@@ -199,7 +199,7 @@ DecisionTree<AttributeValueType, LabelType>
       typename std::vector< KeyType >::const_iterator ckIt = candidateKeys.begin();
       while ( ckIt != candidateKeys.end() )
         {
-        std::cout << (*ckIt).first << " " << (*ckIt).second << std::endl;
+        otbMsgDevMacro(<< (*ckIt).first << " " << (*ckIt).second);
         Pointer child = (*m_TreeMap)[(*ckIt)];
         return child->Decide(example);
         }

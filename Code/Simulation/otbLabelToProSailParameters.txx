@@ -78,12 +78,9 @@ void
 LabelToProSailParameters<TLabel>
 ::GenerateData()
 {
-  //int value = 0;
-  //    this->m_Label;
   ParametersType Step1Parameters=this->GetStep1Parameters();
   ParametersType Step2Parameters=this->GetStep2Parameters();
-  std::cout<<" Step1Parameters"<<Step1Parameters<<"Step2Parameters"<<Step2Parameters<<""<<std::endl;
-
+  otbMsgDevMacro(<<" Step1Parameters"<<Step1Parameters<<" Step2Parameters"<<Step2Parameters);
 }
 
 

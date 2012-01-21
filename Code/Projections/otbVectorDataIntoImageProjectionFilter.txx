@@ -228,8 +228,8 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
 
   m_VdProjFilter->Update();
 
-
-/*  TreeIteratorType itVector(m_VdProjFilter->GetOutput()->GetDataTree());
+  /*
+  TreeIteratorType itVector(m_VdProjFilter->GetOutput()->GetDataTree());
   itVector.GoToBegin();
   while (!itVector.IsAtEnd())
     {
@@ -244,7 +244,8 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
       std::cout << "Polygon region: " << itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion() <<  std::endl;
       }
     ++itVector;
-    }*/
+    }
+  */
 
   if (m_UseOutputSpacingAndOriginFromImage)
     {

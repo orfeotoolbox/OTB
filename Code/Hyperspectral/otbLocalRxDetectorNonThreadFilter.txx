@@ -108,8 +108,8 @@ LocalRxDetectorNonThreadFilter<TInputImage, TOutputImage>
 
   ImageRegionIteratorType outputIt(outputPtr, *fit);
 
-  std::cout << "Region de la face list : " << *vectorFit << std::endl;
-  std::cout << "Region dans le buffer : " << inputPtr->GetBufferedRegion() << std::endl;
+  //std::cout << "Region de la face list : " << *vectorFit << std::endl;
+  //std::cout << "Region dans le buffer : " << inputPtr->GetBufferedRegion() << std::endl;
 
   // Run Input Image
   for (inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd(); ++inputIt, ++outputIt)
@@ -200,8 +200,6 @@ LocalRxDetectorNonThreadFilter<TInputImage, TOutputImage>
   // Crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
     {
-    std::cout << "Input requested : " << inputRequestedRegion << std::endl;
-
     inputPtr->SetRequestedRegion( inputRequestedRegion );
     return;
     }

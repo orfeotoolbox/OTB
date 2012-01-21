@@ -101,7 +101,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
     {
     if (m_FilterFunctionCoef->Size() == 0)
       {
-      std::cout << "use dummy filter" << std::endl;
+      otbMsgDevMacro(<< "use dummy filter");
       for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
         {
         m_FilterFunctionCoef->PushBack(FilterFunctionValues::New());

@@ -578,8 +578,8 @@ void JPEG2000TileCache::EstimateTileCacheSize(unsigned int originalWidthTile, un
 
   if (!this->m_TileCacheSizeInByte)
     {
-    std::cout << "WARNING: m_TileCacheSizeInByte is estimated at " << m_TileCacheSizeInByte
-              << " bytes so we don't used the cache" << std::endl;
+    otbMsgDevMacro( << "TileCacheSizeInByte is estimated at " << m_TileCacheSizeInByte
+                    << " bytes so we don't used the cache");
     }
 
   otbMsgDevMacro( << "m_TileCacheSizeInByte = " << m_TileCacheSizeInByte );
@@ -1121,7 +1121,7 @@ void JPEG2000ImageIO::ReadImageInformation()
 
   if (lJP2MetadataReader.m_MetadataIsRead)
     {
-    std::cout << /*otbMsgDevMacro(<<*/ "JPEG2000 file has metadata available!" << std::endl/*)*/;
+    otbMsgDevMacro(<<"JPEG2000 file has metadata available!");
 
     /* GEOTRANSFORM */
     if (lJP2MetadataReader.HaveGeoTransform())

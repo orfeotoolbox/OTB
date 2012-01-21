@@ -542,8 +542,7 @@ void OGRIOHelper
           }
           default:
           {
-          std::cout << "Geometry type not found: " << ogrMulti->getGeometryRef(geoIndex)->getGeometryType() <<
-            std::endl;
+          otbWarningMacro( << "Geometry type not found: " << ogrMulti->getGeometryRef(geoIndex)->getGeometryType());
           break;
           }
           }
@@ -621,8 +620,7 @@ void OGRIOHelper
           }
           default:
           {
-          std::cout << "Geometry type not found: " << ogrMulti->getGeometryRef(geoIndex)->getGeometryType() <<
-            std::endl;
+          otbWarningMacro( << "Geometry type not found: " << ogrMulti->getGeometryRef(geoIndex)->getGeometryType());
           break;
           }
           }
@@ -631,7 +629,7 @@ void OGRIOHelper
       }
       default:
       {
-      std::cout << "Geometry not handled: " << geometry->getGeometryName() << std::endl;
+      otbWarningMacro("Geometry not handled: " << geometry->getGeometryName());
       break;
       }
       }

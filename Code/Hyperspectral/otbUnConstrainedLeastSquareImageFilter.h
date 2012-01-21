@@ -64,7 +64,7 @@ public:
 
   void SetMatrix(const MatrixType& m)
   {
-    std::cout << "m : " << m.rows() << " " << m.cols() << std::endl;
+    //std::cout << "m : " << m.rows() << " " << m.cols() << std::endl;
     m_Svd.reset( new SVDType(m) );
     m_Inv = m_Svd->inverse();
     m_OutputSize = m.cols();
