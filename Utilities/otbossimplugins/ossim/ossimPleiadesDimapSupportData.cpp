@@ -118,6 +118,8 @@ ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData ()
     theProductIsOk(false),
     TheRpcIsOk(false),
     theXmlDocumentRoot(),
+
+    theSensorID(),
     theImageID(),
     theProductionDate(),
     theAcquisitionDate(),
@@ -153,9 +155,7 @@ ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData ()
     theLrCorner(),
     theLlCorner(),
 
-    theRefGroundPoint(0.0, 0.0, 0.0),
-    theRefImagePoint(0.0, 0.0),
-
+    theSpecId(),
     theErrBias(0),
     theErrBiasX(0),
     theErrBiasY(0),
@@ -174,7 +174,9 @@ ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData ()
     theLineDenCoeff(),
     theSampNumCoeff(),
     theSampDenCoeff(),
-    theSpecId()
+
+    theRefGroundPoint(0.0, 0.0, 0.0),
+    theRefImagePoint(0.0, 0.0)
 {
 }
 
