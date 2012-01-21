@@ -134,6 +134,8 @@ macro(SWIG_ADD_SOURCE_TO_MODULE name outfiles infile)
   else(CMAKE_SWIG_OUTDIR)
     set(swig_outdir ${CMAKE_CURRENT_BINARY_DIR})
   endif(CMAKE_SWIG_OUTDIR)
+  # cleanup swig_extra_generated_files content for multi-langage wrapping support
+  set(swig_extra_generated_files)
   SWIG_GET_EXTRA_OUTPUT_FILES(${SWIG_MODULE_${name}_LANGUAGE}
     swig_extra_generated_files
     "${swig_outdir}"
