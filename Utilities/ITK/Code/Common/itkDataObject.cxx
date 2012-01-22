@@ -376,7 +376,7 @@ DataObject
 //----------------------------------------------------------------------------
 void 
 DataObject
-::PropagateRequestedRegion() throw (InvalidRequestedRegionError)
+::PropagateRequestedRegion()
 {
   // If we need to update due to PipelineMTime, or the fact that our
   // data was released, then propagate the update region to the source 

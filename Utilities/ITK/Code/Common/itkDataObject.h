@@ -357,7 +357,7 @@ public:
 
   /** Methods to update the pipeline. Called internally by the
    * pipeline mechanism. */
-  virtual void PropagateRequestedRegion() throw (InvalidRequestedRegionError);
+  virtual void PropagateRequestedRegion();
   virtual void UpdateOutputData();
   
   /** Reset the pipeline. If an exception is thrown during an Update(),
