@@ -20,10 +20,12 @@ ADD_TEST(FA-000209-SVMValidationLinearlySeparableWithProbEstimate_KO ${CXX_TEST_
 0000209-SVMValidationLinearlySeparableProbEstimation 500 500 0.0025 0.0075 0.0075 0.0025 0. 0.0025 0. 0.0025 0 1)
 
 # ------- Uncaught exception in applications ----------------------
-ADD_TEST(FA-0000478-UncaughtException ${CXX_TEST_PATH}/0000478-UncaughtException 
-  ${OTB_DATA_ROOT}/Examples/sensor_stereo_left.tif 
-  ${OTB_DATA_ROOT}/Examples/sensor_stereo_right.tif 
-  ${TEMP}/FA-0000478-output.tif)
+ADD_TEST(NAME FA-0000478-UncaughtException
+         COMMAND  ${CXX_TEST_PATH}/0000478-UncaughtException
+                  $<TARGET_FILE_DIR:otbapp_StereoSensorModelToElevationMap>
+                  ${OTB_DATA_ROOT}/Examples/sensor_stereo_left.tif 
+                  ${OTB_DATA_ROOT}/Examples/sensor_stereo_right.tif 
+                  ${TEMP}/FA-0000478-output.tif)
 
 ADD_EXECUTABLE(0000478-UncaughtException 0000478-UncaughtException.cxx)
 TARGET_LINK_LIBRARIES(0000478-UncaughtException OTBIO OTBCommon OTBApplicationEngine)

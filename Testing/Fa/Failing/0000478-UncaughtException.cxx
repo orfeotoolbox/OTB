@@ -20,16 +20,17 @@
 
 int main(int argc,char* argv[])
 {
-  typedef otb::Wrapper::Application AppType;
+  using otb::Wrapper::ApplicationRegistry;
+  using otb::Wrapper::Application;
   
-  if (argc != 4)
+  if (argc != 5)
     {
-    std::cout << "Usage: 0000478-UncaughtException stereo_ref stereo_sec output_file" << std::endl;
+    std::cout << "Usage: 0000478-UncaughtException app_module_path stereo_ref stereo_sec output_file" << std::endl;
     return 1;
     }
   
-  otb::Wrapper::ApplicationRegistry::SetApplicationPath("/home2/gpasero/ORFEO-TOOLBOX/otb-build/OTB-bin/bin");
-  AppType::Pointer myApp = otb::Wrapper::ApplicationRegistry::CreateApplication("StereoSensorModelToElevationMap");
+  ApplicationRegistry::SetApplicationPath(argv[1]);
+  Application::Pointer myApp = ApplicationRegistry::CreateApplication("StereoSensorModelToElevationMap");
   
   if (myApp.IsNull())
     {
@@ -39,9 +40,9 @@ int main(int argc,char* argv[])
   
   myApp->Init();
   
-  myApp->SetParameterString("ref", argv[1]);
-  myApp->SetParameterString("sec", argv[2]);
-  myApp->SetParameterString("out", argv[3]);
+  myApp->SetParameterString("ref", argv[2]);
+  myApp->SetParameterString("sec", argv[3]);
+  myApp->SetParameterString("out", argv[4]);
   myApp->SetParameterString("elev","dem");
   myApp->SetParameterString("elev.dem.path", "FAKE_DEM_PATH");
   myApp->SetParameterString("elev.dem.geoid", "FAKE_GEOID_PATH");
