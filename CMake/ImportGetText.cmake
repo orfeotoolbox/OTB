@@ -38,7 +38,7 @@ IF(OTB_USE_GETTEXT)
         MESSAGE(STATUS "  GetText intl library  : ${GETTEXT_INTL_LIBRARY}")
       ENDIF(APPLE OR WIN32)
     
-      IF(BUILD_APPLICATIONS AND WRAP_QT)
+      IF(BUILD_APPLICATIONS AND OTB_WRAP_QT)
       			# Check bug 419 : conflict between gettext and Qt on some Ubuntu systems
             SET(CMAKE_REQUIRED_INCLUDES "${QT_INCLUDES}")
             SET(CMAKE_REQUIRED_LIBRARIES "${QT_LIBRARIES};${GETTEXT_LIBRARY}")
@@ -53,7 +53,7 @@ IF(OTB_USE_GETTEXT)
                   "Opening OTB-applications auto generated in QT may generate a crash.\n"
                   "You might consider deactivating the support of Gettext in OTB with the OTB_USE_GETTEXT cmake option.\n")
             ENDIF(NOT CHECK_QT_GETTEXT_CONFLICT)
-      ENDIF(BUILD_APPLICATIONS AND WRAP_QT)
+      ENDIF(BUILD_APPLICATIONS AND OTB_WRAP_QT)
       
     ELSE(GETTEXT_FOUND)
       SET(OTB_I18N 0)
