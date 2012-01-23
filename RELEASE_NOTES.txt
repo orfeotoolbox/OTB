@@ -1,3 +1,277 @@
+OTB-v.3.12.0 - Changes since version 3.10.0 (2011/??/??)
+-----------------------------------------
+* Library
+  * MaximumAutocorrelationFactorImageFilter
+  * MultivariateAlterationDetector
+  * Add Hyperspectral processing filters
+    * Dimensionnality estimation :
+      * EigenValueLikelihoodMaximization
+      * VirtualDimensionnality
+    * Dimensionnality reduction :
+      * PCAImageFilter - perform forward and inverse Principal Component Analysis decomposition
+      * FastICAImageFilter - perform forward and inverse Independent Component Analysis decomposition, based on FastICA algorithm
+      * MNFImageFilter - perform forward and inverse Maximum Noise Fraction decomposition
+      * NAPCAImageFilter - perform forward and inverse Noise Adjusted Principal Component Analysis decomposition
+    * Endmember extraction :
+      * VcaImageFilter - performs Vertex Component Analysis
+      * MDMDNMFImageFilter - performs Minimum Spectral Dispersion Maximum Spatial Dispersion nonnegative Matrix Factorization
+    * Unmixing under Linear Mixture Model hypothesis :
+      * UnConstrainedLeastSquareImageFilter - standard least square solving
+      * NCLSUnmixingImageFilter - least square with non-negativity constraint
+      * FCLSUnmixingImageFilter - least square with non-negativity and additivity constraint
+      * ISRAUnmixingImageFilter - image space reconstruction algorithm
+    * Anomaly detection :
+      * LocalRxDetectorFilter
+    * SparseUnMixingImageFilter : finds correlation in time series using sparse representation
+    * Addition of several mathematical operations to support hyperspectral filters implementation
+      * AngularProjectionImageFilter
+      * AngularProjectionSetImageFilter
+      * BinarySpectralAngleFunctor
+      * ConcatenateScalarValueImageFilter
+      * DotProductImageFilter
+      * SparseWvltToAngleMapperListFilter
+      * ProjectiveProjectionImageFilter
+      * VectorImageToMatrixImageFilter
+      Different sort of gradient filter for noise estimation in MNF :
+      * LocalActivityImageFilter
+      * LocalGradientImageFilter
+      * HorizontalSobelVectorImageFilter
+      * VerticalSobelVectorImageFilter
+      * SobelVectorImageFilter
+  * Add Simulation module, based on Prospect and Sail
+    * AtmosphericEffects
+    * DataSpec5B
+    * ImageSimulationMethod
+    * LabelMapToSimulatedImageFilter
+    * LabelToProsailParameters
+    * LeafParameters
+    * ReduceSpectralResponse
+    * ReduceSpectralResponseClassifierRAndNIR
+    * SailModel
+    * SatelliteRSR
+    * SpatialisationFilter
+    * SurfaceReflectanceToReflectanceFilter
+    * SpectralResponse
+  * Improve WaveletGenerator speed, and fix reconstruction issue is multithreaded environment
+  * ClampImageFilter, ClampVectorImageFilter
+  * ThresholdVectorImageFilter
+  * Support for writing PDS files (Planetary Data System) in ImageFileWriter, through GDALImageIO
+  * ImageRegionAdaptiveSplitter, RAMDrivenAdaptiveStreamingManager,  New streaming strategy in writer, taking advantage of both tile size and pipeline memory print estimation
+  * Finer progress reporting in StreamingImageFileWriter
+  * Move ViewerManager application from OTB-Applications to OTB source tree, and rename as otbViewer
+  * Factor MsgReporter class in OTB source tree, and reuse it in Monteverdi
+  * HooverInstances, HooverConfusionMatrix : tools to evaluate a segmentation against a ground truth
+  * Removed deprecated class MapProjection
+  * Removed streaming and threading support from MeanShiftVectorImageFilter, since it was generating wrong labeled images
+  * Pleiades data support
+    * Update to openjpeg rev 1111
+    * Complete rework of JPEG2000ImageIO
+      * Tile caching support
+      * Multithreaded decoding
+      * GMLBox decoding
+      * Multi-resolution decoding support
+    * Experimental Pleiades metadata support in ossimplugins :
+      * RPC Sensor model
+      * Calibration coefficient
+      * Various information about the product    
+  * New application module framework (BUILD_APPLICATIONS:BOOL=ON)
+    * New library OTBApplicationEngine to generate application module as shared plugin objects
+    * This replaces small command line utilities in OTB-Applications
+    * Command line launcher for application module
+    * Generic Qt based widget to show/configure/run an application
+    * Qt based GUI application launcher
+    * SWIG module on top of OTBApplicationEngine to execute applications from Python and Java
+    * Quickstart scripts provided for launching the commandline tools (otbcli_XXX)
+      and for starting the Qt GUI (otbgui_XXX)
+    * The following applications are available in this release :
+      * CartographicDBValidation
+        * ComputePolylineFeatureFromImage
+        * DSFuzzyModelEstimation
+        * VectorDataDSValidation
+      * ChangeDetection
+        * MultivariateAlterationDetector
+      * Classification
+        * ComputeImagesStatistics
+        * ImageSVMClassifier
+        * KMeansClassification
+        * SOMClassification (Kohonen Self Organizing Map)
+        * TrainSVMImagesClassifier
+        * ValidateSVMImagesClassifier
+      * DimensionnalityReduction
+        * MaximumAutocorrelationFactor
+      * Disparitymap
+        * FineRegistration
+        * StereoSensorModelToElevationMap
+      * FeatureExtraction
+        * LineSegmentDetection
+      * Hyperspectral
+        * VertexComponentAnalysis
+        * HyperspectralUnmixing
+      * Projections
+        * BundleToPerfectSensor
+        * ConvertCartoToGeoPoint
+        * ConvertSensorToGeoPoint
+        * ImageEnvelope
+        * ObtainUTMZoneFromGeoPoint
+        * OrthoRectification
+        * RigidTransformResample
+        * Superimpose
+      * RadiometricIndices
+        * RadiometricVegetationIndices
+      * Radiometry
+        * OpticalCalibration
+        * SarRadiometricCalibration
+      * Rasterization
+        * Rasterization
+      * Segmentation
+        * ConnectedComponentSegmentation
+        * MeanShiftSegmentation
+      * Utils
+        * BandMath
+        * ColorMapping
+        * CompareImages
+        * ConcatenateImages
+        * ConcatenateVectorData
+        * Convert
+        * ExtractROI
+        * KmzExport
+        * MultiResolutionPyramid
+        * OSMDownloader
+        * Quicklook
+        * ReadImageInfo
+        * Rescale
+        * Smoothing
+        * SplitImage
+        * VectorDataExtractROIApplication
+        * VectorDataSetField
+        * VectorDataTransform
+
+* System
+  * Update internal Ossim to revision 20113
+  * Update internal Boost to 1.47.0
+  * Update internal OpenJpeg to rev 1111
+  * Support for FLTK 1.3
+  * Support building ossim as a DLL on windows
+  * Support building ossimplugin as a DLL on windows
+  * Remove Ossim, OpenThreads and OpenJpeg headers from the install tree
+  
+* Monteverdi
+  * Support for Pleiades format
+    * Support JPEG2000 image loading with multi-resolution choice
+    * Quicklook generation based on JPEG2000 format capabilities
+    * Support viewing of JPEG2000Images
+    * Add module to uncompress an extract of a JPEG2000 image to TIFF
+    * Reader module tries to save the quicklook next to the original file
+      to improve loading time of JP2 files
+  * Fix gaussian histogram stretching mode to avoid warning and black image
+  * Support Drag'N'Drop of image and vector format into Monteverdi tree
+  * Support bundle generation on MacOSX
+  * ConnectedComponentSegmentation :
+    * Add "Elongation" statistics parameter
+    * Support single band image
+    * Support extracts of images in sensor model geometry
+  * Writer module(s) :
+    * Use StreamingImageFileWriter to take advantage of streaming improvements
+  * Add Monteverdi version number in title bar
+  * Reduce KMeans module memory footprint
+    * Fix sample list size from an amount of RAM
+    * Release temporary filters and variables as soon as possible
+    
+* OTB-Applications
+  * Removal of command line application migrated to OTB source tree
+  * Migration of Viewermanager application to OTB source tree
+
+* OTB-Wrapping
+  * Add otb::Transform
+  
+* Bug fixes :
+  * OTB-wrapping
+    * 0000382: Build fails on CentOS 5.5 because of '$self' in java wrapper
+
+  * Documentation
+    * 0000483: "<" or ">" are interpreted as ¿ in Cookbook
+    * 0000370: Cookbook : make a HTML documentation
+    * 0000378: Doxygen not updated
+
+  * OTB-lib
+    * 0000392: Unable to read Landsat Tiff file. Problem with Tags reading ?
+    * 0000449: In otbViewer, the slide show crashes
+    * 0000416: segfault with non existing input image in the new otb applications framework
+    * 0000424: Execute button enabling problem
+    * 0000479: Can't write int8 image
+    * 0000448: In otbViewer quicklook, navigation coordinate are not adapted to multi-res Pleiades images
+    * 0000421: ListSampleGenerator is not random
+    * 0000429: Trouble with .geom for Formosat
+    * 0000428: itkCastImageFilter doesn't work well with streaming
+    * 0000478: Exceptions thrown inside applications are not caught
+    * 0000450: In otbViewer, zoom doesn't work well with link mode
+    * 0000439: Can't run Qt ReadImageInfo
+    * 0000380: wavelet reconstruction filter problem
+    * 0000386: Remove direct use of ossim from Simulation tests
+    * 0000401: Error while reading a lum image with several channels
+    * 0000381: No platform testing OTB_USE_EXTERNAL_OSSIM
+    * 0000393: histogram minimum filter available ?
+    * 0000400: how to return objects when function uses a filter ?
+
+  * Monteverdi
+    * 0000464: FLU is not compatible with FLTK 1.3
+    * 0000411: Does not support fluid 1.3
+    * 0000396: Object labeling module crashes
+    * 0000408: KMeans clustering crashes after a while
+    * 0000480: Viewer crashes playing with histogram method
+    * 0000407: Right click on any list component crashes Monteverdi
+    * 0000412: Monteverdi segfaults using contextual menu on module item
+    * 0000477: High memory usage in Monteverdi Viewer module with JPEG2000 images
+    * 0000475: Select an Region in the Uncompressed JPEG2000 image module QL view constantly increase memory usage
+    * 0000405: otbSupervisedClassificationApplication does not handle class removal properly
+    * 0000474: In TileMap Import module, search place by name does not work anymore
+    * 0000410: KMZ export module leaves a lot of .jpg.aux.xml files in the output directory
+    * 0000404: Spectral Viewer keep image locked
+    * 0000403: Save dataset (advanced version): Not available for an output of bandmath module
+
+  * OTB-Packaging
+    * 0000486: [osgeo4w] Update setup.hint to add osgearth dependency
+    * 0000399: Ubuntu packaging for Monteverdi fails (resource files are missing)
+    * 0000413: Update CentOS installation manual
+
+  * OTB-applications
+    * 0000438: KMeans Application crach in Qt Framework
+    * 0000457: Crash of new otbApplications
+
+  * Orfeo Toolbox (OTB)
+    * 0000472: LSD application on sensor image extract produces wrond geo-positioning
+    * 0000441: SWIG/Python interface for applications does not catch all exceptions
+    * 0000491: Build scheduling is buggy with SWIG wrapper
+    * 0000436: Calling GetParameterXXXImage("in") more than once in DoExecute() breaks streaming
+    * 0000440: In SWIG/python interface to applications, an exception is thrown when setting parameters unless Init() is called before
+    * 0000434: CommandLine launcher does not report outputs of the MeanShiftApplication
+    * 0000431: OTB v. 3.10.0 & Snow Leopard : a bug fixed - Nov. 23, 2011
+    * 0000484: Rename CMake WRAP_* options
+    * 0000418: ld error on exit when using the new application framework with any engines
+    * 0000419: The new QT applications framework  don't work on Ubuntu 11.04 and Ubuntu 11.11
+    * 0000473: Saving TIFF with "degenerated" sizes is highly suboptimal
+    * 0000469: Clamp output values to the precision range in new application framework
+    * 0000476: baseline file must have extension
+    * 0000470: New applications framework input image parameter prevents from accessing to intermediate resolutions
+    * 0000423: Internationalisation problem when launching application via Qt
+    * 0000453: DEMConvert application becomes ready even if output parameter is empty
+    * 0000426: RAM parameter has no effect in the new application framework
+    * 0000442: In otb::WrapperApplication, calling Init() twice results in doubled parameters in examples
+    * 0000425: In QT application launcher, some applications are ready to run with missing parameters
+    * 0000420: command line error reporting is not clear ('-' vs '--')
+    * 0000387: [Monteverdi] Unable to display vector data with the viewer
+    * 0000390: Lots of warning from itk::Transform when using otb::GenericRSTransform
+    * 0000435: OTB CommandLine wrappers parameters short key
+
+  * Server administration
+    * 0000394: Loading the blog page takes > 10s
+    * 0000417: SoftwareGuide and CookBook generation logs are not uploaded to the server
+    * 0000415: Hook checkstyle should allow the new add_test prototype
+    * 0000414: Add a hook to avoid big files pushed to OTB-Data
+    * 0000377: Sourceforge "Code" section is wrong or outdated
+
+
+
 OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/30)
 -----------------------------------------
 * Monteverdi
