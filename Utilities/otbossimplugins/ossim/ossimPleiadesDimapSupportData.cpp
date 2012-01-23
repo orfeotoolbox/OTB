@@ -758,6 +758,11 @@ bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    kwl.add(prefix,
+           "processing_level",
+           theProcessingLevelString,
+           true);
+
+   kwl.add(prefix,
            "instrument",
            theInstrument,
            true);
@@ -1018,6 +1023,8 @@ bool ossimPleiadesDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theLlCorner =createGround( kwl.find(prefix, "ll_ground_point"));
 
    theSensorID = ossimString(kwl.find(prefix, "sensorID"));
+
+   theProcessingLevelString = ossimString(kwl.find(prefix, "processing_level"));
 
    thePhysicalBias.resize(theNumBands);
    tempString = kwl.find(prefix,"physical_bias");

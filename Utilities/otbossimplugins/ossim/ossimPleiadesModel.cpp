@@ -102,13 +102,17 @@ std::ostream& ossimPleiadesModel::print(std::ostream& out) const
        << "\n  theImageSize          = " << theImageSize
        << "\n  theRefGndPt           = " << theRefGndPt
        << "\n  theRefImgPt           = " << theRefImgPt
+       << "\n  theProcessingLevel    = " << theSupportData->getProcessingLevel()
        << "\n------------------------------------------------"
        << "\n  " << endl;
 
    // Set the flags back.
    out.flags(f);
 
-   return ossimRpcModel::print(out);
+   if (theSupportData->getProcessingLevel() == "SENSOR")
+    return ossimRpcModel::print(out);
+   else
+    return out;
 }
 
 //*************************************************************************************************
@@ -145,7 +149,10 @@ bool ossimPleiadesModel::loadState(const ossimKeywordlist& kwl,
    ossimString supportPrefix = ossimString(prefix) + "support_data.";
    theSupportData->loadState(kwl, supportPrefix);
 
-   return ossimRpcModel::loadState(kwl, prefix);
+   if (theSupportData->getProcessingLevel() == "SENSOR")
+    return ossimRpcModel::loadState(kwl, prefix);
+   else
+    return true;
 }
 
 
