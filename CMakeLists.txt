@@ -96,17 +96,19 @@ MARK_AS_ADVANCED(OTB_USE_PATENTED)
 #
 # Setup the option for each laguage
 #
-OPTION ( WRAP_PYTHON "Wrap Python" OFF )
-OPTION ( WRAP_JAVA   "Wrap Java"   OFF )
-#OPTION ( WRAP_LUA    "Wrap Lua"    OFF )
-#OPTION ( WRAP_RUBY   "Wrap Ruby"   OFF )
-#OPTION ( WRAP_TCL    "Wrap Tcl"    OFF )
-#OPTION ( WRAP_CSHARP "Wrap CSharp" OFF )
-#OPTION ( WRAP_R      "Wrap R"      OFF )
+OPTION ( OTB_WRAP_PYTHON "Wrap Python" OFF )
+OPTION ( OTB_WRAP_JAVA   "Wrap Java"   OFF )
+#OPTION ( OTB_WRAP_LUA    "Wrap Lua"    OFF )
+#OPTION ( OTB_WRAP_RUBY   "Wrap Ruby"   OFF )
+#OPTION ( OTB_WRAP_TCL    "Wrap Tcl"    OFF )
+#OPTION ( OTB_WRAP_CSHARP "Wrap CSharp" OFF )
+#OPTION ( OTB_WRAP_R      "Wrap R"      OFF )
 
 # Generate Qt based GUI
-OPTION ( WRAP_QT "Enable Qt wrappers" OFF )
-OPTION ( WRAP_PYQT "Enable PyQt wrappers" OFF )
+OPTION ( OTB_WRAP_QT "Enable Qt wrappers" OFF )
+
+# Do not release this yet
+#OPTION ( OTB_WRAP_PYQT "Enable PyQt wrappers" OFF )
 
 
 #-----------------------------------------------------------------------------

@@ -13,7 +13,7 @@ endmacro()
 #
 # General SWIG configuration
 #
-if ( WRAP_LUA OR WRAP_PYTHON OR WRAP_JAVA OR WRAP_CSHARP OR WRAP_TCL OR WRAP_R OR WRAP_RUBY )
+if ( OTB_WRAP_LUA OR OTB_WRAP_PYTHON OR OTB_WRAP_JAVA OR OTB_WRAP_CSHARP OR OTB_WRAP_TCL OR OTB_WRAP_R OR OTB_WRAP_RUBY )
   find_package ( SWIG REQUIRED )
   include ( UseSWIGLocal )
   set_source_files_properties ( otbApplication.i PROPERTIES CPLUSPLUS ON )
@@ -32,7 +32,7 @@ endif()
 #
 # Python SWIG configuration
 #
-if ( WRAP_PYTHON )
+if ( OTB_WRAP_PYTHON )
   check_PIC_flag ( Python )
   find_package ( PythonLibs REQUIRED )
   find_package ( PythonInterp REQUIRED )
@@ -76,7 +76,7 @@ endif()
 #
 # JAVA SWIG configuration
 #
-if ( WRAP_JAVA )
+if ( OTB_WRAP_JAVA )
   check_PIC_flag ( Java )
   find_package ( Java REQUIRED )
   find_package ( JNI REQUIRED )
@@ -124,7 +124,7 @@ endif()
 #
 # lua SWIG configuration - EXPERIMENTAL !!!
 #
-if ( WRAP_LUA )
+if ( OTB_WRAP_LUA )
 #  option ( USE_SYSTEM_LUA "Use a system provided lua" OFF )
 
 #  if ( USE_SYSTEM_LUA )
@@ -162,7 +162,7 @@ endif()
 #
 # ruby SWIG configuration - EXPERIMENTAL !!!
 #
-if ( WRAP_RUBY )
+if ( OTB_WRAP_RUBY )
   check_PIC_flag ( Ruby )
   find_package ( Ruby REQUIRED )
   include_directories ( ${RUBY_INCLUDE_DIRS} )
