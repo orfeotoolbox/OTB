@@ -25,7 +25,7 @@ namespace otb
 /** \class BinarySpectralAngleFunctor
  *  \brief This functor computes the spectral angle between two pixels.
  *
- *  It can be used as a functor in a BinaryFunctorImageFilter to 
+ *  It can be used as a functor in a BinaryFunctorImageFilter to
  *  compute the pixel-by-pixel spectral angles.
  */
 namespace Functor
