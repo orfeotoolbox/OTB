@@ -125,14 +125,17 @@ bool ossimPleiadesModel::saveState(ossimKeywordlist& kwl,
   {
      ossimString supportPrefix = ossimString(prefix) + "support_data.";
      theSupportData->saveState(kwl, supportPrefix);
-     //std::cout << "ossimPleiadesModel::saveState: " << std::endl;
-     //kwl.print(std::cout);
   }
 
+  // If only it is a sensor product we save parameters from RPC model, its avoid to
+  // propagate a empty RPC model
   if (theSupportData->getProcessingLevel() == "SENSOR")
    return ossimRpcModel::saveState(kwl, prefix);
   else
-   return true;
+    {
+    kwl.add(prefix, "sensor", theSensorID, true);
+    return true;
+    }
 }
 
 //*************************************************************************************************
@@ -149,10 +152,14 @@ bool ossimPleiadesModel::loadState(const ossimKeywordlist& kwl,
    ossimString supportPrefix = ossimString(prefix) + "support_data.";
    theSupportData->loadState(kwl, supportPrefix);
 
+   // If only it is a sensor product we load parameters from RPC model only, its avoid to
+   // add a empty RPC model
    if (theSupportData->getProcessingLevel() == "SENSOR")
     return ossimRpcModel::loadState(kwl, prefix);
    else
+     {
     return true;
+     }
 }
 
 
