@@ -71,7 +71,7 @@ private:
     SetDescription("Reproject and Rasterize a Vector Data.");
 
     SetDocName("Rasterization");
-    SetDocLongDescription("Reproject and Rasterize a Vector Data.");
+    SetDocLongDescription("Reproject and Rasterize a Vector Data according to a support image if any, or following the output image propreties set by the user. The application generates an output image in a binary style");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
