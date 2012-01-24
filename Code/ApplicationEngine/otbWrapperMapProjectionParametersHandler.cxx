@@ -28,8 +28,8 @@ namespace Wrapper
 
 void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Pointer app, const std::string & key)
 {
-  app->AddParameter(ParameterType_Choice, key, "Output Map Projection");
-  app->SetParameterDescription(key,"Parameters of the ouptut map projection.");
+  app->AddParameter(ParameterType_Choice, key, "Output Cartographic Map Projection");
+  app->SetParameterDescription(key,"Parameters of the ouptut map projection to be used.");
     
   // utm
   std::ostringstream oss;
