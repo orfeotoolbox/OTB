@@ -2677,6 +2677,10 @@ ADD_TEST(ioTuTerraSarImageMetadataInterfaceNew ${IO_TESTS18}
         otbTerraSarImageMetadataInterfaceNew
 )
 
+ADD_TEST(ioTuPleiadesImageMetadataInterfaceNew ${IO_TESTS18}
+        otbPleiadesImageMetadataInterfaceNew
+)
+
 IF(OTB_DATA_USE_LARGEINPUT)
 
 #------------ ImageMetadataInterfaceBaseTest ---------------
@@ -3752,6 +3756,7 @@ otbPointSetFileReader2.cxx
 SET(BasicIO_SRCS18
 otbIOTests18.cxx
 otbSpotImageMetadataInterfaceNew.cxx
+otbPleiadesImageMetadataInterfaceNew.cxx
 otbFormosatImageMetadataInterfaceNew.cxx
 otbQuickBirdImageMetadataInterfaceNew.cxx
 otbWorldView2ImageMetadataInterfaceNew.cxx

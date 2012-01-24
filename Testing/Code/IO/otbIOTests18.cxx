@@ -25,6 +25,7 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbSpotImageMetadataInterfaceNew);
+  REGISTER_TEST(otbPleiadesImageMetadataInterfaceNew);
   REGISTER_TEST(otbFormosatImageMetadataInterfaceNew);
   REGISTER_TEST(otbIkonosImageMetadataInterfaceNew);
   REGISTER_TEST(otbQuickBirdImageMetadataInterfaceNew);
