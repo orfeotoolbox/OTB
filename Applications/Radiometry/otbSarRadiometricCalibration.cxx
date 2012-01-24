@@ -59,11 +59,17 @@ private:
     AddDocTag(Tags::SAR);
 
     AddParameter(ParameterType_ComplexInputImage,  "in", "Input Complex Image");
+    SetParameterDescription("in", "Input complex image");
+
     AddParameter(ParameterType_ComplexOutputImage,  "out", "Output Image");
+    SetParameterDescription("out", "Output calibrated complex image");
+    
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
+    
     AddParameter(ParameterType_Empty, "noise", "Disable Noise");
+    SetParameterDescription("noise", "Flag to disable noise");
     MandatoryOff("noise");
 
     // Doc example parameter settings

@@ -47,8 +47,8 @@ private:
 
     // Documentation
     SetDocName("Vector data set field");
-    SetDocLongDescription("Set a specified field to a specified value on all features of a vector data (Note: doesn't work with KML files yet)");
-    SetDocLimitations("None");
+    SetDocLongDescription("Set a specified field to a specified value on all features of a vector data.");
+    SetDocLimitations("Doesn't work with KML files yet");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 

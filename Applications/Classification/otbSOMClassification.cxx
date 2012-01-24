@@ -84,13 +84,13 @@ private:
     AddDocTag(Tags::Learning);
 
     AddParameter(ParameterType_InputImage,  "in",   "InputImage");
-    SetParameterDescription("in", "Input image.");
+    SetParameterDescription("in", "Input image to classify.");
     
     AddParameter(ParameterType_OutputImage,  "out",   "OutputImage");
-    SetParameterDescription("out", "Output classified image.");
+    SetParameterDescription("out", "Output classified image (each pixel contains the index of its corresponding vector in the SOM).");
     
     AddParameter(ParameterType_InputImage,  "vm",   "ValidityMask");
-    SetParameterDescription("vm", "Validity mask");
+    SetParameterDescription("vm", "Validity mask (only pixels corresponding to a mask value greater than 0 will be used for learning)");
     MandatoryOff("vm");
     
     AddParameter(ParameterType_Float, "tp", "TrainingProbability");
@@ -98,7 +98,7 @@ private:
     MandatoryOff("tp");
     
     AddParameter(ParameterType_Int,  "ts",   "TrainingSetSize");
-    SetParameterDescription("ts", "Maximum training set size");
+    SetParameterDescription("ts", "Maximum training set size (in pixels)");
     MandatoryOff("ts");
     
     AddParameter(ParameterType_Int,  "sl",   "StreamingLines");
@@ -106,7 +106,7 @@ private:
     MandatoryOff("sl");
     
     AddParameter(ParameterType_OutputImage, "som", "SOM Map");
-    SetParameterDescription("som","Self-Organizing Map map");
+    SetParameterDescription("som","Output image containing the Self-Organizing Map");
     MandatoryOff("som");
     
     AddParameter(ParameterType_Int,  "sx",   "SizeX");
@@ -118,27 +118,27 @@ private:
     MandatoryOff("sy");
     
     AddParameter(ParameterType_Int,  "nx",   "NeighborhoodX");
-    SetParameterDescription("nx", "X initial neighborhood of the SOM map");
+    SetParameterDescription("nx", "X size of the initial neighborhood in the SOM map");
     MandatoryOff("nx");
     
     AddParameter(ParameterType_Int,  "ny",   "NeighborhoodY");
-    SetParameterDescription("ny", "Y initial neighborhood of the SOM map");
+    SetParameterDescription("ny", "Y size of the initial neighborhood in the SOM map");
     MandatoryOff("nx");
     
     AddParameter(ParameterType_Int,  "ni",   "NumberIteration");
-    SetParameterDescription("ni", "Number of iterations of the SOM learning");
+    SetParameterDescription("ni", "Number of iterations for SOM learning");
     MandatoryOff("ni");
     
     AddParameter(ParameterType_Float,  "bi",   "BetaInit");
-    SetParameterDescription("bi", "Initial beta value");
+    SetParameterDescription("bi", "Initial learning coefficient");
     MandatoryOff("bi");
     
     AddParameter(ParameterType_Float,  "bf",   "BetaFinal");
-    SetParameterDescription("bf", "Final beta value");
+    SetParameterDescription("bf", "Final learning coefficient");
     MandatoryOff("bf");
     
     AddParameter(ParameterType_Float,  "iv",   "InitialValue");
-    SetParameterDescription("iv", "Initial value (max weight)");
+    SetParameterDescription("iv", "Maximum initial neuron weight");
     MandatoryOff("iv");
     
     AddParameter(ParameterType_RAM, "ram", "Available RAM");

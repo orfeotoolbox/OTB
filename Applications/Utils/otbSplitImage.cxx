@@ -54,7 +54,7 @@ private:
     SetDescription("Split a N multiband image into N images");
 
     SetDocName("Split Image");
-    SetDocLongDescription("This application splits a N multiband image into N images. The output images filename will be generated from the output one. Thus if the input image has 2 channels, and the user has set ad output outimage.tif, the generated images will be outimage_0.tif and outimage_1.tif");
+    SetDocLongDescription("This application splits a N-bands image into N mono-band images. The output images filename will be generated from the output parameter. Thus if the input image has 2 channels, and the user has set an output outimage.tif, the generated images will be outimage_0.tif and outimage_1.tif");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -62,11 +62,11 @@ private:
     AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-    SetParameterDescription("in","Input image filename.");
+    SetParameterDescription("in","Input multiband image filename.");
 
     AddParameter(ParameterType_Filename, "out", "Output Image");
     SetParameterDescription("out",
-                            "Will be used to get the prefix and the extension of the output images to write");
+                            "Output filename that will be used to get the prefix and the extension of the output images to write");
 
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);

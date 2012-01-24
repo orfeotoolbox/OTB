@@ -175,7 +175,7 @@ private:
     SetDescription("Unsupervised KMeans image classification");
 
     SetDocName("Unsupervised KMeans image classification");
-    SetDocLongDescription("Performs Unsupervised KMeans image classification.");
+    SetDocLongDescription("Performs unsupervised KMeans image classification.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -183,9 +183,9 @@ private:
     AddDocTag(Tags::Segmentation);
     AddDocTag(Tags::Learning);
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-    SetParameterDescription("in", "Input image filename.");
+    SetParameterDescription("in", "Input image to classify.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out", "Output image filename.");
+    SetParameterDescription("out", "Output image containing the class indexes.");
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
@@ -193,14 +193,14 @@ private:
     SetParameterDescription("vm", "Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
     MandatoryOff("vm");
     AddParameter(ParameterType_Int, "ts", "Training set size");
-    SetParameterDescription("ts", "Size of the training set.");
+    SetParameterDescription("ts", "Size of the training set (in pixels).");
     SetDefaultParameterInt("ts", 100);
     MandatoryOff("ts");
     AddParameter(ParameterType_Int, "nc", "Number of classes");
-    SetParameterDescription("nc", "number of modes, which will be used to generate class membership.");
+    SetParameterDescription("nc", "Number of modes, which will be used to generate class membership.");
     SetDefaultParameterInt("nc", 5);
     AddParameter(ParameterType_Int, "maxit", "Maximum number of iterations");
-    SetParameterDescription("maxit", "Maximum number of iterations.");
+    SetParameterDescription("maxit", "Maximum number of iterations for the learning step.");
     SetDefaultParameterInt("maxit", 1000);
     MandatoryOff("maxit");
     AddParameter(ParameterType_Float, "ct", "Convergence threshold");
@@ -208,7 +208,7 @@ private:
     SetDefaultParameterFloat("ct", 0.0001);
     MandatoryOff("ct");
     AddParameter(ParameterType_Filename, "outmeans", "Centroid filename");
-    SetParameterDescription("outmeans", "save label centroid in txt file.");
+    SetParameterDescription("outmeans", "Output text file containing centroid positions");
     MandatoryOff("outmeans");
 
 

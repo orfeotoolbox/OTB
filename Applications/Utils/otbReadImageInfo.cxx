@@ -52,7 +52,7 @@ private:
 
     // Documentation
     SetDocName("Read image information");
-    SetDocLongDescription("Display informations about the input image like: image size, metadata, projections...");
+    SetDocLongDescription("Display information about the input image like: image size, metadata, projections...");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -62,76 +62,97 @@ private:
     AddDocTag(Tags::Meta);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
+    SetParameterDescription("in", "Input image to analyse");
     
     AddParameter(ParameterType_Empty, "keywordlist", "Display the OSSIM keywordlist");
-    SetParameterDescription("keywordlist", "Output the OSSIM keyword list.\n"                                      "It contains metadata informations (sensor model, geometry ). Informations are store in keyword list (pairs of key/value)");
+    SetParameterDescription("keywordlist", "Output the OSSIM keyword list. It contains metadata information (sensor model, geometry ). Informations are stored in keyword list (pairs of key/value)");
     DisableParameter("keywordlist");
     MandatoryOff("keywordlist");
     //Create output parameters to store image informations
     AddParameter(ParameterType_Int,"sizex","Size X");
+    SetParameterDescription("sizex","X size (in pixels)");
     SetParameterRole("sizex", Role_Output);
     AddParameter(ParameterType_Int,"sizey","Size Y");
+    SetParameterDescription("sizey","Y size (in pixels)");
     SetParameterRole("sizey", Role_Output);
 
     AddParameter(ParameterType_Float,"spacingx","Pixel Size X");
+    SetParameterDescription("spacingx", "Pixel size along X (in physical units)");
     SetParameterRole("spacingx", Role_Output);
     AddParameter(ParameterType_Float,"spacingy","Pixel Size Y");
+    SetParameterDescription("spacingy", "Pixel size along Y (in physical units)");
     SetParameterRole("spacingy", Role_Output);
 
-    AddParameter(ParameterType_Float,"estimatedgroundspacingx","Estimated ground spacing X (in meters)");
+    AddParameter(ParameterType_Float,"estimatedgroundspacingx","Estimated ground spacing X");
+    SetParameterDescription("estimatedgroundspacingx", "Estimated ground spacing along X (in meters).");
     SetParameterRole("estimatedgroundspacingx", Role_Output);
-    AddParameter(ParameterType_Float,"estimatedgroundspacingy","Estimated ground spacing Y (in meters)");
+    AddParameter(ParameterType_Float,"estimatedgroundspacingy","Estimated ground spacing Y");
+    SetParameterDescription("estimatedgroundspacingy", "Estimated ground spacing along Y (in meters).");
     SetParameterRole("estimatedgroundspacingy", Role_Output);
 
     AddParameter(ParameterType_Int,"numberbands","Number Of Bands");
+    SetParameterDescription("numberbands", "Number of bands");
     SetParameterRole("numberbands", Role_Output);
     
     AddParameter(ParameterType_String,"sensor","Sensor id");
+    SetParameterDescription("sensor", "Sensor identifier");
     SetParameterRole("sensor", Role_Output);
    
     AddParameter(ParameterType_String,"id","Image id");
+    SetParameterDescription("id", "Image identifier");
     SetParameterRole("id", Role_Output);
 
     AddParameter(ParameterType_String,"time","Acquisition time");
+    SetParameterDescription("time", "Acquisition time.");
     SetParameterRole("time", Role_Output);
 
     AddParameter(ParameterType_Float,"ullat","Upper left lattitude");
+    SetParameterDescription("ullat", "Lattitude of the upper left corner.");
     SetParameterRole("ullat", Role_Output);
     SetDefaultParameterFloat("ullat", 0);
 
     AddParameter(ParameterType_Float,"ullon","Upper left longitude");
+    SetParameterDescription("ullon", "Longitude of the upper left corner.");
     SetParameterRole("ullon", Role_Output);
     SetDefaultParameterFloat("ullon", 0);
 
     AddParameter(ParameterType_Float,"urlat","Upper right lattitude");
+    SetParameterDescription("urlat", "Lattitude of the upper right corner.");
     SetParameterRole("urlat", Role_Output);
     SetDefaultParameterFloat("urlat", 0);
 
     AddParameter(ParameterType_Float,"urlon","Upper right longitude");
+    SetParameterDescription("urlon", "Longitude of the upper right corner.");
     SetParameterRole("urlon", Role_Output);
     SetDefaultParameterFloat("urlon", 0);
 
     AddParameter(ParameterType_Float,"lrlat","Lower right lattitude");
+    SetParameterDescription("lrlat", "Lattitude of the lower right corner.");
     SetParameterRole("lrlat", Role_Output);
     SetDefaultParameterFloat("lrlat", 0);
 
     AddParameter(ParameterType_Float,"lrlon","Lower right longitude");
+    SetParameterDescription("lrlon", "Longitude of the lower right corner.");
     SetParameterRole("lrlon", Role_Output);
     SetDefaultParameterFloat("lrlon", 0);
 
     AddParameter(ParameterType_Float,"lllat","Lower left lattitude");
+    SetParameterDescription("lllat", "Lattitude of the lower left corner.");
     SetParameterRole("lllat", Role_Output);
     SetDefaultParameterFloat("lllat", 0);
 
     AddParameter(ParameterType_Float,"lllon","Lower left longitude");
+    SetParameterDescription("lllon", "Longitude of the lower left corner.");
     SetParameterRole("lllon", Role_Output);
     SetDefaultParameterFloat("lllon", 0);
 
 
-    AddParameter(ParameterType_String,"town","Main town near center of image");
+    AddParameter(ParameterType_String,"town", "Nearest town");
+    SetParameterDescription("town", "Main town near center of image");
     SetParameterRole("town", Role_Output);
 
-    AddParameter(ParameterType_String,"country","Country of the image");
+    AddParameter(ParameterType_String,"country","Country");
+    SetParameterDescription("country", "Country of the image");
     SetParameterRole("country", Role_Output);
 
     AddParameter(ParameterType_Group, "rgb", "Default RGB Display");
@@ -152,10 +173,12 @@ private:
     SetDefaultParameterInt("rgb.b", 3);
     SetParameterRole("rgb.b", Role_Output);
 
-    AddParameter(ParameterType_String,"projectionref","Projection Coordinate System");
+    AddParameter(ParameterType_String,"projectionref","Projection");
+    SetParameterDescription("projectionref", "Projection Coordinate System");
     SetParameterRole("projectionref", Role_Output);
 
-    AddParameter(ParameterType_String,"keyword","Image Keywordlist");
+    AddParameter(ParameterType_String,"keyword","Keywordlist");
+    SetParameterDescription("keyword","Image keyword list");
     SetParameterRole("keyword", Role_Output);
 
     AddParameter(ParameterType_Group, "gcp", "Ground Control Points informations");
@@ -163,20 +186,28 @@ private:
     SetParameterRole("gcp", Role_Output);
 
     AddParameter(ParameterType_Int, "gcp.count", "GCPs Number");
-    SetParameterDescription("gcp.count","Number of GCPs");
+    SetParameterDescription("gcp.count", "Number of GCPs");
     SetDefaultParameterInt("gcp.count", 0);
     SetParameterRole("gcp.count", Role_Output);
 
-    AddParameter(ParameterType_String,"gcp.proj","GCP Projection System");
+    AddParameter(ParameterType_String,"gcp.proj", "GCP Projection");
+    SetParameterDescription("gcp.proj", "Projection Coordinate System for GCPs");
     SetParameterRole("gcp.proj", Role_Output);
 
-    AddParameter(ParameterType_StringList,"gcp.ids","GCPs Id");
+    AddParameter(ParameterType_StringList,"gcp.ids", "GCPs Id");
+    SetParameterDescription("gcp.ids", "GCPs identifier");
     SetParameterRole("gcp.ids", Role_Output);
-    AddParameter(ParameterType_StringList,"gcp.info","GCPs Info");
+    
+    AddParameter(ParameterType_StringList,"gcp.info", "GCPs Info");
+    SetParameterDescription("gcp.info", "GCPs Information");
     SetParameterRole("gcp.info", Role_Output);
-    AddParameter(ParameterType_StringList,"gcp.imcoord","GCPs Image Coordinates");
+    
+    AddParameter(ParameterType_StringList,"gcp.imcoord", "GCPs Image Coordinates");
+    SetParameterDescription("gcp.imcoord", "GCPs Image coordinates");
     SetParameterRole("gcp.imcoord", Role_Output);
-    AddParameter(ParameterType_StringList,"gcp.geocoord","GCPs Geographic Coordinates");
+    
+    AddParameter(ParameterType_StringList, "gcp.geocoord", "GCPs Geographic Coordinates");
+    SetParameterDescription("gcp.geocoord", "GCPs Geographic Coordinates");
     SetParameterRole("gcp.geocoord", Role_Output);
 
     // Doc example parameter settings

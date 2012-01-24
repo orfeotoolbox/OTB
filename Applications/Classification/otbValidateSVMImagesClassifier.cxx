@@ -121,10 +121,10 @@ private:
   void DoInit()
   {
     SetName("ValidateSVMImagesClassifier");
-    SetDescription("Estimate the performance of the SVM model with a new set of validation samples and another image.");
+    SetDescription("Estimate the performance of the SVM model with a set of images and validation samples.");
 
     SetDocName("Validate SVM Images Classifier");
-    SetDocLongDescription("Estimate the performance of the SVM model obtained by the ImagesSVMClassifier with a new set of validation samples and another image.\n The application asks for images statisctics as input (XML file generated with the ComputeImagesStatistics application) and a SVM model (text file) generated with the ImagesSVMClassifier application.\n It will compute the global confusion matrix, kappa index and also the precision, recall and F-score of each class.");
+    SetDocLongDescription("Estimate the performance of the SVM model obtained by the TrainSVMImagesClassifier with a new set of images and validation samples.\n The application asks for images statistics as input (XML file generated with the ComputeImagesStatistics application) and a SVM model (text file) generated with the TrainSVMImagesClassifier application.\n It will compute the global confusion matrix, kappa index and also the precision, recall and F-score of each class.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -134,7 +134,7 @@ private:
     AddParameter(ParameterType_InputImageList, "il", "Input Image List");
     SetParameterDescription("il", "Input image list filename.");
     AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List");
-    SetParameterDescription("vd", "Vector Data of samples used to validate the estimator.");
+    SetParameterDescription("vd", "List of vector data to select validation samples.");
     AddParameter(ParameterType_Filename, "imstat", "XML image statistics file");
     MandatoryOff("imstat");
     SetParameterDescription("imstat", "Filename of an XML file containing mean and standard deviation of input images.");
@@ -143,11 +143,11 @@ private:
     ElevationParametersHandler::AddElevationParameters(this, "elev");
     
     AddParameter(ParameterType_Filename, "out", "Output filename");
-    SetParameterDescription("out", "Filename, which contains the performances of the SVM model.");
+    SetParameterDescription("out", "Output file, which contains the performances of the SVM model.");
     MandatoryOff("out");
     AddParameter(ParameterType_Filename, "svm", "SVM validation filename");
     SetParameterDescription("svm",
-                            "SVM model to validate (given by TrainSVMImagesClassification output for instance).");
+                            "Input SVM model to validate (given by TrainSVMImagesClassification for instance).");
 
    // Doc example parameter settings
    SetDocExampleParameterValue("il", "QB_1_ortho.tif");

@@ -57,7 +57,7 @@ private:
     SetDescription("Apply a transform to each vertex of the input VectorData");
     
     SetDocName("Vector Data Transformation");
-    SetDocLongDescription("This application performs a transformation of an input vector data transforming each vertex that composed the vector data. The applied transformation manages translation, rotation and scale, and can be centered or not.");
+    SetDocLongDescription("This application performs a transformation of an input vector data transforming each vertex in the vector data. The applied transformation manages translation, rotation and scale, and can be centered or not.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -65,18 +65,22 @@ private:
     AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_InputVectorData, "vd", "Input Vector data");
+    SetParameterDescription("vd", "Input vector data to transform");
+    
     AddParameter(ParameterType_OutputVectorData,"out","Output Vector data");
+    SetParameterDescription("out", "Output transformed vector data");
 
     AddParameter(ParameterType_InputImage, "in", "Support image");
-    SetParameterDescription("in","Image needed as a support of the VectorData");
+    SetParameterDescription("in","Image needed as a support to the vector data");
   
     // Transform Group
     AddParameter(ParameterType_Group, "transform", "Transform parameters");
+    SetParameterDescription("transform", "Group of parameters to define the transform");
 
     AddParameter(ParameterType_Float, "transform.tx", "Translation X");
-    SetParameterDescription("transform.tx","Translation in the X direction");
+    SetParameterDescription("transform.tx","Translation in the X direction (in pixels)");
     AddParameter(ParameterType_Float, "transform.ty", "Translation Y");
-    SetParameterDescription("transform.ty","Translation in the Y direction");
+    SetParameterDescription("transform.ty","Translation in the Y direction (in pixels)");
     SetDefaultParameterFloat("transform.tx", 0.);
     SetDefaultParameterFloat("transform.ty", 0.);
       
@@ -85,9 +89,9 @@ private:
     SetDefaultParameterFloat("transform.ro", 0.);
 
     AddParameter(ParameterType_Float, "transform.centerx", "Center X");
-    SetParameterDescription("transform.centerx","The first coordinate of the rotation center");
+    SetParameterDescription("transform.centerx","X coordinate of the rotation center (in physical units)");
     AddParameter(ParameterType_Float, "transform.centery", "Center Y");
-    SetParameterDescription("transform.centery","The second coordinate of the rotation center");
+    SetParameterDescription("transform.centery","Y coordinate of the rotation center (in physical units)");
     SetDefaultParameterFloat("transform.centerx", 0.);
     SetDefaultParameterFloat("transform.centery", 0.);
 

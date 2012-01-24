@@ -47,7 +47,7 @@ private:
     SetDescription("Computes global mean and standard deviation for each band from a set of images and optionally saves the results in an XML file.");
     SetDocName("Compute Images second order statistics");
     SetDocLongDescription("This application computes a global mean and standard deviation for each band of a set of images and optionally saves the results in an XML file. The output XML is intended to be used an input for the TrainImagesSVMClassifier application to normalize samples before learning.");
-    SetDocLimitations("The set of input images must have the same number of bands. Input images must be of the same number and type and bands order has to be identical.");
+    SetDocLimitations("Each image of the set must contain the same bands as the others (i.e. same types, in the same order).");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Documentation of the TrainImagesSVMClassifier application.");
  
@@ -58,7 +58,7 @@ private:
     SetParameterDescription( "il", "List of input images filenames." );
 
     AddParameter(ParameterType_Filename, "out", "Output XML file");
-    SetParameterDescription( "out", "XML filename where the statistics are saved for future reuse" );
+    SetParameterDescription( "out", "XML filename where the statistics are saved for future reuse." );
     MandatoryOff("out");
 
    // Doc example parameter settings

@@ -79,14 +79,14 @@ private:
     MandatoryOff("mask");
 
     AddParameter(ParameterType_Filename, "svm", "SVM Model file");
-    SetParameterDescription("svm", "A SVM model file.");
+    SetParameterDescription("svm", "A SVM model file (*.svm extension, produced by TrainSVMImagesClassifier application).");
 
     AddParameter(ParameterType_Filename, "imstat", "Statistics file");
-    SetParameterDescription("imstat", "A XML file containing mean and standard deviation to center and reduce samples before classification.");
+    SetParameterDescription("imstat", "A XML file containing mean and standard deviation to center and reduce samples before classification (produced by ComputeImagesStatistics application).");
     MandatoryOff("imstat");
     
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription( "out", "Output image labeled with class labels");
+    SetParameterDescription( "out", "Output image containing class labels");
     SetParameterOutputImagePixelType( "out", ImagePixelType_uint8);
 
     AddParameter(ParameterType_RAM, "ram", "Available RAM");

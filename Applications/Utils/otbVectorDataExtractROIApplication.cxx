@@ -71,7 +71,7 @@ private:
     SetDescription("Perform an extract ROI on the input vector data according to the input image extent");
 
     SetDocName("VectorData Extract ROI");
-    SetDocLongDescription("This application extracts the VectorData features belonging to a region specified by the support image envelope");
+    SetDocLongDescription("This application extracts the vector data features belonging to a region specified by the support image envelope");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -79,9 +79,16 @@ private:
     AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_Group,"io","Input and output data");
+    SetParameterDescription("io", "Group containing input and output parameters");
+    
     AddParameter(ParameterType_InputVectorData, "io.vd", "Input Vector data");
+    SetParameterDescription("io.vd", "Input vector data");
+    
     AddParameter(ParameterType_InputImage,      "io.in", "Support image");
+    SetParameterDescription("io.in", "Support image that specifies the extracted region");
+    
     AddParameter(ParameterType_OutputVectorData,"io.out","Output Vector data");
+    SetParameterDescription("io.out", "Output extracted vector data");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");

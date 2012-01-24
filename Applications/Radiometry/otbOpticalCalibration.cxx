@@ -82,17 +82,18 @@ private:
     SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5");
     // Documentation
     SetDocName("Optical calibration");
-    SetDocLongDescription("The application allows to convert pixel values from DN (for Digital Numbers) to physically interpretable and comparable values.Calibrated values are called surface reflectivity and its values lie in the range [0, 1].\nThe first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illumination.\nThe second level is called Top Of Canopy (TOC) reflectivity. In addition to sensor gain and solar illumination, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\nIt is also possible to indicate an AERONET file which contains atmospheric parameters (version 1 and version 2 of Aeronet file are supported.");
+    SetDocLongDescription("The application allows to convert pixel values from DN (for Digital Numbers) to physically interpretable and comparable values. Calibrated values are called surface reflectivity and its values lie in the range [0, 1].\nThe first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illumination.\nThe second level is called Top Of Canopy (TOC) reflectivity. In addition to sensor gain and solar illumination, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\nIt is also possible to indicate an AERONET file which contains atmospheric parameters (version 1 and version 2 of Aeronet file are supported.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("The OTB CookBook");
  
     AddDocTag(Tags::Calibration);
 
-    AddParameter(ParameterType_InputImage,  "in",  "Input Image Filename");
+    AddParameter(ParameterType_InputImage,  "in",  "Input");
+    SetParameterDescription("in", "Input image filename (values in DN)");
 
-    AddParameter(ParameterType_OutputImage, "out", "Output Image Filename");
-    SetParameterDescription("out","Calibrated Image Filename");
+    AddParameter(ParameterType_OutputImage, "out", "Output");
+    SetParameterDescription("out","Output calibrated image filename");
 
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
@@ -104,12 +105,12 @@ private:
     SetParameterString("level", "toa");
 
     AddParameter(ParameterType_Empty, "milli", "Convert to milli reflectance");
-    SetParameterDescription("milli", "Output milli-reflectance instead of reflectance.\n"
-                                     "This allows to put save the image in integer pixel type (in the range [0, 1000]  instead of floating point in the range [0, 1]. In order to do that, use this option and set the output pixel type (-out filename uint16 for example)");
+    SetParameterDescription("milli", "Flag to use milli-reflectance instead of reflectance.\n"
+                                     "This allows to save the image with integer pixel type (in the range [0, 1000]  instead of floating point in the range [0, 1]. In order to do that, use this option and set the output pixel type (-out filename uint16 for example)");
     DisableParameter("milli");
     MandatoryOff("milli");
 
-    AddParameter(ParameterType_Filename,   "rsr", "Relative Spectral Response File");
+    AddParameter(ParameterType_Filename, "rsr", "Relative Spectral Response File");
     std::ostringstream oss;
     oss << "Sensor relative spectral response file"<<std::endl;
     oss << "By default the application gets these informations in the metadata";
@@ -126,9 +127,16 @@ private:
     AddChoice("atmo.aerosol.desertic",    "Desertic");
 
     AddParameter(ParameterType_Float, "atmo.oz",   "Ozone Amount");
+    SetParameterDescription("atmo.oz", "Ozone Amount");
+    
     AddParameter(ParameterType_Float, "atmo.wa",   "Water Vapor Amount");
+    SetParameterDescription("atmo.wa", "Water Vapor Amount (in saturation fraction of water)");
+    
     AddParameter(ParameterType_Float, "atmo.pressure", "Atmospheric Pressure");
+    SetParameterDescription("atmo.pressure", "Atmospheric Pressure (in hPa)");
+    
     AddParameter(ParameterType_Float, "atmo.opt",  "Aerosol Optical Thickness");
+    SetParameterDescription("atmo.opt", "Aerosol Optical Thickness");
 
     SetDefaultParameterFloat("atmo.oz", 0.);
     SetDefaultParameterFloat("atmo.wa",  2.5);
@@ -140,7 +148,7 @@ private:
     MandatoryOff("atmo.pressure");
     MandatoryOff("atmo.opt");
 
-    AddParameter(ParameterType_Filename,   "atmo.aeronet", "Aeronet File");
+    AddParameter(ParameterType_Filename, "atmo.aeronet", "Aeronet File");
     SetParameterDescription("atmo.aeronet","Aeronet file containing atmospheric parameters");
     MandatoryOff("atmo.aeronet");
 

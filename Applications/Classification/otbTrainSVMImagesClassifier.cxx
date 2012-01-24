@@ -133,8 +133,8 @@ private:
     SetDescription("Train a SVM classifier from multiple pairs of images and training vector data.");
 
     // Documentation
-    SetDocName("Train SVM classifier from multiple image");
-    SetDocLongDescription("This application performs SVM classifier training from multiple pairs of input images and training vector data. Samples are composed of pixel values in each band optionally centered and reduced using XML statistics file produced by the ComputeImagesStatistics application.\n The training vector data must contain polygons with a positive integer field representing the class label. Name of the field can be set using the \"Class label field\" parameter. Training and validation sample lists are built such that each class is equally represented in the two lists. One parameter allows to control the ratio between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and validation sets per class and per image.\n Several SVM classifier parameters cas be set. The kernel function which defined the feature space (for example if the kernel is a Gaussian radial basis function kernel the corresponding feature space of infinite dimensions). To allow some flexibility in separating the classes, SVM models have a cost parameter, C, that controls the trade off between allowing training errors and forcing rigid margins. It creates a soft margin that permits some misclassifications. Increasing the value of C increases the cost of misclassifying points and forces the creation of a more accurate model that may not generalize well. Classifier parameters can also be optimize.");
+    SetDocName("Train SVM classifier from multiple images");
+    SetDocLongDescription("This application performs SVM classifier training from multiple pairs of input images and training vector data. Samples are composed of pixel values in each band optionally centered and reduced using XML statistics file produced by the ComputeImagesStatistics application.\n The training vector data must contain polygons with a positive integer field representing the class label. Name of the field can be set using the \"Class label field\" parameter. Training and validation sample lists are built such that each class is equally represented in both lists. One parameter allows to control the ratio between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and validation sets per class and per image.\n Several SVM classifier parameters can be set, such as the kernel function which defines the feature space (for example if the kernel is a Gaussian radial basis function, the corresponding feature space is an infinite-dimensional space). To allow some flexibility in the classification, SVM models have a cost parameter, C, that controls the trade-off between allowing training errors and forcing rigid margins. It creates a soft margin that permits some misclassifications. Increasing the value of C increases the cost of misclassifying points and forces the creation of a more accurate model that may not generalize well. Classifier parameters can also be optimized.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -147,12 +147,12 @@ private:
     AddParameter(ParameterType_InputImageList, "io.il", "Input Image List");
     SetParameterDescription("io.il", "A list of input images.");
     AddParameter(ParameterType_InputVectorDataList, "io.vd", "Vector Data List");
-    SetParameterDescription("io.vd", "A list of vector data sample used to train the estimator.");
+    SetParameterDescription("io.vd", "A list of vector data to select the training samples.");
     AddParameter(ParameterType_Filename, "io.imstat", "XML image statistics file");
     MandatoryOff("io.imstat");
     SetParameterDescription("io.imstat", "Filename of an XML file containing mean and standard deviation of input images.");
     AddParameter(ParameterType_Filename, "io.out", "Output SVM model");
-    SetParameterDescription("io.out", "Output SVM model");
+    SetParameterDescription("io.out", "Output file containing the SVM model estimated");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
@@ -164,11 +164,11 @@ private:
     AddParameter(ParameterType_Int, "sample.mt", "Maximum training sample size");
     //MandatoryOff("mt");
     SetDefaultParameterInt("sample.mt", -1);
-    SetParameterDescription("sample.mt", "Maximum size of the training sample (default = -1).");
+    SetParameterDescription("sample.mt", "Maximum size of the training sample list (default = -1).");
     AddParameter(ParameterType_Int, "sample.mv", "Maximum validation sample size");
     // MandatoryOff("mv");
     SetDefaultParameterInt("sample.mv", -1);
-    SetParameterDescription("sample.mv", "Maximum size of the validation sample (default = -1)");
+    SetParameterDescription("sample.mv", "Maximum size of the validation sample list (default = -1)");
 
     // AddParameter(ParameterType_Int, "sample.b", "Balance and grow the training set");
     // SetParameterDescription("sample.b", "Balance and grow the training set.");
@@ -176,11 +176,11 @@ private:
         
     AddParameter(ParameterType_Float, "sample.vtr", "training and validation sample ratio");
     SetParameterDescription("sample.vtr",
-                            "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5.");
+                            "Ratio between training and validation samples (0.0 = all training, 1.0 = all validation) default = 0.5.");
     SetParameterFloat("sample.vtr", 0.5);
     
     AddParameter(ParameterType_Filename, "sample.vfn", "Name of the discrimination field");
-    SetParameterDescription("sample.vfn", "Name of the field using to discriminate class in the vector data files.");
+    SetParameterDescription("sample.vfn", "Name of the field used to discriminate class in the vector data files.");
     SetParameterString("sample.vfn", "Class");
 
     //Group SVM
@@ -193,12 +193,12 @@ private:
     AddChoice("svm.k.sigmoid", "Sigmoid");
     SetParameterString("svm.k", "linear");
     SetParameterDescription("svm.k", "SVM Kernel Type.");
-    AddParameter(ParameterType_Float, "svm.c", "Control trade off between training errors and forcing rigid margins.");
+    AddParameter(ParameterType_Float, "svm.c", "Cost parameter C.");
     SetParameterFloat("svm.c", 1.0);
-    SetParameterDescription("svm.c", "SVM models have a cost parameter C (1 by default).");
+    SetParameterDescription("svm.c", "SVM models have a cost parameter C (1 by default) to control the trade-off between training errors and forcing rigid margins.");
     AddParameter(ParameterType_Empty, "svm.opt", "parameters optimization");
     MandatoryOff("svm.opt");
-    SetParameterDescription("svm.opt", "SVM parameters optimization");
+    SetParameterDescription("svm.opt", "SVM optimization flag");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("io.il", "QB_1_ortho.tif");

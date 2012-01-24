@@ -67,28 +67,37 @@ private:
     AddDocTag(Tags::Filter);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("in", "Input image to filter.");
+    SetParameterDescription("in", "Input image to smooth.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription("out", "Filtered image.");
+    SetParameterDescription("out", "Output smoothed image.");
 
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
 
     AddParameter(ParameterType_Choice,      "type", "Smoothing Type");
-    SetParameterDescription("type", "smoothing kernel to apply : mean, gaussian, anisotropric diffusion.");
+    SetParameterDescription("type", "Smoothing kernel to apply");
+    
     AddChoice("type.mean",     "Mean");
+    
     AddParameter(ParameterType_Radius, "type.mean.radius", "Radius");
+    SetParameterDescription("type.mean.radius", "Mean radius (in pixels)");
     SetDefaultParameterInt("type.mean.radius", 2);
 
     AddChoice("type.gaussian", "Gaussian");
+    
     AddParameter(ParameterType_Radius, "type.gaussian.radius", "Radius");
-
+    SetParameterDescription("type.gaussian.radius", "Gaussian radius (in pixels)");
     SetDefaultParameterInt("type.gaussian.radius", 2);
 
     AddChoice("type.anidif",   "Anisotropic Diffusion");
+    
     AddParameter(ParameterType_Float,  "type.anidif.timestep", "Time Step");
+    SetParameterDescription("type.anidif.timestep", "Diffusion equation time step");
+    
     AddParameter(ParameterType_Int,  "type.anidif.nbiter", "Nb Iterations");
+    SetParameterDescription("type.anidif.nbiter", "Number of iterations");
+    
     SetDefaultParameterFloat("type.anidif.timestep",   0.125);
     SetDefaultParameterInt("type.anidif.nbiter",     10);
 
