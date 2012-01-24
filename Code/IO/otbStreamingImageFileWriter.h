@@ -284,6 +284,9 @@ private:
   bool m_WriteGeomFile;              // Write a geom file to store the kwl
 
   StreamingManagerPointerType m_StreamingManager;
+
+  bool          m_IsObserving;
+  unsigned long m_ObserverID;
 };
 
 } // end namespace otb

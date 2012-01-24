@@ -60,7 +60,9 @@ StreamingImageFileWriter<TInputImage>
     m_FactorySpecifiedImageIO(false),
     m_UseCompression(false),
     m_UseInputMetaDataDictionary(false),
-    m_WriteGeomFile(false)
+    m_WriteGeomFile(false),
+    m_IsObserving(true),
+    m_ObserverID(0)
 {
   // By default, we use tiled streaming, with automatic tile size
   // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
@@ -544,6 +546,8 @@ StreamingImageFileWriter<TInputImage>
 
   // Get the source process object
   itk::ProcessObject* source = inputPtr->GetSource();
+  m_IsObserving = false;
+  m_ObserverID = 0;
 
   // Check if source exists
   if(source)
@@ -554,7 +558,8 @@ StreamingImageFileWriter<TInputImage>
     CommandPointerType command = CommandType::New();
     command->SetCallbackFunction(this, &Self::ObserveSourceFilterProgress);
 
-    source->AddObserver(itk::ProgressEvent(), command);
+    m_ObserverID = source->AddObserver(itk::ProgressEvent(), command);
+    m_IsObserving = true;
     }
   else
     {
@@ -596,6 +601,12 @@ StreamingImageFileWriter<TInputImage>
 
   // Notify end event observers
   this->InvokeEvent(itk::EndEvent());
+
+  if (m_IsObserving)
+    {
+    m_IsObserving = false;
+    source->RemoveObserver(m_ObserverID);
+    }
 
   /**
    * Now we have to mark the data as up to data.
