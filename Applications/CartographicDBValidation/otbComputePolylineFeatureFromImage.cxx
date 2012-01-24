@@ -79,32 +79,32 @@ private:
   void DoInit()
   {
     SetName("ComputePolylineFeatureFromImage");
-    SetDescription("Compute a polyline feature descriptors from an input image which are part of the polyline pixels that verify the FeatureExpression");
+    SetDescription("This application compute for each studied polyline, contained in the input VectorData, the choosen descriptors.");
 
     SetDocName("Compute Polyline Feature From Image");
-    SetDocLongDescription("This application computes a polyline feature descriptors from an input image which are part of the polyline pixels that verify the FeatureExpression.");
+    SetDocLongDescription("The first step in the classifier fusion based validation is to compute, for each studied polyline, the choosen descriptors. ");
     SetDocLimitations("Since it does not rely on streaming process, take care of the size of input image before launching application.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     AddDocTag(Tags::FeatureExtraction);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-    SetParameterDescription("in", "An image from which to compute description.");
+    SetParameterDescription("in", "An image to compute the descriptors on.");
 
     AddParameter(ParameterType_InputVectorData, "vd", "Vector Data");
-    SetParameterDescription("vd", "Vector data containing the polylines onto which the feature will be computed.");
+    SetParameterDescription("vd", "Vector data containing the polylines where the features will be computed.");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     AddParameter(ParameterType_String, "expr", "Feature expression");
-    SetParameterDescription("expr", "The feature formula (b1 < 0.3)");
+    SetParameterDescription("expr", "The feature formula (b1 < 0.3) where b1 is the standard name of input image first band");
 
     AddParameter(ParameterType_String, "field", "Feature name");
-    SetParameterDescription("field", "The feature name (NONDVI, ROADSA...)");
+    SetParameterDescription("field", "The field name corresponding to the feature codename (NONDVI, ROADSA...)");
 
     AddParameter(ParameterType_OutputVectorData, "out", "Output Vector Data");
-    SetParameterDescription("out", "The output vector data containing the features");
+    SetParameterDescription("out", "The output vector data containing polylines with a new field");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "NDVI.TIF");

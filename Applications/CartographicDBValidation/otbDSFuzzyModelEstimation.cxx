@@ -150,12 +150,12 @@ private:
     MandatoryOff("wgt");
     SetParameterFloat("wgt", 0.5);
 
-    AddParameter(ParameterType_Filename,"initmod","initial model");
-    SetParameterDescription("initmod","Initial state for the model Optimizer");
+    AddParameter(ParameterType_Filename,"initmod","initialization model");
+    SetParameterDescription("initmod","Initialization model (xml file) to be used. If the xml initialization model is set, the descriptor list is not used (specified using the option -desclist)");
     MandatoryOff("initmod");
 
     AddParameter(ParameterType_StringList, "desclist","Descriptor list");
-    SetParameterDescription("desclist","List of the descriptors used in the model (must be specified to perform an automatic initialization)");
+    SetParameterDescription("desclist","List of the descriptors to be used in the model (must be specified to perform an automatic initialization)");
     MandatoryOff("desclist");
     SetParameterString("desclist","");
 
@@ -169,7 +169,7 @@ private:
     MandatoryOff("optobs");
 
     AddParameter(ParameterType_Filename,"out","Output filename");
-    SetParameterDescription("out","Output model file name (xml file)");
+    SetParameterDescription("out","Output model file name (xml file) contains the optimal model to perform informations fusion.");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("psin", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp");

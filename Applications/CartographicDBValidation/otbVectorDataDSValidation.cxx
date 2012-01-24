@@ -64,16 +64,16 @@ private:
     SetDescription("Vector data validation based on the fusion of features using Dempster-Shafer evidence theory framework.");
 
     SetDocName("Vector Data validation");
-    SetDocLongDescription("Vector data validation based on the fusion of features using Dempster-Shafer evidence theory framework.");
+    SetDocLongDescription("This application validates or unvalidate the studied samples using the Dempster-Shafer theory.");
     SetDocLimitations("None.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("http://en.wikipedia.org/wiki/Dempster-Shafer_theory");
    
     AddDocTag(Tags::FeatureExtraction);
 
 
     AddParameter(ParameterType_InputVectorData, "in", "Input Vector Data");
-    SetParameterDescription("in", "Input vector data for validation");
+    SetParameterDescription("in", "Input vector data to validate");
 
     AddParameter(ParameterType_Filename, "descmod", "Descriptors model filename");
     SetParameterDescription("descmod", "Fuzzy descriptors model (xml file)");
@@ -95,13 +95,13 @@ private:
     SetParameterFloat("thd", 0.5);
 
     AddParameter(ParameterType_OutputVectorData, "out", "Output Vector Data");
-    SetParameterDescription("out", "Output validated vector data");
+    SetParameterDescription("out", "Output VectorData containing only the validated samples");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp");
     SetDocExampleParameterValue("belsup", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp");
     SetDocExampleParameterValue("descmod", "DSFuzzyModel.xml");
-    SetDocExampleParameterValue("out", "VectorDataDSValidation.xml");
+    SetDocExampleParameterValue("out", "VectorDataDSValidation.shp");
     
   }
 
