@@ -19,4 +19,10 @@ ADD_TEST(NAME FA-000478-UncaughtException
                   $<TARGET_FILE_DIR:otbapp_StereoSensorModelToElevationMap>
                   ${OTB_DATA_ROOT}/Examples/sensor_stereo_left.tif 
                   ${OTB_DATA_ROOT}/Examples/sensor_stereo_right.tif 
-                  ${OTBTesting_BINARY_DIR}/Temporary/FA-0000478-output.tif)
+                  ${TEMP}/FA-0000478-output.tif)
+
+ADD_TEST(NAME FA-0000495-StreamingImageFileWriterProgressReporting
+         COMMAND  ${CXX_TEST_PATH}/0000495-StreamingImageFileWriterProgressReporting
+                  ${OTB_DATA_ROOT}/Examples/sensor_stereo_left.tif
+                  ${TEMP}/FA-0000495-output1.tif
+                  ${TEMP}/FA-0000495-output2.tif)

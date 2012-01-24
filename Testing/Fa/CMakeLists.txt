@@ -60,6 +60,9 @@ ENDIF(BUILD_APPLICATIONS)
 ADD_EXECUTABLE(0000437-WriteImageCentOS 0000437-WriteImageCentOS.cxx)
 TARGET_LINK_LIBRARIES(0000437-WriteImageCentOS OTBIO OTBCommon)
 
+ADD_EXECUTABLE(0000495-StreamingImageFileWriterProgressReporting
+               0000495-StreamingImageFileWriterProgressReporting.cxx)
+TARGET_LINK_LIBRARIES(0000495-StreamingImageFileWriterProgressReporting OTBIO OTBCommon)
 
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
