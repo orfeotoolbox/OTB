@@ -51,7 +51,7 @@ public:
   /** Datatype used for the density */
   typedef float ValueType;
   //typedef std::pair<ValueType, ValueType> FloatType;
-  typedef itk::Vector<ValueType, 2> FloatType; 
+  typedef itk::Vector<ValueType, 2> FloatType;
 
   typedef itk::ImageFunction<TInputImage, FloatType ,
       TCoordRep>                                          Superclass;
