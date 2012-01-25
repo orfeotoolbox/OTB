@@ -23,21 +23,37 @@ OTB_TEST_APPLICATION(NAME  apTvUtSmoothingTest
 
 OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoTest
                      APP  ReadImageInfo
-                     OPTIONS -in ${INPUTDATA}/poupees.tif)
+                     OPTIONS -in ${INPUTDATA}/poupees.tif  
+                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoTest.txt
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtReadImageInfoTest.txt
+                	     ${TEMP}/apTvUtReadImageInfoTest.txt)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoSpot5
                      APP  ReadImageInfo
-                     OPTIONS -in ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF)
+                     OPTIONS -in ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF  
+                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoSpot5.txt
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtReadImageInfoSpot5.txt
+                	     ${TEMP}/apTvUtReadImageInfoSpot5.txt)
                      
 OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoERS
                      APP  ReadImageInfo
-                     OPTIONS -in ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001)
+                     OPTIONS -in ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001  
+                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoERS.txt
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtReadImageInfoERS.txt
+                	     ${TEMP}/apTvUtReadImageInfoERS.txt)
 
 OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoRADARSAT1
                      APP  ReadImageInfo
-                     OPTIONS -in ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001)
+                     OPTIONS -in ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001  
+                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoRADARSAT1.txt
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtReadImageInfoRADARSAT1.txt
+                	     ${TEMP}/apTvUtReadImageInfoRADARSAT1.txt)
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 

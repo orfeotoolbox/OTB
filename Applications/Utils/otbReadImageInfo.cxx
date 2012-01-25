@@ -251,7 +251,7 @@ private:
     FloatType approxGroundSpacing = std::make_pair(itk::NumericTraits<ValueType>::Zero, itk::NumericTraits<ValueType>::min());
 
     FloatVectorImageType::IndexType  index;
-    vnl_random rand;
+    vnl_random rand(12345);
 
     index[0] = static_cast<FloatVectorImageType::IndexType::IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
     index[1] = static_cast<FloatVectorImageType::IndexType::IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
