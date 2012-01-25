@@ -18,16 +18,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include <boost/algorithm/string.hpp>
-
-#include "otbStreamingStatisticsVectorImageFilter.h"
-#include "otbEigenvalueLikelihoodMaximisation.h"
 #include "otbVcaImageFilter.h"
-#include "otbUnConstrainedLeastSquareImageFilter.h"
-#include "otbISRAUnmixingImageFilter.h"
-#include "otbNCLSUnmixingImageFilter.h"
-#include "otbFCLSUnmixingImageFilter.h"
-
 #include "otbVectorImageToMatrixImageFilter.h"
 
 
@@ -38,9 +29,8 @@ namespace Wrapper
 
 const unsigned int Dimension = 2;
 
-typedef otb::VCAImageFilter<DoubleVectorImageType> VCAFilterType;
+typedef otb::VCAImageFilter<DoubleVectorImageType>                 VCAFilterType;
 typedef otb::VectorImageToMatrixImageFilter<DoubleVectorImageType> VectorImageToMatrixImageFilterType;
-
 
 class VertexComponentAnalysis : public Application
 {

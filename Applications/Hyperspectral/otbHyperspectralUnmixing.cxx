@@ -18,11 +18,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include <boost/algorithm/string.hpp>
-
 #include "otbStreamingStatisticsVectorImageFilter.h"
-#include "otbEigenvalueLikelihoodMaximisation.h"
-#include "otbVcaImageFilter.h"
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 #include "otbISRAUnmixingImageFilter.h"
 #include "otbNCLSUnmixingImageFilter.h"
@@ -40,8 +36,6 @@ namespace Wrapper
 const unsigned int Dimension = 2;
 
 typedef otb::StreamingStatisticsVectorImageFilter<DoubleVectorImageType> StreamingStatisticsVectorImageFilterType;
-typedef otb::EigenvalueLikelihoodMaximisation<double>                    ELMType;
-typedef otb::VCAImageFilter<DoubleVectorImageType>                       VCAFilterType;
 
 typedef otb::UnConstrainedLeastSquareImageFilter<DoubleVectorImageType, DoubleVectorImageType, double> UCLSUnmixingFilterType;
 typedef otb::ISRAUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             ISRAUnmixingFilterType;
