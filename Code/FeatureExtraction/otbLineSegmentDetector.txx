@@ -176,7 +176,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   /** Computing the length of the bins*/
   unsigned int NbBin = 1024;
-  double       lengthBin = static_cast<double>((max - min)) / static_cast<double>(NbBin - 1);
+  double       lengthBin = static_cast<double>((max - min)) / static_cast<double>(NbBin-1);
   CoordinateHistogramType  tempHisto(NbBin);  /** Initializing the histogram */
 
   // New region : without boundaries
@@ -221,8 +221,11 @@ LineSegmentDetector<TInputImage, TPrecision>
   it.GoToBegin();
   while (!it.IsAtEnd())
     {
-    unsigned int    bin = static_cast<unsigned int> (static_cast<double>(it.Value()) / lengthBin);
+    unsigned int    bin = static_cast<unsigned int> (static_cast<double>(it.Value()-min) / lengthBin);
     
+    // Highlights bug 498
+    assert(bin<NbBin);
+
     if (it.Value() - m_Threshold > 1e-10) tempHisto[NbBin - bin - 1].push_back(it.GetIndex());
     else SetPixelToUsed(it.GetIndex());
 
