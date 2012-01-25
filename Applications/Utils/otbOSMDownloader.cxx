@@ -72,7 +72,7 @@ private:
     MandatoryOff("key");
 
     AddParameter(ParameterType_String, "value",  "OSM tag value");
-    SetParameterDescription("key", "OSM tag value to extract (motorway, footway...)");
+    SetParameterDescription("value", "OSM tag value to extract (motorway, footway...)");
     MandatoryOff("value");
 
     // Elevation

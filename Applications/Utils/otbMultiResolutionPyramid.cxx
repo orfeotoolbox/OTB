@@ -64,7 +64,7 @@ private:
 
     // Documentation
     SetDocName("Multi Resolution Pyramid");
-    SetDocLongDescription("This application builds a multi-resolution pyramid of the input image. USer can specified the number of levels of the pyramid and the subsampling factor. To spped ip the process, you can use the fast scheme option");
+    SetDocLongDescription("This application builds a multi-resolution pyramid of the input image. User can specified the number of levels of the pyramid and the subsampling factor. To speed up the process, you can use the fast scheme option");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -89,9 +89,11 @@ private:
 
     AddParameter(ParameterType_Int, "sfactor", "Subsampling factor");
     SetDefaultParameterInt("sfactor", 2);
+    SetParameterDescription( "sfactor", "Subsampling factor between each level of the pyramid (default is 2).");
 
-    AddParameter(ParameterType_Float,  "vfactor", "Subsampling factor");
+    AddParameter(ParameterType_Float,  "vfactor", "Variance factor");
     SetDefaultParameterFloat("vfactor", 0.6);
+    SetParameterDescription( "vfactor", "Variance factor use in smoothing. It is multiplied by the subsampling factor of each level in the  pyramid (default is 0.6).");
 
     // Boolean Fast scheme
     AddParameter(ParameterType_Empty, "fast", "Use Fast Scheme");
