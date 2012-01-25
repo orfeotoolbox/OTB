@@ -54,6 +54,7 @@ public:
 
   typedef itk::ImageFunction<TInputImage, FloatType ,
       TCoordRep>                                          Superclass;
+  
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -107,7 +108,7 @@ private:
   void operator =(const Self&);  //purposely not implemented
 
   ValueType              m_R;
-  ValueType              m_deg2radCoef;
+  ValueType              m_Deg2radCoef;
 };
 
 } // end namespace otb
