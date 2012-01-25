@@ -339,6 +339,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/CorrelChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/KullbackLeiblerDistanceChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/KullbackLeiblerProfileChDet.cxx
+  ${OTB_SOURCE_DIR}/Examples/ChangeDetection/MultivariateAlterationDetector.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/KdTreeBasedKMeansClustering.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/KMeansImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageKmeansModelEstimator.cxx
