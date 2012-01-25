@@ -248,7 +248,8 @@ private:
     GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
     groundSpacing->SetInputImage(inImage);
       
-    FloatType approxGroundSpacing = std::make_pair(itk::NumericTraits<ValueType>::Zero, itk::NumericTraits<ValueType>::min());
+    FloatType approxGroundSpacing;
+    approxGroundSpacing.Fill(itk::NumericTraits<ValueType>::Zero);
 
     FloatVectorImageType::IndexType  index;
     vnl_random rand(12345);
@@ -259,8 +260,8 @@ private:
     approxGroundSpacing = groundSpacing->EvaluateAtIndex(index);
 
     //Get image estimated ground spacing (in m)
-    SetParameterFloat("estimatedgroundspacingx", approxGroundSpacing.first);
-    SetParameterFloat("estimatedgroundspacingy", approxGroundSpacing.second);
+    SetParameterFloat("estimatedgroundspacingx", approxGroundSpacing[0]);
+    SetParameterFloat("estimatedgroundspacingy", approxGroundSpacing[1]);
 
     ossOutput << "\tEstimated ground spacing (in meters): [" << GetParameterFloat("estimatedgroundspacingx") << "," << GetParameterFloat("estimatedgroundspacingy") << "]" << std::endl;
 
