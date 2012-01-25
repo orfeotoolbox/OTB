@@ -142,6 +142,9 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
   oss << "</body></html>";
 
   val = oss.str();
+
+  // Replace "\n" string with <br/>
+  itksys::SystemTools::ReplaceString( val, "\n", "<br/>");
 }
 
 void
