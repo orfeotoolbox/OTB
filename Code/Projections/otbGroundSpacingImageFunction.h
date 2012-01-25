@@ -40,7 +40,7 @@ namespace otb
  */
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT GroundSpacingImageFunction :
-    public itk::ImageFunction<TInputImage, std::pair<float, float>,
+    public itk::ImageFunction<TInputImage, itk::Vector<float, 2>,
       TCoordRep>
 {
 public:
@@ -49,8 +49,8 @@ public:
   
   /** Datatype used for the density */
   typedef float ValueType;
-  typedef std::pair<ValueType, ValueType> FloatType;
-  
+  //typedef std::pair<ValueType, ValueType> FloatType;
+  typedef itk::Vector<ValueType, 2> FloatType; 
 
   typedef itk::ImageFunction<TInputImage, FloatType ,
       TCoordRep>                                          Superclass;

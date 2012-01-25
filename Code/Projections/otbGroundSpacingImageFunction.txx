@@ -61,9 +61,12 @@ typename GroundSpacingImageFunction<TInputImage, TCoordRep>
 GroundSpacingImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
+  FloatType var;
+  
   if (!this->GetInputImage())
     {
-    return (std::make_pair(itk::NumericTraits<ValueType>::min(), itk::NumericTraits<ValueType>::min()));
+    var.Fill(itk::NumericTraits<ValueType>::min());
+    return var;
     }
 
   PointType point = this->GetPixelLocation(index);
@@ -103,9 +106,9 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
   ValueType cY = Two * vcl_atan2(vcl_sqrt(aY), vcl_sqrt(One - aY));
   ValueType dY = m_R * cY;
 
-  FloatType var;
-  var.first = dX / (vcl_fabs(static_cast<ValueType>(indexSrcX[0] - index[0])));
-  var.second = dY / (vcl_fabs(static_cast<ValueType>(indexSrcY[1] - index[1])));
+  //FloatType var;
+  var[0] = dX / (vcl_fabs(static_cast<ValueType>(indexSrcX[0] - index[0])));
+  var[1] = dY / (vcl_fabs(static_cast<ValueType>(indexSrcY[1] - index[1])));
 
   return var;
 }
