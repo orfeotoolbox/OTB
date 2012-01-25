@@ -38,7 +38,7 @@ TARGET_LINK_LIBRARIES(KullbackLeiblerProfileChDet OTBIO OTBCommon  ITKStatistics
 ADD_EXECUTABLE(KullbackLeiblerSupervizedDistanceChDet KullbackLeiblerSupervizedDistanceChDet.cxx)
 TARGET_LINK_LIBRARIES(KullbackLeiblerSupervizedDistanceChDet OTBIO OTBCommon  ITKStatistics)
 
-ADD_EXECUTABLE(MultivariateAlterationDetector otbMultivariateAlterationDetectorExample.cxx)
+ADD_EXECUTABLE(MultivariateAlterationDetector MultivariateAlterationDetector.cxx)
 TARGET_LINK_LIBRARIES(MultivariateAlterationDetector OTBIO OTBCommon  ITKStatistics)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -23,11 +23,13 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {/Spot5-Gloucester-before.tif}, {Spot5-Gloucester-after.tif}
+//    INPUTS: {Spot5-Gloucester-before.tif}, {Spot5-Gloucester-after.tif}
 //    OUTPUTS: {MADOutput.tif}, {mad-input1.png}, {mad-input2.png}, {mad-output.png}
+//
 //  Software Guide : EndCommandLineArgs
 
-//  Software Guide : BeginLatex This example illustrates the class
+//  Software Guide : BeginLatex 
+// This example illustrates the class
 // \doxygen{otb}{MultivariateAlterationChangeDetectorImageFilter},
 // which implements the Multivariate Alteration Change Detector
 // algorithm (TODO: Add citation). This algorihtm allows to perform
@@ -62,7 +64,7 @@
 int main(int argc, char* argv[])
 {
 
-  if (argc < 4)
+  if (argc < 6)
     {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile1 inputImageFile2 outIn1Pretty outIn2Pretty outPretty"
@@ -220,9 +222,9 @@ int main(int argc, char* argv[])
 // detection by Multivariate Alteration Detector.
 // \begin{figure}
 // \center
-// \includegraphics[width=0.32\textwidth]{outIn1Pretty.eps}
-// \includegraphics[width=0.32\textwidth]{outIn2Pretty.eps}
-// \includegraphics[width=0.32\textwidth]{outPretty.eps}
+// \includegraphics[width=0.32\textwidth]{mad-input1.png}
+// \includegraphics[width=0.32\textwidth]{mad-input2.png}
+// \includegraphics[width=0.32\textwidth]{mad-output.png}
 // \itkcaption[CorrelationMultivariate Alteration Detection Results]{Result of the
 // Multivariate Alteration Detector results on SPOT5 data before and
 // after flooding.}
