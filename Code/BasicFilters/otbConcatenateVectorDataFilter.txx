@@ -85,8 +85,8 @@ ConcatenateVectorDataFilter<TVectorData>
   typename DataNodeType::Pointer outputRoot = this->GetOutput()->GetDataTree()->GetRoot()->Get();
   
   // Adding the layer to the data tree
-  this->GetOutput()->GetDataTree()->Add(m_Folder, outputRoot);
-  this->GetOutput()->GetDataTree()->Add(m_Document , m_Folder);
+  this->GetOutput()->GetDataTree()->Add(m_Document, outputRoot);
+  this->GetOutput()->GetDataTree()->Add(m_Folder, m_Document);
   
   // Retrieve all the inputs
   for(unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
