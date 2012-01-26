@@ -36,22 +36,33 @@ set(APPLICATION_BINARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 # Generate a script in the build dir, next to the cli launcher
 # Need a two-step process since configure_file don't support permissions
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree)
 
-if (NOT WIN32)
+if (WIN32)
+configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.bat.buildtree.in
+                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree/otbcli.bat
+                @ONLY )
+file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree/otbcli.bat
+     DESTINATION ${CLI_OUPUT_DIR}
+     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
+configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.bat.installtree.in
+                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbcli.bat
+                @ONLY )
+install(PROGRAMS ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbcli.bat
+        DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
+
+else()
 configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.buildtree.in
                 ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree/otbcli
                 @ONLY )
 file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree/otbcli
      DESTINATION ${CLI_OUPUT_DIR}
      FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
-endif(NOT WIN32)
-
-
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree)
-if (NOT WIN32)
 configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.installtree.in
                 ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbcli
                 @ONLY )
 install(PROGRAMS ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbcli
         DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
-endif(NOT WIN32)
+
+endif()
