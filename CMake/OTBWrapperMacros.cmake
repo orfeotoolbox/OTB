@@ -40,7 +40,7 @@ macro(OTB_CREATE_APPLICATION)
    endif()
    
    # Generate a quickstart script in the build dir
-   if (NOT WIN32)
+   #if (NOT WIN32)
 
       # What is the path to the applications
       # a MODULE target is always treated as LIBRARY
@@ -50,44 +50,63 @@ macro(OTB_CREATE_APPLICATION)
         set(APPLICATION_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR})
       endif()
 
-      set(SCRIPT_CLI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbcli_app.sh.in)
+      if (WIN32)
+        set(SCRIPT_CLI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbcli_app.bat.in)
+        set(SCRIPT_CLI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli_${APPLICATION_NAME}.bat)
+        set(SCRIPT_CLI_INSTALLABLE ${APPLICATION_BINARY_PATH}/otbcli_${APPLICATION_NAME}.bat)
+      else()
+        set(SCRIPT_CLI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbcli_app.sh.in)
+        set(SCRIPT_CLI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli_${APPLICATION_NAME})
+        set(SCRIPT_CLI_INSTALLABLE ${APPLICATION_BINARY_PATH}/otbcli_${APPLICATION_NAME})
+      endif()
+      
       if (EXISTS ${SCRIPT_CLI_SOURCE})
           # Generate a script in the build dir, next to the cli launcher
           configure_file( ${SCRIPT_CLI_SOURCE}
-                          ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli_${APPLICATION_NAME}
+                          ${SCRIPT_CLI_INTERMEDIATE}
                           @ONLY )
           
           # Copy it next to the application shared lib, and give executable rights
-          file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli_${APPLICATION_NAME}
+          file(COPY ${SCRIPT_CLI_INTERMEDIATE}
                DESTINATION ${APPLICATION_BINARY_PATH}
                FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
     
           if (OTB_INSTALL_BIN_DIR_CM24)
               # Install a version of this script if we are inside the OTB build
-              install(PROGRAMS ${APPLICATION_BINARY_PATH}/otbcli_${APPLICATION_NAME}
-                      DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
+              install(PROGRAMS ${SCRIPT_CLI_INSTALLABLE}
+                      DESTINATION ${OTB_INSTALL_BIN_DIR_CM24}
+                      COMPONENT RuntimeLibraries)
           endif()
       endif()
 
-      set(SCRIPT_GUI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbgui_app.sh.in)
+      if (WIN32)
+        set(SCRIPT_GUI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbgui_app.bat.in)
+        set(SCRIPT_GUI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui_${APPLICATION_NAME}.bat)
+        set(SCRIPT_GUI_INSTALLABLE ${APPLICATION_BINARY_PATH}/otbgui_${APPLICATION_NAME}.bat)
+      else()
+        set(SCRIPT_GUI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbgui_app.sh.in)
+        set(SCRIPT_GUI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui_${APPLICATION_NAME})
+        set(SCRIPT_GUI_INSTALLABLE ${APPLICATION_BINARY_PATH}/otbgui_${APPLICATION_NAME})
+      endif()
+
       if (EXISTS ${SCRIPT_GUI_SOURCE})
           # Generate a script in the build dir, next to the cli launcher
           configure_file( ${SCRIPT_GUI_SOURCE}
-                          ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui_${APPLICATION_NAME}
+                          ${SCRIPT_GUI_INTERMEDIATE}
                           @ONLY )
           
           # Copy it next to the application shared lib, and give executable rights
-          file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui_${APPLICATION_NAME}
+          file(COPY ${SCRIPT_GUI_INTERMEDIATE}
                DESTINATION ${APPLICATION_BINARY_PATH}
                FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
 
           if (OTB_INSTALL_BIN_DIR_CM24)
               # Install a version of this script if we are inside the OTB build
-              install(PROGRAMS ${APPLICATION_BINARY_PATH}/otbgui_${APPLICATION_NAME}
+              install(PROGRAMS ${SCRIPT_GUI_INSTALLABLE}
                       DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
           endif()
       endif()
-   endif(NOT WIN32)
+   #endif(NOT WIN32)
    
    list(APPEND OTB_APPLICATIONS_NAME_LIST ${APPLICATION_NAME})
    set(OTB_APPLICATIONS_NAME_LIST ${OTB_APPLICATIONS_NAME_LIST}
