@@ -32,11 +32,11 @@
 // This example illustrates the class
 // \doxygen{otb}{MultivariateAlterationChangeDetectorImageFilter},
 // which implements the Multivariate Alteration Change Detector
-// algorithm (TODO: Add citation). This algorihtm allows to perform
-// change detection from a pair multi-band images, including images
-// with different number of bands or modalities. Its output is a a
-// multi-band image of change maps, each one being unccorrelated with
-// the remaining. The number of bands of the output image is the
+// algorithm \cite{nielsen2007regularized}. This algorihtm allows to
+// perform change detection from a pair multi-band images, including
+// images with different number of bands or modalities. Its output is
+// a a multi-band image of change maps, each one being unccorrelated
+// with the remaining. The number of bands of the output image is the
 // minimum number of bands between the two input images.
 //
 // The algorithm works as follows. It tries to find two linear
@@ -217,20 +217,19 @@ int main(int argc, char* argv[])
   input2VisuWriter->Update();
   outputVisuWriter->Update();
 
-//  Software Guide : BeginLatex
-// Figure \ref{fig:MADCHDET} shows the result of the change
-// detection by Multivariate Alteration Detector.
+//  Software Guide : BeginLatex 
+// Figure \ref{fig:MADCHDET} shows the
+// results of Multivariate Alteration Detector applied to a pair of
+// SPOT5 images before and after a flooding event.  
 // \begin{figure}
-// \center
-// \includegraphics[width=0.32\textwidth]{mad-input1.png}
-// \includegraphics[width=0.32\textwidth]{mad-input2.png}
-// \includegraphics[width=0.32\textwidth]{mad-output.png}
-// \itkcaption[CorrelationMultivariate Alteration Detection Results]{Result of the
-// Multivariate Alteration Detector results on SPOT5 data before and
-// after flooding.}
-// \label{fig:RESCORRCHDET}
-// \end{figure}
-//  Software Guide : EndLatex
+// \center \includegraphics[width=0.32\textwidth]{mad-input1.eps}
+// \includegraphics[width=0.32\textwidth]{mad-input2.eps}
+// \includegraphics[width=0.32\textwidth]{mad-output.eps}
+// \itkcaption[CorrelationMultivariate Alteration Detection
+// Results]{Result of the Multivariate Alteration Detector results on
+// SPOT5 data before and after flooding.}  \label{fig:MADCHDET}
+// \end{figure} 
+// Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 
