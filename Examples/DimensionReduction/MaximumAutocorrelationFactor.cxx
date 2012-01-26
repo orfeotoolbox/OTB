@@ -162,8 +162,8 @@ int main(int argc, char* argv[])
   // results of Maximum Autocorrelation Factor applied to an 8 bands
   // Worldview2 image. 
   // \begin{figure}
-  // \center \includegraphics[width=0.4\textwidth]{maf-input.eps}
-  // \includegraphics[width=0.4\textwidth]{maf-output.eps}
+  // \center \includegraphics[width=0.32\textwidth]{maf-input.eps}
+  // \includegraphics[width=0.32\textwidth]{maf-output.eps}
   // \itkcaption[Maximum Autocorrelation Factor results]{Results of the
   // Maximum Autocorrelation Factor algorithm applied to a 8 bands
   // Worldview2 image (3 first components).}  \label{fig:MAFFIG}
