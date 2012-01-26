@@ -66,8 +66,8 @@ int otbLocalActivityVectorImageFilterTest ( int argc, char* argv[] )
     return EXIT_FAILURE;
   }
 
-  const char * inputImageName = parseResult->GetInputImage().c_str();
-  const char * outputImageName = parseResult->GetOutputImage().c_str();
+  std::string inputImageName = parseResult->GetInputImage();
+  std::string outputImageName = parseResult->GetOutputImage();
   unsigned int radiusX = 1;
   unsigned int radiusY = 1;
   if ( parseResult->IsOptionPresent("--Radius") )

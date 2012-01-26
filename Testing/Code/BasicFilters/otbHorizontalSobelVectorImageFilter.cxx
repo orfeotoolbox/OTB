@@ -66,8 +66,8 @@ int otbHorizontalSobelVectorImageFilterTest ( int argc, char* argv[] )
     return EXIT_FAILURE;
   }
 
-  const char * inputImageName = parseResult->GetInputImage().c_str();
-  const char * outputImageName = parseResult->GetOutputImage().c_str();
+  std::string inputImageName = parseResult->GetInputImage();
+  std::string outputImageName = parseResult->GetOutputImage();
 
   // Main type definition
   const unsigned int Dimension = 2;

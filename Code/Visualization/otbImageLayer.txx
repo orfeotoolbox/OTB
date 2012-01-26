@@ -69,7 +69,7 @@ ImageLayer<TImage, TOutputImage>
   m_CountryName = "";
 
   m_GroundSpacing = GroundSpacingImageType::New();
-  m_ApproxGroundSpacing = std::make_pair(itk::NumericTraits<ValueType>::min(), itk::NumericTraits<ValueType>::min());
+  m_ApproxGroundSpacing.Fill(itk::NumericTraits<ValueType>::min());
 }
 
 template <class TImage, class TOutputImage>
@@ -286,7 +286,7 @@ ImageLayer<TImage, TOutputImage>
       {
       PointType point = this->GetPixelLocation (index);
 
-      oss << setiosflags(std::ios::fixed) << std::setprecision(2) << "Ground spacing(in m): (" << m_ApproxGroundSpacing.first << ";" << m_ApproxGroundSpacing.second << ")" <<
+      oss << setiosflags(std::ios::fixed) << std::setprecision(2) << "Ground spacing(in m): (" << m_ApproxGroundSpacing[0] << ";" << m_ApproxGroundSpacing[1] << ")" <<
       std::endl;
 
       oss << setiosflags(std::ios::fixed) << std::setprecision(6) << "Lon: " << point[0] << " Lat: " << point[1] << std::endl;

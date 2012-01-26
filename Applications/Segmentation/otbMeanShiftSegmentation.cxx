@@ -58,10 +58,15 @@ private:
     AddDocTag(Tags::Segmentation);
 
     AddParameter(ParameterType_InputImage,   "in",     "Input Image");
+    SetParameterDescription( "in", "The input image." );
     AddParameter(ParameterType_OutputImage,  "fout",    "Filtered output");
+    SetParameterDescription( "fout", "The filtered output image." );
     AddParameter(ParameterType_OutputImage,  "cout",    "Clustered output");
+    SetParameterDescription( "cout", "The clustered output image." );
     AddParameter(ParameterType_OutputImage,  "lout",    "Label output");
+    SetParameterDescription( "lout", "The label output image." );
     AddParameter(ParameterType_OutputImage,  "cbout",   "Cluster Boundaries output");
+    SetParameterDescription( "cbout", "The cluster boundaries output image." );
     MandatoryOff("fout");
     MandatoryOff("cout");
     MandatoryOff("lout");
@@ -72,9 +77,13 @@ private:
    //   MandatoryOff("ram");
 
     AddParameter(ParameterType_Int,          "spatialr",   "Spatial radius");
+    SetParameterDescription( "spatialr", "Spatial radius defining neighborhood." );
     AddParameter(ParameterType_Float,        "ranger",   "Range radius");
+    SetParameterDescription( "ranger", "Range radius defining the interval in the color space." );
     AddParameter(ParameterType_Int,          "minsize",   "Min region size");
+    SetParameterDescription( "minsize", "Minimun size of a region to be kept after clustering." );
     AddParameter(ParameterType_Float,        "scale",   "Scale");
+    SetParameterDescription( "scale", "Scale to stretch the image before processing." );
     SetDefaultParameterInt("spatialr",   5);
     SetDefaultParameterFloat("ranger",   15.0);
     SetDefaultParameterInt("minsize",    100);

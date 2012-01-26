@@ -12,6 +12,7 @@
   Copyright (c) CS Systemes d'information. All rights reserved.
   See CSCopyright.txt for details.
 
+
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
@@ -40,7 +41,7 @@ namespace otb
  */
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT GroundSpacingImageFunction :
-    public itk::ImageFunction<TInputImage, std::pair<float, float>,
+    public itk::ImageFunction<TInputImage, itk::Vector<float, 2>,
       TCoordRep>
 {
 public:
@@ -49,11 +50,12 @@ public:
   
   /** Datatype used for the density */
   typedef float ValueType;
-  typedef std::pair<ValueType, ValueType> FloatType;
-  
+  //typedef std::pair<ValueType, ValueType> FloatType;
+  typedef itk::Vector<ValueType, 2> FloatType;
 
   typedef itk::ImageFunction<TInputImage, FloatType ,
       TCoordRep>                                          Superclass;
+  
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -107,7 +109,7 @@ private:
   void operator =(const Self&);  //purposely not implemented
 
   ValueType              m_R;
-  ValueType              m_deg2radCoef;
+  ValueType              m_Deg2radCoef;
 };
 
 } // end namespace otb

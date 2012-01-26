@@ -50,7 +50,7 @@ private:
     SetDescription("Concatenate VectorDatas");
 
     SetDocName("Concatenate");
-    SetDocLongDescription("This application concatenates a list of VectorData to produce a unique VectorData as output"
+    SetDocLongDescription("This application concatenates a list of VectorData to produce a unique VectorData as output."
                           "Note that the VectorDatas must be of the same type (Storing polygons only, lines only, or points only)");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -62,6 +62,7 @@ private:
     SetParameterDescription("vd", "VectorData files to be concatenated in an unique VectorData");
 
     AddParameter(ParameterType_OutputVectorData, "out", "Concatenated VectorData");
+    SetParameterDescription("out", "Output conctenated VectorData");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("vd", "ToulousePoints-examples.shp ToulouseRoad-examples.shp");

@@ -38,7 +38,7 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
 ::GroundSpacingImageFunction()
 {
   m_R = 6371000;
-  m_deg2radCoef = CONST_PI / 180;
+  m_Deg2radCoef = CONST_PI / 180;
 }
 
 /**
@@ -61,9 +61,12 @@ typename GroundSpacingImageFunction<TInputImage, TCoordRep>
 GroundSpacingImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
+  FloatType var;
+  
   if (!this->GetInputImage())
     {
-    return (std::make_pair(itk::NumericTraits<ValueType>::min(), itk::NumericTraits<ValueType>::min()));
+    var.Fill(itk::NumericTraits<ValueType>::min());
+    return var;
     }
 
   PointType point = this->GetPixelLocation(index);
@@ -84,28 +87,28 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
   PointType pointSrcX = this->GetPixelLocation(indexSrcX);
   PointType pointSrcY = this->GetPixelLocation(indexSrcY);
 
-  ValueType dLatX = (vcl_fabs(pointSrcX[1] - point[1])) * m_deg2radCoef;
-  ValueType dLonX = (vcl_fabs(pointSrcX[0] - point[0])) * m_deg2radCoef;
+  ValueType dLatX = (vcl_fabs(pointSrcX[1] - point[1])) * m_Deg2radCoef;
+  ValueType dLonX = (vcl_fabs(pointSrcX[0] - point[0])) * m_Deg2radCoef;
 
   const ValueType One = itk::NumericTraits<ValueType>::One;
   const ValueType Two = One + One;
 
-  ValueType aX = vcl_sin(dLatX / Two) * vcl_sin(dLatX / Two) + vcl_cos(point[1] * m_deg2radCoef) * vcl_cos(
-    pointSrcX[1] * m_deg2radCoef) * vcl_sin(dLonX / Two) * vcl_sin(dLonX / Two);
+  ValueType aX = vcl_sin(dLatX / Two) * vcl_sin(dLatX / Two) + vcl_cos(point[1] * m_Deg2radCoef) * vcl_cos(
+    pointSrcX[1] * m_Deg2radCoef) * vcl_sin(dLonX / Two) * vcl_sin(dLonX / Two);
   ValueType cX = Two * vcl_atan2(vcl_sqrt(aX), vcl_sqrt(One - aX));
   ValueType dX = m_R * cX;
 
-  ValueType dLatY = (vcl_fabs(pointSrcY[1] - point[1])) * m_deg2radCoef;
-  ValueType dLonY = (vcl_fabs(pointSrcY[0] - point[0])) * m_deg2radCoef;
+  ValueType dLatY = (vcl_fabs(pointSrcY[1] - point[1])) * m_Deg2radCoef;
+  ValueType dLonY = (vcl_fabs(pointSrcY[0] - point[0])) * m_Deg2radCoef;
 
-  ValueType aY = vcl_sin(dLatY / Two) * vcl_sin(dLatY / Two) + vcl_cos(point[1] * m_deg2radCoef) * vcl_cos(
-    pointSrcY[1] * m_deg2radCoef) * vcl_sin(dLonY / Two) * vcl_sin(dLonY / Two);
+  ValueType aY = vcl_sin(dLatY / Two) * vcl_sin(dLatY / Two) + vcl_cos(point[1] * m_Deg2radCoef) * vcl_cos(
+    pointSrcY[1] * m_Deg2radCoef) * vcl_sin(dLonY / Two) * vcl_sin(dLonY / Two);
   ValueType cY = Two * vcl_atan2(vcl_sqrt(aY), vcl_sqrt(One - aY));
   ValueType dY = m_R * cY;
 
-  FloatType var;
-  var.first = dX / (vcl_fabs(static_cast<ValueType>(indexSrcX[0] - index[0])));
-  var.second = dY / (vcl_fabs(static_cast<ValueType>(indexSrcY[1] - index[1])));
+  //FloatType var;
+  var[0] = dX / (vcl_fabs(static_cast<ValueType>(indexSrcX[0] - index[0])));
+  var[1] = dY / (vcl_fabs(static_cast<ValueType>(indexSrcY[1] - index[1])));
 
   return var;
 }

@@ -87,6 +87,7 @@ private:
 
     // Channelist Parameters
     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
+    SetParameterDescription("cl","Channels to write in the output image.");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "VegetationIndex.hd");

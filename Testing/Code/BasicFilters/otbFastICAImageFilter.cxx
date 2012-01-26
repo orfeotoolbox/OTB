@@ -77,8 +77,8 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
     return EXIT_FAILURE;
   }
 
-  const char * inputImageName = parseResult->GetInputImage().c_str();
-  const char * outputImageName = parseResult->GetOutputImage().c_str();
+  std::string inputImageName = parseResult->GetInputImage();
+  std::string outputImageName = parseResult->GetOutputImage();
   const unsigned int nbComponents = parseResult->IsOptionPresent("--NumComponents") ?
     parseResult->GetParameterUInt("--NumComponents") : 0;
   const unsigned int nbIterations = parseResult->IsOptionPresent("--NumIterations") ?
