@@ -28,7 +28,7 @@
 //
 //  Software Guide : EndCommandLineArgs
 
-//  Software Guide : BeginLatex 
+//  Software Guide : BeginLatex
 // This example illustrates the class
 // \doxygen{otb}{MultivariateAlterationChangeDetectorImageFilter},
 // which implements the Multivariate Alteration Change Detector
@@ -217,10 +217,10 @@ int main(int argc, char* argv[])
   input2VisuWriter->Update();
   outputVisuWriter->Update();
 
-//  Software Guide : BeginLatex 
+//  Software Guide : BeginLatex
 // Figure \ref{fig:MADCHDET} shows the
 // results of Multivariate Alteration Detector applied to a pair of
-// SPOT5 images before and after a flooding event.  
+// SPOT5 images before and after a flooding event.
 // \begin{figure}
 // \center \includegraphics[width=0.32\textwidth]{mad-input1.eps}
 // \includegraphics[width=0.32\textwidth]{mad-input2.eps}
@@ -228,7 +228,7 @@ int main(int argc, char* argv[])
 // \itkcaption[CorrelationMultivariate Alteration Detection
 // Results]{Result of the Multivariate Alteration Detector results on
 // SPOT5 data before and after flooding.}  \label{fig:MADCHDET}
-// \end{figure} 
+// \end{figure}
 // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
