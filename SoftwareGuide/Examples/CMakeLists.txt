@@ -318,6 +318,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SeamCarvingOtherExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ThresholdToPointSetExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/CloudDetectionExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/DimensionReduction/MaximumAutocorrelationFactor.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/EdgeDensityExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/ConnectedThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuThresholdImageFilter.cxx
