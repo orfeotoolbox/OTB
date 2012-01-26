@@ -47,7 +47,6 @@ int main(int argc, char* argv[])
   region.SetIndex( id );
 
   ImageType::Pointer image = ImageType::New();
-  ImageType::PixelType pix;
   image->SetRegions(region);
   image->Allocate();
   image->FillBuffer(value);
