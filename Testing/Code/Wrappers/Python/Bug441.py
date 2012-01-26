@@ -19,6 +19,6 @@ StereoSensorModelToElevationMap.SetParameterString("elev.dem.geoid", "geoid_wron
 try:
   StereoSensorModelToElevationMap.ExecuteAndWriteOutput()
 except:
-  sys.exit( 1 )
+  raise
 
 sys.exit( 0 )
