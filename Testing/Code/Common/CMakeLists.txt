@@ -68,20 +68,23 @@ ADD_TEST(coTuConfigurationTestDEM ${COMMON_TESTS1}
         )
 
 
-ADD_TEST(coTuConfigurationTestDEM_WithConfigFile ${EXECUTABLE_OUTPUT_PATH}/otbTestDriver
+ADD_TEST(NAME coTuConfigurationTestDEM_WithConfigFile
+         COMMAND ${EXECUTABLE_OUTPUT_PATH}/otbTestDriver
         --add-before-env OTB_CONFIG_FILE ${CMAKE_BINARY_DIR}/Testing/otbconf_OK
-        Execute ${COMMON_TESTS1}
+        Execute $<TARGET_FILE:otbCommonTests1>
         otbConfigurationTestDEM
         ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
         )
-ADD_TEST(coTuConfigurationTestDEM_WithWrongConfigFile ${EXECUTABLE_OUTPUT_PATH}/otbTestDriver
+ADD_TEST(NAME coTuConfigurationTestDEM_WithWrongConfigFile
+         COMMAND ${EXECUTABLE_OUTPUT_PATH}/otbTestDriver
         --add-before-env OTB_CONFIG_FILE ${CMAKE_BINARY_DIR}/Testing/otbconf_NotOK
-        Execute ${COMMON_TESTS1}
+        Execute $<TARGET_FILE:otbCommonTests1>
         otbConfigurationTestDEM
         )
-ADD_TEST(coTuConfigurationTestDEM_WithNonExistantConfigFile ${EXECUTABLE_OUTPUT_PATH}/otbTestDriver
+ADD_TEST(NAME coTuConfigurationTestDEM_WithNonExistantConfigFile
+         COMMAND ${EXECUTABLE_OUTPUT_PATH}/otbTestDriver
         --add-before-env OTB_CONFIG_FILE ${CMAKE_BINARY_DIR}/Testing/otbconf_NonExistant
-        Execute ${COMMON_TESTS1}
+        Execute $<TARGET_FILE:otbCommonTests1>
         otbConfigurationTestDEM
         )
 # -------            otb::CommandLibneArgumentParser  -------------
