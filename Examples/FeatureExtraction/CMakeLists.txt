@@ -1,9 +1,6 @@
 PROJECT(FeatureExtractionExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
-ADD_EXECUTABLE(PCAExample PCAExample.cxx )
-TARGET_LINK_LIBRARIES(PCAExample OTBCommon OTBIO OTBBasicFilters)
-
 ADD_EXECUTABLE(AlignmentsExample AlignmentsExample.cxx )
 TARGET_LINK_LIBRARIES(AlignmentsExample OTBFeatureExtraction OTBCommon OTBIO
 ITKIO)

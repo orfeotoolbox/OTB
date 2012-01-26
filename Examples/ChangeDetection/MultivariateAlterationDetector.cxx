@@ -76,8 +76,8 @@ int main(int argc, char* argv[])
   const unsigned int Dimension = 2;
 
   //  Software Guide : BeginLatex
-  // We then define the types for the input images,  of the
-  // change image and of the image to be stored in a file for visualization.
+  // We then define the types for the input images and for the
+  // change image.
   //
   //  Software Guide : EndLatex
 
@@ -225,7 +225,7 @@ int main(int argc, char* argv[])
 // \center \includegraphics[width=0.32\textwidth]{mad-input1.eps}
 // \includegraphics[width=0.32\textwidth]{mad-input2.eps}
 // \includegraphics[width=0.32\textwidth]{mad-output.eps}
-// \itkcaption[CorrelationMultivariate Alteration Detection
+// \itkcaption[Multivariate Alteration Detection
 // Results]{Result of the Multivariate Alteration Detector results on
 // SPOT5 data before and after flooding.}  \label{fig:MADCHDET}
 // \end{figure}
