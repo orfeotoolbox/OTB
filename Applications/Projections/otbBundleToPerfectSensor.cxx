@@ -66,13 +66,17 @@ private:
     AddDocTag(Tags::Pansharpening);
 
     AddParameter(ParameterType_InputImage,   "inp",   "Input PAN Image");
+    SetParameterDescription("inp"," Input panchromatic image.");
     AddParameter(ParameterType_InputImage,   "inxs",  "Input XS Image");
+    SetParameterDescription("inxs"," Input XS image.");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
+    SetParameterDescription("lms"," Spacing of the deformation field. Default is 10 times the PAN image spacing.");
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
+    SetParameterDescription("out"," Output image.");
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
 

@@ -67,6 +67,7 @@ private:
     AddDocTag(Tags::FeatureExtraction);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in"," Input image on which lines while be detected.");
 
     AddParameter(ParameterType_OutputVectorData, "out", "Output Detected lines");
     SetParameterDescription("out"," Output detected line segments (vector data).");
@@ -75,6 +76,7 @@ private:
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     AddParameter(ParameterType_Empty, "norescale", "No rescaling in [0, 255]");
+    SetParameterDescription("norescale","By default, the input image amplitude is rescaled between [0,255]. Turn on this parameter to skip rescaling");
     MandatoryOff("norescale");
 
     // Doc example parameter settings

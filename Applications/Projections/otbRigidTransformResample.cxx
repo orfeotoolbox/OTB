@@ -60,9 +60,13 @@ private:
     AddDocTag(Tags::Geometry);
 
     AddParameter(ParameterType_InputImage,   "in",   "Input image");
+    SetParameterDescription("in","The input image to translate.");
     AddParameter(ParameterType_OutputImage,  "out",  "Output image");
+    SetParameterDescription("out","The translated output image.");
     AddParameter(ParameterType_Float,        "tx",   "The X translation (in physical units)");
+    SetParameterDescription("tx","The translation value along X axis (in physical units).");
     AddParameter(ParameterType_Float,        "ty",   "The Y translation (in physical units)");
+    SetParameterDescription("ty","The translation value along Y axis (in physical units)");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_toulouse_sub.tif");

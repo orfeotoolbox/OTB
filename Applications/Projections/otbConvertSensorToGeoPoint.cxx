@@ -50,11 +50,11 @@ private:
   void DoInit()
   {
     SetName("ConvertSensorToGeoPoint");
-    SetDescription("Convert Sensor Point To Geographic Point using a Forward Sensor Model");
+    SetDescription("Sensor to geographic coordinates conversion.");
 
     // Documentation
     SetDocName("Convert Sensor Point To Geographic Point");
-    SetDocLongDescription("Sensor to geographic coordinates conversion");
+    SetDocLongDescription("This Application converts a sensor point of an input image to a geographic point using the Forward Sensor Model of the input image.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ConvertCartoToGeoPoint application, otbObtainUTMZoneFromGeoPoint");
@@ -62,18 +62,25 @@ private:
     AddDocTag(Tags::Geometry);
 
     AddParameter(ParameterType_InputImage,  "in",   "Sensor image");
+    SetParameterDescription("in", "Input sensor image.");
 
     AddParameter(ParameterType_Group, "input", "Point Coordinates");
     AddParameter(ParameterType_Float, "input.idx","X value of desired point");
+    SetParameterDescription("input.idx", "X coordinate of the point to transform.");
     AddParameter(ParameterType_Float, "input.idy","Y value of desired point");
+    SetParameterDescription("input.idy", "Y coordinate of the point to transform.");
 
     // Output with Output Role
     AddParameter(ParameterType_Group, "output", "Geographic Coordinates");
     AddParameter(ParameterType_Float, "output.idx","Output Point Longitude");
+    SetParameterDescription("output.idx", "Output point longitude coordinate.");
     AddParameter(ParameterType_Float, "output.idy","Output Point Latitude");
+    SetParameterDescription("output.idy", "Output point latitude coordinate.");
     
     AddParameter(ParameterType_String,"output.town","Main town near the coordinates computed");
+    SetParameterDescription("output.town", "Nearest main town of the computed geographic point.");
     AddParameter(ParameterType_String,"output.country","Country of the image");
+    SetParameterDescription("output.country", "Country of the input image");
     
     // Set the parameter role for the output parameters
     SetParameterRole("output.idx", Role_Output );

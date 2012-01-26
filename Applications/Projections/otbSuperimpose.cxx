@@ -67,7 +67,9 @@ private:
     AddDocTag("Superimposition");
 
     AddParameter(ParameterType_InputImage,   "inr",   "Reference input");
+    SetParameterDescription("inr","The input reference image.");
     AddParameter(ParameterType_InputImage,   "inm",   "The image to reproject");
+    SetParameterDescription("inm","The image to reproject into the geometry of the reference input.");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
@@ -77,6 +79,7 @@ private:
     SetDefaultParameterFloat("lms", 4.);
 
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
+    SetParameterDescription("out","Output reprojected image.");
     AddParameter(ParameterType_RAM,          "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
 
