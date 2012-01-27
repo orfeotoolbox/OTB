@@ -1,10 +1,31 @@
 \chapter{Dimension Reduction}\label{chap:dimred}
 
+Dimension reduction is a statistical process which concentrates the
+amount of information in multivariate data into a fewer number of
+variables (or dimensions).
+
+Though there are plenty of non-linear methods in the litterature, OTB
+provides only linear dimension reduction techniques applied to images for now.
+
+Usually, linear dimension-reduction algorithms try to find a set of
+linear combinations of the input image bands that maximise a given
+criterion, often chosen so that image information concentrates on the
+first components. Algorithms differs by the criterion to optimise and
+also by their handling of the signal or image noise.
+
+In remote-sensing images processing, dimension reduction algorithms
+are of great interest for denoising, or as a preliminary processing
+for classification of feature images or unmixing of hyperspectral
+images. In addition to the denoising effect, the advantage of
+dimension reduction in the two latter is that it lowers the size of
+the data to be analysed, and as such, speeds up the processing time
+without too much loss of accuracy.
+
 \section{Principal Components Analysis}
 
 \input{PCAExample}
 
-\section{NA Principal Components Analysis}
+\section{Noise-Adjusted Principal Components Analysis}
 
 \input{NAPCAExample}
 
@@ -12,7 +33,7 @@
 
 \input{MNFExample}
 
-\section{Independant Component Analysis}
+\section{Fast Independant Component Analysis}
 
 \input{ICAExample}
 
