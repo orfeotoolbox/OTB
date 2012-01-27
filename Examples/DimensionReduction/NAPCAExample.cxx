@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
   //
   // Software Guide : EndLatex
 
-  // SoftwareGuide : BeginCodeSnippet  
+  // SoftwareGuide : BeginCodeSnippet
   typedef otb::LocalActivityVectorImageFilter<ImageType,ImageType> NoiseFilterType;
   // SoftwareGuide : EndCodeSnippet
 

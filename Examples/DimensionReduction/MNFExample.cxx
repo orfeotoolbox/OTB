@@ -39,7 +39,7 @@
 // Components Analysis transform. The first transform is based on an
 // estimated covariance matrix of the noise, and intends to whiten the
 // input image (noise with unit variance and no correlation between
-// bands). 
+// bands).
 //
 // The second Principal Components Analysis is then applied to the
 // noise-whitened image, giving the Minimum Noise Fraction transform.
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
   //
   // Software Guide : EndLatex
 
-  // SoftwareGuide : BeginCodeSnippet  
+  // SoftwareGuide : BeginCodeSnippet
   typedef otb::LocalActivityVectorImageFilter<ImageType,ImageType> NoiseFilterType;
   // SoftwareGuide : EndCodeSnippet
 

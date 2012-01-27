@@ -28,7 +28,7 @@
 //
 //  Software Guide : EndCommandLineArgs
 
-//  Software Guide : BeginLatex 
+//  Software Guide : BeginLatex
 // This example illustrates the class
 // \doxygen{otb}{MultivariateAlterationChangeDetectorImageFilter},
 // which implements the Multivariate Alteration Change Detector

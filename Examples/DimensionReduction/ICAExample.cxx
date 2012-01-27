@@ -178,7 +178,7 @@ int main(int argc, char* argv[])
   invFilter->SetMeanValues( FastICAfilter->GetMeanValues() );
   invFilter->SetStdDevValues( FastICAfilter->GetStdDevValues() );
   invFilter->SetTransformationMatrix( FastICAfilter->GetTransformationMatrix() );
-  invFilter->SetPCATransformationMatrix( 
+  invFilter->SetPCATransformationMatrix(
                             FastICAfilter->GetPCATransformationMatrix() );
   invFilter->SetInput(FastICAfilter->GetOutput());
     

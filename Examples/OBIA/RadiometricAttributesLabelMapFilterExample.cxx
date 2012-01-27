@@ -86,7 +86,7 @@ int main(int argc, char * argv[])
 
   // Labeled image type
   typedef unsigned short                              LabelType;
-  typedef unsigned char 	                      MaskPixelType;
+  typedef unsigned char                              MaskPixelType;
   typedef double                                      PixelType;
   typedef otb::Image<LabelType, Dimension>            LabeledImageType;
   typedef otb::Image<MaskPixelType, Dimension>        MaskImageType;
