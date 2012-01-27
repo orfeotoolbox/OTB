@@ -291,7 +291,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/SimpleDisparityMapEstimationExample.cxx
   #${OTB_SOURCE_DIR}/Examples/DisparityMap/NCCRegistrationFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/FineRegistrationImageFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/PCAExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TextureExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/PanTexExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SFSExample.cxx
@@ -318,8 +317,12 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SeamCarvingOtherExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ThresholdToPointSetExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/CloudDetectionExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/DimensionReduction/MaximumAutocorrelationFactor.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/EdgeDensityExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/DimensionReduction/MaximumAutocorrelationFactor.cxx
+  ${OTB_SOURCE_DIR}/Examples/DimensionReduction/PCAExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/DimensionReduction/NAPCAExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/DimensionReduction/MNFExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/DimensionReduction/ICAExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/ConnectedThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuMultipleThresholdImageFilter.cxx
