@@ -221,7 +221,7 @@ int main(int argc, char* argv[])
   // original image, color composition with first three principal
   // components and output of the
   // inverse mode (the input RGB image).}
-  // \label{fig:PCNAA_FILTER}
+  // \label{fig:NAPCA_FILTER}
   // \end{figure}
   //
   //  Software Guide : EndLatex
