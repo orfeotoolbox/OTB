@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // SoftwareGuide : BeginCodeSnippet  
-  typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > NoiseFilterType;
+  typedef otb::LocalActivityVectorImageFilter<ImageType,ImageType> NoiseFilterType;
   // SoftwareGuide : EndCodeSnippet
 
 
@@ -167,7 +167,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
-  // We finally plug the pipeline and trigger the PCA computation with
+  // We finally plug the pipeline and trigger the NA-PCA computation with
   // the method \code{Update()} of the writer.
   //
   // Software Guide : EndLatex
@@ -182,7 +182,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // \doxygen{otb}{NAPCAImageFilter} allows also to compute inverse
-  // transformation from PCA coefficients. In reverse mode, the
+  // transformation from NA-PCA coefficients. In reverse mode, the
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
   //
@@ -209,7 +209,7 @@ int main(int argc, char* argv[])
   
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:NAPCA_FILTER} shows the result of applying forward
-  // and reverse NAPCA transformation to a 8 bands Wordlview2 image.
+  // and reverse NA-PCA transformation to a 8 bands Wordlview2 image.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.32\textwidth]{napca-input-pretty.eps}

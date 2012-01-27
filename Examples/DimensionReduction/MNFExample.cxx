@@ -30,10 +30,21 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{MNFImageFilter}.
-// This filter computes a Principal Component Analysis using an
+// \doxygen{otb}{MNFImageFilter}.  This filter computes a Minimum
+// Noise Fraction transform \cite{nielsen2011kernel} using an
 // efficient method based on the inner product in order to compute the
 // covariance matrix.
+//
+// The Minimum Noise Fraction transform is a sequence of two Principal
+// Components Analysis transform. The first transform is based on an
+// estimated covariance matrix of the noise, and intends to whiten the
+// input image (noise with unit variance and no correlation between
+// bands). 
+//
+// The second Principal Components Analysis is then applied to the
+// noise-whitened image, giving the Minimum Noise Fraction transform.
+//
+// In this implementation, noise is estimated from a local window.
 //
 // The first step required to use this filter is to include its header file.
 //
@@ -100,7 +111,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // SoftwareGuide : BeginCodeSnippet  
-  typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > NoiseFilterType;
+  typedef otb::LocalActivityVectorImageFilter<ImageType,ImageType> NoiseFilterType;
   // SoftwareGuide : EndCodeSnippet
 
 
@@ -167,7 +178,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
-  // We finally plug the pipeline and trigger the PCA computation with
+  // We finally plug the pipeline and trigger the MNF computation with
   // the method \code{Update()} of the writer.
   //
   // Software Guide : EndLatex
@@ -182,7 +193,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // \doxygen{otb}{MNFImageFilter} allows also to compute inverse
-  // transformation from PCA coefficients. In reverse mode, the
+  // transformation from MNF coefficients. In reverse mode, the
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
   //

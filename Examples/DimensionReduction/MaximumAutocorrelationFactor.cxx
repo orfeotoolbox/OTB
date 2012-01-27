@@ -28,7 +28,16 @@
 
 //  Software Guide : BeginLatex 
 // This example illustrates the class
-// \doxygen{otb}{MaximumAutocorrelationFactorImageFilter} ...
+// \doxygen{otb}{MaximumAutocorrelationFactorImageFilter}, which
+// performs a Maximum Autocorrelation Factor transform \cite{nielsen2011kernel}. Like
+// PCA, MAF tries to find a set of orthogonal linear transform, but
+// the criterion to maximize is the auto-correlation rather than the
+// variance.
+//
+// Auto-correlation is the correlation between the component and a
+// unitary shifted version of the component.
+// 
+// Please note that the inverse transform is not implemented yet.
 //
 // We start by including the corresponding header file.
 //

@@ -31,10 +31,15 @@
 //
 // This example illustrates the use of the
 // \doxygen{otb}{FastICAImageFilter}.
-// This filter computes a Principal Component Analysis using an
-// efficient method based on the inner product in order to compute the
-// covariance matrix.
+// This filter computes a Fast Independant Components Analysis transform.
 //
+// Like Principal Components Analysis, FastICA computes a set of
+// orthogonal linear combinations, but the criterion of Fast ICA is
+// different: instead of maximizing variance, it tries to maximize
+// stastistical independance between components. In Fast ICA,
+// statistical independance is mesured by evaluating non-Gaussianity
+// of the components, and the maximization is done in an iterative way.
+
 // The first step required to use this filter is to include its header file.
 //
 // Software Guide : EndLatex
@@ -144,7 +149,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
-  // We finally plug the pipeline and trigger the PCA computation with
+  // We finally plug the pipeline and trigger the ICA computation with
   // the method \code{Update()} of the writer.
   //
   // Software Guide : EndLatex
@@ -159,7 +164,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // \doxygen{otb}{FastICAImageFilter} allows also to compute inverse
-  // transformation from PCA coefficients. In reverse mode, the
+  // transformation from ICA coefficients. In reverse mode, the
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
   //
@@ -173,7 +178,8 @@ int main(int argc, char* argv[])
   invFilter->SetMeanValues( FastICAfilter->GetMeanValues() );
   invFilter->SetStdDevValues( FastICAfilter->GetStdDevValues() );
   invFilter->SetTransformationMatrix( FastICAfilter->GetTransformationMatrix() );
-  invFilter->SetPCATransformationMatrix( FastICAfilter->GetPCATransformationMatrix() );
+  invFilter->SetPCATransformationMatrix( 
+                            FastICAfilter->GetPCATransformationMatrix() );
   invFilter->SetInput(FastICAfilter->GetOutput());
     
   WriterType::Pointer invWriter = WriterType::New();
