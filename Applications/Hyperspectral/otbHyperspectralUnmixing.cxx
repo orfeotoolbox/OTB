@@ -22,7 +22,7 @@
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 #include "otbISRAUnmixingImageFilter.h"
 #include "otbNCLSUnmixingImageFilter.h"
-#include "otbFCLSUnmixingImageFilter.h"
+//#include "otbFCLSUnmixingImageFilter.h"
 #include "otbMDMDNMFImageFilter.h"
 
 #include "otbVectorImageToMatrixImageFilter.h"
@@ -40,7 +40,7 @@ typedef otb::StreamingStatisticsVectorImageFilter<DoubleVectorImageType> Streami
 typedef otb::UnConstrainedLeastSquareImageFilter<DoubleVectorImageType, DoubleVectorImageType, double> UCLSUnmixingFilterType;
 typedef otb::ISRAUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             ISRAUnmixingFilterType;
 typedef otb::NCLSUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             NCLSUnmixingFilterType;
-typedef otb::FCLSUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             FCLSUnmixingFilterType;
+//typedef otb::FCLSUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             FCLSUnmixingFilterType;
 typedef otb::MDMDNMFImageFilter<DoubleVectorImageType, DoubleVectorImageType>                          MDMDNMFUnmixingFilterType;
 
 typedef otb::VectorImageToMatrixImageFilter<DoubleVectorImageType> VectorImageToMatrixImageFilterType;
@@ -69,7 +69,7 @@ enum EndmembersEstimationMethod
 enum UnMixingMethod
 {
   UnMixingMethod_UCLS,
-  UnMixingMethod_FCLS,
+  //UnMixingMethod_FCLS,
   UnMixingMethod_NCLS,
   UnMixingMethod_ISRA,
   UnMixingMethod_MDMDNMF,
@@ -122,8 +122,8 @@ private:
     AddChoice("ua.ucls", "UCLS");
     SetParameterDescription("ua.ucls", "Unconstrained Least Square");
 
-    AddChoice("ua.fcls", "FCLS");
-    SetParameterDescription("ua.fcls", "Fully constrained Least Square");
+//    AddChoice("ua.fcls", "FCLS");
+//    SetParameterDescription("ua.fcls", "Fully constrained Least Square");
 
     AddChoice("ua.ncls", "NCLS");
     SetParameterDescription("ua.ncls", "Non-negative constrained Least Square");
@@ -216,6 +216,7 @@ private:
 
       }
       break;
+      /*
     case UnMixingMethod_FCLS:
       {
       std::cout << "FCLS Unmixing" << std::endl;
@@ -230,6 +231,7 @@ private:
 
       }
       break;
+      */
     case UnMixingMethod_MDMDNMF:
       {
       std::cout << "MDMD-NMF Unmixing" << std::endl;

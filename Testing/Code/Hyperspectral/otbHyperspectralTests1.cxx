@@ -33,8 +33,6 @@ void RegisterTests()
   REGISTER_TEST(otbISRAUnmixingImageFilterTest);
   REGISTER_TEST(otbNCLSUnmixingImageFilterNewTest);
   REGISTER_TEST(otbNCLSUnmixingImageFilterTest);
-  REGISTER_TEST(otbFCLSUnmixingImageFilterNewTest);
-  REGISTER_TEST(otbFCLSUnmixingImageFilterTest);
   REGISTER_TEST(otbVCAImageFilterNew);
   REGISTER_TEST(otbVCAImageFilterTestHighSNR);
   REGISTER_TEST(otbSparseUnmixingImageFilterNew);
