@@ -26,9 +26,6 @@
 #include <cctype>
 #include <algorithm>
 
-#include "itksys/SystemTools.hxx"
-#include "itksys/Directory.hxx"
-
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -1013,26 +1010,29 @@ std::map<std::string, int> TestHelper::RegressionTestBaselines(char *baselineFil
   std::map<std::string, int> baselines;
   baselines[std::string(baselineFilename)] = 0;
 
-  std::string myPath = itksys::SystemTools::GetFilenamePath( baselineFilename );
-  itksys::Directory myDir;
-  myDir.Load( myPath.c_str() );
-  const unsigned int nbFiles = myDir.GetNumberOfFiles();
+  std::string originalBaseline(baselineFilename);
 
-  const std::string originalBaseline = itksys::SystemTools::GetFilenameWithoutLastExtension(baselineFilename);
-  const unsigned int sizeRef = originalBaseline.size();
-
-  myPath.append("/");
-  for(unsigned int i=0; i<nbFiles; i++)
+  int                    x = 0;
+  std::string::size_type suffixPos = originalBaseline.find_last_of(".");
+  std::string::size_type maxPathPos = originalBaseline.find_last_of("/");
+  std::string            suffix;
+  if ((suffixPos != std::string::npos) && ((suffixPos>maxPathPos) || (maxPathPos==std::string::npos)))
     {
-    const std::string curFilename = itksys::SystemTools::GetFilenameWithoutLastExtension( myDir.GetFile( i ) );
- 
-    if( curFilename.substr(0, sizeRef) == originalBaseline )
-      {
-      std::string myFile = myPath;
-      baselines[myFile.append(myDir.GetFile( i ) )] = 0;
-      }
+    suffix = originalBaseline.substr(suffixPos, originalBaseline.length());
+    originalBaseline.erase(suffixPos, originalBaseline.length());
     }
-
+  while (++x)
+    {
+    std::ostringstream filename;
+    filename << originalBaseline << "." << x << suffix;
+    std::ifstream filestream(filename.str().c_str());
+    if (!filestream)
+      {
+      break;
+      }
+    baselines[filename.str()] = 0;
+    filestream.close();
+    }
   return baselines;
 }
 
