@@ -23,14 +23,14 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {wv2_cannes_8bands.tif}
-//    OUTPUTS: {PCAOutput.tif}, {InversePCAOutput.tif}, {input-pretty.png}, {output-pretty.png}, {invoutput-pretty.png}
-//    8
+//    OUTPUTS: {FastICAOutput.tif}, {InverseFastICAOutput.tif}, {FastICA-input-pretty.png}, {FastICA-output-pretty.png}, {FastICA-invoutput-pretty.png}
+//    8 20 1.
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{PCAImageFilter}.
+// \doxygen{otb}{FastICAImageFilter}.
 // This filter computes a Principal Component Analysis using an
 // efficient method based on the inner product in order to compute the
 // covariance matrix.
@@ -40,8 +40,9 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbPCAImageFilter.h"
+#include "otbFastICAImageFilter.h"
 // Software Guide : EndCodeSnippet
+
 
 int main(int argc, char* argv[])
 {
@@ -54,7 +55,8 @@ int main(int argc, char* argv[])
   const char *       inpretty = argv[4];
   const char *       outpretty = argv[5];
   const char *       invoutpretty = argv[6];
-
+  unsigned int numIterations = atoi(argv[7]);
+  double mu = atof(argv[8]);
 
   // Software Guide : BeginLatex
   //
@@ -80,6 +82,7 @@ int main(int argc, char* argv[])
   ReaderType::Pointer reader     = ReaderType::New();
   reader->SetFileName(inputFileName);
   // Software Guide : EndCodeSnippet
+
   // Software Guide : BeginLatex
   //
   // We define the type for the filter. It is templated over the input
@@ -90,22 +93,44 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::PCAImageFilter<ImageType, ImageType,
-                              otb::Transform::FORWARD> PCAFilterType;
-  PCAFilterType::Pointer pcafilter     = PCAFilterType::New();
+  typedef otb::FastICAImageFilter<ImageType, ImageType,
+                                otb::Transform::FORWARD> FastICAFilterType;
+  FastICAFilterType::Pointer FastICAfilter     = FastICAFilterType::New();
   // Software Guide : EndCodeSnippet
+  
   // Software Guide : BeginLatex
   //
-  // The only parameter needed for the PCA is the number of principal
+  // We then set the number of principal
   // components required as output. We can choose to get less PCs than
   // the number of input bands.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  pcafilter->SetNumberOfPrincipalComponentsRequired(
+  FastICAfilter->SetNumberOfPrincipalComponentsRequired(
     numberOfPrincipalComponentsRequired);
   // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // We set the number of iterations of the ICA algorithm.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  FastICAfilter->SetNumberOfIterations(numIterations);
+  // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // We also set the $\mu$ parameter.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  FastICAfilter->SetMu( mu );
+  // Software Guide : EndCodeSnippet
+  
   // Software Guide : BeginLatex
   //
   // We now instantiate the writer and set the file name for the
@@ -125,15 +150,15 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  pcafilter->SetInput(reader->GetOutput());
-  writer->SetInput(pcafilter->GetOutput());
+  FastICAfilter->SetInput(reader->GetOutput());
+  writer->SetInput(FastICAfilter->GetOutput());
 
   writer->Update();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
-  // \doxygen{otb}{PCAImageFilter} allows also to compute inverse
+  // \doxygen{otb}{FastICAImageFilter} allows also to compute inverse
   // transformation from PCA coefficients. In reverse mode, the
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
@@ -141,12 +166,15 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::PCAImageFilter< ImageType, ImageType,
-                               otb::Transform::INVERSE > InvPCAFilterType;
-  InvPCAFilterType::Pointer invFilter = InvPCAFilterType::New();
+  typedef otb::FastICAImageFilter< ImageType, ImageType,
+                                 otb::Transform::INVERSE > InvFastICAFilterType;
+  InvFastICAFilterType::Pointer invFilter = InvFastICAFilterType::New();
   
-  invFilter->SetInput(pcafilter->GetOutput());
-  invFilter->SetTransformationMatrix(pcafilter->GetTransformationMatrix());
+  invFilter->SetMeanValues( FastICAfilter->GetMeanValues() );
+  invFilter->SetStdDevValues( FastICAfilter->GetStdDevValues() );
+  invFilter->SetTransformationMatrix( FastICAfilter->GetTransformationMatrix() );
+  invFilter->SetPCATransformationMatrix( FastICAfilter->GetPCATransformationMatrix() );
+  invFilter->SetInput(FastICAfilter->GetOutput());
     
   WriterType::Pointer invWriter = WriterType::New();
   invWriter->SetFileName(outputInverseFilename );
@@ -156,20 +184,20 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
   
   //  Software Guide : BeginLatex
-  // Figure~\ref{fig:PCA_FILTER} shows the result of applying forward
-  // and reverse PCA transformation to a 8 bands Wordlview2 image.
+  // Figure~\ref{fig:FastICA_FILTER} shows the result of applying forward
+  // and reverse FastICA transformation to a 8 bands Wordlview2 image.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.32\textwidth]{input-pretty.eps}
-  // \includegraphics[width=0.32\textwidth]{output-pretty.eps}
-  // \includegraphics[width=0.32\textwidth]{invoutput-pretty.eps}
+  // \includegraphics[width=0.32\textwidth]{FastICA-input-pretty.eps}
+  // \includegraphics[width=0.32\textwidth]{FastICA-output-pretty.eps}
+  // \includegraphics[width=0.32\textwidth]{FastICA-invoutput-pretty.eps}
   // \itkcaption[PCA Filter (forward trasnformation)]{Result of applying the
-  // \doxygen{otb}{PCAImageFilter} to an image. From left
+  // \doxygen{otb}{FastICAImageFilter} to an image. From left
   // to right:
   // original image, color composition with first three principal
   // components and output of the
   // inverse mode (the input RGB image).}
-  // \label{fig:PCA_FILTER}
+  // \label{fig:FastICA_FILTER}
   // \end{figure}
   //
   //  Software Guide : EndLatex
@@ -190,7 +218,7 @@ int main(int argc, char* argv[])
   inputPrintFilter->SetChannel(5);
   inputPrintFilter->SetChannel(3);
   inputPrintFilter->SetChannel(2);
-  outputPrintFilter->SetInput(pcafilter->GetOutput());
+  outputPrintFilter->SetInput(FastICAfilter->GetOutput());
   outputPrintFilter->SetChannel(1);
   outputPrintFilter->SetChannel(2);
   outputPrintFilter->SetChannel(3);

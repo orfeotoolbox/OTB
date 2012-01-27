@@ -23,14 +23,14 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {wv2_cannes_8bands.tif}
-//    OUTPUTS: {PCAOutput.tif}, {InversePCAOutput.tif}, {input-pretty.png}, {output-pretty.png}, {invoutput-pretty.png}
-//    8
+//    OUTPUTS: {NAPCAOutput.tif}, {InverseNAPCAOutput.tif}, {napca-input-pretty.png}, {napca-output-pretty.png}, {napca-invoutput-pretty.png}
+//    8 1 1
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{PCAImageFilter}.
+// \doxygen{otb}{NAPCAImageFilter}.
 // This filter computes a Principal Component Analysis using an
 // efficient method based on the inner product in order to compute the
 // covariance matrix.
@@ -40,8 +40,19 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbPCAImageFilter.h"
+#include "otbNAPCAImageFilter.h"
 // Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// We also need to include the header of the noise filter.
+//
+// SoftwareGuide : EndLatex
+
+// Software Guide : BeginCodeSnippet
+#include "otbLocalActivityVectorImageFilter.h"
+// Software Guide : EndCodeSnippet
+
 
 int main(int argc, char* argv[])
 {
@@ -54,7 +65,8 @@ int main(int argc, char* argv[])
   const char *       inpretty = argv[4];
   const char *       outpretty = argv[5];
   const char *       invoutpretty = argv[6];
-
+  unsigned int vradius = atoi(argv[7]);
+  bool normalization = atoi(argv[8]);
 
   // Software Guide : BeginLatex
   //
@@ -80,6 +92,18 @@ int main(int argc, char* argv[])
   ReaderType::Pointer reader     = ReaderType::New();
   reader->SetFileName(inputFileName);
   // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // We define the type of the noise filter.
+  //
+  // Software Guide : EndLatex
+
+  // SoftwareGuide : BeginCodeSnippet  
+  typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > NoiseFilterType;
+  // SoftwareGuide : EndCodeSnippet
+
+
   // Software Guide : BeginLatex
   //
   // We define the type for the filter. It is templated over the input
@@ -90,22 +114,46 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::PCAImageFilter<ImageType, ImageType,
-                              otb::Transform::FORWARD> PCAFilterType;
-  PCAFilterType::Pointer pcafilter     = PCAFilterType::New();
+  typedef otb::NAPCAImageFilter<ImageType, ImageType,
+                                NoiseFilterType,
+                                otb::Transform::FORWARD> NAPCAFilterType;
+  NAPCAFilterType::Pointer napcafilter     = NAPCAFilterType::New();
   // Software Guide : EndCodeSnippet
+  
   // Software Guide : BeginLatex
   //
-  // The only parameter needed for the PCA is the number of principal
+  // We then set the number of principal
   // components required as output. We can choose to get less PCs than
   // the number of input bands.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  pcafilter->SetNumberOfPrincipalComponentsRequired(
+  napcafilter->SetNumberOfPrincipalComponentsRequired(
     numberOfPrincipalComponentsRequired);
   // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // We set the radius of the sliding window for noise estimation.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  NoiseFilterType::RadiusType radius = {{ vradius, vradius }};
+  napcafilter->GetNoiseImageFilter()->SetRadius(radius);
+  // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // Last, we can activate normalisation.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  napcafilter->SetUseNormalization( normalization );
+  // Software Guide : EndCodeSnippet
+  
   // Software Guide : BeginLatex
   //
   // We now instantiate the writer and set the file name for the
@@ -125,15 +173,15 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  pcafilter->SetInput(reader->GetOutput());
-  writer->SetInput(pcafilter->GetOutput());
+  napcafilter->SetInput(reader->GetOutput());
+  writer->SetInput(napcafilter->GetOutput());
 
   writer->Update();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
-  // \doxygen{otb}{PCAImageFilter} allows also to compute inverse
+  // \doxygen{otb}{NAPCAImageFilter} allows also to compute inverse
   // transformation from PCA coefficients. In reverse mode, the
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
@@ -141,12 +189,16 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::PCAImageFilter< ImageType, ImageType,
-                               otb::Transform::INVERSE > InvPCAFilterType;
-  InvPCAFilterType::Pointer invFilter = InvPCAFilterType::New();
+  typedef otb::NAPCAImageFilter< ImageType, ImageType,
+                                 NoiseFilterType,
+                                 otb::Transform::INVERSE > InvNAPCAFilterType;
+  InvNAPCAFilterType::Pointer invFilter = InvNAPCAFilterType::New();
   
-  invFilter->SetInput(pcafilter->GetOutput());
-  invFilter->SetTransformationMatrix(pcafilter->GetTransformationMatrix());
+  invFilter->SetMeanValues( napcafilter->GetMeanValues() );
+  if ( normalization )
+    invFilter->SetStdDevValues( napcafilter->GetStdDevValues() );
+  invFilter->SetTransformationMatrix( napcafilter->GetTransformationMatrix() );
+  invFilter->SetInput(napcafilter->GetOutput());
     
   WriterType::Pointer invWriter = WriterType::New();
   invWriter->SetFileName(outputInverseFilename );
@@ -156,20 +208,20 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
   
   //  Software Guide : BeginLatex
-  // Figure~\ref{fig:PCA_FILTER} shows the result of applying forward
-  // and reverse PCA transformation to a 8 bands Wordlview2 image.
+  // Figure~\ref{fig:NAPCA_FILTER} shows the result of applying forward
+  // and reverse NAPCA transformation to a 8 bands Wordlview2 image.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.32\textwidth]{input-pretty.eps}
-  // \includegraphics[width=0.32\textwidth]{output-pretty.eps}
-  // \includegraphics[width=0.32\textwidth]{invoutput-pretty.eps}
+  // \includegraphics[width=0.32\textwidth]{napca-input-pretty.eps}
+  // \includegraphics[width=0.32\textwidth]{napca-output-pretty.eps}
+  // \includegraphics[width=0.32\textwidth]{napca-invoutput-pretty.eps}
   // \itkcaption[PCA Filter (forward trasnformation)]{Result of applying the
-  // \doxygen{otb}{PCAImageFilter} to an image. From left
+  // \doxygen{otb}{NAPCAImageFilter} to an image. From left
   // to right:
   // original image, color composition with first three principal
   // components and output of the
   // inverse mode (the input RGB image).}
-  // \label{fig:PCA_FILTER}
+  // \label{fig:PCNAA_FILTER}
   // \end{figure}
   //
   //  Software Guide : EndLatex
@@ -190,7 +242,7 @@ int main(int argc, char* argv[])
   inputPrintFilter->SetChannel(5);
   inputPrintFilter->SetChannel(3);
   inputPrintFilter->SetChannel(2);
-  outputPrintFilter->SetInput(pcafilter->GetOutput());
+  outputPrintFilter->SetInput(napcafilter->GetOutput());
   outputPrintFilter->SetChannel(1);
   outputPrintFilter->SetChannel(2);
   outputPrintFilter->SetChannel(3);
