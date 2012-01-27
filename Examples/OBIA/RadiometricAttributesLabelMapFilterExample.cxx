@@ -18,7 +18,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {OBIARadiometricAttribute1.tif}, {qb_ExtractRoad_Radiometry_pretty.jpg}
+//    OUTPUTS: {OBIARadiometricAttribute1.png}, {qb_ExtractRoad_Radiometry_pretty.jpg}
 //    STATS::Band1::Mean 0 0.5 16 16 50 1.0
 //  Software Guide : EndCommandLineArgs
 
@@ -86,15 +86,17 @@ int main(int argc, char * argv[])
 
   // Labeled image type
   typedef unsigned short                              LabelType;
+  typedef unsigned char 	                      MaskPixelType;
   typedef double                                      PixelType;
   typedef otb::Image<LabelType, Dimension>            LabeledImageType;
+  typedef otb::Image<MaskPixelType, Dimension>        MaskImageType;
   typedef otb::Image<PixelType, Dimension>            ImageType;
   typedef otb::VectorImage<PixelType, Dimension>      VectorImageType;
   typedef otb::VectorImage<unsigned char, Dimension>  OutputVectorImageType;
   typedef otb::ImageFileReader<LabeledImageType>      LabeledReaderType;
   typedef otb::ImageFileReader<ImageType>             ReaderType;
   typedef otb::ImageFileReader<VectorImageType>       VectorReaderType;
-  typedef otb::ImageFileWriter<LabeledImageType>      WriterType;
+  typedef otb::ImageFileWriter<MaskImageType>         WriterType;
   typedef otb::ImageFileWriter<OutputVectorImageType> VectorWriterType;
   typedef otb::VectorRescaleIntensityImageFilter
   <VectorImageType, OutputVectorImageType> VectorRescalerType;
@@ -120,7 +122,7 @@ int main(int argc, char * argv[])
   typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>
   OpeningLabelMapFilterType;
   typedef itk::LabelMapToBinaryImageFilter<LabelMapType,
-      LabeledImageType>
+      MaskImageType>
   LabelMapToBinaryImageFilterType;
   typedef otb::MultiChannelRAndNIRIndexImageFilter<VectorImageType,
       ImageType> NDVIImageFilterType;

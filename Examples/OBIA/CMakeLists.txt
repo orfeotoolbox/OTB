@@ -53,11 +53,11 @@ ADD_TEST(trTeOBIAShapeAttributeComputationTest ${EXE_TESTS}
 )
 
 ADD_TEST(trTeOBIARadiometricAttributesLabelMapFilterTest ${EXE_TESTS}
-        --compare-image ${TOL}        ${BASELINE}/OBIARadiometricAttributes.tif
-                                ${TEMP}/OBIARadiometricAttributes.tif
+        --compare-image ${TOL}        ${BASELINE}/OBIARadiometricAttributes.png
+                                ${TEMP}/OBIARadiometricAttributes.png
         RadiometricAttributesLabelMapFilterExample
         ${INPUTDATA}/qb_RoadExtract.tif
-        ${TEMP}/OBIARadiometricAttributes.tif
+        ${TEMP}/OBIARadiometricAttributes.png
         ${TEMP}/qb_RoadExtract_Radiometry_pretty.png
         STATS::Band1::Mean
         0
