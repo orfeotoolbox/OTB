@@ -34,16 +34,6 @@ OTB_TEST_APPLICATION(NAME  apTvHyHyperspectralUnmixing_NCLS
 #                 -ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
 #                 -out ${TEMP}/apTvHyHyperspectralUnmixing_ISRA.tif double
 #                 -ua isra )
-                
-OTB_TEST_APPLICATION(NAME  apTvHyHyperspectralUnmixing_FCLS
-                     APP  HyperspectralUnmixing
-                     OPTIONS -in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
-                			 -ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
-                 			 -out ${TEMP}/apTvHyHyperspectralUnmixing_FCLS.tif double
-                 			 -ua fcls 
-                     VALID   --compare-image ${EPSILON_9}
-                              ${BASELINE}/apTvHyHyperspectralUnmixing_FCLS.tif
-                  			  ${TEMP}/apTvHyHyperspectralUnmixing_FCLS.tif)
 
 #--- VertexComponentAnalysis ---#
 OTB_TEST_APPLICATION(NAME  apTvHyVertexComponentAnalysis

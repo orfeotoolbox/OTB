@@ -30,15 +30,6 @@ add_test( NAME pyTvHyperspectralUnmixingUCLS
                   ucls
                   )
 
-add_test( NAME pyTvHyperspectralUnmixingFCLS
-          COMMAND ${TEST_DRIVER} Execute
-                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonHyperspectralUnmixing1.py
-                  ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
-                  ${TEMP}/pyTvHyperspectralUnmixing_fcls.tif
-                  ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/endmembers.tif
-                  fcls
-                  )
-
 add_test( NAME pyTvBug440
           COMMAND ${TEST_DRIVER} Execute
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Bug440.py
