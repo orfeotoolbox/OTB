@@ -31,7 +31,7 @@
 // \doxygen{otb}{MaximumAutocorrelationFactorImageFilter}, which
 // performs a Maximum Autocorrelation Factor transform \cite{nielsen2011kernel}. Like
 // PCA, MAF tries to find a set of orthogonal linear transform, but
-// the criterion to maximize is the auto-correlation rather than the
+// the criterion to maximize is the spatial auto-correlation rather than the
 // variance.
 //
 // Auto-correlation is the correlation between the component and a

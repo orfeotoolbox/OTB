@@ -29,15 +29,15 @@
 namespace otb {
 
 /** \class MNFImageFilter
- * \brief Performs a Minimum Noise Fraction analysis of a vector image.
+ * \brief Performs a Maximum Noise Fraction analysis of a vector image.
  *
  * The internal structure of this filter is a filter-to-filter like structure.
- * The estimation of the covariance matrix has persistent capabilities...
+ * The estimation of the covariance matrix is streamed
  *
  * The high pass filter which has to be used for the noise estimation is templated
- * for a better scalability...
+ * for a better scalability.
  *
- * TODO? Utiliser une 2e entree pour donner directement une image de bruit ??
+ * TODO? Utiliser une 2e entree pour donner directement une image de bruit ?
  *
  * \sa otbStreamingStatisticsVectorImageFilter
  * \sa PCAImageFiler

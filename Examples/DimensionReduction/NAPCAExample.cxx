@@ -30,10 +30,21 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{NAPCAImageFilter}.
-// This filter computes a Principal Component Analysis using an
+// \doxygen{otb}{NAPCAImageFilter}.  This filter computes a Noise-Adjusted
+// Principal Component Analysis transform \cite{lee1990enhancement} using an
 // efficient method based on the inner product in order to compute the
 // covariance matrix.
+//
+// The Noise-Adjusted Principal Component Analysis transform is a sequence 
+// of two Principal Component Analysis transforms. The first transform is based 
+// on an estimated covariance matrix of the noise, and intends to whiten the
+// input image (noise with unit variance and no correlation between
+// bands).
+//
+// The second Principal Component Analysis is then applied to the
+// noise-whitened image, giving the Maximum Noise Fraction transform.
+//
+// It is basically a reformulation of the Maximum Noise Fraction algorithm.
 //
 // The first step required to use this filter is to include its header file.
 //
@@ -95,6 +106,17 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
+  // In contrast with standard Principal Component Analysis, NA-PCA
+  // needs an estimation of the noise correlation matrix
+  // in the dataset prior to transformation.
+  //
+  // A classical approach is to use spatial gradient images
+  // and infer the noise correlation matrix from it.
+  // The method of noise estimation can be customized
+  // by templating the \doxygen{otb}{NAPCAImageFilter}
+  // with the desired noise estimation method.
+  //
+  // In this implementation, noise is estimated from a local window.
   // We define the type of the noise filter.
   //
   // Software Guide : EndLatex
@@ -107,7 +129,8 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // We define the type for the filter. It is templated over the input
-  // and the output image types and also the transformation direction. The
+  // and the output image types, the noise estimation filter type,
+  // and also the transformation direction. The
   // internal structure of this filter is a filter-to-filter like structure.
   // We can now the instantiate the filter.
   //

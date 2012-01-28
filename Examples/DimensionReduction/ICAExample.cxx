@@ -33,10 +33,13 @@
 // \doxygen{otb}{FastICAImageFilter}.
 // This filter computes a Fast Independant Components Analysis transform.
 //
-// Like Principal Components Analysis, FastICA computes a set of
+// Like Principal Components Analysis, Independent Component Analysis
+// \cite{jutten1991blind} computes a set of
 // orthogonal linear combinations, but the criterion of Fast ICA is
 // different: instead of maximizing variance, it tries to maximize
-// stastistical independance between components. In Fast ICA,
+// stastistical independance between components.
+// 
+// In the Fast ICA algorithm \cite{hyvarinen1999fast},
 // statistical independance is mesured by evaluating non-Gaussianity
 // of the components, and the maximization is done in an iterative way.
 

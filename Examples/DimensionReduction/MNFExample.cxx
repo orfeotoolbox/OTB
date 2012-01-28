@@ -30,19 +30,19 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{MNFImageFilter}.  This filter computes a Minimum
-// Noise Fraction transform \cite{nielsen2011kernel} using an
+// \doxygen{otb}{MNFImageFilter}.  This filter computes a Maximum
+// Noise Fraction transform \cite{green1988transformation} using an
 // efficient method based on the inner product in order to compute the
 // covariance matrix.
 //
-// The Minimum Noise Fraction transform is a sequence of two Principal
-// Components Analysis transform. The first transform is based on an
+// The Maximum Noise Fraction transform is a sequence of two Principal
+// Component Analysis transforms. The first transform is based on an
 // estimated covariance matrix of the noise, and intends to whiten the
 // input image (noise with unit variance and no correlation between
 // bands).
 //
-// The second Principal Components Analysis is then applied to the
-// noise-whitened image, giving the Minimum Noise Fraction transform.
+// The second Principal Component Analysis is then applied to the
+// noise-whitened image, giving the Maximum Noise Fraction transform.
 //
 // In this implementation, noise is estimated from a local window.
 //
@@ -106,6 +106,17 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
+  // In contrast with standard Principal Component Analysis, MNF
+  // needs an estimation of the noise correlation matrix
+  // in the dataset prior to transformation.
+  //
+  // A classical approach is to use spatial gradient images
+  // and infer the noise correlation matrix from it.
+  // The method of noise estimation can be customized
+  // by templating the \doxygen{otb}{MNFImageFilter}
+  // with the desired noise estimation method.
+  //
+  // In this implementation, noise is estimated from a local window.
   // We define the type of the noise filter.
   //
   // Software Guide : EndLatex
