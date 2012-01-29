@@ -7,6 +7,7 @@ MARK_AS_ADVANCED(OTB_USE_EXTERNAL_BOOST)
 IF(OTB_USE_EXTERNAL_BOOST)
   # Import the package
   FIND_PACKAGE(Boost)
+  MARK_AS_ADVANCED(Boost_DIR)
   IF(Boost_FOUND)
     MESSAGE(STATUS "  Found Boost version ${Boost_VERSION}")
     IF( ${Boost_MINOR_VERSION} LESS 35)

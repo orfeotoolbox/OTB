@@ -65,6 +65,7 @@ ADD_DEFINITIONS(
 # Pedantic mode
 SET(OTB_BUILD_PEDANTIC OFF CACHE BOOL
     "Choose compilation in pedantic or relaxed mode")
+MARK_AS_ADVANCED(OTB_BUILD_PEDANTIC)
 
 IF(OTB_BUILD_PEDANTIC)
     IF(WIN32)

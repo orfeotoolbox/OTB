@@ -109,7 +109,6 @@ FIND_LIBRARY(OPENTHREADS_LIBRARY
     [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OSG_ROOT]/lib
 )
 
-
 FIND_LIBRARY(OPENTHREADS_LIBRARY_DEBUG 
     NAMES OpenThreadsd OpenThreadsWin32d
     PATHS

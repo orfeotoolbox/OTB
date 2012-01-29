@@ -15,6 +15,10 @@ endmacro()
 #
 if ( OTB_WRAP_LUA OR OTB_WRAP_PYTHON OR OTB_WRAP_JAVA OR OTB_WRAP_CSHARP OR OTB_WRAP_TCL OR OTB_WRAP_R OR OTB_WRAP_RUBY )
   find_package ( SWIG REQUIRED )
+  mark_as_advanced(SWIG_DIR)
+  mark_as_advanced(SWIG_EXECUTABLE)
+  mark_as_advanced(SWIG_VERSION)
+
   include ( UseSWIGLocal )
   set_source_files_properties ( otbApplication.i PROPERTIES CPLUSPLUS ON )
 

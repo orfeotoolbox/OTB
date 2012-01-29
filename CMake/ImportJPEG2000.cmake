@@ -1,6 +1,7 @@
 MESSAGE(STATUS "Importing Jpeg2000...")
 # Use the openjpeg library.
 OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
+MARK_AS_ADVANCED(OTB_USE_JPEG2000)
 
 IF(OTB_USE_JPEG2000)
  MESSAGE(STATUS "  Enabling Jpeg2000 support")
