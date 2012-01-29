@@ -2926,10 +2926,12 @@ IF(OTB_USE_CURL)
 ADD_TEST(ioTvImageFileReaderServerNameHTTPTest ${IO_TESTS19}
         otbImageFileReaderServerName
         http://tile.openstreetmap.org/)
+SET_PROPERTY(TEST ioTvImageFileReaderServerNameHTTPTest PROPERTY RESOURCE_LOCK web_access)
 
 ADD_TEST(ioTvImageFileReaderServerNameOTBTest ${IO_TESTS19}
         otbImageFileReaderServerName
         ${OTB_DATA_ROOT}/Examples/osmfile.otb)
+SET_PROPERTY(TEST ioTvImageFileReaderServerNameOTBTest PROPERTY RESOURCE_LOCK web_access)
 
 # We do not perform regression testing here because images on server might change
 ADD_TEST(ioTvTileMapImageIOFile ${IO_TESTS19}
@@ -2939,6 +2941,7 @@ ADD_TEST(ioTvTileMapImageIOFile ${IO_TESTS19}
     ${TEMP}
     1.4835345 43.55968261 13
 )
+SET_PROPERTY(TEST ioTvTileMapImageIOFile PROPERTY RESOURCE_LOCK web_access)
 
 ADD_TEST(ioTvTileMapImageIOWeb ${IO_TESTS19}
   otbTileMapImageIOTest
@@ -2947,6 +2950,7 @@ ADD_TEST(ioTvTileMapImageIOWeb ${IO_TESTS19}
     ${TEMP}
     1.4835345 43.55968261 13
 )
+SET_PROPERTY(TEST ioTvTileMapImageIOWeb PROPERTY RESOURCE_LOCK web_access)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvTileMapWriter ${IO_TESTS19}
@@ -2978,6 +2982,7 @@ ADD_TEST(ioTvOSMToVectorDataGeneratorTest ${IO_TESTS19}
   ${INPUTDATA}/qb_road.osm
   ${TEMP}/ioTvOSMToVectorDataFilterTest_highway.shp
 )
+SET_PROPERTY(TEST ioTvImageFileReaderServerNameHTTPTest PROPERTY RESOURCE_LOCK web_access)
 
 ADD_TEST(ioTvOSMToVectorDataGeneratorByName ${IO_TESTS19}
   --compare-ogr ${EPSILON_9}
@@ -2987,6 +2992,7 @@ ADD_TEST(ioTvOSMToVectorDataGeneratorByName ${IO_TESTS19}
   -osm ${INPUTDATA}/qb_road.osm
   -vd ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
 )
+SET_PROPERTY(TEST ioTvOSMToVectorDataGeneratorByName PROPERTY RESOURCE_LOCK web_access)
 
 # ImageToOSMVectorData
 ADD_TEST(ioTuImageToOSMVectorDataGeneratorNew ${IO_TESTS19}
@@ -3003,6 +3009,7 @@ ADD_TEST(ioTvImageToOSMVectorDataGenerator ${IO_TESTS19}
   -out ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
   -key highvay,motorway
 )
+SET_PROPERTY(TEST ioTvImageToOSMVectorDataGenerator PROPERTY RESOURCE_LOCK web_access)
 
 ENDIF(OTB_USE_CURL)
 
