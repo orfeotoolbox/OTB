@@ -38,7 +38,7 @@
 // orthogonal linear combinations, but the criterion of Fast ICA is
 // different: instead of maximizing variance, it tries to maximize
 // stastistical independance between components.
-// 
+//
 // In the Fast ICA algorithm \cite{hyvarinen1999fast},
 // statistical independance is mesured by evaluating non-Gaussianity
 // of the components, and the maximization is done in an iterative way.

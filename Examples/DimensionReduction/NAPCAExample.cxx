@@ -35,8 +35,8 @@
 // efficient method based on the inner product in order to compute the
 // covariance matrix.
 //
-// The Noise-Adjusted Principal Component Analysis transform is a sequence 
-// of two Principal Component Analysis transforms. The first transform is based 
+// The Noise-Adjusted Principal Component Analysis transform is a sequence
+// of two Principal Component Analysis transforms. The first transform is based
 // on an estimated covariance matrix of the noise, and intends to whiten the
 // input image (noise with unit variance and no correlation between
 // bands).
