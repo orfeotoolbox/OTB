@@ -4,7 +4,7 @@ include_directories(../QtWidget)
 set( SRCS
      otbApplicationLauncherQt.cxx )
 
-add_executable(otbApplicationLauncherQt ${SRCS})
+add_executable(otbApplicationLauncherQt WIN32 ${SRCS})
 
 target_link_libraries(otbApplicationLauncherQt
                        OTBWrapperQtWidget
