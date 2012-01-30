@@ -370,7 +370,7 @@ ViewerViewGUI
    std::string fileName = m_ViewerModel->GetObjectList().at(len-1).pFileName;
    int slashIndex       = fileName.find_last_of("/", fileName.size());
 
-   itk::OStringStream oss;
+   std::ostringstream oss;
    oss<<m_UndisplayedLabel;
    oss<<m_TemplateViewerName<<fileName.substr(slashIndex+1, fileName.size());
    guiImageList->add(oss.str().c_str());
@@ -652,7 +652,7 @@ ViewerViewGUI
    std::string fileName = m_ViewerModel->GetObjectList().at(selectedItem-1).pFileName;
    int slashIndex = fileName.find_last_of("/", fileName.size());
 
-   itk::OStringStream oss;
+   std::ostringstream oss;
    oss<<status;
    oss<<m_TemplateViewerName<<fileName.substr(slashIndex+1, fileName.size());
    guiImageList->text(selectedItem, oss.str().c_str());
@@ -763,7 +763,7 @@ ViewerViewGUI
  ViewerViewGUI
  ::UpdateInformation(unsigned int selectedItem)
  {
-   itk::OStringStream oss;
+   std::ostringstream oss;
    oss.str("");
    const ObjectsTrackedType & objTracked = m_ViewerModel->GetObjectList().at(selectedItem-1);
    std::string selectedImageName = objTracked.pFileName;
@@ -1192,7 +1192,7 @@ void
 ViewerViewGUI
 ::UpdateDiaporamaProgressBar()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss<<m_DiaporamaCurrentIndex+1<<"/"<<guiImageList->size();
   guiDiaporamaProgressBar->copy_label(oss.str().c_str());
@@ -1237,7 +1237,7 @@ void
 ViewerViewGUI
 ::UpdateLinkSetupWindow()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   guiLinkListLeft->clear();
   guiLinkListRight->clear();
