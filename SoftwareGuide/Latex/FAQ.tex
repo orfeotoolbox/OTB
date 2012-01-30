@@ -70,7 +70,7 @@ The creation of a preparatory program is needed because of :
 \end{itemize}
 
 
-This program was initiated by CNES mid-2003 and will last until mid 2011.
+This program was initiated by CNES mid-2003 and will last until mid 2013.
 It consists in two parts, between which it is necessary to keep a strong interaction:
 \begin{itemize}
 \item A Methodological part,
@@ -149,14 +149,10 @@ A simple \texttt{make} in your OTB binary directory will be enough to update the
 OTB is a multi-platform library. It has successfully been installed on
 the following platforms:
 \begin{itemize}
-  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X, 4.2.X, 4.3.X, 4.4.X, 4.5.X)
-  \item Windows with Microsoft Visual Studio C++ 7.1 .NET 2003
-  \item Windows with Microsoft Visual Studio C++ 8.0 .NET 2005
+  \item Linux/Unix with GCC (4.1.X, 4.2.X, 4.3.X, 4.4.X, 4.5.X, 4.6.X)
   \item Windows with Microsoft Visual Studio C++ 9.0 .NET 2008
-  \item Windows with Microsoft Visual Express 2005
   \item Windows with Microsoft Visual Express 2008
   \item Windows with Microsoft Visual Express 2010
-  \item Cygwin (\url{http://www.cygwin.com})
   \item MacOS (OSX 10.5, OSX 10.6)
   \item Open Solaris
 \end{itemize}
@@ -190,7 +186,7 @@ whatever you want. Make sure that you have downloaded the source code for:
 
 \subsubsection{Unix/Linux Platforms}
 
-\textbf{Important note}: on some Linux distributions (eg. Debian, Ubuntu, Fedora), you should use
+\textbf{Important note}: on some Linux distributions (eg. Debian, Ubuntu), you should use
 the official packages for CMake, GDAL and Fltk (including the development packages). Once you have installed these
 packages, you can skip to step 4.
 
@@ -199,12 +195,14 @@ packages, you can skip to step 4.
 \item Install GDAL (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip gdal.1.8.0.tar.gz
-      tar xvf gdal.1.8.0.tar
-      cd gdal.1.8.0
-      ./configure --prefix=INSTALL_DIR --with-libtiff=internal --with-geotiff=internal
+      gunzip gdal.1.9.0.tar.gz
+      tar xvf gdal.1.9.0.tar
+      cd gdal.1.9.0
+      ./configure --prefix=INSTALL_DIR --with-libtiff=internal --with-geotiff=internal 
+                  --with-rename-internal-libtiff-symbols=yes --with-rename-internal-libgeotiff-symbols=yes 
       make
       make install
+      --> check that gdalinfo --version works otherwise set your LD_LIBRARY_PATH to where you have installed GDAL 
   \end{verbatim}
 
 It seems to be a bug in the GDAL install procedure: if you are installing it without root privileges, even if your \texttt{INSTALL\_DIR} is a directory for which you have the write permissions, GDAL tries to copy the python bindings together with the Python site packages, which are usually somewhere in /usr/lib.
@@ -216,9 +214,9 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \item Install CMake (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip cmake-2.8.4.tar.gz
-      tar xvf cmake-2.8.4.tar
-      cd cmake-2.8.4
+      gunzip cmake-2.8.7.tar.gz
+      tar xvf cmake-2.8.7.tar
+      cd cmake-2.8.7
       ./configure --prefix=INSTALL_DIR
       make
       make install
@@ -227,15 +225,15 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
       your path with \texttt{export PATH=\$PATH:INSTALL\_DIR/bin} or
       something similar.
 
-\item Install Fltk (optional) using CMake (do not use the configure script) (or \textbf{use your distribution package})
+\item Install Fltk (optional) using CMake (do not use the configure script) (or for more simplicity \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
-      bunzip2 fltk-1.1.9-source.tar.bz2 OR
-      gunzip fltk-1.1.9-source.tar.gz
-      tar xvf fltk-1.1.9-source.tar
+      bunzip2 fltk-1.3.0-source.tar.bz2 OR
+      gunzip fltk-1.3.0-source.tar.gz
+      tar xvf fltk-1.3.0-source.tar
       mkdir Fltk-binary
       cd Fltk-binary
-      ccmake ../fltk-1.1.9
+      ccmake ../fltk-1.3.0
       --> follow the CMake instructions, in particular:
           --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
 	  --> set BUILD_EXAMPLES to ON within CMake
@@ -267,19 +265,16 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 	  --> set OTB_USE_EXTERNAL_ITK to OFF within CMake
 	  --> set FLTK_DIR to INSTALL_DIR/Fltk-Binary within CMake OR
 	      if you do not have FLTK, you can use the OTB internal FLTK setting  
-	      OTB_USE_EXTERNAL_ITK to OFF. If you don't have FLTK and don't want to use 
+	      OTB_USE_EXTERNAL_FLTK to OFF. If you don't have FLTK and don't want to use 
 	      the internal one, press 't' to change to advanced mode and set OTB_USE_VISU to OFF
 	  --> generate the configuration with 'g'
        make -j 2
   \end{verbatim}
 
   If you want a faster compilation and don't want the compilation of the examples, you
-  can set \texttt{BUILD\_EXAMPLES} to \texttt{OFF}. Some platforms apparently
-  have more difficulties with shared libraries, if you experience any problem
-  with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
-  built size might reach 1~GB.
+  can set \texttt{BUILD\_EXAMPLES} to \texttt{OFF}. 
 
-  After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-3.0.0}
+  After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-3.12.0}
   and the compiled binaries and libraries in \texttt{INSTALL\_DIR/OTB-Binary}. Keeping
   the sources is important as most programs you will designed will need an access
   to the \texttt{.txx} files during compilation. However, the binaries directory knows were
@@ -297,7 +292,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 
 \end{enumerate}
 
-\subsubsection{Microsoft Visual Studio (7.1 .NET 2003/8.0 .NET 2005/Express 2005/Express 2008 2010/Express 2010)}
+\subsubsection{Microsoft Visual Studio (Express 2008/Express 2010)}
 OSGeo4W is a binary distribution of a broad set of open source geospatial software 
 for Win32 environments (Windows XP, Vista, etc), and contains all the required dependencies of OTB.
 
@@ -335,27 +330,9 @@ for Win32 environments (Windows XP, Vista, etc), and contains all the required d
 
 \end{enumerate}
 
-Microsoft Visual Studio 2010 is supported since the version 3.6. 
-
-\subsubsection{Cygwin}
-\begin{enumerate}
-
-\item Download the lastest version at \url{http://www.cygwin.com} and install it.
-	Then, launch it, a prompt appears (similar to Linux one).
-
-\item Install GDAL
-
-	To compile GDAL, at configure step, use these options :
-\begin{verbatim}
-	./configure --prefix=INSTALL_DIR --with-geotiff=internal --with-libtiff=internal
-\end{verbatim}
-	Then the usual make and make install.
-
-
-\item Install OTB
-
-	See Linux part for details (same procedure).
-\end{enumerate}
+  Windows platforms didn't support to build with shared libraries. If you experience any problem
+  with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
+  built size might reach 1~GB. 
 
 That should be all! Otherwise, subscribe to
    otb-users@googlegroups.com and you will get some help.
@@ -376,45 +353,8 @@ Since Visual Studio 2010, OTB can't compile while using the internal libLAS libr
 the following variables in cmake :  \texttt{OTB\_USE\_LIBLAS = OFF}\\
 Then you will be able to configure and build the project as usual.
 
-\subsubsection{Cygwin}
-Due to an unknown bug, Fltk can't compile on some versions of Cygwin (OpenGL problems).
-
-Put OTB\_USE\_VISU to OFF to avoid these problems.
-
-Some bugs can appear while compiling GDAL with JPEG2000 files : disable this format to solve the problem.
-
 \subsubsection{MacOSX 10.6 Snow Leopard}
-Since 10.6 (Snow Leopard), OS X does not support Carbon calls from 64bit code anymore. Until FLTK is ported to Cocoa, it can only be compiled in 32 bits mode, thus OTB needs to be compiled in 32 bits mode, as well as GDAL. Moreover, there is a compilation issue with liblas, so liblas must be disabled.
-You can follow these steps :
-
-\begin{enumerate}
-
-\item Install GDAL
-
-	To compile GDAL, at configure step, use these options :
-\begin{verbatim}
-	export CFLAGS="-O2 -W -arch i386 "
-	export CXXFLAGS="-O2 -W  -arch i386 "
-	export LDFLAGS="-arch i386"
-
-	./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal
-	--with-geotiff=internal --with-jpeg=internal
-\end{verbatim}
-
-	Then the usual make and make install.
-
-
-\item Configure OTB
-
-        Follow the Unix/Linux instructions. In particular set the following variables :
-        \texttt{CMAKE\_OSX\_ARCHITECTURES = i386}\\
-        \texttt{GDAL\_INCLUDE\_DIR}\\
-        \texttt{GDAL\_LIBRARY\_DIR}\\
-        \texttt{OTB\_USE\_LIBLAS = OFF}\\
-
-        Then the usual make and make install.
-
-\end{enumerate}
+Since 10.6 (Snow Leopard), OS X does not support Carbon calls from 64bit code anymore. OTB should be compiled with FLTK 1.3 from the macport fltk-devel and \texttt{OTB\_USE\_EXTERNAL\_FLTK = ON}\\. Moreover, there is a compilation issue with liblas, so liblas must be disabled with \texttt{OTB\_USE\_LIBLAS = OFF}\\.
 
 \subsubsection{Open Solaris}
 There are some issues on Open Solaris 2009.06 and before with libLAS (library included
@@ -425,39 +365,14 @@ It seems to be fine with the more recent release of Open Solaris.
 
 \subsubsection{Debian Linux / Ubuntu}
 
-On some Debian / Ubuntu versions, the system gdal library might conflict with the system Tiff library. This is most likely the case if you get odd segmentation fault whenever trying to open a tiff image.
+On some Debian / Ubuntu versions, the system gdal library and its tiff internal symbol might conflict with the system Tiff library (bugs.debian.org/558733). This is most likely the case if you get odd segmentation fault whenever trying to open a tiff image. This symbol clash happens when using OTB. A workaround to the issue has been provided in GDAL sources, but is available in the 1.9.0 release.
 
-Here is an outline of the issue: to be able to handler big Tiff files (e.g. more than 4 Gb) the Tiff library has to be compiled with some specific options. This is not the case for most distrib Tiff packages. Therefore, Gdal is often compiled with an internal Tiff version using the appropriate options. In this case, the Gdal shared library might expose the internal Tiff symbols, so that these symbols will be found when linking against the Gdal library. But Gdal offers the Tiff symbols without offering the headers in its include directory, so that one ends up compiling some code using Tiff system headers and Tiff Gdal symbols. This might cause Tiff version conflicts and lead to segmentation fault.
+The recommended procedure is to get this recent source and build GDAL from sources, with the following configure command: 
+  \begin{verbatim}
+      ./configure --prefix=INSTALL_DIR --with-libtiff=internal --with-geotiff=internal 
+                  --with-rename-internal-libtiff-symbols=yes --with-rename-internal-libgeotiff-symbol 
+  \end{verbatim}
 
-Now, here is the workaround: Build your own Gdal library (you probably want to have the most up-to-date Gdal anyway) using the following options during configuration:
-\begin{verbatim}
-	./configure --prefix=INSTALL_DIR --with-libtiff=internal --with-geotiff=internal
-\end{verbatim}
-
-Then make and (sudo) make install. Then, do:
-
-\begin{verbatim}
-        sudo cp frmts/gtiff/libgeotiff/*.h   INSTALL_DIR/include/
-	sudo cp frmts/gtiff/libgeotiff/*.inc INSTALL_DIR/include/
-	sudo cp frmts/gtiff/libtiff/*.h      INSTALL_DIR/include/ 
-\end{verbatim}
-
-This will add the missing headers to the the Gdal include directory, so that your Gdal installation now provide a full Tiff support (headers and symbols). During OTB configuration, you will need to set configuration varaible related to gdal to your own Gdal:
-\begin{verbatim}
-       GDALCONFIG_EXECUTABLE            gdal_binary_directory/bin/gdal-config                 
-       GDAL_CONFIG                      gdal_binary_directory/bin/gdal-config                 
-       GDAL_INCLUDE_DIR                 gdal_binary_directory/include                         
-       GDAL_LIBRARY                     gdal_binary_directory/lib/libgdal.so 
-       OGR_INCLUDE_DIRS                 gdal_binary_directory/include  
-\end{verbatim}
-Be careful to use Gdal include directory as TIFF\_INCLUDE\_DIRS and GEOTIFF\_INCLUDE\_DIRS and Gdal library for GEOTIFF\_LIBRARY and TIFF\_LIBRARY.   
-\begin{verbatim}
-       GEOTIFF_INCLUDE_DIRS             gdal_binary_directory/include                         
-       GEOTIFF_LIBRARY                  gdal_binary_directory/lib/libgdal.so 
-            
-       TIFF_INCLUDE_DIRS                gdal_binary_directory/include                         
-       TIFF_LIBRARY                     gdal_binary_directory/lib/libgdal.so
-\end{verbatim}              
 
 \section{Using OTB}
 
@@ -577,7 +492,8 @@ All functionalities which are useful for remote sensing data are of interest. As
 OTB is a library, it should be generic algorithms: change, detection, fusion,
 object detection, segmentation, interpolation, etc.
 
-More specific applications can be contributed to the OTB-Applications package.
+More specific applications can be contributed to the new framework of application 
+directly in the OTB_SRC_DIR/Applications directory.
 
 \section{Running the tests}\label{sec:runningTheTests}
 
@@ -597,7 +513,7 @@ All these test are available in the directory \texttt{Testing} and are also good
 
 \subsection{How to run the tests?}
 
-There is more than 1000 tests for OTB and about 100 for the OTB-Applications and it takes from 20 minutes to 3 hours to run all the test, mainly depending on your compilation options (Release mode does make a difference) and of course your hardware.
+There is more than 2500 tests for OTB and it takes from 20 minutes to 3 hours to run all the test, mainly depending on your compilation options (Release mode does make a difference) and of course your hardware.
 
 To run the tests, you first have to make sure that you set the option \texttt{BUILD\_TESTING} to \texttt{ON} before building the library. If you want to modify it, just rerun ccmake, change the option, then make.
 
