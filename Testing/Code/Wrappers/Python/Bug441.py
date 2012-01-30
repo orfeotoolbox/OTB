@@ -14,11 +14,13 @@ StereoSensorModelToElevationMap.SetParameterString("elev", "dem")
 StereoSensorModelToElevationMap.SetParameterString("elev.dem.path",  "dem_wrong_path")
 StereoSensorModelToElevationMap.SetParameterString("elev.dem.geoid", "geoid_wrong_file")
 
-# This bug verifies that no exception is raised during ExecuteAndWriteOutput
-# It does **NOT** check that the execution of the application succeeds
+# This bug verifies that a proper exception is raised during ExecuteAndWriteOutput
 try:
   StereoSensorModelToElevationMap.ExecuteAndWriteOutput()
 except:
-  raise
+  print "Catching exception : this is the expected behavior - TEST PASS"
+  sys.exit( 0 )
 
-sys.exit( 0 )
+print "Should have raised an exception, but did not - TEST FAIL"
+sys.exit( 1 )
+
