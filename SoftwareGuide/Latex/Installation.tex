@@ -3,8 +3,7 @@
 \index{Installation}
 
 This section describes the process for installing OTB on your system. 
-OTB is a toolbox, and as such, once it is installed in your computer, 
-which provide by default a set of useful libraries. You can use
+OTB is a toolbox, and as such, once it is installed in your computer, provided by default a set of useful libraries. You can use
 these libraries to build your own applications based on it. By default,  
 What OTB does provide---besides the toolbox proper---is a
 large set of test files and examples that will introduce you to OTB concepts
@@ -14,7 +13,7 @@ Since the release 3.12, OTB embedded a specific framework to generate applicatio
 in more user-friendly way. The majority of the applications available in the
 OTB-Applications packages have been revamped into the main OTB package. Now if you 
 activate the specific option \code{BUILD\_APPLICATIONS}, OTB build for each 
-application one shared library (also know as plugin). This plugin can be
+application one shared library (also known as plugin). This plugin can be
 auto-loaded into appropriate tools wihtout recompiling, and is able to
 fully describe its parameters, behaviour and documentation.
 
@@ -22,19 +21,19 @@ The tools to use these plugins can be extended, but OTB shipped the
 following:
 \begin{itemize}
 \item A command-line laucher, which is almost equivalent to the former
-  OTB Applications command-line interface,
-\item A graphical launcher, with an auto-generated QT interface,
+  OTB-Applications command-line interface,
+\item A graphical launcher, with an auto-generated Qt interface,
   providing ergonomic parameters setting, display of documentation,
   and progress reporting,
 \item A C and SWIG interface, which means that any application can be
-  loaded set-up and executed into a high-level language such as Python
+  loaded set-up and executed into a high-level language such as \textbf{Python}
   for instance.
 \end{itemize}  
 
-For the moment, the former \textbf{OTB Applications} package will be keep available 
+For the moment, the former \textbf{OTB-Applications} package will be keep available 
 but will no longer be maintained.
 
-The classical OTB-powered applications are keep available and will continue
+The classical OTB powered applications are keep available and will continue
 to be maintained:
 \begin{description}
 \item [Monteverdi]{An integrated applications giving graphical access to a lot of OTB 
@@ -53,17 +52,13 @@ intend to do. Table~\ref{tab:installation}.
 \hline
 & \textbf{OTB library and internal applications} & \textbf{Monteverdi} & \textbf{OTB-Applications} & \textbf{Wrapping (Java and Python)} \\
 \hline
-\hline
 \textbf{Any platform} & 
   Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source}) 
 & Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source})\\
 \hline
-\hline
 \textbf{Windows 2000/XP/Vista/Seven} & OSGeo4W installer for internal applications & Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries})& Windows installer (see section~\ref{ssec:windows_binaries})& Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries}) \\
 \hline
-\hline
 \textbf{MacOS X 10.5 and higher} &  & app's DMG file (see section~\ref{ssec:mac_binaries}) &  & \\
-\hline
 \hline
 \textbf{Ubuntu Linux 11.10, 11.04, 10.10 and 10.04 (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries})&  \\
 \hline
@@ -97,7 +92,9 @@ need to be installed are:
 \item libgeotiff,
 \item libjpeg,
 \item zlib, 
-\item libpng.
+\item libpng,
+\item mapnick,
+\item gettext.
 \end{itemize}\label{OSGeo4W_lib}
 Remember that the corresponding dlls are to be accessible in the system path. To ensure so, add
 the OSGeo4W bin directory to your system path.
@@ -110,14 +107,14 @@ installation process.
 Since OTB 3.12, we provide OTB packages through OSGeo4W for new OTB Applications, Monteverdi and 
 OTB-Wrapping. This packages are available directly in the OSGeo4W installer with the following names:
 \begin{itemize}
-\item otb-bin and otb-python respectively for command lines and QT applications, and for python applications
-\item otb-monteverdi for monteverdi application 
-\item otb-wrapping for low levelPython/Java bindings.
+\item \textbf{otb-bin} and \textbf{otb-python} respectively for command lines and QT applications, and for python applications
+\item \textbf{otb-monteverdi} for monteverdi application 
+\item \textbf{otb-wrapping} for low levelPython/Java bindings.
 \end{itemize}
 Select the package you want add let it guide by the installation process which will manage the installation of all dependecies needed.
 In the case of otb-monteverdi, monteverdi will be directly install in OSGeo4W repository and some shortcuts will be added to your desktop 
 and in the start menu. You can now use directly monteverdi from your desktop, from the starter menu and from an OSGeo4W shell with command monteverdi. 
-For the otb-bin packages, it will be available directly in the OSGeo4W shell, for example otbgui_BandMath. We recommended to use this way to install 
+For the otb-bin packages, it will be available directly in the OSGeo4W shell, for example otbgui\_BandMath. We recommended to use this way to install 
 the OTB packages on Windows. 
 If you want use the otb-python package, for example in QGIS, please following the install note found in the \href{http://wiki.orfeo-toolbox.org/index.php/Quantum_GIS_access_to_OTB_applications#Notes_for_Windows_users}{OTB wiki}. You can simply check into a OSGeo4W shell the list of available application:
 \begin{verbatim}
@@ -130,7 +127,7 @@ For more information you can read the OTB Cookbook which provide useful informat
 \subsection{MacOS X}
 \label{ssec:mac_binaries}
 
-For MacOS X, a DMG file is available for Monteverdi for MacOS X 10.5 and higher. 
+For MacOS X, a .dmg file is available for Monteverdi for MacOS X 10.5 and higher. 
 Please go the the \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}.
 Click on the file to launch Monteverdi.
 
@@ -191,7 +188,7 @@ sudo aptitude update
 \end{verbatim}
 Following the guidlines for orfeotoolbox ppa install you can select the package you want or install all
 \begin{verbatim}
-sudo aptitude install otb otbapp monteverdi otb-wrapping-python otb-wrapping-java
+sudo aptitude install libotb otbapp monteverdi otb-wrapping-python otb-wrapping-java
 \end{verbatim}
 
 Be careful not to add the two repositories, since they may cause incompatibilities.
@@ -206,7 +203,7 @@ Now run:
 \begin{verbatim}
 sudo aptitude update
 \end{verbatim}
-AS the previous cases, select which packages you will install.
+As the previous cases, select which packages you will install.
 \begin{verbatim}
 sudo aptitude install libotb otb-bin otb-bin-qt otb-python otbapp monteverdi
 \end{verbatim}
@@ -266,20 +263,21 @@ and then add the OTB packages as shown above.
 
 \subsubsection{CentOS 5.5}
 \label{ssec:centos_binaries}
-Since 3.12 version, OTB packages (OTB, monteverdi, OTB-Applications) are available on CentOS 5.5 distribution. In the following lines, we will describe the way to install OTB and monteverdi packages on this distribution. If you want use OTB-Wrapping, please following the instructions found in this \href{http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.12.0/OTB_packages_on_CentOS_5.5.txt}{file}. Preliminary step:
+Since 3.12 version, OTB packages (OTB, monteverdi, OTB-Applications) are available on CentOS 5.5 distribution. In the following lines, we will describe the way to install OTB and monteverdi packages on this distribution. If you want use OTB-Wrapping, please following the instructions found in this \href{http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.12.0/OTB_packages_on_CentOS_5.5.txt}{file}. Preliminary steps (common to all packages):
 
 \begin{enumerate}
 
   \item Configure your system to pass through your HTTP(S) proxy,
 
-  \item Add required extra repositories: EPEL, ELGIS and centosplus,
+  \item Add required extra repositories: EPEL, ELGIS and centosplus, 
 
 \end{enumerate}
-,common to all packages, can be found in the previous file.
+can be found in the previous file.
 
 So if you want OTB and monteverdi packages, you need to install a standard RPM packages which is available on OTB website: 
    \begin{verbatim}
-   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/gdal-1.8.0-5.i386.rpm
+   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/
+         gdal-1.8.0-5.i386.rpm
    yum --nogpgcheck install gdal-1.8.0-5.i386.rpm
    \end{verbatim}
 We can now get and install (replace version number by the current):
@@ -287,12 +285,14 @@ We can now get and install (replace version number by the current):
 \begin{enumerate}
 \item OTB libraries and new OTB application package: 
    \begin{verbatim}
-   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/OrfeoToolbox-3.11.0-1.i386.rpm
+   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/
+         OrfeoToolbox-3.11.0-1.i386.rpm
    yum --nogpgcheck install OrfeoToolbox-3.11.0-1.i386.rpm
    \end{verbatim}
 \item monteverdi package:
    \begin{verbatim}
-   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/Monteverdi-1.9.0-0.i386.rpm
+   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/
+         Monteverdi-1.9.0-0.i386.rpm
    yum --nogpgcheck install Monteverdi-1.9.0-0.i386.rpm
    \end{verbatim}
 \end{enumerate}
@@ -451,14 +451,16 @@ version based on MFC.}
 
 
 \textbf{\underline{On Windows}}
-\index Downloading libraries from OSGeo4W
-The OTB needs some external library to work. On Windows, we recommended to use the OSGeo4Windows tools tp get those libraries. Please refer to the section \ref{OSGeo4W_lib} to do the procedure.
-\index Configuring CMake on Windows
+\index{Downloading libraries from OSGeo4W}
+The OTB needs some external library to work. On Windows, we recommended to use the OSGeo4Windows tools to get those libraries. Please refer to the section \ref{OSGeo4W_lib} to do the procedure.
+\index{Configuring CMake on Windows}
 On windows, you need to create the binary directory before launching CMake.
 Here, you'll use the following one:
+\begin{verbatim}
 * OTB
 |- OTB\_SOURCE\_DIR 
 |- OTB\_BINARY\_DIR
+\end{verbatim}
 
 Launch CMake executable, on the top of the GUI, select the source and binary directory.
 Then press \emph{Configure}, the \emph{Generate} button will be accessible only when
@@ -482,7 +484,7 @@ You'll probably need to push several times \emph{Configure} to have access to th
 the \emph{Advanced} button to have access to the advanced CMake variable.
 When this is done, push \emph{Generate}, the CMake window will close itself.
 
-\index Compiling OTB on Windows
+\index{Compiling OTB on Windows}
 Now, you can go in your \emph{binary directory} (here OTB\_BINARY\_DIR). CMake has generated Makefiles or
 Visual Studio projects. You can open the solution and generate the \texttt{ALL\_BUILD} project.
 If you plan to run executables from within the Visual Studio environment, you should open the Visual Studio 
@@ -497,14 +499,14 @@ That should be all! Otherwise, subscribe to
 otb-users@googlegroups.com and you will get some help.
 
 \textbf{\underline{On Linux/Unix}}
-\index Configuring CMake on Windows
+\index{Configuring CMake on Unix}
 On Unix, the binary directory is created by the user and CMake is invoked with the
 path to the source directory. For example:
 \small
 \begin{verbatim}
-mkdir OTB\_BINARY\_DIR
-cd OTB\_BINARY\_DIR
-ccmake ../OTB_SOURCE\_DIR
+mkdir OTB_BINARY_DIR
+cd OTB_BINARY_DIR
+ccmake ../OTB_SOURCE_DIR
 \end{verbatim}
 \normalsize
 
@@ -517,7 +519,6 @@ Once the interface open, you can push \emph{c} (for Configure), or/and \emph{t} 
 \item OTB\_USE\_EXTERNAL\_EXPAT:BOOL=ON
 \item OTB\_USE\_LIBLAS:BOOL=ON
 \item OTB\_USE\_EXTERNAL\_LIBLAS:BOOL=ON
-\item 
 \item OTB\_USE\_GETTEXT:BOOL=OFF
 \item OTB\_USE\_JPEG2000:BOOL=ON
 \end{itemize}
@@ -535,7 +536,7 @@ make install
 \textbf{\underline{Compilation awarness}}
 The build process will typically take anywhere from 15 to 30 minutes depending
 on the performance of your system. If you decide to enable testing as part of
-the normal build process, about 600 small test programs will be compiled. This
+the normal build process, about 2500 small tests programs will be compiled. This
 will verify that the basic components of OTB have been correctly built on your
 system.
 
