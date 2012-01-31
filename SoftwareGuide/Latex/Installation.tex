@@ -2,17 +2,41 @@
 \label{chapter:Installation}
 \index{Installation}
 
-This section describes the process for installing OTB on your system. Keep in
-mind that OTB is a toolbox, and as such, once it is installed in your computer
-there will be no application to run. Rather, you will use OTB to build your
-own applications. What OTB does provide---besides the toolbox proper---is a
+This section describes the process for installing OTB on your system. 
+OTB is a toolbox, and as such, once it is installed in your computer, 
+which provide by default a set of useful libraries. You can use
+these libraries to build your own applications based on it. By default,  
+What OTB does provide---besides the toolbox proper---is a
 large set of test files and examples that will introduce you to OTB concepts
-and will show you how to use OTB in your own projects.
+and will show you how to use OTB in your own projects. 
 
-If you are interested in OTB-powered applications, you may try one of the following:
+Since the release 3.12, OTB embedded a specific framework to generate applications
+in more user-friendly way. The majority of the applications available in the
+OTB-Applications packages have been revamped into the main OTB package. Now if you 
+activate the specific option \code{BUILD\_APPLICATIONS}, OTB build for each 
+application one shared library (also know as plugin). This plugin can be
+auto-loaded into appropriate tools wihtout recompiling, and is able to
+fully describe its parameters, behaviour and documentation.
+
+The tools to use these plugins can be extended, but OTB shipped the
+following:
+\begin{itemize}
+\item A command-line laucher, which is almost equivalent to the former
+  OTB Applications command-line interface,
+\item A graphical launcher, with an auto-generated QT interface,
+  providing ergonomic parameters setting, display of documentation,
+  and progress reporting,
+\item A C and SWIG interface, which means that any application can be
+  loaded set-up and executed into a high-level language such as Python
+  for instance.
+\end{itemize}  
+
+For the moment, the former \textbf{OTB Applications} package will be keep available 
+but will no longer be maintained.
+
+The classical OTB-powered applications are keep available and will continue
+to be maintained:
 \begin{description}
-\item[OTB-Applications]{A set of command-line and graphical processing chains built
-upon OTB.}
 \item [Monteverdi]{An integrated applications giving graphical access to a lot of OTB 
 functionnalities.}
 \item[OTB-Wrapping]{Calling OTB from Python or Java (see chapter~\ref{chap:wrappings}).}
@@ -27,23 +51,25 @@ intend to do. Table~\ref{tab:installation}.
 \begin{table}[!htbp]
 \begin{tabular}{|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|}
 \hline
-& \textbf{OTB library} & \textbf{Monteverdi} & \textbf{OTB-Applications} & \textbf{Wrapping (Java and Python)} \\
+& \textbf{OTB library and internal applications} & \textbf{Monteverdi} & \textbf{OTB-Applications} & \textbf{Wrapping (Java and Python)} \\
 \hline
 \hline
 \textbf{Any platform} & 
-  Build from source (see section~\ref{sec:source}) &  Build from source (see section~\ref{sec:source}) 
+  Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source}) 
 & Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source})\\
 \hline
 \hline
-\textbf{Windows 2000/XP/Vista/Seven} &  & Windows installer (see section~\ref{ssec:windows_binaries})& Windows installer (see section~\ref{ssec:windows_binaries})& Windows installer (see section~\ref{ssec:windows_binaries}) \\
+\textbf{Windows 2000/XP/Vista/Seven} & OSGeo4W installer for internal applications & Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries})& Windows installer (see section~\ref{ssec:windows_binaries})& Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries}) \\
 \hline
 \hline
 \textbf{MacOS X 10.5 and higher} &  & app's DMG file (see section~\ref{ssec:mac_binaries}) &  & \\
 \hline
 \hline
-\textbf{Ubuntu Linux 10.10, 10.04 and 9.10 (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries})&  \\
+\textbf{Ubuntu Linux 11.10, 11.04, 10.10 and 10.04 (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries})&  \\
 \hline
-\textbf{OpenSuse 11.2 and higher (32/64 bits)} & RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) & \\
+\textbf{OpenSuse 11.X and higher (32/64 bits)} & RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) & \\
+\hline
+\textbf{CentOS 5.5 and higher (32/64 bits)} & RPM package (see section~\ref{ssec:centos_binaries}) &  RPM package (see section~\ref{ssec:centos_binaries}) &  RPM package (see section~\ref{ssec:centos_binaries}) & \\
 \hline
 \end{tabular}
 \caption{Available installation procedures with respect to system configuration and target usage}
@@ -58,10 +84,11 @@ intend to do. Table~\ref{tab:installation}.
 \subsection{Windows 2000/XP/Vista/Seven}
 \label{ssec:windows_binaries}
 
-For Windows 2000/XP/Vista/Seven users, installation programs exists for Monteverdi, 
-OTB-Applications and OTB-Wrapping. 
+For Windows 2000/XP/Vista/Seven users, classical installation programs exists for Monteverdi, 
+old OTB-Applications and OTB-Wrapping. This is the old way, we recommend to use the new install
+process directly through OSGeo4W which is described later in this paragraph. 
 
-These installers depends on dependencies that can be installed through OSGeo4W. The packages that
+The classical installers depends on dependencies that can be installed through \href{http://trac.osgeo.org/osgeo4w/}{OSGeo4W}. The packages that
 need to be installed are:
 \begin{itemize}
 \item gdal,
@@ -71,27 +98,47 @@ need to be installed are:
 \item libjpeg,
 \item zlib, 
 \item libpng.
-\end{itemize}
+\end{itemize}\label{OSGeo4W_lib}
 Remember that the corresponding dlls are to be accessible in the system path. To ensure so, add
 the OSGeo4W bin directory to your system path.
 
- Once the dependencies have been properly installed, please go the the 
+Once the dependencies have been properly installed, please go the the 
 \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}, to
 get the installer. Double-click on the installer and let it guide you through the 
 installation process.
 
+Since OTB 3.12, we provide OTB packages through OSGeo4W for new OTB Applications, Monteverdi and 
+OTB-Wrapping. This packages are available directly in the OSGeo4W installer with the following names:
+\begin{itemize}
+\item otb-bin and otb-python respectively for command lines and QT applications, and for python applications
+\item otb-monteverdi for monteverdi application 
+\item otb-wrapping for low levelPython/Java bindings.
+\end{itemize}
+Select the package you want add let it guide by the installation process which will manage the installation of all dependecies needed.
+In the case of otb-monteverdi, monteverdi will be directly install in OSGeo4W repository and some shortcuts will be added to your desktop 
+and in the start menu. You can now use directly monteverdi from your desktop, from the starter menu and from an OSGeo4W shell with command monteverdi. 
+For the otb-bin packages, it will be available directly in the OSGeo4W shell, for example otbgui_BandMath. We recommended to use this way to install 
+the OTB packages on Windows. 
+If you want use the otb-python package, for example in QGIS, please following the install note found in the \href{http://wiki.orfeo-toolbox.org/index.php/Quantum_GIS_access_to_OTB_applications#Notes_for_Windows_users}{OTB wiki}. You can simply check into a OSGeo4W shell the list of available application:
+\begin{verbatim}
+python
+import otbApplication
+print str( otbApplication.Registry.GetAvailableApplications() )
+\end{verbatim}
+For more information you can read the OTB Cookbook which provide useful information about these new OTB Application. 
+
 \subsection{MacOS X}
 \label{ssec:mac_binaries}
 
-For MacOS X, a ready to app's DMG file is available for Monteverdi for MacOS X 10.5 and higher. 
+For MacOS X, a DMG file is available for Monteverdi for MacOS X 10.5 and higher. 
 Please go the the \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}.
 Click on the file to launch Monteverdi.
 
 \subsection{Linux}
 
-\subsubsection{Ubuntu 10.04, 10.10 and 11.04}
+\subsubsection{Ubuntu 10.04, 10.10, 11.04 and 11.10}
 \label{ssec:ubuntu_binaries}
-For Ubuntu 10.04 (Lucid Lynx), 10.10 (Maverick Meerkat) and 11.04 (Natty Narwhal), OTB, 
+For Ubuntu 10.04 (Lucid Lynx), 10.10 (Maverick Meerkat), 11.04 (Natty Narwhal) and 11.10 (Oneiric), OTB, 
 OTB-Applications, Monteverdi and OTB-Wrapping packages are available through APT repositories.
 
 If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
@@ -102,7 +149,30 @@ sudo add-apt-repository ppa:otb/orfeotoolbox-stable
 Now run:
 \begin{verbatim}
 sudo aptitude update
-sudo aptitude install otb otbapp monteverdi otb-wrapping-python otb-wrapping-java
+\end{verbatim}
+If you want only OTB libraries, please use:
+\begin{verbatim}
+sudo aptitude install libotb otbapp monteverdi otb-wrapping-python otb-wrapping-java
+\end{verbatim}
+
+If you want old OTB Applications, please use:
+\begin{verbatim}
+sudo aptitude install otbapp
+\end{verbatim}
+
+If you want new OTB Applications, please use:
+\begin{verbatim}
+sudo aptitude install otb-bin otb-bin-qt otb-python
+\end{verbatim}
+
+If you want monteverdi application, please use:
+\begin{verbatim}
+sudo aptitude install monteverdi
+\end{verbatim}
+
+If you want Python/Java wrapping, please use:
+\begin{verbatim}
+sudo aptitude install otb-wrapping-python otb-wrapping-java
 \end{verbatim}
 
 If you are using \emph{Synaptic}, you can add the repositories, update and install the packages through the
@@ -118,6 +188,9 @@ sudo add-apt-repository ppa:otb/orfeotoolbox-stable-ubuntugis
 Now run:
 \begin{verbatim}
 sudo aptitude update
+\end{verbatim}
+Following the guidlines for orfeotoolbox ppa install you can select the package you want or install all
+\begin{verbatim}
 sudo aptitude install otb otbapp monteverdi otb-wrapping-python otb-wrapping-java
 \end{verbatim}
 
@@ -132,17 +205,20 @@ sudo add-apt-repository ppa:otb/orfeotoolbox-nightly
 Now run:
 \begin{verbatim}
 sudo aptitude update
-sudo aptitude install otb otbapp monteverdi otb-wrapping
+\end{verbatim}
+AS the previous cases, select which packages you will install.
+\begin{verbatim}
+sudo aptitude install libotb otb-bin otb-bin-qt otb-python otbapp monteverdi
 \end{verbatim}
 
-For further informations about ubuntu packages go to href{https://launchpad.net/~otb/+archive/orfeotoolbox-stable}{orfeotoolbox-stable launchpad page} and click on \textbf{Read about installing}.
+For further informations about ubuntu packages go to href{https://launchpad.net/~otb/+archive/orfeotoolbox-stable}{orfeotoolbox-stable} launchpad page and click on \textbf{Read about installing}.
 
 \textbf{apt-add-repository} will try to retrieve the GPG keys of the repositories to certify the origin of the packages. If you are behind a http proxy, this step won't work and apt-add-repository will stall and eventually quit. You can temporarily ignore this error and proceed with the update step. Following this, aptitude update will issue a warning about a signature problem. This warning won't prevent you from installing the packages.
 
-\subsubsection{OpenSuse 11.3 and higher}
+\subsubsection{OpenSuse 11.X and higher}
 \label{ssec:opensuse_binaries}
 
-For OpenSuse 11.3 and higher, OTB, OTB-Applications, Monteverdi and 
+For OpenSuse 11.X and higher, OTB, OTB-Applications, Monteverdi and 
 OTB-Wrapping packages are available through \emph{zypper}.
 
 First, you need to add the appropriate repositories with these command-lines (please replace $11.4$ by your OpenSuse version):
@@ -187,6 +263,39 @@ sudo zypper ar
 http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_Tumbleweed/ tzotsos
 \end{verbatim}
 and then add the OTB packages as shown above.
+
+\subsubsection{CentOS 5.5}
+\label{ssec:centos_binaries}
+Since 3.12 version, OTB packages (OTB, monteverdi, OTB-Applications) are available on CentOS 5.5 distribution. In the following lines, we will describe the way to install OTB and monteverdi packages on this distribution. If you want use OTB-Wrapping, please following the instructions found in this \href{http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.12.0/OTB_packages_on_CentOS_5.5.txt}{file}. Preliminary step:
+
+\begin{enumerate}
+
+  \item Configure your system to pass through your HTTP(S) proxy,
+
+  \item Add required extra repositories: EPEL, ELGIS and centosplus,
+
+\end{enumerate}
+,common to all packages, can be found in the previous file.
+
+So if you want OTB and monteverdi packages, you need to install a standard RPM packages which is available on OTB website: 
+   \begin{verbatim}
+   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/gdal-1.8.0-5.i386.rpm
+   yum --nogpgcheck install gdal-1.8.0-5.i386.rpm
+   \end{verbatim}
+We can now get and install (replace version number by the current):
+
+\begin{enumerate}
+\item OTB libraries and new OTB application package: 
+   \begin{verbatim}
+   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/OrfeoToolbox-3.11.0-1.i386.rpm
+   yum --nogpgcheck install OrfeoToolbox-3.11.0-1.i386.rpm
+   \end{verbatim}
+\item monteverdi package:
+   \begin{verbatim}
+   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/Monteverdi-1.9.0-0.i386.rpm
+   yum --nogpgcheck install Monteverdi-1.9.0-0.i386.rpm
+   \end{verbatim}
+\end{enumerate}
 
 
 \section{Building from sources}
