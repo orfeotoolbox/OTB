@@ -450,7 +450,7 @@ version based on MFC.}
 \end{figure}
 
 
-\subsubsubsection{On Windows}
+\textbf{\underline{On Windows}}
 \index Downloading libraries from OSGeo4W
 The OTB needs some external library to work. On Windows, we recommended to use the OSGeo4Windows tools tp get those libraries. Please refer to the section \ref{OSGeo4W_lib} to do the procedure.
 \index Configuring CMake on Windows
@@ -467,15 +467,15 @@ The CMake GUI is used to specify the source and build
 directories (Figure \ref{fig:CMakeGUI}).
 Here is a list recommended variables to set :  
 \begin{itemize}
-\item OTB_USE_EXTERNAL_BOOST:BOOL=ON
-\item OTB_USE_MAPNIK:BOOL=ON
-\item MAPNIK_INCLUDE_DIR:PATH=C:/OSGeo4W/include/mapnik
-\item MAPNIK_LIBRARY:FILEPATH=C:/OSGeo4W/lib/mapnik.lib
-\item OTB_USE_CURL:BOOL=ON
-\item OTB_USE_EXTERNAL_EXPAT:BOOL=ON
-\item OTB_USE_LIBLAS:BOOL=OFF
-\item OTB_USE_GETTEXT:BOOL=OFF
-\item OTB_USE_JPEG2000:BOOL=ON
+\item OTB\_USE\_EXTERNAL\_BOOST:BOOL=ON
+\item OTB\_USE\_MAPNIK:BOOL=ON
+\item MAPNIK\_INCLUDE\_DIR:PATH=C:/OSGeo4W/include/mapnik
+\item MAPNIK\_LIBRARY:FILEPATH=C:/OSGeo4W/lib/mapnik.lib
+\item OTB\_USE\_CURL:BOOL=ON
+\item OTB\_USE\_EXTERNAL\_EXPAT:BOOL=ON
+\item OTB\_USE\_LIBLAS:BOOL=OFF
+\item OTB\_USE\_GETTEXT:BOOL=OFF
+\item OTB\_USE\_JPEG2000:BOOL=ON
 \end{itemize}
 
 You'll probably need to push several times \emph{Configure} to have access to the variable and to check 
@@ -496,7 +496,7 @@ built size might reach 1~GB.
 That should be all! Otherwise, subscribe to
 otb-users@googlegroups.com and you will get some help.
 
-\subsubsubsection{On Linux/Unix}
+\textbf{\underline{On Linux/Unix}}
 \index Configuring CMake on Windows
 On Unix, the binary directory is created by the user and CMake is invoked with the
 path to the source directory. For example:
@@ -511,19 +511,19 @@ ccmake ../OTB_SOURCE\_DIR
 Once the interface open, you can push \emph{c} (for Configure), or/and \emph{t} for Toggle (to have access to the advanced variables). If you have follow the section \ref{sec:FAQInstall} every needed libraries are in the
 \emph{/usr} and will be found automatically by CMake. Set the following recommended CMake variables:
 \begin{itemize}
-\item OTB_USE_EXTERNAL_BOOST:BOOL=ON
-\item OTB_USE_MAPNIK:BOOL=ON
-\item OTB_USE_CURL:BOOL=ON
-\item OTB_USE_EXTERNAL_EXPAT:BOOL=ON
-\item OTB_USE_LIBLAS:BOOL=ON
-\item OTB_USE_EXTERNAL_LIBLAS:BOOL=ON
+\item OTB\_USE\_EXTERNAL\_BOOST:BOOL=ON
+\item OTB\_USE\_MAPNIK:BOOL=ON
+\item OTB\_USE\_CURL:BOOL=ON
+\item OTB\_USE\_EXTERNAL\_EXPAT:BOOL=ON
+\item OTB\_USE\_LIBLAS:BOOL=ON
+\item OTB\_USE\_EXTERNAL\_LIBLAS:BOOL=ON
 \item 
-\item OTB_USE_GETTEXT:BOOL=OFF
-\item OTB_USE_JPEG2000:BOOL=ON
+\item OTB\_USE\_GETTEXT:BOOL=OFF
+\item OTB\_USE\_JPEG2000:BOOL=ON
 \end{itemize}
 
 Push \emph{c} to update CMake untill the option \emph{Generate} is accessible in the GUI,
-then push \enph{g} fot \emph{Generate}. The CMake interface will close itself.
+then push \emph{g} fot \emph{Generate}. The CMake interface will close itself.
 Then, go into your build directory (here OTB\_BINARY\_DIR) and do \emph{make} to launch the compilation.
 
 If you want to put OTB in a standard location, you can proceed with:
@@ -532,7 +532,7 @@ If you want to put OTB in a standard location, you can proceed with:
 make install
 \end{verbatim}
 
-\subsubsubsection{Compilation awarness}
+\textbf{\underline{Compilation awarness}}
 The build process will typically take anywhere from 15 to 30 minutes depending
 on the performance of your system. If you decide to enable testing as part of
 the normal build process, about 600 small test programs will be compiled. This
