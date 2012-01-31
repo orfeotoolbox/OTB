@@ -70,7 +70,7 @@ The creation of a preparatory program is needed because of :
 \end{itemize}
 
 
-This program was initiated by CNES mid-2003 and will last until mid 2013.
+This program was initiated by CNES mid-2003 and will last until mid 2011.
 It consists in two parts, between which it is necessary to keep a strong interaction:
 \begin{itemize}
 \item A Methodological part,
@@ -159,12 +159,75 @@ the following platforms:
 
 \subsection{Which libraries/packages are needed before installing
  OTB?}
-\begin{itemize}
-\item CMake (\url{http://www.cmake.org}), minimum 2.6
-\item GDAL (\url{http://www.gdal.org})
-\item Optional (you may use the version included in OTB): Fltk (\url{http://www.fltk.org}) and ITK (\url{www.itk.org})
-\item Optional (OTB will compile and work but some minor functionalities will be missing): cURL (\url{http://curl.haxx.se/}), FFTW (\url{www.fftw.org}).
-\end{itemize}
+The following table gathered the library (mandatory or not) used in the OTB. Some of them are included in the OTB but can be used as external libraries.
+
+\begin{center}
+\begin{tiny}
+\begin{table}[!htbp]
+\begin{tabular}{|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|}
+\hline
+& \textbf{Library} & \textbf{Web site} & \textbf{Mandatory} & \textbf{Where} & \textbf{Minimum version} \\
+\hline
+\textbf{CMake} & \url{http://www.cmake.org} & yes & Extern & 2.8 \\ 
+\hline
+\textbf{ITK} & \url{http://www.itk.org} & yes & Intern & - \\
+\hline
+\textbf{GDAL} & \url{http://www.gdal.org} & yes & Extern & 1.6 \\
+\hline
+\textbf{OSSIM} & \url{http://www.ossim.org} & yes & \textbf{Intern}/Extern & 1.8.6 \\
+\hline
+\textbf{FLTK)} & \url{http://www.fltk.org} & no & \textbf{Intern}/Extern & - \\
+\hline
+\textbf{Curl} & \url{http://curl.haxx.se} & no & Extern & - \\
+\hline
+\textbf{FFTW} & \url{http://www.fftw.org} & no & Extern & - \\
+\hline
+\textbf{expat} & \url{http://www.expat.org} & no & \textbf{Intern}/Extern & - \\
+\hline
+\textbf{zlib} & \url{http://www.zlib.net} & yes & Extern & - \\
+\hline
+\textbf{libpng} & \url{http://www.libpng.org} & yes & Extern & - \\
+\hline
+\textbf{libtiff} & \url{http://www.libtiff.org} & yes & Extern & - \\
+\hline
+\textbf{libgeotiff} & \url{http://geotiff.osgeo.org} & yes & Extern & - \\
+\hline
+\textbf{libjpeg} & \url{http://www.ijg.org} & yes & Extern & - \\
+\hline
+\textbf{openJpeg} & \url{http://www.openjpeg.org} & no & Intern & - \\
+\hline
+\textbf{liblas} & \url{http://www.liblas.org} & no & Intern/\textbf{Extern} & - \\
+\hline
+\textbf{boost} & \url{http://www.boost.org} & no & Intern\textbf{Extern} & - \\
+\hline
+\textbf{openthreads} & \url{http://openthreads.sourceforge.net} & no & Intern/Extern & - \\
+\hline
+\textbf{gettext} & \url{http://www.gnu.org/s/gettext} & no & Extern & - \\
+\hline
+\textbf{Mapnick} & \url{http://www.mapnick.org} & no & Extern & - \\
+\hline
+\textbf{tinyXML} & \url{http://www.grinninglizard.com/tinyxml} & yes & Intern & - \\
+\hline
+\textbf{KML} & \url{http://libkml.googlecode.com} & yes & Intern & - \\
+\hline
+\textbf{6S} & \url{http://6s.ltdri.org} & yes & intern & - \\
+\hline
+\textbf{edison} & \url{http://www.caip.rutgers.edu/riul/} & yes & Intern & - \\
+\hline
+\textbf{SiftFast} & \url{http://libsift.sourceforge.net} & yes & Intern & - \\
+\hline
+\textbf{MuParser} & \url{http://www.muparser.sourceforge.net} & yes & Intern & - \\
+\hline
+\textbf{libSVM} & \url{http://www.csie.ntu.edu.tw/~cjlin/libsvm} & yes & Intern & - \\
+\hline
+\end{tabular}
+\caption{Libraries used in the OTB.}
+\label{tab:installation}
+\end{table}
+\end{tiny}
+\end{center}
+
+
 
 \subsection{Main steps}
 In order to install OTB on your system follow these steps (in the
@@ -248,38 +311,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
    You can also choose to use the FLTK version we included in the source of OTB, in this case, everything will be compile at the same time. To do that, you will have to set the option \texttt{OTB\_USE\_EXTERNAL\_FLTK} to \texttt{OFF}
 
 \item Install OTB
-  \begin{verbatim}
-      cd INSTALL_DIR
-      gunzip OrfeoToolbox-3.12.0.tgz
-      tar xvf OrfeoToolbox-3.12.0.tar
-      mkdir OTB-Binary
-      cd OTB-Binary
-      ccmake ../OrfeoToolbox-3.12.0
-      --> follow the CMake instructions, in particular:
-	  --> set BUILD_EXAMPLES to ON within CMake
-	  --> set BUILD_SHARED_LIBS to ON within CMake
-	  --> set BUILD_TESTING to OFF within CMake
-	  --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
-	  --> set GDAL_INCLUDE_DIRS to INSTALL_DIR/include within CMake
-	  --> set GDAL_LIBRARY_DIRS to INSTALL_DIR/lib within CMake
-	  --> set OTB_USE_EXTERNAL_ITK to OFF within CMake
-	  --> set FLTK_DIR to INSTALL_DIR/Fltk-Binary within CMake OR
-	      if you do not have FLTK, you can use the OTB internal FLTK setting  
-	      OTB_USE_EXTERNAL_FLTK to OFF. If you don't have FLTK and don't want to use 
-	      the internal one, press 't' to change to advanced mode and set OTB_USE_VISU to OFF
-	  --> generate the configuration with 'g'
-       make -j 2
-  \end{verbatim}
-
-  If you want a faster compilation and don't want the compilation of the examples, you
-  can set \texttt{BUILD\_EXAMPLES} to \texttt{OFF}. 
-
-  After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-3.12.0}
-  and the compiled binaries and libraries in \texttt{INSTALL\_DIR/OTB-Binary}. Keeping
-  the sources is important as most programs you will designed will need an access
-  to the \texttt{.txx} files during compilation. However, the binaries directory knows were
-  its sources are and you will need to point only to the \texttt{INSTALL\_DIR/OTB-Binary}
-  when the \texttt{cmake} for your program will ask you where the OTB is.
+  Please refers to the SoftwareGuide section : \ref{sec:source}
 
   If you want to put OTB in a standard location, you can proceed with:
 
@@ -293,46 +325,9 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \end{enumerate}
 
 \subsubsection{Microsoft Visual Studio (Express 2008/Express 2010)}
-OSGeo4W is a binary distribution of a broad set of open source geospatial software 
-for Win32 environments (Windows XP, Vista, etc), and contains all the required dependencies of OTB.
-
-
-\begin{enumerate}
-
-\item Install OSGeo4W with the following packages : gdal, libgeotiff, libtiff, libtiff-devel, libjpeg, libpng, libpng-devel-vc, zlib, zlib-devel, expat, curl, liblas, liblas-devel
-
-\item Start an OSGeo4W shell
-
-\item Type \texttt{cmake-gui}
-
-\item Configure OTB with CMake (Example for release mode, with internal FLTK and ITK)
-
-    First give the path where the source code is and where to build the binaries.
-
-    Then press the "Configure" button and choose the generator for your project. For example, Visual Studio 9 2008.
-
-    Set the following variables after the first configuration pass :
-
-        \texttt{OTB\_USE\_CURL = ON}\\
-        \texttt{OTB\_USE\_EXTERNAL\_EXPAT = ON}\\
-        \texttt{OTB\_USE\_LIBLAS = ON}\\
-        \texttt{OTB\_USE\_EXTERNAL\_LIBLAS = ON}
-
-    Press "Configure" again. The "Generate" button should be available
-
-    Press "Generate" to have CMake build a Visual Studio project for you
-
-\item Compile OTB with Microsoft Visual Studio
-    When the MSVC++ project is generated, you can open the solution and generate the \texttt{ALL\_BUILD} project.
-
-    If you plan to run executables from within the Visual Studio environment, you should open the Visual Studio solution file
-    from the OSGeo4W shell. To do this, simply drag-and-drop the ".sln" file to an OSGeo4W shell and press Enter.
-
-\end{enumerate}
-
-  Windows platforms didn't support to build with shared libraries. If you experience any problem
-  with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
-  built size might reach 1~GB. 
+Windows platforms didn't support to build with shared libraries. If you experience any problem
+with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
+built size might reach 1~GB. 
 
 That should be all! Otherwise, subscribe to
    otb-users@googlegroups.com and you will get some help.

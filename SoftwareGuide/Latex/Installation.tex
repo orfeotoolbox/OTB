@@ -196,10 +196,9 @@ operating systems, compilers, and hardware platforms including
 MS-Windows, Linux on Intel-compatible hardware, Solaris and Mac
 OSX.  It is known to work with the following compilers:
 \begin{itemize}
-\item Cygwin, MinGW, Visual Studio 7, 8 and 9 and Visual Studio Express 2005, 
-  2008 and 2010 on MS-Windows%, .NET 2002, .NET 2003
-\item GCC on Unix/Linux systems
-\item GCC on Mac systems
+\item Visual Studio C++ 9.0 .NET 2008, Visual Studio Express 2008 and 2010 on MS-Windows
+\item GCC (4.1.X, 4.2.X, 4.3.X, 4.4.X, 4.5.X, 4.6.X) on Unix/Linux systems
+\item GCC on Mac (OSX 10.5, OSX 10.6) systems
 \end{itemize}
 
 Given the advanced usage of C++ features in the toolbox, some
@@ -237,22 +236,19 @@ hg update
 
 \subsection{External Libraries}
 
-The OTB depends on 3 libraries:
+The OTB depends on several libraries:
 \begin{itemize}
-  \item ITK: you have the choice between using OTB's internal version
-  of ITK or building your own ITK outside the OTB source tree. The
-  recommended choice is the first one. See next section for
-  details. If you choose to use an external version of ITK, go to
-  \url{http://www.itk.org} and follow the guidelines to download and
-  install ITK.
-  \item GDAL: The support of remote sensing imagery formats is ensured
-    through the use of the GDAL library. Please see
-\url{http://www.remotesensing.org/gdal/} for informations on how to
-download and install this library on your system.
+\item ITK: The medical image processing library is embedded in the OTB, it is considered as an internal library.
+\item GDAL: The support of remote sensing imagery formats is ensured
+  through the use of the GDAL library. Please see
+  \url{http://www.remotesensing.org/gdal/} for informations on how to install.
+\item OSSIM: Image geometry library, it handles for example the sensor geometric models. 
+  Please see \url{http://www.ossim.org} for informations on how to install.
+download and install this library on your system. OTB requires at least the version 1.6.
 \item Fltk: this library is used for the visualization
   functionnalities. See \url{http://www.fltk.org/} for details about
   dowloading and installing Fltk. OTB has been tested with version 1.1.9,
-  1.1.10 and 1.3. As for ITK, you also have the choice to use OTB's internal
+  1.1.10 and 1.3. You also have the choice to use OTB's internal
   version (which is 1.1.9) if you don't have FLTK already installed.
 \item gettext (optional): Since version 3.2, OTB includes experimental support 
   for internationalization. Gettext is required to activate this 
@@ -274,7 +270,7 @@ workspaces that can be used in the compiler environment of your choice. CMake
 is quite sophisticated---it supports complex environments requiring system
 configuration, compiler feature testing, and code generation.
 
-CMake generates Makefiles under UNIX and Cygwin systems and generates Visual
+CMake generates Makefiles under UNIX systems and generates Visual
 Studio workspaces under Windows (and appropriate build files for other
 compilers like Borland). The information used by CMake is provided by
 \code{CMakeLists.txt} files that are present in every directory of the OTB
@@ -294,34 +290,28 @@ CMake can be downloaded at no cost from
   \url{http://www.cmake.org}
 \end{center}
 
-OTB requires at least CMake version 2.6. You can download binary
+OTB requires at least CMake version 2.8. You can download binary
 versions for most of the popular platforms including Windows, Solaris,
 IRIX, HP, Mac and Linux. Alternatively you can download the source
 code and build CMake on your system. Follow the instructions in the
 CMake Web page for downloading and installing the software.
 
+For Unix/Linux systems, an additional help can be found in the \ref{sec:FAQInstall}
+section, subsection Unix/Linux Platforms.
+
+\index{CMake!OTB tree}
 Running CMake initially requires that you provide two pieces of
-information: where the source code directory is located
-(OTB\_SOURCE\_DIR), and where the object code is to be produced
-(OTB\_BINARY\_DIR). These are referred to as the \emph{source
-directory} and the \emph{binary directory}. We recommend setting the
-binary directory to be different than the source directory (an
+information: 
+\begin{itemize}
+\item Where the source code directory is located (ex.: OTB\_SOURCE\_DIR),
+\item Where the object code is to be produced: (ex.: OTB\_BINARY\_DIR). 
+\end{itemize}
+These are referred to as the \emph{source directory} and the \emph{binary directory}.
+We recommend setting the binary directory to be different than the source directory (an
 \emph{out-of-source} build), but OTB will still build if they are set
-to the same directory (an \emph{in-source} build).  On Unix, the
-binary directory is created by the user and CMake is invoked with the
-path to the source directory. For example:
+to the same directory (an \emph{in-source} build). 
 
-\small
-\begin{verbatim}
-mkdir OTB-binary
-cd OTB-binary
-ccmake ../OTB
-\end{verbatim}
-\normalsize
-
-On Windows, the CMake GUI is used to specify the source and build
-directories (Figure \ref{fig:CMakeGUI}).
-
+\subsubsection{Compiling OTB}
 CMake runs in an interactive mode in that you iteratively select
 options and configure according to these options. The iteration
 proceeds until no more options remain to be selected. At this point, a
@@ -336,9 +326,8 @@ list in its interface.  Only when no new options appear after a configuration
 iteration can you be sure that the necessary decisions have all been made. At
 this point build files are generated for the current configuration.
 
-\subsubsection{Configuring OTB}
+As the following figures display it, CMake has a different interface according to your systems.
 \label{sec:ConfiguringOTBwithVTK}
-
 \index{Configuration!with VTK}
 
 \begin{figure}[ht]
@@ -351,54 +340,111 @@ version based on MFC.}
 \label{fig:CMakeGUI}
 \end{figure}
 
-Figure \ref{fig:CMakeGUI} shows the CMake interface for UNIX and MS-Windows.
-In order to speed up the build process you may want to disable the compilation
-of the testing and examples. This is done with the variables
-\code{BUILD\_TESTING=OFF} and \code{BUILD\_EXAMPLES=OFF}.  The examples
-distributed with the toolbox are a helpful resource for learning how to use OTB
-components but are not essential for the use of the toolbox itself. The testing
-section includes a large number of small programs that exercise the
-capabilities of OTB classes. Due to the large number of tests, enabling the
-testing option will considerably increase the build time.  It is not
-desirable to enable this option for a first build of the toolbox.
 
-\code{OTB-Applications}, which contains applications incorporating GUIs and different levels
-of visualization are also available. The variable \code{BUILD\_APPLICATION=ON} enables 
-application building. A complete list of available applications can be found 
-on \href{http://orfeo-toolbox.org/Applications/index.html}{OTB Website}
+\subsubsubsection{On Windows}
+\index Downloading libraries from OSGeo4W
+The OTB needs some external library to work. On Windows, we recommended to use the OSGeo4Windows tools tp get those libraries. Please refer to the section \ref{OSGeo4W_lib} to do the procedure.
+\index Configuring CMake on Windows
+On windows, you need to create the binary directory before launching CMake.
+Here, you'll use the following one:
+* OTB
+|- OTB\_SOURCE\_DIR 
+|- OTB\_BINARY\_DIR
 
-Begin running CMake by using
-ccmake on Unix, and CMakeSetup on
-Windows. Remember to run ccmake from the binary directory on Unix. On
-Windows, specify the source and binary directories in the GUI, then begin to
-set the build variables in the GUI as necessary.  Most variables should have
-default values that are sensible. Each time you change a set of variables in
-CMake, it is necessary to proceed to another configuration step. In the
-Windows version this is done by clicking on the ``Configure'' button. In the
-UNIX version this is done in an interface using the
-curses library, where you can configure by hitting the ``c'' key.
+Launch CMake executable, on the top of the GUI, select the source and binary directory.
+Then press \emph{Configure}, the \emph{Generate} button will be accessible only when
+every needed CMake variable will be set.
+The CMake GUI is used to specify the source and build
+directories (Figure \ref{fig:CMakeGUI}).
+Here is a list recommended variables to set :  
+\begin{itemize}
+\item OTB_USE_EXTERNAL_BOOST:BOOL=ON
+\item OTB_USE_MAPNIK:BOOL=ON
+\item MAPNIK_INCLUDE_DIR:PATH=C:/OSGeo4W/include/mapnik
+\item MAPNIK_LIBRARY:FILEPATH=C:/OSGeo4W/lib/mapnik.lib
+\item OTB_USE_CURL:BOOL=ON
+\item OTB_USE_EXTERNAL_EXPAT:BOOL=ON
+\item OTB_USE_LIBLAS:BOOL=OFF
+\item OTB_USE_GETTEXT:BOOL=OFF
+\item OTB_USE_JPEG2000:BOOL=ON
+\end{itemize}
 
-When no new options appear in CMake, you can proceed to generate Makefiles or
-Visual Studio projects (or appropriate build file(s) depending on your
-compiler). This is done in Windows by clicking on the ``Ok'' button.  In the
-UNIX version this is done by hitting the ``g'' key. After the generation
-process CMake will quit silently. To initiate the build process on UNIX,
-simply type \code{make} in the binary directory. Under Windows, load the
-workspace named \code{OTB.dsw} (if using MSDEV) or \code{OTB.sln} (if using
-the .NET compiler) from the binary directory you specified in the CMake GUI.
+You'll probably need to push several times \emph{Configure} to have access to the variable and to check 
+the \emph{Advanced} button to have access to the advanced CMake variable.
+When this is done, push \emph{Generate}, the CMake window will close itself.
 
+\index Compiling OTB on Windows
+Now, you can go in your \emph{binary directory} (here OTB\_BINARY\_DIR). CMake has generated Makefiles or
+Visual Studio projects. You can open the solution and generate the \texttt{ALL\_BUILD} project.
+If you plan to run executables from within the Visual Studio environment, you should open the Visual Studio 
+solution file from the OSGeo4W shell. To do this, simply drag-and-drop the ".sln" file to an OSGeo4W shell 
+and press Enter.
+
+Windows platforms didn't support to build with shared libraries. If you experience any problem
+with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
+built size might reach 1~GB. 
+
+That should be all! Otherwise, subscribe to
+otb-users@googlegroups.com and you will get some help.
+
+\subsubsubsection{On Linux/Unix}
+\index Configuring CMake on Windows
+On Unix, the binary directory is created by the user and CMake is invoked with the
+path to the source directory. For example:
+\small
+\begin{verbatim}
+mkdir OTB\_BINARY\_DIR
+cd OTB\_BINARY\_DIR
+ccmake ../OTB_SOURCE\_DIR
+\end{verbatim}
+\normalsize
+
+Once the interface open, you can push \emph{c} (for Configure), or/and \emph{t} for Toggle (to have access to the advanced variables). If you have follow the section \ref{sec:FAQInstall} every needed libraries are in the
+\emph{/usr} and will be found automatically by CMake. Set the following recommended CMake variables:
+\begin{itemize}
+\item OTB_USE_EXTERNAL_BOOST:BOOL=ON
+\item OTB_USE_MAPNIK:BOOL=ON
+\item OTB_USE_CURL:BOOL=ON
+\item OTB_USE_EXTERNAL_EXPAT:BOOL=ON
+\item OTB_USE_LIBLAS:BOOL=ON
+\item OTB_USE_EXTERNAL_LIBLAS:BOOL=ON
+\item 
+\item OTB_USE_GETTEXT:BOOL=OFF
+\item OTB_USE_JPEG2000:BOOL=ON
+\end{itemize}
+
+Push \emph{c} to update CMake untill the option \emph{Generate} is accessible in the GUI,
+then push \enph{g} fot \emph{Generate}. The CMake interface will close itself.
+Then, go into your build directory (here OTB\_BINARY\_DIR) and do \emph{make} to launch the compilation.
+
+If you want to put OTB in a standard location, you can proceed with:
+
+\begin{verbatim}
+make install
+\end{verbatim}
+
+\subsubsubsection{Compilation awarness}
 The build process will typically take anywhere from 15 to 30 minutes depending
 on the performance of your system. If you decide to enable testing as part of
 the normal build process, about 600 small test programs will be compiled. This
 will verify that the basic components of OTB have been correctly built on your
 system.
 
-\subsubsection{Building ITK}
+Set the CMake variables \code{BUILD\_TESTING} and \code{BUILD\_EXAMPLES} to ON will activate 
+the compilation of the examples and the tests and slow down the build process.
+The examples distributed with the toolbox are a helpful resource for learning how to use OTB
+components but are not essential for the use of the toolbox itself. The testing
+section includes a large number of small programs that exercise the
+capabilities of OTB classes. Due to the large number of tests, enabling the
+testing option will considerably increase the build time.  It is not
+desirable to enable this option for a first build of the toolbox.
 
-The OTB installation procedure allows you to choose between building
-the OTB with an external version of ITK already present in your
-system. The choice is made by using the \code{OTB\_USE\_EXTERNAL\_ITK}
-CMake variable.
+\code{OTB Applications}, which contains applications incorporating GUIs and different levels
+of visualization are also available. The variable \code{BUILD\_APPLICATION=ON} enables 
+application building. A complete list of available applications can be found 
+on \href{http://orfeo-toolbox.org/Applications/index.html}{OTB Website}
+
+
 
 \section{Getting Started With OTB }
 \label{sec:GettingStartedWithOTB}
