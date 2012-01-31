@@ -38,7 +38,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 	    PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_EXECUTABLE(otbViewer WIN32
+ADD_EXECUTABLE(otbViewer
                    otbViewer.cxx
                    ${VIEW_SRCS} ${CONTROLLER_SRCS} ${MODEL_SRCS}
                    ${otbViewer_FLTK_UI_SRCS})
