@@ -261,11 +261,14 @@ packages, you can skip to step 4.
       gunzip gdal.1.9.0.tar.gz
       tar xvf gdal.1.9.0.tar
       cd gdal.1.9.0
-      ./configure --prefix=INSTALL_DIR --with-libtiff=internal --with-geotiff=internal 
-                  --with-rename-internal-libtiff-symbols=yes --with-rename-internal-libgeotiff-symbols=yes 
+      ./configure --prefix=INSTALL_DIR --with-libtiff=internal 
+                  --with-geotiff=internal 
+                  --with-rename-internal-libtiff-symbols=yes 
+                  --with-rename-internal-libgeotiff-symbols=yes 
       make
       make install
-      --> check that gdalinfo --version works otherwise set your LD_LIBRARY_PATH to where you have installed GDAL 
+      --> check that gdalinfo --version works otherwise set your 
+          LD_LIBRARY_PATH to where you have installed GDAL 
   \end{verbatim}
 
 It seems to be a bug in the GDAL install procedure: if you are installing it without root privileges, even if your \texttt{INSTALL\_DIR} is a directory for which you have the write permissions, GDAL tries to copy the python bindings together with the Python site packages, which are usually somewhere in /usr/lib.
@@ -364,8 +367,10 @@ On some Debian / Ubuntu versions, the system gdal library and its tiff internal 
 
 The recommended procedure is to get this recent source and build GDAL from sources, with the following configure command: 
   \begin{verbatim}
-      ./configure --prefix=INSTALL_DIR --with-libtiff=internal --with-geotiff=internal 
-                  --with-rename-internal-libtiff-symbols=yes --with-rename-internal-libgeotiff-symbol 
+      ./configure --prefix=INSTALL_DIR --with-libtiff=internal 
+                  --with-geotiff=internal 
+                  --with-rename-internal-libtiff-symbols=yes
+                  --with-rename-internal-libgeotiff-symbol 
   \end{verbatim}
 
 
