@@ -168,7 +168,7 @@ The following table gathered the library (mandatory or not) used in the OTB. Som
 \hline
 \textbf{Library} & \textbf{Web site} & \textbf{Mandatory} & \textbf{Where} & \textbf{Minimum version} \\
 \hline
-\textbf{CMake} & \url{www.cmake.org} & yes & Extern & 2.8 \\ 
+\textbf{CMake} & \url{www.cmake.org} & yes & Extern & 2.8 \\
 \hline
 \textbf{ITK} & \url{www.itk.org} & yes & Intern & - \\
 \hline
@@ -176,7 +176,7 @@ The following table gathered the library (mandatory or not) used in the OTB. Som
 \hline
 \textbf{OSSIM} & \url{www.ossim.org} & yes & \textbf{Intern}/Extern & 1.8.6 \\
 \hline
-\textbf{FLTK)} & \url{www.fltk.org} & no & \textbf{Intern}/Extern & - \\
+\textbf{FLTK} & \url{www.fltk.org} & no & \textbf{Intern}/Extern & - \\
 \hline
 \textbf{Curl} & \url{www.curl.haxx.se} & no & Extern & - \\
 \hline
@@ -200,11 +200,11 @@ The following table gathered the library (mandatory or not) used in the OTB. Som
 \hline
 \textbf{boost} & \url{www.boost.org} & no & Intern\textbf{Extern} & - \\
 \hline
-\textbf{openthreads} & \url{openthreads.sourceforge.net} & no & Intern/Extern & - \\
+\textbf{openthreads} & \url{www.openscenegraph.org} & no & Intern/Extern & - \\
 \hline
 \textbf{gettext} & \url{www.gnu.org/s/gettext} & no & Extern & - \\
 \hline
-\textbf{Mapnick} & \url{www.mapnick.org} & no & Extern & - \\
+\textbf{Mapnik} & \url{www.mapnik.org} & no & Extern & - \\
 \hline
 \textbf{tinyXML} & \url{www.grinninglizard.com/tinyxml} & yes & Intern & - \\
 \hline
@@ -261,14 +261,14 @@ packages, you can skip to step 4.
       gunzip gdal.1.9.0.tar.gz
       tar xvf gdal.1.9.0.tar
       cd gdal.1.9.0
-      ./configure --prefix=INSTALL_DIR --with-libtiff=internal 
-                  --with-geotiff=internal 
-                  --with-rename-internal-libtiff-symbols=yes 
-                  --with-rename-internal-libgeotiff-symbols=yes 
+      ./configure --prefix=INSTALL_DIR --with-libtiff=internal
+                  --with-geotiff=internal
+                  --with-rename-internal-libtiff-symbols=yes
+                  --with-rename-internal-libgeotiff-symbols=yes
       make
       make install
-      --> check that gdalinfo --version works otherwise set your 
-          LD_LIBRARY_PATH to where you have installed GDAL 
+      --> check that gdalinfo --version works otherwise set your
+          LD_LIBRARY_PATH to where you have installed GDAL
   \end{verbatim}
 
 It seems to be a bug in the GDAL install procedure: if you are installing it without root privileges, even if your \texttt{INSTALL\_DIR} is a directory for which you have the write permissions, GDAL tries to copy the python bindings together with the Python site packages, which are usually somewhere in /usr/lib.
@@ -330,7 +330,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \subsubsection{Microsoft Visual Studio (Express 2008/Express 2010)}
 Windows platforms didn't support to build with shared libraries. If you experience any problem
 with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
-built size might reach 1~GB. 
+built size might reach 1~GB.
 
 That should be all! Otherwise, subscribe to
    otb-users@googlegroups.com and you will get some help.
@@ -347,7 +347,7 @@ The solution is to use the GNU tar command if it is available on your
 system (gtar).
 
 \subsubsection{Visual Studio 2010/Express 2010}
-Since Visual Studio 2010, OTB can't compile while using the internal libLAS library : disable the use of the library by setting 
+Since Visual Studio 2010, OTB can't compile while using the internal libLAS library : disable the use of the library by setting
 the following variables in cmake :  \texttt{OTB\_USE\_LIBLAS = OFF}\\
 Then you will be able to configure and build the project as usual.
 
@@ -365,12 +365,12 @@ It seems to be fine with the more recent release of Open Solaris.
 
 On some Debian / Ubuntu versions, the system gdal library and its tiff internal symbol might conflict with the system Tiff library (bugs.debian.org/558733). This is most likely the case if you get odd segmentation fault whenever trying to open a tiff image. This symbol clash happens when using OTB. A workaround to the issue has been provided in GDAL sources, but is available in the 1.9.0 release.
 
-The recommended procedure is to get this recent source and build GDAL from sources, with the following configure command: 
+The recommended procedure is to get this recent source and build GDAL from sources, with the following configure command:
   \begin{verbatim}
-      ./configure --prefix=INSTALL_DIR --with-libtiff=internal 
-                  --with-geotiff=internal 
+      ./configure --prefix=INSTALL_DIR --with-libtiff=internal
+                  --with-geotiff=internal
                   --with-rename-internal-libtiff-symbols=yes
-                  --with-rename-internal-libgeotiff-symbol 
+                  --with-rename-internal-libgeotiff-symbol
   \end{verbatim}
 
 
@@ -434,20 +434,20 @@ on-line API documentation which is available at \url{http://www.orfeo-toolbox.or
 
 \subsection{I want to contribute to OTB, where to begin?}
 
-First, you can send an email to otb@cnes.fr or the the user mailing list (otb-users@googlegroups.com) 
+First, you can send an email to otb@cnes.fr or the the user mailing list (otb-users@googlegroups.com)
 to let us know what functionality
 you would like to introduce in OTB. If the functionality seems important for the
 OTB users, we will then discuss on how to retrieve your code,
 make the necessary adaptions, check with you that the results are correct and finally
 include it in the next release.
 
-To make this process of contribution easier, we also provide a 
+To make this process of contribution easier, we also provide a
 ``sandbox`` repository for OTB which works as a testing environment that
 isolates untested code changes and outright experimentation from the
 production environment or repository. Here is how it works:
 
 \begin{itemize}
-  \item Clone the main OTB repository: 
+  \item Clone the main OTB repository:
     \begin{verbatim}
     hg clone http://hg.orfeo-toolbox.org/OTB
     \end{verbatim}
@@ -462,7 +462,7 @@ production environment or repository. Here is how it works:
      [ui]
      hg push http://hg.orfeo-toolbox.org/OTB-SandBox
     \end{verbatim}
-\end{itemize}  
+\end{itemize}
 
 If necessary, use the -f option (we will sort out the mess). When ask
 for the login use ``anonymous`` with the password ``otb``.  We will be
@@ -471,7 +471,7 @@ mail at otb-users@googlegroups.com to provide more explanations.
 We will then review the corrections, test them and then merge them
 into the main repository.  You can find more informations about the
 procedure at
-\url{http://blog.orfeo-toolbox.org/news/contribute-easily-to-otb}.      
+\url{http://blog.orfeo-toolbox.org/news/contribute-easily-to-otb}.
 
 You can also run the nightly tests so we have a wider range of plateforms to detect
 bugs earlier. Look at section \ref{sec:runningTheTests}.
@@ -492,7 +492,7 @@ All functionalities which are useful for remote sensing data are of interest. As
 OTB is a library, it should be generic algorithms: change, detection, fusion,
 object detection, segmentation, interpolation, etc.
 
-More specific applications can be contributed to the new framework of application 
+More specific applications can be contributed to the new framework of application
 directly in the Applications directory of OTB.
 
 \section{Running the tests}\label{sec:runningTheTests}
