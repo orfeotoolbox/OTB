@@ -54,7 +54,7 @@ private slots:
 
 signals:
   void QuitSignal();
-  
+
 
 private:
   QtWidgetView(const QtWidgetView&); //purposely not implemented
