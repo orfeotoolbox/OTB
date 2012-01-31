@@ -31,16 +31,16 @@
 //
 // This example illustrates the use of the
 // \doxygen{otb}{FastICAImageFilter}.
-// This filter computes a Fast Independant Components Analysis transform.
+// This filter computes a Fast Independent Components Analysis transform.
 //
 // Like Principal Components Analysis, Independent Component Analysis
 // \cite{jutten1991blind} computes a set of
 // orthogonal linear combinations, but the criterion of Fast ICA is
 // different: instead of maximizing variance, it tries to maximize
-// stastistical independance between components.
+// statistical independence between components.
 //
 // In the Fast ICA algorithm \cite{hyvarinen1999fast},
-// statistical independance is mesured by evaluating non-Gaussianity
+// statistical independence is measured by evaluating non-Gaussianity
 // of the components, and the maximization is done in an iterative way.
 
 // The first step required to use this filter is to include its header file.
@@ -68,9 +68,9 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // We start by defining the types for the images and the reader and
+  // We start by defining the types for the images, the reader, and
   // the writer. We choose to work with a \doxygen{otb}{VectorImage},
-  // since we will produce a multi-channel image (the principal
+  // since we will produce a multi-channel image (the independent
   // components) from a multi-channel input image.
   //
   // Software Guide : EndLatex
@@ -108,8 +108,8 @@ int main(int argc, char* argv[])
   
   // Software Guide : BeginLatex
   //
-  // We then set the number of principal
-  // components required as output. We can choose to get less PCs than
+  // We then set the number of independent
+  // components required as output. We can choose to get less ICs than
   // the number of input bands.
   //
   // Software Guide : EndLatex
@@ -194,7 +194,7 @@ int main(int argc, char* argv[])
   
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:FastICA_FILTER} shows the result of applying forward
-  // and reverse FastICA transformation to a 8 bands Wordlview2 image.
+  // and reverse FastICA transformation to a 8 bands Worldview2 image.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.32\textwidth]{FastICA-input-pretty.eps}

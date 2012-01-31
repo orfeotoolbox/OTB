@@ -97,7 +97,10 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // The only parameter needed for the PCA is the number of principal
-  // components required as output. We can choose to get less PCs than
+  // components required as output. Principal components are linear combination of input components
+  // (here the input image  bands),
+  // which are selected using Singular Value Decomposition eigen vectors sorted by eigen value.
+  // We can choose to get less Principal Components than
   // the number of input bands.
   //
   // Software Guide : EndLatex
@@ -157,7 +160,7 @@ int main(int argc, char* argv[])
   
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:PCA_FILTER} shows the result of applying forward
-  // and reverse PCA transformation to a 8 bands Wordlview2 image.
+  // and reverse PCA transformation to a 8 bands Worldview2 image.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.32\textwidth]{input-pretty.eps}

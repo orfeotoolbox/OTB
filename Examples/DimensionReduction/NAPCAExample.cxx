@@ -43,6 +43,7 @@
 //
 // The second Principal Component Analysis is then applied to the
 // noise-whitened image, giving the Maximum Noise Fraction transform.
+// Applying PCA on noise-whitened image consists in ranking Principal Components according to signal to noise ratio.
 //
 // It is basically a reformulation of the Maximum Noise Fraction algorithm.
 //
@@ -81,7 +82,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // We start by defining the types for the images and the reader and
+  // We start by defining the types for the images, the reader and
   // the writer. We choose to work with a \doxygen{otb}{VectorImage},
   // since we will produce a multi-channel image (the principal
   // components) from a multi-channel input image.
@@ -232,7 +233,7 @@ int main(int argc, char* argv[])
   
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:NAPCA_FILTER} shows the result of applying forward
-  // and reverse NA-PCA transformation to a 8 bands Wordlview2 image.
+  // and reverse NA-PCA transformation to a 8 bands Worldview2 image.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.32\textwidth]{napca-input-pretty.eps}
