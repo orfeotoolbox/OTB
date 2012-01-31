@@ -233,7 +233,7 @@ int main(int argc, char* argv[])
   
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:NAPCA_FILTER} shows the result of applying forward
-  // and reverse NA-PCA transformation to a 8 bands Wordlview2 image.
+  // and reverse NA-PCA transformation to a 8 bands Worldview2 image.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.32\textwidth]{napca-input-pretty.eps}

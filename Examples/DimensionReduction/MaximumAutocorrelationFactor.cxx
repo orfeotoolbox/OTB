@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
   //  Software Guide : BeginLatex
   //
   //  We can now declare the types for the reader. Since the images
-  //  can be vey large, we will force the pipeline to use
+  //  can be very large, we will force the pipeline to use
   //  streaming. For this purpose, the file writer will be
   //  streamed. This is achieved by using the
   //  \doxygen{otb}{StreamingImageFileWriter} class.

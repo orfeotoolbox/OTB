@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // We start by defining the types for the images and the reader and
+  // We start by defining the types for the images, the reader, and
   // the writer. We choose to work with a \doxygen{otb}{VectorImage},
   // since we will produce a multi-channel image (the principal
   // components) from a multi-channel input image.
@@ -231,7 +231,7 @@ int main(int argc, char* argv[])
   
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:MNF_FILTER} shows the result of applying forward
-  // and reverse MNF transformation to a 8 bands Wordlview2 image.
+  // and reverse MNF transformation to a 8 bands Worldview2 image.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.32\textwidth]{MNF-input-pretty.eps}
