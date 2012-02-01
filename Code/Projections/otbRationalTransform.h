@@ -18,7 +18,7 @@
 #ifndef __otbRationalTransform_h
 #define __otbRationalTransform_h
 
-#include "itkTransform.h"
+#include "otbTransform.h"
 #include "itkMacro.h"
 
 namespace otb
@@ -44,11 +44,11 @@ namespace otb
 
 template <class TScalarType = double,
           unsigned int Dimension = 2>
-class ITK_EXPORT RationalTransform : public itk::Transform<TScalarType, Dimension, Dimension>
+class ITK_EXPORT RationalTransform : public Transform<TScalarType, Dimension, Dimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef itk::Transform<TScalarType, Dimension,
+  typedef Transform<TScalarType, Dimension,
     Dimension>                                      Superclass;
   typedef RationalTransform                         Self;
   typedef itk::SmartPointer<Self>                   Pointer;
