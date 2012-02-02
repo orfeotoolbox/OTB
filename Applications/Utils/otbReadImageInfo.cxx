@@ -52,7 +52,7 @@ private:
 
     // Documentation
     SetDocName("Read image information");
-    SetDocLongDescription("Display information about the input image like: image size, metadata, projections...");
+    SetDocLongDescription("Display information about the input image like: image size, origin, spacing, metadata, projections...");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -82,6 +82,13 @@ private:
     AddParameter(ParameterType_Float,"spacingy","Pixel Size Y");
     SetParameterDescription("spacingy", "Pixel size along Y (in physical units)");
     SetParameterRole("spacingy", Role_Output);
+
+    AddParameter(ParameterType_Float,"originx","Image Origin X");
+    SetParameterDescription("originx", "Origin along X");
+    SetParameterRole("originx", Role_Output);
+    AddParameter(ParameterType_Float,"originy","Image Origin Y");
+    SetParameterDescription("originy", "Origin along Y");
+    SetParameterRole("originy", Role_Output);
 
     AddParameter(ParameterType_Float,"estimatedgroundspacingx","Estimated ground spacing X");
     SetParameterDescription("estimatedgroundspacingx", "Estimated ground spacing along X (in meters).");
@@ -239,6 +246,13 @@ private:
     SetParameterInt("sizey", inImage->GetLargestPossibleRegion().GetSize()[1]);
 
     ossOutput << "\tSize :  [" << GetParameterInt("sizex") << "," << GetParameterInt("sizey") << "]" << std::endl;
+
+    //Get image origin
+    SetParameterFloat("originx", inImage->GetOrigin()[0]);
+    SetParameterFloat("originy", inImage->GetOrigin()[1]);
+
+    ossOutput << "\tOrigin :  [" << GetParameterFloat("originx") << "," << GetParameterInt("originy") << "]" << std::endl;
+
     //Get image spacing
     SetParameterFloat("spacingx", inImage->GetSpacing()[0]);
     SetParameterFloat("spacingy", inImage->GetSpacing()[1]);
