@@ -125,7 +125,6 @@ FuzzyDescriptorsModelManager
     {
       PairType currentDescriptor;
       // Store the descriptor type name
-      std::string lol;
       currentDescriptor.first = currentStat->Attribute("name");
 
       // The size is not stored in the XML file
