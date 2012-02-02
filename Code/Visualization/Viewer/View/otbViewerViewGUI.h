@@ -187,6 +187,7 @@ protected:
   virtual void InitializeImageController(unsigned int selectedItem );
 
   virtual void OpenJpeg2000Image();
+  virtual void OpenHDFImage();
  
 
   /** Constructor */

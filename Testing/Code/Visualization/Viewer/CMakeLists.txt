@@ -21,6 +21,12 @@ ADD_TEST(ivmTuModelTest_JPEG2000Id ${Viewer_TESTS}
         3
 )
 
+ADD_TEST(ivmTuModelTest_HDFId ${Viewer_TESTS}
+	otbViewerModelWithAddNumTest
+	${INPUTDATA}/GSSTF_NCEP.2b.2008.12.31.he5
+        3
+)
+
 ADD_TEST(ivmTvViewTest ${Viewer_TESTS}
 	otbViewerViewTest
 	${INPUTDATA}/poupees.tif
@@ -29,6 +35,11 @@ ADD_TEST(ivmTvViewTest ${Viewer_TESTS}
 ADD_TEST(ivmTvViewTest_JPEG2000Id ${Viewer_TESTS}
 	otbViewerViewTest
 	${INPUTDATA}/bretagne.j2k:3
+)
+
+ADD_TEST(ivmTvViewTest_HDFId ${Viewer_TESTS}
+	otbViewerViewTest
+	${INPUTDATA}/GSSTF_NCEP.2b.2008.12.31.he5:3
 )
 
 # We need to regenerate the UI sources, even though FLTK_WRAP_UI is called 

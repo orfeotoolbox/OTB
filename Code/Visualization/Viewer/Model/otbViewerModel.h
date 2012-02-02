@@ -49,6 +49,7 @@ See OTBCopyright.txt for details.
 #include "otbImageView.h"
 #include "otbImageWidgetController.h"
 
+
 namespace otb
 {
 /** \class ViewerModel
@@ -124,6 +125,9 @@ public:
 
   typedef Curves2DWidget                                                         CurvesWidgetType;
 
+  
+  typedef enum ViewEnum {Grayscale,ComplexMod,ComplexPhase,RGB} ViewEnumType;
+  
   /**
    * Struct embedded in the model
    */
@@ -140,6 +144,7 @@ public:
     PixelDescriptionModelPointerType  pPixelModel;
     CurvesWidgetType::Pointer         pCurveWidget;
     std::string                       pFileName;
+    ViewEnumType                      pViewType;
   };
 
   typedef struct _ObjectsTracked ObjectsTracked;
@@ -164,7 +169,7 @@ public:
   virtual void InitializeImageViewController(unsigned int selectedItem);
 
   /** Method needed to Get the list of componenets stored*/
-   const ObjectTrackedList & GetObjectList() const
+   ObjectTrackedList & GetObjectList()
     {
       return m_ObjectTrackedList;
     }
@@ -184,6 +189,13 @@ public:
   void GetJPEG2000ResolutionAndInformations(const std::string & filepath,
                                             std::vector<unsigned int>& res,
                                             std::vector<std::string> & desc);
+  // Test a filename and returns true if the file is HDF
+  bool IsHDFFile(const std::string & filepath);
+  void GetHDFDataset(const std::string & filepath,
+                                            std::vector<std::string>& names,
+                                            std::vector<std::string>& desc);
+  // Test a filename and returns true if the file is JPEG2000
+  bool IsComplexFile(const std::string & filepath);
 
 protected:
   /** This is protected for the singleton. Use GetInstance() instead. */

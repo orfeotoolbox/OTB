@@ -78,6 +78,11 @@ ViewerViewGUI
 
   // Select the last opened image
   guiImageList->value( guiImageList->size() );
+  //Udpate the ViewerGUISetup
+  unsigned int selectedItem = guiImageList->value();
+  this->UpdateViewerSetupWindow(selectedItem);
+  this->ViewerSetupOk();
+
   this->SelectAction();
 }
 
@@ -119,6 +124,24 @@ ViewerViewGUI
     guiJpeg2000ResSelection->redraw();
     guiJpeg2000ResSelection->show();
     }
+  
+  else if (m_ViewerModel->IsHDFFile( cfname ))
+  {
+
+   guiHDFDataset->clear();
+   std::vector<std::string> names;
+   std::vector<std::string> desc;
+   m_ViewerModel->GetHDFDataset( cfname, names, desc );
+   for( unsigned int j=0; j<names.size(); j++ )
+      {
+      guiHDFDataset->add( desc[j].c_str() );
+      }
+   guiHDFDataset->value(0);
+   guiHDFFilename->value( cfname );
+   guiHDFDatasetSelection->redraw();
+   guiHDFDatasetSelection->show();
+   
+  }
   else
     {
     //Initialize
@@ -169,6 +192,7 @@ ViewerViewGUI
 
     //Update the Link Setup
     this->UpdateLinkSetupWindow();
+    
   }
 }
 
@@ -203,6 +227,41 @@ ViewerViewGUI
     }
 
   unsigned int numberOfOpenedImages = m_ViewerController->OpenInputImage(cfname, resVal);
+  this->Initialize(numberOfOpenedImages);
+}
+
+void
+ViewerViewGUI
+::OpenHDFImage()
+{
+  const std::string descDataset = guiHDFDataset->value();
+  const char * cfname =  guiHDFFilename->value();
+
+  // Find the dataset id from the selected description
+  std::vector<std::string> names;
+  std::vector<std::string> desc;
+  m_ViewerModel->GetHDFDataset( cfname, names, desc );
+  bool isFound = false;
+  unsigned int id = 0;
+  unsigned int datasetId = 0;
+  while ( id<desc.size() && !isFound)
+    {
+    size_t found;
+    found = desc[id].find(descDataset);
+    if( found!=string::npos )
+      {
+      isFound = true;
+      datasetId = id;
+      }
+    id++;
+    }
+  
+  if (!isFound)
+    {
+    itkExceptionMacro( "Unable to find the dataset associated to the description "<<descDataset);
+    }
+
+  unsigned int numberOfOpenedImages = m_ViewerController->OpenInputImage(cfname, datasetId);
   this->Initialize(numberOfOpenedImages);
 }
 
@@ -406,11 +465,11 @@ ViewerViewGUI
    //DipalyPreviewWidget
    this->DisplayPreviewWidget(selectedItem);
 
-   //Update SelectedImageInformation
-   this->UpdateInformation(selectedItem);
-
    //Udpate the ViewerGUISetup
    this->UpdateViewerSetupWindow(selectedItem);
+   
+   //Update SelectedImageInformation
+   this->UpdateInformation(selectedItem);
 
    //LINK SETUP
    this->UpdateLinkSetupWindow();
@@ -787,17 +846,35 @@ ViewerViewGUI
    
    ChannelListType channels = renderer->GetChannelList();
    
-   if( channels.size() == 2 )
-     {
-     oss<<"Displayed channels : R=" << channels[0]+1 << ", G=" << channels[1]+1 << ", B=" << channels[2]+1 << "." << std::endl;
-     }
-   else if ( channels.size() >= 2 )
-     {
-     oss<<"Displayed channels : R=" << channels[0]+1 << ", G=" << channels[1]+1 << ", B=" << channels[2]+1 << "." << std::endl;
-     }
+   //complex mode
+   switch(objTracked.pViewType ){
+      //grayscale mode
+      case 0:
+         oss<<"Grayscale mode : Channel=" << channels[0]+1 << std::endl;
+         break;
+      //Complex mode (modulus)
+      case 1:
+         oss<<"Complex mode : Modulus computed using bands "<< channels[0]+1 << " (real part), "<<channels[1]+1<<" (imaginary part)"<<std::endl;
+         break;
+      //Complex mode (phase)
+      case 2:
+         oss<<"Complex mode : Phase computed using bands "<< channels[0]+1 << " (real part), "<<channels[1]+1<<" (imaginary part)"<<std::endl;
+         break;
+      //rgb mode
+      case 3:
+         oss<<"Displayed channels : R=" << channels[0]+1 << ", G=" << channels[1]+1 << ", B=" << channels[2]+1 << "." << std::endl;
+         break;
+   }
    
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
+   
+   if (m_ViewerModel->IsComplexFile( m_ViewerModel->GetObjectList().at(selectedItem-1).pFileName ))
+      {
+      oss<<"Complex image. Even bands are real parts, odd ones are imaginary parts."<<std::endl;
+      guiViewerInformation->insert(oss.str().c_str());
+      }
+   
  }
 
  /**
@@ -807,8 +884,7 @@ ViewerViewGUI
  ViewerViewGUI
  ::UpdateViewerSetupWindow(unsigned int selectedItem)
  {
-   ViewerModelType::ReaderPointerType reader = m_ViewerModel->GetObjectList().at(selectedItem-1).pReader;
-   unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+   unsigned int nbComponent = m_ViewerModel->GetObjectList().at(selectedItem-1).pReader->GetOutput()->GetNumberOfComponentsPerPixel();
 
    // Constrain min and max
    guiGrayscaleChannelChoice->range(1, nbComponent);
@@ -821,25 +897,32 @@ ViewerViewGUI
    guiImaginaryChannelChoice->range(1, nbComponent);
 
    guiViewerSetupWindow->redraw();
-
-   switch(nbComponent){
-   case 1 :
-     this->GrayScaleSet();
-     break;
-   case 4 :
-     this->RGBSet();
-     break;
-   case 3 :
-     this->RGBSet();
-     break;
-   case 2:
+   
+   if (m_ViewerModel->IsComplexFile( m_ViewerModel->GetObjectList().at(selectedItem-1).pFileName ))
+     {
      this->ComplexSet();
-     break;
-   default :
-     break;
-   }
-
+     }
+   else
+      {
+      switch(nbComponent){
+      case 1 :
+      this->GrayScaleSet();
+      break;
+      case 4 :
+      this->RGBSet();
+      break;
+      case 3 :
+      this->RGBSet();
+      break;
+      case 2:
+      this->GrayScaleSet();
+      break;
+      default :
+      break;
+      }
+      }
    guiViewerSetupName->value(this->CutFileName(selectedItem-1));
+   //this->ViewerSetupOk();
 
  }
 
@@ -859,8 +942,7 @@ ViewerViewGUI
        return;
      }
 
-   ViewerModelType::ReaderPointerType reader = m_ViewerModel->GetObjectList().at(selectedItem-1).pReader;
-   unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+   unsigned int nbComponent = m_ViewerModel->GetObjectList().at(selectedItem-1).pReader->GetOutput()->GetNumberOfComponentsPerPixel();
 
    guiViewerSetupColorMode->set();
    guiViewerSetupComplexMode->clear();
@@ -908,8 +990,7 @@ ViewerViewGUI
        // no image selected, return
        return;
      }
-   ViewerModelType::ReaderPointerType reader = m_ViewerModel->GetObjectList().at(selectedItem-1).pReader;
-   unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+   unsigned int nbComponent = m_ViewerModel->GetObjectList().at(selectedItem-1).pReader->GetOutput()->GetNumberOfComponentsPerPixel();
 
    guiViewerSetupGrayscaleMode->set();
    guiViewerSetupComplexMode->clear();
@@ -949,8 +1030,7 @@ ViewerViewGUI
      // no image selected, return
      return;
    }
-   ViewerModelType::ReaderPointerType reader = m_ViewerModel->GetObjectList().at(selectedItem-1).pReader;
-   unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+   unsigned int nbComponent = m_ViewerModel->GetObjectList().at(selectedItem-1).pReader->GetOutput()->GetNumberOfComponentsPerPixel();
 
    guiViewerSetupComplexMode->set();
    guiViewerSetupColorMode->clear();
@@ -969,11 +1049,14 @@ ViewerViewGUI
    RenderingFunctionType::Pointer renderingFunction = m_ViewerModel->GetObjectList().at(selectedItem-1).pRenderFunction;
 
    ChannelListType channels = renderingFunction->GetChannelList();
-   unsigned int i=0;
-   while (channels.size() < 2)
+   if (channels.size() == 0)
    {
-     channels.push_back(i);
-     ++i;
+      channels.push_back(0);
+      channels.push_back(1);
+   }
+   else if (channels.size() == 1)
+   {
+      channels.push_back(1);
    }
 
    guiRealChannelChoice->value(std::min(channels[0] + 1, nbComponent));
@@ -1014,11 +1097,13 @@ ViewerViewGUI
      int greenChoice = static_cast<int>(guiGreenChannelChoice->value() - 1);
      int blueChoice = static_cast<int>(guiBlueChannelChoice->value() - 1);
      m_ViewerController->UpdateRGBChannelOrder(redChoice, greenChoice, blueChoice, selectedItem);
+     m_ViewerModel->GetObjectList().at(selectedItem-1).pViewType = ViewerModel::RGB;
      }
    else if (guiViewerSetupGrayscaleMode->value())
      {
      int choice = static_cast<int>(guiGrayscaleChannelChoice->value() - 1);
      m_ViewerController->UpdateGrayScaleChannelOrder(choice, selectedItem);
+     m_ViewerModel->GetObjectList().at(selectedItem-1).pViewType = ViewerModel::Grayscale;
      }
    else if (guiViewerSetupComplexMode->value())
      {
@@ -1027,9 +1112,11 @@ ViewerViewGUI
      if (bAmplitude->value())
             {
              m_ViewerController->UpdateAmplitudeChannelOrder(realChoice, imagChoice, selectedItem);
+             m_ViewerModel->GetObjectList().at(selectedItem-1).pViewType = ViewerModel::ComplexMod;
             }
        else
             {
+            m_ViewerModel->GetObjectList().at(selectedItem-1).pViewType = ViewerModel::ComplexPhase;
             m_ViewerController->UpdatePhaseChannelOrder(realChoice, imagChoice, selectedItem);
             }
      }

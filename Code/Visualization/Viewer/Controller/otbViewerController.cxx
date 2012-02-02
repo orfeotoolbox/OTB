@@ -54,7 +54,7 @@ ViewerController
   
   if( filename != realFile )
     {
-    if( m_Model->IsJPEG2000File( realFile ) )
+    if( m_Model->IsJPEG2000File( realFile ) || m_Model->IsHDFFile(realFile) )
       {
       try
         {
@@ -67,25 +67,25 @@ ViewerController
         }
       }
     }
-
+ 
   try
-  {
+    {
     std::string strFilename = filename;
     numberOfOpenedImages = m_Model->OpenImage( strFilename, id );
-  }
+    }
   catch ( ... )
-  {
-    try
     {
+    try
+      {
       std::string strFilename = filename;
       numberOfOpenedImages = m_Model->OpenImageList( strFilename );
-    }
+      }
     catch (itk::ExceptionObject & err)
-    {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
+      {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      }
     }
-  }
-
+    
   return numberOfOpenedImages;
 }
 

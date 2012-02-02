@@ -29,6 +29,8 @@ See OTBCopyright.txt for details.
 # include "otbJPEG2000ImageIO.h"
 #endif
 
+
+
 namespace otb
 {
 
@@ -133,6 +135,93 @@ ViewerModel
 #endif
 }
 
+bool
+ViewerModel
+::IsHDFFile(const std::string & filepath)
+{
+  bool isHDF = false;
+  std::string filename = filepath;
+  GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
+  std::vector<string> names;
+  std::vector<std::string> desc;
+
+  // in case of hdr file (.hdr), GDAL want the header file as filepath
+  string::size_type loc = filepath.find( ".hdr", 0 );
+  if ( loc != string::npos )
+    {
+    filename.erase(loc, 4);
+    }
+  readerGDAL->SetFileName(filename);
+  if (readerGDAL->CanReadFile(filename.c_str()))
+    {
+    if (readerGDAL->GetSubDatasetInfo(names, desc))
+      {
+      isHDF = true; // There are no subdataset in this file
+      }
+    }
+  return isHDF;
+}
+
+
+void
+ViewerModel
+::GetHDFDataset(const std::string & filepath,
+                                       std::vector<std::string>& names,
+                                       std::vector<std::string>& desc)
+{
+  if( !this->IsHDFFile(filepath) )
+    {
+    itkExceptionMacro( "Image "<<filepath<< " is not a HDF file." );
+    }
+  else
+    {
+    // in case of hdr file (.hdr), GDAL want the header file as filepath
+    std::string filename = filepath;
+    string::size_type loc = filepath.find( ".hdr", 0 );
+    if ( loc != string::npos )
+      {
+      filename.erase(loc, 4);
+      }
+    
+    GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
+    readerGDAL->SetFileName(filename);
+    readerGDAL->CanReadFile(filename.c_str());
+    readerGDAL->GetSubDatasetInfo(names, desc);
+    }
+}
+
+bool
+ViewerModel
+::IsComplexFile(const std::string & filepath)
+{
+   bool isComplex = false;
+   ReaderPointerType  reader = ReaderType::New();
+   reader->SetFileName(filepath);
+   reader->GenerateOutputInformation();
+   
+   // Special action if we use the GDAL image IO
+   if (strcmp(reader->GetImageIO()->GetNameOfClass(), "GDALImageIO") == 0)
+      {
+         if ((dynamic_cast<GDALImageIO*> (reader->GetImageIO()))->GDALPixelTypeIsComplex())
+            { // Complex Data
+               isComplex = true;
+            }
+      }
+   else // if we don't use GDAL Image IO
+      {
+         switch (reader->GetImageIO()->GetPixelType())
+         {
+         case itk::ImageIOBase::COMPLEX: // handle the radar case
+            isComplex = true;
+            break;
+         default: 
+            isComplex = false;
+            break;
+         }
+      }
+   return isComplex;
+}
+
 unsigned int
 ViewerModel
 ::OpenImage(std::string filename, const unsigned int id)
@@ -140,9 +229,10 @@ ViewerModel
   std::string otbFilepath = filename;
 
   bool isJPEG2000 = this->IsJPEG2000File(filename);
+  bool isHDF = this->IsHDFFile(filename);
 
-  // If jpeg2000, add the selected resolution at the end of the file name
-  if( isJPEG2000 )
+  // If jpeg2000 or HDF, add the selected resolution at the end of the file name
+  if( isJPEG2000 || isHDF)
     {
     otbFilepath += ":";
     std::ostringstream ossRes;
@@ -237,9 +327,9 @@ ViewerModel
   /** Store all the information in the structure*/
   ObjectsTracked currentComponent;
 
+  currentComponent.pReader    = reader;
   currentComponent.pFileName   = otbFilepath;
   currentComponent.pLayer     = visuGenerator->GetLayer();
-  currentComponent.pReader    = reader;
   currentComponent.pQuicklook = quicklook;
   currentComponent.pRendering = rendering;
   currentComponent.pVisuView  = visuView;
@@ -249,8 +339,8 @@ ViewerModel
   currentComponent.pPixelModel  = pixelModel;
   currentComponent.pCurveWidget = curveWidget;
 
-  assert(currentComponent.pLayer);
   assert(currentComponent.pReader);
+  assert(currentComponent.pLayer);
   assert(currentComponent.pQuicklook);
   assert(currentComponent.pRendering);
   assert(currentComponent.pVisuView);
@@ -320,9 +410,9 @@ ViewerModel
     /** Store all the information in the structure*/
     ObjectsTracked currentComponent;
 
+    currentComponent.pReader    = reader->GetImageFileReader(i);
     currentComponent.pFileName   = reader->GetFileName(i);
     currentComponent.pLayer     = visuGenerator->GetLayer();
-    currentComponent.pReader    = reader->GetImageFileReader(i);
     currentComponent.pRendering = rendering;
     currentComponent.pVisuView  = visuView;
     currentComponent.pWidgetController = controller;
@@ -331,8 +421,8 @@ ViewerModel
     currentComponent.pPixelModel  = pixelModel;
     currentComponent.pCurveWidget = curveWidget;
 
-    assert(currentComponent.pLayer);
     assert(currentComponent.pReader);
+    assert(currentComponent.pLayer);
     assert(currentComponent.pRendering);
     assert(currentComponent.pVisuView);
     assert(currentComponent.pWidgetController);
@@ -351,6 +441,7 @@ ViewerModel
 
   return reader->GetOutput()->Size();
 }
+
 
 
 /**
