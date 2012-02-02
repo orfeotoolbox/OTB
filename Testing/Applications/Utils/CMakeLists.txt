@@ -278,3 +278,16 @@ OTB_TEST_APPLICATION(NAME apTvUtQuicklookSpot5
                              ${TEMP}/apTvUtQuicklookSpot5.tif
                      )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+#--- Pixel Value ---
+OTB_TEST_APPLICATION(NAME apTvUtPixelValue
+                     APP PixelValue
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -coordx 30
+                             -coordy 30
+                             -cl Channel1 Channel3 Channel4
+                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValue.txt
+                       VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtPixelValue.txt
+                	     ${TEMP}/apTvUtPixelValue.txt
+                             )

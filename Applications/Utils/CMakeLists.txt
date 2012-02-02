@@ -74,3 +74,7 @@ OTB_CREATE_APPLICATION(NAME           Quicklook
 OTB_CREATE_APPLICATION(NAME           ColorMapping
                        SOURCES        otbColorMapping.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction)
+
+OTB_CREATE_APPLICATION(NAME           PixelValue
+                       SOURCES        otbPixelValue.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon)
