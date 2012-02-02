@@ -71,7 +71,7 @@ private:
     SetMinimumParameterIntValue("coordy", 0);
 
     AddParameter(ParameterType_ListView,"cl","Channels");
-    SetParameterDescription("cl","Displayed channels");  
+    SetParameterDescription("cl","Displayed channels");
     MandatoryOff("cl");
 
     AddParameter(ParameterType_String,"value","Pixel Value");

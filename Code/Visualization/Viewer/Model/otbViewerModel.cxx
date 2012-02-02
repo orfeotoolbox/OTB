@@ -30,7 +30,6 @@ See OTBCopyright.txt for details.
 #endif
 
 
-
 namespace otb
 {
 
@@ -214,7 +213,7 @@ ViewerModel
          case itk::ImageIOBase::COMPLEX: // handle the radar case
             isComplex = true;
             break;
-         default: 
+         default:
             isComplex = false;
             break;
          }
@@ -441,7 +440,6 @@ ViewerModel
 
   return reader->GetOutput()->Size();
 }
-
 
 
 /**
