@@ -329,7 +329,7 @@ void ossimPleiadesDimapSupportData::printInfo(ostream& os) const
 bool ossimPleiadesDimapSupportData::parseXmlFile(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimPleiadesDimapSupportData::parseXmlFile";
-   //traceDebug.setTraceFlag(true);
+   traceDebug.setTraceFlag(true);
 
    if(traceDebug())
    {
@@ -1623,7 +1623,7 @@ bool ossimPleiadesDimapSupportData::parseMetadataIdentification(ossimRefPtr<ossi
   if (xml_nodes.size() == 0)
     {
     // FIXME MSD: used to support peiades samples from SPOT-IMAGES website which are not coherent
-    // with the last specification. Should be remove when first data will be available and sample
+    // with the specification (28/09/2012). Should be remove when first data will be available and sample
     // replaced.
     theXmlDocumentRoot = "/PHR_DIMAP_Document";
     if (traceDebug())
@@ -1637,12 +1637,28 @@ bool ossimPleiadesDimapSupportData::parseMetadataIdentification(ossimRefPtr<ossi
     xmlDocument->findNodes(xpath, xml_nodes);
       if (xml_nodes.size() == 0)
         {
-        setErrorStatus();
+        // FIXME MSD: used to support peiades samples from SPOT-IMAGES website which are not coherent
+        // with the specification (28/09/2012). Should be remove when first data will be available and sample
+        // replaced.
+        theXmlDocumentRoot = "/Dimap_Document";
         if (traceDebug())
           {
-          ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nCould not find: " << xpath << endl;
+          ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nTry to use the new root: " << theXmlDocumentRoot << endl;
           }
-        return false;
+
+          xml_nodes.clear();
+          xpath = "/Metadata_Identification/METADATA_FORMAT";
+          xpath = theXmlDocumentRoot + xpath;
+          xmlDocument->findNodes(xpath, xml_nodes);
+          if (xml_nodes.size() == 0)
+            {
+            setErrorStatus();
+            if (traceDebug())
+              {
+              ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nCould not find: " << xpath << endl;
+              }
+            return false;
+            }
         }
     }
 
