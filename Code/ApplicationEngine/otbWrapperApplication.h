@@ -511,6 +511,10 @@ public:
 
   void AddDocTag( const std::string & tag )
   {
+    for (unsigned int i=0 ; i<m_DocTags.size() ; i++)
+      {
+      if (m_DocTags[i].compare(tag) == 0) return;
+      }
     m_DocTags.push_back( tag );
     this->Modified();
   }
