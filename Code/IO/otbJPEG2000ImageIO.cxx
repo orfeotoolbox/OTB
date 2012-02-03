@@ -1131,18 +1131,32 @@ void JPEG2000ImageIO::ReadImageInformation()
 
       itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, geoTransform);
 
+      /*for (int i = 0; i < 6 ; i++)
+        {
+        std::cout << geoTransform[i] << ", ";
+        }
+      std::cout << std::endl;*/
+
       // retrieve origin and spacing from the geo transform ????
       m_Origin[0] = geoTransform[0];
       m_Origin[1] = geoTransform[3];
-      m_Spacing[0] = geoTransform[2];
-      m_Spacing[1] = geoTransform[4];
+      m_Spacing[0] = geoTransform[1];
+      m_Spacing[1] = geoTransform[5];
 
       if ( m_Spacing[0]== 0 || m_Spacing[1] == 0)
         {
         //otbMsgDevMacro(<< "JPEG2000 file has a geotransform but with weird elements !!!");
-        otbWarningMacro(<< "JPEG2000 file has an incorrect geotransform  (spacing = 0)!");
-        m_Spacing[0] = 1;
-        m_Spacing[1] = 1;
+        if (geoTransform[2] != 0  && geoTransform[4] != 0 )
+          {
+          m_Spacing[0] = geoTransform[2];
+          m_Spacing[1] = geoTransform[4];
+          }
+        else
+          {
+          otbWarningMacro(<< "JPEG2000 file has an incorrect geotransform  (spacing = 0)!");
+          m_Spacing[0] = 1;
+          m_Spacing[1] = 1;
+          }
         }
 
       }
@@ -1197,6 +1211,7 @@ void JPEG2000ImageIO::ReadImageInformation()
         key = lStream.str();
         
         itk::EncapsulateMetaData<std::string>(dict, key, static_cast<std::string> (papszGMLMetadata[cpt]));
+        //std::cout << static_cast<std::string> (papszGMLMetadata[cpt]) << std::endl;
         }
       }
 

@@ -227,7 +227,7 @@ ossimPleiadesModel::open(const ossimFilename& file)
     if(!theSupportData->parseXmlFile(DIMxmlFile))
     {
        theSupportData = 0; // ossimRefPtr
-       ossimNotify(ossimNotifyLevel_WARN) << "ossimPleiadesModel::open WARNING:"
+       ossimNotify(ossimNotifyLevel_DEBUG) << "ossimPleiadesModel::open WARNING:"
           << "\nCould not open correctly DIMAP file" << std::endl;
        return false;
     }

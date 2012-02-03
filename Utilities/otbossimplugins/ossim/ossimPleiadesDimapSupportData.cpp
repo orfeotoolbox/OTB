@@ -329,7 +329,7 @@ void ossimPleiadesDimapSupportData::printInfo(ostream& os) const
 bool ossimPleiadesDimapSupportData::parseXmlFile(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimPleiadesDimapSupportData::parseXmlFile";
-   traceDebug.setTraceFlag(true);
+   //traceDebug.setTraceFlag(true);
 
    if(traceDebug())
    {
