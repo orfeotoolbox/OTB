@@ -49,7 +49,7 @@ private:
     SetDescription("Get the value of a pixel.");
 
     // Documentation
-    SetDocName("Pixel Vaue");
+    SetDocName("Pixel Value");
     SetDocLongDescription("Get the value of a pixel.\nPay attention, index starts at 0.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
