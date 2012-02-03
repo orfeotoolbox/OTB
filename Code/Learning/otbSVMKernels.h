@@ -698,7 +698,13 @@ public:
 
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    return (vcl_exp(-param.gamma * m_Custom(x, y, param)));
+    double value=-param.gamma*m_Custom(x, y, param);
+    if(value<-30.0)
+      {
+        return 0.0;
+      }
+
+   return (vcl_exp(value));
   }
 
 protected:
