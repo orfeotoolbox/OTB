@@ -174,6 +174,9 @@ private:
   float m_DivisionProgress;
 
   StreamingManagerPointerType m_StreamingManager;
+
+  bool          m_IsObserving;
+  unsigned long m_ObserverID;
 };
 
 } // end namespace otb

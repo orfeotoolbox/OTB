@@ -39,7 +39,9 @@ StreamingImageVirtualWriter<TInputImage>
 ::StreamingImageVirtualWriter()
  : m_NumberOfDivisions(0),
    m_CurrentDivision(0),
-   m_DivisionProgress(0.0)
+   m_DivisionProgress(0.0),
+   m_IsObserving(true),
+   m_ObserverID(0)
 {
   // By default, we use tiled streaming, with automatic tile size
   // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
@@ -198,6 +200,8 @@ StreamingImageVirtualWriter<TInputImage>
    */
   // Get the source process object
   itk::ProcessObject* source = inputPtr->GetSource();
+  m_IsObserving = false;
+  m_ObserverID = 0;
 
   // Check if source exists
   if(source)
@@ -208,7 +212,8 @@ StreamingImageVirtualWriter<TInputImage>
     CommandPointerType command = CommandType::New();
     command->SetCallbackFunction(this, &Self::ObserveSourceFilterProgress);
 
-    source->AddObserver(itk::ProgressEvent(), command);
+    m_ObserverID = source->AddObserver(itk::ProgressEvent(), command);
+    m_IsObserving = true;
     }
   else
     {
@@ -242,6 +247,12 @@ StreamingImageVirtualWriter<TInputImage>
 
   // Notify end event observers
   this->InvokeEvent(itk::EndEvent());
+
+  if (m_IsObserving)
+    {
+    m_IsObserving = false;
+    source->RemoveObserver(m_ObserverID);
+    }
 
   /**
    * Now we have to mark the data as up to data.
