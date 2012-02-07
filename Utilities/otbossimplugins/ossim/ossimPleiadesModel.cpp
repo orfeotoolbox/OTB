@@ -130,7 +130,12 @@ bool ossimPleiadesModel::saveState(ossimKeywordlist& kwl,
   // If only it is a sensor product we save parameters from RPC model, its avoid to
   // propagate a empty RPC model
   if (theSupportData->getProcessingLevel() == "SENSOR")
-   return ossimRpcModel::saveState(kwl, prefix);
+    {
+    //std::cout << "**** SAVE STATE WITH RPC" << std::endl;
+    ossimRpcModel::saveState(kwl, prefix);
+    //print(std::cout);
+    return true;
+    }
   else
     {
     kwl.add(prefix, "sensor", theSensorID, true);
@@ -155,7 +160,12 @@ bool ossimPleiadesModel::loadState(const ossimKeywordlist& kwl,
    // If only it is a sensor product we load parameters from RPC model only, its avoid to
    // add a empty RPC model
    if (theSupportData->getProcessingLevel() == "SENSOR")
-    return ossimRpcModel::loadState(kwl, prefix);
+     {
+     //std::cout << "**** LOAD STATE WITH RPC" << std::endl;
+     ossimRpcModel::loadState(kwl, prefix);
+     //print(std::cout);
+     return true;
+     }
    else
      {
     return true;
@@ -291,7 +301,9 @@ ossimPleiadesModel::open(const ossimFilename& file)
     ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exit status = " << (result ? "true" : "false\n") << std::endl;
     }
 
-  //print(std::cout);
+  std::cout << "---------------------------" << std::endl;
+  print(std::cout);
+  std::cout << "---------------------------" << std::endl;
   return result;
 }
 

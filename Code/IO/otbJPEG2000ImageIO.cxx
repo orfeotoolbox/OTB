@@ -42,6 +42,9 @@ extern "C"
 #include "ogr_spatialref.h"
 #include "ogr_srs_api.h"
 
+#include "itksys/SystemTools.hxx"
+
+
 /**
 Divide an integer by a power of 2 and round upwards
 @return Returns a divided by 2^b
@@ -1131,11 +1134,11 @@ void JPEG2000ImageIO::ReadImageInformation()
 
       itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, geoTransform);
 
-      /*for (int i = 0; i < 6; i++)
+      /*for (int i = 0; i < 6 ; i++)
         {
         std::cout << geoTransform[i] << ", ";
         }
-      std::cout << std::endl; */
+      std::cout << std::endl;*/
 
       // retrieve origin and spacing from the geo transform ????
       m_Origin[0] = geoTransform[0];
@@ -1160,6 +1163,10 @@ void JPEG2000ImageIO::ReadImageInformation()
         }
 
       }
+    std::cout << "Origin: " << m_Origin[0] << ", " << m_Origin[1]
+              << "Spacing: " << m_Spacing[0] << ", " << m_Spacing[1] << std::endl;
+
+
 
     /* GCPs */
     if (lJP2MetadataReader.GetGCPCount() > 0)
@@ -1211,7 +1218,22 @@ void JPEG2000ImageIO::ReadImageInformation()
         key = lStream.str();
         
         itk::EncapsulateMetaData<std::string>(dict, key, static_cast<std::string> (papszGMLMetadata[cpt]));
-        //std::cout << static_cast<std::string> (papszGMLMetadata[cpt]) << std::endl;
+        std::cout << static_cast<std::string> (papszGMLMetadata[cpt]) << std::endl;
+
+        std::string lineGML = static_cast<std::string> (papszGMLMetadata[cpt]);
+        // TODO MSD: IMPROVE this condition -> sensor model ~ Check if we have axis = row, col
+        const char* findRowString = itksys::SystemTools::FindLastString(lineGML.c_str(),"<gml:axisName>row</gml:axisName>");
+        const char* findColString = itksys::SystemTools::FindLastString(lineGML.c_str(),"<gml:axisName>col</gml:axisName>");
+
+        if (findRowString && findColString)
+          {
+          std::cout << "SENSOR MODEL" << std::endl;
+          m_Origin[0] = 0; m_Origin[1] = 0;
+          m_Spacing[0] = 1; m_Spacing[1] = 1;
+          }
+        else
+          std::cout << "NOT SENSOR MODEL" << std::endl;
+
         }
       }
 
@@ -1245,7 +1267,17 @@ void JPEG2000ImageIO::ReadImageInformation()
         OSRRelease(pSR);
         pSR = NULL;
         }
+      std::string toto;
+      itk::ExposeMetaData<std::string>(this->GetMetaDataDictionary(),
+                                        MetaDataKey::ProjectionRefKey,
+                                        toto);
 
+      std::cout << "PROJECTION: " << toto << std::endl;
+
+      }
+    else
+      {
+      std::cout << "NO PROJECTION: " << std::endl;
       }
     //dict.Print(std::cout);
     }
