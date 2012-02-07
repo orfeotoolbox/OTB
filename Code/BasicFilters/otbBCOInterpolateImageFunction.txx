@@ -96,13 +96,13 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
       {
       if (dist <= 1.)
         {
-        BCOCoef[radius+i] = (m_Alpha + 2.)*vcl_abs(vcl_pow(dist, 3))
-          - (m_Alpha + 3.)*vcl_pow(dist, 2) + 1;
+        BCOCoef[radius+i] = (m_Alpha + 2.)*vcl_abs(dist * dist * dist)
+          - (m_Alpha + 3.)*dist*dist + 1;
         }
       else
         {
-        BCOCoef[radius+i] = m_Alpha*vcl_abs(vcl_pow(dist, 3)) - 5
-          *m_Alpha*vcl_pow(dist, 2) + 8*m_Alpha*vcl_abs(dist) - 4*m_Alpha;
+        BCOCoef[radius+i] = m_Alpha*vcl_abs(dist * dist * dist) - 5
+          *m_Alpha*dist*dist + 8*m_Alpha*vcl_abs(dist) - 4*m_Alpha;
         }
       }
     else
