@@ -283,20 +283,6 @@ ADD_TEST(utTvKmlprintgeometry   ${UTILITIES_TESTS}
 #                 ijObjectLabelAttributeValuesTest
 # )
 
-# -------  KNN classification from Insight Journal  --------------------
-# The data are those submitted with the pape for the case 2D classification
-# with 2 features.
-ADD_TEST(utTvClassifyKNN2   ${UTILITIES_TESTS}
-        --compare-image ${NOTOL}
-           ${BASELINE}/output2D_2ch.tif
-           ${TEMP}/output2D_2ch.tif
-        classifyKNN2
-        ${INPUTDATA}/mapfile.t1t2_139_2
-        ${INPUTDATA}/mst1139.tif
-        ${INPUTDATA}/mst2139.tif
-        ${TEMP}/output2D_2ch.tif
-        4
-        )
 
 # ------- GreyLevelRunLengthMatrixTextureCoefficientsCalculator from Insight Journal  --------------------
 ADD_TEST(ijTuGreyLevelRunLengthMatrixTextureCoefficientsCalculator ${UTILITIES_TESTS}
@@ -347,7 +333,6 @@ kmlsortplacemarks.cc
 siftfast.cpp
 ijObjectLabelAttributeValuesTest.cxx
 ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest.cxx
-classifyKNN2.cxx
 )
 
 

@@ -56,8 +56,6 @@ MESSAGE(STATUS "Configuring otbmuparser...")
 ADD_SUBDIRECTORY(otbmuparser)
 MESSAGE(STATUS "Configuring otbsvm...")
 ADD_SUBDIRECTORY(otbsvm )
-MESSAGE(STATUS "Configuring otbknn...")
-ADD_SUBDIRECTORY(otbknn )
 MESSAGE(STATUS "Configuring InsightJournal...")
 ADD_SUBDIRECTORY(InsightJournal)
 
