@@ -262,9 +262,9 @@ packages, you can skip to step 4.
       gunzip gdal.1.9.0.tar.gz
       tar xvf gdal.1.9.0.tar
       cd gdal.1.9.0
-      ./configure --prefix=INSTALL_DIR --with-libtiff=internal
-                  --with-geotiff=internal
-                  --with-rename-internal-libtiff-symbols=yes
+      ./configure --prefix=INSTALL_DIR --with-libtiff=internal \
+                  --with-geotiff=internal \
+                  --with-rename-internal-libtiff-symbols=yes \
                   --with-rename-internal-libgeotiff-symbols=yes
       make
       make install
