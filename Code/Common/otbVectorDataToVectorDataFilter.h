@@ -90,19 +90,19 @@ protected:
   /** Destructor */
   virtual ~VectorDataToVectorDataFilter() {}
 
-  virtual OutputPointType ProcessPoint(InputPointType point) const
+  virtual OutputPointType ProcessPoint(InputPointType itkNotUsed(point)) const
   {
     itkExceptionMacro( << "Subclass should reimplement this method");
   }
-  virtual OutputLinePointerType ProcessLine(InputLinePointerType line) const
+  virtual OutputLinePointerType ProcessLine(InputLinePointerType itkNotUsed(line)) const
   {
     itkExceptionMacro( << "Subclass should reimplement this method");
   }
-  virtual OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const
+  virtual OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType itkNotUsed(polygon)) const
   {
     itkExceptionMacro( << "Subclass should reimplement this method");
   }
-  virtual OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const
+  virtual OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType itkNotUsed(polygonList)) const
   {
     itkExceptionMacro( << "Subclass should reimplement this method");
   }
