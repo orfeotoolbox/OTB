@@ -2,6 +2,10 @@
 #
 # Find LaTeX
 #
+
+MESSAGE("==============================" ${SoftwareGuide_SOURCE_DIR})
+
+
 INCLUDE (${CMAKE_ROOT}/Modules/FindLATEX.cmake)
 
 FIND_PROGRAM(TEX4HT_COMPILER
@@ -192,10 +196,10 @@ IF(LATEX_COMPILER)
     ARGS      ${LATEX_WRAPPER2}
               ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.tex
     DEPENDS   ${SoftwareGuide_Tex_SRCS} ${ITK_EXAMPLES_TEX_SRCS}
-    OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.dvi
+    OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.dvi
     COMMENT   "Generating dvi file"
   )
-  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.dvi)
+  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.dvi)
   
   IF(DVIPS_CONVERTER)
     MESSAGE("DVIPS converter")
@@ -205,10 +209,10 @@ IF(LATEX_COMPILER)
       ARGS      ${DVIPS_WRAPPER2}
                 SoftwareGuide.dvi ${DVIPS_CONVERTER_OPTIONS} -o  SoftwareGuide.ps
       DEPENDS   SoftwareGuide.ind SoftwareGuide.bbl SoftwareGuide.dvi
-      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.ps
+      OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.ps
       COMMENT   "Generating ps file"
     )
-  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.ps)
+  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.ps)
 
   ENDIF(DVIPS_CONVERTER)
 
@@ -217,10 +221,10 @@ IF(LATEX_COMPILER)
       SOURCE    SoftwareGuide.ps
       COMMAND   ${PS2PDF_CONVERTER}
       ARGS      ${PS2PDF_CONVERTER_OPTIONS} SoftwareGuide.ps
-      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.pdf
+      OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.pdf
       COMMENT   "Generating pdf file"
     )
-    SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.pdf)
+    SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.pdf)
   ENDIF(PS2PDF_CONVERTER)
 
   IF(MAKEINDEX_COMPILER)
@@ -229,19 +233,19 @@ IF(LATEX_COMPILER)
       COMMAND   ${LATEX_WRAPPER1}
       ARGS      ${LATEX_WRAPPER2}
                 ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.tex
-      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.idx
+      OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.idx
       COMMENT   "Generating idx file"
     )
-  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.idx)
+  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.idx)
   
     ADD_CUSTOM_COMMAND(
       SOURCE    SoftwareGuide.idx
       COMMAND   ${MAKEINDEX_COMPILER}
       ARGS      SoftwareGuide
-      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.ind
+      OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.ind
       COMMENT   "Generating ind file"
     )
-  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.ind)
+  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.ind)
   ENDIF(MAKEINDEX_COMPILER)
 
   IF(BIBTEX_COMPILER)
@@ -249,10 +253,10 @@ IF(LATEX_COMPILER)
       SOURCE    SoftwareGuide.aux
       COMMAND   ${BIBTEX_COMPILER}
       ARGS      SoftwareGuide
-      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.bbl
+      OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.bbl
       COMMENT   "Generating bbl file"
     )
-  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.bbl)
+  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.bbl)
   ENDIF(BIBTEX_COMPILER)
            
 ENDIF(LATEX_COMPILER)
@@ -260,3 +264,11 @@ ENDIF(LATEX_COMPILER)
 
 ADD_CUSTOM_TARGET(SoftwareGuideLatex ALL DEPENDS ${TEX_OUTPUTS})
 
+# Rename the SoftwareGuide.pdf file into SoftwareGuide-version.pdf
+SET(FINAL_DOC_NAME "${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
+ADD_CUSTOM_TARGET(SoftwareGuideRenamePdf
+                  ALL
+   		  ${CMAKE_COMMAND} -E rename ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.pdf ${FINAL_DOC_NAME}.pdf
+                  COMMENT "Renaming the pdf document" 
+       )
+ADD_DEPENDENCIES(SoftwareGuideRenamePdf SoftwareGuideLatex)
