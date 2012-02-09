@@ -19,9 +19,16 @@
 #define __otbStereorectificationDeformationFieldSource_h
 
 #include "itkImageSource.h"
+#include "otbGenericRSTransform.h"
+#include "itkImageRegionIteratorWithIndex.h"
+#include "itkVector.h"
 
 namespace otb
 {
+/** \class StereorectificationDeformationFieldSource
+ *  \brief TODO
+ * 
+ */
 template <class TInputImage, class TOutputImage >
 class ITK_EXPORT StereorectificationDeformationFieldSource
   : public itk::ImageSource<TOutputImage>
@@ -33,10 +40,25 @@ public:
   typedef itk::SmartPointer<Self>                   Pointer;
   typedef itk::SmartPointer<const Self>             ConstPointer;
 
+  // Inputs and outputs relative typedefs
   typedef TInputImage                               InputImageType;
   typedef typename InputImageType::Pointer          InputImagePointerType;
   typedef TOutputImage                              OutputImageType;
   typedef typename OutputImageType::Pointer         OutputImagePointerType;
+
+  // Image related typedefs
+  typedef typename OutputImageType::SizeType        SizeType;
+  typedef typename OutputImageType::PointType       PointType;
+  typedef typename OutputImageType::SpacingType     SpacingType;
+  typedef typename OutputImageType::RegionType      RegionType;
+
+  // 3D RS transform
+  // TODO: Allow to tune precision (i.e. double or float)
+  typedef otb::GenericRSTransform<double,3,3>       RSTransformType;
+  typedef typename RSTransformType::Pointer         RSTransformPointerType;
+
+  // 3D points
+  typedef typename RSTransformType::InputPointType  TDPointType;
 
   /** Method for creation through the object factory. */
   itkNewMacro( Self );
@@ -48,13 +70,40 @@ public:
   itkSetMacro(AverageElevation,double);
   itkGetConstReferenceMacro(AverageElevation,double);
   
+  /** Get/Set the elevation offset */
+  itkSetMacro(ElevationOffset,double);
+  itkGetConstReferenceMacro(ElevationOffset,double);
+
   /** Get/Set the scale */
   itkSetMacro(Scale,double);
   itkGetConstReferenceMacro(Scale,double);
 
-  /** Get / Set the grid scale */
+  /** Get/Set the grid scale */
   itkSetMacro(GridStep,double);
   itkGetMacro(GridStep,double);
+
+  /** Get/Set left image for stereo-rectification */
+  itkSetObjectMacro(LeftImage,InputImageType);
+  itkGetObjectMacro(LeftImage,InputImageType);
+
+  /** Get/Set right image for stereo-rectification */
+  itkSetObjectMacro(RightImage,InputImageType);
+  itkGetObjectMacro(RightImage,InputImageType);
+
+  /** Get the size of the rectified image */
+  itkGetConstReferenceMacro(RectifiedImageSize,SizeType);
+
+  /** Return the left deformation field (const version)  */
+  const OutputImageType * GetLeftDeformationFieldOutput() const;
+
+  /** Return the left deformation field */
+  OutputImageType * GetLeftDeformationFieldOutput();
+
+  /** Return the left deformation field (const version)  */
+  const OutputImageType * GetRightDeformationFieldOutput() const;
+
+  /** Return the left deformation field */
+  OutputImageType * GetRightDeformationFieldOutput();
 
 protected:
   /** Constructor */
@@ -81,6 +130,9 @@ private:
   /** Disparity will be null for this elevation */
   double m_AverageElevation;
 
+  /** This elevation offset is used to compute the epipolar direction */
+  double m_ElevationOffset;
+
   /** A scale greater than 1 will lead to zoomed stereo-rectified
    *  pairs */
   double m_Scale;
@@ -96,6 +148,17 @@ private:
   /** Right image */
   InputImagePointerType m_RightImage;
 
+  /** Left to right transform */
+  RSTransformPointerType m_LeftToRightTransform;
+
+  /** Right to left transform */
+  RSTransformPointerType m_RightToLeftTransform;
+
+  /** Size of the rectified images */
+  SizeType m_RectifiedImageSize;
+
+  /** Output origin in left image (internal use) */
+  TDPointType m_OutputOriginInLeftImage;
 };
 
 } // End namespace otb
