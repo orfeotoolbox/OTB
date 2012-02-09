@@ -3,9 +3,6 @@
 # Find LaTeX
 #
 
-MESSAGE("==============================" ${SoftwareGuide_SOURCE_DIR})
-
-
 INCLUDE (${CMAKE_ROOT}/Modules/FindLATEX.cmake)
 
 FIND_PROGRAM(TEX4HT_COMPILER
