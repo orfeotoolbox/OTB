@@ -93,6 +93,9 @@ public:
   /** Get the size of the rectified image */
   itkGetConstReferenceMacro(RectifiedImageSize,SizeType);
 
+  /** Get the estimated mean baseline ratio */
+  itkGetConstReferenceMacro(MeanBaselineRatio,double);
+
   /** Return the left deformation field (const version)  */
   const OutputImageType * GetLeftDeformationFieldOutput() const;
 
@@ -114,6 +117,9 @@ protected:
 
   /** Generate output images information */
   virtual void GenerateOutputInformation();
+
+  /** Enlarge output requested region (no streaming) */
+  virtual void EnlargeOutputRequestedRegion(itk::DataObject * itkNotUsed(output));
 
   /** Compute the deformation field */
   virtual void GenerateData();
@@ -159,6 +165,10 @@ private:
 
   /** Output origin in left image (internal use) */
   TDPointType m_OutputOriginInLeftImage;
+
+  /** This variable contains the estimated mean baseline ratio over
+   *  the image */
+  double m_MeanBaselineRatio;
 };
 
 } // End namespace otb

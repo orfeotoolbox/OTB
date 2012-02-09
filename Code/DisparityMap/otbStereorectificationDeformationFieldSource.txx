@@ -19,6 +19,7 @@
 #define __otbStereoSensorModelToElevationMapFilter_txx
 
 #include "otbStereorectificationDeformationFieldSource.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -34,7 +35,8 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   m_RightImage(),
   m_LeftToRightTransform(),
   m_RightToLeftTransform(),
-  m_OutputOriginInLeftImage()
+  m_OutputOriginInLeftImage(),
+  m_MeanBaselineRatio(0)
 {
   // Set the number of outputs to 2 (one deformation field for each
   // image)
@@ -207,8 +209,16 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // Now, we can compute the origin of the epipolar images in the left
   // input image geometry (we rotate back)
-  m_OutputOriginInLeftImage[0] = leftInputOrigin[0] + ux * minx + vx * miny;
-  m_OutputOriginInLeftImage[1] = leftInputOrigin[1] + uy * minx + vy * miny;
+  itk::ContinuousIndex<double,2> outputOriginCIndexInLeftImage;
+  outputOriginCIndexInLeftImage[0] = leftInputOrigin[0] + ux * minx + vx * miny;
+  outputOriginCIndexInLeftImage[1] = leftInputOrigin[1] + uy * minx + vy * miny;
+  
+  PointType tmpPointForConversion;
+
+  m_LeftImage->TransformContinuousIndexToPhysicalPoint(outputOriginCIndexInLeftImage, tmpPointForConversion);
+
+  m_OutputOriginInLeftImage[0] = tmpPointForConversion[0];
+  m_OutputOriginInLeftImage[1] = tmpPointForConversion[1];
   m_OutputOriginInLeftImage[2] = m_AverageElevation;
 
   // And also the size of the deformation field
@@ -226,6 +236,20 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   
   leftDFPtr->SetSpacing(outputSpacing);
   rightDFPtr->SetSpacing(outputSpacing);
+}
+
+template <class TInputImage, class TOutputImage>
+void
+StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
+::EnlargeOutputRequestedRegion(itk::DataObject *)
+{
+  // Retrieve the deformation field pointers
+  OutputImageType * leftDFPtr = this->GetLeftDeformationFieldOutput();
+  OutputImageType * rightDFPtr = this->GetLeftDeformationFieldOutput();
+
+  // Prevent from streaming
+  leftDFPtr->SetRequestedRegionToLargestPossibleRegion();
+  rightDFPtr->SetRequestedRegionToLargestPossibleRegion();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -257,6 +281,13 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   it1.GoToBegin();
   it2.GoToBegin();
+ 
+  // Reset the mean baseline ratio
+  m_MeanBaselineRatio = 0;
+ 
+  // Set-up progress reporting
+  itk::ProgressReporter progress(this, 0, leftDFPtr->GetBufferedRegion().GetNumberOfPixels());
+
 
   // We loop on the deformation fields
   while(!it1.IsAtEnd() && !it2.IsAtEnd())
@@ -308,6 +339,15 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // of epiPoint2 at a higher elevation (using the offset)
     epiPoint2[2] = m_AverageElevation + m_ElevationOffset;
     endLine1 = m_LeftToRightTransform->TransformPoint(epiPoint2);
+
+    // Estimate the local baseline ratio
+    double localBaselineRatio = ((endLine1[0] - startLine1[0])
+                              *  (endLine1[0] - startLine1[0])
+                              +  (endLine1[1] - startLine1[1])
+                              *  (endLine1[1] - startLine1[1]))
+                              /  2*m_AverageElevation;
+
+    m_MeanBaselineRatio+=localBaselineRatio;
     
     // Now, we can compute the equation of the epipolar line y = a*x+b
     // (do not forget that the y axis is flip in our case)
@@ -392,8 +432,13 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // Last, we move forward
     ++it1;
     ++it2;
+    
+    // Update progress
+    progress.CompletedPixel();
     }
     
+  // Compute the mean baseline ratio
+  m_MeanBaselineRatio /= leftDFPtr->GetBufferedRegion().GetNumberOfPixels();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -401,7 +446,8 @@ void
 StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 ::PrintSelf( std::ostream& os, itk::Indent indent ) const
 {
-
+  // Call superclass implementation
+  Superclass::PrintSelf(os,indent);
 }
 
 } // end namespace otb
