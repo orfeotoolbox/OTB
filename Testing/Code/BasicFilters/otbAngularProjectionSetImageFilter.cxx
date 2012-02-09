@@ -111,7 +111,7 @@ int otbAngularProjectionSetImageFilterTest ( int argc, char * argv[] )
 
   for ( unsigned int i = 0; i < writers->Size(); i++ )
   {
-    itk::OStringStream title;
+    std::ostringstream title;
     title << outputImageName << "_" << i << ".hdr";
 
     writers->SetNthElement(i, WriterType::New());
