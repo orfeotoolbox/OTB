@@ -423,6 +423,10 @@ ${INPUTDATA}/DEM/egm96.grd
 3
 )
 
+#--------- otb::StereorectificationDeformationFieldSource -----------------------------------------
+ADD_TEST(feTuStereorectificationDeformationFieldSourceNew ${DISPARITYMAP_TESTS3}
+otbStereorectificationDeformationFieldSourceNew)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -463,6 +467,7 @@ otbStreamingWarpImageFilter.cxx
 otbFineRegistrationImageFilterNew.cxx
 otbFineRegistrationImageFilterTest.cxx
 otbStereoSensorModelToElevationMapFilter.cxx
+otbStereorectificationDeformationFieldSource.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbDisparityMapTests1 "${BasicDisparityMap_SRCS1}" "OTBDisparityMap;OTBIO;OTBTesting")
