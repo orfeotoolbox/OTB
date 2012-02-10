@@ -212,22 +212,14 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // Now, we can compute the origin of the epipolar images in the left
   // input image geometry (we rotate back)
-  itk::ContinuousIndex<double,2> outputOriginCIndexInLeftImage;
-  outputOriginCIndexInLeftImage[0] = leftInputOrigin[0] + ux * minx + vx * miny;
-  outputOriginCIndexInLeftImage[1] = leftInputOrigin[1] + uy * minx + vy * miny;
-  
-  PointType tmpPointForConversion;
-
-  m_LeftImage->TransformContinuousIndexToPhysicalPoint(outputOriginCIndexInLeftImage, tmpPointForConversion);
-
-  m_OutputOriginInLeftImage[0] = tmpPointForConversion[0];
-  m_OutputOriginInLeftImage[1] = tmpPointForConversion[1];
+  m_OutputOriginInLeftImage[0] = leftInputOrigin[0] + m_LeftImage->GetSpacing()[0] * (ux * minx + vx * miny);
+  m_OutputOriginInLeftImage[1] = leftInputOrigin[1] + m_LeftImage->GetSpacing()[0] * (uy * minx + vy * miny);
   m_OutputOriginInLeftImage[2] = m_AverageElevation;
 
   // And also the size of the deformation field
   SizeType outputSize;
-  outputSize[0] = (m_RectifiedImageSize[0] / m_GridStep) + 1;
-  outputSize[1] = (m_RectifiedImageSize[1] / m_GridStep) + 1;
+  outputSize[0] = (m_RectifiedImageSize[0] / m_GridStep + 1 );
+  outputSize[1] = (m_RectifiedImageSize[1] / m_GridStep + 1);
   
   // Build the output largest region
   RegionType outputLargestRegion;
@@ -268,7 +260,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // Retrieve the output pointers
   OutputImageType * leftDFPtr = this->GetLeftDeformationFieldOutput();
-  OutputImageType * rightDFPtr = this->GetLeftDeformationFieldOutput();
+  OutputImageType * rightDFPtr = this->GetRightDeformationFieldOutput();
 
   // Declare all the TDPoint variables we will need
   TDPointType currentPoint1, currentPoint2,nextLineStart1,nextLineStart2, startLine1, endLine1, startLine2, endLine2, epiPoint1, epiPoint2;
@@ -285,8 +277,8 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // We define the iterators we will use
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType> IteratorType;
   
-  IteratorType it1(leftDFPtr,leftDFPtr->GetBufferedRegion());
-  IteratorType it2(rightDFPtr,rightDFPtr->GetBufferedRegion());
+  IteratorType it1(leftDFPtr,leftDFPtr->GetLargestPossibleRegion());
+  IteratorType it2(rightDFPtr,rightDFPtr->GetLargestPossibleRegion());
 
   it1.GoToBegin();
   it2.GoToBegin();
@@ -295,7 +287,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   m_MeanBaselineRatio = 0;
  
   // Set-up progress reporting
-  itk::ProgressReporter progress(this, 0, leftDFPtr->GetBufferedRegion().GetNumberOfPixels());
+  itk::ProgressReporter progress(this, 0, leftDFPtr->GetLargestPossibleRegion().GetNumberOfPixels());
 
 
   // We loop on the deformation fields
@@ -337,17 +329,17 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // This point is the image of the left input image origin at the
     // average elevation
     currentPoint1[2] = m_AverageElevation;
-    epiPoint2 = m_RightToLeftTransform->TransformPoint(currentPoint1);
+    epiPoint2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
 
     // The begining of the epipolar line in the left image is the image
     // of epiPoint2 at a lower elevation (using the offset)
     epiPoint2[2] = m_AverageElevation - m_ElevationOffset;
-    startLine1 = m_LeftToRightTransform->TransformPoint(epiPoint2);
+    startLine1 = m_RightToLeftTransform->TransformPoint(epiPoint2);
     
     // The endning of the epipolar line in the left image is the image
     // of epiPoint2 at a higher elevation (using the offset)
     epiPoint2[2] = m_AverageElevation + m_ElevationOffset;
-    endLine1 = m_LeftToRightTransform->TransformPoint(epiPoint2);
+    endLine1 = m_RightToLeftTransform->TransformPoint(epiPoint2);
 
     // Estimate the local baseline ratio
     double localBaselineRatio = ((endLine1[0] - startLine1[0])
@@ -383,8 +375,8 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // We want to move m_Scale pixels away in the epipolar line of the
     // first image
     // TODO: Take into account height direction ?
-    double alpha1 = vcl_atan(a1);
-    double deltax1 = -m_Scale * m_GridStep * vcl_cos(alpha1);
+    double alpha1 = M_PI - vcl_atan(a1);
+    double deltax1 =  m_Scale * m_GridStep * vcl_cos(alpha1);
     double deltay1 = -m_Scale * m_GridStep * vcl_sin(alpha1);
 
     // Before moving currentPoint1, we will store its image by the
@@ -408,8 +400,8 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // Now, we compute the displacement in right image. The iscale
     // factor already account for m_GridStep and scale, no need to use
     // them again
-    double alpha2 = vcl_atan(a2);
-    double deltax2 = - iscale * vcl_cos(alpha2);
+    double alpha2 = M_PI - vcl_atan(a2);
+    double deltax2 =   iscale * vcl_cos(alpha2);
     double deltay2 = - iscale * vcl_sin(alpha2);
 
     // We can now move currentPoint2
@@ -424,9 +416,8 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
       {
       // We want to move 1 pixel away in the direction orthogonal to
       // epipolar line
-      double beta1 = M_PI/2 + alpha2;
-      double nextdeltax1 = -m_Scale * m_GridStep * vcl_cos(beta1);
-      double nextdeltay1 = -m_Scale * m_GridStep * vcl_sin(beta1);
+      double nextdeltax1 = m_Scale * m_GridStep * vcl_sin(alpha1);
+      double nextdeltay1 = m_Scale * m_GridStep * vcl_cos(alpha1);
 
       // We can then update nextLineStart1
       nextLineStart1[0] = currentPoint1[0] - deltax1 + nextdeltax1;
