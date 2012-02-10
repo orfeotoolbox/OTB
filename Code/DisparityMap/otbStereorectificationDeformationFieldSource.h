@@ -26,8 +26,59 @@
 namespace otb
 {
 /** \class StereorectificationDeformationFieldSource
- *  \brief TODO
+ *  \brief Compute the deformation fields for stereo-rectification
+ *
+ *  The geometry of acqusition related to stereo pairs is such that
+ *  the displacement related to the elevation between the two images
+ *  of the pair always occurs along lines that are called epipolar
+ *  lines.
  * 
+ *  In the case of conic acqusition, these lines are perfectly
+ *  parallel by definition, while in push-broom geometry, these lines
+ *  might not be exactly parallel due to perturbations during
+ *  acquisition, especially when considering a large field of view.
+ * 
+ *  The purpose of stereo-rectification is to warp both images of the
+ *  pairs so that the displacement related to the elevation only
+ *  occurs in the horizontal direction (i.e. epipolar lines are
+ *  horizontal). This operation is useful for mainly two reasons: it
+ *  allows to search for disparities in one direction only, and it
+ *  allows to derives anaglyph for 3D viewing with 3D glasses.
+ * 
+ *  This filter allows you to compute the deformation fields up to the
+ *  sensor model precision needed to warp a pair of stereo images into
+ *  epipolar geometry. Warping can be done using the
+ *  otb::StreamingWarpImageFilter.
+ * 
+ *  Since lines might not be perfectly regular, the algorithm
+ *  performed by this filter uses the otb::GenericRSTransform
+ *  capabilities to compute the local epipolar lines, and iteratively
+ *  build a resampling grid by propagating along these locally
+ *  estimated lines.
+ * 
+ *  Epipolar images will have a null origin and a size as given by the
+ *  GetRectifiedImageSize() method. The deformation fields and size
+ *  are derived to produce epipolar images covering the whole extent
+ *  of the left image.
+ *
+ *  The SetAverageElevation() method allows you to set the elevation
+ *  hypothesis on which the epipolar geometry is built. It means that
+ *  any pair of pixels in the stereo pair whose elevation is exactly
+ *  equal to the average elevation will have a null disparity (no
+ *  displacement). The SetElevationOffset() method allows to tune the
+ *  elevation offset which is only used for local epipolar lines
+ *  estimation. The default value of 50 meters should do.
+ * 
+ *  Additionnaly, the SetScale() method allows to derive deformation
+ *  fields and images size at a coarser (scale > 1) or finer (scale <
+ *  1) resolution. The SetGridStep() allows to tune the step of the
+ *  resampling grid. Please keep in mind that the whole grid is loaded
+ *  into memory, and that the epipolar lines direction may only vary
+ *  smoothly. When working with large images, a coarse grid-step will
+ *  generally be accurate enough and will preserve the memory ressources.
+ *
+ *  \sa StreamingWarpImageFilter
+ *  \sa StereoSensorModelToElevationMapFilter
  */
 template <class TInputImage, class TOutputImage >
 class ITK_EXPORT StereorectificationDeformationFieldSource
