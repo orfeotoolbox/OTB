@@ -428,14 +428,19 @@ ADD_TEST(feTuStereorectificationDeformationFieldSourceNew ${DISPARITYMAP_TESTS3}
 otbStereorectificationDeformationFieldSourceNew)
 
 ADD_TEST(feTvStereorectificationDeformationFieldSource ${DISPARITYMAP_TESTS3}
+--compare-n-images ${EPSILON_10} 2
+${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput1.tif
+${TEMP}/feTvStereorectificationDeformationFieldSourceOutput1.tif
+${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput2.tif
+${TEMP}/feTvStereorectificationDeformationFieldSourceOutput2.tif
 otbStereorectificationDeformationFieldSource
 ${INPUTDATA}/sensor_stereo_left.tif
 ${INPUTDATA}/sensor_stereo_right.tif
 ${TEMP}/feTvStereorectificationDeformationFieldSourceOutput1.tif
 ${TEMP}/feTvStereorectificationDeformationFieldSourceOutput2.tif
 300
-1
-1
+0.5
+5
 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
