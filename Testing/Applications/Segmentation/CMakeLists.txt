@@ -45,3 +45,14 @@ OTB_TEST_APPLICATION(NAME  apTvCcConnectedComponentSegmentatioNoMask
                      VALID   --compare-ogr ${NOTOL}
                              ${BASELINE_FILES}/apTvCcConnectedComponentSegmentationNoMask.shp
                              ${TEMP}/apTvCcConnectedComponentSegmentationNoMask.shp)                    		   
+
+#--- HooverCompareSegmentation ---#
+OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest
+                     APP      HooverCompareSegmentation
+                     OPTIONS  -ingt ${INPUTDATA}/maur_GT.tif
+                              -inms ${INPUTDATA}/maur_labelled.tif
+                     TESTENVOPTIONS ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
+                     VALID    --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvSeHooverCompareSegmentationTest.txt
+                	         ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
+                     )

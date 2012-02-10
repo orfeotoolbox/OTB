@@ -6,3 +6,7 @@ OTB_CREATE_APPLICATION(NAME           MeanShiftSegmentation
 OTB_CREATE_APPLICATION(NAME           ConnectedComponentSegmentation
                        SOURCES        otbConnectedComponentSegmentation.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           HooverCompareSegmentation
+                       SOURCES        otbHooverCompareSegmentation.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
