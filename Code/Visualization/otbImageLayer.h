@@ -203,6 +203,10 @@ public:
   }
 
   virtual LayerValueType GetValueAtIndex(const IndexType& index);
+  
+  itkSetMacro(ComputeHistoOnFullResolution, bool);
+  itkSetMacro(ComputeHistoOnZoomResolution, bool);
+  itkSetMacro(UpdateHisto, bool);
 
 protected:
   /** Constructor */
@@ -240,6 +244,9 @@ private:
   /** List sample used to compute the histogram by the rendering function*/
   ListSamplePointerType m_ListSample;
   bool                  m_ListSampleProvided; //To remember if the list sample was provided manually by the user
+  bool                  m_ComputeHistoOnFullResolution; //to compute histogram on full image, even if quicklook is available.
+  bool                  m_ComputeHistoOnZoomResolution; //to compute histogram on zoom image, even if quicklook is available.
+  bool                  m_UpdateHisto; //boolean to force histogram computation.
 
   /** Rendering function */
   RenderingFunctionPointerType m_RenderingFunction;

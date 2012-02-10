@@ -35,8 +35,9 @@ namespace otb
 
 template <class TImage, class TOutputImage>
 ImageLayer<TImage, TOutputImage>
-::ImageLayer() : m_Quicklook(), m_Image(), m_ListSample(), m_ListSampleProvided(false), m_RenderingFunction(),
-  m_QuicklookRenderingFilter(), m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
+::ImageLayer() : m_Quicklook(), m_Image(), m_ListSample(), m_ListSampleProvided(false),m_ComputeHistoOnFullResolution(false),
+  m_ComputeHistoOnZoomResolution(false), m_UpdateHisto(false), m_RenderingFunction(), m_QuicklookRenderingFilter(),
+  m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
   m_ExtractFilter(), m_ScaledExtractFilter()
 {
   // Rendering filters
@@ -113,7 +114,7 @@ ImageLayer<TImage, TOutputImage>
 //     this->UpdateListSample();
 //   }
 // Render quicklook
-
+  
   if (this->GetHasQuicklook())
     {
     itk::TimeProbe probe;
@@ -124,7 +125,6 @@ ImageLayer<TImage, TOutputImage>
       {
       m_QuicklookRenderingFilter->Modified();
       }
-
     m_QuicklookRenderingFilter->Update();
     this->SetRenderedQuicklook(m_QuicklookRenderingFilter->GetOutput());
     probe.Stop();
@@ -142,7 +142,6 @@ ImageLayer<TImage, TOutputImage>
       {
       m_ExtractRenderingFilter->Modified();
       }
-
     m_ExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetExtractRegion());
     m_ExtractRenderingFilter->Update();
     this->SetRenderedExtract(m_ExtractRenderingFilter->GetOutput());
@@ -179,6 +178,7 @@ ImageLayer<TImage, TOutputImage>
     {
     this->SetHasScaledExtract(false);
     }
+  
 }
 
 template <class TImage, class TOutputImage>
@@ -193,11 +193,18 @@ ImageLayer<TImage, TOutputImage>
     ImagePointerType histogramSource;
 
     // if there is a quicklook, use it for histogram generation
-    if (m_Quicklook.IsNotNull())
+    if (m_Quicklook.IsNotNull() && !m_ComputeHistoOnFullResolution && !m_ComputeHistoOnZoomResolution)
       {
       histogramSource = m_Quicklook;
       }
-    else
+    else if(m_ComputeHistoOnZoomResolution)
+      {
+      histogramSource = m_Image;
+      histogramSource->SetRequestedRegion(this->GetScaledExtractRegion());
+      //histogramSource->SetBufferedRegion(this->GetScaledExtractRegion());
+      //histogramSource->SetLargestPossibleRegion(this->GetScaledExtractRegion());
+      }
+      else
       {
       // Else use the full image (update the data)
       // REVIEW: Not sure the region is right here. Should be the
@@ -206,20 +213,24 @@ ImageLayer<TImage, TOutputImage>
       //
       histogramSource = m_Image;
       histogramSource->SetRequestedRegion(this->GetExtractRegion());
+      //histogramSource->SetBufferedRegion(this->GetExtractRegion());
+      //histogramSource->SetLargestPossibleRegion(this->GetExtractRegion());
       }
 
     // Check if we need to generate the histogram again
     if (m_ListSample.IsNull() || m_ListSample->Size() == 0 ||
-        (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()))
+        (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) || m_UpdateHisto)
       {
       otbMsgDevMacro(<< "ImageLayer::UpdateListSample():" << " (" << this->GetName() << ")"
                      << " Regenerating histogram due to pippeline update.");
-
+       
       // Update the histogram source
       histogramSource->Update();
 
+
       // Iterate on the image
-      itk::ImageRegionConstIterator<ImageType> it(histogramSource, histogramSource->GetBufferedRegion());
+      //itk::ImageRegionConstIterator<ImageType> it(histogramSource, histogramSource->GetBufferedRegion());
+      itk::ImageRegionConstIterator<ImageType> it(histogramSource, histogramSource->GetRequestedRegion());
 
       // declare a list to store the samples
       m_ListSample->Clear();
@@ -238,10 +249,13 @@ ImageLayer<TImage, TOutputImage>
         }
       otbMsgDevMacro(<< "ImageLayer::UpdateListSample()" << " (" << this->GetName() << ")"
                      << " Sample list generated (" << m_ListSample->Size() << " samples, " << sampleSize << " bands)");
-
+      
       m_RenderingFunction->SetListSample(m_ListSample);
       // Init the rendering function with the input metadata dictionary
       m_RenderingFunction->Initialize(m_Image->GetMetaDataDictionary());
+
+      //Set the flag to false cause histo was computed
+      m_UpdateHisto = false;
       }
     }
 }
