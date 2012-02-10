@@ -80,7 +80,7 @@ ImageRegionAdaptativeSplitter<VImageDimension>
   m_StreamVector.clear();
 
   // Handle trivial case
-  if(m_RequestedNumberOfSplits == 1)
+  if(m_RequestedNumberOfSplits == 1 || m_RequestedNumberOfSplits == 0)
     {
     m_StreamVector.push_back(m_ImageRegion);
     m_IsUpToDate = true;
