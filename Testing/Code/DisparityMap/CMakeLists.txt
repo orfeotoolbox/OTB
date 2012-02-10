@@ -427,6 +427,17 @@ ${INPUTDATA}/DEM/egm96.grd
 ADD_TEST(feTuStereorectificationDeformationFieldSourceNew ${DISPARITYMAP_TESTS3}
 otbStereorectificationDeformationFieldSourceNew)
 
+ADD_TEST(feTvStereorectificationDeformationFieldSource ${DISPARITYMAP_TESTS3}
+otbStereorectificationDeformationFieldSource
+${INPUTDATA}/sensor_stereo_left.tif
+${INPUTDATA}/sensor_stereo_right.tif
+${TEMP}/feTvStereorectificationDeformationFieldSourceOutput1.tif
+${TEMP}/feTvStereorectificationDeformationFieldSourceOutput2.tif
+300
+1
+1
+)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

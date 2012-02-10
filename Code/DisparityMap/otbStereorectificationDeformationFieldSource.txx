@@ -43,6 +43,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   this->SetNumberOfOutputs(2);
 
   // Create the 2nd input (not created by default)
+  this->SetNthOutput(0, OutputImageType::New());
   this->SetNthOutput(1, OutputImageType::New());
 
   // Build the RS Transforms
@@ -107,6 +108,8 @@ void
 StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
+  //Superclass::GenerateOutputInformation();
+
   // Ensure that both left image and right image are available
   if(m_LeftImage.IsNull() || m_RightImage.IsNull())
     {
@@ -119,7 +122,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // Retrieve the deformation field pointers
   OutputImageType * leftDFPtr = this->GetLeftDeformationFieldOutput();
-  OutputImageType * rightDFPtr = this->GetLeftDeformationFieldOutput();
+  OutputImageType * rightDFPtr = this->GetRightDeformationFieldOutput();
 
   // Set up  the RS transforms
   m_LeftToRightTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
@@ -233,7 +236,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // Update the information
   leftDFPtr->SetLargestPossibleRegion(outputLargestRegion);
   rightDFPtr->SetLargestPossibleRegion(outputLargestRegion);
-  
+
   leftDFPtr->SetSpacing(outputSpacing);
   rightDFPtr->SetSpacing(outputSpacing);
 }
@@ -241,11 +244,14 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
-::EnlargeOutputRequestedRegion(itk::DataObject *)
+::EnlargeOutputRequestedRegion(itk::DataObject * output)
 {
+  // Call superclass
+  Superclass::EnlargeOutputRequestedRegion(output);
+
   // Retrieve the deformation field pointers
   OutputImageType * leftDFPtr = this->GetLeftDeformationFieldOutput();
-  OutputImageType * rightDFPtr = this->GetLeftDeformationFieldOutput();
+  OutputImageType * rightDFPtr = this->GetRightDeformationFieldOutput();
 
   // Prevent from streaming
   leftDFPtr->SetRequestedRegionToLargestPossibleRegion();
@@ -257,6 +263,9 @@ void
 StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 ::GenerateData()
 {
+  // Allocate the output
+  this->AllocateOutputs();
+
   // Retrieve the output pointers
   OutputImageType * leftDFPtr = this->GetLeftDeformationFieldOutput();
   OutputImageType * rightDFPtr = this->GetLeftDeformationFieldOutput();
