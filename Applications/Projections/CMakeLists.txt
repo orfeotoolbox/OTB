@@ -30,3 +30,6 @@ OTB_CREATE_APPLICATION(NAME           ObtainUTMZoneFromGeoPoint
 OTB_CREATE_APPLICATION(NAME           ConvertSensorToGeoPoint
                        SOURCES        otbConvertSensorToGeoPoint.cxx
                        LINK_LIBRARIES OTBBasicFilters)
+OTB_CREATE_APPLICATION(NAME           GridBasedImageResampling
+                       SOURCES        otbGridBasedImageResampling.cxx
+                       LINK_LIBRARIES OTBBasicFilters)
