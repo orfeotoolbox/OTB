@@ -16,6 +16,9 @@ TARGET_LINK_LIBRARIES(RadiometricAttributesLabelMapFilterExample OTBCommon OTBIO
 ADD_EXECUTABLE(LabelMapToVectorData LabelMapToVectorData.cxx )
 TARGET_LINK_LIBRARIES(LabelMapToVectorData OTBCommon OTBIO OTBBasicFilters ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
+ADD_EXECUTABLE(HooverMetricsEstimation HooverMetricsEstimation.cxx )
+TARGET_LINK_LIBRARIES(HooverMetricsEstimation OTBCommon OTBIO OTBBasicFilters ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/OBIA)
