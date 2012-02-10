@@ -342,11 +342,11 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     endLine1 = m_RightToLeftTransform->TransformPoint(epiPoint2);
 
     // Estimate the local baseline ratio
-    double localBaselineRatio = ((endLine1[0] - startLine1[0])
-                              *  (endLine1[0] - startLine1[0])
-                              +  (endLine1[1] - startLine1[1])
-                              *  (endLine1[1] - startLine1[1]))
-                              /  2*m_AverageElevation;
+    double localBaselineRatio = 2*m_ElevationOffset 
+                                / vcl_sqrt((endLine1[0] - startLine1[0])
+                                *  (endLine1[0] - startLine1[0])
+                                +  (endLine1[1] - startLine1[1])
+                                *  (endLine1[1] - startLine1[1]));
 
     m_MeanBaselineRatio+=localBaselineRatio;
     
