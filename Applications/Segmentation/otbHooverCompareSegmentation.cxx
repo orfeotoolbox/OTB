@@ -63,7 +63,7 @@ public:
     
     typename TInput::ValueType max = 0.0;
     unsigned int index=0;
-    for (unsigned int i=0 ; i<m_ScoreColors.size() ; i++)
+    for (unsigned int i=0; i<m_ScoreColors.size(); i++)
       {
       if (A[i] > max)
         {
@@ -123,8 +123,8 @@ public:
   typedef otb::LabelMapToAttributeImageFilter
       <LabelMapType, FloatVectorImageType>          AttributeImageFilterType;
   typedef otb::UnaryFunctorImageFilter
-      <FloatVectorImageType, 
-       Int16VectorImageType, 
+      <FloatVectorImageType,
+       Int16VectorImageType,
        Functor::HooverColorMapping
         <FloatPixelType, Int16PixelType> >          HooverColorFilterType;
 

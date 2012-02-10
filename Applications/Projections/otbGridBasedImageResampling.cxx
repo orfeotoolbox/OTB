@@ -54,7 +54,7 @@ public:
   typedef otb::Image<DeformationType>   DeformationFieldType;
 
   typedef itk::VectorCastImageFilter
-  <FloatVectorImageType, 
+  <FloatVectorImageType,
    DeformationFieldType>                DeformationFieldCastFilterType;
   
 
@@ -64,7 +64,7 @@ public:
    DeformationFieldType>                WarpFilterType;
   typedef otb::MultiToMonoChannelExtractROI
   <FloatVectorImageType::InternalPixelType,
-   FloatVectorImageType::InternalPixelType> 
+   FloatVectorImageType::InternalPixelType>
                                         ExtractFilterType;
 
   typedef otb::BandMathImageFilter

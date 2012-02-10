@@ -53,7 +53,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 const typename StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
-::OutputImageType * 
+::OutputImageType *
 StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 ::GetLeftDeformationFieldOutput() const
 {
@@ -66,7 +66,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 typename StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
-::OutputImageType * 
+::OutputImageType *
 StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 ::GetLeftDeformationFieldOutput()
 {
@@ -79,7 +79,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 const typename StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
-::OutputImageType * 
+::OutputImageType *
 StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 ::GetRightDeformationFieldOutput() const
 {
@@ -92,7 +92,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 typename StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
-::OutputImageType * 
+::OutputImageType *
 StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 ::GetRightDeformationFieldOutput()
 {
@@ -169,7 +169,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // (do not forget that the y axis is flip in our case)
   // TODO: Add some division by zero check here (but this would only
   // happen in case the images are almost epipolar already)
-  double a = (leftEpiLineEnd[1] - leftEpiLineStart[1]) 
+  double a = (leftEpiLineEnd[1] - leftEpiLineStart[1])
            / (leftEpiLineEnd[0] - leftEpiLineStart[0]);
   double b = leftEpiLineStart[1] - a * leftEpiLineStart[0];
 
@@ -194,9 +194,9 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   double ury = vx * m_LeftImage->GetLargestPossibleRegion().GetSize()[0];
   double llx = uy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1];
   double lly = vy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1];
-  double lrx = ux * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] 
+  double lrx = ux * m_LeftImage->GetLargestPossibleRegion().GetSize()[0]
              + uy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1];
-  double lry = vx * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] 
+  double lry = vx * m_LeftImage->GetLargestPossibleRegion().GetSize()[0]
              + vy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1];
 
   // Bounding box (this time we do not omit ulx)
@@ -342,7 +342,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     endLine1 = m_RightToLeftTransform->TransformPoint(epiPoint2);
 
     // Estimate the local baseline ratio
-    double localBaselineRatio = 2*m_ElevationOffset 
+    double localBaselineRatio = 2*m_ElevationOffset
                                 / vcl_sqrt((endLine1[0] - startLine1[0])
                                 *  (endLine1[0] - startLine1[0])
                                 +  (endLine1[1] - startLine1[1])
@@ -393,7 +393,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // And we compute the equivalent displacement in right image
     endLine2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
     
-    double iscale = vcl_sqrt((endLine2[0]-startLine2[0])*(endLine2[0]-startLine2[0]) 
+    double iscale = vcl_sqrt((endLine2[0]-startLine2[0])*(endLine2[0]-startLine2[0])
                              +
                              (endLine2[1]-startLine2[1])*(endLine2[1]-startLine2[1]));
 

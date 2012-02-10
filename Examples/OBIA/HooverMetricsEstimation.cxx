@@ -29,27 +29,27 @@
 //
 // The following example shows how to compare two segmentations, using Hoover
 // metrics. For instance, it can be used to compare a segmentation produced
-// by your algorithm against a partial ground truth segmentation. In this 
+// by your algorithm against a partial ground truth segmentation. In this
 // example, the ground truth segmentation will be refered by the letters GT
 // whereas the machine segmentation will be refered by MS.
 //
-// The estimation of Hoover metrics is done with two filters : 
+// The estimation of Hoover metrics is done with two filters :
 // \doxygen{otb}{HooverMatrixFilter} and \doxygen{otb}{HooverInstanceFilter}.
 // The first one produces a matrix containing the number of overlapping pixels
 // between MS regions and GT regions. The second one classifies each region among
 // four types (called Hoover instances):
 // \begin{itemize}
-// \item Correct detection : a region is matched with an other one in the 
+// \item Correct detection : a region is matched with an other one in the
 // opposite segmentation, because they cover nearly the same area.
-// \item Over-segmentation : a GT region is matched with a group of MS 
+// \item Over-segmentation : a GT region is matched with a group of MS
 // regions because they cover nearly the same area.
 // \item Under-segmentation : a MS region is matched with a group of GT
 // regions because they cover nearly the same area.
-// \item Missed detection (for GT regions) or Noise (for MS region) : 
+// \item Missed detection (for GT regions) or Noise (for MS region) :
 // un-matched regions.
 // \end{itemize}
 // Note that a region can be tagged with two types. When the Hoover instance
-// have been found, the instance filter computes overall scores for each 
+// have been found, the instance filter computes overall scores for each
 // category : they are the Hoover metrics \footnote{see http://www.trop.mips.uha.fr/pdf/ORASIS-2009.pdf}.
 //
 // Software Guide : EndLatex
@@ -80,11 +80,11 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   // The filters \doxygen{otb}{HooverMatrixFilter} and \doxygen{otb}{HooverInstanceFilter}
   // are designed to handle \doxygen{itk}{LabelMap} images. This is a useful data structure
-  // to represent labelled images. A label map is a set of label objects. Each label object 
-  // stands for a region with a unique label value. The extent of the region is coded as a 
-  // set of line segments, run-length encoded. 
+  // to represent labelled images. A label map is a set of label objects. Each label object
+  // stands for a region with a unique label value. The extent of the region is coded as a
+  // set of line segments, run-length encoded.
   // To be able to add information to these label objects, we use \doxygen{otb}{AttributesMapLabelObject}.
-  // Each region can store a set of attributes. In this case, Hoover instances and metrics 
+  // Each region can store a set of attributes. In this case, Hoover instances and metrics
   // will be stored in these attributes.
   // Software Guide : EndLatex
 
@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   // The first step is to convert the images from the classical "pixel array" representation
   // to label map: we use \doxygen{itk}{LabelImageToLabelMapFilter}. The background value sets
-  // the label value of regions considered as background: there is no label object for the 
+  // the label value of regions considered as background: there is no label object for the
   // background region.
   // Software Guide : EndLatex
   
@@ -142,11 +142,11 @@ int main(int argc, char* argv[])
   
   // Software Guide : BeginLatex
   // The instance filter computes the Hoover metrics for each region. These metrics
-  // are stored as attributes in each label object. The threshold parameter 
+  // are stored as attributes in each label object. The threshold parameter
   // corresponds to the overlapping ratio above which two regions can be matched.
   // The extended attributes can be used if the user want to keep a trace of the
-  // associations between MS and GT regions : i.e. if a GT region has been matched 
-  // as a correct detection, it will carry an attribute containing the label value 
+  // associations between MS and GT regions : i.e. if a GT region has been matched
+  // as a correct detection, it will carry an attribute containing the label value
   // of the associated MS region (the same principle goes for other types of instance).
   // Software Guide : EndLatex
   
@@ -181,7 +181,7 @@ int main(int argc, char* argv[])
   
   // Software Guide : BeginLatex
   // The output image contains for each GT region its correct detection score ("RC", band 1),
-  // its over-segmentation score ("RF", band 2), its under-segmentation score ("RA", band 3) 
+  // its over-segmentation score ("RF", band 2), its under-segmentation score ("RA", band 3)
   // and its missed detection score ("RM", band 4).
   // Software Guide : EndLatex
   
@@ -194,7 +194,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
-  // The Hoover scores are also computed for the whole segmentations. Here is some explanation about the score names : 
+  // The Hoover scores are also computed for the whole segmentations. Here is some explanation about the score names :
   // C = correct, F = fragmentation, A = aggregation, M = missed, N = noise.
   // Software Guide : EndLatex
   
