@@ -767,4 +767,55 @@ void ossimGeometricSarSensorModel::lineSampleToWorld(const ossimDpt& image_point
    return;
 }
 
+
+void ossimGeometricSarSensorModel::set_platformPosition(PlatformPosition* platformPosition)
+{
+   if(_platformPosition != 0)
+   {
+      delete _platformPosition;
+      _platformPosition = 0;
+   }
+   _platformPosition = platformPosition->Clone();
+}
+
+void ossimGeometricSarSensorModel::set_sensorParams(SensorParams* sensorParams)
+{
+   if(_sensorParams != 0)
+   {
+      delete _sensorParams;
+      _sensorParams = 0;
+   }
+   _sensorParams = sensorParams->Clone();
+}
+
+void ossimGeometricSarSensorModel::set_refPoint(RefPoint* refPoint)
+{
+   if(_refPoint != 0)
+   {
+      delete _refPoint;
+      _refPoint = 0;
+   }
+   _refPoint = refPoint->Clone();
+}
+
+
+PlatformPosition* ossimGeometricSarSensorModel::get_platformPosition()
+{
+	return _platformPosition;
+}
+
+
+SensorParams* ossimGeometricSarSensorModel::get_sensorParams()
+{
+	return _sensorParams;
+}
+
+
+RefPoint* ossimGeometricSarSensorModel::get_refPoint()
+{
+	return _refPoint;
+}
+
+
+
 }

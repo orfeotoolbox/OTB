@@ -165,6 +165,16 @@ public:
    virtual void lineSampleToWorld(const ossimDpt& image_point,
                                   ossimGpt&       gpt) const;
 
+   /**
+    * @brief Accessors to the plateform, sensor parameters and reference point.
+    */
+   void set_platformPosition(PlatformPosition* platformPosition);
+   void set_sensorParams(SensorParams* sensorParams);
+   void set_refPoint(RefPoint* refPoint);
+   PlatformPosition* get_platformPosition() const;
+   SensorParams* get_sensorParams() const;
+   RefPoint* get_refPoint()  const;
+
 protected:
    /**
     * @brief Creates replacement coarse grid model if user requested via ossim preferences 
