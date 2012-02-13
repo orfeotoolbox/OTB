@@ -167,6 +167,14 @@ SetParameterDescription("grid.type.def","A deformation grid contains at each gri
     SetParameterString("interpolator","bco");
 
     AddRAMParameter();
+
+    // Doc example
+    SetDocExampleParameterValue("io.in","ROI_IKO_PAN_LesHalles_sub.tif");
+    SetDocExampleParameterValue("io.out","ROI_IKO_PAN_LesHalles_sub_resampled.tif uint8");
+    SetDocExampleParameterValue("grid.in","ROI_IKO_PAN_LesHalles_sub_deformation_field.tif");
+    SetDocExampleParameterValue("out.sizex","256");
+    SetDocExampleParameterValue("out.sizey","256");
+    SetDocExampleParameterValue("grid.type","def");
   }
 
  void DoUpdateParameters()
