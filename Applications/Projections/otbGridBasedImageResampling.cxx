@@ -167,9 +167,7 @@ SetParameterDescription("grid.type.def","A deformation grid contains at each gri
     SetParameterString("interpolator","bco");
 
     // RAM available
-    AddParameter(ParameterType_RAM, "ram", "Available memory for processing (in MB)");
-    SetParameterDescription("ram","This allows to set the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
-    SetDefaultParameterInt("ram", 256);
+    AddRAMParameter();
     MandatoryOff("ram");
   }
 
