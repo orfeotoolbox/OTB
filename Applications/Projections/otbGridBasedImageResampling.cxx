@@ -127,20 +127,21 @@ private:
     SetParameterDescription("grid.in","The resampling grid");
     AddParameter(ParameterType_Choice,   "grid.type", "Grid Type");
     SetParameterDescription("grid.type","Allows to choose between two grid types");
+    AddChoice("grid.type.def","Deformation  grid: G(x_out,y_out) = (x_in-x_out, y_in-y_out)");
+    SetParameterDescription("grid.type.def","A deformation grid contains at each grid position the offset to apply to this position in order to get to the corresponding point in the input image to resample");
     AddChoice("grid.type.loc","Localisation grid: G(x_out,y_out) = (x_in, y_in)");
     SetParameterDescription("grid.type.loc","A localisation grid contains at each grid position the corresponding position in the input image to resample");
-    AddChoice("grid.type.def","Deformation  grid: G(x_out,y_out) = (x_in-x_out, y_in-y_out)");
-SetParameterDescription("grid.type.def","A deformation grid contains at each grid position the offset to apply to this position in order to get to the corresponding point in the input image to resample");
+
     
     AddParameter(ParameterType_Group, "out", "Output Image parameters");
     SetParameterDescription("out","Parameters of the output image");
     
     AddParameter(ParameterType_Float, "out.ulx", "Upper Left X");
     SetParameterDescription("out.ulx","X Coordinate of the upper-left pixel of the output resampled image");
-    SetParameterFloat("out.ulx",0);
+    SetDefaultParameterFloat("out.ulx",0);
     AddParameter(ParameterType_Float, "out.uly", "Upper Left Y");
     SetParameterDescription("out.uly","Y Coordinate of the upper-left pixel of the output resampled image");
-    SetParameterFloat("out.uly",0);
+    SetDefaultParameterFloat("out.uly",0);
 
     AddParameter(ParameterType_Int, "out.sizex", "Size X");
     SetParameterDescription("out.sizex","Size of the output resampled image along X (in pixels)");
@@ -148,10 +149,10 @@ SetParameterDescription("grid.type.def","A deformation grid contains at each gri
     SetParameterDescription("out.sizey","Size of the output resampled image along Y (in pixels)");
     AddParameter(ParameterType_Float, "out.spacingx", "Pixel Size X");
     SetParameterDescription("out.spacingx","Size of each pixel along X axis");
-    SetParameterFloat("out.spacingx",1.);
+    SetDefaultParameterFloat("out.spacingx",1.);
     AddParameter(ParameterType_Float, "out.spacingy", "Pixel Size Y");
     SetParameterDescription("out.spacingy","Size of each pixel along Y axis");
-    SetParameterFloat("out.spacingy",1.);
+    SetDefaultParameterFloat("out.spacingy",1.);
     
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
