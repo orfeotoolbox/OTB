@@ -44,6 +44,8 @@ extern "C"
 
 #include "itksys/SystemTools.hxx"
 
+#include "tinyxml.h"
+
 
 /**
 Divide an integer by a power of 2 and round upwards
@@ -159,6 +161,9 @@ public:
       return NULL;
   };
 
+  // Get the origin from GML box (use tinyxml to parse the GML box)
+  bool GetOriginFromGMLBox (std::vector<double> &origin);
+
   /** Check if the file has been correctly read*/
   bool m_MetadataIsRead;
 
@@ -167,6 +172,55 @@ private:
   GDALJP2Metadata m_JP2Metadata;
 
 };
+
+bool JPEG2000MetadataReader::GetOriginFromGMLBox (std::vector<double> &origin)
+{
+  if (!m_MetadataIsRead)
+    return false;
+
+  std::string gmlString = static_cast<std::string> (m_JP2Metadata.papszGMLMetadata[0]);
+  gmlString.erase(0,18); // We need to remove first part to create a true xml stream
+  otbMsgDevMacro( << "XML extract from GML box: " << gmlString );
+
+  TiXmlDocument doc;
+  doc.Parse(gmlString.c_str()); // Create xml doc from a string
+
+  TiXmlHandle docHandle( &doc );
+  TiXmlElement* originTag = docHandle.FirstChild( "gml:FeatureCollection" )
+                                     .FirstChild( "gml:featureMember" )
+                                     .FirstChild( "gml:FeatureCollection" )
+                                     .FirstChild( "gml:featureMember" )
+                                     .FirstChild( "gml:GridCoverage" )
+                                     .FirstChild( "gml:gridDomain")
+                                     .FirstChild( "gml:Grid" )
+                                     .FirstChild( "gml:limits" )
+                                     .FirstChild( "gml:GridEnvelope" )
+                                     .FirstChild( "gml:low").ToElement();
+  if(originTag)
+    {
+    otbMsgDevMacro( << "\t Origin (" <<  originTag->Value() <<" tag)= "<<  originTag->GetText());
+    }
+  else
+    {
+    otbMsgDevMacro( << "Didn't find the GML element which indicate the origin!" );
+    return false;
+    }
+
+  std::vector<itksys::String> originValues;
+  originValues = itksys::SystemTools::SplitString(originTag->GetText(),' ', false);
+
+  std::istringstream ss0 (originValues[0]);
+  std::istringstream ss1 (originValues[1]);
+  ss0 >> origin[1];
+  ss1 >> origin[0];
+  origin[0]--;
+  origin[1]--;
+
+  otbMsgDevMacro( << "\t Origin from GML box: " <<  origin[0] << ", " << origin[1] );
+
+  return true;
+}
+
 
 /************************************************************************/
 /*            JPEG2000 internal reader based on openjpeg                */
@@ -1134,13 +1188,14 @@ void JPEG2000ImageIO::ReadImageInformation()
 
       itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, geoTransform);
 
-      /*for (int i = 0; i < 6 ; i++)
+      /*std::cout << "from gml box, geotransform: " ;
+      for (int i = 0; i < 6 ; i++)
         {
         std::cout << geoTransform[i] << ", ";
         }
       std::cout << std::endl;*/
 
-      // retrieve origin and spacing from the geo transform ????
+      // Retrieve origin and spacing from the geo transform
       m_Origin[0] = geoTransform[0];
       m_Origin[1] = geoTransform[3];
       m_Spacing[0] = geoTransform[1];
@@ -1148,7 +1203,7 @@ void JPEG2000ImageIO::ReadImageInformation()
 
       if ( m_Spacing[0]== 0 || m_Spacing[1] == 0)
         {
-        //otbMsgDevMacro(<< "JPEG2000 file has a geotransform but with weird elements !!!");
+        // Manage case where axis are not standard
         if (geoTransform[2] != 0  && geoTransform[4] != 0 )
           {
           m_Spacing[0] = geoTransform[2];
@@ -1161,12 +1216,7 @@ void JPEG2000ImageIO::ReadImageInformation()
           m_Spacing[1] = 1;
           }
         }
-
       }
-    std::cout << "Origin: " << m_Origin[0] << ", " << m_Origin[1]
-              << "Spacing: " << m_Spacing[0] << ", " << m_Spacing[1] << std::endl;
-
-
 
     /* GCPs */
     if (lJP2MetadataReader.GetGCPCount() > 0)
@@ -1218,22 +1268,7 @@ void JPEG2000ImageIO::ReadImageInformation()
         key = lStream.str();
         
         itk::EncapsulateMetaData<std::string>(dict, key, static_cast<std::string> (papszGMLMetadata[cpt]));
-        std::cout << static_cast<std::string> (papszGMLMetadata[cpt]) << std::endl;
-
-        std::string lineGML = static_cast<std::string> (papszGMLMetadata[cpt]);
-        // TODO MSD: IMPROVE this condition -> sensor model ~ Check if we have axis = row, col
-        const char* findRowString = itksys::SystemTools::FindLastString(lineGML.c_str(),"<gml:axisName>row</gml:axisName>");
-        const char* findColString = itksys::SystemTools::FindLastString(lineGML.c_str(),"<gml:axisName>col</gml:axisName>");
-
-        if (findRowString && findColString)
-          {
-          std::cout << "SENSOR MODEL" << std::endl;
-          m_Origin[0] = 0; m_Origin[1] = 0;
-          m_Spacing[0] = 1; m_Spacing[1] = 1;
-          }
-        else
-          std::cout << "NOT SENSOR MODEL" << std::endl;
-
+        otbMsgDevMacro( static_cast<std::string> (papszGMLMetadata[cpt]));
         }
       }
 
@@ -1267,19 +1302,19 @@ void JPEG2000ImageIO::ReadImageInformation()
         OSRRelease(pSR);
         pSR = NULL;
         }
-      std::string toto;
-      itk::ExposeMetaData<std::string>(this->GetMetaDataDictionary(),
-                                        MetaDataKey::ProjectionRefKey,
-                                        toto);
-
-      std::cout << "PROJECTION: " << toto << std::endl;
-
       }
     else
       {
-      std::cout << "NO PROJECTION: " << std::endl;
+      otbMsgDevMacro( << "NO PROJECTION IN GML BOX => SENSOR MODEL " );
+      m_Origin[0] = 0; m_Origin[1] = 0;
+      m_Spacing[0] = 1; m_Spacing[1] = 1;
+
+      lJP2MetadataReader.GetOriginFromGMLBox(m_Origin);
       }
-    //dict.Print(std::cout);
+
+    otbMsgDevMacro(<< "FROM GML box: " << "Origin: " << m_Origin[0] << ", " << m_Origin[1]
+                   << " | Spacing: " << m_Spacing[0] << ", " << m_Spacing[1] );
+
     }
   else
     {

@@ -301,9 +301,9 @@ ossimPleiadesModel::open(const ossimFilename& file)
     ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exit status = " << (result ? "true" : "false\n") << std::endl;
     }
 
-  std::cout << "---------------------------" << std::endl;
+  /*std::cout << "---------------------------" << std::endl;
   print(std::cout);
-  std::cout << "---------------------------" << std::endl;
+  std::cout << "---------------------------" << std::endl;*/
   return result;
 }
 
