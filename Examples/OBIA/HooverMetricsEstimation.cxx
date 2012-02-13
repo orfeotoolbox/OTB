@@ -79,13 +79,9 @@ int main(int argc, char* argv[])
   
   // Software Guide : BeginLatex
   // The filters \doxygen{otb}{HooverMatrixFilter} and \doxygen{otb}{HooverInstanceFilter}
-  // are designed to handle \doxygen{itk}{LabelMap} images. This is a useful data structure
-  // to represent labelled images. A label map is a set of label objects. Each label object
-  // stands for a region with a unique label value. The extent of the region is coded as a
-  // set of line segments, run-length encoded.
-  // To be able to add information to these label objects, we use \doxygen{otb}{AttributesMapLabelObject}.
-  // Each region can store a set of attributes. In this case, Hoover instances and metrics
-  // will be stored in these attributes.
+  // are designed to handle \doxygen{itk}{LabelMap} images, made with \doxygen{otb}{AttributesMapLabelObject}.
+  // This type of label object allows to store generic attributes. Each region can store 
+  // a set of attributes: in this case, Hoover instances and metrics will be stored.
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
@@ -112,8 +108,8 @@ int main(int argc, char* argv[])
   ms_reader->SetFileName(argv[2]);
   
   // Software Guide : BeginLatex
-  // The first step is to convert the images from the classical "pixel array" representation
-  // to label map: we use \doxygen{itk}{LabelImageToLabelMapFilter}. The background value sets
+  // The first step is to convert the images to label maps : we use 
+  // \doxygen{itk}{LabelImageToLabelMapFilter}. The background value sets
   // the label value of regions considered as background: there is no label object for the
   // background region.
   // Software Guide : EndLatex
@@ -144,7 +140,7 @@ int main(int argc, char* argv[])
   // The instance filter computes the Hoover metrics for each region. These metrics
   // are stored as attributes in each label object. The threshold parameter
   // corresponds to the overlapping ratio above which two regions can be matched.
-  // The extended attributes can be used if the user want to keep a trace of the
+  // The extended attributes can be used if the user wants to keep a trace of the
   // associations between MS and GT regions : i.e. if a GT region has been matched
   // as a correct detection, it will carry an attribute containing the label value
   // of the associated MS region (the same principle goes for other types of instance).
