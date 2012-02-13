@@ -29,7 +29,6 @@ namespace Wrapper
 DocExampleStructure::DocExampleStructure() : m_ParameterList(), m_ApplicationName(""), m_ExampleCommentList(), m_NbOfExamples(1)
 {
   m_ExampleCommentList.push_back("");
-  m_ParameterList.push_back(ParametersVectorType());
 }
 
 DocExampleStructure::~DocExampleStructure()
@@ -39,8 +38,14 @@ DocExampleStructure::~DocExampleStructure()
 void
 DocExampleStructure::AddParameter( const std::string key, const std::string value, unsigned int exId)
 {
+  if( m_ParameterList.size() < exId+1 )
+    {
+    while( m_ParameterList.size()<exId+1)
+      {
+      m_ParameterList.push_back(ParametersVectorType());
+      }
+    }
   
-
   m_ParameterList.at(exId).push_back(std::make_pair(key, value));
 }
 
