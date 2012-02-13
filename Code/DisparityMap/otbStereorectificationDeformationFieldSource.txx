@@ -21,6 +21,9 @@
 #include "otbStereorectificationDeformationFieldSource.h"
 #include "itkProgressReporter.h"
 
+// For partial specialization
+#include "otbVectorImage.h"
+
 namespace otb
 {
 
@@ -231,6 +234,9 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   leftDFPtr->SetSpacing(outputSpacing);
   rightDFPtr->SetSpacing(outputSpacing);
+
+  leftDFPtr->SetNumberOfComponentsPerPixel(2);
+  rightDFPtr->SetNumberOfComponentsPerPixel(2);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -303,7 +309,8 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
       }
 
     // 2 - Next, we will fill the deformation fields
-    typename OutputImageType::PixelType dFValue1, dFValue2;
+    typename OutputImageType::PixelType dFValue1 = it1.Get();
+    typename OutputImageType::PixelType dFValue2 = it2.Get();
     
     // We must cast iterators position to physical space
     PointType currentDFPoint1, currentDFPoint2;
