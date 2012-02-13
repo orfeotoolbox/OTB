@@ -189,16 +189,17 @@ void DoExecute()
 
       // In case of localisation grid, we must internally convert to
       // deformation grid, which is the only type handled by StreamingWarpImageFilter
-      if(GetParameterString("grid.type") == "loc")
+      if(GetParameterInt("grid.type") == 0)
         {
+        GetLogger()->Info("Grid intepreted as a location grid.");
         m_ExtractX->SetInput(inGrid);
         m_ExtractX->SetChannel(1);
-        m_BandMathX->SetInput(m_ExtractX->GetOutput());
-        m_BandMathX->SetExpression("im1b1+idxPhyX");
+        m_BandMathX->SetNthInput(0,m_ExtractX->GetOutput(),"locX");
+        m_BandMathX->SetExpression("locX-idxPhyX");
         m_ExtractY->SetInput(inGrid);
         m_ExtractY->SetChannel(1);
-        m_BandMathY->SetInput(m_ExtractY->GetOutput());
-        m_BandMathY->SetExpression("im1b1+idxPhyY");
+        m_BandMathY->SetNthInput(0,m_ExtractY->GetOutput(),"locY");
+        m_BandMathY->SetExpression("locY-idxPhyY");
         m_VectorCastX->SetInput(m_BandMathX->GetOutput());
         m_Concatenate->SetInput1(m_VectorCastX->GetOutput());
         m_VectorCastY->SetInput(m_BandMathY->GetOutput());
@@ -207,6 +208,7 @@ void DoExecute()
         }
       else
         {
+        GetLogger()->Info("Grid intepreted as a deformation grid.");
         m_DeformationFieldCaster->SetInput(inGrid);
         }
 
