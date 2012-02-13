@@ -454,6 +454,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           {
           m_Application->SetParameterString(paramKey, values[0]);
           }
+        //if( type == ParameterType_Filename )
+        //m_Parser->GetAttributAsString(std::string("-").append(paramKey), m_Expression)
         else
           if (type == ParameterType_Empty)
             {
@@ -580,7 +582,8 @@ void CommandLineLauncher::DisplayHelp()
   std::cerr << "NAME: " << m_Application->GetName() << std::endl;
   std::cerr << "DESCRIPTION: " << m_Application->GetDescription() << std::endl;
   std::string cl = m_Application->GetCLExample();
-  if( cl != "" )
+  std::cout<<cl.size()<<std::endl;
+  if( !cl.empty() )
     {
     std::cerr << "EXAMPLE OF USE: " << std::endl;
     std::cerr << m_Application->GetCLExample() << std::endl;

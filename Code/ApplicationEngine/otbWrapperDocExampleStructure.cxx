@@ -123,10 +123,12 @@ DocExampleStructure::AddExample( const std::string & comm )
 std::string
 DocExampleStructure::GenerateCLExample( unsigned int exId )
 {
-  if( m_ApplicationName.empty() || m_ParameterList.at(exId).empty() )
+  if( m_ApplicationName.empty() || m_ParameterList.size() == 0 )
     {
     return "";
     }
+  else if ( m_ParameterList.at(exId).empty() )
+    return "";
   
   std::ostringstream oss;
   oss << "otbcli_" << m_ApplicationName << " ";
