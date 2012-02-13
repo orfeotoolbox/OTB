@@ -34,8 +34,6 @@
 
 #include "otbMacro.h"
 
-#include "otbWrapperRAMParameter.h"
-
 namespace otb
 {
 
@@ -182,10 +180,8 @@ private:
     MandatoryOff("opt.rpc");
 
     // RAM available
-    AddParameter(ParameterType_RAM, "opt.ram", "Available memory for processing (in MB)");
+    AddRAMParameter("opt.ram");
     SetParameterDescription("opt.ram","This allows to set the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
-    SetDefaultParameterInt("opt.ram", 256);
-    MandatoryOff("opt.ram");
 
     // Deformation Field Spacing
     AddParameter(ParameterType_Float, "opt.gridspacing", "Resampling grid spacing");

@@ -89,9 +89,7 @@ private:
     SetParameterDescription( "out", "Output image containing class labels");
     SetParameterOutputImagePixelType( "out", ImagePixelType_uint8);
 
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+    AddRAMParameter();
 
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");

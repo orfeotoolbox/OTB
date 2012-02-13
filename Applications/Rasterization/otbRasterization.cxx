@@ -116,9 +116,7 @@ private:
     SetParameterDescription( "spy", "OutputSpacing[1] (useless if support image is given)" );
     MandatoryOff("spy");
     
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+    AddRAMParameter();
     
     SetDocExampleParameterValue("in","qb_RoadExtract_classification.shp");
     SetDocExampleParameterValue("out", "rasterImage.tif");

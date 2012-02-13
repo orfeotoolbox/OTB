@@ -612,7 +612,7 @@ protected:
   void AddRAMParameter(std::string paramKey, std::string paramName, unsigned int defaultValue);
 
   /** Add a parameterRAM method with no parameter*/
-  void AddRAMParameter();
+  void AddRAMParameter(std::string paramKey="ram");
 
   /** Remove the items added to the ListWidget */
   void ClearChoices(std::string key);

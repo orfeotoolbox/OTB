@@ -95,9 +95,8 @@ private:
     SetParameterDescription("in2","Image which describe scene after perturbations.");
     AddParameter(ParameterType_OutputImage, "out", "Change Map");
     SetParameterDescription("out","Image of detected changes.");
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in1", "Spot5-Gloucester-before.tif");

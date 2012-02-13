@@ -79,9 +79,7 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "The concatenated output image");
     
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+    AddRAMParameter();
  
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "GomaAvant.png GomaApres.png");

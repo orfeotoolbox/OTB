@@ -68,9 +68,7 @@ private:
     SetParameterDescription("out",
                             "Output filename that will be used to get the prefix and the extension of the output images to write");
 
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+    AddRAMParameter();
 
   // Doc example parameter settings
     SetDocExampleParameterValue("in", "VegetationIndex.hd");

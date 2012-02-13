@@ -95,9 +95,7 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output");
     SetParameterDescription("out","Output calibrated image filename");
 
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+    AddRAMParameter();
 
     AddParameter(ParameterType_Choice,   "level", "Calibration Level");
     AddChoice("level.toa",     "TOA : Top Of Atmosphere");

@@ -100,9 +100,7 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "Radiometric indices output image");
 
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+    AddRAMParameter();
 
     AddParameter(ParameterType_Group, "channels", "Channels selection");
     SetParameterDescription("channels", "Channels selection");

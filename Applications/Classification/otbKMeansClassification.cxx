@@ -186,9 +186,9 @@ private:
     SetParameterDescription("in", "Input image to classify.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "Output image containing the class indexes.");
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+
+    AddRAMParameter();
+
     AddParameter(ParameterType_InputImage, "vm", "Validity Mask");
     SetParameterDescription("vm", "Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
     MandatoryOff("vm");

@@ -72,10 +72,6 @@ private:
     MandatoryOff("lout");
     MandatoryOff("cbout");
 
-   // AddParameter(ParameterType_RAM, "ram", "Available RAM");
-   //  SetDefaultParameterInt("ram", 256);
-   //   MandatoryOff("ram");
-
     AddParameter(ParameterType_Int,          "spatialr",   "Spatial radius");
     SetParameterDescription( "spatialr", "Spatial radius defining neighborhood." );
     AddParameter(ParameterType_Float,        "ranger",   "Range radius");

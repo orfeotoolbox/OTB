@@ -66,7 +66,6 @@ private:
     SetParameterDescription( "out" , "The rescaled image filename." );
 
     AddRAMParameter();
-    MandatoryOff("ram");
 
     AddParameter(ParameterType_Float,      "outmin", "Output min value");
     AddParameter(ParameterType_Float,      "outmax", "Output max value");

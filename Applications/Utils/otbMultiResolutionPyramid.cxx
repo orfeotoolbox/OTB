@@ -79,9 +79,7 @@ private:
     AddParameter(ParameterType_Filename, "out", "Output Image");
     SetParameterDescription("out","will be used to get the prefix and the extension of the images to write");
 
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+    AddRAMParameter();
 
     AddParameter(ParameterType_Int, "level", "Number Of Levels");
     SetDefaultParameterInt("level", 1);

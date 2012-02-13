@@ -1087,24 +1087,28 @@ void Application::AddRAMParameter(std::string paramKey, std::string paramName, u
 {
   GetParameterList()->AddParameter(ParameterType_RAM, paramKey, paramName);
   SetDefaultParameterInt(paramKey, defaultValue);
+  MandatoryOff(paramKey);
 }
 
-void Application::AddRAMParameter()
+// paramKey default value = ram
+void Application::AddRAMParameter(std::string paramKey)
 {
   // Get the  RAM Parameter from the configuration file
   if (otb::ConfigurationFile::GetInstance()->IsValid() )
     {
-    AddRAMParameter("ram",
-                    "Available RAM",
+    AddRAMParameter(paramKey,
+                    "Available RAM (Mb)",
                     otb::ConfigurationFile::GetInstance()->GetAvailableRAMInMBytes());
     }
   else
     {
     // TODO check this
-    AddRAMParameter("ram",
-                    "Available RAM",
+    AddRAMParameter(paramKey,
+                    "Available RAM (Mb)",
                     128);
     }
+  MandatoryOff(paramKey);
+  SetParameterDescription(paramKey, "Available memory for processing (in MB)");
 }
 
 std::vector< std::pair<std::string, std::string> >

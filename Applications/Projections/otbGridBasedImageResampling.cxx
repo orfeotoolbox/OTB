@@ -166,9 +166,7 @@ SetParameterDescription("grid.type.def","A deformation grid contains at each gri
     SetDefaultParameterInt("interpolator.bco.radius", 2);
     SetParameterString("interpolator","bco");
 
-    // RAM available
     AddRAMParameter();
-    MandatoryOff("ram");
   }
 
  void DoUpdateParameters()

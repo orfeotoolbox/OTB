@@ -64,9 +64,7 @@ private:
     AddParameter(ParameterType_ComplexOutputImage,  "out", "Output Image");
     SetParameterDescription("out", "Output calibrated complex image");
     
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+    AddRAMParameter();
     
     AddParameter(ParameterType_Empty, "noise", "Disable Noise");
     SetParameterDescription("noise", "Flag to disable noise");

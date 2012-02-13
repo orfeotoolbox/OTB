@@ -80,11 +80,9 @@ private:
 
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
     SetParameterDescription("out","Output reprojected image.");
-    AddParameter(ParameterType_RAM,          "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
+    AddRAMParameter();
 
     MandatoryOff("lms");
-    MandatoryOff("ram");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("inr", "QB_Toulouse_Ortho_PAN.tif");

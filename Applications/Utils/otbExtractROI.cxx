@@ -66,9 +66,7 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
 
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+    AddRAMParameter();
 
     AddParameter(ParameterType_Int,  "startx", "Start X");
     SetParameterDescription("startx", "ROI start x position.");
