@@ -581,14 +581,11 @@ void CommandLineLauncher::DisplayHelp()
   std::cerr << "====================== HELP CONTEXT ======================" << std::endl;
   std::cerr << "NAME: " << m_Application->GetName() << std::endl;
   std::cerr << "DESCRIPTION: " << m_Application->GetDescription() << std::endl;
-  std::string cl = m_Application->GetCLExample();
-  std::cout<<cl.size()<<std::endl;
-  if( !cl.empty() )
-    {
-    std::cerr << "EXAMPLE OF USE: " << std::endl;
-    std::cerr << m_Application->GetCLExample() << std::endl;
-    }
-
+  
+  std::string cl(m_Application->GetCLExample());
+  std::cerr << "EXAMPLE OF USE: " << std::endl;
+  std::cerr << m_Application->GetCLExample() << std::endl;
+  
   std::string link = "http://www.orfeo-toolbox.org/Applications/";
   link.append(m_Application->GetName());
   link.append(".html");

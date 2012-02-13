@@ -123,12 +123,13 @@ DocExampleStructure::AddExample( const std::string & comm )
 std::string
 DocExampleStructure::GenerateCLExample( unsigned int exId )
 {
+  std::string res("None");
   if( m_ApplicationName.empty() || m_ParameterList.size() == 0 )
     {
-    return "";
+    return res;
     }
   else if ( m_ParameterList.at(exId).empty() )
-    return "";
+    return res;
   
   std::ostringstream oss;
   oss << "otbcli_" << m_ApplicationName << " ";
@@ -142,12 +143,12 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
       }
     }
   
-  std::string res = oss.str();
+  res = oss.str();
   
   // Supress last added space
   res.erase( res.size()-1, 1);
   
-  return res;
+  return res.c_str();
 }
 
 std::string
