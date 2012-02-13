@@ -1188,12 +1188,12 @@ void JPEG2000ImageIO::ReadImageInformation()
 
       itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, geoTransform);
 
-      /*std::cout << "from gml box, geotransform: " ;
-      for (int i = 0; i < 6 ; i++)
+      /*std::cout << "from gml box, geotransform: ";
+      for (int i = 0; i < 6; i++)
         {
         std::cout << geoTransform[i] << ", ";
         }
-      std::cout << std::endl;*/
+      std::cout << std::endl; */
 
       // Retrieve origin and spacing from the geo transform
       m_Origin[0] = geoTransform[0];

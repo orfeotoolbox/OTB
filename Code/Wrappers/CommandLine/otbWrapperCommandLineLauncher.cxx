@@ -443,8 +443,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                       {
                       // Handle space in filename. Only for input
                       // files or directories
-                      if (type == ParameterType_Directory || type == ParameterType_Filename || type == ParameterType_ComplexInputImage || 
-                          type == ParameterType_InputImage || type == ParameterType_InputVectorData ||  type == ParameterType_Filename 
+                      if (type == ParameterType_Directory || type == ParameterType_Filename || type == ParameterType_ComplexInputImage ||
+                          type == ParameterType_InputImage || type == ParameterType_InputVectorData ||  type == ParameterType_Filename
                           ||  type == ParameterType_OutputVectorData )
                         {
                         for(unsigned int i=1; i<values.size(); i++)

@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   // The filters \doxygen{otb}{HooverMatrixFilter} and \doxygen{otb}{HooverInstanceFilter}
   // are designed to handle \doxygen{itk}{LabelMap} images, made with \doxygen{otb}{AttributesMapLabelObject}.
-  // This type of label object allows to store generic attributes. Each region can store 
+  // This type of label object allows to store generic attributes. Each region can store
   // a set of attributes: in this case, Hoover instances and metrics will be stored.
   // Software Guide : EndLatex
 
@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
   ms_reader->SetFileName(argv[2]);
   
   // Software Guide : BeginLatex
-  // The first step is to convert the images to label maps : we use 
+  // The first step is to convert the images to label maps : we use
   // \doxygen{itk}{LabelImageToLabelMapFilter}. The background value sets
   // the label value of regions considered as background: there is no label object for the
   // background region.
