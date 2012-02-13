@@ -154,6 +154,11 @@ private:
     SetParameterDescription("out.spacingy","Size of each pixel along Y axis");
     SetDefaultParameterFloat("out.spacingy",1.);
     
+    AddParameter(ParameterType_Float,"out.default","Default value");
+    SetParameterDescription("out.default","The default value to give to pixel that falls outside of the input image.");
+    SetDefaultParameterFloat("out.default",0);
+
+    
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
     SetParameterDescription("interpolator","This group of parameters allows to define how the input image will be interpolated during resampling.");
@@ -166,7 +171,7 @@ private:
     SetParameterDescription("interpolator.bco.radius","This parameter allows to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
     SetParameterString("interpolator","bco");
-
+    
     AddRAMParameter();
 
     // Doc example
@@ -198,7 +203,7 @@ void DoExecute()
 
       // In case of localisation grid, we must internally convert to
       // deformation grid, which is the only type handled by StreamingWarpImageFilter
-      if(GetParameterInt("grid.type") == 0)
+      if(GetParameterInt("grid.type") == 1)
         {
         GetLogger()->Info("Grid intepreted as a location grid.");
         m_ExtractX->SetInput(inGrid);
@@ -273,6 +278,13 @@ void DoExecute()
     ul[0] = GetParameterFloat("out.ulx");
     ul[1] = GetParameterFloat("out.uly");
     m_WarpImageFilter->SetOutputOrigin(ul);
+
+    // Build the default pixel
+    FloatVectorImageType::PixelType defaultValue;
+    defaultValue.SetSize(inImage->GetNumberOfComponentsPerPixel());
+    defaultValue.Fill(GetParameterFloat("out.default"));
+
+    m_WarpImageFilter->SetEdgePaddingValue(defaultValue);
 
     // Output Image
     SetParameterOutputImage("io.out", m_WarpImageFilter->GetOutput());
