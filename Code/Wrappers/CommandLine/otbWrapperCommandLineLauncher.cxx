@@ -91,6 +91,7 @@ void CommandLineLauncher::DeleteWatcherList()
 
 bool CommandLineLauncher::Load(const std::string & exp)
 {
+  std::cout<<exp<<std::endl;
   m_Expression = exp;
 
   return this->Load();
@@ -438,11 +439,26 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                     dynamic_cast<ListViewParameter *> (param.GetPointer())->SetSelectedNames(values);
                     }
                   else
-                    if (values.size() != 1 && !param->GetAutomaticValue())
+                    if(values.size() != 1)
                       {
-                      std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", must have 1 value, not  "
-                                << values.size() << std::endl;
-                      return INVALIDNUMBEROFVALUE;
+                      // Handle space in filename. Only for input
+                      // files or directories
+                      if (type == ParameterType_Directory || type == ParameterType_Filename || type == ParameterType_ComplexInputImage || 
+                          type == ParameterType_InputImage || type == ParameterType_InputVectorData ||  type == ParameterType_Filename 
+                          ||  type == ParameterType_OutputVectorData )
+                        {
+                        for(unsigned int i=1; i<values.size(); i++)
+                          {
+                          values[0].append(" ");
+                          values[0].append(values[i]);
+                          }
+                        }
+                      else if (!param->GetAutomaticValue())
+                        {
+                        std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", must have 1 value, not  "
+                                  << values.size() << std::endl;
+                        return INVALIDNUMBEROFVALUE;
+                        }
                       }
 
         // Single value parameter
@@ -454,8 +470,6 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           {
           m_Application->SetParameterString(paramKey, values[0]);
           }
-        //if( type == ParameterType_Filename )
-        //m_Parser->GetAttributAsString(std::string("-").append(paramKey), m_Expression)
         else
           if (type == ParameterType_Empty)
             {
