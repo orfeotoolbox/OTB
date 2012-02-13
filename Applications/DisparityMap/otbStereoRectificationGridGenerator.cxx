@@ -106,12 +106,11 @@ private:
     SetParameterRole("epi.baseline", Role_Output);
 
     // Doc example
-    // SetDocExampleParameterValue("io.in","ROI_IKO_PAN_LesHalles_sub.tif");
-    // SetDocExampleParameterValue("io.out","ROI_IKO_PAN_LesHalles_sub_resampled.tif uint8");
-    // SetDocExampleParameterValue("grid.in","ROI_IKO_PAN_LesHalles_sub_deformation_field.tif");
-    // SetDocExampleParameterValue("out.sizex","256");
-    // SetDocExampleParameterValue("out.sizey","256");
-    // SetDocExampleParameterValue("grid.type","def");
+    SetDocExampleParameterValue("io.inleft","wv2_xs_left.tif");
+    SetDocExampleParameterValue("io.inright","wv2_xs_left.tif");
+    SetDocExampleParameterValue("io.outleft","wv2_xs_left_epi_field.tif");
+    SetDocExampleParameterValue("io.outright","wv2_xs_right_epi_field.tif");
+    SetDocExampleParameterValue("epi.elevation","400");
   }
 
  void DoUpdateParameters()
