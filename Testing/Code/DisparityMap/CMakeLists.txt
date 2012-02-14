@@ -448,6 +448,11 @@ ADD_TEST(feTuHorizontalPixelWiseBlockMatchingImageFilterNew ${DISPARITYMAP_TESTS
 otbHorizontalPixelWiseBlockMatchingImageFilterNew)
 
 ADD_TEST(feTvHorizontalPixelWiseBlockMatchingImageFilter ${DISPARITYMAP_TESTS3}
+--compare-n-images ${NOTOL} 2
+${BASELINE}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputDisparity.tif
+${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputDisparity.tif
+${BASELINE}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputMetric.tif
+${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputMetric.tif
 otbHorizontalPixelWiseBlockMatchingImageFilter
 ${EXAMPLEDATA}/StereoFixed.png
 ${EXAMPLEDATA}/StereoMoving.png
