@@ -33,7 +33,7 @@ namespace otb
  *  of the pair always occurs along lines that are called epipolar
  *  lines.
  *
- *  In the case of conic acqusition, these lines are perfectly
+ *  In the case of conic acquisition, these lines are perfectly
  *  parallel by definition, while in push-broom geometry, these lines
  *  might not be exactly parallel due to perturbations during
  *  acquisition, especially when considering a large field of view.
