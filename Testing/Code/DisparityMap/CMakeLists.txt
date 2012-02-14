@@ -443,6 +443,22 @@ ${TEMP}/feTvStereorectificationDeformationFieldSourceOutput2.tif
 5
 )
 
+#--------- otb::HorizontalPixelWiseBlockMatchingImageFilter -----------------------------------------
+ADD_TEST(feTuHorizontalPixelWiseBlockMatchingImageFilterNew ${DISPARITYMAP_TESTS3}
+otbHorizontalPixelWiseBlockMatchingImageFilterNew)
+
+ADD_TEST(feTvHorizontalPixelWiseBlockMatchingImageFilter ${DISPARITYMAP_TESTS3}
+otbHorizontalPixelWiseBlockMatchingImageFilter
+${EXAMPLEDATA}/StereoFixed.png
+${EXAMPLEDATA}/StereoMoving.png
+${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputDisparity.tif
+${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputMetric.tif
+2
+-10 +10
+)
+
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -484,6 +500,7 @@ otbFineRegistrationImageFilterNew.cxx
 otbFineRegistrationImageFilterTest.cxx
 otbStereoSensorModelToElevationMapFilter.cxx
 otbStereorectificationDeformationFieldSource.cxx
+otbHorizontalPixelWiseBlockMatchingImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbDisparityMapTests1 "${BasicDisparityMap_SRCS1}" "OTBDisparityMap;OTBIO;OTBTesting")
