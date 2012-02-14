@@ -178,7 +178,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // Now, we will change coordinate so that the epipolar line is
   // horizontal
-  double alpha = M_PI - vcl_atan(a);
+  double alpha = -vcl_atan(a);
 
   // And compute the unitary vectors of the new axis (equivalent to
   // the column of the rotation matrix)
@@ -382,7 +382,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // We want to move m_Scale pixels away in the epipolar line of the
     // first image
     // TODO: Take into account height direction ?
-    double alpha1 = M_PI - vcl_atan(a1);
+    double alpha1 =   -vcl_atan(a1);
     double deltax1 =  m_Scale * m_GridStep * vcl_cos(alpha1);
     double deltay1 = -m_Scale * m_GridStep * vcl_sin(alpha1);
 
@@ -407,7 +407,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // Now, we compute the displacement in right image. The iscale
     // factor already account for m_GridStep and scale, no need to use
     // them again
-    double alpha2 = M_PI - vcl_atan(a2);
+    double alpha2 =    -vcl_atan(a2);
     double deltax2 =   iscale * vcl_cos(alpha2);
     double deltay2 = - iscale * vcl_sin(alpha2);
 
