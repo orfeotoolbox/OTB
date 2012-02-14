@@ -462,6 +462,20 @@ ${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputMetric.tif
 -10 +10
 )
 
+ADD_TEST(feTvHorizontalPixelWiseBlockMatchingImageFilterNCC ${DISPARITYMAP_TESTS3}
+--compare-n-images ${NOTOL} 2
+${BASELINE}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
+${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
+${BASELINE}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
+${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
+otbHorizontalPixelWiseBlockMatchingImageFilterNCC
+${EXAMPLEDATA}/StereoFixed.png
+${EXAMPLEDATA}/StereoMoving.png
+${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
+${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
+2
+-10 +10
+)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

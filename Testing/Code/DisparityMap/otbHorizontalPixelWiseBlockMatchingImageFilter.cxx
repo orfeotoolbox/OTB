@@ -29,6 +29,9 @@ typedef otb::StreamingImageFileWriter<FloatImageType> FloatWriterType;
 
 typedef otb::HorizontalPixelWiseBlockMatchingImageFilter<ImageType,FloatImageType,FloatImageType,ImageType> HorizontalPixelWiseBlockMatchingImageFilterType;
 
+typedef otb::Functor::NCCBlockMatching<ImageType,FloatImageType> NCCBlockMatchingFunctorType;
+
+typedef otb::HorizontalPixelWiseBlockMatchingImageFilter<ImageType,FloatImageType,FloatImageType,ImageType, NCCBlockMatchingFunctorType> HorizontalPixelWiseNCCBlockMatchingImageFilterType;
 
 int otbHorizontalPixelWiseBlockMatchingImageFilterNew(int argc, char * argv[])
 {
@@ -52,6 +55,50 @@ int otbHorizontalPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
   bmFilter->SetRadius(atoi(argv[5]));
   bmFilter->SetMinimumDisparity(atoi(argv[6]));
   bmFilter->SetMaximumDisparity(atoi(argv[7]));
+
+  ReaderType::Pointer maskReader = ReaderType::New();
+  if(argc > 8)
+    {
+    maskReader->SetFileName(argv[8]);
+    bmFilter->SetMaskInput(maskReader->GetOutput());
+    }
+
+  FloatWriterType::Pointer dispWriter = FloatWriterType::New();
+  dispWriter->SetInput(bmFilter->GetDisparityOutput());
+  dispWriter->SetFileName(argv[3]);
+
+  otb::StandardWriterWatcher watcher1(dispWriter,bmFilter,"Computing disparity map");
+
+  dispWriter->Update();
+
+  FloatWriterType::Pointer metricWriter = FloatWriterType::New();
+  metricWriter->SetInput(bmFilter->GetMetricOutput());
+  metricWriter->SetFileName(argv[4]);
+
+  otb::StandardWriterWatcher watcher2(metricWriter,bmFilter,"Computing metric map");
+
+  metricWriter->Update();
+
+
+  return EXIT_SUCCESS;
+}
+
+
+int otbHorizontalPixelWiseBlockMatchingImageFilterNCC(int argc, char * argv[])
+{
+  ReaderType::Pointer leftReader = ReaderType::New();
+  leftReader->SetFileName(argv[1]);
+
+  ReaderType::Pointer rightReader = ReaderType::New();
+  rightReader->SetFileName(argv[2]);
+  
+  HorizontalPixelWiseNCCBlockMatchingImageFilterType::Pointer bmFilter = HorizontalPixelWiseNCCBlockMatchingImageFilterType::New();
+  bmFilter->SetLeftInput(leftReader->GetOutput());
+  bmFilter->SetRightInput(rightReader->GetOutput());
+  bmFilter->SetRadius(atoi(argv[5]));
+  bmFilter->SetMinimumDisparity(atoi(argv[6]));
+  bmFilter->SetMaximumDisparity(atoi(argv[7]));
+  bmFilter->MinimizeOff();
 
   ReaderType::Pointer maskReader = ReaderType::New();
   if(argc > 8)

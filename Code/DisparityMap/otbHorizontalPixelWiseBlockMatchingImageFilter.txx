@@ -353,7 +353,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   // Set-up progress reporting (this is not exact, since we do not
   // account for pixels that are out of range for a given disparity
-  itk::ProgressReporter progress(this, 0, outputRegionForThread.GetNumberOfPixels()*(m_MaximumDisparity - m_MinimumDisparity));
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels()*(m_MaximumDisparity - m_MinimumDisparity));
 
   // Define the block matching functor
   TBlockMatchingFunctor bmFunctor;

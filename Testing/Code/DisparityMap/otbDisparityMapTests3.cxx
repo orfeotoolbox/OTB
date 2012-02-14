@@ -34,4 +34,5 @@ void RegisterTests()
   REGISTER_TEST(otbStereorectificationDeformationFieldSource);
   REGISTER_TEST(otbHorizontalPixelWiseBlockMatchingImageFilterNew);
   REGISTER_TEST(otbHorizontalPixelWiseBlockMatchingImageFilter);
+  REGISTER_TEST(otbHorizontalPixelWiseBlockMatchingImageFilterNCC);
 }

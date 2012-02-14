@@ -58,6 +58,64 @@ public:
     return ssd;
   }
 };
+/** \class NCCBlockMatching
+ *  \brief Functor to perform simple NCC block-matching
+ * 
+ *  This functor is designed to work with the
+ *  HorizontalPixelWiseBlockMatchingImageFilter. It performs a simple
+ *  NCC (Normalized Cross-Correlation) block-matching. The functor is
+ *  templated by the type of inputs images and output metric image,
+ *  and is using two neighborhood iterators as inputs.
+ */
+template <class TInputImage, class TOutputMetricImage>
+ITK_EXPORT class NCCBlockMatching
+{
+public:
+  typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeigghborhoodIteratorType;
+  typedef typename TOutputMetricImage::ValueType      MetricValueType;
+
+  // Implement the NCC operator
+  inline MetricValueType operator()(ConstNeigghborhoodIteratorType & a, ConstNeigghborhoodIteratorType & b) const
+  {
+    MetricValueType meanA(0),meanB(0), sigmaA(0), sigmaB(0), cov(0), ncc(0);
+    
+    // For some reason, iterators do not work on neighborhoods
+    for(unsigned int i = 0; i<a.Size(); ++i)
+      {
+      meanA+=a.GetPixel(i);
+      meanB+=b.GetPixel(i);
+      }
+    
+    // Compute mean
+    meanA/=a.Size();
+    meanB/=b.Size();
+
+    for(unsigned int i = 0; i<a.Size(); ++i)
+      {
+      cov+=(a.GetPixel(i)-meanA)*(b.GetPixel(i)-meanB);
+      sigmaA+=(a.GetPixel(i)-meanA)*(a.GetPixel(i)-meanA);
+      sigmaB+=(b.GetPixel(i)-meanB)*(b.GetPixel(i)-meanB);
+      }
+    
+    cov/=a.Size()-1;
+    sigmaA/=a.Size()-1;
+    sigmaB/=a.Size()-1;
+    sigmaA = vcl_sqrt(sigmaA);
+    sigmaB = vcl_sqrt(sigmaB);
+
+    if(sigmaA > 1e-20 && sigmaB > 1e-20)
+      {
+      ncc = vcl_abs(cov)/(sigmaA*sigmaB);
+      }
+    else
+      {
+      ncc = 0;
+      }
+
+    return ncc;
+  }
+};
+
 } // End Namespace Functor
 
 /** \class HorizontalPixelWiseBlockMatchingImageFilter
