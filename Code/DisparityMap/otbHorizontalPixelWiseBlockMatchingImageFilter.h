@@ -28,6 +28,15 @@ namespace otb
 
 namespace Functor
 {
+/** \class SSDBlockMatching
+ *  \brief Functor to perform simple SSD block-matching
+ * 
+ *  This functor is designed to work with the
+ *  HorizontalPixelWiseBlockMatchingImageFilter. It performs a simple
+ *  SSD (Sum of Square Distances) block-matching. The functor is
+ *  templated by the type of inputs images and output metric image,
+ *  and is using two neighborhood iterators as inputs.
+ */
 template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class SSDBlockMatching
 {
@@ -38,8 +47,6 @@ public:
   // Implement the SSD operator
   inline MetricValueType operator()(ConstNeigghborhoodIteratorType & a, ConstNeigghborhoodIteratorType & b) const
   {
-    typename ConstNeigghborhoodIteratorType::Iterator itA, itB;
-
     MetricValueType ssd = 0;
     
     // For some reason, iterators do not work on neighborhoods
@@ -51,8 +58,53 @@ public:
     return ssd;
   }
 };
+} // End Namespace Functor
 
-}
+/** \class HorizontalPixelWiseBlockMatchingImageFilter
+ *  \brief Perform horizontal 1D block matching between two images
+ *
+ *  This filter performs pixel-wise horizontal 1D block-matching
+ *  between a pair of image. This is especially useful in the case of
+ *  stereo pairs in epipolar geometry, where displacements
+ *  corresponding to differences of elevation occur in the horizontal
+ *  direction only. Please note that only integer pixel displacement
+ *  are explored. For finer results, consider up-sampling the input
+ *  images or search for another filter.
+ * 
+ *  The block-matching metric itself is defined by a template functor
+ *  on neighborhood iterators. A wide range of block-matching
+ *  criterions can be implemented this way, but the default functor
+ *  performs a simple SSD (Sum of Square Distances). The radius of the
+ *  blocks can be set using the SetRadius() method. The filter will
+ *  try to minimize the metric value by default. Setting the minimize
+ *  flag to off using the MinimizeOff() method will make the filter
+ *  try to maximize the metric.
+ * 
+ *  Only a user defined range of disparities between the two images is
+ *  explored, which can be set by using the SetMinimumDisparity() and
+ *  SetMaximumDisparity() methods.
+ * 
+ *  This filter has two outputs: the first is the disparity image,
+ *  which can be retrieved using the GetDisparityOutput() method, and
+ *  contains the estimated local horizontal displacement between both
+ *  input images (displacement from left image to right image). The
+ *  second is the metric image, which contains the metric optimum value
+ *  corresponding to this estimated displacement.
+ * 
+ *  Mask is not mandatory. The mask allows to indicate pixels validity
+ *  with respect to the left image. If a mask image is provided, only
+ *  pixels whose mask values are strictly positive will be considered
+ *  for disparity exploration. The other will exhibit a null value for
+ *  the metric and a disparity corresponding to the minimum allowed
+ *  disparity.
+ *
+ *  \sa FineRegistrationImageFilter
+ *  \sa StereorectificationDeformationFieldSource
+ *
+ *  \ingroup Streamed
+ *  \ingroup Threaded
+ * 
+ */
 
 template <class TInputImage, class TOutputMetricImage, class TOutputDisparityImage = TOutputMetricImage, class TMaskImage = otb::Image<unsigned char>, 
           class TBlockMatchingFunctor = Functor::SSDBlockMatching<TInputImage,TOutputMetricImage> >
