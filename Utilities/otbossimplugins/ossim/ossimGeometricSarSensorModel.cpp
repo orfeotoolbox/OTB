@@ -780,12 +780,12 @@ void ossimGeometricSarSensorModel::set_platformPosition(PlatformPosition* platfo
 
 void ossimGeometricSarSensorModel::set_sensorParams(SensorParams* sensorParams)
 {
-   if(_sensorParams != 0)
+   if(_sensor != 0)
    {
-      delete _sensorParams;
-      _sensorParams = 0;
+      delete _sensor;
+      _sensor = 0;
    }
-   _sensorParams = sensorParams->Clone();
+   _sensor = sensorParams->Clone();
 }
 
 void ossimGeometricSarSensorModel::set_refPoint(RefPoint* refPoint)
@@ -799,19 +799,19 @@ void ossimGeometricSarSensorModel::set_refPoint(RefPoint* refPoint)
 }
 
 
-PlatformPosition* ossimGeometricSarSensorModel::get_platformPosition()
+PlatformPosition* ossimGeometricSarSensorModel::get_platformPosition() const
 {
 	return _platformPosition;
 }
 
 
-SensorParams* ossimGeometricSarSensorModel::get_sensorParams()
+SensorParams* ossimGeometricSarSensorModel::get_sensorParams() const
 {
-	return _sensorParams;
+	return _sensor;
 }
 
 
-RefPoint* ossimGeometricSarSensorModel::get_refPoint()
+RefPoint* ossimGeometricSarSensorModel::get_refPoint() const
 {
 	return _refPoint;
 }
