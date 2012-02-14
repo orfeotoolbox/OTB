@@ -26,7 +26,7 @@
 
 namespace otb
 {
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
@@ -53,7 +53,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 }
 
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
@@ -61,7 +61,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {}
 
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
@@ -72,7 +72,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   this->SetNthInput(0, const_cast<TInputImage *>( image ));
 }
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
@@ -83,7 +83,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   this->SetNthInput(1, const_cast<TInputImage *>( image ));
 }
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
@@ -94,9 +94,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   this->SetNthInput(2, const_cast<TMaskImage *>( image ));
 }
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-const TInputImage * 
+const TInputImage *
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetLeftInput() const
@@ -108,9 +108,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0));
 }
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-const TInputImage * 
+const TInputImage *
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetRightInput() const
@@ -122,9 +122,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(1));
 }
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-const TMaskImage * 
+const TMaskImage *
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetMaskInput() const
@@ -136,9 +136,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(2));
 }
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-const TOutputMetricImage * 
+const TOutputMetricImage *
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetMetricOutput() const
@@ -150,9 +150,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   return static_cast<const TOutputMetricImage *>(this->itk::ProcessObject::GetOutput(0));
 }
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-TOutputMetricImage * 
+TOutputMetricImage *
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetMetricOutput()
@@ -165,9 +165,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 }
 
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-const TOutputDisparityImage * 
+const TOutputDisparityImage *
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetDisparityOutput() const
@@ -179,9 +179,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   return static_cast<const TOutputDisparityImage *>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-TOutputDisparityImage * 
+TOutputDisparityImage *
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetDisparityOutput()
@@ -193,7 +193,7 @@ if (this->GetNumberOfOutputs()<2)
   return static_cast<TOutputDisparityImage *>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
@@ -322,7 +322,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       }
     }
 }
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
@@ -337,7 +337,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   outDispPtr->FillBuffer(m_MinimumDisparity);
 }
 
-template <class TInputImage, class TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
@@ -407,9 +407,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     outDispIt.GoToBegin();
 
     // Loop on pixels
-    while(!leftIt.IsAtEnd() 
-          || !rightIt.IsAtEnd() 
-          || !outMetricIt.IsAtEnd() 
+    while(!leftIt.IsAtEnd()
+          || !rightIt.IsAtEnd()
+          || !outMetricIt.IsAtEnd()
           || !outDispIt.IsAtEnd())
       {
       

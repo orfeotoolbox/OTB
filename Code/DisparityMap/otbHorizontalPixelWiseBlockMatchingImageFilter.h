@@ -30,7 +30,7 @@ namespace Functor
 {
 /** \class SSDBlockMatching
  *  \brief Functor to perform simple SSD block-matching
- * 
+ *
  *  This functor is designed to work with the
  *  HorizontalPixelWiseBlockMatchingImageFilter. It performs a simple
  *  SSD (Sum of Square Distances) block-matching. The functor is
@@ -60,7 +60,7 @@ public:
 };
 /** \class NCCBlockMatching
  *  \brief Functor to perform simple NCC block-matching
- * 
+ *
  *  This functor is designed to work with the
  *  HorizontalPixelWiseBlockMatchingImageFilter. It performs a simple
  *  NCC (Normalized Cross-Correlation) block-matching. The functor is
@@ -128,7 +128,7 @@ public:
  *  direction only. Please note that only integer pixel displacement
  *  are explored. For finer results, consider up-sampling the input
  *  images or search for another filter.
- * 
+ *
  *  The block-matching metric itself is defined by a template functor
  *  on neighborhood iterators. A wide range of block-matching
  *  criterions can be implemented this way, but the default functor
@@ -137,18 +137,18 @@ public:
  *  try to minimize the metric value by default. Setting the minimize
  *  flag to off using the MinimizeOff() method will make the filter
  *  try to maximize the metric.
- * 
+ *
  *  Only a user defined range of disparities between the two images is
  *  explored, which can be set by using the SetMinimumDisparity() and
  *  SetMaximumDisparity() methods.
- * 
+ *
  *  This filter has two outputs: the first is the disparity image,
  *  which can be retrieved using the GetDisparityOutput() method, and
  *  contains the estimated local horizontal displacement between both
  *  input images (displacement from left image to right image). The
  *  second is the metric image, which contains the metric optimum value
  *  corresponding to this estimated displacement.
- * 
+ *
  *  Mask is not mandatory. The mask allows to indicate pixels validity
  *  with respect to the left image. If a mask image is provided, only
  *  pixels whose mask values are strictly positive will be considered
@@ -161,10 +161,10 @@ public:
  *
  *  \ingroup Streamed
  *  \ingroup Threaded
- * 
+ *
  */
 
-template <class TInputImage, class TOutputMetricImage, class TOutputDisparityImage = TOutputMetricImage, class TMaskImage = otb::Image<unsigned char>, 
+template <class TInputImage, class TOutputMetricImage, class TOutputDisparityImage = TOutputMetricImage, class TMaskImage = otb::Image<unsigned char>,
           class TBlockMatchingFunctor = Functor::SSDBlockMatching<TInputImage,TOutputMetricImage> >
 class ITK_EXPORT HorizontalPixelWiseBlockMatchingImageFilter :
     public itk::ImageToImageFilter<TInputImage,TOutputDisparityImage>
