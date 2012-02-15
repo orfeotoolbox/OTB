@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperInputFilenameParameter_h
-#define __otbWrapperInputFilenameParameter_h
+#ifndef __otbWrapperOutputFilenameParameter_h
+#define __otbWrapperOutputFilenameParameter_h
 
 #include <string>
 #include "otbWrapperStringParameter.h"
@@ -26,15 +26,15 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class InputFilenameParameter
+/** \class OutputFilenameParameter
  *  \brief This class represent a string parameter for the wrapper framework
  */
-class InputFilenameParameter
+class OutputFilenameParameter
   : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef InputFilenameParameter        Self;
+  typedef OutputFilenameParameter        Self;
   typedef StringParameter               Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -43,7 +43,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(InputFilenameParameter, Parameter);
+  itkTypeMacro(OutputFilenameParameter, Parameter);
 
   
   bool HasValue() const
@@ -63,7 +63,7 @@ public:
   
 protected:
   /** Constructor */
-  InputFilenameParameter()
+  OutputFilenameParameter()
   {
     // Initialize the String Parameter
     m_StringParam= StringParameter::New();
@@ -72,12 +72,12 @@ protected:
   }
 
   /** Destructor */
-  virtual ~InputFilenameParameter()
+  virtual ~OutputFilenameParameter()
   {}
 
 private:
-  InputFilenameParameter(const InputFilenameParameter &); //purposely not implemented
-  void operator =(const InputFilenameParameter&); //purposely not
+  OutputFilenameParameter(const OutputFilenameParameter &); //purposely not implemented
+  void operator =(const OutputFilenameParameter&); //purposely not
                                                   //implemented
 
   StringParameter::Pointer m_StringParam;
