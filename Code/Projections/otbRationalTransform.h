@@ -198,7 +198,7 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os, indent); 
+    Superclass::PrintSelf(os, indent);
     os << indent << "Numerator Degree : " << m_NumeratorDegree << std::endl;
     os << indent << "Denominator Degree : " << m_DenominatorDegree << std::endl;
     os << indent << "InputSpacing : " << m_InputSpacing << std::endl;
