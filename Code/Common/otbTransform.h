@@ -196,6 +196,16 @@ protected:
 
   virtual ~Transform() {}
 
+  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  {
+    Superclass::PrintSelf(os, indent); 
+    os << indent << "Parameters : " << m_Parameters << std::endl;
+    os << indent << "FixedParameters : " << m_FixedParameters << std::endl;
+    os << indent << "Jacobian : " << m_Jacobian << std::endl;
+
+  }
+
+
   mutable ParametersType m_Parameters;
   mutable ParametersType m_FixedParameters;
 
