@@ -43,7 +43,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
    // Geoid file
   oss.str("");
   oss << key<<".dem.geoid";
-  app->AddParameter(ParameterType_Filename, oss.str(), "Geoid File");
+  app->AddParameter(ParameterType_InputFilename, oss.str(), "Geoid File");
   app->SetParameterDescription(oss.str(),"Use a geoid grid to get the height above the ellipsoid used");
   app->SetParameterString(oss.str(), otb::ConfigurationFile::GetInstance()->GetGeoidFile());
   app->MandatoryOff(oss.str());

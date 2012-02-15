@@ -318,7 +318,7 @@ class QParameterGroup(QParameterBase):
             otbApplication.ParameterType_Int : QParameterInt,
             otbApplication.ParameterType_Float : QParameterFloat,
             otbApplication.ParameterType_String : QParameterString,
-            otbApplication.ParameterType_Filename : QParameterInputFilename,
+            otbApplication.ParameterType_InputFilename : QParameterInputFilename,
             otbApplication.ParameterType_Directory : QParameterDirectory,
             otbApplication.ParameterType_Choice : QParameterChoice,
             otbApplication.ParameterType_InputImage : QParameterInputFilename,

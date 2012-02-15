@@ -21,7 +21,7 @@
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperEmptyParameter.h"
-#include "otbWrapperFilenameParameter.h"
+#include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
@@ -443,8 +443,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                       {
                       // Handle space in filename. Only for input
                       // files or directories
-                      if (type == ParameterType_Directory || type == ParameterType_Filename || type == ParameterType_ComplexInputImage ||
-                          type == ParameterType_InputImage || type == ParameterType_InputVectorData ||  type == ParameterType_Filename
+                      if (type == ParameterType_Directory || type == ParameterType_InputFilename || type == ParameterType_ComplexInputImage ||
+                          type == ParameterType_InputImage || type == ParameterType_InputVectorData ||  type == ParameterType_InputFilename
                           ||  type == ParameterType_OutputVectorData )
                         {
                         for(unsigned int i=1; i<values.size(); i++)
@@ -464,7 +464,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         // Single value parameter
         if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type
             == ParameterType_Radius || type == ParameterType_Directory || type
-            == ParameterType_Filename || type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
+            == ParameterType_InputFilename || type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
             type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||  type == ParameterType_OutputVectorData
             || type == ParameterType_RAM)
           {
@@ -708,7 +708,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "<float>         ";
     }
-  else if (type == ParameterType_Filename || type == ParameterType_Directory || type == ParameterType_InputImage ||
+  else if (type == ParameterType_InputFilename || type == ParameterType_Directory || type == ParameterType_InputImage ||
            type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData ||
            type == ParameterType_String || type == ParameterType_Choice )
     {

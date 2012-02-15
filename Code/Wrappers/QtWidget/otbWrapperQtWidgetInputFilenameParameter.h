@@ -15,11 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetFilenameParameter_h
-#define __otbWrapperQtWidgetFilenameParameter_h
+#ifndef __otbWrapperQtWidgetInputFilenameParameter_h
+#define __otbWrapperQtWidgetInputFilenameParameter_h
 
 #include <QtGui>
-#include "otbWrapperFilenameParameter.h"
+#include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 
@@ -31,27 +31,27 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetFilenameParameter : public QtWidgetParameterBase
+class QtWidgetInputFilenameParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetFilenameParameter(FilenameParameter*, QtWidgetModel*);
-  virtual ~QtWidgetFilenameParameter();
+  QtWidgetInputFilenameParameter(InputFilenameParameter*, QtWidgetModel*);
+  virtual ~QtWidgetInputFilenameParameter();
 
 protected slots:
   void SetFileName( const QString& value );
   void SelectFile();
 
 private:
-  QtWidgetFilenameParameter(const QtWidgetFilenameParameter&); //purposely not implemented
-  void operator=(const QtWidgetFilenameParameter&); //purposely not implemented
+  QtWidgetInputFilenameParameter(const QtWidgetInputFilenameParameter&); //purposely not implemented
+  void operator=(const QtWidgetInputFilenameParameter&); //purposely not implemented
 
   virtual void DoCreateWidget();
 
   virtual void DoUpdateGUI();
 
 
-  FilenameParameter::Pointer m_FilenameParam;
+  InputFilenameParameter::Pointer m_FilenameParam;
 
   QHBoxLayout * m_HLayout;
   QLineEdit*    m_Input;

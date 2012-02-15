@@ -21,7 +21,7 @@
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperEmptyParameter.h"
-#include "otbWrapperFilenameParameter.h"
+#include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperNumericalParameter.h"
@@ -330,9 +330,9 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_Float;
     }
-  else if (dynamic_cast<const FilenameParameter*>(param))
+  else if (dynamic_cast<const InputFilenameParameter*>(param))
     {
-    type = ParameterType_Filename;
+    type = ParameterType_InputFilename;
     }
   else if (dynamic_cast<const DirectoryParameter*>(param))
     {
@@ -579,9 +579,9 @@ void Application::SetParameterString(std::string parameter, std::string value)
     StringParameter* paramDown = dynamic_cast<StringParameter*>(param);
     paramDown->SetValue(value);
     }
-  else if (dynamic_cast<FilenameParameter*>(param))
+  else if (dynamic_cast<InputFilenameParameter*>(param))
     {
-    FilenameParameter* paramDown = dynamic_cast<FilenameParameter*>(param);
+    InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
     paramDown->SetValue(value);
     }
   else if (dynamic_cast<DirectoryParameter*>(param))
@@ -816,9 +816,9 @@ std::string Application::GetParameterString(std::string parameter)
     StringParameter* paramDown = dynamic_cast<StringParameter*>(param);
     ret = paramDown->GetValue();
     }
-  else if (dynamic_cast<FilenameParameter*>(param))
+  else if (dynamic_cast<InputFilenameParameter*>(param))
     {
-    FilenameParameter* paramDown = dynamic_cast<FilenameParameter*>(param);
+    InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
     ret = paramDown->GetValue();
     }
   else if (dynamic_cast<DirectoryParameter*>(param))
@@ -984,7 +984,7 @@ std::string Application::GetParameterAsString(std::string paramKey)
   std::string ret="";
   ParameterType type = this->GetParameterType( paramKey );
 
-  if( type == ParameterType_String || type == ParameterType_Filename
+  if( type == ParameterType_String || type == ParameterType_InputFilename
       || type == ParameterType_Directory || type == ParameterType_InputImage
       || type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData
       || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData

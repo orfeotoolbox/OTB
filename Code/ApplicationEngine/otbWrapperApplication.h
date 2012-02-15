@@ -255,7 +255,7 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_String
-   * \li ParameterType_Filename
+   * \li ParameterType_InputFilename
    * \li ParameterType_Directory
    * \li ParameterType_Choice
    * \li ParameterType_Float
@@ -334,7 +334,7 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_String
-   * \li ParameterType_Filename
+   * \li ParameterType_InputFilename
    * \li ParameterType_Directory
    * \li ParameterType_InputImage
    * \li ParameterType_InputComplexImage
@@ -455,7 +455,7 @@ public:
    * \li ParameterType_Choice
    * \li ParameterType_Radius
    * \li ParameterType_String
-   * \li ParameterType_Filename
+   * \li ParameterType_InputFilename
    * \li ParameterType_Directory
    * \li ParameterType_InputImage
    * \li ParameterType_InputComplexImage

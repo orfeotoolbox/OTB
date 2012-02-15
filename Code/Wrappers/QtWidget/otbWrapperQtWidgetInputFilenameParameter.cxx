@@ -15,31 +15,31 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbWrapperQtWidgetFilenameParameter.h"
+#include "otbWrapperQtWidgetInputFilenameParameter.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-QtWidgetFilenameParameter::QtWidgetFilenameParameter(FilenameParameter* param, QtWidgetModel* m)
+QtWidgetInputFilenameParameter::QtWidgetInputFilenameParameter(InputFilenameParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(param, m),
   m_FilenameParam(param)
 {
 }
 
-QtWidgetFilenameParameter::~QtWidgetFilenameParameter()
+QtWidgetInputFilenameParameter::~QtWidgetInputFilenameParameter()
 {
 }
 
-void QtWidgetFilenameParameter::DoUpdateGUI()
+void QtWidgetInputFilenameParameter::DoUpdateGUI()
 {
   // Update the lineEdit
   QString text( QString::fromStdString(m_FilenameParam->GetValue() ));
   m_Input->setText(text);
 }
 
-void QtWidgetFilenameParameter::DoCreateWidget()
+void QtWidgetInputFilenameParameter::DoCreateWidget()
 {
   // Set up input text edit
   m_HLayout = new QHBoxLayout;
@@ -63,7 +63,7 @@ void QtWidgetFilenameParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetFilenameParameter::SelectFile()
+void QtWidgetInputFilenameParameter::SelectFile()
 {
   QFileDialog fileDialog;
   fileDialog.setConfirmOverwrite(true);
@@ -92,7 +92,7 @@ void QtWidgetFilenameParameter::SelectFile()
     }
 }
 
-void QtWidgetFilenameParameter::SetFileName(const QString& value)
+void QtWidgetInputFilenameParameter::SetFileName(const QString& value)
 {
   // save value
   m_FilenameParam->SetValue(value.toStdString());
