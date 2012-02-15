@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
   // (progress, logs...)
   QMainWindow* mainWindow =  new QMainWindow();
   mainWindow->setWindowIcon(QIcon( ":/otb_small.png" ));
-  mainWindow->setWindowTitle(QString(app->GetDocName()).append(" - version ").append(OTB_VERSION_STRING));
+  mainWindow->setWindowTitle(QString(app->GetDocName()).append(" - ").append(OTB_VERSION_STRING));
 
   // Create GUI based on module
   QtWidgetView* gui = new QtWidgetView(app);
