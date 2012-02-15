@@ -30,8 +30,8 @@ ADD_EXECUTABLE(0000132-jpg 0000132-jpg.cxx )
 TARGET_LINK_LIBRARIES(0000132-jpg OTBIO OTBVisualization)
 ENDIF(OTB_USE_VISU_GUI)
 
-ADD_EXECUTABLE(PolygonsVectorization PolygonsVectorization.cxx)
-TARGET_LINK_LIBRARIES(PolygonsVectorization OTBIO OTBCommon)
+ADD_EXECUTABLE(0000094-PolygonsVectorization 0000094-PolygonsVectorization.cxx)
+TARGET_LINK_LIBRARIES(0000094-PolygonsVectorization OTBIO OTBCommon)
 
 ADD_EXECUTABLE(0000169-fftcomplextocomplex  0000169-fftcomplextocomplex.cxx)
 TARGET_LINK_LIBRARIES(0000169-fftcomplextocomplex OTBIO OTBCommon)

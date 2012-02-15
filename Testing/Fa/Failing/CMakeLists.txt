@@ -26,3 +26,11 @@ ADD_TEST(NAME FA-0000495-StreamingImageFileWriterProgressReporting
                   ${OTB_DATA_ROOT}/Examples/sensor_stereo_left.tif
                   ${TEMP}/FA-0000495-output1.tif
                   ${TEMP}/FA-0000495-output2.tif)
+
+# -------       Vectorization issue   -----------------------------------
+# http://bugs.orfeo-toolbox.org/view.php?id=94
+ ADD_TEST(FA-0000094-fe-PolygonsVectorization ${CXX_TEST_PATH}/0000094-PolygonsVectorization
+         -in ${OTB_DATA_ROOT}/Input/objtest2.tif
+         -ot ${TEMP}/output.txt
+         -out ${TEMP}/objtest2-result.tif
+         )
