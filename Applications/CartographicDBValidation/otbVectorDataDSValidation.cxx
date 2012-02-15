@@ -75,7 +75,7 @@ private:
     AddParameter(ParameterType_InputVectorData, "in", "Input Vector Data");
     SetParameterDescription("in", "Input vector data to validate");
 
-    AddParameter(ParameterType_Filename, "descmod", "Descriptors model filename");
+    AddParameter(ParameterType_InputFilename, "descmod", "Descriptors model filename");
     SetParameterDescription("descmod", "Fuzzy descriptors model (xml file)");
 
     AddParameter(ParameterType_StringList, "belsup", "Belief Support");

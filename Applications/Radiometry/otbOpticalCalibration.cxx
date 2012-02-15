@@ -108,7 +108,7 @@ private:
     DisableParameter("milli");
     MandatoryOff("milli");
 
-    AddParameter(ParameterType_Filename, "rsr", "Relative Spectral Response File");
+    AddParameter(ParameterType_InputFilename, "rsr", "Relative Spectral Response File");
     std::ostringstream oss;
     oss << "Sensor relative spectral response file"<<std::endl;
     oss << "By default the application gets these informations in the metadata";
@@ -146,7 +146,7 @@ private:
     MandatoryOff("atmo.pressure");
     MandatoryOff("atmo.opt");
 
-    AddParameter(ParameterType_Filename, "atmo.aeronet", "Aeronet File");
+    AddParameter(ParameterType_InputFilename, "atmo.aeronet", "Aeronet File");
     SetParameterDescription("atmo.aeronet","Aeronet file containing atmospheric parameters");
     MandatoryOff("atmo.aeronet");
 

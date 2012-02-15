@@ -446,7 +446,7 @@ private:
     // Custom LUT
     AddChoice("method.custom","Color mapping with custom labeled look-up table");
     SetParameterDescription("method.custom","Apply a user-defined look-up table to a labeled image. Look-up table is loaded from a text file.");
-    AddParameter(ParameterType_Filename, "method.custom.lut", "Look-up table file");
+    AddParameter(ParameterType_InputFilename, "method.custom.lut", "Look-up table file");
     SetParameterDescription("method.custom.lut",  "An ASCII file containing the look-up table\n"
                             "with one color per line\n"
                             "(for instance the line '1 255 0 0' means that all pixels with label 1 will be replaced by RGB color 255 0 0)\n"

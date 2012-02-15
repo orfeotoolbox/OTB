@@ -207,7 +207,7 @@ private:
     SetParameterDescription("ct", "Convergence threshold for class centroid  (L2 distance, by default 0.01).");
     SetDefaultParameterFloat("ct", 0.0001);
     MandatoryOff("ct");
-    AddParameter(ParameterType_Filename, "outmeans", "Centroid filename");
+    AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
     SetParameterDescription("outmeans", "Output text file containing centroid positions");
     MandatoryOff("outmeans");
 

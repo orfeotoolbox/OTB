@@ -59,7 +59,8 @@ private:
     AddParameter(ParameterType_Float, "float", "Float");
     MandatoryOff("float");
     AddParameter(ParameterType_String, "string", "String");
-    AddParameter(ParameterType_Filename, "filename", "File name");
+    AddParameter(ParameterType_InputFilename, "filename", "File name");
+    AddParameter(ParameterType_OutputFilename, "outfilename", "Output Filename");
     AddParameter(ParameterType_Directory, "directory", "Directory name");
 
 

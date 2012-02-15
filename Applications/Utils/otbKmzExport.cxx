@@ -60,7 +60,7 @@ private:
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
     
-    AddParameter(ParameterType_Filename, "out",  "Output .kmz product");
+    AddParameter(ParameterType_OutputFilename, "out",  "Output .kmz product");
     SetParameterDescription("out", "Output Kmz product directory (with .kmz extension)");
     
     AddParameter(ParameterType_Int, "tilesize",  "Tile Size");

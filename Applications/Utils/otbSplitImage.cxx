@@ -64,7 +64,7 @@ private:
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in","Input multiband image filename.");
 
-    AddParameter(ParameterType_Filename, "out", "Output Image");
+    AddParameter(ParameterType_OutputFilename, "out", "Output Image");
     SetParameterDescription("out",
                             "Output filename that will be used to get the prefix and the extension of the output images to write");
 

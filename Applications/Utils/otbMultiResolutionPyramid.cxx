@@ -76,7 +76,7 @@ private:
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
 
-    AddParameter(ParameterType_Filename, "out", "Output Image");
+    AddParameter(ParameterType_OutputFilename, "out", "Output Image");
     SetParameterDescription("out","will be used to get the prefix and the extension of the images to write");
 
     AddRAMParameter();

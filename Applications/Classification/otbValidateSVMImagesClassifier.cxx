@@ -135,17 +135,17 @@ private:
     SetParameterDescription("il", "Input image list filename.");
     AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List");
     SetParameterDescription("vd", "List of vector data to select validation samples.");
-    AddParameter(ParameterType_Filename, "imstat", "XML image statistics file");
+    AddParameter(ParameterType_InputFilename, "imstat", "XML image statistics file");
     MandatoryOff("imstat");
     SetParameterDescription("imstat", "Filename of an XML file containing mean and standard deviation of input images.");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
     
-    AddParameter(ParameterType_Filename, "out", "Output filename");
+    AddParameter(ParameterType_OutputFilename, "out", "Output filename");
     SetParameterDescription("out", "Output file, which contains the performances of the SVM model.");
     MandatoryOff("out");
-    AddParameter(ParameterType_Filename, "svm", "SVM validation filename");
+    AddParameter(ParameterType_InputFilename, "svm", "SVM validation filename");
     SetParameterDescription("svm",
                             "Input SVM model to validate (given by TrainSVMImagesClassification for instance).");
 

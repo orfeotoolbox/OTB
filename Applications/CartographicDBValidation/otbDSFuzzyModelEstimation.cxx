@@ -150,7 +150,7 @@ private:
     MandatoryOff("wgt");
     SetParameterFloat("wgt", 0.5);
 
-    AddParameter(ParameterType_Filename,"initmod","initialization model");
+    AddParameter(ParameterType_InputFilename,"initmod","initialization model");
     SetParameterDescription("initmod","Initialization model (xml file) to be used. If the xml initialization model is set, the descriptor list is not used (specified using the option -desclist)");
     MandatoryOff("initmod");
 
@@ -168,7 +168,7 @@ private:
     SetParameterDescription("optobs","Activate the optimizer observer");
     MandatoryOff("optobs");
 
-    AddParameter(ParameterType_Filename,"out","Output filename");
+    AddParameter(ParameterType_OutputFilename,"out","Output filename");
     SetParameterDescription("out","Output model file name (xml file) contains the optimal model to perform informations fusion.");
 
     // Doc example parameter settings

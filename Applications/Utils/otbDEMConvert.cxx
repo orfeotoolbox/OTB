@@ -59,7 +59,7 @@ private:
     AddParameter(ParameterType_InputImage,  "in",  "Input geo-referenced DEM");
     SetParameterDescription("in", "Input geo-referenced DEM to convert to general raster format.");
 
-    AddParameter(ParameterType_Filename,    "out", "Prefix of the output files");
+    AddParameter(ParameterType_OutputFilename,    "out", "Prefix of the output files");
     std::ostringstream oss;
     oss << "will be used to get the prefix (name withtout extensions) of the files to write. ";
     oss << "Three files - prefix.geom, prefix.omd and prefix.ras - will be generated.";

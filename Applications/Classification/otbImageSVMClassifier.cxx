@@ -78,10 +78,10 @@ private:
     SetParameterDescription( "mask", "The mask allows to restrict classification of the input image to the area where mask pixel values are greater than 0.");
     MandatoryOff("mask");
 
-    AddParameter(ParameterType_Filename, "svm", "SVM Model file");
+    AddParameter(ParameterType_InputFilename, "svm", "SVM Model file");
     SetParameterDescription("svm", "A SVM model file (*.svm extension, produced by TrainSVMImagesClassifier application).");
 
-    AddParameter(ParameterType_Filename, "imstat", "Statistics file");
+    AddParameter(ParameterType_InputFilename, "imstat", "Statistics file");
     SetParameterDescription("imstat", "A XML file containing mean and standard deviation to center and reduce samples before classification (produced by ComputeImagesStatistics application).");
     MandatoryOff("imstat");
     

@@ -148,10 +148,10 @@ private:
     SetParameterDescription("io.il", "A list of input images.");
     AddParameter(ParameterType_InputVectorDataList, "io.vd", "Vector Data List");
     SetParameterDescription("io.vd", "A list of vector data to select the training samples.");
-    AddParameter(ParameterType_Filename, "io.imstat", "XML image statistics file");
+    AddParameter(ParameterType_InputFilename, "io.imstat", "XML image statistics file");
     MandatoryOff("io.imstat");
     SetParameterDescription("io.imstat", "Filename of an XML file containing mean and standard deviation of input images.");
-    AddParameter(ParameterType_Filename, "io.out", "Output SVM model");
+    AddParameter(ParameterType_OutputFilename, "io.out", "Output SVM model");
     SetParameterDescription("io.out", "Output file containing the SVM model estimated");
 
     // Elevation
@@ -179,7 +179,7 @@ private:
                             "Ratio between training and validation samples (0.0 = all training, 1.0 = all validation) default = 0.5.");
     SetParameterFloat("sample.vtr", 0.5);
     
-    AddParameter(ParameterType_Filename, "sample.vfn", "Name of the discrimination field");
+    AddParameter(ParameterType_InputFilename, "sample.vfn", "Name of the discrimination field");
     SetParameterDescription("sample.vfn", "Name of the field used to discriminate class in the vector data files.");
     SetParameterString("sample.vfn", "Class");
 

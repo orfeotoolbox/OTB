@@ -57,7 +57,7 @@ private:
     AddParameter(ParameterType_InputImageList, "il", "Input images");
     SetParameterDescription( "il", "List of input images filenames." );
 
-    AddParameter(ParameterType_Filename, "out", "Output XML file");
+    AddParameter(ParameterType_OutputFilename, "out", "Output XML file");
     SetParameterDescription( "out", "XML filename where the statistics are saved for future reuse." );
     MandatoryOff("out");
 
