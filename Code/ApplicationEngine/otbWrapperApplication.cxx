@@ -22,6 +22,7 @@
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperEmptyParameter.h"
 #include "otbWrapperInputFilenameParameter.h"
+#include "otbWrapperOutputFilenameParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperNumericalParameter.h"
@@ -334,6 +335,10 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_InputFilename;
     }
+  else if (dynamic_cast<const OutputFilenameParameter*>(param))
+    {
+    type = ParameterType_OutputFilename;
+    }
   else if (dynamic_cast<const DirectoryParameter*>(param))
     {
     type = ParameterType_Directory;
@@ -584,6 +589,11 @@ void Application::SetParameterString(std::string parameter, std::string value)
     InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
     paramDown->SetValue(value);
     }
+  else if (dynamic_cast<OutputFilenameParameter*>(param))
+    {
+    OutputFilenameParameter* paramDown = dynamic_cast<OutputFilenameParameter*>(param);
+    paramDown->SetValue(value);
+    }
   else if (dynamic_cast<DirectoryParameter*>(param))
     {
     DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
@@ -821,6 +831,11 @@ std::string Application::GetParameterString(std::string parameter)
     InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
     ret = paramDown->GetValue();
     }
+  else if (dynamic_cast<OutputFilenameParameter*>(param))
+    {
+    OutputFilenameParameter* paramDown = dynamic_cast<OutputFilenameParameter*>(param);
+    ret = paramDown->GetValue();
+    }
   else if (dynamic_cast<DirectoryParameter*>(param))
     {
     DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
@@ -984,7 +999,7 @@ std::string Application::GetParameterAsString(std::string paramKey)
   std::string ret="";
   ParameterType type = this->GetParameterType( paramKey );
 
-  if( type == ParameterType_String || type == ParameterType_InputFilename
+  if( type == ParameterType_String || type == ParameterType_InputFilename || type == ParameterType_OutputFilename
       || type == ParameterType_Directory || type == ParameterType_InputImage
       || type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData
       || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData

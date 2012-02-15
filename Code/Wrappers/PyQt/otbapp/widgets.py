@@ -313,12 +313,12 @@ class QParameterGroup(QParameterBase):
     def DoCreateWidget(self):
         defaultWidget = QParameterInt
         paramTypeToWidget = {
-            otbApplication.ParameterType_Choice : QParameterInt,
             otbApplication.ParameterType_Empty : QParameterEmpty,
             otbApplication.ParameterType_Int : QParameterInt,
             otbApplication.ParameterType_Float : QParameterFloat,
             otbApplication.ParameterType_String : QParameterString,
             otbApplication.ParameterType_InputFilename : QParameterInputFilename,
+            otbApplication.ParameterType_OutputFilename : QParameterInputFilename,
             otbApplication.ParameterType_Directory : QParameterDirectory,
             otbApplication.ParameterType_Choice : QParameterChoice,
             otbApplication.ParameterType_InputImage : QParameterInputFilename,

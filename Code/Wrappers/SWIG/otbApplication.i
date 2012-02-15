@@ -53,6 +53,7 @@ namespace Wrapper
     ParameterType_String,
     ParameterType_StringList,
     ParameterType_InputFilename,
+    ParameterType_OutputFilename,
     ParameterType_Directory,
     ParameterType_Choice,
     ParameterType_InputImage,

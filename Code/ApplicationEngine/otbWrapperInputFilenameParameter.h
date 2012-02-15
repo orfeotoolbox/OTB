@@ -34,7 +34,7 @@ class InputFilenameParameter
 {
 public:
   /** Standard class typedef */
-  typedef InputFilenameParameter             Self;
+  typedef InputFilenameParameter        Self;
   typedef StringParameter               Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

@@ -21,6 +21,7 @@
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperEmptyParameter.h"
 #include "otbWrapperInputFilenameParameter.h"
+#include "otbWrapperOutputFilenameParameter.h"
 #include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
@@ -252,6 +253,11 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
       case ParameterType_InputFilename:
         {
         newParam = InputFilenameParameter::New();
+        }
+        break;
+      case ParameterType_OutputFilename:
+        {
+        newParam = OutputFilenameParameter::New();
         }
         break;
       case ParameterType_Directory:
