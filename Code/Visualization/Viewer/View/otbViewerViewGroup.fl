@@ -102,7 +102,7 @@ class ViewerViewGroup {open
       }
     }
     Fl_Window guiViewerSetupWindow {
-      label {Viewer setup}
+      label {Viewer setup} open
       xywh {885 215 705 230} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 visible
     } {
       Fl_Round_Button guiViewerSetupGrayscaleMode {
@@ -132,7 +132,7 @@ class ViewerViewGroup {open
         tooltip {Select band for blue channel in RGB composition} xywh {602 95 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
       }
       Fl_Return_Button guiViewerSetupOk {
-        label Ok
+        label Update
         callback {ViewerSetupOk();}
         tooltip {Save changes and leave viewer set up interface} xywh {353 180 80 30} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelcolor 186
       }
@@ -160,7 +160,7 @@ class ViewerViewGroup {open
       }
       Fl_Round_Button bAmplitude {
         label Amplitude
-        callback {bPhase->clear();}
+        callback {bPhase->clear();} selected
         tooltip {Toggle modulus mode} xywh {235 50 80 15} down_box ROUND_DOWN_BOX value 1 labelcolor 187 deactivate
       }
       Fl_Round_Button bPhase {
@@ -412,7 +412,7 @@ OpenHDFImage();}
     comment {for fluid 1.3} {in_source not_in_header
     }
   }
-  Function {OpenJpeg2000Image()} {open selected return_type {virtual void}
+  Function {OpenJpeg2000Image()} {open return_type {virtual void}
   } {
     comment {for fluid 1.3} {in_source not_in_header
     }

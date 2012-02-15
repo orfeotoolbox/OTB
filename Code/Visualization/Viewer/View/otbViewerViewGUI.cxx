@@ -831,11 +831,22 @@ ViewerViewGUI
    oss<<"Filename: "<<selectedImageName<<std::endl;
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
-   oss<<"Image information:"<<std::endl;
+   oss<<"Image information: "<<std::endl;
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
-   oss<<"Number of bands: "<<objTracked.pReader->GetOutput()->GetNumberOfComponentsPerPixel();
-   oss<<" - Size: "<<objTracked.pReader->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
+
+  
+   if (m_ViewerModel->IsComplexFile( m_ViewerModel->GetObjectList().at(selectedItem-1).pFileName ))
+     {
+     oss<<"Number of bands: "<<objTracked.pReader->GetOutput()->GetNumberOfComponentsPerPixel()/2<<std::endl;
+     oss<<"(Complex image: "<<objTracked.pReader->GetOutput()->GetNumberOfComponentsPerPixel()<< " bands displayed: Even bands are real parts, odd ones are imaginary parts.)";
+     }
+   else
+     {
+     oss<<"Number of bands: "<<objTracked.pReader->GetOutput()->GetNumberOfComponentsPerPixel();
+     }
+   oss<<std::endl;
+   oss<<"Size: "<<objTracked.pReader->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
 
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
@@ -868,13 +879,6 @@ ViewerViewGUI
    
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
-   
-   if (m_ViewerModel->IsComplexFile( m_ViewerModel->GetObjectList().at(selectedItem-1).pFileName ))
-      {
-      oss<<"Complex image. Even bands are real parts, odd ones are imaginary parts."<<std::endl;
-      guiViewerInformation->insert(oss.str().c_str());
-      }
-   
  }
 
  /**
