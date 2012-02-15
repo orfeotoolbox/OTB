@@ -1222,7 +1222,7 @@ void JPEG2000ImageIO::ReadImageInformation()
     if (lJP2MetadataReader.GetGCPCount() > 0)
       {
       // No GCPprojRef return by GDALJP2metadata
-      std::string gcpProjectionKey = static_cast<std::string>("UNKNOWN");
+      std::string gcpProjectionKey = "UNKNOWN";
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionKey);
 
       int nbGCPs = lJP2MetadataReader.GetGCPCount();
