@@ -27,6 +27,7 @@ set( WrappersQtWidget_MOC_HDR
        otbQtStringSelectionWidget.h
        itkQtProgressBar.h
        otbWrapperQtWidgetInputFilenameParameter.h
+       otbWrapperQtWidgetOutputFilenameParameter.h
        otbQtLogOutput.h
        otbWrapperQtWidgetDirectoryParameter.h
        otbWrapperQtWidgetSimpleProgressReport.h

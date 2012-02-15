@@ -95,7 +95,7 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
   CREATEWIDGET(IntParameter,            QtWidgetIntParameter)
   CREATEWIDGET(FloatParameter,          QtWidgetFloatParameter)
   CREATEWIDGET(InputFilenameParameter,       QtWidgetInputFilenameParameter)
-  CREATEWIDGET(OutputFilenameParameter,       QtWidgetInputFilenameParameter)
+  CREATEWIDGET(OutputFilenameParameter,       QtWidgetOutputFilenameParameter)
   CREATEWIDGET(DirectoryParameter,      QtWidgetDirectoryParameter)
   CREATEWIDGET(StringParameter,         QtWidgetStringParameter)
   CREATEWIDGET(StringListParameter,     QtWidgetStringListParameter)
