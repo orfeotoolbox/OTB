@@ -33,4 +33,5 @@ ADD_TEST(NAME FA-0000495-StreamingImageFileWriterProgressReporting
          -in ${OTB_DATA_ROOT}/Input/objtest2.tif
          -ot ${TEMP}/output.txt
          -out ${TEMP}/objtest2-result.tif
+         -s 0
          )
