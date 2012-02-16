@@ -1268,7 +1268,7 @@ void JPEG2000ImageIO::ReadImageInformation()
         key = lStream.str();
         
         itk::EncapsulateMetaData<std::string>(dict, key, static_cast<std::string> (papszGMLMetadata[cpt]));
-        otbMsgDevMacro( static_cast<std::string> (papszGMLMetadata[cpt]));
+        otbMsgDevMacro( << static_cast<std::string>(papszGMLMetadata[cpt]));
         }
       }
 
