@@ -149,7 +149,7 @@ private:
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
     /*SetDocExampleParameterValue("index.ndvi", "true");
     SetDocExampleParameterValue("index.rvi", "true");
-    SetDocExampleParameterValue("index.ipvi", "true");*/
+    SetDocExampleParameterValue("index.ipvi", "true"); */
     SetDocExampleParameterValue("out", "RadiometricWaterIndicesImages.tif");
   }
 
@@ -171,7 +171,7 @@ private:
       SetMinimumParameterIntValue("channels.rho860", 1);
       SetMaximumParameterIntValue("channels.rho860", GetParameterImage("in")->GetNumberOfComponentsPerPixel());
       SetMinimumParameterIntValue("channels.rho1240", 1);
-      SetMaximumParameterIntValue("channels.rho1240", GetParameterImage("in")->GetNumberOfComponentsPerPixel());  
+      SetMaximumParameterIntValue("channels.rho1240", GetParameterImage("in")->GetNumberOfComponentsPerPixel());
       }
   }
 
