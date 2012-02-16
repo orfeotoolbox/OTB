@@ -164,7 +164,7 @@ private:
     SetMaximumParameterFloatValue("float", 15.0);
     AddParameter(ParameterType_String, "string", "String");
     MandatoryOff("string");
-    AddParameter(ParameterType_Filename, "filename", "File name");
+    AddParameter(ParameterType_InputFilename, "filename", "File name");
     MandatoryOff("filename");
     AddParameter(ParameterType_Directory, "directory", "Directory name");
     MandatoryOff("directory");
