@@ -111,6 +111,7 @@ private:
     AddParameter(ParameterType_OutputImage, "io.outmask", "The output mask corresponding to all criterions");
     SetParameterDescription("io.outmask","A mask image corresponding to all citerions (see masking parameters). Only required if variance threshold or nodata criterions are set.");
     DisableParameter("io.outmask");
+    MandatoryOff("io.outmask");
 
     AddParameter(ParameterType_Empty,"io.outmetric","Output optimal metric values as well");
     SetParameterDescription("io.outmetric","If used, the output image will have a second component with metric optimal values");
@@ -159,6 +160,12 @@ private:
     AddRAMParameter();
  
     // Doc example parameter settings
+    SetDocExampleParameterValue("io.inleft","StereoFixed.png");
+    SetDocExampleParameterValue("io.inright","StereoMoving.png");
+    SetDocExampleParameterValue("bm.mind","-10");
+    SetDocExampleParameterValue("bm.maxd","10");
+    SetDocExampleParameterValue("masking.variancet","10");
+    SetDocExampleParameterValue("io.out","MyDisparity.tif");
   }
 
   void DoUpdateParameters()
