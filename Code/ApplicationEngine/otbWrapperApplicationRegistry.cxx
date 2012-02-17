@@ -101,10 +101,17 @@ ApplicationRegistry::CreateApplication(const std::string& name)
   for(std::list<ApplicationPointer>::iterator k = possibleApp.begin();
       k != possibleApp.end(); ++k)
     {
-    (*k)->Init();
-    if ( (*k)->GetName() == name )
+    try
       {
-      appli = *k;
+      (*k)->Init();
+      if ( (*k)->GetName() == name )
+        {
+        appli = *k;
+        }
+      }
+    catch(...)
+      {
+      otbMsgDevMacro( << "Error a faulty Application has been detected: "<<(*k)->GetNameOfClass() << std::endl );
       }
     }
 
