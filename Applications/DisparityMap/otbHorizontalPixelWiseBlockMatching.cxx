@@ -19,12 +19,16 @@
 #include "otbWrapperApplicationFactory.h"
 
 
+namespace otb
+{
+namespace Wrapper
+{
 
-class FineRegistration : public Application
+class HorizontalPixelWiseBlockMatching : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef FineRegistration              Self;
+  typedef HorizontalPixelWiseBlockMatching              Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -32,7 +36,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(FineRegistration, otb::Application);
+  itkTypeMacro(HorizontalPixelWiseBlockMatching, otb::Application);
 
   /** Filters typedef */
 
@@ -63,7 +67,7 @@ private:
     SetParameterDescription("io.out","An image containing the estimated disparity as well as the metric values if the option is used");
 
     AddParameter(ParameterType_Empty,"io.outmetric","Output optimal metric values as well");
-    SetParameterDescription("io.outmetric","If used, the output image will have a seocnd component with metric optimal values")
+    SetParameterDescription("io.outmetric","If used, the output image will have a second component with metric optimal values");
 
     AddParameter(ParameterType_Group,"mask","Image masking parameters");
     SetParameterDescription("mask","This group of parameters allows to determine the masking parameters to prevent disparities estimation for some pixels of the left image");
@@ -72,11 +76,11 @@ private:
     SetParameterDescription("mask.in","This parameter allows to provide a custom mask");
     MandatoryOff("mask.in");
 
-    AddParameter(ParameterType_InputImage,"mask.nodata","Discard pixels with no-data value");
+    AddParameter(ParameterType_Float,"mask.nodata","Discard pixels with no-data value");
     SetParameterDescription("mask.in","This parameter allows to discard pixels whose value is equal to the user-defined no-data value.");
     MandatoryOff("mask.nodata");
     
-    AddParameter(ParameterType_InputImage,"mask.variancet","Discard pixels with low local variance");
+    AddParameter(ParameterType_Float,"mask.variancet","Discard pixels with low local variance");
     SetParameterDescription("mask.variancet","This parameter allows to discard pixels whose local variance is too small (the size of the neighborhood is given by the radius parameter)");
     MandatoryOff("mask.variancet");
 
