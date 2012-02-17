@@ -10,3 +10,7 @@ OTB_CREATE_APPLICATION(NAME           FineRegistration
 OTB_CREATE_APPLICATION(NAME           StereoRectificationGridGenerator
                        SOURCES        otbStereoRectificationGridGenerator.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           HorizontalPixelWiseBlockMatching
+                       SOURCES        otbHorizontalPixelWiseBlockMatching.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
