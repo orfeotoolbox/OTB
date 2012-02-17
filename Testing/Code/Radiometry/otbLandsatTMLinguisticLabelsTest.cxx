@@ -61,7 +61,7 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   OutputPixelType tir = otb::Functor::LandsatTM::TIR<InputPixelType, OutputPixelType>()( pixel );
   OutputPixelType mirtir = otb::Functor::LandsatTM::MIRTIR<InputPixelType, OutputPixelType>()( pixel );
   OutputPixelType ndsivis = otb::Functor::LandsatTM::NDSIVis<InputPixelType, OutputPixelType>()( pixel );
-  OutputPixelType ndbbbi = otb::Functor::LandsatTM::NDSIVis<InputPixelType, OutputPixelType>()( pixel );
+  OutputPixelType ndbbbi = otb::Functor::LandsatTM::NDBBBI<InputPixelType, OutputPixelType>()( pixel );
   OutputPixelType ndvi = otb::Functor::LandsatTM::NDVI<InputPixelType, OutputPixelType>()( pixel );
   OutputPixelType ndbsi = otb::Functor::LandsatTM::NDBSI<InputPixelType, OutputPixelType>()( pixel );
 
