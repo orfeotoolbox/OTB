@@ -203,7 +203,7 @@ void DoExecute()
 
       // In case of localisation grid, we must internally convert to
       // deformation grid, which is the only type handled by StreamingWarpImageFilter
-      if(GetParameterInt("grid.type") == 1)
+      if(GetParameterString("grid.type") == "loc")
         {
         GetLogger()->Info("Grid intepreted as a location grid.");
         m_ExtractX->SetInput(inGrid);
