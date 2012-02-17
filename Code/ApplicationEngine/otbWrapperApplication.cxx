@@ -814,12 +814,30 @@ std::string Application::GetParameterString(std::string parameter)
   if (dynamic_cast<ChoiceParameter*>(param))
     {
     ChoiceParameter* paramDown = dynamic_cast<ChoiceParameter*>(param);
-    ret = paramDown->GetChoiceName( paramDown->GetValue() );
+    std::string choiceKey = paramDown->GetChoiceKey( paramDown->GetValue() );
+    size_t lastPointPos = choiceKey.find_last_of('.');
+    if(lastPointPos != std::string::npos)
+      {
+      ret = choiceKey.substr(lastPointPos);
+        }
+    else
+      {
+      ret = choiceKey;
+      }
     }
   else if (dynamic_cast<ListViewParameter*>(param))
     {
     ListViewParameter* paramDown = dynamic_cast<ListViewParameter*>(param);
-    ret = paramDown->GetChoiceName( paramDown->GetValue() );
+    std::string choiceKey = paramDown->GetChoiceKey( paramDown->GetValue() );
+    size_t lastPointPos = choiceKey.find_last_of('.');
+    if(lastPointPos != std::string::npos)
+      {
+      ret = choiceKey.substr(lastPointPos);
+        }
+    else
+      {
+      ret = choiceKey;
+      }
     }
   else if (dynamic_cast<StringParameter*>(param))
     {
