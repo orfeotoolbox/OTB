@@ -34,7 +34,8 @@
 #include <mapnik/image_util.hpp>
 #include <mapnik/config_error.hpp>
 #include <mapnik/memory_datasource.hpp>
-
+#include <mapnik/layer.hpp>
+#include <mapnik/map.hpp>
 #include <mapnik/value.hpp>
 
 #include "ogr_spatialref.h"
@@ -411,7 +412,7 @@ VectorDataToImageFilter<TVectorData, TImage>
   for (unsigned int tileIdx = 0; tileIdx < m_NbTile; ++tileIdx)
     {
     //Delete the previous layers from the map
-    int numberLayer = m_Maps[tileIdx].layerCount();
+    int numberLayer = m_Maps[tileIdx].layer_count();
     for (int i = numberLayer - 1; i >= 0; i--) //yes, int.
       {
       m_Maps[tileIdx].removeLayer(i);
@@ -433,7 +434,7 @@ VectorDataToImageFilter<TVectorData, TImage>
         
         std::stringstream layerName;
         layerName << "layer-" << tileIdx;
-        mapnik::Layer lyr(layerName.str());
+        mapnik::layer lyr(layerName.str());
         lyr.set_srs(m_VectorDataProjectionProj4);
         lyr.set_datasource(mDatasource);
         
@@ -447,7 +448,7 @@ VectorDataToImageFilter<TVectorData, TImage>
       }
     assert((m_SensorModelFlip == 1) || (m_SensorModelFlip == -1));
 
-    mapnik::Envelope<double> envelope(
+    mapnik::box2d<double> envelope(
       m_Origin[0] + m_TilingRegions[tileIdx].GetIndex()[0]*m_Spacing[0],
       m_SensorModelFlip*(m_Origin[1] + m_TilingRegions[tileIdx].GetIndex()[1] * m_Spacing[1]
                          + m_TilingRegions[tileIdx].GetSize()[1] * m_Spacing[1]),
@@ -456,12 +457,12 @@ VectorDataToImageFilter<TVectorData, TImage>
       m_SensorModelFlip*(m_Origin[1] + m_TilingRegions[tileIdx].GetIndex()[1] * m_Spacing[1])
       );
         
-    m_Maps[tileIdx].zoomToBox(envelope);
+    m_Maps[tileIdx].zoom_to_box(envelope);
     otbMsgDebugMacro(<< "Envelope: " << envelope);
     
     otbMsgDebugMacro(<< "Map scale: " << m_Maps[tileIdx].scale_denominator());
-    mapnik::Image32 buf(m_Maps[tileIdx].getWidth(), m_Maps[tileIdx].getHeight());
-    mapnik::agg_renderer<mapnik::Image32> ren(m_Maps[tileIdx], buf);
+    mapnik::image_32 buf(m_Maps[tileIdx].width(), m_Maps[tileIdx].height());
+    mapnik::agg_renderer<mapnik::image_32> ren(m_Maps[tileIdx], buf);
     ren.apply();
     
     const unsigned char * src = buf.raw_data();
@@ -519,16 +520,16 @@ VectorDataToImageFilter<TVectorData, TImage>
       case FEATURE_POINT:
         {
         typedef mapnik::vertex<double, 2>  vertex2d;
-        typedef mapnik::point<vertex2d>    point2d;
-        typedef boost::shared_ptr<point2d> point_ptr;
-        mapnik::geometry2d * point = new point2d;
+        typedef mapnik::geometry<vertex2d>  geom;
+        typedef boost::shared_ptr<geom> geom_ptr;
+        geom* point = new geom(mapnik::Point);
 
         point->move_to(dataNode->GetPoint()[0], m_SensorModelFlip * dataNode->GetPoint()[1]);
 //           std::cout << dataNode->GetPoint()[0] << ", " << dataNode->GetPoint()[1] << std::endl;
 
-        typedef boost::shared_ptr<mapnik::raster>               raster_ptr;
-        typedef mapnik::feature<mapnik::geometry2d, raster_ptr> Feature;
-        typedef boost::shared_ptr<Feature>                      feature_ptr;
+        typedef boost::shared_ptr<mapnik::raster> raster_ptr;
+        typedef mapnik::feature<geom, raster_ptr> Feature;
+        typedef boost::shared_ptr<Feature>        feature_ptr;
 
         feature_ptr mfeature = feature_ptr(new Feature(1));
         mfeature->add_geometry(point);
@@ -550,10 +551,10 @@ VectorDataToImageFilter<TVectorData, TImage>
         }
       case otb::FEATURE_LINE:
         {
-        typedef mapnik::vertex<double, 2>                             vertex2d;
-        typedef mapnik::line_string<vertex2d, mapnik::vertex_vector2> line2d;
-        typedef boost::shared_ptr<line2d>                             line_ptr;
-        mapnik::geometry2d * line = new line2d;
+        typedef mapnik::vertex<double, 2>  vertex2d;
+        typedef mapnik::geometry<vertex2d> geom;
+        typedef boost::shared_ptr<geom>    geom_ptr;
+        geom* line = new geom(mapnik::LineString);
 
         typedef typename DataNodeType::LineType::VertexListConstIteratorType VertexIterator;
         VertexIterator itVertex = dataNode->GetLine()->GetVertexList()->Begin();
@@ -567,7 +568,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 //           std::cout << "Num points: " << line->num_points() << std::endl;
 
         typedef boost::shared_ptr<mapnik::raster>               raster_ptr;
-        typedef mapnik::feature<mapnik::geometry2d, raster_ptr> Feature;
+        typedef mapnik::feature<geom, raster_ptr> Feature;
         typedef boost::shared_ptr<Feature>                      feature_ptr;
 
         feature_ptr mfeature = feature_ptr(new Feature(1));
@@ -604,10 +605,10 @@ VectorDataToImageFilter<TVectorData, TImage>
         }
       case FEATURE_POLYGON:
         {
-        typedef mapnik::vertex<double, 2>                         vertex2d;
-        typedef mapnik::polygon<vertex2d, mapnik::vertex_vector2> polygon2d;
-        typedef boost::shared_ptr<polygon2d>                      polygon_ptr;
-        mapnik::geometry2d * polygon = new polygon2d;
+        typedef mapnik::vertex<double, 2>  vertex2d;
+        typedef mapnik::geometry<vertex2d> geom;
+        typedef boost::shared_ptr<geom>    geom_ptr;
+        geom* polygon = new geom(mapnik::Polygon);
 
         typedef typename DataNodeType::PolygonType::VertexListConstIteratorType VertexIterator;
         VertexIterator itVertex = dataNode->GetPolygonExteriorRing()->GetVertexList()->Begin();
@@ -617,9 +618,9 @@ VectorDataToImageFilter<TVectorData, TImage>
           ++itVertex;
           }
 
-        typedef boost::shared_ptr<mapnik::raster>               raster_ptr;
-        typedef mapnik::feature<mapnik::geometry2d, raster_ptr> Feature;
-        typedef boost::shared_ptr<Feature>                      feature_ptr;
+        typedef boost::shared_ptr<mapnik::raster> raster_ptr;
+        typedef mapnik::feature<geom, raster_ptr> Feature;
+        typedef boost::shared_ptr<Feature>        feature_ptr;
 
         feature_ptr mfeature = feature_ptr(new Feature(1));
         mfeature->add_geometry(polygon);
