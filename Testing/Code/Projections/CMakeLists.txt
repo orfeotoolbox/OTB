@@ -1448,8 +1448,8 @@ ${TEMP}/otbRationalTransformOutput.txt
 )
 
 ADD_TEST(prTvRationalTransformToDeformationFiledSourceTest ${PROJECTIONS_TESTS4}
-#--compare-image ${EPSILON_9}  ${BASELINE}/prTvRationalTransformToDeformationFiledSourceTest.hdr
-#                        ${TEMP}/prTvRationalTransformToDeformationFiledSourceTest.hdr
+--compare-image ${EPSILON_9}  ${BASELINE}/prTvRationalTransformToDeformationFiledSourceTest.hdr
+                        ${TEMP}/prTvRationalTransformToDeformationFiledSourceTest.hdr
 otbRationalTransformToDeformationFiledSourceTest
 ${TEMP}/prTvRationalTransformToDeformationFiledSourceTest.hdr
 )
