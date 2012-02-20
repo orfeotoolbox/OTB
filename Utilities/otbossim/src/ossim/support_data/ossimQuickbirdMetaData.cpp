@@ -312,7 +312,7 @@ bool ossimQuickbirdMetaData::loadState(const ossimKeywordlist& kwl,
          }
       }
    }
-   else if (theBandId=="P")
+   else
    {
       theAbsCalFactors = std::vector<double>(1, 1.);
       lookup = kwl.find(prefix, "absCalFactor");
