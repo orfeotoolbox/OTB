@@ -848,11 +848,13 @@ bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
 bool ossimIkonosRpcModel::loadState(const ossimKeywordlist& kwl,
                                     const char* prefix)
 {
-   if(theSupportData.valid())
+   if( !theSupportData )
    {
+      theSupportData = new ossimIkonosMetaData();
+   }
+
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
       theSupportData->loadState(kwl, supportPrefix);
-   }
 
    return ossimRpcModel::loadState(kwl, prefix);
 }
