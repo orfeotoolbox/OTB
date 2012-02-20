@@ -1447,6 +1447,13 @@ ${TEMP}/otbRationalTransformOutput.txt
 -10 -10
 )
 
+ADD_TEST(prTvRationalTransformToDeformationFiledSourceTest ${PROJECTIONS_TESTS4}
+#--compare-image ${EPSILON_9}  ${BASELINE}/prTvRationalTransformToDeformationFiledSourceTest.hdr
+#                        ${TEMP}/prTvRationalTransformToDeformationFiledSourceTest.hdr
+otbRationalTransformToDeformationFiledSourceTest
+${TEMP}/prTvRationalTransformToDeformationFiledSourceTest.hdr
+)
+
 #----- otb::GeographicalDistance ---------------------
 ADD_TEST(prTuGeographicalDistanceNew ${PROJECTIONS_TESTS4}
   otbGeographicalDistanceNew)
@@ -1631,6 +1638,7 @@ otbGenericRSResampleImageFilter.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbRationalTransform.cxx
+otbRationalTransformToDeformationFieldSource.cxx
 otbGeographicalDistance.cxx
 otbVectorDataTransformFilter.cxx
 otbGenericRSTransformGenericTest.cxx

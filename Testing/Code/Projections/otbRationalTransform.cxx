@@ -38,7 +38,7 @@ int otbRationalTransform(int argc, char* argv[])
   RationalTransformType::Pointer rt = RationalTransformType::New();
   rt->SetNumeratorDegree(4);
   rt->SetDenominatorDegree(4);
-  
+
   RationalTransformType::ParametersType params(rt->GetNumberOfParameters());
   params.Fill(1.);
 
@@ -79,7 +79,7 @@ int otbRationalTransform(int argc, char* argv[])
   ofs.precision(10);
 
   unsigned int idx = 2;
- 
+
   ofs<<"Rational function is: "<<std::endl;
   ofs<<"fx(x, y) = (1+2*x+3*x^2+4*x^3+5*x^4)/(6+7*x+8*x^2+9*x^3+10*x^4)"<<std::endl;
   ofs<<"fy(x, y) = (11+12*y+13*y^2+14*y^3+15*y^4)/(16+17*y+18*y^2+19*y^3+20*y^4)"<<std::endl;

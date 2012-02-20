@@ -75,13 +75,13 @@ public:
   itkSetMacro(NumeratorDegree, unsigned int);
 
   /** Get the numerator degree */
-  itkGetMacro(NumeratorDegree, unsigned int);
+  itkGetConstMacro(NumeratorDegree, unsigned int);
 
   /** Set the numerator degree */
   itkSetMacro(DenominatorDegree, unsigned int);
 
   /** Get the denominator degree */
-  itkGetMacro(DenominatorDegree, unsigned int);
+  itkGetConstMacro(DenominatorDegree, unsigned int);
 
   /** Set the origin of the vector data.
   * \sa GetOrigin() */
