@@ -693,7 +693,7 @@ ossimObject* ossimRpcModel::dup() const
 //*****************************************************************************
 std::ostream& ossimRpcModel::print(std::ostream& out) const
 {
-   out << "\nDump of ossimRpcModel object at " << hex << this << ":\n"
+   out << "\nDump of ossimRpcModel object at " << std::hex << this << std::dec << ":\n"
        << POLY_TYPE_KW   << ": " << thePolyType   << "\n"
        << LINE_SCALE_KW  << ": " << theLineScale  << "\n"
        << SAMP_SCALE_KW  << ": " << theSampScale  << "\n"
@@ -707,24 +707,24 @@ std::ostream& ossimRpcModel::print(std::ostream& out) const
        << HGT_OFFSET_KW  << ": " << theHgtOffset  << "\n"
        << BIAS_ERROR_KW  << ": " << theBiasError  << "\n"
        << RAND_ERROR_KW  << ": " << theRandError  << "\n"
-       << endl;
+       << std::endl;
 
    for (int i=0; i<NUM_COEFFS; i++)
-      out<<"  "<<LINE_NUM_COEF_KW<<"["<<i<<"]: "<<theLineNumCoef[i]<<endl;
+      out<<"  "<<LINE_NUM_COEF_KW<<"["<<i<<"]: "<<theLineNumCoef[i]<<std::endl;
 
-   out << endl;
+   out << std::endl;
    for (int i=0; i<NUM_COEFFS; i++)
-      out<<"  "<<LINE_DEN_COEF_KW<<"["<<i<<"]: "<<theLineDenCoef[i]<<endl;
+      out<<"  "<<LINE_DEN_COEF_KW<<"["<<i<<"]: "<<theLineDenCoef[i]<<std::endl;
 
-   out << endl;
+   out << std::endl;
    for (int i=0; i<NUM_COEFFS; i++)
-      out<<"  "<<SAMP_NUM_COEF_KW<<"["<<i<<"]: "<<theSampNumCoef[i]<<endl;
+      out<<"  "<<SAMP_NUM_COEF_KW<<"["<<i<<"]: "<<theSampNumCoef[i]<<std::endl;
 
-   out << endl;
+   out << std::endl;
    for (int i=0; i<NUM_COEFFS; i++)
-      out<<"  "<<SAMP_DEN_COEF_KW<<"["<<i<<"]: "<<theSampDenCoef[i]<<endl;
+      out<<"  "<<SAMP_DEN_COEF_KW<<"["<<i<<"]: "<<theSampDenCoef[i]<<std::endl;
       
-   out << endl;
+   out << std::endl;
 
    return ossimSensorModel::print(out);
 }
