@@ -21,8 +21,8 @@
 #include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
-
 #include "itkProgressReporter.h"
+#include "itkConstantBoundaryCondition.h"
 
 namespace otb
 {
@@ -436,6 +436,13 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     itk::ImageRegionIterator<TOutputDisparityImage> outHDispIt(outHDispPtr,inputLeftRegion);
     itk::ImageRegionIterator<TOutputDisparityImage> outVDispIt(outVDispPtr,inputLeftRegion);
     itk::ImageRegionConstIterator<TMaskImage>       inMaskIt;
+
+
+    itk::ConstantBoundaryCondition<TInputImage> nbc1;
+    itk::ConstantBoundaryCondition<TInputImage> nbc2;
+    
+    leftIt.OverrideBoundaryCondition(&nbc1);
+    rightIt.OverrideBoundaryCondition(&nbc2);
 
     // If we have a mask, define the iterator
     if(inMaskPtr)
