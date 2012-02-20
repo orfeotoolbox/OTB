@@ -285,10 +285,11 @@ private:
       m_NCCBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
       m_NCCBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_NCCBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
+      m_NCCBlockMatcher->MinimizeOff();
 
       if(masking)
         {
-        m_SSDBlockMatcher->SetMaskInput(m_BandMathFilter->GetOutput());
+        m_NCCBlockMatcher->SetMaskInput(m_BandMathFilter->GetOutput());
         }
 
       hdispImage = m_NCCBlockMatcher->GetHorizontalDisparityOutput();
