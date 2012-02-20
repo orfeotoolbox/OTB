@@ -73,7 +73,6 @@ void QtWidgetChoiceParameter::DoCreateWidget()
   connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(SetValue(int)) );
   connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), m_StackWidget, SLOT(setCurrentIndex(int)) );
   connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
-  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
   m_VLayout = new QVBoxLayout;
   m_VLayout->addWidget(m_ComboBox);

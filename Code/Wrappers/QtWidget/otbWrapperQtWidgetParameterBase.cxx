@@ -34,6 +34,9 @@ QtWidgetParameterBase::~QtWidgetParameterBase()
 void QtWidgetParameterBase::CreateWidget()
 {
   this->DoCreateWidget();
+  
+  // connect the update signal to this widget
+  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 }
 
 void QtWidgetParameterBase::UpdateGUI()

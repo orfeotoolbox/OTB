@@ -44,7 +44,6 @@ void QtWidgetRAMParameter::DoCreateWidget()
 
   connect( m_QSpinBox, SIGNAL(valueChanged(int)), this, SLOT(SetValue(int)) );
   connect( m_QSpinBox, SIGNAL(valueChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
-  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
   // Set a valid range
   // Using m_UnsignedIntParam->GetMaximum() to set the maximum range

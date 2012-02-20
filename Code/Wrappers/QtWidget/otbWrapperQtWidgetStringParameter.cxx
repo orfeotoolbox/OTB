@@ -55,7 +55,6 @@ void QtWidgetStringParameter::DoCreateWidget()
 
   connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetValue(const QString&)) );
   connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
-  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
   this->setLayout(m_HLayout);
 

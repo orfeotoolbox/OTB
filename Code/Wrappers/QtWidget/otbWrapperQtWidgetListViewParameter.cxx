@@ -62,7 +62,6 @@ void QtWidgetListViewParameter::DoCreateWidget()
   m_ListView->setSelectionMode(QAbstractItemView::MultiSelection);
 
   connect( m_ListView, SIGNAL(itemSelectionChanged()), this, SLOT(SelectedItems()) );
-  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
   m_VLayout = new QHBoxLayout;
   m_VLayout->setContentsMargins(0, 0, 0, 0);

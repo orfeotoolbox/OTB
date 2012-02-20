@@ -144,7 +144,6 @@ void QtWidgetStringListParameter::DoCreateWidget()
   hLayout->addWidget(scroll);
 
 
-  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
   this->setLayout(hLayout);
 
