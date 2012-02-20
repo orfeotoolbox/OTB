@@ -18,7 +18,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbHorizontalPixelWiseBlockMatchingImageFilter.h"
+#include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "otbVarianceImageFilter.h"
 #include "otbBandMathImageFilter.h"
 #include "otbImageList.h"
@@ -29,11 +29,11 @@ namespace otb
 namespace Wrapper
 {
 
-class HorizontalPixelWiseBlockMatching : public Application
+class PixelWiseBlockMatching : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef HorizontalPixelWiseBlockMatching              Self;
+  typedef PixelWiseBlockMatching              Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -41,13 +41,13 @@ public:
   typedef otb::Functor::SSDBlockMatching<FloatImageType,FloatImageType> SSDBlockMatchingFunctorType;
   typedef otb::Functor::NCCBlockMatching<FloatImageType,FloatImageType> NCCBlockMatchingFunctorType;
 
-  typedef otb::HorizontalPixelWiseBlockMatchingImageFilter<FloatImageType,
+  typedef otb::PixelWiseBlockMatchingImageFilter<FloatImageType,
                                                            FloatImageType,
                                                            FloatImageType,
                                                            FloatImageType,
                                                            SSDBlockMatchingFunctorType> SSDBlockMatchingFilterType;
 
-  typedef otb::HorizontalPixelWiseBlockMatchingImageFilter<FloatImageType,
+  typedef otb::PixelWiseBlockMatchingImageFilter<FloatImageType,
                                                            FloatImageType,
                                                            FloatImageType,
                                                            FloatImageType,
@@ -67,12 +67,12 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(HorizontalPixelWiseBlockMatching, otb::Application);
+  itkTypeMacro(PixelWiseBlockMatching, otb::Application);
 
   /** Filters typedef */
 
 private:
-  HorizontalPixelWiseBlockMatching()
+  PixelWiseBlockMatching()
   {
     // Initialize filters
     m_SSDBlockMatcher = SSDBlockMatchingFilterType::New();
@@ -85,11 +85,11 @@ private:
 
   void DoInit()
   {
-    SetName("HorizontalPixelWiseBlockMatching");
-    SetDescription("Performs block-matching to estimate pixel-wise horizontal disparities between two images");
+    SetName("PixelWiseBlockMatching");
+    SetDescription("Performs block-matching to estimate pixel-wise disparities between two images");
 
-    SetDocName("Horizontal Pixel-wise Block-Matching");
-    SetDocLongDescription("This application allows to erforms block-matching to estimate pixel-wise horizontal disparities between two images. This is useful in the case of stereo images in epipolar geometry, when displacements related to elevation only occur in the horizontal direction. The application allows to choose the block-matching method to use. It also allows to input a mask (related to the left input image) of pixels for which the disparity should be investigated. Additionnaly, two criterions can be optionnaly use to disable disparity investigation for some pixel: a no-data value, and a threshold on the local variance. This allows to speed-up computation by avoiding to investigate disparities that will not be reliable anyway. For efficiency reasons, if the optimal metric values image is desired, it will be concatenated to the output image (which will then have two bands, the first being the disparity, and the second the metric values). One can split these images afterward.");
+    SetDocName(" Pixel-wise Block-Matching");
+    SetDocLongDescription("This application allows to performs block-matching to estimate pixel-wise disparities between two images. The application allows to choose the block-matching method to use. It also allows to input a mask (related to the left input image) of pixels for which the disparity should be investigated. Additionnaly, two criterions can be optionnaly use to disable disparity investigation for some pixel: a no-data value, and a threshold on the local variance. This allows to speed-up computation by avoiding to investigate disparities that will not be reliable anyway. For efficiency reasons, if the optimal metric values image is desired, it will be concatenated to the output image (which will then have two bands, the first being the disparity, and the second the metric values). One can split these images afterward.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbStereoRectificationGridGenerator");
@@ -106,7 +106,7 @@ private:
     SetParameterDescription("io.inright","The right input (secondary)");
 
     AddParameter(ParameterType_OutputImage, "io.out", "The output disparity map");
-    SetParameterDescription("io.out","An image containing the estimated disparity as well as the metric values if the option is used");
+    SetParameterDescription("io.out","An image containing the estimated disparities as well as the metric values if the option is used");
 
     AddParameter(ParameterType_OutputImage, "io.outmask", "The output mask corresponding to all criterions");
     SetParameterDescription("io.outmask","A mask image corresponding to all citerions (see masking parameters). Only required if variance threshold or nodata criterions are set.");
@@ -150,12 +150,17 @@ private:
     SetDefaultParameterInt("bm.radius",3);
     SetMinimumParameterIntValue("bm.radius",1);
 
-    AddParameter(ParameterType_Int,"bm.mind","Minimum disparity");
-    SetParameterDescription("bm.mind","Minimum disparity to explore (can be negative)");
+    AddParameter(ParameterType_Int,"bm.minhd","Minimum horizontal disparity");
+    SetParameterDescription("bm.minhd","Minimum horizontal disparity to explore (can be negative)");
 
-    AddParameter(ParameterType_Int,"bm.maxd","Maximum disparity");
-    SetParameterDescription("bm.maxd","Maximum disparity to explore (can be negative)");
+    AddParameter(ParameterType_Int,"bm.maxhd","Maximum horizontal disparity");
+    SetParameterDescription("bm.maxhd","Maximum horizontal disparity to explore (can be negative)");
 
+    AddParameter(ParameterType_Int,"bm.minvd","Minimum vertical disparity");
+    SetParameterDescription("bm.minvd","Minimum vertical disparity to explore (can be negative)");
+
+    AddParameter(ParameterType_Int,"bm.maxvd","Maximum vertical disparity");
+    SetParameterDescription("bm.maxvd","Maximum vertical disparity to explore (can be negative)");
     
     AddRAMParameter();
  
@@ -187,8 +192,10 @@ private:
     FloatImageType::Pointer leftmask;
 
     unsigned int radius  = GetParameterInt("bm.radius");
-    int          mindisp = GetParameterInt("bm.mind");
-    int          maxdisp = GetParameterInt("bm.maxd");
+    int          minhdisp = GetParameterInt("bm.minhd");
+    int          maxhdisp = GetParameterInt("bm.maxhd");
+    int          minvdisp = GetParameterInt("bm.minvd");
+    int          maxvdisp = GetParameterInt("bm.maxvd");
     
     itk::OStringStream bandMathExpression;
     bandMathExpression<<"if(";
@@ -245,7 +252,8 @@ private:
       m_BandMathFilter->SetExpression(bandMathExpression.str());
       }
       
-    FloatImageType * dispImage;
+    FloatImageType * hdispImage;
+    FloatImageType * vdispImage;
     FloatImageType * metricImage;
 
     // SSD case
@@ -254,15 +262,17 @@ private:
       m_SSDBlockMatcher->SetLeftInput(leftImage);
       m_SSDBlockMatcher->SetRightInput(rightImage);
       m_SSDBlockMatcher->SetRadius(radius);
-      m_SSDBlockMatcher->SetMinimumDisparity(mindisp);
-      m_SSDBlockMatcher->SetMaximumDisparity(maxdisp);
-
+      m_SSDBlockMatcher->SetMinimumHorizontalDisparity(minhdisp);
+      m_SSDBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
+      m_SSDBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
+      m_SSDBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
       if(masking)
         {
         m_SSDBlockMatcher->SetMaskInput(m_BandMathFilter->GetOutput());
         }
 
-      dispImage = m_SSDBlockMatcher->GetDisparityOutput();
+      hdispImage = m_SSDBlockMatcher->GetHorizontalDisparityOutput();
+      vdispImage = m_SSDBlockMatcher->GetVerticalDisparityOutput();
       metricImage = m_SSDBlockMatcher->GetMetricOutput();
       }
     // NCC case
@@ -271,22 +281,26 @@ private:
       m_NCCBlockMatcher->SetLeftInput(leftImage);
       m_NCCBlockMatcher->SetRightInput(rightImage);
       m_NCCBlockMatcher->SetRadius(radius);
-      m_NCCBlockMatcher->SetMinimumDisparity(mindisp);
-      m_NCCBlockMatcher->SetMaximumDisparity(maxdisp);
+      m_NCCBlockMatcher->SetMinimumHorizontalDisparity(minhdisp);
+      m_NCCBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
+      m_NCCBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
+      m_NCCBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
 
       if(masking)
         {
         m_SSDBlockMatcher->SetMaskInput(m_BandMathFilter->GetOutput());
         }
 
-      dispImage = m_NCCBlockMatcher->GetDisparityOutput();
+      hdispImage = m_NCCBlockMatcher->GetHorizontalDisparityOutput();
+      vdispImage = m_NCCBlockMatcher->GetVerticalDisparityOutput();
       metricImage = m_NCCBlockMatcher->GetMetricOutput();
       }
     
 
     m_OutputImageList->Clear();
 
-    m_OutputImageList->PushBack(dispImage);
+    m_OutputImageList->PushBack(hdispImage);
+    m_OutputImageList->PushBack(vdispImage);
 
     if(IsParameterEnabled("io.outmetric"))
       {
@@ -326,4 +340,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::HorizontalPixelWiseBlockMatching)
+OTB_APPLICATION_EXPORT(otb::Wrapper::PixelWiseBlockMatching)

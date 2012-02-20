@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHorizontalPixelWiseBlockMatchingImageFilter_txx
-#define __otbHorizontalPixelWiseBlockMatchingImageFilter_txx
+#ifndef __otbPixelWiseBlockMatchingImageFilter_txx
+#define __otbPixelWiseBlockMatchingImageFilter_txx
 
-#include "otbHorizontalPixelWiseBlockMatchingImageFilter.h"
+#include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 
@@ -28,18 +28,19 @@ namespace otb
 {
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::HorizontalPixelWiseBlockMatchingImageFilter()
+::PixelWiseBlockMatchingImageFilter()
 {
   // Set the number of inputs
   this->SetNumberOfInputs(3);
   this->SetNumberOfRequiredInputs(2);
 
   // Set the outputs
-  this->SetNumberOfOutputs(2);
+  this->SetNumberOfOutputs(3);
   this->SetNthOutput(0,TOutputMetricImage::New());
   this->SetNthOutput(1,TOutputDisparityImage::New());
+  this->SetNthOutput(2,TOutputDisparityImage::New());
 
   // Default parameters
   m_Radius.Fill(2);
@@ -48,23 +49,25 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   m_Minimize = true;
 
   // Default disparity range
-  m_MinimumDisparity = -10;
-  m_MaximumDisparity =  10;
+  m_MinimumHorizontalDisparity = -10;
+  m_MaximumHorizontalDisparity =  10;
+  m_MinimumVerticalDisparity = 0;
+  m_MaximumVerticalDisparity = 0;
 }
 
 
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::~HorizontalPixelWiseBlockMatchingImageFilter()
+::~PixelWiseBlockMatchingImageFilter()
 {}
 
 
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::SetLeftInput(const TInputImage * image)
 {
@@ -75,7 +78,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::SetRightInput(const TInputImage * image)
 {
@@ -86,7 +89,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::SetMaskInput(const TMaskImage * image)
 {
@@ -97,7 +100,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 const TInputImage *
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetLeftInput() const
 {
@@ -111,7 +114,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 const TInputImage *
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetRightInput() const
 {
@@ -125,7 +128,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 const TMaskImage *
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetMaskInput() const
 {
@@ -139,7 +142,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 const TOutputMetricImage *
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetMetricOutput() const
 {
@@ -153,7 +156,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 TOutputMetricImage *
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetMetricOutput()
 {
@@ -168,9 +171,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 const TOutputDisparityImage *
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::GetDisparityOutput() const
+::GetHorizontalDisparityOutput() const
 {
   if (this->GetNumberOfOutputs()<2)
     {
@@ -182,9 +185,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 TOutputDisparityImage *
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::GetDisparityOutput()
+::GetHorizontalDisparityOutput()
 {
 if (this->GetNumberOfOutputs()<2)
     {
@@ -195,8 +198,38 @@ if (this->GetNumberOfOutputs()<2)
 
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
+const TOutputDisparityImage *
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
+::GetVerticalDisparityOutput() const
+{
+  if (this->GetNumberOfOutputs()<3)
+    {
+    return 0;
+    }
+  return static_cast<const TOutputDisparityImage *>(this->itk::ProcessObject::GetOutput(2));
+}
+
+template <class TInputImage, class TOutputMetricImage,
+class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
+TOutputDisparityImage *
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
+::GetVerticalDisparityOutput()
+{
+if (this->GetNumberOfOutputs()<3)
+    {
+    return 0;
+    }
+  return static_cast<TOutputDisparityImage *>(this->itk::ProcessObject::GetOutput(2));
+}
+
+
+
+template <class TInputImage, class TOutputMetricImage,
+class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GenerateInputRequestedRegion()
 {
@@ -209,10 +242,11 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   TMaskImage *  inMaskPtr  = const_cast<TMaskImage * >(this->GetMaskInput());
 
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
-  TOutputDisparityImage * outDispPtr = this->GetDisparityOutput();
-  
+  TOutputDisparityImage * outHDispPtr = this->GetHorizontalDisparityOutput();
+  TOutputDisparityImage * outVDispPtr = this->GetVerticalDisparityOutput();  
+
   // Check pointers before using them
-  if(!inLeftPtr || !inRightPtr || !outMetricPtr || !outDispPtr)
+  if(!inLeftPtr || !inRightPtr || !outMetricPtr || !outHDispPtr || !outVDispPtr)
     {
     return;
     }
@@ -231,7 +265,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     }
 
   // Retrieve requested region (TODO: check if we need to handle
-  // region for outDispPtr)
+  // region for outHDispPtr)
   RegionType outputRequestedRegion = outMetricPtr->GetRequestedRegion();
   
   // Pad by the appropriate radius
@@ -240,11 +274,13 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   // Now, we must find the corresponding region in moving image
   IndexType rightRequestedRegionIndex = inputLeftRegion.GetIndex();
-  rightRequestedRegionIndex[0]+=m_MinimumDisparity;
-  
+  rightRequestedRegionIndex[0]+=m_MinimumHorizontalDisparity;
+  rightRequestedRegionIndex[0]+=m_MinimumVerticalDisparity;  
+
   SizeType rightRequestedRegionSize = inputLeftRegion.GetSize();
-  rightRequestedRegionSize[0]+= m_MaximumDisparity - m_MinimumDisparity;
-  
+  rightRequestedRegionSize[0]+= m_MaximumHorizontalDisparity - m_MinimumHorizontalDisparity;
+  rightRequestedRegionSize[1]+= m_MaximumVerticalDisparity - m_MinimumVerticalDisparity;  
+
   RegionType inputRightRegion;
   inputRightRegion.SetIndex(rightRequestedRegionIndex);
   inputRightRegion.SetSize(rightRequestedRegionSize);
@@ -325,22 +361,24 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::BeforeThreadedGenerateData()
 {
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
-  TOutputDisparityImage * outDispPtr   = this->GetDisparityOutput();
+  TOutputDisparityImage * outHDispPtr   = this->GetHorizontalDisparityOutput();
+  TOutputDisparityImage * outVDispPtr   = this->GetVerticalDisparityOutput();
 
   // Fill buffers with default values
   outMetricPtr->FillBuffer(0.);
-  outDispPtr->FillBuffer(m_MinimumDisparity);
+  outHDispPtr->FillBuffer(m_MinimumHorizontalDisparity);
+  outVDispPtr->FillBuffer(m_MinimumVerticalDisparity);
 }
 
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
-HorizontalPixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
 {
@@ -349,11 +387,12 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   const TInputImage *     inRightPtr   = this->GetRightInput();
   const TMaskImage  *     inMaskPtr    = this->GetMaskInput();
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
-  TOutputDisparityImage * outDispPtr   = this->GetDisparityOutput();
+  TOutputDisparityImage * outHDispPtr   = this->GetHorizontalDisparityOutput();
+  TOutputDisparityImage * outVDispPtr   = this->GetVerticalDisparityOutput();
 
   // Set-up progress reporting (this is not exact, since we do not
   // account for pixels that are out of range for a given disparity
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels()*(m_MaximumDisparity - m_MinimumDisparity));
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels()*(m_MaximumHorizontalDisparity - m_MinimumHorizontalDisparity + 1)*(m_MaximumVerticalDisparity - m_MinimumVerticalDisparity + 1));
 
   // Define the block matching functor
   TBlockMatchingFunctor bmFunctor;
@@ -362,11 +401,15 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
 
   // We loop on disparities
-  for(int disparity = m_MinimumDisparity; disparity <= m_MaximumDisparity; ++disparity)
+  for(int vdisparity = m_MinimumVerticalDisparity; vdisparity <= m_MaximumVerticalDisparity; ++vdisparity)
+    {
+  for(int hdisparity = m_MinimumHorizontalDisparity; hdisparity <= m_MaximumHorizontalDisparity; ++hdisparity)
     {
     // First, we cast output region to the right image
     IndexType rightRequestedRegionIndex = outputRegionForThread.GetIndex();
-    rightRequestedRegionIndex[0]+=disparity;
+    rightRequestedRegionIndex[0]+=hdisparity;
+    rightRequestedRegionIndex[1]+=vdisparity;
+
     // We crop
     RegionType inputRightRegion;
     inputRightRegion.SetIndex(rightRequestedRegionIndex);
@@ -375,8 +418,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
     // And then cast back
     IndexType leftRequestedRegionIndex = inputRightRegion.GetIndex();
-    leftRequestedRegionIndex[0]-=disparity;
-  
+    leftRequestedRegionIndex[0]-=hdisparity;
+    leftRequestedRegionIndex[1]-=vdisparity;  
+
     RegionType inputLeftRegion;
     inputLeftRegion.SetIndex(leftRequestedRegionIndex);
     inputLeftRegion.SetSize(inputRightRegion.GetSize());
@@ -389,8 +433,8 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     itk::ConstNeighborhoodIterator<TInputImage>     leftIt(m_Radius,inLeftPtr,inputLeftRegion);
     itk::ConstNeighborhoodIterator<TInputImage>     rightIt(m_Radius,inRightPtr,inputRightRegion);
     itk::ImageRegionIterator<TOutputMetricImage>    outMetricIt(outMetricPtr,inputLeftRegion);
-    itk::ImageRegionIterator<TOutputDisparityImage> outDispIt(outDispPtr,inputLeftRegion);
-
+    itk::ImageRegionIterator<TOutputDisparityImage> outHDispIt(outHDispPtr,inputLeftRegion);
+    itk::ImageRegionIterator<TOutputDisparityImage> outVDispIt(outVDispPtr,inputLeftRegion);
     itk::ImageRegionConstIterator<TMaskImage>       inMaskIt;
 
     // If we have a mask, define the iterator
@@ -404,13 +448,15 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     leftIt.GoToBegin();
     rightIt.GoToBegin();
     outMetricIt.GoToBegin();
-    outDispIt.GoToBegin();
+    outHDispIt.GoToBegin();
+    outVDispIt.GoToBegin();
 
     // Loop on pixels
     while(!leftIt.IsAtEnd()
           || !rightIt.IsAtEnd()
           || !outMetricIt.IsAtEnd()
-          || !outDispIt.IsAtEnd())
+          || !outHDispIt.IsAtEnd()
+          || !outVDispIt.IsAtEnd())
       {
       
       // If the mask is present and valid
@@ -420,19 +466,22 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
         double metric = bmFunctor(leftIt,rightIt);
 
         // If we are at first loop, fill both outputs
-        if(disparity == m_MinimumDisparity)
+        if(vdisparity == m_MinimumVerticalDisparity && hdisparity == m_MinimumHorizontalDisparity)
           {
-          outDispIt.Set(disparity);
+          outHDispIt.Set(hdisparity);
+          outVDispIt.Set(vdisparity);
           outMetricIt.Set(metric);
           }
         else if(m_Minimize && metric < outMetricIt.Get())
           {
-          outDispIt.Set(disparity);
+          outHDispIt.Set(hdisparity);
+          outVDispIt.Set(vdisparity);
           outMetricIt.Set(metric);
           }
         else if(!m_Minimize && metric > outMetricIt.Get())
           {
-          outDispIt.Set(disparity);
+          outHDispIt.Set(hdisparity);
+          outVDispIt.Set(vdisparity);
           outMetricIt.Set(metric);
           }
         }
@@ -442,13 +491,15 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       ++leftIt;
       ++rightIt;
       ++outMetricIt;
-      ++outDispIt;
+      ++outHDispIt;
+      ++outVDispIt;
 
       if(inMaskPtr)
         {
         ++inMaskIt;
         }
       }
+    }
     }
 }
 } // End namespace otb

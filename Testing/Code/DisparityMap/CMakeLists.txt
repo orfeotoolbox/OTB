@@ -444,35 +444,35 @@ ${TEMP}/feTvStereorectificationDeformationFieldSourceOutput2.tif
 )
 
 #--------- otb::HorizontalPixelWiseBlockMatchingImageFilter -----------------------------------------
-ADD_TEST(feTuHorizontalPixelWiseBlockMatchingImageFilterNew ${DISPARITYMAP_TESTS3}
-otbHorizontalPixelWiseBlockMatchingImageFilterNew)
+ADD_TEST(dmTuPixelWiseBlockMatchingImageFilterNew ${DISPARITYMAP_TESTS3}
+otbPixelWiseBlockMatchingImageFilterNew)
 
-ADD_TEST(feTvHorizontalPixelWiseBlockMatchingImageFilter ${DISPARITYMAP_TESTS3}
+ADD_TEST(dmTvPixelWiseBlockMatchingImageFilter ${DISPARITYMAP_TESTS3}
 --compare-n-images ${NOTOL} 2
-${BASELINE}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputDisparity.tif
-${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputDisparity.tif
-${BASELINE}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputMetric.tif
-${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputMetric.tif
-otbHorizontalPixelWiseBlockMatchingImageFilter
+${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
+${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
+${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterOutputMetric.tif
+${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputMetric.tif
+otbPixelWiseBlockMatchingImageFilter
 ${EXAMPLEDATA}/StereoFixed.png
 ${EXAMPLEDATA}/StereoMoving.png
-${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputDisparity.tif
-${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterOutputMetric.tif
+${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
+${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputMetric.tif
 2
 -10 +10
 )
 
-ADD_TEST(feTvHorizontalPixelWiseBlockMatchingImageFilterNCC ${DISPARITYMAP_TESTS3}
+ADD_TEST(dmTvPixelWiseBlockMatchingImageFilterNCC ${DISPARITYMAP_TESTS3}
 --compare-n-images ${NOTOL} 2
-${BASELINE}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
-${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
-${BASELINE}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
-${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
-otbHorizontalPixelWiseBlockMatchingImageFilterNCC
+${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
+${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
+${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
+${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
+otbPixelWiseBlockMatchingImageFilterNCC
 ${EXAMPLEDATA}/StereoFixed.png
 ${EXAMPLEDATA}/StereoMoving.png
-${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
-${TEMP}/feTvHorizontalPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
+${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
+${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
 2
 -10 +10
 )
@@ -519,7 +519,7 @@ otbFineRegistrationImageFilterNew.cxx
 otbFineRegistrationImageFilterTest.cxx
 otbStereoSensorModelToElevationMapFilter.cxx
 otbStereorectificationDeformationFieldSource.cxx
-otbHorizontalPixelWiseBlockMatchingImageFilter.cxx
+otbPixelWiseBlockMatchingImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbDisparityMapTests1 "${BasicDisparityMap_SRCS1}" "OTBDisparityMap;OTBIO;OTBTesting")

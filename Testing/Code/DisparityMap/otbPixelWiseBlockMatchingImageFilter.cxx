@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbHorizontalPixelWiseBlockMatchingImageFilter.h"
+#include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
@@ -27,21 +27,21 @@ typedef otb::Image<float>                             FloatImageType;
 typedef otb::ImageFileReader<ImageType>               ReaderType;
 typedef otb::StreamingImageFileWriter<FloatImageType> FloatWriterType;
 
-typedef otb::HorizontalPixelWiseBlockMatchingImageFilter<ImageType,FloatImageType,FloatImageType,ImageType> HorizontalPixelWiseBlockMatchingImageFilterType;
+typedef otb::PixelWiseBlockMatchingImageFilter<ImageType,FloatImageType,FloatImageType,ImageType> PixelWiseBlockMatchingImageFilterType;
 
 typedef otb::Functor::NCCBlockMatching<ImageType,FloatImageType> NCCBlockMatchingFunctorType;
 
-typedef otb::HorizontalPixelWiseBlockMatchingImageFilter<ImageType,FloatImageType,FloatImageType,ImageType, NCCBlockMatchingFunctorType> HorizontalPixelWiseNCCBlockMatchingImageFilterType;
+typedef otb::PixelWiseBlockMatchingImageFilter<ImageType,FloatImageType,FloatImageType,ImageType, NCCBlockMatchingFunctorType> PixelWiseNCCBlockMatchingImageFilterType;
 
-int otbHorizontalPixelWiseBlockMatchingImageFilterNew(int argc, char * argv[])
+int otbPixelWiseBlockMatchingImageFilterNew(int argc, char * argv[])
 {
   // Instanciation
-  HorizontalPixelWiseBlockMatchingImageFilterType::Pointer bmFilter = HorizontalPixelWiseBlockMatchingImageFilterType::New();
+  PixelWiseBlockMatchingImageFilterType::Pointer bmFilter = PixelWiseBlockMatchingImageFilterType::New();
 
   return EXIT_SUCCESS;
 }
 
-int otbHorizontalPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
+int otbPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
 {
   ReaderType::Pointer leftReader = ReaderType::New();
   leftReader->SetFileName(argv[1]);
@@ -49,12 +49,12 @@ int otbHorizontalPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
   ReaderType::Pointer rightReader = ReaderType::New();
   rightReader->SetFileName(argv[2]);
   
-  HorizontalPixelWiseBlockMatchingImageFilterType::Pointer bmFilter = HorizontalPixelWiseBlockMatchingImageFilterType::New();
+  PixelWiseBlockMatchingImageFilterType::Pointer bmFilter = PixelWiseBlockMatchingImageFilterType::New();
   bmFilter->SetLeftInput(leftReader->GetOutput());
   bmFilter->SetRightInput(rightReader->GetOutput());
   bmFilter->SetRadius(atoi(argv[5]));
-  bmFilter->SetMinimumDisparity(atoi(argv[6]));
-  bmFilter->SetMaximumDisparity(atoi(argv[7]));
+  bmFilter->SetMinimumHorizontalDisparity(atoi(argv[6]));
+  bmFilter->SetMaximumHorizontalDisparity(atoi(argv[7]));
 
   ReaderType::Pointer maskReader = ReaderType::New();
   if(argc > 8)
@@ -64,7 +64,7 @@ int otbHorizontalPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
     }
 
   FloatWriterType::Pointer dispWriter = FloatWriterType::New();
-  dispWriter->SetInput(bmFilter->GetDisparityOutput());
+  dispWriter->SetInput(bmFilter->GetHorizontalDisparityOutput());
   dispWriter->SetFileName(argv[3]);
 
   otb::StandardWriterWatcher watcher1(dispWriter,bmFilter,"Computing disparity map");
@@ -84,7 +84,7 @@ int otbHorizontalPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
 }
 
 
-int otbHorizontalPixelWiseBlockMatchingImageFilterNCC(int argc, char * argv[])
+int otbPixelWiseBlockMatchingImageFilterNCC(int argc, char * argv[])
 {
   ReaderType::Pointer leftReader = ReaderType::New();
   leftReader->SetFileName(argv[1]);
@@ -92,12 +92,12 @@ int otbHorizontalPixelWiseBlockMatchingImageFilterNCC(int argc, char * argv[])
   ReaderType::Pointer rightReader = ReaderType::New();
   rightReader->SetFileName(argv[2]);
   
-  HorizontalPixelWiseNCCBlockMatchingImageFilterType::Pointer bmFilter = HorizontalPixelWiseNCCBlockMatchingImageFilterType::New();
+  PixelWiseNCCBlockMatchingImageFilterType::Pointer bmFilter = PixelWiseNCCBlockMatchingImageFilterType::New();
   bmFilter->SetLeftInput(leftReader->GetOutput());
   bmFilter->SetRightInput(rightReader->GetOutput());
   bmFilter->SetRadius(atoi(argv[5]));
-  bmFilter->SetMinimumDisparity(atoi(argv[6]));
-  bmFilter->SetMaximumDisparity(atoi(argv[7]));
+  bmFilter->SetMinimumHorizontalDisparity(atoi(argv[6]));
+  bmFilter->SetMaximumHorizontalDisparity(atoi(argv[7]));
   bmFilter->MinimizeOff();
 
   ReaderType::Pointer maskReader = ReaderType::New();
@@ -108,7 +108,7 @@ int otbHorizontalPixelWiseBlockMatchingImageFilterNCC(int argc, char * argv[])
     }
 
   FloatWriterType::Pointer dispWriter = FloatWriterType::New();
-  dispWriter->SetInput(bmFilter->GetDisparityOutput());
+  dispWriter->SetInput(bmFilter->GetHorizontalDisparityOutput());
   dispWriter->SetFileName(argv[3]);
 
   otb::StandardWriterWatcher watcher1(dispWriter,bmFilter,"Computing disparity map");

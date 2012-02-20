@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHorizontalPixelWiseBlockMatchingImageFilter_h
-#define __otbHorizontalPixelWiseBlockMatchingImageFilter_h
+#ifndef __otbPixelWiseBlockMatchingImageFilter_h
+#define __otbPixelWiseBlockMatchingImageFilter_h
 
 
 #include "itkImageToImageFilter.h"
@@ -32,7 +32,7 @@ namespace Functor
  *  \brief Functor to perform simple SSD block-matching
  *
  *  This functor is designed to work with the
- *  HorizontalPixelWiseBlockMatchingImageFilter. It performs a simple
+ *  PixelWiseBlockMatchingImageFilter. It performs a simple
  *  SSD (Sum of Square Distances) block-matching. The functor is
  *  templated by the type of inputs images and output metric image,
  *  and is using two neighborhood iterators as inputs.
@@ -62,7 +62,7 @@ public:
  *  \brief Functor to perform simple NCC block-matching
  *
  *  This functor is designed to work with the
- *  HorizontalPixelWiseBlockMatchingImageFilter. It performs a simple
+ *  PixelWiseBlockMatchingImageFilter. It performs a simple
  *  NCC (Normalized Cross-Correlation) block-matching. The functor is
  *  templated by the type of inputs images and output metric image,
  *  and is using two neighborhood iterators as inputs.
@@ -118,7 +118,7 @@ public:
 
 } // End Namespace Functor
 
-/** \class HorizontalPixelWiseBlockMatchingImageFilter
+/** \class PixelWiseBlockMatchingImageFilter
  *  \brief Perform horizontal 1D block matching between two images
  *
  *  This filter performs pixel-wise horizontal 1D block-matching
@@ -166,12 +166,12 @@ public:
 
 template <class TInputImage, class TOutputMetricImage, class TOutputDisparityImage = TOutputMetricImage, class TMaskImage = otb::Image<unsigned char>,
           class TBlockMatchingFunctor = Functor::SSDBlockMatching<TInputImage,TOutputMetricImage> >
-class ITK_EXPORT HorizontalPixelWiseBlockMatchingImageFilter :
+class ITK_EXPORT PixelWiseBlockMatchingImageFilter :
     public itk::ImageToImageFilter<TInputImage,TOutputDisparityImage>
 {
 public:
   /** Standard class typedef */
-  typedef HorizontalPixelWiseBlockMatchingImageFilter       Self;
+  typedef PixelWiseBlockMatchingImageFilter       Self;
   typedef itk::ImageToImageFilter<TInputImage,
                                   TOutputDisparityImage>    Superclass;
   typedef itk::SmartPointer<Self>                           Pointer;
@@ -181,7 +181,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HorizontalPixelWiseBlockMatchingImageFilter, ImageToImageFilter);
+  itkTypeMacro(PixelWiseBlockMatchingImageFilter, ImageToImageFilter);
 
   /** Usefull typedefs */
   typedef TInputImage                                       InputImageType;
@@ -213,8 +213,13 @@ public:
   TOutputMetricImage * GetMetricOutput();
 
   /** Get the disparity output */
-  const TOutputDisparityImage * GetDisparityOutput() const;
-  TOutputDisparityImage * GetDisparityOutput();
+  const TOutputDisparityImage * GetHorizontalDisparityOutput() const;
+  TOutputDisparityImage * GetHorizontalDisparityOutput();
+
+  /** Get the disparity output */
+  const TOutputDisparityImage * GetVerticalDisparityOutput() const;
+  TOutputDisparityImage * GetVerticalDisparityOutput();
+
 
   /** Set unsigned int radius */
   void SetRadius(unsigned int radius)
@@ -227,24 +232,32 @@ public:
   itkGetConstReferenceMacro(Radius, SizeType);
   
   /*** Set/Get the minimum disparity to explore */
-  itkSetMacro(MinimumDisparity,int);
-  itkGetConstReferenceMacro(MinimumDisparity,int);
+  itkSetMacro(MinimumHorizontalDisparity,int);
+  itkGetConstReferenceMacro(MinimumHorizontalDisparity,int);
 
   /*** Set/Get the maximum disparity to explore */
-  itkSetMacro(MaximumDisparity,int);
-  itkGetConstReferenceMacro(MaximumDisparity,int);
+  itkSetMacro(MaximumHorizontalDisparity,int);
+  itkGetConstReferenceMacro(MaximumHorizontalDisparity,int);
 
-  /** True if metric should be minimized. False otherwise */
+  /*** Set/Get the minimum disparity to explore */
+  itkSetMacro(MinimumVerticalDisparity,int);
+  itkGetConstReferenceMacro(MinimumVerticalDisparity,int);
+
+  /*** Set/Get the maximum disparity to explore */
+  itkSetMacro(MaximumVerticalDisparity,int);
+  itkGetConstReferenceMacro(MaximumVerticalDisparity,int);
+
+
   itkSetMacro(Minimize, bool);
   itkGetConstReferenceMacro(Minimize,bool);
   itkBooleanMacro(Minimize);
 
 protected:
   /** Constructor */
-  HorizontalPixelWiseBlockMatchingImageFilter();
+  PixelWiseBlockMatchingImageFilter();
 
   /** Destructor */
-  virtual ~HorizontalPixelWiseBlockMatchingImageFilter();
+  virtual ~PixelWiseBlockMatchingImageFilter();
 
   /** Generate input requrested region */
   virtual void GenerateInputRequestedRegion();
@@ -256,17 +269,24 @@ protected:
   virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId);
   
 private:
-  HorizontalPixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented
+  PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemeFnted
 
    /** The radius of the blocks */
   SizeType                      m_Radius;
 
   /** The min disparity to explore */
-  int                           m_MinimumDisparity;
+  int                           m_MinimumHorizontalDisparity;
 
   /** The max disparity to explore */
-  int                           m_MaximumDisparity;
+  int                           m_MaximumHorizontalDisparity;
+
+   /** The min disparity to explore */
+  int                           m_MinimumVerticalDisparity;
+
+  /** The max disparity to explore */
+  int                           m_MaximumVerticalDisparity;
+
 
   /** Should we minimize or maximize ? */
   bool                          m_Minimize;
@@ -274,7 +294,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHorizontalPixelWiseBlockMatchingImageFilter.txx"
+#include "otbPixelWiseBlockMatchingImageFilter.txx"
 #endif
 
 #endif
