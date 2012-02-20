@@ -10,7 +10,7 @@
 // Description: Class declaration for image generator.
 //
 //*************************************************************************
-// $Id: ossimIgen.h 19911 2011-08-08 14:52:27Z gpotts $
+// $Id: ossimIgen.h 20303 2011-11-29 16:11:46Z oscarkramer $
 #ifndef ossimIgen_HEADER
 #define ossimIgen_HEADER
 
@@ -64,6 +64,7 @@ protected:
    bool              theTilingEnabled;
    bool              theProgressFlag;
    bool              theStdoutFlag;
+   ossim_uint32      theThreadCount;
 
 };
 

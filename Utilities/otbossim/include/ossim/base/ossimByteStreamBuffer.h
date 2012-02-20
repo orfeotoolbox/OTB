@@ -25,11 +25,11 @@ class OSSIM_DLL ossimByteStreamBuffer : public std::basic_streambuf<char, std::c
 public:
    ossimByteStreamBuffer();
     
-   ossimByteStreamBuffer(char* buf, ossim_int64 bufSize, bool shared=true);
+   ossimByteStreamBuffer(char_type* buf, ossim_int64 bufSize, bool shared=true);
     
    ossimByteStreamBuffer(const ossimByteStreamBuffer& src);
    virtual ~ossimByteStreamBuffer();
-   virtual std::streambuf* setbuf ( char * s, std::streamsize n );
+   virtual std::streambuf* setbuf ( char_type * s, std::streamsize n );
    void clear();
    // added so we can set a buffer and make it shared
    std::streambuf* setBuf(char* buf, std::streamsize bufSize, bool shared);

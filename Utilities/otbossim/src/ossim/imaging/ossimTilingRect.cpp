@@ -35,7 +35,8 @@ ossimTilingRect::ossimTilingRect()
       m_offsetInPixels(0,0),
       m_tilingDistanceInPixels(0,0),
       m_tilinResolutionDistance(ossim::nan(),ossim::nan()),
-      m_tilingResolutionUnitType(OSSIM_UNIT_UNKNOWN)
+      m_tilingResolutionUnitType(OSSIM_UNIT_UNKNOWN),
+      m_fractionalPixelMisalignment(ossim::nan(),ossim::nan())
 {
 }
 
@@ -56,7 +57,6 @@ bool ossimTilingRect::initializeBase(const ossimMapProjection& proj,
    {
       ossimRefPtr<ossimImageGeometry> geom = new ossimImageGeometry (0, theMapProjection.get());
       geom->setImageSize(ossimIpt(theImageRect.width(), theImageRect.height()));
-      geom->computeGsd();
       gsd = geom->getMetersPerPixel();
    }
 
@@ -137,6 +137,10 @@ bool ossimTilingRect::initializeBase(const ossimMapProjection& proj,
          thePaddingSizeInPixels.x = ossim::round<int>(paddingSize.x / theMapProjection->getDecimalDegreesPerPixel().x);
          thePaddingSizeInPixels.y = ossim::round<int>(paddingSize.y / theMapProjection->getDecimalDegreesPerPixel().y);
 
+         double intpart;
+         m_fractionalPixelMisalignment.x = modf(convertedTilingDistance.x / theMapProjection->getDecimalDegreesPerPixel().x, &intpart);
+         m_fractionalPixelMisalignment.y = modf(convertedTilingDistance.y / theMapProjection->getDecimalDegreesPerPixel().y, &intpart);
+
          m_tilingDistanceInPixels.x = ossim::round<int>(convertedTilingDistance.x / theMapProjection->getDecimalDegreesPerPixel().x);
          m_tilingDistanceInPixels.y = ossim::round<int>(convertedTilingDistance.y / theMapProjection->getDecimalDegreesPerPixel().y);
 
@@ -150,6 +154,10 @@ bool ossimTilingRect::initializeBase(const ossimMapProjection& proj,
       {
          thePaddingSizeInPixels.x = ossim::round<int>(paddingSize.x / gsd.x);
          thePaddingSizeInPixels.y = ossim::round<int>(paddingSize.y / gsd.y);
+
+         double intpart;
+         m_fractionalPixelMisalignment.x = modf(convertedTilingDistance.x / gsd.x, &intpart);
+         m_fractionalPixelMisalignment.y = modf(convertedTilingDistance.y / gsd.y, &intpart);
 
          m_tilingDistanceInPixels.x = ossim::round<int>(convertedTilingDistance.x / gsd.x);
          m_tilingDistanceInPixels.y = ossim::round<int>(convertedTilingDistance.y / gsd.y);
@@ -189,12 +197,12 @@ bool ossimTilingRect::initializeBase(const ossimMapProjection& proj,
       {
          if (imageWidth % (ossim_int32)m_tilingDistanceInPixels.x != 0)
          {
-            ossim_int32 numX =  ossim::round<int>(imageWidth/m_tilingDistanceInPixels.x);
+            ossim_int32 numX =  ossim::round<int>((double)imageWidth/m_tilingDistanceInPixels.x);
             imageWidth = m_tilingDistanceInPixels.x * numX;
          }
          if (imageHeight % (ossim_int32)m_tilingDistanceInPixels.y != 0)
          {
-            ossim_int32 numY =  ossim::round<int>(imageHeight/m_tilingDistanceInPixels.y);
+            ossim_int32 numY =  ossim::round<int>((double)imageHeight/m_tilingDistanceInPixels.y);
             imageHeight = m_tilingDistanceInPixels.y * numY;
          }
       }
@@ -231,19 +239,12 @@ bool ossimTilingRect::initialize(const ossimMapProjection& proj,
       ossimGpt lr;
       ossimGpt ll;
 
-      theMapProjection->lineSampleToWorld(theImageRect.ul(),
-         ul);
-      theMapProjection->lineSampleToWorld(theImageRect.ur(),
-         ur);
-      theMapProjection->lineSampleToWorld(theImageRect.lr(),
-         lr);
-      theMapProjection->lineSampleToWorld(theImageRect.ll(),
-         ll);
+      theMapProjection->lineSampleToWorld(theImageRect.ul(), ul);
+      theMapProjection->lineSampleToWorld(theImageRect.ur(), ur);
+      theMapProjection->lineSampleToWorld(theImageRect.lr(), lr);
+      theMapProjection->lineSampleToWorld(theImageRect.ll(), ll);
 
-      theTilingRect = ossimDrect(ossimDpt(ul),
-         ossimDpt(ur),
-         ossimDpt(lr),
-         ossimDpt(ll),
+      theTilingRect = ossimDrect(ossimDpt(ul), ossimDpt(ur), ossimDpt(lr), ossimDpt(ll),
          OSSIM_RIGHT_HANDED);
 
       if(traceDebug())
@@ -283,19 +284,11 @@ bool ossimTilingRect::initialize(const ossimMapProjection& proj,
       ossimDpt lr;
       ossimDpt ll;
 
-      theMapProjection->lineSampleToEastingNorthing(theImageRect.ul(),
-         ul);
-      theMapProjection->lineSampleToEastingNorthing(theImageRect.ur(),
-         ur);
-      theMapProjection->lineSampleToEastingNorthing(theImageRect.lr(),
-         lr);
-      theMapProjection->lineSampleToEastingNorthing(theImageRect.ll(),
-         ll);
-      theTilingRect = ossimDrect(ul,
-         ur,
-         lr,
-         ll,
-         OSSIM_RIGHT_HANDED);
+      theMapProjection->lineSampleToEastingNorthing(theImageRect.ul(), ul);
+      theMapProjection->lineSampleToEastingNorthing(theImageRect.ur(), ur);
+      theMapProjection->lineSampleToEastingNorthing(theImageRect.lr(), lr);
+      theMapProjection->lineSampleToEastingNorthing(theImageRect.ll(), ll);
+      theTilingRect = ossimDrect(ul, ur, lr, ll, OSSIM_RIGHT_HANDED);
 
       if (!m_clipToAoi)
       {
@@ -335,8 +328,8 @@ bool ossimTilingRect::initialize(const ossimMapProjection& proj,
       }
       else
       {
-         ossim_int32 tmpX = (ossim_int32)(fabs(tilingRectInPixels.ur().x - tilingRectInPixels.ul().x));
-         ossim_int32 tmpY = (ossim_int32)(fabs(tilingRectInPixels.ur().y - tilingRectInPixels.lr().y));
+         ossim_int32 tmpX = (ossim_int32)(fabs(tilingRectInPixels.ur().x - tilingRectInPixels.ul().x)) + 1;
+         ossim_int32 tmpY = (ossim_int32)(fabs(tilingRectInPixels.ur().y - tilingRectInPixels.lr().y)) + 1;
 
          ossim_int32 modValueX = tmpX % (ossim_int32)m_tilingDistanceInPixels.x;
          ossim_int32 modValueY = tmpY % (ossim_int32)m_tilingDistanceInPixels.y;
@@ -408,6 +401,108 @@ bool ossimTilingRect::next(ossimRefPtr<ossimMapProjection>& resultProjection,
          (row+1), (col+1), theTileId);
 
       getOrigin(origin, row, col);
+
+      if (!m_fractionalPixelMisalignment.isNan())
+      {
+         if (row == 0 && col != 0)
+         {
+            if (m_fractionalPixelMisalignment.x >= 0.5)
+            {
+               if (theMapProjection->isGeographic())
+               {
+                  origin.x = origin.x + (1 - m_fractionalPixelMisalignment.x) * theMapProjection->getDecimalDegreesPerPixel().x * col;
+               }
+               else
+               {
+                  origin.x = origin.x + (1 - m_fractionalPixelMisalignment.x) * theMapProjection->getMetersPerPixel().x * col;
+               }
+            }  
+            else
+            {
+               if (theMapProjection->isGeographic())
+               {
+                  origin.x = origin.x - m_fractionalPixelMisalignment.x * theMapProjection->getDecimalDegreesPerPixel().x * col;
+               }
+               else
+               {
+                  origin.x = origin.x - m_fractionalPixelMisalignment.x * theMapProjection->getMetersPerPixel().x * col;
+               }
+            }
+         }
+         else if (col == 0 && row != 0)
+         {
+            if (m_fractionalPixelMisalignment.y >= 0.5)
+            {
+               if (theMapProjection->isGeographic())
+               {
+                  origin.y = origin.y - (1 - m_fractionalPixelMisalignment.y) * theMapProjection->getDecimalDegreesPerPixel().y * row;
+               }
+               else
+               {
+                  origin.y = origin.y - (1 - m_fractionalPixelMisalignment.y) * theMapProjection->getMetersPerPixel().y * row;
+               }
+            }
+            else
+            {
+               if (theMapProjection->isGeographic())
+               {
+                  origin.y = origin.y + m_fractionalPixelMisalignment.y * theMapProjection->getDecimalDegreesPerPixel().y * row;
+               }
+               else
+               {
+                  origin.y = origin.y + m_fractionalPixelMisalignment.y * theMapProjection->getMetersPerPixel().y * row;
+               }  
+            }
+         }
+         else if (col != 0 && row != 0)
+         {
+            if (m_fractionalPixelMisalignment.x >= 0.5)
+            {
+               if (theMapProjection->isGeographic())
+               {
+                  origin.x = origin.x + (1 - m_fractionalPixelMisalignment.x) * theMapProjection->getDecimalDegreesPerPixel().x * col;
+               }
+               else
+               {
+                  origin.x = origin.x + (1 - m_fractionalPixelMisalignment.x) * theMapProjection->getMetersPerPixel().x * col;
+               }
+            }  
+            else
+            {
+               if (theMapProjection->isGeographic())
+               {
+                  origin.x = origin.x - m_fractionalPixelMisalignment.x * theMapProjection->getDecimalDegreesPerPixel().x * col;
+               }
+               else
+               {
+                  origin.x = origin.x - m_fractionalPixelMisalignment.x * theMapProjection->getMetersPerPixel().x * col;
+               }
+            }
+
+            if (m_fractionalPixelMisalignment.y >= 0.5)
+            {
+               if (theMapProjection->isGeographic())
+               {
+                  origin.y = origin.y - (1 - m_fractionalPixelMisalignment.y) * theMapProjection->getDecimalDegreesPerPixel().y * row;
+               }
+               else
+               {
+                  origin.y = origin.y - (1 - m_fractionalPixelMisalignment.y) * theMapProjection->getMetersPerPixel().y * row;
+               }
+            }
+            else
+            {
+               if (theMapProjection->isGeographic())
+               {
+                  origin.y = origin.y + m_fractionalPixelMisalignment.y * theMapProjection->getDecimalDegreesPerPixel().y * row;
+               }
+               else
+               {
+                  origin.y = origin.y + m_fractionalPixelMisalignment.y * theMapProjection->getMetersPerPixel().y * row;
+               }  
+            }
+         }
+      }
 
       ossimIpt pixels = ossimDpt(m_tilingDistanceInPixels.x, m_tilingDistanceInPixels.y);
 

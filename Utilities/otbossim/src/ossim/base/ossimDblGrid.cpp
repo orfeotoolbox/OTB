@@ -12,7 +12,7 @@
 //   system. 
 //
 //*****************************************************************************
-//  $Id: ossimDblGrid.cpp 19441 2011-04-25 16:47:28Z dburken $
+//  $Id: ossimDblGrid.cpp 20204 2011-11-04 15:12:28Z dburken $
 
 #include <cstring>
 #include <climits>
@@ -1085,7 +1085,7 @@ void ossimDblGrid::filter(int size_x, int size_y, double* kernel)
    int      end_y   = theSize.y - ry;
    int      knl_ctr = ry*size_x + rx;     // offset to center of kernel buffer
    double   node_value, kernel_value;
-   int      node_idx, resample_node_idx;
+   int      resample_node_idx;
    
    // The resampled data is accumulated and stored in a temporary ossimDblGrid object so that we
    // can take advantage of the extrapolation feature later in this method.
@@ -1101,7 +1101,6 @@ void ossimDblGrid::filter(int size_x, int size_y, double* kernel)
    {
       for (int x=start_x; x<end_x; x++)
       {
-         node_idx = index(x, y);
          resample_node_idx = resample_grid.index(x-start_x, y-start_y);
       
          // Fetch samples for each kernel element, apply gain, then accumulate

@@ -693,7 +693,7 @@ ossimObject* ossimRpcModel::dup() const
 //*****************************************************************************
 std::ostream& ossimRpcModel::print(std::ostream& out) const
 {
-   out << "\nDump of ossimRpcModel object at " << hex << this << dec << ":\n"
+   out << "\nDump of ossimRpcModel object at " << hex << this << ":\n"
        << POLY_TYPE_KW   << ": " << thePolyType   << "\n"
        << LINE_SCALE_KW  << ": " << theLineScale  << "\n"
        << SAMP_SCALE_KW  << ": " << theSampScale  << "\n"

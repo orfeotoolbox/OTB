@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableContainer.cpp 19471 2011-05-03 15:03:05Z gpotts $
+// $Id: ossimConnectableContainer.cpp 20316 2011-12-02 15:56:38Z oscarkramer $
 
 #include <algorithm>
 #include <stack>
@@ -329,7 +329,7 @@ ossimConnectableObject* ossimConnectableContainer::findObject(const ossimConnect
 void ossimConnectableContainer::makeUniqueIds()
 {
    connectablObjectMapType::iterator current;
-   std::vector<ossimConnectableObject* > objectList;
+   std::vector<ossimRefPtr<ossimConnectableObject> > objectList;
 
 
    current = theObjectMap.begin();
@@ -345,18 +345,18 @@ void ossimConnectableContainer::makeUniqueIds()
    for(long index = 0; index < (long)objectList.size(); ++index)
    {
       ossimConnectableContainerInterface* container = PTR_CAST(ossimConnectableContainerInterface,
-                                                               objectList[index]);
+                                                               objectList[index].get());
       if(container)
       {
          container->makeUniqueIds();
          theObjectMap.insert(std::make_pair(objectList[index]->getId().getId(),
-                                            objectList[index]));
+                                            objectList[index].get()));
       }
       else
       {
          objectList[index]->setId(ossimIdManager::instance()->generateId());
          theObjectMap.insert(std::make_pair(objectList[index]->getId().getId(),
-                             objectList[index]));
+                             objectList[index].get()));
       }
    }
 }
@@ -776,3 +776,24 @@ void ossimConnectableContainer::accept(ossimVisitor& visitor)
    
 }
 
+//**************************************************************************************************
+// Inserts all of this object's children and inputs into the container provided. Since this is
+// itself a container, this method will consolidate this with the argument container. Therefore 
+// this object will not be represented in the argument container (but its children will be).
+// Returns TRUE if successful.
+//**************************************************************************************************
+bool ossimConnectableContainer::fillContainer(ossimConnectableContainer& container)
+{
+   connectablObjectMapType::iterator current;
+   current = theObjectMap.begin();
+   ossim_uint32 i = 0;
+   bool fill_ok;
+   while(current != theObjectMap.end())
+   {
+      ossimRefPtr<ossimConnectableObject> currentObject = current->second;
+      if (currentObject.valid())
+         container.addChild(currentObject.get());
+      current++;
+   }
+   return true;
+}

@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNitfWriter.cpp 11385 2007-07-25 13:56:38Z gpotts $
+//  $Id: ossimNitf20Writer.cpp 2982 2011-10-10 21:28:55Z david.burken $
 
 #include <fstream>
 #include <algorithm>
@@ -66,6 +66,15 @@ ossimNitf20Writer::ossimNitf20Writer(const ossimFilename& filename,
    theFileHeader      = new ossimNitfFileHeaderV2_0;
    theImageHeader     = new ossimNitfImageHeaderV2_0;
    theOutputImageType = "nitf20_block_band_separate";
+
+   // These are always set:
+   theFileHeader->setEncryption( ossimString("0") );
+   theImageHeader->setJustification( ossimString("R") );
+   
+   // Set any site defaults.
+   initializeDefaultsFromConfigFile(
+      dynamic_cast<ossimNitfFileHeaderV2_X*>(theFileHeader.get()),
+      dynamic_cast<ossimNitfImageHeaderV2_X*>(theImageHeader.get()) );
 }
 
 ossimNitf20Writer::~ossimNitf20Writer()
@@ -73,15 +82,15 @@ ossimNitf20Writer::~ossimNitf20Writer()
    //---
    // This looks like a leak but it's not as both of these are ossimRefPtr's.
    //---
-   theFileHeader=NULL;
-   theImageHeader=NULL;
+   theFileHeader=0;
+   theImageHeader=0;
    
    close();
 }
 
 bool ossimNitf20Writer::isOpen()const
 {
-   return (theOutputStream != NULL);
+   return (theOutputStream != 0);
 }
 
 bool ossimNitf20Writer::open()
@@ -102,7 +111,7 @@ void ossimNitf20Writer::close()
    {
       theOutputStream->close();
       delete theOutputStream;
-      theOutputStream = (std::ofstream*)NULL;
+      theOutputStream = (std::ofstream*)0;
    }
 }
 
@@ -208,7 +217,7 @@ void ossimNitf20Writer::setProperty(ossimRefPtr<ossimProperty> property)
 
 ossimRefPtr<ossimProperty> ossimNitf20Writer::getProperty(const ossimString& name)const
 {
-   ossimRefPtr<ossimProperty> result = NULL;
+   ossimRefPtr<ossimProperty> result = 0;
    
    if(name == "file_header")
    {

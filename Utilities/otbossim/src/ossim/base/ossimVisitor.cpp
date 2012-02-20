@@ -1,4 +1,4 @@
-// $Id: ossimVisitor.cpp 19918 2011-08-09 11:30:03Z gpotts $
+// $Id: ossimVisitor.cpp 20490 2012-01-23 20:08:47Z dburken $
 
 #include <ossim/base/ossimVisitor.h>
 #include <ossim/base/ossimConnectableObject.h>
@@ -152,14 +152,19 @@ void ossimCollectionVisitor::reset()
 }
 
 ossimTypeNameVisitor::ossimTypeNameVisitor(int visitorType)
-:ossimCollectionVisitor(visitorType)
+   :ossimCollectionVisitor(visitorType),
+    m_typeName(),
+    m_firstOfTypeFlag(false)
 {
 }
 
-ossimTypeNameVisitor::ossimTypeNameVisitor(const ossimString& typeName, bool firstOfTypeFlag, int visitorType)
-:ossimCollectionVisitor(visitorType),
-m_typeName(typeName),
- m_firstOfTypeFlag(firstOfTypeFlag)
+ossimTypeNameVisitor::ossimTypeNameVisitor(const ossimString& typeName,
+                                           bool firstOfTypeFlag,
+                                           int visitorType)
+   :
+   ossimCollectionVisitor(visitorType),
+   m_typeName(typeName),
+   m_firstOfTypeFlag(firstOfTypeFlag)
 {
 }
 
@@ -195,6 +200,16 @@ void ossimTypeNameVisitor::setTypeName(const ossimString& typeName)
 const ossimString& ossimTypeNameVisitor::getTypeName()const
 {
    return m_typeName;
+}
+
+void ossimTypeNameVisitor::setFirstOfTypeFlag(bool flag)
+{
+   m_firstOfTypeFlag = flag;
+}
+
+bool ossimTypeNameVisitor::getFirstOfTypeFlag() const
+{
+   return m_firstOfTypeFlag;
 }
 
 ossimTypeIdVisitor::ossimTypeIdVisitor(int visitorType)

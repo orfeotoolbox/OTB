@@ -5,7 +5,7 @@
 // Author:  Kenneth Melero
 //
 //*******************************************************************
-//  $Id: ossimGeomFileWriter.cpp 16293 2010-01-07 16:19:47Z dburken $
+//  $Id: ossimGeomFileWriter.cpp 20506 2012-01-27 17:02:30Z dburken $
 
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimGpt.h>
@@ -13,6 +13,7 @@
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimUnitTypeLut.h>
 #include <ossim/imaging/ossimGeomFileWriter.h>
 #include <ossim/imaging/ossimImageGeometry.h>
@@ -44,6 +45,26 @@ bool ossimGeomFileWriter::writeFile()
       ossimRefPtr<ossimImageGeometry> geom = theInputConnection->getImageGeometry();
       if(geom.valid())
       {
+         //---
+         // First check the ossimImageGeometry image size and adjust to area of interest if
+         // necessary.  The ossimImageGeometry::applyScale method sometimes has rounding
+         // issues so fix it here...
+         //---
+         if ( geom->getImageSize().hasNans() ||
+              ( geom->getImageSize() != theAreaOfInterest.size() ) )
+         {
+            if ( traceDebug() )
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  << "ossimGeomFileWriter::writeFile DEBUG:"
+                  << "\nAdjusting ossimImageGeometry size to reflect the area of interest."
+                  << "\narea of interest size: " << theAreaOfInterest.size()
+                  << "\nossimImageGeometry size: " << geom->getImageSize()
+                  << std::endl;
+            }
+            geom->setImageSize( theAreaOfInterest.size() );
+         }
+               
          // Save the state to keyword list.
          ossimKeywordlist kwl;
          geom->saveState(kwl);

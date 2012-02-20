@@ -12,7 +12,7 @@
 // See class doxygen descriptions below for more.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimInfo.h 19801 2011-07-04 15:13:23Z dburken $
+// $Id: ossimInfo.h 20122 2011-10-11 17:23:03Z dburken $
 
 #ifndef ossimInfo_HEADER
 #define ossimInfo_HEADER 1
@@ -217,6 +217,29 @@ public:
     * @return true if entry info was saved to keyword list false if not.
     */
    bool getImageGeometryInfo(ossim_uint32 entry, ossimKeywordlist& kwl, bool dnoFlag);
+
+   /**
+    * @brief Populates keyword list with image rectangle.
+    *
+    * This requires open image.
+    *
+    * @param kwl Keyword list to populate.
+    */
+   void getImageRect(ossimKeywordlist& kwl);
+
+   /**
+    * @brief Populates keyword list with image rectangle.
+    *
+    * @param entry Entry number to select.  Note this is the entry number from
+    * the getEntryList call not a simple zero based entry index.
+    * 
+    * @param kwl Keyword list to populate.
+    *
+    * This requires open image.
+    *
+    * @return true if entry info was saved to keyword list false if not.
+    */
+   bool getImageRect(ossim_uint32 entry, ossimKeywordlist& kwl);
 
    /**
     * @return true if current open image entry is an overview.

@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableContainer.h 19553 2011-05-08 00:52:40Z gpotts $
+// $Id: ossimConnectableContainer.h 20316 2011-12-02 15:56:38Z oscarkramer $
 
 #ifndef ossimConnectableContainer_HEADER
 #define ossimConnectableContainer_HEADER
@@ -172,6 +172,15 @@ public:
 //    void propagateEventToInputs(ossimEvent& event,
 //                                ossimConnectableObject* start);
      
+   /*!
+    *  Inserts all of this object's children and inputs into the container provided. Since this is
+    *  itself a container, this method will consolidate this with the argument container. 
+    *  Consequently, this object will not be represented in the argument container but its children
+    *  will be. Ownership of children will pass to the argument container.
+    *  @return Returns TRUE if successful.
+    */
+   virtual bool fillContainer(ossimConnectableContainer& container);
+
 protected:
    virtual ~ossimConnectableContainer();
    ossimConnectableContainer(const ossimConnectableContainer& rhs);

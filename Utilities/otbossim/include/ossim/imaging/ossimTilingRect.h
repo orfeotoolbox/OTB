@@ -58,6 +58,7 @@ protected:
    ossimDpt               m_tilingDistanceInPixels;
    ossimDpt               m_tilinResolutionDistance;
    ossimUnitType          m_tilingResolutionUnitType;
+   ossimDpt               m_fractionalPixelMisalignment;
                     
 TYPE_DATA
 };

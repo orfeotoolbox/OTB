@@ -10,7 +10,7 @@
 // Contains class definition for ossimImageMetaData.
 // 
 //*******************************************************************
-//  $Id: ossimImageMetaData.cpp 16282 2010-01-06 21:23:55Z dburken $
+//  $Id: ossimImageMetaData.cpp 20265 2011-11-18 12:19:39Z gpotts $
 #include <vector>
 #include <algorithm>
 #include <ossim/imaging/ossimImageMetaData.h>
@@ -49,6 +49,14 @@ ossimImageMetaData::ossimImageMetaData(ossimScalarType aType,
 }
 
 ossimImageMetaData::ossimImageMetaData(const ossimImageMetaData& rhs)
+:theNullPixelArray(0),
+theMinPixelArray(0),
+theMaxPixelArray(0),
+theMinValuesValidFlag(false),
+theMaxValuesValidFlag(false),
+theNullValuesValidFlag(false),
+theScalarType(OSSIM_SCALAR_UNKNOWN),
+theNumberOfBands(0)
 {
    assign(rhs);
 }

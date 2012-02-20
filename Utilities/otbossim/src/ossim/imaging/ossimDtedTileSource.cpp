@@ -11,7 +11,7 @@
 // Contains class declaration for ossimDtedTileSource.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.cpp 17941 2010-08-19 22:39:13Z dburken $
+// $Id: ossimDtedTileSource.cpp 20393 2011-12-19 14:02:23Z dburken $
 
 #include <cstdlib>
 #include <iostream>
@@ -399,47 +399,52 @@ bool ossimDtedTileSource::loadState(const ossimKeywordlist& kwl,
 //**************************************************************************************************
 ossimRefPtr<ossimImageGeometry> ossimDtedTileSource::getImageGeometry()
 {
-   if ( !theGeometry.valid() )
-   {
-      //---
-      // Make an Equidistant Cylindrical projection with a origin at the equator
-      // since the DTED post spacing is considered to be square.
-      //---
-      const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();
-      ossimRefPtr<ossimEquDistCylProjection> eq =
-         new ossimEquDistCylProjection(*(datum->ellipsoid()),
-                                       ossimGpt(0.0, 0.0, 0.0, datum),
-                                       0.0,   // false easting
-                                       0.0);  // false northing
-      
-      //---
-      // Set the tie point.
-      // NOTE: Latitude southwest corner we need northwest.
-      //---
-      ossim_float64 lat = m_uhl.latOrigin() + (m_uhl.latInterval() * (m_uhl.numLatPoints()-1.0));
-      ossim_float64 lon = m_uhl.lonOrigin();
-      ossimGpt tie(lat, lon, 0.0, datum);
-      eq->setUlTiePoints(tie);
+   if ( theGeometry.valid() )
+      return theGeometry;
+
+   // Compute the projection tie point (UL corner of dted cell). The UHL supplies the SW (LL) corner
+   // coordinates, so need to compute the UL lat from the cell spacing:
+   const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();
+   ossim_float64 ul_lat = m_uhl.latOrigin() + (m_uhl.latInterval() * (m_uhl.numLatPoints()-1.0));
+   ossim_float64 ul_lon = m_uhl.lonOrigin();
+   ossimGpt tie(ul_lat, ul_lon, 0.0, datum);
+
+   //---
+   // This code is backed out as it affects the corner.
+   // E.g.: image0.ur_lon:  -88.999999999995
+   // Should be -89.0
+   // Used ossimImageGeometry::::getMetersPerPixel for a center of the image gsd. (drb)
+   // 
+   // We also need to define an origin for the projection as the center of the cell for proper GSD
+   // calculation (OLK 01/11: Used to set origin at 0,0 causing incorrect meters GSD to be
+   // computed)
+   // ossim_float64 mid_lat = m_uhl.latOrigin() + (m_uhl.latInterval()*m_uhl.numLatPoints()/2.0);
+   // ossim_float64 mid_lon = m_uhl.lonOrigin() + (m_uhl.lonInterval()*m_uhl.numLonLines()/2.0);
+   // ossimGpt origin (mid_lat, mid_lon, 0.0, datum);
+   //---
+   ossimGpt origin (0.0, 0.0, 0.0, datum);
+
+   // Make an Equidistant Cylindrical projection.
+   ossimRefPtr<ossimEquDistCylProjection> eq =
+      new ossimEquDistCylProjection(*(datum->ellipsoid()));
       
       // Set the scale:
-      ossimDpt gsd(m_uhl.lonInterval(), m_uhl.latInterval());
-      eq->setDecimalDegreesPerPixel(gsd);
+   eq->setOrigin(origin);
+   eq->setUlTiePoints(tie);
+   ossimDpt gsd(m_uhl.lonInterval(), m_uhl.latInterval());
+   eq->setDecimalDegreesPerPixel(gsd);
 
-      // Set the pcs code. Was determined that 4326 was preferred over 6326 (OLK 08/2010)
-      eq->setPcsCode(4326); // used to be 6326
-      
-      // Give it to the geometry object.
-      ossimRefPtr<ossimProjection> proj = eq.get();
-      
-      // Make the geometry:
-      theGeometry = new ossimImageGeometry;
-      
-      // Set the projection.
-      theGeometry->setProjection( proj.get() );
+   // Give it to the geometry object.
+   ossimRefPtr<ossimProjection> proj = eq.get();
+   
+   // Make the geometry:
+   theGeometry = new ossimImageGeometry;
+   
+   // Set the projection.
+   theGeometry->setProjection( proj.get() );
 
-      // Set image things the geometry object should know about.
-      initImageParameters( theGeometry.get() );
-   }
+   // Set image things the geometry object should know about.
+   initImageParameters( theGeometry.get() );
    
    return theGeometry;
 }

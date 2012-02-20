@@ -9,9 +9,7 @@
 // Description: Common file for global functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.cpp 20041 2011-09-06 14:59:46Z oscarkramer $
-
-#include <sstream>
+// $Id: ossimCommon.cpp 20240 2011-11-09 21:53:55Z dburken $
 
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimConstants.h>
@@ -24,6 +22,9 @@
 #include <ossim/matrix/newmat.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimGpt.h>
+#include <OpenThreads/Thread>
+#include <sstream>
+
 static ossimTrace traceDebug("ossimCommon:debug");
 
 // stores a floating point nan value
@@ -863,15 +864,8 @@ void ossim::toVector(std::vector<ossimGpt>& result,
    }   
 }
 
-/**
- * Generic function to extract a list of values into a vector of string where
- * the string of points is of the form:
- *
- * (value1,value2, ... , )
- *
- * Parenthesis are required
- */ 
-bool ossim::extractSimpleValues(std::vector<ossimString>& values, const ossimString& stringOfPoints)
+bool ossim::extractSimpleValues(std::vector<ossimString>& values,
+                                const ossimString& stringOfPoints)
 {
    std::istringstream in(stringOfPoints);
    ossim::skipws(in);
@@ -912,18 +906,27 @@ bool ossim::extractSimpleValues(std::vector<ossimString>& values, const ossimStr
    
    return result;
 }
-/**
- * This will output a vector of values inst a string
- *
- *  (value1,...,valueN)
- *
- * Specialize the char for it will output the actual ascii char instead of the numeric value
- *
- * Parenthesis are required
- */ 
+
+bool ossim::toSimpleVector(std::vector<ossim_uint32>& result,
+                           const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = (ossim_uint32) extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toUInt32());
+      }
+   }
+   return resultFlag;
+}
+
 template <>
 void ossim::toSimpleStringList(ossimString& result,
-                        const std::vector<ossim_uint8>& valuesList)
+                               const std::vector<ossim_uint8>& valuesList)
 
 {
    std::ostringstream out;
@@ -942,3 +945,106 @@ void ossim::toSimpleStringList(ossimString& result,
    result = "("+out.str()+")";
 }
 
+bool ossim::toSimpleVector(std::vector<ossim_int32>& result,
+                           const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = (ossim_int32) extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toInt32());
+      }
+   }
+   return resultFlag;
+}
+
+bool ossim::toSimpleVector(std::vector<ossim_uint16>& result,
+                           const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = (ossim_int32) extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toUInt32());
+      }
+   }
+   return resultFlag;
+}
+
+bool ossim::toSimpleVector(std::vector<ossim_int16>& result,
+                           const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = (ossim_uint32) extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toInt32());
+      }
+   }
+   return resultFlag;
+}
+
+bool ossim::toSimpleVector(std::vector<ossim_uint8>& result,
+                    const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = (ossim_uint32) extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toUInt8());
+      }
+   }
+   return resultFlag;
+}
+
+bool ossim::toSimpleVector(std::vector<ossim_int8>& result,
+                    const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = (ossim_uint32) extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toUInt8());
+      }
+   }
+   return resultFlag;
+}
+
+ossim_uint32 ossim::getNumberOfThreads()
+{
+   ossim_uint32 result;
+   const char* str = ossimPreferences::instance()->findPreference("ossim_threads");
+   if ( str )
+   {
+      result = ossimString(str).toUInt32();
+   }
+   else
+   {
+      result = static_cast<ossim_uint32>( OpenThreads::GetNumberOfProcessors() );
+   }
+   if ( !result )
+   {
+      result = 1;
+   }
+   return result;
+}

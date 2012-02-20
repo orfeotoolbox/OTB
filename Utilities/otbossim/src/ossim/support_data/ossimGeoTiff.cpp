@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.cpp 20026 2011-09-01 16:33:18Z dburken $
+// $Id: ossimGeoTiff.cpp 20408 2011-12-22 16:55:35Z dburken $
 
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/base/ossimTrace.h>
@@ -53,7 +53,7 @@ static const ossimGeoTiffDatumLut DATUM_LUT;
 OpenThreads::Mutex ossimGeoTiff::theMutex;
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 20026 2011-09-01 16:33:18Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 20408 2011-12-22 16:55:35Z dburken $";
 #endif
 
 //---
@@ -220,7 +220,8 @@ int ossimGeoTiff::getPcsUnitType(ossim_int32 pcsCode)
 
 #define EPSG_CODE_MAX 32767
 bool ossimGeoTiff::writeTags(TIFF* tifPtr,
-                             const ossimRefPtr<ossimMapProjectionInfo> projectionInfo)
+                             const ossimRefPtr<ossimMapProjectionInfo> projectionInfo,
+                             bool imagineNad27Flag)
 {
    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
 
@@ -334,8 +335,37 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
          }
       }
 
+      // ***
+      // ERDAS Imagine < v8.7 has a NAD27 Conus Bug.  They are not using the
+      // proper GCS code.  They use user-defined fields and Geog citation tag to
+      // define.  Sucks!  It is an open issue at Leica.  This is a work around
+      // flag for this issue.
+      // ***
+      if((datumCode == "NAS-C") && imagineNad27Flag)
+      {
+         gcs = USER_DEFINED;
+
+         std::ostringstream os;
+         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 20408 $ $Date: 2011-12-22 17:55:35 +0100 (jeu., 22 déc. 2011) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+
+         GTIFKeySet(gtif,
+                    GeogCitationGeoKey,
+                    TYPE_ASCII,
+                    1,
+                    os.str().c_str());
+
+         // User-Defined
+         GTIFKeySet(gtif, GeogGeodeticDatumGeoKey, TYPE_SHORT, 1,
+                    KvUserDefined );
+         // User-Defined
+         GTIFKeySet(gtif, GeogEllipsoidGeoKey, TYPE_SHORT, 1,
+                    KvUserDefined );
+      }
+      else
+      {
       GTIFKeySet( gtif, GeographicTypeGeoKey, TYPE_SHORT, 1, gcs );
       gcsTypeSet = true;
+      }
 
       // Write the projection parameters.
 
@@ -799,7 +829,8 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
 bool ossimGeoTiff::writeJp2GeotiffBox(const ossimFilename& tmpFile,
                                       const ossimIrect& rect,
                                       const ossimProjection* proj,
-                                      std::vector<ossim_uint8>& buf)
+                                       std::vector<ossim_uint8>& buf,
+                                       ossimPixelType pixelType )
 {
    //---
    // Snip from The "GeoTIFF Box" Specification for JPEG 2000 Metadata:
@@ -826,7 +857,12 @@ bool ossimGeoTiff::writeJp2GeotiffBox(const ossimFilename& tmpFile,
       {
          ossimRefPtr<ossimMapProjectionInfo> projectionInfo
 	   = new ossimMapProjectionInfo(mapProj, ossimDrect(rect));
-         ossimGeoTiff::writeTags(tiff, projectionInfo);
+
+         // Set the pixel type to point of area.
+         projectionInfo->setPixelType(pixelType);
+
+         // Write the geotiff keys.
+         ossimGeoTiff::writeTags(tiff, projectionInfo, false);
       }
 
       // Basic tiff tags.
@@ -1173,30 +1209,25 @@ bool ossimGeoTiff::readTags(
    double* tiepoints=0;
    if(TIFFGetField(theTiffPtr, TIFFTAG_GEOTIEPOINTS,  &tiePointSize, &tiepoints))
    {
-      theTiePoint.insert(theTiePoint.begin(),
-                         tiepoints, tiepoints+tiePointSize);
+      theTiePoint.insert(theTiePoint.begin(), tiepoints, tiepoints+tiePointSize);
  
       // ESH 05/2009 -- If the image is in a projected coordinate system, the
       // tiepoints will be projected coordinates not lat/lon. Let's avoid setting
       // the origin lon/lat to projected x/y. Fix for ticket #711.
-      if ( theModelType == ModelTypeGeographic )
-      {
-         if(ossim::isnan(theOriginLon) && 
-            (pixScaleSize > 1) &&
-            (tiePointSize > 3))
-         {
-            theOriginLon = tiepoints[3] - tiepoints[0] * pixScale[0]; 
-         }
-         
-         // In geographic projection, the origin lat indicates the horizontal scaling (as 
-         // 1/cos(lat) ), so it should not be computed here
-         if(ossim::isnan(theOriginLat) && 
-            (pixScaleSize > 1) &&
-            (tiePointSize > 3))
-         {
-            theOriginLat = tiepoints[4] + tiepoints[1] * fabs(pixScale[1]);
-         }
-      }
+      //if ( theModelType == ModelTypeGeographic )
+      //{
+      //   if(ossim::isnan(theOriginLon) && 
+      //      (pixScaleSize > 1) &&
+      //      (tiePointSize > 3))
+      //   {
+      //      theOriginLon = tiepoints[3] - tiepoints[0] * pixScale[0]; 
+      //   }
+      //   
+      //   if(ossim::isnan(theOriginLat) && (pixScaleSize > 1) && (tiePointSize > 3))
+      //   {
+      //      theOriginLat = tiepoints[4] + tiepoints[1] * fabs(pixScale[1]);
+      //   }
+      //}
    }
    theModelTransformation.clear();
    ossim_uint16 transSize = 0;
@@ -1460,12 +1491,10 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl, const char* prefix) c
       }
    }
   
-   if ((theRasterType == OSSIM_PIXEL_IS_AREA))
+   if ((theRasterType == PIXEL_IS_AREA))
    {
-     //---
       // Since the internal pixel representation is "point", shift the
       // tie point to be relative to the center of the pixel.
-      //---
       if (theScale.size() > 1)
       {
          x_tie_point += (theScale[0])/2.0;
@@ -1512,8 +1541,13 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl, const char* prefix) c
          return false;
       }
 
+      //---
       // Tiepoint
-      ossimDpt tiepoint (x_tie_point,y_tie_point);
+      // Have data with tie points -180.001389 so use ossimGpt::wrap() to handle:
+      //---
+      ossimGpt tieGpt(y_tie_point, x_tie_point, 0.0);
+      tieGpt.wrap();
+      ossimDpt tiepoint(tieGpt);
       kwl.add(prefix, ossimKeywordNames::TIE_POINT_XY_KW, tiepoint.toString(), true);
       kwl.add(prefix, ossimKeywordNames::TIE_POINT_UNITS_KW, "degrees", true);
 
@@ -1525,15 +1559,22 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl, const char* prefix) c
          kwl.add(prefix, ossimKeywordNames::PIXEL_SCALE_UNITS_KW, "degrees", true);
 
          // origin
-         if (ossim::isnan(theOriginLat) || ossim::isnan(theOriginLon))
+         if ( ossim::isnan(theOriginLat) )
          {
-            double centerX = theWidth/2.0;
+            //---
+            // Put the origin lat at the center of the image so the meters per
+            // pixel is somewhat real.
+            //---
             double centerY = theLength/2.0;
-            theOriginLat = theScale[1]*centerY + y_tie_point;
-            theOriginLon = theScale[0]*centerX + x_tie_point;
+            theOriginLat = tieGpt.lat - theScale[1]*centerY;
+         }
+
+         if (  ossim::isnan(theOriginLon) )
+         {
+            theOriginLon = 0.0;
          }
       }
-
+      
       if (!(ossim::isnan(theOriginLat) || ossim::isnan(theOriginLon)))
       {
          kwl.add(prefix, ossimKeywordNames::ORIGIN_LATITUDE_KW,  theOriginLat, true);
@@ -1892,6 +1933,14 @@ void ossimGeoTiff::getModelTransformation(std::vector<double>& transform) const
 const std::vector<double>& ossimGeoTiff::getScale() const
 {
    return theScale;
+}
+
+ossimPixelType ossimGeoTiff::getRasterType() const
+{
+   if (theRasterType == PIXEL_IS_AREA)
+      return OSSIM_PIXEL_IS_AREA;
+
+   return OSSIM_PIXEL_IS_POINT;
 }
 
 const std::vector<double>& ossimGeoTiff::getTiePoint() const

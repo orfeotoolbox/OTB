@@ -10,14 +10,15 @@
 //   The mask is stored in a compressed format where one byte represents 8 bit-masks for masking
 //   8 image pixels. 
 //*************************************************************************************************
-//  $Id: ossimBitMaskWriter.cpp 2644 2011-05-26 15:20:11Z oscar.kramer $
+//  $Id: ossimBitMaskWriter.cpp 3081 2011-12-22 16:34:12Z oscar.kramer $
 
 #include <ossim/imaging/ossimBitMaskWriter.h>
 #include <ossim/base/ossimFilename.h>
-#include <ossim/imaging/ossimImageData.h>
-#include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimVisitor.h>
+#include <ossim/imaging/ossimImageData.h>
+#include <ossim/imaging/ossimImageHandler.h>
 
 const char* ossimBitMaskWriter::MASK_FILE_MAGIC_NUMBER = "OSSIM_BIT_MASK";
 const char* ossimBitMaskWriter::BM_STARTING_RLEVEL_KW = "starting_rlevel";
@@ -177,25 +178,36 @@ void ossimBitMaskWriter::generateMask(ossimRefPtr<ossimImageData> tile, ossim_ui
    {
       mask_index = y*num_mask_cols + ul.x/8;
       start_bit = ul.x % 8; // may not start on even mask byte boundary
-      for (int x=ul.x; (x<=lr.x)&&(x<image_size.x); /* incremented in bit loop below */ )
-      {
-         // Process 8 samples and pack resultant mask into one byte:
-         maskbuf[mask_index] = 0;
-         for (ossim_uint32 mask_bit=start_bit; mask_bit<8; ++mask_bit)
-         {
-            // Decide whether to mask depending on pixel flipper outputting a NULL pixel. 
-            if (tile->isNull(tile_index++))
-               maskbuf[mask_index] &=  MASK_BITS_0[mask_bit];
-            else
-               maskbuf[mask_index] |= MASK_BITS_1[mask_bit];
 
-            // Advance the pixel column and check for end of image rect:
-            ++x;
-            if ((x >= image_size.x) || (x > lr.x))
-               break;
+      for (int x=ul.x; (x<=lr.x); /* incremented in bit loop below */ )         
+      {
+         if ( x < image_size.x )
+         {
+            // Process 8 samples and pack resultant mask into one byte:
+            maskbuf[mask_index] = 0;
+            for (ossim_uint32 mask_bit=start_bit; mask_bit<8; ++mask_bit)
+            {
+               // Decide whether to mask depending on pixel flipper outputting a NULL pixel. 
+               // if (tile->isNull(tile_index++))
+               if (tile->isNull(tile_index++))                  
+                  maskbuf[mask_index] &=  MASK_BITS_0[mask_bit];
+               else
+                  maskbuf[mask_index] |= MASK_BITS_1[mask_bit];
+               
+               // Advance the pixel column and check for end of image rect:
+               ++x;
+               if ((x >= image_size.x) || (x > lr.x))
+                  break;
+            }
+            ++mask_index; // advance the mask buffer index 1 after processing 8 tile samples
+            start_bit = 0;
          }
-         ++mask_index; // advance the mask buffer index 1 after processing 8 tile samples
-         start_bit = 0;
+         else
+         {
+            ++x;
+            
+            ++tile_index;
+         }
       }
    } // Finished looping over all pixels in input tile
 
@@ -252,7 +264,7 @@ void ossimBitMaskWriter::close()
 //*************************************************************************************************
 bool ossimBitMaskWriter::loadState(const ossimKeywordlist& kwl, const char* prefix)
 {
-   static const char* MODULE = "ossimBitMaskWriter::writeMask(kwl)";
+   // static const char* MODULE = "ossimBitMaskWriter::writeMask(kwl)";
 
    initializeFlipper();
 
@@ -323,10 +335,16 @@ ossim_int32 ossimBitMaskWriter::connectMyInputTo (ossimConnectableObject *inputO
    if (handler == NULL)
    {
       // Need to search:
-      ossimConnectableObject::ConnectableObjectList handler_list;
-      input_source->findAllInputsOfType(handler_list, "ossimImageHandler");
-      if (!handler_list.empty())
-         handler = dynamic_cast<ossimImageHandler*>(handler_list[0].get());
+      ossimTypeNameVisitor visitor(ossimString("ossimImageHandler"),
+                                   true,
+                                   ossimVisitor::VISIT_CHILDREN|ossimVisitor::VISIT_INPUTS);
+      
+      input_source->accept(visitor);
+      ossimRefPtr<ossimObject> obj = visitor.getObject();
+      if ( obj.valid() )
+      {
+         handler = dynamic_cast<ossimImageHandler*>( obj.get() );
+      }
    }
 
    // Should have a handler:
@@ -378,10 +396,9 @@ ossimIpt ossimBitMaskWriter::computeImageSize(ossim_uint32 rlevel, ossimImageDat
       isize.y = (isize.y + 1) / 2;
    }
 
-   // Adjust size to even mask boundary:
+   // Adjust size n X direction to even mask boundary:
    ossimIpt tile_size (tile->getWidth(), tile->getHeight());
-   isize.x = ((int) ceil((double)isize.x/tile_size.x)) * tile_size.x;
-   isize.y = ((int) ceil((double)isize.y/tile_size.y)) * tile_size.y;
+   isize.x = ((int)(isize.x+7)/8) * 8;
 
    return isize;
 }
@@ -408,6 +425,7 @@ bool ossimBitMaskWriter::buildOverviews(ossim_uint32 total_num_rlevels)
    ossim_uint8 *ref_buf = m_buffers[ref_rlevel-m_startingResLevel];
    ossim_uint32 ref_index = 0, ovr_index = 0;
    ossim_uint8 *ovr_buf = 0;
+   ossim_uint32 size_of_refbuf = ref_size.x * ref_size.y;
 
    // Loop over all remaining res levels:
    while (ovr_rlevel != total_num_rlevels)
@@ -431,20 +449,30 @@ bool ossimBitMaskWriter::buildOverviews(ossim_uint32 total_num_rlevels)
 
          for (int x=0; x<ovr_size.x; x++)
          {
-            ovr_buf[ovr_index++] = (ref_buf[ref_index]   & 0x80)       +
-                                  ((ref_buf[ref_index]   & 0x20) << 1) +
-                                  ((ref_buf[ref_index]   & 0x08) << 2) +
-                                  ((ref_buf[ref_index++] & 0x02) << 3) +
-                                  ((ref_buf[ref_index]   & 0x80) >> 4) +
-                                  ((ref_buf[ref_index]   & 0x20) >> 3) +
-                                  ((ref_buf[ref_index]   & 0x08) >> 2) +
-                                  ((ref_buf[ref_index++] & 0x02) >> 1);
+            ossim_uint8 a = 0;
+            ossim_uint8 b = 0;
+            if (ref_index < size_of_refbuf)
+            {
+               a = ref_buf[ref_index++];
+               if ((x < (ovr_size.x-1)) || !(ref_size.x & 1))
+                  b = ref_buf[ref_index++];
+            }
+            ovr_buf[ovr_index++] = ( (a & 0x80)       |
+                                    ((a & 0x20) << 1) |
+                                    ((a & 0x08) << 2) |
+                                    ((a & 0x02) << 3) |
+                                    ((b & 0x80) >> 4) |
+                                    ((b & 0x20) >> 3) |
+                                    ((b & 0x08) >> 2) |
+                                    ((b & 0x02) >> 1));
+
          }
       }
 
       // Advance to next rlevel:
       ref_buf = ovr_buf;
       ref_size = ovr_size;
+      size_of_refbuf = size_of_ovrbuf;
       ++ovr_rlevel;
    }
 

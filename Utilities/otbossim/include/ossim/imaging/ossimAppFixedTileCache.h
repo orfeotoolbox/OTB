@@ -9,7 +9,7 @@
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimAppFixedTileCache.h 18421 2010-11-15 13:08:30Z gpotts $
+// $Id: ossimAppFixedTileCache.h 20127 2011-10-12 11:27:10Z gpotts $
 #ifndef ossimAppFixedTileCache_HEADER
 #define ossimAppFixedTileCache_HEADER
 #include <map>
@@ -56,7 +56,8 @@ public:
    ossimRefPtr<ossimImageData> getTile(ossimAppFixedCacheId cacheId,
                            const ossimIpt& origin);
    ossimRefPtr<ossimImageData> addTile(ossimAppFixedCacheId cacheId,
-                                       ossimRefPtr<ossimImageData> data);
+                                       ossimRefPtr<ossimImageData> data,
+                                       bool duplicateData=true);
    
    ossimRefPtr<ossimImageData> removeTile(ossimAppFixedCacheId cacheId,
                                           const ossimIpt& origin);

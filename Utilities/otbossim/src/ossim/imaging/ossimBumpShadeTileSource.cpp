@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBumpShadeTileSource.cpp 20079 2011-09-09 12:27:42Z gpotts $
+// $Id: ossimBumpShadeTileSource.cpp 20198 2011-11-03 13:23:40Z dburken $
 
 #include <ossim/imaging/ossimBumpShadeTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -267,11 +267,23 @@ void ossimBumpShadeTileSource::computeColor(ossim_uint8& r,
 
 void ossimBumpShadeTileSource::initialize()
 {
-  ossimImageCombiner::initialize();
+   ossimImageCombiner::initialize();
+
+   ossimImageSource* normalSource = dynamic_cast<ossimImageSource*>( getInput(0) );
+   if ( normalSource )
+   {
+      normalSource->initialize();
+   }
+   
+   ossimImageSource* colorSource = dynamic_cast<ossimImageSource*>( getInput(1) );
+   if ( colorSource )
+   {
+      colorSource->initialize();
+   }
+   
    m_tile = 0;
    
-  computeLightDirection();
-  
+   computeLightDirection();
 }
 
 void ossimBumpShadeTileSource::allocate()

@@ -16,7 +16,7 @@
 //              Derived from ossimElevCellHandler.
 //<
 //*****************************************************************************
-// $Id: ossimDtedHandler.h 16120 2009-12-17 19:49:52Z gpotts $
+// $Id: ossimDtedHandler.h 20448 2012-01-12 17:35:11Z gpotts $
 
 #ifndef ossimDtedHandler_HEADER
 #define ossimDtedHandler_HEADER
@@ -37,6 +37,13 @@
 class OSSIM_DLL ossimDtedHandler : public ossimElevCellHandler
 {
 public:
+
+   /// number of Dted posts per point.
+   static const int TOTAL_POSTS = 4;
+   /// number of Dted posts per block
+   static const int NUM_POSTS_PER_BLOCK= 2;
+
+   /// ossimDtedHandler
    ossimDtedHandler()
    {
       
@@ -103,8 +110,46 @@ public:
       return m_acc;
    }
 protected:
+
+   /// DtedPost, this class contains the height, weighting factor and status
+   class DtedPost
+   {
+   public:
+     // constructor - initialise variables
+     DtedPost():
+       m_height(0),
+       m_weight(0),
+       m_status(false)
+     {
+     }
+     // destructor
+     virtual ~DtedPost();
+     // member variables
+     double m_height;
+     double m_weight;
+     bool m_status;
+   };
+
+   /// DtedHeight is a class for storing DTED information
+   /// - 4 posts are used to generate an interpolated height value.
+   class DtedHeight
+   {
+   public:
+     // constructor
+     DtedHeight();
+     // destructor
+     virtual ~DtedHeight();
+     // calculate the interpolated Height for the posts
+     double calcHeight();
+     // debug
+     void debug();
+     // post data
+     DtedPost m_posts[TOTAL_POSTS];
+   };
+
+
    virtual ~ossimDtedHandler();
-  // Disallow operator= and copy constrution...
+  // Disallow operator= and copy construction...
    const ossimDtedHandler& operator=(const ossimDtedHandler& rhs);
    ossimDtedHandler(const ossimDtedHandler&);
 
@@ -118,9 +163,15 @@ protected:
    void gatherStatistics();
 
    ossim_sint16 convertSignedMagnitude(ossim_uint16& s) const;
-   virtual double getHeightAboveMSLFile(const ossimGpt&);
-   virtual double getHeightAboveMSLMemory(const ossimGpt&);
-   
+   virtual double getHeightAboveMSL(const ossimGpt&, bool readFromFile);
+
+  /**
+   * read the height posts from the File
+   * @param postData - post heights, status & weight
+   * @param offset - file contents offset to start reading from
+   */
+   void readPostsFromFile(DtedHeight &postData, int offset);
+
    mutable OpenThreads::Mutex m_fileStrMutex;
    mutable std::ifstream m_fileStr;
    

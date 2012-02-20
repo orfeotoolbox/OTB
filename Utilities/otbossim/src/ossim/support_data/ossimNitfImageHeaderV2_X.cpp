@@ -17,35 +17,48 @@
 static const ossimTrace traceDebug(
    ossimString("ossimNitfImageHeaderV2_X:debug"));
 
-const ossimString ossimNitfImageHeaderV2_X::IID1_KW = "iid1";
-const ossimString ossimNitfImageHeaderV2_X::IDATIM_KW = "idatim";
-const ossimString ossimNitfImageHeaderV2_X::TGTID_KW = "tgtid";
-const ossimString ossimNitfImageHeaderV2_X::IID2_KW = "iid2";
-const ossimString ossimNitfImageHeaderV2_X::ITITLE_KW="ititle";
-const ossimString ossimNitfImageHeaderV2_X::ISCLAS_KW = "isclas";
-const ossimString ossimNitfImageHeaderV2_X::ENCRYP_KW = "encryp";
-const ossimString ossimNitfImageHeaderV2_X::ISORCE_KW = "isorce";
-const ossimString ossimNitfImageHeaderV2_X::PVTYPE_KW = "pvtype";
-const ossimString ossimNitfImageHeaderV2_X::IREP_KW = "irep";
-const ossimString ossimNitfImageHeaderV2_X::ICAT_KW = "icat";
-const ossimString ossimNitfImageHeaderV2_X::ABPP_KW = "abpp";
-const ossimString ossimNitfImageHeaderV2_X::PJUST_KW = "pjust";
-const ossimString ossimNitfImageHeaderV2_X::ICORDS_KW = "icords";
-const ossimString ossimNitfImageHeaderV2_X::IGEOLO_KW = "igeolo";
-const ossimString ossimNitfImageHeaderV2_X::NICOM_KW = "nicom";
-const ossimString ossimNitfImageHeaderV2_X::IC_KW = "ic";
-const ossimString ossimNitfImageHeaderV2_X::COMRAT_KW = "comrat";
-const ossimString ossimNitfImageHeaderV2_X::ISYNC_KW = "isync";
-const ossimString ossimNitfImageHeaderV2_X::IMODE_KW = "imode";
-const ossimString ossimNitfImageHeaderV2_X::NBPR_KW = "nbpr";
-const ossimString ossimNitfImageHeaderV2_X::NBPC_KW = "nbpc";
-const ossimString ossimNitfImageHeaderV2_X::NPPBH_KW = "nppbh";
-const ossimString ossimNitfImageHeaderV2_X::NPPBV_KW = "nppbv";
-const ossimString ossimNitfImageHeaderV2_X::NBPP_KW = "nbpp";
-const ossimString ossimNitfImageHeaderV2_X::IDLVL_KW = "idlvl";
-const ossimString ossimNitfImageHeaderV2_X::IALVL_KW = "ialvl";
-const ossimString ossimNitfImageHeaderV2_X::ILOC_KW = "iloc";
-const ossimString ossimNitfImageHeaderV2_X::IMAG_KW = "imag";
+const ossimString ossimNitfImageHeaderV2_X::IM_KW       = "IM";
+const ossimString ossimNitfImageHeaderV2_X::IID1_KW     = "IID1";
+const ossimString ossimNitfImageHeaderV2_X::IDATIM_KW   = "IDATIM";
+const ossimString ossimNitfImageHeaderV2_X::TGTID_KW    = "TGTID";
+const ossimString ossimNitfImageHeaderV2_X::IID2_KW     = "IID2";
+const ossimString ossimNitfImageHeaderV2_X::ITITLE_KW   = "ITITLE";
+const ossimString ossimNitfImageHeaderV2_X::ISCLAS_KW   = "ISCLAS";
+const ossimString ossimNitfImageHeaderV2_X::ENCRYP_KW   = "ENCRYP";
+const ossimString ossimNitfImageHeaderV2_X::ISORCE_KW   = "ISORCE";
+const ossimString ossimNitfImageHeaderV2_X::NROWS_KW    = "NROWS";
+const ossimString ossimNitfImageHeaderV2_X::NCOLS_KW    = "NCOLS";
+const ossimString ossimNitfImageHeaderV2_X::PVTYPE_KW   = "PVTYPE";
+const ossimString ossimNitfImageHeaderV2_X::IREP_KW     = "IREP";
+const ossimString ossimNitfImageHeaderV2_X::ICAT_KW     = "ICAT";
+const ossimString ossimNitfImageHeaderV2_X::ABPP_KW     = "ABPP";
+const ossimString ossimNitfImageHeaderV2_X::PJUST_KW    = "PJUST";
+const ossimString ossimNitfImageHeaderV2_X::ICORDS_KW   = "ICORDS";
+const ossimString ossimNitfImageHeaderV2_X::IGEOLO_KW   = "IGEOLO";
+const ossimString ossimNitfImageHeaderV2_X::NICOM_KW    = "NICOM";
+const ossimString ossimNitfImageHeaderV2_X::ICOM_KW     =  "ICOM";
+const ossimString ossimNitfImageHeaderV2_X::IC_KW       = "IC";
+const ossimString ossimNitfImageHeaderV2_X::COMRAT_KW   = "COMRAT";
+const ossimString ossimNitfImageHeaderV2_X::NBANDS_KW   = "NBANDS";
+const ossimString ossimNitfImageHeaderV2_X::ISYNC_KW    = "ISYNC";
+const ossimString ossimNitfImageHeaderV2_X::IMODE_KW    = "IMODE";
+const ossimString ossimNitfImageHeaderV2_X::NBPR_KW     = "NBPR";
+const ossimString ossimNitfImageHeaderV2_X::NBPC_KW     = "NBPC";
+const ossimString ossimNitfImageHeaderV2_X::NPPBH_KW    = "NPPBH";
+const ossimString ossimNitfImageHeaderV2_X::NPPBV_KW    = "NPPBV";
+const ossimString ossimNitfImageHeaderV2_X::NBPP_KW     = "NBPP";
+const ossimString ossimNitfImageHeaderV2_X::IDLVL_KW    = "IDLVL";
+const ossimString ossimNitfImageHeaderV2_X::IALVL_KW    = "IALVL";
+const ossimString ossimNitfImageHeaderV2_X::ILOC_KW     = "ILOC";
+const ossimString ossimNitfImageHeaderV2_X::IMAG_KW     = "IMAG";
+const ossimString ossimNitfImageHeaderV2_X::UDIDL_KW    = "UDIDL";
+const ossimString ossimNitfImageHeaderV2_X::UDOFL_KW    = "UDOFL";
+const ossimString ossimNitfImageHeaderV2_X::IXSHDL_KW   = "IXSHDL";
+const ossimString ossimNitfImageHeaderV2_X::IXSOFL_KW   = "IXSOFL";
+const ossimString ossimNitfImageHeaderV2_X::IMDATOFF_KW = "IMDATOFF";
+const ossimString ossimNitfImageHeaderV2_X::BMRLNTH_KW  = "BMRLNTH";
+
+
 
 RTTI_DEF1(ossimNitfImageHeaderV2_X,
           "ossimNitfImageHeaderV2_X",
@@ -190,14 +203,22 @@ void ossimNitfImageHeaderV2_X::setBitsPerPixel(ossim_uint32 bitsPerPixel)
 {
    std::stringstream strm;
    strm << bitsPerPixel;
-   ossimNitfCommon::setField(theNumberOfBitsPerPixelPerBand, strm.str(), 2);
+   ossimNitfCommon::setField(theNumberOfBitsPerPixelPerBand,
+                             strm.str(),
+                             2,
+                             std::ios::right,
+                             '0');
 }
 
 void ossimNitfImageHeaderV2_X::setActualBitsPerPixel(ossim_uint32 bitsPerPixel)
 {
    std::stringstream strm;
    strm << bitsPerPixel;
-   ossimNitfCommon::setField(theActualBitsPerPixelPerBand, strm.str(), 2);
+   ossimNitfCommon::setField(theActualBitsPerPixelPerBand,
+                             strm.str(),
+                             2,
+                             std::ios::right,
+                             '0');
 }
 
 void ossimNitfImageHeaderV2_X::setImageMode(char mode)
@@ -389,9 +410,68 @@ ossim_uint32 ossimNitfImageHeaderV2_X::getNumberOfPixelsPerBlockCol()const
    return ossimString(theNumberOfPixelsPerBlockHoriz).toUInt32();
 }
 
+bool ossimNitfImageHeaderV2_X::loadState(const ossimKeywordlist& kwl, const char* prefix)
+{
+   // Note: Currently not looking up all fieds only ones that make sense.
+   
+   const char* lookup;
+
+   lookup = kwl.find( prefix, IID1_KW);
+   if ( lookup )
+   {
+      setImageId( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, IDATIM_KW);
+   if ( lookup )
+   {
+      setAquisitionDateTime( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, TGTID_KW);
+   if ( lookup )
+   {
+      setTargetId( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, IID2_KW);
+   if ( lookup )
+   {
+      setTitle( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ITITLE_KW); // duplicate of above
+   if ( lookup )
+   {
+      setTitle( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISCLAS_KW);
+   if ( lookup )
+   {
+      setSecurityClassification( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ENCRYP_KW);
+   if ( lookup )
+   {
+      setEncryption( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, ISORCE_KW);
+   if ( lookup )
+   {
+      setImageSource( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ICAT_KW);
+   if ( lookup )
+   {
+      setCategory( ossimString(lookup) );
+   }
+   
+   return true;
+}
+
 void ossimNitfImageHeaderV2_X::setProperty(ossimRefPtr<ossimProperty> property)
 {
    ossimString name = property->getName();
+
+   // Make case insensitive:
+   name.upcase();
+   
    std::ostringstream out;
    
    if(!property) return;
@@ -801,46 +881,45 @@ bool ossimNitfImageHeaderV2_X::saveState(ossimKeywordlist& kwl, const ossimStrin
 {
    bool result = ossimNitfImageHeader::saveState(kwl, prefix);
    
-   kwl.add(prefix, "IM", theType);
-   kwl.add(prefix, "IID1", theImageId);
-   kwl.add(prefix, "IDATIM", theDateTime);
-   kwl.add(prefix, "TGTID", theTargetId);
-   kwl.add(prefix, "IID2", theTitle);
-   kwl.add(prefix, "ISCLAS", theSecurityClassification);
-   kwl.add(prefix, "ENCRYP", theEncryption);
-   kwl.add(prefix, "ISORCE", theImageSource);
-   kwl.add(prefix, "NROWS", theSignificantRows);
-   kwl.add(prefix, "NCOLS", theSignificantCols);
-   kwl.add(prefix, "PVTYPE", thePixelValueType);
-   kwl.add(prefix, "IREP", theRepresentation);
-   kwl.add(prefix, "ABPP", theActualBitsPerPixelPerBand);
-   kwl.add(prefix, "ICAT", theCategory);
-   kwl.add(prefix, "PJUST", theJustification);
-   kwl.add(prefix, "ICORDS", theCoordinateSystem);
-   kwl.add(prefix, "NICOM", theNumberOfComments);
-   
-   kwl.add(prefix, "ICOM", ossimString(theImageComments));
-   kwl.add(prefix, "IGEOLO", theGeographicLocation);
-   kwl.add(prefix, "IC", theCompression);
-   kwl.add(prefix, "COMRAT", theCompressionRateCode);
-   kwl.add(prefix, "NBANDS", theNumberOfBands);
-   kwl.add(prefix, "ISYNC", theImageSyncCode);
-   kwl.add(prefix, "IMODE", theImageMode);
-   kwl.add(prefix, "NBPR", theNumberOfBlocksPerRow);
-   kwl.add(prefix, "NBPC", theNumberOfBlocksPerCol);
-   kwl.add(prefix, "NPPBH", theNumberOfPixelsPerBlockHoriz);
-   kwl.add(prefix, "NPPBV", theNumberOfPixelsPerBlockVert);
-   kwl.add(prefix, "NBPP", theNumberOfBitsPerPixelPerBand);
-   kwl.add(prefix, "IDLVL", theDisplayLevel);
-   kwl.add(prefix, "IALVL", theAttachmentLevel);
-   kwl.add(prefix, "ILOC", theImageLocation);
-   kwl.add(prefix, "IMAG", theImageMagnification);
-   kwl.add(prefix, "UDIDL", theUserDefinedImageDataLength);
-   kwl.add(prefix, "UDOFL", theUserDefinedOverflow);
-   kwl.add(prefix, "IXSHDL", theExtendedSubheaderDataLen);
-   kwl.add(prefix, "IXSOFL", theExtendedSubheaderOverflow);
-   kwl.add(prefix, "IMDATOFF", theBlockedImageDataOffset);
-   kwl.add(prefix, "BMRLNTH", theBlockMaskRecordLength);
+   kwl.add(prefix, IM_KW.c_str(),       theType);
+   kwl.add(prefix, IID1_KW.c_str(),     theImageId);
+   kwl.add(prefix, IDATIM_KW.c_str(),   theDateTime);
+   kwl.add(prefix, TGTID_KW.c_str(),    theTargetId);
+   kwl.add(prefix, IID2_KW.c_str(),     theTitle);
+   kwl.add(prefix, ISCLAS_KW.c_str(),   theSecurityClassification);
+   kwl.add(prefix, ENCRYP_KW.c_str(),   theEncryption);
+   kwl.add(prefix, ISORCE_KW.c_str(),   theImageSource);
+   kwl.add(prefix, NROWS_KW.c_str(),    theSignificantRows);
+   kwl.add(prefix, NCOLS_KW.c_str(),    theSignificantCols);
+   kwl.add(prefix, PVTYPE_KW.c_str(),   thePixelValueType);
+   kwl.add(prefix, IREP_KW.c_str(),     theRepresentation);
+   kwl.add(prefix, ABPP_KW.c_str(),     theActualBitsPerPixelPerBand);
+   kwl.add(prefix, ICAT_KW.c_str(),     theCategory);
+   kwl.add(prefix, PJUST_KW.c_str(),    theJustification);
+   kwl.add(prefix, ICORDS_KW.c_str(),   theCoordinateSystem);
+   kwl.add(prefix, NICOM_KW.c_str(),    theNumberOfComments);
+   kwl.add(prefix, ICOM_KW.c_str(),     ossimString(theImageComments));
+   kwl.add(prefix, IGEOLO_KW.c_str(),   theGeographicLocation);
+   kwl.add(prefix, IC_KW.c_str(),       theCompression);
+   kwl.add(prefix, COMRAT_KW.c_str(),   theCompressionRateCode);
+   kwl.add(prefix, NBANDS_KW.c_str(),   theNumberOfBands);
+   kwl.add(prefix, ISYNC_KW.c_str(),    theImageSyncCode);
+   kwl.add(prefix, IMODE_KW.c_str(),    theImageMode);
+   kwl.add(prefix, NBPR_KW.c_str(),     theNumberOfBlocksPerRow);
+   kwl.add(prefix, NBPC_KW.c_str(),     theNumberOfBlocksPerCol);
+   kwl.add(prefix, NPPBH_KW.c_str(),    theNumberOfPixelsPerBlockHoriz);
+   kwl.add(prefix, NPPBV_KW.c_str(),    theNumberOfPixelsPerBlockVert);
+   kwl.add(prefix, NBPP_KW.c_str(),     theNumberOfBitsPerPixelPerBand);
+   kwl.add(prefix, IDLVL_KW.c_str(),    theDisplayLevel);
+   kwl.add(prefix, IALVL_KW.c_str(),    theAttachmentLevel);
+   kwl.add(prefix, ILOC_KW.c_str(),     theImageLocation);
+   kwl.add(prefix, IMAG_KW.c_str(),     theImageMagnification);
+   kwl.add(prefix, UDIDL_KW.c_str(),    theUserDefinedImageDataLength);
+   kwl.add(prefix, UDOFL_KW.c_str(),    theUserDefinedOverflow);
+   kwl.add(prefix, IXSHDL_KW.c_str(),   theExtendedSubheaderDataLen);
+   kwl.add(prefix, IXSOFL_KW.c_str(),   theExtendedSubheaderOverflow);
+   kwl.add(prefix, IMDATOFF_KW.c_str(), theBlockedImageDataOffset);
+   kwl.add(prefix, BMRLNTH_KW.c_str(),  theBlockMaskRecordLength);
    
    return result;
 }

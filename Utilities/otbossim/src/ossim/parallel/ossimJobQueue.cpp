@@ -206,7 +206,7 @@ bool ossimJobQueue::isEmpty()const
 ossim_uint32 ossimJobQueue::size()
 {
    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_jobQueueMutex);
-   return m_jobQueue.size();
+   return (ossim_uint32) m_jobQueue.size();
 }
 
 ossimJob::List::iterator ossimJobQueue::findById(const ossimString& id)

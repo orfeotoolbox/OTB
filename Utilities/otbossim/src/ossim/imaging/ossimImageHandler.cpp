@@ -12,7 +12,7 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 19964 2011-08-16 18:11:44Z gpotts $
+//  $Id: ossimImageHandler.cpp 20133 2011-10-12 19:03:47Z oscarkramer $
 
 #include <algorithm>
 
@@ -60,7 +60,7 @@ static const char SUPPLEMENTARY_DIRECTORY_KW[] = "supplementary_directory";
 static const char VALID_VERTICES_FILE_KW[]     = "valid_vertices_file";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 19964 2011-08-16 18:11:44Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 20133 2011-10-12 19:03:47Z oscarkramer $";
 #endif
 
 // GARRETT! All of the decimation factors are scattered throughout. We want to fold that into 
@@ -82,7 +82,8 @@ theLut(0),
 theDecimationFactors(0),
 theImageID(""),
 theStartingResLevel(0),
-theOpenOverviewFlag(true)
+theOpenOverviewFlag(true),
+thePixelType(OSSIM_PIXEL_IS_POINT)
 {
    if (traceDebug())
    {
@@ -124,29 +125,14 @@ bool ossimImageHandler::saveState(ossimKeywordlist& kwl,
       return false;
    }
 
-   kwl.add(prefix,
-           ossimKeywordNames::FILENAME_KW,
-           theImageFile.c_str(),
-           true);
-   kwl.add(prefix,
-           HAS_LUT_KW,
-           (theLut.valid()?"true":"false"),
-           true);
-   kwl.add(prefix,
-           ossimKeywordNames::IMAGE_ID_KW,
-           theImageID,
-           true);
-   kwl.add(prefix,
-           ossimKeywordNames::OVERVIEW_FILE_KW,
-           theOverviewFile.c_str(),
-           true);
-   kwl.add(prefix,
-           SUPPLEMENTARY_DIRECTORY_KW,
-           theSupplementaryDirectory.c_str(),
-           true);
-
+   kwl.add(prefix, ossimKeywordNames::FILENAME_KW, theImageFile.c_str(), true);
+   kwl.add(prefix, HAS_LUT_KW, (theLut.valid()?"true":"false"), true);
+   kwl.add(prefix, ossimKeywordNames::IMAGE_ID_KW, theImageID, true);
+   kwl.add(prefix, ossimKeywordNames::OVERVIEW_FILE_KW, theOverviewFile.c_str(), true);
+   kwl.add(prefix, SUPPLEMENTARY_DIRECTORY_KW, theSupplementaryDirectory.c_str(), true);
    kwl.add(prefix, START_RES_LEVEL_KW, theStartingResLevel, true);
    kwl.add(prefix, OPEN_OVERVIEW_FLAG_KW, (theOpenOverviewFlag?"1":"0"), true);
+   kwl.add(prefix, ossimKeywordNames::PIXEL_TYPE_KW, (ossim_uint16) thePixelType, true);
    
    return true;
 }
@@ -264,6 +250,10 @@ bool ossimImageHandler::loadState(const ossimKeywordlist& kwl,
    
    // Read image id if present:
    theImageID = kwl.find(prefix, ossimKeywordNames::IMAGE_ID_KW);
+
+   lookup = kwl.find(prefix, ossimKeywordNames::PIXEL_TYPE_KW);
+   if (lookup)
+      thePixelType = (ossimPixelType) atoi(lookup);
 
    if(traceDebug())
    {
@@ -1117,7 +1107,11 @@ void ossimImageHandler::loadMetaData()
 {
   theMetaData.clear();
 
-  ossimFilename filename = getFilenameWithThisExtension(ossimString(".omd"));
+  ossimFilename filename = getFilenameWithThisExtension(ossimString(".omd"), false);
+  if ( filename.exists() == false )
+  {
+     filename = getFilenameWithThisExtension(ossimString(".omd"), true);
+  }
   if(filename.exists())
   {
      ossimKeywordlist kwl;
@@ -1195,7 +1189,7 @@ ossimFilename ossimImageHandler::getOverviewFile()const
 
 void ossimImageHandler::getEntryList(std::vector<ossim_uint32>& entryList)const
 {
-	entryList.push_back(0);
+   entryList.push_back(0);
 }
 
 void ossimImageHandler::getEntryStringList(
@@ -1214,6 +1208,22 @@ void ossimImageHandler::getEntryStringList(
    }
 }
 
+bool ossimImageHandler::useEntryIndex() const
+{
+   bool result = false;
+   if ( isOpen() )
+   {
+      std::vector<ossim_uint32> entryList;
+      getEntryList(entryList);
+
+      if ( entryList.size() )
+      {
+         if ( (entryList.size() > 1) || (entryList[0] != 0) ) result = true;
+      }
+   }
+   return result;
+}
+
 ossim_uint32 ossimImageHandler::getNumberOfEntries()const
 {
    std::vector<ossim_uint32> tempList;
@@ -1221,7 +1231,6 @@ ossim_uint32 ossimImageHandler::getNumberOfEntries()const
    
    return (ossim_uint32)tempList.size();
 }
-
 
 void ossimImageHandler::completeOpen()
 {

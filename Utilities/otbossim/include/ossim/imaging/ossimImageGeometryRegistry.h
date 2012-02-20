@@ -14,7 +14,7 @@
 #include <ossim/imaging/ossimImageGeometryFactoryBase.h>
 #include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/base/ossimFactoryListInterface.h>
-class OSSIM_DLL ossimImageGeometryRegistry : public ossimBaseObjectFactory,
+class OSSIM_DLL ossimImageGeometryRegistry : public ossimImageGeometryFactoryBase,
                                              public ossimFactoryListInterface<ossimImageGeometryFactoryBase,
                                                                               ossimImageGeometry>
 {
@@ -22,6 +22,13 @@ public:
    virtual ~ossimImageGeometryRegistry(){m_instance=0;}
    static ossimImageGeometryRegistry* instance();
    
+   
+   virtual ossimImageGeometry* createGeometry(const ossimString& typeName)const;
+   virtual ossimImageGeometry* createGeometry(const ossimKeywordlist& kwl,
+                                              const char* prefix=0)const;
+   virtual ossimImageGeometry* createGeometry(const ossimFilename& filename,
+                                              ossim_uint32 entryIdx)const;
+#if 0
    /*!
     * Creates an object given a type name.
     */
@@ -38,7 +45,7 @@ public:
    {
       return createObjectFromRegistry(kwl, prefix);
    }
-   
+#endif
    virtual bool extendGeometry(ossimImageHandler* handler)const;
    
    /*!
@@ -53,11 +60,11 @@ public:
    
 protected:
    ossimImageGeometryRegistry()
-   :ossimBaseObjectFactory()
+   :ossimImageGeometryFactoryBase()
    {}
    
    ossimImageGeometryRegistry( const ossimImageGeometryRegistry& rhs )
-   :ossimBaseObjectFactory(rhs)
+   :ossimImageGeometryFactoryBase(rhs)
    {}
    void operator =(const ossimImageGeometryRegistry&){}
    static ossimImageGeometryRegistry* m_instance;

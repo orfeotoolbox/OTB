@@ -6,10 +6,12 @@ ossimByteStreamBuffer::ossimByteStreamBuffer()
     m_bufferSize(0),
     m_sharedBuffer(false)
 {
-    
+   setBuf(m_buffer, m_bufferSize, m_sharedBuffer);
 }
 
-ossimByteStreamBuffer::ossimByteStreamBuffer(char* buf, ossim_int64 bufSize, bool shared)
+ossimByteStreamBuffer::ossimByteStreamBuffer(char_type* buf, 
+                                             ossim_int64 bufSize, 
+                                             bool shared)
    :m_buffer(0),
     m_bufferSize(0),
     m_sharedBuffer(false)    
@@ -22,20 +24,10 @@ ossimByteStreamBuffer::ossimByteStreamBuffer(const ossimByteStreamBuffer& src)
     m_bufferSize(0),
     m_sharedBuffer(false)    
 {
-   if(src.m_sharedBuffer)
+   setBuf(src.m_buffer, src.m_bufferSize, src.m_sharedBuffer);
+   
+   if(src.m_buffer&&src.m_bufferSize)
    {
-      m_buffer = src.m_buffer;
-      m_sharedBuffer = true;
-      m_bufferSize = src.m_bufferSize;
-   }
-   else if(src.m_buffer)
-   {
-      // first copy the contents of the buffer
-      //
-      m_bufferSize = src.m_bufferSize;
-      m_buffer = new char_type[m_bufferSize];
-      memcpy(m_buffer, src.m_buffer, m_bufferSize);
-        
       // now align pointers to the same offset locations
       //
       ossim_int64 goff = src.gptr()-src.eback();
@@ -50,7 +42,7 @@ ossimByteStreamBuffer::~ossimByteStreamBuffer()
 {
    deleteBuffer();
 }
-std::streambuf* ossimByteStreamBuffer::setbuf ( char * s, std::streamsize n )
+std::streambuf* ossimByteStreamBuffer::setbuf ( char_type * s, std::streamsize n )
 {
    return setBuf(s, n, false);
 }
@@ -62,10 +54,17 @@ void ossimByteStreamBuffer::clear()
 // added so we can set a buffer and make it shared
 std::streambuf* ossimByteStreamBuffer::setBuf(char* buf, std::streamsize bufSize, bool shared)
 {
+   
    deleteBuffer();
    setp(0,0);
    setg(0,0,0);
-   m_buffer = reinterpret_cast<char_type*>(buf);
+   char_type* tempBuf = buf;
+   if(!shared&&bufSize&&buf)
+   {
+      tempBuf = new char_type[bufSize];
+      memcpy(tempBuf, buf, bufSize);
+   }
+   m_buffer = tempBuf;
    m_sharedBuffer = shared;
    m_bufferSize = bufSize;
    setp(m_buffer, m_buffer+bufSize);
@@ -132,7 +131,6 @@ ossimByteStreamBuffer::int_type ossimByteStreamBuffer::pbackfail(int_type __c )
    }
    return result;
 }
-
 ossimByteStreamBuffer::pos_type ossimByteStreamBuffer::seekoff(off_type offset, std::ios_base::seekdir dir,
                                                                std::ios_base::openmode __mode)
 { 
@@ -156,6 +154,14 @@ ossimByteStreamBuffer::pos_type ossimByteStreamBuffer::seekoff(off_type offset, 
          {
             result = pos_type(offset);
          }
+         if(__mode  & std::ios_base::in)
+         {
+            gbump(offset - (gptr() - eback()));
+         }
+         else if(__mode & std::ios_base::out)
+         {
+            pbump(offset - (pptr() - pbase()));
+         }
          break;
       }
       case std::ios_base::cur:
@@ -177,6 +183,14 @@ ossimByteStreamBuffer::pos_type ossimByteStreamBuffer::seekoff(off_type offset, 
          if((newPosition >= 0)&&(newPosition < m_bufferSize))
          {
             result = newPosition;
+            if(__mode  & std::ios_base::in)
+            {
+               gbump(offset);
+            }
+            else if(__mode & std::ios_base::out)
+            {
+               pbump(offset);
+            }
          }
          break;
       }
@@ -196,6 +210,14 @@ ossimByteStreamBuffer::pos_type ossimByteStreamBuffer::seekoff(off_type offset, 
          if((newPosition >= 0)&&(newPosition < m_bufferSize))
          {
             result = newPosition;
+            if(__mode  & std::ios_base::in)
+            {
+               gbump(offset - (gptr() - eback()));
+            }
+            else if(__mode & std::ios_base::out)
+            {
+               pbump(offset - (epptr() - pptr()));
+            }
          }
          break;
       }
@@ -226,9 +248,9 @@ ossimByteStreamBuffer::pos_type ossimByteStreamBuffer::seekpos(pos_type pos, std
    {
       if(pos >=0)
       {
+         setp(m_buffer, m_buffer+m_bufferSize);
          if(pos < m_bufferSize)
          {
-            setp(m_buffer, m_buffer+m_bufferSize);
             pbump(pos);
             result = pos;
          }
@@ -245,7 +267,7 @@ ossimByteStreamBuffer::pos_type ossimByteStreamBuffer::seekpos(pos_type pos, std
       }
    }
     
-   return result; 
+   return result;
 }
 
 std::streamsize ossimByteStreamBuffer::xsgetn(char_type* __s, std::streamsize __n)

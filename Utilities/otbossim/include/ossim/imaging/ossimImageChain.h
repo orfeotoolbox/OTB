@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.h 19963 2011-08-16 18:11:18Z gpotts $
+// $Id: ossimImageChain.h 20316 2011-12-02 15:56:38Z oscarkramer $
 #ifndef ossimImageChain_HEADER
 #define ossimImageChain_HEADER
 #include <vector>
@@ -19,8 +19,6 @@ using namespace std;
 #include <ossim/base/ossimConnectableObjectListener.h>
 #include <ossim/base/ossimId.h>
 #include <ossim/base/ossimConnectableContainerInterface.h>
-
-class ossimImageChainChildListener;
 
 class OSSIMDLLEXPORT ossimImageChain : public ossimImageSource,
                                        public ossimConnectableObjectListener,
@@ -63,6 +61,8 @@ public:
     * getTile request
     */
    virtual ossimImageSource* getFirstSource();
+   virtual const ossimImageSource* getFirstSource() const;
+   
    virtual ossimObject* getFirstObject();
 
    /**
@@ -70,6 +70,8 @@ public:
     * getTile request.
     */
    virtual ossimImageSource* getLastSource();
+   virtual const ossimImageSource* getLastSource() const;
+   
    virtual ossimObject* getLastObject();
 
 
@@ -358,14 +360,32 @@ public:
    virtual void propagateEventToOutputs(ossimEvent& event);
    virtual void propagateEventToInputs(ossimEvent& event);
  
-   
+   virtual void processEvent(ossimEvent& event);
+
    virtual void accept(ossimVisitor& visitor);
    void deleteList();
+
+   /**
+    * These access methods greatly facilitate the implementation of an image chain adaptor class.
+    * They shouldn't be accessed directly by any other classes.  These methods really should be 
+    * "protected" but the compiler complains if this base class' declarations are "protected".
+    */
+   virtual ossimConnectableObject::ConnectableObjectList& imageChainList() { return theImageChainList; }
+   virtual const ossimConnectableObject::ConnectableObjectList& imageChainList() const { return theImageChainList; }
+   
+   /**
+    * Inserts all of this object's children and inputs into the container provided. Since this is
+    * itself a form of container, this method will consolidate this chain with the argument
+    * container. Consequently, this chain object will not be represented in the container, but its
+    * children will be, with correct input and output connections to external objects. Ownership
+    * of children will pass to the argument container.
+    * @return Returns TRUE if successful.
+    */
+   virtual bool fillContainer(ossimConnectableContainer& container);
 
 protected:
    void prepareForRemoval(ossimConnectableObject* connectableObject);
    
-   friend class ossimImageChainChildListener;
   /**
     * This will hold a sequence of image sources.
     * theFirst one in the list will be the head of the
@@ -374,7 +394,6 @@ protected:
    ossimConnectableObject::ConnectableObjectList theImageChainList;
    
    ossimRefPtr<ossimImageData>     theBlankTile;
-   ossimImageChainChildListener*   theChildListener;
   // mutable bool                    thePropagateEventFlag;
    mutable bool                    theLoadStateFlag;
    /**

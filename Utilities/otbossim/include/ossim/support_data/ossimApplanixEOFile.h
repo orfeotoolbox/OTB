@@ -6,19 +6,22 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEOFile.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimApplanixEOFile.h 20483 2012-01-21 15:42:22Z dburken $
 #ifndef ossimApplanixEOFile_HEADER
-#define ossimApplanixEOFile_HEADER
+#define ossimApplanixEOFile_HEADER 1
+
+#include <ossim/base/ossimReferenced.h>
+#include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/base/ossimString.h>
 #include <iostream>
 #include <map>
 #include <vector>
-#include <ossim/base/ossimReferenced.h>
-#include <ossim/base/ossimRefPtr.h>
-#include <ossim/base/ossimFilename.h>
 
 class OSSIM_DLL ossimApplanixEORecord : public ossimReferenced
 {
 public:
+
    OSSIM_DLL friend std::ostream& operator <<(std::ostream& out, const ossimApplanixEORecord& src);
    ossimApplanixEORecord(const ossimApplanixEORecord& src)
       :theField(src.theField)
@@ -202,7 +205,7 @@ protected:
    ossim_float64 theMaxLon;
    std::vector<ossimString> theRecordFormat;
    std::vector< ossimRefPtr<ossimApplanixEORecord> > theApplanixRecordList;
-   std::map<ossimString, ossimRefPtr<ossimApplanixEORecord> > theRecordIdMap;
+   std::map<ossimString, ossimRefPtr<ossimApplanixEORecord>, ossimStringLtstr> theRecordIdMap;
 };
 
 #endif

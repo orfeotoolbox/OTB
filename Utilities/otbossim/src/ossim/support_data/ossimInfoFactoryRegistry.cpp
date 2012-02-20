@@ -16,41 +16,19 @@
 
 #include <algorithm> /* for std::find */
 
-ossimInfoFactoryRegistry* ossimInfoFactoryRegistry::theInstance = 0;
+ossimInfoFactoryRegistry* ossimInfoFactoryRegistry::m_instance = 0;
 
 ossimInfoFactoryRegistry::~ossimInfoFactoryRegistry()
 {
-   theFactoryList.clear();
 }
 
 ossimInfoFactoryRegistry* ossimInfoFactoryRegistry::instance()
 {
-   if ( !theInstance )
+   if ( !m_instance )
    {
-      theInstance = new ossimInfoFactoryRegistry;
+      m_instance = new ossimInfoFactoryRegistry;
    }
-   return theInstance;
-}
-
-void ossimInfoFactoryRegistry::registerFactory(
-   ossimInfoFactoryInterface* factory)
-{
-   if (factory)
-   {
-      theFactoryList.push_back(factory);
-   }
-}
-
-void ossimInfoFactoryRegistry::unregisterFactory(
-   ossimInfoFactoryInterface* factory)
-{
-   std::vector<ossimInfoFactoryInterface*>::iterator i =
-      std::find(theFactoryList.begin(), theFactoryList.end(), factory);
-   
-   if( i != theFactoryList.end() )
-   {
-      theFactoryList.erase(i);
-   }
+   return m_instance;
 }
 
 ossimInfoBase* ossimInfoFactoryRegistry::create(
@@ -59,9 +37,9 @@ ossimInfoBase* ossimInfoFactoryRegistry::create(
    ossimInfoBase* result = 0;
    
    std::vector<ossimInfoFactoryInterface*>::const_iterator i =
-      theFactoryList.begin();
+      m_factoryList.begin();
 
-   while ( i != theFactoryList.end() )
+   while ( i != m_factoryList.end() )
    {
       result = (*i)->create(file);
       if ( result )
@@ -76,7 +54,6 @@ ossimInfoBase* ossimInfoFactoryRegistry::create(
 
 /** hidden from use default constructor */
 ossimInfoFactoryRegistry::ossimInfoFactoryRegistry()
-   : theFactoryList()
 {
    this->registerFactory(ossimInfoFactory::instance());
 }

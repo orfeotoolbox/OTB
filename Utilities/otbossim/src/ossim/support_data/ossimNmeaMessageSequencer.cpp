@@ -52,7 +52,6 @@ bool ossimNmeaMessageSequencer::next(ossimNmeaMessage& msg)
    bool result = false;
    
    try {
-      msg.reset();
       msg.parseMessage(*m_inputStream);
       result = true;
    } 

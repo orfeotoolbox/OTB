@@ -5,14 +5,14 @@
 // See LICENSE.txt file in the top level directory for more details.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimNitfFileHeaderV2_X.h 18413 2010-11-11 19:56:22Z gpotts $
+// $Id: ossimNitfFileHeaderV2_X.h 20123 2011-10-11 17:55:44Z dburken $
 
 #ifndef ossimNitfFileHeaderV2_X_HEADER
 #define ossimNitfFileHeaderV2_X_HEADER
 #include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimNitfFileHeader.h>
 
-
+class ossimKeywordlist;
 class ossimLocalTm;
 
 class OSSIM_DLL ossimNitfFileHeaderV2_X : public ossimNitfFileHeader
@@ -93,6 +93,20 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
    bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
+
+   /*!
+    * @brief Method to set fields from a keyword list.
+    *
+    * This is not a true loadState as it does not lookup/initialize all class
+    * members.  This was added to allow defaults, e.g OSTAID, to be set via a
+    * site configuration file.
+    * Code does not return false if a field(key) is not found..
+    *
+    * @return true if ok or false on error.
+    */
+   virtual bool loadState(const ossimKeywordlist& kwl,
+                          const char* prefix=0);
+   
    /**
     * Properties of a NITF 2.x Header file. See MIL-STD-2500A or
     * MIL-STD-2500B for details.

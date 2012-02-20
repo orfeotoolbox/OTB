@@ -9,7 +9,7 @@
 // Description: This class extends the stl's string class.
 // 
 //********************************************************************
-// $Id: ossimString.cpp 19870 2011-07-26 11:14:43Z gpotts $
+// $Id: ossimString.cpp 20204 2011-11-04 15:12:28Z dburken $
 
 #include <cctype> /* for toupper */
 #include <cstdlib> /* for getenv() */
@@ -28,7 +28,7 @@
 static ossimTrace traceDebug("ossimString:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static char OSSIM_ID[] = "$Id: ossimString.cpp 19870 2011-07-26 11:14:43Z gpotts $";
+static char OSSIM_ID[] = "$Id: ossimString.cpp 20204 2011-11-04 15:12:28Z dburken $";
 #endif
 
 ossimString ossimString::upcase(const ossimString& aString)
@@ -278,10 +278,8 @@ ossimString ossimString::expandEnvironmentVariable() const
    std::stack<ossim_uint32> startChars;
    ossimRegExp regExpStart("\\$\\(");
 
-   ossim_uint32 startIndex = 0;
    if(regExpStart.find(result.c_str()))
    {
-      startIndex = regExpStart.start();
       startChars.push(regExpStart.start());
       while(!startChars.empty())
       {

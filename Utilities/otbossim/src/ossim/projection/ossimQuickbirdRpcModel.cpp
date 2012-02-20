@@ -438,13 +438,11 @@ bool ossimQuickbirdRpcModel::saveState(ossimKeywordlist& kwl,
 bool ossimQuickbirdRpcModel::loadState(const ossimKeywordlist& kwl,
                                        const char* prefix)
 {
-   if( !theSupportData )
+ if(theSupportData.valid())
    {
-      theSupportData = new ossimQuickbirdMetaData();
+      ossimString supportPrefix = ossimString(prefix) + "support_data.";
+      theSupportData->loadState(kwl, supportPrefix);
    }
-
-   ossimString supportPrefix = ossimString(prefix) + "support_data.";
-   theSupportData->loadState(kwl, supportPrefix);
 
    return ossimRpcModel::loadState(kwl, prefix);
 }

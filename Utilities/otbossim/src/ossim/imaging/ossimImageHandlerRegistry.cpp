@@ -9,7 +9,7 @@
 // Contains class definition for ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.cpp 19551 2011-05-07 16:36:34Z dburken $
+//  $Id: ossimImageHandlerRegistry.cpp 20317 2011-12-02 18:03:49Z oscarkramer $
 
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/base/ossimFilename.h>
@@ -62,7 +62,7 @@ ossimRefPtr<ossimImageHandler> ossimImageHandlerRegistry::openBySuffix(const oss
    
    getImageHandlersBySuffix(handlers, file.ext());
    ossim_uint32 idx = 0;
-   ossim_uint32 size = handlers.size();
+   ossim_uint32 size = (ossim_uint32) handlers.size();
    
    for(idx = 0; idx < size; ++idx)
    {

@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.h 19880 2011-07-30 16:27:15Z dburken $
+//  $Id: ossimMapProjection.h 20133 2011-10-12 19:03:47Z oscarkramer $
 
 #ifndef ossimMapProjection_HEADER
 #define ossimMapProjection_HEADER 1
@@ -202,15 +202,8 @@ public:
    //! specification and ignores image geometry differences.
    virtual bool operator==(const ossimProjection& projection) const;
 
-   /**
-    * This will go from the ground point and give
-    * you an approximate lat and lon per pixel. the Delta Lat
-    * and delta lon will be in degrees.
-    */
-   virtual void computeDegreesPerPixel(const ossimGpt& ground,
-                                       const ossimDpt& metersPerPixel,
-                                       double &deltaLat,
-                                       double &deltaLon);
+   //! Computes the approximate resolution in degrees/pixel
+   virtual void computeDegreesPerPixel();
 
    
    /**
@@ -218,19 +211,7 @@ public:
     * you an approximate meters per pixel. the Delta Lat
     * and delta lon will be in degrees.
     */
-   virtual void computeMetersPerPixel(const ossimGpt& center,
-                                      double deltaDegreesPerPixelLat,
-                                      double deltaDegreesPerPixelLon,
-                                      ossimDpt &metersPerPixel);
-
-   /**
-    * This will go from its internal origin of latitude and longitude and give
-    * you an approximate meters per pixel. the Delta Lat
-    * and delta lon will be in degrees.
-    */
-   virtual void computeMetersPerPixel(double deltaDegreesPerPixelLat,
-                                      double deltaDegreesPerPixelLon,
-                                      ossimDpt &metersPerPixel);
+   virtual void computeMetersPerPixel();
 
    void setMatrix(double rotation,
                   const ossimDpt& scale,

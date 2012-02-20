@@ -15,10 +15,10 @@ public:
    void initialize(const ossimFilename& file);
    void initialize(const std::string& str);
    
-   bool next(ossimNmeaMessage& msg);
+   virtual bool next(ossimNmeaMessage& msg);
    
-   void reset();
-   bool valid()const;
+   virtual void reset();
+   virtual bool valid()const;
    
 protected:
    void destroy();

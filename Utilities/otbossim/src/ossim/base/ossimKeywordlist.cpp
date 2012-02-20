@@ -5,7 +5,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.cpp 20022 2011-09-01 15:45:14Z dburken $
+// $Id: ossimKeywordlist.cpp 20440 2012-01-11 16:29:48Z gpotts $
 
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDirectory.h>
@@ -28,7 +28,7 @@ static const char NULL_KEY_NOTICE[]
 
 #ifdef OSSIM_ID_ENABLED
 static const bool TRACE = false;
-static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 20022 2011-09-01 15:45:14Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 20440 2012-01-11 16:29:48Z gpotts $";
 #endif
 
 ossimKeywordlist::ossimKeywordlist(const ossimKeywordlist& src)
@@ -163,17 +163,12 @@ void ossimKeywordlist::add(const char* prefix,
                            const ossimKeywordlist& kwl,
                            bool overwrite)
 {
+   std::string p = prefix ? prefix : "";
    std::map<std::string, std::string>::const_iterator iter = kwl.m_map.begin();
-   
    while(iter != kwl.m_map.end())
    {
-      ossimString valueToAdd = (*iter).second;
-      ossimString newKey     = (*iter).first;
-      
-      add(prefix,
-          newKey,
-          valueToAdd,
-          overwrite);
+      std::string k( p + (*iter).first );
+      addPair( k, (*iter).second, overwrite );
       ++iter;
    }
 }
@@ -211,7 +206,6 @@ void ossimKeywordlist::addPair(const std::string& prefix,
    std::string k(prefix + key);
    addPair(k, value, overwrite);
 }
-
 
 void ossimKeywordlist::add(const char* key,
                            const char* value,
@@ -478,16 +472,16 @@ bool ossimKeywordlist::write(const char* file,
       << file << std::endl;
       return false;
    }
-
+   
    if ( comment != 0 )
    {
       ossimString commentStr("// ");
       commentStr += comment;
-
+      
       // Write out the input comment to the first line.
       filename << commentStr.c_str() << std::endl;
    }
-
+   
    writeToStream(filename);
    
    filename.close();
@@ -715,7 +709,7 @@ bool ossimKeywordlist::parseFile(const ossimFilename& file,
 {
    std::ifstream is;
    is.open(file.c_str(), std::ios::in | std::ios::binary);
-
+   
    if ( !is.is_open() )
    {
       // ESH 07/2008, Trac #234: OSSIM is case sensitive 
@@ -724,7 +718,7 @@ bool ossimKeywordlist::parseFile(const ossimFilename& file,
       // filename, try again with the results of a case insensitive search.
       ossimDirectory directory(file.path());
       ossimFilename filename(file.file());
-
+      
       std::vector<ossimFilename> result;
       bool bSuccess = directory.findCaseInsensitiveEquivalents( filename, result );
       if ( bSuccess == true )
@@ -736,7 +730,7 @@ bool ossimKeywordlist::parseFile(const ossimFilename& file,
             is.open( result[i].c_str(), std::ios::in | std::ios::binary );
          }
       }
-
+      
       if ( !is.is_open() )
       {
          if ( traceDebug() ) 
@@ -750,9 +744,9 @@ bool ossimKeywordlist::parseFile(const ossimFilename& file,
       }
    }
    bool result = parseStream(is, ignoreBinaryChars);
-
+   
    is.close();
-
+   
    return result;
 }
 
@@ -805,11 +799,16 @@ ossimKeywordlist::KeywordlistParseState ossimKeywordlist::readComments(ossimStri
       c = in.peek();
       if(c == '/')
       {
-        result = KeywordlistParseState_OK;
+         result = KeywordlistParseState_OK;
          sequence += c;
          while(!in.bad()&&!in.eof())
          {
             c = (char)in.get();
+            if(!isValidKeywordlistCharacter(c))
+            {
+               result = KeywordlistParseState_BAD_STREAM;
+               break;
+            }
             if((c == '\n')||
                (c == '\r'))
             {
@@ -910,7 +909,6 @@ ossimKeywordlist::KeywordlistParseState ossimKeywordlist::readValue(ossimString&
          break;
       }
    }
-
    // The ifstream object will end in 'ÿ' (character 255 or -1) if the end-of-file indicator 
    // will not be set(e.g \n). In this case, end-of-file conditions would never be detected. 
    // add EOF (which is actually the integer -1 or 255) check here.
@@ -961,6 +959,7 @@ ossimKeywordlist::KeywordlistParseState ossimKeywordlist::readValue(ossimString&
 ossimKeywordlist::KeywordlistParseState ossimKeywordlist::readKeyAndValuePair(ossimString& key, ossimString& value, std::istream& in)const
 {
    ossimKeywordlist::KeywordlistParseState keyState   = readKey(key, in);
+   if(keyState & KeywordlistParseState_BAD_STREAM) return keyState;
    ossimKeywordlist::KeywordlistParseState valueState = readValue(value, in);
    return static_cast<ossimKeywordlist::KeywordlistParseState>( (static_cast<int>(keyState) |
                                                                  static_cast<int>(valueState)) );
@@ -981,11 +980,13 @@ bool ossimKeywordlist::parseStream(std::istream& is)
       skipWhitespace(is);
       if(is.eof() || is.bad()) return true; // we skipped to end so valid keyword list
       state = readComments(sequence, is);
+      if(state & KeywordlistParseState_BAD_STREAM) return false;
       // if we failed a comment parse then try key value parse.
       if(state == KeywordlistParseState_FAIL)
       {
          key = sequence; // just in case there is a 1 token look ahead residual for a single slash test.
-         if(readKeyAndValuePair(key, value, is) == KeywordlistParseState_OK)
+         ossimKeywordlist::KeywordlistParseState testKeyValueState = readKeyAndValuePair(key, value, is);
+         if(testKeyValueState == KeywordlistParseState_OK)
          {
             key = key.trim();
             if(key.empty())
@@ -1002,7 +1003,11 @@ bool ossimKeywordlist::parseStream(std::istream& is)
                m_map.insert(std::make_pair(key.string(), value.string()));
             }
          }
-#if 1
+         else if(testKeyValueState & KeywordlistParseState_BAD_STREAM)
+         {
+            return false;
+         }
+#if 0
          // Commented out to allow an invalid line in keyword list without
          // erroring out, effectively skipping bad line. drb - 01 Sep. 2001
          else
@@ -1011,7 +1016,7 @@ bool ossimKeywordlist::parseStream(std::istream& is)
          }
 #endif
       }
-      else if(state == KeywordlistParseState_BAD_STREAM)
+      else if(state & KeywordlistParseState_BAD_STREAM)
       {
          return false;
       }
@@ -1385,7 +1390,7 @@ bool ossimKeywordlist::getBoolKeywordValue(bool& rtn_val,
    }
    else
       found = false;
-
+   
    return found;
 }
 

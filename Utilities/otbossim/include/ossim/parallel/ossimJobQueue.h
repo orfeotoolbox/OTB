@@ -1,7 +1,20 @@
+//**************************************************************************************************
+//                          OSSIM -- Open Source Software Image Map
+//
+// LICENSE: See top level LICENSE.txt file.
+//
+//**************************************************************************************************
+//  $Id$
 #ifndef ossimJobQueue_HEADER
 #define ossimJobQueue_HEADER
+
 #include <ossim/parallel/ossimJob.h>
 #include <OpenThreads/Block>
+
+//*************************************************************************************************
+//! Class for maintaining an ordered list of jobs to be processed. As the jobs are completed and
+//! the product consumed, the jobs are removed from this list
+//*************************************************************************************************
 class OSSIM_DLL ossimJobQueue : public ossimReferenced
 {
 public:
@@ -40,7 +53,6 @@ protected:
    OpenThreads::Block m_block;
    ossimJob::List m_jobQueue;
    ossimRefPtr<Callback> m_callback;
-   
 };
 
 #endif

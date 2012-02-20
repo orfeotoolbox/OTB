@@ -10,7 +10,7 @@
 // all nitf writers.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimKakaduNitfWriter.h 15073 2009-08-13 19:55:34Z dburken $
+// $Id: ossimNitfWriterBase.h 2981 2011-10-10 21:14:02Z david.burken $
 #ifndef ossimNitfWriterBase_HEADER
 #define ossimNitfWriterBase_HEADER
 
@@ -156,6 +156,14 @@ protected:
    void setComplexityLevel(std::streamoff,
                            ossimNitfFileHeaderV2_X* hdr);
 
+   /**
+    * @brief Sets file header and image header defaults from config file if
+    * found in preferences.
+    */
+   virtual void initializeDefaultsFromConfigFile(
+      ossimNitfFileHeaderV2_X* fileHdr,
+      ossimNitfImageHeaderV2_X* imgHdr );   
+
    /** @brief If true user wants to set RPC00B tag. (DEFAULT = false) */
    bool theEnableRpcbTagFlag;
    
@@ -164,6 +172,8 @@ protected:
     * Currently only valid for map projected images.
     */
    bool theEnableBlockaTagFlag;
+
+   
 
 private:
 

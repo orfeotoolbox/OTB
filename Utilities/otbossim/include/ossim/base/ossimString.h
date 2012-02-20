@@ -9,7 +9,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimString.h 19707 2011-06-01 19:06:35Z dburken $
+// $Id: ossimString.h 20491 2012-01-23 20:10:06Z dburken $
 #ifndef ossimString_HEADER
 #define ossimString_HEADER 1
 
@@ -27,30 +27,33 @@ public:
    typedef std::string::iterator       iterator;
    typedef std::string::size_type      size_type;
 
-   /** default constructor */
+   /** @brief default constructor */
    ossimString(): m_str() {}
 
-   /** constructor that takes a std::string */
+   /** @brief constructor that takes a std::string */
    ossimString(const std::string& s):m_str(s) {}
 
    /**
-    * constructor that takes char*
+    * @brief constructor that takes char*
     * NOTE: std::string construtor throws exception given null pointer;
     * hence, the null check.
     */
    ossimString(const char *aString):m_str( aString?aString:"" ){}
 
-   /** copy constructor */
+   /** @brief copy constructor */
    ossimString(const ossimString& aString):m_str(aString.m_str){}
 
-   /** constructor - constructs with n copies of c */
+   /** @brief constructor - constructs with n copies of c */
    ossimString(std::string::size_type n, char c):m_str(n,c){}
 
-   /** constructor - constructs with 1 c. */
+   /** @brief constructor - constructs with 1 c. */
    ossimString(char aChar):m_str(1, aChar){}
 
    template <class Iter>
    ossimString(Iter startIter, Iter endIter):m_str(startIter, endIter){}
+
+   /** @brief destructor */
+   ~ossimString(){}
 
    bool contains(const ossimString& aString) const
    { return m_str.find(aString.m_str)!=std::string::npos; }
@@ -677,7 +680,7 @@ public:
 
    /**
     * If OSSIM_ID_ENABLED returns the OSSIM_ID which currently is the
-    * expanded cvs $Id: ossimString.h 19707 2011-06-01 19:06:35Z dburken $ macro; else, an empty string.
+    * expanded cvs $Id: ossimString.h 20491 2012-01-23 20:10:06Z dburken $ macro; else, an empty string.
     */
    ossimString getOssimId() const;
 

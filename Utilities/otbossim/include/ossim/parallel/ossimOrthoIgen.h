@@ -10,7 +10,7 @@
 // Description: Class declaration for ortho-image generator.
 //
 //*************************************************************************
-// $Id: ossimOrthoIgen.h 19907 2011-08-05 19:55:46Z dburken $
+// $Id: ossimOrthoIgen.h 20133 2011-10-12 19:03:47Z oscarkramer $
 
 #ifndef ossimOrthoIgen_HEADER
 #define ossimOrthoIgen_HEADER
@@ -133,7 +133,6 @@ protected:
    bool          theClipToValidRectFlag;
    PropertyMap   theReaderProperties;
    PropertyMap   theWriterProperties;   
-   bool          theCutRectSpecIsConsolidated;
    ossimFilename theTargetHistoFileName;
    std::vector<ossimSrcRecord> theSrcRecords;
    ossimFilename theProductFilename;
@@ -146,7 +145,7 @@ protected:
    ossim_float64 theClipPixelMin;
    ossim_float64 theClipPixelMax;
    ossimString   theOutputRadiometry;
-
+   ossimPixelType thePixelAlignment;
    /**
    * @brief Sets up the igen keyword list for the process.
    *
@@ -194,13 +193,6 @@ protected:
    void addFiles(ossimString fileInfoStr, 
                  std::vector<ossimString> fileInfos,
                  bool withEncodedEntry);
-
-   /**
-   * Implemented to fix the misalignment between the input projection and the product. This was
-   * due to an UL corner in the product that was not an integral distance (in pixels) from the UL
-   * corner of the input image (assuming single input). OLK 3/10
-   */
-   void snapTiePointToRefProj();
 
    /**
    * Consolidates specification of bounding rect given various ways of specifying on the command

@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOrthoIgen.cpp 19907 2011-08-05 19:55:46Z dburken $
+// $Id: ossimOrthoIgen.cpp 20409 2011-12-22 16:57:05Z dburken $
 
 
 #include <ossim/parallel/ossimOrthoIgen.h>
@@ -51,7 +51,6 @@
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimEpsgProjectionFactory.h>
-#include <ossim/projection/ossimSensorModel.h>
 
 #include <sstream>
 
@@ -178,13 +177,13 @@ ossimOrthoIgen::ossimOrthoIgen()
    theClipToValidRectFlag(false),   
    theReaderProperties(),
    theWriterProperties(),   
-   theCutRectSpecIsConsolidated(false),
    theTargetHistoFileName(),
    theProductFilename(),
    theReferenceProj(0),
    theMaskShpFile(""),
    theCacheExcludedFlag(false),
-   theOutputRadiometry("")
+   theOutputRadiometry(""),
+   thePixelAlignment(OSSIM_PIXEL_IS_AREA) // will revert to "point" upon first occurrence in source list
 {
    // Determine default behavior of clip from preferences:
    ossimString flag = ossimPreferences::instance()->findPreference("orthoigen.clip_to_valid_rect");
@@ -302,8 +301,10 @@ void ossimOrthoIgen::addArguments(ossimArgumentParser& argumentParser)
       "overviews, histograms and external geometries are located");
    argumentParser.getApplicationUsage()->addCommandLineOption(
       "-t or --thumbnail", "thumbnail size");
-    argumentParser.getApplicationUsage()->addCommandLineOption(
+   argumentParser.getApplicationUsage()->addCommandLineOption(
       "--tiling-template","Specify an external file that contains tiling information");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--threads [n]","Indicates multi-threaded process using optionally-specified number of threads");
    argumentParser.getApplicationUsage()->addCommandLineOption(
       "--utm","Defaults to a utm image chain with GSD = to the input");
    argumentParser.getApplicationUsage()->addCommandLineOption(
@@ -338,11 +339,13 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    double tempDouble3;
    double tempDouble4;
    ossimString tempString;
+   unsigned int tempUint;
    ossimArgumentParser::ossimParameter stringParam(tempString);
    ossimArgumentParser::ossimParameter doubleParam(tempDouble);
    ossimArgumentParser::ossimParameter doubleParam2(tempDouble2);
    ossimArgumentParser::ossimParameter doubleParam3(tempDouble3);
    ossimArgumentParser::ossimParameter doubleParam4(tempDouble4);
+   ossimArgumentParser::ossimParameter uintParam(tempUint);
    theCutOriginType = ossimOrthoIgen::OSSIM_CENTER_ORIGIN;
    theCutOrigin.makeNan();
    theCutDxDy.makeNan();
@@ -376,7 +379,7 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
       else
       {
          theThumbnailSize.x = tempString.toInt();
-         theThumbnailSize.y = theThumbnailSize.x ;
+         theThumbnailSize.y = 0;
       }
       theBuildThumbnailFlag = true;
    }
@@ -438,6 +441,16 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
       theCutOrigin.lat = maxY;
       theCutOrigin.lon = minX;
       theCutDxDy.lat   = (maxY-minY);
+      if ( (maxX < 0.0) && (minX >= 0.0) )
+      {
+         //---
+         // Min is eastern hemisphere, max is western. Crossed the international date line.
+         // Add 360 to make it positive.
+         //
+         // Note no check for just max < min here???  Perhaps throw exception.(drb)
+         //---
+         maxX += 360.0;
+      }      
       theCutDxDy.lon   = (maxX-minX);
       theCutDxDyUnit   = OSSIM_DEGREES;
    }
@@ -620,6 +633,9 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    {
       theCombinerTemplate = ossimFilename(tempString);
    }
+   
+   theGeoScalingLatitude = ossim::nan();
+
    if (argumentParser.read("--utm"))
    {
       theProjectionType = OSSIM_UTM_PROJECTION;
@@ -629,6 +645,7 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    {
       theProjectionType = OSSIM_GEO_PROJECTION;
       theProjectionName = "ossimEquDistCylProjection";
+      theGeoScalingLatitude = 0.0;
    }
    else if(argumentParser.read("--input-proj"))
    {
@@ -646,7 +663,6 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
       theProjectionType = OSSIM_EXTERNAL_PROJECTION;
    }
 
-   theGeoScalingLatitude = ossim::nan();
    if(argumentParser.read("--geo-scaled", doubleParam))
    {
       theProjectionType = OSSIM_GEO_PROJECTION;
@@ -707,6 +723,19 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    if (argumentParser.read("--replacement-mode", stringParam))
    { 
       thePixelReplacementMode = tempString;
+   }
+
+   // Threading:
+   num_params = argumentParser.numberOfParams("--threads", uintParam);
+   if (num_params == 0)   // No param means system decides optimal thread count
+   {
+      argumentParser.read("--threads");
+      theThreadCount = 0; // Flags system-resolved
+   }
+   else if (num_params == 1)
+   {
+      argumentParser.read("--threads", uintParam);
+      theThreadCount = (ossim_uint32) tempUint; 
    }
 
    if(traceDebug())
@@ -803,6 +832,7 @@ bool ossimOrthoIgen::execute()
 
    try
    {
+      // theProductProjection->print(cout) << endl;
       outputProduct();
    }
    catch(const ossimException& e)
@@ -946,6 +976,11 @@ void ossimOrthoIgen::setDefaultValues()
    theCutDxDy.makeNan();
    theCutOriginUnit   = OSSIM_UNIT_UNKNOWN;
    theCutDxDyUnit     = OSSIM_UNIT_UNKNOWN;
+
+   // PIXEL_IS_AREA HACK -- Set the assumed pixel alignment type to "area". Upon the first occurrence
+   // of a pixel-is-point entry, this property will revert to point. THIS NEEDS TO BE
+   // REMOVED WHEN THE EW GUI PROVIDES FOR THE USER TO SET THIS PROPERTY (OLK 09/11):
+   thePixelAlignment = OSSIM_PIXEL_IS_AREA; // not a default, but necessary for later logic
 }
 
 //*************************************************************************************************
@@ -1113,6 +1148,12 @@ void ossimOrthoIgen::setupIgenChain()
          singleImageChain->addLast(img_handler);
          current_source = img_handler;
 
+         // PIXEL_IS_AREA HACK -- Scan the pixel alignment to see if all inputs are "area",
+         // in which case we override the command-line writer property setting. THIS NEEDS TO BE
+         // REMOVED WHEN THE EW GUI PROVIDES FOR THE USER TO SET THIS PROPERTY (OLK 09/11):
+         if (img_handler->getPixelType() == OSSIM_PIXEL_IS_POINT)
+            thePixelAlignment = OSSIM_PIXEL_IS_POINT;
+
          // This call will check for the presence of a raster mask file alongside the image,
          // and insert the mask filter in the chain if present:
          current_source = setupRasterMask(singleImageChain, theSrcRecords[idx]);
@@ -1170,12 +1211,14 @@ void ossimOrthoIgen::setupIgenChain()
                bandMergeObject = new ossimBandMergeSource();
             }
             bandMergeObject->connectMyInputTo(singleImageChain);
+            singleImageChain->changeOwner(bandMergeObject.get());
          }
          else
          {
             mosaicObject->connectMyInputTo(singleImageChain);
+            singleImageChain->changeOwner(mosaicObject.get());
          }
-         theContainer->addChild(singleImageChain);
+         //theContainer->addChild(singleImageChain);
 
          // Set the weight for this image when doing a blend mosaic:
          if (obm)
@@ -1228,10 +1271,6 @@ void ossimOrthoIgen::setupIgenChain()
    // Output radiometry filter:
    setupOutputRadiometry();
 
-   // With the processing chain initialized and GSD defaulted to the reference projection's GSD,
-   // determine the actual product GSD based on projection type and command-line options:
-   setProductGsd();
-
    // After all the connections have been established, add the product chain to the overall 
    // product container. This container will also hold the writer object.
    theContainer->addChild(theProductChain.get());
@@ -1248,14 +1287,14 @@ void ossimOrthoIgen::setupIgenChain()
 //*************************************************************************************************
 void ossimOrthoIgen::setupCutter()
 {
+   // The command line accepts cut rect specification in several formats. Consolidate them to
+   // a common form (UL tiepoint <theCutOrigin> and distance to LR pixel center <theCutDxDy>. This
+   // method also updates the product projection with new bounds:
+   consolidateCutRectSpec();
+
    ossimImageSource* input_source = theProductChain->getFirstSource();
    if((theCutDxDy.hasNans()&&theMaskShpFile.empty())||!theProductProjection.valid()||!input_source)
       return;
-
-   // Before anything, make sure the cut rect is relative to UL and in proper units relative to
-   // projection type:
-   if (!theCutRectSpecIsConsolidated)
-      consolidateCutRectSpec();
 
    //user may pass the shape filename with an query (e.g C:/myshp.shp|select * from myshp),
    //parse the name of mask shape file here
@@ -1279,7 +1318,9 @@ void ossimOrthoIgen::setupCutter()
      if (theCutOriginUnit == OSSIM_METERS)  // projection in meters...
      {
        ossimEastingNorthingCutter* cutter = new ossimEastingNorthingCutter;
-       ossimDpt lr (theCutOrigin.x + theCutDxDy.x, theCutOrigin.y - theCutDxDy.y);
+       ossimDpt mpp (theProductProjection->getMetersPerPixel());
+       ossimDpt lr (theCutOrigin.x + theCutDxDy.x - mpp.x, theCutOrigin.y - theCutDxDy.y + mpp.y);
+       cutter->setView(theProductProjection.get());
        cutter->setEastingNorthingRectangle(theCutOrigin, lr);
        theProductChain->addFirst(cutter);
      }
@@ -1288,10 +1329,11 @@ void ossimOrthoIgen::setupCutter()
        ossimGeoPolyCutter* cutter = new ossimGeoPolyCutter;
        std::vector<ossimGpt> polygon;
 
-       ossimGpt ul(theCutOrigin.lat,                theCutOrigin.lon               );
-       ossimGpt ur(theCutOrigin.lat,                theCutOrigin.lon + theCutDxDy.x);
-       ossimGpt lr(theCutOrigin.lat - theCutDxDy.y, theCutOrigin.lon + theCutDxDy.x);
-       ossimGpt ll(theCutOrigin.lat - theCutDxDy.y, theCutOrigin.lon               );
+       ossimDpt dpp (theProductProjection->getDecimalDegreesPerPixel());
+       ossimGpt ul(theCutOrigin.lat,                        theCutOrigin.lon               );
+       ossimGpt ur(theCutOrigin.lat,                        theCutOrigin.lon + theCutDxDy.x - dpp.x);
+       ossimGpt lr(theCutOrigin.lat - theCutDxDy.y + dpp.y, theCutOrigin.lon + theCutDxDy.x - dpp.x);
+       ossimGpt ll(theCutOrigin.lat - theCutDxDy.y + dpp.y, theCutOrigin.lon               );
 
        polygon.push_back(ul);
        polygon.push_back(ur);
@@ -1404,10 +1446,11 @@ void ossimOrthoIgen::setupCutter()
        std::vector<ossimGpt> bound;
        if (theCutOriginUnit == OSSIM_METERS)
        {
+          ossimDpt mpp (theProductProjection->getMetersPerPixel());
          ossimGpt ul = theProductProjection->inverse(ossimDpt(theCutOrigin.x, theCutOrigin.y));
-         ossimGpt ur = theProductProjection->inverse(ossimDpt(theCutOrigin.x + theCutDxDy.x, theCutOrigin.y));
-         ossimGpt lr = theProductProjection->inverse(ossimDpt(theCutOrigin.x + theCutDxDy.x, theCutOrigin.y - theCutDxDy.y));
-         ossimGpt ll = theProductProjection->inverse(ossimDpt(theCutOrigin.x, theCutOrigin.y - theCutDxDy.y));
+         ossimGpt ur = theProductProjection->inverse(ossimDpt(theCutOrigin.x + theCutDxDy.x - mpp.x, theCutOrigin.y));
+         ossimGpt lr = theProductProjection->inverse(ossimDpt(theCutOrigin.x + theCutDxDy.x - mpp.x, theCutOrigin.y - theCutDxDy.y + mpp.y));
+         ossimGpt ll = theProductProjection->inverse(ossimDpt(theCutOrigin.x, theCutOrigin.y - theCutDxDy.y + mpp.y));
 
          bound.push_back(ul);
          bound.push_back(ur);
@@ -1416,10 +1459,11 @@ void ossimOrthoIgen::setupCutter()
        }
        else
        {
-         ossimGpt ul(theCutOrigin.lat,                theCutOrigin.lon               );
-         ossimGpt ur(theCutOrigin.lat,                theCutOrigin.lon + theCutDxDy.x);
-         ossimGpt lr(theCutOrigin.lat - theCutDxDy.y, theCutOrigin.lon + theCutDxDy.x);
-         ossimGpt ll(theCutOrigin.lat - theCutDxDy.y, theCutOrigin.lon               );
+          ossimDpt dpp (theProductProjection->getDecimalDegreesPerPixel());
+          ossimGpt ul(theCutOrigin.lat,                        theCutOrigin.lon               );
+          ossimGpt ur(theCutOrigin.lat,                        theCutOrigin.lon + theCutDxDy.x - dpp.x);
+          ossimGpt lr(theCutOrigin.lat - theCutDxDy.y + dpp.y, theCutOrigin.lon + theCutDxDy.x - dpp.x);
+          ossimGpt ll(theCutOrigin.lat - theCutDxDy.y + dpp.y, theCutOrigin.lon               );
 
          bound.push_back(ul);
          bound.push_back(ur);
@@ -1530,6 +1574,16 @@ void ossimOrthoIgen::setupWriter()
          }
       }
 
+      // PIXEL_IS_AREA HACK: Temporary patch to override command line alignment type with source
+      // image's alignment type. TO BE REMOVED ONCE EW GUI PROVIDES FOR USER-SETTING OF THIS 
+      // PROPERTY (OLK 09/11):
+      if (thePixelAlignment == OSSIM_PIXEL_IS_AREA)
+      {
+          ossimString pixelType ("pixel_type");
+          theWriterProperties.erase(pixelType);
+          theWriterProperties.insert(std::make_pair(pixelType, ossimString("area")));
+      }
+
       //---
       // Set writer filename, connect and add to writer to keyword list.
       //---
@@ -1591,9 +1645,9 @@ void ossimOrthoIgen::setupProjection()
    {
       if (!theTemplateView.isReadable())
       {
-         std::string errMsg = "ossimOrthoIgen::setupProjection() -- Could not read the product "
+         ossimString errMsg = "ossimOrthoIgen::setupProjection() -- Could not read the product "
             "projection template file at <";
-         errMsg += theTemplateView.string();
+         errMsg += theTemplateView;
          errMsg += ">. Cannot establish output projection.";
          throw(ossimException(errMsg));
       }
@@ -1704,23 +1758,21 @@ void ossimOrthoIgen::setupProjection()
    if (ref_map)
       theProductProjection->setUlGpt(ref_map->getUlGpt());
 
+   // cout << "ref_map->getUlGpt(): " << ref_map->getUlGpt() << endl;
+
+   // Base class makes sure the product view projection is properly wired into the chain. 
+   setView();
+
    // Set the desired image GSD. This is nontrivial due to the many ways GSD can be implied and/or
-   // explicitly provided:
+   // explicitly provided. This method also does a setView before returning:
    setProductGsd();
 
    theProjectionName = theProductProjection->getProjectionName();
 
    // At this point, the product projection will not have a tiepoint (UL corner coordinates)
-   // defined unless it is the same projection as the input reference. We just need to get close to
-   // bootstrap the process. The exact tiepoint is computed later in snapTiePointToRefProj().
+   // defined unless it is the same projection as the input reference. Need to set it now. Note that
+   // if a cut-rect is specified, the tie-point will be modified later in setupCutter()
    establishMosaicTiePoint();
-
-   // Base class makes sure the product view projection is properly wired into the chain:
-   setView();
-
-   // Fix the tiepoint misalignment between input and output image projections:
-   consolidateCutRectSpec();
-   snapTiePointToRefProj();
 
    if (traceDebug())
    {
@@ -1869,8 +1921,8 @@ bool ossimOrthoIgen::setupTiling()
 //      associated theCutOriginUnits is assigned accordingly.
 //   3. theCutDxDy reflects the full size of the rect, in the units corresponding to the projection
 //      and associated theCutDxDyUnit is set to METERS for UTM, DEGREES for geographic
-//   4. A boolean data member (theCutRectSpecIsConsolidated) is set. This is checked throughout to
-//      make sure the consolidation was done.
+//   4. The product projection's origin (image center) and tie point are updated to reflect the
+//      output rectangle.
 //
 //*************************************************************************************************
 void ossimOrthoIgen::consolidateCutRectSpec()
@@ -1888,8 +1940,10 @@ void ossimOrthoIgen::consolidateCutRectSpec()
       return;
    }
 
-   // Geographic Projection (lat/lon cut rect) requested?
    ossimGpt originPLH;
+   ossimDpt resolution;
+
+   // Geographic Projection (lat/lon cut rect) requested?
    if(theProductProjection->isGeographic()) 
    {
       // geographic projection; units need to be decimal degrees. First check for consistent origin:
@@ -1921,6 +1975,10 @@ void ossimOrthoIgen::consolidateCutRectSpec()
       {
          // Now we need to clip the cut rect by the valid image footprint for the entire mosaic:
          ossimDrect boundingRect = theProductChain->getBoundingRect(); // in view coordinates
+
+         // The bounding rect is in image space. Since pixel-is-point, the actual valid area on the
+         // ground will extend 1/2 pixel beyond the centers, so grow the bounding rect by 1/2 p:
+         boundingRect.expand(ossimDpt(0.5, 0.5));
          ossimGpt mosaic_ul, mosaic_lr;
          theProductProjection->lineSampleHeightToWorld(boundingRect.ul(), 0, mosaic_ul);
          theProductProjection->lineSampleHeightToWorld(boundingRect.lr(), 0, mosaic_lr);
@@ -1936,6 +1994,8 @@ void ossimOrthoIgen::consolidateCutRectSpec()
          if (mosaic_lr.lon < cutrect_lr.lon)
             theCutDxDy.lon = mosaic_lr.lon - theCutOrigin.lon;
       }
+
+      resolution = theProductProjection->getDecimalDegreesPerPixel();
    }
 
    // Map Projection (easting, northing cut rect) requested?
@@ -1971,6 +2031,7 @@ void ossimOrthoIgen::consolidateCutRectSpec()
          {
             // Now we need to clip the cut rect by the valid image footprint for the entire mosaic:
             ossimDrect boundingRect = theProductChain->getBoundingRect(); // in view coordinates
+            boundingRect.expand(ossimDpt(0.5, 0.5));
             ossimDpt mosaic_ul, mosaic_lr;
             theProductProjection->lineSampleToEastingNorthing(boundingRect.ul(), mosaic_ul);
             theProductProjection->lineSampleToEastingNorthing(boundingRect.lr(), mosaic_lr);
@@ -2017,7 +2078,19 @@ void ossimOrthoIgen::consolidateCutRectSpec()
       // Set these to the correct units. May already be correct, but just in case...
       theCutOriginUnit = OSSIM_METERS; 
       theCutDxDyUnit = OSSIM_METERS; 
+
+      resolution = theProductProjection->getMetersPerPixel();
    }
+
+   // The cut rect corresponds to the edges of the pixel ("edge-to-edge"), while OSSIM considers
+   // coordinates to correspond to the pixel centers. Need to shift the origin to the SE by 1/2p:
+   ossimDpt half_pixel = resolution * 0.5;
+   theCutOrigin.y -= half_pixel.y;
+   theCutOrigin.x += half_pixel.x;
+
+   // The size of the cutrect needs to be an integral number of pixels in output space:
+   theCutDxDy.x = (floor(theCutDxDy.x/resolution.x + 0.5))* resolution.x;
+   theCutDxDy.y = (floor(theCutDxDy.y/resolution.y + 0.5))* resolution.y;
 
    // Adjust a center origin specification to be Upper Left corner:
    if (theCutOriginType == OSSIM_CENTER_ORIGIN)
@@ -2032,91 +2105,32 @@ void ossimOrthoIgen::consolidateCutRectSpec()
       theCutOriginType = OSSIM_UPPER_LEFT_ORIGIN;
    }
 
-
-   theCutRectSpecIsConsolidated = true;
-}
-
-//*************************************************************************************************
-// Implemented to fix the misalignment between the input projection and the product. This was
-// due to an UL corner in the product that was not an integral distance (in pixels) from the UL
-// corner of the input image (assuming single input). OLK 3/10
-//*************************************************************************************************
-void ossimOrthoIgen::snapTiePointToRefProj()
-{
-   if (!theProductProjection.valid())
-      return;
-
-   // Make sure the AOI is specified in terms of UL corner and distance towards LR:
-   if (!theCutRectSpecIsConsolidated)
-      consolidateCutRectSpec();
-
-   // The notion of snapping to a tiepoint is only valid for a map projected input:
-   ossimMapProjection* in_proj = PTR_CAST(ossimMapProjection, theReferenceProj.get());
-   if (!in_proj)
-      return;
-   
-   // We will be modifying the product projection's tiepoint (a.k.a. UL corner point):
-   double fractional_pixel_misalignment, intpart;
-   if (theProductProjection->isGeographic())
+   // Finally, update the product projection with new rectangle:
+   ossimDpt cutCenter (theCutOrigin.x + theCutDxDy.x/2.0, theCutOrigin.y - theCutDxDy.y/2.0);
+   ossimGpt gpt;
+   if (theCutDxDyUnit == OSSIM_METERS)
    {
-      // If the cut origin is not defined, then set the cut origin to the current mosaic tiepoint
-      // set previously by establishMosaicTiepoint():
-      if (theCutOrigin.hasNans())
-         theCutOrigin = theProductProjection->getUlGpt();
-
-      // Insure that the cut origin specified falls on an integer pixel of the reference image.
-      // This cures the fractional pixel shift observed when an arbitrary cut-box is specified 
-      // (OLK 07/11):
-      ossimGpt cut_orig_gpt (theCutOrigin.lat, theCutOrigin.lon);
-      ossimDpt cut_orig_dpt;
-      in_proj->worldToLineSample(cut_orig_gpt, cut_orig_dpt);
-      cut_orig_dpt.x = round<double, double>(cut_orig_dpt.x);
-      cut_orig_dpt.y = round<double, double>(cut_orig_dpt.y);
-      in_proj->lineSampleToWorld(cut_orig_dpt, cut_orig_gpt);
-      theCutOrigin.lat = cut_orig_gpt.lat;
-      theCutOrigin.lon = cut_orig_gpt.lon;
-      theProductProjection->setUlTiePoints(cut_orig_gpt);
-   }
-
-   else    // projection in meters...
-   {
-      // If the cut origin is not defined, then set the cut origin to the current mosaic tiepoint
-      // set previously by establishMosaicTiepoint():
-      if (theCutOrigin.hasNans())
-         theCutOrigin = theProductProjection->getUlEastingNorthing();
-
-      // Insure that the cut origin specified falls on an integer pixel of the reference image.
-      // This cures the fractional pixel shift observed when an arbitrary cut-box is specified 
-      // (OLK 07/11):
-      ossimGpt cut_orig_gpt (in_proj->inverse(theCutOrigin));
-      ossimDpt cut_orig_dpt;
-      in_proj->worldToLineSample(cut_orig_gpt, cut_orig_dpt);
-      cut_orig_dpt.x = round<double, double>(cut_orig_dpt.x);
-      cut_orig_dpt.y = round<double, double>(cut_orig_dpt.y);
-      in_proj->lineSampleToWorld(cut_orig_dpt, cut_orig_gpt);
-      theCutOrigin = in_proj->forward(cut_orig_gpt);
-      theProductProjection->setUlTiePoints(theCutOrigin);
-
-      // Directly use the meters offset from input image UL in computing snap shift:
-      ossimDpt ul_EN_in (in_proj->getUlEastingNorthing()); // input image UL E/N origin.
-      ossimDpt mtrsPerPixel (theProductProjection->getMetersPerPixel());
-
-
-      // Establish offset from cut-rect UL to input image UL in pixels, and
-      // correct the cut-rect's origin for the fractional part of misalignment:
-      double dE = theCutOrigin.x - ul_EN_in.x;
-      fractional_pixel_misalignment = modf(dE/mtrsPerPixel.x, &intpart);
-      dE = fractional_pixel_misalignment * mtrsPerPixel.x;
-      theCutOrigin.x -= dE; // + 0.5*mtrsPerPixel.x;
-
-      double dN = theCutOrigin.y - ul_EN_in.y;
-      fractional_pixel_misalignment = modf(dN/mtrsPerPixel.y, &intpart);
-      dN = fractional_pixel_misalignment * mtrsPerPixel.y;
-      theCutOrigin.y -= dN; // - 0.5*mtrsPerPixel.y;
-
-      // Set the new easting/northing cut origin:
+      // Set the E/N values for the cut origin as the tie point:
       theProductProjection->setUlTiePoints(theCutOrigin);
    }
+   else
+   {
+      // Set the projection center (origin) latitude at the center of the cut rect:
+      gpt.lat = cutCenter.y;
+      gpt.lon = 0.0;
+      theProductProjection->setOrigin(gpt);
+
+      // Set the lat/lon values for the cut origin as the tie point:
+      gpt.lat = theCutOrigin.y;
+      gpt.lon = theCutOrigin.x;
+      theProductProjection->setUlTiePoints(gpt);
+   }
+
+   // cout << "\n**************** proj 2:\n";
+   // theProductProjection->print(cout);
+
+   // Propagates changes to the projection to the processing chain:
+   setView();
 }
 
 //*************************************************************************************************
@@ -2445,7 +2459,9 @@ void ossimOrthoIgen::establishMosaicTiePoint()
    ossimGpt tie_gpt_i, tie_gpt;
    ossimDpt tie_dpt_i, tie_dpt;
    tie_gpt.makeNan();
+   tie_gpt.height(0.0);
    tie_dpt.makeNan();
+
 
    // Loop over all input handlers and latch the most NW tiepoint as the mosaic TP:
    ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
@@ -2460,14 +2476,54 @@ void ossimOrthoIgen::establishMosaicTiePoint()
       if (!geom.valid()) 
          continue; // Skip over any non geometry inputs (e.g., masks)
 
-      ossimIrect boundingRect = handler->getBoundingRect();
+      if ( theProductProjection->isGeographic() )
+      {
+         geom->getTiePoint( tie_gpt_i, true ); // True to get edge of tie.
+         if ( tie_gpt_i.hasNans() == false )
+         {
+            if (tie_gpt.hasNans())
+               tie_gpt = tie_gpt_i;
+            else
+            {
+               if (tie_gpt_i.lat > tie_gpt.lat) 
+                  tie_gpt.lat = tie_gpt_i.lat;
+               if (tie_gpt_i.lon < tie_gpt.lon) 
+                  tie_gpt.lon = tie_gpt_i.lon;
+            }
+         }
+      }
+      else
+      {
+         geom->getTiePoint( tie_dpt_i, true ); // True to get edge of tie.
+         if ( tie_dpt_i.hasNans() == false )
+         {
+            if (tie_dpt.hasNans())
+               tie_dpt = tie_dpt_i;
+            else
+            {
+               if (tie_dpt_i.y > tie_dpt.y) 
+                  tie_dpt.y = tie_dpt_i.y;
+               if (tie_dpt_i.x < tie_dpt.x) 
+                  tie_dpt.x = tie_dpt_i.x;
+            }
+         }
+      }
+   }
+   
+#if 0
+      // Establish input image bounding rect, making sure to expand to include the FULL pixel since
+      // pixel is point -- i.e. the pixel coordinate corresponds to the center of the pixel area, 
+      // not the edge. Therefore shift the image point by 1/2 pixel to correspond to edges:
+      // (OLK 09/11)
+      ossimDrect boundingRect (handler->getBoundingRect());
       vector<ossimDpt> img_vertices;
-      img_vertices.push_back(boundingRect.ul());
-      img_vertices.push_back(boundingRect.ur());
-      img_vertices.push_back(boundingRect.lr());
-      img_vertices.push_back(boundingRect.ll());
+      img_vertices.push_back(boundingRect.ul() + ossimDpt(-0.5, -0.5));
+      img_vertices.push_back(boundingRect.ur() + ossimDpt( 0.5, -0.5));
+      img_vertices.push_back(boundingRect.lr() + ossimDpt( 0.5,  0.5));
+      img_vertices.push_back(boundingRect.ll() + ossimDpt(-0.5,  0.5));
+      
 
-      // The tiepoint will be in easting/northing or lat/lon depending on the type of projection 
+      // The tie point will be in easting/northing or lat/lon depending on the type of projection 
       // used for the product. Need to consider all image corners since the orientation of the image
       // is not known:
       for (int j=0; j<4; j++)
@@ -2475,7 +2531,8 @@ void ossimOrthoIgen::establishMosaicTiePoint()
          geom->localToWorld(img_vertices[j], tie_gpt_i);
          if (theProductProjection->isGeographic())
          {
-            if (ossim::isnan(tie_gpt.lat) || ossim::isnan(tie_gpt.lon))
+            tie_gpt.height(0.0);
+            if (tie_gpt.hasNans())
                tie_gpt = tie_gpt_i;
             else
             {
@@ -2501,10 +2558,31 @@ void ossimOrthoIgen::establishMosaicTiePoint()
       }
    }
 
-   if (!ossim::isnan(tie_gpt.lat) && !ossim::isnan(tie_gpt.lon) )
-      theProductProjection->setUlTiePoints(tie_gpt);
-   else if (!tie_dpt.hasNans())
+#endif
+
+   // The tie point coordinates currently reflect the UL edge of the UL pixel. We'll need to shift
+   // the tie point from the edge to the center. (OLK 09/11)
+   ossimDpt half_pixel_shift(0,0);
+   if (theProductProjection->isGeographic())
+   {
+      half_pixel_shift = theProductProjection->getDecimalDegreesPerPixel() * 0.5;
+      if (!tie_gpt.hasNans())
+      {
+         tie_gpt.lat -= half_pixel_shift.lat;
+         tie_gpt.lon += half_pixel_shift.lon;
+         theProductProjection->setUlTiePoints(tie_gpt);
+      }
+   }
+   else
+   {
+      half_pixel_shift = theProductProjection->getMetersPerPixel() * 0.5;
+      tie_dpt.y -= half_pixel_shift.y;
+      tie_dpt.x += half_pixel_shift.x;
       theProductProjection->setUlTiePoints(tie_dpt);
+   }
+
+   // Propagates changes to the projection to the processing chain:
+   setView();
 }
 
 //*************************************************************************************************
@@ -2610,9 +2688,8 @@ ossimImageSource* ossimOrthoIgen::setupRasterMask(ossimImageChain* singleImageCh
       return img_handler;
 
    // Open up the mask file and verify it is good:
-   ossimRefPtr<ossimImageHandler> mask_handler = 
-      ossimImageHandlerRegistry::instance()->open(mask_file);
-   if (!mask_handler.valid())
+   ossimImageHandler* mask_handler =  ossimImageHandlerRegistry::instance()->open(mask_file);
+   if (mask_handler == NULL)
    {
       ossimNotify(ossimNotifyLevel_WARN)<<"ossimOrthoIgen::setupRasterMask() -- Could not open "
          "raster mask file <"<<mask_file<<">. Maske request will be ignored."<<endl;
@@ -2623,10 +2700,18 @@ ossimImageSource* ossimOrthoIgen::setupRasterMask(ossimImageChain* singleImageCh
    // IMPORTANT NOTE: the mask filter is an image combiner. It is being inserted into a single 
    // image chain. Since it owns its two inputs (the image handler and the mask), it must
    // replace the handler in the chain. Also, see note in ossimMaskFilter::setInputSources().
-   singleImageChain->deleteLast(); // Remove the handler
+   //singleImageChain->deleteLast(); // Remove the handler
    // ossimImageSource* nextInChain = singleImageChain->getLastSource();
-   ossimRefPtr<ossimMaskFilter> mask_filter = new ossimMaskFilter(img_handler, mask_handler.get());
-   singleImageChain->addLast(mask_filter.get()); 
+   ossimRefPtr<ossimMaskFilter> mask_filter = new ossimMaskFilter;
+   singleImageChain->insertRight(mask_filter.get(), img_handler); 
+   mask_filter->setMaskSource(mask_handler);  // assumes ownership of object
+
+   //---
+   // Set the mode to SELECT_CLAMP_MIN.  This clamps data to min pixel value in the valid image
+   // area if the input pixel is null(essentially a pixel flip).
+   //---
+   mask_filter->setMaskType(ossimMaskFilter::OSSIM_MASK_TYPE_SELECT_CLAMP_MIN);
+   
    return mask_filter.get();
 }
 
@@ -2717,18 +2802,7 @@ void ossimOrthoIgen::reComputeChainGsds()
             if ( proj.valid() )
             {
                if ( proj->isAffectedByElevation() )
-               {
-                  ossimRefPtr<ossimSensorModel> model = dynamic_cast<ossimSensorModel*>(proj.get());
-                  if ( model.valid() )
-                  {
-                     //---
-                     // Recompute the input projection gsd. This affects the call:
-                     // gsd = theReferenceProj->getMetersPerPixel();
-                     //---
-                     model->computeGsd();
-                  }
-                  geom->computeGsd();
-               }
+                  proj->getMetersPerPixel();
             }
          }
       }
@@ -2747,106 +2821,93 @@ void ossimOrthoIgen::setProductGsd()
 
    // Fetch the reference input projection first. Settings may be copied to the product projection:
    ossimMapProjection* ref_map = PTR_CAST(ossimMapProjection, theReferenceProj.get());
+   ossimGpt origin;
 
-   ossimDpt gsd;
-   ossimUnitType gsdUnits;
-   if(!theDeltaPerPixelOverride.hasNans())
+   // The geo-scaling latitude effectively specifies the map projection's origin latitude, which
+   // may affect the scaling of GSD in x-direction. This is only relevant for geographic projections
+   if (theProductProjection->isGeographic())
    {
-      gsd = theDeltaPerPixelOverride;
-      gsdUnits = theDeltaPerPixelUnit;
+      ossimGpt origin (0.0, theProductProjection->getOrigin().lon, 0.0);
+      if (ossim::isnan(theGeoScalingLatitude))
+      {
+         // Loop over all input handlers and accumulate the geographic centers. This will allow 
+         // computing mosaic center point (approximate) for purposes of establishing reference 
+         // latitude for scale:
+         origin.lat = 0.0;
+         origin.lon = theProductProjection->getOrigin().lon;
+
+         ossimConnectableObject::ConnectableObjectList clientList;
+         theProductChain->findAllInputsOfType(clientList, STATIC_TYPE_INFO(ossimImageHandler), 1, 1);
+         ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
+         ossimDpt center_pt;
+         ossimGpt geocenter;
+         int num_contributors = 0;
+         while (iter != clientList.end())
+         {
+            ossimImageHandler* handler = PTR_CAST(ossimImageHandler, (*iter).get());
+            if (!handler)
+               break;
+
+            iter++;
+            ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
+            if (!geom.valid()) 
+               continue; // Skip over any non geometry inputs (e.g., masks)
+
+            handler->getBoundingRect().getCenter(center_pt);
+            if (!geom->localToWorld(center_pt, geocenter))  
+               continue;
+            if (num_contributors == 0)
+               origin.lat = geocenter.lat;
+            else
+               origin.lat += geocenter.lat;
+            ++num_contributors;
+         }
+
+         // Compute average latitude among all contributors:
+         if (num_contributors)
+            origin.lat /= (double)num_contributors;
+      }
+      else
+      {
+         // A geo-scaling reference latitude was provided on the command line:
+         origin.lat = theGeoScalingLatitude;
+      }
+
+      // Set the latitude of origin to the reference latitude (either specified on command line or
+      // computed as scene center):
+      theProductProjection->setOrigin(origin); // proj now can handle meters and degrees correctly
    }
-   else
+
+   // Establish the resolution based on either command line option or reference proj if no values
+   // provided on command line (--degrees or --meters):
+   ossimDpt resolution (theDeltaPerPixelOverride);
+   ossimUnitType resUnits = theDeltaPerPixelUnit;
+   if (resolution.hasNans())
    {
       //  No GSD specified, so copy it from the input projection:
       if (ref_map && ref_map->isGeographic())
       {
-         gsd = ref_map->getDecimalDegreesPerPixel();
-         gsdUnits = OSSIM_DEGREES;
+         resolution = ref_map->getDecimalDegreesPerPixel();
+         resUnits = OSSIM_DEGREES;
       }
       else
       {
-         gsd = theReferenceProj->getMetersPerPixel();
-         gsdUnits = OSSIM_METERS;
+         resolution = theReferenceProj->getMetersPerPixel();
+         resUnits = OSSIM_METERS;
       }
    }
 
    // Set the desired image GSD, accounting for possible mixing of units:
-   if (gsdUnits == OSSIM_DEGREES)
+   if (resUnits == OSSIM_DEGREES)
    {
-      // GSD in degrees normally implies that the product is a 2D geographic. If it isn't, we need
-      // to insure that the scaling to meters occurs at the reference latitude:
-      if (theProductProjection->isGeographic())
-      {
-         // May need to scale the x-direction by the specified reference latitude. NOTE: this command line
-         // argument takes precedence over explicit specification of GSD in x-direction (implies 
-         // geographic product projection):
-         if ((!ossim::isnan(theGeoScalingLatitude)))
-            gsd.x = gsd.y/cosd(theGeoScalingLatitude);
-         theProductProjection->setDecimalDegreesPerPixel(gsd);
-      }
-      else
-      {
-         // The projection is map (easting, northing), so need to convert the GSD units. Only the
-         // GSD in y (latitude) direction is used since we would desire near square pixels:
-         ossimDpt mpd (ossimGpt(0,0,0).metersPerDegree());
-         gsd.y = gsd.y * mpd.y;
-         gsd.x = gsd.y;
-         theProductProjection->setMetersPerPixel(gsd);
-      }
+      // Need to adjust the resolution in the longitude direction if the user requested geo-scaling:
+      if (!ossim::isnan(theGeoScalingLatitude))
+         resolution.lon = resolution.lat/cosd(theGeoScalingLatitude);
+      theProductProjection->setDecimalDegreesPerPixel(resolution);
    }
-   else // GSD units are in meters
-   {
-      // This has been a problem -- request for geo-projection but with GSD specified in meters:
-      if (theProductProjection->isGeographic())
-      {
-         // If no reference latitude was provided, then determine the approximate center of the 
-         // product:
-         if (ossim::isnan(theGeoScalingLatitude))
-         {
-            theGeoScalingLatitude = 0.0;
+   else 
+      theProductProjection->setMetersPerPixel(resolution);
 
-            // Loop over all input handlers and accumulate the geographic centers. This will allow 
-            // computing mosaic center point (approximate) for purposes of establishing reference 
-            // latitude for scale:
-            ossimConnectableObject::ConnectableObjectList clientList;
-            theProductChain->findAllInputsOfType(clientList, 
-               STATIC_TYPE_INFO(ossimImageHandler), true, true);
-            ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
-            ossimDpt center_pt;
-            ossimGpt geocenter;
-            int num_contributors = 0;
-            while (iter != clientList.end())
-            {
-               ossimImageHandler* handler = PTR_CAST(ossimImageHandler, (*iter).get());
-               iter++;
-
-               if (!handler)
-                  break;
-
-               ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
-               if (!geom.valid()) 
-                  continue; // Skip over any non geometry inputs (e.g., masks)
-
-               handler->getBoundingRect().getCenter(center_pt);
-               if (!geom->localToWorld(center_pt, geocenter))  
-                  continue;
-               theGeoScalingLatitude += geocenter.lat;
-               ++num_contributors;
-            }
-
-            // Compute average latitude among all contributors:
-            if (num_contributors)
-               theGeoScalingLatitude /= (double)num_contributors;
-         }
-         
-         // Finally, initialize the scaling latitude on the projection before setting the 
-         // meters/pixel so that the projection can properly convert to degrees/pixel:
-         ossimGpt origin (theProductProjection->getOrigin());
-         origin.lat = theGeoScalingLatitude;
-         theProductProjection->setOrigin(origin); // proj now can handle meters correctly
-      }
-
-      // Set the meters per pixel since projection can handle these units:
-      theProductProjection->setMetersPerPixel(gsd);
-   }
+   // Propagates changes to the projection to the processing chain:
+   setView();
 }

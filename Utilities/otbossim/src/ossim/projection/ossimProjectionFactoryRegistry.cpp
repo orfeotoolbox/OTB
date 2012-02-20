@@ -4,10 +4,11 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProjectionFactoryRegistry.cpp 19045 2011-03-10 15:50:07Z gpotts $
+// $Id: ossimProjectionFactoryRegistry.cpp 20413 2012-01-03 19:03:59Z dburken $
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
 #include <ossim/projection/ossimEpsgProjectionFactory.h>
+#include <ossim/projection/ossimWktProjectionFactory.h>
 #include <ossim/projection/ossimMapProjectionFactory.h>
 #include <ossim/projection/ossimTiffProjectionFactory.h>
 #include <ossim/projection/ossimNitfProjectionFactory.h>
@@ -78,8 +79,13 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(ossimImageHand
 ossimProjection* ossimProjectionFactoryRegistry::createProjection(
    const ossimKeywordlist& kwl, const char* prefix)const
 {
-   ossimProjection* result = createNativeObjectFromRegistry(kwl, prefix);
-
+   ossimProjection* result = 0;//createNativeObjectFromRegistry(kwl, prefix); 
+   ossim_uint32 idx = 0; 
+   for(idx = 0; ((idx < m_factoryList.size())&&!result);++idx) 
+   { 
+      result = m_factoryList[idx]->createProjection(kwl, prefix); 
+   } 
+   
    if ( (result == 0) && (prefix == 0) )
    {
       //---
@@ -118,7 +124,7 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(
                   bFoundImageLine = true;
                   ossimString s2 = v[0];
                   s2 += ".";
-                  ossim_uint32 idx = 0;
+                  idx = 0;
                   for(;((idx < m_factoryList.size())&&!result); ++idx)
                   {
                      result =  m_factoryList[idx]->createProjection(kwl, s2.c_str());
@@ -139,13 +145,13 @@ void ossimProjectionFactoryRegistry::initializeDefaults()
 {
    registerFactory(ossimSensorModelFactory::instance());
    registerFactory(ossimNitfProjectionFactory::instance());
-   
    registerFactory(ossimTiffProjectionFactory::instance());
+   registerFactory(ossimWktProjectionFactory::instance());
    registerFactory(ossimMapProjectionFactory::instance());
    registerFactory(ossimMiscProjectionFactory::instance());
 
    // KEEP THIS LAST PLEASE!
-   // This factory costructs map projections from EPSG codes. An infinite loop will occur if this
+   // This factory constructs map projections from EPSG codes. An infinite loop will occur if this
    // is placed before the explicit (non-coded) factories, since this factory will invoke the above
    // factories via this registry after populating a KWL which includes a PCS code. If this factory
    // sees that request before the others, it will be caught in a loop.

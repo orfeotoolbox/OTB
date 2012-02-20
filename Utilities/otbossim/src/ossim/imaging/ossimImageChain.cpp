@@ -8,13 +8,14 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.cpp 19968 2011-08-16 19:26:20Z gpotts $
+// $Id: ossimImageChain.cpp 20322 2011-12-06 01:00:55Z oscarkramer $
 #include <algorithm>
 #include <iostream>
 #include <iterator>
 
 #include <ossim/imaging/ossimImageChain.h>
 #include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimConnectableContainer.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -32,31 +33,16 @@ static ossimTrace traceDebug("ossimImageChain");
 RTTI_DEF3(ossimImageChain, "ossimImageChain", ossimImageSource,
           ossimConnectableObjectListener, ossimConnectableContainerInterface);
 
-class ossimImageChainChildListener : public ossimConnectableObjectListener
+void ossimImageChain::processEvent(ossimEvent& event)
 {
-public:
-   ossimImageChainChildListener(ossimImageChain* owner)
-      :theChain(owner)
-      {
-      }
-   virtual void processEvent(ossimEvent& event);
-//   virtual void propertyEvent(ossimPropertyEvent& event);
-//   virtual void refreshEvent(ossimRefreshEvent& /* event */);
-   ossimImageChain* theChain;
-};
-
-void ossimImageChainChildListener::processEvent(ossimEvent& event)
-{
-   if(!theChain) return;
    ossimConnectableObjectListener::processEvent(event);
-   ossimConnectableObject* obj = PTR_CAST(ossimConnectableObject,
-                                          event.getCurrentObject());
+   ossimConnectableObject* obj = PTR_CAST(ossimConnectableObject, event.getCurrentObject());
    
-   if((ossimConnectableObject*)theChain->getFirstSource() == obj)
+   if((ossimConnectableObject*)getFirstSource() == obj)
    {
       if(event.isPropagatingToOutputs())
       {
-         ossimConnectableObject::ConnectableObjectList& outputList = theChain->getOutputList();
+         ossimConnectableObject::ConnectableObjectList& outputList = getOutputList();
          ossim_uint32 idx = 0;
          for(idx = 0; idx < outputList.size();++idx)
          {
@@ -69,43 +55,6 @@ void ossimImageChainChildListener::processEvent(ossimEvent& event)
       }
    }
 }
-#if 0
-void ossimImageChainChildListener::propertyEvent(ossimPropertyEvent& event)
-{
-   ossimConnectableObject* obj = PTR_CAST(ossimConnectableObject,
-                                          event.getObject());
-   
-   
-   // if it originated from within my chain then propagate up to parent
-   // only if I have no outputs
-   //
-   if(obj)
-   {
-      if(!theChain->findObject(PTR_CAST(ossimConnectableObject,event.getObject())))
-      {
-         ossimConnectableObject* interface = theChain->findObject(obj->getId(), false);
-         
-         if(interface)
-         {
-            ossimConnectableObject* parent = PTR_CAST(ossimConnectableObject,
-                                                      theChain->getOwner());
-            if(parent&&
-               !theChain->getNumberOfOutputs())
-            {
-               parent->propagateEventToOutputs(event);
-            }
-         }
-      }
-      else
-      {
-         if(!theChain->thePropagateEventFlag)
-         {
-            theChain->propagateEventToOutputs(event);
-         }
-      }
-   }
-}
-#endif
 
 ossimImageChain::ossimImageChain()
 :ossimImageSource(0,
@@ -120,19 +69,12 @@ ossimImageChain::ossimImageChain()
    ossimConnectableContainerInterface::theBaseObject = this;
    //thePropagateEventFlag = false;
    addListener((ossimConnectableObjectListener*)this);
-   theChildListener = new ossimImageChainChildListener(this);
 }
 
 ossimImageChain::~ossimImageChain()
 {
    removeListener((ossimConnectableObjectListener*)this);
    deleteList();
-
-   if(theChildListener)
-   {
-      delete theChildListener;
-      theChildListener = 0;
-   }
 }
 
 bool ossimImageChain::addFirst(ossimConnectableObject* obj)
@@ -145,9 +87,9 @@ bool ossimImageChain::addFirst(ossimConnectableObject* obj)
 
 bool ossimImageChain::addLast(ossimConnectableObject* obj)
 {
-   if(theImageChainList.size() > 0)
+   if(imageChainList().size() > 0)
    {
-      ossimConnectableObject* lastSource = theImageChainList[ theImageChainList.size() -1].get();
+      ossimConnectableObject* lastSource = imageChainList()[ imageChainList().size() -1].get();
 //      if(dynamic_cast<ossimImageSource*>(obj)&&lastSource)
          if(lastSource)
       {
@@ -161,7 +103,7 @@ bool ossimImageChain::addLast(ossimConnectableObject* obj)
          tempIn = obj->getInputList();
          theInputListIsFixedFlag = obj->getInputListIsFixedFlag();
          setNumberOfInputs(obj->getNumberOfInputs());
-         theImageChainList.push_back(obj);
+         imageChainList().push_back(obj);
          
          obj->addListener((ossimConnectableObjectListener*)this);
          // Send an event to any listeners.
@@ -182,19 +124,27 @@ bool ossimImageChain::addLast(ossimConnectableObject* obj)
 
 ossimImageSource* ossimImageChain::getFirstSource()
 {
-   if(theImageChainList.size()>0)
+   if(imageChainList().size()>0)
    {
-      return dynamic_cast<ossimImageSource*>(theImageChainList[0].get());
+      return dynamic_cast<ossimImageSource*>(imageChainList()[0].get());
    }
+
+   return 0;
+}
+
+const ossimImageSource* ossimImageChain::getFirstSource() const
+{
+   if(imageChainList().size()>0)
+      return dynamic_cast<const ossimImageSource*>(imageChainList()[0].get());
 
    return 0;
 }
 
 ossimObject* ossimImageChain::getFirstObject()
 {
-   if(theImageChainList.size()>0)
+   if(imageChainList().size()>0)
    {
-      return dynamic_cast<ossimImageSource*>(theImageChainList[0].get());
+      return dynamic_cast<ossimImageSource*>(imageChainList()[0].get());
    }
 
    return 0;
@@ -202,19 +152,27 @@ ossimObject* ossimImageChain::getFirstObject()
 
 ossimImageSource* ossimImageChain::getLastSource()
 {
-   if(theImageChainList.size()>0)
+   if(imageChainList().size()>0)
    {
-      return dynamic_cast<ossimImageSource*>((*(theImageChainList.end()-1)).get());
+      return dynamic_cast<ossimImageSource*>((*(imageChainList().end()-1)).get());
    }
+
+   return NULL;
+}
+
+const ossimImageSource* ossimImageChain::getLastSource() const
+{
+   if(imageChainList().size()>0)
+      return dynamic_cast<const ossimImageSource*>((*(imageChainList().end()-1)).get());
 
    return NULL;
 }
 
 ossimObject* ossimImageChain::getLastObject()
 {
-   if(theImageChainList.size()>0)
+   if(imageChainList().size()>0)
    {
-      return dynamic_cast<ossimImageSource*>((*(theImageChainList.end()-1)).get());
+      return dynamic_cast<ossimImageSource*>((*(imageChainList().end()-1)).get());
    }
 
    return 0;
@@ -223,9 +181,9 @@ ossimObject* ossimImageChain::getLastObject()
 ossimConnectableObject* ossimImageChain::findObject(const ossimId& id,
                                                     bool /* recurse */)
 {
-   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  theImageChainList.begin();
+   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  imageChainList().begin();
    
-   while(current != theImageChainList.end())
+   while(current != imageChainList().end())
    {
       if((*current).get())
       {
@@ -238,9 +196,9 @@ ossimConnectableObject* ossimImageChain::findObject(const ossimId& id,
       ++current;
    }
    
-   current =  theImageChainList.begin();
+   current =  imageChainList().begin();
    
-   while(current != theImageChainList.end())
+   while(current != imageChainList().end())
    {
       ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface,
                                                          (*current).get());
@@ -260,9 +218,9 @@ ossimConnectableObject* ossimImageChain::findObject(const ossimId& id,
 ossimConnectableObject* ossimImageChain::findObject(const ossimConnectableObject* obj,
                                                     bool /* recurse */)
 {
-   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  theImageChainList.begin();
+   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  imageChainList().begin();
    
-   while(current != theImageChainList.end())
+   while(current != imageChainList().end())
    {
       if((*current).valid())
       {
@@ -275,9 +233,9 @@ ossimConnectableObject* ossimImageChain::findObject(const ossimConnectableObject
       ++current;
    }
    
-   current =  theImageChainList.begin();
+   current =  imageChainList().begin();
    
-   while(current != theImageChainList.end())
+   while(current != imageChainList().end())
    {
       ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).get());
       
@@ -296,9 +254,9 @@ ossimConnectableObject* ossimImageChain::findObject(const ossimConnectableObject
 ossimConnectableObject* ossimImageChain::findFirstObjectOfType(const RTTItypeid& typeInfo,
                                                                bool recurse)
 {
-   vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  theImageChainList.begin();
+   vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  imageChainList().begin();
    
-   while(current != theImageChainList.end())
+   while(current != imageChainList().end())
    {
       if((*current).valid()&&
          (*current)->canCastTo(typeInfo))
@@ -310,8 +268,8 @@ ossimConnectableObject* ossimImageChain::findFirstObjectOfType(const RTTItypeid&
 
    if(recurse)
    {
-      current =  theImageChainList.begin();
-      while(current != theImageChainList.end())
+      current =  imageChainList().begin();
+      while(current != imageChainList().end())
       {
          ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, 
                                                             (*current).get());
@@ -334,9 +292,9 @@ ossimConnectableObject* ossimImageChain::findFirstObjectOfType(const RTTItypeid&
 ossimConnectableObject* ossimImageChain::findFirstObjectOfType(const ossimString& className,
                                                                bool recurse)
 {
-   vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  theImageChainList.begin();
+   vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  imageChainList().begin();
    
-   while(current != theImageChainList.end())
+   while(current != imageChainList().end())
    {
       if((*current).valid()&&
          (*current)->canCastTo(className) )
@@ -348,8 +306,8 @@ ossimConnectableObject* ossimImageChain::findFirstObjectOfType(const ossimString
 
    if(recurse)
    {
-      current =  theImageChainList.begin();
-      while(current != theImageChainList.end())
+      current =  imageChainList().begin();
+      while(current != imageChainList().end())
       {
          ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).get());
          
@@ -372,9 +330,9 @@ ossimConnectableObject::ConnectableObjectList ossimImageChain::findAllObjectsOfT
                                                                            bool recurse)
 {
    ossimConnectableObject::ConnectableObjectList result;
-   ossimConnectableObject::ConnectableObjectList::iterator current =  theImageChainList.begin();
+   ossimConnectableObject::ConnectableObjectList::iterator current =  imageChainList().begin();
    
-   while(current != theImageChainList.end())
+   while(current != imageChainList().end())
    {
       if((*current).valid()&&
          (*current)->canCastTo(typeInfo))
@@ -392,8 +350,8 @@ ossimConnectableObject::ConnectableObjectList ossimImageChain::findAllObjectsOfT
 
    if(recurse)
    {
-      current =  theImageChainList.begin();
-      while(current != theImageChainList.end())
+      current =  imageChainList().begin();
+      while(current != imageChainList().end())
       {
          ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).get());
          
@@ -422,9 +380,9 @@ ossimConnectableObject::ConnectableObjectList ossimImageChain::findAllObjectsOfT
                                                                            bool recurse)
 {
    ossimConnectableObject::ConnectableObjectList result;
-   ossimConnectableObject::ConnectableObjectList::iterator current =  theImageChainList.begin();
+   ossimConnectableObject::ConnectableObjectList::iterator current =  imageChainList().begin();
    
-   while(current != theImageChainList.end())
+   while(current != imageChainList().end())
    {
       if((*current).valid()&&
          (*current)->canCastTo(className))
@@ -442,8 +400,8 @@ ossimConnectableObject::ConnectableObjectList ossimImageChain::findAllObjectsOfT
 
    if(recurse)
    {
-      current =  theImageChainList.begin();
-      while(current != theImageChainList.end())
+      current =  imageChainList().begin();
+      while(current != imageChainList().end())
       {
          ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).get());
          
@@ -471,19 +429,19 @@ ossimConnectableObject::ConnectableObjectList ossimImageChain::findAllObjectsOfT
 void ossimImageChain::makeUniqueIds()
 {
    setId(ossimIdManager::instance()->generateId());
-   for(long index = 0; index < (long)theImageChainList.size(); ++index)
+   for(long index = 0; index < (long)imageChainList().size(); ++index)
    {
       ossimConnectableContainerInterface* container = PTR_CAST(ossimConnectableContainerInterface,
-                                                               theImageChainList[index].get());
+                                                               imageChainList()[index].get());
       if(container)
       {
          container->makeUniqueIds();
       }
       else
       {
-         if(theImageChainList[index].valid())
+         if(imageChainList()[index].valid())
          {
-            theImageChainList[index]->setId(ossimIdManager::instance()->generateId());
+            imageChainList()[index]->setId(ossimIdManager::instance()->generateId());
          }
       }
    }
@@ -491,13 +449,13 @@ void ossimImageChain::makeUniqueIds()
 
 ossim_uint32 ossimImageChain::getNumberOfObjects(bool recurse)const
 {
-   ossim_uint32 result = (ossim_uint32)theImageChainList.size();
+   ossim_uint32 result = (ossim_uint32)imageChainList().size();
    
    if(recurse)
    {
-      for(ossim_uint32 i = 0; i < theImageChainList.size(); ++i)
+      for(ossim_uint32 i = 0; i < imageChainList().size(); ++i)
       {
-         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, theImageChainList[i].get());
+         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, imageChainList()[i].get());
          if(child)
          {
             result += child->getNumberOfObjects(true);
@@ -525,42 +483,42 @@ bool ossimImageChain::addChild(ossimConnectableObject* object)
 bool ossimImageChain::removeChild(ossimConnectableObject* object)
 {
    bool result = false;
-   vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  std::find(theImageChainList.begin(), theImageChainList.end(), object);
+   vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  std::find(imageChainList().begin(), imageChainList().end(), object);
    
    
-   if(current!=theImageChainList.end())
+   if(current!=imageChainList().end())
    {
       result = true;
       object->removeListener((ossimConnectableObjectListener*)this);
-      if(current == theImageChainList.begin())
+      if(current == imageChainList().begin())
       {
-         object->removeListener((ossimConnectableObjectListener*)theChildListener);
+         object->removeListener((ossimConnectableObjectListener*)this);
       }
-      if(theImageChainList.size() == 1)
+      if(imageChainList().size() == 1)
       {
          object->changeOwner(0);
-         current = theImageChainList.erase(current);
+         current = imageChainList().erase(current);
       }
       else 
       {
          ossimConnectableObject::ConnectableObjectList input  = object->getInputList();
          ossimConnectableObject::ConnectableObjectList output = object->getOutputList();
          object->changeOwner(0);// set the owner to 0
-         bool erasingBeginning = (current == theImageChainList.begin());
-         bool erasingEnd = (current+1) == theImageChainList.end();
-         current = theImageChainList.erase(current);
+         bool erasingBeginning = (current == imageChainList().begin());
+         bool erasingEnd = (current+1) == imageChainList().end();
+         current = imageChainList().erase(current);
          object->disconnect();
          
-         if(!theImageChainList.empty())
+         if(!imageChainList().empty())
          {
             if(erasingBeginning) // the one that receives the first getTile
             {
-               (*theImageChainList.begin())->addListener(theChildListener);
+               (*imageChainList().begin())->addListener(this);
             }
             
-            else if(current==theImageChainList.end()) // one that receives the last getTIle
+            else if(current==imageChainList().end()) // one that receives the last getTIle
             {
-               current = theImageChainList.begin()+(theImageChainList.size()-1);
+               current = imageChainList().begin()+(imageChainList().size()-1);
                (*current)->connectInputList(input);
                theInputObjectList = (*current)->getInputList();
                theInputListIsFixedFlag = (*current)->getInputListIsFixedFlag();
@@ -603,9 +561,9 @@ void ossimImageChain::getChildren(vector<ossimConnectableObject*>& children,
    ossim_uint32 i = 0;
    
    vector<ossimConnectableObject*> temp;
-   for(i = 0; i < theImageChainList.size();++i)
+   for(i = 0; i < imageChainList().size();++i)
    {
-      temp.push_back(theImageChainList[i].get());
+      temp.push_back(imageChainList()[i].get());
    }
 
    for(i = 0; i < temp.size();++i)
@@ -642,15 +600,15 @@ bool ossimImageChain::add(ossimConnectableObject* source)
 //   if(PTR_CAST(ossimImageSource, source))
    {
      source->changeOwner(this);
-     if(theImageChainList.size() > 0)
+     if(imageChainList().size() > 0)
      {
         source->disconnectAllOutputs();
         theOutputListIsFixedFlag = source->getOutputListIsFixedFlag();
-        theImageChainList[0]->removeListener(theChildListener);
-        theImageChainList.insert(theImageChainList.begin(), source);
-        theImageChainList[0]->addListener(theChildListener);
+        imageChainList()[0]->removeListener(this);
+        imageChainList().insert(imageChainList().begin(), source);
+        imageChainList()[0]->addListener(this);
         source->addListener((ossimConnectableObjectListener*)this);
-        theImageChainList[0]->connectMyInputTo(theImageChainList[1].get());
+        imageChainList()[0]->connectMyInputTo(imageChainList()[1].get());
         result = true;
      }
      else
@@ -666,9 +624,9 @@ bool ossimImageChain::add(ossimConnectableObject* source)
         theInputListIsFixedFlag = source->getInputListIsFixedFlag();
      //   theOutputObjectList     = source->getOutputList();
      //   theOutputListIsFixedFlag= source->getOutputListIsFixedFlag();
-        theImageChainList.push_back(source);
+        imageChainList().push_back(source);
         source->addListener((ossimConnectableObjectListener*)this);
-        source->addListener(theChildListener);
+        source->addListener(this);
         result = true;
      }
    }
@@ -687,15 +645,15 @@ bool ossimImageChain::insertRight(ossimConnectableObject* newObj,
                                   ossimConnectableObject* rightOfThisObj)
 {
    if(!newObj&&!rightOfThisObj) return false;
-   if(!theImageChainList.size())
+   if(!imageChainList().size())
    {
       return add(newObj);
    }
-   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator iter = std::find(theImageChainList.begin(), theImageChainList.end(), rightOfThisObj);
+   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator iter = std::find(imageChainList().begin(), imageChainList().end(), rightOfThisObj);
    
-   if(iter!=theImageChainList.end())
+   if(iter!=imageChainList().end())
    {
-      if(iter == theImageChainList.begin())
+      if(iter == imageChainList().begin())
       {
          return add(newObj);
       }
@@ -709,7 +667,7 @@ bool ossimImageChain::insertRight(ossimConnectableObject* newObj,
          newObj->connectOutputList(outputList);
          newObj->changeOwner(this);
          newObj->addListener((ossimConnectableObjectListener*)this);
-         theImageChainList.insert(iter, newObj);
+         imageChainList().insert(iter, newObj);
          // Send event to any listeners.
          ossimContainerEvent event(this, OSSIM_EVENT_ADD_OBJECT_ID);
          event.setObjectList(newObj);
@@ -737,14 +695,14 @@ bool ossimImageChain::insertLeft(ossimConnectableObject* newObj,
                                  ossimConnectableObject* leftOfThisObj)
 {
    if(!newObj&&!leftOfThisObj) return false;
-   if(!theImageChainList.size())
+   if(!imageChainList().size())
    {
       return add(newObj);
    }
-   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator iter = std::find(theImageChainList.begin(), theImageChainList.end(), leftOfThisObj);
-   if(iter!=theImageChainList.end())
+   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator iter = std::find(imageChainList().begin(), imageChainList().end(), leftOfThisObj);
+   if(iter!=imageChainList().end())
    {
-      if((iter+1)==theImageChainList.end())
+      if((iter+1)==imageChainList().end())
       {
          return addLast(newObj);
       }
@@ -758,7 +716,7 @@ bool ossimImageChain::insertLeft(ossimConnectableObject* newObj,
          leftOfThisObj->connectMyInputTo(newObj);
          newObj->changeOwner(this);
          newObj->addListener((ossimConnectableObjectListener*)this);
-         theImageChainList.insert(iter+1, newObj);
+         imageChainList().insert(iter+1, newObj);
          // Send an event to any listeners.
          ossimContainerEvent event(this, OSSIM_EVENT_ADD_OBJECT_ID);
          event.setObjectList(newObj);
@@ -791,16 +749,16 @@ bool ossimImageChain::replace(ossimConnectableObject* newObj,
       ossimConnectableObject::ConnectableObjectList& inputList  = oldObj->getInputList();
       ossimConnectableObject::ConnectableObjectList& outputList = oldObj->getOutputList();
       oldObj->removeListener((ossimConnectableObjectListener*)this);
-      oldObj->removeListener(theChildListener);
+      oldObj->removeListener(this);
       oldObj->changeOwner(0);
-      theImageChainList[idx] = newObj;
+      imageChainList()[idx] = newObj;
       newObj->connectInputList(inputList);
       newObj->connectOutputList(outputList);
       newObj->changeOwner(this);
       newObj->addListener((ossimConnectableObjectListener*)this);
       if(idx == 0)
       {
-         newObj->addListener(theChildListener);
+         newObj->addListener(this);
       }
    }
    
@@ -811,10 +769,10 @@ ossimRefPtr<ossimImageData> ossimImageChain::getTile(
    const ossimIrect& tileRect,
    ossim_uint32 resLevel)
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* inputSource = PTR_CAST(ossimImageSource,
-                                             theImageChainList[0].get());
+                                             imageChainList()[0].get());
       
       if(inputSource)
       {
@@ -853,10 +811,10 @@ ossimRefPtr<ossimImageData> ossimImageChain::getTile(
 
 ossim_uint32 ossimImageChain::getNumberOfInputBands() const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                      theImageChainList[0].get());
+                                                      imageChainList()[0].get());
       if(interface)
       {
          return interface->getNumberOfOutputBands();
@@ -880,10 +838,10 @@ ossim_uint32 ossimImageChain::getNumberOfInputBands() const
 
 double ossimImageChain::getNullPixelValue(ossim_uint32 band)const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                      theImageChainList[0].get());
+                                                      imageChainList()[0].get());
       if(interface)
       {
          return interface->getNullPixelValue(band);
@@ -907,10 +865,10 @@ double ossimImageChain::getNullPixelValue(ossim_uint32 band)const
 
 double ossimImageChain::getMinPixelValue(ossim_uint32 band)const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                      theImageChainList[0].get());
+                                                      imageChainList()[0].get());
       if(interface)
       {
          return interface->getMinPixelValue(band);
@@ -934,10 +892,10 @@ double ossimImageChain::getMinPixelValue(ossim_uint32 band)const
 
 double ossimImageChain::getMaxPixelValue(ossim_uint32 band)const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* inter = PTR_CAST(ossimImageSource,
-                                                  theImageChainList[0].get());
+                                                  imageChainList()[0].get());
       if(inter)
       {
          return inter->getMaxPixelValue(band);
@@ -961,10 +919,10 @@ double ossimImageChain::getMaxPixelValue(ossim_uint32 band)const
 
 void ossimImageChain::getOutputBandList(std::vector<ossim_uint32>& bandList) const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* inter = PTR_CAST(ossimImageSource,
-                                                  theImageChainList[0].get());
+                                                  imageChainList()[0].get());
       if(inter)
       {
          return inter->getOutputBandList(bandList);
@@ -974,10 +932,10 @@ void ossimImageChain::getOutputBandList(std::vector<ossim_uint32>& bandList) con
    
 ossimScalarType ossimImageChain::getOutputScalarType() const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                      theImageChainList[0].get());
+                                                      imageChainList()[0].get());
       if(interface)
       {
          return interface->getOutputScalarType();
@@ -1001,10 +959,10 @@ ossimScalarType ossimImageChain::getOutputScalarType() const
 
 ossim_uint32 ossimImageChain::getTileWidth()const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
          ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                         theImageChainList[0].get());
+                                                         imageChainList()[0].get());
          if(interface)
          {
             return interface->getTileWidth();;
@@ -1028,10 +986,10 @@ ossim_uint32 ossimImageChain::getTileWidth()const
 
 ossim_uint32 ossimImageChain::getTileHeight()const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
          ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                         theImageChainList[0].get());
+                                                         imageChainList()[0].get());
          if(interface)
          {
             return interface->getTileHeight();
@@ -1055,11 +1013,11 @@ ossim_uint32 ossimImageChain::getTileHeight()const
    
 ossimIrect ossimImageChain::getBoundingRect(ossim_uint32 resLevel)const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
 
       ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                      theImageChainList[0].get());
+                                                      imageChainList()[0].get());
 
       if(interface)
       {
@@ -1089,10 +1047,10 @@ void ossimImageChain::getValidImageVertices(vector<ossimIpt>& validVertices,
                                             ossimVertexOrdering ordering,
                                             ossim_uint32 resLevel)const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* interface =PTR_CAST(ossimImageSource,
-                                                     theImageChainList[0].get());
+                                                     imageChainList()[0].get());
 
       if(interface)
       {
@@ -1119,9 +1077,9 @@ void ossimImageChain::getValidImageVertices(vector<ossimIpt>& validVertices,
 
 ossimRefPtr<ossimImageGeometry> ossimImageChain::getImageGeometry()
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
-      ossimImageSource* interface = PTR_CAST(ossimImageSource, theImageChainList[0].get());
+      ossimImageSource* interface = PTR_CAST(ossimImageSource, imageChainList()[0].get());
       if( interface )
       {
          return interface->getImageGeometry();
@@ -1144,10 +1102,10 @@ ossimRefPtr<ossimImageGeometry> ossimImageChain::getImageGeometry()
 void ossimImageChain::getDecimationFactor(ossim_uint32 resLevel,
                                           ossimDpt& result) const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                      theImageChainList[0].get());
+                                                      imageChainList()[0].get());
       if(interface)
       {
          interface->getDecimationFactor(resLevel,
@@ -1174,10 +1132,10 @@ void ossimImageChain::getDecimationFactor(ossim_uint32 resLevel,
 
 void ossimImageChain::getDecimationFactors(vector<ossimDpt>& decimations) const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                      theImageChainList[0].get());
+                                                      imageChainList()[0].get());
       if(interface)
       {
          interface->getDecimationFactors(decimations);
@@ -1200,10 +1158,10 @@ void ossimImageChain::getDecimationFactors(vector<ossimDpt>& decimations) const
 
 ossim_uint32 ossimImageChain::getNumberOfDecimationLevels()const
 {
-   if((theImageChainList.size() > 0)&&(isSourceEnabled()))
+   if((imageChainList().size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                      theImageChainList[0].get());
+                                                      imageChainList()[0].get());
 
       if(interface)
       {
@@ -1294,14 +1252,14 @@ bool ossimImageChain::addAllSources(map<ossimId, vector<ossimId> >& idMapping,
                // we will try to do a default connection
                //
                
-               if(theImageChainList.size())
+               if(imageChainList().size())
                {
                   if(traceDebug())
                   {
                      CLOG << "connecting " << source->getClassName() << " to "
-                          << theImageChainList[0]->getClassName() << std::endl;
+                          << imageChainList()[0]->getClassName() << std::endl;
                   }
-                  source->connectMyInputTo(0, theImageChainList[0].get());
+                  source->connectMyInputTo(0, imageChainList()[0].get());
                }
             }
             else
@@ -1327,9 +1285,9 @@ bool ossimImageChain::addAllSources(map<ossimId, vector<ossimId> >& idMapping,
       
       ++index;
    }
-   if(theImageChainList.size())
+   if(imageChainList().size())
    {
-     ossimConnectableObject* obj = theImageChainList[(ossim_int32)theImageChainList.size()-1].get();
+     ossimConnectableObject* obj = imageChainList()[(ossim_int32)imageChainList().size()-1].get();
      if(obj)
      {
         setNumberOfInputs(obj->getNumberOfInputs());
@@ -1423,7 +1381,7 @@ bool ossimImageChain::saveState(ossimKeywordlist& kwl,
    {
       return result;
    }
-   ossim_uint32 upper = (ossim_uint32)theImageChainList.size();
+   ossim_uint32 upper = (ossim_uint32)imageChainList().size();
    ossim_uint32 counter = 1;
 
    if (upper)
@@ -1437,7 +1395,7 @@ bool ossimImageChain::saveState(ossimKeywordlist& kwl,
          newPrefix += (ossimString("object") +
                        ossimString::toString(counter) +
                        ossimString("."));
-         result = theImageChainList[idx]->saveState(kwl, newPrefix.c_str());
+         result = imageChainList()[idx]->saveState(kwl, newPrefix.c_str());
       }
    }
 
@@ -1478,20 +1436,20 @@ void ossimImageChain::initialize()
    static const char* MODULE = "ossimImageChain::initialize()";
    if (traceDebug()) CLOG << " Entered..." << std::endl;
    
-   long upper = (ossim_uint32)theImageChainList.size();
+   long upper = (ossim_uint32)imageChainList().size();
    
    for(long index = upper - 1; index >= 0; --index)
    {
       if(traceDebug())
       {
          CLOG << "initilizing source: "
-              << theImageChainList[index]->getClassName()
+              << imageChainList()[index]->getClassName()
               << std::endl;
       }
-      if(theImageChainList[index].valid())
+      if(imageChainList()[index].valid())
       {
          ossimSource* interface =
-            PTR_CAST(ossimSource, theImageChainList[index].get());
+            PTR_CAST(ossimSource, imageChainList()[index].get());
 
          if(interface)
          {
@@ -1507,14 +1465,14 @@ void ossimImageChain::initialize()
 
 void ossimImageChain::enableSource()
 {
-   ossim_int32 upper = static_cast<ossim_int32>(theImageChainList.size());
+   ossim_int32 upper = static_cast<ossim_int32>(imageChainList().size());
    ossim_int32 index = 0;
    for(index = upper - 1; index >= 0; --index)
    {
       // make sure we initialize in reverse order.
       // some source may depend on the initialization of
       // its inputs
-     ossimSource* source = PTR_CAST(ossimSource, theImageChainList[index].get());
+     ossimSource* source = PTR_CAST(ossimSource, imageChainList()[index].get());
      if(source)
      {
         source->enableSource();
@@ -1526,14 +1484,14 @@ void ossimImageChain::enableSource()
 
 void ossimImageChain::disableSource()
 {
-   long upper = (ossim_uint32)theImageChainList.size();
+   long upper = (ossim_uint32)imageChainList().size();
    
    for(long index = upper - 1; index >= 0; --index)
    {
       // make sure we initialize in reverse order.
       // some source may depend on the initialization of
       // its inputs
-     ossimSource* source = PTR_CAST(ossimSource, theImageChainList[index].get());
+     ossimSource* source = PTR_CAST(ossimSource, imageChainList()[index].get());
      if(source)
      {
         source->disableSource();
@@ -1548,7 +1506,6 @@ void ossimImageChain::prepareForRemoval(ossimConnectableObject* connectableObjec
    if(connectableObject)
    {
       connectableObject->removeListener((ossimConnectableObjectListener*)this);
-      connectableObject->removeListener(theChildListener);
       connectableObject->changeOwner(0);
       connectableObject->disconnect();   
    }
@@ -1556,67 +1513,67 @@ void ossimImageChain::prepareForRemoval(ossimConnectableObject* connectableObjec
 
 bool ossimImageChain::deleteFirst()
 {
-   if (theImageChainList.size() == 0) return false;
+   if (imageChainList().size() == 0) return false;
 
    ossimContainerEvent event(this, OSSIM_EVENT_REMOVE_OBJECT_ID);
-   prepareForRemoval(theImageChainList[0].get());
+   prepareForRemoval(imageChainList()[0].get());
    // Clear any listeners, memory.
-   event.setObjectList(theImageChainList[0].get());
-   theImageChainList[0] = 0;
+   event.setObjectList(imageChainList()[0].get());
+   imageChainList()[0] = 0;
    // Remove from the vector.
-   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator i = theImageChainList.begin();
-   theImageChainList.erase(i);
+   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator i = imageChainList().begin();
+   imageChainList().erase(i);
    fireEvent(event);
    return true;
 }
 
 bool ossimImageChain::deleteLast()
 {
-   if (theImageChainList.size() == 0) return false;
+   if (imageChainList().size() == 0) return false;
 
    ossimContainerEvent event(this, OSSIM_EVENT_REMOVE_OBJECT_ID);
   // Clear any listeners, memory.
-   ossim_uint32 idx = (ossim_uint32)theImageChainList.size() - 1;
-   prepareForRemoval(theImageChainList[idx].get());
-   event.setObjectList(theImageChainList[idx].get());
-   theImageChainList[idx] = 0;
+   ossim_uint32 idx = (ossim_uint32)imageChainList().size() - 1;
+   prepareForRemoval(imageChainList()[idx].get());
+   event.setObjectList(imageChainList()[idx].get());
+   imageChainList()[idx] = 0;
    // Remove from the vector.
-   theImageChainList.pop_back();
+   imageChainList().pop_back();
    fireEvent(event);
    return true; 
 }
 
 void ossimImageChain::deleteList()
 {
-   ossim_uint32 upper = theImageChainList.size();
+   ossim_uint32 upper = (ossim_uint32) imageChainList().size();
    ossim_uint32 idx = 0;
    ossimContainerEvent event(this, OSSIM_EVENT_REMOVE_OBJECT_ID);
    for(; idx < upper; ++idx)
    {
-      if(theImageChainList[idx].valid())
+      if(imageChainList()[idx].valid())
       {
-         event.getObjectList().push_back(theImageChainList[idx].get());
-         prepareForRemoval(theImageChainList[idx].get());
-         theImageChainList[idx] = 0;
+         event.getObjectList().push_back(imageChainList()[idx].get());
+         prepareForRemoval(imageChainList()[idx].get());
+         imageChainList()[idx] = 0;
       }
    }
   
-   theImageChainList.clear();
+   imageChainList().clear();
    fireEvent(event);
 }
 
 
 void ossimImageChain::disconnectInputEvent(ossimConnectionEvent& event)
 {
-   if(theImageChainList.size())
+   if(imageChainList().size())
    {
       if(event.getObject()==this)
       {
-         if(theImageChainList[theImageChainList.size()-1].valid())
+         if(imageChainList()[imageChainList().size()-1].valid())
          {
             for(ossim_uint32 i = 0; i < event.getNumberOfOldObjects(); ++i)
             {
-               theImageChainList[theImageChainList.size()-1]->disconnectMyInput(event.getOldObject(i));
+               imageChainList()[imageChainList().size()-1]->disconnectMyInput(event.getOldObject(i));
             }
          }
       }
@@ -1629,26 +1586,26 @@ void ossimImageChain::disconnectOutputEvent(ossimConnectionEvent& /* event */)
 
 void ossimImageChain::connectInputEvent(ossimConnectionEvent& event)
 {
-   if(theImageChainList.size())
+   if(imageChainList().size())
    {
       if(event.getObject()==this)
       {
-         if(theImageChainList[theImageChainList.size()-1].valid())
+         if(imageChainList()[imageChainList().size()-1].valid())
          {
             for(ossim_uint32 i = 0; i < event.getNumberOfNewObjects(); ++i)
             {
                ossimConnectableObject* obj = event.getNewObject(i);
-               theImageChainList[theImageChainList.size()-1]->connectMyInputTo(findInputIndex(obj),
+               imageChainList()[imageChainList().size()-1]->connectMyInputTo(findInputIndex(obj),
                                                                                obj,
                                                                                false);
             }
          }
       }
-      else if(event.getObject() == theImageChainList[0].get())
+      else if(event.getObject() == imageChainList()[0].get())
       {
          if(!theLoadStateFlag)
          {
-//            theInputObjectList = theImageChainList[0]->getInputList();
+//            theInputObjectList = imageChainList()[0]->getInputList();
          }
       }
       initialize();
@@ -1661,7 +1618,7 @@ void ossimImageChain::connectOutputEvent(ossimConnectionEvent& /* event */)
 
 // void ossimImageChain::propertyEvent(ossimPropertyEvent& event)
 // {
-//    if(theImageChainList.size())
+//    if(imageChainList().size())
 //    {
 //       ossimConnectableObject* obj = PTR_CAST(ossimConnectableObject,
 //                                              event.getObject());
@@ -1687,7 +1644,7 @@ void ossimImageChain::objectDestructingEvent(ossimObjectDestructingEvent& event)
 {
    if(!event.getObject()) return;
 
-   if(theImageChainList.size()&&(event.getObject()!=this))
+   if(imageChainList().size()&&(event.getObject()!=this))
    {
       removeChild(PTR_CAST(ossimConnectableObject,
                            event.getObject()));
@@ -1698,12 +1655,12 @@ void ossimImageChain::propagateEventToOutputs(ossimEvent& event)
    //if(thePropagateEventFlag) return;
 
    //thePropagateEventFlag = true;
-   if(theImageChainList.size())
+   if(imageChainList().size())
    {
-      if(theImageChainList[theImageChainList.size()-1].valid())
+      if(imageChainList()[imageChainList().size()-1].valid())
       {
-         theImageChainList[theImageChainList.size()-1]->fireEvent(event);
-         theImageChainList[theImageChainList.size()-1]->propagateEventToOutputs(event);
+         imageChainList()[imageChainList().size()-1]->fireEvent(event);
+         imageChainList()[imageChainList().size()-1]->propagateEventToOutputs(event);
       }
    }
    //ossimConnectableObject::propagateEventToOutputs(event);
@@ -1714,12 +1671,12 @@ void ossimImageChain::propagateEventToInputs(ossimEvent& event)
 //   if(thePropagateEventFlag) return;
 
 //   thePropagateEventFlag = true;
-   if(theImageChainList.size())
+   if(imageChainList().size())
    {
-      if(theImageChainList[0].valid())
+      if(imageChainList()[0].valid())
       {
-         theImageChainList[0]->fireEvent(event);
-         theImageChainList[0]->propagateEventToInputs(event);
+         imageChainList()[0]->fireEvent(event);
+         imageChainList()[0]->propagateEventToInputs(event);
       }
    }
 //   thePropagateEventFlag = false;
@@ -1733,9 +1690,9 @@ ossimConnectableObject* ossimImageChain::operator[](ossim_uint32 index)
 ossimConnectableObject* ossimImageChain::getConnectableObject(
    ossim_uint32 index)
 {
-   if(theImageChainList.size() && (index < theImageChainList.size()))
+   if(imageChainList().size() && (index < imageChainList().size()))
    {
-      return theImageChainList[index].get();
+      return imageChainList()[index].get();
    }
    
    return 0; 
@@ -1745,9 +1702,9 @@ ossim_int32 ossimImageChain::indexOf(ossimConnectableObject* obj)const
 {
    ossim_uint32 idx = 0;
    
-   for(idx = 0; idx < theImageChainList.size();++idx)
+   for(idx = 0; idx < imageChainList().size();++idx)
    {
-      if(theImageChainList[idx] == obj)
+      if(imageChainList()[idx] == obj)
       {
          return (ossim_int32)idx;
       }
@@ -1768,8 +1725,8 @@ void ossimImageChain::accept(ossimVisitor& visitor)
       visitor.turnOffVisitorType(ossimVisitor::VISIT_INPUTS|ossimVisitor::VISIT_OUTPUTS);
       if(visitor.getVisitorType() & ossimVisitor::VISIT_CHILDREN)
       {
-         ConnectableObjectList::reverse_iterator current = theImageChainList.rbegin();
-         while((current != theImageChainList.rend())&&!visitor.stopTraversal())
+         ConnectableObjectList::reverse_iterator current = imageChainList().rbegin();
+         while((current != imageChainList().rend())&&!visitor.stopTraversal())
          {
             ossimRefPtr<ossimConnectableObject> currentObject = (*current);
             if(currentObject.get() && !visitor.hasVisited(currentObject.get())) currentObject->accept(visitor);
@@ -1779,4 +1736,34 @@ void ossimImageChain::accept(ossimVisitor& visitor)
       visitor.setVisitorType(currentType);
       ossimConnectableObject::accept(visitor);
    }
+}
+
+//**************************************************************************************************
+// Inserts all of its children and inputs into the container provided. Since ossimImageChain is
+// itself a form of container, this method will consolidate this chain with the argument
+// container. Therefore this chain object will not be represented in the container (but its
+// children will be, with correct input and output connections to external objects).
+// Returns TRUE if successful.
+//**************************************************************************************************
+bool ossimImageChain::fillContainer(ossimConnectableContainer& container)
+{
+   // Grab the first source in the chain and let it fill the container with itself and inputs. This
+   // will traverse down the chain and will even pick up external sources that feed this chain:
+   ossimRefPtr<ossimConnectableObject> first_source = getFirstSource();
+   if (!first_source.valid())
+      return false;
+   first_source->fillContainer(container);
+
+   // Instead of adding ourselves, make sure my first source is properly connected to my output,
+   // thus obviating the need for this image chain (my chain items become part of 'container':
+   ConnectableObjectList& obj_list = getOutputList();
+   ossimRefPtr<ossimConnectableObject> output_connection = 0;
+   while (!obj_list.empty())
+   {
+      // Always pick off the beginning of the list since it is shrinking with each disconnect:
+      output_connection = obj_list[0];
+      disconnectMyOutput(output_connection.get(), true, false);
+      first_source->connectMyOutputTo(output_connection.get());
+   }
+   return true;
 }

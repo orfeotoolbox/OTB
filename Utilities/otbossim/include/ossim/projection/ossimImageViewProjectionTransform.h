@@ -13,10 +13,10 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimImageViewProjectionTransform.h 18424 2010-11-16 16:06:04Z gpotts $
+//  $Id: ossimImageViewProjectionTransform.h 20352 2011-12-12 17:24:52Z dburken $
 
 #ifndef ossimImageViewProjectionTransform_HEADER
-#define ossimImageViewProjectionTransform_HEADER
+#define ossimImageViewProjectionTransform_HEADER 1
 
 #include <ossim/projection/ossimImageViewTransform.h>
 #include <ossim/imaging/ossimImageGeometry.h>
@@ -82,6 +82,19 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix = 0)const;
 
 protected:
+
+   /**
+    * @brief Initializes the view geometry image size from image geometry
+    * bounding rect.
+    *
+    * This is needed for the ossimImageGeometry::worldToLocal if the underlying
+    * projection is geographic to handle images that cross the date line.
+    * 
+    * @param Input image rectangle.
+    * @return true on success, false on error.
+    */
+   bool initializeViewSize();  
+   
    ossimRefPtr<ossimImageGeometry> m_imageGeometry;
    ossimRefPtr<ossimImageGeometry> m_viewGeometry;
    

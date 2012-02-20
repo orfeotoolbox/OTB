@@ -9,17 +9,17 @@
 // Description: Rpf support class
 //
 //********************************************************************
-// $Id: ossimRpfLocationSection.cpp 16997 2010-04-12 18:53:48Z dburken $
-
-#include <istream>
-#include <ostream>
-#include <iterator>
+// $Id: ossimRpfLocationSection.cpp 20324 2011-12-06 22:25:23Z dburken $
 
 #include <ossim/support_data/ossimRpfLocationSection.h>
 #include <ossim/base/ossimCommon.h> /* ossim::byteOrder() */
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimErrorCodes.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/support_data/ossimRpfComponentIdLut.h>
+#include <istream>
+#include <ostream>
+#include <iterator>
 
 static const ossimTrace traceDebug("ossimRpfLocationSection:debug");
 
@@ -60,6 +60,8 @@ std::ostream& ossimRpfComponentLocationRecord::print(
 {
    out << prefix << "ComponentId:             "
        << m_componentId << "\n"
+       << prefix << "ComponentIdString:       "
+       << ossimRpfComponentIdLut::instance()->getEntryString(m_componentId) << "\n"
        << prefix << "ComponentLength:         "
        << m_componentLength   << "\n"
        << prefix << "ComponentLocation:       "

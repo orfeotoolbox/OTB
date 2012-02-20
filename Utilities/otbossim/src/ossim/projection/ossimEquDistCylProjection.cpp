@@ -9,9 +9,10 @@
 //
 // Calls Geotrans Equidistant Cylinder projection code.  
 //*******************************************************************
-//  $Id: ossimEquDistCylProjection.cpp 20042 2011-09-06 14:59:56Z gpotts $
+//  $Id: ossimEquDistCylProjection.cpp 20542 2012-02-06 17:41:05Z dburken $
 
 #include <ossim/projection/ossimEquDistCylProjection.h>
+#include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimCommon.h>
@@ -90,9 +91,7 @@ void ossimEquDistCylProjection::update()
    theFalseEastingNorthing.x = Eqcy_False_Easting;
    theFalseEastingNorthing.y = Eqcy_False_Northing;
 
-   // Scale longitude to possible new origin:
-   theDegreesPerPixel.lon = theDegreesPerPixel.lat / Cos_Eqcy_Std_Parallel;
-   theMetersPerPixel.makeNan();
+   theMetersPerPixel.makeNan(); // force recompute by base class
 
    ossimMapProjection::update();
 
@@ -128,6 +127,7 @@ void ossimEquDistCylProjection::setFalseEastingNorthing(double falseEasting,
 
 void ossimEquDistCylProjection::setDefaults()
 {
+   theProjectionUnits = OSSIM_DEGREES;
    Eqcy_False_Easting  = 0.0;
    Eqcy_False_Northing = 0.0;
    Eqcy_Delta_Northing = 10007555.0;
@@ -203,75 +203,148 @@ void ossimEquDistCylProjection::worldToLineSample(const ossimGpt &worldPoint,
    if(theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
    {
       ossimMapProjection::worldToLineSample(worldPoint, lineSample);
-      
       return;
+   }
+   
+   // make sure our tie point is good and world point is good.
+   if(theUlEastingNorthing.isNan() || worldPoint.isLatNan() || worldPoint.isLonNan())
+   {
+      lineSample.makeNan();
+      return;
+   }
+
+   // see if we have a datum set and if so shift the world to our datum.  If not then
+   // find the easting northing value for the world point.
+   ossimDpt gptEastingNorthing;
+   if(theDatum)
+   {
+      ossimGpt gpt = worldPoint;
+      gpt.changeDatum(theDatum);
+      gptEastingNorthing = forward(gpt);
    }
    else
    {
-      // make sure our tie point is good and world point
-      // is good.
-      //
-      if(theUlEastingNorthing.isNan()||
-         worldPoint.isLatNan() || worldPoint.isLonNan())
-      {
-         lineSample.makeNan();
-         return;
-      }
-      // initialize line sample
-      //   lineSample = ossimDpt(0,0);
-      
-      // I am commenting this code out because I am going to
-      // move it to the ossimImageViewProjectionTransform.
-      //
-      // see if we have a datum set and if so
-      // shift the world to our datum.  If not then
-      // find the easting northing value for the world
-      // point.
-      if(theDatum)
+      gptEastingNorthing = forward(worldPoint);
+   }
+
+   // check the final result to make sure there were no problems.
+   if(!gptEastingNorthing.isNan())
+   {
+      lineSample.x = ((gptEastingNorthing.x  - theUlEastingNorthing.x)/theMetersPerPixel.x);
+
+      // We must remember that the Northing is negative since the positive
+      // axis for an image is assumed to go down since it's image space.
+      lineSample.y = (-(gptEastingNorthing.y - theUlEastingNorthing.y)/theMetersPerPixel.y);
+   }
+}
+
+void ossimEquDistCylProjection::worldToLineSample( const ossimGpt& worldPoint,
+                                                   const ossimIpt& imageSize,
+                                                   ossimDpt&       lineSample ) const
+{
+   if( theModelTransformUnitType == OSSIM_UNIT_UNKNOWN )
+   {
+      // Make sure our points are good.
+      if( !theUlEastingNorthing.isNan() && !worldPoint.isLatNan() && !worldPoint.isLonNan() &&
+          !imageSize.isNan() )
       {
          ossimGpt gpt = worldPoint;
-         
-         gpt.changeDatum(theDatum);
-         
-         // lineSample is currently in easting northing
-         // and will need to be converted to line sample.
-         lineSample = forward(gpt);
-      }
-      else
-      {
-         // lineSample is currently in easting northing
-         // and will need to be converted to line sample.
-         lineSample = forward(worldPoint);
-      }
-      
-      // check the final result to make sure there were no
-      // problems.
-      //
-      if(!lineSample.isNan())
-      {
-         //       if(!isIdentityMatrix())
-         //       {
-         //          ossimDpt temp = lineSample;
-         
-         //          lineSample.x = theInverseTrans[0][0]*temp.x+
-         //                         theInverseTrans[0][1]*temp.y+
-         //                         theInverseTrans[0][2];
-         
-         //          lineSample.y = theInverseTrans[1][0]*temp.x+
-         //                         theInverseTrans[1][1]*temp.y+
-         //                         theInverseTrans[1][2];
-         //       }
-         //       else
+
+         //---
+         // See if we have a datum set and if so shift the world to our datum.  If not then
+         // find the easting northing value for the world point.
+         if(theDatum)
          {
-            lineSample.x = ((lineSample.x  - theUlEastingNorthing.x)/theMetersPerPixel.x);
+            gpt.changeDatum(theDatum);
+         }
+
+         // Convert to easting northing.
+         ossimDpt gptEastingNorthing = forward(gpt);
+
+         if( !gptEastingNorthing.isNan() )
+         {
+            if ( imageSize.x > 0.0 )
+            {
+               ossimGpt edge(gpt.lat, -180.0, 0.0);
+               ossimDpt leftProjectionEdge = forward(edge);
+               
+               edge.lon = 180;
+               ossimDpt rightProjectionEdge = forward(edge);
+
+               // Right edge Easting of image from tie.
+               ossim_float64 leftImageX = theUlEastingNorthing.x  - (0.5*theMetersPerPixel.x);
+               ossim_float64 rightImageX = leftImageX + (imageSize.x * theMetersPerPixel.x);
+
+               if ( rightImageX < rightProjectionEdge.x ) // Image edge left of date line.
+               {
+                  // Image does not cross the date line.
+                  lineSample.x =
+                     (gptEastingNorthing.x - theUlEastingNorthing.x) / theMetersPerPixel.x;
+               }
+               else // Crossed date line:
+               {
+                  // Normalize the right image point to account for wrap:
+                  ossim_float64 normRightX =
+                     rightImageX - rightProjectionEdge.x + leftProjectionEdge.x;
+
+                  if ( ( gptEastingNorthing.x >= leftImageX ) &&
+                       ( gptEastingNorthing.x <= rightProjectionEdge.x ) )
+                  {
+                     // Between tie and date line.
+                     lineSample.x =
+                        (gptEastingNorthing.x - theUlEastingNorthing.x)/theMetersPerPixel.x;
+                  }
+                  else if ( ( gptEastingNorthing.x >= leftProjectionEdge.x ) &&
+                            ( gptEastingNorthing.x <=  normRightX ) )
+                  {
+                     // Between date line and right image point.
+                     lineSample.x = ( rightProjectionEdge.x - theUlEastingNorthing.x +
+                                     gptEastingNorthing.x - leftProjectionEdge.x )/theMetersPerPixel.x;
+                  }
+                  else
+                  {
+                     // Point in between normalized right x and tie:
+                     ossim_float64 deltaToLeft  = theUlEastingNorthing.x - gptEastingNorthing.x;
+                     ossim_float64 deltaToRight = gptEastingNorthing.x - normRightX;
+                     
+                     // Make relative to the closest edge.
+                     if ( deltaToRight < deltaToLeft )
+                     {
+                        lineSample.x = (imageSize.x - 1) + deltaToRight/theMetersPerPixel.x;
+                     }
+                     else
+                     {
+                        lineSample.x = -(deltaToLeft/theMetersPerPixel.x );
+                     }
+                  }  
+               }
+              
+            } // Matches: if ( ( imageSize.x > 0.0 ) && ( imageSize.y > 0.0 ) )
+            else
+            {
+               lineSample.x = (gptEastingNorthing.x - theUlEastingNorthing.x)/theMetersPerPixel.x;
+            }
             
             // We must remember that the Northing is negative since the positive
             // axis for an image is assumed to go down since it's image space.
-            lineSample.y = (-(lineSample.y - theUlEastingNorthing.y)/theMetersPerPixel.y);
-         }
+            lineSample.y = (theUlEastingNorthing.y - gptEastingNorthing.y) / theMetersPerPixel.y;
+            
+         } // Matches: if( !lineSample.isNan() )
+         
       }
+      else // Some point we need has nans...
+      {
+         lineSample.makeNan();
+      }
+      
+   } // Matches: if( theModelTransformUnitType == OSSIM_UNIT_UNKNOWN )
+   else 
+   {
+      // Has transform:
+      ossimMapProjection::worldToLineSample(worldPoint, lineSample);
    }
-}
+
+} // End: ossimEquDistCylProjection::worldToLineSample(worldPoint, lineSample, imageSize)
 
 ossimGpt ossimEquDistCylProjection::inverse(const ossimDpt &eastingNorthing)const
 {
@@ -324,6 +397,19 @@ bool ossimEquDistCylProjection::loadState(const ossimKeywordlist& kwl, const cha
 
    //   ossimLlxyProjection::loadState(kwl, prefix);
    ossimMapProjection::loadState(kwl, prefix);
+   theProjectionUnits = OSSIM_DEGREES;
+
+   // Make sure the origin.lat is defined since it is needed to relate degrees/meter:
+   if (ossim::isnan(theOrigin.lat))
+   {
+      theOrigin.lat = theUlGpt.lat;
+      if (ossim::isnan(theOrigin.lat))
+         theOrigin.lat = 0.0;
+   }
+
+   // Make sure degrees per pixel is defined:
+   if (theDegreesPerPixel.hasNans() && !theMetersPerPixel.hasNans())
+      computeDegreesPerPixel();
 
    const char* type = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
 
@@ -345,38 +431,6 @@ bool ossimEquDistCylProjection::loadState(const ossimKeywordlist& kwl, const cha
             
    return true;
 }
-
-//*************************************************************************************************
-// Sets the GSD in x and y directions indirectly by specifying degrees/pixel instead of meters
-// per pixel. This necessarily implies a reference latitude where lat = arccos(y/x). The origin 
-// latitude will be modified accordingly. There will be ambiguity on the implied latitude's 
-// hemisphere which will be resolved by referencing the tiepoint's latitude.
-//*************************************************************************************************
-void ossimEquDistCylProjection::setDecimalDegreesPerPixel(const ossimDpt& dpp)
-{
-   // Adjust the origin latitude in order to achieve the gsd ratio scaling first:
-   //if (dpp.lon != 0.0)
-   if (!ossim::almostEqual(dpp.lon,0.0))
-   { 
-      double ratio = dpp.lat/dpp.lon;
-      if(ossim::almostEqual(ratio, 1.0))
-      {
-         ratio = 1.0;
-      }
-      else if (ratio > 1.0)
-         ratio = 1.0;
-      else if (ratio < -1.0)
-         ratio = -1.0;
-      theOrigin.lat = ossim::acosd(ratio);
-   }
-
-   // Check hemisphere against tiepoint:
-   if (!theUlGpt.isLatNan()&&!theUlGpt.isLonNan() && (theUlGpt.lat < 0))
-      theOrigin.lat *= -1.0;
-
-   ossimMapProjection::setDecimalDegreesPerPixel(dpp);
-}
-
 
 /***************************************************************************/
 /*

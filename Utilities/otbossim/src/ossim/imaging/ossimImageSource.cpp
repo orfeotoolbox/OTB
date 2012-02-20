@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.cpp 19732 2011-06-06 22:24:54Z dburken $
+// $Id: ossimImageSource.cpp 20230 2011-11-08 17:33:13Z dburken $
 
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -146,8 +146,7 @@ ossim_uint32 ossimImageSource::getTileWidth()  const
 
 ossim_uint32 ossimImageSource::getTileHeight() const
 {
-   ossimImageSource* inter = PTR_CAST(ossimImageSource,
-                                               getInput(0));
+   ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
    if(inter)
    {
       return inter->getTileHeight();
@@ -161,8 +160,7 @@ ossim_uint32 ossimImageSource::getTileHeight() const
 
 ossimIrect ossimImageSource::getBoundingRect(ossim_uint32 resLevel)const
 {
-   ossimImageSource* inter = PTR_CAST(ossimImageSource,
-                                      getInput(0));
+   ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
    if(inter)
    {
       return inter->getBoundingRect(resLevel);
@@ -170,6 +168,11 @@ ossimIrect ossimImageSource::getBoundingRect(ossim_uint32 resLevel)const
    ossimIrect rect;
    rect.makeNan();
    return rect;
+}
+
+void ossimImageSource::getBoundingRect(ossimIrect& rect, ossim_uint32 resLevel) const
+{
+   rect = getBoundingRect( resLevel );
 }
 
 bool ossimImageSource::saveState(ossimKeywordlist& kwl,

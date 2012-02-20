@@ -30,25 +30,23 @@ void ossimJobMultiThreadQueue::setNumberOfThreads(ossim_uint32 nThreads)
    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
    ossim_uint32 idx = 0;
    ossim_uint32 queueSize = m_threadQueueList.size();
-   if(nThreads != m_threadQueueList.size())
+   
+   if(nThreads > queueSize)
    {
-      if(nThreads > queueSize)
+      for(idx = queueSize; idx < nThreads;++idx)
       {
-         for(idx = queueSize; idx < nThreads;++idx)
-         {
-            ossimRefPtr<ossimJobThreadQueue> threadQueue = new ossimJobThreadQueue();
-            threadQueue->setJobQueue(m_jobQueue.get());
-            m_threadQueueList.push_back(threadQueue);
-         }
+         ossimRefPtr<ossimJobThreadQueue> threadQueue = new ossimJobThreadQueue();
+         threadQueue->setJobQueue(m_jobQueue.get());
+         m_threadQueueList.push_back(threadQueue);
       }
-      else 
+   }
+   else if(nThreads < queueSize)
+   {
+      ThreadQueueList::iterator iter = m_threadQueueList.begin()+nThreads;
+      while(iter != m_threadQueueList.end())
       {
-         ThreadQueueList::iterator iter = m_threadQueueList.begin()+nThreads;
-         while(iter != m_threadQueueList.end())
-         {
-            (*iter)->cancel();
-            iter = m_threadQueueList.erase(iter);
-         }
+         (*iter)->cancel();
+         iter = m_threadQueueList.erase(iter);
       }
    }
 }
@@ -67,7 +65,7 @@ ossim_uint32 ossimJobMultiThreadQueue::numberOfBusyThreads()const
    ossim_uint32 queueSize = m_threadQueueList.size();
    for(idx = 0; idx < queueSize;++idx)
    {
-      if(!m_threadQueueList[idx]->isProcessingJob()) ++result;
+      if(m_threadQueueList[idx]->isProcessingJob()) ++result;
    }
    return result;
 }

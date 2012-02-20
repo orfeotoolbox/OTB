@@ -9,13 +9,14 @@
 // Description: OSSIM Kakadu based nitf writer.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimKakaduNitfWriter.cpp 15073 2009-08-13 19:55:34Z dburken $
+// $Id: ossimNitfWriterBase.cpp 2981 2011-10-10 21:14:02Z david.burken $
 
 #include <ossim/imaging/ossimNitfWriterBase.h>
 #include <ossim/base/ossimBooleanProperty.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimPreferences.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimTrace.h>
@@ -338,3 +339,21 @@ ossimString ossimNitfWriterBase::getExtension() const
 {
    return ossimString("ntf");
 }
+
+void ossimNitfWriterBase::initializeDefaultsFromConfigFile( ossimNitfFileHeaderV2_X* fileHdr,
+                                                            ossimNitfImageHeaderV2_X* imgHdr )
+{
+   // Look in prefs for site configuration file:
+   const char* lookup = ossimPreferences::instance()->
+      findPreference("nitf_writer.site_configuration_file");
+   if ( lookup && fileHdr && imgHdr )
+   {
+      ossimKeywordlist kwl;
+      if ( kwl.addFile( lookup ) )
+      {
+         fileHdr->loadState( kwl, "nitf.file." );
+         imgHdr->loadState( kwl, "nitf.image." );
+      }
+   }
+}
+

@@ -9,7 +9,7 @@
 // Contains definition of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimSpotDimapSupportData.cpp 20194 2011-11-01 17:31:13Z dburken $
 
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
 #include <ossim/base/ossimFilename.h>
@@ -1502,7 +1502,6 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
          thePixelLookAngleY[idx] = tempValue.toDouble();
       }
    }
-   
 
    total =  ossimString(kwl.find(prefix,"number_of_attitude_samples")).toUInt32();
    theAttitudeSamples.resize(total);
@@ -2404,8 +2403,8 @@ bool ossimSpotDimapSupportData::parsePart3(
 
    return true;
 }
-bool ossimSpotDimapSupportData::parsePart4(
-                                           ossimRefPtr<ossimXmlDocument> xmlDocument)
+
+bool ossimSpotDimapSupportData::parsePart4(ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
   ossimString xpath;
   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
@@ -2672,55 +2671,55 @@ bool ossimSpotDimapSupportData::initSceneSource(
 
    //---
    // Fetch viewing angle:
-   /*
-    * From the SPOT Dimap documentation (Dimap Generic 1.0), VIEWING_ANGLE
-    * (the scene instrumental viewing angle) is ONLY available for SPOT5 data.
-    * FROM SPOT: You can use use incidence angle to calculate viewing angle
-    * (called look direction as well).
-    * FIX (see below): need theSatelliteAltitude and theIncidenceAngle. The
-    * equation is shown below where RT is the mean value of WGS84 ellipsoid 
-    * semi-axis.
-    *
-    * */
+   //
+   // From the SPOT Dimap documentation (Dimap Generic 1.0), VIEWING_ANGLE
+   // (the scene instrumental viewing angle) is ONLY available for SPOT5 data.
+   // FROM SPOT: You can use use incidence angle to calculate viewing angle
+   // (called look direction as well).
+   // FIX (see below): need theSatelliteAltitude and theIncidenceAngle. The
+   // equation is shown below where RT is the mean value of WGS84 ellipsoid 
+   // semi-axis.
    //---
-   if(this->theSensorID == "Spot 5") {
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
+   if(this->theSensorID == "Spot 5")
    {
-      setErrorStatus();
-      if(traceDebug())
+      xml_nodes.clear();
+      xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE";
+      xmlDocument->findNodes(xpath, xml_nodes);
+      if (xml_nodes.size() == 0)
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\nCould not find: " << xpath
-            << std::endl;
+         setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "DEBUG:\nCould not find: " << xpath
+               << std::endl;
+         }
+         return false;
       }
-      return false;
+      theViewingAngle = xml_nodes[0]->getText().toDouble();
    }
-   theViewingAngle = xml_nodes[0]->getText().toDouble();
-   } else {
-       xml_nodes.clear();
-       xpath = "/Dimap_Document/Data_Strip/Ephemeris/SATELLITE_ALTITUDE";
-
-       theViewingAngle = -1.0;
-       xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
+   else
    {
-      setErrorStatus();
-      if(traceDebug())
+      xml_nodes.clear();
+      xpath = "/Dimap_Document/Data_Strip/Ephemeris/SATELLITE_ALTITUDE";
+      
+      theViewingAngle = -1.0;
+      xmlDocument->findNodes(xpath, xml_nodes);
+      if (xml_nodes.size() == 0)
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\nCould not find: " << xpath
-            << std::endl;
+         setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "DEBUG:\nCould not find: " << xpath
+               << std::endl;
+         }
+         return false;
       }
-      return false;
-   }
-       //compute VIEWING_ANGLE
-       double theSatelliteAltitude =  xml_nodes[0]->getText().toDouble();
-       double RT = 63710087714.0;
-       theViewingAngle = asin((RT/(RT+theSatelliteAltitude))*sin(theIncidenceAngle));
-
+      //compute VIEWING_ANGLE
+      double theSatelliteAltitude =  xml_nodes[0]->getText().toDouble();
+      double RT = 63710087714.0;
+      theViewingAngle = asin((RT/(RT+theSatelliteAltitude))*sin(theIncidenceAngle));
    }
 
    //---
@@ -2868,53 +2867,6 @@ bool ossimSpotDimapSupportData::initFramePoints(
    }
    theSceneOrientation = xml_nodes[0]->getText().toDouble();  
 
-   //---
-   // Fetch viewing angle:
-   /*
-    * From the SPOT Dimap documentation (Dimap Generic 1.0), VIEWING_ANGLE
-    * (the scene instrumental viewing angle) is ONLY available for SPOT5 data.
-    * WORKAROUND: if SPOT1 or SPOT4 data, then set VIEWING_ANGLE to -1.0
-    * */
-   //---
-   if(this->theSensorID == "Spot 5") {
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
-   }
-   theViewingAngle = xml_nodes[0]->getText().toDouble();
-   } else {
-       theViewingAngle = -1.0;
-   }
-
-   //---
-   // Fetch Step Count:
-   //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Data_Strip/Sensor_Configuration/Mirror_Position/STEP_COUNT";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
-   }
-   theStepCount = xml_nodes[0]->getText().toInt();
-   
    return true;
 }
 

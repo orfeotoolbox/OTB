@@ -10,13 +10,10 @@
 //              rpf file.
 //
 //********************************************************************
-// $Id: ossimRpfFrame.h 16997 2010-04-12 18:53:48Z dburken $
+// $Id: ossimRpfFrame.h 20324 2011-12-06 22:25:23Z dburken $
 
 #ifndef ossimRpfFrame_HEADER
-#define ossimRpfFrame_HEADER
-
-#include <iosfwd>
-#include <vector>
+#define ossimRpfFrame_HEADER 1
 
 #include <ossim/base/ossimReferenced.h>
 #include <ossim/base/ossimRefPtr.h>
@@ -24,6 +21,9 @@
 #include <ossim/base/ossimErrorCodes.h>
 #include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/support_data/ossimRpfColorGrayscaleTable.h>
+#include <ossim/support_data/ossimRpfReplaceUpdateTable.h>
+#include <iosfwd>
+#include <vector>
 
 class ossimRpfHeader;
 class ossimRpfAttributes;
@@ -94,6 +94,13 @@ public:
       return theNitfFile.get();
    }
 
+   /**
+    * @return The RPF replace / update table.  The ossimRefPtr can have a null
+    * internal pointer if record was not found. Callers should check
+    * ossimRefPtr<ossimRpfReplaceUpdateTable>::valid() before using pointer.
+    */
+   ossimRefPtr<ossimRpfReplaceUpdateTable> getRpfReplaceUpdateTable() const;
+
 private:
    void clearFields();
    void deleteAll();
@@ -103,6 +110,7 @@ private:
    ossimErrorCode populateAttributeSection(std::istream& in);
    ossimErrorCode populateColorGrayscaleSection(std::istream& in);
    ossimErrorCode populateMasks(std::istream& in);
+   ossimErrorCode populateReplaceUpdateTable(std::istream& in);
 
    /*!
     * The header will be instantiated during the opening of the
@@ -190,6 +198,9 @@ private:
     * [spatial data section] to the first byte of the subframe table.
     */
    vector< vector< vector< ossim_uint32> > > theSubframeTransparencyMaskTable;
+
+   /** Holds table of "replace / update" records if present. */
+   ossimRefPtr<ossimRpfReplaceUpdateTable> theReplaceUpdateTable;
 
 };
 

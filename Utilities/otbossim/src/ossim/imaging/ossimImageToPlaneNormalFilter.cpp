@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageToPlaneNormalFilter.cpp 20078 2011-09-09 12:25:50Z gpotts $
+// $Id: ossimImageToPlaneNormalFilter.cpp 20198 2011-11-03 13:23:40Z dburken $
 #include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -47,7 +47,6 @@ ossimRefPtr<ossimImageData> ossimImageToPlaneNormalFilter::getTile(
    const ossimIrect& tileRect,
    ossim_uint32 resLevel)
 {
-
    if(!isSourceEnabled()||!theInputConnection)
    {
       return ossimImageSourceFilter::getTile(tileRect, resLevel);
@@ -64,12 +63,12 @@ ossimRefPtr<ossimImageData> ossimImageToPlaneNormalFilter::getTile(
    }
 
    theTile->setImageRectangle(tileRect);
-   theBlankTile->setImageRectangle(tileRect);
 
    ossimIrect requestRect(tileRect.ul().x - 1,
                           tileRect.ul().y - 1,
                           tileRect.lr().x + 1,
                           tileRect.lr().y + 1);
+
    ossimRefPtr<ossimImageData> input =
       theInputConnection->getTile(requestRect, resLevel);
 
@@ -79,10 +78,9 @@ ossimRefPtr<ossimImageData> ossimImageToPlaneNormalFilter::getTile(
       {
          initializeTile();
          theTile->validate();
-         theTile->setImageRectangle(tileRect);
-        return theTile.get();
+         return theTile.get();
       }
-      
+      theBlankTile->setImageRectangle(tileRect);
       return theBlankTile;
    }
 
@@ -101,8 +99,7 @@ ossimRefPtr<ossimImageData> ossimImageToPlaneNormalFilter::getTile(
       }
    }
 
-   computeNormals(input,
-                  theTile);
+   computeNormals(input, theTile);
 
    theXScale = oldScaleX;
    theYScale = oldScaleY;
@@ -127,6 +124,8 @@ void ossimImageToPlaneNormalFilter::initialize()
 {
    if(theInputConnection)
    {
+      theInputConnection->initialize();
+      
       theInputBounds = theInputConnection->getBoundingRect();
       theTile      = ossimImageDataFactory::instance()->create(this, this);
       theBlankTile = (ossimImageData*)(theTile->dup());

@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageCombiner.cpp 18590 2010-12-22 14:31:04Z dburken $
+// $Id: ossimImageCombiner.cpp 20382 2011-12-15 14:24:57Z dburken $
 #include <ossim/imaging/ossimImageCombiner.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimIrect.h>
@@ -278,7 +278,7 @@ void ossimImageCombiner::initialize()
    
    theLargestNumberOfInputBands = 0;
    theComputeFullResBoundsFlag = true;
-   
+
    // now find the largest number of bands
    //
    ossim_uint32 size = getNumberOfInputs();

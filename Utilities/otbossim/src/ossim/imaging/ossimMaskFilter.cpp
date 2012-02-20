@@ -10,7 +10,7 @@
 // Description: Class definition for ossimMaskFilter.
 //
 //*************************************************************************
-// $Id: ossimMaskFilter.cpp 19736 2011-06-07 15:54:13Z dburken $
+// $Id: ossimMaskFilter.cpp 20409 2011-12-22 16:57:05Z dburken $
 
 #include <ossim/imaging/ossimMaskFilter.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -23,34 +23,14 @@
 
 static const char * MASK_FILTER_MASK_TYPE_KW = "mask_type";
 
-RTTI_DEF1(ossimMaskFilter, "ossimMaskFilter", ossimImageCombiner);
+RTTI_DEF1(ossimMaskFilter, "ossimMaskFilter", ossimImageSource);
 
 ossimMaskFilter::ossimMaskFilter(ossimObject* owner)
    :
-   ossimImageCombiner(owner, 2, 0, true, false),
+   ossimImageSource(owner, 1, 1, true, false),
    theMaskType(OSSIM_MASK_TYPE_SELECT),
    theTile(0)
 {
-}
-
-ossimMaskFilter::ossimMaskFilter(ossimImageSource* imageSource, ossimImageSource* maskSource)
-   :   
-   ossimImageCombiner(0, 2, 0, true, false),
-   theMaskType(OSSIM_MASK_TYPE_SELECT),
-   theTile(0)
-{
-   setInputSources(imageSource, maskSource);
-} 
-
-ossimMaskFilter::ossimMaskFilter(ossimObject* owner, 
-                                 ossimImageSource* imageSource,
-				                     ossimImageSource* maskSource)
-   :  
-   ossimImageCombiner(owner, 2, 0, true, false),
-   theMaskType(OSSIM_MASK_TYPE_SELECT),
-   theTile(0)
-{
-   setInputSources(imageSource, maskSource);
 }
 
 ossimMaskFilter::~ossimMaskFilter()
@@ -58,50 +38,32 @@ ossimMaskFilter::~ossimMaskFilter()
 }
 
 //*************************************************************************************************
-// This set method is necessary when this object is being added to an ossimImageChain because
-// ossimImageChain::addLast() performs a disconnect of all the input sources, thus losing the
-// assignments made via constructor accepting source pointers. If the intent is to insert this
-// object in place of the image handler in a chain, First remove the handler from the chain, then
-// add a default-constructed mask filter object, then call this method to assign the inputs.
-//*************************************************************************************************
-void ossimMaskFilter::setInputSources(ossimImageSource* imageSource, ossimImageSource* maskSource)
+void ossimMaskFilter::setMaskSource(ossimImageSource* maskSource)
 {
-   connectMyInputTo(0, imageSource);
-   connectMyInputTo(1, maskSource);
+   theMaskSource = maskSource;
 }
 
 ossimRefPtr<ossimImageData> ossimMaskFilter::getTile(const ossimIrect& rect,
                                                      ossim_uint32 resLevel)
 {
    ossimImageSource* imageSource = PTR_CAST(ossimImageSource, getInput(0));
-   
-   // we will check to see if it's a fileMaskSource
-   //
-   ossimImageSource* maskSource = PTR_CAST(ossimImageSource, getInput(1));
-   
+   if (!imageSource || !theMaskSource.valid())
+   {
+      ossimRefPtr<ossimImageData>();
+      return theTile;
+   }
+
    ossimRefPtr<ossimImageData> imageSourceData;
    ossimRefPtr<ossimImageData> maskSourceData;
    
-   if(imageSource)
-   {
-      imageSourceData = imageSource->getTile(rect, resLevel);
-   }
-
+   imageSourceData = imageSource->getTile(rect, resLevel);
    if(!isSourceEnabled())
-   {
       return imageSourceData;
-   }
    
-   if(maskSource)
-   {     
-      maskSourceData = maskSource->getTile(rect, resLevel);
-   }
-
    if (!theTile.valid())
-   {
       allocate();
-   }
 
+   maskSourceData = theMaskSource->getTile(rect, resLevel);
    if(!imageSourceData.valid() || !theTile.valid())
    {
       return ossimRefPtr<ossimImageData>();
@@ -138,7 +100,6 @@ bool ossimMaskFilter::canConnectMyInputTo(ossim_int32 /* index */,
 
 void ossimMaskFilter::initialize()
 {
-   ossimImageCombiner::initialize();
    if(getInput(0))
    {
       // Force an allocate on the next getTile.
@@ -148,7 +109,7 @@ void ossimMaskFilter::initialize()
 
 void ossimMaskFilter::allocate()
 {
-   if(getInput(0))
+   if(getInput())
    {
       theTile = ossimImageDataFactory::instance()->create(this, this);
       theTile->initialize();
@@ -187,30 +148,32 @@ ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilter(
    theTile->setDataObjectStatus(imageSourceData->getDataObjectStatus());
    switch(theMaskType)
    {
-   case OSSIM_MASK_TYPE_SELECT:
+      case OSSIM_MASK_TYPE_SELECT:
+      case OSSIM_MASK_TYPE_SELECT_CLAMP_MIN:
       {
          return executeMaskFilterSelect(theTile, maskSourceData);
       }
-   case OSSIM_MASK_TYPE_INVERT:
+      case OSSIM_MASK_TYPE_INVERT:
       {
          return executeMaskFilterInvertSelect(theTile, maskSourceData);
       }
-   case OSSIM_MASK_TYPE_WEIGHTED:
+      case OSSIM_MASK_TYPE_WEIGHTED:
       {
          return executeMaskFilterWeighted(theTile, maskSourceData);
       }
-   case OSSIM_MASK_TYPE_BINARY:
-   case OSSIM_MASK_TYPE_BINARY_INVERSE:
+      case OSSIM_MASK_TYPE_BINARY:
+      case OSSIM_MASK_TYPE_BINARY_INVERSE:
       {
          return executeMaskFilterBinary(theTile, maskSourceData);
       }
    }
-
+   
    return imageSourceData;
 }
 
-ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterSelect(ossimRefPtr<ossimImageData> imageSourceData,
-                                                                     ossimRefPtr<ossimImageData> maskSourceData)
+ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterSelect(
+   ossimRefPtr<ossimImageData> imageSourceData,
+   ossimRefPtr<ossimImageData> maskSourceData)
 {
    if(maskSourceData->getScalarType() != OSSIM_UCHAR)
    {
@@ -466,10 +429,11 @@ ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterBinary(
 }
 
 template <class inputT, class maskT>
-ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterSelection(inputT /* dummyInput */,
-                                                                        maskT  /* dummyMask */,
-                                                            ossimRefPtr<ossimImageData> imageSourceData,
-                                                            ossimRefPtr<ossimImageData> maskSourceData)
+ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterSelection(
+   inputT /* dummyInput */,
+   maskT  /* dummyMask */,
+   ossimRefPtr<ossimImageData> imageSourceData,
+   ossimRefPtr<ossimImageData> maskSourceData)
 {
    ossimDataObjectStatus maskDataStatus  = maskSourceData->getDataObjectStatus();
    ossimDataObjectStatus inputDataStatus = imageSourceData->getDataObjectStatus();
@@ -502,20 +466,32 @@ ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterSelection(inputT /
       ossim_uint32 maxOffset = theTile->getWidth()*theTile->getHeight();
       for(ossim_uint32 band = 0; band < inputBands; ++band)
       {
-         maskT* bufMask = (maskT*)maskSourceData->getBuf();
-         inputT* bufIn     = (inputT*)imageSourceData->getBuf(band);
-         inputT* bufOut    = (inputT*)theTile->getBuf(band);
-         inputT  np        = (inputT)theTile->getNullPix(band);
+         maskT*  bufMask = static_cast<maskT*> ( maskSourceData->getBuf() );
+         inputT* bufIn   = static_cast<inputT*>( imageSourceData->getBuf(band) );
+         inputT* bufOut  = static_cast<inputT*>( theTile->getBuf(band) );
+         inputT  nullPix = static_cast<inputT> ( theTile->getNullPix(band) );
+         inputT  minPix  = static_cast<inputT> ( theTile->getMinPix(band) );
          ossim_uint32 offset = 0;
          for(offset = 0; offset < maxOffset; ++offset)
          {
-            if(*bufMask == 255)
+            if(*bufMask)
             {
-               *bufOut = *bufIn;
+               if ( theMaskType == OSSIM_MASK_TYPE_SELECT )
+               {
+                  *bufOut = *bufIn;
+               }
+               else
+               {
+                  //---
+                  // OSSIM_MASK_TYPE_SELECT_CLAMP_MIN
+                  // Use input pixel clamping any nulls to min.
+                  //---
+                  *bufOut = *bufIn != nullPix ? *bufIn : minPix;
+               }
             }
             else
             {
-               *bufOut = np;
+               *bufOut = nullPix;
             }
             ++bufOut;
             ++bufIn;
@@ -749,6 +725,10 @@ void ossimMaskFilter::setMaskType(const ossimString& type)
       {
          theMaskType = OSSIM_MASK_TYPE_BINARY_INVERSE;
       }
+      else if(maskType == "select_clamp_min")
+      {
+         theMaskType = OSSIM_MASK_TYPE_SELECT_CLAMP_MIN;
+      } 
    }
 }
 
@@ -788,28 +768,20 @@ ossimString ossimMaskFilter::getMaskTypeString() const
          maskType = "binary_inverse";
          break;
       }
+      case OSSIM_MASK_TYPE_SELECT_CLAMP_MIN:
+      {
+         maskType = "select_clamp_min";
+         break;
+      }
    }
 
    return maskType;
 }
 
-ossimIrect ossimMaskFilter::getBoundingRect(ossim_uint32 resLevel)const
-{
-   ossimIrect result;
-   result.makeNan();
-
-   ossimImageSource* imageSource = PTR_CAST(ossimImageSource, getInput(0));
-   if(imageSource)
-   {
-      result = imageSource->getBoundingRect(resLevel);
-   }
-   return result;
-}
-
 bool ossimMaskFilter::loadState(const ossimKeywordlist& kwl,
                                 const char* prefix)
 {
-   bool result = ossimImageCombiner::loadState(kwl, prefix);
+   bool result = ossimImageSource::loadState(kwl, prefix);
    
    theInputListIsFixedFlag  = true;
    theOutputListIsFixedFlag = false;
@@ -832,7 +804,7 @@ bool ossimMaskFilter::saveState(ossimKeywordlist& kwl,
            getMaskTypeString().c_str(),
            true);
    
-   return ossimImageCombiner::saveState(kwl, prefix);
+   return ossimImageSource::saveState(kwl, prefix);
 }
 
 void ossimMaskFilter::setProperty(ossimRefPtr<ossimProperty> property)
@@ -845,7 +817,7 @@ void ossimMaskFilter::setProperty(ossimRefPtr<ossimProperty> property)
       }
       else
       {
-         ossimImageCombiner::setProperty(property);
+         ossimImageSource::setProperty(property);
       }
    }
 }
@@ -869,150 +841,22 @@ ossimRefPtr<ossimProperty> ossimMaskFilter::getProperty(
    }
    else
    {
-      result = ossimImageCombiner::getProperty(name);
+      result = ossimImageSource::getProperty(name);
    }
    return result;
 }
 
-void ossimMaskFilter::getPropertyNames(
-   std::vector<ossimString>& propertyNames)const
+void ossimMaskFilter::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
-   ossimImageCombiner::getPropertyNames(propertyNames);
+   ossimImageSource::getPropertyNames(propertyNames);
    propertyNames.push_back(MASK_FILTER_MASK_TYPE_KW);
 }
 
-void ossimMaskFilter::getDecimationFactor(ossim_uint32 resLevel,
-                                          ossimDpt& result)const
+ossim_uint32 ossimMaskFilter::getNumberOfInputBands() const
 {
-   ossimImageSource* input = PTR_CAST(ossimImageSource,
-                                               getInput(0));
-   if(input)
-   {
-      input->getDecimationFactor(resLevel, result);
-   }
-}
-
-void ossimMaskFilter::getDecimationFactors(vector<ossimDpt>& decimations)const
-{
-   ossimImageSource* input = PTR_CAST(ossimImageSource,
-                                               getInput(0));
-   if(input)
-   {
-      input->getDecimationFactors(decimations);
-   }     
-}
-
-ossim_uint32 ossimMaskFilter::getNumberOfDecimationLevels()const
-{
-   ossimImageSource* input = PTR_CAST(ossimImageSource,
-                                               getInput(0));
-   if(input)
-   {
-      return input->getNumberOfDecimationLevels();
-   } 
+   ossimImageSource* img_source = PTR_CAST(ossimImageSource, getInput());
+   if (img_source)
+      return img_source->getNumberOfInputBands();
    return 0;
 }
 
-ossim_uint32 ossimMaskFilter::getNumberOfOutputBands() const
-{
-   ossimImageSource* input = PTR_CAST(ossimImageSource,
-                                               getInput(0));
-   if(input)
-   {
-      return input->getNumberOfOutputBands();
-   }
-   return 0;
-}
-
-ossimScalarType ossimMaskFilter::getOutputScalarType() const
-{
-   ossimImageSource* input = PTR_CAST(ossimImageSource,
-                                               getInput(0));
-   if(input)
-   {
-      return input->getOutputScalarType();
-   }
-   
-   return OSSIM_SCALAR_UNKNOWN;
-}
-
-void ossimMaskFilter::getValidImageVertices(
-   vector<ossimIpt>& validVertices,
-   ossimVertexOrdering ordering,
-   ossim_uint32 resLevel)const
-{
-   ossimImageSource* input = PTR_CAST(ossimImageSource,
-                                               getInput(0));
-   if(input)
-   {
-      input->getValidImageVertices(validVertices, ordering, resLevel);
-   }
-}
-
-ossim_uint32 ossimMaskFilter::getTileWidth() const
-{
-   ossimImageSource* input = PTR_CAST(ossimImageSource,
-                                               getInput(0));
-   if(input)
-   {
-      return input->getTileWidth();
-   }
-   
-   return 0;
-}
-
-ossim_uint32 ossimMaskFilter::getTileHeight() const
-{
-   ossimImageSource* input = PTR_CAST(ossimImageSource,
-                                               getInput(0));
-   if(input)
-   {
-      return input->getTileHeight();
-   }
-   return 0;
-}
-
-double ossimMaskFilter::getNullPixelValue(ossim_uint32 band)const
-{
-   ossimImageSource* input = PTR_CAST(ossimImageSource,
-                                               getInput(0));
-   if(input)
-   {
-      return input->getNullPixelValue(band);
-   }
-   return 0;
-}
-
-double ossimMaskFilter::getMinPixelValue(ossim_uint32 band)const
-{
-   ossimImageSource* input = PTR_CAST(ossimImageSource,
-                                               getInput(0));
-   if(input)
-   {
-      return input->getMinPixelValue(band);
-   }
-   return 0;
-}
-
-double ossimMaskFilter::getMaxPixelValue(ossim_uint32 band)const
-{
-   ossimImageSource* input = PTR_CAST(ossimImageSource,
-                                               getInput(0));
-   if(input)
-   {
-      return input->getMaxPixelValue(band);
-   }
-   return 0;
-}
-
-//*************************************************************************************************
-// Provides pointer to the image source's image geometry.
-//*************************************************************************************************
-ossimRefPtr<ossimImageGeometry> ossimMaskFilter::getImageGeometry()
-{
-   ossimImageSource *input = dynamic_cast<ossimImageSource *>(getInput(0));
-   if (input)
-      return input->getImageGeometry();
-
-   return 0;
-}

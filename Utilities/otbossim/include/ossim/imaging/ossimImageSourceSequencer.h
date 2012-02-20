@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageSourceSequencer.h 19583 2011-05-13 10:58:10Z gpotts $
+//  $Id: ossimImageSourceSequencer.h 20302 2011-11-29 14:21:12Z dburken $
 #ifndef ossimImageSourceSequencer_HEADER
 #define ossimImageSourceSequencer_HEADER
 #include <ossim/imaging/ossimImageSource.h>
@@ -73,7 +73,7 @@ public:
    virtual void setToStartOfSequence();
 
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& rect,
-                                   ossim_uint32 resLevel=0);
+                                               ossim_uint32 resLevel=0);
 
    /*!
     * Will allow you to get the next tile in the sequence.
@@ -90,8 +90,16 @@ public:
     */
    virtual ossimRefPtr<ossimImageData> getNextTile(ossim_uint32 resLevel=0);
 
-   virtual bool getTileOrigin(ossim_int32 id,
-                              ossimIpt& origin)const;
+   virtual bool getTileOrigin(ossim_int32 id, ossimIpt& origin)const;
+
+   /*!
+    * @brief Establishes a tile rect given tile ID.
+    * @param tile_id
+    * @param rect Rectangle to initialize.
+    * @return true if valid; else, false.
+    */
+   bool getTileRect(ossim_uint32 tile_id, ossimIrect& rect) const;
+
    virtual ossimRefPtr<ossimImageData> getTile(ossim_int32 id,
                                                ossim_uint32 resLevel=0);
 

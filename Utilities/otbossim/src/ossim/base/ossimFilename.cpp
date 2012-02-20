@@ -7,7 +7,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 20096 2011-09-14 16:44:20Z dburken $
+// $Id: ossimFilename.cpp 20192 2011-10-25 17:27:25Z dburken $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -1205,43 +1205,68 @@ bool ossimFilename::wildcardRemove()const
 
 bool ossimFilename::copyFileTo(const ossimFilename& outputFile) const
 {
+   bool result = false;
+   
    std::ifstream is(this->c_str(), std::ios::in|std::ios::binary);
-   if (is.fail())
+   if ( is.good() )
+   {
+      ossimFilename f = outputFile;
+      if ( f.isDir() )
+      {
+         f = f.dirCat( this->file() );
+      }
+
+      if ( f != *this )
+      {
+         std::ofstream os( f.c_str(), std::ios::out|std::ios::binary );
+         if ( os.good() )
+         {
+            // Copy the file:
+            char c;
+            while(is.get(c))
+            {
+               os.put(c);
+            }
+            
+            if ( is.eof() &&  !os.fail())
+            {
+               result = true;
+            }
+            else
+            {
+               ossimNotify(ossimNotifyLevel_WARN)
+                  << "WARNING: "
+                  << "ossimFilename::copyFileTo WARNING:"
+                  << "\nError detected writing from file "
+                  << this->c_str() << " to file " << f.c_str() << std::endl;
+            }
+         }
+         else
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "WARNING: "
+               << "ossimFilename::copyFileTo WARNING:"
+               << "\nCannot open: " << f.c_str() << std::endl;
+         }
+      } //  if ( f != *this )
+      else
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "WARNING: "
+            << "ossimFilename::copyFileTo WARNING:"
+            << "\nFiles the same!" << std::endl;
+      }
+      
+   } // if ( is.good() )
+   else
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << "WARNING: "
          << "ossimFilename::copyFileTo WARNING:"
          << "\nCannot open: " << this->c_str() << std::endl;
-      return false;
-   }
-
-   std::ofstream os(outputFile.c_str(), std::ios::out|std::ios::binary);
-   if (os.fail())
-   {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "WARNING: "
-         << "ossimFilename::copyFileTo WARNING:"
-         << "\nCannot open: " << outputFile.c_str() << std::endl;
-      return false;
-   }
-
-   char c;
-   while(is.get(c))
-   {
-      os.put(c);
-   }
-
-   if (!is.eof() || os.fail())
-   {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "WARNING: "
-         << "ossimFilename::copyFileTo WARNING:"
-         << "\nError detected writing from file "
-         << this->c_str() << " to file " << outputFile.c_str() << std::endl;
-      return false;
    }
    
-   return true;
+   return result;
 }
 
 //---

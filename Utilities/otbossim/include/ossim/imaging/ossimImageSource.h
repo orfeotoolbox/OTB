@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.h 19732 2011-06-06 22:24:54Z dburken $
+// $Id: ossimImageSource.h 20230 2011-11-08 17:33:13Z dburken $
 #ifndef ossimImageSource_HEADER
 #define ossimImageSource_HEADER 1
 
@@ -153,6 +153,18 @@ public:
     * image.
     */
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0) const;
+   
+   /**
+    * @brief Gets the bounding rectangle of the source.
+    *
+    * This default implementation calls the getBoundingRect interface that
+    * returns a rectangle.  Derived classes should override as needed.
+    * 
+    * @param rect Initialized with bounding rectangle by this.
+    * @param resLevel Reduced resolution level if applicable.
+    */
+   virtual void getBoundingRect(ossimIrect& rect,
+                                ossim_uint32 resLevel=0) const;
    
    /**
     * Method to save the state of an object to a keyword list.

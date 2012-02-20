@@ -11,7 +11,7 @@
 // Contains class definition for TiffOverviewBuilder
 // 
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.cpp 20099 2011-09-15 16:04:12Z oscarkramer $
+//  $Id: ossimTiffOverviewBuilder.cpp 20206 2011-11-04 15:16:31Z dburken $
 
 #include <algorithm> /* for std::fill */
 // #include <cstring>
@@ -54,7 +54,7 @@ static ossimTrace traceDebug("ossimTiffOverviewBuilder:degug");
 static const char COPY_ALL_KW[] = "copy_all_flag";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 20099 2011-09-15 16:04:12Z oscarkramer $";
+static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 20206 2011-11-04 15:16:31Z dburken $";
 #endif
 
 
@@ -201,7 +201,9 @@ bool ossimTiffOverviewBuilder::execute()
       m_maskWriter->setStartingResLevel(1);
       ossimRefPtr<ossimBitMaskTileSource> bmts = new ossimBitMaskTileSource;
       bmts->setAssociatedMaskWriter(m_maskWriter.get());
-      m_maskFilter = new ossimMaskFilter(m_imageHandler.get(), bmts.get());
+      m_maskFilter = new ossimMaskFilter();
+      m_maskFilter->connectMyInputTo(m_imageHandler.get());
+      m_maskFilter->setMaskSource((ossimImageSource*)bmts.get());
    }
 
    ossimStdOutProgress* progressListener = 0; // Only used on master.

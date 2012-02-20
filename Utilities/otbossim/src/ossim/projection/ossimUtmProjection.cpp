@@ -8,7 +8,7 @@
 //
 // Calls Geotrans Utm projection code.  
 //*******************************************************************
-//  $Id: ossimUtmProjection.cpp 19653 2011-05-26 11:38:07Z gpotts $
+//  $Id: ossimUtmProjection.cpp 20133 2011-10-12 19:03:47Z oscarkramer $
 
 #include <cstdlib>
 #include <cmath>
@@ -167,13 +167,6 @@ ossimUtmProjection::ossimUtmProjection(const ossimUtmProjection& src)
 
 void ossimUtmProjection::update()
 {
-   // Garrett comments:  This should already be kept in synch by the getPcsCode() in ossimMapProjection
-   //
-   // EPSG code can be derived if not already specified in KWL:
-   //
-   
-   //if (thePcsCode == 0)
-   //   thePcsCode = ossimEpsgProjectionDatabase::instance()->findProjectionCode(*this);
    ossimGpt origin = theOrigin;
    origin.lond(computeZoneMeridian(theZone));
    origin.latd(0.0);
@@ -255,7 +248,7 @@ void ossimUtmProjection::setOrigin(const ossimGpt& origin)
    {
       setHemisphere(origin);
    }
-   ossimMapProjection::setOrigin(theOrigin);
+   ossimMapProjection::setOrigin(origin);
 }
 
 void ossimUtmProjection::setZone(const ossimGpt& ground)
@@ -746,7 +739,7 @@ ossim_int32 ossimUtmProjection::Convert_Transverse_Mercator_To_Geodetic (double 
   double eta4;
   double ftphi;   /* Footpoint latitude                              */
   int    i;       /* Loop iterator                   */
-  double s;       /* Sine of latitude                        */
+  /*double s;        Sine of latitude                        */
   double sn;      /* Radius of curvature in the prime vertical       */
   double sr;      /* Radius of curvature in the meridian             */
   double t;       /* Tangent of latitude                             */
@@ -801,7 +794,7 @@ ossim_int32 ossimUtmProjection::Convert_Transverse_Mercator_To_Geodetic (double 
     sn = SPHSN(ftphi);
 
     /* Sine Cosine terms */
-    s = sin(ftphi);
+    // s = sin(ftphi);
     c = cos(ftphi);
 
     /* Tangent Value  */

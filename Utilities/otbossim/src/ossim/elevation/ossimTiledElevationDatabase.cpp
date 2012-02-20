@@ -171,6 +171,9 @@ void ossimTiledElevationDatabase::mapRegion(const ossimGrect& region)
             // Walk the directory
             m_fileWalker = new ossimFileWalker();
             m_fileWalker->initializeDefaultFilterList();
+
+            m_fileWalker->setNumberOfThreads( ossim::getNumberOfThreads() );
+            
             cb = new ProcessFileCB(this, &ossimTiledElevationDatabase::processFile);
             m_fileWalker->registerProcessFileCallback(cb);
             m_fileWalker->walk(f);

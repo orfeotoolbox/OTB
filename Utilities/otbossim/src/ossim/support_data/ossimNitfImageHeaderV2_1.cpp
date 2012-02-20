@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.cpp 18413 2010-11-11 19:56:22Z gpotts $
+// $Id: ossimNitfImageHeaderV2_1.cpp 20123 2011-10-11 17:55:44Z dburken $
 #include <sstream>
 #include <iomanip>
 #include <cstring> // for memset
@@ -634,6 +634,91 @@ bool ossimNitfImageHeaderV2_1::saveState(ossimKeywordlist& kwl, const ossimStrin
    return true;
 }
 
+bool ossimNitfImageHeaderV2_1::loadState(const ossimKeywordlist& kwl, const char* prefix)
+{
+   // Note: Currently not looking up all fieds only ones that make sense.
+   
+   const char* lookup;
+
+   lookup = kwl.find( prefix, ISCLSY_KW );
+   if ( lookup )
+   {
+      setSecurityClassificationSystem( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISCODE_KW );
+   if ( lookup )
+   {
+      setCodewords( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISCTLH_KW );
+   if ( lookup )
+   {
+      setControlAndHandling( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISREL_KW);
+   if ( lookup )
+   {
+      setReleasingInstructions( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISDCTP_KW );
+   if ( lookup )
+   {
+      setDeclassificationType( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISDCDT_KW );
+   if ( lookup )
+   {
+      setDeclassificationDate( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISDCXM_KW );
+   if ( lookup )
+   {
+      setDeclassificationExempt( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISDG_KW );
+   if ( lookup )
+   {
+      setDowngrade( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISDGDT_KW );
+   if ( lookup )
+   {
+      setDowngradeDate( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISCLTX_KW );
+   if ( lookup )
+   {
+      setClassificationText( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISCATP_KW );
+   if ( lookup )
+   {
+      setClassificationAuthorityType( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISCAUT_KW );
+   if ( lookup )
+   {
+      setClassificationAuthority( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISCRSN_KW );
+   if ( lookup )
+   {
+      setClassificationReason( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISSRDT_KW );
+   if ( lookup )
+   {
+      setSecuritySourceDate( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ISCTLN_KW );
+   if ( lookup )
+   {
+      setSecurityControlNumber( ossimString(lookup) );
+   }
+   
+   return ossimNitfImageHeaderV2_X::loadState(kwl, prefix);
+}
+
 bool ossimNitfImageHeaderV2_1::isCompressed()const
 {
    ossimString temp = theCompression;
@@ -835,7 +920,7 @@ void ossimNitfImageHeaderV2_1::clearFields()
    memset(thePixelValueType, ' ',3);
    memset(theRepresentation, ' ',8);
    memset(theCategory, ' ',8);
-   memset(theActualBitsPerPixelPerBand, ' ',2);
+   memset(theActualBitsPerPixelPerBand, '0',2);
    memset(theJustification, ' ',1);
    memset(theCoordinateSystem, ' ',1);
    memset(theGeographicLocation, ' ',60);
@@ -1102,6 +1187,10 @@ void ossimNitfImageHeaderV2_1::setImageMagnification(const ossimString& value)
 void ossimNitfImageHeaderV2_1::setProperty(ossimRefPtr<ossimProperty> property)
 {
    ossimString name = property->getName();
+
+   // Make case insensitive:
+   name.upcase();
+   
    std::ostringstream out;
    
    if(!property) return;

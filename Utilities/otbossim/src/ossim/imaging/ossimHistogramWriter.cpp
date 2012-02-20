@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramWriter.cpp 17194 2010-04-23 15:05:19Z dburken $
+// $Id: ossimHistogramWriter.cpp 20118 2011-10-05 13:50:55Z dburken $
 #include <ossim/base/ossimProcessListener.h>
 #include <ossim/imaging/ossimHistogramWriter.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -249,7 +249,8 @@ void ossimHistogramWriter::writeHistogram()
    
    ossimRefPtr<ossimMultiResLevelHistogram> histo = histoSource->getHistogram();
 
-   if(histo.valid())
+   // Don't write histogram if abort flag was set...
+   if(histo.valid() && !isAborted() )
    {
       ossimKeywordlist kwl;
       histo->saveState(kwl);
@@ -264,7 +265,7 @@ void ossimHistogramWriter::writeHistogram()
             }
          }
       }
-      if(isOpen())
+      if( isOpen() )
       {
          kwl.writeToStream(*theFileStream);
       }
@@ -274,7 +275,7 @@ void ossimHistogramWriter::writeHistogram()
    if(deleteHistoSource)
    {
       delete histoSource;
-      histoSource = NULL;
+      histoSource = 0;
    }
    theHistogramSource = 0;
    
@@ -283,7 +284,10 @@ void ossimHistogramWriter::writeHistogram()
 
 void ossimHistogramWriter::abort()
 {
-   // Call base...
+   //---
+   // Call base abort. This sets the status to PROCESS_STATUS_ABORT_REQUEST so the processor
+   // knows to abort.
+   //---
    ossimProcessInterface::abort();
 
    // Propagate to histo source.
@@ -296,4 +300,10 @@ void ossimHistogramWriter::abort()
          histoSource->abort();
       }
    }
+
+   //---
+   // Now set status to "ABORTED" so ossimProcessInterface::isAborted returns true so the
+   // writeHistogram method doesn't write the file if the process was aborted.
+   //---
+   setProcessStatus(PROCESS_STATUS_ABORTED);
 }

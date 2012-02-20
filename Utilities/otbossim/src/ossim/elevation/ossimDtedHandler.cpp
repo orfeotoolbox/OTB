@@ -9,7 +9,7 @@
 //   from disk. This elevation files are memory mapped.
 //
 //*****************************************************************************
-// $Id: ossimDtedHandler.cpp 17599 2010-06-20 13:52:34Z dburken $
+// $Id: ossimDtedHandler.cpp 20448 2012-01-12 17:35:11Z gpotts $
 
 #include <cstdlib>
 #include <cstring> /* for memcpy */
@@ -48,6 +48,7 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file, bool memoryMa
       m_swCornerPost(),
       m_swapBytesFlag(false)
 {
+
    static const char MODULE[] = "ossimDtedHandler (Filename) Constructor";
    if (traceExec())
    {
@@ -101,11 +102,11 @@ double ossimDtedHandler::getHeightAboveMSL(const ossimGpt& gpt)
 {
    if(m_fileStr.is_open())
    {
-      return getHeightAboveMSLFile(gpt);
+      return getHeightAboveMSL(gpt, true);
    }
    else if(m_memoryMap.size())
    {
-      return getHeightAboveMSLMemory(gpt);
+      return getHeightAboveMSL(gpt, false);
    }
    
    return ossim::nan();
@@ -177,6 +178,18 @@ bool ossimDtedHandler::open(const ossimFilename& file, bool memoryMapFlag)
    
    m_offsetToFirstDataRecord = m_acc.stopOffset();
    
+#if 0 /* Serious debug only... */
+   std::cout << m_numLonLines
+             << "\t" << m_numLatPoints
+             << "\t" << m_lonSpacing
+             << "\t" << m_latSpacing
+             << "\t" << m_dtedRecordSizeInBytes
+             << "\t" << theFilename.fileSize()
+             << "\t" << file
+             << "\t" << m_offsetToFirstDataRecord
+             << std::endl;
+#endif
+
    //***
    //  initialize the bounding rectangle:
    //***
@@ -215,7 +228,7 @@ bool ossimDtedHandler::open(const ossimFilename& file, bool memoryMapFlag)
    return true;
 }
 
-double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
+double ossimDtedHandler::getHeightAboveMSL(const ossimGpt& gpt, bool readFromFile)
 {
    // Establish the grid indexes:
    double xi = (gpt.lon - m_swCornerPost.lon) / m_lonSpacing;
@@ -245,11 +258,6 @@ double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
       return ossim::nan();
    }
 
-   double p00;
-   double p01;
-   double p10;
-   double p11;
-
    //***
    // Grab the four points from the dted cell needed.  These are big endian,
    // signed magnitude shorts so they must be interpreted accordingly.
@@ -257,187 +265,84 @@ double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
    int offset = m_offsetToFirstDataRecord + x0 * m_dtedRecordSizeInBytes +
                 y0 * 2 + DATA_RECORD_OFFSET_TO_POST;
 
+   /// read the posts from the DTED file.
+   DtedHeight postData;
+   //
+   if ( readFromFile )
    {
-      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_fileStrMutex);
-      // Put the file pointer at the start of the first elevation post.
-      m_fileStr.seekg(offset, std::ios::beg);
-      
-      ossim_sint16 ss;
-      ossim_uint16 us;
-      
-      // Get the first post.
-      m_fileStr.read((char*)&us, POST_SIZE);
-      ss = convertSignedMagnitude(us);
-      p00 = ss;
-      
-      // Get the second post.
-      m_fileStr.read((char*)&us, POST_SIZE);
-      ss = convertSignedMagnitude(us);
-      p01 = ss;
-      
-      // Move over to the next column.
-      offset += m_dtedRecordSizeInBytes;
-      m_fileStr.seekg(offset, std::ios::beg);
-      
-      // Get the third post.
-      m_fileStr.read((char*)&us, POST_SIZE);
-      ss = convertSignedMagnitude(us);
-      p10 = ss;
-      
-      // Get the fourth post.
-      m_fileStr.read((char*)&us, POST_SIZE);
-      ss = convertSignedMagnitude(us);
-      p11 = ss;
+     readPostsFromFile( postData, offset );
    }
-   
+   else
+   {
+     ossim_uint8* buf = &m_memoryMap.front();
+     {
+       ossim_uint16 us;
+
+       memcpy(&us, buf+offset, POST_SIZE);
+       postData.m_posts[0].m_height = convertSignedMagnitude(us);
+       memcpy(&us, buf+offset+POST_SIZE, POST_SIZE);
+       postData.m_posts[1].m_height = convertSignedMagnitude(us);
+
+       // Move over to the next column.
+       offset += m_dtedRecordSizeInBytes;
+       memcpy(&us, buf+offset, POST_SIZE);
+       postData.m_posts[2].m_height = convertSignedMagnitude(us);
+       memcpy(&us, buf+offset+POST_SIZE, POST_SIZE);
+       postData.m_posts[3].m_height = convertSignedMagnitude(us);
+     }
+   }
    // Perform bilinear interpolation:
    double wx1 = xi  - x0;
    double wy1 = yi  - y0;
    double wx0 = 1.0 - wx1;
    double wy0 = 1.0 - wy1;
    
-   double w00 = wx0*wy0;
-   double w01 = wx0*wy1;
-   double w10 = wx1*wy0;
-   double w11 = wx1*wy1;
-
-   //***
-   // Test for null posts and set the corresponding weights to 0:
-   //***
-   if (p00 == NULL_POST)
-      w00 = 0.0;
-   if (p01 == NULL_POST)
-      w01 = 0.0;
-   if (p10 == NULL_POST)
-      w10 = 0.0;
-   if (p11 == NULL_POST)
-      w11 = 0.0;
+   postData.m_posts[0].m_weight = wx0*wy0;
+   postData.m_posts[1].m_weight = wx0*wy1;
+   postData.m_posts[2].m_weight = wx1*wy0;
+   postData.m_posts[3].m_weight = wx1*wy1;
 
 #if 0 /* Serious debug only... */
-   cout << "\np00:  " << p00
-        << "\np01:  " << p01
-        << "\np10:  " << p10
-        << "\np11:  " << p11
-        << "\nw00:  " << w00
-        << "\nw01:  " << w01
-        << "\nw10:  " << w10
-        << "\nw11:  " << w11
-        << std::endl;
+   postData.debug();
 #endif
 
-   double sum_weights = w00 + w01 + w10 + w11;
-
-   if (sum_weights)
-   {
-      return (p00*w00 + p01*w01 + p10*w10 + p11*w11) / sum_weights;
-   }
-   
-   return ossim::nan();
+   return postData.calcHeight();
 }
 
-double ossimDtedHandler::getHeightAboveMSLMemory(const ossimGpt& gpt)
+void ossimDtedHandler::readPostsFromFile( DtedHeight &postData, int offset)
 {
-   ossim_uint8* buf = &m_memoryMap.front();
-   // Establish the grid indexes:
-   double xi = (gpt.lon - m_swCornerPost.lon) / m_lonSpacing;
-   double yi = (gpt.lat - m_swCornerPost.lat) / m_latSpacing;
 
-   // Check for right edge.
-   int x0 = static_cast<int>(xi);
-   int y0 = static_cast<int>(yi);
-
-   // Check for right edge.
-//    if (gpt.lon == theGroundRect.lr().lon)
-   if(x0 == (m_numLonLines-1))
-   {
-      --x0; // Move over one post.
-   }
-   
-   // Check for top edge.
-//    if (gpt.lat == theGroundRect.ul().lat)
-   if(y0 == (m_numLatPoints-1))
-   {
-      --y0; // Move down one post.
-   }
-
-   // Do some error checking.
-   if ( xi < 0.0 || yi < 0.0 ||
-        x0 > (m_numLonLines  - 2.0) ||
-        y0 > (m_numLatPoints - 2.0) )
-   {
-      return ossim::nan();
-   }
-
-   double p00;
-   double p01;
-   double p10;
-   double p11;
-
-   //***
-   // Grab the four points from the dted cell needed.  These are big endian,
-   // signed magnitude shorts so they must be interpreted accordingly.
-   //***
-   ossim_uint64 offset = m_offsetToFirstDataRecord + x0 * m_dtedRecordSizeInBytes +
-                         y0 * 2 + DATA_RECORD_OFFSET_TO_POST;
-   {
-      ossim_uint16 us;
-      
-      memcpy(&us, buf+offset, POST_SIZE); 
-      p00 = convertSignedMagnitude(us);
-      memcpy(&us, buf+offset+POST_SIZE, POST_SIZE); 
-      p01 = convertSignedMagnitude(us);
-      
-      // Move over to the next column.
-      offset += m_dtedRecordSizeInBytes;
-      memcpy(&us, buf+offset, POST_SIZE); 
-      p10 = convertSignedMagnitude(us);
-      memcpy(&us, buf+offset+POST_SIZE, POST_SIZE); 
-      p11 = convertSignedMagnitude(us);
-   }
-    
-   // Perform bilinear interpolation:
-   double wx1 = xi  - x0;
-   double wy1 = yi  - y0;
-   double wx0 = 1.0 - wx1;
-   double wy0 = 1.0 - wy1;
-   
-   double w00 = wx0*wy0;
-   double w01 = wx0*wy1;
-   double w10 = wx1*wy0;
-   double w11 = wx1*wy1;
-
-   //***
-   // Test for null posts and set the corresponding weights to 0:
-   //***
-   if (p00 == NULL_POST)
-      w00 = 0.0;
-   if (p01 == NULL_POST)
-      w01 = 0.0;
-   if (p10 == NULL_POST)
-      w10 = 0.0;
-   if (p11 == NULL_POST)
-      w11 = 0.0;
-
-#if 0 /* Serious debug only... */
-   cout << "\np00:  " << p00
-        << "\np01:  " << p01
-        << "\np10:  " << p10
-        << "\np11:  " << p11
-        << "\nw00:  " << w00
-        << "\nw01:  " << w01
-        << "\nw10:  " << w10
-        << "\nw11:  " << w11
-        << std::endl;
-#endif
-
-   double sum_weights = w00 + w01 + w10 + w11;
-
-   if (sum_weights)
-   {
-      return (p00*w00 + p01*w01 + p10*w10 + p11*w11) / sum_weights;
-   }
-   
-   return ossim::nan();
+  OpenThreads::ScopedLock <OpenThreads::Mutex> lock( m_fileStrMutex );
+  ossim_sint16 ss;
+  ossim_uint16 us;
+  int postCount = 0;
+  // read the posts in blocks 2x2.
+  for ( int column = 0; column < NUM_POSTS_PER_BLOCK ; ++column )
+  {
+    m_fileStr.seekg( offset, std::ios::beg );
+    for ( int row = 0; row < NUM_POSTS_PER_BLOCK ; ++row )
+    {
+      if ( !m_fileStr.eof() )
+      {
+        us = 0;
+        m_fileStr.read( ( char* ) &us, POST_SIZE );
+        // check the read was ok
+        if ( m_fileStr.good() )
+        {
+          postData.m_posts[postCount].m_status = true;
+        }
+        else
+        {
+          // reset the goodbit
+          m_fileStr.clear();
+        }
+        ss = convertSignedMagnitude( us );
+        postData.m_posts[postCount].m_height = ss;
+      }
+      postCount++;
+    }
+    offset += m_dtedRecordSizeInBytes;
+  }
 }
 
 double ossimDtedHandler::getPostValue(const ossimIpt& gridPt) const
@@ -605,3 +510,55 @@ ossimDtedHandler::ossimDtedHandler(const ossimDtedHandler&)
    :
    ossimElevCellHandler()
 {}
+
+
+/// DtedPost methods
+ossimDtedHandler::DtedPost::~DtedPost(){}
+
+/// DtedHeight methods
+ossimDtedHandler::DtedHeight::DtedHeight() {}
+
+ossimDtedHandler::DtedHeight::~DtedHeight(){}
+
+double ossimDtedHandler::DtedHeight::calcHeight()
+{
+  double sum_weights = 0;
+  double sum_posts = 0;
+
+  for ( int i = 0; i < TOTAL_POSTS; ++i )
+  {
+    if ( m_posts[i].m_height == NULL_POST || !m_posts[i].m_status )
+    {
+      m_posts[i].m_weight = 0.0;
+    }
+  }
+
+  for ( int i = 0; i < TOTAL_POSTS; ++i )
+  {
+    sum_weights += m_posts[i].m_weight;
+    sum_posts += m_posts[i].m_height * m_posts[i].m_weight;
+  }
+  if ( sum_weights )
+  {
+    return sum_posts / sum_weights;
+  }
+  return ossim::nan();
+}
+
+void ossimDtedHandler::DtedHeight::debug()
+{
+  cout << "\np00:  " << m_posts[0].m_height
+       << "\np01:  " << m_posts[1].m_height
+       << "\np10:  " << m_posts[2].m_height
+       << "\np11:  " << m_posts[3].m_height
+       << "\nw00:  " << m_posts[0].m_weight
+       << "\nw01:  " << m_posts[1].m_weight
+       << "\nw10:  " << m_posts[2].m_weight
+       << "\nw11:  " << m_posts[3].m_weight
+       << "\ns00:  " << m_posts[0].m_status
+       << "\ns01:  " << m_posts[1].m_status
+       << "\ns10:  " << m_posts[2].m_status
+       << "\ns11:  " << m_posts[3].m_status
+       << std::endl;
+}
+

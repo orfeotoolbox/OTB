@@ -8,12 +8,12 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbToGreyFilter.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimRgbToGreyFilter.h 20197 2011-11-03 13:22:02Z dburken $
 #ifndef ossimRgbToGreyFilter_HEADER
 #define ossimRgbToGreyFilter_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
 
-class ossimRgbToGreyFilter : public ossimImageSourceFilter
+class OSSIMDLLEXPORT ossimRgbToGreyFilter : public ossimImageSourceFilter
 {
 public:
    ossimRgbToGreyFilter(ossimObject* owner=NULL);

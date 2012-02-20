@@ -28,23 +28,21 @@ class OSSIM_DLL ossimNmeaMessage : public ossimReferenced
 public:
    typedef std::vector<ossimString> FieldListType;
    
-   ossimNmeaMessage(const ossimString& acceptedStartingCharacters="!$"):m_startChars(acceptedStartingCharacters){}
+   ossimNmeaMessage(const std::string& acceptedStartingCharacters="!$"):m_startChars(acceptedStartingCharacters){}
    
    /**
     * Parses a standard formatted NMEA message.  No exceptions are created for checksums.  The checksum needs
     * to be checked after parsing by calling validCheckSum().
     */
-   void parseMessage(std::istream& in)throw(ossimException);
+   virtual void parseMessage(std::istream& in)throw(ossimException);
    
-   /**
-    * After parsing a valid checksum can be called to see if the messages is valid.
-    */
+   virtual bool valid()const{return validCheckSum();}
    bool validCheckSum()const{return m_validCheckSum;}
    
    
    ossim_uint32 numberOfFields()const{return m_fields.size();}
    
-   const ossimString& getField(ossim_uint32 idx)
+   const std::string& getField(ossim_uint32 idx)
    {
       static ossimString empty="";
       
@@ -52,7 +50,7 @@ public:
       
       return empty;
    }
-   const ossimString& operator [](int idx)const
+   const std::string& operator [](int idx)const
    {
       static ossimString empty="";
       
@@ -60,28 +58,28 @@ public:
       
       return empty;
    }
-   void setStartChars(const ossimString& acceptedStartingCharacters="!$"){m_startChars = acceptedStartingCharacters;}
+   void setStartChars(const std::string& acceptedStartingCharacters="!$"){m_startChars = acceptedStartingCharacters;}
    
-   void reset()
+   virtual void reset()
    {
       m_fields.clear();
       m_message = "";
       m_validCheckSum = false;
    }
-   const ossimString& message()const{return m_message;}
+   const std::string& message()const{return m_message;}
    
-   static ossim_uint32 checksum(ossimString::const_iterator start, ossimString::const_iterator end);
+   static ossim_uint32 checksum(std::string::const_iterator start, std::string::const_iterator end);
    
 protected:
-   void setFields(ossimString::const_iterator start, ossimString::const_iterator end);
+   virtual void setFields(std::string::const_iterator start, std::string::const_iterator end);
    
    bool isValidStartChar(char c)const;
    
-   ossimString m_message;
+   std::string m_message;
    FieldListType m_fields;
    
    bool m_validCheckSum;
-   ossimString m_startChars;
+   std::string m_startChars;
 };
 
 #endif

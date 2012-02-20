@@ -12,7 +12,7 @@
 // Utility class for getting information from the ossim library.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimInfo.cpp 19801 2011-07-04 15:13:23Z dburken $
+// $Id: ossimInfo.cpp 20184 2011-10-20 13:16:44Z dburken $
 
 #include <ossim/util/ossimInfo.h>
 #include <ossim/base/ossimArgumentParser.h>
@@ -67,6 +67,7 @@ static const char GEOM_INFO_KW[]            = "geometry_info";
 static const char HEIGHT_KW[]               = "height";
 static const char IMAGE_FILE_KW[]           = "image_file";
 static const char IMAGE_INFO_KW[]           = "image_info";
+static const char IMAGE_RECT_KW[]           = "image_rect";
 static const char METADATA_KW[]             = "metadata";
 static const char MTRS2FT_KW[]              = "mtrs2ft";
 static const char MTRS2FT_US_SURVEY_KW[]    = "mtrs2ft_us_survey";
@@ -152,6 +153,8 @@ void ossimInfo::addArguments(ossimArgumentParser& ap)
    au->addCommandLineOption("--plugin-test", "Test plugin passed to option.");
    
    au->addCommandLineOption("--projections", "Prints projections.");
+   
+   au->addCommandLineOption("-r", "Will print image rectangle.");
 
    au->addCommandLineOption("--rad2deg", "<radians> Gives degrees from radians.");
 
@@ -402,6 +405,15 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
          if( ap.read("--projections") )
          {
             m_kwl->add( PROJECTIONS_KW, TRUE_KW );
+            if ( ap.argc() < 2 )
+            {
+               break;
+            }
+         }
+
+         if( ap.read("-r") )
+         {
+            m_kwl->add( IMAGE_RECT_KW, TRUE_KW );
             if ( ap.argc() < 2 )
             {
                break;
@@ -757,6 +769,8 @@ ossim_uint32 ossimInfo::executeImageOptions(const ossimFilename& file)
       dumpImage(file, dnoFlag);
    }
 
+   
+   bool imageRectFlag = false;
    bool metaDataFlag  = false;
    bool paletteFlag   = false;
    bool imageInfoFlag = false;
@@ -779,6 +793,15 @@ ossim_uint32 ossimInfo::executeImageOptions(const ossimFilename& file)
       value = lookup;
       paletteFlag = value.toBool();
    }
+
+   // Image rect:
+   lookup = m_kwl->find( IMAGE_RECT_KW );
+   if ( lookup )
+   {
+      ++consumedKeys;
+      value = lookup;
+      imageRectFlag = value.toBool();
+   }
    
    //---
    // General image info:
@@ -796,7 +819,6 @@ ossim_uint32 ossimInfo::executeImageOptions(const ossimFilename& file)
    // Image geometry info:
    // Defaulted on if no image options set.
    //---
-   
    lookup = m_kwl->find( GEOM_INFO_KW );
    if ( lookup )
    {
@@ -812,7 +834,7 @@ ossim_uint32 ossimInfo::executeImageOptions(const ossimFilename& file)
       imageGeomFlag = true;
    }
 
-   if ( metaDataFlag || paletteFlag || imageInfoFlag || imageGeomFlag )
+   if ( imageRectFlag || metaDataFlag || paletteFlag || imageInfoFlag || imageGeomFlag )
    {
       // Requires open image.
       if ( m_img.valid() == false )
@@ -822,6 +844,11 @@ ossim_uint32 ossimInfo::executeImageOptions(const ossimFilename& file)
 
       // Output keyword list.
       ossimKeywordlist okwl;
+
+      if ( imageRectFlag )
+      {
+         getImageRect(okwl);
+      }
     
       if ( metaDataFlag )
       {
@@ -841,6 +868,11 @@ ossim_uint32 ossimInfo::executeImageOptions(const ossimFilename& file)
       if ( imageGeomFlag )
       {
          getImageGeometryInfo(okwl, dnoFlag);
+      }
+
+      if ( imageRectFlag )
+      {
+         getImageRect(okwl);
       }
       
       lookup = m_kwl->find( OUTPUT_FILE_KW );
@@ -1333,6 +1365,53 @@ bool ossimInfo::getImageGeometryInfo(ossim_uint32 entry, ossimKeywordlist& kwl, 
    return result;
 }
 
+void ossimInfo::getImageRect(ossimKeywordlist& kwl)
+{
+   if ( m_img.valid() )
+   {
+      ossim_uint32 numEntries = 0;
+
+      std::vector<ossim_uint32> entryList;
+      m_img->getEntryList(entryList);
+
+      std::vector<ossim_uint32>::const_iterator i = entryList.begin();
+      while ( i != entryList.end() )
+      {
+         if ( getImageRect( (*i), kwl ) )
+         {
+            ++numEntries;
+         }
+         ++i;
+      }
+   } // if ( m_img.valid() )
+}
+   
+bool ossimInfo::getImageRect(ossim_uint32 entry, ossimKeywordlist& kwl)
+{
+   bool result = false;
+   
+   if ( m_img.valid() )
+   {
+      if ( m_img->setCurrentEntry(entry) )
+      {
+         ossimString prefix = "image";
+         prefix = prefix + ossimString::toString(entry) + ".";
+         ossimIrect outputRect = m_img->getBoundingRect();
+         kwl.add(prefix, "image_rectangle", outputRect.toString().c_str(), true);
+         result = true;
+
+      } // if ( m_img->setCurrentEntry(entry) )
+   } // if ( m_img.valid() )
+
+   if ( !result )
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "Could not get image rectangle for: " << m_img->getFilename() << std::endl;
+   }
+   
+   return result;
+}
+
 // Note be sure to m_img->setCurrentEntry before calling.
 bool ossimInfo::isImageEntryOverview() const
 {
@@ -1623,7 +1702,7 @@ std::ostream& ossimInfo::outputHeight(const ossimGpt& gpt, std::ostream& out) co
    }
    else
    {
-      out << "Did not find cell for point!" << "\n";
+      out << "Did not find cell for point: " << gpt << "\n";
    }
    
    out << "MSL to ellipsoid delta: ";

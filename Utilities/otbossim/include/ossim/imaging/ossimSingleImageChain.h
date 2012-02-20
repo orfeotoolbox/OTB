@@ -30,15 +30,13 @@ class ossimFilename;
 class ossimSrcRecord;
 
 /**
+ * @class ossimSingleImageChain
+ * 
  * @brief Single image chain class.
  *
- * Typical usage:
- * ossimRefPtr<ossimSingleImageChain> myChain = new ossimSingleImageChain();
- * if ( myChain->open(myFile) == true )
- * {
- *    myChain->createRenderedChain();
- *    your-code-goes-here();
- * }
+ * Convenience class for a single image chain.
+ * 
+ * For code example see: ossim/src/test/ossim-single-image-chain-test.cpp  
  *
  * Just a clarification on "start of chain" versus "end of chain" in this
  * file.
@@ -140,7 +138,10 @@ public:
     * 8) chain cache
     *
     * NOTES:
-    * 1) If doing a sequential write where tiles to the right of the
+    * 1) Cache on left hand side of resampler is critical to speed if you
+    *    have the ossimImageRender enabled.
+    *    
+    * 2) If doing a sequential write where tiles to the right of the
     *    resampler will not be revisited the chain cache could be
     *    disabled to save memory.
     */
@@ -423,6 +424,27 @@ public:
     * m_remapToEightBitFlag has been set.
     */
    ossimScalarType getImageHandlerScalarType() const;
+
+   /**
+    * @brief Convenience method to open the histogram and apply a default
+    * stretch.
+    *
+    * This will only work if the image is open, there is a histogram remapper
+    * in the chain, and there was a histogram created.
+    * 
+    * Valid stretches (from ossimHistogramRemapper.h):
+    *
+    @verbatim
+      ossimHistogramRemapper::LINEAR_ONE_PIECE
+      ossimHistogramRemapper::LINEAR_1STD_FROM_MEAN
+      ossimHistogramRemapper::LINEAR_2STD_FROM_MEAN
+      ossimHistogramRemapper::LINEAR_3STD_FROM_MEAN
+      ossimHistogramRemapper::LINEAR_AUTO_MIN_MAX
+    @endverbatim
+    *
+    * @return true on success, false on error.
+    */
+   bool openHistogram( ossimHistogramRemapper::StretchMode mode );
 
 private:
 

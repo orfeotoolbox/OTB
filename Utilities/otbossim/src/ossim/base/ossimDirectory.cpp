@@ -10,7 +10,7 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimDirectory.cpp 20092 2011-09-12 19:09:17Z dburken $
+// $Id: ossimDirectory.cpp 20229 2011-11-08 17:01:17Z oscarkramer $
 
 #include <cstring> /* for strncasecmp */
 #include <iostream>
@@ -110,6 +110,7 @@ bool ossimDirectory::getFirst(ossimFilename &filename, int flags)
          else
          {
             // no more file in the directory
+            filename.clear();
             return false;
          }
       }
@@ -138,6 +139,7 @@ bool ossimDirectory::getNext(ossimFilename &filename) const
       else
       {
          // no more file in the directory
+         filename.clear();
          return false;
       }
    }

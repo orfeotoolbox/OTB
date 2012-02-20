@@ -19,6 +19,7 @@
 #include <ossim/base/ossimArgumentParser.h>
 #include <ossim/base/ossimApplicationUsage.h>
 #include <ossim/base/ossimCallback1.h>
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimContainerProperty.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimDatumFactoryRegistry.h>
@@ -1054,7 +1055,7 @@ ossimHistogramMode ossimImageUtil::getHistogramMode() const
 
 ossim_uint32 ossimImageUtil::getNumberOfThreads() const
 {
-   ossim_uint32 result = 1;
+   ossim_uint32 result;
    std::string lookup = m_kwl->findKey( THREADS_KW );
    if ( lookup.size() )
    {
@@ -1062,12 +1063,7 @@ ossim_uint32 ossimImageUtil::getNumberOfThreads() const
    }
    else
    {
-      // Look in ossim preferences if keyword is not set above.
-      const char* str = ossimPreferences::instance()->findPreference("ossim_threads");
-      if ( str )
-      {
-         result = ossimString(str).toUInt32();
-      }
+      result = ossim::getNumberOfThreads();
    }
    return result;
 }

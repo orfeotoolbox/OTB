@@ -7,11 +7,10 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimIgen.cpp 19907 2011-08-05 19:55:46Z dburken $
+// $Id: ossimIgen.cpp 20444 2012-01-12 14:45:52Z oscarkramer $
 
 #include <iterator>
 #include <sstream>
-#include <exception>
 
 #include <ossim/ossimConfig.h> /* To pick up define OSSIM_HAS_MPI. */
 
@@ -36,6 +35,8 @@
 #include <ossim/imaging/ossimTilingPoly.h>
 #include <ossim/base/ossimPreferences.h>
 #include <ossim/parallel/ossimMpi.h>
+#include <ossim/parallel/ossimMultiThreadSequencer.h>
+#include <ossim/parallel/ossimMtDebug.h> //### For debug/performance eval
 
 static ossimTrace traceDebug(ossimString("ossimIgen:debug"));
 static ossimTrace traceLog(ossimString("ossimIgen:log"));
@@ -53,7 +54,8 @@ theNumberOfTilesToBuffer(2),
 theKwl(),
 theTilingEnabled(false),
 theProgressFlag(true),
-theStdoutFlag(false)
+theStdoutFlag(false),
+theThreadCount(9999) // Default no threading
 {
    theOutputRect.makeNan();
 }
@@ -392,8 +394,13 @@ void ossimIgen::outputProduct()
 #endif
 
    // we will just load a serial connection if MPI is not supported.
+   // Threading?
+   if (!sequencer.valid() && (theThreadCount != 9999))
+      sequencer = new ossimMultiThreadSequencer(0, theThreadCount);
+
    if (!sequencer.valid())
       sequencer = new ossimImageSourceSequencer(0);
+
 
    // Look for the first writer (should be the only writer) in our list of objects:
    ossimRefPtr<ossimImageFileWriter> writer  = 0;
@@ -516,6 +523,30 @@ void ossimIgen::outputProduct()
       // No multi-file tiling, just conventional write to single file:
       writeToFile(writer.get());
    }
+
+   //########## DEBUG CODE FOR TIMING MULTI THREAD LOCKS ##############
+   if (sequencer.valid() && (theThreadCount != 9999))
+   {
+      ossimMultiThreadSequencer* mts = dynamic_cast<ossimMultiThreadSequencer*>(sequencer.get());
+      if (mts != NULL)
+      {
+
+         double jgtt = mts->d_jobGetTileT;
+         ossim_uint32 num_threads = mts->getNumberOfThreads();
+         double jgttpj = jgtt/num_threads;
+         cout<<setprecision(3)<<endl;
+         cout << "Multi-threading metrics ---"<<endl;
+         cout << "   Number of threads:      " << num_threads<< endl;
+         cout << "   Max cache used:         "<< mts->d_maxCacheUsed << endl;
+         cout << "   Cache emptied count:    "<< ossimString::toString(mts->d_cacheEmptyCount) << endl;
+         cout << "   Time waiting on jobs:   "<<mts->d_idleTime2<<" s"<<endl;
+         cout << "   Time waiting on cache:  "<<mts->d_idleTime5<<" s"<<endl;
+         cout << "   Handler getTile T:      "<<mts->handlerGetTileT()<<" s"<<endl;
+         cout << "   Job getTile T:          "<<jgtt<<" s"<<endl;
+         cout << "   Average getTile T/job:  "<<jgttpj<<" s\n"<<endl;
+      }
+   }
+   //##################################################################
 }
 
 //*************************************************************************************************
@@ -536,8 +567,10 @@ bool ossimIgen::writeToFile(ossimImageFileWriter* writer)
       ossimFilename logFile = writer->getFilename();
       logFile.setExtension(ossimString("log"));
 
+      ossimRefPtr<ossimConnectableContainer> container = new ossimConnectableContainer;
+      writer->fillContainer(*container.get());
       ossimKeywordlist logKwl;
-      writer->saveStateOfAllInputs(logKwl);
+      container->saveState(logKwl);
       logKwl.write(logFile.c_str());
    }
 
@@ -547,7 +580,7 @@ bool ossimIgen::writeToFile(ossimImageFileWriter* writer)
    }
 
    // Catch internal exceptions:
-   catch(std::exception& e)
+   catch(const ossimException& e)
    {
       ossimNotify(ossimNotifyLevel_FATAL)
          << "ossimIgen::outputProduct ERROR:\n"

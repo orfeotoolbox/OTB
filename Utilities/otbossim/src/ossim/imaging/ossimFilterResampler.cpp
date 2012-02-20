@@ -11,7 +11,7 @@
 //         David A. Horner (DAH) http://dave.thehorners.com
 //
 //*************************************************************************
-// $Id: ossimFilterResampler.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimFilterResampler.cpp 20326 2011-12-07 13:48:18Z dburken $
 
 #include <ossim/imaging/ossimFilterResampler.h>
 #include <ossim/base/ossimCommon.h>
@@ -313,26 +313,23 @@ template <class T> void ossimFilterResampler::resampleBilinearTile(
    const ossimDpt& deltaUr,
    const ossimDpt& outLength)
 {
-//    std::cout << "INPUT  = \n" << *input << std::endl
-//              << "OUTPUT = \n" << *output << std::endl
-//              << "inputUL= " << inputUl << std::endl
-//              << "inputUR= " << inputUr << std::endl
-//              << "deltaUL= " << deltaUl << std::endl
-//              << "deltaUr= " << deltaUr << std::endl
-//              << "outlength= " << outLength << std::endl;
-   ossim_uint32  band,centerOffset;
-   ossim_float64 tmpFlt64,stepSizeWidth,stepSizeHeight;
+#if 0 /* Please leave for debug. */
+   std::cout << "INPUT  = \n" << *input << std::endl
+             << "OUTPUT = \n" << *output << std::endl
+             << "inputUL= " << inputUl << std::endl
+             << "inputUR= " << inputUr << std::endl
+             << "deltaUL= " << deltaUl << std::endl
+             << "deltaUr= " << deltaUr << std::endl
+             << "outlength= " << outLength << std::endl;
+#endif
+   
+   ossim_uint32  band, centerOffset;
+   ossim_float64 tmpFlt64, stepSizeWidth;
 
    if(outLength.x>1) {
       stepSizeWidth  = 1.0/(outLength.x-1.0);
    } else {
       stepSizeWidth   = 1.0;
-   }
-
-   if(outLength.y>1) {
-      stepSizeHeight = 1.0/(outLength.y-1.0);   
-   } else {
-      stepSizeHeight = 1.0;
    }
 
    // INPUT INFORMATION
@@ -383,9 +380,9 @@ template <class T> void ossimFilterResampler::resampleBilinearTile(
    double pointx,pointy,deltaX,deltaY;
    ossim_int32 starty,startx; 
 
-   // USING NEAREST NEIGHBOR
    if(xkernel_width==0 || ykernel_height==0)
    {
+      // USING NEAREST NEIGHBOR
       for(ossim_uint32 resultY = 0; resultY < resultRectH; ++resultY)
       {
 //          deltaX = (terminalx-initialx) * stepSizeWidth;
@@ -418,10 +415,10 @@ template <class T> void ossimFilterResampler::resampleBilinearTile(
          terminaly  += deltaUr.y;
       } // End of loop in y direction.
       
-   // USING A KERNEL
    }
    else
    {
+      // USING A KERNEL
       const double* kernel;
       ossim_uint32 iy,ix,sourceIndex,nullCount;
       for(ossim_uint32 resultY = 0; resultY < resultRectH; ++resultY)
@@ -434,8 +431,7 @@ template <class T> void ossimFilterResampler::resampleBilinearTile(
          {
             starty  = ossim::round<int>(pointy - ykernel_half_height + .5);
             startx  = ossim::round<int>(pointx - xkernel_half_width + .5);
-            centerOffset = (ossim_uint32)((starty+ykernel_half_height)*inWidth +
-                                          (startx+xkernel_half_width));
+            centerOffset = ossim::round<int>(pointy)*inWidth + ossim::round<int>(pointx);
             sourceIndex = starty*inWidth+startx;
 
             // look at center pixel, make sure they aren't all null.
@@ -503,13 +499,19 @@ template <class T> void ossimFilterResampler::resampleBilinearTile(
                   {
                      if(densityvals[band]<=FLT_EPSILON)
                      {
-                        tmpFlt64 = pixelvals[band];
+                        //---
+                        // Setting tempFlt64 to pixelvals[band] causing 0's where -32768
+                        // should be when null check was skipped above.
+                        // tmpFlt64 = pixelvals[band];
+                        //---
+                        tmpFlt64 = NULL_PIX[band];
                      }
                      else
                      {
                         // normalize
                         tmpFlt64 = pixelvals[band]/densityvals[band];
                      }
+                     
                      // clamp
                      tmpFlt64 = (tmpFlt64>=MIN_PIX[band]?(tmpFlt64<MAX_PIX[band]?tmpFlt64:MAX_PIX[band]):MIN_PIX[band]); 
                      // set resultant pixel value.

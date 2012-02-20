@@ -75,7 +75,7 @@ ossimImageGeometry* ossimImageGeometryFactory::createGeometry(
 
 bool ossimImageGeometryFactory::extendGeometry(ossimImageHandler* handler)const
 {
-   bool result = true;
+   bool result = false;
    if (handler)
    {
       bool add2D = true;

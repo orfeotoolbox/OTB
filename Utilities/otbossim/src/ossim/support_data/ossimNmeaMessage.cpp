@@ -15,7 +15,7 @@
 #include <ossim/base/ossimCommon.h>
 #include <iomanip>
 
-ossim_uint32 ossimNmeaMessage::checksum(ossimString::const_iterator start, ossimString::const_iterator end)
+ossim_uint32 ossimNmeaMessage::checksum(std::string::const_iterator start, std::string::const_iterator end)
 {
    ossim_uint32 sum = 0;
    
@@ -27,7 +27,7 @@ ossim_uint32 ossimNmeaMessage::checksum(ossimString::const_iterator start, ossim
    return sum;
 }
 
-void ossimNmeaMessage::setFields(ossimString::const_iterator start, ossimString::const_iterator end)
+void ossimNmeaMessage::setFields(std::string::const_iterator start, std::string::const_iterator end)
 {
    m_fields.clear();
    ossim_uint32 idx = 0;
@@ -52,7 +52,7 @@ void ossimNmeaMessage::setFields(ossimString::const_iterator start, ossimString:
 
 bool ossimNmeaMessage::isValidStartChar(char c)const
 {
-   ossimString::const_iterator iter = std::find(m_startChars.begin(), m_startChars.end(), c);
+   std::string::const_iterator iter = std::find(m_startChars.begin(), m_startChars.end(), c);
    return (iter != m_startChars.end());
 }
 
@@ -76,15 +76,17 @@ void ossimNmeaMessage::parseMessage(std::istream& in)throw(ossimException)
       m_message += c;
       c = static_cast<char>(in.get());
    }
-   ossimString::iterator iter = std::find(m_message.begin(), m_message.end(), '*');
+   std::string::iterator iter = std::find(m_message.begin(), m_message.end(), '*');
    
    if(iter != m_message.end())
    {
-      setFields(m_message.begin()+1, iter);
+      setFields(m_message.begin()+1, m_message.end());
       ossim_uint32 check = checksum(m_message.begin()+1, iter);
       std::ostringstream out;
       out << std::setw(2) << std::setfill('0') << std::hex << check;
-      if(out.str() == ossimString(iter+1, m_message.end()).downcase()) 
+      std::string::iterator endChecksumIter = iter+1;
+      while((endChecksumIter!= m_message.end())&&(*endChecksumIter!=',')) ++endChecksumIter;
+      if(out.str() == ossimString(iter+1, endChecksumIter).downcase()) 
       {
          m_validCheckSum = true;
       }

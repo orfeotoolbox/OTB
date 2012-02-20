@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixUtmModel.cpp 19682 2011-05-31 14:21:20Z dburken $
+//  $Id: ossimApplanixUtmModel.cpp 20485 2012-01-23 18:22:38Z gpotts $
 #include <sstream>
 #include <ossim/projection/ossimApplanixUtmModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -26,7 +26,7 @@ static ossimTrace traceDebug("ossimApplanixUtmModel:debug");
 RTTI_DEF1(ossimApplanixUtmModel, "ossimApplanixUtmModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixUtmModel.cpp 19682 2011-05-31 14:21:20Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixUtmModel.cpp 20485 2012-01-23 18:22:38Z gpotts $";
 #endif
 
 ossimApplanixUtmModel::ossimApplanixUtmModel()
@@ -144,12 +144,12 @@ void ossimApplanixUtmModel::lineSampleToWorld(const ossimDpt& image_point,
    //***
    // Extrapolate if image point is outside image:
    //***
-   if (!insideImage(image_point))
-   {
-      gpt.makeNan();
+  // if (!insideImage(image_point))
+  // {
+   //   gpt.makeNan();
 //       gpt = extrapolate(image_point);
-      return;
-   }
+   //   return;
+   //}
 
    //***
    // Determine imaging ray and invoke elevation source object's services to
@@ -174,12 +174,12 @@ void ossimApplanixUtmModel::lineSampleHeightToWorld(const ossimDpt& image_point,
                                                  const double&   heightEllipsoid,
                                                  ossimGpt&       worldPoint) const
 {
-   if (!insideImage(image_point))
-   {
-      worldPoint.makeNan();
+//   if (!insideImage(image_point))
+//   {
+      //worldPoint.makeNan();
 //       worldPoint = extrapolate(image_point, heightEllipsoid);
-   }
-   else
+//   }
+//   else
    {
       //***
       // First establish imaging ray from image point:
@@ -194,6 +194,7 @@ void ossimApplanixUtmModel::lineSampleHeightToWorld(const ossimDpt& image_point,
 void ossimApplanixUtmModel::worldToLineSample(const ossimGpt& world_point,
                                            ossimDpt&       image_point) const
 {
+#if 0
    if((theBoundGndPolygon.getNumberOfVertices() > 0)&&
       (!theBoundGndPolygon.hasNans()))
    {
@@ -204,6 +205,7 @@ void ossimApplanixUtmModel::worldToLineSample(const ossimGpt& world_point,
          return;
       }         
    }
+#endif
    ossimEcefPoint g_ecf(world_point);
    ossimEcefVector ecfRayDir(g_ecf - theAdjEcefPlatformPosition);
    ossimColumnVector3d camRayDir (theCompositeMatrixInverse*ecfRayDir.data());
@@ -302,16 +304,16 @@ void ossimApplanixUtmModel::updateModel()
 //   theAdjEcefPlatformPosition = theEcefPlatformPosition; 
 
    theBoundGndPolygon.resize(4);
-   ossim_float64 w = theImageClipRect.width()*2.0;
-   ossim_float64 h = theImageClipRect.height()*2.0;
+   // ossim_float64 w = theImageClipRect.width();//*2.0;
+   // ossim_float64 h = theImageClipRect.height();//*2.0;
    
-   lineSampleToWorld(theImageClipRect.ul()+ossimDpt(-w, -h), gpt);
+   lineSampleToWorld(theImageClipRect.ul(),gpt);//+ossimDpt(-w, -h), gpt);
    theBoundGndPolygon[0] = gpt;
-   lineSampleToWorld(theImageClipRect.ur()+ossimDpt(w, -h), gpt);
+   lineSampleToWorld(theImageClipRect.ur(),gpt);//+ossimDpt(w, -h), gpt);
    theBoundGndPolygon[1] = gpt;
-   lineSampleToWorld(theImageClipRect.lr()+ossimDpt(w, h), gpt);
+   lineSampleToWorld(theImageClipRect.lr(),gpt);//+ossimDpt(w, h), gpt);
    theBoundGndPolygon[2] = gpt;
-   lineSampleToWorld(theImageClipRect.ll()+ossimDpt(-w, h), gpt);
+   lineSampleToWorld(theImageClipRect.ll(),gpt);//+ossimDpt(-w, h), gpt);
    theBoundGndPolygon[3] = gpt;
 }
 
@@ -792,23 +794,46 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
          theFocalLength = ossimString(focal_length).toDouble();
       }
 
+      cameraKwl.trimAllValues();
+      
+      
+      ossimString regExpression =  ossimString("^(") + "d[0-9]+)";
+      vector<ossimString> keys;
+      cameraKwl.getSubstringKeyList( keys, regExpression );
+      long numberOfDistortions = (long)keys.size();
+      int offset = (int)ossimString("d").size();
       ossim_uint32 idx = 0;
-      for(idx = 0; idx < 26; ++idx)
+      std::vector<int> numberList(numberOfDistortions);
+      for(idx = 0; idx < (int)numberList.size();++idx)
       {
-         const char* value = cameraKwl.find(ossimString("d")+ossimString::toString(idx));
-
-         if(value)
+         ossimString numberStr(keys[idx].begin() + offset,
+                               keys[idx].end());
+         numberList[idx] = numberStr.toInt();
+      }
+      std::sort(numberList.begin(), numberList.end());
+      double distance=0.0, distortion=0.0;
+     
+      for(idx = 0; idx < numberList.size(); ++idx)
+      {
+         ossimString value = cameraKwl.find(ossimString("d")+ossimString::toString(numberList[idx]));
+         if(!value.empty())
          {
+            std::istringstream inStr(value.c_str());
+            inStr >> distance;
+            ossim::skipws(inStr);
+            inStr >> distortion;
+#if 0
             std::vector<ossimString> splitString;
             ossimString tempString(value);
-            double distance=0.0, distortion=0.0;
             tempString = tempString.trim();
             tempString.split(splitString, " ");
-            if(splitString.size() == 2)
+            std::cout << splitString.size() << std::endl;
+            if(splitString.size() >= 2)
             {
                distance = splitString[0].toDouble();
                distortion = splitString[1].toDouble();
             }
+#endif
             
             tool.setValue(distortion, unitType);
             lensKwl.add(ossimString("distance") + ossimString::toString(idx),
@@ -824,7 +849,7 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
          if(pixel_size)
          {
             lensKwl.add("dxdy",
-                        ossimString(pixel_size) + " " + ossimString(pixel_size),
+                        ossimString::toString(thePixelSize.x) + " " +ossimString::toString(thePixelSize.y),
                         true);
          }
          else
@@ -848,7 +873,7 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
          ossimString tempString(principal_point);
          tempString = tempString.trim();
          tempString.split(splitString, " ");
-         if(splitString.size() == 2)
+         if(splitString.size() >= 2)
          {
             thePrincipalPoint.x = splitString[0].toDouble();
             thePrincipalPoint.y = splitString[1].toDouble();

@@ -739,3 +739,28 @@ ossimScalarType ossimSingleImageChain::getImageHandlerScalarType() const
    }
    return result;
 }
+
+bool ossimSingleImageChain::openHistogram( ossimHistogramRemapper::StretchMode mode )
+{
+   bool result = false;
+   ossimRefPtr<ossimImageHandler> ih = getImageHandler();
+   if ( ih.valid() )
+   {
+      ossimRefPtr<ossimHistogramRemapper> hr = getHistogramRemapper();
+      if ( hr.valid() )
+      {
+         ossimFilename f = ih->getFilenameWithThisExtension( ossimString("his") );
+         if ( hr->openHistogram( f ) == true )
+         {
+            // Enable:
+            hr->setEnableFlag(true);
+
+            // Set the mode:
+            hr->setStretchMode( mode );
+
+            result = true;
+         }
+      }
+   }
+   return result;
+}

@@ -196,23 +196,21 @@ void ossimFileWalker::walkDir(const ossimFilename& dir)
       // Loop to get the list of files and directories in this directory.
       m_mutex.lock();
       ossimFilename f;
-      if ( d.getFirst(f) )
+      bool valid_file = d.getFirst(f);
+      while ( valid_file )
       {
-         while ( f != "" )
+         if ( isFiltered(f) == false )
          {
-            if ( isFiltered(f) == false )
+            if (f.isDir())
             {
-               if (f.isDir())
-               {
-                  dirs.push_back(f);
-               }
-               else
-               {
-                  files.push_back(f);
-               }
+               dirs.push_back(f);
             }
-            d.getNext(f);
+            else
+            {
+               files.push_back(f);
+            }
          }
+         valid_file = d.getNext(f);
       }
       m_mutex.unlock();
       

@@ -10,9 +10,9 @@
 // Description: Common file for utility functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.h 20040 2011-09-06 14:59:05Z oscarkramer $
+// $Id: ossimCommon.h 20255 2011-11-14 16:38:57Z oscarkramer $
 #ifndef ossimCommon_HEADER
-#define ossimCommon_HEADER
+#define ossimCommon_HEADER 1
 
 
 // XXX nullify these for now, but eventually replace with a #include 
@@ -496,6 +496,7 @@ namespace ossim
       
       result = "("+out.str()+")";
    }
+   
    /**
     * This will output a vector of values inst a string
     *
@@ -507,7 +508,7 @@ namespace ossim
     */ 
    template <>
    OSSIM_DLL void toSimpleStringList(ossimString& result,
-                           const std::vector<ossim_uint8>& valuesList);
+                                     const std::vector<ossim_uint8>& valuesList);
    
    /**
     * Generic function to extract a list of values into a vector of string where
@@ -517,50 +518,85 @@ namespace ossim
     *
     * Parenthesis are required
     */ 
-   OSSIM_DLL bool extractSimpleValues(std::vector<ossimString>& values, const ossimString& stringOfPoints);
+   OSSIM_DLL bool extractSimpleValues(std::vector<ossimString>& values,
+                                      const ossimString& stringOfPoints);
 
    
-   template <class T>
-   bool toSimpleVector(std::vector<T>& result, const ossimString& stringOfPoints)
-   {
-      std::istringstream in(stringOfPoints);
-      ossim::skipws(in);
-      bool returnValue = true;
-      char c = in.get();
-      ossimString value = "";
-      if(c == '(')
-      {
-         c = (char)in.get();
-         while((c!=')')&&
-               (c!= '\n')&&
-               (in.good()))
-         {
-            if(c!= ',')
-            {
-               value += ossimString(c);
-            }
-            else
-            {
-               result.push_back(static_cast<T>(value.toDouble()));
-               value = "";
-            }
-            c = in.get();
-         }
-      }
-      if(c!= ')')
-      {
-         returnValue = false;
-      }
-      else
-      {
-         if(!value.empty())
-         {
-            result.push_back(static_cast<T>(value.toDouble()));
-         }
-      }
-      
-      return returnValue;
-   }
+  template <class T>  bool toSimpleVector(std::vector<T>& result, const ossimString& stringOfPoints)
+  {
+     std::istringstream in(stringOfPoints);
+     ossim::skipws(in);
+     bool returnValue = true;
+     char c = in.get();
+     ossimString value = "";
+     if(c == '(')
+     {
+        c = (char)in.get();
+        while( (c!=')') && (c!= '\n') && (in.good()) )
+        {
+           if(c!= ',')
+           {
+              value += ossimString(c);
+           }
+           else
+           {
+              result.push_back(static_cast<T>(value.toDouble()));
+              value = "";
+           }
+           c = in.get();
+        }
+     }
+     if(c!= ')')
+     {
+        returnValue = false;
+     }
+     else
+     {
+        if(!value.empty())
+        {
+           result.push_back(static_cast<T>(value.toDouble()));
+        }
+     }
+     
+     return returnValue;
+  }
+   
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+  OSSIM_DLL bool toSimpleVector(std::vector<ossim_uint32>& result,
+                                const ossimString& stringOfPoints);
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+  OSSIM_DLL bool toSimpleVector(std::vector<ossim_int32>& result,
+                                const ossimString& stringOfPoints);
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+   OSSIM_DLL bool toSimpleVector(std::vector<ossim_uint16>& result,
+                                 const ossimString& stringOfPoints);
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+  OSSIM_DLL bool toSimpleVector(std::vector<ossim_int16>& result,
+                                const ossimString& stringOfPoints);
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+   OSSIM_DLL bool toSimpleVector(std::vector<ossim_uint8>& result,
+                                 const ossimString& stringOfPoints);
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+   OSSIM_DLL bool toSimpleVector(std::vector<ossim_int8>& result,
+                                 const ossimString& stringOfPoints);
    
         // lex str into tokens starting at position start using whitespace  
 	//    chars as delimiters and quotes[0] and quotes[1] as the opening
@@ -571,6 +607,17 @@ namespace ossim
 	// REQUIRE(tokens != NULL);
 	// REQUIRE(unbalancedQuotes != NULL);
 
+   /**
+    * @brief Get the number threads to use from ossimPreferences or OpenThreads.
+    *
+    * Keyword searched for is:  "ossim_threads"
+    *
+    * If keyword is not found OpenThreads::GetNumberOfProcessors() is used.
+    *
+    * @return Number of threads. Default=1
+    */
+   OSSIM_DLL ossim_uint32 getNumberOfThreads();
+
 }
 
-#endif /* #ifndef COMMON_H */
+#endif /* #ifndef ossimCommon_HEADER */

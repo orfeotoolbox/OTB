@@ -5,17 +5,18 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEOFile.cpp 19900 2011-08-04 14:19:57Z dburken $
+//  $Id: ossimApplanixEOFile.cpp 20483 2012-01-21 15:42:22Z dburken $
+
 #include <ossim/support_data/ossimApplanixEOFile.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimRegExp.h>
+#include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimCommon.h>
 #include <iterator>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <iomanip>
-#include <ossim/base/ossimKeywordlist.h>
-#include <ossim/base/ossimRegExp.h>
-#include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimCommon.h>
 
 static ossimTrace traceDebug("ossimApplanixEOFile:debug");
 
@@ -497,7 +498,8 @@ const ossimRefPtr<ossimApplanixEORecord> ossimApplanixEOFile::getRecordGivenId(c
 
    if(theRecordIdMap.size())
    {
-      std::map<ossimString, ossimRefPtr<ossimApplanixEORecord> >::const_iterator iter = theRecordIdMap.find(id);
+      std::map<ossimString, ossimRefPtr<ossimApplanixEORecord>,
+         ossimStringLtstr >::const_iterator iter = theRecordIdMap.find(id);
       
       if(iter!=theRecordIdMap.end())
       {

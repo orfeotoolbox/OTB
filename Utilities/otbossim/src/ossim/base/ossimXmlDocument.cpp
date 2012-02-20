@@ -11,7 +11,7 @@
 // Contains definition of class ossimXmlDocument. This class provides read-only
 // parsing and accessing of an XML document file.
 //*****************************************************************************
-// $Id: ossimXmlDocument.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimXmlDocument.cpp 20370 2011-12-15 13:46:06Z gpotts $
 
 
 #include <ossim/base/ossimXmlDocument.h>
@@ -34,10 +34,7 @@ static std::istream& xmlskipws(std::istream& in)
 {
    int c = in.peek();
    while((!in.fail())&&
-         ((c == ' ') ||
-          (c == '\t') ||
-          (c == '\n')|
-          (c == '\r')))
+         (( (c == ' ') || (c == '\t') || (c == '\n')|| (c == '\r') || (c<0x20) || (c>=0x7f) )))//|| (c<0x20) || (c >=0x2f) )))
    {
       in.ignore(1);
       c = in.peek();
@@ -53,7 +50,8 @@ RTTI_DEF1(ossimXmlDocument, "ossimXmlDocument", ossimObject)
 ossimXmlDocument::ossimXmlDocument(const ossimFilename& xmlFileName)
    :
    theRootNode  (0),
-   theXmlHeader("<?xml version='1.0'?>")
+   theXmlHeader("<?xml version='1.0'?>"),
+   theStrictCheckFlag(false)
 {
 
    if(xmlFileName != "")
@@ -65,7 +63,8 @@ ossimXmlDocument::ossimXmlDocument(const ossimXmlDocument& src)
 :ossimObject(src),
 theRootNode(src.theRootNode.valid()?(ossimXmlNode*)src.theRootNode->dup():(ossimXmlNode*)0),
 theXmlHeader(src.theXmlHeader),
-theFilename(src.theFilename)
+theFilename(src.theFilename),
+theStrictCheckFlag(src.theStrictCheckFlag)
 {
    
 }
@@ -147,7 +146,6 @@ bool ossimXmlDocument::read(std::istream& in)
    }
    startTagCharacterFound = true;
 
-   theXmlHeader = "";
    if(readHeader(in))
    {
       if(theXmlHeader=="")
@@ -164,7 +162,7 @@ bool ossimXmlDocument::read(std::istream& in)
       }
    }
    if((!theXmlHeader.contains("xml version"))&&
-      (!startTagCharacterFound))
+      (!startTagCharacterFound)&&theStrictCheckFlag)
    {
       if (traceDebug())
       {
@@ -373,7 +371,10 @@ void ossimXmlDocument::fromKwl(const ossimKeywordlist& kwlToConvert)
 void ossimXmlDocument::toKwl(ossimKeywordlist& kwl ,
                              const ossimString& prefix)const
 {
-   
+   if(theRootNode.valid())
+   {
+      theRootNode->toKwl(kwl, prefix);
+   }
 //    const std::vector<ossimRefPtr<ossimXmlNode> >& children = theRootNode->getChildNodes();
    
 //    ossim_uint32 idx = 0;
@@ -382,7 +383,6 @@ void ossimXmlDocument::toKwl(ossimKeywordlist& kwl ,
 //    {
 //       children[idx]->toKwl(kwl, prefix);
 //    }
-   theRootNode->toKwl(kwl, prefix);
 }
 
 bool ossimXmlDocument::readHeader(std::istream& in)

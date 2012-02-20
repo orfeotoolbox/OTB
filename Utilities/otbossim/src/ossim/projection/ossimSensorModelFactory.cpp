@@ -11,7 +11,7 @@
 //   Contains implementation of class ossimSensorModelFactory
 //
 //*****************************************************************************
-//  $Id: ossimSensorModelFactory.cpp 20089 2011-09-09 17:32:31Z gpotts $
+//  $Id: ossimSensorModelFactory.cpp 20238 2011-11-09 18:39:10Z gpotts $
 #include <fstream>
 #include <algorithm>
 #include <ossim/projection/ossimSensorModelFactory.h>
@@ -50,6 +50,7 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimApplanixUtmModel.h>
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/projection/ossimSkyBoxLearSensor.h>
+#include <ossim/projection/ossimIpodSensor.h>
 #include <ossim/support_data/ossimFfL7.h>
 #include <ossim/support_data/ossimFfL5.h>
 
@@ -133,6 +134,10 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
    if(name == STATIC_TYPE_NAME(ossimSkyBoxLearSensor))
    {
       return new ossimSkyBoxLearSensor;
+   }
+   if(name == STATIC_TYPE_NAME(ossimIpodSensor))
+   {
+      return new ossimIpodSensor;
    }
    if(name == STATIC_TYPE_NAME(ossimCoarseGridModel))
    {
@@ -251,6 +256,7 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimRS1SarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimBuckeyeSensor));
    typeList.push_back(STATIC_TYPE_NAME(ossimSkyBoxLearSensor));
+   typeList.push_back(STATIC_TYPE_NAME(ossimIpodSensor));
 
    //***
    // ADD_MODEL: Please leave this comment for the next programmer. Add above.

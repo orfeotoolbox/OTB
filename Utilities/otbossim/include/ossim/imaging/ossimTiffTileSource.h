@@ -13,11 +13,10 @@
 // ossimTiffTileSource  is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimTiffTileSource.h 18373 2010-11-02 18:31:14Z gpotts $
+//  $Id: ossimTiffTileSource.h 20492 2012-01-25 13:05:12Z gpotts $
 
 #ifndef ossimTiffTileSource_HEADER
-#define ossimTiffTileSource_HEADER
-
+#define ossimTiffTileSource_HEADER 1
 
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimIrect.h>
@@ -269,6 +268,23 @@ private:
     * to the scalar type nan or double nan; sets to default min max if so.
     */
    void validateMinMaxNull();
+
+   /**
+    * @brief Checks line/samples of level for power of two decimation from the
+    * previous rlevel.
+    *
+    * Used to weed out thumbnail directories being used as a reduced
+    * resolution layer.
+    *
+    * Note this shuts off the thumbnail which someone may
+    * want to see.  We could make this a reader prop if it becomes an issue.
+    * drb - 09 Jan. 2012.
+    *
+    * @param dir The tiff directory index.
+    * 
+    * @return true is so; else, false.  If level is zero returns false.
+    */
+   bool isPowerOfTwoDecimation(ossim_uint32 dir) const;
    
    ossimRefPtr<ossimImageData> theTile;
    
@@ -307,8 +323,10 @@ private:
    std::vector<ossim_uint32> theImageDirectoryList;
    ossim_uint32              theCurrentTiffRlevel;
    
+   ossim_int32               theCompressionType;
+   
 
 TYPE_DATA
 };
 
-#endif
+#endif /* #ifndef ossimTiffTileSource_HEADER */

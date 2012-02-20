@@ -7,7 +7,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimSpaceObliqueMercatorProjection.h 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimSpaceObliqueMercatorProjection.h 20197 2011-11-03 13:22:02Z dburken $
 #ifndef ossimSpaceObliqueMercatorProjection_HEADER
 #define ossimSpaceObliqueMercatorProjection_HEADER
 #include <ossim/projection/ossimMapProjection.h>
@@ -24,7 +24,7 @@
  *
  * 
  */
-class ossimSpaceObliqueMercatorProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimSpaceObliqueMercatorProjection : public ossimMapProjection
 {
 public:
    enum ossimSatelliteType

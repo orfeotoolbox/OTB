@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEcefModel.h 16174 2009-12-23 16:34:06Z dburken $
+//  $Id: ossimApplanixEcefModel.h 20496 2012-01-25 17:15:43Z gpotts $
 #ifndef ossimApplanixEcefModel_HEADER
 #define ossimApplanixEcefModel_HEADER
 #include <ossim/projection/ossimFcsiModel.h>
@@ -44,6 +44,17 @@ public:
    virtual void updateModel();
 
    void setPrincipalPoint(ossimDpt principalPoint);
+
+   virtual bool insideImage(const ossimDpt& p) const
+   {
+      /*          return( (p.u>=(0.0-FLT_EPSILON)) && */
+      /*                  (p.u<=(double)(theImageSize.u-(1-FLT_EPSILON))) && */
+      /*                  (p.v>=(0.0-FLT_EPSILON)) && */
+      /*                  (p.v<=(double)(theImageSize.v-(1-FLT_EPSILON))) ); */
+      // if it's close to the edge we will consider it inside the image
+      //
+      return theImageClipRect.pointWithin(p, theImageClipRect.width());
+   }
 
 
    void setRollPitchHeading(double roll,

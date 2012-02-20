@@ -10,7 +10,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceSequencer.cpp 19002 2011-03-02 21:02:16Z oscarkramer $
+//  $Id: ossimImageSourceSequencer.cpp 20302 2011-11-29 14:21:12Z dburken $
 #include <ossim/imaging/ossimImageSourceSequencer.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimIrect.h>
@@ -44,7 +44,7 @@ ossimImageSourceSequencer::ossimImageSourceSequencer(ossimImageSource* inputSour
    if(inputSource)
    {
      connectMyInputTo(0, inputSource);
-     initialize();
+     initialize(); // Derived class depends on this initialization to happen now. DO NOT MOVE.
    }
    addListener( (ossimConnectableObjectListener*)this);
 }
@@ -156,7 +156,6 @@ bool ossimImageSourceSequencer::canConnectMyInputTo(ossim_int32 /* inputIndex */
 
 void ossimImageSourceSequencer::connectInputEvent(ossimConnectionEvent& /* event */)
 {
-  theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
   initialize();
 }
 
@@ -255,36 +254,24 @@ ossimRefPtr<ossimImageData> ossimImageSourceSequencer::getTile(
    return 0;
 }
 
-ossimRefPtr<ossimImageData> ossimImageSourceSequencer::getNextTile(
-   ossim_uint32 resLevel)
+ossimRefPtr<ossimImageData> ossimImageSourceSequencer::getNextTile( ossim_uint32 resLevel )
 {
-   if(!theInputConnection)
+   ossimRefPtr<ossimImageData> result = 0;
+   if ( theInputConnection )
    {
-      return NULL;
-   }
-   ossimIpt origin;
-   if(getTileOrigin(theCurrentTileNumber, origin))
-   {
-      ++theCurrentTileNumber;
-
-      ossimIrect tileRect(origin.x,
-			  origin.y,
-			  origin.x + (theTileSize.x - 1),
-			  origin.y + (theTileSize.y - 1));
-      ossimRefPtr<ossimImageData> data = theInputConnection->getTile(tileRect,
-                                                                     resLevel);
-      if(!data.valid()||!data->getBuf())
-	  {	 
-	     theBlankTile->setImageRectangle(tileRect);
-		 	
-         return theBlankTile;
+      ossimIrect tileRect;
+      if ( getTileRect( theCurrentTileNumber, tileRect ) )
+      {
+         ++theCurrentTileNumber;
+         result = theInputConnection->getTile(tileRect, resLevel);
+         if( !result.valid() || !result->getBuf() )
+         {	 
+            theBlankTile->setImageRectangle(tileRect);
+            result = theBlankTile;
+         }
       }
-      
-      return data;
    }
-
-   
-   return ossimRefPtr<ossimImageData>();
+   return result;
 }
 
 ossimRefPtr<ossimImageData> ossimImageSourceSequencer::getTile(
@@ -295,95 +282,84 @@ ossimRefPtr<ossimImageData> ossimImageSourceSequencer::getTile(
    {
       CLOG << "entering.."<<endl;
    }
-   if(!theInputConnection)
+
+   ossimRefPtr<ossimImageData> result = 0;
+
+   if(theInputConnection)
+   {
+      // if we have no tiles try to initialize.
+      if(getNumberOfTiles() == 0)
+      {
+         initialize();
+      }
+
+      ossimIrect tileRect;
+      if ( getTileRect( id, tileRect ) )
+      {
+         result = theInputConnection->getTile(tileRect, resLevel);
+         if( !result.valid() || !result->getBuf() )
+         {	 
+            theBlankTile->setImageRectangle(tileRect);
+            result = theBlankTile;
+         }
+      }
+      else // getTileRect failed...
+      {
+         if(traceDebug())
+         {
+            CLOG << "was not able to get an origin for id = " << id << endl;
+         }
+      }
+   }
+   else // no connection...
    {
       if(traceDebug())
       {
          CLOG << "No input connection so returing NULL" << endl;
-      }
-      return NULL;
-   }
-   // if we have no tiles try to initialize.
-   if(getNumberOfTiles() == 0)
-   {
-      initialize();
-   }
-   ossimIpt origin;
-   
-   if(getTileOrigin(id, origin))
-   {
-      if(traceDebug())
-      {
-         CLOG << "returning tile" << endl;
-      }
-      ossimIrect tRect(origin.x,
-                       origin.y,
-                       origin.x + theTileSize.x - 1,
-                       origin.y + theTileSize.y - 1);
-      
-      ossimRefPtr<ossimImageData> temp = theInputConnection->getTile(tRect,
-                                                                     resLevel);
-
-
-      theBlankTile->setImageRectangle(tRect);
-      
-      if(temp.valid())
-      {
-         if(!temp->getBuf())
-         {
-            return theBlankTile;
-         }
-      }
-      else
-      {
-         return theBlankTile;
-      }
-      return temp;
-   }
-   else
-   {
-      if(traceDebug())
-      {
-         CLOG << "was not able to get an origin for id = " << id << endl;
       }
    }
    if(traceDebug())
    {
       CLOG << "leaving.."<<endl;
    }
-   return 0;
+   
+   return result;
 }
 
-
-bool ossimImageSourceSequencer::getTileOrigin(ossim_int32 id,
-                                              ossimIpt& origin)const
+bool ossimImageSourceSequencer::getTileOrigin(ossim_int32 id, ossimIpt& origin) const
 {
-   if(id < 0)
+   bool result = false;
+   if( id >= 0 )
    {
-      return false;
-   }
-   if((theNumberOfTilesHorizontal > 0)&&
-      (theCurrentTileNumber < getNumberOfTiles()))
-   {
-      ossim_int32 y = id/static_cast<ossim_int32>(theNumberOfTilesHorizontal);
-      ossim_int32 x = id%static_cast<ossim_int32>(theNumberOfTilesHorizontal);
-      if((x < static_cast<ossim_int32>(theNumberOfTilesHorizontal)) &&
-         (y < static_cast<ossim_int32>(theNumberOfTilesVertical)))
-      {           
-         origin.x = theAreaOfInterest.ul().x + x*theTileSize.x;
-         origin.y = theAreaOfInterest.ul().y + y*theTileSize.y;
-      }
-      else
+      if( (theNumberOfTilesHorizontal > 0) && (theCurrentTileNumber < getNumberOfTiles()) )
       {
-         return false;
+         ossim_int32 y = id/static_cast<ossim_int32>(theNumberOfTilesHorizontal);
+         ossim_int32 x = id%static_cast<ossim_int32>(theNumberOfTilesHorizontal);
+         if((x < static_cast<ossim_int32>(theNumberOfTilesHorizontal)) &&
+            (y < static_cast<ossim_int32>(theNumberOfTilesVertical)))
+         {           
+            origin.x = theAreaOfInterest.ul().x + x*theTileSize.x;
+            origin.y = theAreaOfInterest.ul().y + y*theTileSize.y;
+            result = true;
+         }
       }
    }
-   else
+   return result;
+}
+
+bool ossimImageSourceSequencer::getTileRect(ossim_uint32 tile_id, ossimIrect& tileRect) const
+{
+   // Fetch tile origin for this tile:
+   ossimIpt origin;
+   bool result = getTileOrigin(tile_id, origin);
+   if ( result )
    {
-      return false;
+      // Establish the tile rect of interest for this tile:
+      tileRect.set_ul (origin);
+      tileRect.set_lrx(origin.x + theTileSize.x - 1);
+      tileRect.set_lry(origin.y + theTileSize.y - 1);
    }
-   
-   return true;
+   return result;
 }
 
 double ossimImageSourceSequencer::getNullPixelValue(ossim_uint32 band)const

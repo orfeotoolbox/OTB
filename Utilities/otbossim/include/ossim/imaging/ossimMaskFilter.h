@@ -10,10 +10,10 @@
   // Description: Class declaration for ossimMaskFilter.
   //
   //*************************************************************************
-    // $Id: ossimMaskFilter.h 19736 2011-06-07 15:54:13Z dburken $
+    // $Id: ossimMaskFilter.h 20409 2011-12-22 16:57:05Z dburken $
 #ifndef  ossimMaskFilter_HEADER
 #define  ossimMaskFilter_HEADER 1
-#include <ossim/imaging/ossimImageCombiner.h>
+#include <ossim/imaging/ossimImageSource.h>
 
     /**
      * <pre>
@@ -27,40 +27,64 @@
      *    to the first input.
      *
      * Keywords:
-     *      mask_type:
+     *    mask_type:
      *
-     * keywords description
-     *      mask_type  This keyword can have the following values:
-     *                 select, invert, or weighted.
-     *                  - select will use the input data and every where
-     *                    the mask is greater than 0 it will copy the input to the output.
-     *                  - invert will use the input data and every where the mask is 0 it
-     *                    will copy the input to the output else it will place a null in
-     *                    the output.
-     *                  - weighted will normalize the mask between 0 and 1 and then multiply
-     *                    the input by that normalized value and copy to the output.
+     * keywords description: This keyword can have the following values:
+     *    select, select_clamp, invert, weighted, binary, or binary_inverse
+     *         
+     *    - select will use the input data and every where
+     *      the mask is greater than 0 it will copy the input to the output.
      *
+     *    - select_clamp_min If mask pixel is non zero, output pixel is input
+     *      pixel; else, null pixel value. Differs from select in that output
+     *      pixel is clamped to min pixel if input pixel is used. 
+     *      
+     *    - invert will use the input data and every where the mask is 0 it
+     *      will copy the input to the output else it will place a null in
+     *      the output.
+     *      
+     *    - weighted will normalize the mask between 0 and 1 and then multiply
+     *      the input by that normalized value and copy to the output.
+     *
+     *    - binary If mask pixel is non zero, output pixel is max pixel value;
+     *      else, null.
+     *
+     *    - binary_inverse If mask pixel is non zero, output pixel is max pixel
+     *      value; else, null pixel value. 
+     *    
      * example of keywords:
      *
      *      mask_type: select
      *
      * </pre>
      */
-class OSSIMDLLEXPORT ossimMaskFilter : public ossimImageCombiner
+class OSSIMDLLEXPORT ossimMaskFilter : public ossimImageSource
 {
 public:
    /**
-    * Enumeration used to identify what the selection type for this mask is to be
-    *  A list of events:
-    *    - OSSIM_MASK_TYPE_SELECT
-    *      is used as a true false mask.  If the mask is non zero
-    *      then the input is kept if it's 0 then the input is nulled out.
-    *    - OSSIM_MASK_TYPE_INVERT
-    *      has the inverted rule of the above.  If the input is tru then the output is nulled
-    *      else the input is kept
-    *    - OSSIM_MASK_TYPE_WEIGHTED
-    *      works as a multiplier of the input data.  The mask is normalized to be between 0 and 1
-    *      and multiplies the input by that normalized value.
+    * Enumeration used to identify what the selection type for this mask is to
+    * be used:
+    * 
+    * - OSSIM_MASK_TYPE_SELECT
+    *   If the mask is non zero then the input is kept if it's 0 then the input
+    *   is nulled out.
+    * - OSSIM_MASK_TYPE_INVERT
+    *   If the input is non zero then the output is nulled else the input is kept
+    * - OSSIM_MASK_TYPE_WEIGHTED
+    *   works as a multiplier of the input data.  The mask is normalized to be
+    *   between 0 and 1 and multiplies the input by that normalized value.
+    * - OSSIM_MASK_TYPE_BINARY
+    *   If mask pixel is non zero, output pixel is null pixel value; else, max
+    *   pixel value.
+    * - OSSIM_MASK_TYPE_BINARY_INVERSE
+    *   If mask pixel is non zero, output pixel is max pixel value; else, null
+    *   pixel value.
+    * - OSSIM_MASK_TYPE_SELECT_CLAMP_MIN
+    *   If mask pixel is non zero, output pixel is input pixel; else, null pixel
+    *   value. Differs from OSSIM_MASK_TYPE_SELECT in that output pixel is
+    *   clamped to min pixel if input pixel is used. The clampling has the
+    *   affect of flipping null pixels to min pixel value if the mask pixel is
+    *   non zero and input pixel is a null.
     */
   enum ossimFileSelectionMaskType
   {
@@ -73,7 +97,9 @@ public:
      /**< binary image> */
      OSSIM_MASK_TYPE_BINARY         = 4,
      /**< inverse binary image> */
-     OSSIM_MASK_TYPE_BINARY_INVERSE = 5
+     OSSIM_MASK_TYPE_BINARY_INVERSE = 5,
+     /**< Standard select if mask is true then keep with min. */
+     OSSIM_MASK_TYPE_SELECT_CLAMP_MIN = 6,
   };
 
    /**
@@ -82,27 +108,13 @@ public:
    ossimMaskFilter(ossimObject* owner=NULL);
 
    /**
-    * Constructs with two inputs
-    */
-   ossimMaskFilter(ossimImageSource* imageSource,
-                   ossimImageSource* maskSource);
-
-   
-   /**
-    * Constructs with two inputs and an owner
-    */
-   ossimMaskFilter(ossimObject* owner,
-                   ossimImageSource* imageSource,
-                   ossimImageSource* maskSource);
-
-   /**
     * This set method is necessary when this object is being added to an ossimImageChain because
     * ossimImageChain::addLast() performs a disconnect of all the input sources, thus losing the
     * assignments made via constructor accepting source pointers. If the intent is to insert this
     * object in place of the image handler in a chain, First remove the handler from the chain, then
     * add a default-constructed mask filter object, then call this method to assign the inputs.
     */
-   void setInputSources(ossimImageSource* imageSource, ossimImageSource* maskSource);
+   void setMaskSource(ossimImageSource* maskSource);
 
    /**
     * Sets the mask type.
@@ -133,14 +145,6 @@ public:
    virtual ossimString getMaskTypeString() const;
 
    /**
-    * Returns the bounding rect in pixel space for this object.
-    * \param resLevel optional res level argument is given.
-    * \return The bounding rect.  It will pass the inputs bounding
-    *         rect since it does not update the bounds.
-    */
-   virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0)const;
-
-   /**
     * Main entry point for the algorithm.
     * \param rect 
     *
@@ -149,39 +153,17 @@ public:
                                                ossim_uint32 resLevel=0);
 
    virtual void initialize();
-   virtual void getDecimationFactor(ossim_uint32 resLevel,
-                                    ossimDpt& result)const;
-   virtual void getDecimationFactors(vector<ossimDpt>& decimations)const;
-
-   virtual ossim_uint32 getNumberOfDecimationLevels()const;
-
-   virtual ossim_uint32 getNumberOfOutputBands() const;
-   
-   virtual ossimScalarType getOutputScalarType() const;
-
-   virtual void getValidImageVertices(vector<ossimIpt>& validVertices,
-                                      ossimVertexOrdering ordering=OSSIM_CLOCKWISE_ORDER,
-                                      ossim_uint32 resLevel=0)const;
-
-   virtual ossim_uint32 getTileWidth() const;
-
-   virtual ossim_uint32 getTileHeight() const;
-
-   virtual double getNullPixelValue(ossim_uint32 band)const;
-   
-   virtual double getMinPixelValue(ossim_uint32 band=0)const;
-   
-   virtual double getMaxPixelValue(ossim_uint32 band=0)const;
-   
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
    
-   virtual bool canConnectMyInputTo(ossim_int32 index,
-                                    const ossimConnectableObject* object)const;
+   virtual bool canConnectMyInputTo(ossim_int32 index, const ossimConnectableObject* object)const;
    
+   virtual ossim_uint32 getNumberOfInputBands() const;
+   
+
    virtual ossimRefPtr<ossimImageData> executeMaskFilter(
       ossimRefPtr<ossimImageData> imageSourceData,
       ossimRefPtr<ossimImageData> maskSourceData);
@@ -196,9 +178,6 @@ public:
    /** @brief Adds "mask_type" to list. */
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
-   /** Provides pointer to the image source's image geometry. */
-   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
-   
 protected:
    /**
     * Will delete its owned tile.
@@ -279,7 +258,8 @@ protected:
     * from the call to getTile.
     */
    ossimRefPtr<ossimImageData> theTile;
-   
+   ossimRefPtr<ossimImageSource> theMaskSource;
+
    TYPE_DATA
 };
 

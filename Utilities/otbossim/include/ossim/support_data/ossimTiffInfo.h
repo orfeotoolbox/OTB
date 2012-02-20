@@ -234,7 +234,7 @@ public:
     * 
     * @return std::ostream&
     */
-   virtual std::ostream& print(std::ifstream& inStr,
+   virtual std::ostream& print(std::istream& inStr,
                                std::ostream& outStr) const;
 
    /**
@@ -269,7 +269,7 @@ public:
     *
     *  @param entryIndex Entry to get geometry from. 
     */
-   bool getImageGeometry(std::ifstream& str,
+   bool getImageGeometry(std::istream& str,
                          ossimKeywordlist& geomKwl,
                          ossim_uint32 entryIndex) const;
 
@@ -352,13 +352,13 @@ private:
                          ossim_uint32 entryIndex) const;
    
    /** Initializes s reference.  Does byte swapping as needed. */
-   void readShort(ossim_uint16& s, std::ifstream& str) const;
+   void readShort(ossim_uint16& s, std::istream& str) const;
    
    /** Initializes l reference.  Does byte swapping as needed. */
-   void readLong(ossim_uint32& l, std::ifstream& str) const;
+   void readLong(ossim_uint32& l, std::istream& str) const;
    
    /** Initializes l reference.  Does byte swapping as needed. */
-   void readLongLong(ossim_uint64& l, std::ifstream& str) const;
+   void readLongLong(ossim_uint64& l, std::istream& str) const;
    
    /** Attempts to parse the pcs code (3072). */
    void parsePcsCode(int code);
@@ -378,7 +378,7 @@ private:
     *
     * @return true if stream is good, false if not.
     */
-   bool getOffset(std::streamoff& offset, std::ifstream& str,
+   bool getOffset(std::streamoff& offset, std::istream& str,
                   ossim_uint16 version) const;
    
    /**
@@ -387,7 +387,7 @@ private:
     *
     * @return true if stream is good, false if not.
     */
-   bool getValue(ossim_uint64& val, std::ifstream& str, WordType type,
+   bool getValue(ossim_uint64& val, std::istream& str, WordType type,
                  ossim_uint16 version) const;
    
    ossim_uint64 getArraySizeInBytes(ossim_uint64 length,
@@ -401,7 +401,7 @@ private:
    /**
     * Eats the value field.  Either 4 or 8 bytes depending on the version.
     */
-   void eatValue(std::ifstream& str, ossim_uint16 version) const;
+   void eatValue(std::istream& str, ossim_uint16 version) const;
    
    void swapBytes(ossim_uint8* v, ossim_uint16 type, ossim_uint64 count) const;
    

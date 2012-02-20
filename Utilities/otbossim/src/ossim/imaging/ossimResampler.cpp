@@ -10,7 +10,7 @@
 // Contains class definition for ossimResampler.
 // 
 //*******************************************************************
-//  $Id: ossimResampler.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimResampler.cpp 20204 2011-11-04 15:12:28Z dburken $
 
 
 #include <iostream>
@@ -531,7 +531,6 @@ void ossimResampler::resamplePartialTile(T,// not used
             }
             else
             {
-               double lastValue = ossim::nan();
                for (l = 0; l < theKernelWidth; l++)
                {
                   ossim_int32 index = Lx[m] + l + kernelHorizontalShift;
@@ -539,7 +538,6 @@ void ossimResampler::resamplePartialTile(T,// not used
                   {
                      if(ossim::isnan(h[index]) == false)
                      {
-                        lastValue = h[index];
                         x += h[index] * theWeightTableX[theKernelWidth - l-1][indexMod];
                      }
 

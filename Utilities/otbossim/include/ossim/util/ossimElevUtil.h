@@ -14,7 +14,7 @@
 // digital elevation model(DEM) operations.
 // 
 //----------------------------------------------------------------------------
-// $Id$
+// $Id: ossimElevUtil.h 20489 2012-01-23 20:07:56Z dburken $
 
 #ifndef ossimElevUtil_HEADER
 #define ossimElevUtil_HEADER 1
@@ -35,6 +35,7 @@ class ossimDpt;
 class ossimFilename;
 class ossimGpt;
 class ossimImageFileWriter;
+class ossimImageGeometry;
 class ossimIrect;
 class ossimKeywordlist;
 
@@ -200,6 +201,18 @@ private:
    ossimRefPtr<ossimMapProjection> getNewUtmProjection();
 
    /**
+    * @brief Convenience method to get a pointer to the  output map
+    * projection.
+    *
+    * Callers should check for valid() as the pointer could be
+    * 0 if not initialized.
+    * 
+    * @returns The ossimMapProjection* from the m_outputGeometry as a ref
+    * pointer.
+    */
+   ossimRefPtr<ossimMapProjection> getMapProjection();
+
+   /**
     * @brief Sets the projection tie point to the scene bounding rect corner.
     * @note Throws ossimException on error.
     */
@@ -227,6 +240,20 @@ private:
     * @note Throws ossimException on error.
     */
    void getTiePoint(ossimSingleImageChain* chain, ossimGpt& tie);
+
+   /**
+    * @brief Loops through all layers to get the upper left tie point.
+    * @param tie Point to initialize.
+    */
+   void getTiePoint(ossimDpt& tie);
+
+   /**
+    * @brief Gets the upper left tie point from a chain.
+    * @param chain The chain to get tie point from.
+    * @param tie Point to initialize.
+    * @note Throws ossimException on error.
+    */
+   void getTiePoint(ossimSingleImageChain* chain, ossimDpt& tie);
 
    /**
     * @brief Loops through all layers to get the best gsd.
@@ -403,6 +430,9 @@ private:
    /** @return true if scale to eight bit option is set; false, if not. */
    bool scaleToEightBit() const;
 
+   /** @return true if snap tie to origin option is set; false, if not. */
+   bool snapTieToOrigin() const;   
+
    /**
     * @brief Adds application arguments to the argument parser.
     * @param ap Parser to add to.
@@ -421,8 +451,11 @@ private:
    /** Hold contents of src file if --src is used. */
    ossimRefPtr<ossimKeywordlist> m_srcKwl;
 
-   /** The output (view) projection. */
-   ossimRefPtr<ossimMapProjection> m_outputProjection;
+   /**
+    * The output (view) projection/image geometry. 
+    * Initialized with output projection only(no transform).
+    */
+   ossimRefPtr<ossimImageGeometry> m_outputGeometry;
 
    /**  Array of dem chains. */
    std::vector< ossimRefPtr<ossimSingleImageChain> > m_demLayer;

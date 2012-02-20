@@ -7,7 +7,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.h 20069 2011-09-07 18:46:58Z dburken $
+// $Id: ossimKeywordlist.h 20438 2012-01-11 15:27:52Z gpotts $
 
 #ifndef ossimKeywordlist_HEADER
 #define ossimKeywordlist_HEADER 1
@@ -20,6 +20,7 @@
 #include <iosfwd>
 #include <map>
 #include <vector>
+#include <algorithm>
 
 static const char DEFAULT_DELIMITER = ':';
 
@@ -84,7 +85,51 @@ public:
             const ossimKeywordlist& kwl,
             bool overwrite=true);
 
+   /**
+    * This is a generic find method that takes a comparator type and iterates through 
+    * the map executing the overloaded operator ().
+    * Typical code example format
+    <pre>
+    typedef std::unary_function<std::pair<ossimString, ossimString>, bool> KwlCompareFunctionType;
+    
+    class KwlKeyCaseInsensitiveEquals : public KwlCompareFunctionType
+    {
+    public:
+       KwlKeyCaseInsensitiveEquals(const ossimString& key):m_key(key){}
+       virtual bool operator()(const KwlComparePairType& rhs)const
+       {
+          return (m_key == rhs.first.downcase());
+       }
+       ossimString m_key;
+    };
 
+    // now for use case example:
+    kwl.findValue(value, KwlKeyCaseInsensitiveEquals("foo"));
+    </pre>
+    
+    This example shows how to supplly your own comparator and do a case insensitive
+    search for the key foo and the value is set to the variable value.
+    *
+    */
+   template<class CompareType>
+   bool findValue(ossimString& value, const CompareType& compare)const
+   {
+      KeywordMap::const_iterator iter = std::find_if(m_map.begin(), m_map.end(), compare);
+      bool result = (iter != m_map.end());
+      if(result) value = iter->second;
+      return result;
+   }
+   
+   std::string& operator[](const std::string& key)
+   {
+      return m_map[key];
+   }
+   std::string operator[](const std::string& key)const
+   {
+      ossimString result = find(key.c_str());
+      
+      return result.c_str();
+   }
    /*!
     * Allows you to extract out a sub keywordlist from another
     * you can also collapse the hieracrchy by setting
@@ -277,13 +322,12 @@ public:
    ossim_uint32 numberOf(const char* str) const;
 
    /*!
-    *  Searches the map for the number of keys containing the prefix
-    *  and the string.
-    *
+    *  Searches the map for the number of keys containing the prefix+key.
+    *  
     *  Given the keyword list contains:
     *
-    *  source1.type: foo
-    *  source2.type: you
+    *  source.type1: foo
+    *  source.type2: you
     *
     *  This:
     *

@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEcefModel.cpp 17206 2010-04-25 23:20:40Z dburken $
+//  $Id: ossimApplanixEcefModel.cpp 20485 2012-01-23 18:22:38Z gpotts $
 #include <sstream>
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -28,7 +28,7 @@ static ossimTrace traceDebug("ossimApplanixEcefModel:debug");
 RTTI_DEF1(ossimApplanixEcefModel, "ossimApplanixEcefModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 17206 2010-04-25 23:20:40Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 20485 2012-01-23 18:22:38Z gpotts $";
 #endif
 
 ossimApplanixEcefModel::ossimApplanixEcefModel()
@@ -175,12 +175,12 @@ void ossimApplanixEcefModel::lineSampleToWorld(const ossimDpt& image_point,
    //***
    // Extrapolate if image point is outside image:
    //***
-   if (!insideImage(image_point))
-   {
-      gpt.makeNan();
+//   if (!insideImage(image_point))
+//   {
+//      gpt.makeNan();
 //       gpt = extrapolate(image_point);
-      return;
-   }
+//      return;
+//   }
 
    //***
    // Determine imaging ray and invoke elevation source object's services to
@@ -230,9 +230,9 @@ void ossimApplanixEcefModel::worldToLineSample(const ossimGpt& world_point,
    {
       if (!(theBoundGndPolygon.pointWithin(world_point)))
       {
-         image_point.makeNan();
+//         image_point.makeNan();
 //          image_point = extrapolate(world_point);
-         return;
+//         return;
       }         
    }
    ossimEcefPoint g_ecf(world_point);
@@ -285,16 +285,18 @@ void ossimApplanixEcefModel::updateModel()
    theCompositeMatrixInverse = theCompositeMatrix.i();
 
    theBoundGndPolygon.resize(4);
-   ossim_float64 w = theImageClipRect.width()*2.0;
-   ossim_float64 h = theImageClipRect.height()*2.0;
-   
-   lineSampleToWorld(theImageClipRect.ul()+ossimDpt(-w, -h), gpt);
+   // ossim_float64 w = theImageClipRect.width()*2.0;
+   // ossim_float64 h = theImageClipRect.height()*2.0;
+   theExtrapolateImageFlag = false;
+   theExtrapolateGroundFlag = false;
+
+   lineSampleToWorld(theImageClipRect.ul(),gpt);//+ossimDpt(-w, -h), gpt);
    theBoundGndPolygon[0] = gpt;
-   lineSampleToWorld(theImageClipRect.ur()+ossimDpt(w, -h), gpt);
+   lineSampleToWorld(theImageClipRect.ur(),gpt);//+ossimDpt(w, -h), gpt);
    theBoundGndPolygon[1] = gpt;
-   lineSampleToWorld(theImageClipRect.lr()+ossimDpt(w, h), gpt);
+   lineSampleToWorld(theImageClipRect.lr(),gpt);//+ossimDpt(w, h), gpt);
    theBoundGndPolygon[2] = gpt;
-   lineSampleToWorld(theImageClipRect.ll()+ossimDpt(-w, h), gpt);
+   lineSampleToWorld(theImageClipRect.ll(),gpt);//+ossimDpt(-w, h), gpt);
    theBoundGndPolygon[3] = gpt;
 }
 
@@ -425,7 +427,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
    theRoll    = 0.0;
    thePitch   = 0.0;
    theHeading = 0.0;
-   bool computeGsdFlag = false;
+   // bool computeGsdFlag = false;
    const char* roll              = kwl.find(prefix, "roll");
    const char* pitch             = kwl.find(prefix, "pitch");
    const char* heading           = kwl.find(prefix, "heading");
@@ -489,7 +491,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       {
          return false;
       }
-      computeGsdFlag = true;
+      // computeGsdFlag = true;
    }
    else
    {
@@ -609,23 +611,48 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
          theFocalLength = ossimString(focal_length).toDouble();
       }
 
+      cameraKwl.trimAllValues();
+      
+      
+      ossimString regExpression =  ossimString("^(") + "d[0-9]+)";
+      vector<ossimString> keys;
+      cameraKwl.getSubstringKeyList( keys, regExpression );
+      long numberOfDistortions = (long)keys.size();
+      int offset = (int)ossimString("d").size();
       ossim_uint32 idx = 0;
-      for(idx = 0; idx < 26; ++idx)
+      std::vector<int> numberList(numberOfDistortions);
+      for(idx = 0; idx < (int)numberList.size();++idx)
       {
-         const char* value = cameraKwl.find(ossimString("d")+ossimString::toString(idx));
+         ossimString numberStr(keys[idx].begin() + offset,
+                               keys[idx].end());
+         numberList[idx] = numberStr.toInt();
+      }
+      std::sort(numberList.begin(), numberList.end());
+      double distance=0.0, distortion=0.0;
 
-         if(value)
+      for(idx = 0; idx < numberList.size(); ++idx)
+      {
+         ossimString value = cameraKwl.find(ossimString("d")+ossimString::toString(numberList[idx]));
+
+         if(!value.empty())
          {
+            std::istringstream inStr(value.c_str());
+            inStr >> distance;
+            ossim::skipws(inStr);
+            inStr >> distortion;
+#if 0
             std::vector<ossimString> splitString;
             ossimString tempString(value);
-            tempString.split(splitString, ossimString(" "));
-            double distance = 0.0;
-            double distortion = 0.0;
-            if(splitString.size() == 2)
+            tempString = tempString.trim();
+            tempString.split(splitString, " ");
+            std::cout << splitString.size() << std::endl;
+            if(splitString.size() >= 2)
             {
                distance = splitString[0].toDouble();
                distortion = splitString[1].toDouble();
             }
+#endif
+            
             tool.setValue(distortion, unitType);
             lensKwl.add(ossimString("distance") + ossimString::toString(idx),
                         distance,

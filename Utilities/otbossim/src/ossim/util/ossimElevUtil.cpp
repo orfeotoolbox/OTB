@@ -12,7 +12,7 @@
 // models(dems).
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimElevUtil.cpp 2796 2011-06-29 21:01:09Z david.burken $
+// $Id: ossimElevUtil.cpp 20489 2012-01-23 20:07:56Z dburken $
 
 #include <ossim/util/ossimElevUtil.h>
 
@@ -31,10 +31,13 @@
 #include <ossim/base/ossimStdOutProgress.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimVisitor.h>
+#include <ossim/base/ossimConnectableContainer.h>
 
 #include <ossim/imaging/ossimBumpShadeTileSource.h>
 #include <ossim/imaging/ossimFilterResampler.h>
 #include <ossim/imaging/ossimImageFileWriter.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimImageMosaic.h>
 #include <ossim/imaging/ossimImageRenderer.h>
@@ -85,9 +88,11 @@ static const char OP_KW[]                   = "operation";
 static const char OUTPUT_RADIOMETRY_KW[]    = "output_radiometry";
 static const char RESAMPLER_FILTER_KW[]     = "resampler_filter";
 static const char SCALE_2_8_BIT_KW[]        = "scale_2_8_bit";
+static const char SNAP_TIE_TO_ORIGIN_KW[]   = "snap_tie_to_origin";
 static const char SRC_FILE_KW[]             = "src_file";
 static const char SRS_KW[]                  = "srs";
 static const char THUMBNAIL_RESOLUTION_KW[] = "thumbnail_resolution"; // pixels
+static const char TRUE_KW[]                 = "true";
 static const char WRITER_KW[]               = "writer";
 static const char WRITER_PROPERTY_KW[]      = "writer_property";
 
@@ -96,7 +101,7 @@ ossimElevUtil::ossimElevUtil()
      m_operation(OSSIM_DEM_OP_UNKNOWN),
      m_kwl(new ossimKeywordlist()),
      m_srcKwl(0),
-     m_outputProjection(0),
+     m_outputGeometry(0),
      m_demLayer(0),
      m_imgLayer(0)
 {
@@ -130,6 +135,8 @@ void ossimElevUtil::addArguments(ossimArgumentParser& ap)
    
    appuse->addCommandLineOption("--cut-center-llwh","<latitude> <longitude> <width> <height>\nSpecify the center cut in latitude longitude space with width and height in pixels.");
 
+   appuse->addCommandLineOption("--degrees","<dpp_xy> | <dpp_x> <dpp_y>\nSpecifies an override for degrees per pixel. Takes either a single value applied equally to x and y directions, or two values applied correspondingly to x then y. This option takes precedence over the \"--meters\" option.");
+
    appuse->addCommandLineOption("--elevation", "<elevation>\nhillshade option - Light source elevation angle for bumb shade.\nRange: 0 to 90, Default = 45.0");
    
    appuse->addCommandLineOption("--exaggeration", "<factor>\nMultiplier for elevation values when computing surface normals. Has the effect of lengthening shadows for oblique lighting.\nRange: .0001 to 50000, Default = 1.0");
@@ -160,11 +167,13 @@ void ossimElevUtil::addArguments(ossimArgumentParser& ap)
 
    appuse->addCommandLineOption("--scale-to-8-bit", "Scales the output to unsigned eight bits per band. This option has been deprecated by the newer \"--output-radiometry\" option.");
 
+   appuse->addCommandLineOption("--snap-tie-to-origin",
+                                "Snaps tie point to projection origin so that (tie-origin)/gsd come out on an even integer boundary.");   
+   
    appuse->addCommandLineOption("--srs","<src_code>\nSpecify an output reference frame/projection. Example: --srs EPSG:4326");
 
    appuse->addCommandLineOption("-t or --thumbnail", "<max_dimension>\nSpecify a thumbnail "
       "resolution.\nScale will be adjusted so the maximum dimension = argument given.");
-   appuse->addCommandLineOption("-t or --thumbnail", "<max_dimension>\nSpecify a thumbnail resolution.\nScale will be adjusted so the maximum dimension = argument given.");
    
    appuse->addCommandLineOption("-w or --writer","<writer>\nSpecifies the output writer.  Default uses output file extension to determine writer.");
    
@@ -338,19 +347,14 @@ bool ossimElevUtil::initialize(ossimArgumentParser& ap)
       m_kwl->add( ossimKeywordNames::ORIGIN_LATITUDE_KW, tempString1.c_str() );
    }
 
-   if( ap.read("--projection", stringParam1) )
-   {
-      m_kwl->add( ossimKeywordNames::PROJECTION_KW, tempString1.c_str() );
-   }
-
    if(ap.read("--output-radiometry", stringParam1))
    {
       m_kwl->add( OUTPUT_RADIOMETRY_KW, tempString1.c_str() );
    }
 
-   if( ap.read("--origin-latitude", stringParam1) )
+   if( ap.read("--projection", stringParam1) )
    {
-      m_kwl->add( ossimKeywordNames::ORIGIN_LATITUDE_KW, tempString1.c_str() );
+      m_kwl->add( ossimKeywordNames::PROJECTION_KW, tempString1.c_str() );
    }
 
    if( ap.read("--resample-filter", stringParam1) )
@@ -360,7 +364,12 @@ bool ossimElevUtil::initialize(ossimArgumentParser& ap)
 
    if ( ap.read("--scale-to-8-bit") )
    {
-      m_kwl->add( SCALE_2_8_BIT_KW, "true");
+      m_kwl->add( SCALE_2_8_BIT_KW, TRUE_KW);
+   }
+
+   if ( ap.read("--snap-tie-to-origin") )
+   {
+      m_kwl->add( SNAP_TIE_TO_ORIGIN_KW, TRUE_KW);
    }
    
    if( ap.read("--srs", stringParam1) )
@@ -583,7 +592,7 @@ void ossimElevUtil::execute()
          gain = ossimString::toFloat64(lookup);
       }
       normSource->setSmoothnessFactor(gain);
-      
+
       ossimRefPtr<ossimImageSource> colorSource = 0;
       if ( hasLutFile() )
       {
@@ -720,10 +729,23 @@ void ossimElevUtil::execute()
       ossimIrect aoi;
       getAreaOfInterest(source.get(), aoi);
 
+      //---
+      // Set the image size here.  Note must be set after combineLayers.  This is needed for
+      // the ossimImageGeometry::worldToLocal call for a geographic projection to handle wrapping
+      // accross the date line.
+      //---
+      m_outputGeometry->setImageSize( aoi.size() );
+
       if ( hasThumbnailResolution() )
       {
+         //---
          // Adjust the projection scale and get the new rect.
+         // Note this will resize the ossimImageGeometry::m_imageSize is scale changes.
+         //---
          initializeThumbnailProjection( aoi, aoi );
+
+         // Reset the source bounding rect if it changed.
+         source->initialize();
       }
 
       // Set up the writer.
@@ -743,45 +765,30 @@ void ossimElevUtil::execute()
          writer->setAreaOfInterest(aoi);
       }
       
-      // Add a listener to get percent complete.
-      ossimStdOutProgress prog(0, true);
-      writer->addListener(&prog);
-
-      if ( traceLog() )
-      {
-         ossimKeywordlist logKwl;
-         writer->saveStateOfAllInputs(logKwl);
-
-         ossimFilename logFile;
-         getOutputFilename(logFile);
-         logFile.setExtension("log");
-
-         logKwl.write( logFile.c_str() );
-      }
-      
       if (writer->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
       {
-         //---
-         // Set the view ossimImageGeometry image size so that external geometries
-         // have the correct "image_size" key/value.
-         //---
-         ossimRefPtr<ossimConnectableObject> obj = writer->getInput(0);
-         ossimRefPtr<ossimImageSource> imgSrc = dynamic_cast<ossimImageSource*>(obj.get());
-         if ( imgSrc.valid() )
+         // Add a listener to get percent complete.
+         ossimStdOutProgress prog(0, true);
+         writer->addListener(&prog);
+
+         if ( traceLog() )
          {
-            ossimRefPtr<ossimImageGeometry> geom = imgSrc->getImageGeometry();
-            if ( geom.valid() )
-            {
-               ossimIrect aoi = writer->getAreaOfInterest();
-               geom->setImageSize(aoi.size());
-            }
+            ossimKeywordlist logKwl;
+            writer->saveStateOfAllInputs(logKwl);
+            
+            ossimFilename logFile;
+            getOutputFilename(logFile);
+            logFile.setExtension("log");
+            ossimKeywordlist kwl;
+            writer->saveStateOfAllInputs(kwl);
+            kwl.write(logFile.c_str() );
          }
          
          // Write the file:
          writer->execute();
-      }
 
-      writer->removeListener(&prog);
+         writer->removeListener(&prog);
+      }
    }
    
    if ( traceDebug() )
@@ -999,18 +1006,17 @@ ossimRefPtr<ossimSingleImageChain> ossimElevUtil::createChain(const ossimFilenam
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " entered..."
-         << "\nfile: " << file << "\n";
+         << MODULE << " entered..." << "\nfile: " << file << "\n";
    }   
    
    ossimRefPtr<ossimSingleImageChain> ic = 0;
-   
+
    if ( file.size() )
    {
       if ( file.exists() )
       {
          ic = new ossimSingleImageChain;
-         if ( ic->open(file) )
+         if ( ic->open( file ) )
          {
             //---
             // If multiple inputs and scaleToEightBit do it at the end of the processing
@@ -1050,7 +1056,7 @@ ossimRefPtr<ossimSingleImageChain> ossimElevUtil::createChain(const ossimFilenam
       }
    }
 
-   if ( !ic.valid() )
+   if ( ic.valid() == false )
    {
       std::string errMsg = "Could not open: ";
       errMsg += file.string();
@@ -1141,9 +1147,6 @@ void ossimElevUtil::createOutputProjection()
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
 
-   // Start with null projection.
-   m_outputProjection  = 0;
-
    const char* op  = m_kwl->find(ossimKeywordNames::PROJECTION_KW);
    const char* srs = m_kwl->find(SRS_KW);
    
@@ -1160,11 +1163,12 @@ void ossimElevUtil::createOutputProjection()
    
    bool usingInput = false;
    ossimDemOutputProjection projType = getOutputProjectionType();
+   ossimRefPtr<ossimMapProjection> proj = 0;
    
    // If an srs code use that first.
    if (srs)
    {
-      m_outputProjection = getNewProjectionFromSrsCode( ossimString(srs) );
+      proj = getNewProjectionFromSrsCode( ossimString(srs) );
    }
    else if (op)
    {
@@ -1172,23 +1176,23 @@ void ossimElevUtil::createOutputProjection()
       {
          case ossimElevUtil::OSSIM_DEM_PROJ_GEO:
          {
-            m_outputProjection = getNewGeoProjection();
+            proj = getNewGeoProjection();
             break;
          }
          case ossimElevUtil::OSSIM_DEM_PROJ_GEO_SCALED:
          {
-            m_outputProjection = getNewGeoScaledProjection();
+            proj = getNewGeoScaledProjection();
             break;
          }
          case ossimElevUtil::OSSIM_DEM_PROJ_INPUT:
          {
-            m_outputProjection = getFirstInputProjection();
+            proj = getFirstInputProjection();
             usingInput = true;
             break;
          }
          case ossimElevUtil::OSSIM_DEM_PROJ_UTM:
          {
-            m_outputProjection = getNewUtmProjection();
+            proj = getNewUtmProjection();
             break;
          }
          default:
@@ -1197,33 +1201,38 @@ void ossimElevUtil::createOutputProjection()
          }
       }
    }
-
+   
    // Check for identity projection:
    ossimRefPtr<ossimMapProjection> inputProj = getFirstInputProjection();   
-   if ( m_outputProjection.valid() && inputProj.valid() )
+   if ( proj.valid() && inputProj.valid() )
    {
-      if ( *(inputProj.get()) == *(m_outputProjection.get()) )
+      if ( *(inputProj.get()) == *(proj.get()) )
       {
          if ( projType == OSSIM_DEM_PROJ_GEO_SCALED )
          {
-            ossimGpt origin = m_outputProjection->getOrigin();
-            m_outputProjection = inputProj;
-            m_outputProjection->setOrigin(origin);
+            // Get the origin used for scaling. 
+            ossimGpt origin = proj->getOrigin();
+
+            // Copy the input projection to our projection.  Has the tie and scale we need.
+            proj = inputProj;
+
+            // Set the origin for scaling.
+            proj->setOrigin(origin);
          }
          else
          {
-            m_outputProjection = inputProj;
+            proj = inputProj;
          }
          usingInput = true;
       }
    }
    
-   if ( !m_outputProjection.valid() )
+   if ( !proj.valid() )
    {
       // Try first input. If map projected use that.
-      m_outputProjection = inputProj;
-      if ( m_outputProjection.valid() )
+      if ( inputProj.valid() )
       {
+         proj = inputProj;
          usingInput = true;
          if ( traceDebug() )
          {
@@ -1234,7 +1243,7 @@ void ossimElevUtil::createOutputProjection()
       }
       else
       {
-         m_outputProjection = getNewGeoScaledProjection();
+         proj = getNewGeoScaledProjection();
          if ( traceDebug() )
          {
             ossimNotify(ossimNotifyLevel_WARN)
@@ -1244,12 +1253,15 @@ void ossimElevUtil::createOutputProjection()
       }
    }
 
+   // Create our ossimImageGeometry with projection (no transform).
+   m_outputGeometry  = new ossimImageGeometry( 0, proj.get() );
+
    //---
    // If the input is the same as output projection do not modify; else, set
    // the gsd to user selected "METERS_KW" or the best resolution of the inputs,
    // set the tie and then snap it to the projection origin.
    //---
-   if ( !usingInput || m_kwl->find(METERS_KW) || m_kwl->find(DEGREES_X_KW) )
+   if ( !usingInput || m_kwl->find(METERS_KW) || m_kwl->find(DEGREES_X_KW))
    {
       // Set the scale.
       initializeProjectionGsd();
@@ -1257,18 +1269,20 @@ void ossimElevUtil::createOutputProjection()
 
    // Set the tie.
    intiailizeProjectionTiePoint();
-   
-   // Adjust the projection tie and origin.
-   m_outputProjection->snapTiePointToOrigin(); 
-   
+
+   if ( snapTieToOrigin() )
+   {
+      // Adjust the projection tie to the origin.
+      proj->snapTiePointToOrigin();
+   }
    
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "using input projection: " << (usingInput?"true":"false")
-         << "\noutput projection:\n";
+         << "\noutput image geometry:\n";
 
-      m_outputProjection->print(ossimNotify(ossimNotifyLevel_DEBUG));
+      m_outputGeometry->print(ossimNotify(ossimNotifyLevel_DEBUG));
 
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exited...\n";
    }
@@ -1282,35 +1296,79 @@ void ossimElevUtil::intiailizeProjectionTiePoint()
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
    
-   ossimGpt tiePoint;
-   tiePoint.makeNan();
+   ossimRefPtr<ossimMapProjection> mapProj = getMapProjection();
 
-   if ( m_outputProjection.valid() )
+   if ( mapProj.valid() )
    {
-      getTiePoint(tiePoint);
-      
-      if ( !tiePoint.hasNans() )
+      if ( mapProj->isGeographic() )
       {
-         m_outputProjection->setUlTiePoints(tiePoint);
+         ossimGpt tiePoint;
+         tiePoint.makeNan();
+         getTiePoint(tiePoint);
+         
+         if ( !tiePoint.hasNans() )
+         {
+            //---
+            // The tie point coordinates currently reflect the UL edge of the UL pixel.
+            // We'll need to shift the tie point bac from the edge to the center base on the
+            // output gsd.
+            //---
+            ossimDpt half_pixel_shift = m_outputGeometry->getDegreesPerPixel() * 0.5;
+            tiePoint.lat -= half_pixel_shift.lat;
+            tiePoint.lon += half_pixel_shift.lon;
+            mapProj->setUlTiePoints(tiePoint);
+         }
+         else
+         {
+            std::string errMsg = MODULE;
+            errMsg += " tie point has nans!";
+            throw( ossimException(errMsg) );
+         }
+
+         if ( traceDebug() )
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "projection tie point: " << tiePoint << "\n" << MODULE << " exited...\n";
+         }
       }
       else
       {
-         std::string errMsg = MODULE;
-         errMsg += " tie point has nans!";
-         throw( ossimException(errMsg) );
+         ossimDpt tiePoint;
+         tiePoint.makeNan();
+         getTiePoint(tiePoint);
+         
+         if ( !tiePoint.hasNans() )
+         {
+            //---
+            // The tie point coordinates currently reflect the UL edge of the UL pixel.
+            // We'll need to shift the tie point bac from the edge to the center base on the
+            // output gsd.
+            //---
+            ossimDpt half_pixel_shift = m_outputGeometry->getMetersPerPixel() * 0.5;
+            tiePoint.y -= half_pixel_shift.y;
+            tiePoint.x += half_pixel_shift.x;
+            mapProj->setUlTiePoints(tiePoint);
+         }
+         else
+         {
+            std::string errMsg = MODULE;
+            errMsg += " tie point has nans!";
+            throw( ossimException(errMsg) );
+         }
+
+         if ( traceDebug() )
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "projection tie point: " << tiePoint << "\n" << MODULE << " exited...\n";
+         }
       }
-   }
+      
+   } // Matches: if ( mapProj.valid() )
    else
    {
       std::string errMsg = MODULE;
       errMsg += "m_projection is null!";
       throw( ossimException(errMsg) ); 
-   }
-   
-   if ( traceDebug() )
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "projection tie point: " << tiePoint << "\n" << MODULE << " exited...\n";
    }
 }
 
@@ -1322,73 +1380,55 @@ void ossimElevUtil::initializeProjectionGsd()
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
 
-   ossimDpt gsd;
-   gsd.makeNan();
+   ossimRefPtr<ossimMapProjection> mapProj = getMapProjection();
 
-   if ( m_outputProjection.valid() )
-   {
-      // Check for GSD spec. Degrees/pixel takes priority over meters/pixel:
-      const char* gsdx = m_kwl->find(DEGREES_X_KW);
-      const char* gsdy = m_kwl->find(DEGREES_Y_KW);
-      
-      if ( gsdx || gsdy ) // Must have at least one...
-      {
-         if ( gsdx )
-         {
-            gsd.x = ossimString::toFloat64(gsdx);
-         }
-         if ( gsdy )
-         {
-            gsd.y = ossimString::toFloat64(gsdy);
-         }
-         if ( ossim::isnan(gsd.x) && !ossim::isnan(gsd.y) )
-         {
-            gsd.x = gsd.y;
-         }
-         else if ( ossim::isnan(gsd.y) && !ossim::isnan(gsd.x) )
-         {
-            gsd.y = gsd.x;
-         }
-         if ( gsd.hasNans() == false )
-         {
-            m_outputProjection->setDecimalDegreesPerPixel(gsd);
-         }
-      }
-      else
-      {
-         const char* lookup = m_kwl->find(METERS_KW);
-         if ( lookup )
-         {
-            gsd.x = ossimString::toFloat64(lookup);
-            gsd.y = gsd.x;
-            m_outputProjection->setMetersPerPixel(gsd);
-         }
-      }
-
-      if ( gsd.hasNans() )
-      {
-         // Get the best resolution from the inputs.
-         getMetersPerPixel(gsd);
-         
-         // See if the output projection is geo-scaled; if so, make the pixels square in meters.
-         if ( getOutputProjectionType() == ossimElevUtil::OSSIM_DEM_PROJ_GEO_SCALED )
-         {
-            // Pick the best resolution and make them both the same.
-            gsd.x = ossim::min<ossim_float64>(gsd.x, gsd.y);
-            gsd.y = gsd.x;
-         }
-         
-         // Set to input gsd.
-         m_outputProjection->setMetersPerPixel(gsd);
-      } 
-   }
-   else
+   if ( !mapProj.valid() )
    {
       std::string errMsg = MODULE;
-      errMsg += "m_projection is null!";
+      errMsg += "projection is null!";
       throw( ossimException(errMsg) ); 
    }
    
+   ossimDpt gsd;
+   gsd.makeNan();
+
+   // Check for GSD spec. Degrees/pixel takes priority over meters/pixel:
+   const char* lookup = m_kwl->find(DEGREES_X_KW);
+   if ( lookup )
+   {
+      gsd.x = ossimString::toFloat64(lookup);
+      lookup = m_kwl->find(DEGREES_Y_KW);
+      gsd.y = ossimString::toFloat64(lookup);
+      mapProj->setDecimalDegreesPerPixel(gsd);
+   }
+   else
+   {
+      lookup = m_kwl->find(METERS_KW);
+      if ( lookup )
+      {
+         gsd.x = ossimString::toFloat64(lookup);
+         gsd.y = gsd.x;
+         mapProj->setMetersPerPixel(gsd);
+      }
+   }
+
+   if ( gsd.hasNans() )
+   {
+      // Get the best resolution from the inputs.
+      getMetersPerPixel(gsd);
+
+      // See if the output projection is geo-scaled; if so, make the pixels square in meters.
+      if ( getOutputProjectionType() == ossimElevUtil::OSSIM_DEM_PROJ_GEO_SCALED )
+      {
+         // Pick the best resolution and make them both the same.
+         gsd.x = ossim::min<ossim_float64>(gsd.x, gsd.y);
+         gsd.y = gsd.x;
+      }
+
+      // Set to input gsd.
+      mapProj->setMetersPerPixel(gsd);
+   }
+
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -1416,7 +1456,7 @@ void ossimElevUtil::getTiePoint(ossimGpt& tie)
    while ( chainIdx != m_demLayer.end() )
    {
       getTiePoint( (*chainIdx).get(), chainTiePoint );
-      if ( tie.isLatNan() || tie.isLonNan() )
+      if ( tie.hasNans() )
       {
          tie = chainTiePoint;
       }
@@ -1471,17 +1511,148 @@ void ossimElevUtil::getTiePoint(ossimSingleImageChain* chain, ossimGpt& tie)
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }   
-   
-   if (chain)
-   {
-      ossimRefPtr<ossimImageGeometry> geom = chain->getImageGeometry();
-      if ( geom.valid() )
-      {
-         ossimIrect boundingRect = chain->getBoundingRect();
-         ossimDpt ulPt = boundingRect.ul();
-         geom->localToWorld(ulPt, tie);
 
+   if (chain && m_outputGeometry.valid() )
+   {
+      //---
+      // The view is not set yet in the chain so we get the tie point from the
+      // image handler geometry not from the chain which will come from the
+      // ossimImageRenderer.
+      //---
+      ossimRefPtr<ossimImageHandler> ih = chain->getImageHandler();
+      if ( ih.valid() )
+      {
+         ossimRefPtr<ossimImageGeometry> geom = ih->getImageGeometry();
+         if ( geom.valid() )
+         {
+            geom->getTiePoint( tie, true );
+         }
+
+         // Set height to 0.0 even though it's not used so hasNans test works.
          tie.hgt = 0.0;
+         
+         if ( tie.hasNans() )
+         {
+            std::string errMsg = MODULE;
+            errMsg += "\ngeom->localToWorld returned nan for chain.";
+            errMsg += "\nChain: ";
+            errMsg += chain->getFilename().string();
+            throw ossimException(errMsg);
+         }
+      }
+      else
+      {
+         std::string errMsg = MODULE;
+         errMsg += "\nNo geometry for chain: ";
+         errMsg += chain->getFilename().string();
+         throw ossimException(errMsg);
+      }
+   }
+   else
+   {
+      std::string errMsg = MODULE;
+      errMsg += " ERROR: Null chain passed to method!";
+      throw ossimException(errMsg);
+   }
+
+   if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "chain name: " << chain->getFilename()
+         << "\ntie point:  " << tie << "\n"
+         << MODULE << " exited...\n";
+   }
+}
+
+void ossimElevUtil::getTiePoint(ossimDpt& tie)
+{
+   static const char MODULE[] = "ossimElevUtil::getTiePoint(ossimDpt&)";
+   if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
+   }
+
+   std::vector< ossimRefPtr<ossimSingleImageChain> >::iterator chainIdx;
+
+   tie.makeNan();
+   
+   // Loop through dem layers.
+   ossimDpt chainTiePoint;
+   chainIdx = m_demLayer.begin();
+   while ( chainIdx != m_demLayer.end() )
+   {
+      getTiePoint( (*chainIdx).get(), chainTiePoint );
+      if ( tie.hasNans() )
+      {
+         tie = chainTiePoint;
+      }
+      else
+      {
+         if ( chainTiePoint.y > tie.y )
+         {
+            tie.y = chainTiePoint.y;
+         }
+         if ( chainTiePoint.x < tie.x )
+         {
+            tie.x = chainTiePoint.x;
+         }
+      }
+      ++chainIdx;
+   }
+
+   // Loop through image layers.
+   chainIdx = m_imgLayer.begin();
+   while ( chainIdx != m_imgLayer.end() )
+   {
+      getTiePoint( (*chainIdx).get(), chainTiePoint );
+      if ( tie.hasNans() )
+      {
+         tie = chainTiePoint;
+      }
+      else
+      {
+         if ( chainTiePoint.y > tie.y )
+         {
+            tie.y = chainTiePoint.y;
+         }
+         if ( chainTiePoint.x < tie.x )
+         {
+            tie.x = chainTiePoint.x;
+         }
+      }
+      ++chainIdx;
+   }
+
+   if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "tie point: " << tie << "\n" << MODULE << " exited...\n";
+   }
+}
+
+void ossimElevUtil::getTiePoint(ossimSingleImageChain* chain, ossimDpt& tie)
+{
+   static const char MODULE[] = "ossimElevUtil::getTiePoint(ossimSingleImageChain*,ossimDpt&)";
+   if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
+   }   
+   
+   if (chain && m_outputGeometry.valid() )
+   {
+      //---
+      // The view is not set yet in the chain so we get the tie point from the
+      // image handler geometry not from the chain which will come from the
+      // ossimImageRenderer.
+      //---
+      ossimRefPtr<ossimImageHandler> ih = chain->getImageHandler();
+      if ( ih.valid() )
+      {
+         ossimRefPtr<ossimImageGeometry> geom = ih->getImageGeometry();
+         if ( geom.valid() )
+         {
+            geom->getTiePoint( tie, true );
+         }
          
          if ( tie.hasNans() )
          {
@@ -1573,8 +1744,7 @@ void ossimElevUtil::getMetersPerPixel(ossimSingleImageChain* chain, ossimDpt& gs
       ossimRefPtr<ossimImageGeometry> geom = chain->getImageGeometry();
       if ( geom.valid() )
       {
-         gsd = geom->getMetersPerPixel();
-         
+         geom->getMetersPerPixel( gsd );
          if ( gsd.hasNans() )
          {
             std::string errMsg = MODULE;
@@ -1641,7 +1811,7 @@ void ossimElevUtil::getOrigin(ossimGpt& gpt)
    if ( lookup )
    {
       ossim_float64 longitude = ossimString::toFloat64(lookup);
-      if ( (longitude >= -180.0) && (longitude <= -180.0) )
+      if ( (longitude >= -180.0) && (longitude <= 180.0) )
       {
          gpt.lon = longitude;
       }
@@ -1663,7 +1833,7 @@ void ossimElevUtil::getOrigin(ossimGpt& gpt)
       }
       if ( ossim::isnan(gpt.lon) )
       {
-         gpt.lon = sceneCenter.lon;
+         gpt.lon = 0.0;
       }    
    }
       
@@ -1911,6 +2081,16 @@ ossimRefPtr<ossimMapProjection> ossimElevUtil::getNewUtmProjection()
    return ossimRefPtr<ossimMapProjection>(utm.get());
 }
 
+ossimRefPtr<ossimMapProjection> ossimElevUtil::getMapProjection()
+{
+   ossimRefPtr<ossimMapProjection> mp = 0;
+   if ( m_outputGeometry.valid() )
+   {
+      mp = dynamic_cast<ossimMapProjection*>( m_outputGeometry->getProjection() );
+   }
+   return mp;
+}
+
 ossimRefPtr<ossimImageFileWriter> ossimElevUtil::createNewWriter() const
 {
    static const char MODULE[] = "ossimElevUtil::createNewWriter()";
@@ -2016,7 +2196,7 @@ void ossimElevUtil::propagateOutputProjectionToChains()
       ossimRefPtr<ossimImageRenderer> resampler = (*chainIdx)->getImageRenderer();
       if ( resampler.valid() )
       {
-         resampler->setView( m_outputProjection.get() );
+         resampler->setView( m_outputGeometry.get() );
       }
       else
       {
@@ -2034,7 +2214,7 @@ void ossimElevUtil::propagateOutputProjectionToChains()
       ossimRefPtr<ossimImageRenderer> resampler = (*chainIdx)->getImageRenderer();
       if ( resampler.valid() )
       {
-         resampler->setView( m_outputProjection.get() );
+         resampler->setView( m_outputGeometry.get() );
       }
       else
       {
@@ -2096,7 +2276,7 @@ ossimRefPtr<ossimImageSource> ossimElevUtil::combineLayers()
 
    ossimRefPtr<ossimImageSource> result = 0;
 
-   ossim_uint32 layerCount = (ossim_uint32)(m_demLayer.size() + m_imgLayer.size());
+   ossim_uint32 layerCount = (ossim_uint32) (m_demLayer.size() + m_imgLayer.size());
 
    if ( layerCount )
    {
@@ -2368,7 +2548,7 @@ void ossimElevUtil::getAreaOfInterest(const ossimImageSource* source, ossimIrect
    // Nan rect for starters.
    rect.makeNan();
    
-   if ( source && m_outputProjection.valid() )
+   if ( source && m_outputGeometry.valid() )
    {
       if ( m_kwl->find( CUT_CENTER_LAT_KW ) ) // --cut-center-llwh
       {
@@ -2389,7 +2569,7 @@ void ossimElevUtil::getAreaOfInterest(const ossimImageSource* source, ossimIrect
             if ( !centerGpt.hasNans() )
             {
                ossimDpt centerDpt;
-               m_outputProjection->worldToLineSample(centerGpt, centerDpt);
+               m_outputGeometry->worldToLocal(centerGpt, centerDpt);
                if ( !centerDpt.hasNans() )
                {
                   ossimIpt ul( ossim::round<int>(centerDpt.x - (width/2)),
@@ -2409,19 +2589,33 @@ void ossimElevUtil::getAreaOfInterest(const ossimImageSource* source, ossimIrect
          
          if ( maxLat && maxLon && minLat && minLon )
          {
+            ossim_float64 minLatF = ossimString(minLat).toFloat64();
+            ossim_float64 maxLatF = ossimString(maxLat).toFloat64();
+
+            //---
+            // Check for swap so we don't get a negative height.
+            // Note no swap check for longitude as box could cross date line.
+            //---
+            if ( minLatF > maxLatF )
+            {
+               ossim_float64 tmpF = minLatF;
+               minLatF = maxLatF;
+               maxLatF = tmpF;
+            }
+            
             ossimGpt gpt(0.0, 0.0, 0.0);
             ossimDpt dpt;
             
             // Upper left:
-            gpt.lat = ossimString(maxLat).toFloat64();
+            gpt.lat = maxLatF;
             gpt.lon = ossimString(minLon).toFloat64();
-            m_outputProjection->worldToLineSample(gpt, dpt);
+            m_outputGeometry->worldToLocal(gpt, dpt);
             ossimIpt ul(dpt);
             
             // Lower right:
-            gpt.lat = ossimString(minLat).toFloat64();
+            gpt.lat = minLatF;
             gpt.lon = ossimString(maxLon).toFloat64();
-            m_outputProjection->worldToLineSample(gpt, dpt);
+            m_outputGeometry->worldToLocal(gpt, dpt);
             ossimIpt lr(dpt);
             
             rect = ossimIrect(ul, lr);
@@ -2434,7 +2628,7 @@ void ossimElevUtil::getAreaOfInterest(const ossimImageSource* source, ossimIrect
          rect = source->getBoundingRect(0);
       }
       
-   } // if ( source && m_outputProjection.valid() )
+   } // if ( source && m_outputGeometry.valid() )
    else
    {
       // Should never happer...
@@ -2450,7 +2644,6 @@ void ossimElevUtil::getAreaOfInterest(const ossimImageSource* source, ossimIrect
       throw( ossimException(errMsg) );
    }
 
-   
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -2460,7 +2653,7 @@ void ossimElevUtil::getAreaOfInterest(const ossimImageSource* source, ossimIrect
 }
 
 void ossimElevUtil::initializeThumbnailProjection(const ossimIrect& originalRect,
-                                                ossimIrect& adjustedRect)
+                                                  ossimIrect& adjustedRect)
 {
    static const char MODULE[] = "ossimElevUtil::initializeThumbnailProjection";
    if ( traceDebug() )
@@ -2469,13 +2662,13 @@ void ossimElevUtil::initializeThumbnailProjection(const ossimIrect& originalRect
          << MODULE << " entered...\n"
          << "origial rect:  " << originalRect << "\n";
 
-      if (m_outputProjection.valid())
+      if (m_outputGeometry.valid())
       {
-         m_outputProjection->print(ossimNotify(ossimNotifyLevel_DEBUG));
+         m_outputGeometry->print(ossimNotify(ossimNotifyLevel_DEBUG));
       }
    }
-
-   if ( !originalRect.hasNans() && m_outputProjection.valid() )
+   
+   if ( !originalRect.hasNans() && m_outputGeometry.valid() )
    {
       //---
       // Thumbnail setup:
@@ -2496,26 +2689,28 @@ void ossimElevUtil::initializeThumbnailProjection(const ossimIrect& originalRect
             ossimGpt lrGpt;
             ossimDpt dpt;
             
-            m_outputProjection->lineSampleToWorld(ossimDpt(originalRect.ul()), ulGpt);
-            m_outputProjection->lineSampleToWorld(ossimDpt(originalRect.lr()), lrGpt);         
+            m_outputGeometry->localToWorld(ossimDpt(originalRect.ul()), ulGpt);
+            m_outputGeometry->localToWorld(ossimDpt(originalRect.lr()), lrGpt);         
             
             ossim_float64 scale = maxRectDimension / thumbSize;
 
             //---
             // Adjust the projection scale.  Note the "true" is to recenter
             // the tie point so it falls relative to the projection origin.
+            //
+            // This call also scales: ossimImageGeometry::m_imageSize
             //---
-            m_outputProjection->applyScale(ossimDpt(scale, scale), true);
+            m_outputGeometry->applyScale(ossimDpt(scale, scale), true);
 
             // Must call to reset the ossimImageRenderer's bounding rect for each input.
             propagateOutputProjectionToChains();
             
             // Get the new upper left in view space.
-            m_outputProjection->worldToLineSample(ulGpt, dpt);
+            m_outputGeometry->worldToLocal(ulGpt, dpt);
             ossimIpt ul(dpt);
             
             // Get the new lower right in view space.
-            m_outputProjection->worldToLineSample(lrGpt, dpt);
+            m_outputGeometry->worldToLocal(lrGpt, dpt);
             ossimIpt lr(dpt);
 
             // Clamp to thumbnail bounds.
@@ -2534,7 +2729,7 @@ void ossimElevUtil::initializeThumbnailProjection(const ossimIrect& originalRect
          }
       }
       
-   } // if ( !originalRect.hasNans() && m_outputProjection.valid() )
+   } // if ( !originalRect.hasNans() && m_outputGeometry.valid() )
    else
    {
       // Should never happer...
@@ -2553,9 +2748,9 @@ void ossimElevUtil::initializeThumbnailProjection(const ossimIrect& originalRect
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "\nadjusted rect: " << adjustedRect << "\n";
-      if (m_outputProjection.valid())
+      if (m_outputGeometry.valid())
       {
-         m_outputProjection->print(ossimNotify(ossimNotifyLevel_DEBUG));
+         m_outputGeometry->print(ossimNotify(ossimNotifyLevel_DEBUG));
       }
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exited...\n";
    }
@@ -2671,6 +2866,20 @@ bool ossimElevUtil::scaleToEightBit() const
    return result;
 }
 
+bool ossimElevUtil::snapTieToOrigin() const
+{
+   bool result = false;
+   if ( m_kwl.valid() )
+   {
+      const char* lookup = m_kwl->find(SNAP_TIE_TO_ORIGIN_KW);
+      if ( lookup )
+      {
+         result = ossimString(lookup).toBool();
+      }
+   }
+   return result;
+}
+
 void  ossimElevUtil::initializeSrcKwl()
 {
    static const char MODULE[] = "ossimElevUtil::initializeSrcKwl";
@@ -2714,7 +2923,6 @@ ossim_uint32 ossimElevUtil::getNumberOfInputs() const
    {
       result += m_kwl->numberOf(DEM_KW);
       result += m_kwl->numberOf(IMG_KW);
-      
    }
    if ( m_srcKwl.valid() )
    {

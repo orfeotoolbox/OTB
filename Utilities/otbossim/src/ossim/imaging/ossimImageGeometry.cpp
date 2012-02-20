@@ -12,13 +12,16 @@
 // $Id$
 
 #include <ossim/imaging/ossimImageGeometry.h>
-#include <ossim/projection/ossimProjection.h>
-#include <ossim/projection/ossimMapProjection.h>
-#include <ossim/base/ossimRefPtr.h>
-#include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossim2dTo2dTransformRegistry.h>
 #include <ossim/elevation/ossimElevManager.h>
+#include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimMapProjection.h>
+#include <ossim/projection/ossimEquDistCylProjection.h>
+#include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <cmath>
 
 RTTI_DEF1(ossimImageGeometry, "ossimImageGeometry", ossimObject);
 
@@ -29,12 +32,10 @@ ossimImageGeometry::ossimImageGeometry()
 :   
 m_transform (0),
 m_projection(0),
-m_gsd(),
 m_decimationFactors(0),
 m_imageSize(),
 m_targetRrds(0)
 {
-   m_gsd.makeNan();
    m_imageSize.makeNan();
 }
 
@@ -50,7 +51,6 @@ ossimImageGeometry::ossimImageGeometry(const ossimImageGeometry& copy_this)
 ossimObject(copy_this),
 m_transform(copy_this.m_transform.valid()?(ossim2dTo2dTransform*)copy_this.m_transform->dup():((ossim2dTo2dTransform*)0)),
 m_projection(copy_this.m_projection.valid()?(ossimProjection*)copy_this.m_projection->dup():(ossimProjection*)0),
-m_gsd(copy_this.m_gsd),
 m_decimationFactors(copy_this.m_decimationFactors),
 m_imageSize(copy_this.m_imageSize),
 m_targetRrds(copy_this.m_targetRrds)
@@ -66,19 +66,11 @@ ossimImageGeometry::ossimImageGeometry(ossim2dTo2dTransform* transform, ossimPro
 ossimObject(),
 m_transform(transform),
 m_projection(proj),
-m_gsd(),
 m_decimationFactors(0),
 m_imageSize(),
 m_targetRrds(0)   
 {
    m_imageSize.makeNan();
-   m_gsd.makeNan();
-   if(m_projection.valid())
-   {
-      // If the transform is NULL (identity), then we can simply copy the input projection's GSD.
-      // Otherwise we'll need to compute a GSD specific to this geometry.
-      m_gsd = m_projection->getMetersPerPixel();
-   }
 }
 
 //**************************************************************************************************
@@ -184,6 +176,10 @@ bool ossimImageGeometry::localToWorld(const ossimDpt& local_pt, ossimGpt& world_
 
    // Perform projection to world coordinates:
    m_projection->lineSampleToWorld(full_image_pt, world_pt);
+
+    // Put longitude between -180 and +180 and latitude between -90 and +90 if not so. 
+    world_pt.wrap();
+    
    return true;
 }
 
@@ -209,6 +205,10 @@ bool ossimImageGeometry::localToWorld(const ossimDpt& local_pt,
 
    // Perform projection to world coordinates:
    m_projection->lineSampleHeightToWorld(full_image_pt, h_ellipsoid, world_pt);
+
+   // Put longitude between -180 and +180 and latitude between -90 and +90 if not so. 
+   world_pt.wrap();
+    
    return true;
 }
 
@@ -219,31 +219,49 @@ bool ossimImageGeometry::localToWorld(const ossimDpt& local_pt,
 //**************************************************************************************************
 bool ossimImageGeometry::worldToLocal(const ossimGpt& world_pt, ossimDpt& local_pt) const
 {
-   //! Return a NAN point of no projection is defined:
-   if (!m_projection.valid())
+   bool result = true;
+   
+   if ( m_projection.valid() )
+   {
+      const ossimEquDistCylProjection* eqProj =
+         dynamic_cast<const ossimEquDistCylProjection*>( m_projection.get() );
+      
+      ossimDpt full_image_pt;
+
+      if ( eqProj && (m_imageSize.hasNans() == false) )
+      {
+         // Call specialized method to handle wrapping...
+         eqProj->worldToLineSample( world_pt, m_imageSize, full_image_pt );
+      }
+      else if( isAffectedByElevation() )
+      {
+         ossimGpt copyPt( world_pt );
+         if(world_pt.isHgtNan())
+         {
+            copyPt.hgt = ossimElevManager::instance()->getHeightAboveEllipsoid(copyPt);
+         }     
+
+         // Perform projection from world coordinates to full-image space:
+         m_projection->worldToLineSample(copyPt, full_image_pt);
+      }
+      else
+      {
+         // Perform projection from world coordinates to full-image space:
+         m_projection->worldToLineSample(world_pt, full_image_pt);
+      }
+      
+      // Transform to local space:
+      fullToRn(full_image_pt, m_targetRrds, local_pt);
+   }
+   else // No projection set:
    {
       local_pt.makeNan();
-      return false;
+      result = false;  
    }
    
-   ossimGpt copyPt(world_pt);
-   if(isAffectedByElevation())
-   {
-      if(world_pt.isHgtNan())
-      {
-         copyPt.hgt = ossimElevManager::instance()->getHeightAboveEllipsoid(copyPt);
-      }
-   }
+   return result;
    
-   // First Perform projection from world coordinates to full-image space:
-   ossimDpt full_image_pt;
-   m_projection->worldToLineSample(copyPt, full_image_pt);
-
-   // Then transform to local space:
-   fullToRn(full_image_pt, m_targetRrds, local_pt);
-   
-   return true;
-}
+} // End: ossimImageGeometry::worldToLocal(const ossimGpt&, ossimDpt&)
 
 //**************************************************************************************************
 //! Sets the transform to be used for local-to-full-image coordinate transformation
@@ -251,10 +269,6 @@ bool ossimImageGeometry::worldToLocal(const ossimGpt& world_pt, ossimDpt& local_
 void ossimImageGeometry::setTransform(ossim2dTo2dTransform* transform) 
 { 
    m_transform = transform; 
-   if (m_projection.valid())
-   {
-      m_gsd.makeNan();
-   }
 }
 
 //**************************************************************************************************
@@ -263,10 +277,6 @@ void ossimImageGeometry::setTransform(ossim2dTo2dTransform* transform)
 void ossimImageGeometry::setProjection(ossimProjection* projection) 
 { 
    m_projection = projection; 
-   if (m_projection.valid())
-   {
-      m_gsd.makeNan();
-   }
 }
 
 //**************************************************************************************************
@@ -279,58 +289,101 @@ bool ossimImageGeometry::isAffectedByElevation() const
     return false;
 }
 
-const ossimDpt& ossimImageGeometry::getMetersPerPixel() const
+//*************************************************************************************************
+//! Returns  GSD in meters in x- and y-directions. This may not be the same as the member 
+//! projection's stated resolution since a transform may be involved.
+//*************************************************************************************************
+ossimDpt ossimImageGeometry::getMetersPerPixel() const
 {
-   if(m_gsd.hasNans())
-   {
-      if(m_projection.valid())
-      {
-         computeGsd();
-      }
-   }
-   
-   return m_gsd;
+   ossimDpt gsd;
+   getMetersPerPixel(gsd);
+   return gsd;
 }
 
-//**************************************************************************************************
-//! When either the projection or the transform changes, this method recomputes the GSD.
-//**************************************************************************************************
-void ossimImageGeometry::computeGsd()const
+//*************************************************************************************************
+//! Computes GSD in meters in x- and y-directions. This may not be the same as the member 
+//! projection's stated resolution since a transform may be involved.
+//*************************************************************************************************
+void ossimImageGeometry::getMetersPerPixel( ossimDpt& gsd ) const
 {
-   if (!m_projection.valid())
+   if (m_projection.valid() && !m_transform.valid())
    {
-      m_gsd.makeNan();
-      return;
+      // No transform present, so simply query the projection for GSD:
+      gsd = m_projection->getMetersPerPixel();
    }
-   
-   // See if we can just copy the map projection's GSD:
-   ossimMapProjection* map_proj = PTR_CAST(ossimMapProjection, m_projection.get());
-   if (map_proj != NULL)
+   else if (m_projection.valid() && (m_imageSize.hasNans() == false))
    {
-      m_gsd = map_proj->getMetersPerPixel();
-      return;
+      // A transform is involved, so need to use localToWorld call below:
+      ossimDpt pL0 (m_imageSize/2);
+      ossimDpt pLx (pL0.x+1, pL0.y);
+      ossimDpt pLy (pL0.x, pL0.y+1);
+      ossimGpt g0, gx, gy;
+
+      localToWorld(pL0, g0);
+      localToWorld(pLx, g0.height(), gx);
+      localToWorld(pLy, g0.height(), gy);
+
+      // Compute horizontal distance for one pixel:
+      gsd.x = g0.distanceTo(gx);
+      gsd.y = g0.distanceTo(gy);
    }
+   else
+   {
+      // This object is not fully initialized:
+      gsd.makeNan();
+   }
+}
 
-   // Must be some kind of sensor model. Need to compute GSD. Get three points in full image space.
-   ossimDpt pL0 (m_imageSize/2);
-   ossimDpt pLx (pL0.x+1, pL0.y);
-   ossimDpt pLy (pL0.x, pL0.y+1);
-   ossimDpt pF0;
-   ossimDpt pFx;
-   ossimDpt pFy;
-   rnToFull(pL0, 0, pF0);
-   rnToFull(pLx, 0, pFx);
-   rnToFull(pLy, 0, pFy);
+//*************************************************************************************************
+// Returns the resolution of this image in degrees/pixel. Note that this only
+// makes sense if there is a projection associated with the image. Returns NaNs if no 
+// projection defined.
+//*************************************************************************************************
+ossimDpt ossimImageGeometry::getDegreesPerPixel() const
+{
+   ossimDpt dpp;
+   getDegreesPerPixel(dpp);
+   return dpp;
+}
 
-   ossimGpt g0, gx, gy;
+//*************************************************************************************************
+// Computes the resolution of this image in degrees/pixel. Note that this only
+// makes sense if there is a projection associated with the image. Returns NaNs if no 
+// projection defined.
+//*************************************************************************************************
+void ossimImageGeometry::getDegreesPerPixel( ossimDpt& dpp ) const
+{
+   const ossimMapProjection *map_proj = dynamic_cast<const ossimMapProjection *>(m_projection.get());
+   if (map_proj && !m_transform.valid())
+   {
+      // No transform present, so simply query the projection for resolution:
+      dpp = map_proj->getDecimalDegreesPerPixel();
+   }
+   else if (m_projection.valid() && (m_imageSize.hasNans() == false))
+   {
+      // A transform is involved, so need to use localToWorld call below:
+      ossimDpt pL0 (m_imageSize/2);
+      ossimDpt pLx (pL0.x+1, pL0.y);
+      ossimDpt pLy (pL0.x, pL0.y+1);
+      ossimGpt g0, gx, gy;
 
-   m_projection->lineSampleToWorld(pF0, g0);
-   m_projection->lineSampleHeightToWorld(pFx, g0.height(), gx);
-   m_projection->lineSampleHeightToWorld(pFy, g0.height(), gy);
+      localToWorld(pL0, g0);
+      localToWorld(pLx, g0.height(), gx);
+      localToWorld(pLy, g0.height(), gy);
 
-   // Compute horizontal distance for one pixel:
-   m_gsd.x = g0.distanceTo(gx);
-   m_gsd.y = g0.distanceTo(gy);
+      // Compute horizontal distance for one pixel:
+      double dlatx = std::fabs(g0.lat - gx.lat);
+      double dlaty = std::fabs(g0.lat - gy.lat);
+      double dlonx = std::fabs(g0.lon - gx.lon);
+      double dlony = std::fabs(g0.lon - gy.lon);
+      dpp.lat = sqrt(dlatx*dlatx + dlaty*dlaty);
+      dpp.lon = sqrt(dlonx*dlonx + dlony*dlony);
+   }
+   else
+   {
+      // This object is not fully initialized:
+      dpp.makeNan();
+   }
 }
 
 //**************************************************************************************************
@@ -339,26 +392,35 @@ void ossimImageGeometry::computeGsd()const
 std::ostream& ossimImageGeometry::print(std::ostream& out) const
 {
    out << "type: ossimImageGeometry" << std::endl;
-    if(m_transform.valid())
-    {
-        out << "  m_transform: ";
-        m_transform->print(out);
-    }
-    else
-    {
-        out << "  No transform defined. Using identity transform.\n";
-    }
+   if(m_transform.valid())
+   {
+      out << "  m_transform: ";
+      m_transform->print(out);
+   }
+   else
+   {
+      out << "  No transform defined. Using identity transform.\n";
+   }
+   
+   if(m_projection.valid())
+   {
+      out << "  m_projection: ";
+      m_projection->print(out);
+   }
+   else
+   {
+      out << "  No projection defined. ";
+   }
 
-    if(m_projection.valid())
-    {
-        out << "  m_projection: ";
-        m_projection->print(out);
-    }
-    else
-    {
-        out << "  No projection defined. ";
-    }
-    return out;
+   for ( std::vector<ossimDpt>::size_type i = 0; i < m_decimationFactors.size(); ++i )
+   {
+      cout << "m_decimationFactors[" << i << "]: " << m_decimationFactors[i] << "\n";
+   }
+
+   out << "m_imageSize: " << m_imageSize
+       << "\nm_targetRrds: " << m_targetRrds << "\n";
+
+   return out;
 }
 
 //**************************************************************************************************
@@ -463,13 +525,6 @@ bool ossimImageGeometry::loadState(const ossimKeywordlist& kwl,
             m_projection = projection;
          }
 
-         // m_gsd:
-         ossimString gsd = kwl.find(prefix, "gsd");
-         if( gsd.size() )
-         {
-            m_gsd.toPoint(gsd);
-         }
-
          // m_decimationFactors:
          ossimString decimations = kwl.find(prefix, "decimations");
          if( decimations.size() )
@@ -541,11 +596,9 @@ bool ossimImageGeometry::saveState(ossimKeywordlist& kwl, const char* prefix) co
    }
 
    // m_gsd:
-   if ( m_gsd.hasNans() )
-   {
-      computeGsd(); // Attempt to compute.
-   }
-   kwl.add(prefix, "gsd", m_gsd.toString(), true);
+   ossimDpt gsd;
+   getMetersPerPixel(gsd);
+   kwl.add(prefix, "gsd", gsd.toString(), true);
 
    // m_decimationFactors:
    if(m_decimationFactors.size())
@@ -601,7 +654,6 @@ const ossimImageGeometry& ossimImageGeometry::operator=(const ossimImageGeometry
       }
       
       // the Gsd should already be solved from the source we are copying from
-      m_gsd               = copy_this.m_gsd;
       m_imageSize         = copy_this.m_imageSize;
       m_decimationFactors = copy_this.m_decimationFactors;
       m_targetRrds        = copy_this.m_targetRrds;
@@ -628,6 +680,134 @@ bool ossimImageGeometry::getCornerGpts(ossimGpt& gul, ossimGpt& gur,
    status &= localToWorld(ill, gll);
 
    return status;
+}
+
+void ossimImageGeometry::getTiePoint(ossimGpt& tie, bool edge) const
+{
+   if ( m_projection.valid() && (m_imageSize.hasNans() == false) )
+   {
+      // Use the easting/northing version of this method if underlying projection is meters:
+      const ossimMapProjection* map_proj = 
+         dynamic_cast<const ossimMapProjection*>(m_projection.get());
+      if (map_proj && !map_proj->isGeographic())
+      {
+         ossimDpt enTie;
+         getTiePoint(enTie, edge);
+         if (!enTie.hasNans())
+            tie = m_projection->inverse(enTie);
+         else
+            tie.makeNan();
+         return; // return here only because it bugs Dave
+      }
+
+      // Use projection to ground to establish UL extreme of image:
+      ossimDpt iul (0,0);
+      ossimDpt iur (m_imageSize.x-1, 0);
+      ossimDpt ilr (m_imageSize.x-1, m_imageSize.y-1);
+      ossimDpt ill (0, m_imageSize.y-1);
+      ossimDpt iRight(1, 0);
+      ossimDpt iDown(0, 1);
+      
+      ossimGpt gul;
+      ossimGpt gur; 
+      ossimGpt glr;
+      ossimGpt gll;
+      ossimGpt gRight;
+      ossimGpt gDown;
+      
+      localToWorld(iul, gul);
+      localToWorld(iur, gur);
+      localToWorld(ilr, glr);
+      localToWorld(ill, gll);
+      localToWorld(iRight, gRight);
+      localToWorld(iDown, gDown);
+      
+      // Determine the direction of the image:
+      if ( gul.lat > gDown.lat ) // oriented north up
+      {
+         if ( gul.lat >= gRight.lat ) // straight up or leaning right
+         {
+            tie.lat = gul.lat;
+            tie.lon = gll.lon;
+         }
+         else // leaning left
+         {
+            tie.lat = gur.lat;
+            tie.lon = gul.lon;
+         }
+      }
+      else // south or on side
+      {
+         if ( gRight.lat >= gul.lat ) // straight down or leaning right
+         {
+            tie.lat = glr.lat;
+            tie.lon = gur.lon;
+         }
+         else // leaning left
+         {
+            tie.lat = gll.lat;
+            tie.lon = glr.lon;
+         }   
+      }
+
+      if ( edge )
+      {
+         ossimDpt pt = m_projection->forward( tie );
+         ossimDpt half_pixel_shift = m_projection->getMetersPerPixel() * 0.5;
+         pt.y += half_pixel_shift.y;
+         pt.x -= half_pixel_shift.x;
+         tie = m_projection->inverse( pt );
+      }
+      
+   } // if ( (m_imageSize.hasNans() == false) && m_projection.valid() )
+   else
+   { 
+      tie.lat = ossim::nan();
+      tie.lon = ossim::nan();
+   }
+}
+
+//**************************************************************************************************
+// Assigns tie to the UL easting northing of the image. If edge is true, the E/N will be for the 
+// pixel-is-area representation
+//**************************************************************************************************
+void ossimImageGeometry::getTiePoint(ossimDpt& tie, bool edge) const
+{
+   if (!m_projection.valid() || m_imageSize.hasNans())
+   {
+      tie.makeNan();
+      return; // return here only because it bugs Dave
+   }
+
+   // Use the geographic version of this method if underlying projection is NOT map in meters:
+   const ossimMapProjection* map_proj = dynamic_cast<const ossimMapProjection*>(m_projection.get());
+   if (!map_proj || map_proj->isGeographic())
+   {
+      // Use the geographic version of this method to establish UL:
+      ossimGpt gTie;
+      gTie.hgt = 0.0;
+      getTiePoint(gTie, edge);
+      if (!gTie.hasNans())
+         tie = m_projection->forward( gTie );
+      else
+         tie.makeNan();
+      return; // return here only because it bugs Dave
+   }
+
+   // The underlying projection is a proper map projection in meters. Use easting northing 
+   // directly to avoid shifting the UL tiepoint because of skewed edge in geographic. Note:
+   // assume the image is North up:
+   ossimDpt iul (0,0);
+   ossimDpt ful;
+   rnToFull(iul, 0, ful);
+   map_proj->lineSampleToEastingNorthing(ful, tie);
+   if (edge && !tie.hasNans())
+   {
+      // Shift from pixel-is-point to pixel-is-area
+      ossimDpt half_pixel_shift = map_proj->getMetersPerPixel() * 0.5;
+      tie.y += half_pixel_shift.y;
+      tie.x -= half_pixel_shift.x;
+   }
 }
 
 //**************************************************************************************************
@@ -697,8 +877,7 @@ bool ossimImageGeometry::isEqualTo(const ossimObject& obj, ossimCompareType comp
    const ossimImageGeometry* rhs = dynamic_cast<const ossimImageGeometry*> (&obj);
    if(rhs&&result) // we know the types are the same
    {
-      result = (m_gsd.isEqualTo(rhs->m_gsd)&&
-                (m_decimationFactors.size() == rhs->m_decimationFactors.size())&&
+      result = ((m_decimationFactors.size() == rhs->m_decimationFactors.size())&&
                 m_imageSize.isEqualTo(rhs->m_imageSize)&& 
                 (m_targetRrds == rhs->m_targetRrds)); 
       
@@ -741,3 +920,31 @@ bool ossimImageGeometry::isEqualTo(const ossimObject& obj, ossimCompareType comp
    return result;
 }
 
+void ossimImageGeometry::getBoundingRect(ossimIrect& bounding_rect) const
+{
+   if (m_imageSize.hasNans())
+   {
+      bounding_rect.makeNan();
+   }
+   else
+   {
+      bounding_rect.set_ulx(0);
+      bounding_rect.set_uly(0);
+      bounding_rect.set_lrx(m_imageSize.x-1);
+      bounding_rect.set_lry(m_imageSize.y-1);
+   }
+}
+
+void ossimImageGeometry::applyScale(const ossimDpt& scale, bool recenterTiePoint)
+{
+   if ((scale.x != 0.0) && (scale.y != 0.0))
+   {
+      ossimMapProjection* map_Proj = dynamic_cast<ossimMapProjection*>(m_projection.get());
+      if ( map_Proj )
+      {
+         m_imageSize.x = ossim::round<ossim_int32>(m_imageSize.x / scale.x);
+         m_imageSize.y = ossim::round<ossim_int32>(m_imageSize.y / scale.y);
+         map_Proj->applyScale(scale, recenterTiePoint);
+      }
+   }
+}

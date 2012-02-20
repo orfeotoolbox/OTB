@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*******************************************************************
-// $Id: ossimImageRenderer.h 19991 2011-08-18 19:43:06Z gpotts $
+// $Id: ossimImageRenderer.h 20236 2011-11-09 15:36:38Z dburken $
 
 #ifndef ossimImageRenderer_HEADER
 #define ossimImageRenderer_HEADER
@@ -33,8 +33,6 @@ public:
    virtual ossimString getLongName()  const;
    virtual ossimString getShortName() const;
 
-   virtual void enableSource();
-   
    /**
     * the resampler will need the tile request to come from the view.
     * It will use the view to transoform this to world and then use the
@@ -53,6 +51,17 @@ public:
     * bounding rect.
     */
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0)const;
+
+   /**
+    * @brief Gets the bounding rectangle of the source.
+    *
+    * This is the output view bounds.
+    * 
+    * @param rect Initialized with bounding rectangle by this.
+    * @param resLevel Reduced resolution level if applicable.
+    */
+   virtual void getBoundingRect(ossimIrect& rect,
+                                ossim_uint32 resLevel=0) const;
 
    /**
     * Method to save the state of an object to a keyword list.
@@ -111,6 +120,34 @@ public:
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+
+   /**
+    * @brief Enables source.
+    *
+    * Overrides ossimSource::enableSource so bounding rects are recomputed on
+    * state change.
+    */
+   virtual void enableSource();
+
+   /**
+    * @brief Disables source.
+    *
+    * Overrides ossimSource::disableSource so bounding rects are recomputed on
+    * state change.
+    */
+   virtual void disableSource();
+
+   /**
+    * @brief Sets the enable flag.
+    *
+    * @param flag True to enable, false to disable.
+    * 
+    * Overrides ossimSource::setEnableFlag so bounding rects are recomputed on
+    * state change.
+    */
+   virtual void setEnableFlag(bool flag);
+
+   
 protected:
    virtual ~ossimImageRenderer();
 
@@ -210,7 +247,11 @@ private:
    //! this is called on a property event and on input connection changes.
    void checkIVT();
 
-   void computeRects();
+   /**
+    * @brief Initializes m_inputR0Rect and m_viewBoundingRect and sets
+    * m_rectsDirty appropriately.
+    */
+   void initializeBoundingRects();
 
    ossimRefPtr<ossimImageData> getTileAtResLevel(const ossimIrect& boundingRect,
                                      ossim_uint32 resLevel);
@@ -254,11 +295,13 @@ private:
     */
    ossim_uint32             m_StartingResLevel;
    ossimRefPtr<ossimImageViewTransform> m_ImageViewTransform;
-   mutable ossimIrect       m_BoundingRect;
-   mutable ossimIrect       m_BoundingViewRect;
+
+   ossimIrect               m_inputR0Rect;
+   ossimIrect               m_viewRect;
+   bool                     m_rectsDirty;
+
    ossim_uint32             m_MaxRecursionLevel;
    bool                     m_AutoUpdateInputTransform;
-   vector<ossimDpt>         m_InputDecimationFactors;
    ossim_uint32             m_MaxLevelsToCompute;
    
 TYPE_DATA

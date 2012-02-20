@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimId.h 13014 2008-06-10 16:03:09Z dburken $
+// $Id: ossimId.h 20314 2011-12-01 21:46:37Z oscarkramer $
 #ifndef ossimId_HEADER
 #define ossimId_HEADER
 
@@ -37,11 +37,11 @@ public:
       return (theId != rhs.theId);
    }
   
-   bool operator == (ossim_int64 rhs)
+   bool operator == (ossim_int64 rhs) const
    {
      return (theId == rhs);
    }
-   bool operator != (ossim_int64 rhs)
+   bool operator != (ossim_int64 rhs) const
    {
      return (theId != rhs);
    }

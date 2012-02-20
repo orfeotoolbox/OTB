@@ -9,7 +9,7 @@
 // Description: Factory for info objects.
 // 
 //----------------------------------------------------------------------------
-// $Id$
+// $Id: ossimInfoFactory.h 20125 2011-10-11 19:47:19Z dburken $
 #ifndef ossimInfoFactory_HEADER
 #define ossimInfoFactory_HEADER
 

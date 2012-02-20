@@ -11,7 +11,7 @@
 // all connectable objects.
 //
 //*************************************************************************
-// $Id: ossimConnectableObject.h 19632 2011-05-24 00:58:27Z gpotts $
+// $Id: ossimConnectableObject.h 20316 2011-12-02 15:56:38Z oscarkramer $
 
 #ifndef ossimConnectableObject_HEADER
 #define ossimConnectableObject_HEADER
@@ -27,6 +27,7 @@
 
 
 class ossimVisitor;
+class ossimConnectableContainer;
 
 class  OSSIMDLLEXPORT  ossimConnectableObject : public ossimObject,
                                                 public ossimListenerManager,
@@ -536,6 +537,12 @@ public:
                                              bool saveThisStateFlag=true,
                                              ossim_uint32 objectIndex=1,
                                              const char* prefix=0) const;
+
+   /**
+    * Inserts this object and all of its children and inputs into the container provided.
+    * @return Returns TRUE if successful.
+    */
+   virtual bool fillContainer(ossimConnectableContainer& container);
 
    /**
     * Moves the input connection matching id up one in the connection list.

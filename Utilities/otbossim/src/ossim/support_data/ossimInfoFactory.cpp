@@ -9,7 +9,7 @@
 // Description: Factory for info objects.
 // 
 //----------------------------------------------------------------------------
-// $Id$
+// $Id: ossimInfoFactory.cpp 20125 2011-10-11 19:47:19Z dburken $
 
 #include <ossim/support_data/ossimInfoFactory.h>
 #include <ossim/support_data/ossimInfoBase.h>
@@ -18,8 +18,10 @@
 #include <ossim/support_data/ossimDoqq.h>
 #include <ossim/support_data/ossimDtedInfo.h>
 #include <ossim/support_data/ossimJ2kInfo.h>
+#include <ossim/support_data/ossimJp2Info.h>
 #include <ossim/support_data/ossimLasInfo.h>
 #include <ossim/support_data/ossimNitfInfo.h>
+#include <ossim/support_data/ossimRpfInfo.h>
 #include <ossim/support_data/ossimTiffInfo.h>
 
 #include <ossim/base/ossimFilename.h>
@@ -42,19 +44,19 @@ ossimInfoBase* ossimInfoFactory::create(const ossimFilename& file) const
 {
    ossimRefPtr<ossimInfoBase> result = 0;
 
-   result = new ossimJ2kInfo();
+   result = new ossimTiffInfo();
+   if ( result->open(file) )
+   {
+      return result.release();
+   }
+
+   result = new ossimJp2Info();
    if ( result->open(file) )
    {
       return result.release();
    }
 
    result = new ossimNitfInfo();
-   if ( result->open(file) )
-   {
-      return result.release();
-   }
-
-   result = new ossimTiffInfo();
    if ( result->open(file) )
    {
       return result.release();
@@ -72,12 +74,12 @@ ossimInfoBase* ossimInfoFactory::create(const ossimFilename& file) const
       return result.release();
    }
 
-   result = new ossimDtedInfo();
+   result = new ossimRpfInfo();
    if ( result->open(file) )
    {
       return result.release();
    }
-
+   
    result = new ossimLasInfo();
    if ( result->open(file) )
    {
@@ -88,7 +90,13 @@ ossimInfoBase* ossimInfoFactory::create(const ossimFilename& file) const
    if ( result->open(file) )
    {
       return result.release();
-   }   
+   }
+
+   result = new ossimJ2kInfo();
+   if ( result->open(file) )
+   {
+      return result.release();
+   }
    
    result = new ossimCcfInfo();
    if ( result->open(file) )

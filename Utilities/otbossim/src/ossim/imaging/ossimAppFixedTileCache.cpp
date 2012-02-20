@@ -9,7 +9,7 @@
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimAppFixedTileCache.cpp 19297 2011-04-07 12:02:46Z gpotts $
+// $Id: ossimAppFixedTileCache.cpp 20127 2011-10-12 11:27:10Z gpotts $
 #include <algorithm>
 #include <sstream>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
@@ -254,8 +254,9 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::getTile(
 
 
 ossimRefPtr<ossimImageData> ossimAppFixedTileCache::addTile(
-   ossimAppFixedCacheId cacheId,
-   ossimRefPtr<ossimImageData> data)
+                                                            ossimAppFixedCacheId cacheId,
+                                                            ossimRefPtr<ossimImageData> data,
+                                                            bool duplicateData)
 {
    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimRefPtr<ossimImageData> result = 0;
@@ -284,7 +285,7 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::addTile(
    }
    {
       cacheSize = aCache->getCacheSize();
-      result    = aCache->addTile(data);
+      result    = aCache->addTile(data, duplicateData);
    
       theCurrentCacheSize += (aCache->getCacheSize() - cacheSize);
    }

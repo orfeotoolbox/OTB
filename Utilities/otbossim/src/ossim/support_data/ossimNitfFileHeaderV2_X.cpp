@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimNitfFileHeaderV2_X.cpp 18413 2010-11-11 19:56:22Z gpotts $
+// $Id: ossimNitfFileHeaderV2_X.cpp 20123 2011-10-11 17:55:44Z dburken $
 
 #include <ossim/support_data/ossimNitfFileHeaderV2_X.h>
 #include <ossim/support_data/ossimNitfCommon.h>
@@ -14,6 +14,7 @@
 #include <sstream>
 #include <ossim/base/ossimDate.h> /* for ossimLocalTm */
 #include <ossim/base/ossimDateProperty.h>
+#include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/support_data/ossimNitfCommon.h>
@@ -21,25 +22,25 @@
 RTTI_DEF1(ossimNitfFileHeaderV2_X, "ossimNitfFileHeaderV2_X", ossimNitfFileHeader);
 static ossimString monthConversionTable[] = {"   ", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
-const ossimString ossimNitfFileHeaderV2_X::FILE_TYPE_KW  = "file_type";
-const ossimString ossimNitfFileHeaderV2_X::VERSION_KW  = "version";
-const ossimString ossimNitfFileHeaderV2_X::FHDR_KW     = "fhdr";
-const ossimString ossimNitfFileHeaderV2_X::CLEVEL_KW  = "clevel";
-const ossimString ossimNitfFileHeaderV2_X::STYPE_KW   = "stype";
-const ossimString ossimNitfFileHeaderV2_X::OSTAID_KW  = "ostaid";
-const ossimString ossimNitfFileHeaderV2_X::FDT_KW     = "fdt";  
-const ossimString ossimNitfFileHeaderV2_X::FTITLE_KW  = "ftitle";
-const ossimString ossimNitfFileHeaderV2_X::FSCLAS_KW  = "fsclas";
-const ossimString ossimNitfFileHeaderV2_X::FSCODE_KW  = "fscode";
-const ossimString ossimNitfFileHeaderV2_X::FSCTLH_KW  = "fsctlh";
-const ossimString ossimNitfFileHeaderV2_X::FSREL_KW   = "fsrel";
-const ossimString ossimNitfFileHeaderV2_X::FSCAUT_KW  = "fscaut";
-const ossimString ossimNitfFileHeaderV2_X::FSCTLN_KW  = "fsctln";
-const ossimString ossimNitfFileHeaderV2_X::FSCOP_KW   = "fscop";
-const ossimString ossimNitfFileHeaderV2_X::FSCPYS_KW  = "fscpys";
-const ossimString ossimNitfFileHeaderV2_X::ENCRYP_KW  = "encryp";
-const ossimString ossimNitfFileHeaderV2_X::ONAME_KW   = "oname";
-const ossimString ossimNitfFileHeaderV2_X::OPHONE_KW  = "ophone";
+const ossimString ossimNitfFileHeaderV2_X::FILE_TYPE_KW = "FILE_TYPE";
+const ossimString ossimNitfFileHeaderV2_X::VERSION_KW   = "VERSION";
+const ossimString ossimNitfFileHeaderV2_X::FHDR_KW      = "FHDR";
+const ossimString ossimNitfFileHeaderV2_X::CLEVEL_KW    = "CLEVEL";
+const ossimString ossimNitfFileHeaderV2_X::STYPE_KW     = "STYPE";
+const ossimString ossimNitfFileHeaderV2_X::OSTAID_KW    = "OSTAID";
+const ossimString ossimNitfFileHeaderV2_X::FDT_KW       = "FDT";  
+const ossimString ossimNitfFileHeaderV2_X::FTITLE_KW    = "FTITLE";
+const ossimString ossimNitfFileHeaderV2_X::FSCLAS_KW    = "FSCLAS";
+const ossimString ossimNitfFileHeaderV2_X::FSCODE_KW    = "FSCODE";
+const ossimString ossimNitfFileHeaderV2_X::FSCTLH_KW    = "FSCTLH";
+const ossimString ossimNitfFileHeaderV2_X::FSREL_KW     = "FSREL";
+const ossimString ossimNitfFileHeaderV2_X::FSCAUT_KW    = "FSCAUT";
+const ossimString ossimNitfFileHeaderV2_X::FSCTLN_KW    = "FSCTLN";
+const ossimString ossimNitfFileHeaderV2_X::FSCOP_KW     = "FSCOP";
+const ossimString ossimNitfFileHeaderV2_X::FSCPYS_KW    = "FSCPYS";
+const ossimString ossimNitfFileHeaderV2_X::ENCRYP_KW    = "ENCRYP";
+const ossimString ossimNitfFileHeaderV2_X::ONAME_KW     = "ONAME";
+const ossimString ossimNitfFileHeaderV2_X::OPHONE_KW    = "OPHONE";
 
 ossimNitfFileHeaderV2_X::ossimNitfFileHeaderV2_X()
 {
@@ -221,6 +222,10 @@ void ossimNitfFileHeaderV2_X::setProperty(ossimRefPtr<ossimProperty> property)
    if(!property.valid()) return;
 
    ossimString name = property->getName();
+
+   // Make case insensitive:
+   name.upcase();
+
    if(name == FHDR_KW)
    {
       
@@ -406,19 +411,99 @@ bool ossimNitfFileHeaderV2_X::saveState(ossimKeywordlist& kwl, const ossimString
    
    if(result)
    {
-      kwl.add(prefix, "FHDR",theFileTypeVersion);
-      kwl.add(prefix, "CLEVEL",theComplexityLevel);
-      kwl.add(prefix, "STYPE",theSystemType);
-      kwl.add(prefix, "OSTAID",theOriginatingStationId);
-      kwl.add(prefix, "FDT",theDateTime);
-      kwl.add(prefix, "FTITLE",theFileTitle);
-      kwl.add(prefix, "FSCLAS",theSecurityClassification);
-      kwl.add(prefix, "FSCOP",theCopyNumber);
-      kwl.add(prefix, "FSCOPYS",theNumberOfCopies);
-      kwl.add(prefix, "ENCRYP",theEncryption);
+      kwl.add(prefix, FHDR_KW.c_str(),   theFileTypeVersion);
+      kwl.add(prefix, CLEVEL_KW.c_str(), theComplexityLevel);
+      kwl.add(prefix, STYPE_KW.c_str(),  theSystemType);
+      kwl.add(prefix, OSTAID_KW.c_str(), theOriginatingStationId);
+      kwl.add(prefix, FDT_KW.c_str(),    theDateTime);
+      kwl.add(prefix, FTITLE_KW.c_str(), theFileTitle);
+      kwl.add(prefix, FSCLAS_KW.c_str(), theSecurityClassification);
+      kwl.add(prefix, FSCOP_KW.c_str(),  theCopyNumber);
+      kwl.add(prefix, FSCPYS_KW.c_str(), theNumberOfCopies);
+      kwl.add(prefix, ENCRYP_KW.c_str(), theEncryption);
    }
    
    return result;
+}
+
+bool ossimNitfFileHeaderV2_X::loadState(const ossimKeywordlist& kwl, const char* prefix)
+{
+   // Note: Currently not looking up all fieds only ones that make sense.
+   
+   const char* lookup;
+   
+   lookup = kwl.find( prefix, OSTAID_KW);
+   if ( lookup )
+   {
+      setOriginatingStationId( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, FDT_KW);
+   if ( lookup )
+   {
+      setDate( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, FTITLE_KW);
+   if ( lookup )
+   {
+      setTitle( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, FSCLAS_KW);
+   if ( lookup )
+   {
+      setFileSecurityClassification( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, FSCODE_KW);
+   if ( lookup )
+   {
+      setCodeWords( ossimString(lookup) ); 
+   }
+   lookup = kwl.find( prefix, FSCTLH_KW);
+   if ( lookup )
+   {
+      setControlAndHandling( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, FSREL_KW);
+   if ( lookup )
+   {
+      setReleasingInstructions( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, FSCAUT_KW);
+   if ( lookup )
+   {
+      setClassificationAuthority( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, FSCTLN_KW);
+   if ( lookup )
+   {
+      setSecurityControlNumber( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, FSCOP_KW);
+   if ( lookup )
+   {
+      setCopyNumber( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, FSCPYS_KW);
+   if ( lookup )
+   {
+      setNumberOfCopies( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ENCRYP_KW);
+   if ( lookup )
+   {
+      setEncryption( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, ONAME_KW);
+   if ( lookup )
+   {
+      setOriginatorsName( ossimString(lookup) );
+   }
+   lookup = kwl.find( prefix, OPHONE_KW);
+   if ( lookup )
+   {
+      setOriginatorsPhone( ossimString(lookup) );
+   }
+
+   return true;
 }
 
 void ossimNitfFileHeaderV2_X::getPropertyNames(std::vector<ossimString>& propertyNames)const

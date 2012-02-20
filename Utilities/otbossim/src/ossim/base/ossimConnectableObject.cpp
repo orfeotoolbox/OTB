@@ -5,13 +5,14 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableObject.cpp 19969 2011-08-16 19:26:44Z gpotts $
+// $Id: ossimConnectableObject.cpp 20452 2012-01-13 17:47:45Z gpotts $
 #include <ossim/base/ossimConnectableObject.h>
 #include <ossim/base/ossimIdManager.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimObjectEvents.h>
 #include <ossim/base/ossimConnectableContainerInterface.h>
+#include <ossim/base/ossimConnectableContainer.h>
 #include <ossim/base/ossimTextProperty.h>
 #include <ossim/base/ossimNotify.h>
 #include <algorithm>
@@ -563,11 +564,9 @@ ossimRefPtr<ossimConnectableObject> ossimConnectableObject::disconnectMyInput(os
       current = (theInputObjectList.begin()+inputIndex);
       result = (*current).get();
       
-      ossim_int32 index = inputIndex;
       if(!theInputListIsFixedFlag)
       {
          current = theInputObjectList.erase(current);
-         index = -1;
       }
       else
       {
@@ -648,11 +647,9 @@ ossimRefPtr<ossimConnectableObject> ossimConnectableObject::disconnectMyOutput(o
    {
       current = (theOutputObjectList.begin()+outputIndex);
       result = (*current).get();
-      ossim_int32 index = outputIndex;
       if(!theOutputListIsFixedFlag)
       {
          current = theOutputObjectList.erase(current);
-         index = -1;
       }
       else
       {
@@ -1786,7 +1783,7 @@ bool ossimConnectableObject::loadState(const ossimKeywordlist& kwl,
    else
    {
       // if we are fixed then the list should already be set
-      numberInputs = theInputObjectList.size();
+      numberInputs = (ossim_int32) theInputObjectList.size();
    }
 
    
@@ -1803,7 +1800,7 @@ bool ossimConnectableObject::loadState(const ossimKeywordlist& kwl,
    else 
    {
       // if we are fixed then the list should already be set
-      numberOutputs = theOutputObjectList.size();
+      numberOutputs = (ossim_int32) theOutputObjectList.size();
    }
 
    lookup = kwl.find(prefix, ossimKeywordNames::DESCRIPTION_KW);
@@ -1897,14 +1894,13 @@ bool ossimConnectableObject::saveState(ossimKeywordlist& kwl,
    return true;
 }
 
-ossim_uint32 ossimConnectableObject::saveStateOfAllInputs(
-                                                          ossimKeywordlist& kwl,
+ossim_uint32 ossimConnectableObject::saveStateOfAllInputs(ossimKeywordlist& kwl,
                                                           bool              saveThisStateFlag,
                                                           ossim_uint32      objectIndex,
                                                           const char*       prefix) const
 {
    ossim_uint32 index = objectIndex;
-   
+
    const ossim_uint32 NUMBER_OF_INPUTS = getNumberOfInputs();
    if (NUMBER_OF_INPUTS)
    {
@@ -1913,33 +1909,43 @@ ossim_uint32 ossimConnectableObject::saveStateOfAllInputs(
       {
          const ossimConnectableObject* input = getInput(i);
          if(input)
-         {
-            index = input->saveStateOfAllInputs(kwl,
-                                                true,
-                                                index,
-                                                prefix);
-         }
+            index = input->saveStateOfAllInputs(kwl, true, index, prefix);
       }
    }
-   
+
    if (saveThisStateFlag)
    {
       ossimString myPrefix;
       if (prefix)
-      {
          myPrefix = prefix;
-      }
-      
-      myPrefix += "object";
-      myPrefix += ossimString::toString(index);
-      myPrefix += ".";
-      
+
+      myPrefix += "object" + ossimString::toString(index) + ".";
+
       // Save the state of this object.
       saveState(kwl, myPrefix.c_str());
       ++index;
    }
-   
+
    return index;
+}
+
+bool ossimConnectableObject::fillContainer(ossimConnectableContainer& container)
+{
+   // Insert inputs into the container:
+   bool good_fill = true;
+   ossim_uint32 num_inputs = getNumberOfInputs();
+   for(ossim_uint32 i=0; (i<num_inputs) && good_fill; ++i)
+   {
+      ossimConnectableObject* input = getInput(i);
+      if (input)
+         good_fill = input->fillContainer(container);
+   }
+   
+   // Insert this object and all of its children and inputs into the container provided:
+   if (good_fill)
+      good_fill = container.addChild(this);
+
+   return good_fill;
 }
 
 bool ossimConnectableObject::canConnectMyOutputTo(ossim_int32 myOutputIndex,
@@ -2171,9 +2177,19 @@ void ossimConnectableObject::accept(ossimVisitor& visitor)
                // lets make sure inputs and outputs are turned off for we are traversing all children and we should not have
                // to have that enabled
                //
-               visitor.turnOffVisitorType(ossimVisitor::VISIT_INPUTS);
+               visitor.turnOffVisitorType(ossimVisitor::VISIT_INPUTS);// |ossimVisitor::VISIT_CHILDREN);
                
-               obj->accept(visitor);
+               //obj->accept(visitor);
+               visitor.setVisitorType(currentType);
+              // visitor.turnOffVisitorType(ossimVisitor::VISIT_INPUTS);
+               // now go through outputs
+               //
+               ConnectableObjectList::iterator current = obj->theOutputObjectList.begin();
+               while(current != obj->theOutputObjectList.end())
+               {
+                  if((*current).get()&&!visitor.hasVisited((*current).get())) (*current)->accept(visitor);
+                  ++current;
+               }
                
                visitor.setVisitorType(currentType);
                

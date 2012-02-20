@@ -7,7 +7,7 @@
 // Description:  ossimCacheTileSource
 // 
 //*******************************************************************
-//  $Id: ossimCacheTileSource.h 16276 2010-01-06 01:54:47Z gpotts $
+//  $Id: ossimCacheTileSource.h 20456 2012-01-13 19:39:30Z gpotts $
 #ifndef ossimCacheTileSource_HEADER
 #define ossimCacheTileSource_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -19,6 +19,7 @@
 class OSSIMDLLEXPORT ossimCacheTileSource : public ossimImageSourceFilter
 {
 public:
+   typedef std::vector<ossimAppFixedTileCache::ossimAppFixedCacheId> RLevelCacheList;
    /**
     * Will construct a new Application cache
     */
@@ -56,20 +57,23 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
 
+   
 protected:
    virtual ~ossimCacheTileSource();
 
    void allocate();
+   void deleteRlevelCache();
+   void initializeRlevelCache();
    
-   ossimAppFixedTileCache::ossimAppFixedCacheId theCacheId;
+   ossimAppFixedTileCache::ossimAppFixedCacheId getCacheId(ossim_uint32 resLevel);
 
    ossimRefPtr<ossimImageData> theTile;
    ossimIpt                    theFixedTileSize;
    bool                        theCachingEnabled;
    bool                        theEventProgressFlag;
-   ossim_uint32                theCacheRLevel;
-   ossimIrect                  theBoundingRect;
-
+   bool                        theUseInputTileSizeFlag;
+   RLevelCacheList             theRLevelCacheList;
+   
    /** For lock and unlock. */
 
    

@@ -7,7 +7,7 @@
 // Description:  ossimCacheTileSource
 // 
 //*******************************************************************
-//  $Id: ossimCacheTileSource.cpp 19953 2011-08-16 00:34:51Z gpotts $
+//  $Id: ossimCacheTileSource.cpp 20459 2012-01-17 01:30:36Z gpotts $
 
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotify.h>
@@ -23,41 +23,46 @@
 static ossimTrace traceDebug("ossimCacheTileSource:debug");
 
 static const ossimString TILE_SIZE_XY_KW("tile_size_xy");
+static const ossimString USE_INPUT_TILE_SIZE_KW("use_input_tile_size");
 
 RTTI_DEF1(ossimCacheTileSource, "ossimCacheTileSource", ossimImageSourceFilter);
    
 ossimCacheTileSource::ossimCacheTileSource()
    : ossimImageSourceFilter(),
-     theCacheId(ossimAppFixedTileCache::instance()->newTileCache()),
+     //theCacheId(ossimAppFixedTileCache::instance()->newTileCache()),
      theTile(0),
      theFixedTileSize(),
      theCachingEnabled(true),
      theEventProgressFlag(false),
-     theCacheRLevel(0),
-     theBoundingRect()     
+     theUseInputTileSizeFlag(false)
 {
-   theBoundingRect.makeNan();
-   theFixedTileSize = ossimAppFixedTileCache::instance()->getTileSize(theCacheId);
+   ossim::defaultTileSize(theFixedTileSize);
 }
 
 ossimCacheTileSource::~ossimCacheTileSource()
 {
-   ossimAppFixedTileCache::instance()->deleteCache(theCacheId);
+   deleteRlevelCache();
+   //ossimAppFixedTileCache::instance()->deleteCache(theCacheId);
    
-   theCacheId = -1;
-   theBoundingRect.makeNan();
+   //theCacheId = -1;
+  // theBoundingRect.makeNan();
 }
 
 void ossimCacheTileSource::flush()
 {
-   ossimAppFixedTileCache::instance()->flush(theCacheId);
+   //ossimAppFixedTileCache::instance()->flush(theCacheId);
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx < theRLevelCacheList.size();++idx)
+   {
+      ossimAppFixedTileCache::instance()->flush(theRLevelCacheList[idx]);
+   }
+
 }
 
 void ossimCacheTileSource::initialize()
 {
    ossimImageSourceFilter::initialize();
    flush();
-   theCacheRLevel = 999999999;
    theTile = 0;
 }
    
@@ -80,24 +85,6 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::getTile(
    {
       if ( isSourceEnabled() )
       {
-         if( (resLevel != theCacheRLevel) ||  theBoundingRect.hasNans() )
-         {
-            flush();
-            // allocate();
-            
-            // theCacheRLevel = 9999999;
-            theCacheRLevel = resLevel;
-            theBoundingRect = getBoundingRect(resLevel);
-            if( !theBoundingRect.hasNans() )
-            {
-               theFixedTileSize = ossimAppFixedTileCache::instance()->getTileSize(theCacheId);
-               theBoundingRect.stretchToTileBoundary(theFixedTileSize);
-               ossimAppFixedTileCache::instance()->setRect(theCacheId,
-                                                           theBoundingRect);
-               // theCacheRLevel = resLevel;
-            }
-         }
-         
          if(!theTile.valid())
          {
             allocate();
@@ -107,15 +94,12 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::getTile(
          {
             theTile->setImageRectangle(tileRect);
             theTile->makeBlank();
-            
-            if( !theBoundingRect.hasNans() )
+            // see if we can get a valid cache at the given resolution level
+            if(getCacheId(resLevel) < 0)
             {
-               result = fillTile(resLevel);
+               return theInputConnection->getTile(tileRect, resLevel);
             }
-            else
-            {
-               result = theTile;
-            }
+            result = fillTile(resLevel);
          }
       }
       else // Not enabled...
@@ -133,20 +117,20 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::fillTile(
 {
    ossimRefPtr<ossimImageData> tempTile = 0;
    fireProgressEvent(0.0);
-   ossimIrect boundingRect = theBoundingRect;
+   ossimIrect boundingRect = getBoundingRect(resLevel);
    ossimIrect tileRect = theTile->getImageRectangle();
-   
    ossimIrect allignedRect = tileRect.clipToRect(boundingRect);
-   
+   ossimAppFixedTileCache::ossimAppFixedCacheId cacheId = getCacheId(resLevel); 
+   ossimIpt cacheTileSize =  ossimAppFixedTileCache::instance()->getTileSize(cacheId);
    if ( !allignedRect.hasNans() )
    {
-      allignedRect.stretchToTileBoundary(theFixedTileSize);
-      ossimAppFixedTileCache::ossimAppFixedCacheId cacheId = theCacheId;
+      allignedRect.stretchToTileBoundary(cacheTileSize);
+     // ossimAppFixedTileCache::ossimAppFixedCacheId cacheId = theCacheId;
       
       // check to see if we need to loop
       if((allignedRect == tileRect)&&
-         (static_cast<ossim_int32>(tileRect.width())  == theFixedTileSize.x)&&
-         (static_cast<ossim_int32>(tileRect.height()) == theFixedTileSize.y))
+         (static_cast<ossim_int32>(tileRect.width())  == cacheTileSize.x)&&
+         (static_cast<ossim_int32>(tileRect.height()) == cacheTileSize.y))
       {
          ossimIpt origin = tileRect.ul();
          if(theCachingEnabled)
@@ -169,14 +153,17 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::fillTile(
                }
             }
          }
+//         else
+//         {
+//            std::cout << "FOUND IN CACHE AT RES " << resLevel << "\n";
+//         }
          
          if(tempTile.valid())
          {
             if((tempTile->getDataObjectStatus() != OSSIM_NULL)&&
                (tempTile->getDataObjectStatus() != OSSIM_EMPTY))
             {
-               
-               // theTile->setDataObjectStatus(tempTile->getDataObjectStatus());
+               theTile->setDataObjectStatus(tempTile->getDataObjectStatus());
                theTile->loadTile(tempTile.get());
             }
          }
@@ -184,10 +171,11 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::fillTile(
       }
       else
       {
+         
          ossim_int32 boundaryHeight = allignedRect.height();
          ossim_int32 boundaryWidth  = allignedRect.width();
          ossimIpt origin(allignedRect.ul());
-         ossim_int32 totalTiles  = (boundaryHeight/theFixedTileSize.y)*
+         ossim_int32 totalTiles  = (boundaryHeight/cacheTileSize.y)*
             (boundaryWidth/theFixedTileSize.x);
          ossim_int32 currentTile = 0;
          for(ossim_int32 row = 0;
@@ -214,8 +202,8 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::fillTile(
                {
                   ossimIrect rect(origin.x,
                                   origin.y,
-                                  origin.x + theFixedTileSize.x-1,
-                                  origin.y + theFixedTileSize.y-1);
+                                  origin.x + cacheTileSize.x-1,
+                                  origin.y + cacheTileSize.y-1);
                   
                   tempTile = theInputConnection->getTile(rect, resLevel);
                   
@@ -231,6 +219,11 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::fillTile(
                      }
                   }
                }
+             //  else
+             //  {
+             //     std::cout << "FOUND IN CACHE AT RES " << resLevel << "\n";
+             // }
+               
                if(tempTile.valid())
                {
                   if(tempTile->getBuf()&&
@@ -245,10 +238,9 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::fillTile(
             }
             origin.y += theFixedTileSize.y;
          }
+         theTile->validate();
          fireProgressEvent(100);
       }
-
-      theTile->validate();
       
    } // End of:  if ( !allignedRect.hasNans() )
    
@@ -268,14 +260,20 @@ ossim_uint32 ossimCacheTileSource::getTileHeight() const
 bool ossimCacheTileSource::loadState(const ossimKeywordlist& kwl,
                                      const char* prefix)
 {
-   ossimAppFixedTileCache::instance()->deleteCache(theCacheId);
+   //ossimAppFixedTileCache::instance()->deleteCache(theCacheId);
    
-   theCacheId = ossimAppFixedTileCache::instance()->newTileCache();
+   //theCacheId = ossimAppFixedTileCache::instance()->newTileCache();
    
+   deleteRlevelCache();
    const char* lookup = kwl.find(prefix, ossimKeywordNames::ENABLE_CACHE_KW);
    if(lookup)
    {
       theCachingEnabled = ossimString(lookup).toBool();
+   }
+   lookup = kwl.find(prefix, USE_INPUT_TILE_SIZE_KW);
+   if(lookup)
+   {
+      theUseInputTileSizeFlag = ossimString(lookup).toBool();
    }
 
    lookup = kwl.find(prefix, TILE_SIZE_XY_KW);
@@ -299,6 +297,10 @@ bool ossimCacheTileSource::saveState(ossimKeywordlist& kwl,
    kwl.add(prefix,
            ossimKeywordNames::ENABLE_CACHE_KW,
            theCachingEnabled,
+           true);
+   kwl.add(prefix,
+           USE_INPUT_TILE_SIZE_KW,
+           theUseInputTileSizeFlag,
            true);
    
    kwl.add(prefix,
@@ -324,6 +326,13 @@ ossimRefPtr<ossimProperty> ossimCacheTileSource::getProperty(
    {
       ossimRefPtr<ossimProperty> result = new ossimBooleanProperty(name,
                                                                    theCachingEnabled);
+      result->setCacheRefreshBit();
+      return result;
+   }
+   else if(name == USE_INPUT_TILE_SIZE_KW)
+   {
+      ossimRefPtr<ossimProperty> result = new ossimBooleanProperty(name,
+                                                                   theUseInputTileSizeFlag);
       result->setCacheRefreshBit();
       return result;
    }
@@ -357,6 +366,15 @@ void ossimCacheTileSource::setProperty(ossimRefPtr<ossimProperty> property)
    {
       setCachingEnabledFlag(property->valueToString().toBool());
    }
+   else if(name == USE_INPUT_TILE_SIZE_KW)
+   {
+      theUseInputTileSizeFlag = property->valueToString().toBool();
+      if(theUseInputTileSizeFlag)
+      {
+         deleteRlevelCache();
+      }
+     // setCachingEnabledFlag(property->valueToString().toBool());
+   }
    else
    {
       ossimImageSourceFilter::setProperty(property);
@@ -368,6 +386,7 @@ void ossimCacheTileSource::getPropertyNames(
 {
    propertyNames.push_back(TILE_SIZE_XY_KW);
    propertyNames.push_back(ossimKeywordNames::ENABLE_CACHE_KW);
+   propertyNames.push_back(USE_INPUT_TILE_SIZE_KW);
    
    ossimImageSourceFilter::getPropertyNames(propertyNames);
 }
@@ -407,7 +426,8 @@ void ossimCacheTileSource::setTileSize(const ossimIpt& size)
    {
       theTile = 0; // Force an allocate of new tile.
       theFixedTileSize = size;
-      ossimAppFixedTileCache::instance()->setTileSize(theCacheId, size);
+      initializeRlevelCache();
+     // ossimAppFixedTileCache::instance()->setTileSize(theCacheId, size);
    }
 }
 
@@ -419,3 +439,72 @@ void ossimCacheTileSource::fireProgressEvent(double percentComplete)
       fireEvent(event);
    }
 }
+
+ossimAppFixedTileCache::ossimAppFixedCacheId ossimCacheTileSource::getCacheId(ossim_uint32 resLevel)
+{
+   ossimAppFixedTileCache::ossimAppFixedCacheId result = -1;
+   if(theRLevelCacheList.empty())
+   {
+      initializeRlevelCache();
+   }
+   if(resLevel < theRLevelCacheList.size())
+   {
+      if(theRLevelCacheList[resLevel] <0)
+      {
+         ossimIpt cacheTileSize(theFixedTileSize);
+         if(theUseInputTileSizeFlag)
+         {
+            cacheTileSize = ossimIpt(ossim::min(static_cast<ossim_int32>(theInputConnection->getTileWidth()),
+                                                static_cast<ossim_int32>(1024)), 
+                                     ossim::min(static_cast<ossim_int32>(theInputConnection->getTileHeight()),
+                                                static_cast<ossim_int32>(1024)));
+            
+         }
+
+         //std::cout << cacheTileSize << std::endl;
+         ossimIrect rect = getBoundingRect(resLevel);
+         
+         if((cacheTileSize.x > static_cast<ossim_int64>(rect.width()))&&
+            (cacheTileSize.y > static_cast<ossim_int64>(rect.height())))
+         {
+            cacheTileSize.x = ossim::max(static_cast<ossim_int64>(rect.width()), 
+                                         static_cast<ossim_int64>(64));
+            cacheTileSize.y = ossim::max(static_cast<ossim_int64>(rect.height()), 
+                                         static_cast<ossim_int64>(64));
+         }
+
+         rect.stretchToTileBoundary(theFixedTileSize);
+         theRLevelCacheList[resLevel] = ossimAppFixedTileCache::instance()->newTileCache(rect, cacheTileSize); 
+      }
+      result = theRLevelCacheList[resLevel];
+   }
+   
+   return result;
+}
+
+void ossimCacheTileSource::deleteRlevelCache()
+{
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx < theRLevelCacheList.size();++idx)
+   {
+      ossimAppFixedTileCache::instance()->deleteCache(theRLevelCacheList[idx]);
+   }
+   theRLevelCacheList.clear();
+}
+
+void ossimCacheTileSource::initializeRlevelCache()
+{
+   ossim_uint32 nLevels = getNumberOfDecimationLevels();
+   deleteRlevelCache();
+   
+   if(nLevels > 0)
+   {
+      ossim_uint32 idx = 0;
+      theRLevelCacheList.resize(nLevels);
+      for(idx= 0; idx < theRLevelCacheList.size(); ++idx)
+      {
+         theRLevelCacheList[idx] = -1;
+      }
+   }
+}
+

@@ -8,12 +8,14 @@
 //
 // Calls Geotrans Equidistant Cylinder projection code.  
 //*******************************************************************
-//  $Id: ossimEquDistCylProjection.h 19880 2011-07-30 16:27:15Z dburken $
+//  $Id: ossimEquDistCylProjection.h 20352 2011-12-12 17:24:52Z dburken $
 
 #ifndef ossimEquDistCylProjection_HEADER
 #define ossimEquDistCylProjection_HEADER
 
 #include <ossim/projection/ossimLlxyProjection.h>
+
+class ossimIpt;
 
 class OSSIMDLLEXPORT ossimEquDistCylProjection : public ossimMapProjection//public ossimLlxyProjection
 {
@@ -69,6 +71,22 @@ public:
                                         ossimGpt&       worldPt) const;
    virtual void     worldToLineSample(const ossimGpt &worldPoint,
                                       ossimDpt&       lineSample)const;
+
+   /**
+    * @brief Specialized worldToLineSample.
+    * 
+    * Takes into consideration the image size and crossing the date line.
+    * Also makes local points outside of image negative or positive based on
+    * there relative closeness to left or right edge.
+    *
+    * @param worldPoint Ground point to convert to line sample.
+    * @param imageSize Size of image in pixels.
+    * @param lineSample Initialized by this.
+    */
+   void worldToLineSample( const ossimGpt& worldPoint,
+                           const ossimIpt& imageSize,
+                           ossimDpt&       lineSample ) const;
+   
    virtual bool isGeographic()const
    {
       return true;
@@ -89,14 +107,6 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
-    /*!
-    * Sets the GSD in x and y directions indirectly by specifying degrees/pixel instead of meters
-    * per pixel. This necessarily implies a reference latitude where lat = arccos(y/x). The origin 
-    * latitude will be modified accordingly. There will be ambiguity on the implied latitude's 
-    * hemisphere which will be resolved by referencing the tiepoint's latitude.
-    */
-   virtual void setDecimalDegreesPerPixel(const ossimDpt& gsd);
-
 private:   
    //---------------------GEOTRANS-------------------------------
    mutable double Eqcy_a;                  /* Semi-major axis of ellipsoid in meters */

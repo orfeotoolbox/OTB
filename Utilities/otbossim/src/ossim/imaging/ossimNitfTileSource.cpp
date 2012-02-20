@@ -9,7 +9,7 @@
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 19900 2011-08-04 14:19:57Z dburken $
+//  $Id: ossimNitfTileSource.cpp 20458 2012-01-17 01:28:55Z gpotts $
 
 #include <ossim/imaging/ossimNitfTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -39,11 +39,6 @@
 #include <ossim/support_data/ossimNitfStdidcTag.h>
 #include <ossim/support_data/ossimNitfVqCompressionHeader.h>
 
-
-#if defined(JPEG_DUAL_MODE_8_12)
-#undef JPEG_DUAL_MODE_8_12 
-#endif
-
 #if defined(JPEG_DUAL_MODE_8_12)
 #include <ossim/imaging/ossimNitfTileSource_12.h>
 #endif
@@ -55,7 +50,7 @@
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 19900 2011-08-04 14:19:57Z dburken $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 20458 2012-01-17 01:28:55Z gpotts $";
 #endif
    
 //---
@@ -2042,11 +2037,16 @@ ossimScalarType ossimNitfTileSource::getOutputScalarType() const
 
 ossim_uint32 ossimNitfTileSource::getTileWidth() const
 {
+   if(!theCacheSize.hasNans()&& theCacheSize.x > 0)
+   {
+      return theCacheSize.x;
+   }
+#if 0
    if (theTile.valid())
    {
       return theTile->getWidth();
    }
-
+#endif
    ossimIpt tileSize;
    ossim::defaultTileSize(tileSize);
    return static_cast<ossim_uint32>(tileSize.x);
@@ -2054,10 +2054,17 @@ ossim_uint32 ossimNitfTileSource::getTileWidth() const
 
 ossim_uint32 ossimNitfTileSource::getTileHeight() const
 {
+   
+   if(!theCacheSize.hasNans()&& theCacheSize.y > 0)
+   {
+      return theCacheSize.y;
+   }
+#if 0
    if (theTile.valid())
    {
       return theTile->getHeight();
    }
+#endif
 
    ossimIpt tileSize;
    ossim::defaultTileSize(tileSize);

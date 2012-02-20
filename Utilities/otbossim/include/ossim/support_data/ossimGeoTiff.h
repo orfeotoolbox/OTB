@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.h 20026 2011-09-01 16:33:18Z dburken $
+// $Id: ossimGeoTiff.h 20133 2011-10-12 19:03:47Z oscarkramer $
 
 #ifndef ossimGeoTiff_HEADER
 #define ossimGeoTiff_HEADER 1
@@ -109,7 +109,8 @@ public:
    static int getPcsUnitType(ossim_int32 pcsCode);
 
    static bool writeTags(TIFF* tiffOut,
-                         const ossimRefPtr<ossimMapProjectionInfo> projectionInfo);
+                         const ossimRefPtr<ossimMapProjectionInfo> projectionInfo,
+                         bool imagineNad27Flag=false);
 
    /**
     * @brief Writes a geotiff box to a buffer.
@@ -121,12 +122,14 @@ public:
     * @param rect The output image rect.
     * @param proj Pointer to output projection.
     * @param buf The buffer to stuff with data.
+    * @param pixelType OSSIM_PIXEL_IS_POINT(0) or OSSIM_PIXEL_IS_AREA(1)
     * @return true on success, false on error.
     */
    static bool writeJp2GeotiffBox(const ossimFilename& tmpFile,
                                   const ossimIrect& rect,
                                   const ossimProjection* proj,
-                                  std::vector<ossim_uint8>& buf);
+                                  std::vector<ossim_uint8>& buf,
+                                  ossimPixelType pixelType);
    
    /**
     *  Reads tags.
@@ -195,6 +198,7 @@ public:
    const std::vector<double>& getTiePoint() const;
    const std::vector<double>& getModelTransformation() const;
    const std::vector<double>& getScale() const;
+   ossimPixelType getRasterType() const;
 
    int getWidth() const;
    int getLength() const;
@@ -262,7 +266,7 @@ private:
    ossim_uint16          theBitsPerSample;                 // tag 258
 
    ossim_uint16          theModelType;                     // key 1024
-   ossim_uint16          theRasterType;                    // key 1025
+   ossim_uint16          theRasterType;                    // key 1025 undefined=0, area=1, point=2
    ossim_uint16          theGcsCode;                       // key 2048
    ossim_uint16          theDatumCode;                     // key 2050
    ossim_uint16          theAngularUnits;                  // key 2054

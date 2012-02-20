@@ -9,7 +9,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.h 20094 2011-09-14 14:15:12Z dburken $
+// $Id: ossimFilename.h 20192 2011-10-25 17:27:25Z dburken $
 
 #ifndef ossimFilename_HEADER
 #define ossimFilename_HEADER
@@ -210,7 +210,12 @@ public:
 
    /**
     * @brief Copies this file to output file.
+    *
+    * Copies this to output file. If output file is a directory, this->file() is
+    * appended to output file.
+    * 
     * @param outputFile File name to copy to.
+    * 
     * @return True on success, false on error.
     */
    bool copyFileTo(const ossimFilename& ouputFile) const;

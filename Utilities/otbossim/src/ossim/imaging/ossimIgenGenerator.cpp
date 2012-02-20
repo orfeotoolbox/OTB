@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimIgenGenerator.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimIgenGenerator.cpp 20206 2011-11-04 15:16:31Z dburken $
 #include <ossim/imaging/ossimIgenGenerator.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -464,7 +464,6 @@ void ossimIgenGenerator::generateNoTiledSpecList(bool outputToFileFlag)
       theOutputKwl.getSize())
    {
       ossimKeywordlist kwl;
-      long id = 0;
       if(theOutputGeoPolygon.size())
       {
          ossimRefPtr<ossimObject> obj = createInput();
@@ -478,7 +477,6 @@ void ossimIgenGenerator::generateNoTiledSpecList(bool outputToFileFlag)
             
             chain->add(cutter);
             chain->saveState(kwl, "object1.");
-            id = chain->getId().getId();
          }
          else
          {

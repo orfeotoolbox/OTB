@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.cpp 19880 2011-07-30 16:27:15Z dburken $
+//  $Id: ossimMapProjection.cpp 20154 2011-10-13 19:00:18Z dburken $
 
 #include <iostream>
 #include <cstdlib>
@@ -42,8 +42,6 @@ ossimMapProjection::ossimMapProjection(const ossimEllipsoid& ellipsoid,
    :theEllipsoid(ellipsoid),
     theOrigin(origin),
     theDatum(origin.datum()), // force no shifting
-    theMetersPerPixel(1, 1),
-    theDegreesPerPixel(),
     theUlGpt(0, 0),
     theUlEastingNorthing(0, 0),
     theFalseEastingNorthing(0, 0),
@@ -52,10 +50,11 @@ ossimMapProjection::ossimMapProjection(const ossimEllipsoid& ellipsoid,
     theModelTransform(),
     theInverseModelTransform(),
     theModelTransformUnitType(OSSIM_UNIT_UNKNOWN),
-    theProjectionUnits(OSSIM_UNIT_UNKNOWN) 
+    theProjectionUnits(OSSIM_METERS) 
 {
    theUlGpt = theOrigin;
    theUlEastingNorthing.makeNan();
+   theMetersPerPixel.makeNan();
    theDegreesPerPixel.makeNan();
 }
 
@@ -74,7 +73,7 @@ ossimMapProjection::ossimMapProjection(const ossimMapProjection& src)
         theModelTransform(src.theModelTransform),
         theInverseModelTransform(src.theInverseModelTransform),
         theModelTransformUnitType(src.theModelTransformUnitType),
-        theProjectionUnits(OSSIM_UNIT_UNKNOWN)
+        theProjectionUnits(src.theProjectionUnits)
 {
 }
 
@@ -240,17 +239,12 @@ void ossimMapProjection::update()
    {
       if(theMetersPerPixel.hasNans())
       {
-         computeMetersPerPixel(theDegreesPerPixel.y,
-                               theDegreesPerPixel.x,
-                               theMetersPerPixel);
+         computeMetersPerPixel();
       }
    }
    else if(!theMetersPerPixel.hasNans())
    {
-      computeDegreesPerPixel(theOrigin,
-                             theMetersPerPixel,
-                             theDegreesPerPixel.y,
-                             theDegreesPerPixel.x);
+      computeDegreesPerPixel();
    }
    // compute the tie points if not already computed
    //
@@ -301,9 +295,7 @@ void ossimMapProjection::updateFromTransform()
             len = ut.getValue(OSSIM_DEGREES);
             theDegreesPerPixel = ossimDpt(len, len);
             theUlGpt = wpt1;
-            computeMetersPerPixel(theDegreesPerPixel.y,
-                                  theDegreesPerPixel.x,
-                                  theMetersPerPixel);
+            computeMetersPerPixel();
             break;
          }
          default:
@@ -319,10 +311,7 @@ void ossimMapProjection::updateFromTransform()
             len = ut.getValue(OSSIM_METERS);
             theMetersPerPixel = ossimDpt(len, len);
             theUlEastingNorthing = mpt1;
-            computeDegreesPerPixel(theOrigin,
-                                   theMetersPerPixel,
-                                   theDegreesPerPixel.y,
-                                   theDegreesPerPixel.x);
+            computeDegreesPerPixel();
             break;
          }
       }
@@ -333,6 +322,24 @@ void ossimMapProjection::updateFromTransform()
 void ossimMapProjection::applyScale(const ossimDpt& scale,
                                     bool recenterTiePoint)
 {
+   ossimDpt mapTieDpt;
+   ossimGpt mapTieGpt;
+   if (recenterTiePoint)
+   {
+      if (isGeographic())
+      {
+         mapTieGpt = getUlGpt();
+         mapTieGpt.lat += theDegreesPerPixel.lat/2.0;
+         mapTieGpt.lon -= theDegreesPerPixel.lon/2.0;
+      }
+      else
+      {
+         mapTieDpt = getUlEastingNorthing();
+         mapTieDpt.x -= theMetersPerPixel.x/2.0;
+         mapTieDpt.y += theMetersPerPixel.y/2.0;
+      }
+   }
+
    theDegreesPerPixel.x *= scale.x;
    theDegreesPerPixel.y *= scale.y;
    theMetersPerPixel.x  *= scale.x;
@@ -340,15 +347,24 @@ void ossimMapProjection::applyScale(const ossimDpt& scale,
 
    if ( recenterTiePoint )
    {
-      snapTiePointToOrigin();
+      if (isGeographic())
+      {
+         mapTieGpt.lat -= theDegreesPerPixel.lat/2.0;
+         mapTieGpt.lon += theDegreesPerPixel.lon/2.0;
+         setUlTiePoints(mapTieGpt);
+      }
+      else
+      {
+         mapTieDpt.x += theMetersPerPixel.x/2.0;
+         mapTieDpt.y -= theMetersPerPixel.y/2.0;
+         setUlTiePoints(mapTieDpt);
+      }
    }
 
    if (theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
    {
-      theModelTransform.getData()[0][0] =
-         theModelTransform.getData()[0][0]*scale.x;
-      theModelTransform.getData()[1][1] =
-         theModelTransform.getData()[1][1]*scale.y;
+      theModelTransform.getData()[0][0] = theModelTransform.getData()[0][0]*scale.x;
+      theModelTransform.getData()[1][1] = theModelTransform.getData()[1][1]*scale.y;
 
       theInverseModelTransform = theModelTransform;
       theInverseModelTransform.i();
@@ -688,24 +704,16 @@ void ossimMapProjection::lineSampleToEastingNorthing(const ossimDpt& lineSample,
 }
 
 
-void ossimMapProjection::setMetersPerPixel(const ossimDpt& gsd)
+void ossimMapProjection::setMetersPerPixel(const ossimDpt& resolution)
 {
-   theMetersPerPixel=gsd;
-   computeDegreesPerPixel(theOrigin,
-                          theMetersPerPixel,
-                          theDegreesPerPixel.y,
-                          theDegreesPerPixel.x);
+   theMetersPerPixel = resolution;
+   computeDegreesPerPixel();
 }
 
-void ossimMapProjection::setDecimalDegreesPerPixel(const ossimDpt& gsd)
+void ossimMapProjection::setDecimalDegreesPerPixel(const ossimDpt& resolution)
 {
-   theDegreesPerPixel.y = gsd.lat;
-   theDegreesPerPixel.x = gsd.lon;
-
-   computeMetersPerPixel(theOrigin,
-                         gsd.lat,
-                         gsd.lon,
-                         theMetersPerPixel);
+   theDegreesPerPixel = resolution;
+   computeMetersPerPixel();
 }
 
 void ossimMapProjection::eastingNorthingToWorld(const ossimDpt& eastingNorthing,
@@ -750,8 +758,8 @@ void ossimMapProjection::setUlTiePoints(const ossimGpt& gpt)
 
 void ossimMapProjection::setUlTiePoints(const ossimDpt& eastingNorthing)
 {
-   setUlGpt(inverse(eastingNorthing));
    setUlEastingNorthing(eastingNorthing);
+   setUlGpt(inverse(eastingNorthing));
 }
 
 
@@ -880,12 +888,6 @@ bool ossimMapProjection::saveState(ossimKeywordlist& kwl, const char* prefix) co
               ossimKeywordNames::IMAGE_MODEL_TRANSFORM_UNIT_KW,
               ossimUnitTypeLut::instance()->getEntryString(theModelTransformUnitType),
               true);
-   }
-   
-   if(theProjectionUnits != OSSIM_UNIT_UNKNOWN)
-   {
-      ossimString units = ossimUnitTypeLut::instance()->getEntryString(theProjectionUnits);
-      kwl.add(prefix, ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW, units, true);
    }
 
    return true;
@@ -1393,21 +1395,13 @@ std::ostream& ossimMapProjection::print(std::ostream& out) const
 //  METHOD: ossimMapProjection::computeDegreesPerPixel
 //
 //*****************************************************************************
-void ossimMapProjection::computeDegreesPerPixel(const ossimGpt& ground,
-                                                const ossimDpt& metersPerPixel,
-                                                double &deltaLat,
-                                                double &deltaLon)
+void ossimMapProjection::computeDegreesPerPixel()
 {
-//    ossimDpt mpd = ground.metersPerDegree();
-//    ossimDpt dpm(1.0/mpd.x,
-//                 1.0/mpd.y);
-//    deltaLat = metersPerPixel.y*dpm.y;
-//    deltaLon = metersPerPixel.x*dpm.x;
-   ossimDpt eastNorthGround = forward(ground);
+   ossimDpt eastNorthGround = forward(theOrigin);
    ossimDpt rightEastNorth  =  eastNorthGround;
    ossimDpt downEastNorth   =  eastNorthGround;
-   rightEastNorth.x += metersPerPixel.x;
-   downEastNorth.y  -= metersPerPixel.y;
+   rightEastNorth.x += theMetersPerPixel.x;
+   downEastNorth.y  -= theMetersPerPixel.y;
 
    ossimGpt rightGpt = inverse(rightEastNorth);
    ossimGpt downGpt  = inverse(downEastNorth);
@@ -1415,57 +1409,40 @@ void ossimMapProjection::computeDegreesPerPixel(const ossimGpt& ground,
    // use euclidean distance to get length along the horizontal (lon)
    // and vertical (lat) directions
    //
-   double tempDeltaLat = rightGpt.latd() - ground.latd();
-   double tempDeltaLon = rightGpt.lond() - ground.lond();
-   deltaLon = sqrt(tempDeltaLat*tempDeltaLat + tempDeltaLon*tempDeltaLon);
+   double tempDeltaLat = rightGpt.latd() - theOrigin.latd();
+   double tempDeltaLon = rightGpt.lond() - theOrigin.lond();
+   theDegreesPerPixel.lon = sqrt(tempDeltaLat*tempDeltaLat + tempDeltaLon*tempDeltaLon);
 
-   tempDeltaLat = downGpt.latd() - ground.latd();
-   tempDeltaLon = downGpt.lond() - ground.lond();
-   deltaLat = sqrt(tempDeltaLat*tempDeltaLat + tempDeltaLon*tempDeltaLon);
+   tempDeltaLat = downGpt.latd() - theOrigin.latd();
+   tempDeltaLon = downGpt.lond() - theOrigin.lond();
+   theDegreesPerPixel.lat = sqrt(tempDeltaLat*tempDeltaLat + tempDeltaLon*tempDeltaLon);
 }
 
 //*****************************************************************************
 //  METHOD: ossimMapProjection::computeMetersPerPixel
 //
 //*****************************************************************************
-void ossimMapProjection::computeMetersPerPixel(const ossimGpt& center,
-                                               double deltaDegreesPerPixelLat,
-                                               double deltaDegreesPerPixelLon,
-                                               ossimDpt &metersPerPixel)
+void ossimMapProjection::computeMetersPerPixel()
 {
 //#define USE_OSSIMGPT_METERS_PER_DEGREE
 #ifdef USE_OSSIMGPT_METERS_PER_DEGREE
-   ossimDpt metersPerDegree (center.metersPerDegree());
-   metersPerPixel.x = metersPerDegree.x * deltaDegreesPerPixelLon;
-   metersPerPixel.y = metersPerDegree.y * deltaDegreesPerPixelLat;
+   ossimDpt metersPerDegree (theOrigin.metersPerDegree());
+   theMetersPerPixel.x = metersPerDegree.x * theDegreesPerPixel.lon;
+   theMetersPerPixel.y = metersPerDegree.y * theDegreesPerPixel.lat;
 #else
-   ossimGpt right=center;
-   ossimGpt down=center;
+   ossimGpt right=theOrigin;
+   ossimGpt down=theOrigin;
 
-   down.latd(center.latd()  + deltaDegreesPerPixelLat);
-   right.lond(center.lond() + deltaDegreesPerPixelLon);
+   down.latd(theOrigin.latd()  + theDegreesPerPixel.lat);
+   right.lond(theOrigin.lond() + theDegreesPerPixel.lon);
 
-   ossimDpt centerMeters = forward(center);
+   ossimDpt centerMeters = forward(theOrigin);
    ossimDpt rightMeters = forward(right);
    ossimDpt downMeters  = forward(down);
 
-   metersPerPixel.x = (rightMeters - centerMeters).length();
-   metersPerPixel.y = (downMeters  - centerMeters).length();
+   theMetersPerPixel.x = (rightMeters - centerMeters).length();
+   theMetersPerPixel.y = (downMeters  - centerMeters).length();
 #endif
-}
-
-//*****************************************************************************
-//  METHOD: ossimMapProjection::computeMetersPerPixel
-//
-//*****************************************************************************
-void ossimMapProjection::computeMetersPerPixel(double deltaDegreesPerPixelLat,
-                                               double deltaDegreesPerPixelLon,
-                                               ossimDpt &metersPerPixel)
-{
-   computeMetersPerPixel(theOrigin,
-                         deltaDegreesPerPixelLat,
-                         deltaDegreesPerPixelLon,
-                         metersPerPixel);
 }
 
 //**************************************************************************************************

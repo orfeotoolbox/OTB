@@ -9,11 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFile.cpp 19682 2011-05-31 14:21:20Z dburken $
-
-#include <fstream>
-#include <iostream>
-#include <iomanip>
+// $Id: ossimNitfFile.cpp 20326 2011-12-07 13:48:18Z dburken $
 
 #include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/support_data/ossimNitfFileHeader.h>
@@ -27,8 +23,10 @@
 #include <ossim/support_data/ossimRpfToc.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimFilename.h>
-#include <ossim/base/ossimNotifyContext.h>
-
+#include <ossim/base/ossimNotify.h>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
 
 
 // Static trace for debugging
@@ -110,15 +108,13 @@ std::ostream& ossimNitfFile::print(std::ostream& out,
       if(info.getTagName() == "RPFHDR")
       {
          // Open of the a.toc.
-         ossimRpfToc* toc = new ossimRpfToc;
+         ossimRefPtr<ossimRpfToc> toc = new ossimRpfToc;
          if ( toc->parseFile(getFilename()) ==
               ossimErrorCodes::OSSIM_OK )
          {
             pfx += "rpf.";
             toc->print(out, pfx, printOverviews);
          }
-         delete toc;
-         toc = 0;
       }
       
    } // matches:  if(theNitfFileHeader.valid())
@@ -243,7 +239,7 @@ bool ossimNitfFile::parseFile(const ossimFilename& file)
       {
          theNitfFileHeader->parseStream(in);
       }
-      catch(std::exception& e)
+      catch( const ossimException& e )
       {
          if (traceDebug())
          {
@@ -291,12 +287,24 @@ ossimNitfImageHeader* ossimNitfFile::getNewImageHeader(
    ossimNitfImageHeader* result = 0;
    if(theNitfFileHeader.valid())
    {
-      std::ifstream in(theFilename.c_str(), std::ios::in|std::ios::binary);
-
-      result = theNitfFileHeader->getNewImageHeader(imageNumber, in);
-      in.close();
+      try // getNewImageHeader can throw exception on parse.
+      {
+         std::ifstream in(theFilename.c_str(), std::ios::in|std::ios::binary);
+         result = theNitfFileHeader->getNewImageHeader(imageNumber, in);
+         in.close();
+      }
+      catch( const ossimException& e )
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimNitfFile::getNewImageHeader caught exception:\n"
+               << e.what()
+               << std::endl;
+         }
+         result = 0;
+      }
    }
-   
    return result;
 }
 

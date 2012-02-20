@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNitfWriter.cpp 18674 2011-01-11 16:24:12Z dburken $
+//  $Id: ossimNitfWriter.cpp 20123 2011-10-11 17:55:44Z dburken $
 
 #include <fstream>
 #include <algorithm>
@@ -19,7 +19,6 @@
 #include <ossim/base/ossimContainerProperty.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimNumericProperty.h>
-#include <ossim/base/ossimPreferences.h>
 #include <ossim/base/ossimProperty.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimStringProperty.h>
@@ -71,6 +70,15 @@ ossimNitfWriter::ossimNitfWriter(const ossimFilename& filename,
    // This will get it if set; else, set to default.
    //---
    ossim::defaultTileSize(m_blockSize);
+
+   // These are always set:
+   m_fileHeader->setEncryption( ossimString("0") );
+   m_imageHeader->setJustification( ossimString("R") );
+
+   // Set any site defaults.
+   initializeDefaultsFromConfigFile(
+      dynamic_cast<ossimNitfFileHeaderV2_X*>(m_fileHeader.get()),
+      dynamic_cast<ossimNitfImageHeaderV2_X*>(m_imageHeader.get()) );
 }
 
 ossimNitfWriter::~ossimNitfWriter()
@@ -523,7 +531,7 @@ bool ossimNitfWriter::writeBlockBandSequential()
    int imageHeaderEnd = m_outputStream->tellp();
    int imageHeaderSize = imageHeaderEnd - imageHeaderStart;
 
-   ossimIpt ul = rect.ul();
+   // ossimIpt ul = rect.ul();
 
    // Start the sequence through tiles:
    theInputConnection->setToStartOfSequence();

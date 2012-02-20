@@ -112,6 +112,20 @@ public:
   
    virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
 
+   /*!
+    * @brief Method to set fields from a keyword list.
+    *
+    * This is not a true loadState as it does not lookup/initialize all class
+    * members.  This was added to allow defaults, e.g ISCLAS, to be set via a
+    * site configuration file.
+    * Code does not return false if a field(key) is not found..
+    *
+    * @return true if ok or false on error.
+    */
+   virtual bool loadState(const ossimKeywordlist& kwl,
+                          const char* prefix=0);
+
+   static const ossimString IM_KW;
    static const ossimString IID1_KW;
    static const ossimString IDATIM_KW;
    static const ossimString TGTID_KW;
@@ -120,6 +134,8 @@ public:
    static const ossimString ISCLAS_KW;
    static const ossimString ENCRYP_KW;
    static const ossimString ISORCE_KW;
+   static const ossimString NROWS_KW;
+   static const ossimString NCOLS_KW;
    static const ossimString PVTYPE_KW;
    static const ossimString IREP_KW;
    static const ossimString ICAT_KW;
@@ -128,8 +144,10 @@ public:
    static const ossimString ICORDS_KW;
    static const ossimString IGEOLO_KW;
    static const ossimString NICOM_KW;
+   static const ossimString ICOM_KW;
    static const ossimString IC_KW;
    static const ossimString COMRAT_KW;
+   static const ossimString NBANDS_KW;
    static const ossimString ISYNC_KW;
    static const ossimString IMODE_KW;
    static const ossimString NBPR_KW;
@@ -141,6 +159,13 @@ public:
    static const ossimString IALVL_KW;
    static const ossimString ILOC_KW;
    static const ossimString IMAG_KW;
+   static const ossimString UDIDL_KW;
+   static const ossimString UDOFL_KW;
+   static const ossimString IXSHDL_KW;
+   static const ossimString IXSOFL_KW;
+   static const ossimString IMDATOFF_KW;
+   static const ossimString BMRLNTH_KW;
+   
 protected:
    /*!
     * FIELD IM:

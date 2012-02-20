@@ -8,7 +8,7 @@
 // Contains class definitions for ossimDpt.
 // 
 //*******************************************************************
-//  $Id: ossimDpt.cpp 19795 2011-06-30 15:04:48Z gpotts $
+//  $Id: ossimDpt.cpp 20204 2011-11-04 15:12:28Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -150,7 +150,7 @@ std::ostream& operator<<(std::ostream& os, const ossimDpt& pt)
    return pt.print(os);
 }
 
-bool ossimDpt::isEqualTo(const ossimDpt& rhs, ossimCompareType compareType)const
+bool ossimDpt::isEqualTo(const ossimDpt& rhs, ossimCompareType /* compareType */)const
 {
    if(rhs.isNan()&&isNan()) return true;
    return (ossim::almostEqual(x, rhs.x)&&

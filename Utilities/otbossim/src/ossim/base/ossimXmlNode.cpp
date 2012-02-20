@@ -9,7 +9,7 @@
 // Contains definition of class ossimXmlNode.
 // 
 //*****************************************************************************
-// $Id: ossimXmlNode.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimXmlNode.cpp 20369 2011-12-15 13:45:24Z gpotts $
 
 #include <iostream>
 #include <stack>
@@ -28,7 +28,8 @@ static std::istream& xmlskipws(std::istream& in)
 {
    int c = in.peek();
    while( !in.fail() &&
-         ( (c == ' ') || (c == '\t') || (c == '\n')|| (c == '\r') ) )
+         (( (c== ' ') || (c == '\t') || (c == '\n')|| (c == '\r') || (c<0x20) || (c>=0x7f) ))
+         )
    {
       in.ignore(1);
       c = in.peek();
@@ -148,7 +149,7 @@ bool ossimXmlNode::read(std::istream& in)
       }
       return false;
    }
-   streampos file_pos = in.tellg();
+
    ossimString endTag;
    
    if(!readTag(in, theTag))
@@ -964,60 +965,38 @@ void ossimXmlNode::clearAttributes()
 void ossimXmlNode::toKwl(ossimKeywordlist& kwl,
                          const ossimString& prefix)const
 {
-   ossimRefPtr<ossimXmlAttribute> nameAtt  = findAttribute("name");
-   ossimRefPtr<ossimXmlAttribute> valueAtt = findAttribute("value");
-   ossimRefPtr<ossimXmlAttribute> typeAtt  = findAttribute("type");
+   ossimString name = getTag();
+   ossimString value = getText();
    
-   ossimString name;
-   ossimString value;
-   ossimString type;
-   if(nameAtt.valid())
-   {
-      name = nameAtt->getValue();
-   }
-   if(valueAtt.valid())
-   {
-      value = valueAtt->getValue();
-   }
-   else
-   {
-      value = theText;
-   }
-   
-   if(typeAtt.valid())
-   {
-      type = typeAtt->getValue();
-   }
    ossimString copyPrefix = prefix;
    
    if(name != "")
    {
       copyPrefix += (name+".");
    }
-   if(type!= "")
-   {
-      kwl.add(copyPrefix,
-              "type",
-              typeAtt->getValue(),
-              true);
-   }
-   
    if(theChildNodes.size() < 1)
    {
       kwl.add(prefix+name,
               value,
               true);
    }
-   else
+
+   ossimString attributePrefix = copyPrefix + "@";
+   ossim_uint32 attributeIdx = 0;
+   for(attributeIdx = 0; attributeIdx < theAttributes.size(); ++attributeIdx)
    {
-      ossim_uint32 idx=0;
-      
-      for(idx = 0; idx < theChildNodes.size();++idx)
-      {
-         theChildNodes[idx]->toKwl(kwl,
-                                   copyPrefix);
-      }
+      kwl.add(attributePrefix+theAttributes[attributeIdx]->getName(),
+              theAttributes[attributeIdx]->getValue(), 
+              true);
    }
+
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx < theChildNodes.size();++idx)
+   {
+      theChildNodes[idx]->toKwl(kwl,
+                                copyPrefix);
+   }
+   
 }
 
 bool ossimXmlNode::readTag(std::istream& in,

@@ -10,10 +10,7 @@
 //              rpf file.
 //
 //********************************************************************
-// $Id: ossimRpfFrame.cpp 17206 2010-04-25 23:20:40Z dburken $
-
-#include <istream>
-#include <ostream>
+// $Id: ossimRpfFrame.cpp 20324 2011-12-06 22:25:23Z dburken $
 
 #include <ossim/support_data/ossimRpfFrame.h>
 #include <ossim/support_data/ossimRpfHeader.h>
@@ -33,17 +30,20 @@
 #include <ossim/support_data/ossimRpfLocationSection.h>
 #include <ossim/support_data/ossimRpfColorConverterSubsection.h>
 #include <ossim/support_data/ossimRpfConstants.h>
+#include <ossim/support_data/ossimRpfReplaceUpdateRecord.h>
+#include <ossim/support_data/ossimRpfReplaceUpdateSectionSubheader.h>
 #include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/support_data/ossimNitfFileHeader.h>
 #include <ossim/support_data/ossimNitfTagInformation.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimErrorCodes.h>
 #include <ossim/base/ossimTrace.h>
+#include <istream>
+#include <ostream>
 
 static const ossimTrace traceDebug("ossimRpfFrame:debug");
 
-std::ostream& operator <<(std::ostream& out,
-                          const ossimRpfFrame& data)
+std::ostream& operator <<(std::ostream& out, const ossimRpfFrame& data)
 {
    data.print(out);
    
@@ -61,7 +61,10 @@ ossimRpfFrame::ossimRpfFrame()
     theCompressionSection(0),
     theColorGrayscaleSubheader(0),
     theColorConverterSubsection(0),
-    theNitfFile(0)
+    theNitfFile(0),
+    theSubframeMaskTable(0),
+    theSubframeTransparencyMaskTable(0),
+    theReplaceUpdateTable(0)
 {
 }
 
@@ -70,8 +73,7 @@ ossimRpfFrame::~ossimRpfFrame()
    deleteAll();
 }
 
-std::ostream& ossimRpfFrame::print(std::ostream& out,
-                                   const std::string& prefix) const
+std::ostream& ossimRpfFrame::print(std::ostream& out, const std::string& prefix) const
 {
    if (traceDebug())
    {
@@ -84,6 +86,11 @@ std::ostream& ossimRpfFrame::print(std::ostream& out,
    }
 
    out << prefix << "filename: " << theFilename << "\n";
+
+   if ( theReplaceUpdateTable.valid() )
+   {
+      theReplaceUpdateTable->print(out, prefix);
+   }
 
    if (traceDebug())
    {
@@ -197,6 +204,8 @@ std::ostream& ossimRpfFrame::print(std::ostream& out,
             }
          }
       }
+
+
       
       out << "end_rpf_frame_print:\n";
       
@@ -263,6 +272,12 @@ ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename,
          // if(!in.fail()&&theHeader)
       {
          result = populateAttributeSection(in);
+
+         // This is needed for ossim-rpf --list-frames so NOT put in full parse section.
+         if(!in.fail()&&(result == ossimErrorCodes::OSSIM_OK))
+         {
+            result = populateReplaceUpdateTable(in);
+         }
 
          if ( minimalParse == false )
          {
@@ -1038,4 +1053,69 @@ ossimErrorCode ossimRpfFrame::populateMasks(istream& in)
    }
    
    return ossimErrorCodes::OSSIM_OK;
+}
+
+ossimErrorCode ossimRpfFrame::populateReplaceUpdateTable(std::istream& in)
+{
+   ossimErrorCode result = ossimErrorCodes::OSSIM_OK;
+   
+   const ossimRpfLocationSection* location = theHeader->getLocationSection();
+
+   if( location )
+   {
+      if ( location->hasComponent(OSSIM_RPF_REPLACE_UPDATE_SECTION_SUBHEADER) )
+      {
+         ossimRpfComponentLocationRecord component;
+         if( location->getComponent(OSSIM_RPF_REPLACE_UPDATE_SECTION_SUBHEADER, component) )
+         {
+            ossimRefPtr<ossimRpfReplaceUpdateSectionSubheader> hdr =
+               new ossimRpfReplaceUpdateSectionSubheader();
+            
+            in.seekg(component.m_componentLocation, ios::beg);
+            
+            if( hdr->parseStream( in, theHeader->getByteOrder() ) == ossimErrorCodes::OSSIM_OK )
+            {
+               ossim_uint16 count = hdr->getNumberOfRecords();
+               if ( count )
+               {
+                  if ( theReplaceUpdateTable.valid() )
+                  {
+                     theReplaceUpdateTable->clear();
+                  }
+                  else
+                  {
+                     theReplaceUpdateTable = new ossimRpfReplaceUpdateTable();
+                  }
+                  ossimRpfReplaceUpdateRecord record;
+                  for ( ossim_uint16 i = 0; i < count; ++i )
+                  {
+                     if ( record.parseStream(in) == ossimErrorCodes::OSSIM_OK )
+                     {
+                        theReplaceUpdateTable->addRecord( record );
+                     }
+                     else
+                     {
+                        break;
+                     }
+                  }
+               }
+               
+            }
+         }  
+      }
+   }
+
+   if ( in.fail() )
+   {
+      theReplaceUpdateTable = 0;
+      result = ossimErrorCodes::OSSIM_ERROR;
+   }
+
+   return result;
+
+} // End: ossimRpfFrame::populateReplaceUpdateTable(std::istream& in)
+
+ossimRefPtr<ossimRpfReplaceUpdateTable> ossimRpfFrame::getRpfReplaceUpdateTable() const
+{
+   return theReplaceUpdateTable;
 }

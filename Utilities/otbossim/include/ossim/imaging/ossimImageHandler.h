@@ -12,7 +12,7 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 19723 2011-06-06 21:03:49Z dburken $
+// $Id: ossimImageHandler.h 20133 2011-10-12 19:03:47Z oscarkramer $
 #ifndef ossimImageHandler_HEADER
 #define ossimImageHandler_HEADER 1
 
@@ -531,6 +531,19 @@ public:
     */
    virtual void getEntryStringList(
       std::vector<ossimString>& entryStringList) const;
+
+   /**
+    * @brief Convenience method to determine if entry index should be used for
+    * support files, e.g. file.his or file_e1.his.
+    * 
+    * @returns true if file is open, &&
+    * ( (entryList.size() > 1) || (entryList[0] != 0) )
+    * false otherwise.
+    *
+    * @note This is just a hint.  Put here as code was duplicated everywhere.
+    * Callers can do what they wish.
+    */
+   bool useEntryIndex() const;
    
    ossimFilename getOverviewFile()const;
 
@@ -607,6 +620,10 @@ public:
 
   //! Sets the image ID in case it is externally generated
   void setImageID(const ossimString&  id) { theImageID = id; }
+
+  //! Returns the raster pixel alignment type. OSSIM treats all alignments internally as
+  //! pixel-is-point. This is only a flag to identify the source's alignment type.
+  ossimPixelType getPixelType() const { return thePixelType; }
 
 protected:
    
@@ -694,6 +711,7 @@ protected:
     * image will be opened (shallow open). Defaulted to true in constructor.
     */
    bool theOpenOverviewFlag;
+   mutable ossimPixelType thePixelType; // pixel-is-point or pixel-is-area
    
 TYPE_DATA
 };

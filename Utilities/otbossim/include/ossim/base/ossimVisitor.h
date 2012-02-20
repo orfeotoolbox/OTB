@@ -1,4 +1,4 @@
-// $Id: ossimVisitor.h 19918 2011-08-09 11:30:03Z gpotts $
+// $Id: ossimVisitor.h 20489 2012-01-23 20:07:56Z dburken $
 
 #ifndef ossimVisitor_HEADER
 #define ossimVisitor_HEADER 1
@@ -130,6 +130,18 @@ public:
    virtual void visit(ossimObject* obj);
    void setTypeName(const ossimString& typeName);
    const ossimString& getTypeName()const;
+
+   /**
+    * @brief Set the m_firstOfTypeFlag.
+    *
+    * @param flag If flag is true, ossimTypeNameVisitor::visit will stop traversing if it
+    * finds an object of m_typeName.
+    */
+   void setFirstOfTypeFlag(bool flag);
+
+   /** @return m_firstOfTypeFlag */
+   bool getFirstOfTypeFlag() const;
+   
 protected:
    ossimString m_typeName;
    bool        m_firstOfTypeFlag;

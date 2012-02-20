@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.cpp 19058 2011-03-11 20:03:24Z dburken $
+// $Id: ossimNitfFileHeaderV2_1.cpp 20123 2011-10-11 17:55:44Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -34,17 +34,17 @@ RTTI_DEF1(ossimNitfFileHeaderV2_1,
           "ossimNitfFileHeaderV2_1",
           ossimNitfFileHeaderV2_X)
 
-const ossimString ossimNitfFileHeaderV2_1::FSCLASY_KW = "fsclasy";
-const ossimString ossimNitfFileHeaderV2_1::FSDCTP_KW  = "fsdctp";
-const ossimString ossimNitfFileHeaderV2_1::FSDCDT_KW  = "fsdcdt";
-const ossimString ossimNitfFileHeaderV2_1::FSDCXM_KW  = "fsdcxm";
-const ossimString ossimNitfFileHeaderV2_1::FSDG_KW    = "fsdg";
-const ossimString ossimNitfFileHeaderV2_1::FSDGDT_KW  = "fsdgdt";
-const ossimString ossimNitfFileHeaderV2_1::FSCLTX_KW  = "fscltx";
-const ossimString ossimNitfFileHeaderV2_1::FSCATP_KW  = "fscatp";
-const ossimString ossimNitfFileHeaderV2_1::FSCRSN_KW  = "fscrsn";
-const ossimString ossimNitfFileHeaderV2_1::FSSRDT_KW  = "fssrdt";
-const ossimString ossimNitfFileHeaderV2_1::FBKGC_KW   = "fbkgc";
+const ossimString ossimNitfFileHeaderV2_1::FSCLSY_KW  = "FSCLSY";
+const ossimString ossimNitfFileHeaderV2_1::FSDCTP_KW  = "FSDCTP";
+const ossimString ossimNitfFileHeaderV2_1::FSDCDT_KW  = "FSDCDT";
+const ossimString ossimNitfFileHeaderV2_1::FSDCXM_KW  = "FSDCXM";
+const ossimString ossimNitfFileHeaderV2_1::FSDG_KW    = "FSDG";
+const ossimString ossimNitfFileHeaderV2_1::FSDGDT_KW  = "FSDGDT";
+const ossimString ossimNitfFileHeaderV2_1::FSCLTX_KW  = "FSCLTX";
+const ossimString ossimNitfFileHeaderV2_1::FSCATP_KW  = "FSCATP";
+const ossimString ossimNitfFileHeaderV2_1::FSCRSN_KW  = "FSCRSN";
+const ossimString ossimNitfFileHeaderV2_1::FSSRDT_KW  = "FSSRDT";
+const ossimString ossimNitfFileHeaderV2_1::FBKGC_KW   = "FBKGC";
 
 static const
 ossimTrace traceDebug(ossimString("ossimNitfFileHeaderV2_1:debug"));
@@ -518,7 +518,7 @@ std::ostream& ossimNitfFileHeaderV2_1::print(std::ostream& out,
        << theFileTitle << "\n"    
        << prefix << std::setw(24) << "FSCLAS:"
        << theSecurityClassification<< "\n"
-       << prefix << std::setw(24) << "FSCLASY:"
+       << prefix << std::setw(24) << "FSCLSY:"
        << theSecurityClassificationSys<< "\n"
        << prefix << std::setw(24) << "FSCODE:"
        << theCodewords << "\n"
@@ -777,8 +777,8 @@ void ossimNitfFileHeaderV2_1::clearFields()
    memset(theClassificationReason, ' ', 1);
    memset(theSecuritySourceDate, ' ', 8);
    memset(theSecurityControlNumber, ' ', 15);
-   memset(theCopyNumber, ' ', 5);
-   memset(theNumberOfCopies, ' ', 5);
+   memset(theCopyNumber, '0', 5);
+   memset(theNumberOfCopies, '0', 5);
    memset(theEncryption, ' ', 1);
    memset(theFileBackgroundColor, 0, 3);
    memset(theOriginatorsName, ' ', 24);
@@ -1540,12 +1540,96 @@ void ossimNitfFileHeaderV2_1::setOriginatorsPhone(const ossimString& phone)
    memcpy(theOriginatorsPhone, out.str().c_str(), 18);
 }
 
+bool ossimNitfFileHeaderV2_1::loadState(const ossimKeywordlist& kwl,
+                                        const char* prefix)
+{
+   // Note: Currently not looking up all fieds only ones that make sense.
+   
+   const char* lookup;
+
+   lookup = kwl.find( prefix, FSCLSY_KW);
+   if ( lookup )
+   {
+      setSecurityClassificationSys( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, FSDCTP_KW);
+   if ( lookup )
+   {
+      setDeclassificationType( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, FSDCDT_KW);
+   if ( lookup )
+   {
+      setDeclassificationDate( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, FSDCXM_KW);
+   if ( lookup )
+   {
+      setDeclassificationExemption( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, FSDG_KW);
+   if ( lookup )
+   {
+      setDowngrade( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, FSDGDT_KW);
+   if ( lookup )
+   {
+      setDowngradingDate( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, FSCLTX_KW );
+   if ( lookup )
+   {
+      setClassificationText( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, FSCATP_KW );
+   if ( lookup )
+   {
+      setClassificationAuthorityType( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, FSCRSN_KW );
+   if ( lookup )
+   {
+      setClassificationReason( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, FSSRDT_KW );
+   if ( lookup )
+   {
+      setClassificationReason( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, FSSRDT_KW);
+   if ( lookup )
+   {
+      setSecuritySourceDate( ossimString(lookup) );
+   }  
+   lookup = kwl.find( prefix, FBKGC_KW );
+   if ( lookup )
+   {
+      ossimString value = lookup;
+      std::vector<ossimString> splitString;
+      value = value.trim();
+      value.split(splitString, " ");
+      if(splitString.size() == 3)
+      {
+         setFileBackgroundColor((ossim_uint8)splitString[0].toUInt32(), 
+                                (ossim_uint8)splitString[1].toUInt32(), 
+                                (ossim_uint8)splitString[2].toUInt32());
+      }
+   }  
+   
+   return ossimNitfFileHeaderV2_X::loadState(kwl, prefix);
+}
+
 void ossimNitfFileHeaderV2_1::setProperty(ossimRefPtr<ossimProperty> property)
 {
    if(!property.valid()) return;
    
    ossimString name = property->getName();
-   if(name == FSCLASY_KW)
+
+   // Make case insensitive:
+   name.upcase();
+   
+   if(name == FSCLSY_KW)
    {
      setSecurityClassificationSys(property->valueToString()); 
    }
@@ -1614,7 +1698,7 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_1::getProperty(const ossimStrin
    {
       property = new ossimStringProperty(name, getComplexityLevel().trim());
    }
-   else if(name == FSCLASY_KW)
+   else if(name == FSCLSY_KW)
    {
       property = new ossimStringProperty(name,
                                                getSecurityClassificationSys().trim());
@@ -1722,7 +1806,7 @@ void ossimNitfFileHeaderV2_1::getPropertyNames(std::vector<ossimString>& propert
 {
    ossimNitfFileHeaderV2_X::getPropertyNames(propertyNames);
 
-   propertyNames.push_back(FSCLASY_KW);
+   propertyNames.push_back(FSCLSY_KW);
    propertyNames.push_back(FSDCTP_KW);
    propertyNames.push_back(FSDCDT_KW);
    propertyNames.push_back(FSDCXM_KW);
@@ -1734,43 +1818,3 @@ void ossimNitfFileHeaderV2_1::getPropertyNames(std::vector<ossimString>& propert
    propertyNames.push_back(FSSRDT_KW);
    propertyNames.push_back(FBKGC_KW);
 }
-
-bool ossimNitfFileHeaderV2_1::setDefaults(const ossimKeywordlist& /* kwl */,
-                                          const char* /* prefix */)
-{
-#if 0	
-   const char* complexityLevel             = kwl.find(prefix, CLEVEL_KW);
-   const char* systemType                  = kwl.find(prefix, STYPE_KW);
-   const char* originatingStationId        = kwl.find(prefix, OSTAID_KW);
-   const char* dateTime                    = kwl.find(prefix, FDT_KW);
-   const char* title                       = kwl.find(prefix, FTITLE_KW);
-   const char* securityClassification      = kwl.find(prefix, FSCLAS_KW);
-   const char* securityClassificationSys   = kwl.find(prefix, FSCLASY_KW);
-   const char* codeWords                   = kwl.find(prefix, FSCODE_KW);
-   const char* controlAndHandling          = kwl.find(prefix, FSCTLH_KW);
-   const char* releasingInstructions       = kwl.find(prefix, FSREL_KW);
-   const char* declassificationType        = kwl.find(prefix, FSDCTP_KW);
-   const char* declassificationDate        = kwl.find(prefix, FSDCDT_KW);
-   const char* declassificationExemption   = kwl.find(prefix, FSDCXM_KW);
-   const char* downgrade                   = kwl.find(prefix, FSDG_KW);
-   const char* downgradingDate             = kwl.find(prefix, FSDGDT_KW);
-   const char* classificationText          = kwl.find(prefix, FSCLTX_KW);
-   const char* classificationAuthorityType = kwl.find(prefix, FSCATP_KW);
-   const char* classificationAuthority     = kwl.find(prefix, FSCAUT_KW);
-   const char* classificationReason        = kwl.find(prefix, FSCRSN_KW);
-   const char* securitySourceDate          = kwl.find(prefix, FSSRDT_KW);
-   const char* securityControlNumber       = kwl.find(prefix, FSCTLN_KW);
-   const char* copyNumber                  = kwl.find(prefix, FSCOP_KW);
-   const char* numberOfCopies              = kwl.find(prefix, FSCPYS_KW);
-   const char* encryption                  = kwl.find(prefix, ENCRYP_KW);
-   const char* fileBackgroundColor         = kwl.find(prefix, FBKGC_KW);
-   const char* originatorsName             = kwl.find(prefix, ONAME_KW);
-   const char* originatorsPhone            = kwl.find(prefix, OPHONE_KW);
-   if(complexityLevel)
-   {
-      setComplexityLevel(complexityLevel);
-   }
-#endif
-   return true;
-}
-

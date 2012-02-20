@@ -284,7 +284,7 @@ std::ostream& ossimTiffInfo::print(std::ostream& out) const
 
    // Capture the original flags then set float output to full precision.
    std::ios_base::fmtflags f = out.flags();
-   out << setiosflags(std::ios::fixed) << std::setprecision(15);
+   out << std::setprecision(15);
    
    // Image File Directory (IFD) loop.
    ossim_int32 ifdIndex = 0;
@@ -574,10 +574,10 @@ std::ostream& ossimTiffInfo::print(std::ostream& out) const
    return out;
 }
 
-std::ostream& ossimTiffInfo::print(std::ifstream& inStr,
+std::ostream& ossimTiffInfo::print(std::istream& inStr,
                                    std::ostream& outStr) const
 {
-   static const char MODULE[] = "ossimTiffInfo::print(std::ifstream&, std::ostream&)";
+   static const char MODULE[] = "ossimTiffInfo::print(std::istream&, std::ostream&)";
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG Entered...\n";
@@ -697,7 +697,7 @@ std::ostream& ossimTiffInfo::print(std::ifstream& inStr,
 
    // Capture the original flags then set float output to full precision.
    std::ios_base::fmtflags f = outStr.flags();
-   outStr << setiosflags(std::ios::fixed) << std::setprecision(15);
+   outStr << std::setprecision(15);
    
    // Image File Directory (IFD) loop.
    ossim_int32 ifdIndex = 0;
@@ -1016,7 +1016,7 @@ bool ossimTiffInfo::getImageGeometry(ossimKeywordlist& geomKwl,
    return result;
 }
 
-bool ossimTiffInfo::getImageGeometry(std::ifstream& inStr,
+bool ossimTiffInfo::getImageGeometry(std::istream& inStr,
                                      ossimKeywordlist& geomKwl,
                                      ossim_uint32 entryIndex) const
 {
@@ -1161,10 +1161,17 @@ bool ossimTiffInfo::getImageGeometry(const ossimKeywordlist& gtiffKwl,
                pixelType.c_str());
    
    // Set the projection type.
+   bool isGeographic = false;
    ossimString pcsCode;
    ossimString ossimProjectionName = "";
    bool hasPcsCode = getPcsCode(gtiffPrefix, gtiffKwl, pcsCode);
-   if (hasPcsCode)
+
+   //---
+   // The ossimEpsgProjectionFactory will not pick up the origin latitude if code is
+   // 4326 (geographic) so we use the projection name; else, the origin_latitude will
+   // always be 0.  This is so the gsd comes out correct for scale.
+   //---
+   if ( hasPcsCode && ( pcsCode != "4326" ) )
    {
       // Add the pcs code.
       geomKwl.add(geomPrefix.c_str(),
@@ -1174,8 +1181,15 @@ bool ossimTiffInfo::getImageGeometry(const ossimKeywordlist& gtiffKwl,
    else
    {
       if ( getOssimProjectionName(gtiffPrefix, gtiffKwl, ossimProjectionName) == false )
+      {
          ossimProjectionName = "ossimEquDistCylProjection";
+      }
       geomKwl.add(geomPrefix.c_str(), ossimKeywordNames::TYPE_KW, ossimProjectionName);
+
+      if ( ossimProjectionName == "ossimEquDistCylProjection" )
+      {
+         isGeographic = true;
+      }
    }
    
    // Get the units. 
@@ -1312,14 +1326,27 @@ bool ossimTiffInfo::getImageGeometry(const ossimKeywordlist& gtiffKwl,
                   FALSE_EASTING_NORTHING_UNITS_KW, units);
    }
    
-   ossim_float64 tmpDbl;
+   ossim_float64 tmpDbl = ossim::nan();
    
-   if ( getOriginLat(gtiffPrefix, gtiffKwl, tmpDbl) )
+   if ( getOriginLat(gtiffPrefix, gtiffKwl, tmpDbl) == false )
+   {
+      if ( isGeographic && hasScale && scale.x )
+      {
+         //---
+         // ossimEquDistCylProjection uses the origin_latitude for meters per pixel (gsd)
+         // computation.  So is not set in tiff tags, compute to achieve the proper
+         // horizontal scaling.
+         //---
+         tmpDbl = ossim::acosd(scale.y/scale.x);
+      }
+   }
+   if ( !ossim::isnan(tmpDbl) )
    {
       geomKwl.add(geomPrefix.c_str(),
                   ossimKeywordNames::ORIGIN_LATITUDE_KW,
                   tmpDbl);
    }
+   
    if ( getCentralMeridian(gtiffPrefix, gtiffKwl, tmpDbl) )
    {
       geomKwl.add(geomPrefix.c_str(),
@@ -1370,7 +1397,7 @@ bool ossimTiffInfo::getImageGeometry(const ossimKeywordlist& gtiffKwl,
    return result;
 }
 
-void ossimTiffInfo::readShort(ossim_uint16& s, std::ifstream& str) const
+void ossimTiffInfo::readShort(ossim_uint16& s, std::istream& str) const
 {
    str.read((char*)&s, sizeof(s));
    if (theEndian)
@@ -1379,7 +1406,7 @@ void ossimTiffInfo::readShort(ossim_uint16& s, std::ifstream& str) const
    }
 }
 
-void ossimTiffInfo::readLong(ossim_uint32& l, std::ifstream& str) const
+void ossimTiffInfo::readLong(ossim_uint32& l, std::istream& str) const
 {
    str.read((char*)&l, sizeof(l));
    if (theEndian)
@@ -1388,7 +1415,7 @@ void ossimTiffInfo::readLong(ossim_uint32& l, std::ifstream& str) const
    }
 }
 
-void ossimTiffInfo::readLongLong(ossim_uint64& l, std::ifstream& str) const
+void ossimTiffInfo::readLongLong(ossim_uint64& l, std::istream& str) const
 {
    str.read((char*)&l, sizeof(l));
    if (theEndian)
@@ -1400,7 +1427,7 @@ void ossimTiffInfo::readLongLong(ossim_uint64& l, std::ifstream& str) const
 
 
 bool ossimTiffInfo::getOffset(
-   std::streamoff& offset, std::ifstream& str, ossim_uint16 version) const
+   std::streamoff& offset, std::istream& str, ossim_uint16 version) const
 {
    bool status = true;
    if  (version == 42)
@@ -1423,7 +1450,7 @@ bool ossimTiffInfo::getOffset(
 }
 
 bool ossimTiffInfo::getValue(ossim_uint64& value,
-                             std::ifstream& str,
+                             std::istream& str,
                              WordType type,
                              ossim_uint16 version) const
 {
@@ -1518,7 +1545,7 @@ ossim_uint16 ossimTiffInfo::getTypeByteSize(ossim_uint16 type) const
    return result;
 }
 
-void ossimTiffInfo::eatValue(std::ifstream& str, ossim_uint16 version) const
+void ossimTiffInfo::eatValue(std::istream& str, ossim_uint16 version) const
 {
    if (version == 42)
    {
@@ -2828,7 +2855,7 @@ std::ostream& ossimTiffInfo::printRasterType(std::ostream& out,
    }
    else if (code == 2)
    {
-      out << "pixels_is_point\n";
+      out << "pixel_is_point\n";
    }
    else
    {

@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.h 18413 2010-11-11 19:56:22Z gpotts $
+// $Id: ossimNitfImageHeaderV2_1.h 20123 2011-10-11 17:55:44Z dburken $
 
 #ifndef ossimNitfImageHeaderV2_1_HEADER
 #define ossimNitfImageHeaderV2_1_HEADER
@@ -103,6 +103,20 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
    virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
+
+   /*!
+    * @brief Method to set fields from a keyword list.
+    *
+    * This is not a true loadState as it does not lookup/initialize all class
+    * members.  This was added to allow defaults, e.g ISCLAS, to be set via a
+    * site configuration file.
+    * Code does not return false if a field(key) is not found..
+    *
+    * @return true if ok or false on error.
+    */
+   virtual bool loadState(const ossimKeywordlist& kwl,
+                          const char* prefix=0);
+   
    static const ossimString ISCLSY_KW;
    static const ossimString ISCODE_KW;
    static const ossimString ISCTLH_KW;

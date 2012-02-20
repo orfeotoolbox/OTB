@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.h 18674 2011-01-11 16:24:12Z dburken $
+// $Id: ossimNitfFileHeaderV2_1.h 20123 2011-10-11 17:55:44Z dburken $
 #ifndef ossimNitfFileHeaderV2_1_HEADER
 #define ossimNitfFileHeaderV2_1_HEADER
 
@@ -213,19 +213,30 @@ public:
    virtual void setOriginatorsName(const ossimString& name);
    virtual void setOriginatorsPhone(const ossimString& phone);
    
-   virtual bool setDefaults(const ossimKeywordlist& kwl,
-                             const char* prefix=0);
-   
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+
+   /*!
+    * @brief Method to set fields from a keyword list.
+    *
+    * This is not a true loadState as it does not lookup/initialize all class
+    * members.  This was added to allow defaults, e.g OSTAID, to be set via a
+    * site configuration file.
+    * Code does not return false if a field(key) is not found..
+    *
+    * @return true if ok or false on error.
+    */
+   virtual bool loadState(const ossimKeywordlist& kwl,
+                          const char* prefix=0);
+   
 
    /**
     * Properties of a NITF 2.1 Header file. See MIL-STD-2500B for details.
     *
     * To access these, pass the constant to getProperty().
     */
-   static const ossimString FSCLASY_KW;
+   static const ossimString FSCLSY_KW;
    static const ossimString FSDCTP_KW;
    static const ossimString FSDCDT_KW;
    static const ossimString FSDCXM_KW;
@@ -302,7 +313,7 @@ private:
    
    // START Of header variables
    /**
-    * Field: FSCLASY
+    * Field: FSCLSY
     * 
     * Is a 2 byte field.  Required but can be blank:
     *

@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 19900 2011-08-04 14:19:57Z dburken $
+// $Id: ossimImageHandlerFactory.cpp 20316 2011-12-02 15:56:38Z oscarkramer $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -30,6 +30,7 @@
 #include <ossim/imaging/ossimQbTileFilesHandler.h>
 #include <ossim/imaging/ossimBitMaskTileSource.h>
 #include <ossim/imaging/ossimBandSeparateHandler.h>
+#include <ossim/parallel/ossimImageHandlerMtAdaptor.h>
 #include <ossim/base/ossimRegExp.h>
 
 static const ossimTrace traceDebug("ossimImageHandlerFactory:debug");
@@ -95,74 +96,74 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName,
       // If here do it the brute force way by going down the list of available
       // readers...
       //---
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying RPF Cache Image...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying RPF Cache Image...\n";
       result = new ossimRpfCacheTileSource;
       result->setOpenOverviewFlag(openOverview);
       if (result->open(copyFilename)) break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying RPF Image Cache Image...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying RPF Image Cache Image...\n";
       result = new ossimImageCacheTileSource;
       result->setOpenOverviewFlag(openOverview);
       if (result->open(copyFilename)) break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying JPEG...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying JPEG...\n";
       result = new ossimJpegTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename)) break;
 
       // this must be checked first before the TIFF handler
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying Quickbird TIFF...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying Quickbird TIFF...\n";
       result = new ossimQuickbirdTiffTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename)) break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying TIFF...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying TIFF...\n";
       result = new ossimTiffTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying CIB/CADRG...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying CIB/CADRG...\n";
       result = new ossimCibCadrgTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying DOQQ...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying DOQQ...\n";
       result = new ossimDoqqTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying DTED...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying DTED...\n";
       result = new ossimDtedTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
 
       // this must be checked first before the NITF raw handler
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying Quickbird Nitf...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying Quickbird Nitf...\n";
       result = new ossimQuickbirdNitfTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying NITF...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying NITF...\n";
       result = new ossimNitfTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying USGS Dem...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying USGS Dem...\n";
       result = new ossimUsgsDemTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying Landsat...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying Landsat...\n";
       result = new ossimLandsatTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying VPF...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying VPF...\n";
       result = new ossimVpfTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying ERS...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying ERS...\n";
       result = new ossimERSTileSource;
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
@@ -175,38 +176,38 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName,
       if (copyFilename.ext() != "ovr")
       {
          // Note:  SRTM should be in front of general raster..
-         if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying SRTM...";
+         if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying SRTM...\n";
          result = new ossimSrtmTileSource;
          result->setOpenOverviewFlag(openOverview);         
          if (result->open(copyFilename))  break;
 
-         if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying General Raster...";
+         if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying General Raster...\n";
          result = new ossimGeneralRasterTileSource; 
          result->setOpenOverviewFlag(openOverview);        
          if (result->open(copyFilename))  break;
       }
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying ADRG...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying ADRG...\n";
       result = new ossimAdrgTileSource();
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying ossimQbTileFilesHandler...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying ossimQbTileFilesHandler...\n";
       result = new ossimQbTileFilesHandler();
       result->setOpenOverviewFlag(openOverview);
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying Bit Mask...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying Bit Mask...\n";
       result = new ossimBitMaskTileSource();
       result->setOpenOverviewFlag(openOverview);
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying band-separated files...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying band-separated files...\n";
       result = new ossimBandSeparateHandler();
       result->setOpenOverviewFlag(openOverview);      
       if (result->open(copyFilename))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying CCF...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying CCF...\n";
       result->setOpenOverviewFlag(openOverview);      
       result = new ossimCcfTileSource();
       if (result->open(copyFilename))  break;
@@ -235,89 +236,89 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    ossimRefPtr<ossimImageHandler> result = 0;
    while (true)
    {
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying adrg...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying adrg...\n";
       result = new ossimAdrgTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying ccf...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying ccf...\n";
       result  = new ossimCcfTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M << "trying CIB/CADRG...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M << "trying CIB/CADRG...\n";
       result  = new ossimCibCadrgTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "trying RpfCache...";
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "trying RpfCache...\n";
       result  = new ossimRpfCacheTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "trying Rpf ImageCache...";
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "trying Rpf ImageCache...\n";
       result  = new ossimImageCacheTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M << "trying DOQQ...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M << "trying DOQQ...\n";
       result  = new ossimDoqqTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying DTED...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying DTED...\n";
       result  = new ossimDtedTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying jpeg...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying jpeg...\n";
       result  = new ossimJpegTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying Quickbird NITF...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying Quickbird NITF...\n";
       result = new ossimQuickbirdNitfTileSource;
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M << "trying Nitf...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M << "trying Nitf...\n";
       result  = new ossimNitfTileSource();
       if (result->loadState(kwl, prefix))  break;
 
       // Must be before tiff...
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying Quickbird TIFF...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying Quickbird TIFF...\n";
       result = new ossimQuickbirdTiffTileSource;
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying tiff...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying tiff...\n";
       result  = new ossimTiffTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying USGS Dem...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying USGS Dem...\n";
       result  = new ossimUsgsDemTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying Landsat...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying Landsat...\n";
       result  = new ossimLandsatTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying VPF...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying VPF...\n";
       result = new ossimVpfTileSource;
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying ERS...";
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying ERS...\n";
       result = new ossimERSTileSource;
       if (result->loadState(kwl, prefix))  break;
 
       // Note:  SRTM should be in front of general raster...
-      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying SRTM..."<< std::endl;
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying SRTM...\n"<< std::endl;
       result  = new ossimSrtmTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG) << M << "trying General Raster..."<< std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG) << M << "trying General Raster...\n"<< std::endl;
       result  = new ossimGeneralRasterTileSource();
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"trying ossimQbTileFilesHandler..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"trying ossimQbTileFilesHandler...\n"<<std::endl;
       result = new ossimQbTileFilesHandler;
       if (result->loadState(kwl, prefix))  break;
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"trying ossimQbTileFilesHandler..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"trying ossimQbTileFilesHandler...\n"<<std::endl;
       result = new ossimQbTileFilesHandler;
       if (result->loadState(kwl, prefix))  break;
 
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying band-separated files...";
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying band-separated files...\n";
       result = new ossimBandSeparateHandler();
       if (result->loadState(kwl, prefix))  break;
 
@@ -351,14 +352,14 @@ ossimImageHandler* ossimImageHandlerFactory::openFromExtension(const ossimFilena
    while (true)
    {
       // OVR can be combined with "tif" once we get rid of ossimQuickbirdTiffTileSource
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying OVR..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying OVR...\n";
       if (ext == "ovr")
       {
          result = new ossimTiffTileSource;
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying TIF or TIFF..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying TIF or TIFF...\n";
       if ( (ext == "tif") || (ext == "tiff") )
       {
          // this must be checked first before the TIFF handler
@@ -368,7 +369,7 @@ ossimImageHandler* ossimImageHandlerFactory::openFromExtension(const ossimFilena
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying NTF or NITF..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying NTF or NITF...\n";
       if ( (ext == "ntf") || (ext == "nitf") )
       {
          // this must be checked first before the NITF raw handler
@@ -378,7 +379,7 @@ ossimImageHandler* ossimImageHandlerFactory::openFromExtension(const ossimFilena
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying RPF..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying RPF...\n";
       if ( (fileName == "rpf"))
       {
          result = new ossimRpfCacheTileSource;
@@ -388,28 +389,28 @@ ossimImageHandler* ossimImageHandlerFactory::openFromExtension(const ossimFilena
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying TOC..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying TOC...\n";
       if ( (fileName == "a.toc") || (ext == "toc"))
       {
          result = new ossimCibCadrgTileSource;
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying JPG or JPEG..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying JPG or JPEG...\n";
       if ( (ext == "jpg") || (ext == "jpeg") )
       {
          result = new ossimJpegTileSource;
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying DOQ or DOQQ..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying DOQ or DOQQ...\n";
       if ( (ext == "doq") || (ext == "doqq") )
       {
          result = new ossimDoqqTileSource;
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying DTn..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying DTn...\n";
       if ( (ext == "dt2") || (ext == "dt1") || (ext == "dt3") ||
          (ext == "dt4") || (ext == "dt5") || (ext == "dt0") )
       {
@@ -417,49 +418,49 @@ ossimImageHandler* ossimImageHandlerFactory::openFromExtension(const ossimFilena
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying HGT..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying HGT...\n";
       if (ext == "hgt")
       {
          result = new ossimSrtmTileSource;
          if(result->open(fileName)) break;
       }  
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying DEM..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying DEM...\n";
       if (ext == "dem")
       {
          result = new ossimUsgsDemTileSource;
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying FST..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying FST...\n";
       if (ext == "fst")
       {
          result = new ossimLandsatTileSource;
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying RAS or RAW..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying RAS or RAW...\n";
       if ( (ext == "ras") || (ext == "raw") )
       {
          result = new ossimGeneralRasterTileSource;
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying IMG..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying IMG...\n";
       if (ext == "img")
       {
          result  = new ossimAdrgTileSource;
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying CCF..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying CCF...\n";
       if (ext == "ccf")
       {
          result = new ossimCcfTileSource;
          if(result->open(fileName)) break;
       }
 
-      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying TIL..."<<std::endl;
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying TIL...\n";
       if (ext == "til")
       {
          result = new ossimQbTileFilesHandler;
@@ -553,7 +554,11 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
    {
       return new ossimBandSeparateHandler();
    }
-
+   if(STATIC_TYPE_NAME(ossimImageHandlerMtAdaptor) == typeName)
+   {
+      return new ossimImageHandlerMtAdaptor();
+   }
+   
    return (ossimObject*)0;
 }
 
@@ -589,7 +594,7 @@ void ossimImageHandlerFactory::getImageHandlersBySuffix(ossimImageHandlerFactory
 {
    static const char* M = "ossimImageHandlerFactory::getImageHandlersBySuffix() -- ";
    // OVR can be combined with "tif" once we get rid of ossimQuickbirdTiffTileSource
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying OVR..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying OVR...\n";
    ossimString testExt = ext.downcase();
    if (testExt == "ovr")
    {
@@ -597,7 +602,7 @@ void ossimImageHandlerFactory::getImageHandlersBySuffix(ossimImageHandlerFactory
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing TIF or TIFF..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing TIF or TIFF...\n";
    if ( (testExt == "tif") || (testExt == "tiff") )
    {
       // this must be checked first before the TIFF handler
@@ -606,7 +611,7 @@ void ossimImageHandlerFactory::getImageHandlersBySuffix(ossimImageHandlerFactory
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing NTF or NITF..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing NTF or NITF...\n";
    if ( (testExt == "ntf") || (testExt == "nitf") )
    {
       // this must be checked first before the NITF raw handler
@@ -615,7 +620,7 @@ void ossimImageHandlerFactory::getImageHandlersBySuffix(ossimImageHandlerFactory
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing RPF..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing RPF...\n";
    if ( (testExt == "rpf"))
    {
       result.push_back(new ossimRpfCacheTileSource);
@@ -623,28 +628,28 @@ void ossimImageHandlerFactory::getImageHandlersBySuffix(ossimImageHandlerFactory
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing TOC..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing TOC...\n";
    if ( testExt == "toc")
    {
       result.push_back(new ossimCibCadrgTileSource);
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing JPG or JPEG..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing JPG or JPEG...\n";
    if ( (testExt == "jpg") || (testExt == "jpeg") )
    {
       result.push_back(new ossimJpegTileSource);
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing DOQ or DOQQ..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing DOQ or DOQQ...\n";
    if ( (testExt == "doq") || (testExt == "doqq") )
    {
       result.push_back(new ossimDoqqTileSource);
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing DTn..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing DTn...\n";
    ossimString regExpStr = "dt[0-9]";
    ossimRegExp regExp(regExpStr);
    if(regExp.find(testExt))
@@ -653,63 +658,63 @@ void ossimImageHandlerFactory::getImageHandlersBySuffix(ossimImageHandlerFactory
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing HGT..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing HGT...\n";
    if (testExt == "hgt")
    {
       result.push_back(new ossimSrtmTileSource);
       return;
    }  
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing DEM..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing DEM...\n";
    if (testExt == "dem")
    {
       result.push_back(new ossimUsgsDemTileSource);
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing FST..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing FST...\n";
    if (testExt == "fst")
    {
       result.push_back(new ossimLandsatTileSource);
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing RAS or RAW or General Raster..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing RAS or RAW or General Raster...\n";
    if ( (testExt == "ras") || (testExt == "raw") || (testExt == "bil"))
    {
       result.push_back(new ossimGeneralRasterTileSource);
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing IMG..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing IMG...\n";
    if (testExt == "img")
    {
       result.push_back(new ossimAdrgTileSource);
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing CCF..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing CCF...\n";
    if (testExt == "ccf")
    {
       result.push_back(new ossimCcfTileSource);
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing TIL..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing TIL...\n";
    if (testExt == "til")
    {
       result.push_back(new ossimQbTileFilesHandler);
       return;
    }
 
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing MASK..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing MASK...\n";
    if (testExt == "mask")
    {
       result.push_back(new ossimBitMaskTileSource);
       return;
    }
    
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing TXT..."<<std::endl;
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing TXT...\n";
    if (testExt == "txt")
    {
       result.push_back(new ossimBandSeparateHandler);
@@ -797,4 +802,5 @@ void ossimImageHandlerFactory::getTypeNameList(std::vector<ossimString>& typeLis
    typeList.push_back(STATIC_TYPE_NAME(ossimQuickbirdTiffTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimQbTileFilesHandler));
    typeList.push_back(STATIC_TYPE_NAME(ossimBitMaskTileSource));
+   typeList.push_back(STATIC_TYPE_NAME(ossimImageHandlerMtAdaptor));
 }

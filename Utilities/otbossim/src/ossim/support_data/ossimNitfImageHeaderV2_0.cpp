@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.cpp 18434 2010-11-17 19:23:11Z gpotts $
+// $Id: ossimNitfImageHeaderV2_0.cpp 20123 2011-10-11 17:55:44Z dburken $
 
 
 #include <iomanip>
@@ -836,7 +836,7 @@ void ossimNitfImageHeaderV2_0::clearFields()
    memset(thePixelValueType, ' ', 3);
    memset(theRepresentation, ' ', 8);
    memset(theCategory, ' ', 8);
-   memset(theActualBitsPerPixelPerBand, ' ', 2);
+   memset(theActualBitsPerPixelPerBand, '0', 2);
    memset(theJustification, ' ', 1);
    memset(theCoordinateSystem, 'N', 1);
    memset(theGeographicLocation, ' ', 60);
@@ -850,7 +850,7 @@ void ossimNitfImageHeaderV2_0::clearFields()
    memset(theNumberOfBlocksPerCol, ' ', 4);
    memset(theNumberOfPixelsPerBlockHoriz, ' ', 4);
    memset(theNumberOfPixelsPerBlockVert, ' ', 4);
-   memset(theNumberOfBitsPerPixelPerBand, ' ', 2);
+   memset(theNumberOfBitsPerPixelPerBand, '0', 2);
    memset(theDisplayLevel, ' ', 3);
    memset(theAttachmentLevel, ' ', 3);
    memcpy(theImageLocation, "0000000000", 10);

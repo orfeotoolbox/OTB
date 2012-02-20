@@ -8,7 +8,7 @@
 // DESCRIPTION: Projection database for EPSG coded projections provided in database files
 //
 //*************************************************************************************************
-//  $Id: ossimEpsgProjectionDatabase.cpp 19879 2011-07-30 16:21:50Z dburken $
+//  $Id: ossimEpsgProjectionDatabase.cpp 20447 2012-01-12 17:33:47Z gpotts $
 #include <ossim/projection/ossimEpsgProjectionDatabase.h>
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -344,6 +344,7 @@ ossimProjection* ossimEpsgProjectionDatabase::findProjection(ossim_uint32 epsg_c
 //*************************************************************************************************
 ossimProjection* ossimEpsgProjectionDatabase::findProjection(const ossimString& spec) const
 {
+   //std::cout << "ossimEpsgProjectionDatabase::findProjection: entered with spec " << spec << "\n";
    ossimProjection* proj = 0;
 
    // Use the CRS code to access the database. The spec should be <group>:<code> where <group> is 
@@ -377,7 +378,7 @@ ossimProjection* ossimEpsgProjectionDatabase::findProjection(const ossimString& 
    {
       ProjDbRecord* db_record = db_iter->second.get();
       split_db_name.clear();
-      split_db_name = db_record->name.split(separators, true);
+      db_record->name.split(split_db_name, separators, true);
       if (split_spec == split_db_name)
       {
          // We may already have instantiated this projection, in which case just return its copy.

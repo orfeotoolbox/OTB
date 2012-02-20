@@ -130,12 +130,11 @@ void ossimJobThreadQueue::setDone(bool done)
       {
          OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_threadMutex);
          if (m_currentJob.valid())
-         {
             m_currentJob->release();
-         }
       }
       
-      if (m_jobQueue.valid()) m_jobQueue->releaseBlock();
+      if (m_jobQueue.valid())
+         m_jobQueue->releaseBlock();
    }
 }
 

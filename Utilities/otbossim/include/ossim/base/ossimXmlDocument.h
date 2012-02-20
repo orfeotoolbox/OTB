@@ -10,7 +10,7 @@
 // parsing and accessing of an XML document file.
 // 
 //*****************************************************************************
-// $Id: ossimXmlDocument.h 16817 2010-03-07 17:25:44Z dburken $
+// $Id: ossimXmlDocument.h 20357 2011-12-13 15:13:58Z gpotts $
 #ifndef ossimXmlDocument_HEADER
 #define ossimXmlDocument_HEADER
 
@@ -57,7 +57,7 @@ private:
    ossimRefPtr<ossimXmlNode>  theRootNode;
    ossimString                theXmlHeader;
    ossimFilename              theFilename;
-
+   bool                       theStrictCheckFlag;
    bool readHeader(std::istream& in);
 TYPE_DATA
 };

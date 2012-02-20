@@ -9,12 +9,11 @@
 // Description: Class declaration of ossimImageGeometry.
 //
 //**************************************************************************************************
-// $Id$
+// $Id: ossimImageGeometry.h 3102 2012-01-18 15:30:20Z oscar.kramer $
 
 #ifndef ossimImageGeometry_HEADER
 #define ossimImageGeometry_HEADER 1
 
-#include <vector>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimDpt.h>
@@ -23,6 +22,9 @@
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossim2dTo2dTransform.h>
+#include <vector>
+
+class ossimIrect;
 
 //**************************************************************************************************
 //! Container class that holds both 2D transform and 3D projection information for an image
@@ -158,11 +160,85 @@ public:
    //! Returns the GSD associated with this image in the active projection. Note that this only
    //! makes sense if there is a projection associated with the image. Returns NaNs if no 
    //! projection defined.
-   const ossimDpt& getMetersPerPixel() const;
+   ossimDpt getMetersPerPixel() const;
+
+   /**
+    * @brief Get the ground sample distance(GSD) associated with this image
+    * in the active projection.
+    *
+    * GSD is taken from projection if there is no transform set; else,
+    * taken from three localToWorld calls (one pixel apart) at the image
+    * center.  If the projection or the image size(if needed) is not set the
+    * point will be set to NaNs.
+    * 
+    * @param gsd Point to intialize with GSD.
+    * 
+    * @note This only makes sense if there is a projection associated with
+    * the image.
+    *
+    * @note Result should be checked for NaNs after call.
+    */
+   void getMetersPerPixel( ossimDpt& gsd ) const;
+
+   //! Returns the resolution of this image in degrees/pixel. Note that this only
+   //! makes sense if there is a projection associated with the image. Returns NaNs if no 
+   //! projection defined.
+   ossimDpt getDegreesPerPixel() const;
+
+   /**
+    * @brief Get the resolution of this image in degrees/pixel.
+    *
+    * Degrees/pixel is taken from projection if there is no transform set;
+    * else, taken from three localToWorld calls (one pixel apart) at the image
+    * center.  If the projection or the image size(if needed) is not set the
+    * point will be set to NaNs.
+    * 
+    * @param dpp Point to intialize with degrees/pixel.
+    * 
+    * @note This only makes sense if there is a projection associated with
+    * the image.
+    *
+    * @note Result should be checked for NaNs after call.
+    */
+   void getDegreesPerPixel( ossimDpt& dpp ) const;
 
    //! Assigns the ossimGpts with the ground coordinates of the four corresponding image 
    //! corner points. Returns true if points are valid.
    bool getCornerGpts(ossimGpt& ul, ossimGpt& ur, ossimGpt& lr, ossimGpt& ll) const;
+
+   /**
+    * @brief Get the latitude, longitude of the tie point.
+    *
+    * This is the bounding upper left point of the image which is not
+    * necessarily the image (0, 0) point.
+    * 
+    * @param tie ossimGpt to assign.
+    *
+    * @param edge If true the tie point is shifted up and to the right by
+    * half the gsd.
+    *
+    * @note Requires projection and image size to be initialized or the
+    * latitude and longitue will be set to nan.
+    *
+    * @note The height parameter of the ossimGpt is not touched by this method.
+    */
+   void getTiePoint(ossimGpt& tie, bool edge) const;
+
+   /**
+    * @brief Get the easting, northing of the tie point.
+    *
+    * This is the bounding upper left point of the image which is not
+    * necessarily the image (0, 0) point.
+    * 
+    * @param tie ossimDpt to assign.
+    *
+    * @param edge If true the tie point is shifted up and to the right by
+    * half the gsd.
+    * 
+    * @note Requires projection and image size to be initialized or the
+    * easting and northing will be set to nan.
+    */
+   void getTiePoint(ossimDpt& tie, bool edge) const;
 
    //! Prints contents to output stream.
    std::ostream& print(std::ostream& out) const;
@@ -217,6 +293,17 @@ public:
    {
       return m_imageSize;
    }
+
+   /**
+    * @brief Get the bounding rect of (0, 0) to (imageSize.x-1, imageSize.y-1).
+    *
+    * Relies on image size being initialized.
+    *
+    * @param bounding_rect Initialized by this method.  Will do a
+    * ossimIrect::makeNan() if the image size is not initialized.
+    */
+   void getBoundingRect(ossimIrect& bounding_rect) const;
+   
    //! Creates a new instance of ossimImageGeometry with the same transform and projection.
    //! Overrides base-class version requiring loadState() and saveState() (not implemented yet)
    virtual ossimObject* dup() const { return new ossimImageGeometry(*this); }
@@ -249,10 +336,15 @@ public:
     */
    ossim_uint32 getTargetRrds() const;
 
-   //! When either the projection or the transform changes, this method recomputes the GSD.
-   void computeGsd()const;
+   //! @brief  Changes the GSD and image size to reflect the scale provided.
+   //! @param scale  The scale to be applied in x and y directions
+   //! @param recenterTiePoint If true the will adjust the tie point by shifting the original tie 
+   //! to the upper left corner, applying scale, then shifting back by half of either the new
+   //! theDeltaLat/lon or theMetersPerPixel depending on if underlying projection isGeographic.
+   void applyScale(const ossimDpt& scale, bool recenterTiePoint);
 
    virtual bool isEqualTo(const ossimObject& obj, ossimCompareType compareType = OSSIM_COMPARE_FULL)const;
+
 protected:
    //! @brief Method to back out decimation of a point.
    //! @param rnPt Is a point in resolution n.
@@ -272,7 +364,6 @@ protected:
 
    ossimRefPtr<ossim2dTo2dTransform> m_transform;   //!< Maintains local_image-to-full_image transformation 
    ossimRefPtr<ossimProjection>      m_projection;  //!< Maintains full_image-to-world_space transformation
-   mutable ossimDpt                  m_gsd;         //!< meters per pixel
    std::vector<ossimDpt>             m_decimationFactors; //!< List of decimation factors for R-levels
    ossimIpt                          m_imageSize; // Image width and height
 

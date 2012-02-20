@@ -8,7 +8,7 @@
     RCS-ID: $Id: graphlst.h 9094 2006-06-13 19:12:40Z dburken $
 */
 
-/* @@(#) $Source$ $Revision: 9094 $ $Date: 2006-06-14 03:12:40 +0800 (Wed, 14 Jun 2006) $ */
+/* @@(#) $Source$ $Revision: 9094 $ $Date: 2006-06-13 21:12:40 +0200 (mar., 13 juin 2006) $ */
 
 /*
 Program	GRAPHLST.H
