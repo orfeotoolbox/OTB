@@ -144,7 +144,6 @@ void QtWidgetStringListParameter::DoCreateWidget()
   hLayout->addWidget(scroll);
 
 
-
   this->setLayout(hLayout);
 
   //m_StringLayout = fileLayout;

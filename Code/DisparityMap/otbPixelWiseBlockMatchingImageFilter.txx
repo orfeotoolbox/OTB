@@ -225,7 +225,6 @@ if (this->GetNumberOfOutputs()<3)
 }
 
 
-
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
@@ -243,7 +242,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
   TOutputDisparityImage * outHDispPtr = this->GetHorizontalDisparityOutput();
-  TOutputDisparityImage * outVDispPtr = this->GetVerticalDisparityOutput();  
+  TOutputDisparityImage * outVDispPtr = this->GetVerticalDisparityOutput();
 
   // Check pointers before using them
   if(!inLeftPtr || !inRightPtr || !outMetricPtr || !outHDispPtr || !outVDispPtr)
@@ -275,11 +274,11 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   // Now, we must find the corresponding region in moving image
   IndexType rightRequestedRegionIndex = inputLeftRegion.GetIndex();
   rightRequestedRegionIndex[0]+=m_MinimumHorizontalDisparity;
-  rightRequestedRegionIndex[0]+=m_MinimumVerticalDisparity;  
+  rightRequestedRegionIndex[0]+=m_MinimumVerticalDisparity;
 
   SizeType rightRequestedRegionSize = inputLeftRegion.GetSize();
   rightRequestedRegionSize[0]+= m_MaximumHorizontalDisparity - m_MinimumHorizontalDisparity;
-  rightRequestedRegionSize[1]+= m_MaximumVerticalDisparity - m_MinimumVerticalDisparity;  
+  rightRequestedRegionSize[1]+= m_MaximumVerticalDisparity - m_MinimumVerticalDisparity;
 
   RegionType inputRightRegion;
   inputRightRegion.SetIndex(rightRequestedRegionIndex);
@@ -419,7 +418,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     // And then cast back
     IndexType leftRequestedRegionIndex = inputRightRegion.GetIndex();
     leftRequestedRegionIndex[0]-=hdisparity;
-    leftRequestedRegionIndex[1]-=vdisparity;  
+    leftRequestedRegionIndex[1]-=vdisparity;
 
     RegionType inputLeftRegion;
     inputLeftRegion.SetIndex(leftRequestedRegionIndex);
