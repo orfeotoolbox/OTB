@@ -363,6 +363,9 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
     const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_Expression));
 
+    // Ensure that the parameter is enabled
+    m_Application->EnableParameter(paramKey);
+
     // if param is a Group, dont do anything, ParamGroup dont have values
     if (type != ParameterType_Group)
       {
