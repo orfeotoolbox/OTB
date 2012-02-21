@@ -79,7 +79,6 @@ void
 VectorDataStyle
 ::LoadOSMStyle(mapnik::Map& mapnikMap) const
 {
-  
     {
     mapnik::feature_type_style style;
       {
@@ -103,7 +102,7 @@ VectorDataStyle
       rule.set_max_scale(static_cast<unsigned long long>(50000000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(10000000ULL / m_ScaleFactor));
       mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
-																				"DejaVu Sans Book", 9, mapnik::color("#000"));
+                                        "DejaVu Sans Book", 9, mapnik::color("#000"));
       textSymb0.set_halo_radius(1);
       textSymb0.set_wrap_width(0);
       textSymb0.set_displacement(0.0, 0);
@@ -115,7 +114,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[place] = 'city' and [capital]='yes'"));
       rule.set_max_scale(static_cast<unsigned long long>(10000000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(2000000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 11, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 11, mapnik::color("#000"));
       textSymb0.set_halo_radius(1);
       textSymb0.set_wrap_width(0);
       textSymb0.set_displacement(0.0, 0);
@@ -127,7 +127,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[place] = 'city' and not [capital]='yes'"));
       rule.set_max_scale(static_cast<unsigned long long>(10000000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(2000000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 8, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 8, mapnik::color("#000"));
       textSymb0.set_halo_radius(1);
       textSymb0.set_wrap_width(0);
       textSymb0.set_displacement(0.0, 0);
@@ -139,7 +140,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[place] = 'city'"));
       rule.set_max_scale(static_cast<unsigned long long>(2000000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(500000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 11, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 11, mapnik::color("#000"));
       textSymb0.set_halo_radius(1);
       textSymb0.set_wrap_width(0);
       textSymb0.set_displacement(0.0, 0);
@@ -151,7 +153,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[place] = 'city'"));
       rule.set_max_scale(static_cast<unsigned long long>(500000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(20000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 14, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 14, mapnik::color("#000"));
       textSymb0.set_halo_radius(1);
       textSymb0.set_wrap_width(0);
       textSymb0.set_displacement(0.0, 0);
@@ -447,7 +450,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[highway] = 'trunk' or [highway] = 'primary'"));
       rule.set_max_scale(static_cast<unsigned long long>(75000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 8, mapnik::color("black"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 8, mapnik::color("black"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(0);
       rule.append(textSymb0);
@@ -458,7 +462,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[highway] = 'secondary'"));
       rule.set_max_scale(static_cast<unsigned long long>(75000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 8, mapnik::color("black"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 8, mapnik::color("black"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
       textSymb0.set_halo_fill(mapnik::color("#fed7a5"));
@@ -470,7 +475,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[highway] = 'trunk' or [highway] = 'primary'"));
       rule.set_max_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(20000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 9, mapnik::color("black"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 9, mapnik::color("black"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(0);
       rule.append(textSymb0);
@@ -481,7 +487,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[highway] = 'trunk' or [highway] = 'primary'"));
       rule.set_max_scale(static_cast<unsigned long long>(20000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(1000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 10, mapnik::color("black"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 10, mapnik::color("black"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(0);
       rule.append(textSymb0);
@@ -492,7 +499,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[highway] = 'secondary'"));
       rule.set_max_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(20000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 9, mapnik::color("black"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 9, mapnik::color("black"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
       textSymb0.set_halo_fill(mapnik::color("#fed7a5"));
@@ -504,7 +512,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[highway] = 'secondary'"));
       rule.set_max_scale(static_cast<unsigned long long>(20000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(1000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 10, mapnik::color("black"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 10, mapnik::color("black"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
       textSymb0.set_halo_fill(mapnik::color("#fed7a5"));
@@ -516,7 +525,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[highway] = 'tertiary'"));
       rule.set_max_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 9, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 9, mapnik::color("#000"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
       rule.append(textSymb0);
@@ -527,7 +537,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[highway] = 'tertiary'"));
       rule.set_max_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(100ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 11, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 11, mapnik::color("#000"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
       rule.append(textSymb0);
@@ -538,7 +549,8 @@ VectorDataStyle
       rule.set_max_scale(static_cast<unsigned long long>(100000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(10000ULL / m_ScaleFactor));
       rule.set_filter(mapnik::parse_expression("[highway] = 'proposed' or [highway]='construction'"));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 9, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 9, mapnik::color("#000"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
       rule.append(textSymb0);
@@ -549,7 +561,8 @@ VectorDataStyle
       rule.set_max_scale(static_cast<unsigned long long>(10000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(1000ULL / m_ScaleFactor));
       rule.set_filter(mapnik::parse_expression("[highway] = 'proposed' or [highway]='construction'"));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 11, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 11, mapnik::color("#000"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
       rule.append(textSymb0);
@@ -560,7 +573,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[highway] = 'unclassified' or [highway] = 'residential'"));
       rule.set_max_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 9, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 9, mapnik::color("#000"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
       textSymb0.set_label_spacing(300);
@@ -572,7 +586,8 @@ VectorDataStyle
       rule.set_filter(mapnik::parse_expression("[highway] = 'unclassified' or [highway] = 'residential'"));
       rule.set_max_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(100ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 11, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 11, mapnik::color("#000"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
       textSymb0.set_label_spacing(400);
@@ -584,7 +599,8 @@ VectorDataStyle
       rule.set_else(true);
       rule.set_max_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 9, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 9, mapnik::color("#000"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
       rule.append(textSymb0);
@@ -595,7 +611,8 @@ VectorDataStyle
       rule.set_else(true);
       rule.set_max_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(100ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"), "DejaVu Sans Book", 11, mapnik::color("#000"));
+      mapnik::text_symbolizer textSymb0(mapnik::parse_expression("[name]"),
+                                        "DejaVu Sans Book", 11, mapnik::color("#000"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
       rule.append(textSymb0);
@@ -1143,7 +1160,8 @@ VectorDataStyle
       }
       {
       mapnik::rule rule;
-      rule.set_filter(mapnik::parse_expression("[highway] = 'motorway' and not ([tunnel] = 'yes' or [tunnel]='true')"));
+      rule.set_filter(mapnik::parse_expression(
+                        "[highway] = 'motorway' and not ([tunnel] = 'yes' or [tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(1000ULL / m_ScaleFactor));
         {
@@ -1203,7 +1221,8 @@ VectorDataStyle
       }
       {
       mapnik::rule rule;
-      rule.set_filter(mapnik::parse_expression("[highway] = 'tertiary' and not ([tunnel]='yes' or [tunnel]='true')"));
+      rule.set_filter(mapnik::parse_expression(
+                        "[highway] = 'tertiary' and not ([tunnel]='yes' or [tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(100000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
         {
@@ -1233,7 +1252,8 @@ VectorDataStyle
       {
       mapnik::rule rule;
       rule.set_filter(mapnik::parse_expression(
-                        "([highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or [highway] = 'road') and not ([tunnel]='yes' or [tunnel]='true')"));
+                        "([highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or "
+                        "[highway] = 'road') and not ([tunnel]='yes' or [tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(100000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
         {
@@ -1249,7 +1269,8 @@ VectorDataStyle
       {
       mapnik::rule rule;
       rule.set_filter(mapnik::parse_expression(
-                        "([highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or [highway] = 'road') and ([tunnel]='yes' or [tunnel]='true')"));
+                        "([highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or "
+                        "[highway] = 'road') and ([tunnel]='yes' or [tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(100000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
         {
@@ -1293,7 +1314,8 @@ VectorDataStyle
       {
       mapnik::rule rule;
       rule.set_filter(mapnik::parse_expression(
-                        "([highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or [highway] = 'road') and not ([tunnel]='yes' or [tunnel]='true')"));
+                        "([highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or "
+                        "[highway] = 'road') and not ([tunnel]='yes' or [tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
         {
@@ -1309,7 +1331,8 @@ VectorDataStyle
       {
       mapnik::rule rule;
       rule.set_filter(mapnik::parse_expression(
-                        "([highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or [highway] = 'road') and ([tunnel]='yes' or [tunnel]='true')"));
+                        "([highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or "
+                        "[highway] = 'road') and ([tunnel]='yes' or [tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
         {
@@ -1324,7 +1347,9 @@ VectorDataStyle
       {
       mapnik::rule rule;
       rule.set_filter(mapnik::parse_expression(
-                        "([highway] = 'tertiary' or [highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or [highway] = 'road') and not ([tunnel]='yes' or [tunnel]='true')"));
+                        "([highway] = 'tertiary' or [highway] = 'residential' or [highway] = 'minor' or "
+                        "[highway] = 'unclassified' or [highway] = 'road') and not ([tunnel]='yes' or "
+                        "[tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
         {
@@ -1340,7 +1365,8 @@ VectorDataStyle
       {
       mapnik::rule rule;
       rule.set_filter(mapnik::parse_expression(
-                        "([highway] = 'tertiary' or [highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or [highway] = 'road') and ([tunnel]='yes' or [tunnel]='true')"));
+                        "([highway] = 'tertiary' or [highway] = 'residential' or [highway] = 'minor' or "
+                        "[highway] = 'unclassified' or [highway] = 'road') and ([tunnel]='yes' or [tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
         {
@@ -1355,7 +1381,9 @@ VectorDataStyle
       {
       mapnik::rule rule;
       rule.set_filter(mapnik::parse_expression(
-                        "([highway] = 'tertiary' or [highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or [highway] = 'road') and not ([tunnel]='yes' or [tunnel]='true')"));
+                        "([highway] = 'tertiary' or [highway] = 'residential' or [highway] = 'minor' or "
+                        "[highway] = 'unclassified' or [highway] = 'road') and not ([tunnel]='yes' or "
+                        "[tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(1000ULL / m_ScaleFactor));
         {
@@ -1371,7 +1399,8 @@ VectorDataStyle
       {
       mapnik::rule rule;
       rule.set_filter(mapnik::parse_expression(
-                        "([highway] = 'tertiary' or [highway] = 'residential' or [highway] = 'minor' or [highway] = 'unclassified' or [highway] = 'road') and ([tunnel]='yes' or [tunnel]='true')"));
+                        "([highway] = 'tertiary' or [highway] = 'residential' or [highway] = 'minor' or "
+                        "[highway] = 'unclassified' or [highway] = 'road') and ([tunnel]='yes' or [tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(1000ULL / m_ScaleFactor));
         {
@@ -1386,7 +1415,8 @@ VectorDataStyle
       {
       mapnik::rule rule;
       rule.set_filter(mapnik::parse_expression(
-                        "[highway] = 'service' and not ([service]='parking_aisle' or [tunnel]='yes' or [tunnel]='true')"));
+                        "[highway] = 'service' and not ([service]='parking_aisle' or [tunnel]='yes' or "
+                        "[tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
         {
@@ -1416,7 +1446,8 @@ VectorDataStyle
       {
       mapnik::rule rule;
       rule.set_filter(mapnik::parse_expression(
-                        "[highway] = 'service' and not ([service]='parking_aisle' or[tunnel]='yes' or [tunnel]='true')"));
+                        "[highway] = 'service' and not ([service]='parking_aisle' or[tunnel]='yes' or "
+                        "[tunnel]='true')"));
       rule.set_max_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(1000ULL / m_ScaleFactor));
         {
@@ -1574,7 +1605,5 @@ VectorDataStyle
       }
     mapnikMap.insert_style("minor-roads-casing", style);
     }
- 
 }
-
 } //namespace otb
