@@ -363,9 +363,6 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
     const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_Expression));
 
-    // Ensure that the parameter is enabled
-    m_Application->EnableParameter(paramKey);
-
     // if param is a Group, dont do anything, ParamGroup dont have values
     if (type != ParameterType_Group)
       {
@@ -383,6 +380,9 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           return INVALIDNUMBEROFVALUE;
           }
         
+        // Ensure that the parameter is enabled
+        m_Application->EnableParameter(paramKey);
+
         if (type == ParameterType_InputVectorDataList)
           {
           dynamic_cast<InputVectorDataListParameter *> (param.GetPointer())->SetListFromFileName(values);
