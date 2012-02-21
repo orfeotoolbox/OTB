@@ -391,7 +391,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   // Set-up progress reporting (this is not exact, since we do not
   // account for pixels that are out of range for a given disparity
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels()*(m_MaximumHorizontalDisparity - m_MinimumHorizontalDisparity + 1)*(m_MaximumVerticalDisparity - m_MinimumVerticalDisparity + 1));
+  itk::ProgressReporter progress(this, threadId, (m_MaximumHorizontalDisparity - m_MinimumHorizontalDisparity + 1)*(m_MaximumVerticalDisparity - m_MinimumVerticalDisparity + 1));
 
   // Define the block matching functor
   TBlockMatchingFunctor bmFunctor;
@@ -491,9 +491,6 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
           outMetricIt.Set(metric);
           }
         }
-
-      progress.CompletedPixel();
-
       ++leftIt;
       ++rightIt;
       ++outMetricIt;
@@ -505,6 +502,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
         ++inMaskIt;
         }
       }
+      progress.CompletedPixel();
     }
     }
 }
