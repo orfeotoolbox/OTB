@@ -1,20 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-#Images de teledetection (grosses images )
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
-
-#Tolerance sur diff pixel image
-SET(NOTOL 0.0)
-SET(EPSILON_7 0.0000001)
-SET(EPSILON_12 0.000000000001)
+INCLUDE(TestingHelper)
 
 SET(BASICFILTERS_TESTS1 ${CXX_TEST_PATH}/otbBasicFiltersTests1)
 SET(BASICFILTERS_TESTS2 ${CXX_TEST_PATH}/otbBasicFiltersTests2)
@@ -58,7 +45,7 @@ ADD_TEST(bfTvFiltreLee ${BASICFILTERS_TESTS1}
 #
 ADD_TEST(bfTuFrostFilterNew ${BASICFILTERS_TESTS1}
          otbFrostFilterNew)
-         
+
 ADD_TEST(bfTvFrostFilter ${BASICFILTERS_TESTS1}
   --compare-image ${EPSILON_7}  ${BASELINE}/bfFiltreFrost_poupees_05_05_01.tif
                           ${TEMP}/bfFiltreFrost_poupees_05_05_01.tif
@@ -132,7 +119,7 @@ ADD_TEST(bfTvMeanFunctorImageTest ${BASICFILTERS_TESTS1}
 
 ADD_TEST(bfTvTransformPointSetFilter ${BASICFILTERS_TESTS1}
   otbTransformPointSetFilterTest)
-  
+
 ADD_TEST(bfTvRandomPointSetSource ${BASICFILTERS_TESTS1}
   otbRandomPointSetSourceTest)
 
@@ -202,7 +189,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
                 ${BASELINE}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
                 ${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
         otbStreamingShrinkImageFilter
-        ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
         50
 )
@@ -212,7 +199,7 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS2}
                 ${BASELINE}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
                 ${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
                 otbStreamingShrinkImageFilter
-        ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
         20
 )
@@ -261,7 +248,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
                 ${BASELINE_FILES}/bfTvImportGeoInformationKeywordListOutput.txt
                 ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
          otbImportGeoInformationImageFilterWithKeywordList
-         ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -433,7 +420,7 @@ ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS4}
                     ${BASELINE_FILES}/bfStreamingStatisticsImageFilterResults.txt
                     ${TEMP}/bfStreamingStatisticsImageFilterResults.txt
          otbStreamingStatisticsImageFilter
-#                ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+#                ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
                 ${INPUTDATA}/small_poupees_1canal.hd
                 ${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
 
@@ -485,7 +472,7 @@ ADD_TEST(bfTuStreamingResampleImageFilterWithAffineTransformNew ${BASICFILTERS_T
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(bfTvStreamingResampleImageFilterWithAffineTransform ${BASICFILTERS_TESTS5}
   otbStreamingResampleImageFilterWithAffineTransform
-  ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
   500
   ${TEMP}/bfTvotbStreamingResampledImageWithAffineTransform.tif
   )
@@ -564,7 +551,7 @@ ADD_TEST(bfTvStreamingStatisticsVectorImageFilter ${BASICFILTERS_TESTS5}
                     ${BASELINE_FILES}/bfTvStreamingStatisticsVectorImageFilterResults.txt
                     ${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
          otbStreamingStatisticsVectorImageFilter
-                #${IMAGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
+                #${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
                 ${INPUTDATA}/couleurs_extrait.png
                 ${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
                 )
@@ -1089,7 +1076,7 @@ ADD_TEST(bfTvVarianceImageFilter ${BASICFILTERS_TESTS8}
 
 ADD_TEST(bfTuBoxAndWhiskerImageFilterNew ${BASICFILTERS_TESTS8}
          otbBoxAndWhiskerImageFilterNew )
-         
+
 ADD_TEST(bfTvBoxAndWhiskerImageFilter ${BASICFILTERS_TESTS8}
   --compare-image ${EPSILON_7}
                   ${BASELINE}/bfBoxAndWhiskerImageFilter_05_05.tif
@@ -1098,7 +1085,7 @@ ADD_TEST(bfTvBoxAndWhiskerImageFilter ${BASICFILTERS_TESTS8}
              ${INPUTDATA}/poupees.tif
                 ${TEMP}/bfBoxAndWhiskerImageFilter_05_05.tif
                 05 05)
-         
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests9 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1154,7 +1141,7 @@ ADD_TEST(bfTvMeanShiftVectorImageFilter ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftVectorImageFilterClusteredOutput.tif
         ${TEMP}/bfMeanShiftVectorImageFilterLabeledClusteredOutput.tif
         ${TEMP}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
-        16 16 10 1.0 
+        16 16 10 1.0
         )
 
 ADD_TEST(bfTuFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
@@ -1364,7 +1351,7 @@ ADD_TEST(bfTvPointSetDensityFunctionTest ${BASICFILTERS_TESTS11}
          otbPointSetDensityFunctionTest
          ${TEMP}/bfTvPointSetDensityFunctionOutputAscii.txt
          )
-         
+
 # -------    otbPointSetDensityGaussianFunction   ----------------------------
 ADD_TEST(bfTuPointSetDensityGaussianFunctionNew ${BASICFILTERS_TESTS11}
      otbPointSetDensityGaussianFunctionNew
@@ -1378,7 +1365,7 @@ ADD_TEST(bfTvPointSetDensityGaussianFunctionTest ${BASICFILTERS_TESTS11}
      otbPointSetDensityGaussianFunctionTest
      ${TEMP}/bfTvPointSetDensityGaussianFunctionOutputAscii.txt
      )
-     
+
 # -------    otbPointSetDensityEpanechnikovFunction   ----------------------------
 ADD_TEST(bfTuPointSetDensityEpanechnikovFunctionNew ${BASICFILTERS_TESTS11}
      otbPointSetDensityEpanechnikovFunctionNew
@@ -1865,7 +1852,7 @@ ADD_TEST(bfTvHorizontalSobelVectorImageFilter
              ${BASELINE}/bfTvHorizontalSobelVectorImageFilter.tif
              ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif
          otbHorizontalSobelVectorImageFilterTest
-		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif)
 
 ADD_TEST(bfTuVerticalSobelVectorImageFilterNew
@@ -1878,7 +1865,7 @@ ADD_TEST(bfTvVerticalSobelVectorImageFilter
              ${BASELINE}/bfTvVerticalSobelVectorImageFilter.tif
              ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif
          otbVerticalSobelVectorImageFilterTest
-		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif)
 
 ADD_TEST(bfTuSobelVectorImageFilterNew
@@ -1891,7 +1878,7 @@ ADD_TEST(bfTvSobelVectorImageFilter
              ${BASELINE}/bfTvSobelVectorImageFilter.tif
              ${TEMP}/bfTvSobelVectorImageFilter.tif
          otbSobelVectorImageFilterTest
-		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvSobelVectorImageFilter.tif)
 
 ADD_TEST(bfTuLocalGradientVectorImageFilterNew
@@ -1946,7 +1933,7 @@ ADD_TEST(bfTvNormalizeVectorImageFilter
      otbNormalizeVectorImageFilterTest
      -in ${INPUTDATA}/cupriteSubHsi.tif
      -out ${TEMP}/bfTvNormalizeVectorImageFilter.tif)
-     
+
 
 
 ADD_TEST(bfTuProjectiveProjectionNew
@@ -1962,7 +1949,7 @@ ADD_TEST(bfTvProjectiveProjectionTestHighSNR
      ${INPUTDATA}/cupriteSubHsi.tif
      3
      ${TEMP}/bfTvProjectiveProjectionTestHighSNR.tif)
-     
+
 
 ADD_TEST(bfTuVectorImageToMatrixNew
          ${BASICFILTERS_TESTS13}
@@ -1982,7 +1969,7 @@ ADD_TEST(bfTuPCAImageFilterNew
 ADD_TEST(bfTvPCAImageFilter1
          ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
-             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvPCAImageFilter1Inv.tif
          otbPCAImageFilterTest
          -in ${INPUTDATA}/cupriteSubHsi.tif
@@ -1992,7 +1979,7 @@ ADD_TEST(bfTvPCAImageFilter1
 ADD_TEST(bfTvPCAImageFilter2
          ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
-             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvPCAImageFilter2Inv.tif
          otbPCAImageFilterTest
          -in ${INPUTDATA}/cupriteSubHsi.tif
@@ -2029,9 +2016,9 @@ ADD_TEST(bfTvPCAImageFilter4
          -inv ${TEMP}/bfTvPCAImageFilter4Inv.tif
          -norm
          -n 4)
-         
-         
-         
+
+
+
 ### NAPCA ###
 
 ADD_TEST(bfTuNAPCAImageFilterNew
@@ -2042,7 +2029,7 @@ ADD_TEST(bfTuNAPCAImageFilterNew
 ADD_TEST(bfTvNAPCAImageFilter1
          ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
-             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvNAPCAImageFilter1Inv.tif
          otbNAPCAImageFilterTest
          -in ${INPUTDATA}/cupriteSubHsi.tif
@@ -2052,7 +2039,7 @@ ADD_TEST(bfTvNAPCAImageFilter1
 ADD_TEST(bfTvNAPCAImageFilter2
          ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
-             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvNAPCAImageFilter2Inv.tif
          otbNAPCAImageFilterTest
          -in ${INPUTDATA}/cupriteSubHsi.tif
@@ -2089,7 +2076,7 @@ ADD_TEST(bfTvNAPCAImageFilter4
          -inv ${TEMP}/bfTvNAPCAImageFilter4Inv.tif
          -norm
          -n 4)
-         
+
 
 ### MNF ###
 
@@ -2113,7 +2100,7 @@ ADD_TEST(bfTvMNFImageFilter4
 ADD_TEST(bfTvMNFImageFilter1
          ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
-             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvMNFImageFilter1Inv.tif
          otbMNFImageFilterTest
          -in ${INPUTDATA}/cupriteSubHsi.tif
@@ -2123,7 +2110,7 @@ ADD_TEST(bfTvMNFImageFilter1
 ADD_TEST(bfTvMNFImageFilter2
          ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
-             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvMNFImageFilter2Inv.tif
          otbMNFImageFilterTest
          -in ${INPUTDATA}/cupriteSubHsi.tif
@@ -2162,7 +2149,7 @@ ADD_TEST(bfTvMNFImageFilter4
          -n 4)
 
 ### FastICA ###
-ADD_TEST(bfTuFastICAInternalOptimizerVectorImageFilterNew 
+ADD_TEST(bfTuFastICAInternalOptimizerVectorImageFilterNew
      ${BASICFILTERS_TESTS13}
      otbFastICAInternalOptimizerVectorImageFilterNewTest)
 
@@ -2203,7 +2190,7 @@ ADD_TEST(bfTuAngularProjectionSetImageFilterNew
 
 #ADD_TEST(bfTvAngularProjectionSetImageFilter
 #	${BASICFILTERS_TESTS13}
-#		--compare-image ${EPSILON_7} 
+#		--compare-image ${EPSILON_7}
 #		${INPUTDATA}/xx
 #		${TEMP}/yy
 #		otbAngularProjectionSetImageFilterTest
@@ -2217,7 +2204,7 @@ ADD_TEST(bfTuSparseWvltToAngleMapperListFilterNew
 #ADD_TEST(bfTvSparseWvltToAngleMapperListFilter
 #	${BASICFILTERS_TESTS13}
 #	otbSparseWvltToAngleMapperListFilterTest
-#	-in ${INPUTDATA}/xx ${INPUTDATA}/yy 
+#	-in ${INPUTDATA}/xx ${INPUTDATA}/yy
 #	-th 10)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2406,7 +2393,7 @@ ADD_TEST(bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Line ${
     ${INPUTDATA}/DEM/srtm_directory
     ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Line.shp
     0 )
-  
+
 ADD_TEST(bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15}
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
@@ -2417,7 +2404,7 @@ ADD_TEST(bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Polygon
     ${INPUTDATA}/DEM/srtm_directory
     ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
     0 )
-  
+
 # ---------------------  otDBOverlapDataNodeFeatureFunction  ---------------------
 ADD_TEST(bfTuDBOverlapDataNodeFeatureFunctionNew ${BASICFILTERS_TESTS15}
   otbDBOverlapDataNodeFeatureFunctionNew

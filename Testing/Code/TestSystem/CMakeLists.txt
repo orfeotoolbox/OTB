@@ -1,22 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(EXAMPLESDATA ${OTB_DATA_ROOT}/Examples)
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(LARGEINPUTDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
-
-#Tolerance sur diff pixel image
-SET(NOTOL 0.0)
-
-#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
-SET(EPSILON_2 0.01)
-SET(EPSILON_3 0.001)
+INCLUDE(TestingHelper)
 
 SET(TESTSYSTEM_TESTS ${CXX_TEST_PATH}/otbTestSystemTests)
 
@@ -25,7 +10,7 @@ ADD_TEST(tsTvIsNightlyRevision ${TESTSYSTEM_TESTS}
          otbIsNightlyRevision
          ${OTB_WC_REVISION}
          http://www.orfeo-toolbox.org/nightly/libNightlyNumber )
-  
+
 #Test if the current working copy corresponds to the nightly revision number
 ADD_TEST(tsTvDataIsNightlyRevision ${TESTSYSTEM_TESTS}
          otbIsNightlyRevision

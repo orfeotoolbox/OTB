@@ -1,21 +1,6 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA      ${OTB_DATA_ROOT}/Input)
-SET(TEMP           ${OTBTesting_BINARY_DIR}/Temporary)
-
-#Remote sensing images (large images )
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-#Tolerance sur diff pixel image
-SET(NOTOL 0.0)
-SET(EPSILON_9 0.000000001)
-
-#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
-SET(EPSILON_3 0.001)
+INCLUDE(TestingHelper)
 
 # Common generic tests
 SET(OBIA_TESTS1 ${CXX_TEST_PATH}/otbOBIATests1)
@@ -51,7 +36,7 @@ ADD_TEST(obTvVectorDataToLabelMapFilter ${OBIA_TESTS1}
 
 ADD_TEST(obTuLabelMapToSampleListFilterNew ${OBIA_TESTS1}
     otbLabelMapToSampleListFilterNew)
-    
+
 ADD_TEST(obTvLabelMapToSampleListFilter ${OBIA_TESTS1}
     otbLabelMapToSampleListFilter
     ${OTB_DATA_ROOT}/Input/rcc8_mire1.png
@@ -127,13 +112,13 @@ ADD_TEST(obTvKMeansAttributesLabelMapFilter ${OBIA_TESTS1}
 
 ADD_TEST(obTuBandsStatisticsAttributesLabelMapFilterNew ${OBIA_TESTS1}
     otbBandsStatisticsAttributesLabelMapFilterNew)
-    
+
 ADD_TEST(obTvBandsStatisticsAttributesLabelMapFilter ${OBIA_TESTS1}
     otbBandsStatisticsAttributesLabelMapFilter
     ${INPUTDATA}/maur.tif
     ${INPUTDATA}/maur_labelled.tif
     ${TEMP}/obTvBandsStatisticsAttributesLabelMapFilter.txt)
-    
+
 ADD_TEST(obTuShapeAttributesLabelMapFilterNew ${OBIA_TESTS1}
         otbShapeAttributesLabelMapFilterNew)
 

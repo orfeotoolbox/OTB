@@ -1,15 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
-
-#Tolerance sur diff pixel image
-SET(TOL 0.0)
-SET(EPSILON_10 0.0000000001)
+INCLUDE(TestingHelper)
 
 SET(CHANGEDETECTION_TESTS1 ${CXX_TEST_PATH}/otbChangeDetectionTests1)
 SET(CHANGEDETECTION_TESTS2 ${CXX_TEST_PATH}/otbChangeDetectionTests2)
@@ -21,7 +13,7 @@ SET(CHANGEDETECTION_TESTS2 ${CXX_TEST_PATH}/otbChangeDetectionTests2)
 # -------            otb::CBAMI   ------------------------------
 
 ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS1}
-  --compare-image ${TOL}   ${BASELINE}/cdCBAMIImage.png
+  --compare-image ${NOTOL}   ${BASELINE}/cdCBAMIImage.png
                     ${TEMP}/cdCBAMIImage.png
         otbCBAMIChangeDetectionTest
          ${INPUTDATA}/GomaAvant.png
@@ -31,7 +23,7 @@ ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS1}
          )
 
 ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS1}
-  --compare-image ${TOL}   ${BASELINE}/cdCorrelImage.png
+  --compare-image ${NOTOL}   ${BASELINE}/cdCorrelImage.png
                     ${TEMP}/cdCorrelImage.png
         otbCorrelChangeDetectionTest
          ${INPUTDATA}/GomaAvant.png
@@ -52,7 +44,7 @@ ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS1}
          )
 
 ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS1}
-  --compare-image ${TOL}   ${BASELINE}/cdMeanRatioImage.png
+  --compare-image ${NOTOL}   ${BASELINE}/cdMeanRatioImage.png
                     ${TEMP}/cdMeanRatioImage.png
         otbMeanRatioChangeDetectionTest
          ${INPUTDATA}/GomaAvant.png
@@ -62,7 +54,7 @@ ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS1}
          )
 
 ADD_TEST(cdTvLHMI ${CHANGEDETECTION_TESTS1}
-#  --compare-image ${TOL}   ${BASELINE}/cdLHMIImage.png
+#  --compare-image ${NOTOL}   ${BASELINE}/cdLHMIImage.png
 #                    ${TEMP}/cdLHMIImage.png
         otbLHMIChangeDetectionTest
          ${INPUTDATA}/GomaAvantSousEch.png
@@ -72,7 +64,7 @@ ADD_TEST(cdTvLHMI ${CHANGEDETECTION_TESTS1}
          )
 
 ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS1}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
                   ${BASELINE}/cdJHMIImage.png
                   ${TEMP}/cdJHMIImage.png
         otbJHMIChangeDetectionTest
@@ -117,7 +109,7 @@ ADD_TEST(cdTuKullbackLeiblerSupervizedDistanceImageFilterNew ${CHANGEDETECTION_T
          otbKullbackLeiblerSupervizedDistanceImageFilterNew)
 
 ADD_TEST(cdTvKullbackLeiblerSupervizedDistanceImageFilter ${CHANGEDETECTION_TESTS2}
-         --compare-image ${TOL}
+         --compare-image ${NOTOL}
              ${BASELINE}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png
                          ${TEMP}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png
          otbKullbackLeiblerSupervizedDistanceImageFilter

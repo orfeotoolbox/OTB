@@ -1,16 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
-#Tolerance de base
-SET(NOTOL 0.0)
-
-#Tolerance sur diff pixel image
-SET(EPSILON_8 0.00000001)
+INCLUDE(TestingHelper)
 
 SET(FUSION_TESTS1 ${CXX_TEST_PATH}/otbFusionTests1)
 

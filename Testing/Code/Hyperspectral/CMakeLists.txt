@@ -1,17 +1,6 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA      ${OTB_DATA_ROOT}/Input)
-SET(TEMP           ${OTBTesting_BINARY_DIR}/Temporary)
-
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-SET(NOTOL 0.0)
-SET(EPSILON_9 0.000000001)
-SET(EPSILON_3 0.001)
+INCLUDE(TestingHelper)
 
 SET(Hyperspectral_TESTS1 ${CXX_TEST_PATH}/otbHyperspectralTests1)
 SET(Hyperspectral_TESTS2 ${CXX_TEST_PATH}/otbHyperspectralTests2)
@@ -20,7 +9,7 @@ SET(Hyperspectral_TESTS3 ${CXX_TEST_PATH}/otbHyperspectralTests3)
 # HyperspectralTests1
 ADD_TEST(hyTuEigenvalueLikelihoodMaximizationNew
          ${Hyperspectral_TESTS1}
-         otbEigenvalueLikelihoodMaximizationNewTest)         
+         otbEigenvalueLikelihoodMaximizationNewTest)
 
 ADD_TEST(hyTvEigenvalueLikelihoodMaximizationTest
          ${Hyperspectral_TESTS1}
@@ -124,7 +113,7 @@ ADD_TEST(hyTvISRAUnmixingImageFilterTest
 # HyperspectralTests3
 ADD_TEST(hyTuMDMDNMFImageFilterNew
          ${Hyperspectral_TESTS3}
-         otbMDMDNMFImageFilterNewTest)         
+         otbMDMDNMFImageFilterNewTest)
 
 ADD_TEST(hyTvMDMDNMFImageFilterTest
          ${Hyperspectral_TESTS3}

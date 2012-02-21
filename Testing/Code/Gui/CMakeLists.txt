@@ -1,16 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
-#Tolerance sur diff pixel image
-SET(TOL 0.0)
-
-#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
-SET(EPS 0.001)
+INCLUDE(TestingHelper)
 
 SET(GUI_TESTS ${CXX_TEST_PATH}/otbGuiTests)
 

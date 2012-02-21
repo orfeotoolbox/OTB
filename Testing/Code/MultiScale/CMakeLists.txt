@@ -1,16 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
-#Tolerance sur diff pixel image
-SET(NOTOL 0.0)
-SET(EPSILON6 0.000001)
-SET(EPSILON8 0.00000001)
-
+INCLUDE(TestingHelper)
 
 SET(MULTISCALE_TESTS1 ${CXX_TEST_PATH}/otbMultiScaleTests1)
 SET(MULTISCALE_TESTS2 ${CXX_TEST_PATH}/otbMultiScaleTests2)
@@ -26,7 +17,7 @@ ADD_TEST(msTuMorphoPyrResamplerNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidResamplerNew)
 
 ADD_TEST(msTvMorphoPyrResampler ${MULTISCALE_TESTS1}
-  --compare-n-images ${EPSILON8} 2
+  --compare-n-images ${EPSILON_8} 2
                    ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.hdr
                    ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
                    ${BASELINE}/msPyrResampler_IKO_LesHalles_full.hdr
@@ -84,7 +75,7 @@ ADD_TEST(msTuMorphoPyrMRToMSConverterNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidMRToMSConverterNew)
 
 ADD_TEST(msTvMorphoPyrMRToMSConverter ${MULTISCALE_TESTS1}
-   --compare-n-images ${EPSILON8} 3
+   --compare-n-images ${EPSILON_8} 3
                     ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
                     ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
                    ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
@@ -376,7 +367,7 @@ ADD_TEST(msTuWaveletInverseFilterBankNew ${MULTISCALE_TESTS4}
          otbWaveletInverseFilterBankNew)
 
 ADD_TEST(msTvWaveletFilterBank ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_FilterBank.tif
          otbWaveletFilterBank
@@ -386,7 +377,7 @@ ADD_TEST(msTvWaveletFilterBank ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleFilterBank ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_FilterBankMultiScale.tif
          otbWaveletFilterBank
@@ -403,7 +394,7 @@ ADD_TEST(msTuWaveletInverseTransformNew ${MULTISCALE_TESTS4}
          otbWaveletInverseTransformNew)
 
 ADD_TEST(msTvWaveletTransformHaar ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
                           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltHaar.tif
          otbWaveletTransform
@@ -416,7 +407,7 @@ ADD_TEST(msTvWaveletTransformHaar ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletMultiScaleTransformHaar ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
                           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleHaar.tif
          otbWaveletTransform
@@ -430,7 +421,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformHaar ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletMultiScaleTransformHaar_1 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
                           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleHaar_1.tif
          otbWaveletTransform
@@ -444,7 +435,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformHaar_1 ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletMultiScaleTransformHaar_4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
                           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleHaar_4.tif
          otbWaveletTransform
@@ -458,7 +449,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformHaar_4 ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletMultiScaleTransformHaar_8 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
                           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleHaar_8.tif
          otbWaveletTransform
@@ -471,7 +462,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformHaar_8 ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletTransformDB4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB4.tif
          otbWaveletTransform
@@ -482,7 +473,7 @@ ADD_TEST(msTvWaveletTransformDB4 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleTransformDB4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB4.tif
          otbWaveletTransform
@@ -493,7 +484,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformDB4 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleTransformDB4_1 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB4_1.tif
          otbWaveletTransform
@@ -506,7 +497,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformDB4_1 ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletMultiScaleTransformDB4_4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB4_4.tif
          otbWaveletTransform
@@ -519,7 +510,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformDB4_4 ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletMultiScaleTransformDB4_8 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB4_8.tif
          otbWaveletTransform
@@ -534,7 +525,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformDB4_8 ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletTransformDB6 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB6.tif
          otbWaveletTransform
@@ -545,7 +536,7 @@ ADD_TEST(msTvWaveletTransformDB6 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleTransformDB6 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB6.tif
          otbWaveletTransform
@@ -557,7 +548,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformDB6 ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletMultiScaleTransformDB6_1 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB6_1.tif
          otbWaveletTransform
@@ -571,7 +562,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformDB6_1 ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletTransformDB8 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB8.tif
          otbWaveletTransform
@@ -582,7 +573,7 @@ ADD_TEST(msTvWaveletTransformDB8 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleTransformDB8 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB8.tif
          otbWaveletTransform
@@ -594,7 +585,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformDB8 ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletMultiScaleTransformDB8_1 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB8_1.tif
          otbWaveletTransform
@@ -607,7 +598,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformDB8_1 ${MULTISCALE_TESTS4}
 
 
 ADD_TEST(msTvWaveletTransformDB12 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB12.tif
          otbWaveletTransform
@@ -618,7 +609,7 @@ ADD_TEST(msTvWaveletTransformDB12 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleTransformDB12 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB12.tif
          otbWaveletTransform
@@ -629,7 +620,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformDB12 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletTransformDB20 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB20.tif
          otbWaveletTransform
@@ -640,7 +631,7 @@ ADD_TEST(msTvWaveletTransformDB20 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleTransformDB20 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB20.tif
          otbWaveletTransform
@@ -651,7 +642,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformDB20 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletTransformSPLINE_BIORTHOGONAL_2_4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltSPLINE_BIORTHOGONAL_2_4.tif
          otbWaveletTransform
@@ -662,7 +653,7 @@ ADD_TEST(msTvWaveletTransformSPLINE_BIORTHOGONAL_2_4 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleTransformSPLINE_BIORTHOGONAL_2_4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleSPLINE_BIORTHOGONAL_2_4.tif
          otbWaveletTransform
@@ -672,7 +663,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformSPLINE_BIORTHOGONAL_2_4 ${MULTISCALE_TEST
           6 #SPLINE_BIORTHOGONAL_2_4
 )
 ADD_TEST(msTvWaveletTransformSPLINE_BIORTHOGONAL_4_4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltSPLINE_BIORTHOGONAL_4_4.tif
          otbWaveletTransform
@@ -683,7 +674,7 @@ ADD_TEST(msTvWaveletTransformSPLINE_BIORTHOGONAL_4_4 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleTransformSPLINE_BIORTHOGONAL_4_4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleSPLINE_BIORTHOGONAL_4_4.tif
          otbWaveletTransform
@@ -693,7 +684,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformSPLINE_BIORTHOGONAL_4_4 ${MULTISCALE_TEST
           7 #SPLINE_BIORTHOGONAL_4_4
 )
 ADD_TEST(msTvWaveletTransformSYMLET8 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltSYMLET8.tif
          otbWaveletTransform
@@ -704,7 +695,7 @@ ADD_TEST(msTvWaveletTransformSYMLET8 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleTransformSYMLET8 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleSYMLET8.tif
          otbWaveletTransform
@@ -722,7 +713,7 @@ ADD_TEST(msTuWaveletPacketInverseTransformNew ${MULTISCALE_TESTS4}
          otbWaveletPacketInverseTransformNew)
 
 ADD_TEST(msTvWaveletPacketTransformHaar ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketHaar.tif
          otbWaveletPacketTransform
@@ -733,7 +724,7 @@ ADD_TEST(msTvWaveletPacketTransformHaar ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketMultiScaleTransformHaar ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScaleHaar.tif
          otbWaveletPacketTransform
@@ -744,7 +735,7 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransformHaar ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketTransformDB4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketDB4.tif
          otbWaveletPacketTransform
@@ -755,7 +746,7 @@ ADD_TEST(msTvWaveletPacketTransformDB4 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketMultiScaleTransformDB4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScaleDB4.tif
          otbWaveletPacketTransform
@@ -766,7 +757,7 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransformDB4 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketTransformDB6 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketDB6.tif
          otbWaveletPacketTransform
@@ -777,7 +768,7 @@ ADD_TEST(msTvWaveletPacketTransformDB6 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketMultiScaleTransformDB6 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScaleDB6.tif
          otbWaveletPacketTransform
@@ -788,7 +779,7 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransformDB6 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketTransformDB8 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketDB8.tif
          otbWaveletPacketTransform
@@ -799,7 +790,7 @@ ADD_TEST(msTvWaveletPacketTransformDB8 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketMultiScaleTransformDB8 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScaleDB8.tif
          otbWaveletPacketTransform
@@ -810,7 +801,7 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransformDB8 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketTransformDB12 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketDB12.tif
          otbWaveletPacketTransform
@@ -821,7 +812,7 @@ ADD_TEST(msTvWaveletPacketTransformDB12 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketMultiScaleTransformDB12 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScaleDB12.tif
          otbWaveletPacketTransform
@@ -832,7 +823,7 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransformDB12 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketTransformDB20 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketDB20.tif
          otbWaveletPacketTransform
@@ -843,7 +834,7 @@ ADD_TEST(msTvWaveletPacketTransformDB20 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketMultiScaleTransformDB20 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScaleDB20.tif
          otbWaveletPacketTransform
@@ -854,7 +845,7 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransformDB20 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketTransformSPLINE_BIORTHOGONAL_2_4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketSPLINE_BIORTHOGONAL_2_4.tif
          otbWaveletPacketTransform
@@ -865,7 +856,7 @@ ADD_TEST(msTvWaveletPacketTransformSPLINE_BIORTHOGONAL_2_4 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketMultiScaleTransformSPLINE_BIORTHOGONAL_2_4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScaleSPLINE_BIORTHOGONAL_2_4.tif
          otbWaveletPacketTransform
@@ -875,7 +866,7 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransformSPLINE_BIORTHOGONAL_2_4 ${MULTISCAL
           6 #SPLINE_BIORTHOGONAL_2_4
 )
 ADD_TEST(msTvWaveletPacketTransformSPLINE_BIORTHOGONAL_4_4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketSPLINE_BIORTHOGONAL_4_4.tif
          otbWaveletPacketTransform
@@ -886,7 +877,7 @@ ADD_TEST(msTvWaveletPacketTransformSPLINE_BIORTHOGONAL_4_4 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketMultiScaleTransformSPLINE_BIORTHOGONAL_4_4 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScaleSPLINE_BIORTHOGONAL_4_4.tif
          otbWaveletPacketTransform
@@ -896,7 +887,7 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransformSPLINE_BIORTHOGONAL_4_4 ${MULTISCAL
           7 #SPLINE_BIORTHOGONAL_4_4
 )
 ADD_TEST(msTvWaveletPacketTransformSYMLET8 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketSYMLET8.tif
          otbWaveletPacketTransform
@@ -907,7 +898,7 @@ ADD_TEST(msTvWaveletPacketTransformSYMLET8 ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketMultiScaleTransformSYMLET8 ${MULTISCALE_TESTS4}
-        --compare-image ${EPSILON6}
+        --compare-image ${EPSILON_6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScaleSYMLET8.tif
          otbWaveletPacketTransform

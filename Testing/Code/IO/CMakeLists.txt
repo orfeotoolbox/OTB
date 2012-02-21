@@ -1,24 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(EXAMPLEDATA ${OTB_DATA_ROOT}/Examples)
-#Remote sensing images (large images )
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(LARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
-#Tolerance on  pixel image diff
-SET(NOTOL 0.0)
-SET(EPSILON_3 0.001)
-SET(EPSILON_4 0.0001)
-SET(EPSILON_5 0.00001)
-SET(EPSILON_6 0.000001)
-SET(EPSILON_9 0.000000001)
+INCLUDE(TestingHelper)
 
 SET(COMMON_TESTS2 ${CXX_TEST_PATH}/otbCommonTests2)
 SET(COMMON_TESTS3 ${CXX_TEST_PATH}/otbCommonTests3)
@@ -70,7 +53,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
 # ---  RADARSAT (GDAL)  ---
 ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2ENVI ${COMMON_TESTS3}
          otbMultiToMonoChannelExtractROI
-         -ushort ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
+         -ushort ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
@@ -108,7 +91,7 @@ ADD_TEST(ioTvImageFileReaderWithComplexPixel_PALSAR ${IO_TESTS1}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
         otbImageFileReaderWithComplexPixelTest
-            ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+            ${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
             ${TEMP}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
             0 0 100 100)
 
@@ -117,7 +100,7 @@ ADD_TEST(ioTvImageFileReaderWithComplexPixel_ERS ${IO_TESTS1}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
         otbImageFileReaderWithComplexPixelTest
-            ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/
+            ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/
             ${TEMP}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
             0 0 100 100)
 
@@ -126,28 +109,28 @@ ADD_TEST(ioTvImageFileReaderWithComplexPixel_RADARSAT ${IO_TESTS1}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
         otbImageFileReaderWithComplexPixelTest
-            ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
+            ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/
             ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
             0 0 100 100)
-            
+
 ADD_TEST(ioTvVectorImageFileReaderWithComplexPixel_RADARSAT2 ${IO_TESTS1}
         --compare-image ${EPSILON_9}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_RADARSAT2.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT2.tif
         otbVectorImageFileReaderWithComplexPixelTest
-            ${LARGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+            ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
             ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT2.tif
             0 0 100 100)
 
 ADD_TEST(ioTvCompareWritingComplexImage_TIF ${IO_TESTS1}
         otbCompareWritingComplexImageTest
-            ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+            ${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
             ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.tif
             0 0 100 100)
 
 ADD_TEST(ioTvCompareWritingComplexImage_HDR ${IO_TESTS1}
          otbCompareWritingComplexImageTest
-         ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
          ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.hdr
          0 0 100 100)
 
@@ -264,14 +247,14 @@ ADD_TEST(ioTvImageFileReaderTIF2MW ${IO_TESTS1}
         otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.pix
         ${TEMP}/ioImageFileReaderPCI2TIF.tif )
-        
+
  ADD_TEST(ioTvImageFileReaderTIF2PCI ${IO_TESTS1}
   --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                     ${TEMP}/ioImageFileReaderTIF2PCI.pix
         otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/ioImageFileReaderTIF2PCI.pix )
-        
+
 #-------------  otbImageIOFactoryNew
 ADD_TEST(ioTuImageIOFactoryNew ${IO_TESTS1}
         otbImageIOFactoryNew )
@@ -302,7 +285,7 @@ ADD_TEST(ioTvImageFileReaderFloatLUM2HDR ${IO_TESTS2}
         otbFloatImageIOTest
         ${INPUTDATA}/poupees_R4.lum
         ${TEMP}/ioImageFileReaderR4_LUM2HDR.hdr )
-        
+
 ADD_TEST(ioTvImageFileReaderFloatHDR2LUM ${IO_TESTS2}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R4.lum
                                 ${TEMP}/ioImageFileReaderR4_HDR2LUM.lum
@@ -318,7 +301,7 @@ ADD_TEST(ioTvImageFileReaderDoubleLUM2HDR ${IO_TESTS2}
         otbDoubleImageIOTest
         ${INPUTDATA}/poupees_R8.lum
         ${TEMP}/ioImageFileReaderR8_LUM2HDR.hdr )
-        
+
 ADD_TEST(ioTvImageFileReaderDoubleHDR2LUM ${IO_TESTS2}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R8.lum
                                 ${TEMP}/ioImageFileReaderR8_HDR2LUM.lum
@@ -358,7 +341,7 @@ ADD_TEST(ioTvStreamingIFWriterLUMWithoutStreaming ${IO_TESTS2}
          0 # NumberOfStreamDivisions
          )
 SET_TESTS_PROPERTIES(ioTvStreamingIFWriterLUMWithoutStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM)
-         
+
 # ---  LUM STREAMING  With STREAMING IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterLUMWithStreaming ${IO_TESTS2}
    --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
@@ -370,7 +353,7 @@ ADD_TEST(ioTvStreamingIFWriterLUMWithStreaming ${IO_TESTS2}
          10 # NumberOfStreamDivisions
          )
 SET_TESTS_PROPERTIES(ioTvStreamingIFWriterLUMWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM)
-         
+
 # ---  LUM STREAMING  With IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingWithIFWriterLUMWithStreaming ${IO_TESTS2}
    --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
@@ -413,7 +396,7 @@ ADD_TEST(ioTvImageFileReaderDoubleBSQ2HDR ${IO_TESTS2}
         otbDoubleImageIOTest
         ${INPUTDATA}/poupees_R8.hd
         ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr )
-        
+
 ADD_TEST(ioTvImageFileReaderDoubleHDR2BSQ ${IO_TESTS2}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R8.hd
                                 ${TEMP}/ioImageFileReaderR8_HDR2BSQ.hd
@@ -578,7 +561,7 @@ ADD_TEST(ioTvImageKeywordlistSPOT5 ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
          --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
-         ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+         ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
          ${TEMP}/ioTvImageKeywordlistSpot5.txt
          ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
 )
@@ -591,7 +574,7 @@ ADD_TEST(ioTvImageKeywordlistFORMOSAT2 ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
          --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
-         ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+         ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
          ${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
          ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
 )
@@ -605,7 +588,7 @@ ADD_TEST(ioTvImageKeywordlistQuickbird ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
-         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/ioTvImageKeywordlistQuickbird.txt
          ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
 )
@@ -618,7 +601,7 @@ ADD_TEST(ioTvImageKeywordlistPleiades ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistPleiades_saveState_loadState.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
-         ${LARGEDATA}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20110401_0896-004_R1C1.JP2
+         ${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20110401_0896-004_R1C1.JP2
          ${TEMP}/ioTvImageKeywordlistPleiades.txt
          ${TEMP}/ioTvImageKeywordlistPleiades_saveState_loadState.txt
 )
@@ -631,7 +614,7 @@ ADD_TEST(ioTvImageKeywordlistIkonos ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
-         ${LARGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+         ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
          ${TEMP}/ioTvImageKeywordlistIkonos.txt
          ${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
 )
@@ -643,7 +626,7 @@ ADD_TEST(ioTvImageKeywordlistRapidEye ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
          ${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEDATA}/RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
+         ${LARGEINPUT}/RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
          ${TEMP}/ioTvImageKeywordlistRapidEye.txt
          ${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
 )
@@ -655,7 +638,7 @@ ADD_TEST(ioTvImageKeywordlistEnvisatAsar ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
          ${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEDATA}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
+         ${LARGEINPUT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
          ${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
          ${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
 )
@@ -667,7 +650,7 @@ ADD_TEST(ioTvImageKeywordlistAlosPalsar ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
          ${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
          ${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
          ${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
 )
@@ -679,7 +662,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat1_GOMA ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001
+         ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/DAT_01.001
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
 )
@@ -691,7 +674,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat1_GOMA_vdf ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/VDF_DAT.001
+         ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/VDF_DAT.001
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
 )
@@ -703,7 +686,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat1_SARDEGNA ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEDATA}/RADARSAT1/SARDEGNA/scene01/dat_01.001
+         ${LARGEINPUT}/RADARSAT1/SARDEGNA/scene01/dat_01.001
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
          )
@@ -715,7 +698,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEDATA}/RADARSAT1/SARDEGNA/scene01/dat_01.001
+         ${LARGEINPUT}/RADARSAT1/SARDEGNA/scene01/dat_01.001
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
          )
@@ -728,7 +711,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat2 ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
           --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
-         ${LARGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+         ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
          ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
 )
@@ -741,7 +724,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
           --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+         ${LARGEINPUT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
 )
@@ -754,7 +737,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Upsala ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
           --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
+         ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
 )
@@ -766,26 +749,26 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
           --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+         ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
 )
 
 ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingXmlFile ${IO_TESTS4}
     otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+         ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
 )
 ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingHHFile ${IO_TESTS4}
     otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+         ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
 )
 ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingVVFile ${IO_TESTS4}
     otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+         ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
 )
@@ -799,7 +782,7 @@ ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
          ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
+         ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
          ${TEMP}/ioTvImageKeywordlistErs.txt
          ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
 )
@@ -835,64 +818,64 @@ IF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
-#        ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/ )
-        ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001 )
+#        ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/ )
+        ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/DAT_01.001 )
 
 ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
-#        ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/ )
-        ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
+#        ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/ )
+        ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
 
 ADD_TEST(ioTuGDALImageIOCanRead_QUICK_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF )
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF )
 
 ADD_TEST(ioTuGDALImageIOCanRead_QUICK_XS ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF )
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF )
 
 ADD_TEST(ioTuGDALImageIOCanRead_WV2_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF )
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF )
 
 ADD_TEST(ioTuGDALImageIOCanRead_WV2_MUL ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF )
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF )
 
 ADD_TEST(ioTuGDALImageIOCanRead_WV2_PSH ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_pansharpened_natural_color_8bit/052298834010_01_P001_PSH/09DEC10103019-S2AS-052298834010_01_P001.TIF )
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_pansharpened_natural_color_8bit/052298834010_01_P001_PSH/09DEC10103019-S2AS-052298834010_01_P001.TIF )
 
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/IKONOS/PARIS/po_79039_pan_0000000.tif)
+        ${LARGEINPUT}/IKONOS/PARIS/po_79039_pan_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_GRN ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/IKONOS/PARIS/po_79039_grn_0000000.tif)
+        ${LARGEINPUT}/IKONOS/PARIS/po_79039_grn_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_BLU ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/IKONOS/PARIS/po_79039_blu_0000000.tif)
+        ${LARGEINPUT}/IKONOS/PARIS/po_79039_blu_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_RED ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/IKONOS/PARIS/po_79039_red_0000000.tif)
+        ${LARGEINPUT}/IKONOS/PARIS/po_79039_red_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/IKONOS/PARIS/po_79039_nir_0000000.tif)
+        ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_SPOT4 ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
-#        ${LARGEDATA}/SPOT4/RIO_DE_JANEIRO/ )
-        ${LARGEDATA}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT )
+#        ${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/ )
+        ${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT )
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/IKONOS/PARIS/po_79039_nir_0000000.tif)
+        ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_FORMOSAT2 ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF)
-        
+        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF)
+
 ADD_TEST(ioTuGDALImageIOCanRead_COSMOSKYMED ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5)
+        ${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5)
 
 ADD_TEST(ioTuGDALImageIOCanRead_COSMOSKYMED2 ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5)
- 
+        ${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5)
+
 ADD_TEST(ioTuGDALImageIOCanRead_COSMOSKYMED3 ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/COSMOSKYMED/Toulouse_spotlight/CSKS2_GTC_B_S2_08_HH_RD_SF_20110417180326_20110417180333.h5)
+        ${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS2_GTC_B_S2_08_HH_RD_SF_20110417180326_20110417180333.h5)
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -906,9 +889,9 @@ ADD_TEST(ioTuGDALImageIOCanRead_HFA ${IO_TESTS5} otbGDALImageIOTestCanRead
 
 ADD_TEST(ioTuGDALImageIOCanRead_PCI ${IO_TESTS5} otbGDALImageIOTestCanRead
     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.pix)
-    
+
 ADD_TEST(ioTvThreadsTest ${IO_TESTS5} otbThreadsTest)
-        
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -918,7 +901,7 @@ ADD_TEST(ioTuGDALImageIOCanWrite_TIFF ${IO_TESTS6} otbGDALImageIOTestCanWrite
         ${INPUTDATA}/testGDALWriter.tif)
 ADD_TEST(ioTuGDALImageIOCanWrite_HFA ${IO_TESTS6} otbGDALImageIOTestCanWrite
         ${INPUTDATA}/HFAGeoreferenced.img)
-        
+
 # Pb with copy of some infos into the dataset
 # cases with no ProjRef
 ADD_TEST(ioTvGDALImageIOWriteMetadata ${IO_TESTS6}
@@ -938,7 +921,7 @@ ADD_TEST(ioTvGDALImageIOWriteMetadata ${IO_TESTS6}
 IF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTuONERAImageIOCanRead ${IO_TESTS6} otbONERAImageIOTestCanRead
-        ${LARGEDATA}/ONERA/spa3_0215_rad.ent)
+        ${LARGEINPUT}/ONERA/spa3_0215_rad.ent)
 
 # Read one ONERAimage type CFloat32 with IFreaderScalar and write to a 2 bands hdr file OK
 # crop 10 10 100 100
@@ -947,7 +930,7 @@ ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS6}
             ${BASELINE}/ioImageFileReaderONERA.hdr
             ${TEMP}/ioImageFileReaderONERA.hdr
          otbImageFileReaderONERATest
-            ${LARGEDATA}/ONERA/spa3_0215_rad.ent
+            ${LARGEINPUT}/ONERA/spa3_0215_rad.ent
             ${TEMP}/ioImageFileReaderONERA.hdr
             10 10 100 100 )
 
@@ -960,7 +943,7 @@ ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS6}
                         ${BASELINE}/ioImageFileReaderONERAComplexImag.hdr
                         ${TEMP}/ioImageFileReaderONERAComplexImag.hdr
          otbImageFileReaderONERAComplex
-            ${LARGEDATA}/ONERA/spa3_0215_rad.ent
+            ${LARGEINPUT}/ONERA/spa3_0215_rad.ent
             ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
                 ${TEMP}/ioImageFileReaderONERAComplexImag.hdr )
 
@@ -971,7 +954,7 @@ ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS6}
             ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
             ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
          otbImageFileWriterONERAComplex
-            ${LARGEDATA}/ONERA/spa3_0215_rad.ent
+            ${LARGEINPUT}/ONERA/spa3_0215_rad.ent
             ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
 
 ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS6}
@@ -1011,7 +994,7 @@ ADD_TEST(ioTvImageFileReaderPNG2PNG ${IO_TESTS7}
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileReaderPNG2PNG_cthead1.png )
-               
+
 # RGB
 ADD_TEST(ioTvImageFileReaderRGB_PNG2PNG ${IO_TESTS7}
   --compare-image ${EPSILON_9}   ${INPUTDATA}/couleurs_extrait.png
@@ -1019,14 +1002,14 @@ ADD_TEST(ioTvImageFileReaderRGB_PNG2PNG ${IO_TESTS7}
         otbImageFileReaderRGBTest
         ${INPUTDATA}/couleurs_extrait.png
         ${TEMP}/ioImageFileReaderRGB_PNG2PNG.png )
-        
+
 ADD_TEST(ioTvImageFileReaderRGB_PNG2TIFF ${IO_TESTS7}
   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderRGB_PNG2TIFF.tiff
                     ${TEMP}/ioImageFileReaderRGB_PNG2TIFF.tiff
         otbImageFileReaderRGBTest
         ${INPUTDATA}/couleurs_extrait.png
         ${TEMP}/ioImageFileReaderRGB_PNG2TIFF.tiff )
-        
+
 ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG ${IO_TESTS7}
   --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.hdr
                     ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png
@@ -1219,7 +1202,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT42PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT4/RIO_DE_JANEIRO/
+         ${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 1 2 3 )
@@ -1227,7 +1210,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT42PNG_2 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT4/RIO_DE_JANEIRO/
+         ${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 3 2 1 )
@@ -1263,7 +1246,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT5/TEHERAN/
+         ${LARGEINPUT}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 1 2 3 )
@@ -1272,7 +1255,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_2 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT5/TEHERAN/
+         ${LARGEINPUT}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 1 )
@@ -1280,7 +1263,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_3 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT5/TEHERAN/
+         ${LARGEINPUT}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 2 )
@@ -1288,7 +1271,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_4 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT5/TEHERAN/
+         ${LARGEINPUT}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 3 )
@@ -1296,7 +1279,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT5/TEHERAN/
+         ${LARGEINPUT}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 4 )
@@ -1306,7 +1289,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosPAN2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/IKONOS/PARIS/po_79039_pan_0000000.tif
+         ${LARGEINPUT}/IKONOS/PARIS/po_79039_pan_0000000.tif
          ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1316,7 +1299,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosRED2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
                             ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/IKONOS/PARIS/po_79039_red_0000000.tif
+         ${LARGEINPUT}/IKONOS/PARIS/po_79039_red_0000000.tif
          ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1325,7 +1308,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosGRN2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/IKONOS/PARIS/po_79039_grn_0000000.tif
+         ${LARGEINPUT}/IKONOS/PARIS/po_79039_grn_0000000.tif
          ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1334,7 +1317,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosBLU2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/IKONOS/PARIS/po_79039_blu_0000000.tif
+         ${LARGEINPUT}/IKONOS/PARIS/po_79039_blu_0000000.tif
          ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1343,7 +1326,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/IKONOS/PARIS/po_79039_nir_0000000.tif
+         ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif
          ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1353,7 +1336,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2LUM ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
          otbMultiChannelExtractROI
-         ${LARGEDATA}/IKONOS/PARIS/po_79039_nir_0000000.tif
+         ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif
          ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1363,7 +1346,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2BSQ ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}       ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
                                 ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
          otbMultiChannelExtractROI
-         ${LARGEDATA}/IKONOS/PARIS/po_79039_nir_0000000.tif
+         ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif
          ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1373,7 +1356,7 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdPAN2TIFF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
                      ${TEMP}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         -ushort ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          -ushort ${TEMP}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
          -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
          )
@@ -1383,7 +1366,7 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2TIFF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
                      ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+         -ushort ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
          -ushort ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
          -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
          )
@@ -1400,7 +1383,7 @@ ADD_TEST(ioTvOtbImageTestSAR_ERS ${IO_TESTS9}
    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
                      ${TEMP}/ioOtbImageTestSAR_ERS.txt
          otbImageTest
-         ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/
+         ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/
          ${TEMP}/ioOtbImageTestSAR_ERS.txt)
 
 # ---  Otb::Image Test  ---
@@ -1409,7 +1392,7 @@ ADD_TEST(ioTvOtbImageTestRadarsat ${IO_TESTS9}
      ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
      ${TEMP}/ioOtbImageTestRadarsat.txt
    otbImageTest
-     ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
+     ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/
      ${TEMP}/ioOtbImageTestRadarsat.txt)
 
 # ---  Otb::VectorImage Test  ---
@@ -1418,7 +1401,7 @@ ADD_TEST(ioTvOtbVectorImageTestRadarsat ${IO_TESTS9}
      ${TEMP}/ioOtbImageTestRadarsat.txt
      ${TEMP}/ioOtbVectorImageTestRadarsat.txt
    otbVectorImageLegacyTest
-     ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
+     ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/
      ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
 SET_TESTS_PROPERTIES(ioTvOtbVectorImageTestRadarsat PROPERTIES DEPENDS ioTvOtbImageTestRadarsat)
 
@@ -1427,21 +1410,21 @@ ADD_TEST(ioTvOtbVectorImageTestSpot5 ${IO_TESTS9}
    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
                      ${TEMP}/ioOtbVectorImageTestSpot5.txt
         otbVectorImageLegacyTest
-        ${LARGEDATA}/SPOT5/TEHERAN/
+        ${LARGEINPUT}/SPOT5/TEHERAN/
         ${TEMP}/ioOtbVectorImageTestSpot5.txt)
 
 ADD_TEST(ioTvOtbVectorImageTestFORMOSAT2 ${IO_TESTS9}
    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestFORMOSAT2.txt
                      ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt
         otbVectorImageLegacyTest
-        ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/
+        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/
         ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt)
 
 ADD_TEST(ioTvOtbVectorImageTestCOSMOSKYMED ${IO_TESTS9}
    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestCOSMOSKYMED.txt
                      ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt
         otbVectorImageLegacyTest
-        ${LARGEDATA}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5
+        ${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5
         ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt)
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -1532,7 +1515,7 @@ ADD_TEST(ioTvStreamingImageFilterGDAL_TIFF ${IO_TESTS9}
          ${INPUTDATA}/poupeesTIF/IMAGERY.TIF
          ${TEMP}/ioStreamingImageFilterTestGDAL_PoupeesTif.png
          )
-      
+
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees_1canal.c1.hdr
@@ -1553,8 +1536,8 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
          1 # Streaming
          100
          )
-         
- 
+
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS10 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1684,7 +1667,7 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBE
          BUFFER_NUMBER_OF_LINES
          1000
          )
-      
+
 ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioStreamingImageFileWriterWithFilter_1_100.hdr
                             ${TEMP}/ioStreamingImageFileWriterWithFilter_1_100.hdr
@@ -1838,14 +1821,14 @@ ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS12}
 
 # Pech David - Garonne, Toulouse area
 ADD_TEST(ioTvDEMToImageGeneratorTest1 ${IO_TESTS12}
-   --compare-image ${EPSILON_5}  
+   --compare-image ${EPSILON_5}
        ${BASELINE}/ioTvDEMToImageGenerator1.tif
        ${TEMP}/ioTvDEMToImageGenerator1.tif
      otbDEMToImageGeneratorTest
        ${INPUTDATA}/DEM/srtm_directory
        ${TEMP}/ioTvDEMToImageGenerator1.tif
        1.437371 43.559045 512 128 0.000032 -0.000024
-        )        
+        )
 
 #Big extend
 ADD_TEST(ioTvDEMToImageGeneratorTest2 ${IO_TESTS12}
@@ -1867,7 +1850,7 @@ ADD_TEST(ioTvDEMToImageGeneratorFromImageTest_SensorModel ${IO_TESTS12}
         ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_SM.tif
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract.tif
       otbDEMToImageGeneratorFromImageTest
-        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${INPUTDATA}/DEM/srtm_directory
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_Extract_DEM.tif
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract.tif
@@ -1924,7 +1907,7 @@ ADD_TEST(ioTuJ2KImageIOCanRead ${IO_TESTS13}
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTuJP2ImageIOCanRead ${IO_TESTS13}
          otbJPEG2000ImageIOTestCanRead
-         ${LARGEDATA}/JPEG2000/QB_multicomp.jpx
+         ${LARGEINPUT}/JPEG2000/QB_multicomp.jpx
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -1934,7 +1917,7 @@ ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF ${IO_TESTS9}
 --compare-image ${EPSILON_9}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
                         ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
          otbVectorImageFileReaderWriterTest
-         ${LARGEDATA}/JPEG2000/QB_multicomp_small.jpx
+         ${LARGEINPUT}/JPEG2000/QB_multicomp_small.jpx
          ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
          )
 
@@ -1943,7 +1926,7 @@ ADD_TEST(ioTvImageFileReaderWriterJP22TIF ${IO_TESTS2}
 --compare-image ${EPSILON_9}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
                         ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          otbDoubleImageIOTest
-         ${LARGEDATA}/JPEG2000/QB_multicomp_small.jpx
+         ${LARGEINPUT}/JPEG2000/QB_multicomp_small.jpx
          ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -1965,19 +1948,19 @@ IF(OTB_DATA_USE_LARGEINPUT)
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R3C1.JP2
+         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R3C1.JP2
          -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1.tif
          -startX 256 -startY 512 -sizeX 256 -sizeY 128
          -channels 1 2 3 4
          -time
          )
-         
-# Decode an area which need 4 tiles   
+
+# Decode an area which need 4 tiles
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R3C1-4tiles ${COMMON_TESTS2}
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1-4tiles.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1-4tiles.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R3C1.JP2
+         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R3C1.JP2
          -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1-4tiles.tif
          -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
          -channels 1 2 3 4
@@ -1989,18 +1972,18 @@ IF(OTB_DATA_USE_LARGEINPUT)
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2
+         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2
          -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1.tif
          -startX 256 -startY 512 -sizeX 256 -sizeY 128
          -channels 1 2 3 4
          -time
          )
-# Decode an area which need 4 tiles          
+# Decode an area which need 4 tiles
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-4tiles ${COMMON_TESTS2}
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-4tiles.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-4tiles.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2
+         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2
          -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-4tiles.tif
          -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
          -channels 1 2 3 4
@@ -2014,58 +1997,58 @@ IF(OTB_DATA_USE_LARGEINPUT)
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
+         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
          -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
          -startX 1330 -startY 928 -sizeX 32 -sizeY 32
          -channels 1 2 3 4
          -time
          )
-         
-  # Generate the QL used in monteverdi (take only first band to put the image in the baseline) 
+
+  # Generate the QL used in monteverdi (take only first band to put the image in the baseline)
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-FullQL ${COMMON_TESTS2}
          --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql.tif
                                         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
+         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
          -ushort ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
          -channels 1
          -time
          )
-         
+
   # Decode an area inside one tile
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-V3-R1C1 ${COMMON_TESTS2}
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1_OUT.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+         -ushort ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
          -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1_OUT.tif
          -startX 256 -startY 512 -sizeX 256 -sizeY 128
          -channels 1 2 3
          -time
          )
-         
-  # Decode an area which need 4 tiles   
+
+  # Decode an area which need 4 tiles
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-V3-R1C1-4tiles ${COMMON_TESTS2}
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1-4tiles.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1-4tiles_OUT.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+         -ushort ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
          -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1-4tiles_OUT.tif
          -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
          -channels 1 2 3
          -time
          )
-         
-  # Generate the QL used in monteverdi (take only first band to put the image in the baseline) 
+
+  # Generate the QL used in monteverdi (take only first band to put the image in the baseline)
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-V3-R1C1-FullQL ${COMMON_TESTS2}
          --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql.tif
                                         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql_OUT.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2:5
+         -ushort ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2:5
          -ushort ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql_OUT.tif
          -channels 1
          -time
-         )             
+         )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -2088,19 +2071,19 @@ ADD_TEST(ioTvMultiResolutionReading3 ${IO_TESTS13}
       ${TEMP}/ioTvMultiResolutionReading3.txt
       3
       )
-      
-IF(OTB_DATA_USE_LARGEINPUT)      
+
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvMultiResolutionReadingPleiadesV3 ${IO_TESTS13}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingPleiadesV3.txt
                              ${TEMP}/ioTvMultiResolutionReadingPleiadesV3_OUT.txt
       otbVectorImageTest
-      ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+      ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
       ${TEMP}/ioTvMultiResolutionReadingPleiadesV3_OUT.txt
       0
       )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-# Tests to check if we can open JPEG2000 files using a otb::VectorImage 
+# Tests to check if we can open JPEG2000 files using a otb::VectorImage
 # and filename:ResolutionFactor syntax.
 # no access to data only PrintSelf() method.
 ADD_TEST(ioTvMultiResolutionReadingInName0 ${IO_TESTS13}
@@ -2118,7 +2101,7 @@ ADD_TEST(ioTvMultiResolutionReadingInName3 ${IO_TESTS13}
       ${TEMP}/ioTvMultiResolutionReadingInName3.txt
       )
 
-# Test to check behavior of function JPEG2000reader->GetResolutionInfo() 
+# Test to check behavior of function JPEG2000reader->GetResolutionInfo()
 # which return info about resolution available in the JPEG2000 file.
 ADD_TEST(ioTvMultiResolutionReadingInfo ${IO_TESTS13}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingInfoOut.txt
@@ -2189,7 +2172,7 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res0_1 ${COMMON_TESTS2}
             ${INPUTDATA}/bretagne.j2k:0
             ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40_OUT.tif
             -startX 700 -startY 1000 -sizeX 50 -sizeY 40 )
-           
+
 # Read an area which need to decode 4 tiles at resolution 0
 ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res0_2 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20.tif
@@ -2207,7 +2190,7 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3 ${COMMON_TESTS2}
             ${INPUTDATA}/bretagne.j2k:3
             ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_OUT.tif )
 
-# Read area inside one tile at resolution 3         
+# Read area inside one tile at resolution 3
 ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3_1 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30_OUT.tif
@@ -2216,16 +2199,16 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3_1 ${COMMON_TESTS2}
            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30_OUT.tif
            -startX 90 -startY 70 -sizeX 20 -sizeY 30 )
 
-# Read an area which need to decode 4 tiles at resolution 3           
+# Read an area which need to decode 4 tiles at resolution 3
 ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3_2 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60_OUT.tif
          otbMultiChannelExtractROI
            ${INPUTDATA}/bretagne.j2k:3
            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60_OUT.tif
-           -startX 40 -startY 30 -sizeX 80 -sizeY 60 )           
+           -startX 40 -startY 30 -sizeX 80 -sizeY 60 )
 
-# Read all the image with a resolution 5         
+# Read all the image with a resolution 5
 ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res5 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif
@@ -2236,7 +2219,7 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res5 ${COMMON_TESTS2}
 # Test the possibility to modify the size of cache used to reduce the decoding operations
 # O tile in the cache (500K)
 ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_500 ${IO_TESTS13}
-   --compare-image ${EPSILON_9}   
+   --compare-image ${EPSILON_9}
          ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_500.tif
          otbGenerateClassicalQLWithJPEG2000
@@ -2246,7 +2229,7 @@ ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_500 ${IO_TESTS13}
 
 # 1 tile in the cache (1000K)
 ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_1000 ${IO_TESTS13}
-   --compare-image ${EPSILON_9}   
+   --compare-image ${EPSILON_9}
          ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_1000.tif
          otbGenerateClassicalQLWithJPEG2000
@@ -2254,9 +2237,9 @@ ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_1000 ${IO_TESTS13}
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_1000.tif
          1000)
 
-# 5 tiles in the cache (5000K)        
+# 5 tiles in the cache (5000K)
 ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_5000 ${IO_TESTS13}
-   --compare-image ${EPSILON_9}   
+   --compare-image ${EPSILON_9}
          ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_5000.tif
          otbGenerateClassicalQLWithJPEG2000
@@ -2264,9 +2247,9 @@ ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_5000 ${IO_TESTS13}
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_5000.tif
          5000)
 
-# 135Mb in the cache (set by otbIFR for JPEG2000)         
+# 135Mb in the cache (set by otbIFR for JPEG2000)
 ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_25000 ${IO_TESTS13}
-   --compare-image ${EPSILON_9}   
+   --compare-image ${EPSILON_9}
          ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_OUT.tif
          otbGenerateClassicalQLWithJPEG2000
@@ -2301,7 +2284,7 @@ ADD_TEST(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvReadingComplexDataIntoComplexImage ${IO_TESTS14}
                 otbReadingComplexDataIntoComplexImageTest
-                ${LARGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
+                ${LARGEINPUT}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
                 1000 1000
 )
 
@@ -2310,7 +2293,7 @@ ADD_TEST(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
                 ${BASELINE}/ioWritingComplexDataWithComplexImageOutput.tif
                 ${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
                 otbWritingComplexDataWithComplexImageTest
-                ${LARGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
+                ${LARGEINPUT}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
                 ${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
                 1000 1000
                 500  500
@@ -2323,7 +2306,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTuVectorDataIOFactory ${IO_TESTS15}
          otbVectorDataIOFactory
          ${INPUTDATA}/ToulouseRoad-examples.shp )
-        
+
 ADD_TEST(ioTuOGRVectorDataIO ${IO_TESTS15}
         otbOGRVectorDataIONew )
 
@@ -2338,7 +2321,7 @@ ADD_TEST(ioTvSHPVectorDataFileReader ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader.txt
                         ${TEMP}/ioSHPVectorDataFileReader.txt
         otbVectorDataFileReader
-        ${LARGEDATA}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
         ${TEMP}/ioSHPVectorDataFileReader.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -2356,7 +2339,7 @@ ADD_TEST(ioTvSHPVectorDataFileReader3 ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader3.txt
                         ${TEMP}/ioSHPVectorDataFileReader3.txt
         otbVectorDataFileReader
-        ${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
+        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
         ${TEMP}/ioSHPVectorDataFileReader3.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -2418,7 +2401,7 @@ ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
             ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.shp
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
         otbVectorDataFileReaderWriter
-            ${LARGEDATA}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+            ${LARGEINPUT}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -2495,7 +2478,7 @@ ADD_TEST(ioTuOGRVectorDataIOCanWritePostGIS ${IO_TESTS15}
         otbOGRVectorDataIOCanWrite
         PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'")
 ENDIF(OTB_USE_PQXX)
-      
+
 ADD_TEST(ioTuKMLVectorDataIO ${IO_TESTS15}
         otbKMLVectorDataIONew )
 
@@ -2552,7 +2535,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
 # Can read a RAD format (ci2)
 ADD_TEST(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16}
         otbRADImageIOTestCanRead
-        ${LARGEDATA}/RAD_CI2/3017_HH.rad)
+        ${LARGEINPUT}/RAD_CI2/3017_HH.rad)
 
 # Convert a ci2.RAD file into ENVI format
 ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
@@ -2560,7 +2543,7 @@ ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
         ${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr
         ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr
         otbImageFileReaderRADComplexFloatExtract
-        ${LARGEDATA}/RAD_CI2/3017_HH.rad
+        ${LARGEINPUT}/RAD_CI2/3017_HH.rad
         ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -2689,56 +2672,56 @@ ADD_TEST(ioTvImageMetadataInterfaceBaseTest_QB ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_QB.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_QB.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_QB.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_QBCevennes ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_QBCevennes.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_QBCevennes.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_QBCevennes.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_QBMUL ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_QBMUL.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_QBMUL.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_QBMUL.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_WV2Pan ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_WV2RomePan.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomePan.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomePan.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_WV2Mul ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_WV2RomeMul.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomeMul.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomeMul.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_IKONOS ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_IKONOS.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_IKONOS.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif
+        ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif
         ${TEMP}/ioTvImageMetadataInterfaceBase_IKONOS.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_SPOT ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_SPOT.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_SPOT.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_SPOT.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+        ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
         ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
 )
 
@@ -2746,7 +2729,7 @@ ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES_sensorP_spotsample ${IO_TES
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES_SEN_P_spot.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
+        ${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
         ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
 )
 
@@ -2754,7 +2737,7 @@ ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES_sensorMS_spotsample ${IO_TE
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES_SEN_MS_spot.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20110401_0896-004_R1C1.JP2
+        ${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20110401_0896-004_R1C1.JP2
         ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
 )
 
@@ -2762,42 +2745,42 @@ ADD_TEST(ioTvImageMetadataInterfaceBaseTest_FORMOSAT2 ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1dims ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
+        ${LARGEINPUT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1TORONTO ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1PANGKALANBUUNUsingHHCosFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingHHCosFile.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingHHCosFile.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingHHCosFile.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1PANGKALANBUUNUsingVVCosFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingVVCosFile.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingVVCosFile.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingVVCosFile.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1PangkalanbuunuUsingXmlFile.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PangkalanbuunuUsingXmlFile.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PangkalanbuunuUsingXmlFile.txt
 )
 
@@ -2808,49 +2791,49 @@ ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_QB ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QB.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_QB.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_QB.txt
 )
 ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_QBCevennes ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEDATA}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
 )
 ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_QBMUL ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QBMUL.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_QBMUL.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_QBMUL.txt
 )
 ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_WV2Pan ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
 )
 ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_WV2Mul ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
 )
 ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_IKONOS ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_IKONOS.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_IKONOS.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif
+        ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif
         ${TEMP}/ioTvOpticalImageMetadataInterface_IKONOS.txt
 )
 ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_SPOT ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_SPOT.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT.txt
 )
 
@@ -2858,7 +2841,7 @@ ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_PLEIADES ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_PLEIADES_V3.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_PLEIADES_OUT.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+        ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
         ${TEMP}/ioTvOpticalImageMetadataInterface_PLEIADES_OUT.txt
 )
 
@@ -2866,7 +2849,7 @@ ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_FORMOSAT2 ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
 )
 
@@ -2875,35 +2858,35 @@ ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1dims ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1dims.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
         otbSarImageMetadataInterfaceTest
-        ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
+        ${LARGEINPUT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
         ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
 )
 ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1TORONTO ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
         otbSarImageMetadataInterfaceTest
-        ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
         ${TEMP}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
 )
 ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingHHCosFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
         otbSarImageMetadataInterfaceTest
-        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
         ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
 )
 ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingVVCosFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
         otbSarImageMetadataInterfaceTest
-        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
         ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
 )
 ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
         otbSarImageMetadataInterfaceTest
-        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
         ${TEMP}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
 )
 
@@ -2955,8 +2938,8 @@ SET_PROPERTY(TEST ioTvTileMapImageIOWeb PROPERTY RESOURCE_LOCK web_access)
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvTileMapWriter ${IO_TESTS19}
     otbTileMapWriter
-       ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
-#       ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+       ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+#       ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
        ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
        ${TEMP}
        500 # extract index[0]
@@ -3022,7 +3005,7 @@ ENDIF(OTB_USE_CURL)
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvImageFileReaderTestSensorPixelValueQB ${IO_TESTS20}
 otbImageFileReaderTestSensorPixelValue
-       ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+       ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
        ${BASELINE_FILES}/ioTvSensorsPixelValue.ini
        OPTIC
        QB
@@ -3034,7 +3017,7 @@ otbImageFileReaderTestSensorPixelValue
 
 ADD_TEST(ioTvImageFileReaderTestSensorPixelValueIKONOS ${IO_TESTS20}
 otbImageFileReaderTestSensorPixelValue
-       ${LARGEDATA}/IKONOS/PARIS/po_79039_pan_0000000.tif
+       ${LARGEINPUT}/IKONOS/PARIS/po_79039_pan_0000000.tif
        ${BASELINE_FILES}/ioTvSensorsPixelValue.ini
        OPTIC
        IKONOS
@@ -3051,7 +3034,7 @@ ADD_TEST(ioTuDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
 
 ADD_TEST(ioTuDefaultImageMetadataInterface ${IO_TESTS20}
         otbDefaultImageMetadataInterface )
-        
+
 ADD_TEST(ioTuOpticalDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
         otbOpticalDefaultImageMetadataInterfaceFactoryNew )
 
@@ -3214,7 +3197,7 @@ ADD_TEST(ioTvMultiDatasetReading2 ${IO_TESTS22}
       ${TEMP}/ioTvMultiDatasetReading2.txt
       5
       )
-      
+
 # Tests to check if we can open hdf files using a otb::VectorImage and filename:NumSubDataset syntax.
 # no access to data only PrintSelf() method.
 ADD_TEST(ioTvMultiDatasetReadingInName1 ${IO_TESTS22}
@@ -3240,7 +3223,7 @@ ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS22}
       ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
       ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
       )
-   
+
 # Tests which read data in HDF files.
 ADD_TEST(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
@@ -3251,7 +3234,7 @@ ADD_TEST(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
          -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
          -channels 1 )
 ENDIF(CHECK_HDF4OPEN_SYMBOL)
-         
+
 ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1.tif
                      ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
@@ -3281,7 +3264,7 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
              ${IO_TESTS23}
              otbMonobandScalarToImageComplex${READING_PIXELTYPE}
              ${INPUTDATA}/monoband${INPUTFILE_PIXELTYPE}.tif)
-             
+
     ADD_TEST(ioTvMonobandScalar${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
              ${IO_TESTS23}
              otbMonobandScalarToVectorImageComplex${READING_PIXELTYPE}
@@ -3344,7 +3327,7 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
                  ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
 
       ENDIF (  NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
-      
+
       # Weird case : need specifications to write the test
       # [missing impl]
       # ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageComplex${READING_PIXELTYPE})
@@ -3412,10 +3395,10 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
               ${TEMP}/monobandComplexOut${DATA_PIXELTYPE}.tif
               100
            )
-        
+
   FOREACH(NBBANDS ${NBBANDS_LIST})
     IF ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
-      
+
       ADD_TEST(ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
                --compare-image ${NOTOL}
@@ -3426,7 +3409,7 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                   100
                   ${NBBANDS}
                )
-      
+
       ADD_TEST(ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
                --compare-image ${NOTOL}
@@ -3437,9 +3420,9 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                   100
                   ${NBBANDS}
                )
-                      
+
     ELSE ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
-      
+
       ADD_TEST(ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
              ${IO_TESTS23}
              --compare-image ${NOTOL}
@@ -3450,7 +3433,7 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                 50
                 ${NBBANDS}
              )
-      
+
       ADD_TEST(ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
                --compare-image ${NOTOL}
@@ -3461,7 +3444,7 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                   50
                   ${NBBANDS}
                )
-    
+
     ENDIF (  NOT ${DATA_PIXELTYPE} MATCHES "Short" )
   ENDFOREACH(NBBANDS ${NBBANDS_LIST})
 
@@ -3486,10 +3469,10 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
               ${TEMP}/monobandStrComplexOut${DATA_PIXELTYPE}.tif
               100
            )
-        
+
   FOREACH(NBBANDS ${NBBANDS_LIST})
     IF ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
-      
+
       ADD_TEST(ioTvStreamingWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
                --compare-image ${NOTOL}
@@ -3500,7 +3483,7 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                   100
                   ${NBBANDS}
                )
-      
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS23 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3543,9 +3526,9 @@ ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${IO_TESTS23}
                   100
                   ${NBBANDS}
                )
-                      
+
     ELSE ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
-      
+
       ADD_TEST(ioTvStreamingWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
              ${IO_TESTS23}
              --compare-image ${NOTOL}
@@ -3556,7 +3539,7 @@ ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${IO_TESTS23}
                 50
                 ${NBBANDS}
              )
-       
+
 
 ADD_TEST(raTuFilterFunctionValuesNew ${IO_TESTS23}
      otbFilterFunctionValuesNew
@@ -3565,7 +3548,7 @@ ADD_TEST(raTuFilterFunctionValuesNew ${IO_TESTS23}
 ADD_TEST(raTuWavelengthSpectralBandsNew ${IO_TESTS23}
      otbWavelengthSpectralBandsNew
 )
-      
+
       ADD_TEST(ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
                --compare-image ${NOTOL}
@@ -3576,9 +3559,9 @@ ADD_TEST(raTuWavelengthSpectralBandsNew ${IO_TESTS23}
                   50
                   ${NBBANDS}
                )
-    
+
     ENDIF (  NOT ${DATA_PIXELTYPE} MATCHES "Short" )
-             
+
   ENDFOREACH(NBBANDS ${NBBANDS_LIST})
 
 ENDFOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})

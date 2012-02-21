@@ -1,14 +1,8 @@
 if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-#Tolerance on  pixel image diff
-SET(NOTOL 0.0)
+INCLUDE(TestingHelper)
 
 set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
-
-set(INPUTDATA ${OTB_DATA_ROOT}/Input)
-set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 if(WIN32)
   add_definitions(-DWIN32)
@@ -104,7 +98,7 @@ add_test(owTvInputImageListParameter ${OTB_WRAPPER_TESTS}
     "my description"
   )
 
- 
+
 # Input vector data list parameter class test
 add_test(owTuInputVectorDataListParameter ${OTB_WRAPPER_TESTS}
     otbWrapperInputVectorDataListParameterNew
@@ -117,8 +111,8 @@ add_test(owTvInputVectorDataListParameter ${OTB_WRAPPER_TESTS}
     "mykey"
     "my description"
   )
-  
-  
+
+
 # Output image parameter class test
 add_test(owTuOutputImageParameter ${OTB_WRAPPER_TESTS}
     otbWrapperOutputImageParameterNew

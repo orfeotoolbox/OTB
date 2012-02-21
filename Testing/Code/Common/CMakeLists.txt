@@ -1,21 +1,6 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
-#Remote sensing images (large images )
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-#Tolerance sur diff pixel image
-SET(NOTOL 0.0)
-SET(EPSILON_9 0.000000001)
-
-#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
-SET(EPSILON_3 0.001)
+INCLUDE(TestingHelper)
 
 SET(COMMON_TESTS1 ${CXX_TEST_PATH}/otbCommonTests1)
 SET(COMMON_TESTS2 ${CXX_TEST_PATH}/otbCommonTests2)
@@ -347,7 +332,7 @@ ADD_TEST(coTvMultiChannelExtractROI_Romania ${COMMON_TESTS2}
 
 ADD_TEST(coTuMultiToMonoROINew ${COMMON_TESTS3}
          otbMultiToMonoChannelExtractROINew)
-         
+
 ADD_TEST(coTvMultiToMonoROI_RGB2NG_PNG ${COMMON_TESTS3}
   --compare-image ${NOTOL}   ${BASELINE}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
                            ${TEMP}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
@@ -401,7 +386,7 @@ ADD_TEST(coTuPathListToHistogramGenerator ${COMMON_TESTS3}
 ADD_TEST(coTuLineSpatialObjectListToPointSetFilter ${COMMON_TESTS3}
          otbLineSpatialObjectListToPointSetFilterNew)
 
-         
+
 IF(OTB_DATA_USE_LARGEINPUT)
 # cf. bug 303
 ADD_TEST(coTvExtractROITestMetaData_TIFF ${COMMON_TESTS3}
@@ -1030,7 +1015,7 @@ otbUnaryFunctorWithIndexImageFilter
   ADD_TEST(coTuParser ${COMMON_TESTS12}
     otbParserTestNew
     )
-  
+
   ADD_TEST(coTvParser ${COMMON_TESTS12}
     otbParserTest
     )
@@ -1150,7 +1135,7 @@ ADD_TEST(coTvImageRegionAdaptativeSplitterStripSmallStream ${COMMON_TESTS13}
 )
 
 
-  
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbCommonTests1.cxx

@@ -1,15 +1,8 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+INCLUDE(TestingHelper)
 
-#Tolerance sur diff pixel image
-SET(TOL 0.0)
-SET(EPSILON 0.000000000001)
-SET(EPSILON_10e6 0.000001)
 SET(MARKOV_TESTS1 ${CXX_TEST_PATH}/otbMarkovTests1)
 SET(MARKOV_TESTS2 ${CXX_TEST_PATH}/otbMarkovTests2)
 SET(MARKOV_TESTS3 ${CXX_TEST_PATH}/otbMarkovTests3)
@@ -23,7 +16,7 @@ ADD_TEST(maTuMarkovRandomFieldFilterNew ${MARKOV_TESTS1}
         otbMarkovRandomFieldFilterNew )
 
 ADD_TEST(maTvMarkovRandomFieldFilter ${MARKOV_TESTS1}
-  --compare-image ${TOL}  ${BASELINE}/maTvMarkovRandomField.png
+  --compare-image ${NOTOL}  ${BASELINE}/maTvMarkovRandomField.png
                             ${TEMP}/maTvMarkovRandomField.png
         otbMarkovRandomFieldFilter
             ${INPUTDATA}/QB_Suburb.png
@@ -39,7 +32,7 @@ ADD_TEST(maTuMRFEnergyEdgeFidelityNew ${MARKOV_TESTS1}
         otbMRFEnergyEdgeFidelityNew )
 
 ADD_TEST(maTvMRFEnergyEdgeFidelity ${MARKOV_TESTS1}
---compare-ascii ${TOL} ${BASELINE_FILES}/maTvMRFEnergyEdgeFidelity.txt
+--compare-ascii ${NOTOL} ${BASELINE_FILES}/maTvMRFEnergyEdgeFidelity.txt
                          ${TEMP}/maTvMRFEnergyEdgeFidelity.txt
      otbMRFEnergyEdgeFidelity
         ${TEMP}/maTvMRFEnergyEdgeFidelity.txt
@@ -51,7 +44,7 @@ ADD_TEST(maTuMRFEnergyGaussianClassificationNew ${MARKOV_TESTS1}
         otbMRFEnergyGaussianClassificationNew )
 
 ADD_TEST(maTvMRFEnergyGaussianClassification ${MARKOV_TESTS1}
---compare-ascii ${TOL} ${BASELINE_FILES}/maTvMRFEnergyGaussianClassification.txt
+--compare-ascii ${NOTOL} ${BASELINE_FILES}/maTvMRFEnergyGaussianClassification.txt
                        ${TEMP}/maTvMRFEnergyGaussianClassification.txt
      otbMRFEnergyGaussianClassification
         ${TEMP}/maTvMRFEnergyGaussianClassification.txt
@@ -63,7 +56,7 @@ ADD_TEST(maTuMRFEnergyPottsNew ${MARKOV_TESTS1}
         otbMRFEnergyPottsNew )
 
 ADD_TEST(maTvMRFEnergyPotts ${MARKOV_TESTS1}
-  --compare-ascii ${TOL}
+  --compare-ascii ${NOTOL}
                   ${BASELINE_FILES}/maTvMRFEnergyPotts.txt
                   ${TEMP}/maTvMRFEnergyPotts.txt
      otbMRFEnergyPotts
@@ -98,7 +91,7 @@ ADD_TEST(maTuMRFOptimizerMetropolisNew ${MARKOV_TESTS2}
         otbMRFOptimizerMetropolisNew )
 
 ADD_TEST(maTvMRFOptimizerMetropolis ${MARKOV_TESTS2}
-  --compare-ascii ${TOL}
+  --compare-ascii ${NOTOL}
                   ${BASELINE_FILES}/maTvMRFOptimizerMetropolis.txt
                   ${TEMP}/maTvMRFOptimizerMetropolis.txt
      otbMRFOptimizerMetropolis
@@ -110,7 +103,7 @@ ADD_TEST(maTvMRFOptimizerMetropolis ${MARKOV_TESTS2}
 ADD_TEST(maTuMRFSamplerMAPNew ${MARKOV_TESTS2}
         otbMRFSamplerMAPNew )
 ADD_TEST(maTvMRFSamplerMAP ${MARKOV_TESTS2}
-  --compare-ascii ${TOL}
+  --compare-ascii ${NOTOL}
                   ${BASELINE_FILES}/maTvMRFSamplerMAP.txt
                   ${TEMP}/maTvMRFSamplerMAP.txt
      otbMRFSamplerMAP
@@ -125,7 +118,7 @@ ADD_TEST(maTvMRFSamplerMAP ${MARKOV_TESTS2}
         otbMRFSamplerRandomNew )
 
 ADD_TEST(maTvMRFSamplerRandom ${MARKOV_TESTS2}
-  --compare-ascii ${TOL}
+  --compare-ascii ${NOTOL}
                   ${BASELINE_FILES}/maTvMRFSamplerRandom.txt
                   ${TEMP}/maTvMRFSamplerRandom.txt
      otbMRFSamplerRandom
@@ -139,7 +132,7 @@ ADD_TEST(maTvMRFSamplerRandom ${MARKOV_TESTS2}
         otbMRFSamplerRandomMAPNew )
 
 ADD_TEST(maTvMRFSamplerRandomMAP ${MARKOV_TESTS2}
-  --compare-ascii ${TOL}
+  --compare-ascii ${NOTOL}
                   ${BASELINE_FILES}/maTvMRFSamplerRandomMAP.txt
                   ${TEMP}/maTvMRFSamplerRandomMAP.txt
      otbMRFSamplerRandomMAP
@@ -156,7 +149,7 @@ ADD_TEST(maTuMRFEnergyFisherClassificationNew ${MARKOV_TESTS3}
         otbMRFEnergyFisherClassificationNew )
 
 ADD_TEST(maTvMRFEnergyFisherClassification ${MARKOV_TESTS3}
-    --compare-ascii ${TOL} ${BASELINE_FILES}/maTvMRFEnergyFisherClassification.txt
+    --compare-ascii ${NOTOL} ${BASELINE_FILES}/maTvMRFEnergyFisherClassification.txt
                             ${TEMP}/maTvMRFEnergyFisherClassification.txt
     otbMRFEnergyFisherClassification
         ${TEMP}/maTvMRFEnergyFisherClassification.txt

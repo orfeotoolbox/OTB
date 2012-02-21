@@ -1,22 +1,16 @@
 
-#IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+INCLUDE(TestingHelper)
+
 SET(SPECTRUM_DB ${OTB_DATA_ROOT}/Input/BD-CNES)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
 SET(SRCLASS0 ${SPECTRUM_DB}/JHU/becknic/manmade/txt)
 SET(SRCLASS1 ${SPECTRUM_DB}/JHU/becknic/water/txt)
 SET(SRCLASS2 ${SPECTRUM_DB}/JHU/becknic/soils/txt)
 SET(SRCLASS3 ${SPECTRUM_DB}/JHU/becknic/vegetation/txt)
 SET(SRCLASS4 ${SPECTRUM_DB}/JHU/becknic/rocks/sedimentary/powder/0_75/txt)
 
-#Tolerance sur diff pixel image
-SET(TOL 0.0)
-SET(EPSILON 0.00001)
-SET(EPSILON_PROSPECT 0.001)
+SET(EPSILON_PROSPECT ${EPSILON_3})
 SET(Simulation_TESTS1 ${CXX_TEST_PATH}/otbSimulationTests1)
 SET(Simulation_TESTS2 ${CXX_TEST_PATH}/otbSimulationTests2)
 SET(Simulation_TESTS3 ${CXX_TEST_PATH}/otbSimulationTests3)
@@ -68,8 +62,8 @@ ADD_TEST(siTuReduceSpectralResponse ${Simulation_TESTS2}
         )
 
 ADD_TEST(siTvReduceSpectralResponse ${Simulation_TESTS2}
-    --compare-ascii ${TOL} ${BASELINE_FILES}/Simulation/siTvReduceSpectralResponse.txt
-                   ${TEMP}/siTvReduceSpectralResponse.txt     
+    --compare-ascii ${NOTOL} ${BASELINE_FILES}/Simulation/siTvReduceSpectralResponse.txt
+                   ${TEMP}/siTvReduceSpectralResponse.txt
         otbReduceSpectralResponse
         ${INPUTDATA}/SpectralResponse1.txt
         ${INPUTDATA}/Radiometry/Test/rep6S.dat
@@ -86,7 +80,7 @@ ADD_TEST(siTuReduceSpectralResponseClassifierRAndNIR ${Simulation_TESTS2}
         2 #NIR index
         )
 
-#FIXME uncomment this test and make it compatible with filters able to read filter function values (rep6S.dat)        
+#FIXME uncomment this test and make it compatible with filters able to read filter function values (rep6S.dat)
 # ADD_TEST(siTuAtmosphericEffects ${Simulation_TESTS2}
 #         otbAtmosphericEffects
 #         ${SPECTRUM_DB}/JHU/becknic/manmade/txt/0092uuu.txt
@@ -108,15 +102,15 @@ ADD_TEST(siTuReduceSpectralResponseClassifierRAndNIR ${Simulation_TESTS2}
 ADD_TEST(siTuSpatialisationTestNew ${Simulation_TESTS2}
         otbSpatialisationTestNew
         )
-        
+
 ADD_TEST(siTvSpatialisationTest ${Simulation_TESTS2}
-   --compare-image ${TOL} ${BASELINE}/Simulation/siTvSpatialisationTest.tif
+   --compare-image ${NOTOL} ${BASELINE}/Simulation/siTvSpatialisationTest.tif
                    ${TEMP}/siTvSpatialisationTest.tif
         otbSpatialisationTest
         ${TEMP}/siTvSpatialisationTest.tif
         )
-        
-        
+
+
 ADD_TEST(siTuLabelMapToSimulatedImageFilterTest ${Simulation_TESTS2}
         otbLabelMapToSimulatedImageFilterTest
         ${INPUTDATA}/Simulation/Shapefile/culturesWithAndWithoutPath.shp
@@ -126,7 +120,7 @@ ADD_TEST(siTuLabelMapToSimulatedImageFilterTest ${Simulation_TESTS2}
         ${SPECTRUM_DB}/jpl/beckman/minerals/ #root path of spectrum
         ${TEMP}/LabelMapToSimulatedImageFilterTest.tif
         )
-        
+
 ADD_TEST(siTuImageSimulationMethodWithVectorDataTest ${Simulation_TESTS2}
         otbImageSimulationMethodWithVectorDataTest
         ${INPUTDATA}/Simulation/Shapefile/stickPolygons_small.shp
@@ -137,7 +131,7 @@ ADD_TEST(siTuImageSimulationMethodWithVectorDataTest ${Simulation_TESTS2}
         ${TEMP}/ImageSimulationMethodTest.tif
         ${TEMP}/LabelImageSimulationMethodTest.tif
         )
-        
+
 ADD_TEST(siTuImageSimulationMethodWithSpatialisationTest ${Simulation_TESTS2}
         otbImageSimulationMethodWithSpatialisationTest
         ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
@@ -160,7 +154,7 @@ ADD_TEST(siTvProspectReflTest ${Simulation_TESTS3}
         otbProspectReflTest
         30.0 #cab
         10.0 #car
-        0.0 #CBrown 
+        0.0 #CBrown
         0.015 #Cw
         0.009 #Cm
         1.2 #N
@@ -173,7 +167,7 @@ ADD_TEST(siTvProspectTransTest ${Simulation_TESTS3}
         otbProspectTransTest
         30.0 #cab
         10.0 #car
-        0.0 #CBrown 
+        0.0 #CBrown
         0.015 #Cw
         0.009 #Cm
         1.2 #N
@@ -186,13 +180,13 @@ ADD_TEST(siTvSailReflHTest ${Simulation_TESTS3}
         otbSailReflHTest
         30.0 #cab
         10.0 #car
-        0.0 #CBrown 
+        0.0 #CBrown
         0.015 #Cw
         0.009 #Cm
         1.2 #N
         2 #LAI
         50 #Angl
-        1 #PSoil 
+        1 #PSoil
         70 #Skyl
         0.2 #HSpot
         30 #TTS
@@ -200,28 +194,28 @@ ADD_TEST(siTvSailReflHTest ${Simulation_TESTS3}
         0 #PSI
         ${TEMP}/siTvSailReflHTest.txt
         )
-        
+
 ADD_TEST(siTvSailReflVTest ${Simulation_TESTS3}
    --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/Simulation/siTvSailReflVTest.txt
                    ${TEMP}/siTvSailReflVTest.txt
         otbSailReflVTest
         30.0 #cab
         10.0 #car
-        0.0 #CBrown 
+        0.0 #CBrown
         0.015 #Cw
         0.009 #Cm
         1.2 #N
         2 #LAI
         50 #Angl
-        1 #PSoil 
+        1 #PSoil
         70 #Skyl
         0.2 #HSpot
         30 #TTS
         0 #TTO
         0 #PSI
         ${TEMP}/siTvSailReflVTest.txt
-        )        
-        
+        )
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSimulation_TESTS4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -230,23 +224,23 @@ ADD_TEST(siTvSailReflVTest ${Simulation_TESTS3}
 
 ADD_TEST(siTuRSRSVMClassifier ${Simulation_TESTS4}
         otbReduceSpectralResponseSVMClassifier
-        ${SRCLASS0} 
-        ${SRCLASS1} 
-        ${SRCLASS2} 
-        ${SRCLASS3} 
-        ${SRCLASS4} 
+        ${SRCLASS0}
+        ${SRCLASS1}
+        ${SRCLASS2}
+        ${SRCLASS3}
+        ${SRCLASS4}
         ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nbBands
         0.1 #percentage of validation files
         )
-        
+
 # ADD_TEST(siTuatmosphericCorrectionsRSRSVMClassifier ${Simulation_TESTS4}
 #         otbAtmosphericCorrectionsRSRSVMClassifier
-#         ${SRCLASS0} 
-#         ${SRCLASS1} 
-#         ${SRCLASS2} 
-#         ${SRCLASS3} 
-#         ${SRCLASS4} 
+#         ${SRCLASS0}
+#         ${SRCLASS1}
+#         ${SRCLASS2}
+#         ${SRCLASS3}
+#         ${SRCLASS4}
 #         ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
 #         4 #nbBands
 #         4 #day
@@ -258,7 +252,7 @@ ADD_TEST(siTuRSRSVMClassifier ${Simulation_TESTS4}
 #         1013. #atmo pressure
 #         2.48134 #water vapour amount
 #         0.34400 #ozone amount
-#         1 #aerosol model type 
+#         1 #aerosol model type
 #         0.199854 #aerosol optical
 #         0.2 #percentage of validation files
 #         )
@@ -284,7 +278,7 @@ ADD_TEST(siTuImageSimulationMethodKMeansClassif ${Simulation_TESTS4}
 #        ${TEMP}/siTuSVMClassifLabelImage.tif
 #        )
 
-# atmospheric corrections tests 
+# atmospheric corrections tests
 SET(Simulation_SRCS1
 otbSimulationTests1.cxx
 otbSurfaceReflectanceToReflectanceFilterNew.cxx
@@ -331,7 +325,4 @@ OTB_ADD_EXECUTABLE(otbSimulationTests2 "${Simulation_SRCS2}" "OTBSimulation;OTBI
 OTB_ADD_EXECUTABLE(otbSimulationTests3 "${Simulation_SRCS3}" "OTBSimulation;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbSimulationTests4 "${Simulation_SRCS4}" "OTBSimulation;OTBIO;OTBLearning;OTBTesting")
 
-
-
-
-#ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -1,13 +1,10 @@
 include( UseJava )
 
+INCLUDE(TestingHelper)
+
 set(TEST_DRIVER otbTestDriver
     --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_Smoothing>
 )
-
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 set( PATH_SEPARATOR ":")
 if (WIN32)

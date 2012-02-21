@@ -1,23 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(EXAMPLEDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
-#Tolerance de base
-SET(NOTOL 0.0)
-
-#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
-SET(EPSILON_1 0.1)
-SET(EPSILON_2 0.01)
-SET(EPSILON_3 0.001)
-
-#Tolerance sur diff pixel image
-SET(EPSILON_6 0.000001)
-SET(EPSILON_8 0.00000001)
+INCLUDE(TestingHelper)
 
 SET(FEATUREEXTRACTION_TESTS1 ${CXX_TEST_PATH}/otbFeatureExtractionTests1)
 SET(FEATUREEXTRACTION_TESTS2 ${CXX_TEST_PATH}/otbFeatureExtractionTests2)
@@ -1401,7 +1385,7 @@ ADD_TEST(feTvScalarImageToAdvancedTexturesFilter ${FEATUREEXTRACTION_TESTS15}
         ${INPUTDATA}/Mire_Cosinus.png
         ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutput
         8 5 1 1)
-        
+
 
 ADD_TEST(feTuScalarImageToHigherOrderTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
         otbScalarImageToHigherOrderTexturesFilterNew
@@ -1486,7 +1470,7 @@ ADD_TEST(feTvFourierMellinDescriptorsRotationInvariant ${FEATUREEXTRACTION_TESTS
   4
   90
   )
-  
+
 # -------            otb::LocalHistogramImageFunction   -------------
 
 ADD_TEST(feTuLocalHistogramImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
@@ -1513,7 +1497,7 @@ ADD_TEST(feTvImageFunctionAdaptor ${FEATUREEXTRACTION_TESTS16}
         otbImageFunctionAdaptor
                 ${INPUTDATA}/poupees.png
          )
-         
+
 # -------   otb::MetaImageFunction   -------------
 ADD_TEST(feTuMetaImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
         otbMetaImageFunctionNew

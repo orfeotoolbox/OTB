@@ -1,8 +1,4 @@
-
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+INCLUDE(TestingHelper)
 
 SET(APPLICATIONSPATH ${OTB_BINARY_DIR}/bin)
 
@@ -15,7 +11,7 @@ set(OTB_WRAPPER_COMMAND_LINE_TESTS ${CXX_TEST_PATH}/otbWrapperCommandLineTests)
 # ----------------Command Line Parser tests -----------------------------------
 add_test(NAME clTuWrapperCommandLineParserNew
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserNew )
-         
+
 add_test(NAME clTvWrapperCommandLineParserTest_GetAtt
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest1
                  "-key"
@@ -25,23 +21,23 @@ add_test(NAME clTvWrapperCommandLineParserTest_IsAttExists_Wrong
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest3
                     "-m"
                     " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape " )
-  
-  
+
+
 add_test(NAME clTvWrapperCommandLineParserTest_IsAttExists
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest4
                  "-m"
                  " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape -m name")
-   
+
 add_test(NAME clTvWrapperCommandLineParserTest_IsAttExistsEnd
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest4
                  "-m"
                  " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape -m name")
-    
+
 add_test(NAME clTvWrapperCommandLineParserTest_IsAttExistsEndNoParam
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest4
                  "-m"
                  " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape test -m")
-   
+
 add_test(NAME clTvWrapperCommandLineParserTest_GetAttWithoutValue
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest1
                     "-key"
@@ -76,7 +72,7 @@ add_test(NAME clTvWrapperCommandLineParserTest_WithKeyNonAlphaNumModuleName
                  "-Re+scale" $<TARGET_FILE_DIR:otbapp_Rescale> )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_WithKeyNonAlphaNumModuleName PROPERTIES WILL_FAIL true)
 
-add_test(NAME clTvWrapperCommandLineParserTest_WithKeyGoodModule 
+add_test(NAME clTvWrapperCommandLineParserTest_WithKeyGoodModule
 	     COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest2
                  "Rescale"  $<TARGET_FILE_DIR:otbapp_Rescale>)
 add_test(NAME clTvWrapperCommandLineParserTest_NoPath

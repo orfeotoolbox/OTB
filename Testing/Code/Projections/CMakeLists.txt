@@ -1,20 +1,6 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-#Remote sensing images (large dataset)
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
-
-#Tolerance between pixel values
-SET(NOTOL 0.0)
-SET(EPSILON_4 0.0001)
-SET(EPSILON_6 0.000001)
-SET(EPSILON_9 0.000000001)
+INCLUDE(TestingHelper)
 
 SET(PROJECTIONS_TESTS1 ${CXX_TEST_PATH}/otbProjectionsTests1)
 SET(PROJECTIONS_TESTS2 ${CXX_TEST_PATH}/otbProjectionsTests2)
@@ -277,7 +263,7 @@ FOREACH( file ${SARSENSORMODEL_TYPES})
                  ${TEMP}/prTvForwardSensorModelGridY_${sensor_name}.tif
                  10 10
                 )
-                
+
 ENDFOREACH( file ${SARSENSORMODEL_TYPES})
 
 
@@ -537,7 +523,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(prTuGCPsToRPCSensorModelImageFilterNew ${PROJECTIONS_TESTS2}
          otbGCPsToRPCSensorModelImageFilterNew)
-   
+
 IF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(prTvGCPsToRPCSensorModelImageFilterWithoutDEM ${PROJECTIONS_TESTS2}
@@ -644,7 +630,7 @@ ADD_TEST(prTvGCPsToRPCSensorModelImageFilterAndOrtho ${PROJECTIONS_TESTS2}
          otbGCPsToRPCSensorModelImageFilterAndOrtho
      ${INPUTDATA}/Haiti1.jpeg
      ${TEMP}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
-     
+
      782166.394827
      2054821.977902
      500
@@ -665,146 +651,146 @@ ADD_TEST(prTvGCPsToRPCSensorModelImageFilterAndOrtho ${PROJECTIONS_TESTS2}
         -72.352051
         18.556946
         0.000000
-    
+
         2078.000000
         1566.000000
         -72.346130
         18.574358
         0.000000
-    
+
         2154.000000
         1430.000000
         -72.342377
         18.580441
         0.000000
-    
+
         2432.000000
         1408.000000
         -72.328964
         18.581335
         0.000000
-    
+
         2558.000000
         934.000000
         -72.322571
         18.602974
         0.000000
-    
+
         3492.000000
         1397.000000
         -72.278343
         18.580887
         0.000000
-    
+
         2890.000000
         1439.000000
         -72.306908
         18.579464
         0.000000
-    
+
         2098.000000
         2469.000000
         -72.345741
         18.532839
         0.000000
-    
+
         1941.000000
         2473.000000
         -72.353317
         18.532595
         0.000000
-    
+
         1644.000000
         2409.000000
         -72.367691
         18.535810
         0.000000
-    
+
         1440.000000
         2448.000000
         -72.377457
         18.534243
         0.000000
-    
+
         687.000000
         2005.000000
         -72.413315
         18.554974
         0.000000
-    
+
         741.000000
         2366.000000
         -72.410934
         18.538496
         0.000000
-    
+
         855.000000
         2802.000000
         -72.405739
         18.518456
         0.000000
-    
+
         1936.000000
         2855.000000
         -72.353920
         18.515240
         0.000000
-    
+
         3338.000000
         2824.000000
         -72.286240
         18.515160
         0.000000
-    
+
         3715.000000
         1772.000000
         -72.267570
         18.563681
         0.000000
-    
+
         3676.000000
         1580.000000
         -72.269203
         18.572529
         0.000000
-    
+
         3395.000000
         931.000000
         -72.282402
         18.602425
         0.000000
-    
+
         3426.000000
         856.000000
         -72.280792
         18.605862
         0.000000
-    
+
         2822.000000
         707.000000
         -72.309692
         18.613203
         0.000000
-    
+
         1891.000000
         360.000000
         -72.354301
         18.629776
         0.000000
-    
+
         3989.000000
         2639.000000
         -72.255020
         18.523664
         0.000000
-    
+
         417.000000
         2317.000000
         -72.426552
         18.540876
         0.000000
 )
- 
+
 ADD_TEST(prTuLeastSquareAffineTransformEstimatorNew ${PROJECTIONS_TESTS2}
          otbLeastSquareAffineTransformEstimatorNew)
 
@@ -927,7 +913,7 @@ ${INPUTDATA}/DEM/egm96.grd
 23 # Tolerance in meters according to DigitalGlobe specification
 )
 
-# TODO MSD need to update the tolerance values and used a real pleiades file 
+# TODO MSD need to update the tolerance values and used a real pleiades file
 ADD_TEST(prTvGenericRSTransformPleiadesToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
 otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
 ${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
@@ -960,7 +946,7 @@ SET(GenericConversionChecking_INPUTS
     ${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
     #${LARGEINPUT}/RAPIDEYE/level3A/2008-12-25T005918_RE3_3A-NAC_752656_40091.tif
     )
-    
+
 SET(GenericConversionChecking_TYPES
 	QUICKBIRD
 	#SPOT4
@@ -980,7 +966,7 @@ SET(GenericConversionChecking_TYPES
 	PLEIADES-PRE
 	#RAPIDEYE
 	)
-	
+
 SET(GenericConversionChecking_TOL_PIX
 	24 # according to DigitalGlobe specification
 	#30
@@ -1000,7 +986,7 @@ SET(GenericConversionChecking_TOL_PIX
 	1 # MSD: need to be defined
 	#30
 	)
-	
+
 SET(GenericConversionChecking_TOL_M
 	23 # according to DigitalGlobe specification
 	#30
@@ -1224,7 +1210,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
 #    SET_TESTS_PROPERTIES(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB}
 #                         PROPERTIES WILL_FAIL true)
 #  ENDFOREACH()
-  
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # QB ortho and extract and extract of MidiPyrenees roads file
@@ -1487,7 +1473,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvGenericRSTransformGenericTestWGS84toEPSG3857 ${PROJECTIONS_TESTS4}
   otbGenericRSTransformGenericTest
   1.48353 43.55968 165145.804154 5397552.58726 EPSG 4326 EPSG 3857 GEO 1e-3 PHYSICAL 1e-3 NOELEV)
-  
+
 ADD_TEST(prTvGenericRSTransformGenericTestEPSG4326toEPSG4326 ${PROJECTIONS_TESTS4}
   otbGenericRSTransformGenericTest
   1.35617289802566 43.4876035537 1.35617289802566 43.4876035537 EPSG 4326 EPSG 4326 GEO 1e-6 GEO 1e-6 NOELEV)

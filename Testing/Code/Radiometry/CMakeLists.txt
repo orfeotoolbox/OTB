@@ -1,22 +1,8 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+INCLUDE(TestingHelper)
 
-#Tolerance sur diff pixel image
-SET(NOTOL 0.0)
-SET(EPSILON_4  0.0001)
-SET(EPSILON_5  0.00001)
-SET(EPSILON_6  0.000001)
-SET(EPSILON_8  0.00000001)
-SET(EPSILON_10 0.0000000001)
-SET(EPSILON_12 0.000000000001)
 SET(RADIOMETRY_TESTS1 ${CXX_TEST_PATH}/otbRadiometryTests1)
 SET(RADIOMETRY_TESTS2 ${CXX_TEST_PATH}/otbRadiometryTests2)
 SET(RADIOMETRY_TESTS3 ${CXX_TEST_PATH}/otbRadiometryTests3)
@@ -34,7 +20,7 @@ ADD_TEST(raTvLAIFromNDVIFormosat2_MultiChannelRAndNIRVegetationIndexImageFilter 
   --compare-image ${EPSILON_8}   ${BASELINE}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
-        LAIFormosat2    
+        LAIFormosat2
         ${INPUTDATA}/verySmallFSATSW.tif
         ${TEMP}/raMultiChannelRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
         1
@@ -352,7 +338,7 @@ ADD_TEST(raTuImageToReflectanceImageFilterAutoFORMOSAT2 ${RADIOMETRY_TESTS2}
                 ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
                 ${TEMP}/raTvImageToReflectanceImageFilterAutoFORMOSAT2.tif
          )
-         
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -413,7 +399,7 @@ ADD_TEST(raTvFilterFunctionValuesSpectralResponseTest ${RADIOMETRY_TESTS3}
         otbFilterFunctionValuesSpectralResponseTest
         ${SPECTRUM_DB}/JHU/becknic/manmade/txt/0092uuu.txt
         ${TEMP}/raTvFilterFunctionValuesSpectralResponseTest.txt
-        0.0025     
+        0.0025
 )
 
 
@@ -1292,7 +1278,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
                 ${TEMP}/raTvSarRadiometricCalibrationToImageFilterRealPixel_TSX_PANGKALANBUUN_HH.tif
                  1000 1000 250 250 # Extract
           )
-          
+
 # Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter
 # before RadiometricCalibFilter.
   ADD_TEST(raTvSarRadiometricCalibrationToImagePixelFilterWithExtractROIBefore_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
@@ -1422,7 +1408,7 @@ ADD_TEST(raTvLandsatTMIndexBrightTest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 # -------            Landsat TM Vis   ------------------------------
@@ -1436,7 +1422,7 @@ ADD_TEST(raTvLandsatTMIndexVisTest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 # -------            Landsat TM NIR   ------------------------------
@@ -1450,7 +1436,7 @@ ADD_TEST(raTvLandsatTMIndexNIRTest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 # -------            Landsat TM MIR1   ------------------------------
@@ -1464,7 +1450,7 @@ ADD_TEST(raTvLandsatTMIndexMIR1Test ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 # -------            Landsat TM MIR2   ------------------------------
@@ -1478,7 +1464,7 @@ ADD_TEST(raTvLandsatTMIndexMIR2Test ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 # -------            Landsat TM TIR   ------------------------------
@@ -1492,7 +1478,7 @@ ADD_TEST(raTvLandsatTMIndexTIRTest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 # -------            Landsat TM MIRTIR   ------------------------------
@@ -1506,7 +1492,7 @@ ADD_TEST(raTvLandsatTMIndexMIRTIRTest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 # -------            Landsat TM NDVI   ------------------------------
@@ -1520,9 +1506,9 @@ ADD_TEST(raTvLandsatTMIndexNDVITest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
- 
+
 # -------            Landsat TM NDBSI   ------------------------------
 ADD_TEST(raTvLandsatTMIndexNDBSITest ${RADIOMETRY_TESTS10}
         otbLandsatTMIndexNDBSI
@@ -1534,7 +1520,7 @@ ADD_TEST(raTvLandsatTMIndexNDBSITest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 
@@ -1549,7 +1535,7 @@ ADD_TEST(raTvLandsatTMIndexBIOTest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 # -------            Landsat TM NDSI   ------------------------------
@@ -1563,7 +1549,7 @@ ADD_TEST(raTvLandsatTMIndexNDSITest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 # -------            Landsat TM NDSIVis   ------------------------------
@@ -1577,7 +1563,7 @@ ADD_TEST(raTvLandsatTMIndexNDSIVisTest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 
@@ -1592,7 +1578,7 @@ ADD_TEST(raTvLandsatTMIndexNDBBBITest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 # -------            Landsat TM Linguistic Labels   ------------------------------
@@ -1606,7 +1592,7 @@ ADD_TEST(raTvLandsatTMLinguisticLabelsTest ${RADIOMETRY_TESTS10}
         41  #TM61
         8   #TM62
         21  #TM7
-  
+
 )
 
 ADD_TEST(raTvLandsatTMLinguisticLabelsTest2 ${RADIOMETRY_TESTS10}
@@ -1619,7 +1605,7 @@ ADD_TEST(raTvLandsatTMLinguisticLabelsTest2 ${RADIOMETRY_TESTS10}
         1  #TM61
         8   #TM62
         51  #TM7
-  
+
 )
 
 ADD_TEST(raTvLandsatTMKernelSpectralRulesTest ${RADIOMETRY_TESTS10}

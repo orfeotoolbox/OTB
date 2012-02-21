@@ -1,21 +1,6 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA      ${OTB_DATA_ROOT}/Input)
-SET(TEMP           ${OTBTesting_BINARY_DIR}/Temporary)
-
-#Remote sensing images (large images )
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-#Tolerance sur diff pixel image
-SET(NOTOL 0.0)
-SET(EPSILON_9 0.000000001)
-
-#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
-SET(EPSILON_3 0.001)
+INCLUDE(TestingHelper)
 
 # Common generic tests
 SET(Fuzzy_TESTS1 ${CXX_TEST_PATH}/otbFuzzyTests1)

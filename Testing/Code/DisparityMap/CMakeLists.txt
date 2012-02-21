@@ -1,18 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-SET(EXAMPLEDATA ${OTB_DATA_ROOT}/Examples)
-
-# Tolerance for pixel difference
-SET(NOTOL 0.0)
-
-#EPSILON loose tolerance for multiplatform support.
-SET(EPSILON_10 0.0000000001)
-SET(EPSILON_4  0.0001)
+INCLUDE(TestingHelper)
 
 SET(DISPARITYMAP_TESTS1 ${CXX_TEST_PATH}/otbDisparityMapTests1)
 SET(DISPARITYMAP_TESTS2 ${CXX_TEST_PATH}/otbDisparityMapTests2)

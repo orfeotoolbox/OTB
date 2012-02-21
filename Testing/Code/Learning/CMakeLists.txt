@@ -1,21 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(EXAMPLEDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
-
-#Tolerance sur diff pixel image
-SET(NOTOL 0.0)
-
-SET(EPSILON_10 0.0000000001)
-SET(EPSILON_3 0.001)
-SET(EPSILON_4 0.0001)
-SET(EPSILON_5 0.00001)
-SET(EPSILON_9 0.000000001)
+INCLUDE(TestingHelper)
 
 SET(LEARNING_TESTS1 ${CXX_TEST_PATH}/otbLearningTests1)
 SET(LEARNING_TESTS2 ${CXX_TEST_PATH}/otbLearningTests2)
@@ -79,7 +65,7 @@ ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
  ${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
  ${TEMP}/leTvsvm_model_image
  0 )
- 
+
 ADD_TEST(leTvSVMImageModelEstimatorTrainWithOptimization ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image_opt
                         ${TEMP}/leTvsvm_model_image_opt
@@ -474,14 +460,14 @@ ADD_TEST(leTuSVMCrossValidationCostFunctionNew ${LEARNING_TESTS4}
 
 ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}
         otbExhaustiveExponentialOptimizerNew)
-        
+
 ADD_TEST(leTvExhaustiveExponentialOptimizerTest ${LEARNING_TESTS4}
         --compare-ascii ${NOTOL}
           ${BASELINE_FILES}/leTvExhaustiveExponentialOptimizerOutput.txt
           ${TEMP}/leTvExhaustiveExponentialOptimizerTestOutput.txt
         otbExhaustiveExponentialOptimizerTest
           ${TEMP}/leTvExhaustiveExponentialOptimizerTestOutput.txt)
-        
+
 # -------            otb::ListSampleGenerator   -----------------------------
 ADD_TEST(leTuListSampleGeneratorNew ${LEARNING_TESTS4}
         otbListSampleGeneratorNew)
