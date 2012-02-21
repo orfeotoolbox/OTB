@@ -58,4 +58,6 @@ REGISTER_TEST(otbHooverMatrixFilter);
 REGISTER_TEST(otbHooverInstanceFilterNew);
 REGISTER_TEST(otbLabelMapToAttributeImageFilterNew);
 REGISTER_TEST(otbHooverInstanceFilterToAttributeImage);
+REGISTER_TEST(otbLabelImageToVectorDataFilterNew);
+REGISTER_TEST(otbLabelImageToVectorDataFilter);
 }
