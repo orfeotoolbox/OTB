@@ -33,7 +33,7 @@ namespace otb
  *  of the pair always occurs along lines that are called epipolar
  *  lines.
  *
- *  In the case of conic acquisition, these lines are perfectly
+ *  In the case of conic acqusition, these lines are perfectly
  *  parallel by definition, while in push-broom geometry, these lines
  *  might not be exactly parallel due to perturbations during
  *  acquisition, especially when considering a large field of view.
@@ -120,7 +120,15 @@ public:
   /** Get/Set the average elevation */
   itkSetMacro(AverageElevation,double);
   itkGetConstReferenceMacro(AverageElevation,double);
-  
+
+  /** Get/Set the DEM directory */
+  itkSetStringMacro(DEMDirectory);
+  itkGetStringMacro(DEMDirectory);  
+
+  /** Get/Set the geoid file */
+  itkSetStringMacro(GeoidFile);
+  itkGetStringMacro(GeoidFile);  
+
   /** Get/Set the elevation offset */
   itkSetMacro(ElevationOffset,double);
   itkGetConstReferenceMacro(ElevationOffset,double);
@@ -186,6 +194,12 @@ private:
 
   /** Disparity will be null for this elevation */
   double m_AverageElevation;
+
+  /** The DEM directory if used */
+  std::string m_DEMDirectory;
+
+  /** The geoid file if used */
+  std::string m_GeoidFile;
 
   /** This elevation offset is used to compute the epipolar direction */
   double m_ElevationOffset;

@@ -24,6 +24,8 @@
 // For partial specialization
 #include "otbVectorImage.h"
 
+#include "otbDEMHandler.h"
+
 namespace otb
 {
 
@@ -31,6 +33,8 @@ template <class TInputImage, class TOutputImage>
 StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 ::StereorectificationDeformationFieldSource() :
   m_AverageElevation(0),
+  m_DEMDirectory(""),
+  m_GeoidFile(""),
   m_ElevationOffset(50),
   m_Scale(1),
   m_GridStep(1),
@@ -123,6 +127,31 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   m_LeftImage->UpdateOutputInformation();
   m_RightImage->UpdateOutputInformation();
 
+  // Setup the DEM handler if needed
+  typename DEMHandler::Pointer demHandler = DEMHandler::New();
+  
+  bool useDEM = false;
+
+  
+  
+  // Set-up a transform to use the DEMHandler
+  typedef otb::GenericRSTransform<> RSTransform2DType;
+  RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
+  leftToGroundTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
+  
+  if(m_DEMDirectory!="")
+    {
+    demHandler->OpenDEMDirectory(m_DEMDirectory);
+    leftToGroundTransform->SetDEMDirectory(m_DEMDirectory);
+    useDEM = true;
+    }
+  if(m_GeoidFile!="")
+    {
+    leftToGroundTransform->SetGeoidFile(m_GeoidFile);
+    demHandler->OpenGeoidFile(m_GeoidFile);
+    }
+  leftToGroundTransform->InstanciateTransform();
+
   // Retrieve the deformation field pointers
   OutputImageType * leftDFPtr = this->GetLeftDeformationFieldOutput();
   OutputImageType * rightDFPtr = this->GetRightDeformationFieldOutput();
@@ -145,10 +174,18 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   outputSpacing.Fill(m_Scale * m_GridStep);
   
   // Then, we retrieve the origin of the left input image
+  double localElevation = m_AverageElevation;
+
+  if(useDEM)
+    {
+    RSTransform2DType::InputPointType tmpPoint;
+    localElevation = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(m_LeftImage->GetOrigin()));
+    }
+
   TDPointType leftInputOrigin;
   leftInputOrigin[0] = m_LeftImage->GetOrigin()[0];
   leftInputOrigin[1] = m_LeftImage->GetOrigin()[1];
-  leftInputOrigin[2] = m_AverageElevation;
+  leftInputOrigin[2] = localElevation;
 
   // Next, we will compute the parameters of the local epipolar line
   // at the left image origin
@@ -160,12 +197,12 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // The begining of the epipolar line in the left image is the image
   // of rightEpiPoint at a lower elevation (using the offset)
-  rightEpiPoint[2] = m_AverageElevation - m_ElevationOffset;
+  rightEpiPoint[2] = localElevation - m_ElevationOffset;
   leftEpiLineStart = m_RightToLeftTransform->TransformPoint(rightEpiPoint);
   
   // The ending of the epipolar line in the left image is the image
   // of rightEpiPoint at a higher elevation (using the offset)
-  rightEpiPoint[2] = m_AverageElevation + m_ElevationOffset;
+  rightEpiPoint[2] = localElevation + m_ElevationOffset;
   leftEpiLineEnd = m_RightToLeftTransform->TransformPoint(rightEpiPoint);
   
   // Now, we can compute the equation of the epipolar line y = a*x+b
@@ -178,7 +215,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // Now, we will change coordinate so that the epipolar line is
   // horizontal
-  double alpha = -vcl_atan(a);
+  double alpha = M_PI - vcl_atan(a);
 
   // And compute the unitary vectors of the new axis (equivalent to
   // the column of the rotation matrix)
@@ -217,7 +254,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // input image geometry (we rotate back)
   m_OutputOriginInLeftImage[0] = leftInputOrigin[0] + m_LeftImage->GetSpacing()[0] * (ux * minx + vx * miny);
   m_OutputOriginInLeftImage[1] = leftInputOrigin[1] + m_LeftImage->GetSpacing()[0] * (uy * minx + vy * miny);
-  m_OutputOriginInLeftImage[2] = m_AverageElevation;
+  m_OutputOriginInLeftImage[2] = localElevation;
 
   // And also the size of the deformation field
   SizeType outputSize;
@@ -264,6 +301,35 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // Allocate the output
   this->AllocateOutputs();
 
+  // Setup the DEM handler if needed
+  typename DEMHandler::Pointer demHandler = DEMHandler::New();
+  
+  bool useDEM = false;
+  
+  // Set-up a transform to use the DEMHandler
+  typedef otb::GenericRSTransform<> RSTransform2DType;
+  RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
+  RSTransform2DType::Pointer rightToGroundTransform = RSTransform2DType::New();
+
+  leftToGroundTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
+  rightToGroundTransform->SetInputKeywordList(m_RightImage->GetImageKeywordlist());
+
+  if(m_DEMDirectory!="")
+    {
+    demHandler->OpenDEMDirectory(m_DEMDirectory);
+    leftToGroundTransform->SetDEMDirectory(m_DEMDirectory);
+    rightToGroundTransform->SetDEMDirectory(m_DEMDirectory);
+    useDEM = true;
+    }
+  if(m_GeoidFile!="")
+    {
+    leftToGroundTransform->SetGeoidFile(m_GeoidFile);
+    rightToGroundTransform->SetGeoidFile(m_GeoidFile);
+    demHandler->OpenGeoidFile(m_GeoidFile);
+    }
+  leftToGroundTransform->InstanciateTransform();
+  rightToGroundTransform->InstanciateTransform();
+
   // Retrieve the output pointers
   OutputImageType * leftDFPtr = this->GetLeftDeformationFieldOutput();
   OutputImageType * rightDFPtr = this->GetRightDeformationFieldOutput();
@@ -271,10 +337,13 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // Declare all the TDPoint variables we will need
   TDPointType currentPoint1, currentPoint2,nextLineStart1,nextLineStart2, startLine1, endLine1, startLine2, endLine2, epiPoint1, epiPoint2;
 
+  // Then, we retrieve the origin of the left input image
+  double localElevation = m_AverageElevation;
+
   // Initialize
   currentPoint1 = m_OutputOriginInLeftImage;
   currentPoint2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
-  currentPoint2[2] = m_AverageElevation;
+  currentPoint2[2] = currentPoint1[2];
 
   // These are the points were the next stereo-rectified image line starts
   nextLineStart1 = currentPoint1;
@@ -335,17 +404,24 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
     // This point is the image of the left input image origin at the
     // average elevation
-    currentPoint1[2] = m_AverageElevation;
+    if(useDEM)
+      {
+      RSTransform2DType::InputPointType tmpPoint;
+      tmpPoint[0] = currentPoint1[0];
+      tmpPoint[1] = currentPoint1[1];
+      localElevation = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
+      }
+    currentPoint1[2] = localElevation;
     epiPoint2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
 
     // The begining of the epipolar line in the left image is the image
     // of epiPoint2 at a lower elevation (using the offset)
-    epiPoint2[2] = m_AverageElevation - m_ElevationOffset;
+    epiPoint2[2] = localElevation - m_ElevationOffset;
     startLine1 = m_RightToLeftTransform->TransformPoint(epiPoint2);
     
     // The endning of the epipolar line in the left image is the image
     // of epiPoint2 at a higher elevation (using the offset)
-    epiPoint2[2] = m_AverageElevation + m_ElevationOffset;
+    epiPoint2[2] = localElevation + m_ElevationOffset;
     endLine1 = m_RightToLeftTransform->TransformPoint(epiPoint2);
 
     // Estimate the local baseline ratio
@@ -365,13 +441,13 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     b1 = startLine1[1] - a1 * startLine1[0];
 
     // We do the same for image 2
-    currentPoint2[2] = m_AverageElevation;
+    currentPoint2[2] = localElevation;
     epiPoint1 = m_RightToLeftTransform->TransformPoint(currentPoint2);
 
-    epiPoint1[2] = m_AverageElevation - m_ElevationOffset;
+    epiPoint1[2] = localElevation - m_ElevationOffset;
     startLine2 = m_LeftToRightTransform->TransformPoint(epiPoint1);
 
-    epiPoint1[2] = m_AverageElevation + m_ElevationOffset;
+    epiPoint1[2] = localElevation + m_ElevationOffset;
     endLine2 = m_LeftToRightTransform->TransformPoint(epiPoint1);
     
     a2 = (endLine2[1] - startLine2[1]) / (endLine2[0] - startLine2[0]);
@@ -382,20 +458,21 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // We want to move m_Scale pixels away in the epipolar line of the
     // first image
     // TODO: Take into account height direction ?
-    double alpha1 =   -vcl_atan(a1);
+    double alpha1 = M_PI - vcl_atan(a1);
     double deltax1 =  m_Scale * m_GridStep * vcl_cos(alpha1);
     double deltay1 = -m_Scale * m_GridStep * vcl_sin(alpha1);
 
     // Before moving currentPoint1, we will store its image by the
     // left to right transform at the m_AverageElevation, to compute
     // the equivalent displacement in right image
-    currentPoint1[2] = m_AverageElevation;
+
+    currentPoint1[2] = localElevation;
     startLine2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
     
     // Now we move currentPoint1
     currentPoint1[0]+=deltax1;
     currentPoint1[1]+=deltay1;
-    currentPoint1[2] = m_AverageElevation;
+    currentPoint1[2] = localElevation;
 
     // And we compute the equivalent displacement in right image
     endLine2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
@@ -407,14 +484,14 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // Now, we compute the displacement in right image. The iscale
     // factor already account for m_GridStep and scale, no need to use
     // them again
-    double alpha2 =    -vcl_atan(a2);
+    double alpha2 = M_PI - vcl_atan(a2);
     double deltax2 =   iscale * vcl_cos(alpha2);
     double deltay2 = - iscale * vcl_sin(alpha2);
 
     // We can now move currentPoint2
     currentPoint2[0] += deltax2;
     currentPoint2[1] += deltay2;
-    currentPoint2[2] =  m_AverageElevation;
+    currentPoint2[2] =  localElevation;
 
     // 5 - Finally, we have to handle a special case for beginning of
     // line, since at this position we are able to compute the
@@ -429,7 +506,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
       // We can then update nextLineStart1
       nextLineStart1[0] = currentPoint1[0] - deltax1 + nextdeltax1;
       nextLineStart1[1] = currentPoint1[1] - deltay1 + nextdeltay1;
-      nextLineStart1[2] = m_AverageElevation;
+      nextLineStart1[2] = localElevation;
 
       // By construction, nextLineStart2 is always the image of
       // nextLineStart1 by the left to right transform at the m_AverageElevation
