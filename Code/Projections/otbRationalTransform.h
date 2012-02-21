@@ -58,10 +58,11 @@ public:
   typedef itk::Point<ScalarType, Dimension>         InputPointType;
   typedef itk::Point<ScalarType, Dimension>         OutputPointType;
 
-  typedef itk::Vector<double, 2> SpacingType;
-  typedef itk::Point<double, 2>  OriginType;
+  typedef itk::Vector<double, Dimension> SpacingType;
+  typedef itk::Point<double, Dimension>  OriginType;
 
   typedef typename Superclass::InverseTransformBasePointer InverseTransformBasePointer;
+  typedef typename Superclass::ParametersType              ParametersType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
