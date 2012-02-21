@@ -66,6 +66,12 @@ public:
                                 OGRLayer * ogrCurrentLayer,
                                 OGRSpatialReference * oSRS);
 
+  /** Return a list of OGRLayer * */
+  std::vector<OGRLayer*> ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source, 
+                                                        OGRDataSource * dummyDatasource, 
+                                                        OGRLayer* ogrCurrentLayer,
+                                                        OGRSpatialReference * oSRS);
+
 protected:
   OGRIOHelper();
   ~OGRIOHelper();

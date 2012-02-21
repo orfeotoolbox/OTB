@@ -645,8 +645,11 @@ void OGRIOHelper
 
 
 unsigned int OGRIOHelper
-::ProcessNodeWrite(InternalTreeNodeType * source, OGRDataSource * m_DataSource, OGRGeometryCollection * ogrCollection,
-                   OGRLayer * ogrCurrentLayer, OGRSpatialReference * oSRS)
+::ProcessNodeWrite(InternalTreeNodeType * source, 
+                   OGRDataSource * m_DataSource, 
+                   OGRGeometryCollection * ogrCollection,
+                   OGRLayer * ogrCurrentLayer, 
+                   OGRSpatialReference * oSRS)
 {
   unsigned int kept = 0;
   // Get the children list from the input node
@@ -733,7 +736,7 @@ unsigned int OGRIOHelper
           {
           // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();
-          
+
           if (std::string(key) != "FID")
             {
             // Edit the value of the field and add it to the current feature
@@ -997,5 +1000,322 @@ unsigned int OGRIOHelper
     }
 
   return kept;
+
 }
+
+/**
+ * They may be several OGRLayers in this tree node.
+ * Return a vector of OGRLayer
+ **/
+std::vector<OGRLayer*> OGRIOHelper
+::ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source, 
+                                 OGRDataSource * inMemoryDataSource, 
+                                 OGRLayer* ogrCurrentLayer,
+                                 OGRSpatialReference * oSRS)
+{
+  
+  // Create the in memory datasource if NULL
+  if (inMemoryDataSource == NULL)
+    {
+    const char * driverName = "Memory";
+    OGRSFDriver * ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
+    inMemoryDataSource = ogrDriver->CreateDataSource("tempDataSource",NULL);
+    }
+
+  std::vector<OGRLayer*>  ogrLayerVector;
+  unsigned int kept = 0;
+  // Get the children list from the input node
+  typedef InternalTreeNodeType::ChildrenListType ChildrenListType;
+  ChildrenListType children = source->GetChildrenList();
+
+  // For each child
+  for (ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
+    {
+    DataNodePointerType dataNode = (*it)->Get();
+    
+    // Get the kwl
+    otb::VectorDataKeywordlist kwl;
+    itk::ExposeMetaData<VectorDataKeywordlist>(dataNode->GetMetaDataDictionary(),
+                                               MetaDataKey::VectorDataKeywordlistKey,
+                                               kwl);
+    
+    // Create the field once
+    if (ogrCurrentLayer != NULL && ogrCurrentLayer->GetFeatureCount() == 0)
+      {
+      // Take into account the fields stored in the
+      // vectordatakeywordlist
+      for (unsigned int fieldIdx  = 0; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
+        {
+        if ( std::string(kwl.GetNthField(fieldIdx).first->GetNameRef()) != "FID" )
+          {
+          otbMsgDevMacro(<< " CreateField '" << kwl.GetNthField(fieldIdx).first->GetNameRef() << "'");
+          if (ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
+            {
+            itkExceptionMacro(<< "Failed to create Field "<<kwl.GetNthField(fieldIdx).first->GetNameRef());
+            }
+          }
+         else
+          {
+          otbMsgDevMacro(<< "WARNING: Skipping OGR field 'FID'");
+          }
+        }
+      }
+
+    switch (dataNode->GetNodeType())
+      {
+      case ROOT:
+      {
+      break;
+      }
+      case DOCUMENT:
+      {
+      ogrCurrentLayer = inMemoryDataSource->CreateLayer(dataNode->GetNodeId(), oSRS,
+                                      wkbUnknown, NULL);
+      if (ogrCurrentLayer == NULL)
+        {
+        std::cout << "Failed to create layer " << dataNode->GetNodeId() << std::endl;
+        }
+      ogrLayerVector.push_back(ogrCurrentLayer);
+      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      break;
+      }
+      case FOLDER:
+      {
+      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      break;
+      }
+      case FEATURE_POINT:
+      {
+      //Build the ogrObject
+      OGRPoint ogrPoint;
+      ogrPoint.setX(dataNode->GetPoint()[0]);
+      ogrPoint.setY(dataNode->GetPoint()[1]);
+
+      if (DataNodeType::Dimension > 2)
+        {
+        ogrPoint.setZ(dataNode->GetPoint()[2]);
+        }
+
+      //Save it in the structure
+      OGRFeature *ogrFeature;
+      ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
+    
+      // Add the fields to the features
+      for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
+        {
+        // Get the key of the Nth OGRFieldRefn
+        const char * key = kwl.GetNthField(i).first->GetNameRef();
+          
+        if (std::string(key) != "FID")
+          {
+          // Edit the value of the field and add it to the current feature
+          ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+          }
+        }
+      ogrFeature->SetGeometry(&ogrPoint);
+
+      if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
+        {
+        itkExceptionMacro(<< "Failed to create feature in shapefile.");
+        }
+
+      OGRFeature::DestroyFeature(ogrFeature);
+      break;
+      }
+      case FEATURE_LINE:
+      {
+      //Build the ogrObject
+      OGRLineString              ogrLine;
+      VertexListConstPointerType vertexList = dataNode->GetLine()->GetVertexList();
+
+      VertexListType::ConstIterator vIt = vertexList->Begin();
+
+      while (vIt != vertexList->End())
+        {
+        OGRPoint ogrPoint;
+        ogrPoint.setX(vIt.Value()[0]);
+        ogrPoint.setY(vIt.Value()[1]);
+        if (DataNodeType::Dimension > 2)
+          {
+          ogrPoint.setZ(vIt.Value()[2]);
+          }
+        ogrLine.addPoint(&ogrPoint);
+        ++vIt;
+        }
+
+      //Save it in the structure
+      OGRFeature *ogrFeature;
+      ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
+
+      // Add the fields to the features
+      for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
+        {
+        // Get the key of the Nth OGRFieldRefn
+        const char * key = kwl.GetNthField(i).first->GetNameRef();
+        // Edit the value of the field and add it to the current feature
+        ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+        }
+      ogrFeature->SetGeometry(&ogrLine);
+
+      if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
+        {
+        itkExceptionMacro(<< "Failed to create feature in shapefile.");
+        }
+
+      OGRFeature::DestroyFeature(ogrFeature);
+      break;
+      }
+      case FEATURE_POLYGON:
+      {
+      //Build the ogrObject
+      OGRPolygon *               ogrPolygon = (OGRPolygon *) OGRGeometryFactory::createGeometry(wkbPolygon);
+      OGRLinearRing *            ogrExternalRing = (OGRLinearRing *) OGRGeometryFactory::createGeometry(wkbLinearRing);
+      VertexListConstPointerType vertexList = dataNode->GetPolygonExteriorRing()->GetVertexList();
+
+      VertexListType::ConstIterator vIt = vertexList->Begin();
+
+      while (vIt != vertexList->End())
+        {
+        OGRPoint ogrPoint;
+        ogrPoint.setX(vIt.Value()[0]);
+        ogrPoint.setY(vIt.Value()[1]);
+        if (DataNodeType::Dimension > 2)
+          {
+          ogrPoint.setZ(vIt.Value()[2]);
+          }
+
+        ogrExternalRing->addPoint(&ogrPoint);
+        ++vIt;
+        }
+      ogrPolygon->addRing(ogrExternalRing);
+      // Close the polygon
+      ogrPolygon->closeRings();
+      OGRGeometryFactory::destroyGeometry(ogrExternalRing);
+
+      // Retrieving internal rings as well
+      for (PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin();
+           pIt != dataNode->GetPolygonInteriorRings()->End(); ++pIt)
+        {
+        OGRLinearRing * ogrInternalRing = (OGRLinearRing *) OGRGeometryFactory::createGeometry(wkbLinearRing);
+        vertexList = pIt.Get()->GetVertexList();
+        vIt = vertexList->Begin();
+
+        while (vIt != vertexList->End())
+          {
+          OGRPoint ogrPoint;
+          ogrPoint.setX(vIt.Value()[0]);
+          ogrPoint.setY(vIt.Value()[1]);
+          if (DataNodeType::Dimension > 2)
+            {
+            ogrPoint.setZ(vIt.Value()[2]);
+            }
+          ogrInternalRing->addPoint(&ogrPoint);
+          ++vIt;
+          }
+        ogrPolygon->addRing(ogrInternalRing);
+        OGRGeometryFactory::destroyGeometry(ogrInternalRing);
+        }
+
+      OGRFeature *ogrFeature;
+      ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
+    
+      // Add the fields to the features
+      for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
+        {
+        // Get the key of the Nth OGRFieldRefn
+        const char * key = kwl.GetNthField(i).first->GetNameRef();
+        // Edit the value of the field and add it to the current feature
+        ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+        }
+    
+      ogrFeature->SetGeometry(ogrPolygon);
+    
+      if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
+        {
+        itkExceptionMacro(<< "Failed to create feature in shapefile.");
+        }
+    
+      OGRFeature::DestroyFeature(ogrFeature);
+      OGRGeometryFactory::destroyGeometry(ogrPolygon);
+      break;
+      }
+      case FEATURE_MULTIPOINT:
+      {
+      OGRMultiPoint* ogrMultiPoint = (OGRMultiPoint*) OGRGeometryFactory::createGeometry(wkbMultiPoint);
+      OGRFeature *   ogrFeature;
+
+      ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
+      ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPoint);
+      ogrFeature->SetGeometry(ogrMultiPoint);
+
+      if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
+        {
+        itkExceptionMacro(<< "Failed to create feature in shapefile.");
+        }
+      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      break;
+      }
+      case FEATURE_MULTILINE:
+      {
+      // Instanciate a new  ogrMultiLineString feature
+      OGRMultiLineString* ogrMultiLineString = (OGRMultiLineString*) OGRGeometryFactory::createGeometry(
+        wkbMultiLineString);
+
+      OGRFeature *ogrFeature;
+
+      ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
+      ogrFeature->GetDefnRef()->SetGeomType(wkbMultiLineString);
+      ogrFeature->SetGeometry(ogrMultiLineString);
+
+      if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
+        {
+        itkExceptionMacro(<< "Failed to create feature in shapefile.");
+        }
+      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      break;
+      }
+      case FEATURE_MULTIPOLYGON:
+      {
+      // Instanciate a new multipolygon feature
+      OGRMultiPolygon* ogrMultiPolygon = (OGRMultiPolygon*) OGRGeometryFactory::createGeometry(wkbMultiPolygon);
+      OGRFeature *     ogrFeature;
+
+      ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
+      ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPolygon);
+      ogrFeature->SetGeometry(ogrMultiPolygon);
+
+      if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
+        {
+        itkExceptionMacro(<< "Failed to create feature in shapefile.");
+        }
+      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      break;
+      }
+      case FEATURE_COLLECTION:
+      {
+      OGRGeometryCollection* ogrCollectionGeometry = (OGRGeometryCollection*) OGRGeometryFactory::createGeometry(
+        wkbGeometryCollection);
+
+      OGRFeature *ogrFeature;
+
+      ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
+      ogrFeature->GetDefnRef()->SetGeomType(wkbGeometryCollection);
+      ogrFeature->SetGeometry(ogrCollectionGeometry);
+
+      if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
+        {
+        itkExceptionMacro(<< "Failed to create feature in shapefile.");
+        }
+      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      break;
+      }
+      }
+    }
+
+  return ogrLayerVector;
+}
+
+
+
+
 } // end namespace otb
