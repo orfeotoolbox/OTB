@@ -24,7 +24,7 @@
 namespace otb
 {
 /** \class LabelImageToVectorDataFilter
- *  \brief this class uses GDALPolygonize method to transform a Label image into 
+ *  \brief this class uses GDALPolygonize method to transform a Label image into
  *         a VectorData. It is a non-streamed version.
  *
  *

@@ -231,7 +231,7 @@ void DoExecute()
       m_LeftIndexSelectionFilter1->SetInput(m_LeftInvertDeformationFieldFilter->GetOutput());
       m_LeftIndexSelectionFilter1->SetIndex(0);
       m_LeftIndexSelectionFilter2->SetInput(m_LeftInvertDeformationFieldFilter->GetOutput());
-      m_LeftIndexSelectionFilter2->SetIndex(1);  
+      m_LeftIndexSelectionFilter2->SetIndex(1);
       m_LeftImageList->Clear();
       m_LeftImageList->PushBack(m_LeftIndexSelectionFilter1->GetOutput());
       m_LeftImageList->PushBack(m_LeftIndexSelectionFilter2->GetOutput());
@@ -243,7 +243,7 @@ void DoExecute()
 
       m_RightDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetRightDeformationFieldOutput());
 
-      m_RightInvertDeformationFieldFilter->SetInput(m_RightDeformationFieldCaster->GetOutput());   
+      m_RightInvertDeformationFieldFilter->SetInput(m_RightDeformationFieldCaster->GetOutput());
       FloatVectorImageType::PointType rorigin = GetParameterImage("io.inright")->GetOrigin();
       FloatVectorImageType::SpacingType rspacing = GetParameterImage("io.inright")->GetSpacing();
       FloatVectorImageType::SizeType rsize = GetParameterImage("io.inright")->GetLargestPossibleRegion().GetSize();

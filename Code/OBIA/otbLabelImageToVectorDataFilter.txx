@@ -165,12 +165,12 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
     /** Convert OGR layer into VectorData */
     OGRFeatureDefn * dfn = outputLayer->GetLayerDefn();
 
-    // Create the document node 
+    // Create the document node
     DataNodePointerType document = DataNodeType::New();
     document->SetNodeType(DOCUMENT);
     document->SetNodeId(dfn->GetName());
 
-    // Adding the layer to the data tree 
+    // Adding the layer to the data tree
     VectorDataPointerType data = dynamic_cast<VectorDataType*>(this->GetOutput());
     DataTreePointerType tree = data->GetDataTree();
     DataNodePointerType root = tree->GetRoot()->Get();

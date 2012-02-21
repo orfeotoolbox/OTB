@@ -123,11 +123,11 @@ public:
 
   /** Get/Set the DEM directory */
   itkSetStringMacro(DEMDirectory);
-  itkGetStringMacro(DEMDirectory);  
+  itkGetStringMacro(DEMDirectory);
 
   /** Get/Set the geoid file */
   itkSetStringMacro(GeoidFile);
-  itkGetStringMacro(GeoidFile);  
+  itkGetStringMacro(GeoidFile);
 
   /** Get/Set the elevation offset */
   itkSetMacro(ElevationOffset,double);
