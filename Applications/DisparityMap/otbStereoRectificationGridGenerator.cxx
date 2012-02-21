@@ -20,6 +20,9 @@
 
 #include "otbStereorectificationDeformationFieldSource.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -81,9 +84,9 @@ private:
     AddParameter(ParameterType_Group,"epi","Epipolar  geometry and grid parameters");
     SetParameterDescription("epi","Parameters of the epipolar geometry and output grids");
     
-    AddParameter(ParameterType_Float,"epi.elevation","Mean elevation (in meters)");
+    ElevationParametersHandler::AddElevationParameters(this, "epi.elevation");
     SetParameterDescription("epi.elevation","In the output rectified images, corresponding pixels whose elevation is equal to the mean elevation will have a null disparity");
-    SetDefaultParameterFloat("epi.elevation",0.);
+    MandatoryOn("epi.elevation");
 
     AddParameter(ParameterType_Float,"epi.scale","Scale of epipolar images");
     SetParameterDescription("epi.scale","The scale parameter allows to generated zoomed-in (scale < 1) or zoomed-out (scale > 1) epipolar images.");
@@ -110,7 +113,7 @@ private:
     SetDocExampleParameterValue("io.inright","wv2_xs_left.tif");
     SetDocExampleParameterValue("io.outleft","wv2_xs_left_epi_field.tif");
     SetDocExampleParameterValue("io.outright","wv2_xs_right_epi_field.tif");
-    SetDocExampleParameterValue("epi.elevation","400");
+    SetDocExampleParameterValue("epi.elevation.average","400");
   }
 
  void DoUpdateParameters()
@@ -124,7 +127,20 @@ void DoExecute()
       m_DeformationFieldSource->SetRightImage(GetParameterImage("io.inright"));
       m_DeformationFieldSource->SetGridStep(GetParameterInt("epi.step"));
       m_DeformationFieldSource->SetScale(GetParameterFloat("epi.scale"));
-      m_DeformationFieldSource->SetAverageElevation(GetParameterFloat("epi.elevation"));
+
+      switch(ElevationParametersHandler::GetElevationType(this, "epi.elevation"))
+        {
+        case Elevation_DEM:
+        {
+        m_DeformationFieldSource->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "epi.elevation"));
+        m_DeformationFieldSource->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "epi.elevation"));
+        }
+        break;
+        case Elevation_Average:
+        {
+        m_DeformationFieldSource->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "epi.elevation"));
+        }
+        }
                                                     
       AddProcess(m_DeformationFieldSource, "Computing epipolar grids ...");
 
