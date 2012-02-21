@@ -72,13 +72,21 @@ public:
   itkStaticConstMacro(SpaceDimension, unsigned int, Dimension);
 
   /** Set the numerator degree */
-  itkSetMacro(NumeratorDegree, unsigned int);
+  void SetNumeratorDegree(unsigned int value)
+  {
+    this->m_NumeratorDegree = value;
+    this->InitalizeParameters();
+  }
 
   /** Get the numerator degree */
   itkGetConstMacro(NumeratorDegree, unsigned int);
 
   /** Set the numerator degree */
-  itkSetMacro(DenominatorDegree, unsigned int);
+  void SetDenominatorDegree(unsigned int value)
+  {
+    this->m_DenominatorDegree = value;
+    this->InitalizeParameters();
+  }
 
   /** Get the denominator degree */
   itkGetConstMacro(DenominatorDegree, unsigned int);
@@ -102,7 +110,6 @@ public:
   * \sa GetSpacing() */
   itkSetMacro(OutputSpacing, SpacingType);
   itkGetConstReferenceMacro(OutputSpacing, SpacingType);
-
 
   /** The transform point method */
   virtual OutputPointType TransformPoint(const InputPointType& point) const
@@ -159,7 +166,7 @@ public:
     return outputPoint;
   }
 
-  // Get the number of parameters
+  /** Get the number of parameters */
   virtual unsigned int GetNumberOfParameters() const
   {
     return (m_NumeratorDegree +1 + m_DenominatorDegree+1)*SpaceDimension;
@@ -178,21 +185,30 @@ public:
     this->m_Parameters = params;
   }
 
+  /** Initialize Parameters size  */
+  void InitalizeParameters()
+  {
+    this->m_Parameters.SetSize(this->GetNumberOfParameters());
+    this->m_Parameters.Fill(0);
+    unsigned int dimensionStride = (m_DenominatorDegree+1)+(m_NumeratorDegree+1);
+
+    for(unsigned int dim = 0; dim < SpaceDimension; ++dim)
+      {
+      this->m_Parameters[ dimensionStride *dim + m_NumeratorDegree+1] = 1.;
+      }
+  }
+
+
 protected:
   RationalTransform() : Superclass(SpaceDimension, 16), m_NumeratorDegree(3), m_DenominatorDegree(3)
     {
-    this->m_Parameters.SetSize(this->GetNumberOfParameters());
-    this->m_Parameters.Fill(0);
-    this->m_Parameters[ 0] = 1.;
-    this->m_Parameters[ 4] = 1.;
-    this->m_Parameters[ 8] = 1.;
-    this->m_Parameters[12] = 1.;
+    this->InitalizeParameters();
     m_InputSpacing.Fill(1);
     m_InputOrigin.Fill(0);
     m_OutputSpacing.Fill(1);
     m_OutputOrigin.Fill(0);
-
     }
+
 
   virtual ~RationalTransform() {}
 
