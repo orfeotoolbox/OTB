@@ -92,26 +92,6 @@ public:
   /** Get the denominator degree */
   itkGetConstMacro(DenominatorDegree, unsigned int);
 
-  /** Set the origin of the vector data.
-  * \sa GetOrigin() */
-  itkSetMacro(InputOrigin, OriginType);
-  itkGetConstReferenceMacro(InputOrigin, OriginType);
-
-  /** Set the spacing (size of a pixel) of the vector data.
-    * \sa GetSpacing() */
-  itkSetMacro(InputSpacing, SpacingType);
-  itkGetConstReferenceMacro(InputSpacing, SpacingType);
-
-  /** Set the origin of the vector data.
-  * \sa GetOrigin() */
-  itkSetMacro(OutputOrigin, OriginType);
-  itkGetConstReferenceMacro(OutputOrigin, OriginType);
-
-  /** Set the spacing (size of a pixel) of the vector data.
-  * \sa GetSpacing() */
-  itkSetMacro(OutputSpacing, SpacingType);
-  itkGetConstReferenceMacro(OutputSpacing, SpacingType);
-
   /** The transform point method */
   virtual OutputPointType TransformPoint(const InputPointType& point) const
   {
@@ -131,24 +111,19 @@ public:
     // Compute RPC transform
     for(unsigned int dim = 0; dim < SpaceDimension; ++dim)
       {
-      // 1) Apply input origin/spacing
-      inputPoint[dim] = inputPoint[dim] * m_InputSpacing[dim] + m_InputOrigin[dim];
-
-      // 2 )Transform point with :
-
-      // 2-1) Initialize numerator and denominator
+      //1) Initialize numerator and denominator
       TScalarType num   = itk::NumericTraits<TScalarType>::Zero;
       TScalarType denom = itk::NumericTraits<TScalarType>::Zero;
       TScalarType currentPower = 1.;
       
-      // 2-2) Compute numerator
+      // 2) Compute numerator
       for(unsigned int numDegree = 0; numDegree <= m_NumeratorDegree; ++numDegree)
         {
         num+=this->m_Parameters[dim*dimensionStride+numDegree]*currentPower;
         currentPower*=inputPoint[dim];
         }
       
-      // 2-3) Compute denominator
+      //3) Compute denominator
       currentPower = 1.;
       for(unsigned int denomDegree = 0; denomDegree <= m_DenominatorDegree; ++denomDegree)
         {
@@ -156,11 +131,8 @@ public:
         currentPower*=inputPoint[dim];
         }
 
-      // 2-4) Fill the output
+      //4) Fill the output
       outputPoint[dim]=num/denom;
-
-      // 3) Apply output origin/spacing
-      outputPoint[dim] = (outputPoint[dim] - m_OutputOrigin[dim]) / m_OutputSpacing[dim];
       }
 
     // Return the output point
@@ -204,10 +176,6 @@ protected:
   RationalTransform() : Superclass(SpaceDimension, 16), m_NumeratorDegree(3), m_DenominatorDegree(3)
     {
     this->InitalizeParameters();
-    m_InputSpacing.Fill(1);
-    m_InputOrigin.Fill(0);
-    m_OutputSpacing.Fill(1);
-    m_OutputOrigin.Fill(0);
     }
 
 
@@ -218,10 +186,6 @@ protected:
     Superclass::PrintSelf(os, indent);
     os << indent << "Numerator Degree : " << m_NumeratorDegree << std::endl;
     os << indent << "Denominator Degree : " << m_DenominatorDegree << std::endl;
-    os << indent << "InputSpacing : " << m_InputSpacing << std::endl;
-    os << indent << "InputOrigin : " << m_InputOrigin << std::endl;
-    os << indent << "OutputSpacing : " << m_OutputSpacing << std::endl;
-    os << indent << "OutputOrigin : " << m_OutputOrigin << std::endl;
 
   }
 
@@ -234,11 +198,6 @@ private:
 
   // Degree of denominator
   unsigned int m_DenominatorDegree;
-
-  SpacingType m_InputSpacing;
-  OriginType  m_InputOrigin;
-  SpacingType m_OutputSpacing;
-  OriginType  m_OutputOrigin;
 };
 
 } // namespace otb
