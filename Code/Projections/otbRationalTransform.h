@@ -220,7 +220,7 @@ protected:
     os << indent << "Denominator Degree : " << m_DenominatorDegree << std::endl;
     os << indent << "InputSpacing : " << m_InputSpacing << std::endl;
     os << indent << "InputOrigin : " << m_InputOrigin << std::endl;
-    os << indent << "InputSpacing : " << m_OutputSpacing << std::endl;
+    os << indent << "OutputSpacing : " << m_OutputSpacing << std::endl;
     os << indent << "OutputOrigin : " << m_OutputOrigin << std::endl;
 
   }
