@@ -179,7 +179,7 @@ private:
                             "Ratio between training and validation samples (0.0 = all training, 1.0 = all validation) default = 0.5.");
     SetParameterFloat("sample.vtr", 0.5);
     
-    AddParameter(ParameterType_InputFilename, "sample.vfn", "Name of the discrimination field");
+    AddParameter(ParameterType_String, "sample.vfn", "Name of the discrimination field");
     SetParameterDescription("sample.vfn", "Name of the field used to discriminate class in the vector data files.");
     SetParameterString("sample.vfn", "Class");
 
