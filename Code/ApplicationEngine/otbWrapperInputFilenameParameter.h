@@ -51,9 +51,17 @@ public:
     return m_StringParam->HasValue();
   }
   
-  // Set/Get Value
-  otbSetObjectMemberMacro(StringParam, Value , std::string);
+  // Get Value
   otbGetObjectMemberMacro(StringParam, Value , std::string);
+  
+  // Set Value
+  virtual void SetValue(const std::string value)
+    {
+    itkDebugMacro("setting member m_StringParam to " << value);
+    this->m_StringParam->SetValue(value);
+    SetActive(true);
+    this->Modified();
+    }
   
   // Clear Value
   void ClearValue()
