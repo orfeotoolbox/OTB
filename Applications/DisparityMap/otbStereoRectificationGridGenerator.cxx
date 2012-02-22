@@ -154,6 +154,14 @@ private:
     AddParameter(ParameterType_Float,"epi.elevation.avgdem.value","Average elevation value");
     SetParameterDescription("epi.elevation.avgdem.value","Average elevation value estimated from DEM");
     SetParameterRole("epi.elevation.avgdem.value",Role_Output);
+
+    AddParameter(ParameterType_Float,"epi.elevation.avgdem.mindisp","Minimum disparity from DEM");
+    SetParameterDescription("epi.elevation.avgdem.mindisp","Disparity corresponding to estimated minimum elevation over the left image");
+    SetParameterRole("epi.elevation.avgdem.mindisp",Role_Output);
+
+    AddParameter(ParameterType_Float,"epi.elevation.avgdem.maxdisp","Maximum disparity from DEM");
+    SetParameterDescription("epi.elevation.avgdem.maxdisp","Disparity corresponding to estimated maximum elevation over the left image");
+    SetParameterRole("epi.elevation.avgdem.maxdisp",Role_Output);
     
     AddChoice("epi.elevation.dem","Elevation from DEM");
     SetParameterDescription("epi.elevation.dem","Local elevations from the provided DEM");
@@ -279,6 +287,14 @@ private:
     SetParameterInt("epi.rectsizey",m_DeformationFieldSource->GetRectifiedImageSize()[1]);
     SetParameterFloat("epi.baseline",m_DeformationFieldSource->GetMeanBaselineRatio());
 
+    if(GetParameterString("epi.elevation") == "avgdem")
+      {
+      SetParameterFloat("epi.elevation.avgdem.mindisp",(m_StatisticsFilter->GetMinimum()-m_StatisticsFilter->GetMean())
+                        /m_DeformationFieldSource->GetMeanBaselineRatio());
+      SetParameterFloat("epi.elevation.avgdem.maxdisp",(m_StatisticsFilter->GetMaximum()-m_StatisticsFilter->GetMean())
+                        /m_DeformationFieldSource->GetMeanBaselineRatio());
+      }
+    
 
     SetParameterOutputImage("io.outleft",m_DeformationFieldSource->GetLeftDeformationFieldOutput());
     SetParameterOutputImage("io.outright",m_DeformationFieldSource->GetRightDeformationFieldOutput());
