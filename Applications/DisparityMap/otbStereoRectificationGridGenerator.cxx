@@ -91,7 +91,7 @@ private:
 
   }
 
- void DoInit()
+  void DoInit()
   {
     SetName("StereoRectificationGridGenerator");
     SetDescription("Generates two deformation fields to stereo-rectify (i.e. resample in epipolar geometry) a pair of stereo images up to the sensor model precision");
@@ -151,9 +151,11 @@ private:
 
     AddParameter(ParameterType_OutputImage, "inverse.outleft", "Left inverse deformation grid");
     SetParameterDescription("inverse.outleft","The output deformation grid to be used to resample the epipolar left image");
+    MandatoryOff("inverse.outleft");
 
     AddParameter(ParameterType_OutputImage, "inverse.outright", "Right inverse deformation grid");
     SetParameterDescription("inverse.outright","The output deformation grid to be used to resample the epipolar right image");
+    MandatoryOff("inverse.outright");
 
     AddParameter(ParameterType_Int, "inverse.ssrate", "Sub-sampling rate for inversion");
     SetParameterDescription("inverse.ssrate","Grid inversion is an heavy process that implies spline regression on control points. To avoid eating to much memory, this parameter allows to first sub-sample the field to invert.");
@@ -168,48 +170,51 @@ private:
     SetDocExampleParameterValue("epi.elevation.average","400");
   }
 
- void DoUpdateParameters()
+  void DoUpdateParameters()
   {
     // Nothing to do here
   }
 
-void DoExecute()
-    {
-      m_DeformationFieldSource->SetLeftImage(GetParameterImage("io.inleft"));
-      m_DeformationFieldSource->SetRightImage(GetParameterImage("io.inright"));
-      m_DeformationFieldSource->SetGridStep(GetParameterInt("epi.step"));
-      m_DeformationFieldSource->SetScale(GetParameterFloat("epi.scale"));
+  void DoExecute()
+  {
+    m_DeformationFieldSource->SetLeftImage(GetParameterImage("io.inleft"));
+    m_DeformationFieldSource->SetRightImage(GetParameterImage("io.inright"));
+    m_DeformationFieldSource->SetGridStep(GetParameterInt("epi.step"));
+    m_DeformationFieldSource->SetScale(GetParameterFloat("epi.scale"));
 
-      switch(ElevationParametersHandler::GetElevationType(this, "epi.elevation"))
-        {
-        case Elevation_DEM:
-        {
-        m_DeformationFieldSource->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "epi.elevation"));
-        m_DeformationFieldSource->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "epi.elevation"));
-        }
-        break;
-        case Elevation_Average:
-        {
-        m_DeformationFieldSource->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "epi.elevation"));
-        }
-        }
+    switch(ElevationParametersHandler::GetElevationType(this, "epi.elevation"))
+      {
+      case Elevation_DEM:
+      {
+      m_DeformationFieldSource->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "epi.elevation"));
+      m_DeformationFieldSource->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "epi.elevation"));
+      }
+      break;
+      case Elevation_Average:
+      {
+      m_DeformationFieldSource->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "epi.elevation"));
+      }
+      }
                                                     
-      AddProcess(m_DeformationFieldSource, "Computing epipolar grids ...");
+    AddProcess(m_DeformationFieldSource, "Computing epipolar grids ...");
 
-      m_DeformationFieldSource->Update();
+    m_DeformationFieldSource->Update();
 
-      SetParameterInt("epi.rectsizex",m_DeformationFieldSource->GetRectifiedImageSize()[0]);
-      SetParameterInt("epi.rectsizey",m_DeformationFieldSource->GetRectifiedImageSize()[1]);
-      SetParameterFloat("epi.baseline",m_DeformationFieldSource->GetMeanBaselineRatio());
+    SetParameterInt("epi.rectsizex",m_DeformationFieldSource->GetRectifiedImageSize()[0]);
+    SetParameterInt("epi.rectsizey",m_DeformationFieldSource->GetRectifiedImageSize()[1]);
+    SetParameterFloat("epi.baseline",m_DeformationFieldSource->GetMeanBaselineRatio());
 
 
-      SetParameterOutputImage("io.outleft",m_DeformationFieldSource->GetLeftDeformationFieldOutput());
-      SetParameterOutputImage("io.outright",m_DeformationFieldSource->GetRightDeformationFieldOutput());
+    SetParameterOutputImage("io.outleft",m_DeformationFieldSource->GetLeftDeformationFieldOutput());
+    SetParameterOutputImage("io.outright",m_DeformationFieldSource->GetRightDeformationFieldOutput());
   
-      // Inverse part
-      // lots of casting here ...
+    // Inverse part
+    // lots of casting here ...
 
-      // Left field inversion
+    // Left field inversion
+    if(IsParameterEnabled("inverse.outleft"))
+      {
+      
       m_LeftDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetLeftDeformationFieldOutput());
 
       m_LeftInvertDeformationFieldFilter->SetInput(m_LeftDeformationFieldCaster->GetOutput());
@@ -238,8 +243,13 @@ void DoExecute()
       m_LeftImageListFilter->SetInput(m_LeftImageList);
 
       SetParameterOutputImage("inverse.outleft",m_LeftImageListFilter->GetOutput());
+      }
 
-      // Right field inversion
+    // Right field inversion
+
+    if(IsParameterEnabled("inverse.outright"))
+      {
+     
 
       m_RightDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetRightDeformationFieldOutput());
 
@@ -262,7 +272,8 @@ void DoExecute()
       m_RightImageListFilter->SetInput(m_RightImageList);
 
       SetParameterOutputImage("inverse.outright",m_RightImageListFilter->GetOutput());
-    }
+      }
+  }
 
   DeformationFieldSourceType::Pointer          m_DeformationFieldSource;
   InverseDeformationFieldFilterType::Pointer   m_LeftInvertDeformationFieldFilter;
