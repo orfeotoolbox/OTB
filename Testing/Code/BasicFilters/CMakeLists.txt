@@ -2477,6 +2477,32 @@ ADD_TEST(bfTvClampImageFilterTest ${BASICFILTERS_TESTS15}
    ${TEMP}/bfTvClampImageFilterTest_Output.tif
 )
 
+
+# ---------------------    otbRasterizeVectorDataFilter---------------------
+ADD_TEST(bfTuVectorDataRasterizeFilterNew ${BASICFILTERS_TESTS15}
+  otbVectorDataRasterizeFilterNew
+)
+
+ADD_TEST(bfTvVectorDataRasterizeFilterSHP ${BASICFILTERS_TESTS15}
+  --compare-image 0.0001
+   ${BASELINE}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
+   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
+  otbVectorDataRasterizeFilter
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+  ${INPUTDATA}/Capitole-Shadows.shp
+  ${TEMP}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
+)
+
+ADD_TEST(bfTvVectorDataRasterizeFilterKML ${BASICFILTERS_TESTS15}
+  --compare-image 0.0001
+   ${BASELINE}/bfTvVectorDataRasterizeFilter_OutputKML.tif
+   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputKML.tif
+  otbVectorDataRasterizeFilter
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+  ${INPUTDATA}/Capitole-Shadows.kml
+  ${TEMP}/bfTvVectorDataRasterizeFilter_OutputKML.tif
+)
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbBasicFiltersTests1.cxx
@@ -2764,6 +2790,7 @@ otbMaximumAutocorrelationFactorImageFilter.cxx
 otbThresholdVectorImageFilter.cxx
 otbClampVectorImageFilter.cxx
 otbClampImageFilter.cxx
+otbVectorDataRasterizeFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
