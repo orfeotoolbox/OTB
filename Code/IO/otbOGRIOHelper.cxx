@@ -645,10 +645,10 @@ void OGRIOHelper
 
 
 unsigned int OGRIOHelper
-::ProcessNodeWrite(InternalTreeNodeType * source, 
-                   OGRDataSource * m_DataSource, 
+::ProcessNodeWrite(InternalTreeNodeType * source,
+                   OGRDataSource * m_DataSource,
                    OGRGeometryCollection * ogrCollection,
-                   OGRLayer * ogrCurrentLayer, 
+                   OGRLayer * ogrCurrentLayer,
                    OGRSpatialReference * oSRS)
 {
   unsigned int kept = 0;
@@ -1008,8 +1008,8 @@ unsigned int OGRIOHelper
  * Return a vector of OGRLayer
  **/
 std::vector<OGRLayer*> OGRIOHelper
-::ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source, 
-                                 OGRDataSource * inMemoryDataSource, 
+::ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source,
+                                 OGRDataSource * inMemoryDataSource,
                                  OGRLayer* ogrCurrentLayer,
                                  OGRSpatialReference * oSRS)
 {
@@ -1314,7 +1314,6 @@ std::vector<OGRLayer*> OGRIOHelper
 
   return ogrLayerVector;
 }
-
 
 
 

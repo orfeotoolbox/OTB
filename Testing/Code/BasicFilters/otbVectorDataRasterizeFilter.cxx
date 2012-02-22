@@ -36,7 +36,7 @@ typedef otb::VectorDataProjectionFilter<VectorDataType,
                                         VectorDataType>       VDProjectionType;
 typedef otb::StreamingImageFileWriter<ImageType>              WriterType;
 typedef otb::RasterizeVectorDataFilter<VectorDataType,
-                                       ImageType, 
+                                       ImageType,
                                        ImageType>             RasterizationFilterType;
 
 int otbVectorDataRasterizeFilterNew(int argc, char* argv[])

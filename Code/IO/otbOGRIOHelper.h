@@ -67,8 +67,8 @@ public:
                                 OGRSpatialReference * oSRS);
 
   /** Return a list of OGRLayer * */
-  std::vector<OGRLayer*> ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source, 
-                                                        OGRDataSource * dummyDatasource, 
+  std::vector<OGRLayer*> ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source,
+                                                        OGRDataSource * dummyDatasource,
                                                         OGRLayer* ogrCurrentLayer,
                                                         OGRSpatialReference * oSRS);
 

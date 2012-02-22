@@ -35,7 +35,7 @@ namespace otb {
 
 /** \class RasterizeVectorDataFilter
  *  \brief Burn geometries from the specified VectorData into raster
- *   
+ *
  *  This class handles burning several input VectorDatas into the
  *  input raster. It handles producing the output in any pixel type
  *  supported by OTB since this class inherits itk::CastImageFilter.
@@ -44,13 +44,13 @@ namespace otb {
  *  be passed in, if not, the burn vector set by the user will be
  *  duplicated to fit this condition.
  *
- *  The user can set an OutputPixelType as a burn vector via 
+ *  The user can set an OutputPixelType as a burn vector via
  *  AddBurnValue(OutputImagePixelType burnValuesPix). To have a
  *  different color for each VectorData, use this method with
  *  differents burnValuesPix as many times as VectorDatas set.
  *  Again, the color will be duplicated if only one burnValuesPix
  *  is set.
- * 
+ *
  *  Note : The VectorDatas and the input raster must be in the same
  *  projectionRef. Nothing is done in this class to reproject the
  *  VectorData into the image coordinate system.
@@ -75,7 +75,7 @@ public:
 
   typedef TInputImage                            InputImageType;
   typedef typename  InputImageType::ConstPointer InputImagePointer;
-  typedef typename  InputImageType::RegionType   InputImageRegionType; 
+  typedef typename  InputImageType::RegionType   InputImageRegionType;
   typedef typename  InputImageType::PixelType    InputImagePixelType;
   typedef typename  InputImageType::IndexType    InputIndexType;
   typedef typename  InputImageType::PointType    InputPointType;
@@ -101,9 +101,9 @@ public:
   /** Add VectorData Input */
   virtual void AddVectorData(const VectorDataType* vd);
 
-  /** 
+  /**
    * Set the burn values using the output pixel type; all the bands
-   * will be burned 
+   * will be burned
    **/
   void AddColor(const OutputImagePixelType& burnValuesPix)
   {
@@ -121,7 +121,7 @@ public:
       }
 
     // Add the value stored in the output image pixel type to
-    // the burn values vector 
+    // the burn values vector
     // Add all the bands to be burned and clear previous bands.
     m_BandsToBurn.clear();
     for (int idx = 0; idx < burnValuesPix.Size(); ++idx)
@@ -135,7 +135,7 @@ protected:
   virtual void GenerateData();
 
   RasterizeVectorDataFilter();
-  virtual ~RasterizeVectorDataFilter() 
+  virtual ~RasterizeVectorDataFilter()
   {
     // Destroy the datasource
     if (m_OGRDataSource != NULL)

@@ -52,7 +52,7 @@ template<class TVectorData, class TInputImage, class TOutputImage>
 void
 RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
 ::GenerateOutputInformation()
-{ 
+{
   Superclass::GenerateOutputInformation();
   
   // Generate the OGRLayers from the input VectorDatas
@@ -88,11 +88,11 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
 
     // The method ConvertDataTreeNodeToOGRLayers create the
     // OGRDataSource but don t release it. Destruction is done in the
-    // desctructor 
+    // desctructor
     m_OGRDataSourcePointer = NULL;
     ogrLayerVector = IOConversion->ConvertDataTreeNodeToOGRLayers(inputRoot,
                                                                   m_OGRDataSourcePointer,
-                                                                  ogrCurrentLayer, 
+                                                                  ogrCurrentLayer,
                                                                   oSRS);
   
     // Cast OGRLayer* to OGRLayerH
@@ -101,7 +101,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
       m_SrcDataSetLayers.push_back( (OGRLayerH)(ogrLayerVector[idx]) );
       }
 
-    // Destroy the oSRS 
+    // Destroy the oSRS
     if (oSRS != NULL)
       {
       OSRRelease(oSRS);
@@ -116,14 +116,14 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
   if (m_BurnValues.size() !=  m_BandsToBurn.size() * m_SrcDataSetLayers.size())
     {
     std::ostringstream oss;
-    oss  <<"Inconsistency detected : expected burn vector size to be equal to( bandToBurn * nb layers = " 
-         << m_BandsToBurn.size() * m_SrcDataSetLayers.size() 
+    oss  <<"Inconsistency detected : expected burn vector size to be equal to( bandToBurn * nb layers = "
+         << m_BandsToBurn.size() * m_SrcDataSetLayers.size()
          << " ), got :  "<< m_BurnValues.size()<<std::endl;
     itkWarningMacro(<<oss.str());
     }
 
   // Clone the burn values to fit the condition
-  for (unsigned int idx =0; idx < m_SrcDataSetLayers.size() ; ++idx)
+  for (unsigned int idx =0; idx < m_SrcDataSetLayers.size(); ++idx)
     {
     for (unsigned int burnidx = 0; burnidx < m_BurnValues.size(); ++burnidx)
       {
@@ -185,10 +185,10 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::GenerateData(
   // Burn the geometries into the dataset
    if (dataset != NULL)
      {
-     GDALRasterizeLayers( dataset, m_BandsToBurn.size(), 
-                          &(m_BandsToBurn[0]), 
-                          m_SrcDataSetLayers.size(), 
-                          &(m_SrcDataSetLayers[0]), 
+     GDALRasterizeLayers( dataset, m_BandsToBurn.size(),
+                          &(m_BandsToBurn[0]),
+                          m_SrcDataSetLayers.size(),
+                          &(m_SrcDataSetLayers[0]),
                           NULL, NULL, &(m_FullBurnValues[0]),
                           NULL,
                           GDALDummyProgress, NULL );

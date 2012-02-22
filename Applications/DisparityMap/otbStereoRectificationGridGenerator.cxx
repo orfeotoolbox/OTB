@@ -304,7 +304,7 @@ private:
 
     // Left field inversion
     if(IsParameterEnabled("inverse.outleft"))
-      {    
+      {
       m_LeftDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetLeftDeformationFieldOutput());
 
       m_LeftInvertDeformationFieldFilter->SetInput(m_LeftDeformationFieldCaster->GetOutput());
