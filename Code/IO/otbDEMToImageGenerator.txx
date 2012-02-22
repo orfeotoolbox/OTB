@@ -36,6 +36,7 @@ DEMToImageGenerator<TDEMImage>
   m_OutputSize[1] = 1;
   m_OutputOrigin[0] = 0;
   m_OutputOrigin[1] = 0;
+  m_AboveEllipsoid = false;
 
   // Value defined in the norm for points SRTM doesn't have information.
   m_DefaultUnknownValue = static_cast<PixelType>(-32768);
@@ -58,6 +59,22 @@ SetDEMDirectoryPath(const std::string& DEMDirectory)
 {
   this->SetDEMDirectoryPath(DEMDirectory.c_str());
 }
+
+template<class TDEMImage>
+void
+DEMToImageGenerator<TDEMImage>::
+SetGeoidFile(const char* path)
+{
+  m_DEMHandler->OpenGeoidFile(path);
+}
+template<class TDEMImage>
+void
+DEMToImageGenerator<TDEMImage>::
+SetGeoidFile(const std::string& path)
+{
+  this->SetGeoidFile(path.c_str());
+}
+
 
 // GenerateOutputInformation method
 template <class TDEMImage>
@@ -146,11 +163,29 @@ DEMToImageGenerator<TDEMImage>
     if(m_Transform.IsNotNull())
       {
         geoPoint = m_Transform->TransformPoint(phyPoint);
-        height = m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude calculation
+        if(m_AboveEllipsoid)
+          {
+          height = m_DEMHandler->GetHeightAboveEllipsoid(geoPoint); // Altitude
+                                                              // calculation
+          }
+        else
+          {
+          height = m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude
+                                                              // calculation
+          }
       }
     else
       {
-        height = m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude calculation
+ if(m_AboveEllipsoid)
+          {
+          height = m_DEMHandler->GetHeightAboveEllipsoid(phyPoint); // Altitude
+                                                                    // calculation
+          }
+        else
+          {
+          height = m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude
+                                                              // calculation
+          }
       }
 /*    otbMsgDevMacro(<< "Index : (" << currentindex[0]<< "," << currentindex[1] << ") -> PhyPoint : ("
                    << phyPoint[0] << "," << phyPoint[1] << ") -> GeoPoint: ("

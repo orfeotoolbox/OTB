@@ -102,11 +102,21 @@ public:
   itkSetObjectMacro(Transform, GenericRSTransformType);
   itkGetConstObjectMacro(Transform, GenericRSTransformType);
 
+  /** Set/Get the above ellipsoid flag. If false, height is given
+  above MSL */
+  itkSetMacro(AboveEllipsoid,bool);
+  itkGetMacro(AboveEllipsoid,bool);
+  itkBooleanMacro(AboveEllipsoid);
+
   void InstanciateTransform();
 
   /** Set the DEM directory. */
   virtual void SetDEMDirectoryPath(const char* DEMDirectory);
   virtual void SetDEMDirectoryPath(const std::string& DEMDirectory);
+
+  /** Set the DEM directory. */
+  virtual void SetGeoidFile(const char* path);
+  virtual void SetGeoidFile(const std::string& path);
 
   /**
    * Set/Get input & output projections.
@@ -187,6 +197,7 @@ protected:
   SpacingType             m_OutputSpacing;
   SizeType                m_OutputSize;
   PixelType               m_DefaultUnknownValue;
+  bool                    m_AboveEllipsoid;
 
 private:
   DEMToImageGenerator(const Self &); //purposely not implemented
