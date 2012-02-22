@@ -27,6 +27,8 @@
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
+#include "otbDEMToImageGenerator.h"
+#include "otbStreamingStatisticsImageFilter.h"
 
 namespace otb
 {
@@ -61,6 +63,8 @@ public:
   typedef otb::ImageList<FloatImageType>      ImageListType;
   typedef otb::ImageListToVectorImageFilter<ImageListType,FloatVectorImageType> ImageListFilterType;
 
+  typedef otb::DEMToImageGenerator<FloatImageType >           DEMToImageGeneratorType;
+  typedef otb::StreamingStatisticsImageFilter<FloatImageType> StatisticsFilterType;
   
   
   /** Standard macro */
@@ -89,6 +93,8 @@ private:
     m_RightImageList              = ImageListType::New();
     m_RightImageListFilter        = ImageListFilterType::New();
 
+    m_DEMToImageGenerator         = DEMToImageGeneratorType::New();
+    m_StatisticsFilter            = StatisticsFilterType::New();
   }
 
   void DoInit()
@@ -122,9 +128,42 @@ private:
     AddParameter(ParameterType_Group,"epi","Epipolar  geometry and grid parameters");
     SetParameterDescription("epi","Parameters of the epipolar geometry and output grids");
     
-    ElevationParametersHandler::AddElevationParameters(this, "epi.elevation");
-    SetParameterDescription("epi.elevation","In the output rectified images, corresponding pixels whose elevation is equal to the mean elevation will have a null disparity");
-    MandatoryOn("epi.elevation");
+    AddParameter(ParameterType_Choice,"epi.elevation","Elevation management");
+    SetParameterDescription("epi.elevation","Manage elevation source for stereo-rectification");
+    AddChoice("epi.elevation.avg","User-defined average elevation");
+    SetParameterDescription("epi.elevation.avg","Average elevation defined by user");
+
+    AddParameter(ParameterType_Float,"epi.elevation.avg.value","Average elevation value");
+    SetParameterDescription("epi.elevation.avg.value","Average elevation value");
+
+    AddChoice("epi.elevation.avgdem","Average elevation computed from DEM");
+    SetParameterDescription("epi.elevation.avgdem","Average elevation computed from the provided DEM");
+
+    AddParameter(ParameterType_Directory,"epi.elevation.avgdem.path","DEM directory");
+    SetParameterDescription("epi.elevation.avgdem.path","Path to the DEM directory");
+    
+    AddParameter(ParameterType_InputFilename,"epi.elevation.avgdem.geoid","Geoid file");
+    SetParameterDescription("epi.elevation.avgdem.geoid","Path to the geoid file");
+    MandatoryOff("epi.elevation.avgdem.geoid");
+
+     AddParameter(ParameterType_Int,"epi.elevation.avgdem.step","Sub-sampling step");
+    SetParameterDescription("epi.elevation.avgdem.step","Step of sub-sampling for average elevation estimation");
+    SetDefaultParameterInt("epi.elevation.avgdem.step",1);
+    SetMinimumParameterIntValue("epi.elevation.avgdem.step",1);
+
+    AddParameter(ParameterType_Float,"epi.elevation.avgdem.value","Average elevation value");
+    SetParameterDescription("epi.elevation.avgdem.value","Average elevation value estimated from DEM");
+    SetParameterRole("epi.elevation.avgdem.value",Role_Output);
+    
+    AddChoice("epi.elevation.dem","Elevation from DEM");
+    SetParameterDescription("epi.elevation.dem","Local elevations from the provided DEM");
+
+    AddParameter(ParameterType_Directory,"epi.elevation.dem.path","DEM directory");
+    SetParameterDescription("epi.elevation.dem.path","Path to the DEM directory");
+    
+    AddParameter(ParameterType_InputFilename,"epi.elevation.dem.geoid","Geoid file");
+    SetParameterDescription("epi.elevation.dem.geoid","Path to the geoid file");
+    MandatoryOff("epi.elevation.dem.geoid");
 
     AddParameter(ParameterType_Float,"epi.scale","Scale of epipolar images");
     SetParameterDescription("epi.scale","The scale parameter allows to generated zoomed-in (scale < 1) or zoomed-out (scale > 1) epipolar images.");
@@ -182,18 +221,54 @@ private:
     m_DeformationFieldSource->SetGridStep(GetParameterInt("epi.step"));
     m_DeformationFieldSource->SetScale(GetParameterFloat("epi.scale"));
 
-    switch(ElevationParametersHandler::GetElevationType(this, "epi.elevation"))
+    if(GetParameterString("epi.elevation") == "avg")
       {
-      case Elevation_DEM:
-      {
-      m_DeformationFieldSource->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "epi.elevation"));
-      m_DeformationFieldSource->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "epi.elevation"));
+      
+      m_DeformationFieldSource->SetAverageElevation(GetParameterFloat("epi.elevation.avg.value"));
       }
-      break;
-      case Elevation_Average:
+    else if(GetParameterString("epi.elevation") == "avgdem")
       {
-      m_DeformationFieldSource->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "epi.elevation"));
+      // TODO: Implement me
+      FloatImageType::PointType   origin  = GetParameterImage("io.inleft")->GetOrigin();
+      FloatImageType::SizeType    size    = GetParameterImage("io.inleft")->GetLargestPossibleRegion().GetSize();
+      FloatImageType::SpacingType spacing = GetParameterImage("io.inleft")->GetSpacing();
+
+      size[0]/=GetParameterInt("epi.elevation.avgdem.step");
+      size[1]/=GetParameterInt("epi.elevation.avgdem.step");
+      spacing[0]*=GetParameterInt("epi.elevation.avgdem.step");
+      spacing[1]*=GetParameterInt("epi.elevation.avgdem.step");
+
+      m_DEMToImageGenerator->SetDEMDirectoryPath(GetParameterString("epi.elevation.avgdem.path"));
+      m_DEMToImageGenerator->SetOutputOrigin(origin);
+      m_DEMToImageGenerator->SetOutputSize(size);
+      m_DEMToImageGenerator->SetOutputSpacing(spacing);
+      m_DEMToImageGenerator->SetOutputProjectionRef(GetParameterImage("io.inleft")->GetProjectionRef());
+      m_DEMToImageGenerator->SetOutputKeywordList(GetParameterImage("io.inleft")->GetImageKeywordlist());
+
+      m_DEMToImageGenerator->AboveEllipsoidOn();
+
+      if(IsParameterEnabled("epi.elevation.avgdem.geoid"))
+        {
+        m_DEMToImageGenerator->SetGeoidFile(GetParameterString("epi.elevation.avgdem.geoid"));
+        }
+
+      m_StatisticsFilter->SetInput(m_DEMToImageGenerator->GetOutput());
+      AddProcess(m_StatisticsFilter,"Computing DEM statistics ...");
+      m_StatisticsFilter->Update();
+      
+      m_DeformationFieldSource->SetAverageElevation(m_StatisticsFilter->GetMean());
+
+      SetParameterInt("epi.elevation.avgdem.value",m_StatisticsFilter->GetMean());
+
       }
+    else if(GetParameterString("epi.elevation") == "dem")
+      {
+      m_DeformationFieldSource->SetDEMDirectory(GetParameterString("epi.elevation.dem.path"));
+
+      if(IsParameterEnabled("epi.elevation.dem.geoid"))
+        {
+        m_DeformationFieldSource->SetGeoidFile(GetParameterString("epi.elevation.dem.geoid"));
+        }
       }
                                                     
     AddProcess(m_DeformationFieldSource, "Computing epipolar grids ...");
@@ -213,8 +288,7 @@ private:
 
     // Left field inversion
     if(IsParameterEnabled("inverse.outleft"))
-      {
-      
+      {    
       m_LeftDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetLeftDeformationFieldOutput());
 
       m_LeftInvertDeformationFieldFilter->SetInput(m_LeftDeformationFieldCaster->GetOutput());
@@ -233,6 +307,9 @@ private:
       m_LeftInvertDeformationFieldFilter->SetOutputSpacing(lspacing);
       m_LeftInvertDeformationFieldFilter->SetSize(lsize);
       m_LeftInvertDeformationFieldFilter->SetSubsamplingFactor(GetParameterInt("inverse.ssrate"));
+      AddProcess(m_LeftInvertDeformationFieldFilter, "Inverting left deformation field ...");
+      m_LeftInvertDeformationFieldFilter->Update();
+
       m_LeftIndexSelectionFilter1->SetInput(m_LeftInvertDeformationFieldFilter->GetOutput());
       m_LeftIndexSelectionFilter1->SetIndex(0);
       m_LeftIndexSelectionFilter2->SetInput(m_LeftInvertDeformationFieldFilter->GetOutput());
@@ -249,8 +326,6 @@ private:
 
     if(IsParameterEnabled("inverse.outright"))
       {
-     
-
       m_RightDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetRightDeformationFieldOutput());
 
       m_RightInvertDeformationFieldFilter->SetInput(m_RightDeformationFieldCaster->GetOutput());
@@ -262,6 +337,10 @@ private:
       m_RightInvertDeformationFieldFilter->SetOutputSpacing(rspacing);
       m_RightInvertDeformationFieldFilter->SetSize(rsize);
       m_RightInvertDeformationFieldFilter->SetSubsamplingFactor(GetParameterInt("inverse.ssrate"));
+
+      AddProcess(m_RightInvertDeformationFieldFilter, "Inverting right deformation field ...");
+      m_RightInvertDeformationFieldFilter->Update();
+
       m_RightIndexSelectionFilter1->SetInput(m_RightInvertDeformationFieldFilter->GetOutput());
       m_RightIndexSelectionFilter1->SetIndex(0);
       m_RightIndexSelectionFilter2->SetInput(m_RightInvertDeformationFieldFilter->GetOutput());
@@ -289,6 +368,9 @@ private:
   IndexSelectionCastFilterType::Pointer        m_RightIndexSelectionFilter2;
   ImageListType::Pointer                       m_RightImageList;
   ImageListFilterType::Pointer                 m_RightImageListFilter;
+  
+  DEMToImageGeneratorType::Pointer             m_DEMToImageGenerator;
+  StatisticsFilterType::Pointer                m_StatisticsFilter;
 
 };
 } // End namespace Wrapper
