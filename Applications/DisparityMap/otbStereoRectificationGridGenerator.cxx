@@ -316,9 +316,12 @@ private:
       lspacing[0]*=GetParameterInt("epi.step");
       lspacing[1]*=GetParameterInt("epi.step");
        
-      lsize[0]/=GetParameterInt("epi.step")+1;
-      lsize[1]/=GetParameterInt("epi.step")+1;
-      
+      lsize[0]/=GetParameterInt("epi.step");
+      lsize[1]/=GetParameterInt("epi.step");
+
+      lsize[0]+=1;
+      lsize[1]+=1;
+
       m_LeftInvertDeformationFieldFilter->SetOutputOrigin(lorigin);
       m_LeftInvertDeformationFieldFilter->SetOutputSpacing(lspacing);
       m_LeftInvertDeformationFieldFilter->SetSize(lsize);
@@ -348,6 +351,15 @@ private:
       FloatVectorImageType::PointType rorigin = GetParameterImage("io.inright")->GetOrigin();
       FloatVectorImageType::SpacingType rspacing = GetParameterImage("io.inright")->GetSpacing();
       FloatVectorImageType::SizeType rsize = GetParameterImage("io.inright")->GetLargestPossibleRegion().GetSize();
+
+      rspacing[0]*=GetParameterInt("epi.step");
+      rspacing[1]*=GetParameterInt("epi.step");
+       
+      rsize[0]/=GetParameterInt("epi.step");
+      rsize[1]/=GetParameterInt("epi.step");
+
+      rsize[0]+=1;
+      rsize[1]+=1;
 
       m_RightInvertDeformationFieldFilter->SetOutputOrigin(rorigin);
       m_RightInvertDeformationFieldFilter->SetOutputSpacing(rspacing);
