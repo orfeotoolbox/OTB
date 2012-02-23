@@ -1316,5 +1316,4 @@ std::vector<OGRLayer*> OGRIOHelper
 }
 
 
-
 } // end namespace otb
