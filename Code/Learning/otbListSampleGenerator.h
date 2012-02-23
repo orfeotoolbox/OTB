@@ -99,6 +99,8 @@ public:
   /** Accessors */
   itkGetConstMacro(MaxTrainingSize, long int);
   itkSetMacro(MaxTrainingSize, long int);
+  itkGetConstMacro(PolygonEdgeInclusion, bool);
+  itkSetMacro(PolygonEdgeInclusion, bool);
   itkGetConstMacro(MaxValidationSize, long int);
   itkSetMacro(MaxValidationSize, long int);
   itkGetConstMacro(ValidationTrainingProportion, double);
@@ -153,6 +155,9 @@ private:
   double   m_ValidationTrainingProportion; // proportion of training vs validation
                                            // (0.0 = all training, 1.0 = all validation)
 
+  bool           m_PolygonEdgeInclusion; // if true take into consideration pixel which are on polygon edge
+                                           //  useful, when dealing with small polygon area (1 or two pixels)
+                                           // false by default
   unsigned short m_NumberOfClasses;
   std::string    m_ClassKey;
   double         m_ClassMinSize;

@@ -170,9 +170,9 @@ private:
     SetDefaultParameterInt("sample.mv", -1);
     SetParameterDescription("sample.mv", "Maximum size of the validation sample list (default = -1)");
 
-    // AddParameter(ParameterType_Int, "sample.b", "Balance and grow the training set");
-    // SetParameterDescription("sample.b", "Balance and grow the training set.");
-    // MandatoryOff("sample.b");
+    AddParameter(ParameterType_Empty, "sample.edg", "On edge pixel inclusion");
+    SetParameterDescription("sample.edg", "Take pixels on polygon edge into consideration when building training and validation samples.");
+    MandatoryOff("sample.edg");
         
     AddParameter(ParameterType_Float, "sample.vtr", "training and validation sample ratio");
     SetParameterDescription("sample.vtr",
@@ -238,6 +238,8 @@ private:
     FloatVectorImageListType* imageList = GetParameterImageList("io.il");
     VectorDataListType* vectorDataList = GetParameterVectorDataList("io.vd");
 
+    vdreproj = VectorDataReprojectionType::New();
+
     //Iterate over all input images
     for (unsigned int imgIndex = 0; imgIndex < imageList->Size(); ++imgIndex)
       {
@@ -253,7 +255,6 @@ private:
       VectorDataType::Pointer vectorData = vectorDataList->GetNthElement(imgIndex);
       vectorData->Update();
 
-      VectorDataReprojectionType::Pointer vdreproj = VectorDataReprojectionType::New();
       vdreproj->SetInputImage(image);
       vdreproj->SetInput(vectorData);
       vdreproj->SetUseOutputSpacingAndOriginFromImage(false);
@@ -287,8 +288,7 @@ private:
       //Sample list generator
       ListSampleGeneratorType::Pointer sampleGenerator = ListSampleGeneratorType::New();
 
-      //m_sampleGenerator = sampleGenerator;
-      //Set inputs of the sample generator
+
       sampleGenerator->SetInput(image);
       sampleGenerator->SetInputVectorData(vdreproj->GetOutput());
 
@@ -296,6 +296,12 @@ private:
       sampleGenerator->SetMaxTrainingSize(GetParameterInt("sample.mt"));
       sampleGenerator->SetMaxValidationSize(GetParameterInt("sample.mv"));
       sampleGenerator->SetValidationTrainingProportion(GetParameterFloat("sample.vtr"));
+
+     // take pixel located on polygon edge into consideration
+     if (IsParameterEnabled("sample.edg"))
+     {
+       sampleGenerator->SetPolygonEdgeInclusion(true);
+     }
 
       sampleGenerator->Update();
 
@@ -467,7 +473,7 @@ private:
 
 
   }
-
+  VectorDataReprojectionType::Pointer vdreproj;
 };
 
 }

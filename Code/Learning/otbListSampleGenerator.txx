@@ -64,6 +64,7 @@ ListSampleGenerator<TImage, TVectorData>
   m_MaxTrainingSize(-1),
   m_MaxValidationSize(-1),
   m_ValidationTrainingProportion(0.0),
+  m_PolygonEdgeInclusion(false),
   m_NumberOfClasses(0),
   m_ClassKey("Class"),
   m_ClassMinSize(-1)
@@ -183,12 +184,9 @@ ListSampleGenerator<TImage, TVectorData>
         otb::TransformPhysicalRegionToIndexRegion(itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion(),
                                                   image.GetPointer());
 
-      //std::cout << "Image region from polygon:\n" << polygonRegion <<  std::endl;
-      //std::cout << "Image largest possible region:\n" << image->GetLargestPossibleRegion() <<  std::endl;
       image->SetRequestedRegion(polygonRegion);
       image->PropagateRequestedRegion();
       image->UpdateOutputData();
-      //std::cout << "Image region requested:\n" << image->GetRequestedRegion() <<  std::endl;
 
       typedef itk::ImageRegionConstIteratorWithIndex<ImageType> IteratorType;
       IteratorType it(image, polygonRegion);
@@ -197,8 +195,8 @@ ListSampleGenerator<TImage, TVectorData>
         {
         itk::ContinuousIndex<double, 2> point;
         image->TransformIndexToPhysicalPoint(it.GetIndex(), point);
-        //std::cout << it.GetIndex() << " -> " << point << std::endl;
-        if (itVector.Get()->GetPolygonExteriorRing()->IsInside(point))
+        if (itVector.Get()->GetPolygonExteriorRing()->IsInside(point) ||
+             (itVector.Get()->GetPolygonExteriorRing()->IsOnEdge(point) && (this->GetPolygonEdgeInclusion())))
           {
           double randomValue = m_RandomGenerator->GetUniformVariate(0.0, 1.0);
           if (randomValue < m_ClassesProbTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)])
