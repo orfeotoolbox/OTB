@@ -311,6 +311,16 @@ private:
     concatenateValidationSamples->Update();
     concatenateValidationLabels->Update();
 
+    if (concatenateTrainingSamples->GetOutputSampleList()->Size() == 0)
+      {
+      otbAppLogFATAL("No training samples, cannot perform SVM training.");
+      }
+
+    if (concatenateValidationSamples->GetOutputSampleList()->Size() == 0)
+      {
+      otbAppLogWARNING("No validation samples.");
+      }
+
     if (IsParameterEnabled("io.imstat"))
       {
       StatisticsReader::Pointer statisticsReader = StatisticsReader::New();
