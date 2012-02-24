@@ -60,4 +60,6 @@ REGISTER_TEST(otbLabelMapToAttributeImageFilterNew);
 REGISTER_TEST(otbHooverInstanceFilterToAttributeImage);
 REGISTER_TEST(otbLabelImageToVectorDataFilterNew);
 REGISTER_TEST(otbLabelImageToVectorDataFilter);
+REGISTER_TEST(otbStreamingVectorizedSegmentationNew);
+REGISTER_TEST(otbStreamingVectorizedSegmentation);
 }

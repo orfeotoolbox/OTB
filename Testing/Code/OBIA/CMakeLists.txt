@@ -193,59 +193,30 @@ ADD_TEST(obTvHooverInstanceFilterToAttributeImage ${OBIA_TESTS1}
 ADD_TEST(obTuLabelImageToVectorDataFilterNew ${OBIA_TESTS1}
     otbLabelImageToVectorDataFilterNew)
     
-ADD_TEST(obTuLabelImageToVectorDataFilter_UC ${OBIA_TESTS1}
+ADD_TEST(obTvLabelImageToVectorDataFilter ${OBIA_TESTS1}
     --compare-ogr ${NOTOL}
-    ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter_UC.shp
-    ${TEMP}/obTuLabelImageToVectorDataFilter_UC.shp
+    ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter.shp
+    ${TEMP}/obTuLabelImageToVectorDataFilter.shp
     otbLabelImageToVectorDataFilter
     ${INPUTDATA}/labelImage_UnsignedChar.tif
-    ${TEMP}/obTuLabelImageToVectorDataFilter_UC.shp
+    ${TEMP}/obTuLabelImageToVectorDataFilter.shp
     )
 
-ADD_TEST(obTuLabelImageToVectorDataFilter_US ${OBIA_TESTS1}
-    --compare-ogr ${NOTOL}
-    ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter_US.shp
-    ${TEMP}/obTuLabelImageToVectorDataFilter_US.shp
-    otbLabelImageToVectorDataFilter
-    ${INPUTDATA}/labelImage_UnsignedShort.tif
-    ${TEMP}/obTuLabelImageToVectorDataFilter_US.shp
-    )
-    
-ADD_TEST(obTuLabelImageToVectorDataFilter_UI ${OBIA_TESTS1}
-    --compare-ogr ${NOTOL}
-    ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter_UI.shp
-    ${TEMP}/obTuLabelImageToVectorDataFilter_UI.shp
-    otbLabelImageToVectorDataFilter
-    ${INPUTDATA}/labelImage_UnsignedInt.tif
-    ${TEMP}/obTuLabelImageToVectorDataFilter_UI.shp
-    )
-    
-ADD_TEST(obTuLabelImageToVectorDataFilter_I ${OBIA_TESTS1}
-    --compare-ogr ${NOTOL}
-    ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter_I.shp
-    ${TEMP}/obTuLabelImageToVectorDataFilter_I.shp
-    otbLabelImageToVectorDataFilter
-    ${INPUTDATA}/labelImage_Int.tif
-    ${TEMP}/obTuLabelImageToVectorDataFilter_I.shp
-    )
 
-ADD_TEST(obTuLabelImageToVectorDataFilter_F ${OBIA_TESTS1}
-    --compare-ogr ${NOTOL}
-    ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter_F.shp
-    ${TEMP}/obTuLabelImageToVectorDataFilter_F.shp
-    otbLabelImageToVectorDataFilter
-    ${INPUTDATA}/labelImage_Float.tif
-    ${TEMP}/obTuLabelImageToVectorDataFilter_F.shp
-    )
-    
-ADD_TEST(obTuLabelImageToVectorDataFilter_D ${OBIA_TESTS1}
-    --compare-ogr ${NOTOL}
-    ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter_D.shp
-    ${TEMP}/obTuLabelImageToVectorDataFilter_D.shp
-    otbLabelImageToVectorDataFilter
-    ${INPUTDATA}/labelImage_Double.tif
-    ${TEMP}/obTuLabelImageToVectorDataFilter_D.shp
-    )
+# -------            otb::StreamingVectorizedSegmentation   -------------
+ADD_TEST(obTuStreamingVectorizedSegmentationNew ${OBIA_TESTS1}
+    otbStreamingVectorizedSegmentationNew)
+
+ADD_TEST(obTvStreamingVectorizedSegmentation ${OBIA_TESTS1}
+     --compare-ogr  ${EPSILON_8}
+     ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutput.sqlite
+     ${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
+     otbStreamingVectorizedSegmentation
+     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+     ${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
+     100
+     )
+     
 
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
@@ -307,6 +278,7 @@ otbLabelMapToAttributeImageFilterNew.cxx
 otbHooverInstanceFilterToAttributeImage.cxx
 otbLabelImageToVectorDataFilterNew.cxx
 otbLabelImageToVectorDataFilter.cxx
+otbStreamingVectorizedSegmentation.cxx
 )
 
 IF(OTB_USE_PQXX)

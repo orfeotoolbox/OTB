@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Return the name of the class. */
-  itkTypeMacro(LineSegmentDetector, VectorDataSource);
+  itkTypeMacro(LabelImageToVectorDataFilter, VectorDataSource);
 
   /** Definition of the input image */
   typedef TInputImage                           InputImageType;
@@ -60,6 +60,7 @@ public:
   typedef typename InputImageType::RegionType   RegionType;
   typedef typename InputImageType::SpacingType  SpacingType;
   typedef typename InputImageType::PointType    OriginType;
+  typedef typename InputImageType::IndexType    IndexType;
 
   /** Definition of the output vector data. */
   typedef VectorData<TPrecision>                 VectorDataType;
@@ -78,6 +79,10 @@ public:
   virtual void SetInput(const InputImageType *input);
   virtual const InputImageType * GetInput(void);
   
+  itkSetMacro(FieldName, std::string);
+  itkGetMacro(FieldName, std::string);
+  
+  
 protected:
   LabelImageToVectorDataFilter();
   virtual ~LabelImageToVectorDataFilter() {}
@@ -90,6 +95,8 @@ protected:
 private:
   LabelImageToVectorDataFilter(const Self &);  //purposely not implemented
   void operator =(const Self&);      //purposely not implemented
+  
+  std::string m_FieldName;
 
 };
 

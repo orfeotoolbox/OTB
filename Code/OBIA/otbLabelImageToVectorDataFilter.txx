@@ -36,7 +36,7 @@ namespace otb
 
 template <class TInputImage, class TPrecision>
 LabelImageToVectorDataFilter<TInputImage, TPrecision>
-::LabelImageToVectorDataFilter()
+::LabelImageToVectorDataFilter() : m_FieldName("DN")
 {
    this->SetNumberOfRequiredInputs(1);
    this->SetNumberOfRequiredOutputs(1);
@@ -132,23 +132,25 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
     double geoTransform[6];
     
     //Set the geo transform of the input image (if any)
-    if (projSize != 0)
+    // Reporting origin and spacing of the buffered region
+    // the spacing is unchanged, the origin is relative to the buffered region
+    IndexType  bufferIndexOrigin = this->GetInput()->GetBufferedRegion().GetIndex();
+    OriginType  bufferOrigin;
+    this->GetInput()->TransformIndexToPhysicalPoint(bufferIndexOrigin, bufferOrigin);
+    geoTransform[0] = bufferOrigin[0];
+    geoTransform[3] = bufferOrigin[1];
+    geoTransform[1] = this->GetInput()->GetSpacing()[0];
+    geoTransform[5] = this->GetInput()->GetSpacing()[1];
+    // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
+    if (projSize == 0)
     {
-      for(unsigned int i = 0; i<6; i++)
-      {
-         geoTransform[i] = this->GetInput()->GetGeoTransform()[i];
-      }
+      geoTransform[2] = 0.;
+      geoTransform[4] = 0.; 
     }
-    //set the identity geo transform,
-    //because mem driver set the default geo transform to 0,1,0,0,0,-1
     else
     {
-      geoTransform[0] = 0;
-      geoTransform[1] = 1;
-      geoTransform[2] = 0;
-      geoTransform[3] = 0;
-      geoTransform[4] = 0;
-      geoTransform[5] = 1;
+      geoTransform[2] = this->GetInput()->GetGeoTransform()[2];
+      geoTransform[4] = this->GetInput()->GetGeoTransform()[4]; 
     }
     dataset->SetGeoTransform(geoTransform);
     
@@ -158,6 +160,9 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
     OGRDataSource * dataSource = ogrDriver->CreateDataSource("Shape",NULL);
     
     OGRLayer * outputLayer = dataSource->CreateLayer("toto",NULL,wkbMultiPolygon,NULL);
+    
+    OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
+    outputLayer->CreateField(&field, true);
 
     //Call GDALPolygonize()
     GDALPolygonize(dataset->GetRasterBand(1), NULL, outputLayer, 0, NULL, NULL, NULL);
@@ -172,6 +177,8 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
 
     // Adding the layer to the data tree
     VectorDataPointerType data = dynamic_cast<VectorDataType*>(this->GetOutput());
+    data->SetProjectionRef(this->GetInput()->GetProjectionRef());
+    
     DataTreePointerType tree = data->GetDataTree();
     DataNodePointerType root = tree->GetRoot()->Get();
     tree->Add(document, root);

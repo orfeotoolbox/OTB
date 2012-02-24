@@ -320,6 +320,7 @@ OGRVectorDataIO::GetOGRDriverName(std::string name) const
     else if ((extension == "TAB")) driverOGR = "MapInfo File";
     else if (extension == "GML") driverOGR = "GML";
     else if (extension == "GPX") driverOGR = "GPX";
+    else if (extension == "SQLITE") driverOGR = "SQLite";
 //    else if (extension=="KML")
 //      driverOGR="KML";
     else driverOGR = "NOT-FOUND";

@@ -48,10 +48,8 @@ int otbLabelImageToVectorDataFilter(int argc, char * argv[])
   WriterType::Pointer  writer = WriterType::New();
   
   reader->SetFileName(infname);
-  //reader->Update();
 
   filter->SetInput(reader->GetOutput());
-  //filter->Update();
 
   writer->SetFileName(outfname);
   writer->SetInput(filter->GetOutput());
