@@ -47,4 +47,5 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataRasterizeFilter);
   REGISTER_TEST(otbVectorDataToLabelImageFilterNew);
   REGISTER_TEST(otbVectorDataToLabelImageFilter);
+  REGISTER_TEST(otbPolygonizationRasterizationTest);
 }

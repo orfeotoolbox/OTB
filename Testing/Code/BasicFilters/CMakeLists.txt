@@ -2518,6 +2518,29 @@ ADD_TEST(bfTvVectorDataToLabelImageFilterSHP ${BASICFILTERS_TESTS15}
   ${TEMP}/bfTvVectorDataToLabelImageFilter_Output.tif
 )
 
+# ---------------------    otbPolygonizationRasterizationTest  ---------------------
+# bijectivity tests
+ADD_TEST(bfTvPolygonizationRasterization_UTM ${BASICFILTERS_TESTS15}
+  otbPolygonizationRasterizationTest
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
+)
+
+ADD_TEST(bfTvPolygonizationRasterization_WGS84 ${BASICFILTERS_TESTS15}
+  otbPolygonizationRasterizationTest
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage_WGS84.tif
+)
+ADD_TEST(bfTvPolygonizationRasterization_SensorModel ${BASICFILTERS_TESTS15}
+  otbPolygonizationRasterizationTest
+  ${INPUTDATA}/QB_Toulouse_SensorModel_labelImage.tif
+)
+
+ADD_TEST(bfTvPolygonizationRasterization_Index ${BASICFILTERS_TESTS15}
+  otbPolygonizationRasterizationTest
+  ${INPUTDATA}/QB_Toulouse_labelImage_Index.tif
+)
+
+
+
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -2808,6 +2831,7 @@ otbClampVectorImageFilter.cxx
 otbClampImageFilter.cxx
 otbVectorDataRasterizeFilter.cxx
 otbVectorDataToLabelImageFilter.cxx
+otbPolygonizationRasterizationTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
