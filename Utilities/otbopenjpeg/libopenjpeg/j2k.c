@@ -2906,7 +2906,7 @@ opj_bool j2k_read_plt_v2 (
 	for (i = 0; i < p_header_size; ++i) {
 		opj_read_bytes(p_header_data,&l_tmp,1);		/* Iplt_ij */
 		++p_header_data;
-		// take only the last seven bytes
+		// take only the last seven bits
 		l_packet_len |= (l_tmp & 0x7f);
 		if (l_tmp & 0x80) {
 			l_packet_len <<= 7;
@@ -3627,6 +3627,20 @@ opj_bool j2k_read_sot_v2 (
 	opj_read_bytes(p_header_data,&l_tot_len,4);		/* Psot */
 	p_header_data+=4;
 
+	/* PSot should be equal to zero or >=14 or <= 2^32-1 */
+	if ((l_tot_len !=0 ) && (l_tot_len < 14) )
+	{
+		if (l_tot_len == 12 ) /* MSD: Special case for the new PHR data */
+		{
+			opj_event_msg_v2(p_manager, EVT_WARNING, "Psot value is not correct regards to the JPEG2000 norm: %d.\n", l_tot_len);
+		}
+		else
+		{
+			opj_event_msg_v2(p_manager, EVT_ERROR, "Psot value is not correct regards to the JPEG2000 norm: %d.\n", l_tot_len);
+			return OPJ_FALSE;
+		}
+	}
+
 #ifdef USE_JPWL
 	if (l_cp->correct) {
 
@@ -3912,6 +3926,7 @@ opj_bool j2k_read_sod_v2 (
 	OPJ_BYTE ** l_current_data = 00;
 	opj_tcp_v2_t * l_tcp = 00;
 	OPJ_UINT32 * l_tile_len = 00;
+	opj_bool l_sot_length_pb_detected = OPJ_FALSE;
 
 	/* preconditions */
 	assert(p_j2k != 00);
@@ -3928,23 +3943,38 @@ opj_bool j2k_read_sod_v2 (
 		p_j2k->m_specific_param.m_decoder.m_sot_length = (OPJ_UINT32)(opj_stream_get_number_byte_left(p_stream) - 2);
 	}
 	else
-		p_j2k->m_specific_param.m_decoder.m_sot_length -= 2;
+	{
+		/* Check to avoid pass the limit of OPJ_UINT32 */
+		if (p_j2k->m_specific_param.m_decoder.m_sot_length >= 2 )
+			p_j2k->m_specific_param.m_decoder.m_sot_length -= 2;
+		else {
+			/* MSD: case commented for the moment to support new PHR data */
+			/*opj_event_msg_v2(p_manager, EVT_ERROR, "SOT length is incoherent\n");
+			return OPJ_FALSE;*/
+		}
+	}
+
 
 	l_current_data = &(l_tcp->m_data);
 	l_tile_len = &l_tcp->m_data_size;
 
-	if (! *l_current_data) {
-		*l_current_data = (OPJ_BYTE*) opj_malloc(p_j2k->m_specific_param.m_decoder.m_sot_length);
+	/* Patch to support new PHR data */
+	if (p_j2k->m_specific_param.m_decoder.m_sot_length) {
+		if (! *l_current_data) {
+			*l_current_data = (OPJ_BYTE*) opj_malloc(p_j2k->m_specific_param.m_decoder.m_sot_length);
+		}
+		else {
+		*l_current_data = (OPJ_BYTE*) opj_realloc(*l_current_data, *l_tile_len + p_j2k->m_specific_param.m_decoder.m_sot_length);
+		}
+
+		if (*l_current_data == 00) {
+			opj_event_msg_v2(p_manager, EVT_ERROR, "Cannot decode tile: problem while reading SOD marker!\n");
+			return OPJ_FALSE;
+		}
 	}
 	else {
-		*l_current_data = (OPJ_BYTE*) opj_realloc(*l_current_data, *l_tile_len + p_j2k->m_specific_param.m_decoder.m_sot_length);
+		l_sot_length_pb_detected = OPJ_TRUE;
 	}
-
-	if (*l_current_data == 00) {
-		opj_event_msg_v2(p_manager, EVT_ERROR, "Cannot decode tile\n");
-		return OPJ_FALSE;
-	}
-
 
 	/* Index */
 	l_cstr_index = p_j2k->cstr_index;
@@ -3966,10 +3996,18 @@ opj_bool j2k_read_sod_v2 (
 		/*l_cstr_index->packno = 0;*/
 	}
 
-	l_current_read_size = opj_stream_read_data(	p_stream,
-												*l_current_data + *l_tile_len,
-												p_j2k->m_specific_param.m_decoder.m_sot_length,
-												p_manager);
+	/* Patch to support new PHR data */
+	if (!l_sot_length_pb_detected)
+	{
+		l_current_read_size = opj_stream_read_data(	p_stream,
+													*l_current_data + *l_tile_len,
+													p_j2k->m_specific_param.m_decoder.m_sot_length,
+													p_manager);
+	}
+	else {
+		l_current_read_size = 0;
+	}
+
 
 	if (l_current_read_size != p_j2k->m_specific_param.m_decoder.m_sot_length) {
 		p_j2k->m_specific_param.m_decoder.m_state = J2K_STATE_NEOC;
@@ -5757,10 +5795,9 @@ opj_bool j2k_encode(opj_j2k_t *j2k, opj_cio_t *cio, opj_image_t *image, opj_code
 	return OPJ_TRUE;
 }
 
-static void j2k_add_mhmarker(opj_codestream_info_t *cstr_info, unsigned short int type, int pos, int len) {
-
-	if (!cstr_info)
-		return;
+static void j2k_add_mhmarker(opj_codestream_info_t *cstr_info, unsigned short int type, int pos, int len)
+{
+	assert(cstr_info != 00);
 
 	/* expand the list? */
 	if ((cstr_info->marknum + 1) > cstr_info->maxmarknum) {
@@ -5776,10 +5813,9 @@ static void j2k_add_mhmarker(opj_codestream_info_t *cstr_info, unsigned short in
 
 }
 
-static void j2k_add_mhmarker_v2(opj_codestream_index_t *cstr_index, OPJ_UINT32 type, OPJ_OFF_T pos, OPJ_UINT32 len) {
-
-	if (!cstr_index)
-		return;
+static void j2k_add_mhmarker_v2(opj_codestream_index_t *cstr_index, OPJ_UINT32 type, OPJ_OFF_T pos, OPJ_UINT32 len)
+{
+	assert(cstr_index != 00);
 
 	/* expand the list? */
 	if ((cstr_index->marknum + 1) > cstr_index->maxmarknum) {
@@ -5795,13 +5831,11 @@ static void j2k_add_mhmarker_v2(opj_codestream_index_t *cstr_index, OPJ_UINT32 t
 
 }
 
-static void j2k_add_tlmarker( int tileno, opj_codestream_info_t *cstr_info, unsigned short int type, int pos, int len) {
+static void j2k_add_tlmarker( int tileno, opj_codestream_info_t *cstr_info, unsigned short int type, int pos, int len)
+{
+	opj_marker_info_t *marker;
 
-
-  opj_marker_info_t *marker;
-
-	if (!cstr_info)
-		return;
+	assert(cstr_info != 00);
 
 	/* expand the list? */
 	if ((cstr_info->tile[tileno].marknum + 1) > cstr_info->tile[tileno].maxmarknum) {
@@ -5820,11 +5854,8 @@ static void j2k_add_tlmarker( int tileno, opj_codestream_info_t *cstr_info, unsi
 
 static void j2k_add_tlmarker_v2(OPJ_UINT32 tileno, opj_codestream_index_t *cstr_index, OPJ_UINT32 type, OPJ_OFF_T pos, OPJ_UINT32 len)
 {
-
-	if (!cstr_index)
-		return;
-
-	if (!cstr_index->tile_index)
+	assert(cstr_index != 00);
+	assert(cstr_index->tile_index != 00);
 
 	/* expand the list? */
 	if ((cstr_index->tile_index[tileno].marknum + 1) > cstr_index->tile_index[tileno].maxmarknum) {
@@ -5847,10 +5878,7 @@ static void j2k_add_tlmarker_v2(OPJ_UINT32 tileno, opj_codestream_index_t *cstr_
 			cstr_index->tile_index[tileno].tp_index[l_current_tile_part].start_pos = pos;
 
 	}
-
 }
-
-
 
 
 /*
