@@ -63,9 +63,9 @@ int otbPolygonizationRasterizationTest(int argc, char* argv[])
   ImageType::PixelType status = itk::NumericTraits<ImageType::PixelType>::Zero;
   unsigned long        numberOfPixelsWithDifferences = 0;
   
-  itk::ImageRegionConstIterator<ImageType> itRef(reader->GetOutput(), 
+  itk::ImageRegionConstIterator<ImageType> itRef(reader->GetOutput(),
                                                  reader->GetOutput()->GetLargestPossibleRegion());
-  itk::ImageRegionConstIterator<ImageType> itTest(rasterization->GetOutput(), 
+  itk::ImageRegionConstIterator<ImageType> itTest(rasterization->GetOutput(),
                                                   rasterization->GetOutput()->GetLargestPossibleRegion());
   itRef.GoToBegin();
   itTest.GoToBegin();

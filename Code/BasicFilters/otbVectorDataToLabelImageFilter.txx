@@ -132,7 +132,7 @@ template<class TVectorData, class TOutputImage>
 void
 VectorDataToLabelImageFilter<TVectorData, TOutputImage>
 ::GenerateOutputInformation()
-{ 
+{
   // get pointer to the output
   OutputImagePointer outputPtr = this->GetOutput();
   if (!outputPtr)
@@ -187,11 +187,11 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
 
     // The method ConvertDataTreeNodeToOGRLayers create the
     // OGRDataSource but don t release it. Destruction is done in the
-    // desctructor 
+    // desctructor
     m_OGRDataSourcePointer = NULL;
     ogrLayerVector = IOConversion->ConvertDataTreeNodeToOGRLayers(inputRoot,
                                                                   m_OGRDataSourcePointer,
-                                                                  ogrCurrentLayer, 
+                                                                  ogrCurrentLayer,
                                                                   oSRS);
 
     // From OGRLayer* to OGRGeometryH vector
@@ -224,7 +224,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
           {
           // TODO : if no burnAttribute available, warning or raise an exception??
           m_FullBurnValues.push_back(m_DefaultBurnValue++);
-          itkWarningMacro(<<"Failed to find attribute "<<m_BurnAttribute << " in layer " 
+          itkWarningMacro(<<"Failed to find attribute "<<m_BurnAttribute << " in layer "
                           << OGR_FD_GetName( OGR_L_GetLayerDefn( (OGRLayerH)(ogrLayerVector[idx]) ))
                           <<" .Setting burn value to default =  "
                           << m_DefaultBurnValue);
@@ -238,7 +238,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
         }
         }
 
-    // Destroy the oSRS 
+    // Destroy the oSRS
     if (oSRS != NULL)
       {
       OSRRelease(oSRS);
@@ -300,10 +300,10 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
   // Burn the geometries into the dataset
    if (dataset != NULL)
      {
-     GDALRasterizeGeometries( dataset, m_BandsToBurn.size(), 
-                          &(m_BandsToBurn[0]), 
-                          m_SrcDataSetGeometries.size(), 
-                          &(m_SrcDataSetGeometries[0]), 
+     GDALRasterizeGeometries( dataset, m_BandsToBurn.size(),
+                          &(m_BandsToBurn[0]),
+                          m_SrcDataSetGeometries.size(),
+                          &(m_SrcDataSetGeometries[0]),
                           NULL, NULL, &(m_FullBurnValues[0]),
                           NULL,
                           GDALDummyProgress, NULL );

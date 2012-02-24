@@ -145,12 +145,12 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
     if (projSize == 0)
     {
       geoTransform[2] = 0.;
-      geoTransform[4] = 0.; 
+      geoTransform[4] = 0.;
     }
     else
     {
       geoTransform[2] = this->GetInput()->GetGeoTransform()[2];
-      geoTransform[4] = this->GetInput()->GetGeoTransform()[4]; 
+      geoTransform[4] = this->GetInput()->GetGeoTransform()[4];
     }
     dataset->SetGeoTransform(geoTransform);
     

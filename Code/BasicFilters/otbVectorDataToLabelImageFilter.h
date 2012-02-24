@@ -32,12 +32,12 @@ namespace otb {
 
 /** \class VectorDataToLabelImageFilter
  *  \brief Burn geometries from the specified VectorData into raster
- *   
+ *
  *  This class handles burning several input VectorDatas into the
  *  output raster.  The burn values are extracted from a field set by
  *  the user.If no burning field is set, the "FID" is used by default.
  *
- *  Setting the output raster informations can be done in two ways by: 
+ *  Setting the output raster informations can be done in two ways by:
  *    - Setting the Origin/Size/Spacing of the output image
  *    - Using an existing image as support via SetOutputParametersFromImage(ImageBase)
  *
@@ -49,7 +49,7 @@ class  ITK_EXPORT VectorDataToLabelImageFilter :
 public:
   /** Standard class typedefs */
   typedef VectorDataToLabelImageFilter                           Self;
-  typedef itk::ImageSource<TOutputImage>     Superclass; 
+  typedef itk::ImageSource<TOutputImage>     Superclass;
   typedef itk::SmartPointer< Self >                           Pointer;
   typedef itk::SmartPointer<const Self>                       ConstPointer;
   
@@ -91,7 +91,7 @@ public:
   itkGetConstReferenceMacro(OutputSize, OutputSizeType);
 
   /** Set the origin of the output image.
-   * \sa GetOrigin() 
+   * \sa GetOrigin()
    */
   itkSetMacro(OutputOrigin, OutputOriginType);
   virtual void SetOutputOrigin(const double origin[2]);
@@ -100,7 +100,7 @@ public:
   itkGetConstReferenceMacro(OutputOrigin, OutputOriginType);
 
   /** Set the spacing (size of a pixel) of the output image.
-  * \sa GetSpacing() 
+  * \sa GetSpacing()
   */
   virtual void SetOutputSpacing(const OutputSpacingType& spacing);
   virtual void SetOutputSpacing(const double spacing[2]);
@@ -120,7 +120,7 @@ protected:
   virtual void GenerateData();
 
   VectorDataToLabelImageFilter();
-  virtual ~VectorDataToLabelImageFilter() 
+  virtual ~VectorDataToLabelImageFilter()
   {
     // Destroy the geometries stored
     for (unsigned int idx = 0; idx < m_SrcDataSetGeometries.size(); ++idx)
