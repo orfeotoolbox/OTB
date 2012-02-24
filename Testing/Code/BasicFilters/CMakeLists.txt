@@ -2503,6 +2503,22 @@ ADD_TEST(bfTvVectorDataRasterizeFilterKML ${BASICFILTERS_TESTS15}
   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputKML.tif
 )
 
+# ---------------------    otbRasterizeVectorDataFilter---------------------
+ADD_TEST(bfTuVectorDataToLabelImageFilterNew ${BASICFILTERS_TESTS15}
+  otbVectorDataToLabelImageFilterNew
+)
+
+ADD_TEST(bfTvVectorDataToLabelImageFilterSHP ${BASICFILTERS_TESTS15}
+  --compare-image 0.0
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
+  ${TEMP}/bfTvVectorDataToLabelImageFilter_Output.tif
+  otbVectorDataToLabelImageFilter
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
+  ${INPUTDATA}/QB_Toulouse_ortho.shp
+  ${TEMP}/bfTvVectorDataToLabelImageFilter_Output.tif
+)
+
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbBasicFiltersTests1.cxx
@@ -2791,6 +2807,7 @@ otbThresholdVectorImageFilter.cxx
 otbClampVectorImageFilter.cxx
 otbClampImageFilter.cxx
 otbVectorDataRasterizeFilter.cxx
+otbVectorDataToLabelImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
