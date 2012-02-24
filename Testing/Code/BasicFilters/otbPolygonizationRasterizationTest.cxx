@@ -28,10 +28,12 @@
 #include "otbStandardOneLineFilterWatcher.h"
 
 #include "itkNumericTraits.h"
-#include "itkImageRegionConstIterator.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 
 int otbPolygonizationRasterizationTest(int argc, char* argv[])
 {
+  typedef unsigned int                                          PixelType;
+  typedef itk::NumericTraits<PixelType>::AbsType                AbsType;
   typedef otb::Image<unsigned int, 2>                           ImageType;
   typedef otb::ImageFileReader<ImageType>                       ReaderType;
 
@@ -60,38 +62,23 @@ int otbPolygonizationRasterizationTest(int argc, char* argv[])
 
   // Compare the input label image and the output of the rasterization
   // filter, they must be exactly similar
-  ImageType::PixelType status = itk::NumericTraits<ImageType::PixelType>::Zero;
-  unsigned long        numberOfPixelsWithDifferences = 0;
+  AbsType status = itk::NumericTraits<AbsType>::Zero;
+  unsigned long numberOfPixelsWithDifferences = 0;
   
-  itk::ImageRegionConstIterator<ImageType> itRef(reader->GetOutput(),
+  itk::ImageRegionConstIteratorWithIndex<ImageType> itRef(reader->GetOutput(),
                                                  reader->GetOutput()->GetLargestPossibleRegion());
-  itk::ImageRegionConstIterator<ImageType> itTest(rasterization->GetOutput(),
+  itk::ImageRegionConstIteratorWithIndex<ImageType> itTest(rasterization->GetOutput(),
                                                   rasterization->GetOutput()->GetLargestPossibleRegion());
-  itRef.GoToBegin();
-  itTest.GoToBegin();
   
-  while(!itRef.IsAtEnd()  && !itTest.IsAtEnd())
+  for(itRef.GoToBegin(), itTest.GoToBegin();
+      !itRef.IsAtEnd()  && !itTest.IsAtEnd();
+      ++itRef, ++itTest)
     {
-    ImageType::PixelType diff = vcl_abs(itRef.Get() - itTest.Get());
-    if( diff != itk::NumericTraits<ImageType::PixelType>::Zero)
+    if (itRef.Get() != itTest.Get())
       {
-      status += diff;
-      numberOfPixelsWithDifferences++;
+      std::cerr << "Pixel at position " << itRef.GetIndex() << " differs : " << itRef.Get() << " against " << itTest.Get() << std::endl;
+      return EXIT_FAILURE;
       }
-    ++itRef;
-    ++itTest;
     }
-
-  if (status != itk::NumericTraits<ImageType::PixelType>::Zero || numberOfPixelsWithDifferences != 0)
-    {
-    std::cout <<"Total difference "<< status << "for ["<< numberOfPixelsWithDifferences <<"] pixel(s)" <<std::endl;
-    std::cout <<"Polygonization - rasterization bijectivity test failed." << std::endl;
-    return EXIT_FAILURE;
-    }
-  else
-    {
-    std::cout <<"Bijectivity Test exit with success" << std::endl;
-    }
-
   return EXIT_SUCCESS;
 }
