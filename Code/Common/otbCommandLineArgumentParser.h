@@ -130,7 +130,7 @@ public:
 //  const char *GetOptionParameter(const char *option, unsigned int number = 0);
   int GetNumberOfParameters(const std::string& option);
 
-  void PrintSelf(std::ostream& os /*, itk::Indent indent*/) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 #define otbGetParameterMacro(name, type)                                                 \
   virtual type GetParameter ## name (const std::string& option, unsigned int number = 0) const     \
