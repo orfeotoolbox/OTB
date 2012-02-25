@@ -78,7 +78,7 @@
 /* Function inlining, not ANSI/ISO C! */
 #if (defined(URI_DOXYGEN) || defined(URI_SIZEDOWN))
 # define URI_INLINE
-#elif defined(__INTEL_COMPILER)
+#elif defined(__INTEL_COMPILER) && defined(WIN32)
 /* Intel C/C++ */
 /* http://predef.sourceforge.net/precomp.html#sec20 */
 /* http://www.intel.com/support/performancetools/c/windows/sb/CS-007751.htm#2 */
