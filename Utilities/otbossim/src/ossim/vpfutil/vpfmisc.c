@@ -416,14 +416,14 @@ void displaymessage( char *s, ... )
    }
    va_end(arglist);
    for (i=0;i<nlines;i++) {
-       fprintf(stderr, text[i]);
+       fprintf(stderr, "%s", text[i]);
    }
    free(text);
 }
 
 void display_message(char *str)
 {
-    fprintf(stderr, str);
+    fprintf(stderr, "%s", str);
 }
 
 
