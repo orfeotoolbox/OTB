@@ -62,8 +62,11 @@
 #cmakedefine OTB_USE_CURL
 #cmakedefine OTB_CURL_MULTI_AVAILABLE
 
-/* Curl */
+/* OpenJpeg */
 #cmakedefine OTB_USE_JPEG2000
+
+/* SiftFast */
+#cmakedefine OTB_USE_SIFTFAST
 
 /* Use Visu/Gui configurations */
 #cmakedefine OTB_USE_VISU_GUI

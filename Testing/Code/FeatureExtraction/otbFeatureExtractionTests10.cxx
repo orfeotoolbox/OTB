@@ -27,9 +27,11 @@ void RegisterTests()
   REGISTER_TEST(otbImageToSURFKeyPointSetFilterNew);
   REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputInterestPointAscii);
   REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputDescriptorAscii);
+#ifdef OTB_USE_SIFTFAST
   REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterNew);
   REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii);
   REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii);
+#endif
   REGISTER_TEST(otbKeyPointSetsMatchingFilterNew);
   REGISTER_TEST(otbKeyPointSetsMatchingFilter);
   REGISTER_TEST(otbLandmarkNew);

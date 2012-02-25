@@ -1,0 +1,3 @@
+MESSAGE(STATUS "Importing libSiftFast...")
+OPTION(OTB_USE_SIFTFAST "Use Fast SIFT Image Features Library" ON)
+MARK_AS_ADVANCED(OTB_USE_SIFTFAST)

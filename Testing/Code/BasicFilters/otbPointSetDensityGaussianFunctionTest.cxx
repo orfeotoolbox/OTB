@@ -20,7 +20,6 @@
 #include "otbPointSetDensityGaussianFunction.h"
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
-#include "otbSiftFastImageFilter.h"
 
 #include <iostream>
 

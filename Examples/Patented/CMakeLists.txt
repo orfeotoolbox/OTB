@@ -22,12 +22,15 @@ ADD_EXECUTABLE(SIFTExample SIFTExample.cxx)
 TARGET_LINK_LIBRARIES(SIFTExample OTBIO OTBCommon OTBFeatureExtraction
 ITKCommon ITKBasicFilters)
 
-ADD_EXECUTABLE(SIFTFastExample SIFTFastExample.cxx)
-TARGET_LINK_LIBRARIES(SIFTFastExample OTBIO OTBCommon OTBFeatureExtraction
-ITKCommon ITKBasicFilters)
+IF(OTB_USE_SIFTFAST)
 
-ADD_EXECUTABLE(SIFTDensityExample SIFTDensityExample.cxx)
-TARGET_LINK_LIBRARIES(SIFTDensityExample OTBIO OTBCommon OTBBasicFilters ITKCommon ITKBasicFilters)
+  ADD_EXECUTABLE(SIFTFastExample SIFTFastExample.cxx)
+  TARGET_LINK_LIBRARIES(SIFTFastExample OTBIO OTBCommon OTBFeatureExtraction ITKCommon ITKBasicFilters)
+
+  ADD_EXECUTABLE(SIFTDensityExample SIFTDensityExample.cxx)
+  TARGET_LINK_LIBRARIES(SIFTDensityExample OTBIO OTBCommon OTBBasicFilters ITKCommon ITKBasicFilters)
+
+ENDIF(OTB_USE_SIFTFAST)
 
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
@@ -101,7 +104,7 @@ ADD_TEST(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
   1 10 0.5 0
 )
 
-
+IF(OTB_USE_SIFTFAST)
 ADD_TEST(feTeSIFTFastExampleTest ${EXE_TESTS}
   --compare-image ${TOL}
    ${BASELINE}/ROISpot5SiftFast.png
@@ -111,7 +114,7 @@ ADD_TEST(feTeSIFTFastExampleTest ${EXE_TESTS}
    ${TEMP}/ROISpot5SiftFast.png
    3
 )
-
+ENDIF(OTB_USE_SIFTFAST)
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbPatentedExamplesTests otbPatentedExamplesTests.cxx)

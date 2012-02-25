@@ -74,8 +74,12 @@ MESSAGE(STATUS "Configuring otbkml...")
 ADD_SUBDIRECTORY(otbkml)
 MESSAGE(STATUS "Configuring otbedison...")
 ADD_SUBDIRECTORY(otbedison)
-MESSAGE(STATUS "Configuring otbsiftfast...")
-ADD_SUBDIRECTORY(otbsiftfast)
+
+IF(OTB_USE_SIFTFAST)
+  MESSAGE(STATUS "Configuring otbsiftfast...")
+  ADD_SUBDIRECTORY(otbsiftfast)
+ENDIF(OTB_USE_SIFTFAST)
+
 MESSAGE(STATUS "Configuring otbconfigfile...")
 ADD_SUBDIRECTORY(otbconfigfile)
 

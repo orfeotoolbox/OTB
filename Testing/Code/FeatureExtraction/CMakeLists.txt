@@ -1039,6 +1039,7 @@ ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXT
 
 
 # -------            otb::ImageToFastSIFTKeyPointSetFilter   -------------
+IF(OTB_USE_SIFTFAST)
 
 ADD_TEST(feTuImageToFastSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS10}
          otbImageToFastSIFTKeyPointSetFilterNew)
@@ -1064,6 +1065,7 @@ ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEA
   6
 )
 
+ENDIF(OTB_USE_SIFTFAST)
 
 
 # --------- MatchingFilter ----------------

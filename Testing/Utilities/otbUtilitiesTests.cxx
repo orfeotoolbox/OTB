@@ -77,7 +77,10 @@ REGISTER_TEST(kmlsharedstyles);
 REGISTER_TEST(kmlsimplifylines);
 REGISTER_TEST(kmlsortplacemarks);
 
+#ifdef OTB_USE_SIFTFAST
 REGISTER_TEST(SiftFast);
+#endif
+
 REGISTER_TEST(ijObjectLabelAttributeValuesTest);
 REGISTER_TEST(ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest);
 }

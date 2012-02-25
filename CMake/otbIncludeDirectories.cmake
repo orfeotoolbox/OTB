@@ -72,7 +72,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbedison/segm
   ${OTB_SOURCE_DIR}/Utilities/otbedison/prompt
   ${OTB_SOURCE_DIR}/Utilities/otbedison/edge
-  ${OTB_SOURCE_DIR}/Utilities/otbsiftfast
   ${OTB_SOURCE_DIR}/Utilities/otbconfigfile
   ${OTB_SOURCE_DIR}/Utilities/otbknn
   ${OTB_SOURCE_DIR}/Utilities/otbmuparser
@@ -106,6 +105,10 @@ IF(OTB_USE_PQXX)
     ${OTB_SOURCE_DIR}/Code/GeospatialAnalysis)
 ENDIF(OTB_USE_PQXX)
 
+IF(OTB_USE_SIFTFAST)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+      ${OTB_SOURCE_DIR}/Utilities/otbsiftfast)
+ENDIF(OTB_USE_SIFTFAST)
 
 #-----------------------------------------------------------------------------
 # Include directories from the ossim build tree
@@ -325,7 +328,6 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Utilities/otbkml/third_party/boost_1_34_1
   Utilities/otbliblas/include
   Utilities/otbedison
-  Utilities/otbsiftfast
   Utilities/otbconfigfile
   Utilities/otbknn
   Utilities/otbmuparser
@@ -367,6 +369,11 @@ IF(OTB_USE_GETTEXT)
   SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
   	${GETTEXT_INCLUDE_DIR} )
 ENDIF(OTB_USE_GETTEXT)
+
+IF(OTB_USE_SIFTFAST)
+  SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+      Utilities/otbsiftfast)
+ENDIF(OTB_USE_SIFTFAST)
 
 #For FLTK header file
 IF(OTB_USE_EXTERNAL_FLTK)

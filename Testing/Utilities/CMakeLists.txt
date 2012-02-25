@@ -335,6 +335,9 @@ ijObjectLabelAttributeValuesTest.cxx
 ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest.cxx
 )
 
+IF(OTB_USE_SIFTFAST)
+  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS} siftfast.cpp)
+ENDIF(OTB_USE_SIFTFAST)
 
 IF(OTB_USE_JPEG2000)
 #  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  openJpegEncoder.cxx openJpegDecoder.cxx)
@@ -369,12 +372,16 @@ ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
 # -------       Select sources files suppress warning  -----------------------------------
 SET(UtilitiesTests_DisableWarning_SRCS
-    siftfast.cpp
     openthreadsWorkCrew.cpp
     expatchardata.cxx
     expatminicheck.cxx
     expatruntests.cxx
 )
+
+IF(OTB_USE_SIFTFAST)
+  SET(UtilitiesTests_DisableWarning_SRCS ${UtilitiesTests_DisableWarning_SRCS} siftfast.cpp)
+ENDIF(OTB_USE_SIFTFAST)
+
 IF(CMAKE_COMPILER_IS_GNUCXX)
       SET_SOURCE_FILES_PROPERTIES( ${UtilitiesTests_DisableWarning_SRCS} PROPERTIES COMPILE_FLAGS -w)
 ELSE(CMAKE_COMPILER_IS_GNUCXX)
@@ -393,7 +400,11 @@ IF(NOT BUILD_SHARED_LIBS)
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon OTBTesting otbsvm otb6S tinyXML otbkml otbsiftfast)
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon OTBTesting otbsvm otb6S tinyXML otbkml)
+
+IF(OTB_USE_SIFTFAST)
+  TARGET_LINK_LIBRARIES(otbUtilitiesTests otbsiftfast)
+ENDIF(OTB_USE_SIFTFAST)
 
 IF(OTB_USE_JPEG2000)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests otbopenjpeg)
