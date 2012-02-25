@@ -72,7 +72,7 @@ ossimDtedRecord::ossimDtedRecord(std::istream& in,
    printf("\nBuf: %02X", (int)buf[0]);  // Display in HEX
 #endif
    
-   if(!(buf[0] = DATA_RECOGNITION_SENTINEL))
+   if(buf[0] != DATA_RECOGNITION_SENTINEL)
    {
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
       ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimDtedRecord::ossimDtedRecord: reading DTED's data record at: " << theStartOffset
