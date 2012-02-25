@@ -169,7 +169,7 @@ protected:
   /** Allocate the outputs (need to be reimplemented since outputs have differents type) */
   virtual void AllocateOutputs();
   /** If modified, we have to reset the list of modes */
-  virtual void Modified()
+  virtual void Modified() const
   {
     Superclass::Modified();
     m_Modes.clear();
@@ -196,7 +196,7 @@ private:
   /** Data scale (used to stretch data range) */
   double m_Scale;
   /** A map of the different modes by segmented regions */
-  ModeMapType m_Modes;
+  mutable ModeMapType m_Modes;
 };
 } // end namespace otb
 

@@ -193,7 +193,7 @@ PolyLineParametricPathWithValue<TValue, VDimension>
 template <class TValue, unsigned int VDimension>
 void
 PolyLineParametricPathWithValue<TValue, VDimension>
-::Modified()
+::Modified() const
 {
   m_LengthIsValid = false;
   m_BoundingRegionIsValid = false;

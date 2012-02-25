@@ -190,7 +190,7 @@ protected:
   GenericRSTransform();
   virtual ~GenericRSTransform() {}
 
-  virtual void Modified()
+  virtual void Modified() const
   {
     this->Superclass::Modified();
     m_TransformUpToDate = false;
@@ -223,7 +223,7 @@ private:
 
   GenericTransformPointerType   m_InputTransform;
   GenericTransformPointerType   m_OutputTransform;
-  bool                          m_TransformUpToDate;
+  mutable bool                  m_TransformUpToDate;
   Projection::TransformAccuracy m_TransformAccuracy;
 
 };

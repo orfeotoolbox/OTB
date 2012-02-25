@@ -527,7 +527,7 @@ double Polygon<TValue>
 template <class TValue>
 void
 Polygon<TValue>
-::Modified()
+::Modified() const
 {
   Superclass::Modified();
   m_AreaIsValid = false;

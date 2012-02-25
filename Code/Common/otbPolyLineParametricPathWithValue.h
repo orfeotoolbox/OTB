@@ -111,7 +111,7 @@ protected:
 
   virtual void ComputeLength() const;
   virtual void ComputeBoundingRegion() const;
-  virtual void Modified();
+  virtual void Modified() const;
 
 private:
   PolyLineParametricPathWithValue(const Self &); //purposely not implemented

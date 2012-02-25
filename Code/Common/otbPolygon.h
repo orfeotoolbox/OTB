@@ -151,7 +151,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void ComputeArea() const;
-  virtual void Modified();
+  virtual void Modified() const;
 
 private:
   Polygon(const Self &); //purposely not implemented
