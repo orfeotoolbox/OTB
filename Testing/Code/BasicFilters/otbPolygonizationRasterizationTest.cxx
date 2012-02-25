@@ -33,8 +33,7 @@
 int otbPolygonizationRasterizationTest(int argc, char* argv[])
 {
   typedef unsigned int                                          PixelType;
-  typedef itk::NumericTraits<PixelType>::AbsType                AbsType;
-  typedef otb::Image<unsigned int, 2>                           ImageType;
+  typedef otb::Image<PixelType, 2>                              ImageType;
   typedef otb::ImageFileReader<ImageType>                       ReaderType;
 
   typedef otb::VectorData<>                                     VectorDataType;
@@ -62,13 +61,10 @@ int otbPolygonizationRasterizationTest(int argc, char* argv[])
 
   // Compare the input label image and the output of the rasterization
   // filter, they must be exactly similar
-  AbsType status = itk::NumericTraits<AbsType>::Zero;
-  unsigned long numberOfPixelsWithDifferences = 0;
-  
   itk::ImageRegionConstIteratorWithIndex<ImageType> itRef(reader->GetOutput(),
-                                                 reader->GetOutput()->GetLargestPossibleRegion());
+                                                          reader->GetOutput()->GetLargestPossibleRegion());
   itk::ImageRegionConstIteratorWithIndex<ImageType> itTest(rasterization->GetOutput(),
-                                                  rasterization->GetOutput()->GetLargestPossibleRegion());
+                                                           rasterization->GetOutput()->GetLargestPossibleRegion());
   
   for(itRef.GoToBegin(), itTest.GoToBegin();
       !itRef.IsAtEnd()  && !itTest.IsAtEnd();
@@ -76,7 +72,7 @@ int otbPolygonizationRasterizationTest(int argc, char* argv[])
     {
     if (itRef.Get() != itTest.Get())
       {
-      std::cerr << "Pixel at position " << itRef.GetIndex() << " differs : " << itRef.Get() << " against " << itTest.Get() << std::endl;
+      std::cerr << "Pixel at position " << itRef.GetIndex() << " differs : in=" << itRef.Get() << " while out=" << itTest.Get() << std::endl;
       return EXIT_FAILURE;
       }
     }
