@@ -2121,45 +2121,46 @@ bool ossimplugins::ossimTerraSarModel::initNoise(
     
     polLayerName = sub_nodes[0]->getText();
 
-    ossim_uint32 polLayerIdx = -1;
+    ossim_uint32 polLayerIdx = 0;
+    bool polLayerIdxFound = false;
     
     for(ossim_uint32 idx = 0 ; idx < _polLayerList.size(); ++idx)
     {
 		if(_polLayerList[idx] == polLayerName)
 		{
 			polLayerIdx = idx;
+			polLayerIdxFound = true;
 		}    
     }  
 
-	if(polLayerIdx < 0)
-	{
-      	setErrorStatus();
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << MODULE << " DEBUG: Unable to found polLayer in polLayer List" << std::endl;
-         }
-      	return false;	
-	}
+	  if (!polLayerIdxFound)
+    {
+      setErrorStatus();
+      if (traceDebug())
+        {
+        ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG: Unable to find polLayer in polLayer List"
+            << std::endl;
+        }
+      return false;
+    }
 	
-	sub_nodes.clear();
+	  sub_nodes.clear();
 
-   //_noise[polLayerIdx] = new Noise();
-   _noise[polLayerIdx].set_imagePolarisation(polLayerName);
+    //_noise[polLayerIdx] = new Noise();
+    _noise[polLayerIdx].set_imagePolarisation(polLayerName);
    
-   result = getNoiseAtGivenNode( (*node),_noise[polLayerIdx]);
-   if(polLayerIdx < 0)
-   {
-      	setErrorStatus();
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << MODULE << " DEBUG: Unable to getNoise for the "<< polLayerName <<" layer image"<< std::endl;
-         }
-      	return false;	
-	}
+    result = getNoiseAtGivenNode( (*node),_noise[polLayerIdx]);
+    if(!result)
+    {
+       setErrorStatus();
+       if (traceDebug())
+       {
+         ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG: Unable to getNoise for the " << polLayerName
+             << " layer image" << std::endl;
+       }
+       return false;
+	  }
 
-   
     ++node;
    }
 
@@ -2226,7 +2227,7 @@ bool ossimplugins::ossimTerraSarModel::getPolLayerFromImageFile(
     }
     polLayerName = sub_nodes[0]->getText();
 	
-	sub_nodes.clear();
+    sub_nodes.clear();
     xpath = "file/location/filename";
     (*node)->findChildNodes(xpath, sub_nodes);
     if (sub_nodes.size() == 0)
@@ -2243,13 +2244,12 @@ bool ossimplugins::ossimTerraSarModel::getPolLayerFromImageFile(
     }
     polLayerFileName = sub_nodes[0]->getText();
 
-	if(polLayerFileName == imageFilename.file())
-	{
-               _polLayer = polLayerName;
-	}
+    if (polLayerFileName == imageFilename.file())
+    {
+      _polLayer = polLayerName;
+    }
     ++node;
    }
-   
    
    if (traceDebug())
    {
@@ -2315,17 +2315,19 @@ bool ossimplugins::ossimTerraSarModel::initCalibration(
     
     polLayerName = sub_nodes[0]->getText();
 
-    ossim_uint32 polLayerIdx = -1;
+    ossim_uint32 polLayerIdx = 0;
+    bool polLayerIdxFound = false;
     
     for(ossim_uint32 idx = 0 ; idx < _polLayerList.size(); ++idx)
     {
 		if(_polLayerList[idx] == polLayerName)
 		{
 			polLayerIdx = idx;
+			polLayerIdxFound = true;
 		}    
     }  
 
-	if(polLayerIdx < 0)
+	if(!polLayerIdxFound)
 	{
       	setErrorStatus();
          if(traceDebug())
