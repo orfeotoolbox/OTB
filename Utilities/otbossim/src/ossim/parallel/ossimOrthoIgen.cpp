@@ -2902,7 +2902,7 @@ void ossimOrthoIgen::setProductGsd()
    {
       // Need to adjust the resolution in the longitude direction if the user requested geo-scaling:
       if (!ossim::isnan(theGeoScalingLatitude))
-         resolution.lon = resolution.lat/cosd(theGeoScalingLatitude);
+         resolution.lon = resolution.lat/ossim::cosd(theGeoScalingLatitude);
       theProductProjection->setDecimalDegreesPerPixel(resolution);
    }
    else 
