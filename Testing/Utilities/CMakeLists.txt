@@ -330,7 +330,6 @@ kmlparsens.cc
 kmlsharedstyles.cc
 kmlsimplifylines.cc
 kmlsortplacemarks.cc
-siftfast.cpp
 ijObjectLabelAttributeValuesTest.cxx
 ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest.cxx
 )
