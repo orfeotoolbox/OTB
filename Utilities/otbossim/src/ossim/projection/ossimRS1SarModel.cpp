@@ -686,7 +686,7 @@ void ossimRS1SarModel::eciToEcfXform(const double& acq_time, NEWMAT::Matrix& xfo
    
    // Establish rotation:
    double cos_gha = ossim::cosd(gha);
-   double sin_gha = ossim::sind(gha);
+   double sin_gha = sind(gha);
 
    // Establish rotation matrix:
    xform = ossimMatrix3x3::create(cos_gha,  sin_gha,  0.0,

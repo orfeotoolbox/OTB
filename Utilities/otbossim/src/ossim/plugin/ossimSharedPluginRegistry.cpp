@@ -158,7 +158,7 @@ ossimPluginLibrary* ossimSharedPluginRegistry::getPlugin(ossim_uint32 idx)
 {
    ossimPluginLibrary* result = 0;
    
-   if(idx < theLibraryList.size())
+   if((idx>=0)&&(idx < theLibraryList.size()))
    {
       result = theLibraryList[idx].get();
    }
@@ -170,7 +170,7 @@ const ossimPluginLibrary* ossimSharedPluginRegistry::getPlugin(ossim_uint32 idx)
 {
    const ossimPluginLibrary* result = 0;
    
-   if(idx < theLibraryList.size())
+   if((idx>=0)&&(idx < theLibraryList.size()))
    {
       result = theLibraryList[idx].get();
    }

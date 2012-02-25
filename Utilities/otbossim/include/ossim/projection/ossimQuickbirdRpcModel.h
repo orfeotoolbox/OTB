@@ -14,7 +14,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimQuickbirdRpcModel.h 17932 2010-08-19 20:34:35Z dburken $
+//  $Id: ossimQuickbirdRpcModel.h 20606 2012-02-24 12:29:52Z gpotts $
 #ifndef ossimQuickbirdRpcModel_HEADER
 #define ossimQuickbirdRpcModel_HEADER
 

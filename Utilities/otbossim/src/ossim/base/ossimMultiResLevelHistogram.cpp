@@ -151,7 +151,7 @@ ossimRefPtr<ossimMultiBandHistogram> ossimMultiResLevelHistogram::addHistogram()
 
 bool ossimMultiResLevelHistogram::setHistogram(ossimRefPtr<ossimMultiBandHistogram> histo, ossim_uint32 resLevel)
 {
-   if(resLevel < getNumberOfResLevels())
+   if( (resLevel >= 0) && (resLevel < getNumberOfResLevels()))
    {
       theHistogramList[resLevel] = histo;
       return true;
@@ -215,7 +215,7 @@ ossim_uint32 ossimMultiResLevelHistogram::getNumberOfBands(ossim_uint32 resLevel
 
 ossimRefPtr<ossimMultiBandHistogram> ossimMultiResLevelHistogram::getMultiBandHistogram(ossim_uint32 resLevel) const
 {
-   if(resLevel < (ossim_uint32)theHistogramList.size())
+   if((resLevel >=0) &&(resLevel < (ossim_uint32)theHistogramList.size()))
    {
       return theHistogramList[resLevel];
    }

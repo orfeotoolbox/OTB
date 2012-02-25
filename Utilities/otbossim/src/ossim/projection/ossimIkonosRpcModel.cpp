@@ -13,7 +13,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimIkonosRpcModel.cpp 16867 2010-03-16 03:29:40Z gpotts $
+//  $Id: ossimIkonosRpcModel.cpp 20606 2012-02-24 12:29:52Z gpotts $
 
 #include <cstdlib>
 #include <ossim/projection/ossimIkonosRpcModel.h>
@@ -56,9 +56,8 @@ static const char* SAMP_DEN_COEFF_KW = "SAMP_DEN_COEFF_";
 
 ossimIkonosRpcModel::ossimIkonosRpcModel()
    :ossimRpcModel(),
-    theSupportData(0)
+    theSupportData(new ossimIkonosMetaData())
 {
-   theSupportData = new ossimIkonosMetaData();
 }
 
 //*****************************************************************************
@@ -70,7 +69,7 @@ ossimIkonosRpcModel::ossimIkonosRpcModel()
 //*****************************************************************************
 ossimIkonosRpcModel::ossimIkonosRpcModel(const ossimFilename& geom_file)
    :  ossimRpcModel(),
-      theSupportData(0)
+      theSupportData(new ossimIkonosMetaData())
 {
    if (traceExec())
    {
@@ -79,8 +78,6 @@ ossimIkonosRpcModel::ossimIkonosRpcModel(const ossimFilename& geom_file)
          << std::endl;
    }
 
-   theSupportData = new ossimIkonosMetaData();
-   
    ossimKeywordlist kwl(geom_file);
    const char* value;
    
@@ -168,11 +165,9 @@ ossimIkonosRpcModel::ossimIkonosRpcModel(const ossimFilename& metadata,
                                          const ossimFilename& rpcdata)
    :
    ossimRpcModel(),
-   theSupportData(0)
+   theSupportData(new ossimIkonosMetaData())
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel Constructor #2: entering..." << std::endl;
-
-   theSupportData = new ossimIkonosMetaData();
 
    parseMetaData(metadata);
    parseRpcData (rpcdata);
@@ -848,13 +843,11 @@ bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
 bool ossimIkonosRpcModel::loadState(const ossimKeywordlist& kwl,
                                     const char* prefix)
 {
-   if( !theSupportData )
+   if(theSupportData.valid())
    {
-      theSupportData = new ossimIkonosMetaData();
-   }
-
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
       theSupportData->loadState(kwl, supportPrefix);
+   }
 
    return ossimRpcModel::loadState(kwl, prefix);
 }

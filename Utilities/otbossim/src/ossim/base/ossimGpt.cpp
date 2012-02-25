@@ -457,9 +457,9 @@ double ossimGpt::azimuthTo(const ossimGpt& gpt) const
 
    // Use alternate local method (not great circle):
    double mean_lat = 0.5*(lat + gpt.lat);
-   double dlon = ossim::cosd(mean_lat)*(gpt.lon - lon);
+   double dlon = cosd(mean_lat)*(gpt.lon - lon);
    double dlat = gpt.lat - lat;
-   double theta = ossim::atan2d(dlon,dlat);
+   double theta = atan2d(dlon,dlat);
    if (theta < 0)
       theta += 360.0;
    return theta;

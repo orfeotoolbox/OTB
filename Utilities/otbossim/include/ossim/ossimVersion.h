@@ -9,6 +9,6 @@
 #define OSSIM_REVISION_NUMBER ?  
 
 // date format = (yyyymmdd)
-#define OSSIM_BUILD_DATE "20120219"
+#define OSSIM_BUILD_DATE "20111022"
 
 #endif /* End of #ifndef ossimVersion_HEADER */

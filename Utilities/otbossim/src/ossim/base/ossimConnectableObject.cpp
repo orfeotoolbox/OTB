@@ -1140,7 +1140,7 @@ bool ossimConnectableObject::connectMyOutputTo(ConnectableObjectList& outputList
 
 ossimConnectableObject* ossimConnectableObject::getInput(ossim_uint32 index)
 {
-   if(index < theInputObjectList.size())
+   if( (index >= 0) && (index < theInputObjectList.size()))
    {
       return theInputObjectList[index].get();
    }
@@ -1150,7 +1150,7 @@ ossimConnectableObject* ossimConnectableObject::getInput(ossim_uint32 index)
 
 const ossimConnectableObject* ossimConnectableObject::getInput(ossim_uint32 index)const
 {
-   if(index < theInputObjectList.size())
+   if( (index >= 0) && (index < theInputObjectList.size()))
    {
       return theInputObjectList[index].get();
    }
@@ -1160,7 +1160,7 @@ const ossimConnectableObject* ossimConnectableObject::getInput(ossim_uint32 inde
 
 ossimConnectableObject* ossimConnectableObject::getOutput(ossim_uint32 index)
 {
-   if(index < theOutputObjectList.size())
+   if( (index >= 0) && (index < theOutputObjectList.size()))
    {
       return theOutputObjectList[index].get();
    }
@@ -1371,7 +1371,7 @@ void ossimConnectableObject::setNumberOfOutputs(ossim_int32 numberOfOutputs)
 
 const ossimConnectableObject* ossimConnectableObject::getOutput(ossim_uint32 index)const
 {
-   if(index < theOutputObjectList.size())
+   if( (index >= 0) && (index < theOutputObjectList.size()))
    {
       return theOutputObjectList[index].get();
    }

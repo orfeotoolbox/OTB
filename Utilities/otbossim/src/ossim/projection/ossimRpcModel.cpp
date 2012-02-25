@@ -13,7 +13,7 @@
 // LIMITATIONS: Does not support parameter adjustment (YET)
 //
 //*****************************************************************************
-//  $Id: ossimRpcModel.cpp 19594 2011-05-17 13:45:46Z gpotts $
+//  $Id: ossimRpcModel.cpp 20600 2012-02-20 15:03:14Z gpotts $
 
 #include <ossim/projection/ossimRpcModel.h>
 #include <ossim/elevation/ossimElevManager.h>

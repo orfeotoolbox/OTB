@@ -114,7 +114,7 @@ void ossimAdjustableParameterInterface::copyAdjustment(ossim_uint32 idx, bool no
     {
        return;
     }
-    if(idx < theAdjustmentList.size())
+    if((idx >=0)&&(idx < theAdjustmentList.size()))
     {
        theAdjustmentList.push_back(theAdjustmentList[idx]);
 
@@ -142,7 +142,7 @@ void ossimAdjustableParameterInterface::keepAdjustment(ossim_uint32 idx,
     {
        return;
     }
-    if(idx < theAdjustmentList.size())
+    if((idx >=0)&&(idx < theAdjustmentList.size()))
     {
        if(createCopy)
        {

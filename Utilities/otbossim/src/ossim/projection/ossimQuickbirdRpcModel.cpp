@@ -10,7 +10,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimQuickbirdRpcModel.cpp 17932 2010-08-19 20:34:35Z dburken $
+//  $Id: ossimQuickbirdRpcModel.cpp 20606 2012-02-24 12:29:52Z gpotts $
 
 #include <ossim/projection/ossimQuickbirdRpcModel.h>
 #include <ossim/base/ossimException.h>
@@ -39,7 +39,7 @@ RTTI_DEF1(ossimQuickbirdRpcModel, "ossimQuickbirdRpcModel", ossimRpcModel);
 //*************************************************************************************************
 ossimQuickbirdRpcModel::ossimQuickbirdRpcModel()
    :ossimRpcModel(),
-    theSupportData(0)
+    theSupportData(new ossimQuickbirdMetaData())
 {
 }
 
@@ -48,7 +48,7 @@ ossimQuickbirdRpcModel::ossimQuickbirdRpcModel()
 //*************************************************************************************************
 ossimQuickbirdRpcModel::ossimQuickbirdRpcModel(const ossimQuickbirdRpcModel& rhs)
    : ossimRpcModel(rhs),
-     theSupportData(0)
+     theSupportData(new ossimQuickbirdMetaData())
 {
 }
 
@@ -58,7 +58,7 @@ ossimQuickbirdRpcModel::ossimQuickbirdRpcModel(const ossimQuickbirdRpcModel& rhs
 //*************************************************************************************************
 ossimQuickbirdRpcModel::ossimQuickbirdRpcModel(const ossimQbTileFilesHandler* handler)
 :  ossimRpcModel(),
-   theSupportData(0)
+   theSupportData(new ossimQuickbirdMetaData())
 {
    setErrorStatus();
    if (!handler)
@@ -426,6 +426,7 @@ void ossimQuickbirdRpcModel::finishConstruction()
 bool ossimQuickbirdRpcModel::saveState(ossimKeywordlist& kwl,
                                        const char* prefix) const
 {
+   // sanity check only.  This shoulc always be true
    if(theSupportData.valid())
    {
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
@@ -438,14 +439,12 @@ bool ossimQuickbirdRpcModel::saveState(ossimKeywordlist& kwl,
 bool ossimQuickbirdRpcModel::loadState(const ossimKeywordlist& kwl,
                                        const char* prefix)
 {
-   if( !theSupportData )
+   // sanity check only.  This shoulc always be true
+   if(theSupportData.valid())
    {
-      theSupportData = new ossimQuickbirdMetaData();
-   }
-
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
       theSupportData->loadState(kwl, supportPrefix);
-
+   }
    return ossimRpcModel::loadState(kwl, prefix);
 }
 
