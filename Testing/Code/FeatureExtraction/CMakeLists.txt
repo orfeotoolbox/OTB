@@ -1678,13 +1678,18 @@ otbFeatureExtractionTests10.cxx
 otbImageToSURFKeyPointSetFilterNew.cxx
 otbImageToSURFKeyPointSetFilterOutputInterestPointAscii.cxx
 otbImageToSURFKeyPointSetFilterOutputDescriptorAscii.cxx
-otbImageToFastSIFTKeyPointSetFilterNew.cxx
-otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
-otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
 otbKeyPointSetsMatchingFilterNew.cxx
 otbKeyPointSetsMatchingFilter.cxx
 otbLandmarkNew.cxx
 )
+IF(OTB_USE_SIFTFAST)
+SET(BasicFeatureExtraction_SRCS10
+      ${BasicFeatureExtraction_SRCS10}
+      otbImageToFastSIFTKeyPointSetFilterNew.cxx
+      otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
+      otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx )
+ENDIF(OTB_USE_SIFTFAST)
+
 SET(BasicFeatureExtraction_SRCS11
 otbFeatureExtractionTests11.cxx
 otbCloudEstimatorFilterNew.cxx
