@@ -309,20 +309,9 @@ template <class T> void ossimTableRemapper::remapFromNativeTable(
             // There is no min, max range checking on value retrieved from table.
             // Range checking should be performed when the table is built.
             //---
-            if((table_index >=0) && (table_index < theTableBinCount))
+            if(table_index < theTableBinCount)
             {
                d[pixel] = rt[table_index];
-            }
-            else if(table_index < 0)
-            {
-               if(theTableBinCount > 1)
-               {
-                  d[pixel] = rt[1];
-               }
-               else
-               {
-                  d[pixel] = table_index;
-               }
             }
             else
             {
@@ -385,14 +374,10 @@ void ossimTableRemapper::remapFromNormalizedTable(
          ossim_uint32 index
             = static_cast<ossim_uint32>(buf[pixel]*theTableBinCount+0.5);
 
-         if((index < theTableBinCount) && (index >=0))
+         if(index < theTableBinCount)
          {
             // If within range use to index the remap table; else, null.
             p = (index < theTableBinCount) ? rt[index] : 0.0;
-         }
-         else if(index < 0)
-         {
-            p = 0.0;
          }
          else 
          {
