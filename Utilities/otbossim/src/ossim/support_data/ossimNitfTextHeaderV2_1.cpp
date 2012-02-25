@@ -173,7 +173,7 @@ void ossimNitfTextHeaderV2_1::clearFields()
    theTextDeclassificationType[2] = '\0';
    theTextDeclassificationDate[8] = '\0';
    theTextDeclassificationExemption[4] = '\0';
-   theTextSecurityDowngrade[2] = '\0';
+   theTextSecurityDowngrade[1] = '\0';
    theTextSecurityDowngradeDate[8] = '\0';;
    theTextClassificationText[43] = '\0';;			
    theTextClassificationAthorityType[1] = '\0';
