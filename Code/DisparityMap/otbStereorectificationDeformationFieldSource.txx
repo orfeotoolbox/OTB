@@ -215,7 +215,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // Now, we will change coordinate so that the epipolar line is
   // horizontal
-  double alpha = M_PI - vcl_atan(a);
+  double alpha = otb::CONST_PI - vcl_atan(a);
 
   // And compute the unitary vectors of the new axis (equivalent to
   // the column of the rotation matrix)
