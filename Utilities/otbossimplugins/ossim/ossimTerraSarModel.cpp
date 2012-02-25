@@ -62,9 +62,6 @@ static const char NUMBER_LAYERS[] = "numberOfLayers";
 static const char CALIBRATION_CALFACTOR[] = "calibration.calibrationConstant.calFactor";
 static const char RADAR_FREQUENCY[] = "radarFrequency";
 
-using ::ossimString;
-using ::ossimXmlDocument;
-
 // Static trace for debugging
 static ossimTrace traceDebug("ossimTerraSarModel:debug");
 
