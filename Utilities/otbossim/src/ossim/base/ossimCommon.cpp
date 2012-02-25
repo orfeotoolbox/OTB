@@ -641,7 +641,7 @@ void ossim::lexQuotedTokens(const std::string& str,
    unbalancedQuotes = false;
    
    int end=0;
-   while (start < str.length() && start >= 0)
+   while (start < str.length())
    {
       if (str[start] == openQuote)
       {

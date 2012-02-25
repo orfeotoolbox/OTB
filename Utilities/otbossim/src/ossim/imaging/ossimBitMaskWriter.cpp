@@ -109,7 +109,7 @@ void ossimBitMaskWriter::generateMask(ossimRefPtr<ossimImageData> tile, ossim_ui
 
    // We don't start doing anything until starting res or higher requested:
    ossim_uint32 mask_rlevel = rLevel - m_startingResLevel;
-   if ((mask_rlevel < 0) || !tile.valid())
+   if (!tile.valid())
       return;
 
    // We should have had this done by now, but just in case:

@@ -781,7 +781,7 @@ void ossimFormosatDimapSupportData::getGeoPosPoint (ossim_uint32 point,
                                                 ossimDpt& ip,
                                                 ossimGpt& gp) const
 {
-   if ((point >= 0) && point < theGeoPosImagePoints.size())
+   if (point < theGeoPosImagePoints.size())
    {
       ip = theGeoPosImagePoints [point];
       gp = theGeoPosGroundPoints[point];
