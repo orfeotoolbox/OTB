@@ -75,7 +75,11 @@ IF(OTB_USE_MAPNIK)
           MESSAGE(STATUS "  Testing if Mapnik2     -- yes")
         ELSE(MAPNIK_SUPPORTS_NEW_INTERFACE)
           MESSAGE(STATUS "  Testing if Mapnik2     -- no")
-          MESSAGE(FATAL_ERROR "Does not support mapnik2 interface: ${OUTPUT}")
+          MESSAGE(STATUS "Does not support mapnik2 interface: ${OUTPUT}")
+          MESSAGE(STATUS "Assuming mapnik 0.7")
+          # This should be dropped when we don't want to support this any more
+          # Estimated date: 02/2013.
+          ADD_DEFINITIONS(-DUSE_OLD_MAPNIK_COMPATIBILITY_MODE)
         ENDIF(MAPNIK_SUPPORTS_NEW_INTERFACE)
 
         # Add compiler option
