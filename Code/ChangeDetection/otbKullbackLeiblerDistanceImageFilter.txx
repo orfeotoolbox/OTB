@@ -228,9 +228,9 @@ CumulantsForEdgeworth<TInput>
     }
 
   fMu3 = fMu4 = 0.0;
-  for (iterTab = tab.begin(); iterTab != tab.end(); ++iterTab)
+  for (unsigned int i = 0; i < inputSize; ++i)
     {
-    pixel = *iterTab;
+    pixel = tab[i];
     pixel_2 = pixel * pixel;
 
     fMu3 += pixel * pixel_2;
