@@ -47,17 +47,17 @@ static shared_ptr<mapnik::text_symbolizer> create_text_symbolizer(
 
 #else
 typedef mapnik::rule rule;
-static mapnik::filter_ptr parse_expression(std::string const& wkt)
+static mapnik::expression_ptr parse_expression(std::string const& wkt)
 {
   return mapnik::parse_expression(wkt);
 }
-static shared_ptr<mapnik::text_symbolizer> create_text_symbolizer(
-  mapnik::filter_ptr filter,
+static boost::shared_ptr<mapnik::text_symbolizer> create_text_symbolizer(
+  mapnik::expression_ptr filter,
   std::string const& face_name,
   unsigned size,
   mapnik::color const& fill)
 {
-  shared_ptr<mapnik::text_symbolizer> p(
+  boost::shared_ptr<mapnik::text_symbolizer> p(
     new mapnik::text_symbolizer(
       filter, face_name, size, fill));
   return p;
