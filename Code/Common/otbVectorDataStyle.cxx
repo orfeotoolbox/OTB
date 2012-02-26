@@ -29,34 +29,38 @@ namespace mapnik_otb
 // should be around 01/2013.
 #ifdef USE_OLD_MAPNIK_COMPATIBILITY_MODE
 typedef mapnik::rule_type rule;
-mapnik::filter_ptr parse_expression(std::string const& wkt)
+static mapnik::filter_ptr parse_expression(std::string const& wkt)
 {
   return mapnik::create_filter(wkt);
 }
-mapnik::text_symbolizer create_text_symbolizer(
+static shared_ptr<mapnik::text_symbolizer> create_text_symbolizer(
   mapnik::filter_ptr filter,
   std::string const& face_name,
   unsigned size,
   mapnik::color const& fill)
 {
-  return mapnik::text_symbolizer(
-    "name", face_name, size, fill);
+  shared_ptr<mapnik::text_symbolizer> p(
+    new mapnik::text_symbolizer(
+      "name", face_name, size, fill));
+  return p;
 }
 
 #else
 typedef mapnik::rule rule;
-mapnik::filter_ptr parse_expression(std::string const& wkt)
+static mapnik::filter_ptr parse_expression(std::string const& wkt)
 {
   return mapnik::parse_expression(wkt);
 }
-mapnik::text_symbolizer create_text_symbolizer(
+static shared_ptr<mapnik::text_symbolizer> create_text_symbolizer(
   mapnik::filter_ptr filter,
   std::string const& face_name,
   unsigned size,
   mapnik::color const& fill)
 {
-  return mapnik::text_symbolizer(
-    filter, face_name, size, fill);
+  shared_ptr<mapnik::text_symbolizer> p(
+    new mapnik::text_symbolizer(
+      filter, face_name, size, fill));
+  return p;
 }
 
 #endif
@@ -141,12 +145,12 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[place] = 'city' and [capital]='yes'"));
       rule.set_max_scale(static_cast<unsigned long long>(50000000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(10000000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 9, mapnik::color("#000"));
-      textSymb0.set_halo_radius(1);
-      textSymb0.set_wrap_width(0);
-      textSymb0.set_displacement(0.0, 0);
-      rule.append(textSymb0);
+      textSymb0->set_halo_radius(1);
+      textSymb0->set_wrap_width(0);
+      textSymb0->set_displacement(0.0, 0);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -154,12 +158,12 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[place] = 'city' and [capital]='yes'"));
       rule.set_max_scale(static_cast<unsigned long long>(10000000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(2000000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 11, mapnik::color("#000"));
-      textSymb0.set_halo_radius(1);
-      textSymb0.set_wrap_width(0);
-      textSymb0.set_displacement(0.0, 0);
-      rule.append(textSymb0);
+      textSymb0->set_halo_radius(1);
+      textSymb0->set_wrap_width(0);
+      textSymb0->set_displacement(0.0, 0);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -167,12 +171,12 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[place] = 'city' and not [capital]='yes'"));
       rule.set_max_scale(static_cast<unsigned long long>(10000000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(2000000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 8, mapnik::color("#000"));
-      textSymb0.set_halo_radius(1);
-      textSymb0.set_wrap_width(0);
-      textSymb0.set_displacement(0.0, 0);
-      rule.append(textSymb0);
+      textSymb0->set_halo_radius(1);
+      textSymb0->set_wrap_width(0);
+      textSymb0->set_displacement(0.0, 0);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -180,12 +184,12 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[place] = 'city'"));
       rule.set_max_scale(static_cast<unsigned long long>(2000000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(500000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 11, mapnik::color("#000"));
-      textSymb0.set_halo_radius(1);
-      textSymb0.set_wrap_width(0);
-      textSymb0.set_displacement(0.0, 0);
-      rule.append(textSymb0);
+      textSymb0->set_halo_radius(1);
+      textSymb0->set_wrap_width(0);
+      textSymb0->set_displacement(0.0, 0);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -193,12 +197,12 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[place] = 'city'"));
       rule.set_max_scale(static_cast<unsigned long long>(500000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(20000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 14, mapnik::color("#000"));
-      textSymb0.set_halo_radius(1);
-      textSymb0.set_wrap_width(0);
-      textSymb0.set_displacement(0.0, 0);
-      rule.append(textSymb0);
+      textSymb0->set_halo_radius(1);
+      textSymb0->set_wrap_width(0);
+      textSymb0->set_displacement(0.0, 0);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
     mapnikMap.insert_style("city", style);
@@ -490,11 +494,11 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'trunk' or [highway] = 'primary'"));
       rule.set_max_scale(static_cast<unsigned long long>(75000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 8, mapnik::color("black"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(0);
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(0);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -502,12 +506,12 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'secondary'"));
       rule.set_max_scale(static_cast<unsigned long long>(75000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 8, mapnik::color("black"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(1);
-      textSymb0.set_halo_fill(mapnik::color("#fed7a5"));
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(1);
+      textSymb0->set_halo_fill(mapnik::color("#fed7a5"));
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -515,11 +519,11 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'trunk' or [highway] = 'primary'"));
       rule.set_max_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(20000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 9, mapnik::color("black"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(0);
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(0);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -527,11 +531,11 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'trunk' or [highway] = 'primary'"));
       rule.set_max_scale(static_cast<unsigned long long>(20000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(1000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 10, mapnik::color("black"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(0);
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(0);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -539,12 +543,12 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'secondary'"));
       rule.set_max_scale(static_cast<unsigned long long>(50000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(20000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 9, mapnik::color("black"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(1);
-      textSymb0.set_halo_fill(mapnik::color("#fed7a5"));
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(1);
+      textSymb0->set_halo_fill(mapnik::color("#fed7a5"));
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -552,12 +556,12 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'secondary'"));
       rule.set_max_scale(static_cast<unsigned long long>(20000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(1000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 10, mapnik::color("black"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(1);
-      textSymb0.set_halo_fill(mapnik::color("#fed7a5"));
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(1);
+      textSymb0->set_halo_fill(mapnik::color("#fed7a5"));
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -565,11 +569,11 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'tertiary'"));
       rule.set_max_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 9, mapnik::color("#000"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(1);
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(1);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -577,11 +581,11 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'tertiary'"));
       rule.set_max_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(100ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 11, mapnik::color("#000"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(1);
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(1);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -589,11 +593,11 @@ VectorDataStyle
       rule.set_max_scale(static_cast<unsigned long long>(100000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(10000ULL / m_ScaleFactor));
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'proposed' or [highway]='construction'"));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 9, mapnik::color("#000"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(1);
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(1);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -601,11 +605,11 @@ VectorDataStyle
       rule.set_max_scale(static_cast<unsigned long long>(10000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(1000ULL / m_ScaleFactor));
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'proposed' or [highway]='construction'"));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 11, mapnik::color("#000"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(1);
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(1);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -613,12 +617,12 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'unclassified' or [highway] = 'residential'"));
       rule.set_max_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 9, mapnik::color("#000"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(1);
-      textSymb0.set_label_spacing(300);
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(1);
+      textSymb0->set_label_spacing(300);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -626,12 +630,12 @@ VectorDataStyle
       rule.set_filter(mapnik_otb::parse_expression("[highway] = 'unclassified' or [highway] = 'residential'"));
       rule.set_max_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(100ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 11, mapnik::color("#000"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(1);
-      textSymb0.set_label_spacing(400);
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(1);
+      textSymb0->set_label_spacing(400);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -639,11 +643,11 @@ VectorDataStyle
       rule.set_else(true);
       rule.set_max_scale(static_cast<unsigned long long>(25000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 9, mapnik::color("#000"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(1);
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(1);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
       {
@@ -651,11 +655,11 @@ VectorDataStyle
       rule.set_else(true);
       rule.set_max_scale(static_cast<unsigned long long>(5000ULL / m_ScaleFactor));
       rule.set_min_scale(static_cast<unsigned long long>(100ULL / m_ScaleFactor));
-      mapnik::text_symbolizer textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
+      boost::shared_ptr<mapnik::text_symbolizer> textSymb0 = mapnik_otb::create_text_symbolizer(mapnik_otb::parse_expression("[name]"),
                                         "DejaVu Sans Book", 11, mapnik::color("#000"));
-      textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
-      textSymb0.set_halo_radius(1);
-      rule.append(textSymb0);
+      textSymb0->set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb0->set_halo_radius(1);
+      rule.append(*textSymb0);
       style.add_rule(rule);
       }
     mapnikMap.insert_style("roads-text", style);
