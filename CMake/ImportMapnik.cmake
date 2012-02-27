@@ -66,21 +66,21 @@ IF(OTB_USE_MAPNIK)
 
 
         # Validating the config
-        TRY_COMPILE(MAPNIK_SUPPORTS_NEW_INTERFACE
+        TRY_COMPILE(OTB_MAPNIK_SUPPORTS_API20
           ${CMAKE_CURRENT_BINARY_DIR}/CMake
           ${CMAKE_CURRENT_SOURCE_DIR}/CMake/otbTestCompileMapnik2.cxx
           CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${MAPNIK_INCLUDE_DIR};${ICUUC_INCLUDE_DIR};${LTDL_INCLUDE_DIR};${FREETYPE2_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${MAPNIK_LIBRARY};${ICUUC_LIBRARY}"
           OUTPUT_VARIABLE OUTPUT)
-        IF(MAPNIK_SUPPORTS_NEW_INTERFACE)
+        IF(OTB_MAPNIK_SUPPORTS_API20)
           MESSAGE(STATUS "  Testing if Mapnik2     -- yes")
-        ELSE(MAPNIK_SUPPORTS_NEW_INTERFACE)
+        ELSE(OTB_MAPNIK_SUPPORTS_API20)
           MESSAGE(STATUS "  Testing if Mapnik2     -- no")
           MESSAGE(STATUS "Does not support mapnik2 interface: ${OUTPUT}")
           MESSAGE(STATUS "Assuming mapnik 0.7")
           # This should be dropped when we don't want to support this any more
           # Estimated date: 02/2013.
-          ADD_DEFINITIONS(-DUSE_OLD_MAPNIK_COMPATIBILITY_MODE)
-        ENDIF(MAPNIK_SUPPORTS_NEW_INTERFACE)
+          ADD_DEFINITIONS(-DOTB_MAPNIK_COMPATIBILITY_API07)
+        ENDIF(OTB_MAPNIK_SUPPORTS_API20)
 
         # Add compiler option
         ADD_DEFINITIONS(-DOTB_USE_MAPNIK)

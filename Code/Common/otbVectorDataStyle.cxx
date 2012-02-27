@@ -27,7 +27,7 @@ namespace mapnik_otb
 {
 // this should be removed once mapnik support for version < 2.0 is dropped.
 // should be around 01/2013.
-#ifdef USE_OLD_MAPNIK_COMPATIBILITY_MODE
+#ifdef OTB_MAPNIK_COMPATIBILITY_API07
 typedef mapnik::rule_type rule;
 static mapnik::filter_ptr parse_expression(std::string const& wkt)
 {

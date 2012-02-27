@@ -40,7 +40,7 @@
 
 #include "ogr_spatialref.h"
 
-#ifdef USE_OLD_MAPNIK_COMPATIBILITY_MODE
+#ifdef OTB_MAPNIK_COMPATIBILITY_API07
 namespace mapnik {
 typedef Layer layer;
 typedef Image32 image_32;
@@ -53,7 +53,7 @@ namespace mapnik_otb
 {
 // this should be removed once mapnik support for version < 2.0 is dropped.
 // should be around 01/2013.
-#ifdef USE_OLD_MAPNIK_COMPATIBILITY_MODE
+#ifdef OTB_MAPNIK_COMPATIBILITY_API07
 static size_t get_num_layer(const mapnik::Map& map) { return map.layerCount(); }
 static unsigned get_height(const mapnik::Map& map) { return map.getHeight(); }
 static unsigned get_width(const mapnik::Map& map) { return map.getWidth(); }
