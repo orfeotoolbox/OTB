@@ -132,9 +132,6 @@ protected:
       {
       OGRDataSource::DestroyDataSource(m_OGRDataSourcePointer);
       }
-    // Clean up the environment
-    OGRCleanupAll();
-    GDALDestroyDriverManager();
   }
 
   virtual void GenerateOutputInformation();
