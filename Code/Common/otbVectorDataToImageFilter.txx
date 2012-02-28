@@ -65,18 +65,20 @@ static void zoom_to_box(mapnik::Map* map, const mapnik::Envelope<double>& envelo
 typedef mapnik::geometry2d geom;
 static geom* create_geom(int geom_type)
 {
+  geom* g = 0;
   switch (geom_type)
     {
     case mapnik::Point:
-      return new mapnik::point<mapnik::vertex<double, 2> >;
+      g = new mapnik::point<mapnik::vertex<double, 2> >;
     case mapnik::LineString:
-      return new mapnik::line_string<mapnik::vertex<double, 2> , mapnik::vertex_vector2>;
+      g = new mapnik::line_string<mapnik::vertex<double, 2> , mapnik::vertex_vector2>;
     case mapnik::Polygon:
-      return new mapnik::polygon<mapnik::vertex<double, 2>, mapnik::vertex_vector2>;
+      g = new mapnik::polygon<mapnik::vertex<double, 2>, mapnik::vertex_vector2>;
     default:
       std::cerr
-        << "Please fix create_geom for mapnik 0.7" << std::endl;
+        << "Please fix otb::mapnik_otb::create_geom for mapnik 0.7" << std::endl;
     }
+  return g;
 }
 #else
 static size_t get_num_layer(const mapnik::Map& map) { return map.layer_count(); }
