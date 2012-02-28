@@ -124,7 +124,7 @@ public:
     // the burn values vector
     // Add all the bands to be burned and clear previous bands.
     m_BandsToBurn.clear();
-    for (int idx = 0; idx < burnValuesPix.Size(); ++idx)
+    for (unsigned int idx = 0; idx < burnValuesPix.Size(); ++idx)
       {
       m_BandsToBurn.push_back(idx + 1 ); // Gdal bands count begins from 1
       m_BurnValues.push_back(static_cast<double>(burnValuesPix.GetElement(idx)));
