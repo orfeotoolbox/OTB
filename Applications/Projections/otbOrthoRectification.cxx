@@ -154,6 +154,10 @@ private:
     SetParameterDescription("outputs.isotropic", isotropOss.str());
     EnableParameter("outputs.isotropic");
     
+    AddParameter(ParameterType_Float, "outputs.default", "Default pixel value");
+    SetParameterDescription("outputs.spacingy","Default value to write when outside of input image.");
+    SetDefaultParameterFloat("outputs.default",0.);
+
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
@@ -429,6 +433,13 @@ private:
     ul[0] = GetParameterFloat("outputs.ulx");
     ul[1] = GetParameterFloat("outputs.uly");
     m_ResampleFilter->SetOutputOrigin(ul);
+
+    // Build the default pixel
+    FloatVectorImageType::PixelType defaultValue;
+    defaultValue.SetSize(inImage->GetNumberOfComponentsPerPixel());
+    defaultValue.Fill(GetParameterFloat("outputs.default"));
+    m_ResampleFilter->SetEdgePaddingValue(defaultValue);
+
 
     // Deformation Field spacing
     ResampleFilterType::SpacingType gridSpacing;
