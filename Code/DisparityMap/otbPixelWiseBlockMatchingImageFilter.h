@@ -247,7 +247,6 @@ public:
   itkSetMacro(MaximumVerticalDisparity,int);
   itkGetConstReferenceMacro(MaximumVerticalDisparity,int);
 
-
   itkSetMacro(Minimize, bool);
   itkGetConstReferenceMacro(Minimize,bool);
   itkBooleanMacro(Minimize);
@@ -264,6 +263,18 @@ public:
   itkSetMacro(InitVerticalDisparity,int);
   itkGetConstReferenceMacro(InitVerticalDisparity,int);
   
+  /** Get the functor for parameters setting */
+  BlockMatchingFunctorType &  GetFunctor()
+  {
+    return m_Functor;
+  }
+
+  /** Get the functor (const version) */
+  const BlockMatchingFunctorType &  GetFunctor() const
+  {
+    return m_Functor;
+  }
+
   /** Set initial horizontal disparity field (optional, override m_InitHorizontalDisparity) */
   void SetHorizontalDisparityInput( const TOutputDisparityImage * hfield);
 
@@ -314,6 +325,9 @@ private:
   
   /** The exploration radius for disparities (used if non null) */
   SizeType                      m_ExplorationRadius;
+
+  /** Block-matching functor */
+  BlockMatchingFunctorType      m_Functor;  
   
   /** Initial horizontal disparity (0 by default, used if an exploration radius is set) */
   int                           m_InitHorizontalDisparity;
