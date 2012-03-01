@@ -932,7 +932,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
       // We need to build our own projection in this case.
       if( oDatum == "WGE" && ossimString(epsg_code) == "3857" )
         {
-          oDatum = "WE-EPSG-3857";
+          oDatum = "6055";
         }
    }
        
