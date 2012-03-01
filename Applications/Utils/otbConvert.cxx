@@ -124,12 +124,12 @@ private:
     
     std::string rescaleType = this->GetParameterString("type");
     
-    if( (rescaleType != "None") && (rescaleType != "Linear") && (rescaleType != "Log2") )
+    if( (rescaleType != "none") && (rescaleType != "linear") && (rescaleType != "log2") )
       {
       itkExceptionMacro("Unknown rescale type "<<rescaleType<<".");
       }
     
-    if( rescaleType == "None" )
+    if( rescaleType == "none" )
       {
       castIm = this->GetParameterImage<TImageType>("in");
       }
@@ -170,7 +170,7 @@ private:
       shrinkFilter->SetShrinkFactor(shrinkFactor);
       AddProcess(shrinkFilter->GetStreamer(), "Computing shrink Image for min/max estimation...");
       
-      if ( rescaleType == "Log2")
+      if ( rescaleType == "log2")
         {
         //define the transfer log
         m_TransferLog = TransferLogType::New();
