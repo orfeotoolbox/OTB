@@ -18,6 +18,8 @@
 #ifndef __otbTestMain_h
 #define __otbTestMain_h
 
+#include "otbConfigure.h"
+
 #include <map>
 #include <string>
 #include <iostream>
