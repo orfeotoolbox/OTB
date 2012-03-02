@@ -31,7 +31,7 @@ namespace otb
 
 template <class TImageType, class TOutputVectorData, class TSegmentationFilter>
 PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, TSegmentationFilter>
-::PersistentStreamingLabelImageToVectorDataFilter()
+::PersistentStreamingLabelImageToVectorDataFilter() : m_FieldName("DN"), m_TileMaxLabel(0), m_StartLabel(0)
 {
    m_SegmentationFilter = SegmentationFilterType::New();
 }
@@ -86,8 +86,40 @@ PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, T
   m_SegmentationFilter->Update();
   
   labelImageToVectorDataFilter->SetInput(dynamic_cast<LabelImageType *>(m_SegmentationFilter->GetOutputs().at(labelImageIndex).GetPointer()));
+  labelImageToVectorDataFilter->SetFieldName(m_FieldName);
   labelImageToVectorDataFilter->Update();
+
   
+  //Relabel the vector data
+  typename TreeNodeType::Pointer rootNode = const_cast<TreeNodeType *>(labelImageToVectorDataFilter->GetOutput()->GetDataTree()->GetRoot());
+  ChildrenListType childList = rootNode->GetChildrenList()[0]->GetChildrenList();
+
+  std::vector<int> fieldValueVector;
+  for (typename ChildrenListType::iterator it = childList.begin(); it != childList.end(); ++it)
+    {
+       typename OutputVectorDataType::DataNodePointerType dataNode = (*it)->Get();
+       fieldValueVector.push_back(dataNode->GetFieldAsInt(m_FieldName));
+    }
+  std::sort(fieldValueVector.begin(), fieldValueVector.end());
+  std::map<int,int> relabelMap;
+  unsigned int i = 0;
+  unsigned int ind = 0;
+  for(i = 0; i < fieldValueVector.size(); i++)
+  {
+     if (relabelMap.find(fieldValueVector.at(i)) == relabelMap.end())
+     {
+         relabelMap[fieldValueVector.at(i)] = static_cast<int>(ind);
+         ind = ind + 1;
+     }
+  }
+  for (typename ChildrenListType::iterator it = childList.begin(); it != childList.end(); ++it)
+  {
+     typename OutputVectorDataType::DataNodePointerType dataNode = (*it)->Get();
+     int newLabel = relabelMap[dataNode->GetFieldAsInt(m_FieldName)] + m_TileMaxLabel;
+     dataNode->SetFieldAsInt(m_FieldName, newLabel);
+  }
+  
+  m_TileMaxLabel = m_TileMaxLabel + fieldValueVector.size();
 
   // return the VectorData in image physical coordinates
   return labelImageToVectorDataFilter->GetOutput();

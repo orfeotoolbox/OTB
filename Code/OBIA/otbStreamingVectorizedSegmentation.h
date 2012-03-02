@@ -94,9 +94,12 @@ public:
 
   typedef typename Superclass::OutputVectorDataType        OutputVectorDataType;
   typedef typename Superclass::OutputVectorDataPointerType OutputVectorDataPointerType;
+  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType::ChildrenListType ChildrenListType;
+  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType TreeNodeType;
   
   typedef TSegmentationFilter                              SegmentationFilterType;
   typedef typename LabeledOutputAccessor<SegmentationFilterType>::LabelImageType  LabelImageType;
+  typedef typename LabelImageType::PixelType                                      LabelPixelType;
   
   typedef otb::LabelImageToVectorDataFilter<LabelImageType,
     typename OutputVectorDataType::PrecisionType>          LabelImageToVectorDataFilterType;
@@ -108,6 +111,18 @@ public:
   itkTypeMacro(PersistentStreamingLabelImageToVectorDataFilter, PersistentImageToVectorDataFilter);
   
   itkGetObjectMacro(SegmentationFilter, SegmentationFilterType);
+  
+  itkSetMacro(FieldName, std::string);
+  itkGetMacro(FieldName, std::string);
+  
+
+  
+  void SetStartLabel(const LabelPixelType & label)
+  {
+     m_StartLabel = label;
+     m_TileMaxLabel = label;
+  }
+  itkGetMacro(StartLabel, LabelPixelType);
 
 protected:
   PersistentStreamingLabelImageToVectorDataFilter();
@@ -122,7 +137,12 @@ private:
 
   virtual OutputVectorDataPointerType ProcessTile();
   
+  std::string m_FieldName;
+  LabelPixelType m_TileMaxLabel;
+  LabelPixelType m_StartLabel;
   typename SegmentationFilterType::Pointer m_SegmentationFilter;
+  
+  
 };
 
 template <class TImageType, class TOutputVectorData, class TSegmentationFilter>
@@ -147,6 +167,7 @@ public:
   typedef TSegmentationFilter                      SegmentationFilterType;
   typedef TImageType                               InputImageType;
   typedef TOutputVectorData                        OutputVectorDataType;
+  typedef typename PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, TSegmentationFilter>::LabelPixelType LabelPixelType;
 
   void SetInput(InputImageType * input)
   {
@@ -165,6 +186,26 @@ public:
   const OutputVectorDataType * GetOutputVectorData()
   {
      return this->GetFilter()->GetOutputVectorData();
+  }
+  
+  void SetFieldName(const std::string & field)
+  {
+     this->GetFilter()->SetFieldName(field);
+  }
+  
+  const std::string & GetFieldName()
+  {
+     return this->GetFilter()->GetFieldName();
+  }
+  
+  void SetStartLabel(const LabelPixelType & label)
+  {
+     this->GetFilter()->SetStartLabel(label);
+  }
+  
+  const LabelPixelType & GetStartLabel()
+  {
+     return this->GetFilter()->GetStartLabel();
   }
   
 protected:

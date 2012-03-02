@@ -49,11 +49,13 @@ int otbStreamingVectorizedSegmentation(int argc, char * argv[])
 
   typedef float InputPixelType;
   const unsigned int Dimension = 2;
+  const std::string fieldName("DN");
 
   // Typedefs
   typedef otb::Image<InputPixelType,  Dimension>          ImageType;
   typedef otb::VectorData<double, 2>                      VectorDataType;
-  typedef otb::MeanShiftImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
+  typedef otb::Image<unsigned int, Dimension>             LabelImageType;
+  typedef otb::MeanShiftImageFilter<ImageType, ImageType, LabelImageType> MeanShiftImageFilterType;
   typedef otb::StreamingVectorizedSegmentation<ImageType, VectorDataType, MeanShiftImageFilterType> StreamingVectorizedSegmentationType;
 
   typedef otb::ImageFileReader<ImageType>                      ReaderType;
@@ -67,11 +69,12 @@ int otbStreamingVectorizedSegmentation(int argc, char * argv[])
   reader->GenerateOutputInformation();
   filter->SetInput(reader->GetOutput());
   filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
-  
+  //filter->GetStreamer()->SetTileDimensionTiledStreaming(atoi(argv[3]));
+  filter->SetFieldName(fieldName);
+  filter->SetStartLabel(1);
   filter->GetSegmentationFilter()->SetSpatialRadius(10);
   filter->GetSegmentationFilter()->SetRangeRadius(15);
   filter->GetSegmentationFilter()->SetMinimumRegionSize(400);
-  
   
   filter->Update();
 

@@ -35,7 +35,7 @@ int otbLabelImageToVectorDataFilter(int argc, char * argv[])
   
   
   const unsigned int Dimension = 2;
-  typedef unsigned char LabelType;
+  typedef unsigned short LabelType;
   typedef otb::Image<LabelType, Dimension> InputLabelImageType;
 
   typedef otb::LabelImageToVectorDataFilter<InputLabelImageType>   FilterType;
