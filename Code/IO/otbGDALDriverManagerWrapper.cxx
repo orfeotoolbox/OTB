@@ -32,8 +32,8 @@ GDALDatasetWrapper::~GDALDatasetWrapper()
     }
 }
 
-// GetDataSet 
-GDALDataset* 
+// GetDataSet
+GDALDataset*
 GDALDatasetWrapper::GetDataSet() const
 {
   return m_Dataset;
@@ -59,7 +59,7 @@ GDALDriverManagerWrapper::~GDALDriverManagerWrapper()
 }
 
 // Open the file for reading and returns a smart dataset pointer
-GDALDatasetWrapper::Pointer 
+GDALDatasetWrapper::Pointer
 GDALDriverManagerWrapper::Open( std::string filename ) const
 {
   GDALDatasetWrapper::Pointer datasetWrapper;
@@ -74,7 +74,7 @@ GDALDriverManagerWrapper::Open( std::string filename ) const
 }
 
 // Open the new  file for writing and returns a smart dataset pointer
-GDALDatasetWrapper::Pointer 
+GDALDatasetWrapper::Pointer
 GDALDriverManagerWrapper::Create( std::string driverShortName, std::string filename,
                                     int nXSize, int nYSize, int nBands,
                                     GDALDataType eType, char ** papszOptions ) const
@@ -99,7 +99,7 @@ GDALDriverManagerWrapper::Create( std::string driverShortName, std::string filen
 }
 
 
-GDALDriver* 
+GDALDriver*
 GDALDriverManagerWrapper::GetDriverByName( std::string driverShortName ) const
 {
   return GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());

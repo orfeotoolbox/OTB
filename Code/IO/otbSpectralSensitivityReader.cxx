@@ -136,7 +136,7 @@ SpectralSensitivityReader
 
   while (std::getline(file, line))
     {
-    // Replace multiple spaces by a unique space 
+    // Replace multiple spaces by a unique space
     std::unique(line.begin(), line.end(), SpectralSensitivityReader::BothAre(' '));
 
     // if the first character is a space, erase it

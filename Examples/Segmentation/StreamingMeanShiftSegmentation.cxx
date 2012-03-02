@@ -28,7 +28,7 @@
 // The labeled output image of each tile is then polygonized and stored into a \doxygen{otb}{VectorData}
 // The method used for polygonize is GDALPolygonize.
 //
-// First we include the segmentation filter (Here it is the MeanShiftFilter) and 
+// First we include the segmentation filter (Here it is the MeanShiftFilter) and
 // the StreamingVectorizedSegmentation header.
 // Software Guide : EndLatex
 #include <iostream>
@@ -36,7 +36,6 @@
 // Software Guide : BeginCodeSnippet
 #include "otbMeanShiftImageFilter.h"
 #include "otbStreamingVectorizedSegmentation.h"
-
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
@@ -92,7 +91,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginLatex
   //
-  // Finaly we define a Reader on the input image and a writer for the VectorData. 
+  // Finaly we define a Reader on the input image and a writer for the VectorData.
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<ImageType>                      ReaderType;
