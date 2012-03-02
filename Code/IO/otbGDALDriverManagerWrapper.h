@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
+#include "otbConfigure.h"
 
 class GDALDataset;
 class GDALDriver;
