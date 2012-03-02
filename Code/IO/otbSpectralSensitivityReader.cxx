@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <cctype>
 #include <boost/algorithm/string.hpp>
-#include <boost/regex.hpp> 
 #include "itksys/SystemTools.hxx"
 
 #include "otbSpotImageMetadataInterface.h"
@@ -138,10 +137,8 @@ SpectralSensitivityReader
   while (std::getline(file, line))
     {
     // Replace multiple spaces by a unique space 
-    boost::regex expr("(\\s)+");
-    std::string fmt(" ");
-    line = boost::regex_replace(line, expr, fmt);
-    
+    std::unique(line.begin(), line.end(), SpectralSensitivityReader::BothAre(' '));
+
     // if the first character is a space, erase it
     boost::trim(line);
     std::vector<std::string> keywordStrings;

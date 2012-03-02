@@ -84,6 +84,18 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  /** Struct use to remove multiple spaces in file */
+  struct BothAre
+{
+    char c;
+    BothAre(char r) : c(r) {}
+    bool operator()(char l, char r) const
+    {
+            return r == c && l == c;
+    }
+};
+
+
 private:
   SpectralSensitivityReader(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
