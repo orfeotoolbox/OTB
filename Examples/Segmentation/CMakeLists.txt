@@ -125,7 +125,8 @@ TARGET_LINK_LIBRARIES(WatershedSegmentation OTBCommon OTBIO ITKAlgorithms ITKNum
 #ITKBasicFilters ITKStatistics)
 
 
-
+ADD_EXECUTABLE(StreamingMeanShiftSegmentation StreamingMeanShiftSegmentation.cxx )
+TARGET_LINK_LIBRARIES(StreamingMeanShiftSegmentation OTBCommon OTBIO OTBOBIA)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
