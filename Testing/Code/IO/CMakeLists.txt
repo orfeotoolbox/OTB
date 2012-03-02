@@ -3504,7 +3504,6 @@ ADD_TEST(raTvSpectralSensitivityReaderTest ${IO_TESTS23}
         ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
 )
 
-
 ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${IO_TESTS23}
      --compare-ascii ${EPSILON_5}
       ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
@@ -3515,6 +3514,19 @@ ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${IO_TESTS23}
     ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
         ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt
 )
+
+IF(OTB_DATA_USE_LARGEINPUT)
+  ADD_TEST(raTvSpectralSensitivityReaderSpot4Test ${IO_TESTS23}
+    --compare-ascii ${EPSILON_5}
+    ${BASELINE_FILES}/raTvSpectralSensitivityReaderSpot4Test.txt
+    ${TEMP}/raTvSpectralSensitivityReaderSpot4Test.txt
+    --ignore-lines-with 2 DataPath FileName
+    otbSpectralSensitivityReaderGenericTest
+    ${INPUTDATA}/Radiometry/SPOT4/HRVIR1/rep6S.dat
+    ${LARGEINPUT}/SPOT4/ROMANIA/raTvS4_20020518_Reflectance.img
+    ${TEMP}/raTvSpectralSensitivityReaderSpot4Test.txt
+    )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
       ADD_TEST(ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
