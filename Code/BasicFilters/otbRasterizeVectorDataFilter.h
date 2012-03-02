@@ -137,12 +137,6 @@ protected:
   RasterizeVectorDataFilter();
   virtual ~RasterizeVectorDataFilter()
   {
-    // Destroy the datasource
-    if (m_OGRDataSource != NULL)
-      {
-        OGR_DS_Destroy( m_OGRDataSource );
-        }
-    
     if (m_OGRDataSourcePointer != NULL)
       {
       OGRDataSource::DestroyDataSource(m_OGRDataSourcePointer);
@@ -157,7 +151,6 @@ private:
   RasterizeVectorDataFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  OGRDataSourceH              m_OGRDataSource;
   OGRDataSource*              m_OGRDataSourcePointer;
 
   // Vector Of LayersH
