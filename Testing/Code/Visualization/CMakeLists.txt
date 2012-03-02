@@ -271,8 +271,8 @@ otbBlendingImageFilterNew
 
 ADD_TEST(vrTvBlendingImageFilter ${VISUALIZATION_TESTS2}
 otbBlendingImageFilter
-${EXAMPLESDATA}/SpotBefore.png
-${EXAMPLESDATA}/SpotAfter.png
+${OTB_DATA_ROOT}/Examples/SpotBefore.png
+${OTB_DATA_ROOT}/Examples/SpotAfter.png
 ${TEMP}/vrTvBlendingImageFilterOutput.png
 )
 
