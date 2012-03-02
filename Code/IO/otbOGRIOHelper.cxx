@@ -652,6 +652,7 @@ unsigned int OGRIOHelper
                    OGRSpatialReference * oSRS)
 {
   unsigned int kept = 0;
+  bool fieldsAddedToOGRLayer = false;
   // Get the children list from the input node
   typedef InternalTreeNodeType::ChildrenListType ChildrenListType;
   ChildrenListType children = source->GetChildrenList();
@@ -670,7 +671,7 @@ unsigned int OGRIOHelper
                                                kwl);
     
     // Create the field once
-    if (ogrCurrentLayer != NULL && ogrCurrentLayer->GetFeatureCount() == 0)
+    if (ogrCurrentLayer != NULL && !fieldsAddedToOGRLayer)
       {
       // Take into account the fields stored in the
       // vectordatakeywordlist
@@ -689,6 +690,7 @@ unsigned int OGRIOHelper
           otbMsgDevMacro(<< "WARNING: Skipping OGR field 'FID'");
           }
         }
+      fieldsAddedToOGRLayer = true;
       }
 
     switch (dataNode->GetNodeType())
@@ -704,6 +706,11 @@ unsigned int OGRIOHelper
         {
         //itkExceptionMacro(<<"Failed to create layer "<<dataNode->GetNodeId());
         std::cout << "Failed to create layer " << dataNode->GetNodeId() << std::endl;
+        }
+      else
+        {
+        // New OGRLayer, set the flag to false
+        fieldsAddedToOGRLayer = false;
         }
       ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
@@ -1024,6 +1031,7 @@ std::vector<OGRLayer*> OGRIOHelper
 
   std::vector<OGRLayer*>  ogrLayerVector;
   unsigned int kept = 0;
+  bool fieldsAddedToOGRLayer = false;
   // Get the children list from the input node
   typedef InternalTreeNodeType::ChildrenListType ChildrenListType;
   ChildrenListType children = source->GetChildrenList();
@@ -1040,7 +1048,7 @@ std::vector<OGRLayer*> OGRIOHelper
                                                kwl);
     
     // Create the field once
-    if (ogrCurrentLayer != NULL && ogrCurrentLayer->GetFeatureCount() == 0)
+    if (ogrCurrentLayer != NULL && !fieldsAddedToOGRLayer)
       {
       // Take into account the fields stored in the
       // vectordatakeywordlist
@@ -1059,6 +1067,7 @@ std::vector<OGRLayer*> OGRIOHelper
           otbMsgDevMacro(<< "WARNING: Skipping OGR field 'FID'");
           }
         }
+      fieldsAddedToOGRLayer = true;
       }
 
     switch (dataNode->GetNodeType())
@@ -1074,6 +1083,11 @@ std::vector<OGRLayer*> OGRIOHelper
       if (ogrCurrentLayer == NULL)
         {
         std::cout << "Failed to create layer " << dataNode->GetNodeId() << std::endl;
+        }
+      else
+        {
+        // New OGRLayer, set the flag to false
+        fieldsAddedToOGRLayer = false;
         }
       ogrLayerVector.push_back(ogrCurrentLayer);
       ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
