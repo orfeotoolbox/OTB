@@ -82,6 +82,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
     InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(tree->GetRoot());
 
     // Iterative method to build the layers from a VectorData
+    OGRRegisterAll();
     OGRLayer *   ogrCurrentLayer = NULL;
     std::vector<OGRLayer *> ogrLayerVector;
     otb::OGRIOHelper::Pointer IOConversion = otb::OGRIOHelper::New();
