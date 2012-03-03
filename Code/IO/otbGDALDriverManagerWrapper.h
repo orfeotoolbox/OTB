@@ -107,5 +107,4 @@ private :
 }; // end of GDALDriverManagerWrapper
 
 
-
 }
