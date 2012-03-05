@@ -690,7 +690,13 @@ unsigned int OGRIOHelper
           otbMsgDevMacro(<< "WARNING: Skipping OGR field 'FID'");
           }
         }
-      fieldsAddedToOGRLayer = true;
+      // While no feature are added to the layer (in case of multiple
+      // folders added to the document) continue test for adding
+      // fields to the ogrCurrentLayer
+      if ( kwl.GetNumberOfFields() > 0 || ogrCurrentLayer->GetFeatureCount() > 0)
+        {
+        fieldsAddedToOGRLayer = true;
+        }
       }
 
     switch (dataNode->GetNodeType())
