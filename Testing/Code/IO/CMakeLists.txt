@@ -6,6 +6,10 @@ IF(OTB_DATA_USE_SPOTPHRINPUT)
   SET(SPOTPHRINPUT ${OTB_DATA_SPOTPHRINPUT_ROOT} )
 ENDIF(OTB_DATA_USE_SPOTPHRINPUT)
 
+IF(OTB_DATA_USE_ICCPHRINPUT)
+  SET(ICCPHRINPUT ${OTB_DATA_ICCPHRINPUT_ROOT} )
+ENDIF(OTB_DATA_USE_ICCPHRINPUT)
+
 SET(COMMON_TESTS2 ${CXX_TEST_PATH}/otbCommonTests2)
 SET(COMMON_TESTS3 ${CXX_TEST_PATH}/otbCommonTests3)
 SET(IO_TESTS1     ${CXX_TEST_PATH}/otbIOTests1)
@@ -48,9 +52,21 @@ ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 
 SET(IO_TESTS23    ${CXX_TEST_PATH}/otbIOTests23)
 
+# --------------------------------------------------------------------------------
+# Manage PHR data input   
+IF(OTB_DATA_USE_LARGEINPUT)
+   SET(GenericTestPHR_DATA_INPUTS
+      ${GenericTestPHR_DATA_INPUTS}
+      ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+   )
+   
+   SET(GenericTestPHR_DATA_TYPES
+      ${GenericTestPHR_DATA_TYPES}
+      SIMULV3_PHR_ORTHO_GEO_PMS-N
+   )      
+ENDIF(OTB_DATA_USE_LARGEINPUT)   
 
 IF(OTB_DATA_USE_SPOTPHRINPUT)
-
   SET(GenericTestPHR_SPOT_DATA_INPUTS
       ${SPOTPHRINPUT}/ORTHO_UTM_BUNDLE/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_ORT_IPU_20120221_8798-001_R1C1.JP2
       ${SPOTPHRINPUT}/ORTHO_UTM_BUNDLE/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_ORT_IPU_20120221_8798-002_R1C1.JP2
@@ -61,15 +77,47 @@ IF(OTB_DATA_USE_SPOTPHRINPUT)
       )
 
   SET(GenericTestPHR_SPOT_DATA_TYPES
-	  ORTHO_UTM_P
-	  ORTHO_UTM_MS
-	  ORTHO_GEO_P
-      ORTHO_GEO_MS
-	  PRIMARY_MS
-	  PRIMARY_P
+	  SPOT_PHR_ORTHO_UTM_P
+	  SPOT_PHR_ORTHO_UTM_MS
+	  SPOT_PHR_ORTHO_GEO_P
+      SPOT_PHR_ORTHO_GEO_MS
+	  SPOT_PHR_PRIMARY_MS
+	  SPOT_PHR_PRIMARY_P
 	 )
 	 
-ENDIF(OTB_DATA_USE_SPOTPHRINPUT)	
+   SET(GenericTestPHR_DATA_INPUTS ${GenericTestPHR_DATA_INPUTS} ${GenericTestPHR_SPOT_DATA_INPUTS})	  
+   SET(GenericTestPHR_DATA_TYPES ${GenericTestPHR_DATA_TYPES} ${GenericTestPHR_SPOT_DATA_TYPES})   
+ENDIF(OTB_DATA_USE_SPOTPHRINPUT)
+
+IF(OTB_DATA_USE_ICCPHRINPUT)
+  SET(GenericTestPHR_ICC_DATA_INPUTS
+      ${ICCPHRINPUT}/PRIMARY_PMS/IMGPHR_201212716417737721/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120127_5579-001_R1C2.JP2
+      ${ICCPHRINPUT}/PRIMARY_PMS/IMGPHR_201212716417737721/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120127_5579-001_R2C2.JP2
+      ${ICCPHRINPUT}/PRIMARY_PMS/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2
+      ${ICCPHRINPUT}/PRIMARY_PMS/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R3C1.JP2
+      )
+
+  SET(GenericTestPHR_ICC_DATA_TYPES
+	  ICC_PHR_PRIMARY_PMS_R1C1_2012-01-27
+	  ICC_PHR_PRIMARY_PMS_R2C2_2012-01-27
+	  ICC_PHR_PRIMARY_PMS_R1C1_2012-02-22
+	  ICC_PHR_PRIMARY_PMS_R3C1_2012-02-22
+	 )
+  
+  SET(GenericTestPHR_DATA_INPUTS ${GenericTestPHR_DATA_INPUTS} ${GenericTestPHR_ICC_DATA_INPUTS})	 
+  SET(GenericTestPHR_DATA_TYPES ${GenericTestPHR_DATA_TYPES} ${GenericTestPHR_ICC_DATA_TYPES})    	 	 
+ENDIF(OTB_DATA_USE_ICCPHRINPUT)
+
+# Use in debug to show the variables
+#SET( GenericTestPHR_TESTNB 0)  
+#FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
+#  LIST(GET GenericTestPHR_DATA_TYPES  ${GenericTestPHR_TESTNB} current_type   )
+#  MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+#  
+#  MESSAGE(STATUS ${current_file})
+#  MESSAGE(STATUS ${current_type})
+#
+#ENDFOREACH()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -620,45 +668,6 @@ ADD_TEST(ioTvImageKeywordlistQuickbird ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
 )
 
-ADD_TEST(ioTvImageKeywordlistPleiades ${IO_TESTS4}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistPleiades.txt
-         ${TEMP}/ioTvImageKeywordlistPleiades.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistPleiades.txt
-         ${TEMP}/ioTvImageKeywordlistPleiades_saveState_loadState.txt
-         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
-    otbImageKeywordlist
-         ${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20110401_0896-004_R1C1.JP2
-         ${TEMP}/ioTvImageKeywordlistPleiades.txt
-         ${TEMP}/ioTvImageKeywordlistPleiades_saveState_loadState.txt
-)
-
-IF(OTB_DATA_USE_SPOTPHRINPUT)
-  
-  SET( GenericTestPHR_TESTNB 0)
-  
-  FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
-    LIST(GET GenericTestPHR_SPOT_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type )
-    MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
-    
-      # Get and manipulate ImageKeywordlist 
-      ADD_TEST(ioTvImageKeywordlist_SPOT_PHR_${current_type} ${IO_TESTS4}
-               --ignore-order --compare-n-ascii ${NOTOL} 2
-                 ${BASELINE_FILES}/ioTvImageKeywordlist_SPOT_PHR_${current_type}.txt
-                 ${TEMP}/ioTvImageKeywordlist_SPOT_PHR_${current_type}_OUT.txt
-                 ${BASELINE_FILES}/ioTvImageKeywordlist_SPOT_PHR_${current_type}.txt
-                 ${TEMP}/ioTvImageKeywordlist_SPOT_PHR_${current_type}_saveState_loadState_OUT.txt
-               --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
-               otbImageKeywordlist
-                  ${current_file}
-                  ${TEMP}/ioTvImageKeywordlist_SPOT_PHR_${current_type}_OUT.txt
-                  ${TEMP}/ioTvImageKeywordlist_SPOT_PHR_${current_type}_saveState_loadState_OUT.txt
-              )
-
-  ENDFOREACH()
-
-ENDIF(OTB_DATA_USE_SPOTPHRINPUT)
-
 ADD_TEST(ioTvImageKeywordlistIkonos ${IO_TESTS4}
   --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
@@ -840,6 +849,34 @@ ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+IF(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_ICCPHRINPUT)
+  
+  SET( GenericTestPHR_TESTNB 0)
+  
+  FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
+    LIST(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type )
+    MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+    
+      # Get and manipulate ImageKeywordlist 
+      ADD_TEST(ioTvImageKeywordlist_${current_type} ${IO_TESTS4}
+               --ignore-order --compare-n-ascii ${NOTOL} 2
+                 ${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
+                 ${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
+                 ${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
+                 ${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
+               --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+               otbImageKeywordlist
+                  ${current_file}
+                  ${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
+                  ${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
+              )
+
+  ENDFOREACH()
+
+ENDIF(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_ICCPHRINPUT)
+
 
 ADD_TEST(ioTvOssimJpegFileRessourceLeak ${IO_TESTS4}
         otbOssimJpegFileRessourceLeakTest
@@ -1948,8 +1985,10 @@ ADD_TEST(ioTvMapProjectionAdapterTest ${IO_TESTS12}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 IF(OTB_USE_JPEG2000)
+
+# --------------------------------------------------------------------------------
+# old test suite:
 
 # ---  JPEG2000 can read ---
 ADD_TEST(ioTuJ2KImageIOCanRead ${IO_TESTS13}
@@ -1984,117 +2023,8 @@ ADD_TEST(ioTvImageFileReaderWriterJP22TIF ${IO_TESTS2}
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+# --------------------------------------------------------------------------------
 # New test suite:
-IF(OTB_DATA_USE_LARGEINPUT)
-# Decode an area inside one tile
-  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R3C1 ${COMMON_TESTS2}
-         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1.tif
-                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1.tif
-         otbMultiChannelExtractROI
-         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R3C1.JP2
-         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1.tif
-         -startX 256 -startY 512 -sizeX 256 -sizeY 128
-         -channels 1 2 3 4
-         -time
-         )
-
-# Decode an area which need 4 tiles
-  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R3C1-4tiles ${COMMON_TESTS2}
-         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1-4tiles.tif
-                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1-4tiles.tif
-         otbMultiChannelExtractROI
-         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R3C1.JP2
-         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1-4tiles.tif
-         -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
-         -channels 1 2 3 4
-         -time
-         )
-
-# Decode an area inside one tile
-  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1 ${COMMON_TESTS2}
-         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1.tif
-                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1.tif
-         otbMultiChannelExtractROI
-         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2
-         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1.tif
-         -startX 256 -startY 512 -sizeX 256 -sizeY 128
-         -channels 1 2 3 4
-         -time
-         )
-# Decode an area which need 4 tiles
-  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-4tiles ${COMMON_TESTS2}
-         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-4tiles.tif
-                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-4tiles.tif
-         otbMultiChannelExtractROI
-         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2
-         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-4tiles.tif
-         -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
-         -channels 1 2 3 4
-         -time
-         )
-
-  # Between tiles 328 and 329, the codestream offset crosses the 2**31-1 boundary (max of 32 bit signed integer)
-  # This reveals a problem on 32 bits systems since fseek takes an integer
-  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-tile328-329 ${COMMON_TESTS2}
-         --without-threads
-         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
-                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
-         otbMultiChannelExtractROI
-         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
-         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
-         -startX 1330 -startY 928 -sizeX 32 -sizeY 32
-         -channels 1 2 3 4
-         -time
-         )
-
-  # Generate the QL used in monteverdi (take only first band to put the image in the baseline)
-  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-FullQL ${COMMON_TESTS2}
-         --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql.tif
-                                        ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
-         otbMultiChannelExtractROI
-         -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
-         -ushort ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
-         -channels 1
-         -time
-         )
-
-  # Decode an area inside one tile
-  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-V3-R1C1 ${COMMON_TESTS2}
-         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1.tif
-                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1_OUT.tif
-         otbMultiChannelExtractROI
-         -ushort ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
-         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1_OUT.tif
-         -startX 256 -startY 512 -sizeX 256 -sizeY 128
-         -channels 1 2 3
-         -time
-         )
-
-  # Decode an area which need 4 tiles
-  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-V3-R1C1-4tiles ${COMMON_TESTS2}
-         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1-4tiles.tif
-                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1-4tiles_OUT.tif
-         otbMultiChannelExtractROI
-         -ushort ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
-         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1-4tiles_OUT.tif
-         -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
-         -channels 1 2 3
-         -time
-         )
-
-  # Generate the QL used in monteverdi (take only first band to put the image in the baseline)
-  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-V3-R1C1-FullQL ${COMMON_TESTS2}
-         --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql.tif
-                                        ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql_OUT.tif
-         otbMultiChannelExtractROI
-         -ushort ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2:5
-         -ushort ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql_OUT.tif
-         -channels 1
-         -time
-         )
-
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
 
 # Tests to check if we can open JPEG2000 files using a otb::VectorImage and IFReader->SetAdditionalNumber() function.
 # no access to data only PrintSelf() method.
@@ -2114,17 +2044,6 @@ ADD_TEST(ioTvMultiResolutionReading3 ${IO_TESTS13}
       ${TEMP}/ioTvMultiResolutionReading3.txt
       3
       )
-
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvMultiResolutionReadingPleiadesV3 ${IO_TESTS13}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingPleiadesV3.txt
-                             ${TEMP}/ioTvMultiResolutionReadingPleiadesV3_OUT.txt
-      otbVectorImageTest
-      ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
-      ${TEMP}/ioTvMultiResolutionReadingPleiadesV3_OUT.txt
-      0
-      )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # Tests to check if we can open JPEG2000 files using a otb::VectorImage
 # and filename:ResolutionFactor syntax.
@@ -2259,6 +2178,7 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res5 ${COMMON_TESTS2}
            ${INPUTDATA}/bretagne.j2k:5
            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif )
 
+# --------------------------------------------------------------------------------
 # Test the possibility to modify the size of cache used to reduce the decoding operations
 # O tile in the cache (500K)
 ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_500 ${IO_TESTS13}
@@ -2299,21 +2219,41 @@ ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_25000 ${IO_TESTS13}
          ${INPUTDATA}/bretagne.j2k
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_OUT.tif)
 
+# --------------------------------------------------------------------------------
+# Special Case
+# Between tiles 328 and 329, the codestream offset crosses the 2**31-1 boundary (max of 32 bit signed integer)
+# This reveals a problem on 32 bits systems since fseek takes an integer
+IF(OTB_DATA_USE_LARGEINPUT)
 
-IF(OTB_DATA_USE_SPOTPHRINPUT)
+  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-tile328-329 ${COMMON_TESTS2}
+           --without-threads
+           --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
+                                         ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
+           otbMultiChannelExtractROI
+              -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
+              -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
+              -startX 1330 -startY 928 -sizeX 32 -sizeY 32
+              -time
+           )
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+# --------------------------------------------------------------------------------
+# Tests about special data (larges files, ICC files, SPOT files)
+IF(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_ICCPHRINPUT)
   SET( GenericTestPHR_TESTNB 0)
 
-FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
-  LIST(GET GenericTestPHR_SPOT_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
+FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
+  LIST(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
   MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
     # CanRead
-    ADD_TEST(ioTuJ2KImageIOCanRead_SPOT_PHR_${current_type} ${IO_TESTS13}
+    ADD_TEST(ioTuJ2KImageIOCanRead_${current_type} ${IO_TESTS13}
              otbJPEG2000ImageIOTestCanRead
                 ${current_file}
             )
     
     # Read info from the input file
-    ADD_TEST(ioTvVectorImageReadingInfo_SPOT_PHR_${current_type} ${IO_TESTS13}
+    ADD_TEST(ioTvVectorImageReadingInfo_${current_type} ${IO_TESTS13}
              --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
                                        ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
              otbVectorImageLegacyTest
@@ -2323,7 +2263,7 @@ FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
              )
 
     # Read info from the input file (res=5)
-    ADD_TEST(ioTvVectorImageReadingInfo_SPOT_PHR_${current_type}_res5 ${IO_TESTS13}
+    ADD_TEST(ioTvVectorImageReadingInfo_${current_type}_res5 ${IO_TESTS13}
              --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
                                        ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
              otbVectorImageLegacyTest
@@ -2333,7 +2273,7 @@ FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
              )
             
     # Extract resolution of input file        
-    ADD_TEST(ioTvMultiResolutionReadingInfo_SPOT_PHR_${current_type} ${IO_TESTS13}
+    ADD_TEST(ioTvMultiResolutionReadingInfo_${current_type} ${IO_TESTS13}
              --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingInfo_${current_type}.txt
                                        ${TEMP}/ioTvMultiResolutionReadingInfo_${current_type}_OUT.txt
              otbMultiResolutionReadingInfo
@@ -2342,7 +2282,7 @@ FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
             )
   
     # Decode an area inside one tile
-    ADD_TEST(ioTvReaderWriterJP22TIF_SPOT_PHR_${current_type}_1 ${COMMON_TESTS2}
+    ADD_TEST(ioTvReaderWriterJP22TIF_${current_type}_1 ${COMMON_TESTS2}
 	         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_1.tif
                                            ${TEMP}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_1_OUT.tif
              otbMultiChannelExtractROI
@@ -2353,7 +2293,7 @@ FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
             )
             
     # Decode an area which need 4 tiles
-    ADD_TEST(ioTvReaderWriterJP22TIF_SPOT_PHR_${current_type}_2 ${COMMON_TESTS2}
+    ADD_TEST(ioTvReaderWriterJP22TIF_${current_type}_2 ${COMMON_TESTS2}
              --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_2.tif
                                            ${TEMP}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_2_OUT.tif
              otbMultiChannelExtractROI
@@ -2364,7 +2304,7 @@ FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
             )
             
     # Decode the whole image with the lowest resolution (res=5)
-    ADD_TEST(ioTvReaderWriterJP22TIF_SPOT_PHR_${current_type}_res5 ${COMMON_TESTS2}
+    ADD_TEST(ioTvReaderWriterJP22TIF_${current_type}_res5 ${COMMON_TESTS2}
              --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_res5.tif
                                            ${TEMP}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_res5_OUT.tif
              otbMultiChannelExtractROI
@@ -2375,7 +2315,7 @@ FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
                            
 ENDFOREACH()
 
-ENDIF(OTB_DATA_USE_SPOTPHRINPUT)
+ENDIF(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_ICCPHRINPUT)
 
 ENDIF(OTB_USE_JPEG2000)
 
@@ -2839,32 +2779,30 @@ ADD_TEST(ioTvImageMetadataInterfaceBaseTest_SPOT ${IO_TESTS18}
         ${TEMP}/ioTvImageMetadataInterfaceBase_SPOT.txt
 )
 
-IF(OTB_DATA_USE_SPOTPHRINPUT)
-  SET( GenericTestPHR_TESTNB 0)
+# PHR Data
+SET( GenericTestPHR_TESTNB 0)
 
-  FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
-    LIST(GET GenericTestPHR_SPOT_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
-    MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
-    
-    ADD_TEST(ioTvImageMetadataInterfaceBaseTest_SPOT_PHR_${current_type} ${IO_TESTS18}
-             --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_SPOT_PHR_${current_type}.txt
-                                      ${TEMP}/ioTvImageMetadataInterfaceBase_SPOT_PHR_${current_type}_OUT.txt
-             otbImageMetadataInterfaceBaseTest
-                ${current_file}
-                ${TEMP}/oTvImageMetadataInterfaceBase_SPOT_PHR_${current_type}_OUT.txt
-             )
+FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
+  LIST(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
+  MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+   
+  ADD_TEST(ioTvImageMetadataInterfaceBaseTest_${current_type} ${IO_TESTS18}
+           --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_${current_type}.txt
+                                    ${TEMP}/ioTvImageMetadataInterfaceBase_${current_type}_OUT.txt
+           otbImageMetadataInterfaceBaseTest
+              ${current_file}
+              ${TEMP}/oTvImageMetadataInterfaceBase_${current_type}_OUT.txt
+          )
 
-    ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_SPOT_PHR_${current_type} ${IO_TESTS18}
-             --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_SPOT_PHR_${current_type}.txt
-                                      ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT_PHR_${current_type}.txt
-             otbOpticalImageMetadataInterfaceTest
-                ${current_file}
-                ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT_PHR_${current_type}_OUT.txt
-             )
+  ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_${current_type} ${IO_TESTS18}
+           --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_${current_type}.txt
+                                    ${TEMP}/ioTvOpticalImageMetadataInterface_${current_type}_OUT.txt
+           otbOpticalImageMetadataInterfaceTest
+              ${current_file}
+              ${TEMP}/ioTvOpticalImageMetadataInterface_${current_type}_OUT.txt
+          )
 
-  ENDFOREACH()
-
-ENDIF(OTB_DATA_USE_SPOTPHRINPUT)
+ENDFOREACH()
 
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES.txt
