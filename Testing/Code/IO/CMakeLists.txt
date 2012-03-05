@@ -2838,6 +2838,34 @@ ADD_TEST(ioTvImageMetadataInterfaceBaseTest_SPOT ${IO_TESTS18}
         ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_SPOT.txt
 )
+
+IF(OTB_DATA_USE_SPOTPHRINPUT)
+  SET( GenericTestPHR_TESTNB 0)
+
+  FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
+    LIST(GET GenericTestPHR_SPOT_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
+    MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+    
+    ADD_TEST(ioTvImageMetadataInterfaceBaseTest_SPOT_PHR_${current_type} ${IO_TESTS18}
+             --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_SPOT_PHR_${current_type}.txt
+                                      ${TEMP}/ioTvImageMetadataInterfaceBase_SPOT_PHR_${current_type}_OUT.txt
+             otbImageMetadataInterfaceBaseTest
+                ${current_file}
+                ${TEMP}/oTvImageMetadataInterfaceBase_SPOT_PHR_${current_type}_OUT.txt
+             )
+
+    ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_SPOT_PHR_${current_type} ${IO_TESTS18}
+             --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_SPOT_PHR_${current_type}.txt
+                                      ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT_PHR_${current_type}.txt
+             otbOpticalImageMetadataInterfaceTest
+                ${current_file}
+                ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT_PHR_${current_type}_OUT.txt
+             )
+
+  ENDFOREACH()
+
+ENDIF(OTB_DATA_USE_SPOTPHRINPUT)
+
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
