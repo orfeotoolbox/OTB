@@ -1102,6 +1102,9 @@ ADD_TEST(bfTvContinuousMinimumMaximumImageCalculatorTest ${BASICFILTERS_TESTS9}
 ADD_TEST(bfTuMeanShiftImageFilterNew ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilterNew )
 
+ADD_TEST(bfTuMeanShiftImageFilterNew2 ${BASICFILTERS_TESTS9}
+        otbMeanShiftImageFilterNew2 )
+
 
 ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
  --compare-n-images ${EPSILON_7} 4
@@ -1120,6 +1123,25 @@ ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
         ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
         16 16 10 1.0
+        )
+
+ADD_TEST(bfTvMeanShiftImageFilterValid ${BASICFILTERS_TESTS9}
+        otbMeanShiftImageFilter
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/bfMeanShiftImageFilterOutputValid.tif
+        ${TEMP}/bfMeanShiftImageFilterClusteredOutputValid.tif
+        ${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutputValid.tif
+        ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutputValid.tif
+        9 50 10 1.0
+        )
+        
+ADD_TEST(bfTvMeanShiftImageFilter2 ${BASICFILTERS_TESTS9}
+        otbMeanShiftImageFilter2
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/bfMeanShiftImageSpatialOutput.tif
+        ${TEMP}/bfMeanShiftImageFilterSpectralOutput.tif
+        ${TEMP}/bfMeanShiftImageFilterMetricOutput.tif
+        9 9 50
         )
 
 ADD_TEST(bfTuMeanShiftVectorImageFilterNew ${BASICFILTERS_TESTS9}
@@ -2703,6 +2725,8 @@ otbContinuousMinimumMaximumImageCalculatorNew.cxx
 otbContinuousMinimumMaximumImageCalculatorTest.cxx
 otbMeanShiftImageFilterNew.cxx
 otbMeanShiftImageFilter.cxx
+otbMeanShiftImageFilterNew2.cxx
+otbMeanShiftImageFilter2.cxx
 otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
 otbFunctionToImageFilterNew.cxx
