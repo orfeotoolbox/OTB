@@ -261,7 +261,6 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 
 
 
-
 template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
 void
 MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
@@ -285,7 +284,6 @@ MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
  }
 
 
-
 template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
 void
 MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
@@ -293,7 +291,6 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
  {
   // nothing to do
  }
-
 
 
 /* TO DO
@@ -435,13 +432,13 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
   double value;
   unsigned int boundaryWeightIndex=numberOfComponents;
   bool isInside;
-  for( int y=0;y<kernelSize[1];y++)
+  for( int y=0; y<kernelSize[1]; y++)
     {
       for (int x = 0; x < kernelSize[0]; x++)
         {
        // std::cout<<"it.Size "<<it->Size()<<std::endl;
         isInside=true;
-        for(unsigned int comp=0;comp<rangeNumberOfComponents;comp++)
+        for(unsigned int comp=0; comp<rangeNumberOfComponents; comp++)
                    {
 
                      neighborhoodValue=it->GetElement(comp+spatialNumberOfComponents);
@@ -452,7 +449,7 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
           if(it->GetElement(boundaryWeightIndex) && isInside)
            {
 
-            for(unsigned int comp=0;comp<spatialNumberOfComponents;comp++)
+            for(unsigned int comp=0; comp<spatialNumberOfComponents; comp++)
             {
              neighborhoodValue=it->GetElement(comp);
              //value=spatialIt->GetElement(comp);
@@ -461,7 +458,7 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
              weightingMeanShiftVector[comp]+=value;
 
             }
-           for(unsigned int comp=0;comp<rangeNumberOfComponents;comp++)
+           for(unsigned int comp=0; comp<rangeNumberOfComponents; comp++)
            {
              neighborhoodValue=it->GetElement(comp+spatialNumberOfComponents);
              //value=rangeIt->GetElement(comp);
@@ -479,14 +476,14 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
         }
     }
 
-  for(unsigned int comp=0;comp<spatialNumberOfComponents;comp++)
+  for(unsigned int comp=0; comp<spatialNumberOfComponents; comp++)
               {
                if( weightingMeanShiftVector[comp]>0)
                 meanShiftVector[comp]=meanShiftVector[comp]/weightingMeanShiftVector[comp]-spatialPixel[comp];
                else
                 meanShiftVector[comp]=0;
               }
-  for(unsigned int comp=0;comp<rangeNumberOfComponents;comp++)
+  for(unsigned int comp=0; comp<rangeNumberOfComponents; comp++)
     {
     if( weightingMeanShiftVector[spatialNumberOfComponents+comp]>0)
                    meanShiftVector[spatialNumberOfComponents+comp]=meanShiftVector[spatialNumberOfComponents+comp]/weightingMeanShiftVector[spatialNumberOfComponents+comp]-rangePixel[comp];
@@ -590,7 +587,6 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
     }
 
 }
-
 
 
 template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
@@ -735,7 +731,6 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 
 
 
-
 /* after threaded convergence test */
 template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
 void
@@ -745,7 +740,6 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 
 
 }
-
 
 
 

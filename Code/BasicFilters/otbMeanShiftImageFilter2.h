@@ -29,7 +29,6 @@
 */
 
 
-
 namespace otb
 {
 
@@ -136,7 +135,7 @@ public:
   OutputMetricImageType * GetMetricOutput();
 
   bool IsImageLatticeInitialized()
-    {return m_ImageLatticeInitialized;};
+    {return m_ImageLatticeInitialized; };
 
 protected:
 
@@ -202,7 +201,6 @@ private:
     largestRadius[1]=std::max(m_SpatialRadius[1],m_RangeRadius[1]);
     return largestRadius;
   };
-
 
 
 
