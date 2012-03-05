@@ -28,5 +28,6 @@ void RegisterTests()
   REGISTER_TEST(otbJPEG2000ImageIOTestCanWrite);
   REGISTER_TEST(otbMultiResolutionReadingInfo);
   REGISTER_TEST(otbVectorImageTest);
+  REGISTER_TEST(otbVectorImageLegacyTest);
   REGISTER_TEST(otbGenerateClassicalQLWithJPEG2000);
 }

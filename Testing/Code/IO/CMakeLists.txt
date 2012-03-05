@@ -2,6 +2,10 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
+IF(OTB_DATA_USE_SPOTPHRINPUT)
+  SET(SPOTPHRINPUT ${OTB_DATA_SPOTPHRINPUT_ROOT} )
+ENDIF(OTB_DATA_USE_SPOTPHRINPUT)
+
 SET(COMMON_TESTS2 ${CXX_TEST_PATH}/otbCommonTests2)
 SET(COMMON_TESTS3 ${CXX_TEST_PATH}/otbCommonTests3)
 SET(IO_TESTS1     ${CXX_TEST_PATH}/otbIOTests1)
@@ -43,6 +47,30 @@ IF(CHECK_GDAL_BUILDED_WITH_HDF)
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 
 SET(IO_TESTS23    ${CXX_TEST_PATH}/otbIOTests23)
+
+
+IF(OTB_DATA_USE_SPOTPHRINPUT)
+
+  SET(GenericTestPHR_SPOT_DATA_INPUTS
+      ${SPOTPHRINPUT}/ORTHO_UTM_BUNDLE/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_ORT_IPU_20120221_8798-001_R1C1.JP2
+      ${SPOTPHRINPUT}/ORTHO_UTM_BUNDLE/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_ORT_IPU_20120221_8798-002_R1C1.JP2
+      ${SPOTPHRINPUT}/PRIMARY_BUNDLE/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20120221_8686-001_R1C1.JP2
+      ${SPOTPHRINPUT}/PRIMARY_BUNDLE/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20120221_8686-002_R1C1.JP2
+      ${SPOTPHRINPUT}/ORTHO_GEOGRAPHIC_BUNDLE/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_ORT_IPU_20120221_8718-001_R1C1.JP2
+      ${SPOTPHRINPUT}/ORTHO_GEOGRAPHIC_BUNDLE/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_ORT_IPU_20120221_8718-002_R1C1.JP2
+      )
+
+  SET(GenericTestPHR_SPOT_DATA_TYPES
+	  ORTHO_UTM_P
+	  ORTHO_UTM_MS
+	  ORTHO_GEO_P
+      ORTHO_GEO_MS
+	  PRIMARY_MS
+	  PRIMARY_P
+	 )
+	 
+ENDIF(OTB_DATA_USE_SPOTPHRINPUT)	
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -604,6 +632,32 @@ ADD_TEST(ioTvImageKeywordlistPleiades ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistPleiades.txt
          ${TEMP}/ioTvImageKeywordlistPleiades_saveState_loadState.txt
 )
+
+IF(OTB_DATA_USE_SPOTPHRINPUT)
+  
+  SET( GenericTestPHR_TESTNB 0)
+  
+  FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
+    LIST(GET GenericTestPHR_SPOT_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type )
+    MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+    
+      # Get and manipulate ImageKeywordlist 
+      ADD_TEST(ioTvImageKeywordlist_SPOT_PHR_${current_type} ${IO_TESTS4}
+               --ignore-order --compare-n-ascii ${NOTOL} 2
+                 ${BASELINE_FILES}/ioTvImageKeywordlist_SPOT_PHR_${current_type}.txt
+                 ${TEMP}/ioTvImageKeywordlist_SPOT_PHR_${current_type}_OUT.txt
+                 ${BASELINE_FILES}/ioTvImageKeywordlist_SPOT_PHR_${current_type}.txt
+                 ${TEMP}/ioTvImageKeywordlist_SPOT_PHR_${current_type}_saveState_loadState_OUT.txt
+               --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+               otbImageKeywordlist
+                  ${current_file}
+                  ${TEMP}/ioTvImageKeywordlist_SPOT_PHR_${current_type}_OUT.txt
+                  ${TEMP}/ioTvImageKeywordlist_SPOT_PHR_${current_type}_saveState_loadState_OUT.txt
+              )
+
+  ENDFOREACH()
+
+ENDIF(OTB_DATA_USE_SPOTPHRINPUT)
 
 ADD_TEST(ioTvImageKeywordlistIkonos ${IO_TESTS4}
   --ignore-order --compare-n-ascii ${NOTOL} 2
@@ -1930,16 +1984,6 @@ ADD_TEST(ioTvImageFileReaderWriterJP22TIF ${IO_TESTS2}
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-
-
-# ---  JPEG2000 can write ---
-# FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=104
-# is solved
-# ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13}
-#          otbJPEG2000ImageIOTestCanWrite
-#          ${TEMP}/toto.j2k
-#          )
-
 # New test suite:
 IF(OTB_DATA_USE_LARGEINPUT)
 # Decode an area inside one tile
@@ -2254,6 +2298,84 @@ ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_25000 ${IO_TESTS13}
          otbGenerateClassicalQLWithJPEG2000
          ${INPUTDATA}/bretagne.j2k
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_OUT.tif)
+
+
+IF(OTB_DATA_USE_SPOTPHRINPUT)
+  SET( GenericTestPHR_TESTNB 0)
+
+FOREACH( current_file ${GenericTestPHR_SPOT_DATA_INPUTS} )
+  LIST(GET GenericTestPHR_SPOT_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
+  MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+    # CanRead
+    ADD_TEST(ioTuJ2KImageIOCanRead_SPOT_PHR_${current_type} ${IO_TESTS13}
+             otbJPEG2000ImageIOTestCanRead
+                ${current_file}
+            )
+    
+    # Read info from the input file
+    ADD_TEST(ioTvVectorImageReadingInfo_SPOT_PHR_${current_type} ${IO_TESTS13}
+             --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
+                                       ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+             otbVectorImageLegacyTest
+                ${current_file}
+                ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+                0
+             )
+
+    # Read info from the input file (res=5)
+    ADD_TEST(ioTvVectorImageReadingInfo_SPOT_PHR_${current_type}_res5 ${IO_TESTS13}
+             --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
+                                       ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+             otbVectorImageLegacyTest
+                ${current_file}
+                ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+                5
+             )
+            
+    # Extract resolution of input file        
+    ADD_TEST(ioTvMultiResolutionReadingInfo_SPOT_PHR_${current_type} ${IO_TESTS13}
+             --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingInfo_${current_type}.txt
+                                       ${TEMP}/ioTvMultiResolutionReadingInfo_${current_type}_OUT.txt
+             otbMultiResolutionReadingInfo
+                ${current_file}
+                ${TEMP}/ioTvMultiResolutionReadingInfo_OUT.txt
+            )
+  
+    # Decode an area inside one tile
+    ADD_TEST(ioTvReaderWriterJP22TIF_SPOT_PHR_${current_type}_1 ${COMMON_TESTS2}
+	         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_1.tif
+                                           ${TEMP}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_1_OUT.tif
+             otbMultiChannelExtractROI
+                ${current_file}
+                ${TEMP}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_1_OUT.tif
+                -startX 512 -startY 1024 -sizeX 256 -sizeY 128
+                -time
+            )
+            
+    # Decode an area which need 4 tiles
+    ADD_TEST(ioTvReaderWriterJP22TIF_SPOT_PHR_${current_type}_2 ${COMMON_TESTS2}
+             --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_2.tif
+                                           ${TEMP}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_2_OUT.tif
+             otbMultiChannelExtractROI
+                ${current_file}
+                ${TEMP}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_2_OUT.tif
+                -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
+                -time
+            )
+            
+    # Decode the whole image with the lowest resolution (res=5)
+    ADD_TEST(ioTvReaderWriterJP22TIF_SPOT_PHR_${current_type}_res5 ${COMMON_TESTS2}
+             --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_res5.tif
+                                           ${TEMP}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_res5_OUT.tif
+             otbMultiChannelExtractROI
+                ${current_file}:5
+                ${TEMP}/ioTvJP22TIF_Extract_SPOT_PHR_${current_type}_res5_OUT.tif
+                -time
+         )
+                           
+ENDFOREACH()
+
+ENDIF(OTB_DATA_USE_SPOTPHRINPUT)
 
 ENDIF(OTB_USE_JPEG2000)
 

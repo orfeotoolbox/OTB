@@ -30,29 +30,39 @@
 int otbVectorImageLegacyTest(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
+  if (argc < 3)
+    {
+    std::cout << argv[0] << "<image> <output information> [dataset number]" << std::endl;
+    return EXIT_FAILURE;
+    }
+
   const char * inputFilename  = argv[1];
   const char * outputAsciiFilename  = argv[2];
-  //  unsigned int  GCPnum((unsigned int)::atoi(argv[2]));
+  int addNumber = -1;
+  if (argc > 3)
+    {
+    addNumber = atoi(argv[3]);
+    }
 
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
-
-  std::ofstream file;
-
-  file.open(outputAsciiFilename);
-
   typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
 
-  InputImageType::Pointer image = InputImageType::New();
-
   typedef otb::ImageFileReader<InputImageType> ReaderType;
-
   ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName(inputFilename);
+  if (addNumber != -1)
+    {
+    reader->SetAdditionalNumber(addNumber);
+    }
   reader->UpdateOutputInformation();
 
+  InputImageType::Pointer image = InputImageType::New();
   image = reader->GetOutput();
+
+  std::ofstream file;
+  file.open(outputAsciiFilename);
 
   std::cout << "------ IMAGE --------" << std::endl;
   std::cout << image << std::endl;
