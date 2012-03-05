@@ -240,8 +240,8 @@ private:
   //KernelType m_Kernel;
 
   bool m_NeighborhoodHasTobeUpdated;
-  /** threshold **/
 
+  unsigned int m_NumberOfSpatialComponents;
 
 };
 } // end namespace otb

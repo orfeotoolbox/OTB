@@ -54,6 +54,7 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 
   m_SpectralBandwidth=16.;
   m_Threshold=1e-3;
+  m_NumberOfSpatialComponents=2; //image lattice
   //CreateKernel by default
  // m_Kernel.CreateStructuringElement();
 
@@ -312,7 +313,7 @@ MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
   unsigned int numberOfComponents= this->GetInput()->GetNumberOfComponentsPerPixel();
   if (this->GetSpatialOutput())
       {
-  this->GetSpatialOutput()->SetNumberOfComponentsPerPixel(2); // image lattice
+  this->GetSpatialOutput()->SetNumberOfComponentsPerPixel(m_NumberOfSpatialComponents); // image lattice
       }
   if (this->GetSpatialOutput())
        {
@@ -320,7 +321,7 @@ MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
        }
   if (this->GetMetricOutput())
        {
-  this->GetMetricOutput()->SetNumberOfComponentsPerPixel(numberOfComponents+2); // Spectral Part + lattice
+  this->GetMetricOutput()->SetNumberOfComponentsPerPixel(numberOfComponents+m_NumberOfSpatialComponents); // Spectral Part + lattice
        }
 }
 
@@ -333,7 +334,6 @@ MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
   // Call superclass implementation
   Superclass::GenerateInputRequestedRegion();
 
-  std::cout<<"generate "<<std::endl;
   // Retrieve input pointers
   TInputImage * inPtr  = const_cast<TInputImage *>(this->GetInput());
 
@@ -545,9 +545,8 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   IndexType pixelIndex;
   InputPixelType inputPixel;
   inputPixel.SetSize(numberOfComponents);
-  // it.Size()=
-  // fill m_Neighborhood
 
+  // fill m_Neighborhood
   unsigned int indextype = 0;
   for (int y = 0; y < kernelSize[1]; y++)
     {
@@ -569,27 +568,25 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
         it->SetElement(1, pixelPos[1]);
         for (unsigned int comp = 0; comp < numberOfComponents; comp++)
           {
-          it->SetElement(comp + 2, inputPixel[comp]);
+          it->SetElement(comp + m_NumberOfSpatialComponents, inputPixel[comp]);
           }
 
-        it->SetElement(numberOfComponents + 2, 1.);
-        //  std::cout<<"set element ok"<<std::endl;
+        it->SetElement(numberOfComponents + m_NumberOfSpatialComponents, 1.);
         }
       else
         {
         for (unsigned int comp = 0; comp < numberOfComponents; comp++)
           {
-          it->SetElement(comp + 2, 0.);
+          it->SetElement(comp + m_NumberOfSpatialComponents, 0.);
           }
         it->SetElement(0, pixelPos[0]);
         it->SetElement(1, pixelPos[1]);
-        it->SetElement(numberOfComponents + 2, 0.);
-
-          }
+        it->SetElement(numberOfComponents + m_NumberOfSpatialComponents, 0.);
+        }
 
       ++it;
       indextype++;
-       }
+      }
     }
 
 }
