@@ -53,6 +53,7 @@ REGISTER_TEST(otbVectorDataToLabelMapFilterNew);
 REGISTER_TEST(otbVectorDataToLabelMapFilter);
 REGISTER_TEST(otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew);
 REGISTER_TEST(otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter);
+REGISTER_TEST(otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter);
 REGISTER_TEST(otbHooverMatrixFilterNew);
 REGISTER_TEST(otbHooverMatrixFilter);
 REGISTER_TEST(otbHooverInstanceFilterNew);
