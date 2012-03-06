@@ -53,6 +53,8 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
   m_Kernel=NULL;
 
   m_SpectralBandwidth=16.;
+  m_SpatialBandwidth=8.;
+
   m_Threshold=1e-3;
   m_NumberOfSpatialComponents=2; //image lattice
   //CreateKernel by default
@@ -658,8 +660,8 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 
     // TODO change the maximum value;
 
-    m_HasConverged = false;
-    while ((iteration < m_MaxIterationNumber) || (!m_HasConverged))
+    bool hasConverged = false;
+    while ((iteration < m_MaxIterationNumber) || (!hasConverged))
       {
 
       typename OutputMetricImageType::PixelType meanShiftVector;
@@ -701,8 +703,8 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
         sum += metricPixel[comp];
         }
 
-
-      m_HasConverged = sum < m_Threshold;
+      //TODO replace SSD Test with templated metric
+      hasConverged = sum < m_Threshold;
 
       iteration++;
       }

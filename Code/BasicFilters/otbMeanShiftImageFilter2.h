@@ -210,6 +210,7 @@ private:
   InputSizeType m_RangeRadius;
 
   double        m_SpectralBandwidth;
+  double        m_SpatialBandwidth;
 
   /** **/
   double m_Threshold;
