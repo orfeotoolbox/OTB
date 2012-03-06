@@ -206,7 +206,6 @@ private:
   };
 
 
-
   /** Spatial radius for mean shift convergence */
   InputSizeType m_SpatialRadius;
   /** Range radius for mean shift convergence */

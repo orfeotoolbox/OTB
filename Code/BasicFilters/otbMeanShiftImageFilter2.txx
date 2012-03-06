@@ -262,7 +262,6 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 }
 
 
-
 template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
 void
 MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
@@ -732,7 +731,6 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 }
 
 
-
 /* after threaded convergence test */
 template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
 void
@@ -742,7 +740,6 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 
 
 }
-
 
 
 template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
