@@ -111,6 +111,9 @@ public:
 
   itkGetConstMacro(SpectralBandwidth, double);
   itkSetMacro(SpectralBandwidth, double);
+  itkGetConstMacro(SpatialBandwidth, double);
+  itkSetMacro(SpatialBandwidth, double);
+
 
   itkGetConstMacro(IterationCount, unsigned int);
 
