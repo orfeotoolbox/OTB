@@ -24,10 +24,10 @@
 
 int otbMeanShiftImageFilter2(int argc, char * argv[])
 {
-  if (argc != 8)
+  if (argc != 10)
     {
     std::cerr << "Usage: " << argv[0] <<
-    " infname spatialfname spectralfname metricfname spatialRadius spectralRadius spectralbandwidth"
+    " infname spatialfname spectralfname metricfname spatialRadius spectralRadius spectralbandwidth spatialBandwidth threshold"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -39,6 +39,8 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   const unsigned int spatialRadius             = atoi(argv[5]);
   const unsigned int spectralRadius            = atoi(argv[6]);
   const double       spectralbandwidth         = atof(argv[7]);
+  const double       spatialbandwidth          = atof(argv[8]);
+  const double       threshold                 = atof(argv[9]);
 
   /* maxit - threshold */
 
@@ -67,6 +69,8 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   radius[1]=spectralRadius;
   filter->SetRangeRadius(radius);
   filter->SetSpectralBandwidth(spectralbandwidth);
+  filter->SetSpatialBandwidth(spatialbandwidth);
+  filter->SetThreshold(threshold);
 
   filter->SetInput(reader->GetOutput());
   //filter->SetNumberOfThreads(1);

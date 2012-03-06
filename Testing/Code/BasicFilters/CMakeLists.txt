@@ -1135,14 +1135,60 @@ ADD_TEST(bfTvMeanShiftImageFilterValid ${BASICFILTERS_TESTS9}
         9 50 10 1.0
         )
         
+       
 ADD_TEST(bfTvMeanShiftImageFilter2 ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilter2
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/bfMeanShiftImageSpatialOutput.tif
         ${TEMP}/bfMeanShiftImageFilterSpectralOutput.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutput.tif
-        9 9 50
+        9 9 50 10 0.001
         )
+        
+ADD_TEST(bfTvMeanShiftImageFilterValidMul ${BASICFILTERS_TESTS9}
+        otbMeanShiftImageFilter
+        ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
+        ${TEMP}/bfMeanShiftImageFilterOutputValidMul.tif
+        ${TEMP}/bfMeanShiftImageFilterClusteredOutputValidMul.tif
+        ${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutputValidMul.tif
+        ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutputValidMul.tif
+        9 50 10 1.0
+        )        
+        
+ADD_TEST(bfTvMeanShiftImageFilter2Mul ${BASICFILTERS_TESTS9}
+        otbMeanShiftImageFilter2
+        ${INPUTDATA}/ROI_QB_MUL_4.tif
+        ${TEMP}/bfMeanShiftImageSpatialOutputMul.tif
+        ${TEMP}/bfMeanShiftImageFilterSpectralOutputMul.tif
+        ${TEMP}/bfMeanShiftImageFilterMetricOutputMul.tif
+        9 9 50 10 0.001
+        )
+        
+  
+            
+#IF(OTB_DATA_USE_LARGEINPUT)
+#
+#ADD_TEST(bfTvMeanShiftImageFilterValidLargeInput ${BASICFILTERS_TESTS9}
+#        otbMeanShiftImageFilter
+#        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+#        ${TEMP}/bfMeanShiftImageFilterOutputValidLargeInput.tif
+#        ${TEMP}/bfMeanShiftImageFilterClusteredOutputValidLargeInput.tif
+#        ${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutputValidLargeInput.tif
+#        ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutputValidLargeInput.tif
+#        9 50 10 1.0
+#        )
+        
+#ADD_TEST(bfTvMeanShiftImageFilter2LargeInput ${BASICFILTERS_TESTS9}
+#        otbMeanShiftImageFilter2
+#        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+#        ${TEMP}/bfMeanShiftImageSpatialOutputLargeInput.tif
+#        ${TEMP}/bfMeanShiftImageFilterSpectralOutputLargeInput.tif
+#        ${TEMP}/bfMeanShiftImageFilterMetricOutputLargeInput.tif
+#        9 9 50 10 0.001
+#        )
+#        
+#ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 
 ADD_TEST(bfTuMeanShiftVectorImageFilterNew ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilterNew )
