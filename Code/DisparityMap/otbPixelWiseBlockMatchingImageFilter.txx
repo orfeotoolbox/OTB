@@ -483,7 +483,6 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       useInitDispMaps = true;
       }
     }
-
   // We loop on disparities
   for(int vdisparity = m_MinimumVerticalDisparity; vdisparity <= m_MaximumVerticalDisparity; ++vdisparity)
     {
@@ -599,7 +598,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
             hdisparity >= estimatedMinHDisp && hdisparity <= estimatedMaxHDisp)
           {
           // Compute the block matching value
-          double metric = bmFunctor(leftIt,rightIt);
+        double metric = m_Functor(leftIt,rightIt);
   
           // If we are at first loop, fill both outputs
           if(vdisparity == estimatedMinVDisp && hdisparity == estimatedMinHDisp)
