@@ -1142,12 +1142,12 @@ ADD_TEST(bfTvMeanShiftImageFilter2 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageSpatialOutput.tif
         ${TEMP}/bfMeanShiftImageFilterSpectralOutput.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutput.tif
-        9 9 50 10 0.001
+        9 9 50 10 0.00001
         )
         
 ADD_TEST(bfTvMeanShiftImageFilterValidMul ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilter
-        ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
+        ${INPUTDATA}/ROI_QB_MUL_4.tif
         ${TEMP}/bfMeanShiftImageFilterOutputValidMul.tif
         ${TEMP}/bfMeanShiftImageFilterClusteredOutputValidMul.tif
         ${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutputValidMul.tif
