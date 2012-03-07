@@ -114,6 +114,8 @@ public:
   itkGetConstMacro(SpatialBandwidth, double);
   itkSetMacro(SpatialBandwidth, double);
 
+  itkGetConstMacro(MaxIterationNumber, unsigned int);
+  itkSetMacro(MaxIterationNumber, unsigned int);
 
   itkGetConstMacro(IterationCount, unsigned int);
 
