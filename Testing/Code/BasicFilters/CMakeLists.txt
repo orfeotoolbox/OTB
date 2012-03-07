@@ -1142,11 +1142,11 @@ ADD_TEST(bfTvMeanShiftImageFilter2 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageSpatialOutput.tif
         ${TEMP}/bfMeanShiftImageFilterSpectralOutput.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutput.tif
-        9 9 50 10 0.00001
+        9 9 50 10 0.00001 10
         )
         
-ADD_TEST(bfTvMeanShiftImageFilterValidMul ${BASICFILTERS_TESTS9}
-        otbMeanShiftImageFilter
+ADD_TEST(bfTvMeanShiftVectorImageFilterValidMul ${BASICFILTERS_TESTS9}
+        otbMeanShiftVectorImageFilter
         ${INPUTDATA}/ROI_QB_MUL_4.tif
         ${TEMP}/bfMeanShiftImageFilterOutputValidMul.tif
         ${TEMP}/bfMeanShiftImageFilterClusteredOutputValidMul.tif
@@ -1154,6 +1154,7 @@ ADD_TEST(bfTvMeanShiftImageFilterValidMul ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutputValidMul.tif
         9 50 10 1.0
         )        
+     
         
 ADD_TEST(bfTvMeanShiftImageFilter2Mul ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilter2
@@ -1161,12 +1162,12 @@ ADD_TEST(bfTvMeanShiftImageFilter2Mul ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageSpatialOutputMul.tif
         ${TEMP}/bfMeanShiftImageFilterSpectralOutputMul.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutputMul.tif
-        9 9 50 10 0.001
+        9 9 50 10 0.01 100
         )
         
   
             
-#IF(OTB_DATA_USE_LARGEINPUT)
+IF(OTB_DATA_USE_LARGEINPUT)
 #
 #ADD_TEST(bfTvMeanShiftImageFilterValidLargeInput ${BASICFILTERS_TESTS9}
 #        otbMeanShiftImageFilter
@@ -1179,15 +1180,15 @@ ADD_TEST(bfTvMeanShiftImageFilter2Mul ${BASICFILTERS_TESTS9}
 #        )
         
 #ADD_TEST(bfTvMeanShiftImageFilter2LargeInput ${BASICFILTERS_TESTS9}
-#        otbMeanShiftImageFilter2
+#       otbMeanShiftImageFilter2
 #        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 #        ${TEMP}/bfMeanShiftImageSpatialOutputLargeInput.tif
 #        ${TEMP}/bfMeanShiftImageFilterSpectralOutputLargeInput.tif
-#        ${TEMP}/bfMeanShiftImageFilterMetricOutputLargeInput.tif
-#        9 9 50 10 0.001
+#       ${TEMP}/bfMeanShiftImageFilterMetricOutputLargeInput.tif
+#        9 9 10 10 0.001 10
 #        )
-#        
-#ENDIF(OTB_DATA_USE_LARGEINPUT)
+        
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 ADD_TEST(bfTuMeanShiftVectorImageFilterNew ${BASICFILTERS_TESTS9}
