@@ -660,7 +660,7 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
     // TODO change the maximum value;
 
     bool hasConverged = false;
-    while ((iteration < m_MaxIterationNumber) || (!hasConverged))
+    while ((iteration < m_MaxIterationNumber) && (!hasConverged))
       {
 
       typename OutputMetricImageType::PixelType meanShiftVector;
