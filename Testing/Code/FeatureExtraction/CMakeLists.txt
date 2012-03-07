@@ -990,13 +990,13 @@ ADD_TEST(feTuImageFittingPolygonListFilterNew ${FEATUREEXTRACTION_TESTS9}
          otbImageFittingPolygonListFilterNew)
 
 ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
---compare-ascii ${EPSILON_3}
-        ${BASELINE_FILES}/feTvImageFittingPolygonListFilter_Output.kml
-        ${TEMP}/feTvImageFittingPolygonListFilter_Output.kml
+--compare-ogr ${EPSILON_3}
+        ${BASELINE_FILES}/feTvImageFittingPolygonListFilter_Output.shp
+        ${TEMP}/feTvImageFittingPolygonListFilter_Output.shp
          otbImageFittingPolygonListFilter
         ${INPUTDATA}/polygon.png
-        ${INPUTDATA}/polygon-start.kml
-        ${TEMP}/feTvImageFittingPolygonListFilter_Output.kml
+        ${INPUTDATA}/polygon-start.shp
+        ${TEMP}/feTvImageFittingPolygonListFilter_Output.shp
         5 10
 )
 
