@@ -70,7 +70,7 @@ void PlatformPositionAdapter::GetPlatformPosition(
 void PlatformPositionAdapter::GetPlatformPositionAtTime(
     ossimplugins::JSDDateTime time, std::vector<double>& position, std::vector<double>& speed)
 {
-	m_SensorModel->get_platformPosition()->getPlatformPositionAtTime(time, position, speed);
+       m_SensorModel->get_platformPosition()->getPlatformPositionAtTime(time, position, speed);
 }
 
 } // namespace otb

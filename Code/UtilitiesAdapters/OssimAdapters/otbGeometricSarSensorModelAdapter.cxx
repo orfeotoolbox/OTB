@@ -69,7 +69,7 @@ ossimplugins::JSDDateTime GeometricSarSensorModelAdapter::getTime(double line)
 void GeometricSarSensorModelAdapter::GetPlatformPositionAtLine(
     double line, std::vector<double>& position, std::vector<double>& speed)
 {
-	m_SensorModel->getPlatformPositionAtLine(line, position, speed);
+       m_SensorModel->getPlatformPositionAtLine(line, position, speed);
 }
 
 } // namespace otb

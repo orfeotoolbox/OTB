@@ -36,7 +36,7 @@ class ImageKeywordlist;
 
 /**
  * \class GeometricSarSensorModelAdapter
- * \brief Wrapper class to access the platform Geometric Sar 
+ * \brief Wrapper class to access the platform Geometric Sar
  *  Sensor Modelposition from ossim.
  *
  * This class is intended to be used in an InSAR setting to get
