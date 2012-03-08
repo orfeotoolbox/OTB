@@ -253,8 +253,8 @@ public:
   itkBooleanMacro(Minimize);
   
   /** Set/Get the exploration radius in the disparity space */
-  itkSetMacro(Radius, SizeType);
-  itkGetConstReferenceMacro(Radius, SizeType);
+  itkSetMacro(ExplorationRadius, SizeType);
+  itkGetConstReferenceMacro(ExplorationRadius, SizeType);
   
   /** Set/Get the initial horizontal disparity */
   itkSetMacro(InitHorizontalDisparity,int);
@@ -265,14 +265,14 @@ public:
   itkGetConstReferenceMacro(InitVerticalDisparity,int);
   
   /** Set initial horizontal disparity field (optional, override m_InitHorizontalDisparity) */
-  void SetInitHorizontalDisparityField( const TOutputDisparityImage * hfield);
+  void SetHorizontalDisparityInput( const TOutputDisparityImage * hfield);
 
   /** Set initial vertical disparity field (optional, override m_InitVerticalDisparity) */
-  void SetInitVerticalDisparityField( const TOutputDisparityImage * vfield);
+  void SetVerticalDisparityInput( const TOutputDisparityImage * vfield);
   
   /** Get the initial disparity fields */
-  const TOutputDisparityImage * GetInitHorizontalDisparityField() const;
-  const TOutputDisparityImage * GetInitVerticalDisparityField() const;
+  const TOutputDisparityImage * GetHorizontalDisparityInput() const;
+  const TOutputDisparityImage * GetVerticalDisparityInput() const;
 
 protected:
   /** Constructor */

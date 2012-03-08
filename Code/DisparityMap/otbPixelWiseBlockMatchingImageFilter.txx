@@ -586,7 +586,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
             {
             estimatedMinHDisp = m_InitHorizontalDisparity - m_ExplorationRadius[0];
             estimatedMinVDisp = m_InitVerticalDisparity - m_ExplorationRadius[1];
-            estimatedMaxHDisp = m_InitHorizontalDisparity) + m_ExplorationRadius[0];
+            estimatedMaxHDisp = m_InitHorizontalDisparity + m_ExplorationRadius[0];
             estimatedMaxVDisp = m_InitVerticalDisparity + m_ExplorationRadius[1];
             }
           // clamp to the minimum disparities
