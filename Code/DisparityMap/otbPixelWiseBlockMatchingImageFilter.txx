@@ -33,7 +33,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::PixelWiseBlockMatchingImageFilter()
 {
   // Set the number of inputs
-  this->SetNumberOfInputs(3);
+  this->SetNumberOfInputs(5);
   this->SetNumberOfRequiredInputs(2);
 
   // Set the outputs
@@ -53,6 +53,13 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   m_MaximumHorizontalDisparity =  10;
   m_MinimumVerticalDisparity = 0;
   m_MaximumVerticalDisparity = 0;
+  
+  // Default initial disparity
+  m_InitHorizontalDisparity = 0;
+  m_InitVerticalDisparity = 0;
+  
+  // Default exploration radius : 0 (not used)
+  m_ExplorationRadius.Fill(0);
 }
 
 
@@ -224,6 +231,56 @@ if (this->GetNumberOfOutputs()<3)
   return static_cast<TOutputDisparityImage *>(this->itk::ProcessObject::GetOutput(2));
 }
 
+template <class TInputImage, class TOutputMetricImage,
+class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
+void
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
+::SetHorizontalDisparityInput( const TOutputDisparityImage * hfield)
+{
+  // Process object is not const-correct so the const casting is required.
+  this->SetNthInput(3, const_cast<TOutputDisparityImage *>( hfield ));
+}
+
+template <class TInputImage, class TOutputMetricImage,
+class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
+void
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
+::SetVerticalDisparityInput( const TOutputDisparityImage * vfield)
+{
+  // Process object is not const-correct so the const casting is required.
+  this->SetNthInput(4, const_cast<TOutputDisparityImage *>( vfield ));
+}
+
+template <class TInputImage, class TOutputMetricImage,
+class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
+const TOutputDisparityImage *
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
+::GetHorizontalDisparityInput() const
+{
+  if(this->GetNumberOfInputs()<4)
+    {
+    return 0;
+    }
+  return static_cast<const TOutputDisparityImage *>(this->itk::ProcessObject::GetInput(3));
+}
+
+template <class TInputImage, class TOutputMetricImage,
+class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
+const TOutputDisparityImage *
+PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
+TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
+::GetVerticalDisparityInput() const
+{
+  if(this->GetNumberOfInputs()<5)
+    {
+    return 0;
+    }
+  return static_cast<const TOutputDisparityImage *>(this->itk::ProcessObject::GetInput(4));
+}
+
 
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
@@ -239,6 +296,8 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   TInputImage * inLeftPtr  = const_cast<TInputImage *>(this->GetLeftInput());
   TInputImage * inRightPtr = const_cast<TInputImage *>(this->GetRightInput());
   TMaskImage *  inMaskPtr  = const_cast<TMaskImage * >(this->GetMaskInput());
+  TOutputDisparityImage * inHDispPtr = const_cast<TOutputDisparityImage * >(this->GetHorizontalDisparityInput());
+  TOutputDisparityImage * inVDispPtr = const_cast<TOutputDisparityImage * >(this->GetVerticalDisparityInput());
 
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
   TOutputDisparityImage * outHDispPtr = this->GetHorizontalDisparityOutput();
@@ -262,6 +321,16 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     {
     itkExceptionMacro(<<"Left and mask images do not have the same size ! Left largest region: "<<inLeftPtr->GetLargestPossibleRegion()<<", mask largest region: "<<inMaskPtr->GetLargestPossibleRegion());
     }
+  
+  // We check that the input initial disparity maps have the same size if present
+  if (inHDispPtr && inLeftPtr->GetLargestPossibleRegion() != inHDispPtr->GetLargestPossibleRegion())
+    {
+    itkExceptionMacro(<<"Left image and initial horizontal disparity map do not have the same size ! Left largest region: "<<inLeftPtr->GetLargestPossibleRegion()<<", horizontal disparity largest region: "<<inHDispPtr->GetLargestPossibleRegion());
+    }
+  if (inVDispPtr && inLeftPtr->GetLargestPossibleRegion() != inVDispPtr->GetLargestPossibleRegion())
+    {
+    itkExceptionMacro(<<"Left image and initial vertical disparity map do not have the same size ! Left largest region: "<<inLeftPtr->GetLargestPossibleRegion()<<", vertical disparity largest region: "<<inVDispPtr->GetLargestPossibleRegion());
+    }
 
   // Retrieve requested region (TODO: check if we need to handle
   // region for outHDispPtr)
@@ -274,7 +343,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   // Now, we must find the corresponding region in moving image
   IndexType rightRequestedRegionIndex = inputLeftRegion.GetIndex();
   rightRequestedRegionIndex[0]+=m_MinimumHorizontalDisparity;
-  rightRequestedRegionIndex[0]+=m_MinimumVerticalDisparity;
+  rightRequestedRegionIndex[1]+=m_MinimumVerticalDisparity;
 
   SizeType rightRequestedRegionSize = inputLeftRegion.GetSize();
   rightRequestedRegionSize[0]+= m_MaximumHorizontalDisparity - m_MinimumHorizontalDisparity;
@@ -356,6 +425,13 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       throw e;
       }
     }
+    
+  if (inHDispPtr && inVDispPtr)
+    {
+    inHDispPtr->SetRequestedRegion( inputLeftRegion );
+    inVDispPtr->SetRequestedRegion( inputLeftRegion );
+    }
+    
 }
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
@@ -385,6 +461,8 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   const TInputImage *     inLeftPtr    = this->GetLeftInput();
   const TInputImage *     inRightPtr   = this->GetRightInput();
   const TMaskImage  *     inMaskPtr    = this->GetMaskInput();
+  const TOutputDisparityImage * inHDispPtr = this->GetHorizontalDisparityInput();
+  const TOutputDisparityImage * inVDispPtr = this->GetVerticalDisparityInput();
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
   TOutputDisparityImage * outHDispPtr   = this->GetHorizontalDisparityOutput();
   TOutputDisparityImage * outVDispPtr   = this->GetVerticalDisparityOutput();
@@ -395,6 +473,18 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   // Define the block matching functor
   TBlockMatchingFunctor bmFunctor;
+  
+  // Check if we use initial disparities and exploration radius
+  bool useExplorationRadius = false;
+  bool useInitDispMaps = false;
+  if (m_ExplorationRadius[0] >= 1 || m_ExplorationRadius[1] >= 1)
+    {
+    useExplorationRadius = true;
+    if (inHDispPtr && inVDispPtr)
+      {
+      useInitDispMaps = true;
+      }
+    }
 
     // std::cout<<"Output region: "<<outputRegionForThread<<std::endl;
 
@@ -435,7 +525,8 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     itk::ImageRegionIterator<TOutputDisparityImage> outHDispIt(outHDispPtr,inputLeftRegion);
     itk::ImageRegionIterator<TOutputDisparityImage> outVDispIt(outVDispPtr,inputLeftRegion);
     itk::ImageRegionConstIterator<TMaskImage>       inMaskIt;
-
+    itk::ImageRegionConstIterator<TOutputDisparityImage>       inHDispIt;
+    itk::ImageRegionConstIterator<TOutputDisparityImage>       inVDispIt;
 
     itk::ConstantBoundaryCondition<TInputImage> nbc1;
     itk::ConstantBoundaryCondition<TInputImage> nbc2;
@@ -448,6 +539,15 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       {
       inMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inMaskPtr,inputLeftRegion);
       inMaskIt.GoToBegin();
+      }
+    
+    // If we use initial disparity maps, define the iterators
+    if (useInitDispMaps)
+      {
+      inHDispIt = itk::ImageRegionConstIterator<TOutputDisparityImage>(inHDispPtr,inputLeftRegion);
+      inVDispIt = itk::ImageRegionConstIterator<TOutputDisparityImage>(inVDispPtr,inputLeftRegion);
+      inHDispIt.GoToBegin();
+      inVDispIt.GoToBegin();
       }
     
     // Initialize iterators
@@ -468,27 +568,63 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       // If the mask is present and valid
       if(!inMaskPtr || (inMaskPtr && inMaskIt.Get() > 0) )
         {
-        // Compute the block matching value
-        double metric = bmFunctor(leftIt,rightIt);
-
-        // If we are at first loop, fill both outputs
-        if(vdisparity == m_MinimumVerticalDisparity && hdisparity == m_MinimumHorizontalDisparity)
+        int estimatedMinHDisp = m_MinimumHorizontalDisparity;
+        int estimatedMinVDisp = m_MinimumVerticalDisparity;
+        int estimatedMaxHDisp = m_MaximumHorizontalDisparity;
+        int estimatedMaxVDisp = m_MaximumVerticalDisparity;
+        if (useExplorationRadius)
           {
-          outHDispIt.Set(hdisparity);
-          outVDispIt.Set(vdisparity);
-          outMetricIt.Set(metric);
+          // compute disparity bounds from initial position and exploration radius
+          if (useInitDispMaps)
+            {
+            estimatedMinHDisp = inHDispIt.Get() - m_ExplorationRadius[0];
+            estimatedMinVDisp = inVDispIt.Get() - m_ExplorationRadius[1];
+            estimatedMaxHDisp = inHDispIt.Get() + m_ExplorationRadius[0];
+            estimatedMaxVDisp = inVDispIt.Get() + m_ExplorationRadius[1];
+            }
+          else
+            {
+            estimatedMinHDisp = m_InitHorizontalDisparity - m_ExplorationRadius[0];
+            estimatedMinVDisp = m_InitVerticalDisparity - m_ExplorationRadius[1];
+            estimatedMaxHDisp = m_InitHorizontalDisparity) + m_ExplorationRadius[0];
+            estimatedMaxVDisp = m_InitVerticalDisparity + m_ExplorationRadius[1];
+            }
+          // clamp to the minimum disparities
+          if (estimatedMinHDisp < m_MinimumHorizontalDisparity)
+            {
+            estimatedMinHDisp = m_MinimumHorizontalDisparity;
+            }
+          if (estimatedMinVDisp < m_MinimumVerticalDisparity)
+            {
+            estimatedMinVDisp = m_MinimumVerticalDisparity;
+            }
           }
-        else if(m_Minimize && metric < outMetricIt.Get())
+        
+        if (vdisparity >= estimatedMinVDisp && vdisparity <= estimatedMaxVDisp &&
+            hdisparity >= estimatedMinHDisp && hdisparity <= estimatedMaxHDisp)
           {
-          outHDispIt.Set(hdisparity);
-          outVDispIt.Set(vdisparity);
-          outMetricIt.Set(metric);
-          }
-        else if(!m_Minimize && metric > outMetricIt.Get())
-          {
-          outHDispIt.Set(hdisparity);
-          outVDispIt.Set(vdisparity);
-          outMetricIt.Set(metric);
+          // Compute the block matching value
+          double metric = bmFunctor(leftIt,rightIt);
+  
+          // If we are at first loop, fill both outputs
+          if(vdisparity == estimatedMinVDisp && hdisparity == estimatedMinHDisp)
+            {
+            outHDispIt.Set(hdisparity);
+            outVDispIt.Set(vdisparity);
+            outMetricIt.Set(metric);
+            }
+          else if(m_Minimize && metric < outMetricIt.Get())
+            {
+            outHDispIt.Set(hdisparity);
+            outVDispIt.Set(vdisparity);
+            outMetricIt.Set(metric);
+            }
+          else if(!m_Minimize && metric > outMetricIt.Get())
+            {
+            outHDispIt.Set(hdisparity);
+            outVDispIt.Set(vdisparity);
+            outMetricIt.Set(metric);
+            }
           }
         }
       ++leftIt;
@@ -501,6 +637,13 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
         {
         ++inMaskIt;
         }
+      
+      if(useInitDispMaps)
+        {
+        ++inHDispIt;
+        ++inVDispIt;
+        }
+      
       }
       progress.CompletedPixel();
     }

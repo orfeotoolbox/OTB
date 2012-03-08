@@ -251,6 +251,28 @@ public:
   itkSetMacro(Minimize, bool);
   itkGetConstReferenceMacro(Minimize,bool);
   itkBooleanMacro(Minimize);
+  
+  /** Set/Get the exploration radius in the disparity space */
+  itkSetMacro(Radius, SizeType);
+  itkGetConstReferenceMacro(Radius, SizeType);
+  
+  /** Set/Get the initial horizontal disparity */
+  itkSetMacro(InitHorizontalDisparity,int);
+  itkGetConstReferenceMacro(InitHorizontalDisparity,int);
+  
+  /** Set/Get the initial vertical disparity */
+  itkSetMacro(InitVerticalDisparity,int);
+  itkGetConstReferenceMacro(InitVerticalDisparity,int);
+  
+  /** Set initial horizontal disparity field (optional, override m_InitHorizontalDisparity) */
+  void SetInitHorizontalDisparityField( const TOutputDisparityImage * hfield);
+
+  /** Set initial vertical disparity field (optional, override m_InitVerticalDisparity) */
+  void SetInitVerticalDisparityField( const TOutputDisparityImage * vfield);
+  
+  /** Get the initial disparity fields */
+  const TOutputDisparityImage * GetInitHorizontalDisparityField() const;
+  const TOutputDisparityImage * GetInitVerticalDisparityField() const;
 
 protected:
   /** Constructor */
@@ -272,7 +294,7 @@ private:
   PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemeFnted
 
-   /** The radius of the blocks */
+  /** The radius of the blocks */
   SizeType                      m_Radius;
 
   /** The min disparity to explore */
@@ -287,9 +309,17 @@ private:
   /** The max disparity to explore */
   int                           m_MaximumVerticalDisparity;
 
-
   /** Should we minimize or maximize ? */
   bool                          m_Minimize;
+  
+  /** The exploration radius for disparities (used if non null) */
+  SizeType                      m_ExplorationRadius;
+  
+  /** Initial horizontal disparity (0 by default, used if an exploration radius is set) */
+  int                           m_InitHorizontalDisparity;
+  
+  /** Initial vertical disparity (0 by default, used if an exploration radius is set) */
+  int                           m_InitVerticalDisparity;
 };
 } // end namespace otb
 
