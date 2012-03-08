@@ -517,12 +517,12 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   // define region
   itk::ImageRegion<2> imageRegion;
   IndexType index;
-  index[0] = std::floor(latticePosition[0] + 0.5);
-  index[1] = std::floor(latticePosition[1] + 0.5);
+  index[0] = vcl_floor(latticePosition[0] + 0.5);
+  index[1] = vcl_floor(latticePosition[1] + 0.5);
 
-  int xMin = index[0] - std::floor(kernelSize[0] / 2);
+  int xMin = index[0] - vcl_floor(kernelSize[0] / 2);
   int xMax = xMin + kernelSize[0];
-  int yMin = index[1] - std::floor(kernelSize[1] / 2);
+  int yMin = index[1] - vcl_floor(kernelSize[1] / 2);
   int yMax = yMin + kernelSize[1];
 
   IndexType minIndex;
@@ -683,10 +683,10 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 
       for (unsigned int comp = 0; comp < spatialNumberOfComponents; comp++)
         {
-        neighborhoodHasTobeUpdated = neighborhoodHasTobeUpdated || ((std::floor(
+        neighborhoodHasTobeUpdated = neighborhoodHasTobeUpdated || ((vcl_floor(
                                                                                 spatialPixel[comp]
                                                                                     + meanShiftVector[comp] + 0.5)
-            - std::floor(spatialPixel[comp] + 0.5)) != 0);
+            - vcl_floor(spatialPixel[comp] + 0.5)) != 0);
         spatialPixel[comp] += meanShiftVector[comp];
         metricPixel[comp] = meanShiftVector[comp] * meanShiftVector[comp];
         sum += metricPixel[comp];
