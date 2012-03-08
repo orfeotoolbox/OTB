@@ -26,6 +26,7 @@
 namespace ossimplugins
 {
 class ossimGeometricSarSensorModel;
+class JSDDateTime;
 }
 
 namespace otb
@@ -60,8 +61,13 @@ public:
 
   void CreateSensorModel(const ImageKeywordlist& image_kwl);
 
+  /** Get the platform position and speed for a given line. */
   void GetPlatformPosition(
       double line, std::vector<double>& position, std::vector<double>& speed);
+
+  /** Get the platform position at a given date and time. */
+  void GetPlatformPositionAtTime(
+      ossimplugins::JSDDateTime time, std::vector<double>& position, std::vector<double>& speed);
 
 protected:
   PlatformPositionAdapter();

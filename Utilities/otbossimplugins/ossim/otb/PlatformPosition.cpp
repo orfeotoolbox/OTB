@@ -13,7 +13,8 @@
 #include <string>
 #include <cmath>
 #include <iomanip>
-
+#include <vector>
+ 
 #include <otb/PlatformPosition.h>
 #include <otb/Ephemeris.h>
 #include <otb/HermiteInterpolator.h>
@@ -169,6 +170,23 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date) const
    }
    return ephem;
 }
+
+bool PlatformPosition::getPlatformPositionAtTime(JSDDateTime time, std::vector<double>& position, std::vector<double>& speed)
+{
+  Ephemeris* ephemeris = this->Interpolate(time);
+  double* position_ptr = ephemeris->get_position();
+  double* speed_ptr = ephemeris->get_speed();
+  if (position.size() != 3) position.resize(3);
+  if (speed.size() != 3) speed.resize(3);
+  position[0] = position_ptr[0];
+  position[1] = position_ptr[1];
+  position[2] = position_ptr[2];
+  speed[0] = speed_ptr[0];
+  speed[1] = speed_ptr[1];
+  speed[2] = speed_ptr[2];
+  return true;
+}
+
 
 void PlatformPosition::setData(Ephemeris** data, int nbrData)
 {

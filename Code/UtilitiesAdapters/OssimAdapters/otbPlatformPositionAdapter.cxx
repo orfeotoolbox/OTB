@@ -22,8 +22,10 @@
 #include "otbImageKeywordlist.h"
 
 #include "ossimGeometricSarSensorModel.h"
+#include "otb/PlatformPosition.h"
 #include "projection/ossimProjection.h"
 #include "ossim/ossimPluginProjectionFactory.h"
+
 
 namespace otb {
 
@@ -63,6 +65,12 @@ void PlatformPositionAdapter::GetPlatformPosition(
     double line, std::vector<double>& position, std::vector<double>& speed)
 {
   m_SensorModel->getPlatformPositionAtLine(line, position, speed);
+}
+
+void PlatformPositionAdapter::GetPlatformPositionAtTime(
+    ossimplugins::JSDDateTime time, std::vector<double>& position, std::vector<double>& speed)
+{
+	m_SensorModel->get_platformPosition()->getPlatformPositionAtTime(time, position, speed);
 }
 
 } // namespace otb

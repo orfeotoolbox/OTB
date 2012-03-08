@@ -12,6 +12,7 @@
 #ifndef PlatformPosition_h
 #define PlatformPosition_h
 
+#include <vector>
 #include <ossimPluginConstants.h>
 #include <otb/JSDDateTime.h>
 
@@ -66,6 +67,14 @@ public:
     * @return The ephemeris at the given date, or NULL if an error occurs
     */
    Ephemeris* Interpolate(JSDDateTime date) const;
+
+
+   /**
+    * @brief This function interpolates its ephemeris to create and extract platform's position and speed
+    * @param date Date and time at wich the interpolation have to be done
+    * @return true, or false if an error occurs
+    */
+   bool getPlatformPositionAtTime(JSDDateTime time, std::vector<double>& position, std::vector<double>& speed);
 
    PlatformPosition* Clone() const
    {
