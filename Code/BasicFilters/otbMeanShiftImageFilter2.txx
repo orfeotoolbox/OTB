@@ -131,9 +131,9 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   OutputPixelType *it = m_Kernel;
   double spatialWeighting = 1. / (m_SpatialRadius[0] * m_SpatialRadius[1]);
 
-  for (int y = 0; y < kernelSize[1]; y++)
+  for (unsigned int y = 0; y < kernelSize[1]; y++)
     {
-    for (int x = 0; x < kernelSize[0]; x++)
+    for (unsigned int x = 0; x < kernelSize[0]; x++)
       {
       it->SetSize(numberOfComponents);
       it->Fill(0.);
@@ -143,7 +143,7 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
      if ((x >= spatialMinX) && (x < spatialMaxX) && (y >= spatialMinY) && (y < spatialMaxY))
         {
         spatialIt->Fill(spatialWeighting);
-        for (int comp = 0; comp < spatialNumberOfComponents; comp++)
+        for (unsigned int comp = 0; comp < spatialNumberOfComponents; comp++)
           {
           it->SetElement(comp, spatialWeighting);
           }
@@ -164,9 +164,9 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
     it = m_Kernel;
     double rangeWeighting = 1. / (m_RangeRadius[0] * m_RangeRadius[1]);
 
-    for (int y = 0; y < kernelSize[1]; y++)
+    for (unsigned int y = 0; y < kernelSize[1]; y++)
       {
-      for (int x = 0; x < kernelSize[0]; x++)
+      for (unsigned int x = 0; x < kernelSize[0]; x++)
         {
         rangeIt->SetSize(rangeNumberOfComponents);
         rangeIt->Fill(0.);
@@ -174,7 +174,7 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
         if ((x >= rangeMinX) && (x < rangeMaxX) && (y >= rangeMinY) && (y < rangeMaxY))
           {
           rangeIt->Fill(rangeWeighting);
-          for (int comp = 0; comp < rangeNumberOfComponents; comp++)
+          for (unsigned int comp = 0; comp < rangeNumberOfComponents; comp++)
             {
             it->SetElement(comp+spatialNumberOfComponents, rangeWeighting);
             }
@@ -433,9 +433,9 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
   double value;
   unsigned int boundaryWeightIndex=numberOfComponents;
   bool isInside;
-  for( int y=0; y<kernelSize[1]; y++)
+  for(unsigned int y=0; y<kernelSize[1]; y++)
     {
-      for (int x = 0; x < kernelSize[0]; x++)
+      for (unsigned int x = 0; x < kernelSize[0]; x++)
         {
        // std::cout<<"it.Size "<<it->Size()<<std::endl;
         isInside=true;
@@ -546,9 +546,9 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
 
   // fill m_Neighborhood
   unsigned int indextype = 0;
-  for (int y = 0; y < kernelSize[1]; y++)
+  for (unsigned int y = 0; y < kernelSize[1]; y++)
     {
-    for (int x = 0; x < kernelSize[0]; x++)
+    for (unsigned int x = 0; x < kernelSize[0]; x++)
       {
       it->SetSize(numberOfComponents + 3);
       pixelIndex[0] = xMin + x;
