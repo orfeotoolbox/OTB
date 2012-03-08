@@ -443,7 +443,7 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
                    {
 
                      neighborhoodValue=it->GetElement(comp+spatialNumberOfComponents);
-                     if(std::abs(neighborhoodValue-rangePixel[comp])>m_SpectralBandwidth)
+                     if(vcl_abs(neighborhoodValue-rangePixel[comp])>m_SpectralBandwidth)
                        isInside=false;
                    }
 
@@ -526,11 +526,11 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   int yMax = yMin + kernelSize[1];
 
   IndexType minIndex;
-  minIndex[0] = std::max(xMin, 0);
-  minIndex[1] = std::max(yMin, 0);
+  minIndex[0] = vcl_max(xMin,static_cast<int>(0));
+  minIndex[1] = vcl_max(yMin,static_cast<int>(0));
   IndexType maxIndex;
-  maxIndex[0] = std::min(xMax, static_cast<int> (width));
-  maxIndex[1] = std::min(yMax, static_cast<int> (height));
+  maxIndex[0] = vcl_min(xMax, static_cast<int> (width));
+  maxIndex[1] = vcl_min(yMax, static_cast<int> (height));
 
   imageRegion.SetIndex(index);
   SizeType size;
