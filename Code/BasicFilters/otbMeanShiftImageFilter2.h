@@ -20,7 +20,7 @@
 
 
 #include "itkImageToImageFilter.h"
-
+#include <vcl_algorithm.h>
 /*
 #include "itkVariableLengthVector.h"
 #include "otbImage.h"

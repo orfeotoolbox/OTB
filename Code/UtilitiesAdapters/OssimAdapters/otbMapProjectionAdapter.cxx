@@ -327,6 +327,17 @@ void MapProjectionAdapter::ApplyParametersToProjection()
     ossimGpt origin(originY, originX, originZ, datum);
     projection->setOrigin(origin);
     }
+  
+  // Set up resolution
+  StoreType::const_iterator itResMeterX = m_ParameterStore.find("MetersPerPixelX");
+  StoreType::const_iterator itResMeterY = m_ParameterStore.find("MetersPerPixelY");
+  if (itResMeterX != m_ParameterStore.end() && itResMeterY != m_ParameterStore.end())
+    {
+    double resMeterX = atof((*itResMeterX).second.c_str());
+    double resMeterY = atof((*itResMeterY).second.c_str());
+    ossimDpt resMeter(resMeterX, resMeterY);
+    projection->setMetersPerPixel(resMeter);
+    }
 
   // Apply parameters to LambertConformalConic
   if (projectionName.compare("ossimLambertConformalConicProjection") == 0)

@@ -131,9 +131,9 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   OutputPixelType *it = m_Kernel;
   double spatialWeighting = 1. / (m_SpatialRadius[0] * m_SpatialRadius[1]);
 
-  for (int y = 0; y < kernelSize[1]; y++)
+  for (unsigned int y = 0; y < kernelSize[1]; y++)
     {
-    for (int x = 0; x < kernelSize[0]; x++)
+    for (unsigned int x = 0; x < kernelSize[0]; x++)
       {
       it->SetSize(numberOfComponents);
       it->Fill(0.);
@@ -143,7 +143,7 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
      if ((x >= spatialMinX) && (x < spatialMaxX) && (y >= spatialMinY) && (y < spatialMaxY))
         {
         spatialIt->Fill(spatialWeighting);
-        for (int comp = 0; comp < spatialNumberOfComponents; comp++)
+        for (unsigned int comp = 0; comp < spatialNumberOfComponents; comp++)
           {
           it->SetElement(comp, spatialWeighting);
           }
@@ -164,9 +164,9 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
     it = m_Kernel;
     double rangeWeighting = 1. / (m_RangeRadius[0] * m_RangeRadius[1]);
 
-    for (int y = 0; y < kernelSize[1]; y++)
+    for (unsigned int y = 0; y < kernelSize[1]; y++)
       {
-      for (int x = 0; x < kernelSize[0]; x++)
+      for (unsigned int x = 0; x < kernelSize[0]; x++)
         {
         rangeIt->SetSize(rangeNumberOfComponents);
         rangeIt->Fill(0.);
@@ -174,7 +174,7 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
         if ((x >= rangeMinX) && (x < rangeMaxX) && (y >= rangeMinY) && (y < rangeMaxY))
           {
           rangeIt->Fill(rangeWeighting);
-          for (int comp = 0; comp < rangeNumberOfComponents; comp++)
+          for (unsigned int comp = 0; comp < rangeNumberOfComponents; comp++)
             {
             it->SetElement(comp+spatialNumberOfComponents, rangeWeighting);
             }
@@ -433,9 +433,9 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
   double value;
   unsigned int boundaryWeightIndex=numberOfComponents;
   bool isInside;
-  for( int y=0; y<kernelSize[1]; y++)
+  for(unsigned int y=0; y<kernelSize[1]; y++)
     {
-      for (int x = 0; x < kernelSize[0]; x++)
+      for (unsigned int x = 0; x < kernelSize[0]; x++)
         {
        // std::cout<<"it.Size "<<it->Size()<<std::endl;
         isInside=true;
@@ -443,7 +443,7 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
                    {
 
                      neighborhoodValue=it->GetElement(comp+spatialNumberOfComponents);
-                     if(std::abs(neighborhoodValue-rangePixel[comp])>m_SpectralBandwidth)
+                     if(vcl_abs(neighborhoodValue-rangePixel[comp])>m_SpectralBandwidth)
                        isInside=false;
                    }
 
@@ -508,8 +508,10 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   unsigned int numberOfPixels = kernelSize[0] * kernelSize[1];
   //std::cout<<"number of pix "<<numberOfPixels<<std::endl;
   unsigned int numberOfComponents = input->GetNumberOfComponentsPerPixel();
-  RegionType largestPossibleRegion = input->GetLargestPossibleRegion();
-  InputSizeType inputSize = largestPossibleRegion.GetSize();
+  RegionType requestedRegion = input->GetRequestedRegion();
+
+  InputSizeType inputSize = requestedRegion.GetSize();
+  InputIndexType inputIndex = requestedRegion.GetIndex();
 
   unsigned int width = inputSize[0];
   unsigned int height = inputSize[1];
@@ -517,20 +519,20 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   // define region
   itk::ImageRegion<2> imageRegion;
   IndexType index;
-  index[0] = std::floor(latticePosition[0] + 0.5);
-  index[1] = std::floor(latticePosition[1] + 0.5);
+  index[0] = vcl_floor(latticePosition[0] + 0.5);
+  index[1] = vcl_floor(latticePosition[1] + 0.5);
 
-  int xMin = index[0] - std::floor(kernelSize[0] / 2);
+  int xMin = index[0] - vcl_floor(kernelSize[0] / 2);
   int xMax = xMin + kernelSize[0];
-  int yMin = index[1] - std::floor(kernelSize[1] / 2);
+  int yMin = index[1] - vcl_floor(kernelSize[1] / 2);
   int yMax = yMin + kernelSize[1];
 
   IndexType minIndex;
-  minIndex[0] = std::max(xMin, 0);
-  minIndex[1] = std::max(yMin, 0);
+  minIndex[0] = vcl_max(xMin,static_cast<int>(inputIndex[0])); // add image index
+  minIndex[1] = vcl_max(yMin,static_cast<int>(inputIndex[1])); // add image index
   IndexType maxIndex;
-  maxIndex[0] = std::min(xMax, static_cast<int> (width));
-  maxIndex[1] = std::min(yMax, static_cast<int> (height));
+  maxIndex[0] = vcl_min(xMax, static_cast<int> (width-1+inputIndex[0])); //add image index
+  maxIndex[1] = vcl_min(yMax, static_cast<int> (height-1+inputIndex[1])); //add image index
 
   imageRegion.SetIndex(index);
   SizeType size;
@@ -546,9 +548,9 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
 
   // fill m_Neighborhood
   unsigned int indextype = 0;
-  for (int y = 0; y < kernelSize[1]; y++)
+  for (unsigned int y = 0; y < kernelSize[1]; y++)
     {
-    for (int x = 0; x < kernelSize[0]; x++)
+    for (unsigned int x = 0; x < kernelSize[0]; x++)
       {
       it->SetSize(numberOfComponents + 3);
       pixelIndex[0] = xMin + x;
@@ -683,10 +685,10 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 
       for (unsigned int comp = 0; comp < spatialNumberOfComponents; comp++)
         {
-        neighborhoodHasTobeUpdated = neighborhoodHasTobeUpdated || ((std::floor(
+        neighborhoodHasTobeUpdated = neighborhoodHasTobeUpdated || ((vcl_floor(
                                                                                 spatialPixel[comp]
                                                                                     + meanShiftVector[comp] + 0.5)
-            - std::floor(spatialPixel[comp] + 0.5)) != 0);
+            - vcl_floor(spatialPixel[comp] + 0.5)) != 0);
         spatialPixel[comp] += meanShiftVector[comp];
         metricPixel[comp] = meanShiftVector[comp] * meanShiftVector[comp];
         sum += metricPixel[comp];
