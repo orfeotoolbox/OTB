@@ -508,8 +508,10 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   unsigned int numberOfPixels = kernelSize[0] * kernelSize[1];
   //std::cout<<"number of pix "<<numberOfPixels<<std::endl;
   unsigned int numberOfComponents = input->GetNumberOfComponentsPerPixel();
-  RegionType largestPossibleRegion = input->GetLargestPossibleRegion();
-  InputSizeType inputSize = largestPossibleRegion.GetSize();
+  RegionType requestedRegion = input->GetRequestedRegion();
+
+  InputSizeType inputSize = requestedRegion.GetSize();
+  InputIndexType inputIndex = requestedRegion.GetIndex();
 
   unsigned int width = inputSize[0];
   unsigned int height = inputSize[1];
@@ -526,11 +528,11 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   int yMax = yMin + kernelSize[1];
 
   IndexType minIndex;
-  minIndex[0] = vcl_max(xMin,static_cast<int>(0));
-  minIndex[1] = vcl_max(yMin,static_cast<int>(0));
+  minIndex[0] = vcl_max(xMin,static_cast<int>(inputIndex[0])); // add image index
+  minIndex[1] = vcl_max(yMin,static_cast<int>(inputIndex[1])); // add image index
   IndexType maxIndex;
-  maxIndex[0] = vcl_min(xMax, static_cast<int> (width));
-  maxIndex[1] = vcl_min(yMax, static_cast<int> (height));
+  maxIndex[0] = vcl_min(xMax, static_cast<int> (width-1+inputIndex[0])); //add image index
+  maxIndex[1] = vcl_min(yMax, static_cast<int> (height-1+inputIndex[1])); //add image index
 
   imageRegion.SetIndex(index);
   SizeType size;
