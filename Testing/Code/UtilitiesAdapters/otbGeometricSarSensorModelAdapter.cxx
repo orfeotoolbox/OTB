@@ -24,7 +24,7 @@
 
 int otbGeometricSarSenorModelAdapterNewTest(int argc, char* argv[])
 {
-  typedef otb::GeometricSarSenorModelAdapter SarSensorModelType;
+  typedef otb::GeometricSarSensorModelAdapter SarSensorModelType;
   SarSensorModelType::Pointer masterPlatform = SarSensorModelType::New();
   return EXIT_SUCCESS;
 }
@@ -51,7 +51,7 @@ int otbGeometricSarSenorModelAdapterTest(int argc, char* argv[])
   master->UpdateOutputInformation();
   slave->UpdateOutputInformation();
 
-  typedef otb::GeometricSarSenorModelAdapter SarSensorModelType;
+  typedef otb::GeometricSarSensorModelAdapter SarSensorModelType;
   SarSensorModelType::Pointer masterSarModel = SarSensorModelType::New();
   SarSensorModelType::Pointer slaveSarModel = SarSensorModelType::New();
 
@@ -77,7 +77,7 @@ int otbGeometricSarSenorModelAdapterTest(int argc, char* argv[])
   file << std::setprecision(15);
 
   file << "Master image:\n";
-  file << "Start Time: " << masterSarModel->getTime(0)<< " m\n";
+  //file << "Start Time: " << masterSarModel->getTime(0)<< " m\n";
   file << "Pos X: " << masterPosition[0] << " m\n";
   file << "Pos Y: " << masterPosition[1] << " m\n";
   file << "Pos Z: " << masterPosition[2] << " m\n";
@@ -86,16 +86,13 @@ int otbGeometricSarSenorModelAdapterTest(int argc, char* argv[])
   file << "Spd Z: " << masterSpeed[2] << " m/s\n";
 
   file << "Slave image:\n";
-  file << "Start Time: " << slaveSarModel->getTime(0)<< " m\n";
+  //file << "Start Time: " << slaveSarModel->getTime(0)<< " m\n";
   file << "Pos X: " << slavePosition[0] << " m\n";
   file << "Pos Y: " << slavePosition[1] << " m\n";
   file << "Pos Z: " << slavePosition[2] << " m\n";
   file << "Spd X: " << slaveSpeed[0] << " m/s\n";
   file << "Spd Y: " << slaveSpeed[1] << " m/s\n";
   file << "Spd Z: " << slaveSpeed[2] << " m/s\n";
-
-  file << "\nBaseline length:\n";
-  file << baselineLength << " m \n";
 
   file.close();
   return EXIT_SUCCESS;
