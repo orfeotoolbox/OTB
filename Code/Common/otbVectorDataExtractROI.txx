@@ -44,6 +44,7 @@ VectorDataExtractROI<TVectorData>
   m_GeoROI(),
   m_DEMDirectory(""),
   m_GeoidFile(""),
+  m_AverageElevation(-32768),
   m_Kept(0)
 {
 }
