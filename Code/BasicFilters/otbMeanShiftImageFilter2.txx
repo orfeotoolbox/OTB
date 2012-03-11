@@ -519,9 +519,9 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   index[0] = static_cast<InputIndexValueType>(vcl_floor(latticePosition[0] + 0.5));
   index[1] = static_cast<InputIndexValueType>(vcl_floor(latticePosition[1] + 0.5));
 
-  InputIndexValueType xMin = index[0] - static_cast<InputIndexValueType>(vcl_floor(kernelSize[0] / 2));
+  InputIndexValueType xMin = index[0] - kernelSize[0] / 2;
   InputIndexValueType xMax = xMin + kernelSize[0];
-  InputIndexValueType yMin = index[1] - static_cast<InputIndexValueType>(vcl_floor(kernelSize[1] / 2));
+  InputIndexValueType yMin = index[1] - kernelSize[1] / 2;
   InputIndexValueType yMax = yMin + kernelSize[1];
 
   InputIndexType minIndex;
