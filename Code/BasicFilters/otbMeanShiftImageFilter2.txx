@@ -513,26 +513,23 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   InputSizeType inputSize = requestedRegion.GetSize();
   InputIndexType inputIndex = requestedRegion.GetIndex();
 
-  unsigned int width = inputSize[0];
-  unsigned int height = inputSize[1];
-
   // define region
   itk::ImageRegion<2> imageRegion;
-  IndexType index;
-  index[0] = vcl_floor(latticePosition[0] + 0.5);
-  index[1] = vcl_floor(latticePosition[1] + 0.5);
+  InputIndexType index;
+  index[0] = static_cast<InputIndexValueType>(vcl_floor(latticePosition[0] + 0.5));
+  index[1] = static_cast<InputIndexValueType>(vcl_floor(latticePosition[1] + 0.5));
 
-  int xMin = index[0] - vcl_floor(kernelSize[0] / 2);
-  int xMax = xMin + kernelSize[0];
-  int yMin = index[1] - vcl_floor(kernelSize[1] / 2);
-  int yMax = yMin + kernelSize[1];
+  InputIndexValueType xMin = index[0] - static_cast<InputIndexValueType>(vcl_floor(kernelSize[0] / 2));
+  InputIndexValueType xMax = xMin + kernelSize[0];
+  InputIndexValueType yMin = index[1] - static_cast<InputIndexValueType>(vcl_floor(kernelSize[1] / 2));
+  InputIndexValueType yMax = yMin + kernelSize[1];
 
-  IndexType minIndex;
-  minIndex[0] = vcl_max(xMin,static_cast<int>(inputIndex[0])); // add image index
-  minIndex[1] = vcl_max(yMin,static_cast<int>(inputIndex[1])); // add image index
-  IndexType maxIndex;
-  maxIndex[0] = vcl_min(xMax, static_cast<int> (width-1+inputIndex[0])); //add image index
-  maxIndex[1] = vcl_min(yMax, static_cast<int> (height-1+inputIndex[1])); //add image index
+  InputIndexType minIndex;
+  minIndex[0] = vcl_max(xMin,inputIndex[0]); // add image index
+  minIndex[1] = vcl_max(yMin,inputIndex[1]); // add image index
+  InputIndexType maxIndex;
+  maxIndex[0] = vcl_min(xMax, static_cast<InputIndexValueType>(inputSize[0]-1+inputIndex[0])); //add image index
+  maxIndex[1] = vcl_min(yMax, static_cast<InputIndexValueType>(inputSize[1]-1+inputIndex[1])); //add image index
 
   imageRegion.SetIndex(index);
   SizeType size;
@@ -542,7 +539,7 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
 
   OutputPixelType *it = *neighborhood;
   PointType pixelPos;
-  IndexType pixelIndex;
+  InputIndexType pixelIndex;
   InputPixelType inputPixel;
   inputPixel.SetSize(numberOfComponents);
 
