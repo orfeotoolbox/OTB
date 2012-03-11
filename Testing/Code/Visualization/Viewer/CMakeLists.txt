@@ -53,19 +53,18 @@ SET(Viewer_SRCS
 otbViewerTests.cxx
 otbViewerModelTest.cxx
 otbViewerViewTest.cxx
-${OTB_SOURCE_DIR}/Code/Visualization/Viewer/Model/otbViewerModel.cxx
-${OTB_SOURCE_DIR}/Code/Visualization/Viewer/Controller/otbViewerController.cxx
-${OTB_SOURCE_DIR}/Code/Visualization/Viewer/View/otbViewerViewGUI.cxx
+../../../../Code/Visualization/Viewer/Model/otbViewerModel.cxx
+../../../../Code/Visualization/Viewer/Controller/otbViewerController.cxx
+../../../../Code/Visualization/Viewer/View/otbViewerViewGUI.cxx
 ${otbViewerTests_FLTK_UI_SRCS}
 )
 
 INCLUDE_DIRECTORIES(
-  ${OTB_SOURCE_DIR}/Code/Visualization/Viewer/View
-  ${OTB_SOURCE_DIR}/Code/Visualization/Viewer/Model
-  ${OTB_SOURCE_DIR}/Code/Visualization/Viewer/Controller
+  ../../../../Code/Visualization/Viewer/View
+  ../../../../Code/Visualization/Viewer/Model
+  ../../../../Code/Visualization/Viewer/Controller
   ${OTB_BINARY_DIR}/Code/Visualization/Viewer
 )
 
 ADD_EXECUTABLE(otbViewerTests ${Viewer_SRCS})
 TARGET_LINK_LIBRARIES(otbViewerTests OTBVisualization OTBTesting)
-
