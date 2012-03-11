@@ -1,6 +1,5 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-INCLUDE(TestingHelper)
 
 SET(Hyperspectral_TESTS1 ${CXX_TEST_PATH}/otbHyperspectralTests1)
 SET(Hyperspectral_TESTS2 ${CXX_TEST_PATH}/otbHyperspectralTests2)

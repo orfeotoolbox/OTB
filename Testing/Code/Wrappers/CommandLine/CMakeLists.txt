@@ -1,4 +1,3 @@
-INCLUDE(TestingHelper)
 
 SET(APPLICATIONSPATH ${OTB_BINARY_DIR}/bin)
 

@@ -1,6 +1,5 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-INCLUDE(TestingHelper)
 
 # Common generic tests
 SET(OBIA_TESTS1 ${CXX_TEST_PATH}/otbOBIATests1)

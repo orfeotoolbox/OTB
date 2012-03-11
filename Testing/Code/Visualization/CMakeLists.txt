@@ -1,6 +1,5 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-INCLUDE(TestingHelper)
 
 # Test programs
 SET(VISUALIZATION_TESTS1 ${CXX_TEST_PATH}/otbVisualizationTests1)

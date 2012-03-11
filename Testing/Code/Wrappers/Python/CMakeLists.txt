@@ -1,4 +1,3 @@
-INCLUDE(TestingHelper)
 
 set(TEST_DRIVER otbTestDriver
     --add-before-env PYTHONPATH        "${CMAKE_BINARY_DIR}/Code/Wrappers/SWIG"

@@ -1,6 +1,5 @@
 include( UseJava )
 
-INCLUDE(TestingHelper)
 
 set(TEST_DRIVER otbTestDriver
     --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_Smoothing>
