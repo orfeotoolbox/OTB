@@ -516,8 +516,8 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
   // define region
   itk::ImageRegion<2> imageRegion;
   InputIndexType index;
-  index[0] = static_cast<InputIndexValueType>(vcl_floor(latticePosition[0] + 0.5));
-  index[1] = static_cast<InputIndexValueType>(vcl_floor(latticePosition[1] + 0.5));
+  index[0] = itk::Math::Round(latticePosition[0]);
+  index[1] = itk::Math::Round(latticePosition[1]);
 
   InputIndexValueType xMin = index[0] - kernelSize[0] / 2;
   InputIndexValueType xMax = xMin + kernelSize[0];
