@@ -75,8 +75,8 @@ IF(OTB_USE_MAPNIK)
           MESSAGE(STATUS "  Testing if Mapnik2     -- yes")
         ELSE(OTB_MAPNIK_SUPPORTS_API20)
           MESSAGE(STATUS "  Testing if Mapnik2     -- no")
-          MESSAGE(STATUS "Does not support mapnik2 interface: ${OUTPUT}")
-          MESSAGE(STATUS "Assuming mapnik 0.7")
+          #MESSAGE(STATUS "Does not support mapnik2 interface: ${OUTPUT}")
+          MESSAGE(STATUS "  Assuming mapnik 0.7")
           # This should be dropped when we don't want to support this any more
           # Estimated date: 02/2013.
           ADD_DEFINITIONS(-DOTB_MAPNIK_COMPATIBILITY_API07)
