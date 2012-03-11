@@ -53,4 +53,5 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "Fl_Image.H:.*warning:.*dereferencing type-punned pointer will break strict-aliasing rules.*"
   "warning -.: directory name .* does not exist"
   "ld.*warning.*duplicate dylib.*"
+  "pyconfig.h:.*warning:.*_XOPEN_SOURCE.*redefined"
   )
