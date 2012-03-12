@@ -33,7 +33,7 @@ class ossimKeywordlist;
 class ossimXmlDocument;
 
 class ossimFormosatDimapSupportData : public ossimObject,
-                                  public ossimErrorStatusInterface
+   public ossimErrorStatusInterface
 {
 public:
 
@@ -126,10 +126,10 @@ public:
    //---
    void getPixelLookAngleX (ossim_uint32 sample, ossim_float64& pa) const;
    void getPixelLookAngleX (const ossim_float64& sample,
-                        	    ossim_float64& pa) const;
+                            ossim_float64& pa) const;
    void getPixelLookAngleY (ossim_uint32 sample, ossim_float64& pa) const;
    void getPixelLookAngleY (const ossim_float64& sample,
-                     	       ossim_float64& pa) const;
+                            ossim_float64& pa) const;
 
    //---
    // Geoposition points provided in the file (most likely just corner points):

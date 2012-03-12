@@ -156,7 +156,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
    // Since EPSG:0 is not a valid epsg code, the fix is safe
    // (ref http://spatialreference.org/ref/epsg/)
    if(pcsCodeVal == 0)
-     pcsCodeVal = EPSG_CODE_MAX;
+      pcsCodeVal = EPSG_CODE_MAX;
 
    if(pcsCodeVal < EPSG_CODE_MAX)
    {
@@ -176,7 +176,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
          ossimString epsg_spec = proj_db->findProjectionCode(newPcsCodeName);
          ossim_uint32 new_code = epsg_spec.after(":").toUInt32();
          if (new_code)
-          pcsCodeVal = new_code;
+            pcsCodeVal = new_code;
       }
       oSRS.importFromEPSG( pcsCodeVal );
    }
@@ -521,7 +521,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
       }
       else if(datumType == "NTF")
       {
-        oSRS.SetWellKnownGeogCS("EPSG:4275");
+         oSRS.SetWellKnownGeogCS("EPSG:4275");
       }
       else
       {
@@ -931,9 +931,9 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
       // The ellipsoid used by ossim is the WGS84 one with minor and major axis differs.
       // We need to build our own projection in this case.
       if( oDatum == "WGE" && ossimString(epsg_code) == "3857" )
-        {
-          oDatum = "6055";
-        }
+      {
+         oDatum = "6055";
+      }
    }
        
    kwl.add(prefix, ossimKeywordNames::DATUM_KW, oDatum, true);

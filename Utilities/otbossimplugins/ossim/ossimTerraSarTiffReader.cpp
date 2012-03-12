@@ -31,13 +31,13 @@ static const char PRODUCT_XML_FILE_KW[] = "product_xml_filename";
 
 namespace ossimplugins
 {
-RTTI_DEF1(ossimTerraSarTiffReader,
-          "ossimTerraSarTiffReader",
-          ossimTiffTileSource)
+   RTTI_DEF1(ossimTerraSarTiffReader,
+             "ossimTerraSarTiffReader",
+             ossimTiffTileSource)
 }
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id$";
+static const char OSSIM_ID[] = "$Id$";
 #endif
    
 static ossimTrace traceDebug("ossimTerraSarTiffReader:degug");  
@@ -284,7 +284,7 @@ ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry() const
             {
                ossimRefPtr<ossimProjection> proj =
                   ossimProjectionFactoryRegistry::instance()->
-                     createProjection(kwl);
+                  createProjection(kwl);
             
                if ( proj.valid() )
                {

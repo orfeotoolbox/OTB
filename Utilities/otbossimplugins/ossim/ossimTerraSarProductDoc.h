@@ -113,7 +113,7 @@ namespace ossimplugins
                       ossimString& s) const;
       
       bool geNumberOfLayers(const ossimXmlDocument* xdoc,
-                      ossimString& s) const;
+                            ossimString& s) const;
 
       bool getImageFile(const ossimXmlDocument* xdoc,
                         ossimString& s) const;
@@ -137,7 +137,7 @@ namespace ossimplugins
                             ossimString& s) const;
 
       bool getGenerationTime(const ossimXmlDocument* xdoc,
-                            ossimString& s) const;
+                             ossimString& s) const;
 
       /** one based??? */
       bool getRangeGateFirstPixel(const ossimXmlDocument* xdoc,
@@ -182,10 +182,10 @@ namespace ossimplugins
                               ossimString& s) const;
       
       bool getRangeFirstPixelTime(const ossimXmlDocument* xdoc,
-                              ossimString& s) const;
+                                  ossimString& s) const;
 
       bool getRangeLastPixelTime(const ossimXmlDocument* xdoc,
-                              ossimString& s) const;
+                                 ossimString& s) const;
 
       bool getCommonPrf(const ossimXmlDocument* xdoc, ossimString& s) const;
       
@@ -220,7 +220,7 @@ namespace ossimplugins
                                     ossimString& s) const;
 
       bool getProductType(const ossimXmlDocument* xdoc,
-                                    ossimString& s) const;
+                          ossimString& s) const;
 
       bool getProductVariant(const ossimXmlDocument* xdoc,
                              ossimString& s) const;
@@ -228,21 +228,21 @@ namespace ossimplugins
       bool getRadiometricCorrection(const ossimXmlDocument* xdoc,
                                     ossimString& s) const;
       bool getImagingMode(const ossimXmlDocument* xdoc,
-                                    ossimString& s) const;
+                          ossimString& s) const;
       bool getAcquisitionSensor(const ossimXmlDocument* xdoc,
-                                    ossimString& s) const;
+                                ossimString& s) const;
       bool getPolarisationMode(const ossimXmlDocument* xdoc,
-                                     ossimString& s) const;
+                               ossimString& s) const;
       bool getPolLayerList(const ossimXmlDocument* xdoc,
-                                    std::vector<ossimString>& s) const;
+                           std::vector<ossimString>& s) const;
       bool getCalFactor(const ossimXmlDocument* xdoc,
-                                    std::vector<ossimString>& s) const;
+                        std::vector<ossimString>& s) const;
       bool getRadarFrequency(const ossimXmlDocument* xdoc,
-                                    ossimString& s) const;
+                             ossimString& s) const;
 /*      bool getCenterIncidenceAngle(const ossimXmlDocument* xdoc,
-                                    ossimString& s) const;
-      bool getCornerIncidenceAngles(const ossimXmlDocument* xdoc,
-                                    std::vector<ossimString>& s) const;
+        ossimString& s) const;
+        bool getCornerIncidenceAngles(const ossimXmlDocument* xdoc,
+        std::vector<ossimString>& s) const;
 */
       /**
        * @brief Method to initialize IncidenceAngles object from
@@ -250,9 +250,9 @@ namespace ossimplugins
        * @param xdoc Opened product xml file.
        * @param pos Pointer to PlatformPosition object.
        * @return true on success, false on error.
-             */
+       */
       bool initSceneCoord(const ossimXmlDocument* xdoc,
-                              SceneCoord* pos) const;
+                          SceneCoord* pos) const;
       
       /**
        * @brief Method to initialize Noise object from
@@ -262,14 +262,14 @@ namespace ossimplugins
        * @return true on success, false on error.
        */
       bool initNoise(const ossimXmlDocument* xdoc,
-                                Noise* pos) const;
+                     Noise* pos) const;
 
 /*
-      bool getImageNoiseTimeUTC(const ossimXmlDocument* xdoc, ossimString& s) const;
-      bool getImageNoiseValidityRangeMin(const ossimXmlDocument* xdoc, ossimString& s) const;
-      bool getImageNoiseValidityRangeMax(const ossimXmlDocument* xdoc, ossimString& s) const;
-      bool getImageNoiseReferencePoint(const ossimXmlDocument* xdoc, ossimString& s) const;
-      bool getImageNoisePolynomialCoefficient( const ossimXmlDocument* xdoc, std::vector<double>& polynomialCoefficient) const;
+  bool getImageNoiseTimeUTC(const ossimXmlDocument* xdoc, ossimString& s) const;
+  bool getImageNoiseValidityRangeMin(const ossimXmlDocument* xdoc, ossimString& s) const;
+  bool getImageNoiseValidityRangeMax(const ossimXmlDocument* xdoc, ossimString& s) const;
+  bool getImageNoiseReferencePoint(const ossimXmlDocument* xdoc, ossimString& s) const;
+  bool getImageNoisePolynomialCoefficient( const ossimXmlDocument* xdoc, std::vector<double>& polynomialCoefficient) const;
 
 */
 

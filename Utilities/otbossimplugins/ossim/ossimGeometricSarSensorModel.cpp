@@ -27,494 +27,494 @@ namespace ossimplugins
 {
 
 
-static const char PRODUCT_GEOREFERENCED_FLAG_KW[] = "product_georeferenced_flag";
-static const char OPTIMIZATION_FACTOR_X_KW[] = "optimization_factor_x";
-static const char OPTIMIZATION_FACTOR_Y_KW[] = "optimization_factor_y";
-static const char OPTIMIZATION_BIAS_X_KW[] = "optimization_bias_x";
-static const char OPTIMIZATION_BIAS_Y_KW[] = "optimization_bias_y";
+   static const char PRODUCT_GEOREFERENCED_FLAG_KW[] = "product_georeferenced_flag";
+   static const char OPTIMIZATION_FACTOR_X_KW[] = "optimization_factor_x";
+   static const char OPTIMIZATION_FACTOR_Y_KW[] = "optimization_factor_y";
+   static const char OPTIMIZATION_BIAS_X_KW[] = "optimization_bias_x";
+   static const char OPTIMIZATION_BIAS_Y_KW[] = "optimization_bias_y";
 
-const char* ossimGeometricSarSensorModel::CREATE_OCG_PREF_KW = "geometric_sar_sensor_model.create_ocg";
+   const char* ossimGeometricSarSensorModel::CREATE_OCG_PREF_KW = "geometric_sar_sensor_model.create_ocg";
 
-RTTI_DEF1(ossimGeometricSarSensorModel, "ossimGeometricSarSensorModel", ossimSensorModel);
+   RTTI_DEF1(ossimGeometricSarSensorModel, "ossimGeometricSarSensorModel", ossimSensorModel);
 
-static ossimTrace traceDebug("ossimGeometricSarSensorModel:debug");
+   static ossimTrace traceDebug("ossimGeometricSarSensorModel:debug");
 
-ossimGeometricSarSensorModel::ossimGeometricSarSensorModel()
-   :
-   ossimSensorModel(),
-   _platformPosition(0),
-   _sensor(0),
-   _refPoint(0),
-   _sarSensor(0),
-   _isProductGeoreferenced(false),
-   _optimizationFactorX(0.0),
-   _optimizationFactorY(0.0),
-   _optimizationBiasX(0.0),
-   _optimizationBiasY(0.0)
-{
-}
-
-ossimGeometricSarSensorModel::ossimGeometricSarSensorModel(
-   const ossimGeometricSarSensorModel& rhs)
-   :
-   ossimSensorModel(rhs),
-   _platformPosition(rhs._platformPosition?rhs._platformPosition->Clone():(PlatformPosition*)0),
-   _sensor(rhs._sensor?rhs._sensor->Clone():(SensorParams*)0),
-   _refPoint(rhs._refPoint?rhs._refPoint->Clone():( RefPoint *)0),
-   _isProductGeoreferenced(rhs._isProductGeoreferenced),
-   _optimizationFactorX(rhs._optimizationFactorX),
-   _optimizationFactorY(rhs._optimizationFactorY),
-   _optimizationBiasX(rhs._optimizationBiasX),
-   _optimizationBiasY(rhs._optimizationBiasY),
-   _imageFilename(rhs._imageFilename),
-   _productXmlFile(rhs._productXmlFile)
-{
-   _sarSensor = new SarSensor(_sensor,_platformPosition);
-}
-
-ossimGeometricSarSensorModel::~ossimGeometricSarSensorModel()
-{
-   if (_platformPosition != 0)
+   ossimGeometricSarSensorModel::ossimGeometricSarSensorModel()
+      :
+      ossimSensorModel(),
+      _platformPosition(0),
+      _sensor(0),
+      _refPoint(0),
+      _sarSensor(0),
+      _isProductGeoreferenced(false),
+      _optimizationFactorX(0.0),
+      _optimizationFactorY(0.0),
+      _optimizationBiasX(0.0),
+      _optimizationBiasY(0.0)
    {
-      delete _platformPosition;
-      _platformPosition = 0;
    }
 
-   if(_sensor != 0)
+   ossimGeometricSarSensorModel::ossimGeometricSarSensorModel(
+      const ossimGeometricSarSensorModel& rhs)
+      :
+      ossimSensorModel(rhs),
+      _platformPosition(rhs._platformPosition?rhs._platformPosition->Clone():(PlatformPosition*)0),
+      _sensor(rhs._sensor?rhs._sensor->Clone():(SensorParams*)0),
+      _refPoint(rhs._refPoint?rhs._refPoint->Clone():( RefPoint *)0),
+      _isProductGeoreferenced(rhs._isProductGeoreferenced),
+      _optimizationFactorX(rhs._optimizationFactorX),
+      _optimizationFactorY(rhs._optimizationFactorY),
+      _optimizationBiasX(rhs._optimizationBiasX),
+      _optimizationBiasY(rhs._optimizationBiasY),
+      _imageFilename(rhs._imageFilename),
+      _productXmlFile(rhs._productXmlFile)
    {
-      delete _sensor;
-      _sensor = 0;
+      _sarSensor = new SarSensor(_sensor,_platformPosition);
    }
 
-   if (_sarSensor != 0)
+   ossimGeometricSarSensorModel::~ossimGeometricSarSensorModel()
    {
-     delete _sarSensor;
-     _sarSensor = 0;
-   }
-
-   if(_refPoint != 0)
-   {
-      delete _refPoint;
-      _refPoint = 0;
-   }
-}
-
-double ossimGeometricSarSensorModel::getSlantRange(double col) const
-{
-   const double CLUM        = 2.99792458e+8 ;
-
-   double dist = _refPoint->get_distance()
-      + _sensor->get_col_direction() * (col - (_refPoint->get_pix_col())) * ((CLUM / 2.0) * _sensor->get_nRangeLook() / _sensor->get_sf()) ;
-
-   return  dist;
-}
-
-JSDDateTime ossimGeometricSarSensorModel::getTime(double line) const
-{
-   double dt =  _sensor->get_lin_direction() * (line - _refPoint->get_pix_line()) * _sensor->get_nAzimuthLook() / _sensor->get_prf() ;
-   JSDDateTime time = _refPoint->get_ephemeris()->get_date();
-   time.set_second(time.get_second() + dt);
-   time.NormDate();
-
-   return time;
-}
-
-bool ossimGeometricSarSensorModel::getPlatformPositionAtLine(double line, vector<double>& position, vector<double>& speed)
-{
-  JSDDateTime time = getTime(line);
-  return _platformPosition->getPlatformPositionAtTime(time,position,speed);
-}
-
-void ossimGeometricSarSensorModel::lineSampleHeightToWorld(
-   const ossimDpt& image_point,
-   const double&   heightEllipsoid,
-   ossimGpt&       worldPoint) const
-{
-
-  if (!_sarSensor)
-  {
-    // bad design consequence, should be fixed.
-    _sarSensor = new SarSensor(_sensor, _platformPosition);
-  }
-   double lon, lat;
-   // const double CLUM        = 2.99792458e+8 ;
-   
-   // optimization
-   double col = image_point.x - (image_point.x * _optimizationFactorX + _optimizationBiasX) ;
-   double line = image_point.y - (image_point.y * _optimizationFactorY + _optimizationBiasY) ;
-
-   JSDDateTime azimuthTime = getTime(line) ;
-
-   // Slant range computation, depending on the product type
-   double slantRange;
-   if (_isProductGeoreferenced)
-   {
-      slantRange = getSlantRangeFromGeoreferenced(col) ;
-   }
-   else
-   {
-      slantRange = getSlantRange(col) ;
-   }
-   
-   int etatLoc = _sarSensor->ImageToWorld(slantRange, azimuthTime, heightEllipsoid, lon, lat);
-
-   if(traceDebug())
-   {
-      switch (etatLoc)
+      if (_platformPosition != 0)
       {
-         case 0:
-            ossimNotify(ossimNotifyLevel_DEBUG) << "successful call to lineSampleHeightToWorld" << std::endl;
-            break;
-         case 1:
-            ossimNotify(ossimNotifyLevel_DEBUG) << "lineSampleHeightToWorld : no real root to the equation belongs to the imaging ray" << std::endl;
-            break;
-         case 2:
-            ossimNotify(ossimNotifyLevel_DEBUG) << "lineSampleHeightToWorld : no real root to the equation" << std::endl;
-            break;
-         default :
-            ossimNotify(ossimNotifyLevel_DEBUG) << "lineSampleHeightToWorld : unknown error case" << std::endl;
-            break;
+         delete _platformPosition;
+         _platformPosition = 0;
+      }
+
+      if(_sensor != 0)
+      {
+         delete _sensor;
+         _sensor = 0;
+      }
+
+      if (_sarSensor != 0)
+      {
+         delete _sarSensor;
+         _sarSensor = 0;
+      }
+
+      if(_refPoint != 0)
+      {
+         delete _refPoint;
+         _refPoint = 0;
       }
    }
 
-   worldPoint.lat = lat;
-   worldPoint.lon = lon;
-   worldPoint.hgt = heightEllipsoid ;
-}
-
-void ossimGeometricSarSensorModel::clearGCPlist() {
-   _optimizationGCPsGroundCoordinates.clear();
-   _optimizationGCPsImageCoordinates.clear();
-
-   // optimization model update
-   optimizeModel(_optimizationGCPsGroundCoordinates, _optimizationGCPsImageCoordinates) ;
-}
-
-void ossimGeometricSarSensorModel::getGCPlist(std::list<ossimGpt> & groundCoordinates, std::list<ossimDpt> & imageCoordinates) {
-   groundCoordinates = _optimizationGCPsGroundCoordinates ;
-   imageCoordinates = _optimizationGCPsImageCoordinates ;
-}
-
-bool ossimGeometricSarSensorModel::optimizeModel(const std::list<ossimGpt> & groundCoordinates, const std::list<ossimDpt> & imageCoordinates)
-{
-   if (groundCoordinates.size() != imageCoordinates.size()) return false ;
-
-   // no optimization is used during the GCP localization error computation
-   _optimizationFactorX = 0.0 ;
-   _optimizationFactorY = 0.0 ;
-   _optimizationBiasX = 0.0 ;
-   _optimizationBiasY = 0.0 ;
-
-   // appends the user input GCPs to the GCPs already present
-   _optimizationGCPsGroundCoordinates.insert(_optimizationGCPsGroundCoordinates.end(), groundCoordinates.begin(), groundCoordinates.end()) ;
-   _optimizationGCPsImageCoordinates.insert(_optimizationGCPsImageCoordinates.end(), imageCoordinates.begin(), imageCoordinates.end()) ;
-
-   // no GCP : no optimization
-   if (groundCoordinates.size() == 0) return true ;
-
-   // Inverse projection of each Ground Control Point
-   std::list<ossimGpt>::iterator itGround = _optimizationGCPsGroundCoordinates.begin() ;
-   std::list<ossimDpt> inverseLocResults ;
-   while (itGround != _optimizationGCPsGroundCoordinates.end())
+   double ossimGeometricSarSensorModel::getSlantRange(double col) const
    {
-      ossimDpt itLoc ;
-      this->worldToLineSample(*itGround,itLoc);
-      inverseLocResults.push_back(itLoc) ;
-      itGround++;
+      const double CLUM        = 2.99792458e+8 ;
+
+      double dist = _refPoint->get_distance()
+         + _sensor->get_col_direction() * (col - (_refPoint->get_pix_col())) * ((CLUM / 2.0) * _sensor->get_nRangeLook() / _sensor->get_sf()) ;
+
+      return  dist;
    }
 
-   // error computation
-   int nbPoints = _optimizationGCPsGroundCoordinates.size() ;
-   double xErrorMean = 0.0, yErrorMean = 0.0, xActualPow = 0.0, yActualPow = 0.0, xActualMean = 0.0, yActualMean = 0.0,
-      xErrorByActualMean = 0.0, yErrorByActualMean = 0.0 ;
-   double xLocalError, yLocalError ;
+   JSDDateTime ossimGeometricSarSensorModel::getTime(double line) const
+   {
+      double dt =  _sensor->get_lin_direction() * (line - _refPoint->get_pix_line()) * _sensor->get_nAzimuthLook() / _sensor->get_prf() ;
+      JSDDateTime time = _refPoint->get_ephemeris()->get_date();
+      time.set_second(time.get_second() + dt);
+      time.NormDate();
 
-   std::list<ossimDpt>::iterator itActualCoords = _optimizationGCPsImageCoordinates.begin() ;
-   std::list<ossimDpt>::iterator itEstimatedCoords = inverseLocResults.begin() ;
-   while ((itActualCoords != _optimizationGCPsImageCoordinates.end())&&(itEstimatedCoords != inverseLocResults.end())) {
-      xLocalError = itActualCoords->x - itEstimatedCoords->x ;
-      yLocalError = itActualCoords->y - itEstimatedCoords->y ;
-
-      xErrorMean += xLocalError ;
-      yErrorMean += yLocalError ;
-      xActualMean += itActualCoords->x ;
-      yActualMean += itActualCoords->y ;
-      xActualPow += itActualCoords->x * itActualCoords->x ;
-      yActualPow += itActualCoords->y * itActualCoords->y ;
-      xErrorByActualMean += xLocalError * itActualCoords->x ;
-      yErrorByActualMean += yLocalError * itActualCoords->y ;
-
-      ++itActualCoords;
-      ++itEstimatedCoords;
+      return time;
    }
 
-   xErrorMean /= nbPoints ;
-   yErrorMean /= nbPoints ;
-   xActualMean /= nbPoints ;
-   yActualMean /= nbPoints ;
-   xActualPow /= nbPoints ;
-   yActualPow /= nbPoints ;
-   xErrorByActualMean /= nbPoints ;
-   yErrorByActualMean /= nbPoints ;
-
-   // linear regression
-   if (fabs(xActualPow - xActualMean*xActualMean) > FLT_EPSILON)
-      _optimizationFactorX = (xErrorByActualMean - xErrorMean * xActualMean) / (xActualPow - xActualMean*xActualMean) ;
-   if (fabs(yActualPow - yActualMean*yActualMean) > FLT_EPSILON)
-      _optimizationFactorY = (yErrorByActualMean - yErrorMean * yActualMean) / (yActualPow - yActualMean*yActualMean) ;
-   _optimizationBiasX = xErrorMean - _optimizationFactorX * xActualMean ;
-   _optimizationBiasY = yErrorMean - _optimizationFactorY * yActualMean ;
-
-   //// Comparison between the estimated image coordinates of each GCP and its actual image coordinates
-   //double lineBias = 0.0, columnBias = 0.0 ;
-   //int nbPtsUsed = 0;
-
-   //std::list<ossimDpt>::iterator itActualCoords = imageCoordinates.begin() ;
-   //std::list<ossimDpt>::iterator itEstimatedCoords = inverseLocResults.begin() ;
-   //while ((itActualCoords != imageCoordinates.end())&&(itEstimatedCoords != inverseLocResults.end())) {
-   //
-   //  columnBias += (itActualCoords->x - itEstimatedCoords->x ) ;
-   //  lineBias += (itActualCoords->y - itEstimatedCoords->y ) ;
-   //
-   //  nbPtsUsed++;
-   //  itActualCoords++;
-   //  itEstimatedCoords++;
-   //}
-
-   //// Computation of bias in line and column : mean deviations
-   //lineBias /= nbPtsUsed ;
-   //columnBias /= nbPtsUsed ;
-
-   //// Update of the model Reference Point
-   //_refPoint->set_pix_col(_refPoint->get_pix_col() - columnBias);
-   //_refPoint->set_pix_line(_refPoint->get_pix_line() - lineBias);
-
-   return true ;
-}
-
-bool ossimGeometricSarSensorModel::saveState(ossimKeywordlist& kwl,
-                                             const char* prefix) const
-
-{
-   static const char MODULE[] = "ossimGeometricSarSensorModel::saveState";
-
-   bool result = false;
-
-   if (traceDebug())
+   bool ossimGeometricSarSensorModel::getPlatformPositionAtLine(double line, vector<double>& position, vector<double>& speed)
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+      JSDDateTime time = getTime(line);
+      return _platformPosition->getPlatformPositionAtTime(time,position,speed);
    }
 
-   if (_platformPosition && _sensor && _refPoint)
+   void ossimGeometricSarSensorModel::lineSampleHeightToWorld(
+      const ossimDpt& image_point,
+      const double&   heightEllipsoid,
+      ossimGpt&       worldPoint) const
    {
-      if ( _platformPosition->saveState(kwl, prefix) )
+
+      if (!_sarSensor)
       {
-         if ( _sensor->saveState(kwl, prefix) )
+         // bad design consequence, should be fixed.
+         _sarSensor = new SarSensor(_sensor, _platformPosition);
+      }
+      double lon, lat;
+      // const double CLUM        = 2.99792458e+8 ;
+   
+      // optimization
+      double col = image_point.x - (image_point.x * _optimizationFactorX + _optimizationBiasX) ;
+      double line = image_point.y - (image_point.y * _optimizationFactorY + _optimizationBiasY) ;
+
+      JSDDateTime azimuthTime = getTime(line) ;
+
+      // Slant range computation, depending on the product type
+      double slantRange;
+      if (_isProductGeoreferenced)
+      {
+         slantRange = getSlantRangeFromGeoreferenced(col) ;
+      }
+      else
+      {
+         slantRange = getSlantRange(col) ;
+      }
+   
+      int etatLoc = _sarSensor->ImageToWorld(slantRange, azimuthTime, heightEllipsoid, lon, lat);
+
+      if(traceDebug())
+      {
+         switch (etatLoc)
          {
-            result = _refPoint->saveState(kwl, prefix);
+            case 0:
+               ossimNotify(ossimNotifyLevel_DEBUG) << "successful call to lineSampleHeightToWorld" << std::endl;
+               break;
+            case 1:
+               ossimNotify(ossimNotifyLevel_DEBUG) << "lineSampleHeightToWorld : no real root to the equation belongs to the imaging ray" << std::endl;
+               break;
+            case 2:
+               ossimNotify(ossimNotifyLevel_DEBUG) << "lineSampleHeightToWorld : no real root to the equation" << std::endl;
+               break;
+            default :
+               ossimNotify(ossimNotifyLevel_DEBUG) << "lineSampleHeightToWorld : unknown error case" << std::endl;
+               break;
+         }
+      }
 
-            if (result)
+      worldPoint.lat = lat;
+      worldPoint.lon = lon;
+      worldPoint.hgt = heightEllipsoid ;
+   }
+
+   void ossimGeometricSarSensorModel::clearGCPlist() {
+      _optimizationGCPsGroundCoordinates.clear();
+      _optimizationGCPsImageCoordinates.clear();
+
+      // optimization model update
+      optimizeModel(_optimizationGCPsGroundCoordinates, _optimizationGCPsImageCoordinates) ;
+   }
+
+   void ossimGeometricSarSensorModel::getGCPlist(std::list<ossimGpt> & groundCoordinates, std::list<ossimDpt> & imageCoordinates) {
+      groundCoordinates = _optimizationGCPsGroundCoordinates ;
+      imageCoordinates = _optimizationGCPsImageCoordinates ;
+   }
+
+   bool ossimGeometricSarSensorModel::optimizeModel(const std::list<ossimGpt> & groundCoordinates, const std::list<ossimDpt> & imageCoordinates)
+   {
+      if (groundCoordinates.size() != imageCoordinates.size()) return false ;
+
+      // no optimization is used during the GCP localization error computation
+      _optimizationFactorX = 0.0 ;
+      _optimizationFactorY = 0.0 ;
+      _optimizationBiasX = 0.0 ;
+      _optimizationBiasY = 0.0 ;
+
+      // appends the user input GCPs to the GCPs already present
+      _optimizationGCPsGroundCoordinates.insert(_optimizationGCPsGroundCoordinates.end(), groundCoordinates.begin(), groundCoordinates.end()) ;
+      _optimizationGCPsImageCoordinates.insert(_optimizationGCPsImageCoordinates.end(), imageCoordinates.begin(), imageCoordinates.end()) ;
+
+      // no GCP : no optimization
+      if (groundCoordinates.size() == 0) return true ;
+
+      // Inverse projection of each Ground Control Point
+      std::list<ossimGpt>::iterator itGround = _optimizationGCPsGroundCoordinates.begin() ;
+      std::list<ossimDpt> inverseLocResults ;
+      while (itGround != _optimizationGCPsGroundCoordinates.end())
+      {
+         ossimDpt itLoc ;
+         this->worldToLineSample(*itGround,itLoc);
+         inverseLocResults.push_back(itLoc) ;
+         itGround++;
+      }
+
+      // error computation
+      int nbPoints = _optimizationGCPsGroundCoordinates.size() ;
+      double xErrorMean = 0.0, yErrorMean = 0.0, xActualPow = 0.0, yActualPow = 0.0, xActualMean = 0.0, yActualMean = 0.0,
+         xErrorByActualMean = 0.0, yErrorByActualMean = 0.0 ;
+      double xLocalError, yLocalError ;
+
+      std::list<ossimDpt>::iterator itActualCoords = _optimizationGCPsImageCoordinates.begin() ;
+      std::list<ossimDpt>::iterator itEstimatedCoords = inverseLocResults.begin() ;
+      while ((itActualCoords != _optimizationGCPsImageCoordinates.end())&&(itEstimatedCoords != inverseLocResults.end())) {
+         xLocalError = itActualCoords->x - itEstimatedCoords->x ;
+         yLocalError = itActualCoords->y - itEstimatedCoords->y ;
+
+         xErrorMean += xLocalError ;
+         yErrorMean += yLocalError ;
+         xActualMean += itActualCoords->x ;
+         yActualMean += itActualCoords->y ;
+         xActualPow += itActualCoords->x * itActualCoords->x ;
+         yActualPow += itActualCoords->y * itActualCoords->y ;
+         xErrorByActualMean += xLocalError * itActualCoords->x ;
+         yErrorByActualMean += yLocalError * itActualCoords->y ;
+
+         ++itActualCoords;
+         ++itEstimatedCoords;
+      }
+
+      xErrorMean /= nbPoints ;
+      yErrorMean /= nbPoints ;
+      xActualMean /= nbPoints ;
+      yActualMean /= nbPoints ;
+      xActualPow /= nbPoints ;
+      yActualPow /= nbPoints ;
+      xErrorByActualMean /= nbPoints ;
+      yErrorByActualMean /= nbPoints ;
+
+      // linear regression
+      if (fabs(xActualPow - xActualMean*xActualMean) > FLT_EPSILON)
+         _optimizationFactorX = (xErrorByActualMean - xErrorMean * xActualMean) / (xActualPow - xActualMean*xActualMean) ;
+      if (fabs(yActualPow - yActualMean*yActualMean) > FLT_EPSILON)
+         _optimizationFactorY = (yErrorByActualMean - yErrorMean * yActualMean) / (yActualPow - yActualMean*yActualMean) ;
+      _optimizationBiasX = xErrorMean - _optimizationFactorX * xActualMean ;
+      _optimizationBiasY = yErrorMean - _optimizationFactorY * yActualMean ;
+
+      //// Comparison between the estimated image coordinates of each GCP and its actual image coordinates
+      //double lineBias = 0.0, columnBias = 0.0 ;
+      //int nbPtsUsed = 0;
+
+      //std::list<ossimDpt>::iterator itActualCoords = imageCoordinates.begin() ;
+      //std::list<ossimDpt>::iterator itEstimatedCoords = inverseLocResults.begin() ;
+      //while ((itActualCoords != imageCoordinates.end())&&(itEstimatedCoords != inverseLocResults.end())) {
+      //
+      //  columnBias += (itActualCoords->x - itEstimatedCoords->x ) ;
+      //  lineBias += (itActualCoords->y - itEstimatedCoords->y ) ;
+      //
+      //  nbPtsUsed++;
+      //  itActualCoords++;
+      //  itEstimatedCoords++;
+      //}
+
+      //// Computation of bias in line and column : mean deviations
+      //lineBias /= nbPtsUsed ;
+      //columnBias /= nbPtsUsed ;
+
+      //// Update of the model Reference Point
+      //_refPoint->set_pix_col(_refPoint->get_pix_col() - columnBias);
+      //_refPoint->set_pix_line(_refPoint->get_pix_line() - lineBias);
+
+      return true ;
+   }
+
+   bool ossimGeometricSarSensorModel::saveState(ossimKeywordlist& kwl,
+                                                const char* prefix) const
+
+   {
+      static const char MODULE[] = "ossimGeometricSarSensorModel::saveState";
+
+      bool result = false;
+
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+      }
+
+      if (_platformPosition && _sensor && _refPoint)
+      {
+         if ( _platformPosition->saveState(kwl, prefix) )
+         {
+            if ( _sensor->saveState(kwl, prefix) )
             {
-               kwl.add(prefix,
-                       PRODUCT_GEOREFERENCED_FLAG_KW,
-                       (_isProductGeoreferenced?"true":"false"));
-               kwl.add(prefix,
-                       OPTIMIZATION_FACTOR_X_KW,
-                       _optimizationFactorX);
-               kwl.add(prefix,
-                       OPTIMIZATION_FACTOR_Y_KW,
-                       _optimizationFactorY);
-               kwl.add(prefix,
-                       OPTIMIZATION_BIAS_X_KW,
-                       _optimizationBiasX);
-               kwl.add(prefix,
-                       OPTIMIZATION_BIAS_Y_KW,
-                       _optimizationBiasY);
+               result = _refPoint->saveState(kwl, prefix);
 
-               result = ossimSensorModel::saveState(kwl, prefix);
+               if (result)
+               {
+                  kwl.add(prefix,
+                          PRODUCT_GEOREFERENCED_FLAG_KW,
+                          (_isProductGeoreferenced?"true":"false"));
+                  kwl.add(prefix,
+                          OPTIMIZATION_FACTOR_X_KW,
+                          _optimizationFactorX);
+                  kwl.add(prefix,
+                          OPTIMIZATION_FACTOR_Y_KW,
+                          _optimizationFactorY);
+                  kwl.add(prefix,
+                          OPTIMIZATION_BIAS_X_KW,
+                          _optimizationBiasX);
+                  kwl.add(prefix,
+                          OPTIMIZATION_BIAS_Y_KW,
+                          _optimizationBiasY);
+
+                  result = ossimSensorModel::saveState(kwl, prefix);
+               }
             }
          }
       }
-   }
 
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " exit status = " << (result?"true":"false\n")
-         << std::endl;
-   }
-
-   return result;
-}
-
-bool ossimGeometricSarSensorModel::loadState(const ossimKeywordlist &kwl,
-                                             const char *prefix)
-{
-   static const char MODULE[] = "ossimGeometricSarSensorModel::loadState";
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
-   }
-
-   bool result = true;
-
-   // Load the base class;
-   if ( ossimSensorModel::loadState(kwl, prefix) == false )
-   {
       if (traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE
-            << "\nossimSensorModel::loadState failed!\n";
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " exit status = " << (result?"true":"false\n")
+            << std::endl;
       }
-      result = false;
+
+      return result;
    }
 
-   // Load the platform position state.
-   if ( !_platformPosition)
+   bool ossimGeometricSarSensorModel::loadState(const ossimKeywordlist &kwl,
+                                                const char *prefix)
    {
-      _platformPosition = new PlatformPosition();
-   }
-   if ( _platformPosition->loadState(kwl, prefix) == false )
-   {
+      static const char MODULE[] = "ossimGeometricSarSensorModel::loadState";
+
       if (traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE
-            << "\n_platformPosition->loadState failed!\n";
+         ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
       }
-      result = false;
-   }
 
-   // Load the sensor position state.
-   if ( !_sensor)
-   {
-      _sensor = new SensorParams();
-   }
-   if ( _sensor->loadState(kwl, prefix) == false )
-   {
-      if (traceDebug())
+      bool result = true;
+
+      // Load the base class;
+      if ( ossimSensorModel::loadState(kwl, prefix) == false )
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE
-            << "\n_sensor->loadState failed!\n";
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nossimSensorModel::loadState failed!\n";
+         }
+         result = false;
       }
-      result = false;
-   }
 
-   _sarSensor = new SarSensor(_sensor, _platformPosition);
-
-   // Load the ref point.
-   if ( !_refPoint)
-   {
-      _refPoint = new RefPoint();
-   }
-   if ( _refPoint->loadState(kwl, prefix) == false )
-   {
-      if (traceDebug())
+      // Load the platform position state.
+      if ( !_platformPosition)
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE
-            << "\n_refPoint->loadState failed!\n";
+         _platformPosition = new PlatformPosition();
       }
-      result = false;
-   }
-
-   const char* lookup = 0;
-   ossimString s;
-
-   lookup = kwl.find(prefix, PRODUCT_GEOREFERENCED_FLAG_KW);
-   if (lookup)
-   {
-      s = lookup;
-      _isProductGeoreferenced = s.toBool();
-   }
-   else
-   {
-      if (traceDebug())
+      if ( _platformPosition->loadState(kwl, prefix) == false )
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE
-            << "\nRequired keyword not found: "
-            << PRODUCT_GEOREFERENCED_FLAG_KW << "\n";
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\n_platformPosition->loadState failed!\n";
+         }
+         result = false;
       }
-      result = false;
-   }
 
-   lookup = kwl.find(prefix, OPTIMIZATION_FACTOR_X_KW);
-   if (lookup)
-   {
-      s = lookup;
-      _optimizationFactorX = s.toDouble();
-   }
-   else
-   {
-      if (traceDebug())
+      // Load the sensor position state.
+      if ( !_sensor)
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE
-            << "\nRequired keyword not found: "
-            << OPTIMIZATION_FACTOR_X_KW << "\n";
+         _sensor = new SensorParams();
       }
-      result = false;
-   }
-
-   lookup = kwl.find(prefix, OPTIMIZATION_FACTOR_Y_KW);
-   if (lookup)
-   {
-      s = lookup;
-      _optimizationFactorY = s.toDouble();
-   }
-   else
-   {
-      if (traceDebug())
+      if ( _sensor->loadState(kwl, prefix) == false )
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE
-            << "\nRequired keyword not found: "
-            << OPTIMIZATION_FACTOR_Y_KW << "\n";
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\n_sensor->loadState failed!\n";
+         }
+         result = false;
       }
-      result = false;
-   }
 
-   lookup = kwl.find(prefix,OPTIMIZATION_BIAS_X_KW);
-   if (lookup)
-   {
-      s = lookup;
-      _optimizationBiasX= s.toDouble();
-   }
-   else
-   {
-      if (traceDebug())
+      _sarSensor = new SarSensor(_sensor, _platformPosition);
+
+      // Load the ref point.
+      if ( !_refPoint)
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE
-            << "\nRequired keyword not found: "
-            << OPTIMIZATION_BIAS_X_KW << "\n";
+         _refPoint = new RefPoint();
       }
-      result = false;
-   }
-
-   lookup = kwl.find(prefix,OPTIMIZATION_BIAS_Y_KW);
-   if (lookup)
-   {
-      s = lookup;
-      _optimizationBiasY = s.toDouble();
-   }
-   else
-   {
-      if (traceDebug())
+      if ( _refPoint->loadState(kwl, prefix) == false )
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE
-            << "\nRequired keyword not found: "
-            << OPTIMIZATION_BIAS_X_KW << "\n";
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\n_refPoint->loadState failed!\n";
+         }
+         result = false;
       }
-      result = false;
-   }
 
-   // if (result && traceDebug())
+      const char* lookup = 0;
+      ossimString s;
+
+      lookup = kwl.find(prefix, PRODUCT_GEOREFERENCED_FLAG_KW);
+      if (lookup)
+      {
+         s = lookup;
+         _isProductGeoreferenced = s.toBool();
+      }
+      else
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nRequired keyword not found: "
+               << PRODUCT_GEOREFERENCED_FLAG_KW << "\n";
+         }
+         result = false;
+      }
+
+      lookup = kwl.find(prefix, OPTIMIZATION_FACTOR_X_KW);
+      if (lookup)
+      {
+         s = lookup;
+         _optimizationFactorX = s.toDouble();
+      }
+      else
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nRequired keyword not found: "
+               << OPTIMIZATION_FACTOR_X_KW << "\n";
+         }
+         result = false;
+      }
+
+      lookup = kwl.find(prefix, OPTIMIZATION_FACTOR_Y_KW);
+      if (lookup)
+      {
+         s = lookup;
+         _optimizationFactorY = s.toDouble();
+      }
+      else
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nRequired keyword not found: "
+               << OPTIMIZATION_FACTOR_Y_KW << "\n";
+         }
+         result = false;
+      }
+
+      lookup = kwl.find(prefix,OPTIMIZATION_BIAS_X_KW);
+      if (lookup)
+      {
+         s = lookup;
+         _optimizationBiasX= s.toDouble();
+      }
+      else
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nRequired keyword not found: "
+               << OPTIMIZATION_BIAS_X_KW << "\n";
+         }
+         result = false;
+      }
+
+      lookup = kwl.find(prefix,OPTIMIZATION_BIAS_Y_KW);
+      if (lookup)
+      {
+         s = lookup;
+         _optimizationBiasY = s.toDouble();
+      }
+      else
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nRequired keyword not found: "
+               << OPTIMIZATION_BIAS_X_KW << "\n";
+         }
+         result = false;
+      }
+
+      // if (result && traceDebug())
 //    if (result)
 //    {
 //       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -527,15 +527,15 @@ bool ossimGeometricSarSensorModel::loadState(const ossimKeywordlist &kwl,
 //          << "saveState result after loadState:"  << kwl2 << endl;
 //    }
 
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " exit status = " << (result?"true":"false\n")
-         << std::endl;
-   }
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " exit status = " << (result?"true":"false\n")
+            << std::endl;
+      }
 
-   return result;
-}
+      return result;
+   }
 
 #if 0
    if(!InitSRGR(kwl, prefix))
@@ -582,7 +582,7 @@ std::ostream& ossimGeometricSarSensorModel::print(std::ostream& out) const
            PRODUCT_GEOREFERENCED_FLAG_KW,
            (_isProductGeoreferenced?"true":"false"));
    kwl.add(prefix,
-                       OPTIMIZATION_FACTOR_X_KW,
+           OPTIMIZATION_FACTOR_X_KW,
            _optimizationFactorX);
    kwl.add(prefix,
            OPTIMIZATION_FACTOR_Y_KW,
@@ -635,7 +635,7 @@ bool ossimGeometricSarSensorModel::createReplacementOCG()
 //
 //*****************************************************************************
 void ossimGeometricSarSensorModel::lineSampleToWorld(const ossimDpt& image_point,
-                                         ossimGpt&       gpt) const
+                                                     ossimGpt&       gpt) const
 {
    bool debug = false;  // setable via interactive debugger
    if (traceDebug() || debug)  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::lineSampleToWorld:entering..." << std::endl;
@@ -689,60 +689,60 @@ void ossimGeometricSarSensorModel::lineSampleToWorld(const ossimDpt& image_point
    //***
    do
    {
-     //***
-     // establish perturbed ground points about the guessed point:
-     //***
-     gpt_dlat.latd(gpt.latd() + LON_LAT_STEP);
-     gpt_dlat.lond(gpt.lond());
-     gpt_dlat.height(ossimElevManager::instance()->getHeightAboveEllipsoid(gpt_dlat));
-     gpt_dlon.latd(gpt.latd());
-     gpt_dlon.lond(gpt.lond() + LON_LAT_STEP);
-     gpt_dlon.height(ossimElevManager::instance()->getHeightAboveEllipsoid(gpt_dlon));
+      //***
+      // establish perturbed ground points about the guessed point:
+      //***
+      gpt_dlat.latd(gpt.latd() + LON_LAT_STEP);
+      gpt_dlat.lond(gpt.lond());
+      gpt_dlat.height(ossimElevManager::instance()->getHeightAboveEllipsoid(gpt_dlat));
+      gpt_dlon.latd(gpt.latd());
+      gpt_dlon.lond(gpt.lond() + LON_LAT_STEP);
+      gpt_dlon.height(ossimElevManager::instance()->getHeightAboveEllipsoid(gpt_dlon));
 
-     //***
-     // Compute numerical partials at current guessed point:
-     //***
-     worldToLineSample(gpt, ip);
-     worldToLineSample(gpt_dlat, ip_dlat);
-     worldToLineSample(gpt_dlon, ip_dlon);
+      //***
+      // Compute numerical partials at current guessed point:
+      //***
+      worldToLineSample(gpt, ip);
+      worldToLineSample(gpt_dlat, ip_dlat);
+      worldToLineSample(gpt_dlon, ip_dlon);
 
-     if(ip.hasNans() || ip_dlat.hasNans() || ip_dlon.hasNans())
-     {
-       gpt.makeNan();
-       return;
-     }
+      if(ip.hasNans() || ip_dlat.hasNans() || ip_dlon.hasNans())
+      {
+         gpt.makeNan();
+         return;
+      }
 
-     du_dlat = (ip_dlat.u - ip.u) / LON_LAT_STEP;
-     du_dlon = (ip_dlon.u - ip.u) / LON_LAT_STEP;
-     dv_dlat = (ip_dlat.v - ip.v) / LON_LAT_STEP;
-     dv_dlon = (ip_dlon.v - ip.v) / LON_LAT_STEP;
+      du_dlat = (ip_dlat.u - ip.u) / LON_LAT_STEP;
+      du_dlon = (ip_dlon.u - ip.u) / LON_LAT_STEP;
+      dv_dlat = (ip_dlat.v - ip.v) / LON_LAT_STEP;
+      dv_dlon = (ip_dlon.v - ip.v) / LON_LAT_STEP;
 
-     //
-     // Test for convergence:
-     //
-     delta_u = image_point.u - ip.u;
-     delta_v = image_point.v - ip.v;
+      //
+      // Test for convergence:
+      //
+      delta_u = image_point.u - ip.u;
+      delta_v = image_point.v - ip.v;
 
-     //
-     // Compute linearized estimate of ground point given ip delta:
-     //
-     inverse_norm = du_dlon*dv_dlat - dv_dlon*du_dlat; // fg-eh
+      //
+      // Compute linearized estimate of ground point given ip delta:
+      //
+      inverse_norm = du_dlon*dv_dlat - dv_dlon*du_dlat; // fg-eh
 
-     if (!ossim::almostEqual(inverse_norm, 0.0, DBL_EPSILON))
-     {
-       delta_lon = (delta_u*dv_dlat - delta_v*du_dlat)/inverse_norm;
-       delta_lat = (delta_v*du_dlon - delta_u*dv_dlon)/inverse_norm;
-       gpt.latd(gpt.latd() + delta_lat);
-       gpt.lond(gpt.lond() + delta_lon);
-       gpt.height(ossimElevManager::instance()->getHeightAboveEllipsoid(gpt));
-     }
-     else
-     {
-       delta_lon = 0;
-       delta_lat = 0;
-     }
-     done = ((fabs(delta_lon) < LON_LAT_THRESHOLD) && (fabs(delta_lat) < LON_LAT_THRESHOLD));
-     iters++;
+      if (!ossim::almostEqual(inverse_norm, 0.0, DBL_EPSILON))
+      {
+         delta_lon = (delta_u*dv_dlat - delta_v*du_dlat)/inverse_norm;
+         delta_lat = (delta_v*du_dlon - delta_u*dv_dlon)/inverse_norm;
+         gpt.latd(gpt.latd() + delta_lat);
+         gpt.lond(gpt.lond() + delta_lon);
+         gpt.height(ossimElevManager::instance()->getHeightAboveEllipsoid(gpt));
+      }
+      else
+      {
+         delta_lon = 0;
+         delta_lat = 0;
+      }
+      done = ((fabs(delta_lon) < LON_LAT_THRESHOLD) && (fabs(delta_lat) < LON_LAT_THRESHOLD));
+      iters++;
    } while ((!done) && (iters < MAX_NUM_ITERATIONS));
 
    if (traceDebug() || debug)
@@ -790,19 +790,19 @@ void ossimGeometricSarSensorModel::set_refPoint(RefPoint* refPoint)
 
 PlatformPosition* ossimGeometricSarSensorModel::get_platformPosition() const
 {
-	return _platformPosition;
+   return _platformPosition;
 }
 
 
 SensorParams* ossimGeometricSarSensorModel::get_sensorParams() const
 {
-	return _sensor;
+   return _sensor;
 }
 
 
 RefPoint* ossimGeometricSarSensorModel::get_refPoint() const
 {
-	return _refPoint;
+   return _refPoint;
 }
 
 

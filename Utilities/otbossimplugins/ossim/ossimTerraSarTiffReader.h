@@ -101,7 +101,7 @@ namespace ossimplugins
       ossimFilename theProductXmlFile;
 
       TYPE_DATA
-   };
+         };
 
 } // End: namespace ossimplugins
 

@@ -26,76 +26,76 @@
 
 namespace ossimplugins
 {
-class ossimPleiadesDimapSupportData;
+   class ossimPleiadesDimapSupportData;
 
-class OSSIM_PLUGINS_DLL ossimPleiadesModel : public ossimRpcModel
-{
-public:
-   /*!
-    * CONSTRUCTORS:
-    */
-    /** @brief default constructor */
-    ossimPleiadesModel();
-
-    /** @brief copy constructor */
-    ossimPleiadesModel(const ossimPleiadesModel& rhs);
-
-    /** @brief Destructor */
-   virtual ~ossimPleiadesModel();
-
-   bool open(const ossimFilename& file);
-
-   /*!
-    * Returns pointer to a new instance, copy of this.
-    * Not implemented yet!  Returns NULL...
-    */
-   virtual ossimObject* dup() const;
-
-   /*!
-    * Extends base-class implementation. Dumps contents of object to ostream.
-    */
-   virtual std::ostream& print(std::ostream& out) const;
-
-   /*!
-    * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
-    * KWL files. Returns true if successful.
-    */
-   virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix=NULL) const;
-
-   virtual bool loadState(const ossimKeywordlist& kwl,
-                          const char* prefix=NULL);
-
-   void setSupportData(ossimPleiadesDimapSupportData* supportData)
+   class OSSIM_PLUGINS_DLL ossimPleiadesModel : public ossimRpcModel
    {
-      theSupportData = supportData;
-   }
-   ossimPleiadesDimapSupportData* getSupportData()
-   {
-      return theSupportData.get();
-   }
-   const ossimPleiadesDimapSupportData* getSupportData()const
-   {
-      return theSupportData.get();
-   }
+   public:
+      /*!
+       * CONSTRUCTORS:
+       */
+      /** @brief default constructor */
+      ossimPleiadesModel();
 
-protected:
+      /** @brief copy constructor */
+      ossimPleiadesModel(const ossimPleiadesModel& rhs);
 
-   bool parseMetaData(const ossimFilename& file);
+      /** @brief Destructor */
+      virtual ~ossimPleiadesModel();
 
-   bool parseRpcData (const ossimFilename& file);
+      bool open(const ossimFilename& file);
 
-   // In the future
-   //bool parseJP2File (const ossimFilename& file);
+      /*!
+       * Returns pointer to a new instance, copy of this.
+       * Not implemented yet!  Returns NULL...
+       */
+      virtual ossimObject* dup() const;
 
-   void finishConstruction();
+      /*!
+       * Extends base-class implementation. Dumps contents of object to ostream.
+       */
+      virtual std::ostream& print(std::ostream& out) const;
 
-   ossimRefPtr<ossimPleiadesDimapSupportData> theSupportData;
+      /*!
+       * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
+       * KWL files. Returns true if successful.
+       */
+      virtual bool saveState(ossimKeywordlist& kwl,
+                             const char* prefix=NULL) const;
 
-   ossimFilename _productXmlFile;
+      virtual bool loadState(const ossimKeywordlist& kwl,
+                             const char* prefix=NULL);
+
+      void setSupportData(ossimPleiadesDimapSupportData* supportData)
+      {
+         theSupportData = supportData;
+      }
+      ossimPleiadesDimapSupportData* getSupportData()
+      {
+         return theSupportData.get();
+      }
+      const ossimPleiadesDimapSupportData* getSupportData()const
+      {
+         return theSupportData.get();
+      }
+
+   protected:
+
+      bool parseMetaData(const ossimFilename& file);
+
+      bool parseRpcData (const ossimFilename& file);
+
+      // In the future
+      //bool parseJP2File (const ossimFilename& file);
+
+      void finishConstruction();
+
+      ossimRefPtr<ossimPleiadesDimapSupportData> theSupportData;
+
+      ossimFilename _productXmlFile;
 
 
-TYPE_DATA
-};
+      TYPE_DATA
+         };
 }
 #endif /* #ifndef ossimPleiadesModel_HEADER */
