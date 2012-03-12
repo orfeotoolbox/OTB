@@ -327,7 +327,7 @@ private:
   SizeType                      m_ExplorationRadius;
 
   /** Block-matching functor */
-  BlockMatchingFunctorType      m_Functor;  
+  BlockMatchingFunctorType      m_Functor;
   
   /** Initial horizontal disparity (0 by default, used if an exploration radius is set) */
   int                           m_InitHorizontalDisparity;
