@@ -162,6 +162,52 @@ private:
     AddParameter(ParameterType_Int,"bm.maxvd","Maximum vertical disparity");
     SetParameterDescription("bm.maxvd","Maximum vertical disparity to explore (can be negative)");
     
+    AddParameter(ParameterType_Choice, "bm.initdisp", "Initial disparities");
+    AddChoice("bm.initdisp.none", "None");
+    SetParameterDescription("bm.initdisp.none", "No initial disparity used");
+    
+    AddChoice("bm.initdisp.uniform", "Uniform initial disparity");
+    SetParameterDescription("bm.initdisp.uniform", "Use an uniform initial disparity estimate");
+    
+    AddParameter(ParameterType_Int, "bm.initdisp.uniform.hdisp", "Horizontal initial disparity");
+    SetParameterDescription("bm.initdisp.uniform.hdisp", "Value of the uniform horizontal disparity initial estimate (in pixels)");
+    SetDefaultParameterInt("bm.initdisp.uniform.hdisp", 0);
+    
+    AddParameter(ParameterType_Int, "bm.initdisp.uniform.vdisp", "Vertical initial disparity");
+    SetParameterDescription("bm.initdisp.uniform.vdisp", "Value of the uniform vertical disparity initial estimate (in pixels)");
+    SetDefaultParameterInt("bm.initdisp.uniform.vdisp", 0);
+    
+    AddParameter(ParameterType_Int, "bm.initdisp.uniform.hrad", "Horizontal exploration radius");
+    SetParameterDescription("bm.initdisp.uniform.hrad", "Horizontal exploration radius around the initial disparity estimate (in pixels)");
+    SetDefaultParameterInt("bm.initdisp.uniform.hrad", 0);
+    DisableParameter("bm.initdisp.uniform.hrad");
+    
+    AddParameter(ParameterType_Int, "bm.initdisp.uniform.vrad", "Vertical exploration radius");
+    SetParameterDescription("bm.initdisp.uniform.vrad", "Vertical exploration radius around the initial disparity estimate (in pixels)");
+    SetDefaultParameterInt("bm.initdisp.uniform.vrad", 0);
+    DisableParameter("bm.initdisp.uniform.vrad");
+    
+    AddChoice("bm.initdisp.maps", "Initial disparity maps");
+    SetParameterDescription("bm.initdisp.maps", "Use initial disparity maps");
+    
+    AddParameter(ParameterType_InputImage, "bm.initdisp.maps.hmap", "Horizontal initial disparity map");
+    SetParameterDescription("bm.initdisp.maps.hmap", "Map of the initial horizontal disparities");
+    
+    AddParameter(ParameterType_InputImage, "bm.initdisp.maps.vmap", "Vertical initial disparity map");
+    SetParameterDescription("bm.initdisp.maps.vmap", "Map of the initial vertical disparities");
+    
+    AddParameter(ParameterType_Int, "bm.initdisp.maps.hrad", "Horizontal exploration radius");
+    SetParameterDescription("bm.initdisp.maps.hrad", "Horizontal exploration radius around the initial disparity estimate (in pixels)");
+    SetDefaultParameterInt("bm.initdisp.maps.hrad", 0);
+    DisableParameter("bm.initdisp.maps.hrad");
+    
+    AddParameter(ParameterType_Int, "bm.initdisp.maps.vrad", "Vertical exploration radius");
+    SetParameterDescription("bm.initdisp.maps.vrad", "Vertical exploration radius around the initial disparity estimate (in pixels)");
+    SetDefaultParameterInt("bm.initdisp.maps.vrad", 0);
+    DisableParameter("bm.initdisp.maps.vrad");
+    
+    //this->DebugOn();
+    
     AddRAMParameter();
  
     // Doc example parameter settings
@@ -183,6 +229,27 @@ private:
       {
       DisableParameter("io.outmask");
       }
+    // enforce positive radii
+    if (GetParameterInt("bm.radius") < 1)
+      {
+      SetParameterInt("bm.radius",1);
+      }
+    if(GetParameterInt("bm.initdisp.uniform.hrad") < 0)
+      {
+      SetParameterInt("bm.initdisp.uniform.hrad",0);
+      }
+    if(GetParameterInt("bm.initdisp.uniform.vrad") < 0)
+      {
+      SetParameterInt("bm.initdisp.uniform.vrad",0);
+      }
+    if(GetParameterInt("bm.initdisp.maps.hrad") < 0)
+      {
+      SetParameterInt("bm.initdisp.maps.hrad",0);
+      }
+    if(GetParameterInt("bm.initdisp.maps.vrad") < 0)
+      {
+      SetParameterInt("bm.initdisp.maps.vrad",0);
+      }
   }
 
   void DoExecute()
@@ -202,6 +269,8 @@ private:
     
     unsigned int inputId = 0;
     bool masking = false;
+    bool useInitialDispUniform = false;
+    bool useInitialDispMap = false;
 
     // Handle input mask if present
     if(IsParameterEnabled("mask.in"))
@@ -252,6 +321,23 @@ private:
       m_BandMathFilter->SetExpression(bandMathExpression.str());
       }
       
+    // Uniform initial disparity case
+    if (GetParameterInt("bm.initdisp") == 1)
+      {
+      if (GetParameterInt("bm.initdisp.uniform.hrad") > 0 && GetParameterInt("bm.initdisp.uniform.vrad") > 0)
+        {
+        useInitialDispUniform = true;
+        }
+      }
+    // Initial disparity map case
+    if (GetParameterInt("bm.initdisp") == 2)
+      {
+      if (GetParameterInt("bm.initdisp.map.hrad") > 0 && GetParameterInt("bm.initdisp.map.vrad") > 0)
+        {
+        useInitialDispMap = true;
+        }
+      }
+    
     FloatImageType * hdispImage;
     FloatImageType * vdispImage;
     FloatImageType * metricImage;
@@ -269,6 +355,24 @@ private:
       if(masking)
         {
         m_SSDBlockMatcher->SetMaskInput(m_BandMathFilter->GetOutput());
+        }
+      if(useInitialDispUniform)
+        {
+        FloatImageType::SizeType expRadius;
+        expRadius[0] = GetParameterInt("bm.initdisp.uniform.hrad");
+        expRadius[1] = GetParameterInt("bm.initdisp.uniform.vrad");
+        m_SSDBlockMatcher->SetExplorationRadius(expRadius);
+        m_SSDBlockMatcher->SetInitHorizontalDisparity(GetParameterInt("bm.initdisp.uniform.hdisp"));
+        m_SSDBlockMatcher->SetInitVerticalDisparity(GetParameterInt("bm.initdisp.uniform.vdisp"));
+        }
+      if(useInitialDispMap)
+        {
+        FloatImageType::SizeType expRadius;
+        expRadius[0] = GetParameterInt("bm.initdisp.maps.hrad");
+        expRadius[1] = GetParameterInt("bm.initdisp.maps.vrad");
+        m_SSDBlockMatcher->SetExplorationRadius(expRadius);
+        m_SSDBlockMatcher->SetHorizontalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.hmap"));
+        m_SSDBlockMatcher->SetVerticalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.vmap"));
         }
 
       hdispImage = m_SSDBlockMatcher->GetHorizontalDisparityOutput();
@@ -290,6 +394,24 @@ private:
       if(masking)
         {
         m_NCCBlockMatcher->SetMaskInput(m_BandMathFilter->GetOutput());
+        }
+      if(useInitialDispUniform)
+        {
+        FloatImageType::SizeType expRadius;
+        expRadius[0] = GetParameterInt("bm.initdisp.uniform.hrad");
+        expRadius[1] = GetParameterInt("bm.initdisp.uniform.vrad");
+        m_NCCBlockMatcher->SetExplorationRadius(expRadius);
+        m_NCCBlockMatcher->SetInitHorizontalDisparity(GetParameterInt("bm.initdisp.uniform.hdisp"));
+        m_NCCBlockMatcher->SetInitVerticalDisparity(GetParameterInt("bm.initdisp.uniform.vdisp"));
+        }
+      if(useInitialDispMap)
+        {
+        FloatImageType::SizeType expRadius;
+        expRadius[0] = GetParameterInt("bm.initdisp.map.hrad");
+        expRadius[1] = GetParameterInt("bm.initdisp.map.vrad");
+        m_NCCBlockMatcher->SetExplorationRadius(expRadius);
+        m_NCCBlockMatcher->SetHorizontalDisparityInput(GetParameterFloatImage("bm.initdisp.map.hmap"));
+        m_NCCBlockMatcher->SetVerticalDisparityInput(GetParameterFloatImage("bm.initdisp.map.vmap"));
         }
 
       hdispImage = m_NCCBlockMatcher->GetHorizontalDisparityOutput();
