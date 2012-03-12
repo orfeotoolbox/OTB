@@ -172,6 +172,8 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // First, spacing
   SpacingType outputSpacing;
   outputSpacing.Fill(m_Scale * m_GridStep);
+  outputSpacing[0]*=m_LeftImage->GetSpacing()[0];
+  outputSpacing[1]*=m_LeftImage->GetSpacing()[1];
   
   // Then, we retrieve the origin of the left input image
   double localElevation = m_AverageElevation;
@@ -459,8 +461,8 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // first image
     // TODO: Take into account height direction ?
     double alpha1 = otb::CONST_PI - vcl_atan(a1);
-    double deltax1 =  m_Scale * m_GridStep * vcl_cos(alpha1);
-    double deltay1 = -m_Scale * m_GridStep * vcl_sin(alpha1);
+    double deltax1 =  m_Scale * m_GridStep * m_LeftImage->GetSpacing()[0] * vcl_cos(alpha1);
+    double deltay1 = -m_Scale * m_GridStep * m_LeftImage->GetSpacing()[1] * vcl_sin(alpha1);
 
     // Before moving currentPoint1, we will store its image by the
     // left to right transform at the m_AverageElevation, to compute
@@ -500,8 +502,8 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
       {
       // We want to move 1 pixel away in the direction orthogonal to
       // epipolar line
-      double nextdeltax1 = m_Scale * m_GridStep * vcl_sin(alpha1);
-      double nextdeltay1 = m_Scale * m_GridStep * vcl_cos(alpha1);
+      double nextdeltax1 = m_Scale * m_LeftImage->GetSpacing()[0] * m_GridStep * vcl_sin(alpha1);
+      double nextdeltay1 = m_Scale * m_LeftImage->GetSpacing()[1] *m_GridStep * vcl_cos(alpha1);
 
       // We can then update nextLineStart1
       nextLineStart1[0] = currentPoint1[0] - deltax1 + nextdeltax1;
