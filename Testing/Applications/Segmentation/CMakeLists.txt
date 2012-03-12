@@ -51,6 +51,8 @@ OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest
                      APP      HooverCompareSegmentation
                      OPTIONS  -ingt ${INPUTDATA}/maur_GT.tif
                               -inms ${INPUTDATA}/maur_labelled.tif
+                              -outgt ${TEMP}/apTvSeHooverCompareSegmentationTestOutgt.tif
+                              -outms ${TEMP}/apTvSeHooverCompareSegmentationTestOutms.tif
                      TESTENVOPTIONS ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
                      VALID    --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvSeHooverCompareSegmentationTest.txt

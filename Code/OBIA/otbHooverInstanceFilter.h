@@ -19,10 +19,10 @@
 #ifndef __otbHooverInstanceFilter_h
 #define __otbHooverInstanceFilter_h
 
+#include <set>
 #include "itkInPlaceLabelMapFilter.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
-#include <set>
 
 namespace otb
 {
@@ -58,7 +58,7 @@ namespace otb
  *
  * These attributes are handled in a different way than the Hoover scores. The simple presence of an extended attribute in a given region has a
  * meaning, regardless of its value. It is assumed that its value always corresponds to an existing region label. This is why these extended
- * attributes are not reseted but removed before computing Hoover instances.
+ * attributes are not reset but removed before computing Hoover instances.
  * (see Hoover et al., "An experimental comparison of range image segmentation algorithms", IEEE PAMI vol. 18, no. 7, July 1996)
  *
  * \sa HooverMatrixFilter
@@ -86,6 +86,7 @@ public:
   typedef typename LabelMapType::LabelObjectContainerType   LabelObjectContainerType;
   typedef typename LabelObjectContainerType::const_iterator LabelObjectContainerTypeConstIterator;
   typedef typename LabelMapType::LabelObjectType        LabelObjectType;
+  typedef typename LabelObjectType::AttributeType       AttributeType;
   typedef typename LabelObjectType::AttributesValueType AttributesValueType;
   typedef typename LabelMapType::LabelVectorType        LabelVectorType;
   typedef typename LabelMapType::RegionType             ImageRegionType;
@@ -126,35 +127,79 @@ public:
   itkGetMacro(MeanRM, AttributesValueType);
   itkGetMacro(MeanRN, AttributesValueType);
 
-  /** Attribute name for correct detection */
-  static const std::string ATTRIBUTE_CD;
-  
-  /** Attribute name for over segmentation */
-  static const std::string ATTRIBUTE_OS;
-  
-  /** Attribute name for under segmentation */
-  static const std::string ATTRIBUTE_US;
-  
-  /** Attribute name for missing region */
-  static const std::string ATTRIBUTE_M;
-  
-  /** Attribute name for noise region */
-  static const std::string ATTRIBUTE_N;
-  
-  /** Attribute name for correct detection score */
-  static const std::string ATTRIBUTE_RC;
-  
-  /** Attribute name for fragmentation score (over segmentation) */
-  static const std::string ATTRIBUTE_RF;
-  
-  /** Attribute name for aggregation score (under segmentation) */
-  static const std::string ATTRIBUTE_RA;
-  
-  /** Attribute name for missed score */
-  static const std::string ATTRIBUTE_RM;
-  
-  /** Attribute name for noise score */
-  static const std::string ATTRIBUTE_RN;
+  itkStaticConstMacro(ATTRIBUTE_CD, AttributeType, 100);
+  itkStaticConstMacro(ATTRIBUTE_OS, AttributeType, 101);
+  itkStaticConstMacro(ATTRIBUTE_US, AttributeType, 102);
+  itkStaticConstMacro(ATTRIBUTE_M,  AttributeType, 103);
+  itkStaticConstMacro(ATTRIBUTE_N,  AttributeType, 104);
+  itkStaticConstMacro(ATTRIBUTE_RC, AttributeType, 105);
+  itkStaticConstMacro(ATTRIBUTE_RF, AttributeType, 106);
+  itkStaticConstMacro(ATTRIBUTE_RA, AttributeType, 107);
+  itkStaticConstMacro(ATTRIBUTE_RM, AttributeType, 108);
+  itkStaticConstMacro(ATTRIBUTE_RN, AttributeType, 109);
+
+  static std::string GetNameFromAttribute( const AttributeType & a )
+    {
+    std::string name;
+    switch( a )
+      {
+      case ATTRIBUTE_CD: name = "HooverInstance_Ext_CD"; break;
+      case ATTRIBUTE_OS: name = "HooverInstance_Ext_OS"; break;
+      case ATTRIBUTE_US: name = "HooverInstance_Ext_US"; break;
+      case ATTRIBUTE_M:  name = "HooverInstance_Ext_M";  break;
+      case ATTRIBUTE_N:  name = "HooverInstance_Ext_N";  break;
+      case ATTRIBUTE_RC: name = "HooverInstance_RC";     break;
+      case ATTRIBUTE_RF: name = "HooverInstance_RF";     break;
+      case ATTRIBUTE_RA: name = "HooverInstance_RA";     break;
+      case ATTRIBUTE_RM: name = "HooverInstance_RM";     break;
+      case ATTRIBUTE_RN: name = "HooverInstance_RN";     break;
+      }
+    return name;
+    }
+
+  static AttributeType GetAttributeFromName( const std::string & name )
+    {
+    if ( name == "HooverInstance_Ext_CD" )
+      {
+      return ATTRIBUTE_CD;
+      }
+    else if ( name == "HooverInstance_Ext_OS" )
+      {
+      return ATTRIBUTE_OS;
+      }
+    else if ( name == "HooverInstance_Ext_US" )
+      {
+      return ATTRIBUTE_US;
+      }
+    else if ( name == "HooverInstance_Ext_M" )
+      {
+      return ATTRIBUTE_M;
+      }
+    else if ( name == "HooverInstance_Ext_N" )
+      {
+      return ATTRIBUTE_N;
+      }
+    else if ( name == "HooverInstance_RC" )
+      {
+      return ATTRIBUTE_RC;
+      }
+    else if ( name == "HooverInstance_RF" )
+      {
+      return ATTRIBUTE_RF;
+      }
+    else if ( name == "HooverInstance_RA" )
+      {
+      return ATTRIBUTE_RA;
+      }
+    else if ( name == "HooverInstance_RM" )
+      {
+      return ATTRIBUTE_RM;
+      }
+    else if ( name == "HooverInstance_RN" )
+      {
+      return ATTRIBUTE_RN;
+      }
+    }
 
 protected:
   HooverInstanceFilter();

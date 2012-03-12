@@ -23,36 +23,6 @@
 
 namespace otb
 {
-/** Hoover Attribute names */
-template <class TLabelMap>
-const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_CD="HooverInstance_Ext_CD";
-
-template <class TLabelMap>
-const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_OS="HooverInstance_Ext_OS";
-
-template <class TLabelMap>
-const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_US="HooverInstance_Ext_US";
-
-template <class TLabelMap>
-const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_M="HooverInstance_Ext_M";
-
-template <class TLabelMap>
-const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_N="HooverInstance_Ext_N";
-
-template <class TLabelMap>
-const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_RC="HooverInstance_RC";
-
-template <class TLabelMap>
-const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_RF="HooverInstance_RF";
-
-template <class TLabelMap>
-const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_RA="HooverInstance_RA";
-
-template <class TLabelMap>
-const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_RM="HooverInstance_RM";
-
-template <class TLabelMap>
-const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_RN="HooverInstance_RN";
 
 /** Constructor */
 template <class TLabelMap>
@@ -232,10 +202,10 @@ void HooverInstanceFilter<TLabelMap>
       otbWarningMacro("Region "<<i<<" in machine segmentation label map is empty");
       }
     // reset any Hoover attribute already present
-    regionMS->SetAttribute(ATTRIBUTE_RC.c_str(), 0.0);
-    regionMS->SetAttribute(ATTRIBUTE_RF.c_str(), 0.0);
-    regionMS->SetAttribute(ATTRIBUTE_RA.c_str(), 0.0);
-    regionMS->SetAttribute(ATTRIBUTE_RN.c_str(), 0.0);
+    regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RC), 0.0);
+    regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RF), 0.0);
+    regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RA), 0.0);
+    regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RN), 0.0);
     
     if (m_UseExtendedAttributes)
       {
@@ -284,10 +254,10 @@ void HooverInstanceFilter<TLabelMap>
     }
   
   // reset any Hoover attribute already present
-  labelObject->SetAttribute(ATTRIBUTE_RC.c_str(), 0.0);
-  labelObject->SetAttribute(ATTRIBUTE_RF.c_str(), 0.0);
-  labelObject->SetAttribute(ATTRIBUTE_RA.c_str(), 0.0);
-  labelObject->SetAttribute(ATTRIBUTE_RM.c_str(), 0.0);
+  labelObject->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RC), 0.0);
+  labelObject->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RF), 0.0);
+  labelObject->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RA), 0.0);
+  labelObject->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RM), 0.0);
   
   if (m_UseExtendedAttributes)
     {
@@ -381,13 +351,13 @@ void HooverInstanceFilter<TLabelMap>
           double scoreRC = m_Threshold * (std::min(coefT / tGT, coefT / tMS));
           bufferRC += scoreRC * static_cast<double>(m_CardRegGT[row]);
           
-          regionGT->SetAttribute(ATTRIBUTE_RC.c_str(), static_cast<AttributesValueType>(scoreRC));
-          regionMS->SetAttribute(ATTRIBUTE_RC.c_str(), static_cast<AttributesValueType>(scoreRC));
+          regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RC), static_cast<AttributesValueType>(scoreRC));
+          regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RC), static_cast<AttributesValueType>(scoreRC));
           
           if (m_UseExtendedAttributes)
             {
-            regionGT->SetAttribute(ATTRIBUTE_CD.c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
-            regionMS->SetAttribute(ATTRIBUTE_CD.c_str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
+            regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_CD), static_cast<AttributesValueType>(regionMS->GetLabel()));
+            regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_CD), static_cast<AttributesValueType>(regionGT->GetLabel()));
             }
           
           GTindices.insert(row);
@@ -422,7 +392,7 @@ void HooverInstanceFilter<TLabelMap>
         double scoreRF = 1.0 - sumScoreRF / (cardRegGT * (cardRegGT - 1.0));
         bufferRF += scoreRF * cardRegGT;
         
-        regionGT->SetAttribute(ATTRIBUTE_RF.c_str(), static_cast<AttributesValueType>(scoreRF));
+        regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RF), static_cast<AttributesValueType>(scoreRF));
         
         unsigned int indexOS=1;
         for(typename ObjectVectorType::iterator it=objectsOfMS.begin(); it!=objectsOfMS.end(); ++it)
@@ -431,12 +401,12 @@ void HooverInstanceFilter<TLabelMap>
           std::ostringstream attribute;
           attribute << ATTRIBUTE_OS << "_" << indexOS;
           
-          regionMS->SetAttribute(ATTRIBUTE_RF.c_str(), static_cast<AttributesValueType>(scoreRF));
+          regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RF), static_cast<AttributesValueType>(scoreRF));
           
           if (m_UseExtendedAttributes)
             {
             regionGT->SetAttribute(attribute.str().c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
-            regionMS->SetAttribute(ATTRIBUTE_OS.c_str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
+            regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_OS), static_cast<AttributesValueType>(regionGT->GetLabel()));
             }
           
           indexOS++;
@@ -518,7 +488,7 @@ void HooverInstanceFilter<TLabelMap>
         double scoreRA = 1.0 - sumScoreUS / (sumCardUS * (sumCardUS - 1.0));
         bufferRA += scoreRA * sumCardUS;
         
-        regionMS->SetAttribute(ATTRIBUTE_RA.c_str(), static_cast<AttributesValueType>(scoreRA));
+        regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RA), static_cast<AttributesValueType>(scoreRA));
         
         unsigned int indexUS=1;
         for(typename ObjectVectorType::iterator it=objectsOfGT.begin(); it!=objectsOfGT.end(); ++it)
@@ -527,12 +497,12 @@ void HooverInstanceFilter<TLabelMap>
           std::ostringstream attribute;
           attribute << ATTRIBUTE_US << "_" << indexUS;
           
-          regionGT->SetAttribute(ATTRIBUTE_RA.c_str(), static_cast<AttributesValueType>(scoreRA));
+          regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RA), static_cast<AttributesValueType>(scoreRA));
           
           if (m_UseExtendedAttributes)
             {
-            regionMS->SetAttribute(attribute.str().c_str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
-            regionGT->SetAttribute(ATTRIBUTE_US.c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
+            regionMS->SetAttribute(attribute.str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
+            regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_US), static_cast<AttributesValueType>(regionMS->GetLabel()));
             }
             
           indexUS++;
@@ -573,11 +543,12 @@ void HooverInstanceFilter<TLabelMap>
       
       bufferRM += static_cast<double>(m_CardRegGT[i]);
       
-      regionGT->SetAttribute(ATTRIBUTE_RM.c_str(), 1.0);
+      regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RM), 1.0);
       
       if (m_UseExtendedAttributes)
         {
-        regionGT->SetAttribute(ATTRIBUTE_M.c_str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
+        regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_M),
+                               static_cast<AttributesValueType>(regionGT->GetLabel()));
         }
       
       }
@@ -593,11 +564,12 @@ void HooverInstanceFilter<TLabelMap>
       
       bufferRN += static_cast<double>(m_CardRegMS[i]);
       
-      regionMS->SetAttribute(ATTRIBUTE_RN.c_str(), 1.0);
+      regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RN), 1.0);
       
       if (m_UseExtendedAttributes)
         {
-        regionMS->SetAttribute(ATTRIBUTE_N.c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
+        regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_N),
+                               static_cast<AttributesValueType>(regionMS->GetLabel()));
         }
       
       }

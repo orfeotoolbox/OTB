@@ -204,6 +204,15 @@ public:
   }
 
   /**
+   * Set an attribute value.
+   * If the key name already exists in the map, the value is overwritten.
+   */
+  void SetAttribute(const std::string& name, AttributesValueType value)
+  {
+    this->SetAttribute(name.c_str(), value);
+  }
+
+  /**
    * Returns the attribute corresponding to name
    */
   AttributesValueType GetAttribute(const char * name) const

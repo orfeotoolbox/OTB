@@ -230,17 +230,17 @@ private:
     
     m_AttributeImageGT = AttributeImageFilterType::New();
     m_AttributeImageGT->SetInput(m_InstanceFilter->GetOutputGroundTruthLabelMap());
-    m_AttributeImageGT->SetAttributeForNthChannel(0, m_InstanceFilter->ATTRIBUTE_RC.c_str());
-    m_AttributeImageGT->SetAttributeForNthChannel(1, m_InstanceFilter->ATTRIBUTE_RF.c_str());
-    m_AttributeImageGT->SetAttributeForNthChannel(2, m_InstanceFilter->ATTRIBUTE_RA.c_str());
-    m_AttributeImageGT->SetAttributeForNthChannel(3, m_InstanceFilter->ATTRIBUTE_RM.c_str());
+    m_AttributeImageGT->SetAttributeForNthChannel(0, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RC));
+    m_AttributeImageGT->SetAttributeForNthChannel(1, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RF));
+    m_AttributeImageGT->SetAttributeForNthChannel(2, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RA));
+    m_AttributeImageGT->SetAttributeForNthChannel(3, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RM));
     
     m_AttributeImageMS = AttributeImageFilterType::New();
     m_AttributeImageMS->SetInput(m_InstanceFilter->GetOutputMachineSegmentationLabelMap());
-    m_AttributeImageMS->SetAttributeForNthChannel(0, m_InstanceFilter->ATTRIBUTE_RC.c_str());
-    m_AttributeImageMS->SetAttributeForNthChannel(1, m_InstanceFilter->ATTRIBUTE_RF.c_str());
-    m_AttributeImageMS->SetAttributeForNthChannel(2, m_InstanceFilter->ATTRIBUTE_RA.c_str());
-    //m_AttributeImageMS->SetAttributeForNthChannel(3, m_InstanceFilter->ATTRIBUTE_RN.c_str());
+    m_AttributeImageMS->SetAttributeForNthChannel(0, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RC));
+    m_AttributeImageMS->SetAttributeForNthChannel(1, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RF));
+    m_AttributeImageMS->SetAttributeForNthChannel(2, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RA));
+    //m_AttributeImageMS->SetAttributeForNthChannel(3, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RN);
     
     m_GTColorFilter = HooverColorFilterType::New();
     m_GTColorFilter->SetInput(m_AttributeImageGT->GetOutput());
@@ -296,7 +296,6 @@ private:
     SetParameterFloat("rf", m_InstanceFilter->GetMeanRF());
     SetParameterFloat("ra", m_InstanceFilter->GetMeanRA());
     SetParameterFloat("rm", m_InstanceFilter->GetMeanRM());
-    
   }
   
   ImageToLabelMapFilterType::Pointer m_GTFilter;

@@ -84,10 +84,10 @@ int otbHooverInstanceFilterToAttributeImage(int argc, char* argv[])
   
   AttributeImageFilterType::Pointer attributeImageGT = AttributeImageFilterType::New();
   attributeImageGT->SetInput(instances->GetOutputGroundTruthLabelMap());
-  attributeImageGT->SetAttributeForNthChannel(0, instances->ATTRIBUTE_RC.c_str());
-  attributeImageGT->SetAttributeForNthChannel(1, instances->ATTRIBUTE_RF.c_str());
-  attributeImageGT->SetAttributeForNthChannel(2, instances->ATTRIBUTE_RA.c_str());
-  attributeImageGT->SetAttributeForNthChannel(3, instances->ATTRIBUTE_RM.c_str());
+  attributeImageGT->SetAttributeForNthChannel(0, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RC));
+  attributeImageGT->SetAttributeForNthChannel(1, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RF));
+  attributeImageGT->SetAttributeForNthChannel(2, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RA));
+  attributeImageGT->SetAttributeForNthChannel(3, InstanceFilterType::GetNameFromAttribute(InstanceFilterType::ATTRIBUTE_RM));
   
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(attributeImageGT->GetOutput());

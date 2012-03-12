@@ -92,6 +92,12 @@ public:
   /** Fill the given channel with value from the given attribute */
   bool SetAttributeForNthChannel(unsigned int channel, const char *attribute);
 
+  /** Fill the given channel with value from the given attribute */
+  bool SetAttributeForNthChannel(unsigned int channel, const std::string& attribute)
+  {
+    return this->SetAttributeForNthChannel(channel, attribute.c_str());
+  }
+
 protected:
   LabelMapToAttributeImageFilter();
   ~LabelMapToAttributeImageFilter() {};
