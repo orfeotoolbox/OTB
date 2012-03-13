@@ -18,8 +18,6 @@ IF(OTB_USE_EXTERNAL_OSSIM)
            "Cannot find OSSIM include directory. Please set OSSIM_INCLUDE_DIR.")
   ENDIF (NOT OSSIM_INCLUDE_DIR)
 
-  INCLUDE_DIRECTORIES(${OSSIM_INCLUDE_DIR} ${OSSIM_INCLUDE_DIR}/ossim)
-
   IF (NOT OSSIM_LIBRARY)
     MESSAGE(FATAL_ERROR
              "Cannot find OSSIM library. Please set OSSIM_LIBRARY.")
