@@ -201,12 +201,16 @@ public:
   void SetRightInput( const TInputImage * image);
 
   /** Set mask input (optional) */
-  void SetMaskInput(const TMaskImage * image);
+  void SetLeftMaskInput(const TMaskImage * image);
+  
+  /** Set right mask input (optional) */
+  void SetRightMaskInput(const TMaskImage * image);
 
   /** Get the inputs */
   const TInputImage * GetLeftInput() const;
   const TInputImage * GetRightInput() const;
-  const TMaskImage  * GetMaskInput() const;
+  const TMaskImage  * GetLeftMaskInput() const;
+  const TMaskImage  * GetRightMaskInput() const;
 
   /** Get the metric output */
   const TOutputMetricImage * GetMetricOutput() const;

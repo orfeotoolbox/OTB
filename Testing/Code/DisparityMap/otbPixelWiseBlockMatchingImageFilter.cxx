@@ -60,7 +60,7 @@ int otbPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
   if(argc > 8)
     {
     maskReader->SetFileName(argv[8]);
-    bmFilter->SetMaskInput(maskReader->GetOutput());
+    bmFilter->SetLeftMaskInput(maskReader->GetOutput());
     }
 
   FloatWriterType::Pointer dispWriter = FloatWriterType::New();
@@ -104,7 +104,7 @@ int otbPixelWiseBlockMatchingImageFilterNCC(int argc, char * argv[])
   if(argc > 8)
     {
     maskReader->SetFileName(argv[8]);
-    bmFilter->SetMaskInput(maskReader->GetOutput());
+    bmFilter->SetLeftMaskInput(maskReader->GetOutput());
     }
 
   FloatWriterType::Pointer dispWriter = FloatWriterType::New();

@@ -108,10 +108,15 @@ private:
     AddParameter(ParameterType_OutputImage, "io.out", "The output disparity map");
     SetParameterDescription("io.out","An image containing the estimated disparities as well as the metric values if the option is used");
 
-    AddParameter(ParameterType_OutputImage, "io.outmask", "The output mask corresponding to all criterions");
-    SetParameterDescription("io.outmask","A mask image corresponding to all citerions (see masking parameters). Only required if variance threshold or nodata criterions are set.");
-    DisableParameter("io.outmask");
-    MandatoryOff("io.outmask");
+    AddParameter(ParameterType_OutputImage, "io.outmaskleft", "The left output mask corresponding to all criterions");
+    SetParameterDescription("io.outmaskleft","A left mask image corresponding to all citerions (see masking parameters). Only required if variance threshold or nodata criterions are set.");
+    DisableParameter("io.outmaskleft");
+    MandatoryOff("io.outmaskleft");
+    
+    AddParameter(ParameterType_OutputImage, "io.outmaskright", "The right output mask corresponding to all criterions");
+    SetParameterDescription("io.outmaskright","A right mask image corresponding to all citerions (see masking parameters). Only required if variance threshold or nodata criterions are set.");
+    DisableParameter("io.outmaskright");
+    MandatoryOff("io.outmaskright");
 
     AddParameter(ParameterType_Empty,"io.outmetric","Output optimal metric values as well");
     SetParameterDescription("io.outmetric","If used, the output image will have a second component with metric optimal values");
@@ -119,12 +124,16 @@ private:
     AddParameter(ParameterType_Group,"mask","Image masking parameters");
     SetParameterDescription("mask","This group of parameters allows to determine the masking parameters to prevent disparities estimation for some pixels of the left image");
     
-    AddParameter(ParameterType_InputImage,"mask.in","Discard pixels from mask image");
-    SetParameterDescription("mask.in","This parameter allows to provide a custom mask");
-    MandatoryOff("mask.in");
+    AddParameter(ParameterType_InputImage,"mask.inleft","Discard left pixels from mask image");
+    SetParameterDescription("mask.inleft","This parameter allows to provide a custom mask for the left image");
+    MandatoryOff("mask.inleft");
+    
+    AddParameter(ParameterType_InputImage,"mask.inright","Discard right pixels from mask image");
+    SetParameterDescription("mask.inright","This parameter allows to provide a custom mask for the right image");
+    MandatoryOff("mask.inright");
 
     AddParameter(ParameterType_Float,"mask.nodata","Discard pixels with no-data value");
-    SetParameterDescription("mask.in","This parameter allows to discard pixels whose value is equal to the user-defined no-data value.");
+    SetParameterDescription("mask.nodata","This parameter allows to discard pixels whose value is equal to the user-defined no-data value.");
     MandatoryOff("mask.nodata");
     SetDefaultParameterFloat("mask.nodata",0.);
     DisableParameter("mask.nodata");
@@ -223,11 +232,13 @@ private:
   {
     if(IsParameterEnabled("mask.variancet") || IsParameterEnabled("mask.nodata"))
       {
-      EnableParameter("io.outmask");
+      EnableParameter("io.outmaskleft");
+      EnableParameter("io.outmaskright");
       }
     else
       {
-      DisableParameter("io.outmask");
+      DisableParameter("io.outmaskleft");
+      DisableParameter("io.outmaskright");
       }
     // enforce positive radii
     if (GetParameterInt("bm.radius") < 1)
@@ -273,9 +284,9 @@ private:
     bool useInitialDispMap = false;
 
     // Handle input mask if present
-    if(IsParameterEnabled("mask.in"))
+    if(IsParameterEnabled("mask.inleft"))
       {
-      leftmask = GetParameterFloatImage("mask.in");
+      leftmask = GetParameterFloatImage("mask.inleft");
       m_BandMathFilter->SetNthInput(inputId,leftmask,"inmask");
       masking = true;
       ++inputId;
@@ -332,7 +343,7 @@ private:
     // Initial disparity map case
     if (GetParameterInt("bm.initdisp") == 2)
       {
-      if (GetParameterInt("bm.initdisp.map.hrad") > 0 && GetParameterInt("bm.initdisp.map.vrad") > 0)
+      if (GetParameterInt("bm.initdisp.maps.hrad") > 0 && GetParameterInt("bm.initdisp.maps.vrad") > 0)
         {
         useInitialDispMap = true;
         }
@@ -352,9 +363,10 @@ private:
       m_SSDBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
       m_SSDBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_SSDBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
+      AddProcess(m_SSDBlockMatcher,"SSD block matching");
       if(masking)
         {
-        m_SSDBlockMatcher->SetMaskInput(m_BandMathFilter->GetOutput());
+        m_SSDBlockMatcher->SetLeftMaskInput(m_BandMathFilter->GetOutput());
         }
       if(useInitialDispUniform)
         {
@@ -390,10 +402,11 @@ private:
       m_NCCBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_NCCBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
       m_NCCBlockMatcher->MinimizeOff();
+      AddProcess(m_NCCBlockMatcher,"NCC block matching");
 
       if(masking)
         {
-        m_NCCBlockMatcher->SetMaskInput(m_BandMathFilter->GetOutput());
+        m_NCCBlockMatcher->SetLeftMaskInput(m_BandMathFilter->GetOutput());
         }
       if(useInitialDispUniform)
         {
@@ -407,11 +420,11 @@ private:
       if(useInitialDispMap)
         {
         FloatImageType::SizeType expRadius;
-        expRadius[0] = GetParameterInt("bm.initdisp.map.hrad");
-        expRadius[1] = GetParameterInt("bm.initdisp.map.vrad");
+        expRadius[0] = GetParameterInt("bm.initdisp.maps.hrad");
+        expRadius[1] = GetParameterInt("bm.initdisp.maps.vrad");
         m_NCCBlockMatcher->SetExplorationRadius(expRadius);
-        m_NCCBlockMatcher->SetHorizontalDisparityInput(GetParameterFloatImage("bm.initdisp.map.hmap"));
-        m_NCCBlockMatcher->SetVerticalDisparityInput(GetParameterFloatImage("bm.initdisp.map.vmap"));
+        m_NCCBlockMatcher->SetHorizontalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.hmap"));
+        m_NCCBlockMatcher->SetVerticalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.vmap"));
         }
 
       hdispImage = m_NCCBlockMatcher->GetHorizontalDisparityOutput();
@@ -434,9 +447,9 @@ private:
     
     SetParameterOutputImage("io.out",m_ImageListFilter->GetOutput());
 
-    if(IsParameterEnabled("io.outmask"))
+    if(IsParameterEnabled("io.outmaskleft"))
       {
-      SetParameterOutputImage("io.outmask",m_BandMathFilter->GetOutput());
+      SetParameterOutputImage("io.outmaskleft",m_BandMathFilter->GetOutput());
       }
   }
 
