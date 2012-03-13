@@ -15,14 +15,14 @@
 #include <iostream>
 #include <fstream>
 
-#include "base/ossimFilename.h"
-#include "base/ossimString.h"
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "imaging/ossimImageHandler.h"
+#include "ossim/base/ossimFilename.h"
+#include "ossim/base/ossimString.h"
+#include "ossim/imaging/ossimImageHandlerRegistry.h"
+#include "ossim/imaging/ossimImageHandler.h"
 
 // this is the most important class and is called as the first line of all applications.
 // without this alll the important factories are not created.
-#include "init/ossimInit.h"
+#include "ossim/init/ossimInit.h"
 
 
 int ossimKeywordlistTest(int argc, char* argv[])

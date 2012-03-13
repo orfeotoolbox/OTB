@@ -25,14 +25,14 @@
 
 #include "ossim/base/ossimCommon.h"
 #include "ossim/init/ossimInit.h"
-#include "otb/HermiteInterpolator.h"
-#include "otb/PlatformPosition.h"
-#include "otb/Ephemeris.h"
-#include "otb/JSDDateTime.h"
+#include "ossim/otb/HermiteInterpolator.h"
+#include "ossim/otb/PlatformPosition.h"
+#include "ossim/otb/Ephemeris.h"
+#include "ossim/otb/JSDDateTime.h"
 
 #include "itkTimeProbe.h"
-#include "projection/ossimProjection.h"
-#include "projection/ossimProjectionFactoryRegistry.h"
+#include "ossim/projection/ossimProjection.h"
+#include "ossim/projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 #include "ossim/base/ossimKeywordlist.h"
 

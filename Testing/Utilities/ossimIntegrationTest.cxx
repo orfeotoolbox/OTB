@@ -15,33 +15,33 @@
 #include <iostream>
 #include <iterator>
 
-#include "base/ossimFilename.h"
-#include "base/ossimString.h"
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "imaging/ossimImageHandler.h"
-#include "imaging/ossimImageFileWriter.h"
-#include "imaging/ossimImageWriterFactoryRegistry.h"
+#include "ossim/base/ossimFilename.h"
+#include "ossim/base/ossimString.h"
+#include "ossim/imaging/ossimImageHandlerRegistry.h"
+#include "ossim/imaging/ossimImageHandler.h"
+#include "ossim/imaging/ossimImageFileWriter.h"
+#include "ossim/imaging/ossimImageWriterFactoryRegistry.h"
 
 // this is an ossim ground point and has a lat, lon, and datum
 // associated with it.
-#include "base/ossimGpt.h"
+#include "ossim/base/ossimGpt.h"
 
 // Base class for accessing projection parameters.
-#include "projection/ossimProjection.h"
+#include "ossim/projection/ossimProjection.h"
 
 // the projection used in the reprojection
-#include "projection/ossimUtmProjection.h"
+#include "ossim/projection/ossimUtmProjection.h"
 
 // used to instantiate a projector
-#include "projection/ossimProjectionFactoryRegistry.h"
+#include "ossim/projection/ossimProjectionFactoryRegistry.h"
 
 
 // The heart of the OSSIM resampling process for reprojecting imagery
-#include "imaging/ossimImageRenderer.h"
+#include "ossim/imaging/ossimImageRenderer.h"
 
 // this is the most important class and is called as the first line of all applications.
 // without this alll the important factories are not created.
-#include "init/ossimInit.h"
+#include "ossim/init/ossimInit.h"
 
 #include "itkMacro.h"
 

@@ -4,8 +4,8 @@
 #include <fstream>
 #include <cstdlib>
 
-#include "base/ossimString.h"
-#include "ossimTileMapModel.h"
+#include "ossim/base/ossimString.h"
+#include "ossim/ossimTileMapModel.h"
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDpt.h>
 
