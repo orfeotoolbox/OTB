@@ -18,12 +18,12 @@
 #include "otbDEMHandler.h"
 #include "otbMacro.h"
 
-#include "elevation/ossimElevManager.h"
-#include "base/ossimGeoidManager.h"
-#include "base/ossimFilename.h"
-#include "base/ossimDirectory.h"
-#include "base/ossimGeoidEgm96.h"
-#include "base/ossimRefPtr.h"
+#include "ossim/elevation/ossimElevManager.h"
+#include "ossim/base/ossimGeoidManager.h"
+#include "ossim/base/ossimFilename.h"
+#include "ossim/base/ossimDirectory.h"
+#include "ossim/base/ossimGeoidEgm96.h"
+#include "ossim/base/ossimRefPtr.h"
 
 namespace otb
 {

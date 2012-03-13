@@ -23,25 +23,25 @@
 #include "otbMacro.h"
 #include "otbUtils.h"
 
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimMapProjectionFactory.h"
-#include "base/ossimGpt.h"
-#include "base/ossimDpt.h"
-#include "projection/ossimProjection.h"
-#include "base/ossimEllipsoid.h"
-#include "base/ossimEllipsoidFactory.h"
-#include "base/ossimString.h"
+#include "ossim/projection/ossimMapProjection.h"
+#include "ossim/projection/ossimMapProjectionFactory.h"
+#include "ossim/base/ossimGpt.h"
+#include "ossim/base/ossimDpt.h"
+#include "ossim/projection/ossimProjection.h"
+#include "ossim/base/ossimEllipsoid.h"
+#include "ossim/base/ossimEllipsoidFactory.h"
+#include "ossim/base/ossimString.h"
 #include "gdal/ossimOgcWktTranslator.h"
 
-#include "projection/ossimUtmProjection.h"
-#include "projection/ossimLambertConformalConicProjection.h"
-#include "projection/ossimTransMercatorProjection.h"
-#include "projection/ossimEckert4Projection.h"
-#include "projection/ossimMollweidProjection.h"
-#include "projection/ossimSinusoidalProjection.h"
+#include "ossim/projection/ossimUtmProjection.h"
+#include "ossim/projection/ossimLambertConformalConicProjection.h"
+#include "ossim/projection/ossimTransMercatorProjection.h"
+#include "ossim/projection/ossimEckert4Projection.h"
+#include "ossim/projection/ossimMollweidProjection.h"
+#include "ossim/projection/ossimSinusoidalProjection.h"
 
-#include <ossim/support_data/ossimSpaceImagingGeom.h>
-#include <ossim/base/ossimKeywordNames.h>
+#include "ossim/support_data/ossimSpaceImagingGeom.h"
+#include "ossim/base/ossimKeywordNames.h"
 
 
 namespace otb

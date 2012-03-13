@@ -23,7 +23,7 @@
 #include "otbMath.h"
 #include "otbAeronetData.h"
 
-#include "base/ossimDate.h"
+#include "ossim/base/ossimDate.h"
 
 namespace otb
 {

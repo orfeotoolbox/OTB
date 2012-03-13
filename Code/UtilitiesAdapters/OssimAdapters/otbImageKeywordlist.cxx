@@ -21,12 +21,12 @@
 
 #include "otbMacro.h"
 
-#include "base/ossimKeywordlist.h"
-#include "base/ossimString.h"
-#include "ossim/ossimPluginProjectionFactory.h"
-#include "imaging/ossimImageHandlerRegistry.h"
+#include "ossim/base/ossimKeywordlist.h"
+#include "ossim/base/ossimString.h"
+#include "ossimPluginProjectionFactory.h"
+#include "ossim/imaging/ossimImageHandlerRegistry.h"
 #include "ossimTileMapModel.h"
-#include "projection/ossimProjectionFactoryRegistry.h"
+#include "ossim/projection/ossimProjectionFactoryRegistry.h"
 
 
 namespace otb

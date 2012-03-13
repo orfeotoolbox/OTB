@@ -19,10 +19,10 @@
 #include "otbRPCProjectionAdapter.h"
 #include "otbImageKeywordlist.h"
 
-#include "projection/ossimRpcProjection.h"
-#include "projection/ossimProjection.h"
-#include "projection/ossimRpcSolver.h"
-#include "imaging/ossimImageGeometry.h"
+#include "ossim/projection/ossimRpcProjection.h"
+#include "ossim/projection/ossimProjection.h"
+#include "ossim/projection/ossimRpcSolver.h"
+#include "ossim/imaging/ossimImageGeometry.h"
 
 namespace otb
 {

@@ -23,7 +23,7 @@
 
 #include "ossimGeometricSarSensorModel.h"
 #include "otb/PlatformPosition.h"
-#include "projection/ossimProjection.h"
+#include "ossim/projection/ossimProjection.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 
 

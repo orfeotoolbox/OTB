@@ -22,7 +22,7 @@
 #include "otbImageKeywordlist.h"
 
 #include "ossimGeometricSarSensorModel.h"
-#include "projection/ossimProjection.h"
+#include "ossim/projection/ossimProjection.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 #include "otb/JSDDateTime.h"
 

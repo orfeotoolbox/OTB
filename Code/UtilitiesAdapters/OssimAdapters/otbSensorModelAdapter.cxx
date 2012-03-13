@@ -23,8 +23,8 @@
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"
 
-#include "projection/ossimProjection.h"
-#include "projection/ossimSensorModelFactory.h"
+#include "ossim/projection/ossimProjection.h"
+#include "ossim/projection/ossimSensorModelFactory.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 
 namespace otb
