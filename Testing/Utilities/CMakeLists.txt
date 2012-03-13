@@ -399,7 +399,7 @@ IF(NOT BUILD_SHARED_LIBS)
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon OTBTesting otbsvm otb6S ${TINYXML_LIBRARIES} otbkml)
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon OTBTesting otbsvm otb6S ${TINYXML_LIBRARIES} ${LIBKML_LIBRARIES})
 
 IF(OTB_USE_SIFTFAST)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests otbsiftfast)

@@ -232,6 +232,7 @@ INCLUDE(ImportGetText)
 INCLUDE(ImportSiftFast)
 INCLUDE(ImportTinyXML)
 INCLUDE(ImportMuParser)
+INCLUDE(ImportLibKML)
 
 
 INCLUDE_DIRECTORIES (
