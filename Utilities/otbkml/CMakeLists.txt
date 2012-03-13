@@ -277,37 +277,8 @@ IF(NOT OTB_INSTALL_NO_LIBRARIES)
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 
-
 IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-
-FILE(GLOB __files0 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/*.h")
-INSTALL(FILES ${__files0}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml
-    COMPONENT Development)
-
-FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/dom/*.h")
-INSTALL(FILES ${__files1}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/dom
-    COMPONENT Development)
-
-FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/base/*.h")
-INSTALL(FILES ${__files2}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/base
-    COMPONENT Development)
-
-FILE(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/convenience/*.h")
-INSTALL(FILES ${__files3}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/convenience
-    COMPONENT Development)
-
-FILE(GLOB __files4 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/engine/*.h")
-INSTALL(FILES ${__files4}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/engine
-    COMPONENT Development)
-
-FILE(GLOB __files5 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/regionator/*.h")
-INSTALL(FILES ${__files5}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/regionator
-    COMPONENT Development)
-
+  INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/kml
+          DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/
+          FILES_MATCHING PATTERN "*.h")
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
