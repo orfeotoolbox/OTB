@@ -2,6 +2,13 @@
 
 FILE(GLOB OTBOssimAdapters_SRCS "*.cxx" )
 
+IF(OTB_USE_EXTERNAL_OSSIM)
+  INCLUDE_DIRECTORIES( ${OSSIM_INCLUDE_DIR} )
+ELSE(OTB_USE_EXTERNAL_OSSIM)
+  INCLUDE_DIRECTORIES( ${OTB_SOURCE_DIR}/Utilities/otbossim/include
+                       ${OTB_BINARY_DIR}/Utilities/otbossim/include )
+ENDIF(OTB_USE_EXTERNAL_OSSIM)
+
 ADD_LIBRARY(OTBOssimAdapters ${OTBOssimAdapters_SRCS})
 TARGET_LINK_LIBRARIES (OTBOssimAdapters ${OSSIM_LIBRARY} otbossimplugins ITKCommon)
 IF(OTB_LIBRARY_PROPERTIES)
