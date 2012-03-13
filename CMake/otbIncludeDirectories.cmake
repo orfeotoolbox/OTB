@@ -64,7 +64,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbossimplugins/ossim
   ${OTB_SOURCE_DIR}/Utilities/InsightJournal
   ${OTB_SOURCE_DIR}/Utilities/otb6S
-  ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib
 #  ${OTB_SOURCE_DIR}/Utilities/otbgalib
   ${OTB_SOURCE_DIR}/Utilities/otbkml/src
   ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party
@@ -109,6 +108,14 @@ IF(OTB_USE_SIFTFAST)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
       ${OTB_SOURCE_DIR}/Utilities/otbsiftfast)
 ENDIF(OTB_USE_SIFTFAST)
+
+IF(OTB_USE_EXTERNAL_TINYXML)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+      ${TINYXML_INCLUDE_DIRS})
+ELSEIF(OTB_USE_EXTERNAL_TINYXML)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+      ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib)
+ENDIF(OTB_USE_EXTERNAL_TINYXML)
 
 #-----------------------------------------------------------------------------
 # Include directories from the ossim build tree
@@ -320,7 +327,6 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Utilities/otbsvm
   Utilities/InsightJournal
   Utilities/otb6S
-  Utilities/tinyXMLlib
 #  Utilities/otbgalib
   Utilities/otbkml
   Utilities/otbkml/src
@@ -383,6 +389,15 @@ ELSE(OTB_USE_EXTERNAL_FLTK)
         SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   		        Utilities/FLTK)
 ENDIF(OTB_USE_EXTERNAL_FLTK)
+
+#For TinyXML header file
+IF(OTB_USE_EXTERNAL_TINYXML)
+        SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
+                ${TINYXML_INCLUDE_DIRS})
+ELSE(OTB_USE_EXTERNAL_TINYXML)
+        SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+                Utilities/tinyXMLlib)
+ENDIF(OTB_USE_EXTERNAL_TINYXML)
 
 #For GLU header file
 SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}

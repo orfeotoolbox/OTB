@@ -230,6 +230,7 @@ INCLUDE(ImportOssim)
 INCLUDE(ImportQt4)
 INCLUDE(ImportGetText)
 INCLUDE(ImportSiftFast)
+INCLUDE(ImportTinyXML)
 
 
 INCLUDE_DIRECTORIES (
