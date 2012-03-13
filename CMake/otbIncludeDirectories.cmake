@@ -44,7 +44,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/InsightJournal
   ${OTB_SOURCE_DIR}/Utilities/otb6S
   ${OTB_SOURCE_DIR}/Utilities/otbkml/src
-  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party
   ${OTB_SOURCE_DIR}/Utilities/otbliblas/include
   ${OTB_SOURCE_DIR}/Utilities/otbedison/segm
   ${OTB_SOURCE_DIR}/Utilities/otbedison/prompt
