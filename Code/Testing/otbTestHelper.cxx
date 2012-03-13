@@ -1014,28 +1014,37 @@ std::map<std::string, int> TestHelper::RegressionTestBaselines(char *baselineFil
   std::map<std::string, int> baselines;
   baselines[std::string(baselineFilename)] = 0;
 
-  std::string myPath = itksys::SystemTools::GetFilenamePath( baselineFilename );
+  std::string myPath = itksys::SystemTools::GetFilenamePath(baselineFilename);
   itksys::Directory myDir;
-  myDir.Load( myPath.c_str() );
+  myDir.Load(myPath.c_str());
   const unsigned int nbFiles = myDir.GetNumberOfFiles();
 
   const std::string originalBaseline = itksys::SystemTools::GetFilenameWithoutLastExtension(baselineFilename);
   const unsigned int sizeRef = originalBaseline.size();
+  const bool HasExtension = sizeRef != itksys::SystemTools::GetFilenameName(baselineFilename).size();
 
   myPath.append("/");
   itksys::RegularExpression reg;
-  reg.compile( "^\\.[0-9]");
+  reg.compile("^\\.[0-9]");
 
-  for(unsigned int i=0; i<nbFiles; i++)
+  for (unsigned int i = 0; i < nbFiles; i++)
     {
-    const std::string curFilename = itksys::SystemTools::GetFilenameWithoutLastExtension( myDir.GetFile( i ) );
-    
-    if( curFilename.substr(0, sizeRef) == originalBaseline )
+    std::string curFilename;
+    if (HasExtension)
       {
-      if(reg.find( curFilename.substr(sizeRef, curFilename.size())))
+      curFilename = itksys::SystemTools::GetFilenameWithoutLastExtension(myDir.GetFile(i));
+      }
+    else
+      {
+      curFilename = itksys::SystemTools::GetFilenameName(myDir.GetFile(i));
+      }
+
+    if (curFilename.substr(0, sizeRef) == originalBaseline)
+      {
+      if (reg.find(curFilename.substr(sizeRef, curFilename.size())))
         {
         std::string myFile = myPath;
-        baselines[myFile.append(myDir.GetFile( i ) )] = 0;
+        baselines[myFile.append(myDir.GetFile(i))] = 0;
         }
       }
     }
