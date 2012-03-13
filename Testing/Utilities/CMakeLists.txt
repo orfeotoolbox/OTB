@@ -325,8 +325,8 @@ kmlhellofeatures.cc
 kmlprint.cc
 kmlchecklinks.cc
 kmlcirclegen.cc
-kmlcountkml.cc
-kmlparsens.cc
+# kmlcountkml.cc
+# kmlparsens.cc
 kmlsharedstyles.cc
 kmlsimplifylines.cc
 kmlsortplacemarks.cc
