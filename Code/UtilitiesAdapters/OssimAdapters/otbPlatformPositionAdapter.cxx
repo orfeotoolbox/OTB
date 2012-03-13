@@ -21,8 +21,8 @@
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"
 
-#include "ossimGeometricSarSensorModel.h"
-#include "otb/PlatformPosition.h"
+#include "ossim/ossimGeometricSarSensorModel.h"
+#include "ossim/otb/PlatformPosition.h"
 #include "ossim/projection/ossimProjection.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 

@@ -21,10 +21,10 @@
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"
 
-#include "ossimGeometricSarSensorModel.h"
+#include "ossim/ossimGeometricSarSensorModel.h"
 #include "ossim/projection/ossimProjection.h"
 #include "ossim/ossimPluginProjectionFactory.h"
-#include "otb/JSDDateTime.h"
+#include "ossim/otb/JSDDateTime.h"
 
 
 namespace otb {
