@@ -231,6 +231,7 @@ INCLUDE(ImportQt4)
 INCLUDE(ImportGetText)
 INCLUDE(ImportSiftFast)
 INCLUDE(ImportTinyXML)
+INCLUDE(ImportMuParser)
 
 
 INCLUDE_DIRECTORIES (

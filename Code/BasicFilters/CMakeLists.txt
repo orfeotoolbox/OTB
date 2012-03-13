@@ -3,7 +3,7 @@
 FILE(GLOB OTBBasicFilters_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBBasicFilters ${OTBBasicFilters_SRCS})
-TARGET_LINK_LIBRARIES (OTBBasicFilters OTBCommon ITKBasicFilters otbedison otbmuparser)
+TARGET_LINK_LIBRARIES (OTBBasicFilters OTBCommon ITKBasicFilters otbedison ${MUPARSER_LIBRARIES})
 
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(OTBBasicFilters PROPERTIES ${OTB_LIBRARY_PROPERTIES})

@@ -52,10 +52,9 @@ IF(NOT OTB_USE_EXTERNAL_BOOST)
   ADD_SUBDIRECTORY(BGL)
 ENDIF(NOT OTB_USE_EXTERNAL_BOOST)
 
-MESSAGE(STATUS "Configuring otbmuparser...")
-ADD_SUBDIRECTORY(otbmuparser)
 MESSAGE(STATUS "Configuring otbsvm...")
 ADD_SUBDIRECTORY(otbsvm )
+
 MESSAGE(STATUS "Configuring InsightJournal...")
 ADD_SUBDIRECTORY(InsightJournal)
 
@@ -66,6 +65,7 @@ ENDIF(NOT OTB_USE_EXTERNAL_OSSIM)
 
 MESSAGE(STATUS "Configuring otbossimplugins...")
 ADD_SUBDIRECTORY(otbossimplugins)
+
 MESSAGE(STATUS "Configuring otb6S...")
 ADD_SUBDIRECTORY(otb6S)
 
@@ -74,8 +74,14 @@ IF(NOT OTB_USE_EXTERNAL_TINYXML)
   ADD_SUBDIRECTORY(tinyXMLlib)
 ENDIF(NOT OTB_USE_EXTERNAL_TINYXML)
 
+IF(NOT OTB_USE_EXTERNAL_MUPARSER)
+  MESSAGE(STATUS "Configuring otbmuparser...")
+  ADD_SUBDIRECTORY(otbmuparser)
+ENDIF(NOT OTB_USE_EXTERNAL_MUPARSER)
+
 MESSAGE(STATUS "Configuring otbkml...")
 ADD_SUBDIRECTORY(otbkml)
+
 MESSAGE(STATUS "Configuring otbedison...")
 ADD_SUBDIRECTORY(otbedison)
 
