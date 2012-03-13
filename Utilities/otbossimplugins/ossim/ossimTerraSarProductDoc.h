@@ -19,6 +19,7 @@
 #include <vector>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimRefPtr.h>
+#include <ossimPluginConstants.h>
 
 // Forward class declarations outside of namespace ossimplugins.
 class ossimDpt;
@@ -39,7 +40,7 @@ namespace ossimplugins
    class SceneCoord;
 
    /** @brief Class to encapsulate parsing TerraSAR product xml file. */
-   class ossimTerraSarProductDoc
+   class OSSIM_PLUGINS_DLL ossimTerraSarProductDoc
    {
    public:
       /** @brief default constructor */

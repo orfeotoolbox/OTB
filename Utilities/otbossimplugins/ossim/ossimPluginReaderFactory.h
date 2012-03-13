@@ -12,6 +12,7 @@
 #ifndef ossimPluginReaderFactory_HEADER
 #define ossimPluginReaderFactory_HEADER
 
+#include <ossimPluginConstants.h>
 #include <ossim/imaging/ossimImageHandlerFactoryBase.h>
 
 class ossimString;
@@ -23,7 +24,7 @@ namespace ossimplugins
 
 
 /** @brief Image handler factory for ossim plugins plugin. */
-   class ossimPluginReaderFactory : public ossimImageHandlerFactoryBase
+   class OSSIM_PLUGINS_DLL ossimPluginReaderFactory : public ossimImageHandlerFactoryBase
    {
    public:
 

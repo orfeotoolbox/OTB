@@ -12,6 +12,8 @@
 #ifndef ossimRadarSat2Model_H
 #define ossimRadarSat2Model_H
 
+#include <ossimPluginConstants.h>
+
 #include <ossimGeometricSarSensorModel.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/base/ossimIpt.h>
@@ -20,6 +22,7 @@
 #include <ossim/base/ossimDpt.h>
 #include <iostream>
 #include <list>
+
 
 #include <otb/CivilDateTime.h>
 #include <otb/RadarSat2NoiseLevel.h>
@@ -41,7 +44,7 @@ namespace ossimplugins
  * @brief This class allows for direct localisation and indirect localisation
  * using the RadarSat2 sensor model
  */
-   class ossimRadarSat2Model : public ossimGeometricSarSensorModel
+   class OSSIM_PLUGINS_DLL ossimRadarSat2Model : public ossimGeometricSarSensorModel
    {
    public:
       /** @brief default constructor */

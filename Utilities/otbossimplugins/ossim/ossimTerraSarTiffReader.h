@@ -13,6 +13,7 @@
 #ifndef ossimTerraSarTiffReader_HEADER
 #define ossimTerraSarTiffReader_HEADER 1
 
+#include <ossimPluginConstants.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/base/ossimFilename.h>
 
@@ -21,7 +22,7 @@ class ossimXmlDocument;
 
 namespace ossimplugins
 {
-   class ossimTerraSarTiffReader : public ossimTiffTileSource
+   class OSSIM_PLUGINS_DLL ossimTerraSarTiffReader : public ossimTiffTileSource
    {
    public:
       

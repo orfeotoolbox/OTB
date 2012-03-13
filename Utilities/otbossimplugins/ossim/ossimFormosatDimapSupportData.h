@@ -16,6 +16,8 @@
 #include <vector>
 #include <iostream>
 
+#include <ossimPluginConstants.h>
+
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimRefPtr.h>
@@ -32,7 +34,7 @@ class ossimKeywordlist;
 // class ossimRefPtr;
 class ossimXmlDocument;
 
-class ossimFormosatDimapSupportData : public ossimObject,
+class OSSIM_PLUGINS_DLL ossimFormosatDimapSupportData : public ossimObject,
    public ossimErrorStatusInterface
 {
 public:

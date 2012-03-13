@@ -21,6 +21,9 @@
 #include <ossim/base/ossimDpt.h>
 #include <iostream>
 #include <list>
+
+#include <ossimPluginConstants.h>
+
 #include <otb/PlatformPosition.h>
 #include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
@@ -42,7 +45,7 @@ namespace ossimplugins
  * @brief This class allows for direct localisation and indirect localisation
  * using the RadarSat2 sensor model
  */
-   class ossimRadarSat2RPCModel : public ossimRpcModel
+   class OSSIM_PLUGINS_DLL ossimRadarSat2RPCModel : public ossimRpcModel
    {
    public:
       /** @brief default constructor */

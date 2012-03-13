@@ -9,6 +9,7 @@
 
 #ifndef ossimPluginProjectionFactory_HEADER
 #define ossimPluginProjectionFactory_HEADER
+
 #include <ossimPluginConstants.h>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
 

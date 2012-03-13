@@ -12,6 +12,7 @@
 #ifndef ossimCosmoSkymedModel_H
 #define ossimCosmoSkymedModel_H
 
+#include <ossimPluginConstants.h>
 #include <ossimGeometricSarSensorModel.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/base/ossimIpt.h>
@@ -34,7 +35,7 @@ namespace ossimplugins
  * @brief This class allows for direct localisation and indirect localisation
  * using the CosmoSkymed sensor model
  */
-   class ossimCosmoSkymedModel : public ossimGeometricSarSensorModel
+   class OSSIM_PLUGINS_DLL ossimCosmoSkymedModel : public ossimGeometricSarSensorModel
    {
    public:
       /**

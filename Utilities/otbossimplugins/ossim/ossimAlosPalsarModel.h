@@ -13,6 +13,7 @@
 #ifndef ossimAlosPalsarModel_H
 #define ossimAlosPalsarModel_H
 
+#include <ossimPluginConstants.h>
 #include <otb/JSDDateTime.h>
 #include <ossimGeometricSarSensorModel.h>
 
@@ -39,7 +40,7 @@ namespace ossimplugins
  * level 1.1 data (SLC).
  *
  */
-   class ossimAlosPalsarModel : public ossimGeometricSarSensorModel
+   class OSSIM_PLUGINS_DLL ossimAlosPalsarModel : public ossimGeometricSarSensorModel
    {
    public:
       /**

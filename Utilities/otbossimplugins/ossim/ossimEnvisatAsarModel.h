@@ -12,6 +12,7 @@
 #ifndef ossimEnvisatAsarModel_H
 #define ossimEnvisatAsarModel_H
 
+#include <ossimPluginConstants.h>
 #include <otb/JSDDateTime.h>
 #include <ossimGeometricSarSensorModel.h>
 #include <ossim/projection/ossimMapProjection.h>
@@ -34,7 +35,7 @@ namespace ossimplugins
  * @brief This class is able to direct localisation and indirect localisation
  * using the EnvisatAsar sensor model
  */
-   class ossimEnvisatAsarModel : public ossimGeometricSarSensorModel
+   class OSSIM_PLUGINS_DLL ossimEnvisatAsarModel : public ossimGeometricSarSensorModel
    {
    public:
       /**

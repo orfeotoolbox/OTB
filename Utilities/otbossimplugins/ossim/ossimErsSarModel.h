@@ -12,6 +12,7 @@
 #ifndef ossimErsSarModel_H
 #define ossimErsSarModel_H
 
+#include <ossimPluginConstants.h>
 #include <otb/JSDDateTime.h>
 #include <ossimGeometricSarSensorModel.h>
 
@@ -34,7 +35,7 @@ namespace ossimplugins
  * @brief This class is able to direct localisation and indirect localisation using the ErsSar sensor model
  *
  */
-   class ossimErsSarModel : public ossimGeometricSarSensorModel
+   class OSSIM_PLUGINS_DLL ossimErsSarModel : public ossimGeometricSarSensorModel
    {
    public:
       /**

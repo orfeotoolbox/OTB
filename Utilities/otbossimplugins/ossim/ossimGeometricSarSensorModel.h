@@ -15,6 +15,7 @@
 #include <list>
 #include <vector>
 
+#include <ossimPluginConstants.h>
 #include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimCoarseGridModel.h>
 
@@ -32,7 +33,7 @@ namespace ossimplugins
  * using the geometric model of SAR sensors.
  * This class must be specified for each sensor.
  */
-   class ossimGeometricSarSensorModel : public ossimSensorModel
+   class OSSIM_PLUGINS_DLL ossimGeometricSarSensorModel : public ossimSensorModel
    {
    public:
       static const char* CREATE_OCG_PREF_KW;

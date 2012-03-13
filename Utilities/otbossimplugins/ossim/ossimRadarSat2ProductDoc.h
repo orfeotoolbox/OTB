@@ -19,6 +19,8 @@
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimRefPtr.h>
+#include <ossimPluginConstants.h>
+
 
 class ossimDpt;
 class ossimGpt;
@@ -60,7 +62,7 @@ namespace ossimplugins
    class SensorParams;
    
 /** @brief Class to encapsulate parsing RadarSat2 product.xml file. */
-   class ossimRadarSat2ProductDoc
+   class OSSIM_PLUGINS_DLL ossimRadarSat2ProductDoc
    {
    public:
       /** @brief default constructor */

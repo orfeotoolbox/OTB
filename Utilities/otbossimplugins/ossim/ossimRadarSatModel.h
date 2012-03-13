@@ -37,7 +37,7 @@ namespace ossimplugins
 /**
  * @brief This class is able to direct localisation and indirect localisation using the RadarSat sensor model
  */
-   class ossimRadarSatModel : public ossimGeometricSarSensorModel
+   class OSSIM_PLUGINS_DLL ossimRadarSatModel : public ossimGeometricSarSensorModel
    {
    public:
       /** @brief Constructor */
