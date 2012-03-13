@@ -19,8 +19,9 @@
 #include <fstream>
 #include <cstdlib>
 
-#include "elevation/ossimElevManager.h"
-#include "base/ossimFilename.h"
+#include "ossim/elevation/ossimElevManager.h"
+#include "ossim/base/ossimFilename.h"
+
 #include "itkPoint.h"
 
 int otbOssimElevManagerTest2(int argc, char* argv[])

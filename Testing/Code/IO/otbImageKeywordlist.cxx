@@ -23,11 +23,12 @@
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"
 
-#include "base/ossimKeywordlist.h"
-#include "projection/ossimProjection.h"
-#include "projection/ossimProjectionFactoryRegistry.h"
+#include "ossim/base/ossimKeywordlist.h"
+#include "ossim/projection/ossimProjection.h"
+#include "ossim/projection/ossimProjectionFactoryRegistry.h"
+#include "ossim/base/ossimFilename.h"
+
 #include "ossim/ossimPluginProjectionFactory.h"
-#include "base/ossimFilename.h"
 
 int otbImageKeywordlist(int argc, char* argv[])
 {

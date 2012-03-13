@@ -45,10 +45,10 @@
 
 #include "otbInverseSensorModel.h"
 
-#include "imaging/ossimImageHandler.h"
-#include "base/ossimKeywordlist.h"
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "projection/ossimProjectionFactoryRegistry.h"
+#include "ossim/imaging/ossimImageHandler.h"
+#include "ossim/base/ossimKeywordlist.h"
+#include "ossim/imaging/ossimImageHandlerRegistry.h"
+#include "ossim/projection/ossimProjectionFactoryRegistry.h"
 
 int otbCreateProjectionWithOSSIM(int argc, char* argv[])
 {

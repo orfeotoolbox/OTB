@@ -1642,6 +1642,13 @@ otbCreateProjectionWithOTB.cxx
 )
 ENDIF(NOT OTB_TESTING_STANDALONE)
 
+IF(OTB_USE_EXTERNAL_OSSIM)
+  INCLUDE_DIRECTORIES( ${OSSIM_INCLUDE_DIR} )
+ELSE(OTB_USE_EXTERNAL_OSSIM)
+  INCLUDE_DIRECTORIES( ${OTB_SOURCE_DIR}/Utilities/otbossim/include
+                       ${OTB_BINARY_DIR}/Utilities/otbossim/include )
+ENDIF(OTB_USE_EXTERNAL_OSSIM)
+
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests2 "${Projections_SRCS2}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests3 "${Projections_SRCS3}" "OTBProjections;OTBIO;OTBTesting")

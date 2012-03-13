@@ -14,11 +14,11 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "ossim/elevation/ossimElevManager.h"
+#include "ossim/base/ossimFilename.h"
 
 #include "otbImage.h"
 #include "otbImageFileWriter.h"
-#include "elevation/ossimElevManager.h"
-#include "base/ossimFilename.h"
 #include "itkImageRegionIteratorWithIndex.h"
 
 int otbOssimElevManagerTest(int argc, char* argv[])

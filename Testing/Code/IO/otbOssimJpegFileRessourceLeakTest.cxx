@@ -15,11 +15,12 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include <imaging/ossimImageHandler.h>
-#include <imaging/ossimImageHandlerRegistry.h>
-#include <base/ossimFilename.h>
 #include <stdlib.h>
 #include <iostream>
+
+#include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/imaging/ossimImageHandlerRegistry.h>
+#include <ossim/base/ossimFilename.h>
 
 // This test demonstrate that handler->close() does not release the file descriptor for jpeg files.
 

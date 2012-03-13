@@ -20,8 +20,8 @@
 #include <fstream>
 #include <sstream>
 
-#include "elevation/ossimElevManager.h"
-#include "base/ossimFilename.h"
+#include "ossim/elevation/ossimElevManager.h"
+#include "ossim/base/ossimFilename.h"
 
 int otbOssimElevManagerTest4(int argc, char* argv[])
 {
