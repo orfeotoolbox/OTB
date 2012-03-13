@@ -49,7 +49,8 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS( LibKML DEFAULT_MSG
                                     LIBKML_REGIONATOR_LIBRARY
                                     LIBKML_XSD_LIBRARY
                                     LIBKML_MINIZIP_LIBRARY )
-IF(LibKML_FOUND)
+
+IF(LIBKML_FOUND)
   SET(LIBKML_INCLUDE_DIRS ${LIBKML_INCLUDE_DIR})
   SET(LIBKML_LIBRARIES ${LIBKML_BASE_LIBRARY}
                        ${LIBKML_CONVENIENCE_LIBRARY}
@@ -58,4 +59,4 @@ IF(LibKML_FOUND)
                        ${LIBKML_REGIONATOR_LIBRARY}
                        ${LIBKML_XSD_LIBRARY}
                        ${LIBKML_MINIZIP_LIBRARY})
-ENDIF(LibKML_FOUND)
+ENDIF(LIBKML_FOUND)
