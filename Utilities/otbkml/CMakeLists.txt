@@ -314,22 +314,4 @@ INSTALL(FILES ${__files5}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/regionator
     COMPONENT Development)
 
-FILE(GLOB __files6 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.5/include/uriparser/*.h")
-INSTALL(FILES ${__files6}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/uriparser-0.7.5/include/uriparser
-    COMPONENT Development)
-
-FILE(GLOB __files12 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3/*.h")
-INSTALL(FILES ${__files12}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/zlib-1.2.3
-    COMPONENT Development)
-FILE(GLOB __files13 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3/contrib/*.h")
-INSTALL(FILES ${__files13}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
-    COMPONENT Development)
-FILE(GLOB __files14 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3/contrib/minizip/*.h")
-INSTALL(FILES ${__files14}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/zlib-1.2.3/contrib/minizip
-    COMPONENT Development)
-
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
