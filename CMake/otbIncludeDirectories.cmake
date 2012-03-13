@@ -283,7 +283,6 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Utilities/otb6S
   Utilities/otbkml
   Utilities/otbkml/src
-  Utilities/otbkml/third_party
   Utilities/otbkml/third_party/boost_1_34_1
   Utilities/otbliblas/include
   Utilities/otbedison
