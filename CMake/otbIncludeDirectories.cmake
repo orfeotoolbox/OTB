@@ -114,37 +114,21 @@ ELSEIF(OTB_USE_EXTERNAL_MUPARSER)
       ${OTB_SOURCE_DIR}/Utilities/otbmuparser)
 ENDIF(OTB_USE_EXTERNAL_MUPARSER)
 
-#-----------------------------------------------------------------------------
-# Include directories from the ossim build tree
-SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-        ${OTB_BINARY_DIR}/Utilities/otbossim/include
-)
-
-
-
-#-----------------------------------------------------------------------------
-# Include directories from the CURL build tree.
 IF(OTB_USE_CURL)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   	${CURL_INCLUDE_DIR} )
 ENDIF(OTB_USE_CURL)
 
-#-----------------------------------------------------------------------------
-# Include directories from the MAPNIK build tree.
 IF(OTB_USE_MAPNIK)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   	${MAPNIK_INCLUDE_DIR} ${FREETYPE2_INCLUDE_DIR})
 ENDIF(OTB_USE_MAPNIK)
 
-#-----------------------------------------------------------------------------
-# Include directories from the GETTEXT build tree.
 IF(OTB_USE_GETTEXT)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   	${GETTEXT_INCLUDE_DIR})
 ENDIF(OTB_USE_GETTEXT)
 
-#-----------------------------------------------------------------------------
-# Include directories from the PQXX build tree.
 IF(OTB_USE_PQXX)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   	${PQXX_INCLUDE_DIR})
