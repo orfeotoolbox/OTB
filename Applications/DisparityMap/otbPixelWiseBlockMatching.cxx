@@ -40,6 +40,7 @@ public:
 
   typedef otb::Functor::SSDBlockMatching<FloatImageType,FloatImageType> SSDBlockMatchingFunctorType;
   typedef otb::Functor::NCCBlockMatching<FloatImageType,FloatImageType> NCCBlockMatchingFunctorType;
+  typedef otb::Functor::LPBlockMatching<FloatImageType,FloatImageType>  LPBlockMatchingFunctorType;
 
   typedef otb::PixelWiseBlockMatchingImageFilter<FloatImageType,
                                                            FloatImageType,
@@ -53,6 +54,12 @@ public:
                                                            FloatImageType,
                                                            NCCBlockMatchingFunctorType> NCCBlockMatchingFilterType;
 
+  typedef otb::PixelWiseBlockMatchingImageFilter<FloatImageType,
+                                                           FloatImageType,
+                                                           FloatImageType,
+                                                           FloatImageType,
+                                                           LPBlockMatchingFunctorType> LPBlockMatchingFilterType;
+  
   typedef otb::VarianceImageFilter<FloatImageType,FloatImageType> VarianceFilterType;
 
 
@@ -77,6 +84,7 @@ private:
     // Initialize filters
     m_SSDBlockMatcher = SSDBlockMatchingFilterType::New();
     m_NCCBlockMatcher = NCCBlockMatchingFilterType::New();
+    m_LPBlockMatcher  = LPBlockMatchingFilterType::New();
     m_VarianceFilter  = VarianceFilterType::New();
     m_BandMathFilter  = BandMathFilterType::New();
     m_OutputImageList = ImageListType::New();
@@ -153,6 +161,14 @@ private:
 
     AddChoice("bm.metric.ncc","Normalized Cross-Correlation");
     SetParameterDescription("bm.metric.ncc","Normalized Cross-Correlation between the left and right windows");
+    
+    AddChoice("bm.metric.lp","Lp pseudo-norm");
+    SetParameterDescription("bm.metric.lp","Lp pseudo-norm between the left and right windows");
+    
+    AddParameter(ParameterType_Float,"bm.metric.lp.p","p value" );
+    SetParameterDescription("bm.metric.lp.p", "Value of the p parameter in Lp pseudo-norm (must be positive)");
+    SetDefaultParameterFloat("bm.metric.lp.p", 1.0);
+    SetMinimumParameterFloatValue("bm.metric.lp.p", 0.0);
     
     AddParameter(ParameterType_Int,"bm.radius","Radius of blocks");
     SetParameterDescription("bm.radius","The radius (in pixels) of blocks in Block-Matching");
@@ -392,7 +408,7 @@ private:
       metricImage = m_SSDBlockMatcher->GetMetricOutput();
       }
     // NCC case
-    else
+    else if (GetParameterInt("bm.metric") == 1)
       {
       m_NCCBlockMatcher->SetLeftInput(leftImage);
       m_NCCBlockMatcher->SetRightInput(rightImage);
@@ -431,6 +447,46 @@ private:
       vdispImage = m_NCCBlockMatcher->GetVerticalDisparityOutput();
       metricImage = m_NCCBlockMatcher->GetMetricOutput();
       }
+    // Lp case
+    else
+      {
+      m_LPBlockMatcher->SetLeftInput(leftImage);
+      m_LPBlockMatcher->SetRightInput(rightImage);
+      m_LPBlockMatcher->SetRadius(radius);
+      m_LPBlockMatcher->GetFunctor().SetP(static_cast<double>(GetParameterFloat("bm.metric.lp.p")));
+      m_LPBlockMatcher->SetMinimumHorizontalDisparity(minhdisp);
+      m_LPBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
+      m_LPBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
+      m_LPBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
+      AddProcess(m_LPBlockMatcher,"Lp block matching");
+
+      if(masking)
+        {
+        m_LPBlockMatcher->SetLeftMaskInput(m_BandMathFilter->GetOutput());
+        }
+      if(useInitialDispUniform)
+        {
+        FloatImageType::SizeType expRadius;
+        expRadius[0] = GetParameterInt("bm.initdisp.uniform.hrad");
+        expRadius[1] = GetParameterInt("bm.initdisp.uniform.vrad");
+        m_LPBlockMatcher->SetExplorationRadius(expRadius);
+        m_LPBlockMatcher->SetInitHorizontalDisparity(GetParameterInt("bm.initdisp.uniform.hdisp"));
+        m_LPBlockMatcher->SetInitVerticalDisparity(GetParameterInt("bm.initdisp.uniform.vdisp"));
+        }
+      if(useInitialDispMap)
+        {
+        FloatImageType::SizeType expRadius;
+        expRadius[0] = GetParameterInt("bm.initdisp.maps.hrad");
+        expRadius[1] = GetParameterInt("bm.initdisp.maps.vrad");
+        m_LPBlockMatcher->SetExplorationRadius(expRadius);
+        m_LPBlockMatcher->SetHorizontalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.hmap"));
+        m_LPBlockMatcher->SetVerticalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.vmap"));
+        }
+
+      hdispImage = m_LPBlockMatcher->GetHorizontalDisparityOutput();
+      vdispImage = m_LPBlockMatcher->GetVerticalDisparityOutput();
+      metricImage = m_LPBlockMatcher->GetMetricOutput();
+      }
     
 
     m_OutputImageList->Clear();
@@ -453,11 +509,14 @@ private:
       }
   }
 
-  // SSD Block matching functor
+  // SSD Block matching filter
   SSDBlockMatchingFilterType::Pointer m_SSDBlockMatcher;
   
-  // NCC Block matching functor
+  // NCC Block matching filter
   NCCBlockMatchingFilterType::Pointer m_NCCBlockMatcher;
+  
+  // Lp Block matching filter
+  LPBlockMatchingFilterType::Pointer  m_LPBlockMatcher;
   
   // Variance filter
   VarianceFilterType::Pointer         m_VarianceFilter;

@@ -116,6 +116,57 @@ public:
   }
 };
 
+/** \class LPBlockMatching
+ *  \brief Functor to perform block-matching based on the L^p pseudo-norm
+ *
+ *  This functor is designed to work with the
+ *  PixelWiseBlockMatchingImageFilter. It performs a distance computation between
+ *  two windows based on the L^p pseudo norm (p greater than 0). The functor is
+ *  templated by the type of inputs images and output metric image,
+ *  and is using two neighborhood iterators as inputs.
+ */
+template <class TInputImage, class TOutputMetricImage>
+ITK_EXPORT class LPBlockMatching
+{
+public:
+  typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeigghborhoodIteratorType;
+  typedef typename TOutputMetricImage::ValueType      MetricValueType;
+  
+  LPBlockMatching(): m_P(0)
+    {
+    }
+  
+  void SetP(double p)
+    {
+    if (p > 0.0)
+      {
+      m_P = p;
+      }
+    else
+      {
+      m_P = 1.0;
+      }
+    }
+  
+  // Implement the Lp metric
+  inline MetricValueType operator()(ConstNeigghborhoodIteratorType & a, ConstNeigghborhoodIteratorType & b) const
+  {
+    MetricValueType score(0); 
+    
+    // For some reason, iterators do not work on neighborhoods
+    for(unsigned int i = 0; i<a.Size(); ++i)
+      {
+      score += vcl_pow( vcl_abs(static_cast<double>(a.GetPixel(i)-b.GetPixel(i))) , m_P);
+      }
+    
+    return score;
+  }
+  
+private:
+  
+  double m_P;
+};
+
 } // End Namespace Functor
 
 /** \class PixelWiseBlockMatchingImageFilter
