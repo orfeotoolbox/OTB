@@ -151,7 +151,7 @@ public:
   // Implement the Lp metric
   inline MetricValueType operator()(ConstNeigghborhoodIteratorType & a, ConstNeigghborhoodIteratorType & b) const
   {
-    MetricValueType score(0); 
+    MetricValueType score(0);
     
     // For some reason, iterators do not work on neighborhoods
     for(unsigned int i = 0; i<a.Size(); ++i)
