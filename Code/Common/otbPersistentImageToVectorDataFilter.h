@@ -25,6 +25,8 @@
 #include "itkExtractImageFilter.h"
 
 #include "otbConcatenateVectorDataFilter.h"
+#include "otbOGRVectorDataIO.h"
+#include "itkMacro.h"
 
 namespace otb
 {
@@ -72,6 +74,9 @@ public:
 
   typedef otb::ConcatenateVectorDataFilter<OutputVectorDataType> ConcatenateVectorDataFilterType;
   typedef typename ConcatenateVectorDataFilterType::Pointer      ConcatenateVectorDataFilterPointerType;
+  
+  typedef otb::OGRVectorDataIO       OGRVectorDataIOType;
+  typedef typename OGRVectorDataIOType::Pointer   OGRVectorDataIOPointerType;
 
   /** Smart Pointer type to a DataObject. */
   typedef itk::DataObject::Pointer DataObjectPointer;
@@ -83,6 +88,10 @@ public:
   virtual void Reset(void);
 
   virtual void Synthetize(void);
+  
+  /** Specify the name of the output shapefile to write. */
+  itkSetStringMacro(FileName);
+  itkGetStringMacro(FileName);
 
 protected:
   PersistentImageToVectorDataFilter();
@@ -101,6 +110,9 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   virtual OutputVectorDataPointerType ProcessTile() = 0;
+  
+  OGRVectorDataIOPointerType m_VectorDataIO;
+  std::string m_FileName;
 
 }; // end of class
 } // end namespace otb

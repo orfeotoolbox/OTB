@@ -32,6 +32,8 @@ PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
 {
   m_ExtractFilter = ExtractImageFilterType::New();
   m_OutputVectorData = OutputVectorDataType::New();
+  
+  m_VectorDataIO = OGRVectorDataIOType::New();
 }
 
 template<class TImage, class TOutputVectorData>
@@ -92,9 +94,10 @@ PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
   // merge the result into the output vector data object
   OutputVectorDataPointerType output = GetOutputVectorData();
 
+
   ConcatenateVectorDataFilterPointerType concatenate = ConcatenateVectorDataFilterType::New();
-  concatenate->AddInput(currentTileVD);
   concatenate->AddInput(output);
+  concatenate->AddInput(currentTileVD);
   concatenate->Update();
 
   concatenate->GetOutput()->SetMetaDataDictionary(currentTileVD->GetMetaDataDictionary());

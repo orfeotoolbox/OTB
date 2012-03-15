@@ -34,6 +34,7 @@ namespace otb
  * Note that the input vectordatas must have the same node type,
  * this is due that vectordata creation does not support multiple geomtries
  * in a single vectordata.
+ * Warning : this filter does not create a deep copy of each node.
  *
  */
 template <class TVectorData>
@@ -82,7 +83,7 @@ protected:
   void GenerateData(void);
   
   /** Recursive method to visit efficiently the vectordata*/
-  void ProcessNode(TreeNodeType * source);
+  void ProcessNode(TreeNodeType * source, DataNodeType * outputDocument);
   
 private:
   ConcatenateVectorDataFilter(const Self &); //purposely not implemented
