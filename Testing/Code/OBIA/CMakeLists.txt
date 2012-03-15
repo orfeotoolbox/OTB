@@ -240,15 +240,46 @@ ADD_TEST(obTuStreamingVectorizedSegmentationNew ${OBIA_TESTS1}
     otbStreamingVectorizedSegmentationNew)
 
 ADD_TEST(obTvStreamingVectorizedSegmentation ${OBIA_TESTS1}
-     --compare-ogr  ${EPSILON_8}
-     ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutput.sqlite
-     ${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
+     #--compare-ogr  ${EPSILON_8}
+     #${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutput.sqlite
+     #${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
      otbStreamingVectorizedSegmentation
-     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-     ${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
-     100
+     #${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+     /home2/arnaud/ORFEO-TOOLBOX/images/TLSE_ORTHO_P_8bits/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_ORT_IPU_20111109_7807-001_R1C1.TIF
+     #/media/otbnas/otb/OTB-LargeInput/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+     ${TEMP}/obTvStreamingVectorizedSegmentationOutput2.shp
+     2048
+     #100
      )
-     
+
+ADD_TEST(obTuLabelImageToOGRDataSourceFilterNew ${OBIA_TESTS1}
+    otbLabelImageToOGRDataSourceFilterNew)
+    
+ADD_TEST(obTvLabelImageToOGRDataSourceFilter ${OBIA_TESTS1}
+    #--compare-ogr ${NOTOL}
+    #${BASELINE_FILES}/obTuLabelImageToOGRDataSourceFilter.shp
+    #${TEMP}/obTuLabelImageToOGRDataSourceFilter.shp
+    otbLabelImageToOGRDataSourceFilter
+    ${INPUTDATA}/labelImage_UnsignedChar.tif
+    ${TEMP}/obTuLabelImageToOGRDataSourceFilter.shp
+    )
+
+# -------            otb::StreamingVectorizedSegmentation   -------------
+ADD_TEST(obTuStreamingVectorizedSegmentationOGRNew ${OBIA_TESTS1}
+    otbStreamingVectorizedSegmentationOGRNew)
+
+ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
+     #--compare-ogr  ${EPSILON_8}
+     #${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutput.sqlite
+     #${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
+     otbStreamingVectorizedSegmentationOGR
+     #${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+     /home2/arnaud/ORFEO-TOOLBOX/images/TLSE_ORTHO_P_8bits/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_ORT_IPU_20111109_7807-001_R1C1.TIF
+     #/media/otbnas/otb/OTB-LargeInput/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+     ${TEMP}/obTvStreamingVectorizedSegmentationOutputOGR.shp
+     2048
+     #100
+     )
 
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
@@ -313,6 +344,8 @@ otbHooverInstanceFilterToAttributeImage.cxx
 otbLabelImageToVectorDataFilterNew.cxx
 otbLabelImageToVectorDataFilter.cxx
 otbStreamingVectorizedSegmentation.cxx
+otbLabelImageToOGRDataSourceFilter.cxx
+otbStreamingVectorizedSegmentationOGR.cxx
 )
 
 IF(OTB_USE_PQXX)

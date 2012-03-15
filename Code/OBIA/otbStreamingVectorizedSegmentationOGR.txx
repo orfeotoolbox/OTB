@@ -18,10 +18,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingVectorizedSegmentation_txx
-#define __otbStreamingVectorizedSegmentation_txx
+#ifndef __otbStreamingVectorizedSegmentationOGR_txx
+#define __otbStreamingVectorizedSegmentationOGR_txx
 
-#include "otbStreamingVectorizedSegmentation.h"
+#include "otbStreamingVectorizedSegmentationOGR.h"
 
 #include "otbVectorDataTransformFilter.h"
 #include "itkAffineTransform.h"
@@ -31,23 +31,23 @@
 namespace otb
 {
 
-template <class TImageType, class TOutputVectorData, class TSegmentationFilter>
-PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, TSegmentationFilter>
-::PersistentStreamingLabelImageToVectorDataFilter() : m_FieldName("DN"), m_TileMaxLabel(0), m_StartLabel(0)
+template <class TImageType, class TSegmentationFilter>
+PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
+::PersistentStreamingLabelImageToOGRDataFilter() : m_FieldName("DN"), m_TileMaxLabel(0), m_StartLabel(0)
 {
    m_SegmentationFilter = SegmentationFilterType::New();
    m_TileNumber = 1;
 }
 
-template <class TImageType, class TOutputVectorData, class TSegmentationFilter>
-PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, TSegmentationFilter>
-::~PersistentStreamingLabelImageToVectorDataFilter()
+template <class TImageType, class TSegmentationFilter>
+PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
+::~PersistentStreamingLabelImageToOGRDataFilter()
 {
 }
 
-template <class TImageType, class TOutputVectorData, class TSegmentationFilter>
+template <class TImageType, class TSegmentationFilter>
 void
-PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, TSegmentationFilter>
+PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
@@ -65,9 +65,9 @@ PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, T
     }
 }
 
-template <class TImageType, class TOutputVectorData, class TSegmentationFilter>
-typename PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, TSegmentationFilter>::OutputVectorDataPointerType
-PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, TSegmentationFilter>
+template <class TImageType, class TSegmentationFilter>
+typename PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>::OGRDataSourceObjectPointerType
+PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 ::ProcessTile()
 {
   std::cout<< "tile number : " << m_TileNumber <<std::endl;
@@ -93,13 +93,9 @@ PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, T
   
   const unsigned int labelImageIndex = LabeledOutputAccessor<SegmentationFilterType>::LabeledOutputIndex;
 
-  typename LabelImageToVectorDataFilterType::Pointer labelImageToVectorDataFilter = LabelImageToVectorDataFilterType::New();
+  typename LabelImageToOGRDataSourceFilterType::Pointer labelImageToOGRDataFilter =
+                                              LabelImageToOGRDataSourceFilterType::New();
   
-  
-  /*typename SegmentationFilterType::Pointer segFilter = SegmentationFilterType::New();
-  segFilter->SetInput(extract->GetOutput());
-  segFilter->GetFunctor().SetExpression("distance<40");
-  segFilter->Update();*/
   
   itk::TimeProbe chrono1;
   chrono1.Start();
@@ -115,15 +111,15 @@ PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, T
   itk::TimeProbe chrono2;
   chrono2.Start();
   //labelImageToVectorDataFilter->SetInput(dynamic_cast<LabelImageType *>(segFilter->GetOutputs().at(labelImageIndex).GetPointer()));
-  labelImageToVectorDataFilter->SetInput(dynamic_cast<LabelImageType *>(m_SegmentationFilter->GetOutputs().at(labelImageIndex).GetPointer()));
-  labelImageToVectorDataFilter->SetFieldName(m_FieldName);
-  labelImageToVectorDataFilter->Update();
+  labelImageToOGRDataFilter->SetInput(dynamic_cast<LabelImageType *>(m_SegmentationFilter->GetOutputs().at(labelImageIndex).GetPointer()));
+  labelImageToOGRDataFilter->SetFieldName(m_FieldName);
+  labelImageToOGRDataFilter->Update();
   
   chrono2.Stop();
   std::cout<< "vectorization took " << chrono2.GetTotal() << " sec"<<std::endl;
 
   //Relabel the vector data
-  itk::TimeProbe chrono3;
+  /*itk::TimeProbe chrono3;
   chrono3.Start();
   typename TreeNodeType::Pointer rootNode = const_cast<TreeNodeType *>(labelImageToVectorDataFilter->GetOutput()->GetDataTree()->GetRoot());
   ChildrenListType childList = rootNode->GetChildrenList()[0]->GetChildrenList();
@@ -160,9 +156,9 @@ PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, T
 
 
   tileChrono.Stop();
-  std::cout<< "tile processing took " << tileChrono.GetTotal() << " sec"<<std::endl;
+  std::cout<< "tile processing took " << tileChrono.GetTotal() << " sec"<<std::endl;*/
   // return the VectorData in image physical coordinates
-  return labelImageToVectorDataFilter->GetOutput();
+  return const_cast<OGRDataSourceObjectType *>(labelImageToOGRDataFilter->GetOutput());
 }
 
 

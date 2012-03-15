@@ -64,4 +64,8 @@ REGISTER_TEST(otbLabelImageToVectorDataFilterNew);
 REGISTER_TEST(otbLabelImageToVectorDataFilter);
 REGISTER_TEST(otbStreamingVectorizedSegmentationNew);
 REGISTER_TEST(otbStreamingVectorizedSegmentation);
+REGISTER_TEST(otbLabelImageToOGRDataSourceFilterNew);
+REGISTER_TEST(otbLabelImageToOGRDataSourceFilter);
+REGISTER_TEST(otbStreamingVectorizedSegmentationOGRNew);
+REGISTER_TEST(otbStreamingVectorizedSegmentationOGR);
 }

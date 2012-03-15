@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingVectorizedSegmentation_h
-#define __otbStreamingVectorizedSegmentation_h
+#ifndef __otbStreamingVectorizedSegmentationOGR_h
+#define __otbStreamingVectorizedSegmentationOGR_h
 
 #include <vector>
 
@@ -36,7 +36,7 @@
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-#include "otbPersistentImageToVectorDataFilter.h"
+#include "otbPersistentImageToOGRDataFilter.h"
 
 #include "otbMeanShiftImageFilter.h"
 #include "otbMeanShiftVectorImageFilter.h"
@@ -83,46 +83,43 @@ class LabeledOutputAccessor<MeanShiftVectorImageFilter<TInputImage, TOutputImage
 };
 
 
-/** \class PersistentStreamingLabelImageToVectorDataFilter
+/** \class PersistentStreamingLabelImageToOGRDataFilter
  *  \brief this class uses GDALPolygonize method to transform a Label image into a VectorData.
  *
  *  This filter is a generic PersistentImageFilter, which encapsulate
  *  the LabelImageToVectorData filter.
  *
- * \sa PersistentImageToVectorDataFilter
+ * \sa PersistentImageToOGRDataFilter
  *
  */
-template <class TImageType, class TOutputVectorData, class TSegmentationFilter>
-class PersistentStreamingLabelImageToVectorDataFilter
-  : public otb::PersistentImageToVectorDataFilter<TImageType,TOutputVectorData >
+template <class TImageType,  class TSegmentationFilter>
+class PersistentStreamingLabelImageToOGRDataFilter
+  : public otb::PersistentImageToOGRDataFilter<TImageType>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentStreamingLabelImageToVectorDataFilter                     Self;
-  typedef PersistentImageToVectorDataFilter<TImageType, TOutputVectorData >   Superclass;
-  typedef itk::SmartPointer<Self>                                             Pointer;
-  typedef itk::SmartPointer<const Self>                                       ConstPointer;
+  typedef PersistentStreamingLabelImageToOGRDataFilter                     Self;
+  typedef PersistentImageToOGRDataFilter<TImageType>                       Superclass;
+  typedef itk::SmartPointer<Self>                                          Pointer;
+  typedef itk::SmartPointer<const Self>                                    ConstPointer;
 
   typedef typename Superclass::InputImageType              InputImageType;
   typedef typename Superclass::InputImagePointer           InputImagePointerType;
 
-  typedef typename Superclass::OutputVectorDataType        OutputVectorDataType;
-  typedef typename Superclass::OutputVectorDataPointerType OutputVectorDataPointerType;
-  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType::ChildrenListType ChildrenListType;
-  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType TreeNodeType;
   
   typedef TSegmentationFilter                              SegmentationFilterType;
   typedef typename LabeledOutputAccessor<SegmentationFilterType>::LabelImageType  LabelImageType;
   typedef typename LabelImageType::PixelType                                      LabelPixelType;
   
-  typedef otb::LabelImageToVectorDataFilter<LabelImageType,
-    typename OutputVectorDataType::PrecisionType>          LabelImageToVectorDataFilterType;
+  typedef otb::LabelImageToOGRDataSourceFilter<LabelImageType>          LabelImageToOGRDataSourceFilterType;
+  typedef typename LabelImageToOGRDataSourceFilterType::OGRDataSourceObjectType  OGRDataSourceObjectType;
+  typedef typename OGRDataSourceObjectType::Pointer OGRDataSourceObjectPointerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentStreamingLabelImageToVectorDataFilter, PersistentImageToVectorDataFilter);
+  itkTypeMacro(PersistentStreamingLabelImageToOGRDataFilter, PersistentImageToOGRDataFilter);
   
   itkGetObjectMacro(SegmentationFilter, SegmentationFilterType);
   
@@ -137,17 +134,17 @@ public:
   itkGetMacro(StartLabel, LabelPixelType);
 
 protected:
-  PersistentStreamingLabelImageToVectorDataFilter();
+  PersistentStreamingLabelImageToOGRDataFilter();
 
-  virtual ~PersistentStreamingLabelImageToVectorDataFilter();
+  virtual ~PersistentStreamingLabelImageToOGRDataFilter();
 
   void GenerateInputRequestedRegion();
 
 private:
-  PersistentStreamingLabelImageToVectorDataFilter(const Self &); //purposely not implemented
+  PersistentStreamingLabelImageToOGRDataFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  virtual OutputVectorDataPointerType ProcessTile();
+  virtual OGRDataSourceObjectPointerType ProcessTile();
   
   std::string m_FieldName;
   LabelPixelType m_TileMaxLabel;
@@ -159,16 +156,16 @@ private:
   
 };
 
-template <class TImageType, class TOutputVectorData, class TSegmentationFilter>
-class ITK_EXPORT StreamingVectorizedSegmentation :
-public PersistentFilterStreamingDecorator<PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, TSegmentationFilter> >
+template <class TImageType,  class TSegmentationFilter>
+class ITK_EXPORT StreamingVectorizedSegmentationOGR :
+public PersistentFilterStreamingDecorator<PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter> >
 {
 
 public:
   /** Standard Self typedef */
-  typedef StreamingVectorizedSegmentation Self;
+  typedef StreamingVectorizedSegmentationOGR Self;
   typedef PersistentFilterStreamingDecorator
-  <PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, TSegmentationFilter> > Superclass;
+  <PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -176,12 +173,11 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(StreamingVectorizedSegmentation, PersistentFilterStreamingDecorator);
+  itkTypeMacro(StreamingVectorizedSegmentationOGR, PersistentFilterStreamingDecorator);
 
   typedef TSegmentationFilter                      SegmentationFilterType;
   typedef TImageType                               InputImageType;
-  typedef TOutputVectorData                        OutputVectorDataType;
-  typedef typename PersistentStreamingLabelImageToVectorDataFilter<TImageType, TOutputVectorData, TSegmentationFilter>::LabelPixelType LabelPixelType;
+  typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>::LabelPixelType LabelPixelType;
 
   void SetInput(InputImageType * input)
   {
@@ -195,11 +191,6 @@ public:
   SegmentationFilterType * GetSegmentationFilter()
   {
      return this->GetFilter()->GetSegmentationFilter();
-  }
-  
-  const OutputVectorDataType * GetOutputVectorData()
-  {
-     return this->GetFilter()->GetOutputVectorData();
   }
   
   void SetFieldName(const std::string & field)
@@ -229,12 +220,12 @@ public:
   
 protected:
   /** Constructor */
-  StreamingVectorizedSegmentation() {}
+  StreamingVectorizedSegmentationOGR() {}
   /** Destructor */
-  virtual ~StreamingVectorizedSegmentation() {}
+  virtual ~StreamingVectorizedSegmentationOGR() {}
 
 private:
-  StreamingVectorizedSegmentation(const Self &); //purposely not implemented
+  StreamingVectorizedSegmentationOGR(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 };
 
@@ -242,7 +233,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingVectorizedSegmentation.txx"
+#include "otbStreamingVectorizedSegmentationOGR.txx"
 #endif
 
 #endif
