@@ -4,6 +4,8 @@
 
 #include "itkMacro.h"
 
+#include "tinyxml.h"
+
 #ifdef TIXML_USE_STL
 	#include <iostream>
 	#include <sstream>
@@ -17,8 +19,6 @@
 	_CrtMemState startMemState;
 	_CrtMemState endMemState;
 #endif
-
-#include "tinyxml.h"
 
 static int gPass = 0;
 static int gFail = 0;
