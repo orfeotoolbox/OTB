@@ -187,6 +187,9 @@ private:
     AddParameter(ParameterType_Int,"bm.maxvd","Maximum vertical disparity");
     SetParameterDescription("bm.maxvd","Maximum vertical disparity to explore (can be negative)");
     
+    AddParameter(ParameterType_Empty,"bm.subpixel","Do sub-pixel interpolation");
+    SetParameterDescription("bm.subpixel", "Estimate disparities with sub-pixel precision");
+    
     AddParameter(ParameterType_Choice, "bm.initdisp", "Initial disparities");
     AddChoice("bm.initdisp.none", "None");
     SetParameterDescription("bm.initdisp.none", "No initial disparity used");
@@ -379,6 +382,11 @@ private:
       m_SSDBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
       m_SSDBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_SSDBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
+      if (IsParameterEnabled("bm.subpixel"))
+        {
+        m_SSDBlockMatcher->DoSubPixelInterpolationOn();
+        }
+      
       AddProcess(m_SSDBlockMatcher,"SSD block matching");
       if(masking)
         {
@@ -418,6 +426,11 @@ private:
       m_NCCBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_NCCBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
       m_NCCBlockMatcher->MinimizeOff();
+      if (IsParameterEnabled("bm.subpixel"))
+        {
+        m_NCCBlockMatcher->DoSubPixelInterpolationOn();
+        }
+      
       AddProcess(m_NCCBlockMatcher,"NCC block matching");
 
       if(masking)
@@ -458,6 +471,11 @@ private:
       m_LPBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
       m_LPBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_LPBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
+      if (IsParameterEnabled("bm.subpixel"))
+        {
+        m_LPBlockMatcher->DoSubPixelInterpolationOn();
+        }
+      
       AddProcess(m_LPBlockMatcher,"Lp block matching");
 
       if(masking)

@@ -21,6 +21,8 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "itkImageRegionConstIterator.h"
+#include "itkImageRegionIterator.h"
 #include "otbImage.h"
 
 namespace otb
@@ -41,11 +43,11 @@ template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class SSDBlockMatching
 {
 public:
-  typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeigghborhoodIteratorType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
   typedef typename TOutputMetricImage::ValueType      MetricValueType;
 
   // Implement the SSD operator
-  inline MetricValueType operator()(ConstNeigghborhoodIteratorType & a, ConstNeigghborhoodIteratorType & b) const
+  inline MetricValueType operator()(ConstNeighborhoodIteratorType & a, ConstNeighborhoodIteratorType & b) const
   {
     MetricValueType ssd = 0;
     
@@ -71,11 +73,11 @@ template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class NCCBlockMatching
 {
 public:
-  typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeigghborhoodIteratorType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
   typedef typename TOutputMetricImage::ValueType      MetricValueType;
 
   // Implement the NCC operator
-  inline MetricValueType operator()(ConstNeigghborhoodIteratorType & a, ConstNeigghborhoodIteratorType & b) const
+  inline MetricValueType operator()(ConstNeighborhoodIteratorType & a, ConstNeighborhoodIteratorType & b) const
   {
     MetricValueType meanA(0),meanB(0), sigmaA(0), sigmaB(0), cov(0), ncc(0);
     
@@ -129,10 +131,10 @@ template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class LPBlockMatching
 {
 public:
-  typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeigghborhoodIteratorType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
   typedef typename TOutputMetricImage::ValueType      MetricValueType;
   
-  LPBlockMatching(): m_P(0)
+  LPBlockMatching(): m_P(1)
     {
     }
   
@@ -149,7 +151,7 @@ public:
     }
   
   // Implement the Lp metric
-  inline MetricValueType operator()(ConstNeigghborhoodIteratorType & a, ConstNeigghborhoodIteratorType & b) const
+  inline MetricValueType operator()(ConstNeighborhoodIteratorType & a, ConstNeighborhoodIteratorType & b) const
   {
     MetricValueType score(0);
     
@@ -244,6 +246,10 @@ public:
   typedef typename InputImageType::SizeType                 SizeType;
   typedef typename InputImageType::IndexType                IndexType;
   typedef typename InputImageType::RegionType               RegionType;
+  
+  typedef typename TOutputMetricImage::ValueType            MetricValueType;
+  
+  typedef itk::ConstNeighborhoodIterator<TInputImage>       ConstNeighborhoodIteratorType;
 
   /** Set left input */
   void SetLeftInput( const TInputImage * image);
@@ -339,6 +345,10 @@ public:
   /** Get the initial disparity fields */
   const TOutputDisparityImage * GetHorizontalDisparityInput() const;
   const TOutputDisparityImage * GetVerticalDisparityInput() const;
+  
+  itkSetMacro(DoSubPixelInterpolation, bool);
+  itkGetConstReferenceMacro(DoSubPixelInterpolation,bool);
+  itkBooleanMacro(DoSubPixelInterpolation);
 
 protected:
   /** Constructor */
@@ -360,6 +370,11 @@ private:
   PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemeFnted
 
+  bool InterpolateSubPixelPosition(ConstNeighborhoodIteratorType & leftPatch,
+                                    itk::ImageRegionIterator<OutputDisparityImageType> & hDispIt,
+                                    itk::ImageRegionIterator<OutputDisparityImageType> & vDispIt,
+                                    itk::ImageRegionIterator<OutputMetricImageType> & metricIt);
+  
   /** The radius of the blocks */
   SizeType                      m_Radius;
 
@@ -389,6 +404,9 @@ private:
   
   /** Initial vertical disparity (0 by default, used if an exploration radius is set) */
   int                           m_InitVerticalDisparity;
+  
+  /** flag to perform sub-pixel interpolation */
+  bool                          m_DoSubPixelInterpolation;
 };
 } // end namespace otb
 
