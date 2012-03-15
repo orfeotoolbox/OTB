@@ -204,7 +204,12 @@ namespace otb
 	    }
 	    break;
 	  case Level_TOC:
-	    {std::cout << "toc" << std::endl;
+	    {
+	      m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
+	      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
+	      m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
+	      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+
 	      m_AtmosphericParam = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
 	      //AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
 
@@ -244,31 +249,24 @@ namespace otb
 		{
 		  m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("atmo.aeronet"));
 		}
-      
-	      //
-	      AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
-	      radTerms->ValuesInitialization(inImage->GetNumberOfComponentsPerPixel());
-	      m_ReflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);
-	      m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
-	      //m_ReflectanceToSurfaceReflectanceFilter->GenerateAtmosphericRadiativeTerms();
-	      //m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
-	      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
-	      m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
-	      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
-	      //m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
-      
+
 	      m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
 	      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
 	      m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+	      m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
 	      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
-	      // AtmosphericCorrectionParameters::Pointer atmoPar =  m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
-	      // itk::OStringStream oss;
+	      //itk::OStringStream oss;
 	      // oss.str("");
-	      // oss << atmoPar;
+	      // oss << m_AtmosphericParam;
+	      // //	      std::cout << oss.str() << std::endl;
+
+	      // AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
+	      // oss << std::endl << atmoTerms;
 	      // std::cout << oss.str() << std::endl;
 
 	      //rescale the surface reflectance in milli-reflectance
+
 	      m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
 	      m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
 	    }
