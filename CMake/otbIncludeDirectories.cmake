@@ -34,6 +34,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Testing
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/CurlAdapters
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OssimAdapters
+  ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/TinyXMLAdapters
   ${OTB_SOURCE_DIR}/Code/Visu
   ${OTB_SOURCE_DIR}/Code/Visualization
   ${OTB_BINARY_DIR}/Code/Visualization
@@ -83,7 +84,7 @@ ENDIF(OTB_USE_SIFTFAST)
 
 IF(OTB_USE_EXTERNAL_TINYXML)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-      ${TINYXML_INCLUDE_DIR})
+      ${TINYXML_INCLUDE_DIRS})
 ELSE(OTB_USE_EXTERNAL_TINYXML)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
       ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib)
@@ -264,6 +265,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Testing
   UtilitiesAdapters/CurlAdapters
   UtilitiesAdapters/OssimAdapters
+  UtilitiesAdapters/TinyXMLAdapters
   OBIA
   Fuzzy
   ObjectDetection
@@ -338,7 +340,7 @@ ENDIF(OTB_USE_EXTERNAL_FLTK)
 #For TinyXML header file
 IF(OTB_USE_EXTERNAL_TINYXML)
         SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
-                ${TINYXML_INCLUDE_DIR})
+                ${TINYXML_INCLUDE_DIRS})
 ELSE(OTB_USE_EXTERNAL_TINYXML)
         SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
                 Utilities/tinyXMLlib)

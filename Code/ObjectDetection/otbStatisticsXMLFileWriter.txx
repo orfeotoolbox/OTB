@@ -21,7 +21,7 @@
 #include "otbStatisticsXMLFileWriter.h"
 #include "itkMacro.h"
 #include "itksys/SystemTools.hxx"
-#include "tinyxml.h"
+#include "otbTinyXML.h"
 
 namespace otb {
 

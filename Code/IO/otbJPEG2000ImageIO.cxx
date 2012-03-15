@@ -44,7 +44,7 @@ extern "C"
 
 #include "itksys/SystemTools.hxx"
 
-#include "tinyxml.h"
+#include "otbTinyXML.h"
 
 
 /**

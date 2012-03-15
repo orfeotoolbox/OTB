@@ -4,7 +4,7 @@
 
 #include "itkMacro.h"
 
-#include "tinyxml.h"
+#include "otbTinyXML.h"
 
 #ifdef TIXML_USE_STL
 	#include <iostream>

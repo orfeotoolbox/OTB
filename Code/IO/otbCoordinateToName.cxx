@@ -23,7 +23,7 @@
 #include "otbMacro.h"
 #include "otbUtils.h"
 
-#include "tinyxml.h"
+#include "otbTinyXML.h"
 #include "otbCurlHelper.h"
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"

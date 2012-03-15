@@ -17,7 +17,7 @@
 =========================================================================*/
 
 #include "otbPlaceNameToLonLat.h"
-#include "tinyxml.h"
+#include "otbTinyXML.h"
 #include "otbCurlHelper.h"
 
 namespace otb

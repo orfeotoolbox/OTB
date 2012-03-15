@@ -1,3 +1,3 @@
 ADD_SUBDIRECTORY(CurlAdapters)
 ADD_SUBDIRECTORY(OssimAdapters)
-
+ADD_SUBDIRECTORY(TinyXMLAdapters)
