@@ -69,8 +69,8 @@
 #cmakedefine OTB_USE_SIFTFAST
 
 /* TinyXML Has STL */
-#ifndef TINYXML_USE_STL
-#cmakedefine TINYXML_USE_STL
+#ifndef TIXML_USE_STL
+#cmakedefine TIXML_USE_STL
 #endif
 
 /* Use Visu/Gui configurations */
