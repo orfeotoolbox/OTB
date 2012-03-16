@@ -17,6 +17,19 @@
 #
 # Created by Eric Wing.
 
+#=============================================================================
+# Copyright 2007-2009 Kitware, Inc.
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+# (To distribute this file outside of CMake, substitute the full
+#  License text for the above reference.)
+
 # Header files are presumed to be included like
 # #include <OpenThreads/Thread>
 
@@ -38,128 +51,73 @@
 # standard install paths.
 # Explicit -DVAR=value arguments should still be able to override everything.
 
-FIND_PATH(OPENTHREADS_INCLUDE_DIR OpenThreads/Thread
+find_path(OPENTHREADS_INCLUDE_DIR OpenThreads/Thread
+    HINTS
+        # enough environment variables?
+        $ENV{OPENTHREADS_INCLUDE_DIR}
+        $ENV{OPENTHREADS_DIR}
+        $ENV{OSG_INCLUDE_DIR}
+        $ENV{OSG_DIR}
+        $ENV{OSGDIR}
+        $ENV{OpenThreads_ROOT}
+        $ENV{OSG_ROOT}
     PATHS
-    $ENV{OPENTHREADS_INCLUDE_DIR}
-    $ENV{OPENTHREADS_DIR}/include
-    $ENV{OPENTHREADS_DIR}
-    $ENV{OSG_INCLUDE_DIR}
-    $ENV{OSG_DIR}/include
-    $ENV{OSG_DIR}
-    $ENV{OSGDIR}/include
-    $ENV{OSGDIR}
-    NO_DEFAULT_PATH
+        /sw # Fink
+        /opt/local # DarwinPorts
+        /opt/csw # Blastwave
+        /opt
+        /usr/freeware
+    PATH_SUFFIXES include
 )
 
 
-
-FIND_PATH(OPENTHREADS_INCLUDE_DIR OpenThreads/Thread
-    ~/Library/Frameworks
-    /Library/Frameworks
-    /usr/local/include
-    /usr/include
-    /sw/include # Fink
-    /opt/local/include # DarwinPorts
-    /opt/csw/include # Blastwave
-    /opt/include
-    $ENV{OSGEO4W_ROOT}/include
-    [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OpenThreads_ROOT]/include
-    [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OSG_ROOT]/include
-)
-
-
-FIND_LIBRARY(OPENTHREADS_LIBRARY 
+find_library(OPENTHREADS_LIBRARY 
     NAMES OpenThreads OpenThreadsWin32 
+    HINTS
+        $ENV{OPENTHREADS_LIBRARY_DIR}
+        $ENV{OPENTHREADS_DIR}
+        $ENV{OSG_LIBRARY_DIR}
+        $ENV{OSG_DIR}
+        $ENV{OSGDIR}
+        $ENV{OpenThreads_ROOT}
+        $ENV{OSG_ROOT}
     PATHS
-    $ENV{OPENTHREADS_LIBRARY_DIR}
-    $ENV{OPENTHREADS_DIR}/lib64
-    $ENV{OPENTHREADS_DIR}/lib
-    $ENV{OPENTHREADS_DIR}
-    $ENV{OSG_LIBRARY_DIR}
-    $ENV{OSG_DIR}/lib64
-    $ENV{OSG_DIR}/lib
-    $ENV{OSG_DIR}
-    $ENV{OSGDIR}/lib64
-    $ENV{OSGDIR}/lib
-    $ENV{OSGDIR}
-    NO_DEFAULT_PATH
+        /sw
+        /opt/local
+        /opt/csw
+        /opt
+        /usr/freeware
+    PATH_SUFFIXES lib64 lib
 )
 
-
-
-FIND_LIBRARY(OPENTHREADS_LIBRARY 
-    NAMES OpenThreads OpenThreadsWin32 
-    PATHS
-    ~/Library/Frameworks
-    /Library/Frameworks
-    /usr/local/lib64
-    /usr/local/lib
-    /usr/lib64
-    /usr/lib
-    /sw/lib64
-    /sw/lib
-    /opt/local/lib64
-    /opt/local/lib
-    /opt/csw/lib64
-    /opt/csw/lib
-    /opt/lib64
-    /opt/lib
-    $ENV{OSGEO4W_ROOT}/lib
-    [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OpenThreads_ROOT]/lib
-    [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OSG_ROOT]/lib
-)
-
-FIND_LIBRARY(OPENTHREADS_LIBRARY_DEBUG 
+find_library(OPENTHREADS_LIBRARY_DEBUG 
     NAMES OpenThreadsd OpenThreadsWin32d
+    HINTS
+        $ENV{OPENTHREADS_DEBUG_LIBRARY_DIR}
+        $ENV{OPENTHREADS_LIBRARY_DIR}
+        $ENV{OPENTHREADS_DIR}
+        $ENV{OSG_LIBRARY_DIR}
+        $ENV{OSG_DIR}
+        $ENV{OSGDIR}
+        $ENV{OpenThreads_ROOT}
+        $ENV{OSG_ROOT}
     PATHS
-    $ENV{OPENTHREADS_DEBUG_LIBRARY_DIR}
-    $ENV{OPENTHREADS_LIBRARY_DIR}
-    $ENV{OPENTHREADS_DIR}/lib64
-    $ENV{OPENTHREADS_DIR}/lib
-    $ENV{OPENTHREADS_DIR}
-    $ENV{OSG_LIBRARY_DIR}
-    $ENV{OSG_DIR}/lib64
-    $ENV{OSG_DIR}/lib
-    $ENV{OSG_DIR}
-    $ENV{OSGDIR}/lib64
-    $ENV{OSGDIR}/lib
-    $ENV{OSGDIR}
-    NO_DEFAULT_PATH
+        /sw
+        /opt/local
+        /opt/csw
+        /opt
+        /usr/freeware
+    PATH_SUFFIXES lib64 lib
 )
 
+if(OPENTHREADS_LIBRARY_DEBUG)
+    set(OPENTHREADS_LIBRARIES
+        optimized ${OPENTHREADS_LIBRARY}
+        debug ${OPENTHREADS_LIBRARY_DEBUG})
+else()
+    set(OPENTHREADS_LIBRARIES ${OPENTHREADS_LIBRARY})
+endif()
 
-
-FIND_LIBRARY(OPENTHREADS_LIBRARY_DEBUG 
-    NAMES OpenThreadsd OpenThreadsWin32d
-    PATHS
-    /usr/local/lib64
-    /usr/local/lib
-    /usr/lib64
-    /usr/lib
-    /sw/lib64
-    /sw/lib
-    /opt/local/lib64
-    /opt/local/lib
-    /opt/csw/lib64
-    /opt/csw/lib
-    /opt/lib64
-    /opt/lib
-    [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OpenThreads_ROOT]/lib
-    [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OSG_ROOT]/lib
-)
-
-
-IF(OPENTHREADS_LIBRARY)
-  IF(NOT OPENTHREADS_LIBRARY_DEBUG)
-      #MESSAGE("-- Warning Debug OpenThreads not found, using: ${OPENTHREADS_LIBRARY}")
-      #SET(OPENTHREADS_LIBRARY_DEBUG "${OPENTHREADS_LIBRARY}")
-      SET(OPENTHREADS_LIBRARY_DEBUG "${OPENTHREADS_LIBRARY}" CACHE FILEPATH "Debug version of OpenThreads Library (use regular version if not available)" FORCE)
-  ENDIF(NOT OPENTHREADS_LIBRARY_DEBUG)
-ENDIF(OPENTHREADS_LIBRARY)
-    
-SET(OPENTHREADS_FOUND "NO")
-IF(OPENTHREADS_INCLUDE_DIR AND OPENTHREADS_LIBRARY)
-  SET(OPENTHREADS_FOUND "YES")
-  # MESSAGE("-- Found OpenThreads: "${OPENTHREADS_LIBRARY})
-ENDIF(OPENTHREADS_INCLUDE_DIR AND OPENTHREADS_LIBRARY)
-
+include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(OpenThreads DEFAULT_MSG
+    OPENTHREADS_LIBRARY OPENTHREADS_INCLUDE_DIR)
