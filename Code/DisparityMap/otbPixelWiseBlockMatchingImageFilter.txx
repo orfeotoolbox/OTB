@@ -838,7 +838,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   
   // check if the position is a minimum (or maximum if !m_Minimize)
   double curMetric = metricIt.Get();
-  for (unsigned int i=firstNeighbor; i<8 ; i+=stepNeighbor)
+  for (unsigned int i=firstNeighbor; i<8; i+=stepNeighbor)
     {
     if (m_Minimize)
       {
