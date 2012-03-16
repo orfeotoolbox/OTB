@@ -69,6 +69,7 @@ find_path(OPENTHREADS_INCLUDE_DIR OpenThreads/Thread
         /usr/freeware
     PATH_SUFFIXES include
 )
+mark_as_advanced(OPENTHREADS_INCLUDE_DIR)
 
 
 find_library(OPENTHREADS_LIBRARY 
@@ -89,8 +90,9 @@ find_library(OPENTHREADS_LIBRARY
         /usr/freeware
     PATH_SUFFIXES lib64 lib
 )
+mark_as_advanced(OPENTHREADS_LIBRARY)
 
-find_library(OPENTHREADS_LIBRARY_DEBUG 
+find_library(OPENTHREADS_LIBRARY_DEBUG
     NAMES OpenThreadsd OpenThreadsWin32d
     HINTS
         $ENV{OPENTHREADS_DEBUG_LIBRARY_DIR}
@@ -109,6 +111,7 @@ find_library(OPENTHREADS_LIBRARY_DEBUG
         /usr/freeware
     PATH_SUFFIXES lib64 lib
 )
+mark_as_advanced(OPENTHREADS_LIBRARY_DEBUG)
 
 if(OPENTHREADS_LIBRARY_DEBUG)
     set(OPENTHREADS_LIBRARIES
