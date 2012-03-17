@@ -1,0 +1,34 @@
+# - Find LIBLAS
+# Find the native LIBLAS includes and library
+#
+#   LIBLAS_FOUND        - True if LIBLAS found.
+#   LIBLAS_INCLUDE_DIRS - where to find tinyxml.h, etc.
+#   LIBLAS_LIBRARIES    - List of libraries when using LIBLAS.
+#
+
+IF( LIBLAS_INCLUDE_DIR )
+    # Already in cache, be silent
+    message("silent")
+    SET( LIBLAS_FIND_QUIETLY TRUE )
+ENDIF( LIBLAS_INCLUDE_DIR )
+
+FIND_PATH( LIBLAS_INCLUDE_DIR liblas/capi/liblas.h )
+
+FIND_LIBRARY( LIBLAS_LIBRARY
+              NAMES liblas_c liblas )
+
+# handle the QUIETLY and REQUIRED arguments and set LIBLAS_FOUND to TRUE if
+# all listed variables are TRUE
+INCLUDE( FindPackageHandleStandardArgs )
+FIND_PACKAGE_HANDLE_STANDARD_ARGS( LIBLAS DEFAULT_MSG LIBLAS_INCLUDE_DIR LIBLAS_LIBRARY )
+
+MARK_AS_ADVANCED( LIBLAS_INCLUDE_DIR LIBLAS_LIBRARY )
+
+IF(LIBLAS_FOUND)
+  SET(LIBLAS_INCLUDE_DIRS ${LIBLAS_INCLUDE_DIR})
+  SET(LIBLAS_LIBRARIES ${LIBLAS_LIBRARY})
+ELSE(LIBLAS_FOUND)
+  SET(LIBLAS_INCLUDE_DIRS)
+  SET(LIBLAS_LIBRARIES)
+ENDIF(LIBLAS_FOUND)
+

@@ -1,37 +1,32 @@
 MESSAGE(STATUS "Importing LibLAS...")
-# Use the liblas library (do not link on solaris)
 OPTION(OTB_USE_LIBLAS "Use liblas library to support Lidar data format." ON)
 MARK_AS_ADVANCED(OTB_USE_LIBLAS)
 
 IF(OTB_USE_LIBLAS)
-    
-    OPTION(OTB_USE_EXTERNAL_LIBLAS "Use an outside build of LibLAS (Lidar data)." OFF)
-    MARK_AS_ADVANCED(OTB_USE_EXTERNAL_LIBLAS)
-    
-    IF(OTB_USE_EXTERNAL_LIBLAS)
-        FIND_PATH(LIBLAS_INCLUDE_DIR NAMES liblas/capi/liblas.h PATHS  ${OSGEO4W_INCLUDE} )
-        IF(LIBLAS_INCLUDE_DIR)
-          INCLUDE_DIRECTORIES( ${LIBLAS_INCLUDE_DIR} )
-        ENDIF(LIBLAS_INCLUDE_DIR)
-        
-        FIND_LIBRARY(LIBLAS_LIBRARY NAMES liblas_c liblas PATHS ${OSGEO4W_LIB})
-        IF(LIBLAS_LIBRARY)
-          LINK_DIRECTORIES( ${LIBLAS_LIBRARY} )
-        ENDIF(LIBLAS_LIBRARY)
-    ENDIF(OTB_USE_EXTERNAL_LIBLAS)
-    
-    IF(OTB_USE_EXTERNAL_LIBLAS)
-      MESSAGE(STATUS "  Using LibLAS external version")
-      MESSAGE(STATUS "  LibLAS includes : ${LIBLAS_INCLUDE_DIR}")
-      MESSAGE(STATUS "  LibLAS library  : ${LIBLAS_LIBRARY}")
-    ELSE(OTB_USE_EXTERNAL_LIBLAS)
-      MESSAGE(STATUS "  Using LibLAS internal version")
-    ENDIF(OTB_USE_EXTERNAL_LIBLAS)
+  FIND_PACKAGE(LibLAS)
 
-ADD_DEFINITIONS(-DLAS_DISABLE_DLL)
-
-ELSE(OTB_USE_LIBLAS)
-
-    MESSAGE(STATUS "  Disabling LibLAS support")
-    
+  # Initialize option with what's found on the system
+  IF(LIBLAS_FOUND)
+    OPTION(OTB_USE_EXTERNAL_LIBLAS "Use external LIBLAS library." ON)
+  ELSE(LIBLAS_FOUND)
+    OPTION(OTB_USE_EXTERNAL_LIBLAS "Use external LIBLAS library." OFF)
+  ENDIF(LIBLAS_FOUND)
+  MARK_AS_ADVANCED(OTB_USE_EXTERNAL_LIBLAS)
+  
+  IF(OTB_USE_EXTERNAL_LIBLAS)
+    IF(LIBLAS_FOUND)
+      MESSAGE(STATUS "Using LibLAS external version")
+    ELSE(LIBLAS_FOUND)
+      # Generate an error if no external liblas is available
+      MESSAGE(FATAL_ERROR "LibLAS required but not found. "
+                          "Either turn OTB_USE_EXTERNAL_LIBLAS to OFF to use the internal version, "
+                          "or OTB_USE_LIBLAS to OFF to disable LAS support")
+    ENDIF(LIBLAS_FOUND)
+  ELSE(OTB_USE_EXTERNAL_LIBLAS)
+    MESSAGE(STATUS "Using LibLAS internal version")
+    SET(LIBLAS_LIBRARIES otbliblas)
+    ADD_DEFINITIONS(-DLAS_DISABLE_DLL)
+  ENDIF(OTB_USE_EXTERNAL_LIBLAS)
+  
 ENDIF(OTB_USE_LIBLAS)
+
