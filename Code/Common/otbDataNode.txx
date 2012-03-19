@@ -532,6 +532,110 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 {
   return m_NodeType == FEATURE_COLLECTION;
 }
+
+
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+OGRGeometry *
+DataNode<TPrecision, VDimension, TValuePrecision>
+::ConvertDataNodeToOGRGeometry(const DataNode* dataNode)
+{
+  switch(dataNode->GetNodeType())
+    {
+    case FEATURE_POINT:
+    {
+    OGRPoint *ogrPoint = (OGRPoint *) OGRGeometryFactory::createGeometry(wkbPoint); ;
+    ogrPoint->setX(dataNode->GetPoint()[0]);
+    ogrPoint->setY(dataNode->GetPoint()[1]);
+    return ogrPoint;
+    }
+    break;
+    case FEATURE_LINE:
+    {
+    //Build the ogrObject
+    OGRLineString *             ogrLine = (OGRLineString *) OGRGeometryFactory::createGeometry(wkbLineString);
+    VertexListConstPointerType vertexList = dataNode->GetLine()->GetVertexList();
+    typename VertexListType::ConstIterator vIt = vertexList->Begin();
+
+    while (vIt != vertexList->End())
+      {
+      OGRPoint ogrPoint;
+      ogrPoint.setX(vIt.Value()[0]);
+      ogrPoint.setY(vIt.Value()[1]);
+      if (Dimension > 2)
+        {
+        ogrPoint.setZ(vIt.Value()[2]);
+        }
+      ogrLine->addPoint(&ogrPoint);
+      ++vIt;
+      }
+    return ogrLine;
+    }
+    break;
+    case FEATURE_POLYGON:
+    {
+    OGRPolygon * polygon = (OGRPolygon *) OGRGeometryFactory::createGeometry(wkbPolygon);
+    OGRLinearRing *  ogrExternalRing = (OGRLinearRing *) OGRGeometryFactory::createGeometry(wkbLinearRing);
+
+    VertexListConstPointerType vertexList = dataNode->GetPolygonExteriorRing()->GetVertexList();
+
+    typename VertexListType::ConstIterator vIt = vertexList->Begin();
+
+    while (vIt != vertexList->End())
+      {
+      OGRPoint ogrPoint;
+      ogrPoint.setX(vIt.Value()[0]);
+      ogrPoint.setY(vIt.Value()[1]);
+      if ( Dimension > 2)
+        {
+        ogrPoint.setZ(vIt.Value()[2]);
+        }
+
+      ogrExternalRing->addPoint(&ogrPoint);
+      ++vIt;
+      }
+    polygon->addRing(ogrExternalRing);
+    // Close the polygon
+    polygon->closeRings();
+    OGRGeometryFactory::destroyGeometry(ogrExternalRing);
+    return polygon;
+    }
+    break;
+    }
+
+  return NULL;  
+}
+
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+double
+DataNode<TPrecision, VDimension, TValuePrecision>
+::EuclideanDistance(const DataNode* node)
+{
+  // Convert the nodes to OGRGeometries
+  OGRGeometry * dstGeomtery     = this->ConvertDataNodeToOGRGeometry(node);
+  OGRGeometry * currentGeometry = this->ConvertDataNodeToOGRGeometry(this);
+  
+  // Compute the distance
+  return currentGeometry->Distance(dstGeomtery);
+}
+
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+double
+DataNode<TPrecision, VDimension, TValuePrecision>
+::EuclideanDistance(const PointType point)
+{
+  // Convert Point to point to ogrPoint
+  OGRPoint ogrPointSrc;
+  ogrPointSrc.setX(point[0]);
+  ogrPointSrc.setY(point[1]);
+
+  // Convert the current datanode to an OGRGeometry
+  OGRGeometry * currentGeometry = this->ConvertDataNodeToOGRGeometry(this);
+
+  // return the distance
+  return currentGeometry->Distance(&ogrPointSrc);
+}
+
+
 } // end namespace otb
 
 #endif

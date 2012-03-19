@@ -26,6 +26,8 @@
 
 #include <iostream>
 
+#include "ogrsf_frmts.h"
+
 namespace otb
 {
 /**
@@ -91,6 +93,8 @@ public:
   typedef typename LineType::Pointer                                           LinePointerType;
   typedef typename LineType::ConstPointer                                      LineConstPointerType;
   typedef Polygon<ValuePrecisionType>                                          PolygonType;
+  typedef typename PolygonType::VertexListType                                 VertexListType;
+  typedef typename VertexListType::ConstPointer                                VertexListConstPointerType;
   typedef typename PolygonType::Pointer                                        PolygonPointerType;
   typedef typename PolygonType::ConstPointer                                   PolygonConstPointerType;
   typedef ObjectList<PolygonType>                                              PolygonListType;
@@ -258,6 +262,10 @@ public:
     */
   std::vector<std::string> GetFieldList() const;
 
+  /** \return the distance to a point */
+  double EuclideanDistance(const DataNode* node);
+
+  double EuclideanDistance(const PointType point);
 /**
  * Clear all fields.
  */
@@ -270,6 +278,8 @@ protected:
   virtual ~DataNode() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  OGRGeometry* ConvertDataNodeToOGRGeometry(const DataNode* dataNode);
 
 private:
   DataNode(const Self&); //purposely not implemented
@@ -296,7 +306,6 @@ private:
 
   /** The fields map */
 //   FieldMapType         m_FieldMap;
-
 };
 } // end namespace
 
