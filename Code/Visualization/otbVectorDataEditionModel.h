@@ -30,7 +30,7 @@ namespace otb
 {
 /** \class VectorDataEditionModel
  *  \brief Model to handle vector data (point, line, polygons) vertex
- *  edition and geometry position 
+ *  edition and geometry position
  *
  *  \sa VectorDataEditVertexActionHandler, VectorDataTranslateGeometryActionHandler
  *
@@ -80,8 +80,8 @@ protected:
   /** Destructor */
   virtual ~VectorDataEditionModel(){}
 
-  void ProcessVertexListTranslation(VertexListType* vertexList, 
-                                    double tx, 
+  void ProcessVertexListTranslation(VertexListType* vertexList,
+                                    double tx,
                                     double ty);
 
 private:

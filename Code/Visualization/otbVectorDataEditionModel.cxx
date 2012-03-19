@@ -32,7 +32,7 @@ VectorDataEditionModel::VectorDataEditionModel() :
 
 void
 VectorDataEditionModel::UpdatePoint( PointType srcPoint, PointType dstPoint)
-{  
+{
   srcPoint[0] = this->GetOrigin()[0] + srcPoint[0] / this->GetSpacing()[0];
   srcPoint[1] = this->GetOrigin()[1] + srcPoint[1] / this->GetSpacing()[1];
   
@@ -124,7 +124,7 @@ VectorDataEditionModel::UpdateGeometryPosition(double tx, double ty)
       break;
       case FEATURE_POLYGON:
       {
-      newVertexList 
+      newVertexList
         = const_cast< VertexListType*>(GetSelectedGeometry()->GetPolygonExteriorRing()->GetVertexList());
 
       this->ProcessVertexListTranslation(newVertexList, tx, ty);
@@ -141,9 +141,9 @@ VectorDataEditionModel::UpdateGeometryPosition(double tx, double ty)
       }
       }
 
-    chrono.Stop();  
+    chrono.Stop();
     // std::cout<< "\tVectorDataEditionModel::UpdateGeometyPosition index "
-    //          << m_SearchIndex  <<" with tx: " << tx << " ty: "<< ty 
+    //          << m_SearchIndex  <<" with tx: " << tx << " ty: "<< ty
     //          <<" took " << chrono.GetMeanTime() << " seconds."
     //          <<std::endl;
     }
@@ -160,7 +160,7 @@ VectorDataEditionModel::SearchDataNodeIndexFromPoint( PointType srcPoint)
   chrono.Start();
 
   // Initialize the search index
-  m_SearchIndex = -1;  
+  m_SearchIndex = -1;
   
   // Search wich geometry the src point belong to
   itk::PreOrderTreeIterator<VectorDataType::DataTreeType> it(this->GetVectorData()->GetDataTree());
@@ -183,7 +183,7 @@ VectorDataEditionModel::SearchDataNodeIndexFromPoint( PointType srcPoint)
     ++it;
     }
 
-  chrono.Stop();  
+  chrono.Stop();
   //std::cout<< "\tVectorDataEditionModel::SearchDataNodeIndexFromPoint "
   //<< " -> m_SearchIndex "<< m_SearchIndex <<" found in " << chrono.GetMeanTime() << " seconds."
   //<<std::endl;

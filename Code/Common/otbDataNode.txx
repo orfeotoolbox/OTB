@@ -602,7 +602,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
     break;
     }
 
-  return NULL;  
+  return NULL;
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
