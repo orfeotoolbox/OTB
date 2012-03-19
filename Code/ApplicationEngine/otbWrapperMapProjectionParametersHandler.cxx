@@ -217,6 +217,7 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
     // Compute the Origin lat/long coordinate
     typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
     OutputParametersEstimatorType::Pointer genericRSEstimator = OutputParametersEstimatorType::New();
+
     genericRSEstimator->SetInput(app->GetParameterImage(imageKey));
     genericRSEstimator->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
     genericRSEstimator->Compute();
@@ -225,7 +226,7 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
                                                genericRSEstimator->GetOutputOrigin()[1]);
     // Update the UTM Gui fields
     app->SetParameterInt(zoneKey.str(), zone);
-    if(genericRSEstimator->GetOutputOrigin()[0] > 0.)
+    if(genericRSEstimator->GetOutputOrigin()[1] > 0.)
       {
       app->EnableParameter(hemKey.str());
       }
