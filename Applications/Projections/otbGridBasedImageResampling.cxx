@@ -33,8 +33,8 @@ namespace otb
 {
 enum
 {
-  Interpolator_Linear,
   Interpolator_NNeighbor,
+  Interpolator_Linear,
   Interpolator_BCO
 };
 
