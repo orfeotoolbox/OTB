@@ -294,7 +294,7 @@ private:
     int          minvdisp = GetParameterInt("bm.minvd");
     int          maxvdisp = GetParameterInt("bm.maxvd");
     
-    itk::OStringStream bandMathExpression;
+    std::ostringstream bandMathExpression;
     bandMathExpression<<"if(";
     
     unsigned int inputId = 0;
