@@ -223,7 +223,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     OGRSFDriver * ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
     OGRDataSource * dataSource = ogrDriver->CreateDataSource("Shape",NULL);
     
-    OGRLayer * outputLayer = dataSource->CreateLayer("toto",NULL,wkbMultiPolygon,NULL);
+    OGRLayer * outputLayer = dataSource->CreateLayer("layer",NULL,wkbMultiPolygon,NULL);
     
     OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
     outputLayer->CreateField(&field, true);
@@ -242,7 +242,6 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     
     //Clear memory
     GDALClose(dataset);
-
 
 }
 

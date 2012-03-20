@@ -21,6 +21,7 @@
 #include "otbImageFileReader.h"
 
 #include "otbMeanShiftVectorImageFilter.h"
+#include "otbMeanShiftImageFilter.h"
 #include "itkConnectedComponentFunctorImageFilter.h"
 #include "otbConnectedComponentMuParserFunctor.h"
 
@@ -53,13 +54,15 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
 
   // Typedefs
   typedef otb::VectorImage<InputPixelType,  Dimension>    ImageType;
+  //typedef otb::Image<InputPixelType,  Dimension>          ImageType;
   typedef otb::Image<unsigned int, Dimension>             LabelImageType;
   typedef otb::MeanShiftVectorImageFilter<ImageType, ImageType, LabelImageType> MeanShiftImageFilterType;
+  //typedef otb::MeanShiftImageFilter<ImageType, ImageType, LabelImageType> MeanShiftImageFilterType;
   
   typedef otb::Functor::ConnectedComponentMuParserFunctor<ImageType::PixelType>  FunctorType;
   typedef itk::ConnectedComponentFunctorImageFilter<ImageType, LabelImageType, FunctorType, LabelImageType > SegmentationFilterType;
-  typedef otb::StreamingVectorizedSegmentationOGR<ImageType, SegmentationFilterType> StreamingVectorizedSegmentationOGRType;
-  //typedef otb::StreamingVectorizedSegmentationOGR<ImageType, VectorDataType, MeanShiftImageFilterType> StreamingVectorizedSegmentationOGRType;
+  //typedef otb::StreamingVectorizedSegmentationOGR<ImageType, SegmentationFilterType> StreamingVectorizedSegmentationOGRType;
+  typedef otb::StreamingVectorizedSegmentationOGR<ImageType, MeanShiftImageFilterType> StreamingVectorizedSegmentationOGRType;
 
   typedef otb::ImageFileReader<ImageType>                      ReaderType;
 
@@ -75,12 +78,13 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   filter->GetStreamer()->SetTileDimensionTiledStreaming(atoi(argv[3]));
   filter->SetFieldName(fieldName);
   filter->SetStartLabel(1);
-  /*filter->GetSegmentationFilter()->SetSpatialRadius(10);
+  filter->GetSegmentationFilter()->SetSpatialRadius(10);
   filter->GetSegmentationFilter()->SetRangeRadius(15);
-  filter->GetSegmentationFilter()->SetMinimumRegionSize(400);*/
-  filter->GetSegmentationFilter()->GetFunctor().SetExpression("distance<40");
+  filter->GetSegmentationFilter()->SetMinimumRegionSize(400);
+  //filter->GetSegmentationFilter()->GetFunctor().SetExpression("distance<15");
   
   filter->SetFileName(argv[2]);
+  filter->Initialize(); //must do this after SetFileName ... 
   
   filter->Update();
 

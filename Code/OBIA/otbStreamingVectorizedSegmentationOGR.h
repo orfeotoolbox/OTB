@@ -123,8 +123,8 @@ public:
   
   itkGetObjectMacro(SegmentationFilter, SegmentationFilterType);
   
-  itkSetMacro(FieldName, std::string);
-  itkGetMacro(FieldName, std::string);
+  /*itkSetMacro(FieldName, std::string);
+  itkGetMacro(FieldName, std::string);*/
   
   void SetStartLabel(const LabelPixelType & label)
   {
@@ -146,7 +146,7 @@ private:
 
   virtual OGRDataSourceObjectPointerType ProcessTile();
   
-  std::string m_FieldName;
+  //std::string m_FieldName;
   LabelPixelType m_TileMaxLabel;
   LabelPixelType m_StartLabel;
   typename SegmentationFilterType::Pointer m_SegmentationFilter;
@@ -216,6 +216,11 @@ public:
   void SetFileName(const std::string & fileName)
   {
      this->GetFilter()->SetFileName(fileName);
+  }
+  
+  void Initialize()
+  {
+     this->GetFilter()->Initialize();
   }
   
 protected:

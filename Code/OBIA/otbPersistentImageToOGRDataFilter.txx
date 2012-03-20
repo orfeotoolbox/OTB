@@ -23,6 +23,8 @@
 
 #include "otbPersistentImageToOGRDataFilter.h"
 #include "ogrsf_frmts.h"
+#include "itksys/SystemTools.hxx"
+#include "otbSystem.h"
 
 namespace otb
 {
@@ -32,7 +34,7 @@ namespace otb
 
 template<class TImage>
 PersistentImageToOGRDataFilter<TImage>
-::PersistentImageToOGRDataFilter() : m_FileName(""), m_TileNum(0)
+::PersistentImageToOGRDataFilter() : m_FieldName("DN"), m_FileName(""), m_TileNum(0)
 {
    // OGR factory registration
    OGRRegisterAll();
@@ -47,6 +49,39 @@ PersistentImageToOGRDataFilter<TImage>
       OGRDataSource::DestroyDataSource(m_DataSource);
     }
 }
+
+template<class TImage>
+std::string
+PersistentImageToOGRDataFilter<TImage>
+::GetOGRDriverName(std::string name) const
+{
+  std::string extension;
+  std::string driverOGR;
+
+  std::string upperName;
+  upperName = name;
+  std::transform(name.begin(), name.end(), upperName.begin(), (int (*)(int))toupper);
+   
+  //Test of PostGIS connection string
+  if (upperName.substr(0, 3) == "PG:")
+    {
+    driverOGR = "PostgreSQL";
+    }
+  else
+    {
+    extension = System::GetExtension(upperName);
+    if (extension == "SHP") driverOGR = "ESRI Shapefile";
+    else if ((extension == "TAB")) driverOGR = "MapInfo File";
+    else if (extension == "GML") driverOGR = "GML";
+    else if (extension == "GPX") driverOGR = "GPX";
+    else if (extension == "SQLITE") driverOGR = "SQLite";
+//    else if (extension=="KML")
+//      driverOGR="KML";
+    else driverOGR = "NOT-FOUND";
+    }
+  return driverOGR;
+}
+
 
 template<class TImage>
 void
@@ -90,25 +125,23 @@ PersistentImageToOGRDataFilter<TImage>
     oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
     }
    OGRSFDriver * ogrDriver;
-   //OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), FALSE, &ogrDriver);
-   ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("ESRI Shapefile");
-   m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), NULL);
-   m_DataSource->CreateLayer("titi", oSRS ,wkbMultiPolygon, NULL);
-   
-   OGRFieldDefn field("DN",OFTInteger);
-   m_DataSource->GetLayer(0)->CreateField(&field, true);
-   
-   std::cout<<"bon ok "<<std::endl;
+   std::string driverName = this->GetOGRDriverName(this->m_FileName).data();
+   if(driverName != "NOT-FOUND")
+   {
+      ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName.c_str());
+      m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), NULL);
+      m_DataSource->CreateLayer("layer", oSRS ,wkbMultiPolygon, NULL);
+      
+      OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
+      m_DataSource->GetLayer(0)->CreateField(&field, true);
+   }
+   else
+   {
+      itkExceptionMacro(<< "No OGR driver found to write file " << this->m_FileName);
+   }
+
 }
 
-template<class TImage>
-void
-PersistentImageToOGRDataFilter<TImage>
-::SetFileName(const std::string & filename)
-{
-  m_FileName = filename;
-  this->Initialize();
-}
 
 template<class TImage>
 void
@@ -118,25 +151,14 @@ PersistentImageToOGRDataFilter<TImage>
   // call the processing function for this tile
   OGRDataSourceObjectPointerType currentTileVD = this->ProcessTile();
   OGRLayer * poSrcLayer = currentTileVD->Get()->GetDataSource()->GetLayer(0);
-  
-  std::ostringstream stream;
-  stream << m_TileNum;
-  
-  //m_DataSource->CopyLayer(tileLayer,stream.str().c_str(),NULL);
-  //create the layer corresponding to the tile processed !
+
   OGRLayer * poDstLayer;
   poDstLayer = m_DataSource->GetLayer(0);
   
-
-  //poDstLayer = m_DataSource->CreateLayer(stream.str().c_str(),poSrcLayer->GetSpatialRef() ,poSrcLayer->GetGeomType(), NULL);
-  //Copy features
+  //Copy features in the output layer
   poSrcLayer->ResetReading();
-  OGRFieldDefn * layerDefn = poSrcLayer->GetLayerDefn()->GetFieldDefn(0);
-  /*std::cout<<"ouaip "<< layerDefn->GetNameRef() <<std::endl;
-  poDstLayer->CreateField(layerDefn, true);
-  std::cout<<"create field ok"<<std::endl;*/
   unsigned int nbFeatures = poSrcLayer->GetFeatureCount(true);
-  //std::cout<<"nb Features : "<<nbFeatures <<std::endl;
+//  std::cout<< "pppppp"<<std::endl;
   unsigned int i = 0;
   OGRFeature  *poFeature;
   while (i<nbFeatures)
@@ -149,15 +171,14 @@ PersistentImageToOGRDataFilter<TImage>
       
       poDstFeature = OGRFeature::CreateFeature( poDstLayer->GetLayerDefn() );
       poDstFeature->SetFrom( poFeature, TRUE );
-      
       poDstLayer->CreateFeature( poDstFeature );
       
+      //free memory
       OGRFeature::DestroyFeature( poDstFeature );
       OGRFeature::DestroyFeature( poFeature );
       
       i++;
   }
-  
   
 //   OGRDataSource::DestroyDataSource(currentTileVD->Get()->GetDataSource());
   

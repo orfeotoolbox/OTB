@@ -82,8 +82,11 @@ public:
   virtual void Initialize(void);
   
   /** Specify the name of the output shapefile to write. */
-  void SetFileName(const std::string & filename);
+  itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
+  
+  itkSetMacro(FieldName, std::string);
+  itkGetMacro(FieldName, std::string);
 
 protected:
   PersistentImageToOGRDataFilter();
@@ -100,6 +103,9 @@ private:
 
   virtual OGRDataSourceObjectPointerType ProcessTile() = 0;
   
+  std::string GetOGRDriverName(std::string name) const;
+  
+  std::string m_FieldName;
   std::string m_FileName;
   unsigned int m_TileNum;
   OGRDataSource * m_DataSource;
