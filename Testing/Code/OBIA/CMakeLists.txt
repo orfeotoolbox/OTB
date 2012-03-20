@@ -148,7 +148,7 @@ ADD_TEST(obTvStreamingConnectedComponentSegmentationOBIAToVectorDataFilter ${OBI
       "SHAPE_Elongation>8"
       5 )
 
-#TODO add validation test
+#TODO JGT add validation test
 ADD_TEST(obTuMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter ${OBIA_TESTS1}
       otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter
       ${INPUTDATA}/ROI_QB_MUL_4.tif
@@ -163,6 +163,21 @@ ADD_TEST(obTuMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFil
       20
       "SHAPE_Elongation>10"
       5 )
+
+#TODO JGT add validation test
+ADD_TEST(obTuMeanShiftConnectedComponentSegmentationFilter ${OBIA_TESTS1}
+      otbMeanShiftConnectedComponentSegmentationFilter
+      ${INPUTDATA}/ROI_QB_MUL_4.tif
+      ${TEMP}/obTuMeanShiftConnectedComponentSegmentationImage.png
+      9 
+      9 
+      50 
+      10 
+      0.001
+      ""
+      "distance<0.2"
+      20)
+      
 
 
 
@@ -289,6 +304,7 @@ otbVectorDataToLabelMapFilter.cxx
 otbVectorDataToLabelMapFilterNew.cxx
 otbStreamingConnectedComponentOBIATest.cxx
 otbMeanShiftStreamingConnectedComponentOBIATest.cxx
+otbMeanShiftConnectedComponentSegmentationFilterTest.cxx
 otbHooverMatrixFilterNew.cxx
 otbHooverMatrixFilter.cxx
 otbHooverInstanceFilterNew.cxx
