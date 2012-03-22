@@ -85,7 +85,7 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   
   //New mean shift filter
   /*typedef otb::MeanShiftConnectedComponentSegmentationFilter
-  < ImageType, LabelImageType, LabelImageType >  SegmentationFilterType;*/
+  < ImageType, LabelImageType, LabelImageType >  SegmentationFilterType; */
   typedef otb::MeanShiftImageFilter2<ImageType,ImageType,ImageType,KernelType> MeanShiftFilterType;
   
   
@@ -119,7 +119,7 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   /*filter->GetSegmentationFilter()->SetMeanShiftFilter(meanShiftFilter);
   filter->GetSegmentationFilter()->SetMaskExpression(maskexpression);
   filter->GetSegmentationFilter()->SetConnectedComponentExpression(segmentationexpression);
-  filter->GetSegmentationFilter()->SetMinimumObjectSize(minobjectsize);*/
+  filter->GetSegmentationFilter()->SetMinimumObjectSize(minobjectsize); */
   
   filter->SetInput(reader->GetOutput());
   //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
@@ -132,7 +132,7 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   //filter->GetSegmentationFilter()->GetFunctor().SetExpression("distance<15");
   
   filter->SetFileName(argv[2]);
-  filter->Initialize(); //must do this after SetFileName ... 
+  filter->Initialize(); //must do this after SetFileName ...
   
   filter->Update();
 

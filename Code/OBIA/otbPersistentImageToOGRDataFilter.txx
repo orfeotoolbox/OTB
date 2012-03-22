@@ -31,7 +31,6 @@ namespace otb
 
 
 
-
 template<class TImage>
 PersistentImageToOGRDataFilter<TImage>
 ::PersistentImageToOGRDataFilter() : m_FieldName("DN"), m_FileName(""), m_TileNum(0)

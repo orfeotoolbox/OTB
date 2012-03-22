@@ -136,7 +136,7 @@ public:
   itkGetObjectMacro(SegmentationFilter, SegmentationFilterType);
   
   /*itkSetMacro(FieldName, std::string);
-  itkGetMacro(FieldName, std::string);*/
+  itkGetMacro(FieldName, std::string); */
   
   void SetStartLabel(const LabelPixelType & label)
   {
