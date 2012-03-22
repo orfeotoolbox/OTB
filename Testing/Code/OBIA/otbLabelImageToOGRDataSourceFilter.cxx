@@ -39,10 +39,10 @@ int otbLabelImageToOGRDataSourceFilterNew(int argc, char * argv[])
 
 int otbLabelImageToOGRDataSourceFilter(int argc, char * argv[])
 {
-  if (argc != 3)
+  if (argc != 2)
     {
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputLabelImageFile outputVectorfile(shp)" << std::endl;
+    std::cerr << " inputLabelImageFile " << std::endl;
     return EXIT_FAILURE;
     }
   const char * infname = argv[1];
@@ -65,8 +65,6 @@ int otbLabelImageToOGRDataSourceFilter(int argc, char * argv[])
   filter->SetInput(reader->GetOutput());
   filter->Update();
   
-  std::cout<<"layer name : "<<filter->GetOutput()->Get()->GetDataSource()->GetLayer(0)->GetName()<<std::endl;
-  std::cout<<"layer nb features : "<<filter->GetOutput()->Get()->GetDataSource()->GetLayer(0)->GetFeatureCount()<<std::endl;
 
   return EXIT_SUCCESS;
 }

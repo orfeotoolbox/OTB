@@ -39,6 +39,7 @@
 #include "otbPersistentImageToOGRDataFilter.h"
 
 #include "otbMeanShiftImageFilter.h"
+#include "otbMeanShiftImageFilter2.h"
 #include "otbMeanShiftVectorImageFilter.h"
 #include "itkMacro.h"
 
@@ -82,6 +83,17 @@ class LabeledOutputAccessor<MeanShiftVectorImageFilter<TInputImage, TOutputImage
       itkStaticConstMacro(LabeledOutputIndex, unsigned int, 2);
 };
 
+/**
+ * \class LabeledOutputAccessor
+ * \brief Specialized class to get the index of the labeled output image in mean shift filter (new version).
+ */
+template <class TInputImage, class TOutputImage, class TOutputImage2, class TKernelType>
+class LabeledOutputAccessor<MeanShiftImageFilter2<TInputImage, TOutputImage, TOutputImage2, TKernelType> >
+{
+   public:
+      typedef typename MeanShiftImageFilter2<TInputImage, TOutputImage, TOutputImage2, TKernelType>::LabeledOutputType    LabelImageType;
+      itkStaticConstMacro(LabeledOutputIndex, unsigned int, 0);
+};
 
 /** \class PersistentStreamingLabelImageToOGRDataFilter
  *  \brief this class uses GDALPolygonize method to transform a Label image into a VectorData.
