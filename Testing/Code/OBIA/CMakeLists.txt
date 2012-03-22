@@ -322,7 +322,6 @@ otbLabelMapToAttributeImageFilterNew.cxx
 otbHooverInstanceFilterToAttributeImage.cxx
 otbLabelImageToVectorDataFilterNew.cxx
 otbLabelImageToVectorDataFilter.cxx
-otbStreamingVectorizedSegmentation.cxx
 otbLabelImageToOGRDataSourceFilter.cxx
 otbStreamingVectorizedSegmentationOGR.cxx
 )
