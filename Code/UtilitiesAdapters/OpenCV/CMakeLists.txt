@@ -1,0 +1,10 @@
+# Sources of non-templated classes.
+
+
+FILE(GLOB OTBMachineLearning_SRCS "*.cxx" )
+
+ADD_LIBRARY(OTBMachineLearning ${OTBLearning_SRCS})
+TARGET_LINK_LIBRARIES (OTBMachineLearning OTBCommon otbsvm)
+IF(OTB_LIBRARY_PROPERTIES)
+  SET_TARGET_PROPERTIES(OTBMachineLearning PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+ENDIF(OTB_LIBRARY_PROPERTIES)
