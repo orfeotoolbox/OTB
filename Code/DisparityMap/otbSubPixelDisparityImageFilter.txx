@@ -465,7 +465,7 @@ SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
 {
-  // choose the refinement method to use 
+  // choose the refinement method to use
   switch(m_RefineMethod)
     {
     // 0 = Parabolic fit
@@ -562,7 +562,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   bool horizontalInterpolation = false;
   bool verticalInterpolation = false;
   
-  // metrics for neighbors positions : first index is x, second is y 
+  // metrics for neighbors positions : first index is x, second is y
   double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
   //int firstNeighbor = 0;
   //int stepNeighbor = 4;
@@ -632,7 +632,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           rightIt.SetLocation(downIndex);
           neighborsMetric[1][2] = m_Functor(leftIt,rightIt);
           
-          // check that current position is an extrema 
+          // check that current position is an extrema
           if (m_Minimize)
             {
             if (neighborsMetric[1][1] < neighborsMetric[1][0] && neighborsMetric[1][1] < neighborsMetric[1][2])
@@ -657,14 +657,14 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         IndexType rightIndex(curRightPos);
         rightIndex[0]+= 1;
         if ( rightBufferedRegion.IsInside(leftIndex) && rightBufferedRegion.IsInside(rightIndex) )
-          {          
+          {
           rightIt.SetLocation(rightIndex);
           neighborsMetric[2][1] = m_Functor(leftIt,rightIt);
           
           rightIt.SetLocation(leftIndex);
           neighborsMetric[0][1] = m_Functor(leftIt,rightIt);
           
-          // check that current position is an extrema 
+          // check that current position is an extrema
           if (m_Minimize)
             {
             if (neighborsMetric[1][1] < neighborsMetric[0][1] && neighborsMetric[1][1] < neighborsMetric[2][1])
@@ -739,7 +739,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     if (verticalInterpolation && !horizontalInterpolation)
       {
       //vertical only
-      double deltaV = 0.5 - (1.0 / 
+      double deltaV = 0.5 - (1.0 /
         (1.0 + (neighborsMetric[1][0]-neighborsMetric[1][1]) / (neighborsMetric[1][2]-neighborsMetric[1][1])));
       if (deltaV > (-0.5) && deltaV < 0.5)
         {
@@ -753,7 +753,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     else if (!verticalInterpolation && horizontalInterpolation)
       {
       // horizontal only
-      double deltaH = 0.5 - (1.0 / 
+      double deltaH = 0.5 - (1.0 /
         (1.0 + (neighborsMetric[0][1]-neighborsMetric[1][1]) / (neighborsMetric[2][1]-neighborsMetric[1][1])));
       if (deltaH > (-0.5) && deltaH < 0.5)
         {
@@ -925,7 +925,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   bool horizontalInterpolation = false;
   bool verticalInterpolation = false;
   
-  // metrics for neighbors positions : first index is x, second is y 
+  // metrics for neighbors positions : first index is x, second is y
   double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
   //int firstNeighbor = 0;
   //int stepNeighbor = 4;
@@ -995,7 +995,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           rightIt.SetLocation(downIndex);
           neighborsMetric[1][2] = m_Functor(leftIt,rightIt);
           
-          // check that current position is an extrema 
+          // check that current position is an extrema
           if (m_Minimize)
             {
             if (neighborsMetric[1][1] < neighborsMetric[1][0] && neighborsMetric[1][1] < neighborsMetric[1][2])
@@ -1020,14 +1020,14 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         IndexType rightIndex(curRightPos);
         rightIndex[0]+= 1;
         if ( rightBufferedRegion.IsInside(leftIndex) && rightBufferedRegion.IsInside(rightIndex) )
-          {          
+          {
           rightIt.SetLocation(rightIndex);
           neighborsMetric[2][1] = m_Functor(leftIt,rightIt);
           
           rightIt.SetLocation(leftIndex);
           neighborsMetric[0][1] = m_Functor(leftIt,rightIt);
           
-          // check that current position is an extrema 
+          // check that current position is an extrema
           if (m_Minimize)
             {
             if (neighborsMetric[1][1] < neighborsMetric[0][1] && neighborsMetric[1][1] < neighborsMetric[2][1])
@@ -1138,7 +1138,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       tinyShiftedRegion.SetSize(0, 1);
       tinyShiftedRegion.SetSize(1, 1);
       
-      for (unsigned int k=0 ; k<nbIterMax ; k++)
+      for (unsigned int k=0; k<nbIterMax; k++)
         {
         if ( (yb-ya) < (yc-yb) )
           {
@@ -1210,7 +1210,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       // set the output size and start index to the center position
       // then set the smaller shift in the transform
       
-      for (unsigned int k=0 ; k<nbIterMax ; k++)
+      for (unsigned int k=0; k<nbIterMax; k++)
         {
         if ( (yb-ya) < (yc-yb) )
           {

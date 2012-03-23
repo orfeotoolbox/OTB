@@ -26,7 +26,7 @@ namespace otb
 /** \class SubPixelDisparityImageFilter
  *  \brief Perform sub-pixel disparity estimation from input integer disparities and the image pair that was used
  *
- *  
+ *
  *
  *  \sa PixelWiseBlockMatchingImageFilter
  *  \sa FineRegistrationImageFilter
