@@ -23,6 +23,10 @@
 #include "itkFixedArray.h"
 #include "itkListSample.h"
 
+//include opencv
+#include <cv.h>       // opencv general include file
+#include <ml.h>		  // opencv machine learning include file
+
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
@@ -45,7 +49,10 @@ public:
   typedef TTargetValue                                  TargetValueType;
   typedef itk::FixedArray<TargetValueType,1>            TargetSampleType;
   typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
-  
+
+  //opencv typedef
+  typedef CvRTrees RFType;
+
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(RandomForestsMachineLearningModel, itk::DataObject);
@@ -62,13 +69,13 @@ public:
   /** Load the model from file */
   virtual void Load();
 
-  /** Input accessors */
-  itkSetObjectMacro(InputListSample,InputListSampleType);
-  itkGetObjectMacro(InputListSample,InputListSampleType);
+  /* /\** Input accessors *\/ */
+  /* itkSetObjectMacro(InputListSample,InputListSampleType); */
+  /* itkGetObjectMacro(InputListSample,InputListSampleType); */
 
-  /** Target accessors */
-  itkSetObjectMacro(TargetListSample,TargetListSampleType);
-  itkGetObjectMacro(TargetListSample,TargetListSampleType);
+  /* /\** Target accessors *\/ */
+  /* itkSetObjectMacro(TargetListSample,TargetListSampleType); */
+  /* itkGetObjectMacro(TargetListSample,TargetListSampleType); */
   
 protected:
   /** Constructor */
@@ -80,15 +87,17 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Input list sample */
-  typename InputListSampleType::Pointer m_InputListSample;
+  /* /\** Input list sample *\/ */
+  /* typename InputListSampleType::Pointer m_InputListSample; */
 
-  /** Target list sample */
-  typename TargetListSampleType::Pointer m_TargetListSample;
+  /* /\** Target list sample *\/ */
+  /* typename TargetListSampleType::Pointer m_TargetListSample; */
 
 private:
   RandomForestsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  CvRTrees * m_RFModel;
 };
 } // end namespace otb
 
