@@ -3,7 +3,7 @@
 
 FILE(GLOB OTBMachineLearning_SRCS "*.cxx" )
 
-ADD_LIBRARY(OTBMachineLearning ${OTBLearning_SRCS})
+ADD_LIBRARY(OTBMachineLearning ${OTBMachineLearning_SRCS})
 TARGET_LINK_LIBRARIES (OTBMachineLearning OTBCommon otbsvm)
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(OTBMachineLearning PROPERTIES ${OTB_LIBRARY_PROPERTIES})
