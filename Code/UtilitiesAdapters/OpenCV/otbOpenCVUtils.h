@@ -19,6 +19,7 @@
 #define __otbOpenCVUtils_h
 
 #include "ml.h"
+#include "itkPixelBuilder.h"
 
 namespace otb
 {
@@ -73,6 +74,40 @@ template <typename T> CvMat * ListSampleToCvMat(typename T::Pointer listSample) 
 
 template <typename T> CvMat * ListSampleToCvMat(typename T::ConstPointer listSample) {
   return ListSampleToCvMat(listSample.GetPointer());
+}
+
+template <typename T> typename T::Pointer CvMatToListSample(const CvMat * cvmat)
+{
+  // Build output type
+  typename T::Pointer output = T::New();
+
+  // Get samples count
+  unsigned sampleCount = cvmat->rows;
+
+  // Get samples size
+  unsigned int sampleSize = cvmat->cols;
+
+  // Loop on samples
+  for(unsigned int i = 0; i < sampleCount;++i)
+    {
+    typename T::MeasurementVectorType sample;
+    itk::PixelBuilder<typename T::MeasurementVectorType>::Zero(sample,sampleSize);
+
+    unsigned int realSampleSize = sample.Size();
+
+    for(unsigned int j = 0; j < realSampleSize;++j)
+      {
+      // Don't forget to cast
+      sample[j] = static_cast<typename T::MeasurementVectorType
+        ::ValueType>(cvGetReal2D(cvmat,i,j));
+      }
+   
+    // PushBack the new sample
+    output->PushBack(sample);
+    }
+
+  // return the output
+  return output;
 }
 
 }
