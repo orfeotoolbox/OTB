@@ -37,6 +37,18 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(MachineLearningModel, itk::DataObject);
 
+  /** Train the machine learning model */
+  virtual void Train() = 0;
+
+  /** Predict values using the model */
+  virtual void Predict()= 0;
+
+  /** Save the model to file */
+  virtual void Save() = 0;
+
+/** Load the model from file */
+  virtual void Load() = 0;
+  
 protected:
   /** Constructor */
   MachineLearningModel();
