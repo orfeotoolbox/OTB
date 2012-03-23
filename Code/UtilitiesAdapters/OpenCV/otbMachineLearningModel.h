@@ -20,7 +20,7 @@
 
 #include "itkLightObject.h"
 #include "itkVariableLengthVector.h"
-#inlcude "itkFixedArray.h"
+#include "itkFixedArray.h"
 #include "itkListSample.h"
 
 namespace otb
@@ -90,6 +90,7 @@ private:
   MachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 };
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMachineLearningModel.txx"
