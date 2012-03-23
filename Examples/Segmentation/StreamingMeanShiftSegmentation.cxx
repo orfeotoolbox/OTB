@@ -35,7 +35,7 @@
 
 // Software Guide : BeginCodeSnippet
 #include "otbMeanShiftImageFilter.h"
-#include "otbStreamingVectorizedSegmentation.h"
+#include "otbStreamingVectorizedSegmentationOGR.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
   // Typedefs
   // Software Guide : BeginCodeSnippet
   typedef otb::MeanShiftImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
-  typedef otb::StreamingVectorizedSegmentation<ImageType, VectorDataType, MeanShiftImageFilterType> StreamingVectorizedSegmentationType;
+  typedef otb::StreamingVectorizedSegmentationOGR<ImageType, MeanShiftImageFilterType> StreamingVectorizedSegmentationType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer             reader = ReaderType::New();
   StreamingVectorizedSegmentationType::Pointer filter = StreamingVectorizedSegmentationType::New();
-  WriterType::Pointer             writer = WriterType::New();
+  //WriterType::Pointer             writer = WriterType::New();
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
@@ -119,16 +119,22 @@ int main(int argc, char *argv[])
   //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
   filter->GetStreamer()->SetAutomaticTiledStreaming();
   
+  const std::string fieldName("DN");
+  filter->SetFieldName(fieldName);
+  filter->SetStartLabel(1);
+  
   filter->GetSegmentationFilter()->SetSpatialRadius(10);
   filter->GetSegmentationFilter()->SetRangeRadius(15);
   filter->GetSegmentationFilter()->SetMinimumRegionSize(400);
   
+  filter->SetFileName(argv[2]);
+  filter->Initialize();
   
   filter->Update();
 
-  writer->SetFileName(argv[2]);
-  writer->SetInput(filter->GetOutputVectorData());
-  writer->Update();
+  //writer->SetFileName(argv[2]);
+  //writer->SetInput(filter->GetOutputVectorData());
+  //writer->Update();
   // Software Guide : EndCodeSnippet
 
 
