@@ -27,7 +27,7 @@ namespace otb
  *  cvReleaseMat function.  A null pointer is resturned in case the
  *  conversion failed.
  */
-template <typename T> CvMat * VariableLengthVectorListSampleToCvMat(const T * listSample) {
+template <typename T> CvMat * ListSampleToCvMat(const T * listSample) {
   // Intialize to NULL
   CvMat * output = NULL;
 
@@ -44,7 +44,7 @@ template <typename T> CvMat * VariableLengthVectorListSampleToCvMat(const T * li
     typename T::ConstIterator sampleIt = listSample->Begin();
 
     // Retrieve samples size alike
-    unsigned int sampleSize = sampleIt.GetMeasurementVector().Size();
+    unsigned int sampleSize = listSample->GetMeasurementVectorSize();
 
     // Allocate CvMat
     output = cvCreateMat(sampleCount,sampleSize,CV_32FC1);
@@ -67,12 +67,12 @@ template <typename T> CvMat * VariableLengthVectorListSampleToCvMat(const T * li
   return output;
 }
 
-template <typename T> CvMat * VariableLengthVectorListSampleToCvMat(typename T::Pointer listSample) {
-  return VariableLengthVectorListSampleToCvMat(listSample.GetPointer());
+template <typename T> CvMat * ListSampleToCvMat(typename T::Pointer listSample) {
+  return ListSampleToCvMat(listSample.GetPointer());
 }
 
-template <typename T> CvMat * VariableLengthVectorListSampleToCvMat(typename T::ConstPointer listSample) {
-  return VariableLengthVectorListSampleToCvMat(listSample.GetPointer());
+template <typename T> CvMat * ListSampleToCvMat(typename T::ConstPointer listSample) {
+  return ListSampleToCvMat(listSample.GetPointer());
 }
 
 }
