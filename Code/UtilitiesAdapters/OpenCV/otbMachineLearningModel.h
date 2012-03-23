@@ -31,8 +31,8 @@ class ITK_EXPORT MachineLearningModel
 {
 public:
   /** Standard class typedefs. */
-  typedef SVMModel                                      Self;
-  typedef itk::DataObject                               Superclass;
+  typedef MachineLearningModel                          Self;
+  typedef itk::LightObject                              Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
 
