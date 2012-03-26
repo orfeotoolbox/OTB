@@ -79,7 +79,7 @@ template <class TInputImage, class TOutputImage, class TLabeledImage>
 class LabeledOutputAccessor<MeanShiftVectorImageFilter<TInputImage, TOutputImage, TLabeledImage> >
 {
    public:
-      typedef typename MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledImage>::LabeledOutputType    LabelImageType;
+      typedef typename MeanShiftVectorImageFilter<TInputImage, TOutputImage, TLabeledImage>::LabeledOutputType    LabelImageType;
       itkStaticConstMacro(LabeledOutputIndex, unsigned int, 2);
 };
 
