@@ -167,8 +167,7 @@ ADD_TEST(obTuMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFil
 #TODO JGT add validation test
 ADD_TEST(obTuMeanShiftConnectedComponentSegmentationFilter ${OBIA_TESTS1}
       otbMeanShiftConnectedComponentSegmentationFilter
-      /home2/arnaud/ORFEO-TOOLBOX/images/pleiade_extract.tif
-      #${INPUTDATA}/ROI_QB_MUL_4.tif
+      ${INPUTDATA}/ROI_QB_MUL_4.tif
       ${TEMP}/obTuMeanShiftConnectedComponentSegmentationImage.png
       9 
       9 
