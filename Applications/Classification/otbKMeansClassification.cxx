@@ -421,7 +421,7 @@ private:
     otbAppLogINFO("-- LEARNING --" << std::endl);
     otbAppLogINFO("Initial centroids are: " << std::endl);
 
-    message.clear();
+    message.str("");
     message << std::endl;
     for (unsigned int i = 0; i < nbClasses; i++)
       {
@@ -434,7 +434,7 @@ private:
       }
     message << std::endl;
     GetLogger()->Info(message.str());
-    message.clear();
+    message.str("");
     otbAppLogINFO("Starting optimization." << std::endl);
     EstimatorType::Pointer estimator = EstimatorType::New();
 
@@ -458,7 +458,7 @@ private:
       {
       otbAppLogWARNING("estimator reached maximum iteration number."<<std::endl);
       }
-    message.clear();
+    message.str("");
     message << "Estimated centroids are: " << std::endl;
     message << std::endl;
     for (unsigned int i = 0; i < nbClasses; i++)
