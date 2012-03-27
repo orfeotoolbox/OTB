@@ -41,6 +41,8 @@ namespace otb {
  *    - Setting the Origin/Size/Spacing of the output image
  *    - Using an existing image as support via SetOutputParametersFromImage(ImageBase)
  *
+ *  OGRRegisterAll() method must have been called before applying filter.
+ *
  */
 template <class TVectorData, class TOutputImage  >
 class  ITK_EXPORT VectorDataToLabelImageFilter :
