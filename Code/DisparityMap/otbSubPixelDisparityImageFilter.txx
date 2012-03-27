@@ -18,6 +18,8 @@
 #ifndef __otbSubPixelDisparityImageFilter_txx
 #define __otbSubPixelDisparityImageFilter_txx
 
+
+
 namespace otb
 {
 template <class TInputImage, class TOutputMetricImage,
@@ -48,6 +50,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   m_MinimumVerticalDisparity = 0;
   m_MaximumVerticalDisparity = 0;
   
+  // Default refinement method : parabolic
   m_RefineMethod = 0;
 }
 
@@ -297,6 +300,45 @@ class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
+::SetInputsFromBlockMatchingFilter(const BlockMatchingFilterType * filter)
+{
+  this->SetLeftInput(filter->GetLeftInput());
+  this->SetRightInput(filter->GetRightInput());
+  
+  this->SetRadius(filter->GetRadius());
+  
+  this->SetMinimumHorizontalDisparity(filter->GetMinimumHorizontalDisparity());
+  this->SetMaximumHorizontalDisparity(filter->GetMaximumHorizontalDisparity());
+  
+  this->SetMinimumVerticalDisparity(filter->GetMinimumVerticalDisparity());
+  this->SetMaximumVerticalDisparity(filter->GetMaximumVerticalDisparity());
+  
+  this->SetMinimize(filter->GetMinimize());
+  
+  if (filter->GetHorizontalDisparityOutput())
+    {
+    this->SetHorizontalDisparityInput(filter->GetHorizontalDisparityOutput());
+    }
+  if (filter->GetVerticalDisparityOutput())
+    {
+    this->SetVerticalDisparityInput(filter->GetVerticalDisparityOutput());
+    }
+  if (filter->GetLeftMaskInput())
+    {
+    this->SetLeftMaskInput(filter->GetLeftMaskInput());
+    }
+  if (filter->GetRightMaskInput())
+    {
+    this->SetRightMaskInput(filter->GetRightMaskInput());
+    }
+  
+}
+
+template <class TInputImage, class TOutputMetricImage,
+class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
+void
+SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
+TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GenerateInputRequestedRegion()
 {
   // Call superclass implementation
@@ -509,8 +551,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   itk::ImageRegionIterator<TDisparityImage> outHDispIt(outHDispPtr,outputRegionForThread);
   itk::ImageRegionIterator<TDisparityImage> outVDispIt(outVDispPtr,outputRegionForThread);
   itk::ImageRegionIterator<TOutputMetricImage>    outMetricIt(outMetricPtr,outputRegionForThread);
-  itk::ImageRegionIterator<TDisparityImage> inHDispIt;
-  itk::ImageRegionIterator<TDisparityImage> inVDispIt;
+  itk::ImageRegionConstIterator<TDisparityImage>  inHDispIt;
+  itk::ImageRegionConstIterator<TDisparityImage>  inVDispIt;
   itk::ImageRegionConstIterator<TMaskImage>       inLeftMaskIt;
   itk::ImageRegionConstIterator<TMaskImage>       inRightMaskIt;
   
@@ -532,12 +574,13 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   
   if(inLeftMaskPtr)
     {
-    inLeftMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inLeftMaskPtr,inputLeftRegion);
+    inLeftMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inLeftMaskPtr,outputRegionForThread);
     inLeftMaskIt.GoToBegin();
     }
+  RegionType rightBufferedRegion = inRightPtr->GetBufferedRegion();
   if(inRightMaskPtr)
     {
-    inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,inputRightRegion);
+    inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,rightBufferedRegion);
     inRightMaskIt.GoToBegin();
     }
   
@@ -552,7 +595,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   /* Specific variables */
   IndexType curLeftPos;
   IndexType curRightPos;
-  RegionType rightBufferedRegion = inRightPtr->GetBufferedRegion();
+  
   float hDisp_f;
   float vDisp_f;
   int hDisp_i;
@@ -564,8 +607,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   
   // metrics for neighbors positions : first index is x, second is y
   double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
-  //int firstNeighbor = 0;
-  //int stepNeighbor = 4;
   
   while (!leftIt.IsAtEnd()
         || !outHDispIt.IsAtEnd()
@@ -580,7 +621,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (useHorizontalDisparity)
       {
-      hDisp_f = static_cast<float>(hDispIt.Get());
+      hDisp_f = static_cast<float>(outHDispIt.Get());
       hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
       curRightPos[0] = curLeftPos[0] + hDisp_i;
       }
@@ -593,7 +634,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (useVerticalDisparity)
       {
-      vDisp_f = static_cast<float>(vDispIt.Get());
+      vDisp_f = static_cast<float>(outVDispIt.Get());
       vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
       curRightPos[1] = curLeftPos[1] + vDisp_i;
       }
@@ -606,130 +647,142 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     // check if the current right position is inside the right image
     if (rightBufferedRegion.IsInside(curRightPos))
       {
-      RegionType smallRightRegion;
-      smallRightRegion.SetIndex(0,curRightPos[0]-1);
-      smallRightRegion.SetIndex(1,curRightPos[1]-1);
-      smallRightRegion.SetSize(0,3);
-      smallRightRegion.SetSize(1,3);
-      
-      itk::ConstNeighborhoodIterator<TInputImage>     rightIt(m_Radius,inRightPtr,smallRightRegion);
-      
-      // compute metric at centre position
-      rightIt.SetLocation(curRightPos);
-      neighborsMetric[1][1] = m_Functor(leftIt,rightIt);
-      
-      if (m_MinimumVerticalDisparity < vDisp_i && vDisp_i < m_MaximumVerticalDisparity)
+      if (inRightMaskPtr)
         {
-        IndexType upIndex(curRightPos);
-        upIndex[1]+= (-1);
-        IndexType downIndex(curRightPos);
-        downIndex[1]+= 1;
-        if ( rightBufferedRegion.IsInside(upIndex) && rightBufferedRegion.IsInside(downIndex) )
-          {
-          rightIt.SetLocation(upIndex);
-          neighborsMetric[1][0] = m_Functor(leftIt,rightIt);
-          
-          rightIt.SetLocation(downIndex);
-          neighborsMetric[1][2] = m_Functor(leftIt,rightIt);
-          
-          // check that current position is an extrema
-          if (m_Minimize)
-            {
-            if (neighborsMetric[1][1] < neighborsMetric[1][0] && neighborsMetric[1][1] < neighborsMetric[1][2])
-              {
-              verticalInterpolation = true;
-              }
-            }
-          else
-            {
-            if (neighborsMetric[1][1] > neighborsMetric[1][0] && neighborsMetric[1][1] > neighborsMetric[1][2])
-              {
-              verticalInterpolation = true;
-              }
-            }
-          }
+        // Set right mask iterator position
+        inRightMaskIt.SetIndex(curRightPos);
         }
-      
-      if (m_MinimumHorizontalDisparity < hDisp_i && hDisp_i < m_MaximumHorizontalDisparity)
+      // check that the current positions are not masked
+      if(!inLeftMaskPtr || (inLeftMaskPtr && inLeftMaskIt.Get() > 0) )
         {
-        IndexType leftIndex(curRightPos);
-        leftIndex[0]+= (-1);
-        IndexType rightIndex(curRightPos);
-        rightIndex[0]+= 1;
-        if ( rightBufferedRegion.IsInside(leftIndex) && rightBufferedRegion.IsInside(rightIndex) )
+        if(!inRightMaskPtr || (inRightMaskPtr && inRightMaskIt.Get() > 0) )
           {
-          rightIt.SetLocation(rightIndex);
-          neighborsMetric[2][1] = m_Functor(leftIt,rightIt);
+          RegionType smallRightRegion;
+          smallRightRegion.SetIndex(0,curRightPos[0]-1);
+          smallRightRegion.SetIndex(1,curRightPos[1]-1);
+          smallRightRegion.SetSize(0,3);
+          smallRightRegion.SetSize(1,3);
           
-          rightIt.SetLocation(leftIndex);
-          neighborsMetric[0][1] = m_Functor(leftIt,rightIt);
+          itk::ConstNeighborhoodIterator<TInputImage>     rightIt(m_Radius,inRightPtr,smallRightRegion);
           
+          // compute metric at centre position
+          rightIt.SetLocation(curRightPos);
+          neighborsMetric[1][1] = m_Functor(leftIt,rightIt);
+          
+          if (m_MinimumVerticalDisparity < vDisp_i && vDisp_i < m_MaximumVerticalDisparity)
+            {
+            IndexType upIndex(curRightPos);
+            upIndex[1]+= (-1);
+            IndexType downIndex(curRightPos);
+            downIndex[1]+= 1;
+            if ( rightBufferedRegion.IsInside(upIndex) && rightBufferedRegion.IsInside(downIndex) )
+              {
+              rightIt.SetLocation(upIndex);
+              neighborsMetric[1][0] = m_Functor(leftIt,rightIt);
+              
+              rightIt.SetLocation(downIndex);
+              neighborsMetric[1][2] = m_Functor(leftIt,rightIt);
+              
           // check that current position is an extrema
-          if (m_Minimize)
-            {
-            if (neighborsMetric[1][1] < neighborsMetric[0][1] && neighborsMetric[1][1] < neighborsMetric[2][1])
-              {
-              horizontalInterpolation = true;
+              if (m_Minimize)
+                {
+                if (neighborsMetric[1][1] < neighborsMetric[1][0] && neighborsMetric[1][1] < neighborsMetric[1][2])
+                  {
+                  verticalInterpolation = true;
+                  }
+                }
+              else
+                {
+                if (neighborsMetric[1][1] > neighborsMetric[1][0] && neighborsMetric[1][1] > neighborsMetric[1][2])
+                  {
+                  verticalInterpolation = true;
+                  }
+                }
               }
             }
-          else
+          
+          if (m_MinimumHorizontalDisparity < hDisp_i && hDisp_i < m_MaximumHorizontalDisparity)
             {
-            if (neighborsMetric[1][1] > neighborsMetric[0][1] && neighborsMetric[1][1] > neighborsMetric[2][1])
-              {
-              horizontalInterpolation = true;
+            IndexType leftIndex(curRightPos);
+            leftIndex[0]+= (-1);
+            IndexType rightIndex(curRightPos);
+            rightIndex[0]+= 1;
+            if ( rightBufferedRegion.IsInside(leftIndex) && rightBufferedRegion.IsInside(rightIndex) )
+          {
+              rightIt.SetLocation(rightIndex);
+              neighborsMetric[2][1] = m_Functor(leftIt,rightIt);
+              
+              rightIt.SetLocation(leftIndex);
+              neighborsMetric[0][1] = m_Functor(leftIt,rightIt);
+              
+          // check that current position is an extrema
+              if (m_Minimize)
+                {
+                if (neighborsMetric[1][1] < neighborsMetric[0][1] && neighborsMetric[1][1] < neighborsMetric[2][1])
+                  {
+                  horizontalInterpolation = true;
+                  }
+                }
+              else
+                {
+                if (neighborsMetric[1][1] > neighborsMetric[0][1] && neighborsMetric[1][1] > neighborsMetric[2][1])
+                  {
+                  horizontalInterpolation = true;
+                  }
+                }
               }
             }
-          }
-        }
-      
-      // if both vertical and horizontal interpolation, compute metrics on corners
-      if (verticalInterpolation && horizontalInterpolation)
-        {
-        IndexType uprightIndex(curRightPos);
-        uprightIndex[0]+= 1;
-        uprightIndex[1]+= (-1);
-        rightIt.SetLocation(uprightIndex);
-        neighborsMetric[2][0] = m_Functor(leftIt,rightIt);
-        
-        IndexType downrightIndex(curRightPos);
-        downrightIndex[0]+= 1;
-        downrightIndex[1]+= 1;
-        rightIt.SetLocation(downrightIndex);
-        neighborsMetric[2][2] = m_Functor(leftIt,rightIt);
-        
-        IndexType downleftIndex(curRightPos);
-        downleftIndex[0]+= (-1);
-        downleftIndex[1]+= 1;
-        rightIt.SetLocation(downleftIndex);
-        neighborsMetric[0][2] = m_Functor(leftIt,rightIt);
-        
-        IndexType upleftIndex(curRightPos);
-        upleftIndex[0]+= (-1);
-        upleftIndex[1]+= (-1);
-        rightIt.SetLocation(upleftIndex);
-        neighborsMetric[0][0] = m_Functor(leftIt,rightIt);
-        
-        //check that it is an extrema
-        if (m_Minimize)
-          {
-          if (neighborsMetric[1][1] > neighborsMetric[2][0] ||
-              neighborsMetric[1][1] > neighborsMetric[2][2] ||
-              neighborsMetric[1][1] > neighborsMetric[0][2] ||
-              neighborsMetric[1][1] > neighborsMetric[0][0])
+          
+          // if both vertical and horizontal interpolation, compute metrics on corners
+          if (verticalInterpolation && horizontalInterpolation)
             {
-            verticalInterpolation = false;
-            horizontalInterpolation = false;
-            }
-          }
-        else
-          {
-          if (neighborsMetric[1][1] < neighborsMetric[2][0] ||
-              neighborsMetric[1][1] < neighborsMetric[2][2] ||
-              neighborsMetric[1][1] < neighborsMetric[0][2] ||
-              neighborsMetric[1][1] < neighborsMetric[0][0])
-            {
-            verticalInterpolation = false;
-            horizontalInterpolation = false;
+            IndexType uprightIndex(curRightPos);
+            uprightIndex[0]+= 1;
+            uprightIndex[1]+= (-1);
+            rightIt.SetLocation(uprightIndex);
+            neighborsMetric[2][0] = m_Functor(leftIt,rightIt);
+            
+            IndexType downrightIndex(curRightPos);
+            downrightIndex[0]+= 1;
+            downrightIndex[1]+= 1;
+            rightIt.SetLocation(downrightIndex);
+            neighborsMetric[2][2] = m_Functor(leftIt,rightIt);
+            
+            IndexType downleftIndex(curRightPos);
+            downleftIndex[0]+= (-1);
+            downleftIndex[1]+= 1;
+            rightIt.SetLocation(downleftIndex);
+            neighborsMetric[0][2] = m_Functor(leftIt,rightIt);
+            
+            IndexType upleftIndex(curRightPos);
+            upleftIndex[0]+= (-1);
+            upleftIndex[1]+= (-1);
+            rightIt.SetLocation(upleftIndex);
+            neighborsMetric[0][0] = m_Functor(leftIt,rightIt);
+            
+            //check that it is an extrema
+            if (m_Minimize)
+              {
+              if (neighborsMetric[1][1] > neighborsMetric[2][0] ||
+                  neighborsMetric[1][1] > neighborsMetric[2][2] ||
+                  neighborsMetric[1][1] > neighborsMetric[0][2] ||
+                  neighborsMetric[1][1] > neighborsMetric[0][0])
+                {
+                verticalInterpolation = false;
+                horizontalInterpolation = false;
+                }
+              }
+            else
+              {
+              if (neighborsMetric[1][1] < neighborsMetric[2][0] ||
+                  neighborsMetric[1][1] < neighborsMetric[2][2] ||
+                  neighborsMetric[1][1] < neighborsMetric[0][2] ||
+                  neighborsMetric[1][1] < neighborsMetric[0][0])
+                {
+                verticalInterpolation = false;
+                horizontalInterpolation = false;
+                }
+              }
             }
           }
         }
@@ -741,9 +794,12 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       //vertical only
       double deltaV = 0.5 - (1.0 /
         (1.0 + (neighborsMetric[1][0]-neighborsMetric[1][1]) / (neighborsMetric[1][2]-neighborsMetric[1][1])));
+      double interpMetric = neighborsMetric[1][1] - 
+        (0.5 * (neighborsMetric[1][0]+neighborsMetric[1][2]) - neighborsMetric[1][1]) * deltaV * deltaV;
       if (deltaV > (-0.5) && deltaV < 0.5)
         {
         outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
+        outMetricIt.Set(interpMetric);
         }
       else
         {
@@ -755,9 +811,12 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       // horizontal only
       double deltaH = 0.5 - (1.0 /
         (1.0 + (neighborsMetric[0][1]-neighborsMetric[1][1]) / (neighborsMetric[2][1]-neighborsMetric[1][1])));
+      double interpMetric = neighborsMetric[1][1] - 
+        (0.5 * (neighborsMetric[0][1]+neighborsMetric[2][1]) - neighborsMetric[1][1]) * deltaH * deltaH;
       if (deltaH > (-0.5) && deltaH < 0.5)
         {
         outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
+        outMetricIt.Set(interpMetric);
         }
       else
         {
@@ -782,10 +841,13 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         {
         double deltaH = (-dx * dyy + dy * dxy )/det;
         double deltaV = ( dx * dxy - dy * dxx )/det;
+        double interpMetric = neighborsMetric[1][1] - 
+          ( dxx * deltaH * deltaH + 2.0 * dxy * deltaH * deltaV + dyy * deltaV * deltaV);
         if (deltaH > (-1.0) && deltaH < 1.0 && deltaV > (-1.0) && deltaV < 1.0)
           {
           outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
           outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
+          outMetricIt.Set(interpMetric);
           }
         else
           {
@@ -794,7 +856,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           }
         }
       }
-    
     
     if (!verticalInterpolation)
       {
@@ -808,6 +869,10 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       outHDispIt.Set( static_cast<double>(hDisp_i));
       }
     
+    if (!verticalInterpolation && !horizontalInterpolation)
+      {
+      outMetricIt.Set(static_cast<double>(neighborsMetric[1][1]));
+      }
     
     progress.CompletedPixel();
     
@@ -824,15 +889,9 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       {
       ++inVDispIt;
       }
-      
     if(inLeftMaskPtr)
       {
       ++inLeftMaskIt;
-      }
-    
-    if(inRightMaskPtr)
-      {
-      ++inRightMaskIt;
       }
     }
 }
@@ -844,16 +903,7 @@ SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::TriangularRefinement(const RegionType& outputRegionForThread, int threadId)
 {
-}
-
-template <class TInputImage, class TOutputMetricImage,
-class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-void
-SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
-TDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::DichotomyRefinement(const RegionType& outputRegionForThread, int threadId)
-{
-// Retrieve pointers
+  // Retrieve pointers
   const TInputImage *     inLeftPtr    = this->GetLeftInput();
   const TInputImage *     inRightPtr   = this->GetRightInput();
   const TMaskImage  *     inLeftMaskPtr    = this->GetLeftMaskInput();
@@ -872,8 +922,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   itk::ImageRegionIterator<TDisparityImage> outHDispIt(outHDispPtr,outputRegionForThread);
   itk::ImageRegionIterator<TDisparityImage> outVDispIt(outVDispPtr,outputRegionForThread);
   itk::ImageRegionIterator<TOutputMetricImage>    outMetricIt(outMetricPtr,outputRegionForThread);
-  itk::ImageRegionIterator<TDisparityImage> inHDispIt;
-  itk::ImageRegionIterator<TDisparityImage> inVDispIt;
+  itk::ImageRegionConstIterator<TDisparityImage>  inHDispIt;
+  itk::ImageRegionConstIterator<TDisparityImage>  inVDispIt;
   itk::ImageRegionConstIterator<TMaskImage>       inLeftMaskIt;
   itk::ImageRegionConstIterator<TMaskImage>       inRightMaskIt;
   
@@ -895,12 +945,13 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   
   if(inLeftMaskPtr)
     {
-    inLeftMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inLeftMaskPtr,inputLeftRegion);
+    inLeftMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inLeftMaskPtr,outputRegionForThread);
     inLeftMaskIt.GoToBegin();
     }
+  RegionType rightBufferedRegion = inRightPtr->GetBufferedRegion();
   if(inRightMaskPtr)
     {
-    inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,inputRightRegion);
+    inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,rightBufferedRegion);
     inRightMaskIt.GoToBegin();
     }
   
@@ -915,7 +966,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   /* Specific variables */
   IndexType curLeftPos;
   IndexType curRightPos;
-  RegionType rightBufferedRegion = inRightPtr->GetBufferedRegion();
+  
   float hDisp_f;
   float vDisp_f;
   int hDisp_i;
@@ -925,10 +976,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   bool horizontalInterpolation = false;
   bool verticalInterpolation = false;
   
-  // metrics for neighbors positions : first index is x, second is y
+  // metrics for neighbors positions : first index is x, second is y 
   double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
-  //int firstNeighbor = 0;
-  //int stepNeighbor = 4;
   
   while (!leftIt.IsAtEnd()
         || !outHDispIt.IsAtEnd()
@@ -943,7 +992,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (useHorizontalDisparity)
       {
-      hDisp_f = static_cast<float>(hDispIt.Get());
+      hDisp_f = static_cast<float>(outHDispIt.Get());
       hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
       curRightPos[0] = curLeftPos[0] + hDisp_i;
       }
@@ -956,7 +1005,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (useVerticalDisparity)
       {
-      vDisp_f = static_cast<float>(vDispIt.Get());
+      vDisp_f = static_cast<float>(outVDispIt.Get());
       vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
       curRightPos[1] = curLeftPos[1] + vDisp_i;
       }
@@ -969,130 +1018,572 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     // check if the current right position is inside the right image
     if (rightBufferedRegion.IsInside(curRightPos))
       {
-      RegionType smallRightRegion;
-      smallRightRegion.SetIndex(0,curRightPos[0]-1);
-      smallRightRegion.SetIndex(1,curRightPos[1]-1);
-      smallRightRegion.SetSize(0,3);
-      smallRightRegion.SetSize(1,3);
-      
-      itk::ConstNeighborhoodIterator<TInputImage>     rightIt(m_Radius,inRightPtr,smallRightRegion);
-      
-      // compute metric at centre position
-      rightIt.SetLocation(curRightPos);
-      neighborsMetric[1][1] = m_Functor(leftIt,rightIt);
-      
-      if (m_MinimumVerticalDisparity < vDisp_i && vDisp_i < m_MaximumVerticalDisparity)
+      if (inRightMaskPtr)
         {
-        IndexType upIndex(curRightPos);
-        upIndex[1]+= (-1);
-        IndexType downIndex(curRightPos);
-        downIndex[1]+= 1;
-        if ( rightBufferedRegion.IsInside(upIndex) && rightBufferedRegion.IsInside(downIndex) )
+        // Set right mask iterator position
+        inRightMaskIt.SetIndex(curRightPos);
+        }
+      // check that the current positions are not masked
+      if(!inLeftMaskPtr || (inLeftMaskPtr && inLeftMaskIt.Get() > 0) )
+        {
+        if(!inRightMaskPtr || (inRightMaskPtr && inRightMaskIt.Get() > 0) )
           {
-          rightIt.SetLocation(upIndex);
-          neighborsMetric[1][0] = m_Functor(leftIt,rightIt);
+          RegionType smallRightRegion;
+          smallRightRegion.SetIndex(0,curRightPos[0]-1);
+          smallRightRegion.SetIndex(1,curRightPos[1]-1);
+          smallRightRegion.SetSize(0,3);
+          smallRightRegion.SetSize(1,3);
           
-          rightIt.SetLocation(downIndex);
-          neighborsMetric[1][2] = m_Functor(leftIt,rightIt);
+          itk::ConstNeighborhoodIterator<TInputImage>     rightIt(m_Radius,inRightPtr,smallRightRegion);
           
-          // check that current position is an extrema
-          if (m_Minimize)
+          // compute metric at centre position
+          rightIt.SetLocation(curRightPos);
+          neighborsMetric[1][1] = m_Functor(leftIt,rightIt);
+          
+          if (m_MinimumVerticalDisparity < vDisp_i && vDisp_i < m_MaximumVerticalDisparity)
             {
-            if (neighborsMetric[1][1] < neighborsMetric[1][0] && neighborsMetric[1][1] < neighborsMetric[1][2])
+            IndexType upIndex(curRightPos);
+            upIndex[1]+= (-1);
+            IndexType downIndex(curRightPos);
+            downIndex[1]+= 1;
+            if ( rightBufferedRegion.IsInside(upIndex) && rightBufferedRegion.IsInside(downIndex) )
               {
-              verticalInterpolation = true;
+              rightIt.SetLocation(upIndex);
+              neighborsMetric[1][0] = m_Functor(leftIt,rightIt);
+              
+              rightIt.SetLocation(downIndex);
+              neighborsMetric[1][2] = m_Functor(leftIt,rightIt);
+              
+              // check that current position is an extrema 
+              if (m_Minimize)
+                {
+                if (neighborsMetric[1][1] < neighborsMetric[1][0] && neighborsMetric[1][1] < neighborsMetric[1][2])
+                  {
+                  verticalInterpolation = true;
+                  }
+                }
+              else
+                {
+                if (neighborsMetric[1][1] > neighborsMetric[1][0] && neighborsMetric[1][1] > neighborsMetric[1][2])
+                  {
+                  verticalInterpolation = true;
+                  }
+                }
               }
             }
-          else
+          
+          if (m_MinimumHorizontalDisparity < hDisp_i && hDisp_i < m_MaximumHorizontalDisparity)
             {
-            if (neighborsMetric[1][1] > neighborsMetric[1][0] && neighborsMetric[1][1] > neighborsMetric[1][2])
+            IndexType leftIndex(curRightPos);
+            leftIndex[0]+= (-1);
+            IndexType rightIndex(curRightPos);
+            rightIndex[0]+= 1;
+            if ( rightBufferedRegion.IsInside(leftIndex) && rightBufferedRegion.IsInside(rightIndex) )
+              {          
+              rightIt.SetLocation(rightIndex);
+              neighborsMetric[2][1] = m_Functor(leftIt,rightIt);
+              
+              rightIt.SetLocation(leftIndex);
+              neighborsMetric[0][1] = m_Functor(leftIt,rightIt);
+              
+              // check that current position is an extrema 
+              if (m_Minimize)
+                {
+                if (neighborsMetric[1][1] < neighborsMetric[0][1] && neighborsMetric[1][1] < neighborsMetric[2][1])
+                  {
+                  horizontalInterpolation = true;
+                  }
+                }
+              else
+                {
+                if (neighborsMetric[1][1] > neighborsMetric[0][1] && neighborsMetric[1][1] > neighborsMetric[2][1])
+                  {
+                  horizontalInterpolation = true;
+                  }
+                }
+              }
+            }
+          
+          // if both vertical and horizontal interpolation, compute metrics on corners
+          if (verticalInterpolation && horizontalInterpolation)
+            {
+            IndexType uprightIndex(curRightPos);
+            uprightIndex[0]+= 1;
+            uprightIndex[1]+= (-1);
+            rightIt.SetLocation(uprightIndex);
+            neighborsMetric[2][0] = m_Functor(leftIt,rightIt);
+            
+            IndexType downrightIndex(curRightPos);
+            downrightIndex[0]+= 1;
+            downrightIndex[1]+= 1;
+            rightIt.SetLocation(downrightIndex);
+            neighborsMetric[2][2] = m_Functor(leftIt,rightIt);
+            
+            IndexType downleftIndex(curRightPos);
+            downleftIndex[0]+= (-1);
+            downleftIndex[1]+= 1;
+            rightIt.SetLocation(downleftIndex);
+            neighborsMetric[0][2] = m_Functor(leftIt,rightIt);
+            
+            IndexType upleftIndex(curRightPos);
+            upleftIndex[0]+= (-1);
+            upleftIndex[1]+= (-1);
+            rightIt.SetLocation(upleftIndex);
+            neighborsMetric[0][0] = m_Functor(leftIt,rightIt);
+            
+            //check that it is an extrema
+            if (m_Minimize)
               {
-              verticalInterpolation = true;
+              if (neighborsMetric[1][1] > neighborsMetric[2][0] ||
+                  neighborsMetric[1][1] > neighborsMetric[2][2] ||
+                  neighborsMetric[1][1] > neighborsMetric[0][2] ||
+                  neighborsMetric[1][1] > neighborsMetric[0][0])
+                {
+                verticalInterpolation = false;
+                horizontalInterpolation = false;
+                }
+              }
+            else
+              {
+              if (neighborsMetric[1][1] < neighborsMetric[2][0] ||
+                  neighborsMetric[1][1] < neighborsMetric[2][2] ||
+                  neighborsMetric[1][1] < neighborsMetric[0][2] ||
+                  neighborsMetric[1][1] < neighborsMetric[0][0])
+                {
+                verticalInterpolation = false;
+                horizontalInterpolation = false;
+                }
               }
             }
           }
         }
-      
-      if (m_MinimumHorizontalDisparity < hDisp_i && hDisp_i < m_MaximumHorizontalDisparity)
+      }
+    
+    // Interpolate position : triangular fit
+    if (verticalInterpolation && !horizontalInterpolation)
+      {
+      //vertical only
+      double deltaV;
+      double interpMetric;
+      if (neighborsMetric[1][0] < neighborsMetric[1][2])
         {
-        IndexType leftIndex(curRightPos);
-        leftIndex[0]+= (-1);
-        IndexType rightIndex(curRightPos);
-        rightIndex[0]+= 1;
-        if ( rightBufferedRegion.IsInside(leftIndex) && rightBufferedRegion.IsInside(rightIndex) )
-          {
-          rightIt.SetLocation(rightIndex);
-          neighborsMetric[2][1] = m_Functor(leftIt,rightIt);
-          
-          rightIt.SetLocation(leftIndex);
-          neighborsMetric[0][1] = m_Functor(leftIt,rightIt);
-          
-          // check that current position is an extrema
-          if (m_Minimize)
-            {
-            if (neighborsMetric[1][1] < neighborsMetric[0][1] && neighborsMetric[1][1] < neighborsMetric[2][1])
-              {
-              horizontalInterpolation = true;
-              }
-            }
-          else
-            {
-            if (neighborsMetric[1][1] > neighborsMetric[0][1] && neighborsMetric[1][1] > neighborsMetric[2][1])
-              {
-              horizontalInterpolation = true;
-              }
-            }
-          }
+        deltaV = 0.5 * ((neighborsMetric[1][0]-neighborsMetric[1][2])/(neighborsMetric[1][2]-neighborsMetric[1][1]));
+        interpMetric = neighborsMetric[1][1] + 0.5*(neighborsMetric[1][0]-neighborsMetric[1][2]);
+        }
+      else
+        {
+        deltaV = 0.5 * ((neighborsMetric[1][0]-neighborsMetric[1][2])/(neighborsMetric[1][0]-neighborsMetric[1][1]));
+        interpMetric = neighborsMetric[1][1] + 0.5*(neighborsMetric[1][2]-neighborsMetric[1][0]);
+        }
+      if (deltaV > (-0.5) && deltaV < 0.5)
+        {
+        outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
+        outMetricIt.Set(interpMetric);
+        }
+      else
+        {
+        verticalInterpolation = false;
+        }
+      }
+    else if (!verticalInterpolation && horizontalInterpolation)
+      {
+      // horizontal only
+      double deltaH;
+      double interpMetric;
+      if (neighborsMetric[0][1] < neighborsMetric[2][1])
+        {
+        deltaH = 0.5 * ((neighborsMetric[0][1]-neighborsMetric[2][1])/(neighborsMetric[2][1]-neighborsMetric[1][1]));
+        interpMetric = neighborsMetric[1][1] + 0.5*(neighborsMetric[0][1]-neighborsMetric[2][1]);
+        }
+      else
+        {
+        deltaH = 0.5 * ((neighborsMetric[0][1]-neighborsMetric[2][1])/(neighborsMetric[0][1]-neighborsMetric[1][1]));
+        interpMetric = neighborsMetric[1][1] + 0.5*(neighborsMetric[2][1]-neighborsMetric[0][1]);
+        }
+      if (deltaH > (-0.5) && deltaH < 0.5)
+        {
+        outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
+        outMetricIt.Set(interpMetric);
+        }
+      else
+        {
+        horizontalInterpolation = false;
+        }
+      }
+    else if (verticalInterpolation && horizontalInterpolation)
+      {
+      //both horizontal and vertical
+      double deltaH;
+      double deltaV;
+      double interpMetricH;
+      double interpMetricV;
+      if (neighborsMetric[1][0] < neighborsMetric[1][2])
+        {
+        deltaV = 0.5 * ((neighborsMetric[1][0]-neighborsMetric[1][2])/(neighborsMetric[1][2]-neighborsMetric[1][1]));
+        interpMetricV = neighborsMetric[1][1] + 0.5*(neighborsMetric[1][0]-neighborsMetric[1][2]);
+        }
+      else
+        {
+        deltaV = 0.5 * ((neighborsMetric[1][0]-neighborsMetric[1][2])/(neighborsMetric[1][0]-neighborsMetric[1][1]));
+        interpMetricV = neighborsMetric[1][1] + 0.5*(neighborsMetric[1][2]-neighborsMetric[1][0]);
+        }
+        
+      if (neighborsMetric[0][1] < neighborsMetric[2][1])
+        {
+        deltaH = 0.5 * ((neighborsMetric[0][1]-neighborsMetric[2][1])/(neighborsMetric[2][1]-neighborsMetric[1][1]));
+        interpMetricH = neighborsMetric[1][1] + 0.5*(neighborsMetric[0][1]-neighborsMetric[2][1]);
+        }
+      else
+        {
+        deltaH = 0.5 * ((neighborsMetric[0][1]-neighborsMetric[2][1])/(neighborsMetric[0][1]-neighborsMetric[1][1]));
+        interpMetricH = neighborsMetric[1][1] + 0.5*(neighborsMetric[2][1]-neighborsMetric[0][1]);
         }
       
-      // if both vertical and horizontal interpolation, compute metrics on corners
-      if (verticalInterpolation && horizontalInterpolation)
+      if (deltaV > (-1.0) && deltaV < 1.0 && deltaH > (-1.0) && deltaH < 1.0)
         {
-        IndexType uprightIndex(curRightPos);
-        uprightIndex[0]+= 1;
-        uprightIndex[1]+= (-1);
-        rightIt.SetLocation(uprightIndex);
-        neighborsMetric[2][0] = m_Functor(leftIt,rightIt);
-        
-        IndexType downrightIndex(curRightPos);
-        downrightIndex[0]+= 1;
-        downrightIndex[1]+= 1;
-        rightIt.SetLocation(downrightIndex);
-        neighborsMetric[2][2] = m_Functor(leftIt,rightIt);
-        
-        IndexType downleftIndex(curRightPos);
-        downleftIndex[0]+= (-1);
-        downleftIndex[1]+= 1;
-        rightIt.SetLocation(downleftIndex);
-        neighborsMetric[0][2] = m_Functor(leftIt,rightIt);
-        
-        IndexType upleftIndex(curRightPos);
-        upleftIndex[0]+= (-1);
-        upleftIndex[1]+= (-1);
-        rightIt.SetLocation(upleftIndex);
-        neighborsMetric[0][0] = m_Functor(leftIt,rightIt);
-        
-        //check that it is an extrema
-        if (m_Minimize)
+        outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
+        outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
+        outMetricIt.Set( interpMetricH*(vcl_abs(deltaH)/(vcl_abs(deltaV)+vcl_abs(deltaH))) + 
+                         interpMetricV*(vcl_abs(deltaV)/(vcl_abs(deltaV)+vcl_abs(deltaH))));
+        }
+      else
+        {
+        verticalInterpolation = false;
+        horizontalInterpolation = false;
+        }
+      }
+    
+    if (!verticalInterpolation)
+      {
+      // No vertical interpolation done : simply copy the integer vertical disparity
+      outVDispIt.Set( static_cast<double>(vDisp_i));
+      }
+    
+    if (!horizontalInterpolation)
+      {
+      // No horizontal interpolation done : simply copy the integer horizontal disparity
+      outHDispIt.Set( static_cast<double>(hDisp_i));
+      }
+    
+    if (!verticalInterpolation && !horizontalInterpolation)
+      {
+      outMetricIt.Set(static_cast<double>(neighborsMetric[1][1]));
+      }
+    
+    progress.CompletedPixel();
+    
+    ++leftIt;
+    ++outHDispIt;
+    ++outVDispIt;
+    ++outMetricIt;
+    
+    if (useHorizontalDisparity)
+      {
+      ++inHDispIt;
+      }
+    if (useVerticalDisparity)
+      {
+      ++inVDispIt;
+      }
+    if(inLeftMaskPtr)
+      {
+      ++inLeftMaskIt;
+      }
+    }
+}
+
+template <class TInputImage, class TOutputMetricImage,
+class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
+void
+SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
+TDisparityImage,TMaskImage,TBlockMatchingFunctor>
+::DichotomyRefinement(const RegionType& outputRegionForThread, int threadId)
+{
+  // Retrieve pointers
+  const TInputImage *     inLeftPtr    = this->GetLeftInput();
+  const TInputImage *     inRightPtr   = this->GetRightInput();
+  const TMaskImage  *     inLeftMaskPtr    = this->GetLeftMaskInput();
+  const TMaskImage  *     inRightMaskPtr    = this->GetRightMaskInput();
+  const TDisparityImage * inHDispPtr = this->GetHorizontalDisparityInput();
+  const TDisparityImage * inVDispPtr = this->GetVerticalDisparityInput();
+  TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
+  TDisparityImage * outHDispPtr   = this->GetHorizontalDisparityOutput();
+  TDisparityImage * outVDispPtr   = this->GetVerticalDisparityOutput();
+
+  // Set-up progress reporting (this is not exact, since we do not
+  // account for pixels that won't be refined)
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels(),100);
+  
+  itk::ConstNeighborhoodIterator<TInputImage>     leftIt(m_Radius,inLeftPtr,outputRegionForThread);
+  itk::ImageRegionIterator<TDisparityImage> outHDispIt(outHDispPtr,outputRegionForThread);
+  itk::ImageRegionIterator<TDisparityImage> outVDispIt(outVDispPtr,outputRegionForThread);
+  itk::ImageRegionIterator<TOutputMetricImage>    outMetricIt(outMetricPtr,outputRegionForThread);
+  itk::ImageRegionConstIterator<TDisparityImage>  inHDispIt;
+  itk::ImageRegionConstIterator<TDisparityImage>  inVDispIt;
+  itk::ImageRegionConstIterator<TMaskImage>       inLeftMaskIt;
+  itk::ImageRegionConstIterator<TMaskImage>       inRightMaskIt;
+  
+  bool useHorizontalDisparity = false;
+  bool useVerticalDisparity = false;
+  
+  if (inHDispPtr)
+    {
+    useHorizontalDisparity = true;
+    inHDispIt = itk::ImageRegionConstIterator<TDisparityImage>(inHDispPtr,outputRegionForThread);
+    inHDispIt.GoToBegin();
+    }
+  if (inVDispPtr)
+    {
+    useVerticalDisparity = true;
+    inVDispIt = itk::ImageRegionConstIterator<TDisparityImage>(inVDispPtr,outputRegionForThread);
+    inVDispIt.GoToBegin();
+    }
+  
+  if(inLeftMaskPtr)
+    {
+    inLeftMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inLeftMaskPtr,outputRegionForThread);
+    inLeftMaskIt.GoToBegin();
+    }
+  RegionType rightBufferedRegion = inRightPtr->GetBufferedRegion();
+  if(inRightMaskPtr)
+    {
+    inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,rightBufferedRegion);
+    inRightMaskIt.GoToBegin();
+    }
+  
+  itk::ConstantBoundaryCondition<TInputImage> nbc1;
+  leftIt.OverrideBoundaryCondition(&nbc1);
+  
+  leftIt.GoToBegin();
+  outHDispIt.GoToBegin();
+  outVDispIt.GoToBegin();
+  outMetricIt.GoToBegin();
+  
+  /* Specific variables */
+  IndexType curLeftPos;
+  IndexType curRightPos;
+  
+  float hDisp_f;
+  float vDisp_f;
+  int hDisp_i;
+  int vDisp_i;
+  
+  // compute metric around current right position
+  bool horizontalInterpolation = false;
+  bool verticalInterpolation = false;
+  
+  // metrics for neighbors positions : first index is x, second is y
+  double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
+  unsigned int nbIterMax = 8;
+  
+  // resampler
+  typename ResamplerFilterType::Pointer resampler = ResamplerFilterType::New();
+  resampler->SetInput(inRightPtr);
+  // set the output size and start index to the center position
+  // then set the smaller shift in the transform
+  IndexType upleftCorner;
+  SizeType windowSize;
+  windowSize[0] = 2 * m_Radius[0] + 1;
+  windowSize[1] = 2 * m_Radius[1] + 1;
+  resampler->SetSize(windowSize);
+  
+  TransformationType::Pointer transfo = TransformationType::New();
+  TransformationType::ParametersType offsetTransfo;
+  offsetTransfo[0] = 0.0;
+  offsetTransfo[1] = 0.0;
+  resampler->SetTransform(transfo);
+  
+  RegionType tinyShiftedRegion;
+  tinyShiftedRegion.SetIndex(0, m_Radius[0]);
+  tinyShiftedRegion.SetIndex(1, m_Radius[1]);
+  tinyShiftedRegion.SetSize(0, 1);
+  tinyShiftedRegion.SetSize(1, 1);
+  
+  // iterators on right image
+  itk::ConstNeighborhoodIterator<TInputImage>     rightIt;
+  itk::ConstNeighborhoodIterator<TInputImage>     shiftedIt;
+  bool centreHasMoved;
+  
+  while (!leftIt.IsAtEnd()
+        || !outHDispIt.IsAtEnd()
+        || !outVDispIt.IsAtEnd()
+        || !outMetricIt.IsAtEnd())
+    {
+    horizontalInterpolation = false;
+    verticalInterpolation = false;
+    
+    /* compute estimated right position */
+    curLeftPos = leftIt.GetIndex();
+    
+    if (useHorizontalDisparity)
+      {
+      hDisp_f = static_cast<float>(outHDispIt.Get());
+      hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
+      curRightPos[0] = curLeftPos[0] + hDisp_i;
+      }
+    else
+      {
+      hDisp_i = 0;
+      curRightPos[0] = curLeftPos[0];
+      }
+    
+    
+    if (useVerticalDisparity)
+      {
+      vDisp_f = static_cast<float>(outVDispIt.Get());
+      vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
+      curRightPos[1] = curLeftPos[1] + vDisp_i;
+      }
+    else
+      {
+      vDisp_i = 0;
+      curRightPos[1] = curLeftPos[1];
+      }
+    
+    // update resampler input position
+    upleftCorner[0] = curRightPos[0] - m_Radius[0];
+    upleftCorner[1] = curRightPos[1] - m_Radius[1];
+    resampler->SetOutputStartIndex(upleftCorner);
+    
+    // check if the current right position is inside the right image
+    if (rightBufferedRegion.IsInside(curRightPos))
+      {
+      if (inRightMaskPtr)
+        {
+        // Set right mask iterator position
+        inRightMaskIt.SetIndex(curRightPos);
+        }
+      // check that the current positions are not masked
+      if(!inLeftMaskPtr || (inLeftMaskPtr && inLeftMaskIt.Get() > 0) )
+        {
+        if(!inRightMaskPtr || (inRightMaskPtr && inRightMaskIt.Get() > 0) )
           {
-          if (neighborsMetric[1][1] > neighborsMetric[2][0] ||
-              neighborsMetric[1][1] > neighborsMetric[2][2] ||
-              neighborsMetric[1][1] > neighborsMetric[0][2] ||
-              neighborsMetric[1][1] > neighborsMetric[0][0])
+          RegionType smallRightRegion;
+          smallRightRegion.SetIndex(0,curRightPos[0]-1);
+          smallRightRegion.SetIndex(1,curRightPos[1]-1);
+          smallRightRegion.SetSize(0,3);
+          smallRightRegion.SetSize(1,3);
+          
+          rightIt.Initialize(m_Radius,inRightPtr,smallRightRegion);
+          
+          // compute metric at centre position
+          rightIt.SetLocation(curRightPos);
+          neighborsMetric[1][1] = m_Functor(leftIt,rightIt);
+          
+          if (m_MinimumVerticalDisparity < vDisp_i && vDisp_i < m_MaximumVerticalDisparity)
             {
-            verticalInterpolation = false;
-            horizontalInterpolation = false;
+            IndexType upIndex(curRightPos);
+            upIndex[1]+= (-1);
+            IndexType downIndex(curRightPos);
+            downIndex[1]+= 1;
+            if ( rightBufferedRegion.IsInside(upIndex) && rightBufferedRegion.IsInside(downIndex) )
+              {
+              rightIt.SetLocation(upIndex);
+              neighborsMetric[1][0] = m_Functor(leftIt,rightIt);
+              
+              rightIt.SetLocation(downIndex);
+              neighborsMetric[1][2] = m_Functor(leftIt,rightIt);
+              
+          // check that current position is an extrema
+              if (m_Minimize)
+                {
+                if (neighborsMetric[1][1] < neighborsMetric[1][0] && neighborsMetric[1][1] < neighborsMetric[1][2])
+                  {
+                  verticalInterpolation = true;
+                  }
+                }
+              else
+                {
+                if (neighborsMetric[1][1] > neighborsMetric[1][0] && neighborsMetric[1][1] > neighborsMetric[1][2])
+                  {
+                  verticalInterpolation = true;
+                  }
+                }
+              }
             }
-          }
-        else
-          {
-          if (neighborsMetric[1][1] < neighborsMetric[2][0] ||
-              neighborsMetric[1][1] < neighborsMetric[2][2] ||
-              neighborsMetric[1][1] < neighborsMetric[0][2] ||
-              neighborsMetric[1][1] < neighborsMetric[0][0])
+          
+          if (m_MinimumHorizontalDisparity < hDisp_i && hDisp_i < m_MaximumHorizontalDisparity)
             {
-            verticalInterpolation = false;
-            horizontalInterpolation = false;
+            IndexType leftIndex(curRightPos);
+            leftIndex[0]+= (-1);
+            IndexType rightIndex(curRightPos);
+            rightIndex[0]+= 1;
+            if ( rightBufferedRegion.IsInside(leftIndex) && rightBufferedRegion.IsInside(rightIndex) )
+          {
+              rightIt.SetLocation(rightIndex);
+              neighborsMetric[2][1] = m_Functor(leftIt,rightIt);
+              
+              rightIt.SetLocation(leftIndex);
+              neighborsMetric[0][1] = m_Functor(leftIt,rightIt);
+              
+          // check that current position is an extrema
+              if (m_Minimize)
+                {
+                if (neighborsMetric[1][1] < neighborsMetric[0][1] && neighborsMetric[1][1] < neighborsMetric[2][1])
+                  {
+                  horizontalInterpolation = true;
+                  }
+                }
+              else
+                {
+                if (neighborsMetric[1][1] > neighborsMetric[0][1] && neighborsMetric[1][1] > neighborsMetric[2][1])
+                  {
+                  horizontalInterpolation = true;
+                  }
+                }
+              }
+            }
+          
+          // if both vertical and horizontal interpolation, compute metrics on corners
+          if (verticalInterpolation && horizontalInterpolation)
+            {
+            IndexType uprightIndex(curRightPos);
+            uprightIndex[0]+= 1;
+            uprightIndex[1]+= (-1);
+            rightIt.SetLocation(uprightIndex);
+            neighborsMetric[2][0] = m_Functor(leftIt,rightIt);
+            
+            IndexType downrightIndex(curRightPos);
+            downrightIndex[0]+= 1;
+            downrightIndex[1]+= 1;
+            rightIt.SetLocation(downrightIndex);
+            neighborsMetric[2][2] = m_Functor(leftIt,rightIt);
+            
+            IndexType downleftIndex(curRightPos);
+            downleftIndex[0]+= (-1);
+            downleftIndex[1]+= 1;
+            rightIt.SetLocation(downleftIndex);
+            neighborsMetric[0][2] = m_Functor(leftIt,rightIt);
+            
+            IndexType upleftIndex(curRightPos);
+            upleftIndex[0]+= (-1);
+            upleftIndex[1]+= (-1);
+            rightIt.SetLocation(upleftIndex);
+            neighborsMetric[0][0] = m_Functor(leftIt,rightIt);
+            
+            //check that it is an extrema
+            if (m_Minimize)
+              {
+              if (neighborsMetric[1][1] > neighborsMetric[2][0] ||
+                  neighborsMetric[1][1] > neighborsMetric[2][2] ||
+                  neighborsMetric[1][1] > neighborsMetric[0][2] ||
+                  neighborsMetric[1][1] > neighborsMetric[0][0])
+                {
+                verticalInterpolation = false;
+                horizontalInterpolation = false;
+                }
+              }
+            else
+              {
+              if (neighborsMetric[1][1] < neighborsMetric[2][0] ||
+                  neighborsMetric[1][1] < neighborsMetric[2][2] ||
+                  neighborsMetric[1][1] < neighborsMetric[0][2] ||
+                  neighborsMetric[1][1] < neighborsMetric[0][0])
+                {
+                verticalInterpolation = false;
+                horizontalInterpolation = false;
+                }
+              }
             }
           }
         }
@@ -1101,7 +1592,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     // Interpolate position : dichotomy
     if (verticalInterpolation && !horizontalInterpolation)
       {
-      unsigned int nbIterMax = 8;
       double ya = static_cast<double>(vDisp_i -1);
       double yb = static_cast<double>(vDisp_i);
       double yc = static_cast<double>(vDisp_i +1);
@@ -1112,41 +1602,17 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double yd;
       double s_yd;
       
-      typedef itk::ResampleImageFilter<TInputImage,TInputImage,double> ResamplerType;
-      ResamplerType::Pointer resampler = ResamplerType::New();
-      resampler->SetInput(inRightPtr);
-      // set the output size and start index to the center position
-      // then set the smaller shift in the transform
-      IndexType upleftCorner(curRightPos);
-      upleftCorner[0] += (-curRadius[0]);
-      upleftCorner[1] += (-curRadius[1]);
-      SizeType windowSize;
-      windowSize[0] = 2 * curRadius[0] + 1;
-      windowSize[1] = 2 * curRadius[1] + 1;
-      resampler->SetOutputStartIndex(upleftCorner);
-      resampler->SetSize(windowSize);
-      typedef itk::TranslationTransform<double,2> TransformationType;
-      TransformationType::Pointer transfo = TransformationType::New();
-      double offsetTransfo[2];
       offsetTransfo[0] = 0.0;
-      offsetTransfo[1] = 0.0;
-      resampler->SetTransform(transfo);
-      
-      RegionType tinyShiftedRegion;
-      tinyShiftedRegion.SetIndex(0, curRadius[0]);
-      tinyShiftedRegion.SetIndex(1, curRadius[1]);
-      tinyShiftedRegion.SetSize(0, 1);
-      tinyShiftedRegion.SetSize(1, 1);
       
       for (unsigned int k=0; k<nbIterMax; k++)
         {
         if ( (yb-ya) < (yc-yb) )
           {
           yd = 0.5 * (yc+yb);
-          offsetTransfo[1] = yd - yb;
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
           transfo->SetParameters(offsetTransfo);
           resampler->Update();
-          itk::ConstNeighborhoodIterator<TInputImage>     shiftedIt(curRadius,resampler->GetOutput(),tinyShiftedRegion);
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_yd = m_Functor(leftIt,shiftedIt);
           
           if (s_yd<s_yb)
@@ -1166,10 +1632,10 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         else
           {
           yd = 0.5 * (ya+yb);
-          offsetTransfo[1] = yd - yb;
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
           transfo->SetParameters(offsetTransfo);
           resampler->Update();
-          itk::ConstNeighborhoodIterator<TInputImage>     shiftedIt(curRadius,resampler->GetOutput(),tinyShiftedRegion);
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_yd = m_Functor(leftIt,shiftedIt);
           
           if (s_yd<s_yb)
@@ -1189,11 +1655,11 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         }
       
       outVDispIt.Set( yb );
+      outMetricIt.Set( s_yb );
       
       }
     else if (!verticalInterpolation && horizontalInterpolation)
       {
-      unsigned int nbIterMax = 8;
       double xa = static_cast<double>(hDisp_i -1);
       double xb = static_cast<double>(hDisp_i);
       double xc = static_cast<double>(hDisp_i +1);
@@ -1204,62 +1670,246 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double xd;
       double s_xd;
       
-      typedef itk::ResampleImageFilter<TInputImage,TInputImage,double> ResamplerType;
-      ResamplerType::Pointer resampler = ResamplerType::New();
-      resampler->SetInput(inRightPtr);
-      // set the output size and start index to the center position
-      // then set the smaller shift in the transform
+      offsetTransfo[1] = 0.0;
+      
+      for (unsigned int k=0 ; k<nbIterMax ; k++)
+        {
+        if ( (xb-xa) < (xc-xb) )
+          {
+          xd = 0.5 * (xc+xb);
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
+          transfo->SetParameters(offsetTransfo);
+          resampler->Update();
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+          s_xd = m_Functor(leftIt,shiftedIt);
+          
+          if (s_xd<s_xb)
+            {
+            xa = xb;
+            s_xa = s_xb;
+            
+            xb = xd;
+            s_xb = s_xd;
+            }
+          else
+            {
+            xc = xd;
+            s_xc = s_xd;
+            }
+          }
+        else
+          {
+          xd = 0.5 * (xa+xb);
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
+          transfo->SetParameters(offsetTransfo);
+          resampler->Update();
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+          s_xd = m_Functor(leftIt,shiftedIt);
+          
+          if (s_xd<s_xb)
+            {
+            xc = xb;
+            s_xc = s_xb;
+            
+            xb = xd;
+            s_xb = s_xd;
+            }
+          else
+            {
+            xa = xd;
+            s_xa = s_xd;
+            }
+          }
+        }
+      
+      outHDispIt.Set( xb );
+      outMetricIt.Set( s_xb );
+      
+      }
+    else
+      {
+      double xa = static_cast<double>(hDisp_i);
+      double ya = static_cast<double>(vDisp_i - 1);
+      double xb = static_cast<double>(hDisp_i);
+      double yb = static_cast<double>(vDisp_i);
+      double xc = static_cast<double>(hDisp_i);
+      double yc = static_cast<double>(vDisp_i + 1);
+      double xe = static_cast<double>(hDisp_i - 1);
+      double ye = static_cast<double>(vDisp_i);
+      double xf = static_cast<double>(hDisp_i + 1);
+      double yf = static_cast<double>(vDisp_i);
+      
+      double s_a = neighborsMetric[1][0];
+      double s_b = neighborsMetric[1][1];
+      double s_c = neighborsMetric[1][2];
+      double s_e = neighborsMetric[0][1];
+      double s_f = neighborsMetric[2][1];
+      
+      
+      double xd;
+      double yd;
+      double s_d;
+      
+      offsetTransfo[0] = 0.0;
       
       for (unsigned int k=0; k<nbIterMax; k++)
         {
+        centreHasMoved = false;
+        // Vertical step
         if ( (yb-ya) < (yc-yb) )
           {
           yd = 0.5 * (yc+yb);
-          // s_yd = metric(yd);
-          if (s_yd<s_yb)
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
+          transfo->SetParameters(offsetTransfo);
+          resampler->Update();
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+          s_d = m_Functor(leftIt,shiftedIt);
+          
+          if (s_d<s_b)
             {
+            centreHasMoved = true;
+            
             ya = yb;
-            s_ya = s_yb;
+            s_a = s_b;
             
             yb = yd;
-            s_yb = s_yd;
+            s_b = s_d;
             }
           else
             {
             yc = yd;
-            s_yc = s_yd;
+            s_c = s_d;
             }
           }
         else
           {
           yd = 0.5 * (ya+yb);
-          // s_yd = metric(yd);
-          if (s_yd<s_yb)
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
+          transfo->SetParameters(offsetTransfo);
+          resampler->Update();
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+          s_d = m_Functor(leftIt,shiftedIt);
+          
+          if (s_d<s_b)
             {
+            centreHasMoved = true;
+            
             yc = yb;
-            s_yc = s_yb;
+            s_c = s_b;
             
             yb = yd;
-            s_yb = s_yd;
+            s_b = s_d;
             }
           else
             {
             ya = yd;
-            s_ya = s_yd;
+            s_a = s_d;
             }
           }
-        }
+        if (centreHasMoved)
+          {
+          // update points e and f
+          ye = yb;
+          yf = yb;
+          
+          offsetTransfo[1] = ye - static_cast<double>(vDisp_i);
+          
+          offsetTransfo[0] = xe - static_cast<double>(hDisp_i);
+          transfo->SetParameters(offsetTransfo);
+          resampler->Update();
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+          s_e = m_Functor(leftIt,shiftedIt);
+          
+          offsetTransfo[0] = xf - static_cast<double>(hDisp_i);
+          transfo->SetParameters(offsetTransfo);
+          resampler->Update();
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+          s_f = m_Functor(leftIt,shiftedIt);
+          }
         
-      outHDispIt.Set( xb );
+        centreHasMoved = false;
+        // Horizontal step
+        if ( (xb-xe) < (xf-xb) )
+          {
+          xd = 0.5 * (xf+xb);
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
+          transfo->SetParameters(offsetTransfo);
+          resampler->Update();
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+          s_d = m_Functor(leftIt,shiftedIt);
+          
+          if (s_d<s_b)
+            {
+            centreHasMoved = true;
+            
+            xe = xb;
+            s_e = s_b;
+            
+            xb = xd;
+            s_b = s_d;
+            }
+          else
+            {
+            xf = xd;
+            s_f = s_d;
+            }
+          }
+        else
+          {
+          xd = 0.5 * (xe+xb);
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
+          transfo->SetParameters(offsetTransfo);
+          resampler->Update();
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+          s_d = m_Functor(leftIt,shiftedIt);
+          
+          if (s_d<s_b)
+            {
+            centreHasMoved = true;
+            
+            xf = xb;
+            s_f = s_b;
+            
+            xb = xd;
+            s_b = s_d;
+            }
+          else
+            {
+            xe = xd;
+            s_e = s_d;
+            }
+          }
+        if (centreHasMoved)
+          {
+          // update a and c
+          xa = xb;
+          xc = xb;
+          
+          offsetTransfo[0] = xa - static_cast<double>(hDisp_i);
+          
+          offsetTransfo[1] = ya - static_cast<double>(vDisp_i);
+          transfo->SetParameters(offsetTransfo);
+          resampler->Update();
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+          s_a = m_Functor(leftIt,shiftedIt);
+          
+          offsetTransfo[1] = yc - static_cast<double>(vDisp_i);
+          transfo->SetParameters(offsetTransfo);
+          resampler->Update();
+          shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+          s_c = m_Functor(leftIt,shiftedIt);
+          }
+        
+        }
       
-      // TODO
+      outHDispIt.Set( xb );
+      outVDispIt.Set( yb );
+      outMetricIt.Set( s_b );
       }
-    else
-      {
-      // TODO
-      }
-    
-    
     
     if (!verticalInterpolation)
       {
@@ -1273,6 +1923,10 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       outHDispIt.Set( static_cast<double>(hDisp_i));
       }
     
+    if (!verticalInterpolation && !horizontalInterpolation)
+      {
+      outMetricIt.Set(static_cast<double>(neighborsMetric[1][1]));
+      }
     
     progress.CompletedPixel();
     
@@ -1289,15 +1943,9 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       {
       ++inVDispIt;
       }
-      
     if(inLeftMaskPtr)
       {
       ++inLeftMaskIt;
-      }
-    
-    if(inRightMaskPtr)
-      {
-      ++inRightMaskIt;
       }
     }
 }

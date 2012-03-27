@@ -172,15 +172,16 @@ private:
 } // End Namespace Functor
 
 /** \class PixelWiseBlockMatchingImageFilter
- *  \brief Perform horizontal 1D block matching between two images
+ *  \brief Perform 2D block matching between two images
  *
- *  This filter performs pixel-wise horizontal 1D block-matching
+ *  This filter performs pixel-wise 2D block-matching
  *  between a pair of image. This is especially useful in the case of
  *  stereo pairs in epipolar geometry, where displacements
  *  corresponding to differences of elevation occur in the horizontal
- *  direction only. Please note that only integer pixel displacement
- *  are explored. For finer results, consider up-sampling the input
- *  images or search for another filter.
+ *  direction only (in that case, the exploration along the vertical 
+ *  direction can be disabled). Please note that only integer pixel 
+ *  displacement are explored. For finer results, consider up-sampling 
+ *  the input images or use the SubPixelDisparityImageFilter.
  *
  *  The block-matching metric itself is defined by a template functor
  *  on neighborhood iterators. A wide range of block-matching
@@ -191,26 +192,36 @@ private:
  *  flag to off using the MinimizeOff() method will make the filter
  *  try to maximize the metric.
  *
- *  Only a user defined range of disparities between the two images is
- *  explored, which can be set by using the SetMinimumDisparity() and
- *  SetMaximumDisparity() methods.
+ *  Only a user defined area of disparities between the two images is
+ *  explored, which can be set by using the SetMinimumHorizontalDisparity()
+ *  , SetMinimumVerticalDisparity(), SetMaximumHorizontalDisparity() 
+ *  and SetMaximumVerticalDisparity() methods.
  *
- *  This filter has two outputs: the first is the disparity image,
- *  which can be retrieved using the GetDisparityOutput() method, and
- *  contains the estimated local horizontal displacement between both
- *  input images (displacement from left image to right image). The
- *  second is the metric image, which contains the metric optimum value
- *  corresponding to this estimated displacement.
+ *  This filter has three outputs: the first is the metric image, 
+ *  which contains the metric optimum value corresponding to the 
+ *  estimated displacement. The second and last outputs are the 
+ *  horizontal and vertical disparity maps, which can be retrieved 
+ *  using the GetHorizontalDisparityOutput() and GetVerticalDisparityOutput()
+ *  methods. They contain the horizontal and vertical local displacement
+ *  between the two input images (displacement is given in pixels, from left
+ *  image to right image).
  *
- *  Mask is not mandatory. The mask allows to indicate pixels validity
- *  with respect to the left image. If a mask image is provided, only
- *  pixels whose mask values are strictly positive will be considered
- *  for disparity exploration. The other will exhibit a null value for
- *  the metric and a disparity corresponding to the minimum allowed
+ *  Masks are not mandatory. A mask allows to indicate pixels validity in
+ *  either left or right image. Left and right masks can be used independently.
+ *  If masks are used, only pixels whose mask values are strictly positive
+ *  will be considered for disparity matching. The other will exhibit a null 
+ *  metric value and a disparity corresponding to the minimum allowed
  *  disparity.
+ *
+ *  The disparity exploration can also be reduced thanks to initial disparity
+ *  maps. The user can provide initial disparity estimate (using the same image
+ *  type and size as the output disparities), or global disparity values. Then
+ *  an exploration radius indicates the disparity range to be explored around 
+ *  the initial estimate (global minimum and maximum values are still in use).
  *
  *  \sa FineRegistrationImageFilter
  *  \sa StereorectificationDeformationFieldSource
+ *  \sa SubPixelDisparityImageFilter
  *
  *  \ingroup Streamed
  *  \ingroup Threaded
@@ -345,10 +356,6 @@ public:
   /** Get the initial disparity fields */
   const TOutputDisparityImage * GetHorizontalDisparityInput() const;
   const TOutputDisparityImage * GetVerticalDisparityInput() const;
-  
-  itkSetMacro(DoSubPixelInterpolation, bool);
-  itkGetConstReferenceMacro(DoSubPixelInterpolation,bool);
-  itkBooleanMacro(DoSubPixelInterpolation);
 
 protected:
   /** Constructor */
@@ -369,12 +376,7 @@ protected:
 private:
   PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemeFnted
-
-  bool InterpolateSubPixelPosition(ConstNeighborhoodIteratorType & leftPatch,
-                                    itk::ImageRegionIterator<OutputDisparityImageType> & hDispIt,
-                                    itk::ImageRegionIterator<OutputDisparityImageType> & vDispIt,
-                                    itk::ImageRegionIterator<OutputMetricImageType> & metricIt);
-  
+ 
   /** The radius of the blocks */
   SizeType                      m_Radius;
 
@@ -399,14 +401,13 @@ private:
   /** Block-matching functor */
   BlockMatchingFunctorType      m_Functor;
   
-  /** Initial horizontal disparity (0 by default, used if an exploration radius is set) */
+  /** Initial horizontal disparity (0 by default, used if an exploration radius is set and if no input horizontal 
+    disparity map is given) */
   int                           m_InitHorizontalDisparity;
   
-  /** Initial vertical disparity (0 by default, used if an exploration radius is set) */
+  /** Initial vertical disparity (0 by default, used if an exploration radius is set and if no input vertical 
+    disparity map is given) */
   int                           m_InitVerticalDisparity;
-  
-  /** flag to perform sub-pixel interpolation */
-  bool                          m_DoSubPixelInterpolation;
 };
 } // end namespace otb
 

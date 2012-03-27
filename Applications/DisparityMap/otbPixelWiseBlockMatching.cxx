@@ -384,7 +384,7 @@ private:
       m_SSDBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
       if (IsParameterEnabled("bm.subpixel"))
         {
-        m_SSDBlockMatcher->DoSubPixelInterpolationOn();
+        //m_SSDBlockMatcher->DoSubPixelInterpolationOn();
         }
       
       AddProcess(m_SSDBlockMatcher,"SSD block matching");
@@ -428,7 +428,7 @@ private:
       m_NCCBlockMatcher->MinimizeOff();
       if (IsParameterEnabled("bm.subpixel"))
         {
-        m_NCCBlockMatcher->DoSubPixelInterpolationOn();
+        //m_NCCBlockMatcher->DoSubPixelInterpolationOn();
         }
       
       AddProcess(m_NCCBlockMatcher,"NCC block matching");
@@ -473,7 +473,7 @@ private:
       m_LPBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
       if (IsParameterEnabled("bm.subpixel"))
         {
-        m_LPBlockMatcher->DoSubPixelInterpolationOn();
+        //m_LPBlockMatcher->DoSubPixelInterpolationOn();
         }
       
       AddProcess(m_LPBlockMatcher,"Lp block matching");
