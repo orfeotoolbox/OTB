@@ -54,6 +54,9 @@ TARGET_LINK_LIBRARIES(0000428-CastImageFilterStreaming OTBIO OTBCommon OTBBasicF
 ADD_EXECUTABLE(0000433-LineSegmentDetector_8b_16b_compare 0000433-LineSegmentDetector_8b_16b_compare.cxx)
 TARGET_LINK_LIBRARIES(0000433-LineSegmentDetector_8b_16b_compare OTBIO OTBFeatureExtraction)
 
+ADD_EXECUTABLE(otbVectorDataToLabelImageFilterWithoutReader  otbVectorDataToLabelImageFilterWithoutReader.cxx)
+TARGET_LINK_LIBRARIES(otbVectorDataToLabelImageFilterWithoutReader OTBBasicFilters OTBIO OTBCommon)
+
 IF(BUILD_APPLICATIONS)
   ADD_EXECUTABLE(0000436-WrapperInputImage_GetImage 0000436-WrapperInputImage_GetImage.cxx)
   TARGET_LINK_LIBRARIES(0000436-WrapperInputImage_GetImage OTBApplicationEngine)
