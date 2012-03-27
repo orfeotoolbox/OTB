@@ -19,7 +19,6 @@
 #define __otbSubPixelDisparityImageFilter_txx
 
 
-
 namespace otb
 {
 template <class TInputImage, class TOutputMetricImage,
@@ -794,7 +793,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       //vertical only
       double deltaV = 0.5 - (1.0 /
         (1.0 + (neighborsMetric[1][0]-neighborsMetric[1][1]) / (neighborsMetric[1][2]-neighborsMetric[1][1])));
-      double interpMetric = neighborsMetric[1][1] - 
+      double interpMetric = neighborsMetric[1][1] -
         (0.5 * (neighborsMetric[1][0]+neighborsMetric[1][2]) - neighborsMetric[1][1]) * deltaV * deltaV;
       if (deltaV > (-0.5) && deltaV < 0.5)
         {
@@ -811,7 +810,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       // horizontal only
       double deltaH = 0.5 - (1.0 /
         (1.0 + (neighborsMetric[0][1]-neighborsMetric[1][1]) / (neighborsMetric[2][1]-neighborsMetric[1][1])));
-      double interpMetric = neighborsMetric[1][1] - 
+      double interpMetric = neighborsMetric[1][1] -
         (0.5 * (neighborsMetric[0][1]+neighborsMetric[2][1]) - neighborsMetric[1][1]) * deltaH * deltaH;
       if (deltaH > (-0.5) && deltaH < 0.5)
         {
@@ -841,7 +840,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         {
         double deltaH = (-dx * dyy + dy * dxy )/det;
         double deltaV = ( dx * dxy - dy * dxx )/det;
-        double interpMetric = neighborsMetric[1][1] - 
+        double interpMetric = neighborsMetric[1][1] -
           ( dxx * deltaH * deltaH + 2.0 * dxy * deltaH * deltaV + dyy * deltaV * deltaV);
         if (deltaH > (-1.0) && deltaH < 1.0 && deltaV > (-1.0) && deltaV < 1.0)
           {
@@ -976,7 +975,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   bool horizontalInterpolation = false;
   bool verticalInterpolation = false;
   
-  // metrics for neighbors positions : first index is x, second is y 
+  // metrics for neighbors positions : first index is x, second is y
   double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
   
   while (!leftIt.IsAtEnd()
@@ -1054,7 +1053,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
               rightIt.SetLocation(downIndex);
               neighborsMetric[1][2] = m_Functor(leftIt,rightIt);
               
-              // check that current position is an extrema 
+              // check that current position is an extrema
               if (m_Minimize)
                 {
                 if (neighborsMetric[1][1] < neighborsMetric[1][0] && neighborsMetric[1][1] < neighborsMetric[1][2])
@@ -1079,14 +1078,14 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
             IndexType rightIndex(curRightPos);
             rightIndex[0]+= 1;
             if ( rightBufferedRegion.IsInside(leftIndex) && rightBufferedRegion.IsInside(rightIndex) )
-              {          
+              {
               rightIt.SetLocation(rightIndex);
               neighborsMetric[2][1] = m_Functor(leftIt,rightIt);
               
               rightIt.SetLocation(leftIndex);
               neighborsMetric[0][1] = m_Functor(leftIt,rightIt);
               
-              // check that current position is an extrema 
+              // check that current position is an extrema
               if (m_Minimize)
                 {
                 if (neighborsMetric[1][1] < neighborsMetric[0][1] && neighborsMetric[1][1] < neighborsMetric[2][1])
@@ -1243,7 +1242,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         {
         outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
         outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
-        outMetricIt.Set( interpMetricH*(vcl_abs(deltaH)/(vcl_abs(deltaV)+vcl_abs(deltaH))) + 
+        outMetricIt.Set( interpMetricH*(vcl_abs(deltaH)/(vcl_abs(deltaV)+vcl_abs(deltaH))) +
                          interpMetricV*(vcl_abs(deltaV)/(vcl_abs(deltaV)+vcl_abs(deltaH))));
         }
       else
@@ -1672,7 +1671,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       
       offsetTransfo[1] = 0.0;
       
-      for (unsigned int k=0 ; k<nbIterMax ; k++)
+      for (unsigned int k=0; k<nbIterMax; k++)
         {
         if ( (xb-xa) < (xc-xb) )
           {

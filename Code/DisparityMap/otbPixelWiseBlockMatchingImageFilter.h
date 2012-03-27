@@ -178,9 +178,9 @@ private:
  *  between a pair of image. This is especially useful in the case of
  *  stereo pairs in epipolar geometry, where displacements
  *  corresponding to differences of elevation occur in the horizontal
- *  direction only (in that case, the exploration along the vertical 
- *  direction can be disabled). Please note that only integer pixel 
- *  displacement are explored. For finer results, consider up-sampling 
+ *  direction only (in that case, the exploration along the vertical
+ *  direction can be disabled). Please note that only integer pixel
+ *  displacement are explored. For finer results, consider up-sampling
  *  the input images or use the SubPixelDisparityImageFilter.
  *
  *  The block-matching metric itself is defined by a template functor
@@ -194,13 +194,13 @@ private:
  *
  *  Only a user defined area of disparities between the two images is
  *  explored, which can be set by using the SetMinimumHorizontalDisparity()
- *  , SetMinimumVerticalDisparity(), SetMaximumHorizontalDisparity() 
+ *  , SetMinimumVerticalDisparity(), SetMaximumHorizontalDisparity()
  *  and SetMaximumVerticalDisparity() methods.
  *
- *  This filter has three outputs: the first is the metric image, 
- *  which contains the metric optimum value corresponding to the 
- *  estimated displacement. The second and last outputs are the 
- *  horizontal and vertical disparity maps, which can be retrieved 
+ *  This filter has three outputs: the first is the metric image,
+ *  which contains the metric optimum value corresponding to the
+ *  estimated displacement. The second and last outputs are the
+ *  horizontal and vertical disparity maps, which can be retrieved
  *  using the GetHorizontalDisparityOutput() and GetVerticalDisparityOutput()
  *  methods. They contain the horizontal and vertical local displacement
  *  between the two input images (displacement is given in pixels, from left
@@ -209,14 +209,14 @@ private:
  *  Masks are not mandatory. A mask allows to indicate pixels validity in
  *  either left or right image. Left and right masks can be used independently.
  *  If masks are used, only pixels whose mask values are strictly positive
- *  will be considered for disparity matching. The other will exhibit a null 
+ *  will be considered for disparity matching. The other will exhibit a null
  *  metric value and a disparity corresponding to the minimum allowed
  *  disparity.
  *
  *  The disparity exploration can also be reduced thanks to initial disparity
  *  maps. The user can provide initial disparity estimate (using the same image
  *  type and size as the output disparities), or global disparity values. Then
- *  an exploration radius indicates the disparity range to be explored around 
+ *  an exploration radius indicates the disparity range to be explored around
  *  the initial estimate (global minimum and maximum values are still in use).
  *
  *  \sa FineRegistrationImageFilter
@@ -401,11 +401,11 @@ private:
   /** Block-matching functor */
   BlockMatchingFunctorType      m_Functor;
   
-  /** Initial horizontal disparity (0 by default, used if an exploration radius is set and if no input horizontal 
+  /** Initial horizontal disparity (0 by default, used if an exploration radius is set and if no input horizontal
     disparity map is given) */
   int                           m_InitHorizontalDisparity;
   
-  /** Initial vertical disparity (0 by default, used if an exploration radius is set and if no input vertical 
+  /** Initial vertical disparity (0 by default, used if an exploration radius is set and if no input vertical
     disparity map is given) */
   int                           m_InitVerticalDisparity;
 };

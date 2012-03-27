@@ -31,22 +31,22 @@ namespace otb
  *
  *  This filter is intended to be placed after a PixelWiseBlockMatchingImageFilter. Its role is to produce an estimate
  *  of the disparities (both horizontal and vertical) with sub-pixel precision. The integer input disparities are used
- *  as starting points for the disparity refinement. The refinement is done within a 3x3 neighborhood around this 
- *  position (it is neighborhood in the 2D disparity space). If no input disparity is given, the shift between 
+ *  as starting points for the disparity refinement. The refinement is done within a 3x3 neighborhood around this
+ *  position (it is neighborhood in the 2D disparity space). If no input disparity is given, the shift between
  *  input images is assumed to be null along both directions.
  *
- *  Left and right masks can be used to skip the sub-pixel disparity refinement for couples of pixels carrying a 
- *  non-positive mask value. 
- *  
+ *  Left and right masks can be used to skip the sub-pixel disparity refinement for couples of pixels carrying a
+ *  non-positive mask value.
+ *
  *  The exploration limits for horizontal and vertical disparities can be set like in PixelWiseBlockMatchingFilter.
  *  If the 3x3 neighborhood around the initial estimate is not inside the exploration area, refinement is skipped for
  *  the current pixel.
  *
- *  Before trying to refine the integer disparity, the filter checks that the initial position is an extrema for the 
- *  metric used. Depending on the 3x3 neighborhood, the refinement can be done along the horizontal axis only, along 
+ *  Before trying to refine the integer disparity, the filter checks that the initial position is an extrema for the
+ *  metric used. Depending on the 3x3 neighborhood, the refinement can be done along the horizontal axis only, along
  *  the vertical axis only, and also in 2D. Three refinement methods are proposed : parabolic, triangular and dichotomy.
- *  The parabolic method tries to fit a parabola to the metric scores on the 3x3 neighborhood. The triangular 
- *  method tries to fit local scores to a circular cone. The dichotomy method tries to find the local extrema by 
+ *  The parabolic method tries to fit a parabola to the metric scores on the 3x3 neighborhood. The triangular
+ *  method tries to fit local scores to a circular cone. The dichotomy method tries to find the local extrema by
  *  a dichotomic search (non-integer disparity positions are tested after a resampling of the right image).
  *
  *  \sa PixelWiseBlockMatchingImageFilter
@@ -57,7 +57,7 @@ namespace otb
  *  \ingroup Threaded
  *
  */
-template <class TInputImage, class TOutputMetricImage, class TDisparityImage = TOutputMetricImage, 
+template <class TInputImage, class TOutputMetricImage, class TDisparityImage = TOutputMetricImage,
           class TMaskImage = otb::Image<unsigned char>,
           class TBlockMatchingFunctor = Functor::SSDBlockMatching<TInputImage,TOutputMetricImage> >
 class ITK_EXPORT SubPixelDisparityImageFilter :
