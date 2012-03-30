@@ -1416,7 +1416,7 @@ namespace ossimplugins
       // Fetch the Global RFM - Direct Model:
       //---
       xml_nodes.clear();
-      xpath = "/Rational_Function_Model/Global_RFM/Direct_Model";
+      xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model";
       xpath = theXmlDocumentRoot + xpath;
       xmlDocument->findNodes(xpath, xml_nodes);
       if (xml_nodes.size() == 0)
@@ -1435,7 +1435,7 @@ namespace ossimplugins
          valueStr << it;
 
          xml_nodes.clear();
-         xpath = "/Rational_Function_Model/Global_RFM/Direct_Model/LINE_NUM_COEFF_";
+         xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/LINE_NUM_COEFF_";
          xpath = theXmlDocumentRoot + xpath;
          xpath = xpath + valueStr.str();
          xmlDocument->findNodes(xpath, xml_nodes);
@@ -1451,7 +1451,7 @@ namespace ossimplugins
          theLineNumCoeff.push_back(xml_nodes[0]->getText().toDouble());
 
          xml_nodes.clear();
-         xpath = "/Rational_Function_Model/Global_RFM/Direct_Model/LINE_DEN_COEFF_";
+         xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/LINE_DEN_COEFF_";
          xpath = theXmlDocumentRoot + xpath;
          xpath = xpath + valueStr.str();
          xmlDocument->findNodes(xpath, xml_nodes);
@@ -1467,7 +1467,7 @@ namespace ossimplugins
          theLineDenCoeff.push_back(xml_nodes[0]->getText().toDouble());
 
          xml_nodes.clear();
-         xpath = "/Rational_Function_Model/Global_RFM/Direct_Model/SAMP_NUM_COEFF_";
+         xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/SAMP_NUM_COEFF_";
          xpath = theXmlDocumentRoot + xpath;
          xpath = xpath + valueStr.str();
          xmlDocument->findNodes(xpath, xml_nodes);
@@ -1483,7 +1483,7 @@ namespace ossimplugins
          theSampNumCoeff.push_back(xml_nodes[0]->getText().toDouble());
 
          xml_nodes.clear();
-         xpath = "/Rational_Function_Model/Global_RFM/Direct_Model/SAMP_DEN_COEFF_";
+         xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/SAMP_DEN_COEFF_";
          xpath = theXmlDocumentRoot + xpath;
          xpath = xpath + valueStr.str();
          xmlDocument->findNodes(xpath, xml_nodes);
@@ -1503,7 +1503,7 @@ namespace ossimplugins
       //---
       // Fetch the Global RFM - Direct Model - Bias:
       //---
-      xpath = "/Rational_Function_Model/Global_RFM/Direct_Model/ERR_BIAS_X";
+      xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/ERR_BIAS_ROW";
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1511,7 +1511,7 @@ namespace ossimplugins
       }
       theErrBiasX = nodeValue.toDouble();
 
-      xpath = "/Rational_Function_Model/Global_RFM/Direct_Model/ERR_BIAS_Y";
+      xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/ERR_BIAS_COL";
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
