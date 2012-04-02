@@ -953,7 +953,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       }
     }
   
-  m_WrongExtrema[threadId] = static_cast<double>(nb_WrongExtrema) / 
+  m_WrongExtrema[threadId] = static_cast<double>(nb_WrongExtrema) /
       static_cast<double>(outputRegionForThread.GetNumberOfPixels());
   
 }
@@ -1382,7 +1382,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           (outMetricIt.Get() < neighborsMetric[1][1] && !m_Minimize))
         {
         nb_WrongExtrema++;
-        } 
+        }
       }
     
     progress.CompletedPixel();
@@ -1406,7 +1406,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       }
     }
   
-  m_WrongExtrema[threadId] = static_cast<double>(nb_WrongExtrema) / 
+  m_WrongExtrema[threadId] = static_cast<double>(nb_WrongExtrema) /
       static_cast<double>(outputRegionForThread.GetNumberOfPixels());
 }
 
@@ -2139,7 +2139,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       }
     }
   
-  m_WrongExtrema[threadId] = static_cast<double>(nb_WrongExtrema) / 
+  m_WrongExtrema[threadId] = static_cast<double>(nb_WrongExtrema) /
       static_cast<double>(outputRegionForThread.GetNumberOfPixels());
 }
 
@@ -2151,7 +2151,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::AfterThreadedGenerateData()
 {
   double wrongExtremaPercent = 0;
-  for (unsigned int i=0 ; i<m_WrongExtrema.size() ; i++)
+  for (unsigned int i=0; i<m_WrongExtrema.size(); i++)
     {
     wrongExtremaPercent += m_WrongExtrema[i];
     }
