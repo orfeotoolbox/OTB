@@ -801,7 +801,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       //vertical only
       double deltaV = 0.5 - (1.0 /
         (1.0 + (neighborsMetric[1][0]-neighborsMetric[1][1]) / (neighborsMetric[1][2]-neighborsMetric[1][1])));
-      double interpMetric = neighborsMetric[1][1] -
       if (deltaV > (-0.5) && deltaV < 0.5)
         {
         outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
@@ -816,7 +815,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       // horizontal only
       double deltaH = 0.5 - (1.0 /
         (1.0 + (neighborsMetric[0][1]-neighborsMetric[1][1]) / (neighborsMetric[2][1]-neighborsMetric[1][1])));
-      double interpMetric = neighborsMetric[1][1] -
       if (deltaH > (-0.5) && deltaH < 0.5)
         {
         outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
@@ -844,7 +842,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         {
         double deltaH = (-dx * dyy + dy * dxy )/det;
         double deltaV = ( dx * dxy - dy * dxx )/det;
-        double interpMetric = neighborsMetric[1][1] -
         if (deltaH > (-1.0) && deltaH < 1.0 && deltaV > (-1.0) && deltaV < 1.0)
           {
           outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
@@ -1304,7 +1301,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         {
         outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
         outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
-        outMetricIt.Set( interpMetricH*(vcl_abs(deltaH)/(vcl_abs(deltaV)+vcl_abs(deltaH))) +
         }
       else
         {
