@@ -497,6 +497,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   outMetricPtr->FillBuffer(0.);
   outHDispPtr->FillBuffer(m_MinimumHorizontalDisparity);
   outVDispPtr->FillBuffer(m_MinimumVerticalDisparity);
+  
+  m_WrongExtrema.resize(this->GetNumberOfThreads());
 }
 
 template <class TInputImage, class TOutputMetricImage,
@@ -541,6 +543,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
   TDisparityImage * outHDispPtr   = this->GetHorizontalDisparityOutput();
   TDisparityImage * outVDispPtr   = this->GetVerticalDisparityOutput();
+  
+  unsigned int nb_WrongExtrema = 0;
 
   // Set-up progress reporting (this is not exact, since we do not
   // account for pixels that won't be refined)
@@ -604,6 +608,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   bool horizontalInterpolation = false;
   bool verticalInterpolation = false;
   
+  typename ResamplerFilterType::Pointer resampler;
+  
   // metrics for neighbors positions : first index is x, second is y
   double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
   
@@ -620,7 +626,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (useHorizontalDisparity)
       {
-      hDisp_f = static_cast<float>(outHDispIt.Get());
+      hDisp_f = static_cast<float>(inHDispIt.Get());
       hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
       curRightPos[0] = curLeftPos[0] + hDisp_i;
       }
@@ -633,7 +639,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (useVerticalDisparity)
       {
-      vDisp_f = static_cast<float>(outVDispIt.Get());
+      vDisp_f = static_cast<float>(inVDispIt.Get());
       vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
       curRightPos[1] = curLeftPos[1] + vDisp_i;
       }
@@ -663,6 +669,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           smallRightRegion.SetSize(1,3);
           
           itk::ConstNeighborhoodIterator<TInputImage>     rightIt(m_Radius,inRightPtr,smallRightRegion);
+          itk::ConstantBoundaryCondition<TInputImage>     nbc2;
+          rightIt.OverrideBoundaryCondition(&nbc2);
           
           // compute metric at centre position
           rightIt.SetLocation(curRightPos);
@@ -682,7 +690,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
               rightIt.SetLocation(downIndex);
               neighborsMetric[1][2] = m_Functor(leftIt,rightIt);
               
-          // check that current position is an extrema
+              // check that current position is an extrema
               if (m_Minimize)
                 {
                 if (neighborsMetric[1][1] < neighborsMetric[1][0] && neighborsMetric[1][1] < neighborsMetric[1][2])
@@ -707,14 +715,14 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
             IndexType rightIndex(curRightPos);
             rightIndex[0]+= 1;
             if ( rightBufferedRegion.IsInside(leftIndex) && rightBufferedRegion.IsInside(rightIndex) )
-          {
+              {
               rightIt.SetLocation(rightIndex);
               neighborsMetric[2][1] = m_Functor(leftIt,rightIt);
               
               rightIt.SetLocation(leftIndex);
               neighborsMetric[0][1] = m_Functor(leftIt,rightIt);
               
-          // check that current position is an extrema
+              // check that current position is an extrema
               if (m_Minimize)
                 {
                 if (neighborsMetric[1][1] < neighborsMetric[0][1] && neighborsMetric[1][1] < neighborsMetric[2][1])
@@ -794,11 +802,9 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double deltaV = 0.5 - (1.0 /
         (1.0 + (neighborsMetric[1][0]-neighborsMetric[1][1]) / (neighborsMetric[1][2]-neighborsMetric[1][1])));
       double interpMetric = neighborsMetric[1][1] -
-        (0.5 * (neighborsMetric[1][0]+neighborsMetric[1][2]) - neighborsMetric[1][1]) * deltaV * deltaV;
       if (deltaV > (-0.5) && deltaV < 0.5)
         {
         outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
-        outMetricIt.Set(interpMetric);
         }
       else
         {
@@ -811,11 +817,9 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double deltaH = 0.5 - (1.0 /
         (1.0 + (neighborsMetric[0][1]-neighborsMetric[1][1]) / (neighborsMetric[2][1]-neighborsMetric[1][1])));
       double interpMetric = neighborsMetric[1][1] -
-        (0.5 * (neighborsMetric[0][1]+neighborsMetric[2][1]) - neighborsMetric[1][1]) * deltaH * deltaH;
       if (deltaH > (-0.5) && deltaH < 0.5)
         {
         outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
-        outMetricIt.Set(interpMetric);
         }
       else
         {
@@ -841,12 +845,10 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         double deltaH = (-dx * dyy + dy * dxy )/det;
         double deltaV = ( dx * dxy - dy * dxx )/det;
         double interpMetric = neighborsMetric[1][1] -
-          ( dxx * deltaH * deltaH + 2.0 * dxy * deltaH * deltaV + dyy * deltaV * deltaV);
         if (deltaH > (-1.0) && deltaH < 1.0 && deltaV > (-1.0) && deltaV < 1.0)
           {
           outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
           outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
-          outMetricIt.Set(interpMetric);
           }
         else
           {
@@ -870,7 +872,67 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (!verticalInterpolation && !horizontalInterpolation)
       {
+      // no interpolation done : keep current score
       outMetricIt.Set(static_cast<double>(neighborsMetric[1][1]));
+      }
+    else
+      {
+      // interpolation done, use a resampler to compute new score
+      typename TInputImage::Pointer fakeRightPtr = TInputImage::New();
+      fakeRightPtr->SetRegions(rightBufferedRegion);
+      fakeRightPtr->SetPixelContainer((const_cast<TInputImage*>(inRightPtr))->GetPixelContainer());
+      
+      itk::ConstNeighborhoodIterator<TInputImage>     shiftedIt;
+      itk::ConstantBoundaryCondition<TInputImage>     nbc3;
+      shiftedIt.OverrideBoundaryCondition(&nbc3);
+      
+      SizeType windowSize;
+      windowSize[0] = 2 * m_Radius[0] + 1;
+      windowSize[1] = 2 * m_Radius[1] + 1;
+      
+      IndexType upleftCorner;
+      upleftCorner[0] = curRightPos[0] - m_Radius[0];
+      upleftCorner[1] = curRightPos[1] - m_Radius[1];
+      
+      TransformationType::Pointer transfo = TransformationType::New();
+      TransformationType::OutputVectorType offsetTransfo(2);
+      
+      RegionType tinyShiftedRegion;
+      tinyShiftedRegion.SetSize(0, 1);
+      tinyShiftedRegion.SetSize(1, 1);
+      tinyShiftedRegion.SetIndex(0, curRightPos[0]);
+      tinyShiftedRegion.SetIndex(1, curRightPos[1]);
+      
+      typename TInputImage::PointType rightOrigin = inRightPtr->GetOrigin();
+      typename TInputImage::PointType rightShift;
+      itk::ContinuousIndex<double,2> pixelOffset;
+      
+      resampler = ResamplerFilterType::New();
+      resampler->SetInput(fakeRightPtr);
+      resampler->SetSize(windowSize);
+      resampler->SetOutputOrigin(inRightPtr->GetOrigin());
+      resampler->SetOutputSpacing(inRightPtr->GetSpacing());
+      resampler->SetNumberOfThreads(1);
+      resampler->SetTransform(transfo);
+      resampler->SetOutputStartIndex(upleftCorner);
+      
+      pixelOffset[0] = outHDispIt.Get() - static_cast<double>(hDisp_i);
+      pixelOffset[1] = outVDispIt.Get() - static_cast<double>(vDisp_i);
+      inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+      offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+      offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+      transfo->SetOffset(offsetTransfo);
+      resampler->Modified();
+      resampler->Update();
+      shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+      outMetricIt.Set(m_Functor(leftIt,shiftedIt));
+      
+      //debug
+      if ((outMetricIt.Get() > neighborsMetric[1][1] && m_Minimize) ||
+          (outMetricIt.Get() < neighborsMetric[1][1] && !m_Minimize))
+        {
+        nb_WrongExtrema++;
+        }
       }
     
     progress.CompletedPixel();
@@ -893,6 +955,10 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       ++inLeftMaskIt;
       }
     }
+  
+  m_WrongExtrema[threadId] = static_cast<double>(nb_WrongExtrema) / 
+      static_cast<double>(outputRegionForThread.GetNumberOfPixels());
+  
 }
 
 template <class TInputImage, class TOutputMetricImage,
@@ -912,7 +978,9 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
   TDisparityImage * outHDispPtr   = this->GetHorizontalDisparityOutput();
   TDisparityImage * outVDispPtr   = this->GetVerticalDisparityOutput();
-
+  
+  unsigned int nb_WrongExtrema = 0;
+  
   // Set-up progress reporting (this is not exact, since we do not
   // account for pixels that won't be refined)
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels(),100);
@@ -975,6 +1043,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   bool horizontalInterpolation = false;
   bool verticalInterpolation = false;
   
+  typename ResamplerFilterType::Pointer resampler;
+  
   // metrics for neighbors positions : first index is x, second is y
   double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
   
@@ -991,7 +1061,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (useHorizontalDisparity)
       {
-      hDisp_f = static_cast<float>(outHDispIt.Get());
+      hDisp_f = static_cast<float>(inHDispIt.Get());
       hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
       curRightPos[0] = curLeftPos[0] + hDisp_i;
       }
@@ -1004,7 +1074,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (useVerticalDisparity)
       {
-      vDisp_f = static_cast<float>(outVDispIt.Get());
+      vDisp_f = static_cast<float>(inVDispIt.Get());
       vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
       curRightPos[1] = curLeftPos[1] + vDisp_i;
       }
@@ -1034,6 +1104,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           smallRightRegion.SetSize(1,3);
           
           itk::ConstNeighborhoodIterator<TInputImage>     rightIt(m_Radius,inRightPtr,smallRightRegion);
+          itk::ConstantBoundaryCondition<TInputImage>     nbc2;
+          rightIt.OverrideBoundaryCondition(&nbc2);
           
           // compute metric at centre position
           rightIt.SetLocation(curRightPos);
@@ -1163,21 +1235,18 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       {
       //vertical only
       double deltaV;
-      double interpMetric;
-      if (neighborsMetric[1][0] < neighborsMetric[1][2])
+      if ((neighborsMetric[1][0] < neighborsMetric[1][2] && m_Minimize) ||
+          (neighborsMetric[1][0] > neighborsMetric[1][2] && !m_Minimize))
         {
         deltaV = 0.5 * ((neighborsMetric[1][0]-neighborsMetric[1][2])/(neighborsMetric[1][2]-neighborsMetric[1][1]));
-        interpMetric = neighborsMetric[1][1] + 0.5*(neighborsMetric[1][0]-neighborsMetric[1][2]);
         }
       else
         {
         deltaV = 0.5 * ((neighborsMetric[1][0]-neighborsMetric[1][2])/(neighborsMetric[1][0]-neighborsMetric[1][1]));
-        interpMetric = neighborsMetric[1][1] + 0.5*(neighborsMetric[1][2]-neighborsMetric[1][0]);
         }
       if (deltaV > (-0.5) && deltaV < 0.5)
         {
         outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
-        outMetricIt.Set(interpMetric);
         }
       else
         {
@@ -1188,21 +1257,18 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       {
       // horizontal only
       double deltaH;
-      double interpMetric;
-      if (neighborsMetric[0][1] < neighborsMetric[2][1])
+      if ((neighborsMetric[0][1] < neighborsMetric[2][1] && m_Minimize) ||
+          (neighborsMetric[0][1] > neighborsMetric[2][1] && !m_Minimize))
         {
         deltaH = 0.5 * ((neighborsMetric[0][1]-neighborsMetric[2][1])/(neighborsMetric[2][1]-neighborsMetric[1][1]));
-        interpMetric = neighborsMetric[1][1] + 0.5*(neighborsMetric[0][1]-neighborsMetric[2][1]);
         }
       else
         {
         deltaH = 0.5 * ((neighborsMetric[0][1]-neighborsMetric[2][1])/(neighborsMetric[0][1]-neighborsMetric[1][1]));
-        interpMetric = neighborsMetric[1][1] + 0.5*(neighborsMetric[2][1]-neighborsMetric[0][1]);
         }
       if (deltaH > (-0.5) && deltaH < 0.5)
         {
         outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
-        outMetricIt.Set(interpMetric);
         }
       else
         {
@@ -1214,28 +1280,24 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       //both horizontal and vertical
       double deltaH;
       double deltaV;
-      double interpMetricH;
-      double interpMetricV;
-      if (neighborsMetric[1][0] < neighborsMetric[1][2])
+      if ((neighborsMetric[1][0] < neighborsMetric[1][2] && m_Minimize) ||
+          (neighborsMetric[1][0] > neighborsMetric[1][2] && !m_Minimize))
         {
         deltaV = 0.5 * ((neighborsMetric[1][0]-neighborsMetric[1][2])/(neighborsMetric[1][2]-neighborsMetric[1][1]));
-        interpMetricV = neighborsMetric[1][1] + 0.5*(neighborsMetric[1][0]-neighborsMetric[1][2]);
         }
       else
         {
         deltaV = 0.5 * ((neighborsMetric[1][0]-neighborsMetric[1][2])/(neighborsMetric[1][0]-neighborsMetric[1][1]));
-        interpMetricV = neighborsMetric[1][1] + 0.5*(neighborsMetric[1][2]-neighborsMetric[1][0]);
         }
         
-      if (neighborsMetric[0][1] < neighborsMetric[2][1])
+      if ((neighborsMetric[0][1] < neighborsMetric[2][1] && m_Minimize) ||
+          (neighborsMetric[0][1] > neighborsMetric[2][1] && !m_Minimize))
         {
         deltaH = 0.5 * ((neighborsMetric[0][1]-neighborsMetric[2][1])/(neighborsMetric[2][1]-neighborsMetric[1][1]));
-        interpMetricH = neighborsMetric[1][1] + 0.5*(neighborsMetric[0][1]-neighborsMetric[2][1]);
         }
       else
         {
         deltaH = 0.5 * ((neighborsMetric[0][1]-neighborsMetric[2][1])/(neighborsMetric[0][1]-neighborsMetric[1][1]));
-        interpMetricH = neighborsMetric[1][1] + 0.5*(neighborsMetric[2][1]-neighborsMetric[0][1]);
         }
       
       if (deltaV > (-1.0) && deltaV < 1.0 && deltaH > (-1.0) && deltaH < 1.0)
@@ -1243,7 +1305,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
         outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
         outMetricIt.Set( interpMetricH*(vcl_abs(deltaH)/(vcl_abs(deltaV)+vcl_abs(deltaH))) +
-                         interpMetricV*(vcl_abs(deltaV)/(vcl_abs(deltaV)+vcl_abs(deltaH))));
         }
       else
         {
@@ -1266,7 +1327,66 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (!verticalInterpolation && !horizontalInterpolation)
       {
+      // no interpolation done : keep current score
       outMetricIt.Set(static_cast<double>(neighborsMetric[1][1]));
+      }
+    else
+      {
+      // interpolation done, use a resampler to compute new score
+      typename TInputImage::Pointer fakeRightPtr = TInputImage::New();
+      fakeRightPtr->SetRegions(rightBufferedRegion);
+      fakeRightPtr->SetPixelContainer((const_cast<TInputImage*>(inRightPtr))->GetPixelContainer());
+      
+      itk::ConstNeighborhoodIterator<TInputImage>     shiftedIt;
+      itk::ConstantBoundaryCondition<TInputImage>     nbc3;
+      shiftedIt.OverrideBoundaryCondition(&nbc3);
+      
+      SizeType windowSize;
+      windowSize[0] = 2 * m_Radius[0] + 1;
+      windowSize[1] = 2 * m_Radius[1] + 1;
+      
+      IndexType upleftCorner;
+      upleftCorner[0] = curRightPos[0] - m_Radius[0];
+      upleftCorner[1] = curRightPos[1] - m_Radius[1];
+      
+      TransformationType::Pointer transfo = TransformationType::New();
+      TransformationType::OutputVectorType offsetTransfo(2);
+      
+      RegionType tinyShiftedRegion;
+      tinyShiftedRegion.SetSize(0, 1);
+      tinyShiftedRegion.SetSize(1, 1);
+      tinyShiftedRegion.SetIndex(0, curRightPos[0]);
+      tinyShiftedRegion.SetIndex(1, curRightPos[1]);
+      
+      typename TInputImage::PointType rightOrigin = inRightPtr->GetOrigin();
+      typename TInputImage::PointType rightShift;
+      itk::ContinuousIndex<double,2> pixelOffset;
+      
+      resampler = ResamplerFilterType::New();
+      resampler->SetInput(fakeRightPtr);
+      resampler->SetSize(windowSize);
+      resampler->SetOutputOrigin(inRightPtr->GetOrigin());
+      resampler->SetOutputSpacing(inRightPtr->GetSpacing());
+      resampler->SetNumberOfThreads(1);
+      resampler->SetTransform(transfo);
+      resampler->SetOutputStartIndex(upleftCorner);
+      
+      pixelOffset[0] = outHDispIt.Get() - static_cast<double>(hDisp_i);
+      pixelOffset[1] = outVDispIt.Get() - static_cast<double>(vDisp_i);
+      inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+      offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+      offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+      transfo->SetOffset(offsetTransfo);
+      resampler->Modified();
+      resampler->Update();
+      shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
+      outMetricIt.Set(m_Functor(leftIt,shiftedIt));
+      
+      if ((outMetricIt.Get() > neighborsMetric[1][1] && m_Minimize) ||
+          (outMetricIt.Get() < neighborsMetric[1][1] && !m_Minimize))
+        {
+        nb_WrongExtrema++;
+        } 
       }
     
     progress.CompletedPixel();
@@ -1289,6 +1409,9 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       ++inLeftMaskIt;
       }
     }
+  
+  m_WrongExtrema[threadId] = static_cast<double>(nb_WrongExtrema) / 
+      static_cast<double>(outputRegionForThread.GetNumberOfPixels());
 }
 
 template <class TInputImage, class TOutputMetricImage,
@@ -1309,6 +1432,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   TDisparityImage * outHDispPtr   = this->GetHorizontalDisparityOutput();
   TDisparityImage * outVDispPtr   = this->GetVerticalDisparityOutput();
 
+  unsigned int nb_WrongExtrema = 0;
+  
   // Set-up progress reporting (this is not exact, since we do not
   // account for pixels that won't be refined)
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels(),100);
@@ -1367,6 +1492,14 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   int hDisp_i;
   int vDisp_i;
   
+  typename TInputImage::Pointer fakeRightPtr = TInputImage::New();
+  fakeRightPtr->SetRegions(rightBufferedRegion);
+  fakeRightPtr->SetPixelContainer((const_cast<TInputImage*>(inRightPtr))->GetPixelContainer());
+  
+  typename TInputImage::PointType rightOrigin = inRightPtr->GetOrigin();
+  typename TInputImage::PointType rightShift;
+  itk::ContinuousIndex<double,2> pixelOffset;
+  
   // compute metric around current right position
   bool horizontalInterpolation = false;
   bool verticalInterpolation = false;
@@ -1375,22 +1508,19 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
   unsigned int nbIterMax = 8;
   
-  // resampler
-  typename ResamplerFilterType::Pointer resampler = ResamplerFilterType::New();
-  resampler->SetInput(inRightPtr);
   // set the output size and start index to the center position
   // then set the smaller shift in the transform
   IndexType upleftCorner;
   SizeType windowSize;
   windowSize[0] = 2 * m_Radius[0] + 1;
   windowSize[1] = 2 * m_Radius[1] + 1;
-  resampler->SetSize(windowSize);
   
   TransformationType::Pointer transfo = TransformationType::New();
-  TransformationType::ParametersType offsetTransfo;
+  TransformationType::OutputVectorType offsetTransfo(2);
   offsetTransfo[0] = 0.0;
   offsetTransfo[1] = 0.0;
-  resampler->SetTransform(transfo);
+  
+  typename ResamplerFilterType::Pointer resampler;
   
   RegionType tinyShiftedRegion;
   tinyShiftedRegion.SetIndex(0, m_Radius[0]);
@@ -1401,6 +1531,10 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   // iterators on right image
   itk::ConstNeighborhoodIterator<TInputImage>     rightIt;
   itk::ConstNeighborhoodIterator<TInputImage>     shiftedIt;
+  itk::ConstantBoundaryCondition<TInputImage>     nbc2;
+  itk::ConstantBoundaryCondition<TInputImage>     nbc3;
+  rightIt.OverrideBoundaryCondition(&nbc2);
+  shiftedIt.OverrideBoundaryCondition(&nbc3);
   bool centreHasMoved;
   
   while (!leftIt.IsAtEnd()
@@ -1416,7 +1550,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (useHorizontalDisparity)
       {
-      hDisp_f = static_cast<float>(outHDispIt.Get());
+      hDisp_f = static_cast<float>(inHDispIt.Get());
       hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
       curRightPos[0] = curLeftPos[0] + hDisp_i;
       }
@@ -1429,7 +1563,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     
     if (useVerticalDisparity)
       {
-      vDisp_f = static_cast<float>(outVDispIt.Get());
+      vDisp_f = static_cast<float>(inVDispIt.Get());
       vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
       curRightPos[1] = curLeftPos[1] + vDisp_i;
       }
@@ -1442,7 +1576,19 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     // update resampler input position
     upleftCorner[0] = curRightPos[0] - m_Radius[0];
     upleftCorner[1] = curRightPos[1] - m_Radius[1];
+    
+    // resampler
+    resampler = ResamplerFilterType::New();
+    resampler->SetInput(fakeRightPtr);
+    resampler->SetSize(windowSize);
+    resampler->SetOutputOrigin(inRightPtr->GetOrigin());
+    resampler->SetOutputSpacing(inRightPtr->GetSpacing());
+    resampler->SetNumberOfThreads(1);
+    resampler->SetTransform(transfo);
     resampler->SetOutputStartIndex(upleftCorner);
+    
+    tinyShiftedRegion.SetIndex(0, curRightPos[0]);
+    tinyShiftedRegion.SetIndex(1, curRightPos[1]);
     
     // check if the current right position is inside the right image
     if (rightBufferedRegion.IsInside(curRightPos))
@@ -1483,7 +1629,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
               rightIt.SetLocation(downIndex);
               neighborsMetric[1][2] = m_Functor(leftIt,rightIt);
               
-          // check that current position is an extrema
+              // check that current position is an extrema
               if (m_Minimize)
                 {
                 if (neighborsMetric[1][1] < neighborsMetric[1][0] && neighborsMetric[1][1] < neighborsMetric[1][2])
@@ -1508,14 +1654,14 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
             IndexType rightIndex(curRightPos);
             rightIndex[0]+= 1;
             if ( rightBufferedRegion.IsInside(leftIndex) && rightBufferedRegion.IsInside(rightIndex) )
-          {
+              {
               rightIt.SetLocation(rightIndex);
               neighborsMetric[2][1] = m_Functor(leftIt,rightIt);
               
               rightIt.SetLocation(leftIndex);
               neighborsMetric[0][1] = m_Functor(leftIt,rightIt);
               
-          // check that current position is an extrema
+              // check that current position is an extrema
               if (m_Minimize)
                 {
                 if (neighborsMetric[1][1] < neighborsMetric[0][1] && neighborsMetric[1][1] < neighborsMetric[2][1])
@@ -1601,20 +1747,24 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double yd;
       double s_yd;
       
-      offsetTransfo[0] = 0.0;
+      pixelOffset[0] = 0.0;
       
       for (unsigned int k=0; k<nbIterMax; k++)
         {
         if ( (yb-ya) < (yc-yb) )
           {
           yd = 0.5 * (yc+yb);
-          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_yd = m_Functor(leftIt,shiftedIt);
           
-          if (s_yd<s_yb)
+          if ((s_yd<s_yb && m_Minimize) || (s_yd>s_yb && !m_Minimize))
             {
             ya = yb;
             s_ya = s_yb;
@@ -1631,13 +1781,17 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         else
           {
           yd = 0.5 * (ya+yb);
-          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_yd = m_Functor(leftIt,shiftedIt);
           
-          if (s_yd<s_yb)
+          if ((s_yd<s_yb && m_Minimize) || (s_yd>s_yb && !m_Minimize))
             {
             yc = yb;
             s_yc = s_yb;
@@ -1655,7 +1809,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       
       outVDispIt.Set( yb );
       outMetricIt.Set( s_yb );
-      
       }
     else if (!verticalInterpolation && horizontalInterpolation)
       {
@@ -1669,20 +1822,24 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double xd;
       double s_xd;
       
-      offsetTransfo[1] = 0.0;
+      pixelOffset[1] = 0.0;
       
       for (unsigned int k=0; k<nbIterMax; k++)
         {
         if ( (xb-xa) < (xc-xb) )
           {
           xd = 0.5 * (xc+xb);
-          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_xd = m_Functor(leftIt,shiftedIt);
           
-          if (s_xd<s_xb)
+          if ((s_xd<s_xb && m_Minimize) || (s_xd>s_xb && !m_Minimize))
             {
             xa = xb;
             s_xa = s_xb;
@@ -1699,13 +1856,17 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         else
           {
           xd = 0.5 * (xa+xb);
-          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_xd = m_Functor(leftIt,shiftedIt);
           
-          if (s_xd<s_xb)
+          if ((s_xd<s_xb && m_Minimize) || (s_xd>s_xb && !m_Minimize))
             {
             xc = xb;
             s_xc = s_xb;
@@ -1723,9 +1884,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       
       outHDispIt.Set( xb );
       outMetricIt.Set( s_xb );
-      
       }
-    else
+    else if (verticalInterpolation && horizontalInterpolation)
       {
       double xa = static_cast<double>(hDisp_i);
       double ya = static_cast<double>(vDisp_i - 1);
@@ -1744,28 +1904,29 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double s_e = neighborsMetric[0][1];
       double s_f = neighborsMetric[2][1];
       
-      
-      double xd;
-      double yd;
+      double xd = xb;
+      double yd = yb;
       double s_d;
-      
-      offsetTransfo[0] = 0.0;
       
       for (unsigned int k=0; k<nbIterMax; k++)
         {
-        centreHasMoved = false;
         // Vertical step
+        centreHasMoved = false;
         if ( (yb-ya) < (yc-yb) )
           {
           yd = 0.5 * (yc+yb);
-          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
-          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
+          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_d = m_Functor(leftIt,shiftedIt);
           
-          if (s_d<s_b)
+          if ((s_d<s_b && m_Minimize) || (s_d>s_b && !m_Minimize))
             {
             centreHasMoved = true;
             
@@ -1784,14 +1945,18 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         else
           {
           yd = 0.5 * (ya+yb);
-          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
-          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
+          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_d = m_Functor(leftIt,shiftedIt);
           
-          if (s_d<s_b)
+          if ((s_d<s_b && m_Minimize) || (s_d>s_b && !m_Minimize))
             {
             centreHasMoved = true;
             
@@ -1813,34 +1978,45 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           ye = yb;
           yf = yb;
           
-          offsetTransfo[1] = ye - static_cast<double>(vDisp_i);
-          
-          offsetTransfo[0] = xe - static_cast<double>(hDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[0] = xe - static_cast<double>(hDisp_i);
+          pixelOffset[1] = ye - static_cast<double>(vDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_e = m_Functor(leftIt,shiftedIt);
           
-          offsetTransfo[0] = xf - static_cast<double>(hDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[0] = xf - static_cast<double>(hDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_f = m_Functor(leftIt,shiftedIt);
           }
         
-        centreHasMoved = false;
         // Horizontal step
+        centreHasMoved = false;
         if ( (xb-xe) < (xf-xb) )
           {
           xd = 0.5 * (xf+xb);
-          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
-          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
+          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_d = m_Functor(leftIt,shiftedIt);
           
-          if (s_d<s_b)
+          if ((s_d<s_b && m_Minimize) || (s_d>s_b && !m_Minimize))
             {
             centreHasMoved = true;
             
@@ -1859,14 +2035,18 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         else
           {
           xd = 0.5 * (xe+xb);
-          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
-          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
+          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_d = m_Functor(leftIt,shiftedIt);
           
-          if (s_d<s_b)
+          if ((s_d<s_b && m_Minimize) || (s_d>s_b && !m_Minimize))
             {
             centreHasMoved = true;
             
@@ -1888,16 +2068,23 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           xa = xb;
           xc = xb;
           
-          offsetTransfo[0] = xa - static_cast<double>(hDisp_i);
-          
-          offsetTransfo[1] = ya - static_cast<double>(vDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[0] = xa - static_cast<double>(hDisp_i);
+          pixelOffset[1] = ya - static_cast<double>(vDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_a = m_Functor(leftIt,shiftedIt);
           
-          offsetTransfo[1] = yc - static_cast<double>(vDisp_i);
-          transfo->SetParameters(offsetTransfo);
+          pixelOffset[1] = yc - static_cast<double>(vDisp_i);
+          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
+          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
+          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          transfo->SetOffset(offsetTransfo);
+          resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_c = m_Functor(leftIt,shiftedIt);
@@ -1926,6 +2113,14 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       {
       outMetricIt.Set(static_cast<double>(neighborsMetric[1][1]));
       }
+    else
+      {
+      if ((outMetricIt.Get() > neighborsMetric[1][1] && m_Minimize) ||
+          (outMetricIt.Get() < neighborsMetric[1][1] && !m_Minimize))
+        {
+        nb_WrongExtrema++;
+        }
+      }
     
     progress.CompletedPixel();
     
@@ -1947,6 +2142,26 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       ++inLeftMaskIt;
       }
     }
+  
+  m_WrongExtrema[threadId] = static_cast<double>(nb_WrongExtrema) / 
+      static_cast<double>(outputRegionForThread.GetNumberOfPixels());
+}
+
+template <class TInputImage, class TOutputMetricImage,
+class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
+void
+SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
+TDisparityImage,TMaskImage,TBlockMatchingFunctor>
+::AfterThreadedGenerateData()
+{
+  double wrongExtremaPercent = 0;
+  for (unsigned int i=0 ; i<m_WrongExtrema.size() ; i++)
+    {
+    wrongExtremaPercent += m_WrongExtrema[i];
+    }
+  wrongExtremaPercent /= m_WrongExtrema.size();
+  
+  //std::cout << "Wrong extrema percentage = "<< wrongExtremaPercent << std::endl;
 }
 
 } // End namespace otb

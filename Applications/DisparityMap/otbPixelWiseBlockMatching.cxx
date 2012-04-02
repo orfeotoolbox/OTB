@@ -24,6 +24,8 @@
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 
+#include "otbSubPixelDisparityImageFilter.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -70,6 +72,23 @@ public:
   typedef otb::ImageListToVectorImageFilter<ImageListType,
                                             FloatVectorImageType> ImageListToVectorImageFilterType;
 
+  typedef otb::SubPixelDisparityImageFilter<FloatImageType,
+                                            FloatImageType,
+                                            FloatImageType,
+                                            FloatImageType,
+                                            SSDBlockMatchingFunctorType> SSDSubPixelDisparityFilterType;
+
+  typedef otb::SubPixelDisparityImageFilter<FloatImageType,
+                                            FloatImageType,
+                                            FloatImageType,
+                                            FloatImageType,
+                                            NCCBlockMatchingFunctorType> NCCSubPixelDisparityFilterType;
+
+  typedef otb::SubPixelDisparityImageFilter<FloatImageType,
+                                            FloatImageType,
+                                            FloatImageType,
+                                            FloatImageType,
+                                            LPBlockMatchingFunctorType> LPSubPixelDisparityFilterType;
 
   /** Standard macro */
   itkNewMacro(Self);
@@ -85,6 +104,9 @@ private:
     m_SSDBlockMatcher = SSDBlockMatchingFilterType::New();
     m_NCCBlockMatcher = NCCBlockMatchingFilterType::New();
     m_LPBlockMatcher  = LPBlockMatchingFilterType::New();
+    m_SSDSubPixFilter = SSDSubPixelDisparityFilterType::New();
+    m_NCCSubPixFilter = NCCSubPixelDisparityFilterType::New();
+    m_LPSubPixFilter  = LPSubPixelDisparityFilterType::New();
     m_VarianceFilter  = VarianceFilterType::New();
     m_BandMathFilter  = BandMathFilterType::New();
     m_OutputImageList = ImageListType::New();
@@ -187,8 +209,20 @@ private:
     AddParameter(ParameterType_Int,"bm.maxvd","Maximum vertical disparity");
     SetParameterDescription("bm.maxvd","Maximum vertical disparity to explore (can be negative)");
     
-    AddParameter(ParameterType_Empty,"bm.subpixel","Do sub-pixel interpolation");
+    AddParameter(ParameterType_Choice,"bm.subpixel","Sub-pixel interpolation");
     SetParameterDescription("bm.subpixel", "Estimate disparities with sub-pixel precision");
+    
+    AddChoice("bm.subpixel.none", "None");
+    SetParameterDescription("bm.subpixel.none", "No sub-pixel ");
+    
+    AddChoice("bm.subpixel.parabolic", "Parabolic");
+    SetParameterDescription("bm.subpixel.parabolic", "Parabolic fit");
+    
+    AddChoice("bm.subpixel.triangular", "Triangular");
+    SetParameterDescription("bm.subpixel.triangular", "Triangular fit");
+    
+    AddChoice("bm.subpixel.dichotomy", "Dichotomy");
+    SetParameterDescription("bm.subpixel.dichotomy", "Dichotomic search");
     
     AddParameter(ParameterType_Choice, "bm.initdisp", "Initial disparities");
     AddChoice("bm.initdisp.none", "None");
@@ -382,10 +416,6 @@ private:
       m_SSDBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
       m_SSDBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_SSDBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
-      if (IsParameterEnabled("bm.subpixel"))
-        {
-        //m_SSDBlockMatcher->DoSubPixelInterpolationOn();
-        }
       
       AddProcess(m_SSDBlockMatcher,"SSD block matching");
       if(masking)
@@ -411,9 +441,29 @@ private:
         m_SSDBlockMatcher->SetVerticalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.vmap"));
         }
 
-      hdispImage = m_SSDBlockMatcher->GetHorizontalDisparityOutput();
-      vdispImage = m_SSDBlockMatcher->GetVerticalDisparityOutput();
-      metricImage = m_SSDBlockMatcher->GetMetricOutput();
+      if (GetParameterInt("bm.subpixel") > 0)
+        {
+        m_SSDSubPixFilter->SetInputsFromBlockMatchingFilter(m_SSDBlockMatcher);
+        switch (GetParameterInt("bm.subpixel"))
+          {
+          case 1 : m_SSDSubPixFilter->SetRefineMethod(SSDSubPixelDisparityFilterType::PARABOLIC);
+            break;
+          case 2 : m_SSDSubPixFilter->SetRefineMethod(SSDSubPixelDisparityFilterType::TRIANGULAR);
+            break;
+          case 3 : m_SSDSubPixFilter->SetRefineMethod(SSDSubPixelDisparityFilterType::DICHOTOMY);
+            break;
+          default : break;
+          }
+        hdispImage = m_SSDSubPixFilter->GetHorizontalDisparityOutput();
+        vdispImage = m_SSDSubPixFilter->GetVerticalDisparityOutput();
+        metricImage = m_SSDSubPixFilter->GetMetricOutput();
+        }
+      else
+        {
+        hdispImage = m_SSDBlockMatcher->GetHorizontalDisparityOutput();
+        vdispImage = m_SSDBlockMatcher->GetVerticalDisparityOutput();
+        metricImage = m_SSDBlockMatcher->GetMetricOutput();
+        }
       }
     // NCC case
     else if (GetParameterInt("bm.metric") == 1)
@@ -426,10 +476,6 @@ private:
       m_NCCBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_NCCBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
       m_NCCBlockMatcher->MinimizeOff();
-      if (IsParameterEnabled("bm.subpixel"))
-        {
-        //m_NCCBlockMatcher->DoSubPixelInterpolationOn();
-        }
       
       AddProcess(m_NCCBlockMatcher,"NCC block matching");
 
@@ -455,10 +501,30 @@ private:
         m_NCCBlockMatcher->SetHorizontalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.hmap"));
         m_NCCBlockMatcher->SetVerticalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.vmap"));
         }
-
-      hdispImage = m_NCCBlockMatcher->GetHorizontalDisparityOutput();
-      vdispImage = m_NCCBlockMatcher->GetVerticalDisparityOutput();
-      metricImage = m_NCCBlockMatcher->GetMetricOutput();
+      
+      if (GetParameterInt("bm.subpixel") > 0)
+        {
+        m_NCCSubPixFilter->SetInputsFromBlockMatchingFilter(m_NCCBlockMatcher);
+        switch (GetParameterInt("bm.subpixel"))
+          {
+          case 1 : m_NCCSubPixFilter->SetRefineMethod(NCCSubPixelDisparityFilterType::PARABOLIC);
+            break;
+          case 2 : m_NCCSubPixFilter->SetRefineMethod(NCCSubPixelDisparityFilterType::TRIANGULAR);
+            break;
+          case 3 : m_NCCSubPixFilter->SetRefineMethod(NCCSubPixelDisparityFilterType::DICHOTOMY);
+            break;
+          default : break;
+          }
+        hdispImage = m_NCCSubPixFilter->GetHorizontalDisparityOutput();
+        vdispImage = m_NCCSubPixFilter->GetVerticalDisparityOutput();
+        metricImage = m_NCCSubPixFilter->GetMetricOutput();
+        }
+      else
+        {
+        hdispImage = m_NCCBlockMatcher->GetHorizontalDisparityOutput();
+        vdispImage = m_NCCBlockMatcher->GetVerticalDisparityOutput();
+        metricImage = m_NCCBlockMatcher->GetMetricOutput();
+        }
       }
     // Lp case
     else
@@ -471,10 +537,6 @@ private:
       m_LPBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
       m_LPBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_LPBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
-      if (IsParameterEnabled("bm.subpixel"))
-        {
-        //m_LPBlockMatcher->DoSubPixelInterpolationOn();
-        }
       
       AddProcess(m_LPBlockMatcher,"Lp block matching");
 
@@ -501,9 +563,29 @@ private:
         m_LPBlockMatcher->SetVerticalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.vmap"));
         }
 
-      hdispImage = m_LPBlockMatcher->GetHorizontalDisparityOutput();
-      vdispImage = m_LPBlockMatcher->GetVerticalDisparityOutput();
-      metricImage = m_LPBlockMatcher->GetMetricOutput();
+      if (GetParameterInt("bm.subpixel") > 0)
+        {
+        m_LPSubPixFilter->SetInputsFromBlockMatchingFilter(m_LPBlockMatcher);
+        switch (GetParameterInt("bm.subpixel"))
+          {
+          case 1 : m_LPSubPixFilter->SetRefineMethod(LPSubPixelDisparityFilterType::PARABOLIC);
+            break;
+          case 2 : m_LPSubPixFilter->SetRefineMethod(LPSubPixelDisparityFilterType::TRIANGULAR);
+            break;
+          case 3 : m_LPSubPixFilter->SetRefineMethod(LPSubPixelDisparityFilterType::DICHOTOMY);
+            break;
+          default : break;
+          }
+        hdispImage = m_LPSubPixFilter->GetHorizontalDisparityOutput();
+        vdispImage = m_LPSubPixFilter->GetVerticalDisparityOutput();
+        metricImage = m_LPSubPixFilter->GetMetricOutput();
+        }
+      else
+        {
+        hdispImage = m_LPBlockMatcher->GetHorizontalDisparityOutput();
+        vdispImage = m_LPBlockMatcher->GetVerticalDisparityOutput();
+        metricImage = m_LPBlockMatcher->GetMetricOutput();
+        }
       }
     
 
@@ -535,6 +617,15 @@ private:
   
   // Lp Block matching filter
   LPBlockMatchingFilterType::Pointer  m_LPBlockMatcher;
+  
+  // SSD sub-pixel disparity filter
+  SSDSubPixelDisparityFilterType::Pointer m_SSDSubPixFilter;
+  
+  // NCC sub-pixel disparity filter
+  NCCSubPixelDisparityFilterType::Pointer m_NCCSubPixFilter;
+  
+  // LP sub-pixel disparity filter
+  LPSubPixelDisparityFilterType::Pointer  m_LPSubPixFilter;
   
   // Variance filter
   VarianceFilterType::Pointer         m_VarianceFilter;

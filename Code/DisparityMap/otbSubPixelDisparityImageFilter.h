@@ -20,8 +20,8 @@
 
 #include "otbPixelWiseBlockMatchingImageFilter.h"
 
-#include "itkResampleImageFilter.h"
 #include "itkTranslationTransform.h"
+#include "itkResampleImageFilter.h"
 
 namespace otb
 {
@@ -92,7 +92,7 @@ public:
   
   typedef itk::ConstNeighborhoodIterator<TInputImage>       ConstNeighborhoodIteratorType;
   
-  typedef itk::ResampleImageFilter<TInputImage,TInputImage,double>  ResamplerFilterType;
+  typedef itk::ResampleImageFilter<TInputImage, TInputImage, double>  ResamplerFilterType;
   typedef itk::TranslationTransform<double,2> TransformationType;
   typedef otb::PixelWiseBlockMatchingImageFilter
           < InputImageType,
@@ -209,6 +209,9 @@ protected:
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId);
   
+  /** After threaded generate data */
+  virtual void AfterThreadedGenerateData();
+  
 private:
   SubPixelDisparityImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -245,6 +248,9 @@ private:
   
   /** Refinement method (PARABOLIC, TRIANGULAR or DICHOTOMY)*/
   int                           m_RefineMethod;
+  
+  /** Stores the number of pixels whose refined position has a worse metric than the initial position */
+  std::vector<double>           m_WrongExtrema;
 };
 } // end namespace otb
 
