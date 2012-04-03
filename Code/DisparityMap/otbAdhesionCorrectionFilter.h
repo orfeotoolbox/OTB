@@ -54,7 +54,7 @@ namespace otb
  * \ingroup IntensityImageFilters, Streamed
  * 
  * See Publications : N. Sabater, J.M. Morel, A. Almansa and G. Blanchet, "Discarding moving objects in quasi-simultaneous stereovision", in IEEE International Conference on Image Processing, ICIP'10, 2010. 
- * 									N. Sabater, J.M. Morel and A. Almansa, "Sub-pixel stereo matching", in IEEE International Geoscience and Remote Sensing Symposium, IGARSS'10, 2010.
+ *                   N. Sabater, J.M. Morel and A. Almansa, "Sub-pixel stereo matching", in IEEE International Geoscience and Remote Sensing Symposium, IGARSS'10, 2010.
  */
 
 
@@ -86,21 +86,20 @@ public:
   typedef typename TMask::Pointer                MaskImagePointerType;
   typedef typename TMask::PixelType              MaskImagePixelType;
  
-  typedef itk::ConstNeighborhoodIterator<TImage>             NeighborhoodIteratorType; 
+  typedef itk::ConstNeighborhoodIterator<TImage> NeighborhoodIteratorType; 
 
-  //typedef otb::Image<int, 2> 											AuxImageType;
   typedef otb::Image<double, 2> AuxImageType;
   typedef typename AuxImageType::Pointer AuxImagePointerType;
   
   typedef std::vector<int>  IntVectorType;
   
-    /** Set input images **/
+  /** Set input images **/
   void SetMedianDisparityInput( const TImage * medianmap);
   void SetMedianMaskInput( const TMask * medianmask);
   void SetEdgesDisparityInput( const TImage * cannymedianmap);
   void SetSubPixelMaskInput( const TMask * subpixelmask);
   
-    /** Get the inputs */
+  /** Get the inputs */
   const TImage * GetMedianDisparityInput();
   const TMask * GetMedianMaskInput();
   const TImage * GetEdgesDisparityInput();
@@ -112,17 +111,17 @@ public:
   /** Get the output risk edges **/
   TImage * GetOutputRiskEdges();
   
-   /** Set/Get the radius */
+  /** Set/Get the radius */
   itkSetMacro(Radius, SizeType);
   itkGetMacro(Radius, SizeType);
 
   /** Set unsigned int radius */
   void SetRadius(unsigned int radius)
-  {
+    {
     m_Radius.Fill(radius);
-  }
+    }
 
-	 /** Set/Get the threshold for the tolerated difference between disparities */
+  /** Set/Get the threshold for the tolerated difference between disparities */
   itkSetMacro(Tolerance, double);
   itkGetMacro(Tolerance, double);
   
@@ -134,16 +133,14 @@ public:
   itkSetMacro(DiscontinuityHighThreshold, double);
   itkGetMacro(DiscontinuityHighThreshold, double);
   
-    /** Set/Get the maximum edge gap  */
+  /** Set/Get the maximum edge gap  */
   itkSetMacro(MaxEdgeGap, double);
   itkGetMacro(MaxEdgeGap, double);
   
-      /** Set/Get the edge threshold  */
+  /** Set/Get the edge threshold  */
   itkSetMacro(EdgeThreshold, double);
   itkGetMacro(EdgeThreshold, double);
   
-  
-
 protected:
   /** Constructor */
   AdhesionCorrectionFilter();
@@ -159,24 +156,22 @@ protected:
   /** Generate output information */
   virtual void GenerateOutputInformation(void);
   
-
-
 private:
   AdhesionCorrectionFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-	SizeType                      m_ImageSize;
+  SizeType                      m_ImageSize;
   /** The radius for correlation */
   SizeType                      m_Radius;
 
-	/** Tolerance  */
-	double                        m_Tolerance;
-	
-	/** Thresholds  */
-	double                        m_DiscontinuityThreshold ;
-	double                        m_DiscontinuityHighThreshold;
-	double                        m_MaxEdgeGap;
-	double                        m_EdgeThreshold;
+  /** Tolerance  */
+  double                        m_Tolerance;
+  
+  /** Thresholds  */
+  double                        m_DiscontinuityThreshold ;
+  double                        m_DiscontinuityHighThreshold;
+  double                        m_MaxEdgeGap;
+  double                        m_EdgeThreshold;
  
 };
 

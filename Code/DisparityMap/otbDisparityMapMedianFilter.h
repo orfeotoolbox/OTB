@@ -15,15 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbDisparityMapMedianFilter_h
 #define __otbDisparityMapMedianFilter_h
-
-
-// First make sure that the configuration is available.
-// This line can be removed once the optimized versions
-// gets integrated into the main directories.
-#include "itkConfigure.h"
 
 #ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
 #include "itkOptMedianImageFilter.h"
@@ -89,7 +82,7 @@ public:
 
 
   /** Standard class typedefs. */
-  typedef DisparityMapMedianFilter                                    Self;
+  typedef DisparityMapMedianFilter                                  Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
   typedef itk::SmartPointer<Self>                                   Pointer;
   typedef itk::SmartPointer<const Self>                             ConstPointer;
@@ -104,27 +97,26 @@ public:
   typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
   typedef typename MaskImageType::PixelType   MaskImagePixelType;
-  typedef typename MaskImageType::Pointer   MaskImagePointerType;
+  typedef typename MaskImageType::Pointer     MaskImagePointerType;
 
-  typedef typename InputImageType::RegionType  InputImageRegionType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename OutputImageType::RegionType  OutputImageRegionType;
+  typedef typename InputImageType::SizeType     SizeType;
 
-  typedef typename TInputImage::SizeType SizeType;
-
-    /** Set input mask **/
+  /** Set input mask **/
   void SetMaskInput( const TMask * inputmask); // mask corresponding to the subpixel disparity map
 
-   /** Get the input mask */
+  /** Get the input mask */
   const TMask * GetMaskInput();
 
   /** Get the output mask  **/
   TMask * GetOutputMask(); // mask corresponding to the median disparity map
 
-	/** Get the updated disparity map **/ 
-	TOutputImage * GetOutputDisparityMap(); // input disparity map updated (incoherences between median and input disparity map are removed)
-	
-	/** Get the updated disparity mask **/
-	TMask * GetOutputDisparityMask();
+  /** Get the updated disparity map **/ 
+  TOutputImage * GetOutputDisparityMap(); // input disparity map updated (incoherences between median and input disparity map are removed)
+  
+  /** Get the updated disparity mask **/
+  TMask * GetOutputDisparityMask();
 
   /** Set/Get the radius of the neighborhood used to compute the median. */
   itkSetMacro(Radius, SizeType);
@@ -132,9 +124,9 @@ public:
   
   /** Set unsigned int radius */
   void SetRadius(unsigned int radius)
-  {
+    {
     m_Radius.Fill(radius);
-  }
+    }
   
   /** Set/Get the incoherence threshold */
   itkSetMacro(IncoherenceThreshold, double);
@@ -151,7 +143,6 @@ public:
   /** Generate output information */
   virtual void GenerateOutputInformation(void);
   
-
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(SameDimensionCheck,
@@ -174,8 +165,12 @@ private:
   DisparityMapMedianFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  /** Radius of median filter */
   SizeType m_Radius;
+  
   SizeType m_ImageSize;
+  
+  /** Threshold of incoherence between original and filtered disparity */
   double m_IncoherenceThreshold;
 };
   

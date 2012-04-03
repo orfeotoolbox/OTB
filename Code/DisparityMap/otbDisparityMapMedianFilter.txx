@@ -18,11 +18,6 @@
 #ifndef __otbDisparityMapMedianFilter_txx
 #define __otbDisparityMapMedianFilter_txx
 
-// First make sure that the configuration is available.
-// This line can be removed once the optimized versions
-// gets integrated into the main directories.
-#include "itkConfigure.h"
-
 #ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
 #include "itkOptMedianImageFilter.h"
 #else
@@ -33,9 +28,6 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkProgressReporter.h"
-
-#include <vector>
-#include <algorithm>
 
 namespace otb
 {
@@ -69,9 +61,9 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 ::GetMaskInput()
 {
   if (this->GetNumberOfInputs()<2)
-  {
+    {
     return 0;
-  }
+    }
   return static_cast<const TMask *>(this->itk::ProcessObject::GetInput(1));
 }
 
@@ -82,7 +74,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-			return 0;
+    return 0;
     }
   return static_cast<TMask *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -95,7 +87,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   if (this->GetNumberOfOutputs()<3)
     {
-			return 0;
+    return 0;
     }
   return static_cast<TOutputImage *>(this->itk::ProcessObject::GetOutput(2));
 }
@@ -107,7 +99,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   if (this->GetNumberOfOutputs()<4)
     {
-			return 0;
+    return 0;
     }
   return static_cast<TMask *>(this->itk::ProcessObject::GetOutput(3));
 }
@@ -125,13 +117,13 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
   typename Superclass::InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
   TMask * inputmaskPtr = const_cast< TMask * >(this->GetMaskInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-	TMask * outputmaskPtr = this->GetOutputMask();
+  TMask * outputmaskPtr = this->GetOutputMask();
   typename Superclass::OutputImagePointer outputdisparitymapPtr = this->GetOutputDisparityMap();
   TMask * outputdisparitymaskPtr = this->GetOutputDisparityMask();
 
   // Update size and spacing according to grid step
   InputImageRegionType largestRegion  = outputPtr->GetLargestPossibleRegion();
-  SizeType outputSize       = largestRegion.GetSize();
+  SizeType outputSize = largestRegion.GetSize();
   m_ImageSize = outputSize;
 
   // Set largest region size
@@ -155,7 +147,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
   typename Superclass::InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
   TMask * inputmaskPtr = const_cast< TMask * >(this->GetMaskInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-	TMask * outputmaskPtr = this->GetOutputMask();
+  TMask * outputmaskPtr = this->GetOutputMask();
   typename Superclass::OutputImagePointer outputdisparitymapPtr = this->GetOutputDisparityMap();
   TMask * outputdisparitymaskPtr = this->GetOutputDisparityMask();
   
@@ -201,195 +193,207 @@ void
 DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 ::GenerateData()
 {
-	// Allocate outputs
-	this->AllocateOutputs();
+  // Allocate outputs
+  this->AllocateOutputs();
 
-
-	// Get the image pointers
+  // Get the image pointers
   typename OutputImageType::Pointer output = this->GetOutput();
   typename InputImageType::ConstPointer input  = this->GetInput();
-	typename MaskImageType::ConstPointer inputmaskPtr = this->GetMaskInput();
-	TMask * outputmaskPtr = this->GetOutputMask();
-	TOutputImage * outputdisparitymapPtr = this->GetOutputDisparityMap();
-	TMask * outputdisparitymaskPtr = this->GetOutputDisparityMask();
-	
+  typename MaskImageType::ConstPointer inputmaskPtr = this->GetMaskInput();
+  TMask * outputmaskPtr = this->GetOutputMask();
+  TOutputImage * outputdisparitymapPtr = this->GetOutputDisparityMap();
+  TMask * outputdisparitymaskPtr = this->GetOutputDisparityMask();
+  
+  /** Input iterators */
+  itk::ConstNeighborhoodIterator<InputImageType> InputIt(m_Radius, input,input->GetRequestedRegion());
+  itk::ConstNeighborhoodIterator<TMask> MaskInputIt(m_Radius, inputmaskPtr,inputmaskPtr->GetRequestedRegion());
 
-	/** Input iterators */
-	itk::ConstNeighborhoodIterator<InputImageType> InputIt(m_Radius, input,input->GetRequestedRegion());
-	itk::ConstNeighborhoodIterator<TMask> MaskInputIt(m_Radius, inputmaskPtr,inputmaskPtr->GetRequestedRegion());
-
-
-	/** Output iterators */
-	itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(output,output->GetRequestedRegion());
-	itk::ImageRegionIterator<TMask> outputMaskIt(outputmaskPtr,output->GetRequestedRegion());
-	itk::ImageRegionIterator<OutputImageType> outputDisparityMapIt(outputdisparitymapPtr,output->GetRequestedRegion());
-	itk::ImageRegionIterator<TMask> outputDisparityMaskIt(outputdisparitymaskPtr,output->GetRequestedRegion());
-	outputIt.GoToBegin();
-	outputMaskIt.GoToBegin();
-	outputDisparityMapIt.GoToBegin();
-	outputDisparityMaskIt.GoToBegin();
+  /** Output iterators */
+  itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(output,output->GetRequestedRegion());
+  itk::ImageRegionIterator<TMask> outputMaskIt(outputmaskPtr,output->GetRequestedRegion());
+  itk::ImageRegionIterator<OutputImageType> outputDisparityMapIt(outputdisparitymapPtr,output->GetRequestedRegion());
+  itk::ImageRegionIterator<TMask> outputDisparityMaskIt(outputdisparitymaskPtr,output->GetRequestedRegion());
+  outputIt.GoToBegin();
+  outputMaskIt.GoToBegin();
+  outputDisparityMapIt.GoToBegin();
+  outputDisparityMaskIt.GoToBegin();
 
   std::vector<InputPixelType> pixels;
-  while (!outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd() && !outputDisparityMapIt.IsAtEnd()  && !outputDisparityMapIt.IsAtEnd())
-  {
-		if (outputIt.GetIndex()[0] >= m_Radius[0] && outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1] )
-		{
-			// determine pixels in the neighborhood window whose subpixel mask is not equal to 0
-			int p=0;
-			pixels.clear();
-			MaskInputIt.SetLocation(outputIt.GetIndex());
-			InputIt.SetLocation(outputIt.GetIndex());
-			for (int i=0;i<MaskInputIt.Size();i++)
-			{
-				if (MaskInputIt.GetPixel(i) != 0)
-				{
-					p++;
-					pixels.push_back(InputIt.GetPixel(i));
-				}
-			}
-			if (p>0)
-			{
-				//outputMaskIt.Set(itk::NumericTraits<MaskImagePixelType>::max());
-				outputMaskIt.Set(1);
-				// get the median value
-				if (std::fmod((double) p,2)==0) 
-				{
-					const unsigned int medianPosition_low = (int) p/2 - 1;
-					const unsigned int medianPosition_high = (int) p/2;
-					const typename std::vector<InputPixelType>::iterator medianIterator_low = pixels.begin() + medianPosition_low;
-					const typename std::vector<InputPixelType>::iterator medianIterator_high = pixels.begin() + medianPosition_high;
-					std::nth_element(pixels.begin(), medianIterator_low, pixels.end());
-					std::nth_element(pixels.begin(), medianIterator_high, pixels.end());
-					outputIt.Set( static_cast<typename OutputImageType::PixelType> ((*medianIterator_low + *medianIterator_high)/2) );
-				}
-				else
-				{
-					const unsigned int medianPosition = (int) floor(p/2);
-					const typename std::vector<InputPixelType>::iterator medianIterator = pixels.begin() + medianPosition;
-		      std::nth_element(pixels.begin(), medianIterator, pixels.end());
-		      outputIt.Set( static_cast<typename OutputImageType::PixelType> (*medianIterator) );
-				}
-			}
-			else
-			{
-				outputIt.Set(0.0);
-				outputMaskIt.Set(0);
-			}
-		}
-		else 
-		{
-			outputIt.Set(0.0);
-			outputMaskIt.Set(0);
-		}
+  while ( !outputIt.IsAtEnd() &&
+          !outputMaskIt.IsAtEnd() &&
+          !outputDisparityMapIt.IsAtEnd() &&
+          !outputDisparityMapIt.IsAtEnd())
+    {
+    if (outputIt.GetIndex()[0] >= m_Radius[0] &&
+        outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] &&
+        outputIt.GetIndex()[1] >= m_Radius[1] &&
+        outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1])
+      {
+      // determine pixels in the neighborhood window whose subpixel mask is not equal to 0
+      int p=0;
+      pixels.clear();
+      MaskInputIt.SetLocation(outputIt.GetIndex());
+      InputIt.SetLocation(outputIt.GetIndex());
+      for (int i=0;i<MaskInputIt.Size();i++)
+        {
+        if (MaskInputIt.GetPixel(i) != 0)
+          {
+          p++;
+          pixels.push_back(InputIt.GetPixel(i));
+          }
+        }
+      if (p>0)
+        {
+        //outputMaskIt.Set(itk::NumericTraits<MaskImagePixelType>::max());
+        outputMaskIt.Set(1);
+        // get the median value
+        if (std::fmod((double) p,2)==0) 
+          {
+          const unsigned int medianPosition_low = (int) p/2 - 1;
+          const unsigned int medianPosition_high = (int) p/2;
+          const typename std::vector<InputPixelType>::iterator medianIterator_low = pixels.begin() + medianPosition_low;
+          const typename std::vector<InputPixelType>::iterator medianIterator_high = pixels.begin() + medianPosition_high;
+          std::nth_element(pixels.begin(), medianIterator_low, pixels.end());
+          std::nth_element(pixels.begin(), medianIterator_high, pixels.end());
+          outputIt.Set( static_cast<typename OutputImageType::PixelType> ((*medianIterator_low + *medianIterator_high)/2) );
+          }
+        else
+          {
+          const unsigned int medianPosition = (int) floor(p/2);
+          const typename std::vector<InputPixelType>::iterator medianIterator = pixels.begin() + medianPosition;
+          std::nth_element(pixels.begin(), medianIterator, pixels.end());
+          outputIt.Set( static_cast<typename OutputImageType::PixelType> (*medianIterator) );
+          }
+        }
+      else
+        {
+        outputIt.Set(0.0);
+        outputMaskIt.Set(0);
+        }
+      }
+    else 
+      {
+      outputIt.Set(0.0);
+      outputMaskIt.Set(0);
+      }
 
-		outputDisparityMapIt.Set( static_cast<typename OutputImageType::PixelType> (InputIt.GetCenterPixel())); // copy the input disparity map
-		outputDisparityMaskIt.Set(MaskInputIt.GetCenterPixel());  // copy the input disparity mask
+    outputDisparityMapIt.Set( static_cast<typename OutputImageType::PixelType> (InputIt.GetCenterPixel())); // copy the input disparity map
+    outputDisparityMaskIt.Set(MaskInputIt.GetCenterPixel());  // copy the input disparity mask
 
-		++outputIt;
-		++outputMaskIt;
-		++outputDisparityMapIt;
-		++outputDisparityMaskIt;
-  }
+    ++outputIt;
+    ++outputMaskIt;
+    ++outputDisparityMapIt;
+    ++outputDisparityMaskIt;
+    }
 
- //Remove incoherences between disparity and median//
+  //Remove incoherences between disparity and median//
   // creation of the auxilliary image that store positions of incoherences between the median and the input disparity map
   MaskImagePointerType image_aux = MaskImageType::New();
-	image_aux->SetRegions(input->GetRequestedRegion());
-	image_aux->Allocate();
-	image_aux->FillBuffer(0);
-	itk::NeighborhoodIterator<TMask> image_aux_It(m_Radius, image_aux,input->GetRequestedRegion());
-	outputIt.GoToBegin();
-	outputMaskIt.GoToBegin();
+  image_aux->SetRegions(input->GetRequestedRegion());
+  image_aux->Allocate();
+  image_aux->FillBuffer(0);
+  itk::NeighborhoodIterator<TMask> image_aux_It(m_Radius, image_aux,input->GetRequestedRegion());
+  outputIt.GoToBegin();
+  outputMaskIt.GoToBegin();
 
-	itk::ImageRegionConstIterator<OutputImageType> MedianIt(output,output->GetRequestedRegion());
+  itk::ImageRegionConstIterator<OutputImageType> MedianIt(output,output->GetRequestedRegion());
 
   while (!outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
-  {
-		if (outputIt.GetIndex()[0] >= m_Radius[0] && outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1] )
-		{
-			MaskInputIt.SetLocation(outputIt.GetIndex());
-			InputIt.SetLocation(outputIt.GetIndex());
-			MedianIt.SetIndex(outputIt.GetIndex());
-			outputDisparityMapIt.SetIndex(outputIt.GetIndex());
-			outputDisparityMaskIt.SetIndex(outputIt.GetIndex());
-			image_aux_It.SetLocation(outputIt.GetIndex());
-			if (MaskInputIt.GetCenterPixel() != 0 && std::fabs(InputIt.GetCenterPixel() - MedianIt.Get())>m_IncoherenceThreshold)
-			{
-				outputDisparityMapIt.Set(0.0); //Remove pixel from disparity map//
-				outputDisparityMaskIt.Set(0);
-				for (int i=0;i<image_aux_It.Size();i++)
-				{
-					image_aux_It.SetPixel(i,1);
-				}
-			}
-		}
-		++outputIt;
-		++outputMaskIt;
-	}
+    {
+    if (outputIt.GetIndex()[0] >= m_Radius[0] &&
+        outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] &&
+        outputIt.GetIndex()[1] >= m_Radius[1] &&
+        outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1])
+      {
+      MaskInputIt.SetLocation(outputIt.GetIndex());
+      InputIt.SetLocation(outputIt.GetIndex());
+      MedianIt.SetIndex(outputIt.GetIndex());
+      outputDisparityMapIt.SetIndex(outputIt.GetIndex());
+      outputDisparityMaskIt.SetIndex(outputIt.GetIndex());
+      image_aux_It.SetLocation(outputIt.GetIndex());
+      if (MaskInputIt.GetCenterPixel() != 0 && std::fabs(InputIt.GetCenterPixel() - MedianIt.Get())>m_IncoherenceThreshold)
+        {
+        outputDisparityMapIt.Set(0.0); //Remove pixel from disparity map//
+        outputDisparityMaskIt.Set(0);
+        for (int i=0;i<image_aux_It.Size();i++)
+          {
+          image_aux_It.SetPixel(i,1);
+          }
+        }
+      }
+    ++outputIt;
+    ++outputMaskIt;
+    }
 
-//Recompute median where values had been changed 
+  //Recompute median where values had been changed 
   // we  use the updated sub pixel disparity map
-	itk::ConstNeighborhoodIterator<OutputImageType> updatedDisparityMapIt(m_Radius, outputdisparitymapPtr,output->GetRequestedRegion());
-	itk::ConstNeighborhoodIterator<TMask> updatedDisparityMaskIt(m_Radius, outputdisparitymaskPtr,output->GetRequestedRegion());
+  itk::ConstNeighborhoodIterator<OutputImageType> updatedDisparityMapIt(m_Radius, outputdisparitymapPtr,output->GetRequestedRegion());
+  itk::ConstNeighborhoodIterator<TMask> updatedDisparityMaskIt(m_Radius, outputdisparitymaskPtr,output->GetRequestedRegion());
 
-	outputIt.GoToBegin();
-	outputMaskIt.GoToBegin();
-	updatedDisparityMapIt.GoToBegin();
-	updatedDisparityMaskIt.GoToBegin();
+  outputIt.GoToBegin();
+  outputMaskIt.GoToBegin();
+  updatedDisparityMapIt.GoToBegin();
+  updatedDisparityMaskIt.GoToBegin();
 
-	while (!updatedDisparityMapIt.IsAtEnd() && !updatedDisparityMaskIt.IsAtEnd() && !outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
-  {
-		if (outputIt.GetIndex()[0] >= m_Radius[0] && outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1] )
-		{
-			image_aux_It.SetLocation(outputIt.GetIndex());
-			if (image_aux_It.GetCenterPixel() != 0)
-			{
-				// determine pixels in the neighborhood window whose subpixel mask is not equal to 0
-							int p=0;
-							pixels.clear();
-							for (int i=0;i<updatedDisparityMaskIt.Size();i++)
-							{
-								if (updatedDisparityMaskIt.GetPixel(i) != 0)
-								{
-									p++;
-									pixels.push_back(updatedDisparityMapIt.GetPixel(i));
-								}
-							}
-							if (p>0)
-							{
-								//outputMaskIt.Set(itk::NumericTraits<MaskImagePixelType>::max());
-								outputMaskIt.Set(1);
-								// get the median value
-								if (std::fmod((double) p,2)==0) 
-								{
-									const unsigned int medianPosition_low = (int) p/2 - 1;
-									const unsigned int medianPosition_high = (int) p/2;
-									const typename std::vector<InputPixelType>::iterator medianIterator_low = pixels.begin() + medianPosition_low;
-									const typename std::vector<InputPixelType>::iterator medianIterator_high = pixels.begin() + medianPosition_high;
-									std::nth_element(pixels.begin(), medianIterator_low, pixels.end());
-									std::nth_element(pixels.begin(), medianIterator_high, pixels.end());
-									outputIt.Set( static_cast<typename OutputImageType::PixelType> ((*medianIterator_low + *medianIterator_high)/2) );
-								}
-								else
-								{
-									const unsigned int medianPosition = (int) floor(p/2);
-									const typename std::vector<InputPixelType>::iterator medianIterator = pixels.begin() + medianPosition;
-						      std::nth_element(pixels.begin(), medianIterator, pixels.end());
-						      outputIt.Set( static_cast<typename OutputImageType::PixelType> (*medianIterator) );
-								}
-							}
-							else
-							{
-								outputIt.Set(0.0);
-								outputMaskIt.Set(0);
-							}
-			}
-		}
-		++outputIt;
-		++outputMaskIt;
-		++updatedDisparityMapIt;
-		++updatedDisparityMaskIt;
-	}
+  while ( !updatedDisparityMapIt.IsAtEnd() &&
+          !updatedDisparityMaskIt.IsAtEnd() &&
+          !outputIt.IsAtEnd() &&
+          !outputMaskIt.IsAtEnd())
+    {
+    if (outputIt.GetIndex()[0] >= m_Radius[0] &&
+        outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] &&
+        outputIt.GetIndex()[1] >= m_Radius[1] &&
+        outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1])
+      {
+      image_aux_It.SetLocation(outputIt.GetIndex());
+      if (image_aux_It.GetCenterPixel() != 0)
+        {
+        // determine pixels in the neighborhood window whose subpixel mask is not equal to 0
+        int p=0;
+        pixels.clear();
+        for (int i=0;i<updatedDisparityMaskIt.Size();i++)
+          {
+          if (updatedDisparityMaskIt.GetPixel(i) != 0)
+            {
+            p++;
+            pixels.push_back(updatedDisparityMapIt.GetPixel(i));
+            }
+          }
+        if (p>0)
+          {
+          //outputMaskIt.Set(itk::NumericTraits<MaskImagePixelType>::max());
+          outputMaskIt.Set(1);
+          // get the median value
+          if (std::fmod((double) p,2)==0) 
+            {
+            const unsigned int medianPosition_low = (int) p/2 - 1;
+            const unsigned int medianPosition_high = (int) p/2;
+            const typename std::vector<InputPixelType>::iterator medianIterator_low = pixels.begin() + medianPosition_low;
+            const typename std::vector<InputPixelType>::iterator medianIterator_high = pixels.begin() + medianPosition_high;
+            std::nth_element(pixels.begin(), medianIterator_low, pixels.end());
+            std::nth_element(pixels.begin(), medianIterator_high, pixels.end());
+            outputIt.Set( static_cast<typename OutputImageType::PixelType> ((*medianIterator_low + *medianIterator_high)/2) );
+            }
+          else
+            {
+            const unsigned int medianPosition = (int) floor(p/2);
+            const typename std::vector<InputPixelType>::iterator medianIterator = pixels.begin() + medianPosition;
+            std::nth_element(pixels.begin(), medianIterator, pixels.end());
+            outputIt.Set( static_cast<typename OutputImageType::PixelType> (*medianIterator) );
+            }
+          }
+        else
+          {
+          outputIt.Set(0.0);
+          outputMaskIt.Set(0);
+          }
+        }
+      }
+    ++outputIt;
+    ++outputMaskIt;
+    ++updatedDisparityMapIt;
+    ++updatedDisparityMaskIt;
+    }
 }
 
 
