@@ -248,14 +248,9 @@ ADD_TEST(obTuStreamingVectorizedSegmentationOGRNew ${OBIA_TESTS1}
     otbStreamingVectorizedSegmentationOGRNew)
 
 ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
-     #--compare-ogr  ${EPSILON_8}
-     #${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutput.sqlite
-     #${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
      otbStreamingVectorizedSegmentationOGR
      ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-     #/home2/arnaud/ORFEO-TOOLBOX/images/TLSE_ORTHO_P_8bits/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_ORT_IPU_20111109_7807-001_R1C1_undersample10.TIF
      ${TEMP}/obTvStreamingVectorizedSegmentationOutputOGR.shp
-     #2048
      100
      )
 

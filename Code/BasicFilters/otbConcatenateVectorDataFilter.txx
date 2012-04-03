@@ -137,13 +137,11 @@ ConcatenateVectorDataFilter<TVectorData>
       ProcessNode(inputRoot, outputDocument);
       
       processNodeChrono.Stop();
-      std::cout<< "Process Node (concatenate) took " << processNodeChrono.GetTotal() << " sec"<<std::endl;
       
     }
    //std::cout<<"nb feature output "<<this->GetOutput()->Size()<<std::endl;
    
    tileChrono.Stop();
-   std::cout<< "Concatenate vector data took " << tileChrono.GetTotal() << " sec"<<std::endl;
 }
 
 
