@@ -441,7 +441,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 	itk::ImageRegionIterator<TMask> new_maskIt(outputmaskPtr,outputPtr->GetRequestedRegion());
 	itk::ImageRegionIterator<AuxImageType> disparity_jumpIt(disparity_jump,outputPtr->GetRequestedRegion());
 	itk::ImageRegionIterator<AuxImageType> disparity_jump2It(disparity_jump2,outputPtr->GetRequestedRegion());
-	itk::ImageRegionIterator<AuxImageType> risk_edgesIt(outputriskedgesPtr,outputPtr->GetRequestedRegion());
+	itk::ImageRegionIterator<TImage> risk_edgesIt(outputriskedgesPtr,outputPtr->GetRequestedRegion());
 	itk::ImageRegionIterator<AuxImageType> auxIt(aux,outputPtr->GetRequestedRegion());
 
 
