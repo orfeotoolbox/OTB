@@ -217,17 +217,18 @@ ADD_TEST(ioTeTileMapImageIOExampleTest ${EXE_TESTS2}
          12
          )
          
- ADD_TEST(ioTeTileMapImageIOExample2Test ${EXE_TESTS2}
---compare-image ${HIGHTOL}  ${BASELINE}/nearMap.jpg
-                        ${TEMP}/nearMap.jpg
-         TileMapImageIOExampleTest
-         ${INPUTDATA}/nearmapfile.otb
-         ${TEMP}/nearMap.jpg
-         ${TEMP}
-         1.4835345
-         43.55968261
-         8
-         )
+# Access to NearMap is subject to an "agreement" checkbox ... 
+# ADD_TEST(ioTeTileMapImageIOExample2Test ${EXE_TESTS2}
+# --compare-image ${HIGHTOL}  ${BASELINE}/nearMap.jpg
+#                         ${TEMP}/nearMap.jpg
+#          TileMapImageIOExampleTest
+#          ${INPUTDATA}/nearmapfile.otb
+#          ${TEMP}/nearMap.jpg
+#          ${TEMP}
+#          1.4835345
+#          43.55968261
+#          8
+#          )
 
 ENDIF( OTB_USE_CURL )
 
