@@ -36,7 +36,7 @@ template <class TInputImage, class TOutputImage, class TMask>
 DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 ::DisparityMapMedianFilter()
 {
-  this->SetNumberOfRequiredInputs( 2 );
+  this->SetNumberOfRequiredInputs( 1 );
   this->SetNumberOfOutputs(4);
   this->SetNthOutput(1,TMask::New());
   this->SetNthOutput(2,TOutputImage::New());
@@ -115,7 +115,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 
   // Retrieve output pointers
   typename Superclass::InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
-  TMask * inputmaskPtr = const_cast< TMask * >(this->GetMaskInput());
+//  TMask * inputmaskPtr = const_cast< TMask * >(this->GetMaskInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
   TMask * outputmaskPtr = this->GetOutputMask();
   typename Superclass::OutputImagePointer outputdisparitymapPtr = this->GetOutputDisparityMap();
@@ -151,9 +151,19 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
   typename Superclass::OutputImagePointer outputdisparitymapPtr = this->GetOutputDisparityMap();
   TMask * outputdisparitymaskPtr = this->GetOutputDisparityMask();
   
-  if ( !inputPtr || !outputPtr || !inputmaskPtr|| !outputmaskPtr || !outputdisparitymapPtr || !outputdisparitymaskPtr)
+  if ( !inputPtr || !outputPtr || !outputmaskPtr || !outputdisparitymapPtr || !outputdisparitymaskPtr)
     {
     return;
+    }
+  
+  if (inputmaskPtr)
+    {
+    // check that the mask has the same size as the input image
+    if (inputmaskPtr->GetLargestPossibleRegion() != inputPtr->GetLargestPossibleRegion())
+      {
+      itkExceptionMacro(<<"Input image and mask image don't have the same size ! Input image :"<<
+        inputPtr->GetLargestPossibleRegion()<< " ; Mask image :"<<inputmaskPtr->GetLargestPossibleRegion());
+      }
     }
 
   // get a copy of the input requested region (should equal the output
@@ -168,6 +178,11 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
     {
     inputPtr->SetRequestedRegion( inputRequestedRegion );
+    if (inputmaskPtr)
+      {
+      inputmaskPtr->SetRequestedRegion( inputRequestedRegion );
+      }
+    
     return;
     }
   else
@@ -206,7 +221,11 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
   
   /** Input iterators */
   itk::ConstNeighborhoodIterator<InputImageType> InputIt(m_Radius, input,input->GetRequestedRegion());
-  itk::ConstNeighborhoodIterator<TMask> MaskInputIt(m_Radius, inputmaskPtr,inputmaskPtr->GetRequestedRegion());
+  itk::ConstNeighborhoodIterator<TMask> MaskInputIt;
+  if (inputmaskPtr)
+    {
+    MaskInputIt.Initialize(m_Radius, inputmaskPtr,inputmaskPtr->GetRequestedRegion());
+    }
 
   /** Output iterators */
   itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(output,output->GetRequestedRegion());
@@ -232,11 +251,14 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
       // determine pixels in the neighborhood window whose subpixel mask is not equal to 0
       int p=0;
       pixels.clear();
-      MaskInputIt.SetLocation(outputIt.GetIndex());
-      InputIt.SetLocation(outputIt.GetIndex());
-      for (int i=0;i<MaskInputIt.Size();i++)
+      if (inputmaskPtr)
         {
-        if (MaskInputIt.GetPixel(i) != 0)
+        MaskInputIt.SetLocation(outputIt.GetIndex());
+        }
+      InputIt.SetLocation(outputIt.GetIndex());
+      for (int i=0;i<InputIt.Size();i++)
+        {
+        if (!inputmaskPtr || (inputmaskPtr && MaskInputIt.GetPixel(i) != 0))
           {
           p++;
           pixels.push_back(InputIt.GetPixel(i));
@@ -278,7 +300,15 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
       }
 
     outputDisparityMapIt.Set( static_cast<typename OutputImageType::PixelType> (InputIt.GetCenterPixel())); // copy the input disparity map
-    outputDisparityMaskIt.Set(MaskInputIt.GetCenterPixel());  // copy the input disparity mask
+    
+    if (inputmaskPtr)
+      {
+      outputDisparityMaskIt.Set(MaskInputIt.GetCenterPixel());  // copy the input disparity mask
+      }
+    else
+      {
+      outputDisparityMaskIt.Set(1); // if no mask is given, fill with 1 by default
+      }
 
     ++outputIt;
     ++outputMaskIt;
@@ -305,13 +335,18 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         outputIt.GetIndex()[1] >= m_Radius[1] &&
         outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1])
       {
-      MaskInputIt.SetLocation(outputIt.GetIndex());
       InputIt.SetLocation(outputIt.GetIndex());
       MedianIt.SetIndex(outputIt.GetIndex());
       outputDisparityMapIt.SetIndex(outputIt.GetIndex());
       outputDisparityMaskIt.SetIndex(outputIt.GetIndex());
       image_aux_It.SetLocation(outputIt.GetIndex());
-      if (MaskInputIt.GetCenterPixel() != 0 && std::fabs(InputIt.GetCenterPixel() - MedianIt.Get())>m_IncoherenceThreshold)
+      if (inputmaskPtr)
+        {
+        MaskInputIt.SetLocation(outputIt.GetIndex());
+        }
+      
+      if ((!inputmaskPtr || (inputmaskPtr && MaskInputIt.GetCenterPixel() != 0)) && 
+          std::fabs(InputIt.GetCenterPixel() - MedianIt.Get())>m_IncoherenceThreshold)
         {
         outputDisparityMapIt.Set(0.0); //Remove pixel from disparity map//
         outputDisparityMaskIt.Set(0);
