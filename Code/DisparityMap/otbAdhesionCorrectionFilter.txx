@@ -555,8 +555,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  std::cout<<"Compute jumps of the disparity map in the epipolar direction not detected by Canny"<<std::endl;
-  //// Compute jumps of the disparity map in the epipolar direction not detected by Canny
+  /** Compute jumps of the disparity map in the epipolar direction not detected by Canny */
 
   new_disparityIt.GoToBegin();
   
@@ -604,11 +603,9 @@ AdhesionCorrectionFilter<TImage, TMask>
     index[1]=index_pos[1]+1;
     new_disparityIt.SetIndex(index);
     }
-
-
-  std::cout<<"Compute intersections between jumps"<<std::endl;
-  //// Compute intersections between jumps
-  //// disparity_jump2 = mask of jumps in the orthogonal epipolar direction:
+  
+  /** Compute intersections between jumps */
+  /** disparity_jump2 = mask of jumps in the orthogonal epipolar direction: */
 
   new_disparityIt.GoToBegin();
 
@@ -658,9 +655,8 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-
-  std::cout<<"Only keep 1 pixel for each discontinuity"<<std::endl;
-  //// Only keep 1 pixel for each discontinuity
+  /** Only keep 1 pixel for each discontinuity */
+  
   new_disparityIt.GoToBegin();
   
   while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
@@ -714,12 +710,8 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  //// Risk zone = pixels to the right for jumps with flag 1 or 3 and 
-  ////             pixels to the left for jumps with flag 1 or 3
-
-
-  //// Inside the risk zone, we look for edges which may cause the adhesion--->risk_edges
-  std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion--->risk_edges"<<std::endl;
+  /** Risk zone = pixels to the right for jumps with flag 1 or 3 and  pixels to the left for jumps with flag 1 or 3 */ 
+  /** Inside the risk zone, we look for edges which may cause the adhesion--->risk_edges */
 
   // Exploring the left-right epipolar direction
   new_disparityIt.GoToBegin();
@@ -819,9 +811,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  std::cout<<"Find extreme of risk edges"<<std::endl;
-  //// Find extreme of risk edges
-  //// extreme points in the edges have flag 2, an the other edge points have flag = 1 
+  /** Find extreme of risk edges : extreme points in the edges have flag 2, an the other edge points have flag = 1 */
   
   new_disparityIt.GoToBegin();
 
@@ -873,9 +863,9 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  std::cout<<"extend extreme edges if necessary "<<std::endl;
-  //// extend extreme edges if necessary 
-  //// extreme points in the edges have flag 2, an the other edge points have flag = 1
+  /** extend extreme edges if necessary : 
+   *  extreme points in the edges have flag 2, an the other edge points have flag = 1 
+   */
 
   new_disparityIt.GoToBegin();
 
@@ -933,10 +923,10 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  std::cout<<"Cut risk edges"<<std::endl;
-  // Cut risk edges 
-  // remove pixel edges when the associated patch has the same disparity 
-  // Ie: the patch is in a planar surfarce without jumps
+  /** Cut risk edges 
+   *  remove pixel edges when the associated patch has the same disparity 
+   * Ie: the patch is in a planar surfarce without jumps
+   */
 
   int Count;
   int big_win = win + 1;
@@ -981,7 +971,7 @@ AdhesionCorrectionFilter<TImage, TMask>
                 }
               }
             }
-          /// If we have ~ the same disparity in a patch of radious big_win and we known the disparity for more the half pixels in this patch //
+          /// If we have ~ the same disparity in a patch of radius big_win and we known the disparity for more the half pixels in this patch //
           risk_edgesIt.SetIndex(index_pos);
           if ((m_max-m_min)<Tol2 && Count>0) risk_edgesIt.Set(0);
           else
@@ -1016,8 +1006,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  std::cout<<"Remove edges with only 1 or 2 pixels"<<std::endl;
-  //// Remove edges with only 1 or 2 pixels
+  /** Remove edges with only 1 or 2 pixels */
   
   new_disparityIt.GoToBegin();
   
@@ -1055,11 +1044,9 @@ AdhesionCorrectionFilter<TImage, TMask>
     index[1]=index_pos[1]+1;
     new_disparityIt.SetIndex(index);
     }
-
-  std::cout<<"Remove pixels risking adhesion"<<std::endl;
-  /////////////////////////////////////////
-  //// Remove pixels risking adhesion /////
-  ////////////////////////////////////////
+  
+  /** Remove pixels risking adhesion */
+  
   new_disparityIt.GoToBegin();
 
   while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
@@ -1363,8 +1350,8 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  std::cout<<"remove around the  disparity jump if no risk_edge have been found"<<std::endl;
-  // remove around the  disparity jump if no risk_edge have been found
+  /** remove around the  disparity jump if no risk_edge have been found */
+  
   new_disparityIt.GoToBegin();
   
   while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
@@ -1436,19 +1423,15 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  /******************************************************/
-  /*   Vertical lines (perpendicular to epipolar lines) */
-  /******************************************************/
+  /**   Vertical lines (perpendicular to epipolar lines) */
 
-
-  //// Jumps of the disaprity map in the other diection
-  ////disparity_jump_2:     flag 7---> special case: intersections
-  ////        flag 5---> jump due to an upper border
-  ////        flag 6---> jump due to an lower border
-  ////        flag 8---> jump due to an upper border + intersection
-  ////        flag 9---> jump due to an lower border + intersection
-
-  std::cout<<"Vertical lines (perpendicular to epipolar lines)"<<std::endl;
+  /** Jumps of the disaprity map in the other diection
+   *  disparity_jump_2:     flag 7---> special case: intersections
+   *        flag 5---> jump due to an upper border
+   *        flag 6---> jump due to an lower border
+   *        flag 8---> jump due to an upper border + intersection
+   *        flag 9---> jump due to an lower border + intersection
+   */
 
   new_disparityIt.GoToBegin();
 
@@ -1493,7 +1476,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     ++new_disparityIt;
     }
 
-  std::cout<<"Vertical lines (perpendicular to epipolar lines) part2"<<std::endl;
+  /** Vertical lines (perpendicular to epipolar lines) part2 */
 
   new_disparityIt.GoToBegin();
   
@@ -1540,8 +1523,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     ++new_disparityIt;
     }
 
-  std::cout<<"remove neighborhood if there is an edge near the first disparities"<<std::endl;
-  // remove neighborhood if there is an edge near the first disparities
+  /** remove neighborhood if there is an edge near the first disparities */
 
   new_disparityIt.GoToBegin();
   
@@ -1587,8 +1569,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  std::cout<<"Remove pixels risking adhesion in the vertical direction(perpendicular to epipolar)"<<std::endl;
-  //// Remove pixels risking adhesion in the vertical direction(perpendicular to epipolar)
+  /** Remove pixels risking adhesion in the vertical direction(perpendicular to epipolar) */
 
   new_disparityIt.GoToBegin();
   while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
@@ -1684,8 +1665,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     ++new_disparityIt;
     }
 
-  std::cout<<"remove pixels around disparity jumps with no risk edges"<<std::endl;
-  //// remove pixels around disparity jumps with no risk edges
+  /** remove pixels around disparity jumps with no risk edges */
 
   new_disparityIt.GoToBegin();
   while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
@@ -1736,9 +1716,10 @@ AdhesionCorrectionFilter<TImage, TMask>
     ++new_disparityIt;
     }
 
-  std::cout<<"Reject isolated disparities"<<std::endl;
-  /////////////////////////////// Reject isolated disparities
-  /////////////////////////////// ie: In the patch is the only meaningful match
+  /** Reject isolated disparities
+   *  ie: In the patch is the only meaningful match
+   */
+   
   int nb_disp =3;
   new_disparityIt.GoToBegin();
 
