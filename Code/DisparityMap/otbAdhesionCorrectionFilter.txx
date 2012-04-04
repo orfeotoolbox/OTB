@@ -363,7 +363,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   TMask * outputmaskPtr = this->GetOutputMask();
   TImage * outputriskedgesPtr = this->GetOutputRiskEdges();
 
-  outputriskedgesPtr->FillBuffer(0.0); 
+  outputriskedgesPtr->FillBuffer(0.0);
   
   int win = m_Radius[0]+1; // should be also equal to m_Radius[1]
   int patch_side = 2*win+1;
@@ -445,7 +445,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         new_disparityIt.GetIndex()[1] < m_ImageSize[1] - win)
       {
       old_maskIt.SetIndex(index_pos);
-      while (old_maskIt.Get() == 0 && 
+      while (old_maskIt.Get() == 0 &&
         new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0])
         {
         ++new_disparityIt;
@@ -453,7 +453,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         }
       index_pos = new_disparityIt.GetIndex();
       disparity_jumpIt.SetIndex(index_pos);
-      disparity_jumpIt.Set(-1);// first disparity in the epipolar line
+      disparity_jumpIt.Set(-1); // first disparity in the epipolar line
       int k=0;
       while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - win)
         {
@@ -493,7 +493,7 @@ AdhesionCorrectionFilter<TImage, TMask>
                   index2[0] = index_pos[0] + i -1;
                   disparity_jumpIt.SetIndex(index2);
                   disparity_jumpIt.Set(3);
-                  if (i>=win) 
+                  if (i>=win)
                     {
                     disparity_jumpIt.SetIndex(index_pos);
                     disparity_jumpIt.Set(4); // big holes
@@ -503,7 +503,7 @@ AdhesionCorrectionFilter<TImage, TMask>
                   {
                   disparity_jumpIt.SetIndex(index_pos);
                   disparity_jumpIt.Set(4);
-                  if (i>=win) 
+                  if (i>=win)
                     {
                     index[0]=index_pos[0] + i -1;
                     disparity_jumpIt.SetIndex(index);
@@ -520,14 +520,14 @@ AdhesionCorrectionFilter<TImage, TMask>
             {
             int pp=0;
             
-            for(k=0; k<8; k++) 
+            for(k=0; k<8; k++)
               {
               index[0]=index_pos[0]+ring[k];
               index[1]=index_pos[1];
               if(old_maskPtr->GetPixel(index)==0) pp++;
               }
             if(pp==0)
-              { 
+              {
               index[0]=index_pos[0]-1;
               index[1]=index_pos[1];
               index2[0]=index_pos[0]+1;
@@ -563,11 +563,11 @@ AdhesionCorrectionFilter<TImage, TMask>
     {
     index_pos = new_disparityIt.GetIndex();
     old_maskIt.SetIndex(index_pos);
-    while (old_maskIt.Get() == 0 && 
+    while (old_maskIt.Get() == 0 &&
       new_disparityIt.GetIndex()[0] < outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
       {
       ++new_disparityIt;
-      old_maskIt.SetIndex(new_disparityIt.GetIndex()); 
+      old_maskIt.SetIndex(new_disparityIt.GetIndex());
       }
     index_pos = new_disparityIt.GetIndex();
     old_disparityIt.SetIndex(index_pos);
@@ -619,7 +619,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       disparity_jumpIt.SetIndex(index_pos);
       if (disparity_jumpIt.Get() == 1 || disparity_jumpIt.Get() == 2 )
         {
-        for (int k=0;k<8;k++)
+        for (int k=0; k<8; k++)
           {
           index=index_pos;
           index[0]=index_pos[0]+ring[k];
@@ -702,7 +702,7 @@ AdhesionCorrectionFilter<TImage, TMask>
           disparity_jumpIt.SetIndex(index);
           }
         }
-      new_disparityIt.SetIndex(index_pos); 
+      new_disparityIt.SetIndex(index_pos);
       ++new_disparityIt;
       }
     index[0]=outputPtr->GetRequestedRegion().GetIndex()[0];
@@ -710,7 +710,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  /** Risk zone = pixels to the right for jumps with flag 1 or 3 and  pixels to the left for jumps with flag 1 or 3 */ 
+  /** Risk zone = pixels to the right for jumps with flag 1 or 3 and  pixels to the left for jumps with flag 1 or 3 */
   /** Inside the risk zone, we look for edges which may cause the adhesion--->risk_edges */
 
   // Exploring the left-right epipolar direction
@@ -764,7 +764,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         {
         int l=-1;
         while (index_pos[0]+l>=outputPtr->GetRequestedRegion().GetIndex()[0] &&
-               l>=-big_dist && 
+               l>=-big_dist &&
                index_pos[0]+l<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
                index_pos[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
           {
@@ -796,14 +796,14 @@ AdhesionCorrectionFilter<TImage, TMask>
           l--;
           }
         }
-      if(index_max !=-100) 
+      if(index_max !=-100)
         {
         index = index_pos;
         index[0] = index_max;
         risk_edgesIt.SetIndex(index);
         risk_edgesIt.Set(1);  // flag= 1 for risk edges
         }
-      new_disparityIt.SetIndex(index_pos); 
+      new_disparityIt.SetIndex(index_pos);
       ++new_disparityIt;
       }
     index[0]=outputPtr->GetRequestedRegion().GetIndex()[0];
@@ -833,7 +833,7 @@ AdhesionCorrectionFilter<TImage, TMask>
           if(risk_edgesIt.Get() > 0) pp++;
           }
         risk_edgesIt.SetIndex(index_pos);
-        if (pp == 0) risk_edgesIt.Set(0);//remove isolate points
+        if (pp == 0) risk_edgesIt.Set(0); //remove isolate points
         if (pp == 1) risk_edgesIt.Set(2);
         if(pp==2)
           {
@@ -846,7 +846,7 @@ AdhesionCorrectionFilter<TImage, TMask>
             risk_edgesIt.SetIndex(index);
             if(risk_edgesIt.Get() > 0)
               {
-              pix.push_back(k); 
+              pix.push_back(k);
               l++;
               }
             }
@@ -863,8 +863,8 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  /** extend extreme edges if necessary : 
-   *  extreme points in the edges have flag 2, an the other edge points have flag = 1 
+  /** extend extreme edges if necessary :
+   *  extreme points in the edges have flag 2, an the other edge points have flag = 1
    */
 
   new_disparityIt.GoToBegin();
@@ -923,8 +923,8 @@ AdhesionCorrectionFilter<TImage, TMask>
     new_disparityIt.SetIndex(index);
     }
 
-  /** Cut risk edges 
-   *  remove pixel edges when the associated patch has the same disparity 
+  /** Cut risk edges
+   *  remove pixel edges when the associated patch has the same disparity
    * Ie: the patch is in a planar surfarce without jumps
    */
 
@@ -946,8 +946,8 @@ AdhesionCorrectionFilter<TImage, TMask>
         auxIt.SetIndex(index_pos);
         if( auxIt.Get() !=0 )
           {
-          double m_max = -10000000.; 
-          double m_min = -m_max; 
+          double m_max = -10000000.;
+          double m_min = -m_max;
           int Count=0;
           for(int j= -big_win; j<= big_win; j++)
             {
@@ -1066,7 +1066,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       int pp=0;
       int pp2=0;
       if (outputriskedgesPtr->GetPixel(index_pos) != 0)
-        {// left 
+        {// left
         int l=-patch_side;
         index[0]=index_pos[0]+l;
         index[1]=index_pos[1];
@@ -1081,7 +1081,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         if (disparity_jump->GetPixel(index) == 1)
           {
           pp++;
-          for (int i=l+1;i<=0; i++)
+          for (int i=l+1; i<=0; i++)
             {
             index[0]=index_pos[0]+i;
             new_disparityIt.SetIndex(index);
@@ -1210,7 +1210,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         if(disparity_jump->GetPixel(index)==2)
           {
           pp++;
-          for (int i=l-1;i>=0;i--)
+          for (int i=l-1; i>=0; i--)
             {
             index[0]=index_pos[0]+i;
             new_disparityIt.SetIndex(index);
@@ -1272,7 +1272,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         if (disparity_jump->GetPixel(index) == 4)
           {
           pp++;
-          for (int i=l-1;i>=0;i--)
+          for (int i=l-1; i>=0; i--)
             {
             index[0]=index_pos[0]+i;
             new_disparityIt.SetIndex(index);
@@ -1491,7 +1491,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       if (disparity_jump2->GetPixel(index_pos) == 7)
         {
         double disp=old_disparityPtr->GetPixel(index_pos);
-        for (int i=0;i<=big_dist;i++)
+        for (int i=0; i<=big_dist; i++)
           {
           if (index_pos[1]+i < outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
             {
@@ -1538,15 +1538,15 @@ AdhesionCorrectionFilter<TImage, TMask>
       old_maskIt.SetIndex(new_disparityIt.GetIndex());
       }
     index_pos = new_disparityIt.GetIndex();
-    for (int l=patch_side;l>0; l--)
+    for (int l=patch_side; l>0; l--)
       {
       index[0]=index_pos[0]+l;
       index[1]=index_pos[1];
       if (disparity_jump->GetPixel(index) != 0 || disparity_jump2->GetPixel(index) != 0 || outputriskedgesPtr->GetPixel(index) != 0)
         {
-        for (int i=-win;i<=win;i++)
+        for (int i=-win; i<=win; i++)
           {
-          for (int k=-win;k<=win;k++)
+          for (int k=-win; k<=win; k++)
             {
             index2[0]=index_pos[0]+l+i;
             index2[1]=index_pos[1]+k;
@@ -1591,7 +1591,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         index[1]=index_pos[1]+l;
         disparity_jump2It.SetIndex(index);
         if(disparity_jump2It.Get() ==5 && l != 0) disparity_jump2It.Set(0);
-        for(int i=l; i<=0; i++) 
+        for(int i=l; i<=0; i++)
           {
           index[1]=index_pos[1]+i;
           new_disparityIt.SetIndex(index);
@@ -1610,7 +1610,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         index[1]=index_pos[1]+l;
         disparity_jump2It.SetIndex(index);
         if(disparity_jump2It.Get() == 6 && l != 0) disparity_jump2It.Set(0);
-        for(int i=l; i>=0; i--) 
+        for(int i=l; i>=0; i--)
           {
           index[1]=index_pos[1]+i;
           new_disparityIt.SetIndex(index);
@@ -1629,7 +1629,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         index[1]=index_pos[1]+l;
         disparity_jump2It.SetIndex(index);
         if(disparity_jump2It.Get() == 8 && l != 0) disparity_jump2It.Set(0);
-        for(int i=l; i<=0; i++) 
+        for(int i=l; i<=0; i++)
           {
           index[1]=index_pos[1]+i;
           new_disparityIt.SetIndex(index);
@@ -1648,7 +1648,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         index[1]=index_pos[1]+l;
         disparity_jump2It.SetIndex(index);
         if(disparity_jump2It.Get() == 9 && l != 0) disparity_jump2It.Set(0);
-        for(int i=l; i>=0; i--) 
+        for(int i=l; i>=0; i--)
           {
           index[1]=index_pos[1]+i;
           new_disparityIt.SetIndex(index);

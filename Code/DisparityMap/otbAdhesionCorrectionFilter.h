@@ -35,16 +35,16 @@ namespace otb
  * - computation of intersections between jumps in the disparity map
  * - creation of a risk map (pixels potentially affected by adhesion)
  * - computation of extrema in the risk map
- * - extension of risk map borders: pixels touching borders of the risk map are removed 
+ * - extension of risk map borders: pixels touching borders of the risk map are removed
  *
- * Inputs are provided as follows: 
+ * Inputs are provided as follows:
  *  - SetInput() provides an image of edges detected in the reference image (for instance using Canny algorithm)
  *  - SetMedianDisparityInput() provides the median disparity map
  *  - SetMedianMaskInput()  provides the mask associated to the median disparity map
  *  - SetEdgesDisparityInput() provides an image of edges detected in the median disparity map
  *  - SetSubPixelMaskInput() provides the mask associated to the subpixel disparity map
- * 
- * The filter proposes as outputs: 
+ *
+ * The filter proposes as outputs:
  *  - GetOutput() provides the disparity map after adhesion correction
  *  - GetOutputMask() provides the mask associated to the disparity map after adhesion correction
  *  - GetOutputRiskEdges() provides the map of risk edges
@@ -52,8 +52,8 @@ namespace otb
  *
  * \sa      FineRegistrationImageFilter, FastCorrelationImageFilter, DisparityMapEstimationMethod, DisparityMapAndMaskEstimationFilter
  * \ingroup IntensityImageFilters, Streamed
- * 
- * See Publications : N. Sabater, J.M. Morel, A. Almansa and G. Blanchet, "Discarding moving objects in quasi-simultaneous stereovision", in IEEE International Conference on Image Processing, ICIP'10, 2010. 
+ *
+ * See Publications : N. Sabater, J.M. Morel, A. Almansa and G. Blanchet, "Discarding moving objects in quasi-simultaneous stereovision", in IEEE International Conference on Image Processing, ICIP'10, 2010.
  *                   N. Sabater, J.M. Morel and A. Almansa, "Sub-pixel stereo matching", in IEEE International Geoscience and Remote Sensing Symposium, IGARSS'10, 2010.
  */
 
@@ -86,7 +86,7 @@ public:
   typedef typename TMask::Pointer                MaskImagePointerType;
   typedef typename TMask::PixelType              MaskImagePixelType;
  
-  typedef itk::ConstNeighborhoodIterator<TImage> NeighborhoodIteratorType; 
+  typedef itk::ConstNeighborhoodIterator<TImage> NeighborhoodIteratorType;
 
   typedef otb::Image<double, 2> AuxImageType;
   typedef typename AuxImageType::Pointer AuxImagePointerType;
@@ -168,7 +168,7 @@ private:
   double                        m_Tolerance;
   
   /** Thresholds  */
-  double                        m_DiscontinuityThreshold ;
+  double                        m_DiscontinuityThreshold;
   double                        m_DiscontinuityHighThreshold;
   double                        m_MaxEdgeGap;
   double                        m_EdgeThreshold;

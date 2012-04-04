@@ -31,26 +31,26 @@ namespace otb
  * \brief Applies a median filter to a monoband disparity map with an associated mask
  *
  * Computes an image where a given pixel is the median value of the
- * the pixels in a neighborhood about the corresponding input pixel. Pixels taken into 
+ * the pixels in a neighborhood about the corresponding input pixel. Pixels taken into
  * account for the median computation have a value different from zero in the associated mask.
- * 
+ *
  * A detection of incoherences between the input disparity map and the median is performed (a pixel corresponds
  * to an incoherence if the absolute value of the difference between the pixel value in the disparity map and in the median
  * image is higher than the incoherence threshold (whose default value is 1). The input disparity map and mask are updated: their value on incoherences becomes 0.
- * 
+ *
  * The median image is then computed again on incoherences using the updated disparity map and mask.
- * 
- * Inputs (with corresponding method): 
+ *
+ * Inputs (with corresponding method):
  *  - disparity map  (SetInput())
  *  - associated mask (SetMaskInput())
  *  - radius (SetRadius())
  *  - incoherence threshold (SetIncoherenceThreshold())
- * Outputs (with corresponding method):  
- * 	- median image (GetOutput())
+ * Outputs (with corresponding method):
+ *        - median image (GetOutput())
  *  - mask associated to the median image (GetOutputMask())
  *  - updated disparity map with incoherence removal (GetOutputDisparityMap())
  *  - mask associated to the updated disparity map (GetOutputDisparityMask())
- * 
+ *
  * A median filter is one of the family of nonlinear filters.  It is
  * used to smooth an image without being biased by outliers or shot noise.
  *
@@ -61,7 +61,7 @@ namespace otb
  * \sa Neighborhood
  * \sa NeighborhoodOperator
  * \sa NeighborhoodIterator
- * 
+ *
  * \ingroup IntensityImageFilters
  */
 template <class TInputImage, class TOutputImage, class TMask>
@@ -112,7 +112,7 @@ public:
   /** Get the output mask  **/
   TMask * GetOutputMask(); // mask corresponding to the median disparity map
 
-  /** Get the updated disparity map **/ 
+  /** Get the updated disparity map **/
   TOutputImage * GetOutputDisparityMap(); // input disparity map updated (incoherences between median and input disparity map are removed)
   
   /** Get the updated disparity mask **/

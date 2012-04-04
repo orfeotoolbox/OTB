@@ -46,7 +46,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 }
 
 template <class TInputImage, class TOutputImage, class TMask>
-void 
+void
 DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 ::SetMaskInput( const TMask * inputmask)
 {
@@ -106,7 +106,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 
 
 template <class TInputImage, class TOutputImage, class TMask>
-void 
+void
 DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 ::GenerateOutputInformation()
 {
@@ -136,7 +136,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 
 
 template <class TInputImage, class TOutputImage, class TMask>
-void 
+void
 DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
@@ -162,7 +162,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
     if (inputmaskPtr->GetLargestPossibleRegion() != inputPtr->GetLargestPossibleRegion())
       {
       itkExceptionMacro(<<"Input image and mask image don't have the same size ! Input image :"<<
-        inputPtr->GetLargestPossibleRegion()<< " ; Mask image :"<<inputmaskPtr->GetLargestPossibleRegion());
+        inputPtr->GetLargestPossibleRegion()<< "; Mask image :"<<inputmaskPtr->GetLargestPossibleRegion());
       }
     }
 
@@ -256,7 +256,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         MaskInputIt.SetLocation(outputIt.GetIndex());
         }
       InputIt.SetLocation(outputIt.GetIndex());
-      for (int i=0;i<InputIt.Size();i++)
+      for (int i=0; i<InputIt.Size(); i++)
         {
         if (!inputmaskPtr || (inputmaskPtr && MaskInputIt.GetPixel(i) != 0))
           {
@@ -269,7 +269,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         //outputMaskIt.Set(itk::NumericTraits<MaskImagePixelType>::max());
         outputMaskIt.Set(1);
         // get the median value
-        if (std::fmod((double) p,2)==0) 
+        if (std::fmod((double) p,2)==0)
           {
           const unsigned int medianPosition_low = (int) p/2 - 1;
           const unsigned int medianPosition_high = (int) p/2;
@@ -293,7 +293,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         outputMaskIt.Set(0);
         }
       }
-    else 
+    else
       {
       outputIt.Set(0.0);
       outputMaskIt.Set(0);
@@ -345,12 +345,12 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         MaskInputIt.SetLocation(outputIt.GetIndex());
         }
       
-      if ((!inputmaskPtr || (inputmaskPtr && MaskInputIt.GetCenterPixel() != 0)) && 
+      if ((!inputmaskPtr || (inputmaskPtr && MaskInputIt.GetCenterPixel() != 0)) &&
           std::fabs(InputIt.GetCenterPixel() - MedianIt.Get())>m_IncoherenceThreshold)
         {
         outputDisparityMapIt.Set(0.0); //Remove pixel from disparity map//
         outputDisparityMaskIt.Set(0);
-        for (int i=0;i<image_aux_It.Size();i++)
+        for (int i=0; i<image_aux_It.Size(); i++)
           {
           image_aux_It.SetPixel(i,1);
           }
@@ -360,7 +360,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
     ++outputMaskIt;
     }
 
-  //Recompute median where values had been changed 
+  //Recompute median where values had been changed
   // we  use the updated sub pixel disparity map
   itk::ConstNeighborhoodIterator<OutputImageType> updatedDisparityMapIt(m_Radius, outputdisparitymapPtr,output->GetRequestedRegion());
   itk::ConstNeighborhoodIterator<TMask> updatedDisparityMaskIt(m_Radius, outputdisparitymaskPtr,output->GetRequestedRegion());
@@ -386,7 +386,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         // determine pixels in the neighborhood window whose subpixel mask is not equal to 0
         int p=0;
         pixels.clear();
-        for (int i=0;i<updatedDisparityMaskIt.Size();i++)
+        for (int i=0; i<updatedDisparityMaskIt.Size(); i++)
           {
           if (updatedDisparityMaskIt.GetPixel(i) != 0)
             {
@@ -399,7 +399,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
           //outputMaskIt.Set(itk::NumericTraits<MaskImagePixelType>::max());
           outputMaskIt.Set(1);
           // get the median value
-          if (std::fmod((double) p,2)==0) 
+          if (std::fmod((double) p,2)==0)
             {
             const unsigned int medianPosition_low = (int) p/2 - 1;
             const unsigned int medianPosition_high = (int) p/2;
@@ -439,7 +439,7 @@ template <class TInputImage, class TOutput, class TMask>
 void
 DisparityMapMedianFilter<TInputImage, TOutput, TMask>
 ::PrintSelf(
-  std::ostream& os, 
+  std::ostream& os,
   itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
