@@ -203,5 +203,18 @@ void VectorDataEditionModel::ProcessVertexListTranslation(VertexListType* vertex
     }
 }
 
+void VectorDataEditionModel::DeleteSelectedGeometry()
+{
+  // Set the selected geometry using the index found
+  if (m_SearchIndex != -1)
+    {
+    // Set the current Geometry
+    this->SetSelectedGeometry(m_SearchIndex);
+
+    // Delete the geometry
+    this->DeleteGeometry();    
+    }
+}
+
 }
 

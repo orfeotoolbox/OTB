@@ -71,6 +71,7 @@ public:
   void SearchDataNodeIndexFromPoint( PointType srcPoint);
   void UpdatePoint( PointType srcPoint,  PointType dstPoint);
   void UpdateGeometryPosition(double tx, double ty);
+  void DeleteSelectedGeometry();
     
   
 protected:
