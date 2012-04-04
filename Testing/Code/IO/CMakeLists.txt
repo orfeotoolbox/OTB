@@ -57,7 +57,7 @@ SET(IO_TESTS23    ${CXX_TEST_PATH}/otbIOTests23)
 IF(OTB_DATA_USE_LARGEINPUT)
    SET(GenericTestPHR_DATA_INPUTS
       ${GenericTestPHR_DATA_INPUTS}
-      ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+      ${LARGEINPUT}/PLEIADES-PRE/PHR_PRODUCT_SIMUL_V3/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
    )
    
    SET(GenericTestPHR_DATA_TYPES
@@ -2804,14 +2804,6 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
 
 ENDFOREACH()
 
-ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES ${IO_TESTS18}
-         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
-        otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
-        ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
-)
-
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES_sensorP_spotsample ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES_SEN_P_spot.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
@@ -2928,7 +2920,7 @@ ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_PLEIADES ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_PLEIADES_V3.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_PLEIADES_OUT.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEINPUT}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+        ${LARGEINPUT}/PLEIADES-PRE/PHR_PRODUCT_SIMUL_V3/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
         ${TEMP}/ioTvOpticalImageMetadataInterface_PLEIADES_OUT.txt
 )
 
