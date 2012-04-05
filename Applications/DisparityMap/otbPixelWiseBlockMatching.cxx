@@ -25,6 +25,7 @@
 #include "otbImageListToVectorImageFilter.h"
 
 #include "otbSubPixelDisparityImageFilter.h"
+#include "otbDisparityMapMedianFilter.h"
 
 namespace otb
 {
@@ -90,6 +91,10 @@ public:
                                             FloatImageType,
                                             LPBlockMatchingFunctorType> LPSubPixelDisparityFilterType;
 
+  typedef otb::DisparityMapMedianFilter<FloatImageType,
+                                        FloatImageType,
+                                        FloatImageType>   MedianFilterType;
+  
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -111,6 +116,8 @@ private:
     m_BandMathFilter  = BandMathFilterType::New();
     m_OutputImageList = ImageListType::New();
     m_ImageListFilter = ImageListToVectorImageFilterType::New();
+    m_HMedianFilter    = MedianFilterType::New();
+    m_VMedianFilter    = MedianFilterType::New();
   }
 
   void DoInit()
@@ -223,6 +230,19 @@ private:
     
     AddChoice("bm.subpixel.dichotomy", "Dichotomy");
     SetParameterDescription("bm.subpixel.dichotomy", "Dichotomic search");
+    
+    AddParameter(ParameterType_Group,"bm.medianfilter","Median filtering");
+    SetParameterDescription("bm.medianfilter","Use a median filter to get a smooth disparity map");
+    
+    AddParameter(ParameterType_Int,"bm.medianfilter.radius", "Radius");
+    SetParameterDescription("bm.medianfilter.radius", "Radius for median filter");
+    MandatoryOff("bm.medianfilter.radius");
+    DisableParameter("bm.medianfilter.radius");
+    
+    AddParameter(ParameterType_Float,"bm.medianfilter.incoherence", "Incoherence threshold");
+    SetParameterDescription("bm.medianfilter.incoherence", "Incoherence threshold between original and filtered disparity");
+    MandatoryOff("bm.medianfilter.incoherence");
+    DisableParameter("bm.medianfilter.incoherence");
     
     AddParameter(ParameterType_Choice, "bm.initdisp", "Initial disparities");
     AddChoice("bm.initdisp.none", "None");
@@ -405,6 +425,9 @@ private:
     FloatImageType * hdispImage;
     FloatImageType * vdispImage;
     FloatImageType * metricImage;
+    FloatImageType * maskImage;
+    
+    maskImage = m_BandMathFilter->GetOutput();
 
     // SSD case
     if(GetParameterInt("bm.metric") == 0)
@@ -420,7 +443,7 @@ private:
       AddProcess(m_SSDBlockMatcher,"SSD block matching");
       if(masking)
         {
-        m_SSDBlockMatcher->SetLeftMaskInput(m_BandMathFilter->GetOutput());
+        m_SSDBlockMatcher->SetLeftMaskInput(maskImage);
         }
       if(useInitialDispUniform)
         {
@@ -481,7 +504,7 @@ private:
 
       if(masking)
         {
-        m_NCCBlockMatcher->SetLeftMaskInput(m_BandMathFilter->GetOutput());
+        m_NCCBlockMatcher->SetLeftMaskInput(maskImage);
         }
       if(useInitialDispUniform)
         {
@@ -542,7 +565,7 @@ private:
 
       if(masking)
         {
-        m_LPBlockMatcher->SetLeftMaskInput(m_BandMathFilter->GetOutput());
+        m_LPBlockMatcher->SetLeftMaskInput(maskImage);
         }
       if(useInitialDispUniform)
         {
@@ -588,6 +611,32 @@ private:
         }
       }
     
+    if (IsParameterEnabled("bm.medianfilter.radius") && IsParameterEnabled("bm.medianfilter.incoherence"))
+      {
+      if (minhdisp < maxhdisp)
+        {
+        m_HMedianFilter->SetInput(hdispImage);
+        m_HMedianFilter->SetRadius(GetParameterInt("bm.medianfilter.radius"));
+        m_HMedianFilter->SetIncoherenceThreshold(GetParameterFloat("bm.medianfilter.incoherence"));
+        if (masking)
+          {
+          m_HMedianFilter->SetMaskInput(maskImage);
+          }
+        hdispImage = m_HMedianFilter->GetOutput();
+        }
+      
+      if (minvdisp < maxvdisp)
+        {
+        m_VMedianFilter->SetInput(vdispImage);
+        m_VMedianFilter->SetRadius(GetParameterInt("bm.medianfilter.radius"));
+        m_VMedianFilter->SetIncoherenceThreshold(GetParameterFloat("bm.medianfilter.incoherence"));
+        if (masking)
+          {
+          m_VMedianFilter->SetMaskInput(maskImage);
+          }
+        vdispImage = m_VMedianFilter->GetOutput();
+        }
+      }
 
     m_OutputImageList->Clear();
 
@@ -605,7 +654,7 @@ private:
 
     if(IsParameterEnabled("io.outmaskleft"))
       {
-      SetParameterOutputImage("io.outmaskleft",m_BandMathFilter->GetOutput());
+      SetParameterOutputImage("io.outmaskleft",maskImage);
       }
   }
 
@@ -638,7 +687,12 @@ private:
 
   // Image list to VectorImage filter
   ImageListToVectorImageFilterType::Pointer m_ImageListFilter;
-
+  
+  // Horizontal Median filter
+  MedianFilterType::Pointer           m_HMedianFilter;
+  
+  // Vertical Median filter
+  MedianFilterType::Pointer           m_VMedianFilter;
 };
 
 }
