@@ -29,10 +29,10 @@ namespace otb
  *  of several input vectordatas.
  *
  *  This generator produces a unique vector by concatening several
- *  inputs set via the method AddInput(VectorData *)
+ *  inputs set via the method AddInput(VectorData *).
  *
  * Note that the input vectordatas must have the same node type,
- * this is due that vectordata creation does not support multiple geomtries
+ * this is due that vectordata creation does not support multiple geometries
  * in a single vectordata.
  * Warning : this filter does not create a deep copy of each node.
  *
