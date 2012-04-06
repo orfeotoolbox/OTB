@@ -205,7 +205,7 @@ template< class TInputImage, class TOutputImage, class TMask>
 void
 DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 ::GenerateData()
-{ 
+{
   // Allocate outputs
   this->AllocateOutputs();
 
