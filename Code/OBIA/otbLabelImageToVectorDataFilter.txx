@@ -36,7 +36,7 @@ namespace otb
 
 template <class TInputImage, class TPrecision>
 LabelImageToVectorDataFilter<TInputImage, TPrecision>
-::LabelImageToVectorDataFilter() : m_FieldName("DN")
+::LabelImageToVectorDataFilter() : m_FieldName("DN"), m_Use8Connected(false)
 {
    this->SetNumberOfRequiredInputs(1);
    this->SetNumberOfRequiredOutputs(1);
@@ -159,13 +159,23 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
     OGRSFDriver * ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
     OGRDataSource * dataSource = ogrDriver->CreateDataSource("Shape",NULL);
     
-    OGRLayer * outputLayer = dataSource->CreateLayer("toto",NULL,wkbMultiPolygon,NULL);
+    OGRLayer * outputLayer = dataSource->CreateLayer("layer",NULL,wkbMultiPolygon,NULL);
     
     OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
     outputLayer->CreateField(&field, true);
 
     //Call GDALPolygonize()
-    GDALPolygonize(dataset->GetRasterBand(1), NULL, outputLayer, 0, NULL, NULL, NULL);
+    char ** options;
+    options = NULL;
+    char * option[1];
+    if (m_Use8Connected == true)
+    {
+      std::string opt("8CONNECTED:8");
+      option[0] = const_cast<char *>(opt.c_str());
+      options=option;
+    }
+    
+    GDALPolygonize(dataset->GetRasterBand(1), NULL, outputLayer, 0, options, NULL, NULL);
     
     /** Convert OGR layer into VectorData */
     OGRFeatureDefn * dfn = outputLayer->GetLayerDefn();

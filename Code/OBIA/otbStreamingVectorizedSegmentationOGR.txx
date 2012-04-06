@@ -33,7 +33,7 @@ namespace otb
 
 template <class TImageType, class TSegmentationFilter>
 PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
-::PersistentStreamingLabelImageToOGRDataFilter() : m_TileMaxLabel(0), m_StartLabel(0)
+::PersistentStreamingLabelImageToOGRDataFilter() : m_TileMaxLabel(0), m_StartLabel(0), m_Use8Connected(false)
 {
    m_SegmentationFilter = SegmentationFilterType::New();
    m_TileNumber = 1;
@@ -85,6 +85,8 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   extract->SetExtractionRegion( this->GetInput()->GetBufferedRegion() );
   extract->Update();
   
+  //std::cout<< "extract region " << extract->GetOutput()->GetLargestPossibleRegion()<<std::endl;
+  
   chrono.Stop();
   //std::cout<< "extract took " << chrono.GetTotal() << " sec"<<std::endl;
 
@@ -106,11 +108,13 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   chrono1.Stop();
   std::cout<< "segmentation took " << chrono1.GetTotal() << " sec"<<std::endl;
   
+  
   itk::TimeProbe chrono2;
   chrono2.Start();
 
   labelImageToOGRDataFilter->SetInput(dynamic_cast<LabelImageType *>(m_SegmentationFilter->GetOutputs().at(labelImageIndex).GetPointer()));
   labelImageToOGRDataFilter->SetFieldName(this->GetFieldName());
+  labelImageToOGRDataFilter->SetUse8Connected(m_Use8Connected);
   labelImageToOGRDataFilter->Update();
   
   chrono2.Stop();

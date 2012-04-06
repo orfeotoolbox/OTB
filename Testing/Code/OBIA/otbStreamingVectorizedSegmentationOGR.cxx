@@ -126,6 +126,7 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   filter->GetStreamer()->SetTileDimensionTiledStreaming(atoi(argv[3]));
   filter->SetFieldName(fieldName);
   filter->SetStartLabel(1);
+  filter->SetUse8Connected(true);
   filter->GetSegmentationFilter()->SetSpatialRadius(5);
   filter->GetSegmentationFilter()->SetRangeRadius(15);
   filter->GetSegmentationFilter()->SetMinimumRegionSize(100);

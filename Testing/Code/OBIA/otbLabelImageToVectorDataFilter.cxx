@@ -50,6 +50,7 @@ int otbLabelImageToVectorDataFilter(int argc, char * argv[])
   reader->SetFileName(infname);
 
   filter->SetInput(reader->GetOutput());
+  filter->SetUse8Connected(false);
 
   writer->SetFileName(outfname);
   writer->SetInput(filter->GetOutput());

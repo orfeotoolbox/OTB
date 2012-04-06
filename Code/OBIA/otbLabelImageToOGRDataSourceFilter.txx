@@ -80,7 +80,7 @@ private:
 
 template <class TInputImage>
 LabelImageToOGRDataSourceFilter<TInputImage>
-::LabelImageToOGRDataSourceFilter() : m_FieldName("DN")
+::LabelImageToOGRDataSourceFilter() : m_FieldName("DN"), m_Use8Connected(false)
 {
    this->SetNumberOfRequiredInputs(1);
    this->SetNumberOfRequiredOutputs(1);
@@ -229,7 +229,17 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     outputLayer->CreateField(&field, true);
 
     //Call GDALPolygonize()
-    GDALPolygonize(dataset->GetRasterBand(1), NULL, outputLayer, 0, NULL, NULL, NULL);
+    char ** options;
+    options = NULL;
+    char * option[1];
+    if (m_Use8Connected == true)
+    {
+      std::string opt("8CONNECTED:8");
+      option[0] = const_cast<char *>(opt.c_str());
+      options=option;
+    }
+    
+    GDALPolygonize(dataset->GetRasterBand(1), NULL, outputLayer, 0, options, NULL, NULL);
     
     
     OGRDataSourceObjectType * decoratedOutput =

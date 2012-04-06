@@ -82,6 +82,8 @@ public:
   itkSetMacro(FieldName, std::string);
   itkGetMacro(FieldName, std::string);
   
+  itkSetMacro(Use8Connected, bool);
+  itkGetMacro(Use8Connected, bool);
   
 protected:
   LabelImageToVectorDataFilter();
@@ -97,6 +99,7 @@ private:
   void operator =(const Self&);      //purposely not implemented
   
   std::string m_FieldName;
+  bool m_Use8Connected;
 
 };
 

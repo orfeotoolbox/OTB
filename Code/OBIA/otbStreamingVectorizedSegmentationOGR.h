@@ -135,15 +135,15 @@ public:
   
   itkGetObjectMacro(SegmentationFilter, SegmentationFilterType);
   
-  /*itkSetMacro(FieldName, std::string);
-  itkGetMacro(FieldName, std::string); */
-  
   void SetStartLabel(const LabelPixelType & label)
   {
      m_StartLabel = label;
      m_TileMaxLabel = label;
   }
   itkGetMacro(StartLabel, LabelPixelType);
+  
+  itkSetMacro(Use8Connected, bool);
+  itkGetMacro(Use8Connected, bool);
 
 protected:
   PersistentStreamingLabelImageToOGRDataFilter();
@@ -164,6 +164,7 @@ private:
   typename SegmentationFilterType::Pointer m_SegmentationFilter;
   
   unsigned int m_TileNumber;
+  bool m_Use8Connected;
   
   
 };
@@ -233,6 +234,16 @@ public:
   void Initialize()
   {
      this->GetFilter()->Initialize();
+  }
+  
+  void SetUse8Connected(bool flag)
+  {
+     this->GetFilter()->SetUse8Connected(flag);
+  }
+  
+  const bool GetUse8Connected()
+  {
+     return this->GetFilter()->GetUse8Connected();
   }
   
 protected:
