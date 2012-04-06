@@ -110,10 +110,6 @@ void
 PersistentImageToOGRDataFilter<TImage>
 ::Initialize()
 {
-   if (m_DataSource != NULL)
-    {
-      OGRDataSource::DestroyDataSource(m_DataSource);
-    }
    
    std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
    bool projectionInformationAvailable = !projectionRefWkt.empty();
@@ -126,6 +122,17 @@ PersistentImageToOGRDataFilter<TImage>
    std::string driverName = this->GetOGRDriverName(this->m_FileName).data();
    if(driverName != "NOT-FOUND")
    {
+      m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
+      if (m_DataSource != NULL)
+      {
+         //Erase the data if possible
+         if (m_DataSource->GetDriver()->TestCapability(ODrCDeleteDataSource))
+         {
+            //Delete datasource
+            m_DataSource->GetDriver()->DeleteDataSource(this->m_FileName.c_str());
+         }
+      }
+
       ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName.c_str());
       m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), NULL);
       m_DataSource->CreateLayer("layer", oSRS ,wkbMultiPolygon, NULL);
