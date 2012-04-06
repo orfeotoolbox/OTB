@@ -135,6 +135,12 @@ SpotImageMetadataInterface::GetSolarIrradiance() const
     outputValuesVariableLengthVector[2] = outputValues[0];
     outputValuesVariableLengthVector[3] = outputValues[3];
     }
+  else if (outputValues.size() == 3)
+    {
+    outputValuesVariableLengthVector[0] = outputValues[2];
+    outputValuesVariableLengthVector[1] = outputValues[1];
+    outputValuesVariableLengthVector[2] = outputValues[0];
+    }
   else
     {
     itkExceptionMacro("Invalid Physical Irradiance");
@@ -440,6 +446,12 @@ SpotImageMetadataInterface
     outputValuesVariableLengthVector[2] = outputValues[0];
     outputValuesVariableLengthVector[3] = outputValues[3];
     }
+  else if (outputValues.size() == 3)
+    {
+    outputValuesVariableLengthVector[0] = outputValues[2];
+    outputValuesVariableLengthVector[1] = outputValues[1];
+    outputValuesVariableLengthVector[2] = outputValues[0];
+    }
   else
     {
     itkExceptionMacro("Invalid Physical Gain");
@@ -495,6 +507,12 @@ SpotImageMetadataInterface
     outputValuesVariableLengthVector[1] = outputValues[1];
     outputValuesVariableLengthVector[2] = outputValues[0];
     outputValuesVariableLengthVector[3] = outputValues[3];
+    }
+  else if (outputValues.size() == 3)
+    {
+    outputValuesVariableLengthVector[0] = outputValues[2];
+    outputValuesVariableLengthVector[1] = outputValues[1];
+    outputValuesVariableLengthVector[2] = outputValues[0];
     }
   else
     {
@@ -594,10 +612,11 @@ SpotImageMetadataInterface
     {
     wavel.SetSize(1);
     if (sensorId == "SPOT4") wavel.Fill(0.610);
-    else if (sensorId == "SPOT5") wavel.Fill(0.480);
-    else itkExceptionMacro(<< "Invalid Spot Sensor ID");
+    else if (sensorId == "SPOT5") wavel.Fill(0.475);
+    else wavel.Fill(0.500); // assume SPOT 123
+      //else itkExceptionMacro(<< "Invalid Spot Sensor ID");
     }
-  else if (nbBands > 1 && nbBands < 5)
+  else if (nbBands == 4)
     {
     wavel.SetSize(4);
     //FIXME is that supposed to correspond to the bands in the files?
@@ -605,6 +624,14 @@ SpotImageMetadataInterface
     wavel[1] = 0.610;
     wavel[2] = 0.780;
     wavel[3] = 1.580;
+    }
+  else if (nbBands == 3)
+    {
+    wavel.SetSize(3);
+    //FIXME is that supposed to correspond to the bands in the files?
+    wavel[0] = 0.500;
+    wavel[1] = 0.610;
+    wavel[2] = 0.780;
     }
   else itkExceptionMacro(<< "Invalid number of bands...");
 
@@ -640,9 +667,10 @@ SpotImageMetadataInterface
     wavel.SetSize(1);
     if (sensorId == "SPOT4") wavel.Fill(0.680);
     else if (sensorId == "SPOT5") wavel.Fill(0.710);
-    else itkExceptionMacro(<< "Invalid Spot Sensor ID");
+    else wavel.Fill(0.730); // assume SPOT 123
+      // else itkExceptionMacro(<< "Invalid Spot Sensor ID");
     }
-  else if (nbBands > 1 && nbBands < 5)
+  else if (nbBands == 4)
     {
     //FIXME is that supposed to correspond to the bands in the files?
     wavel.SetSize(4);
@@ -650,6 +678,13 @@ SpotImageMetadataInterface
     wavel[1] = 0.680;
     wavel[2] = 0.890;
     wavel[3] = 1.750;
+    }
+  else if (nbBands == 3)
+    {
+    wavel.SetSize(3);
+    wavel[0] = 0.590;
+    wavel[1] = 0.680;
+    wavel[2] = 0.890;
     }
   else itkExceptionMacro(<< "Invalid number of bands...");
 
