@@ -132,17 +132,6 @@ public:
   itkSetMacro(IncoherenceThreshold, double);
   itkGetMacro(IncoherenceThreshold, double);
   
-  /** MedianImageFilter needs a larger input requested region than
-   * the output requested region.  As such, MedianImageFilter needs
-   * to provide an implementation for GenerateInputRequestedRegion()
-   * in order to inform the pipeline execution model.
-   *
-   * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
-  
-  /** Generate output information */
-  virtual void GenerateOutputInformation(void);
-  
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(SameDimensionCheck,
@@ -159,7 +148,19 @@ protected:
   virtual ~DisparityMapMedianFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  void GenerateData();
+  /** MedianImageFilter needs a larger input requested region than
+   * the output requested region.  As such, MedianImageFilter needs
+   * to provide an implementation for GenerateInputRequestedRegion()
+   * in order to inform the pipeline execution model.
+   *
+   * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
+  virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
+  
+  /** Generate output information */
+  virtual void GenerateOutputInformation(void);
+
+  /** apply median filter */
+  virtual void GenerateData();
 
 private:
   DisparityMapMedianFilter(const Self&); //purposely not implemented
@@ -167,8 +168,6 @@ private:
 
   /** Radius of median filter */
   SizeType m_Radius;
-  
-  SizeType m_ImageSize;
   
   /** Threshold of incoherence between original and filtered disparity */
   double m_IncoherenceThreshold;

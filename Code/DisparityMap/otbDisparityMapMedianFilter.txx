@@ -115,7 +115,6 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 
   // Retrieve output pointers
   typename Superclass::InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
-//  TMask * inputmaskPtr = const_cast< TMask * >(this->GetMaskInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
   TMask * outputmaskPtr = this->GetOutputMask();
   typename Superclass::OutputImagePointer outputdisparitymapPtr = this->GetOutputDisparityMap();
@@ -124,7 +123,6 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
   // Update size and spacing according to grid step
   InputImageRegionType largestRegion  = outputPtr->GetLargestPossibleRegion();
   SizeType outputSize = largestRegion.GetSize();
-  m_ImageSize = outputSize;
 
   // Set largest region size
   largestRegion.SetSize(outputSize);
@@ -207,7 +205,7 @@ template< class TInputImage, class TOutputImage, class TMask>
 void
 DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 ::GenerateData()
-{
+{ 
   // Allocate outputs
   this->AllocateOutputs();
 
@@ -218,6 +216,8 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
   TMask * outputmaskPtr = this->GetOutputMask();
   TOutputImage * outputdisparitymapPtr = this->GetOutputDisparityMap();
   TMask * outputdisparitymaskPtr = this->GetOutputDisparityMask();
+  
+  SizeType imgSize = output->GetLargestPossibleRegion().GetSize();
   
   /** Input iterators */
   itk::ConstNeighborhoodIterator<InputImageType> InputIt(m_Radius, input,input->GetRequestedRegion());
@@ -244,9 +244,9 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
           !outputDisparityMapIt.IsAtEnd())
     {
     if (outputIt.GetIndex()[0] >= m_Radius[0] &&
-        outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] &&
+        outputIt.GetIndex()[0] <   imgSize[0] - m_Radius[0] &&
         outputIt.GetIndex()[1] >= m_Radius[1] &&
-        outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1])
+        outputIt.GetIndex()[1] <   imgSize[1] - m_Radius[1])
       {
       // determine pixels in the neighborhood window whose subpixel mask is not equal to 0
       int p=0;
@@ -331,9 +331,9 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
   while (!outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
     {
     if (outputIt.GetIndex()[0] >= m_Radius[0] &&
-        outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] &&
+        outputIt.GetIndex()[0] <   imgSize[0] - m_Radius[0] &&
         outputIt.GetIndex()[1] >= m_Radius[1] &&
-        outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1])
+        outputIt.GetIndex()[1] <   imgSize[1] - m_Radius[1])
       {
       InputIt.SetLocation(outputIt.GetIndex());
       MedianIt.SetIndex(outputIt.GetIndex());
@@ -376,9 +376,9 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
           !outputMaskIt.IsAtEnd())
     {
     if (outputIt.GetIndex()[0] >= m_Radius[0] &&
-        outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] &&
+        outputIt.GetIndex()[0] <   imgSize[0] - m_Radius[0] &&
         outputIt.GetIndex()[1] >= m_Radius[1] &&
-        outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1])
+        outputIt.GetIndex()[1] <   imgSize[1] - m_Radius[1])
       {
       image_aux_It.SetLocation(outputIt.GetIndex());
       if (image_aux_It.GetCenterPixel() != 0)
