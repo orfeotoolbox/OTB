@@ -51,7 +51,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 ::SetMaskInput( const TMask * inputmask)
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(1, const_cast<TMask *>( inputmask ));
+  this->SetNthInput(1, const_cast<TMask *>( inputmask ));
 }
 
 
