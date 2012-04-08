@@ -249,7 +249,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         outputIt.GetIndex()[1] <   imgSize[1] - m_Radius[1])
       {
       // determine pixels in the neighborhood window whose subpixel mask is not equal to 0
-      int p=0;
+      int p = 0;
       pixels.clear();
       if (inputmaskPtr)
         {
@@ -269,10 +269,10 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         //outputMaskIt.Set(itk::NumericTraits<MaskImagePixelType>::max());
         outputMaskIt.Set(1);
         // get the median value
-        if (std::fmod((double) p,2)==0)
+        if (p & 0x1 == 0)
           {
-          const unsigned int medianPosition_low = (int) p/2 - 1;
-          const unsigned int medianPosition_high = (int) p/2;
+          const unsigned int medianPosition_low = p/2 - 1;
+          const unsigned int medianPosition_high = p/2;
           const typename std::vector<InputPixelType>::iterator medianIterator_low = pixels.begin() + medianPosition_low;
           const typename std::vector<InputPixelType>::iterator medianIterator_high = pixels.begin() + medianPosition_high;
           std::nth_element(pixels.begin(), medianIterator_low, pixels.end());
@@ -281,7 +281,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
           }
         else
           {
-          const unsigned int medianPosition = (int) floor(p/2);
+          const unsigned int medianPosition = p/2;
           const typename std::vector<InputPixelType>::iterator medianIterator = pixels.begin() + medianPosition;
           std::nth_element(pixels.begin(), medianIterator, pixels.end());
           outputIt.Set( static_cast<typename OutputImageType::PixelType> (*medianIterator) );
@@ -399,10 +399,10 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
           //outputMaskIt.Set(itk::NumericTraits<MaskImagePixelType>::max());
           outputMaskIt.Set(1);
           // get the median value
-          if (std::fmod((double) p,2)==0)
+          if (p & 0x1 == 0)
             {
-            const unsigned int medianPosition_low = (int) p/2 - 1;
-            const unsigned int medianPosition_high = (int) p/2;
+            const unsigned int medianPosition_low = p/2 - 1;
+            const unsigned int medianPosition_high = p/2;
             const typename std::vector<InputPixelType>::iterator medianIterator_low = pixels.begin() + medianPosition_low;
             const typename std::vector<InputPixelType>::iterator medianIterator_high = pixels.begin() + medianPosition_high;
             std::nth_element(pixels.begin(), medianIterator_low, pixels.end());
@@ -411,7 +411,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
             }
           else
             {
-            const unsigned int medianPosition = (int) floor(p/2);
+            const unsigned int medianPosition = p/2;
             const typename std::vector<InputPixelType>::iterator medianIterator = pixels.begin() + medianPosition;
             std::nth_element(pixels.begin(), medianIterator, pixels.end());
             outputIt.Set( static_cast<typename OutputImageType::PixelType> (*medianIterator) );
