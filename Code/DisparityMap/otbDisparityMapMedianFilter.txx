@@ -269,7 +269,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         //outputMaskIt.Set(itk::NumericTraits<MaskImagePixelType>::max());
         outputMaskIt.Set(1);
         // get the median value
-        if (p & 0x1 == 0)
+        if ((p & 0x1) == 0)
           {
           const unsigned int medianPosition_low = p/2 - 1;
           const unsigned int medianPosition_high = p/2;
@@ -399,7 +399,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
           //outputMaskIt.Set(itk::NumericTraits<MaskImagePixelType>::max());
           outputMaskIt.Set(1);
           // get the median value
-          if (p & 0x1 == 0)
+          if ((p & 0x1) == 0)
             {
             const unsigned int medianPosition_low = p/2 - 1;
             const unsigned int medianPosition_high = p/2;
