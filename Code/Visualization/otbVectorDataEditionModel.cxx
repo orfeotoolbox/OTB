@@ -212,7 +212,7 @@ void VectorDataEditionModel::DeleteSelectedGeometry()
     this->SetSelectedGeometry(m_SearchIndex);
 
     // Delete the geometry
-    this->DeleteGeometry();    
+    this->DeleteGeometry();
     }
 }
 
