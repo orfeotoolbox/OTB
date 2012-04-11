@@ -99,9 +99,10 @@ public:
   typedef typename MaskImageType::PixelType   MaskImagePixelType;
   typedef typename MaskImageType::Pointer     MaskImagePointerType;
 
-  typedef typename InputImageType::RegionType   InputImageRegionType;
-  typedef typename OutputImageType::RegionType  OutputImageRegionType;
-  typedef typename InputImageType::SizeType     SizeType;
+  typedef typename InputImageType::RegionType       InputImageRegionType;
+  typedef typename OutputImageType::RegionType      OutputImageRegionType;
+  typedef typename InputImageType::SizeType         SizeType;
+  typedef typename OutputImageType::IndexValueType  IndexValueType;
 
   /** Set input mask **/
   void SetMaskInput( const TMask * inputmask); // mask corresponding to the subpixel disparity map

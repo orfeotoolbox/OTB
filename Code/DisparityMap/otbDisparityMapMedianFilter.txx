@@ -243,10 +243,10 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
           !outputDisparityMapIt.IsAtEnd() &&
           !outputDisparityMapIt.IsAtEnd())
     {
-    if (outputIt.GetIndex()[0] >= m_Radius[0] &&
-        outputIt.GetIndex()[0] <   imgSize[0] - m_Radius[0] &&
-        outputIt.GetIndex()[1] >= m_Radius[1] &&
-        outputIt.GetIndex()[1] <   imgSize[1] - m_Radius[1])
+    if (outputIt.GetIndex()[0] >= static_cast<IndexValueType>(m_Radius[0]) &&
+        outputIt.GetIndex()[0] < static_cast<IndexValueType>(imgSize[0]) - static_cast<IndexValueType>(m_Radius[0]) &&
+        outputIt.GetIndex()[1] >= static_cast<IndexValueType>(m_Radius[1]) &&
+        outputIt.GetIndex()[1] < static_cast<IndexValueType>(imgSize[1]) - static_cast<IndexValueType>(m_Radius[1]))
       {
       // determine pixels in the neighborhood window whose subpixel mask is not equal to 0
       int p = 0;
@@ -256,7 +256,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         MaskInputIt.SetLocation(outputIt.GetIndex());
         }
       InputIt.SetLocation(outputIt.GetIndex());
-      for (int i=0; i<InputIt.Size(); i++)
+      for (unsigned int i=0; i<InputIt.Size(); i++)
         {
         if (!inputmaskPtr || (inputmaskPtr && MaskInputIt.GetPixel(i) != 0))
           {
@@ -330,10 +330,10 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 
   while (!outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
     {
-    if (outputIt.GetIndex()[0] >= m_Radius[0] &&
-        outputIt.GetIndex()[0] <   imgSize[0] - m_Radius[0] &&
-        outputIt.GetIndex()[1] >= m_Radius[1] &&
-        outputIt.GetIndex()[1] <   imgSize[1] - m_Radius[1])
+    if (outputIt.GetIndex()[0] >= static_cast<IndexValueType>(m_Radius[0]) &&
+        outputIt.GetIndex()[0] < static_cast<IndexValueType>(imgSize[0]) - static_cast<IndexValueType>(m_Radius[0]) &&
+        outputIt.GetIndex()[1] >= static_cast<IndexValueType>(m_Radius[1]) &&
+        outputIt.GetIndex()[1] < static_cast<IndexValueType>(imgSize[1]) - static_cast<IndexValueType>(m_Radius[1]))
       {
       InputIt.SetLocation(outputIt.GetIndex());
       MedianIt.SetIndex(outputIt.GetIndex());
@@ -350,7 +350,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         {
         outputDisparityMapIt.Set(0.0); //Remove pixel from disparity map//
         outputDisparityMaskIt.Set(0);
-        for (int i=0; i<image_aux_It.Size(); i++)
+        for (unsigned int i=0; i<image_aux_It.Size(); i++)
           {
           image_aux_It.SetPixel(i,1);
           }
@@ -375,10 +375,10 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
           !outputIt.IsAtEnd() &&
           !outputMaskIt.IsAtEnd())
     {
-    if (outputIt.GetIndex()[0] >= m_Radius[0] &&
-        outputIt.GetIndex()[0] <   imgSize[0] - m_Radius[0] &&
-        outputIt.GetIndex()[1] >= m_Radius[1] &&
-        outputIt.GetIndex()[1] <   imgSize[1] - m_Radius[1])
+    if (outputIt.GetIndex()[0] >= static_cast<IndexValueType>(m_Radius[0]) &&
+        outputIt.GetIndex()[0] < static_cast<IndexValueType>(imgSize[0]) - static_cast<IndexValueType>(m_Radius[0]) &&
+        outputIt.GetIndex()[1] >= static_cast<IndexValueType>(m_Radius[1]) &&
+        outputIt.GetIndex()[1] < static_cast<IndexValueType>(imgSize[1]) - static_cast<IndexValueType>(m_Radius[1]))
       {
       image_aux_It.SetLocation(outputIt.GetIndex());
       if (image_aux_It.GetCenterPixel() != 0)
@@ -386,7 +386,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         // determine pixels in the neighborhood window whose subpixel mask is not equal to 0
         int p=0;
         pixels.clear();
-        for (int i=0; i<updatedDisparityMaskIt.Size(); i++)
+        for (unsigned int i=0; i<updatedDisparityMaskIt.Size(); i++)
           {
           if (updatedDisparityMaskIt.GetPixel(i) != 0)
             {
