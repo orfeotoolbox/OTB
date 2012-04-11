@@ -406,13 +406,16 @@ private:
       ++it;
       }
 
-    // Next, initialize centroids
+    // Next, initialize centroids by random sampling in the generated
+    // list of samples
 
     for (unsigned int classIndex = 0; classIndex < nbClasses; ++classIndex)
       {
+      SampleType newCentroid = sampleList->GetMeasurementVector(randGen->GetIntegerVariate(sampleList->Size()-1));
+
       for (unsigned int compIndex = 0; compIndex < sampleSize; ++compIndex)
         {
-        initialMeans[compIndex + classIndex * sampleSize] = min[compIndex] + (max[compIndex] - min[compIndex]) * randGen->GetUniformVariate(0.0, 1.0);
+        initialMeans[compIndex + classIndex * sampleSize] = newCentroid[compIndex];
         }
       }
     otbAppLogINFO(<<totalSamples <<" samples will be used as estimator input."<<std::endl);
