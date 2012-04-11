@@ -347,6 +347,9 @@ private:
     //first sample
 
     itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer randGen=itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance();
+
+    randGen->Initialize();
+
     if (maskFlag)
       {
       while (!it.IsAtEnd() && !m_MaskIt .IsAtEnd() && (m_MaskIt.Get() <= 0))
