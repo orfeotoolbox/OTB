@@ -75,7 +75,7 @@ public:
   itkGetObjectMacro(VectorData, VectorDataType);
   
   /** Load a vector data. */
-  void AddVectorData( VectorDataPointer vData );
+  void AddVectorData( VectorDataPointer vData , bool update = true);
   void AddNode( TreeNodeType * node );
   
   /** Add vertex to the vector data representation.

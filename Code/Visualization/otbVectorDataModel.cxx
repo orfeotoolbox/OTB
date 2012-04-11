@@ -251,15 +251,17 @@ void VectorDataModel::SetSelectedGeometry(int n)
 
 
 void
-VectorDataModel::AddVectorData( VectorDataPointer vData )
+VectorDataModel::AddVectorData( VectorDataPointer vData, bool update)
 {
   this->EndGeometry(false);
   DataTreeType::Pointer tree = vData->GetDataTree();
   TreeNodeType * root = const_cast<TreeNodeType *>(tree->GetRoot());
   this->AddNode( root );
-  this->Update();
+  if (update)
+    {
+    this->Update();
+    }
 }
-
 
 void
 VectorDataModel::AddNode( TreeNodeType * node )
