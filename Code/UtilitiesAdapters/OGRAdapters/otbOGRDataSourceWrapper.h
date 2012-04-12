@@ -25,7 +25,7 @@
 #include "itkPoint.h"
 #include "itkDataObject.h"
 #include "itkMacro.h" // itkNewMacro
-#include "itkObjectFactory.h" // that should have been included by itkMacro.h 
+#include "itkObjectFactory.h" // that should have been included by itkMacro.h
 
 // class OGRDataSource;
 #include "ogrsf_frmts.h" // OGRDataSource
@@ -113,7 +113,7 @@ namespace otb { namespace ogr {
        */
       void TransformPointToPhysicalPoint(const PointType& point, PointType& physicalPoint) const
         {
-        for (size_t i=0; i!=Dimension ; ++i)
+        for (size_t i=0; i!=Dimension; ++i)
           physicalPoint[i] = point[i] * m_Spacing[i] + m_Origin[i];
         }
 
@@ -128,7 +128,7 @@ namespace otb { namespace ogr {
         {
         // why no loop on VDimension ?
         PointType physicalPoint;
-        for (size_t i=0; i!=Dimension ; ++i)
+        for (size_t i=0; i!=Dimension; ++i)
           physicalPoint[i] = point[i] * m_Spacing[i] + m_Origin[i];
         return physicalPoint;
         }
@@ -146,7 +146,7 @@ namespace otb { namespace ogr {
      *
      * @note not meant to be inherited
      * @note this class has an entity semantics: \em non-copyable, nor \em
-     * assignable. 
+     * assignable.
      * @note \c OGRRegisterAll() is implicitly called on construction
      */
     class DataSource : public itk::DataObject
@@ -232,7 +232,7 @@ namespace otb { namespace ogr {
       {
       assert(m_DataSource && "OGRDataSource not initialized");
       const int nbLayers = this->GetLayersCount();
-      for (int i=0; i!=nbLayers ; ++i)
+      for (int i=0; i!=nbLayers; ++i)
         {
         OGRLayer * l = m_DataSource->GetLayer(i);
         if (!l)
@@ -257,7 +257,7 @@ namespace otb { namespace ogr {
       {
       assert(m_DataSource && "OGRDataSource not initialized");
       const int nbLayers = this->GetLayersCount();
-      for (int i=0; i!=nbLayers ; ++i)
+      for (int i=0; i!=nbLayers; ++i)
         {
         OGRLayer * l = m_DataSource->GetLayer(i);
         if (!l)
@@ -293,7 +293,7 @@ namespace otb { namespace ogr {
      * Resets current data source with the one in parameter.
      * \param[in,out] source source \c OGRDataSource that this instance will own.
      * \throw None
-     * @post Assumes ownership of the \c source. 
+     * @post Assumes ownership of the \c source.
      */
     void Reset(OGRDataSource * source);
 
@@ -341,16 +341,16 @@ namespace otb { namespace ogr {
      * to be programming errors.
      * \throw None
      */
-    OGRLayer& GetLayerChecked(size_t i) ;
+    OGRLayer& GetLayerChecked(size_t i);
     /**\copydoc otb::ogr::DataSource::GetLayerChecked()
      */
-    OGRLayer const& GetLayerChecked(size_t i) const ;
+    OGRLayer const& GetLayerChecked(size_t i) const;
     //@}
 
 
-    struct boolean{ int i;};
+    struct boolean{ int i; };
     /** Can the data source be used (ie not null).
-     * 
+     *
      * Hack to provide a boolean operator that is convertible only to a
      * boolean expression to be used in \c if tests.
      * @see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6

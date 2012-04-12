@@ -42,7 +42,7 @@ namespace otb { namespace ogr {
   /** \name Singleton related functions */
   //@{
 public:
-  static Drivers & Init() ;
+  static Drivers & Init();
 private:
   /** Constructor.
    * Calls \c OGRRegisterAll().

@@ -22,7 +22,7 @@ namespace otb {
   /**\defgroup Geometry Geometry
    * \ingroup Thematic
    * Classes and functions aimed toward the manipulation of set of geometric
-   * objects. 
+   * objects.
    * This module mainly provides an encapsulation of <a
    * href="http://www.gdal.org/ogr/">OGR API</a>.
    * @{

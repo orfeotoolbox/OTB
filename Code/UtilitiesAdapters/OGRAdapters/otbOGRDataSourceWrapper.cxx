@@ -78,7 +78,7 @@ otb::ogr::DataSource::DataSource()
 {
   Drivers::Init();
 
-  OGRSFDriver * d = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("Memory"); 
+  OGRSFDriver * d = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("Memory");
   assert(d && "OGR Memory driver not found");
   m_DataSource = d->CreateDataSource("in-memory");
   if (!m_DataSource) {
@@ -106,7 +106,7 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
   return res;
 }
 
-/*static*/ 
+/*static*/
 otb::ogr::DataSource::Pointer
 otb::ogr::DataSource::New(OGRDataSource * source)
 {
@@ -169,7 +169,7 @@ namespace  { // Anonymous namespace
   private:
     bool m_doForceComputation;
     };
-} // Anonymous namespace 
+} // Anonymous namespace
 
 int otb::ogr::DataSource::Size(bool doForceComputation) const
 {

@@ -28,13 +28,13 @@
 using namespace otb;
 
 #if 0
-#if defined(BOOST_TEST_DYN_LINK) 
+#if defined(BOOST_TEST_DYN_LINK)
 #error BOOST_TEST_DYN_LINK defined
-#else 
+#else
 #error BOOST_TEST_DYN_LINK not defined
 #endif
 
-#if defined(BOOST_TEST_MAIN) 
+#if defined(BOOST_TEST_MAIN)
 #error BOOST_TEST_MAIN defined
 #else
 #error BOOST_TEST_MAIN not defined

@@ -164,7 +164,7 @@ namespace otb
       command; \
       } \
     catch (const std::exception& stde)   { \
-      throw ; } \
+      throw; } \
     catch (...) \
       { \
       std::ostringstream message; \
