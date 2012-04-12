@@ -5,4 +5,7 @@ syntax: glob
 *.pyc
 .\#*
 \#*\#
+tags
+*vim*
+*.template
 

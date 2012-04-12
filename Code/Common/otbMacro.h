@@ -163,12 +163,8 @@ namespace otb
       { \
       command; \
       } \
-    catch (std::bad_alloc& err)     { \
-      throw err; } \
-    catch (itk::ExceptionObject& e) { \
-      throw e; } \
     catch (const std::exception& stde)   { \
-      throw stde; } \
+      throw ; } \
     catch (...) \
       { \
       std::ostringstream message; \
@@ -178,6 +174,14 @@ namespace otb
       } \
     std::cout << " Checking valid command " << # command " ok." << std::endl; \
     }
+
+#define otbGenericExceptionMacro(T, x) \
+{ \
+  ::itk::OStringStream message; \
+  message << "otb::ERROR: " x; \
+  T e_(__FILE__, __LINE__, message.str(),ITK_LOCATION); \
+  throw e_;\
+}
 
 #define otbTestingCheckNotValidCommand(command) \
     { \
