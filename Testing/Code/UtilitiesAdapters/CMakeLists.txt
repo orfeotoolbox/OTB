@@ -1,5 +1,6 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
+ADD_SUBDIRECTORY(OGRAdapters)
 
 SET(UtilitiesAdapters_TESTS1 ${CXX_TEST_PATH}/otbUtilitiesAdaptersTests1)
 
