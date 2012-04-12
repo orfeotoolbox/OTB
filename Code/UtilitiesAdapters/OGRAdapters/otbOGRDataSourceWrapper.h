@@ -286,9 +286,6 @@ namespace otb { namespace ogr {
      * This is a convenience function to setup a second data source with all the
      * meta information of another data source and use the same underlying \c
      * OGRDataSource.
-     * \note this function is different than just using two SmartPointers to the
-     * same data source since separate «DataObjects» are still maintained. This
-     * function is similar to \c «LayerSource»::GraftOutput().
      */
     virtual void Graft(const itk::DataObject *data);
 
