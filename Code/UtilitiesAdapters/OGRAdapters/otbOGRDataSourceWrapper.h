@@ -356,7 +356,7 @@ namespace otb { namespace ogr {
      * 
      * Hack to provide a boolean operator that is convertible only to a
      * boolean expression to be used in \c if tests.
-     * @see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, §24.6
+     * @see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6
      */
     operator int boolean ::* () const {
       return m_DataSource ? &boolean::i : 0;
