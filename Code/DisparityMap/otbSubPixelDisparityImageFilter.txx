@@ -900,24 +900,15 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       tinyShiftedRegion.SetIndex(0, curRightPos[0]);
       tinyShiftedRegion.SetIndex(1, curRightPos[1]);
       
-      typename TInputImage::PointType rightOrigin = inRightPtr->GetOrigin();
-      typename TInputImage::PointType rightShift;
-      itk::ContinuousIndex<double,2> pixelOffset;
-      
       resampler = ResamplerFilterType::New();
       resampler->SetInput(fakeRightPtr);
       resampler->SetSize(windowSize);
-      resampler->SetOutputOrigin(inRightPtr->GetOrigin());
-      resampler->SetOutputSpacing(inRightPtr->GetSpacing());
       resampler->SetNumberOfThreads(1);
       resampler->SetTransform(transfo);
       resampler->SetOutputStartIndex(upleftCorner);
       
-      pixelOffset[0] = outHDispIt.Get() - static_cast<double>(hDisp_i);
-      pixelOffset[1] = outVDispIt.Get() - static_cast<double>(vDisp_i);
-      inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-      offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-      offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+      offsetTransfo[0] = outHDispIt.Get() - static_cast<double>(hDisp_i);
+      offsetTransfo[1] = outVDispIt.Get() - static_cast<double>(vDisp_i);
       transfo->SetOffset(offsetTransfo);
       resampler->Modified();
       resampler->Update();
@@ -1354,24 +1345,15 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       tinyShiftedRegion.SetIndex(0, curRightPos[0]);
       tinyShiftedRegion.SetIndex(1, curRightPos[1]);
       
-      typename TInputImage::PointType rightOrigin = inRightPtr->GetOrigin();
-      typename TInputImage::PointType rightShift;
-      itk::ContinuousIndex<double,2> pixelOffset;
-      
       resampler = ResamplerFilterType::New();
       resampler->SetInput(fakeRightPtr);
       resampler->SetSize(windowSize);
-      resampler->SetOutputOrigin(inRightPtr->GetOrigin());
-      resampler->SetOutputSpacing(inRightPtr->GetSpacing());
       resampler->SetNumberOfThreads(1);
       resampler->SetTransform(transfo);
       resampler->SetOutputStartIndex(upleftCorner);
       
-      pixelOffset[0] = outHDispIt.Get() - static_cast<double>(hDisp_i);
-      pixelOffset[1] = outVDispIt.Get() - static_cast<double>(vDisp_i);
-      inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-      offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-      offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+      offsetTransfo[0] = outHDispIt.Get() - static_cast<double>(hDisp_i);
+      offsetTransfo[1] = outVDispIt.Get() - static_cast<double>(vDisp_i);
       transfo->SetOffset(offsetTransfo);
       resampler->Modified();
       resampler->Update();
@@ -1492,17 +1474,13 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   fakeRightPtr->SetRegions(rightBufferedRegion);
   fakeRightPtr->SetPixelContainer((const_cast<TInputImage*>(inRightPtr))->GetPixelContainer());
   
-  typename TInputImage::PointType rightOrigin = inRightPtr->GetOrigin();
-  typename TInputImage::PointType rightShift;
-  itk::ContinuousIndex<double,2> pixelOffset;
-  
   // compute metric around current right position
   bool horizontalInterpolation = false;
   bool verticalInterpolation = false;
   
   // metrics for neighbors positions : first index is x, second is y
   double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
-  unsigned int nbIterMax = 8;
+  unsigned int nbIterMax = 10;
   
   // set the output size and start index to the center position
   // then set the smaller shift in the transform
@@ -1577,8 +1555,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     resampler = ResamplerFilterType::New();
     resampler->SetInput(fakeRightPtr);
     resampler->SetSize(windowSize);
-    resampler->SetOutputOrigin(inRightPtr->GetOrigin());
-    resampler->SetOutputSpacing(inRightPtr->GetSpacing());
     resampler->SetNumberOfThreads(1);
     resampler->SetTransform(transfo);
     resampler->SetOutputStartIndex(upleftCorner);
@@ -1743,17 +1719,14 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double yd;
       double s_yd;
       
-      pixelOffset[0] = 0.0;
+      offsetTransfo[0] = 0.0;
       
       for (unsigned int k=0; k<nbIterMax; k++)
         {
         if ( (yb-ya) < (yc-yb) )
           {
           yd = 0.5 * (yc+yb);
-          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
@@ -1777,10 +1750,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         else
           {
           yd = 0.5 * (ya+yb);
-          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
@@ -1807,7 +1777,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       outMetricIt.Set( s_yb );
       }
     else if (!verticalInterpolation && horizontalInterpolation)
-      {
+      {      
       double xa = static_cast<double>(hDisp_i -1);
       double xb = static_cast<double>(hDisp_i);
       double xc = static_cast<double>(hDisp_i +1);
@@ -1818,17 +1788,14 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double xd;
       double s_xd;
       
-      pixelOffset[1] = 0.0;
+      offsetTransfo[1] = 0.0;
       
       for (unsigned int k=0; k<nbIterMax; k++)
-        {
+        {        
         if ( (xb-xa) < (xc-xb) )
           {
           xd = 0.5 * (xc+xb);
-          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
@@ -1852,10 +1819,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         else
           {
           xd = 0.5 * (xa+xb);
-          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
@@ -1911,11 +1875,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         if ( (yb-ya) < (yc-yb) )
           {
           yd = 0.5 * (yc+yb);
-          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
-          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
@@ -1941,11 +1902,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         else
           {
           yd = 0.5 * (ya+yb);
-          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
-          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
@@ -1974,21 +1932,15 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           ye = yb;
           yf = yb;
           
-          pixelOffset[0] = xe - static_cast<double>(hDisp_i);
-          pixelOffset[1] = ye - static_cast<double>(vDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[0] = xe - static_cast<double>(hDisp_i);
+          offsetTransfo[1] = ye - static_cast<double>(vDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_e = m_Functor(leftIt,shiftedIt);
           
-          pixelOffset[0] = xf - static_cast<double>(hDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[0] = xf - static_cast<double>(hDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
@@ -2001,11 +1953,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         if ( (xb-xe) < (xf-xb) )
           {
           xd = 0.5 * (xf+xb);
-          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
-          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
@@ -2031,11 +1980,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         else
           {
           xd = 0.5 * (xe+xb);
-          pixelOffset[0] = xd - static_cast<double>(hDisp_i);
-          pixelOffset[1] = yd - static_cast<double>(vDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[0] = xd - static_cast<double>(hDisp_i);
+          offsetTransfo[1] = yd - static_cast<double>(vDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
@@ -2064,21 +2010,15 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           xa = xb;
           xc = xb;
           
-          pixelOffset[0] = xa - static_cast<double>(hDisp_i);
-          pixelOffset[1] = ya - static_cast<double>(vDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[0] = xa - static_cast<double>(hDisp_i);
+          offsetTransfo[1] = ya - static_cast<double>(vDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
           s_a = m_Functor(leftIt,shiftedIt);
           
-          pixelOffset[1] = yc - static_cast<double>(vDisp_i);
-          inRightPtr->TransformContinuousIndexToPhysicalPoint(pixelOffset, rightShift);
-          offsetTransfo[0] = rightShift[0]-rightOrigin[0];
-          offsetTransfo[1] = rightShift[1]-rightOrigin[1];
+          offsetTransfo[1] = yc - static_cast<double>(vDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
@@ -2115,6 +2055,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           (outMetricIt.Get() < neighborsMetric[1][1] && !m_Minimize))
         {
         nb_WrongExtrema++;
+        
         }
       }
     
