@@ -35,6 +35,7 @@
 #include "otbWrapperComplexOutputImageParameter.h"
 
 #include "otbWrapperDocExampleStructure.h"
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 namespace otb
 {
@@ -616,6 +617,14 @@ protected:
 
   /** Add a parameterRAM method with no parameter*/
   void AddRAMParameter(std::string paramKey="ram");
+
+  /** Add a parameterRAND method with parameter
+   * by default seed initialization is based on time value*/
+   void AddRANDParameter(std::string paramKey, std::string paramName, unsigned int defaultValue);
+
+   /** Add a parameterRAND method with no parameter*/
+   void AddRANDParameter(std::string paramKey="rand");
+
 
   /** Remove the items added to the ListWidget */
   void ClearChoices(std::string key);

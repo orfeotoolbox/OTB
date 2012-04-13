@@ -123,7 +123,30 @@ void Application::UpdateParameters()
 int Application::Execute()
 {
   int ret = 0;
-  
+  // before execute we set the seed of mersenne twister
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  bool UseSpecificSeed = false;
+
+  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+    {
+    std::string key = *it;
+
+    if ((key.compare(0, 4, "rand") == 0) && HasValue("rand"))
+      {
+      UseSpecificSeed = true;
+      Parameter* param = GetParameterByKey(key);
+      IntParameter* randParam = dynamic_cast<IntParameter*> (param);
+      int seed = randParam->GetValue();
+      itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(seed);
+      }
+
+    }
+
+  if (!UseSpecificSeed)
+    {
+    itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->Initialize();
+    }
+
   this->DoExecute();
 
   return ret;
@@ -1143,6 +1166,27 @@ void Application::AddRAMParameter(std::string paramKey)
   MandatoryOff(paramKey);
   SetParameterDescription(paramKey, "Available memory for processing (in MB)");
 }
+
+void Application::AddRANDParameter(std::string paramKey, std::string paramName, unsigned int defaultValue)
+{
+  GetParameterList()->AddParameter(ParameterType_Int, paramKey, paramName);
+  SetDefaultParameterInt(paramKey, defaultValue);
+  MandatoryOff(paramKey);
+}
+
+// paramKey default value = rand
+void Application::AddRANDParameter(std::string paramKey)
+{
+  // Get the  RAND Parameter from the configuration file
+
+  GetParameterList()->AddParameter(ParameterType_Int, paramKey, "set user defined seed");
+  MandatoryOff(paramKey);
+  SetParameterDescription(paramKey, "Set specific seed. with integer value.");
+
+}
+
+
+
 
 std::vector< std::pair<std::string, std::string> >
 Application::GetOutputParametersSumUp()

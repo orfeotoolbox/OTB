@@ -41,7 +41,7 @@
 #include "otbWrapperStringListParameter.h"
 
 #include "otbStreamingImageFileWriter.h"
-#include "itkMersenneTwisterRandomVariateGenerator.h"
+
 
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperApplication.h"
@@ -645,8 +645,8 @@ void CommandLineLauncher::DisplayHelp()
 void CommandLineLauncher::LoadTestEnv()
 {
   //Set seed for rand and itk mersenne twister
-  srand(1);
-  itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(121212);
+  //srand(1);
+ // itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(121212);
 }
 
 
