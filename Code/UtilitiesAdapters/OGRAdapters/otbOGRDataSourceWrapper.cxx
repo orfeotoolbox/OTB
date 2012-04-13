@@ -127,7 +127,8 @@ OGRLayer& otb::ogr::DataSource::GetLayerChecked(size_t i)
   const int nb_layers = GetLayersCount();
   if (int(i) >= nb_layers)
     {
-    itkExceptionMacro(<< "Cannot fetch " << i << "th layer in the OGRDataSource as it contains only " << nb_layers << "layers.");
+    itkExceptionMacro(<< "Cannot fetch " << i << "th layer in the OGRDataSource as it contains only "
+      << nb_layers << "layers.");
     }
   OGRLayer * layer_ptr = m_DataSource->GetLayer(int(i));
   if (!layer_ptr)
@@ -145,6 +146,7 @@ OGRLayer const& otb::ogr::DataSource::GetLayerChecked(size_t i) const
 OGRLayer* otb::ogr::DataSource::GetLayerUnchecked(size_t i)
 {
   OGRLayer * layer_ptr = m_DataSource->GetLayer(int(i));
+  return layer_ptr;
 }
 
 int otb::ogr::DataSource::GetLayersCount() const
@@ -191,4 +193,3 @@ void otb::ogr::DataSource::PrintSelf(
 {
   assert(! "Disabled to check if it makes sense...");
 }
-

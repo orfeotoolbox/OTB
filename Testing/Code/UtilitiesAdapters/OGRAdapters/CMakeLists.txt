@@ -15,22 +15,24 @@ IF(Boost_FOUND)
     MESSAGE(STATUS "Boost_UNIT_TEST_FRAMEWORK_LIBRARY: ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}")
     # MESSAGE(STATUS "Boost_DATE_TIME_LIBRARY: ${Boost_DATE_TIME_LIBRARY}")
 ELSE(Boost_FOUND)
-  MESSAGE(FATAL_ERROR
+  MESSAGE(WARNING
     "Cannot build OTB/OGR UT without Boost.  Please set Boost_DIR.")
 ENDIF(Boost_FOUND)
 
 
-OTB_ADD_EXECUTABLE(otbOGRTests "${OGRCommon_SRC}" "OTBIO;OTBTesting")
-# TARGET_LINK_LIBRARIES(otbOGRTests OTBOGRAdapters  OTBTesting itkvcl)
-TARGET_LINK_LIBRARIES(otbOGRTests OTBOGRAdapters OTBTesting
-  ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-  )
+IF (Boost_UNIT_TEST_FRAMEWORK_FOUND)
+  OTB_ADD_EXECUTABLE(otbOGRTests "${OGRCommon_SRC}" "OTBIO;OTBTesting")
+  # TARGET_LINK_LIBRARIES(otbOGRTests OTBOGRAdapters  OTBTesting itkvcl)
+  TARGET_LINK_LIBRARIES(otbOGRTests OTBOGRAdapters OTBTesting
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    )
 
 
-# -------------  otb::OGRDataSourceWrapper ----------------------------
-ADD_TEST(coTuOGRDataSourceWrapperNew ${OGR_TESTS}
-  otbOGRDataSourceWrapperNew
-)
+  # -------------  otb::OGRDataSourceWrapper ----------------------------
+  ADD_TEST(coTuOGRDataSourceWrapperNew ${OGR_TESTS}
+    otbOGRDataSourceWrapperNew
+    )
+ENDIF(Boost_UNIT_TEST_FRAMEWORK_FOUND)
 # ADD_TEST(coTuOGRDataSourceWrapperIO ${OGR_TESTS}
   # otbOGRDataSourceWrapperIO
 # )

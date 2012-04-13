@@ -25,7 +25,7 @@
 #include "itkPoint.h"
 #include "itkDataObject.h"
 #include "itkMacro.h" // itkNewMacro
-#include "itkObjectFactory.h" // that should have been included by itkMacro.h
+#include "itkObjectFactory.h" // that should have been included by itkMacro.h 
 
 // class OGRDataSource;
 #include "ogrsf_frmts.h" // OGRDataSource
@@ -33,6 +33,7 @@ class OGRLayer;
 
 namespace otb { namespace ogr {
   /**\ingroup Geometry
+   * \class ImageReference
    * \todo see how mix it with the \c otb::ogr::DataSource wrapper as it was
    * with \c VectorData.
    */
@@ -53,8 +54,8 @@ namespace otb { namespace ogr {
       //@}
 
       /** Default constructor.
-       * @post <tt>m_Spacing = {1,1}</tt>
-       * @post <tt>m_Origin = {0,0}</tt>
+       * \post <tt>m_Spacing = {1,1}</tt>
+       * \post <tt>m_Origin = {0,0}</tt>
        */
       ImageReference()
         {
@@ -62,8 +63,8 @@ namespace otb { namespace ogr {
         m_Origin.Fill(0);
         }
       /** Init constructor.
-       * @post <tt>m_Spacing = spacing</tt>
-       * @post <tt>m_Origin = origin</tt>
+       * \post <tt>m_Spacing = spacing</tt>
+       * \post <tt>m_Origin = origin</tt>
        */
       ImageReference(SpacingType const& spacing, OriginType const& origin)
         : m_Spacing(spacing), m_Origin(origin)
@@ -138,23 +139,25 @@ namespace otb { namespace ogr {
       };
 
     /**\ingroup Geometry
+     * \class DataSource
      * Collection of geometric objects.
      *
      * This class is meant to supercede \c otb::VectorData class.  It provides
      * an encapsulation of OGR classes. In that particular case, it's an
      * encapsulation of \c OGRDataSource.
      *
-     * @note not meant to be inherited
-     * @note this class has an entity semantics: \em non-copyable, nor \em
-     * assignable.
-     * @note \c OGRRegisterAll() is implicitly called on construction
+     * \note not meant to be inherited
+     * \note this class has an entity semantics: \em non-copyable, nor \em
+     * assignable. 
+     * \note \c OGRRegisterAll() is implicitly called on construction
+     * \internal as the class is not meant to be inherited, no new function is virtual.
      */
     class DataSource : public itk::DataObject
     {
   public:
     /**\name Standard ITK typedefs */
     //@{
-    typedef DataSource             Self;
+    typedef DataSource                    Self;
     typedef itk::DataObject               Superclass;
     typedef itk::SmartPointer<Self>       Pointer;
     typedef itk::SmartPointer<const Self> ConstPointer;
@@ -170,8 +173,8 @@ namespace otb { namespace ogr {
      * \throw itk::ExceptionObject if the inner \c OGRDataSource cannot be
      * opened.
      *
-     * @note \c OGRRegisterAll() is implicitly called on construction
-     * @see \c DataSource()
+     * \note \c OGRRegisterAll() is implicitly called on construction
+     * \see \c DataSource()
      */
     itkNewMacro(Self);
     itkTypeMacro(Layer, DataObject);
@@ -188,8 +191,8 @@ namespace otb { namespace ogr {
      * \return a newly created \c DataSource.
      * \throw itk::ExceptionObject if the inner \c OGRDataSource cannot be
      * opened.
-     * @note \c OGRRegisterAll() is implicitly called on construction
-     * @see \c DataSource(OGRDataSource *)
+     * \note \c OGRRegisterAll() is implicitly called on construction
+     * \see \c DataSource(OGRDataSource *)
      */
     static Pointer New(std::string const& filename, Modes::type mode=Modes::read);
     /**
@@ -198,26 +201,26 @@ namespace otb { namespace ogr {
      * \return a newly created \c DataSource that assumes ownership of \c
      * source.
      * \throw Nothing
-     * @note \c OGRRegisterAll() is supposed to have been called before building
+     * \note \c OGRRegisterAll() is supposed to have been called before building
      * \c source.
-     * @note no condition is assumed on the non-nullity of \c source.
-     * @see \c DataSource(OGRDataSource *)
+     * \note no condition is assumed on the non-nullity of \c source.
+     * \see \c DataSource(OGRDataSource *)
      */
     static Pointer New(OGRDataSource * source);
     //@}
 
     /**\name Projection Reference property */
     //@{
-    /*virtual*/ void SetProjectionRef(const std::string& projectionRef);
-    /*virtual*/ std::string GetProjectionRef() const;
+    void SetProjectionRef(const std::string& projectionRef);
+    std::string GetProjectionRef() const;
     //@}
 
     /** Clears the data source.
-     * @post the \c OGRDataSource owned is destroyed with the dedicated function
+     * \post the \c OGRDataSource owned is destroyed with the dedicated function
      * from OGR %API.
-     * @post <tt>m_DataSource = 0</tt>
+     * \post <tt>m_DataSource = 0</tt>
      */
-    /*virtual*/ bool Clear();
+    bool Clear();
 
     /**
      * Applies a functor on all layers.
@@ -293,12 +296,12 @@ namespace otb { namespace ogr {
      * Resets current data source with the one in parameter.
      * \param[in,out] source source \c OGRDataSource that this instance will own.
      * \throw None
-     * @post Assumes ownership of the \c source.
+     * \post Assumes ownership of the \c source. 
      */
     void Reset(OGRDataSource * source);
 
     /**\name Layers access
-     *@note as the following accessors are not inlined, they aren't optimized.
+     *\note as the following accessors are not inlined, they aren't optimized.
      */
     //@{
     /** Returns the number of layers.
@@ -314,7 +317,7 @@ namespace otb { namespace ogr {
      * \pre the layer must available, an assertion will abort the program
      * otherwise.
      * \throw None
-     * @note Use \c GetLayerUnchecked() if invalid indices are programming
+     * \note Use \c GetLayerUnchecked() if invalid indices are programming
      * errors, or if null layers are to be expected.
      */
     OGRLayer& GetLayer(size_t i)
@@ -348,12 +351,12 @@ namespace otb { namespace ogr {
     //@}
 
 
-    struct boolean{ int i; };
+    struct boolean{ int i;};
     /** Can the data source be used (ie not null).
-     *
+     * 
      * Hack to provide a boolean operator that is convertible only to a
      * boolean expression to be used in \c if tests.
-     * @see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6
+     * \see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6
      */
     operator int boolean ::* () const {
       return m_DataSource ? &boolean::i : 0;
@@ -366,16 +369,16 @@ namespace otb { namespace ogr {
      * \throw itk::ExceptionObject if the inner \c OGRDataSource cannot be
      * opened.
      *
-     * @note \c OGRRegisterAll() is implicitly called on construction
-     * @see \c DataSource::New()
+     * \note \c OGRRegisterAll() is implicitly called on construction
+     * \see \c DataSource::New()
      */
     DataSource();
     /** Init constructor.
-     * @post the newly constructed object owns the \c source parameter.
+     * \post the newly constructed object owns the \c source parameter.
      */
     DataSource(OGRDataSource * source);
     /** Destructor.
-     * @post the \c OGRDataSource owned is released (if not null).
+     * \post the \c OGRDataSource owned is released (if not null).
      */
     virtual ~DataSource();
     /** Prints self into stream. */
