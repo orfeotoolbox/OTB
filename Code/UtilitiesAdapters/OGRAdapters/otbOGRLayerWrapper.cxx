@@ -21,7 +21,7 @@
 /*===========================================================================*/
 #include "otbOGRLayerWrapper.h"
 #include <cassert>
-#include <boost/bind.hpp> 
+#include <boost/bind.hpp>
 #include "ogrsf_frmts.h" // OGRDataSource & OGRLayer
 
 /*===========================================================================*/
@@ -38,7 +38,7 @@ namespace  { // Anonymous namespace
     {
     void operator()(OGRLayer*) const {}
     };
-} // Anonymous namespace 
+} // Anonymous namespace
 
 
 otb::ogr::Layer::Layer(OGRLayer* layer)

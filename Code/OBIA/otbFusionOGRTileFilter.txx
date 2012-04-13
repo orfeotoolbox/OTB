@@ -129,7 +129,7 @@ FusionOGRTileFilter<TImage>
          UpperLeftCorner[1] = m_StreamSize[1]*(y-1) + 1;
          
          LowerRightCorner[0] = m_StreamSize[0]*x + 1 + m_Radius;
-         LowerRightCorner[1] = m_StreamSize[1]*y - 1 - 1; 
+         LowerRightCorner[1] = m_StreamSize[1]*y - 1 - 1;
          
          inputImage->TransformIndexToPhysicalPoint(UpperLeftCorner, ulCorner);
          inputImage->TransformIndexToPhysicalPoint(LowerRightCorner, lrCorner);

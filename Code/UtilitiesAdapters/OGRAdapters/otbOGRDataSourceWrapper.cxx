@@ -123,9 +123,9 @@ otb::ogr::DataSource::New(OGRDataSource * source)
 /*================================[ layers ]=================================*/
 /*===========================================================================*/
 otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
-  std::string const& name, 
-  OGRSpatialReference * poSpatialRef/* = NULL */, 
-  OGRwkbGeometryType eGType/* = wkbUnknown */, 
+  std::string const& name,
+  OGRSpatialReference * poSpatialRef/* = NULL */,
+  OGRwkbGeometryType eGType/* = wkbUnknown */,
   char ** papszOptions/* = NULL */)
 {
   assert(m_DataSource && "Datasource not initialized");
@@ -141,8 +141,8 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
 }
 
 otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
-  Layer & srcLayer, 
-  std::string const& newName, 
+  Layer & srcLayer,
+  std::string const& newName,
   char ** papszOptions/* = NULL */)
 {
   assert(m_DataSource && "Datasource not initialized");

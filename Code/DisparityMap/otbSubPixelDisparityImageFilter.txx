@@ -1777,7 +1777,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       outMetricIt.Set( s_yb );
       }
     else if (!verticalInterpolation && horizontalInterpolation)
-      {      
+      {
       double xa = static_cast<double>(hDisp_i -1);
       double xb = static_cast<double>(hDisp_i);
       double xc = static_cast<double>(hDisp_i +1);
@@ -1791,7 +1791,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       offsetTransfo[1] = 0.0;
       
       for (unsigned int k=0; k<nbIterMax; k++)
-        {        
+        {
         if ( (xb-xa) < (xc-xb) )
           {
           xd = 0.5 * (xc+xb);

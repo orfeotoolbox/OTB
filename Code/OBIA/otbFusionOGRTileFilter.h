@@ -29,7 +29,7 @@ namespace otb
  *  \brief This filter fusion the geometries in a layer (ogr) along streaming lines.
  *  The SetStreamSize() method allows to retrieve the number of streams in row and column,
  *  and their pixel coordinates.
- *  The input image is used to transform pixel coordinates of the streaming lines into 
+ *  The input image is used to transform pixel coordinates of the streaming lines into
  *  coordinate system of the image, which must be the same as the one in the OGR input file.
  *  The input OGR file is updated with the fusionned polygons.
  *
@@ -99,7 +99,7 @@ protected:
   };
   struct SortFeatureStruct
   {
-     bool operator() (FusionStruct f1, FusionStruct f2) { return (f1.overlap > f2.overlap);}
+     bool operator() (FusionStruct f1, FusionStruct f2) { return (f1.overlap > f2.overlap); }
   } SortFeature;
   
 private:

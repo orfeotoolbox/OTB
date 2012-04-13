@@ -25,7 +25,7 @@
 #include "itkPoint.h"
 #include "itkDataObject.h"
 #include "itkMacro.h" // itkNewMacro
-#include "itkObjectFactory.h" // that should have been included by itkMacro.h 
+#include "itkObjectFactory.h" // that should have been included by itkMacro.h
 
 #include "otbOGRLayerWrapper.h"
 
@@ -151,7 +151,7 @@ namespace otb { namespace ogr {
      *
      * \note not meant to be inherited
      * \note this class has an entity semantics: \em non-copyable, nor \em
-     * assignable. 
+     * assignable.
      * \note \c OGRRegisterAll() is implicitly called on construction
      * \internal as the class is not meant to be inherited, no new function is virtual.
      */
@@ -272,7 +272,7 @@ namespace otb { namespace ogr {
      * Resets current data source with the one in parameter.
      * \param[in,out] source source \c OGRDataSource that this instance will own.
      * \throw None
-     * \post Assumes ownership of the \c source. 
+     * \post Assumes ownership of the \c source.
      */
     void Reset(OGRDataSource * source);
 
@@ -384,9 +384,9 @@ namespace otb { namespace ogr {
     //@}
 
 
-    struct boolean{ int i;};
+    struct boolean{ int i; };
     /** Can the data source be used (ie not null).
-     * 
+     *
      * Hack to provide a boolean operator that is convertible only to a
      * boolean expression to be used in \c if tests.
      * \see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6

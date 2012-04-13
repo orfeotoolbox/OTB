@@ -1187,7 +1187,6 @@ void Application::AddRANDParameter(std::string paramKey)
 
 
 
-
 std::vector< std::pair<std::string, std::string> >
 Application::GetOutputParametersSumUp()
 {

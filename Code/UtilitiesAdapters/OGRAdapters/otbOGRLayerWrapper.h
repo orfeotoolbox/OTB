@@ -32,7 +32,7 @@ namespace otb { namespace ogr
  * It provides an encapsulation of OGR classes. In that particular case, it's an
  * encapsulation of \c OGRLayer.
  *
- * \note this class is a proxy class on top of an \c OGRLayer. 
+ * \note this class is a proxy class on top of an \c OGRLayer.
  * \note It can be copied.
  * \note when created from a \c otb::ogr::DataSource::ExecuteSQL, it will
  * automatically manage the release of the underlying \c OGRLayer.
@@ -42,7 +42,7 @@ namespace otb { namespace ogr
  *
  * \todo find a way to tell whether the related \c OGRDataSource was released
  */
-class Layer 
+class Layer
 // : public itk::DataObject
   {
 public:
@@ -81,9 +81,9 @@ public:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 
-  struct boolean{ int i;};
+  struct boolean{ int i; };
   /** Can the layer be used (ie not null).
-   * 
+   *
    * Hack to provide a boolean operator that is convertible only to a
    * boolean expression to be used in \c if tests.
    * @see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6
