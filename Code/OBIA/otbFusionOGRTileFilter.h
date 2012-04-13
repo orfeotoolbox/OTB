@@ -20,6 +20,7 @@
 
 #include "itkProcessObject.h"
 #include "ogrsf_frmts.h"
+#include <algorithm>
 
 namespace otb
 {
