@@ -122,36 +122,86 @@ otb::ogr::DataSource::New(OGRDataSource * source)
 /*===========================================================================*/
 /*================================[ layers ]=================================*/
 /*===========================================================================*/
-OGRLayer& otb::ogr::DataSource::GetLayerChecked(size_t i)
+otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
+  std::string const& name, 
+  OGRSpatialReference * poSpatialRef/* = NULL */, 
+  OGRwkbGeometryType eGType/* = wkbUnknown */, 
+  char ** papszOptions/* = NULL */)
+{
+  assert(m_DataSource && "Datasource not initialized");
+  OGRLayer * ol = m_DataSource->CreateLayer(
+    name.c_str(), poSpatialRef, eGType, papszOptions);
+  if (!ol)
+    {
+    itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
+      << "> in the OGRDataSource file " << m_DataSource->GetName());
+    }
+  Layer l(ol);
+  return l;
+}
+
+otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
+  Layer & srcLayer, 
+  std::string const& newName, 
+  char ** papszOptions/* = NULL */)
+{
+  assert(m_DataSource && "Datasource not initialized");
+  OGRLayer * l0 = &srcLayer.ogr();
+  OGRLayer * ol = m_DataSource->CopyLayer(l0, newName.c_str(), papszOptions);
+  if (!ol)
+    {
+    itkGenericExceptionMacro(<< "Failed to copy the layer <"
+      << srcLayer.GetName() << "> into the new layer <" <<newName
+      << "> in the OGRDataSource file " << m_DataSource->GetName());
+    }
+  Layer l(ol);
+  return l;
+}
+
+void otb::ogr::DataSource::DeleteLayer(size_t i)
 {
   const int nb_layers = GetLayersCount();
   if (int(i) >= nb_layers)
     {
-    itkExceptionMacro(<< "Cannot fetch " << i << "th layer in the OGRDataSource as it contains only "
-      << nb_layers << "layers.");
+    itkExceptionMacro(<< "Cannot delete " << i << "th layer in the OGRDataSource <"
+      << m_DataSource->GetName() << "> as it contains only " << nb_layers << "layers.");
+    }
+  const OGRErr err = m_DataSource->DeleteLayer(int(i));
+  if (err != OGRERR_NONE)
+    {
+    itkExceptionMacro(<< "Cannot delete " << i << "th layer in the OGRDataSource <"
+      << m_DataSource->GetName() << ">.");
+    }
+}
+
+
+otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(size_t i)
+{
+  const int nb_layers = GetLayersCount();
+  if (int(i) >= nb_layers)
+    {
+    itkExceptionMacro(<< "Cannot fetch " << i << "th layer in the OGRDataSource <"
+      << m_DataSource->GetName() << "> as it contains only " << nb_layers << "layers.");
     }
   OGRLayer * layer_ptr = m_DataSource->GetLayer(int(i));
   if (!layer_ptr)
     {
-    itkExceptionMacro( << "Unexpected error: cannot fetch " << i << "th layer in the OGRDataSource.");
+    itkExceptionMacro( << "Unexpected error: cannot fetch " << i << "th layer in the OGRDataSource <"
+      << m_DataSource->GetName() << ">.");
     }
-    return *layer_ptr;
-}
-
-OGRLayer const& otb::ogr::DataSource::GetLayerChecked(size_t i) const
-{
-  return const_cast <DataSource*>(this)->GetLayerChecked(i);
+    return otb::ogr::Layer(layer_ptr);
 }
 
 OGRLayer* otb::ogr::DataSource::GetLayerUnchecked(size_t i)
 {
+  assert(m_DataSource && "Datasource not initialized");
   OGRLayer * layer_ptr = m_DataSource->GetLayer(int(i));
   return layer_ptr;
 }
 
 int otb::ogr::DataSource::GetLayersCount() const
 {
-  assert(m_DataSource);
+  assert(m_DataSource && "Datasource not initialized");
   return m_DataSource->GetLayerCount();
 }
 
@@ -163,7 +213,7 @@ namespace  { // Anonymous namespace
     {
     AccuLayersSizes(bool doForceComputation)
       : m_doForceComputation(doForceComputation) { }
-    int operator()(OGRLayer& layer, int accumulated) const
+    int operator()(otb::ogr::Layer const& layer, int accumulated) const
       {
       const int loc_size = layer.GetFeatureCount(m_doForceComputation);
       return loc_size < 0 ? loc_size : loc_size+accumulated;
@@ -186,10 +236,12 @@ int otb::ogr::DataSource::Size(bool doForceComputation) const
 void otb::ogr::DataSource::PrintSelf(
   std::ostream& os, itk::Indent indent) const
 {
-  // ForEachLayer(boost::bind(&OGRLayer::PrintSelf, _1, indent++));
+  assert(m_DataSource && "Datasource not initialized");
+  ForEachLayer(boost::bind(&Layer::PrintSelf, _1, boost::ref(os), indent.GetNextIndent()));
 }
 
 /*virtual*/ void otb::ogr::DataSource::Graft(const itk::DataObject * data)
 {
   assert(! "Disabled to check if it makes sense...");
 }
+

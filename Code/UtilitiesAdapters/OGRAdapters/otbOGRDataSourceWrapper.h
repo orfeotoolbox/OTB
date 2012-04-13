@@ -19,7 +19,7 @@
 #define __otbOGRDataSourceWrapper_h
 
 #include <string>
-#include <cassert>
+
 
 #include "itkVector.h"
 #include "itkPoint.h"
@@ -27,9 +27,12 @@
 #include "itkMacro.h" // itkNewMacro
 #include "itkObjectFactory.h" // that should have been included by itkMacro.h 
 
-// class OGRDataSource;
-#include "ogrsf_frmts.h" // OGRDataSource
+#include "otbOGRLayerWrapper.h"
+
+class OGRDataSource;
 class OGRLayer;
+class OGRSpatialReference;
+#include "ogr_core.h" // OGRwkbGeometryType
 
 namespace otb { namespace ogr {
   /**\ingroup Geometry
@@ -228,23 +231,10 @@ namespace otb { namespace ogr {
      *
      * \throw itk::ExceptionObject in case one layer can't be accessed.
      * \throw * whatever the functor \c may throw.
-     * \note the functor is expected to receive an \c OGRLayer by reference.
+     * \note the functor is expected to receive an \c ogr::Layer by reference.
      * \sa std::for_each
      */
-    template <class Functor> void ForEachLayer(Functor f)
-      {
-      assert(m_DataSource && "OGRDataSource not initialized");
-      const int nbLayers = this->GetLayersCount();
-      for (int i=0; i!=nbLayers; ++i)
-        {
-        OGRLayer * l = m_DataSource->GetLayer(i);
-        if (!l)
-          {
-          itkExceptionMacro(<< "Failed to fetch "<< i <<"th layer from OGRDataSource");
-          }
-        f(*l);
-        }
-      }
+    template <class Functor> void ForEachLayer(Functor f) const;
 
     /**
      * Accumulates the result of a functor on all layers.
@@ -253,24 +243,10 @@ namespace otb { namespace ogr {
      * \return the result accumulated (with +)
      * \throw itk::ExceptionObject in case one layer can't be accessed.
      * \throw * whatever the functor \c may throw.
-     * \note the functor is expected to receive an \c OGRLayer by reference.
+     * \note the functor is expected to receive an \c ogr::Layer by reference.
      * \sa std::accumulate
      */
-    template <class Functor, typename V> V AccumulateOnLayers(Functor f, V v0) const
-      {
-      assert(m_DataSource && "OGRDataSource not initialized");
-      const int nbLayers = this->GetLayersCount();
-      for (int i=0; i!=nbLayers; ++i)
-        {
-        OGRLayer * l = m_DataSource->GetLayer(i);
-        if (!l)
-          {
-          itkExceptionMacro(<< "Failed to fetch "<< i <<"th layer from OGRDataSource");
-          }
-        v0 = f(*l, v0);
-        }
-      return v0;
-      }
+    template <class Functor, typename V> V AccumulateOnLayers(Functor f, V v0) const;
 
     /** Returns the number of elements in the Data Source.
      * \param[in] doForceComputation  indicates whether the size shall be
@@ -300,6 +276,72 @@ namespace otb { namespace ogr {
      */
     void Reset(OGRDataSource * source);
 
+    /**\name Layers modification */
+    //@{
+    /**
+     * Creates a new layer.
+     * \param[in] name          name for the layer
+     * \param poSpatialRef      the coordinate system to use for the new layer, or NULL if no coordinate system is available.
+     * \param[in] eGType        the geometry type for the layer. Use wkbUnknown if there are no constraints on the types geometry to be written.
+     * \param[in] papszOptions  a StringList of name=value options. Options are driver specific.
+     *
+     * \return a proxy on the \c OGRLayer created.
+     * \throw itk::ExceptionObject in case the layer cannot be created on the
+     * data source.
+     *
+     * \note a \em proxy-class is returned instead of a plain \c OGRLayer is
+     * order to encapsulate all lifetime management of the \c OGRLayer obtained
+     * (i.e. never to be destroyed). If you want to delete a layer obtained
+     * with \c CreateLayer, you must use \c DeleteLayer.
+     * \note the \c papszOptions parameter may later become a \c
+     * std::vector<std::string>
+     * \sa OGRDataSource::CreateLayer
+     */
+    Layer CreateLayer(
+      std::string        const& name,
+      OGRSpatialReference     * poSpatialRef = NULL,
+      OGRwkbGeometryType        eGType = wkbUnknown,
+      char                   ** papszOptions = NULL);
+
+    /**
+     * Deletes the i-th layer from the data source.
+     * \param[in] i  layer index
+     *
+     * \throw it::ExceptionObject in case the index is out of range
+     * \throw it::ExceptionObject if the layer cannot be deleted from the data
+     * source.
+     *
+     * \pre the data source must support the delete operation
+     * \pre the index \c i must be in range [0, GetLayersCount())
+     * \sa OGRDataSource::DeleteLayer
+     */
+    void DeleteLayer(size_t i);
+
+    /**
+     * Copies a layer.
+     * \param[in] srcLayer      Source layer to copy. It may come from another \c
+     * DataSource.
+     * \param[in] newName       Name of the new layer
+     * \param[in] papszOptions  Creation options
+     *
+     * \return a proxy on the \c OGRLayer created.
+     * \throw itk::ExceptionObject in case the layer cannot be created on the
+     * data source.
+     *
+     * \note a \em proxy-class is returned instead of a plain \c OGRLayer is
+     * order to encapsulate all lifetime management of the \c OGRLayer obtained
+     * (i.e. never to be destroyed). If you want to delete a layer obtained
+     * with \c CreateLayer, you must use \c DeleteLayer.
+     * \note the \c papszOptions parameter may later become a \c
+     * std::vector<std::string>
+     * \sa OGRDataSource::CopyLayer
+     */
+    Layer CopyLayer(
+      Layer            & srcLayer,
+      std::string const& newName,
+      char            ** papszOptions = NULL);
+    //@}
+
     /**\name Layers access
      *\note as the following accessors are not inlined, they aren't optimized.
      */
@@ -320,19 +362,10 @@ namespace otb { namespace ogr {
      * \note Use \c GetLayerUnchecked() if invalid indices are programming
      * errors, or if null layers are to be expected.
      */
-    OGRLayer& GetLayer(size_t i)
-      {
-      assert(int(i) < GetLayersCount());
-      OGRLayer * layer_ptr = GetLayerUnchecked(i);
-      assert(layer_ptr);
-      return *layer_ptr;
-      }
+    Layer GetLayer(size_t i);
     /**\copydoc otb::ogr::DataSource::GetLayer()
      */
-    OGRLayer const& GetLayer(size_t i) const
-      {
-      return const_cast <DataSource*>(this)->GetLayer(i);
-      }
+    Layer const GetLayer(size_t i) const;
 
     /**
      * Checked Accessor to a given layer.
@@ -344,10 +377,10 @@ namespace otb { namespace ogr {
      * to be programming errors.
      * \throw None
      */
-    OGRLayer& GetLayerChecked(size_t i);
+    Layer GetLayerChecked(size_t i);
     /**\copydoc otb::ogr::DataSource::GetLayerChecked()
      */
-    OGRLayer const& GetLayerChecked(size_t i) const;
+    Layer const GetLayerChecked(size_t i) const;
     //@}
 
 
@@ -361,6 +394,16 @@ namespace otb { namespace ogr {
     operator int boolean ::* () const {
       return m_DataSource ? &boolean::i : 0;
     }
+
+    /** Access to raw \c OGRDataSource.
+     * This function provides an abstraction leak in case deeper control on the
+     * underlying \c OGRDataSource is required.
+     * \pre the underlying \c OGRDataSource must be valid, i.e.
+     * <tt>m_DataSource != 0</tt>, an assertion is fired otherwise.
+   * \warning you must under no circonstance try to delete the \c OGRDataSource
+   * obtained this way.
+     */
+    OGRDataSource & ogr();
 
   protected:
     /** Default constructor.
@@ -407,7 +450,7 @@ namespace otb { namespace ogr {
 } } // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbOGRDataSourceWrapper.txx"
+#include "otbOGRDataSourceWrapper.txx"
 #endif
 
 #endif // __otbOGRDataSourceWrapper_h
