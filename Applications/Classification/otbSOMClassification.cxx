@@ -144,6 +144,7 @@ private:
     AddRAMParameter();
     // TODO : replace StreamingLines by RAM param ?
     
+    AddRANDParameter();
     // Default parameters
     SetDefaultParameterFloat("tp", 1.0);
     SetDefaultParameterInt("sx", 32);

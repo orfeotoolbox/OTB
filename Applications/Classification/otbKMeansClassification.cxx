@@ -211,6 +211,7 @@ private:
     SetParameterDescription("outmeans", "Output text file containing centroid positions");
     MandatoryOff("outmeans");
 
+    AddRANDParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
@@ -348,7 +349,7 @@ private:
 
     itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer randGen=itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance();
 
-    randGen->Initialize();
+    //randGen->Initialize();
 
     if (maskFlag)
       {

@@ -149,6 +149,7 @@ private:
     SetParameterDescription("svm",
                             "Input SVM model to validate (given by TrainSVMImagesClassification for instance).");
 
+    AddRANDParameter();
    // Doc example parameter settings
    SetDocExampleParameterValue("il", "QB_1_ortho.tif");
    SetDocExampleParameterValue("vd", "VectorData_QB1.shp");

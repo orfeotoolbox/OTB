@@ -200,6 +200,7 @@ private:
     MandatoryOff("svm.opt");
     SetParameterDescription("svm.opt", "SVM optimization flag");
 
+    AddRANDParameter();
     // Doc example parameter settings
     SetDocExampleParameterValue("io.il", "QB_1_ortho.tif");
     SetDocExampleParameterValue("io.vd", "VectorData_QB1.shp");
