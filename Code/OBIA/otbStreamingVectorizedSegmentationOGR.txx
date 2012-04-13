@@ -51,8 +51,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
-
-  if (this->GetInput())
+  /*if (this->GetInput())
     {
     InputImagePointerType input = const_cast<InputImageType *> (this->GetInput());
 
@@ -62,7 +61,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
     region.Crop(input->GetLargestPossibleRegion());
 
     input->SetRequestedRegion(region);
-    }
+    }*/
 }
 
 template <class TImageType, class TSegmentationFilter>
@@ -82,10 +81,8 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   typedef itk::ExtractImageFilter<InputImageType, InputImageType> ExtractImageFilterType;
   typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
   extract->SetInput( this->GetInput() );
-  extract->SetExtractionRegion( this->GetInput()->GetBufferedRegion() );
+  extract->SetExtractionRegion( this->GetInput()->GetRequestedRegion() );
   extract->Update();
-  
-  //std::cout<< "extract region " << extract->GetOutput()->GetLargestPossibleRegion()<<std::endl;
   
   chrono.Stop();
   //std::cout<< "extract took " << chrono.GetTotal() << " sec"<<std::endl;
@@ -165,7 +162,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   std::cout<< "relabel took " << chrono3.GetTotal() << " sec"<<std::endl;
   
   return output;
-  return const_cast<OGRDataSourceObjectType *>(labelImageToOGRDataFilter->GetOutput());
+  //return const_cast<OGRDataSourceObjectType *>(labelImageToOGRDataFilter->GetOutput());
 }
 
 

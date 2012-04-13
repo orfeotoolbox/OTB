@@ -66,4 +66,5 @@ REGISTER_TEST(otbLabelImageToOGRDataSourceFilterNew);
 REGISTER_TEST(otbLabelImageToOGRDataSourceFilter);
 REGISTER_TEST(otbStreamingVectorizedSegmentationOGRNew);
 REGISTER_TEST(otbStreamingVectorizedSegmentationOGR);
+REGISTER_TEST(otbFusionOGRTileFilter);
 }

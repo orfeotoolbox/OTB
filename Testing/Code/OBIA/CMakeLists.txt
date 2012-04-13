@@ -248,11 +248,27 @@ ADD_TEST(obTuStreamingVectorizedSegmentationOGRNew ${OBIA_TESTS1}
     otbStreamingVectorizedSegmentationOGRNew)
 
 ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
+     #--compare-ogr  ${EPSILON_8}
+     #${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutput.sqlite
+     #${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
      otbStreamingVectorizedSegmentationOGR
      ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-     ${TEMP}/obTvStreamingVectorizedSegmentationOutputOGR.shp
+     ${TEMP}/obTvStreamingVectorizedSegmentationOGR.sqlite
      100
      )
+
+# -------            otb::FusionOGRTileFilter   -------------
+CONFIGURE_FILE(${INPUTDATA}/QB_Toulouse_Ortho_withTiles.sqlite
+               ${TEMP}/obTvFusionOGRTile.sqlite COPYONLY)
+ADD_TEST(obTuFusionOGRTileFilterNew ${OBIA_TESTS1}
+    --compare-ogr  ${EPSILON_8}
+    ${BASELINE_FILES}/obTvFusionOGRTile.sqlite
+    ${TEMP}/obTvFusionOGRTile.sqlite
+    otbFusionOGRTileFilter
+    ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+    ${TEMP}/obTvFusionOGRTile.sqlite
+    112
+    )
 
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
@@ -318,6 +334,7 @@ otbLabelImageToVectorDataFilterNew.cxx
 otbLabelImageToVectorDataFilter.cxx
 otbLabelImageToOGRDataSourceFilter.cxx
 otbStreamingVectorizedSegmentationOGR.cxx
+otbFusionOGRTileFilter.cxx
 )
 
 IF(OTB_USE_PQXX)

@@ -95,6 +95,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void GenerateData();
+  
+  void GenerateInputRequestedRegion();
 
 
 private:
@@ -108,6 +110,7 @@ private:
   std::string m_FieldName;
   std::string m_FileName;
   unsigned int m_TileNum;
+  SizeType m_StreamSize;
   OGRDataSource * m_DataSource;
 
 }; // end of class

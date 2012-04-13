@@ -126,14 +126,14 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   filter->GetStreamer()->SetTileDimensionTiledStreaming(atoi(argv[3]));
   filter->SetFieldName(fieldName);
   filter->SetStartLabel(1);
-  filter->SetUse8Connected(true);
+  filter->SetUse8Connected(false);
   filter->GetSegmentationFilter()->SetSpatialRadius(5);
   filter->GetSegmentationFilter()->SetRangeRadius(15);
   filter->GetSegmentationFilter()->SetMinimumRegionSize(100);
   //filter->GetSegmentationFilter()->GetFunctor().SetExpression("distance<15");
   
   filter->SetFileName(argv[2]);
-  filter->Initialize(); //must do this after SetFileName ...
+  filter->Initialize(); //must do this after SetFileName and SetInput...
   
   filter->Update();
 

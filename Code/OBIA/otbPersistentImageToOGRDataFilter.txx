@@ -25,15 +25,17 @@
 #include "ogrsf_frmts.h"
 #include "itksys/SystemTools.hxx"
 #include "otbSystem.h"
+#include "otbFusionOGRTileFilter.h"
+#include "itkTimeProbe.h"
 
 namespace otb
 {
-
 
 template<class TImage>
 PersistentImageToOGRDataFilter<TImage>
 ::PersistentImageToOGRDataFilter() : m_FieldName("DN"), m_FileName(""), m_TileNum(0)
 {
+   m_StreamSize.Fill(0);
    // OGR factory registration
    OGRRegisterAll();
 }
@@ -47,6 +49,19 @@ PersistentImageToOGRDataFilter<TImage>
       OGRDataSource::DestroyDataSource(m_DataSource);
     }
 }
+
+template<class TImage>
+void
+PersistentImageToOGRDataFilter<TImage>
+::GenerateInputRequestedRegion()
+{
+   Superclass::GenerateInputRequestedRegion();
+   if (this->m_StreamSize[0]==0 && this->m_StreamSize[1]==0)
+   {
+      this->m_StreamSize = this->GetInput()->GetRequestedRegion().GetSize();
+   }
+}
+
 
 template<class TImage>
 std::string
@@ -102,7 +117,13 @@ void
 PersistentImageToOGRDataFilter<TImage>
 ::Synthetize()
 {
-
+   typedef FusionOGRTileFilter<InputImageType> FusionFilterType;
+   typename FusionFilterType::Pointer filter = FusionFilterType::New();
+   
+   filter->SetInput(this->GetInput());
+   filter->SetInputFileName(this->m_FileName);
+   filter->SetStreamSize(this->m_StreamSize);
+   filter->GenerateData();
 }
 
 template<class TImage>
@@ -144,7 +165,6 @@ PersistentImageToOGRDataFilter<TImage>
    {
       itkExceptionMacro(<< "No OGR driver found to write file " << this->m_FileName);
    }
-
 }
 
 
@@ -161,9 +181,10 @@ PersistentImageToOGRDataFilter<TImage>
   poDstLayer = m_DataSource->GetLayer(0);
   
   //Copy features in the output layer
+  itk::TimeProbe chrono;
+  chrono.Start();
   poSrcLayer->ResetReading();
   unsigned int nbFeatures = poSrcLayer->GetFeatureCount(true);
-//  std::cout<< "pppppp"<<std::endl;
   unsigned int i = 0;
   OGRFeature  *poFeature;
   while (i<nbFeatures)
@@ -184,6 +205,8 @@ PersistentImageToOGRDataFilter<TImage>
       
       i++;
   }
+  chrono.Stop();
+  std::cout<< "write ogr tile took " << chrono.GetTotal() << " sec"<<std::endl;
   
 //   OGRDataSource::DestroyDataSource(currentTileVD->Get()->GetDataSource());
   
