@@ -19,6 +19,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1
   						     ##-sample.b 2
 					         -svm.opt true
     						 -io.out ${TEMP}/clsvmModelQB1.svm
+    						 -rand 121212
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
    					 		 ${TEMP}/clsvmModelQB1.svm)
@@ -35,6 +36,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
    							 -sample.mt 100
     					     -sample.vtr 0.5
     						 -svm.opt true
+    						 -rand 121212
     					     -io.out ${TEMP}/clsvmModelQB1_allOpt.svm
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
@@ -50,6 +52,7 @@ OTB_TEST_APPLICATION(NAME apTvClValidateSVMImagesClassifierQB1
      						 -imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
    							 -svm    ${TEMP}/clsvmModelQB1.svm
    							 -out    ${TEMP}/clsvmPerformanceEstimationQB1.txt
+   							 -rand   121212
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/clsvmPerformanceEstimationQB1.txt
     						 ${TEMP}/clsvmPerformanceEstimationQB1.txt)
@@ -119,6 +122,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB123
     						 #-sample.b 2
    							 -svm.opt true
     						 -io.out ${TEMP}/clsvmModelQB123.svm
+    						 -rand 121212
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB123.svm
    					 		 ${TEMP}/clsvmModelQB123.svm)
@@ -134,6 +138,7 @@ OTB_TEST_APPLICATION(NAME apTvClValidateSVMImagesClassifierQB123
      						 -imstat ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
    							 -svm    ${TEMP}/clsvmModelQB123.svm
    							 -out    ${TEMP}/clsvmPerformanceEstimationQB123.txt
+   							 -rand   121212
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/clsvmPerformanceEstimationQB123.txt
     						 ${TEMP}/clsvmPerformanceEstimationQB123.txt)
@@ -225,6 +230,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB456
     						 #-sample.b 2
    							 -svm.opt true
     						 -io.out ${TEMP}/clsvmModelQB456.svm
+    						 -rand 121212
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB456.svm
    					 		 ${TEMP}/clsvmModelQB456.svm)
@@ -239,6 +245,7 @@ OTB_TEST_APPLICATION(NAME apTvClValidateSVMImagesClassifierQB456
                              -vd     ${INPUTDATA}/Classification/VectorData_QB5_bis.shp
      						 -imstat ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
    							 -svm    ${TEMP}/clsvmModelQB456.svm
+   							 -rand   121212
    							 -out    ${TEMP}/clsvmPerformanceEstimationQB456.txt
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/clsvmPerformanceEstimationQB456.txt
@@ -308,6 +315,7 @@ OTB_TEST_APPLICATION(NAME apTvClKMeansImageClassification
                              -nc 5  
                              -maxit 10000 
                              -ct 0.0000001
+                             -rand 121212
                              -out ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.tif 
                      VALID   --compare-image ${NOTOL}
                              ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOuptut.tif
@@ -317,6 +325,7 @@ OTB_TEST_APPLICATION(NAME apTvClKMeansImageClassification
 OTB_TEST_APPLICATION(NAME   apTvClSOMClassificationSmall
                      APP    SOMClassification
                      OPTIONS -in ${INPUTDATA}/poupees_sub.png
+                             -rand 121212
                              -out ${TEMP}/apTvClSOMClassificationSmall.tif uint16
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvClSOMClassificationSmall.tif
@@ -339,6 +348,7 @@ OTB_TEST_APPLICATION(NAME   apTvClSOMClassificationFull
                              -bi  1.0
                              -bf  0.1
                              -iv  0
+                             -rand 121212
                      VALID   --compare-n-images ${NOTOL} 2
                              ${BASELINE}/apTvClSOMClassificationFull.tif
                              ${TEMP}/apTvClSOMClassificationFull.tif
