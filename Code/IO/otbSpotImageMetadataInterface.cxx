@@ -611,8 +611,8 @@ SpotImageMetadataInterface
   if (nbBands == 1)
     {
     wavel.SetSize(1);
-    if (sensorId == "SPOT4") wavel.Fill(0.610);
-    else if (sensorId == "SPOT5") wavel.Fill(0.475);
+    if (sensorId == "Spot 4") wavel.Fill(0.610);
+    else if (sensorId == "Spot 5") wavel.Fill(0.475);
     else wavel.Fill(0.500); // assume SPOT 123
       //else itkExceptionMacro(<< "Invalid Spot Sensor ID");
     }
@@ -665,8 +665,8 @@ SpotImageMetadataInterface
   if (nbBands == 1)
     {
     wavel.SetSize(1);
-    if (sensorId == "SPOT4") wavel.Fill(0.680);
-    else if (sensorId == "SPOT5") wavel.Fill(0.710);
+    if (sensorId == "Spot 4") wavel.Fill(0.680);
+    else if (sensorId == "Spot 5") wavel.Fill(0.710);
     else wavel.Fill(0.730); // assume SPOT 123
       // else itkExceptionMacro(<< "Invalid Spot Sensor ID");
     }
@@ -738,11 +738,11 @@ SpotImageMetadataInterface
   // Panchromatic case
   if (nbBands == 1)
     {
-    if (sensorId == "SPOT4")
+    if (sensorId == "Spot 4")
       {
 
       }
-    else if (sensorId == "SPOT5")
+    else if (sensorId == "Spot 5")
       {
 
       }
