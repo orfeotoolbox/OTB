@@ -74,6 +74,7 @@ private:
     SetParameterDescription("outendm","The endmebers, stored in a one-line multi-spectral image, each pixel representing an endmember");
     MandatoryOn("outendm");
 
+    AddRANDParameter();
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("ne", "5");
