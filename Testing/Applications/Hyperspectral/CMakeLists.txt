@@ -40,6 +40,7 @@ OTB_TEST_APPLICATION(NAME  apTvHyVertexComponentAnalysis
                      APP  VertexComponentAnalysis
                      OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
                              -ne 5
+                             -rand 121212
                  	     -outendm ${TEMP}/apTvHyVertexComponentAnalysis.tif double
                              VALID   --compare-image ${EPSILON_9}
                                      ${BASELINE}/TvHyVertexComponentAnalysisImage.tif
