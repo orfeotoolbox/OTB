@@ -179,7 +179,7 @@ private:
   if( this->IsParameterEnabled(key) )                                   \
     {                                                                   \
     type##FilterType::Pointer l_##type##Filter = type##FilterType::New(); \
-    itk::OStringStream oss;                                             \
+    std::ostringstream oss;                                             \
     oss<<"channels."<<chan1;                                            \
     l_##type##Filter->GetFunctor().SetIndex1(this->GetParameterInt(oss.str())); \
     oss.str("");                                                        \
