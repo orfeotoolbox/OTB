@@ -29,8 +29,8 @@ using namespace otb;
 /*===========================================================================*/
 /*==============================[ other stuff ]==============================*/
 /*===========================================================================*/
-int otbOGRDataSourceNew (int argc, char **argv)
-// int main(int argc, char **argv)
+// int otbOGRDataSourceNew (int argc, char **argv)
+int main(int argc, char **argv)
 {
   if (argc <1)
     {
@@ -43,5 +43,6 @@ int otbOGRDataSourceNew (int argc, char **argv)
   std::cout << "nb layers:\t" << ds->GetLayersCount() << std::endl;
   std::cout << "nb features(0):\t" << ds->Size(false) << std::endl;
   std::cout << "nb features(1):\t" << ds->Size(true) << std::endl;
+  ds->Print(std::cout);
   return EXIT_SUCCESS;
 }

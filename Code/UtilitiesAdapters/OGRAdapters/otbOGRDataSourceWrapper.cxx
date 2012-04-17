@@ -199,11 +199,56 @@ OGRLayer* otb::ogr::DataSource::GetLayerUnchecked(size_t i)
   return layer_ptr;
 }
 
+otb::ogr::Layer otb::ogr::DataSource::GetLayer(std::string const& name)
+{
+  assert(m_DataSource && "Datasource not initialized");
+  OGRLayer * layer_ptr = m_DataSource->GetLayerByName(name.c_str());
+  return otb::ogr::Layer(layer_ptr);
+}
+
+
+otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(std::string const& name)
+{
+  assert(m_DataSource && "Datasource not initialized");
+  OGRLayer * layer_ptr = m_DataSource->GetLayerByName(name.c_str());
+  if (!layer_ptr)
+    {
+    itkExceptionMacro( << "Cannot fetch any layer named <" << name
+      << "> in the OGRDataSource <" << m_DataSource->GetName() << ">.");
+    }
+  return otb::ogr::Layer(layer_ptr);
+}
+
 int otb::ogr::DataSource::GetLayersCount() const
 {
   assert(m_DataSource && "Datasource not initialized");
   return m_DataSource->GetLayerCount();
 }
+
+otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
+  std::string const& statement, 
+  OGRGeometry * poSpatialFilter, 
+  char        const* pszDialect)
+{
+  assert(m_DataSource && "Datasource not initialized");
+  OGRLayer * layer_ptr = m_DataSource->ExecuteSQL(
+    statement.c_str(), poSpatialFilter, pszDialect);
+  if (!layer_ptr)
+    {
+#if defined(PREFER_EXCEPTION)
+    itkExceptionMacro( << "Unexpected error: cannot execute the SQL request <" << statement
+      << "> in the OGRDataSource <" << m_DataSource->GetName() << ">.");
+#else 
+    // Cannot use the deleter made for result sets obtained from
+    // OGRDataSource::ExecuteSQL because it checks for non-nullity....
+    // *sigh*
+    return otb::ogr::Layer(0);
+#endif
+    }
+  return otb::ogr::Layer(layer_ptr, m_DataSource);
+
+}
+
 
 /*===========================================================================*/
 /*===============================[ features ]================================*/
@@ -243,5 +288,22 @@ void otb::ogr::DataSource::PrintSelf(
 /*virtual*/ void otb::ogr::DataSource::Graft(const itk::DataObject * data)
 {
   assert(! "Disabled to check if it makes sense...");
+}
+
+bool otb::ogr::DataSource::HasCapability(std::string const& capabilityName)
+{
+  assert(m_DataSource && "Datasource not initialized");
+  return m_DataSource->TestCapability(capabilityName.c_str());
+}
+
+void otb::ogr::DataSource::SyncToDisk()
+{
+  assert(m_DataSource && "Datasource not initialized");
+  const OGRErr res= m_DataSource->SyncToDisk();
+  if (res != OGRERR_NONE)
+    {
+    itkExceptionMacro( << "Cannot flush the pending of the OGRDataSource <"
+      << m_DataSource->GetName() << ">.");
+    }
 }
 

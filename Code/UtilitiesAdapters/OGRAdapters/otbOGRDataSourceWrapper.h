@@ -32,6 +32,7 @@
 class OGRDataSource;
 class OGRLayer;
 class OGRSpatialReference;
+class OGRGeometry;
 #include "ogr_core.h" // OGRwkbGeometryType
 
 namespace otb { namespace ogr {
@@ -149,11 +150,16 @@ namespace otb { namespace ogr {
      * an encapsulation of OGR classes. In that particular case, it's an
      * encapsulation of \c OGRDataSource.
      *
-     * \note not meant to be inherited
-     * \note this class has an entity semantics: \em non-copyable, nor \em
+     * \note Not meant to be inherited
+     * \note This class has an entity semantics: \em non-copyable, nor \em
      * assignable.
      * \note \c OGRRegisterAll() is implicitly called on construction
-     * \internal as the class is not meant to be inherited, no new function is virtual.
+     * \internal As the class is not meant to be inherited, no new function is virtual.
+     *
+     * \note The following function haven't been encapsulated (yet?):
+     * - \c SetStyleTable() & \c GetStyleTable()
+     * - \c SetDriver() & \c GetDriver()
+     * - all functions related to the reference count.
      */
     class DataSource : public itk::DataObject
     {
@@ -281,9 +287,13 @@ namespace otb { namespace ogr {
     /**
      * Creates a new layer.
      * \param[in] name          name for the layer
-     * \param poSpatialRef      the coordinate system to use for the new layer, or NULL if no coordinate system is available.
-     * \param[in] eGType        the geometry type for the layer. Use wkbUnknown if there are no constraints on the types geometry to be written.
-     * \param[in] papszOptions  a StringList of name=value options. Options are driver specific.
+     * \param poSpatialRef      the coordinate system to use for the new layer,
+     *                          or NULL if no coordinate system is available.
+     * \param[in] eGType        the geometry type for the layer. Use wkbUnknown
+     *                          if there are no constraints on the types
+     *                          geometry to be written.
+     * \param[in] papszOptions  a StringList of name=value options. Options are
+     *                          driver specific.
      *
      * \return a proxy on the \c OGRLayer created.
      * \throw itk::ExceptionObject in case the layer cannot be created on the
@@ -353,7 +363,7 @@ namespace otb { namespace ogr {
     /**
      * Unchecked Accessor to a given layer.
      * \param[in] i  index of the layer to access
-     * \return a reference to the layer requested.
+     * \return the layer requested.
      * \pre <tt>i < GetLayersCount()</tt>, an assertion will abort the program
      * otherwise.
      * \pre the layer must available, an assertion will abort the program
@@ -362,10 +372,23 @@ namespace otb { namespace ogr {
      * \note Use \c GetLayerUnchecked() if invalid indices are programming
      * errors, or if null layers are to be expected.
      */
-    Layer GetLayer(size_t i);
-    /**\copydoc otb::ogr::DataSource::GetLayer()
+    Layer       GetLayer(size_t i);
+    /**\copydoc otb::ogr::DataSource::GetLayer(size_t)
      */
     Layer const GetLayer(size_t i) const;
+
+    /**
+     * Unchecked Accessor to a given layer.
+     * \param[in] name  name of the layer to search
+     * \return the layer requested, possibly a null one.
+     * \throw None
+     * \note Use \c GetLayerUnchecked(std::string const&) if you'd rather have
+     * an exception instead of testing whether the layer obtained is valid.
+     */
+    Layer       GetLayer(std::string const& name);
+    /**\copydoc otb::ogr::DataSource::GetLayer(std::string const&)
+     */
+    Layer const GetLayer(std::string const& name) const;
 
     /**
      * Checked Accessor to a given layer.
@@ -381,6 +404,44 @@ namespace otb { namespace ogr {
     /**\copydoc otb::ogr::DataSource::GetLayerChecked()
      */
     Layer const GetLayerChecked(size_t i) const;
+
+    /**
+     * Checked Accessor to a given layer.
+     * \param[in] name  name of the layer to search
+     * \return the layer requested, possibly a null one.
+     * \throw itk::ExceptionObject if there exist no layer by that name
+     * \note use \c GetLayer(std::string const&) if you'd rather test the
+     * obtained layer instead of catching an exception.
+     */
+    Layer       GetLayerChecked(std::string const& name);
+    /**\copydoc otb::ogr::DataSource::GetLayerChecked(std::string const&)
+     */
+    Layer const GetLayerChecked(std::string const& name) const;
+
+    /**
+     * Excecutes the statement..
+     * \param[in] statement  textual description of the SQL statement.
+     * \param[in] poSpatialFilter  \c Geometry representing a spatial filter -- may be null.
+     * \param[in] pszDialect  allows control of the statement dialect. If set to
+     *                     NULL, the OGR SQL engine will be used, except for
+     *                     RDBMS drivers that will use their dedicated SQL
+     *                     engine, unless OGRSQL is explicitely passed as the
+     *                     dialect.
+     * \return a new \c Layer that contains the matching \c Features. In case of
+     * error, or no matching result sets, a \em null Layer will be returned.
+     * Check for \¢ Layer's validity before doing anything else.
+     * \throw None even when there is an error -- OGR can not report errors,
+     * neither this wrapping.
+     * \note the returned \c Layer will be automatically collected on its
+     * destruction ; i.e. unlike OGR API, no need to explicitly call \c
+     * OGRDataSource::ReleaseResultSet().
+     * \sa OGRDataSource::ExecuteSQL
+     */
+    Layer ExecuteSQL(
+      std::string const& statement,
+      OGRGeometry *  	 poSpatialFilter,
+      char        const* pszDialect);
+
     //@}
 
 
@@ -391,9 +452,25 @@ namespace otb { namespace ogr {
      * boolean expression to be used in \c if tests.
      * \see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6
      */
-    operator int boolean ::* () const {
+    operator int boolean ::* () const
+      {
       return m_DataSource ? &boolean::i : 0;
-    }
+      }
+
+    /**
+     * Flushes all changes to disk.
+     * \throw itd::ExceptionObject in case the flush operation failed.
+     * \sa OGRDataSource::SyncToDisk
+     */
+    void SyncToDisk();
+
+    /**
+     * Returns whether a capability is avalaible.
+     * \param[in] capabilityName  name of the capability to check.
+     * \throw None
+     * \sa OGRDataSource::TestCapability
+     */
+    bool HasCapability(std::string const& capabilityName);
 
     /** Access to raw \c OGRDataSource.
      * This function provides an abstraction leak in case deeper control on the

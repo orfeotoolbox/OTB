@@ -64,6 +64,12 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_mem_add_n_del_layer)
   BOOST_CHECK_THROW(ds->GetLayerChecked(1), itk::ExceptionObject);
   BOOST_CHECK_EQUAL(l.GetName(), k_one);
   BOOST_CHECK_EQUAL(l0.GetName(), k_one);
+  BOOST_CHECK_EQUAL(l0.GetName(), k_one);
+
+  BOOST_CHECK_EQUAL(ds->GetLayer(k_one).GetName(), k_one);
+  BOOST_CHECK_EQUAL(ds->GetLayerChecked(k_one).GetName(), k_one);
+  BOOST_ASSERT(! ds->GetLayer(k_two));
+  BOOST_CHECK_THROW(ds->GetLayerChecked(k_two), itk::ExceptionObject);
 
   ogr::Layer l2 = ds -> CreateLayer(k_two);
   BOOST_CHECK_EQUAL(ds->GetLayersCount(), 2);
@@ -71,6 +77,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_mem_add_n_del_layer)
   BOOST_CHECK_EQUAL(ds->Size(true), 0);
   BOOST_CHECK_EQUAL(ds->GetLayer(0).GetName(), k_one);
   BOOST_CHECK_EQUAL(ds->GetLayer(1).GetName(), k_two);
+  BOOST_CHECK_EQUAL(ds->GetLayer(k_two).GetName(), k_two);
   BOOST_CHECK_THROW(ds->GetLayerChecked(2), itk::ExceptionObject);
 
   ds->DeleteLayer(0);

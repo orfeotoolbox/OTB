@@ -53,6 +53,13 @@ otb::ogr::Layer const otb::ogr::DataSource::GetLayer(size_t i) const
 }
 
 inline
+otb::ogr::Layer const otb::ogr::DataSource::GetLayer(std::string const& name) const
+{
+  return const_cast <DataSource*>(this)->GetLayer(name);
+}
+
+
+inline
 otb::ogr::Layer const otb::ogr::DataSource::GetLayerChecked(size_t i) const
 {
   return const_cast <DataSource*>(this)->GetLayerChecked(i);

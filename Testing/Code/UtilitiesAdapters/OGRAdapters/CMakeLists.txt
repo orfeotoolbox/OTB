@@ -4,7 +4,10 @@ SET(OGR_TESTS ${CXX_TEST_PATH}/otbOGRTests)
 
 SET(OGRCommon_SRC
 otbOGRDataSourceWrapperNew.cxx
-# otbOGRDataSourceWrapperIO.cxx
+)
+
+SET(OGRNon_UT_SRC
+otbOGRDataSourceWrapperIO.cxx
 )
 
 find_package(Boost COMPONENTS filesystem unit_test_framework)
@@ -22,7 +25,6 @@ ENDIF(Boost_FOUND)
 
 IF (Boost_UNIT_TEST_FRAMEWORK_FOUND)
   OTB_ADD_EXECUTABLE(otbOGRTests "${OGRCommon_SRC}" "OTBIO;OTBTesting")
-  # TARGET_LINK_LIBRARIES(otbOGRTests OTBOGRAdapters  OTBTesting itkvcl)
   TARGET_LINK_LIBRARIES(otbOGRTests OTBOGRAdapters OTBTesting
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
     )
@@ -33,8 +35,12 @@ IF (Boost_UNIT_TEST_FRAMEWORK_FOUND)
     otbOGRDataSourceWrapperNew
     )
 ENDIF(Boost_UNIT_TEST_FRAMEWORK_FOUND)
-# ADD_TEST(coTuOGRDataSourceWrapperIO ${OGR_TESTS}
-  # otbOGRDataSourceWrapperIO
-# )
+
+OTB_ADD_EXECUTABLE(otbOGRTestsV "${OGRNon_UT_SRC}" "OTBIO;OTBTesting")
+TARGET_LINK_LIBRARIES(otbOGRTestsV OTBOGRAdapters OTBTesting
+  )
+ADD_TEST(coTuOGRDataSourceWrapperIO ${OGR_TESTS_NON_UT}
+  otbOGRDataSourceWrapperIO
+  )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
