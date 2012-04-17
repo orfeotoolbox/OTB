@@ -39,7 +39,7 @@ class RadiometricWaterIndices: public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef RadiometricWaterIndices  Self;
+  typedef RadiometricWaterIndices       Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -50,17 +50,17 @@ public:
   itkTypeMacro(RadiometricWaterIndices, otb::Wrapper::Application);
 
   /** Output  containers typedef */
-  typedef ObjectList<itk::ProcessObject>  FilterListType;
-  typedef ImageList<FloatImageType> ImageListType;
+  typedef ObjectList<itk::ProcessObject>                                    FilterListType;
+  typedef ImageList<FloatImageType>                                         ImageListType;
   typedef ImageListToVectorImageFilter<ImageListType, FloatVectorImageType> ImageListToVectorImageFilterType;
 
   /** Radiometric indices functors typedef */
-  typedef Functor::SRWI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> SRWIFunctorType;
-  typedef Functor::NDWI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDWIFunctorType;
+  typedef Functor::SRWI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  SRWIFunctorType;
+  typedef Functor::NDWI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDWIFunctorType;
   typedef Functor::NDWI2<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDWI2FunctorType;
   typedef Functor::MNDWI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> MNDWIFunctorType;
-  typedef Functor::NDPI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDPIFunctorType;
-  typedef Functor::NDTI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDTIFunctorType;
+  typedef Functor::NDPI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDPIFunctorType;
+  typedef Functor::NDTI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDTIFunctorType;
   //typedef Functor::WaterSqrtSpectralAngleFunctor<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> WaterSqrtSpectralAngleFunctor;
 
   typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, SRWIFunctorType>  SRWIFilterType;
@@ -219,8 +219,8 @@ private:
     SetParameterOutputImage("out", m_Concatener->GetOutput());
   }
   
-  FilterListType::Pointer  m_FilterList;
-  ImageListType::Pointer m_ImageList;
+  FilterListType::Pointer                   m_FilterList;
+  ImageListType::Pointer                    m_ImageList;
   ImageListToVectorImageFilterType::Pointer m_Concatener;
 
 };
