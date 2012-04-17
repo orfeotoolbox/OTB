@@ -173,7 +173,7 @@ SpotImageMetadataInterface::GetDay() const
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
   std::vector<std::string> outputValues;
 
-  boost::split(outputValues, valueString , boost::is_any_of(" T:-"));
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
   if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Day");
 
