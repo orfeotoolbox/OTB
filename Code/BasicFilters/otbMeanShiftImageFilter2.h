@@ -18,12 +18,11 @@
 #ifndef __otbMeanShiftImageFilter2_h
 #define __otbMeanShiftImageFilter2_h
 
-
+#include "otbImage.h"
 #include "itkImageToImageFilter.h"
 #include <vcl_algorithm.h>
 /*
 #include "itkVariableLengthVector.h"
-#include "otbImage.h"
 #include "otbObjectList.h"
 #include "otbPolygon.h"
 */
@@ -96,10 +95,13 @@ public:
   typedef typename OutputImageType::PixelType   OutputPixelType;
   typedef typename OutputImageType::RegionType  OutputRegionType;
 
-   typedef TOutputMetricImage                          OutputMetricImageType;
-   typedef typename OutputMetricImageType::Pointer     OutputMetricImagePointerType;
-   typedef typename OutputMetricImageType::PixelType   OutputMetricPixelType;
-   typedef typename OutputMetricImageType::RegionType  MetricRegionType;
+  typedef TOutputMetricImage                          OutputMetricImageType;
+  typedef typename OutputMetricImageType::Pointer     OutputMetricImagePointerType;
+  typedef typename OutputMetricImageType::PixelType   OutputMetricPixelType;
+  typedef typename OutputMetricImageType::RegionType  MetricRegionType;
+  
+  typedef unsigned int                                OutputIterationPixelType;
+  typedef otb::Image<OutputIterationPixelType, 2>                OutputIterationImageType; 
 
   typedef TKernel      KernelType;
 
@@ -138,6 +140,9 @@ public:
   OutputImageType * GetRangeOutput();
   /** Return the mean shift vector image output */
   OutputMetricImageType * GetMetricOutput();
+
+  /** Returns the number of iterations done at each pixel */
+  OutputIterationImageType * GetIterationOutput();
 
   bool IsImageLatticeInitialized()
     {return m_ImageLatticeInitialized; };
