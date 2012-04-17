@@ -457,56 +457,56 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
        // std::cout<<"it.Size "<<it->Size()<<std::endl;
         isInside=true;
         for(unsigned int comp=0; comp<rangeNumberOfComponents; comp++)
-	  {
-	    
-	    neighborhoodValue=it->GetElement(comp+spatialNumberOfComponents);
-	    if(vcl_abs(neighborhoodValue-rangePixel[comp])>m_SpectralBandwidth)
-	      isInside=false;
-	  }
+         {
+           
+           neighborhoodValue=it->GetElement(comp+spatialNumberOfComponents);
+           if(vcl_abs(neighborhoodValue-rangePixel[comp])>m_SpectralBandwidth)
+             isInside=false;
+         }
  
-	if(it->GetElement(boundaryWeightIndex) && isInside)
-	  {
-	    
+       if(it->GetElement(boundaryWeightIndex) && isInside)
+         {
+           
             for(unsigned int comp=0; comp<spatialNumberOfComponents; comp++)
-	      {
-		neighborhoodValue=it->GetElement(comp);
-		//value=spatialIt->GetElement(comp);
-		value=1;
-		meanShiftVector[comp]+=(neighborhoodValue);
-		weightingMeanShiftVector[comp]+=value;
+             {
+              neighborhoodValue=it->GetElement(comp);
+              //value=spatialIt->GetElement(comp);
+              value=1;
+              meanShiftVector[comp]+=(neighborhoodValue);
+              weightingMeanShiftVector[comp]+=value;
 
-	      }
-	    for(unsigned int comp=0; comp<rangeNumberOfComponents; comp++)
-	      {
-		neighborhoodValue=it->GetElement(comp+spatialNumberOfComponents);
-		//value=rangeIt->GetElement(comp);
-		value=1;
-		//  meanShiftVector[spatialNumberOfComponents+comp]+=(neighborhoodValue-rangePixel[comp])*(neighborhoodValue-rangePixel[comp])*neighborhoodValue*value;
-		//  weightingMeanShiftVector[spatialNumberOfComponents+comp]+=(neighborhoodValue-rangePixel[comp])*(neighborhoodValue-rangePixel[comp])*value;
-		meanShiftVector[spatialNumberOfComponents+comp]+=(neighborhoodValue);
-		weightingMeanShiftVector[spatialNumberOfComponents+comp]+=value;
-	      }
-	    
-	  }
-	++it;
-	++rangeIt;
-	++spatialIt;
+             }
+           for(unsigned int comp=0; comp<rangeNumberOfComponents; comp++)
+             {
+              neighborhoodValue=it->GetElement(comp+spatialNumberOfComponents);
+              //value=rangeIt->GetElement(comp);
+              value=1;
+              //  meanShiftVector[spatialNumberOfComponents+comp]+=(neighborhoodValue-rangePixel[comp])*(neighborhoodValue-rangePixel[comp])*neighborhoodValue*value;
+              //  weightingMeanShiftVector[spatialNumberOfComponents+comp]+=(neighborhoodValue-rangePixel[comp])*(neighborhoodValue-rangePixel[comp])*value;
+              meanShiftVector[spatialNumberOfComponents+comp]+=(neighborhoodValue);
+              weightingMeanShiftVector[spatialNumberOfComponents+comp]+=value;
+             }
+           
+         }
+       ++it;
+       ++rangeIt;
+       ++spatialIt;
         }
     }
   
   for(unsigned int comp=0; comp<spatialNumberOfComponents; comp++)
     {
       if( weightingMeanShiftVector[comp]>0)
-	meanShiftVector[comp]=meanShiftVector[comp]/weightingMeanShiftVector[comp]-spatialPixel[comp];
+       meanShiftVector[comp]=meanShiftVector[comp]/weightingMeanShiftVector[comp]-spatialPixel[comp];
       else
-	meanShiftVector[comp]=0;
+       meanShiftVector[comp]=0;
     }
   for(unsigned int comp=0; comp<rangeNumberOfComponents; comp++)
     {
       if( weightingMeanShiftVector[spatialNumberOfComponents+comp]>0)
-	meanShiftVector[spatialNumberOfComponents+comp]=meanShiftVector[spatialNumberOfComponents+comp]/weightingMeanShiftVector[spatialNumberOfComponents+comp]-rangePixel[comp];
+       meanShiftVector[spatialNumberOfComponents+comp]=meanShiftVector[spatialNumberOfComponents+comp]/weightingMeanShiftVector[spatialNumberOfComponents+comp]-rangePixel[comp];
       else
-	meanShiftVector[spatialNumberOfComponents+comp]=0;
+       meanShiftVector[spatialNumberOfComponents+comp]=0;
     }
   
   return meanShiftVector;

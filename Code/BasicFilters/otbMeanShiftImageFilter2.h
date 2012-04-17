@@ -101,7 +101,7 @@ public:
   typedef typename OutputMetricImageType::RegionType  MetricRegionType;
   
   typedef unsigned int                                OutputIterationPixelType;
-  typedef otb::Image<OutputIterationPixelType, 2>                OutputIterationImageType; 
+  typedef otb::Image<OutputIterationPixelType, 2>                OutputIterationImageType;
 
   typedef TKernel      KernelType;
 
