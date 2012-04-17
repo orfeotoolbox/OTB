@@ -19,12 +19,14 @@
 #include "otbFusionOGRTileFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
+#include "itksys/SystemTools.hxx"
 
 int otbFusionOGRTileFilter(int argc, char * argv[])
 {
   const char * infname = argv[1];
   const char * inOGRfname = argv[2];
-  unsigned int size = atoi(argv[3]);
+  const char * tmpOGRfname = argv[3];
+  unsigned int size = atoi(argv[4]);
   
   /** Typedefs */
   const unsigned int Dimension = 2;
@@ -37,6 +39,10 @@ int otbFusionOGRTileFilter(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   FilterType::Pointer filter = FilterType::New();
   
+  //first copy the input OGR file as it will be updated with the fusionned polygons
+  itksys::SystemTools::CopyAFile(inOGRfname,tmpOGRfname,true);
+  
+  
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
   
@@ -44,7 +50,7 @@ int otbFusionOGRTileFilter(int argc, char * argv[])
   streamSize.Fill(size);
   
   filter->SetInput(reader->GetOutput());
-  filter->SetInputFileName(inOGRfname);
+  filter->SetInputFileName(tmpOGRfname);
   filter->SetStreamSize(streamSize);
   filter->GenerateData();
 

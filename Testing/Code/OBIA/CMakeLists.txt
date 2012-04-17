@@ -258,14 +258,13 @@ ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
      )
 
 # -------            otb::FusionOGRTileFilter   -------------
-CONFIGURE_FILE(${INPUTDATA}/QB_Toulouse_Ortho_withTiles.sqlite
-               ${TEMP}/obTvFusionOGRTile.sqlite COPYONLY)
-ADD_TEST(obTuFusionOGRTileFilterNew ${OBIA_TESTS1}
+ADD_TEST(obTuFusionOGRTileFilter ${OBIA_TESTS1}
     --compare-ogr  ${EPSILON_8}
     ${BASELINE_FILES}/obTvFusionOGRTile.sqlite
     ${TEMP}/obTvFusionOGRTile.sqlite
     otbFusionOGRTileFilter
     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+    ${INPUTDATA}/QB_Toulouse_Ortho_withTiles.sqlite
     ${TEMP}/obTvFusionOGRTile.sqlite
     112
     )
