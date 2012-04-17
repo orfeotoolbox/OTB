@@ -28,6 +28,8 @@ PURPOSE.  See the above copyright notices for more information.
 class OGRLayer; // fwd declarations
 class OGRDataSource;
 class OGRGeometry;
+class OGRFeatureDefn;
+class OGRFieldDefn;
 
 namespace otb { namespace ogr {
 /**\ingroup Geometry
@@ -133,6 +135,17 @@ public:
 
   /**\name Iteration */
   //@{
+  /**\ingroup Geometry
+   * \class feature_iter
+   * Implementation class for \c Feature iterator.
+   * \internal
+   * \sa otb::ogr::Layer::iterator
+   * \sa otb::ogr::Layer::const_iterator
+   * \note Naming policy is compliant with C++ standard as the iterator are as
+   * well. This will permit transparent integration with all standard and boost
+   * algorithms, and C++11 <em>for-range loops</em> for instance.
+   * \see http://www.boost.org/doc/libs/1_49_0/libs/iterator/doc/iterator_facade.html#tutorial-example
+   */
   template <class Value> class feature_iter
     : public boost::iterator_facade<feature_iter<Value>, Value, boost::single_pass_traversal_tag>
     {
@@ -179,7 +192,28 @@ public:
   iterator       begin() ;
   iterator       end() { return iterator(); }
   //@}
+
+  /**\name Features definition */
+  //@{
+  OGRFeatureDefn & GetLayerDefn() const;
+
+  void CreateField(OGRFieldDefn const& field, bool bApproxOK = true);
+  void DeleteField(size_t fieldIndex);
+  void AlterFieldDefn(size_t fieldIndex, OGRFieldDefn& newFieldDefn, int nFlags);
+  void ReorderField(size_t oldPos, size_t newPos);
+  void ReorderFields(int *map);
+  void SetIgnoredFields(int *);
+  //@}
 private:
+  /**
+   * Internal encapsulation of \c OGRLayer::GetNextFeature().
+   *
+   * \return the next \c OGRFeature of the layer, encapsulated in a \c Feature.
+   * \throw None
+   * \internal
+   * Required to implement iterators without exposing/including \c OGRFeature
+   * class definition.
+   */
   Feature GetNextFeature();
 
   /** Data implementation.

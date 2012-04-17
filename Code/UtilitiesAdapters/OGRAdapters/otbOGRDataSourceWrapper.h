@@ -429,7 +429,7 @@ namespace otb { namespace ogr {
      *                     dialect.
      * \return a new \c Layer that contains the matching \c Features. In case of
      * error, or no matching result sets, a \em null Layer will be returned.
-     * Check for \¢ Layer's validity before doing anything else.
+     * Check for \c Layer's validity before doing anything else.
      * \throw None even when there is an error -- OGR can not report errors,
      * neither this wrapping.
      * \note the returned \c Layer will be automatically collected on its
@@ -457,7 +457,7 @@ namespace otb { namespace ogr {
       return m_DataSource ? &boolean::i : 0;
       }
 
-    /**
+    /*otb::ogr::*
      * Flushes all changes to disk.
      * \throw itd::ExceptionObject in case the flush operation failed.
      * \sa OGRDataSource::SyncToDisk

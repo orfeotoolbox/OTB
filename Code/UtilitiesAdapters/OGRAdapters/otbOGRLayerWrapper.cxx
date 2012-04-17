@@ -112,7 +112,11 @@ void otb::ogr::Layer::SetFeature(Feature feature)
 std::string otb::ogr::Layer::GetName() const
 {
   assert(m_Layer && "null layer");
+#if GDAL_VERSION >= 10800
   return m_Layer->GetName();
+#else 
+  return GetLayerDefn().GetName();
+#endif
 }
 
 OGRLayer & otb::ogr::Layer::ogr()
@@ -153,5 +157,90 @@ void otb::ogr::Layer::SetSpatialFilter(OGRGeometry const* spatialFilter)
   assert(m_Layer && "OGRLayer not initialized");
   // const_cast because OGR is not 100% const-correct
   m_Layer->SetSpatialFilter(const_cast <OGRGeometry*>(spatialFilter));
+}
+
+/*===========================================================================*/
+/*==========================[ Feature Definition ]===========================*/
+/*===========================================================================*/
+OGRFeatureDefn & otb::ogr::Layer::GetLayerDefn() const
+{
+  assert(m_Layer && "OGRLayer not initialized");
+  return *const_cast <OGRLayer*>(m_Layer.get())->GetLayerDefn();
+}
+
+void otb::ogr::Layer::CreateField(
+  OGRFieldDefn const& field, bool bApproxOK/* = true */)
+{
+  assert(m_Layer && "OGRLayer not initialized");
+  const OGRErr res = m_Layer->CreateField(const_cast <OGRFieldDefn*>(&field), bApproxOK);
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<< "Cannot create a new field in the layer <"<<GetName()<<">.");
+    }
+}
+
+void otb::ogr::Layer::DeleteField(size_t fieldIndex)
+{
+  assert(m_Layer && "OGRLayer not initialized");
+#if GDAL_VERSION < 10900
+  itkGenericExceptionMacro("OGRLayer::AlterFieldDefn is not supported by OGR v"
+    << GDAL_VERSION << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
+#else
+  const OGRErr res = m_Layer->DeleteField(int(fieldIndex));
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<< "Cannot delete the "<<fieldIndex << "th field in the layer <"
+      <<GetName() <<">.");
+    }
+#endif
+}
+
+void otb::ogr::Layer::AlterFieldDefn(
+  size_t fieldIndex, OGRFieldDefn& newFieldDefn, int nFlags)
+{
+  assert(m_Layer && "OGRLayer not initialized");
+#if GDAL_VERSION < 10900
+  itkGenericExceptionMacro("OGRLayer::AlterFieldDefn is not supported by OGR v"
+    << GDAL_VERSION << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
+#else
+  const OGRErr res = m_Layer->AlterFieldDefn(int(fieldIndex), &newFieldDefn, nFlags);
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<< "Cannot alter the "<<fieldIndex << "th field in the layer <"
+      <<GetName() <<">.");
+    }
+#endif
+}
+
+void otb::ogr::Layer::ReorderField(size_t oldPos, size_t newPos)
+{
+  assert(m_Layer && "OGRLayer not initialized");
+#if GDAL_VERSION < 10900
+  itkGenericExceptionMacro("OGRLayer::ReorderField is not supported by OGR v"
+    << GDAL_VERSION << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
+#else
+  const OGRErr res = m_Layer->ReorderField(int(oldPos), int(newPos));
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<< "Cannot move the "<<oldPos << "th field to the "
+      << newPos << "th position in the layer <" <<GetName() <<">.");
+    }
+#endif
+}
+
+void otb::ogr::Layer::ReorderFields(int * map)
+{
+  assert(m_Layer && "OGRLayer not initialized");
+#if GDAL_VERSION < 10900
+  itkGenericExceptionMacro("OGRLayer::ReorderField is not supported by OGR v"
+    << GDAL_VERSION << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
+#else
+  const OGRErr res = m_Layer->ReorderFields(map);
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<< "Cannot reorder the fields of the layer <"
+      <<GetName() <<">.");
+    }
+#endif
 }
 
