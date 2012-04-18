@@ -185,12 +185,12 @@ public:
   typedef feature_iter<Feature      > iterator;
   typedef feature_iter<Feature const> const_iterator;
 
-  const_iterator begin() const { return cbegin(); }
-  const_iterator end  () const { return cend  (); }
-  const_iterator cbegin() const ;
-  const_iterator cend() const { return iterator(); }
-  iterator       begin() ;
-  iterator       end() { return iterator(); }
+  const_iterator begin () const { return cbegin(); }
+  const_iterator end   () const { return cend  (); }
+  const_iterator cbegin() const; 
+  const_iterator cend  () const { return iterator(); }
+  iterator       begin (); 
+  iterator       end   () { return iterator(); }
   //@}
 
   /**\name Features definition */

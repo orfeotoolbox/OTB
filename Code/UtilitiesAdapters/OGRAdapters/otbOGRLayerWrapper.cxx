@@ -22,7 +22,7 @@
 #include "otbOGRLayerWrapper.h"
 #include <cassert>
 #include <boost/bind.hpp>
-#include <boost/range/algorithm.hpp>
+#include <boost/foreach.hpp>
 #include "ogrsf_frmts.h" // OGRDataSource & OGRLayer
 
 /*===========================================================================*/
@@ -97,7 +97,8 @@ void otb::ogr::Layer::DeleteFeature(long nFID)
 otb::ogr::Feature otb::ogr::Layer::GetFeature(long nFID)
 {
   assert(m_Layer && "OGRLayer not initialized");
-  Feature feat = m_Layer->GetFeature(nFID);
+  const Feature feat = m_Layer->GetFeature(nFID);
+  return feat;
 }
 
 void otb::ogr::Layer::SetFeature(Feature feature)
@@ -130,10 +131,15 @@ void otb::ogr::Layer::PrintSelf(std::ostream& os, itk::Indent indent) const
   os << indent << "+";
   if (m_Layer) // in case for odd reason the layer that should exist can't be found
     {
-    os << "Layer <" << m_Layer->GetName() << ">\n";
-    boost::for_each( // for each feature
-      *this,
-      boost::bind(&Feature::PrintSelf, _1, boost::ref(os), indent.GetNextIndent()));
+    os << "Layer <" << GetName() << ">\n";
+    indent = indent.GetNextIndent();
+    BOOST_FOREACH(Feature f, *this)
+      {
+      f.PrintSelf(os, indent);
+      }
+    // boost::for_each( // for each feature
+      // *this,
+      // boost::bind(&Feature::PrintSelf, _1, boost::ref(os), indent.GetNextIndent()));
     }
   else
     {
@@ -243,4 +249,3 @@ void otb::ogr::Layer::ReorderFields(int * map)
     }
 #endif
 }
-

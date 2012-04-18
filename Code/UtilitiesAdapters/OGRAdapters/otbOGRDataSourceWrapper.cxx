@@ -306,4 +306,3 @@ void otb::ogr::DataSource::SyncToDisk()
       << m_DataSource->GetName() << ">.");
     }
 }
-

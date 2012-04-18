@@ -433,13 +433,13 @@ namespace otb { namespace ogr {
      * \throw None even when there is an error -- OGR can not report errors,
      * neither this wrapping.
      * \note the returned \c Layer will be automatically collected on its
-     * destruction ; i.e. unlike OGR API, no need to explicitly call \c
+     * destruction; i.e. unlike OGR API, no need to explicitly call \c
      * OGRDataSource::ReleaseResultSet().
      * \sa OGRDataSource::ExecuteSQL
      */
     Layer ExecuteSQL(
       std::string const& statement,
-      OGRGeometry *  	 poSpatialFilter,
+      OGRGeometry *      poSpatialFilter,
       char        const* pszDialect);
 
     //@}
