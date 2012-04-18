@@ -1,0 +1,198 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef __otbDisparityMapToDEMFilter_h
+#define __otbDisparityMapToDEMFilter_h
+
+#include "itkImageToImageFilter.h"
+#include "otbGenericRSTransform.h"
+// #include "itkConstNeighborhoodIterator.h"
+// #include "itkImageRegionConstIterator.h"
+// #include "itkImageRegionIterator.h"
+// #include "otbImage.h"
+
+namespace otb
+{
+
+/** \class DisparityMapToDEMFilter
+ *  \brief Project an input disparity map into a regular DEM
+ *
+ *  This filter uses an input disparity map (horizontal and vertical) to produce a DEM with a regular sampling 
+ *  in the chosen map projection system. The elevation is computed from the triangulation of the "left-right" pairs 
+ *  of pixels matched. When several elevations are possible on a DEM cell, the highest is kept.
+ *
+ *  The inputs are:
+ *    - the horizontal and vertical disparity maps (SetHorizontalDisparityMapInput, SetVerticalDisparityMapInput)
+ *    - the original image pair (in sensor geometry) (SetLeftInput, SetRightInput)
+ *    - the deformation grids of the epipolar geometry (SetLeftEpipolarGridInput, SetRightEpipolarGridInput)
+ *    - the mask associated to the input disparity maps (SetDisparityMaskInput)
+ *    [- the DEM map projection system]
+ *
+ *  The outputs are:
+ *    - the DEM (GetDEMOutput)
+ *
+ *  \sa FineRegistrationImageFilter
+ *  \sa StereorectificationDeformationFieldSource
+ *  \sa SubPixelDisparityImageFilter
+ *  \sa PixelWiseBlockMatchingImageFilter
+ *
+ *  \ingroup Streamed
+ *  \ingroup Threaded
+ *
+ */
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage = TDisparityImage, 
+          class TEpipolarGridImage = TDisparityImage, class TMaskImage = otb::Image<unsigned char> >
+class ITK_EXPORT DisparityMapToDEMFilter :
+    public itk::ImageToImageFilter<TDisparityImage,TOutputDEMImage>
+{
+public:
+  /** Standard class typedef */
+  typedef DisparityMapToDEMFilter                           Self;
+  typedef itk::ImageToImageFilter<TDisparityImage,
+                                  TOutputDEMImage>          Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(DisparityMapToDEMFilter, ImageToImageFilter);
+
+  /** Usefull typedefs */
+  typedef TDisparityImage         DisparityMapType;
+  typedef TInputImage             SensorImageType;
+  typedef TOutputDEMImage         DEMImageType;
+  typedef TEpipolarGridImage      GridImageType;
+  typedef TMaskImage              MaskImageType;
+  
+  typedef typename DEMImageType::RegionType         RegionType;
+  
+  // 3D RS transform
+  // TODO: Allow to tune precision (i.e. double or float)
+  typedef otb::GenericRSTransform<double,3,3>       RSTransformType;
+  //typedef typename RSTransformType::Pointer         RSTransformPointerType;
+
+  // 3D points
+  typedef typename RSTransformType::InputPointType  TDPointType;
+  
+  /** Set horizontal disparity map input */
+  void SetHorizontalDisparityMapInput( const TDisparityImage * hmap);
+  
+  /** Set vertical disparity map input */
+  void SetVerticalDisparityMapInput( const TDisparityImage * vmap);
+  
+  /** Set left input */
+  void SetLeftInput( const TInputImage * image);
+
+  /** Set right input */
+  void SetRightInput( const TInputImage * image);
+  
+  /** Set left epipolar grid (deformation grid from sensor image to epipolar space, regular in epipolar space)*/
+  void SetLeftEpipolarGridInput( const TEpipolarGridImage * grid);
+  
+  /** Set right epipolar grid (deformation grid from sensor image to epipolar space, regular in epipolar space)*/
+  void SetRightEpipolarGridInput( const TEpipolarGridImage * grid);
+  
+  /** Set mask associated to disparity maps (optional, pixels with a null mask value are ignored) */
+  void SetDisparityMaskInput( const TMaskImage * mask);
+
+  /** Get the inputs */
+  const TDisparityImage * GetHorizontalDisparityMapInput() const;
+  const TDisparityImage * GetVerticalDisparityMapInput() const;
+  const TInputImage * GetLeftInput() const;
+  const TInputImage * GetRightInput() const;
+  const TEpipolarGridImage * GetLeftEpipolarGridInput() const;
+  const TEpipolarGridImage * GetRightEpipolarGridInput() const;
+  const TMaskImage  * GetDisparityMaskInput() const;
+
+  /** Get DEM output*/
+  const TOutputDEMImage * GetDEMOutput() const;
+  TOutputDEMImage * GetDEMOutput();
+  
+  /** Set/Get macro for minimum elevation */
+  itkSetMacro(ElevationMin, double);
+  itkGetConstReferenceMacro(ElevationMin, double);
+  
+  /** Set/Get macro for maximum elevation */
+  itkSetMacro(ElevationMax, double);
+  itkGetConstReferenceMacro(ElevationMax, double);
+  
+  /** Set/Get macro for DEM grid step */
+  itkSetMacro(DEMGridStep, double);
+  itkGetConstReferenceMacro(DEMGridStep, double);
+  
+  /** Get/Set the average elevation */
+  itkSetMacro(AverageElevation,double);
+  itkGetConstReferenceMacro(AverageElevation,double);
+
+  /** Get/Set the DEM directory */
+  itkSetStringMacro(DEMDirectory);
+  itkGetStringMacro(DEMDirectory);
+
+  /** Get/Set the geoid file */
+  itkSetStringMacro(GeoidFile);
+  itkGetStringMacro(GeoidFile);
+  
+protected:
+  /** Constructor */
+  DisparityMapToDEMFilter();
+
+  /** Destructor */
+  virtual ~DisparityMapToDEMFilter();
+
+  /** Generate output information */
+  virtual void GenerateOutputInformation();
+
+  /** Generate input requrested region */
+  virtual void GenerateInputRequestedRegion();
+
+  /** Before threaded generate data */
+  virtual void BeforeThreadedGenerateData();
+  
+  /** Threaded generate data */
+  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId);
+  
+private:
+  DisparityMapToDEMFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+  
+  /** Minimum elevation of the DEM in meters (over the chosen reference : DEM, geoid, average)*/
+  double m_ElevationMin;
+  
+  /** Maximum elevation of the DEM in meters (over the chosen reference : DEM, geoid, average)*/
+  double m_ElevationMax;
+  
+  /** DEM grid step (in meters) */
+  double m_DEMGridStep;
+  
+  /** DEM Directory */
+  std::string m_DEMDirectory;
+  
+  /** Geoid File */
+  std::string m_GeoidFile;
+  
+  /** Average Elevation */
+  double m_AverageElevation;
+};
+} // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbDisparityMapToDEMFilter.txx"
+#endif
+
+#endif
