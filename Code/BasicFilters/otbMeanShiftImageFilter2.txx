@@ -681,6 +681,7 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
     // TODO change the maximum value;
 
     bool hasConverged = false;
+
     while ((iteration < m_MaxIterationNumber) && (!hasConverged))
       {
 
@@ -720,7 +721,7 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
         rangePixel[comp] += meanShiftVector[spatialNumberOfComponents + comp];
         metricPixel[spatialNumberOfComponents + comp] = meanShiftVector[spatialNumberOfComponents + comp]
             * meanShiftVector[spatialNumberOfComponents + comp];
-        sum += metricPixel[comp];
+        sum += metricPixel[spatialNumberOfComponents+comp];
         }
 
       //TODO replace SSD Test with templated metric
