@@ -31,8 +31,8 @@ namespace otb
 /** \class DisparityMapToDEMFilter
  *  \brief Project an input disparity map into a regular DEM
  *
- *  This filter uses an input disparity map (horizontal and vertical) to produce a DEM with a regular sampling 
- *  in the chosen map projection system. The elevation is computed from the triangulation of the "left-right" pairs 
+ *  This filter uses an input disparity map (horizontal and vertical) to produce a DEM with a regular sampling
+ *  in the chosen map projection system. The elevation is computed from the triangulation of the "left-right" pairs
  *  of pixels matched. When several elevations are possible on a DEM cell, the highest is kept.
  *
  *  The inputs are:
@@ -54,7 +54,7 @@ namespace otb
  *  \ingroup Threaded
  *
  */
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage = TDisparityImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage = TDisparityImage,
           class TEpipolarGridImage = TDisparityImage, class TMaskImage = otb::Image<unsigned char> >
 class ITK_EXPORT DisparityMapToDEMFilter :
     public itk::ImageToImageFilter<TDisparityImage,TOutputDEMImage>

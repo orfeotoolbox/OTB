@@ -27,7 +27,7 @@
 namespace otb
 {
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
 ::DisparityMapToDEMFilter()
@@ -50,13 +50,13 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   m_GeoidFile = "";
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
 ::~DisparityMapToDEMFilter()
 {}
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -66,7 +66,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   this->SetNthInput(0, const_cast<TDisparityImage *>( hmap ));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -76,7 +76,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   this->SetNthInput(1, const_cast<TDisparityImage *>( vmap ));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -86,7 +86,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   this->SetNthInput(2, const_cast<TInputImage *>( image ));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -96,7 +96,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   this->SetNthInput(3, const_cast<TInputImage *>( image ));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -106,7 +106,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   this->SetNthInput(4, const_cast<TEpipolarGridImage *>( grid ));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -116,7 +116,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   this->SetNthInput(5, const_cast<TEpipolarGridImage *>( grid ));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -126,7 +126,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   this->SetNthInput(6, const_cast<TMaskImage *>( mask ));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 const TDisparityImage *
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -139,7 +139,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(0));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 const TDisparityImage *
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -152,7 +152,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(1));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 const TInputImage *
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -165,7 +165,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(2));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 const TInputImage *
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -178,7 +178,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(3));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 const TEpipolarGridImage *
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -191,7 +191,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   return static_cast<const TEpipolarGridImage *>(this->itk::ProcessObject::GetInput(4));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 const TEpipolarGridImage *
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -204,7 +204,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   return static_cast<const TEpipolarGridImage *>(this->itk::ProcessObject::GetInput(5));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 const TMaskImage *
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -217,7 +217,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(6));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 const TOutputDEMImage *
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -230,7 +230,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   return static_cast<const TOutputDEMImage *>(this->itk::ProcessObject::GetOutput(0));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 TOutputDEMImage *
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -243,7 +243,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   return static_cast<TOutputDEMImage *>(this->itk::ProcessObject::GetOutput(0));
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -369,13 +369,13 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   outputPtr->SetNumberOfComponentsPerPixel(1);
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
 ::GenerateInputRequestedRegion()
 {
-  // For the epi grid : generate full buffer 
+  // For the epi grid : generate full buffer
   TEpipolarGridImage * leftGrid = const_cast<TEpipolarGridImage*>(this->GetLeftEpipolarGridInput());
   TEpipolarGridImage * rightGrid = const_cast<TEpipolarGridImage*>(this->GetRightEpipolarGridInput());
   
@@ -486,7 +486,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   minGridIndex[0] = static_cast<int>(gridRegion.GetIndex(0));
   minGridIndex[1] = static_cast<int>(gridRegion.GetIndex(1));
   
-  for (unsigned int k=0 ; k<8 ; k++)
+  for (unsigned int k=0; k<8; k++)
     {
     // compute left image coordinate
     TDPointType tmpSensor = groundToLeftTransform->TransformPoint(corners[k]);
@@ -496,7 +496,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     gridIndex[1] = minGridIndex[1];
     
     //we assume 3 iterations are enough to find the 4 surrounding pixels
-    for (unsigned int s=0 ; s<2 ; s++)
+    for (unsigned int s=0; s<2; s++)
       {
       gridIndexU[0] = gridIndex[0] + 1;
       gridIndexU[1] = gridIndex[1];
@@ -603,7 +603,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     }
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
@@ -612,7 +612,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   // TODO
 }
 
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage, 
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>

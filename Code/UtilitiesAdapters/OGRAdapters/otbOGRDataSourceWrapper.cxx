@@ -226,8 +226,8 @@ int otb::ogr::DataSource::GetLayersCount() const
 }
 
 otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
-  std::string const& statement, 
-  OGRGeometry * poSpatialFilter, 
+  std::string const& statement,
+  OGRGeometry * poSpatialFilter,
   char        const* pszDialect)
 {
   assert(m_DataSource && "Datasource not initialized");
@@ -238,7 +238,7 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
 #if defined(PREFER_EXCEPTION)
     itkExceptionMacro( << "Unexpected error: cannot execute the SQL request <" << statement
       << "> in the OGRDataSource <" << m_DataSource->GetName() << ">.");
-#else 
+#else
     // Cannot use the deleter made for result sets obtained from
     // OGRDataSource::ExecuteSQL because it checks for non-nullity....
     // *sigh*

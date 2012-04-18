@@ -74,8 +74,8 @@ bool otb::ogr::operator==(otb::ogr::Feature const& lhs, otb::ogr::Feature const&
   OGRFeature * r = const_cast<OGRFeature*>(rhs.m_Feature.get());
   return
     (l == r ) // incl. ==0
-    || 
+    ||
     (l && r && l->Equal(r)) // must be non-null to compare them with Equal
-    ;
+   ;
 }
 

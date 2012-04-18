@@ -69,8 +69,8 @@ private:
   };
 
 
-} // ogr namespace 
-} // otb namespace 
+} // ogr namespace
+} // otb namespace
 
 
 #ifndef OTB_MANUAL_INSTANTIATION

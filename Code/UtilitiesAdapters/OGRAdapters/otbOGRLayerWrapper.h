@@ -170,11 +170,11 @@ public:
     template <class OtherValue> bool equal(feature_iter<OtherValue> const& other) const
       { return other.m_Crt == m_Crt; }
     void increment()
-      { 
+      {
       assert(m_Layer && "cannot increment end()");
       m_Crt = m_Layer->GetNextFeature();
       }
-    Value & dereference() const 
+    Value & dereference() const
       { return m_Crt; }
 
     otb::ogr::Layer * m_Layer;
@@ -187,9 +187,9 @@ public:
 
   const_iterator begin () const { return cbegin(); }
   const_iterator end   () const { return cend  (); }
-  const_iterator cbegin() const; 
+  const_iterator cbegin() const;
   const_iterator cend  () const { return iterator(); }
-  iterator       begin (); 
+  iterator       begin ();
   iterator       end   () { return iterator(); }
   //@}
 

@@ -115,7 +115,7 @@ std::string otb::ogr::Layer::GetName() const
   assert(m_Layer && "null layer");
 #if GDAL_VERSION >= 10800
   return m_Layer->GetName();
-#else 
+#else
   return GetLayerDefn().GetName();
 #endif
 }
