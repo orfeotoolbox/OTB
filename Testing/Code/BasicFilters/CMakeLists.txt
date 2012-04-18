@@ -1131,7 +1131,7 @@ ADD_TEST(bfTvMeanShiftImageFilterValid ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterClusteredOutputValid.tif
         ${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutputValid.tif
         ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutputValid.tif
-        9 50 10 1.0
+        4 50 10 1.0
         )
               
 ADD_TEST(bfTvMeanShiftImageFilter2 ${BASICFILTERS_TESTS9}
@@ -1141,7 +1141,7 @@ ADD_TEST(bfTvMeanShiftImageFilter2 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterSpectralOutput.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutput.tif
         ${TEMP}/bfMeanShiftImageFilterIterationOutput.tif
-        9 9 50 10 0.00001 10
+        8 4 50 10 0.000001 15
         )
         
 ADD_TEST(bfTvMeanShiftVectorImageFilterValidMul ${BASICFILTERS_TESTS9}
@@ -1151,7 +1151,7 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterValidMul ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterClusteredOutputValidMul.tif
         ${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutputValidMul.tif
         ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutputValidMul.tif
-        9 50 10 1.0
+        4 50 10 1.0
         )        
      
         
@@ -1162,7 +1162,7 @@ ADD_TEST(bfTvMeanShiftImageFilter2Mul ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterSpectralOutputMul.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutputMul.tif
         ${TEMP}/bfMeanShiftImageFilterIterationOutputMul.tif
-        9 9 50 10 0.01 100
+        8 4 50 10 1 100
         )
         
   
