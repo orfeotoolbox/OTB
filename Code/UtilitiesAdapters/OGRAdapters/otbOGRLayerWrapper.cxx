@@ -113,7 +113,7 @@ void otb::ogr::Layer::SetFeature(Feature feature)
 std::string otb::ogr::Layer::GetName() const
 {
   assert(m_Layer && "null layer");
-#if GDAL_VERSION >= 10800
+#if GDAL_VERSION_NUM >= 1800
   return m_Layer->GetName();
 #else
   return GetLayerDefn().GetName();
@@ -188,7 +188,7 @@ void otb::ogr::Layer::CreateField(
 void otb::ogr::Layer::DeleteField(size_t fieldIndex)
 {
   assert(m_Layer && "OGRLayer not initialized");
-#if GDAL_VERSION < 10900
+#if GDAL_VERSION_NUM < 1900
   itkGenericExceptionMacro("OGRLayer::AlterFieldDefn is not supported by OGR v"
     << GDAL_VERSION << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
 #else
@@ -205,7 +205,7 @@ void otb::ogr::Layer::AlterFieldDefn(
   size_t fieldIndex, OGRFieldDefn& newFieldDefn, int nFlags)
 {
   assert(m_Layer && "OGRLayer not initialized");
-#if GDAL_VERSION < 10900
+#if GDAL_VERSION_NUM < 1900
   itkGenericExceptionMacro("OGRLayer::AlterFieldDefn is not supported by OGR v"
     << GDAL_VERSION << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
 #else
@@ -221,7 +221,7 @@ void otb::ogr::Layer::AlterFieldDefn(
 void otb::ogr::Layer::ReorderField(size_t oldPos, size_t newPos)
 {
   assert(m_Layer && "OGRLayer not initialized");
-#if GDAL_VERSION < 10900
+#if GDAL_VERSION_NUM < 1900
   itkGenericExceptionMacro("OGRLayer::ReorderField is not supported by OGR v"
     << GDAL_VERSION << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
 #else
@@ -237,7 +237,7 @@ void otb::ogr::Layer::ReorderField(size_t oldPos, size_t newPos)
 void otb::ogr::Layer::ReorderFields(int * map)
 {
   assert(m_Layer && "OGRLayer not initialized");
-#if GDAL_VERSION < 10900
+#if GDAL_VERSION_NUM < 1900
   itkGenericExceptionMacro("OGRLayer::ReorderField is not supported by OGR v"
     << GDAL_VERSION << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
 #else
