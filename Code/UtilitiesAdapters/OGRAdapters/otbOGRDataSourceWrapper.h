@@ -20,6 +20,10 @@
 
 #include <string>
 
+// to implement copy_const
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/is_const.hpp>
 
 #include "itkVector.h"
 #include "itkPoint.h"
@@ -247,8 +251,26 @@ public:
     : public boost::iterator_facade<layer_iter<Value>, Value, boost::random_access_traversal_tag>
     {
     struct enabler {};
+    /** Const-synchronized type of the \c DataSource container.
+     * \internal
+     * The definition of a new series of functions \c boost::copy_const,
+     * \c boost::copy_cv, etc have been <a
+     * href="http://lists.boost.org/Archives/boost/2010/03/162526.php">discussed
+     * on boost mailing-list</a>. However nothing seems to have been undertaken
+     * in this way, even if a <a
+     * href="https://svn.boost.org/trac/boost/ticket/3970">ticket</a> has been
+     * opened.
+     *
+     * So here is the hard-coded result of what \c boost::copy_const would have
+     * given in order to avoid any licensing issue.
+     */
+    typedef typename boost::mpl::if_
+      <boost::is_const<Value>
+      , otb::ogr::DataSource const
+      , otb::ogr::DataSource
+      >::type container_type;
   public:
-    layer_iter(otb::ogr::DataSource & datasource, size_t index)
+    layer_iter(container_type & datasource, size_t index)
       : m_DataSource(&datasource), m_index(index) {}
     layer_iter()
       : m_DataSource(0), m_index(0) {}
@@ -279,8 +301,8 @@ public:
       return m_DataSource->GetLayerUnchecked(m_index);
       }
 
-    otb::ogr::DataSource * m_DataSource;
-    size_t                 m_index;
+    container_type * m_DataSource;
+    size_t           m_index;
     };
 
   template <class> friend class layer_iter;

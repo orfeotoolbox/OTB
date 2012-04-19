@@ -124,16 +124,16 @@ otb::ogr::DataSource::New(OGRDataSource * source)
 /*===========================================================================*/
 otb::ogr::DataSource::const_iterator otb::ogr::DataSource::cbegin() const
 {
-  // return const_iterator(*this, 0);
-  assert(!"not-ready");
-  return const_iterator();
+  return const_iterator(*this, 0);
+  // assert(!"not-ready");
+  // return const_iterator();
 }
 
 otb::ogr::DataSource::const_iterator otb::ogr::DataSource::cend() const
 {
-  // return const_iterator(*this, GetLayersCount());
-  assert(!"not-ready");
-  return const_iterator();
+  return const_iterator(*this, GetLayersCount());
+  // assert(!"not-ready");
+  // return const_iterator();
 }
 
 otb::ogr::DataSource::iterator otb::ogr::DataSource::begin()
