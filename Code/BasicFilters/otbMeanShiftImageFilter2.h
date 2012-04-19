@@ -64,7 +64,47 @@ namespace otb
  * \ingroup ImageEnhancement
  */
 
-template <class TInputImage, class TOutputMetricImage,class TOutputImage,class TKernel>
+class KernelUniform
+{
+public:
+  typedef double RealType;
+
+  KernelUniform() {
+    SetBandwidth(1.0);
+  }
+
+  ~KernelUniform() {}
+  inline RealType operator() (RealType x) {
+    return (x >= -m_Bandwidth || x <= m_Bandwidth) ? m_KernelUniformValue : 0.0;
+  }
+
+  RealType GetRadius() {
+    return m_Radius;
+  }
+
+  RealType GetBandwidth() {
+    return m_Bandwidth;
+  }
+
+  void SetBandwidth(RealType bw) {
+    m_Bandwidth = bw;
+    m_KernelUniformValue = 1.0 / (2.0 * m_Bandwidth);
+    m_Radius = m_Bandwidth;
+  }
+
+private:
+  RealType m_Radius;
+  RealType m_Bandwidth;
+  RealType m_KernelUniformValue;
+};
+
+class NormL2
+{
+};
+
+
+
+template <class TInputImage, class TOutputImage, class TKernel = KernelUniform, class TNorm = NormL2, class TOutputMetricImage = TOutputImage, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
 class ITK_EXPORT MeanShiftImageFilter2
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -80,6 +120,7 @@ public:
   itkNewMacro(Self);
 
   /** Template parameters typedefs */
+  typedef double                                RealType;
   typedef TInputImage                           InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointerType;
   typedef typename InputImageType::PixelType    InputPixelType;
@@ -99,27 +140,19 @@ public:
   typedef typename OutputMetricImageType::Pointer     OutputMetricImagePointerType;
   typedef typename OutputMetricImageType::PixelType   OutputMetricPixelType;
   typedef typename OutputMetricImageType::RegionType  MetricRegionType;
-  
-  typedef unsigned int                                OutputIterationPixelType;
-  typedef otb::Image<OutputIterationPixelType, 2>                OutputIterationImageType;
 
-  typedef TKernel      KernelType;
+  typedef TOutputIterationImage                 OutputIterationImageType;
+
+  typedef TKernel                               KernelType;
 
   /** Setters / Getters */
-  itkSetMacro(SpatialRadius, InputSizeType);
-  itkGetMacro(SpatialRadius, InputSizeType);
-  itkSetMacro(RangeRadius, InputSizeType);
-  itkGetMacro(RangeRadius,InputSizeType);
-
-  itkGetConstMacro(SpectralBandwidth, double);
-  itkSetMacro(SpectralBandwidth, double);
-  itkGetConstMacro(SpatialBandwidth, double);
-  itkSetMacro(SpatialBandwidth, double);
+  itkSetMacro(SpatialBandwidth, RealType);
+  itkGetMacro(SpatialBandwidth, RealType);
+  itkSetMacro(RangeBandwidth, RealType);
+  itkGetMacro(RangeBandwidth, RealType);
 
   itkGetConstMacro(MaxIterationNumber, unsigned int);
   itkSetMacro(MaxIterationNumber, unsigned int);
-
-  itkGetConstMacro(IterationCount, unsigned int);
 
   itkGetConstMacro(Threshold, double);
   itkSetMacro(Threshold, double);
@@ -134,18 +167,17 @@ public:
   const OutputImageType * GetRangeOutput() const;
   /** Return the spectral image output */
   const OutputMetricImageType * GetMetricOutput() const;
+  /** Returns the number of iterations done at each pixel */
+  const OutputIterationImageType * GetIterationOutput() const;
+
   /** Return the const spatial image output */
   OutputImageType * GetSpatialOutput();
    /** Return the spectral image output */
   OutputImageType * GetRangeOutput();
   /** Return the mean shift vector image output */
   OutputMetricImageType * GetMetricOutput();
-
   /** Returns the number of iterations done at each pixel */
   OutputIterationImageType * GetIterationOutput();
-
-  bool IsImageLatticeInitialized()
-    {return m_ImageLatticeInitialized; };
 
 protected:
 
@@ -189,13 +221,12 @@ protected:
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
  //virtual void GetNeighborhood(PointType latticePosition);
  virtual void GetNeighborhood(OutputPixelType **neighborhood,PointType latticePosition);
 
  virtual OutputMetricPixelType CalculateMeanShiftVector(OutputPixelType *neighbothood,OutputPixelType spatialPixel,OutputPixelType rangePixel);
 
- virtual void CreateUniformKernel();
+ // virtual void CreateUniformKernel();
 private:
   MeanShiftImageFilter2(const Self &); //purposely not implemented
   void operator =(const Self&);             //purposely not implemented
@@ -204,34 +235,27 @@ private:
   void Initialize();
 
   /** returns the largest radius **/
-  InputSizeType GetLargestRadius()
-  {
-    InputSizeType largestRadius;
-    largestRadius[0]=std::max(m_SpatialRadius[0],m_RangeRadius[0]);
-    largestRadius[1]=std::max(m_SpatialRadius[1],m_RangeRadius[1]);
-    return largestRadius;
-  };
+  // InputSizeType GetLargestRadius()
+  // {
+  //   InputSizeType largestRadius;
+  //   largestRadius[0]=std::max(m_SpatialRadius[0],m_RangeRadius[0]);
+  //   largestRadius[1]=std::max(m_SpatialRadius[1],m_RangeRadius[1]);
+  //   return largestRadius;
+  // };
 
 
-  /** Spatial radius for mean shift convergence */
-  InputSizeType m_SpatialRadius;
-  /** Range radius for mean shift convergence */
-  InputSizeType m_RangeRadius;
 
-  double        m_SpectralBandwidth;
-  double        m_SpatialBandwidth;
+  /** Range bandwidth */
+  RealType        m_RangeBandwidth;
+
+  /** Spatial bandwidth */
+  RealType      m_SpatialBandwidth;
+
+  /** Radius of pixel neighborhood, determined by the kernel from the spatial bandwidth  */
+  InputSizeType      m_SpatialRadius;
 
   /** **/
   double m_Threshold;
-
-  /** is the lattice initialized **/
-  bool m_ImageLatticeInitialized;
-
-  /** is the lattice initialized **/
-  bool m_HasConverged;
-
-  /** mean shift iteration count **/
-  unsigned int m_IterationCount;
 
   /** max iteration number **/
   unsigned int m_MaxIterationNumber;
@@ -240,18 +264,21 @@ private:
   //OutputPixelType *m_Neighborhood;
 
   /** Kernel pointer **/
-  OutputPixelType *m_SpatialKernel;
-  OutputPixelType *m_RangeKernel;
-  OutputPixelType *m_Kernel;
+  // OutputPixelType *m_SpatialKernel;
+  // OutputPixelType *m_RangeKernel;
+  // OutputPixelType *m_Kernel;
 
   /** KernelType to be defined **/
-  //KernelType m_Kernel;
+  KernelType m_SpatialKernel;
+  KernelType m_RangeKernel;
+
 
   bool m_NeighborhoodHasTobeUpdated;
 
   unsigned int m_NumberOfSpatialComponents;
 
 };
+
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

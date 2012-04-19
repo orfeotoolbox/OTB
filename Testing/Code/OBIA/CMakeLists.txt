@@ -153,10 +153,8 @@ ADD_TEST(obTuMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFil
       otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter
       ${INPUTDATA}/ROI_QB_MUL_4.tif
       ${TEMP}/obTuMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.shp
-      9 
-      9 
-      50 
-      10 
+      9
+      10
       0.001
       ""
       "distance<10"
@@ -169,15 +167,15 @@ ADD_TEST(obTuMeanShiftConnectedComponentSegmentationFilter ${OBIA_TESTS1}
       otbMeanShiftConnectedComponentSegmentationFilter
       ${INPUTDATA}/ROI_QB_MUL_4.tif
       ${TEMP}/obTuMeanShiftConnectedComponentSegmentationImage.png
-      9 
-      9 
-      50 
-      10 
+      9
+      9
+      50
+      10
       0.01
       ""
       "distance<0.2"
       50)
-      
+
 
 
 
@@ -224,7 +222,7 @@ ADD_TEST(obTvHooverInstanceFilterToAttributeImage ${OBIA_TESTS1}
 
 ADD_TEST(obTuLabelImageToVectorDataFilterNew ${OBIA_TESTS1}
     otbLabelImageToVectorDataFilterNew)
-    
+
 ADD_TEST(obTvLabelImageToVectorDataFilter ${OBIA_TESTS1}
     --compare-ogr ${NOTOL}
     ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter.shp
@@ -237,7 +235,7 @@ ADD_TEST(obTvLabelImageToVectorDataFilter ${OBIA_TESTS1}
 
 ADD_TEST(obTuLabelImageToOGRDataSourceFilterNew ${OBIA_TESTS1}
     otbLabelImageToOGRDataSourceFilterNew)
-    
+
 ADD_TEST(obTvLabelImageToOGRDataSourceFilter ${OBIA_TESTS1}
     otbLabelImageToOGRDataSourceFilter
     ${INPUTDATA}/labelImage_UnsignedChar.tif

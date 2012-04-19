@@ -37,29 +37,20 @@
 
 namespace otb
 {
-template <class TInputImage, class TOutputMetricImage,class TOutputImage,class TKernel>
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::MeanShiftImageFilter2()
 {
-  m_SpatialRadius.Fill(3);
-  m_RangeRadius.Fill(9);
-  m_ImageLatticeInitialized = false;
-  m_HasConverged = false;
-  m_IterationCount = 0;
-  m_MaxIterationNumber = 4;
-  //this->SetRadius();
-  m_SpatialKernel=NULL;
-  m_RangeKernel=NULL;
-  m_Kernel=NULL;
 
-  m_SpectralBandwidth=16.;
-  m_SpatialBandwidth=8.;
+
+  m_MaxIterationNumber = 4;
+
+  m_SpatialBandwidth = 3;
+  m_RangeBandwidth=16.;
 
   m_Threshold=1e-3;
-  m_NumberOfSpatialComponents=2; //image lattice
-  //CreateKernel by default
- // m_Kernel.CreateStructuringElement();
 
+  m_NumberOfSpatialComponents=TInputImage::ImageDimension; //image lattice
 
   m_NeighborhoodHasTobeUpdated = true;
   this->SetNumberOfOutputs(4);
@@ -71,20 +62,15 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 }
 
 
-template <class TInputImage, class TOutputMetricImage, class TOutputImage, class TKernel>
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::~ MeanShiftImageFilter2()
 {
-  // if (m_Neighborhood)
-//     {
 
- //    }
-   delete[] m_Kernel;
-   delete[] m_SpatialKernel;
-   delete[] m_RangeKernel;
 }
 
 
+/*
 // to be replaced with new and generic method
 template <class TInputImage, class TOutputMetricImage, class TOutputImage, class TKernel>
 void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
@@ -186,11 +172,11 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
 
       }
 }
+*/
 
-
-template <class TInputImage, class TOutputMetricImage, class TOutputImage, class TKernel>
-const typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>::OutputImageType *
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputImageType *
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::GetSpatialOutput() const
 {
   if (this->GetNumberOfOutputs() < 1)
@@ -200,9 +186,9 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
   return static_cast<const OutputImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
 
-template <class TInputImage, class TOutputMetricImage, class TOutputImage, class TKernel>
-typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage,TOutputImage, TKernel>::OutputImageType *
-MeanShiftImageFilter2<TInputImage, TOutputMetricImage,TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputImageType *
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::GetSpatialOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
@@ -213,9 +199,9 @@ MeanShiftImageFilter2<TInputImage, TOutputMetricImage,TOutputImage, TKernel>
 }
 
 
-template <class TInputImage,  class TOutputMetricImage,class TOutputImage, class TKernel>
-const typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>::OutputImageType *
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputImageType *
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::GetRangeOutput() const
 {
   if (this->GetNumberOfOutputs() < 2)
@@ -225,9 +211,9 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
   return static_cast<const OutputImageType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template <class TInputImage, class TOutputMetricImage, class TOutputImage, class TKernel>
-typename MeanShiftImageFilter2<TInputImage, TOutputMetricImage,TOutputImage, TKernel>::OutputImageType *
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputImageType *
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::GetRangeOutput()
 {
   if (this->GetNumberOfOutputs() < 2)
@@ -238,9 +224,9 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 }
 
 
-template <class TInputImage,  class TOutputMetricImage,class TOutputImage, class TKernel>
-const typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>::OutputMetricImageType *
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputMetricImageType *
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::GetMetricOutput() const
 {
   if (this->GetNumberOfOutputs() < 3)
@@ -251,9 +237,9 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 }
 
 
-template <class TInputImage, class TOutputMetricImage, class TOutputImage, class TKernel>
-typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>::OutputMetricImageType *
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputMetricImageType *
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::GetMetricOutput()
 {
   if (this->GetNumberOfOutputs() < 3)
@@ -263,9 +249,9 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
   return static_cast<OutputMetricImageType *>(this->itk::ProcessObject::GetOutput(2));
 }
 
-template <class TInputImage,  class TOutputMetricImage,class TOutputImage, class TKernel>
-typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>::OutputIterationImageType *
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputIterationImageType *
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::GetIterationOutput()
 {
   if (this->GetNumberOfOutputs() < 4)
@@ -275,9 +261,22 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
   return static_cast<OutputIterationImageType *>(this->itk::ProcessObject::GetOutput(3));
 }
 
-template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputIterationImageType *
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
+::GetIterationOutput() const
+{
+  if (this->GetNumberOfOutputs() < 4)
+    {
+      return 0;
+    }
+  return static_cast<OutputIterationImageType *>(this->itk::ProcessObject::GetOutput(3));
+}
+
+
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::AllocateOutputs()
 {
 
@@ -301,9 +300,9 @@ MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
  }
 
 
-template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::Initialize()
  {
   // nothing to do
@@ -317,9 +316,9 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
  */
 
 
-template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -340,9 +339,9 @@ MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
 }
 
 
-template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::GenerateInputRequestedRegion()
 {
   // Call superclass implementation
@@ -369,10 +368,15 @@ MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
 
   // spatial and range radius may differ, padding must be done with the largest.
   //unsigned int largestRadius= this->GetLargestRadius();
-  InputSizeType largestRadius= this->GetLargestRadius();
+  // SHE: commented out, only the spatial radius has an effect on the input region size
+  //InputSizeType largestRadius= this->GetLargestRadius();
   // Pad by the appropriate radius
   RegionType inputRequestedRegion  = outputRequestedRegion;
-  inputRequestedRegion.PadByRadius(largestRadius);
+
+  m_SpatialKernel.SetBandwidth(m_SpatialBandwidth);
+  m_SpatialRadius.Fill(m_SpatialKernel.GetRadius());
+
+  inputRequestedRegion.PadByRadius(m_SpatialRadius);
 
   // crop the input requested region at the input's largest possible region
    if ( inputRequestedRegion.Crop(inPtr->GetLargestPossibleRegion()) )
@@ -399,9 +403,9 @@ MeanShiftImageFilter2<TInputImage, TOutputMetricImage, TOutputImage, TKernel>
 }
 
 
-template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::BeforeThreadedGenerateData()
 {
 
@@ -409,24 +413,27 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
   TOutputImage * outSpatialPtr   = this->GetSpatialOutput();
   TOutputImage * outRangePtr   = this->GetRangeOutput();
 
-  // each value is tested
-  m_HasConverged=false;
-
   //TODO define generic case for the Kernel
-  this->CreateUniformKernel();
+  //this->CreateUniformKernel();
+  m_SpatialKernel.SetBandwidth(m_SpatialBandwidth);
+  m_RangeKernel.SetBandwidth(m_RangeBandwidth);
+
+  m_SpatialRadius.Fill(m_SpatialKernel.GetRadius());
+
 }
 
 
 // returns input spatial neighborhood, range, and binary map for boundaries
-template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
-typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>::OutputMetricPixelType  MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputMetricPixelType
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::CalculateMeanShiftVector(OutputPixelType *neighborhood,OutputPixelType spatialPixel,OutputPixelType rangePixel)
  {
   //std::cout<<"calculate mean shift vector"<<std::endl;
   OutputMetricPixelType meanShiftVector;
   OutputMetricPixelType weightingMeanShiftVector;
   // Kernel*Input //
-  InputSizeType kernelSize = this->GetLargestRadius();
+  InputSizeType kernelSize = m_SpatialRadius;
 
   unsigned int numberOfPixels= kernelSize[0]*kernelSize[1];
   //std::cout<<"number of pix "<<numberOfPixels<<std::endl;
@@ -442,8 +449,6 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
 
   // use only m_Kernel : need to define a concatenate output not spatial and range
   OutputPixelType *it = neighborhood;
-  OutputPixelType *spatialIt = m_SpatialKernel;
-  OutputPixelType *rangeIt = m_RangeKernel;
 
   //std::cout<<"start processing"<<std::endl;
   double neighborhoodValue;
@@ -473,7 +478,7 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
           {
 
           neighborhoodValue = it->GetElement(comp + spatialNumberOfComponents);
-          el = (neighborhoodValue - rangePixel[comp]) / m_SpectralBandwidth;
+          el = (neighborhoodValue - rangePixel[comp]) / m_RangeBandwidth;
 
           diff += el * el;
 
@@ -509,11 +514,9 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
 
         }
       ++it;
-      ++rangeIt;
-      ++spatialIt;
       }
     }
-  
+
   for(unsigned int comp=0; comp<spatialNumberOfComponents; comp++)
     {
       if( weightingMeanShiftVector[comp]>0)
@@ -532,16 +535,17 @@ typename MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKe
 
   return meanShiftVector;
  }
-  
+
 
 // returns input spatial neighborhood, range, and binarry map for boundaries
-template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
-void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+void
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::GetNeighborhood(OutputPixelType **neighborhood,PointType latticePosition)
  {
 
   typename InputImageType::ConstPointer input = this->GetInput();
-  InputSizeType kernelSize = this->GetLargestRadius();
+  InputSizeType kernelSize = m_SpatialRadius;
 
   unsigned int numberOfPixels = kernelSize[0] * kernelSize[1];
   //std::cout<<"number of pix "<<numberOfPixels<<std::endl;
@@ -627,9 +631,9 @@ void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel
 }
 
 
-template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, int threadId)
 {
   // at the first iteration
@@ -670,18 +674,18 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
   OutputIteratorType spatialIt(spatialOutput, outputRegionForThread);
   OutputMetricIteratorType metricIt(metricOutput, outputRegionForThread);
   OutputIterationIteratorType iterationIt(iterationOutput, outputRegionForThread);
-  
+
   // fill pixel
   rangeIt.GoToBegin();
   spatialIt.GoToBegin();
   metricIt.GoToBegin();
   iterationIt.GoToBegin();
-  
+
   unsigned int spatialNumberOfComponents = spatialOutput->GetNumberOfComponentsPerPixel();
   unsigned int rangeNumberOfComponents = rangeOutput->GetNumberOfComponentsPerPixel();
   unsigned int numberOfComponents = spatialNumberOfComponents + rangeNumberOfComponents;
 
-  InputSizeType kernelSize = this->GetLargestRadius();
+  InputSizeType kernelSize = m_SpatialRadius;
   OutputPixelType *neighborhood = new OutputPixelType[kernelSize[0] * kernelSize[1]];
   unsigned int iteration = 0;
 
@@ -779,9 +783,9 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 
 
 /* after threaded convergence test */
-template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::AfterThreadedGenerateData()
 {
 
@@ -789,14 +793,14 @@ MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
 }
 
 
-template <class TInputImage,class TOutputMetricImage, class TOutputImage, class TKernel>
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Spatial radius: "                << m_SpatialRadius               << std::endl;
-  os << indent << "Range radius: "                  << m_RangeRadius                 << std::endl;
+  os << indent << "Spatial bandwidth: "                << m_SpatialBandwidth               << std::endl;
+  os << indent << "Range bandwidth: "                  << m_RangeBandwidth                 << std::endl;
  }
 
 } // end namespace otb

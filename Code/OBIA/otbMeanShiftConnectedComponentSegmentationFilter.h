@@ -94,7 +94,7 @@ public:
 
   typedef double KernelType;
   typedef otb::MeanShiftImageFilter2
-      <VectorImageType, VectorImageType, VectorImageType, KernelType>
+      <VectorImageType, VectorImageType>
   MeanShiftFilterType;
 
   typedef typename MeanShiftFilterType::Pointer MeanShiftFilterPointerType;

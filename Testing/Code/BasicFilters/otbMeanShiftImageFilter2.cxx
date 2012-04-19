@@ -24,11 +24,10 @@
 
 int otbMeanShiftImageFilter2(int argc, char * argv[])
 {
-  std::cout << "coucou" << std::endl;
-  if (argc != 12)
+  if (argc != 10)
     {
     std::cerr << "Usage: " << argv[0] <<
-    " infname spatialfname spectralfname metricfname spatialRadius spectralRadius spectralbandwidth spatialBandwidth threshold maxiterationnumber"
+    " infname spatialfname spectralfname metricfname iterationfname spatialBandwidth rangeBandwidth threshold maxiterationnumber"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -38,12 +37,10 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   const char *       spectralfname             = argv[3];
   const char *       metricfname               = argv[4];
   const char *       iterationfname            = argv[5];
-  const unsigned int spatialRadius             = atoi(argv[6]);
-  const unsigned int spectralRadius            = atoi(argv[7]);
-  const double       spectralbandwidth         = atof(argv[8]);
-  const double       spatialbandwidth          = atof(argv[9]);
-  const double       threshold                 = atof(argv[10]);
-  const unsigned int maxiterationnumber        = atoi(argv[11]);
+  const double       spatialBandwidth          = atof(argv[6]);
+  const double       rangeBandwidth            = atof(argv[7]);
+  const double       threshold                 = atof(argv[8]);
+  const unsigned int maxiterationnumber        = atoi(argv[9]);
   /* maxit - threshold */
 
   const unsigned int Dimension = 2;
@@ -52,7 +49,7 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, Dimension>          ImageType;
   typedef otb::ImageFileReader<ImageType>                 ReaderType;
   typedef otb::ImageFileWriter<ImageType>                 WriterType;
-  typedef otb::MeanShiftImageFilter2<ImageType, ImageType,ImageType,KernelType> FilterType;
+  typedef otb::MeanShiftImageFilter2<ImageType, ImageType> FilterType;
   typedef FilterType::OutputIterationImageType IterationImageType;
   typedef otb::ImageFileWriter<IterationImageType> IterationWriterType;
 
@@ -62,18 +59,9 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
 
   reader->SetFileName(infname);
 
-  //define square radius
-  ImageType::SizeType radius;
-  radius[0]=spatialRadius;
-  radius[1]=spatialRadius;
-
-  filter->SetSpatialRadius(radius);
-
-  radius[0]=spectralRadius;
-  radius[1]=spectralRadius;
-  filter->SetRangeRadius(radius);
-  filter->SetSpectralBandwidth(spectralbandwidth);
-  filter->SetSpatialBandwidth(spatialbandwidth);
+  // Set filter parameters
+  filter->SetSpatialBandwidth(spatialBandwidth);
+  filter->SetRangeBandwidth(rangeBandwidth);
   filter->SetThreshold(threshold);
   filter->SetMaxIterationNumber(maxiterationnumber);
   filter->SetInput(reader->GetOutput());

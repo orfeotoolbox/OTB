@@ -1133,7 +1133,7 @@ ADD_TEST(bfTvMeanShiftImageFilterValid ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutputValid.tif
         4 50 10 1.0
         )
-              
+
 ADD_TEST(bfTvMeanShiftImageFilter2 ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilter2
         ${INPUTDATA}/QB_Suburb.png
@@ -1141,9 +1141,9 @@ ADD_TEST(bfTvMeanShiftImageFilter2 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterSpectralOutput.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutput.tif
         ${TEMP}/bfMeanShiftImageFilterIterationOutput.tif
-        8 4 50 10 0.000001 15
+        4 10 0.000001 15
         )
-        
+
 ADD_TEST(bfTvMeanShiftVectorImageFilterValidMul ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilter
         ${INPUTDATA}/ROI_QB_MUL_4.tif
@@ -1152,9 +1152,9 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterValidMul ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutputValidMul.tif
         ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutputValidMul.tif
         4 50 10 1.0
-        )        
-     
-        
+        )
+
+
 ADD_TEST(bfTvMeanShiftImageFilter2Mul ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilter2
         ${INPUTDATA}/ROI_QB_MUL_4.tif
@@ -1162,11 +1162,11 @@ ADD_TEST(bfTvMeanShiftImageFilter2Mul ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterSpectralOutputMul.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutputMul.tif
         ${TEMP}/bfMeanShiftImageFilterIterationOutputMul.tif
-        8 4 50 10 1 100
+        4 10 1 100
         )
-        
-  
-            
+
+
+
 IF(OTB_DATA_USE_LARGEINPUT)
 #
 #ADD_TEST(bfTvMeanShiftImageFilterValidLargeInput ${BASICFILTERS_TESTS9}
@@ -1178,7 +1178,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
 #        ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutputValidLargeInput.tif
 #        9 50 10 1.0
 #        )
-        
+
 #ADD_TEST(bfTvMeanShiftImageFilter2LargeInput ${BASICFILTERS_TESTS9}
 #       otbMeanShiftImageFilter2
 #        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
@@ -1187,7 +1187,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
 #       ${TEMP}/bfMeanShiftImageFilterMetricOutputLargeInput.tif
 #        9 9 10 10 0.001 10
 #        )
-        
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 

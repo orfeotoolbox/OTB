@@ -24,7 +24,6 @@
 
 typedef float InputPixelType;
 const unsigned int Dimension = 2;
-typedef double                                          KernelType;
 typedef otb::Image<unsigned int, Dimension>             LabelImageType;
 typedef otb::Image<unsigned int, Dimension>             MaskImageType;
 
@@ -38,7 +37,7 @@ typedef otb::MeanShiftConnectedComponentSegmentationFilter
   < ImageType, MaskImageType,
     LabelImageType >  MeanShiftConnectedComponentsegmentationFilterType;
 
-typedef otb::MeanShiftImageFilter2<ImageType, ImageType,ImageType,KernelType> MeanShiftFilterType;
+typedef otb::MeanShiftImageFilter2<ImageType, ImageType> MeanShiftFilterType;
 
 
 int otbMeanShiftConnectedComponentSegmentationFilter(int argc, char * argv[])
@@ -50,17 +49,15 @@ int otbMeanShiftConnectedComponentSegmentationFilter(int argc, char * argv[])
   const char * outputFilename = argv[2];
 
   /* mean shift parameters */
-  const unsigned int spatialRadius = atoi(argv[3]);
-  const unsigned int spectralRadius = atoi(argv[4]);
-  const double spectralbandwidth = atof(argv[5]);
-  const double spatialbandwidth = atof(argv[6]);
-  const double threshold = atof(argv[7]);
+  const double spatialBandwidth = atof(argv[3]);
+  const double rangeBandwidth = atof(argv[4]);
+  const double threshold = atof(argv[5]);
 
   /* conencted component parameters */
 
-  const char * maskexpression = argv[8];
-  const char * segmentationexpression = argv[9];
-  unsigned int minobjectsize = atoi(argv[10]);
+  const char * maskexpression = argv[6];
+  const char * segmentationexpression = argv[7];
+  unsigned int minobjectsize = atoi(argv[8]);
 
    // add meanshift options
 
@@ -73,18 +70,9 @@ int otbMeanShiftConnectedComponentSegmentationFilter(int argc, char * argv[])
 
   reader->SetFileName(infname);
 
-  //define square radius
-  ImageType::SizeType radius;
-  radius[0] = spatialRadius;
-  radius[1] = spatialRadius;
+  meanShiftFilter->SetSpatialBandwidth(spatialBandwidth);
 
-  meanShiftFilter->SetSpatialRadius(radius);
-
-  radius[0] = spectralRadius;
-  radius[1] = spectralRadius;
-  meanShiftFilter->SetRangeRadius(radius);
-  meanShiftFilter->SetSpectralBandwidth(spectralbandwidth);
-  meanShiftFilter->SetSpatialBandwidth(spatialbandwidth);
+  meanShiftFilter->SetRangeBandwidth(rangeBandwidth);
   meanShiftFilter->SetThreshold(threshold);
 
   meanShiftFilter->SetInput(reader->GetOutput());
