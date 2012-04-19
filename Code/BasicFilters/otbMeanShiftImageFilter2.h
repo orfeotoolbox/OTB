@@ -37,7 +37,7 @@ namespace otb
  *
  * Mean shift is a data clustering algorithm often used in image processing and segmentation.
  * For a given pixel, the mean shift will build a set of neighboring pixels within a given spatial
- * radius (can be set using SetSpatialRadius()) and a spectral range (can be set using SetRangeRadius()).
+ * bandwidth (can be set using SetSpatialBandwidth()) and a spectral range (can be set using SetRangeBandwidth()).
  * The spatial and spectral center of this set is then computed and the algorithm iterates with this new spatial
  * and spectral center.
  *
@@ -47,8 +47,7 @@ namespace otb
  *
  *
  * GetMetricOutput() method gives mean shift vector
- *
- * The Scale parameter allows you to stretch the data dynamic
+ * GetIterationOutput() returns the number of iterations performed for each pixel.
  *
  * For more information on mean shift techniques, one might consider reading the following article:
  *
@@ -157,24 +156,20 @@ public:
   itkGetConstMacro(Threshold, double);
   itkSetMacro(Threshold, double);
 
-  /** Kernel accessors */
-  //itkSetMacro(Kernel, KernelType);
-  //itkGetConstReferenceMacro(Kernel, KernelType);
-
-  /** Return the const spatial image output */
+  /** Returns the const spatial image output */
   const OutputImageType * GetSpatialOutput() const;
-  /** Return the spectral image output */
+  /** Returns the spectral image output */
   const OutputImageType * GetRangeOutput() const;
-  /** Return the spectral image output */
+  /** Returns the mean shift vector computed at the last iteration for each pixel */
   const OutputMetricImageType * GetMetricOutput() const;
   /** Returns the number of iterations done at each pixel */
   const OutputIterationImageType * GetIterationOutput() const;
 
-  /** Return the const spatial image output */
+  /** Returns the const spatial image output */
   OutputImageType * GetSpatialOutput();
-   /** Return the spectral image output */
+   /** Returns the spectral image output */
   OutputImageType * GetRangeOutput();
-  /** Return the mean shift vector image output */
+  /** Returns the mean shift vector computed at the last iteration for each pixel */
   OutputMetricImageType * GetMetricOutput();
   /** Returns the number of iterations done at each pixel */
   OutputIterationImageType * GetIterationOutput();
@@ -210,15 +205,15 @@ protected:
   virtual void AfterThreadedGenerateData();
 
 
-  /** Allocate the outputs (need to be reimplemented since outputs have differents type) */
+  /** Allocates the outputs (need to be reimplemented since outputs have differents type) */
   virtual void AllocateOutputs();
 
   /** Constructor */
   MeanShiftImageFilter2();
-  /** destructor */
+  /** Destructor */
   virtual ~MeanShiftImageFilter2();
 
-  /**PrintSelf method */
+  /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
  //virtual void GetNeighborhood(PointType latticePosition);
@@ -257,16 +252,8 @@ private:
   /** **/
   double m_Threshold;
 
-  /** max iteration number **/
+  /** Maximum number of iterations **/
   unsigned int m_MaxIterationNumber;
-
-  /** image neighborhood is a pointer to image region **/
-  //OutputPixelType *m_Neighborhood;
-
-  /** Kernel pointer **/
-  // OutputPixelType *m_SpatialKernel;
-  // OutputPixelType *m_RangeKernel;
-  // OutputPixelType *m_Kernel;
 
   /** KernelType to be defined **/
   KernelType m_SpatialKernel;
