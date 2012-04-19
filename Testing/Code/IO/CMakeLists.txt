@@ -68,7 +68,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
       SIMUL_PHR_JP2_ORTHO_DIMAPv2_PMS-N_lossy_12bits
       SIMUL_PHR_TIFF_ORTHO_DIMAPv2_MS_lossless_8bits
       SIMUL_PHR_TIFF_PRIMARY_DIMAPv2_MS_lossy_12bits
-      JP2_PHR_DIMAPv2_PRIMARY_PMS_lossless_12bits
+      PHR_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits
    )      
 ENDIF(OTB_DATA_USE_LARGEINPUT)   
 
@@ -2250,11 +2250,15 @@ IF(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRI
 FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
   LIST(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
   MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+  STRING(REGEX MATCH "TIFF" PHR_TIFF_FILE ${current_type})
+  
+  IF (NOT PHR_TIFF_FILE)
     # CanRead
     ADD_TEST(ioTuJ2KImageIOCanRead_${current_type} ${IO_TESTS13}
              otbJPEG2000ImageIOTestCanRead
                 ${current_file}
             )
+  ENDIF (NOT PHR_TIFF_FILE)
     
     # Read info from the input file
     ADD_TEST(ioTvVectorImageReadingInfo_${current_type} ${IO_TESTS13}
@@ -2266,6 +2270,7 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
                 0
              )
 
+  IF (NOT PHR_TIFF_FILE)
     # Read info from the input file (res=5)
     ADD_TEST(ioTvVectorImageReadingInfo_${current_type}_res5 ${IO_TESTS13}
              --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
@@ -2275,7 +2280,9 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
                 ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
                 5
              )
+  ENDIF (NOT PHR_TIFF_FILE)
             
+  IF (NOT PHR_TIFF_FILE)          
     # Extract resolution of input file        
     ADD_TEST(ioTvMultiResolutionReadingInfo_${current_type} ${IO_TESTS13}
              --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingInfo_${current_type}.txt
@@ -2284,6 +2291,7 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
                 ${current_file}
                 ${TEMP}/ioTvMultiResolutionReadingInfo_${current_type}_OUT.txt
             )
+
   
     # Decode an area inside one tile
     ADD_TEST(ioTvReaderWriterJP22TIF_${current_type}_1 ${COMMON_TESTS2}
@@ -2318,6 +2326,7 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
                 -channels 1
                 -time
          )
+  ENDIF (NOT PHR_TIFF_FILE)
                            
 ENDFOREACH()
 
