@@ -25,6 +25,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include <boost/utility/enable_if.hpp>
 #include "itkIndent.h"
 #include "otbOGRFeatureWrapper.h"
+
+#include "ogr_core.h" // OGRwkbGeometryType
 class OGRLayer; // fwd declarations
 class OGRDataSource;
 class OGRGeometry;
@@ -204,6 +206,8 @@ public:
   void ReorderFields(int *map);
   void SetIgnoredFields(int *);
   //@}
+
+  OGRwkbGeometryType GetGeomType() const;
 private:
   /**
    * Internal encapsulation of \c OGRLayer::GetNextFeature().

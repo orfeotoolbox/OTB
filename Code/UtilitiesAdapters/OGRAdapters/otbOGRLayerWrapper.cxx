@@ -131,15 +131,12 @@ void otb::ogr::Layer::PrintSelf(std::ostream& os, itk::Indent indent) const
   os << indent << "+";
   if (m_Layer) // in case for odd reason the layer that should exist can't be found
     {
-    os << "Layer <" << GetName() << ">\n";
+    os << "Layer <" << GetName() << "> of "<< OGRGeometryTypeToName(GetGeomType()) <<"\n";
     indent = indent.GetNextIndent();
     BOOST_FOREACH(Feature f, *this)
       {
       f.PrintSelf(os, indent);
       }
-    // boost::for_each( // for each feature
-      // *this,
-      // boost::bind(&Feature::PrintSelf, _1, boost::ref(os), indent.GetNextIndent()));
     }
   else
     {
@@ -247,5 +244,15 @@ void otb::ogr::Layer::ReorderFields(int * map)
     itkGenericExceptionMacro(<< "Cannot reorder the fields of the layer <"
       <<GetName() <<">.");
     }
+#endif
+}
+
+OGRwkbGeometryType otb::ogr::Layer::GetGeomType() const
+{
+  assert(m_Layer && "OGRLayer not initialized");
+#if GDAL_VERSION_NUM < 1800
+  return GetLayerDefn().GetGeomType();
+#else
+  return m_Layer->GetGeomType();
 #endif
 }

@@ -61,8 +61,15 @@ otb::ogr::Feature otb::ogr::Feature::clone() const
 void otb::ogr::Feature::PrintSelf(std::ostream & os, itk::Indent indent) const
 {
   CheckInvariants();
+  const itk::Indent one_indent = itk::Indent().GetNextIndent();
+  const int nbFields = m_Feature->GetFieldCount();
   os << indent << "+";
-  os << " " << m_Feature->GetFieldCount() << " fields\n";
+  os << " " << nbFields << " fields\n";
+  for (int i=0; i!=nbFields; ++i) {
+    os << indent << "|" << one_indent << "+ ";
+    os << const_cast<Feature*>(this)->ogr().GetFieldDefnRef(i)->GetType() << ": " // << *this
+      << "\n";
+  }
 }
 
 bool otb::ogr::operator==(otb::ogr::Feature const& lhs, otb::ogr::Feature const& rhs)
@@ -76,6 +83,5 @@ bool otb::ogr::operator==(otb::ogr::Feature const& lhs, otb::ogr::Feature const&
     (l == r ) // incl. ==0
     ||
     (l && r && l->Equal(r)) // must be non-null to compare them with Equal
-   ;
+;
 }
-
