@@ -88,7 +88,7 @@ FusionOGRTileFilter<TImage>
       {
          /*std::cout<< " column tile number : " << x*y <<std::endl;
          itk::TimeProbe chrono;
-         chrono.Start();*/
+         chrono.Start(); */
   
          //First compute the intersection between polygons and the streaming line (upper stream)
          std::vector<FeatureStruct> upperStreamFeatureList;
@@ -253,7 +253,7 @@ FusionOGRTileFilter<TImage>
          }
       
       /*chrono.Stop();
-      std::cout<< "Column fusion tile took " << chrono.GetTotal() << " sec"<<std::endl;*/
+      std::cout<< "Column fusion tile took " << chrono.GetTotal() << " sec"<<std::endl; */
   
       } //end for x
    } //end for y
@@ -268,7 +268,7 @@ FusionOGRTileFilter<TImage>
       {
          /*std::cout<< " line tile number : " << x*y <<std::endl;
          itk::TimeProbe chrono;
-         chrono.Start();*/
+         chrono.Start(); */
          
          //First compute the intersection between polygons and the streaming line (upper stream)
          std::vector<FeatureStruct> upperStreamFeatureList;
@@ -431,7 +431,7 @@ FusionOGRTileFilter<TImage>
       
       
       /*chrono.Stop();
-      std::cout<< "line fusion tile took " << chrono.GetTotal() << " sec"<<std::endl;*/
+      std::cout<< "line fusion tile took " << chrono.GetTotal() << " sec"<<std::endl; */
       
       } //end for x
    } //end for y

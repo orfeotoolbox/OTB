@@ -154,7 +154,7 @@ PersistentImageToOGRDataFilter<TImage>
       /*char ** options = NULL;
       char * opt = "SPATIALITE=YES";
       options = CSLAddString(options, opt );
-      m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), &options[0]);*/
+      m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), &options[0]); */
       
       m_DataSource->CreateLayer("layer", oSRS ,wkbMultiPolygon, NULL);
       
