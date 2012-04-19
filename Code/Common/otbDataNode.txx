@@ -543,7 +543,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
     {
     case FEATURE_POINT:
     {
-    OGRPoint *ogrPoint = (OGRPoint *) OGRGeometryFactory::createGeometry(wkbPoint); ;
+    OGRPoint *ogrPoint = (OGRPoint *) OGRGeometryFactory::createGeometry(wkbPoint);
     ogrPoint->setX(dataNode->GetPoint()[0]);
     ogrPoint->setY(dataNode->GetPoint()[1]);
     return ogrPoint;
