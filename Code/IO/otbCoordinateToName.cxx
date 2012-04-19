@@ -104,10 +104,11 @@ void CoordinateToName::DoEvaluate()
   if (Utils::IsLonLatValid(m_Lon, m_Lat))
     {
     std::ostringstream urlStream;
-    urlStream << "http://ws.geonames.org/findNearbyPlaceName?lat=";
+    urlStream << "http://api.geonames.org/findNearbyPlaceName?lat=";
     urlStream << m_Lat;
     urlStream << "&lng=";
     urlStream << m_Lon;
+    urlStream << "&username=otbteam";
     otbMsgDevMacro("CoordinateToName: retrieve url " << urlStream.str());
 
     try
