@@ -248,9 +248,10 @@ public:
    * \see http://www.boost.org/doc/libs/1_49_0/libs/iterator/doc/iterator_facade.html#tutorial-example
    */
   template <class Value> class layer_iter
-    : public boost::iterator_facade<layer_iter<Value>, Value, boost::random_access_traversal_tag>
+    : public boost::iterator_facade<layer_iter<Value>, Value, boost::random_access_traversal_tag, Value>
     {
     struct enabler {};
+
     /** Const-synchronized type of the \c DataSource container.
      * \internal
      * The definition of a new series of functions \c boost::copy_const,
@@ -264,42 +265,25 @@ public:
      * So here is the hard-coded result of what \c boost::copy_const would have
      * given in order to avoid any licensing issue.
      */
-    typedef typename boost::mpl::if_
-      <boost::is_const<Value>
-      , otb::ogr::DataSource const
-      , otb::ogr::DataSource
-      >::type container_type;
+    typedef typename boost::mpl::if_ <boost::is_const<Value> , otb::ogr::DataSource const , otb::ogr::DataSource >::type
+      container_type;
   public:
-    layer_iter(container_type & datasource, size_t index)
-      : m_DataSource(&datasource), m_index(index) {}
-    layer_iter()
-      : m_DataSource(0), m_index(0) {}
+    layer_iter(container_type & datasource, size_t index);
+    layer_iter(); ;
+
     template <class OtherValue> layer_iter(
       layer_iter<OtherValue> const& other,
       typename boost::enable_if<boost::is_convertible<OtherValue*,Value*>
       , enabler
       >::type = enabler()
-    )
-      : m_DataSource(other.m_DataSource), m_index(other.m_index)
-      {}
+    );
   private:
     friend class boost::iterator_core_access;
     template <class> friend class layer_iter;
 
-    template <class OtherValue> bool equal(layer_iter<OtherValue> const& other) const
-      {
-      return m_DataSource == other.m_DataSource && other.m_index == m_index;
-      }
-    void increment()
-      {
-      assert(m_DataSource && m_index < m_DataSource->GetLayersCount() && "cannot increment past end()");
-      ++m_index;
-      }
-    Value dereference() const
-      {
-      assert(m_DataSource && m_index < m_DataSource->GetLayersCount() && "cannot dereference past end()");
-      return m_DataSource->GetLayerUnchecked(m_index);
-      }
+    template <class OtherValue> bool equal(layer_iter<OtherValue> const& other) const;
+    void increment();
+    Value dereference() const;
 
     container_type * m_DataSource;
     size_t           m_index;
@@ -316,29 +300,6 @@ public:
   iterator       begin ();
   iterator       end   ();
   //@}
-
-  /**
-   * Applies a functor on all layers.
-   * \param[in] f  functor (copied) to execute on each layer.
-   *
-   * \throw itk::ExceptionObject in case one layer can't be accessed.
-   * \throw * whatever the functor \c may throw.
-   * \note the functor is expected to receive an \c ogr::Layer by reference.
-   * \sa std::for_each
-   */
-  template <class Functor> void ForEachLayer(Functor f) const;
-
-  /**
-   * Accumulates the result of a functor on all layers.
-   * \param[in] f  functor (copied) to execute on each layer.
-   *
-   * \return the result accumulated (with +)
-   * \throw itk::ExceptionObject in case one layer can't be accessed.
-   * \throw * whatever the functor \c may throw.
-   * \note the functor is expected to receive an \c ogr::Layer by reference.
-   * \sa std::accumulate
-   */
-  template <class Functor, typename V> V AccumulateOnLayers(Functor f, V v0) const;
 
   /** Returns the number of elements in the Data Source.
    * \param[in] doForceComputation  indicates whether the size shall be
@@ -538,8 +499,7 @@ public:
    * boolean expression to be used in \c if tests.
    * \see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6
    */
-  operator int boolean ::* () const
-    {
+  operator int boolean ::* () const {
     return m_DataSource ? &boolean::i : 0;
     }
 
@@ -587,6 +547,7 @@ protected:
    * \post the \c OGRDataSource owned is released (if not null).
    */
   virtual ~DataSource();
+
   /** Prints self into stream. */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -602,6 +563,9 @@ private:
    * OGRDataSource::GetLayer().
    */
   OGRLayer* GetLayerUnchecked(size_t i);
+  /** @copydoc OGRLayer* otb::ogr::DataSource::GetLayerUnchecked(size_t i)
+   */
+  OGRLayer* GetLayerUnchecked(size_t i) const;
 
   DataSource(const Self&);             //purposely not implemented
   DataSource& operator =(const Self&); //purposely not implemented

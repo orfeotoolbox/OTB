@@ -32,11 +32,18 @@
 #include "ogrsf_frmts.h" // OGRDataSource & OGRLayer
 
 /*===========================================================================*/
-/*==============================[ other stuff ]==============================*/
+/*=========================[ otb::ogr::DataSource ]==========================*/
 /*===========================================================================*/
+// These function definitions are inline so assert() will be expanded according
+// to the compilation mode of the client code.
 
-// This implementation is inline so assert() will be expanded according to the
-// compilation mode of the client code.
+inline
+OGRDataSource & otb::ogr::DataSource::ogr()
+{
+  assert(m_DataSource && "OGRDataSource not initialized");
+  return *m_DataSource;
+}
+
 inline
 otb::ogr::Layer otb::ogr::DataSource::GetLayer(size_t i)
 {
@@ -65,47 +72,59 @@ otb::ogr::Layer const otb::ogr::DataSource::GetLayerChecked(size_t i) const
   return const_cast <DataSource*>(this)->GetLayerChecked(i);
 }
 
-template <class Functor, typename V>
 inline
-V otb::ogr::DataSource::AccumulateOnLayers(Functor f, V v0) const
+OGRLayer* otb::ogr::DataSource::GetLayerUnchecked(size_t i) const
 {
-  assert(m_DataSource && "OGRDataSource not initialized");
-  const int nbLayers = this->GetLayersCount();
-  for (int i=0; i!=nbLayers; ++i)
-    {
-    const Layer l = GetLayer(i);
-    if (!l)
-      {
-      itkExceptionMacro(<< "Failed to fetch "<< i <<"th layer from OGRDataSource");
-      }
-    v0 = f(l, v0);
-    }
-  return v0;
+  return const_cast <DataSource*>(this)->GetLayerUnchecked(i);
 }
 
-template <class Functor>
-inline
-void otb::ogr::DataSource::ForEachLayer(Functor f) const
+/*===========================================================================*/
+/*====================[ otb::ogr::DataSource/iterators ]=====================*/
+/*===========================================================================*/
+template <class Value>
+otb::ogr::DataSource::layer_iter<Value>::layer_iter(container_type & datasource, size_t index)
+: m_DataSource(&datasource), m_index(index)
+{}
+
+template <class Value>
+otb::ogr::DataSource::layer_iter<Value>::layer_iter()
+: m_DataSource(0), m_index(0)
+{}
+
+template <class Value>
+template <class OtherValue> otb::ogr::DataSource::layer_iter<Value>::layer_iter(
+  otb::ogr::DataSource::layer_iter<OtherValue> const& other,
+  typename boost::enable_if<boost::is_convertible<OtherValue*,Value*>
+  , enabler
+  >::type
+)
+: m_DataSource(other.m_DataSource), m_index(other.m_index)
+{}
+
+template <class Value>
+template <class OtherValue>
+bool otb::ogr::DataSource::layer_iter<Value>::equal(layer_iter<OtherValue> const& other) const
 {
-  assert(m_DataSource && "OGRDataSource not initialized");
-  const int nbLayers = this->GetLayersCount();
-  for (int i=0; i!=nbLayers; ++i)
-    {
-    Layer l = GetLayer(i);
-    if (!l)
-      {
-      itkExceptionMacro(<< "Failed to fetch "<< i <<"th layer from OGRDataSource");
-      }
-    f(l);
-    }
+  return m_DataSource == other.m_DataSource && other.m_index == m_index;
 }
+
+template <class Value>
+void otb::ogr::DataSource::layer_iter<Value>::increment()
+{
+  assert(m_DataSource
+    && m_index < m_DataSource->GetLayersCount()
+    && "cannot increment past end()");
+  ++m_index;
+}
+
+template <class Value>
+Value otb::ogr::DataSource::layer_iter<Value>::dereference() const
+{
+  assert(m_DataSource
+    && m_index < m_DataSource->GetLayersCount()
+    && "cannot dereference past end()");
+  return Value(m_DataSource->GetLayerUnchecked(m_index));
+}
+
 
 #endif // __otbOGRDataSourceWrapper_txx
-
-inline
-OGRDataSource & otb::ogr::DataSource::ogr()
-{
-  assert(m_DataSource && "OGRDataSource not initialized");
-  return *m_DataSource;
-}
-

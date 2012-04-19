@@ -19,7 +19,9 @@
 #include "otbOGRDataSourceWrapper.h"
 // standard includes
 #include <cassert>
+#include <numeric>
 #include <boost/bind.hpp>
+#include <boost/foreach.hpp>
 // ITK includes
 #include "itkMacro.h" // itkExceptionMacro
 #include "itkMetaDataObject.h"
@@ -125,15 +127,11 @@ otb::ogr::DataSource::New(OGRDataSource * source)
 otb::ogr::DataSource::const_iterator otb::ogr::DataSource::cbegin() const
 {
   return const_iterator(*this, 0);
-  // assert(!"not-ready");
-  // return const_iterator();
 }
 
 otb::ogr::DataSource::const_iterator otb::ogr::DataSource::cend() const
 {
   return const_iterator(*this, GetLayersCount());
-  // assert(!"not-ready");
-  // return const_iterator();
 }
 
 otb::ogr::DataSource::iterator otb::ogr::DataSource::begin()
@@ -282,7 +280,7 @@ namespace  { // Anonymous namespace
     {
     AccuLayersSizes(bool doForceComputation)
       : m_doForceComputation(doForceComputation) { }
-    int operator()(otb::ogr::Layer const& layer, int accumulated) const
+    int operator()(int accumulated, otb::ogr::Layer const& layer) const
       {
       const int loc_size = layer.GetFeatureCount(m_doForceComputation);
       return loc_size < 0 ? loc_size : loc_size+accumulated;
@@ -294,7 +292,7 @@ namespace  { // Anonymous namespace
 
 int otb::ogr::DataSource::Size(bool doForceComputation) const
 {
-  return AccumulateOnLayers(AccuLayersSizes(doForceComputation), 0);
+  return std::accumulate(begin(),end(), 0, AccuLayersSizes(doForceComputation));
 }
 
 /*===========================================================================*/
@@ -306,7 +304,10 @@ void otb::ogr::DataSource::PrintSelf(
   std::ostream& os, itk::Indent indent) const
 {
   assert(m_DataSource && "Datasource not initialized");
-  ForEachLayer(boost::bind(&Layer::PrintSelf, _1, boost::ref(os), indent.GetNextIndent()));
+  BOOST_FOREACH(Layer const l, *this)
+    {
+    l.PrintSelf(os, indent);
+    }
 }
 
 /*virtual*/ void otb::ogr::DataSource::Graft(const itk::DataObject * data)
