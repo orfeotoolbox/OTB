@@ -48,7 +48,7 @@ public:
   
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
-  itkTypeMacro(MachineLearningModel, itk::DataObject);
+  itkTypeMacro(MachineLearningModel, itk::LightObject);
 
   /** Train the machine learning model */
   virtual void Train() = 0;
