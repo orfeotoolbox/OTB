@@ -600,6 +600,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
     return polygon;
     }
     break;
+    default: break;
     }
 
   return NULL;
