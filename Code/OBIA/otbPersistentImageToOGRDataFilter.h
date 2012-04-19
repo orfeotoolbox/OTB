@@ -85,8 +85,12 @@ public:
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
   
+  /** Set/Get the Field Name of the ogr file in which labels will be written. (default is "DN")*/
   itkSetMacro(FieldName, std::string);
   itkGetMacro(FieldName, std::string);
+  
+  /** Get the size of the tile used for streaming. */
+  itkGetMacro(StreamSize, SizeType);
 
 protected:
   PersistentImageToOGRDataFilter();

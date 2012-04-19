@@ -22,6 +22,8 @@
 
 #include "ogrsf_frmts.h"
 #include <iomanip>
+#include "itkTimeProbe.h"
+
 
 namespace otb
 {
@@ -78,10 +80,16 @@ FusionOGRTileFilter<TImage>
    unsigned int nbColStream = static_cast<unsigned int>(imageSize[0] / m_StreamSize[0] + 1);
    
    //process column
+   unsigned int nbTransaction = 0;
+   inputLayer->StartTransaction();
    for(unsigned int x=1; x<=nbColStream; x++)
    {
       for(unsigned int y=1; y<=nbRowStream; y++)
       {
+         /*std::cout<< " column tile number : " << x*y <<std::endl;
+         itk::TimeProbe chrono;
+         chrono.Start();*/
+  
          //First compute the intersection between polygons and the streaming line (upper stream)
          std::vector<FeatureStruct> upperStreamFeatureList;
          upperStreamFeatureList.clear();
@@ -226,6 +234,11 @@ FusionOGRTileFilter<TImage>
                inputLayer->DeleteFeature(lower.feat->GetFID());
                inputLayer->DeleteFeature(upper.feat->GetFID());
                OGRFeature::DestroyFeature( fusionFeature );
+               if(++nbTransaction == 65536)
+               {
+                  inputLayer->CommitTransaction();
+                  inputLayer->StartTransaction();
+               }
             }
          }
          
@@ -239,14 +252,24 @@ FusionOGRTileFilter<TImage>
             OGRFeature::DestroyFeature( lowerStreamFeatureList.at(l).feat );
          }
       
+      /*chrono.Stop();
+      std::cout<< "Column fusion tile took " << chrono.GetTotal() << " sec"<<std::endl;*/
+  
       } //end for x
    } //end for y
+   inputLayer->CommitTransaction();
 
    //Process line
+   nbTransaction = 0;
+   inputLayer->StartTransaction();
    for(unsigned int y=1; y<=nbRowStream; y++)
    {
       for(unsigned int x=1; x<=nbColStream; x++)
       {
+         /*std::cout<< " line tile number : " << x*y <<std::endl;
+         itk::TimeProbe chrono;
+         chrono.Start();*/
+         
          //First compute the intersection between polygons and the streaming line (upper stream)
          std::vector<FeatureStruct> upperStreamFeatureList;
          upperStreamFeatureList.clear();
@@ -388,6 +411,11 @@ FusionOGRTileFilter<TImage>
                inputLayer->DeleteFeature(lower.feat->GetFID());
                inputLayer->DeleteFeature(upper.feat->GetFID());
                OGRFeature::DestroyFeature( fusionFeature );
+               if(++nbTransaction == 65536)
+               {
+                  inputLayer->CommitTransaction();
+                  inputLayer->StartTransaction();
+               }
             }
          }
          
@@ -401,9 +429,13 @@ FusionOGRTileFilter<TImage>
             OGRFeature::DestroyFeature( lowerStreamFeatureList.at(l).feat );
          }
       
+      
+      /*chrono.Stop();
+      std::cout<< "line fusion tile took " << chrono.GetTotal() << " sec"<<std::endl;*/
+      
       } //end for x
    } //end for y
-   
+   inputLayer->CommitTransaction();
    
    //Free memory
    OGRDataSource::DestroyDataSource(inputDataSource);

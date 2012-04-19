@@ -117,13 +117,7 @@ void
 PersistentImageToOGRDataFilter<TImage>
 ::Synthetize()
 {
-   typedef FusionOGRTileFilter<InputImageType> FusionFilterType;
-   typename FusionFilterType::Pointer filter = FusionFilterType::New();
-   
-   filter->SetInput(this->GetInput());
-   filter->SetInputFileName(this->m_FileName);
-   filter->SetStreamSize(this->m_StreamSize);
-   filter->GenerateData();
+
 }
 
 template<class TImage>
@@ -156,10 +150,18 @@ PersistentImageToOGRDataFilter<TImage>
 
       ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName.c_str());
       m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), NULL);
+      
+      /*char ** options = NULL;
+      char * opt = "SPATIALITE=YES";
+      options = CSLAddString(options, opt );
+      m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), &options[0]);*/
+      
       m_DataSource->CreateLayer("layer", oSRS ,wkbMultiPolygon, NULL);
       
       OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
       m_DataSource->GetLayer(0)->CreateField(&field, true);
+      
+      //CSLDestroy( options );
    }
    else
    {
@@ -187,6 +189,7 @@ PersistentImageToOGRDataFilter<TImage>
   unsigned int nbFeatures = poSrcLayer->GetFeatureCount(true);
   unsigned int i = 0;
   OGRFeature  *poFeature;
+  poDstLayer->StartTransaction();
   while (i<nbFeatures)
   {
       OGRFeature  *poDstFeature = NULL;
@@ -199,12 +202,19 @@ PersistentImageToOGRDataFilter<TImage>
       poDstFeature->SetFrom( poFeature, TRUE );
       poDstLayer->CreateFeature( poDstFeature );
       
+      if (i == nbFeatures-1)
+      {
+         poDstLayer->CommitTransaction();
+         poDstLayer->StartTransaction();
+      }
+      
       //free memory
       OGRFeature::DestroyFeature( poDstFeature );
       OGRFeature::DestroyFeature( poFeature );
       
       i++;
   }
+  poDstLayer->CommitTransaction();
   chrono.Stop();
   std::cout<< "write ogr tile took " << chrono.GetTotal() << " sec"<<std::endl;
   

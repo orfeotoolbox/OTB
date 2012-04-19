@@ -159,6 +159,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
      i++;
   }
   m_TileMaxLabel = m_TileMaxLabel + relabelMap.size();
+  chrono3.Stop();
   std::cout<< "relabel took " << chrono3.GetTotal() << " sec"<<std::endl;
   
   return output;
