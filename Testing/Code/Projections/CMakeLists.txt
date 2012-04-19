@@ -110,14 +110,24 @@ ADD_TEST(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelQuickbird.txt
 )
 
-ADD_TEST(prTvSensorModelPleiades ${PROJECTIONS_TESTS1}
+ADD_TEST(prTvSensorModelPleiades-PRE-TIFF ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
-         ${BASELINE_FILES}/prTvSensorModelPleiades.txt
-         ${TEMP}/prTvSensorModelPleiades.txt
+         ${BASELINE_FILES}/prTvSensorModelPleiades-PRE-TIFF.txt
+         ${TEMP}/prTvSensorModelPleiades-PRE-TIFF_OUT.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
-         ${TEMP}/prTvSensorModelPleiades.txt
+         ${LARGEINPUT}/PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF
+         ${TEMP}/prTvSensorModelPleiades-PRE-TIFF_OUT.txt
+)
+
+ADD_TEST(prTvSensorModelPleiades-JP2 ${PROJECTIONS_TESTS1}
+  --ignore-order --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelPleiades.txt
+         ${TEMP}/prTvSensorModelPleiades_OUT.txt
+         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+    otbSensorModel
+         ${LARGEINPUT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
+         ${TEMP}/prTvSensorModelPleiades_OUT.txt
 )
 
 ADD_TEST(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
@@ -912,18 +922,34 @@ ${INPUTDATA}/DEM/egm96.grd
 23 # Tolerance in meters according to DigitalGlobe specification
 )
 
+
+
 # TODO MSD need to update the tolerance values and used a real pleiades file
-ADD_TEST(prTvGenericRSTransformPleiadesToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
+ADD_TEST(prTvGenericRSTransformPleiadesToulouseGeodesicPointChecking_PRE ${PROJECTIONS_TESTS3}
 otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
-${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
+${LARGEINPUT}/PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF
 ${INPUTDATA}/DEM/srtm_directory/
 ${INPUTDATA}/DEM/egm96.grd
-27760 27230 # IGN reference point based inside CNES (site 31555A point c)
+27760 25888 # IGN reference point based inside CNES (site 31555A point c)
 1.48353 43.55968 # IGN reference point lon/lat
 192.205 # IGN reference point elevation (prec < 10 cm)
 1 # Tolerance in pixels according to values found in RPC-DIMAPv2 file (ERR_BIAS_ROW and ERR_BIAS_COL)
 1 # Tolerance in meters according to values found in RPC-DIMAPv2 file (ERR_BIAS_X and ERR_BIAS_Y)
 )
+
+# TODO MSD need to update the tolerance values and used a real pleiades file
+ADD_TEST(prTvGenericRSTransformPleiadesToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
+otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
+${LARGEINPUT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
+${INPUTDATA}/DEM/srtm_directory/
+${INPUTDATA}/DEM/egm96.grd
+20000 28010 # IGN reference point based inside CNES (site 31555A point c)
+1.48353 43.55968 # IGN reference point lon/lat
+192.205 # IGN reference point elevation (prec < 10 cm)
+1 # Tolerance in pixels according to values found in RPC-DIMAPv2 file (ERR_BIAS_ROW and ERR_BIAS_COL)
+1 # Tolerance in meters according to values found in RPC-DIMAPv2 file (ERR_BIAS_X and ERR_BIAS_Y)
+)
+
 
 # Generic Testing
 SET(GenericConversionChecking_INPUTS
@@ -942,7 +968,6 @@ SET(GenericConversionChecking_INPUTS
     #${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5
     #${LARGEINPUT}/MODIS/MOD13Q1/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf
     #${LARGEINPUT}/ONERA/spa3_0215_rad.dat
-    ${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
     #${LARGEINPUT}/RAPIDEYE/level3A/2008-12-25T005918_RE3_3A-NAC_752656_40091.tif
     )
 
@@ -962,7 +987,6 @@ SET(GenericConversionChecking_TYPES
 	#COSMOSKYMED
 	#MODIS
 	#ONERA
-	PLEIADES-PRE
 	#RAPIDEYE
 	)
 
@@ -982,7 +1006,6 @@ SET(GenericConversionChecking_TOL_PIX
 	#30
 	#30
 	#30
-	1 # MSD: need to be defined
 	#30
 	)
 
@@ -1002,7 +1025,6 @@ SET(GenericConversionChecking_TOL_M
 	30
 	#30
 	#30
-	1 # MSD: need to be defined
 	#30
 	)
 
@@ -1043,8 +1065,8 @@ SET(FWDBWDChecking_INPUTS
     #${LARGEINPUT}/MODIS/MOD13Q1/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf
     #${LARGEINPUT}/ONERA/spa3_0215_rad.dat
     #${LARGEINPUT}/RAPIDEYE/level3A/2008-12-25T005918_RE3_3A-NAC_752656_40091.tif
-    ${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
     )
+    
 SET(FWDBWDChecking_TYPES
 	QUICKBIRD
 	#SPOT4
@@ -1062,7 +1084,6 @@ SET(FWDBWDChecking_TYPES
 	#MODIS
 	#ONERA
 	#RAPIDEYE
-	PLEIADES-PRE
 	)
 SET( FWDBWDChecking_TESTNB 0)
 
