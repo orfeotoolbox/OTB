@@ -20,6 +20,7 @@
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
 #include "otbOGRLayerWrapper.h"
+
 #include <cassert>
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>

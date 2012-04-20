@@ -47,8 +47,8 @@ public:
   Feature clone() const;
   void PrintSelf(std::ostream &os, itk::Indent indent) const;
 
-  OGRFeature const& ogr() const
-    {
+  OGRFeature & ogr() const
+    { // not returning a OGRFeature const& because OGR is not const-correct
     CheckInvariants();
     return *m_Feature;
     }
@@ -57,6 +57,8 @@ public:
     CheckInvariants();
     return *m_Feature;
     }
+
+  size_t GetSize() const;
 
   friend bool otb::ogr::operator==(Feature const& lhs, Feature const& rhs);
 private:

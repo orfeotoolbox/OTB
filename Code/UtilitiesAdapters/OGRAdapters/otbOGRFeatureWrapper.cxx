@@ -24,6 +24,7 @@
 #include <boost/make_shared.hpp>
 #include "ogr_feature.h"
 
+#include "otbOGRFieldWrapper.h"
 /*===========================================================================*/
 /*======================[ Construction / Destruction ]=======================*/
 /*===========================================================================*/
@@ -66,10 +67,19 @@ void otb::ogr::Feature::PrintSelf(std::ostream & os, itk::Indent indent) const
   os << indent << "+";
   os << " " << nbFields << " fields\n";
   for (int i=0; i!=nbFields; ++i) {
-    OGRFieldDefn & field = *const_cast<Feature*>(this)->ogr().GetFieldDefnRef(i);
+    assert(ogr().GetFieldDefnRef(i));
+    Field     field(*this, i);
     os << indent << "|" << one_indent << "+ ";
-    os << field.GetNameRef() << ": ";
-    os << "(" << OGRFieldDefn::GetFieldTypeName(field.GetType()) << ")";
+    os << field.GetName() << ": ";
+    switch (field.GetType())
+      {
+      case OFTInteger: os << field.GetValue<int>(); break;
+      case OFTReal   : os << field.GetValue<double>(); break;
+    case OFTString : os << field.GetValue<std::string>();
+      break;
+    default: os << "??? -> " << field.GetType(); break;
+      }
+    os << " (" << OGRFieldDefn::GetFieldTypeName(field.GetType()) << ")";
     os << "\n";
   }
 }
@@ -86,4 +96,8 @@ bool otb::ogr::operator==(otb::ogr::Feature const& lhs, otb::ogr::Feature const&
     ||
     (l && r && l->Equal(r)) // must be non-null to compare them with Equal
 ;
+}
+
+size_t otb::ogr::Feature::GetSize() const {
+  return ogr().GetFieldCount();
 }
