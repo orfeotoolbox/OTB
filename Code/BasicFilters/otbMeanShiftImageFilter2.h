@@ -102,7 +102,6 @@ class NormL2
 };
 
 
-
 template <class TInputImage, class TOutputImage, class TKernel = KernelUniform, class TNorm = NormL2, class TOutputMetricImage = TOutputImage, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
 class ITK_EXPORT MeanShiftImageFilter2
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
@@ -237,7 +236,6 @@ private:
   //   largestRadius[1]=std::max(m_SpatialRadius[1],m_RangeRadius[1]);
   //   return largestRadius;
   // };
-
 
 
   /** Range bandwidth */

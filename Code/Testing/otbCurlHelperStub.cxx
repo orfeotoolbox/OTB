@@ -33,7 +33,7 @@ bool CurlHelperStub::TestUrlAvailability(const std::string& url) const
 
 int CurlHelperStub::RetrieveUrlInMemory(const std::string& url, std::string& output) const
 {
-  if (url.compare("http://ws.geonames.org/findNearbyPlaceName?lat=1.29&lng=103.78") == 0)
+  if (url.compare("http://api.geonames.org/findNearbyPlaceName?lat=1.29&lng=103.78&username=otbteam") == 0)
     {
     output = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
         "<geonames>\n"
@@ -58,7 +58,7 @@ int CurlHelperStub::RetrieveUrlInMemory(const std::string& url, std::string& out
 
 int CurlHelperStub::RetrieveFile(const std::ostringstream& urlStream, std::string filename) const
 {
-  if (urlStream.str().compare("http://ws.geonames.org/findNearbyPlaceName?lat=1.29&lng=103.78") == 0)
+  if (urlStream.str().compare("http://api.geonames.org/findNearbyPlaceName?lat=1.29&lng=103.78&username=otbteam") == 0)
     {
     std::ofstream file;
     file.open(filename.c_str());
