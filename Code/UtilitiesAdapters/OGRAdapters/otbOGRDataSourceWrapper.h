@@ -24,6 +24,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/is_const.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "itkVector.h"
 #include "itkPoint.h"
@@ -164,7 +165,7 @@ private:
  * - \c SetDriver() & \c GetDriver()
  * - all functions related to the reference count.
  */
-class DataSource : public itk::DataObject
+class DataSource : public itk::DataObject , public boost::noncopyable
   {
 public:
   /**\name Standard ITK typedefs */
@@ -269,7 +270,7 @@ public:
       container_type;
   public:
     layer_iter(container_type & datasource, size_t index);
-    layer_iter(); ;
+    layer_iter();
 
     template <class OtherValue> layer_iter(
       layer_iter<OtherValue> const& other,
@@ -575,6 +576,14 @@ private:
   // ImageReference  m_ImageReference;
   }; // end class DataSource
 } } // end namespace otb::ogr
+
+#if 0
+namespace boost { namespace foreach {
+  template<typename T> struct is_noncopyable; // forward declaration
+  template <>
+  struct is_noncopyable<otb::ogr::DataSource> : mpl::true_ {};
+}}
+#endif
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbOGRDataSourceWrapper.txx"

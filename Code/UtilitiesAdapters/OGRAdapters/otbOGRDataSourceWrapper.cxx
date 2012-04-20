@@ -304,7 +304,7 @@ void otb::ogr::DataSource::PrintSelf(
   std::ostream& os, itk::Indent indent) const
 {
   assert(m_DataSource && "Datasource not initialized");
-  BOOST_FOREACH(Layer const l, *this)
+  BOOST_FOREACH(Layer const& l, *this)
     {
     l.PrintSelf(os, indent);
     }
