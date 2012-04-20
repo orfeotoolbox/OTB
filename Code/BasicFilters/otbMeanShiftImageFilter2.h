@@ -113,12 +113,14 @@ public:
   typedef itk::SmartPointer<Self>                            Pointer;
   typedef itk::SmartPointer<const Self>                      ConstPointer;
 
+  typedef double                                RealType;
+
   /** Type macro */
   itkTypeMacro(MeanShiftImageFilter2, ImageToImageFilter);
   itkNewMacro(Self);
 
   /** Template parameters typedefs */
-  typedef double                                RealType;
+
   typedef TInputImage                           InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointerType;
   typedef typename InputImageType::PixelType    InputPixelType;
@@ -142,6 +144,10 @@ public:
   typedef TOutputIterationImage                 OutputIterationImageType;
 
   typedef TKernel                               KernelType;
+
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
+
+  typedef itk::VariableLengthVector<RealType>       RealVector;
 
   /** Setters / Getters */
   itkSetMacro(SpatialBandwidth, RealType);
@@ -218,7 +224,7 @@ protected:
  //virtual void GetNeighborhood(PointType latticePosition);
  virtual void GetNeighborhood(OutputPixelType **neighborhood,PointType latticePosition);
 
- virtual OutputMetricPixelType CalculateMeanShiftVector(OutputPixelType *neighbothood,OutputPixelType spatialPixel,OutputPixelType rangePixel);
+ virtual void CalculateMeanShiftVector(typename InputImageType::ConstPointer inputImagePtr, RealVector jointPixel, const OutputRegionType& outputRegion, RealVector & meanShiftVector, OutputPixelType *neighborhood, OutputPixelType spatialPixel,OutputPixelType rangePixel);
 
  // virtual void CreateUniformKernel();
 private:
@@ -259,8 +265,7 @@ private:
 
 
   bool m_NeighborhoodHasTobeUpdated;
-
-  unsigned int m_NumberOfSpatialComponents;
+  unsigned int m_NumberOfComponentsPerPixel;
 
 };
 
