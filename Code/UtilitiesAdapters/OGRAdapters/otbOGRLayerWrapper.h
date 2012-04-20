@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLayer_h
-#define __otbLayer_h
+#ifndef __otbLayerWrapper_h
+#define __otbLayerWrapper_h
 
 // #include <iosfwd> // std::ostream&
 #include <boost/shared_ptr.hpp>
@@ -232,7 +232,7 @@ private:
 } } // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbLayer.txx"
+// #include "otbLayerWrapper.txx"
 #endif
 
-#endif // __otbLayer_h
+#endif // __otbLayerWrapper_h

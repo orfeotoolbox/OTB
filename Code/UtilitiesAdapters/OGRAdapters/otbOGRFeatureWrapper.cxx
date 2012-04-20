@@ -66,9 +66,11 @@ void otb::ogr::Feature::PrintSelf(std::ostream & os, itk::Indent indent) const
   os << indent << "+";
   os << " " << nbFields << " fields\n";
   for (int i=0; i!=nbFields; ++i) {
+    OGRFieldDefn & field = *const_cast<Feature*>(this)->ogr().GetFieldDefnRef(i);
     os << indent << "|" << one_indent << "+ ";
-    os << const_cast<Feature*>(this)->ogr().GetFieldDefnRef(i)->GetType() << ": " // << *this
-      << "\n";
+    os << field.GetNameRef() << ": ";
+    os << "(" << OGRFieldDefn::GetFieldTypeName(field.GetType()) << ")";
+    os << "\n";
   }
 }
 
