@@ -57,10 +57,10 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Train()
 {
   //convert listsample to opencv matrix
-  cv::Mat cvInputSample = ListSampleToCvMat(m_InputListSample);
-  cv::Mat training_classifications;
+  const CvMat * cvInputSample = otb::ListSampleToCvMat<InputListSampleType>(this->GetInputListSample());
+  const CvMat * training_classifications;
   //Mat var_type = Mat(ATTRIBUTES_PER_SAMPLE + 1, 1, CV_8U );
-  cv::Mat var_type;
+  CvMat var_type;
   //train rf
 
   CvRTParams params = CvRTParams(m_MaxDepth, // max depth
@@ -76,10 +76,16 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
                                        m_TerminationCriteria // termination cirteria
                                       );
 
+  CvRTrees* rtree = new CvRTrees;
   rtree->train(cvInputSample, CV_ROW_SAMPLE, training_classifications,
-                     Mat(), Mat(), var_type, Mat(), params);
+	       CvMat(), CvMat(), var_type, CvMat(), params);
+  
   //convert opencv matrix to listsample
-  this->SetTargetListSample(CvMatToListSample(cvInputSample));
+  TargetListSampleType::Pointer targetListSample = TargetListSampleType::New();
+  
+  this->SetTargetListSample(otb::CvMatToListSample<TargetListSampleType>(cvInputSample));
+  
+  cv::cvReleaseMat(cvInputSample);
 }
 
 template <class TInputValue, class TOutputValue>
