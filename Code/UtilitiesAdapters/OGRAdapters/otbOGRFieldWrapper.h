@@ -35,7 +35,6 @@ class OGRFieldDefn;
 
 
 
-
 #include <iomanip>
 template <typename RT, typename CT> void print_adress(RT (CT::*p)(int))
 {
