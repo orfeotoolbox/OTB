@@ -295,9 +295,9 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("io.inleft","StereoFixed.png");
     SetDocExampleParameterValue("io.inright","StereoMoving.png");
-    SetDocExampleParameterValue("bm.mind","-10");
-    SetDocExampleParameterValue("bm.maxd","10");
-    SetDocExampleParameterValue("masking.variancet","10");
+    SetDocExampleParameterValue("bm.minhd","-10");
+    SetDocExampleParameterValue("bm.maxhd","10");
+    SetDocExampleParameterValue("mask.variancet","10");
     SetDocExampleParameterValue("io.out","MyDisparity.tif");
   }
 
