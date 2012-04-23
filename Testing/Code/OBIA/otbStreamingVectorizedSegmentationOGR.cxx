@@ -50,6 +50,14 @@ int otbStreamingVectorizedSegmentationOGRNew(int argc, char * argv[])
 
 int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
 {
+
+  if (argc != 4)
+    {
+      std::cerr << "Usage: " << argv[0];
+      std::cerr << " inputImage outputVec TileDimension" << std::endl;
+      return EXIT_FAILURE;
+    }
+
   const unsigned int spatialRadius = 9;
   const unsigned int spectralRadius = 9;
   const double spectralbandwidth = 50;
