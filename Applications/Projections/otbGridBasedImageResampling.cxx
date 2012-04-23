@@ -127,9 +127,9 @@ private:
     SetParameterDescription("grid.in","The resampling grid");
     AddParameter(ParameterType_Choice,   "grid.type", "Grid Type");
     SetParameterDescription("grid.type","Allows to choose between two grid types");
-    AddChoice("grid.type.def","Deformation  grid: G(x_out,y_out) = (x_in-x_out, y_in-y_out)");
+    AddChoice("grid.type.def","Deformation  grid: $G(x_out,y_out) = (x_in-x_out, y_in-y_out)$");
     SetParameterDescription("grid.type.def","A deformation grid contains at each grid position the offset to apply to this position in order to get to the corresponding point in the input image to resample");
-    AddChoice("grid.type.loc","Localisation grid: G(x_out,y_out) = (x_in, y_in)");
+    AddChoice("grid.type.loc","Localisation grid: $G(x_out,y_out) = (x_in, y_in)$");
     SetParameterDescription("grid.type.loc","A localisation grid contains at each grid position the corresponding position in the input image to resample");
 
     
