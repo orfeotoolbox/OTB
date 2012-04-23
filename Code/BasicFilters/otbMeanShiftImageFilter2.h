@@ -21,11 +21,6 @@
 #include "otbImage.h"
 #include "itkImageToImageFilter.h"
 #include <vcl_algorithm.h>
-/*
-#include "itkVariableLengthVector.h"
-#include "otbObjectList.h"
-#include "otbPolygon.h"
-*/
 
 
 namespace otb
@@ -108,12 +103,11 @@ class ITK_EXPORT MeanShiftImageFilter2
 {
 public:
   /** Standard class typedef */
-  typedef MeanShiftImageFilter2                               Self;
+  typedef MeanShiftImageFilter2                              Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                            Pointer;
   typedef itk::SmartPointer<const Self>                      ConstPointer;
-
-  typedef double                                RealType;
+  typedef double                                             RealType;
 
   /** Type macro */
   itkTypeMacro(MeanShiftImageFilter2, ImageToImageFilter);
@@ -141,9 +135,9 @@ public:
   typedef typename OutputMetricImageType::PixelType   OutputMetricPixelType;
   typedef typename OutputMetricImageType::RegionType  MetricRegionType;
 
-  typedef TOutputIterationImage                 OutputIterationImageType;
+  typedef TOutputIterationImage                       OutputIterationImageType;
 
-  typedef TKernel                               KernelType;
+  typedef TKernel                                     KernelType;
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
@@ -209,40 +203,23 @@ protected:
 
   virtual void AfterThreadedGenerateData();
 
-
   /** Allocates the outputs (need to be reimplemented since outputs have differents type) */
   virtual void AllocateOutputs();
 
   /** Constructor */
   MeanShiftImageFilter2();
+
   /** Destructor */
   virtual ~MeanShiftImageFilter2();
 
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- //virtual void GetNeighborhood(PointType latticePosition);
- //virtual void GetNeighborhood(OutputPixelType **neighborhood,PointType latticePosition);
-
   virtual void CalculateMeanShiftVector(typename InputImageType::ConstPointer inputImagePtr, RealVector jointPixel, const OutputRegionType& outputRegion, RealVector & meanShiftVector);
 
- // virtual void CreateUniformKernel();
 private:
   MeanShiftImageFilter2(const Self &); //purposely not implemented
   void operator =(const Self&);             //purposely not implemented
-
-  /** Initialize image lattice for spatial filtering */
-  void Initialize();
-
-  /** returns the largest radius **/
-  // InputSizeType GetLargestRadius()
-  // {
-  //   InputSizeType largestRadius;
-  //   largestRadius[0]=std::max(m_SpatialRadius[0],m_RangeRadius[0]);
-  //   largestRadius[1]=std::max(m_SpatialRadius[1],m_RangeRadius[1]);
-  //   return largestRadius;
-  // };
-
 
   /** Range bandwidth */
   RealType        m_RangeBandwidth;
@@ -253,7 +230,7 @@ private:
   /** Radius of pixel neighborhood, determined by the kernel from the spatial bandwidth  */
   InputSizeType      m_SpatialRadius;
 
-  /** **/
+  /** Threshold on the squared norm of the mean shift vector to decide when to stop iterating **/
   double m_Threshold;
 
   /** Maximum number of iterations **/
@@ -263,10 +240,7 @@ private:
   KernelType m_SpatialKernel;
   KernelType m_RangeKernel;
 
-
-  bool m_NeighborhoodHasTobeUpdated;
   unsigned int m_NumberOfComponentsPerPixel;
-
 };
 
 } // end namespace otb

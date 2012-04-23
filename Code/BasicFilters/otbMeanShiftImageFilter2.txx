@@ -23,17 +23,9 @@
 
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionIteratorWithIndex.h"
 #include "otbMacro.h"
 
-#include "itkNeighborhoodAlgorithm.h"
-#include "itkZeroFluxNeumannBoundaryCondition.h"
-//#include "itkOffset.h"
 #include "itkProgressReporter.h"
-
-#include "itkConstNeighborhoodIterator.h"
-
-//#include "msImageProcessor.h"
 
 namespace otb
 {
@@ -41,22 +33,16 @@ template <class TInputImage, class TOutputImage, class TKernel, class TNorm, cla
 MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::MeanShiftImageFilter2()
 {
-
-
   m_MaxIterationNumber = 4;
-
   m_SpatialBandwidth = 3;
   m_RangeBandwidth=16.;
-
   m_Threshold=1e-3;
 
-  m_NeighborhoodHasTobeUpdated = true;
   this->SetNumberOfOutputs(4);
   this->SetNthOutput(0, OutputImageType::New());
   this->SetNthOutput(1, OutputImageType::New());
   this->SetNthOutput(2, OutputMetricImageType::New());
   this->SetNthOutput(3, OutputIterationImageType::New());
-
 }
 
 
@@ -66,111 +52,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 {
 
 }
-
-
-/*
-// to be replaced with new and generic method
-template <class TInputImage, class TOutputMetricImage, class TOutputImage, class TKernel>
-void MeanShiftImageFilter2<TInputImage,TOutputMetricImage, TOutputImage, TKernel>
-::CreateUniformKernel()
-{
-  if(m_SpatialKernel)
-    {
-    delete[] m_SpatialKernel;
-    }
-  if(m_Kernel)
-    {
-     delete[] m_Kernel;
-    }
-  if(m_RangeKernel)
-    {
-    delete[] m_RangeKernel;
-    }
-  InputSizeType kernelSize = this->GetLargestRadius();
-
-  unsigned int numberOfPixels = kernelSize[0] * kernelSize[1];
-  //std::cout<<"number of pix "<<numberOfPixels<<std::endl;
-  unsigned int spatialNumberOfComponents =  this->GetSpatialOutput()->GetNumberOfComponentsPerPixel();
-  unsigned int rangeNumberOfComponents =this->GetRangeOutput()->GetNumberOfComponentsPerPixel();
-  unsigned int numberOfComponents = spatialNumberOfComponents + rangeNumberOfComponents;
-  // Case Uniform
-
-  // memory allocation
-  m_Kernel = new OutputPixelType[numberOfPixels];
-  m_SpatialKernel = new OutputPixelType[numberOfPixels];
-  m_RangeKernel = new OutputPixelType[numberOfPixels];
-
-  // TODO JGT : to be replaced with generic kernel
-  // no kernel defined
-
-  unsigned int kernelCenterX = (kernelSize[0] - 1) / 2;
-  unsigned int kernelCenterY = (kernelSize[1] - 1) / 2;
-
-  // test odd/even
-  unsigned int spatialMinX = (kernelSize[0] - m_SpatialRadius[0])/ 2;
-  unsigned int spatialMinY = (kernelSize[1] - m_SpatialRadius[1])/ 2;
-  unsigned int spatialMaxX = spatialMinX+m_SpatialRadius[0];
-  unsigned int spatialMaxY = spatialMinY+m_SpatialRadius[1];
-
-  OutputPixelType *spatialIt = m_SpatialKernel;
-  OutputPixelType *it = m_Kernel;
-  double spatialWeighting = 1. / (m_SpatialRadius[0] * m_SpatialRadius[1]);
-
-  for (unsigned int y = 0; y < kernelSize[1]; y++)
-    {
-    for (unsigned int x = 0; x < kernelSize[0]; x++)
-      {
-      it->SetSize(numberOfComponents);
-      it->Fill(0.);
-      spatialIt->SetSize(spatialNumberOfComponents);
-      spatialIt->Fill(0.);
-
-     if ((x >= spatialMinX) && (x < spatialMaxX) && (y >= spatialMinY) && (y < spatialMaxY))
-        {
-        spatialIt->Fill(spatialWeighting);
-        for (unsigned int comp = 0; comp < spatialNumberOfComponents; comp++)
-          {
-          it->SetElement(comp, spatialWeighting);
-          }
-        }
-      ++spatialIt;
-      ++it;
-      }
-
-    }
-
-  // test odd/even
-    unsigned int rangeMinX = (kernelSize[0] - m_RangeRadius[0])/ 2;
-    unsigned int rangeMinY = (kernelSize[1] - m_RangeRadius[1])/ 2;
-    unsigned int rangeMaxX = rangeMinX+m_RangeRadius[0];
-    unsigned int rangeMaxY = rangeMinY+m_RangeRadius[1];
-
-    OutputPixelType *rangeIt = m_RangeKernel;
-    it = m_Kernel;
-    double rangeWeighting = 1. / (m_RangeRadius[0] * m_RangeRadius[1]);
-
-    for (unsigned int y = 0; y < kernelSize[1]; y++)
-      {
-      for (unsigned int x = 0; x < kernelSize[0]; x++)
-        {
-        rangeIt->SetSize(rangeNumberOfComponents);
-        rangeIt->Fill(0.);
-
-        if ((x >= rangeMinX) && (x < rangeMaxX) && (y >= rangeMinY) && (y < rangeMaxY))
-          {
-          rangeIt->Fill(rangeWeighting);
-          for (unsigned int comp = 0; comp < rangeNumberOfComponents; comp++)
-            {
-            it->SetElement(comp+spatialNumberOfComponents, rangeWeighting);
-            }
-          }
-        ++rangeIt;
-        ++it;
-        }
-
-      }
-}
-*/
 
 template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputImageType *
@@ -301,41 +182,24 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
 MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
-::Initialize()
- {
-  // nothing to do
- }
-
-
-/* TO DO
- *
- *
- *
- */
-
-
-template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
-void
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
 
   m_NumberOfComponentsPerPixel = this->GetInput()->GetNumberOfComponentsPerPixel();
 
-
   if (this->GetSpatialOutput())
-      {
-  this->GetSpatialOutput()->SetNumberOfComponentsPerPixel(ImageDimension); // image lattice
-      }
+    {
+    this->GetSpatialOutput()->SetNumberOfComponentsPerPixel(ImageDimension); // image lattice
+    }
   if (this->GetSpatialOutput())
-       {
-  this->GetRangeOutput()->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
-       }
+    {
+    this->GetRangeOutput()->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
+    }
   if (this->GetMetricOutput())
-       {
-  this->GetMetricOutput()->SetNumberOfComponentsPerPixel(ImageDimension + m_NumberOfComponentsPerPixel); // Spectral Part + lattice
-       }
+    {
+    this->GetMetricOutput()->SetNumberOfComponentsPerPixel(ImageDimension + m_NumberOfComponentsPerPixel); // Spectral Part + lattice
+    }
 }
 
 
@@ -373,12 +237,13 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   // Pad by the appropriate radius
   RegionType inputRequestedRegion  = outputRequestedRegion;
 
+  // Initializes the kernel bandwidth to calculate its radius
   m_SpatialKernel.SetBandwidth(m_SpatialBandwidth);
   m_SpatialRadius.Fill(m_SpatialKernel.GetRadius());
 
   inputRequestedRegion.PadByRadius(m_SpatialRadius);
 
-  // crop the input requested region at the input's largest possible region
+  // Crop the input requested region at the input's largest possible region
    if ( inputRequestedRegion.Crop(inPtr->GetLargestPossibleRegion()) )
      {
      inPtr->SetRequestedRegion( inputRequestedRegion );
@@ -413,8 +278,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   TOutputImage * outSpatialPtr   = this->GetSpatialOutput();
   TOutputImage * outRangePtr   = this->GetRangeOutput();
 
-  //TODO define generic case for the Kernel
-  //this->CreateUniformKernel();
   m_SpatialKernel.SetBandwidth(m_SpatialBandwidth);
   m_RangeKernel.SetBandwidth(m_RangeBandwidth);
 
@@ -424,16 +287,13 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 }
 
 
-// returns input spatial neighborhood, range, and binary map for boundaries
+// Calculates the mean shift vector at the position given by jointPixel
 template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
-void //typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputMetricPixelType
+void
 MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::CalculateMeanShiftVector(typename InputImageType::ConstPointer inputImage, RealVector jointPixel, const OutputRegionType& outputRegion, RealVector & meanShiftVector)
  {
-//  OutputMetricPixelType meanShiftVector;
   RealVector weightingMeanShiftVector;
-
-//  unsigned int numberOfComponents   = spatialNumberOfComponents +rangeNumberOfComponents;
   double sum=0;
 
   meanShiftVector.SetSize(ImageDimension + m_NumberOfComponentsPerPixel);
@@ -451,7 +311,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   InputSizeType  regionSize;
   RegionType neighborhoodRegion;
 
-
   // Calculates current pixel neighborhood region, restricted to the output image region
   for(unsigned int comp = 0; comp < ImageDimension; ++comp)
     {
@@ -467,10 +326,10 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   neighborhoodRegion.SetIndex(regionIndex); // TODO Handle region borders
   neighborhoodRegion.SetSize(regionSize); //TODO Add +1 for each dimension
 
+  // An iterator on the neighborhood of the current pixel
   itk::ImageRegionConstIteratorWithIndex<InputImageType> it(inputImage, neighborhoodRegion);
 
   it.GoToBegin();
-
 
   while(!it.IsAtEnd())
     {
@@ -502,35 +361,30 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     isInside = diff < 1.0;
 
 
-    if (/*it->GetElement(boundaryWeightIndex) && */ isInside)
+    if (isInside)
+      {
+
+      for (unsigned int comp = 0; comp < ImageDimension; comp++)
         {
-
-        for (unsigned int comp = 0; comp < ImageDimension; comp++)
-          {
-          neighborhoodValue = it.GetIndex().GetElement(comp);
-          value = 1;
-          meanShiftVector[comp] += (neighborhoodValue) * value;
-          weightingMeanShiftVector[comp] += value;
-
-          }
-
-
-        for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
-          {
-          neighborhoodValue = it.Get().GetElement(comp);
-          value = 1;
-          meanShiftVector[ImageDimension + comp] += (neighborhoodValue) * value;
-          weightingMeanShiftVector[ImageDimension + comp] += value;
-          }
-
+        neighborhoodValue = it.GetIndex().GetElement(comp);
+        value = 1;
+        meanShiftVector[comp] += (neighborhoodValue) * value;
+        weightingMeanShiftVector[comp] += value;
         }
 
-      ++it;
+      for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
+        {
+        neighborhoodValue = it.Get().GetElement(comp);
+        value = 1;
+        meanShiftVector[ImageDimension + comp] += (neighborhoodValue) * value;
+        weightingMeanShiftVector[ImageDimension + comp] += value;
+        }
+      }
 
+    ++it;
     }
 
-
-
+  //Normalize vector by kernel total weight
   for(unsigned int comp=0; comp < ImageDimension; comp++)
     {
       if( weightingMeanShiftVector[comp]>0)
@@ -538,7 +392,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
       else
        meanShiftVector[comp]=0;
     }
-
 
   for(unsigned int comp=0; comp<m_NumberOfComponentsPerPixel; comp++)
     {
@@ -552,100 +405,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
  }
 
 
-/*
-// returns input spatial neighborhood, range, and binarry map for boundaries
-template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
-void
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
-::GetNeighborhood(OutputPixelType **neighborhood,PointType latticePosition)
- {
-
-  typename InputImageType::ConstPointer input = this->GetInput();
-  InputSizeType kernelSize = m_SpatialRadius;
-
-  unsigned int numberOfPixels = kernelSize[0] * kernelSize[1];
-  //std::cout<<"number of pix "<<numberOfPixels<<std::endl;
-  unsigned int numberOfComponents = input->GetNumberOfComponentsPerPixel();
-  RegionType requestedRegion = input->GetRequestedRegion();
-
-  InputSizeType inputSize = requestedRegion.GetSize();
-  InputIndexType inputIndex = requestedRegion.GetIndex();
-
-  // define region
-  itk::ImageRegion<2> imageRegion;
-  InputIndexType index;
-  index[0] = itk::Math::Round(latticePosition[0]);
-  index[1] = itk::Math::Round(latticePosition[1]);
-
-  InputIndexValueType xMin = index[0] - kernelSize[0] / 2;
-  InputIndexValueType xMax = xMin + kernelSize[0];
-  InputIndexValueType yMin = index[1] - kernelSize[1] / 2;
-  InputIndexValueType yMax = yMin + kernelSize[1];
-
-  InputIndexType minIndex;
-  minIndex[0] = vcl_max(xMin,inputIndex[0]); // add image index
-  minIndex[1] = vcl_max(yMin,inputIndex[1]); // add image index
-  InputIndexType maxIndex;
-  maxIndex[0] = vcl_min(xMax, static_cast<InputIndexValueType>(inputSize[0]-1+inputIndex[0])); //add image index
-  maxIndex[1] = vcl_min(yMax, static_cast<InputIndexValueType>(inputSize[1]-1+inputIndex[1])); //add image index
-
-  imageRegion.SetIndex(index);
-  SizeType size;
-  size[0] = maxIndex[0] - minIndex[0];
-  size[1] = maxIndex[1] - minIndex[1];
-  imageRegion.SetSize(size);
-
-  OutputPixelType *it = *neighborhood;
-  PointType pixelPos;
-  InputIndexType pixelIndex;
-  InputPixelType inputPixel;
-  inputPixel.SetSize(numberOfComponents);
-
-  // fill m_Neighborhood
-  unsigned int indextype = 0;
-  for (unsigned int y = 0; y < kernelSize[1]; y++)
-    {
-    for (unsigned int x = 0; x < kernelSize[0]; x++)
-      {
-      it->SetSize(numberOfComponents + 3);
-      pixelIndex[0] = xMin + x;
-      pixelIndex[1] = yMin + y;
-      pixelPos[0] = xMin + x;
-      pixelPos[1] = yMin + y;
-
-      if ((pixelPos[0] >= minIndex[0]) && (pixelPos[0] <= maxIndex[0]) && (pixelPos[1] >= minIndex[1]) && (pixelPos[1]
-          <= maxIndex[1]))
-        {
-
-        inputPixel = input->GetPixel(pixelIndex);
-
-        it->SetElement(0, pixelPos[0]);
-        it->SetElement(1, pixelPos[1]);
-        for (unsigned int comp = 0; comp < numberOfComponents; comp++)
-          {
-          it->SetElement(comp + ImageDimension, inputPixel[comp]);
-          }
-
-        it->SetElement(numberOfComponents + ImageDimension, 1.);
-        }
-      else
-        {
-        for (unsigned int comp = 0; comp < numberOfComponents; comp++)
-          {
-          it->SetElement(comp + ImageDimension, 0.);
-          }
-        it->SetElement(0, pixelPos[0]);
-        it->SetElement(1, pixelPos[1]);
-        it->SetElement(numberOfComponents + ImageDimension, 0.);
-        }
-
-      ++it;
-      indextype++;
-      }
-    }
-
-}
-*/
 
 template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
@@ -698,11 +457,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   metricIt.GoToBegin();
   iterationIt.GoToBegin();
 
-  //unsigned int rangeNumberOfComponents = rangeOutput->GetNumberOfComponentsPerPixel();
-  //unsigned int numberOfComponents = spatialNumberOfComponents + rangeNumberOfComponents;
-
-  InputSizeType kernelSize = m_SpatialRadius;
-  OutputPixelType *neighborhood = new OutputPixelType[kernelSize[0] * kernelSize[1]];
   unsigned int iteration = 0;
 
 
@@ -720,7 +474,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 
   while (!inputIt.IsAtEnd())
     {
-    bool neighborhoodHasTobeUpdated = true;
+    bool hasConverged = false;
 
     InputIndexType index = inputIt.GetIndex();
     inputPixel = inputIt.Get();
@@ -728,12 +482,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     spatialPixel = spatialIt.Get();
     metricPixel = metricIt.Get();
 
-    // spatialPixel.SetElement(0, index[0]);
-    // spatialPixel.SetElement(1, index[1]);
-
-    // TODO change the maximum value;
-
-    bool hasConverged = false;
 
     // Initialize pixel in the joint spatial-range domain
     for(unsigned int comp = 0; comp < ImageDimension; ++comp)
@@ -746,51 +494,19 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
       jointPixel.SetElement(ImageDimension+comp, inputPixel[comp]);
       }
 
-
+    iteration = 0;
     while ((iteration < m_MaxIterationNumber) && (!hasConverged))
       {
+      double meanShiftVectorSqNorm;
 
       //Calculate meanShiftVector
       this->CalculateMeanShiftVector(input, jointPixel, outputRegionForThread, meanShiftVector);
-
-
-      double sum = 0;
-
-/*
-      for (unsigned int comp = 0; comp < ImageDimension; comp++)
-        {
-        neighborhoodHasTobeUpdated = neighborhoodHasTobeUpdated || ((vcl_floor(
-                                                                                spatialPixel[comp]
-                                                                                    + meanShiftVector[comp] + 0.5)
-            - vcl_floor(spatialPixel[comp] + 0.5)) != 0);
-        spatialPixel[comp] += meanShiftVector[comp];
-        metricPixel[comp] = meanShiftVector[comp] * meanShiftVector[comp];
-        sum += metricPixel[comp];
-        }
-
-
-      for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
-        {
-
-        rangePixel[comp] += meanShiftVector[ImageDimension + comp];
-        metricPixel[ImageDimension + comp] = meanShiftVector[ImageDimension + comp]
-            * meanShiftVector[ImageDimension + comp];
-        sum += metricPixel[ImageDimension+comp];
-        }
-*/
-
-      double meanShiftVectorSqNorm;
-
       meanShiftVectorSqNorm = meanShiftVector.GetSquaredNorm();
-
       jointPixel += meanShiftVector;
 
       //TODO replace SSD Test with templated metric
       hasConverged = meanShiftVectorSqNorm < m_Threshold;
-      //hasConverged = sum < m_Threshold;
-
       iteration++;
-
       }
 
     for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
@@ -807,7 +523,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
       metricPixel[comp] = meanShiftVector[comp] * meanShiftVector[comp];
       }
 
-
     rangeIt.Set(rangePixel);
     spatialIt.Set(spatialPixel);
     metricIt.Set(metricPixel);
@@ -823,14 +538,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 
     progress.CompletedPixel();
 
-    // use iteration map
-    iteration = 0;
     }
-  if (neighborhood != NULL)
-    {
-     delete[] neighborhood;
-    }
-
 }
 
 
