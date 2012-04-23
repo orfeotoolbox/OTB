@@ -19,7 +19,7 @@
 #define __otbDisparityMapToDEMFilter_txx
 
 #include "otbDisparityMapToDEMFilter.h"
-// #include "itkImageRegionConstIterator.h"
+#include "itkImageConstIteratorWithIndex.h"
 // #include "itkImageRegionIterator.h"
 // #include "itkProgressReporter.h"
 // #include "itkConstantBoundaryCondition.h"
@@ -375,7 +375,7 @@ void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
 ::GenerateInputRequestedRegion()
 {
-  // For the epi grid : generate full buffer
+  // For the epi grid : generate full buffer here !
   TEpipolarGridImage * leftGrid = const_cast<TEpipolarGridImage*>(this->GetLeftEpipolarGridInput());
   TEpipolarGridImage * rightGrid = const_cast<TEpipolarGridImage*>(this->GetRightEpipolarGridInput());
   
@@ -496,7 +496,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     gridIndex[1] = minGridIndex[1];
     
     //we assume 3 iterations are enough to find the 4 surrounding pixels
-    for (unsigned int s=0; s<2; s++)
+    for (unsigned int s=0; s<3; s++)
       {
       gridIndexU[0] = gridIndex[0] + 1;
       gridIndexU[1] = gridIndex[1];
@@ -618,6 +618,157 @@ void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
 ::ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId)
 {
+  const TDisparityImage * horizDisp = this->GetHorizontalDisparityMapInput();
+  const TDisparityImage * vertiDisp = this->GetVerticalDisparityMapInput();
+  
+  const TInputImage * leftSensor = this->GetLeftInput();
+  const TInputImage * rightSensor = this->GetRightInput();
+  
+  RSTransformType::Pointer leftToGroundTransform = RSTransformType::New();
+  RSTransformType::Pointer rightToGroundTransform = RSTransformType::New();
+  
+  leftToGroundTransform->SetInputKeywordList(leftSensor->GetImageKeywordlist());  
+  rightToGroundTransform->SetInputKeywordList(rightSensor->GetImageKeywordlist());
+  
+  if(m_DEMDirectory!="")
+    {
+    leftToGroundTransform->SetDEMDirectory(m_DEMDirectory);
+    rightToGroundTransform->SetDEMDirectory(m_DEMDirectory);
+    }
+  if(m_GeoidFile!="")
+    {
+    leftToGroundTransform->SetGeoidFile(m_GeoidFile);
+    rightToGroundTransform->SetGeoidFile(m_GeoidFile);
+    }
+    
+  leftToGroundTransform->InstanciateTransform();
+  rightToGroundTransform->InstanciateTransform();
+  
+  const TEpipolarGridImage * leftGrid = this->GetLeftEpipolarGridInput();
+  const TEpipolarGridImage * rightGrid = this->GetRightEpipolarGridInput();
+  
+  typename TEpipolarGridImage::RegionType gridRegion = leftGrid->GetLargestPossibleRegion();
+  
+  // TODO : replace by sub region for thread
+  typename TDisparityImage::RegionType disparityRegion = horizDisp->GetRequestedRegion();
+  
+  itk::ImageRegionConstIteratorWithIndex<DisparityMapType> horizIt(horizDisp,disparityRegion);
+  itk::ImageRegionConstIteratorWithIndex<DisparityMapType> vertiIt(vertiDisp,disparityRegion);
+  
+  horizIt.GoToBegin();
+  vertiIt.GoToBegin();
+  
+  typename TDisparityImage::PointType epiPoint;
+  itk::ContinuousIndex<double,2> gridIndexConti;
+  double subPixIndex[2];
+  typename GridImageType::IndexType ulIndex, urIndex, lrIndex, llIndex;
+  typename GridImageType::PixelType ulPixel(2);
+  typename GridImageType::PixelType urPixel(2);
+  typename GridImageType::PixelType lrPixel(2);
+  typename GridImageType::PixelType llPixel(2);
+  typename GridImageType::PixelType cPixel(2);
+  
+  TDPointType sensorPoint;
+  TDPointType leftGroundHmin;
+  TDPointType leftGroundHmax;
+  TDPointType rightGroundHmin;
+  TDPointType rightGroundHmax;
+  
+  while (!horizIt.IsAtEnd() && !vertiIt.IsAtEnd())
+    {
+    // TODO : if mask, check value and skip iteration if mask value is not valid
+    
+    // compute left ray
+    horizDisp->TransformIndexToPhysicalPoint(horizIt.GetIndex(),epiPoint);
+    leftGrid->TransformPhysicalPointToContinuousIndex(epiPoint,gridIndexConti);
+    
+    ulIndex[0] = static_cast<int>(vcl_floor(gridIndexConti[0]));
+    ulIndex[1] = static_cast<int>(vcl_floor(gridIndexConti[1]));
+    if (ulIndex[0] < gridRegion.GetIndex(0)) ulIndex[0] = gridRegion.GetIndex(0);
+    if (ulIndex[1] < gridRegion.GetIndex(1)) ulIndex[1] = gridRegion.GetIndex(1);
+    if (ulIndex[0] > (gridRegion.GetIndex(0) + gridRegion.GetSize(0) - 2))
+      {
+      ulIndex[0] = gridRegion.GetIndex(0) + gridRegion.GetSize(0) - 2;
+      }
+    if (ulIndex[1] > (gridRegion.GetIndex(1) + gridRegion.GetSize(1) - 2))
+      {
+      ulIndex[1] = gridRegion.GetIndex(1) + gridRegion.GetSize(1) - 2;
+      }
+    urPixel[0] = ulIndex[0] + 1;
+    urPixel[1] = ulIndex[1];
+    lrPixel[0] = ulIndex[0] + 1;
+    lrPixel[1] = ulIndex[1] + 1;
+    llPixel[0] = ulIndex[0];
+    llPixel[1] = ulIndex[1] + 1;
+    subPixIndex[0] = gridIndexConti[0] - static_cast<double>(ulIndex[0]);
+    subPixIndex[1] = gridIndexConti[1] - static_cast<double>(ulIndex[1]);
+    
+    ulPixel = leftGrid->GetPixel(ulIndex);
+    urPixel = leftGrid->GetPixel(urIndex);
+    lrPixel = leftGrid->GetPixel(lrIndex);
+    llPixel = leftGrid->GetPixel(llIndex);
+    cPixel = (ulPixel * (1.0 - subPixIndex[0]) + urPixel * subPixIndex[0]) * (1.0 - subPixIndex[1]) +
+             (llPixel * (1.0 - subPixIndex[0]) + lrPixel * subPixIndex[0]) * subPixIndex[1];
+    
+    sensorPoint[0] = cPixel[0];
+    sensorPoint[1] = cPixel[1];
+    sensorPoint[2] = m_ElevationMin;
+    leftGroundHmin = leftToGroundTransform->TransformPoint(sensorPoint);
+    
+    sensorPoint[2] = m_ElevationMax;
+    leftGroundHmax = leftToGroundTransform->TransformPoint(sensorPoint);
+    
+    // compute right ray
+    rightGrid->TransformPhysicalPointToContinuousIndex(epiPoint,gridIndexConti);
+    
+    ulIndex[0] = static_cast<int>(vcl_floor(gridIndexConti[0]));
+    ulIndex[1] = static_cast<int>(vcl_floor(gridIndexConti[1]));
+    if (ulIndex[0] < gridRegion.GetIndex(0)) ulIndex[0] = gridRegion.GetIndex(0);
+    if (ulIndex[1] < gridRegion.GetIndex(1)) ulIndex[1] = gridRegion.GetIndex(1);
+    if (ulIndex[0] > (gridRegion.GetIndex(0) + gridRegion.GetSize(0) - 2))
+      {
+      ulIndex[0] = gridRegion.GetIndex(0) + gridRegion.GetSize(0) - 2;
+      }
+    if (ulIndex[1] > (gridRegion.GetIndex(1) + gridRegion.GetSize(1) - 2))
+      {
+      ulIndex[1] = gridRegion.GetIndex(1) + gridRegion.GetSize(1) - 2;
+      }
+    urPixel[0] = ulIndex[0] + 1;
+    urPixel[1] = ulIndex[1];
+    lrPixel[0] = ulIndex[0] + 1;
+    lrPixel[1] = ulIndex[1] + 1;
+    llPixel[0] = ulIndex[0];
+    llPixel[1] = ulIndex[1] + 1;
+    subPixIndex[0] = gridIndexConti[0] - static_cast<double>(ulIndex[0]);
+    subPixIndex[1] = gridIndexConti[1] - static_cast<double>(ulIndex[1]);
+    
+    ulPixel = rightGrid->GetPixel(ulIndex);
+    urPixel = rightGrid->GetPixel(urIndex);
+    lrPixel = rightGrid->GetPixel(lrIndex);
+    llPixel = rightGrid->GetPixel(llIndex);
+    cPixel = (ulPixel * (1.0 - subPixIndex[0]) + urPixel * subPixIndex[0]) * (1.0 - subPixIndex[1]) +
+             (llPixel * (1.0 - subPixIndex[0]) + lrPixel * subPixIndex[0]) * subPixIndex[1];
+    
+    sensorPoint[0] = cPixel[0];
+    sensorPoint[1] = cPixel[1];
+    sensorPoint[2] = m_ElevationMin;
+    rightGroundHmin = rightToGroundTransform->TransformPoint(sensorPoint);
+    
+    sensorPoint[2] = m_ElevationMax;
+    rightGroundHmax = rightToGroundTransform->TransformPoint(sensorPoint);
+    
+    // Compute ray intersection
+    
+    // Optimise position ?
+    
+    // Is point inside DEM area ?
+    
+    // Add point to its corresponding cell (keep maximum)
+    
+    ++horizIt;
+    ++vertiIt;
+    }
+  
   // TODO
 }
 
