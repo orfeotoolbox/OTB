@@ -22,6 +22,7 @@
 #include "itkVariableLengthVector.h"
 #include "itkFixedArray.h"
 #include "itkListSample.h"
+#include "otbMachineLearningModel.h"
 
 //include opencv
 #include <cv.h>       // opencv general include file
@@ -31,12 +32,12 @@ namespace otb
 {
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT RandomForestsMachineLearningModel 
-  : public itk::LightObject
+  : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:
   /** Standard class typedefs. */
-  typedef RandomForestsMachineLearningModel                          Self;
-  typedef itk::LightObject                              Superclass;
+  typedef RandomForestsMachineLearningModel             Self;
+  typedef MachineLearningModel<TInputValue, TTargetValue>                     Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
 
@@ -98,6 +99,17 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   CvRTrees * m_RFModel;
+  unsigned int m_MaxDepth;
+  unsigned int m_MinSampleCount;
+  double m_RegressionAccuracy;
+  bool m_ComputeSurrogateSplit;
+  unsigned int m_MaxNumberOfCategories;
+  float * m_Priors;
+  bool m_CalculateVariableImportance;
+  unsigned int m_MaxNumberOfVariables;
+  unsigned int m_MaxNumberOfTrees;
+  double m_ForrestAccuracy;
+  int m_TerminationCriteria;
 };
 } // end namespace otb
 
