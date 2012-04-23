@@ -627,7 +627,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   RSTransformType::Pointer leftToGroundTransform = RSTransformType::New();
   RSTransformType::Pointer rightToGroundTransform = RSTransformType::New();
   
-  leftToGroundTransform->SetInputKeywordList(leftSensor->GetImageKeywordlist());  
+  leftToGroundTransform->SetInputKeywordList(leftSensor->GetImageKeywordlist());
   rightToGroundTransform->SetInputKeywordList(rightSensor->GetImageKeywordlist());
   
   if(m_DEMDirectory!="")

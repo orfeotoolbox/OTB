@@ -110,12 +110,12 @@ TileImageFilter<TImage>
   typename ImageType::SizeType totalSize;
   totalSize.Fill(0);
 
-  for(unsigned int i = 0; i < m_Layout[0];++i)
+  for(unsigned int i = 0; i < m_Layout[0]; ++i)
     {
     totalSize[0]+=m_ColumnsSizes[i];
     }
 
-  for(unsigned int i = 0; i < m_Layout[1];++i)
+  for(unsigned int i = 0; i < m_Layout[1]; ++i)
     {
     totalSize[1]+=m_RowsSizes[i];
     }
@@ -221,13 +221,13 @@ TileImageFilter<TImage>
   typename RegionType::IndexType regionIndex = out2inRegion.GetIndex();
   
   // Compute tile offsets
-  for(unsigned int i = 0; i < tileXIndex;++i)
+  for(unsigned int i = 0; i < tileXIndex; ++i)
     {
     regionIndex[0]-=m_ColumnsSizes.at(i);
     }
 
   unsigned int tileYOffset = 0;
-  for(unsigned int i = 0; i < tileYIndex;++i)
+  for(unsigned int i = 0; i < tileYIndex; ++i)
     {
     regionIndex[1]-=m_RowsSizes.at(i);
     }
@@ -267,12 +267,12 @@ TileImageFilter<TImage>
   
 
   // Compute tile offsets
-  for(unsigned int i = 0; i < tileXIndex;++i)
+  for(unsigned int i = 0; i < tileXIndex; ++i)
     {
     regionIndex[0]+=m_ColumnsSizes.at(i);
     }
 
-  for(unsigned int i = 0; i < tileYIndex;++i)
+  for(unsigned int i = 0; i < tileYIndex; ++i)
     {
     regionIndex[1]+=m_RowsSizes.at(i);
     }

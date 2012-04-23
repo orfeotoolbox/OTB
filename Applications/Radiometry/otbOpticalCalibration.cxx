@@ -256,14 +256,14 @@ namespace otb
               m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
               m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
-	      std::ostringstream oss;
+             std::ostringstream oss;
               oss.str("");
               oss << m_AtmosphericParam;
 
-	      AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
-              oss << std::endl << std::endl << atmoTerms ;
+             AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
+              oss << std::endl << std::endl << atmoTerms;
 
-	      GetLogger()->Info("Atmospheric correction parameters : " + oss.str());
+             GetLogger()->Info("Atmospheric correction parameters : " + oss.str());
               //rescale the surface reflectance in milli-reflectance
 
               m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
