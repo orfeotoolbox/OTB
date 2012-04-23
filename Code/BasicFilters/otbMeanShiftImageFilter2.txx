@@ -428,7 +428,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void //typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputMetricPixelType
 MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
-::CalculateMeanShiftVector(typename InputImageType::ConstPointer inputImage, RealVector jointPixel, const OutputRegionType& outputRegion, RealVector & meanShiftVector, OutputPixelType *neighborhood, OutputPixelType spatialPixel,OutputPixelType rangePixel)
+::CalculateMeanShiftVector(typename InputImageType::ConstPointer inputImage, RealVector jointPixel, const OutputRegionType& outputRegion, RealVector & meanShiftVector)
  {
 //  OutputMetricPixelType meanShiftVector;
   RealVector weightingMeanShiftVector;
@@ -455,13 +455,13 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   // Calculates current pixel neighborhood region, restricted to the output image region
   for(unsigned int comp = 0; comp < ImageDimension; ++comp)
     {
-    unsigned int indexRight;
+    long int indexRight;
     inputIndex[comp] = jointPixel[comp];
 
-    regionIndex[comp] = vcl_max(outputRegion.GetIndex().GetElement(comp), static_cast<long int>(inputIndex[comp] - m_SpatialRadius[comp]));
-    indexRight = vcl_min(outputRegion.GetIndex().GetElement(comp) + outputRegion.GetSize().GetElement(comp) - 1, inputIndex[comp] + m_SpatialRadius[comp]);
+    regionIndex[comp] = vcl_max(static_cast<long int>(outputRegion.GetIndex().GetElement(comp)), static_cast<long int>(inputIndex[comp] - m_SpatialRadius[comp]));
+    indexRight = vcl_min(static_cast<long int>(outputRegion.GetIndex().GetElement(comp) + outputRegion.GetSize().GetElement(comp) - 1), static_cast<long int>(inputIndex[comp] + m_SpatialRadius[comp]));
 
-    regionSize[comp] = indexRight - inputIndex[comp] + 1;
+    regionSize[comp] = indexRight - regionIndex[comp] + 1;
     }
 
   neighborhoodRegion.SetIndex(regionIndex); // TODO Handle region borders
@@ -552,6 +552,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
  }
 
 
+/*
 // returns input spatial neighborhood, range, and binarry map for boundaries
 template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
@@ -644,7 +645,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     }
 
 }
-
+*/
 
 template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
@@ -750,7 +751,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
       {
 
       //Calculate meanShiftVector
-      this->CalculateMeanShiftVector(input, jointPixel, rangeOutput->GetLargestPossibleRegion(), meanShiftVector, neighborhood, spatialPixel, rangePixel);
+      this->CalculateMeanShiftVector(input, jointPixel, outputRegionForThread, meanShiftVector);
 
 
       double sum = 0;

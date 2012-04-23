@@ -222,9 +222,9 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
  //virtual void GetNeighborhood(PointType latticePosition);
- virtual void GetNeighborhood(OutputPixelType **neighborhood,PointType latticePosition);
+ //virtual void GetNeighborhood(OutputPixelType **neighborhood,PointType latticePosition);
 
- virtual void CalculateMeanShiftVector(typename InputImageType::ConstPointer inputImagePtr, RealVector jointPixel, const OutputRegionType& outputRegion, RealVector & meanShiftVector, OutputPixelType *neighborhood, OutputPixelType spatialPixel,OutputPixelType rangePixel);
+  virtual void CalculateMeanShiftVector(typename InputImageType::ConstPointer inputImagePtr, RealVector jointPixel, const OutputRegionType& outputRegion, RealVector & meanShiftVector);
 
  // virtual void CreateUniformKernel();
 private:
