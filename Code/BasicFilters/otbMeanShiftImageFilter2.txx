@@ -293,6 +293,7 @@ void
 MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::CalculateMeanShiftVector(typename RealVectorImageType::Pointer jointImage, RealVector jointPixel, const OutputRegionType& outputRegion, RealVector & meanShiftVector)
  {
+   unsigned int jointDimension = ImageDimension + m_NumberOfComponentsPerPixel;
   RealVector jointNeighbor;
 
   RealType weightSum = 0;
@@ -326,23 +327,27 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   it.GoToBegin();
   while(!it.IsAtEnd())
     {
-    RealVector diff;
     RealType norm2;
     RealType weight;
 
     jointNeighbor = it.Get();
 
-    // Calculate the squared norm of the difference
-    diff = jointNeighbor - jointPixel;
-
     // Compute the squared norm of the difference
     // This is the L2 norm, TODO: replace by the templated norm
-    norm2 = diff.GetSquaredNorm();
+    norm2 = 0;
+    for(unsigned int comp = 0; comp < jointDimension; comp++)
+      {
+      RealType d;
+      d = jointNeighbor[comp] - jointPixel[comp];
+      norm2 += d*d;
+      }
+
     // Compute pixel weight from kernel
     // TODO : replace by the templated kernel
     weight = (norm2 <= 1.0)? 1.0 : 0.0;
 
-    /*
+
+/*
     // The following code is an alternative way to compute norm2 and weight
     // It separates the norms of spatial and range elements
     RealType spatialNorm2;
@@ -350,7 +355,9 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     spatialNorm2 = 0;
     for (unsigned int comp = 0; comp < ImageDimension; comp++)
       {
-      spatialNorm2 += diff[comp] * diff[comp];
+      RealType d;
+      d = jointNeighbor[comp] - jointPixel[comp];
+      spatialNorm2 += d*d;
       }
 
     if(spatialNorm2 >= 1.0)
@@ -362,18 +369,24 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
       rangeNorm2 = 0;
       for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
         {
-        rangeNorm2 += diff[ImageDimension + comp] * diff[ImageDimension + comp];
+        RealType d;
+        d = jointNeighbor[ImageDimension + comp] - jointPixel[ImageDimension + comp];
+        rangeNorm2 += d*d;
         }
 
       weight = (rangeNorm2 <= 1.0)? 1.0 : 0.0;
       }
-    */
+*/
 
     // Update sum of weights
     weightSum += weight;
 
     // Update mean shift vector
-    meanShiftVector += weight * jointNeighbor;
+    for(unsigned int comp = 0; comp < jointDimension; comp++)
+      {
+      meanShiftVector[comp] += weight * jointNeighbor[comp];
+      }
+
 
     ++it;
     }
