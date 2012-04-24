@@ -177,3 +177,38 @@ OGRFeatureDefn&  otb::ogr::Feature::GetDefn() const
   CheckInvariants();
   return *m_Feature->GetDefnRef();
 }
+
+/*===========================================================================*/
+/*==============================[ Geometries ]===============================*/
+/*===========================================================================*/
+
+void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
+{
+  CheckInvariants();
+  OGRGeometry * g = geometry.release();
+  m_Feature->SetGeometryDirectly(g);
+  assert(! geometry);
+}
+
+otb::ogr::Feature::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
+{
+  CheckInvariants();
+  OGRGeometry * g = m_Feature->StealGeometry();
+  UniqueGeometryPtr res(g);
+  assert(! m_Feature->GetGeometryRef());
+  return UniqueGeometryPtr(g);
+}
+
+void otb::ogr::Feature::SetGeometry(OGRGeometry const* geometry)
+{
+  CheckInvariants();
+  // OGR copies the input geometry => should have been const
+  m_Feature->SetGeometryDirectly(const_cast <OGRGeometry*>(geometry));
+  assert(m_Feature->GetGeometryRef() == geometry);
+}
+
+OGRGeometry const* otb::ogr::Feature::GetGeometry() const
+{
+  CheckInvariants();
+  return m_Feature->GetGeometryRef();
+}

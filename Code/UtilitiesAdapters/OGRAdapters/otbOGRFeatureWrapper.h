@@ -21,6 +21,7 @@
 // #include <iosfwd> // std::ostream&
 #include <cassert>
 #include <boost/shared_ptr.hpp>
+#include <boost/interprocess/smart_ptr/unique_ptr.hpp>
 #include "itkIndent.h"
 #include "otbOGRFieldWrapper.h"
 
@@ -73,6 +74,31 @@ public:
   Field const operator[](std::string const& name) const;
   FieldDefn   GetFieldDefn(size_t index) const;
   FieldDefn   GetFieldDefn(std::string const& name) const;
+  //@}
+
+  /**\name Geometries
+   * @todo we should detect whether the official C++11 \c std::unique_ptr<> is
+   * available instead of always using <tt>boost.interprocess.unique_ptr<></tt>.
+   *
+   * @warning OGR does not provide a dedicated deleter/destroyer for \c OGRGeometry
+   * instances. As a consequence, \c OGRFeature::SetGeometryDirectly and \c
+   * OGRFeature::StealGeometry may end up trying to release the memory with the
+   * wrong allocator. They are still provided, but beware that problems may
+   * happen -- with or without this %OTB wrapping.
+   */
+  //@{
+  void SetGeometry(OGRGeometry const* geometry); // not a ref because it may be null
+  OGRGeometry const* GetGeometry() const; // not a ref because it may be null
+
+  struct JustDelete {
+    template <typename T>
+    void operator()(T* p) {delete p; }
+  };
+  typedef boost::interprocess::unique_ptr<OGRGeometry, JustDelete> UniqueGeometryPtr;
+
+  void SetGeometryDirectly(UniqueGeometryPtr geometry);
+  UniqueGeometryPtr StealGeometry();
+
   //@}
 
   friend bool otb::ogr::operator==(Feature const& lhs, Feature const& rhs);
