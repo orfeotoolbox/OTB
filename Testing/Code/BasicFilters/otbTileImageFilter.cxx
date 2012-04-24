@@ -52,7 +52,7 @@ int otbTileImageFilter(int argc, char * argv[])
   TileVectorImageFilterType::Pointer tileFilter = TileVectorImageFilterType::New();
   tileFilter->SetLayout(layout);
 
-  for(unsigned int i = 0; i<numberOfImages;++i)
+  for(unsigned int i = 0; i<numberOfImages; ++i)
     {
     if(i+4 > (unsigned int)argc)
       {

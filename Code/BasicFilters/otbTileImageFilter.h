@@ -30,7 +30,7 @@ namespace otb
  *  parameter allows to set up of the images will be patched together:
  *  it is a 2D array containing the number of images in the horizontal
  *  direction and vertical direction respectively.
- * 
+ *
  *  Images can be set using the PushBackInput() or SetInput(unsigned
  *  int, Image *) methods. Please note that input images are supposed
  *  to be set in the lexicographical order.
