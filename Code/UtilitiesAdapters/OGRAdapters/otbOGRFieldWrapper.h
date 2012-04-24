@@ -37,24 +37,9 @@ class OGRFieldDefn;
 #include "itkIndent.h"
 #include <cassert>
 
-#if 0
-#include <iomanip>
-template <typename RT, typename CT> void print_adress(RT (CT::*p)(int))
-{
-  unsigned char const * first = reinterpret_cast<unsigned char *>(&p);
-  unsigned char const * last = reinterpret_cast<unsigned char *>(&p + 1);
+namespace otb { namespace ogr {
 
-  for (; first != last; ++first)
-    {
-    std::cout << std::hex << std::setw(2) << std::setfill('0')
-      << (int)*first << ' ';
-    }
-  std::cout << "\n";
-}
-#endif
-
-
-namespace types_ { // namespace types_
+namespace metaprog { // namespace metaprog
 using namespace boost::mpl;
 typedef boost::mpl::map
   < pair<int, int_<OFTInteger> >
@@ -107,9 +92,8 @@ typedef map
   // , pair<int_<OFTStringList>,  MemberGetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
   > FieldGetters_Map;
 
-} // namespace types_
+} // namespace metaprog
 
-namespace otb { namespace ogr {
 class FieldDefn
   {
 public:
@@ -185,11 +169,11 @@ public:
 #endif
   template <typename T> T GetValue() const
     {
-    const int VALUE = boost::mpl::at<types_::FieldType_Map, T>::type::value;
-    typedef typename boost::mpl::at<types_::FieldType_Map, T>::type Kind;
+    const int VALUE = boost::mpl::at<metaprog::FieldType_Map, T>::type::value;
+    typedef typename boost::mpl::at<metaprog::FieldType_Map, T>::type Kind;
     BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
     assert(m_Definition.GetType() == Kind::value);
-    typedef typename boost::mpl::at<types_::FieldGetters_Map, Kind>::type GetterType;
+    typedef typename boost::mpl::at<metaprog::FieldGetters_Map, Kind>::type GetterType;
     BOOST_STATIC_ASSERT(!(boost::is_same<GetterType, boost::mpl::void_>::value));
     assert(m_index >= 0 && m_index < m_Feature->GetFieldCount());
     return GetterType::call(*m_Feature, m_index);
@@ -199,7 +183,9 @@ public:
 private:
   FieldDefn                       m_Definition;
   boost::shared_ptr<OGRFeature> & m_Feature;
-  size_t                          m_index; // all the fields decoding is at the wrong place (OGRFeature instead of OGRField)
+  // all the fields decoding is at the wrong place (OGRFeature instead of
+  // OGRField) => need for an index
+  size_t                          m_index;
   };
 
 } } // end namespace otb::ogr

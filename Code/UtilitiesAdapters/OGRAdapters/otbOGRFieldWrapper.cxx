@@ -28,8 +28,8 @@
 /*===========================================================================*/
 /*===========================[ Static Assertions ]===========================*/
 /*===========================================================================*/
-namespace types_
-{
+namespace otb { namespace ogr {
+namespace metaprog {
 BOOST_STATIC_ASSERT(!(boost::is_same<
   MemberGetterPtr<int,         &OGRFeature::GetFieldAsInteger>,
   MemberGetterPtr<double,      &OGRFeature::GetFieldAsDouble>
@@ -67,6 +67,7 @@ BOOST_STATIC_ASSERT(!(boost::is_same<
     >::value
 ));
 }
+} } // end namespace otb::ogr
 
 /*===========================================================================*/
 /*===============================[ FieldDefn ]===============================*/
