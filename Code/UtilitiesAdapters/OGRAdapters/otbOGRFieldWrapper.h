@@ -67,6 +67,7 @@ typedef boost::mpl::map
   > FieldType_Map;
 
 /**\ingroup GeometryInternals
+ * \class MemberGetterPtr
  * Type for hosting simple member-function pointers to field getters.
  * \tparam T type of field according to OGR API.
  * \tparam ptr_to_function member function pointer to a field getter from \c
@@ -91,6 +92,7 @@ template
     };
 
 /**\ingroup GeometryInternals
+ * \class MemberContainerGetterPtr
  * Type for hosting simple member-function pointers to list-field getters.
  * \tparam T type of field according to OGR API.
  * \tparam ptr_to_function member function pointer to a list-field getter from
