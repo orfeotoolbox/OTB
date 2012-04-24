@@ -2608,7 +2608,24 @@ ADD_TEST(bfTvPolygonizationRasterization_Index ${BASICFILTERS_TESTS15}
   ${INPUTDATA}/QB_Toulouse_labelImage_Index.tif
 )
 
+#-------- TileImageFilter --------------------------
+ADD_TEST(bfTuTileImageFilterNew ${BASICFILTERS_TESTS15}
+  otbTileImageFilterNew
+)
 
+
+ADD_TEST(bfTvTileImageFilter ${BASICFILTERS_TESTS15}
+  --compare-image ${NOTOL}
+   ${BASELINE}/bfTvTileImageFilterOutput.tif
+   ${TEMP}/bfTvTileImageFilterOutput.tif
+  otbTileImageFilter
+  2 2
+  ${TEMP}/bfTvTileImageFilterOutput.tif
+  ${INPUTDATA}/Spot5-Gloucester-before.tif
+  ${INPUTDATA}/Spot5-Gloucester-before.tif
+  ${INPUTDATA}/Spot5-Gloucester-before.tif
+  ${INPUTDATA}/Spot5-Gloucester-before.tif
+)
 
 
 # A enrichir
@@ -2903,6 +2920,7 @@ otbClampImageFilter.cxx
 otbVectorDataRasterizeFilter.cxx
 otbVectorDataToLabelImageFilter.cxx
 otbPolygonizationRasterizationTest.cxx
+otbTileImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
