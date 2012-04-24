@@ -131,3 +131,15 @@ std::ostream & otb::ogr::Field::PrintSelf(
   os << "\n";
   return os;
 }
+
+bool otb::ogr::Field::HasBeenSet() const
+{
+  assert(m_Feature);
+  return m_Feature->IsFieldSet(m_index);
+}
+
+void otb::ogr::Field::Unset() const
+{
+  assert(m_Feature);
+  m_Feature->UnsetField(m_index);
+}

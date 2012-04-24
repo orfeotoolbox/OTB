@@ -39,8 +39,20 @@ class OGRFieldDefn;
 
 namespace otb { namespace ogr {
 
+/**\ingroup Geometry
+ * \defgroup GeometryInternals Geometry Internals
+ */
+
+/**\ingroup GeometryInternals
+ * Namespace used to host internal meta-prog definitions.
+ */
 namespace metaprog { // namespace metaprog
 using namespace boost::mpl;
+
+/**\ingroup GeometryInternals
+ * Associative map of C++ types to OGR field types (\c OGRFieldType).
+ * \internal Relies on Boost.MPL
+ */
 typedef boost::mpl::map
   < pair<int, int_<OFTInteger> >
   , pair<std::vector<int>, int_<OFTIntegerList> >
@@ -54,6 +66,17 @@ typedef boost::mpl::map
   // OFTDateTime
   > FieldType_Map;
 
+/**\ingroup GeometryInternals
+ * Type for hosting simple member-function pointers to field getters.
+ * \tparam T type of field according to OGR API.
+ * \tparam ptr_to_function member function pointer to a field getter from \c
+ *         OGRFeature.
+ * \tparam FinalReturnType type of the field according to OTB wrappers (default
+ * <tt> = T</tt>)
+ *
+ * \internal
+ * This is a hack to pass a member function pointer as template-parameter.
+ */
 template
   < typename T
   , T ( OGRFeature::*ptr_to_function )(int)
@@ -67,6 +90,17 @@ template
       }
     };
 
+/**\ingroup GeometryInternals
+ * Type for hosting simple member-function pointers to list-field getters.
+ * \tparam T type of field according to OGR API.
+ * \tparam ptr_to_function member function pointer to a list-field getter from
+ * \c OGRFeature.
+ * \tparam FinalReturnType type of the list-field according to OTB wrappers
+ * (default <tt> = std::vector<T></tt>)
+ *
+ * \internal
+ * This is a hack to pass a member function pointer as template-parameter.
+ */
 template
   < typename T
   , T const* ( OGRFeature::*ptr_to_function )(int, int*)
@@ -78,11 +112,16 @@ template
       {
       int nb = 0;
       T const* raw_container = (f.*ptr_to_function)(index, &nb);
-      FinalReturnType res(raw_container+0, raw_container+nb);
+      const FinalReturnType res(raw_container+0, raw_container+nb);
       return res;
       }
     };
 
+/**\ingroup GeometryInternals
+ * Associative map of OGR field types (\c OGRFieldType) to their associated
+ * getters.
+ * \internal Relies on Boost.MPL
+ */
 typedef map
   < pair<int_<OFTInteger>,     MemberGetterPtr<int,             &OGRFeature::GetFieldAsInteger> >
   , pair<int_<OFTIntegerList>, MemberContainerGetterPtr<int,    &OGRFeature::GetFieldAsIntegerList> >
@@ -94,6 +133,14 @@ typedef map
 
 } // namespace metaprog
 
+/**\ingroup Geometry
+ * \class FieldDefn
+ * \brief Encapsulation of \c OGRFieldDefn
+ * \invariant <tt>m_definition != 0</tt>
+ * \invariant \c m_definition lifetime is of the responsability of the owning \c
+ * \c OGRFeatureDefn.
+ * \sa OGRFieldDefn
+ */
 class FieldDefn
   {
 public:
@@ -149,6 +196,13 @@ template <> struct FieldDecodingTraitsGetter<std::string>
 /*=================================[ Field ]=================================*/
 /*===========================================================================*/
 class Feature;
+/**\ingroup Geometry
+ * \class Field
+ * \brief Encapsulation of \c OGRField
+ * Instances of \c Field are expected to be built from an existing \c Feature
+ * with which they'll share their owning \c OGRFeature.
+ * \sa OGRField
+ */
 class Field
   {
 public:
@@ -159,6 +213,9 @@ public:
     { return m_Definition.GetType(); }
   std::string GetName() const
     { return m_Definition.GetName(); }
+
+  bool HasBeenSet() const;
+  void Unset() const;
 
 #if 0
   template <typename T> void SetValue(T const& v)

@@ -23,6 +23,7 @@
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 #include "ogr_feature.h"
+#include "itkMacro.h"
 
 #include "otbOGRFieldWrapper.h"
 /*===========================================================================*/
@@ -54,6 +55,18 @@ otb::ogr::Feature otb::ogr::Feature::clone() const
   CheckInvariants();
   const Feature res(m_Feature->Clone());
   return res;
+}
+
+void otb::ogr::Feature::SetFrom(Feature const& rhs, bool mustForgive)
+{
+  CheckInvariants();
+  m_Feature->SetFrom(&rhs.ogr(), mustForgive);
+}
+
+void otb::ogr::Feature::SetFrom(Feature const& rhs, int * map, bool mustForgive)
+{
+  CheckInvariants();
+  m_Feature->SetFrom(&rhs.ogr(), map, mustForgive);
 }
 
 /*===========================================================================*/
@@ -97,11 +110,70 @@ size_t otb::ogr::Feature::GetSize() const {
 
 otb::ogr::Field otb::ogr::Feature::operator[](size_t index)
 {
-    Field field(*this, index);
-    return field;
+  CheckInvariants();
+  Field field(*this, index);
+  return field;
 }
 
 otb::ogr::Field const otb::ogr::Feature::operator[](size_t index) const
 {
   return const_cast<Feature*>(this)->operator[](index);
+}
+
+otb::ogr::Field otb::ogr::Feature::operator[](std::string const& name)
+{
+  CheckInvariants();
+  int index = m_Feature->GetFieldIndex(name.c_str());
+  if (index < 0)
+    {
+    itkGenericExceptionMacro(<<"No field named <"<<name<<"> in feature");
+    }
+  return this->operator[](index);
+}
+
+otb::ogr::Field const otb::ogr::Feature::operator[](std::string const& name) const
+{
+  return const_cast<Feature*>(this)->operator[](name);
+}
+
+otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(size_t index) const
+{
+  CheckInvariants();
+  return FieldDefn(*m_Feature->GetFieldDefnRef(index));
+}
+
+otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(std::string const& name) const
+{
+  CheckInvariants();
+  int index = m_Feature->GetFieldIndex(name.c_str());
+  if (index < 0)
+    {
+    itkGenericExceptionMacro(<<"No field named <"<<name<<"> in feature");
+    }
+  return this->GetFieldDefn(index);
+}
+
+/*===========================================================================*/
+/*==============================[ Properties ]===============================*/
+/*===========================================================================*/
+long otb::ogr::Feature::GetFID() const
+{
+  CheckInvariants();
+  return m_Feature->GetFID();
+}
+
+void otb::ogr::Feature::SetFID(long fid)
+{
+  CheckInvariants();
+  const OGRErr res = m_Feature->SetFID(fid);
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<<"Cannot Set FID to "<<fid<<" for feature: " << res);
+    }
+}
+
+OGRFeatureDefn&  otb::ogr::Feature::GetDefn() const
+{
+  CheckInvariants();
+  return *m_Feature->GetDefnRef();
 }
