@@ -111,7 +111,7 @@ public:
   typedef vnl_vector<RealType>                                    VnlVectorType;
   typedef vnl_matrix<RealType>                                    VnlMatrixType;
 
-  /** Get the linear correlation used to compute Maf */
+  /** Get the linear combination used to compute Maf */
   itkGetMacro(V, VnlMatrixType);
 
   /** Get the auto-correlation associated with each Maf */
