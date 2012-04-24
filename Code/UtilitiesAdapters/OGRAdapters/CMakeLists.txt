@@ -1,13 +1,6 @@
 # Sources of non-templated classes.
 FILE(GLOB OTBOGRAdapters_SRCS "*.cxx" )
 
-# IF(OTB_USE_EXTERNAL_OSSIM)
-  # INCLUDE_DIRECTORIES( ${OSSIM_INCLUDE_DIR} )
-# ELSE(OTB_USE_EXTERNAL_OSSIM)
-  # INCLUDE_DIRECTORIES( ${OTB_SOURCE_DIR}/Utilities/otbossim/include
-                       # ${OTB_BINARY_DIR}/Utilities/otbossim/include )
-# ENDIF(OTB_USE_EXTERNAL_OSSIM)
-
 ADD_LIBRARY(OTBOGRAdapters ${OTBOGRAdapters_SRCS})
 TARGET_LINK_LIBRARIES (OTBOGRAdapters OTBCommon ${OGR_LIBRARY} ITKCommon)
 IF(OTB_LIBRARY_PROPERTIES)
@@ -25,10 +18,10 @@ ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
   FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
-  # FILE(GLOB __files3 "${CMAKE_CURRENT_BINARY_DIR}/*.h")
-  # INSTALL(FILES ${__files1} ${__files2} ${__files3}
+  FILE(GLOB __files3 "${CMAKE_CURRENT_BINARY_DIR}/*.h")
   # INSTALL(FILES ${__files1}
-  INSTALL(FILES ${__files1} ${__files2}
+  # INSTALL(FILES ${__files1} ${__files2}
+  INSTALL(FILES ${__files1} ${__files2} ${__files3}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/UtilitiesAdapters/OGRAdapters
     COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
