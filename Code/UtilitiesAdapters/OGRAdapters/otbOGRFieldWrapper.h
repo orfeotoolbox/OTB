@@ -26,14 +26,18 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/at.hpp>
 
-#include <boost/mpl/assert.hpp>
+// #include <boost/mpl/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
-// class OGRFeature;
-#include "ogr_feature.h"
+#include <boost/shared_ptr.hpp>
 class OGRFieldDefn;
+// class OGRFeature;
+#include "ogr_feature.h" // OGRFeature::*field_getters
+#include "ogr_core.h" // OGR enums
+#include "itkIndent.h"
+#include <cassert>
 
-
+#if 0
 #include <iomanip>
 template <typename RT, typename CT> void print_adress(RT (CT::*p)(int))
 {
@@ -47,9 +51,10 @@ template <typename RT, typename CT> void print_adress(RT (CT::*p)(int))
     }
   std::cout << "\n";
 }
+#endif
 
 
-namespace types_ { // Anonymous namespace
+namespace types_ { // namespace types_
 using namespace boost::mpl;
 typedef boost::mpl::map
   < pair<int, int_<OFTInteger> >
@@ -58,87 +63,65 @@ typedef boost::mpl::map
   , pair<std::vector<double>, int_<OFTRealList> >
   , pair<std::string, int_<OFTString> >
   , pair<std::vector<std::string>, int_<OFTStringList> >
+  // OFTBinary
+  // OFTDate
+  // OFTTime
+  // OFTDateTime
   > FieldType_Map;
 
 template
   < typename T
   , T ( OGRFeature::*ptr_to_function )(int)
   , typename FinalReturnType = T
-  > class member_function_get_ptr
+  > class MemberGetterPtr
     {
   public:
     static FinalReturnType call(OGRFeature &f, int index)
       {
-      // print_adress(ptr_to_function);
-      // print_adress(&OGRFeature::GetFieldAsString);
       return (f.*ptr_to_function)(index);
       }
     };
 
+template
+  < typename T
+  , T const* ( OGRFeature::*ptr_to_function )(int, int*)
+  , typename FinalReturnType = std::vector<T>
+  > class MemberContainerGetterPtr
+    {
+  public:
+    static FinalReturnType call(OGRFeature &f, int index)
+      {
+      int nb = 0;
+      T const* raw_container = (f.*ptr_to_function)(index, &nb);
+      FinalReturnType res(raw_container+0, raw_container+nb);
+      return res;
+      }
+    };
+
 typedef map
-  < pair<int_<OFTInteger>, member_function_get_ptr<int,         &OGRFeature::GetFieldAsInteger> >
-  , pair<int_<OFTReal>,    member_function_get_ptr<double,      &OGRFeature::GetFieldAsDouble> >
-  , pair<int_<OFTString>,  member_function_get_ptr<char const*, &OGRFeature::GetFieldAsString, std::string> >
+  < pair<int_<OFTInteger>,     MemberGetterPtr<int,             &OGRFeature::GetFieldAsInteger> >
+  , pair<int_<OFTIntegerList>, MemberContainerGetterPtr<int,    &OGRFeature::GetFieldAsIntegerList> >
+  , pair<int_<OFTReal>,        MemberGetterPtr<double,          &OGRFeature::GetFieldAsDouble> >
+  , pair<int_<OFTRealList>,    MemberContainerGetterPtr<double, &OGRFeature::GetFieldAsDoubleList> >
+  , pair<int_<OFTString>,      MemberGetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
+  // , pair<int_<OFTStringList>,  MemberGetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
   > FieldGetters_Map;
 
-BOOST_STATIC_ASSERT(!(boost::is_same<
-  member_function_get_ptr<int,         &OGRFeature::GetFieldAsInteger>,
-  member_function_get_ptr<double,      &OGRFeature::GetFieldAsDouble>
-  >::value
-  ));
-
-BOOST_STATIC_ASSERT(!(boost::is_same< int, float >::value));
-BOOST_STATIC_ASSERT(!(boost::is_same<
-  int_<OFTReal  >::type,
-  int_<OFTString>::type
-  >::value
-  ));
-BOOST_STATIC_ASSERT(!(boost::is_same<
-  at<FieldType_Map,  float>,
-  void_
-  >::value
-  ));
-BOOST_STATIC_ASSERT(!(boost::is_same<
-  at<FieldType_Map,  double>,
-  int_<OFTReal>
-  >::value
-  ));
-BOOST_STATIC_ASSERT(!(boost::is_same<
-  at<FieldType_Map,  double >::type,
-  at<FieldType_Map,  int >::type
-  >::value
-  ));
-BOOST_STATIC_ASSERT((
-  at<FieldType_Map,  double>::type::value !=
-  at<FieldType_Map,  int   >::type::value
-  ));
-BOOST_STATIC_ASSERT(!(boost::is_same<
-  at<FieldGetters_Map, int_<OFTReal> >,
-  at<FieldGetters_Map, int_<OFTString> >
-  >::value
-  ));
-} // Anonymous namespace
+} // namespace types_
 
 namespace otb { namespace ogr {
 class FieldDefn
   {
 public:
   FieldDefn(OGRFieldDefn& definition) : m_definition(&definition){ }
-  std::string  GetName() const
-    {
-    assert(m_definition);
-    return m_definition->GetNameRef();
-    }
-  OGRFieldType GetType() const
-    {
-    assert(m_definition);
-    return m_definition->GetType();
-    }
+  std::string  GetName() const;
+  OGRFieldType GetType() const;
 
 private:
   OGRFieldDefn * m_definition;
   };
 
+#if 0
 template <typename FieldType> struct FieldDecodingTraitsGetter {};
 template <typename FieldType> struct FieldDecodingTraits
   {
@@ -153,7 +136,7 @@ template <typename FieldType> struct FieldDecodingTraits
 template <> struct FieldDecodingTraitsGetter<int>
   {
   typedef int Type;
-  static Type Get(OGRFeature &f, int index)
+  static Type Get(OGRFeature &f, size_t index)
     {
     return f.GetFieldAsInteger(index);
     }
@@ -162,7 +145,7 @@ template <> struct FieldDecodingTraitsGetter<int>
 template <> struct FieldDecodingTraitsGetter<double>
   {
   typedef double Type;
-  static Type Get(OGRFeature &f, int index)
+  static Type Get(OGRFeature &f, size_t index)
     {
     return f.GetFieldAsDouble(index);
     }
@@ -171,25 +154,21 @@ template <> struct FieldDecodingTraitsGetter<double>
 template <> struct FieldDecodingTraitsGetter<std::string>
   {
   typedef std::string Type;
-  static Type Get(OGRFeature &f, int index)
+  static Type Get(OGRFeature &f, size_t index)
     {
     return f.GetFieldAsString(index);
     }
   };
+#endif
 
 /*===========================================================================*/
 /*=================================[ Field ]=================================*/
 /*===========================================================================*/
+class Feature;
 class Field
   {
 public:
-  Field(Feature const& feature, int index)
-    :   m_Definition(*feature.ogr().GetFieldDefnRef(index))
-      , m_Feature(feature)
-      , m_index(index)
-  {
-  assert(feature.ogr().GetFieldDefnRef(index));
-  }
+  Field(Feature & feature, size_t index);
   // Field(OGRFeature& field, FieldDefn const& definition);
   FieldDefn const& GetDefinition() const;
   OGRFieldType GetType() const
@@ -208,32 +187,19 @@ public:
     {
     const int VALUE = boost::mpl::at<types_::FieldType_Map, T>::type::value;
     typedef typename boost::mpl::at<types_::FieldType_Map, T>::type Kind;
-    BOOST_STATIC_ASSERT(!(boost::is_same< Kind, boost::mpl::void_ >::value));
+    BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
     assert(m_Definition.GetType() == Kind::value);
-    typedef typename boost::mpl::at< types_::FieldGetters_Map, Kind >::type function_;
-    BOOST_STATIC_ASSERT(!(boost::is_same< function_, boost::mpl::void_ >::value));
-    assert(m_index >= 0 && m_index < m_Feature.GetSize());
-    return function_::call(m_Feature.ogr(), m_index);
-    // return FieldDecodingTraitsGetter<T>::Get(m_Feature.ogr(), m_index);
+    typedef typename boost::mpl::at<types_::FieldGetters_Map, Kind>::type GetterType;
+    BOOST_STATIC_ASSERT(!(boost::is_same<GetterType, boost::mpl::void_>::value));
+    assert(m_index >= 0 && m_index < m_Feature->GetFieldCount());
+    return GetterType::call(*m_Feature, m_index);
     }
-#if 0
-  std::ostream & PrintSelf(std::ostream&os, itk::Indent indent) {
-    os << indent;
-    switch (GetType)
-      {
-machin_int:
-      os << GetValue<int>();
-      break;
-    default:
 
-      }
-    return os;
-  }
-#endif
+  std::ostream & PrintSelf(std::ostream&os, itk::Indent indent) const;
 private:
-  FieldDefn  m_Definition;
-  Feature    m_Feature;
-  int        m_index; // all the fields decoding is at the wrong place (OGRFeature instead of OGRField)
+  FieldDefn                       m_Definition;
+  boost::shared_ptr<OGRFeature> & m_Feature;
+  size_t                          m_index; // all the fields decoding is at the wrong place (OGRFeature instead of OGRField)
   };
 
 } } // end namespace otb::ogr

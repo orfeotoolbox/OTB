@@ -22,6 +22,7 @@
 #include <cassert>
 #include <boost/shared_ptr.hpp>
 #include "itkIndent.h"
+#include "otbOGRFieldWrapper.h"
 
 class OGRFeature;
 class OGRGeometry;
@@ -47,27 +48,22 @@ public:
   Feature clone() const;
   void PrintSelf(std::ostream &os, itk::Indent indent) const;
 
-  OGRFeature & ogr() const
-    { // not returning a OGRFeature const& because OGR is not const-correct
-    CheckInvariants();
-    return *m_Feature;
-    }
-  OGRFeature & ogr()
-    {
-    CheckInvariants();
-    return *m_Feature;
-    }
+  OGRFeature & ogr() const;
+  OGRFeature & ogr();
+  boost::shared_ptr<OGRFeature>      & sptr()       {return m_Feature; }
+  boost::shared_ptr<OGRFeature> const& sptr() const {return m_Feature; }
 
+  /**\name Fields */
+  //@{
   size_t GetSize() const;
+  Field       operator[](size_t index);
+  Field const operator[](size_t index) const;
+  //@}
 
   friend bool otb::ogr::operator==(Feature const& lhs, Feature const& rhs);
 private:
-  void CheckInvariants() const
-    {
-    assert(m_Feature && "OGRFeature can't be null");
-    }
+  void CheckInvariants() const;
   boost::shared_ptr<OGRFeature> m_Feature;
-
   };
 
 
@@ -76,7 +72,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbOGRFeatureWrapper.txx"
+#include "otbOGRFeatureWrapper.txx"
 #endif
 
 #endif // __otbOGRFeatureWrapper_h

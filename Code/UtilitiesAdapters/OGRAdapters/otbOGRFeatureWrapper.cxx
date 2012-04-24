@@ -62,26 +62,16 @@ otb::ogr::Feature otb::ogr::Feature::clone() const
 void otb::ogr::Feature::PrintSelf(std::ostream & os, itk::Indent indent) const
 {
   CheckInvariants();
-  const itk::Indent one_indent = itk::Indent().GetNextIndent();
-  const int nbFields = m_Feature->GetFieldCount();
+  const size_t nbFields = m_Feature->GetFieldCount();
   os << indent << "+";
   os << " " << nbFields << " fields\n";
-  for (int i=0; i!=nbFields; ++i) {
+  indent = indent.GetNextIndent();
+  for (size_t i=0; i!=nbFields; ++i)
+    {
     assert(ogr().GetFieldDefnRef(i));
-    Field     field(*this, i);
-    os << indent << "|" << one_indent << "+ ";
-    os << field.GetName() << ": ";
-    switch (field.GetType())
-      {
-      case OFTInteger: os << field.GetValue<int>(); break;
-      case OFTReal   : os << field.GetValue<double>(); break;
-    case OFTString : os << field.GetValue<std::string>();
-      break;
-    default: os << "??? -> " << field.GetType(); break;
-      }
-    os << " (" << OGRFieldDefn::GetFieldTypeName(field.GetType()) << ")";
-    os << "\n";
-  }
+    Field const& field = (*this)[i];
+    field.PrintSelf(os, indent);
+    }
 }
 
 bool otb::ogr::operator==(otb::ogr::Feature const& lhs, otb::ogr::Feature const& rhs)
@@ -98,6 +88,20 @@ bool otb::ogr::operator==(otb::ogr::Feature const& lhs, otb::ogr::Feature const&
 ;
 }
 
+/*===========================================================================*/
+/*================================[ Fields ]=================================*/
+/*===========================================================================*/
 size_t otb::ogr::Feature::GetSize() const {
   return ogr().GetFieldCount();
+}
+
+otb::ogr::Field otb::ogr::Feature::operator[](size_t index)
+{
+    Field field(*this, index);
+    return field;
+}
+
+otb::ogr::Field const otb::ogr::Feature::operator[](size_t index) const
+{
+  return const_cast<Feature*>(this)->operator[](index);
 }
