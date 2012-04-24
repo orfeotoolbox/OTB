@@ -2621,10 +2621,10 @@ ADD_TEST(bfTvTileImageFilter ${BASICFILTERS_TESTS15}
   otbTileImageFilter
   2 2
   ${TEMP}/bfTvTileImageFilterOutput.tif
-  ${INPUTDATA}/Spot5-Gloucester-before.tif
-  ${INPUTDATA}/Spot5-Gloucester-before.tif
-  ${INPUTDATA}/Spot5-Gloucester-before.tif
-  ${INPUTDATA}/Spot5-Gloucester-before.tif
+  ${INPUTDATA}/ROI_QB_MUL_4.tif
+  ${INPUTDATA}/ROI_QB_MUL_4.tif  
+  ${INPUTDATA}/ROI_QB_MUL_4.tif  
+  ${INPUTDATA}/ROI_QB_MUL_4.tif
 )
 
 
