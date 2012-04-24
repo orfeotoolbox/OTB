@@ -141,7 +141,9 @@ public:
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
-  typedef itk::VariableLengthVector<RealType>       RealVector;
+  typedef itk::VariableLengthVector<RealType>         RealVector;
+
+  typedef itk::VectorImage<RealType, InputImageType::ImageDimension> RealVectorImageType;
 
   /** Setters / Getters */
   itkSetMacro(SpatialBandwidth, RealType);
@@ -215,7 +217,7 @@ protected:
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  virtual void CalculateMeanShiftVector(typename InputImageType::ConstPointer inputImagePtr, RealVector jointPixel, const OutputRegionType& outputRegion, RealVector & meanShiftVector);
+  virtual void CalculateMeanShiftVector(typename RealVectorImageType::Pointer inputImagePtr, RealVector jointPixel, const OutputRegionType& outputRegion, RealVector & meanShiftVector);
 
 private:
   MeanShiftImageFilter2(const Self &); //purposely not implemented
