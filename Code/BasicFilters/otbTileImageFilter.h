@@ -23,9 +23,24 @@
 namespace otb
 {
 /** \class TileImageFilter
- * \brief TODO
+ *  \brief This filter allows to make a spatial mosaic from a set of images
  *
- * \ingroup IntensityImageFilters
+ *  This filter produces a spatial mosaic from a set of images. It
+ *  supports both otb::Image and otb::VectorImage. The layout
+ *  parameter allows to set up of the images will be patched together:
+ *  it is a 2D array containing the number of images in the horizontal
+ *  direction and vertical direction respectively.
+ * 
+ *  Images can be set using the PushBackInput() or SetInput(unsigned
+ *  int, Image *) methods. Please note that input images are supposed
+ *  to be set in the lexicographical order.
+ *
+ *  This filter does not support missing images: the number of input
+ *  images must match exactly layout[0]*layout[1]. Additional
+ *  consistency checks are that the number of components and spacing
+ *  must be consistent for all images, and the size of the images must
+ *  match with each others.
+ *
  * \ingroup Streamed
  * \ingroup MultiThreaded
  */
