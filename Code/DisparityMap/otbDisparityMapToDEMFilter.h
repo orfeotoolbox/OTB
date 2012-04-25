@@ -20,10 +20,12 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbGenericRSTransform.h"
+#include "itkImageRegionSplitter.h"
 // #include "itkConstNeighborhoodIterator.h"
 // #include "itkImageRegionConstIterator.h"
 // #include "itkImageRegionIterator.h"
-// #include "otbImage.h"
+#include "otbVectorImage.h"
+#include "otbImage.h"
 
 namespace otb
 {
@@ -33,7 +35,8 @@ namespace otb
  *
  *  This filter uses an input disparity map (horizontal and vertical) to produce a DEM with a regular sampling
  *  in the chosen map projection system. The elevation is computed from the triangulation of the "left-right" pairs
- *  of pixels matched. When several elevations are possible on a DEM cell, the highest is kept.
+ *  of pixels matched. When several elevations are possible on a DEM cell, the highest is kept. Note : disparity maps
+ *  and DEM are expected to be of scalar image type.
  *
  *  The inputs are:
  *    - the horizontal and vertical disparity maps (SetHorizontalDisparityMapInput, SetVerticalDisparityMapInput)
@@ -55,7 +58,7 @@ namespace otb
  *
  */
 template <class TDisparityImage, class TInputImage, class TOutputDEMImage = TDisparityImage,
-          class TEpipolarGridImage = TDisparityImage, class TMaskImage = otb::Image<unsigned char> >
+          class TEpipolarGridImage = otb::VectorImage<float,2> , class TMaskImage = otb::Image<unsigned char> >
 class ITK_EXPORT DisparityMapToDEMFilter :
     public itk::ImageToImageFilter<TDisparityImage,TOutputDEMImage>
 {
@@ -81,6 +84,9 @@ public:
   typedef TMaskImage              MaskImageType;
   
   typedef typename DEMImageType::RegionType         RegionType;
+  typedef typename DEMImageType::PixelType          DEMPixelType;
+  
+  typedef itk::ImageRegionSplitter<2>   SplitterType;
   
   // 3D RS transform
   // TODO: Allow to tune precision (i.e. double or float)
@@ -167,14 +173,17 @@ protected:
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId);
   
+  /** After threaded generate data : sum up temporary DEMs */
+  virtual void AfterThreadedGenerateData();
+  
 private:
   DisparityMapToDEMFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  /** Minimum elevation of the DEM in meters (over the chosen reference : DEM, geoid, average)*/
+  /** Minimum elevation of the DEM in meters */
   double m_ElevationMin;
   
-  /** Maximum elevation of the DEM in meters (over the chosen reference : DEM, geoid, average)*/
+  /** Maximum elevation of the DEM in meters */
   double m_ElevationMax;
   
   /** DEM grid step (in meters) */
@@ -188,6 +197,15 @@ private:
   
   /** Average Elevation */
   double m_AverageElevation;
+  
+  /** Region splitter for input disparity maps */
+  SplitterType::Pointer m_InputSplitter;
+  
+  /** Number of splits used for input multithreading */
+  unsigned int m_UsedInputSplits;
+  
+  /** Temporary DEMs for mutlithreading */
+  std::vector<typename DEMImageType::Pointer> m_TempDEMRegions;
 };
 } // end namespace otb
 
