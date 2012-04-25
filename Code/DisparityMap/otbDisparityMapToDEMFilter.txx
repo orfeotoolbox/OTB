@@ -626,7 +626,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     {
     m_TempDEMRegions.clear();
     
-    for (unsigned int i=0;i<m_UsedInputSplits;i++)
+    for (unsigned int i=0; i<m_UsedInputSplits; i++)
       {
       typename DEMImageType::Pointer tmpImg = TOutputDEMImage::New();
       tmpImg->SetNumberOfComponentsPerPixel(1);
@@ -689,7 +689,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   const TEpipolarGridImage * leftGrid = this->GetLeftEpipolarGridInput();
   const TEpipolarGridImage * rightGrid = this->GetRightEpipolarGridInput();
   
-  typename TEpipolarGridImage::RegionType gridRegion = leftGrid->GetLargestPossibleRegion(); 
+  typename TEpipolarGridImage::RegionType gridRegion = leftGrid->GetLargestPossibleRegion();
   
   TOutputDEMImage * tmpDEM = NULL;
   typename TOutputDEMImage::RegionType outputRequestedRegion = outputDEM->GetRequestedRegion();
@@ -929,7 +929,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     }
   
   // Check DEMs from other threads and keep the maximum elevation
-  for (unsigned int i=1;i<m_TempDEMRegions.size();i++)
+  for (unsigned int i=1; i<m_TempDEMRegions.size(); i++)
     {
     itk::ImageRegionIterator<DEMImageType> tmpDEMIt(m_TempDEMRegions[i],outputDEM->GetRequestedRegion());
     
