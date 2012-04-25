@@ -19,6 +19,7 @@
 #define __otbMeanShiftImageFilter2_h
 
 #include "otbImage.h"
+#include "otbVectorImage.h"
 #include "itkImageToImageFilter.h"
 #include <vcl_algorithm.h>
 
@@ -143,7 +144,7 @@ public:
 
   typedef itk::VariableLengthVector<RealType>         RealVector;
 
-  typedef itk::VectorImage<RealType, InputImageType::ImageDimension> RealVectorImageType;
+  typedef otb::VectorImage<RealType, InputImageType::ImageDimension> RealVectorImageType;
 
   /** Setters / Getters */
   itkSetMacro(SpatialBandwidth, RealType);
