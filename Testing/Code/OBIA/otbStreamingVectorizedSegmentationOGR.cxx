@@ -51,10 +51,10 @@ int otbStreamingVectorizedSegmentationOGRNew(int argc, char * argv[])
 int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
 {
 
-  if (argc != 4)
+  if (argc != 7)
     {
       std::cerr << "Usage: " << argv[0];
-      std::cerr << " inputImage outputVec TileDimension" << std::endl;
+      std::cerr << " inputImage outputVec TileDimension spatialRadius rangeRadius minObjectSize" << std::endl;
       return EXIT_FAILURE;
     }
 
@@ -64,6 +64,9 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   const double spatialbandwidth = 10;
   const double threshold = 0.001;
 
+  const unsigned int spatialRadiusOldMS     = atoi(argv[4]);
+  const double rangeRadiusOldMS             = atof(argv[5]);
+  const unsigned int minimumObjectSizeOldMS = atoi(argv[6]);
   /* conencted component parameters */
 
   const char * maskexpression = "";
@@ -128,9 +131,9 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   filter->SetFieldName(fieldName);
   filter->SetStartLabel(1);
   filter->SetUse8Connected(false);
-  filter->GetSegmentationFilter()->SetSpatialRadius(5);
-  filter->GetSegmentationFilter()->SetRangeRadius(15);
-  filter->GetSegmentationFilter()->SetMinimumRegionSize(100);
+  filter->GetSegmentationFilter()->SetSpatialRadius(spatialRadiusOldMS);
+  filter->GetSegmentationFilter()->SetRangeRadius(rangeRadiusOldMS);
+  filter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSizeOldMS);
   //filter->GetSegmentationFilter()->GetFunctor().SetExpression("distance<15");
 
   filter->SetFileName(argv[2]);

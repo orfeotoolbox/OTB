@@ -253,6 +253,9 @@ ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
      ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
      ${TEMP}/obTvStreamingVectorizedSegmentationOGR.sqlite
      100
+     5
+     15.
+     100
      )
 
 # -------            otb::FusionOGRTileFilter   -------------
