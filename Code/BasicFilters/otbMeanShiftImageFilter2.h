@@ -244,6 +244,10 @@ private:
   KernelType m_RangeKernel;
 
   unsigned int m_NumberOfComponentsPerPixel;
+
+  /** Input data in the joint spatial-range domain, scaled by the bandwidths */
+  typename RealVectorImageType::Pointer m_JointImage;
+
 };
 
 } // end namespace otb
