@@ -100,18 +100,30 @@ otb::ogr::Layer::const_iterator otb::ogr::Layer::cstart(size_t index) const
 void otb::ogr::Layer::CreateFeature(Feature feature)
 {
   assert(m_Layer && "OGRLayer not initialized");
-  m_Layer->CreateFeature(&feature.ogr());
+  const OGRErr res = m_Layer->CreateFeature(&feature.ogr());
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<< "Cannot create a new feature in the layer <"<<GetName()<<">:" << CPLGetLastErrorMsg());
+    }
 }
 
 void otb::ogr::Layer::DeleteFeature(long nFID)
 {
   assert(m_Layer && "OGRLayer not initialized");
-  m_Layer->DeleteFeature(nFID);
+  const OGRErr res = m_Layer->DeleteFeature(nFID);
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<< "Cannot delete the feature <"<<nFID<<"> in the layer <"<<GetName()<<">:" << CPLGetLastErrorMsg());
+    }
 }
 
 otb::ogr::Feature otb::ogr::Layer::GetFeature(long nFID)
 {
   assert(m_Layer && "OGRLayer not initialized");
+  if (nFID == OGRNullFID)
+    {
+    itkGenericExceptionMacro(<< "Invalid feature null id GetFeature() in the layer <"<<GetName()<<">.");
+    }
   const Feature feat = m_Layer->GetFeature(nFID);
   return feat;
 }
@@ -119,7 +131,11 @@ otb::ogr::Feature otb::ogr::Layer::GetFeature(long nFID)
 void otb::ogr::Layer::SetFeature(Feature feature)
 {
   assert(m_Layer && "OGRLayer not initialized");
-  m_Layer->SetFeature(&feature.ogr());
+  const OGRErr res = m_Layer->SetFeature(&feature.ogr());
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<< "Cannot update a feature in the layer <"<<GetName()<<">:" << CPLGetLastErrorMsg());
+    }
 }
 
 /*===========================================================================*/
@@ -206,7 +222,7 @@ void otb::ogr::Layer::CreateField(
   const OGRErr res = m_Layer->CreateField(const_cast <OGRFieldDefn*>(&field), bApproxOK);
   if (res != OGRERR_NONE)
     {
-    itkGenericExceptionMacro(<< "Cannot create a new field in the layer <"<<GetName()<<">.");
+    itkGenericExceptionMacro(<< "Cannot create a field in the layer <"<<GetName()<<">:" << CPLGetLastErrorMsg());
     }
 }
 

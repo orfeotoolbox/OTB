@@ -20,14 +20,14 @@ PURPOSE.  See the above copyright notices for more information.
 
 // #include <iosfwd> // std::ostream&
 #include <boost/shared_ptr.hpp>
-// #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/utility/enable_if.hpp>
 #include "itkIndent.h"
 #include "otbOGRFeatureWrapper.h"
 
 #include "ogr_core.h" // OGRwkbGeometryType
-class OGRLayer; // fwd declarations
+// Forward declarations
+class OGRLayer;
 class OGRDataSource;
 class OGRGeometry;
 class OGRFeatureDefn;
@@ -55,18 +55,9 @@ class Layer
   // : public itk::DataObject
   {
 public:
-  /**\name Standard class typedefs */
+  /**\name ITK class typedefs */
   //@{
   typedef Layer                         Self;
-  // typedef itk::DataObject               Superclass;
-  // typedef itk::SmartPointer<Self>       Pointer;
-  // typedef itk::SmartPointer<const Self> ConstPointer;
-  //@}
-
-  /**\name Standard macros */
-  //@{
-  // itkNewMacro(Self);
-  // itkTypeMacro(Layer, DataObject);
   //@}
 
   /**\name Construction */
@@ -87,9 +78,64 @@ public:
    */
   int GetFeatureCount(bool doForceComputation) const;
 
+  /**
+   * Adds a pre-existing \c Feature to the layer.
+   * \param[in,out] feature feature to add. Upon successful completion, the feature
+   * id will be updated (unless it was previously set)
+   *
+   * \throw itk::ExceptionObject if the feature can't be added.
+   * \sa OGRLayer::CreateFeature
+   * \internal
+   * Whilst the \c Feature id is updated, it is not the same feature than the
+   * one stored in the layer. In other words, \c Feature is still in charge of
+   * the actual \c OGRFeature (in case it was), and the feature added is of the
+   * responsibility of the layer.
+   */
   void CreateFeature(Feature feature);
+
+  /**
+   * Removes a feature identified by its id from the \c Layer.
+   * \param[in] nFID  feature id.
+   *
+   * \throw itk::ExceptionObject if the feature can't be added.
+   * \warning calls to this function will invalidate any feature iterator
+   * previously obtained.
+   * \sa OGRFeature::DeleteFeature
+   */
   void DeleteFeature(long nFID);
+
+  /**
+   * Finds a feature from its id.
+   * \param[in] nFID  feature id.
+   *
+   * \return a RAII capsule around the \c OGRFeature stored in the layer and
+   * that matches the requested id.
+   * \throw itk::ExceptionObject if nFID is null
+   *
+   * \pre \c nFID value cannot be \c OGRNullFID
+   * \post result's \c GetFID() equals \c nFID
+   * \warning calls to this function will invalidate any feature iterator
+   * previously obtained.
+   * \sa OGRFeature::GetFeature
+   * \internal
+   * The feature obtained is owned by the \c Feature instance.
+   */
   Feature GetFeature(long nFID);
+
+  /**
+   * Changes a \c Feature in the Layer.
+   * \param[in,out] feature feature to set. Upon successful completion, the feature
+   * id will be updated (in case it was previously set)
+   *
+   * \throw itk::ExceptionObject if the feauture can't be set.
+   * \pre the Layer need to support <em>OLCRandomWrite</em> capability.
+   * \sa OGRLayer::SetFeature
+   * \internal
+   * Whilst the \c Feature id is updated, it is not the same feature than the
+   * one stored in the layer. In other words, \c Feature is still in charge of
+   * the actual \c OGRFeature (in case it was), and the feature added is of the
+   * responsibility of the layer.
+   */
   void SetFeature(Feature feature);
   //@}
 
