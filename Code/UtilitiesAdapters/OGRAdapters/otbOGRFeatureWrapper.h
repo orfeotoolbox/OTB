@@ -21,12 +21,11 @@
 // #include <iosfwd> // std::ostream&
 #include <cassert>
 #include <boost/shared_ptr.hpp>
-#include <boost/interprocess/smart_ptr/unique_ptr.hpp>
 #include "itkIndent.h"
 #include "otbOGRFieldWrapper.h"
+#include "otbOGRGeometryWrapper.h"
 
 class OGRFeature;
-class OGRGeometry;
 class OGRFeatureDefn;
 
 namespace otb {
@@ -89,12 +88,6 @@ public:
   //@{
   void SetGeometry(OGRGeometry const* geometry); // not a ref because it may be null
   OGRGeometry const* GetGeometry() const; // not a ref because it may be null
-
-  struct JustDelete {
-    template <typename T>
-    void operator()(T* p) {delete p; }
-  };
-  typedef boost::interprocess::unique_ptr<OGRGeometry, JustDelete> UniqueGeometryPtr;
 
   void SetGeometryDirectly(UniqueGeometryPtr geometry);
   UniqueGeometryPtr StealGeometry();

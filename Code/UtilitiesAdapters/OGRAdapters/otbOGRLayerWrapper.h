@@ -126,13 +126,23 @@ public:
   OGRLayer & ogr();
 
   /**\name Spatial filter property
-   * \internal the I/O geometry is an undeletable pointer, can be may be null.
+   * \internal the I/O geometry is an undeletable pointer, that may be null.
    * \todo we'll see later if a Geometry capsule is defined, or a
    * \c nondeletable<> pointer type.
    */
   //@{
-  OGRGeometry const* GetSpatialFilter() const;
-  void SetSpatialFilter(OGRGeometry const* spatialFilter);
+  OGRGeometry const* GetSpatialFilter() const; // not a ref because it may be null
+  void SetSpatialFilter(OGRGeometry const* spatialFilter); // not a ref because it may be null
+  /// Sets a new rectangular spatial filter.
+  void SetSpatialFilterRect(double dfMinX, double dfMinY, double dfMaxX, double dfMaxY);
+  //@}
+
+  /**\name Spatial Reference property
+   * \internal the I/O spatial reference is an undeletable pointer, that may be null.
+   * \note read-only property
+   */
+  //@{
+  OGRSpatialReference const* GetSpatialRef() const;
   //@}
 
   /**\name Iteration */
@@ -193,6 +203,10 @@ public:
   const_iterator cend  () const { return iterator(); }
   iterator       begin ();
   iterator       end   () { return iterator(); }
+
+  const_iterator start (size_t index) const { return cstart(index); }
+  const_iterator cstart(size_t index) const;
+  iterator       start (size_t index);
   //@}
 
   /**\name Features definition */

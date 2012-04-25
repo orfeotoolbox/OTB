@@ -83,6 +83,20 @@ otb::ogr::Layer::const_iterator otb::ogr::Layer::cbegin() const
   return const_iterator(*const_cast <Layer*>(this));
 }
 
+otb::ogr::Layer::iterator otb::ogr::Layer::start(size_t index)
+{
+  assert(m_Layer && "OGRLayer not initialized");
+  m_Layer->SetNextByIndex(index);
+  return iterator(*this);
+}
+
+otb::ogr::Layer::const_iterator otb::ogr::Layer::cstart(size_t index) const
+{
+  assert(m_Layer && "OGRLayer not initialized");
+  m_Layer->SetNextByIndex(index);
+  return const_iterator(*const_cast <Layer*>(this));
+}
+
 void otb::ogr::Layer::CreateFeature(Feature feature)
 {
   assert(m_Layer && "OGRLayer not initialized");
@@ -161,6 +175,19 @@ void otb::ogr::Layer::SetSpatialFilter(OGRGeometry const* spatialFilter)
   assert(m_Layer && "OGRLayer not initialized");
   // const_cast because OGR is not 100% const-correct
   m_Layer->SetSpatialFilter(const_cast <OGRGeometry*>(spatialFilter));
+}
+
+void otb::ogr::Layer::SetSpatialFilterRect(
+  double dfMinX, double dfMinY, double dfMaxX, double dfMaxY)
+{
+  assert(m_Layer && "OGRLayer not initialized");
+  m_Layer->SetSpatialFilterRect(dfMinX, dfMinY, dfMaxX, dfMaxY);
+}
+
+OGRSpatialReference const* otb::ogr::Layer::GetSpatialRef() const
+{
+  assert(m_Layer && "OGRLayer not initialized");
+  return m_Layer->GetSpatialRef();
 }
 
 /*===========================================================================*/

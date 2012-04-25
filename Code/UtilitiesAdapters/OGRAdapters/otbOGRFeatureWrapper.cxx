@@ -190,7 +190,7 @@ void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
   assert(! geometry);
 }
 
-otb::ogr::Feature::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
+otb::ogr::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
 {
   CheckInvariants();
   OGRGeometry * g = m_Feature->StealGeometry();
