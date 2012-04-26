@@ -31,7 +31,7 @@ using ::std::tuple_element;
 
 #elif defined(BOOST_HAS_TR1_TUPLE)
 
-#include <tuple>
+#include <boost/tr1/tuple.hpp>
 
 namespace boost{ namespace math{
 

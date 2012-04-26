@@ -20,6 +20,7 @@
         {
             typedef proto::expr<T, A, 0> result_type;
             template<typename A0>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0) const
             {
                 return result_type::make(a0);
@@ -30,12 +31,14 @@
         {
             typedef proto::basic_expr<T, A, 0> result_type;
             template<typename A0>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0) const
             {
                 return result_type::make(a0);
             }
         };
         template<typename Type >
+        BOOST_FORCEINLINE
         Type construct()
         {
             return construct_<Type>()();
@@ -61,6 +64,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -118,6 +122,7 @@
         {
             typedef proto::expr<T, A, 1> result_type;
             template<typename A0>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0) const
             {
                 return result_type::make(a0);
@@ -128,12 +133,14 @@
         {
             typedef proto::basic_expr<T, A, 1> result_type;
             template<typename A0>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0) const
             {
                 return result_type::make(a0);
             }
         };
         template<typename Type , typename A0>
+        BOOST_FORCEINLINE
         Type construct(A0 &a0)
         {
             return construct_<Type>()(a0);
@@ -159,6 +166,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -216,6 +224,7 @@
         {
             typedef proto::expr<T, A, 2> result_type;
             template<typename A0 , typename A1>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1) const
             {
                 return result_type::make(a0 , a1);
@@ -226,12 +235,14 @@
         {
             typedef proto::basic_expr<T, A, 2> result_type;
             template<typename A0 , typename A1>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1) const
             {
                 return result_type::make(a0 , a1);
             }
         };
         template<typename Type , typename A0 , typename A1>
+        BOOST_FORCEINLINE
         Type construct(A0 &a0 , A1 &a1)
         {
             return construct_<Type>()(a0 , a1);
@@ -257,6 +268,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -314,6 +326,7 @@
         {
             typedef proto::expr<T, A, 3> result_type;
             template<typename A0 , typename A1 , typename A2>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2) const
             {
                 return result_type::make(a0 , a1 , a2);
@@ -324,12 +337,14 @@
         {
             typedef proto::basic_expr<T, A, 3> result_type;
             template<typename A0 , typename A1 , typename A2>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2) const
             {
                 return result_type::make(a0 , a1 , a2);
             }
         };
         template<typename Type , typename A0 , typename A1 , typename A2>
+        BOOST_FORCEINLINE
         Type construct(A0 &a0 , A1 &a1 , A2 &a2)
         {
             return construct_<Type>()(a0 , a1 , a2);
@@ -355,6 +370,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -412,6 +428,7 @@
         {
             typedef proto::expr<T, A, 4> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3) const
             {
                 return result_type::make(a0 , a1 , a2 , a3);
@@ -422,12 +439,14 @@
         {
             typedef proto::basic_expr<T, A, 4> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3) const
             {
                 return result_type::make(a0 , a1 , a2 , a3);
             }
         };
         template<typename Type , typename A0 , typename A1 , typename A2 , typename A3>
+        BOOST_FORCEINLINE
         Type construct(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3)
         {
             return construct_<Type>()(a0 , a1 , a2 , a3);
@@ -453,6 +472,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -510,6 +530,7 @@
         {
             typedef proto::expr<T, A, 5> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4);
@@ -520,12 +541,14 @@
         {
             typedef proto::basic_expr<T, A, 5> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4);
             }
         };
         template<typename Type , typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
+        BOOST_FORCEINLINE
         Type construct(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4)
         {
             return construct_<Type>()(a0 , a1 , a2 , a3 , a4);
@@ -551,6 +574,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -608,6 +632,7 @@
         {
             typedef proto::expr<T, A, 6> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4 , a5);
@@ -618,12 +643,14 @@
         {
             typedef proto::basic_expr<T, A, 6> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4 , a5);
             }
         };
         template<typename Type , typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
+        BOOST_FORCEINLINE
         Type construct(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5)
         {
             return construct_<Type>()(a0 , a1 , a2 , a3 , a4 , a5);
@@ -649,6 +676,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -706,6 +734,7 @@
         {
             typedef proto::expr<T, A, 7> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4 , a5 , a6);
@@ -716,12 +745,14 @@
         {
             typedef proto::basic_expr<T, A, 7> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4 , a5 , a6);
             }
         };
         template<typename Type , typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
+        BOOST_FORCEINLINE
         Type construct(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6)
         {
             return construct_<Type>()(a0 , a1 , a2 , a3 , a4 , a5 , a6);
@@ -747,6 +778,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -804,6 +836,7 @@
         {
             typedef proto::expr<T, A, 8> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6 , A7 &a7) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7);
@@ -814,12 +847,14 @@
         {
             typedef proto::basic_expr<T, A, 8> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6 , A7 &a7) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7);
             }
         };
         template<typename Type , typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
+        BOOST_FORCEINLINE
         Type construct(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6 , A7 &a7)
         {
             return construct_<Type>()(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7);
@@ -845,6 +880,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -902,6 +938,7 @@
         {
             typedef proto::expr<T, A, 9> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6 , A7 &a7 , A8 &a8) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8);
@@ -912,12 +949,14 @@
         {
             typedef proto::basic_expr<T, A, 9> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6 , A7 &a7 , A8 &a8) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8);
             }
         };
         template<typename Type , typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
+        BOOST_FORCEINLINE
         Type construct(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6 , A7 &a7 , A8 &a8)
         {
             return construct_<Type>()(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8);
@@ -943,6 +982,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -1000,6 +1040,7 @@
         {
             typedef proto::expr<T, A, 10> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6 , A7 &a7 , A8 &a8 , A9 &a9) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9);
@@ -1010,12 +1051,14 @@
         {
             typedef proto::basic_expr<T, A, 10> result_type;
             template<typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9>
+            BOOST_FORCEINLINE
             result_type operator ()(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6 , A7 &a7 , A8 &a8 , A9 &a9) const
             {
                 return result_type::make(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9);
             }
         };
         template<typename Type , typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9>
+        BOOST_FORCEINLINE
         Type construct(A0 &a0 , A1 &a1 , A2 &a2 , A3 &a3 , A4 &a4 , A5 &a5 , A6 &a6 , A7 &a7 , A8 &a8 , A9 &a9)
         {
             return construct_<Type>()(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9);
@@ -1041,6 +1084,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s

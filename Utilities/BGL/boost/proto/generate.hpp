@@ -43,6 +43,7 @@ namespace boost { namespace proto
                 >
             type;
 
+            BOOST_FORCEINLINE
             static type const call(proto::expr<Tag, term<Arg>, 0> const &e)
             {
                 type that = {e.child0};
@@ -61,6 +62,7 @@ namespace boost { namespace proto
                 >
             type;
 
+            BOOST_FORCEINLINE
             static type const call(proto::basic_expr<Tag, term<Arg>, 0> const &e)
             {
                 type that = {e.child0};
@@ -108,6 +110,7 @@ namespace boost { namespace proto
         /// \param expr A Proto expression
         /// \return expr
         template<typename Expr>
+        BOOST_FORCEINLINE
         #ifdef BOOST_PROTO_STRICT_RESULT_OF
         Expr
         #else
@@ -170,6 +173,7 @@ namespace boost { namespace proto
         /// \param expr A Proto expression
         /// \return Extends<Expr>(expr)
         template<typename Expr>
+        BOOST_FORCEINLINE
         Extends<Expr> operator ()(Expr const &e) const
         {
             return Extends<Expr>(e);
@@ -216,6 +220,7 @@ namespace boost { namespace proto
         /// \param expr The expression to wrap
         /// \return <tt>Extends\<Expr\> that = {expr}; return that;</tt>
         template<typename Expr>
+        BOOST_FORCEINLINE
         Extends<Expr> operator ()(Expr const &e) const
         {
             Extends<Expr> that = {e};
@@ -269,6 +274,7 @@ namespace boost { namespace proto
         /// \param expr The expression to modify.
         /// \return <tt>deep_copy(expr)</tt>
         template<typename Expr>
+        BOOST_FORCEINLINE
         typename result<by_value_generator(Expr)>::type operator ()(Expr const &e) const
         {
             return detail::by_value_generator_<Expr>::call(e);
@@ -326,6 +332,7 @@ namespace boost { namespace proto
         /// \param expr The expression to modify.
         /// \return Second()(First()(expr))
         template<typename Expr>
+        BOOST_FORCEINLINE
         typename result<compose_generators(Expr)>::type operator ()(Expr const &e) const
         {
             return Second()(First()(e));

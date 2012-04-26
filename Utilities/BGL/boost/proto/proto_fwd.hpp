@@ -187,6 +187,12 @@ namespace boost { namespace proto
         struct not_a_domain;
         struct not_a_grammar;
         struct not_a_generator;
+
+        template<typename T, typename Void = void>
+        struct is_transform_;
+
+        template<typename T, typename Void = void>
+        struct is_aggregate_;
     }
 
     typedef detail::ignore const ignore;
@@ -207,62 +213,70 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // Operator tags
-    namespace tag
+    namespace tagns_
     {
-        struct terminal;
-        struct unary_plus;
-        struct negate;
-        struct dereference;
-        struct complement;
-        struct address_of;
-        struct logical_not;
-        struct pre_inc;
-        struct pre_dec;
-        struct post_inc;
-        struct post_dec;
+        namespace tag
+        {
+            struct terminal;
+            struct unary_plus;
+            struct negate;
+            struct dereference;
+            struct complement;
+            struct address_of;
+            struct logical_not;
+            struct pre_inc;
+            struct pre_dec;
+            struct post_inc;
+            struct post_dec;
 
-        struct shift_left;
-        struct shift_right;
-        struct multiplies;
-        struct divides;
-        struct modulus;
-        struct plus;
-        struct minus;
-        struct less;
-        struct greater;
-        struct less_equal;
-        struct greater_equal;
-        struct equal_to;
-        struct not_equal_to;
-        struct logical_or;
-        struct logical_and;
-        struct bitwise_and;
-        struct bitwise_or;
-        struct bitwise_xor;
-        struct comma;
-        struct mem_ptr;
+            struct shift_left;
+            struct shift_right;
+            struct multiplies;
+            struct divides;
+            struct modulus;
+            struct plus;
+            struct minus;
+            struct less;
+            struct greater;
+            struct less_equal;
+            struct greater_equal;
+            struct equal_to;
+            struct not_equal_to;
+            struct logical_or;
+            struct logical_and;
+            struct bitwise_and;
+            struct bitwise_or;
+            struct bitwise_xor;
+            struct comma;
+            struct mem_ptr;
 
-        struct assign;
-        struct shift_left_assign;
-        struct shift_right_assign;
-        struct multiplies_assign;
-        struct divides_assign;
-        struct modulus_assign;
-        struct plus_assign;
-        struct minus_assign;
-        struct bitwise_and_assign;
-        struct bitwise_or_assign;
-        struct bitwise_xor_assign;
-        struct subscript;
-        struct member;
-        struct if_else_;
-        struct function;
+            struct assign;
+            struct shift_left_assign;
+            struct shift_right_assign;
+            struct multiplies_assign;
+            struct divides_assign;
+            struct modulus_assign;
+            struct plus_assign;
+            struct minus_assign;
+            struct bitwise_and_assign;
+            struct bitwise_or_assign;
+            struct bitwise_xor_assign;
+            struct subscript;
+            struct member;
+            struct if_else_;
+            struct function;
 
-        // Fusion tags
-        struct proto_expr;
-        struct proto_expr_iterator;
-        struct proto_flat_view;
+            // Fusion tags
+            struct proto_expr;
+            struct proto_expr_iterator;
+            struct proto_flat_view;
+        }
     }
+
+    using namespace tagns_;
+
+    template<typename Expr>
+    struct tag_of;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     struct _;
@@ -354,7 +368,7 @@ namespace boost { namespace proto
     template<typename Condition, typename Then = _, typename Else = not_<_> >
     struct if_;
 
-    template<typename Cases>
+    template<typename Cases, typename Transform = tag_of<_>()>
     struct switch_;
 
     template<typename T>
@@ -455,9 +469,6 @@ namespace boost { namespace proto
 
     template<typename SubDomain, typename SuperDomain>
     struct is_sub_domain_of;
-
-    template<typename Expr>
-    struct tag_of;
 
     template<typename Expr>
     struct arity_of;
@@ -677,10 +688,10 @@ namespace boost { namespace proto
     template<typename T>
     struct is_callable;
 
-    template<typename T, typename Void = void>
+    template<typename T>
     struct is_transform;
 
-    template<typename T, typename Void = void>
+    template<typename T>
     struct is_aggregate;
 
     #define BOOST_PROTO_UNEXPR() typedef int proto_is_expr_;

@@ -93,6 +93,7 @@
             /// \param d An arbitrary data
             /// \pre <tt>matches\<Expr, Grammar\>::value</tt> is \c true
             /// \return <tt>which()(e, s, d)</tt>
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param   e
               , typename impl::state_param  s

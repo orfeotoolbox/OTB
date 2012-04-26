@@ -108,6 +108,7 @@
             typedef proto::expr<T, A, N> result_type;
 
             template<BOOST_PP_ENUM_PARAMS(BOOST_PP_MAX(N, 1), typename A)>
+            BOOST_FORCEINLINE
             result_type operator ()(BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_MAX(N, 1), A, &a)) const
             {
                 return result_type::make(BOOST_PP_ENUM_PARAMS(BOOST_PP_MAX(N, 1), a));
@@ -120,6 +121,7 @@
             typedef proto::basic_expr<T, A, N> result_type;
 
             template<BOOST_PP_ENUM_PARAMS(BOOST_PP_MAX(N, 1), typename A)>
+            BOOST_FORCEINLINE
             result_type operator ()(BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_MAX(N, 1), A, &a)) const
             {
                 return result_type::make(BOOST_PP_ENUM_PARAMS(BOOST_PP_MAX(N, 1), a));
@@ -127,6 +129,7 @@
         };
 
         template<typename Type BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+        BOOST_FORCEINLINE
         Type construct(BOOST_PP_ENUM_BINARY_PARAMS(N, A, &a))
         {
             return construct_<Type>()(BOOST_PP_ENUM_PARAMS(N, a));
@@ -155,6 +158,7 @@
             /// \param e The current expression
             /// \param s The current state
             /// \param d An arbitrary data
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param   e
               , typename impl::state_param  s

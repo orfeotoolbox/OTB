@@ -92,6 +92,7 @@ namespace boost { namespace proto
         {
             typedef typename BOOST_PROTO_RESULT_OF<Fun()>::type result_type;
 
+            BOOST_FORCEINLINE
             result_type operator()(
                 typename impl2::expr_param
               , typename impl2::state_param
@@ -124,7 +125,7 @@ namespace boost { namespace proto
         /// a typedef for <tt>boost::result_of\<Fun(Expr, State, Data)\>::type</tt>.
         template<typename Expr, typename State, typename Data>
         struct impl
-          : impl2<Expr, State, Data, is_transform<Fun>::value>
+          : impl2<Expr, State, Data, detail::is_transform_<Fun>::value>
         {};
     };
 
@@ -140,6 +141,8 @@ namespace boost { namespace proto
         {
             typedef typename when<_, A0>::template impl<Expr, State, Data>::result_type a0;
             typedef typename detail::poly_function_traits<Fun, Fun(a0)>::result_type result_type;
+            
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl2::expr_param   e
               , typename impl2::state_param  s
@@ -158,6 +161,8 @@ namespace boost { namespace proto
         {
             typedef typename when<_, A0>::template impl<Expr, State, Data>::result_type a0;
             typedef typename Fun::template impl<a0, State, Data>::result_type result_type;
+            
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl2::expr_param   e
               , typename impl2::state_param  s
@@ -193,7 +198,7 @@ namespace boost { namespace proto
         /// \param d An arbitrary data
         template<typename Expr, typename State, typename Data>
         struct impl
-          : impl2<Expr, State, Data, is_transform<Fun>::value>
+          : impl2<Expr, State, Data, detail::is_transform_<Fun>::value>
         {};
     };
 
@@ -210,6 +215,8 @@ namespace boost { namespace proto
             typedef typename when<_, A0>::template impl<Expr, State, Data>::result_type a0;
             typedef typename when<_, A1>::template impl<Expr, State, Data>::result_type a1;
             typedef typename detail::poly_function_traits<Fun, Fun(a0, a1)>::result_type result_type;
+            
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl2::expr_param   e
               , typename impl2::state_param  s
@@ -230,6 +237,8 @@ namespace boost { namespace proto
             typedef typename when<_, A0>::template impl<Expr, State, Data>::result_type a0;
             typedef typename when<_, A1>::template impl<Expr, State, Data>::result_type a1;
             typedef typename Fun::template impl<a0, a1, Data>::result_type result_type;
+            
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl2::expr_param   e
               , typename impl2::state_param  s
@@ -271,7 +280,7 @@ namespace boost { namespace proto
         /// \param d An arbitrary data
         template<typename Expr, typename State, typename Data>
         struct impl
-          : impl2<Expr, State, Data, is_transform<Fun>::value>
+          : impl2<Expr, State, Data, detail::is_transform_<Fun>::value>
         {};
     };
 
@@ -290,6 +299,8 @@ namespace boost { namespace proto
             typedef typename when<_, A1>::template impl<Expr, State, Data>::result_type a1;
             typedef typename when<_, A2>::template impl<Expr, State, Data>::result_type a2;
             typedef typename detail::poly_function_traits<Fun, Fun(a0, a1, a2)>::result_type result_type;
+            
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl2::expr_param   e
               , typename impl2::state_param  s
@@ -312,6 +323,8 @@ namespace boost { namespace proto
             typedef typename when<_, A1>::template impl<Expr, State, Data>::result_type a1;
             typedef typename when<_, A2>::template impl<Expr, State, Data>::result_type a2;
             typedef typename Fun::template impl<a0, a1, a2>::result_type result_type;
+            
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl2::expr_param   e
               , typename impl2::state_param  s
@@ -337,7 +350,7 @@ namespace boost { namespace proto
 
         template<typename Expr, typename State, typename Data>
         struct impl
-          : impl2<Expr, State, Data, is_transform<Fun>::value>
+          : impl2<Expr, State, Data, detail::is_transform_<Fun>::value>
         {};
     };
 

@@ -24,6 +24,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -54,6 +55,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -84,6 +86,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -114,6 +117,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -144,6 +148,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -174,6 +179,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s
@@ -204,6 +210,7 @@
             
             
             
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param e
               , typename impl::state_param s

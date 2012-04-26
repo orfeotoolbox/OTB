@@ -112,11 +112,12 @@ namespace boost { namespace proto
         };
         #endif
 
-        template<typename Type, bool IsAggregate = is_aggregate<Type>::value>
+        template<typename Type, bool IsAggregate = detail::is_aggregate_<Type>::value>
         struct construct_
         {
             typedef Type result_type;
 
+            BOOST_FORCEINLINE
             Type operator ()() const
             {
                 return Type();
@@ -131,6 +132,7 @@ namespace boost { namespace proto
         {
             typedef Type result_type;
 
+            BOOST_FORCEINLINE
             Type operator ()() const
             {
                 return Type();
@@ -231,6 +233,7 @@ namespace boost { namespace proto
             typedef typename detail::make_if_<Object, Expr, State, Data>::type result_type;
 
             /// \return <tt>result_type()</tt>
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param
               , typename impl::state_param

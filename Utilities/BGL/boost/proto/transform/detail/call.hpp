@@ -69,6 +69,7 @@
             /// \param e The current expression
             /// \param s The current state
             /// \param d An arbitrary data
+            BOOST_FORCEINLINE
             result_type operator ()(
                 typename impl::expr_param   e
               , typename impl::state_param  s

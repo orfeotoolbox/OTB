@@ -58,6 +58,7 @@ namespace boost { namespace proto
         };
 
         template<typename T, typename Expr, typename Arg0>
+        BOOST_FORCEINLINE
         Expr make_terminal(T &t, Expr *, proto::term<Arg0> *)
         {
             Expr that = {t};
@@ -65,6 +66,7 @@ namespace boost { namespace proto
         }
 
         template<typename T, typename Expr, typename Arg0, std::size_t N>
+        BOOST_FORCEINLINE
         Expr make_terminal(T (&t)[N], Expr *, proto::term<Arg0[N]> *)
         {
             Expr that;
@@ -76,6 +78,7 @@ namespace boost { namespace proto
         }
 
         template<typename T, typename Expr, typename Arg0, std::size_t N>
+        BOOST_FORCEINLINE
         Expr make_terminal(T const(&t)[N], Expr *, proto::term<Arg0[N]> *)
         {
             Expr that;
@@ -129,6 +132,7 @@ namespace boost { namespace proto
     {
         BOOST_PROTO_UNEXPR()
 
+        BOOST_FORCEINLINE
         explicit unexpr(Expr const &e)
           : Expr(e)
         {}

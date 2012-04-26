@@ -22,11 +22,8 @@
 #include <boost/fusion/include/intrinsic.hpp>
 #include <boost/fusion/include/single_view.hpp>
 #include <boost/fusion/include/transform_view.hpp>
-#include <boost/fusion/support/ext_/is_segmented.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
+#include <boost/fusion/include/is_segmented.hpp>
 #include <boost/fusion/sequence/comparison/enable_comparison.hpp>
-#include <boost/fusion/view/ext_/segmented_iterator.hpp>
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/traits.hpp>
 #include <boost/proto/eval.hpp>
@@ -608,33 +605,6 @@ namespace boost { namespace fusion
             {
                 typedef forward_traversal_tag type;
             };
-        };
-
-        template<>
-        struct begin_impl<proto::tag::proto_flat_view>
-        {
-            template<typename Sequence>
-            struct apply
-              : fusion::segmented_begin<Sequence>
-            {};
-        };
-
-        template<>
-        struct end_impl<proto::tag::proto_flat_view>
-        {
-            template<typename Sequence>
-            struct apply
-              : fusion::segmented_end<Sequence>
-            {};
-        };
-
-        template<>
-        struct size_impl<proto::tag::proto_flat_view>
-        {
-            template<typename Sequence>
-            struct apply
-              : fusion::segmented_size<Sequence>
-            {};
         };
 
     }

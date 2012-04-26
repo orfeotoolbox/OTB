@@ -8,7 +8,7 @@
 //  PGI C++ compiler setup:
 
 #define BOOST_COMPILER_VERSION __PGIC__##__PGIC_MINOR__
-#define BOOST_COMPILER "PGI compiler version " BOOST_STRINGIZE(_COMPILER_VERSION)
+#define BOOST_COMPILER "PGI compiler version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
 
 //
 // Threading support:
@@ -16,9 +16,6 @@
 // if no threading API is detected.
 //
 
-// PGI 10.x doesn't seem to define __PGIC__
-
-// versions earlier than 10.x do define __PGIC__
 #if __PGIC__ >= 10
 
 // options requested by configure --enable-test
@@ -53,6 +50,7 @@
 #define BOOST_NO_CHAR32_T
 #define BOOST_NO_CONSTEXPR
 #define BOOST_NO_DECLTYPE
+#define BOOST_NO_DECLTYPE_N3276
 #define BOOST_NO_DEFAULTED_FUNCTIONS
 #define BOOST_NO_DELETED_FUNCTIONS
 #define BOOST_NO_EXPLICIT_CONVERSION_OPERATORS

@@ -47,6 +47,7 @@ namespace boost { namespace proto
             /// \param e An expression
             /// \return \c e
             /// \throw nothrow
+            BOOST_FORCEINLINE
             #ifdef BOOST_PROTO_STRICT_RESULT_OF
             result_type
             #else

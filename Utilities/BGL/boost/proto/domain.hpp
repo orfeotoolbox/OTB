@@ -142,6 +142,7 @@ namespace boost { namespace proto
                 BOOST_PROTO_CALLABLE()
                 typedef typename remove_const<T>::type result_type;
 
+                BOOST_FORCEINLINE
                 result_type operator()(T &e) const
                 {
                     return e;
@@ -185,6 +186,7 @@ namespace boost { namespace proto
                 BOOST_PROTO_CALLABLE()
                 typedef T &result_type;
 
+                BOOST_FORCEINLINE
                 result_type operator()(T &e) const
                 {
                     return e;
