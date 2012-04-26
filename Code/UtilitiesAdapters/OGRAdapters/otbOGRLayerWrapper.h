@@ -42,17 +42,17 @@ namespace otb { namespace ogr {
  * encapsulation of \c OGRLayer.
  *
  * \note this class is a proxy class on top of an \c OGRLayer.
- * \note It can be copied.
+ * \note It can be copied, and assigned. NEw instances will share the underlying
+ * \c OGRLayer.
  * \note when created from a \c otb::ogr::DataSource::ExecuteSQL, it will
  * automatically manage the release of the underlying \c OGRLayer.
  * \note the default constructor is disabled on purpose
  * \note the destructor automatically generated does everything that is
  * expected.
  *
- * \todo find a way to tell whether the related \c OGRDataSource was released
+ * \todo find a way to be notified when the related \c OGRDataSource is released
  */
 class Layer
-  // : public itk::DataObject
   {
 public:
   /**\name ITK class typedefs */
@@ -62,8 +62,31 @@ public:
 
   /**\name Construction */
   //@{
+  /**
+   * Init constructor with a layer owned by a DataSource.
+   * \param layer \c OGRLayer instance that is owned by a DataSource.
+   * \throw None
+   * On destruction of the proxy class, the internal \c OGRLayer is left alone.
+   *
+   * @warning if the datasource hosting the layer (built with this constructor)
+   * is deleted, the layer won't be usable anymore. Unfortunatelly, there is no
+   * mean to report this to this layer proxy.
+   */
   explicit Layer(OGRLayer* layer);
-  Layer(OGRLayer* layer, OGRDataSource* sourceInChargeOfLifeTime);
+
+  /**
+   * Init constructor for layers that need to be released.
+   * \param layer  \c OGRLayer owned by the client code.
+   * \param sourceInChargeOfLifeTime  reference to the actual \c OGRDataSource
+   * that knows how to release the layer.
+   *
+   * \throw None
+   * \internal
+   * This constructor is meant to be used for wrapping layers coming from \c
+   * OGRDataSource::ExecuteSQL(). It's actually the constructor called by \c
+   * DataSource::ExecuteSQL().
+   */
+  Layer(OGRLayer* layer, OGRDataSource& sourceInChargeOfLifeTime);
   //@}
 
   /**\name Features collection */
@@ -127,7 +150,7 @@ public:
    * \param[in,out] feature feature to set. Upon successful completion, the feature
    * id will be updated (in case it was previously set)
    *
-   * \throw itk::ExceptionObject if the feauture can't be set.
+   * \throw itk::ExceptionObject if the feature can't be set.
    * \pre the Layer need to support <em>OLCRandomWrite</em> capability.
    * \sa OGRLayer::SetFeature
    * \internal
@@ -172,30 +195,70 @@ public:
   OGRLayer & ogr();
 
   /**\name Spatial filter property
-   * \internal the I/O geometry is an undeletable pointer, that may be null.
    * \todo we'll see later if a Geometry capsule is defined, or a
    * \c nondeletable<> pointer type.
+   * \internal
+   * The I/O geometry is an undeletable pointer, that may be null (hence the
+   * need of pointers instead of references).
    */
   //@{
-  OGRGeometry const* GetSpatialFilter() const; // not a ref because it may be null
-  void SetSpatialFilter(OGRGeometry const* spatialFilter); // not a ref because it may be null
-  /// Sets a new rectangular spatial filter.
+  /**
+   * Returns a reference to the current spatial filter, if any.
+   *
+   * \return a reference to the current spatial filter. Spatial filter that isn't
+   * supposed to be modified this way. Use \c SetSpatialFilter or \c
+   * SetSpatialFilterRect for this purpose.
+   * \throw None
+   * \sa OGRLayer::GetSpatialFilter
+   */
+  OGRGeometry const* GetSpatialFilter() const;
+
+  /**
+   * Sets the current spatial filter.
+   * \param[in] spatialFilter  new spatial filter definition, NULL clears the
+   * filter.
+   * \throw None
+   * Replaces the current spatial filter with a clone of the one passed as
+   * parameter. Thus parameter remains the responsibility of the caller.
+   *
+   * The spatial filter is used to filter the \c Feature's obtained when iterating
+   * on the layer.
+   * \note OGR warns us that the test may be incorrectly implemented, and that
+   * we may have false-positives, but no missed shapes.
+   * \sa OGRLayer::SetSpatialFilter
+   */
+  void SetSpatialFilter(OGRGeometry const* spatialFilter);
+  /** Sets a new rectangular spatial filter.
+   * Defines the new filter as a rectangular shape.
+   *
+   * The coordinates used shall be in the same referential as the layer as the
+   * whole (as returned by \c GetSpatialRef()).
+   * \sa OGRLayer::SetSpatialFilterRect
+   */
   void SetSpatialFilterRect(double dfMinX, double dfMinY, double dfMaxX, double dfMaxY);
   //@}
 
-  /**\name Spatial Reference property
+  /**Spatial Reference property.
    * \internal the I/O spatial reference is an undeletable pointer, that may be null.
    * \note read-only property
    */
-  //@{
   OGRSpatialReference const* GetSpatialRef() const;
-  //@}
 
   /**\name Iteration */
   //@{
   /**\ingroup Geometry
    * \class feature_iter
    * Implementation class for \c Feature iterator.
+   * This iterator is a single <em>pass iterator</em>. We may fetch the \c
+   * Feature referenced by an iterator previously stored, but never resume the
+   * iteration after a call to \c Layer::begin(), \c Layer::start(), \c
+   * Layer::CreateFeature(), \c Layer::DeleteFeature(), \c Layer::GetFeature(),
+   * \c Layer::SetFeature(), nor fork the iteration.
+   * \code
+   * iterator b = begin();
+   * iterator i = std::advance(b, 1);
+   * b++; // this is invalid
+   * \endcode
    * \internal
    * \sa otb::ogr::Layer::iterator
    * \sa otb::ogr::Layer::const_iterator
@@ -240,33 +303,147 @@ public:
     };
 
   template <class> friend class feature_iter;
+  /// Features %iterator.
   typedef feature_iter<Feature      > iterator;
+  /// Features const %iterator.
   typedef feature_iter<Feature const> const_iterator;
 
-  const_iterator begin () const { return cbegin(); }
-  const_iterator end   () const { return cend  (); }
+  /** Returns a <em>single-pass</em> %iterator to the start of the sequence.
+   * \sa feature_iter
+   */
   const_iterator cbegin() const;
+  /** Returns the %end %iterator of the sequence.
+   */
   const_iterator cend  () const { return iterator(); }
+  /**\copydoc cbegin */
+  const_iterator begin () const { return cbegin(); }
+  /**\copydoc cend */
+  const_iterator end   () const { return cend  (); }
+  /**\copydoc cbegin */
   iterator       begin ();
+  /**\copydoc cend */
   iterator       end   () { return iterator(); }
 
-  const_iterator start (size_t index) const { return cstart(index); }
-  const_iterator cstart(size_t index) const;
-  iterator       start (size_t index);
+  /** Returns a <em>single-pass</em> %iterator to the i-th \c Feature of the
+   * sequence.
+   * \sa feature_iter
+   * Depending of the actual driver (i.e. \c OGRDriver), this may be done in O(N).
+   */
+  const_iterator cstart_at(size_t index) const;
+  /** \copydoc cstart_at */
+  const_iterator start_at (size_t index) const { return cstart_at(index); }
+  /** \copydoc cstart_at */
+  iterator       start_at (size_t index);
   //@}
 
-  /**\name Features definition */
+  /**\name Features definition
+   * \todo shall we instead inhibit the declaration of the functions when GDAL
+   * version does not match?
+   */
   //@{
+  /** Returns a reference to the layer definition.
+   * @warning the definition obtained shall not be modified. Use the \c *Field
+   * functions instead.
+   * \internal
+   * The return type shall have been const, but unfortunatelly \c OGRFeatureDefn
+   * is not const-correct.
+   * \sa OGRLayer::GetLayerDefn
+   */
   OGRFeatureDefn & GetLayerDefn() const;
 
+  /**
+   * Adds a new field given its definition.
+   * \param[in] field  field definition
+   * \param[in] bApproxOK  If true, the field may be created in a slightly
+   * different form depending on the limitations of the format driver.
+   *
+   * \pre This function shall not be called while there are \c Feature in
+   * existance that were obtained or created with the previous layer definition.
+   * \throw itk::ExceptionObject if the new field cannot be created
+   * \sa OGRLayer::CreateField
+   * \todo move to use \c otb::ogr::FieldDefn
+   */
   void CreateField(OGRFieldDefn const& field, bool bApproxOK = true);
+
+  /**
+   * Deletes a field.
+   * \param[in] fieldIndex  index of the field to remove.
+   *
+   * \pre This function shall not be called while there are \c Feature in
+   * existance that were obtained or created with the previous layer definition.
+   * \throw itk::ExceptionObject if the new field cannot be deleted
+   * \sa OGRLayer::DeleteField
+   * \pre to be available, this function requires OTB to be compiled against OGR
+   * v1.9.0 at least.
+   */
   void DeleteField(size_t fieldIndex);
-  void AlterFieldDefn(size_t fieldIndex, OGRFieldDefn& newFieldDefn, int nFlags);
+
+  /**
+   * Changes the definition of the i-th field.
+   * \param[in] fieldIndex  index of the field to change
+   * \param[in,out] newFieldDefn  definition of the new field.
+   * \param[in] nFlags  combination of \c ALTER_NAME_FLAG, \c ALTER_TYPE_FLAG
+   * and \c ALTER_WIDTH_PRECISION_FLAG to indicate which of the name and/or type
+   * and/or width and precision fields from the new field definition must be
+   * taken into account.
+   *
+   * \pre This function shall not be called while there are \c Feature in
+   * existance that were obtained or created with the previous layer definition.
+   * \throw itk::ExceptionObject if the new field cannot be modified
+   * \sa OGRLayer::AlterFieldDefn
+   * \pre to be available, this function requires OTB to be compiled against OGR
+   * v1.9.0 at least.
+   * \todo move to use \c otb::ogr::FieldDefn
+   */
+  void AlterFieldDefn(size_t fieldIndex, OGRFieldDefn const& newFieldDefn, int nFlags);
+
+  /**
+   * Moves a field from one position to another.
+   * \param[in] oldPos  old field index position
+   * \param[in] newPos  new field index position
+   *
+   * \pre This function shall not be called while there are \c Feature in
+   * existance that were obtained or created with the previous layer definition.
+   * \throw itk::ExceptionObject if the new field cannot be modified
+   * \sa OGRLayer::ReorderField
+   * \pre to be available, this function requires OTB to be compiled against OGR
+   * v1.9.0 at least.
+   */
   void ReorderField(size_t oldPos, size_t newPos);
+
+  /**
+   * Reorder all the fields of the layer.
+   * \param[in] map array that tells the new position of each field.
+   *
+   * \pre This function shall not be called while there are \c Feature in
+   * existance that were obtained or created with the previous layer definition.
+   * \throw itk::ExceptionObject if the new field cannot be modified
+   * \sa OGRLayer::ReorderFields
+   * \pre to be available, this function requires OTB to be compiled against OGR
+   * v1.9.0 at least.
+   */
   void ReorderFields(int *map);
-  void SetIgnoredFields(int *);
+
+  /**
+   * Sets which fields can be omitted when retrieving features from the layer.
+   * \param[in] fieldNames 0-terminated array of the field names to ignore when
+   * fetching features from the layer. 0 to clear the list.
+   * end
+   *
+   * Besides field names of the layers, the following special fields can be
+   * passed: "OGR_GEOMETRY" to ignore geometry and "OGR_STYLE" to ignore layer
+   * style.
+   *
+   * By default, no fields are ignored.
+   * \throw itk::ExceptionObject if the new field cannot be modified
+   * \sa OGRLayer::SetIgnoredFields
+   */
+  void SetIgnoredFields(char const** fieldNames);
   //@}
 
+  /** Returns the type of the geometry stored.
+   * \sa OGRLayer::GetGeomType
+   */
   OGRwkbGeometryType GetGeomType() const;
 private:
   /**

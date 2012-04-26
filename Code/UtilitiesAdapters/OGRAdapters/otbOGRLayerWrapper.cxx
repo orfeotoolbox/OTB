@@ -47,8 +47,8 @@ otb::ogr::Layer::Layer(OGRLayer* layer)
 {
 }
 
-otb::ogr::Layer::Layer(OGRLayer* layer, OGRDataSource* sourceInChargeOfLifeTime)
-: m_Layer(layer,  boost::bind(&OGRDataSource::ReleaseResultSet, sourceInChargeOfLifeTime, _1))
+otb::ogr::Layer::Layer(OGRLayer* layer, OGRDataSource& sourceInChargeOfLifeTime)
+: m_Layer(layer,  boost::bind(&OGRDataSource::ReleaseResultSet, boost::ref(sourceInChargeOfLifeTime), _1))
 {
   assert(layer && "A null OGRlayer cannot belong to an OGRDataSource" );
   // OGR always refuses "delete 0". *sigh*
@@ -83,14 +83,14 @@ otb::ogr::Layer::const_iterator otb::ogr::Layer::cbegin() const
   return const_iterator(*const_cast <Layer*>(this));
 }
 
-otb::ogr::Layer::iterator otb::ogr::Layer::start(size_t index)
+otb::ogr::Layer::iterator otb::ogr::Layer::start_at(size_t index)
 {
   assert(m_Layer && "OGRLayer not initialized");
   m_Layer->SetNextByIndex(index);
   return iterator(*this);
 }
 
-otb::ogr::Layer::const_iterator otb::ogr::Layer::cstart(size_t index) const
+otb::ogr::Layer::const_iterator otb::ogr::Layer::cstart_at(size_t index) const
 {
   assert(m_Layer && "OGRLayer not initialized");
   m_Layer->SetNextByIndex(index);
@@ -103,7 +103,8 @@ void otb::ogr::Layer::CreateFeature(Feature feature)
   const OGRErr res = m_Layer->CreateFeature(&feature.ogr());
   if (res != OGRERR_NONE)
     {
-    itkGenericExceptionMacro(<< "Cannot create a new feature in the layer <"<<GetName()<<">:" << CPLGetLastErrorMsg());
+    itkGenericExceptionMacro(<< "Cannot create a new feature in the layer <"
+      <<GetName()<<">:" << CPLGetLastErrorMsg());
     }
 }
 
@@ -113,7 +114,8 @@ void otb::ogr::Layer::DeleteFeature(long nFID)
   const OGRErr res = m_Layer->DeleteFeature(nFID);
   if (res != OGRERR_NONE)
     {
-    itkGenericExceptionMacro(<< "Cannot delete the feature <"<<nFID<<"> in the layer <"<<GetName()<<">:" << CPLGetLastErrorMsg());
+    itkGenericExceptionMacro(<< "Cannot delete the feature <"<<nFID<<"> in the layer <"
+      <<GetName()<<">:" << CPLGetLastErrorMsg());
     }
 }
 
@@ -134,7 +136,8 @@ void otb::ogr::Layer::SetFeature(Feature feature)
   const OGRErr res = m_Layer->SetFeature(&feature.ogr());
   if (res != OGRERR_NONE)
     {
-    itkGenericExceptionMacro(<< "Cannot update a feature in the layer <"<<GetName()<<">:" << CPLGetLastErrorMsg());
+    itkGenericExceptionMacro(<< "Cannot update a feature in the layer <"
+      <<GetName()<<">:" << CPLGetLastErrorMsg());
     }
 }
 
@@ -222,7 +225,8 @@ void otb::ogr::Layer::CreateField(
   const OGRErr res = m_Layer->CreateField(const_cast <OGRFieldDefn*>(&field), bApproxOK);
   if (res != OGRERR_NONE)
     {
-    itkGenericExceptionMacro(<< "Cannot create a field in the layer <"<<GetName()<<">:" << CPLGetLastErrorMsg());
+    itkGenericExceptionMacro(<< "Cannot create a field in the layer <"
+      <<GetName()<<">:" << CPLGetLastErrorMsg());
     }
 }
 
@@ -230,31 +234,34 @@ void otb::ogr::Layer::DeleteField(size_t fieldIndex)
 {
   assert(m_Layer && "OGRLayer not initialized");
 #if GDAL_VERSION_NUM < 1900
-  itkGenericExceptionMacro("OGRLayer::AlterFieldDefn is not supported by OGR v"
+  itkGenericExceptionMacro("OGRLayer::DeleteField is not supported by OGR v"
     << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
 #else
   const OGRErr res = m_Layer->DeleteField(int(fieldIndex));
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot delete the "<<fieldIndex << "th field in the layer <"
-      <<GetName() <<">.");
+      <<GetName() <<">:" << CPLGetLastErrorMsg());
     }
 #endif
 }
 
 void otb::ogr::Layer::AlterFieldDefn(
-  size_t fieldIndex, OGRFieldDefn& newFieldDefn, int nFlags)
+  size_t fieldIndex, OGRFieldDefn const& newFieldDefn, int nFlags)
 {
   assert(m_Layer && "OGRLayer not initialized");
 #if GDAL_VERSION_NUM < 1900
   itkGenericExceptionMacro("OGRLayer::AlterFieldDefn is not supported by OGR v"
     << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
 #else
-  const OGRErr res = m_Layer->AlterFieldDefn(int(fieldIndex), &newFieldDefn, nFlags);
+  const OGRErr res = m_Layer->AlterFieldDefn(
+    int(fieldIndex),
+    const_cast <OGRFieldDefn*>(&newFieldDefn),
+    nFlags);
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot alter the "<<fieldIndex << "th field in the layer <"
-      <<GetName() <<">.");
+      <<GetName() <<">:" << CPLGetLastErrorMsg());
     }
 #endif
 }
@@ -270,7 +277,7 @@ void otb::ogr::Layer::ReorderField(size_t oldPos, size_t newPos)
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot move the "<<oldPos << "th field to the "
-      << newPos << "th position in the layer <" <<GetName() <<">.");
+      << newPos << "th position in the layer <" <<GetName() <<">:" << CPLGetLastErrorMsg());
     }
 #endif
 }
@@ -286,9 +293,20 @@ void otb::ogr::Layer::ReorderFields(int * map)
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot reorder the fields of the layer <"
-      <<GetName() <<">.");
+      <<GetName() <<">:" << CPLGetLastErrorMsg());
     }
 #endif
+}
+
+void otb::ogr::Layer::SetIgnoredFields(char const** fieldNames)
+{
+  assert(m_Layer && "OGRLayer not initialized");
+  const OGRErr res = m_Layer->SetIgnoredFields(fieldNames);
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<< "Cannot set fields to ignore on the layer <"
+      <<GetName() <<">:" << CPLGetLastErrorMsg());
+    }
 }
 
 OGRwkbGeometryType otb::ogr::Layer::GetGeomType() const

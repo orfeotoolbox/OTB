@@ -151,7 +151,7 @@ public:
   OGRFieldType GetType() const;
 
 private:
-  OGRFieldDefn * m_definition;
+  OGRFieldDefn * m_definition; // pointer in order to support assignments
   };
 
 #if 0

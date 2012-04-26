@@ -267,8 +267,7 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
     return otb::ogr::Layer(0);
 #endif
     }
-  return otb::ogr::Layer(layer_ptr, m_DataSource);
-
+  return otb::ogr::Layer(layer_ptr, *m_DataSource);
 }
 
 

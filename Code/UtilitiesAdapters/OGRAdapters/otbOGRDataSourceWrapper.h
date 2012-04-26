@@ -15,6 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbOGRDataSourceWrapper_h
 #define __otbOGRDataSourceWrapper_h
 
@@ -191,7 +192,6 @@ public:
    */
   itkNewMacro(Self);
   itkTypeMacro(Layer, DataObject);
-  // itkStaticConstMacro(Dimension, unsigned int, VDimension);
   //@}
   /**\name Creation functions */
   //@{
