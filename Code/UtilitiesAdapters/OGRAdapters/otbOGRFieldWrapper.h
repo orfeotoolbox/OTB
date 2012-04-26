@@ -234,7 +234,7 @@ public:
     assert(m_Definition.GetType() == Kind::value);
     typedef typename boost::mpl::at<metaprog::FieldGetters_Map, Kind>::type GetterType;
     BOOST_STATIC_ASSERT(!(boost::is_same<GetterType, boost::mpl::void_>::value));
-    assert(m_index >= 0 && m_index < m_Feature->GetFieldCount());
+    assert(m_index >= 0 && int(m_index) < m_Feature->GetFieldCount());
     return GetterType::call(*m_Feature, m_index);
     }
 

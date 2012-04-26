@@ -504,15 +504,13 @@ public:
     return m_DataSource ? &boolean::i : 0;
     }
 
-  /*otb::ogr::*
-   * Flushes all changes to disk.
+  /** Flushes all changes to disk.
    * \throw itd::ExceptionObject in case the flush operation failed.
    * \sa OGRDataSource::SyncToDisk
    */
   void SyncToDisk();
 
-  /**
-   * Returns whether a capability is avalaible.
+  /** Returns whether a capability is avalaible.
    * \param[in] capabilityName  name of the capability to check.
    * \throw None
    * \sa OGRDataSource::TestCapability
@@ -578,6 +576,8 @@ private:
 } } // end namespace otb::ogr
 
 #if 0
+// Either this, or inheriting from noncopyable is required for DataSource to be
+// compatible with BOOST_FOREACH
 namespace boost { namespace foreach {
   template<typename T> struct is_noncopyable; // forward declaration
   template <>

@@ -33,6 +33,10 @@ namespace otb {
 
 #include "otbOGRDriversInit.h"
 #include "otbOGRDataSourceWrapper.h"
+// #include "otbOGRLayerWrapper.h" // implicit
+// #include "otbOGRFeatureWrapper.h" // implicit
+// #include "otbOGRFieldWrapper.h" // implicit
+// #include "otbOGRGeometryWrapper.h" // implicit
 
 /**\ingroup Geometry
  * \file    otbOGR.h
