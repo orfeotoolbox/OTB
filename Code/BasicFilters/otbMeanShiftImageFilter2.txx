@@ -23,6 +23,7 @@
 
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
+#include "otbUnaryFunctorWithIndexWithOutputSizeImageFilter.h"
 #include "otbMacro.h"
 
 #include "itkProgressReporter.h"
@@ -293,6 +294,18 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 
   m_NumberOfComponentsPerPixel = this->GetInput()->GetNumberOfComponentsPerPixel();
 
+
+  typedef SpatialRangeJointDomainTransform<InputImageType, RealVectorImageType> FunctionType;
+  typedef otb::UnaryFunctorWithIndexWithOutputSizeImageFilter<InputImageType, RealVectorImageType, FunctionType> JointImageFunctorType;
+
+  typename JointImageFunctorType::Pointer jointImageFunctor = JointImageFunctorType::New();
+
+  jointImageFunctor->SetInput(inputPtr);
+  jointImageFunctor->GetFunctor().Initialize(ImageDimension, m_NumberOfComponentsPerPixel, m_SpatialBandwidth, m_RangeBandwidth);
+  jointImageFunctor->Update();
+  m_JointImage = jointImageFunctor->GetOutput();
+
+/*
   // Allocate the joint domain image
   m_JointImage = RealVectorImageType::New();
   m_JointImage->SetNumberOfComponentsPerPixel(ImageDimension + m_NumberOfComponentsPerPixel);
@@ -325,7 +338,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     ++inputIt;
     ++jointIt;
     }
-
+*/
 }
 
 

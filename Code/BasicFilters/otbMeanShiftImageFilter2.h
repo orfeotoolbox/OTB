@@ -27,6 +27,52 @@
 namespace otb
 {
 
+template<class TInputImage, class TOutputJointImage>
+class SpatialRangeJointDomainTransform
+{
+public:
+  typedef double RealType;
+
+  SpatialRangeJointDomainTransform() {}
+  ~SpatialRangeJointDomainTransform() {}
+
+  inline typename TOutputJointImage::PixelType operator() (const typename TInputImage::PixelType & inputPixel, const typename TInputImage::IndexType & index)
+  {
+    typename TOutputJointImage::PixelType jointPixel;
+    jointPixel.SetSize(ImageDimension + m_NumberOfComponentsPerPixel);
+
+    for(unsigned int comp = 0; comp < ImageDimension; comp++)
+      {
+      jointPixel[comp] = index[comp] / m_SpatialBandwidth;
+      }
+    for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
+      {
+      jointPixel[ImageDimension + comp] = inputPixel[comp] / m_RangeBandwidth;
+      }
+    return jointPixel;
+  }
+
+  void Initialize(unsigned int _ImageDimension, unsigned int _m_NumberOfComponentsPerPixel, RealType _m_SpatialBandwidth, RealType _m_RangeBandwidth)
+  {
+    ImageDimension = _ImageDimension;
+    m_NumberOfComponentsPerPixel = _m_NumberOfComponentsPerPixel;
+    m_SpatialBandwidth = _m_SpatialBandwidth;
+    m_RangeBandwidth = _m_RangeBandwidth;
+    m_OutputSize = ImageDimension + m_NumberOfComponentsPerPixel;
+  }
+
+  unsigned int GetOutputSize()
+  {
+    return m_OutputSize;
+  }
+
+private:
+  unsigned int ImageDimension;
+  unsigned int m_NumberOfComponentsPerPixel;
+  unsigned int m_OutputSize;
+  RealType m_SpatialBandwidth;
+  RealType m_RangeBandwidth;
+};
 
 /** \class MeanShiftImageFilter2
  *
