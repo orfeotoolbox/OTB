@@ -27,6 +27,14 @@
 namespace otb
 {
 
+/** \class SpatialRangeJointDomainTransform
+ *
+ *
+ * Functor returning the joint spatial-range representation of a pixel, i.e. the
+ * concatenation of range components and coordinates as a vector. Components are
+ * scaled by their respective spatial and range bandwidth.
+ */
+
 template<class TInputImage, class TOutputJointImage>
 class SpatialRangeJointDomainTransform
 {
@@ -74,36 +82,6 @@ private:
   RealType m_RangeBandwidth;
 };
 
-/** \class MeanShiftImageFilter2
- *
- *
- * Mean shift is a data clustering algorithm often used in image processing and segmentation.
- * For a given pixel, the mean shift will build a set of neighboring pixels within a given spatial
- * bandwidth (can be set using SetSpatialBandwidth()) and a spectral range (can be set using SetRangeBandwidth()).
- * The spatial and spectral center of this set is then computed and the algorithm iterates with this new spatial
- * and spectral center.
- *
- * Mean shift can be used for edge-preserving smoothing, or for clustering. The GetOutput() method
- * return concatenation of spatial and spectral meanshift filtered data GetSpatialOutput() and GetSpectralOutput() gives
- * resp. spatial and Spectral filtering parts
- *
- *
- * GetMetricOutput() method gives mean shift vector
- * GetIterationOutput() returns the number of iterations performed for each pixel.
- *
- * For more information on mean shift techniques, one might consider reading the following article:
- *
- * D. Comaniciu, P. Meer, "Mean Shift: A Robust Approach Toward Feature Space Analysis," IEEE Transactions on
- * Pattern Analysis and Machine Intelligence, vol. 24, no. 5, pp. 603-619, May, 2002
- * D. Comaniciu, P. Meer, "Robust analysis of feature spaces: color image segmentation," cvpr, p. 750, 1997
- * IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'97), 1997
- * D. Comaniciu, P. Meer, "Mean Shift Analysis and Applications," iccv, p. 1197, Seventh International Conference
- * on Computer Vision (ICCV'99) - Volume 2, 1999
- *
- * \sa MeanShiftImageFilter
- *
- * \ingroup ImageEnhancement
- */
 
 class KernelUniform
 {
@@ -143,7 +121,36 @@ class NormL2
 {
 };
 
-
+/** \class MeanShiftImageFilter2
+ *
+ *
+ * Mean shift is a data clustering algorithm often used in image processing and segmentation.
+ * For a given pixel, the mean shift will build a set of neighboring pixels within a given spatial
+ * bandwidth (can be set using SetSpatialBandwidth()) and a spectral range (can be set using SetRangeBandwidth()).
+ * The spatial and spectral center of this set is then computed and the algorithm iterates with this new spatial
+ * and spectral center.
+ *
+ * Mean shift can be used for edge-preserving smoothing, or for clustering. The GetOutput() method
+ * return concatenation of spatial and spectral meanshift filtered data GetSpatialOutput() and GetSpectralOutput() gives
+ * resp. spatial and Spectral filtering parts
+ *
+ *
+ * GetMetricOutput() method gives mean shift vector
+ * GetIterationOutput() returns the number of iterations performed for each pixel.
+ *
+ * For more information on mean shift techniques, one might consider reading the following article:
+ *
+ * D. Comaniciu, P. Meer, "Mean Shift: A Robust Approach Toward Feature Space Analysis," IEEE Transactions on
+ * Pattern Analysis and Machine Intelligence, vol. 24, no. 5, pp. 603-619, May, 2002
+ * D. Comaniciu, P. Meer, "Robust analysis of feature spaces: color image segmentation," cvpr, p. 750, 1997
+ * IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'97), 1997
+ * D. Comaniciu, P. Meer, "Mean Shift Analysis and Applications," iccv, p. 1197, Seventh International Conference
+ * on Computer Vision (ICCV'99) - Volume 2, 1999
+ *
+ * \sa MeanShiftImageFilter
+ *
+ * \ingroup ImageEnhancement
+ */
 template <class TInputImage, class TOutputImage, class TKernel = KernelUniform, class TNorm = NormL2, class TOutputMetricImage = TOutputImage, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
 class ITK_EXPORT MeanShiftImageFilter2
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
@@ -233,8 +240,6 @@ protected:
 
    virtual void GenerateInputRequestedRegion();
 
-   //virtual void EnlargeOutputRequestedRegion( itk::DataObject *output );
-
    virtual void BeforeThreadedGenerateData();
 
    /** MeanShiftFilter can be implemented as a multithreaded filter.
@@ -289,6 +294,7 @@ private:
   KernelType m_SpatialKernel;
   KernelType m_RangeKernel;
 
+  /** Number of components per pixel in the input image */
   unsigned int m_NumberOfComponentsPerPixel;
 
   /** Input data in the joint spatial-range domain, scaled by the bandwidths */

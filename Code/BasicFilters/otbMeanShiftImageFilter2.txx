@@ -296,6 +296,10 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   m_NumberOfComponentsPerPixel = this->GetInput()->GetNumberOfComponentsPerPixel();
 
 
+  // m_JointImage is the input data expressed in the joint spatial-range
+  // domain, i.e. spatial coordinates are concatenated to the range values.
+  // Moreover, pixel components in this image are normalized by their respective
+  // (spatial or range) bandwith.
   typedef SpatialRangeJointDomainTransform<InputImageType, RealVectorImageType> FunctionType;
   typedef otb::UnaryFunctorWithIndexWithOutputSizeImageFilter<InputImageType, RealVectorImageType, FunctionType> JointImageFunctorType;
 
@@ -577,6 +581,11 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
         modeCandidate[comp] = jointPixel[comp] * m_SpatialBandwidth + 0.5;
         }
       // Check status of candidate mode
+
+      // If pixel candidate has status 0 (no mode assigned) or 1 (mode assigned)
+      // but not 2 (pixel in current search path), and pixel has actually moved
+      // from its initial position, and pixel candidate is inside the output
+      // region, then perform optimization tasks
       if (m_modeTable->GetPixel(modeCandidate) != 2 && modeCandidate != currentIndex && outputRegionForThread.IsInside(modeCandidate))
         {
         // Obtain the data point to see if it close to jointPixel
@@ -592,15 +601,17 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 
         if (diff < 0.5) // Spectral value is close enough
           {
-          // if no mode has been associated to the candidate pixel then
+          // If no mode has been associated to the candidate pixel then
           // associate it to the upcoming mode
           if( m_modeTable->GetPixel(modeCandidate) == 0)
             {
+            // Add the candidate to the list of pixels that will be assigned the
+            // finally calculated mode value
             pointList[pointCount++] = modeCandidate;
             m_modeTable->SetPixel(modeCandidate, 2);
             } else // == 1
             {
-            // the candidate pixel has already been assigned to a mode
+            // The candidate pixel has already been assigned to a mode
             // Assign the same value
             rangePixel = rangeOutput->GetPixel(modeCandidate);
             for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
@@ -608,8 +619,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
               jointPixel[ImageDimension + comp] = rangePixel[comp] / m_RangeBandwidth;
               }
             // Update the mode table because pixel will be assigned just now
-            m_modeTable->SetPixel(currentIndex, 2);  // Note: in multithreading, = 1 would
-                                                     // not be safe
+            m_modeTable->SetPixel(currentIndex, 2);
             // bypass further calculation
             numBreaks++;
             break;
