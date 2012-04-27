@@ -79,14 +79,14 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
                                        m_TerminationCriteria // termination cirteria
                                       );
 
-  cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_32F );
+  cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
   var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
 
-  var_type.at<float>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
+  var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
 
   CvRTrees* rtree = new CvRTrees;
   rtree->train(samples, CV_ROW_SAMPLE, labels,
-	       cv::Mat(), cv::Mat(), cv::Mat(), cv::Mat(), params);
+	       cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
   
   //train(const Mat& trainData, int tflag, const Mat& responses, const Mat& varIdx=Mat(), const Mat& sampleIdx=Mat(), const Mat& varType=Mat(), const Mat& missingDataMask=Mat(), CvRTParams params=CvRTParams() )¶
 
