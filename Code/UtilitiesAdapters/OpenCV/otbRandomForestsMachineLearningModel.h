@@ -36,10 +36,10 @@ class ITK_EXPORT RandomForestsMachineLearningModel
 {
 public:
   /** Standard class typedefs. */
-  typedef RandomForestsMachineLearningModel             Self;
-  typedef MachineLearningModel<TInputValue, TTargetValue>                     Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef RandomForestsMachineLearningModel               Self;
+  typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   // Input related typedefs
   typedef TInputValue                                   InputValueType;
@@ -56,7 +56,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
-  itkTypeMacro(RandomForestsMachineLearningModel, itk::DataObject);
+  itkTypeMacro(RandomForestsMachineLearningModel, itk::MachineLearningModel);
 
   /** Train the machine learning model */
   virtual void Train();

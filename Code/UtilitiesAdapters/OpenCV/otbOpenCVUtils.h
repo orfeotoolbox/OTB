@@ -28,7 +28,7 @@ namespace otb
    *  cvReleaseMat function.  A null pointer is resturned in case the
    *  conversion failed.
    */
-  template <typename T> void ListSampleToMat(const T * listSample, cv::Mat & output) {
+  template <class T> void ListSampleToMat(const T * listSample, cv::Mat & output) {
     // Sample index
     unsigned int sampleIdx = 0;
 

@@ -18,7 +18,7 @@
 #ifndef __otbMachineLearningModel_h
 #define __otbMachineLearningModel_h
 
-#include "itkLightObject.h"
+#include "itkObject.h"
 #include "itkVariableLengthVector.h"
 #include "itkFixedArray.h"
 #include "itkListSample.h"
@@ -27,12 +27,12 @@ namespace otb
 {
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT MachineLearningModel 
-  : public itk::LightObject
+  : public itk::Object
 {
 public:
   /** Standard class typedefs. */
   typedef MachineLearningModel                          Self;
-  typedef itk::LightObject                              Superclass;
+  typedef itk::Object                                   Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
 
@@ -47,8 +47,7 @@ public:
   typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
   
   /** Run-time type information (and related methods). */
-  itkNewMacro(Self);
-  itkTypeMacro(MachineLearningModel, itk::LightObject);
+  itkTypeMacro(MachineLearningModel, itk::Object);
 
   /** Train the machine learning model */
   virtual void Train() = 0;

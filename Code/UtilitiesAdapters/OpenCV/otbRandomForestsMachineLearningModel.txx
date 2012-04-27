@@ -57,12 +57,12 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Train()
 {
   //convert listsample to opencv matrix
-  const cv::Mat cvInputSample;
-  otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), cvInputSample);
+  cv::Mat samples;
+  otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
   
-  const cv::Mat training_classifications;
+  cv::Mat labels;
+  otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
   //Mat var_type = Mat(ATTRIBUTES_PER_SAMPLE + 1, 1, CV_8U );
-  const cv::Mat var_type;
   
   //train rf
 
@@ -79,16 +79,18 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
                                        m_TerminationCriteria // termination cirteria
                                       );
 
+  cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_32F );
+  var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
+
+  var_type.at<float>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
+
   CvRTrees* rtree = new CvRTrees;
-  rtree->train(cvInputSample, CV_ROW_SAMPLE, training_classifications,
+  rtree->train(samples, CV_ROW_SAMPLE, labels,
 	       cv::Mat(), cv::Mat(), cv::Mat(), cv::Mat(), params);
   
   //train(const Mat& trainData, int tflag, const Mat& responses, const Mat& varIdx=Mat(), const Mat& sampleIdx=Mat(), const Mat& varType=Mat(), const Mat& missingDataMask=Mat(), CvRTParams params=CvRTParams() )¶
 
   //convert opencv matrix to listsample
-  typename TargetListSampleType::Pointer targetListSample = TargetListSampleType::New();
-  
-  this->SetTargetListSample(otb::MatToListSample<TargetListSampleType>(cvInputSample));
   
   //cv::cvReleaseMat(cvInputSample);
 }
