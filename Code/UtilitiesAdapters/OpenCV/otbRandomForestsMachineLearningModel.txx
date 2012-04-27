@@ -63,9 +63,9 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
   //Mat var_type = Mat(ATTRIBUTES_PER_SAMPLE + 1, 1, CV_8U );
-  
-  //train rf
 
+  //Define random forests paramneters
+  //FIXME do this in the constructor?
   CvRTParams params = CvRTParams(m_MaxDepth, // max depth
                                        m_MinSampleCount, // min sample count
                                        m_RegressionAccuracy, // regression accuracy: N/A here
@@ -84,15 +84,10 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
 
-  //CvRTrees* rtree = new CvRTrees;
+  //train the RT model
   m_RFModel->train(samples, CV_ROW_SAMPLE, labels,
 	       cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
   
-  //train(const Mat& trainData, int tflag, const Mat& responses, const Mat& varIdx=Mat(), const Mat& sampleIdx=Mat(), const Mat& varType=Mat(), const Mat& missingDataMask=Mat(), CvRTParams params=CvRTParams() )¶
-
-  //convert opencv matrix to listsample
-  
-  //cv::cvReleaseMat(cvInputSample);
 }
 
 template <class TInputValue, class TOutputValue>
@@ -106,6 +101,9 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   
   cv::Mat labels;
 
+  //FIXME the input sample must be 1d floating-point vector with the same 
+  //number of elements as the total number of variables used for 
+  //training in function predict
   double result = m_RFModel->predict(samples.col(0), labels);
 
   this->SetTargetListSample(otb::MatToListSample<TargetListSampleType>(labels));
