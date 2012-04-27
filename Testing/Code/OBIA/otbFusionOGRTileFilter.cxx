@@ -20,13 +20,22 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itksys/SystemTools.hxx"
+#include "otbOGRDataSourceWrapper.h"
 
 int otbFusionOGRTileFilter(int argc, char * argv[])
 {
-  const char * infname = argv[1];
-  const char * inOGRfname = argv[2];
-  const char * tmpOGRfname = argv[3];
-  unsigned int size = atoi(argv[4]);
+  if (argc != 6)
+    {
+      std::cerr << "Usage: " << argv[0];
+      std::cerr << " inputImage inputOGR outputOGR layerName streamingSize" << std::endl;
+      return EXIT_FAILURE;
+    }
+  
+  const char * infname      = argv[1];
+  const char * inOGRfname   = argv[2];
+  const char * tmpOGRfname  = argv[3];
+  const char * layerName    = argv[4];
+  unsigned int size         = atoi(argv[5]);
   
   /** Typedefs */
   const unsigned int Dimension = 2;
@@ -49,9 +58,12 @@ int otbFusionOGRTileFilter(int argc, char * argv[])
   ImageType::SizeType streamSize;
   streamSize.Fill(size);
   
+  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(tmpOGRfname, otb::ogr::DataSource::Modes::write);
+  
   filter->SetInput(reader->GetOutput());
-  filter->SetInputFileName(tmpOGRfname);
+  filter->SetOGRDataSource(ogrDS);
   filter->SetStreamSize(streamSize);
+  filter->SetLayerName(layerName);
   filter->GenerateData();
 
   return EXIT_SUCCESS;

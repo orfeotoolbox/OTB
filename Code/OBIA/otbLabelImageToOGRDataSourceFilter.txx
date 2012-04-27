@@ -27,55 +27,11 @@
 #include "gdal_priv.h"
 #include "cpl_conv.h"
 #include "gdal_alg.h"
-#include "ogrsf_frmts.h"
 
-#include <typeinfo>
+
 namespace otb
 {
 
-class OGRDataSourceWrapper : public itk::Object
-{
-
-public:
-  typedef OGRDataSourceWrapper      Self;
-  typedef itk::Object        Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
-
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(OGRDataSourceWrapper, itk::Object);
-
-  void SetDataSource (OGRDataSource* datasource)
-  {
-      m_DataSource = datasource;
-  }
-  /** Easy access to the internal OGRDataSource object.
-   *  Don't close it, it will be automatic */
-  OGRDataSource* GetDataSource() const
-    {
-    return m_DataSource;
-    }
-
-protected :
-  OGRDataSourceWrapper()
-   : m_DataSource(NULL)
-  {
-  }
-
-  ~OGRDataSourceWrapper()
-  {
-    if (m_DataSource)
-      {
-      OGRDataSource::DestroyDataSource(m_DataSource);
-      }
-  }
-
-private:
-  OGRDataSource* m_DataSource;
-}; // end of OGRDataSourceWrapper
 
 
 template <class TInputImage>
@@ -86,7 +42,6 @@ LabelImageToOGRDataSourceFilter<TInputImage>
    this->SetNumberOfRequiredOutputs(1);
    
    GDALAllRegister();
-   OGRRegisterAll();
    
    this->ProcessObject::SetNthOutput(0, this->MakeOutput(0) );
 }
@@ -97,15 +52,15 @@ typename LabelImageToOGRDataSourceFilter<TInputImage>::DataObjectPointer
 LabelImageToOGRDataSourceFilter<TInputImage>
 ::MakeOutput(unsigned int itkNotUsed(idx))
 {
-  return static_cast< DataObjectPointer >(OGRDataSourceObjectType::New().GetPointer());
+  return static_cast< DataObjectPointer >(OGRDataSourceType::New().GetPointer());
 }
 
 template <class TInputImage>
-const typename LabelImageToOGRDataSourceFilter<TInputImage>::OGRDataSourceObjectType *
+const typename LabelImageToOGRDataSourceFilter<TInputImage>::OGRDataSourceType *
 LabelImageToOGRDataSourceFilter<TInputImage>
 ::GetOutput()
 {
-  return static_cast< const OGRDataSourceObjectType * >(
+  return static_cast< const OGRDataSourceType *>(
               this->ProcessObject::GetOutput(0));
 }
 
@@ -219,14 +174,12 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     dataset->SetGeoTransform(geoTransform);
     
     //Create the output layer for GDALPolygonize().
-    const char * driverName = "Memory";
-    OGRSFDriver * ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
-    OGRDataSource * dataSource = ogrDriver->CreateDataSource("Shape",NULL);
+    ogr::DataSource::Pointer ogrDS = ogr::DataSource::New();
     
-    OGRLayer * outputLayer = dataSource->CreateLayer("layer",NULL,wkbMultiPolygon,NULL);
+    OGRLayerType outputLayer = ogrDS->CreateLayer("layer",NULL,wkbPolygon,NULL);
     
     OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
-    outputLayer->CreateField(&field, true);
+    outputLayer.CreateField(&field, true);
 
     //Call GDALPolygonize()
     char ** options;
@@ -239,16 +192,10 @@ LabelImageToOGRDataSourceFilter<TInputImage>
       options=option;
     }
     
-    GDALPolygonize(dataset->GetRasterBand(1), NULL, outputLayer, 0, options, NULL, NULL);
+    GDALPolygonize(dataset->GetRasterBand(1), NULL, &outputLayer.ogr(), 0, options, NULL, NULL);
     
     
-    OGRDataSourceObjectType * decoratedOutput =
-            static_cast< OGRDataSourceObjectType * >(
-              this->ProcessObject::GetOutput(0));
-              
-    typename OGRDataSourceWrapper::Pointer dataSourceWrapper = OGRDataSourceWrapper::New();
-    dataSourceWrapper->SetDataSource(dataSource);
-    decoratedOutput->Set(dataSourceWrapper);
+    this->SetNthOutput(0,ogrDS);
     
     //Clear memory
     GDALClose(dataset);

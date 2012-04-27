@@ -22,14 +22,12 @@
 
 #include "otbMeanShiftVectorImageFilter.h"
 #include "otbMeanShiftImageFilter.h"
-#include "itkConnectedComponentFunctorImageFilter.h"
-#include "otbConnectedComponentMuParserFunctor.h"
+
 
 #include "otbPersistentImageToOGRDataFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 
-#include "otbMeanShiftImageFilter2.h"
-#include "otbMeanShiftConnectedComponentSegmentationFilter.h"
+#include "otbOGRDataSourceWrapper.h"
 
 int otbStreamingVectorizedSegmentationOGRNew(int argc, char * argv[])
 {
@@ -51,27 +49,20 @@ int otbStreamingVectorizedSegmentationOGRNew(int argc, char * argv[])
 int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
 {
 
-  if (argc != 7)
+  if (argc != 8)
     {
       std::cerr << "Usage: " << argv[0];
-      std::cerr << " inputImage outputVec TileDimension spatialRadius rangeRadius minObjectSize" << std::endl;
+      std::cerr << " inputImage outputVec layerName TileDimension spatialRadius rangeRadius minObjectSize" << std::endl;
       return EXIT_FAILURE;
     }
 
-  const unsigned int spatialRadius = 9;
-  const unsigned int spectralRadius = 9;
-  const double spectralbandwidth = 50;
-  const double spatialbandwidth = 10;
-  const double threshold = 0.001;
-
-  const unsigned int spatialRadiusOldMS     = atoi(argv[4]);
-  const double rangeRadiusOldMS             = atof(argv[5]);
-  const unsigned int minimumObjectSizeOldMS = atoi(argv[6]);
-  /* conencted component parameters */
-
-  const char * maskexpression = "";
-  const char * segmentationexpression = "distance<0.2";
-  unsigned int minobjectsize = 20;
+  const char * imageName                    = argv[1];
+  const char * dataSourceName               = argv[2];
+  const char * layerName                    = argv[3];
+  const unsigned int tileSize               = atoi(argv[4]);
+  const unsigned int spatialRadiusOldMS     = atoi(argv[5]);
+  const double rangeRadiusOldMS             = atof(argv[6]);
+  const unsigned int minimumObjectSizeOldMS = atoi(argv[7]);
 
 
   typedef float InputPixelType;
@@ -80,64 +71,35 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
 
   // Typedefs
   typedef otb::VectorImage<InputPixelType,  Dimension>    ImageType;
-  //typedef otb::Image<InputPixelType,  Dimension>          ImageType;
   typedef otb::Image<unsigned int, Dimension>             LabelImageType;
-  typedef double                                          KernelType;
 
   //old mean shift filter
   typedef otb::MeanShiftVectorImageFilter<ImageType, ImageType, LabelImageType> SegmentationFilterType;
-  //typedef otb::MeanShiftImageFilter<ImageType, ImageType, LabelImageType> SegmentationFilterType;
-
-
-  //connectedComponnent filter
-  /*typedef otb::Functor::ConnectedComponentMuParserFunctor<ImageType::PixelType>  FunctorType;
-  typedef itk::ConnectedComponentFunctorImageFilter<ImageType, LabelImageType, FunctorType, LabelImageType > SegmentationFilterType;
-  */
-
-  //New mean shift filter
-  /*typedef otb::MeanShiftConnectedComponentSegmentationFilter
-  < ImageType, LabelImageType, LabelImageType >  SegmentationFilterType; */
-  typedef otb::MeanShiftImageFilter2<ImageType,ImageType> MeanShiftFilterType;
-
-
   typedef otb::StreamingVectorizedSegmentationOGR<ImageType, SegmentationFilterType> StreamingVectorizedSegmentationOGRType;
   typedef otb::ImageFileReader<ImageType>                      ReaderType;
 
   ReaderType::Pointer             reader = ReaderType::New();
-  StreamingVectorizedSegmentationOGRType::Pointer filter = StreamingVectorizedSegmentationOGRType::New();
-  MeanShiftFilterType::Pointer meanShiftFilter = MeanShiftFilterType::New();
+  StreamingVectorizedSegmentationOGRType::Pointer filter = StreamingVectorizedSegmentationOGRType::New();  
 
-
-
-  reader->SetFileName(argv[1]);
-  reader->GenerateOutputInformation();
-
-
-  //New Filter mean shift
-  meanShiftFilter->SetRangeBandwidth(spectralbandwidth);
-  meanShiftFilter->SetSpatialBandwidth(spatialbandwidth);
-  meanShiftFilter->SetThreshold(threshold);
-  meanShiftFilter->SetInput(reader->GetOutput());
-  meanShiftFilter->UpdateOutputInformation();
-
-  /*filter->GetSegmentationFilter()->SetMeanShiftFilter(meanShiftFilter);
-  filter->GetSegmentationFilter()->SetMaskExpression(maskexpression);
-  filter->GetSegmentationFilter()->SetConnectedComponentExpression(segmentationexpression);
-  filter->GetSegmentationFilter()->SetMinimumObjectSize(minobjectsize); */
+  reader->SetFileName(imageName);
+  reader->UpdateOutputInformation();
+  
+  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
 
   filter->SetInput(reader->GetOutput());
+  filter->SetOGRDataSource(ogrDS);
   //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
-  filter->GetStreamer()->SetTileDimensionTiledStreaming(atoi(argv[3]));
+  filter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
+  filter->SetLayerName(layerName);
   filter->SetFieldName(fieldName);
   filter->SetStartLabel(1);
   filter->SetUse8Connected(false);
   filter->GetSegmentationFilter()->SetSpatialRadius(spatialRadiusOldMS);
   filter->GetSegmentationFilter()->SetRangeRadius(rangeRadiusOldMS);
   filter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSizeOldMS);
-  //filter->GetSegmentationFilter()->GetFunctor().SetExpression("distance<15");
 
-  filter->SetFileName(argv[2]);
-  filter->Initialize(); //must do this after SetFileName and SetInput...
+
+  filter->Initialize(); //must be called !
 
   filter->Update();
 

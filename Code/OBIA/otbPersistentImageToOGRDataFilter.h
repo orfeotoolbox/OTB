@@ -24,11 +24,10 @@
 #include "otbPersistentImageFilter.h"
 
 #include "otbLabelImageToOGRDataSourceFilter.h"
-#include "itkDataObjectDecorator.h"
+#include "otbOGRDataSourceWrapper.h"
 
 #include "itkMacro.h"
 
-class OGRDataSource;
 
 namespace otb
 {
@@ -49,8 +48,8 @@ class ITK_EXPORT PersistentImageToOGRDataFilter :
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentImageToOGRDataFilter               Self;
-  typedef PersistentImageFilter<TImage, TImage>            Superclass;
+  typedef PersistentImageToOGRDataFilter                  Self;
+  typedef PersistentImageFilter<TImage, TImage>           Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
@@ -65,13 +64,11 @@ public:
   typedef typename InputImageType::PixelType         PixelType;
   typedef typename InputImageType::InternalPixelType InternalPixelType;
 
+  typedef ogr::DataSource                            OGRDataSourceType;
+  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
+  typedef ogr::Layer                                 OGRLayerType;
+  typedef ogr::Feature                               OGRFeatureType;
 
-  typedef itk::DataObjectDecorator<OGRDataSourceWrapper> OGRDataSourceObjectType;
-  typedef typename OGRDataSourceObjectType::Pointer  OGRDataSourceObjectPointerType;
-
-
-  /** Smart Pointer type to a DataObject. */
-  typedef itk::DataObject::Pointer DataObjectPointer;
 
   void AllocateOutputs();
 
@@ -81,9 +78,9 @@ public:
   
   virtual void Initialize(void);
   
-  /** Specify the name of the output shapefile to write. */
-  itkSetStringMacro(FileName);
-  itkGetStringMacro(FileName);
+  /** Set/Get the name of the output layer to write in the input ogrDataSource. */
+  itkSetStringMacro(LayerName);
+  itkGetStringMacro(LayerName);
   
   /** Set/Get the Field Name of the ogr file in which labels will be written. (default is "DN")*/
   itkSetMacro(FieldName, std::string);
@@ -91,6 +88,11 @@ public:
   
   /** Get the size of the tile used for streaming. */
   itkGetMacro(StreamSize, SizeType);
+  
+  /** Set/Get the input OGRDataSource */
+  void SetOGRDataSource( OGRDataSourcePointerType ogrDS );
+  OGRDataSourceType * GetOGRDataSource( void );
+
 
 protected:
   PersistentImageToOGRDataFilter();
@@ -107,15 +109,13 @@ private:
   PersistentImageToOGRDataFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  virtual OGRDataSourceObjectPointerType ProcessTile() = 0;
-  
-  std::string GetOGRDriverName(std::string name) const;
+  virtual OGRDataSourcePointerType ProcessTile() = 0;
   
   std::string m_FieldName;
-  std::string m_FileName;
-  unsigned int m_TileNum;
+  std::string m_LayerName;
+  OGRwkbGeometryType m_GeometryType;
   SizeType m_StreamSize;
-  OGRDataSource * m_DataSource;
+  //OGRDataSourcePointerType m_DataSource;
 
 }; // end of class
 } // end namespace otb

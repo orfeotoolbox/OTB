@@ -252,6 +252,7 @@ ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
      otbStreamingVectorizedSegmentationOGR
      ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
      ${TEMP}/obTvStreamingVectorizedSegmentationOGR.sqlite
+     NewLayer
      100
      5
      15.
@@ -267,6 +268,7 @@ ADD_TEST(obTuFusionOGRTileFilter ${OBIA_TESTS1}
     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
     ${INPUTDATA}/QB_Toulouse_Ortho_withTiles.sqlite
     ${TEMP}/obTvFusionOGRTile.sqlite
+    layer
     112
     )
 
@@ -351,7 +353,7 @@ otbLabelImageToLabelMapWithAdjacencyFilter.cxx
 )
 
 ADD_EXECUTABLE(otbOBIATests1 otbOBIATests1.cxx ${BasicOBIA_SRCS1})
-TARGET_LINK_LIBRARIES(otbOBIATests1 OTBIO OTBOBIA  OTBTesting)
+TARGET_LINK_LIBRARIES(otbOBIATests1 OTBIO OTBOBIA  OTBTesting OTBOGRAdapters)
 
 IF(OTB_USE_PQXX)
 ADD_EXECUTABLE(otbOBIATests2 otbOBIATests2.cxx ${BasicOBIA_SRCS2})

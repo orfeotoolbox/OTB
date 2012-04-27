@@ -19,8 +19,7 @@
 #define __otbLabelImageToOGRDataSourceFilter_h
 
 #include "itkProcessObject.h"
-#include "itkDataObjectDecorator.h"
-#include "itkDataObject.h"
+#include "otbOGRDataSourceWrapper.h"
 
 namespace otb
 {
@@ -32,7 +31,6 @@ class OGRDataSourceWrapper;
  *         a OGRDataSource. It is a non-streamed version.
  *
  *
- *  \sa StreamingLabelImageToOGRDataSourceFilter (streamed version)
  *  \ingroup OBIA
  *
  *
@@ -66,7 +64,9 @@ public:
   typedef typename InputImageType::PointType    OriginType;
   typedef typename InputImageType::IndexType    IndexType;
   
-  typedef itk::DataObjectDecorator<OGRDataSourceWrapper> OGRDataSourceObjectType;
+  typedef ogr::DataSource                            OGRDataSourceType;
+  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
+  typedef ogr::Layer                                 OGRLayerType;
   
   /** Set/Get the input image of this process object.  */
   virtual void SetInput(const InputImageType *input);
@@ -78,7 +78,7 @@ public:
   itkSetMacro(Use8Connected, bool);
   itkGetMacro(Use8Connected, bool);
   
-  const OGRDataSourceObjectType * GetOutput();
+  const OGRDataSourceType * GetOutput();
   
 protected:
   LabelImageToOGRDataSourceFilter();

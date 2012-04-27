@@ -19,7 +19,7 @@
 #define __otbFusionOGRTileFilter_h
 
 #include "itkProcessObject.h"
-#include "ogrsf_frmts.h"
+#include "otbOGRDataSourceWrapper.h"
 #include <algorithm>
 
 namespace otb
@@ -59,6 +59,11 @@ public:
   typedef typename InputImageType::SpacingType  SpacingType;
   typedef typename InputImageType::PointType    OriginType;
   typedef typename InputImageType::IndexType    IndexType;
+  
+  typedef ogr::DataSource                            OGRDataSourceType;
+  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
+  typedef ogr::Layer                                 OGRLayerType;
+  typedef ogr::Feature                               OGRFeatureType;
 
   
   /** Set/Get the input image of this process object.  */
@@ -71,13 +76,17 @@ public:
   /** Return the name of the class. */
   itkTypeMacro(FusionOGRTileFilter, ProcessObject);
   
-  /** Set/Get Input OGR filename */
-  itkSetMacro(InputFileName, std::string);
-  itkGetMacro(InputFileName, std::string);
+  /** Set/Get the input OGRDataSource */
+  void SetOGRDataSource( OGRDataSourcePointerType ogrDS );
+  OGRDataSourceType * GetOGRDataSource( void );
   
   /** Set/Get the size of the stream */
   itkSetMacro(StreamSize, SizeType);
   itkGetMacro(StreamSize, SizeType);
+  
+  /** Set/Get the name of the output layer to write in the input ogrDataSource. */
+  itkSetStringMacro(LayerName);
+  itkGetStringMacro(LayerName);
   
   /** Generate Data method*/
   virtual void GenerateData();
@@ -94,7 +103,10 @@ protected:
   };
   struct FeatureStruct
   {
-     OGRFeature * feat;
+     FeatureStruct(OGRFeatureDefn & defn) : feat(defn), fusioned(false)
+     {
+     }
+     OGRFeatureType feat;
      bool fusioned;
   };
   struct SortFeatureStruct
@@ -102,13 +114,15 @@ protected:
      bool operator() (FusionStruct f1, FusionStruct f2) { return (f1.overlap > f2.overlap); }
   } SortFeature;
   
+  void ProcessStreamingLine(bool line);
+  
 private:
   FusionOGRTileFilter(const Self &);  //purposely not implemented
   void operator =(const Self&);      //purposely not implemented
   
-  std::string m_InputFileName;
   SizeType m_StreamSize;
   unsigned int m_Radius;
+  std::string m_LayerName;
 
 
 };

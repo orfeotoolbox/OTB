@@ -21,17 +21,6 @@
 #ifndef __otbStreamingVectorizedSegmentationOGR_h
 #define __otbStreamingVectorizedSegmentationOGR_h
 
-#include <vector>
-
-#include "itkImageRegion.h"
-#include "otbVectorData.h"
-#include "itkPreOrderTreeIterator.h"
-
-#include "itkDataObject.h"
-#include "itkDataObjectDecorator.h"
-#include "itkSimpleDataObjectDecorator.h"
-
-#include "otbLabelImageToVectorDataFilter.h"
 #include "itkExtractImageFilter.h"
 
 #include "otbPersistentImageFilter.h"
@@ -110,22 +99,22 @@ class PersistentStreamingLabelImageToOGRDataFilter
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentStreamingLabelImageToOGRDataFilter                     Self;
-  typedef PersistentImageToOGRDataFilter<TImageType>                       Superclass;
-  typedef itk::SmartPointer<Self>                                          Pointer;
-  typedef itk::SmartPointer<const Self>                                    ConstPointer;
+  typedef PersistentStreamingLabelImageToOGRDataFilter     Self;
+  typedef PersistentImageToOGRDataFilter<TImageType>       Superclass;
+  typedef itk::SmartPointer<Self>                          Pointer;
+  typedef itk::SmartPointer<const Self>                    ConstPointer;
 
   typedef typename Superclass::InputImageType              InputImageType;
   typedef typename Superclass::InputImagePointer           InputImagePointerType;
 
-  
   typedef TSegmentationFilter                              SegmentationFilterType;
   typedef typename LabeledOutputAccessor<SegmentationFilterType>::LabelImageType  LabelImageType;
   typedef typename LabelImageType::PixelType                                      LabelPixelType;
   
   typedef otb::LabelImageToOGRDataSourceFilter<LabelImageType>          LabelImageToOGRDataSourceFilterType;
-  typedef typename LabelImageToOGRDataSourceFilterType::OGRDataSourceObjectType  OGRDataSourceObjectType;
-  typedef typename OGRDataSourceObjectType::Pointer OGRDataSourceObjectPointerType;
+  typedef typename Superclass::OGRDataSourceType                        OGRDataSourceType;
+  typedef typename Superclass::OGRDataSourcePointerType                 OGRDataSourcePointerType;
+  typedef typename Superclass::OGRLayerType                             OGRLayerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -156,7 +145,7 @@ private:
   PersistentStreamingLabelImageToOGRDataFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  virtual OGRDataSourceObjectPointerType ProcessTile();
+  virtual OGRDataSourcePointerType ProcessTile();
   
   //std::string m_FieldName;
   LabelPixelType m_TileMaxLabel;
@@ -178,9 +167,9 @@ public:
   /** Standard Self typedef */
   typedef StreamingVectorizedSegmentationOGR Self;
   typedef PersistentFilterStreamingDecorator
-  <PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter> > Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  <PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter> >   Superclass;
+  typedef itk::SmartPointer<Self>                                                    Pointer;
+  typedef itk::SmartPointer<const Self>                                              ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -190,7 +179,10 @@ public:
 
   typedef TSegmentationFilter                      SegmentationFilterType;
   typedef TImageType                               InputImageType;
-  typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>::LabelPixelType LabelPixelType;
+  typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType,
+               TSegmentationFilter>::LabelPixelType                           LabelPixelType;
+  typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType,
+               TSegmentationFilter>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
 
   void SetInput(InputImageType * input)
   {
@@ -199,6 +191,11 @@ public:
   const InputImageType * GetInput()
   {
     return this->GetFilter()->GetInput();
+  }
+  
+  void SetOGRDataSource( OGRDataSourcePointerType ogrDS )
+  {
+    this->GetFilter()->SetOGRDataSource(ogrDS);
   }
 
   SegmentationFilterType * GetSegmentationFilter()
@@ -226,9 +223,9 @@ public:
      return this->GetFilter()->GetStartLabel();
   }
   
-  void SetFileName(const std::string & fileName)
+  void SetLayerName(const std::string & fileName)
   {
-     this->GetFilter()->SetFileName(fileName);
+     this->GetFilter()->SetLayerName(fileName);
   }
   
   void Initialize()
