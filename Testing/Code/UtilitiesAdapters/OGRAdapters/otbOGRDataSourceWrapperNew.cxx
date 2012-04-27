@@ -92,8 +92,10 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_mem_add_n_del_layer)
 
 BOOST_AUTO_TEST_CASE(OGRDataSource_new_exceptions)
 {
-  BOOST_CHECK_THROW(ogr::DataSource::New("name-that-shall-not-exist.shp", ogr::DataSource::Modes::read), itk::ExceptionObject);
-  BOOST_CHECK_THROW(ogr::DataSource::New("unsupported.extension", ogr::DataSource::Modes::write), itk::ExceptionObject)
+  BOOST_CHECK_THROW(ogr::DataSource::New("name-that-shall-not-exist.shp", ogr::DataSource::Modes::read),
+    itk::ExceptionObject);
+  BOOST_CHECK_THROW(ogr::DataSource::New("unsupported.extension", ogr::DataSource::Modes::write),
+    itk::ExceptionObject)
 }
 
 BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp)
