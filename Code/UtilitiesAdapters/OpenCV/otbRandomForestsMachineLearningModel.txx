@@ -106,7 +106,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   
   cv::Mat labels;
 
-  double result = m_RFModel->predict(samples, labels);
+  double result = m_RFModel->predict(samples.col(0), labels);
 
   this->SetTargetListSample(otb::MatToListSample<TargetListSampleType>(labels));
   //convert Mat to listsample
