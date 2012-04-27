@@ -96,17 +96,22 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Predict()
 {
   //convert listsample to Mat
-  cv::Mat samples;
-  otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
-  
-  cv::Mat labels;
+  cv::Mat sample;
 
-  //FIXME the input sample must be 1d floating-point vector with the same 
+  for(typename InputListSampleType::ConstIterator sIt = this->GetInputListSample()->Begin();
+      sIt!=this->GetInputListSample()->Begin();++sIt)
+    {
+    otb::SampleToMat<InputSampleType>(sIt.GetMeasurementVector(),sample);
+  
+    cv::Mat label;
   //number of elements as the total number of variables used for 
   //training in function predict
   double result = m_RFModel->predict(samples.col(0), labels);
 
-  this->SetTargetListSample(otb::MatToListSample<TargetListSampleType>(labels));
+    double result = m_RFModel->predict(sample, label);
+    }
+
+  //this->SetTargetListSample(otb::MatToListSample<TargetListSampleType>(labels));
   //convert Mat to listsample
 }
 

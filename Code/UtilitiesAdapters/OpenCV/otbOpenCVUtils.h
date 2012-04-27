@@ -23,6 +23,18 @@
 
 namespace otb
 {
+  template <class T> void SampleToMat(const T & sample, cv::Mat& output)
+  {
+    output.create(1,sample.Size(),CV_32FC1);
+
+    // Loop on sample size
+    for(unsigned int i = 0; i < sample.Size();++i)
+      {
+      output.at<float>(0,i) = sample[i];
+      }
+  }
+
+
   /** Converts a ListSample of VariableLengthVector to a CvMat. The user
    *  is responsible for freeing the output pointer with the
    *  cvReleaseMat function.  A null pointer is resturned in case the
