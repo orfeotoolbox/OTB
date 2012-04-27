@@ -115,15 +115,17 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::Save()
+::Save(char * filename, const char * name)
 {
+  m_RFModel->save(filename, name);
 }
 
 template <class TInputValue, class TOutputValue>
 void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::Load()
+::Load(char * filename, const char * name)
 {
+  m_RFModel->load(filename, name);
 }
 
 template <class TInputValue, class TOutputValue>

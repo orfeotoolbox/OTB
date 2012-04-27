@@ -65,10 +65,10 @@ public:
   virtual void Predict();
 
   /** Save the model to file */
-  virtual void Save();
+  virtual void Save(char * filename, const char * name=0);
 
   /** Load the model from file */
-  virtual void Load();
+  virtual void Load(char * filename, const char * name=0);
 
   /* /\** Input accessors *\/ */
   /* itkSetObjectMacro(InputListSample,InputListSampleType); */
