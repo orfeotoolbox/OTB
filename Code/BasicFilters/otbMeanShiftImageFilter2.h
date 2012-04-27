@@ -189,8 +189,8 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   typedef itk::VariableLengthVector<RealType>         RealVector;
-
   typedef otb::VectorImage<RealType, InputImageType::ImageDimension> RealVectorImageType;
+  typedef otb::Image<unsigned short, InputImageType::ImageDimension>  ModeTableImageType;
 
   /** Setters / Getters */
   itkSetMacro(SpatialBandwidth, RealType);
@@ -293,6 +293,14 @@ private:
 
   /** Input data in the joint spatial-range domain, scaled by the bandwidths */
   typename RealVectorImageType::Pointer m_JointImage;
+
+  /** Image to store the status at each pixel:
+   * 0 : no mode has been found yet
+   * 1 : a mode has been assigned to this pixel
+   * 2 : pixel is in the path of the currently processed pixel and a mode will
+   *     be assigned to it
+   */
+  typename ModeTableImageType::Pointer m_modeTable;
 
 };
 
