@@ -20,16 +20,22 @@
 // standard includes
 #include <cassert>
 #include <numeric>
+#include <algorithm>
+#include <clocale> // toupper
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
 // ITK includes
 #include "itkMacro.h" // itkExceptionMacro
 #include "itkMetaDataObject.h"
 #include "itkExceptionObject.h"
+#include "itksys/SystemTools.hxx"
 // OTB includes
 #include "otbMacro.h"
 #include "otbMetaDataKey.h"
 #include "otbOGRDriversInit.h"
+#include "otbSystem.h"
 // OGR includes
 #include "ogrsf_frmts.h"
 
@@ -75,6 +81,46 @@ void otb::ogr::DataSource::Reset(OGRDataSource * source)
   m_DataSource = source;
 }
 
+namespace  { // Anonymous namespace
+struct ExtensionDriverAssociation
+  {
+  char const* extension;
+  char const* driverName;
+  bool Matches(std::string const& ext) const
+    {
+    return ext == extension;
+    }
+  };
+const ExtensionDriverAssociation k_ExtensionDriverMap[] =
+  {
+    {"SHP", "ESRI Shapefile"},
+    {"TAB", "MapInfo File"},
+    {"GML", "GML"},
+    {"GPX", "GPX"},
+    {"SQLITE", "SQLite"},
+    {"KML", "KML"},
+  };
+char const* DeduceDriverName(std::string filename)
+  {
+  std::transform(filename.begin(), filename.end(), filename.begin(), (int (*)(int))toupper);
+  if (0 == strncmp(filename.c_str(), "PG:", 3))
+    {
+    return "PostgreSQL";
+    }
+  const std::string extension = otb::System::GetExtension(filename);
+  ExtensionDriverAssociation const* whichIt =
+    std::find_if(
+      boost::begin(k_ExtensionDriverMap), boost::end(k_ExtensionDriverMap),
+      boost::bind(&ExtensionDriverAssociation::Matches, _1, extension));
+  if (whichIt ==  boost::end(k_ExtensionDriverMap))
+    {
+    return 0; // nothing found
+    }
+  return whichIt->driverName;
+  }
+} // Anonymous namespace
+
+
 otb::ogr::DataSource::DataSource()
 : m_DataSource(0)
 {
@@ -84,7 +130,7 @@ otb::ogr::DataSource::DataSource()
   assert(d && "OGR Memory driver not found");
   m_DataSource = d->CreateDataSource("in-memory");
   if (!m_DataSource) {
-    itkExceptionMacro(<< "Failed to create OGRMemDataSource");
+    itkExceptionMacro(<< "Failed to create OGRMemDataSource: " << CPLGetLastErrorMsg());
   }
   m_DataSource->SetDriver(d);
 }
@@ -100,12 +146,42 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
   Drivers::Init();
 
   const bool update = mode & Modes::write;
-  OGRDataSource * source = OGRSFDriverRegistrar::Open(filename.c_str(), update);
-  if (!source) {
-    itkGenericExceptionMacro(<< "Failed to open OGRDataSource file " << filename);
-  }
-  Pointer res = new DataSource(source);
-  return res;
+  if (itksys::SystemTools::FileExists(filename.c_str()))
+    {
+    OGRDataSource * source = OGRSFDriverRegistrar::Open(filename.c_str(), update);
+    if (!source)
+      {
+      itkGenericExceptionMacro(<< "Failed to open OGRDataSource file "
+        << filename<<": " << CPLGetLastErrorMsg());
+      }
+    Pointer res = new DataSource(source);
+    return res;
+    }
+  else
+    {
+    if (! update)
+      {
+      itkGenericExceptionMacro(<< "No DataSource named <"<<filename<<"> exists,"
+        " and the file opening mode does not permit updates. DataSource creation is thus avorted.");
+      }
+    // Hand made factory based on file extension.
+    char const* driverName = DeduceDriverName(filename);
+    if (!driverName)
+      {
+      itkGenericExceptionMacro(<< "No OGR driver known to OTB to create and handle a DataSource named <"<<filename<<">.");
+      }
+
+    OGRSFDriver * d = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
+    assert(d && "OGR driver not found");
+    OGRDataSource * source = d->CreateDataSource(filename.c_str());
+    if (!source) {
+      itkGenericExceptionMacro(<< "Failed to create OGRDataSource <"<<filename
+        <<"> (driver name:" << driverName<<">: " << CPLGetLastErrorMsg());
+    }
+    source->SetDriver(d);
+    Pointer res = new DataSource(source);
+    return res;
+    }
 }
 
 /*static*/
@@ -156,7 +232,8 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
   if (!ol)
     {
     itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
-      << "> in the OGRDataSource file " << m_DataSource->GetName());
+      << "> in the OGRDataSource file <" << m_DataSource->GetName()
+      <<">: " << CPLGetLastErrorMsg());
     }
   Layer l(ol);
   return l;
@@ -174,7 +251,8 @@ otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
     {
     itkGenericExceptionMacro(<< "Failed to copy the layer <"
       << srcLayer.GetName() << "> into the new layer <" <<newName
-      << "> in the OGRDataSource file " << m_DataSource->GetName());
+      << "> in the OGRDataSource file <" << m_DataSource->GetName()
+      <<">: " << CPLGetLastErrorMsg());
     }
   Layer l(ol);
   return l;
@@ -192,7 +270,7 @@ void otb::ogr::DataSource::DeleteLayer(size_t i)
   if (err != OGRERR_NONE)
     {
     itkExceptionMacro(<< "Cannot delete " << i << "th layer in the OGRDataSource <"
-      << m_DataSource->GetName() << ">.");
+      << m_DataSource->GetName() << ">: " << CPLGetLastErrorMsg());
     }
 }
 
@@ -209,7 +287,7 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(size_t i)
   if (!layer_ptr)
     {
     itkExceptionMacro( << "Unexpected error: cannot fetch " << i << "th layer in the OGRDataSource <"
-      << m_DataSource->GetName() << ">.");
+      << m_DataSource->GetName() << ">: " << CPLGetLastErrorMsg());
     }
     return otb::ogr::Layer(layer_ptr);
 }
@@ -236,7 +314,8 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(std::string const& name)
   if (!layer_ptr)
     {
     itkExceptionMacro( << "Cannot fetch any layer named <" << name
-      << "> in the OGRDataSource <" << m_DataSource->GetName() << ">.");
+      << "> in the OGRDataSource <" << m_DataSource->GetName() << ">: "
+      << CPLGetLastErrorMsg());
     }
   return otb::ogr::Layer(layer_ptr);
 }
@@ -259,7 +338,7 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
     {
 #if defined(PREFER_EXCEPTION)
     itkExceptionMacro( << "Unexpected error: cannot execute the SQL request <" << statement
-      << "> in the OGRDataSource <" << m_DataSource->GetName() << ">.");
+      << "> in the OGRDataSource <" << m_DataSource->GetName() << ">: " << CPLGetLastErrorMsg());
 #else
     // Cannot use the deleter made for result sets obtained from
     // OGRDataSource::ExecuteSQL because it checks for non-nullity....
@@ -327,6 +406,6 @@ void otb::ogr::DataSource::SyncToDisk()
   if (res != OGRERR_NONE)
     {
     itkExceptionMacro( << "Cannot flush the pending of the OGRDataSource <"
-      << m_DataSource->GetName() << ">.");
+      << m_DataSource->GetName() << ">: " << CPLGetLastErrorMsg());
     }
 }
