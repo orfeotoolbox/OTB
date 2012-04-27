@@ -24,7 +24,7 @@
 #include "ogr_feature.h"
 #include "otbOGRFeatureWrapper.h"
 #include "otbJoinContainer.h"
-
+#include <boost/array.hpp>
 /*===========================================================================*/
 /*===========================[ Static Assertions ]===========================*/
 /*===========================================================================*/
@@ -66,6 +66,14 @@ BOOST_STATIC_ASSERT(!(boost::is_same<
     at<FieldGetters_Map, int_<OFTString> >
     >::value
 ));
+
+BOOST_STATIC_ASSERT((boost::is_array<int[42]>::value));
+BOOST_STATIC_ASSERT(!(boost::is_array<boost::array<int, 42> >::value));
+BOOST_STATIC_ASSERT(!(boost::is_array<std::vector<int> >::value));
+
+BOOST_STATIC_ASSERT((boost::is_contiguous<int[42]>::value));
+BOOST_STATIC_ASSERT((boost::is_contiguous<boost::array<int, 42> >::value));
+BOOST_STATIC_ASSERT((boost::is_contiguous<std::vector<int> >::value));
 }
 } } // end namespace otb::ogr
 

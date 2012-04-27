@@ -28,6 +28,7 @@
 
 // #include <boost/mpl/assert.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/range/size.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/shared_ptr.hpp>
 class OGRFieldDefn;
@@ -36,6 +37,20 @@ class OGRFieldDefn;
 #include "ogr_core.h" // OGR enums
 #include "itkIndent.h"
 #include <cassert>
+
+#include <boost/type_traits/is_array.hpp>
+namespace boost {
+template <typename Range> struct is_contiguous
+  { enum {value = is_array<Range>::value}; };
+
+// todo: other vector params
+template <typename T> struct is_contiguous<std::vector<T> >
+  { enum {value = true}; };
+template <typename T, std::size_t N> class array;
+template <typename T, std::size_t N> struct is_contiguous<boost::array<T, N> >
+  { enum {value = true}; };
+} // boost namespace
+
 
 namespace otb { namespace ogr {
 
@@ -92,6 +107,29 @@ template
     };
 
 /**\ingroup GeometryInternals
+ * \class MemberSetterPtr
+ * Type for hosting simple member-function pointers to field setters.
+ * \tparam T type of field according to OGR API.
+ * \tparam ptr_to_function member function pointer to a field setter from \c
+ *         OGRFeature.
+ * <tt> = T</tt>)
+ *
+ * \internal
+ * This is a hack to pass a member function pointer as template-parameter.
+ */
+template
+  < typename T
+  , void ( OGRFeature::*ptr_to_function )(int, T value)
+  > class MemberSetterPtr
+    {
+  public:
+    static void call(OGRFeature &f, int index, T const& value)
+      {
+      (f.*ptr_to_function)(index, value);
+      }
+    };
+
+/**\ingroup GeometryInternals
  * \class MemberContainerGetterPtr
  * Type for hosting simple member-function pointers to list-field getters.
  * \tparam T type of field according to OGR API.
@@ -119,6 +157,73 @@ template
       }
     };
 
+/*===========================================================================*/
+template
+  < typename T
+  , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+  , typename ActualParamType = std::vector<T>
+  , bool Is_contiguous = boost::is_contiguous<ActualParamType>::value
+  > class TagDispatchMemberContainerSetterPtr;
+
+template
+  < typename T
+  , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+  , typename ActualParamType
+  > class TagDispatchMemberContainerSetterPtr<T, ptr_to_function, ActualParamType, true>
+    {
+  public:
+    static void call(OGRFeature &f, int index, ActualParamType const& container)
+      {
+      const int nb = boost::size(container);
+      (f.*ptr_to_function)(index, nb, &container[0]);
+      }
+    };
+
+template
+  < typename T
+  , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+  , typename ActualParamType
+  > class TagDispatchMemberContainerSetterPtr<T, ptr_to_function, ActualParamType, false>
+    {
+  public:
+    static void call(OGRFeature &f, int index, ActualParamType const& container)
+      {
+      const int nb = boost::size(container);
+      std::vector<T> v(boost::begin(container), boost::end(container));
+      (f.*ptr_to_function)(index, nb, &v[0]);
+      }
+    };
+
+/**\ingroup GeometryInternals
+ * \class MemberContainerSetterPtr
+ * Type for hosting simple member-function pointers to list-field setters.
+ * \tparam T type of field according to OGR API.
+ * \tparam ptr_to_function member function pointer to a list-field setter from
+ * \c OGRFeature.
+ * \tparam FinalReturnType type of the list-field according to OTB wrappers
+ * (default <tt> = std::vector<T></tt>)
+ *
+ * \internal
+ * This is a hack to pass a member function pointer as template-parameter.
+ */
+template
+  < typename T
+  , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+  , typename ActualParamType = std::vector<T>
+  > class MemberContainerSetterPtr
+    {
+  public:
+    static void call(OGRFeature &f, int index, ActualParamType const& container)
+      {
+      TagDispatchMemberContainerSetterPtr<
+        T
+        ,ptr_to_function
+        ,ActualParamType
+        , boost::is_contiguous<ActualParamType>::value
+        >::call(f, index, container);
+      }
+    };
+
 /**\ingroup GeometryInternals
  * Associative map of OGR field types (\c OGRFieldType) to their associated
  * getters.
@@ -132,6 +237,20 @@ typedef map
   , pair<int_<OFTString>,      MemberGetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
   // , pair<int_<OFTStringList>,  MemberGetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
   > FieldGetters_Map;
+
+/**\ingroup GeometryInternals
+ * Associative map of OGR field types (\c OGRFieldType) to their associated
+ * setters.
+ * \internal Relies on Boost.MPL
+ */
+typedef map
+  < pair<int_<OFTInteger>,     MemberSetterPtr<int,             &OGRFeature::SetField> >
+  , pair<int_<OFTIntegerList>, MemberContainerSetterPtr<int,    &OGRFeature::SetField> >
+  , pair<int_<OFTReal>,        MemberSetterPtr<double,          &OGRFeature::SetField> >
+  , pair<int_<OFTRealList>,    MemberContainerSetterPtr<double, &OGRFeature::SetField> >
+  // , pair<int_<OFTString>,      MemberSetterPtr<char const*,     &OGRFeature::SetField, std::string> >
+  // , pair<int_<OFTStringList>,  MemberSetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
+  > FieldSetters_Map;
 
 } // namespace metaprog
 
@@ -224,6 +343,18 @@ public:
     {
     assert(m_Definition.GetType() == FieldTraits<T>::kind);
     FieldDecodingTraits<T>::Set(m_Feature.ogr(), m_index, v);
+    }
+#else
+  template <typename T> void SetValue(T const& value)
+    {
+    const int VALUE = boost::mpl::at<metaprog::FieldType_Map, T>::type::value;
+    typedef typename boost::mpl::at<metaprog::FieldType_Map, T>::type Kind;
+    BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
+    assert(m_Definition.GetType() == Kind::value);
+    typedef typename boost::mpl::at<metaprog::FieldSetters_Map, Kind>::type SetterType;
+    BOOST_STATIC_ASSERT(!(boost::is_same<SetterType, boost::mpl::void_>::value));
+    assert(m_index >= 0 && int(m_index) < m_Feature->GetFieldCount());
+    SetterType::call(*m_Feature, m_index, value);
     }
 #endif
   template <typename T> T GetValue() const
