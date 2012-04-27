@@ -104,9 +104,6 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
     otb::SampleToMat<InputSampleType>(sIt.GetMeasurementVector(),sample);
   
     cv::Mat label;
-  //number of elements as the total number of variables used for 
-  //training in function predict
-  double result = m_RFModel->predict(samples.col(0), labels);
 
     double result = m_RFModel->predict(sample, label);
     }
