@@ -84,8 +84,8 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
 
-  CvRTrees* rtree = new CvRTrees;
-  rtree->train(samples, CV_ROW_SAMPLE, labels,
+  //CvRTrees* rtree = new CvRTrees;
+  m_RFModel->train(samples, CV_ROW_SAMPLE, labels,
 	       cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
   
   //train(const Mat& trainData, int tflag, const Mat& responses, const Mat& varIdx=Mat(), const Mat& sampleIdx=Mat(), const Mat& varType=Mat(), const Mat& missingDataMask=Mat(), CvRTParams params=CvRTParams() )¶
