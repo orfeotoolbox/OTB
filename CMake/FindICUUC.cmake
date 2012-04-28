@@ -1,0 +1,33 @@
+# - Find ICUUC
+# Find the native ICUUC includes and library
+#
+#   ICUUC_FOUND        - True if ICUUC found.
+#   ICUUC_INCLUDE_DIRS - where to find tinyxml.h, etc.
+#   ICUUC_LIBRARIES    - List of libraries when using ICUUC.
+#
+
+IF( ICUUC_INCLUDE_DIR )
+    # Already in cache, be silent
+    SET( ICUUC_FIND_QUIETLY TRUE )
+ENDIF( ICUUC_INCLUDE_DIR )
+
+FIND_PATH( ICUUC_INCLUDE_DIR unicode/unistr.h )
+
+FIND_LIBRARY( ICUUC_LIBRARY
+              NAMES icuuc )
+
+# handle the QUIETLY and REQUIRED arguments and set ICUUC_FOUND to TRUE if
+# all listed variables are TRUE
+INCLUDE( FindPackageHandleStandardArgs )
+FIND_PACKAGE_HANDLE_STANDARD_ARGS( ICUUC DEFAULT_MSG ICUUC_INCLUDE_DIR ICUUC_LIBRARY )
+
+MARK_AS_ADVANCED( ICUUC_INCLUDE_DIR ICUUC_LIBRARY )
+
+IF(ICUUC_FOUND)
+  SET(ICUUC_INCLUDE_DIRS ${ICUUC_INCLUDE_DIR})
+  SET(ICUUC_LIBRARIES ${ICUUC_LIBRARY})
+ELSE(ICUUC_FOUND)
+  SET(ICUUC_INCLUDE_DIRS)
+  SET(ICUUC_LIBRARIES)
+ENDIF(ICUUC_FOUND)
+
