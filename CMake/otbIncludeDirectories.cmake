@@ -267,6 +267,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   UtilitiesAdapters/CurlAdapters
   UtilitiesAdapters/OssimAdapters
   UtilitiesAdapters/TinyXMLAdapters
+  UtilitiesAdapters/OGRAdapters
   OBIA
   Fuzzy
   ObjectDetection
