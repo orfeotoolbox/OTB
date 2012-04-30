@@ -192,6 +192,7 @@ public:
   typedef TOutputIterationImage                       OutputIterationImageType;
 
   typedef otb::VectorImage<RealType, InputImageType::ImageDimension> OutputSpatialImageType;
+  typedef typename OutputSpatialImageType::Pointer                   OutputSpatialImagePointerType;
   typedef typename OutputSpatialImageType::PixelType                 OutputSpatialPixelType;
 
   typedef TKernel                                     KernelType;

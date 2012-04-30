@@ -41,7 +41,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   m_ModeSearchOptimization = true;
 
   this->SetNumberOfOutputs(4);
-  this->SetNthOutput(0, OutputImageType::New());
+  this->SetNthOutput(0, OutputSpatialImageType::New());
   this->SetNthOutput(1, OutputImageType::New());
   this->SetNthOutput(2, OutputMetricImageType::New());
   this->SetNthOutput(3, OutputIterationImageType::New());
@@ -214,15 +214,11 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   Superclass::GenerateInputRequestedRegion();
 
   // Retrieve input pointers
-  TInputImage * inPtr  = const_cast<TInputImage *>(this->GetInput());
-
-  TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
-  OutputSpatialImageType * outSpatialPtr = this->GetSpatialOutput();
-  TOutputImage * outRangePtr = this->GetRangeOutput();
-  OutputIterationImageType * outIterationPtr = this->GetIterationOutput();
+  InputImagePointerType inPtr  = const_cast<TInputImage *>(this->GetInput());
+  OutputImagePointerType outRangePtr = this->GetRangeOutput();
 
   // Check pointers before using them
-  if(!inPtr || !outMetricPtr || !outSpatialPtr || !outRangePtr || !outIterationPtr)
+  if ( !inPtr || !outRangePtr )
     {
     return;
     }
@@ -230,7 +226,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 
   // Retrieve requested region (TODO: check if we need to handle
   // region for outHDispPtr)
-  RegionType outputRequestedRegion = outMetricPtr->GetRequestedRegion();
+  RegionType outputRequestedRegion = outRangePtr->GetRequestedRegion();
 
   // spatial and range radius may differ, padding must be done with the largest.
   //unsigned int largestRadius= this->GetLargestRadius();
@@ -278,10 +274,10 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   typedef itk::ImageRegionConstIteratorWithIndex<InputImageType> InputIteratorWithIndexType;
   typedef itk::ImageRegionIterator<RealVectorImageType> JointImageIteratorType;
 
-  TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
-  OutputSpatialImageType * outSpatialPtr   = this->GetSpatialOutput();
-  TOutputImage * outRangePtr   = this->GetRangeOutput();
-  typename InputImageType::ConstPointer inputPtr = this->GetInput();
+  OutputMetricImagePointerType          outMetricPtr  = this->GetMetricOutput();
+  OutputSpatialImagePointerType         outSpatialPtr = this->GetSpatialOutput();
+  OutputImagePointerType                outRangePtr   = this->GetRangeOutput();
+  typename InputImageType::ConstPointer inputPtr      = this->GetInput();
 
   InputIndexType index;
 
