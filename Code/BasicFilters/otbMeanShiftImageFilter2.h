@@ -44,7 +44,8 @@ public:
   SpatialRangeJointDomainTransform() {}
   ~SpatialRangeJointDomainTransform() {}
 
-  inline typename TOutputJointImage::PixelType operator() (const typename TInputImage::PixelType & inputPixel, const typename TInputImage::IndexType & index)
+  inline typename TOutputJointImage::PixelType operator()
+  (const typename TInputImage::PixelType & inputPixel, const typename TInputImage::IndexType & index)
   {
     typename TOutputJointImage::PixelType jointPixel;
     jointPixel.SetSize(ImageDimension + m_NumberOfComponentsPerPixel);
@@ -60,7 +61,8 @@ public:
     return jointPixel;
   }
 
-  void Initialize(unsigned int _ImageDimension, unsigned int _m_NumberOfComponentsPerPixel, RealType _m_SpatialBandwidth, RealType _m_RangeBandwidth)
+  void Initialize(unsigned int _ImageDimension, unsigned int _m_NumberOfComponentsPerPixel,
+                  RealType _m_SpatialBandwidth, RealType _m_RangeBandwidth)
   {
     ImageDimension = _ImageDimension;
     m_NumberOfComponentsPerPixel = _m_NumberOfComponentsPerPixel;
@@ -78,8 +80,8 @@ private:
   unsigned int ImageDimension;
   unsigned int m_NumberOfComponentsPerPixel;
   unsigned int m_OutputSize;
-  RealType m_SpatialBandwidth;
-  RealType m_RangeBandwidth;
+  RealType     m_SpatialBandwidth;
+  RealType     m_RangeBandwidth;
 };
 
 
@@ -169,15 +171,15 @@ public:
 
   /** Template parameters typedefs */
 
-  typedef TInputImage                           InputImageType;
-  typedef typename InputImageType::Pointer      InputImagePointerType;
-  typedef typename InputImageType::PixelType    InputPixelType;
-  typedef typename InputImageType::IndexType    InputIndexType;
-  typedef typename InputImageType::SizeType     InputSizeType;
+  typedef TInputImage                             InputImageType;
+  typedef typename InputImageType::Pointer        InputImagePointerType;
+  typedef typename InputImageType::PixelType      InputPixelType;
+  typedef typename InputImageType::IndexType      InputIndexType;
+  typedef typename InputImageType::SizeType       InputSizeType;
   typedef typename InputImageType::IndexValueType InputIndexValueType;
-  typedef typename InputImageType::PointType    PointType;
-  typedef typename InputImageType::RegionType   RegionType;
-  typedef typename InputImageType::SizeType     SizeType;
+  typedef typename InputImageType::PointType      PointType;
+  typedef typename InputImageType::RegionType     RegionType;
+  typedef typename InputImageType::SizeType       SizeType;
 
   typedef TOutputImage                          OutputImageType;
   typedef typename OutputImageType::Pointer     OutputImagePointerType;
@@ -195,13 +197,13 @@ public:
   typedef typename OutputSpatialImageType::Pointer                   OutputSpatialImagePointerType;
   typedef typename OutputSpatialImageType::PixelType                 OutputSpatialPixelType;
 
-  typedef TKernel                                     KernelType;
+  typedef TKernel KernelType;
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
-  typedef itk::VariableLengthVector<RealType>         RealVector;
+  typedef itk::VariableLengthVector<RealType>                        RealVector;
   typedef otb::VectorImage<RealType, InputImageType::ImageDimension> RealVectorImageType;
-  typedef otb::Image<unsigned short, InputImageType::ImageDimension>  ModeTableImageType;
+  typedef otb::Image<unsigned short, InputImageType::ImageDimension> ModeTableImageType;
 
   /** Setters / Getters */
   itkSetMacro(SpatialBandwidth, RealType);
@@ -276,7 +278,9 @@ protected:
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  virtual void CalculateMeanShiftVector(typename RealVectorImageType::Pointer inputImagePtr, RealVector jointPixel, const OutputRegionType& outputRegion, RealVector & meanShiftVector);
+  virtual void CalculateMeanShiftVector(typename RealVectorImageType::Pointer inputImagePtr,
+                                        RealVector jointPixel, const OutputRegionType& outputRegion,
+                                        RealVector & meanShiftVector);
 
 private:
   MeanShiftImageFilter2(const Self &); //purposely not implemented
@@ -313,7 +317,7 @@ private:
    * 2 : pixel is in the path of the currently processed pixel and a mode will
    *     be assigned to it
    */
-  typename ModeTableImageType::Pointer m_modeTable;
+  typename ModeTableImageType::Pointer m_ModeTable;
 
   /** Boolean to enable mode search optimization */
   bool m_ModeSearchOptimization;

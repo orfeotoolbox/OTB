@@ -347,10 +347,10 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     // 0 : no mode has been found yet
     // 1 : a mode has been assigned to this pixel
     // 2 : a mode will be assigned to this pixel
-    m_modeTable = ModeTableImageType::New();
-    m_modeTable->SetRegions(inputPtr->GetRequestedRegion());
-    m_modeTable->Allocate();
-    m_modeTable->FillBuffer(0);
+    m_ModeTable = ModeTableImageType::New();
+    m_ModeTable->SetRegions(inputPtr->GetRequestedRegion());
+    m_ModeTable->Allocate();
+    m_ModeTable->FillBuffer(0);
     }
 
 }
@@ -481,25 +481,25 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   this->AllocateOutputs();
 
   // Retrieve output images pointers
-  typename OutputSpatialImageType::Pointer spatialOutput = this->GetSpatialOutput();
-  typename OutputImageType::Pointer rangeOutput = this->GetRangeOutput();
-  typename OutputMetricImageType::Pointer metricOutput = this->GetMetricOutput();
+  typename OutputSpatialImageType::Pointer   spatialOutput = this->GetSpatialOutput();
+  typename OutputImageType::Pointer          rangeOutput = this->GetRangeOutput();
+  typename OutputMetricImageType::Pointer    metricOutput = this->GetMetricOutput();
   typename OutputIterationImageType::Pointer iterationOutput = this->GetIterationOutput();
 
   // Get input image pointer
   typename InputImageType::ConstPointer input = this->GetInput();
 
   // defines input and output iterators
-  typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
-  typedef itk::ImageRegionIterator<OutputSpatialImageType> OutputSpatialIteratorType;
-  typedef itk::ImageRegionIterator<OutputMetricImageType> OutputMetricIteratorType;
-  typedef itk::ImageRegionConstIteratorWithIndex<InputImageType> InputIteratorWithIndexType;
-  typedef itk::ImageRegionIterator<OutputIterationImageType> OutputIterationIteratorType;
+  typedef itk::ImageRegionIterator<OutputImageType>               OutputIteratorType;
+  typedef itk::ImageRegionIterator<OutputSpatialImageType>        OutputSpatialIteratorType;
+  typedef itk::ImageRegionIterator<OutputMetricImageType>         OutputMetricIteratorType;
+  typedef itk::ImageRegionConstIteratorWithIndex<InputImageType>  InputIteratorWithIndexType;
+  typedef itk::ImageRegionIterator<OutputIterationImageType>      OutputIterationIteratorType;
 
 
-  typename OutputImageType::PixelType rangePixel;
-  typename OutputSpatialImageType::PixelType spatialPixel;
-  typename OutputMetricImageType::PixelType metricPixel;
+  typename OutputImageType::PixelType          rangePixel;
+  typename OutputSpatialImageType::PixelType   spatialPixel;
+  typename OutputMetricImageType::PixelType    metricPixel;
   typename OutputIterationImageType::PixelType iterationPixel;
 
   InputIndexType index;
@@ -583,7 +583,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
         // but not 2 (pixel in current search path), and pixel has actually moved
         // from its initial position, and pixel candidate is inside the output
         // region, then perform optimization tasks
-        if (m_modeTable->GetPixel(modeCandidate) != 2 && modeCandidate != currentIndex && outputRegionForThread.IsInside(modeCandidate))
+        if (m_ModeTable->GetPixel(modeCandidate) != 2 && modeCandidate != currentIndex && outputRegionForThread.IsInside(modeCandidate))
           {
           // Obtain the data point to see if it close to jointPixel
           RealVector candidatePixel;
@@ -600,12 +600,12 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
             {
             // If no mode has been associated to the candidate pixel then
             // associate it to the upcoming mode
-            if( m_modeTable->GetPixel(modeCandidate) == 0)
+            if( m_ModeTable->GetPixel(modeCandidate) == 0)
               {
               // Add the candidate to the list of pixels that will be assigned the
               // finally calculated mode value
               pointList[pointCount++] = modeCandidate;
-              m_modeTable->SetPixel(modeCandidate, 2);
+              m_ModeTable->SetPixel(modeCandidate, 2);
               } else // == 1
               {
               // The candidate pixel has already been assigned to a mode
@@ -616,7 +616,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
                 jointPixel[ImageDimension + comp] = rangePixel[comp] / m_RangeBandwidth;
                 }
               // Update the mode table because pixel will be assigned just now
-              m_modeTable->SetPixel(currentIndex, 2);
+              m_ModeTable->SetPixel(currentIndex, 2);
               // bypass further calculation
               numBreaks++;
               break;
@@ -673,13 +673,13 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     if (m_ModeSearchOptimization)
       {
       // Update the mode table now that the current pixel has been assigned
-      m_modeTable->SetPixel(currentIndex, 1);
+      m_ModeTable->SetPixel(currentIndex, 1);
 
       // Also assign all points in the list to the same mode
       for (unsigned int i = 0; i < pointCount; i++)
         {
         rangeOutput->SetPixel(pointList[i], rangePixel);
-        m_modeTable->SetPixel(pointList[i], 1);
+        m_ModeTable->SetPixel(pointList[i], 1);
         }
       }
 
