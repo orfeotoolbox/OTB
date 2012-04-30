@@ -191,6 +191,9 @@ public:
 
   typedef TOutputIterationImage                       OutputIterationImageType;
 
+  typedef otb::VectorImage<RealType, InputImageType::ImageDimension> OutputSpatialImageType;
+  typedef typename OutputSpatialImageType::PixelType                 OutputSpatialPixelType;
+
   typedef TKernel                                     KernelType;
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
@@ -215,7 +218,7 @@ public:
   itkGetConstMacro(ModeSearchOptimization, bool);
 
   /** Returns the const spatial image output */
-  const OutputImageType * GetSpatialOutput() const;
+  const OutputSpatialImageType * GetSpatialOutput() const;
   /** Returns the spectral image output */
   const OutputImageType * GetRangeOutput() const;
   /** Returns the mean shift vector computed at the last iteration for each pixel */
@@ -224,7 +227,7 @@ public:
   const OutputIterationImageType * GetIterationOutput() const;
 
   /** Returns the const spatial image output */
-  OutputImageType * GetSpatialOutput();
+  OutputSpatialImageType * GetSpatialOutput();
    /** Returns the spectral image output */
   OutputImageType * GetRangeOutput();
   /** Returns the mean shift vector computed at the last iteration for each pixel */

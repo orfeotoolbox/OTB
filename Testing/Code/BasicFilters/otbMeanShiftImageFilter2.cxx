@@ -44,14 +44,16 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   /* maxit - threshold */
 
   const unsigned int Dimension = 2;
-  typedef float                                           PixelType;
-  typedef double                                          KernelType;
-  typedef otb::VectorImage<PixelType, Dimension>          ImageType;
-  typedef otb::ImageFileReader<ImageType>                 ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                 WriterType;
+  typedef float                                            PixelType;
+  typedef double                                           KernelType;
+  typedef otb::VectorImage<PixelType, Dimension>           ImageType;
+  typedef otb::ImageFileReader<ImageType>                  ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                  WriterType;
   typedef otb::MeanShiftImageFilter2<ImageType, ImageType> FilterType;
-  typedef FilterType::OutputIterationImageType IterationImageType;
-  typedef otb::ImageFileWriter<IterationImageType> IterationWriterType;
+  typedef FilterType::OutputIterationImageType             IterationImageType;
+  typedef otb::ImageFileWriter<IterationImageType>         IterationWriterType;
+  typedef FilterType::OutputSpatialImageType               SpatialImageType;
+  typedef otb::ImageFileWriter<SpatialImageType>           SpatialWriterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
@@ -66,7 +68,7 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   filter->SetMaxIterationNumber(maxiterationnumber);
   filter->SetInput(reader->GetOutput());
   //filter->SetNumberOfThreads(1);
-  WriterType::Pointer writer1 = WriterType::New();
+  SpatialWriterType::Pointer writer1 = SpatialWriterType::New();
   WriterType::Pointer writer2 = WriterType::New();
   WriterType::Pointer writer3 = WriterType::New();
   IterationWriterType::Pointer writer4 = IterationWriterType::New();
