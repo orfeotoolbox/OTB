@@ -27,7 +27,6 @@
 
 #include "itkProgressReporter.h"
 
-#define MEAN_SHIFT_MODE_SEARCH_OPTIMIZATION
 
 namespace otb
 {
@@ -39,6 +38,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   m_SpatialBandwidth = 3;
   m_RangeBandwidth=16.;
   m_Threshold=1e-3;
+  m_ModeSearchOptimization = true;
 
   this->SetNumberOfOutputs(4);
   this->SetNthOutput(0, OutputImageType::New());
@@ -345,16 +345,17 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     }
 */
 
-#ifdef MEAN_SHIFT_MODE_SEARCH_OPTIMIZATION
-  // Image to store the status at each pixel:
-  // 0 : no mode has been found yet
-  // 1 : a mode has been assigned to this pixel
-  // 2 : a mode will be assigned to this pixel
-  m_modeTable = ModeTableImageType::New();
-  m_modeTable->SetRegions(inputPtr->GetRequestedRegion());
-  m_modeTable->Allocate();
-  m_modeTable->FillBuffer(0);
-#endif
+  if (m_ModeSearchOptimization)
+    {
+    // Image to store the status at each pixel:
+    // 0 : no mode has been found yet
+    // 1 : a mode has been assigned to this pixel
+    // 2 : a mode will be assigned to this pixel
+    m_modeTable = ModeTableImageType::New();
+    m_modeTable->SetRegions(inputPtr->GetRequestedRegion());
+    m_modeTable->Allocate();
+    m_modeTable->FillBuffer(0);
+    }
 
 }
 
@@ -536,15 +537,15 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 
   meanShiftVector.SetSize(ImageDimension + m_NumberOfComponentsPerPixel);
 
-#ifdef MEAN_SHIFT_MODE_SEARCH_OPTIMIZATION
+  // Variables used by mode search optimization
   // List of indices where the current pixel passes through
-  std::vector<InputIndexType> pointList(m_MaxIterationNumber);
+  std::vector<InputIndexType> pointList;
+  if(m_ModeSearchOptimization) pointList.reserve(m_MaxIterationNumber);
   // Number of points currently in the pointList
   unsigned int pointCount;
   // Number of times an already processed candidate pixel is encountered, resulting in no
   // further computation (Used for statistics only)
   unsigned int numBreaks = 0;
-#endif
 
   while (!jointIt.IsAtEnd())
     {
@@ -557,76 +558,80 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 
     jointPixel = jointIt.Get();
 
-#ifdef MEAN_SHIFT_MODE_SEARCH_OPTIMIZATION
+
     // index of the currently processed output pixel
     InputIndexType currentIndex;
-    // index of the current pixel updated during the mean shift loop
-    InputIndexType modeCandidate;
-    for (unsigned int comp = 0; comp < ImageDimension; comp++)
+    if(m_ModeSearchOptimization)
       {
-      currentIndex[comp] = jointPixel[comp] * m_SpatialBandwidth + 0.5;
+      for (unsigned int comp = 0; comp < ImageDimension; comp++)
+        {
+        currentIndex[comp] = jointPixel[comp] * m_SpatialBandwidth + 0.5;
+        }
+      pointCount = 0;
       }
-    pointCount = 0;
-
-#endif
 
     iteration = 0;
     while ((iteration < m_MaxIterationNumber) && (!hasConverged))
       {
 
-#ifdef MEAN_SHIFT_MODE_SEARCH_OPTIMIZATION
-      // Find index of the pixel closest to the current jointPixel (not normalized by bandwidth)
-      for (unsigned int comp = 0; comp < ImageDimension; comp++)
+      if (m_ModeSearchOptimization)
         {
-        modeCandidate[comp] = jointPixel[comp] * m_SpatialBandwidth + 0.5;
-        }
-      // Check status of candidate mode
-
-      // If pixel candidate has status 0 (no mode assigned) or 1 (mode assigned)
-      // but not 2 (pixel in current search path), and pixel has actually moved
-      // from its initial position, and pixel candidate is inside the output
-      // region, then perform optimization tasks
-      if (m_modeTable->GetPixel(modeCandidate) != 2 && modeCandidate != currentIndex && outputRegionForThread.IsInside(modeCandidate))
-        {
-        // Obtain the data point to see if it close to jointPixel
-        RealVector candidatePixel;
-        RealType diff = 0;
-        candidatePixel = m_JointImage->GetPixel(modeCandidate);
-        for (unsigned int comp = ImageDimension; comp < ImageDimension + m_NumberOfComponentsPerPixel; comp++)
+        // index of the current pixel updated during the mean shift loop
+        InputIndexType modeCandidate;
+        // Find index of the pixel closest to the current jointPixel (not normalized by bandwidth)
+        for (unsigned int comp = 0; comp < ImageDimension; comp++)
           {
-          RealType d;
-          d = candidatePixel[comp] - jointPixel[comp];
-          diff += d*d;
+          modeCandidate[comp] = jointPixel[comp] * m_SpatialBandwidth + 0.5;
           }
+        // Check status of candidate mode
 
-        if (diff < 0.5) // Spectral value is close enough
+        // If pixel candidate has status 0 (no mode assigned) or 1 (mode assigned)
+        // but not 2 (pixel in current search path), and pixel has actually moved
+        // from its initial position, and pixel candidate is inside the output
+        // region, then perform optimization tasks
+        if (m_modeTable->GetPixel(modeCandidate) != 2 && modeCandidate != currentIndex && outputRegionForThread.IsInside(modeCandidate))
           {
-          // If no mode has been associated to the candidate pixel then
-          // associate it to the upcoming mode
-          if( m_modeTable->GetPixel(modeCandidate) == 0)
+          // Obtain the data point to see if it close to jointPixel
+          RealVector candidatePixel;
+          RealType diff = 0;
+          candidatePixel = m_JointImage->GetPixel(modeCandidate);
+          for (unsigned int comp = ImageDimension; comp < ImageDimension + m_NumberOfComponentsPerPixel; comp++)
             {
-            // Add the candidate to the list of pixels that will be assigned the
-            // finally calculated mode value
-            pointList[pointCount++] = modeCandidate;
-            m_modeTable->SetPixel(modeCandidate, 2);
-            } else // == 1
-            {
-            // The candidate pixel has already been assigned to a mode
-            // Assign the same value
-            rangePixel = rangeOutput->GetPixel(modeCandidate);
-            for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
-              {
-              jointPixel[ImageDimension + comp] = rangePixel[comp] / m_RangeBandwidth;
-              }
-            // Update the mode table because pixel will be assigned just now
-            m_modeTable->SetPixel(currentIndex, 2);
-            // bypass further calculation
-            numBreaks++;
-            break;
+            RealType d;
+            d = candidatePixel[comp] - jointPixel[comp];
+            diff += d*d;
             }
+
+          if (diff < 0.5) // Spectral value is close enough
+            {
+            // If no mode has been associated to the candidate pixel then
+            // associate it to the upcoming mode
+            if( m_modeTable->GetPixel(modeCandidate) == 0)
+              {
+              // Add the candidate to the list of pixels that will be assigned the
+              // finally calculated mode value
+              pointList[pointCount++] = modeCandidate;
+              m_modeTable->SetPixel(modeCandidate, 2);
+              } else // == 1
+              {
+              // The candidate pixel has already been assigned to a mode
+              // Assign the same value
+              rangePixel = rangeOutput->GetPixel(modeCandidate);
+              for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
+                {
+                jointPixel[ImageDimension + comp] = rangePixel[comp] / m_RangeBandwidth;
+                }
+              // Update the mode table because pixel will be assigned just now
+              m_modeTable->SetPixel(currentIndex, 2);
+              // bypass further calculation
+              numBreaks++;
+              break;
+              }
+            }
+
           }
-        }
-#endif
+        } // end if (m_ModeSearchOptimization)
+
       //Calculate meanShiftVector
       this->CalculateMeanShiftVector(m_JointImage, jointPixel, requestedRegion, meanShiftVector);
 
@@ -671,17 +676,18 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     iterationPixel = iteration;
     iterationIt.Set(iterationPixel);
 
-#ifdef MEAN_SHIFT_MODE_SEARCH_OPTIMIZATION
-    // Update the mode table now that the current pixel has been assigned
-    m_modeTable->SetPixel(currentIndex, 1);
-
-    // Also assign all points in the list to the same mode
-    for(unsigned int i = 0; i < pointCount; i++)
+    if (m_ModeSearchOptimization)
       {
-      rangeOutput->SetPixel(pointList[i], rangePixel);
-      m_modeTable->SetPixel(pointList[i], 1);
+      // Update the mode table now that the current pixel has been assigned
+      m_modeTable->SetPixel(currentIndex, 1);
+
+      // Also assign all points in the list to the same mode
+      for (unsigned int i = 0; i < pointCount; i++)
+        {
+        rangeOutput->SetPixel(pointList[i], rangePixel);
+        m_modeTable->SetPixel(pointList[i], 1);
+        }
       }
-#endif
 
     ++jointIt;
     ++rangeIt;

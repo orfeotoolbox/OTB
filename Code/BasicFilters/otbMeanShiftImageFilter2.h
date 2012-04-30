@@ -211,6 +211,9 @@ public:
   itkGetConstMacro(Threshold, double);
   itkSetMacro(Threshold, double);
 
+  itkSetMacro(ModeSearchOptimization, bool);
+  itkGetConstMacro(ModeSearchOptimization, bool);
+
   /** Returns the const spatial image output */
   const OutputImageType * GetSpatialOutput() const;
   /** Returns the spectral image output */
@@ -308,6 +311,8 @@ private:
    */
   typename ModeTableImageType::Pointer m_modeTable;
 
+  /** Boolean to enable mode search optimization */
+  bool m_ModeSearchOptimization;
 };
 
 } // end namespace otb
