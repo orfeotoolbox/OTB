@@ -519,7 +519,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   for (unsigned int comp = ImageDimension; comp < jointDimension; comp++) bandwidth[comp] = m_RangeBandwidth;
 
 
-
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   RegionType requestedRegion;
