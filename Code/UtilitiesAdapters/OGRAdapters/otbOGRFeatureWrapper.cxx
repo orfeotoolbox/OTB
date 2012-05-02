@@ -66,7 +66,12 @@ void otb::ogr::Feature::SetFrom(Feature const& rhs, bool mustForgive)
 void otb::ogr::Feature::SetFrom(Feature const& rhs, int * map, bool mustForgive)
 {
   CheckInvariants();
+#if GDAL_VERSION_NUM >= 1900
   m_Feature->SetFrom(&rhs.ogr(), map, mustForgive);
+#else
+  itkGenericExceptionMacro("OGRLayer::SetFrom(feature, fieldmap, forgive) is not supported by OGR v"
+    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
+#endif
 }
 
 /*===========================================================================*/

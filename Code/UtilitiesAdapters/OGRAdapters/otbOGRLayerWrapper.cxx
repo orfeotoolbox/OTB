@@ -301,12 +301,17 @@ void otb::ogr::Layer::ReorderFields(int * map)
 void otb::ogr::Layer::SetIgnoredFields(char const** fieldNames)
 {
   assert(m_Layer && "OGRLayer not initialized");
+#if GDAL_VERSION_NUM >= 1900
   const OGRErr res = m_Layer->SetIgnoredFields(fieldNames);
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot set fields to ignore on the layer <"
       <<GetName() <<">:" << CPLGetLastErrorMsg());
     }
+#else
+  itkGenericExceptionMacro("OGRLayer::SetIgnoredFields is not supported by OGR v"
+    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
+#endif
 }
 
 OGRwkbGeometryType otb::ogr::Layer::GetGeomType() const
