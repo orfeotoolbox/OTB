@@ -526,7 +526,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   requestedRegion = input->GetRequestedRegion();
 
 
-  typedef itk::ImageRegionIterator<RealVectorImageType> JointImageIteratorType;
+  typedef itk::ImageRegionConstIteratorWithIndex<RealVectorImageType> JointImageIteratorType;
   JointImageIteratorType jointIt(m_JointImage, outputRegionForThread);
 
   OutputIteratorType rangeIt(rangeOutput, outputRegionForThread);
@@ -534,11 +534,16 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   OutputMetricIteratorType metricIt(metricOutput, outputRegionForThread);
   OutputIterationIteratorType iterationIt(iterationOutput, outputRegionForThread);
 
+  typedef itk::ImageRegionIterator<ModeTableImageType> ModeTableImageIteratorType;
+  ModeTableImageIteratorType modeTableIt(m_ModeTable, outputRegionForThread);
+
+
   jointIt.GoToBegin();
   rangeIt.GoToBegin();
   spatialIt.GoToBegin();
   metricIt.GoToBegin();
   iterationIt.GoToBegin();
+  modeTableIt.GoToBegin();
 
   unsigned int iteration = 0;
 
@@ -556,20 +561,27 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   // further computation (Used for statistics only)
   unsigned int numBreaks = 0;
 
-  while (!jointIt.IsAtEnd())
+  for (; !jointIt.IsAtEnd();
+         ++jointIt, ++rangeIt, ++spatialIt, ++metricIt, ++iterationIt, ++modeTableIt, progress.CompletedPixel())
     {
+
+    // if pixel has been already processed (by mode search optimization), skip
+    typename ModeTableImageType::InternalPixelType currentPixelMode;
+    currentPixelMode = modeTableIt.Get();
+    if(m_ModeSearchOptimization &&  currentPixelMode == 1)
+      continue;
+
     bool hasConverged = false;
 
+    // get input pixel in the joint spatial-range domain (with components
+    // normalized by bandwith)
     jointPixel = jointIt.Get();
 
     // index of the currently processed output pixel
     InputIndexType currentIndex;
-    for (unsigned int comp = 0; comp < ImageDimension; comp++)
-      {
-      currentIndex[comp] = jointPixel[comp] * m_SpatialBandwidth + 0.5;
-      }
-    pointCount = 0; // Note: used only in mode search optimization
+    currentIndex = jointIt.GetIndex();
 
+    pointCount = 0; // Note: used only in mode search optimization
     iteration = 0;
     while ((iteration < m_MaxIterationNumber) && (!hasConverged))
       {
@@ -622,7 +634,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
                 jointPixel[ImageDimension + comp] = rangePixel[comp] / m_RangeBandwidth;
                 }
               // Update the mode table because pixel will be assigned just now
-              m_ModeTable->SetPixel(currentIndex, 2);
+              modeTableIt.Set(2); // m_ModeTable->SetPixel(currentIndex, 2);
               // bypass further calculation
               numBreaks++;
               break;
@@ -677,7 +689,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     if (m_ModeSearchOptimization)
       {
       // Update the mode table now that the current pixel has been assigned
-      m_ModeTable->SetPixel(currentIndex, 1);
+      modeTableIt.Set(1); // m_ModeTable->SetPixel(currentIndex, 1);
 
       // Also assign all points in the list to the same mode
       for (unsigned int i = 0; i < pointCount; i++)
@@ -686,14 +698,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
         m_ModeTable->SetPixel(pointList[i], 1);
         }
       }
-
-    ++jointIt;
-    ++rangeIt;
-    ++spatialIt;
-    ++metricIt;
-    ++iterationIt;
-
-    progress.CompletedPixel();
 
     }
   // std::cout << "numBreaks: " << numBreaks << " Break ratio: " << numBreaks / (RealType)outputRegionForThread.GetNumberOfPixels() << std::endl;
