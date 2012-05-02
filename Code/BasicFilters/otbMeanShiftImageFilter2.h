@@ -278,9 +278,9 @@ protected:
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  virtual void CalculateMeanShiftVector(typename RealVectorImageType::Pointer inputImagePtr,
-                                        RealVector jointPixel, const OutputRegionType& outputRegion,
-                                        RealVector & meanShiftVector);
+  virtual void CalculateMeanShiftVector(const typename RealVectorImageType::Pointer inputImagePtr,
+                                        const RealVector& jointPixel, const OutputRegionType& outputRegion,
+                                        RealVector& meanShiftVector);
 
 private:
   MeanShiftImageFilter2(const Self &); //purposely not implemented
