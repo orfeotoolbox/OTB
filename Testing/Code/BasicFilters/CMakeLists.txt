@@ -1141,7 +1141,7 @@ ADD_TEST(bfTvMeanShiftImageFilter2 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterSpectralOutput.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutput.tif
         ${TEMP}/bfMeanShiftImageFilterIterationOutput.tif
-        4 10 0.000001 15
+        4 50 0.1 100
         )
 
 ADD_TEST(bfTvMeanShiftVectorImageFilterValidMul ${BASICFILTERS_TESTS9}
@@ -1162,7 +1162,7 @@ ADD_TEST(bfTvMeanShiftImageFilter2Mul ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterSpectralOutputMul.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutputMul.tif
         ${TEMP}/bfMeanShiftImageFilterIterationOutputMul.tif
-        4 10 1 100
+        4 50 0.1 100
         )
 
 
