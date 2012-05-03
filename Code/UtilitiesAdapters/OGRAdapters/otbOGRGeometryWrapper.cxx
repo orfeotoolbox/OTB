@@ -100,7 +100,7 @@ otb::ogr::UniqueGeometryPtr otb::ogr::UnionCascaded(OGRGeometry const& this_)
   return UniqueGeometryPtr(this_.UnionCascaded());
 #else
   itkGenericExceptionMacro("OGRLayer::UnionCascaded is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.")
+    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.");
 #endif
 }
 
