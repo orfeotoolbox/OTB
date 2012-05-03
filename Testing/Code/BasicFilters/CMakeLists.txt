@@ -2068,7 +2068,38 @@ ADD_TEST(bfTvPCAImageFilter3
          -in ${INPUTDATA}/cupriteSubHsi.tif
          -out ${TEMP}/bfTvPCAImageFilter3.tif
          -inv ${TEMP}/bfTvPCAImageFilter3Inv.tif
+         )
+
+# Test the direct transform
+ADD_TEST(bfTvPCAImageFilter3Norm
+         ${BASICFILTERS_TESTS13}
+         --compare-n-images ${EPSILON_7} 2
+             ${BASELINE}/bfTvPCAImageFilter3Norm.tif
+             ${TEMP}/bfTvPCAImageFilter3Norm.tif
+             ${BASELINE}/bfTvPCAImageFilter3InvNorm.tif
+             ${TEMP}/bfTvPCAImageFilter3InvNorm.tif
+         otbPCAImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvPCAImageFilter3Norm.tif
+         -inv ${TEMP}/bfTvPCAImageFilter3InvNorm.tif
          -norm)
+
+
+# Test the direct transform, reducing dimensionnality
+ADD_TEST(bfTvPCAImageFilter4Norm
+         ${BASICFILTERS_TESTS13}
+         --compare-n-images ${EPSILON_7} 2
+             ${BASELINE}/bfTvPCAImageFilter4Norm.tif
+             ${TEMP}/bfTvPCAImageFilter4Norm.tif
+             ${BASELINE}/bfTvPCAImageFilter4InvNorm.tif
+             ${TEMP}/bfTvPCAImageFilter4InvNorm.tif
+         otbPCAImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvPCAImageFilter4Norm.tif
+         -inv ${TEMP}/bfTvPCAImageFilter4InvNorm.tif
+         -norm
+         -n 4)
+
 
 
 # Test the direct transform, reducing dimensionnality
@@ -2083,7 +2114,6 @@ ADD_TEST(bfTvPCAImageFilter4
          -in ${INPUTDATA}/cupriteSubHsi.tif
          -out ${TEMP}/bfTvPCAImageFilter4.tif
          -inv ${TEMP}/bfTvPCAImageFilter4Inv.tif
-         -norm
          -n 4)
 
 
