@@ -36,8 +36,7 @@ class OGRFieldDefn;
 #include "ogr_core.h" // OGR enums
 #include "itkIndent.h"
 #include <cassert>
-// #include "boost/type_traits/is_contiguous.h" // from OTB actually
-#include "is_contiguous.h" // from OTB actually
+#include "boost/type_traits/is_contiguous.h" // from OTB actually
 
 
 namespace otb { namespace ogr {
