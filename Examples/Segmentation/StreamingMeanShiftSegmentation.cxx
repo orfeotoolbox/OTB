@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginLatex
   //
-  // Now we have declared all type needed for the pipeline, we instanciate the different filters,
+  // Now we have declared all type needed for the pipeline, we instantiate the different filters,
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer             reader = ReaderType::New();

@@ -250,8 +250,11 @@ namespace ossimplugins
          if(!theSupportData->parseXmlFile(DIMxmlFile))
          {
             theSupportData = 0; // ossimRefPtr
-            ossimNotify(ossimNotifyLevel_DEBUG) << "ossimPleiadesModel::open WARNING:"
-                                                << "\nCould not open correctly DIMAP file" << std::endl;
+            if (traceDebug())
+            {
+              ossimNotify(ossimNotifyLevel_DEBUG) << "ossimPleiadesModel::open DEBUG:"
+                                                  << "\nCould not open correctly DIMAP file" << std::endl;
+            }
             return false;
          }
 
