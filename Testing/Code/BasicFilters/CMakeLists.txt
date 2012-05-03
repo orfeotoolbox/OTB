@@ -1141,6 +1141,7 @@ ADD_TEST(bfTvMeanShiftImageFilter2 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterSpectralOutput.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutput.tif
         ${TEMP}/bfMeanShiftImageFilterIterationOutput.tif
+        ${TEMP}/bfMeanShiftImageFilterLabelOutput.tif
         4 50 0.1 100
         )
 
@@ -1162,6 +1163,7 @@ ADD_TEST(bfTvMeanShiftImageFilter2Mul ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterSpectralOutputMul.tif
         ${TEMP}/bfMeanShiftImageFilterMetricOutputMul.tif
         ${TEMP}/bfMeanShiftImageFilterIterationOutputMul.tif
+        ${TEMP}/bfMeanShiftImageFilterLabelOutputMul.tif
         4 50 0.1 100
         )
 
@@ -2652,8 +2654,8 @@ ADD_TEST(bfTvTileImageFilter ${BASICFILTERS_TESTS15}
   2 2
   ${TEMP}/bfTvTileImageFilterOutput.tif
   ${INPUTDATA}/ROI_QB_MUL_4.tif
-  ${INPUTDATA}/ROI_QB_MUL_4.tif  
-  ${INPUTDATA}/ROI_QB_MUL_4.tif  
+  ${INPUTDATA}/ROI_QB_MUL_4.tif
+  ${INPUTDATA}/ROI_QB_MUL_4.tif
   ${INPUTDATA}/ROI_QB_MUL_4.tif
 )
 

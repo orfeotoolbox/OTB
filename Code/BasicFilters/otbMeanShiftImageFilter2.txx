@@ -40,11 +40,12 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   m_Threshold=1e-3;
   m_ModeSearchOptimization = true;
 
-  this->SetNumberOfOutputs(4);
+  this->SetNumberOfOutputs(5);
   this->SetNthOutput(0, OutputSpatialImageType::New());
   this->SetNthOutput(1, OutputImageType::New());
   this->SetNthOutput(2, OutputMetricImageType::New());
   this->SetNthOutput(3, OutputIterationImageType::New());
+  this->SetNthOutput(4, OutputLabelImageType::New());
 }
 
 
@@ -154,6 +155,30 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   return static_cast<OutputIterationImageType *>(this->itk::ProcessObject::GetOutput(3));
 }
 
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputLabelImageType *
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
+::GetLabelOutput()
+{
+  if (this->GetNumberOfOutputs() < 5)
+    {
+      return 0;
+    }
+  return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(4));
+}
+
+template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
+const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>::OutputLabelImageType *
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
+::GetLabelOutput() const
+{
+  if (this->GetNumberOfOutputs() < 5)
+    {
+      return 0;
+    }
+  return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(4));
+}
+
 
 template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputMetricImage, class TOutputIterationImage>
 void
@@ -165,6 +190,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   typename OutputImageType::Pointer          rangeOutputPtr = this->GetRangeOutput();
   typename OutputMetricImageType::Pointer    metricOutputPtr = this->GetMetricOutput();
   typename OutputIterationImageType::Pointer iterationOutputPtr = this->GetIterationOutput();
+  typename OutputLabelImageType::Pointer     labelOutputPtr = this->GetLabelOutput();
 
   metricOutputPtr->SetBufferedRegion(metricOutputPtr->GetRequestedRegion());
   metricOutputPtr->Allocate();
@@ -178,6 +204,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   iterationOutputPtr->SetBufferedRegion(iterationOutputPtr->GetRequestedRegion());
   iterationOutputPtr->Allocate();
 
+  labelOutputPtr->SetBufferedRegion(labelOutputPtr->GetRequestedRegion());
+  labelOutputPtr->Allocate();
  }
 
 
@@ -483,6 +511,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   typename OutputImageType::Pointer          rangeOutput = this->GetRangeOutput();
   typename OutputMetricImageType::Pointer    metricOutput = this->GetMetricOutput();
   typename OutputIterationImageType::Pointer iterationOutput = this->GetIterationOutput();
+  typename OutputLabelImageType::Pointer     labelOutput = this->GetLabelOutput();
 
   // Get input image pointer
   typename InputImageType::ConstPointer input = this->GetInput();
@@ -492,6 +521,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   typedef itk::ImageRegionIterator<OutputSpatialImageType>        OutputSpatialIteratorType;
   typedef itk::ImageRegionIterator<OutputMetricImageType>         OutputMetricIteratorType;
   typedef itk::ImageRegionIterator<OutputIterationImageType>      OutputIterationIteratorType;
+  typedef itk::ImageRegionIterator<OutputLabelImageType>      OutputLabelIteratorType;
 
 
   unsigned int jointDimension = ImageDimension + m_NumberOfComponentsPerPixel;
@@ -532,6 +562,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   OutputSpatialIteratorType spatialIt(spatialOutput, outputRegionForThread);
   OutputMetricIteratorType metricIt(metricOutput, outputRegionForThread);
   OutputIterationIteratorType iterationIt(iterationOutput, outputRegionForThread);
+  OutputLabelIteratorType labelIt(labelOutput, outputRegionForThread);
 
   typedef itk::ImageRegionIterator<ModeTableImageType> ModeTableImageIteratorType;
   ModeTableImageIteratorType modeTableIt(m_ModeTable, outputRegionForThread);
@@ -559,16 +590,24 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   // Number of times an already processed candidate pixel is encountered, resulting in no
   // further computation (Used for statistics only)
   unsigned int numBreaks = 0;
+  // index of the current pixel updated during the mean shift loop
+  InputIndexType modeCandidate;
+  // Number of labels already assigned. This is also used to find the next unused label
+  LabelType numLabels = 0;
 
   for (; !jointIt.IsAtEnd();
-         ++jointIt, ++rangeIt, ++spatialIt, ++metricIt, ++iterationIt, ++modeTableIt, progress.CompletedPixel())
+       ++jointIt, ++rangeIt, ++spatialIt, ++metricIt, ++iterationIt,
+         ++modeTableIt, ++labelIt, progress.CompletedPixel())
     {
 
     // if pixel has been already processed (by mode search optimization), skip
     typename ModeTableImageType::InternalPixelType currentPixelMode;
     currentPixelMode = modeTableIt.Get();
     if(m_ModeSearchOptimization &&  currentPixelMode == 1)
+      {
+      numBreaks++;
       continue;
+      }
 
     bool hasConverged = false;
 
@@ -587,8 +626,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 
       if (m_ModeSearchOptimization)
         {
-        // index of the current pixel updated during the mean shift loop
-        InputIndexType modeCandidate;
         // Find index of the pixel closest to the current jointPixel (not normalized by bandwidth)
         for (unsigned int comp = 0; comp < ImageDimension; comp++)
           {
@@ -690,11 +727,24 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
       // Update the mode table now that the current pixel has been assigned
       modeTableIt.Set(1); // m_ModeTable->SetPixel(currentIndex, 1);
 
+      // If the loop exited with hasConverged, then we have a new mode
+      LabelType label;
+      if (hasConverged)
+        {
+        numLabels++;
+        label = numLabels;
+        } else // the loop exited through a break. Use the already assigned mode label
+        {
+        label = labelOutput->GetPixel(modeCandidate);
+        }
+      labelIt.Set(label);
+
       // Also assign all points in the list to the same mode
       for (unsigned int i = 0; i < pointCount; i++)
         {
         rangeOutput->SetPixel(pointList[i], rangePixel);
         m_ModeTable->SetPixel(pointList[i], 1);
+        labelOutput->SetPixel(pointList[i], label);
         }
       }
 

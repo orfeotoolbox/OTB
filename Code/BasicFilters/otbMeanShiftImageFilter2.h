@@ -193,6 +193,9 @@ public:
 
   typedef TOutputIterationImage                       OutputIterationImageType;
 
+  typedef unsigned long                                         LabelType;
+  typedef otb::Image<LabelType, InputImageType::ImageDimension> OutputLabelImageType;
+
   typedef otb::VectorImage<RealType, InputImageType::ImageDimension> OutputSpatialImageType;
   typedef typename OutputSpatialImageType::Pointer                   OutputSpatialImagePointerType;
   typedef typename OutputSpatialImageType::PixelType                 OutputSpatialPixelType;
@@ -228,6 +231,9 @@ public:
   const OutputMetricImageType * GetMetricOutput() const;
   /** Returns the number of iterations done at each pixel */
   const OutputIterationImageType * GetIterationOutput() const;
+  /** Returns the image of region labels */
+  const OutputLabelImageType * GetLabelOutput() const;
+
 
   /** Returns the const spatial image output */
   OutputSpatialImageType * GetSpatialOutput();
@@ -237,6 +243,8 @@ public:
   OutputMetricImageType * GetMetricOutput();
   /** Returns the number of iterations done at each pixel */
   OutputIterationImageType * GetIterationOutput();
+  /** Returns the image of region labels */
+  OutputLabelImageType * GetLabelOutput();
 
 protected:
 
