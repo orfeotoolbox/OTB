@@ -207,9 +207,9 @@ namespace ossimplugins
       ossimFilename RPCxmlFile;
 
       // Generate metadata and rpc filename
-      if (file.ext().downcase() != "jp2")
+      if (file.ext().downcase() != "jp2" && file.ext().downcase() != "tif")
       {
-         //not a jpeg2000 file
+         //not a valid file
          return false;
       }
       else
@@ -224,12 +224,13 @@ namespace ossimplugins
 
             DIMxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^IMG_", "DIM_");
 
-            DIMxmlFileTmp = DIMxmlFileTmp.replaceStrThatMatch("_R[0-9]+C[0-9]+\\.JP2$", ".XML");
+            DIMxmlFileTmp = DIMxmlFileTmp.replaceStrThatMatch("_R[0-9]+C[0-9]+\\.(JP2|TIF)$", ".XML");
 
             RPCxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^DIM_", "RPC_");
 
             DIMxmlFile = DIMxmlFile.dirCat(DIMxmlFileTmp);
             RPCxmlFile = RPCxmlFile.dirCat(RPCxmlFileTmp);
+
          }
       }
 
@@ -260,7 +261,10 @@ namespace ossimplugins
          processingLevel = theSupportData->getProcessingLevel();
       }
       else
+        {
+         ossimNotify(ossimNotifyLevel_DEBUG) << " PHR DIMAP file " << DIMxmlFile << " doesn't exist ...\n";
          return false;
+        }
 
       // Parse the RPC xml file if necessary
       if (RPCxmlFile.exists() && (processingLevel == "SENSOR"))
