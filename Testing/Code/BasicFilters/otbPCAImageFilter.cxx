@@ -74,7 +74,7 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
   std::string outputImageName = parseResult->GetOutputImage();
   const unsigned int nbComponents = parseResult->IsOptionPresent("--NumComponents") ?
     parseResult->GetParameterUInt("--NumComponents") : 0;
-  const bool normalization = parseResult->IsOptionPresent("--NormalizeVariance");
+  const bool normalization = parseResult->IsOptionPresent("--Normalize");
 
   // Main type definition
   const unsigned int Dimension = 2;
