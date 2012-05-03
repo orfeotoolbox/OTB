@@ -41,16 +41,17 @@ namespace otb { namespace ogr {
  * It provides an encapsulation of OGR classes. In that particular case, it's an
  * encapsulation of \c OGRLayer.
  *
- * \note this class is a proxy class on top of an \c OGRLayer.
- * \note It can be copied, and assigned. NEw instances will share the underlying
+ * \note This class is a proxy class on top of an \c OGRLayer.
+ * \note It can be copied, and assigned. New instances will share the underlying
  * \c OGRLayer.
- * \note when created from a \c otb::ogr::DataSource::ExecuteSQL, it will
+ * \note When created from a \c otb::ogr::DataSource::ExecuteSQL(), it will
  * automatically manage the release of the underlying \c OGRLayer.
- * \note the default constructor is disabled on purpose
- * \note the destructor automatically generated does everything that is
+ * \note The default constructor is disabled on purpose.
+ * \note The destructor automatically generated does everything that is
  * expected.
  *
- * \todo find a way to be notified when the related \c OGRDataSource is released
+ * \todo Find a way to be notified when the related \c OGRDataSource is released
+ * \since OTB v 3.14.0
  */
 class Layer
   {
@@ -68,7 +69,7 @@ public:
    * \throw None
    * On destruction of the proxy class, the internal \c OGRLayer is left alone.
    *
-   * @warning if the datasource hosting the layer (built with this constructor)
+   * \warning If the datasource hosting the layer (built with this constructor)
    * is deleted, the layer won't be usable anymore. Unfortunatelly, there is no
    * mean to report this to this layer proxy.
    */
@@ -97,7 +98,7 @@ public:
    *
    * \return the number of features in the layer, -1 if count is unknown
    * \throw None
-   * \sa OGRLayer::GetFeatureCount
+   * \sa \c OGRLayer::GetFeatureCount()
    */
   int GetFeatureCount(bool doForceComputation) const;
 
@@ -107,7 +108,7 @@ public:
    * id will be updated (unless it was previously set)
    *
    * \throw itk::ExceptionObject if the feature can't be added.
-   * \sa OGRLayer::CreateFeature
+   * \sa \c OGRLayer::CreateFeature()
    * \internal
    * Whilst the \c Feature id is updated, it is not the same feature than the
    * one stored in the layer. In other words, \c Feature is still in charge of
@@ -121,9 +122,9 @@ public:
    * \param[in] nFID  feature id.
    *
    * \throw itk::ExceptionObject if the feature can't be added.
-   * \warning calls to this function will invalidate any feature iterator
+   * \warning Calls to this function will invalidate any feature iterator
    * previously obtained.
-   * \sa OGRFeature::DeleteFeature
+   * \sa \c OGRFeature::DeleteFeature()
    */
   void DeleteFeature(long nFID);
 
@@ -136,10 +137,10 @@ public:
    * \throw itk::ExceptionObject if nFID is null
    *
    * \pre \c nFID value cannot be \c OGRNullFID
-   * \post result's \c GetFID() equals \c nFID
-   * \warning calls to this function will invalidate any feature iterator
+   * \post Result's \c GetFID() equals \c nFID
+   * \warning Calls to this function will invalidate any feature iterator
    * previously obtained.
-   * \sa OGRFeature::GetFeature
+   * \sa \c OGRFeature::GetFeature()
    * \internal
    * The feature obtained is owned by the \c Feature instance.
    */
@@ -151,8 +152,8 @@ public:
    * id will be updated (in case it was previously set)
    *
    * \throw itk::ExceptionObject if the feature can't be set.
-   * \pre the Layer need to support <em>OLCRandomWrite</em> capability.
-   * \sa OGRLayer::SetFeature
+   * \pre The Layer need to support <em>OLCRandomWrite</em> capability.
+   * \sa \c OGRLayer::SetFeature()
    * \internal
    * Whilst the \c Feature id is updated, it is not the same feature than the
    * one stored in the layer. In other words, \c Feature is still in charge of
@@ -187,15 +188,15 @@ public:
   /** Access to raw \c OGRLayer.
    * This function provides an abstraction leak in case deeper control on the
    * underlying \c OGRLayer is required.
-   * \pre the underlying \c OGRLayer must be valid, i.e.
+   * \pre The underlying \c OGRLayer must be valid, i.e.
    * <tt>m_Layer != 0</tt>, an assertion is fired otherwise.
-   * \warning you must under no circonstance try to delete the \c OGRLayer
+   * \warning You must under no circonstance try to delete the \c OGRLayer
    * obtained this way.
    */
   OGRLayer & ogr();
 
   /**\name Spatial filter property
-   * \todo we'll see later if a Geometry capsule is defined, or a
+   * \todo We'll see later if a Geometry capsule is defined, or a
    * \c nondeletable<> pointer type.
    * \internal
    * The I/O geometry is an undeletable pointer, that may be null (hence the
@@ -209,23 +210,23 @@ public:
    * supposed to be modified this way. Use \c SetSpatialFilter or \c
    * SetSpatialFilterRect for this purpose.
    * \throw None
-   * \sa OGRLayer::GetSpatialFilter
+   * \sa \c OGRLayer::GetSpatialFilter()
    */
   OGRGeometry const* GetSpatialFilter() const;
 
   /**
    * Sets the current spatial filter.
-   * \param[in] spatialFilter  new spatial filter definition, NULL clears the
-   * filter.
-   * \throw None
    * Replaces the current spatial filter with a clone of the one passed as
-   * parameter. Thus parameter remains the responsibility of the caller.
+   * parameter. Thus the parameter remains of the responsibility of the caller.
    *
    * The spatial filter is used to filter the \c Feature's obtained when iterating
    * on the layer.
+   * \param[in] spatialFilter  new spatial filter definition, NULL clears the
+   * filter.
+   * \throw None
    * \note OGR warns us that the test may be incorrectly implemented, and that
    * we may have false-positives, but no missed shapes.
-   * \sa OGRLayer::SetSpatialFilter
+   * \sa \c OGRLayer::SetSpatialFilter()
    */
   void SetSpatialFilter(OGRGeometry const* spatialFilter);
   /** Sets a new rectangular spatial filter.
@@ -233,14 +234,14 @@ public:
    *
    * The coordinates used shall be in the same referential as the layer as the
    * whole (as returned by \c GetSpatialRef()).
-   * \sa OGRLayer::SetSpatialFilterRect
+   * \sa \c OGRLayer::SetSpatialFilterRect()
    */
   void SetSpatialFilterRect(double dfMinX, double dfMinY, double dfMaxX, double dfMaxY);
   //@}
 
   /**Spatial Reference property.
    * \internal the I/O spatial reference is an undeletable pointer, that may be null.
-   * \note read-only property
+   * \note Read-only property
    */
   OGRSpatialReference const* GetSpatialRef() const;
 
@@ -251,7 +252,7 @@ public:
    * Implementation class for \c Feature iterator.
    * This iterator is a single <em>pass iterator</em>. We may fetch the \c
    * Feature referenced by an iterator previously stored, but never resume the
-   * iteration after a call to \c Layer::begin(), \c Layer::start(), \c
+   * iteration after a call to \c Layer::begin(), \c Layer::start_at(), \c
    * Layer::CreateFeature(), \c Layer::DeleteFeature(), \c Layer::GetFeature(),
    * \c Layer::SetFeature(), nor fork the iteration.
    * \code
@@ -260,12 +261,13 @@ public:
    * b++; // this is invalid
    * \endcode
    * \internal
-   * \sa otb::ogr::Layer::iterator
-   * \sa otb::ogr::Layer::const_iterator
+   * \sa \c otb::ogr::Layer::iterator
+   * \sa \c otb::ogr::Layer::const_iterator
    * \note Naming policy is compliant with C++ standard as the iterator are as
    * well. This will permit transparent integration with all standard and boost
    * algorithms, and C++11 <em>for-range loops</em> for instance.
    * \see http://www.boost.org/doc/libs/1_49_0/libs/iterator/doc/iterator_facade.html#tutorial-example
+   * \since OTB v 3.14.0
    */
   template <class Value> class feature_iter
     : public boost::iterator_facade<feature_iter<Value>, Value, boost::single_pass_traversal_tag>
@@ -309,7 +311,7 @@ public:
   typedef feature_iter<Feature const> const_iterator;
 
   /** Returns a <em>single-pass</em> %iterator to the start of the sequence.
-   * \sa feature_iter
+   * \sa \c feature_iter
    */
   const_iterator cbegin() const;
   /** Returns the %end %iterator of the sequence.
@@ -326,7 +328,7 @@ public:
 
   /** Returns a <em>single-pass</em> %iterator to the i-th \c Feature of the
    * sequence.
-   * \sa feature_iter
+   * \sa \c feature_iter
    * Depending of the actual driver (i.e. \c OGRDriver), this may be done in O(N).
    */
   const_iterator cstart_at(size_t index) const;
@@ -337,17 +339,17 @@ public:
   //@}
 
   /**\name Features definition
-   * \todo shall we instead inhibit the declaration of the functions when GDAL
+   * \todo Shall we instead inhibit the declaration of the functions when GDAL
    * version does not match?
    */
   //@{
   /** Returns a reference to the layer definition.
-   * @warning the definition obtained shall not be modified. Use the \c *Field
+   * \warning The definition obtained shall not be modified. Use the \c *Field
    * functions instead.
    * \internal
    * The return type shall have been const, but unfortunatelly \c OGRFeatureDefn
    * is not const-correct.
-   * \sa OGRLayer::GetLayerDefn
+   * \sa \c OGRLayer::GetLayerDefn()
    */
   OGRFeatureDefn & GetLayerDefn() const;
 
@@ -360,8 +362,8 @@ public:
    * \pre This function shall not be called while there are \c Feature in
    * existance that were obtained or created with the previous layer definition.
    * \throw itk::ExceptionObject if the new field cannot be created
-   * \sa OGRLayer::CreateField
-   * \todo move to use \c otb::ogr::FieldDefn
+   * \sa \c OGRLayer::CreateField()
+   * \todo Move to use \c otb::ogr::FieldDefn
    */
   void CreateField(OGRFieldDefn const& field, bool bApproxOK = true);
 
@@ -372,8 +374,8 @@ public:
    * \pre This function shall not be called while there are \c Feature in
    * existance that were obtained or created with the previous layer definition.
    * \throw itk::ExceptionObject if the new field cannot be deleted
-   * \sa OGRLayer::DeleteField
-   * \pre to be available, this function requires OTB to be compiled against OGR
+   * \sa \c OGRLayer::DeleteField()
+   * \pre To be available, this function requires OTB to be compiled against OGR
    * v1.9.0 at least.
    */
   void DeleteField(size_t fieldIndex);
@@ -390,10 +392,10 @@ public:
    * \pre This function shall not be called while there are \c Feature in
    * existance that were obtained or created with the previous layer definition.
    * \throw itk::ExceptionObject if the new field cannot be modified
-   * \sa OGRLayer::AlterFieldDefn
-   * \pre to be available, this function requires OTB to be compiled against OGR
+   * \sa \c OGRLayer::AlterFieldDefn()
+   * \pre To be available, this function requires OTB to be compiled against OGR
    * v1.9.0 at least.
-   * \todo move to use \c otb::ogr::FieldDefn
+   * \todo Move to use \c otb::ogr::FieldDefn
    */
   void AlterFieldDefn(size_t fieldIndex, OGRFieldDefn const& newFieldDefn, int nFlags);
 
@@ -405,8 +407,8 @@ public:
    * \pre This function shall not be called while there are \c Feature in
    * existance that were obtained or created with the previous layer definition.
    * \throw itk::ExceptionObject if the new field cannot be modified
-   * \sa OGRLayer::ReorderField
-   * \pre to be available, this function requires OTB to be compiled against OGR
+   * \sa \c OGRLayer::ReorderField()
+   * \pre To be available, this function requires OTB to be compiled against OGR
    * v1.9.0 at least.
    */
   void ReorderField(size_t oldPos, size_t newPos);
@@ -418,8 +420,8 @@ public:
    * \pre This function shall not be called while there are \c Feature in
    * existance that were obtained or created with the previous layer definition.
    * \throw itk::ExceptionObject if the new field cannot be modified
-   * \sa OGRLayer::ReorderFields
-   * \pre to be available, this function requires OTB to be compiled against OGR
+   * \sa \c OGRLayer::ReorderFields()
+   * \pre To be available, this function requires OTB to be compiled against OGR
    * v1.9.0 at least.
    */
   void ReorderFields(int *map);
@@ -436,13 +438,13 @@ public:
    *
    * By default, no fields are ignored.
    * \throw itk::ExceptionObject if the new field cannot be modified
-   * \sa OGRLayer::SetIgnoredFields
+   * \sa \c OGRLayer::SetIgnoredFields()
    */
   void SetIgnoredFields(char const** fieldNames);
   //@}
 
   /** Returns the type of the geometry stored.
-   * \sa OGRLayer::GetGeomType
+   * \sa \c OGRLayer::GetGeomType()
    */
   OGRwkbGeometryType GetGeomType() const;
 private:
@@ -460,7 +462,7 @@ private:
   /** Data implementation.
    * \internal
    * The actual %layer implementation belongs to the \c otb::Layer object,
-   * unless this is the result of \c ExecuteSQL. In that case a deleter is set
+   * unless this is the result of \c ExecuteSQL(). In that case a deleter is set
    * to correctly release the layer.
    */
   boost::shared_ptr<OGRLayer> m_Layer;

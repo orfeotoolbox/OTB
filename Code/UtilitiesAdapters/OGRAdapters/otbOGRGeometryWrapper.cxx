@@ -31,7 +31,9 @@
 /*===========================================================================*/
 void otb::ogr::internal::GeometryDeleter::operator()(OGRGeometry* p)
 {
-  OGRGeometryFactory::destroyGeometry (p);
+  if (p) { // OGR refuses delete 0...
+    OGRGeometryFactory::destroyGeometry (p);
+  }
 }
 
 /*===========================================================================*/

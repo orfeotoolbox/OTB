@@ -30,9 +30,9 @@ using namespace otb;
 /**\ingroup Geometry
  * \file    otbOGRDataSourceWrapperNew.cxx
  *
- *\todo test: CopyLayer from one datasource to another
- *\todo test: read datasource
- *\todo test: write datasource
+ *\todo Test: CopyLayer from one datasource to another
+ *\todo Test: read datasource
+ *\todo Test: write datasource
  */
 
 /*===========================================================================*/
@@ -46,6 +46,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_new_empty)
   BOOST_CHECK_EQUAL(ds->GetLayersCount(), 0);
   BOOST_CHECK_EQUAL(ds->Size(false), 0);
   BOOST_CHECK_EQUAL(ds->Size(true), 0);
+  BOOST_CHECK_EQUAL(ds->GetLayerChecked(0),otb::ogr::Layer(0));
   BOOST_CHECK_THROW(ds->GetLayerChecked(0), itk::ExceptionObject);
 }
 

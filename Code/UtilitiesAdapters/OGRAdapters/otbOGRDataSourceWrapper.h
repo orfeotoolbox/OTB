@@ -44,8 +44,9 @@ class OGRGeometry;
 namespace otb { namespace ogr {
 /**\ingroup Geometry
  * \class ImageReference
- * \todo see how mix it with the \c otb::ogr::DataSource wrapper as it was
+ * \todo See how mix it with the \c otb::ogr::DataSource wrapper as it was
  * with \c VectorData.
+ * \since OTB v 3.14.0
  */
 template <typename TPrecision> class ImageReference
   {
@@ -155,16 +156,17 @@ private:
  * an encapsulation of OGR classes. In that particular case, it's an
  * encapsulation of \c OGRDataSource.
  *
- * \note Not meant to be inherited
+ * \note Not meant to be inherited.
  * \note This class has an entity semantics: \em non-copyable, nor \em
  * assignable.
- * \note \c OGRRegisterAll() is implicitly called on construction
- * \internal As the class is not meant to be inherited, no new function is virtual.
+ * \note \c OGRRegisterAll() is implicitly called on construction.
  *
- * \note The following function haven't been encapsulated (yet?):
+ * \note The following functions haven't been encapsulated (yet?):
  * - \c SetStyleTable() & \c GetStyleTable()
  * - \c SetDriver() & \c GetDriver()
  * - all functions related to the reference count.
+ * \since OTB v 3.14.0
+ * \internal As the class is not meant to be inherited, no new function is virtual.
  */
 class DataSource : public itk::DataObject , public boost::noncopyable
   {
@@ -180,14 +182,14 @@ public:
   /**\name Standard macros */
   //@{
   /** Default builder.
-   * This builder function creates a new \c DataSource() with its default
+   * This builder function creates a new \c DataSource with its default
    * constructor. The actual \c OGRDataSource is using the <em>in-memory</em>
    * \c OGRSFDriver: \c OGRMemDriver.
    *
    * \throw itk::ExceptionObject if the inner \c OGRDataSource cannot be
    * opened.
    *
-   * \note \c OGRRegisterAll() is implicitly called on construction
+   * \note \c OGRRegisterAll() is implicitly called on construction.
    * \see \c DataSource()
    */
   itkNewMacro(Self);
@@ -195,6 +197,11 @@ public:
   //@}
   /**\name Creation functions */
   //@{
+  /**
+   * I/O modes for \c DataSources.
+   * \note Read/Write mode should have been <tt>read | write</tt>, but actually
+   * OGR data source are always at least in read mode.
+   */
   struct Modes { enum type { invalid, read=1, write=2, MAX__ }; };
 
   /**
@@ -216,7 +223,7 @@ public:
    * \throw Nothing
    * \note \c OGRRegisterAll() is supposed to have been called before building
    * \c source.
-   * \note no condition is assumed on the non-nullity of \c source.
+   * \note No condition is assumed on the non-nullity of \c source.
    * \see \c DataSource(OGRDataSource *)
    */
   static Pointer New(OGRDataSource * source);
@@ -229,7 +236,7 @@ public:
   //@}
 
   /** Clears the data source.
-   * \post the \c OGRDataSource owned is destroyed with the dedicated function
+   * \post The \c OGRDataSource owned is destroyed with the dedicated function
    * from OGR %API.
    * \post <tt>m_DataSource = 0</tt>
    */
@@ -240,13 +247,13 @@ public:
   /**\ingroup Geometry
    * \class layer_iter
    * Implementation class for \c Layer iterator.
-   * \internal
-   * \sa otb::ogr::Layer::iterator
-   * \sa otb::ogr::Layer::const_iterator
+   * \sa \c otb::ogr::Layer::iterator
+   * \sa \c otb::ogr::Layer::const_iterator
    * \note Naming policy is compliant with C++ standard as the iterator are as
    * well. This will permit transparent integration with all standard and boost
    * algorithms, and C++11 <em>for-range loops</em> for instance.
    * \see http://www.boost.org/doc/libs/1_49_0/libs/iterator/doc/iterator_facade.html#tutorial-example
+   * \since OTB v 3.14.0
    */
   template <class Value> class layer_iter
     : public boost::iterator_facade<layer_iter<Value>, Value, boost::random_access_traversal_tag, Value>
@@ -308,7 +315,7 @@ public:
    *
    * \return the number of features in the Data Source, -1 if count is unknown
    * \throw None
-   * \sa OGRLayer::GetFeatureCount
+   * \sa \c OGRLayer::GetFeatureCount()
    */
   int Size(bool doForceComputation) const;
 
@@ -347,13 +354,13 @@ public:
    * \throw itk::ExceptionObject in case the layer cannot be created on the
    * data source.
    *
-   * \note a \em proxy-class is returned instead of a plain \c OGRLayer is
+   * \note A \em proxy-class is returned instead of a plain \c OGRLayer is
    * order to encapsulate all lifetime management of the \c OGRLayer obtained
    * (i.e. never to be destroyed). If you want to delete a layer obtained
-   * with \c CreateLayer, you must use \c DeleteLayer.
-   * \note the \c papszOptions parameter may later become a \c
-   * std::vector<std::string>
-   * \sa OGRDataSource::CreateLayer
+   * with \c CreateLayer(), you must use \c DeleteLayer().
+   * \note The \c papszOptions parameter may later become a \c
+   * std::vector<std::string>.
+   * \sa \c OGRDataSource::CreateLayer()
    */
   Layer CreateLayer(
     std::string        const& name,
@@ -365,13 +372,13 @@ public:
    * Deletes the i-th layer from the data source.
    * \param[in] i  layer index
    *
-   * \throw it::ExceptionObject in case the index is out of range
-   * \throw it::ExceptionObject if the layer cannot be deleted from the data
+   * \throw itk::ExceptionObject in case the index is out of range
+   * \throw itk::ExceptionObject if the layer cannot be deleted from the data
    * source.
    *
-   * \pre the data source must support the delete operation
-   * \pre the index \c i must be in range [0, GetLayersCount())
-   * \sa OGRDataSource::DeleteLayer
+   * \pre The data source must support the delete operation.
+   * \pre The index \c i must be in range [0, GetLayersCount()).
+   * \sa \c OGRDataSource::DeleteLayer()
    */
   void DeleteLayer(size_t i);
 
@@ -386,13 +393,13 @@ public:
    * \throw itk::ExceptionObject in case the layer cannot be created on the
    * data source.
    *
-   * \note a \em proxy-class is returned instead of a plain \c OGRLayer is
+   * \note A \em proxy-class is returned instead of a plain \c OGRLayer in
    * order to encapsulate all lifetime management of the \c OGRLayer obtained
    * (i.e. never to be destroyed). If you want to delete a layer obtained
-   * with \c CreateLayer, you must use \c DeleteLayer.
-   * \note the \c papszOptions parameter may later become a \c
-   * std::vector<std::string>
-   * \sa OGRDataSource::CopyLayer
+   * with \c CreateLayer(), you must use \c DeleteLayer().
+   * \note The \c papszOptions parameter may later become a \c
+   * std::vector<std::string>.
+   * \sa \c OGRDataSource::CopyLayer()
    */
   Layer CopyLayer(
     Layer            & srcLayer,
@@ -401,21 +408,20 @@ public:
   //@}
 
   /**\name Layers access
-   *\note as the following accessors are not inlined, they aren't optimized.
+   *\note As the following accessors are not inlined, they aren't optimized.
    */
   //@{
   /** Returns the number of layers.
-  */
+   * \sa \c OGRDataSource::GetLayersCount()
+   */
   int GetLayersCount() const;
 
   /**
    * Unchecked Accessor to a given layer.
    * \param[in] i  index of the layer to access
    * \return the layer requested.
-   * \pre <tt>i < GetLayersCount()</tt>, an assertion will abort the program
-   * otherwise.
-   * \pre the layer must available, an assertion will abort the program
-   * otherwise.
+   * \pre <tt>i < GetLayersCount()</tt>, an assertion will be fired otherwise.
+   * \pre The layer must be available, an assertion will be fired otherwise.
    * \throw None
    * \note Use \c GetLayerUnchecked() if invalid indices are programming
    * errors, or if null layers are to be expected.
@@ -443,7 +449,7 @@ public:
    * \param[in] i  index of the layer to access
    * \return a reference to the layer requested.
    * \pre <tt>i < GetLayersCount()</tt>, an exception is raised otherwise.
-   * \pre the layer must available, an exception is raised otherwise.
+   * \pre The layer must available, an exception is raised otherwise.
    * \note Use \c GetLayer() if invalid indices, and null layers, are expected
    * to be programming errors.
    * \throw None
@@ -458,7 +464,7 @@ public:
    * \param[in] name  name of the layer to search
    * \return the layer requested, possibly a null one.
    * \throw itk::ExceptionObject if there exist no layer by that name
-   * \note use \c GetLayer(std::string const&) if you'd rather test the
+   * \note Use \c GetLayer(std::string const&) if you'd rather test the
    * obtained layer instead of catching an exception.
    */
   Layer       GetLayerChecked(std::string const& name);
@@ -480,10 +486,10 @@ public:
    * Check for \c Layer's validity before doing anything else.
    * \throw None even when there is an error -- OGR can not report errors,
    * neither this wrapping.
-   * \note the returned \c Layer will be automatically collected on its
+   * \note The returned \c Layer will be automatically collected on its
    * destruction; i.e. unlike OGR API, no need to explicitly call \c
    * OGRDataSource::ReleaseResultSet().
-   * \sa OGRDataSource::ExecuteSQL
+   * \sa \c OGRDataSource::ExecuteSQL()
    */
   Layer ExecuteSQL(
     std::string const& statement,
@@ -506,23 +512,23 @@ public:
 
   /** Flushes all changes to disk.
    * \throw itd::ExceptionObject in case the flush operation failed.
-   * \sa OGRDataSource::SyncToDisk
+   * \sa \c OGRDataSource::SyncToDisk()
    */
   void SyncToDisk();
 
   /** Returns whether a capability is avalaible.
    * \param[in] capabilityName  name of the capability to check.
    * \throw None
-   * \sa OGRDataSource::TestCapability
+   * \sa \c OGRDataSource::TestCapability()
    */
-  bool HasCapability(std::string const& capabilityName);
+  bool HasCapability(std::string const& capabilityName) const;
 
   /** Access to raw \c OGRDataSource.
    * This function provides an abstraction leak in case deeper control on the
    * underlying \c OGRDataSource is required.
-   * \pre the underlying \c OGRDataSource must be valid, i.e.
+   * \pre The underlying \c OGRDataSource must be valid, i.e.
    * <tt>m_DataSource != 0</tt>, an assertion is fired otherwise.
-   * \warning you must under no circonstance try to delete the \c OGRDataSource
+   * \warning You must under no circonstance try to delete the \c OGRDataSource
    * obtained this way.
    */
   OGRDataSource & ogr();
@@ -539,11 +545,11 @@ protected:
    */
   DataSource();
   /** Init constructor.
-   * \post the newly constructed object owns the \c source parameter.
+   * \post The newly constructed object owns the \c source parameter.
    */
   DataSource(OGRDataSource * source);
   /** Destructor.
-   * \post the \c OGRDataSource owned is released (if not null).
+   * \post The \c OGRDataSource owned is released (if not null).
    */
   virtual ~DataSource();
 
@@ -556,7 +562,7 @@ private:
    * \param[in] i  index of the layer to access
    * \return a reference to the layer requested.
    * \pre <tt>i < GetLayersCount()</tt>, return 0 otherwise
-   * \pre the layer must available, 0 is returned otherwise.
+   * \pre The layer must available, 0 is returned otherwise.
    * \throw None
    * \internal this function is a simple encapsulation of \c
    * OGRDataSource::GetLayer().
@@ -565,9 +571,6 @@ private:
   /** @copydoc OGRLayer* otb::ogr::DataSource::GetLayerUnchecked(size_t i)
    */
   OGRLayer* GetLayerUnchecked(size_t i) const;
-
-  DataSource(const Self&);             //purposely not implemented
-  DataSource& operator =(const Self&); //purposely not implemented
 
 private:
   OGRDataSource  *m_DataSource;

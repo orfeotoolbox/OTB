@@ -26,7 +26,6 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/at.hpp>
 
-// #include <boost/mpl/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/range/size.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -37,29 +36,20 @@ class OGRFieldDefn;
 #include "ogr_core.h" // OGR enums
 #include "itkIndent.h"
 #include <cassert>
-
-#include <boost/type_traits/is_array.hpp>
-namespace boost {
-template <typename Range> struct is_contiguous
-  { enum {value = is_array<Range>::value}; };
-
-// todo: other vector params
-template <typename T> struct is_contiguous<std::vector<T> >
-  { enum {value = true}; };
-template <typename T, std::size_t N> class array;
-template <typename T, std::size_t N> struct is_contiguous<boost::array<T, N> >
-  { enum {value = true}; };
-} // boost namespace
+// #include "boost/type_traits/is_contiguous.h" // from OTB actually
+#include "is_contiguous.h" // from OTB actually
 
 
 namespace otb { namespace ogr {
 
 /**\ingroup Geometry
  * \defgroup GeometryInternals Geometry Internals
+ * \since OTB v 3.14.0
  */
 
 /**\ingroup GeometryInternals
  * Namespace used to host internal meta-prog definitions.
+ * \since OTB v 3.14.0
  */
 namespace metaprog { // namespace metaprog
 using namespace boost::mpl;
@@ -67,6 +57,7 @@ using namespace boost::mpl;
 /**\ingroup GeometryInternals
  * Associative map of C++ types to OGR field types (\c OGRFieldType).
  * \internal Relies on Boost.MPL
+ * \since OTB v 3.14.0
  */
 typedef boost::mpl::map
   < pair<int, int_<OFTInteger> >
@@ -92,6 +83,7 @@ typedef boost::mpl::map
  *
  * \internal
  * This is a hack to pass a member function pointer as template-parameter.
+ * \since OTB v 3.14.0
  */
 template
   < typename T
@@ -116,6 +108,7 @@ template
  *
  * \internal
  * This is a hack to pass a member function pointer as template-parameter.
+ * \since OTB v 3.14.0
  */
 template
   < typename T
@@ -140,6 +133,7 @@ template
  *
  * \internal
  * This is a hack to pass a member function pointer as template-parameter.
+ * \since OTB v 3.14.0
  */
 template
   < typename T
@@ -205,6 +199,7 @@ template
  *
  * \internal
  * This is a hack to pass a member function pointer as template-parameter.
+ * \since OTB v 3.14.0
  */
 template
   < typename T
@@ -228,6 +223,7 @@ template
  * Associative map of OGR field types (\c OGRFieldType) to their associated
  * getters.
  * \internal Relies on Boost.MPL
+ * \since OTB v 3.14.0
  */
 typedef map
   < pair<int_<OFTInteger>,     MemberGetterPtr<int,             &OGRFeature::GetFieldAsInteger> >
@@ -242,6 +238,7 @@ typedef map
  * Associative map of OGR field types (\c OGRFieldType) to their associated
  * setters.
  * \internal Relies on Boost.MPL
+ * \since OTB v 3.14.0
  */
 typedef map
   < pair<int_<OFTInteger>,     MemberSetterPtr<int,             &OGRFeature::SetField> >
@@ -261,6 +258,7 @@ typedef map
  * \invariant \c m_definition lifetime is of the responsability of the owning \c
  * \c OGRFeatureDefn.
  * \sa OGRFieldDefn
+ * \since OTB v 3.14.0
  */
 class FieldDefn
   {
@@ -317,12 +315,14 @@ template <> struct FieldDecodingTraitsGetter<std::string>
 /*=================================[ Field ]=================================*/
 /*===========================================================================*/
 class Feature;
+
 /**\ingroup Geometry
  * \class Field
  * \brief Encapsulation of \c OGRField
  * Instances of \c Field are expected to be built from an existing \c Feature
  * with which they'll share their owning \c OGRFeature.
  * \sa OGRField
+ * \since OTB v 3.14.0
  */
 class Field
   {

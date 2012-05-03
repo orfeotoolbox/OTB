@@ -393,7 +393,7 @@ void otb::ogr::DataSource::PrintSelf(
   assert(! "Disabled to check if it makes sense...");
 }
 
-bool otb::ogr::DataSource::HasCapability(std::string const& capabilityName)
+bool otb::ogr::DataSource::HasCapability(std::string const& capabilityName) const
 {
   assert(m_DataSource && "Datasource not initialized");
   return m_DataSource->TestCapability(capabilityName.c_str());

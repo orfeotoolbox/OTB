@@ -50,7 +50,7 @@ otb::ogr::Feature::~Feature()
 {
 }
 
-otb::ogr::Feature otb::ogr::Feature::clone() const
+otb::ogr::Feature otb::ogr::Feature::Clone() const
 {
   CheckInvariants();
   const Feature res(m_Feature->Clone());
@@ -60,14 +60,22 @@ otb::ogr::Feature otb::ogr::Feature::clone() const
 void otb::ogr::Feature::SetFrom(Feature const& rhs, bool mustForgive)
 {
   CheckInvariants();
-  m_Feature->SetFrom(&rhs.ogr(), mustForgive);
+  const OGRErr res = m_Feature->SetFrom(&rhs.ogr(), mustForgive);
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<<"Cannot assign from another feature: " << CPLGetLastErrorMsg());
+    }
 }
 
 void otb::ogr::Feature::SetFrom(Feature const& rhs, int * map, bool mustForgive)
 {
   CheckInvariants();
 #if GDAL_VERSION_NUM >= 1900
-  m_Feature->SetFrom(&rhs.ogr(), map, mustForgive);
+  const OGRErr res = m_Feature->SetFrom(&rhs.ogr(), map, mustForgive);
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<<"Cannot assign from another feature: " << CPLGetLastErrorMsg());
+    }
 #else
   itkGenericExceptionMacro("OGRLayer::SetFrom(feature, fieldmap, forgive) is not supported by OGR v"
     << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
@@ -127,12 +135,7 @@ otb::ogr::Field const otb::ogr::Feature::operator[](size_t index) const
 
 otb::ogr::Field otb::ogr::Feature::operator[](std::string const& name)
 {
-  CheckInvariants();
-  int index = m_Feature->GetFieldIndex(name.c_str());
-  if (index < 0)
-    {
-    itkGenericExceptionMacro(<<"No field named <"<<name<<"> in feature");
-    }
+  const int index = GetFieldIndex(name);
   return this->operator[](index);
 }
 
@@ -149,13 +152,19 @@ otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(size_t index) const
 
 otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(std::string const& name) const
 {
+  const int index = GetFieldIndex(name);
+  return this->GetFieldDefn(index);
+}
+
+int otb::ogr::Feature::GetFieldIndex(std::string const& name) const
+{
   CheckInvariants();
-  int index = m_Feature->GetFieldIndex(name.c_str());
+  const int index = m_Feature->GetFieldIndex(name.c_str());
   if (index < 0)
     {
     itkGenericExceptionMacro(<<"No field named <"<<name<<"> in feature");
     }
-  return this->GetFieldDefn(index);
+  return index;
 }
 
 /*===========================================================================*/
@@ -173,7 +182,7 @@ void otb::ogr::Feature::SetFID(long fid)
   const OGRErr res = m_Feature->SetFID(fid);
   if (res != OGRERR_NONE)
     {
-    itkGenericExceptionMacro(<<"Cannot Set FID to "<<fid<<" for feature: " << res);
+    itkGenericExceptionMacro(<<"Cannot Set FID to "<<fid<<" for feature: " << CPLGetLastErrorMsg());
     }
 }
 
@@ -190,8 +199,14 @@ OGRFeatureDefn&  otb::ogr::Feature::GetDefn() const
 void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
 {
   CheckInvariants();
-  OGRGeometry * g = geometry.release();
-  m_Feature->SetGeometryDirectly(g);
+  OGRGeometry * g = geometry.get();
+  const OGRErr res = m_Feature->SetGeometryDirectly(g);
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<<"Cannot set (directly) the geometry: " << CPLGetLastErrorMsg());
+    }
+  assert(m_Feature->GetGeometryRef() == g);
+  geometry.release(); // success => commit the transaction (after any exception thrown)
   assert(! geometry);
 }
 
@@ -208,8 +223,11 @@ void otb::ogr::Feature::SetGeometry(OGRGeometry const* geometry)
 {
   CheckInvariants();
   // OGR copies the input geometry => should have been const
-  m_Feature->SetGeometryDirectly(const_cast <OGRGeometry*>(geometry));
-  assert(m_Feature->GetGeometryRef() == geometry);
+  const OGRErr res = m_Feature->SetGeometry(const_cast <OGRGeometry*>(geometry));
+  if (res != OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<<"Cannot set the geometry: " << CPLGetLastErrorMsg());
+    }
 }
 
 OGRGeometry const* otb::ogr::Feature::GetGeometry() const

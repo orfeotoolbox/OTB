@@ -71,6 +71,7 @@ BOOST_STATIC_ASSERT((boost::is_array<int[42]>::value));
 BOOST_STATIC_ASSERT(!(boost::is_array<boost::array<int, 42> >::value));
 BOOST_STATIC_ASSERT(!(boost::is_array<std::vector<int> >::value));
 
+BOOST_STATIC_ASSERT((boost::is_contiguous<int*>::value));
 BOOST_STATIC_ASSERT((boost::is_contiguous<int[42]>::value));
 BOOST_STATIC_ASSERT((boost::is_contiguous<boost::array<int, 42> >::value));
 BOOST_STATIC_ASSERT((boost::is_contiguous<std::vector<int> >::value));
