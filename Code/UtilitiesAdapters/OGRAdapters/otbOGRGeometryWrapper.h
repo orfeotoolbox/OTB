@@ -34,9 +34,9 @@ struct GeometryDeleter
 
 /**\ingroup Geometry
  * \defgroup OGRGeometryWrapper OGRGeometry Wrappers
- * Helper definition to hangle \c OGRGeometry objects.
+ * %Helper definition to handle \c OGRGeometry objects.
  *
- * @note %OTB doesn't provide anything on top of \c OGRGeometryFactory to create
+ * \note %OTB doesn't provide anything on top of \c OGRGeometryFactory to create
  * new factories. Please, never create new \c OGRGeometry by hand with
  * <tt>new</tt> operator as there is no garanty they'll get destroyed within the
  * proper memory context when released from an owning \c OGRFeature.
