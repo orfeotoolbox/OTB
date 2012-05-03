@@ -51,7 +51,7 @@ private:
     // Documentation
     SetDocName("Mean Shift segmentation");
     SetDocLongDescription("This application performs mean shift clustering.");
-    SetDocLimitations("None");
+    SetDocLimitations("This application relies on old mean shift implementation (EDISON), which is going to be replaced by new one.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
