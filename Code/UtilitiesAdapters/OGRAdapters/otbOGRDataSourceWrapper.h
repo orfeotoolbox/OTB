@@ -42,7 +42,7 @@ class OGRGeometry;
 #include "ogr_core.h" // OGRwkbGeometryType
 
 namespace otb { namespace ogr {
-/**\ingroup Geometry
+/**\ingroup gGeometry
  * \class ImageReference
  * \todo See how mix it with the \c otb::ogr::DataSource wrapper as it was
  * with \c VectorData.
@@ -148,7 +148,7 @@ private:
   OriginType                  m_Origin;
   };
 
-/**\ingroup Geometry
+/**\ingroup gGeometry
  * \class DataSource
  * Collection of geometric objects.
  *
@@ -244,7 +244,7 @@ public:
 
   /**\name Iteration */
   //@{
-  /**\ingroup Geometry
+  /**\ingroup gGeometry
    * \class layer_iter
    * Implementation class for \c Layer iterator.
    * \sa \c otb::ogr::Layer::iterator

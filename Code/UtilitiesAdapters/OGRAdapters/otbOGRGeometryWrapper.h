@@ -42,7 +42,7 @@ struct GeometryDeleter
 
 // we don't encapsulate OGRGeometry, but please, don't create new geometries with a new.
 
-/**\ingroup Geometry
+/**\ingroup gGeometry
  * \defgroup OGRGeometryWrapper OGRGeometry Wrappers
  * %Helper definition to handle \c OGRGeometry objects.
  *

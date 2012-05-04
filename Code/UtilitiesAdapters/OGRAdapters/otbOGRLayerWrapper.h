@@ -34,7 +34,7 @@ class OGRFeatureDefn;
 class OGRFieldDefn;
 
 namespace otb { namespace ogr {
-/**\ingroup Geometry
+/**\ingroup gGeometry
  * \class Layer
  * \brief %Layer of geometric objets.
  *
@@ -247,7 +247,7 @@ public:
 
   /**\name Iteration */
   //@{
-  /**\ingroup Geometry
+  /**\ingroup gGeometry
    * \class feature_iter
    * Implementation class for \c Feature iterator.
    * This iterator is a single <em>pass iterator</em>. We may fetch the \c

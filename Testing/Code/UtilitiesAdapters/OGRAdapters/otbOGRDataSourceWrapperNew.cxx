@@ -27,7 +27,7 @@
 
 using namespace otb;
 
-/**\ingroup Geometry
+/**\ingroup gGeometry
  * \file    otbOGRDataSourceWrapperNew.cxx
  *
  *\todo Test: CopyLayer from one datasource to another

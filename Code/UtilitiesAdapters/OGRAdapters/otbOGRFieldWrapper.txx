@@ -44,7 +44,7 @@
 /*===========================================================================*/
 
 namespace otb { namespace ogr {
-/**\ingroup Geometry
+/**\ingroup gGeometry
  * \defgroup GeometryInternals Geometry Internals
  * \since OTB v 3.14.0
  */

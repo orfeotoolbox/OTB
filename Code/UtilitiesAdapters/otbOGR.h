@@ -19,7 +19,7 @@
 #define __otbOGR_h
 
 namespace otb {
-  /**\defgroup Geometry Geometry
+  /**\defgroup gGeometry Geometry
    * \ingroup Thematic
    * Classes and functions aimed toward the manipulation of set of geometric
    * objects.
@@ -38,7 +38,7 @@ namespace otb {
 // #include "otbOGRFieldWrapper.h" // implicit
 // #include "otbOGRGeometryWrapper.h" // implicit
 
-/**\ingroup Geometry
+/**\ingroup gGeometry
  * \file    otbOGR.h
  * How to include all include files dedicated to OGR encapsulation in OTB...
  */

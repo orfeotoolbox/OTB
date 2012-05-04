@@ -33,7 +33,7 @@ namespace ogr {
 class Feature;
 bool operator==(Feature const& lhs, Feature const& rhs);
 
-/**\ingroup Geometry
+/**\ingroup gGeometry
  * \class Feature proxy class.
  * \brief Geometric objet with descriptive fields.
  *

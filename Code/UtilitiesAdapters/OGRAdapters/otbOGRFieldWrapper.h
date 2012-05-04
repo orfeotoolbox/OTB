@@ -31,7 +31,7 @@ namespace otb { namespace ogr {
 /*===========================================================================*/
 /*===========================[ Field definition ]============================*/
 /*===========================================================================*/
-/**\ingroup Geometry
+/**\ingroup gGeometry
  * \class FieldDefn
  * \brief Encapsulation of \c OGRFieldDefn: field definition.
  * \invariant <tt>m_definition != 0</tt>
@@ -60,7 +60,7 @@ private:
 /*===========================================================================*/
 class Feature;
 
-/**\ingroup Geometry
+/**\ingroup gGeometry
  * \class Field
  * \brief Encapsulation of \c OGRField
  * Instances of \c Field are expected to be built from an existing \c Feature
