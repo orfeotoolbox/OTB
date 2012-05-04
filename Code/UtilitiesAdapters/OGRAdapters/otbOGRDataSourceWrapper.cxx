@@ -82,6 +82,10 @@ void otb::ogr::DataSource::Reset(OGRDataSource * source)
 }
 
 namespace  { // Anonymous namespace
+/**\ingroup GeometryInternals
+ * \brief Type for associating filename extension with OGR driver names.
+ * \since OTB v 3.14.0
+ */
 struct ExtensionDriverAssociation
   {
   char const* extension;
@@ -91,6 +95,10 @@ struct ExtensionDriverAssociation
     return ext == extension;
     }
   };
+/**\ingroup GeometryInternals
+ * \brief Associative table of filename extension -> OGR driver names.
+ * \since OTB v 3.14.0
+ */
 const ExtensionDriverAssociation k_ExtensionDriverMap[] =
   {
     {"SHP", "ESRI Shapefile"},
@@ -100,6 +108,14 @@ const ExtensionDriverAssociation k_ExtensionDriverMap[] =
     {"SQLITE", "SQLite"},
     {"KML", "KML"},
   };
+/**\ingroup GeometryInternals
+ * \brief Returns the OGR driver name associated to a filename.
+ * \since OTB v 3.14.0
+ * \note Relies on the driver name associated to the filename extension in \c
+ * k_ExtensionDriverMap.
+ * \note As a special case, filenames starting with "PG:" are bound to
+ * "PostgreSQL".
+ */
 char const* DeduceDriverName(std::string filename)
   {
   std::transform(filename.begin(), filename.end(), filename.begin(), (int (*)(int))toupper);
@@ -168,7 +184,8 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
     char const* driverName = DeduceDriverName(filename);
     if (!driverName)
       {
-      itkGenericExceptionMacro(<< "No OGR driver known to OTB to create and handle a DataSource named <"<<filename<<">.");
+      itkGenericExceptionMacro(<< "No OGR driver known to OTB to create and handle a DataSource named <"
+        <<filename<<">.");
       }
 
     OGRSFDriver * d = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
@@ -354,18 +371,22 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
 /*===============================[ features ]================================*/
 /*===========================================================================*/
 namespace  { // Anonymous namespace
-  struct AccuLayersSizes
+/**\ingroup GeometryInternals
+ * \brief %Functor used to accumulate the sizes of the layers in a \c DataSource.
+ * \since OTB v 3.14.0
+ */
+struct AccuLayersSizes
+  {
+  AccuLayersSizes(bool doForceComputation)
+    : m_doForceComputation(doForceComputation) { }
+  int operator()(int accumulated, otb::ogr::Layer const& layer) const
     {
-    AccuLayersSizes(bool doForceComputation)
-      : m_doForceComputation(doForceComputation) { }
-    int operator()(int accumulated, otb::ogr::Layer const& layer) const
-      {
-      const int loc_size = layer.GetFeatureCount(m_doForceComputation);
-      return loc_size < 0 ? loc_size : loc_size+accumulated;
-      }
-  private:
-    bool m_doForceComputation;
-    };
+    const int loc_size = layer.GetFeatureCount(m_doForceComputation);
+    return loc_size < 0 ? loc_size : loc_size+accumulated;
+    }
+private:
+  bool m_doForceComputation;
+  };
 } // Anonymous namespace
 
 int otb::ogr::DataSource::Size(bool doForceComputation) const

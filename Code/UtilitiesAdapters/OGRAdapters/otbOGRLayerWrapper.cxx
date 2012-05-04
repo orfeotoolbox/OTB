@@ -30,10 +30,10 @@
 /*======================[ Construction & Destruction ]=======================*/
 /*===========================================================================*/
 namespace  { // Anonymous namespace
-  /**\ingroup Geometry
+  /**\ingroup GeometryInternals
    * Deleter for \c boost::shared_ptr<> that doesn't delete.
    * This is required for \c OGRLayer s that belong to \c OGRDataSource.
-   * \internal
+   * \internal Unlike OGR, works as a no-op on null geometries.
    */
   struct LeaveAloneDeleter
     {

@@ -29,7 +29,7 @@
 /*===========================[ Static Assertions ]===========================*/
 /*===========================================================================*/
 namespace otb { namespace ogr {
-namespace metaprog {
+namespace internal {
 BOOST_STATIC_ASSERT(!(boost::is_same<
   MemberGetterPtr<int,         &OGRFeature::GetFieldAsInteger>,
   MemberGetterPtr<double,      &OGRFeature::GetFieldAsDouble>
@@ -84,13 +84,13 @@ BOOST_STATIC_ASSERT((boost::is_contiguous<std::vector<int> >::value));
 
 std::string otb::ogr::FieldDefn::GetName() const
 {
-  assert(m_definition);
+  assert(m_definition && "No field definition wrapped");
   return m_definition->GetNameRef();
 }
 
 OGRFieldType otb::ogr::FieldDefn::GetType() const
 {
-  assert(m_definition);
+  assert(m_definition && "No field definition wrapped");
   return m_definition->GetType();
 }
 
@@ -103,13 +103,13 @@ otb::ogr::Field::Field(otb::ogr::Feature & feature, size_t index)
 , m_Feature(feature.sptr())
 , m_index(index)
 {
-  assert(m_Feature);
-  assert(m_Feature->GetFieldDefnRef(index));
+  CheckInvariants();
 }
 
 std::ostream & otb::ogr::Field::PrintSelf(
   std::ostream& os, itk::Indent indent) const
 {
+  CheckInvariants();
   const itk::Indent one_indent = itk::Indent().GetNextIndent();
   // os << indent << "|" << one_indent << "+ ";
   os << indent << this->GetName() << ": ";
@@ -143,12 +143,12 @@ std::ostream & otb::ogr::Field::PrintSelf(
 
 bool otb::ogr::Field::HasBeenSet() const
 {
-  assert(m_Feature);
+  CheckInvariants();
   return m_Feature->IsFieldSet(m_index);
 }
 
 void otb::ogr::Field::Unset() const
 {
-  assert(m_Feature);
+  CheckInvariants();
   m_Feature->UnsetField(m_index);
 }

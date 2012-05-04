@@ -23,11 +23,21 @@ class OGRGeometry;
 
 namespace otb { namespace ogr {
 namespace internal {
+/**\ingroup GeometryInternals
+ * Deleter dedicated to \c OGRGeometry.
+ * \internal
+ * Unlike OGR, works as a no-op on null geometries.
+ *
+ * Unlike the other deleters used, the type of this one needs to be known in the
+ * header file in order to define the type \c UniqueGeometryPtr. As a
+ * consequence, it is not in an anonymous namespace , but in \c
+ * otb::ogr::internal.
+ */
 struct GeometryDeleter
   {
   void operator()(OGRGeometry* p);
   };
-} // metaprog namespace
+} // internal namespace
 
 
 // we don't encapsulate OGRGeometry, but please, don't create new geometries with a new.

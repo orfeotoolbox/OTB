@@ -63,6 +63,7 @@ template <typename T, std::size_t N> class array;
 template <typename T, std::size_t N, typename CloneAllocator> class ptr_array;
 template <typename T, typename CloneAllocator, typename Allocator> class ptr_vector;
 
+// is_contiguous specialisations
 template <typename T, typename Allocator> struct is_contiguous<std::vector<T, Allocator> >
   { enum {value = true}; };
 template <typename T, std::size_t N> struct is_contiguous<boost::array<T, N> >
