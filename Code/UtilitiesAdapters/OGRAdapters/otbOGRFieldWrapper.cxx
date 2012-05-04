@@ -84,14 +84,14 @@ BOOST_STATIC_ASSERT((boost::is_contiguous<std::vector<int> >::value));
 
 std::string otb::ogr::FieldDefn::GetName() const
 {
-  assert(m_definition && "No field definition wrapped");
-  return m_definition->GetNameRef();
+  assert(m_Definition && "No field definition wrapped");
+  return m_Definition->GetNameRef();
 }
 
 OGRFieldType otb::ogr::FieldDefn::GetType() const
 {
-  assert(m_definition && "No field definition wrapped");
-  return m_definition->GetType();
+  assert(m_Definition && "No field definition wrapped");
+  return m_Definition->GetType();
 }
 
 /*===========================================================================*/

@@ -34,8 +34,8 @@ namespace otb { namespace ogr {
 /**\ingroup gGeometry
  * \class FieldDefn
  * \brief Encapsulation of \c OGRFieldDefn: field definition.
- * \invariant <tt>m_definition != 0</tt>
- * \invariant \c m_definition lifetime is of the responsability of the owning \c
+ * \invariant <tt>m_Definition != 0</tt>
+ * \invariant \c m_Definition lifetime is of the responsability of the owning \c
  * \c OGRFeatureDefn.
  * \sa OGRFieldDefn
  * \since OTB v 3.14.0
@@ -43,7 +43,7 @@ namespace otb { namespace ogr {
 class FieldDefn
   {
 public:
-  FieldDefn(OGRFieldDefn& definition) : m_definition(&definition){ }
+  FieldDefn(OGRFieldDefn& definition) : m_Definition(&definition){ }
   std::string  GetName() const; //!< Field name accessor.
   OGRFieldType GetType() const; //!< Field type accessor.
 
@@ -51,7 +51,7 @@ private:
   /**Pointer to the actual definition.
    * \internal pointer in order to support assignments
    */
-  OGRFieldDefn * m_definition;
+  OGRFieldDefn * m_Definition;
   };
 
 
