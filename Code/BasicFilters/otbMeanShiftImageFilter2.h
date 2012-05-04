@@ -329,6 +329,12 @@ private:
 
   /** Boolean to enable mode search optimization */
   bool m_ModeSearchOptimization;
+
+  /** Mode counters (local to each thread) */
+  itk::VariableLengthVector<LabelType> m_NumLabels;
+  /** Number of bits used to represent the threadId in the most significant bits
+  of labels */
+  unsigned int m_ThreadIdNumberOfBits;
 };
 
 } // end namespace otb

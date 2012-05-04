@@ -375,6 +375,26 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     m_ModeTable->SetRegions(inputPtr->GetRequestedRegion());
     m_ModeTable->Allocate();
     m_ModeTable->FillBuffer(0);
+
+    // Initialize counters for mode (also used for mode labeling)
+    // Most significant bits of label counters are used to identify the thread
+    // Id.
+    unsigned int numThreads;
+
+    numThreads = this->GetNumberOfThreads();
+    m_ThreadIdNumberOfBits = -1;
+    unsigned int n = numThreads;
+    while (n != 0)
+      {
+      n >>= 1;
+      m_ThreadIdNumberOfBits++;
+      }
+    m_NumLabels.SetSize(numThreads);
+    for(unsigned int i = 0; i < numThreads; i++)
+      {
+      m_NumLabels[i] = static_cast<LabelType>(i) << (sizeof(LabelType)*8 - m_ThreadIdNumberOfBits);
+      }
+
     }
 
 }
@@ -521,7 +541,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   typedef itk::ImageRegionIterator<OutputSpatialImageType>        OutputSpatialIteratorType;
   typedef itk::ImageRegionIterator<OutputMetricImageType>         OutputMetricIteratorType;
   typedef itk::ImageRegionIterator<OutputIterationImageType>      OutputIterationIteratorType;
-  typedef itk::ImageRegionIterator<OutputLabelImageType>      OutputLabelIteratorType;
+  typedef itk::ImageRegionIterator<OutputLabelImageType>          OutputLabelIteratorType;
 
 
   unsigned int jointDimension = ImageDimension + m_NumberOfComponentsPerPixel;
@@ -592,8 +612,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   unsigned int numBreaks = 0;
   // index of the current pixel updated during the mean shift loop
   InputIndexType modeCandidate;
-  // Number of labels already assigned. This is also used to find the next unused label
-  LabelType numLabels = 0;
 
   for (; !jointIt.IsAtEnd();
        ++jointIt, ++rangeIt, ++spatialIt, ++metricIt, ++iterationIt,
@@ -731,8 +749,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
       LabelType label;
       if (hasConverged)
         {
-        numLabels++;
-        label = numLabels;
+        m_NumLabels[threadId]++;
+        label = m_NumLabels[threadId];
         } else // the loop exited through a break. Use the already assigned mode label
         {
         label = labelOutput->GetPixel(modeCandidate);
@@ -759,7 +777,52 @@ void
 MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricImage, TOutputIterationImage>
 ::AfterThreadedGenerateData()
 {
+  typename OutputLabelImageType::Pointer labelOutput = this->GetLabelOutput();
+  typedef itk::ImageRegionIterator<OutputLabelImageType> OutputLabelIteratorType;
+  OutputLabelIteratorType labelIt(labelOutput, labelOutput->GetRequestedRegion());
 
+  // Reassign mode labels
+  // Note: Labels are only computed when mode search optimization is enabled
+  if (m_ModeSearchOptimization)
+    {
+    LabelType label;
+    LabelType newLabel;
+
+    unsigned int threadId;
+
+    // New labels will be consecutive. The following vector contains the new
+    // start label for each thread.
+    itk::VariableLengthVector<LabelType> newLabelOffset;
+    newLabelOffset.SetSize(this->GetNumberOfThreads());
+    newLabelOffset[0] = 0;
+    for (int i = 1; i < this->GetNumberOfThreads(); i++)
+      {
+      LabelType localNumLabel;
+      // Retrieve the number of labels in the thread by removing the threadId
+      // from the most significant bits
+      localNumLabel = m_NumLabels[i-1] & ( (static_cast<LabelType>(1) << (sizeof(LabelType)*8 - m_ThreadIdNumberOfBits)) - static_cast<LabelType>(1) );
+      newLabelOffset[i] = localNumLabel + newLabelOffset[i-1];
+      }
+
+    labelIt.GoToBegin();
+
+    while ( !labelIt.IsAtEnd() )
+      {
+      label = labelIt.Get();
+
+      // Get threadId from most significant bits
+      threadId = label >> (sizeof(LabelType)*8 - m_ThreadIdNumberOfBits);
+
+      // Relabeling
+      // First get the label number by removing the threadId bits
+      // Then add the label offset specific to the threadId
+      newLabel = label & ( (static_cast<LabelType>(1) << (sizeof(LabelType)*8 - m_ThreadIdNumberOfBits)) - static_cast<LabelType>(1) );
+      newLabel += newLabelOffset[threadId];
+
+      labelIt.Set(newLabel);
+      ++labelIt;
+      }
+    }
 
 }
 
