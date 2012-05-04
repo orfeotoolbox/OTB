@@ -155,7 +155,7 @@ private:
     EnableParameter("outputs.isotropic");
     
     AddParameter(ParameterType_Float, "outputs.default", "Default pixel value");
-    SetParameterDescription("outputs.spacingy","Default value to write when outside of input image.");
+    SetParameterDescription("outputs.default","Default value to write when outside of input image.");
     SetDefaultParameterFloat("outputs.default",0.);
 
     // Elevation
