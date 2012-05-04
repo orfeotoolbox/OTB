@@ -47,9 +47,9 @@ OGRDataSource & otb::ogr::DataSource::ogr()
 inline
 otb::ogr::Layer otb::ogr::DataSource::GetLayer(size_t i)
 {
-  assert(int(i) < GetLayersCount());
+  assert(int(i) < GetLayersCount() && "Out-of-range index");
   OGRLayer * layer_ptr = GetLayerUnchecked(i);
-  assert(layer_ptr);
+  assert(layer_ptr && "No layer returned by OGR");
   return otb::ogr::Layer(layer_ptr);
 }
 

@@ -94,7 +94,7 @@ void otb::ogr::Feature::PrintSelf(std::ostream & os, itk::Indent indent) const
   indent = indent.GetNextIndent();
   for (size_t i=0; i!=nbFields; ++i)
     {
-    assert(ogr().GetFieldDefnRef(i));
+    assert(ogr().GetFieldDefnRef(i) && "No definition associated to the i-th field");
     Field const& field = (*this)[i];
     field.PrintSelf(os, indent);
     }
@@ -205,9 +205,9 @@ void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
     {
     itkGenericExceptionMacro(<<"Cannot set (directly) the geometry: " << CPLGetLastErrorMsg());
     }
-  assert(m_Feature->GetGeometryRef() == g);
+  assert(m_Feature->GetGeometryRef() == g && "The new geometry hasn't been set as expected");
   geometry.release(); // success => commit the transaction (after any exception thrown)
-  assert(! geometry);
+  assert(! geometry && "UniqueGeometryPtr hasn't released its pointer");
 }
 
 otb::ogr::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
@@ -215,7 +215,7 @@ otb::ogr::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
   CheckInvariants();
   OGRGeometry * g = m_Feature->StealGeometry();
   UniqueGeometryPtr res(g);
-  assert(! m_Feature->GetGeometryRef());
+  assert(! m_Feature->GetGeometryRef() && "Geometry hasn't been properly stolen");
   return UniqueGeometryPtr(g);
 }
 

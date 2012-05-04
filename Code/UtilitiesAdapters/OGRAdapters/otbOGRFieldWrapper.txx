@@ -277,9 +277,9 @@ typedef map
 inline
 void otb::ogr::Field::CheckInvariants() const
 {
-  assert(m_Feature);
-  assert(int(m_index) < m_Feature->GetFieldCount());
-  assert(m_Feature->GetFieldDefnRef(m_index));
+  assert(m_Feature && "OGR Fields must be associated to a valid feature");
+  assert(int(m_index) < m_Feature->GetFieldCount() && "Out-of-range index for a OGR field");
+  assert(m_Feature->GetFieldDefnRef(m_index) && "No definition available for the OGR field");
 }
 
 template <typename T>
@@ -290,7 +290,7 @@ void otb::ogr::Field::SetValue(T const& value)
   const int VALUE = boost::mpl::at<internal::FieldType_Map, T>::type::value;
   typedef typename boost::mpl::at<internal::FieldType_Map, T>::type Kind;
   BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
-  assert(m_Definition.GetType() == Kind::value);
+  assert(m_Definition.GetType() == Kind::value && "OGR field type mismatches the type of new field value");
   typedef typename boost::mpl::at<internal::FieldSetters_Map, Kind>::type SetterType;
   BOOST_STATIC_ASSERT(!(boost::is_same<SetterType, boost::mpl::void_>::value));
   SetterType::call(*m_Feature, m_index, value);
@@ -305,7 +305,7 @@ T otb::ogr::Field::GetValue() const
   const int VALUE = boost::mpl::at<internal::FieldType_Map, T>::type::value;
   typedef typename boost::mpl::at<internal::FieldType_Map, T>::type Kind;
   BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
-  assert(m_Definition.GetType() == Kind::value);
+  assert(m_Definition.GetType() == Kind::value && "OGR field type mismatches the type of requested field value");
   typedef typename boost::mpl::at<internal::FieldGetters_Map, Kind>::type GetterType;
   BOOST_STATIC_ASSERT(!(boost::is_same<GetterType, boost::mpl::void_>::value));
   return GetterType::call(*m_Feature, m_index);

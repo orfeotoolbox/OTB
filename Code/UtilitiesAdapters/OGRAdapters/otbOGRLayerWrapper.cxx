@@ -59,7 +59,7 @@ otb::ogr::Layer::Layer(OGRLayer* layer, OGRDataSource& sourceInChargeOfLifeTime)
 /*===========================================================================*/
 int otb::ogr::Layer::GetFeatureCount(bool doForceComputation) const
 {
-  assert(m_Layer);
+  assert(m_Layer && "Can't ask the features count on an invalid layer");
   return m_Layer->GetFeatureCount(doForceComputation);
 }
 
