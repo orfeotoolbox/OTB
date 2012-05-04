@@ -303,7 +303,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   OutputImagePointerType                outRangePtr   = this->GetRangeOutput();
   typename InputImageType::ConstPointer inputPtr      = this->GetInput();
 
-  InputIndexType index;
+  //InputIndexType index;
 
   typename InputImageType::PixelType inputPixel;
   RealVector jointPixel;
@@ -538,7 +538,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   typename OutputIterationImageType::PixelType iterationPixel;
   metricPixel.SetSize(1);
 
-  InputIndexType index;
+  //InputIndexType index;
 
   // Pixel in the joint spatial-range domain
   RealVector jointPixel;
