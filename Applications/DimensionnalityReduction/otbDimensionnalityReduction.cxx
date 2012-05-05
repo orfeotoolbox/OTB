@@ -82,10 +82,10 @@ public:
 
   /** Standard macro */
   itkNewMacro(Self)
- ;
+;
 
   itkTypeMacro(DimensionnalityReduction, otb::Wrapper::Application)
- ;
+;
 
 private:
   void DoInit()
