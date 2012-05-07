@@ -557,7 +557,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   metricPixel.SetSize(jointDimension);
 
   typename OutputIterationImageType::PixelType iterationPixel;
-  metricPixel.SetSize(1);
 
   // Initialize output images to zero
   iterationOutput->FillBuffer(0);
@@ -566,7 +565,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   z1.Fill(0);
   metricOutput->FillBuffer(z1);
   OutputSpatialPixelType z2;
-  z2.SetSize(metricOutput->GetNumberOfComponentsPerPixel());
+  z2.SetSize(spatialOutput->GetNumberOfComponentsPerPixel());
   z2.Fill(0);
   spatialOutput->FillBuffer(z2);
 
