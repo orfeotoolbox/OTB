@@ -1205,10 +1205,11 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterQBPAN ${BASICFILTERS_TESTS9}
 ADD_TEST(bfTvMeanShiftImageFilterQBPAN ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilter2
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_PAN2.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_PAN2.tif
-        ${TEMP}/bfMeanShift2ImageFilterMetricOutput_PAN2.tif
-        ${TEMP}/bfMeanShift2ImageFilterIterationOutput_PAN2.tif
+        ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_PAN.tif
+        ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_PAN.tif
+        ${TEMP}/bfMeanShift2ImageFilterMetricOutput_PAN.tif
+        ${TEMP}/bfMeanShift2ImageFilterIterationOutput_PAN.tif
+        ${TEMP}/bfMeanShift2ImageFilterLabelOutput_PAN.tif
         5 15 1.0 100
         )   
         
