@@ -559,7 +559,16 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   typename OutputIterationImageType::PixelType iterationPixel;
   metricPixel.SetSize(1);
 
-  //InputIndexType index;
+  // Initialize output images to zero
+  iterationOutput->FillBuffer(0);
+  OutputMetricPixelType z1;
+  z1.SetSize(metricOutput->GetNumberOfComponentsPerPixel());
+  z1.Fill(0);
+  metricOutput->FillBuffer(z1);
+  OutputSpatialPixelType z2;
+  z2.SetSize(metricOutput->GetNumberOfComponentsPerPixel());
+  z2.Fill(0);
+  spatialOutput->FillBuffer(z2);
 
   // Pixel in the joint spatial-range domain
   RealVector jointPixel;
