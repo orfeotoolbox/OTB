@@ -47,6 +47,9 @@ public:
   std::string  GetName() const; //!< Field name accessor.
   OGRFieldType GetType() const; //!< Field type accessor.
 
+  OGRFieldDefn & ogr()       { return *m_Definition; }
+  OGRFieldDefn & ogr() const { return *m_Definition; }
+
 private:
   /**Pointer to the actual definition.
    * \internal pointer in order to support assignments
@@ -54,6 +57,14 @@ private:
   OGRFieldDefn * m_Definition;
   };
 
+inline
+bool operator==(FieldDefn const& lhs, FieldDefn const& rhs)
+  {
+  return lhs.GetName() == rhs.GetName()
+    &&   lhs.GetType() == rhs.GetType();
+  }
+
+std::ostream & operator<<(std::ostream & os, FieldDefn const& defn);
 
 /*===========================================================================*/
 /*=================================[ Field ]=================================*/

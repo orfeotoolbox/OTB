@@ -93,6 +93,12 @@ OGRFieldType otb::ogr::FieldDefn::GetType() const
   return m_Definition->GetType();
 }
 
+
+std::ostream & otb::ogr::operator<<(std::ostream & os, otb::ogr::FieldDefn const& defn)
+{
+  return os << defn.GetName()
+    << " (" << OGRFieldDefn::GetFieldTypeName(defn.GetType()) << ")";
+}
 /*===========================================================================*/
 /*=================================[ Field ]=================================*/
 /*===========================================================================*/

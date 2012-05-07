@@ -219,10 +219,10 @@ OGRFeatureDefn & otb::ogr::Layer::GetLayerDefn() const
 }
 
 void otb::ogr::Layer::CreateField(
-  OGRFieldDefn const& field, bool bApproxOK/* = true */)
+  FieldDefn const& field, bool bApproxOK/* = true */)
 {
   assert(m_Layer && "OGRLayer not initialized");
-  const OGRErr res = m_Layer->CreateField(const_cast <OGRFieldDefn*>(&field), bApproxOK);
+  const OGRErr res = m_Layer->CreateField(&field.ogr(), bApproxOK);
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot create a field in the layer <"
@@ -247,7 +247,7 @@ void otb::ogr::Layer::DeleteField(size_t fieldIndex)
 }
 
 void otb::ogr::Layer::AlterFieldDefn(
-  size_t fieldIndex, OGRFieldDefn const& newFieldDefn, int nFlags)
+  size_t fieldIndex, FieldDefn const& newFieldDefn, int nFlags)
 {
   assert(m_Layer && "OGRLayer not initialized");
 #if GDAL_VERSION_NUM < 1900
@@ -256,7 +256,7 @@ void otb::ogr::Layer::AlterFieldDefn(
 #else
   const OGRErr res = m_Layer->AlterFieldDefn(
     int(fieldIndex),
-    const_cast <OGRFieldDefn*>(&newFieldDefn),
+    &newFieldDefn.ogr(),
     nFlags);
   if (res != OGRERR_NONE)
     {

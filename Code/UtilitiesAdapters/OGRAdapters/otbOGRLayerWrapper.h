@@ -31,7 +31,6 @@ class OGRLayer;
 class OGRDataSource;
 class OGRGeometry;
 class OGRFeatureDefn;
-class OGRFieldDefn;
 
 namespace otb { namespace ogr {
 /**\ingroup gGeometry
@@ -366,7 +365,7 @@ public:
    * \sa \c OGRLayer::CreateField()
    * \todo Move to use \c otb::ogr::FieldDefn
    */
-  void CreateField(OGRFieldDefn const& field, bool bApproxOK = true);
+  void CreateField(FieldDefn const& field, bool bApproxOK = true);
 
   /**
    * Deletes a field.
@@ -398,7 +397,7 @@ public:
    * v1.9.0 at least.
    * \todo Move to use \c otb::ogr::FieldDefn
    */
-  void AlterFieldDefn(size_t fieldIndex, OGRFieldDefn const& newFieldDefn, int nFlags);
+  void AlterFieldDefn(size_t fieldIndex, FieldDefn const& newFieldDefn, int nFlags);
 
   /**
    * Moves a field from one position to another.
