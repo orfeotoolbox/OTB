@@ -22,6 +22,10 @@
 #include "otbOGRGeometryWrapper.h"
 #include "ogr_geometry.h"
 
+#if GDAL_VERSION_NUM < 1800
+#  include "itkMacro.h"
+#endif
+
 #ifdef _MSC_VER
 // warning convertion int -> bool
 #pragma warning ( disable : 4800 )
