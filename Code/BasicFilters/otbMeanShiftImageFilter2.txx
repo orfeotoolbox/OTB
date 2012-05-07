@@ -389,6 +389,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
       n >>= 1;
       m_ThreadIdNumberOfBits++;
       }
+    if(m_ThreadIdNumberOfBits == 0) m_ThreadIdNumberOfBits = 1; // minimum 1 bit
     m_NumLabels.SetSize(numThreads);
     for(unsigned int i = 0; i < numThreads; i++)
       {
@@ -594,6 +595,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
   metricIt.GoToBegin();
   iterationIt.GoToBegin();
   modeTableIt.GoToBegin();
+  labelIt.GoToBegin();
 
   unsigned int iteration = 0;
 
