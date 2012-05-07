@@ -747,9 +747,9 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
       // Update the mode table now that the current pixel has been assigned
       modeTableIt.Set(1); // m_ModeTable->SetPixel(currentIndex, 1);
 
-      // If the loop exited with hasConverged, then we have a new mode
+      // If the loop exited with hasConverged or too many iterations, then we have a new mode
       LabelType label;
-      if (hasConverged)
+      if (hasConverged || iteration == m_MaxIterationNumber)
         {
         m_NumLabels[threadId]++;
         label = m_NumLabels[threadId];
