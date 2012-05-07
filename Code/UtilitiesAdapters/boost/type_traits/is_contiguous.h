@@ -36,12 +36,17 @@
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 
-namespace std {
 // forward declarations
-template <typename T, std::size_t N> class array;
-template <typename T, typename Allocator> class vector;
+namespace std {
+template <typename T, std::size_t N>                                class array;
+template <typename T, typename TAllocator>                          class vector;
 } // std namespace
 
+namespace boost {
+template <typename T, std::size_t N>                                 class array;
+template <typename T, std::size_t N, typename TCloneAllocator>       class ptr_array;
+template <typename T, typename TCloneAllocator, typename TAllocator> class ptr_vector;
+} // boost namespace
 
 namespace boost {
 /**\ingroup boost
@@ -53,25 +58,21 @@ namespace boost {
  *
  * \sa http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3350.html about
  * \c contiguous_iterator_tag.
- *
+ * @{
  */
 template <typename Range> struct is_contiguous
   { enum {value = is_array<Range>::value || is_pointer<Range>::value}; };
 
-// forward declarations
-template <typename T, std::size_t N> class array;
-template <typename T, std::size_t N, typename CloneAllocator> class ptr_array;
-template <typename T, typename CloneAllocator, typename Allocator> class ptr_vector;
-
 // is_contiguous specialisations
-template <typename T, typename Allocator> struct is_contiguous<std::vector<T, Allocator> >
+template <typename T, typename TAllocator>         struct is_contiguous<std::vector<T, TAllocator> >
   { enum {value = true}; };
-template <typename T, std::size_t N> struct is_contiguous<boost::array<T, N> >
+template <typename T, std::size_t N>               struct is_contiguous<boost::array<T, N> >
   { enum {value = true}; };
-template <typename T, std::size_t N, typename CA> struct is_contiguous<boost::ptr_array<T, N, CA> >
+template <typename T, std::size_t N, typename TCA> struct is_contiguous<boost::ptr_array<T, N, TCA> >
   { enum {value = true}; };
-template <typename T, typename CA, typename A> struct is_contiguous<boost::ptr_vector<T, CA, A> >
+template <typename T, typename TCA, typename TA>   struct is_contiguous<boost::ptr_vector<T, TCA, TA> >
   { enum {value = true}; };
+/** @} */
 } // boost namespace
 
 #endif // __is_contiguous_h

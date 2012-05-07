@@ -21,7 +21,7 @@
 // #include <iosfwd> // std::ostream&
 #include <cassert>
 #include <boost/shared_ptr.hpp>
-#include "itkIndent.h"
+// #include "itkIndent.h", included from field
 #include "otbOGRFieldWrapper.h"
 #include "otbOGRGeometryWrapper.h"
 

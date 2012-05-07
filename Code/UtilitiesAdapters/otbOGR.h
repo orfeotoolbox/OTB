@@ -21,8 +21,7 @@
 namespace otb {
   /**\defgroup gGeometry Geometry
    * \ingroup Thematic
-   * Classes and functions aimed toward the manipulation of set of geometric
-   * objects.
+   * \brief Classes and functions aimed toward the manipulation of set of geometric objects.
    * This module mainly provides an encapsulation of <a
    * href="http://www.gdal.org/ogr/">OGR API</a>.
    * @{
@@ -40,7 +39,7 @@ namespace otb {
 
 /**\ingroup gGeometry
  * \file    otbOGR.h
- * How to include all include files dedicated to OGR encapsulation in OTB...
+ * \brief How to include all include files dedicated to OGR encapsulation in OTB...
  */
 
 

@@ -22,10 +22,10 @@ PURPOSE.  See the above copyright notices for more information.
 #include <boost/shared_ptr.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/utility/enable_if.hpp>
-#include "itkIndent.h"
+// #include "itkIndent.h", included from field
 #include "otbOGRFeatureWrapper.h"
 
-#include "ogr_core.h" // OGRwkbGeometryType
+// #include "ogr_core.h" // OGRwkbGeometryType, included from feature -> field
 // Forward declarations
 class OGRLayer;
 class OGRDataSource;
@@ -249,7 +249,7 @@ public:
   //@{
   /**\ingroup gGeometry
    * \class feature_iter
-   * Implementation class for \c Feature iterator.
+   * \brief Implementation class for \c Feature iterator.
    * This iterator is a single <em>pass iterator</em>. We may fetch the \c
    * Feature referenced by an iterator previously stored, but never resume the
    * iteration after a call to \c Layer::begin(), \c Layer::start_at(), \c
@@ -263,9 +263,10 @@ public:
    * \internal
    * \sa \c otb::ogr::Layer::iterator
    * \sa \c otb::ogr::Layer::const_iterator
-   * \note Naming policy is compliant with C++ standard as the iterator are as
-   * well. This will permit transparent integration with all standard and boost
-   * algorithms, and C++11 <em>for-range loops</em> for instance.
+   * \note Naming policy is compliant with C++ standard as the iterator
+   * functions are as well. This will permit transparent integration with all
+   * standard and boost algorithms, and C++11 <em>for-range loops</em> for
+   * instance.
    * \see http://www.boost.org/doc/libs/1_49_0/libs/iterator/doc/iterator_facade.html#tutorial-example
    * \since OTB v 3.14.0
    */

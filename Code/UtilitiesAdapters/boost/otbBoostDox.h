@@ -20,7 +20,7 @@
 
 /**\defgroup boost Boost alike helpers
  * \ingroup  Thematic
- * Various helpers that are likelly to end-up in boost by themselves eventually.
+ * \brief Various helpers that are likelly to end-up in boost by themselves eventually.
  * \see http://www.boost.org/
  * @{
  */

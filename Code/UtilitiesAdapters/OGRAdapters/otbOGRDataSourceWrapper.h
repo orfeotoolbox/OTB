@@ -39,7 +39,7 @@ class OGRDataSource;
 class OGRLayer;
 class OGRSpatialReference;
 class OGRGeometry;
-#include "ogr_core.h" // OGRwkbGeometryType
+// #include "ogr_core.h" // OGRwkbGeometryType, included from Layer
 
 namespace otb { namespace ogr {
 /**\ingroup gGeometry
@@ -150,7 +150,7 @@ private:
 
 /**\ingroup gGeometry
  * \class DataSource
- * Collection of geometric objects.
+ * \brief Collection of geometric objects.
  *
  * This class is meant to supercede \c otb::VectorData class.  It provides
  * an encapsulation of OGR classes. In that particular case, it's an
@@ -246,12 +246,13 @@ public:
   //@{
   /**\ingroup gGeometry
    * \class layer_iter
-   * Implementation class for \c Layer iterator.
+   * \brief Implementation class for \c Layer iterator.
    * \sa \c otb::ogr::Layer::iterator
    * \sa \c otb::ogr::Layer::const_iterator
-   * \note Naming policy is compliant with C++ standard as the iterator are as
-   * well. This will permit transparent integration with all standard and boost
-   * algorithms, and C++11 <em>for-range loops</em> for instance.
+   * \note Naming policy is compliant with C++ standard as the iterator
+   * functions are as well. This will permit transparent integration with all
+   * standard and boost algorithms, and C++11 <em>for-range loops</em> for
+   * instance.
    * \see http://www.boost.org/doc/libs/1_49_0/libs/iterator/doc/iterator_facade.html#tutorial-example
    * \since OTB v 3.14.0
    */

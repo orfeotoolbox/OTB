@@ -54,7 +54,34 @@ struct GeometryDeleter
  * Thus, always use \c OGRGeometryFactory functions to create new geometries.
  * You can then manage their lifetime manually or rely on \c UniqueGeometryPtr
  * that provides a non-copyable, but movable RAII wrapper around \c OGRGeometry.
+ * \since OTB v 3.14.0
  * @{
+ */
+
+/**
+ * Smart-pointer over \c OGRGeometry, with \em move-semantics.
+ * In a few words:
+ * - When a function receives a \em unique_ptr<>, it implicitly assumes
+ * responsibility of the received pointer.
+ * - When a function returns a \em unique_ptr<>, the client code implicitly
+ * assumes responsibility of the returned pointer.
+ * - When exiting a scope, the pointer is destroyed. Which means, as long as we
+ * keep using \em unique_ptr<> around functions calls, there is no need to
+ * burden our mind with the lifetime of the encapsulated pointers.
+ * - Moreover, we can specify how pointers are deleted; property that we
+ * exploit to use the ad'hoc destruction function from OGR API, see \c
+ * GeometryDeleter.
+ *
+ * \see http://www2.research.att.com/~bs/C++0xFAQ.html#rval about \em move-semantics.
+ * \see http://www2.research.att.com/~bs/C++0xFAQ.html#std-unique_ptr about \c
+ * std::unique_ptr<>
+ * \see GOTW \#103, \#104 about \c unique_ptr<> as well: http://herbsutter.com/gotw/_103/
+ *
+ * \internal
+ * This should be defined on top of C++11 \c std::unique_ptr<>. By the mean
+ * time, we are using an emulation provided in boost.interprocess.
+ * \todo When CMake provides a way to detect C++11 features, use a \c #ifdef to
+ * use the correct type.
  */
 typedef boost::interprocess::unique_ptr<OGRGeometry, internal::GeometryDeleter> UniqueGeometryPtr;
 ///Do these features intersect?
