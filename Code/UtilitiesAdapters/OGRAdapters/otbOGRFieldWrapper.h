@@ -123,9 +123,22 @@ public:
   /** Prints self into stream. */
   std::ostream & PrintSelf(std::ostream&os, itk::Indent indent) const;
 private:
+  /**\name Unchecked definitions
+   * All the definitions that follow do the real work. However, they are not the
+   * exposed public functions. The design of this class follows the principle
+   * behind the NVI (<em>Non-Virtual Interface</em>) pattern:
+   * - The public functions are inlined and check invariants and preconditions,
+   * - While the private functions do the work.
+   */
+  //@{
+  bool           UncheckedHasBeenSet() const;
+  void           UncheckedUnset() const;
+  std::ostream & UncheckedPrintSelf(std::ostream&os, itk::Indent indent) const;
+  //@}
+
   /**
    * Internal function to check class invariants.
-   * If any invariant is broken, an assertion ill be fired.
+   * If any invariant is broken, an assertion will be fired.
    * \internal
    * This function is defined inlined in order to be able to inhibit invariants
    * checking depending on the compilation mode (on \c NDEBUG preprocessor

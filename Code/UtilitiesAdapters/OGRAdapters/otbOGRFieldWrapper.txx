@@ -311,4 +311,26 @@ T otb::ogr::Field::GetValue() const
   return GetterType::call(*m_Feature, m_index);
 }
 
+inline
+std::ostream & otb::ogr::Field::PrintSelf(
+  std::ostream& os, itk::Indent indent) const
+{
+  CheckInvariants();
+  return UncheckedPrintSelf(os, indent);
+}
+
+inline
+bool otb::ogr::Field::HasBeenSet() const
+{
+  CheckInvariants();
+  return UncheckedHasBeenSet();
+}
+
+inline
+void otb::ogr::Field::Unset() const
+{
+  CheckInvariants();
+  UncheckedUnset();
+}
+
 #endif // __otbOGRFieldWrapper_txx

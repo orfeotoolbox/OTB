@@ -20,7 +20,6 @@
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
 #include "otbOGRFieldWrapper.h"
-#include <cassert>
 #include "ogr_feature.h"
 #include "otbOGRFeatureWrapper.h"
 #include "otbJoinContainer.h"
@@ -106,10 +105,9 @@ otb::ogr::Field::Field(otb::ogr::Feature & feature, size_t index)
   CheckInvariants();
 }
 
-std::ostream & otb::ogr::Field::PrintSelf(
+std::ostream & otb::ogr::Field::UncheckedPrintSelf(
   std::ostream& os, itk::Indent indent) const
 {
-  CheckInvariants();
   const itk::Indent one_indent = itk::Indent().GetNextIndent();
   // os << indent << "|" << one_indent << "+ ";
   os << indent << this->GetName() << ": ";
@@ -141,14 +139,12 @@ std::ostream & otb::ogr::Field::PrintSelf(
   return os;
 }
 
-bool otb::ogr::Field::HasBeenSet() const
+bool otb::ogr::Field::UncheckedHasBeenSet() const
 {
-  CheckInvariants();
   return m_Feature->IsFieldSet(m_index);
 }
 
-void otb::ogr::Field::Unset() const
+void otb::ogr::Field::UncheckedUnset() const
 {
-  CheckInvariants();
   m_Feature->UnsetField(m_index);
 }
