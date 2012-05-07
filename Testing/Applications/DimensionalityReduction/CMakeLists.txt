@@ -10,12 +10,12 @@ OTB_TEST_APPLICATION(NAME   apTvChMaximumAutocorrelationFactor
                              ${TEMP}/apTvChMaximumAutocorrelationFactor.tif)
 
 
-OTB_TEST_APPLICATION(NAME   apTvChDimensionnalityReductionPCA
-                     APP  DimensionnalityReduction
+OTB_TEST_APPLICATION(NAME   apTvChDimensionalityReductionPCA
+                     APP  DimensionalityReduction
                      OPTIONS -in ${INPUTDATA}/cupriteSubHsi.tif
-                             -out ${TEMP}/apTvChDimensionnalityReductionPCA.tif
+                             -out ${TEMP}/apTvChDimensionalityReductionPCA.tif
                              -method pca
                      VALID   --compare-image 0.025
                              ${BASELINE}/bfTvPCAImageFilter3.tif
-                             ${TEMP}/apTvChDimensionnalityReductionPCA.tif)
+                             ${TEMP}/apTvChDimensionalityReductionPCA.tif)
                              

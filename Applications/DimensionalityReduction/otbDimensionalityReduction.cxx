@@ -39,19 +39,19 @@ namespace otb
 namespace Wrapper
 {
 
-class DimensionnalityReduction: public Application
+class DimensionalityReduction: public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef DimensionnalityReduction Self;
+  typedef DimensionalityReduction Self;
   typedef Application Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  // Dimensionnality reduction typedef
+  // Dimensionality reduction typedef
   typedef otb::MaximumAutocorrelationFactorImageFilter<FloatVectorImageType, FloatVectorImageType> MAFFilterType;
 
-  typedef itk::ImageToImageFilter<FloatVectorImageType, FloatVectorImageType> DimensionnalityReductionFilter;
+  typedef itk::ImageToImageFilter<FloatVectorImageType, FloatVectorImageType> DimensionalityReductionFilter;
 
   // Reduction dimensio filters
   typedef otb::PCAImageFilter<FloatVectorImageType, FloatVectorImageType, otb::Transform::FORWARD> PCAForwardFilterType;
@@ -84,16 +84,16 @@ public:
   itkNewMacro(Self)
 ;
 
-  itkTypeMacro(DimensionnalityReduction, otb::Wrapper::Application)
+  itkTypeMacro(DimensionalityReduction, otb::Wrapper::Application)
 ;
 
 private:
   void DoInit()
   {
-    SetName("DimensionnalityReduction");
+    SetName("DimensionalityReduction");
     SetDescription("Perform Dimension reduction of the input image.");
-    SetDocName("Dimensionnality reduction application");
-    SetDocLongDescription("Performs dimensionnality reduction on input image. PCA,NA-PCA,MAF,ICA methods are available.");
+    SetDocName("Dimensionality reduction application");
+    SetDocLongDescription("Performs dimensionality reduction on input image. PCA,NA-PCA,MAF,ICA methods are available.");
     SetDocLimitations(
                       "Though the inverse transform can be computed, this application only provides the forward transform for now.");
     SetDocAuthors("OTB-Team");
@@ -104,7 +104,7 @@ private:
     AddDocTag(Tags::Filter);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-    SetParameterDescription("in", "The input image to apply dimensionnality reduction.");
+    SetParameterDescription("in", "The input image to apply dimensionality reduction.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "output image. Components are ordered by decreasing eigenvalues.");
     AddParameter(ParameterType_Group, "rescale", "Rescale Output.");
@@ -164,7 +164,7 @@ private:
     SetMinimumParameterIntValue("nbcomp", 0);
 
     AddParameter(ParameterType_Empty, "normalize", "Normalize.");
-    SetParameterDescription("normalize", "center AND reduce data before Dimensionnality reduction.");
+    SetParameterDescription("normalize", "center AND reduce data before Dimensionality reduction.");
     MandatoryOff("normalize");
 
     // Doc example parameter settings
@@ -368,11 +368,11 @@ private:
 
   MinMaxFilterType::Pointer               m_MinMaxFilter;
   RescaleImageFilterType::Pointer         m_RescaleFilter;
-  DimensionnalityReductionFilter::Pointer m_ForwardFilter;
-  DimensionnalityReductionFilter::Pointer m_InverseFilter;
+  DimensionalityReductionFilter::Pointer m_ForwardFilter;
+  DimensionalityReductionFilter::Pointer m_InverseFilter;
 };
 
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::DimensionnalityReduction)
+OTB_APPLICATION_EXPORT(otb::Wrapper::DimensionalityReduction)
