@@ -19,7 +19,6 @@
 #define __otbOGRFeatureWrapper_h
 
 // #include <iosfwd> // std::ostream&
-#include <cassert>
 #include <boost/shared_ptr.hpp>
 // #include "itkIndent.h", included from field
 #include "otbOGRFieldWrapper.h"
@@ -300,6 +299,32 @@ public:
    */
   friend bool otb::ogr::operator==(Feature const& lhs, Feature const& rhs);
 private:
+  /**\name Unchecked definitions
+   * All the definitions that follow do the real work. However, they are not the
+   * exposed public functions. The design of this class follows the principle
+   * behind the NVI (<em>Non-Virtual Interface</em>) pattern:
+   * - The public functions are inlined and check invariants and preconditions,
+   * - While the private functions do the work.
+   */
+  //@{
+  Feature            UncheckedClone() const;
+  void               UncheckedSetFrom(Feature const& rhs, int *map, bool mustForgive = true);
+  void               UncheckedSetFrom(Feature const& rhs, bool mustForgive = true);
+  void               UncheckedPrintSelf(std::ostream &os, itk::Indent indent) const;
+  Field              UncheckedGetElement(size_t index);
+  Field              UncheckedGetElement(std::string const& name);
+  FieldDefn          UncheckedGetFieldDefn(size_t index) const;
+  FieldDefn          UncheckedGetFieldDefn(std::string const& name) const;
+  int                UncheckedGetFieldIndex(std::string const& name) const;
+  long               UncheckedGetFID() const;
+  void               UncheckedSetFID(long fid);
+  OGRFeatureDefn&    UncheckedGetDefn() const;
+  void               UncheckedSetGeometryDirectly(UniqueGeometryPtr geometry);
+  UniqueGeometryPtr  UncheckedStealGeometry();
+  OGRGeometry const* UncheckedGetGeometry() const;
+  void               UncheckedSetGeometry(OGRGeometry const* geometry);
+  //@}
+
   /** Searches the index of a field given a name.
    * \invariant <tt>m_Feature != 0</tt>
    * \throw itk::ExceptionObject if no field named \c name exists.

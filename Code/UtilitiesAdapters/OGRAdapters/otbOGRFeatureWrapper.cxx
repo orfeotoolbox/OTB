@@ -50,16 +50,14 @@ otb::ogr::Feature::~Feature()
 {
 }
 
-otb::ogr::Feature otb::ogr::Feature::Clone() const
+otb::ogr::Feature otb::ogr::Feature::UncheckedClone() const
 {
-  CheckInvariants();
   const Feature res(m_Feature->Clone());
   return res;
 }
 
-void otb::ogr::Feature::SetFrom(Feature const& rhs, bool mustForgive)
+void otb::ogr::Feature::UncheckedSetFrom(Feature const& rhs, bool mustForgive)
 {
-  CheckInvariants();
   const OGRErr res = m_Feature->SetFrom(&rhs.ogr(), mustForgive);
   if (res != OGRERR_NONE)
     {
@@ -67,9 +65,8 @@ void otb::ogr::Feature::SetFrom(Feature const& rhs, bool mustForgive)
     }
 }
 
-void otb::ogr::Feature::SetFrom(Feature const& rhs, int * map, bool mustForgive)
+void otb::ogr::Feature::UncheckedSetFrom(Feature const& rhs, int * map, bool mustForgive)
 {
-  CheckInvariants();
 #if GDAL_VERSION_NUM >= 1900
   const OGRErr res = m_Feature->SetFrom(&rhs.ogr(), map, mustForgive);
   if (res != OGRERR_NONE)
@@ -85,9 +82,8 @@ void otb::ogr::Feature::SetFrom(Feature const& rhs, int * map, bool mustForgive)
 /*===========================================================================*/
 /*=================================[ Misc ]==================================*/
 /*===========================================================================*/
-void otb::ogr::Feature::PrintSelf(std::ostream & os, itk::Indent indent) const
+void otb::ogr::Feature::UncheckedPrintSelf(std::ostream & os, itk::Indent indent) const
 {
-  CheckInvariants();
   const size_t nbFields = m_Feature->GetFieldCount();
   os << indent << "+";
   os << " " << nbFields << " fields\n";
@@ -121,44 +117,35 @@ size_t otb::ogr::Feature::GetSize() const {
   return ogr().GetFieldCount();
 }
 
-otb::ogr::Field otb::ogr::Feature::operator[](size_t index)
+otb::ogr::Field otb::ogr::Feature::UncheckedGetElement(size_t index)
 {
-  CheckInvariants();
   Field field(*this, index);
   return field;
 }
 
-otb::ogr::Field const otb::ogr::Feature::operator[](size_t index) const
-{
-  return const_cast<Feature*>(this)->operator[](index);
-}
-
-otb::ogr::Field otb::ogr::Feature::operator[](std::string const& name)
+otb::ogr::Field otb::ogr::Feature::UncheckedGetElement(std::string const& name)
 {
   const int index = GetFieldIndex(name);
   return this->operator[](index);
 }
 
-otb::ogr::Field const otb::ogr::Feature::operator[](std::string const& name) const
+otb::ogr::FieldDefn otb::ogr::Feature::UncheckedGetFieldDefn(size_t index) const
 {
-  return const_cast<Feature*>(this)->operator[](name);
-}
-
-otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(size_t index) const
-{
-  CheckInvariants();
   return FieldDefn(*m_Feature->GetFieldDefnRef(index));
 }
 
-otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(std::string const& name) const
+otb::ogr::FieldDefn otb::ogr::Feature::UncheckedGetFieldDefn(std::string const& name) const
 {
   const int index = GetFieldIndex(name);
+  if (index < 0)
+    {
+    itkGenericExceptionMacro(<<"no field named <"<<name<<">");
+    }
   return this->GetFieldDefn(index);
 }
 
-int otb::ogr::Feature::GetFieldIndex(std::string const& name) const
+int otb::ogr::Feature::UncheckedGetFieldIndex(std::string const& name) const
 {
-  CheckInvariants();
   const int index = m_Feature->GetFieldIndex(name.c_str());
   if (index < 0)
     {
@@ -170,15 +157,13 @@ int otb::ogr::Feature::GetFieldIndex(std::string const& name) const
 /*===========================================================================*/
 /*==============================[ Properties ]===============================*/
 /*===========================================================================*/
-long otb::ogr::Feature::GetFID() const
+long otb::ogr::Feature::UncheckedGetFID() const
 {
-  CheckInvariants();
   return m_Feature->GetFID();
 }
 
-void otb::ogr::Feature::SetFID(long fid)
+void otb::ogr::Feature::UncheckedSetFID(long fid)
 {
-  CheckInvariants();
   const OGRErr res = m_Feature->SetFID(fid);
   if (res != OGRERR_NONE)
     {
@@ -186,9 +171,8 @@ void otb::ogr::Feature::SetFID(long fid)
     }
 }
 
-OGRFeatureDefn&  otb::ogr::Feature::GetDefn() const
+OGRFeatureDefn&  otb::ogr::Feature::UncheckedGetDefn() const
 {
-  CheckInvariants();
   return *m_Feature->GetDefnRef();
 }
 
@@ -196,32 +180,25 @@ OGRFeatureDefn&  otb::ogr::Feature::GetDefn() const
 /*==============================[ Geometries ]===============================*/
 /*===========================================================================*/
 
-void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
+void otb::ogr::Feature::UncheckedSetGeometryDirectly(UniqueGeometryPtr geometry)
 {
-  CheckInvariants();
   OGRGeometry * g = geometry.get();
   const OGRErr res = m_Feature->SetGeometryDirectly(g);
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<<"Cannot set (directly) the geometry: " << CPLGetLastErrorMsg());
     }
-  assert(m_Feature->GetGeometryRef() == g && "The new geometry hasn't been set as expected");
   geometry.release(); // success => commit the transaction (after any exception thrown)
-  assert(! geometry && "UniqueGeometryPtr hasn't released its pointer");
 }
 
-otb::ogr::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
+otb::ogr::UniqueGeometryPtr otb::ogr::Feature::UncheckedStealGeometry()
 {
-  CheckInvariants();
   OGRGeometry * g = m_Feature->StealGeometry();
-  UniqueGeometryPtr res(g);
-  assert(! m_Feature->GetGeometryRef() && "Geometry hasn't been properly stolen");
   return UniqueGeometryPtr(g);
 }
 
-void otb::ogr::Feature::SetGeometry(OGRGeometry const* geometry)
+void otb::ogr::Feature::UncheckedSetGeometry(OGRGeometry const* geometry)
 {
-  CheckInvariants();
   // OGR copies the input geometry => should have been const
   const OGRErr res = m_Feature->SetGeometry(const_cast <OGRGeometry*>(geometry));
   if (res != OGRERR_NONE)
@@ -230,8 +207,7 @@ void otb::ogr::Feature::SetGeometry(OGRGeometry const* geometry)
     }
 }
 
-OGRGeometry const* otb::ogr::Feature::GetGeometry() const
+OGRGeometry const* otb::ogr::Feature::UncheckedGetGeometry() const
 {
-  CheckInvariants();
   return m_Feature->GetGeometryRef();
 }
