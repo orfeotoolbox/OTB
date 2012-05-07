@@ -158,7 +158,7 @@ private:
     //MandatoryOff("method");
 
     AddParameter(ParameterType_Int, "nbcomp", "Number of Components.");
-    SetParameterDescription("nbcomp", "");
+    SetParameterDescription("nbcomp", "Number of relevant components kept. By default all components are kept.");
     SetDefaultParameterInt("nbcomp", 0);
     MandatoryOff("nbcomp");
     SetMinimumParameterIntValue("nbcomp", 0);
