@@ -21,8 +21,6 @@
 #include "otbDisparityMapToDEMFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
-// #include "itkProgressReporter.h"
-// #include "itkConstantBoundaryCondition.h"
 
 namespace otb
 {
@@ -257,25 +255,17 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   const TInputImage * rightImgPtr = this->GetRightInput();
   TOutputDEMImage * outputPtr = this->GetDEMOutput();
   
-  // // Setup the DEM handler if needed
-  //typename DEMHandler::Pointer demHandler = DEMHandler::New();
-  
-  //bool useDEM = false;
-  
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
   leftToGroundTransform->SetInputKeywordList(leftImgPtr->GetImageKeywordlist());
   if(m_DEMDirectory!="")
     {
-    //demHandler->OpenDEMDirectory(m_DEMDirectory);
     leftToGroundTransform->SetDEMDirectory(m_DEMDirectory);
-    //useDEM = true;
     }
   if(m_GeoidFile!="")
     {
     leftToGroundTransform->SetGeoidFile(m_GeoidFile);
-    //demHandler->OpenGeoidFile(m_GeoidFile);
     }
   leftToGroundTransform->SetAverageElevation(m_AverageElevation);
   
@@ -285,14 +275,11 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   rightToGroundTransform->SetInputKeywordList(rightImgPtr->GetImageKeywordlist());
   if(m_DEMDirectory!="")
     {
-    //demHandler->OpenDEMDirectory(m_DEMDirectory);
     rightToGroundTransform->SetDEMDirectory(m_DEMDirectory);
-    //useDEM = true;
     }
   if(m_GeoidFile!="")
     {
     rightToGroundTransform->SetGeoidFile(m_GeoidFile);
-    //demHandler->OpenGeoidFile(m_GeoidFile);
     }
   rightToGroundTransform->SetAverageElevation(m_AverageElevation);
   
@@ -333,7 +320,6 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   tmpPoint[1] = (rightImgPtr->GetOrigin())[1] + (rightImgPtr->GetSpacing())[1] * static_cast<double>(inputSize[1]);
   RSTransform2DType::OutputPointType right_ll = rightToGroundTransform->TransformPoint(tmpPoint);
   
-  
   double left_xmin = std::min(std::min(std::min(left_ul[0],left_ur[0]),left_lr[0]),left_ll[0]);
   double left_xmax = std::max(std::max(std::max(left_ul[0],left_ur[0]),left_lr[0]),left_ll[0]);
   double left_ymin = std::min(std::min(std::min(left_ul[1],left_ur[1]),left_lr[1]),left_ll[1]);
@@ -357,20 +343,22 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   // Choose origin
   typename TOutputDEMImage::PointType outOrigin;
   outOrigin[0] = box_xmin;
-  outOrigin[1] = box_ymin;
+  outOrigin[1] = box_ymax;
   outputPtr->SetOrigin(outOrigin);
   
-  // Choose step
+  // Compute step :
+  // TODO : use a clean RS transform instead
   typename TOutputDEMImage::SpacingType outSpacing;
-  outSpacing[0] = m_DEMGridStep;
-  outSpacing[1] = m_DEMGridStep;
+  outSpacing[0] = 57.295779513 * m_DEMGridStep / (6378137.0 * vcl_cos((box_ymin + box_ymax) * 0.5 * 0.01745329251));
+  outSpacing[1] = -57.295779513 * m_DEMGridStep / 6378137.0;
+  outputPtr->SetSpacing(outSpacing);
   
   // Compute output size
   typename DEMImageType::RegionType outRegion;
   outRegion.SetIndex(0,0);
   outRegion.SetIndex(1,0);
-  outRegion.SetSize(0, static_cast<unsigned int>((box_xmax - box_xmin) / m_DEMGridStep));
-  outRegion.SetSize(1, static_cast<unsigned int>((box_ymax - box_ymin) / m_DEMGridStep));
+  outRegion.SetSize(0, static_cast<unsigned int>((box_xmax - box_xmin) / vcl_abs(outSpacing[0])));
+  outRegion.SetSize(1, static_cast<unsigned int>((box_ymax - box_ymin) / vcl_abs(outSpacing[1])));
   
   outputPtr->SetLargestPossibleRegion(outRegion);
   outputPtr->SetNumberOfComponentsPerPixel(1);
@@ -410,12 +398,12 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     {
     groundToLeftTransform->SetGeoidFile(m_GeoidFile);
     }
+  groundToLeftTransform->SetAverageElevation(m_AverageElevation);
   groundToLeftTransform->SetOutputKeywordList(leftSensor->GetImageKeywordlist());
   groundToLeftTransform->InstanciateTransform();
   
   // For the disparity maps and mask
   // Iterate over OutputRequestedRegion corners for elevation min and max
-  // up left at elevation min
   TDisparityImage * horizDisp = const_cast<TDisparityImage*>(this->GetHorizontalDisparityMapInput());
   TDisparityImage * vertiDisp = const_cast<TDisparityImage*>(this->GetVerticalDisparityMapInput());
   TMaskImage * maskDisp = const_cast<TMaskImage*>(this->GetDisparityMaskInput());
@@ -434,7 +422,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
       <<horizDisp->GetLargestPossibleRegion()<<", mask region : "<<maskDisp->GetLargestPossibleRegion());
     }
   
-  
+  // up left at elevation min
   TDPointType corners[8];
   corners[0][0]= outOrigin[0] + outSpacing[0] * outRegion.GetIndex(0);
   corners[0][1]= outOrigin[1] + outSpacing[1] * outRegion.GetIndex(1);
@@ -476,6 +464,9 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   typename GridImageType::IndexType gridIndex;
   typename GridImageType::IndexType gridIndexU;
   typename GridImageType::IndexType gridIndexV;
+  typename GridImageType::PointType gridPoint;
+  typename GridImageType::PointType gridPointU;
+  typename GridImageType::PointType gridPointV;
   typename GridImageType::PixelType origLoc(2);
   typename GridImageType::PixelType uUnitLoc(2);
   typename GridImageType::PixelType vUnitLoc(2);
@@ -511,9 +502,16 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
       gridIndexV[0] = gridIndex[0];
       gridIndexV[1] = gridIndex[1] + 1;
       
-      origLoc = leftGrid->GetPixel(gridIndex);
-      uUnitLoc = leftGrid->GetPixel(gridIndexU);
-      vUnitLoc = leftGrid->GetPixel(gridIndexV);
+      leftGrid->TransformIndexToPhysicalPoint(gridIndex, gridPoint);
+      leftGrid->TransformIndexToPhysicalPoint(gridIndexU, gridPointU);
+      leftGrid->TransformIndexToPhysicalPoint(gridIndexV, gridPointV);
+      
+      origLoc[0] = (leftGrid->GetPixel(gridIndex))[0] + gridPoint[0];
+      origLoc[1] = (leftGrid->GetPixel(gridIndex))[1] + gridPoint[1];
+      uUnitLoc[0] = (leftGrid->GetPixel(gridIndexU))[0] + gridPointU[0];
+      uUnitLoc[1] = (leftGrid->GetPixel(gridIndexU))[1] + gridPointU[1];
+      vUnitLoc[0] = (leftGrid->GetPixel(gridIndexV))[0] + gridPointV[0];
+      vUnitLoc[1] = (leftGrid->GetPixel(gridIndexV))[1] + gridPointV[1];
       
       u_loc[0] = static_cast<double>(uUnitLoc[0] - origLoc[0]);
       u_loc[1] = static_cast<double>(uUnitLoc[1] - origLoc[1]);
@@ -571,6 +569,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
       if (epiIndexMax[0] < epiContiIndex[0]) epiIndexMax[0] = epiContiIndex[0];
       if (epiIndexMax[1] < epiContiIndex[1]) epiIndexMax[1] = epiContiIndex[1];
       }
+    
     }
   
   typename DisparityMapType::RegionType inputDisparityRegion;
@@ -712,18 +711,11 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   vertiIt.GoToBegin();
   
   bool useMask = false;
+  itk::ImageRegionConstIterator<MaskImageType> maskIt;
   if (disparityMask)
     {
     useMask = true;
-    }
-  else
-    {
-    disparityMask = MaskImageType::New();
-    }
-  
-  itk::ImageRegionConstIterator<MaskImageType> maskIt(disparityMask,disparityRegion);
-  if (useMask)
-    {
+    maskIt = itk::ImageRegionConstIterator<MaskImageType>(disparityMask,disparityRegion);
     maskIt.GoToBegin();
     }
   
@@ -736,6 +728,11 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   typename GridImageType::PixelType lrPixel(2);
   typename GridImageType::PixelType llPixel(2);
   typename GridImageType::PixelType cPixel(2);
+  
+  typename GridImageType::PointType ulPoint;
+  typename GridImageType::PointType urPoint;
+  typename GridImageType::PointType lrPoint;
+  typename GridImageType::PointType llPoint;
   
   TDPointType sensorPoint;
   TDPointType leftGroundHmin;
@@ -773,19 +770,28 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
       {
       ulIndex[1] = gridRegion.GetIndex(1) + gridRegion.GetSize(1) - 2;
       }
-    urPixel[0] = ulIndex[0] + 1;
-    urPixel[1] = ulIndex[1];
-    lrPixel[0] = ulIndex[0] + 1;
-    lrPixel[1] = ulIndex[1] + 1;
-    llPixel[0] = ulIndex[0];
-    llPixel[1] = ulIndex[1] + 1;
+    urIndex[0] = ulIndex[0] + 1;
+    urIndex[1] = ulIndex[1];
+    lrIndex[0] = ulIndex[0] + 1;
+    lrIndex[1] = ulIndex[1] + 1;
+    llIndex[0] = ulIndex[0];
+    llIndex[1] = ulIndex[1] + 1;
     subPixIndex[0] = gridIndexConti[0] - static_cast<double>(ulIndex[0]);
     subPixIndex[1] = gridIndexConti[1] - static_cast<double>(ulIndex[1]);
     
-    ulPixel = leftGrid->GetPixel(ulIndex);
-    urPixel = leftGrid->GetPixel(urIndex);
-    lrPixel = leftGrid->GetPixel(lrIndex);
-    llPixel = leftGrid->GetPixel(llIndex);
+    leftGrid->TransformIndexToPhysicalPoint(ulIndex, ulPoint);
+    leftGrid->TransformIndexToPhysicalPoint(urIndex, urPoint);
+    leftGrid->TransformIndexToPhysicalPoint(lrIndex, lrPoint);
+    leftGrid->TransformIndexToPhysicalPoint(llIndex, llPoint);
+    
+    ulPixel[0] = (leftGrid->GetPixel(ulIndex))[0] + ulPoint[0];
+    ulPixel[1] = (leftGrid->GetPixel(ulIndex))[1] + ulPoint[1];
+    urPixel[0] = (leftGrid->GetPixel(urIndex))[0] + urPoint[0];
+    urPixel[1] = (leftGrid->GetPixel(urIndex))[1] + urPoint[1];
+    lrPixel[0] = (leftGrid->GetPixel(lrIndex))[0] + lrPoint[0];
+    lrPixel[1] = (leftGrid->GetPixel(lrIndex))[1] + lrPoint[1];
+    llPixel[0] = (leftGrid->GetPixel(llIndex))[0] + llPoint[0];
+    llPixel[1] = (leftGrid->GetPixel(llIndex))[1] + llPoint[1];
     cPixel = (ulPixel * (1.0 - subPixIndex[0]) + urPixel * subPixIndex[0]) * (1.0 - subPixIndex[1]) +
              (llPixel * (1.0 - subPixIndex[0]) + lrPixel * subPixIndex[0]) * subPixIndex[1];
     
@@ -801,6 +807,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     itk::ContinuousIndex<double,2> rightIndexEstimate;
     rightIndexEstimate[0] = static_cast<double>((horizIt.GetIndex())[0]) + static_cast<double>(horizIt.Get());
     rightIndexEstimate[1] = static_cast<double>((horizIt.GetIndex())[1]) + static_cast<double>(vertiIt.Get());
+    
     horizDisp->TransformContinuousIndexToPhysicalPoint(rightIndexEstimate,epiPoint);
     rightGrid->TransformPhysicalPointToContinuousIndex(epiPoint,gridIndexConti);
     
@@ -816,19 +823,28 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
       {
       ulIndex[1] = gridRegion.GetIndex(1) + gridRegion.GetSize(1) - 2;
       }
-    urPixel[0] = ulIndex[0] + 1;
-    urPixel[1] = ulIndex[1];
-    lrPixel[0] = ulIndex[0] + 1;
-    lrPixel[1] = ulIndex[1] + 1;
-    llPixel[0] = ulIndex[0];
-    llPixel[1] = ulIndex[1] + 1;
+    urIndex[0] = ulIndex[0] + 1;
+    urIndex[1] = ulIndex[1];
+    lrIndex[0] = ulIndex[0] + 1;
+    lrIndex[1] = ulIndex[1] + 1;
+    llIndex[0] = ulIndex[0];
+    llIndex[1] = ulIndex[1] + 1;
     subPixIndex[0] = gridIndexConti[0] - static_cast<double>(ulIndex[0]);
     subPixIndex[1] = gridIndexConti[1] - static_cast<double>(ulIndex[1]);
     
-    ulPixel = rightGrid->GetPixel(ulIndex);
-    urPixel = rightGrid->GetPixel(urIndex);
-    lrPixel = rightGrid->GetPixel(lrIndex);
-    llPixel = rightGrid->GetPixel(llIndex);
+    rightGrid->TransformIndexToPhysicalPoint(ulIndex, ulPoint);
+    rightGrid->TransformIndexToPhysicalPoint(urIndex, urPoint);
+    rightGrid->TransformIndexToPhysicalPoint(lrIndex, lrPoint);
+    rightGrid->TransformIndexToPhysicalPoint(llIndex, llPoint);
+    
+    ulPixel[0] = (rightGrid->GetPixel(ulIndex))[0] + ulPoint[0];
+    ulPixel[1] = (rightGrid->GetPixel(ulIndex))[1] + ulPoint[1];
+    urPixel[0] = (rightGrid->GetPixel(urIndex))[0] + urPoint[0];
+    urPixel[1] = (rightGrid->GetPixel(urIndex))[1] + urPoint[1];
+    lrPixel[0] = (rightGrid->GetPixel(lrIndex))[0] + lrPoint[0];
+    lrPixel[1] = (rightGrid->GetPixel(lrIndex))[1] + lrPoint[1];
+    llPixel[0] = (rightGrid->GetPixel(llIndex))[0] + llPoint[0];
+    llPixel[1] = (rightGrid->GetPixel(llIndex))[1] + llPoint[1];
     cPixel = (ulPixel * (1.0 - subPixIndex[0]) + urPixel * subPixIndex[0]) * (1.0 - subPixIndex[1]) +
              (llPixel * (1.0 - subPixIndex[0]) + lrPixel * subPixIndex[0]) * subPixIndex[1];
     
@@ -881,11 +897,11 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     
     if (outputRequestedRegion.IsInside(cellIndex))
       {
-      // Estimate local reference elevation (average, DEM or geoid)
-      double localElevation = demHandler->GetHeightAboveEllipsoid(midPoint2D);
+      // Estimate local reference elevation (average, DEM or geoid) => NO NEED, ALREADY HAVE 3D RAYS
+      //double localElevation = demHandler->GetHeightAboveEllipsoid(midPoint2D);
       
       // Add point to its corresponding cell (keep maximum)
-      DEMPixelType cellHeight = static_cast<DEMPixelType>(midPoint3D[2] + localElevation);
+      DEMPixelType cellHeight = static_cast<DEMPixelType>(midPoint3D[2]);
       if (cellHeight > tmpDEM->GetPixel(cellIndex) && cellHeight < static_cast<DEMPixelType>(m_ElevationMax))
         {
         tmpDEM->SetPixel(cellIndex,cellHeight);
@@ -898,6 +914,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     if (useMask) ++maskIt;
     
     }
+   
 }
 
 template <class TDisparityImage, class TInputImage, class TOutputDEMImage,

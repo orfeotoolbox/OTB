@@ -21,9 +21,6 @@
 #include "itkImageToImageFilter.h"
 #include "otbGenericRSTransform.h"
 #include "itkImageRegionSplitter.h"
-// #include "itkConstNeighborhoodIterator.h"
-// #include "itkImageRegionConstIterator.h"
-// #include "itkImageRegionIterator.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
