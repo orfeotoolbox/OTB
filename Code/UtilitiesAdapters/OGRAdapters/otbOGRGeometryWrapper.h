@@ -79,8 +79,9 @@ struct GeometryDeleter
  *
  * \note You may experiment difficulties to copy \c UniqueGeometryPtr. This is
  * likelly to be normal. You'll have to emulate \c std::move() with \c
- * boost::interprocess::move(). Check for instance \c Feature::StealGeometry(),
- * or \c Feature::SetGeometryDirectly() to see examples.
+ * boost::move() (with Boost v1.48+, or with \c boost::interprocess::move()
+ * otherwise). Check for instance \c Feature::StealGeometry(), or \c
+ * Feature::SetGeometryDirectly() to see examples.
  *
  * \internal
  * This should be defined on top of C++11 \c std::unique_ptr<>. By the mean

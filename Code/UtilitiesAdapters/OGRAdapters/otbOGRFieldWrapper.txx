@@ -264,7 +264,7 @@ typedef map
   , pair<int_<OFTIntegerList>, MemberContainerSetterPtr<int,    &OGRFeature::SetField> >
   , pair<int_<OFTReal>,        MemberSetterPtr<double,          &OGRFeature::SetField> >
   , pair<int_<OFTRealList>,    MemberContainerSetterPtr<double, &OGRFeature::SetField> >
-  // , pair<int_<OFTString>,      MemberSetterPtr<char const*,     &OGRFeature::SetField/*, std::string*/> >
+  , pair<int_<OFTString>,      MemberSetterPtr<char const*,     &OGRFeature::SetField/*, std::string*/> >
   // , pair<int_<OFTStringList>,  MemberContainerSetterPtr<char const*,     &OGRFeature::SetField, std::string> >
   > FieldSetters_Map;
 

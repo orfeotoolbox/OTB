@@ -22,6 +22,14 @@
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
 #include <cassert>
+#if BOOST_VERSION > 104800
+#   include <boost/move/move.hpp> // since 1.48
+#else
+#   include <boost/interprocess/detail/move.hpp>
+namespace boost {
+using boost::interprocess::move;
+} // boost namespace
+#endif
 
 /*===========================================================================*/
 /*================================[ Feature ]================================*/
@@ -129,7 +137,7 @@ void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
 {
   CheckInvariants();
   OGRGeometry * g = geometry.get();
-  UncheckedSetGeometryDirectly(boost::interprocess::move(geometry));
+  UncheckedSetGeometryDirectly(boost::move(geometry));
   assert(m_Feature->GetGeometryRef() == g && "The new geometry hasn't been set as expected");
   assert(! geometry && "UniqueGeometryPtr hasn't released its pointer");
 }
@@ -140,7 +148,7 @@ otb::ogr::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
   CheckInvariants();
   UniqueGeometryPtr res = UncheckedStealGeometry();
   assert(! m_Feature->GetGeometryRef() && "Geometry hasn't been properly stolen");
-  return boost::interprocess::move(res);
+  return boost::move(res);
 }
 
 inline
