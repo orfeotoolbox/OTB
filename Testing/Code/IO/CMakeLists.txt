@@ -2224,23 +2224,23 @@ ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_25000 ${IO_TESTS13}
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_OUT.tif)
 
 # --------------------------------------------------------------------------------
-# Special Case
+# Special Case (deactivated by MSD, OpenJPEG now support the larges files so this tests is not relevant
 # Between tiles 328 and 329, the codestream offset crosses the 2**31-1 boundary (max of 32 bit signed integer)
 # This reveals a problem on 32 bits systems since fseek takes an integer
-IF(OTB_DATA_USE_LARGEINPUT)
-
-  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-tile328-329 ${COMMON_TESTS2}
-           --without-threads
-           --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
-                                         ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
-           otbMultiChannelExtractROI
-              -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
-              -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
-              -startX 1330 -startY 928 -sizeX 32 -sizeY 32
-              -time
-           )
-
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+#IF(OTB_DATA_USE_LARGEINPUT)
+#
+#  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-tile328-329 ${COMMON_TESTS2}
+#           --without-threads
+#           --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
+#                                         ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
+#           otbMultiChannelExtractROI
+#              -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
+#              -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
+#              -startX 1330 -startY 928 -sizeX 32 -sizeY 32
+#              -time
+#           )
+#
+#ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # --------------------------------------------------------------------------------
 # Tests about special data (larges files, CNES files, SPOT files)
@@ -2819,22 +2819,6 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
 
 ENDFOREACH()
 
-ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES_sensorP_spotsample ${IO_TESTS18}
-         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES_SEN_P_spot.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
-        otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
-        ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
-)
-
-ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES_sensorMS_spotsample ${IO_TESTS18}
-         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES_SEN_MS_spot.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
-        otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20110401_0896-004_R1C1.JP2
-        ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
-)
-
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_FORMOSAT2 ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
@@ -2929,14 +2913,6 @@ ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_SPOT ${IO_TESTS18}
         otbOpticalImageMetadataInterfaceTest
         ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT.txt
-)
-
-ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_PLEIADES ${IO_TESTS18}
-         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_PLEIADES_V3.txt
-                         ${TEMP}/ioTvOpticalImageMetadataInterface_PLEIADES_OUT.txt
-        otbOpticalImageMetadataInterfaceTest
-        ${LARGEINPUT}/PLEIADES-PRE/PHR_PRODUCT_SIMUL_V3/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
-        ${TEMP}/ioTvOpticalImageMetadataInterface_PLEIADES_OUT.txt
 )
 
 ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_FORMOSAT2 ${IO_TESTS18}
