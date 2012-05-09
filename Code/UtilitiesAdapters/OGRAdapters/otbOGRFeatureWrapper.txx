@@ -22,7 +22,7 @@
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
 #include <cassert>
-#if BOOST_VERSION > 104800
+#if BOOST_VERSION >= 104800
 #   include <boost/move/move.hpp> // since 1.48
 #else
 #   include <boost/interprocess/detail/move.hpp>
