@@ -300,8 +300,8 @@ public:
     Value & dereference() const
       { return m_Crt; }
 
-    otb::ogr::Layer * m_Layer;
-    otb::ogr::Feature m_Crt;
+    otb::ogr::Layer         * m_Layer;
+    otb::ogr::Feature mutable m_Crt;
     };
 
   template <class> friend class feature_iter;

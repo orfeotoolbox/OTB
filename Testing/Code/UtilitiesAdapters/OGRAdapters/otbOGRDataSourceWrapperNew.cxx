@@ -227,6 +227,8 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
   f0.SetValue(42);
   BOOST_ASSERT(f0.HasBeenSet());
   BOOST_CHECK_EQUAL(f0.GetValue<int>(), 42);
+  BOOST_CHECK_EQUAL(g0[0].GetValue<int>(), 42);
+  BOOST_CHECK_EQUAL((*l.begin())[0].GetValue<int>(), 42);
   // BOOST_CHECK_assert_FAILS(f0.GetValue<double>(), itk::ExceptionObject);
 
   ogr::Field f1 = g0["OFTReal"];
