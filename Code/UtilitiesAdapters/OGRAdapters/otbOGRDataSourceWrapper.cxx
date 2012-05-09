@@ -171,6 +171,7 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
         << filename<<": " << CPLGetLastErrorMsg());
       }
     Pointer res = new DataSource(source);
+    res->UnRegister();
     return res;
     }
   else
@@ -197,6 +198,7 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
     }
     source->SetDriver(d);
     Pointer res = new DataSource(source);
+    res->UnRegister();
     return res;
     }
 }
@@ -206,6 +208,7 @@ otb::ogr::DataSource::Pointer
 otb::ogr::DataSource::New(OGRDataSource * source)
 {
   Pointer res = new DataSource(source);
+  res->UnRegister();
   return res;
 }
 
