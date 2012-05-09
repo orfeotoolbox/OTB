@@ -223,19 +223,18 @@ public:
   itkSetMacro(ModeSearchOptimization, bool);
   itkGetConstMacro(ModeSearchOptimization, bool);
 
-  /** Returns the const spatial image output */
+  /** Returns the const spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
   const OutputSpatialImageType * GetSpatialOutput() const;
-  /** Returns the spectral image output */
+  /** Returns the const spectral image output */
   const OutputImageType * GetRangeOutput() const;
-  /** Returns the mean shift vector computed at the last iteration for each pixel */
+  /** Returns the const mean shift vector computed at the last iteration for each pixel */
   const OutputMetricImageType * GetMetricOutput() const;
-  /** Returns the number of iterations done at each pixel */
+  /** Returns the const number of iterations map. */
   const OutputIterationImageType * GetIterationOutput() const;
-  /** Returns the image of region labels */
+  /** Returns the const image of region labels */
   const OutputLabelImageType * GetLabelOutput() const;
 
-
-  /** Returns the const spatial image output */
+  /** Returns the spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
   OutputSpatialImageType * GetSpatialOutput();
    /** Returns the spectral image output */
   OutputImageType * GetRangeOutput();
