@@ -22,6 +22,7 @@
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
 #include <cassert>
+#include <boost/version.hpp>
 #if BOOST_VERSION >= 104800
 #   include <boost/move/move.hpp> // since 1.48
 #else
