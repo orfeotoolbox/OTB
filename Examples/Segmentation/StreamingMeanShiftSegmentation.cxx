@@ -43,6 +43,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorData.h"
 
+#include "otbOGRDataSourceWrapper.h"
 
 int main(int argc, char *argv[])
 {
@@ -116,21 +117,32 @@ int main(int argc, char *argv[])
   reader->SetFileName(argv[1]);
   reader->GenerateOutputInformation();
   filter->SetInput(reader->GetOutput());
+
+  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(argv[2], otb::ogr::DataSource::Modes::write);
+
+  filter->SetOGRDataSource(ogrDS);
+
+
+
   //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
   filter->GetStreamer()->SetAutomaticTiledStreaming();
   
   const std::string fieldName("DN");
   filter->SetFieldName(fieldName);
+  filter->SetLayerName("Layer");
   filter->SetStartLabel(1);
+  filter->SetUse8Connected(false);
   
   filter->GetSegmentationFilter()->SetSpatialRadius(10);
   filter->GetSegmentationFilter()->SetRangeRadius(15);
   filter->GetSegmentationFilter()->SetMinimumRegionSize(400);
   
-  filter->SetFileName(argv[2]);
   filter->Initialize();
   
   filter->Update();
+
+
+
 
   //writer->SetFileName(argv[2]);
   //writer->SetInput(filter->GetOutputVectorData());

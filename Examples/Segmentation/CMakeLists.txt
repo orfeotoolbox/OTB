@@ -126,8 +126,7 @@ TARGET_LINK_LIBRARIES(WatershedSegmentation OTBCommon OTBIO ITKAlgorithms ITKNum
 
 
 ADD_EXECUTABLE(StreamingMeanShiftSegmentation StreamingMeanShiftSegmentation.cxx )
-TARGET_LINK_LIBRARIES(StreamingMeanShiftSegmentation OTBCommon OTBIO OTBOBIA)
-
+TARGET_LINK_LIBRARIES(StreamingMeanShiftSegmentation OTBCommon OTBIO OTBOBIA OTBOGRAdapters)
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Segmentation)
