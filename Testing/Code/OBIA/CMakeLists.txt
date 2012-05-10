@@ -251,7 +251,8 @@ ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
      #${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
      otbStreamingVectorizedSegmentationOGR
      ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-     ${TEMP}/obTvStreamingVectorizedSegmentationOGR.shp
+     ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif
+     ${TEMP}/obTvStreamingVectorizedSegmentationOGR.sqlite
      NewLayer
      100
      5

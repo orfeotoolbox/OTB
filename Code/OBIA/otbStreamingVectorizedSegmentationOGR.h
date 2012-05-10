@@ -133,6 +133,9 @@ public:
   
   itkSetMacro(Use8Connected, bool);
   itkGetMacro(Use8Connected, bool);
+  
+  virtual void SetInputMask(const LabelImageType *mask);
+  virtual const LabelImageType * GetInputMask(void);
 
 protected:
   PersistentStreamingLabelImageToOGRDataFilter();
@@ -182,6 +185,8 @@ public:
   typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType,
                TSegmentationFilter>::LabelPixelType                           LabelPixelType;
   typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType,
+               TSegmentationFilter>::LabelImageType                           LabelImageType;
+  typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType,
                TSegmentationFilter>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
 
   void SetInput(InputImageType * input)
@@ -191,6 +196,15 @@ public:
   const InputImageType * GetInput()
   {
     return this->GetFilter()->GetInput();
+  }
+  
+  void SetInputMask(LabelImageType * mask)
+  {
+    this->GetFilter()->SetInputMask(mask);
+  }
+  const LabelImageType * GetInputMask()
+  {
+    return this->GetFilter()->GetInputMask();
   }
   
   void SetOGRDataSource( OGRDataSourcePointerType ogrDS )

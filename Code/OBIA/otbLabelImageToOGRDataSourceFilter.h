@@ -24,7 +24,7 @@
 namespace otb
 {
 
-class OGRDataSourceWrapper;
+// class OGRDataSourceWrapper;
 
 /** \class LabelImageToOGRDataSourceFilter
  *  \brief this class uses GDALPolygonize method to transform a Label image into
@@ -71,6 +71,10 @@ public:
   /** Set/Get the input image of this process object.  */
   virtual void SetInput(const InputImageType *input);
   virtual const InputImageType * GetInput(void);
+  
+  /** Set/Get the input mask image. All pixels in the mask with a value of 0 will not be considered suitable for collection as polygons */
+  virtual void SetInputMask(const InputImageType *input);
+  virtual const InputImageType * GetInputMask(void);
   
   itkSetMacro(FieldName, std::string);
   itkGetMacro(FieldName, std::string);

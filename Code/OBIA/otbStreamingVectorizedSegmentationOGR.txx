@@ -35,6 +35,8 @@ template <class TImageType, class TSegmentationFilter>
 PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 ::PersistentStreamingLabelImageToOGRDataFilter() : m_TileMaxLabel(0), m_StartLabel(0), m_Use8Connected(false)
 {
+   this->SetNumberOfInputs(3);
+   this->SetNumberOfRequiredInputs(2);
    m_SegmentationFilter = SegmentationFilterType::New();
    m_TileNumber = 1;
 }
@@ -43,6 +45,28 @@ template <class TImageType, class TSegmentationFilter>
 PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 ::~PersistentStreamingLabelImageToOGRDataFilter()
 {
+}
+
+template <class TImageType, class TSegmentationFilter>
+void
+PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
+::SetInputMask(const LabelImageType *mask)
+{
+  this->itk::ProcessObject::SetNthInput(2, const_cast<LabelImageType *>(mask));
+}
+
+template <class TImageType, class TSegmentationFilter>
+const typename PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
+::LabelImageType *
+PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
+::GetInputMask(void)
+{
+  if (this->GetNumberOfInputs() < 3)
+    {
+    return 0;
+    }
+
+  return static_cast<const LabelImageType *>(this->itk::ProcessObject::GetInput(2));
 }
 
 template <class TImageType, class TSegmentationFilter>
@@ -63,18 +87,12 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   itk::TimeProbe tileChrono;
   tileChrono.Start();
   
-  
-  itk::TimeProbe chrono;
-  chrono.Start();
   // Apply an ExtractImageFilter to avoid problems with filters asking for the LargestPossibleRegion
   typedef itk::ExtractImageFilter<InputImageType, InputImageType> ExtractImageFilterType;
   typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
   extract->SetInput( this->GetInput() );
   extract->SetExtractionRegion( this->GetInput()->GetRequestedRegion() );
   extract->Update();
-  
-  chrono.Stop();
-  //std::cout<< "extract took " << chrono.GetTotal() << " sec"<<std::endl;
 
   // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
   extract->GetOutput()->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
@@ -83,7 +101,6 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 
   typename LabelImageToOGRDataSourceFilterType::Pointer labelImageToOGRDataFilter =
                                               LabelImageToOGRDataSourceFilterType::New();
-  
   
   itk::TimeProbe chrono1;
   chrono1.Start();
@@ -97,7 +114,22 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   
   itk::TimeProbe chrono2;
   chrono2.Start();
-
+  
+  typename LabelImageType::ConstPointer inputMask = this->GetInputMask();
+  if (!inputMask.IsNull())
+  {
+     // Apply an ExtractImageFilter to avoid problems with filters asking for the LargestPossibleRegion
+     typedef itk::ExtractImageFilter<LabelImageType, LabelImageType> ExtractLabelImageFilterType;
+     typename ExtractLabelImageFilterType::Pointer maskExtract = ExtractLabelImageFilterType::New();
+     maskExtract->SetInput( this->GetInputMask() );
+     maskExtract->SetExtractionRegion( this->GetInputMask()->GetRequestedRegion() );
+     maskExtract->Update();
+      
+     // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
+     maskExtract->GetOutput()->SetMetaDataDictionary(this->GetInputMask()->GetMetaDataDictionary());
+     
+     labelImageToOGRDataFilter->SetInputMask(maskExtract->GetOutput());
+  }
   labelImageToOGRDataFilter->SetInput(dynamic_cast<LabelImageType *>(m_SegmentationFilter->GetOutputs().at(labelImageIndex).GetPointer()));
   labelImageToOGRDataFilter->SetFieldName(this->GetFieldName());
   labelImageToOGRDataFilter->SetUse8Connected(m_Use8Connected);

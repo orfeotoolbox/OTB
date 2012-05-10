@@ -49,20 +49,21 @@ int otbStreamingVectorizedSegmentationOGRNew(int argc, char * argv[])
 int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
 {
 
-  if (argc != 8)
+  if (argc != 9)
     {
       std::cerr << "Usage: " << argv[0];
-      std::cerr << " inputImage outputVec layerName TileDimension spatialRadius rangeRadius minObjectSize" << std::endl;
+      std::cerr << " inputImage maskImage outputVec layerName TileDimension spatialRadius rangeRadius minObjectSize" << std::endl;
       return EXIT_FAILURE;
     }
 
   const char * imageName                    = argv[1];
-  const char * dataSourceName               = argv[2];
-  const char * layerName                    = argv[3];
-  const unsigned int tileSize               = atoi(argv[4]);
-  const unsigned int spatialRadiusOldMS     = atoi(argv[5]);
-  const double rangeRadiusOldMS             = atof(argv[6]);
-  const unsigned int minimumObjectSizeOldMS = atoi(argv[7]);
+  const char * maskName                     = argv[2];
+  const char * dataSourceName               = argv[3];
+  const char * layerName                    = argv[4];
+  const unsigned int tileSize               = atoi(argv[5]);
+  const unsigned int spatialRadiusOldMS     = atoi(argv[6]);
+  const double rangeRadiusOldMS             = atof(argv[7]);
+  const unsigned int minimumObjectSizeOldMS = atoi(argv[8]);
 
 
   typedef float InputPixelType;
@@ -77,16 +78,22 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   typedef otb::MeanShiftVectorImageFilter<ImageType, ImageType, LabelImageType> SegmentationFilterType;
   typedef otb::StreamingVectorizedSegmentationOGR<ImageType, SegmentationFilterType> StreamingVectorizedSegmentationOGRType;
   typedef otb::ImageFileReader<ImageType>                      ReaderType;
+  typedef otb::ImageFileReader<LabelImageType>                 MaskReaderType;
 
   ReaderType::Pointer             reader = ReaderType::New();
+  MaskReaderType::Pointer         maskReader = MaskReaderType::New();
   StreamingVectorizedSegmentationOGRType::Pointer filter = StreamingVectorizedSegmentationOGRType::New();  
 
   reader->SetFileName(imageName);
   reader->UpdateOutputInformation();
   
+  maskReader->SetFileName(maskName);
+  maskReader->UpdateOutputInformation();
+  
   otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
 
   filter->SetInput(reader->GetOutput());
+  filter->SetInputMask(maskReader->GetOutput());
   filter->SetOGRDataSource(ogrDS);
   //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
   filter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
