@@ -188,7 +188,7 @@ template
     static void call(OGRFeature &f, int index, ActualParamType const& container)
       {
       const int nb = boost::size(container);
-      (f.*ptr_to_function)(index, nb, &container[0]);
+      (f.*ptr_to_function)(index, nb, const_cast <T*>(&container[0]));
       }
     };
 

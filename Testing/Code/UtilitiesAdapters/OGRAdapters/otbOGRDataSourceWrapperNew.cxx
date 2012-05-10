@@ -222,6 +222,7 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
     BOOST_ASSERT(!g0[i].HasBeenSet());
     }
 
+  // ----[ int
   ogr::Field f0 = g0[0];
   BOOST_CHECK_EQUAL(f0.GetName(), k_f0.GetName());
   f0.SetValue(42);
@@ -231,6 +232,7 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
   // BOOST_CHECK_EQUAL((*l.begin())[0].GetValue<int>(), 42);
   // BOOST_CHECK_assert_FAILS(f0.GetValue<double>(), itk::ExceptionObject);
 
+  // ----[ double
   ogr::Field f1 = g0["OFTReal"];
   BOOST_CHECK_EQUAL(f1.GetName(), k_f1.GetName());
   // f1.SetValue(42); // need to support types promotion
@@ -238,6 +240,7 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
   BOOST_ASSERT(f1.HasBeenSet());
   BOOST_CHECK_EQUAL(f1.GetValue<double>(), 42.0);
 
+  // ----[ string
   ogr::Field f2 = g0["OFTString"];
   BOOST_CHECK_EQUAL(f2.GetName(), k_f2.GetName());
   f2.SetValue(("foobar")); // need to support types promotion
@@ -246,12 +249,47 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
   f2.Unset();
   BOOST_ASSERT(!f2.HasBeenSet());
 
-#if 0 // not ready
   f2.SetValue(std::string("foo"));
   BOOST_ASSERT(f2.HasBeenSet());
   BOOST_CHECK_EQUAL(f2.GetValue<std::string>(), "foo");
-#endif
 
+  // ----[ list of ints
+    {
+    ogr::Field f3 = g0["OFTIntegerList"];
+    std::vector<int> v0;
+    v0.push_back(42);
+    v0.push_back(12);
+    f3.SetValue(v0);
+
+    std::vector<int> v2 = f3.GetValue<std::vector<int> >();
+    BOOST_CHECK_EQUAL_COLLECTIONS(v0.begin(),v0.end(),v2.begin(),v2.end());
+    }
+
+  // ----[ list of doubles
+    {
+    ogr::Field f4 = g0["OFTRealList"];
+    std::vector<double> v0;
+    v0.push_back(42);
+    v0.push_back(12);
+    f4.SetValue(v0);
+
+    std::vector<double> v2 = f4.GetValue<std::vector<double> >();
+    BOOST_CHECK_EQUAL_COLLECTIONS(v0.begin(),v0.end(),v2.begin(),v2.end());
+    }
+
+  // ----[ list of string
+#if 0 // not ready yet
+    {
+    ogr::Field f5 = g0["OFTStringList"];
+    std::vector<std::string> v0;
+    v0.push_back("42");
+    v0.push_back("12");
+    f5.SetValue(v0);
+
+    std::vector<std::string> v2 = f5.GetValue<std::vector<std::string> >();
+    BOOST_CHECK_EQUAL_COLLECTIONS(v0.begin(),v0.end(),v2.begin(),v2.end());
+    }
+#endif
 }
 
 BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp_with_features)
