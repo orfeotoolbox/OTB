@@ -133,12 +133,16 @@ class NormL2
  * and spectral center.
  *
  * Mean shift can be used for edge-preserving smoothing, or for clustering. The GetOutput() method
- * return concatenation of spatial and spectral meanshift filtered data GetSpatialOutput() and GetSpectralOutput() gives
- * resp. spatial and Spectral filtering parts
+ * return spatial and  meanshift filtered data GetSpatialOutput() and GetRangeOutput() gives
+ * resp. spatial (as displacement map) and Spectral filtering parts
  *
- *
- * GetMetricOutput() method gives mean shift vector
+ * GetMetricOutput() method gives mean shift vector after pixel convergence.
  * GetIterationOutput() returns the number of iterations performed for each pixel.
+ * GetLabelOutput() returns a label map with one label for each mode.
+ *
+ * MeanShifVector norm is compared with Threshold (set using Get/Set accessor) to define pixel convergence (1e-3 by default).
+ * MaxIterationNumber defines maximum iteration number for each pixel convergence (set using Get/Set accessor). Set to 4 by default.
+ * ModeSearchOptimization is a boolean value, to choose between optimized and non optimized algorithm. If set to true (by default), assign mode value to each pixel on a path covered in convergence steps.
  *
  * For more information on mean shift techniques, one might consider reading the following article:
  *
@@ -152,6 +156,7 @@ class NormL2
  * \sa MeanShiftImageFilter
  *
  * \ingroup ImageSegmentation
+ * \ingroup ImageEnhancement
  */
 template <class TInputImage, class TOutputImage, class TKernel = KernelUniform, class TNorm = NormL2, class TOutputMetricImage = TOutputImage, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
 class ITK_EXPORT MeanShiftImageFilter2
