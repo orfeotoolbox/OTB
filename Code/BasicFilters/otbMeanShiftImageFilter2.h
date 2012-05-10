@@ -151,7 +151,7 @@ class NormL2
  *
  * \sa MeanShiftImageFilter
  *
- * \ingroup ImageEnhancement
+ * \ingroup ImageSegmentation
  */
 template <class TInputImage, class TOutputImage, class TKernel = KernelUniform, class TNorm = NormL2, class TOutputMetricImage = TOutputImage, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
 class ITK_EXPORT MeanShiftImageFilter2
