@@ -34,6 +34,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/range/size.hpp>
 #include <boost/type_traits/is_same.hpp>
+// #include "boost/type_traits/is_array.hpp"
 #include "boost/type_traits/is_contiguous.h" // from OTB actually
 
 #include "ogr_feature.h" // OGRFeature::*field_getters
@@ -64,11 +65,12 @@ using namespace boost::mpl;
  * yet.
  */
 typedef boost::mpl::map
-  < pair<int, int_<OFTInteger> >
-  , pair<std::vector<int>, int_<OFTIntegerList> >
-  , pair<double, int_<OFTReal> >
-  , pair<std::vector<double>, int_<OFTRealList> >
-  , pair<std::string, int_<OFTString> >
+  < pair<int                     , int_<OFTInteger> >
+  , pair<std::vector<int>        , int_<OFTIntegerList> >
+  , pair<double                  , int_<OFTReal> >
+  , pair<std::vector<double>     , int_<OFTRealList> >
+  , pair<std::string             , int_<OFTString> >
+  , pair<char*                   , int_<OFTString> >
   , pair<std::vector<std::string>, int_<OFTStringList> >
   // OFTBinary
   // OFTDate
@@ -268,6 +270,39 @@ typedef map
   // , pair<int_<OFTStringList>,  MemberContainerSetterPtr<char const*,     &OGRFeature::SetField, std::string> >
   > FieldSetters_Map;
 
+/**\ingroup GeometryInternals
+ * \class CppToOGRConverter_trait
+ * \brief Trait class for converting C++ types into OGR field setter compatible types.
+ * \tparam T initial C++ type
+ * \return C compatible type for OGR API.
+ * \note C static arrays become pointers (in order to support literal strings)
+ * \note C++ \c std::string becomes <tt>char const*</tt>
+ * \since OTB v 3.14.0
+ */
+template <typename T> struct CppToOGRConverter_trait
+    {
+    typedef T type;
+    static T const& convert(T const& value) { return value; }
+    };
+
+/**\ingroup GeometryInternals
+ * \brief Specialisation for C static arrays.
+ */
+template <typename T, std::size_t N> struct CppToOGRConverter_trait<T[N]>
+  {
+  typedef T* type;
+  static T const* convert(const T value[N]) { return &value[0]; }
+  };
+
+/**\ingroup GeometryInternals
+ * \brief Specialisation for C++ \c std::string.
+ */
+template <> struct CppToOGRConverter_trait<std::string>
+  {
+  typedef char* type;
+  static char const* convert(std::string const& value) { return value.c_str(); }
+  };
+
 } // namespace internal
 } } // end namespace otb::ogr
 
@@ -288,13 +323,16 @@ inline
 void otb::ogr::Field::SetValue(T const& value)
 {
   CheckInvariants();
-  const int VALUE = boost::mpl::at<internal::FieldType_Map, T>::type::value;
-  typedef typename boost::mpl::at<internal::FieldType_Map, T>::type Kind;
+  typedef internal::CppToOGRConverter_trait<T> Converter;
+  typedef typename Converter::type InterfaceType;
+  // BOOST_STATIC_ASSERT(!(boost::is_array<InterfaceType>::value));
+  typedef typename boost::mpl::at<internal::FieldType_Map, InterfaceType>::type Kind;
+  const int VALUE = Kind::value;
   BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
-  assert(m_Definition.GetType() == Kind::value && "OGR field type mismatches the type of new field value");
+  assert(m_Definition.GetType() == VALUE && "OGR field type mismatches the type of new field value");
   typedef typename boost::mpl::at<internal::FieldSetters_Map, Kind>::type SetterType;
   BOOST_STATIC_ASSERT(!(boost::is_same<SetterType, boost::mpl::void_>::value));
-  SetterType::call(*m_Feature, m_index, value);
+  SetterType::call(*m_Feature, m_index, Converter::convert(value));
 }
 
 template <typename T>
@@ -303,10 +341,10 @@ T otb::ogr::Field::GetValue() const
 {
   CheckInvariants();
   assert(HasBeenSet() && "Cannot access the value of a field that hasn't been set");
-  const int VALUE = boost::mpl::at<internal::FieldType_Map, T>::type::value;
   typedef typename boost::mpl::at<internal::FieldType_Map, T>::type Kind;
+  const int VALUE = Kind::value;
   BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
-  assert(m_Definition.GetType() == Kind::value && "OGR field type mismatches the type of requested field value");
+  assert(m_Definition.GetType() == VALUE && "OGR field type mismatches the type of requested field value");
   typedef typename boost::mpl::at<internal::FieldGetters_Map, Kind>::type GetterType;
   BOOST_STATIC_ASSERT(!(boost::is_same<GetterType, boost::mpl::void_>::value));
   return GetterType::call(*m_Feature, m_index);

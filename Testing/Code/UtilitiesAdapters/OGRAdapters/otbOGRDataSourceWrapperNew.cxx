@@ -238,12 +238,18 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
   BOOST_ASSERT(f1.HasBeenSet());
   BOOST_CHECK_EQUAL(f1.GetValue<double>(), 42.0);
 
-#if 0 // not ready
   ogr::Field f2 = g0["OFTString"];
   BOOST_CHECK_EQUAL(f2.GetName(), k_f2.GetName());
   f2.SetValue(("foobar")); // need to support types promotion
   BOOST_ASSERT(f2.HasBeenSet());
   BOOST_CHECK_EQUAL(f2.GetValue<std::string>(), "foobar");
+  f2.Unset();
+  BOOST_ASSERT(!f2.HasBeenSet());
+
+#if 0 // not ready
+  f2.SetValue(std::string("foo"));
+  BOOST_ASSERT(f2.HasBeenSet());
+  BOOST_CHECK_EQUAL(f2.GetValue<std::string>(), "foo");
 #endif
 
 }
@@ -259,12 +265,11 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp_with_features)
   OGRFeatureDefn & defn = l.GetLayerDefn();
   l.CreateField(k_f0);
   ogr::Feature g0(defn);
-  // g0[0].SetValue(42);
-  g0.ogr().SetField(0,42);
-  // l.CreateFeature(g0);
-  l.ogr().CreateFeature(&g0.ogr());
+  g0[0].SetValue(42);
+  l.CreateFeature(g0);
 }
 
+#if 0
 BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp_with_features_raw)
 {
   const std::string k_shp = "SomeShapeFileWithFeaturesRaw";
@@ -286,3 +291,4 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp_with_features_raw)
   OGRFeature::DestroyFeature(g0);
   OGRDataSource::DestroyDataSource(ds);
 }
+#endif

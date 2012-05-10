@@ -74,6 +74,11 @@ BOOST_STATIC_ASSERT((boost::is_contiguous<int*>::value));
 BOOST_STATIC_ASSERT((boost::is_contiguous<int[42]>::value));
 BOOST_STATIC_ASSERT((boost::is_contiguous<boost::array<int, 42> >::value));
 BOOST_STATIC_ASSERT((boost::is_contiguous<std::vector<int> >::value));
+
+BOOST_STATIC_ASSERT((boost::is_same<int, CppToOGRConverter_trait<int>::type >::value));
+BOOST_STATIC_ASSERT((boost::is_same<char*, CppToOGRConverter_trait<char[8]>::type >::value));
+BOOST_STATIC_ASSERT(!(boost::is_same<char*, char[8] >::value));
+
 }
 } } // end namespace otb::ogr
 
