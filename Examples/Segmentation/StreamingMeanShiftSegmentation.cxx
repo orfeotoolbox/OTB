@@ -123,7 +123,6 @@ int main(int argc, char *argv[])
   filter->SetOGRDataSource(ogrDS);
 
 
-
   //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
   filter->GetStreamer()->SetAutomaticTiledStreaming();
   
@@ -140,7 +139,6 @@ int main(int argc, char *argv[])
   filter->Initialize();
   
   filter->Update();
-
 
 
 

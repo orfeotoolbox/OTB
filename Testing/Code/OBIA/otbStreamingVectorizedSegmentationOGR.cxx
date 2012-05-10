@@ -82,7 +82,7 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
 
   ReaderType::Pointer             reader = ReaderType::New();
   MaskReaderType::Pointer         maskReader = MaskReaderType::New();
-  StreamingVectorizedSegmentationOGRType::Pointer filter = StreamingVectorizedSegmentationOGRType::New();  
+  StreamingVectorizedSegmentationOGRType::Pointer filter = StreamingVectorizedSegmentationOGRType::New();
 
   reader->SetFileName(imageName);
   reader->UpdateOutputInformation();

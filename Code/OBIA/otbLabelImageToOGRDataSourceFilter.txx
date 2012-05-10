@@ -33,7 +33,6 @@ namespace otb
 {
 
 
-
 template <class TInputImage>
 LabelImageToOGRDataSourceFilter<TInputImage>
 ::LabelImageToOGRDataSourceFilter() : m_FieldName("DN"), m_Use8Connected(false)

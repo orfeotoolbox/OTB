@@ -148,7 +148,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   unsigned int ind = 0;
   std::map<int,int> relabelMap;
   typename OGRLayerType::const_iterator featIt = tmpLayer.begin();
-  for(;featIt!=tmpLayer.end(); ++featIt)
+  for(; featIt!=tmpLayer.end(); ++featIt)
   {
      ogr::Field field = (*featIt)[0];
      int fieldValue = field.GetValue<int>();
@@ -158,7 +158,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
          ind = ind + 1;
      }
   }
-  for(featIt = tmpLayer.begin();featIt!=tmpLayer.end(); ++featIt)
+  for(featIt = tmpLayer.begin(); featIt!=tmpLayer.end(); ++featIt)
   {
      ogr::Field field = (*featIt)[0];
      int fieldValue = field.GetValue<int>();

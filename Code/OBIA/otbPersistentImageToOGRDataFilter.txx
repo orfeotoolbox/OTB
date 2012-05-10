@@ -145,7 +145,7 @@ PersistentImageToOGRDataFilter<TImage>
   OGRLayerType srcLayer = currentTileVD->GetLayerChecked(0);
 
   OGRDataSourcePointerType ogrDS = this->GetOGRDataSource();
-  OGRLayerType dstLayer = ogrDS->GetLayersCount() == 1 
+  OGRLayerType dstLayer = ogrDS->GetLayersCount() == 1
                           ? ogrDS->GetLayer(0)
                           : ogrDS->GetLayer(m_LayerName);
   
@@ -155,7 +155,7 @@ PersistentImageToOGRDataFilter<TImage>
 
   dstLayer.ogr().StartTransaction();
   OGRLayerType::const_iterator featIt = srcLayer.begin();
-  for(;featIt!=srcLayer.end(); ++featIt)
+  for(; featIt!=srcLayer.end(); ++featIt)
   {
       OGRFeatureType dstFeature(dstLayer.GetLayerDefn());
       dstFeature.SetFrom( *featIt, TRUE );

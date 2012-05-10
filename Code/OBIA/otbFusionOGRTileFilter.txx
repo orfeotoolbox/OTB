@@ -128,7 +128,7 @@ FusionOGRTileFilter<TInputImage>
          inputLayer.SetSpatialFilterRect(ulCorner[0],lrCorner[1],lrCorner[0],ulCorner[1]);
          
          OGRLayerType::const_iterator featIt = inputLayer.begin();
-         for(;featIt!=inputLayer.end(); ++featIt)
+         for(; featIt!=inputLayer.end(); ++featIt)
          {
             FeatureStruct s(inputLayer.GetLayerDefn());
             s.feat = *featIt;
@@ -164,7 +164,7 @@ FusionOGRTileFilter<TInputImage>
          
          inputLayer.SetSpatialFilterRect(ulCorner[0],lrCorner[1],lrCorner[0],ulCorner[1]);
          
-         for(featIt = inputLayer.begin();featIt!=inputLayer.end(); ++featIt)
+         for(featIt = inputLayer.begin(); featIt!=inputLayer.end(); ++featIt)
          {
             FeatureStruct s(inputLayer.GetLayerDefn());
             s.feat = *featIt;
