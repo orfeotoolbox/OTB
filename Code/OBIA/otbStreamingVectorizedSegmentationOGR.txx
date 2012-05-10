@@ -108,68 +108,37 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 
 
   //Relabeling
-  //itk::TimeProbe chrono3;
-  //chrono3.Start();
+  itk::TimeProbe chrono3;
+  chrono3.Start();
   OGRDataSourcePointerType tmpDS = const_cast<OGRDataSourceType *>(labelImageToOGRDataFilter->GetOutput());
-  /*OGRLayerType tmpLayer = tmpDS->GetLayer(0);
+  OGRLayerType tmpLayer = tmpDS->GetLayer(0);
 
   unsigned int ind = 0;
   std::map<int,int> relabelMap;
   typename OGRLayerType::const_iterator featIt = tmpLayer.begin();
-  for(;featIt!=tmpLayer.end(); std::advance(featIt, 1))
+  for(;featIt!=tmpLayer.end(); ++featIt)
   {
-     int fieldValue = (*featIt)[0].GetValue<int>();
+     ogr::Field field = (*featIt)[0];
+     int fieldValue = field.GetValue<int>();
      if (relabelMap.find(fieldValue) == relabelMap.end())
      {
          relabelMap[fieldValue] = static_cast<int>(ind);
          ind = ind + 1;
      }
   }
-  for(featIt = tmpLayer.begin();featIt!=tmpLayer.end(); std::advance(featIt, 1))
+  for(featIt = tmpLayer.begin();featIt!=tmpLayer.end(); ++featIt)
   {
-     int fieldValue = (*featIt)[0].GetValue<int>();
+     ogr::Field field = (*featIt)[0];
+     int fieldValue = field.GetValue<int>();
      int newFieldValue = relabelMap[fieldValue] + m_TileMaxLabel;
-     //*featIt.SetField(0,newFieldValue);
-     *featIt.UnsetField(0);
-     *featIt.SetField(this->GetFieldName().c_str(),newFieldValue);
+     field.Unset();
+     field.SetValue(newFieldValue);
      //Need to rewrite the feature otherwise changes are not considered.
      tmpLayer.SetFeature(*featIt);
   }
   m_TileMaxLabel = m_TileMaxLabel + relabelMap.size();
   chrono3.Stop();
-  std::cout<< "relabel took " << chrono3.GetTotal() << " sec"<<std::endl;*/
-  
-  /*while (i<nbFeatures)
-  {
-     poFeature = poLayer->GetNextFeature();
-     int fieldValue = poFeature->GetFieldAsInteger(0);
-     if (relabelMap.find(fieldValue) == relabelMap.end())
-     {
-         relabelMap[fieldValue] = static_cast<int>(ind);
-         ind = ind + 1;
-     }
-     OGRFeature::DestroyFeature( poFeature );
-     i++;
-  }
-  i = 0;
-  poLayer->ResetReading();
-  while (i<nbFeatures)
-  {
-     poFeature = poLayer->GetNextFeature();
-     int fieldValue = poFeature->GetFieldAsInteger(0);
-     int newFieldValue = relabelMap[fieldValue] + m_TileMaxLabel;
-     poFeature->SetField(0,newFieldValue);
-     poFeature->UnsetField(0);
-     poFeature->SetField(this->GetFieldName().c_str(),newFieldValue);
-     //Need to rewrite the feature otherwise changes are not considered.
-     poLayer->SetFeature(poFeature);
-     
-     OGRFeature::DestroyFeature( poFeature );
-     i++;
-  }
-  m_TileMaxLabel = m_TileMaxLabel + relabelMap.size();
-  chrono3.Stop();
-  std::cout<< "relabel took " << chrono3.GetTotal() << " sec"<<std::endl;*/
+  std::cout<< "relabel took " << chrono3.GetTotal() << " sec"<<std::endl;
   
   return tmpDS;
 }

@@ -94,11 +94,6 @@ FusionOGRTileFilter<TInputImage>
       inputLayer.ogr().StartTransaction();
       for(unsigned int y=1; y<=nbRowStream; y++)
       {
-         std::cout<< " column tile number : " << x*y <<std::endl;
-         /*std::cout<< " column tile number : " << x*y <<std::endl;
-         itk::TimeProbe chrono;
-         chrono.Start(); */
-  
          //First we get all the feature that intersect the streaming line of the Upper/left stream
          std::vector<FeatureStruct> upperStreamFeatureList;
          upperStreamFeatureList.clear();
@@ -135,12 +130,10 @@ FusionOGRTileFilter<TInputImage>
          OGRLayerType::const_iterator featIt = inputLayer.begin();
          for(;featIt!=inputLayer.end(); ++featIt)
          {
-            std::cout<< " before structure " <<std::endl;
             FeatureStruct s(inputLayer.GetLayerDefn());
             s.feat = *featIt;
             s.fusioned = false;
             upperStreamFeatureList.push_back(s);
-            std::cout<< " after structure " <<std::endl;
          }
          
          //Do the same thing for the lower/right stream
@@ -171,7 +164,7 @@ FusionOGRTileFilter<TInputImage>
          
          inputLayer.SetSpatialFilterRect(ulCorner[0],lrCorner[1],lrCorner[0],ulCorner[1]);
          
-         for(featIt = inputLayer.begin();featIt!=inputLayer.end(); std::advance(featIt, 1))
+         for(featIt = inputLayer.begin();featIt!=inputLayer.end(); ++featIt)
          {
             FeatureStruct s(inputLayer.GetLayerDefn());
             s.feat = *featIt;
@@ -189,10 +182,8 @@ FusionOGRTileFilter<TInputImage>
             {
                FeatureStruct upper = upperStreamFeatureList[u];
                FeatureStruct lower = lowerStreamFeatureList[l];
-               std::cout<< " before Intersects ? " <<std::endl;
                if (ogr::Intersects(*upper.feat.GetGeometry(), *lower.feat.GetGeometry()))
                {
-                  std::cout<< " before intersection " <<std::endl;
                   ogr::UniqueGeometryPtr intersection = ogr::Intersection(*upper.feat.GetGeometry(),*lower.feat.GetGeometry());
                   if (intersection)
                   {
@@ -233,37 +224,25 @@ FusionOGRTileFilter<TInputImage>
          std::sort(fusionList.begin(),fusionList.end(),SortFeature);
          for(unsigned int i=0; i<fusionListSize; i++)
          {
-            std::cout<< " before feature struct 1 " <<std::endl;
             FeatureStruct upper = upperStreamFeatureList.at(fusionList.at(i).indStream1);
-            std::cout<< " before feature struct 2 " <<std::endl;
             FeatureStruct lower = lowerStreamFeatureList.at(fusionList.at(i).indStream2);
             if( !upper.fusioned && !lower.fusioned )
             {
-               std::cout<< " before fusion " <<std::endl;
                upperStreamFeatureList[fusionList[i].indStream1].fusioned = true;
                lowerStreamFeatureList[fusionList[i].indStream2].fusioned = true;
                ogr::UniqueGeometryPtr fusionPolygon = ogr::Union(*upper.feat.GetGeometry(),*lower.feat.GetGeometry());
-               std::cout<< " after fusion " <<std::endl;
                OGRFeatureType fusionFeature(inputLayer.GetLayerDefn());
                fusionFeature.SetGeometry( fusionPolygon.get() );
-               std::cout<< " after Set geometry " <<std::endl;
-               //fusionFeature.SetField(0,upper.feat->GetFieldAsInteger(0));
+               
+               ogr::Field field = upper.feat[0];
+               fusionFeature[0].SetValue(field.GetValue<int>());
                inputLayer.CreateFeature(fusionFeature);
-               std::cout<< " after Create feature " <<std::endl;
                inputLayer.DeleteFeature(lower.feat.GetFID());
-               std::cout<< " after Delete Feature " <<std::endl;
                inputLayer.DeleteFeature(upper.feat.GetFID());
-               std::cout<< " after Delete Feature 2 " <<std::endl;
             }
          }
-
-      
-      /*chrono.Stop();
-      std::cout<< "Column fusion tile took " << chrono.GetTotal() << " sec"<<std::endl; */
-  
       } //end for x
       inputLayer.ogr().CommitTransaction();
-      std::cout<< " after CommitTransaction " <<std::endl;
    } //end for y
    inputLayer.ogr().CommitTransaction();
 

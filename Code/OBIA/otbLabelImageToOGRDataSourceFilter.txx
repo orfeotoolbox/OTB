@@ -179,7 +179,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     OGRLayerType outputLayer = ogrDS->CreateLayer("layer",NULL,wkbPolygon,NULL);
     
     OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
-    outputLayer.CreateField(&field, true);
+    outputLayer.CreateField(field, true);
 
     //Call GDALPolygonize()
     char ** options;

@@ -24,6 +24,7 @@
 #include "otbPersistentImageToOGRDataFilter.h"
 #include "itkTimeProbe.h"
 #include <boost/foreach.hpp>
+#include <stdio.h>
 
 namespace otb
 {
@@ -113,12 +114,20 @@ PersistentImageToOGRDataFilter<TImage>
    char * opt = "SPATIALITE=YES";
    options = CSLAddString(options, opt );
    m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), &options[0]); */
-   
+
    ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, NULL);
-   
    OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
-   ogrDS->GetLayer(m_LayerName).CreateField(&field, true);
    
+   //Handle the case of shapefile ....
+   if (ogrDS->GetLayersCount() == 1)
+   {
+      ogrDS->GetLayer(0).CreateField(field, true);
+   }
+   else
+   {
+      ogrDS->GetLayer(m_LayerName).CreateField(field, true);
+   }
+
    //CSLDestroy( options );
 
 }
@@ -134,7 +143,9 @@ PersistentImageToOGRDataFilter<TImage>
   OGRLayerType srcLayer = currentTileVD->GetLayerChecked(0);
 
   OGRDataSourcePointerType ogrDS = this->GetOGRDataSource();
-  OGRLayerType dstLayer = ogrDS->GetLayer(m_LayerName);
+  OGRLayerType dstLayer = ogrDS->GetLayersCount() == 1 
+                          ? ogrDS->GetLayer(0)
+                          : ogrDS->GetLayer(m_LayerName);
   
   //Copy features in the output layer
   itk::TimeProbe chrono;
@@ -142,7 +153,7 @@ PersistentImageToOGRDataFilter<TImage>
 
   dstLayer.ogr().StartTransaction();
   OGRLayerType::const_iterator featIt = srcLayer.begin();
-  for(;featIt!=srcLayer.end(); std::advance(featIt, 1))
+  for(;featIt!=srcLayer.end(); ++featIt)
   {
       OGRFeatureType dstFeature(dstLayer.GetLayerDefn());
       dstFeature.SetFrom( *featIt, TRUE );
