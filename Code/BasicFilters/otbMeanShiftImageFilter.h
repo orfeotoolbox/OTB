@@ -60,7 +60,7 @@ public:
 /** \class MeanShiftImageFilter
  *
  *
- * Mean shift is a data clustering algorithm ofthen used in image processing and segmentation.
+ * Mean shift is a data clustering algorithm often used in image processing and segmentation.
  * For a given pixel, the mean shift will build a set of neighboring pixels within a given spatial
  * radius (can be set using SetSpatialRadius()) and a color range (can be set using SetRangeRadius()).
  * The spatial and color center of this set is then computed and the algorithm iterates with this new spatial
