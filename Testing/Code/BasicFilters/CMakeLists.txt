@@ -1166,7 +1166,7 @@ ADD_TEST(bfTuMeanShiftImageFilterROIQBMul4 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_ROIQBMul4.tif
         4 50 0.1 100
         )
-        
+
 ADD_TEST(bfTuMeanShiftVectorImageFilterQBRoad ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilter
         ${INPUTDATA}/qb_RoadExtract.img
@@ -1188,9 +1188,9 @@ ADD_TEST(bfTuMeanShiftImageFilterQBRoad ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBRoad.tif
         4 30 0.1 100
         )
-                
-        
-        
+
+
+
 ADD_TEST(bfTvMeanShiftVectorImageFilterQBPAN ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilter
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
@@ -1199,7 +1199,7 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterQBPAN ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutputValid_PAN.tif
         ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutputValid_PAN.tif
         5 15 100 1.0
-        )                
+        )
 
 
 ADD_TEST(bfTvMeanShiftImageFilterQBPAN ${BASICFILTERS_TESTS9}
@@ -1211,8 +1211,8 @@ ADD_TEST(bfTvMeanShiftImageFilterQBPAN ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShift2ImageFilterIterationOutput_PAN.tif
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_PAN.tif
         5 15 1.0 100
-        )   
-        
+        )
+
 ADD_TEST(bfTuMeanShiftVectorImageFilterSPOT5 ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilter
         ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
@@ -1233,7 +1233,16 @@ ADD_TEST(bfTuMeanShiftImageFilterSPOT5 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShift2ImageFilterIterationOutput_SPOT5.tif
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_SPOT5.tif
         4 10 0.1 100
-        )        
+        )
+
+ADD_TEST(bfTuLabelImageRegionMergingFilterSPOT5 ${BASICFILTERS_TESTS9}
+        otbLabelImageRegionMergingFilter
+        ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+        ${TEMP}/bfLabelImageRegionMergingFilterSpectralOutput_SPOT5.tif
+        ${TEMP}/bfLabelImageRegionMergingFilterLabelOutput_SPOT5.tif
+        ${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
+        4 10 0.1 100
+        )
 
 IF(OTB_DATA_USE_LARGEINPUT)
 #
@@ -2889,6 +2898,7 @@ otbMeanShiftImageFilterNew2.cxx
 otbMeanShiftImageFilter2.cxx
 otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
+otbLabelImageRegionMergingFilter.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
 otbBinaryImageDensityFunctionNew.cxx
