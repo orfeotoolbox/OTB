@@ -1134,16 +1134,28 @@ ADD_TEST(bfTuMeanShiftImageFilterQBSuburb ${BASICFILTERS_TESTS9}
         4 50 10 1.0
         )
 
-ADD_TEST(bfTuMeanShiftImageFilter2QBSuburb ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTuMeanShiftImageFilter2QBSuburbOptim ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilter2
         ${INPUTDATA}/QB_Suburb.png
-        ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_QBSuburb.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_QBSuburb.tif
-        ${TEMP}/bfMeanShift2ImageFilterMetricOutput_QBSuburb.tif
-        ${TEMP}/bfMeanShift2ImageFilterIterationOutput_QBSuburb.tif
-        ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBSuburb.tif
-        4 50 0.1 10
+        ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_QBSuburbOptim.tif
+        ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_QBSuburbOptim.tif
+        ${TEMP}/bfMeanShift2ImageFilterMetricOutput_QBSuburbOptim.tif
+        ${TEMP}/bfMeanShift2ImageFilterIterationOutput_QBSuburbOptim.tif
+        ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBSuburbOptim.tif
+        4 50 0.1 10 1
         )
+ 
+ ADD_TEST(bfTuMeanShiftImageFilter2QBSuburbNonOptim ${BASICFILTERS_TESTS9}
+        otbMeanShiftImageFilter2
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_QBSuburbNonOptim.tif
+        ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_QBSuburbNonOptim.tif
+        ${TEMP}/bfMeanShift2ImageFilterMetricOutput_QBSuburbNonOptim.tif
+        ${TEMP}/bfMeanShift2ImageFilterIterationOutput_QBSuburbNonOptim.tif
+        ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBSuburbNonOptim.tif
+        4 50 0.1 10 0
+        )
+        
 
 ADD_TEST(bfTuMeanShiftVectorImageFilterROIQBMul4 ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilter
@@ -1154,6 +1166,8 @@ ADD_TEST(bfTuMeanShiftVectorImageFilterROIQBMul4 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutput_ROIQBMul4.tif
         4 50 100 1.0
         )
+
+
 
 
 ADD_TEST(bfTuMeanShiftImageFilterROIQBMul4 ${BASICFILTERS_TESTS9}
