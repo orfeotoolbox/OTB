@@ -107,8 +107,31 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 ::BeforeThreadedGenerateData()
 {
   typename InputSpectralImageType::Pointer spectralImage = this->GetInputSpectralImage();
+  typename InputLabelImageType::Pointer inputLabelImage = this->GetInputLabelImage();
 
   m_NumberOfComponentsPerPixel = spectralImage->GetNumberOfComponentsPerPixel();
+
+  // Convert to label map with adjacency
+  typename LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
+  labelMapFilter->SetInput(inputLabelImage);
+  labelMapFilter->Update();
+
+  // Associate each label to a spectral value
+  m_LabelMap = labelMapFilter->GetOutput();
+  typename LabelMapType::LabelObjectContainerType & localLabelObjectContainer = m_LabelMap->GetLabelObjectContainer();
+  typename LabelMapType::LabelObjectContainerType::iterator labelIt = localLabelObjectContainer.begin();
+  while ( labelIt != localLabelObjectContainer.end() )
+    {
+    typename LabelMapType::LabelType l;
+    l = labelIt->first;
+    typename AttributeLabelObjectType::Pointer labelObject = labelIt->second;
+    labelObject->SetAttribute(
+      spectralImage->GetPixel(
+        labelObject->GetLine(0).GetIndex()
+      )
+    );
+    ++labelIt;
+    }
 
 }
 
@@ -126,6 +149,27 @@ void
 LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
 ::AfterThreadedGenerateData()
 {
+  typename OutputLabelImageType::Pointer outputLabelImage = this->GetOutput();
+  typedef itk::ImageRegionIterator<OutputLabelImageType> OutputLabelIteratorType;
+  OutputLabelIteratorType outputLabelIt(outputLabelImage, outputLabelImage->GetRequestedRegion());
+
+  // copy labelMap to output label image
+  typename LabelMapToLabelImageFilterType::Pointer mapToImageFilter = LabelMapToLabelImageFilterType::New();
+  mapToImageFilter->SetInput(m_LabelMap);
+  mapToImageFilter->Update();
+
+  OutputLabelIteratorType mapToImageIt(mapToImageFilter->GetOutput(), outputLabelImage->GetRequestedRegion());
+
+  outputLabelIt.GoToBegin();
+  mapToImageIt.GoToBegin();
+
+  while(!outputLabelIt.IsAtEnd())
+    {
+    outputLabelIt.Set(mapToImageIt.Get());
+    ++outputLabelIt;
+    ++mapToImageIt;
+    }
+
 }
 
 

@@ -21,6 +21,10 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "itkImageToImageFilter.h"
+#include "itkLabelMap.h"
+#include "itkAttributeLabelObject.h"
+#include "otbLabelImageToLabelMapWithAdjacencyFilter.h"
+#include "otbLabelMapToLabelImageFilter.h"
 
 namespace otb
 {
@@ -67,6 +71,7 @@ public:
   typedef typename InputImageType::SizeType       SizeType;
 
   typedef TInputSpectralImage                     InputSpectralImageType;
+  typedef typename TInputSpectralImage::PixelType SpectralPixelType;
 
   typedef TOutputLabelImage                        OutputLabelImageType;
   typedef typename OutputLabelImageType::PixelType OutputLabelType;
@@ -75,6 +80,15 @@ public:
   typedef typename OutputImageType::Pointer     OutputImagePointerType;
   typedef typename OutputImageType::PixelType   OutputPixelType;
   typedef typename OutputImageType::RegionType  OutputRegionType;
+
+  itkStaticConstMacro(ImageDimension, unsigned int, InputLabelImageType::ImageDimension);
+
+  /** LabelMap typedefs */
+  typedef itk::AttributeLabelObject<InputLabelType, ImageDimension, SpectralPixelType> AttributeLabelObjectType;
+  typedef otb::LabelImageToLabelMapWithAdjacencyFilter<OutputLabelImageType,
+    otb::LabelMapWithAdjacency<AttributeLabelObjectType> > LabelMapFilterType;
+  typedef typename LabelMapFilterType::OutputImageType LabelMapType;
+  typedef otb::LabelMapToLabelImageFilter<LabelMapType, OutputLabelImageType> LabelMapToLabelImageFilterType;
 
 
   /** Setters / Getters */
@@ -128,6 +142,8 @@ private:
 
   /** Number of components per pixel in the input image */
   unsigned int m_NumberOfComponentsPerPixel;
+
+  typename LabelMapType::Pointer m_LabelMap;
 };
 
 } // end namespace otb
