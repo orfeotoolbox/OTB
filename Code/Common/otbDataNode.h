@@ -266,6 +266,17 @@ public:
   double EuclideanDistance(const DataNode* node);
 
   double EuclideanDistance(const PointType point);
+
+   /**
+    * \return true if the two datanodes intersects
+    */
+  bool Intersects(const DataNode* node);
+
+   /**
+    * \return true if the two datanodes intersects
+    */
+  bool Within(const DataNode* node);
+
 /**
  * Clear all fields.
  */

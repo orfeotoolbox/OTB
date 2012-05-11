@@ -636,6 +636,32 @@ DataNode<TPrecision, VDimension, TValuePrecision>
   return currentGeometry->Distance(&ogrPointSrc);
 }
 
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+bool
+DataNode<TPrecision, VDimension, TValuePrecision>
+::Intersects(const DataNode* node)
+{
+  // Convert the nodes to OGRGeometries
+  OGRGeometry * dstGeomtery     = this->ConvertDataNodeToOGRGeometry(node);
+  OGRGeometry * currentGeometry = this->ConvertDataNodeToOGRGeometry(this);
+  
+  // 
+  return currentGeometry->Intersects(dstGeomtery);
+}
+
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+bool
+DataNode<TPrecision, VDimension, TValuePrecision>
+::Within(const DataNode* node)
+{
+  // Convert the nodes to OGRGeometries
+  OGRGeometry * dstGeomtery     = this->ConvertDataNodeToOGRGeometry(node);
+  OGRGeometry * currentGeometry = this->ConvertDataNodeToOGRGeometry(this);
+  
+  // 
+  return currentGeometry->Within(dstGeomtery);
+}
+
 
 } // end namespace otb
 
