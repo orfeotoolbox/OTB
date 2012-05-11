@@ -141,7 +141,6 @@ int main(int argc, char *argv[])
   filter->Update();
 
 
-
   //writer->SetFileName(argv[2]);
   //writer->SetInput(filter->GetOutputVectorData());
   //writer->Update();

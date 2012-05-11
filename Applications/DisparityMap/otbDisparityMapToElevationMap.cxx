@@ -161,14 +161,14 @@ private:
         }
         break;
         }
-      } 
+      }
     
     this->SetParameterOutputImage("out",m_DispToElev->GetOutput());
   }
   
   VectorImageToListFilterType::Pointer m_VectorToList;
   
-  DisparityToElevationFilterType::Pointer m_DispToElev; 
+  DisparityToElevationFilterType::Pointer m_DispToElev;
 };
 
 }

@@ -645,7 +645,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
   OGRGeometry * dstGeomtery     = this->ConvertDataNodeToOGRGeometry(node);
   OGRGeometry * currentGeometry = this->ConvertDataNodeToOGRGeometry(this);
   
-  // 
+  //
   return currentGeometry->Intersects(dstGeomtery);
 }
 
@@ -658,7 +658,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
   OGRGeometry * dstGeomtery     = this->ConvertDataNodeToOGRGeometry(node);
   OGRGeometry * currentGeometry = this->ConvertDataNodeToOGRGeometry(this);
   
-  // 
+  //
   return currentGeometry->Within(dstGeomtery);
 }
 

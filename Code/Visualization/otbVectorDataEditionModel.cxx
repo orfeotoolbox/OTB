@@ -272,7 +272,7 @@ void VectorDataEditionModel
     ++it;
     }
 
-  for (unsigned int idx = 0 ; idx < geomToDelete.size(); idx++)
+  for (unsigned int idx = 0; idx < geomToDelete.size(); idx++)
     {
     this->SetSelectedGeometry(geomToDelete[idx] - idx);
     this->DeleteGeometry();

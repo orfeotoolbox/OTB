@@ -71,7 +71,6 @@ public:
 
 
 
-
   typedef otb::StreamingVectorizedSegmentationOGR<FloatVectorImageType, MSEDISONSegmentationFilterType> MSEDIONStreamingVectorizedSegmentationOGRType;
 
 
@@ -188,7 +187,6 @@ private:
      MandatoryOff("neighbor");
 
 
-
     // Doc example parameter settings
 
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_PAN.tif");
@@ -282,7 +280,6 @@ private:
 
             break;
             }
-
 
 
       default:
