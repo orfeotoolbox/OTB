@@ -33,7 +33,8 @@ namespace otb
 
 template <class TImageType, class TSegmentationFilter>
 PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
-::PersistentStreamingLabelImageToOGRDataFilter() : m_TileMaxLabel(0), m_StartLabel(0), m_Use8Connected(false)
+::PersistentStreamingLabelImageToOGRDataFilter() : m_TileMaxLabel(0), m_StartLabel(0), m_Use8Connected(false),
+  m_FilterSmallObject(false), m_MinimumObjectSize(1)
 {
    this->SetNumberOfInputs(3);
    this->SetNumberOfRequiredInputs(2);
@@ -111,6 +112,16 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   chrono1.Stop();
   std::cout<< "segmentation took " << chrono1.GetTotal() << " sec"<<std::endl;
   
+  //RelabelComponentImageFilter to suppress small area
+  typename RelabelComponentImageFilterType::Pointer relabelComponentFilter = RelabelComponentImageFilterType::New();
+  if(m_FilterSmallObject)
+  {
+     relabelComponentFilter->SetInput(dynamic_cast<LabelImageType *>(m_SegmentationFilter->GetOutputs().at(labelImageIndex).GetPointer()));
+     relabelComponentFilter->SetMinimumObjectSize(m_MinimumObjectSize);
+     relabelComponentFilter->Update();
+     
+     labelImageToOGRDataFilter->SetInputMask(relabelComponentFilter->GetOutput());
+  }
   
   itk::TimeProbe chrono2;
   chrono2.Start();
@@ -128,7 +139,18 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
      // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
      maskExtract->GetOutput()->SetMetaDataDictionary(this->GetInputMask()->GetMetaDataDictionary());
      
-     labelImageToOGRDataFilter->SetInputMask(maskExtract->GetOutput());
+     if(m_FilterSmallObject)
+     {
+        typename MultiplyImageFilterType::Pointer multiplyImageFilter = MultiplyImageFilterType::New();
+        multiplyImageFilter->SetInput1(maskExtract->GetOutput());
+        multiplyImageFilter->SetInput2(relabelComponentFilter->GetOutput());
+        multiplyImageFilter->Update();
+        labelImageToOGRDataFilter->SetInputMask(multiplyImageFilter->GetOutput());
+     }
+     else
+     {
+        labelImageToOGRDataFilter->SetInputMask(maskExtract->GetOutput());
+     }
   }
   labelImageToOGRDataFilter->SetInput(dynamic_cast<LabelImageType *>(m_SegmentationFilter->GetOutputs().at(labelImageIndex).GetPointer()));
   labelImageToOGRDataFilter->SetFieldName(this->GetFieldName());

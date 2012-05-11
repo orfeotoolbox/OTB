@@ -26,6 +26,8 @@
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "otbPersistentImageToOGRDataFilter.h"
+#include "otbRelabelComponentImageFilter.h"
+#include "itkMultiplyImageFilter.h"
 
 #include "otbMeanShiftImageFilter.h"
 #include "otbMeanShiftImageFilter2.h"
@@ -115,6 +117,9 @@ public:
   typedef typename Superclass::OGRDataSourceType                        OGRDataSourceType;
   typedef typename Superclass::OGRDataSourcePointerType                 OGRDataSourcePointerType;
   typedef typename Superclass::OGRLayerType                             OGRLayerType;
+  
+  typedef RelabelComponentImageFilter<LabelImageType,LabelImageType>    RelabelComponentImageFilterType;
+  typedef itk::MultiplyImageFilter<LabelImageType,LabelImageType,LabelImageType>  MultiplyImageFilterType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -133,6 +138,12 @@ public:
   
   itkSetMacro(Use8Connected, bool);
   itkGetMacro(Use8Connected, bool);
+  
+  itkSetMacro(FilterSmallObject, bool);
+  itkGetMacro(FilterSmallObject, bool);
+  
+  itkSetMacro(MinimumObjectSize, unsigned int);
+  itkGetMacro(MinimumObjectSize, unsigned int);
   
   virtual void SetInputMask(const LabelImageType *mask);
   virtual const LabelImageType * GetInputMask(void);
@@ -157,6 +168,8 @@ private:
   
   unsigned int m_TileNumber;
   bool m_Use8Connected;
+  bool m_FilterSmallObject;
+  unsigned int m_MinimumObjectSize;
   
   
 };
@@ -255,6 +268,26 @@ public:
   const bool GetUse8Connected()
   {
      return this->GetFilter()->GetUse8Connected();
+  }
+  
+  void SetFilterSmallObject(bool flag)
+  {
+     this->GetFilter()->SetFilterSmallObject(flag);
+  }
+  
+  const bool GetFilterSmallObject()
+  {
+     return this->GetFilter()->GetFilterSmallObject();
+  }
+  
+  void SetMinimumObjectSize(const unsigned int & size)
+  {
+     this->GetFilter()->SetMinimumObjectSize(size);
+  }
+  
+  const unsigned int GetMinimumObjectSize()
+  {
+     return this->GetFilter()->GetMinimumObjectSize();
   }
   
 protected:

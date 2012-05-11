@@ -49,10 +49,10 @@ int otbStreamingVectorizedSegmentationOGRNew(int argc, char * argv[])
 int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
 {
 
-  if (argc != 9)
+  if (argc != 11)
     {
       std::cerr << "Usage: " << argv[0];
-      std::cerr << " inputImage maskImage outputVec layerName TileDimension spatialRadius rangeRadius minObjectSize" << std::endl;
+      std::cerr << " inputImage maskImage outputVec layerName TileDimension spatialRadius rangeRadius minObjectSize filterSmallObj minSize" << std::endl;
       return EXIT_FAILURE;
     }
 
@@ -64,6 +64,8 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   const unsigned int spatialRadiusOldMS     = atoi(argv[6]);
   const double rangeRadiusOldMS             = atof(argv[7]);
   const unsigned int minimumObjectSizeOldMS = atoi(argv[8]);
+  const bool filterSmallObj                 = atoi(argv[9]);
+  const unsigned int minSize                = atoi(argv[10]);
 
 
   typedef float InputPixelType;
@@ -93,7 +95,7 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
 
   filter->SetInput(reader->GetOutput());
-  filter->SetInputMask(maskReader->GetOutput());
+  //filter->SetInputMask(maskReader->GetOutput());
   filter->SetOGRDataSource(ogrDS);
   //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
   filter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
@@ -101,6 +103,8 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
   filter->SetFieldName(fieldName);
   filter->SetStartLabel(1);
   filter->SetUse8Connected(false);
+  filter->SetFilterSmallObject(filterSmallObj);
+  filter->SetMinimumObjectSize(minSize);
   filter->GetSegmentationFilter()->SetSpatialRadius(spatialRadiusOldMS);
   filter->GetSegmentationFilter()->SetRangeRadius(rangeRadiusOldMS);
   filter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSizeOldMS);
