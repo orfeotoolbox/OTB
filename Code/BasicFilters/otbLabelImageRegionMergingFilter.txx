@@ -202,8 +202,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
         m_LabelMap->GetLabelObject(curLabel)->SetAttribute(currentObjectAttributes);
         mergedOnce = true;
         // After the merge, iterators and references become invalid -> reinitialize
-        labelIt = labelObjectContainer.begin();
-        continue;
+        labelIt = labelObjectContainer.find(curLabel);
         }
       ++labelIt;
       } // end of loop over labels
