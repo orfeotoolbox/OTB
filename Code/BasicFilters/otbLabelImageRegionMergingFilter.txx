@@ -136,37 +136,42 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   // Region Merging
 
   //Define a vector of the pairs to merge
-  //typename LabelMapType::LabelPairVectorType pairs;
-  //typedef typename LabelMapType::LabelPairType LabelPairType;
+  typedef typename LabelMapType::LabelPairType LabelPairType;
   bool finishedMerging = false;
   unsigned int mergeIterations = 0;
 
   std::cout << "Start merging" << std::endl;
+  // Iterate until no more merge to do
   while(!finishedMerging)
     {
-    bool restartFromFirstRegion = false;
     bool mergedOnce = false;
+
+    // Iterate over all regions (restart if a merge occurs)
     labelObjectContainer = m_LabelMap->GetLabelObjectContainer();
     labelIt = labelObjectContainer.begin();
     while (labelIt != labelObjectContainer.end())
       {
-      typename AttributeLabelObjectType::Pointer labelObject;
-      labelObject = m_LabelMap->GetLabelObject(labelIt->first);
-      //const OutputPixelType spectral = labelObject->GetAttribute().minValue;
-      const AttributeType &currentObjectAttributes = labelObject->GetAttribute();
-      //std::cout << "label " << labelIt->first << ": " << labelObject->Size() << "pixels" << std::endl;
-      const typename LabelMapType::AdjacentLabelsContainerType & adjacentLabelsContainer = m_LabelMap->GetAdjacentLabels(labelIt->first);
+      LabelType curLabel;    // label of current region
+      typename AttributeLabelObjectType::Pointer labelObject; // current label object
+      AttributeType currentObjectAttributes;  // attributes (updated when merging)
+
+      curLabel = labelIt->first;
+      labelObject = m_LabelMap->GetLabelObject(curLabel);
+      currentObjectAttributes = labelObject->GetAttribute();
+
+      // define a vector of pairs to merge into the current region
+      typename LabelMapType::LabelPairVectorType pairs;
+
+      // Iterate over all adjacent regions and check for merge
+      const typename LabelMapType::AdjacentLabelsContainerType & adjacentLabelsContainer = m_LabelMap->GetAdjacentLabels(curLabel);
       typename LabelMapType::AdjacentLabelsContainerType::iterator adjIt = adjacentLabelsContainer.begin();
       while (adjIt != adjacentLabelsContainer.end())
         {
-        LabelType adjLabel;
-        adjLabel = *adjIt;
+        LabelType adjLabel = *adjIt;
         typename AttributeLabelObjectType::Pointer adjLabelObject = m_LabelMap->GetLabelObject(adjLabel);
-        //const OutputPixelType adjSpectral = adjLabelObject->GetAttribute().minValue;
         const AttributeType &adjacentObjectAttributes = adjLabelObject->GetAttribute();
-        //std::cout << "neighbour " << adjLabel << " = " << adjacentObjectAttributes << std::endl;
 
-        // Check condition to fuse regions
+        // Check condition to merge regions
         bool doMerge = true;
         for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel && doMerge; comp++)
           {
@@ -175,47 +180,38 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
             doMerge = false;
             }
           }
+
         if(doMerge)
-          //if( (adjSpectral - spectral).GetNorm() < m_RangeBandwidth )
           {
-          // Define output attribute
-          AttributeType att;
-          att.minValue.SetSize(m_NumberOfComponentsPerPixel);
-          att.maxValue.SetSize(m_NumberOfComponentsPerPixel);
-          //std::cout << "merge: " << currentObjectAttributes << " and " << adjacentObjectAttributes << std::endl;
-          for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel && doMerge; comp++)
+          // Update output attribute
+          for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
             {
-            att.minValue[comp] = std::min(currentObjectAttributes.minValue[comp], adjacentObjectAttributes.minValue[comp]);
-            att.maxValue[comp] = std::max(currentObjectAttributes.maxValue[comp], adjacentObjectAttributes.maxValue[comp]);
+            currentObjectAttributes.minValue[comp] = std::min(currentObjectAttributes.minValue[comp], adjacentObjectAttributes.minValue[comp]);
+            currentObjectAttributes.maxValue[comp] = std::max(currentObjectAttributes.maxValue[comp], adjacentObjectAttributes.maxValue[comp]);
             }
-          // Merge objects
-          if(labelObject->Size() >= adjLabelObject->Size())
-            {
-            m_LabelMap->MergeLabels(labelIt->first, adjLabel);
-            m_LabelMap->GetLabelObject(labelIt->first)->SetAttribute(att);
-            }
-          else
-            {
-            m_LabelMap->MergeLabels(adjLabel, labelIt->first);
-            m_LabelMap->GetLabelObject(adjLabel)->SetAttribute(att);
-            restartFromFirstRegion = true;
-            }
-          //pairs.push_back(LabelPairType(labelIt->first, adjLabel));
-          mergedOnce = true;
-          // std::cout << "after merge: " << att << std::endl;
+          // Add adjacent label to the merge list
+          pairs.push_back(LabelPairType(curLabel, adjLabel));
           }
         ++adjIt;
-        if(restartFromFirstRegion) break;
         } // end of loop over adjacent labels
-
-      if(restartFromFirstRegion) break;
+      // Merge when necessary
+      if(!pairs.empty() > 0)
+        {
+        m_LabelMap->MergeLabels(pairs);
+        // Update the attribute with the newly computed value
+        m_LabelMap->GetLabelObject(curLabel)->SetAttribute(currentObjectAttributes);
+        mergedOnce = true;
+        // After the merge, iterators and references become invalid -> reinitialize
+        labelIt = labelObjectContainer.begin();
+        continue;
+        }
       ++labelIt;
       } // end of loop over labels
     if ( !mergedOnce   // finished iterating over all regions without merging once
          //   || mergeIterations >= 10 // TEMPORARY !!!
     ) finishedMerging = true;
     mergeIterations++;
-     std::cout << "mergeIterations: " << mergeIterations << "(" <<  m_LabelMap->GetNumberOfLabelObjects() << ") objects" << std::endl;
+     std::cout << "mergeIterations: " << mergeIterations << " (" <<  m_LabelMap->GetNumberOfLabelObjects() << " objects)" << std::endl;
     } // end of main iteration loop
   std::cout << "merge iterations: " << mergeIterations << std::endl;
   std::cout << "number of label objects: " << m_LabelMap->GetNumberOfLabelObjects() << std::endl;
