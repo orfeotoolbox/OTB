@@ -2898,7 +2898,7 @@ otbMeanShiftImageFilterNew2.cxx
 otbMeanShiftImageFilter2.cxx
 otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
-otbLabelImageRegionMergingFilter.cxx
+#otbLabelImageRegionMergingFilter.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
 otbBinaryImageDensityFunctionNew.cxx
