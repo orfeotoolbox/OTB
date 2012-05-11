@@ -14,3 +14,7 @@ OTB_CREATE_APPLICATION(NAME           StereoRectificationGridGenerator
 OTB_CREATE_APPLICATION(NAME           PixelWiseBlockMatching
                        SOURCES        otbPixelWiseBlockMatching.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           DisparityMapToElevationMap
+                       SOURCES        otbDisparityMapToElevationMap.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
