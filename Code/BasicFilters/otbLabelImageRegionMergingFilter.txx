@@ -189,7 +189,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
             att.maxValue[comp] = std::max(currentObjectAttributes.maxValue[comp], adjacentObjectAttributes.maxValue[comp]);
             }
           // Merge objects
-          if(labelIt->second->Size() >= adjLabelObject->Size())
+          if(labelObject->Size() >= adjLabelObject->Size())
             {
             m_LabelMap->MergeLabels(labelIt->first, adjLabel);
             m_LabelMap->GetLabelObject(labelIt->first)->SetAttribute(att);
