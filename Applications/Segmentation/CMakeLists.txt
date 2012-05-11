@@ -10,3 +10,9 @@ OTB_CREATE_APPLICATION(NAME           ConnectedComponentSegmentation
 OTB_CREATE_APPLICATION(NAME           HooverCompareSegmentation
                        SOURCES        otbHooverCompareSegmentation.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+                       
+OTB_CREATE_APPLICATION(NAME           LargeScaleSegmentation
+                       SOURCES        otbLargeScaleSegmentation.cxx
+                       LINK_LIBRARIES OTBBasicFilters;OTBOBIA;OTBOGRAdapters)
+                       
+                       
