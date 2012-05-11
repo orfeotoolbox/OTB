@@ -591,21 +591,39 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     }
   else
     {
-    // Couldn't crop the region (requested region is outside the largest
-    // possible region).  Throw an exception.
-    // store what we tried to request (prior to trying to crop)
-    horizDisp->SetRequestedRegion( inputDisparityRegion );
-    vertiDisp->SetRequestedRegion( inputDisparityRegion );
-
-    // build an exception
-    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    std::ostringstream msg;
-    msg << this->GetNameOfClass()
-                << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
-    e.SetDescription("Requested region is (at least partially) outside the largest possible region of disparity map.");
-    e.SetDataObject(horizDisp);
-    throw e;
+    // use empty region
+    typename DisparityMapType::RegionType emptyRegion;
+    
+    emptyRegion.SetIndex(horizDisp->GetLargestPossibleRegion().GetIndex());
+    emptyRegion.SetSize(0,0);
+    emptyRegion.SetSize(1,0);
+    
+    horizDisp->SetRequestedRegion( emptyRegion );
+    vertiDisp->SetRequestedRegion( emptyRegion );
+    if (maskDisp)
+      {
+      maskDisp->SetRequestedRegion( emptyRegion );
+      }
+    
+    // no exception : it can happen in this filter
+    if (0)
+      {
+      // Couldn't crop the region (requested region is outside the largest
+      // possible region).  Throw an exception.
+      // store what we tried to request (prior to trying to crop)
+      horizDisp->SetRequestedRegion( inputDisparityRegion );
+      vertiDisp->SetRequestedRegion( inputDisparityRegion );
+  
+      // build an exception
+      itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+      std::ostringstream msg;
+      msg << this->GetNameOfClass()
+                  << "::GenerateInputRequestedRegion()";
+      e.SetLocation(msg.str().c_str());
+      e.SetDescription("Requested region is (at least partially) outside the largest possible region of disparity map.");
+      e.SetDataObject(horizDisp);
+      throw e;
+      }
     }
 }
 
@@ -619,9 +637,17 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   
   const TOutputDEMImage * outputDEM = this->GetDEMOutput();
   
-  m_UsedInputSplits = m_InputSplitter->GetNumberOfSplits(horizDisp->GetRequestedRegion(), this->GetNumberOfThreads());
+  typename DisparityMapType::RegionType requestedRegion = horizDisp->GetRequestedRegion();
   
-  if (m_UsedInputSplits > 0 && m_UsedInputSplits <= this->GetNumberOfThreads())
+  m_UsedInputSplits = m_InputSplitter->GetNumberOfSplits(requestedRegion, this->GetNumberOfThreads());
+  
+  // ensure empty regions are not processed
+  if (requestedRegion.GetSize(0) == 0 && requestedRegion.GetSize(1) == 0)
+    {
+    m_UsedInputSplits = 0;
+    }
+  
+  if (m_UsedInputSplits <= this->GetNumberOfThreads())
     {
     m_TempDEMRegions.clear();
     
