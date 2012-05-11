@@ -24,10 +24,10 @@
 
 int otbMeanShiftImageFilter2(int argc, char * argv[])
 {
-  if (argc != 11)
+  if (argc != 11 && argc != 12)
     {
     std::cerr << "Usage: " << argv[0] <<
-    " infname spatialfname spectralfname metricfname iterationfname labelfname spatialBandwidth rangeBandwidth threshold maxiterationnumber"
+    " infname spatialfname spectralfname metricfname iterationfname labelfname spatialBandwidth rangeBandwidth threshold maxiterationnumber (useoptimization)"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -42,6 +42,12 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   const double       rangeBandwidth            = atof(argv[8]);
   const double       threshold                 = atof(argv[9]);
   const unsigned int maxiterationnumber        = atoi(argv[10]);
+  bool               useoptimization                 = true;
+  if(argc==12)
+    {
+      useoptimization           = atoi(argv[11])!=0;
+    }
+
   /* maxit - threshold */
 
   const unsigned int Dimension = 2;
@@ -70,6 +76,8 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   filter->SetThreshold(threshold);
   filter->SetMaxIterationNumber(maxiterationnumber);
   filter->SetInput(reader->GetOutput());
+
+  filter->SetModeSearchOptimization(useoptimization);
   //filter->SetNumberOfThreads(1);
   SpatialWriterType::Pointer writer1 = SpatialWriterType::New();
   WriterType::Pointer writer2 = WriterType::New();
