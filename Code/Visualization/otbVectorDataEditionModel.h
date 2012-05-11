@@ -26,6 +26,9 @@
 #include "otbVectorData.h"
 #include "otbVectorDataModel.h"
 
+#include "otbRemoteSensingRegion.h"
+#include "itkImageRegion.h"
+
 namespace otb
 {
 /** \class VectorDataEditionModel
@@ -72,6 +75,7 @@ public:
   void UpdatePoint( PointType srcPoint,  PointType dstPoint);
   void UpdateGeometryPosition(double tx, double ty);
   void DeleteSelectedGeometry();
+  void DeleteSelectedGeometriesInROI(itk::ImageRegion<2> rsRegion);
     
   
 protected:

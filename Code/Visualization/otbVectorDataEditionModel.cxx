@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "otbVectorDataEditionModel.h"
 
-#include "otbVectorDataFileWriter.h"
 #include "itkTimeProbe.h"
 
 
@@ -214,6 +213,74 @@ void VectorDataEditionModel::DeleteSelectedGeometry()
     // Delete the geometry
     this->DeleteGeometry();
     }
+}
+
+void VectorDataEditionModel
+::DeleteSelectedGeometriesInROI(itk::ImageRegion<2> rsRegion)
+{
+  itk::TimeProbe chrono;
+  chrono.Start();
+  
+  // From RemoteSensingRegion To Datanode (polygon)
+  DataNodeType::Pointer  regionNode = DataNodeType::New();
+  PolygonType::Pointer regionPolygon = PolygonType::New();
+  // Set the type of the datanode
+  regionNode->SetNodeId("FEATURE_POLYGON");
+  regionNode->SetNodeType(otb::FEATURE_POLYGON);
+  regionNode->SetPolygonExteriorRing(regionPolygon);
+  
+  // Add the verticies to the polygon
+  VertexType p;
+  VertexType ul,ur, ll, lr;
+  ul[0] = rsRegion.GetIndex()[0];
+  ul[1] = rsRegion.GetIndex()[1];
+  regionPolygon->AddVertex(ul);
+
+  ur[0] = rsRegion.GetIndex()[0] + rsRegion.GetSize()[0];
+  ur[1] = rsRegion.GetIndex()[1];
+  regionPolygon->AddVertex(ur);
+
+  ll[0] = rsRegion.GetIndex()[0] + rsRegion.GetSize()[0];
+  ll[1] = rsRegion.GetIndex()[1] + rsRegion.GetSize()[1];
+  regionPolygon->AddVertex(ll);
+
+  lr[0] = rsRegion.GetIndex()[0];
+  lr[1] = rsRegion.GetIndex()[1] + rsRegion.GetSize()[1];
+  regionPolygon->AddVertex(lr);
+
+  // Search the geometries within or intersecting the bounding region
+  // and delete them
+  itk::PreOrderTreeIterator<VectorDataType::DataTreeType> it(this->GetVectorData()->GetDataTree());
+  it.GoToBegin();
+  int count = 0;
+  int nbGeomDeleted = 0;
+  std::vector<unsigned int>   geomToDelete;
+  while (!it.IsAtEnd() )
+    {
+    if (it.Get()->IsPointFeature() || it.Get()->IsLineFeature() || it.Get()->IsPolygonFeature())
+      {
+      // check if the geometry intersects or is within the bounding box
+      if ( it.Get()->Intersects(regionNode) || it.Get()->Within(regionNode))
+        {
+        geomToDelete.push_back(count);
+        // this->SetSelectedGeometry(count);
+        // this->DeleteGeometry();
+        nbGeomDeleted++;
+        }
+      count++;
+      }
+    ++it;
+    }
+
+  for (unsigned int idx = 0 ; idx < geomToDelete.size(); idx++)
+    {
+    this->SetSelectedGeometry(geomToDelete[idx] - idx);
+    this->DeleteGeometry();
+    }
+
+  chrono.Stop();
+  std::cout<< "\tVectorDataEditionModel::DeleteWithinROI -> "<<  nbGeomDeleted << " geometries deleted / "
+           << count <<" in "  << chrono.GetMeanTime() << " seconds." <<std::endl;
 }
 
 }
