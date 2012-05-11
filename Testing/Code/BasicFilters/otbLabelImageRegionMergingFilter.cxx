@@ -80,6 +80,7 @@ int otbLabelImageRegionMergingFilter(int argc, char * argv[])
   MergeFilterType::Pointer mergeFilter = MergeFilterType::New();
   mergeFilter->SetInputLabelImage(filter->GetLabelOutput());
   mergeFilter->SetInputSpectralImage(filter->GetRangeOutput());
+  mergeFilter->SetRangeBandwidth(rangeBandwidth);
   LabelWriterType::Pointer mergeWriter = LabelWriterType::New();
   mergeWriter->SetFileName(labelmergedfname);
   mergeWriter->SetInput(mergeFilter->GetOutput());

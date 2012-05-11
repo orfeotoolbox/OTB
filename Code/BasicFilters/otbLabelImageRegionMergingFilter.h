@@ -29,6 +29,29 @@
 namespace otb
 {
 
+/** \class MinMaxAttibutes
+ *
+ * Contains attributes for a segmented region, representing the min and max
+ * spectral values in the region
+ */
+template <class PixelType>
+class MinMaxAttributes
+{
+public:
+  MinMaxAttributes() {}
+  MinMaxAttributes(PixelType _minValue, PixelType _maxValue) :
+    minValue(_minValue), maxValue(_maxValue) {}
+  MinMaxAttributes(PixelType _value) :
+    minValue(_value), maxValue(_value) {}
+
+  PixelType minValue;
+  PixelType maxValue;
+  friend std::ostream& operator<< (std::ostream& os, const MinMaxAttributes& ma) {
+    return os << "{ min: " << ma.minValue << " max: " << ma.maxValue << " }";
+  }
+};
+
+
 /** \class LabelImageRegionMergingFilter
  *
  *
@@ -84,10 +107,12 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, InputLabelImageType::ImageDimension);
 
   /** LabelMap typedefs */
-  typedef itk::AttributeLabelObject<InputLabelType, ImageDimension, SpectralPixelType> AttributeLabelObjectType;
+  typedef MinMaxAttributes<SpectralPixelType> AttributeType;
+  typedef itk::AttributeLabelObject<InputLabelType, ImageDimension, AttributeType > AttributeLabelObjectType;
   typedef otb::LabelImageToLabelMapWithAdjacencyFilter<OutputLabelImageType,
     otb::LabelMapWithAdjacency<AttributeLabelObjectType> > LabelMapFilterType;
   typedef typename LabelMapFilterType::OutputImageType LabelMapType;
+  typedef typename LabelMapType::LabelType             LabelType;
   typedef otb::LabelMapToLabelImageFilter<LabelMapType, OutputLabelImageType> LabelMapToLabelImageFilterType;
 
 
