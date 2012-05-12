@@ -70,7 +70,6 @@ public:
   // typedef otb::MeanShiftImageFilter2<FloatVectorImageType, LabelImageType> MeanShiftFilterType;
 
 
-
   typedef otb::StreamingVectorizedSegmentationOGR<FloatVectorImageType, MSEDISONSegmentationFilterType> MSEDIONStreamingVectorizedSegmentationOGRType;
 
 
