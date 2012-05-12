@@ -27,8 +27,9 @@
 // POSIX platforms.
 
 #include "kml/base/file.h"
-#include <stdlib.h>
-#include <string.h>
+#include <unistd.h>
+#include <cstdlib>
+#include <cstring>
 #include <sys/types.h>
 #include <sys/stat.h>
 
