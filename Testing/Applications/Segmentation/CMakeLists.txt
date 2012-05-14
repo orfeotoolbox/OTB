@@ -58,3 +58,13 @@ OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest
                              ${BASELINE_FILES}/apTvSeHooverCompareSegmentationTest.txt
                 	         ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
                      )
+                     
+#--- LargeScaleSegmentation ---#
+#TODO add validation data
+OTB_TEST_APPLICATION(NAME     apTuObLargeScaleSegmentationTest
+                     APP      LargeScaleSegmentation
+                     OPTIONS  -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                              -outvd ${TEMP}/apTuObLargeScaleSegmentationVectorData.shp
+                              -filter meanshiftedison
+                     )
+                     
