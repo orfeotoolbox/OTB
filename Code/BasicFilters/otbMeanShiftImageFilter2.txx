@@ -365,16 +365,19 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     }
 */
 
+  //TODO don't create mode table iterator when ModeSearchOptimization is set to false
+  m_ModeTable = ModeTableImageType::New();
+  m_ModeTable->SetRegions(inputPtr->GetRequestedRegion());
+  m_ModeTable->Allocate();
+  m_ModeTable->FillBuffer(0);
+
   if (m_ModeSearchOptimization)
     {
     // Image to store the status at each pixel:
     // 0 : no mode has been found yet
     // 1 : a mode has been assigned to this pixel
     // 2 : a mode will be assigned to this pixel
-    m_ModeTable = ModeTableImageType::New();
-    m_ModeTable->SetRegions(inputPtr->GetRequestedRegion());
-    m_ModeTable->Allocate();
-    m_ModeTable->FillBuffer(0);
+
 
     // Initialize counters for mode (also used for mode labeling)
     // Most significant bits of label counters are used to identify the thread
