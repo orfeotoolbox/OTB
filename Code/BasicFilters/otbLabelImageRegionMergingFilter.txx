@@ -164,7 +164,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 
       // Iterate over all adjacent regions and check for merge
       const typename LabelMapType::AdjacentLabelsContainerType & adjacentLabelsContainer = m_LabelMap->GetAdjacentLabels(curLabel);
-      typename LabelMapType::AdjacentLabelsContainerType::iterator adjIt = adjacentLabelsContainer.begin();
+      typename LabelMapType::AdjacentLabelsContainerType::const_iterator adjIt = adjacentLabelsContainer.begin();
       while (adjIt != adjacentLabelsContainer.end())
         {
         LabelType adjLabel = *adjIt;
@@ -195,7 +195,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
         ++adjIt;
         } // end of loop over adjacent labels
       // Merge when necessary
-      if(!pairs.empty() > 0)
+      if(!pairs.empty())
         {
         m_LabelMap->MergeLabels(pairs);
         // Update the attribute with the newly computed value
