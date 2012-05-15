@@ -22,14 +22,14 @@
 #include "otbImageFileReader.h"
 #include "otbGeometricSarSensorModelAdapter.h"
 
-int otbGeometricSarSenorModelAdapterNewTest(int argc, char* argv[])
+int otbGeometricSarSensorModelAdapterNewTest(int argc, char* argv[])
 {
   typedef otb::GeometricSarSensorModelAdapter SarSensorModelType;
   SarSensorModelType::Pointer masterPlatform = SarSensorModelType::New();
   return EXIT_SUCCESS;
 }
 
-int otbGeometricSarSenorModelAdapterTest(int argc, char* argv[])
+int otbGeometricSarSensorModelAdapterTest(int argc, char* argv[])
 {
  if (argc != 4)
     {

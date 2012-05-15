@@ -25,6 +25,6 @@ void RegisterTests()
 {
   REGISTER_TEST(otbPlatformPositionComputeBaselineNewTest);
   REGISTER_TEST(otbPlatformPositionComputeBaselineTest);
-  REGISTER_TEST(otbGeometricSarSenorModelAdapterNewTest);
-  REGISTER_TEST(otbGeometricSarSenorModelAdapterTest);
+  REGISTER_TEST(otbGeometricSarSensorModelAdapterNewTest);
+  REGISTER_TEST(otbGeometricSarSensorModelAdapterTest);
 }

@@ -20,20 +20,20 @@ ADD_TEST(uaTvPlatformPositionComputeBaselineTest
          ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(uaTvGeometricSarSenorModelAdapterNew
+ADD_TEST(uaTvGeometricSarSensorModelAdapterNew
          ${UtilitiesAdapters_TESTS1}
-         otbGeometricSarSenorModelAdapterNewTest)
+         otbGeometricSarSensorModelAdapterNewTest)
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(uaTvGeometricSarSenorModelAdapterTest
+ADD_TEST(uaTvGeometricSarSensorModelAdapterTest
          ${UtilitiesAdapters_TESTS1}
            --compare-ascii ${EPSILON_9}
-           ${BASELINE_FILES}/uaTvGeometricSarSenorModelAdapterTest.txt
-           ${TEMP}/uaTvGeometricSarSenorModelAdapterTest.txt
-         otbGeometricSarSenorModelAdapterTest
+           ${BASELINE_FILES}/uaTvGeometricSarSensorModelAdapterTest.txt
+           ${TEMP}/uaTvGeometricSarSensorModelAdapter_OUT.txt
+         otbGeometricSarSensorModelAdapterTest
          ${LARGEINPUT}/TERRASARX/ULURU/TSX1_SAR__SSC______HS_S_SRA_20090212T204239_20090212T204240/TSX1_SAR__SSC______HS_S_SRA_20090212T204239_20090212T204240.xml
          ${LARGEINPUT}/TERRASARX/ULURU/TSX1_SAR__SSC______HS_S_SRA_20090223T204240_20090223T204241/TSX1_SAR__SSC______HS_S_SRA_20090223T204240_20090223T204241.xml
-         ${TEMP}/uaTvGeometricSarSenorModelAdapter.txt)
+         ${TEMP}/uaTvGeometricSarSensorModelAdapter_OUT.txt)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 SET(UtilitiesAdapters_SRCS1
