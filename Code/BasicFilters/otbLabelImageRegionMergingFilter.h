@@ -77,6 +77,42 @@ public:
   }
 };
 
+/** \class SpectralAttribute
+ *
+ * Contains attributes for a segmented region, representing a spectral value in the region
+ */
+template <class PixelType>
+class SpectralAttribute
+{
+public:
+  SpectralAttribute() {}
+  SpectralAttribute(PixelType _value) :
+    spectralValue(_value) {}
+
+  PixelType spectralValue;
+
+  friend std::ostream& operator<< (std::ostream& os, const SpectralAttribute& sa) {
+    return os << sa.spectralValue;
+  }
+
+  bool IsSimilar(const SpectralAttribute &other, typename PixelType::ComponentType distance)
+  {
+    bool similar = true;
+    unsigned int numberOfComponentsPerPixel = spectralValue.Size();
+    for(unsigned int comp = 0; comp < numberOfComponentsPerPixel && similar; comp++)
+      {
+      if (vcl_abs(spectralValue[comp] - other.spectralValue[comp]) > distance)
+        similar = false;
+      }
+    return similar;
+  }
+
+  static SpectralAttribute Merge(const SpectralAttribute &att1, const SpectralAttribute &att2)
+  {
+    return att1;
+  }
+};
+
 
 /** \class LabelImageRegionMergingFilter
  *
@@ -134,6 +170,7 @@ public:
 
   /** LabelMap typedefs */
   typedef MinMaxAttributes<SpectralPixelType> AttributeType;
+  //typedef SpectralAttribute<SpectralPixelType> AttributeType;
   typedef itk::AttributeLabelObject<InputLabelType, ImageDimension, AttributeType > AttributeLabelObjectType;
   typedef otb::LabelImageToLabelMapWithAdjacencyFilter<OutputLabelImageType,
     otb::LabelMapWithAdjacency<AttributeLabelObjectType> > LabelMapFilterType;
