@@ -1258,6 +1258,15 @@ ADD_TEST(bfTuLabelImageRegionMergingFilterQB_Suburb ${BASICFILTERS_TESTS9}
         4 50 0.1 100
         )
 
+ADD_TEST(bfTuLabelImageRegionMergingFilterSPOT5 ${BASICFILTERS_TESTS9}
+        otbLabelImageRegionMergingFilter
+        ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+        ${TEMP}/bfLabelImageRegionMergingFilterSpectralOutput_SPOT5.tif
+        ${TEMP}/bfLabelImageRegionMergingFilterLabelOutput_SPOT5.tif
+        ${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
+        4 10 0.1 100
+        )
+
 IF(OTB_DATA_USE_LARGEINPUT)
 #
 #ADD_TEST(bfTvMeanShiftImageFilterValidLargeInput ${BASICFILTERS_TESTS9}
