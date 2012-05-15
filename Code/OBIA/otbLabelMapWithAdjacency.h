@@ -90,7 +90,7 @@ public:
   /** Add a given label to the adjacent labels set of another label */
   void AddAdjacentLabel(LabelType label1, LabelType label2)
   {
-    if(m_AdjacencyMap.find(label1)!=m_AdjacencyMap.end())
+    if(m_AdjacencyMap.find(label1) != m_AdjacencyMap.end())
       {
       m_AdjacencyMap[label1].insert(label2);
       }
@@ -105,7 +105,7 @@ public:
    /** Clear the adjacent labels of a given label */
   void ClearAdjacentLabels(LabelType label)
   {
-    if(m_AdjacencyMap.find(label)!=m_AdjacencyMap.end())
+    if(m_AdjacencyMap.find(label) != m_AdjacencyMap.end())
       {
       m_AdjacencyMap[label].clear();
       }
@@ -114,7 +114,7 @@ public:
   /** Remove the given adjacent label from the given label */
   void RemoveAdjacentLabel(LabelType label1, LabelType label2)
   {
-    if(m_AdjacencyMap.find(label1)!=m_AdjacencyMap.end())
+    if(m_AdjacencyMap.find(label1) != m_AdjacencyMap.end())
       {
       m_AdjacencyMap[label1].erase(label2);
       }
@@ -145,7 +145,7 @@ public:
       }
 
     // Check if two labels are adjacent
-    if(m_AdjacencyMap.find(label1)!=m_AdjacencyMap.end() && !m_AdjacencyMap[label1].count(label2))
+    if(m_AdjacencyMap.find(label1) != m_AdjacencyMap.end() && !m_AdjacencyMap[label1].count(label2))
       {
       itkExceptionMacro(<<"Labels "<<label1<<" and "<<label2<<" are not adjacent, can not merge.");
       }
@@ -159,7 +159,8 @@ public:
     typename LabelObjectType::Pointer loOut = mergeFunctor(lo1, lo2);
 
     // Move every occurence of label2 to label1 in adjacency map
-    for(typename AdjacentLabelsContainerType::iterator it = m_AdjacencyMap[label2].begin(); it != m_AdjacencyMap[label2].end(); ++it)
+    for(typename AdjacentLabelsContainerType::iterator it = m_AdjacencyMap[label2].begin();
+        it != m_AdjacencyMap[label2].end(); ++it)
       {
       m_AdjacencyMap[*it].erase(label2);
       if(*it != label1)
