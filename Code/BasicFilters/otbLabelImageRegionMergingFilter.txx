@@ -172,23 +172,11 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
         const AttributeType &adjacentObjectAttributes = adjLabelObject->GetAttribute();
 
         // Check condition to merge regions
-        bool doMerge = true;
-        for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel && doMerge; comp++)
-          {
-          if (std::min(currentObjectAttributes.minValue[comp], adjacentObjectAttributes.minValue[comp]) + m_RangeBandwidth < std::max(currentObjectAttributes.maxValue[comp], adjacentObjectAttributes.maxValue[comp]) )
-            {
-            doMerge = false;
-            }
-          }
 
-        if(doMerge)
+        if ( currentObjectAttributes.IsSimilar(adjacentObjectAttributes, m_RangeBandwidth) )
           {
           // Update output attribute
-          for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
-            {
-            currentObjectAttributes.minValue[comp] = std::min(currentObjectAttributes.minValue[comp], adjacentObjectAttributes.minValue[comp]);
-            currentObjectAttributes.maxValue[comp] = std::max(currentObjectAttributes.maxValue[comp], adjacentObjectAttributes.maxValue[comp]);
-            }
+          currentObjectAttributes = AttributeType::Merge(currentObjectAttributes, adjacentObjectAttributes);
           // Add adjacent label to the merge list
           pairs.push_back(LabelPairType(curLabel, adjLabel));
           }

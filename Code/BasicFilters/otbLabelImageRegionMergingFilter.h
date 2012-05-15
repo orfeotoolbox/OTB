@@ -49,6 +49,32 @@ public:
   friend std::ostream& operator<< (std::ostream& os, const MinMaxAttributes& ma) {
     return os << "{ min: " << ma.minValue << " max: " << ma.maxValue << " }";
   }
+
+  bool IsSimilar(const MinMaxAttributes &other, typename PixelType::ComponentType distance)
+  {
+    bool similar = true;
+    unsigned int numberOfComponentsPerPixel = minValue.Size();
+    for(unsigned int comp = 0; comp < numberOfComponentsPerPixel && similar; comp++)
+      {
+      if (std::min(minValue[comp], other.minValue[comp]) + distance < std::max(maxValue[comp], other.maxValue[comp]) )
+        {
+        similar = false;
+        }
+      }
+    return similar;
+  }
+
+  static MinMaxAttributes Merge(const MinMaxAttributes &att1, const MinMaxAttributes &att2)
+  {
+    MinMaxAttributes output(att1);
+    unsigned int numberOfComponentsPerPixel = att1.minValue.Size();
+    for(unsigned int comp = 0; comp < numberOfComponentsPerPixel; comp++)
+      {
+      output.minValue[comp] = std::min(att1.minValue[comp], att2.minValue[comp]);
+      output.maxValue[comp] = std::max(att1.maxValue[comp], att2.maxValue[comp]);
+      }
+    return output;
+  }
 };
 
 
