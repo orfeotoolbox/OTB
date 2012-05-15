@@ -25,6 +25,7 @@
 #include "itkTimeProbe.h"
 #include <boost/foreach.hpp>
 #include <stdio.h>
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -164,7 +165,7 @@ PersistentImageToOGRDataFilter<TImage>
   
   dstLayer.ogr().CommitTransaction();
   chrono.Stop();
-  std::cout<< "write ogr tile took " << chrono.GetTotal() << " sec"<<std::endl;
+  otbMsgDebugMacro(<< "write ogr tile took " << chrono.GetTotal() << " sec");
   
 }
 

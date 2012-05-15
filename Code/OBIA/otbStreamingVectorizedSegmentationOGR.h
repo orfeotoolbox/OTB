@@ -145,6 +145,12 @@ public:
   itkSetMacro(MinimumObjectSize, unsigned int);
   itkGetMacro(MinimumObjectSize, unsigned int);
   
+  itkSetMacro(Simplify, bool);
+  itkGetMacro(Simplify, bool);
+  
+  itkSetMacro(SimplificationTolerance, double);
+  itkGetMacro(SimplificationTolerance, double);
+  
   virtual void SetInputMask(const LabelImageType *mask);
   virtual const LabelImageType * GetInputMask(void);
 
@@ -162,7 +168,7 @@ private:
   virtual OGRDataSourcePointerType ProcessTile();
   
   //std::string m_FieldName;
-  LabelPixelType m_TileMaxLabel;
+  int m_TileMaxLabel;
   LabelPixelType m_StartLabel;
   typename SegmentationFilterType::Pointer m_SegmentationFilter;
   
@@ -170,6 +176,8 @@ private:
   bool m_Use8Connected;
   bool m_FilterSmallObject;
   unsigned int m_MinimumObjectSize;
+  bool m_Simplify;
+  double m_SimplificationTolerance;
   
   
 };
@@ -288,6 +296,26 @@ public:
   const unsigned int GetMinimumObjectSize()
   {
      return this->GetFilter()->GetMinimumObjectSize();
+  }
+  
+  void SetSimplify(bool flag)
+  {
+     this->GetFilter()->SetSimplify(flag);
+  }
+  
+  const bool GetSimplify()
+  {
+     return this->GetFilter()->GetSimplify();
+  }
+  
+  void SetSimplificationTolerance(const double & tol)
+  {
+     this->GetFilter()->SetSimplificationTolerance(tol);
+  }
+  
+  const double GetSimplificationTolerance()
+  {
+     return this->GetFilter()->GetSimplificationTolerance();
   }
   
 protected:

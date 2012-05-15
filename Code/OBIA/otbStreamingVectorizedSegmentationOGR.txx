@@ -27,6 +27,7 @@
 #include "itkAffineTransform.h"
 
 #include "itkTimeProbe.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -34,7 +35,7 @@ namespace otb
 template <class TImageType, class TSegmentationFilter>
 PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 ::PersistentStreamingLabelImageToOGRDataFilter() : m_TileMaxLabel(0), m_StartLabel(0), m_Use8Connected(false),
-  m_FilterSmallObject(false), m_MinimumObjectSize(1)
+  m_FilterSmallObject(false), m_MinimumObjectSize(1),m_Simplify(false), m_SimplificationTolerance(0.3)
 {
    this->SetNumberOfInputs(3);
    this->SetNumberOfRequiredInputs(2);
@@ -83,7 +84,7 @@ typename PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationF
 PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 ::ProcessTile()
 {
-  std::cout<< "tile number : " << m_TileNumber <<std::endl;
+  otbMsgDebugMacro(<< "tile number : " << m_TileNumber);
   m_TileNumber = m_TileNumber + 1;
   itk::TimeProbe tileChrono;
   tileChrono.Start();
@@ -110,22 +111,10 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   m_SegmentationFilter->Update();
   
   chrono1.Stop();
-  std::cout<< "segmentation took " << chrono1.GetTotal() << " sec"<<std::endl;
-  
-  //RelabelComponentImageFilter to suppress small area
-  typename RelabelComponentImageFilterType::Pointer relabelComponentFilter = RelabelComponentImageFilterType::New();
-  if(m_FilterSmallObject)
-  {
-     relabelComponentFilter->SetInput(dynamic_cast<LabelImageType *>(m_SegmentationFilter->GetOutputs().at(labelImageIndex).GetPointer()));
-     relabelComponentFilter->SetMinimumObjectSize(m_MinimumObjectSize);
-     relabelComponentFilter->Update();
-     
-     labelImageToOGRDataFilter->SetInputMask(relabelComponentFilter->GetOutput());
-  }
-  
+  otbMsgDebugMacro(<<"segmentation took " << chrono1.GetTotal() << " sec");
+
   itk::TimeProbe chrono2;
   chrono2.Start();
-  
   typename LabelImageType::ConstPointer inputMask = this->GetInputMask();
   if (!inputMask.IsNull())
   {
@@ -135,64 +124,58 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
      maskExtract->SetInput( this->GetInputMask() );
      maskExtract->SetExtractionRegion( this->GetInputMask()->GetRequestedRegion() );
      maskExtract->Update();
-      
      // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
      maskExtract->GetOutput()->SetMetaDataDictionary(this->GetInputMask()->GetMetaDataDictionary());
-     
-     if(m_FilterSmallObject)
-     {
-        typename MultiplyImageFilterType::Pointer multiplyImageFilter = MultiplyImageFilterType::New();
-        multiplyImageFilter->SetInput1(maskExtract->GetOutput());
-        multiplyImageFilter->SetInput2(relabelComponentFilter->GetOutput());
-        multiplyImageFilter->Update();
-        labelImageToOGRDataFilter->SetInputMask(multiplyImageFilter->GetOutput());
-     }
-     else
-     {
-        labelImageToOGRDataFilter->SetInputMask(maskExtract->GetOutput());
-     }
+
+     labelImageToOGRDataFilter->SetInputMask(maskExtract->GetOutput());
   }
+
   labelImageToOGRDataFilter->SetInput(dynamic_cast<LabelImageType *>(m_SegmentationFilter->GetOutputs().at(labelImageIndex).GetPointer()));
   labelImageToOGRDataFilter->SetFieldName(this->GetFieldName());
   labelImageToOGRDataFilter->SetUse8Connected(m_Use8Connected);
   labelImageToOGRDataFilter->Update();
   
   chrono2.Stop();
-  std::cout<< "vectorization took " << chrono2.GetTotal() << " sec"<<std::endl;
+  otbMsgDebugMacro(<< "vectorization took " << chrono2.GetTotal() << " sec");
 
-
-  //Relabeling
+  //Relabeling & simplication of geometries & filtering small objects
   itk::TimeProbe chrono3;
   chrono3.Start();
   OGRDataSourcePointerType tmpDS = const_cast<OGRDataSourceType *>(labelImageToOGRDataFilter->GetOutput());
   OGRLayerType tmpLayer = tmpDS->GetLayer(0);
 
-  unsigned int ind = 0;
-  std::map<int,int> relabelMap;
-  typename OGRLayerType::const_iterator featIt = tmpLayer.begin();
-  for(; featIt!=tmpLayer.end(); ++featIt)
-  {
-     ogr::Field field = (*featIt)[0];
-     int fieldValue = field.GetValue<int>();
-     if (relabelMap.find(fieldValue) == relabelMap.end())
-     {
-         relabelMap[fieldValue] = static_cast<int>(ind);
-         ind = ind + 1;
-     }
-  }
+  typename OGRLayerType::iterator featIt = tmpLayer.begin();
   for(featIt = tmpLayer.begin(); featIt!=tmpLayer.end(); ++featIt)
   {
      ogr::Field field = (*featIt)[0];
-     int fieldValue = field.GetValue<int>();
-     int newFieldValue = relabelMap[fieldValue] + m_TileMaxLabel;
      field.Unset();
-     field.SetValue(newFieldValue);
+     field.SetValue(m_TileMaxLabel);
+     m_TileMaxLabel++;
+
+     //Simplify the geometry
+     if (m_Simplify)
+     {
+        (*featIt).SetGeometry((*featIt).GetGeometry()->SimplifyPreserveTopology(m_SimplificationTolerance));
+     }
      //Need to rewrite the feature otherwise changes are not considered.
      tmpLayer.SetFeature(*featIt);
+     
+     //Filter small objects.
+     if(m_FilterSmallObject)
+     {
+        double area = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->get_Area();
+        //convert into pixel coordinates
+        typename InputImageType::SpacingType spacing = this->GetInput()->GetSpacing();
+        double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
+        otbMsgDebugMacro(<<"DN = "<<field.GetValue<int>()<<", area = "<<pixelsArea);
+        if( pixelsArea < m_MinimumObjectSize )
+        {
+           tmpLayer.DeleteFeature((*featIt).GetFID());
+        }
+     }
   }
-  m_TileMaxLabel = m_TileMaxLabel + relabelMap.size();
   chrono3.Stop();
-  std::cout<< "relabel took " << chrono3.GetTotal() << " sec"<<std::endl;
+  otbMsgDebugMacro(<< "relabeling, filtering small objects and simplifying geometries took " << chrono3.GetTotal() << " sec");
   
   return tmpDS;
 }

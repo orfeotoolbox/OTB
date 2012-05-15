@@ -258,8 +258,10 @@ ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
      5
      15.
      100
-     0 #filter small object
+     1 #filter small object
      200 #minimum size of object
+     0 #Simplify Flag
+     0.2 #Simplification tolerance
      )
 
 # -------            otb::FusionOGRTileFilter   -------------
