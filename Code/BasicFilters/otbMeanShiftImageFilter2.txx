@@ -440,7 +440,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
 
   // An iterator on the neighborhood of the current pixel (in joint
   // spatial-range domain)
-  itk::ImageRegionConstIterator<RealVectorImageType> it(jointImage, neighborhoodRegion);
+  otb::FastImageRegionConstIterator<RealVectorImageType> it(jointImage, neighborhoodRegion);
+  //itk::ImageRegionConstIterator<RealVectorImageType> it(jointImage, neighborhoodRegion);
 
   it.GoToBegin();
   while(!it.IsAtEnd())
@@ -448,7 +449,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputMetricIm
     RealType norm2;
     RealType weight;
 
-    jointNeighbor = it.Get();
+    jointNeighbor.SetData(const_cast<RealType*>(it.GetPixelPointer()));
 
     // Compute the squared norm of the difference
     // This is the L2 norm, TODO: replace by the templated norm

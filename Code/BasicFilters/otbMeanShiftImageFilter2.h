@@ -21,6 +21,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "itkImageToImageFilter.h"
+#include "itkImageRegionConstIterator.h"
 #include <vcl_algorithm.h>
 
 
@@ -121,6 +122,45 @@ private:
 
 class NormL2
 {
+};
+
+/** \class FastImageRegionConstIterator
+ *
+ * Iterator for reading pixels over an image region, specialized for faster
+ * access to pixels in vector images through the method GetPixelPointer
+ */
+
+
+template<typename TImage>
+class FastImageRegionConstIterator
+  : public itk::ImageRegionConstIterator<TImage>
+{
+public:
+  /** Standard class typedef. */
+  typedef FastImageRegionConstIterator<TImage>   Self;
+  typedef itk::ImageRegionConstIterator<TImage>  Superclass;
+
+  typedef typename Superclass::ImageType    ImageType;
+  typedef typename Superclass::RegionType   RegionType;
+
+  typedef typename TImage::PixelType         PixelType;
+  typedef typename TImage::InternalPixelType InternalPixelType;
+
+  itkTypeMacro(FastImageRegionConstIterator, ImageRegionConstIterator);
+
+  FastImageRegionConstIterator() : Superclass() {}
+  FastImageRegionConstIterator(const ImageType *ptr, const RegionType &region)
+    : Superclass(ptr, region)
+  {
+    m_NumberOfComponentsPerPixel = ptr->GetNumberOfComponentsPerPixel();
+  }
+
+  inline const InternalPixelType * GetPixelPointer() const
+  {
+    return this->m_Buffer + (this->m_Offset * m_NumberOfComponentsPerPixel);
+  }
+
+  unsigned int m_NumberOfComponentsPerPixel;
 };
 
 /** \class MeanShiftImageFilter2
