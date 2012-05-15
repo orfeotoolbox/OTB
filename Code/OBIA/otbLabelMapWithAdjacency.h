@@ -119,7 +119,7 @@ public:
       m_AdjacencyMap[label1].erase(label2);
       }
   }
-  
+
   /** Get the set of adjacent labels from a given label */
   const AdjacentLabelsContainerType & GetAdjacentLabels(LabelType label) const
   {
@@ -149,7 +149,7 @@ public:
       {
       itkExceptionMacro(<<"Labels "<<label1<<" and "<<label2<<" are not adjacent, can not merge.");
       }
-    
+
     // Retrieve the two label objects
     typename LabelObjectType::Pointer lo1 = this->GetLabelObject(label1);
     typename LabelObjectType::Pointer lo2 = this->GetLabelObject(label2);
@@ -157,23 +157,21 @@ public:
     // Merges label object
     MergeFunctorType mergeFunctor;
     typename LabelObjectType::Pointer loOut = mergeFunctor(lo1, lo2);
-    
-    // Remove label2 from adjancency table of label1
-    m_AdjacencyMap[label1].erase(label2);
-    m_AdjacencyMap.erase(label2);
 
     // Move every occurence of label2 to label1 in adjacency map
-    for(typename AdjacencyMapType::iterator it = m_AdjacencyMap.begin(); it!=m_AdjacencyMap.end(); ++it)
+    for(typename AdjacentLabelsContainerType::iterator it = m_AdjacencyMap[label2].begin(); it != m_AdjacencyMap[label2].end(); ++it)
       {
-      // Check if label2 is in the adjacent labels
-      if(it->second.count(label2))
+      m_AdjacencyMap[*it].erase(label2);
+      if(*it != label1)
         {
-        it->second.erase(label2);
-        it->second.insert(label1);
-        m_AdjacencyMap[label1].insert(it->first);
+        m_AdjacencyMap[*it].insert(label1);
+        m_AdjacencyMap[label1].insert(*it);
         }
       }
-    
+
+    // Remove label2 from adjancency map
+    m_AdjacencyMap.erase(label2);
+
     // Remove label object corresponding to label2
     this->RemoveLabel(label2);
 
@@ -239,7 +237,7 @@ protected:
 private:
   LabelMapWithAdjacency(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
- 
+
   /** The adjacency map */
   AdjacencyMapType m_AdjacencyMap;
 };
