@@ -24,15 +24,11 @@
 namespace otb
 {
 
-// class OGRDataSourceWrapper;
-
 /** \class LabelImageToOGRDataSourceFilter
- *  \brief this class uses GDALPolygonize method to transform a Label image into
- *         a OGRDataSource. It is a non-streamed version.
- *
+ *  this class uses \c GDALPolygonize method to transform a Label image into
+ *  a "memory" \c ogr::DataSource. It is a non-streamed version.
  *
  *  \ingroup OBIA
- *
  *
  */
 
@@ -72,16 +68,34 @@ public:
   virtual void SetInput(const InputImageType *input);
   virtual const InputImageType * GetInput(void);
   
-  /** Set/Get the input mask image. All pixels in the mask with a value of 0 will not be considered suitable for collection as polygons */
+  /** Set the input mask image.
+   * All pixels in the mask with a value of 0 will not be considered
+   * suitable for vectorization.
+   */
   virtual void SetInputMask(const InputImageType *input);
   virtual const InputImageType * GetInputMask(void);
   
+  /** Set the Field Name in which labels will be written. (default is "DN")
+   * A field "FieldName" of type integer is created in the output memory layer.
+   */
   itkSetMacro(FieldName, std::string);
+  /**
+   * Return the Field name in which labels have been written.
+   */
   itkGetMacro(FieldName, std::string);
   
+  /**
+   * Set the value of 8-connected neighborhood option used in \c GDALPolygonize
+   */
   itkSetMacro(Use8Connected, bool);
+  /**
+   * Get the value of 8-connected neighborhood option used in \c GDALPolygonize
+   */
   itkGetMacro(Use8Connected, bool);
   
+  /**
+   * Get the output \c ogr::DataSource which is a "memory" datasource.
+   */
   const OGRDataSourceType * GetOutput();
   
 protected:

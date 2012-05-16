@@ -87,12 +87,11 @@ class LabeledOutputAccessor<MeanShiftImageFilter2<TInputImage, TOutputImage, TOu
 };
 
 /** \class PersistentStreamingLabelImageToOGRDataFilter
- *  \brief this class uses GDALPolygonize method to transform a Label image into a VectorData.
- *
- *  This filter is a generic PersistentImageFilter, which encapsulate
- *  the LabelImageToVectorData filter.
- *
- * \sa PersistentImageToOGRDataFilter
+ * \brief This filter is a framework for large scale segmentation.
+ * It is a persistent filter that process the input image tile by tile.
+ * The segmentation filter is set by the user using \c SetSegmentationFilter.
+ * The result of the segmentation of each tile is vectorized using \c GDALPolygonize()
+ * and then the result is written in a \c ogr::DataSource. 
  *
  */
 template <class TImageType,  class TSegmentationFilter>
@@ -127,30 +126,54 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PersistentStreamingLabelImageToOGRDataFilter, PersistentImageToOGRDataFilter);
   
+  /** Return a pointer to the segmentation filter used. */
   itkGetObjectMacro(SegmentationFilter, SegmentationFilterType);
   
+  /** Set the first Label value (default is 1). Incremental step is 1.*/
   void SetStartLabel(const LabelPixelType & label)
   {
      m_StartLabel = label;
      m_TileMaxLabel = label;
   }
+  /** Return the first label value*/
   itkGetMacro(StartLabel, LabelPixelType);
   
+  /**
+   * Set the value of 8-connected neighborhood option used in \c LabelImageToOGRDataSourceFilter
+   */
   itkSetMacro(Use8Connected, bool);
+  /**
+   * Get the value of 8-connected neighborhood option used in \c LabelImageToOGRDataSourceFilter
+   */
   itkGetMacro(Use8Connected, bool);
   
+  /** Set the option for filtering small objects. Default to false. */
   itkSetMacro(FilterSmallObject, bool);
+  /** Return the value of filter small objects option.*/
   itkGetMacro(FilterSmallObject, bool);
   
+  /** Set the minimum object size (in pixels) in case FilterSmallObject option is true.*/
   itkSetMacro(MinimumObjectSize, unsigned int);
+  /** Get the minimum object size.*/
   itkGetMacro(MinimumObjectSize, unsigned int);
   
+  /** Option for simplifying geometries. Default to false.*/
   itkSetMacro(Simplify, bool);
   itkGetMacro(Simplify, bool);
   
+  /** Set the tolerance value for simplifying geometries. 
+   * \sa \c OGRGeometry::Simplify() \c OGRGeometry::SimplifyPreserveTopology()
+   */
   itkSetMacro(SimplificationTolerance, double);
+  /** Get the tolerance value for simplifying geometries. 
+   * \sa \c OGRGeometry::Simplify() \c OGRGeometry::SimplifyPreserveTopology()
+   */
   itkGetMacro(SimplificationTolerance, double);
   
+  /** Set/Get the input mask image.
+   * All pixels in the mask with a value of 0 will not be considered
+   * suitable for vectorization.
+   */
   virtual void SetInputMask(const LabelImageType *mask);
   virtual const LabelImageType * GetInputMask(void);
 
@@ -167,7 +190,7 @@ private:
 
   virtual OGRDataSourcePointerType ProcessTile();
   
-  //std::string m_FieldName;
+
   int m_TileMaxLabel;
   LabelPixelType m_StartLabel;
   typename SegmentationFilterType::Pointer m_SegmentationFilter;
@@ -182,6 +205,15 @@ private:
   
 };
 
+/** \class StreamingVectorizedSegmentationOGR
+ * \brief This filter is a framework for large scale segmentation.
+ * It is a persistent filter that process the input image tile by tile.
+ * The segmentation filter is set by the user using \c SetSegmentationFilter.
+ * The result of the segmentation of each tile is vectorized using \c GDALPolygonize()
+ * and then the result is written in a \c ogr::DataSource. 
+ *
+ *
+ */
 template <class TImageType,  class TSegmentationFilter>
 class ITK_EXPORT StreamingVectorizedSegmentationOGR :
 public PersistentFilterStreamingDecorator<PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter> >
@@ -210,6 +242,7 @@ public:
   typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType,
                TSegmentationFilter>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
 
+  /** Set the input image. */
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);
@@ -218,7 +251,10 @@ public:
   {
     return this->GetFilter()->GetInput();
   }
-  
+  /** Set/Get the input mask image.
+   * All pixels in the mask with a value of 0 will not be considered
+   * suitable for vectorization.
+   */
   void SetInputMask(LabelImageType * mask)
   {
     this->GetFilter()->SetInputMask(mask);
@@ -227,7 +263,7 @@ public:
   {
     return this->GetFilter()->GetInputMask();
   }
-  
+  /** Set the \c ogr::DataSource in which the layer LayerName will be created. */
   void SetOGRDataSource( OGRDataSourcePointerType ogrDS )
   {
     this->GetFilter()->SetOGRDataSource(ogrDS);
@@ -237,7 +273,9 @@ public:
   {
      return this->GetFilter()->GetSegmentationFilter();
   }
-  
+  /** Set the Field Name in which labels will be written. (default is "DN")
+   * A field FieldName is created in the output layer LayerName. The Field type is Integer.
+   */
   void SetFieldName(const std::string & field)
   {
      this->GetFilter()->SetFieldName(field);
@@ -248,16 +286,17 @@ public:
      return this->GetFilter()->GetFieldName();
   }
   
+  /** Set the first Label value (default is 1). Incremental step is 1.*/
   void SetStartLabel(const LabelPixelType & label)
   {
      this->GetFilter()->SetStartLabel(label);
   }
-  
+  /** Return the first label value*/
   const LabelPixelType & GetStartLabel()
   {
      return this->GetFilter()->GetStartLabel();
   }
-  
+  /** Set/Get the name of the output layer to write in the input \c ogr::DataSource. */
   void SetLayerName(const std::string & fileName)
   {
      this->GetFilter()->SetLayerName(fileName);
@@ -267,7 +306,9 @@ public:
   {
      this->GetFilter()->Initialize();
   }
-  
+  /**
+   * Set the value of 8-connected neighborhood option used in \c LabelImageToOGRDataSourceFilter
+   */
   void SetUse8Connected(bool flag)
   {
      this->GetFilter()->SetUse8Connected(flag);
@@ -277,7 +318,7 @@ public:
   {
      return this->GetFilter()->GetUse8Connected();
   }
-  
+  /** Set the option for filtering small objects. Default to false. */
   void SetFilterSmallObject(bool flag)
   {
      this->GetFilter()->SetFilterSmallObject(flag);
@@ -287,7 +328,7 @@ public:
   {
      return this->GetFilter()->GetFilterSmallObject();
   }
-  
+  /** Set the minimum object size (in pixels) in case FilterSmallObject option is true.*/
   void SetMinimumObjectSize(const unsigned int & size)
   {
      this->GetFilter()->SetMinimumObjectSize(size);
@@ -297,7 +338,7 @@ public:
   {
      return this->GetFilter()->GetMinimumObjectSize();
   }
-  
+  /** Option for simplifying geometries. Default to false.*/
   void SetSimplify(bool flag)
   {
      this->GetFilter()->SetSimplify(flag);
@@ -307,7 +348,9 @@ public:
   {
      return this->GetFilter()->GetSimplify();
   }
-  
+  /** Set the tolerance value for simplifying geometries. 
+   * \sa \c OGRGeometry::Simplify() \c OGRGeometry::SimplifyPreserveTopology()
+   */
   void SetSimplificationTolerance(const double & tol)
   {
      this->GetFilter()->SetSimplificationTolerance(tol);

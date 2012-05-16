@@ -121,7 +121,9 @@ PersistentImageToOGRDataFilter<TImage>
    ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, NULL);
    OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
    
-   //Handle the case of shapefile ....
+   //Handle the case of shapefile. A shapefile is a layer and not a datasource.
+   //The layer name in a shapefile is the shapefile's name.
+   //This is not the case for a database as sqlite or PG.
    if (ogrDS->GetLayersCount() == 1)
    {
       ogrDS->GetLayer(0).CreateField(field, true);
@@ -150,10 +152,10 @@ PersistentImageToOGRDataFilter<TImage>
                           ? ogrDS->GetLayer(0)
                           : ogrDS->GetLayer(m_LayerName);
   
-  //Copy features in the output layer
+  
+  //Copy features contained in the memory layer (srcLayer) in the output layer
   itk::TimeProbe chrono;
   chrono.Start();
-
   dstLayer.ogr().StartTransaction();
   OGRLayerType::const_iterator featIt = srcLayer.begin();
   for(; featIt!=srcLayer.end(); ++featIt)

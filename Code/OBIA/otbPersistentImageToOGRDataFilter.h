@@ -35,8 +35,7 @@ namespace otb
 /** \class PersistentImageToOGRDataFilter
  *  \brief Perform vectorization in a persistent way.
  *
- *  This filter is a generic PersistentImageFilter, which encapsulate any filter
- *  which produces OGR data from an input Image.
+ *  This filter is a generic PersistentImageFilter.
  *
  *
  * \sa PersistentImageFilter
@@ -71,26 +70,38 @@ public:
 
 
   void AllocateOutputs();
-
   virtual void Reset(void);
-
   virtual void Synthetize(void);
   
+  /** This method creates the output layer in the OGRDataSource set by the user.
+   * The name of the layer is set by \c SetLayerName .
+   * \note This methode must be called before the call of Update .
+   */
   virtual void Initialize(void);
   
-  /** Set/Get the name of the output layer to write in the input ogrDataSource. */
+  /** Set/Get the name of the output layer to write in the \c ogr::DataSource. */
   itkSetStringMacro(LayerName);
   itkGetStringMacro(LayerName);
   
-  /** Set/Get the Field Name of the ogr file in which labels will be written. (default is "DN")*/
+  /** Set the Field Name in which labels will be written. (default is "DN")
+   * A field FieldName is created in the output layer LayerName. The Field type is Integer.
+   */
   itkSetMacro(FieldName, std::string);
+  
+  /**
+   * Return the Field name in which labels have been written.
+   */
   itkGetMacro(FieldName, std::string);
   
-  /** Get the size of the tile used for streaming. */
+  /** Get the size of the tile used for streaming.
+   * This is useful if you use for example the \c OGRFusionTileFilter
+   * for fusioning streaming tiles.
+   */
   itkGetMacro(StreamSize, SizeType);
   
-  /** Set/Get the input OGRDataSource */
+  /** Set the \c ogr::DataSource in which the layer LayerName will be created. */
   void SetOGRDataSource( OGRDataSourcePointerType ogrDS );
+  /** Get the \c ogr::DataSource output. */
   OGRDataSourceType * GetOGRDataSource( void );
 
 
@@ -115,7 +126,6 @@ private:
   std::string m_LayerName;
   OGRwkbGeometryType m_GeometryType;
   SizeType m_StreamSize;
-  //OGRDataSourcePointerType m_DataSource;
 
 }; // end of class
 } // end namespace otb
