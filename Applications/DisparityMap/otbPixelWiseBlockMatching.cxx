@@ -112,12 +112,14 @@ private:
     m_SSDSubPixFilter = SSDSubPixelDisparityFilterType::New();
     m_NCCSubPixFilter = NCCSubPixelDisparityFilterType::New();
     m_LPSubPixFilter  = LPSubPixelDisparityFilterType::New();
-    m_VarianceFilter  = VarianceFilterType::New();
-    m_BandMathFilter  = BandMathFilterType::New();
+    m_LVarianceFilter = VarianceFilterType::New();
+    m_RVarianceFilter = VarianceFilterType::New();
+    m_LBandMathFilter = BandMathFilterType::New();
+    m_RBandMathFilter = BandMathFilterType::New();
     m_OutputImageList = ImageListType::New();
     m_ImageListFilter = ImageListToVectorImageFilterType::New();
-    m_HMedianFilter    = MedianFilterType::New();
-    m_VMedianFilter    = MedianFilterType::New();
+    m_HMedianFilter   = MedianFilterType::New();
+    m_VMedianFilter   = MedianFilterType::New();
   }
 
   void DoInit()
@@ -126,7 +128,14 @@ private:
     SetDescription("Performs block-matching to estimate pixel-wise disparities between two images");
 
     SetDocName(" Pixel-wise Block-Matching");
-    SetDocLongDescription("This application allows to performs block-matching to estimate pixel-wise disparities between two images. The application allows to choose the block-matching method to use. It also allows to input a mask (related to the left input image) of pixels for which the disparity should be investigated. Additionnaly, two criterions can be optionnaly use to disable disparity investigation for some pixel: a no-data value, and a threshold on the local variance. This allows to speed-up computation by avoiding to investigate disparities that will not be reliable anyway. For efficiency reasons, if the optimal metric values image is desired, it will be concatenated to the output image (which will then have two bands, the first being the disparity, and the second the metric values). One can split these images afterward.");
+    SetDocLongDescription("This application allows to performs block-matching to estimate pixel-wise disparities "
+      "between two images. The application allows to choose the block-matching method to use. It also allows to input"
+      " masks (related to the left and right input image) of pixels for which the disparity should be investigated. "
+      "Additionnaly, two criterions can be optionnaly used to disable disparity investigation for some pixel: a "
+      "no-data value, and a threshold on the local variance. This allows to speed-up computation by avoiding to "
+      "investigate disparities that will not be reliable anyway. For efficiency reasons, if the optimal metric values"
+      " image is desired, it will be concatenated to the output image (which will then have three bands : horizontal "
+      "disparity, vertical disparity and metric value). One can split these images afterward.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbStereoRectificationGridGenerator");
@@ -145,15 +154,10 @@ private:
     AddParameter(ParameterType_OutputImage, "io.out", "The output disparity map");
     SetParameterDescription("io.out","An image containing the estimated disparities as well as the metric values if the option is used");
 
-    AddParameter(ParameterType_OutputImage, "io.outmaskleft", "The left output mask corresponding to all criterions");
-    SetParameterDescription("io.outmaskleft","A left mask image corresponding to all citerions (see masking parameters). Only required if variance threshold or nodata criterions are set.");
-    DisableParameter("io.outmaskleft");
-    MandatoryOff("io.outmaskleft");
-    
-    AddParameter(ParameterType_OutputImage, "io.outmaskright", "The right output mask corresponding to all criterions");
-    SetParameterDescription("io.outmaskright","A right mask image corresponding to all citerions (see masking parameters). Only required if variance threshold or nodata criterions are set.");
-    DisableParameter("io.outmaskright");
-    MandatoryOff("io.outmaskright");
+    AddParameter(ParameterType_OutputImage, "io.outmask", "The output mask corresponding to all criterions");
+    SetParameterDescription("io.outmask","A mask image corresponding to all citerions (see masking parameters). Only required if variance threshold or nodata criterions are set.");
+    DisableParameter("io.outmask");
+    MandatoryOff("io.outmask");
 
     AddParameter(ParameterType_Empty,"io.outmetric","Output optimal metric values as well");
     SetParameterDescription("io.outmetric","If used, the output image will have a second component with metric optimal values");
@@ -305,13 +309,11 @@ private:
   {
     if(IsParameterEnabled("mask.variancet") || IsParameterEnabled("mask.nodata"))
       {
-      EnableParameter("io.outmaskleft");
-      EnableParameter("io.outmaskright");
+      EnableParameter("io.outmask");
       }
     else
       {
-      DisableParameter("io.outmaskleft");
-      DisableParameter("io.outmaskright");
+      DisableParameter("io.outmask");
       }
     // enforce positive radii
     if (GetParameterInt("bm.radius") < 1)
@@ -341,6 +343,7 @@ private:
     FloatImageType::Pointer leftImage = GetParameterFloatImage("io.inleft");
     FloatImageType::Pointer rightImage = GetParameterFloatImage("io.inright");
     FloatImageType::Pointer leftmask;
+    FloatImageType::Pointer rightmask;
 
     unsigned int radius  = GetParameterInt("bm.radius");
     int          minhdisp = GetParameterInt("bm.minhd");
@@ -348,11 +351,16 @@ private:
     int          minvdisp = GetParameterInt("bm.minvd");
     int          maxvdisp = GetParameterInt("bm.maxvd");
     
-    std::ostringstream bandMathExpression;
-    bandMathExpression<<"if(";
+    std::ostringstream leftBandMathExpression;
+    leftBandMathExpression<<"if(";
     
-    unsigned int inputId = 0;
-    bool masking = false;
+    std::ostringstream rightBandMathExpression;
+    rightBandMathExpression<<"if(";
+    
+    unsigned int inputIdLeft = 0;
+    unsigned int inputIdRight = 0;
+    bool maskingLeft = false;
+    bool maskingRight = false;
     bool useInitialDispUniform = false;
     bool useInitialDispMap = false;
 
@@ -360,51 +368,90 @@ private:
     if(IsParameterEnabled("mask.inleft"))
       {
       leftmask = GetParameterFloatImage("mask.inleft");
-      m_BandMathFilter->SetNthInput(inputId,leftmask,"inmask");
-      masking = true;
-      ++inputId;
-      bandMathExpression<<"inmask > 0";
+      m_LBandMathFilter->SetNthInput(inputIdLeft,leftmask,"inmask");
+      maskingLeft = true;
+      ++inputIdLeft;
+      leftBandMathExpression<<"inmask > 0";
+      }
+    if(IsParameterEnabled("mask.inright"))
+      {
+      rightmask = GetParameterFloatImage("mask.inright");
+      m_RBandMathFilter->SetNthInput(inputIdRight,rightmask,"inmask");
+      maskingRight = true;
+      ++inputIdRight;
+      rightBandMathExpression<<"inmask > 0";
       }
     
     // Handle variance threshold if present
     if(IsParameterEnabled("mask.variancet"))
       {
-      if(masking)
+      if(maskingLeft)
         {
-        bandMathExpression<<" and ";
+        leftBandMathExpression<<" and ";
         }
-
-      m_VarianceFilter->SetInput(leftImage);
+      if(maskingRight)
+        {
+        rightBandMathExpression<<" and ";
+        }
+      // Left side
+      m_LVarianceFilter->SetInput(leftImage);
       VarianceFilterType::InputSizeType vradius;
       vradius.Fill(radius);
-      m_VarianceFilter->SetRadius(vradius);
+      m_LVarianceFilter->SetRadius(vradius);
 
-      m_BandMathFilter->SetNthInput(inputId,m_VarianceFilter->GetOutput(),"variance");
-      bandMathExpression<<"variance > "<<GetParameterFloat("mask.variancet");
-      ++inputId;
-      masking = true;
+      m_LBandMathFilter->SetNthInput(inputIdLeft,m_LVarianceFilter->GetOutput(),"variance");
+      leftBandMathExpression<<"variance > "<<GetParameterFloat("mask.variancet");
+      ++inputIdLeft;
+      
+      // Right side
+      m_RVarianceFilter->SetInput(rightImage);
+      m_RVarianceFilter->SetRadius(vradius);
+      
+      m_RBandMathFilter->SetNthInput(inputIdRight,m_RVarianceFilter->GetOutput(),"variance");
+      rightBandMathExpression<<"variance > "<<GetParameterFloat("mask.variancet");
+      ++inputIdRight;
+      
+      maskingLeft = true;
+      maskingRight = true;
       }
 
     // Handle nodata field if present
     if(IsParameterEnabled("mask.nodata"))
       {
-      if(masking)
+      if(maskingLeft)
         {
-        bandMathExpression<<" and ";
+        leftBandMathExpression<<" and ";
         }
-      m_BandMathFilter->SetNthInput(inputId,leftImage,"leftimage");
-      bandMathExpression<<"leftimage != "<<GetParameterFloat("mask.nodata");
-      masking = true;
-      }
-
-    bandMathExpression<<",255,0)";
-
-    if(masking)
-      {
-      GetLogger()->Info("Masking criterion: " + bandMathExpression.str());
-      m_BandMathFilter->SetExpression(bandMathExpression.str());
-      }
+      if(maskingRight)
+        {
+        rightBandMathExpression<<" and ";
+        }
+      // Left side
+      m_LBandMathFilter->SetNthInput(inputIdLeft,leftImage,"leftimage");
+      leftBandMathExpression<<"leftimage != "<<GetParameterFloat("mask.nodata");
       
+      // Right side
+      m_RBandMathFilter->SetNthInput(inputIdRight,rightImage,"rightimage");
+      rightBandMathExpression<<"rightimage != "<<GetParameterFloat("mask.nodata");
+      
+      maskingLeft = true;
+      maskingRight = true;
+      }
+
+    leftBandMathExpression<<",255,0)";
+    rightBandMathExpression<<",255,0)";
+
+    if(maskingLeft)
+      {
+      GetLogger()->Info("Masking criterion on left image: " + leftBandMathExpression.str());
+      m_LBandMathFilter->SetExpression(leftBandMathExpression.str());
+      }
+    if(maskingRight)
+      {
+      GetLogger()->Info("Masking criterion on right image: " + rightBandMathExpression.str());
+      m_RBandMathFilter->SetExpression(rightBandMathExpression.str());
+      }
+    
     // Uniform initial disparity case
     if (GetParameterInt("bm.initdisp") == 1)
       {
@@ -425,9 +472,11 @@ private:
     FloatImageType * hdispImage;
     FloatImageType * vdispImage;
     FloatImageType * metricImage;
-    FloatImageType * maskImage;
+    FloatImageType * maskLeftImage;
+    FloatImageType * maskRightImage;
     
-    maskImage = m_BandMathFilter->GetOutput();
+    maskLeftImage = m_LBandMathFilter->GetOutput();
+    maskRightImage = m_RBandMathFilter->GetOutput();
 
     // SSD case
     if(GetParameterInt("bm.metric") == 0)
@@ -441,9 +490,13 @@ private:
       m_SSDBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
       
       AddProcess(m_SSDBlockMatcher,"SSD block matching");
-      if(masking)
+      if(maskingLeft)
         {
-        m_SSDBlockMatcher->SetLeftMaskInput(maskImage);
+        m_SSDBlockMatcher->SetLeftMaskInput(maskLeftImage);
+        }
+      if(maskingRight)
+        {
+        m_SSDBlockMatcher->SetRightMaskInput(maskRightImage);
         }
       if(useInitialDispUniform)
         {
@@ -467,6 +520,7 @@ private:
       if (GetParameterInt("bm.subpixel") > 0)
         {
         m_SSDSubPixFilter->SetInputsFromBlockMatchingFilter(m_SSDBlockMatcher);
+        AddProcess(m_SSDSubPixFilter,"Sub-pixel refinement");
         switch (GetParameterInt("bm.subpixel"))
           {
           case 1 : m_SSDSubPixFilter->SetRefineMethod(SSDSubPixelDisparityFilterType::PARABOLIC);
@@ -502,9 +556,13 @@ private:
       
       AddProcess(m_NCCBlockMatcher,"NCC block matching");
 
-      if(masking)
+      if(maskingLeft)
         {
-        m_NCCBlockMatcher->SetLeftMaskInput(maskImage);
+        m_NCCBlockMatcher->SetLeftMaskInput(maskLeftImage);
+        }
+      if(maskingRight)
+        {
+        m_NCCBlockMatcher->SetRightMaskInput(maskRightImage);
         }
       if(useInitialDispUniform)
         {
@@ -528,6 +586,7 @@ private:
       if (GetParameterInt("bm.subpixel") > 0)
         {
         m_NCCSubPixFilter->SetInputsFromBlockMatchingFilter(m_NCCBlockMatcher);
+        AddProcess(m_NCCSubPixFilter,"Sub-pixel refinement");
         switch (GetParameterInt("bm.subpixel"))
           {
           case 1 : m_NCCSubPixFilter->SetRefineMethod(NCCSubPixelDisparityFilterType::PARABOLIC);
@@ -563,9 +622,13 @@ private:
       
       AddProcess(m_LPBlockMatcher,"Lp block matching");
 
-      if(masking)
+      if(maskingLeft)
         {
-        m_LPBlockMatcher->SetLeftMaskInput(maskImage);
+        m_LPBlockMatcher->SetLeftMaskInput(maskLeftImage);
+        }
+      if(maskingRight)
+        {
+        m_LPBlockMatcher->SetRightMaskInput(maskRightImage);
         }
       if(useInitialDispUniform)
         {
@@ -589,6 +652,7 @@ private:
       if (GetParameterInt("bm.subpixel") > 0)
         {
         m_LPSubPixFilter->SetInputsFromBlockMatchingFilter(m_LPBlockMatcher);
+        AddProcess(m_LPSubPixFilter,"Sub-pixel refinement");
         switch (GetParameterInt("bm.subpixel"))
           {
           case 1 : m_LPSubPixFilter->SetRefineMethod(LPSubPixelDisparityFilterType::PARABOLIC);
@@ -618,9 +682,9 @@ private:
         m_HMedianFilter->SetInput(hdispImage);
         m_HMedianFilter->SetRadius(GetParameterInt("bm.medianfilter.radius"));
         m_HMedianFilter->SetIncoherenceThreshold(GetParameterFloat("bm.medianfilter.incoherence"));
-        if (masking)
+        if (maskingLeft)
           {
-          m_HMedianFilter->SetMaskInput(maskImage);
+          m_HMedianFilter->SetMaskInput(maskLeftImage);
           }
         hdispImage = m_HMedianFilter->GetOutput();
         }
@@ -630,9 +694,9 @@ private:
         m_VMedianFilter->SetInput(vdispImage);
         m_VMedianFilter->SetRadius(GetParameterInt("bm.medianfilter.radius"));
         m_VMedianFilter->SetIncoherenceThreshold(GetParameterFloat("bm.medianfilter.incoherence"));
-        if (masking)
+        if (maskingLeft)
           {
-          m_VMedianFilter->SetMaskInput(maskImage);
+          m_VMedianFilter->SetMaskInput(maskLeftImage);
           }
         vdispImage = m_VMedianFilter->GetOutput();
         }
@@ -652,9 +716,10 @@ private:
     
     SetParameterOutputImage("io.out",m_ImageListFilter->GetOutput());
 
-    if(IsParameterEnabled("io.outmaskleft"))
+    if(IsParameterEnabled("io.outmask"))
       {
-      SetParameterOutputImage("io.outmaskleft",maskImage);
+      SetParameterOutputImage("io.outmask",maskLeftImage);
+      // The right side mask is not saved because the application computes disparities from left to right
       }
   }
 
@@ -676,15 +741,21 @@ private:
   // LP sub-pixel disparity filter
   LPSubPixelDisparityFilterType::Pointer  m_LPSubPixFilter;
   
-  // Variance filter
-  VarianceFilterType::Pointer         m_VarianceFilter;
+  // Variance filter for left image
+  VarianceFilterType::Pointer         m_LVarianceFilter;
   
-  // Band-math filter
-  BandMathFilterType::Pointer         m_BandMathFilter;
-
+  // Variance filter for right image
+  VarianceFilterType::Pointer         m_RVarianceFilter;
+  
+  // Band-math filter for left mask
+  BandMathFilterType::Pointer         m_LBandMathFilter;
+  
+  // Band-math filter for right mask
+  BandMathFilterType::Pointer         m_RBandMathFilter;
+  
   // The Image list
   ImageListType::Pointer              m_OutputImageList;
-
+  
   // Image list to VectorImage filter
   ImageListToVectorImageFilterType::Pointer m_ImageListFilter;
   

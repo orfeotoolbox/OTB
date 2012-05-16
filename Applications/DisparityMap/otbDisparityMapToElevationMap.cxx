@@ -106,6 +106,10 @@ private:
     SetParameterDescription("hmax","Maximum elevation expected (in meters)");
     SetDefaultParameterFloat("hmax",100.0);
     
+    AddParameter(ParameterType_InputImage,"mask","Disparity mask");
+    SetParameterDescription("mask","Masked disparity cells won't be projected");
+    MandatoryOff("mask");
+    
     ElevationParametersHandler::AddElevationParameters(this, "elev");
     
     AddRAMParameter();
@@ -144,6 +148,11 @@ private:
     m_DispToElev->SetElevationMin(this->GetParameterFloat("hmin"));
     m_DispToElev->SetElevationMax(this->GetParameterFloat("hmax"));
     m_DispToElev->SetDEMGridStep(this->GetParameterFloat("step"));
+    
+    if (IsParameterEnabled("mask"))
+      {
+      m_DispToElev->SetDisparityMaskInput(this->GetParameterUInt8Image("mask"));
+      }
     
     if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
       {

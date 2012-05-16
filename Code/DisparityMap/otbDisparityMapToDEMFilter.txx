@@ -720,7 +720,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   typename TOutputDEMImage::RegionType outputRequestedRegion = outputDEM->GetRequestedRegion();
   
   typename TDisparityImage::RegionType disparityRegion;
-  if (threadId < m_UsedInputSplits)
+  if (static_cast<unsigned int>(threadId) < m_UsedInputSplits)
     {
     disparityRegion = m_InputSplitter->GetSplit(threadId,m_UsedInputSplits,horizDisp->GetRequestedRegion());
     tmpDEM = m_TempDEMRegions[threadId];
