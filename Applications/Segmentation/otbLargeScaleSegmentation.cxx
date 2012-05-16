@@ -420,6 +420,7 @@ private:
         return;
       }
 
+    ogrDS->SyncToDisk();
     SetParameterOutputImage<LabelImageType> ("lout", m_LabelImage);
 
   }
