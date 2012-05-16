@@ -120,6 +120,29 @@ UniqueGeometryPtr Difference (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Computes symmetric difference.
 UniqueGeometryPtr SymDifference (OGRGeometry const& lhs, OGRGeometry const& rhs); // -1.8
 
+/** Simplifies Geometry.
+ * This function tries to uses the best simplication algorithm available in the
+ * current version of GDAL. <em>Best</em> in the sense of topology preservation.
+ * i.e. With GDAL v1.8.0, \c OGRGeometry::Simplify() is used; with GDAL v1.9.0+,
+ * \c OGRGeometry::SimplifyPreserveTopology() is used.
+ * \pre Requires GDAL 1.8.0
+ * \sa \c OGRGeometry::Simplify()
+ * \sa \c OGRGeometry::SimplifyPreserveTopology()
+ */
+UniqueGeometryPtr Simplify(OGRGeometry const& g, double tolerance);
+
+/** Simplifies Geometry with no guarantee of preserving the geometry.
+ * \pre Requires GDAL 1.8.0
+ * \sa \c OGRGeometry::Simplify()
+ */
+UniqueGeometryPtr SimplifyDontPreserveTopology(OGRGeometry const& g, double tolerance);
+
+/** Simplifies Geometry while preserving topology.
+ * \pre Requires GDAL 1.9.0
+ * \sa \c OGRGeometry::SimplifyPreserveTopology()
+ */
+UniqueGeometryPtr SimplifyPreserveTopology(OGRGeometry const& g, double tolerance);
+
 /** @} */
 
 } } // end namespace otb::ogr

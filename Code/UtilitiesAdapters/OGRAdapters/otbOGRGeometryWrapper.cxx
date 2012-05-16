@@ -105,7 +105,7 @@ otb::ogr::UniqueGeometryPtr otb::ogr::UnionCascaded(OGRGeometry const& this_)
 #if GDAL_VERSION_NUM >= 1800
   return UniqueGeometryPtr(this_.UnionCascaded());
 #else
-  itkGenericExceptionMacro("OGRLayer::UnionCascaded is not supported by OGR v"
+  itkGenericExceptionMacro("OGRGeometry::UnionCascaded is not supported by OGR v"
     << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.");
 #endif
 }
@@ -121,5 +121,37 @@ otb::ogr::UniqueGeometryPtr otb::ogr::SymDifference(OGRGeometry const& lhs, OGRG
   return UniqueGeometryPtr(lhs.SymDifference(&rhs));
 #else
   return UniqueGeometryPtr(lhs.SymmetricDifference(&rhs));
+#endif
+}
+
+otb::ogr::UniqueGeometryPtr otb::ogr::SimplifyDontPreserveTopology(OGRGeometry const& g, double tolerance)
+{
+#if GDAL_VERSION_NUM >= 1800
+  return UniqueGeometryPtr(g.Simplify(tolerance));
+#else
+  itkGenericExceptionMacro("OGRGeometry::Simplify is not supported by OGR v"
+    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.");
+#endif
+}
+
+otb::ogr::UniqueGeometryPtr otb::ogr::SimplifyPreserveTopology(OGRGeometry const& g, double tolerance)
+{
+#if GDAL_VERSION_NUM >= 1900
+  return UniqueGeometryPtr(g.SimplifyPreserveTopology(tolerance));
+#else
+  itkGenericExceptionMacro("OGRGeometry::Simplify is not supported by OGR v"
+    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.");
+#endif
+}
+
+otb::ogr::UniqueGeometryPtr otb::ogr::Simplify(OGRGeometry const& g, double tolerance)
+{
+#if   GDAL_VERSION_NUM >= 1900
+  return UniqueGeometryPtr(g.SimplifyPreserveTopology(tolerance));
+#elif GDAL_VERSION_NUM >= 1800
+  return UniqueGeometryPtr(g.Simplify(tolerance));
+#else
+  itkGenericExceptionMacro("OGRGeometry::Simplify(PreserveTopology) is not supported by OGR v"
+    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.");
 #endif
 }
