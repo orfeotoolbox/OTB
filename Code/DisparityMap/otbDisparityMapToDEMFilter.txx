@@ -647,7 +647,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     m_UsedInputSplits = 0;
     }
   
-  if (m_UsedInputSplits <= this->GetNumberOfThreads())
+  if (m_UsedInputSplits <= static_cast<unsigned int>(this->GetNumberOfThreads()))
     {
     m_TempDEMRegions.clear();
     
@@ -788,11 +788,11 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     ulIndex[1] = static_cast<int>(vcl_floor(gridIndexConti[1]));
     if (ulIndex[0] < gridRegion.GetIndex(0)) ulIndex[0] = gridRegion.GetIndex(0);
     if (ulIndex[1] < gridRegion.GetIndex(1)) ulIndex[1] = gridRegion.GetIndex(1);
-    if (ulIndex[0] > (gridRegion.GetIndex(0) + gridRegion.GetSize(0) - 2))
+    if (ulIndex[0] > (gridRegion.GetIndex(0) + static_cast<int>(gridRegion.GetSize(0)) - 2))
       {
       ulIndex[0] = gridRegion.GetIndex(0) + gridRegion.GetSize(0) - 2;
       }
-    if (ulIndex[1] > (gridRegion.GetIndex(1) + gridRegion.GetSize(1) - 2))
+    if (ulIndex[1] > (gridRegion.GetIndex(1) + static_cast<int>(gridRegion.GetSize(1)) - 2))
       {
       ulIndex[1] = gridRegion.GetIndex(1) + gridRegion.GetSize(1) - 2;
       }
@@ -841,11 +841,11 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     ulIndex[1] = static_cast<int>(vcl_floor(gridIndexConti[1]));
     if (ulIndex[0] < gridRegion.GetIndex(0)) ulIndex[0] = gridRegion.GetIndex(0);
     if (ulIndex[1] < gridRegion.GetIndex(1)) ulIndex[1] = gridRegion.GetIndex(1);
-    if (ulIndex[0] > (gridRegion.GetIndex(0) + gridRegion.GetSize(0) - 2))
+    if (ulIndex[0] > (gridRegion.GetIndex(0) + static_cast<int>(gridRegion.GetSize(0)) - 2))
       {
       ulIndex[0] = gridRegion.GetIndex(0) + gridRegion.GetSize(0) - 2;
       }
-    if (ulIndex[1] > (gridRegion.GetIndex(1) + gridRegion.GetSize(1) - 2))
+    if (ulIndex[1] > (gridRegion.GetIndex(1) + static_cast<int>(gridRegion.GetSize(1)) - 2))
       {
       ulIndex[1] = gridRegion.GetIndex(1) + gridRegion.GetSize(1) - 2;
       }
