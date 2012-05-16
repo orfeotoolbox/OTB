@@ -1,5 +1,15 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
+# Decompose GDAL version
+STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1" GDAL_VERSION_MAJOR "${GDAL_VERSION}")
+STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\2" GDAL_VERSION_MINOR "${GDAL_VERSION}")
+STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\3" GDAL_VERSION_PATCH "${GDAL_VERSION}")
+SET(GDAL_VERSION_MAJOR_STRING "${GDAL_VERSION_MAJOR}" CACHE STRING "Major Version Number of GDAL package found")
+SET(GDAL_VERSION_MINOR_STRING "${GDAL_VERSION_MINOR}" CACHE STRING "Minor Version Number of GDAL package found")
+SET(GDAL_VERSION_PATCH_STRING "${GDAL_VERSION_PATCH}" CACHE STRING "Patch Version Number of GDAL package found")
+MATH(EXPR GDAL_NUM_VERSION "((${GDAL_VERSION_MAJOR})*100+${GDAL_VERSION_MINOR})*100+${GDAL_VERSION_PATCH}")
+MESSAGE(STATUS "GDAL Num version: ${GDAL_NUM_VERSION}")
+ADD_DEFINITIONS(-DGDAL_VERSION=${GDAL_NUM_VERSION})
 
 # Common generic tests
 SET(OBIA_TESTS1 ${CXX_TEST_PATH}/otbOBIATests1)
@@ -264,6 +274,8 @@ ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
      0.2 #Simplification tolerance
      )
 
+
+IF(${GDAL_NUM_VERSION} VERSION_GREATER "10800")
 # -------            otb::FusionOGRTileFilter   -------------
 ADD_TEST(obTuFusionOGRTileFilter ${OBIA_TESTS1}
 #     --compare-ogr  ${EPSILON_8}
@@ -276,6 +288,7 @@ ADD_TEST(obTuFusionOGRTileFilter ${OBIA_TESTS1}
     layer
     112
     )
+ENDIF(${GDAL_NUM_VERSION} VERSION_GREATER "10800")
 
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
@@ -343,6 +356,11 @@ otbLabelImageToOGRDataSourceFilter.cxx
 otbStreamingVectorizedSegmentationOGR.cxx
 otbFusionOGRTileFilter.cxx
 )
+
+IF(${GDAL_NUM_VERSION} VERSION_LESS "10800")
+LIST(REMOVE_ITEM BasicOBIA_SRCS1 otbFusionOGRTileFilter.cxx)
+ENDIF(${GDAL_NUM_VERSION} VERSION_LESS "10800")
+
 
 IF(OTB_USE_PQXX)
 SET(BasicOBIA_SRCS2

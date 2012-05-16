@@ -18,8 +18,14 @@
 #ifndef __otbFusionOGRTileFilter_h
 #define __otbFusionOGRTileFilter_h
 
-#include "itkProcessObject.h"
 #include "otbOGRDataSourceWrapper.h"
+
+#if(GDAL_VERSION_NUM < 1800)
+#error FusionOGRTileFilter requires GDAL version >= 1.8.0
+#endif
+
+#include "itkProcessObject.h"
+
 #include <algorithm>
 
 namespace otb
