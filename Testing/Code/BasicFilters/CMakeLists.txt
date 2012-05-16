@@ -1124,6 +1124,50 @@ ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
         16 16 10 1.0
         )
 
+
+ ADD_TEST(bfTvMeanShiftImageFilterEDISON ${BASICFILTERS_TESTS9}
+       --compare-image ${EPSILON_7}
+        ${BASELINE}/bfTvMeanShiftFilterSpectralOutputOptim.tif
+        ${TEMP}/bfTvMeanShiftImageFilterOutputOptim.tif
+        otbMeanShiftImageFilter
+        ${INPUTDATA}/MeanShiftTest.tif
+        ${TEMP}/bfTvMeanShiftImageFilterOutputOptim.tif
+        ${TEMP}/bfTvMeanShiftImageFilterClusteredOutputOptim.tif
+        ${TEMP}/bfTvMeanShiftImageFilterLabeledClusteredOutputOptim.tif
+        ${TEMP}/bfTvMeanShiftImageFilterClusterBoundariesOutpuOptim.tif
+        2 10 10 0.1
+        )     
+       
+  
+ ADD_TEST(bfTvMeanShiftImageFilter2Optim ${BASICFILTERS_TESTS9}
+        --compare-image ${EPSILON_7}
+        ${BASELINE}/bfTvMeanShiftFilterSpectralOutputOptim.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterSpectralOutputOptim.tif
+        otbMeanShiftImageFilter2
+        ${INPUTDATA}/MeanShiftTest.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterSpatialOutputOptim.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterSpectralOutputOptim.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterMetricOutputOptim.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterIterationOutputOptim.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterLabelOutputOptim.tif
+        2 10 0.1 10 1
+       )
+ 
+ 
+ ADD_TEST(bfTvMeanShiftImageFilter2NonOptim ${BASICFILTERS_TESTS9}
+        --compare-image ${EPSILON_7}
+        ${BASELINE}/bfTvMeanShiftFilterSpectralOutputNonOptim.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterSpectralOutputNonOptim.tif
+        otbMeanShiftImageFilter2
+        ${INPUTDATA}/MeanShiftTest.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterSpatialOutputNonOptim.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterSpectralOutputNonOptim.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterMetricOutputNonOptim.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterIterationOutputNonOptim.tif
+        ${TEMP}/bfTvMeanShift2ImageFilterLabelOutputNonOptim.tif
+        2 10 0.1 10 0
+       )
+
 ADD_TEST(bfTuMeanShiftImageFilterQBSuburb ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilter
         ${INPUTDATA}/QB_Suburb.png
