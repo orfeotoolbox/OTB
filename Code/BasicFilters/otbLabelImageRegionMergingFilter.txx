@@ -28,8 +28,8 @@
 
 namespace otb
 {
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::LabelImageRegionMergingFilter()
 {
 
@@ -41,51 +41,51 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 
 }
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 void
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::SetInputLabelImage( const TInputLabelImage * labelImage)
 {
   // Process object is not const-correct so the const casting is required.
   this->SetNthInput(0, const_cast<TInputLabelImage *>( labelImage ));
 }
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 void
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::SetInputSpectralImage( const TInputSpectralImage * spectralImage)
 {
   // Process object is not const-correct so the const casting is required.
   this->SetNthInput(1, const_cast<TInputSpectralImage *>( spectralImage ));
 }
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 TInputLabelImage *
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::GetInputLabelImage()
 {
   return dynamic_cast<TInputLabelImage*>(itk::ProcessObject::GetInput(0));
 }
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 TInputSpectralImage *
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::GetInputSpectralImage()
 {
   return dynamic_cast<TInputSpectralImage*>(itk::ProcessObject::GetInput(1));
 }
 
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::~LabelImageRegionMergingFilter()
 {
 
 }
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 TOutputLabelImage *
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::GetLabelOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
@@ -95,9 +95,9 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 const TOutputLabelImage *
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::GetLabelOutput() const
 {
   if (this->GetNumberOfOutputs() < 1)
@@ -107,9 +107,9 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
-typename LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>::OutputClusteredImageType *
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
+typename LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>::OutputClusteredImageType *
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::GetClusteredOutput()
 {
   if (this->GetNumberOfOutputs() < 2)
@@ -119,9 +119,9 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   return static_cast<OutputClusteredImageType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
-const typename LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>::OutputClusteredImageType *
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
+const typename LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>::OutputClusteredImageType *
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::GetClusteredOutput() const
 {
   if (this->GetNumberOfOutputs() < 2)
@@ -132,9 +132,9 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 }
 
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 void
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 //::BeforeThreadedGenerateData()
 ::GenerateData()
 {
@@ -383,9 +383,9 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
     }
 }
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 void
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -393,9 +393,9 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 }
 
 
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
-typename LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>::RegionAdjacencyMapType
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
+typename LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>::RegionAdjacencyMapType
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::LabelImageToRegionAdjacencyMap(typename InputLabelImageType::Pointer  inputLabelImage)
 {
   // declare the output map

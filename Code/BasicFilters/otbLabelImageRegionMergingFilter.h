@@ -36,7 +36,7 @@ namespace otb
  *
  * \ingroup ImageSegmentation
  */
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage = TInputLabelImage>
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage = TInputLabelImage, class TOutputClusteredImage = TInputSpectralImage>
 class ITK_EXPORT LabelImageRegionMergingFilter
   : public itk::ImageToImageFilter<TInputLabelImage, TOutputLabelImage>
 {
@@ -77,7 +77,7 @@ public:
   typedef typename OutputImageType::PixelType   OutputPixelType;
   typedef typename OutputImageType::RegionType  OutputRegionType;
 
-  typedef TInputSpectralImage                   OutputClusteredImageType;
+  typedef TOutputClusteredImage                   OutputClusteredImageType;
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputLabelImageType::ImageDimension);
 
