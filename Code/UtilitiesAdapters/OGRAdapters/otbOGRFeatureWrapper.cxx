@@ -23,6 +23,7 @@
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 #include "ogr_feature.h"
+#include "cpl_error.h"
 #include "itkMacro.h"
 
 #include "otbOGRFieldWrapper.h"
