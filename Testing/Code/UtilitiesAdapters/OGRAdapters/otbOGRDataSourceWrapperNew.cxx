@@ -22,6 +22,7 @@
 #define BOOST_TEST_MODULE "otb::org::DataSource creation unit testing"
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
+#include <boost/foreach.hpp>
 #include "otbOGRDataSourceWrapper.h"
 
 
@@ -303,6 +304,61 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp_with_features)
   ogr::Feature g0(defn);
   g0[0].SetValue(42);
   l.CreateFeature(g0);
+}
+
+BOOST_AUTO_TEST_CASE(Local_Geometries)
+{
+  ogr::UniqueGeometryPtr gp (OGRGeometryFactory::createGeometry(wkbPoint));
+  BOOST_REQUIRE(gp);
+  OGRPoint * p = dynamic_cast<OGRPoint*>(gp.get());
+  BOOST_REQUIRE(p);
+  p->setX(0);
+  p->setY(0);
+
+  OGRPoint x0(-10, 0);
+  OGRPoint x1(+10, 0);
+  OGRLineString X;
+  X.addPoint(&x0);
+  X.addPoint(&x1);
+
+  OGRPoint y0(0, -10);
+  OGRPoint y1(0, +10);
+  OGRLineString Y;
+  Y.addPoint(&y0);
+  Y.addPoint(&y1);
+
+  ogr::UniqueGeometryPtr i = ogr::Intersection(X, Y);
+  BOOST_CHECK(ogr::Equals(*i, *p));
+  BOOST_CHECK(ogr::Equals(*i, *gp));
+}
+
+BOOST_AUTO_TEST_CASE(Add_n_Read_Geometries)
+{
+  ogr::DataSource::Pointer ds = ogr::DataSource::New();
+  ogr::Layer l = ds -> CreateLayer(k_one, 0, wkbPoint);
+
+  OGRFeatureDefn & defn = l.GetLayerDefn();
+  for (int u=-10; u!=10; ++u) {
+    ogr::Feature f(defn);
+    const OGRPoint p(u, u);
+    f.SetGeometry(&p);
+    l.CreateFeature(f);
+  }
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(false), 20);
+
+  int u=-10;
+  BOOST_FOREACH(ogr::Feature f, l)
+    {
+    const OGRPoint ref(u, u);
+    ogr::UniqueGeometryPtr p = f.StealGeometry();
+    BOOST_REQUIRE(p);
+    BOOST_CHECK(! f.GetGeometry());
+    BOOST_CHECK(ogr::Equals(*p, ref));
+    f.SetGeometryDirectly(boost::move(p));
+    BOOST_CHECK(!p);
+    ++u;
+    }
+
 }
 
 #if 0
