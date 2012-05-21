@@ -25,6 +25,7 @@
 #include "otbOGRFieldWrapper.h"
 #include <cassert>
 #include <vector>
+#include <algorithm>
 #include <boost/mpl/map.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/pair.hpp>
@@ -101,6 +102,32 @@ template
     static FinalReturnType call(OGRFeature &f, int index)
       {
       return (f.*ptr_to_function)(index);
+      }
+    };
+
+/**\ingroup GeometryInternals
+ * \class StringListMemberGetterPtr
+ * Type for hosting member-function pointers to string-list field getters.
+ * \tparam FinalReturnType type of the field according to OTB wrappers (default
+ * <tt> = T</tt>)
+ *
+ * \internal
+ * This override is required because of the particular nature of the
+ * <tt>char**</tt> type chosen by OGR API, plus the fact this is the only
+ * const-correct getter...
+ * \since OTB v 3.14.0
+ */
+template
+  < typename FinalReturnType = std::vector<std::string>
+  > class StringListMemberGetterPtr
+    {
+  public:
+    static FinalReturnType call(OGRFeature &f, int index)
+      {
+      char ** sl = f.GetFieldAsStringList(index);
+      char ** last = std::find(sl, (char**)0, (char*)0);
+      FinalReturnType res(sl, last);
+      return res;
       }
     };
 
@@ -252,7 +279,7 @@ typedef map
   , pair<int_<OFTReal>,        MemberGetterPtr<double,          &OGRFeature::GetFieldAsDouble> >
   , pair<int_<OFTRealList>,    MemberContainerGetterPtr<double, &OGRFeature::GetFieldAsDoubleList> >
   , pair<int_<OFTString>,      MemberGetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
-  // , pair<int_<OFTStringList>,  MemberGetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
+  , pair<int_<OFTStringList>,  StringListMemberGetterPtr<std::vector<std::string> > >
   > FieldGetters_Map;
 
 /**\ingroup GeometryInternals
@@ -267,7 +294,7 @@ typedef map
   , pair<int_<OFTReal>,        MemberSetterPtr<double,          &OGRFeature::SetField> >
   , pair<int_<OFTRealList>,    MemberContainerSetterPtr<double, &OGRFeature::SetField> >
   , pair<int_<OFTString>,      MemberSetterPtr<char const*,     &OGRFeature::SetField/*, std::string*/> >
-  // , pair<int_<OFTStringList>,  MemberContainerSetterPtr<char const*,     &OGRFeature::SetField, std::string> >
+  // , pair<int_<OFTStringList>,  MemberSetterPtr<char const*,     &OGRFeature::SetField, std::string> >
   > FieldSetters_Map;
 
 /**\ingroup GeometryInternals
@@ -331,6 +358,8 @@ void otb::ogr::Field::SetValue(T const& value)
   BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
   assert(m_Definition.GetType() == VALUE && "OGR field type mismatches the type of new field value");
   typedef typename boost::mpl::at<internal::FieldSetters_Map, Kind>::type SetterType;
+  // If you experience a static assertion failure in the line below, it means
+  // the type of the parameter is not supported to set a field.
   BOOST_STATIC_ASSERT(!(boost::is_same<SetterType, boost::mpl::void_>::value));
   SetterType::call(*m_Feature, m_index, Converter::convert(value));
 }
@@ -346,6 +375,8 @@ T otb::ogr::Field::GetValue() const
   BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
   assert(m_Definition.GetType() == VALUE && "OGR field type mismatches the type of requested field value");
   typedef typename boost::mpl::at<internal::FieldGetters_Map, Kind>::type GetterType;
+  // If you experience a static assertion failure in the line below, it means
+  // the field cannot be extracted into the type requested.
   BOOST_STATIC_ASSERT(!(boost::is_same<GetterType, boost::mpl::void_>::value));
   return GetterType::call(*m_Feature, m_index);
 }
