@@ -166,20 +166,24 @@ public:
 /** \class MeanShiftImageFilter2
  *
  *
- * Mean shift is a data clustering algorithm often used in image processing and segmentation.
- * For a given pixel, the mean shift will build a set of neighboring pixels within a given spatial
- * bandwidth (can be set using SetSpatialBandwidth()) and a spectral range (can be set using SetRangeBandwidth()).
- * The spatial and spectral center of this set is then computed and the algorithm iterates with this new spatial
- * and spectral center.
+ * Mean shift is an edge-preserving smoothing algorithm often used in image
+ * processing and segmentation. It will iteratively smooth a given pixel with
+ * its neighbors that are within a spatial distance (set using
+ * SetSpatialBandwidth()) and within a spectral range (set using
+ * SetRangeBandwidth()). The resulting filtered image can be retrieved by
+ * GetOutput() or GetRangeOutput().
  *
- * Mean shift can be used for edge-preserving smoothing, or for clustering. The GetOutput() method
- * return spatial and  meanshift filtered data GetSpatialOutput() and GetRangeOutput() gives
- * resp. spatial (as displacement map) and Spectral filtering parts
+ * There are additional output images, as explained below.
+ * Internally, the algorithm will iteratively update a pixel both in position
+ * and spectral value, with respect to its neighbors, until convergence to a
+ * local mode. The map of the distance traveled by pixels is obtained by
+ * GetSpatialOutput(). A map of detected local modes is also available in
+ * GetLabelOutput() and can be seen as a first segmentation of the input image,
+ * although usually highly oversegmented.
+ * Finally, GetIterationOutput() will return the number of algorithm iterations
+ * for each pixel.
  *
- * GetIterationOutput() returns the number of iterations performed for each pixel.
- * GetLabelOutput() returns a label map with one label for each mode.
- *
- * MeanShifVector norm is compared with Threshold (set using Get/Set accessor) to define pixel convergence (1e-3 by default).
+ * MeanShifVector squared norm is compared with Threshold (set using Get/Set accessor) to define pixel convergence (1e-3 by default).
  * MaxIterationNumber defines maximum iteration number for each pixel convergence (set using Get/Set accessor). Set to 4 by default.
  * ModeSearchOptimization is a boolean value, to choose between optimized and non optimized algorithm. If set to true (by default), assign mode value to each pixel on a path covered in convergence steps.
  *
@@ -247,18 +251,31 @@ public:
   typedef otb::VectorImage<RealType, InputImageType::ImageDimension> RealVectorImageType;
   typedef otb::Image<unsigned short, InputImageType::ImageDimension> ModeTableImageType;
 
-  /** Setters / Getters */
+  /** Sets the spatial bandwidth (or radius in the case of a uniform kernel)
+    * of the neighborhood for each pixel
+    */
   itkSetMacro(SpatialBandwidth, RealType);
   itkGetMacro(SpatialBandwidth, RealType);
+
+  /** Sets the spectral bandwidth (or radius for a uniform kernel) for pixels
+    * to be included in the same mode
+    */
   itkSetMacro(RangeBandwidth, RealType);
   itkGetMacro(RangeBandwidth, RealType);
 
+  /** Sets the maximum number of algorithm iterations */
   itkGetConstMacro(MaxIterationNumber, unsigned int);
   itkSetMacro(MaxIterationNumber, unsigned int);
 
+  /** Sets the threshold value for the mean shift vector's squared norm,
+    * under which convergence is assumed
+    */
   itkGetConstMacro(Threshold, double);
   itkSetMacro(Threshold, double);
 
+  /** Toggle mode search optimization, which is enabled by default.
+    * When off, the output label image is not available
+    */
   itkSetMacro(ModeSearchOptimization, bool);
   itkGetConstMacro(ModeSearchOptimization, bool);
 
