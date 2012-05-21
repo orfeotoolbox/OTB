@@ -120,10 +120,6 @@ public:
   }
 };
 
-class NormL2
-{
-};
-
 /** \class FastImageRegionConstIterator
  *
  * Iterator for reading pixels over an image region, specialized for faster
@@ -211,7 +207,7 @@ public:
  * \ingroup ImageSegmentation
  * \ingroup ImageEnhancement
  */
-template <class TInputImage, class TOutputImage, class TKernel = KernelUniform, class TNorm = NormL2, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
+template <class TInputImage, class TOutputImage, class TKernel = KernelUniform, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
 class ITK_EXPORT MeanShiftImageFilter2
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
