@@ -35,6 +35,10 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 
   this->SetNumberOfRequiredInputs( 2 );
 
+  this->SetNumberOfOutputs(2);
+  this->SetNthOutput(0, OutputLabelImageType::New());
+  this->SetNthOutput(1, OutputClusteredImageType::New());
+
 }
 
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
@@ -103,6 +107,30 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
 
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
+typename LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>::OutputClusteredImageType *
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+::GetClusteredOutput()
+{
+  if (this->GetNumberOfOutputs() < 2)
+    {
+      return 0;
+    }
+  return static_cast<OutputClusteredImageType *>(this->itk::ProcessObject::GetOutput(1));
+}
+
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
+const typename LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>::OutputClusteredImageType *
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+::GetClusteredOutput() const
+{
+  if (this->GetNumberOfOutputs() < 2)
+    {
+      return 0;
+    }
+  return static_cast<OutputClusteredImageType *>(this->itk::ProcessObject::GetOutput(1));
+}
+
 
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
 void
@@ -113,10 +141,13 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   typename InputSpectralImageType::Pointer spectralImage = this->GetInputSpectralImage();
   typename InputLabelImageType::Pointer inputLabelImage = this->GetInputLabelImage();
   typename OutputLabelImageType::Pointer outputLabelImage = this->GetLabelOutput();
+  typename OutputClusteredImageType::Pointer outputClusteredImage = this->GetClusteredOutput();
 
-  // Allocate the output
+  // Allocate output
   outputLabelImage->SetBufferedRegion( outputLabelImage->GetRequestedRegion() );
   outputLabelImage->Allocate();
+  outputClusteredImage->SetBufferedRegion( outputClusteredImage->GetRequestedRegion() );
+  outputClusteredImage->Allocate();
 
   m_NumberOfComponentsPerPixel = spectralImage->GetNumberOfComponentsPerPixel();
 
@@ -337,6 +368,19 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
     } // end of main iteration loop
   std::cout << "merge iterations: " << mergeIterations << std::endl;
   std::cout << "number of label objects: " << regionCount << std::endl;
+
+  // Generate clustered output
+  itk::ImageRegionIterator<OutputClusteredImageType> outputClusteredIt(outputClusteredImage, outputClusteredImage->GetRequestedRegion() );
+  outputClusteredIt.GoToBegin();
+  outputIt.GoToBegin();
+  while( !outputClusteredIt.IsAtEnd() )
+    {
+    LabelType label = outputIt.Get();
+    const SpectralPixelType & p = m_Modes[ label ];
+    outputClusteredIt.Set(p);
+    ++outputClusteredIt;
+    ++outputIt;
+    }
 }
 
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>

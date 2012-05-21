@@ -78,6 +78,8 @@ public:
   typedef typename OutputImageType::PixelType   OutputPixelType;
   typedef typename OutputImageType::RegionType  OutputRegionType;
 
+  typedef TInputSpectralImage                   OutputClusteredImageType;
+
   itkStaticConstMacro(ImageDimension, unsigned int, InputLabelImageType::ImageDimension);
 
   /** LabelMap typedefs */
@@ -105,6 +107,10 @@ public:
   const OutputLabelImageType * GetLabelOutput() const;
   /** Returns the image of region labels */
   OutputLabelImageType * GetLabelOutput();
+  /** Returns the const clustered output image, with one spectral value per region  */
+  const OutputClusteredImageType * GetClusteredOutput() const;
+  /** Returns the clustered output image, with one spectral value per region  */
+  OutputClusteredImageType * GetClusteredOutput();
 
   void SetInputLabelImage( const InputLabelImageType * labelImage);
   void SetInputSpectralImage( const InputSpectralImageType * spectralImage);
