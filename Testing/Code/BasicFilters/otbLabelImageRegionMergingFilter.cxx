@@ -25,10 +25,10 @@
 
 int otbLabelImageRegionMergingFilter(int argc, char * argv[])
 {
-  if (argc != 9)
+  if (argc != 10)
     {
     std::cerr << "Usage: " << argv[0] <<
-    " infname spectralfname labelfname labelmergedfname spatialBandwidth rangeBandwidth threshold maxiterationnumber"
+    " infname spectralfname labelfname labelmergedfname clusteredfname spatialBandwidth rangeBandwidth threshold maxiterationnumber"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -37,10 +37,11 @@ int otbLabelImageRegionMergingFilter(int argc, char * argv[])
   const char *       spectralfname             = argv[2];
   const char *       labelfname                = argv[3];
   const char *       labelmergedfname          = argv[4];
-  const double       spatialBandwidth          = atof(argv[5]);
-  const double       rangeBandwidth            = atof(argv[6]);
-  const double       threshold                 = atof(argv[7]);
-  const unsigned int maxiterationnumber        = atoi(argv[8]);
+  const char *       clusteredfname            = argv[5];
+  const double       spatialBandwidth          = atof(argv[6]);
+  const double       rangeBandwidth            = atof(argv[7]);
+  const double       threshold                 = atof(argv[8]);
+  const unsigned int maxiterationnumber        = atoi(argv[9]);
   /* maxit - threshold */
 
   const unsigned int Dimension = 2;
@@ -85,10 +86,14 @@ int otbLabelImageRegionMergingFilter(int argc, char * argv[])
   mergeWriter->SetFileName(labelmergedfname);
   mergeWriter->SetInput(mergeFilter->GetOutput());
 
+  WriterType::Pointer clusteredWriter = WriterType::New();
+  clusteredWriter->SetFileName(clusteredfname);
+  clusteredWriter->SetInput(mergeFilter->GetClusteredOutput());
 
   writer2->Update();
   writer5->Update();
   mergeWriter->Update();
+  clusteredWriter->Update();
 
   return EXIT_SUCCESS;
 }

@@ -1186,9 +1186,9 @@ ADD_TEST(bfTuMeanShiftImageFilter2QBSuburbOptim ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShift2ImageFilterMetricOutput_QBSuburbOptim.tif
         ${TEMP}/bfMeanShift2ImageFilterIterationOutput_QBSuburbOptim.tif
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBSuburbOptim.tif
-        4 50 0.1 10 1
+        4 25 0.1 10 1
         )
- 
+
  ADD_TEST(bfTuMeanShiftImageFilter2QBSuburbNonOptim ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilter2
         ${INPUTDATA}/QB_Suburb.png
@@ -1197,9 +1197,9 @@ ADD_TEST(bfTuMeanShiftImageFilter2QBSuburbOptim ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShift2ImageFilterMetricOutput_QBSuburbNonOptim.tif
         ${TEMP}/bfMeanShift2ImageFilterIterationOutput_QBSuburbNonOptim.tif
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBSuburbNonOptim.tif
-        4 50 0.1 10 0
+        4 25 0.1 10 0
         )
-        
+
 
 ADD_TEST(bfTuMeanShiftVectorImageFilterROIQBMul4 ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilter
@@ -1299,7 +1299,8 @@ ADD_TEST(bfTuLabelImageRegionMergingFilterQB_Suburb ${BASICFILTERS_TESTS9}
         ${TEMP}/bfLabelImageRegionMergingFilterSpectralOutput_QB_Suburb.tif
         ${TEMP}/bfLabelImageRegionMergingFilterLabelOutput_QB_Suburb.tif
         ${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_QB_Suburb.tif
-        4 50 0.1 100
+        ${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_QB_Suburb.tif
+        4 25 0.1 100
         )
 
 ADD_TEST(bfTuLabelImageRegionMergingFilterSPOT5 ${BASICFILTERS_TESTS9}
@@ -1308,7 +1309,8 @@ ADD_TEST(bfTuLabelImageRegionMergingFilterSPOT5 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfLabelImageRegionMergingFilterSpectralOutput_SPOT5.tif
         ${TEMP}/bfLabelImageRegionMergingFilterLabelOutput_SPOT5.tif
         ${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
-        4 10 0.1 100
+        ${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_SPOT5.tif
+        4 25 0.1 100
         )
 
 IF(OTB_DATA_USE_LARGEINPUT)
