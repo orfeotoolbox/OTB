@@ -135,7 +135,6 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 void
 LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
-//::BeforeThreadedGenerateData()
 ::GenerateData()
 {
   typename InputSpectralImageType::Pointer spectralImage = this->GetInputSpectralImage();
@@ -151,7 +150,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 
   m_NumberOfComponentsPerPixel = spectralImage->GetNumberOfComponentsPerPixel();
 
-  std::cout << "Copy input label image to output label image" << std::endl;
+  //std::cout << "Copy input label image to output label image" << std::endl;
   // Copy input label image to output label image
   typename itk::ImageRegionConstIterator<InputLabelImageType> inputIt(inputLabelImage, outputLabelImage->GetRequestedRegion());
   typename itk::ImageRegionIterator<OutputLabelImageType> outputIt(outputLabelImage, outputLabelImage->GetRequestedRegion());
@@ -172,13 +171,13 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 
   m_Modes.resize(0);
   m_Modes.reserve(regionCount+1);
-  for(unsigned int i = 0; i < regionCount+1 ; ++i)
+  for(unsigned int i = 0; i < regionCount+1; ++i)
     {
     m_Modes.push_back( SpectralPixelType(m_NumberOfComponentsPerPixel) );
     }
   m_PointCounts.resize(regionCount+1); // = std::vector<unsigned int>(regionCount+1);
 
-  std::cout << "Associate each label to a spectral value" << std::endl;
+  //std::cout << "Associate each label to a spectral value" << std::endl;
 
   // Associate each label to a spectral value, a canonical label and a point count
   typename itk::ImageRegionConstIterator<InputLabelImageType> inputItWithIndex(inputLabelImage, outputLabelImage->GetRequestedRegion());
@@ -200,12 +199,12 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   bool finishedMerging = false;
   unsigned int mergeIterations = 0;
 
-  std::cout << "Start merging" << std::endl;
+  //std::cout << "Start merging" << std::endl;
   // Iterate until no more merge to do
   while(!finishedMerging)
     {
 
-    std::cout << "Iterate over all regions" << std::endl;
+    //std::cout << "Iterate over all regions" << std::endl;
     // Iterate over all regions
     for(LabelType curLabel = 1; curLabel <= regionCount; ++curLabel)
       {
@@ -262,7 +261,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
         } // end of loop over adjacent labels
       } // end of loop over labels
 
-    std::cout << "Simplify the table of canonical labels" << std::endl;
+    //std::cout << "Simplify the table of canonical labels" << std::endl;
     /* Simplify the table of canonical labels */
     for(LabelType i = 1; i < regionCount+1; ++i)
       {
@@ -274,12 +273,11 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
       m_CanonicalLabels[i] = can;
       }
 
-    std::cout << "merge regions with same canonical label" << std::endl;
+    //std::cout << "merge regions with same canonical label" << std::endl;
     /* Merge regions with same canonical label */
     /* - update modes and point counts */
     std::vector<SpectralPixelType> newModes;
     newModes.reserve(regionCount+1); //(regionCount+1, SpectralPixelType(m_NumberOfComponentsPerPixel));
-    std::cout << "allocated newModes" << std::endl;
     for(unsigned int i = 0; i < regionCount+1; ++i)
       {
       newModes.push_back( SpectralPixelType(m_NumberOfComponentsPerPixel) );
@@ -303,7 +301,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
       newPointCounts[canLabel] += nPoints;
       }
 
-    std::cout << "re-labeling" << std::endl;
+    //std::cout << "re-labeling" << std::endl;
     /* re-labeling */
     std::vector<LabelType> newLabels(regionCount+1);
     std::vector<bool> newLabelSet(regionCount+1);
@@ -334,7 +332,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
     unsigned int oldRegionCount = regionCount;
     regionCount = label;
 
-    std::cout << "number of new labels:" << regionCount << std::endl;
+    //std::cout << "number of new labels:" << regionCount << std::endl;
     /* reassign labels in label image */
     outputIt.GoToBegin();
     while(!outputIt.IsAtEnd())
@@ -366,8 +364,8 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 
     mergeIterations++;
     } // end of main iteration loop
-  std::cout << "merge iterations: " << mergeIterations << std::endl;
-  std::cout << "number of label objects: " << regionCount << std::endl;
+  // std::cout << "merge iterations: " << mergeIterations << std::endl;
+  // std::cout << "number of label objects: " << regionCount << std::endl;
 
   // Generate clustered output
   itk::ImageRegionIterator<OutputClusteredImageType> outputClusteredIt(outputClusteredImage, outputClusteredImage->GetRequestedRegion() );

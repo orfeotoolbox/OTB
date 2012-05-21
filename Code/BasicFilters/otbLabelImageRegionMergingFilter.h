@@ -130,17 +130,15 @@ private:
   void operator =(const Self&);             //purposely not implemented
 
   /** Range bandwidth */
-  RealType        m_RangeBandwidth;
-
+  RealType                       m_RangeBandwidth;
   /** Number of components per pixel in the input image */
-  unsigned int m_NumberOfComponentsPerPixel;
-
+  unsigned int                   m_NumberOfComponentsPerPixel;
   /** This contains the label to which each label will be merged */
-  std::vector<LabelType> m_CanonicalLabels;
+  std::vector<LabelType>         m_CanonicalLabels;
   /** Contains the spectral value for each region */
   std::vector<SpectralPixelType> m_Modes;
   /** Number of points in each region */
-  std::vector<unsigned int> m_PointCounts;
+  std::vector<unsigned int>      m_PointCounts;
 };
 
 } // end namespace otb
