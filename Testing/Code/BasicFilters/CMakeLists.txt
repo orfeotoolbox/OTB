@@ -1136,9 +1136,9 @@ ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
         ${TEMP}/bfTvMeanShiftImageFilterLabeledClusteredOutputOptim.tif
         ${TEMP}/bfTvMeanShiftImageFilterClusterBoundariesOutpuOptim.tif
         2 10 10 0.1
-        )     
-       
-  
+        )
+
+
  ADD_TEST(bfTvMeanShiftImageFilter2Optim ${BASICFILTERS_TESTS9}
         --compare-image ${EPSILON_7}
         ${BASELINE}/bfTvMeanShiftFilterSpectralOutputOptim.tif
@@ -1147,13 +1147,12 @@ ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
         ${INPUTDATA}/MeanShiftTest.tif
         ${TEMP}/bfTvMeanShift2ImageFilterSpatialOutputOptim.tif
         ${TEMP}/bfTvMeanShift2ImageFilterSpectralOutputOptim.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterMetricOutputOptim.tif
         ${TEMP}/bfTvMeanShift2ImageFilterIterationOutputOptim.tif
         ${TEMP}/bfTvMeanShift2ImageFilterLabelOutputOptim.tif
         2 10 0.1 10 1
        )
- 
- 
+
+
  ADD_TEST(bfTvMeanShiftImageFilter2NonOptim ${BASICFILTERS_TESTS9}
         --compare-image ${EPSILON_7}
         ${BASELINE}/bfTvMeanShiftFilterSpectralOutputNonOptim.tif
@@ -1162,7 +1161,6 @@ ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
         ${INPUTDATA}/MeanShiftTest.tif
         ${TEMP}/bfTvMeanShift2ImageFilterSpatialOutputNonOptim.tif
         ${TEMP}/bfTvMeanShift2ImageFilterSpectralOutputNonOptim.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterMetricOutputNonOptim.tif
         ${TEMP}/bfTvMeanShift2ImageFilterIterationOutputNonOptim.tif
         ${TEMP}/bfTvMeanShift2ImageFilterLabelOutputNonOptim.tif
         2 10 0.1 10 0
@@ -1183,7 +1181,6 @@ ADD_TEST(bfTuMeanShiftImageFilter2QBSuburbOptim ${BASICFILTERS_TESTS9}
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_QBSuburbOptim.tif
         ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_QBSuburbOptim.tif
-        ${TEMP}/bfMeanShift2ImageFilterMetricOutput_QBSuburbOptim.tif
         ${TEMP}/bfMeanShift2ImageFilterIterationOutput_QBSuburbOptim.tif
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBSuburbOptim.tif
         4 25 0.1 10 1
@@ -1194,7 +1191,6 @@ ADD_TEST(bfTuMeanShiftImageFilter2QBSuburbOptim ${BASICFILTERS_TESTS9}
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_QBSuburbNonOptim.tif
         ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_QBSuburbNonOptim.tif
-        ${TEMP}/bfMeanShift2ImageFilterMetricOutput_QBSuburbNonOptim.tif
         ${TEMP}/bfMeanShift2ImageFilterIterationOutput_QBSuburbNonOptim.tif
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBSuburbNonOptim.tif
         4 25 0.1 10 0
@@ -1219,7 +1215,6 @@ ADD_TEST(bfTuMeanShiftImageFilterROIQBMul4 ${BASICFILTERS_TESTS9}
         ${INPUTDATA}/ROI_QB_MUL_4.tif
         ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_ROIQBMul4.tif
         ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_ROIQBMul4.tif
-        ${TEMP}/bfMeanShift2ImageFilterMetricOutput_ROIQBMul4.tif
         ${TEMP}/bfMeanShift2ImageFilterIterationOutput_ROIQBMul4.tif
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_ROIQBMul4.tif
         4 50 0.1 100
@@ -1241,7 +1236,6 @@ ADD_TEST(bfTuMeanShiftImageFilterQBRoad ${BASICFILTERS_TESTS9}
         ${INPUTDATA}/qb_RoadExtract.img
         ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_QBRoad.tif
         ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_QBRoad.tif
-        ${TEMP}/bfMeanShift2ImageFilterMetricOutput_QBRoad.tif
         ${TEMP}/bfMeanShift2ImageFilterIterationOutput_QBRoad.tif
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBRoad.tif
         4 30 0.1 100
@@ -1265,7 +1259,6 @@ ADD_TEST(bfTvMeanShiftImageFilterQBPAN ${BASICFILTERS_TESTS9}
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_PAN.tif
         ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_PAN.tif
-        ${TEMP}/bfMeanShift2ImageFilterMetricOutput_PAN.tif
         ${TEMP}/bfMeanShift2ImageFilterIterationOutput_PAN.tif
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_PAN.tif
         5 15 1.0 100
@@ -1287,7 +1280,6 @@ ADD_TEST(bfTuMeanShiftImageFilterSPOT5 ${BASICFILTERS_TESTS9}
         ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
         ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_SPOT5.tif
         ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_SPOT5.tif
-        ${TEMP}/bfMeanShift2ImageFilterMetricOutput_SPOT5.tif
         ${TEMP}/bfMeanShift2ImageFilterIterationOutput_SPOT5.tif
         ${TEMP}/bfMeanShift2ImageFilterLabelOutput_SPOT5.tif
         4 10 0.1 100
@@ -1330,7 +1322,6 @@ IF(OTB_DATA_USE_LARGEINPUT)
 #        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 #        ${TEMP}/bfMeanShiftImageSpatialOutputLargeInput.tif
 #        ${TEMP}/bfMeanShiftImageFilterSpectralOutputLargeInput.tif
-#       ${TEMP}/bfMeanShiftImageFilterMetricOutputLargeInput.tif
 #        9 9 10 10 0.001 10
 #        )
 

@@ -24,10 +24,10 @@
 
 int otbMeanShiftImageFilter2(int argc, char * argv[])
 {
-  if (argc != 11 && argc != 12)
+  if (argc != 10 && argc != 11)
     {
     std::cerr << "Usage: " << argv[0] <<
-    " infname spatialfname spectralfname metricfname iterationfname labelfname spatialBandwidth rangeBandwidth threshold maxiterationnumber (useoptimization)"
+    " infname spatialfname spectralfname iterationfname labelfname spatialBandwidth rangeBandwidth threshold maxiterationnumber (useoptimization)"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -35,17 +35,16 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   const char *       infname                   = argv[1];
   const char *       spatialfname              = argv[2];
   const char *       spectralfname             = argv[3];
-  const char *       metricfname               = argv[4];
-  const char *       iterationfname            = argv[5];
-  const char *       labelfname                = argv[6];
-  const double       spatialBandwidth          = atof(argv[7]);
-  const double       rangeBandwidth            = atof(argv[8]);
-  const double       threshold                 = atof(argv[9]);
-  const unsigned int maxiterationnumber        = atoi(argv[10]);
+  const char *       iterationfname            = argv[4];
+  const char *       labelfname                = argv[5];
+  const double       spatialBandwidth          = atof(argv[6]);
+  const double       rangeBandwidth            = atof(argv[7]);
+  const double       threshold                 = atof(argv[8]);
+  const unsigned int maxiterationnumber        = atoi(argv[9]);
   bool               useoptimization                 = true;
   if(argc==12)
     {
-      useoptimization           = atoi(argv[11])!=0;
+      useoptimization           = atoi(argv[10])!=0;
     }
 
   /* maxit - threshold */
@@ -81,25 +80,21 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   //filter->SetNumberOfThreads(1);
   SpatialWriterType::Pointer writer1 = SpatialWriterType::New();
   WriterType::Pointer writer2 = WriterType::New();
-  WriterType::Pointer writer3 = WriterType::New();
   IterationWriterType::Pointer writer4 = IterationWriterType::New();
   LabelWriterType::Pointer writer5 = LabelWriterType::New();
 
   writer1->SetFileName(spatialfname);
   writer2->SetFileName(spectralfname);
-  writer3->SetFileName(metricfname);
   writer4->SetFileName(iterationfname);
   writer5->SetFileName(labelfname);
 
   writer1->SetInput(filter->GetSpatialOutput());
   writer2->SetInput(filter->GetRangeOutput());
-  writer3->SetInput(filter->GetMetricOutput());
   writer4->SetInput(filter->GetIterationOutput());
   writer5->SetInput(filter->GetLabelOutput());
 
   writer1->Update();
   writer2->Update();
-  writer3->Update();
   writer4->Update();
   writer5->Update();
 

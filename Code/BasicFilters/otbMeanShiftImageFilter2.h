@@ -176,7 +176,6 @@ public:
  * return spatial and  meanshift filtered data GetSpatialOutput() and GetRangeOutput() gives
  * resp. spatial (as displacement map) and Spectral filtering parts
  *
- * GetMetricOutput() method gives mean shift vector after pixel convergence.
  * GetIterationOutput() returns the number of iterations performed for each pixel.
  * GetLabelOutput() returns a label map with one label for each mode.
  *
@@ -198,7 +197,7 @@ public:
  * \ingroup ImageSegmentation
  * \ingroup ImageEnhancement
  */
-template <class TInputImage, class TOutputImage, class TKernel = KernelUniform, class TNorm = NormL2, class TOutputMetricImage = TOutputImage, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
+template <class TInputImage, class TOutputImage, class TKernel = KernelUniform, class TNorm = NormL2, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
 class ITK_EXPORT MeanShiftImageFilter2
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -230,11 +229,6 @@ public:
   typedef typename OutputImageType::Pointer     OutputImagePointerType;
   typedef typename OutputImageType::PixelType   OutputPixelType;
   typedef typename OutputImageType::RegionType  OutputRegionType;
-
-  typedef TOutputMetricImage                          OutputMetricImageType;
-  typedef typename OutputMetricImageType::Pointer     OutputMetricImagePointerType;
-  typedef typename OutputMetricImageType::PixelType   OutputMetricPixelType;
-  typedef typename OutputMetricImageType::RegionType  MetricRegionType;
 
   typedef TOutputIterationImage                       OutputIterationImageType;
 
@@ -272,8 +266,6 @@ public:
   const OutputSpatialImageType * GetSpatialOutput() const;
   /** Returns the const spectral image output */
   const OutputImageType * GetRangeOutput() const;
-  /** Returns the const mean shift vector computed at the last iteration for each pixel */
-  const OutputMetricImageType * GetMetricOutput() const;
   /** Returns the const number of iterations map. */
   const OutputIterationImageType * GetIterationOutput() const;
   /** Returns the const image of region labels */
@@ -283,8 +275,6 @@ public:
   OutputSpatialImageType * GetSpatialOutput();
    /** Returns the spectral image output */
   OutputImageType * GetRangeOutput();
-  /** Returns the mean shift vector computed at the last iteration for each pixel */
-  OutputMetricImageType * GetMetricOutput();
   /** Returns the number of iterations done at each pixel */
   OutputIterationImageType * GetIterationOutput();
   /** Returns the image of region labels */
