@@ -324,10 +324,10 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
         unsigned int nPoints = newPointCounts[canLabel];
         for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; ++comp)
           {
-          m_Modes[canLabel][comp] = newModes[canLabel][comp] / nPoints;
+          m_Modes[label][comp] = newModes[canLabel][comp] / nPoints;
           }
 
-        m_PointCounts[canLabel] = newPointCounts[canLabel];
+        m_PointCounts[label] = newPointCounts[canLabel];
         }
       }
 
