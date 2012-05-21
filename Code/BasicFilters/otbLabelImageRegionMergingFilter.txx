@@ -350,10 +350,10 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
       }
 
 
-    if ( oldRegionCount == regionCount  // finished iterating over all regions without merging once
-         || mergeIterations >= 10 // TEMPORARY !!!
-         || regionCount == 1
-    ) finishedMerging = true;
+    // if ( oldRegionCount == regionCount  // finished iterating over all regions without merging once
+    //      || mergeIterations >= 10
+    //      || regionCount == 1
+    // ) finishedMerging = true;
 
     // only one iteration for now
     finishedMerging = true;
