@@ -42,7 +42,7 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   const double       threshold                 = atof(argv[8]);
   const unsigned int maxiterationnumber        = atoi(argv[9]);
   bool               useoptimization                 = true;
-  if(argc==12)
+  if(argc==11)
     {
       useoptimization           = atoi(argv[10])!=0;
     }
