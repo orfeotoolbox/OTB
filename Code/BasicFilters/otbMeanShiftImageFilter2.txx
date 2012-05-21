@@ -572,7 +572,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputIteratio
   // Variables used by mode search optimization
   // List of indices where the current pixel passes through
   std::vector<InputIndexType> pointList;
-  if(m_ModeSearchOptimization) pointList.reserve(m_MaxIterationNumber);
+  if(m_ModeSearchOptimization) pointList.resize(m_MaxIterationNumber);
   // Number of points currently in the pointList
   unsigned int pointCount;
   // Number of times an already processed candidate pixel is encountered, resulting in no
