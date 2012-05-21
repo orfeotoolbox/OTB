@@ -91,7 +91,7 @@ class LabeledOutputAccessor<MeanShiftImageFilter2<TInputImage, TOutputImage, TOu
  * It is a persistent filter that process the input image tile by tile.
  * The segmentation filter is set by the user using \c SetSegmentationFilter.
  * The result of the segmentation of each tile is vectorized using \c GDALPolygonize()
- * and then the result is written in a \c ogr::DataSource. 
+ * and then the result is written in a \c ogr::DataSource.
  *
  */
 template <class TImageType,  class TSegmentationFilter>
@@ -161,11 +161,11 @@ public:
   itkSetMacro(Simplify, bool);
   itkGetMacro(Simplify, bool);
   
-  /** Set the tolerance value for simplifying geometries. 
+  /** Set the tolerance value for simplifying geometries.
    * \sa \c OGRGeometry::Simplify() \c OGRGeometry::SimplifyPreserveTopology()
    */
   itkSetMacro(SimplificationTolerance, double);
-  /** Get the tolerance value for simplifying geometries. 
+  /** Get the tolerance value for simplifying geometries.
    * \sa \c OGRGeometry::Simplify() \c OGRGeometry::SimplifyPreserveTopology()
    */
   itkGetMacro(SimplificationTolerance, double);
@@ -210,7 +210,7 @@ private:
  * It is a persistent filter that process the input image tile by tile.
  * The segmentation filter is set by the user using \c SetSegmentationFilter.
  * The result of the segmentation of each tile is vectorized using \c GDALPolygonize()
- * and then the result is written in a \c ogr::DataSource. 
+ * and then the result is written in a \c ogr::DataSource.
  *
  *
  */
@@ -348,7 +348,7 @@ public:
   {
      return this->GetFilter()->GetSimplify();
   }
-  /** Set the tolerance value for simplifying geometries. 
+  /** Set the tolerance value for simplifying geometries.
    * \sa \c OGRGeometry::Simplify() \c OGRGeometry::SimplifyPreserveTopology()
    */
   void SetSimplificationTolerance(const double & tol)
