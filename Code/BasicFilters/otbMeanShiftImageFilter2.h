@@ -91,33 +91,33 @@ class KernelUniform
 public:
   typedef double RealType;
 
-  KernelUniform() {
-    SetBandwidth(1.0);
-  }
-
+  KernelUniform() {}
   ~KernelUniform() {}
+
   inline RealType operator() (RealType x) {
-    return (x >= -m_Bandwidth || x <= m_Bandwidth) ? m_KernelUniformValue : 0.0;
+    return (x <= 1) ? 1.0 : 0.0;
   }
 
-  RealType GetRadius() {
-    return m_Radius;
+  RealType GetRadius(RealType bandwidth) {
+    return bandwidth;
+  }
+};
+
+class KernelGaussian
+{
+public:
+  typedef double RealType;
+
+  KernelGaussian() {}
+  ~KernelGaussian() {}
+
+  inline RealType operator() (RealType x) {
+    return vcl_exp(-0.5*x);
   }
 
-  RealType GetBandwidth() {
-    return m_Bandwidth;
+  RealType GetRadius(RealType bandwidth) {
+    return 3.0*bandwidth;
   }
-
-  void SetBandwidth(RealType bw) {
-    m_Bandwidth = bw;
-    m_KernelUniformValue = 1.0 / (2.0 * m_Bandwidth);
-    m_Radius = m_Bandwidth;
-  }
-
-private:
-  RealType m_Radius;
-  RealType m_Bandwidth;
-  RealType m_KernelUniformValue;
 };
 
 class NormL2
@@ -182,6 +182,16 @@ public:
  * although usually highly oversegmented.
  * Finally, GetIterationOutput() will return the number of algorithm iterations
  * for each pixel.
+ *
+ * The class template parameter TKernel allows one to choose how pixels in the
+ * spatial and spectral neighborhood of a given pixel participate in the
+ * smoothed result. By default, a uniform kernel is used (KernelUniform), giving
+ * an equal weight to all neighbor pixels. KernelGaussian can also be used,
+ * although the computation time is significantly higher. The TKernel class
+ * should define operator(), taking a squared norm as parameter and returning a
+ * real value between 0 and 1. It should also define GetRadius(), converting the
+ * spatial bandwidth parameter to the spatial radius defining how many pixels
+ * are in the processing window local to a pixel.
  *
  * MeanShifVector squared norm is compared with Threshold (set using Get/Set accessor) to define pixel convergence (1e-3 by default).
  * MaxIterationNumber defines maximum iteration number for each pixel convergence (set using Get/Set accessor). Set to 4 by default.
@@ -360,9 +370,9 @@ private:
   /** Maximum number of iterations **/
   unsigned int m_MaxIterationNumber;
 
-  /** KernelType to be defined **/
-  KernelType m_SpatialKernel;
-  KernelType m_RangeKernel;
+  /** Kernel object, implementing operator() which returns a weight between 0 and 1
+* depending on the squared norm given in parameter **/
+  KernelType m_Kernel;
 
   /** Number of components per pixel in the input image */
   unsigned int m_NumberOfComponentsPerPixel;

@@ -225,9 +225,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputIteratio
   // Pad by the appropriate radius
   RegionType inputRequestedRegion  = outputRequestedRegion;
 
-  // Initializes the kernel bandwidth to calculate its radius
-  m_SpatialKernel.SetBandwidth(m_SpatialBandwidth);
-  m_SpatialRadius.Fill(m_SpatialKernel.GetRadius());
+  // Initializes the spatial radius from kernel bandwidth
+  m_SpatialRadius.Fill(m_Kernel.GetRadius(m_SpatialBandwidth));
 
   inputRequestedRegion.PadByRadius(m_SpatialRadius);
 
@@ -273,10 +272,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputIteratio
   typename InputImageType::PixelType inputPixel;
   RealVector jointPixel;
 
-  m_SpatialKernel.SetBandwidth(m_SpatialBandwidth);
-  m_RangeKernel.SetBandwidth(m_RangeBandwidth);
-
-  m_SpatialRadius.Fill(m_SpatialKernel.GetRadius());
+  m_SpatialRadius.Fill(m_Kernel.GetRadius(m_SpatialBandwidth));
 
   m_NumberOfComponentsPerPixel = this->GetInput()->GetNumberOfComponentsPerPixel();
 
@@ -427,9 +423,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputIteratio
       }
 
     // Compute pixel weight from kernel
-    // TODO : replace by the templated kernel
-    weight = (norm2 <= 1.0)? 1.0 : 0.0;
-
+    weight = m_Kernel(norm2);
 /*
     // The following code is an alternative way to compute norm2 and weight
     // It separates the norms of spatial and range elements
