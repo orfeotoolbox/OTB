@@ -261,35 +261,33 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
     v0.push_back(12);
     f3.SetValue(v0);
 
-    std::vector<int> v2 = f3.GetValue<std::vector<int> >();
-    BOOST_CHECK_EQUAL_COLLECTIONS(v0.begin(),v0.end(),v2.begin(),v2.end());
+    std::vector<int> w0 = f3.GetValue<std::vector<int> >();
+    BOOST_CHECK_EQUAL_COLLECTIONS(v0.begin(),v0.end(),w0.begin(),w0.end());
     }
 
   // ----[ list of doubles
     {
     ogr::Field f4 = g0["OFTRealList"];
-    std::vector<double> v0;
-    v0.push_back(42);
-    v0.push_back(12);
-    f4.SetValue(v0);
+    std::vector<double> v1;
+    v1.push_back(42);
+    v1.push_back(12);
+    f4.SetValue(v1);
 
-    std::vector<double> v2 = f4.GetValue<std::vector<double> >();
-    BOOST_CHECK_EQUAL_COLLECTIONS(v0.begin(),v0.end(),v2.begin(),v2.end());
+    std::vector<double> w1 = f4.GetValue<std::vector<double> >();
+    BOOST_CHECK_EQUAL_COLLECTIONS(v1.begin(),v1.end(),w1.begin(),w1.end());
     }
 
   // ----[ list of string
-#if 0 // not ready yet
     {
     ogr::Field f5 = g0["OFTStringList"];
-    std::vector<std::string> v0;
-    v0.push_back("42");
-    v0.push_back("12");
-    f5.SetValue(v0);
+    std::vector<std::string> v2;
+    v2.push_back("42");
+    v2.push_back("12");
+    f5.SetValue(v2);
 
-    std::vector<std::string> v2 = f5.GetValue<std::vector<std::string> >();
-    BOOST_CHECK_EQUAL_COLLECTIONS(v0.begin(),v0.end(),v2.begin(),v2.end());
+    std::vector<std::string> w2 = f5.GetValue<std::vector<std::string> >();
+    BOOST_CHECK_EQUAL_COLLECTIONS(v2.begin(),v2.end(),w2.begin(),w2.end());
     }
-#endif
 }
 
 BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp_with_features)

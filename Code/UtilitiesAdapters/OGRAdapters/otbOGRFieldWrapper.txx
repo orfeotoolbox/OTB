@@ -25,7 +25,6 @@
 #include "otbOGRFieldWrapper.h"
 #include <cassert>
 #include <vector>
-#include <algorithm>
 #include <boost/mpl/map.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/pair.hpp>
@@ -125,8 +124,7 @@ template
     static FinalReturnType call(OGRFeature &f, int index)
       {
       char ** sl = f.GetFieldAsStringList(index);
-      char ** last = std::find(sl, (char**)0, (char*)0);
-      FinalReturnType res(sl, last);
+      FinalReturnType res(sl, sl+CSLCount(sl));
       return res;
       }
     };
@@ -237,6 +235,38 @@ template
     };
 
 /**\ingroup GeometryInternals
+ * \class StringListMemberSetterPtr
+ * Type for hosting member-function pointers to string-list field setters.
+ * \tparam ActualParamType type of the field according to OTB wrappers (default
+ * <tt> = T</tt>)
+ *
+ * \internal
+ * This override is required because of the particular nature of the
+ * <tt>char**</tt> type chosen by OGR API.
+ * \since OTB v 3.14.0
+ */
+template
+  < typename ActualParamType
+  > class StringListMemberSetterPtr
+    {
+  public:
+    static void call(OGRFeature &f, int index, ActualParamType const& container)
+      {
+      const int nb = boost::size(container) + 1;
+      std::vector<char const*> v; v.reserve(nb);
+      for (typename ActualParamType::const_iterator b = container.begin(), e = container.end()
+; b != e
+; ++b)
+        {
+        v.push_back(b->c_str());
+        }
+      v.push_back(0);
+      assert(CSLCount(const_cast <char**>(&v[0])) == boost::size(container));
+      f.SetField(index, const_cast <char**>(&v[0]));
+      }
+    };
+
+/**\ingroup GeometryInternals
  * \class MemberContainerSetterPtr
  * Type for hosting simple member-function pointers to list-field setters.
  * \tparam T type of field according to OGR API.
@@ -294,7 +324,7 @@ typedef map
   , pair<int_<OFTReal>,        MemberSetterPtr<double,          &OGRFeature::SetField> >
   , pair<int_<OFTRealList>,    MemberContainerSetterPtr<double, &OGRFeature::SetField> >
   , pair<int_<OFTString>,      MemberSetterPtr<char const*,     &OGRFeature::SetField/*, std::string*/> >
-  // , pair<int_<OFTStringList>,  MemberSetterPtr<char const*,     &OGRFeature::SetField, std::string> >
+  , pair<int_<OFTStringList>,  StringListMemberSetterPtr<std::vector<std::string> > >
   > FieldSetters_Map;
 
 /**\ingroup GeometryInternals
