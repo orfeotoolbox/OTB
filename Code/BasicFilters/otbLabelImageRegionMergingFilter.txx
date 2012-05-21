@@ -20,6 +20,9 @@
 #define __otbLabelImageRegionMergingFilter_txx
 
 #include "otbLabelImageRegionMergingFilter.h"
+#include "itkImageRegionConstIterator.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
+#include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 
 
@@ -104,39 +107,65 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
 void
 LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
-::BeforeThreadedGenerateData()
+//::BeforeThreadedGenerateData()
+::GenerateData()
 {
   typename InputSpectralImageType::Pointer spectralImage = this->GetInputSpectralImage();
   typename InputLabelImageType::Pointer inputLabelImage = this->GetInputLabelImage();
+  typename OutputLabelImageType::Pointer outputLabelImage = this->GetLabelOutput();
+
+  // Allocate the output
+  outputLabelImage->SetBufferedRegion( outputLabelImage->GetRequestedRegion() );
+  outputLabelImage->Allocate();
 
   m_NumberOfComponentsPerPixel = spectralImage->GetNumberOfComponentsPerPixel();
 
-  // Convert to label map with adjacency
-  typename LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
-  labelMapFilter->SetInput(inputLabelImage);
-  labelMapFilter->Update();
-
-  // Associate each label to a spectral value
-  m_LabelMap = labelMapFilter->GetOutput();
-  typename LabelMapType::LabelObjectContainerType & labelObjectContainer = m_LabelMap->GetLabelObjectContainer();
-  typename LabelMapType::LabelObjectContainerType::iterator labelIt = labelObjectContainer.begin();
-  while ( labelIt != labelObjectContainer.end() )
+  std::cout << "Copy input label image to output label image" << std::endl;
+  // Copy input label image to output label image
+  typename itk::ImageRegionConstIterator<InputLabelImageType> inputIt(inputLabelImage, outputLabelImage->GetRequestedRegion());
+  typename itk::ImageRegionIterator<OutputLabelImageType> outputIt(outputLabelImage, outputLabelImage->GetRequestedRegion());
+  inputIt.GoToBegin();
+  outputIt.GoToBegin();
+  while(!inputIt.IsAtEnd())
     {
-    LabelType l;
-    l = labelIt->first;
-    typename AttributeLabelObjectType::Pointer labelObject = labelIt->second;
-
-    labelObject->SetAttribute(
-      // spectralImage->GetPixel(        labelObject->GetLine(0).GetIndex() )
-      AttributeType( spectralImage->GetPixel( labelObject->GetLine(0).GetIndex() ) )
-    );
-    ++labelIt;
+    outputIt.Set(inputIt.Get());
+    ++inputIt;
+    ++outputIt;
     }
 
+  RegionAdjacencyMapType regionAdjacencyMap = LabelImageToRegionAdjacencyMap(inputLabelImage);
+  unsigned int regionCount = regionAdjacencyMap.size() - 1;
+
+  // Initialize arrays for mode information
+  m_CanonicalLabels.resize(regionCount+1);
+
+  m_Modes.resize(0);
+  m_Modes.reserve(regionCount+1);
+  for(unsigned int i = 0; i < regionCount+1 ; ++i)
+    {
+    m_Modes.push_back( SpectralPixelType(m_NumberOfComponentsPerPixel) );
+    }
+  m_PointCounts.resize(regionCount+1); // = std::vector<unsigned int>(regionCount+1);
+
+  std::cout << "Associate each label to a spectral value" << std::endl;
+
+  // Associate each label to a spectral value, a canonical label and a point count
+  typename itk::ImageRegionConstIterator<InputLabelImageType> inputItWithIndex(inputLabelImage, outputLabelImage->GetRequestedRegion());
+  inputItWithIndex.GoToBegin();
+  while(!inputItWithIndex.IsAtEnd())
+    {
+    LabelType label = inputItWithIndex.Get();
+    // if label has not been initialized yet ..
+    if(m_PointCounts[label] == 0)
+      {
+      m_CanonicalLabels[label] = label;
+      m_Modes[label] = spectralImage->GetPixel(inputItWithIndex.GetIndex());
+      }
+    m_PointCounts[label]++;
+    ++inputItWithIndex;
+    }
   // Region Merging
 
-  //Define a vector of the pairs to merge
-  typedef typename LabelMapType::LabelPairType LabelPairType;
   bool finishedMerging = false;
   unsigned int mergeIterations = 0;
 
@@ -144,105 +173,171 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   // Iterate until no more merge to do
   while(!finishedMerging)
     {
-    bool mergedOnce = false;
 
-    // Iterate over all regions (restart if a merge occurs)
-    labelObjectContainer = m_LabelMap->GetLabelObjectContainer();
-    labelIt = labelObjectContainer.begin();
-    while (labelIt != labelObjectContainer.end())
+    std::cout << "Iterate over all regions" << std::endl;
+    // Iterate over all regions
+    for(LabelType curLabel = 1; curLabel <= regionCount; ++curLabel)
       {
-      LabelType curLabel;    // label of current region
-      typename AttributeLabelObjectType::Pointer labelObject; // current label object
-      AttributeType currentObjectAttributes;  // attributes (updated when merging)
+      if(m_PointCounts[curLabel] == 0) // do not process empty regions
+        continue;
 
-      curLabel = labelIt->first;
-      labelObject = m_LabelMap->GetLabelObject(curLabel);
-      currentObjectAttributes = labelObject->GetAttribute();
-
-      // define a vector of pairs to merge into the current region
-      typename LabelMapType::LabelPairVectorType pairs;
+      const SpectralPixelType & curSpectral = m_Modes[curLabel];
 
       // Iterate over all adjacent regions and check for merge
-      const typename LabelMapType::AdjacentLabelsContainerType & adjacentLabelsContainer = m_LabelMap->GetAdjacentLabels(curLabel);
-      typename LabelMapType::AdjacentLabelsContainerType::const_iterator adjIt = adjacentLabelsContainer.begin();
-      while (adjIt != adjacentLabelsContainer.end())
+      typename AdjacentLabelsContainerType::const_iterator adjIt = regionAdjacencyMap[curLabel].begin();
+      while (adjIt != regionAdjacencyMap[curLabel].end())
         {
         LabelType adjLabel = *adjIt;
-        typename AttributeLabelObjectType::Pointer adjLabelObject = m_LabelMap->GetLabelObject(adjLabel);
-        const AttributeType &adjacentObjectAttributes = adjLabelObject->GetAttribute();
-
+        assert(adjLabel <= regionCount);
+        const SpectralPixelType & adjSpectral = m_Modes[adjLabel];
         // Check condition to merge regions
-
-        if ( currentObjectAttributes.IsSimilar(adjacentObjectAttributes, m_RangeBandwidth) )
+        bool isSimilar = true;
+        RealType norm2 = 0;
+        for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; ++comp)
           {
-          // Update output attribute
-          currentObjectAttributes = AttributeType::Merge(currentObjectAttributes, adjacentObjectAttributes);
-          // Add adjacent label to the merge list
-          pairs.push_back(LabelPairType(curLabel, adjLabel));
+          RealType e;
+          e = (curSpectral[comp] - adjSpectral[comp]) / m_RangeBandwidth;
+          norm2 += e*e;
+          }
+        isSimilar = norm2 < 0.25;
+        if(isSimilar)
+          {
+          // Find canonical label for current region
+          LabelType curCanLabel = curLabel; //m_CanonicalLabels[curLabel];
+          while(m_CanonicalLabels[curCanLabel] != curCanLabel)
+            {
+            curCanLabel = m_CanonicalLabels[curCanLabel];
+            }
+
+          // Find canonical label for adjacent region
+          LabelType adjCanLabel = adjLabel; //m_CanonicalLabels[curLabel];
+          while(m_CanonicalLabels[adjCanLabel] != adjCanLabel)
+            {
+            adjCanLabel = m_CanonicalLabels[adjCanLabel];
+            }
+
+          // Assign same canonical label to both regions
+          if(curCanLabel < adjCanLabel)
+            {
+            m_CanonicalLabels[adjCanLabel] = curCanLabel;
+            }
+          else
+            {
+            m_CanonicalLabels[m_CanonicalLabels[curCanLabel]] = adjCanLabel;
+            m_CanonicalLabels[curCanLabel] = adjCanLabel;
+            }
           }
         ++adjIt;
         } // end of loop over adjacent labels
-      // Merge when necessary
-      if(!pairs.empty())
-        {
-        m_LabelMap->MergeLabels(pairs);
-        // Update the attribute with the newly computed value
-        m_LabelMap->GetLabelObject(curLabel)->SetAttribute(currentObjectAttributes);
-        mergedOnce = true;
-        // After the merge, iterators and references become invalid -> reinitialize
-        labelIt = labelObjectContainer.find(curLabel);
-        }
-      ++labelIt;
       } // end of loop over labels
-    if ( !mergedOnce   // finished iterating over all regions without merging once
-         //   || mergeIterations >= 10 // TEMPORARY !!!
+
+    std::cout << "Simplify the table of canonical labels" << std::endl;
+    /* Simplify the table of canonical labels */
+    for(LabelType i = 1; i < regionCount+1; ++i)
+      {
+      LabelType can = i;
+      while(m_CanonicalLabels[can] != can)
+        {
+        can = m_CanonicalLabels[can];
+        }
+      m_CanonicalLabels[i] = can;
+      }
+
+    std::cout << "merge regions with same canonical label" << std::endl;
+    /* Merge regions with same canonical label */
+    /* - update modes and point counts */
+    std::vector<SpectralPixelType> newModes;
+    newModes.reserve(regionCount+1); //(regionCount+1, SpectralPixelType(m_NumberOfComponentsPerPixel));
+    std::cout << "allocated newModes" << std::endl;
+    for(unsigned int i = 0; i < regionCount+1; ++i)
+      {
+      newModes.push_back( SpectralPixelType(m_NumberOfComponentsPerPixel) );
+      }
+    std::vector<unsigned int> newPointCounts(regionCount+1);
+
+    for(unsigned int i = 1; i < regionCount+1; ++i)
+      {
+      newModes[i].Fill(0);
+      newPointCounts[i] = 0;
+      }
+
+    for(unsigned int i = 1; i < regionCount+1; ++i)
+      {
+      LabelType canLabel = m_CanonicalLabels[i];
+      unsigned int nPoints = m_PointCounts[i];
+      for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; ++comp)
+        {
+        newModes[canLabel][comp] += nPoints * m_Modes[i][comp];
+        }
+      newPointCounts[canLabel] += nPoints;
+      }
+
+    std::cout << "re-labeling" << std::endl;
+    /* re-labeling */
+    std::vector<LabelType> newLabels(regionCount+1);
+    std::vector<bool> newLabelSet(regionCount+1);
+    for(unsigned int i = 1; i < regionCount+1; ++i)
+      {
+      newLabelSet[i] = false;
+      }
+
+    LabelType label = 0;
+    for(unsigned int i = 1; i < regionCount+1; ++i)
+      {
+      LabelType canLabel = m_CanonicalLabels[i];
+      if(newLabelSet[canLabel] == false)
+        {
+        newLabelSet[canLabel] = true;
+        label++;
+        newLabels[canLabel] = label;
+        unsigned int nPoints = newPointCounts[canLabel];
+        for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; ++comp)
+          {
+          m_Modes[canLabel][comp] = newModes[canLabel][comp] / nPoints;
+          }
+
+        m_PointCounts[canLabel] = newPointCounts[canLabel];
+        }
+      }
+
+    unsigned int oldRegionCount = regionCount;
+    regionCount = label;
+
+    std::cout << "number of new labels:" << regionCount << std::endl;
+    /* reassign labels in label image */
+    outputIt.GoToBegin();
+    while(!outputIt.IsAtEnd())
+      {
+
+      LabelType l = outputIt.Get();
+      LabelType canLabel;
+      assert(m_CanonicalLabels[l] <= oldRegionCount);
+      canLabel = newLabels[m_CanonicalLabels[l]];
+      outputIt.Set( canLabel );
+
+      ++outputIt;
+      }
+
+
+    if ( oldRegionCount == regionCount  // finished iterating over all regions without merging once
+         || mergeIterations >= 10 // TEMPORARY !!!
+         || regionCount == 1
     ) finishedMerging = true;
+
+    // only one iteration for now
+    finishedMerging = true;
+
+    if(!finishedMerging)
+      {
+      /* Update adjacency table */
+      regionAdjacencyMap = LabelImageToRegionAdjacencyMap(outputLabelImage);
+      }
+
     mergeIterations++;
-     std::cout << "mergeIterations: " << mergeIterations << " (" <<  m_LabelMap->GetNumberOfLabelObjects() << " objects)" << std::endl;
     } // end of main iteration loop
   std::cout << "merge iterations: " << mergeIterations << std::endl;
-  std::cout << "number of label objects: " << m_LabelMap->GetNumberOfLabelObjects() << std::endl;
-  // Merge pairs listed in the vector
-  //m_LabelMap->MergeLabels(pairs);
+  std::cout << "number of label objects: " << regionCount << std::endl;
 }
-
-
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
-void
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
-::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, int threadId)
-{
-}
-
-
-template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
-void
-LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
-::AfterThreadedGenerateData()
-{
-  typename OutputLabelImageType::Pointer outputLabelImage = this->GetOutput();
-  typedef itk::ImageRegionIterator<OutputLabelImageType> OutputLabelIteratorType;
-  OutputLabelIteratorType outputLabelIt(outputLabelImage, outputLabelImage->GetRequestedRegion());
-
-  // copy labelMap to output label image
-  typename LabelMapToLabelImageFilterType::Pointer mapToImageFilter = LabelMapToLabelImageFilterType::New();
-  mapToImageFilter->SetInput(m_LabelMap);
-  mapToImageFilter->Update();
-
-  OutputLabelIteratorType mapToImageIt(mapToImageFilter->GetOutput(), outputLabelImage->GetRequestedRegion());
-
-  outputLabelIt.GoToBegin();
-  mapToImageIt.GoToBegin();
-
-  while(!outputLabelIt.IsAtEnd())
-    {
-    outputLabelIt.Set(mapToImageIt.Get());
-    ++outputLabelIt;
-    ++mapToImageIt;
-    }
-
-}
-
 
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
 void
@@ -251,7 +346,65 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Range bandwidth: "                  << m_RangeBandwidth                 << std::endl;
- }
+}
+
+
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage>
+typename LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>::RegionAdjacencyMapType
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage>
+::LabelImageToRegionAdjacencyMap(typename InputLabelImageType::Pointer  inputLabelImage)
+{
+  // declare the output map
+  RegionAdjacencyMapType ram;
+
+  // Find the maximum label value
+  itk::ImageRegionConstIterator<InputLabelImageType> it(inputLabelImage, inputLabelImage->GetRequestedRegion());
+  it.GoToBegin();
+  LabelType maxLabel = 0;
+  while(!it.IsAtEnd())
+    {
+    LabelType label = it.Get();
+    maxLabel = vcl_max(maxLabel, label);
+    ++it;
+    }
+
+  // Set the size of the adjacency map
+  ram.resize(maxLabel+1);
+
+  // set the image region without bottom and right borders so that bottom and
+  // right neighbors always exist
+  RegionType regionWithoutBottomRightBorders  = inputLabelImage->GetRequestedRegion();
+  SizeType size = regionWithoutBottomRightBorders.GetSize();
+  for(unsigned int d = 0; d < ImageDimension; ++d) size[d] -= 1;
+  regionWithoutBottomRightBorders.SetSize(size);
+  itk::ImageRegionConstIteratorWithIndex<InputLabelImageType> inputIt(inputLabelImage, regionWithoutBottomRightBorders);
+
+  inputIt.GoToBegin();
+  while(!inputIt.IsAtEnd())
+    {
+    const InputIndexType & index = inputIt.GetIndex();
+    LabelType label = inputIt.Get();
+
+    // check neighbors
+    for(unsigned int d = 0; d < ImageDimension; ++d)
+      {
+      InputIndexType neighborIndex = index;
+      neighborIndex[d]++;
+
+      LabelType neighborLabel = inputLabelImage->GetPixel(neighborIndex);
+
+      // add adjacency if different labels
+      if(neighborLabel != label)
+        {
+        ram[label].insert(neighborLabel);
+        ram[neighborLabel].insert(label);
+        }
+      }
+    ++inputIt;
+    }
+
+  return ram;
+}
 
 } // end namespace otb
 

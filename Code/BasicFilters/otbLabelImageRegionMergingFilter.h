@@ -21,98 +21,11 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "itkImageToImageFilter.h"
-#include "itkLabelMap.h"
-#include "itkAttributeLabelObject.h"
-#include "otbLabelImageToLabelMapWithAdjacencyFilter.h"
-#include "otbLabelMapToLabelImageFilter.h"
+
+#include <set>
 
 namespace otb
 {
-
-/** \class MinMaxAttibutes
- *
- * Contains attributes for a segmented region, representing the min and max
- * spectral values in the region
- */
-template <class PixelType>
-class MinMaxAttributes
-{
-public:
-  MinMaxAttributes() {}
-  MinMaxAttributes(PixelType _minValue, PixelType _maxValue) :
-    minValue(_minValue), maxValue(_maxValue) {}
-  MinMaxAttributes(PixelType _value) :
-    minValue(_value), maxValue(_value) {}
-
-  PixelType minValue;
-  PixelType maxValue;
-  friend std::ostream& operator<< (std::ostream& os, const MinMaxAttributes& ma) {
-    return os << "{ min: " << ma.minValue << " max: " << ma.maxValue << " }";
-  }
-
-  bool IsSimilar(const MinMaxAttributes &other, typename PixelType::ComponentType distance)
-  {
-    bool similar = true;
-    unsigned int numberOfComponentsPerPixel = minValue.Size();
-    for(unsigned int comp = 0; comp < numberOfComponentsPerPixel && similar; comp++)
-      {
-      if (std::min(minValue[comp], other.minValue[comp]) + distance < std::max(maxValue[comp], other.maxValue[comp]) )
-        {
-        similar = false;
-        }
-      }
-    return similar;
-  }
-
-  static MinMaxAttributes Merge(const MinMaxAttributes &att1, const MinMaxAttributes &att2)
-  {
-    MinMaxAttributes output(att1);
-    unsigned int numberOfComponentsPerPixel = att1.minValue.Size();
-    for(unsigned int comp = 0; comp < numberOfComponentsPerPixel; comp++)
-      {
-      output.minValue[comp] = std::min(att1.minValue[comp], att2.minValue[comp]);
-      output.maxValue[comp] = std::max(att1.maxValue[comp], att2.maxValue[comp]);
-      }
-    return output;
-  }
-};
-
-/** \class SpectralAttribute
- *
- * Contains attributes for a segmented region, representing a spectral value in the region
- */
-template <class PixelType>
-class SpectralAttribute
-{
-public:
-  SpectralAttribute() {}
-  SpectralAttribute(PixelType _value) :
-    spectralValue(_value) {}
-
-  PixelType spectralValue;
-
-  friend std::ostream& operator<< (std::ostream& os, const SpectralAttribute& sa) {
-    return os << sa.spectralValue;
-  }
-
-  bool IsSimilar(const SpectralAttribute &other, typename PixelType::ComponentType distance)
-  {
-    bool similar = true;
-    unsigned int numberOfComponentsPerPixel = spectralValue.Size();
-    for(unsigned int comp = 0; comp < numberOfComponentsPerPixel && similar; comp++)
-      {
-      if (vcl_abs(spectralValue[comp] - other.spectralValue[comp]) > distance)
-        similar = false;
-      }
-    return similar;
-  }
-
-  static SpectralAttribute Merge(const SpectralAttribute &att1, const SpectralAttribute &att2)
-  {
-    return att1;
-  }
-};
-
 
 /** \class LabelImageRegionMergingFilter
  *
@@ -122,7 +35,6 @@ public:
  *
  *
  * \ingroup ImageSegmentation
- * \ingroup ImageEnhancement
  */
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage = TInputLabelImage>
 class ITK_EXPORT LabelImageRegionMergingFilter
@@ -169,14 +81,20 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, InputLabelImageType::ImageDimension);
 
   /** LabelMap typedefs */
-  typedef MinMaxAttributes<SpectralPixelType> AttributeType;
-  //typedef SpectralAttribute<SpectralPixelType> AttributeType;
-  typedef itk::AttributeLabelObject<InputLabelType, ImageDimension, AttributeType > AttributeLabelObjectType;
+/*
+  //typedef MinMaxAttributes<SpectralPixelType> AttributeType;
+  typedef SpectralAttribute<SpectralPixelType> AttributeType;
+  typedef itk::AttributeLabelObject<OutputLabelType, ImageDimension, AttributeType > AttributeLabelObjectType;
   typedef otb::LabelImageToLabelMapWithAdjacencyFilter<OutputLabelImageType,
     otb::LabelMapWithAdjacency<AttributeLabelObjectType> > LabelMapFilterType;
   typedef typename LabelMapFilterType::OutputImageType LabelMapType;
   typedef typename LabelMapType::LabelType             LabelType;
   typedef otb::LabelMapToLabelImageFilter<LabelMapType, OutputLabelImageType> LabelMapToLabelImageFilterType;
+*/
+
+  typedef InputLabelType      LabelType;
+  typedef std::set<LabelType> AdjacentLabelsContainerType;
+  typedef std::vector<AdjacentLabelsContainerType> RegionAdjacencyMapType;
 
 
   /** Setters / Getters */
@@ -195,7 +113,7 @@ public:
 
 protected:
 
-   virtual void BeforeThreadedGenerateData();
+   virtual void GenerateData();
 
     /** LabelImageRegionMergingFilter can be implemented as a multithreaded filter.
       * Therefore, this implementation provides a ThreadedGenerateData()
@@ -207,10 +125,10 @@ protected:
       *
       * \sa ImageToImageFilter::ThreadedGenerateData(),
       *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
-                               int threadId );
+//  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
+//                               int threadId );
 
-  virtual void AfterThreadedGenerateData();
+//  virtual void AfterThreadedGenerateData();
 
   /** Constructor */
   LabelImageRegionMergingFilter();
@@ -220,6 +138,9 @@ protected:
 
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  /** Method to build a map of adjacent regions */
+  RegionAdjacencyMapType LabelImageToRegionAdjacencyMap(typename InputLabelImageType::Pointer inputLabelImage);
 
 private:
   LabelImageRegionMergingFilter(const Self &);     //purposely not implemented
@@ -231,7 +152,9 @@ private:
   /** Number of components per pixel in the input image */
   unsigned int m_NumberOfComponentsPerPixel;
 
-  typename LabelMapType::Pointer m_LabelMap;
+  std::vector<LabelType> m_CanonicalLabels;
+  std::vector<SpectralPixelType> m_Modes;
+  std::vector<unsigned int> m_PointCounts;
 };
 
 } // end namespace otb
