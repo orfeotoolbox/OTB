@@ -41,8 +41,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputIteratio
   m_ModeSearchOptimization = true;
 
   this->SetNumberOfOutputs(4);
-  this->SetNthOutput(0, OutputSpatialImageType::New());
-  this->SetNthOutput(1, OutputImageType::New());
+  this->SetNthOutput(0, OutputImageType::New());
+  this->SetNthOutput(1, OutputSpatialImageType::New());
   this->SetNthOutput(2, OutputIterationImageType::New());
   this->SetNthOutput(3, OutputLabelImageType::New());
 }
@@ -60,11 +60,11 @@ const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, 
 MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputIterationImage>
 ::GetSpatialOutput() const
 {
-  if (this->GetNumberOfOutputs() < 1)
+  if (this->GetNumberOfOutputs() < 2)
     {
     return 0;
     }
-  return static_cast<const OutputSpatialImageType *>(this->itk::ProcessObject::GetOutput(0));
+  return static_cast<const OutputSpatialImageType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputIterationImage>
@@ -72,11 +72,11 @@ typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutpu
 MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputIterationImage>
 ::GetSpatialOutput()
 {
-  if (this->GetNumberOfOutputs() < 1)
+  if (this->GetNumberOfOutputs() < 2)
     {
     return 0;
     }
-  return static_cast<OutputSpatialImageType *>(this->itk::ProcessObject::GetOutput(0));
+  return static_cast<OutputSpatialImageType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
 
@@ -85,11 +85,11 @@ const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, 
 MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputIterationImage>
 ::GetRangeOutput() const
 {
-  if (this->GetNumberOfOutputs() < 2)
+  if (this->GetNumberOfOutputs() < 1)
     {
     return 0;
     }
-  return static_cast<const OutputImageType *>(this->itk::ProcessObject::GetOutput(1));
+  return static_cast<const OutputImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
 
 template <class TInputImage, class TOutputImage, class TKernel, class TNorm, class TOutputIterationImage>
@@ -97,11 +97,11 @@ typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutpu
 MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TNorm, TOutputIterationImage>
 ::GetRangeOutput()
 {
-  if (this->GetNumberOfOutputs() < 2)
+  if (this->GetNumberOfOutputs() < 1)
     {
     return 0;
     }
-  return static_cast<OutputImageType *>(this->itk::ProcessObject::GetOutput(1));
+  return static_cast<OutputImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
 
 
