@@ -381,7 +381,7 @@ void otb::ogr::Field::SetValue(T const& value)
 {
   CheckInvariants();
   typedef internal::CppToOGRConverter_trait<T> Converter;
-  typedef typename Converter::type InterfaceType;
+  typedef typename Converter::type             InterfaceType;
   // BOOST_STATIC_ASSERT(!(boost::is_array<InterfaceType>::value));
   typedef typename boost::mpl::at<internal::FieldType_Map, InterfaceType>::type Kind;
   const int VALUE = Kind::value;
