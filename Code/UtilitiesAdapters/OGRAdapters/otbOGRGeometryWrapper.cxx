@@ -22,7 +22,7 @@
 #include "otbOGRGeometryWrapper.h"
 #include "ogr_geometry.h"
 
-#if GDAL_VERSION_NUM < 1800
+#if GDAL_VERSION_NUM < 1900
 #  include "itkMacro.h"
 #endif
 
@@ -140,7 +140,7 @@ otb::ogr::UniqueGeometryPtr otb::ogr::SimplifyPreserveTopology(OGRGeometry const
   return UniqueGeometryPtr(g.SimplifyPreserveTopology(tolerance));
 #else
   itkGenericExceptionMacro("OGRGeometry::Simplify is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.");
+    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.");
 #endif
 }
 
