@@ -36,7 +36,6 @@ namespace otb
  * concatenation of range components and coordinates as a vector. Components are
  * scaled by their respective spatial and range bandwidth.
  */
-
 template<class TInputImage, class TOutputJointImage>
 class SpatialRangeJointDomainTransform
 {
@@ -86,7 +85,6 @@ private:
   RealType     m_RangeBandwidth;
 };
 
-
 class KernelUniform
 {
 public:
@@ -126,8 +124,6 @@ public:
  * Iterator for reading pixels over an image region, specialized for faster
  * access to pixels in vector images through the method GetPixelPointer
  */
-
-
 template<typename TImage>
 class FastImageRegionConstIterator
   : public itk::ImageRegionConstIterator<TImage>
@@ -161,6 +157,16 @@ public:
 };
 
 
+/** \class BucketImage
+  *
+  * This class indexes pixels in a N-dimensional image into a N+1-dimensional
+  * array of buckets. Each pixel is stored into one bucket depending on its
+  * position on the lattice (the width of a bucket is given at construction) and
+  * one spectral component (also given at construction by spectralCoordinate).
+  *
+  * The (spatially and spectrally) neighboring buckets of pixels can then be
+  * obtained by using GetNeighborhoodBucketListIndices().
+  */
 template <class TImage>
 class BucketImage
 {
@@ -188,6 +194,14 @@ public:
   typedef std::vector<BucketType>                    BucketListType;
 
   BucketImage() {}
+
+  /** Constructor for the bucket image. It operates on the specified
+    * region.
+    * spatialRadius specifies the width of a bucket in pixels.
+    * rangeRadius is the spectral width for the specified spectral coordinate in
+    * one bucket.
+    * spectralCoordinate is the index of the pixel used for classification in buckets.
+    */
   BucketImage(ImageConstPointerType image, const RegionType & region, RealType spatialRadius, RealType rangeRadius, unsigned int spectralCoordinate)
   {
     m_Image = image;
@@ -282,6 +296,7 @@ public:
 
   ~BucketImage() {}
 
+  /** Returns the N+1-dimensional bucket index for a given pixel value at the given index */
   BucketImageIndexType GetBucketIndex(const PixelType & pixel, const IndexType & index)
   {
     BucketImageIndexType bucketIndex(ImageDimension+1);
@@ -293,6 +308,8 @@ public:
     return bucketIndex;
   }
 
+  /** Converts a N+1-dimensional bucket index into the 1D list index useable by
+  GetBucket() */
   int BucketIndexToBucketListIndex(const BucketImageIndexType & bucketIndex)
   {
     int bucketListIndex = bucketIndex[0];
@@ -303,6 +320,7 @@ public:
     return bucketListIndex;
   }
 
+  /** Retrieves the list of all buckets in the neighborhood of the given bucket */
   std::vector<unsigned int> GetNeighborhoodBucketListIndices(int bucketIndex)
   {
     std::vector<unsigned int> indices(m_NeighborhoodOffsetVectorSize);
@@ -314,6 +332,7 @@ public:
     return indices;
   }
 
+  /* Returns the list of pixels (actually pointer to pixel data) contained in a bucket */
   const BucketType & GetBucket(unsigned int index)
   {
     return m_BucketList[index];
