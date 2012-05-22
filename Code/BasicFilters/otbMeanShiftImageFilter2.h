@@ -22,6 +22,7 @@
 #include "otbVectorImage.h"
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionConstIterator.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 #include <vcl_algorithm.h>
 
 
@@ -159,6 +160,174 @@ public:
   unsigned int m_NumberOfComponentsPerPixel;
 };
 
+
+template <class TImage>
+class BucketImage
+{
+public:
+  typedef TImage                                 ImageType;
+  typedef typename ImageType::ConstPointer       ImageConstPointerType;
+  typedef typename ImageType::PixelType          PixelType;
+  typedef typename ImageType::InternalPixelType  InternalPixelType;
+  typedef typename ImageType::RegionType         RegionType;
+  typedef typename ImageType::IndexType          IndexType;
+
+  typedef double  RealType;
+
+  static const unsigned int ImageDimension = ImageType::ImageDimension;
+
+  /** The bucket image has dimension N+1 (ie. usually 3D for most images) */
+  typedef std::vector<typename ImageType::SizeType::SizeValueType>   BucketImageSizeType;
+  //typedef std::vector<typename ImageType::IndexType::IndexValueType> BucketImageIndexType;
+  typedef std::vector<long> BucketImageIndexType;
+
+
+  /** pixel buckets typedefs and declarations */
+  typedef const typename ImageType::InternalPixelType *    ImageDataPointerType;
+  typedef std::vector<ImageDataPointerType>          BucketType;
+  typedef std::vector<BucketType>                    BucketListType;
+
+  BucketImage() {}
+  BucketImage(ImageConstPointerType image, const RegionType & region, RealType spatialRadius, RealType rangeRadius, unsigned int spectralCoordinate)
+  {
+    m_Image = image;
+    m_Region = region;
+    m_SpatialRadius = spatialRadius;
+    m_RangeRadius = rangeRadius;
+    m_SpectralCoordinate = spectralCoordinate;
+
+    // Find max and min of the used spectral band
+    itk::ImageRegionConstIterator<ImageType> inputIt(m_Image, m_Region);
+    inputIt.GoToBegin();
+    InternalPixelType minValue = inputIt.Get()[spectralCoordinate];
+    InternalPixelType maxValue = minValue;
+    ++inputIt;
+    while( !inputIt.IsAtEnd() )
+      {
+      const PixelType &p = inputIt.Get();
+      minValue = vcl_min(minValue, p[m_SpectralCoordinate]);
+      maxValue = vcl_max(maxValue, p[m_SpectralCoordinate]);
+      ++inputIt;
+      }
+
+    m_MinValue = minValue;
+    m_MaxValue = maxValue;
+    std::cout << "min: " << m_MinValue << ", max: " << m_MaxValue << std::endl;
+    // Compute bucket image dimensions
+    m_DimensionVector.resize(ImageDimension+1);
+    for(unsigned int dim = 0; dim < ImageDimension; ++dim)
+      {
+      m_DimensionVector[dim] = m_Region.GetSize()[dim] / m_SpatialRadius + 1;
+      }
+    m_DimensionVector[ImageDimension] = (unsigned int)((maxValue - minValue + m_RangeRadius) / m_RangeRadius);
+
+    std::cout << "m_DimensionVector: " << m_DimensionVector[0] << ", "<<m_DimensionVector[1] << ", "<<m_DimensionVector[2] << std::endl;
+
+    unsigned int numBuckets = m_DimensionVector[0];
+    for(unsigned int dim = 1; dim <= ImageDimension; ++dim)
+      numBuckets *= m_DimensionVector[dim];
+
+    m_BucketList.resize(numBuckets);
+
+    // Build buckets
+    BucketImageIndexType bucketIndex; //(ImageDimension+1);
+    itk::ImageRegionConstIteratorWithIndex<ImageType> it(m_Image, m_Region);
+    it.GoToBegin();
+    // this iterator is only used to get the pixel data pointer
+    FastImageRegionConstIterator<ImageType> fastIt(m_Image, m_Region);
+    fastIt.GoToBegin();
+
+    while( !it.IsAtEnd() )
+      {
+      const IndexType & index = it.GetIndex();
+      const PixelType & pixel = it.Get();
+
+      // Find which bucket this pixel belongs to
+      bucketIndex = GetBucketIndex(pixel, index);
+
+      unsigned int bucketListIndex = BucketIndexToBucketListIndex(bucketIndex);
+      assert(bucketListIndex < numBuckets);
+      m_BucketList[bucketListIndex].push_back(fastIt.GetPixelPointer());
+      ++it;
+      ++fastIt;
+      }
+  }
+
+  ~BucketImage() {}
+
+  BucketImageIndexType GetBucketIndex(const PixelType & pixel, const IndexType & index)
+  {
+    BucketImageIndexType bucketIndex(ImageDimension+1);
+    for(unsigned int dim = 0; dim < ImageDimension; ++dim)
+      {
+      bucketIndex[dim] = (index[dim] - m_Region.GetIndex()[dim]) / m_SpatialRadius;
+        }
+    bucketIndex[ImageDimension] = (pixel[m_SpectralCoordinate] - m_MinValue) / m_RangeRadius;
+    return bucketIndex;
+  }
+
+  unsigned int BucketIndexToBucketListIndex(const BucketImageIndexType & bucketIndex)
+  {
+    unsigned int bucketListIndex = bucketIndex[0];
+    for(unsigned int dim = 1; dim <= ImageDimension; ++dim)
+      {
+      bucketListIndex = bucketListIndex * m_DimensionVector[dim] + bucketIndex[dim];
+      }
+    return bucketListIndex;
+  }
+
+  std::vector<unsigned int> GetNeighborhoodBucketListIndices(const BucketImageIndexType & bucketIndex)
+  {
+    std::vector<unsigned int> indices;
+    BucketImageIndexType neighborIndex;
+    indices.push_back(BucketIndexToBucketListIndex(bucketIndex));
+
+    for(unsigned int dim = 0; dim <= ImageDimension; ++dim)
+      {
+      if(bucketIndex[dim] > 0)
+        {
+        neighborIndex = bucketIndex;
+        neighborIndex[dim]--;
+        indices.push_back(BucketIndexToBucketListIndex(neighborIndex));
+        }
+      if(static_cast<typename ImageType::SizeType::SizeValueType>(bucketIndex[dim]) < m_DimensionVector[dim]-1)
+        {
+        neighborIndex = bucketIndex;
+        neighborIndex[dim]++;
+        indices.push_back(BucketIndexToBucketListIndex(neighborIndex));
+        }
+      }
+    return indices;
+  }
+
+  const BucketType & GetBucket(unsigned int index)
+  {
+    return m_BucketList[index];
+  }
+
+private:
+  /** Input image */
+  ImageConstPointerType m_Image;
+  /** Processed region */
+  RegionType m_Region;
+
+  /** Spatial radius of one bucket of pixels */
+  RealType m_SpatialRadius;
+  /** Range radius (at a single dimension) of one bucket of pixels */
+  RealType m_RangeRadius;
+  /** pixels are separated in buckets depending on their spatial position and
+  also their value at one coordinate */
+  unsigned int m_SpectralCoordinate;
+  /** Min and Max of selected spectral coordinate */
+  InternalPixelType m_MinValue;
+  InternalPixelType m_MaxValue;
+
+  /** the buckets are stored in this list */
+  BucketListType m_BucketList;
+  /** This vector holds the dimensions of the 3D (ND?) bucket image */
+  BucketImageSizeType m_DimensionVector;
+};
+
 /** \class MeanShiftImageFilter2
  *
  *
@@ -285,6 +454,11 @@ public:
   itkSetMacro(ModeSearchOptimization, bool);
   itkGetConstMacro(ModeSearchOptimization, bool);
 
+  /** Toggle bucket optimization, which is enabled by default.
+    */
+  itkSetMacro(BucketOptimization, bool);
+  itkGetConstMacro(BucketOptimization, bool);
+
   /** Returns the const spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
   const OutputSpatialImageType * GetSpatialOutput() const;
   /** Returns the const spectral image output */
@@ -346,7 +520,7 @@ protected:
   virtual void CalculateMeanShiftVector(const typename RealVectorImageType::Pointer inputImagePtr,
                                         const RealVector& jointPixel, const OutputRegionType& outputRegion,
                                         RealVector& meanShiftVector);
-
+  virtual void CalculateMeanShiftVectorBucket(const RealVector& jointPixel, RealVector& meanShiftVector);
 private:
   MeanShiftImageFilter2(const Self &); //purposely not implemented
   void operator =(const Self&);             //purposely not implemented
@@ -386,12 +560,18 @@ private:
 
   /** Boolean to enable mode search optimization */
   bool m_ModeSearchOptimization;
+  /** Boolean to enable bucket optimization */
+  bool m_BucketOptimization;
 
   /** Mode counters (local to each thread) */
   itk::VariableLengthVector<LabelType> m_NumLabels;
   /** Number of bits used to represent the threadId in the most significant bits
   of labels */
   unsigned int m_ThreadIdNumberOfBits;
+
+  typedef BucketImage<RealVectorImageType> BucketImageType;
+  BucketImageType m_BucketImage;
+
 };
 
 } // end namespace otb

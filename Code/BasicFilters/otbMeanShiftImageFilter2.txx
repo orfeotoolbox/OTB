@@ -39,6 +39,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
   m_RangeBandwidth=16.;
   m_Threshold=1e-3;
   m_ModeSearchOptimization = true;
+  m_BucketOptimization = true;
 
   this->SetNumberOfOutputs(4);
   this->SetNthOutput(0, OutputImageType::New());
@@ -291,6 +292,15 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
   jointImageFunctor->Update();
   m_JointImage = jointImageFunctor->GetOutput();
 
+  if(m_BucketOptimization)
+    {
+  // Create bucket image
+  // Note: because values in the input m_JointImage are normalized, the
+  // rangeRadius argument is just 1
+    m_BucketImage = BucketImageType(static_cast<typename RealVectorImageType::ConstPointer>(m_JointImage),
+                                    m_JointImage->GetRequestedRegion(),
+                                    m_Kernel.GetRadius(m_SpatialBandwidth), 1, ImageDimension);
+    }
 /*
   // Allocate the joint domain image
   m_JointImage = RealVectorImageType::New();
@@ -466,6 +476,79 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 
 
     ++it;
+    }
+
+  if(weightSum > 0)
+    {
+    for(unsigned int comp = 0; comp < jointDimension; comp++)
+      {
+      meanShiftVector[comp] = meanShiftVector[comp] / weightSum - jointPixel[comp];
+      }
+    }
+  else
+    meanShiftVector.Fill(0);
+ }
+
+// Calculates the mean shift vector at the position given by jointPixel
+template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+void
+MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+::CalculateMeanShiftVectorBucket(const RealVector& jointPixel, RealVector& meanShiftVector)
+ {
+  unsigned int jointDimension = ImageDimension + m_NumberOfComponentsPerPixel;
+  RealVector jointNeighbor;
+
+  RealType weightSum = 0;
+
+  meanShiftVector.Fill(0.);
+  jointNeighbor.SetSize(ImageDimension + m_NumberOfComponentsPerPixel);
+
+  InputIndexType index;
+  for(unsigned int dim = 0; dim < ImageDimension; ++dim)
+    {
+    index[dim] = jointPixel[dim] * m_SpatialBandwidth + 0.5;
+    }
+
+  std::vector<unsigned int> neighborBuckets;
+  neighborBuckets = m_BucketImage.GetNeighborhoodBucketListIndices(m_BucketImage.GetBucketIndex(jointPixel, index));
+
+  while(!neighborBuckets.empty())
+    {
+    const typename BucketImageType::BucketType & bucket = m_BucketImage.GetBucket(neighborBuckets.back());
+    neighborBuckets.pop_back();
+    if(bucket.empty()) continue;
+    typename BucketImageType::BucketType::const_iterator it = bucket.begin();
+    while(it != bucket.end())
+      {
+      RealType norm2;
+      RealType weight;
+      //std::cout << bucket.size() << std::endl;
+      jointNeighbor.SetData(const_cast<RealType*>(*it));
+
+      // Compute the squared norm of the difference
+      // This is the L2 norm, TODO: replace by the templated norm
+      norm2 = 0;
+      for(unsigned int comp = 0; comp < jointDimension; comp++)
+        {
+        RealType d;
+        d = jointNeighbor[comp] - jointPixel[comp];
+        norm2 += d*d;
+        }
+
+      // Compute pixel weight from kernel
+      weight = m_Kernel(norm2);
+
+      // Update sum of weights
+      weightSum += weight;
+
+      // Update mean shift vector
+      for(unsigned int comp = 0; comp < jointDimension; comp++)
+        {
+        meanShiftVector[comp] += weight * jointNeighbor[comp];
+        }
+
+      ++it;
+      }
     }
 
   if(weightSum > 0)
@@ -661,7 +744,14 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
         } // end if (m_ModeSearchOptimization)
 
       //Calculate meanShiftVector
-      this->CalculateMeanShiftVector(m_JointImage, jointPixel, requestedRegion, meanShiftVector);
+      if(m_BucketOptimization)
+        {
+        this->CalculateMeanShiftVectorBucket(jointPixel, meanShiftVector);
+        }
+      else
+        {
+        this->CalculateMeanShiftVector(m_JointImage, jointPixel, requestedRegion, meanShiftVector);
+        }
 
       // Compute mean shift vector squared norm (not normalized by bandwidth)
       // and add mean shift vector to current joint pixel
