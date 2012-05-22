@@ -178,8 +178,8 @@ public:
 
   /** The bucket image has dimension N+1 (ie. usually 3D for most images) */
   typedef std::vector<typename ImageType::SizeType::SizeValueType>   BucketImageSizeType;
-  //typedef std::vector<typename ImageType::IndexType::IndexValueType> BucketImageIndexType;
-  typedef std::vector<long> BucketImageIndexType;
+  typedef std::vector<typename ImageType::IndexType::IndexValueType> BucketImageIndexType;
+  //typedef std::vector<long> BucketImageIndexType;
 
 
   /** pixel buckets typedefs and declarations */
@@ -212,23 +212,22 @@ public:
 
     m_MinValue = minValue;
     m_MaxValue = maxValue;
-    std::cout << "min: " << m_MinValue << ", max: " << m_MaxValue << std::endl;
-    // Compute bucket image dimensions
+
+    // Compute bucket image dimensions. Note: empty buckets are at each border
+    // to simplify image border issues
     m_DimensionVector.resize(ImageDimension+1);
     for(unsigned int dim = 0; dim < ImageDimension; ++dim)
       {
-      m_DimensionVector[dim] = m_Region.GetSize()[dim] / m_SpatialRadius + 1;
+      m_DimensionVector[dim] = m_Region.GetSize()[dim] / m_SpatialRadius + 3;
       }
-    m_DimensionVector[ImageDimension] = (unsigned int)((maxValue - minValue + m_RangeRadius) / m_RangeRadius);
-
-    std::cout << "m_DimensionVector: " << m_DimensionVector[0] << ", "<<m_DimensionVector[1] << ", "<<m_DimensionVector[2] << std::endl;
+    m_DimensionVector[ImageDimension] = (unsigned int)((maxValue - minValue) / m_RangeRadius) + 3;
 
     unsigned int numBuckets = m_DimensionVector[0];
     for(unsigned int dim = 1; dim <= ImageDimension; ++dim)
       numBuckets *= m_DimensionVector[dim];
 
     m_BucketList.resize(numBuckets);
-
+    m_BucketListSize = numBuckets;
     // Build buckets
     BucketImageIndexType bucketIndex; //(ImageDimension+1);
     itk::ImageRegionConstIteratorWithIndex<ImageType> it(m_Image, m_Region);
@@ -251,6 +250,34 @@ public:
       ++it;
       ++fastIt;
       }
+
+    // Prepare neighborhood offset vector
+    BucketImageIndexType zeroOffsetIndex(ImageDimension+1);
+    for(unsigned dim = 0; dim <= ImageDimension; ++dim) zeroOffsetIndex[dim] = 0;
+    std::vector<BucketImageIndexType> neighborsIndexList;
+    neighborsIndexList.push_back(zeroOffsetIndex);
+    for(unsigned dim = 0; dim <= ImageDimension; ++dim)
+      {
+      // take all neighbors already in the list and add their direct neighbor
+      // along the current dim
+      unsigned int curSize = neighborsIndexList.size();
+      for(unsigned int i = 0; i < curSize; ++i)
+        {
+        BucketImageIndexType index = neighborsIndexList[i];
+        index[dim]--;
+        neighborsIndexList.push_back(index);
+        index[dim] += 2;
+        neighborsIndexList.push_back(index);
+        }
+      }
+    // Convert all neighbors n-dimensional indices to bucket list 1D indices
+    m_NeighborhoodOffsetVectorSize = neighborsIndexList.size();
+    m_NeighborhoodOffsetVector.reserve(m_NeighborhoodOffsetVectorSize);
+    for(unsigned int i = 0; i < m_NeighborhoodOffsetVectorSize; ++i)
+      {
+      int listIndex = BucketIndexToBucketListIndex(neighborsIndexList[i]);
+      m_NeighborhoodOffsetVector.push_back(listIndex);
+      }
   }
 
   ~BucketImage() {}
@@ -260,15 +287,15 @@ public:
     BucketImageIndexType bucketIndex(ImageDimension+1);
     for(unsigned int dim = 0; dim < ImageDimension; ++dim)
       {
-      bucketIndex[dim] = (index[dim] - m_Region.GetIndex()[dim]) / m_SpatialRadius;
+      bucketIndex[dim] = (index[dim] - m_Region.GetIndex()[dim]) / m_SpatialRadius + 1;
         }
-    bucketIndex[ImageDimension] = (pixel[m_SpectralCoordinate] - m_MinValue) / m_RangeRadius;
+    bucketIndex[ImageDimension] = (pixel[m_SpectralCoordinate] - m_MinValue) / m_RangeRadius + 1;
     return bucketIndex;
   }
 
-  unsigned int BucketIndexToBucketListIndex(const BucketImageIndexType & bucketIndex)
+  int BucketIndexToBucketListIndex(const BucketImageIndexType & bucketIndex)
   {
-    unsigned int bucketListIndex = bucketIndex[0];
+    int bucketListIndex = bucketIndex[0];
     for(unsigned int dim = 1; dim <= ImageDimension; ++dim)
       {
       bucketListIndex = bucketListIndex * m_DimensionVector[dim] + bucketIndex[dim];
@@ -276,26 +303,13 @@ public:
     return bucketListIndex;
   }
 
-  std::vector<unsigned int> GetNeighborhoodBucketListIndices(const BucketImageIndexType & bucketIndex)
+  std::vector<unsigned int> GetNeighborhoodBucketListIndices(int bucketIndex)
   {
-    std::vector<unsigned int> indices;
-    BucketImageIndexType neighborIndex;
-    indices.push_back(BucketIndexToBucketListIndex(bucketIndex));
+    std::vector<unsigned int> indices(m_NeighborhoodOffsetVectorSize);
 
-    for(unsigned int dim = 0; dim <= ImageDimension; ++dim)
+    for(unsigned int i = 0; i < m_NeighborhoodOffsetVectorSize; ++i)
       {
-      if(bucketIndex[dim] > 0)
-        {
-        neighborIndex = bucketIndex;
-        neighborIndex[dim]--;
-        indices.push_back(BucketIndexToBucketListIndex(neighborIndex));
-        }
-      if(static_cast<typename ImageType::SizeType::SizeValueType>(bucketIndex[dim]) < m_DimensionVector[dim]-1)
-        {
-        neighborIndex = bucketIndex;
-        neighborIndex[dim]++;
-        indices.push_back(BucketIndexToBucketListIndex(neighborIndex));
-        }
+      indices[i] = bucketIndex + m_NeighborhoodOffsetVector[i];
       }
     return indices;
   }
@@ -303,6 +317,11 @@ public:
   const BucketType & GetBucket(unsigned int index)
   {
     return m_BucketList[index];
+  }
+
+  unsigned int GetNumberOfNeighborBuckets()
+  {
+    return m_NeighborhoodOffsetVectorSize;
   }
 
 private:
@@ -324,8 +343,14 @@ private:
 
   /** the buckets are stored in this list */
   BucketListType m_BucketList;
+  unsigned int m_BucketListSize;
   /** This vector holds the dimensions of the 3D (ND?) bucket image */
   BucketImageSizeType m_DimensionVector;
+  /** Vector of offsets in the buckets list to get all buckets in the
+    * neighborhood
+    */
+  std::vector<int> m_NeighborhoodOffsetVector;
+  unsigned int m_NeighborhoodOffsetVectorSize;
 };
 
 /** \class MeanShiftImageFilter2
@@ -454,7 +479,7 @@ public:
   itkSetMacro(ModeSearchOptimization, bool);
   itkGetConstMacro(ModeSearchOptimization, bool);
 
-  /** Toggle bucket optimization, which is enabled by default.
+  /** Toggle bucket optimization, which is disabled by default.
     */
   itkSetMacro(BucketOptimization, bool);
   itkGetConstMacro(BucketOptimization, bool);

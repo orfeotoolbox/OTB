@@ -39,7 +39,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
   m_RangeBandwidth=16.;
   m_Threshold=1e-3;
   m_ModeSearchOptimization = true;
-  m_BucketOptimization = true;
+  m_BucketOptimization = false;
 
   this->SetNumberOfOutputs(4);
   this->SetNthOutput(0, OutputImageType::New());
@@ -390,7 +390,10 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
   InputSizeType  regionSize;
   RegionType neighborhoodRegion;
 
-  meanShiftVector.Fill(0.);
+  for(unsigned int comp = 0; comp < jointDimension; comp++)
+    {
+    meanShiftVector[comp] = 0;
+    }
   jointNeighbor.SetSize(ImageDimension + m_NumberOfComponentsPerPixel);
 
   // Calculates current pixel neighborhood region, restricted to the output image region
@@ -485,8 +488,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
       meanShiftVector[comp] = meanShiftVector[comp] / weightSum - jointPixel[comp];
       }
     }
-  else
-    meanShiftVector.Fill(0);
  }
 
 // Calculates the mean shift vector at the position given by jointPixel
@@ -500,7 +501,12 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 
   RealType weightSum = 0;
 
-  meanShiftVector.Fill(0.);
+  for(unsigned int comp = 0; comp < jointDimension; comp++)
+    {
+    meanShiftVector[comp] = 0;
+    }
+
+
   jointNeighbor.SetSize(ImageDimension + m_NumberOfComponentsPerPixel);
 
   InputIndexType index;
@@ -510,19 +516,23 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
     }
 
   std::vector<unsigned int> neighborBuckets;
-  neighborBuckets = m_BucketImage.GetNeighborhoodBucketListIndices(m_BucketImage.GetBucketIndex(jointPixel, index));
+  neighborBuckets = m_BucketImage.GetNeighborhoodBucketListIndices(
+    m_BucketImage.BucketIndexToBucketListIndex(
+      m_BucketImage.GetBucketIndex(jointPixel, index)
+    )
+  );
 
-  while(!neighborBuckets.empty())
+  unsigned int numNeighbors = m_BucketImage.GetNumberOfNeighborBuckets();
+  for(unsigned int neighborIndex = 0; neighborIndex < numNeighbors; ++neighborIndex)
     {
-    const typename BucketImageType::BucketType & bucket = m_BucketImage.GetBucket(neighborBuckets.back());
-    neighborBuckets.pop_back();
+    const typename BucketImageType::BucketType & bucket = m_BucketImage.GetBucket(neighborBuckets[neighborIndex]);
     if(bucket.empty()) continue;
     typename BucketImageType::BucketType::const_iterator it = bucket.begin();
     while(it != bucket.end())
       {
       RealType norm2;
       RealType weight;
-      //std::cout << bucket.size() << std::endl;
+
       jointNeighbor.SetData(const_cast<RealType*>(*it));
 
       // Compute the squared norm of the difference
@@ -558,8 +568,6 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
       meanShiftVector[comp] = meanShiftVector[comp] / weightSum - jointPixel[comp];
       }
     }
-  else
-    meanShiftVector.Fill(0);
  }
 
 
