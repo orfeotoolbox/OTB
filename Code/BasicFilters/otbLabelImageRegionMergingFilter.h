@@ -111,6 +111,8 @@ public:
 
 protected:
 
+   virtual void GenerateOutputInformation(void);
+
    virtual void GenerateData();
 
   /** Constructor */

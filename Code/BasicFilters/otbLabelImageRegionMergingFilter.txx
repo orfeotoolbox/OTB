@@ -131,6 +131,21 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   return static_cast<OutputClusteredImageType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
+void
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
+::GenerateOutputInformation()
+{
+  Superclass::GenerateOutputInformation();
+
+  unsigned int numberOfComponentsPerPixel = this->GetInputSpectralImage()->GetNumberOfComponentsPerPixel();
+
+  if(this->GetClusteredOutput())
+    {
+    this->GetClusteredOutput()->SetNumberOfComponentsPerPixel(numberOfComponentsPerPixel);
+    }
+
+}
 
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 void
