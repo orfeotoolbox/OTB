@@ -53,6 +53,9 @@ TARGET_LINK_LIBRARIES(MetadataExample OTBCommon OTBIO)
 ADD_EXECUTABLE(VectorDataIOExample VectorDataIOExample.cxx )
 TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO)
 
+ADD_EXECUTABLE(OGRWrappersExample OGRWrappersExample.cxx )
+TARGET_LINK_LIBRARIES(OGRWrappersExample OTBCommon OTBOGRAdapters)
+
 ADD_EXECUTABLE(DEMToImageGenerator DEMToImageGenerator.cxx )
 TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon )
 

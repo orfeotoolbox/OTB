@@ -179,7 +179,7 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
     if (! update)
       {
       itkGenericExceptionMacro(<< "No DataSource named <"<<filename<<"> exists,"
-        " and the file opening mode does not permit updates. DataSource creation is thus avorted.");
+        " and the file opening mode does not permit updates. DataSource creation is thus aborted.");
       }
     // Hand made factory based on file extension.
     char const* driverName = DeduceDriverName(filename);
@@ -194,7 +194,7 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
     OGRDataSource * source = d->CreateDataSource(filename.c_str());
     if (!source) {
       itkGenericExceptionMacro(<< "Failed to create OGRDataSource <"<<filename
-        <<"> (driver name:" << driverName<<">: " << CPLGetLastErrorMsg());
+        <<"> (driver name: " << driverName<<">: " << CPLGetLastErrorMsg());
     }
     source->SetDriver(d);
     Pointer res = new DataSource(source);

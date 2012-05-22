@@ -104,7 +104,7 @@ void otb::ogr::Layer::CreateFeature(Feature feature)
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot create a new feature in the layer <"
-      <<GetName()<<">:" << CPLGetLastErrorMsg());
+      <<GetName()<<">: " << CPLGetLastErrorMsg());
     }
 }
 
@@ -115,7 +115,7 @@ void otb::ogr::Layer::DeleteFeature(long nFID)
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot delete the feature <"<<nFID<<"> in the layer <"
-      <<GetName()<<">:" << CPLGetLastErrorMsg());
+      <<GetName()<<">: " << CPLGetLastErrorMsg());
     }
 }
 
@@ -137,7 +137,7 @@ void otb::ogr::Layer::SetFeature(Feature feature)
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot update a feature in the layer <"
-      <<GetName()<<">:" << CPLGetLastErrorMsg());
+      <<GetName()<<">: " << CPLGetLastErrorMsg());
     }
 }
 
@@ -226,7 +226,7 @@ void otb::ogr::Layer::CreateField(
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot create a field in the layer <"
-      <<GetName()<<">:" << CPLGetLastErrorMsg());
+      <<GetName()<<">: " << CPLGetLastErrorMsg());
     }
 }
 
@@ -241,7 +241,7 @@ void otb::ogr::Layer::DeleteField(size_t fieldIndex)
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot delete the "<<fieldIndex << "th field in the layer <"
-      <<GetName() <<">:" << CPLGetLastErrorMsg());
+      <<GetName() <<">: " << CPLGetLastErrorMsg());
     }
 #endif
 }
@@ -261,7 +261,7 @@ void otb::ogr::Layer::AlterFieldDefn(
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot alter the "<<fieldIndex << "th field in the layer <"
-      <<GetName() <<">:" << CPLGetLastErrorMsg());
+      <<GetName() <<">: " << CPLGetLastErrorMsg());
     }
 #endif
 }
@@ -277,7 +277,7 @@ void otb::ogr::Layer::ReorderField(size_t oldPos, size_t newPos)
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot move the "<<oldPos << "th field to the "
-      << newPos << "th position in the layer <" <<GetName() <<">:" << CPLGetLastErrorMsg());
+      << newPos << "th position in the layer <" <<GetName() <<">: " << CPLGetLastErrorMsg());
     }
 #endif
 }
@@ -293,7 +293,7 @@ void otb::ogr::Layer::ReorderFields(int * map)
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot reorder the fields of the layer <"
-      <<GetName() <<">:" << CPLGetLastErrorMsg());
+      <<GetName() <<">: " << CPLGetLastErrorMsg());
     }
 #endif
 }
@@ -306,7 +306,7 @@ void otb::ogr::Layer::SetIgnoredFields(char const** fieldNames)
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot set fields to ignore on the layer <"
-      <<GetName() <<">:" << CPLGetLastErrorMsg());
+      <<GetName() <<">: " << CPLGetLastErrorMsg());
     }
 #else
   itkGenericExceptionMacro("OGRLayer::SetIgnoredFields is not supported by OGR v"
