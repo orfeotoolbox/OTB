@@ -183,6 +183,12 @@ private:
     SetMinimumParameterIntValue("minsize", 1);
     MandatoryOff("minsize");
 
+    AddParameter(ParameterType_Float, "simplify", "Simplify geometry");
+    SetParameterDescription("simplify",
+                            "Simplify polygons according to a given tolerance");
+    SetDefaultParameterFloat("simplify",0.1);
+    MandatoryOff("simplify");
+
     AddParameter(ParameterType_String, "layername", "Layer Name");
     SetParameterDescription("layername", "Layer Name.(by default : Layer )");
     SetParameterString("layername", "layer");
@@ -297,9 +303,13 @@ private:
           edisonVectorizationFilter->SetMinimumObjectSize(minSize);
           }
 
-        edisonVectorizationFilter->SetSimplify(false);
+        if(IsParameterEnabled("simplify"))
+          {
+          edisonVectorizationFilter->SetSimplify(true);
+          edisonVectorizationFilter->SetSimplificationTolerance(GetParameterFloat("simplify"));
+          }
 
-        std::cout<<"Edison branch"<<std::endl;
+        edisonVectorizationFilter->SetSimplify(false);
 
         edisonVectorizationFilter->Initialize(); //must be called !
         edisonVectorizationFilter->Update(); //must be called !
