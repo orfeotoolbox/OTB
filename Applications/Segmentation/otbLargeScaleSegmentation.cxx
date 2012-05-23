@@ -30,6 +30,9 @@
 #include "otbStreamingVectorizedSegmentationOGR.h"
 #include "otbOGRDataSourceWrapper.h"
 
+// Fusion filter
+#include "otbFusionOGRTileFilter.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -83,6 +86,10 @@ public:
   <FloatVectorImageType, 
    ConnectedComponentSegmentationFilterType> 
                                           ConnectedComponentStreamingVectorizedSegmentationOGRType;
+
+  typedef otb::FusionOGRTileFilter
+  <FloatVectorImageType>                  FusionFilterType;
+
 
   /** Standard macro */
   itkNewMacro(Self);
@@ -138,6 +145,9 @@ private:
     SetDefaultParameterFloat("filter.meanshiftedison.ranger", 15.0);
     SetDefaultParameterInt("filter.meanshiftedison.minsize", 100);
     SetDefaultParameterFloat("filter.meanshiftedison.scale", 100000.);
+
+    AddParameter(ParameterType_Empty,"stitch","Stich polygons at tiles borders");
+    MandatoryOff("stitch");
 
     // AddChoice("filter.meanshift", "MeanShift");
     // SetParameterDescription(
@@ -377,6 +387,20 @@ private:
     ogrDS->SyncToDisk();
     SetParameterOutputImage<LabelImageType> ("lout", m_LabelImage);
 
+    // Stitching mode
+    if(IsParameterEnabled("stitch"))
+      {
+      otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
+      FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
+      fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
+      fusionFilter->SetOGRDataSource(ogrDS);
+      FloatVectorImageType::SizeType streamSize;
+      streamSize.Fill(tileSize);
+      std::cout<<"Stream size: "<<streamSize<<std::endl;
+      fusionFilter->SetStreamSize(streamSize);
+      fusionFilter->SetLayerName(layerName);
+      fusionFilter->GenerateData();
+      }
   }
     LabelImageType::Pointer     m_LabelImage;
 };
