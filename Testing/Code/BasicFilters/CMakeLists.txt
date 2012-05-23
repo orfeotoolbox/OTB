@@ -1285,6 +1285,28 @@ ADD_TEST(bfTuMeanShiftImageFilterSPOT5 ${BASICFILTERS_TESTS9}
         4 10 0.1 100
         )
 
+ADD_TEST(bfTvMeanShiftImageFilter2ThreadingNonOpt ${BASICFILTERS_TESTS9}
+        --compare-image ${EPSILON_7}
+        ${TEMP}/bfMeanShift2ImageFilter2SingleThreading_SPOT5.tif
+        ${TEMP}/bfMeanShift2ImageFilter2MultiThreading_SPOT5.tif
+        otbMeanShiftImageFilter2Threading
+        ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+        ${TEMP}/bfMeanShift2ImageFilter2SingleThreading_SPOT5.tif
+        ${TEMP}/bfMeanShift2ImageFilter2MultiThreading_SPOT5.tif
+        4 10 0
+        )
+
+#ADD_TEST(bfTvMeanShiftImageFilter2ThreadingOpt ${BASICFILTERS_TESTS9}
+#        --compare-image ${EPSILON_7}
+#        ${TEMP}/bfMeanShift2ImageFilter2SingleThreading_SPOT5.tif
+#        ${TEMP}/bfMeanShift2ImageFilter2MultiThreading_SPOT5.tif
+#        otbMeanShiftImageFilter2Threading
+#        ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+#        ${TEMP}/bfMeanShift2ImageFilter2SingleThreading_SPOT5.tif
+#        ${TEMP}/bfMeanShift2ImageFilter2MultiThreading_SPOT5.tif
+#        4 10 1
+#        )
+
 ADD_TEST(bfTuLabelImageRegionMergingFilterQB_Suburb ${BASICFILTERS_TESTS9}
         otbLabelImageRegionMergingFilter
         ${INPUTDATA}/QB_Suburb.png
@@ -2956,6 +2978,7 @@ otbMeanShiftImageFilterNew.cxx
 otbMeanShiftImageFilter.cxx
 otbMeanShiftImageFilterNew2.cxx
 otbMeanShiftImageFilter2.cxx
+otbMeanShiftImageFilter2Threading.cxx
 otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
 otbLabelImageRegionMergingFilter.cxx
