@@ -40,9 +40,6 @@ IF(OTB_USE_EXTERNAL_GDAL)
     EXECUTE_PROCESS(COMMAND ${GDALCONFIG_EXECUTABLE} --version
                     OUTPUT_VARIABLE GDAL_VERSION
                     OUTPUT_STRIP_TRAILING_WHITESPACE)
-    MESSAGE(STATUS "  GDAL version is " ${GDAL_VERSION})
-    SET(GDAL_VERSION ${GDAL_VERSION} CACHE STRING "GDAL version" FORCE)
-    MARK_AS_ADVANCED(GDAL_VERSION)
    
     # Detect if gdal support hdf format
     EXECUTE_PROCESS(COMMAND ${GDALCONFIG_EXECUTABLE} --formats
@@ -58,7 +55,13 @@ IF(OTB_USE_EXTERNAL_GDAL)
   ELSE (NOT WIN32)
   	# For WIN32 platform, GDAL is automatically built with HDF support.
     SET(CHECK_GDAL_BUILDED_WITH_HDF 1 CACHE INTERNAL "GDAL_BUILDED_WITH_HDF" FORCE)
+    # GDAL_INCLUDE_DIR has already been checked here
+    FILE(READ "${GDAL_INCLUDE_DIR}/gdal_version.h" _gdal_version_h_CONTENTS)
+    STRING(REGEX REPLACE ".*# *define GDAL_RELEASE_NAME *\"([0-9.]+)\".*" "\\1" GDAL_VERSION "${_gdal_version_h_CONTENTS}")
   ENDIF (NOT WIN32)
+  MESSAGE(STATUS "  GDAL version is " ${GDAL_VERSION})
+  SET(GDAL_VERSION ${GDAL_VERSION} CACHE STRING "GDAL version" FORCE)
+  MARK_AS_ADVANCED(GDAL_VERSION)
 
   # Find geotiff headers
   FIND_PATH(GEOTIFF_INCLUDE_DIRS geotiff.h $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} ${OSGEO4W_INCLUDE} /usr/include/geotiff /usr/include/libgeotiff)
