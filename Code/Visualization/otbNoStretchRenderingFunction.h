@@ -109,16 +109,16 @@ namespace otb
 
           if (spixel.Size() == 1)
           {
-            OutputValueType value = ClippedValue(m_TransferFunction(spixel[0]));
+            OutputValueType value = ClippedValue(this->m_TransferFunction(spixel[0]));
             output[0] = value;
             output[1] = value;
             output[2] = value;
           }
           else
           {
-            output[0] = ClippedValue(m_TransferFunction(spixel[0]));
-            output[1] = ClippedValue(m_TransferFunction(spixel[1]));
-            output[2] = ClippedValue(m_TransferFunction(spixel[2]));
+            output[0] = ClippedValue(this->m_TransferFunction(spixel[0]));
+            output[1] = ClippedValue(this->m_TransferFunction(spixel[1]));
+            output[2] = ClippedValue(this->m_TransferFunction(spixel[2]));
           }
 
           if ((spixel.Size() == 4) && (output.Size() == 4))
