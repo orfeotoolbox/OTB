@@ -38,6 +38,7 @@
 #include "boost/type_traits/is_contiguous.h" // from OTB actually
 
 #include "ogr_feature.h" // OGRFeature::*field_getters
+#include "cpl_string.h" // CSLCount
 
 
 /*===========================================================================*/
