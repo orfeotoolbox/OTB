@@ -15,89 +15,77 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
+// Wrappers
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
 // Segmentation filters includes
 #include "otbMeanShiftVectorImageFilter.h"
-
 #include "otbMeanShiftImageFilter2.h"
-
-#include "otbStreamingVectorizedSegmentationOGR.h"
-
-//#include "otbPersistentImageToOGRDataFilter.h"
-//#include "otbPersistentFilterStreamingDecorator.h"
-
 #include "otbConnectedComponentMuParserFunctor.h"
 #include "itkConnectedComponentFunctorImageFilter.h"
 #include "otbMaskMuParserFilter.h"
 
-
-#include "otbParser.h"
-
+// Large scale vectorization framework
+#include "otbStreamingVectorizedSegmentationOGR.h"
 #include "otbOGRDataSourceWrapper.h"
-
-#include "otbMultiToMonoChannelExtractROI.h"
-#include "otbObjectList.h"
-
 
 namespace otb
 {
 namespace Wrapper
 {
-
-
 class LargeScaleSegmentation : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef LargeScaleSegmentation         Self;
+  typedef LargeScaleSegmentation        Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  /** Images typedefs */
   typedef UInt32ImageType               LabelImageType;
   typedef UInt32ImageType               MaskImageType;
 
-
-  typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
-                                        MaskImageType::PixelType>                ExtractROIFilterType;
-   typedef ObjectList<ExtractROIFilterType>                                      ExtractROIFilterListType;
-
-   // typedef itk::ImageToImageFilter<FloatVectorImageType,UInt32ImageType> SegmentationFilterType;
-  typedef otb::MeanShiftVectorImageFilter<FloatVectorImageType,FloatVectorImageType,LabelImageType> MSEDISONSegmentationFilterType;
-
-
-  // TODO replace by new meanshift segmentation scheme
-  //typedef otb::MeanShiftConnectedComponentSegmentationFilter< FloatVectorImageType, MaskImageType,LabelImageType >  MeanShiftConnectedComponentSegmentationFilterType;
-  // typedef otb::MeanShiftImageFilter2<FloatVectorImageType, LabelImageType> MeanShiftFilterType;
-
-
-  // Mask generation
-  typedef otb::Functor::ConnectedComponentMuParserFunctor<FloatVectorImageType::PixelType> FunctorType;
-  typedef itk::ConnectedComponentFunctorImageFilter<
-      FloatVectorImageType,
-      LabelImageType,
-      FunctorType,
-      MaskImageType > ConnectedComponentSegmentationFilterType;
-
-
+  // Segmentation filters typedefs
+  // Edison mean-shift
+  typedef otb::MeanShiftVectorImageFilter
+  <FloatVectorImageType,
+   FloatVectorImageType,
+   LabelImageType>                        EdisonSegmentationFilterType;
+  // Home made mean-shift
   typedef otb::MeanShiftImageFilter2
-       <FloatVectorImageType, FloatVectorImageType>
-   MeanShiftFilterType;
-  // mask typedef
-  typedef otb::MaskMuParserFilter<FloatVectorImageType, MaskImageType> MaskMuParserFilterType;
+  <FloatVectorImageType, 
+   FloatVectorImageType>
+                                          MeanShiftFilterType;
+  // Simple connected components
+  typedef otb::Functor::ConnectedComponentMuParserFunctor
+  <FloatVectorImageType::PixelType>       FunctorType;
 
+  typedef itk::ConnectedComponentFunctorImageFilter
+  <FloatVectorImageType,
+   LabelImageType,
+   FunctorType,
+   MaskImageType >                        ConnectedComponentSegmentationFilterType;
+  
+  // mask filter
+  typedef otb::MaskMuParserFilter
+  <FloatVectorImageType, MaskImageType>   MaskMuParserFilterType;
 
-  typedef otb::StreamingVectorizedSegmentationOGR<FloatVectorImageType, ConnectedComponentSegmentationFilterType> ConnectedComponentStreamingVectorizedSegmentationOGRType;
-
-  typedef otb::StreamingVectorizedSegmentationOGR<FloatVectorImageType, MSEDISONSegmentationFilterType> MSEDIONStreamingVectorizedSegmentationOGRType;
- // typedef otb::StreamingVectorizedSegmentationOGR<FloatVectorImageType, ConnectedComponentSegmentationFilterType> ConnectedComponentStreamingVectorizedSegmentationOGRType;
-
+  // Vectorize filters
+  // Edison mean-shift
+  typedef otb::StreamingVectorizedSegmentationOGR
+  <FloatVectorImageType, 
+   EdisonSegmentationFilterType>          EdisontreamingVectorizedSegmentationOGRType;
+  
+  // Connected components
+  typedef otb::StreamingVectorizedSegmentationOGR
+  <FloatVectorImageType, 
+   ConnectedComponentSegmentationFilterType> 
+                                          ConnectedComponentStreamingVectorizedSegmentationOGRType;
 
   /** Standard macro */
   itkNewMacro(Self);
-
   itkTypeMacro(LargeScaleSegmentation, otb::Application);
 
 private:
@@ -131,7 +119,6 @@ private:
     SetParameterDescription("lout", "The labeled output image.");
     MandatoryOff("lout");
 
-    //
     AddParameter(ParameterType_Choice, "filter", "Segmentation Filter");
     SetParameterDescription("filter", "Choose your segmentation filter method.");
 
@@ -152,40 +139,42 @@ private:
     SetDefaultParameterInt("filter.meanshiftedison.minsize", 100);
     SetDefaultParameterFloat("filter.meanshiftedison.scale", 100000.);
 
-    AddChoice("filter.meanshift", "MeanShift");
-    SetParameterDescription(
-                            "filter.meanshift",
-                            "MeanShift filter (MeanShift filtered output is segmented by connected component segmentation, this step will be replaced by a dedicated scheme (WIP)).");
-    // MeanShift Parameters
-    AddParameter(ParameterType_Int, "filter.meanshift.spatialr", "Spatial radius");
-    SetParameterDescription("filter.meanshift.spatialr", "Spatial radius defining neighborhood.");
-    AddParameter(ParameterType_Float, "filter.meanshift.ranger", "Range radius");
-    SetParameterDescription("filter.meanshift.ranger", "Range radius defining the interval in the color space.");
-    AddParameter(ParameterType_Float, "filter.meanshift.thres", "convergence threshold");
-    SetParameterDescription("filter.meanshift.thres", "convergence threshold. iterative scheme will stop if MeanShift "
-      "vector is below this threshold (1e-3 by default) or iteration number reached maximum iteration number.");
-    AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "maximum iteration number");
-    SetParameterDescription("filter.meanshift.maxiter",
-                            "iteration process is stopped if convergence hasn't been reached after this number of iteration (10 by default).");
-    AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
-    SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
-    MandatoryOff("filter.meanshift.useoptim");
-    AddParameter(ParameterType_String, "filter.meanshift.expr", "Connected Component Expression");
-    SetParameterDescription("filter.meanshift.expr", "Formula used for connected component segmentation");
-    SetDefaultParameterInt("filter.meanshift.spatialr", 5);
+    // AddChoice("filter.meanshift", "MeanShift");
+    // SetParameterDescription(
+    //                         "filter.meanshift",
+    //                         "MeanShift filter (MeanShift filtered output is segmented by connected component segmentation, this step will be replaced by a dedicated scheme (WIP)).");
+    // // MeanShift Parameters
+    // AddParameter(ParameterType_Int, "filter.meanshift.spatialr", "Spatial radius");
+    // SetParameterDescription("filter.meanshift.spatialr", "Spatial radius defining neighborhood.");
+    // AddParameter(ParameterType_Float, "filter.meanshift.ranger", "Range radius");
+    // SetParameterDescription("filter.meanshift.ranger", "Range radius defining the interval in the color space.");
+    // AddParameter(ParameterType_Float, "filter.meanshift.thres", "convergence threshold");
+    // SetParameterDescription("filter.meanshift.thres", "convergence threshold. iterative scheme will stop if MeanShift "
+    //   "vector is below this threshold (1e-3 by default) or iteration number reached maximum iteration number.");
+    // AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "maximum iteration number");
+    // SetParameterDescription("filter.meanshift.maxiter",
+    //                         "iteration process is stopped if convergence hasn't been reached after this number of iteration (10 by default).");
+    // AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
+    // SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
+    // MandatoryOff("filter.meanshift.useoptim");
+    // AddParameter(ParameterType_String, "filter.meanshift.expr", "Connected Component Expression");
+    // SetParameterDescription("filter.meanshift.expr", "Formula used for connected component segmentation");
+    // SetDefaultParameterInt("filter.meanshift.spatialr", 5);
 
-    SetDefaultParameterInt("filter.meanshift.spatialr", 5);
-    SetDefaultParameterFloat("filter.meanshift.ranger", 15.0);
-    SetDefaultParameterFloat("filter.meanshift.thres", 1e-3);
-    SetMinimumParameterFloatValue("filter.meanshift.thres", 0.);
-    SetDefaultParameterInt("filter.meanshift.maxiter", 10);
-    SetMinimumParameterIntValue("filter.meanshift.maxiter", 1);
+    // SetDefaultParameterInt("filter.meanshift.spatialr", 5);
+    // SetDefaultParameterFloat("filter.meanshift.ranger", 15.0);
+    // SetDefaultParameterFloat("filter.meanshift.thres", 1e-3);
+    // SetMinimumParameterFloatValue("filter.meanshift.thres", 0.);
+    // SetDefaultParameterInt("filter.meanshift.maxiter", 10);
+    // SetMinimumParameterIntValue("filter.meanshift.maxiter", 1);
 
     AddChoice("filter.connectedcomponent", "ConnectedComponentMuParser");
     SetParameterDescription("filter.connectedcomponent", "connectedComponant muparser filter.");
 
     AddParameter(ParameterType_String, "filter.connectedcomponent.expr", "Connected Component Expression");
     SetParameterDescription("filter.connectedcomponent.expr", "Formula used for connected component segmentation");
+    MandatoryOff("filter.connectedcomponent.expr");
+
 
     AddParameter(ParameterType_Int, "minsize", "Minimum object size");
     SetParameterDescription("minsize",
@@ -193,8 +182,6 @@ private:
     SetDefaultParameterInt("minsize", 1);
     SetMinimumParameterIntValue("minsize", 1);
     MandatoryOff("minsize");
-
-    //
 
     AddParameter(ParameterType_String, "layername", "Layer Name");
     SetParameterDescription("layername", "Layer Name.(by default : Layer )");
@@ -238,54 +225,57 @@ private:
 
   void DoExecute()
   {
-    //
+    // Retrieve output filename as well as layer names
     std::string dataSourceName = GetParameterString("outvd");
     otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
-
-    //mask image transform vector image to LabelImage
-    if (HasValue("inmask"))
-      {
-      m_MaskImage = this->GetParameterUInt32Image("inmask");
-      m_MaskImage->UpdateOutputInformation();
-      }
-
-    const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
-    const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("tilesize"));
-
     std::string layerName = this->GetParameterString("layername");
     std::string fieldName = this->GetParameterString("fieldname");
 
+    // Retrieve start label parameter 
     const unsigned int startLabel = this->GetParameterInt("startlabel");
+
+    // Retrieve the 8-connected option
     bool use8connected = IsParameterEnabled("neighbor");
 
+    // Retrieve min object size parameter
+    const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
+
+    // Retrieve tile size parameter
+    const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("tilesize"));
+
+
+    // Switch on segmentation filter case
     switch (GetParameterInt("filter"))
       {
-      // MeanShiftEDISON based filtering
+      // Edison mean-shift
       case 0:
         {
+        EdisontreamingVectorizedSegmentationOGRType::Pointer
+          edisonVectorizationFilter = EdisontreamingVectorizedSegmentationOGRType::New();
 
-        MSEDIONStreamingVectorizedSegmentationOGRType::Pointer
-            EDISONVectorizationFilter = MSEDIONStreamingVectorizedSegmentationOGRType::New();
-        m_VectorizationFilter = EDISONVectorizationFilter;
+        edisonVectorizationFilter->SetInput(GetParameterFloatVectorImage("in"));
 
-        EDISONVectorizationFilter->SetInput(GetParameterFloatVectorImage("in"));
         if (HasValue("inmask"))
           {
-          EDISONVectorizationFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
+          edisonVectorizationFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
           }
-        EDISONVectorizationFilter->SetOGRDataSource(ogrDS);
+        edisonVectorizationFilter->SetOGRDataSource(ogrDS);
 
-        //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
         if (tileSize != 0)
-          EDISONVectorizationFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
-        else EDISONVectorizationFilter->GetStreamer()->SetAutomaticTiledStreaming();
+          {
+          edisonVectorizationFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
+          }
+        else 
+          {
+          edisonVectorizationFilter->GetStreamer()->SetAutomaticAdaptativeStreaming();
+          }
 
-        EDISONVectorizationFilter->SetLayerName(layerName);
-        EDISONVectorizationFilter->SetFieldName(fieldName);
-        EDISONVectorizationFilter->SetStartLabel(startLabel);
+        edisonVectorizationFilter->SetLayerName(layerName);
+        edisonVectorizationFilter->SetFieldName(fieldName);
+        edisonVectorizationFilter->SetStartLabel(startLabel);
         if (use8connected)
         otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
-        EDISONVectorizationFilter->SetUse8Connected(use8connected);
+        edisonVectorizationFilter->SetUse8Connected(use8connected);
 
         //segmentation paramters
         const unsigned int
@@ -296,117 +286,71 @@ private:
             minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.minsize"));
         const float scale = this->GetParameterFloat("filter.meanshiftedison.scale");
 
-        EDISONVectorizationFilter->GetSegmentationFilter()->SetSpatialRadius(spatialRadius);
-        EDISONVectorizationFilter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
-        EDISONVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
-        EDISONVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
+        edisonVectorizationFilter->GetSegmentationFilter()->SetSpatialRadius(spatialRadius);
+        edisonVectorizationFilter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
+        edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
+        edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
         if (minSize > 1)
           {
           otbAppLogINFO(<<"Object with size under "<<minSize<<" will be suppressed."<<std::endl);
-          EDISONVectorizationFilter->SetFilterSmallObject(true);
-          EDISONVectorizationFilter->SetMinimumObjectSize(minSize);
+          edisonVectorizationFilter->SetFilterSmallObject(true);
+          edisonVectorizationFilter->SetMinimumObjectSize(minSize);
           }
-        EDISONVectorizationFilter->Initialize(); //must be called !
-        EDISONVectorizationFilter->Update(); //must be called !
-        //m_VectorizationFilter->Update();
-        m_LabelImage = EDISONVectorizationFilter->GetSegmentationFilter()->GetLabeledClusteredOutput();
+
+        edisonVectorizationFilter->SetSimplify(false);
+
+        std::cout<<"Edison branch"<<std::endl;
+
+        edisonVectorizationFilter->Initialize(); //must be called !
+        edisonVectorizationFilter->Update(); //must be called !
+        m_LabelImage = edisonVectorizationFilter->GetSegmentationFilter()->GetLabeledClusteredOutput();
 
         break;
 
         }
-        //MeanShift filter
+        // Home made mean-shift
       case 1:
         {
-
-        ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
-            MSVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
-        m_VectorizationFilter = MSVectorizationFilter;
-
-        MeanShiftFilterType::Pointer MSFilter = MeanShiftFilterType::New();
-        // MeanShift filtering
-        // Set filter parameters
-
-        //segmentation paramters
-        const unsigned int
-            spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.spatialr"));
-        const unsigned int rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.ranger"));
-        const unsigned int maxIter = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.maxiter"));
-        const float threshold = this->GetParameterFloat("filter.meanshift.thres");
-
-        MSFilter->SetSpatialBandwidth(spatialRadius);
-        MSFilter->SetRangeBandwidth(rangeRadius);
-        MSFilter->SetThreshold(threshold);
-        MSFilter->SetMaxIterationNumber(maxIter);
-        MSFilter->SetInput(GetParameterFloatVectorImage("in"));
-        MSFilter->SetModeSearchOptimization(IsParameterEnabled("filter.meanshift.useoptim"));
-
-        MSVectorizationFilter->SetInput(GetParameterFloatVectorImage("in"));
-        AddProcess(MSVectorizationFilter, "Computing Filtering");
-
-        MSVectorizationFilter->SetInput(MSFilter->GetRangeOutput());
-        if (HasValue("inmask"))
-          {
-          MSVectorizationFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
-          MSVectorizationFilter->GetSegmentationFilter()->SetMaskImage(this->GetParameterUInt32Image("inmask"));
-
-          }
-        MSVectorizationFilter->SetOGRDataSource(ogrDS);
-
-        //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
-        if (tileSize != 0)
-          MSVectorizationFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
-        else MSVectorizationFilter->GetStreamer()->SetAutomaticTiledStreaming();
-
-        MSVectorizationFilter->SetLayerName(layerName);
-        MSVectorizationFilter->SetFieldName(fieldName);
-        MSVectorizationFilter->SetStartLabel(startLabel);
-        MSVectorizationFilter->SetUse8Connected(use8connected);
-
-        MSVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
-                                                                                   GetParameterString(
-                                                                                                      "filter.meanshift.expr"));
-        AddProcess(MSVectorizationFilter->GetSegmentationFilter(), "Computing segmentation");
-
-        MSVectorizationFilter->Initialize(); //must be called !
-        m_VectorizationFilter->Update();
-        m_LabelImage = MSVectorizationFilter->GetSegmentationFilter()->GetOutput();
-
+        otbAppLogFATAL(<<"Standard mean-shift not implemented yet");
         break;
         }
-        // CC filter
+        // Connected component segmentation
       case 2:
         {
         ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
-            CCVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
-        m_VectorizationFilter = CCVectorizationFilter;
+            ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
 
-        CCVectorizationFilter->SetInput(GetParameterFloatVectorImage("in"));
+        ccVectorizationFilter->SetInput(GetParameterFloatVectorImage("in"));
         if (HasValue("inmask"))
           {
-          CCVectorizationFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
-          CCVectorizationFilter->GetSegmentationFilter()->SetMaskImage(this->GetParameterUInt32Image("inmask"));
+          ccVectorizationFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
+          ccVectorizationFilter->GetSegmentationFilter()->SetMaskImage(this->GetParameterUInt32Image("inmask"));
 
           }
-        CCVectorizationFilter->SetOGRDataSource(ogrDS);
+        ccVectorizationFilter->SetOGRDataSource(ogrDS);
 
-        //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
         if (tileSize != 0)
-          CCVectorizationFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
-        else CCVectorizationFilter->GetStreamer()->SetAutomaticTiledStreaming();
+          {
+          ccVectorizationFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
+          }
+        else 
+          {
+          ccVectorizationFilter->GetStreamer()->SetAutomaticTiledStreaming();
+          }
 
-        CCVectorizationFilter->SetLayerName(layerName);
-        CCVectorizationFilter->SetFieldName(fieldName);
-        CCVectorizationFilter->SetStartLabel(startLabel);
-        CCVectorizationFilter->SetUse8Connected(use8connected);
+        ccVectorizationFilter->SetLayerName(layerName);
+        ccVectorizationFilter->SetFieldName(fieldName);
+        ccVectorizationFilter->SetStartLabel(startLabel);
+        ccVectorizationFilter->SetUse8Connected(use8connected);
 
-        CCVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
+        ccVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
                                                                                    GetParameterString(
                                                                                                       "filter.connectedcomponent.expr"));
-        AddProcess(CCVectorizationFilter->GetSegmentationFilter(), "Computing segmentation");
+        AddProcess(ccVectorizationFilter->GetSegmentationFilter(), "Computing segmentation");
 
-        CCVectorizationFilter->Initialize(); //must be called !
-        m_VectorizationFilter->Update();
-        m_LabelImage = CCVectorizationFilter->GetSegmentationFilter()->GetOutput();
+        ccVectorizationFilter->Initialize(); //must be called !
+        ccVectorizationFilter->Update();
+        m_LabelImage = ccVectorizationFilter->GetSegmentationFilter()->GetOutput();
 
         break;
         }
@@ -424,10 +368,6 @@ private:
     SetParameterOutputImage<LabelImageType> ("lout", m_LabelImage);
 
   }
-
-    itk::ProcessObject::Pointer m_SegmentationFilter;
-    itk::ProcessObject::Pointer m_VectorizationFilter;
-    MaskImageType::Pointer      m_MaskImage;
     LabelImageType::Pointer     m_LabelImage;
 };
 
