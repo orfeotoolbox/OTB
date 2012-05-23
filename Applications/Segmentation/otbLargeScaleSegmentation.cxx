@@ -58,7 +58,7 @@ public:
    LabelImageType>                        EdisonSegmentationFilterType;
   // Home made mean-shift
   typedef otb::MeanShiftImageFilter2
-  <FloatVectorImageType, 
+  <FloatVectorImageType,
    FloatVectorImageType>
                                           MeanShiftFilterType;
   // Simple connected components
@@ -78,13 +78,13 @@ public:
   // Vectorize filters
   // Edison mean-shift
   typedef otb::StreamingVectorizedSegmentationOGR
-  <FloatVectorImageType, 
+  <FloatVectorImageType,
    EdisonSegmentationFilterType>          EdisontreamingVectorizedSegmentationOGRType;
   
   // Connected components
   typedef otb::StreamingVectorizedSegmentationOGR
-  <FloatVectorImageType, 
-   ConnectedComponentSegmentationFilterType> 
+  <FloatVectorImageType,
+   ConnectedComponentSegmentationFilterType>
                                           ConnectedComponentStreamingVectorizedSegmentationOGRType;
 
   typedef otb::FusionOGRTileFilter
@@ -247,7 +247,7 @@ private:
     std::string layerName = this->GetParameterString("layername");
     std::string fieldName = this->GetParameterString("fieldname");
 
-    // Retrieve start label parameter 
+    // Retrieve start label parameter
     const unsigned int startLabel = this->GetParameterInt("startlabel");
 
     // Retrieve the 8-connected option
@@ -281,7 +281,7 @@ private:
           {
           edisonVectorizationFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
           }
-        else 
+        else
           {
           edisonVectorizationFilter->GetStreamer()->SetAutomaticAdaptativeStreaming();
           }
@@ -353,7 +353,7 @@ private:
           {
           ccVectorizationFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
           }
-        else 
+        else
           {
           ccVectorizationFilter->GetStreamer()->SetAutomaticTiledStreaming();
           }
