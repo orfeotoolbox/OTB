@@ -164,6 +164,10 @@ namespace otb
 				SetParameterDescription("outputs.hog", "hog");
 				EnableParameter("outputs.hog");
 
+				AddParameter(ParameterType_Empty,"outputs.flusser","Compute flusser moments by default");
+				SetParameterDescription("outputs.flusser", "flusser");
+				EnableParameter("outputs.flusser");
+
 				AddParameter(ParameterType_OutputImage, "out",  "Output Image");
 				SetParameterDescription("out", "Output image containing the feature vectors.");
 				SetParameterOutputImagePixelType("out", ImagePixelType_double);
