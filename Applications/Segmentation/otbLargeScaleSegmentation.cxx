@@ -293,7 +293,7 @@ private:
         otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
         edisonVectorizationFilter->SetUse8Connected(use8connected);
 
-        //segmentation paramters
+        //segmentation parameters
         const unsigned int
             spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.spatialr"));
         const unsigned int
@@ -391,15 +391,21 @@ private:
     if(IsParameterEnabled("stitch"))
       {
       otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
-      FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
-      fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
-      fusionFilter->SetOGRDataSource(ogrDS);
-      FloatVectorImageType::SizeType streamSize;
-      streamSize.Fill(tileSize);
-      std::cout<<"Stream size: "<<streamSize<<std::endl;
-      fusionFilter->SetStreamSize(streamSize);
-      fusionFilter->SetLayerName(layerName);
-      fusionFilter->GenerateData();
+
+      #if GDAL_VERSION_NUM < 1800
+            itkWarningMacro("Stiching polygons is not supported by OGR v"
+                << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.")
+      #else
+            FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
+            fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
+            fusionFilter->SetOGRDataSource(ogrDS);
+            FloatVectorImageType::SizeType streamSize;
+            streamSize.Fill(tileSize);
+            std::cout<<"Stream size: "<<streamSize<<std::endl;
+            fusionFilter->SetStreamSize(streamSize);
+            fusionFilter->SetLayerName(layerName);
+            fusionFilter->GenerateData();
+      #endif
       }
   }
     LabelImageType::Pointer     m_LabelImage;
