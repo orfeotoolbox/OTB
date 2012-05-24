@@ -122,8 +122,8 @@ protected:
   
   void ProcessStreamingLine(bool line);
   /** get length in case of  OGRGeometryCollection.
-   * This function recodes the get_lenght method available since gdal 1.8.0 
-   * in the case of OGRGeometryCollection. The aim is allow to access polygon stiching  
+   * This function recodes the get_lenght method available since gdal 1.8.0
+   * in the case of OGRGeometryCollection. The aim is allow to access polygon stiching
    * functionalities with gdal 1.6.
    */
   double GetLengthOGRGeometryCollection(OGRGeometryCollection * intersection);
