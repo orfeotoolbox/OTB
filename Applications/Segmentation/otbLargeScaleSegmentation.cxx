@@ -258,7 +258,8 @@ private:
 
     // Retrieve tile size parameter
     const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("tilesize"));
-
+    // The actual stream size used
+    FloatVectorImageType::SizeType streamSize;
 
     // Switch on segmentation filter case
     switch (GetParameterInt("filter"))
@@ -325,6 +326,8 @@ private:
         edisonVectorizationFilter->Update(); //must be called !
         m_LabelImage = edisonVectorizationFilter->GetSegmentationFilter()->GetLabeledClusteredOutput();
 
+        streamSize = edisonVectorizationFilter->GetStreamSize();
+
         break;
 
         }
@@ -371,6 +374,7 @@ private:
         ccVectorizationFilter->Initialize(); //must be called !
         ccVectorizationFilter->Update();
         m_LabelImage = ccVectorizationFilter->GetSegmentationFilter()->GetOutput();
+        streamSize = ccVectorizationFilter->GetStreamSize();
 
         break;
         }
@@ -399,8 +403,6 @@ private:
             FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
             fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
             fusionFilter->SetOGRDataSource(ogrDS);
-            FloatVectorImageType::SizeType streamSize;
-            streamSize.Fill(tileSize);
             std::cout<<"Stream size: "<<streamSize<<std::endl;
             fusionFilter->SetStreamSize(streamSize);
             fusionFilter->SetLayerName(layerName);
