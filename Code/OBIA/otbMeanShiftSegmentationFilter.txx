@@ -30,6 +30,7 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
    m_RegionMergingFilter = RegionMergingFilterType::New();
 
    this->SetNumberOfOutputs(2);
+
    this->SetNthOutput(0, m_RegionMergingFilter->GetLabelOutput());
    this->SetNthOutput(1, m_RegionMergingFilter->GetClusteredOutput());
 }
@@ -81,21 +82,21 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
   return static_cast<OutputClusteredImageType *>(this->m_RegionMergingFilter->GetClusteredOutput());
 }
 
-template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
-void
-MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
-::GenerateOutputInformation()
-{
-  Superclass::GenerateOutputInformation();
+// template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
+// void
+// MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
+// ::GenerateOutputInformation()
+// {
+//   Superclass::GenerateOutputInformation();
 
-  unsigned int numberOfComponentsPerPixel = this->GetInputSpectralImage()->GetNumberOfComponentsPerPixel();
+//   unsigned int numberOfComponentsPerPixel = this->GetInput()->GetNumberOfComponentsPerPixel();
 
-  if(this->GetClusteredOutput())
-    {
-    this->GetClusteredOutput()->SetNumberOfComponentsPerPixel(numberOfComponentsPerPixel);
-    }
+//   if(this->GetClusteredOutput())
+//     {
+//     this->GetClusteredOutput()->SetNumberOfComponentsPerPixel(numberOfComponentsPerPixel);
+//     }
 
-}
+// }
 
 
 template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
@@ -105,9 +106,11 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
 {
 
   this->m_MeanShiftFilter->SetInput(this->GetInput());
+  this->m_MeanShiftFilter->Update();
 
-  this->m_RegionMergingFilter->SetInputLabelImage(this->m_RegionMergingFilter->GetLabelOutput());
-  this->m_RegionMergingFilter->SetInputSpectralImage(this->m_RegionMergingFilter->GetRangeOutput());
+  this->m_RegionMergingFilter->SetInputLabelImage(this->m_MeanShiftFilter->GetLabelOutput());
+  this->m_RegionMergingFilter->SetInputSpectralImage(this->m_MeanShiftFilter->GetRangeOutput());
+  this->m_RegionMergingFilter->SetRangeBandwidth(this->GetRangeBandwidth());
 
   this->m_RegionMergingFilter->Update();
 

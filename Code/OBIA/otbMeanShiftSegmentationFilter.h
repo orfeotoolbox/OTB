@@ -78,6 +78,32 @@ public:
   itkSetObjectMacro(RegionMergingFilter, RegionMergingFilterType);
   itkGetObjectMacro(RegionMergingFilter, RegionMergingFilterType);
 
+  /** Sets the spatial bandwidth (or radius in the case of a uniform kernel)
+    * of the neighborhood for each pixel
+    */
+  virtual void SetSpatialBandwidth(const RealType _arg)
+  {
+    this->m_MeanShiftFilter->SetSpatialBandwidth(_arg);
+  }
+  virtual RealType GetSpatialBandwidth ()
+  {
+    return this->m_MeanShiftFilter->GetSpatialBandwidth();
+  }
+
+
+  /** Sets the spectral bandwidth (or radius for a uniform kernel) for pixels
+    * to be included in the same mode
+    */
+  virtual void SetRangeBandwidth(const RealType _arg)
+  {
+    this->m_MeanShiftFilter->SetRangeBandwidth(_arg);
+  }
+  virtual RealType GetRangeBandwidth ()
+  {
+    return this->m_MeanShiftFilter->GetRangeBandwidth();
+  }
+
+
   /** Returns the const image of region labels */
   const OutputLabelImageType * GetLabelOutput() const;
   /** Returns the image of region labels */
@@ -94,7 +120,7 @@ protected:
 
   void GenerateInputRequestedRegion();
 
-  virtual void GenerateOutputInformation(void);
+//  virtual void GenerateOutputInformation(void);
 
   virtual void GenerateData();
 
