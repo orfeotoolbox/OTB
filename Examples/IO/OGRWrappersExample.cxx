@@ -18,25 +18,25 @@
 
 // Software Guide : BeginLatex
 //
-// Starting from version 3.14.0 of the OTB library, a wrapper around OGR API is
-//  provided. The purposes of the wrapper are:
-//  \begin{itemize}
-//  \item To permit OTB to handle very large vector data sets;
-//  \item and to offer a modern (in the
-//  \href{http://en.wikipedia.org/wiki/RAII}{RAII} sense) interface to handle
-//  vector data.
-//  \end{itemize}
+// Starting with the version 3.14.0 of the OTB library, a wrapper around OGR API
+// is provided. The purposes of the wrapper are:
+// \begin{itemize}
+// \item to permit OTB to handle very large vector data sets;
+// \item and to offer a modern (in the
+// \href{http://en.wikipedia.org/wiki/RAII}{RAII} sense) interface to handle
+// vector data.
+// \end{itemize}
 //
-//  As OGR already provides a rich set of geometric related data, and the
-//  algorithms to manipulate and serialize them, we've decided to wrap it into a
-//  new \em{exception-safe} interface.
+// As OGR already provides a rich set of geometric related data, as well as the
+// algorithms to manipulate and serialize them, we've decided to wrap it into a
+// new \emph{exception-safe} interface.
 //
-//  This example illustrates the use of OTB's OGR wrapper framework. This
-//  program takes a source of polygons (a shape file for instance) as input and
-//  produces a source of multi-polygon as output.
+// This example illustrates the use of OTB's OGR wrapper framework. This
+// program takes a source of polygons (a shape file for instance) as input and
+// produces a datasource of multi-polygons as output.
 //
-//  We will start by including the header files for the OGR wrapper classes,
-//  plus other header files that are out of scope here.
+// We will start by including the header files for the OGR wrapper classes,
+// plus other header files that are out of scope here.
 //
 // Software Guide : EndLatex
 
@@ -47,25 +47,33 @@
 #include <cstdio> // EXIT_*
 
 // Software Guide : BeginLatex
-//  The following declarations will permit to merge the
-//  \subdoxygen{otb}{ogr}{Field}s from each \subdoxygen{otb}{ogr}{Feature} into
-//  list-fields. We'll get back to this point later.
+//
+// The following declarations will permit to merge the
+// \subdoxygen{otb}{ogr}{Field}s from each \subdoxygen{otb}{ogr}{Feature} into
+// list-fields. We'll get back to this point later.
+//
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
 #include <string>
 #include <vector>
 #include <boost/variant.hpp>
 #include "otbJoinContainer.h"
-typedef std::vector<int>                                          IntListType;
-typedef std::vector<std::string>                                  StringListType;
-typedef std::vector<double>                                       RealListType;
-typedef boost::variant<IntListType, StringListType, RealListType> AnyListFieldType;
-typedef std::vector<AnyListFieldType>                             AnyListFieldListType;
 
-AnyListFieldListType prepareNewFields(OGRFeatureDefn /*const*/& defn, otb::ogr::Layer & dest_layer);
-void printField(otb::ogr::Field const& field, AnyListFieldType const& newListField);
-void assignField(otb::ogr::Field field, AnyListFieldType const& newListFieldValue);
-void  pushFieldsToFieldLists(otb::ogr::Feature const& source_feature, AnyListFieldListType & field);
+typedef std::vector<int>                                    IntList_t;
+typedef std::vector<std::string>                            StringList_t;
+typedef std::vector<double>                                 RealList_t;
+// TODO: handle non recognized fields
+typedef boost::variant<IntList_t, StringList_t, RealList_t> AnyListField_t;
+typedef std::vector<AnyListField_t>                         AnyListFieldList_t;
+
+AnyListFieldList_t prepareNewFields(
+  OGRFeatureDefn /*const*/& defn, otb::ogr::Layer & destLayer);
+void printField(
+  otb::ogr::Field const& field, AnyListField_t const& newListField);
+void assignField(
+  otb::ogr::Field field, AnyListField_t const& newListFieldValue);
+void  pushFieldsToFieldLists(
+  otb::ogr::Feature const& inputFeature, AnyListFieldList_t & field);
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
@@ -81,103 +89,147 @@ int main(int argc, char * argv[])
     {
 // Software Guide : BeginLatex
 //
-//  We caw now instantiate first the input data source.
+// We caw now instantiate first the input \subdoxygen{otb}{ogr}{DataSource}.
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-    otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(argv[1], otb::ogr::DataSource::Modes::read);
+    otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(
+      argv[1], otb::ogr::DataSource::Modes::read);
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-//  And then, we can instantiate the output data source.
+// And then, we can instantiate the output \subdoxygen{otb}{ogr}{DataSource} and
+// its unique \subdoxygen{otb}{ogr}{Layer} multi-polygons.
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-    otb::ogr::DataSource::Pointer destination = otb::ogr::DataSource::New(argv[2], otb::ogr::DataSource::Modes::write);
-    otb::ogr::Layer dest_layer = destination->CreateLayer(argv[2], 0, wkbMultiPolygon);
+    otb::ogr::DataSource::Pointer destination = otb::ogr::DataSource::New(
+      argv[2], otb::ogr::DataSource::Modes::write);
+    otb::ogr::Layer destLayer = destination->CreateLayer(
+      argv[2], 0, wkbMultiPolygon);
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
-//  The data obtained from the reader mimics the interface of OGRDataSource. To
-//  access the geometric objects stored we need first to iterate on the
-//  \subdoxygen{otb}{ogr}{Layer}s from the \subdoxygen{otb}{ogr}{DataSource},
-//  then on the \subdoxygen{otb}{ogr}{Feature} from each layer.
+// The data obtained from the reader mimics the interface of
+// \code{OGRDataSource}. To access the geometric objects stored, we need first
+// to iterate on the \subdoxygen{otb}{ogr}{Layer}s from the
+// \subdoxygen{otb}{ogr}{DataSource}, then on the \subdoxygen{otb}{ogr}{Feature}
+// from each layer.
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-    for (otb::ogr::DataSource::const_iterator lb = source->begin(), le = source->end(); lb != le; ++lb)
+    // for (auto const& inputLayer : *source)
+    for (otb::ogr::DataSource::const_iterator lb=source->begin(), le=source->end()
+      ; lb != le
+      ; ++lb)
       {
-      otb::ogr::Layer const& source_layer = *lb;
+      otb::ogr::Layer const& inputLayer = *lb;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-//  In this example we will only read polygon objects from the input
-//  file before writing them to the output file. As all features from a
-//  layer share the same geometric type, we can filter on the layer
-//  geometric type.
+// In this example we will only read polygon objects from the input
+// file before writing them to the output file. As all features from a
+// layer share the same geometric type, we can filter on the layer
+// geometric type.
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-      if (source_layer.GetGeomType() != wkbPolygon)
+      if (inputLayer.GetGeomType() != wkbPolygon)
         {
         std::cout << "Warning: Ignoring layer: ";
-        source_layer.PrintSelf(std::cout, 2);
+        inputLayer.PrintSelf(std::cout, 2);
         continue; // skip to next layer
         }
 // Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
+// Software Guide : BeginLatex
 //
-//  In order to prepare the fields for the new layer, we first need to extract
-//  the fields definition from the original layer in order to deduce the new
-//  fields of the result layer.
+// In order to prepare the fields for the new layer, we first need to extract
+// the fields definition from the input layer in order to deduce the new fields
+// of the result layer.
 //
-//  Software Guide : EndLatex
+// Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-      OGRFeatureDefn & sourceFeatureDefn = source_layer.GetLayerDefn();
-      AnyListFieldListType fields = prepareNewFields(sourceFeatureDefn, dest_layer);
+      OGRFeatureDefn & sourceFeatureDefn = inputLayer.GetLayerDefn();
+      AnyListFieldList_t fields = prepareNewFields(sourceFeatureDefn, destLayer);
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
-//  The result layer will contain only one feature that stores a Multi-polygon
-//  shape. All geometric shapes are plain \tt{OGRGeometry} objects.
+// The result layer will contain only one feature, per input layer, that stores
+// a multi-polygon shape. All geometric shapes are plain \code{OGRGeometry}
+// objects.
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-      OGRMultiPolygon dest_geometry; // todo: ptr to move
+      OGRMultiPolygon destGeometry; // todo: use UniqueGeometryPtr
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
-//  The transformation algorithm is as simple as aggregating all the polygon
-//  from the features from the original layer into the destination multi-polygon
-//  geometric object.
+// The transformation algorithm is as simple as aggregating all the polygons
+// from the features from the input layer into the destination multi-polygon
+// geometric object.
 //
-//  Note: GetGeometry() provides a direct access to a non-mutable OGRGeometry
-//  pointer. OGRMultixxx::addGeometry() copies the received pointer. As a
-//  consequence, the following code is optimal regarding the geometric objects
-//  manipulated.
+// Note that \subdoxygen{otb}{ogr}{Feature}\code{::GetGeometry()} provides a
+// direct access to a non-mutable \code{OGRGeometry} pointer and that
+// \code{OGRGeometryCollection::addGeometry()} copies the received pointer. As
+// a consequence, the following code is optimal regarding the geometric objects
+// manipulated.
+//
+// This is also at this point that we fetch the field values from the input
+// features to accumulate them into the \code{fields} list.
+//
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-      for (otb::ogr::Layer::const_iterator fb = source_layer.begin(), fe = source_layer.end(); fb != fe; ++fb)
+      // for (auto const& inputFeature : inputLayer)
+      for (otb::ogr::Layer::const_iterator fb=inputLayer.begin(), fe=inputLayer.end()
+        ; fb != fe
+        ; ++fb)
         {
-        otb::ogr::Feature const& source_feature = *fb;
-        dest_geometry.addGeometry(source_feature.GetGeometry());
-        pushFieldsToFieldLists(source_feature,fields);
+        otb::ogr::Feature const& inputFeature = *fb;
+        destGeometry.addGeometry(inputFeature.GetGeometry());
+        pushFieldsToFieldLists(inputFeature,fields);
         } // for each feature
 // Software Guide : EndCodeSnippet
-      otb::ogr::Feature newFeature(dest_layer.GetLayerDefn());
-      newFeature.SetGeometry(&dest_geometry); // SetGeom -> copies
+
+// Software Guide : BeginLatex
+//
+// Then the new geometric object can be added to a new feature, that will be
+// eventually added to the destination layer.
+//
+// Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet
+      otb::ogr::Feature newFeature(destLayer.GetLayerDefn());
+      newFeature.SetGeometry(&destGeometry); // SetGeom -> copies
+// Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// We set here the fields of the new feature with the ones accumulated over the
+// features from the input layer.
+//
+// Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet
       for (size_t i=0, N=sourceFeatureDefn.GetFieldCount(); i!=N; ++i)
         {
         printField(newFeature[i], fields[i]);
         assignField(newFeature[i], fields[i]);
         }
+// Software Guide : EndCodeSnippet
 
-      dest_layer.CreateFeature(newFeature); // add feature to the layer
+// Software Guide : BeginLatex
+//
+// Finally we add (with \subdoxygen{otb}{ogr}{Layer}\code{::CreateFeature()}
+// the new feature to the destination layer, and we can process the next layer
+// from the input datasource.
+//
+// Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet
+      destLayer.CreateFeature(newFeature); // adds feature to the layer
       } // for each layer
+// Software Guide : EndCodeSnippet
 
     return EXIT_SUCCESS;
     }
@@ -188,9 +240,75 @@ int main(int argc, char * argv[])
   return EXIT_FAILURE;
 }
 
-struct push_visitor : boost::static_visitor<>
+// Software Guide : BeginLatex
+//
+// In order to \emph{simplify} the manipulation of \subdoxygen{otb}{ogr}{Field}s
+// and to avoid copy-paste for each possible case of field-type, this example
+// relies on
+// \href{http://www.boost.org/doc/libs/release/doc/html/variant.html}{boost.Variant}.
+//
+// As such, we have defined \code{AnyListField\_t} as a variant type on all
+// possible types of field. Then, the manipulation of the variant field values is
+// done through the templatized functions
+// \subdoxygen{otb}{ogr}{Field}\code{::SetValue<>()} and
+// \subdoxygen{otb}{ogr}{Field}\code{::GetValue<>()}, from the various
+// variant-visitors.
+//
+// Before using the visitors, we need to operate a switch on the exact type of
+// each field from the input layers. An empty field-values container is first
+// added to the set of fields containers. Finally, the destination layer is
+// completed with a new field of the right deduced type.
+//
+// Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet
+AnyListFieldList_t prepareNewFields(
+  OGRFeatureDefn /*const*/& defn, otb::ogr::Layer & destLayer)
 {
-  push_visitor(otb::ogr::Field const& f) : m_f(f) {}
+  AnyListFieldList_t fields;
+  for (size_t i=0, N=defn.GetFieldCount(); i!=N; ++i)
+    {
+    const char* name = defn.GetFieldDefn(i)->GetNameRef();
+    OGRFieldType type  = static_cast<OGRFieldType>(-1);
+    switch (defn.GetFieldDefn(i)->GetType())
+      {
+    case OFTInteger:
+      fields.push_back (IntList_t());
+      type = OFTIntegerList;
+      break;
+    case OFTString:
+      fields.push_back (StringList_t());
+      type = OFTStringList;
+      break;
+    case OFTReal:
+      fields.push_back (RealList_t());
+      type = OFTRealList;
+      break;
+    default:
+      std::cerr << "Unsupported field type: " <<
+        OGRFieldDefn::GetFieldTypeName(defn.GetFieldDefn(i)->GetType())
+        << " for " << name << "\n";
+      break;
+      }
+    OGRFieldDefn newFieldDefn(name, type); // name is duplicated here => no dangling pointer
+    destLayer.CreateField(newFieldDefn, false);
+    }
+  return fields;
+}
+// Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// The first visitor, \code{PushVisitor()}, takes the value from one field
+// and pushes it into a container of list-variant. The type of the field to
+// fetch is deduced from the type of the values stored in the container. It is
+// called by \code{pushFieldsToFieldLists()}, that for each field of the input
+// feature applies the visitor on the container.
+//
+// Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet
+struct PushVisitor : boost::static_visitor<>
+{
+  PushVisitor(otb::ogr::Field const& f) : m_f(f) {}
 
   template <typename T> void operator()(T & container) const
     {
@@ -202,50 +320,27 @@ private:
   otb::ogr::Field const& m_f;
 };
 
-void  pushFieldsToFieldLists(otb::ogr::Feature const& source_feature, AnyListFieldListType & fields)
+void  pushFieldsToFieldLists(
+  otb::ogr::Feature const& inputFeature, AnyListFieldList_t & fields)
 {
   // For each field
-  for (size_t i=0, N=source_feature.GetSize(); i!=N; ++i)
+  for (size_t i=0, N=inputFeature.GetSize(); i!=N; ++i)
     {
-    otb::ogr::Field field = source_feature[i];
-    boost::apply_visitor(push_visitor(field), fields[i]);
+    otb::ogr::Field field = inputFeature[i];
+    boost::apply_visitor(PushVisitor(field), fields[i]);
     }
 }
+// Software Guide : EndCodeSnippet
 
-AnyListFieldListType prepareNewFields(OGRFeatureDefn /*const*/& defn, otb::ogr::Layer & dest_layer)
-{
-  AnyListFieldListType fields;
-  for (size_t i=0, N=defn.GetFieldCount(); i!=N; ++i)
-    {
-    const char* name = defn.GetFieldDefn(i)->GetNameRef();
-    OGRFieldType type = OFTMaxType;
-    switch (defn.GetFieldDefn(i)->GetType())
-      {
-    case OFTInteger:
-      fields.push_back (IntListType());
-      type = OFTIntegerList;
-      break;
-    case OFTString:
-      fields.push_back (StringListType());
-      type = OFTStringList;
-      break;
-    case OFTReal:
-      fields.push_back (RealListType());
-      type = OFTRealList;
-      break;
-    default:
-      std::cerr << "Unsupported field type: " <<
-        OGRFieldDefn::GetFieldTypeName(defn.GetFieldDefn(i)->GetType())
-        << " for " << name << "\n";
-      break;
-      }
-    OGRFieldDefn newFieldDefn(name, type); // name is duplicated here => no dangling pointer
-    dest_layer.CreateField(newFieldDefn, false);
-    }
-  return fields;
-}
-
-struct print_visitor : boost::static_visitor<>
+// Software Guide : BeginLatex
+//
+// A second simple visitor, \code{PrintVisitor}, is defined to trace the
+// values of each field (which contains a list of typed data (integers, strings
+// or reals).
+//
+// Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet
+struct PrintVisitor : boost::static_visitor<>
 {
   template <typename T> void operator()(T const& container) const
     {
@@ -253,15 +348,24 @@ struct print_visitor : boost::static_visitor<>
     }
 };
 
-void printField(otb::ogr::Field const& field, AnyListFieldType const& newListField)
+void printField(otb::ogr::Field const& field, AnyListField_t const& newListField)
 {
   std::cout << field.GetName() << " -> ";
-  boost::apply_visitor(print_visitor(), newListField);
+  boost::apply_visitor(PrintVisitor(), newListField);
 }
+// Software Guide : EndCodeSnippet
 
-struct set_field_visitor : boost::static_visitor<>
+// Software Guide : BeginLatex
+//
+// The third visitor, \code{SetFieldVisitor}, sets the field of the
+// destination features, which have been accumulated in the list of typed
+// values.
+//
+// Software Guide : BeginCodeSnippet
+struct SetFieldVisitor : boost::static_visitor<>
 {
-  set_field_visitor(otb::ogr::Field f) : m_f(f) {}
+  SetFieldVisitor(otb::ogr::Field f) : m_f(f) {}
+  // operator() from visitors are expected to be const
   template <typename T> void operator()(T const& container) const
     {
     m_f.SetValue(container);
@@ -270,7 +374,16 @@ private:
   otb::ogr::Field mutable m_f; // this is a proxy -> a reference in a sort
 };
 
-void assignField(otb::ogr::Field field, AnyListFieldType const& newListFieldValue)
+void assignField(otb::ogr::Field field, AnyListField_t const& newListFieldValue)
 {
-  boost::apply_visitor(set_field_visitor(field), newListFieldValue);
+  boost::apply_visitor(SetFieldVisitor(field), newListFieldValue);
 }
+// Software Guide : EndCodeSnippet
+// Software Guide : EndLatex
+//
+// Software Guide : BeginLatex
+//
+//  Note that this example does not handle the case when the input layers don't
+//  share a same fields-definition.
+//
+// Software Guide : EndLatex
