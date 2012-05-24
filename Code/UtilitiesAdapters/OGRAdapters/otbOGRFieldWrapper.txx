@@ -395,6 +395,13 @@ void otb::ogr::Field::SetValue(T const& value)
   SetterType::call(*m_Feature, m_index, Converter::convert(value));
 }
 
+template <typename T, size_t N>
+inline
+void otb::ogr::Field::SetValue(T const value[N])
+{
+  this->SetValue(&value[0]);
+}
+
 template <typename T>
 inline
 T otb::ogr::Field::GetValue() const

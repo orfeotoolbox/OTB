@@ -120,6 +120,19 @@ public:
   template <typename T> void SetValue(T const& value);
 
   /**
+   * Value setter.
+   * This overload is meant to help type promotions from <tt>char const[42]</tt> to
+   * <tt>char const*</tt>.
+   * \param[in] value  New value for the field.
+   * \throw None
+   * \pre \c value's kind must match the field's type.
+   * \internal
+   * This function automagically decodes the type of the parameter in order to
+   * use the ad'hoc setter from \c OGRFeature.
+   */
+  template <typename T, size_t N> void SetValue(T const value[N]);
+
+  /**
    * Value getter.
    * \tparam T expected type for the stored value.
    * \throw None
