@@ -246,6 +246,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/MetadataExample.cxx
   #${OTB_SOURCE_DIR}/Examples/IO/DXFReaderExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/VectorDataIOExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/OGRWrappersExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/LidarReaderExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/LidarToImageExample.cxx
