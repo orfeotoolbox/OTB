@@ -186,8 +186,14 @@ ADD_TEST(obTuMeanShiftConnectedComponentSegmentationFilter ${OBIA_TESTS1}
       "distance<0.2"
       50)
 
-
-
+ADD_TEST(obTuMeanShiftSegmentationFilter ${OBIA_TESTS1}
+      otbMeanShiftSegmentationFilter
+      ${INPUTDATA}/ROI_QB_MUL_4.tif
+      ${TEMP}/obTuMeanShiftSegmentationFilterLabelImage.tif
+      ${TEMP}/obTuMeanShiftSegmentationFilterClusteredImage.tif
+      4
+      10
+      )
 
 ADD_TEST(obTuLabelImageToLabelMapWithAdjacencyFilterNew ${OBIA_TESTS3}
   otbLabelImageToLabelMapWithAdjacencyFilterNew)
@@ -345,6 +351,7 @@ otbVectorDataToLabelMapFilterNew.cxx
 otbStreamingConnectedComponentOBIATest.cxx
 otbMeanShiftStreamingConnectedComponentOBIATest.cxx
 otbMeanShiftConnectedComponentSegmentationFilterTest.cxx
+otbMeanShiftSegmentationFilter.cxx
 otbHooverMatrixFilterNew.cxx
 otbHooverMatrixFilter.cxx
 otbHooverInstanceFilterNew.cxx
