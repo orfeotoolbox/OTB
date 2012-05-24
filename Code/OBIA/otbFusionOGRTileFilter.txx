@@ -73,7 +73,30 @@ FusionOGRTileFilter<TInputImage>
    return static_cast<OGRDataSourceType *> (this->itk::ProcessObject::GetInput(1));
 }
 
-
+template<class TInputImage>
+double
+FusionOGRTileFilter<TInputImage>
+::GetLengthOGRGeometryCollection( OGRGeometryCollection * intersection )
+{
+  double dfLength = 0.0;
+  for( int iGeom = 0; iGeom < intersection->getNumGeometries(); iGeom++ )
+    {
+      OGRGeometry* geom = intersection->getGeometryRef(iGeom); 
+      switch( wkbFlatten(geom->getGeometryType()) )
+	{
+	case wkbLinearRing:
+	case wkbLineString:
+	  dfLength += ((OGRCurve *) geom)->get_Length();
+	  break;
+	case wkbGeometryCollection:
+	  dfLength += GetLengthOGRGeometryCollection(dynamic_cast<OGRGeometryCollection *> (geom));
+	  break;
+	default:
+	  break;
+	}
+    }
+  return dfLength;
+}
 template<class TInputImage>
 void
 FusionOGRTileFilter<TInputImage>
@@ -210,8 +233,13 @@ FusionOGRTileFilter<TInputImage>
                      }
                      else if (intersection->getGeometryType() == wkbMultiLineString)
                      {
-                        fusion.overlap = dynamic_cast<OGRMultiLineString *>(intersection.get())->get_Length();
-                     }
+                        #if(GDAL_VERSION_NUM < 1800)
+			fusion.overlap = GetLengthOGRGeometryCollection(dynamic_cast<OGRGeometryCollection *> (intersection.get()));
+                        #else
+			fusion.overlap = dynamic_cast<OGRMultiLineString *>(intersection.get())->get_Length();
+                        #endif
+		     }
+	     
                      
                      long upperFID = upper.feat.GetFID();
                      long lowerFID = lower.feat.GetFID();

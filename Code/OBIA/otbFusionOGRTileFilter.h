@@ -20,9 +20,9 @@
 
 #include "otbOGRDataSourceWrapper.h"
 
-#if(GDAL_VERSION_NUM < 1800)
-#error FusionOGRTileFilter requires GDAL version >= 1.8.0
-#endif
+//#if(GDAL_VERSION_NUM < 1800)
+//#error FusionOGRTileFilter requires GDAL version >= 1.8.0
+//#endif
 
 #include "itkProcessObject.h"
 
@@ -121,7 +121,13 @@ protected:
   } SortFeature;
   
   void ProcessStreamingLine(bool line);
-  
+  /** get length in case of  OGRGeometryCollection.
+   * This function recodes the get_lenght method available since gdal 1.8.0 
+   * in the case of OGRGeometryCollection. The aim is allow to access polygon stiching  
+   * functionalities with gdal 1.6.
+   */
+  double GetLengthOGRGeometryCollection(OGRGeometryCollection * intersection);
+
 private:
   FusionOGRTileFilter(const Self &);  //purposely not implemented
   void operator =(const Self&);      //purposely not implemented

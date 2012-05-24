@@ -270,7 +270,7 @@ ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
      )
 
 
-IF(${GDAL_NUM_VERSION} VERSION_GREATER "10800")
+#IF(${GDAL_NUM_VERSION} VERSION_GREATER "10800")
 # -------            otb::FusionOGRTileFilter   -------------
 ADD_TEST(obTuFusionOGRTileFilter ${OBIA_TESTS1}
 #     --compare-ogr  ${EPSILON_8}
@@ -283,7 +283,7 @@ ADD_TEST(obTuFusionOGRTileFilter ${OBIA_TESTS1}
     layer
     112
     )
-ENDIF(${GDAL_NUM_VERSION} VERSION_GREATER "10800")
+#ENDIF(${GDAL_NUM_VERSION} VERSION_GREATER "10800")
 
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
@@ -353,9 +353,9 @@ otbStreamingVectorizedSegmentationOGR.cxx
 otbFusionOGRTileFilter.cxx
 )
 
-IF(${GDAL_NUM_VERSION} VERSION_LESS "10800")
-LIST(REMOVE_ITEM BasicOBIA_SRCS1 otbFusionOGRTileFilter.cxx)
-ENDIF(${GDAL_NUM_VERSION} VERSION_LESS "10800")
+#IF(${GDAL_NUM_VERSION} VERSION_LESS "10800")
+#LIST(REMOVE_ITEM BasicOBIA_SRCS1 otbFusionOGRTileFilter.cxx)
+#ENDIF(${GDAL_NUM_VERSION} VERSION_LESS "10800")
 
 
 IF(OTB_USE_PQXX)
