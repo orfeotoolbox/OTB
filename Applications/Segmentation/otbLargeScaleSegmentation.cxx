@@ -321,6 +321,8 @@ private:
           }
 
         edisonVectorizationFilter->SetSimplify(false);
+        
+        AddProcess(edisonVectorizationFilter->GetStreamer(), "Computing Edison mean-shift segmentation");
 
         edisonVectorizationFilter->Initialize(); //must be called !
         edisonVectorizationFilter->Update(); //must be called !
@@ -369,7 +371,7 @@ private:
         ccVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
                                                                                    GetParameterString(
                                                                                                       "filter.connectedcomponent.expr"));
-        AddProcess(ccVectorizationFilter->GetSegmentationFilter(), "Computing segmentation");
+        AddProcess(ccVectorizationFilter->GetStreamer(), "Computing connected component segmentation");
 
         ccVectorizationFilter->Initialize(); //must be called !
         ccVectorizationFilter->Update();
