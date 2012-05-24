@@ -242,6 +242,8 @@ public:
   typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType,
                TSegmentationFilter>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
 
+  typedef typename InputImageType::SizeType                                   SizeType;
+
   /** Set the input image. */
   void SetInput(InputImageType * input)
   {
@@ -302,6 +304,12 @@ public:
      this->GetFilter()->SetLayerName(fileName);
   }
   
+  /** Retrieve the actual streamsize used */
+  SizeType GetStreamSize()
+  {
+    return this->GetFilter()->GetStreamSize();
+  }
+
   void Initialize()
   {
      this->GetFilter()->Initialize();
