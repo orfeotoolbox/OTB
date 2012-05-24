@@ -125,7 +125,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Method to build a map of adjacent regions */
-  RegionAdjacencyMapType LabelImageToRegionAdjacencyMap(typename InputLabelImageType::Pointer inputLabelImage);
+  RegionAdjacencyMapType LabelImageToRegionAdjacencyMap(typename OutputLabelImageType::Pointer inputLabelImage);
 
 private:
   LabelImageRegionMergingFilter(const Self &);     //purposely not implemented

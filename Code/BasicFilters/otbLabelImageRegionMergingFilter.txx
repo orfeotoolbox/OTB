@@ -178,7 +178,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
     ++outputIt;
     }
 
-  RegionAdjacencyMapType regionAdjacencyMap = LabelImageToRegionAdjacencyMap(inputLabelImage);
+  RegionAdjacencyMapType regionAdjacencyMap = LabelImageToRegionAdjacencyMap(outputLabelImage);
   unsigned int regionCount = regionAdjacencyMap.size() - 1;
 
   // Initialize arrays for mode information
@@ -409,13 +409,13 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 typename LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>::RegionAdjacencyMapType
 LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
-::LabelImageToRegionAdjacencyMap(typename InputLabelImageType::Pointer  inputLabelImage)
+::LabelImageToRegionAdjacencyMap(typename OutputLabelImageType::Pointer  labelImage)
 {
   // declare the output map
   RegionAdjacencyMapType ram;
 
   // Find the maximum label value
-  itk::ImageRegionConstIterator<InputLabelImageType> it(inputLabelImage, inputLabelImage->GetRequestedRegion());
+  itk::ImageRegionConstIterator<OutputLabelImageType> it(labelImage, labelImage->GetRequestedRegion());
   it.GoToBegin();
   LabelType maxLabel = 0;
   while(!it.IsAtEnd())
@@ -430,11 +430,11 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 
   // set the image region without bottom and right borders so that bottom and
   // right neighbors always exist
-  RegionType regionWithoutBottomRightBorders  = inputLabelImage->GetRequestedRegion();
+  RegionType regionWithoutBottomRightBorders  = labelImage->GetRequestedRegion();
   SizeType size = regionWithoutBottomRightBorders.GetSize();
   for(unsigned int d = 0; d < ImageDimension; ++d) size[d] -= 1;
   regionWithoutBottomRightBorders.SetSize(size);
-  itk::ImageRegionConstIteratorWithIndex<InputLabelImageType> inputIt(inputLabelImage, regionWithoutBottomRightBorders);
+  itk::ImageRegionConstIteratorWithIndex<OutputLabelImageType> inputIt(labelImage, regionWithoutBottomRightBorders);
 
   inputIt.GoToBegin();
   while(!inputIt.IsAtEnd())
@@ -448,7 +448,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
       InputIndexType neighborIndex = index;
       neighborIndex[d]++;
 
-      LabelType neighborLabel = inputLabelImage->GetPixel(neighborIndex);
+      LabelType neighborLabel = labelImage->GetPixel(neighborIndex);
 
       // add adjacency if different labels
       if(neighborLabel != label)
