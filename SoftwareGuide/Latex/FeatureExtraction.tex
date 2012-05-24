@@ -82,7 +82,8 @@ More features are available in \doxygen{otb}{ScalarImageToAdvancedTexturesFilter
 \input{HarrisExample}
 \subsection{SIFT detector}
 \label{sec:SIFTDetector}
-\input{SIFTFastExample}
+% \input{SIFTFastExample}
+\InputIfFileExists{SIFTFastExample}
 \subsection{SURF detector}
 \input{SURFExample}
 
@@ -121,7 +122,8 @@ interest points.
 \subsection{Edge Density}
 \input{EdgeDensityExample}
 \subsection{SIFT Density}
-\input{SIFTDensityExample}
+\InputIfFileExists{SIFTDensityExample}
+% \input{SIFTDensityExample}
 
 \section{Geometric Moments}
 
