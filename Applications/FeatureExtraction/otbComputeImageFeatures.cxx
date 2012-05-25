@@ -46,7 +46,6 @@
 */
 
 
-
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbImageFileWriter.h"
