@@ -409,14 +409,17 @@ namespace otb
 
             //segmentation parameters
             const unsigned int
-              spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.spatialr"));
+            spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.spatialr"));
             const unsigned int
-              rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.ranger"));
+            rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.ranger"));
             const unsigned int
-              minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.minsize"));
+            minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
 
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetSpatialBandwidth(spatialRadius);
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
+
+        meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(1000);
+        meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(0.01);
 
             if (minSize > 1)
               {
