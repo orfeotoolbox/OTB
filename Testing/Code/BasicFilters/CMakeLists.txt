@@ -1307,7 +1307,13 @@ ADD_TEST(bfTvMeanShiftImageFilter2ThreadingNonOpt ${BASICFILTERS_TESTS9}
 #        4 10 1
 #        )
 
-ADD_TEST(bfTuLabelImageRegionMergingFilterQB_Suburb ${BASICFILTERS_TESTS9}
+
+ADD_TEST(bfTvLabelImageRegionMergingFilterQB_Suburb ${BASICFILTERS_TESTS9}
+        --compare-n-images ${EPSILON_7} 2
+        ${BASELINE}/bfLabelImageRegionMergingFilterMergeOutput_QB_Suburb.tif
+        ${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_QB_Suburb.tif
+      	${BASELINE}/bfLabelImageRegionMergingFilterClusteredOutput_QB_Suburb.tif
+       	${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_QB_Suburb.tif
         otbLabelImageRegionMergingFilter
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/bfLabelImageRegionMergingFilterSpectralOutput_QB_Suburb.tif
@@ -1317,7 +1323,12 @@ ADD_TEST(bfTuLabelImageRegionMergingFilterQB_Suburb ${BASICFILTERS_TESTS9}
         4 25 0.1 100
         )
 
-ADD_TEST(bfTuLabelImageRegionMergingFilterSPOT5 ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTvLabelImageRegionMergingFilterSPOT5 ${BASICFILTERS_TESTS9}
+        --compare-n-images ${EPSILON_7} 2
+        ${BASELINE}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
+        ${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
+        ${BASELINE}/bfLabelImageRegionMergingFilterClusteredOutput_SPOT5.tif
+        ${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_SPOT5.tif
         otbLabelImageRegionMergingFilter
         ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
         ${TEMP}/bfLabelImageRegionMergingFilterSpectralOutput_SPOT5.tif
