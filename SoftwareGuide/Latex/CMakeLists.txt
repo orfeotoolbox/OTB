@@ -99,6 +99,7 @@ SET( Tex_SRCS
   Iterators.tex
   Numerics.tex
   Registration.tex
+  StereoReconstruction.tex
   Segmentation.tex
   SoftwareGuide.tex
   SoftwareProcess.tex
