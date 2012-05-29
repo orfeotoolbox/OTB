@@ -30,32 +30,21 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
    m_RegionMergingFilter = RegionMergingFilterType::New();
 
    this->SetNumberOfOutputs(2);
-
-   this->SetNthOutput(0, m_RegionMergingFilter->GetLabelOutput());
-   this->SetNthOutput(1, m_RegionMergingFilter->GetClusteredOutput());
+   this->SetNthOutput(0,TOutputLabelImage::New());
+   this->SetNthOutput(1,TOutputClusteredImage::New());
 }
 
 template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
 MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
 ::~MeanShiftSegmentationFilter()
-{
-}
-
-template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
-void
-MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
-::GenerateInputRequestedRegion()
-{
-  Superclass::GenerateInputRequestedRegion();
-}
-
+{}
 
 template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
 TOutputLabelImage *
 MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
 ::GetLabelOutput()
 {
-  return static_cast<OutputLabelImageType *>(this->m_RegionMergingFilter->GetLabelOutput());
+  return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
 
 template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
@@ -63,7 +52,7 @@ const TOutputLabelImage *
 MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
 ::GetLabelOutput() const
 {
-  return static_cast<OutputLabelImageType *>(this->m_RegionMergingFilter->GetLabelOutput());
+  return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
 
 template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
@@ -71,7 +60,7 @@ typename MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClus
 MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
 ::GetClusteredOutput()
 {
-  return static_cast<OutputClusteredImageType *>(this->m_RegionMergingFilter->GetClusteredOutput());
+  return static_cast<OutputClusteredImageType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
@@ -79,41 +68,22 @@ const typename MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutp
 MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
 ::GetClusteredOutput() const
 {
-  return static_cast<OutputClusteredImageType *>(this->m_RegionMergingFilter->GetClusteredOutput());
+  return static_cast<OutputClusteredImageType *>(this->itk::ProcessObject::GetOutput(1));
 }
-
-// template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
-// void
-// MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
-// ::GenerateOutputInformation()
-// {
-//   Superclass::GenerateOutputInformation();
-
-//   unsigned int numberOfComponentsPerPixel = this->GetInput()->GetNumberOfComponentsPerPixel();
-
-//   if(this->GetClusteredOutput())
-//     {
-//     this->GetClusteredOutput()->SetNumberOfComponentsPerPixel(numberOfComponentsPerPixel);
-//     }
-
-// }
-
 
 template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
 void
 MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
 ::GenerateData()
 {
-
   this->m_MeanShiftFilter->SetInput(this->GetInput());
-  this->m_MeanShiftFilter->Update();
-
   this->m_RegionMergingFilter->SetInputLabelImage(this->m_MeanShiftFilter->GetLabelOutput());
   this->m_RegionMergingFilter->SetInputSpectralImage(this->m_MeanShiftFilter->GetRangeOutput());
   this->m_RegionMergingFilter->SetRangeBandwidth(this->GetRangeBandwidth());
 
+  m_RegionMergingFilter->GraftNthOutput(0,this->GetLabelOutput());
+  m_RegionMergingFilter->GraftNthOutput(1,this->GetClusteredOutput());
   this->m_RegionMergingFilter->Update();
-
   this->GraftNthOutput(0, m_RegionMergingFilter->GetLabelOutput());
   this->GraftNthOutput(1, m_RegionMergingFilter->GetClusteredOutput());
 }

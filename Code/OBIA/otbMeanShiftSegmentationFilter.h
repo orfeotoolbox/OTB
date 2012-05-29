@@ -70,14 +70,6 @@ public:
                                         OutputLabelImageType, OutputClusteredImageType>  RegionMergingFilterType;
   typedef typename RegionMergingFilterType::Pointer                                      RegionMergingFilterPointerType;
 
-  /** Set/Get mean shift filter */
-  itkSetObjectMacro(MeanShiftFilter, MeanShiftFilterType);
-  itkGetObjectMacro(MeanShiftFilter, MeanShiftFilterType);
-
-  /** Set/Get region merging filter */
-  itkSetObjectMacro(RegionMergingFilter, RegionMergingFilterType);
-  itkGetObjectMacro(RegionMergingFilter, RegionMergingFilterType);
-
   /** Sets the spatial bandwidth (or radius in the case of a uniform kernel)
     * of the neighborhood for each pixel
     */
@@ -117,8 +109,6 @@ protected:
   MeanShiftSegmentationFilter();
 
   virtual ~MeanShiftSegmentationFilter();
-
-  void GenerateInputRequestedRegion();
 
 //  virtual void GenerateOutputInformation(void);
 
