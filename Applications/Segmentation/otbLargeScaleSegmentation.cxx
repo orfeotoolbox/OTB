@@ -21,7 +21,7 @@
 
 // Segmentation filters includes
 #include "otbMeanShiftVectorImageFilter.h"
-#include "otbMeanShiftImageFilter2.h"
+#include "otbMeanShiftSegmentationFilter.h"
 #include "otbConnectedComponentMuParserFunctor.h"
 #include "itkConnectedComponentFunctorImageFilter.h"
 #include "otbMaskMuParserFilter.h"
@@ -56,11 +56,13 @@ public:
   <FloatVectorImageType,
    FloatVectorImageType,
    LabelImageType>                        EdisonSegmentationFilterType;
+
   // Home made mean-shift
-  typedef otb::MeanShiftImageFilter2
+  typedef otb::MeanShiftSegmentationFilter
   <FloatVectorImageType,
-   FloatVectorImageType>
-                                          MeanShiftFilterType;
+   LabelImageType,
+   FloatVectorImageType>                  MeanShiftSegmentationFilterType;
+
   // Simple connected components
   typedef otb::Functor::ConnectedComponentMuParserFunctor
   <FloatVectorImageType::PixelType>       FunctorType;
@@ -81,6 +83,12 @@ public:
   <FloatVectorImageType,
    EdisonSegmentationFilterType>          EdisontreamingVectorizedSegmentationOGRType;
   
+  // Home made mean-shift
+  typedef otb::StreamingVectorizedSegmentationOGR
+  <FloatVectorImageType,
+   MeanShiftSegmentationFilterType>       MeanShiftVectorizedSegmentationOGRType;
+
+
   // Connected components
   typedef otb::StreamingVectorizedSegmentationOGR
   <FloatVectorImageType,
@@ -149,15 +157,15 @@ private:
     AddParameter(ParameterType_Empty,"stitch","Stich polygons at tiles borders");
     MandatoryOff("stitch");
 
-    // AddChoice("filter.meanshift", "MeanShift");
-    // SetParameterDescription(
-    //                         "filter.meanshift",
-    //                         "MeanShift filter (MeanShift filtered output is segmented by connected component segmentation, this step will be replaced by a dedicated scheme (WIP)).");
-    // // MeanShift Parameters
-    // AddParameter(ParameterType_Int, "filter.meanshift.spatialr", "Spatial radius");
-    // SetParameterDescription("filter.meanshift.spatialr", "Spatial radius defining neighborhood.");
-    // AddParameter(ParameterType_Float, "filter.meanshift.ranger", "Range radius");
-    // SetParameterDescription("filter.meanshift.ranger", "Range radius defining the interval in the color space.");
+    AddChoice("filter.meanshift", "MeanShift");
+    SetParameterDescription(
+                            "filter.meanshift",
+                            "Home-made threaded MeanShift filter.");
+    // MeanShift Parameters
+    AddParameter(ParameterType_Int, "filter.meanshift.spatialr", "Spatial radius");
+    SetParameterDescription("filter.meanshift.spatialr", "Spatial radius defining neighborhood.");
+    AddParameter(ParameterType_Float, "filter.meanshift.ranger", "Range radius");
+    SetParameterDescription("filter.meanshift.ranger", "Range radius defining the interval in the color space.");
     // AddParameter(ParameterType_Float, "filter.meanshift.thres", "convergence threshold");
     // SetParameterDescription("filter.meanshift.thres", "convergence threshold. iterative scheme will stop if MeanShift "
     //   "vector is below this threshold (1e-3 by default) or iteration number reached maximum iteration number.");
@@ -167,12 +175,9 @@ private:
     // AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
     // SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
     // MandatoryOff("filter.meanshift.useoptim");
-    // AddParameter(ParameterType_String, "filter.meanshift.expr", "Connected Component Expression");
-    // SetParameterDescription("filter.meanshift.expr", "Formula used for connected component segmentation");
-    // SetDefaultParameterInt("filter.meanshift.spatialr", 5);
 
-    // SetDefaultParameterInt("filter.meanshift.spatialr", 5);
-    // SetDefaultParameterFloat("filter.meanshift.ranger", 15.0);
+    SetDefaultParameterInt("filter.meanshift.spatialr", 5);
+    SetDefaultParameterFloat("filter.meanshift.ranger", 15.0);
     // SetDefaultParameterFloat("filter.meanshift.thres", 1e-3);
     // SetMinimumParameterFloatValue("filter.meanshift.thres", 0.);
     // SetDefaultParameterInt("filter.meanshift.maxiter", 10);
@@ -319,8 +324,10 @@ private:
           edisonVectorizationFilter->SetSimplify(true);
           edisonVectorizationFilter->SetSimplificationTolerance(GetParameterFloat("simplify"));
           }
-
-        edisonVectorizationFilter->SetSimplify(false);
+        else
+          {
+          edisonVectorizationFilter->SetSimplify(false);
+          }
         
         AddProcess(edisonVectorizationFilter->GetStreamer(), "Computing Edison mean-shift segmentation");
 
@@ -336,7 +343,69 @@ private:
         // Home made mean-shift
       case 1:
         {
-        otbAppLogFATAL(<<"Standard mean-shift not implemented yet");
+        MeanShiftVectorizedSegmentationOGRType::Pointer
+          meanShiftVectorizationFilter = MeanShiftVectorizedSegmentationOGRType::New();
+
+        meanShiftVectorizationFilter->SetInput(GetParameterFloatVectorImage("in"));
+
+        if (HasValue("inmask"))
+          {
+          meanShiftVectorizationFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
+          }
+        meanShiftVectorizationFilter->SetOGRDataSource(ogrDS);
+
+        if (tileSize != 0)
+          {
+          meanShiftVectorizationFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
+          }
+        else
+          {
+          meanShiftVectorizationFilter->GetStreamer()->SetAutomaticAdaptativeStreaming();
+          }
+
+        meanShiftVectorizationFilter->SetLayerName(layerName);
+        meanShiftVectorizationFilter->SetFieldName(fieldName);
+        meanShiftVectorizationFilter->SetStartLabel(startLabel);
+        if (use8connected)
+        otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
+        meanShiftVectorizationFilter->SetUse8Connected(use8connected);
+
+        //segmentation parameters
+        const unsigned int
+            spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.spatialr"));
+        const unsigned int
+            rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.ranger"));
+        const unsigned int
+            minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.minsize"));
+
+        meanShiftVectorizationFilter->GetSegmentationFilter()->SetSpatialBandwidth(spatialRadius);
+        meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
+
+        if (minSize > 1)
+          {
+          otbAppLogINFO(<<"Object with size under "<<minSize<<" will be suppressed."<<std::endl);
+          meanShiftVectorizationFilter->SetFilterSmallObject(true);
+          meanShiftVectorizationFilter->SetMinimumObjectSize(minSize);
+          }
+
+        if(IsParameterEnabled("simplify"))
+          {
+          meanShiftVectorizationFilter->SetSimplify(true);
+          meanShiftVectorizationFilter->SetSimplificationTolerance(GetParameterFloat("simplify"));
+          }
+        else
+          {
+          meanShiftVectorizationFilter->SetSimplify(false);
+          }
+        
+        AddProcess(meanShiftVectorizationFilter->GetStreamer(), "Computing MeanShift segmentation");
+
+        meanShiftVectorizationFilter->Initialize(); //must be called !
+        meanShiftVectorizationFilter->Update(); //must be called !
+        m_LabelImage = meanShiftVectorizationFilter->GetSegmentationFilter()->GetLabelOutput();
+
+        streamSize = meanShiftVectorizationFilter->GetStreamSize();
+
         break;
         }
         // Connected component segmentation
