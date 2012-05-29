@@ -474,34 +474,34 @@ public:
     * of the neighborhood for each pixel
     */
   itkSetMacro(SpatialBandwidth, RealType);
-  itkGetMacro(SpatialBandwidth, RealType);
+  itkGetConstReferenceMacro(SpatialBandwidth, RealType);
 
   /** Sets the spectral bandwidth (or radius for a uniform kernel) for pixels
     * to be included in the same mode
     */
   itkSetMacro(RangeBandwidth, RealType);
-  itkGetMacro(RangeBandwidth, RealType);
+  itkGetConstReferenceMacro(RangeBandwidth, RealType);
 
   /** Sets the maximum number of algorithm iterations */
-  itkGetConstMacro(MaxIterationNumber, unsigned int);
+  itkGetConstReferenceMacro(MaxIterationNumber, unsigned int);
   itkSetMacro(MaxIterationNumber, unsigned int);
 
   /** Sets the threshold value for the mean shift vector's squared norm,
     * under which convergence is assumed
     */
-  itkGetConstMacro(Threshold, double);
+  itkGetConstReferenceMacro(Threshold, double);
   itkSetMacro(Threshold, double);
 
   /** Toggle mode search optimization, which is enabled by default.
     * When off, the output label image is not available
     */
   itkSetMacro(ModeSearchOptimization, bool);
-  itkGetConstMacro(ModeSearchOptimization, bool);
+  itkGetConstReferenceMacro(ModeSearchOptimization, bool);
 
   /** Toggle bucket optimization, which is disabled by default.
     */
   itkSetMacro(BucketOptimization, bool);
-  itkGetConstMacro(BucketOptimization, bool);
+  itkGetConstReferenceMacro(BucketOptimization, bool);
 
   /** Returns the const spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
   const OutputSpatialImageType * GetSpatialOutput() const;
