@@ -252,9 +252,9 @@ void VectorDataEditionModel
   // and delete them
   itk::PreOrderTreeIterator<VectorDataType::DataTreeType> it(this->GetVectorData()->GetDataTree());
   it.GoToBegin();
-  int count = 0;
-  int nbGeomDeleted = 0;
-  std::vector<unsigned int>   geomToDelete;
+  //int count = 0;
+  //int nbGeomDeleted = 0;
+
   while (!it.IsAtEnd() )
     {
     if (it.Get()->IsPointFeature() || it.Get()->IsLineFeature() || it.Get()->IsPolygonFeature())
@@ -262,25 +262,22 @@ void VectorDataEditionModel
       // check if the geometry intersects or is within the bounding box
       if ( it.Get()->Intersects(regionNode) || it.Get()->Within(regionNode))
         {
-        geomToDelete.push_back(count);
-        // this->SetSelectedGeometry(count);
-        // this->DeleteGeometry();
-        nbGeomDeleted++;
+        // Remove the node
+        it.Remove();
+        
+        // must go the to begin, because the iterator seems lost when
+        // removing a node from its tree
+        it.GoToBegin();
+        
+        //nbGeomDeleted++;
         }
-      count++;
+      //count++;
       }
     ++it;
     }
-
-  for (unsigned int idx = 0; idx < geomToDelete.size(); idx++)
-    {
-    this->SetSelectedGeometry(geomToDelete[idx] - idx);
-    this->DeleteGeometry();
-    }
-
-  chrono.Stop();
-  std::cout<< "\tVectorDataEditionModel::DeleteWithinROI -> "<<  nbGeomDeleted << " geometries deleted / "
-           << count <<" in "  << chrono.GetMeanTime() << " seconds." <<std::endl;
+  // chrono.Stop();
+  // std::cout<< "\tVectorDataEditionModel::DeleteWithinROI -> "<<  nbGeomDeleted << " geometries deleted / "
+  //          << count <<" in "  << chrono.GetMeanTime() << " seconds." <<std::endl;
 }
 
 }
