@@ -89,10 +89,8 @@ int main(int argc, char *argv[])
   
   // Typedefs
   // Software Guide : BeginCodeSnippet
-
   //typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
   typedef otb::MeanShiftSegmentationFilter <ImageType,LabelImageType,ImageType>  MeanShiftSegmentationFilterType;
-
 
 
   typedef otb::StreamingVectorizedSegmentationOGR<ImageType, MeanShiftSegmentationFilterType> StreamingVectorizedSegmentationType;
