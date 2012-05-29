@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMeanShiftImageFilter2.h"
+#include "otbMeanShiftSmoothingImageFilter.h"
 #include "otbLabelImageRegionMergingFilter.h"
 
 int otbLabelImageRegionMergingFilter(int argc, char * argv[])
@@ -50,7 +50,7 @@ int otbLabelImageRegionMergingFilter(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, Dimension>           ImageType;
   typedef otb::ImageFileReader<ImageType>                  ReaderType;
   typedef otb::ImageFileWriter<ImageType>                  WriterType;
-  typedef otb::MeanShiftImageFilter2<ImageType, ImageType> FilterType;
+  typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> FilterType;
   typedef FilterType::OutputLabelImageType                 LabelImageType;
   typedef otb::ImageFileWriter<LabelImageType>             LabelWriterType;
 

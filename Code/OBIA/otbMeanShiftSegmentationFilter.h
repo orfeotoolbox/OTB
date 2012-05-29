@@ -20,7 +20,7 @@
 
 #include "itkMacro.h"
 
-#include "otbMeanShiftImageFilter2.h"
+#include "otbMeanShiftSmoothingImageFilter.h"
 #include "otbLabelImageRegionMergingFilter.h"
 
 namespace otb {
@@ -62,7 +62,7 @@ public:
 
   // Mean shift filter
   typedef OutputClusteredImageType                                                               MeanShiftFilteredImageType;
-  typedef MeanShiftImageFilter2<InputSpectralImageType, MeanShiftFilteredImageType, KernelType>  MeanShiftFilterType;
+  typedef MeanShiftSmoothingImageFilter<InputSpectralImageType, MeanShiftFilteredImageType, KernelType>  MeanShiftFilterType;
   typedef typename MeanShiftFilterType::Pointer                                                  MeanShiftFilterPointerType;
   // Region merging filter
   typedef typename MeanShiftFilterType::OutputLabelImageType                             InputLabelImageType;

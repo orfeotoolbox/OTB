@@ -16,10 +16,10 @@
 
 =========================================================================*/
 
-#ifndef __otbMeanShiftImageFilter2_txx
-#define __otbMeanShiftImageFilter2_txx
+#ifndef __otbMeanShiftSmoothingImageFilter_txx
+#define __otbMeanShiftSmoothingImageFilter_txx
 
-#include "otbMeanShiftImageFilter2.h"
+#include "otbMeanShiftSmoothingImageFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 #include "otbUnaryFunctorWithIndexWithOutputSizeImageFilter.h"
@@ -31,8 +31,8 @@
 namespace otb
 {
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::MeanShiftImageFilter2()
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+::MeanShiftSmoothingImageFilter()
 {
   m_MaxIterationNumber = 4;
   m_SpatialBandwidth = 3;
@@ -50,15 +50,15 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::~ MeanShiftImageFilter2()
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+::~ MeanShiftSmoothingImageFilter()
 {
 
 }
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputSpatialImageType *
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+const typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputSpatialImageType *
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::GetSpatialOutput() const
 {
   if (this->GetNumberOfOutputs() < 2)
@@ -69,8 +69,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 }
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputSpatialImageType *
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputSpatialImageType *
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::GetSpatialOutput()
 {
   if (this->GetNumberOfOutputs() < 2)
@@ -82,8 +82,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputImageType *
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+const typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputImageType *
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::GetRangeOutput() const
 {
   if (this->GetNumberOfOutputs() < 1)
@@ -94,8 +94,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 }
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputImageType *
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputImageType *
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::GetRangeOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
@@ -107,8 +107,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputIterationImageType *
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputIterationImageType *
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::GetIterationOutput()
 {
   if (this->GetNumberOfOutputs() < 3)
@@ -119,8 +119,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 }
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputIterationImageType *
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+const typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputIterationImageType *
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::GetIterationOutput() const
 {
   if (this->GetNumberOfOutputs() < 3)
@@ -131,8 +131,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 }
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputLabelImageType *
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputLabelImageType *
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::GetLabelOutput()
 {
   if (this->GetNumberOfOutputs() < 4)
@@ -143,8 +143,8 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 }
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-const typename MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputLabelImageType *
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+const typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputLabelImageType *
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::GetLabelOutput() const
 {
   if (this->GetNumberOfOutputs() < 4)
@@ -157,7 +157,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::AllocateOutputs()
 {
 
@@ -182,7 +182,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -202,7 +202,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::GenerateInputRequestedRegion()
 {
   // Call superclass implementation
@@ -258,7 +258,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::BeforeThreadedGenerateData()
 {
   // typedef itk::ImageRegionConstIteratorWithIndex<InputImageType> InputIteratorWithIndexType;
@@ -378,7 +378,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 // Calculates the mean shift vector at the position given by jointPixel
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::CalculateMeanShiftVector(const typename RealVectorImageType::Pointer jointImage, const RealVector& jointPixel, const OutputRegionType& outputRegion, RealVector& meanShiftVector)
  {
   unsigned int jointDimension = ImageDimension + m_NumberOfComponentsPerPixel;
@@ -493,7 +493,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 // Calculates the mean shift vector at the position given by jointPixel
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::CalculateMeanShiftVectorBucket(const RealVector& jointPixel, RealVector& meanShiftVector)
  {
   unsigned int jointDimension = ImageDimension + m_NumberOfComponentsPerPixel;
@@ -573,7 +573,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, int threadId)
 {
   // at the first iteration
@@ -828,7 +828,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 /* after threaded convergence test */
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::AfterThreadedGenerateData()
 {
   typename OutputLabelImageType::Pointer labelOutput = this->GetLabelOutput();
@@ -883,7 +883,7 @@ MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 void
-MeanShiftImageFilter2<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

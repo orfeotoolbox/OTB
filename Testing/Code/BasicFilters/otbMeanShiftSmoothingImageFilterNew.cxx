@@ -17,16 +17,16 @@
 =========================================================================*/
 #include "itkMacro.h"
 #include "otbVectorImage.h"
-#include "otbMeanShiftImageFilter2.h"
+#include "otbMeanShiftSmoothingImageFilter.h"
 
-int otbMeanShiftImageFilterNew2(int argc, char * argv[])
+int otbMeanShiftSmoothingImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef short                                           PixelType;
   typedef double                                          OutputPixelType;
   typedef otb::VectorImage<OutputPixelType, Dimension>          OutputImageType;
   typedef otb::VectorImage<PixelType, Dimension>                ImageType;
-  typedef otb::MeanShiftImageFilter2<ImageType, OutputImageType> FilterType;
+  typedef otb::MeanShiftSmoothingImageFilter<ImageType, OutputImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();

@@ -19,7 +19,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMeanShiftImageFilter2.h"
+#include "otbMeanShiftSmoothingImageFilter.h"
 #include "otbMeanShiftConnectedComponentSegmentationFilter.h"
 
 typedef float InputPixelType;
@@ -37,7 +37,7 @@ typedef otb::MeanShiftConnectedComponentSegmentationFilter
   < ImageType, MaskImageType,
     LabelImageType >  MeanShiftConnectedComponentsegmentationFilterType;
 
-typedef otb::MeanShiftImageFilter2<ImageType, ImageType> MeanShiftFilterType;
+typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftFilterType;
 
 
 int otbMeanShiftConnectedComponentSegmentationFilter(int argc, char * argv[])

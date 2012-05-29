@@ -30,7 +30,7 @@
 #include "itkMultiplyImageFilter.h"
 
 #include "otbMeanShiftImageFilter.h"
-#include "otbMeanShiftImageFilter2.h"
+#include "otbMeanShiftSmoothingImageFilter.h"
 #include "otbMeanShiftVectorImageFilter.h"
 #include "itkMacro.h"
 
@@ -79,10 +79,10 @@ class LabeledOutputAccessor<MeanShiftVectorImageFilter<TInputImage, TOutputImage
  * \brief Specialized class to get the index of the labeled output image in mean shift filter (new version).
  */
 template <class TInputImage, class TOutputImage, class TOutputImage2, class TKernelType>
-class LabeledOutputAccessor<MeanShiftImageFilter2<TInputImage, TOutputImage, TOutputImage2, TKernelType> >
+class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TOutputImage2, TKernelType> >
 {
    public:
-      typedef typename MeanShiftImageFilter2<TInputImage, TOutputImage, TOutputImage2, TKernelType>::LabeledOutputType    LabelImageType;
+      typedef typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TOutputImage2, TKernelType>::LabeledOutputType    LabelImageType;
       itkStaticConstMacro(LabeledOutputIndex, unsigned int, 0);
 };
 

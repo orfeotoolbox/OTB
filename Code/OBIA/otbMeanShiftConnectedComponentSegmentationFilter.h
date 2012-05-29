@@ -25,7 +25,7 @@
 #include "otbMaskMuParserFilter.h"
 #include "itkRelabelComponentImageFilter.h"
 
-#include "otbMeanShiftImageFilter2.h"
+#include "otbMeanShiftSmoothingImageFilter.h"
 
 namespace otb {
 
@@ -93,7 +93,7 @@ public:
   RelabelComponentFilterType;
 
   typedef double KernelType;
-  typedef otb::MeanShiftImageFilter2
+  typedef otb::MeanShiftSmoothingImageFilter
       <VectorImageType, VectorImageType>
   MeanShiftFilterType;
 

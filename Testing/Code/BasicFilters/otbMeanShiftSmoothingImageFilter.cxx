@@ -20,9 +20,9 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMeanShiftImageFilter2.h"
+#include "otbMeanShiftSmoothingImageFilter.h"
 
-int otbMeanShiftImageFilter2(int argc, char * argv[])
+int otbMeanShiftSmoothingImageFilter(int argc, char * argv[])
 {
   if (argc != 10 && argc != 11)
     {
@@ -55,7 +55,7 @@ int otbMeanShiftImageFilter2(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, Dimension>           ImageType;
   typedef otb::ImageFileReader<ImageType>                  ReaderType;
   typedef otb::ImageFileWriter<ImageType>                  WriterType;
-  typedef otb::MeanShiftImageFilter2<ImageType, ImageType> FilterType;
+  typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> FilterType;
   typedef FilterType::OutputIterationImageType             IterationImageType;
   typedef otb::ImageFileWriter<IterationImageType>         IterationWriterType;
   typedef FilterType::OutputSpatialImageType               SpatialImageType;

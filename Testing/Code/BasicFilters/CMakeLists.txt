@@ -1101,8 +1101,8 @@ ADD_TEST(bfTvContinuousMinimumMaximumImageCalculatorTest ${BASICFILTERS_TESTS9}
 ADD_TEST(bfTuMeanShiftImageFilterNew ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilterNew )
 
-ADD_TEST(bfTuMeanShiftImageFilterNew2 ${BASICFILTERS_TESTS9}
-        otbMeanShiftImageFilterNew2 )
+ADD_TEST(bfTuMeanShiftSmoothingImageFilterNew ${BASICFILTERS_TESTS9}
+        otbMeanShiftImageFilterNew )
 
 
 ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
@@ -1139,30 +1139,30 @@ ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
         )
 
 
- ADD_TEST(bfTvMeanShiftImageFilter2Optim ${BASICFILTERS_TESTS9}
+ ADD_TEST(bfTvMeanShiftSmoothingImageFilterOptim ${BASICFILTERS_TESTS9}
         --compare-image ${EPSILON_7}
         ${BASELINE}/bfTvMeanShiftFilterSpectralOutputOptim.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterSpectralOutputOptim.tif
-        otbMeanShiftImageFilter2
+        ${TEMP}/bfTvMeanShiftSmoothingImageFilterSpectralOutputOptim.tif
+        otbMeanShiftSmoothingImageFilter
         ${INPUTDATA}/MeanShiftTest.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterSpatialOutputOptim.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterSpectralOutputOptim.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterIterationOutputOptim.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterLabelOutputOptim.tif
+        ${TEMP}/bfTvMeanShiftSmoothingImageFilterSpatialOutputOptim.tif
+        ${TEMP}/bfTvMeanShiftSmoothingImageFilterSpectralOutputOptim.tif
+        ${TEMP}/bfTvMeanShiftSmoothingImageFilterIterationOutputOptim.tif
+        ${TEMP}/bfTvMeanShiftSmoothingImageFilterLabelOutputOptim.tif
         2 10 0.1 10 1
        )
 
 
- ADD_TEST(bfTvMeanShiftImageFilter2NonOptim ${BASICFILTERS_TESTS9}
+ ADD_TEST(bfTvMeanShiftSmoothingImageFilterNonOptim ${BASICFILTERS_TESTS9}
         --compare-image ${EPSILON_7}
         ${BASELINE}/bfTvMeanShiftFilterSpectralOutputNonOptim.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterSpectralOutputNonOptim.tif
-        otbMeanShiftImageFilter2
+        ${TEMP}/bfTvMeanShiftSmoothingImageFilterSpectralOutputNonOptim.tif
+        otbMeanShiftSmoothingImageFilter
         ${INPUTDATA}/MeanShiftTest.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterSpatialOutputNonOptim.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterSpectralOutputNonOptim.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterIterationOutputNonOptim.tif
-        ${TEMP}/bfTvMeanShift2ImageFilterLabelOutputNonOptim.tif
+        ${TEMP}/bfTvMeanShiftSmoothingImageFilterSpatialOutputNonOptim.tif
+        ${TEMP}/bfTvMeanShiftSmoothingImageFilterSpectralOutputNonOptim.tif
+        ${TEMP}/bfTvMeanShiftSmoothingImageFilterIterationOutputNonOptim.tif
+        ${TEMP}/bfTvMeanShiftSmoothingImageFilterLabelOutputNonOptim.tif
         2 10 0.1 10 0
        )
 
@@ -1176,23 +1176,23 @@ ADD_TEST(bfTuMeanShiftImageFilterQBSuburb ${BASICFILTERS_TESTS9}
         4 50 10 1.0
         )
 
-ADD_TEST(bfTuMeanShiftImageFilter2QBSuburbOptim ${BASICFILTERS_TESTS9}
-        otbMeanShiftImageFilter2
+ADD_TEST(bfTuMeanShiftSmoothingImageFilterQBSuburbOptim ${BASICFILTERS_TESTS9}
+        otbMeanShiftSmoothingImageFilter
         ${INPUTDATA}/QB_Suburb.png
-        ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_QBSuburbOptim.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_QBSuburbOptim.tif
-        ${TEMP}/bfMeanShift2ImageFilterIterationOutput_QBSuburbOptim.tif
-        ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBSuburbOptim.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_QBSuburbOptim.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBSuburbOptim.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_QBSuburbOptim.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_QBSuburbOptim.tif
         4 25 0.1 10 1
         )
 
- ADD_TEST(bfTuMeanShiftImageFilter2QBSuburbNonOptim ${BASICFILTERS_TESTS9}
-        otbMeanShiftImageFilter2
+ ADD_TEST(bfTuMeanShiftSmoothingImageFilterQBSuburbNonOptim ${BASICFILTERS_TESTS9}
+        otbMeanShiftSmoothingImageFilter
         ${INPUTDATA}/QB_Suburb.png
-        ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_QBSuburbNonOptim.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_QBSuburbNonOptim.tif
-        ${TEMP}/bfMeanShift2ImageFilterIterationOutput_QBSuburbNonOptim.tif
-        ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBSuburbNonOptim.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_QBSuburbNonOptim.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBSuburbNonOptim.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_QBSuburbNonOptim.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_QBSuburbNonOptim.tif
         4 25 0.1 10 0
         )
 
@@ -1210,13 +1210,13 @@ ADD_TEST(bfTuMeanShiftVectorImageFilterROIQBMul4 ${BASICFILTERS_TESTS9}
 
 
 
-ADD_TEST(bfTuMeanShiftImageFilterROIQBMul4 ${BASICFILTERS_TESTS9}
-        otbMeanShiftImageFilter2
+ADD_TEST(bfTuMeanShiftSmoothingImageFilterROIQBMul4 ${BASICFILTERS_TESTS9}
+        otbMeanShiftSmoothingImageFilter
         ${INPUTDATA}/ROI_QB_MUL_4.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_ROIQBMul4.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_ROIQBMul4.tif
-        ${TEMP}/bfMeanShift2ImageFilterIterationOutput_ROIQBMul4.tif
-        ${TEMP}/bfMeanShift2ImageFilterLabelOutput_ROIQBMul4.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_ROIQBMul4.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_ROIQBMul4.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_ROIQBMul4.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_ROIQBMul4.tif
         4 50 0.1 100
         )
 
@@ -1231,13 +1231,13 @@ ADD_TEST(bfTuMeanShiftVectorImageFilterQBRoad ${BASICFILTERS_TESTS9}
         )
 
 
-ADD_TEST(bfTuMeanShiftImageFilterQBRoad ${BASICFILTERS_TESTS9}
-        otbMeanShiftImageFilter2
+ADD_TEST(bfTuMeanShiftSmoothingImageFilterQBRoad ${BASICFILTERS_TESTS9}
+        otbMeanShiftSmoothingImageFilter
         ${INPUTDATA}/qb_RoadExtract.img
-        ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_QBRoad.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_QBRoad.tif
-        ${TEMP}/bfMeanShift2ImageFilterIterationOutput_QBRoad.tif
-        ${TEMP}/bfMeanShift2ImageFilterLabelOutput_QBRoad.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_QBRoad.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBRoad.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_QBRoad.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_QBRoad.tif
         4 30 0.1 100
         )
 
@@ -1254,13 +1254,13 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterQBPAN ${BASICFILTERS_TESTS9}
         )
 
 
-ADD_TEST(bfTvMeanShiftImageFilterQBPAN ${BASICFILTERS_TESTS9}
-        otbMeanShiftImageFilter2
+ADD_TEST(bfTvMeanShiftSmoothingImageFilterQBPAN ${BASICFILTERS_TESTS9}
+        otbMeanShiftSmoothingImageFilter
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_PAN.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_PAN.tif
-        ${TEMP}/bfMeanShift2ImageFilterIterationOutput_PAN.tif
-        ${TEMP}/bfMeanShift2ImageFilterLabelOutput_PAN.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_PAN.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_PAN.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_PAN.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_PAN.tif
         5 15 1.0 100
         )
 
@@ -1275,35 +1275,35 @@ ADD_TEST(bfTuMeanShiftVectorImageFilterSPOT5 ${BASICFILTERS_TESTS9}
         )
 
 
-ADD_TEST(bfTuMeanShiftImageFilterSPOT5 ${BASICFILTERS_TESTS9}
-        otbMeanShiftImageFilter2
+ADD_TEST(bfTuMeanShiftSmoothingImageFilterSPOT5 ${BASICFILTERS_TESTS9}
+        otbMeanShiftSmoothingImageFilter
         ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpatialOutput_SPOT5.tif
-        ${TEMP}/bfMeanShift2ImageFilterSpectralOutput_SPOT5.tif
-        ${TEMP}/bfMeanShift2ImageFilterIterationOutput_SPOT5.tif
-        ${TEMP}/bfMeanShift2ImageFilterLabelOutput_SPOT5.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_SPOT5.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_SPOT5.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_SPOT5.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_SPOT5.tif
         4 10 0.1 100
         )
 
-ADD_TEST(bfTvMeanShiftImageFilter2ThreadingNonOpt ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTvMeanShiftSmoothingImageFilterThreadingNonOpt ${BASICFILTERS_TESTS9}
         --compare-image ${EPSILON_7}
-        ${TEMP}/bfMeanShift2ImageFilter2SingleThreading_SPOT5.tif
-        ${TEMP}/bfMeanShift2ImageFilter2MultiThreading_SPOT5.tif
-        otbMeanShiftImageFilter2Threading
+        ${TEMP}/bfMeanShiftSmoothingImageFilter2SingleThreading_SPOT5.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilter2MultiThreading_SPOT5.tif
+        otbMeanShiftSmoothingImageFilterThreading
         ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-        ${TEMP}/bfMeanShift2ImageFilter2SingleThreading_SPOT5.tif
-        ${TEMP}/bfMeanShift2ImageFilter2MultiThreading_SPOT5.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilter2SingleThreading_SPOT5.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilter2MultiThreading_SPOT5.tif
         4 10 0
         )
 
 #ADD_TEST(bfTvMeanShiftImageFilter2ThreadingOpt ${BASICFILTERS_TESTS9}
 #        --compare-image ${EPSILON_7}
-#        ${TEMP}/bfMeanShift2ImageFilter2SingleThreading_SPOT5.tif
-#        ${TEMP}/bfMeanShift2ImageFilter2MultiThreading_SPOT5.tif
+#        ${TEMP}/bfMeanShiftSmoothingImageFilter2SingleThreading_SPOT5.tif
+#        ${TEMP}/bfMeanShiftSmoothingImageFilter2MultiThreading_SPOT5.tif
 #        otbMeanShiftImageFilter2Threading
 #        ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-#        ${TEMP}/bfMeanShift2ImageFilter2SingleThreading_SPOT5.tif
-#        ${TEMP}/bfMeanShift2ImageFilter2MultiThreading_SPOT5.tif
+#        ${TEMP}/bfMeanShiftSmoothingImageFilter2SingleThreading_SPOT5.tif
+#        ${TEMP}/bfMeanShiftSmoothingImageFilter2MultiThreading_SPOT5.tif
 #        4 10 1
 #        )
 
@@ -2987,9 +2987,9 @@ otbContinuousMinimumMaximumImageCalculatorNew.cxx
 otbContinuousMinimumMaximumImageCalculatorTest.cxx
 otbMeanShiftImageFilterNew.cxx
 otbMeanShiftImageFilter.cxx
-otbMeanShiftImageFilterNew2.cxx
-otbMeanShiftImageFilter2.cxx
-otbMeanShiftImageFilter2Threading.cxx
+otbMeanShiftSmoothingImageFilterNew.cxx
+otbMeanShiftSmoothingImageFilter.cxx
+otbMeanShiftSmoothingImageFilterThreading.cxx
 otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
 otbLabelImageRegionMergingFilter.cxx

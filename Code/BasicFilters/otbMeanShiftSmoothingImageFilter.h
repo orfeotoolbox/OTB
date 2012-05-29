@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanShiftImageFilter2_h
-#define __otbMeanShiftImageFilter2_h
+#ifndef __otbMeanShiftSmoothingImageFilter_h
+#define __otbMeanShiftSmoothingImageFilter_h
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -372,7 +372,7 @@ private:
   unsigned int m_NeighborhoodOffsetVectorSize;
 };
 
-/** \class MeanShiftImageFilter2
+/** \class MeanShiftSmoothingImageFilter
  *
  *
  * Mean shift is an edge-preserving smoothing algorithm often used in image
@@ -421,19 +421,19 @@ private:
  * \ingroup ImageEnhancement
  */
 template <class TInputImage, class TOutputImage, class TKernel = KernelUniform, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
-class ITK_EXPORT MeanShiftImageFilter2
+class ITK_EXPORT MeanShiftSmoothingImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedef */
-  typedef MeanShiftImageFilter2                              Self;
+  typedef MeanShiftSmoothingImageFilter                              Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                            Pointer;
   typedef itk::SmartPointer<const Self>                      ConstPointer;
   typedef double                                             RealType;
 
   /** Type macro */
-  itkTypeMacro(MeanShiftImageFilter2, ImageToImageFilter);
+  itkTypeMacro(MeanShiftSmoothingImageFilter, ImageToImageFilter);
   itkNewMacro(Self);
 
   /** Template parameters typedefs */
@@ -553,10 +553,10 @@ protected:
   virtual void AllocateOutputs();
 
   /** Constructor */
-  MeanShiftImageFilter2();
+  MeanShiftSmoothingImageFilter();
 
   /** Destructor */
-  virtual ~MeanShiftImageFilter2();
+  virtual ~MeanShiftSmoothingImageFilter();
 
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -566,7 +566,7 @@ protected:
                                         RealVector& meanShiftVector);
   virtual void CalculateMeanShiftVectorBucket(const RealVector& jointPixel, RealVector& meanShiftVector);
 private:
-  MeanShiftImageFilter2(const Self &); //purposely not implemented
+  MeanShiftSmoothingImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&);             //purposely not implemented
 
   /** Range bandwidth */
@@ -621,7 +621,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftImageFilter2.txx"
+#include "otbMeanShiftSmoothingImageFilter.txx"
 #endif
 
 #endif
