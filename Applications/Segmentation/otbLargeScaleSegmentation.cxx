@@ -418,8 +418,8 @@ namespace otb
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetSpatialBandwidth(spatialRadius);
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
 
-        meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(1000);
-        meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(0.01);
+        meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(100);
+        meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(0.1);
 
             if (minSize > 1)
               {
