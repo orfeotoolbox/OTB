@@ -182,14 +182,17 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   unsigned int regionCount = regionAdjacencyMap.size() - 1;
 
   // Initialize arrays for mode information
+  m_CanonicalLabels.clear();
   m_CanonicalLabels.resize(regionCount+1);
 
-  m_Modes.resize(0);
+  m_Modes.clear();
   m_Modes.reserve(regionCount+1);
   for(unsigned int i = 0; i < regionCount+1; ++i)
     {
     m_Modes.push_back( SpectralPixelType(m_NumberOfComponentsPerPixel) );
     }
+
+  m_PointCounts.clear();
   m_PointCounts.resize(regionCount+1); // = std::vector<unsigned int>(regionCount+1);
 
   //std::cout << "Associate each label to a spectral value" << std::endl;
