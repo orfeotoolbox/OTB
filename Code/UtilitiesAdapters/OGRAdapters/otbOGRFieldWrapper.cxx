@@ -66,18 +66,18 @@ BOOST_STATIC_ASSERT(!(boost::is_same<
     >::value
 ));
 
-BOOST_STATIC_ASSERT((boost::is_array<int[42]>::value));
-BOOST_STATIC_ASSERT(!(boost::is_array<boost::array<int, 42> >::value));
-BOOST_STATIC_ASSERT(!(boost::is_array<std::vector<int> >::value));
+BOOST_MPL_ASSERT((boost::is_array<int[42]>));
+BOOST_MPL_ASSERT_NOT((boost::is_array<boost::array<int, 42> >));
+BOOST_MPL_ASSERT_NOT((boost::is_array<std::vector<int> >));
 
 BOOST_STATIC_ASSERT((boost::is_contiguous<int*>::value));
 BOOST_STATIC_ASSERT((boost::is_contiguous<int[42]>::value));
 BOOST_STATIC_ASSERT((boost::is_contiguous<boost::array<int, 42> >::value));
 BOOST_STATIC_ASSERT((boost::is_contiguous<std::vector<int> >::value));
 
-BOOST_STATIC_ASSERT((boost::is_same<int, CppToOGRConverter_trait<int>::type >::value));
-BOOST_STATIC_ASSERT((boost::is_same<char*, CppToOGRConverter_trait<char[8]>::type >::value));
-BOOST_STATIC_ASSERT(!(boost::is_same<char*, char[8] >::value));
+BOOST_MPL_ASSERT((boost::is_same<int, CppToOGRConverter_trait<int>::type >));
+BOOST_MPL_ASSERT((boost::is_same<char*, CppToOGRConverter_trait<char[8]>::type >));
+BOOST_MPL_ASSERT_NOT((boost::is_same<char*, char[8] >));
 
 }
 } } // end namespace otb::ogr

@@ -30,6 +30,8 @@
 #include <boost/mpl/pair.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/at.hpp>
+#include <boost/mpl/assert.hpp>
+// #include <boost/mpl/print.hpp>
 
 #include <boost/static_assert.hpp>
 #include <boost/range/size.hpp>
@@ -72,6 +74,7 @@ typedef boost::mpl::map
   , pair<std::vector<double>     , int_<OFTRealList> >
   , pair<std::string             , int_<OFTString> >
   , pair<char*                   , int_<OFTString> >
+  , pair<char const*             , int_<OFTString> >
   , pair<std::vector<std::string>, int_<OFTStringList> >
   // OFTBinary
   // OFTDate
@@ -383,23 +386,18 @@ void otb::ogr::Field::SetValue(T const& value)
   CheckInvariants();
   typedef internal::CppToOGRConverter_trait<T> Converter;
   typedef typename Converter::type             InterfaceType;
-  // BOOST_STATIC_ASSERT(!(boost::is_array<InterfaceType>::value));
+  // uncomment the next line to debug the InterfaceType computed
+  // boost::mpl::print<typename internal::CppToOGRConverter_trait<T>::type> interface_type; (void) interface_type;
+  BOOST_MPL_ASSERT_MSG(!boost::is_array<InterfaceType>::value, InterFaceType_Cant_Be_An_array, (T, InterfaceType));
   typedef typename boost::mpl::at<internal::FieldType_Map, InterfaceType>::type Kind;
+  BOOST_MPL_ASSERT_MSG(!(boost::is_same<Kind, boost::mpl::void_>::value), UNEXPECTED_KIND_TYPE, (T, InterfaceType, Kind));
   const int VALUE = Kind::value;
-  BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
   assert(m_Definition.GetType() == VALUE && "OGR field type mismatches the type of new field value");
   typedef typename boost::mpl::at<internal::FieldSetters_Map, Kind>::type SetterType;
   // If you experience a static assertion failure in the line below, it means
   // the type of the parameter is not supported to set a field.
-  BOOST_STATIC_ASSERT(!(boost::is_same<SetterType, boost::mpl::void_>::value));
+  BOOST_MPL_ASSERT_NOT((boost::is_same<SetterType, boost::mpl::void_>));
   SetterType::call(*m_Feature, m_index, Converter::convert(value));
-}
-
-template <typename T, size_t N>
-inline
-void otb::ogr::Field::SetValue(T const value[N])
-{
-  this->SetValue(&value[0]);
 }
 
 template <typename T>
