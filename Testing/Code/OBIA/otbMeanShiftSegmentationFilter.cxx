@@ -24,10 +24,10 @@
 
 int otbMeanShiftSegmentationFilter(int argc, char * argv[])
 {
-  if (argc != 6)
+  if (argc != 8)
     {
     std::cerr << "Usage: " << argv[0] <<
-    " inputFileName outputLabelFileName outputClusteredFileName spatialBandwidth rangeBandwidth"
+    " inputFileName outputLabelFileName outputClusteredFileName spatialBandwidth rangeBandwidth maxIter threshold"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -37,6 +37,8 @@ int otbMeanShiftSegmentationFilter(int argc, char * argv[])
   const char *       outputClusteredFileName   = argv[3];
   const double       spatialBandwidth          = atof(argv[4]);
   const double       rangeBandwidth            = atof(argv[5]);
+  const unsigned int maxIter                   = atoi(argv[6]);
+  const double       threshold                 = atof(argv[7]);
 
   /* maxit - threshold */
 
@@ -60,6 +62,8 @@ int otbMeanShiftSegmentationFilter(int argc, char * argv[])
   // Set filter parameters
   filter->SetSpatialBandwidth(spatialBandwidth);
   filter->SetRangeBandwidth(rangeBandwidth);
+  filter->SetMaxIterationNumber(maxIter);
+  filter->SetThreshold(threshold);
   filter->SetInput(reader->GetOutput());
 
   //filter->SetNumberOfThreads(1);

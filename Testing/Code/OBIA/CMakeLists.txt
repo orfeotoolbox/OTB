@@ -181,7 +181,9 @@ ADD_TEST(obTuMeanShiftSegmentationFilter ${OBIA_TESTS1}
       ${TEMP}/obTuMeanShiftSegmentationFilterLabelImage.tif
       ${TEMP}/obTuMeanShiftSegmentationFilterClusteredImage.tif
       4
-      10
+      25
+      100
+      0.1
       )
 
 ADD_TEST(obTuLabelImageToLabelMapWithAdjacencyFilterNew ${OBIA_TESTS3}
