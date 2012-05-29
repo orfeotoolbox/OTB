@@ -245,25 +245,84 @@ namespace otb
         // Nothing to do here : all parameters are independent
       }
 
+      template<class TSegmentationFilter>
+      FloatVectorImageType::SizeType
+      GenericApplySegmentation(otb::StreamingVectorizedSegmentationOGR<FloatVectorImageType,
+				TSegmentationFilter> * streamingVectorizedFilter, otb::ogr::DataSource::Pointer ogrDS)
+      {
+	typedef  TSegmentationFilter             SegmentationFilterType;
+	typedef  typename SegmentationFilterType::Pointer SegmentationFilterPointerType;
+	typedef otb::StreamingVectorizedSegmentationOGR
+        <FloatVectorImageType,
+        SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
+
+	
+	// Retrieve tile size parameter
+        const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("tilesize"));
+	// Retrieve the 8-connected option
+        bool use8connected = IsParameterEnabled("neighbor");
+
+	streamingVectorizedFilter->SetInput(GetParameterFloatVectorImage("in"));
+
+	if (HasValue("inmask"))
+	  {
+	    streamingVectorizedFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
+	  }
+	streamingVectorizedFilter->SetOGRDataSource(ogrDS);
+
+	if (tileSize != 0)
+	  {
+	    streamingVectorizedFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
+	  }
+	else
+	  {
+	    streamingVectorizedFilter->GetStreamer()->SetAutomaticTiledStreaming();
+	  }
+
+	if (use8connected)
+	  {
+	    otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
+	    streamingVectorizedFilter->SetUse8Connected(use8connected);
+	  }
+	//StreamingVectorizedSegmentationOGRType::Pointer vec = StreamingVectorizedSegmentationOGRType::New();
+	const std::string layerName = this->GetParameterString("layername");
+        const std::string fieldName = this->GetParameterString("fieldname");
+
+        // Retrieve start label parameter
+        const unsigned int startLabel = this->GetParameterInt("startlabel");
+
+	streamingVectorizedFilter->SetLayerName(layerName);
+        streamingVectorizedFilter->SetFieldName(fieldName);
+        streamingVectorizedFilter->SetStartLabel(startLabel);
+
+	if(IsParameterEnabled("simplify"))
+	  {
+	    streamingVectorizedFilter->SetSimplify(true);
+	    streamingVectorizedFilter->SetSimplificationTolerance(GetParameterFloat("simplify"));
+	  }
+	else
+	  {
+	    streamingVectorizedFilter->SetSimplify(false);
+	  }
+	AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing segmentation");
+
+	streamingVectorizedFilter->Initialize(); //must be called !
+	streamingVectorizedFilter->Update(); //must be called !
+
+	return streamingVectorizedFilter->GetStreamSize();
+      }
       void DoExecute()
       {
         // Retrieve output filename as well as layer names
         std::string dataSourceName = GetParameterString("outvd");
         otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
-        std::string layerName = this->GetParameterString("layername");
-        std::string fieldName = this->GetParameterString("fieldname");
 
-        // Retrieve start label parameter
-        const unsigned int startLabel = this->GetParameterInt("startlabel");
-
-        // Retrieve the 8-connected option
-        bool use8connected = IsParameterEnabled("neighbor");
+        
 
         // Retrieve min object size parameter
         const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
 
-        // Retrieve tile size parameter
-        const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("tilesize"));
+        
         // The actual stream size used
         FloatVectorImageType::SizeType streamSize;
 
@@ -274,40 +333,17 @@ namespace otb
           {
             otbAppLogINFO(<<"Use connected component segmentation."<<std::endl);
             ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
-              ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
+            ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
 
-            ccVectorizationFilter->SetInput(GetParameterFloatVectorImage("in"));
             if (HasValue("inmask"))
-              {
-                ccVectorizationFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
-                ccVectorizationFilter->GetSegmentationFilter()->SetMaskImage(this->GetParameterUInt32Image("inmask"));
-
-              }
-            ccVectorizationFilter->SetOGRDataSource(ogrDS);
-
-            if (tileSize != 0)
-              {
-                ccVectorizationFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
-              }
-            else
-              {
-                ccVectorizationFilter->GetStreamer()->SetAutomaticTiledStreaming();
-              }
-
-            ccVectorizationFilter->SetLayerName(layerName);
-            ccVectorizationFilter->SetFieldName(fieldName);
-            ccVectorizationFilter->SetStartLabel(startLabel);
-            ccVectorizationFilter->SetUse8Connected(use8connected);
-
+               {
+                 ccVectorizationFilter->GetSegmentationFilter()->SetMaskImage(this->GetParameterUInt32Image("inmask"));
+               }
+         
             ccVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
                                                                                        GetParameterString(
                                                                                                           "filter.connectedcomponent.expr"));
-            AddProcess(ccVectorizationFilter->GetStreamer(), "Computing connected component segmentation");
-
-            ccVectorizationFilter->Initialize(); //must be called !
-            ccVectorizationFilter->Update();
-            //m_LabelImage = ccVectorizationFilter->GetSegmentationFilter()->GetOutput();
-            streamSize = ccVectorizationFilter->GetStreamSize();
+            streamSize = GenericApplySegmentation<ConnectedComponentSegmentationFilterType>(ccVectorizationFilter, ogrDS);
           }
         else if (segType == "meanshiftedison")
           {
@@ -315,29 +351,7 @@ namespace otb
             EdisontreamingVectorizedSegmentationOGRType::Pointer
               edisonVectorizationFilter = EdisontreamingVectorizedSegmentationOGRType::New();
 
-            edisonVectorizationFilter->SetInput(GetParameterFloatVectorImage("in"));
-
-            if (HasValue("inmask"))
-              {
-                edisonVectorizationFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
-              }
-            edisonVectorizationFilter->SetOGRDataSource(ogrDS);
-
-            if (tileSize != 0)
-              {
-                edisonVectorizationFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
-              }
-            else
-              {
-                edisonVectorizationFilter->GetStreamer()->SetAutomaticAdaptativeStreaming();
-              }
-
-            edisonVectorizationFilter->SetLayerName(layerName);
-            edisonVectorizationFilter->SetFieldName(fieldName);
-            edisonVectorizationFilter->SetStartLabel(startLabel);
-            if (use8connected)
-              otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
-            edisonVectorizationFilter->SetUse8Connected(use8connected);
+            
 
             //segmentation parameters
             const unsigned int
@@ -359,53 +373,13 @@ namespace otb
                 edisonVectorizationFilter->SetMinimumObjectSize(minSize);
               }
 
-            if(IsParameterEnabled("simplify"))
-              {
-                edisonVectorizationFilter->SetSimplify(true);
-                edisonVectorizationFilter->SetSimplificationTolerance(GetParameterFloat("simplify"));
-              }
-            else
-              {
-                edisonVectorizationFilter->SetSimplify(false);
-              }
-
-            AddProcess(edisonVectorizationFilter->GetStreamer(), "Computing Edison mean-shift segmentation");
-
-            edisonVectorizationFilter->Initialize(); //must be called !
-            edisonVectorizationFilter->Update(); //must be called !
-            //m_LabelImage = edisonVectorizationFilter->GetSegmentationFilter()->GetLabeledClusteredOutput();
-
-            streamSize = edisonVectorizationFilter->GetStreamSize();
+	    streamSize = GenericApplySegmentation<EdisonSegmentationFilterType>(edisonVectorizationFilter, ogrDS);
           }
         else if (segType == "meanshift")
           {
             otbAppLogINFO(<<"Use threaded Mean-shift segmentation."<<std::endl);
             MeanShiftVectorizedSegmentationOGRType::Pointer
               meanShiftVectorizationFilter = MeanShiftVectorizedSegmentationOGRType::New();
-
-            meanShiftVectorizationFilter->SetInput(GetParameterFloatVectorImage("in"));
-
-            if (HasValue("inmask"))
-              {
-                meanShiftVectorizationFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
-              }
-            meanShiftVectorizationFilter->SetOGRDataSource(ogrDS);
-
-            if (tileSize != 0)
-              {
-                meanShiftVectorizationFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
-              }
-            else
-              {
-                meanShiftVectorizationFilter->GetStreamer()->SetAutomaticAdaptativeStreaming();
-              }
-
-            meanShiftVectorizationFilter->SetLayerName(layerName);
-            meanShiftVectorizationFilter->SetFieldName(fieldName);
-            meanShiftVectorizationFilter->SetStartLabel(startLabel);
-            if (use8connected)
-              otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
-            meanShiftVectorizationFilter->SetUse8Connected(use8connected);
 
             //segmentation parameters
             const unsigned int
@@ -428,23 +402,7 @@ namespace otb
                 meanShiftVectorizationFilter->SetMinimumObjectSize(minSize);
               }
 
-            if(IsParameterEnabled("simplify"))
-              {
-                meanShiftVectorizationFilter->SetSimplify(true);
-                meanShiftVectorizationFilter->SetSimplificationTolerance(GetParameterFloat("simplify"));
-              }
-            else
-              {
-                meanShiftVectorizationFilter->SetSimplify(false);
-              }
-
-            AddProcess(meanShiftVectorizationFilter->GetStreamer(), "Computing MeanShift segmentation");
-
-            meanShiftVectorizationFilter->Initialize(); //must be called !
-            meanShiftVectorizationFilter->Update(); //must be called !
-            //m_LabelImage = meanShiftVectorizationFilter->GetSegmentationFilter()->GetLabelOutput();
-
-            streamSize = meanShiftVectorizationFilter->GetStreamSize();
+	    streamSize = this->GenericApplySegmentation<MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, ogrDS);
           }
         else
           {
@@ -458,11 +416,11 @@ namespace otb
         if(IsParameterEnabled("stitch"))
           {
             otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
-
-#if GDAL_VERSION_NUM < 1800
-            itkWarningMacro("Stiching polygons is not supported by OGR v"
-                            << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.")
-#else
+	    const std::string layerName = this->GetParameterString("layername");
+	    //#if GDAL_VERSION_NUM < 1800
+            //itkWarningMacro("Stiching polygons is not supported by OGR v"
+            //                << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.")
+	    //#else
               FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
             fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
             fusionFilter->SetOGRDataSource(ogrDS);
@@ -470,10 +428,11 @@ namespace otb
             fusionFilter->SetStreamSize(streamSize);
             fusionFilter->SetLayerName(layerName);
             fusionFilter->GenerateData();
-#endif
+	    //#endif
           }
       }
       //LabelImageType::Pointer     m_LabelImage;
+      
     };
 
 
