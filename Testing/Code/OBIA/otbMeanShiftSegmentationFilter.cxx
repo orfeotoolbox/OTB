@@ -72,7 +72,7 @@ int otbMeanShiftSegmentationFilter(int argc, char * argv[])
   writerClustered->SetInput(filter->GetClusteredOutput());
   writerLabel->SetInput(filter->GetLabelOutput());
 
-//  writerClustered->Update();
+  writerClustered->Update();
   writerLabel->Update();
 
   return EXIT_SUCCESS;
