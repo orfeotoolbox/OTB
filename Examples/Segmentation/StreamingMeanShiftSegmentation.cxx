@@ -34,11 +34,11 @@
 #include <iostream>
 
 // Software Guide : BeginCodeSnippet
-#include "otbMeanShiftImageFilter.h"
 #include "otbStreamingVectorizedSegmentationOGR.h"
+#include "otbMeanShiftSegmentationFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "otbImage.h"
+#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorData.h"
@@ -47,12 +47,12 @@
 
 int main(int argc, char *argv[])
 {
-  if (argc < 3)
+  if (argc < 2)
     {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr <<
-    " inputImage outputVectorData nbLinePerStream "
+    " inputImage outputVectorData "
               << std::endl;
     return 1;
     }
@@ -64,8 +64,11 @@ int main(int argc, char *argv[])
   
   // Software Guide : BeginCodeSnippet
   typedef float InputPixelType;
+  typedef unsigned int LabelPixelType;
+
   const unsigned int Dimension = 2;
-  typedef otb::Image<InputPixelType,  Dimension>          ImageType;
+  typedef otb::VectorImage<InputPixelType,  Dimension>          ImageType;
+  typedef otb::Image<LabelPixelType,  Dimension>          LabelImageType;
   typedef otb::VectorData<double, 2>                      VectorDataType;
   // Software Guide : EndCodeSnippet
   
@@ -86,8 +89,13 @@ int main(int argc, char *argv[])
   
   // Typedefs
   // Software Guide : BeginCodeSnippet
-  typedef otb::MeanShiftImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
-  typedef otb::StreamingVectorizedSegmentationOGR<ImageType, MeanShiftImageFilterType> StreamingVectorizedSegmentationType;
+
+  //typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
+  typedef otb::MeanShiftSegmentationFilter <ImageType,LabelImageType,ImageType>  MeanShiftSegmentationFilterType;
+
+
+
+  typedef otb::StreamingVectorizedSegmentationOGR<ImageType, MeanShiftSegmentationFilterType> StreamingVectorizedSegmentationType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -132,9 +140,14 @@ int main(int argc, char *argv[])
   filter->SetStartLabel(1);
   filter->SetUse8Connected(false);
   
-  filter->GetSegmentationFilter()->SetSpatialRadius(10);
-  filter->GetSegmentationFilter()->SetRangeRadius(15);
-  filter->GetSegmentationFilter()->SetMinimumRegionSize(400);
+  //filter->GetSegmentationFilter()->SetSpatialRadius(10);
+  //filter->GetSegmentationFilter()->SetRangeRadius(15);
+  //filter->GetSegmentationFilter()->SetMinimumRegionSize(400);
+
+  filter->GetSegmentationFilter()->SetSpatialBandwidth(10);
+  filter->GetSegmentationFilter()->SetRangeBandwidth(15);
+  filter->SetFilterSmallObject(true);
+  filter->SetMinimumObjectSize(400);
   
   filter->Initialize();
   

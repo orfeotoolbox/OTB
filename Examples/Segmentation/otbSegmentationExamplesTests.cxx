@@ -33,7 +33,12 @@ void RegisterTests()
   REGISTER_TEST(ConnectedThresholdImageFilterTest);
   REGISTER_TEST(OtsuMultipleThresholdImageFilterTest);
   REGISTER_TEST(LabelizeNeighborhoodConnectedImageFilterTest);
+  REGISTER_TEST(StreamingMeanShiftSegmentationTest);
 }
+
+#undef main
+#define main StreamingMeanShiftSegmentationTest
+#include "StreamingMeanShiftSegmentation.cxx"
 
 #undef main
 #define main IsolatedConnectedImageFilterTest

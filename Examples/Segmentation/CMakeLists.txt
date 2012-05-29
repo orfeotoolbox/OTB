@@ -415,8 +415,23 @@ ADD_TEST(seTeLabelizeNeighborhoodConnectedImageFilterTest ${EXE_TESTS}
         80 80
 )
 
+                             
+# ------- StreamingMeanShiftSegmentationTest ----------
+
+ADD_TEST(seTeStreamingMeanShiftSegmentationTest ${EXE_TESTS}
+       # --compare-ogr ${NOTOL}
+       # ${BASELINE_FILES}/seTeStreamingMeanShiftSegmentationTest.shp
+       # ${TEMP}/seTeStreamingMeanShiftSegmentationTest.shp
+        StreamingMeanShiftSegmentationTest
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${TEMP}/seTeStreamingMeanShiftSegmentationTest.shp
+)
+
+
+
+
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbSegmentationExamplesTests otbSegmentationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbSegmentationExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+TARGET_LINK_LIBRARIES(otbSegmentationExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBOGRAdapters OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
