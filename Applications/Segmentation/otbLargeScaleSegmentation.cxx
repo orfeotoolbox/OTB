@@ -166,22 +166,23 @@ namespace otb
         SetParameterDescription("filter.meanshift.spatialr", "Spatial radius defining neighborhood.");
         AddParameter(ParameterType_Float, "filter.meanshift.ranger", "Range radius");
         SetParameterDescription("filter.meanshift.ranger", "Range radius defining the interval in the color space.");
-        // AddParameter(ParameterType_Float, "filter.meanshift.thres", "convergence threshold");
-        // SetParameterDescription("filter.meanshift.thres", "convergence threshold. iterative scheme will stop if MeanShift "
-        //   "vector is below this threshold (1e-3 by default) or iteration number reached maximum iteration number.");
-        // AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "maximum iteration number");
-        // SetParameterDescription("filter.meanshift.maxiter",
-        //                         "iteration process is stopped if convergence hasn't been reached after this number of iteration (10 by default).");
-        // AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
+        AddParameter(ParameterType_Float, "filter.meanshift.thres", "convergence threshold");
+        SetParameterDescription("filter.meanshift.thres", "convergence threshold. iterative scheme will stop if MeanShift "
+				"vector is below this threshold (1e-3 by default) or iteration number reached maximum iteration number.");
+        AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "maximum iteration number");
+        SetParameterDescription("filter.meanshift.maxiter",
+                                 "iteration process is stopped if convergence hasn't been reached after this number of iteration (10 by default).");
+        
+	// AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
         // SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
         // MandatoryOff("filter.meanshift.useoptim");
 
         SetDefaultParameterInt("filter.meanshift.spatialr", 5);
         SetDefaultParameterFloat("filter.meanshift.ranger", 15.0);
-        // SetDefaultParameterFloat("filter.meanshift.thres", 1e-3);
-        // SetMinimumParameterFloatValue("filter.meanshift.thres", 0.);
-        // SetDefaultParameterInt("filter.meanshift.maxiter", 10);
-        // SetMinimumParameterIntValue("filter.meanshift.maxiter", 1);
+        SetDefaultParameterFloat("filter.meanshift.thres", 0.1);
+        SetMinimumParameterFloatValue("filter.meanshift.thres", 0.);
+        SetDefaultParameterInt("filter.meanshift.maxiter", 100);
+        SetMinimumParameterIntValue("filter.meanshift.maxiter", 1);
 
         AddChoice("filter.connectedcomponent", "ConnectedComponentMuParser");
         SetParameterDescription("filter.connectedcomponent", "connectedComponant muparser filter.");
@@ -382,12 +383,16 @@ namespace otb
             rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.ranger"));
             const unsigned int
             minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
+	    const float
+            threshold = static_cast<float> (this->GetParameterInt("filter.meanshift.thres"));
+	    const unsigned int
+            maxIterNumber = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.maxiter"));
 
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetSpatialBandwidth(spatialRadius);
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
 
-	    meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(100);
-	    meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(0.1);
+	    meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
+	    meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
 
             if (minSize > 1)
               {
