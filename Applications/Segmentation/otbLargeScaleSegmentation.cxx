@@ -421,6 +421,8 @@ namespace otb
             std::cout<<"Stream size: "<<streamSize<<std::endl;
             fusionFilter->SetStreamSize(streamSize);
             fusionFilter->SetLayerName(layerName);
+
+            AddProcess(fusionFilter, "Stitching polygons");
             fusionFilter->GenerateData();
           }
       }
