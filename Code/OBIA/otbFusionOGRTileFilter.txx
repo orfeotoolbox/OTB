@@ -218,10 +218,12 @@ FusionOGRTileFilter<TInputImage>
                      if(intersection->getGeometryType() == wkbPolygon)
                      {
                         fusion.overlap = dynamic_cast<OGRPolygon *>(intersection.get())->get_Area();
+                        std::cout<<"Intersection is a polygon !"<<std::endl;
                      }
                      else if(intersection->getGeometryType() == wkbMultiPolygon)
                      {
                         fusion.overlap = dynamic_cast<OGRMultiPolygon *>(intersection.get())->get_Area();
+                        std::cout<<"Intersection is a polygon !"<<std::endl;
                      }
                      else if(intersection->getGeometryType() == wkbGeometryCollection)
                      {
@@ -263,10 +265,17 @@ FusionOGRTileFilter<TInputImage>
                fusionFeature.SetGeometry( fusionPolygon.get() );
                
                ogr::Field field = upper.feat[0];
-               fusionFeature[0].SetValue(field.GetValue<int>());
-               inputLayer.CreateFeature(fusionFeature);
-               inputLayer.DeleteFeature(lower.feat.GetFID());
-               inputLayer.DeleteFeature(upper.feat.GetFID());
+               try
+                 {
+                 fusionFeature[0].SetValue(field.GetValue<int>());
+                 inputLayer.CreateFeature(fusionFeature);
+                 inputLayer.DeleteFeature(lower.feat.GetFID());
+                 inputLayer.DeleteFeature(upper.feat.GetFID());
+                 }
+               catch(itk::ExceptionObject& err)
+                 {
+                 otbDebugMacro(<<"An exception was caught during fusion: "<<err);
+                 }
             }
          }
       } //end for x
