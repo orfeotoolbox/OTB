@@ -237,7 +237,6 @@ namespace otb
         SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_PAN.tif");
         SetDocExampleParameterValue("outvd", "SegmentationVectorData.sqlite");
         SetDocExampleParameterValue("filter", "meanshift");
-
       }
   
       void DoUpdateParameters()
@@ -266,6 +265,7 @@ namespace otb
         if (HasValue("inmask"))
           {
             streamingVectorizedFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
+	    otbAppLogINFO(<<"Use a mask as input." << std::endl);
           }
         streamingVectorizedFilter->SetOGRDataSource(ogrDS);
 
@@ -281,8 +281,8 @@ namespace otb
         if (use8connected)
           {
             otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
-            streamingVectorizedFilter->SetUse8Connected(use8connected);
-          }
+	  }  
+	streamingVectorizedFilter->SetUse8Connected(use8connected);
 
         const std::string layerName = this->GetParameterString("layername");
         const std::string fieldName = this->GetParameterString("fieldname");
@@ -298,6 +298,7 @@ namespace otb
           {
             streamingVectorizedFilter->SetSimplify(true);
             streamingVectorizedFilter->SetSimplificationTolerance(GetParameterFloat("simplify"));
+	    otbAppLogINFO(<<"Simplify the geometry." << std::endl);
           }
         else
           {
