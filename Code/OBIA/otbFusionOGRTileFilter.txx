@@ -23,7 +23,7 @@
 #include "ogrsf_frmts.h"
 #include <iomanip>
 #include "itkTimeProbe.h"
-
+#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -111,6 +111,7 @@ FusionOGRTileFilter<TInputImage>
    unsigned int nbRowStream = static_cast<unsigned int>(imageSize[1] / m_StreamSize[1] + 1);
    unsigned int nbColStream = static_cast<unsigned int>(imageSize[0] / m_StreamSize[0] + 1);
    
+   itk::ProgressReporter progress(this,0,nbRowStream*nbColStream);
    
    for(unsigned int x=1; x<=nbColStream; x++)
    {
@@ -218,12 +219,10 @@ FusionOGRTileFilter<TInputImage>
                      if(intersection->getGeometryType() == wkbPolygon)
                      {
                         fusion.overlap = dynamic_cast<OGRPolygon *>(intersection.get())->get_Area();
-                        std::cout<<"Intersection is a polygon !"<<std::endl;
                      }
                      else if(intersection->getGeometryType() == wkbMultiPolygon)
                      {
                         fusion.overlap = dynamic_cast<OGRMultiPolygon *>(intersection.get())->get_Area();
-                        std::cout<<"Intersection is a polygon !"<<std::endl;
                      }
                      else if(intersection->getGeometryType() == wkbGeometryCollection)
                      {
@@ -280,6 +279,9 @@ FusionOGRTileFilter<TInputImage>
          }
       } //end for x
       inputLayer.ogr().CommitTransaction();
+
+      // Update progress
+      progress.CompletedPixel();
    } //end for y
    inputLayer.ogr().CommitTransaction();
 
@@ -294,8 +296,6 @@ FusionOGRTileFilter<TImage>
    this->ProcessStreamingLine(false);
    //Process row
    this->ProcessStreamingLine(true);
-   
-
 }
 
 
