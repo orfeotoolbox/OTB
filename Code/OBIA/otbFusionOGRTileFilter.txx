@@ -24,6 +24,7 @@
 #include <iomanip>
 #include "itkTimeProbe.h"
 #include "itkProgressReporter.h"
+#include "otbMacro.h"
 
 namespace otb
 {

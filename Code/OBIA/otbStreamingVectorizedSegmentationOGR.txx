@@ -28,6 +28,7 @@
 
 #include "itkTimeProbe.h"
 #include "otbMacro.h"
+#include <cassert>
 
 namespace otb
 {
@@ -155,14 +156,9 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
      //Simplify the geometry
      if (m_Simplify)
      {
-        #if GDAL_VERSION_NUM < 1800
-           itkGenericExceptionMacro("Simplify geometry is not supported by OGR v"
-               << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
-        #elif GDAL_VERSION_NUM < 1900
-           (*featIt).SetGeometry((*featIt).GetGeometry()->Simplify(m_SimplificationTolerance));
-        #else
-           (*featIt).SetGeometry((*featIt).GetGeometry()->SimplifyPreserveTopology(m_SimplificationTolerance));
-        #endif
+           const OGRGeometry * geom = (*featIt).GetGeometry();
+           assert(geom && "geometry is NULL ! Can't simplify it.");
+           (*featIt).SetGeometryDirectly(ogr::Simplify(*geom,m_SimplificationTolerance));
      }
      //Need to rewrite the feature otherwise changes are not considered.
      tmpLayer.SetFeature(*featIt);
