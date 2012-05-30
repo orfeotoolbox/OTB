@@ -137,7 +137,7 @@ namespace otb
         AddParameter(ParameterType_Choice, "filter", "Segmentation algorithm");
         SetParameterDescription("filter", "Choose your segmentation method (threaded mean-shift by default).");
 
-	AddChoice("filter.meanshift", "Threaded mean-shift");
+       AddChoice("filter.meanshift", "Threaded mean-shift");
         SetParameterDescription(
                                 "filter.meanshift",
                                 "Home-made threaded mean-shift filter.");
@@ -181,15 +181,15 @@ namespace otb
         SetDefaultParameterInt("filter.meanshiftedison.minsize", 100);
         SetDefaultParameterFloat("filter.meanshiftedison.scale", 100000.);
 
-	AddParameter(ParameterType_Empty, "neighbor", "Neighborhood vectorization strategy");
+       AddParameter(ParameterType_Empty, "neighbor", "Neighborhood vectorization strategy");
         SetParameterDescription("neighbor",
                                 "Pixel neighborhood vectorization strategy. 4 or 8 neighborhood .(4 neighborhood by default.)");
         MandatoryOff("neighbor");
 
         AddParameter(ParameterType_Empty,"stitch","Stitch polygons");
-	SetParameterDescription("stitch", "Scan segments on each side of tiles and append polygons which have almost one picel in common.");
+       SetParameterDescription("stitch", "Scan segments on each side of tiles and append polygons which have almost one picel in common.");
         MandatoryOff("stitch");
-	EnableParameter("stitch");
+       EnableParameter("stitch");
 
         AddChoice("filter.connectedcomponent", "Connected component Segmentation");
         SetParameterDescription("filter.connectedcomponent", "Connected component segmentation based on mathematical condition.");
@@ -227,7 +227,7 @@ namespace otb
                                 "   if tile size set to (0 by default)");
         SetDefaultParameterInt("tilesize", 0);
         MandatoryOff("tilesize");
-	EnableParameter("tilesize");
+       EnableParameter("tilesize");
 
         AddParameter(ParameterType_Int, "startlabel", "start label");
         SetParameterDescription("startlabel", "Start label (1 by default)");
@@ -283,7 +283,7 @@ namespace otb
         if (use8connected)
           {
             otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
-          }  
+          }
         streamingVectorizedFilter->SetUse8Connected(use8connected);
 
         const std::string layerName = this->GetParameterString("layername");

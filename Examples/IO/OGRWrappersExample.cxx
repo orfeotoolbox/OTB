@@ -185,8 +185,8 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
       // for (auto const& inputFeature : inputLayer)
       for (otb::ogr::Layer::const_iterator fb=inputLayer.begin(), fe=inputLayer.end()
-  ; fb != fe
-  ; ++fb)
+ ; fb != fe
+ ; ++fb)
         {
         otb::ogr::Feature const& inputFeature = *fb;
         destGeometry.addGeometry(inputFeature.GetGeometry());
