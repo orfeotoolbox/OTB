@@ -53,8 +53,7 @@ namespace otb
 
       // Segmentation filters typedefs
       // Edison mean-shift
-      typedef otb::MeanShiftVectorImageFilter
-      <FloatVectorImageType,
+      typedef otb::MeanShiftVectorImageFilter      <FloatVectorImageType,
        FloatVectorImageType,
        LabelImageType>                        EdisonSegmentationFilterType;
 
@@ -255,7 +254,6 @@ namespace otb
 	typedef otb::StreamingVectorizedSegmentationOGR
         <FloatVectorImageType,
         SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
-
 	
 	// Retrieve tile size parameter
         const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("tilesize"));
@@ -284,7 +282,7 @@ namespace otb
 	    otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
 	    streamingVectorizedFilter->SetUse8Connected(use8connected);
 	  }
-	//StreamingVectorizedSegmentationOGRType::Pointer vec = StreamingVectorizedSegmentationOGRType::New();
+
 	const std::string layerName = this->GetParameterString("layername");
         const std::string fieldName = this->GetParameterString("fieldname");
 
@@ -304,7 +302,7 @@ namespace otb
 	  {
 	    streamingVectorizedFilter->SetSimplify(false);
 	  }
-	AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing segmentation");
+	AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
 
 	streamingVectorizedFilter->Initialize(); //must be called !
 	streamingVectorizedFilter->Update(); //must be called !
@@ -317,11 +315,8 @@ namespace otb
         std::string dataSourceName = GetParameterString("outvd");
         otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
 
-        
-
         // Retrieve min object size parameter
         const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
-
         
         // The actual stream size used
         FloatVectorImageType::SizeType streamSize;
@@ -351,8 +346,6 @@ namespace otb
             EdisontreamingVectorizedSegmentationOGRType::Pointer
               edisonVectorizationFilter = EdisontreamingVectorizedSegmentationOGRType::New();
 
-            
-
             //segmentation parameters
             const unsigned int
               spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.spatialr"));
@@ -366,7 +359,8 @@ namespace otb
             edisonVectorizationFilter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
             edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
             edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
-            if (minSize > 1)
+            
+	    if (minSize > 1)
               {
                 otbAppLogINFO(<<"Object with size under "<<minSize<<" will be suppressed."<<std::endl);
                 edisonVectorizationFilter->SetFilterSmallObject(true);
@@ -392,8 +386,8 @@ namespace otb
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetSpatialBandwidth(spatialRadius);
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
 
-        meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(100);
-        meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(0.1);
+	    meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(100);
+	    meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(0.1);
 
             if (minSize > 1)
               {
@@ -401,7 +395,6 @@ namespace otb
                 meanShiftVectorizationFilter->SetFilterSmallObject(true);
                 meanShiftVectorizationFilter->SetMinimumObjectSize(minSize);
               }
-
 	    streamSize = this->GenericApplySegmentation<MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, ogrDS);
           }
         else
@@ -410,29 +403,22 @@ namespace otb
           }
 
         ogrDS->SyncToDisk();
-        //SetParameterOutputImage<LabelImageType> ("lout", m_LabelImage);
 
         // Stitching mode
         if(IsParameterEnabled("stitch"))
           {
             otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
 	    const std::string layerName = this->GetParameterString("layername");
-	    //#if GDAL_VERSION_NUM < 1800
-            //itkWarningMacro("Stiching polygons is not supported by OGR v"
-            //                << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.")
-	    //#else
-              FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
+	    
+	    FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
             fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
             fusionFilter->SetOGRDataSource(ogrDS);
             std::cout<<"Stream size: "<<streamSize<<std::endl;
             fusionFilter->SetStreamSize(streamSize);
             fusionFilter->SetLayerName(layerName);
             fusionFilter->GenerateData();
-	    //#endif
           }
       }
-      //LabelImageType::Pointer     m_LabelImage;
-      
     };
 
 
