@@ -19,6 +19,7 @@
 #define __otbFusionOGRTileFilter_h
 
 #include "otbOGRDataSourceWrapper.h"
+#include "otbMacro.h"
 
 //#if(GDAL_VERSION_NUM < 1800)
 //#error FusionOGRTileFilter requires GDAL version >= 1.8.0
