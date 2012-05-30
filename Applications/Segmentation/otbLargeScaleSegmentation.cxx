@@ -168,12 +168,12 @@ namespace otb
         SetParameterDescription("filter.meanshift.ranger", "Range radius defining the interval in the color space.");
         AddParameter(ParameterType_Float, "filter.meanshift.thres", "convergence threshold");
         SetParameterDescription("filter.meanshift.thres", "convergence threshold. iterative scheme will stop if MeanShift "
-				"vector is below this threshold (1e-3 by default) or iteration number reached maximum iteration number.");
+                                "vector is below this threshold (1e-3 by default) or iteration number reached maximum iteration number.");
         AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "maximum iteration number");
         SetParameterDescription("filter.meanshift.maxiter",
                                  "iteration process is stopped if convergence hasn't been reached after this number of iteration (10 by default).");
         
-	// AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
+        // AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
         // SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
         // MandatoryOff("filter.meanshift.useoptim");
 
@@ -248,67 +248,67 @@ namespace otb
       template<class TSegmentationFilter>
       FloatVectorImageType::SizeType
       GenericApplySegmentation(otb::StreamingVectorizedSegmentationOGR<FloatVectorImageType,
-				TSegmentationFilter> * streamingVectorizedFilter, otb::ogr::DataSource::Pointer ogrDS)
+                                TSegmentationFilter> * streamingVectorizedFilter, otb::ogr::DataSource::Pointer ogrDS)
       {
-	typedef  TSegmentationFilter             SegmentationFilterType;
-	typedef  typename SegmentationFilterType::Pointer SegmentationFilterPointerType;
-	typedef otb::StreamingVectorizedSegmentationOGR
+        typedef  TSegmentationFilter             SegmentationFilterType;
+        typedef  typename SegmentationFilterType::Pointer SegmentationFilterPointerType;
+        typedef otb::StreamingVectorizedSegmentationOGR
         <FloatVectorImageType,
         SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
-	
-	// Retrieve tile size parameter
+        
+        // Retrieve tile size parameter
         const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("tilesize"));
-	// Retrieve the 8-connected option
+        // Retrieve the 8-connected option
         bool use8connected = IsParameterEnabled("neighbor");
 
-	streamingVectorizedFilter->SetInput(GetParameterFloatVectorImage("in"));
+        streamingVectorizedFilter->SetInput(GetParameterFloatVectorImage("in"));
 
-	if (HasValue("inmask"))
-	  {
-	    streamingVectorizedFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
-	  }
-	streamingVectorizedFilter->SetOGRDataSource(ogrDS);
+        if (HasValue("inmask"))
+          {
+            streamingVectorizedFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
+          }
+        streamingVectorizedFilter->SetOGRDataSource(ogrDS);
 
-	if (tileSize != 0)
-	  {
-	    streamingVectorizedFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
-	  }
-	else
-	  {
-	    streamingVectorizedFilter->GetStreamer()->SetAutomaticTiledStreaming();
-	  }
+        if (tileSize != 0)
+          {
+            streamingVectorizedFilter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
+          }
+        else
+          {
+            streamingVectorizedFilter->GetStreamer()->SetAutomaticTiledStreaming();
+          }
 
-	if (use8connected)
-	  {
-	    otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
-	    streamingVectorizedFilter->SetUse8Connected(use8connected);
-	  }
+        if (use8connected)
+          {
+            otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
+            streamingVectorizedFilter->SetUse8Connected(use8connected);
+          }
 
-	const std::string layerName = this->GetParameterString("layername");
+        const std::string layerName = this->GetParameterString("layername");
         const std::string fieldName = this->GetParameterString("fieldname");
 
         // Retrieve start label parameter
         const unsigned int startLabel = this->GetParameterInt("startlabel");
 
-	streamingVectorizedFilter->SetLayerName(layerName);
+        streamingVectorizedFilter->SetLayerName(layerName);
         streamingVectorizedFilter->SetFieldName(fieldName);
         streamingVectorizedFilter->SetStartLabel(startLabel);
 
-	if(IsParameterEnabled("simplify"))
-	  {
-	    streamingVectorizedFilter->SetSimplify(true);
-	    streamingVectorizedFilter->SetSimplificationTolerance(GetParameterFloat("simplify"));
-	  }
-	else
-	  {
-	    streamingVectorizedFilter->SetSimplify(false);
-	  }
-	AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
+        if(IsParameterEnabled("simplify"))
+          {
+            streamingVectorizedFilter->SetSimplify(true);
+            streamingVectorizedFilter->SetSimplificationTolerance(GetParameterFloat("simplify"));
+          }
+        else
+          {
+            streamingVectorizedFilter->SetSimplify(false);
+          }
+        AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
 
-	streamingVectorizedFilter->Initialize(); //must be called !
-	streamingVectorizedFilter->Update(); //must be called !
+        streamingVectorizedFilter->Initialize(); //must be called !
+        streamingVectorizedFilter->Update(); //must be called !
 
-	return streamingVectorizedFilter->GetStreamSize();
+        return streamingVectorizedFilter->GetStreamSize();
       }
       void DoExecute()
       {
@@ -361,14 +361,14 @@ namespace otb
             edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
             edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
             
-	    if (minSize > 1)
+            if (minSize > 1)
               {
                 otbAppLogINFO(<<"Object with size under "<<minSize<<" will be suppressed."<<std::endl);
                 edisonVectorizationFilter->SetFilterSmallObject(true);
                 edisonVectorizationFilter->SetMinimumObjectSize(minSize);
               }
 
-	    streamSize = GenericApplySegmentation<EdisonSegmentationFilterType>(edisonVectorizationFilter, ogrDS);
+            streamSize = GenericApplySegmentation<EdisonSegmentationFilterType>(edisonVectorizationFilter, ogrDS);
           }
         else if (segType == "meanshift")
           {
@@ -383,16 +383,16 @@ namespace otb
             rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.ranger"));
             const unsigned int
             minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
-	    const float
+            const float
             threshold = static_cast<float> (this->GetParameterInt("filter.meanshift.thres"));
-	    const unsigned int
+            const unsigned int
             maxIterNumber = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.maxiter"));
 
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetSpatialBandwidth(spatialRadius);
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
 
-	    meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
-	    meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
+            meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
+            meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
 
             if (minSize > 1)
               {
@@ -400,7 +400,7 @@ namespace otb
                 meanShiftVectorizationFilter->SetFilterSmallObject(true);
                 meanShiftVectorizationFilter->SetMinimumObjectSize(minSize);
               }
-	    streamSize = this->GenericApplySegmentation<MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, ogrDS);
+            streamSize = this->GenericApplySegmentation<MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, ogrDS);
           }
         else
           {
@@ -413,9 +413,9 @@ namespace otb
         if(IsParameterEnabled("stitch"))
           {
             otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
-	    const std::string layerName = this->GetParameterString("layername");
-	    
-	    FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
+            const std::string layerName = this->GetParameterString("layername");
+            
+            FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
             fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
             fusionFilter->SetOGRDataSource(ogrDS);
             std::cout<<"Stream size: "<<streamSize<<std::endl;
