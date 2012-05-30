@@ -134,12 +134,39 @@ namespace otb
         // SetParameterDescription("lout", "The labeled output image.");
         // MandatoryOff("lout");
 
-        AddParameter(ParameterType_Choice, "filter", "Segmentation Filter");
-        SetParameterDescription("filter", "Choose your segmentation filter method (threaded mean-shift by default.");
+        AddParameter(ParameterType_Choice, "filter", "Segmentation algorithm");
+        SetParameterDescription("filter", "Choose your segmentation method (threaded mean-shift by default).");
 
-        AddChoice("filter.meanshiftedison", "EDISON MeanShift");
+	AddChoice("filter.meanshift", "Threaded mean-shift");
+        SetParameterDescription(
+                                "filter.meanshift",
+                                "Home-made threaded mean-shift filter.");
+        // MeanShift Parameters
+        AddParameter(ParameterType_Int, "filter.meanshift.spatialr", "Spatial radius");
+        SetParameterDescription("filter.meanshift.spatialr", "Spatial radius defining neighborhood.");
+        AddParameter(ParameterType_Float, "filter.meanshift.ranger", "Range radius");
+        SetParameterDescription("filter.meanshift.ranger", "Range radius defining the interval in the color space.");
+        AddParameter(ParameterType_Float, "filter.meanshift.thres", "convergence threshold");
+        SetParameterDescription("filter.meanshift.thres", "convergence threshold. iterative scheme will stop if mean-shift "
+                                "vector is below this threshold (1e-3 by default) or iteration number reached maximum iteration number.");
+        AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "maximum iteration number");
+        SetParameterDescription("filter.meanshift.maxiter",
+                                 "iteration process is stopped if convergence hasn't been reached after this number of iteration (10 by default).");
+        
+        //AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
+        //SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
+        //MandatoryOff("filter.meanshift.useoptim");
+
+        SetDefaultParameterInt("filter.meanshift.spatialr", 5);
+        SetDefaultParameterFloat("filter.meanshift.ranger", 15.0);
+        SetDefaultParameterFloat("filter.meanshift.thres", 0.1);
+        SetMinimumParameterFloatValue("filter.meanshift.thres", 0.);
+        SetDefaultParameterInt("filter.meanshift.maxiter", 100);
+        SetMinimumParameterIntValue("filter.meanshift.maxiter", 1);
+
+        AddChoice("filter.meanshiftedison", "EDISON mean-shift");
         SetParameterDescription("filter.meanshiftedison",
-                                "EDISON based MeanShift filter. (is going to be replaced by new framework).");
+                                "EDISON based Mean-shift filter. (is going to be replaced by new framework and will be deprecated).");
         // EDISON Meanshift Parameters
         AddParameter(ParameterType_Int, "filter.meanshiftedison.spatialr", "Spatial radius");
         SetParameterDescription("filter.meanshiftedison.spatialr", "Spatial radius defining neighborhood.");
@@ -154,54 +181,33 @@ namespace otb
         SetDefaultParameterInt("filter.meanshiftedison.minsize", 100);
         SetDefaultParameterFloat("filter.meanshiftedison.scale", 100000.);
 
-        AddParameter(ParameterType_Empty,"stitch","Stich polygons at tiles borders");
+	AddParameter(ParameterType_Empty, "neighbor", "Neighborhood vectorization strategy");
+        SetParameterDescription("neighbor",
+                                "Pixel neighborhood vectorization strategy. 4 or 8 neighborhood .(4 neighborhood by default.)");
+        MandatoryOff("neighbor");
+
+        AddParameter(ParameterType_Empty,"stitch","Stitch polygons");
+	SetParameterDescription("stitch", "Scan segments on each side of tiles and append polygons which have almost one picel in common.");
         MandatoryOff("stitch");
+	EnableParameter("stitch");
 
-        AddChoice("filter.meanshift", "MeanShift");
-        SetParameterDescription(
-                                "filter.meanshift",
-                                "Home-made threaded MeanShift filter.");
-        // MeanShift Parameters
-        AddParameter(ParameterType_Int, "filter.meanshift.spatialr", "Spatial radius");
-        SetParameterDescription("filter.meanshift.spatialr", "Spatial radius defining neighborhood.");
-        AddParameter(ParameterType_Float, "filter.meanshift.ranger", "Range radius");
-        SetParameterDescription("filter.meanshift.ranger", "Range radius defining the interval in the color space.");
-        AddParameter(ParameterType_Float, "filter.meanshift.thres", "convergence threshold");
-        SetParameterDescription("filter.meanshift.thres", "convergence threshold. iterative scheme will stop if MeanShift "
-                                "vector is below this threshold (1e-3 by default) or iteration number reached maximum iteration number.");
-        AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "maximum iteration number");
-        SetParameterDescription("filter.meanshift.maxiter",
-                                 "iteration process is stopped if convergence hasn't been reached after this number of iteration (10 by default).");
-        
-        // AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
-        // SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
-        // MandatoryOff("filter.meanshift.useoptim");
-
-        SetDefaultParameterInt("filter.meanshift.spatialr", 5);
-        SetDefaultParameterFloat("filter.meanshift.ranger", 15.0);
-        SetDefaultParameterFloat("filter.meanshift.thres", 0.1);
-        SetMinimumParameterFloatValue("filter.meanshift.thres", 0.);
-        SetDefaultParameterInt("filter.meanshift.maxiter", 100);
-        SetMinimumParameterIntValue("filter.meanshift.maxiter", 1);
-
-        AddChoice("filter.connectedcomponent", "ConnectedComponentMuParser");
-        SetParameterDescription("filter.connectedcomponent", "connectedComponant muparser filter.");
+        AddChoice("filter.connectedcomponent", "Connected component Segmentation");
+        SetParameterDescription("filter.connectedcomponent", "Connected component segmentation based on mathematical condition.");
 
         AddParameter(ParameterType_String, "filter.connectedcomponent.expr", "Connected Component Expression");
-        SetParameterDescription("filter.connectedcomponent.expr", "Formula used for connected component segmentation");
+        SetParameterDescription("filter.connectedcomponent.expr", "User defined criteria based on mathematical condition used for connected component segmentation.");
         MandatoryOff("filter.connectedcomponent.expr");
-
 
         AddParameter(ParameterType_Int, "minsize", "Minimum object size");
         SetParameterDescription("minsize",
-                                "object with size under this threshold (area in pixels) will be replaced by the background value.");
+                                "Object with size under this threshold(area in pixels) will be replaced by the background value.");
         SetDefaultParameterInt("minsize", 1);
         SetMinimumParameterIntValue("minsize", 1);
         MandatoryOff("minsize");
 
         AddParameter(ParameterType_Float, "simplify", "Simplify geometry");
         SetParameterDescription("simplify",
-                                "Simplify polygons according to a given tolerance");
+                                "Simplify polygons according to a given tolerance (in pixel?).");
         SetDefaultParameterFloat("simplify",0.1);
         MandatoryOff("simplify");
 
@@ -215,22 +221,18 @@ namespace otb
         SetParameterString("fieldname", "DN");
         MandatoryOff("fieldname");
 
-        AddParameter(ParameterType_Int, "tilesize", "tile size");
+        AddParameter(ParameterType_Int, "tilesize", "Tiles size");
         SetParameterDescription("tilesize",
-                                "streaming to dimension for computing vectorization.(automatic tile dimension is set "
-                                "   if tile size set to 0 (by default).)");
+                                "user defined streaming tiles size  to compute segmentation.Automatic tile dimension is set "
+                                "   if tile size set to (0 by default)");
         SetDefaultParameterInt("tilesize", 0);
         MandatoryOff("tilesize");
+	EnableParameter("tilesize");
 
         AddParameter(ParameterType_Int, "startlabel", "start label");
-        SetParameterDescription("startlabel", "Start label.(1 by default)");
+        SetParameterDescription("startlabel", "Start label (1 by default)");
         SetDefaultParameterInt("startlabel", 1);
         MandatoryOff("startlabel");
-
-        AddParameter(ParameterType_Empty, "neighbor", "use 8 connected");
-        SetParameterDescription("neighbor",
-                                "Pixel neighborhood vectorization strategy. 4 or 8 neighborhood .(4 neighborhood by default.)");
-        MandatoryOff("neighbor");
 
         // Doc example parameter settings
 
