@@ -114,11 +114,11 @@ namespace otb
         SetDocLongDescription("This application is dedicated to image segmentation. "
                               "By handling streaming and OGR framework, it has been optimized for processing large scale data."
                               "Numerous segmentations algorithms are available."
-			      "The application stream a large image, and for each stream:"
-			      "apply a segmentation algorithm, "
-			      "vectorize the results in polygons and keep-it " 
-			      "This application allows to correct some errors due to streaming by stitching polygons."
-			      );
+                           "The application stream a large image, and for each stream:"
+                           "apply a segmentation algorithm, "
+                           "vectorize the results in polygons and keep-it "
+                           "This application allows to correct some errors due to streaming by stitching polygons."
+                           );
         SetDocLimitations(" .");
         SetDocAuthors("OTB-Team");
         SetDocSeeAlso("MeanShiftSegmentation");
@@ -138,8 +138,8 @@ namespace otb
         AddParameter(ParameterType_Choice, "filter", "Segmentation algorithm");
         SetParameterDescription("filter", "Choose your segmentation method (threaded mean-shift by default).");
 
-	AddChoice("filter.meanshift", "Threaded mean-shift");
-	SetParameterDescription(
+       AddChoice("filter.meanshift", "Threaded mean-shift");
+       SetParameterDescription(
                                 "filter.meanshift",
                                 "Home-made threaded mean-shift filter.");
         // MeanShift Parameters
@@ -169,7 +169,7 @@ namespace otb
         SetParameterDescription("filter.meanshiftedison",
                                 "EDISON based Mean-shift filter. (is going to be replaced by new framework and will be deprecated).");
         
-	// EDISON Meanshift Parameters
+       // EDISON Meanshift Parameters
         AddParameter(ParameterType_Int, "filter.meanshiftedison.spatialr", "Spatial radius");
         SetParameterDescription("filter.meanshiftedison.spatialr", "Spatial radius defining neighborhood.");
         AddParameter(ParameterType_Float, "filter.meanshiftedison.ranger", "Range radius");
@@ -263,7 +263,7 @@ namespace otb
         const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("tilesize"));
         // Retrieve the 8-connected option
         bool use8connected = IsParameterEnabled("neighbor");
-	// Retrieve min object size parameter
+       // Retrieve min object size parameter
         const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
 
         streamingVectorizedFilter->SetInput(GetParameterFloatVectorImage("in"));
@@ -290,12 +290,12 @@ namespace otb
           }
         streamingVectorizedFilter->SetUse8Connected(use8connected);
 
-	if (minSize > 1)
-	  {
-	    otbAppLogINFO(<<"Object with size under "<< minSize <<" will be suppressed."<<std::endl);
-	    streamingVectorizedFilter->SetFilterSmallObject(true);
-	    streamingVectorizedFilter->SetMinimumObjectSize(minSize);
-	  }
+       if (minSize > 1)
+         {
+           otbAppLogINFO(<<"Object with size under "<< minSize <<" will be suppressed."<<std::endl);
+           streamingVectorizedFilter->SetFilterSmallObject(true);
+           streamingVectorizedFilter->SetMinimumObjectSize(minSize);
+         }
 
         const std::string layerName = this->GetParameterString("layername");
         const std::string fieldName = this->GetParameterString("fieldname");
