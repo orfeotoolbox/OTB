@@ -105,7 +105,12 @@ FusionOGRTileFilter<TInputImage>
 {
    typename InputImageType::ConstPointer inputImage = this->GetInput();
    OGRDataSourcePointerType inputDataSource = this->GetOGRDataSource();
-   OGRLayerType inputLayer = inputDataSource->GetLayerChecked(m_LayerName);
+   //Handle the case of shapefile. A shapefile is a layer and not a datasource.
+   //The layer name in a shapefile is the shapefile's name.
+   //This is not the case for a database as sqlite or PG.
+   OGRLayerType inputLayer = inputDataSource->GetLayersCount() == 1
+                          ? inputDataSource->GetLayer(0)
+                          : inputDataSource->GetLayerChecked(m_LayerName);
    
    //compute the number of stream division in row and column
    SizeType imageSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
