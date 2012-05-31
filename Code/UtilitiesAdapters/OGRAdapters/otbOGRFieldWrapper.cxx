@@ -159,3 +159,16 @@ void otb::ogr::Field::UncheckedUnset() const
 {
   m_Feature->UnsetField(m_index);
 }
+
+void otb::ogr::Field::UncheckedAssign(Field const& f)
+{
+  if (f.HasBeenSet())
+    {
+    OGRField & of = f.ogr();
+    m_Feature->SetField(m_index, &of); // OGR API copies *of
+    }
+  else // not sure OGR setField handle the case where new fields are unset
+    {
+    this->Unset();
+    }
+}

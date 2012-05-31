@@ -77,6 +77,10 @@ class Feature;
  * Instances of \c Field are expected to be built from an existing \c Feature
  * with which they'll share their owning \c OGRFeature.
  *
+ * A \c Field instance works as a proxy. Copying a field will only have it share
+ * the actual \c OGRField between several instances. In order to copy a field
+ * value from another field, use \c Field::assign().
+ *
  * \invariant <tt>m_Feature</tt> shall be valid (i.e. not wrapping a null \c
  * OGRFeature).
  * \invariant <tt>m_index < m_Feature->GetFieldCount()</tt>.
@@ -133,6 +137,31 @@ public:
 
   /** Prints self into stream. */
   std::ostream & PrintSelf(std::ostream&os, itk::Indent indent) const;
+
+  /** Copies a field.
+   * As \c Field is a proxy type, this function is the only possible way to copy a field.
+   *
+   * First, the field must be defined with a definition, then it could be set
+   * from another field value.
+   * \code
+   * Field srcField = srcFeature[42];
+   * Feature dstFeature(layerDefinition);
+   * Field dst(dstFeature, 12);
+   * dstField.Assign(srcField);
+   * \endcode
+   */
+  void Assign(Field const& f);
+
+  /** Access to the raw underlying OGR data.
+   * This function provides an abstraction leak in case deeper control on the
+   * underlying \c OGRFeature is required.
+   * \warning You must under no circonstance try to delete the \c OGRField
+   * obtained this way.
+   */
+  OGRField & ogr() const;
+
+  /** \copydoc Field::ogr() const */
+  OGRField & ogr();
 private:
   /**\name Unchecked definitions
    * All the definitions that follow do the real work. However, they are not the
@@ -145,6 +174,7 @@ private:
   bool           UncheckedHasBeenSet() const;
   void           UncheckedUnset() const;
   std::ostream & UncheckedPrintSelf(std::ostream&os, itk::Indent indent) const;
+  void           UncheckedAssign(Field const& f);
   //@}
 
   /**
