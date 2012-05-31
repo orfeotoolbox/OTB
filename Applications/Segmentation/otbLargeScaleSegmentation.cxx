@@ -127,8 +127,8 @@ namespace otb
         SetParameterDescription("inmask", "Mask image. (Pixel with 0 will not be processed).");
         MandatoryOff("inmask");
 
-        AddParameter(ParameterType_OutputFilename, "outvd", "Output VectorData");
-        SetParameterDescription("outvd", "The name of output Vector Data.");
+        AddParameter(ParameterType_OutputFilename, "outvd", "Output vector data");
+        SetParameterDescription("outvd", "The name of segmentation output. Vector Data (polygons).");
 
         // AddParameter(ParameterType_OutputImage, "lout", "Labeled output");
         // SetParameterDescription("lout", "The labeled output image.");
@@ -181,7 +181,7 @@ namespace otb
         SetDefaultParameterInt("filter.meanshiftedison.minsize", 100);
         SetDefaultParameterFloat("filter.meanshiftedison.scale", 100000.);
 
-       AddParameter(ParameterType_Empty, "neighbor", "Neighborhood vectorization strategy");
+       AddParameter(ParameterType_Empty, "neighbor", "8-neighbor vect. strategy");
         SetParameterDescription("neighbor",
                                 "Pixel neighborhood vectorization strategy. 4 or 8 neighborhood .(4 neighborhood by default.)");
         MandatoryOff("neighbor");
@@ -194,7 +194,7 @@ namespace otb
         AddChoice("filter.connectedcomponent", "Connected component Segmentation");
         SetParameterDescription("filter.connectedcomponent", "Connected component segmentation based on mathematical condition.");
 
-        AddParameter(ParameterType_String, "filter.connectedcomponent.expr", "Connected Component Expression");
+        AddParameter(ParameterType_String, "filter.connectedcomponent.expr", "Condition");
         SetParameterDescription("filter.connectedcomponent.expr", "User defined criteria based on mathematical condition used for connected component segmentation.");
         MandatoryOff("filter.connectedcomponent.expr");
 
@@ -211,12 +211,12 @@ namespace otb
         SetDefaultParameterFloat("simplify",0.1);
         MandatoryOff("simplify");
 
-        AddParameter(ParameterType_String, "layername", "Layer Name");
+        AddParameter(ParameterType_String, "layername", "Layer name");
         SetParameterDescription("layername", "Layer Name.(by default : Layer )");
         SetParameterString("layername", "layer");
         MandatoryOff("layername");
 
-        AddParameter(ParameterType_String, "fieldname", "Field Name");
+        AddParameter(ParameterType_String, "fieldname", "Field name");
         SetParameterDescription("fieldname", "field Name.(by default : DN )");
         SetParameterString("fieldname", "DN");
         MandatoryOff("fieldname");
@@ -261,6 +261,8 @@ namespace otb
         const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("tilesize"));
         // Retrieve the 8-connected option
         bool use8connected = IsParameterEnabled("neighbor");
+	// Retrieve min object size parameter
+        const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
 
         streamingVectorizedFilter->SetInput(GetParameterFloatVectorImage("in"));
 
@@ -285,6 +287,13 @@ namespace otb
             otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
           }
         streamingVectorizedFilter->SetUse8Connected(use8connected);
+
+	if (minSize > 1)
+	  {
+	    otbAppLogINFO(<<"Object with size under "<< minSize <<" will be suppressed."<<std::endl);
+	    streamingVectorizedFilter->SetFilterSmallObject(true);
+	    streamingVectorizedFilter->SetMinimumObjectSize(minSize);
+	  }
 
         const std::string layerName = this->GetParameterString("layername");
         const std::string fieldName = this->GetParameterString("fieldname");
@@ -319,9 +328,6 @@ namespace otb
         std::string dataSourceName = GetParameterString("outvd");
         otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
 
-        // Retrieve min object size parameter
-        const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
-        
         // The actual stream size used
         FloatVectorImageType::SizeType streamSize;
 
@@ -364,13 +370,6 @@ namespace otb
             edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
             edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
             
-            if (minSize > 1)
-              {
-                otbAppLogINFO(<<"Object with size under "<<minSize<<" will be suppressed."<<std::endl);
-                edisonVectorizationFilter->SetFilterSmallObject(true);
-                edisonVectorizationFilter->SetMinimumObjectSize(minSize);
-              }
-
             streamSize = GenericApplySegmentation<EdisonSegmentationFilterType>(edisonVectorizationFilter, ogrDS);
           }
         else if (segType == "meanshift")
@@ -397,12 +396,7 @@ namespace otb
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
 
-            if (minSize > 1)
-              {
-                otbAppLogINFO(<<"Object with size under "<<minSize<<" will be suppressed."<<std::endl);
-                meanShiftVectorizationFilter->SetFilterSmallObject(true);
-                meanShiftVectorizationFilter->SetMinimumObjectSize(minSize);
-              }
+            
             streamSize = this->GenericApplySegmentation<MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, ogrDS);
           }
         else
