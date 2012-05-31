@@ -20,8 +20,8 @@
 
 #include "otbFusionOGRTileFilter.h"
 
-#include "ogrsf_frmts.h"
 #include <iomanip>
+#include "ogrsf_frmts.h"
 #include "itkTimeProbe.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
@@ -111,14 +111,14 @@ FusionOGRTileFilter<TInputImage>
    OGRLayerType inputLayer = inputDataSource->GetLayersCount() == 1
                           ? inputDataSource->GetLayer(0)
                           : inputDataSource->GetLayerChecked(m_LayerName);
-   
+
    //compute the number of stream division in row and column
    SizeType imageSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
    unsigned int nbRowStream = static_cast<unsigned int>(imageSize[1] / m_StreamSize[1] + 1);
    unsigned int nbColStream = static_cast<unsigned int>(imageSize[0] / m_StreamSize[0] + 1);
-   
+
    itk::ProgressReporter progress(this,0,nbRowStream*nbColStream);
-   
+
    for(unsigned int x=1; x<=nbColStream; x++)
    {
       inputLayer.ogr().StartTransaction();
@@ -129,7 +129,7 @@ FusionOGRTileFilter<TInputImage>
          upperStreamFeatureList.clear();
          IndexType  UpperLeftCorner;
          IndexType  LowerRightCorner;
-         
+
          if(!line)
          {
             // Treat Row stream
@@ -145,7 +145,7 @@ FusionOGRTileFilter<TInputImage>
             //Compute the spatial filter of the left stream
             UpperLeftCorner[0] = (x-1)*m_StreamSize[0] + 1;
             UpperLeftCorner[1] = m_StreamSize[1]*y - 1 - 1 - m_Radius;
-            
+
             LowerRightCorner[0] = m_StreamSize[0]*x - 1 - 1;
             LowerRightCorner[1] = m_StreamSize[1]*y - 1 - 1; //-1 to stop just before stream line
          }
@@ -154,9 +154,9 @@ FusionOGRTileFilter<TInputImage>
          inputImage->TransformIndexToPhysicalPoint(UpperLeftCorner, ulCorner);
          OriginType  lrCorner;
          inputImage->TransformIndexToPhysicalPoint(LowerRightCorner, lrCorner);
-         
+
          inputLayer.SetSpatialFilterRect(ulCorner[0],lrCorner[1],lrCorner[0],ulCorner[1]);
-         
+
          OGRLayerType::const_iterator featIt = inputLayer.begin();
          for(; featIt!=inputLayer.end(); ++featIt)
          {
@@ -165,7 +165,7 @@ FusionOGRTileFilter<TInputImage>
             s.fusioned = false;
             upperStreamFeatureList.push_back(s);
          }
-         
+
          //Do the same thing for the lower/right stream
          std::vector<FeatureStruct> lowerStreamFeatureList;
          lowerStreamFeatureList.clear();
@@ -175,7 +175,7 @@ FusionOGRTileFilter<TInputImage>
             //Compute the spatial filter of the lower stream
             UpperLeftCorner[0] = x*m_StreamSize[0] + 1;
             UpperLeftCorner[1] = m_StreamSize[1]*(y-1) + 1;
-            
+
             LowerRightCorner[0] = m_StreamSize[0]*x + 1 + m_Radius;
             LowerRightCorner[1] = m_StreamSize[1]*y - 1 - 1;
          }
@@ -184,16 +184,16 @@ FusionOGRTileFilter<TInputImage>
             //Compute the spatial filter of the right stream
             UpperLeftCorner[0] = (x-1)*m_StreamSize[0] + 1;
             UpperLeftCorner[1] = m_StreamSize[1]*y + 1;
-            
+
             LowerRightCorner[0] = m_StreamSize[0]*x - 1 - 1;
             LowerRightCorner[1] = m_StreamSize[1]*y + 1 + m_Radius;
          }
-         
+
          inputImage->TransformIndexToPhysicalPoint(UpperLeftCorner, ulCorner);
          inputImage->TransformIndexToPhysicalPoint(LowerRightCorner, lrCorner);
-         
+
          inputLayer.SetSpatialFilterRect(ulCorner[0],lrCorner[1],lrCorner[0],ulCorner[1]);
-         
+
          for(featIt = inputLayer.begin(); featIt!=inputLayer.end(); ++featIt)
          {
             FeatureStruct s(inputLayer.GetLayerDefn());
@@ -201,7 +201,7 @@ FusionOGRTileFilter<TInputImage>
             s.fusioned = false;
             lowerStreamFeatureList.push_back(s);
          }
-      
+
          unsigned int nbUpperPolygons = upperStreamFeatureList.size();
          unsigned int nbLowerPolygons = lowerStreamFeatureList.size();
          std::vector<FusionStruct> fusionList;
@@ -221,7 +221,7 @@ FusionOGRTileFilter<TInputImage>
                      fusion.indStream1 = u;
                      fusion.indStream2 = l;
                      fusion.overlap = 0.;
-                     
+
                      if(intersection->getGeometryType() == wkbPolygon)
                      {
                         fusion.overlap = dynamic_cast<OGRPolygon *>(intersection.get())->get_Area();
@@ -246,8 +246,8 @@ FusionOGRTileFilter<TInputImage>
                      fusion.overlap = dynamic_cast<OGRMultiLineString *>(intersection.get())->get_Length();
                         #endif
                    }
-            
-                     
+
+
                      long upperFID = upper.feat.GetFID();
                      long lowerFID = lower.feat.GetFID();
                      fusionList.push_back(fusion);
@@ -268,7 +268,7 @@ FusionOGRTileFilter<TInputImage>
                ogr::UniqueGeometryPtr fusionPolygon = ogr::Union(*upper.feat.GetGeometry(),*lower.feat.GetGeometry());
                OGRFeatureType fusionFeature(inputLayer.GetLayerDefn());
                fusionFeature.SetGeometry( fusionPolygon.get() );
-               
+
                ogr::Field field = upper.feat[0];
                try
                  {
@@ -308,4 +308,3 @@ FusionOGRTileFilter<TImage>
 } // end namespace otb
 
 #endif
-

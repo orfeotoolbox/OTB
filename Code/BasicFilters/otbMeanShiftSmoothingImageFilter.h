@@ -28,6 +28,15 @@
 
 namespace otb
 {
+template <typename T> inline T simple_pow(T const& v, unsigned int p)
+{
+  T res = 1;
+  for (unsigned int i=0; i!=p; ++i)
+    {
+    res *= v;
+    }
+  return res;
+}
 
 /** \class SpatialRangeJointDomainTransform
  *
@@ -43,42 +52,41 @@ public:
   typedef double RealType;
 
   SpatialRangeJointDomainTransform() {}
-  ~SpatialRangeJointDomainTransform() {}
+  // ~SpatialRangeJointDomainTransform() {}
 
-  inline typename TOutputJointImage::PixelType operator()
-  (const typename TInputImage::PixelType & inputPixel, const typename TInputImage::IndexType & index)
+  typename TOutputJointImage::PixelType operator()
+  (const typename TInputImage::PixelType & inputPixel, const typename TInputImage::IndexType & index) const
   {
-    typename TOutputJointImage::PixelType jointPixel;
-    jointPixel.SetSize(ImageDimension + m_NumberOfComponentsPerPixel);
+    typename TOutputJointImage::PixelType jointPixel(m_ImageDimension + m_NumberOfComponentsPerPixel);
 
-    for(unsigned int comp = 0; comp < ImageDimension; comp++)
+    for(unsigned int comp = 0; comp < m_ImageDimension; comp++)
       {
       jointPixel[comp] = index[comp] / m_SpatialBandwidth;
       }
     for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
       {
-      jointPixel[ImageDimension + comp] = inputPixel[comp] / m_RangeBandwidth;
+      jointPixel[m_ImageDimension + comp] = inputPixel[comp] / m_RangeBandwidth;
       }
     return jointPixel;
   }
 
-  void Initialize(unsigned int _ImageDimension, unsigned int _m_NumberOfComponentsPerPixel,
-                  RealType _m_SpatialBandwidth, RealType _m_RangeBandwidth)
+  void Initialize(unsigned int _ImageDimension, unsigned int numberOfComponentsPerPixel_,
+                  RealType spatialBandwidth_, RealType rangeBandwidth_)
   {
-    ImageDimension = _ImageDimension;
-    m_NumberOfComponentsPerPixel = _m_NumberOfComponentsPerPixel;
-    m_SpatialBandwidth = _m_SpatialBandwidth;
-    m_RangeBandwidth = _m_RangeBandwidth;
-    m_OutputSize = ImageDimension + m_NumberOfComponentsPerPixel;
+    m_ImageDimension             = _ImageDimension;
+    m_NumberOfComponentsPerPixel = numberOfComponentsPerPixel_;
+    m_SpatialBandwidth           = spatialBandwidth_;
+    m_RangeBandwidth             = rangeBandwidth_;
+    m_OutputSize                 = m_ImageDimension + m_NumberOfComponentsPerPixel;
   }
 
-  unsigned int GetOutputSize()
+  unsigned int GetOutputSize() const
   {
     return m_OutputSize;
   }
 
 private:
-  unsigned int ImageDimension;
+  unsigned int m_ImageDimension;
   unsigned int m_NumberOfComponentsPerPixel;
   unsigned int m_OutputSize;
   RealType     m_SpatialBandwidth;
@@ -90,14 +98,14 @@ class KernelUniform
 public:
   typedef double RealType;
 
-  KernelUniform() {}
-  ~KernelUniform() {}
+  // KernelUniform() {}
+  // ~KernelUniform() {}
 
-  inline RealType operator() (RealType x) {
+  RealType operator() (RealType x) const{
     return (x <= 1) ? 1.0 : 0.0;
   }
 
-  RealType GetRadius(RealType bandwidth) {
+  RealType GetRadius(RealType bandwidth) const {
     return bandwidth;
   }
 };
@@ -107,14 +115,14 @@ class KernelGaussian
 public:
   typedef double RealType;
 
-  KernelGaussian() {}
-  ~KernelGaussian() {}
+  // KernelGaussian() {}
+  // ~KernelGaussian() {}
 
-  inline RealType operator() (RealType x) {
+  RealType operator() (RealType x) const {
     return vcl_exp(-0.5*x);
   }
 
-  RealType GetRadius(RealType bandwidth) {
+  RealType GetRadius(RealType bandwidth) const {
     return 3.0*bandwidth;
   }
 };
@@ -148,11 +156,12 @@ public:
     m_NumberOfComponentsPerPixel = ptr->GetNumberOfComponentsPerPixel();
   }
 
-  inline const InternalPixelType * GetPixelPointer() const
+  const InternalPixelType * GetPixelPointer() const
   {
     return this->m_Buffer + (this->m_Offset * m_NumberOfComponentsPerPixel);
   }
 
+private:
   unsigned int m_NumberOfComponentsPerPixel;
 };
 
@@ -203,12 +212,12 @@ public:
     * spectralCoordinate is the index of the pixel used for classification in buckets.
     */
   BucketImage(ImageConstPointerType image, const RegionType & region, RealType spatialRadius, RealType rangeRadius, unsigned int spectralCoordinate)
+    : m_Image( image )
+    , m_Region( region )
+    , m_SpatialRadius( spatialRadius )
+    , m_RangeRadius( rangeRadius )
+    , m_SpectralCoordinate( spectralCoordinate )
   {
-    m_Image = image;
-    m_Region = region;
-    m_SpatialRadius = spatialRadius;
-    m_RangeRadius = rangeRadius;
-    m_SpectralCoordinate = spectralCoordinate;
 
     // Find max and min of the used spectral band
     itk::ImageRegionConstIterator<ImageType> inputIt(m_Image, m_Region);
@@ -229,7 +238,7 @@ public:
 
     // Compute bucket image dimensions. Note: empty buckets are at each border
     // to simplify image border issues
-    m_DimensionVector.resize(ImageDimension+1);
+    m_DimensionVector.resize(ImageDimension+1); // NB: pays for a 0-innit
     for(unsigned int dim = 0; dim < ImageDimension; ++dim)
       {
       m_DimensionVector[dim] = m_Region.GetSize()[dim] / m_SpatialRadius + 3;
@@ -241,9 +250,7 @@ public:
       numBuckets *= m_DimensionVector[dim];
 
     m_BucketList.resize(numBuckets);
-    m_BucketListSize = numBuckets;
     // Build buckets
-    BucketImageIndexType bucketIndex; //(ImageDimension+1);
     itk::ImageRegionConstIteratorWithIndex<ImageType> it(m_Image, m_Region);
     it.GoToBegin();
     // this iterator is only used to get the pixel data pointer
@@ -256,7 +263,7 @@ public:
       const PixelType & pixel = it.Get();
 
       // Find which bucket this pixel belongs to
-      bucketIndex = GetBucketIndex(pixel, index);
+      const BucketImageIndexType bucketIndex = GetBucketIndex(pixel, index);
 
       unsigned int bucketListIndex = BucketIndexToBucketListIndex(bucketIndex);
       assert(bucketListIndex < numBuckets);
@@ -266,15 +273,16 @@ public:
       }
 
     // Prepare neighborhood offset vector
-    BucketImageIndexType zeroOffsetIndex(ImageDimension+1);
-    for(unsigned dim = 0; dim <= ImageDimension; ++dim) zeroOffsetIndex[dim] = 0;
+    // BucketImageIndexType zeroOffsetIndex(ImageDimension+1);
     std::vector<BucketImageIndexType> neighborsIndexList;
-    neighborsIndexList.push_back(zeroOffsetIndex);
+    neighborsIndexList.reserve(simple_pow(3, ImageDimension+1));
+    neighborsIndexList.resize(1, BucketImageIndexType(ImageDimension+1)); // zeroOffsetIndex
+    // neighborsIndexList.push_back(zeroOffsetIndex);
     for(unsigned dim = 0; dim <= ImageDimension; ++dim)
       {
       // take all neighbors already in the list and add their direct neighbor
       // along the current dim
-      unsigned int curSize = neighborsIndexList.size();
+      const unsigned int curSize = neighborsIndexList.size();
       for(unsigned int i = 0; i < curSize; ++i)
         {
         BucketImageIndexType index = neighborsIndexList[i];
@@ -285,11 +293,11 @@ public:
         }
       }
     // Convert all neighbors n-dimensional indices to bucket list 1D indices
-    m_NeighborhoodOffsetVectorSize = neighborsIndexList.size();
-    m_NeighborhoodOffsetVector.reserve(m_NeighborhoodOffsetVectorSize);
-    for(unsigned int i = 0; i < m_NeighborhoodOffsetVectorSize; ++i)
+    const unsigned int neighborhoodOffsetVectorSize = neighborsIndexList.size();
+    m_NeighborhoodOffsetVector.reserve(neighborhoodOffsetVectorSize);
+    for(unsigned int i = 0; i < neighborhoodOffsetVectorSize; ++i)
       {
-      int listIndex = BucketIndexToBucketListIndex(neighborsIndexList[i]);
+      const int listIndex = BucketIndexToBucketListIndex(neighborsIndexList[i]);
       m_NeighborhoodOffsetVector.push_back(listIndex);
       }
   }
@@ -310,7 +318,7 @@ public:
 
   /** Converts a N+1-dimensional bucket index into the 1D list index useable by
   GetBucket() */
-  int BucketIndexToBucketListIndex(const BucketImageIndexType & bucketIndex)
+  int BucketIndexToBucketListIndex(const BucketImageIndexType & bucketIndex) const
   {
     int bucketListIndex = bucketIndex[0];
     for(unsigned int dim = 1; dim <= ImageDimension; ++dim)
@@ -321,26 +329,27 @@ public:
   }
 
   /** Retrieves the list of all buckets in the neighborhood of the given bucket */
-  std::vector<unsigned int> GetNeighborhoodBucketListIndices(int bucketIndex)
-  {
-    std::vector<unsigned int> indices(m_NeighborhoodOffsetVectorSize);
+  std::vector<unsigned int> GetNeighborhoodBucketListIndices(int bucketIndex) const
+    {
+    const unsigned int neighborhoodOffsetVectorSize = m_NeighborhoodOffsetVector.size();
+    std::vector<unsigned int> indices(neighborhoodOffsetVectorSize);
 
-    for(unsigned int i = 0; i < m_NeighborhoodOffsetVectorSize; ++i)
+    for(unsigned int i = 0; i < neighborhoodOffsetVectorSize; ++i)
       {
       indices[i] = bucketIndex + m_NeighborhoodOffsetVector[i];
       }
     return indices;
-  }
+    }
 
   /* Returns the list of pixels (actually pointer to pixel data) contained in a bucket */
-  const BucketType & GetBucket(unsigned int index)
+  const BucketType & GetBucket(unsigned int index) const
   {
     return m_BucketList[index];
   }
 
-  unsigned int GetNumberOfNeighborBuckets()
+  unsigned int GetNumberOfNeighborBuckets() const
   {
-    return m_NeighborhoodOffsetVectorSize;
+    return m_NeighborhoodOffsetVector.size();
   }
 
 private:
@@ -362,14 +371,12 @@ private:
 
   /** the buckets are stored in this list */
   BucketListType m_BucketList;
-  unsigned int m_BucketListSize;
   /** This vector holds the dimensions of the 3D (ND?) bucket image */
   BucketImageSizeType m_DimensionVector;
   /** Vector of offsets in the buckets list to get all buckets in the
     * neighborhood
     */
   std::vector<int> m_NeighborhoodOffsetVector;
-  unsigned int m_NeighborhoodOffsetVectorSize;
 };
 
 /** \class MeanShiftSmoothingImageFilter
@@ -426,7 +433,7 @@ class ITK_EXPORT MeanShiftSmoothingImageFilter
 {
 public:
   /** Standard class typedef */
-  typedef MeanShiftSmoothingImageFilter                              Self;
+  typedef MeanShiftSmoothingImageFilter                      Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                            Pointer;
   typedef itk::SmartPointer<const Self>                      ConstPointer;

@@ -64,11 +64,6 @@ const typename PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegment
 PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 ::GetInputMask(void)
 {
-  if (this->GetNumberOfInputs() < 3)
-    {
-    return 0;
-    }
-
   return static_cast<const LabelImageType *>(this->itk::ProcessObject::GetInput(2));
 }
 
@@ -86,10 +81,10 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 ::ProcessTile()
 {
   otbMsgDebugMacro(<< "tile number : " << m_TileNumber);
-  m_TileNumber = m_TileNumber + 1;
+  ++m_TileNumber;
   itk::TimeProbe tileChrono;
   tileChrono.Start();
-  
+
   // Apply an ExtractImageFilter to avoid problems with filters asking for the LargestPossibleRegion
   typedef itk::ExtractImageFilter<InputImageType, InputImageType> ExtractImageFilterType;
   typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
@@ -99,18 +94,18 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
 
   // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
   extract->GetOutput()->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
-  
+
   const unsigned int labelImageIndex = LabeledOutputAccessor<SegmentationFilterType>::LabeledOutputIndex;
 
   typename LabelImageToOGRDataSourceFilterType::Pointer labelImageToOGRDataFilter =
                                               LabelImageToOGRDataSourceFilterType::New();
-  
+
   itk::TimeProbe chrono1;
   chrono1.Start();
   m_SegmentationFilter->SetInput(extract->GetOutput());
   m_SegmentationFilter->UpdateLargestPossibleRegion();
   m_SegmentationFilter->Update();
-  
+
   chrono1.Stop();
   otbMsgDebugMacro(<<"segmentation took " << chrono1.GetTotal() << " sec");
 
@@ -135,7 +130,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   labelImageToOGRDataFilter->SetFieldName(this->GetFieldName());
   labelImageToOGRDataFilter->SetUse8Connected(m_Use8Connected);
   labelImageToOGRDataFilter->Update();
-  
+
   chrono2.Stop();
   otbMsgDebugMacro(<< "vectorization took " << chrono2.GetTotal() << " sec");
 
@@ -149,7 +144,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   for(featIt = tmpLayer.begin(); featIt!=tmpLayer.end(); ++featIt)
   {
      ogr::Field field = (*featIt)[0];
-     field.Unset();
+     // field.Unset();
      field.SetValue(m_TileMaxLabel);
      m_TileMaxLabel++;
 
@@ -162,7 +157,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
      }
      //Need to rewrite the feature otherwise changes are not considered.
      tmpLayer.SetFeature(*featIt);
-     
+
      //Filter small objects.
      if(m_FilterSmallObject)
      {
@@ -179,7 +174,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   }
   chrono3.Stop();
   otbMsgDebugMacro(<< "relabeling, filtering small objects and simplifying geometries took " << chrono3.GetTotal() << " sec");
-  
+
   return tmpDS;
 }
 

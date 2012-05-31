@@ -233,7 +233,7 @@ public:
 
   /** Get the dimension (size) of the index. */
   static unsigned int GetImageIteratorDimension()
-    {return ImageIteratorDimension;}
+    {return ImageIteratorDimension; }
 
   /** Comparison operator. Two iterators are the same if they "point to" the
    * same memory location */
