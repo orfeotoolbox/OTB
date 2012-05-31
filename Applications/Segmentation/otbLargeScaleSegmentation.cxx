@@ -112,11 +112,16 @@ namespace otb
         // Documentation
         SetDocName("Large Scale segmentation");
         SetDocLongDescription("This application is dedicated to image segmentation. "
-                              "By handling streaming and OGR framework, it has been optimized for processing large scale data ."
-                              " Numerous segmentations algorithms are available. Output are vector data type.");
+                              "By handling streaming and OGR framework, it has been optimized for processing large scale data."
+                              "Numerous segmentations algorithms are available."
+			      "The application stream a large image, and for each stream:"
+			      "apply a segmentation algorithm, "
+			      "vectorize the results in polygons and keep-it " 
+			      "This application allows to correct some errors due to streaming by stitching polygons."
+			      );
         SetDocLimitations(" .");
         SetDocAuthors("OTB-Team");
-        SetDocSeeAlso(" ");
+        SetDocSeeAlso("MeanShiftSegmentation");
 
         AddDocTag(Tags::Segmentation);
 
@@ -130,15 +135,11 @@ namespace otb
         AddParameter(ParameterType_OutputFilename, "outvd", "Output vector data");
         SetParameterDescription("outvd", "The name of segmentation output. Vector Data (polygons).");
 
-        // AddParameter(ParameterType_OutputImage, "lout", "Labeled output");
-        // SetParameterDescription("lout", "The labeled output image.");
-        // MandatoryOff("lout");
-
         AddParameter(ParameterType_Choice, "filter", "Segmentation algorithm");
         SetParameterDescription("filter", "Choose your segmentation method (threaded mean-shift by default).");
 
-       AddChoice("filter.meanshift", "Threaded mean-shift");
-        SetParameterDescription(
+	AddChoice("filter.meanshift", "Threaded mean-shift");
+	SetParameterDescription(
                                 "filter.meanshift",
                                 "Home-made threaded mean-shift filter.");
         // MeanShift Parameters
@@ -167,7 +168,8 @@ namespace otb
         AddChoice("filter.meanshiftedison", "EDISON mean-shift");
         SetParameterDescription("filter.meanshiftedison",
                                 "EDISON based Mean-shift filter. (is going to be replaced by new framework and will be deprecated).");
-        // EDISON Meanshift Parameters
+        
+	// EDISON Meanshift Parameters
         AddParameter(ParameterType_Int, "filter.meanshiftedison.spatialr", "Spatial radius");
         SetParameterDescription("filter.meanshiftedison.spatialr", "Spatial radius defining neighborhood.");
         AddParameter(ParameterType_Float, "filter.meanshiftedison.ranger", "Range radius");
@@ -395,7 +397,6 @@ namespace otb
 
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
             meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
-
             
             streamSize = this->GenericApplySegmentation<MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, ogrDS);
           }
