@@ -33,10 +33,15 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
 ::MeanShiftSmoothingImageFilter()
-: m_MaxIterationNumber( 10 )
+: m_RangeBandwidth( 16. )
   , m_SpatialBandwidth( 3 )
-  , m_RangeBandwidth( 16. )
+  // , m_SpatialRadius(???)
   , m_Threshold( 1e-3 )
+  , m_MaxIterationNumber( 10 )
+  // , m_Kernel(...)
+  // , m_NumberOfComponentsPerPixel(...)
+  // , m_JointImage(0)
+  // , m_ModeTable(0)
   , m_ModeSearchOptimization( true )
   , m_BucketOptimization( false )
 {
