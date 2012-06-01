@@ -18,7 +18,7 @@
 #ifndef __otbWatershedSegmentationFilter_h
 #define __otbWatershedSegmentationFilter_h
 
-#include "itkMacro.h"
+#include "otbMacro.h"
 #include "itkCastImageFilter.h"
 #include "itkWatershedImageFilter.h"
 
@@ -69,10 +69,10 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
   otbSetObjectMemberMacro(WatershedFilter,Level,float);
-  otbGetObjectMemberConstReferenceMacro(WatershedFilter,Level,float);
+  otbGetObjectMemberMacro(WatershedFilter,Level,float);
 
   otbSetObjectMemberMacro(WatershedFilter,Threshold,float);
-  otbGetObjectMemberConstReferenceMacro(WatershedFilter,Threshold,float);
+  otbGetObjectMemberMacro(WatershedFilter,Threshold,float);
 
 
 protected:
