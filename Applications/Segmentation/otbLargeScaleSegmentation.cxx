@@ -56,7 +56,7 @@ public:
 
   // Segmentation filters typedefs
   // Edison mean-shift
-  typedef otb::MeanShiftVectorImageFilter      
+  typedef otb::MeanShiftVectorImageFilter
   <FloatVectorImageType,
    FloatVectorImageType,
    LabelImageType>                        EdisonSegmentationFilterType;
@@ -137,7 +137,7 @@ private:
                           "Numerous segmentations algorithms are available."
                           "The application stream a large image, and for each stream:"
                           "apply a segmentation algorithm, "
-                          "vectorize the results in polygons and keep-it " 
+                          "vectorize the results in polygons and keep-it "
                           "This application allows to correct some errors due to streaming by stitching polygons."
       );
     SetDocLimitations(" .");
@@ -230,11 +230,11 @@ private:
     AddChoice("mode.normal", "label image output");
     SetParameterDescription("mode.normal","Classic segmentation paradigm.");
 
-    //Normal mode parameters 
+    //Normal mode parameters
     AddParameter(ParameterType_OutputImage,  "mode.normal.lout",    "Label output");
     SetParameterDescription( "mode.normal.lout", "The label output image.");
 
-    //Streaming vectorization parameters 
+    //Streaming vectorization parameters
     AddParameter(ParameterType_OutputFilename, "mode.largescale.outvd", "Output vector data");
     SetParameterDescription("mode.largescale.outvd", "The name of segmentation output. Vector Data (polygons).");
     MandatoryOff("mode.largescale.outvd");
@@ -409,7 +409,7 @@ private:
       otbAppLogINFO(<<"Use connected component segmentation."<<std::endl);
 
       if (segModeType == "largescale")
-        {    
+        {
         ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
           ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
 
@@ -428,7 +428,7 @@ private:
         {
         otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
         }
-      else 
+      else
         {
         otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
         }
@@ -447,7 +447,7 @@ private:
       const float scale = this->GetParameterFloat("filter.meanshiftedison.scale");
 
       if (segModeType == "largescale")
-        { 
+        {
         EdisontreamingVectorizedSegmentationOGRType::Pointer
           edisonVectorizationFilter = EdisontreamingVectorizedSegmentationOGRType::New();
 
@@ -469,13 +469,13 @@ private:
         m_Filter->SetRangeRadius(rangeRadius);
         m_Filter->SetMinimumRegionSize(minimumObjectSize);
         m_Filter->SetScale(scale);
-        if (IsParameterEnabled("mode.normal.lout") && HasValue("mode.normal.lout")) 
+        if (IsParameterEnabled("mode.normal.lout") && HasValue("mode.normal.lout"))
           {
           SetParameterOutputImage<UInt32ImageType> ("mode.normal.lout", m_Filter->GetLabeledClusteredOutput());
           AddProcess(m_Filter, "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
           }
         }
-      else 
+      else
         {
         otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
         }
@@ -485,7 +485,7 @@ private:
       otbAppLogINFO(<<"Use threaded Mean-shift segmentation."<<std::endl);
 
       if (segModeType == "largescale")
-        { 
+        {
         MeanShiftVectorizedSegmentationOGRType::Pointer
           meanShiftVectorizationFilter = MeanShiftVectorizedSegmentationOGRType::New();
 
@@ -512,7 +512,7 @@ private:
         {
         otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
         }
-      else 
+      else
         {
         otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
         }
@@ -521,7 +521,7 @@ private:
       {
 
       if (segModeType == "largescale")
-        { 
+        {
         otbAppLogINFO(<<"Using watershed segmentation."<<std::endl);
             
         AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
@@ -542,7 +542,7 @@ private:
         {
         otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
         }
-      else 
+      else
         {
         otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
         }
@@ -577,7 +577,7 @@ private:
       {
       otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
       }
-    else 
+    else
       {
       otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
       }
