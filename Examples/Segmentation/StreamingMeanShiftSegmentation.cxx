@@ -22,44 +22,59 @@
 
 // Software Guide : BeginLatex
 //
-// The following example illustrates how to segment images
-// using the \doxygen{otb}{StreamingVectorizedSegmentation}.
-// The \doxygen{otb}{MeanShiftImageFilter} is used to segment each tile of the image.
-// The labeled output image of each tile is then polygonized and stored into a \doxygen{otb}{VectorData}
-// The method used for polygonize is GDALPolygonize.
+// The following example illustrates how to segment very large images
+// using the \doxygen{otb}{StreamingVectorizedSegmentation}. This filter is
+// templated over the segmentation filter that will be used to segment each tile
+// of the input image. In this example we will use the \doxygen{otb}{MeanShiftVectorImageFilter}.
+// The labeled output image of each tile is then vectorized (using a filter based on GDALPolygonize)
+// and stored into a \doxygen{otb}{ogr}{Layer} within the \doxygen{otb}{ogr}{DataSource} 
+// set as input. Finally a fusion filter, \doxygen{otb}{FusionOGRTileFilter}, is used to merge polygons
+// at tile border.
 //
-// First we include the segmentation filter (Here it is the MeanShiftFilter) and
-// the StreamingVectorizedSegmentation header.
+// Let's take a look at the code.
+// First we include all the needed headers
 // Software Guide : EndLatex
 #include <iostream>
 
 // Software Guide : BeginCodeSnippet
 #include "otbStreamingVectorizedSegmentationOGR.h"
-#include "otbMeanShiftSegmentationFilter.h"
+#include "otbMeanShiftVectorImageFilter.h"
+#include "otbOGRDataSourceWrapper.h"
+#include "otbFusionOGRTileFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbVectorDataFileWriter.h"
-#include "otbVectorData.h"
 
-#include "otbOGRDataSourceWrapper.h"
 
 int main(int argc, char *argv[])
 {
-  if (argc < 2)
+  if (argc != 13)
     {
-    std::cerr << "Missing Parameters " << std::endl;
-    std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " inputImage outputVectorData "
-              << std::endl;
-    return 1;
+      std::cerr << "Usage: " << argv[0];
+      std::cerr << " inputImage maskImage outputVec layerName TileDimension"
+               << "spatialRadius rangeRadius minObjectSize filterSmallObj minSize"
+               << "SimplifyFlag Tolerance" << std::endl;
+      return EXIT_FAILURE;
     }
+
+  const char * imageName                    = argv[1];
+  const char * maskName                     = argv[2];
+  const char * dataSourceName               = argv[3];
+  const char * layerName                    = argv[4];
+  const unsigned int tileSize               = atoi(argv[5]);
+  const unsigned int spatialRadius          = atoi(argv[6]);
+  const double rangeRadius                  = atof(argv[7]);
+  const unsigned int minimumObjectSize      = atoi(argv[8]);
+  const bool filterSmallObj                 = atoi(argv[9]);
+  const unsigned int minSize                = atoi(argv[10]);
+  const bool simplify                       = atoi(argv[11]);
+  const double tolerance                    = atof(argv[12]);
+  const std::string fieldName("DN");
 
   // Software Guide : BeginLatex
   //
-  // We now declare the image and pixel types to use as input of the MeanShiftFilter.
+  // We now declare the image and pixel types used as input of the MeanShiftFilter.
   // Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
@@ -74,35 +89,24 @@ int main(int argc, char *argv[])
   
   // Software Guide : BeginLatex
   //
-  // Next we declare the output VectorData type that will contain all the polygons.
-  // Software Guide : EndLatex
-  
-  // Software Guide : BeginCodeSnippet
-  typedef otb::VectorData<double, 2>                      VectorDataType;
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
   // Then the mean shift segmentation filter is declared using the Image type declared previsouly.
   // The StreamingVectorizedSegmentation is templated over the mean shift filter, the input image type and the output vector data type
   // Software Guide : EndLatex
   
-  // Typedefs
   // Software Guide : BeginCodeSnippet
   //typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
-  typedef otb::MeanShiftSegmentationFilter <ImageType,LabelImageType,ImageType>  MeanShiftSegmentationFilterType;
-
-
-  typedef otb::StreamingVectorizedSegmentationOGR<ImageType, MeanShiftSegmentationFilterType> StreamingVectorizedSegmentationType;
+  typedef otb::MeanShiftVectorImageFilter <ImageType, ImageType, LabelImageType>  SegmentationFilterType;
+  typedef otb::StreamingVectorizedSegmentationOGR<ImageType, SegmentationFilterType> StreamingVectorizedSegmentationType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
-  // Finaly we define a Reader on the input image and a writer for the VectorData.
+  // Finaly we define a Reader on the input image and a mask reader.
+  // All pixels in the mask with a value of 0 will not be considered suitable for vectorization.
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader<ImageType>                      ReaderType;
-  typedef otb::VectorDataFileWriter<VectorDataType>            WriterType;
+  typedef otb::ImageFileReader<ImageType>           ReaderType;
+  typedef otb::ImageFileReader<LabelImageType>      MaskReaderType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -110,51 +114,136 @@ int main(int argc, char *argv[])
   // Now we have declared all type needed for the pipeline, we instantiate the different filters,
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  ReaderType::Pointer             reader = ReaderType::New();
+  ReaderType::Pointer        reader = ReaderType::New();
+  MaskReaderType::Pointer    maskReader = MaskReaderType::New();
   StreamingVectorizedSegmentationType::Pointer filter = StreamingVectorizedSegmentationType::New();
-  //WriterType::Pointer             writer = WriterType::New();
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
   //
-  // And we connect the pipeline and set parameters for the mean shift filter.
+  // The instanciation of the DataSource is slightly different as usual.
+  // In fact the \code{New()} method on a \doxygen{otb}{ogr}{DataSource} can be called with or without parameters.
+  // Without parameters, the \code{New()} method instanciate a "Memory" DataSource, which means all the data are stored in memory.
+  // This is not useful in case of large scale segmentation as it will result in millions of polygons kept in memory ... 
+  // However the \code{New()} method can also take a filename (\code{std::String}) parameter. Then either the file already exists
+  // and the corresponding ogr driver is used to open the file, or it doesn't exists and then it is created.
+  // Here we used a non existing filename to create a new file in writing mode. 
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  reader->SetFileName(argv[1]);
-  reader->GenerateOutputInformation();
-  filter->SetInput(reader->GetOutput());
-
-  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(argv[2], otb::ogr::DataSource::Modes::write);
-
-  filter->SetOGRDataSource(ogrDS);
-
-
-  //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
-  filter->GetStreamer()->SetAutomaticTiledStreaming();
+  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
+  // Software Guide : EndCodeSnippet
   
-  const std::string fieldName("DN");
+  // Software Guide : BeginLatex
+  //
+  // Now we set the parameters to the segmentation filter.The \doxygen{otb}{MeanShiftVectorImageFilter}
+  // required three parameters, the spatial radius, the range radius and the minimum object size.
+  // We use the \code{GetSegmentationFilter()} method on the \doxygen{otb}{StreamingVectorizedSegmentation} 
+  // to get a pointer to the segmentation filter.
+  // Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
+  filter->GetSegmentationFilter()->SetSpatialRadius(spatialRadius);
+  filter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
+  filter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
+  // Software Guide : EndCodeSnippet
+  
+  
+  // Software Guide : BeginLatex
+  //
+  // Then we set parameters to the \doxygen{otb}{StreamingVectorizedSegmentation} filter.
+  // These parameters are :
+  // \begin{itemize}
+  //  \item tile size : use \code{SetTileDimensionTiledStreaming()} for square tile or \code{SetNumberOfLinesStrippedStreaming()}
+  // for Strip.
+  // \item layer name : name of the layer that will be created in the input \doxygen{otb}{ogr}{DataSource}.
+  // \item field name : name of the field that will contained the label values. (default is "DN").
+  // \item start label : first label. Each polygons have a unique label (incremented by one).
+  // \item option to filter small polygons (default to false).
+  // \item minimum object size : in case filter small polygons option is True
+  // \item simplify option : simplification of polygon vertex (default to false).This can reduced very efficiently the size 
+  // of the output file with no real impact on the results.
+  // \item simplification tolerance
+  // Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
+  filter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
+  filter->SetLayerName(layerName);
   filter->SetFieldName(fieldName);
-  filter->SetLayerName("Layer");
   filter->SetStartLabel(1);
-  filter->SetUse8Connected(false);
+  filter->SetFilterSmallObject(filterSmallObj);
+  filter->SetMinimumObjectSize(minSize);
+  filter->SetSimplify(simplify);
+  filter->SetSimplificationTolerance(tolerance);
+  // Software Guide : EndCodeSnippet
   
-  //filter->GetSegmentationFilter()->SetSpatialRadius(10);
-  //filter->GetSegmentationFilter()->SetRangeRadius(15);
-  //filter->GetSegmentationFilter()->SetMinimumRegionSize(400);
-
-  filter->GetSegmentationFilter()->SetSpatialBandwidth(10);
-  filter->GetSegmentationFilter()->SetRangeBandwidth(15);
-  filter->SetFilterSmallObject(true);
-  filter->SetMinimumObjectSize(400);
   
+  // Software Guide : BeginLatex
+  //
+  // Finally we connect the pipeline
+  // Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
+  reader->SetFileName(imageName);
+  reader->GenerateOutputInformation();
+  
+  maskReader->SetFileName(maskName);
+  maskReader->UpdateOutputInformation();
+  
+  filter->SetInput(reader->GetOutput());
+  filter->SetInputMask(maskReader->GetOutput());
+  filter->SetOGRDataSource(ogrDS);
+  // Software Guide : EndCodeSnippet
+  
+  
+  // Software Guide : BeginLatex
+  //
+  // And call the \code{Initialize()} method (needed to create the output layer in the datasource)
+  // before calling the \code{Update()} method.
+  // Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
   filter->Initialize();
-  
   filter->Update();
+  // Software Guide : EndCodeSnippet
+  
+  
+  // Software Guide : BeginLatex
+  //
+  // The segmentation is done, but as it works tile by tile, we need to fusion polygons at tile border.
+  // We use the \doxygen{otb}{FusionOGRTileFilter}. This filter uses a simple fusion strategy. 
+  // Polygons that have the largest intersection over a tile are fusioned. Each polygon can be fusioned 
+  // only once per tile border (row and column).
+  // Let's look at the code for fusioning.
+  // As usual we declared and instanciate the \doxygen{otb}{FusionOGRTileFilter}.
+  // Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
+  typedef otb::FusionOGRTileFilter<ImageType>   FusionFilterType;
+  FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
+  // Software Guide : EndCodeSnippet
+  
+  // Software Guide : BeginLatex
+  // Next we set the input image and the input \doxygen{otb}{ogr}{DataSource}.
+  // The image is internally used in the filter to compute coordinates of streaming tiles.
+  // The DataSource is the one containing the segmentation results.
+  // Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
+  fusionFilter->SetInput(reader->GetOutput());
+  fusionFilter->SetOGRDataSource(ogrDS);
+  // Software Guide : EndCodeSnippet
+  
+  // Software Guide : BeginLatex
+  // We set the name of the layer containing segmentation results which is the same that we used
+  // for the \doxygen{otb}{StreamingVectorizedSegmentation} filter. We also set the size of the 
+  // tile used, which may be different from the one we set in the \doxygen{otb}{StreamingVectorizedSegmentation} filter
+  // but can be retrieved using the \code{GetStreamSize()} method.
+  // Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
+  fusionFilter->SetStreamSize(filter->GetStreamSize());
+  fusionFilter->SetLayerName(layerName);
+  // Software Guide : EndCodeSnippet
+  
+  // Software Guide : BeginLatex
+  // Finally we call the \code{GenerateData()} method to launch the processing.
+  // Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
+  fusionFilter->GenerateData();
 
-
-  //writer->SetFileName(argv[2]);
-  //writer->SetInput(filter->GetOutputVectorData());
-  //writer->Update();
   // Software Guide : EndCodeSnippet
 
 

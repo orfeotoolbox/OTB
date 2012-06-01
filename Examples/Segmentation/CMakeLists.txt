@@ -424,7 +424,17 @@ ADD_TEST(seTeStreamingMeanShiftSegmentationTest ${EXE_TESTS}
        # ${TEMP}/seTeStreamingMeanShiftSegmentationTest.shp
         StreamingMeanShiftSegmentationTest
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif
         ${TEMP}/seTeStreamingMeanShiftSegmentationTest.shp
+        NewLayer
+        100
+        5
+        15.
+        100
+        1 #filter small object
+        50 #minimum size of object
+        1 #Simplify Flag
+        0.2 #Simplification tolerance
 )
 
 
