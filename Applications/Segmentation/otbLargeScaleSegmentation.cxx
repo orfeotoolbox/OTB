@@ -418,8 +418,8 @@ private:
       {
       otbAppLogINFO(<<"Use connected component segmentation."<<std::endl);
 
-      if (segModeType == "largescale")
-        {
+      // if (segModeType == "largescale")
+      //   {
         ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
           ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
 
@@ -433,15 +433,15 @@ private:
             "filter.connectedcomponent.expr"));
         streamSize = GenericApplySegmentation<FloatVectorImageType,ConnectedComponentSegmentationFilterType>(ccVectorizationFilter,this->GetParameterFloatVectorImage("in"),ogrDS, 0);
 
-        }
-      else if (segModeType == "normal")
-        {
-        otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
-        }
-      else
-        {
-        otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
-        }
+        // }
+      // else if (segModeType == "normal")
+      //   {
+      //   otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
+      //   }
+      // else
+      //   {
+      //   otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+      //   }
       }
     else if (segType == "meanshiftedison")
       {
@@ -456,8 +456,8 @@ private:
         minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.minsize"));
       const float scale = this->GetParameterFloat("filter.meanshiftedison.scale");
 
-      if (segModeType == "largescale")
-        {
+      // if (segModeType == "largescale")
+      //   {
         EdisontreamingVectorizedSegmentationOGRType::Pointer
           edisonVectorizationFilter = EdisontreamingVectorizedSegmentationOGRType::New();
 
@@ -467,9 +467,9 @@ private:
         edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
 
         streamSize = GenericApplySegmentation<FloatVectorImageType,EdisonSegmentationFilterType>(edisonVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS,2);
-        }
-      else if (segModeType == "normal")
-        {
+        // }
+      // else if (segModeType == "normal")
+      //   {
         otbAppLogINFO(<<"Segmentation mode which output label image" << std::endl);
         m_Filter =  EdisonSegmentationFilterType::New();
 
@@ -484,18 +484,18 @@ private:
           SetParameterOutputImage<UInt32ImageType> ("mode.normal.lout", m_Filter->GetLabeledClusteredOutput());
           AddProcess(m_Filter, "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
           }
-        }
-      else
-        {
-        otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
-        }
+        // }
+      // else
+      //   {
+      //   otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+      //   }
       }
     else if (segType == "meanshift")
       {
       otbAppLogINFO(<<"Use threaded Mean-shift segmentation."<<std::endl);
 
-      if (segModeType == "largescale")
-        {
+      // if (segModeType == "largescale")
+      //   {
         MeanShiftVectorizedSegmentationOGRType::Pointer
           meanShiftVectorizationFilter = MeanShiftVectorizedSegmentationOGRType::New();
 
@@ -516,22 +516,22 @@ private:
         meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
         meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
 
-        streamSize = this->GenericApplySegmentation<FloatVectorImageType,MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS, 2);
-        }
-      else if (segModeType == "normal")
-        {
-        otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
-        }
-      else
-        {
-        otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
-        }
+        streamSize = this->GenericApplySegmentation<FloatVectorImageType,MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS, 0);
+        // }
+      // else if (segModeType == "normal")
+      //   {
+      //   otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
+      //   }
+      // else
+      //   {
+      //   otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+      //   }
       }
     else if(segType == "watershed")
       {
 
-      if (segModeType == "largescale")
-        {
+      // if (segModeType == "largescale")
+      //   {
         otbAppLogINFO(<<"Using watershed segmentation."<<std::endl);
 
         AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
@@ -547,15 +547,15 @@ private:
         watershedVectorizedFilter->GetSegmentationFilter()->SetLevel(GetParameterFloat("filter.watershed.level"));
 
         streamSize = this->GenericApplySegmentation<FloatImageType,WatershedSegmentationFilterType>(watershedVectorizedFilter,gradientMagnitudeFilter->GetOutput(),ogrDS,0);
-        }
-      else if (segModeType == "normal")
-        {
-        otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
-        }
-      else
-        {
-        otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
-        }
+        // }
+      // else if (segModeType == "normal")
+      //   {
+      //   otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
+      //   }
+      // else
+      //   {
+      //   otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+      //   }
       }
     else
       {
@@ -585,7 +585,7 @@ private:
       }
     else if (segModeType == "normal")
       {
-      otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
+      otbAppLogINFO(<<"implementation in progress." << std::endl);
       }
     else
       {
