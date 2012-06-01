@@ -26,6 +26,9 @@
 #include "otbConnectedComponentMuParserFunctor.h"
 #include "itkConnectedComponentFunctorImageFilter.h"
 #include "otbMaskMuParserFilter.h"
+#include "otbVectorImageToAmplitudeImageFilter.h"
+#include "itkGradientMagnitudeImageFilter.h"
+#include "otbWatershedSegmentationFilter.h"
 
 // Large scale vectorization framework
 #include "otbStreamingVectorizedSegmentationOGR.h"
@@ -53,7 +56,8 @@ namespace otb
 
       // Segmentation filters typedefs
       // Edison mean-shift
-      typedef otb::MeanShiftVectorImageFilter      <FloatVectorImageType,
+      typedef otb::MeanShiftVectorImageFilter      
+      <FloatVectorImageType,
 						    FloatVectorImageType,
 						    LabelImageType>                        EdisonSegmentationFilterType;
 
@@ -73,6 +77,18 @@ namespace otb
        FunctorType,
        MaskImageType >                        ConnectedComponentSegmentationFilterType;
   
+      // Watershed
+      typedef otb::VectorImageToAmplitudeImageFilter
+      <FloatVectorImageType,
+       FloatImageType>                        AmplitudeFilterType;
+
+      typedef itk::GradientMagnitudeImageFilter
+      <FloatImageType,FloatImageType>         GradientMagnitudeFilterType;
+      
+      typedef otb::WatershedSegmentationFilter
+      <FloatImageType,LabelImageType>         WatershedSegmentationFilterType;
+
+
       // mask filter
       typedef otb::MaskMuParserFilter
       <FloatVectorImageType, MaskImageType>   MaskMuParserFilterType;
@@ -99,6 +115,11 @@ namespace otb
       <FloatVectorImageType>                  FusionFilterType;
 
 
+      // Watershed
+      typedef otb::StreamingVectorizedSegmentationOGR
+      <FloatImageType,
+       WatershedSegmentationFilterType>      StreamingVectorizedWatershedFilterType;
+      
       /** Standard macro */
       itkNewMacro(Self);
       itkTypeMacro(LargeScaleSegmentation, otb::Application);
@@ -177,13 +198,32 @@ namespace otb
         SetDefaultParameterFloat("filter.meanshiftedison.scale", 100000.);
 
 	//Connected component segmentation parameters
-	AddChoice("filter.connectedcomponent", "Connected component Segmentation");
+        AddChoice("filter.connectedcomponent", "Connected component Segmentation");
         SetParameterDescription("filter.connectedcomponent", "Connected component segmentation based on mathematical condition.");
 
         AddParameter(ParameterType_String, "filter.connectedcomponent.expr", "Condition");
         SetParameterDescription("filter.connectedcomponent.expr", "User defined criteria based on mathematical condition used for connected component segmentation.");
         MandatoryOff("filter.connectedcomponent.expr");
 
+        // Watershed
+        AddChoice("filter.watershed","Watershed segmentation");
+        SetParameterDescription("filter.watershed","The traditionnal watershed algorithm. The height function is the gradient magnitude of the amplitude (square root of the sum of squared bands)");
+
+        AddParameter(ParameterType_Float,"filter.watershed.threshold","Depth Threshold");
+        SetParameterDescription("filter.watershed.threshold","Depth threshold Units in percentage of the maximum depth in the image.");
+        SetDefaultParameterFloat("filter.watershed.threshold",0.01);
+        SetMinimumParameterFloatValue("filter.watershed.threshold",0);
+        SetMaximumParameterFloatValue("filter.watershed.threshold",1);
+
+        AddParameter(ParameterType_Float,"filter.watershed.level","Flood Level");
+        SetParameterDescription("filter.watershed.level","flood level for generating the merge tree from the initial segmentation (between 0 and 1)");
+        SetDefaultParameterFloat("filter.watershed.level",0.1);
+        SetMinimumParameterFloatValue("filter.watershed.level",0);
+        SetMaximumParameterFloatValue("filter.watershed.level",1);
+
+        AddParameter(ParameterType_Empty, "neighbor", "8-neighbor vect. strategy");
+        SetParameterDescription("stitch", "Scan segments on each side of tiles and append polygons which have almost one picel in common.");
+        EnableParameter("stitch");
 	AddParameter(ParameterType_Choice, "mode", "Segmentation mode (large scale or normal");
         SetParameterDescription("filter", "Choose your segmentation mode (large scalse with vector output or label image.");
 
@@ -264,10 +304,10 @@ namespace otb
         // Nothing to do here : all parameters are independent
       }
 
-      template<class TSegmentationFilter>
+      template<class TInputImage, class TSegmentationFilter>
       FloatVectorImageType::SizeType
-      GenericApplySegmentation(otb::StreamingVectorizedSegmentationOGR<FloatVectorImageType,
-								       TSegmentationFilter> * streamingVectorizedFilter, otb::ogr::DataSource::Pointer ogrDS)
+      GenericApplySegmentation(otb::StreamingVectorizedSegmentationOGR<TInputImage,
+                               TSegmentationFilter> * streamingVectorizedFilter, TInputImage * inputImage ,otb::ogr::DataSource::Pointer ogrDS)
       {
         typedef  TSegmentationFilter             SegmentationFilterType;
         typedef  typename SegmentationFilterType::Pointer SegmentationFilterPointerType;
@@ -285,7 +325,7 @@ namespace otb
 	// Switch on segmentation mode
         const std::string segModeType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("mode")))->GetChoiceKey(GetParameterInt("mode"));
 	
-        streamingVectorizedFilter->SetInput(GetParameterFloatVectorImage("in"));
+        streamingVectorizedFilter->SetInput(inputImage);
 
         if (HasValue("mode.largescale.inmask"))
           {
@@ -382,7 +422,7 @@ namespace otb
 		ccVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
 											   GetParameterString(
 													      "filter.connectedcomponent.expr"));
-		streamSize = GenericApplySegmentation<ConnectedComponentSegmentationFilterType>(ccVectorizationFilter, ogrDS);
+            streamSize = GenericApplySegmentation<FloatVectorImageType,ConnectedComponentSegmentationFilterType>(ccVectorizationFilter,this->GetParameterFloatVectorImage("in"),ogrDS);
 
 	      }
 	    else if (segModeType == "normal")
@@ -417,7 +457,7 @@ namespace otb
 		edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
 		edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
             
-		streamSize = GenericApplySegmentation<EdisonSegmentationFilterType>(edisonVectorizationFilter, ogrDS);
+            streamSize = GenericApplySegmentation<FloatVectorImageType,EdisonSegmentationFilterType>(edisonVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS);
 	      }
 	    else if (segModeType == "normal")
 	      {
@@ -467,7 +507,26 @@ namespace otb
 		meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
 		meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
             
-		streamSize = this->GenericApplySegmentation<MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, ogrDS);
+            streamSize = this->GenericApplySegmentation<FloatVectorImageType,MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS);
+          }
+        else if(segType == "watershed")
+          {
+          otbAppLogINFO(<<"Using watershed segmentation."<<std::endl);
+
+          AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
+          
+          amplitudeFilter->SetInput(this->GetParameterFloatVectorImage("in"));
+
+          GradientMagnitudeFilterType::Pointer gradientMagnitudeFilter = GradientMagnitudeFilterType::New();
+          gradientMagnitudeFilter->SetInput(amplitudeFilter->GetOutput());
+
+          StreamingVectorizedWatershedFilterType::Pointer watershedVectorizedFilter = StreamingVectorizedWatershedFilterType::New();
+
+          watershedVectorizedFilter->GetSegmentationFilter()->SetThreshold(GetParameterFloat("filter.watershed.threshold"));
+          watershedVectorizedFilter->GetSegmentationFilter()->SetLevel(GetParameterFloat("filter.watershed.level"));
+
+          streamSize = this->GenericApplySegmentation<FloatImageType,WatershedSegmentationFilterType>(watershedVectorizedFilter,gradientMagnitudeFilter->GetOutput(),ogrDS);
+
 	      }
 	    else if (segModeType == "normal")
 	      {
