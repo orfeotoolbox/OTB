@@ -282,7 +282,7 @@ namespace otb
                                 "   if tile size set to (0 by default)");
         SetDefaultParameterInt("mode.largescale.tilesize", 0);
         MandatoryOff("mode.largescale.tilesize");
-	EnableParameter("mode.largescale.tilesize");
+        EnableParameter("mode.largescale.tilesize");
 
         AddParameter(ParameterType_Int, "mode.largescale.startlabel", "start label");
         SetParameterDescription("mode.largescale.startlabel", "Start label (1 by default)");
@@ -309,19 +309,19 @@ namespace otb
         typedef  TSegmentationFilter             SegmentationFilterType;
         typedef  typename SegmentationFilterType::Pointer SegmentationFilterPointerType;
         typedef otb::StreamingVectorizedSegmentationOGR
-	  <FloatVectorImageType,
-	   SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
+          <FloatVectorImageType,
+           SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
         
         // Retrieve tile size parameter
         const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("mode.largescale.tilesize"));
         // Retrieve the 8-connected option
         bool use8connected = IsParameterEnabled("mode.largescale.neighbor");
-	// Retrieve min object size parameter
+        // Retrieve min object size parameter
         const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("mode.largescale.minsize"));
 
-	// Switch on segmentation mode
+        // Switch on segmentation mode
         const std::string segModeType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("mode")))->GetChoiceKey(GetParameterInt("mode"));
-	
+        
         streamingVectorizedFilter->SetInput(inputImage);
 
         if (HasValue("mode.largescale.inmask"))
@@ -346,12 +346,12 @@ namespace otb
           }
         streamingVectorizedFilter->SetUse8Connected(use8connected);
 
-	if (minSize > 1)
-	  {
-	    otbAppLogINFO(<<"Object with size under "<< minSize <<" will be suppressed."<<std::endl);
-	    streamingVectorizedFilter->SetFilterSmallObject(true);
-	    streamingVectorizedFilter->SetMinimumObjectSize(minSize);
-	  }
+        if (minSize > 1)
+          {
+            otbAppLogINFO(<<"Object with size under "<< minSize <<" will be suppressed."<<std::endl);
+            streamingVectorizedFilter->SetFilterSmallObject(true);
+            streamingVectorizedFilter->SetMinimumObjectSize(minSize);
+          }
 
         const std::string layerName = this->GetParameterString("mode.largescale.layername");
         const std::string fieldName = this->GetParameterString("mode.largescale.fieldname");
