@@ -54,8 +54,8 @@ namespace otb
       // Segmentation filters typedefs
       // Edison mean-shift
       typedef otb::MeanShiftVectorImageFilter      <FloatVectorImageType,
-       FloatVectorImageType,
-       LabelImageType>                        EdisonSegmentationFilterType;
+						    FloatVectorImageType,
+						    LabelImageType>                        EdisonSegmentationFilterType;
 
       // Home made mean-shift
       typedef otb::MeanShiftSegmentationFilter
@@ -114,11 +114,11 @@ namespace otb
         SetDocLongDescription("This application is dedicated to image segmentation. "
                               "By handling streaming and OGR framework, it has been optimized for processing large scale data."
                               "Numerous segmentations algorithms are available."
-                           "The application stream a large image, and for each stream:"
-                           "apply a segmentation algorithm, "
-                           "vectorize the results in polygons and keep-it "
-                           "This application allows to correct some errors due to streaming by stitching polygons."
-                           );
+			      "The application stream a large image, and for each stream:"
+			      "apply a segmentation algorithm, "
+			      "vectorize the results in polygons and keep-it " 
+			      "This application allows to correct some errors due to streaming by stitching polygons."
+			      );
         SetDocLimitations(" .");
         SetDocAuthors("OTB-Team");
         SetDocSeeAlso("MeanShiftSegmentation");
@@ -128,18 +128,11 @@ namespace otb
         AddParameter(ParameterType_InputImage, "in", "Input Image");
         SetParameterDescription("in", "The input image.");
 
-        AddParameter(ParameterType_InputImage, "inmask", "Mask Image");
-        SetParameterDescription("inmask", "Mask image. (Pixel with 0 will not be processed).");
-        MandatoryOff("inmask");
-
-        AddParameter(ParameterType_OutputFilename, "outvd", "Output vector data");
-        SetParameterDescription("outvd", "The name of segmentation output. Vector Data (polygons).");
-
         AddParameter(ParameterType_Choice, "filter", "Segmentation algorithm");
         SetParameterDescription("filter", "Choose your segmentation method (threaded mean-shift by default).");
 
-       AddChoice("filter.meanshift", "Threaded mean-shift");
-       SetParameterDescription(
+	AddChoice("filter.meanshift", "Threaded mean-shift");
+	SetParameterDescription(
                                 "filter.meanshift",
                                 "Home-made threaded mean-shift filter.");
         // MeanShift Parameters
@@ -152,7 +145,7 @@ namespace otb
                                 "vector is below this threshold (1e-3 by default) or iteration number reached maximum iteration number.");
         AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "maximum iteration number");
         SetParameterDescription("filter.meanshift.maxiter",
-                                 "iteration process is stopped if convergence hasn't been reached after this number of iteration (10 by default).");
+				"iteration process is stopped if convergence hasn't been reached after this number of iteration (10 by default).");
         
         //AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
         //SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
@@ -169,7 +162,7 @@ namespace otb
         SetParameterDescription("filter.meanshiftedison",
                                 "EDISON based Mean-shift filter. (is going to be replaced by new framework and will be deprecated).");
         
-       // EDISON Meanshift Parameters
+	// EDISON Meanshift Parameters
         AddParameter(ParameterType_Int, "filter.meanshiftedison.spatialr", "Spatial radius");
         SetParameterDescription("filter.meanshiftedison.spatialr", "Spatial radius defining neighborhood.");
         AddParameter(ParameterType_Float, "filter.meanshiftedison.ranger", "Range radius");
@@ -183,58 +176,81 @@ namespace otb
         SetDefaultParameterInt("filter.meanshiftedison.minsize", 100);
         SetDefaultParameterFloat("filter.meanshiftedison.scale", 100000.);
 
-       AddParameter(ParameterType_Empty, "neighbor", "8-neighbor vect. strategy");
-        SetParameterDescription("neighbor",
-                                "Pixel neighborhood vectorization strategy. 4 or 8 neighborhood .(4 neighborhood by default.)");
-        MandatoryOff("neighbor");
-
-        AddParameter(ParameterType_Empty,"stitch","Stitch polygons");
-       SetParameterDescription("stitch", "Scan segments on each side of tiles and append polygons which have almost one picel in common.");
-        MandatoryOff("stitch");
-       EnableParameter("stitch");
-
-        AddChoice("filter.connectedcomponent", "Connected component Segmentation");
+	//Connected component segmentation parameters
+	AddChoice("filter.connectedcomponent", "Connected component Segmentation");
         SetParameterDescription("filter.connectedcomponent", "Connected component segmentation based on mathematical condition.");
 
         AddParameter(ParameterType_String, "filter.connectedcomponent.expr", "Condition");
         SetParameterDescription("filter.connectedcomponent.expr", "User defined criteria based on mathematical condition used for connected component segmentation.");
         MandatoryOff("filter.connectedcomponent.expr");
 
-        AddParameter(ParameterType_Int, "minsize", "Minimum object size");
-        SetParameterDescription("minsize",
+	AddParameter(ParameterType_Choice, "mode", "Segmentation mode (large scale or normal");
+        SetParameterDescription("filter", "Choose your segmentation mode (large scalse with vector output or label image.");
+
+	AddChoice("mode.largescale", "vector data output");
+	SetParameterDescription("mode.largescale","Large scale segmentation paradigm.");
+
+	AddChoice("mode.normal", "label image output");
+	SetParameterDescription("mode.normal","Classic segmentation paradigm.");
+
+	//Normal mode parameters 
+	AddParameter(ParameterType_OutputImage,  "mode.normal.lout",    "Label output");
+	SetParameterDescription( "mode.normal.lout", "The label output image.");
+
+	//Streaming vectorization parameters 
+	AddParameter(ParameterType_OutputFilename, "mode.largescale.outvd", "Output vector data");
+        SetParameterDescription("mode.largescale.outvd", "The name of segmentation output. Vector Data (polygons).");
+	MandatoryOff("mode.largescale.outvd");
+
+	AddParameter(ParameterType_InputImage, "mode.largescale.inmask", "Mask Image");
+        SetParameterDescription("mode.largescale.inmask", "Mask image. (Pixel with 0 will not be processed).");
+        MandatoryOff("mode.largescale.inmask");
+
+	AddParameter(ParameterType_Empty, "mode.largescale.neighbor", "8-neighbor vect. strategy");
+        SetParameterDescription("mode.largescale.neighbor",
+                                "Pixel neighborhood vectorization strategy. 4 or 8 neighborhood .(4 neighborhood by default.)");
+        MandatoryOff("mode.largescale.neighbor");
+
+        AddParameter(ParameterType_Empty,"mode.largescale.stitch","Stitch polygons");
+	SetParameterDescription("mode.largescale.stitch", "Scan segments on each side of tiles and append polygons which have almost one picel in common.");
+        MandatoryOff("mode.largescale.stitch");
+	EnableParameter("mode.largescale.stitch");
+
+        AddParameter(ParameterType_Int, "mode.largescale.minsize", "Minimum object size");
+        SetParameterDescription("mode.largescale.minsize",
                                 "Object with size under this threshold(area in pixels) will be replaced by the background value.");
-        SetDefaultParameterInt("minsize", 1);
-        SetMinimumParameterIntValue("minsize", 1);
-        MandatoryOff("minsize");
+        SetDefaultParameterInt("mode.largescale.minsize", 1);
+        SetMinimumParameterIntValue("mode.largescale.minsize", 1);
+        MandatoryOff("mode.largescale.minsize");
 
-        AddParameter(ParameterType_Float, "simplify", "Simplify geometry");
-        SetParameterDescription("simplify",
+        AddParameter(ParameterType_Float, "mode.largescale.simplify", "Simplify geometry");
+        SetParameterDescription("mode.largescale.simplify",
                                 "Simplify polygons according to a given tolerance (in pixel?).");
-        SetDefaultParameterFloat("simplify",0.1);
-        MandatoryOff("simplify");
+        SetDefaultParameterFloat("mode.largescale.simplify",0.1);
+        MandatoryOff("mode.largescale.simplify");
 
-        AddParameter(ParameterType_String, "layername", "Layer name");
-        SetParameterDescription("layername", "Layer Name.(by default : Layer )");
-        SetParameterString("layername", "layer");
-        MandatoryOff("layername");
+        AddParameter(ParameterType_String, "mode.largescale.layername", "Layer name");
+        SetParameterDescription("mode.largescale.layername", "Layer Name.(by default : Layer )");
+        SetParameterString("mode.largescale.layername", "layer");
+        MandatoryOff("mode.largescale.layername");
 
-        AddParameter(ParameterType_String, "fieldname", "Field name");
-        SetParameterDescription("fieldname", "field Name.(by default : DN )");
-        SetParameterString("fieldname", "DN");
-        MandatoryOff("fieldname");
+        AddParameter(ParameterType_String, "mode.largescale.fieldname", "Field name");
+        SetParameterDescription("mode.largescale.fieldname", "field Name.(by default : DN )");
+        SetParameterString("mode.largescale.fieldname", "DN");
+        MandatoryOff("mode.largescale.fieldname");
 
-        AddParameter(ParameterType_Int, "tilesize", "Tiles size");
-        SetParameterDescription("tilesize",
+        AddParameter(ParameterType_Int, "mode.largescale.tilesize", "Tiles size");
+        SetParameterDescription("mode.largescale.tilesize",
                                 "user defined streaming tiles size  to compute segmentation.Automatic tile dimension is set "
                                 "   if tile size set to (0 by default)");
-        SetDefaultParameterInt("tilesize", 0);
-        MandatoryOff("tilesize");
-       EnableParameter("tilesize");
+        SetDefaultParameterInt("mode.largescale.tilesize", 0);
+        MandatoryOff("mode.largescale.tilesize");
+	EnableParameter("mode.largescale.tilesize");
 
-        AddParameter(ParameterType_Int, "startlabel", "start label");
-        SetParameterDescription("startlabel", "Start label (1 by default)");
-        SetDefaultParameterInt("startlabel", 1);
-        MandatoryOff("startlabel");
+        AddParameter(ParameterType_Int, "mode.largescale.startlabel", "start label");
+        SetParameterDescription("mode.largescale.startlabel", "Start label (1 by default)");
+        SetDefaultParameterInt("mode.largescale.startlabel", 1);
+        MandatoryOff("mode.largescale.startlabel");
 
         // Doc example parameter settings
 
@@ -251,26 +267,29 @@ namespace otb
       template<class TSegmentationFilter>
       FloatVectorImageType::SizeType
       GenericApplySegmentation(otb::StreamingVectorizedSegmentationOGR<FloatVectorImageType,
-                                TSegmentationFilter> * streamingVectorizedFilter, otb::ogr::DataSource::Pointer ogrDS)
+								       TSegmentationFilter> * streamingVectorizedFilter, otb::ogr::DataSource::Pointer ogrDS)
       {
         typedef  TSegmentationFilter             SegmentationFilterType;
         typedef  typename SegmentationFilterType::Pointer SegmentationFilterPointerType;
         typedef otb::StreamingVectorizedSegmentationOGR
-        <FloatVectorImageType,
-        SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
+	  <FloatVectorImageType,
+	   SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
         
         // Retrieve tile size parameter
-        const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("tilesize"));
+        const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("mode.largescale.tilesize"));
         // Retrieve the 8-connected option
-        bool use8connected = IsParameterEnabled("neighbor");
-       // Retrieve min object size parameter
-        const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
+        bool use8connected = IsParameterEnabled("mode.largescale.neighbor");
+	// Retrieve min object size parameter
+        const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("mode.largescale.minsize"));
 
+	// Switch on segmentation mode
+        const std::string segModeType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("mode")))->GetChoiceKey(GetParameterInt("mode"));
+	
         streamingVectorizedFilter->SetInput(GetParameterFloatVectorImage("in"));
 
-        if (HasValue("inmask"))
+        if (HasValue("mode.largescale.inmask"))
           {
-            streamingVectorizedFilter->SetInputMask(this->GetParameterUInt32Image("inmask"));
+            streamingVectorizedFilter->SetInputMask(this->GetParameterUInt32Image("mode.largescale.inmask"));
             otbAppLogINFO(<<"Use a mask as input." << std::endl);
           }
         streamingVectorizedFilter->SetOGRDataSource(ogrDS);
@@ -290,27 +309,27 @@ namespace otb
           }
         streamingVectorizedFilter->SetUse8Connected(use8connected);
 
-       if (minSize > 1)
-         {
-           otbAppLogINFO(<<"Object with size under "<< minSize <<" will be suppressed."<<std::endl);
-           streamingVectorizedFilter->SetFilterSmallObject(true);
-           streamingVectorizedFilter->SetMinimumObjectSize(minSize);
-         }
+	if (minSize > 1)
+	  {
+	    otbAppLogINFO(<<"Object with size under "<< minSize <<" will be suppressed."<<std::endl);
+	    streamingVectorizedFilter->SetFilterSmallObject(true);
+	    streamingVectorizedFilter->SetMinimumObjectSize(minSize);
+	  }
 
-        const std::string layerName = this->GetParameterString("layername");
-        const std::string fieldName = this->GetParameterString("fieldname");
+        const std::string layerName = this->GetParameterString("mode.largescale.layername");
+        const std::string fieldName = this->GetParameterString("mode.largescale.fieldname");
 
         // Retrieve start label parameter
-        const unsigned int startLabel = this->GetParameterInt("startlabel");
+        const unsigned int startLabel = this->GetParameterInt("mode.largescale.startlabel");
 
         streamingVectorizedFilter->SetLayerName(layerName);
         streamingVectorizedFilter->SetFieldName(fieldName);
         streamingVectorizedFilter->SetStartLabel(startLabel);
 
-        if(IsParameterEnabled("simplify"))
+        if(IsParameterEnabled("mode.largescale.simplify"))
           {
             streamingVectorizedFilter->SetSimplify(true);
-            streamingVectorizedFilter->SetSimplificationTolerance(GetParameterFloat("simplify"));
+            streamingVectorizedFilter->SetSimplificationTolerance(GetParameterFloat("mode.largescale.simplify"));
             otbAppLogINFO(<<"Simplify the geometry." << std::endl);
           }
         else
@@ -321,112 +340,181 @@ namespace otb
 
         streamingVectorizedFilter->Initialize(); //must be called !
         streamingVectorizedFilter->Update(); //must be called !
-
-        return streamingVectorizedFilter->GetStreamSize();
+     
+	return streamingVectorizedFilter->GetStreamSize();
       }
       void DoExecute()
       {
-        // Retrieve output filename as well as layer names
-        std::string dataSourceName = GetParameterString("outvd");
-        otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
+	// Switch on segmentation mode
+        const std::string segModeType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("mode")))->GetChoiceKey(GetParameterInt("mode"));
+	// Switch on segmentation filter case
+        const std::string segType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter"));
 
+	otb::ogr::DataSource::Pointer ogrDS;
+
+	
         // The actual stream size used
         FloatVectorImageType::SizeType streamSize;
 
-        // Switch on segmentation filter case
-        const std::string segType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter"));
-
         if (segType == "connectedcomponent")
           {
-            otbAppLogINFO(<<"Use connected component segmentation."<<std::endl);
-            ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
-            ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
 
-            if (HasValue("inmask"))
-               {
-                 ccVectorizationFilter->GetSegmentationFilter()->SetMaskImage(this->GetParameterUInt32Image("inmask"));
-               }
+	    //otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
+	    //streamingVectorizedFilter->GetSegmentationFilter()->SetInput(GetParameterFloatVectorImage("in"));
+	    //streamingVectorizedFilter->GetSegmentationFilter()->Update();
+	    //if (IsParameterEnabled("mode.normal.lout") && HasValue("mode.normal.lout")) SetParameterOutputImage/*<UInt16ImageType>*/ ("mode.normal.lout", streamingVectorizedFilter->GetSegmentationFilter()->GetOutput());
+            otbAppLogINFO(<<"Use connected component segmentation."<<std::endl);
+
+	    if (segModeType == "largescale")
+	      {  
+		// Retrieve output filename as well as layer names
+		std::string dataSourceName = GetParameterString("mode.largescale.outvd");
+		ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
+	  
+		ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
+		  ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
+
+		if (HasValue("mode.largescale.inmask"))
+		  {
+		    ccVectorizationFilter->GetSegmentationFilter()->SetMaskImage(this->GetParameterUInt32Image("mode.largescale.inmask"));
+		  }
          
-            ccVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
-                                                                                       GetParameterString(
-                                                                                                          "filter.connectedcomponent.expr"));
-            streamSize = GenericApplySegmentation<ConnectedComponentSegmentationFilterType>(ccVectorizationFilter, ogrDS);
+		ccVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
+											   GetParameterString(
+													      "filter.connectedcomponent.expr"));
+		streamSize = GenericApplySegmentation<ConnectedComponentSegmentationFilterType>(ccVectorizationFilter, ogrDS);
+
+	      }
+	    else if (segModeType == "normal")
+	      {
+		otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
+	      }
+	    else 
+	      {
+		otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+	      }
           }
         else if (segType == "meanshiftedison")
           {
             otbAppLogINFO(<<"Use Edison Mean-shift segmentation."<<std::endl);
-            EdisontreamingVectorizedSegmentationOGRType::Pointer
-              edisonVectorizationFilter = EdisontreamingVectorizedSegmentationOGRType::New();
 
-            //segmentation parameters
-            const unsigned int
-              spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.spatialr"));
-            const unsigned int
-              rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.ranger"));
-            const unsigned int
-              minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.minsize"));
-            const float scale = this->GetParameterFloat("filter.meanshiftedison.scale");
+	    //segmentation parameters
+		const unsigned int
+		  spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.spatialr"));
+		const unsigned int
+		  rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.ranger"));
+		const unsigned int
+		  minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.minsize"));
+		const float scale = this->GetParameterFloat("filter.meanshiftedison.scale");
 
-            edisonVectorizationFilter->GetSegmentationFilter()->SetSpatialRadius(spatialRadius);
-            edisonVectorizationFilter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
-            edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
-            edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
+	    if (segModeType == "largescale")
+	      { 
+		EdisontreamingVectorizedSegmentationOGRType::Pointer
+		  edisonVectorizationFilter = EdisontreamingVectorizedSegmentationOGRType::New();
+
+		edisonVectorizationFilter->GetSegmentationFilter()->SetSpatialRadius(spatialRadius);
+		edisonVectorizationFilter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
+		edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
+		edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
             
-            streamSize = GenericApplySegmentation<EdisonSegmentationFilterType>(edisonVectorizationFilter, ogrDS);
+		streamSize = GenericApplySegmentation<EdisonSegmentationFilterType>(edisonVectorizationFilter, ogrDS);
+	      }
+	    else if (segModeType == "normal")
+	      {
+		otbAppLogINFO(<<"Segmentation mode which output label image" << std::endl);
+		m_Filter =  EdisonSegmentationFilterType::New();
+		
+		m_Filter->SetInput(GetParameterFloatVectorImage("in"));
+
+		m_Filter->SetSpatialRadius(spatialRadius);
+		m_Filter->SetRangeRadius(rangeRadius);
+		m_Filter->SetMinimumRegionSize(minimumObjectSize);
+		m_Filter->SetScale(scale);
+		if (IsParameterEnabled("mode.normal.lout") && HasValue("mode.normal.lout")) 
+		  {
+		    SetParameterOutputImage<UInt32ImageType> ("mode.normal.lout", m_Filter->GetLabeledClusteredOutput());
+		    AddProcess(m_Filter, "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
+		  }
+	      }
+	    else 
+	      {
+		otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+	      }
           }
         else if (segType == "meanshift")
           {
             otbAppLogINFO(<<"Use threaded Mean-shift segmentation."<<std::endl);
-            MeanShiftVectorizedSegmentationOGRType::Pointer
-              meanShiftVectorizationFilter = MeanShiftVectorizedSegmentationOGRType::New();
 
-            //segmentation parameters
-            const unsigned int
-            spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.spatialr"));
-            const unsigned int
-            rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.ranger"));
-            const unsigned int
-            minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
-            const float
-            threshold = static_cast<float> (this->GetParameterInt("filter.meanshift.thres"));
-            const unsigned int
-            maxIterNumber = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.maxiter"));
+	    if (segModeType == "largescale")
+	      { 
+		MeanShiftVectorizedSegmentationOGRType::Pointer
+		  meanShiftVectorizationFilter = MeanShiftVectorizedSegmentationOGRType::New();
 
-            meanShiftVectorizationFilter->GetSegmentationFilter()->SetSpatialBandwidth(spatialRadius);
-            meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
+		//segmentation parameters
+		const unsigned int
+		  spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.spatialr"));
+		const unsigned int
+		  rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.ranger"));
+		//const unsigned int
+		//minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
+		const float
+		  threshold = static_cast<float> (this->GetParameterInt("filter.meanshift.thres"));
+		const unsigned int
+		  maxIterNumber = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.maxiter"));
 
-            meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
-            meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
+		meanShiftVectorizationFilter->GetSegmentationFilter()->SetSpatialBandwidth(spatialRadius);
+		meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
+		meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
+		meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
             
-            streamSize = this->GenericApplySegmentation<MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, ogrDS);
+		streamSize = this->GenericApplySegmentation<MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, ogrDS);
+	      }
+	    else if (segModeType == "normal")
+	      {
+		otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
+	      }
+	    else 
+	      {
+		otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+	      }
           }
         else
           {
             otbAppLogFATAL(<<"non defined filtering method "<<GetParameterInt("filter")<<std::endl);
           }
 
-        ogrDS->SyncToDisk();
+	if (segModeType == "largescale" )
+	  {
+	    ogrDS->SyncToDisk();
 
-        // Stitching mode
-        if(IsParameterEnabled("stitch"))
-          {
-            otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
-            const std::string layerName = this->GetParameterString("layername");
+	    // Stitching mode
+	    if(IsParameterEnabled("mode.largescale.stitch"))
+	      {
+		otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
+		const std::string layerName = this->GetParameterString("mode.largescale.layername");
             
-            FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
-            fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
-            fusionFilter->SetOGRDataSource(ogrDS);
-            std::cout<<"Stream size: "<<streamSize<<std::endl;
-            fusionFilter->SetStreamSize(streamSize);
-            fusionFilter->SetLayerName(layerName);
+		FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
+		fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
+		fusionFilter->SetOGRDataSource(ogrDS);
+		std::cout<<"Stream size: "<<streamSize<<std::endl;
+		fusionFilter->SetStreamSize(streamSize);
+		fusionFilter->SetLayerName(layerName);
 
-            AddProcess(fusionFilter, "Stitching polygons");
-            fusionFilter->GenerateData();
-          }
+		AddProcess(fusionFilter, "Stitching polygons");
+		fusionFilter->GenerateData();
+	      }
+	  }
+	else if (segModeType == "normal")
+	  {
+	    otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
+	  }
+	else 
+	  {
+	    otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+	  }
       }
+      EdisonSegmentationFilterType::Pointer m_Filter;
     };
-
-
   }
 }
 
