@@ -25,11 +25,19 @@
 namespace otb {
 
 /** \class WatershedSegmentationFilter
-*
+*   \brief Watershed composite filter allowing to set output type
 *  
+*   This filter is a composite filter that encapsulates the
+*   itk::WatershedImageFilter and allows to set the type of the output
+*   image (which is not the case in the itk::WatershedImageFilter).
+*   
+*   The composite filter internally casts the output from the
+*   itk::WatershedImageFilter into TOutputLabelImage.
+*
+*   For more information, please refere to the documentation of the
+*   original itk::WatershedImageFilter .
+*
 */
-
-
 template <class TInputImage,  class TOutputLabelImage >
 class WatershedSegmentationFilter 
   : public itk::ImageToImageFilter<TInputImage, TOutputLabelImage>
