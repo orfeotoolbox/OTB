@@ -76,7 +76,7 @@ public:
    LabelImageType,
    FunctorType,
    MaskImageType >                        ConnectedComponentSegmentationFilterType;
-  
+
   // Watershed
   typedef otb::VectorImageToAmplitudeImageFilter
   <FloatVectorImageType,
@@ -84,7 +84,7 @@ public:
 
   typedef itk::GradientMagnitudeImageFilter
   <FloatImageType,FloatImageType>         GradientMagnitudeFilterType;
-      
+
   typedef otb::WatershedSegmentationFilter
   <FloatImageType,LabelImageType>         WatershedSegmentationFilterType;
 
@@ -98,7 +98,7 @@ public:
   typedef otb::StreamingVectorizedSegmentationOGR
   <FloatVectorImageType,
    EdisonSegmentationFilterType>          EdisontreamingVectorizedSegmentationOGRType;
-  
+
   // Home made mean-shift
   typedef otb::StreamingVectorizedSegmentationOGR
   <FloatVectorImageType,
@@ -119,7 +119,7 @@ public:
   typedef otb::StreamingVectorizedSegmentationOGR
   <FloatImageType,
    WatershedSegmentationFilterType>      StreamingVectorizedWatershedFilterType;
-      
+
   /** Standard macro */
   itkNewMacro(Self);
   itkTypeMacro(LargeScaleSegmentation, otb::Application);
@@ -139,7 +139,7 @@ private:
                           "apply a segmentation algorithm, "
                           "vectorize the results in polygons and keep-it "
                           "This application allows to correct some errors due to streaming by stitching polygons."
-      );
+    );
     SetDocLimitations(" .");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("MeanShiftSegmentation");
@@ -167,7 +167,7 @@ private:
     AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "maximum iteration number");
     SetParameterDescription("filter.meanshift.maxiter",
                             "iteration process is stopped if convergence hasn't been reached after this number of iteration (10 by default).");
-        
+
     //AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
     //SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
     //MandatoryOff("filter.meanshift.useoptim");
@@ -182,7 +182,7 @@ private:
     AddChoice("filter.meanshiftedison", "EDISON mean-shift");
     SetParameterDescription("filter.meanshiftedison",
                             "EDISON based Mean-shift filter. (is going to be replaced by new framework and will be deprecated).");
-        
+
     // EDISON Meanshift Parameters
     AddParameter(ParameterType_Int, "filter.meanshiftedison.spatialr", "Spatial radius");
     SetParameterDescription("filter.meanshiftedison.spatialr", "Spatial radius defining neighborhood.");
@@ -295,7 +295,7 @@ private:
     SetDocExampleParameterValue("outvd", "SegmentationVectorData.sqlite");
     SetDocExampleParameterValue("filter", "meanshift");
   }
-  
+
   void DoUpdateParameters()
   {
     // Nothing to do here : all parameters are independent
@@ -304,14 +304,14 @@ private:
   template<class TInputImage, class TSegmentationFilter>
   FloatVectorImageType::SizeType
   GenericApplySegmentation(otb::StreamingVectorizedSegmentationOGR<TInputImage,
-                           TSegmentationFilter> * streamingVectorizedFilter, TInputImage * inputImage ,otb::ogr::DataSource::Pointer ogrDS)
+                                                                   TSegmentationFilter> * streamingVectorizedFilter, TInputImage * inputImage ,otb::ogr::DataSource::Pointer ogrDS, const unsigned int outputNb)
   {
     typedef  TSegmentationFilter             SegmentationFilterType;
     typedef  typename SegmentationFilterType::Pointer SegmentationFilterPointerType;
     typedef otb::StreamingVectorizedSegmentationOGR
       <FloatVectorImageType,
-      SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
-        
+       SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
+
     // Retrieve tile size parameter
     const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("mode.largescale.tilesize"));
     // Retrieve the 8-connected option
@@ -321,7 +321,7 @@ private:
 
     // Switch on segmentation mode
     const std::string segModeType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("mode")))->GetChoiceKey(GetParameterInt("mode"));
-        
+
     streamingVectorizedFilter->SetInput(inputImage);
 
     if (HasValue("mode.largescale.inmask"))
@@ -373,13 +373,28 @@ private:
       {
       streamingVectorizedFilter->SetSimplify(false);
       }
-    AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
 
-    streamingVectorizedFilter->Initialize(); //must be called !
-    streamingVectorizedFilter->Update(); //must be called !
-     
-    return streamingVectorizedFilter->GetStreamSize();
+    if (segModeType == "largescale")
+      {
+      AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
+
+      streamingVectorizedFilter->Initialize(); //must be called !
+      streamingVectorizedFilter->Update(); //must be called !
+      }
+    else if (segModeType == "normal")
+      {
+      otbAppLogINFO(<<"Segmentation mode which output label image" << std::endl);
+
+      SetParameterOutputImage<UInt32ImageType> ("mode.normal.lout", dynamic_cast<UInt32ImageType *> (streamingVectorizedFilter->GetSegmentationFilter()->GetOutputs().at(outputNb).GetPointer()));
+      AddProcess(streamingVectorizedFilter->GetSegmentationFilter(),
+                 "Computing " + (dynamic_cast <ChoiceParameter *>
+                                 (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter"))
+                 + " segmentation");
+      streamingVectorizedFilter->GetSegmentationFilter()->Update();
+      }
+      return streamingVectorizedFilter->GetStreamSize();
   }
+
   void DoExecute()
   {
     // Switch on segmentation mode
@@ -388,24 +403,19 @@ private:
     const std::string segType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter"));
 
     otb::ogr::DataSource::Pointer ogrDS;
-  
+
     if(segModeType=="largescale")
       {
       // Retrieve output filename as well as layer names
       std::string dataSourceName = GetParameterString("mode.largescale.outvd");
       ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
       }
-  
+
     // The actual stream size used
     FloatVectorImageType::SizeType streamSize;
 
     if (segType == "connectedcomponent")
       {
-
-      //otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
-      //streamingVectorizedFilter->GetSegmentationFilter()->SetInput(GetParameterFloatVectorImage("in"));
-      //streamingVectorizedFilter->GetSegmentationFilter()->Update();
-      //if (IsParameterEnabled("mode.normal.lout") && HasValue("mode.normal.lout")) SetParameterOutputImage/*<UInt16ImageType>*/ ("mode.normal.lout", streamingVectorizedFilter->GetSegmentationFilter()->GetOutput());
       otbAppLogINFO(<<"Use connected component segmentation."<<std::endl);
 
       if (segModeType == "largescale")
@@ -417,11 +427,11 @@ private:
           {
           ccVectorizationFilter->GetSegmentationFilter()->SetMaskImage(this->GetParameterUInt32Image("mode.largescale.inmask"));
           }
-         
+
         ccVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
           GetParameterString(
             "filter.connectedcomponent.expr"));
-        streamSize = GenericApplySegmentation<FloatVectorImageType,ConnectedComponentSegmentationFilterType>(ccVectorizationFilter,this->GetParameterFloatVectorImage("in"),ogrDS);
+        streamSize = GenericApplySegmentation<FloatVectorImageType,ConnectedComponentSegmentationFilterType>(ccVectorizationFilter,this->GetParameterFloatVectorImage("in"),ogrDS, 0);
 
         }
       else if (segModeType == "normal")
@@ -455,14 +465,14 @@ private:
         edisonVectorizationFilter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
         edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
         edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
-            
-        streamSize = GenericApplySegmentation<FloatVectorImageType,EdisonSegmentationFilterType>(edisonVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS);
+
+        streamSize = GenericApplySegmentation<FloatVectorImageType,EdisonSegmentationFilterType>(edisonVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS,2);
         }
       else if (segModeType == "normal")
         {
         otbAppLogINFO(<<"Segmentation mode which output label image" << std::endl);
         m_Filter =  EdisonSegmentationFilterType::New();
-    
+
         m_Filter->SetInput(GetParameterFloatVectorImage("in"));
 
         m_Filter->SetSpatialRadius(spatialRadius);
@@ -505,8 +515,8 @@ private:
         meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
         meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
         meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
-            
-        streamSize = this->GenericApplySegmentation<FloatVectorImageType,MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS);
+
+        streamSize = this->GenericApplySegmentation<FloatVectorImageType,MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS, 2);
         }
       else if (segModeType == "normal")
         {
@@ -523,20 +533,20 @@ private:
       if (segModeType == "largescale")
         {
         otbAppLogINFO(<<"Using watershed segmentation."<<std::endl);
-            
+
         AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
-            
+
         amplitudeFilter->SetInput(this->GetParameterFloatVectorImage("in"));
-            
+
         GradientMagnitudeFilterType::Pointer gradientMagnitudeFilter = GradientMagnitudeFilterType::New();
         gradientMagnitudeFilter->SetInput(amplitudeFilter->GetOutput());
-            
+
         StreamingVectorizedWatershedFilterType::Pointer watershedVectorizedFilter = StreamingVectorizedWatershedFilterType::New();
-            
+
         watershedVectorizedFilter->GetSegmentationFilter()->SetThreshold(GetParameterFloat("filter.watershed.threshold"));
         watershedVectorizedFilter->GetSegmentationFilter()->SetLevel(GetParameterFloat("filter.watershed.level"));
-            
-        streamSize = this->GenericApplySegmentation<FloatImageType,WatershedSegmentationFilterType>(watershedVectorizedFilter,gradientMagnitudeFilter->GetOutput(),ogrDS);
+
+        streamSize = this->GenericApplySegmentation<FloatImageType,WatershedSegmentationFilterType>(watershedVectorizedFilter,gradientMagnitudeFilter->GetOutput(),ogrDS,0);
         }
       else if (segModeType == "normal")
         {
@@ -551,24 +561,24 @@ private:
       {
       otbAppLogFATAL(<<"non defined filtering method "<<GetParameterInt("filter")<<std::endl);
       }
-            
+
     if (segModeType == "largescale" )
       {
       ogrDS->SyncToDisk();
-          
+
       // Stitching mode
       if(IsParameterEnabled("mode.largescale.stitch"))
         {
         otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
         const std::string layerName = this->GetParameterString("mode.largescale.layername");
-            
+
         FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
         fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
         fusionFilter->SetOGRDataSource(ogrDS);
         std::cout<<"Stream size: "<<streamSize<<std::endl;
         fusionFilter->SetStreamSize(streamSize);
         fusionFilter->SetLayerName(layerName);
-            
+
         AddProcess(fusionFilter, "Stitching polygons");
         fusionFilter->GenerateData();
         }
@@ -587,4 +597,4 @@ private:
 }
 }
 
-  OTB_APPLICATION_EXPORT(otb::Wrapper::LargeScaleSegmentation)
+OTB_APPLICATION_EXPORT(otb::Wrapper::LargeScaleSegmentation)
