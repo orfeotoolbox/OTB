@@ -186,6 +186,17 @@ ADD_TEST(obTuMeanShiftSegmentationFilter ${OBIA_TESTS1}
       0.1
       )
 
+ADD_TEST(obTuWatershedSegmentationFilter ${OBIA_TESTS1}
+      --compare-image ${NOTOL}
+      ${BASELINE}/obTuWatershedSegmentationFilterLabelImage.tif
+      ${TEMP}/obTuWatershedSegmentationFilterLabelImage.tif
+      otbWatershedSegmentationFilter
+      ${EXAMPLEDATA}/ROI_QB_PAN_1.tif
+      ${TEMP}/obTuWatershedSegmentationFilterLabelImage.tif
+      0.01
+      0.2
+      )
+
 ADD_TEST(obTuLabelImageToLabelMapWithAdjacencyFilterNew ${OBIA_TESTS3}
   otbLabelImageToLabelMapWithAdjacencyFilterNew)
 
@@ -343,6 +354,7 @@ otbStreamingConnectedComponentOBIATest.cxx
 otbMeanShiftStreamingConnectedComponentOBIATest.cxx
 otbMeanShiftConnectedComponentSegmentationFilterTest.cxx
 otbMeanShiftSegmentationFilter.cxx
+otbWatershedSegmentationFilter.cxx
 otbHooverMatrixFilterNew.cxx
 otbHooverMatrixFilter.cxx
 otbHooverInstanceFilterNew.cxx
