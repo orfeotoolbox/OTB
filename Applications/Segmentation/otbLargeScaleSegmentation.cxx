@@ -221,11 +221,8 @@ namespace otb
         SetMinimumParameterFloatValue("filter.watershed.level",0);
         SetMaximumParameterFloatValue("filter.watershed.level",1);
 
-        AddParameter(ParameterType_Empty, "neighbor", "8-neighbor vect. strategy");
-        SetParameterDescription("stitch", "Scan segments on each side of tiles and append polygons which have almost one picel in common.");
-        EnableParameter("stitch");
 	AddParameter(ParameterType_Choice, "mode", "Segmentation mode (large scale or normal");
-        SetParameterDescription("filter", "Choose your segmentation mode (large scalse with vector output or label image.");
+        SetParameterDescription("mode", "Choose your segmentation mode (large scalse with vector output or label image.");
 
 	AddChoice("mode.largescale", "vector data output");
 	SetParameterDescription("mode.largescale","Large scale segmentation paradigm.");
@@ -391,7 +388,13 @@ namespace otb
         const std::string segType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter"));
 
 	otb::ogr::DataSource::Pointer ogrDS;
-
+	
+        if(segModeType=="largescale")
+          {
+          // Retrieve output filename as well as layer names
+          std::string dataSourceName = GetParameterString("mode.largescale.outvd");
+          ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
+          }
 	
         // The actual stream size used
         FloatVectorImageType::SizeType streamSize;
@@ -406,11 +409,7 @@ namespace otb
             otbAppLogINFO(<<"Use connected component segmentation."<<std::endl);
 
 	    if (segModeType == "largescale")
-	      {  
-		// Retrieve output filename as well as layer names
-		std::string dataSourceName = GetParameterString("mode.largescale.outvd");
-		ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
-	  
+	      {    
 		ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
 		  ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
 
@@ -508,69 +507,80 @@ namespace otb
 		meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
             
             streamSize = this->GenericApplySegmentation<FloatVectorImageType,MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS);
+              }
+            else if (segModeType == "normal")
+            {
+            otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
+            }
+          else 
+            {
+            otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+            }
           }
         else if(segType == "watershed")
           {
-          otbAppLogINFO(<<"Using watershed segmentation."<<std::endl);
 
-          AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
-          
-          amplitudeFilter->SetInput(this->GetParameterFloatVectorImage("in"));
-
-          GradientMagnitudeFilterType::Pointer gradientMagnitudeFilter = GradientMagnitudeFilterType::New();
-          gradientMagnitudeFilter->SetInput(amplitudeFilter->GetOutput());
-
-          StreamingVectorizedWatershedFilterType::Pointer watershedVectorizedFilter = StreamingVectorizedWatershedFilterType::New();
-
-          watershedVectorizedFilter->GetSegmentationFilter()->SetThreshold(GetParameterFloat("filter.watershed.threshold"));
-          watershedVectorizedFilter->GetSegmentationFilter()->SetLevel(GetParameterFloat("filter.watershed.level"));
-
-          streamSize = this->GenericApplySegmentation<FloatImageType,WatershedSegmentationFilterType>(watershedVectorizedFilter,gradientMagnitudeFilter->GetOutput(),ogrDS);
-
-	      }
-	    else if (segModeType == "normal")
-	      {
-		otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
-	      }
-	    else 
-	      {
-		otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
-	      }
+          if (segModeType == "largescale")
+            { 
+            otbAppLogINFO(<<"Using watershed segmentation."<<std::endl);
+            
+            AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
+            
+            amplitudeFilter->SetInput(this->GetParameterFloatVectorImage("in"));
+            
+            GradientMagnitudeFilterType::Pointer gradientMagnitudeFilter = GradientMagnitudeFilterType::New();
+            gradientMagnitudeFilter->SetInput(amplitudeFilter->GetOutput());
+            
+            StreamingVectorizedWatershedFilterType::Pointer watershedVectorizedFilter = StreamingVectorizedWatershedFilterType::New();
+            
+            watershedVectorizedFilter->GetSegmentationFilter()->SetThreshold(GetParameterFloat("filter.watershed.threshold"));
+            watershedVectorizedFilter->GetSegmentationFilter()->SetLevel(GetParameterFloat("filter.watershed.level"));
+            
+            streamSize = this->GenericApplySegmentation<FloatImageType,WatershedSegmentationFilterType>(watershedVectorizedFilter,gradientMagnitudeFilter->GetOutput(),ogrDS);
+            }
+          else if (segModeType == "normal")
+            {
+            otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
+            }
+          else 
+            {
+            otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+            }
           }
         else
           {
-            otbAppLogFATAL(<<"non defined filtering method "<<GetParameterInt("filter")<<std::endl);
+          otbAppLogFATAL(<<"non defined filtering method "<<GetParameterInt("filter")<<std::endl);
           }
-
-	if (segModeType == "largescale" )
-	  {
-	    ogrDS->SyncToDisk();
-
-	    // Stitching mode
-	    if(IsParameterEnabled("mode.largescale.stitch"))
-	      {
-		otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
-		const std::string layerName = this->GetParameterString("mode.largescale.layername");
             
-		FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
-		fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
-		fusionFilter->SetOGRDataSource(ogrDS);
-		std::cout<<"Stream size: "<<streamSize<<std::endl;
-		fusionFilter->SetStreamSize(streamSize);
-		fusionFilter->SetLayerName(layerName);
-
-		AddProcess(fusionFilter, "Stitching polygons");
-		fusionFilter->GenerateData();
-	      }
-	  }
-	else if (segModeType == "normal")
-	  {
-	    otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
-	  }
-	else 
-	  {
-	    otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
-	  }
+        if (segModeType == "largescale" )
+          {
+          ogrDS->SyncToDisk();
+          
+          // Stitching mode
+          if(IsParameterEnabled("mode.largescale.stitch"))
+            {
+            otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
+            const std::string layerName = this->GetParameterString("mode.largescale.layername");
+            
+            FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
+            fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
+            fusionFilter->SetOGRDataSource(ogrDS);
+            std::cout<<"Stream size: "<<streamSize<<std::endl;
+            fusionFilter->SetStreamSize(streamSize);
+            fusionFilter->SetLayerName(layerName);
+            
+            AddProcess(fusionFilter, "Stitching polygons");
+            fusionFilter->GenerateData();
+            }
+          }
+        else if (segModeType == "normal")
+          {
+          otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
+          }
+        else 
+          {
+          otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+          }
       }
       EdisonSegmentationFilterType::Pointer m_Filter;
     };
