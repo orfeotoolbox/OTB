@@ -561,6 +561,8 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   typename OutputImageType::PixelType          rangePixel(m_NumberOfComponentsPerPixel);
   typename OutputSpatialImageType::PixelType   spatialPixel(ImageDimension);
 
+  RealVector jointPixel;
+
   // Initialize output images to zero
   iterationOutput->FillBuffer(0);
   OutputSpatialPixelType zero(spatialOutput->GetNumberOfComponentsPerPixel());
@@ -627,7 +629,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
 
     // get input pixel in the joint spatial-range domain (with components
     // normalized by bandwith)
-    RealVector jointPixel = jointIt.Get(); // Pixel in the joint spatial-range domain
+    jointPixel = jointIt.Get(); // Pixel in the joint spatial-range domain
 
     // index of the currently processed output pixel
     InputIndexType const& currentIndex = jointIt.GetIndex();
