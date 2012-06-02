@@ -105,8 +105,8 @@ struct TransformationFunctorDispatcher<TransformationFunctor, OGRGeometry>
     {
     OGRFeatureDefn & defn = out.GetLayerDefn();
     for (ogr::Layer::const_iterator b = in.begin(), e = in.end()
-     ; b != e
-     ; ++b
+    ; b != e
+    ; ++b
     )
       {
       ogr::Feature const feat = *b;
