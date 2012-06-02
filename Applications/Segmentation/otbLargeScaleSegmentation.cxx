@@ -260,11 +260,13 @@ private:
     SetMinimumParameterIntValue("mode.largescale.minsize", 1);
     MandatoryOff("mode.largescale.minsize");
 
+
     AddParameter(ParameterType_Float, "mode.largescale.simplify", "Simplify geometry");
     SetParameterDescription("mode.largescale.simplify",
                             "Simplify polygons according to a given tolerance (in pixel?).");
     SetDefaultParameterFloat("mode.largescale.simplify",0.1);
     MandatoryOff("mode.largescale.simplify");
+    DisableParameter("mode.largescale.simplify");
 
     AddParameter(ParameterType_String, "mode.largescale.layername", "Layer name");
     SetParameterDescription("mode.largescale.layername", "Layer Name.(by default : Layer )");
@@ -376,6 +378,7 @@ private:
 
     if (segModeType == "largescale")
       {
+      otbAppLogINFO(<<"Large scale segmentation mode which output vector data" << std::endl);
       AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
 
       streamingVectorizedFilter->Initialize(); //must be called !
@@ -385,11 +388,13 @@ private:
       {
       otbAppLogINFO(<<"Segmentation mode which output label image" << std::endl);
 
+      streamingVectorizedFilter->GetSegmentationFilter()->SetInput(inputImage);
       SetParameterOutputImage<UInt32ImageType> ("mode.normal.lout", dynamic_cast<UInt32ImageType *> (streamingVectorizedFilter->GetSegmentationFilter()->GetOutputs().at(outputNb).GetPointer()));
-      AddProcess(streamingVectorizedFilter->GetSegmentationFilter(),
-                 "Computing " + (dynamic_cast <ChoiceParameter *>
-                                 (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter"))
-                 + " segmentation");
+      //TODO add progress reporting in normal mode
+      // AddProcess(dynamic_cast <OutputImageParameter *> (GetParameterByKey("mode.normal.lout"))->GetWriter(),
+      //            "Computing " + (dynamic_cast <ChoiceParameter *>
+      //                            (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter"))
+      //            + " segmentation");
       streamingVectorizedFilter->GetSegmentationFilter()->Update();
       }
       return streamingVectorizedFilter->GetStreamSize();
@@ -467,28 +472,28 @@ private:
         edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
 
         streamSize = GenericApplySegmentation<FloatVectorImageType,EdisonSegmentationFilterType>(edisonVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS,2);
-        // }
-      // else if (segModeType == "normal")
-      //   {
-        otbAppLogINFO(<<"Segmentation mode which output label image" << std::endl);
-        m_Filter =  EdisonSegmentationFilterType::New();
+        // // }
+      // // else if (segModeType == "normal")
+      // //   {
+      //   otbAppLogINFO(<<"Segmentation mode which output label image" << std::endl);
+      //   m_Filter =  EdisonSegmentationFilterType::New();
 
-        m_Filter->SetInput(GetParameterFloatVectorImage("in"));
+      //   m_Filter->SetInput(GetParameterFloatVectorImage("in"));
 
-        m_Filter->SetSpatialRadius(spatialRadius);
-        m_Filter->SetRangeRadius(rangeRadius);
-        m_Filter->SetMinimumRegionSize(minimumObjectSize);
-        m_Filter->SetScale(scale);
-        if (IsParameterEnabled("mode.normal.lout") && HasValue("mode.normal.lout"))
-          {
-          SetParameterOutputImage<UInt32ImageType> ("mode.normal.lout", m_Filter->GetLabeledClusteredOutput());
-          AddProcess(m_Filter, "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
-          }
-        // }
-      // else
-      //   {
-      //   otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
-      //   }
+      //   m_Filter->SetSpatialRadius(spatialRadius);
+      //   m_Filter->SetRangeRadius(rangeRadius);
+      //   m_Filter->SetMinimumRegionSize(minimumObjectSize);
+      //   m_Filter->SetScale(scale);
+      //   if (IsParameterEnabled("mode.normal.lout") && HasValue("mode.normal.lout"))
+      //     {
+      //     SetParameterOutputImage<UInt32ImageType> ("mode.normal.lout", m_Filter->GetLabeledClusteredOutput());
+      //     AddProcess(m_Filter, "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
+      //     }
+      //   // }
+      // // else
+      // //   {
+      // //   otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
+      // //  }
       }
     else if (segType == "meanshift")
       {
@@ -585,7 +590,7 @@ private:
       }
     else if (segModeType == "normal")
       {
-      otbAppLogINFO(<<"implementation in progress." << std::endl);
+      otbAppLogINFO(<<"implementation in progress..." << std::endl);
       }
     else
       {
