@@ -41,11 +41,11 @@ namespace otb
 {
 namespace Wrapper
 {
-class LargeScaleSegmentation : public Application
+class Segmentation : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef LargeScaleSegmentation        Self;
+  typedef Segmentation        Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -122,12 +122,12 @@ public:
 
   /** Standard macro */
   itkNewMacro(Self);
-  itkTypeMacro(LargeScaleSegmentation, otb::Application);
+  itkTypeMacro(Segmentation, otb::Application);
 
 private:
   void DoInit()
   {
-    SetName("LargeScaleSegmentation");
+    SetName("Segmentation");
     SetDescription("Performs Large scale segmentation");
 
     // Documentation
@@ -542,4 +542,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::LargeScaleSegmentation)
+OTB_APPLICATION_EXPORT(otb::Wrapper::Segmentation)
