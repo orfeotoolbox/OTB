@@ -66,8 +66,8 @@ struct ProcessVisitor : boost::static_visitor<>
     {
     std::cout << "G2GF: Process Visitor: DS("<<source->ogr().GetName()<<") -> DS("<<source->ogr().GetName()<<") ...\n";
     for (otb::ogr::DataSource::const_iterator b = source->begin(), e = source->end()
-    ; b != e
-    ; ++b
+   ; b != e
+   ; ++b
     )
       {
       otb::ogr::Layer const& sourceLayer = *b;
