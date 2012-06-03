@@ -397,7 +397,7 @@ private:
       //            + " segmentation");
       streamingVectorizedFilter->GetSegmentationFilter()->Update();
       }
-      return streamingVectorizedFilter->GetStreamSize();
+    return streamingVectorizedFilter->GetStreamSize();
   }
 
   void DoExecute()
@@ -422,31 +422,18 @@ private:
     if (segType == "connectedcomponent")
       {
       otbAppLogINFO(<<"Use connected component segmentation."<<std::endl);
+      ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
+        ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
 
-      // if (segModeType == "largescale")
-      //   {
-        ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
-          ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
+      if (HasValue("mode.largescale.inmask"))
+        {
+        ccVectorizationFilter->GetSegmentationFilter()->SetMaskImage(this->GetParameterUInt32Image("mode.largescale.inmask"));
+        }
 
-        if (HasValue("mode.largescale.inmask"))
-          {
-          ccVectorizationFilter->GetSegmentationFilter()->SetMaskImage(this->GetParameterUInt32Image("mode.largescale.inmask"));
-          }
-
-        ccVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
-          GetParameterString(
-            "filter.connectedcomponent.expr"));
-        streamSize = GenericApplySegmentation<FloatVectorImageType,ConnectedComponentSegmentationFilterType>(ccVectorizationFilter,this->GetParameterFloatVectorImage("in"),ogrDS, 0);
-
-        // }
-      // else if (segModeType == "normal")
-      //   {
-      //   otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
-      //   }
-      // else
-      //   {
-      //   otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
-      //   }
+      ccVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
+        GetParameterString(
+          "filter.connectedcomponent.expr"));
+      streamSize = GenericApplySegmentation<FloatVectorImageType,ConnectedComponentSegmentationFilterType>(ccVectorizationFilter,this->GetParameterFloatVectorImage("in"),ogrDS, 0);
       }
     else if (segType == "meanshiftedison")
       {
@@ -461,106 +448,59 @@ private:
         minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("filter.meanshiftedison.minsize"));
       const float scale = this->GetParameterFloat("filter.meanshiftedison.scale");
 
-      // if (segModeType == "largescale")
-      //   {
-        EdisontreamingVectorizedSegmentationOGRType::Pointer
-          edisonVectorizationFilter = EdisontreamingVectorizedSegmentationOGRType::New();
+      EdisontreamingVectorizedSegmentationOGRType::Pointer
+        edisonVectorizationFilter = EdisontreamingVectorizedSegmentationOGRType::New();
 
-        edisonVectorizationFilter->GetSegmentationFilter()->SetSpatialRadius(spatialRadius);
-        edisonVectorizationFilter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
-        edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
-        edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
+      edisonVectorizationFilter->GetSegmentationFilter()->SetSpatialRadius(spatialRadius);
+      edisonVectorizationFilter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
+      edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
+      edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
 
-        streamSize = GenericApplySegmentation<FloatVectorImageType,EdisonSegmentationFilterType>(edisonVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS,2);
-        // // }
-      // // else if (segModeType == "normal")
-      // //   {
-      //   otbAppLogINFO(<<"Segmentation mode which output label image" << std::endl);
-      //   m_Filter =  EdisonSegmentationFilterType::New();
-
-      //   m_Filter->SetInput(GetParameterFloatVectorImage("in"));
-
-      //   m_Filter->SetSpatialRadius(spatialRadius);
-      //   m_Filter->SetRangeRadius(rangeRadius);
-      //   m_Filter->SetMinimumRegionSize(minimumObjectSize);
-      //   m_Filter->SetScale(scale);
-      //   if (IsParameterEnabled("mode.normal.lout") && HasValue("mode.normal.lout"))
-      //     {
-      //     SetParameterOutputImage<UInt32ImageType> ("mode.normal.lout", m_Filter->GetLabeledClusteredOutput());
-      //     AddProcess(m_Filter, "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
-      //     }
-      //   // }
-      // // else
-      // //   {
-      // //   otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
-      // //  }
+      streamSize = GenericApplySegmentation<FloatVectorImageType,EdisonSegmentationFilterType>(edisonVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS,2);
       }
     else if (segType == "meanshift")
       {
       otbAppLogINFO(<<"Use threaded Mean-shift segmentation."<<std::endl);
 
-      // if (segModeType == "largescale")
-      //   {
-        MeanShiftVectorizedSegmentationOGRType::Pointer
-          meanShiftVectorizationFilter = MeanShiftVectorizedSegmentationOGRType::New();
+      MeanShiftVectorizedSegmentationOGRType::Pointer
+        meanShiftVectorizationFilter = MeanShiftVectorizedSegmentationOGRType::New();
 
-        //segmentation parameters
-        const unsigned int
-          spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.spatialr"));
-        const unsigned int
-          rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.ranger"));
-        //const unsigned int
-        //minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
-        const float
-          threshold = static_cast<float> (this->GetParameterInt("filter.meanshift.thres"));
-        const unsigned int
-          maxIterNumber = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.maxiter"));
+      //segmentation parameters
+      const unsigned int
+        spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.spatialr"));
+      const unsigned int
+        rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.ranger"));
+      //const unsigned int
+      //minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
+      const float
+        threshold = static_cast<float> (this->GetParameterInt("filter.meanshift.thres"));
+      const unsigned int
+        maxIterNumber = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.maxiter"));
 
-        meanShiftVectorizationFilter->GetSegmentationFilter()->SetSpatialBandwidth(spatialRadius);
-        meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
-        meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
-        meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
+      meanShiftVectorizationFilter->GetSegmentationFilter()->SetSpatialBandwidth(spatialRadius);
+      meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
+      meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
+      meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
 
-        streamSize = this->GenericApplySegmentation<FloatVectorImageType,MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS, 0);
-        // }
-      // else if (segModeType == "normal")
-      //   {
-      //   otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
-      //   }
-      // else
-      //   {
-      //   otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
-      //   }
+      streamSize = this->GenericApplySegmentation<FloatVectorImageType,MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS, 0);
       }
     else if(segType == "watershed")
       {
+      otbAppLogINFO(<<"Using watershed segmentation."<<std::endl);
 
-      // if (segModeType == "largescale")
-      //   {
-        otbAppLogINFO(<<"Using watershed segmentation."<<std::endl);
+      AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
 
-        AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
+      amplitudeFilter->SetInput(this->GetParameterFloatVectorImage("in"));
 
-        amplitudeFilter->SetInput(this->GetParameterFloatVectorImage("in"));
+      GradientMagnitudeFilterType::Pointer gradientMagnitudeFilter = GradientMagnitudeFilterType::New();
+      gradientMagnitudeFilter->SetInput(amplitudeFilter->GetOutput());
 
-        GradientMagnitudeFilterType::Pointer gradientMagnitudeFilter = GradientMagnitudeFilterType::New();
-        gradientMagnitudeFilter->SetInput(amplitudeFilter->GetOutput());
+      StreamingVectorizedWatershedFilterType::Pointer watershedVectorizedFilter = StreamingVectorizedWatershedFilterType::New();
 
-        StreamingVectorizedWatershedFilterType::Pointer watershedVectorizedFilter = StreamingVectorizedWatershedFilterType::New();
+      watershedVectorizedFilter->GetSegmentationFilter()->SetThreshold(GetParameterFloat("filter.watershed.threshold"));
+      watershedVectorizedFilter->GetSegmentationFilter()->SetLevel(GetParameterFloat("filter.watershed.level"));
 
-        watershedVectorizedFilter->GetSegmentationFilter()->SetThreshold(GetParameterFloat("filter.watershed.threshold"));
-        watershedVectorizedFilter->GetSegmentationFilter()->SetLevel(GetParameterFloat("filter.watershed.level"));
-
-        streamSize = this->GenericApplySegmentation<FloatImageType,WatershedSegmentationFilterType>(watershedVectorizedFilter,gradientMagnitudeFilter->GetOutput(),ogrDS,0);
-        // }
-      // else if (segModeType == "normal")
-      //   {
-      //   otbAppLogINFO(<<"This mode is not implemented yet." << std::endl);
-      //   }
-      // else
-      //   {
-      //   otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
-      //   }
+      streamSize = this->GenericApplySegmentation<FloatImageType,WatershedSegmentationFilterType>(watershedVectorizedFilter,gradientMagnitudeFilter->GetOutput(),ogrDS,0);
       }
     else
       {
