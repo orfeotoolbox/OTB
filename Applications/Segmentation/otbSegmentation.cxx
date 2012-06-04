@@ -479,7 +479,7 @@ private:
       //const unsigned int
       //minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
       const float
-        threshold = static_cast<float> (this->GetParameterInt("filter.meanshift.thres"));
+        threshold = this->GetParameterFloat("filter.meanshift.thres");
       const unsigned int
         maxIterNumber = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.maxiter"));
 
