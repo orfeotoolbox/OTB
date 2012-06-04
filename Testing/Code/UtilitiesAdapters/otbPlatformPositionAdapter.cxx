@@ -31,9 +31,9 @@ int otbPlatformPositionComputeBaselineNewTest(int argc, char* argv[])
 
 int otbPlatformPositionComputeBaselineTest(int argc, char* argv[])
 {
- if (argc != 4)
+ if (argc != 3)
     {
-    std::cerr << "Usage: " << argv[0] << " masterImageFile slaveImageFile output" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " imageFile output" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -42,62 +42,36 @@ int otbPlatformPositionComputeBaselineTest(int argc, char* argv[])
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
-  ReaderType::Pointer master = ReaderType::New();
-  ReaderType::Pointer slave = ReaderType::New();
+  ReaderType::Pointer image = ReaderType::New();
 
-  master->SetFileName(argv[1]);
-  slave->SetFileName(argv[2]);
+  image->SetFileName(argv[1]);
 
-  master->UpdateOutputInformation();
-  slave->UpdateOutputInformation();
+  image->UpdateOutputInformation();
 
   typedef otb::PlatformPositionAdapter PlatformType;
-  PlatformType::Pointer masterPlatform = PlatformType::New();
-  PlatformType::Pointer slavePlatform = PlatformType::New();
+  PlatformType::Pointer imagePlatform = PlatformType::New();
 
-  masterPlatform->CreateSensorModel(master->GetOutput()->GetImageKeywordlist());
-  slavePlatform->CreateSensorModel(slave->GetOutput()->GetImageKeywordlist());
+  imagePlatform->CreateSensorModel(image->GetOutput()->GetImageKeywordlist());
 
-  std::vector<double> masterPosition;
-  std::vector<double> masterSpeed;
-  masterPosition.resize(3);
-  masterSpeed.resize(3);
+  std::vector<double> imagePosition;
+  std::vector<double> imageSpeed;
+  imagePosition.resize(3);
+  imageSpeed.resize(3);
 
-  std::vector<double> slavePosition;
-  std::vector<double> slaveSpeed;
-  slavePosition.resize(3);
-  slaveSpeed.resize(3);
-
-  masterPlatform->GetPlatformPosition(0, masterPosition, masterSpeed);
-  slavePlatform->GetPlatformPosition(0, slavePosition, slaveSpeed);
+  imagePlatform->GetPlatformPosition(0, imagePosition, imageSpeed);
 
   std::ofstream file;
-  file.open(argv[3]);
+  file.open(argv[2]);
 
   file << std::setprecision(15);
 
-  file << "Master image:\n";
-  file << "Pos X: " << masterPosition[0] << " m\n";
-  file << "Pos Y: " << masterPosition[1] << " m\n";
-  file << "Pos Z: " << masterPosition[2] << " m\n";
-  file << "Spd X: " << masterSpeed[0] << " m/s\n";
-  file << "Spd Y: " << masterSpeed[1] << " m/s\n";
-  file << "Spd Z: " << masterSpeed[2] << " m/s\n";
-
-  file << "Slave image:\n";
-  file << "Pos X: " << slavePosition[0] << " m\n";
-  file << "Pos Y: " << slavePosition[1] << " m\n";
-  file << "Pos Z: " << slavePosition[2] << " m\n";
-  file << "Spd X: " << slaveSpeed[0] << " m/s\n";
-  file << "Spd Y: " << slaveSpeed[1] << " m/s\n";
-  file << "Spd Z: " << slaveSpeed[2] << " m/s\n";
-
-  double baselineLength = vcl_sqrt(
-      (masterPosition[0] - slavePosition[0]) * (masterPosition[0] - slavePosition[0]) +
-      (masterPosition[1] - slavePosition[1]) * (masterPosition[1] - slavePosition[1]) +
-      (masterPosition[2] - slavePosition[2]) * (masterPosition[2] - slavePosition[2]));
-  file << "\nBaseline length:\n";
-  file << baselineLength << " m \n";
+  file << "Image:\n";
+  file << "Pos X: " << imagePosition[0] << " m\n";
+  file << "Pos Y: " << imagePosition[1] << " m\n";
+  file << "Pos Z: " << imagePosition[2] << " m\n";
+  file << "Spd X: " << imageSpeed[0] << " m/s\n";
+  file << "Spd Y: " << imageSpeed[1] << " m/s\n";
+  file << "Spd Z: " << imageSpeed[2] << " m/s\n";
 
   file.close();
   return EXIT_SUCCESS;
