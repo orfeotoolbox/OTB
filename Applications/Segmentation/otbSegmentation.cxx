@@ -328,7 +328,7 @@ private:
     const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("mode.vector.minsize"));
 
     // Switch on segmentation mode
-    const std::string segModeType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("mode")))->GetChoiceKey(GetParameterInt("mode"));
+    const std::string segModeType = GetParameterString("mode");
 
     streamingVectorizedFilter->SetInput(inputImage);
 
@@ -409,9 +409,9 @@ private:
   void DoExecute()
   {
     // Switch on segmentation mode
-    const std::string segModeType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("mode")))->GetChoiceKey(GetParameterInt("mode"));
+    const std::string segModeType = GetParameterString("mode");
     // Switch on segmentation filter case
-    const std::string segType = (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter"));
+    const std::string segType = GetParameterString("filter");
 
     otb::ogr::DataSource::Pointer ogrDS;
 
