@@ -248,7 +248,6 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   m_NumberOfComponentsPerPixel = this->GetInput()->GetNumberOfComponentsPerPixel();
 
 
-
   // Allocate output images
   this->AllocateOutputs();
 
