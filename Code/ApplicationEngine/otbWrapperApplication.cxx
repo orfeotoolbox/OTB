@@ -1200,7 +1200,7 @@ Application::GetOutputParametersSumUp()
     
     if ( type != ParameterType_Group )
       {
-      if ( param->GetRole() == Role_Output )
+      if ( param->GetRole() == Role_Output && IsParameterEnabled(*it) )
         {
         std::pair<std::string, std::string> keyVal;
         keyVal.first = (*it);
