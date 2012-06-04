@@ -237,6 +237,8 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   OutputSpatialImagePointerType         outSpatialPtr = this->GetSpatialOutput();
   OutputImagePointerType                outRangePtr   = this->GetRangeOutput();
   typename InputImageType::ConstPointer inputPtr      = this->GetInput();
+  typename OutputIterationImageType::Pointer iterationOutput = this->GetIterationOutput();
+  typename OutputSpatialImageType::Pointer   spatialOutput = this->GetSpatialOutput();
 
   //InputIndexType index;
 
@@ -244,6 +246,17 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   m_SpatialRadius.Fill(m_Kernel.GetRadius(m_SpatialBandwidth));
 
   m_NumberOfComponentsPerPixel = this->GetInput()->GetNumberOfComponentsPerPixel();
+
+
+
+  // Allocate output images
+  this->AllocateOutputs();
+
+  // Initialize output images to zero
+  iterationOutput->FillBuffer(0);
+  OutputSpatialPixelType zero(spatialOutput->GetNumberOfComponentsPerPixel());
+  zero.Fill(0);
+  spatialOutput->FillBuffer(zero);
 
 
   // m_JointImage is the input data expressed in the joint spatial-range
@@ -537,8 +550,6 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
 {
   // at the first iteration
 
-  // Allocate output images
-  this->AllocateOutputs();
 
   // Retrieve output images pointers
   typename OutputSpatialImageType::Pointer   spatialOutput = this->GetSpatialOutput();
@@ -563,11 +574,6 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
 
   RealVector jointPixel;
 
-  // Initialize output images to zero
-  iterationOutput->FillBuffer(0);
-  OutputSpatialPixelType zero(spatialOutput->GetNumberOfComponentsPerPixel());
-  zero.Fill(0);
-  spatialOutput->FillBuffer(zero);
 
   RealVector bandwidth(jointDimension);
   for (unsigned int comp = 0; comp < ImageDimension; comp++) bandwidth[comp] = m_SpatialBandwidth;
