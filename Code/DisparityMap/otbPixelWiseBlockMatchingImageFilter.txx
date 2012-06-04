@@ -464,7 +464,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   // Fill buffers with default values
   outMetricPtr->FillBuffer(0.);
-  outHDispPtr->FillBuffer(m_MinimumHorizontalDisparity);
+  outHDispPtr->FillBuffer(m_MaximumHorizontalDisparity);
   outVDispPtr->FillBuffer(m_MinimumVerticalDisparity);
 }
 
