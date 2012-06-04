@@ -154,15 +154,18 @@ private:
     AddParameter(ParameterType_Float,"epi.elevation.avgdem.value","Average elevation value");
     SetParameterDescription("epi.elevation.avgdem.value","Average elevation value estimated from DEM");
     SetParameterRole("epi.elevation.avgdem.value",Role_Output);
+    DisableParameter("epi.elevation.avgdem.value");
 
     AddParameter(ParameterType_Float,"epi.elevation.avgdem.mindisp","Minimum disparity from DEM");
     SetParameterDescription("epi.elevation.avgdem.mindisp","Disparity corresponding to estimated minimum elevation over the left image");
     SetParameterRole("epi.elevation.avgdem.mindisp",Role_Output);
+    DisableParameter("epi.elevation.avgdem.mindisp");
 
     AddParameter(ParameterType_Float,"epi.elevation.avgdem.maxdisp","Maximum disparity from DEM");
     SetParameterDescription("epi.elevation.avgdem.maxdisp","Disparity corresponding to estimated maximum elevation over the left image");
     SetParameterRole("epi.elevation.avgdem.maxdisp",Role_Output);
-    
+    DisableParameter("epi.elevation.avgdem.maxdisp");
+
     AddChoice("epi.elevation.dem","Elevation from DEM");
     SetParameterDescription("epi.elevation.dem","Local elevations from the provided DEM");
 
@@ -268,7 +271,8 @@ private:
       
       m_DeformationFieldSource->SetAverageElevation(m_StatisticsFilter->GetMean());
 
-      SetParameterInt("epi.elevation.avgdem.value",m_StatisticsFilter->GetMean());
+      EnableParameter("epi.elevation.avgdem.value");
+      SetParameterFloat("epi.elevation.avgdem.value",m_StatisticsFilter->GetMean());
 
       }
     else if(GetParameterString("epi.elevation") == "dem")
@@ -291,8 +295,10 @@ private:
 
     if(GetParameterString("epi.elevation") == "avgdem")
       {
+      EnableParameter("epi.elevation.avgdem.mindisp");
       SetParameterFloat("epi.elevation.avgdem.mindisp",(m_StatisticsFilter->GetMinimum()-m_StatisticsFilter->GetMean())
                         /m_DeformationFieldSource->GetMeanBaselineRatio());
+      EnableParameter("epi.elevation.avgdem.maxdisp");
       SetParameterFloat("epi.elevation.avgdem.maxdisp",(m_StatisticsFilter->GetMaximum()-m_StatisticsFilter->GetMean())
                         /m_DeformationFieldSource->GetMeanBaselineRatio());
       }
