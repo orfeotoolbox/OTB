@@ -270,7 +270,7 @@ private:
       m_StatisticsFilter->Update();
 
       m_DeformationFieldSource->SetAverageElevation(m_StatisticsFilter->GetMean());
-
+      
       EnableParameter("epi.elevation.avgdem.value");
       SetParameterFloat("epi.elevation.avgdem.value",m_StatisticsFilter->GetMean());
 
