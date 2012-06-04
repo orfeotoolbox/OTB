@@ -520,7 +520,6 @@ private:
         FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
         fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
         fusionFilter->SetOGRDataSource(ogrDS);
-        std::cout<<"Stream size: "<<streamSize<<std::endl;
         fusionFilter->SetStreamSize(streamSize);
         fusionFilter->SetLayerName(layerName);
 
