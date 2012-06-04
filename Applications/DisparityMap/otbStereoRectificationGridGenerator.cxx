@@ -46,10 +46,10 @@ public:
 
   typedef otb::StereorectificationDeformationFieldSource
   <FloatVectorImageType,FloatVectorImageType> DeformationFieldSourceType;
-  
+
   typedef itk::Vector<double,2>               DeformationType;
   typedef otb::Image<DeformationType>         DeformationFieldType;
-  
+
   typedef itk::VectorCastImageFilter
   <FloatVectorImageType,
    DeformationFieldType>                      DeformationFieldCastFilterType;
@@ -65,8 +65,8 @@ public:
 
   typedef otb::DEMToImageGenerator<FloatImageType >           DEMToImageGeneratorType;
   typedef otb::StreamingStatisticsImageFilter<FloatImageType> StatisticsFilterType;
-  
-  
+
+
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -127,7 +127,7 @@ private:
 
     AddParameter(ParameterType_Group,"epi","Epipolar  geometry and grid parameters");
     SetParameterDescription("epi","Parameters of the epipolar geometry and output grids");
-    
+
     AddParameter(ParameterType_Choice,"epi.elevation","Elevation management");
     SetParameterDescription("epi.elevation","Manage elevation source for stereo-rectification");
     AddChoice("epi.elevation.avg","User-defined average elevation");
@@ -141,7 +141,7 @@ private:
 
     AddParameter(ParameterType_Directory,"epi.elevation.avgdem.path","DEM directory");
     SetParameterDescription("epi.elevation.avgdem.path","Path to the DEM directory");
-    
+
     AddParameter(ParameterType_InputFilename,"epi.elevation.avgdem.geoid","Geoid file");
     SetParameterDescription("epi.elevation.avgdem.geoid","Path to the geoid file");
     MandatoryOff("epi.elevation.avgdem.geoid");
@@ -171,7 +171,7 @@ private:
 
     AddParameter(ParameterType_Directory,"epi.elevation.dem.path","DEM directory");
     SetParameterDescription("epi.elevation.dem.path","Path to the DEM directory");
-    
+
     AddParameter(ParameterType_InputFilename,"epi.elevation.dem.geoid","Geoid file");
     SetParameterDescription("epi.elevation.dem.geoid","Path to the geoid file");
     MandatoryOff("epi.elevation.dem.geoid");
@@ -179,7 +179,7 @@ private:
     AddParameter(ParameterType_Float,"epi.scale","Scale of epipolar images");
     SetParameterDescription("epi.scale","The scale parameter allows to generated zoomed-in (scale < 1) or zoomed-out (scale > 1) epipolar images.");
     SetDefaultParameterFloat("epi.scale",1.);
-    
+
     AddParameter(ParameterType_Int,"epi.step","Step of the deformation grid (in nb. of pixels)");
     SetParameterDescription("epi.step","Stereo-rectification deformation grid only varies slowly. Therefore, it is recommanded to use a coarser grid (higher step value) in case of large images");
     SetDefaultParameterInt("epi.step",1);
@@ -217,7 +217,7 @@ private:
     SetDocExampleParameterValue("io.inright","wv2_xs_left.tif");
     SetDocExampleParameterValue("io.outleft","wv2_xs_left_epi_field.tif");
     SetDocExampleParameterValue("io.outright","wv2_xs_right_epi_field.tif");
-    SetDocExampleParameterValue("epi.elevation.avg","400");
+    SetDocExampleParameterValue("epi.elevation.avg.value","400");
   }
 
   void DoUpdateParameters()
@@ -234,7 +234,7 @@ private:
 
     if(GetParameterString("epi.elevation") == "avg")
       {
-      
+
       m_DeformationFieldSource->SetAverageElevation(GetParameterFloat("epi.elevation.avg.value"));
       }
     else if(GetParameterString("epi.elevation") == "avgdem")
@@ -268,7 +268,7 @@ private:
       m_StatisticsFilter->SetInput(m_DEMToImageGenerator->GetOutput());
       AddProcess(m_StatisticsFilter,"Computing DEM statistics ...");
       m_StatisticsFilter->Update();
-      
+
       m_DeformationFieldSource->SetAverageElevation(m_StatisticsFilter->GetMean());
 
       EnableParameter("epi.elevation.avgdem.value");
@@ -284,7 +284,7 @@ private:
         m_DeformationFieldSource->SetGeoidFile(GetParameterString("epi.elevation.dem.geoid"));
         }
       }
-                                                    
+
     AddProcess(m_DeformationFieldSource, "Computing epipolar grids ...");
 
     m_DeformationFieldSource->Update();
@@ -302,11 +302,11 @@ private:
       SetParameterFloat("epi.elevation.avgdem.maxdisp",(m_StatisticsFilter->GetMaximum()-m_StatisticsFilter->GetMean())
                         /m_DeformationFieldSource->GetMeanBaselineRatio());
       }
-    
+
 
     SetParameterOutputImage("io.outleft",m_DeformationFieldSource->GetLeftDeformationFieldOutput());
     SetParameterOutputImage("io.outright",m_DeformationFieldSource->GetRightDeformationFieldOutput());
-  
+
     // Inverse part
     // lots of casting here ...
 
@@ -316,14 +316,14 @@ private:
       m_LeftDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetLeftDeformationFieldOutput());
 
       m_LeftInvertDeformationFieldFilter->SetInput(m_LeftDeformationFieldCaster->GetOutput());
-        
+
       FloatVectorImageType::PointType lorigin = GetParameterImage("io.inleft")->GetOrigin();
       FloatVectorImageType::SpacingType lspacing = GetParameterImage("io.inleft")->GetSpacing();
       FloatVectorImageType::SizeType lsize = GetParameterImage("io.inleft")->GetLargestPossibleRegion().GetSize();
-      
+
       lspacing[0]*=GetParameterInt("epi.step");
       lspacing[1]*=GetParameterInt("epi.step");
-       
+
       lsize[0]/=GetParameterInt("epi.step");
       lsize[1]/=GetParameterInt("epi.step");
 
@@ -362,7 +362,7 @@ private:
 
       rspacing[0]*=GetParameterInt("epi.step");
       rspacing[1]*=GetParameterInt("epi.step");
-       
+
       rsize[0]/=GetParameterInt("epi.step");
       rsize[1]/=GetParameterInt("epi.step");
 
@@ -404,7 +404,7 @@ private:
   IndexSelectionCastFilterType::Pointer        m_RightIndexSelectionFilter2;
   ImageListType::Pointer                       m_RightImageList;
   ImageListFilterType::Pointer                 m_RightImageListFilter;
-  
+
   DEMToImageGeneratorType::Pointer             m_DEMToImageGenerator;
   StatisticsFilterType::Pointer                m_StatisticsFilter;
 
