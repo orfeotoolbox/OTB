@@ -195,7 +195,6 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   m_PointCounts.clear();
   m_PointCounts.resize(regionCount+1); // = std::vector<unsigned int>(regionCount+1);
 
-  //std::cout << "Associate each label to a spectral value" << std::endl;
 
   // Associate each label to a spectral value, a canonical label and a point count
   typename itk::ImageRegionConstIterator<InputLabelImageType> inputItWithIndex(inputLabelImage, outputLabelImage->GetRequestedRegion());
@@ -206,7 +205,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
     // if label has not been initialized yet ..
     if(m_PointCounts[label] == 0)
       {
-      m_CanonicalLabels[label] = label;
+     // m_CanonicalLabels[label] = label;
       m_Modes[label] = spectralImage->GetPixel(inputItWithIndex.GetIndex());
       }
     m_PointCounts[label]++;
@@ -219,16 +218,26 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 
   //std::cout << "Start merging" << std::endl;
   // Iterate until no more merge to do
-  while(!finishedMerging)
-    {
-
-    //std::cout << "Iterate over all regions" << std::endl;
-    // Iterate over all regions
-    for(LabelType curLabel = 1; curLabel <= regionCount; ++curLabel)
+ // while(!finishedMerging)
+ //   {
+    while(!finishedMerging)
       {
-      if(m_PointCounts[curLabel] == 0) // do not process empty regions
-        continue;
 
+      // Initialize Canonical Labels
+      for(LabelType curLabel = 1; curLabel <= regionCount; ++curLabel)
+        m_CanonicalLabels[curLabel] = curLabel;
+
+    // Iterate over all regions
+
+      for(LabelType curLabel = 1; curLabel <= regionCount; ++curLabel)
+      {
+
+      if(m_PointCounts[curLabel] == 0)
+        {
+        // do not process empty regions
+        continue;
+        }
+     // std::cout<<" point in label "<<curLabel<<" "<<m_PointCounts[curLabel]<<std::endl;
       const SpectralPixelType & curSpectral = m_Modes[curLabel];
 
       // Iterate over all adjacent regions and check for merge
@@ -241,13 +250,14 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
         // Check condition to merge regions
         bool isSimilar = true;
         RealType norm2 = 0;
-        for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; ++comp)
+         for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; ++comp)
           {
           RealType e;
           e = (curSpectral[comp] - adjSpectral[comp]) / m_RangeBandwidth;
           norm2 += e*e;
           }
         isSimilar = norm2 < 0.25;
+
         if(isSimilar)
           {
           // Find canonical label for current region
@@ -350,7 +360,6 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
     unsigned int oldRegionCount = regionCount;
     regionCount = label;
 
-    //std::cout << "number of new labels:" << regionCount << std::endl;
     /* reassign labels in label image */
     outputIt.GoToBegin();
     while(!outputIt.IsAtEnd())
@@ -365,14 +374,9 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
       ++outputIt;
       }
 
-
-    // if ( oldRegionCount == regionCount  // finished iterating over all regions without merging once
-    //      || mergeIterations >= 10
-    //      || regionCount == 1
-    // ) finishedMerging = true;
+    finishedMerging = oldRegionCount == regionCount || mergeIterations >= 10 || regionCount == 1;
 
     // only one iteration for now
-    finishedMerging = true;
 
     if(!finishedMerging)
       {
