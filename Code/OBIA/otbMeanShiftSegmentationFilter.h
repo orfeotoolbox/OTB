@@ -100,7 +100,7 @@ public:
    *  threshold will be fused with adjacent region with smallest spectral distance).
    */
   otbSetObjectMemberMacro(RegionPruningFilter,MinRegionSize,RealType);
-  otbGetObjectMemberConstReferenceMacro(RegionPruningFilter,MinRegionSize,RealType);
+  otbGetObjectMemberMacro(RegionPruningFilter,MinRegionSize,RealType);
 
   /** Returns the const image of region labels */
   const OutputLabelImageType * GetLabelOutput() const;
