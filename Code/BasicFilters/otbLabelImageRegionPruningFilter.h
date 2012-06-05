@@ -87,12 +87,9 @@ public:
   typedef std::set<LabelType> AdjacentLabelsContainerType;
   typedef std::vector<AdjacentLabelsContainerType> RegionAdjacencyMapType;
 
-
-  /** Setters / Getters */
-  itkSetMacro(RangeBandwidth, RealType);
-  itkGetMacro(RangeBandwidth, RealType);
   itkSetMacro(MinRegionSize, RealType);
   itkGetConstMacro(MinRegionSize, RealType);
+
   /** Returns the const image of region labels */
   const OutputLabelImageType * GetLabelOutput() const;
   /** Returns the image of region labels */
@@ -133,8 +130,6 @@ private:
   LabelImageRegionPruningFilter(const Self &);     //purposely not implemented
   void operator =(const Self&);             //purposely not implemented
 
-  /** Range bandwidth */
-  RealType                       m_RangeBandwidth;
   /** Number of components per pixel in the input image */
   unsigned int                   m_NumberOfComponentsPerPixel;
   unsigned int                   m_MinRegionSize;

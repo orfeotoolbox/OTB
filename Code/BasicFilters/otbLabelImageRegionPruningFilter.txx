@@ -231,7 +231,7 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
                   minRegionCount++;
                 }
         }
-      //std::cout<<minRegionCount<<" regions are too be fused"<<std::endl;
+     // std::cout<<minRegionCount<<" regions are too be fused"<<std::endl;
     // Iterate over all regions
 
       for(LabelType curLabel = 1; curLabel <= regionCount; ++curLabel)
@@ -266,7 +266,7 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
          for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; ++comp)
           {
           RealType e;
-          e = (curSpectral[comp] - adjSpectral[comp]) / m_RangeBandwidth;
+          e = (curSpectral[comp] - adjSpectral[comp]);
           norm2 += e*e;
           }
         if(norm2 < bestNorm2)
@@ -430,7 +430,7 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Range bandwidth: "                  << m_RangeBandwidth                 << std::endl;
+  os << indent << "Minimum Region Size: "                  << m_MinRegionSize                 << std::endl;
 }
 
 
