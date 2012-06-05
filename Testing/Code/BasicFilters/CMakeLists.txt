@@ -1183,7 +1183,7 @@ ADD_TEST(bfTuMeanShiftSmoothingImageFilterQBSuburbOptim ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBSuburbOptim.tif
         ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_QBSuburbOptim.tif
         ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_QBSuburbOptim.tif
-        4 25 0.1 10 1
+        4 25 0.1 100 1
         )
 
  ADD_TEST(bfTvMeanShiftSmoothingImageFilterQBSuburbNonOptim ${BASICFILTERS_TESTS9}
@@ -1202,7 +1202,7 @@ ADD_TEST(bfTuMeanShiftSmoothingImageFilterQBSuburbOptim ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBSuburbNonOptim.tif
         ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_QBSuburbNonOptim.tif
         ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_QBSuburbNonOptim.tif
-        4 25 0.1 10 0
+        4 25 0.1 100 0
         )
 
 
@@ -1250,6 +1250,65 @@ ADD_TEST(bfTuMeanShiftSmoothingImageFilterQBRoad ${BASICFILTERS_TESTS9}
         4 30 0.1 100
         )
 
+SET(TEST /home/jonathan/workspace/ORFEO-TOOLBOX/test_MeanShift/)
+
+ADD_TEST(bfTuMeanShiftSmoothingImageFilterPleiades ${BASICFILTERS_TESTS9}
+        otbMeanShiftSmoothingImageFilter
+        ${TEST}/phr_las_vegas_xt_12bits.tif
+        ${TEST}/bfMeanShiftSmoothingImageFilterSpatialOutput_PleiadesR100.tif
+        ${TEST}/bfMeanShiftSmoothingImageFilterSpectralOutput_PleiadesR100.tif
+        ${TEST}/bfMeanShiftSmoothingImageFilterIterationOutput_PleiadesR100.tif
+        ${TEST}/bfMeanShiftSmoothingImageFilterLabelOutput_PleiadesR100.tif
+        4 100 0.1 100
+        )
+ADD_TEST(bfTuMeanShiftVectorImageFilterEdgesPleiades ${BASICFILTERS_TESTS9}
+        otbMeanShiftVectorImageFilter
+        ${TEST}/edges.tif
+        ${TEST}/bfMeanShiftImageFilterOutput_EDISONPleiades.tif
+        ${TEST}/ClusteredOutput_EDISONedges.tif
+        ${TEST}/LabeledClusteredOutput_EDISONedges.tif
+        ${TEST}/bfMeanShiftImageFilterClusterBoundariesOutput_EDISONPleiades.tif
+        4 100 100 1.0
+        )    
+ADD_TEST(bfTuMeanShiftVectorImageFilterEdgesPleiades1 ${BASICFILTERS_TESTS9}
+        otbMeanShiftVectorImageFilter
+        ${TEST}/edges.tif
+        ${TEST}/bfMeanShiftImageFilterOutput_EDISONPleiades.tif
+        ${TEST}/ClusteredOutput_EDISONedges1.tif
+        ${TEST}/LabeledClusteredOutput_EDISONedges1.tif
+        ${TEST}/bfMeanShiftImageFilterClusterBoundariesOutput_EDISONPleiades.tif
+        4 100 1 1.0
+        )            
+               
+ADD_TEST(bfTuMeanShiftVectorImageFilterCarsPleiades ${BASICFILTERS_TESTS9}
+        otbMeanShiftVectorImageFilter
+        ${TEST}/cars.tif
+        ${TEST}/bfMeanShiftImageFilterOutput_EDISONPleiades.tif
+        ${TEST}/ClusteredOutput_EDISONcars.tif
+        ${TEST}/LabeledClusteredOutput_EDISONcars.tif
+        ${TEST}/bfMeanShiftImageFilterClusterBoundariesOutput_EDISONPleiades.tif
+        4 100 100 1.0
+        )           
+  
+ADD_TEST(bfTuMeanShiftVectorImageFilterCarsPleiades1 ${BASICFILTERS_TESTS9}
+        otbMeanShiftVectorImageFilter
+        ${TEST}/cars.tif
+        ${TEST}/bfMeanShiftImageFilterOutput_EDISONPleiades.tif
+        ${TEST}/ClusteredOutput_EDISONcars1.tif
+        ${TEST}/LabeledClusteredOutput_EDISONcars1.tif
+        ${TEST}/bfMeanShiftImageFilterClusterBoundariesOutput_EDISONPleiades.tif
+        4 100 1 1.0
+        )                      
+        
+ADD_TEST(bfTuMeanShiftVectorImageFilterPleiades ${BASICFILTERS_TESTS9}
+        otbMeanShiftVectorImageFilter
+        ${TEST}/phr_las_vegas_xt_12bits.tif
+        ${TEST}/bfMeanShiftImageFilterOutput_EDISONPleiades.tif
+        ${TEST}/bfMeanShiftImageFilterClusteredOutput_EDISONPleiades.tif
+        ${TEST}/bfMeanShiftImageFilterLabeledClusteredOutput_EDISONPleiades.tif
+        ${TEST}/bfMeanShiftImageFilterClusterBoundariesOutput_EDISONPleiades.tif
+        4 50 1 1.0
+        )   
 
 
 ADD_TEST(bfTvMeanShiftVectorImageFilterQBPAN ${BASICFILTERS_TESTS9}
@@ -1331,6 +1390,21 @@ ADD_TEST(bfTvLabelImageRegionMergingFilterQB_Suburb ${BASICFILTERS_TESTS9}
         ${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_QB_Suburb.tif
         4 25 0.1 100
         )
+        
+ADD_TEST(bfTvLabelImageRegionPruningFilterQB_Suburb ${BASICFILTERS_TESTS9}
+        --compare-n-images ${EPSILON_7} 2
+        ${BASELINE}/bfLabelImageRegionPruningFilterMergeOutput_QB_Suburb.tif
+        ${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_QB_Suburb.tif
+      	${BASELINE}/bfLabelImageRegionPruningFilterClusteredOutput_QB_Suburb.tif
+       	${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_QB_Suburb.tif
+        otbLabelImageRegionPruningFilter
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/bfLabelImageRegionPruningFilterSpectralOutput_QB_Suburb.tif
+        ${TEMP}/bfLabelImageRegionPruningFilterLabelOutput_QB_Suburb.tif
+        ${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_QB_Suburb.tif
+        ${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_QB_Suburb.tif
+        4 25 0.1 100 10
+        )        
 
 ADD_TEST(bfTvLabelImageRegionMergingFilterSPOT5 ${BASICFILTERS_TESTS9}
         --compare-n-images ${EPSILON_7} 2
@@ -1345,6 +1419,21 @@ ADD_TEST(bfTvLabelImageRegionMergingFilterSPOT5 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
         ${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_SPOT5.tif
         4 25 0.1 100
+        )
+
+ADD_TEST(bfTvLabelImageRegionPruningFilterSPOT5 ${BASICFILTERS_TESTS9}
+        --compare-n-images ${EPSILON_7} 2
+        ${BASELINE}/bfLabelImageRegionPruningFilterMergeOutput_SPOT5.tif
+        ${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_SPOT5.tif
+        ${BASELINE}/bfLabelImageRegionPruningFilterClusteredOutput_SPOT5.tif
+        ${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_SPOT5.tif
+        otbLabelImageRegionPruningFilter
+        ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+        ${TEMP}/bfLabelImageRegionPruningFilterSpectralOutput_SPOT5.tif
+        ${TEMP}/bfLabelImageRegionPruningFilterLabelOutput_SPOT5.tif
+        ${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_SPOT5.tif
+        ${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_SPOT5.tif
+        4 25 0.1 100 20
         )
 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -3002,6 +3091,7 @@ otbMeanShiftSmoothingImageFilterThreading.cxx
 otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
 otbLabelImageRegionMergingFilter.cxx
+otbLabelImageRegionPruningFilter.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
 otbBinaryImageDensityFunctionNew.cxx

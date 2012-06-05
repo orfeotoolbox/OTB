@@ -34,6 +34,7 @@ void RegisterTests()
   REGISTER_TEST(otbMeanShiftVectorImageFilterNew);
   REGISTER_TEST(otbMeanShiftVectorImageFilter);
   REGISTER_TEST(otbLabelImageRegionMergingFilter);
+  REGISTER_TEST(otbLabelImageRegionPruningFilter);
   REGISTER_TEST(otbFunctionToImageFilterNew);
   REGISTER_TEST(otbFunctionToImageFilter);
   REGISTER_TEST(otbBinaryImageDensityFunctionNew);
