@@ -87,8 +87,8 @@ int otbLabelImageRegionPruningFilter(int argc, char * argv[])
   mergeFilter->SetRangeBandwidth(rangeBandwidth);
 
   PruneFilterType::Pointer pruneFilter = PruneFilterType::New();
-  pruneFilter->SetInputLabelImage(filter->GetLabelOutput());
-  pruneFilter->SetInputSpectralImage(filter->GetRangeOutput());
+  pruneFilter->SetInputLabelImage(mergeFilter->GetLabelOutput());
+  pruneFilter->SetInputSpectralImage(mergeFilter->GetClusteredOutput());
   pruneFilter->SetRangeBandwidth(rangeBandwidth);
   pruneFilter->SetMinRegionSize(minregionsize);
   LabelWriterType::Pointer pruneWriter = LabelWriterType::New();
