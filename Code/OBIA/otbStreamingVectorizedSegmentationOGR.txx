@@ -140,6 +140,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   OGRDataSourcePointerType tmpDS = const_cast<OGRDataSourceType *>(labelImageToOGRDataFilter->GetOutput());
   OGRLayerType tmpLayer = tmpDS->GetLayer(0);
 
+  const typename InputImageType::SpacingType inSpacing = this->GetInput()->GetSpacing();
   typename OGRLayerType::iterator featIt = tmpLayer.begin();
   for(featIt = tmpLayer.begin(); featIt!=tmpLayer.end(); ++featIt)
   {
@@ -153,7 +154,9 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
      {
            const OGRGeometry * geom = (*featIt).GetGeometry();
            assert(geom && "geometry is NULL ! Can't simplify it.");
-           (*featIt).SetGeometryDirectly(ogr::Simplify(*geom,m_SimplificationTolerance));
+           
+           const double tol = m_SimplificationTolerance * inSpacing[0];
+           (*featIt).SetGeometryDirectly(ogr::Simplify(*geom,tol));
      }
      //Need to rewrite the feature otherwise changes are not considered.
      tmpLayer.SetFeature(*featIt);
