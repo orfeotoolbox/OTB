@@ -112,7 +112,7 @@ template <class Value>
 void otb::ogr::DataSource::layer_iter<Value>::increment()
 {
   assert(m_DataSource
-    && m_index < m_DataSource->GetLayersCount()
+    && int(m_index) < m_DataSource->GetLayersCount()
     && "cannot increment past end()");
   ++m_index;
 }
@@ -121,7 +121,7 @@ template <class Value>
 Value otb::ogr::DataSource::layer_iter<Value>::dereference() const
 {
   assert(m_DataSource
-    && m_index < m_DataSource->GetLayersCount()
+    && int(m_index) < m_DataSource->GetLayersCount()
     && "cannot dereference past end()");
   return Value(m_DataSource->GetLayerUnchecked(m_index));
 }
