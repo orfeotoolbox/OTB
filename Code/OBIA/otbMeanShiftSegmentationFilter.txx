@@ -28,7 +28,8 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
 {
    m_MeanShiftFilter = MeanShiftFilterType::New();
    m_RegionMergingFilter = RegionMergingFilterType::New();
-
+   m_RegionPruningFilter = RegionPruningFilterType::New();
+   this->SetMinRegionSize(100);
    this->SetNumberOfOutputs(2);
    this->SetNthOutput(0,TOutputLabelImage::New());
    this->SetNthOutput(1,TOutputClusteredImage::New());
@@ -80,12 +81,27 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
   this->m_RegionMergingFilter->SetInputLabelImage(this->m_MeanShiftFilter->GetLabelOutput());
   this->m_RegionMergingFilter->SetInputSpectralImage(this->m_MeanShiftFilter->GetRangeOutput());
   this->m_RegionMergingFilter->SetRangeBandwidth(this->GetRangeBandwidth());
+  std::cout << "MinRegionSize " << this->m_RegionPruningFilter->GetMinRegionSize() << std::endl;
+  if (this->GetMinRegionSize() == 0)
+    {
+    m_RegionMergingFilter->GraftNthOutput(0, this->GetLabelOutput());
+    m_RegionMergingFilter->GraftNthOutput(1, this->GetClusteredOutput());
+    this->m_RegionMergingFilter->Update();
+    this->GraftNthOutput(0, m_RegionMergingFilter->GetLabelOutput());
+    this->GraftNthOutput(1, m_RegionMergingFilter->GetClusteredOutput());
+    }
+  else
+    {
 
-  m_RegionMergingFilter->GraftNthOutput(0,this->GetLabelOutput());
-  m_RegionMergingFilter->GraftNthOutput(1,this->GetClusteredOutput());
-  this->m_RegionMergingFilter->Update();
-  this->GraftNthOutput(0, m_RegionMergingFilter->GetLabelOutput());
-  this->GraftNthOutput(1, m_RegionMergingFilter->GetClusteredOutput());
+    this->m_RegionPruningFilter->SetInputLabelImage(this->m_RegionMergingFilter->GetLabelOutput());
+    this->m_RegionPruningFilter->SetInputSpectralImage(this->m_RegionMergingFilter->GetClusteredOutput());
+    this->m_RegionMergingFilter->Update();
+    m_RegionPruningFilter->GraftNthOutput(0, this->GetLabelOutput());
+    m_RegionPruningFilter->GraftNthOutput(1, this->GetClusteredOutput());
+    this->m_RegionPruningFilter->Update();
+    this->GraftNthOutput(0, m_RegionPruningFilter->GetLabelOutput());
+    this->GraftNthOutput(1, m_RegionPruningFilter->GetClusteredOutput());
+    }
 }
 
 } // end namespace otb

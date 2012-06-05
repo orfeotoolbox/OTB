@@ -22,6 +22,7 @@
 
 #include "otbMeanShiftSmoothingImageFilter.h"
 #include "otbLabelImageRegionMergingFilter.h"
+#include "otbLabelImageRegionPruningFilter.h"
 
 namespace otb {
 
@@ -69,6 +70,11 @@ public:
   typedef LabelImageRegionMergingFilter<InputLabelImageType, MeanShiftFilteredImageType,
                                         OutputLabelImageType, OutputClusteredImageType>  RegionMergingFilterType;
   typedef typename RegionMergingFilterType::Pointer                                      RegionMergingFilterPointerType;
+  typedef LabelImageRegionPruningFilter<OutputLabelImageType,OutputClusteredImageType,
+                                          OutputLabelImageType, OutputClusteredImageType>  RegionPruningFilterType;
+  typedef typename RegionPruningFilterType::Pointer                                      RegionPruningFilterPointerType;
+
+
 
   /** Sets the spatial bandwidth (or radius in the case of a uniform kernel)
     * of the neighborhood for each pixel
@@ -89,6 +95,12 @@ public:
   /** Set the convergence threshold */
   otbSetObjectMemberMacro(MeanShiftFilter,Threshold,RealType);
   otbGetObjectMemberConstReferenceMacro(MeanShiftFilter,Threshold,RealType);
+
+  /** Sets the minimum region size. (after merging step clustered regions, which size is under this
+   *  threshold will be fused with adjacent region with smallest spectral distance).
+   */
+  otbSetObjectMemberMacro(RegionPruningFilter,MinRegionSize,RealType);
+  otbGetObjectMemberConstReferenceMacro(RegionPruningFilter,MinRegionSize,RealType);
 
   /** Returns the const image of region labels */
   const OutputLabelImageType * GetLabelOutput() const;
@@ -112,7 +124,7 @@ private:
 
   MeanShiftFilterPointerType     m_MeanShiftFilter;
   RegionMergingFilterPointerType m_RegionMergingFilter;
-
+  RegionPruningFilterPointerType m_RegionPruningFilter;
 };
 
 
