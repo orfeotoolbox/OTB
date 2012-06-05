@@ -443,12 +443,12 @@ private:
 
     if(maskingLeft)
       {
-      GetLogger()->Info("Masking criterion on left image: " + leftBandMathExpression.str());
+      GetLogger()->Info("Masking criterion on left image: " + leftBandMathExpression.str() + '\n');
       m_LBandMathFilter->SetExpression(leftBandMathExpression.str());
       }
     if(maskingRight)
       {
-      GetLogger()->Info("Masking criterion on right image: " + rightBandMathExpression.str());
+      GetLogger()->Info("Masking criterion on right image: " + rightBandMathExpression.str() + '\n');
       m_RBandMathFilter->SetExpression(rightBandMathExpression.str());
       }
 
