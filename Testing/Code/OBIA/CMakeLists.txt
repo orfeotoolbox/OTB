@@ -186,6 +186,19 @@ ADD_TEST(obTuMeanShiftSegmentationFilter ${OBIA_TESTS1}
       0.1
       )
 
+ADD_TEST(obTuMeanShiftSegmentationFilterPruning ${OBIA_TESTS1}
+      otbMeanShiftSegmentationFilter
+      ${INPUTDATA}/ROI_QB_MUL_4.tif
+      ${TEMP}/obTuMeanShiftSegmentationFilterLabelImagePruning.tif
+      ${TEMP}/obTuMeanShiftSegmentationFilterClusteredImagePruning.tif
+      4
+      25
+      100
+      0.1
+      20
+      )  
+      
+
 ADD_TEST(obTuWatershedSegmentationFilter ${OBIA_TESTS1}
       --compare-image ${NOTOL}
       ${BASELINE}/obTuWatershedSegmentationFilterLabelImage.tif
