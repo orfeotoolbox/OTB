@@ -32,11 +32,11 @@ namespace otb
 namespace Wrapper
 {
 
-class PixelWiseBlockMatching : public Application
+class BlockMatching : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef PixelWiseBlockMatching              Self;
+  typedef BlockMatching                 Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -62,7 +62,7 @@ public:
                                                            FloatImageType,
                                                            FloatImageType,
                                                            LPBlockMatchingFunctorType> LPBlockMatchingFilterType;
-  
+
   typedef otb::VarianceImageFilter<FloatImageType,FloatImageType> VarianceFilterType;
 
 
@@ -94,16 +94,16 @@ public:
   typedef otb::DisparityMapMedianFilter<FloatImageType,
                                         FloatImageType,
                                         FloatImageType>   MedianFilterType;
-  
+
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(PixelWiseBlockMatching, otb::Application);
+  itkTypeMacro(BlockMatching, otb::Application);
 
   /** Filters typedef */
 
 private:
-  PixelWiseBlockMatching()
+  BlockMatching()
   {
     // Initialize filters
     m_SSDBlockMatcher = SSDBlockMatchingFilterType::New();
@@ -124,7 +124,7 @@ private:
 
   void DoInit()
   {
-    SetName("PixelWiseBlockMatching");
+    SetName("BlockMatching");
     SetDescription("Performs block-matching to estimate pixel-wise disparities between two images");
 
     SetDocName(" Pixel-wise Block-Matching");
@@ -144,7 +144,7 @@ private:
 
     AddParameter(ParameterType_Group,"io","Input and output data");
     SetParameterDescription("io","This group of parameters allows to set the input and output images.");
-    
+
     AddParameter(ParameterType_InputImage,"io.inleft","Left input image");
     SetParameterDescription("io.inleft","The left input image (reference)");
 
@@ -164,11 +164,11 @@ private:
 
     AddParameter(ParameterType_Group,"mask","Image masking parameters");
     SetParameterDescription("mask","This group of parameters allows to determine the masking parameters to prevent disparities estimation for some pixels of the left image");
-    
+
     AddParameter(ParameterType_InputImage,"mask.inleft","Discard left pixels from mask image");
     SetParameterDescription("mask.inleft","This parameter allows to provide a custom mask for the left image");
     MandatoryOff("mask.inleft");
-    
+
     AddParameter(ParameterType_InputImage,"mask.inright","Discard right pixels from mask image");
     SetParameterDescription("mask.inright","This parameter allows to provide a custom mask for the right image");
     MandatoryOff("mask.inright");
@@ -178,7 +178,7 @@ private:
     MandatoryOff("mask.nodata");
     SetDefaultParameterFloat("mask.nodata",0.);
     DisableParameter("mask.nodata");
-    
+
     AddParameter(ParameterType_Float,"mask.variancet","Discard pixels with low local variance");
     SetParameterDescription("mask.variancet","This parameter allows to discard pixels whose local variance is too small (the size of the neighborhood is given by the radius parameter)");
     MandatoryOff("mask.variancet");
@@ -187,22 +187,22 @@ private:
 
     AddParameter(ParameterType_Group,"bm","Block matching parameters");
     SetParameterDescription("bm","This group of parameters allow to tune the block-matching behaviour");
-    
+
     AddParameter(ParameterType_Choice,   "bm.metric", "Block-matching metric");
     AddChoice("bm.metric.ssd","Sum of Squared Distances");
     SetParameterDescription("bm.metric.ssd","Sum of squared distances between pixels value in the metric window");
 
     AddChoice("bm.metric.ncc","Normalized Cross-Correlation");
     SetParameterDescription("bm.metric.ncc","Normalized Cross-Correlation between the left and right windows");
-    
+
     AddChoice("bm.metric.lp","Lp pseudo-norm");
     SetParameterDescription("bm.metric.lp","Lp pseudo-norm between the left and right windows");
-    
+
     AddParameter(ParameterType_Float,"bm.metric.lp.p","p value" );
     SetParameterDescription("bm.metric.lp.p", "Value of the p parameter in Lp pseudo-norm (must be positive)");
     SetDefaultParameterFloat("bm.metric.lp.p", 1.0);
     SetMinimumParameterFloatValue("bm.metric.lp.p", 0.0);
-    
+
     AddParameter(ParameterType_Int,"bm.radius","Radius of blocks");
     SetParameterDescription("bm.radius","The radius (in pixels) of blocks in Block-Matching");
     SetDefaultParameterInt("bm.radius",3);
@@ -219,83 +219,83 @@ private:
 
     AddParameter(ParameterType_Int,"bm.maxvd","Maximum vertical disparity");
     SetParameterDescription("bm.maxvd","Maximum vertical disparity to explore (can be negative)");
-    
+
     AddParameter(ParameterType_Choice,"bm.subpixel","Sub-pixel interpolation");
     SetParameterDescription("bm.subpixel", "Estimate disparities with sub-pixel precision");
-    
+
     AddChoice("bm.subpixel.none", "None");
     SetParameterDescription("bm.subpixel.none", "No sub-pixel ");
-    
+
     AddChoice("bm.subpixel.parabolic", "Parabolic");
     SetParameterDescription("bm.subpixel.parabolic", "Parabolic fit");
-    
+
     AddChoice("bm.subpixel.triangular", "Triangular");
     SetParameterDescription("bm.subpixel.triangular", "Triangular fit");
-    
+
     AddChoice("bm.subpixel.dichotomy", "Dichotomy");
     SetParameterDescription("bm.subpixel.dichotomy", "Dichotomic search");
-    
+
     AddParameter(ParameterType_Group,"bm.medianfilter","Median filtering");
     SetParameterDescription("bm.medianfilter","Use a median filter to get a smooth disparity map");
-    
+
     AddParameter(ParameterType_Int,"bm.medianfilter.radius", "Radius");
     SetParameterDescription("bm.medianfilter.radius", "Radius for median filter");
     MandatoryOff("bm.medianfilter.radius");
     DisableParameter("bm.medianfilter.radius");
-    
+
     AddParameter(ParameterType_Float,"bm.medianfilter.incoherence", "Incoherence threshold");
     SetParameterDescription("bm.medianfilter.incoherence", "Incoherence threshold between original and filtered disparity");
     MandatoryOff("bm.medianfilter.incoherence");
     DisableParameter("bm.medianfilter.incoherence");
-    
+
     AddParameter(ParameterType_Choice, "bm.initdisp", "Initial disparities");
     AddChoice("bm.initdisp.none", "None");
     SetParameterDescription("bm.initdisp.none", "No initial disparity used");
-    
+
     AddChoice("bm.initdisp.uniform", "Uniform initial disparity");
     SetParameterDescription("bm.initdisp.uniform", "Use an uniform initial disparity estimate");
-    
+
     AddParameter(ParameterType_Int, "bm.initdisp.uniform.hdisp", "Horizontal initial disparity");
     SetParameterDescription("bm.initdisp.uniform.hdisp", "Value of the uniform horizontal disparity initial estimate (in pixels)");
     SetDefaultParameterInt("bm.initdisp.uniform.hdisp", 0);
-    
+
     AddParameter(ParameterType_Int, "bm.initdisp.uniform.vdisp", "Vertical initial disparity");
     SetParameterDescription("bm.initdisp.uniform.vdisp", "Value of the uniform vertical disparity initial estimate (in pixels)");
     SetDefaultParameterInt("bm.initdisp.uniform.vdisp", 0);
-    
+
     AddParameter(ParameterType_Int, "bm.initdisp.uniform.hrad", "Horizontal exploration radius");
     SetParameterDescription("bm.initdisp.uniform.hrad", "Horizontal exploration radius around the initial disparity estimate (in pixels)");
     SetDefaultParameterInt("bm.initdisp.uniform.hrad", 0);
     DisableParameter("bm.initdisp.uniform.hrad");
-    
+
     AddParameter(ParameterType_Int, "bm.initdisp.uniform.vrad", "Vertical exploration radius");
     SetParameterDescription("bm.initdisp.uniform.vrad", "Vertical exploration radius around the initial disparity estimate (in pixels)");
     SetDefaultParameterInt("bm.initdisp.uniform.vrad", 0);
     DisableParameter("bm.initdisp.uniform.vrad");
-    
+
     AddChoice("bm.initdisp.maps", "Initial disparity maps");
     SetParameterDescription("bm.initdisp.maps", "Use initial disparity maps");
-    
+
     AddParameter(ParameterType_InputImage, "bm.initdisp.maps.hmap", "Horizontal initial disparity map");
     SetParameterDescription("bm.initdisp.maps.hmap", "Map of the initial horizontal disparities");
-    
+
     AddParameter(ParameterType_InputImage, "bm.initdisp.maps.vmap", "Vertical initial disparity map");
     SetParameterDescription("bm.initdisp.maps.vmap", "Map of the initial vertical disparities");
-    
+
     AddParameter(ParameterType_Int, "bm.initdisp.maps.hrad", "Horizontal exploration radius");
     SetParameterDescription("bm.initdisp.maps.hrad", "Horizontal exploration radius around the initial disparity estimate (in pixels)");
     SetDefaultParameterInt("bm.initdisp.maps.hrad", 0);
     DisableParameter("bm.initdisp.maps.hrad");
-    
+
     AddParameter(ParameterType_Int, "bm.initdisp.maps.vrad", "Vertical exploration radius");
     SetParameterDescription("bm.initdisp.maps.vrad", "Vertical exploration radius around the initial disparity estimate (in pixels)");
     SetDefaultParameterInt("bm.initdisp.maps.vrad", 0);
     DisableParameter("bm.initdisp.maps.vrad");
-    
+
     //this->DebugOn();
-    
+
     AddRAMParameter();
- 
+
     // Doc example parameter settings
     SetDocExampleParameterValue("io.inleft","StereoFixed.png");
     SetDocExampleParameterValue("io.inright","StereoMoving.png");
@@ -350,13 +350,13 @@ private:
     int          maxhdisp = GetParameterInt("bm.maxhd");
     int          minvdisp = GetParameterInt("bm.minvd");
     int          maxvdisp = GetParameterInt("bm.maxvd");
-    
+
     std::ostringstream leftBandMathExpression;
     leftBandMathExpression<<"if(";
-    
+
     std::ostringstream rightBandMathExpression;
     rightBandMathExpression<<"if(";
-    
+
     unsigned int inputIdLeft = 0;
     unsigned int inputIdRight = 0;
     bool maskingLeft = false;
@@ -381,7 +381,7 @@ private:
       ++inputIdRight;
       rightBandMathExpression<<"inmask > 0";
       }
-    
+
     // Handle variance threshold if present
     if(IsParameterEnabled("mask.variancet"))
       {
@@ -402,15 +402,15 @@ private:
       m_LBandMathFilter->SetNthInput(inputIdLeft,m_LVarianceFilter->GetOutput(),"variance");
       leftBandMathExpression<<"variance > "<<GetParameterFloat("mask.variancet");
       ++inputIdLeft;
-      
+
       // Right side
       m_RVarianceFilter->SetInput(rightImage);
       m_RVarianceFilter->SetRadius(vradius);
-      
+
       m_RBandMathFilter->SetNthInput(inputIdRight,m_RVarianceFilter->GetOutput(),"variance");
       rightBandMathExpression<<"variance > "<<GetParameterFloat("mask.variancet");
       ++inputIdRight;
-      
+
       maskingLeft = true;
       maskingRight = true;
       }
@@ -429,11 +429,11 @@ private:
       // Left side
       m_LBandMathFilter->SetNthInput(inputIdLeft,leftImage,"leftimage");
       leftBandMathExpression<<"leftimage != "<<GetParameterFloat("mask.nodata");
-      
+
       // Right side
       m_RBandMathFilter->SetNthInput(inputIdRight,rightImage,"rightimage");
       rightBandMathExpression<<"rightimage != "<<GetParameterFloat("mask.nodata");
-      
+
       maskingLeft = true;
       maskingRight = true;
       }
@@ -451,7 +451,7 @@ private:
       GetLogger()->Info("Masking criterion on right image: " + rightBandMathExpression.str());
       m_RBandMathFilter->SetExpression(rightBandMathExpression.str());
       }
-    
+
     // Uniform initial disparity case
     if (GetParameterInt("bm.initdisp") == 1)
       {
@@ -468,13 +468,13 @@ private:
         useInitialDispMap = true;
         }
       }
-    
+
     FloatImageType * hdispImage;
     FloatImageType * vdispImage;
     FloatImageType * metricImage;
     FloatImageType * maskLeftImage;
     FloatImageType * maskRightImage;
-    
+
     maskLeftImage = m_LBandMathFilter->GetOutput();
     maskRightImage = m_RBandMathFilter->GetOutput();
 
@@ -488,7 +488,7 @@ private:
       m_SSDBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
       m_SSDBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_SSDBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
-      
+
       AddProcess(m_SSDBlockMatcher,"SSD block matching");
       if(maskingLeft)
         {
@@ -553,7 +553,7 @@ private:
       m_NCCBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_NCCBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
       m_NCCBlockMatcher->MinimizeOff();
-      
+
       AddProcess(m_NCCBlockMatcher,"NCC block matching");
 
       if(maskingLeft)
@@ -582,7 +582,7 @@ private:
         m_NCCBlockMatcher->SetHorizontalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.hmap"));
         m_NCCBlockMatcher->SetVerticalDisparityInput(GetParameterFloatImage("bm.initdisp.maps.vmap"));
         }
-      
+
       if (GetParameterInt("bm.subpixel") > 0)
         {
         m_NCCSubPixFilter->SetInputsFromBlockMatchingFilter(m_NCCBlockMatcher);
@@ -619,7 +619,7 @@ private:
       m_LPBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
       m_LPBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
       m_LPBlockMatcher->SetMaximumVerticalDisparity(maxvdisp);
-      
+
       AddProcess(m_LPBlockMatcher,"Lp block matching");
 
       if(maskingLeft)
@@ -674,7 +674,7 @@ private:
         metricImage = m_LPBlockMatcher->GetMetricOutput();
         }
       }
-    
+
     if (IsParameterEnabled("bm.medianfilter.radius") && IsParameterEnabled("bm.medianfilter.incoherence"))
       {
       if (minhdisp < maxhdisp)
@@ -688,7 +688,7 @@ private:
           }
         hdispImage = m_HMedianFilter->GetOutput();
         }
-      
+
       if (minvdisp < maxvdisp)
         {
         m_VMedianFilter->SetInput(vdispImage);
@@ -711,9 +711,9 @@ private:
       {
       m_OutputImageList->PushBack(metricImage);
       }
-    
+
     m_ImageListFilter->SetInput(m_OutputImageList);
-    
+
     SetParameterOutputImage("io.out",m_ImageListFilter->GetOutput());
 
     if(IsParameterEnabled("io.outmask"))
@@ -725,43 +725,43 @@ private:
 
   // SSD Block matching filter
   SSDBlockMatchingFilterType::Pointer m_SSDBlockMatcher;
-  
+
   // NCC Block matching filter
   NCCBlockMatchingFilterType::Pointer m_NCCBlockMatcher;
-  
+
   // Lp Block matching filter
   LPBlockMatchingFilterType::Pointer  m_LPBlockMatcher;
-  
+
   // SSD sub-pixel disparity filter
   SSDSubPixelDisparityFilterType::Pointer m_SSDSubPixFilter;
-  
+
   // NCC sub-pixel disparity filter
   NCCSubPixelDisparityFilterType::Pointer m_NCCSubPixFilter;
-  
+
   // LP sub-pixel disparity filter
   LPSubPixelDisparityFilterType::Pointer  m_LPSubPixFilter;
-  
+
   // Variance filter for left image
   VarianceFilterType::Pointer         m_LVarianceFilter;
-  
+
   // Variance filter for right image
   VarianceFilterType::Pointer         m_RVarianceFilter;
-  
+
   // Band-math filter for left mask
   BandMathFilterType::Pointer         m_LBandMathFilter;
-  
+
   // Band-math filter for right mask
   BandMathFilterType::Pointer         m_RBandMathFilter;
-  
+
   // The Image list
   ImageListType::Pointer              m_OutputImageList;
-  
+
   // Image list to VectorImage filter
   ImageListToVectorImageFilterType::Pointer m_ImageListFilter;
-  
+
   // Horizontal Median filter
   MedianFilterType::Pointer           m_HMedianFilter;
-  
+
   // Vertical Median filter
   MedianFilterType::Pointer           m_VMedianFilter;
 };
@@ -769,4 +769,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::PixelWiseBlockMatching)
+OTB_APPLICATION_EXPORT(otb::Wrapper::BlockMatching)
