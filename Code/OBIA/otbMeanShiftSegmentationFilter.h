@@ -75,7 +75,6 @@ public:
   typedef typename RegionPruningFilterType::Pointer                                      RegionPruningFilterPointerType;
 
 
-
   /** Sets the spatial bandwidth (or radius in the case of a uniform kernel)
     * of the neighborhood for each pixel
     */

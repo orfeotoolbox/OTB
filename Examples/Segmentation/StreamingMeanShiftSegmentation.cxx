@@ -27,7 +27,7 @@
 // templated over the segmentation filter that will be used to segment each tile
 // of the input image. In this example we will use the \doxygen{otb}{MeanShiftVectorImageFilter}.
 // The labeled output image of each tile is then vectorized (using a filter based on GDALPolygonize)
-// and stored into a \doxygen{otb}{ogr}{Layer} within the \doxygen{otb}{ogr}{DataSource} 
+// and stored into a \doxygen{otb}{ogr}{Layer} within the \doxygen{otb}{ogr}{DataSource}
 // set as input. Finally a fusion filter, \doxygen{otb}{FusionOGRTileFilter}, is used to merge polygons
 // at tile border.
 //
@@ -124,10 +124,10 @@ int main(int argc, char *argv[])
   // The instanciation of the DataSource is slightly different as usual.
   // In fact the \code{New()} method on a \doxygen{otb}{ogr}{DataSource} can be called with or without parameters.
   // Without parameters, the \code{New()} method instanciate a "Memory" DataSource, which means all the data are stored in memory.
-  // This is not useful in case of large scale segmentation as it will result in millions of polygons kept in memory ... 
+  // This is not useful in case of large scale segmentation as it will result in millions of polygons kept in memory ...
   // However the \code{New()} method can also take a filename (\code{std::String}) parameter. Then either the file already exists
   // and the corresponding ogr driver is used to open the file, or it doesn't exists and then it is created.
-  // Here we used a non existing filename to create a new file in writing mode. 
+  // Here we used a non existing filename to create a new file in writing mode.
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
   //
   // Now we set the parameters to the segmentation filter.The \doxygen{otb}{MeanShiftVectorImageFilter}
   // required three parameters, the spatial radius, the range radius and the minimum object size.
-  // We use the \code{GetSegmentationFilter()} method on the \doxygen{otb}{StreamingVectorizedSegmentation} 
+  // We use the \code{GetSegmentationFilter()} method on the \doxygen{otb}{StreamingVectorizedSegmentation}
   // to get a pointer to the segmentation filter.
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
   // \item start label : first label. Each polygons have a unique label (incremented by one).
   // \item option to filter small polygons (default to false).
   // \item minimum object size : in case filter small polygons option is True
-  // \item simplify option : simplification of polygon vertex (default to false).This can reduced very efficiently the size 
+  // \item simplify option : simplification of polygon vertex (default to false).This can reduced very efficiently the size
   // of the output file with no real impact on the results.
   // \item simplification tolerance
   // Software Guide : EndLatex
@@ -206,8 +206,8 @@ int main(int argc, char *argv[])
   // Software Guide : BeginLatex
   //
   // The segmentation is done, but as it works tile by tile, we need to fusion polygons at tile border.
-  // We use the \doxygen{otb}{FusionOGRTileFilter}. This filter uses a simple fusion strategy. 
-  // Polygons that have the largest intersection over a tile are fusioned. Each polygon can be fusioned 
+  // We use the \doxygen{otb}{FusionOGRTileFilter}. This filter uses a simple fusion strategy.
+  // Polygons that have the largest intersection over a tile are fusioned. Each polygon can be fusioned
   // only once per tile border (row and column).
   // Let's look at the code for fusioning.
   // As usual we declared and instanciate the \doxygen{otb}{FusionOGRTileFilter}.
@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
   
   // Software Guide : BeginLatex
   // We set the name of the layer containing segmentation results which is the same that we used
-  // for the \doxygen{otb}{StreamingVectorizedSegmentation} filter. We also set the size of the 
+  // for the \doxygen{otb}{StreamingVectorizedSegmentation} filter. We also set the size of the
   // tile used, which may be different from the one we set in the \doxygen{otb}{StreamingVectorizedSegmentation} filter
   // but can be retrieved using the \code{GetStreamSize()} method.
   // Software Guide : EndLatex
@@ -243,7 +243,6 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   fusionFilter->GenerateData();
-
   // Software Guide : EndCodeSnippet
 
 
