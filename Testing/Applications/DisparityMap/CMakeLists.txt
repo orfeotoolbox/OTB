@@ -68,9 +68,9 @@ OTB_TEST_APPLICATION(NAME apTvDmStereoRectificationGridGeneratorTest
                              -io.outleft ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
                              -io.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
                              -epi.elevation.avg.value 300
-                             -epi.step 5
                              -epi.scale 0.5
-                     VALID   --compare-n-images ${EPSILON_10} 2
+                             -epi.step 5
+                     VALID   --compare-n-images ${EPSILON_7} 2
                              ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput1.tif
                              ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
                              ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput2.tif
