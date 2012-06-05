@@ -231,7 +231,7 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
                   minRegionCount++;
                 }
         }
-     // std::cout<<minRegionCount<<" regions are too be fused"<<std::endl;
+    // std::cout<<minRegionCount<<" regions are too be fused"<<std::endl;
     // Iterate over all regions
 
       for(LabelType curLabel = 1; curLabel <= regionCount; ++curLabel)
@@ -393,7 +393,7 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
       ++outputIt;
       }
 
-    finishedPruning =  !minRegionCount ||  regionCount == 1;
+    finishedPruning =  !minRegionCount ||  regionCount == 1 ||  pruneIterations>=10;
 
     // only one iteration for now
 
