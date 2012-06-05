@@ -123,12 +123,12 @@ public:
   typedef typename OutputImageType::Pointer  OutputImageTypePointer;
   typedef typename SegmentTableType::Pointer SegmentTableTypePointer;
   typedef typename BoundaryType::Pointer     BoundaryTypePointer;
-    
-  /** A constant used in the labeling algorithm.  */
-  static unsigned long NULL_LABEL;
 
   /** A constant used in the labeling algorithm.  */
-  static short NULL_FLOW;
+  itkStaticConstMacro(NULL_LABEL, unsigned long, 0);
+
+  /** A constant used in the labeling algorithm.  */
+  itkStaticConstMacro(NULL_FLOW, short, -1);
  
   /** Get/Set the input image.   */
   InputImageType * GetInputImage(void)
