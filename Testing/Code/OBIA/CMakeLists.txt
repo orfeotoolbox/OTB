@@ -264,13 +264,13 @@ ADD_TEST(obTuStreamingVectorizedSegmentationOGRNew ${OBIA_TESTS1}
     otbStreamingVectorizedSegmentationOGRNew)
 
 ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
-     #--compare-ogr  ${EPSILON_8}
-     #${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutput.sqlite
-     #${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
+     --compare-ogr  ${EPSILON_8}
+     ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutput.sqlite
+     ${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
      otbStreamingVectorizedSegmentationOGR
      ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
      ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif
-     ${TEMP}/obTvStreamingVectorizedSegmentationOGR.sqlite
+     ${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
      NewLayer
      100
      5
@@ -286,13 +286,13 @@ ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
 #IF(${GDAL_NUM_VERSION} VERSION_GREATER "10800")
 # -------            otb::FusionOGRTileFilter   -------------
 ADD_TEST(obTuFusionOGRTileFilter ${OBIA_TESTS1}
-#     --compare-ogr  ${EPSILON_8}
-#     ${BASELINE_FILES}/obTvFusionOGRTile.sqlite
-#     ${TEMP}/obTvFusionOGRTile.sqlite
+    --compare-ogr  ${EPSILON_8}
+    ${BASELINE_FILES}/obTvFusionOGRTile.shp
+    ${TEMP}/obTvFusionOGRTile.shp
     otbFusionOGRTileFilter
     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-    ${INPUTDATA}/QB_Toulouse_Ortho_withTiles.sqlite
-    ${TEMP}/obTvFusionOGRTile.sqlite
+    ${INPUTDATA}/QB_Toulouse_Ortho_withTiles.shp
+    ${TEMP}/obTvFusionOGRTile.shp
     layer
     112
     )

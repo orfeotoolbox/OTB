@@ -51,6 +51,24 @@ int otbFusionOGRTileFilter(int argc, char * argv[])
   //first copy the input OGR file as it will be updated with the fusionned polygons
   itksys::SystemTools::CopyAFile(inOGRfname,tmpOGRfname,true);
   
+  //Get the base name of the .shp file
+  std::string inPathName = itksys::SystemTools::GetFilenamePath(inOGRfname);
+  std::string inBaseName = itksys::SystemTools::GetFilenameWithoutExtension(inOGRfname);
+  std::string outPathName = itksys::SystemTools::GetFilenamePath(tmpOGRfname);
+  std::string outBaseName = itksys::SystemTools::GetFilenameWithoutExtension(tmpOGRfname);
+
+
+  //copy the .shx, .dbf, .prj files
+  std::string in = inPathName+"/"+inBaseName+".shx";
+  std::string out = outPathName+"/"+outBaseName+".shx";
+  itksys::SystemTools::CopyAFile(in.c_str(),out.c_str(),true);
+  in = inPathName+"/"+inBaseName+".dbf";
+  out = outPathName+"/"+outBaseName+".dbf";
+  itksys::SystemTools::CopyAFile(in.c_str(),out.c_str(),true);
+  in = inPathName+"/"+inBaseName+".prj";
+  out = outPathName+"/"+outBaseName+".prj";
+  itksys::SystemTools::CopyAFile(in.c_str(),out.c_str(),true);
+
   
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
