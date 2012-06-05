@@ -64,7 +64,8 @@ OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest
 OTB_TEST_APPLICATION(NAME     apTuObSegmentationTest
                      APP      Segmentation
                      OPTIONS  -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-                              -outvd ${TEMP}/apTuObLargeScaleSegmentationVectorData.shp
-                              -filter meanshiftedison
+                     		  -mode vector
+                              -mode.vector.out ${TEMP}/apTuObLargeScaleSegmentationVectorData.shp
+                              -filter edison
                      )
                      
