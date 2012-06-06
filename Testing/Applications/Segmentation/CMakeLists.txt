@@ -59,13 +59,36 @@ OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest
                 	         ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
                      )
                      
-#--- LargeScaleSegmentation ---#
-#TODO add validation data
-OTB_TEST_APPLICATION(NAME     apTuObSegmentationTest
+#--- Segmentation ---#
+SET(cc_parameters "-filter.cc.expr distance<50")
+SET(edison_parameters "-filter.edison.spatialr 5 -filter.edison.ranger 50 -filter.edison.minsize 10")
+SET(meanshift_parameters "-filter.meanshift.spatialr 5 -filter.meanshift.ranger 50 -filter.meanshift.minsize 10")
+SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.ogroptions OVERWRITE=YES")
+SET(raster_output_format ".tif uint16")
+SET(vector_output_format ".sqlite")
+
+# Loop on modes
+FOREACH(mode "Raster" "Vector")
+STRING(TOLOWER ${mode} lmode)
+# Loop on filters
+FOREACH(filter "Edison" "Meanshift" "CC" "Watershed")
+
+STRING(TOLOWER ${filter} lfilter)
+SET(OUTFILE ${TEMP}/apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
+
+#Ensure outfile is deleted
+file(REMOVE ${OUTFILE})
+
+OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                      APP      Segmentation
-                     OPTIONS  -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-                     		  -mode vector
-                              -mode.vector.out ${TEMP}/apTuObLargeScaleSegmentationVectorData.shp
-                              -filter edison
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+                              -filter ${lfilter}
+                              ${${lfilter}_parameters}
+                              -mode ${lmode}
+                              -mode.${lmode}.out ${OUTFILE}
+                              ${${lmode}_parameters}
                      )
+
+ENDFOREACH(filter)
+ENDFOREACH(mode)
                      
