@@ -36,7 +36,11 @@ struct SwapXYFunctor
     otb::ogr::UniqueGeometryPtr out(in ? in->clone() : 0);
     if (out)
       {
+#if GDAL_VERSION_NUM >= 1900
       out->swapXY();
+#else
+      assert(!"Sorry, This example filter requires GDAL v1.9.0 or later");
+#endif
       }
     return boost::move(out);
     }
