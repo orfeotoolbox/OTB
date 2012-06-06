@@ -258,8 +258,8 @@ LabelImageToOGRDataSourceFilter<TInputImage>
       this->GetInputMask()->TransformIndexToPhysicalPoint(bufferIndexOrigin, bufferOrigin);
       geoTransform[0] = bufferOrigin[0];
       geoTransform[3] = bufferOrigin[1];
-      geoTransform[1] = this->GetInput()->GetSpacing()[0];
-      geoTransform[5] = this->GetInput()->GetSpacing()[1];
+      geoTransform[1] = this->GetInputMask()->GetSpacing()[0];
+      geoTransform[5] = this->GetInputMask()->GetSpacing()[1];
       // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
       if (projSize == 0)
       {
@@ -268,8 +268,8 @@ LabelImageToOGRDataSourceFilter<TInputImage>
       }
       else
       {
-         geoTransform[2] = this->GetInput()->GetGeoTransform()[2];
-         geoTransform[4] = this->GetInput()->GetGeoTransform()[4];
+         geoTransform[2] = this->GetInputMask()->GetGeoTransform()[2];
+         geoTransform[4] = this->GetInputMask()->GetGeoTransform()[4];
       }
       maskDataset->SetGeoTransform(geoTransform);
       

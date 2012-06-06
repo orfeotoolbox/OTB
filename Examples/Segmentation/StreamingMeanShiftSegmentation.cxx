@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   reader->SetFileName(imageName);
-  reader->GenerateOutputInformation();
+  reader->UpdateOutputInformation();
   
   maskReader->SetFileName(maskName);
   maskReader->UpdateOutputInformation();
