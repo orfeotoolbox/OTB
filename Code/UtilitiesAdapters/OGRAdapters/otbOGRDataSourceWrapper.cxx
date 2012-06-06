@@ -162,6 +162,7 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
   Drivers::Init();
 
   const bool update = mode & Modes::write;
+  // std::cout << "Opening datasource " << filename << " update=" << update << "\n";
   if (itksys::SystemTools::FileExists(filename.c_str()))
     {
     OGRDataSource * source = OGRSFDriverRegistrar::Open(filename.c_str(), update);

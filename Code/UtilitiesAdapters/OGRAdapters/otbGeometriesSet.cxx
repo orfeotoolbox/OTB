@@ -20,39 +20,123 @@
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
 #include "otbGeometriesSet.h"
+#include <cassert>
 
 /*===========================================================================*/
-/*==============================[ other stuff ]==============================*/
+/*================================[ Helpers ]================================*/
 /*===========================================================================*/
+template <typename DataType>
+inline
+DataType & getRef(typename itk::SmartPointer<DataType> const& ds)
+{
+  assert(ds && "unexpected nil datasource");
+  return *ds;
+}
 
+#if 0
+template <typename DataType>
+inline
+DataType const& getRef(typename DataType::ConstPointer ds)
+{
+  assert(ds);
+  return *ds;
+}
+#endif
+
+otb::ogr::Layer const& getRef(otb::ogr::Layer const& layer)
+{
+  return layer;
+}
+
+otb::ogr::Layer & getRef(otb::ogr::Layer & layer)
+{
+  return layer;
+}
+
+/*===========================================================================*/
+/*=======================[ Setting and construction ]========================*/
+/*===========================================================================*/
 otb::GeometriesSet::GeometriesSet()
+: m_geometriesSet(otb::ogr::DataSource::New())
 {
 }
 
-/*virtual*/  otb::GeometriesSet::~GeometriesSet()
+otb::GeometriesSet::GeometriesSet(ogr::DataSource::Pointer datasource)
+: m_geometriesSet(datasource)
+{
+  assert(datasource && "unexpected nil datasource");
+}
+
+otb::GeometriesSet::GeometriesSet(ogr::Layer layer)
+: m_geometriesSet(layer)
+{
+}
+
+/*static*/
+otb::GeometriesSet::Pointer otb::GeometriesSet::New(ogr::DataSource::Pointer datasource)
+{
+  Pointer res = new Self(datasource);
+  res->UnRegister();
+  return res;
+}
+
+/*static*/
+otb::GeometriesSet::Pointer otb::GeometriesSet::New(ogr::Layer layer)
+{
+  Pointer res = new Self(layer);
+  res->UnRegister();
+  return res;
+}
+
+/*virtual*/
+otb::GeometriesSet::~GeometriesSet()
 {
 }
 
 void otb::GeometriesSet::Set(ogr::Layer layer)
 {
+  assert(layer && "unexpected nil layer");
   m_geometriesSet = layer;
 }
 
 void otb::GeometriesSet::Set(ogr::DataSource::Pointer datasource)
 {
+  assert(datasource && "unexpected nil datasource");
   m_geometriesSet = datasource;
 }
 
+/*===========================================================================*/
+/*=================================[ IsSet ]=================================*/
+/*===========================================================================*/
+struct IsSetTester : boost::static_visitor<bool>
+{
+  template <typename T>
+  bool operator()(T const& gs) const
+    {
+    return getRef(gs);
+    }
+};
+
+bool otb::GeometriesSet::IsSet() const
+{
+  return this->apply(IsSetTester());
+}
+
+/*===========================================================================*/
+/*===============================[ Printing ]================================*/
+/*===========================================================================*/
 struct Printer : boost::static_visitor<>
 {
   Printer(std::ostream& os, itk::Indent indent)
     : m_os(os), m_indent(indent) {}
   void operator()(otb::ogr::Layer layer) const
     {
+    assert(layer && "unexpected nil layer...");
     layer.PrintSelf(m_os, m_indent);
     }
   void operator()(otb::ogr::DataSource::Pointer datasource) const
     {
+    assert(datasource && "unexpected nil datasource...");
     datasource->Print(m_os, m_indent);
     }
 private:

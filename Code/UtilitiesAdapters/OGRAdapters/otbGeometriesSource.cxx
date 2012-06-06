@@ -29,12 +29,14 @@
 otb::GeometriesSource::GeometriesSource()
 {
   Superclass::SetNumberOfRequiredOutputs(1);
-  // The default behaviour is to prepare a in-memory OGR datasource in case
-  // filters are piped.
-  // In the filter is meant to produce a file, use SetOutput, or the New(string)
-  // function to built the GeometriesSource and filters
-  ogr::DataSource::Pointer inMemoryDS = ogr::DataSource::New();
-  Superclass::SetNthOutput(0, inMemoryDS);
+  // The following line has for side effect to set of DataSource with the wrong
+  // type as default value instead of a plain nil
+  // smartpointer... => NO
+  // Superclass::SetNthOutput(0, 0);
+
+  // Moreover, the default, and correct, value will be set in AllocateOutputs if
+  // nothing is set by then => nothing more to do.
+
 }
 
 /*virtual*/  otb::GeometriesSource::~GeometriesSource()
@@ -57,4 +59,24 @@ otb::GeometriesSource::OutputGeometriesType* otb::GeometriesSource::GetOutput(un
 void otb::GeometriesSource::SetOutput(OutputGeometriesType* output, unsigned int idx/* = 0 */)
 {
   Superclass::SetNthOutput(idx, output);
+}
+
+/*virtual*/ void otb::GeometriesSource::AllocateOutputs()
+{
+  // The default behaviour is to prepare a in-memory OGR datasource in case
+  // filters are piped.
+  // In the filter is meant to produce a file, use SetOutput, or the New(string)
+  // function to built the GeometriesSource and filters
+  if (!GetOutput() || !GetOutput()->IsSet())
+    {
+    GeometriesSet::Pointer gs = GeometriesSet::New(); // in-memory DataSource
+    assert(gs);
+    this->SetOutput(gs);
+    }
+}
+
+/*virtual*/ void otb::GeometriesSource::PrepareOutputs()
+{
+  AllocateOutputs();
+  Superclass::PrepareOutputs();
 }

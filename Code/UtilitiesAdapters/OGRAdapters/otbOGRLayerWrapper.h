@@ -153,6 +153,8 @@ public:
    * \throw itk::ExceptionObject if the feature can't be set.
    * \pre The Layer need to support <em>OLCRandomWrite</em> capability.
    * \sa \c OGRLayer::SetFeature()
+   * \warning Calls to this function may invalidate any feature iterator
+   * previously obtained depending on the actual \c OGRDriver.
    * \internal
    * Whilst the \c Feature id is updated, it is not the same feature than the
    * one stored in the layer. In other words, \c Feature is still in charge of
@@ -363,6 +365,8 @@ public:
    * existance that were obtained or created with the previous layer definition.
    * \throw itk::ExceptionObject if the new field cannot be created
    * \sa \c OGRLayer::CreateField()
+   * \warning Calls to this function may invalidate any feature iterator
+   * previously obtained depending on the actual \c OGRDriver.
    * \todo Move to use \c otb::ogr::FieldDefn
    */
   void CreateField(FieldDefn const& field, bool bApproxOK = true);
@@ -447,6 +451,8 @@ public:
    * \sa \c OGRLayer::GetGeomType()
    */
   OGRwkbGeometryType GetGeomType() const;
+
+  friend bool otb::ogr::operator==(Layer const& lhs, Layer const& rhs);
 private:
   /**
    * Internal encapsulation of \c OGRLayer::GetNextFeature().
@@ -467,6 +473,12 @@ private:
    */
   boost::shared_ptr<OGRLayer> m_Layer;
   };
+
+bool operator==(Layer const& lhs, Layer const& rhs);
+inline bool operator!=(Layer const& lhs, Layer const& rhs)
+  {
+  return ! (lhs == rhs);
+  }
 
 } } // end namespace otb::ogr
 

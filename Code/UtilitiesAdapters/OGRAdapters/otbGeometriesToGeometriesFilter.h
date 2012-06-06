@@ -68,8 +68,8 @@ protected:
   virtual void GenerateData(void);
 
 private:
-  void Process(
-    InputGeometriesType const& source, OutputGeometriesType &destination);
+  void Process(OutputGeometriesType &inout);
+  void Process(InputGeometriesType const& source, OutputGeometriesType &destination);
   virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const=0;
   friend struct ::ProcessVisitor;
   };
@@ -90,6 +90,10 @@ struct TransformationFunctorDispatcher<TransformationFunctor, ogr::Layer>
     {
     m_functor(in, out);
     }
+  void operator()(ogr::Layer & inout) const
+    {
+    m_functor(inout);
+    }
 private:
   TransformationFunctor m_functor;
   };
@@ -101,20 +105,36 @@ struct TransformationFunctorDispatcher<TransformationFunctor, OGRGeometry>
   typedef typename TransformationFunctor::TransformedElementType TransformedElementType;
   BOOST_MPL_ASSERT((boost::is_same<OGRGeometry, TransformedElementType>));
   TransformationFunctorDispatcher(TransformationFunctor functor) : m_functor(functor){ }
+
   void operator()(ogr::Layer const& in, ogr::Layer & out) const
     {
+    // std::cout << "Converting layer " << in.GetName() << " -> " << out.GetName() << "\n";
     OGRFeatureDefn & defn = out.GetLayerDefn();
-    for (ogr::Layer::const_iterator b = in.begin(), e = in.end()
- ; b != e
- ; ++b
-    )
+    for (ogr::Layer::const_iterator b = in.begin(), e = in.end(); b != e; ++b)
       {
       ogr::Feature const feat = *b;
-      ogr::UniqueGeometryPtr g = m_functor(feat.GetGeometry());
       // TODO: field transformations...
+      ogr::UniqueGeometryPtr g = m_functor(feat.GetGeometry());
       ogr::Feature dest(defn);
       dest.SetGeometryDirectly(boost::move(g));
       out.CreateFeature(dest);
+      }
+    }
+
+  void operator()(ogr::Layer & inout) const
+    {
+    // std::cout << "Converting layer " << inout.GetName() << "\n";
+    OGRFeatureDefn & defn = inout.GetLayerDefn();
+    // NB: We can't iterate with begin()/end() as SetFeature may invalidate the
+    // iterators depending of the underlying drivers
+    // => we use start_at(), i.e. SetNextByIndex()
+    for (int i=0, N=inout.GetFeatureCount(true); i!=N; ++i)
+      {
+      ogr::Feature feat = *inout.start_at(i);
+      // TODO: field transformations...
+      ogr::UniqueGeometryPtr g = m_functor(feat.GetGeometry());
+      feat.SetGeometryDirectly(boost::move(g));
+      inout.SetFeature(feat);
       }
     }
 private:
@@ -156,12 +176,17 @@ protected:
   /** Destructor. */
   virtual ~DefaultGeometriesToGeometriesFilter();
 
-  /** Prints self to stream. */
-  // void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
   virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const
     {
-    m_TransformationFunctor(source, destination); // if TransformedElementType == layer
+    // std::cout << "DG2GF::DoProcessLayer: L("<<source.GetName()<<") -> L("<<destination.GetName()<<") ...\n";
+    if (source != destination)
+      {
+      m_TransformationFunctor(source, destination); // if TransformedElementType == layer
+      }
+    else
+      {
+      m_TransformationFunctor(destination); // if TransformedElementType == layer
+      }
     };
 private:
   TransformationFunctorDispatcherType m_TransformationFunctor;

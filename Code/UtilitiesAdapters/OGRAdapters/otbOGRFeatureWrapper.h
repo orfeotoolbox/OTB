@@ -298,6 +298,7 @@ public:
    * equal.
    */
   friend bool otb::ogr::operator==(Feature const& lhs, Feature const& rhs);
+  OGRFeature const* addr() const { return m_Feature.get(); }
 private:
   /**\name Unchecked definitions
    * All the definitions that follow do the real work. However, they are not the

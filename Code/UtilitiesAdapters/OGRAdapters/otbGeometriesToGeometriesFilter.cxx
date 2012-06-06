@@ -20,6 +20,7 @@
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
 #include "otbGeometriesToGeometriesFilter.h"
+#include <cassert>
 #include "otbGeometriesSet.h"
 #include "itkMacro.h"
 #include "itkTimeProbe.h"
@@ -59,21 +60,46 @@ struct ProcessVisitor : boost::static_visitor<>
     : m_filter(filter) {}
   void operator()(otb::ogr::Layer const& source, otb::ogr::Layer & destination) const
     {
-    std::cout << "G2GF: Process Visitor: L -> L ("<< source.GetName()<<")...\n";
+    // std::cout << "G2GF: Process Visitor: L -> L ("<< source.GetName()<<")...\n";
     m_filter.DoProcessLayer(source, destination);
     }
+
   void operator()(otb::ogr::DataSource::Pointer source, otb::ogr::DataSource::Pointer destination) const
     {
-    std::cout << "G2GF: Process Visitor: DS("<<source->ogr().GetName()<<") -> DS("<<source->ogr().GetName()<<") ...\n";
+    assert(source && "can't filter a nil datasource");
+    assert(destination && "can't filter to a nil datasource");
+    // std::cout << "G2GF: Process Visitor: DS("<<source->ogr().GetName()<<") -> DS("<<destination->ogr().GetName()<<") ...\n";
     for (otb::ogr::DataSource::const_iterator b = source->begin(), e = source->end()
  ; b != e
  ; ++b
     )
       {
       otb::ogr::Layer const& sourceLayer = *b;
+      assert(sourceLayer && "unexpected nil source layer");
+      // std::cout << "source layer name:" << sourceLayer.GetName() << "\n";
       otb::ogr::Layer destLayer = destination->CreateLayer(
         sourceLayer.GetName(), 0, sourceLayer.GetGeomType());
+      // std::cout << "layer created!\n";
       m_filter.DoProcessLayer(sourceLayer, destLayer);
+      }
+    }
+
+  void operator()(otb::ogr::Layer & inout) const
+    {
+    // std::cout << "G2GF: Process Visitor: L -> L ("<< source.GetName()<<")...\n";
+    m_filter.DoProcessLayer(inout, inout);
+    }
+
+  void operator()(otb::ogr::DataSource::Pointer inout) const
+    {
+    assert(inout && "can't filter a nil datasource");
+    // std::cout << "G2GF: Process Visitor: DS("<<source->ogr().GetName()<<") -> DS("<<destination->ogr().GetName()<<") ...\n";
+    for (otb::ogr::DataSource::iterator b = inout->begin(), e = inout->end(); b != e; ++b)
+      {
+      otb::ogr::Layer layer = *b;
+      assert(layer && "unexpected nil source layer");
+      // std::cout << "source layer name:" << sourceLayer.GetName() << "\n";
+      m_filter.DoProcessLayer(layer, layer);
       }
     }
 
@@ -89,10 +115,19 @@ private:
 /*virtual*/ void otb::GeometriesToGeometriesFilter::Process(
   InputGeometriesType const& source, OutputGeometriesType & destination)
 {
-  std::cout << "G2GF: Processing ...\n";
+  // std::cout << "G2GF: Processing ...\n";
   // si layer, appelle virt process layer
   // si DS, loop et appelle virt process layer
   source.apply(ProcessVisitor(*this), destination);
+}
+
+/*virtual*/ void otb::GeometriesToGeometriesFilter::Process(
+  OutputGeometriesType & inout)
+{
+  // std::cout << "G2GF: Processing ...\n";
+  // si layer, appelle virt process layer
+  // si DS, loop et appelle virt process layer
+  inout.apply(ProcessVisitor(*this));
 }
 
 /*virtual*/
@@ -111,14 +146,25 @@ void otb::GeometriesToGeometriesFilter::GenerateOutputInformation(void )
 /*virtual*/
 void otb::GeometriesToGeometriesFilter::GenerateData(void )
 {
-  // this->AllocateOutputs();
-  OutputGeometriesType::Pointer      output = this->GetOutput();
+  // std::cout << "G2GF::GenerateData\n";
+  this->AllocateOutputs();
   InputGeometriesType::ConstPointer  input  = this->GetInput();
+  // assert(input && "Cann't filter to a nil geometries set");
+  OutputGeometriesType::Pointer      output = this->GetOutput();
+  assert(output && "Cann't filter a nil geometries set");
 
   // Start recursive processing
   itk::TimeProbe chrono;
   chrono.Start();
-  this->Process(*input, *output);
+  if (input)
+    {
+    this->Process(*input, *output);
+    }
+  else
+    {
+    this->Process(*output);
+    }
+
   chrono.Stop();
   otbMsgDevMacro(<< "GeometriesToGeometriesFilter: geometries processed in " << chrono.GetMeanTime() << " seconds.");
 }

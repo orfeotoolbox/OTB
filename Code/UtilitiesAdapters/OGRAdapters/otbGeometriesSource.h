@@ -72,16 +72,14 @@ public:
   virtual OutputGeometriesType* GetOutput(unsigned int idx);
 
   virtual void SetOutput(OutputGeometriesType* output, unsigned int idx = 0);
+  virtual void PrepareOutputs();
 
 protected:
   GeometriesSource();
   virtual ~GeometriesSource();
 
-  // Inherited definition is enough
-  // void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  // /** Ensures that the output vector data are cleared before processing. */
-  // virtual void  AllocateOutputs();
+  /** Ensures that the output vector data are cleared before processing. */
+  virtual void  AllocateOutputs();
   };
 } // end namespace otb
 

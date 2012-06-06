@@ -66,7 +66,8 @@ int otb::ogr::Layer::GetFeatureCount(bool doForceComputation) const
 otb::ogr::Feature otb::ogr::Layer::GetNextFeature()
 {
   assert(m_Layer && "OGRLayer not initialized");
-  return m_Layer->GetNextFeature();
+  OGRFeature * f = m_Layer->GetNextFeature();
+  return f;
 }
 
 otb::ogr::Layer::iterator otb::ogr::Layer::begin()
@@ -322,4 +323,10 @@ OGRwkbGeometryType otb::ogr::Layer::GetGeomType() const
 #else
   return m_Layer->GetGeomType();
 #endif
+}
+
+bool otb::ogr::operator==(Layer const& lhs, Layer const& rhs)
+{
+  const bool equal = lhs.m_Layer.get() == rhs.m_Layer.get();
+  return equal;
 }
