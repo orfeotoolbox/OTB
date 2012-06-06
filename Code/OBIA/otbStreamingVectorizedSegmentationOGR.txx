@@ -67,13 +67,6 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   return static_cast<const LabelImageType *>(this->itk::ProcessObject::GetInput(2));
 }
 
-template <class TImageType, class TSegmentationFilter>
-void
-PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
-::GenerateInputRequestedRegion()
-{
-  Superclass::GenerateInputRequestedRegion();
-}
 
 template <class TImageType, class TSegmentationFilter>
 typename PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>::OGRDataSourcePointerType

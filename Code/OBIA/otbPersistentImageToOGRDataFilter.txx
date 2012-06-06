@@ -65,19 +65,6 @@ PersistentImageToOGRDataFilter<TImage>
 template<class TImage>
 void
 PersistentImageToOGRDataFilter<TImage>
-::GenerateInputRequestedRegion()
-{
-   Superclass::GenerateInputRequestedRegion();
-   if (this->m_StreamSize[0]==0 && this->m_StreamSize[1]==0)
-   {
-      this->m_StreamSize = this->GetInput()->GetRequestedRegion().GetSize();
-   }
-}
-
-
-template<class TImage>
-void
-PersistentImageToOGRDataFilter<TImage>
 ::AllocateOutputs()
 {
   // Nothing that needs to be allocated for the outputs : the output is not meant to be used
@@ -143,6 +130,12 @@ void
 PersistentImageToOGRDataFilter<TImage>
 ::GenerateData()
 {
+  
+  if (this->GetStreamSize()[0]==0 && this->GetStreamSize()[1]==0)
+  {
+     this->m_StreamSize = this->GetInput()->GetRequestedRegion().GetSize();
+  }
+  
   // call the processing function for this tile
   OGRDataSourcePointerType currentTileVD = this->ProcessTile();
   OGRLayerType srcLayer = currentTileVD->GetLayerChecked(0);

@@ -182,7 +182,6 @@ protected:
 
   virtual ~PersistentStreamingLabelImageToOGRDataFilter();
 
-  void GenerateInputRequestedRegion();
 
 private:
   PersistentStreamingLabelImageToOGRDataFilter(const Self &); //purposely not implemented

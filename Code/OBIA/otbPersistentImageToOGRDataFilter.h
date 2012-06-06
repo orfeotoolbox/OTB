@@ -112,8 +112,6 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void GenerateData();
-  
-  void GenerateInputRequestedRegion();
 
 
 private:
