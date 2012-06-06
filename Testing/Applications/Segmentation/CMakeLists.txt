@@ -60,24 +60,36 @@ OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest
                      )
                      
 #--- Segmentation ---#
-SET(cc_parameters "-filter.cc.expr distance<50")
+
+# Segmentation algorithms parameters
+SET(cc_parameters "-filter.cc.expr distance<25")
 SET(edison_parameters "-filter.edison.spatialr 5 -filter.edison.ranger 50 -filter.edison.minsize 10")
 SET(meanshift_parameters "-filter.meanshift.spatialr 5 -filter.meanshift.ranger 50 -filter.meanshift.minsize 10")
 SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.ogroptions OVERWRITE=YES")
-SET(raster_output_format ".tif uint16")
+
+# Output type dependning on mode
+SET(raster_output_format ".tif")
+SET(raster_output_option " uint16")
 SET(vector_output_format ".sqlite")
+
+# Validation depending on mode 
+SET(vector_comparison --compare-ogr ${NOTOL})
+SET(raster_comparison --compare-image ${NOTOL})
+
+# Reference ffiles depending on modes
+SET(vector_ref_path ${BASELINE_FILES})
+SET(raster_ref_path ${BASELINE})
 
 # Loop on modes
 FOREACH(mode "Raster" "Vector")
 STRING(TOLOWER ${mode} lmode)
+
 # Loop on filters
 FOREACH(filter "Edison" "Meanshift" "CC" "Watershed")
-
 STRING(TOLOWER ${filter} lfilter)
-SET(OUTFILE ${TEMP}/apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
-#Ensure outfile is deleted
-file(REMOVE ${OUTFILE})
+# Derive output file name
+SET(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                      APP      Segmentation
@@ -85,8 +97,11 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
-                              -mode.${lmode}.out ${OUTFILE}
+                              -mode.${lmode}.out ${TEMP}/${OUTFILE}${${lmode}_output_option}
                               ${${lmode}_parameters}
+                     VALID    ${${lmode}_comparison}
+                              ${${lmode}_ref_path}/${OUTFILE}
+                              ${TEMP}/${OUTFILE}
                      )
 
 ENDFOREACH(filter)
