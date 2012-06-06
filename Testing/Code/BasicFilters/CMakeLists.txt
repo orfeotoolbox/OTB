@@ -1250,66 +1250,6 @@ ADD_TEST(bfTuMeanShiftSmoothingImageFilterQBRoad ${BASICFILTERS_TESTS9}
         4 30 0.1 100
         )
 
-SET(TEST /home/jonathan/workspace/ORFEO-TOOLBOX/test_MeanShift/)
-
-ADD_TEST(bfTuMeanShiftSmoothingImageFilterPleiades ${BASICFILTERS_TESTS9}
-        otbMeanShiftSmoothingImageFilter
-        ${TEST}/phr_las_vegas_xt_12bits.tif
-        ${TEST}/bfMeanShiftSmoothingImageFilterSpatialOutput_PleiadesR100.tif
-        ${TEST}/bfMeanShiftSmoothingImageFilterSpectralOutput_PleiadesR100.tif
-        ${TEST}/bfMeanShiftSmoothingImageFilterIterationOutput_PleiadesR100.tif
-        ${TEST}/bfMeanShiftSmoothingImageFilterLabelOutput_PleiadesR100.tif
-        4 100 0.1 100
-        )
-ADD_TEST(bfTuMeanShiftVectorImageFilterEdgesPleiades ${BASICFILTERS_TESTS9}
-        otbMeanShiftVectorImageFilter
-        ${TEST}/edges.tif
-        ${TEST}/bfMeanShiftImageFilterOutput_EDISONPleiades.tif
-        ${TEST}/ClusteredOutput_EDISONedges.tif
-        ${TEST}/LabeledClusteredOutput_EDISONedges.tif
-        ${TEST}/bfMeanShiftImageFilterClusterBoundariesOutput_EDISONPleiades.tif
-        4 100 100 1.0
-        )    
-ADD_TEST(bfTuMeanShiftVectorImageFilterEdgesPleiades1 ${BASICFILTERS_TESTS9}
-        otbMeanShiftVectorImageFilter
-        ${TEST}/edges.tif
-        ${TEST}/bfMeanShiftImageFilterOutput_EDISONPleiades.tif
-        ${TEST}/ClusteredOutput_EDISONedges1.tif
-        ${TEST}/LabeledClusteredOutput_EDISONedges1.tif
-        ${TEST}/bfMeanShiftImageFilterClusterBoundariesOutput_EDISONPleiades.tif
-        4 100 1 1.0
-        )            
-               
-ADD_TEST(bfTuMeanShiftVectorImageFilterCarsPleiades ${BASICFILTERS_TESTS9}
-        otbMeanShiftVectorImageFilter
-        ${TEST}/cars.tif
-        ${TEST}/bfMeanShiftImageFilterOutput_EDISONPleiades.tif
-        ${TEST}/ClusteredOutput_EDISONcars.tif
-        ${TEST}/LabeledClusteredOutput_EDISONcars.tif
-        ${TEST}/bfMeanShiftImageFilterClusterBoundariesOutput_EDISONPleiades.tif
-        4 100 100 1.0
-        )           
-  
-ADD_TEST(bfTuMeanShiftVectorImageFilterCarsPleiades1 ${BASICFILTERS_TESTS9}
-        otbMeanShiftVectorImageFilter
-        ${TEST}/cars.tif
-        ${TEST}/bfMeanShiftImageFilterOutput_EDISONPleiades.tif
-        ${TEST}/ClusteredOutput_EDISONcars1.tif
-        ${TEST}/LabeledClusteredOutput_EDISONcars1.tif
-        ${TEST}/bfMeanShiftImageFilterClusterBoundariesOutput_EDISONPleiades.tif
-        4 100 1 1.0
-        )                      
-        
-ADD_TEST(bfTuMeanShiftVectorImageFilterPleiades ${BASICFILTERS_TESTS9}
-        otbMeanShiftVectorImageFilter
-        ${TEST}/phr_las_vegas_xt_12bits.tif
-        ${TEST}/bfMeanShiftImageFilterOutput_EDISONPleiades.tif
-        ${TEST}/bfMeanShiftImageFilterClusteredOutput_EDISONPleiades.tif
-        ${TEST}/bfMeanShiftImageFilterLabeledClusteredOutput_EDISONPleiades.tif
-        ${TEST}/bfMeanShiftImageFilterClusterBoundariesOutput_EDISONPleiades.tif
-        4 50 1 1.0
-        )   
-
 
 ADD_TEST(bfTvMeanShiftVectorImageFilterQBPAN ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilter
