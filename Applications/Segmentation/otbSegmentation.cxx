@@ -170,6 +170,8 @@ private:
                             "vector is below this threshold or if iteration number reached maximum number of iterations.");
     AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "Maximum number of iterations");
     SetParameterDescription("filter.meanshift.maxiter", "Algorithm iterative scheme will stop if convergence hasn't been reached after the maximum number of iterations.");
+    AddParameter(ParameterType_Int, "filter.meanshift.minsize", "Mininum region size");
+    SetParameterDescription("filter.meanshift.minsize", "Minimun size of a region in segmentation. Smaller clusters will be merged to the neighbouring cluster with the closest radiometry.");
 
     //AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
     //SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
@@ -178,7 +180,9 @@ private:
     SetDefaultParameterInt("filter.meanshift.spatialr", 5);
     SetDefaultParameterFloat("filter.meanshift.ranger", 15.0);
     SetDefaultParameterFloat("filter.meanshift.thres", 0.1);
-    SetMinimumParameterFloatValue("filter.meanshift.thres", 0.);
+    SetMinimumParameterFloatValue("filter.meanshift.thres", 0.1);
+    SetDefaultParameterInt("filter.meanshift.minsize", 100);
+    SetMinimumParameterIntValue("filter.meanshift.minsize", 0);
     SetDefaultParameterInt("filter.meanshift.maxiter", 100);
     SetMinimumParameterIntValue("filter.meanshift.maxiter", 1);
 
@@ -198,6 +202,7 @@ private:
     SetDefaultParameterInt("filter.edison.spatialr", 5);
     SetDefaultParameterFloat("filter.edison.ranger", 15.0);
     SetDefaultParameterInt("filter.edison.minsize", 100);
+    SetMinimumParameterIntValue("filter.edison.minsize", 0);
     SetDefaultParameterFloat("filter.edison.scale", 1.);
 
     //Connected component segmentation parameters
@@ -476,8 +481,9 @@ private:
         spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.spatialr"));
       const unsigned int
         rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.ranger"));
-      //const unsigned int
-      //minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("minsize"));
+       const unsigned int
+            minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.minsize"));
+
       const float
         threshold = this->GetParameterFloat("filter.meanshift.thres");
       const unsigned int
@@ -487,6 +493,7 @@ private:
       meanShiftVectorizationFilter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
       meanShiftVectorizationFilter->GetSegmentationFilter()->SetMaxIterationNumber(maxIterNumber);
       meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
+      meanShiftVectorizationFilter->GetSegmentationFilter()->SetMinRegionSize(minimumObjectSize);
 
       streamSize = this->GenericApplySegmentation<FloatVectorImageType,MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS, 0);
       }
