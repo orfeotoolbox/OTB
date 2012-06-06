@@ -76,3 +76,26 @@ OTB_TEST_APPLICATION(NAME apTvDmStereoRectificationGridGeneratorTest
                              ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput2.tif
                              ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
                      )
+
+#--- GridBasedImageResampling ---#
+OTB_TEST_APPLICATION(NAME apTvDmGridBasedImageResamplingLeftTest
+                     APP  GridBasedImageResampling
+                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_left.tif
+                             -io.out ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
+                             -grid.in ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
+                             -out.sizex 158
+                             -out.sizey 158
+                     )
+
+SET_TESTS_PROPERTIES(apTvDmGridBasedImageResamplingLeftTest PROPERTIES DEPENDS apTvDmStereoRectificationGridGeneratorTest)
+
+OTB_TEST_APPLICATION(NAME apTvDmGridBasedImageResamplingRightTest
+                     APP  GridBasedImageResampling
+                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_right.tif
+                             -io.out ${TEMP}/apTvDmGridBasedImageResamplingRightTest.tif
+                             -grid.in ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
+                             -out.sizex 158
+                             -out.sizey 158
+                     )
+
+SET_TESTS_PROPERTIES(apTvDmGridBasedImageResamplingRightTest PROPERTIES DEPENDS apTvDmStereoRectificationGridGeneratorTest)
