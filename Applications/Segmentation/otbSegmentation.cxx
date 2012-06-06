@@ -171,7 +171,8 @@ private:
     AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "Maximum number of iterations");
     SetParameterDescription("filter.meanshift.maxiter", "Algorithm iterative scheme will stop if convergence hasn't been reached after the maximum number of iterations.");
     AddParameter(ParameterType_Int, "filter.meanshift.minsize", "Mininum region size");
-    SetParameterDescription("filter.meanshift.minsize", "Minimun size of a region in segmentation. Smaller clusters will be merged to the neighbouring cluster with the closest radiometry.");
+    SetParameterDescription("filter.meanshift.minsize", "Minimun size of a region (in pixel unit) in segmentation. Smaller clusters will be merged to the neighbouring cluster with the closest radiometry."
+      " If set to 0 no pruning is done.");
 
     //AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
     //SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
