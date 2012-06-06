@@ -95,7 +95,7 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
 
     this->m_RegionPruningFilter->SetInputLabelImage(this->m_RegionMergingFilter->GetLabelOutput());
     this->m_RegionPruningFilter->SetInputSpectralImage(this->m_RegionMergingFilter->GetClusteredOutput());
-    this->m_RegionMergingFilter->Update();
+
     m_RegionPruningFilter->GraftNthOutput(0, this->GetLabelOutput());
     m_RegionPruningFilter->GraftNthOutput(1, this->GetClusteredOutput());
     this->m_RegionPruningFilter->Update();
