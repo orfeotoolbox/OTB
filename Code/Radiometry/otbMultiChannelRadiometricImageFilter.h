@@ -101,6 +101,7 @@ public:
       default:
         otbMsgDevMacro(<< "Band type not expected, you should probably do something about it!");
       }
+    return 0;
   }
 
 protected:
