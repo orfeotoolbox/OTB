@@ -516,7 +516,7 @@ public:
   const OutputImageType * GetRangeOutput() const;
   /** Returns the const number of iterations map. */
   const OutputIterationImageType * GetIterationOutput() const;
-  /** Returns the const image of region labels */
+  /** Returns the const image of region labels. This output does not have sense without mode search optimization (each label codes for one mode)*/
   const OutputLabelImageType * GetLabelOutput() const;
 
   /** Returns the spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
@@ -525,7 +525,7 @@ public:
   OutputImageType * GetRangeOutput();
   /** Returns the number of iterations done at each pixel */
   OutputIterationImageType * GetIterationOutput();
-  /** Returns the image of region labels */
+  /** Returns the image of region labels. This output does not have sense without mode search optimization (each label codes for one mode) */
   OutputLabelImageType * GetLabelOutput();
 
 protected:
