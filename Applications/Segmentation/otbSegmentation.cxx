@@ -296,6 +296,10 @@ private:
     SetDefaultParameterInt("mode.vector.startlabel", 1);
     SetMinimumParameterIntValue("mode.vector.startlabel", 1);
 
+    AddParameter(ParameterType_StringList,"mode.vector.ogroptions","OGR options for layer creation");
+    SetParameterDescription("mode.vector.ogroptions","A list of layer creation options in the form KEY=VALUE that will be passed directly to OGR without any validity checking. Options may depend on the file format, and can be found in OGR documentation.");
+    MandatoryOff("mode.vector.ogroptions");
+
     // Doc example parameter settings
     SetExampleComment("Example of use with vector mode and watershed segmentation",0);
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_PAN.tif");
@@ -338,7 +342,7 @@ private:
 
     streamingVectorizedFilter->SetInput(inputImage);
 
-    if (HasValue("mode.vector.inmask"))
+    if (segModeType == "vector" && HasValue("mode.vector.inmask"))
       {
       streamingVectorizedFilter->SetInputMask(this->GetParameterUInt32Image("mode.vector.inmask"));
       otbAppLogINFO(<<"Use a mask as input." << std::endl);
@@ -377,7 +381,7 @@ private:
     streamingVectorizedFilter->SetFieldName(fieldName);
     streamingVectorizedFilter->SetStartLabel(startLabel);
 
-    if(IsParameterEnabled("mode.vector.simplify"))
+    if(IsParameterEnabled("mode.vector.simplify") && GetParameterString("mode") == "vector")
       {
       streamingVectorizedFilter->SetSimplify(true);
       streamingVectorizedFilter->SetSimplificationTolerance(GetParameterFloat("mode.vector.simplify"));
@@ -390,6 +394,12 @@ private:
 
     if (segModeType == "vector")
       {
+      // Handle OGR options
+      if(IsParameterEnabled("mode.vector.ogroptions"))
+        {
+        streamingVectorizedFilter->GetFilter()->SetOGRLayerCreationOptions(GetParameterStringList("mode.vector.ogroptions"));
+        }                                             
+      
       otbAppLogINFO(<<"Large scale segmentation mode which output vector data" << std::endl);
       AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
 
@@ -540,14 +550,6 @@ private:
         AddProcess(fusionFilter, "Stitching polygons");
         fusionFilter->GenerateData();
         }
-      }
-    else if (segModeType == "raster")
-      {
-      otbAppLogINFO(<<"implementation in progress..." << std::endl);
-      }
-    else
-      {
-      otbAppLogFATAL(<<"non defined segmentation mode method "<<GetParameterInt("mode")<<std::endl);
       }
   }
   EdisonSegmentationFilterType::Pointer m_Filter;
