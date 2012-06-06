@@ -81,7 +81,7 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
   this->m_RegionMergingFilter->SetInputLabelImage(this->m_MeanShiftFilter->GetLabelOutput());
   this->m_RegionMergingFilter->SetInputSpectralImage(this->m_MeanShiftFilter->GetRangeOutput());
   this->m_RegionMergingFilter->SetRangeBandwidth(this->GetRangeBandwidth());
-  std::cout << "MinRegionSize " << this->m_RegionPruningFilter->GetMinRegionSize() << std::endl;
+  //std::cout << "MinRegionSize " << this->m_RegionPruningFilter->GetMinRegionSize() << std::endl;
   if (this->GetMinRegionSize() == 0)
     {
     m_RegionMergingFilter->GraftNthOutput(0, this->GetLabelOutput());
