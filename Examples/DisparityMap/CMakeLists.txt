@@ -13,6 +13,9 @@ ADD_EXECUTABLE(FineRegistrationImageFilterExample FineRegistrationImageFilterExa
 TARGET_LINK_LIBRARIES(FineRegistrationImageFilterExample OTBFeatureExtraction OTBCommon OTBIO
 ITKIO)
 
+ADD_EXECUTABLE(StereoReconstructionExample StereoReconstructionExample.cxx )
+TARGET_LINK_LIBRARIES(StereoReconstructionExample OTBFeatureExtraction OTBCommon OTBIO
+ITKIO)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

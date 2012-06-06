@@ -20,6 +20,7 @@
 
 #include "otbStereorectificationDeformationFieldSource.h"
 #include "itkProgressReporter.h"
+#include "otbMath.h"
 
 // For partial specialization
 #include "otbVectorImage.h"
