@@ -136,7 +136,7 @@ PersistentImageToOGRDataFilter<TImage>
    CPLStringList options(NULL);
 
    for(typename std::vector<std::string>::const_iterator optIt = m_OGRLayerCreationOptions.begin();
-       optIt != m_OGRLayerCreationOptions.end();++optIt)
+       optIt != m_OGRLayerCreationOptions.end(); ++optIt)
      {
      // No trouble with c_str() since AddString makes a copy of the string
      options.AddString(optIt->c_str());

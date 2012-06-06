@@ -398,7 +398,7 @@ private:
       if(IsParameterEnabled("mode.vector.ogroptions"))
         {
         streamingVectorizedFilter->GetFilter()->SetOGRLayerCreationOptions(GetParameterStringList("mode.vector.ogroptions"));
-        }                                             
+        }
       
       otbAppLogINFO(<<"Large scale segmentation mode which output vector data" << std::endl);
       AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
