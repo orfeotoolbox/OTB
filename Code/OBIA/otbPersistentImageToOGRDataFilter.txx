@@ -61,6 +61,33 @@ PersistentImageToOGRDataFilter<TImage>
    return static_cast<OGRDataSourceType *> (this->itk::ProcessObject::GetInput(1));
 }
 
+template<class TImage>
+void
+PersistentImageToOGRDataFilter<TImage>
+::AddOGRLayerCreationOption(const std::string& option)
+{
+  m_OGRLayerCreationOptions.push_back(option);
+  this->Modified();
+}
+
+template<class TImage>
+void
+PersistentImageToOGRDataFilter<TImage>
+::ClearOGRLayerCreationOptions()
+{
+  m_OGRLayerCreationOptions.clear();
+  this->Modified();
+}
+
+template<class TImage>
+void
+PersistentImageToOGRDataFilter<TImage>
+::SetOGRLayerCreationOptions(const std::vector<std::string>&  options)
+{
+  m_OGRLayerCreationOptions = options;
+  this->Modified();
+}
+
 
 template<class TImage>
 void
@@ -105,7 +132,17 @@ PersistentImageToOGRDataFilter<TImage>
    options = CSLAddString(options, opt );
    m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), &options[0]); */
 
-   ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, NULL);
+   // Parse OGR layer creation option
+   CPLStringList options(NULL);
+
+   for(typename std::vector<std::string>::const_iterator optIt = m_OGRLayerCreationOptions.begin();
+       optIt != m_OGRLayerCreationOptions.end();++optIt)
+     {
+     // No trouble with c_str() since AddString makes a copy of the string
+     options.AddString(optIt->c_str());
+     }
+
+   ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, options.List());
    OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
    
    //Handle the case of shapefile. A shapefile is a layer and not a datasource.

@@ -27,7 +27,7 @@
 #include "otbOGRDataSourceWrapper.h"
 
 #include "itkMacro.h"
-
+#include <string>
 
 namespace otb
 {
@@ -104,6 +104,14 @@ public:
   /** Get the \c ogr::DataSource output. */
   OGRDataSourceType * GetOGRDataSource( void );
 
+  /** Add one option for OGR layer creation */
+  void AddOGRLayerCreationOption(const std::string& option);
+
+  /** Clear all OGR layer creation options */
+  void ClearOGRLayerCreationOptions();
+  
+  /** Set the OGR layer creation options */
+  void SetOGRLayerCreationOptions(const std::vector<std::string> & options);
 
 protected:
   PersistentImageToOGRDataFilter();
@@ -124,6 +132,7 @@ private:
   std::string m_LayerName;
   OGRwkbGeometryType m_GeometryType;
   SizeType m_StreamSize;
+  std::vector<std::string> m_OGRLayerCreationOptions;
 
 }; // end of class
 } // end namespace otb
