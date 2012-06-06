@@ -765,6 +765,11 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
         labelOutput->SetPixel(pointList[i], label);
         }
       }
+    else // if ModeSearchOptimization is not set LabelOutput can't be generated
+      {
+        LabelType labelZero=0;
+        labelIt.Set(labelZero);
+      }
 
     }
   // std::cout << "numBreaks: " << numBreaks << " Break ratio: " << numBreaks / (RealType)outputRegionForThread.GetNumberOfPixels() << std::endl;
