@@ -75,28 +75,30 @@ int otbMeanShiftSmoothingImageFilter(int argc, char * argv[])
   filter->SetThreshold(threshold);
   filter->SetMaxIterationNumber(maxiterationnumber);
   filter->SetInput(reader->GetOutput());
-
   filter->SetModeSearchOptimization(useoptimization);
   //filter->SetNumberOfThreads(1);
   SpatialWriterType::Pointer writer1 = SpatialWriterType::New();
   WriterType::Pointer writer2 = WriterType::New();
   IterationWriterType::Pointer writer4 = IterationWriterType::New();
-  LabelWriterType::Pointer writer5 = LabelWriterType::New();
 
   writer1->SetFileName(spatialfname);
   writer2->SetFileName(spectralfname);
   writer4->SetFileName(iterationfname);
-  writer5->SetFileName(labelfname);
 
   writer1->SetInput(filter->GetSpatialOutput());
   writer2->SetInput(filter->GetRangeOutput());
   writer4->SetInput(filter->GetIterationOutput());
-  writer5->SetInput(filter->GetLabelOutput());
 
+ if (useoptimization) //mode label image is only available with mode search optimization
+    {
+    LabelWriterType::Pointer writer5 = LabelWriterType::New();
+    writer5->SetFileName(labelfname);
+    writer5->SetInput(filter->GetLabelOutput());
+    writer5->Update();
+    }
   writer1->Update();
   writer2->Update();
   writer4->Update();
-  writer5->Update();
 
   return EXIT_SUCCESS;
 }

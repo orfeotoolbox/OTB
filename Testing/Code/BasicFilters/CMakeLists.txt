@@ -1187,15 +1187,13 @@ ADD_TEST(bfTuMeanShiftSmoothingImageFilterQBSuburbOptim ${BASICFILTERS_TESTS9}
         )
 
  ADD_TEST(bfTvMeanShiftSmoothingImageFilterQBSuburbNonOptim ${BASICFILTERS_TESTS9}
-        --compare-n-images ${EPSILON_7} 4
+        --compare-n-images ${EPSILON_7} 3
         ${BASELINE}/bfMeanShiftSmoothingImageFilterSpatialOutput_QBSuburbNonOptim.tif
         ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_QBSuburbNonOptim.tif
         ${BASELINE}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBSuburbNonOptim.tif
         ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBSuburbNonOptim.tif
         ${BASELINE}/bfMeanShiftSmoothingImageFilterIterationOutput_QBSuburbNonOptim.tif
         ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_QBSuburbNonOptim.tif
-        ${BASELINE}/bfMeanShiftSmoothingImageFilterLabelOutput_QBSuburbNonOptim.tif
-        ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_QBSuburbNonOptim.tif
         otbMeanShiftSmoothingImageFilter
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_QBSuburbNonOptim.tif
