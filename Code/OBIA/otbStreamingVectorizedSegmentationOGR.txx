@@ -134,6 +134,8 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
   OGRLayerType tmpLayer = tmpDS->GetLayer(0);
 
   const typename InputImageType::SpacingType inSpacing = this->GetInput()->GetSpacing();
+  const double tol = m_SimplificationTolerance * std::max(vcl_abs(inSpacing[0]),vcl_abs(inSpacing[1]));
+
   typename OGRLayerType::iterator featIt = tmpLayer.begin();
   for(featIt = tmpLayer.begin(); featIt!=tmpLayer.end(); ++featIt)
   {
@@ -147,8 +149,7 @@ PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter>
      {
            const OGRGeometry * geom = (*featIt).GetGeometry();
            assert(geom && "geometry is NULL ! Can't simplify it.");
-           
-           const double tol = m_SimplificationTolerance * inSpacing[0];
+
            (*featIt).SetGeometryDirectly(ogr::Simplify(*geom,tol));
      }
      //Need to rewrite the feature otherwise changes are not considered.
