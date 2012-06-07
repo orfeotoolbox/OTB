@@ -41,6 +41,7 @@
 
 #include "ogr_feature.h" // OGRFeature::*field_getters
 #include "cpl_string.h" // CSLCount
+#include "otbOGRHelpers.h"
 
 
 /*===========================================================================*/
@@ -256,17 +257,7 @@ template
   public:
     static void call(OGRFeature &f, int index, ActualParamType const& container)
       {
-      const int nb = boost::size(container) + 1;
-      std::vector<char const*> v; v.reserve(nb);
-      for (typename ActualParamType::const_iterator b = container.begin(), e = container.end()
-; b != e
-; ++b)
-        {
-        v.push_back(b->c_str());
-        }
-      v.push_back(0);
-      assert(CSLCount(const_cast <char**>(&v[0])) == boost::size(container));
-      f.SetField(index, const_cast <char**>(&v[0]));
+      f.SetField(index, StringListConverter(container).to_ogr());
       }
     };
 
