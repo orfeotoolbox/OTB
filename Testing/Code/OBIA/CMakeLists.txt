@@ -295,6 +295,25 @@ ADD_TEST(obTvStreamingVectorizedSegmentationOGR ${OBIA_TESTS1}
      0.2 #Simplification tolerance
      )
 
+ADD_TEST(obTvStreamingVectorizedSegmentationOGRHalfSpacing ${OBIA_TESTS1}
+     --compare-ogr  ${EPSILON_8}
+     ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationHalfSpacingOutput.sqlite
+     ${TEMP}/obTvStreamingVectorizedSegmentationHalfSpacingOutput.sqlite
+     otbStreamingVectorizedSegmentationOGR
+     ${INPUTDATA}/QB_Toulouse_Ortho_PAN_HalfSpacing.tif
+     ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask_HalfSpacing.tif
+     ${TEMP}/obTvStreamingVectorizedSegmentationHalfSpacingOutput.sqlite
+     NewLayer
+     100
+     5
+     15.
+     100
+     1 #filter small object
+     200 #minimum size of object
+     0 #Simplify Flag
+     0.2 #Simplification tolerance
+     )
+
 
 #IF(${GDAL_NUM_VERSION} VERSION_GREATER "10800")
 # -------            otb::FusionOGRTileFilter   -------------
