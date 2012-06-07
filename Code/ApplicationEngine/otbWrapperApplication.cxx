@@ -1044,11 +1044,11 @@ std::string Application::GetParameterAsString(std::string paramKey)
       || type == ParameterType_Directory || type == ParameterType_InputImage
       || type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData
       || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData
-      || type == ParameterType_ListView)
+      || type == ParameterType_ListView || type == ParameterType_Choice)
     {
       ret = this->GetParameterString( paramKey );
     }
-  else if ( type == ParameterType_Int || type == ParameterType_Radius || type == ParameterType_Choice
+  else if ( type == ParameterType_Int || type == ParameterType_Radius 
             || type == ParameterType_RAM)
     {
       std::ostringstream oss;
