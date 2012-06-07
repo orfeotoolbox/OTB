@@ -46,10 +46,26 @@ namespace ogr
  * \since OTB v 3.14.0
  * \todo Have \c DataSource constructor receive a
  * <tt>std::vector<std::string></tt>, or even more precide types.
+ * \internal
+ * This helper is implemented as a class (and in consequence as an object) in
+ * order to ensure the temporary vector of <tt>char*</tt> survives the call of
+ * \c to_ogr(). Even when used as suggested by the example above, the vector
+ * survives till the <tt>; </tt> at the end of the instruction.
  */
 struct StringListConverter
 {
+
   template <class ContainerType>
+    /**
+     * Init constructor.
+     * \tparam    ContainerType Any container matching C++ convention for
+     * standard containers (have a \c value_type, \c begin(), \c end()).
+     * \param[in] strings  list of strings to convert
+     *
+     * \throw std::bad_alloc
+     * Prepares \c m_raw with to contain a list of strings that can be seen as a
+     * 0-terminated array of <tt>char*</tt>.
+     */
   explicit StringListConverter(ContainerType const& strings)
     {
     BOOST_MPL_ASSERT((boost::is_same<typename ContainerType::value_type, std::string>));
@@ -61,6 +77,9 @@ struct StringListConverter
     m_raw.push_back(0);
     assert(CSLCount(const_cast <char**>(&m_raw[0])) == boost::size(strings));
     }
+  /**
+   * Acces to the OGR compliant list of strings.
+   */
   char ** to_ogr() const
     {
     return const_cast <char**>(&m_raw[0]);
