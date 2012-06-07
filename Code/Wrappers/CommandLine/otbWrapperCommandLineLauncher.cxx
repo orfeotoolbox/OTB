@@ -596,21 +596,18 @@ void CommandLineLauncher::LinkWatchers(itk::Object * caller, const itk::EventObj
 void CommandLineLauncher::DisplayHelp()
 {
   std::cerr << std::endl;
-  std::cerr << "====================== HELP CONTEXT ======================" << std::endl;
-  std::cerr << "NAME: " << m_Application->GetName() << std::endl;
-  std::cerr << "DESCRIPTION: " << m_Application->GetDescription() << std::endl;
-  
-  std::string cl(m_Application->GetCLExample());
-  std::cerr << "EXAMPLE OF USE: " << std::endl;
-  std::cerr << m_Application->GetCLExample() << std::endl;
-  
+
+  std::cerr << "This is the "<<m_Application->GetName() << " application."<<std::endl;
+  std::cerr<<std::endl;
+  std::cerr << m_Application->GetDescription() << std::endl;
+  std::cerr<<std::endl;  
   std::string link = "http://www.orfeo-toolbox.org/Applications/";
   link.append(m_Application->GetName());
   link.append(".html");
 
-  std::cerr << "DOCUMENTATION: " << link << std::endl;
-
-  std::cerr << "======================= PARAMETERS =======================" << std::endl;
+  std::cerr << "Complete documentation: " << link << std::endl;
+  std::cerr<<std::endl;
+  std::cerr << "Parameters: " << std::endl;
 
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
   const unsigned int nbOfParam = appKeyList.size();
@@ -640,6 +637,11 @@ void CommandLineLauncher::DisplayHelp()
         std::cerr << this->DisplayParameterHelp(param, appKeyList[i]);
         }
     }
+
+  std::cerr<<std::endl;
+  std::string cl(m_Application->GetCLExample());
+  std::cerr << m_Application->GetCLExample() << std::endl;
+
 }
 
 
