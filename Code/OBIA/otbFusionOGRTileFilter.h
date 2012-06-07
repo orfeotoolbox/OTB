@@ -33,14 +33,19 @@ namespace otb
 {
 
 /** \class FusionOGRTileFilter
- *  \brief This filter fusion the geometries in a layer (ogr) along streaming lines.
- *  The SetStreamSize() method allows to retrieve the number of streams in row and column,
+ *  \brief This filter fusion the geometries in a layer (\c OGRLayer) along streaming lines.
+ *  It is a in-line filter which means that the result of the fusion overwrites the input layer.
+ *  The strategy for merging polygons is quite simple. A polygon P1 is merge with a polygon P2 if:
+ *  - P1 and P2 are on different side of the streaming line
+ *  - P1 and P2 intersect each other.
+ *  - P2 has the largest intersection with P1 among all other polygons Pi intersecting P1.
+ *  The \c SetStreamSize() method allows to retrieve the number of streams in row and column,
  *  and their pixel coordinates.
  *  The input image is used to transform pixel coordinates of the streaming lines into
  *  coordinate system of the image, which must be the same as the one in the OGR input file.
- *  The input OGR file is updated with the fusionned polygons.
- *
- *
+ *  This filter is intended to be used after \c StreamingVectorizedSegmentationOGR. 
+ *  @see Example/StreamingMeanShiftSegmentation.cxx
+ *  
  *  \ingroup OBIA
  *
  *
@@ -53,9 +58,9 @@ public:
 
    /** typedef for the classes standards. */
   typedef FusionOGRTileFilter                 Self;
-  typedef itk::ProcessObject                              Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::ProcessObject                  Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
   
   /** Definition of the input image */
   typedef TInputImage                           InputImageType;
@@ -73,8 +78,9 @@ public:
   typedef ogr::Feature                               OGRFeatureType;
 
   
-  /** Set/Get the input image of this process object.  */
+  /** Set the input image of this process object.  */
   virtual void SetInput(const InputImageType *input);
+  /** Get the input image. */
   virtual const InputImageType * GetInput(void);
   
   /** Method for management of the object factory. */
@@ -83,19 +89,25 @@ public:
   /** Return the name of the class. */
   itkTypeMacro(FusionOGRTileFilter, ProcessObject);
   
-  /** Set/Get the input OGRDataSource */
+  /** Set the input OGRDataSource */
   void SetOGRDataSource( OGRDataSourcePointerType ogrDS );
+  /** Get the input OGRDataSource*/
   OGRDataSourceType * GetOGRDataSource( void );
   
-  /** Set/Get the size of the stream */
+  /** Set the stream size. 
+   * As this filter is intended to be used right after the \c StreamingVectorizedSegmentation,
+   * use the \c GetStreamSize() method on it to get the correct stream size.
+   */
   itkSetMacro(StreamSize, SizeType);
+  /** Get stream size*/
   itkGetMacro(StreamSize, SizeType);
   
-  /** Set/Get the name of the output layer to write in the input ogrDataSource. */
+  /** Set the name of the layer in the input \c OGRDataSource, that contains the polygons to merge.*/
   itkSetStringMacro(LayerName);
+  /** Get the layer name. */
   itkGetStringMacro(LayerName);
   
-  /** Generate Data method*/
+  /** Generate Data method. This method must be called explicitly (not through the \c Update method). */
   virtual void GenerateData();
   
 protected:
@@ -121,6 +133,9 @@ protected:
      bool operator() (FusionStruct f1, FusionStruct f2) { return (f1.overlap > f2.overlap); }
   } SortFeature;
   
+  /** 
+   Main computation method. if line is true process row part, else process column part.
+   */
   void ProcessStreamingLine(bool line);
   /** get length in case of  OGRGeometryCollection.
    * This function recodes the get_lenght method available since gdal 1.8.0

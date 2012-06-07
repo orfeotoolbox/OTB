@@ -88,11 +88,8 @@ class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputIm
 
 /** \class PersistentStreamingLabelImageToOGRDataFilter
  * \brief This filter is a framework for large scale segmentation.
- * It is a persistent filter that process the input image tile by tile.
- * The segmentation filter is set by the user using \c SetSegmentationFilter.
- * The result of the segmentation of each tile is vectorized using \c GDALPolygonize()
- * and then the result is written in a \c ogr::DataSource.
- *
+ * For a detailed description @see StreamingVectorizedSegmentationOGR
+ * \Note 
  */
 template <class TImageType,  class TSegmentationFilter>
 class PersistentStreamingLabelImageToOGRDataFilter
@@ -207,11 +204,23 @@ private:
 /** \class StreamingVectorizedSegmentationOGR
  * \brief This filter is a framework for large scale segmentation.
  * It is a persistent filter that process the input image tile by tile.
- * The segmentation filter is set by the user using \c SetSegmentationFilter.
- * The result of the segmentation of each tile is vectorized using \c GDALPolygonize()
- * and then the result is written in a \c ogr::DataSource.
- *
- *
+ * This filter is templated over the segmentation filter. This later is used to segment each tile of the input image.
+ * Each segmentation result (for each tile) is then vectorized using \c LabelImageToOGRDataSourceFilter
+ * (based on \c GDALPolygonize()).
+ * The output \c OGRDataSource of the \c LabelImageToOGRDataSourceFilter is a "memory" DataSource 
+ * (ie all features of a tile are kept in memory). From here some optional processing can be done,
+ * depending on input parameters : 
+ * - Simplify option : If set to true, the SimplificationTolerance parameter is used to simplify all geometries,
+ * using the \c OGRGeometry::Simplify() method, based on Douglas-Peuker algorithm.
+ * - FilterSmallObject option : if set to true, polygons with a size less than MinimumObjectSize (in pixels)
+ * are discarded.
+ * Finally all features contained in the "memory" DataSource are copied into the input DataSource,
+ * in the layer specified with the \c SetLayerName() method.
+ * 
+ * \Note The Use8Connected parameter can be turn on and it will be used in \c GDALPolygonize(). But be carreful, it
+ * can create cross polygons !
+ * \Note The input mask can be used to exclude pixels from vectorization process.
+ * All pixels with a value of 0 in the input mask image will not be suitable for vectorization.
  */
 template <class TImageType,  class TSegmentationFilter>
 class ITK_EXPORT StreamingVectorizedSegmentationOGR :
@@ -297,7 +306,9 @@ public:
   {
      return this->GetFilter()->GetStartLabel();
   }
-  /** Set/Get the name of the output layer to write in the input \c ogr::DataSource. */
+  /** Set the name of the output layer in which polygons will be writen. 
+  * This layer is created in the input \c ogr::DataSource.
+  */
   void SetLayerName(const std::string & fileName)
   {
      this->GetFilter()->SetLayerName(fileName);

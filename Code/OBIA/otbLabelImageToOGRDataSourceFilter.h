@@ -25,10 +25,16 @@ namespace otb
 {
 
 /** \class LabelImageToOGRDataSourceFilter
- *  this class uses \c GDALPolygonize method to transform a Label image into
- *  a "memory" \c ogr::DataSource. It is a non-streamed version.
- *
- *  \ingroup OBIA
+ *  this class uses \c GDALPolygonize() method to transform a Label image into
+ *  a "memory" \c OGRDataSource. The layer in the DataSource is named "Layer".
+ *  Each Feature of the layer has a Integer Field which name is specified by \c SetFieldName() (default is "DN").
+ *  Label of the input image are written into this field.
+ *  An optional input mask can be used to exclude pixels from vectorization process.
+ *  All pixels with a value of 0 in the input mask image will not be suitable for vectorization.
+ * \Note The Use8Connected parameter can be turn on and it will be used in \c GDALPolygonize(). But be carreful, it
+ * can create cross polygons !
+ * \Note It is a non-streamed version.
+ * \ingroup OBIA
  *
  */
 
