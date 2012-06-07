@@ -20,18 +20,18 @@
 
 #include "otbVectorDataSource.h"
 #include "otbVectorData.h"
+#include "otbOGRDataSourceWrapper.h"
 
 namespace otb
 {
 /** \class LabelImageToVectorDataFilter
- *  \brief this class uses GDALPolygonize method to transform a Label image into
- *         a VectorData. It is a non-streamed version.
- *
- *
- *  \sa StreamingLabelImageToVectorDataFilter (streamed version)
+ *  \brief this class uses GDALPolygonize method to transform a Label image into a VectorData. 
+ *  An optional input mask can be used to exclude pixels from vectorization process.
+ *  All pixels with a value of 0 in the input mask image will not be suitable for vectorization.
+ * \Note The Use8Connected parameter can be turn on and it will be used in \c GDALPolygonize(). But be carreful, it
+ * can create cross polygons !
+ * \Note It is a non-streamed version.
  *  \ingroup OBIA
- *
- *
  */
 
 template <class TInputImage, class TPrecision = double>
@@ -74,10 +74,21 @@ public:
   typedef typename VectorDataType::PointType     PointType;
   typedef typename LineType::VertexType          VertexType;
   
+  typedef ogr::DataSource                            OGRDataSourceType;
+  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
+  typedef ogr::Layer                                 OGRLayerType;
+  
   
   /** Set/Get the input image of this process object.  */
   virtual void SetInput(const InputImageType *input);
   virtual const InputImageType * GetInput(void);
+  
+  /** Set the input mask image.
+   * All pixels in the mask with a value of 0 will not be considered
+   * suitable for vectorization.
+   */
+  virtual void SetInputMask(const InputImageType *input);
+  virtual const InputImageType * GetInputMask(void);
   
   itkSetMacro(FieldName, std::string);
   itkGetMacro(FieldName, std::string);
