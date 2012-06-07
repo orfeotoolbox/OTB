@@ -148,7 +148,7 @@ protected:
   bool CheckParametersPrefix();
 
   /** Check if each key is valid for the application. */
-  bool CheckKeyValidity();
+  bool CheckKeyValidity(std::string& key);
 
   /** Display the output parameter (Role == RoleOutput) */
   void DisplayOutputParameters();

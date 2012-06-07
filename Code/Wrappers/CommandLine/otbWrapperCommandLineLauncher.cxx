@@ -216,9 +216,10 @@ bool CommandLineLauncher::BeforeExecute()
     }
 
   // Check the key validity (ie. exist in the application parameters)
-  if (this->CheckKeyValidity() == false)
+  std::string unknownKey;
+  if (this->CheckKeyValidity(unknownKey) == false)
     {
-    std::cerr << "ERROR: At least one key is not known by the application..." << std::endl;
+    std::cerr << "ERROR: option -"<<unknownKey<<" does not exist in the application." << std::endl;
     this->DisplayHelp();
     return false;
     }
@@ -797,7 +798,7 @@ bool CommandLineLauncher::CheckParametersPrefix()
   return res;
 }
 
-bool CommandLineLauncher::CheckKeyValidity()
+bool CommandLineLauncher::CheckKeyValidity(std::string& refKey)
 {
   bool res = true;
   // Extract expression keys
@@ -812,7 +813,7 @@ bool CommandLineLauncher::CheckKeyValidity()
   // Check if each key in the expression exists in the application
   for (unsigned int i = 0; i < expKeyList.size(); i++)
     {
-    const std::string refKey = expKeyList[i];
+    refKey = expKeyList[i];
     bool keyExist = false;
     for (unsigned int j = 0; j < appKeyList.size(); j++)
       {
