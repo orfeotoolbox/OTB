@@ -38,7 +38,7 @@ namespace otb
  *  This filter is a generic filter. It is the base class of the Large scale segmentation framework.
  *  The \c Initialize() method is used to create the new layer (LayerName) in the input \c OGRDataSource,
  *  and the field (FieldName) in the layer. This field will contain the label of the polygon in the input image.
- *  The \c ProcessTile() method is pure virtual and is implemented in sub class 
+ *  The \c ProcessTile() method is pure virtual and is implemented in sub class
  *  (@see \c PersistentStreamingLabelImageToOGRDataFilter). It returns a "memory" DataSource.
  *  This filter only copy each feature of the layer in the "memory" DataSource into the LayerName layer in the
  *  input \c OGRDataSource set by \c SetOGRDataSource() method.

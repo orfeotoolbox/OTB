@@ -1048,7 +1048,7 @@ std::string Application::GetParameterAsString(std::string paramKey)
     {
       ret = this->GetParameterString( paramKey );
     }
-  else if ( type == ParameterType_Int || type == ParameterType_Radius 
+  else if ( type == ParameterType_Int || type == ParameterType_Radius
             || type == ParameterType_RAM)
     {
       std::ostringstream oss;

@@ -600,7 +600,7 @@ void CommandLineLauncher::DisplayHelp()
   std::cerr << "This is the "<<m_Application->GetName() << " application."<<std::endl;
   std::cerr<<std::endl;
   std::cerr << m_Application->GetDescription() << std::endl;
-  std::cerr<<std::endl;  
+  std::cerr<<std::endl;
   std::string link = "http://www.orfeo-toolbox.org/Applications/";
   link.append(m_Application->GetName());
   link.append(".html");

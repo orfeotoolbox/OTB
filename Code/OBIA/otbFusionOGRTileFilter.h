@@ -43,9 +43,9 @@ namespace otb
  *  and their pixel coordinates.
  *  The input image is used to transform pixel coordinates of the streaming lines into
  *  coordinate system of the image, which must be the same as the one in the OGR input file.
- *  This filter is intended to be used after \c StreamingVectorizedSegmentationOGR. 
+ *  This filter is intended to be used after \c StreamingVectorizedSegmentationOGR.
  *  @see Example/StreamingMeanShiftSegmentation.cxx
- *  
+ *
  *  \ingroup OBIA
  *
  *
@@ -94,7 +94,7 @@ public:
   /** Get the input OGRDataSource*/
   OGRDataSourceType * GetOGRDataSource( void );
   
-  /** Set the stream size. 
+  /** Set the stream size.
    * As this filter is intended to be used right after the \c StreamingVectorizedSegmentation,
    * use the \c GetStreamSize() method on it to get the correct stream size.
    */
@@ -133,7 +133,7 @@ protected:
      bool operator() (FusionStruct f1, FusionStruct f2) { return (f1.overlap > f2.overlap); }
   } SortFeature;
   
-  /** 
+  /**
    Main computation method. if line is true process row part, else process column part.
    */
   void ProcessStreamingLine(bool line);
