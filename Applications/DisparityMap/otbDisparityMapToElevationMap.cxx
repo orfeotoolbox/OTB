@@ -76,23 +76,26 @@ private:
 
     AddDocTag(Tags::Stereo);
 
-    AddParameter(ParameterType_InputImage,"in","Input disparity map");
-    SetParameterDescription("in","The input disparity map (horizontal disparity in first band, vertical in second)");
+    AddParameter(ParameterType_Group,"io","Input and output data");
+    SetParameterDescription("io","This group of parameters allows to set the input and output images and grids.");
 
-    AddParameter(ParameterType_InputImage,"left","Left sensor image");
-    SetParameterDescription("left","Left image in original (sensor) geometry");
+    AddParameter(ParameterType_InputImage,"io.in","Input disparity map");
+    SetParameterDescription("io.in","The input disparity map (horizontal disparity in first band, vertical in second)");
 
-    AddParameter(ParameterType_InputImage,"right","Right sensor image");
-    SetParameterDescription("right","Right image in original (sensor) geometry");
+    AddParameter(ParameterType_InputImage,"io.left","Left sensor image");
+    SetParameterDescription("io.left","Left image in original (sensor) geometry");
 
-    AddParameter(ParameterType_InputImage,"lgrid","Left Grid");
-    SetParameterDescription("lgrid","Left epipolar grid (deformation grid between sensor et disparity spaces)");
+    AddParameter(ParameterType_InputImage,"io.right","Right sensor image");
+    SetParameterDescription("io.right","Right image in original (sensor) geometry");
 
-    AddParameter(ParameterType_InputImage,"rgrid","Right Grid");
-    SetParameterDescription("rgrid","Right epipolar grid (deformation grid between sensor et disparity spaces)");
+    AddParameter(ParameterType_InputImage,"io.lgrid","Left Grid");
+    SetParameterDescription("io.lgrid","Left epipolar grid (deformation grid between sensor et disparity spaces)");
 
-    AddParameter(ParameterType_OutputImage,"out","Output elevation map");
-    SetParameterDescription("out", "Output elevation map in ground projection");
+    AddParameter(ParameterType_InputImage,"io.rgrid","Right Grid");
+    SetParameterDescription("io.rgrid","Right epipolar grid (deformation grid between sensor et disparity spaces)");
+
+    AddParameter(ParameterType_OutputImage,"io.out","Output elevation map");
+    SetParameterDescription("io.out", "Output elevation map in ground projection");
 
     AddParameter(ParameterType_Float,"step","DEM step");
     SetParameterDescription("step","Spacing of the output elevation map (in meters)");
@@ -106,21 +109,21 @@ private:
     SetParameterDescription("hmax","Maximum elevation expected (in meters)");
     SetDefaultParameterFloat("hmax",100.0);
 
-    AddParameter(ParameterType_InputImage,"mask","Disparity mask");
-    SetParameterDescription("mask","Masked disparity cells won't be projected");
-    MandatoryOff("mask");
+    AddParameter(ParameterType_InputImage,"io.mask","Disparity mask");
+    SetParameterDescription("io.mask","Masked disparity cells won't be projected");
+    MandatoryOff("io.mask");
 
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in","disparity.tif");
-    SetDocExampleParameterValue("left","sensor_left.tif");
-    SetDocExampleParameterValue("right","sensor_right.tif");
-    SetDocExampleParameterValue("lgrid","grid_epi_left.tif");
-    SetDocExampleParameterValue("rgrid","grid_epi_right.tif");
-    SetDocExampleParameterValue("out","dem.tif");
+    SetDocExampleParameterValue("io.in","disparity.tif");
+    SetDocExampleParameterValue("io.left","sensor_left.tif");
+    SetDocExampleParameterValue("io.right","sensor_right.tif");
+    SetDocExampleParameterValue("io.lgrid","grid_epi_left.tif");
+    SetDocExampleParameterValue("io.rgrid","grid_epi_right.tif");
+    SetDocExampleParameterValue("io.out","dem.tif");
   }
 
   void DoUpdateParameters()
@@ -130,11 +133,11 @@ private:
 
   void DoExecute()
   {
-    FloatVectorImageType::Pointer inputDisp     = this->GetParameterImage("in");
-    FloatVectorImageType::Pointer sensorLeft    = this->GetParameterImage("left");
-    FloatVectorImageType::Pointer sensorRight   = this->GetParameterImage("right");
-    FloatVectorImageType::Pointer gridLeft      = this->GetParameterImage("lgrid");
-    FloatVectorImageType::Pointer gridRight     = this->GetParameterImage("rgrid");
+    FloatVectorImageType::Pointer inputDisp     = this->GetParameterImage("io.in");
+    FloatVectorImageType::Pointer sensorLeft    = this->GetParameterImage("io.left");
+    FloatVectorImageType::Pointer sensorRight   = this->GetParameterImage("io.right");
+    FloatVectorImageType::Pointer gridLeft      = this->GetParameterImage("io.lgrid");
+    FloatVectorImageType::Pointer gridRight     = this->GetParameterImage("io.rgrid");
 
     m_VectorToList->SetInput(inputDisp);
     m_VectorToList->UpdateOutputInformation();
@@ -149,9 +152,9 @@ private:
     m_DispToElev->SetElevationMax(this->GetParameterFloat("hmax"));
     m_DispToElev->SetDEMGridStep(this->GetParameterFloat("step"));
 
-    if (IsParameterEnabled("mask"))
+    if (IsParameterEnabled("io.mask"))
       {
-      m_DispToElev->SetDisparityMaskInput(this->GetParameterUInt8Image("mask"));
+      m_DispToElev->SetDisparityMaskInput(this->GetParameterUInt8Image("io.mask"));
       }
 
     if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
@@ -172,7 +175,7 @@ private:
         }
       }
 
-    this->SetParameterOutputImage("out",m_DispToElev->GetOutput());
+    this->SetParameterOutputImage("io.out",m_DispToElev->GetOutput());
   }
 
   VectorImageToListFilterType::Pointer m_VectorToList;
