@@ -26,6 +26,7 @@
 #include <boost/foreach.hpp>
 #include <stdio.h>
 #include "otbMacro.h"
+#include "otbOGRHelpers.h"
 
 namespace otb
 {
@@ -127,22 +128,8 @@ PersistentImageToOGRDataFilter<TImage>
    
    
    OGRDataSourcePointerType ogrDS = this->GetOGRDataSource();
-   /*char ** options = NULL;
-   char * opt = "SPATIALITE=YES";
-   options = CSLAddString(options, opt );
-   m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), &options[0]); */
 
-   // Parse OGR layer creation option
-   CPLStringList options(NULL);
-
-   for(typename std::vector<std::string>::const_iterator optIt = m_OGRLayerCreationOptions.begin();
-       optIt != m_OGRLayerCreationOptions.end(); ++optIt)
-     {
-     // No trouble with c_str() since AddString makes a copy of the string
-     options.AddString(optIt->c_str());
-     }
-
-   ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, options.List());
+   ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, otb::ogr::StringListConverter(m_OGRLayerCreationOptions).to_ogr());
    OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
    
    //Handle the case of shapefile. A shapefile is a layer and not a datasource.
