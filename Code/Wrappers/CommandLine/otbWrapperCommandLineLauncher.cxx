@@ -757,6 +757,30 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     oss << "]";
     }
 
+  if(m_Application->IsMandatory(paramKey))
+    {
+    oss<<" (mandatory";
+    }
+  else
+    {
+    oss<<" (optional";
+    
+    if(m_Application->IsParameterEnabled(paramKey))
+      {
+      oss<<", on by default";
+      }
+    else
+      {
+      oss<<", off by default";
+      }
+    }
+
+  if(m_Application->HasValue(paramKey))
+    {
+    oss<<", default value is "<<m_Application->GetParameterAsString(paramKey);
+    }
+  oss<<")";
+
   oss << std::endl;
   return oss.str();
 }
