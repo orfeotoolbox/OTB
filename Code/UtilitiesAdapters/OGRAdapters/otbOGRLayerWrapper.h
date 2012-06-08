@@ -33,6 +33,13 @@ class OGRGeometry;
 class OGRFeatureDefn;
 
 namespace otb { namespace ogr {
+
+/**\ingroup gGeometry
+ * Compares layers identities.
+ * \return whether the two layers are in fact the same.
+ */
+bool operator==(Layer const& lhs, Layer const& rhs);
+
 /**\ingroup gGeometry
  * \class Layer
  * \brief %Layer of geometric objets.
@@ -474,7 +481,6 @@ private:
   boost::shared_ptr<OGRLayer> m_Layer;
   };
 
-bool operator==(Layer const& lhs, Layer const& rhs);
 inline bool operator!=(Layer const& lhs, Layer const& rhs)
   {
   return ! (lhs == rhs);
