@@ -276,6 +276,7 @@ private:
                             "Simplify polygons according to a given tolerance (in pixel). This option allows to reduce the size of the output file or database.");
     SetDefaultParameterFloat("mode.vector.simplify",0.1);
     MandatoryOff("mode.vector.simplify");
+    DisableParameter("mode.vector.simplify");
 
     AddParameter(ParameterType_String, "mode.vector.layername", "Layer name");
     SetParameterDescription("mode.vector.layername", "Name of the layer in the vector file or database (default is Layer).");
