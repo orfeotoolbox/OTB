@@ -117,6 +117,9 @@ public:
   /** Set initial vertical disparity field */
   void SetVerticalDisparityInput( const TDisparityImage * vfield);
   
+  /** Set the input metric image */
+  void SetMetricInput(const TOutputMetricImage * image);
+  
   /** Get the initial disparity fields */
   const TDisparityImage * GetHorizontalDisparityInput() const;
   const TDisparityImage * GetVerticalDisparityInput() const;

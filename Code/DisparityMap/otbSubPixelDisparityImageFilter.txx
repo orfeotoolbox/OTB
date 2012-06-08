@@ -28,14 +28,14 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::SubPixelDisparityImageFilter()
 {
 // Set the number of inputs
-  this->SetNumberOfInputs(6);
+  this->SetNumberOfInputs(7);
   this->SetNumberOfRequiredInputs(2);
 
   // Set the outputs
   this->SetNumberOfOutputs(3);
-  this->SetNthOutput(0,TOutputMetricImage::New());
+  this->SetNthOutput(0,TDisparityImage::New());
   this->SetNthOutput(1,TDisparityImage::New());
-  this->SetNthOutput(2,TDisparityImage::New());
+  this->SetNthOutput(2,TOutputMetricImage::New());
 
   // Default parameters
   m_Radius.Fill(2);
@@ -128,6 +128,17 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
 template <class TInputImage, class TOutputMetricImage,
 class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
+void
+SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
+TDisparityImage,TMaskImage,TBlockMatchingFunctor>
+::SetMetricInput(const TOutputMetricImage * image)
+{
+  // Process object is not const-correct so the const casting is required.
+  this->SetNthInput(6, const_cast<TOutputMetricImage *>( image ));
+}
+
+template <class TInputImage, class TOutputMetricImage,
+class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 const TInputImage *
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
@@ -212,30 +223,30 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
 template <class TInputImage, class TOutputMetricImage,
 class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-const TOutputMetricImage *
+const TDisparityImage *
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::GetMetricOutput() const
+::GetHorizontalDisparityOutput() const
 {
   if (this->GetNumberOfOutputs()<1)
     {
     return 0;
     }
-  return static_cast<const TOutputMetricImage *>(this->itk::ProcessObject::GetOutput(0));
+  return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetOutput(0));
 }
 
 template <class TInputImage, class TOutputMetricImage,
 class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-TOutputMetricImage *
+TDisparityImage *
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::GetMetricOutput()
+::GetHorizontalDisparityOutput()
 {
-  if (this->GetNumberOfOutputs()<1)
+if (this->GetNumberOfOutputs()<1)
     {
     return 0;
     }
-  return static_cast<TOutputMetricImage *>(this->itk::ProcessObject::GetOutput(0));
+  return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(0));
 }
 
 template <class TInputImage, class TOutputMetricImage,
@@ -243,7 +254,7 @@ class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 const TDisparityImage *
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::GetHorizontalDisparityOutput() const
+::GetVerticalDisparityOutput() const
 {
   if (this->GetNumberOfOutputs()<2)
     {
@@ -257,7 +268,7 @@ class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 TDisparityImage *
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::GetHorizontalDisparityOutput()
+::GetVerticalDisparityOutput()
 {
 if (this->GetNumberOfOutputs()<2)
     {
@@ -268,30 +279,30 @@ if (this->GetNumberOfOutputs()<2)
 
 template <class TInputImage, class TOutputMetricImage,
 class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-const TDisparityImage *
+const TOutputMetricImage *
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::GetVerticalDisparityOutput() const
+::GetMetricOutput() const
 {
   if (this->GetNumberOfOutputs()<3)
     {
     return 0;
     }
-  return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetOutput(2));
+  return static_cast<const TOutputMetricImage *>(this->itk::ProcessObject::GetOutput(2));
 }
 
 template <class TInputImage, class TOutputMetricImage,
 class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-TDisparityImage *
+TOutputMetricImage *
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::GetVerticalDisparityOutput()
+::GetMetricOutput()
 {
-if (this->GetNumberOfOutputs()<3)
+  if (this->GetNumberOfOutputs()<3)
     {
     return 0;
     }
-  return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(2));
+  return static_cast<TOutputMetricImage *>(this->itk::ProcessObject::GetOutput(2));
 }
 
 template <class TInputImage, class TOutputMetricImage,
@@ -313,6 +324,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   this->SetMaximumVerticalDisparity(filter->GetMaximumVerticalDisparity());
   
   this->SetMinimize(filter->GetMinimize());
+  
+  this->SetMetricInput(filter->GetMetricOutput());
   
   if (filter->GetHorizontalDisparityOutput())
     {
@@ -392,24 +405,28 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   // Retrieve requested region (TODO: check if we need to handle
   // region for outHDispPtr)
-  RegionType outputRequestedRegion = outMetricPtr->GetRequestedRegion();
+  RegionType outputRequestedRegion = outHDispPtr->GetRequestedRegion();
   
   // Pad by the appropriate radius
   RegionType inputLeftRegion  = outputRequestedRegion;
   inputLeftRegion.PadByRadius(m_Radius);
 
   // Now, we must find the corresponding region in moving image
-  IndexType rightRequestedRegionIndex = inputLeftRegion.GetIndex();
+  IndexType rightRequestedRegionIndex = outputRequestedRegion.GetIndex();
   rightRequestedRegionIndex[0]+=m_MinimumHorizontalDisparity;
   rightRequestedRegionIndex[1]+=m_MinimumVerticalDisparity;
 
-  SizeType rightRequestedRegionSize = inputLeftRegion.GetSize();
+  SizeType rightRequestedRegionSize = outputRequestedRegion.GetSize();
   rightRequestedRegionSize[0]+= m_MaximumHorizontalDisparity - m_MinimumHorizontalDisparity;
   rightRequestedRegionSize[1]+= m_MaximumVerticalDisparity - m_MinimumVerticalDisparity;
 
   RegionType inputRightRegion;
   inputRightRegion.SetIndex(rightRequestedRegionIndex);
   inputRightRegion.SetSize(rightRequestedRegionSize);
+  
+  RegionType inputRightMaskRegion = inputRightRegion;
+  
+  inputRightRegion.PadByRadius(m_Radius);
 
   // crop the left region at the left's largest possible region
   if ( inputLeftRegion.Crop(inLeftPtr->GetLargestPossibleRegion()))
@@ -439,47 +456,56 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   if ( inputRightRegion.Crop(inRightPtr->GetLargestPossibleRegion()))
     {
     inRightPtr->SetRequestedRegion( inputRightRegion );
+    inputRightMaskRegion.Crop(inRightPtr->GetLargestPossibleRegion());
     }
   else
     {
-    // Couldn't crop the region (requested region is outside the largest
-    // possible region).  Throw an exception.
-    // store what we tried to request (prior to trying to crop)
+    // Depending on the minimum and maximum disparities, the right side patch can 
+    // be outside the image : in this case, just request an empty region
+    inputRightRegion.SetIndex(0,0);
+    inputRightRegion.SetIndex(1,0);
+    inputRightRegion.SetSize(0,0);
+    inputRightRegion.SetSize(1,0);
     inRightPtr->SetRequestedRegion( inputRightRegion );
-
-    // build an exception
-    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    std::ostringstream msg;
-    msg << this->GetNameOfClass()
-                << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
-    e.SetDescription("Requested region is (at least partially) outside the largest possible region of right image.");
-    e.SetDataObject(inRightPtr);
-    throw e;
+    inputRightMaskRegion = inputRightRegion;
+    
+    
+//     // Couldn't crop the region (requested region is outside the largest
+//     // possible region).  Throw an exception.
+//     // store what we tried to request (prior to trying to crop)
+//     inRightPtr->SetRequestedRegion( inputRightRegion );
+// 
+//     // build an exception
+//     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+//     std::ostringstream msg;
+//     msg << this->GetNameOfClass()
+//                 << "::GenerateInputRequestedRegion()";
+//     e.SetLocation(msg.str().c_str());
+//     e.SetDescription("Requested region is (at least partially) outside the largest possible region of right image.");
+//     e.SetDataObject(inRightPtr);
+//     throw e;
     }
 
   if(inLeftMaskPtr)
     {
     // no need to crop the mask region : left mask and left image have same largest possible region
-    inLeftMaskPtr->SetRequestedRegion( inputLeftRegion );
+    inLeftMaskPtr->SetRequestedRegion( outputRequestedRegion );
     }
   
   if(inRightMaskPtr)
     {
-    // no need to crop the mask region : right mask and right image have same largest possible region
-    inRightMaskPtr->SetRequestedRegion( inputRightRegion );
+    inRightMaskPtr->SetRequestedRegion( inputRightMaskRegion );
     }
     
   if (inHDispPtr)
     {
-    inHDispPtr->SetRequestedRegion( inputLeftRegion );
+    inHDispPtr->SetRequestedRegion( outputRequestedRegion );
     }
     
   if (inVDispPtr)
     {
-    inVDispPtr->SetRequestedRegion( inputLeftRegion );
+    inVDispPtr->SetRequestedRegion( outputRequestedRegion );
     }
-    
 }
 
 template <class TInputImage, class TOutputMetricImage,
@@ -583,8 +609,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   RegionType rightBufferedRegion = inRightPtr->GetBufferedRegion();
   if(inRightMaskPtr)
     {
-    inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,rightBufferedRegion);
-    inRightMaskIt.GoToBegin();
+    RegionType inRightMaskRegion = inRightMaskPtr->GetBufferedRegion();
+    inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,inRightMaskRegion);
     }
   
   itk::ConstantBoundaryCondition<TInputImage> nbc1;
@@ -915,7 +941,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
       outMetricIt.Set(m_Functor(leftIt,shiftedIt));
       
-      //debug
       if ((outMetricIt.Get() > neighborsMetric[1][1] && m_Minimize) ||
           (outMetricIt.Get() < neighborsMetric[1][1] && !m_Minimize))
         {
@@ -1006,8 +1031,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   RegionType rightBufferedRegion = inRightPtr->GetBufferedRegion();
   if(inRightMaskPtr)
     {
-    inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,rightBufferedRegion);
-    inRightMaskIt.GoToBegin();
+    RegionType inRightMaskRegion = inRightMaskPtr->GetBufferedRegion();
+    inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,inRightMaskRegion);
     }
   
   itk::ConstantBoundaryCondition<TInputImage> nbc1;
@@ -1449,8 +1474,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   RegionType rightBufferedRegion = inRightPtr->GetBufferedRegion();
   if(inRightMaskPtr)
     {
-    inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,rightBufferedRegion);
-    inRightMaskIt.GoToBegin();
+    RegionType inRightMaskRegion = inRightMaskPtr->GetBufferedRegion();
+    inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,inRightMaskRegion);
     }
   
   itk::ConstantBoundaryCondition<TInputImage> nbc1;
