@@ -175,6 +175,12 @@ private:
         }
       }
 
+    m_DispToElev->UpdateOutputInformation();
+    FloatVectorImageType::RegionType outputRegion = m_DispToElev->GetOutput()->GetLargestPossibleRegion();
+
+    otbAppLogINFO(<<"Elevation map origin : [" << m_DispToElev->GetOutput()->GetOrigin()[0] << "," << m_DispToElev->GetOutput()->GetOrigin()[1] <<  "]" << std::endl);
+    otbAppLogINFO(<<"Elevation map size : [" << outputRegion.GetSize()[0] << "," << outputRegion.GetSize()[1] << "]" << std::endl);
+
     this->SetParameterOutputImage("io.out",m_DispToElev->GetOutput());
   }
 
