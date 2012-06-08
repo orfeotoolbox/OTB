@@ -34,6 +34,8 @@ class OGRFeatureDefn;
 
 namespace otb { namespace ogr {
 
+class Layer;
+
 /**\ingroup gGeometry
  * Compares layers identities.
  * \return whether the two layers are in fact the same.
