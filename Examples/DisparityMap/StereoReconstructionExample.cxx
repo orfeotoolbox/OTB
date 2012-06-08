@@ -20,7 +20,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {sensor_stereo_left.tif}, {sensor_stereo_right.tif}
 //    OUTPUTS: {elevationOutput.tif}
-//    140 
+//    140
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -50,7 +50,6 @@
 #include "otbStreamingImageFileWriter.h"
 #include "otbBCOInterpolateImageFunction.h"
 // Software Guide : EndCodeSnippet
-
 
 
 int main(int argc, char* argv[])
@@ -85,11 +84,11 @@ int main(int argc, char* argv[])
 //   typedef itk::VectorIndexSelectionCastImageFilter
 //     <DeformationFieldType,
 //      FloatImageType>                          IndexSelectionCastFilterType;
-// 
+//
 //   typedef otb::ImageList<FloatImageType>      ImageListType;
 //   typedef otb::ImageListToVectorImageFilter
 //     <ImageListType,FloatVectorImageType>      ImageListFilterType;
-// 
+//
 //   typedef otb::DEMToImageGenerator
 //     <FloatImageType>                          DEMToImageGeneratorType;
 //   typedef otb::StreamingStatisticsImageFilter
@@ -129,7 +128,7 @@ int main(int argc, char* argv[])
 
   std::cout << "epi.rectsizex" << m_DeformationFieldSource->GetRectifiedImageSize()[0] << std::endl;
   std::cout << "epi.rectsizey" << m_DeformationFieldSource->GetRectifiedImageSize()[1] << std::endl;
-  std::cout << "epi.baseline" << m_DeformationFieldSource->GetMeanBaselineRatio() << std::endl;  
+  std::cout << "epi.baseline" << m_DeformationFieldSource->GetMeanBaselineRatio() << std::endl;
   
   return EXIT_SUCCESS;
 }

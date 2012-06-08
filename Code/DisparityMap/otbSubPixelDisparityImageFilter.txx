@@ -460,7 +460,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     }
   else
     {
-    // Depending on the minimum and maximum disparities, the right side patch can 
+    // Depending on the minimum and maximum disparities, the right side patch can
     // be outside the image : in this case, just request an empty region
     inputRightRegion.SetIndex(0,0);
     inputRightRegion.SetIndex(1,0);
@@ -474,7 +474,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 //     // possible region).  Throw an exception.
 //     // store what we tried to request (prior to trying to crop)
 //     inRightPtr->SetRequestedRegion( inputRightRegion );
-// 
+//
 //     // build an exception
 //     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
 //     std::ostringstream msg;
