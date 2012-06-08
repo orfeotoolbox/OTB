@@ -1058,7 +1058,7 @@ std::string Application::GetParameterAsString(std::string paramKey)
   else if( type == ParameterType_Float )
     {
       std::ostringstream oss;
-      oss << std::setprecision(10);
+      //oss << std::setprecision(10);
       oss << this->GetParameterFloat( paramKey );
       ret = oss.str();
     }
