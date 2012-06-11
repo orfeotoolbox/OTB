@@ -54,7 +54,7 @@ int otbOGRDataSourceToLabelImageFilter(int argc, char* argv[])
   rasterization->SetBurnAttribute("DN");
 
   /*otb::StandardOneLineFilterWatcher * watch = new otb::StandardOneLineFilterWatcher(rasterization.GetPointer(),
-                                                                          "rasterization");*/
+                                                                          "rasterization"); */
 
   WriterType::Pointer writer  = WriterType::New();
   writer->SetFileName(argv[3]);
