@@ -99,3 +99,38 @@ OTB_TEST_APPLICATION(NAME apTvDmGridBasedImageResamplingRightTest
                      )
 
 SET_TESTS_PROPERTIES(apTvDmGridBasedImageResamplingRightTest PROPERTIES DEPENDS apTvDmStereoRectificationGridGeneratorTest)
+
+OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
+                     APP  BlockMatching
+                     OPTIONS -io.inleft ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
+                             -io.inright ${TEMP}/apTvDmGridBasedImageResamplingRightTest.tif
+                             -io.out ${TEMP}/apTvDmBlockMatchingTest.tif
+                             -bm.minhd 25
+                             -bm.maxhd 45
+                             -bm.minvd 1
+                             -bm.maxvd 2
+                             -mask.nodata 0
+                             -io.outmetric 1
+                             -bm.metric ncc
+                             -bm.subpixel dichotomy
+                             -bm.medianfilter.radius 2
+                             -bm.medianfilter.incoherence 2.0
+                     )
+
+SET_TESTS_PROPERTIES(apTvDmBlockMatchingTest PROPERTIES DEPENDS apTvDmGridBasedImageResamplingRightTest)
+SET_TESTS_PROPERTIES(apTvDmBlockMatchingTest PROPERTIES DEPENDS apTvDmGridBasedImageResamplingLeftTest)
+
+OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
+                     APP  DisparityMapToElevationMap
+                     OPTIONS -io.in ${TEMP}/apTvDmBlockMatchingTest.tif
+                             -io.left ${INPUTDATA}/sensor_stereo_left.tif
+                             -io.right ${INPUTDATA}/sensor_stereo_right.tif
+                             -io.lgrid ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
+                             -io.rgrid ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
+                             -io.out ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
+                             -hmin 150
+                             -hmax 400
+                             -elev.average.value 300
+                     )
+
+SET_TESTS_PROPERTIES(apTvDmDisparityMapToElevationMap PROPERTIES DEPENDS apTvDmBlockMatchingTest)
