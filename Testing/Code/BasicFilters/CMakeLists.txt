@@ -2821,6 +2821,21 @@ ADD_TEST(bfTvVectorDataToLabelImageFilterSHP ${BASICFILTERS_TESTS15}
   ${TEMP}/bfTvVectorDataToLabelImageFilter_Output.tif
 )
 
+# ---------------------    otbOGRDataSourceToLabelImageFilter---------------------
+ADD_TEST(bfTuOGRDataSourceToLabelImageFilterNew ${BASICFILTERS_TESTS15}
+  otbOGRDataSourceToLabelImageFilterNew
+)
+
+ADD_TEST(bfTvOGRDataSourceToLabelImageFilterSHP ${BASICFILTERS_TESTS15}
+  --compare-image 0.0
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
+  ${TEMP}/bfTvOGRDataSourceToLabelImageFilter_Output.tif
+  otbOGRDataSourceToLabelImageFilter
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
+  ${INPUTDATA}/QB_Toulouse_ortho.shp
+  ${TEMP}/bfTvOGRDataSourceToLabelImageFilter_Output.tif
+)
+
 # ---------------------    otbPolygonizationRasterizationTest  ---------------------
 # bijectivity tests
 ADD_TEST(bfTvPolygonizationRasterization_UTM ${BASICFILTERS_TESTS15}
@@ -3156,6 +3171,7 @@ otbClampVectorImageFilter.cxx
 otbClampImageFilter.cxx
 otbVectorDataRasterizeFilter.cxx
 otbVectorDataToLabelImageFilter.cxx
+otbOGRDataSourceToLabelImageFilter.cxx
 otbPolygonizationRasterizationTest.cxx
 otbTileImageFilter.cxx
 )
