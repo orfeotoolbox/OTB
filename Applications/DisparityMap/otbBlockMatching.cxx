@@ -166,11 +166,11 @@ private:
     SetParameterDescription("mask","This group of parameters allows to determine the masking parameters to prevent disparities estimation for some pixels of the left image");
 
     AddParameter(ParameterType_InputImage,"mask.inleft","Discard left pixels from mask image");
-    SetParameterDescription("mask.inleft","This parameter allows to provide a custom mask for the left image");
+    SetParameterDescription("mask.inleft","This parameter allows to provide a custom mask for the left image.Block matching will be only perform on pixels inside the mask.");
     MandatoryOff("mask.inleft");
 
     AddParameter(ParameterType_InputImage,"mask.inright","Discard right pixels from mask image");
-    SetParameterDescription("mask.inright","This parameter allows to provide a custom mask for the right image");
+    SetParameterDescription("mask.inright","This parameter allows to provide a custom mask for the right image.Block matching will be perform only on pixels inside the mask.");
     MandatoryOff("mask.inright");
 
     AddParameter(ParameterType_Float,"mask.nodata","Discard pixels with no-data value");
