@@ -43,13 +43,6 @@ void RegisterTests()
   REGISTER_TEST(otbClampVectorImageFilterTest);
   REGISTER_TEST(otbClampImageFilterNew);
   REGISTER_TEST(otbClampImageFilterTest);
-  REGISTER_TEST(otbVectorDataRasterizeFilterNew);
-  REGISTER_TEST(otbVectorDataRasterizeFilter);
-  REGISTER_TEST(otbVectorDataToLabelImageFilterNew);
-  REGISTER_TEST(otbVectorDataToLabelImageFilter);
-  REGISTER_TEST(otbOGRDataSourceToLabelImageFilterNew);
-  REGISTER_TEST(otbOGRDataSourceToLabelImageFilter);
-  REGISTER_TEST(otbPolygonizationRasterizationTest);
   REGISTER_TEST(otbTileImageFilterNew);
   REGISTER_TEST(otbTileImageFilter);
 }

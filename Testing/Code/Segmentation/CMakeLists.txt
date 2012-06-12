@@ -8,10 +8,10 @@ ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 # -------  otb::HooverMatrix &  otb::HooverInstance -------------
 
-ADD_TEST(obTuHooverMatrixFilterNew ${OBIA_TESTS1}
+ADD_TEST(obTuHooverMatrixFilterNew ${SEGMENTATION_TESTS1}
     otbHooverMatrixFilterNew)
 
-ADD_TEST(obTvHooverMatrixFilter ${OBIA_TESTS1}
+ADD_TEST(obTvHooverMatrixFilter ${SEGMENTATION_TESTS1}
     --compare-ascii ${NOTOL}
     ${BASELINE_FILES}/obTvHooverMatrixFilter.txt
     ${TEMP}/obTvHooverMatrixFilter.txt
@@ -21,10 +21,10 @@ ADD_TEST(obTvHooverMatrixFilter ${OBIA_TESTS1}
     ${TEMP}/obTvHooverMatrixFilter.txt
     )
 
-ADD_TEST(obTuHooverInstanceFilterNew ${OBIA_TESTS1}
+ADD_TEST(obTuHooverInstanceFilterNew ${SEGMENTATION_TESTS1}
     otbHooverInstanceFilterNew)
 
-ADD_TEST(obTvHooverInstanceFilterToAttributeImage ${OBIA_TESTS1}
+ADD_TEST(obTvHooverInstanceFilterToAttributeImage ${SEGMENTATION_TESTS1}
     --compare-image ${EPSILON_9}
     ${BASELINE}/obTvHooverInstanceFilterToAttributeImage.tif
     ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
@@ -33,6 +33,40 @@ ADD_TEST(obTvHooverInstanceFilterToAttributeImage ${OBIA_TESTS1}
     ${INPUTDATA}/maur_labelled.tif
     ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
     )
+
+ADD_TEST(obTuWatershedSegmentationFilter ${SEGMENTATION_TESTS1}
+      --compare-image ${NOTOL}
+      ${BASELINE}/obTuWatershedSegmentationFilterLabelImage.tif
+      ${TEMP}/obTuWatershedSegmentationFilterLabelImage.tif
+      otbWatershedSegmentationFilter
+      ${EXAMPLEDATA}/ROI_QB_PAN_1.tif
+      ${TEMP}/obTuWatershedSegmentationFilterLabelImage.tif
+      0.01
+      0.2
+      )
+
+ADD_TEST(obTuMeanShiftSegmentationFilter ${SEGMENTATION_TESTS1}
+      otbMeanShiftSegmentationFilter
+      ${INPUTDATA}/ROI_QB_MUL_4.tif
+      ${TEMP}/obTuMeanShiftSegmentationFilterLabelImage.tif
+      ${TEMP}/obTuMeanShiftSegmentationFilterClusteredImage.tif
+      4
+      25
+      100
+      0.1
+      )
+
+ADD_TEST(obTuMeanShiftSegmentationFilterPruning ${SEGMENTATION_TESTS1}
+      otbMeanShiftSegmentationFilter
+      ${INPUTDATA}/ROI_QB_MUL_4.tif
+      ${TEMP}/obTuMeanShiftSegmentationFilterLabelImagePruning.tif
+      ${TEMP}/obTuMeanShiftSegmentationFilterClusteredImagePruning.tif
+      4
+      25
+      100
+      0.1
+      20
+      )
 
 # -------            otb::StreamingVectorizedSegmentation   -------------
 ADD_TEST(obTuStreamingImageToOGRDataSourceSegmentationFilterNew ${SEGMENTATION_TESTS1}
@@ -97,6 +131,8 @@ otbHooverMatrixFilterNew.cxx
 otbHooverMatrixFilter.cxx
 otbHooverInstanceFilterNew.cxx
 otbHooverInstanceFilterToAttributeImage.cxx
+otbWatershedSegmentationFilter.cxx
+otbMeanShiftSegmentationFilter.cxx
 otbStreamingImageToOGRDataSourceSegmentationFilter.cxx
 otbOGRDataSourceStreamStitchingFilter.cxx
 )

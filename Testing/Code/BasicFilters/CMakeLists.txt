@@ -2781,82 +2781,6 @@ ADD_TEST(bfTvClampImageFilterTest ${BASICFILTERS_TESTS15}
 )
 
 
-# ---------------------    otbRasterizeVectorDataFilter---------------------
-ADD_TEST(bfTuVectorDataRasterizeFilterNew ${BASICFILTERS_TESTS15}
-  otbVectorDataRasterizeFilterNew
-)
-
-ADD_TEST(bfTvVectorDataRasterizeFilterSHP ${BASICFILTERS_TESTS15}
-  --compare-image 0.0001
-   ${BASELINE}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
-   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
-  otbVectorDataRasterizeFilter
-  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-  ${INPUTDATA}/Capitole-Shadows.shp
-  ${TEMP}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
-)
-
-ADD_TEST(bfTvVectorDataRasterizeFilterKML ${BASICFILTERS_TESTS15}
-  --compare-image 0.0001
-   ${BASELINE}/bfTvVectorDataRasterizeFilter_OutputKML.tif
-   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputKML.tif
-  otbVectorDataRasterizeFilter
-  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-  ${INPUTDATA}/Capitole-Shadows.kml
-  ${TEMP}/bfTvVectorDataRasterizeFilter_OutputKML.tif
-)
-
-# ---------------------    otbRasterizeVectorDataFilter---------------------
-ADD_TEST(bfTuVectorDataToLabelImageFilterNew ${BASICFILTERS_TESTS15}
-  otbVectorDataToLabelImageFilterNew
-)
-
-ADD_TEST(bfTvVectorDataToLabelImageFilterSHP ${BASICFILTERS_TESTS15}
-  --compare-image 0.0
-  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
-  ${TEMP}/bfTvVectorDataToLabelImageFilter_Output.tif
-  otbVectorDataToLabelImageFilter
-  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
-  ${INPUTDATA}/QB_Toulouse_ortho.shp
-  ${TEMP}/bfTvVectorDataToLabelImageFilter_Output.tif
-)
-
-# ---------------------    otbOGRDataSourceToLabelImageFilter---------------------
-ADD_TEST(bfTuOGRDataSourceToLabelImageFilterNew ${BASICFILTERS_TESTS15}
-  otbOGRDataSourceToLabelImageFilterNew
-)
-
-ADD_TEST(bfTvOGRDataSourceToLabelImageFilterSHP ${BASICFILTERS_TESTS15}
-  --compare-image 0.0
-  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
-  ${TEMP}/bfTvOGRDataSourceToLabelImageFilter_Output.tif
-  otbOGRDataSourceToLabelImageFilter
-  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
-  ${INPUTDATA}/QB_Toulouse_ortho.shp
-  ${TEMP}/bfTvOGRDataSourceToLabelImageFilter_Output.tif
-)
-
-# ---------------------    otbPolygonizationRasterizationTest  ---------------------
-# bijectivity tests
-ADD_TEST(bfTvPolygonizationRasterization_UTM ${BASICFILTERS_TESTS15}
-  otbPolygonizationRasterizationTest
-  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
-)
-
-ADD_TEST(bfTvPolygonizationRasterization_WGS84 ${BASICFILTERS_TESTS15}
-  otbPolygonizationRasterizationTest
-  ${INPUTDATA}/QB_Toulouse_ortho_labelImage_WGS84.tif
-)
-ADD_TEST(bfTvPolygonizationRasterization_SensorModel ${BASICFILTERS_TESTS15}
-  otbPolygonizationRasterizationTest
-  ${INPUTDATA}/QB_Toulouse_SensorModel_labelImage.tif
-)
-
-ADD_TEST(bfTvPolygonizationRasterization_Index ${BASICFILTERS_TESTS15}
-  otbPolygonizationRasterizationTest
-  ${INPUTDATA}/QB_Toulouse_labelImage_Index.tif
-)
-
 #-------- TileImageFilter --------------------------
 ADD_TEST(bfTuTileImageFilterNew ${BASICFILTERS_TESTS15}
   otbTileImageFilterNew
@@ -3169,10 +3093,6 @@ otbMaximumAutocorrelationFactorImageFilter.cxx
 otbThresholdVectorImageFilter.cxx
 otbClampVectorImageFilter.cxx
 otbClampImageFilter.cxx
-otbVectorDataRasterizeFilter.cxx
-otbVectorDataToLabelImageFilter.cxx
-otbOGRDataSourceToLabelImageFilter.cxx
-otbPolygonizationRasterizationTest.cxx
 otbTileImageFilter.cxx
 )
 

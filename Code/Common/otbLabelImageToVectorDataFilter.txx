@@ -29,7 +29,6 @@
 #include "cpl_conv.h"
 #include "gdal_alg.h"
 
-#include <typeinfo>
 namespace otb
 {
 

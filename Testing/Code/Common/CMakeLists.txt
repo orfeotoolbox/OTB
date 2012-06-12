@@ -1135,6 +1135,106 @@ ADD_TEST(coTvImageRegionAdaptativeSplitterStripSmallStream ${COMMON_TESTS13}
 
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ADD_TEST(obTuLabelImageToVectorDataFilterNew ${COMMON_TESTS14}
+    otbLabelImageToVectorDataFilterNew)
+
+ADD_TEST(obTvLabelImageToVectorDataFilter ${COMMON_TESTS14}
+    --compare-ogr ${NOTOL}
+    ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter.shp
+    ${TEMP}/obTuLabelImageToVectorDataFilter.shp
+    otbLabelImageToVectorDataFilter
+    ${INPUTDATA}/labelImage_UnsignedChar.tif
+    ${TEMP}/obTuLabelImageToVectorDataFilter.shp
+    )
+
+ADD_TEST(obTuLabelImageToOGRDataSourceFilterNew ${COMMON_TESTS14}
+    otbLabelImageToOGRDataSourceFilterNew)
+
+ADD_TEST(obTvLabelImageToOGRDataSourceFilter ${COMMON_TESTS14}
+    otbLabelImageToOGRDataSourceFilter
+    ${INPUTDATA}/labelImage_UnsignedChar.tif
+    )
+
+# ---------------------    otbRasterizeVectorDataFilter---------------------
+ADD_TEST(bfTuVectorDataRasterizeFilterNew ${COMMON_TESTS14}
+  otbVectorDataRasterizeFilterNew
+)
+
+ADD_TEST(bfTvVectorDataRasterizeFilterSHP ${COMMON_TESTS14}
+  --compare-image 0.0001
+   ${BASELINE}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
+   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
+  otbVectorDataRasterizeFilter
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+  ${INPUTDATA}/Capitole-Shadows.shp
+  ${TEMP}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
+)
+
+ADD_TEST(bfTvVectorDataRasterizeFilterKML ${COMMON_TESTS14}
+  --compare-image 0.0001
+   ${BASELINE}/bfTvVectorDataRasterizeFilter_OutputKML.tif
+   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputKML.tif
+  otbVectorDataRasterizeFilter
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+  ${INPUTDATA}/Capitole-Shadows.kml
+  ${TEMP}/bfTvVectorDataRasterizeFilter_OutputKML.tif
+)
+
+# ---------------------    otbRasterizeVectorDataFilter---------------------
+ADD_TEST(bfTuVectorDataToLabelImageFilterNew ${COMMON_TESTS14}
+  otbVectorDataToLabelImageFilterNew
+)
+
+ADD_TEST(bfTvVectorDataToLabelImageFilterSHP ${COMMON_TESTS14}
+  --compare-image 0.0
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
+  ${TEMP}/bfTvVectorDataToLabelImageFilter_Output.tif
+  otbVectorDataToLabelImageFilter
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
+  ${INPUTDATA}/QB_Toulouse_ortho.shp
+  ${TEMP}/bfTvVectorDataToLabelImageFilter_Output.tif
+)
+
+# ---------------------    otbOGRDataSourceToLabelImageFilter---------------------
+ADD_TEST(bfTuOGRDataSourceToLabelImageFilterNew ${COMMON_TESTS14}
+  otbOGRDataSourceToLabelImageFilterNew
+)
+
+ADD_TEST(bfTvOGRDataSourceToLabelImageFilterSHP ${COMMON_TESTS14}
+  --compare-image 0.0
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
+  ${TEMP}/bfTvOGRDataSourceToLabelImageFilter_Output.tif
+  otbOGRDataSourceToLabelImageFilter
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
+  ${INPUTDATA}/QB_Toulouse_ortho.shp
+  ${TEMP}/bfTvOGRDataSourceToLabelImageFilter_Output.tif
+)
+
+# ---------------------    otbPolygonizationRasterizationTest  ---------------------
+# bijectivity tests
+ADD_TEST(bfTvPolygonizationRasterization_UTM ${COMMON_TESTS14}
+  otbPolygonizationRasterizationTest
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
+)
+
+ADD_TEST(bfTvPolygonizationRasterization_WGS84 ${COMMON_TESTS14}
+  otbPolygonizationRasterizationTest
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage_WGS84.tif
+)
+ADD_TEST(bfTvPolygonizationRasterization_SensorModel ${COMMON_TESTS14}
+  otbPolygonizationRasterizationTest
+  ${INPUTDATA}/QB_Toulouse_SensorModel_labelImage.tif
+)
+
+ADD_TEST(bfTvPolygonizationRasterization_Index ${COMMON_TESTS14}
+  otbPolygonizationRasterizationTest
+  ${INPUTDATA}/QB_Toulouse_labelImage_Index.tif
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbCommonTests1.cxx
@@ -1301,6 +1401,17 @@ otbStreamingManager.cxx
 otbImageRegionAdaptativeSplitter.cxx
 )
 
+SET(BasicCommon_SRCS14
+otbCommonTests14.cxx
+otbLabelImageToVectorDataFilterNew.cxx
+otbLabelImageToVectorDataFilter.cxx
+otbLabelImageToOGRDataSourceFilter.cxx
+otbVectorDataRasterizeFilter.cxx
+otbVectorDataToLabelImageFilter.cxx
+otbOGRDataSourceToLabelImageFilter.cxx
+otbPolygonizationRasterizationTest.cxx
+)
+
 OTB_ADD_EXECUTABLE(otbCommonTests1 "${BasicCommon_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests2 "${BasicCommon_SRCS2}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests3 "${BasicCommon_SRCS3}" "OTBIO;OTBTesting")
@@ -1322,5 +1433,6 @@ TARGET_LINK_LIBRARIES(otbCommonTests11 OTBIO  OTBTesting itkvcl)
 
 OTB_ADD_EXECUTABLE(otbCommonTests12 "${BasicCommon_SRCS12}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests13 "${BasicCommon_SRCS13}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbCommonTests14 "${BasicCommon_SRCS14}" "OTBIO;OTBTesting;OTBOGRAdapters")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

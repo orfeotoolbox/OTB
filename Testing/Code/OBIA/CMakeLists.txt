@@ -175,40 +175,6 @@ ADD_TEST(obTuMeanShiftConnectedComponentSegmentationFilter ${OBIA_TESTS1}
       "distance<0.2"
       50)
 
-ADD_TEST(obTuMeanShiftSegmentationFilter ${OBIA_TESTS1}
-      otbMeanShiftSegmentationFilter
-      ${INPUTDATA}/ROI_QB_MUL_4.tif
-      ${TEMP}/obTuMeanShiftSegmentationFilterLabelImage.tif
-      ${TEMP}/obTuMeanShiftSegmentationFilterClusteredImage.tif
-      4
-      25
-      100
-      0.1
-      )
-
-ADD_TEST(obTuMeanShiftSegmentationFilterPruning ${OBIA_TESTS1}
-      otbMeanShiftSegmentationFilter
-      ${INPUTDATA}/ROI_QB_MUL_4.tif
-      ${TEMP}/obTuMeanShiftSegmentationFilterLabelImagePruning.tif
-      ${TEMP}/obTuMeanShiftSegmentationFilterClusteredImagePruning.tif
-      4
-      25
-      100
-      0.1
-      20
-      )  
-      
-
-ADD_TEST(obTuWatershedSegmentationFilter ${OBIA_TESTS1}
-      --compare-image ${NOTOL}
-      ${BASELINE}/obTuWatershedSegmentationFilterLabelImage.tif
-      ${TEMP}/obTuWatershedSegmentationFilterLabelImage.tif
-      otbWatershedSegmentationFilter
-      ${EXAMPLEDATA}/ROI_QB_PAN_1.tif
-      ${TEMP}/obTuWatershedSegmentationFilterLabelImage.tif
-      0.01
-      0.2
-      )
 
 ADD_TEST(obTuLabelImageToLabelMapWithAdjacencyFilterNew ${OBIA_TESTS3}
   otbLabelImageToLabelMapWithAdjacencyFilterNew)
@@ -224,26 +190,6 @@ ADD_TEST(obTvLabelImageToLabelMapWithAdjacencyFilter ${OBIA_TESTS3}
 
 ADD_TEST(obTuLabelMapToAttributeImageFilterNew ${OBIA_TESTS1}
     otbLabelMapToAttributeImageFilterNew)
-
-ADD_TEST(obTuLabelImageToVectorDataFilterNew ${OBIA_TESTS1}
-    otbLabelImageToVectorDataFilterNew)
-
-ADD_TEST(obTvLabelImageToVectorDataFilter ${OBIA_TESTS1}
-    --compare-ogr ${NOTOL}
-    ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter.shp
-    ${TEMP}/obTuLabelImageToVectorDataFilter.shp
-    otbLabelImageToVectorDataFilter
-    ${INPUTDATA}/labelImage_UnsignedChar.tif
-    ${TEMP}/obTuLabelImageToVectorDataFilter.shp
-    )
-
-ADD_TEST(obTuLabelImageToOGRDataSourceFilterNew ${OBIA_TESTS1}
-    otbLabelImageToOGRDataSourceFilterNew)
-
-ADD_TEST(obTvLabelImageToOGRDataSourceFilter ${OBIA_TESTS1}
-    otbLabelImageToOGRDataSourceFilter
-    ${INPUTDATA}/labelImage_UnsignedChar.tif
-    )
 
 
 # OBIATests2 (need PQXX)
@@ -301,12 +247,7 @@ otbVectorDataToLabelMapFilterNew.cxx
 otbStreamingConnectedComponentOBIATest.cxx
 otbMeanShiftStreamingConnectedComponentOBIATest.cxx
 otbMeanShiftConnectedComponentSegmentationFilterTest.cxx
-otbMeanShiftSegmentationFilter.cxx
-otbWatershedSegmentationFilter.cxx
 otbLabelMapToAttributeImageFilterNew.cxx
-otbLabelImageToVectorDataFilterNew.cxx
-otbLabelImageToVectorDataFilter.cxx
-otbLabelImageToOGRDataSourceFilter.cxx
 )
 
 

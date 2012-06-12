@@ -25,7 +25,7 @@
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-#include "otbPersistentImageToOGRDataFilter.h"
+#include "otbPersistentImageToOGRDataSourceFilter.h"
 #include "otbRelabelComponentImageFilter.h"
 #include "itkMultiplyImageFilter.h"
 
@@ -93,12 +93,12 @@ class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputIm
  */
 template <class TImageType,  class TSegmentationFilter>
 class PersistentStreamingLabelImageToOGRDataSourceFilter
-  : public otb::PersistentImageToOGRDataFilter<TImageType>
+  : public otb::PersistentImageToOGRDataSourceFilter<TImageType>
 {
 public:
   /** Standard Self typedef */
   typedef PersistentStreamingLabelImageToOGRDataSourceFilter     Self;
-  typedef PersistentImageToOGRDataFilter<TImageType>             Superclass;
+  typedef PersistentImageToOGRDataSourceFilter<TImageType>             Superclass;
   typedef itk::SmartPointer<Self>                          Pointer;
   typedef itk::SmartPointer<const Self>                    ConstPointer;
 
