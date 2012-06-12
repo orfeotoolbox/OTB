@@ -26,9 +26,9 @@
 
 #include "itkRGBAPixel.h"
 #include "otbImage.h"
-#include "otbVectorDataToImageFilter.h"
+#include "otbVectorDataToMapFilter.h"
 
-int otbVectorDataToImageFilterWorld(int argc, char * argv[])
+int otbVectorDataToMapFilterWorld(int argc, char * argv[])
 {
 
   if (argc < 11)
@@ -76,8 +76,8 @@ int otbVectorDataToImageFilterWorld(int argc, char * argv[])
   spacing[0] = atof(argv[8]);
   spacing[1] = atof(argv[9]);
 
-  typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
-  VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
+  typedef otb::VectorDataToMapFilter<VectorDataType, ImageType> VectorDataToMapFilterType;
+  VectorDataToMapFilterType::Pointer vectorDataRendering = VectorDataToMapFilterType::New();
   vectorDataRendering->SetInput(0, projection0->GetOutput());
   vectorDataRendering->SetInput(1, projection1->GetOutput());
 

@@ -24,10 +24,10 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbVectorDataToImageFilterNew);
-  REGISTER_TEST(otbVectorDataToImageFilter);
-  REGISTER_TEST(otbVectorDataToImageFilterBinary);
-  REGISTER_TEST(otbVectorDataToImageFilterSensorModel);
-  REGISTER_TEST(otbVectorDataToImageFilterWorld);
-  REGISTER_TEST(otbVectorDataToImageFilterNoFonts);
+  REGISTER_TEST(otbVectorDataToMapFilterNew);
+  REGISTER_TEST(otbVectorDataToMapFilter);
+  REGISTER_TEST(otbVectorDataToMapFilterBinary);
+  REGISTER_TEST(otbVectorDataToMapFilterSensorModel);
+  REGISTER_TEST(otbVectorDataToMapFilterWorld);
+  REGISTER_TEST(otbVectorDataToMapFilterNoFonts);
 }

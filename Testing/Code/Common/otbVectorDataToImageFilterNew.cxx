@@ -19,17 +19,17 @@
 #include "itkRGBAPixel.h"
 #include "otbImage.h"
 #include "otbVectorData.h"
-#include "otbVectorDataToImageFilter.h"
+#include "otbVectorDataToMapFilter.h"
 
-int otbVectorDataToImageFilterNew(int argc, char * argv[])
+int otbVectorDataToMapFilterNew(int argc, char * argv[])
 {
 
   typedef otb::VectorData<>             VectorDataType;
   typedef itk::RGBAPixel<unsigned char> PixelType;
   typedef otb::Image<PixelType, 2>      ImageType;
 
-  typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
-  VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
+  typedef otb::VectorDataToMapFilter<VectorDataType, ImageType> VectorDataToMapFilterType;
+  VectorDataToMapFilterType::Pointer vectorDataRendering = VectorDataToMapFilterType::New();
 
   std::cout << vectorDataRendering << std::endl;
 

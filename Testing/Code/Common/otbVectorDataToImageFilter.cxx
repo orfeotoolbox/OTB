@@ -26,9 +26,9 @@
 
 #include "itkRGBAPixel.h"
 #include "otbImage.h"
-#include "otbVectorDataToImageFilter.h"
+#include "otbVectorDataToMapFilter.h"
 
-int otbVectorDataToImageFilter(int argc, char * argv[])
+int otbVectorDataToMapFilter(int argc, char * argv[])
 {
 
   if (argc < 4)
@@ -85,8 +85,8 @@ int otbVectorDataToImageFilter(int argc, char * argv[])
   extractROI->SetRegion(region);
   extractROI->SetInput(projection->GetOutput());
 
-  typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
-  VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
+  typedef otb::VectorDataToMapFilter<VectorDataType, ImageType> VectorDataToMapFilterType;
+  VectorDataToMapFilterType::Pointer vectorDataRendering = VectorDataToMapFilterType::New();
   vectorDataRendering->SetInput(extractROI->GetOutput());
 
   vectorDataRendering->SetSize(size);
@@ -106,7 +106,7 @@ int otbVectorDataToImageFilter(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbVectorDataToImageFilterBinary(int argc, char * argv[])
+int otbVectorDataToMapFilterBinary(int argc, char * argv[])
 {
 
   if (argc < 3)
@@ -163,14 +163,14 @@ int otbVectorDataToImageFilterBinary(int argc, char * argv[])
   extractROI->SetRegion(region);
   extractROI->SetInput(projection->GetOutput());
 
-  typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
-  VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
+  typedef otb::VectorDataToMapFilter<VectorDataType, ImageType> VectorDataToMapFilterType;
+  VectorDataToMapFilterType::Pointer vectorDataRendering = VectorDataToMapFilterType::New();
   vectorDataRendering->SetInput(extractROI->GetOutput());
 
   vectorDataRendering->SetSize(size);
   vectorDataRendering->SetOrigin(origin);
   vectorDataRendering->SetSpacing(spacing);
-  vectorDataRendering->SetRenderingStyleType(VectorDataToImageFilterType::Binary);
+  vectorDataRendering->SetRenderingStyleType(VectorDataToMapFilterType::Binary);
 
   //Save the image in a file
   typedef otb::ImageFileWriter<ImageType> WriterType;

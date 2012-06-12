@@ -27,9 +27,9 @@
 #include "itkRGBAPixel.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbVectorDataToImageFilter.h"
+#include "otbVectorDataToMapFilter.h"
 
-int otbVectorDataToImageFilterSensorModel(int argc, char * argv[])
+int otbVectorDataToMapFilterSensorModel(int argc, char * argv[])
 {
 
   if (argc < 5)
@@ -88,8 +88,8 @@ int otbVectorDataToImageFilterSensorModel(int argc, char * argv[])
   std::cout << "Origin: " << origin << std::endl;
   std::cout << "Spacing: " << spacing << std::endl;
 
-  typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
-  VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
+  typedef otb::VectorDataToMapFilter<VectorDataType, ImageType> VectorDataToMapFilterType;
+  VectorDataToMapFilterType::Pointer vectorDataRendering = VectorDataToMapFilterType::New();
   vectorDataRendering->SetInput(projection->GetOutput());
 
   vectorDataRendering->SetSize(size);

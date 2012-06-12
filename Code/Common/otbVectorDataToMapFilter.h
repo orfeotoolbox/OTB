@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataToImageFilter_h
-#define __otbVectorDataToImageFilter_h
+#ifndef __otbVectorDataToMapFilter_h
+#define __otbVectorDataToMapFilter_h
 
 #include "itkImageSource.h"
 #include "otbRGBAPixelConverter.h"
@@ -29,7 +29,7 @@
 
 namespace otb
 {
-/** \class VectorDataToImageFilter
+/** \class VectorDataToMapFilter
    *   \brief <b>EXPERIMENTAL FEATURE</b> Render a vector data into an image
    *
    * To use this class, you need to compile the library with the option OTB_USE_MAPNIK
@@ -58,11 +58,11 @@ namespace otb
    */
 
 template <class TVectorData, class TImage>
-class ITK_EXPORT VectorDataToImageFilter : public itk::ImageSource<TImage>
+class ITK_EXPORT VectorDataToMapFilter : public itk::ImageSource<TImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorDataToImageFilter       Self;
+  typedef VectorDataToMapFilter       Self;
   typedef itk::ImageSource<TImage>      Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorDataToImageFilter, ImageSource);
+  itkTypeMacro(VectorDataToMapFilter, ImageSource);
 
   /** Some typedefs. */
   typedef TVectorData                                         VectorDataType;
@@ -181,9 +181,9 @@ public:
 
 protected:
   /** Constructor */
-  VectorDataToImageFilter();
+  VectorDataToMapFilter();
   /** Destructor */
-  virtual ~VectorDataToImageFilter() {}
+  virtual ~VectorDataToMapFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -194,7 +194,7 @@ protected:
   virtual void BeforeThreadedGenerateData();
 
 private:
-  VectorDataToImageFilter(const Self &);  //purposely not implemented
+  VectorDataToMapFilter(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
   void ProcessNode(InternalTreeNodeType * source, datasource_ptr mDatasource);
@@ -245,7 +245,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToImageFilter.txx"
+#include "otbVectorDataToMapFilter.txx"
 #endif
 
 #endif

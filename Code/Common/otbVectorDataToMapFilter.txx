@@ -16,11 +16,11 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataToImageFilter_txx
-#define __otbVectorDataToImageFilter_txx
+#ifndef __otbVectorDataToMapFilter_txx
+#define __otbVectorDataToMapFilter_txx
 
 #include <sstream>
-#include "otbVectorDataToImageFilter.h"
+#include "otbVectorDataToMapFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageIteratorWithIndex.h"
 #include "otbVectorDataStyle.h"
@@ -99,8 +99,8 @@ static geom* create_geom(mapnik::eGeomType geom_type) { return new geom(geom_typ
    * Constructor
  */
 template <class TVectorData, class TImage>
-VectorDataToImageFilter<TVectorData, TImage>
-::VectorDataToImageFilter() :
+VectorDataToMapFilter<TVectorData, TImage>
+::VectorDataToMapFilter() :
   m_StyleList(),
   m_UseAsOverlay(true),
   m_RenderingStyleType(OSM)
@@ -119,7 +119,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::SetInput(const VectorDataType *input)
 {
   // Process object is not const-correct so the const_cast is required here
@@ -129,7 +129,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::SetInput(unsigned int idx, const VectorDataType *input)
 {
   // Process object is not const-correct so the const_cast is required here
@@ -138,8 +138,8 @@ VectorDataToImageFilter<TVectorData, TImage>
 }
 
 template <class TVectorData, class TImage>
-const typename VectorDataToImageFilter<TVectorData, TImage>::VectorDataType *
-VectorDataToImageFilter<TVectorData, TImage>
+const typename VectorDataToMapFilter<TVectorData, TImage>::VectorDataType *
+VectorDataToMapFilter<TVectorData, TImage>
 ::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
@@ -152,8 +152,8 @@ VectorDataToImageFilter<TVectorData, TImage>
 }
 
 template <class TVectorData, class TImage>
-const typename VectorDataToImageFilter<TVectorData, TImage>::VectorDataType *
-VectorDataToImageFilter<TVectorData, TImage>
+const typename VectorDataToMapFilter<TVectorData, TImage>::VectorDataType *
+VectorDataToMapFilter<TVectorData, TImage>
 ::GetInput(unsigned int idx)
 {
   return static_cast<const TVectorData *>
@@ -163,7 +163,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 //----------------------------------------------------------------------------
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::SetSpacing(const SpacingType& spacing)
 {
   if (this->m_Spacing != spacing)
@@ -176,7 +176,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 //----------------------------------------------------------------------------
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::SetSpacing(const double spacing[2])
 {
   SpacingType s(spacing);
@@ -186,7 +186,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 //----------------------------------------------------------------------------
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::SetSpacing(const float spacing[2])
 {
   itk::Vector<float, 2> sf(spacing);
@@ -198,7 +198,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 //----------------------------------------------------------------------------
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::SetOrigin(const double origin[2])
 {
   OriginType p(origin);
@@ -208,7 +208,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 //----------------------------------------------------------------------------
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::SetOrigin(const float origin[2])
 {
   itk::Point<float, 2> of(origin);
@@ -222,7 +222,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 */
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::GenerateOutputInformation()
 {
   // we can't call the superclass method here.
@@ -259,7 +259,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 */
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::BeforeThreadedGenerateData(void)
 {
 
@@ -427,7 +427,7 @@ VectorDataToImageFilter<TVectorData, TImage>
  */
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::GenerateData(void)
 {
 
@@ -538,7 +538,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::ProcessNode(InternalTreeNodeType * source, datasource_ptr mDatasource)
 {
   typedef typename VectorDataType::DataNodeType DataNodeType;
@@ -680,25 +680,25 @@ VectorDataToImageFilter<TVectorData, TImage>
       case FEATURE_MULTIPOINT:
         {
         itkExceptionMacro(
-          << "This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+          << "This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToMapFilter(), please request for it");
         break;
         }
       case FEATURE_MULTILINE:
         {
         itkExceptionMacro(
-          << "This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+          << "This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToMapFilter(), please request for it");
         break;
         }
       case FEATURE_MULTIPOLYGON:
         {
         itkExceptionMacro(
-          << "This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+          << "This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToMapFilter(), please request for it");
         break;
         }
       case FEATURE_COLLECTION:
         {
         itkExceptionMacro(
-          << "This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+          << "This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToMapFilter(), please request for it");
         break;
         }
       }
@@ -710,7 +710,7 @@ VectorDataToImageFilter<TVectorData, TImage>
  */
 template <class TVectorData, class TImage>
 void
-VectorDataToImageFilter<TVectorData, TImage>
+VectorDataToMapFilter<TVectorData, TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
