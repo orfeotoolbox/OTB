@@ -838,37 +838,37 @@ ADD_TEST(coTuVectorImageToASImageAdaptorNew ${COMMON_TESTS8}
 IF(OTB_USE_MAPNIK)
 
 # -------------  otb::QuickLookImageGenerator ----------------------------
-ADD_TEST(coTuVectorDataToImageFilterNew ${COMMON_TESTS9}
-otbVectorDataToImageFilterNew
+ADD_TEST(coTuVectorDataToMapFilterNew ${COMMON_TESTS9}
+otbVectorDataToMapFilterNew
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(coTvVectorDataToImageFilter ${COMMON_TESTS9}
+ADD_TEST(coTvVectorDataToMapFilter ${COMMON_TESTS9}
      --compare-image ${NOTOL}
-                        ${BASELINE}/coTvVectorDataToImageFilter.png
-                     ${TEMP}/coTvVectorDataToImageFilter.png
-   otbVectorDataToImageFilter
+                        ${BASELINE}/coTvVectorDataToMapFilter.png
+                     ${TEMP}/coTvVectorDataToMapFilter.png
+   otbVectorDataToMapFilter
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
-        ${TEMP}/coTvVectorDataToImageFilter.png
+        ${TEMP}/coTvVectorDataToMapFilter.png
         ${INPUTDATA}/DejaVuSans.ttf # font
 )
 
-ADD_TEST(coTvVectorDataToImageFilterBinary ${COMMON_TESTS9}
+ADD_TEST(coTvVectorDataToMapFilterBinary ${COMMON_TESTS9}
      --compare-image ${NOTOL}
-                        ${BASELINE}/coTvVectorDataToImageFilterBinary.png
-                     ${TEMP}/coTvVectorDataToImageFilterBinary.png
-   otbVectorDataToImageFilterBinary
+                        ${BASELINE}/coTvVectorDataToMapFilterBinary.png
+                     ${TEMP}/coTvVectorDataToMapFilterBinary.png
+   otbVectorDataToMapFilterBinary
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
-        ${TEMP}/coTvVectorDataToImageFilterBinary.png
+        ${TEMP}/coTvVectorDataToMapFilterBinary.png
 )
 
-ADD_TEST(coTvVectorDataToImageFilterNoFonts ${COMMON_TESTS9}
+ADD_TEST(coTvVectorDataToMapFilterNoFonts ${COMMON_TESTS9}
      --compare-image ${NOTOL}
-                        ${BASELINE}/coTvVectorDataToImageFilterNoFonts.png
-                     ${TEMP}/coTvVectorDataToImageFilterNoFonts.png
-   otbVectorDataToImageFilterNoFonts
+                        ${BASELINE}/coTvVectorDataToMapFilterNoFonts.png
+                     ${TEMP}/coTvVectorDataToMapFilterNoFonts.png
+   otbVectorDataToMapFilterNoFonts
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
-        ${TEMP}/coTvVectorDataToImageFilterNoFonts.png
+        ${TEMP}/coTvVectorDataToMapFilterNoFonts.png
 )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -877,26 +877,26 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(coTvVectorDataToImageFilterSensorModel ${COMMON_TESTS9}
+ADD_TEST(coTvVectorDataToMapFilterSensorModel ${COMMON_TESTS9}
      --compare-image ${NOTOL}
-                        ${BASELINE}/coTvVectorDataToImageFilterSensorModel.png
-                     ${TEMP}/coTvVectorDataToImageFilterSensorModel.png
-   otbVectorDataToImageFilterSensorModel
+                        ${BASELINE}/coTvVectorDataToMapFilterSensorModel.png
+                     ${TEMP}/coTvVectorDataToMapFilterSensorModel.png
+   otbVectorDataToMapFilterSensorModel
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-        ${TEMP}/coTvVectorDataToImageFilterSensorModel.png
+        ${TEMP}/coTvVectorDataToMapFilterSensorModel.png
         ${INPUTDATA}/DejaVuSans.ttf # font
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(coTvVectorDataToImageFilterWorld ${COMMON_TESTS9}
+ADD_TEST(coTvVectorDataToMapFilterWorld ${COMMON_TESTS9}
      --compare-image ${NOTOL}
-                     ${BASELINE}/coTvVectorDataToImageFilterWorld.png
-                     ${TEMP}/coTvVectorDataToImageFilterWorld.png
-   otbVectorDataToImageFilterWorld
+                     ${BASELINE}/coTvVectorDataToMapFilterWorld.png
+                     ${TEMP}/coTvVectorDataToMapFilterWorld.png
+   otbVectorDataToMapFilterWorld
         ${INPUTDATA}/world_boundaries/world_boundaries_m.shp
         ${INPUTDATA}/world_boundaries/places.shp
-        ${TEMP}/coTvVectorDataToImageFilterWorld.png
+        ${TEMP}/coTvVectorDataToMapFilterWorld.png
         500 500 #Size
         -20 60 #lon/lat
         0.1 -0.1 #spacing lon/lat
@@ -1253,11 +1253,11 @@ otbVectorImageToASImageAdaptorNew.cxx
 IF(OTB_USE_MAPNIK)
 SET(BasicCommon_SRCS9
 otbCommonTests9.cxx
-otbVectorDataToImageFilterNew.cxx
-otbVectorDataToImageFilter.cxx
-otbVectorDataToImageFilterSensorModel.cxx
-otbVectorDataToImageFilterWorld.cxx
-otbVectorDataToImageFilterNoFonts.cxx
+otbVectorDataToMapFilterNew.cxx
+otbVectorDataToMapFilter.cxx
+otbVectorDataToMapFilterSensorModel.cxx
+otbVectorDataToMapFilterWorld.cxx
+otbVectorDataToMapFilterNoFonts.cxx
 
 )
 ENDIF(OTB_USE_MAPNIK)
