@@ -28,7 +28,7 @@
 // of the input image. In this example we will use the \doxygen{otb}{MeanShiftVectorImageFilter}.
 // The labeled output image of each tile is then vectorized (using a filter based on GDALPolygonize)
 // and stored into a \doxygen{otb}{ogr}{Layer} within the \doxygen{otb}{ogr}{DataSource}
-// set as input. Finally a fusion filter, \doxygen{otb}{FusionOGRTileFilter}, is used to merge polygons
+// set as input. Finally a fusion filter, \doxygen{otb}{OGRDataSourceStreamStitchingFilter}, is used to merge polygons
 // at tile border.
 //
 // Let's take a look at the code.
@@ -37,10 +37,10 @@
 #include <iostream>
 
 // Software Guide : BeginCodeSnippet
-#include "otbStreamingVectorizedSegmentationOGR.h"
+#include "otbStreamingImageToOGRDataSourceSegmentationFilter.h"
 #include "otbMeanShiftVectorImageFilter.h"
 #include "otbOGRDataSourceWrapper.h"
-#include "otbFusionOGRTileFilter.h"
+#include "otbOGRDataSourceStreamStitchingFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbVectorImage.h"
@@ -84,7 +84,6 @@ int main(int argc, char *argv[])
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<InputPixelType,  Dimension>          ImageType;
   typedef otb::Image<LabelPixelType,  Dimension>          LabelImageType;
-  typedef otb::VectorData<double, 2>                      VectorDataType;
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
@@ -96,7 +95,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginCodeSnippet
   //typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
   typedef otb::MeanShiftVectorImageFilter <ImageType, ImageType, LabelImageType>  SegmentationFilterType;
-  typedef otb::StreamingVectorizedSegmentationOGR<ImageType, SegmentationFilterType> StreamingVectorizedSegmentationType;
+  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter<ImageType, SegmentationFilterType> StreamingVectorizedSegmentationType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -206,14 +205,14 @@ int main(int argc, char *argv[])
   // Software Guide : BeginLatex
   //
   // The segmentation is done, but as it works tile by tile, we need to fusion polygons at tile border.
-  // We use the \doxygen{otb}{FusionOGRTileFilter}. This filter uses a simple fusion strategy.
+  // We use the \doxygen{otb}{OGRDataSourceStreamStitchingFilter}. This filter uses a simple fusion strategy.
   // Polygons that have the largest intersection over a tile are fusioned. Each polygon can be fusioned
   // only once per tile border (row and column).
   // Let's look at the code for fusioning.
-  // As usual we declared and instanciate the \doxygen{otb}{FusionOGRTileFilter}.
+  // As usual we declared and instanciate the \doxygen{otb}{OGRDataSourceStreamStitchingFilter}.
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  typedef otb::FusionOGRTileFilter<ImageType>   FusionFilterType;
+  typedef otb::OGRDataSourceStreamStitchingFilter<ImageType>   FusionFilterType;
   FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
   // Software Guide : EndCodeSnippet
   

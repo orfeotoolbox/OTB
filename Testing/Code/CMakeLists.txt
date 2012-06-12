@@ -22,6 +22,7 @@ ADD_SUBDIRECTORY(MultiTemporal)
 ADD_SUBDIRECTORY(Simulation)
 ADD_SUBDIRECTORY(Hyperspectral)
 ADD_SUBDIRECTORY(UtilitiesAdapters)
+ADD_SUBDIRECTORY(Segmentation)
 
 IF(OTB_USE_VISU_GUI)
         ADD_SUBDIRECTORY(Visu)

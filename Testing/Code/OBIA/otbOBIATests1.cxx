@@ -67,9 +67,4 @@ REGISTER_TEST(otbLabelImageToVectorDataFilterNew);
 REGISTER_TEST(otbLabelImageToVectorDataFilter);
 REGISTER_TEST(otbLabelImageToOGRDataSourceFilterNew);
 REGISTER_TEST(otbLabelImageToOGRDataSourceFilter);
-REGISTER_TEST(otbStreamingVectorizedSegmentationOGRNew);
-REGISTER_TEST(otbStreamingVectorizedSegmentationOGR);
-//#if GDAL_VERSION_NUM >= 1800
-REGISTER_TEST(otbFusionOGRTileFilter);
-//#endif
 }

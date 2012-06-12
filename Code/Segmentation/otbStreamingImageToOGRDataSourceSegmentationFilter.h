@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingVectorizedSegmentationOGR_h
-#define __otbStreamingVectorizedSegmentationOGR_h
+#ifndef __otbStreamingImageToOGRDataSourceSegmentationFilter_h
+#define __otbStreamingImageToOGRDataSourceSegmentationFilter_h
 
 #include "itkExtractImageFilter.h"
 
@@ -88,17 +88,17 @@ class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputIm
 
 /** \class PersistentStreamingLabelImageToOGRDataFilter
  * \brief This filter is a framework for large scale segmentation.
- * For a detailed description @see StreamingVectorizedSegmentationOGR
+ * For a detailed description @see StreamingImageToOGRDataSourceSegmentationFilter
  * \Note
  */
 template <class TImageType,  class TSegmentationFilter>
-class PersistentStreamingLabelImageToOGRDataFilter
-  : public otb::PersistentImageToOGRDataFilter<TImageType>
+class PersistentStreamingLabelImageToOGRDataSourceFilter
+  : public otb::PersistentImageToOGRDataSourceFilter<TImageType>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentStreamingLabelImageToOGRDataFilter     Self;
-  typedef PersistentImageToOGRDataFilter<TImageType>       Superclass;
+  typedef PersistentStreamingLabelImageToOGRDataSourceFilter     Self;
+  typedef PersistentImageToOGRDataSourceFilter<TImageType>       Superclass;
   typedef itk::SmartPointer<Self>                          Pointer;
   typedef itk::SmartPointer<const Self>                    ConstPointer;
 
@@ -121,7 +121,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentStreamingLabelImageToOGRDataFilter, PersistentImageToOGRDataFilter);
+  itkTypeMacro(PersistentStreamingLabelImageToOGRDataSourceFilter, PersistentImageToOGRDataSourceFilter);
   
   /** Return a pointer to the segmentation filter used. */
   itkGetObjectMacro(SegmentationFilter, SegmentationFilterType);
@@ -175,13 +175,13 @@ public:
   virtual const LabelImageType * GetInputMask(void);
 
 protected:
-  PersistentStreamingLabelImageToOGRDataFilter();
+  PersistentStreamingLabelImageToOGRDataSourceFilter();
 
-  virtual ~PersistentStreamingLabelImageToOGRDataFilter();
+  virtual ~PersistentStreamingLabelImageToOGRDataSourceFilter();
 
 
 private:
-  PersistentStreamingLabelImageToOGRDataFilter(const Self &); //purposely not implemented
+  PersistentStreamingLabelImageToOGRDataSourceFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   virtual OGRDataSourcePointerType ProcessTile();
@@ -201,7 +201,7 @@ private:
   
 };
 
-/** \class StreamingVectorizedSegmentationOGR
+/** \class StreamingImageToOGRDataSourceSegmentationFilter
  * \brief This filter is a framework for large scale segmentation.
  * It is a persistent filter that process the input image tile by tile.
  * This filter is templated over the segmentation filter. This later is used to segment each tile of the input image.
@@ -223,15 +223,15 @@ private:
  * All pixels with a value of 0 in the input mask image will not be suitable for vectorization.
  */
 template <class TImageType,  class TSegmentationFilter>
-class ITK_EXPORT StreamingVectorizedSegmentationOGR :
-public PersistentFilterStreamingDecorator<PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter> >
+class ITK_EXPORT StreamingImageToOGRDataSourceSegmentationFilter :
+public PersistentFilterStreamingDecorator<PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilter> >
 {
 
 public:
   /** Standard Self typedef */
-  typedef StreamingVectorizedSegmentationOGR Self;
+  typedef StreamingImageToOGRDataSourceSegmentationFilter Self;
   typedef PersistentFilterStreamingDecorator
-  <PersistentStreamingLabelImageToOGRDataFilter<TImageType, TSegmentationFilter> >   Superclass;
+  <PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilter> >   Superclass;
   typedef itk::SmartPointer<Self>                                                    Pointer;
   typedef itk::SmartPointer<const Self>                                              ConstPointer;
 
@@ -239,15 +239,15 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(StreamingVectorizedSegmentationOGR, PersistentFilterStreamingDecorator);
+  itkTypeMacro(StreamingImageToOGRDataSourceSegmentationFilter, PersistentFilterStreamingDecorator);
 
   typedef TSegmentationFilter                      SegmentationFilterType;
   typedef TImageType                               InputImageType;
-  typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType,
+  typedef typename PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType,
                TSegmentationFilter>::LabelPixelType                           LabelPixelType;
-  typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType,
+  typedef typename PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType,
                TSegmentationFilter>::LabelImageType                           LabelImageType;
-  typedef typename PersistentStreamingLabelImageToOGRDataFilter<TImageType,
+  typedef typename PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType,
                TSegmentationFilter>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
 
   typedef typename InputImageType::SizeType                                   SizeType;
@@ -381,12 +381,12 @@ public:
   
 protected:
   /** Constructor */
-  StreamingVectorizedSegmentationOGR() {}
+  StreamingImageToOGRDataSourceSegmentationFilter() {}
   /** Destructor */
-  virtual ~StreamingVectorizedSegmentationOGR() {}
+  virtual ~StreamingImageToOGRDataSourceSegmentationFilter() {}
 
 private:
-  StreamingVectorizedSegmentationOGR(const Self &); //purposely not implemented
+  StreamingImageToOGRDataSourceSegmentationFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 };
 
@@ -394,7 +394,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingVectorizedSegmentationOGR.txx"
+#include "otbStreamingImageToOGRDataSourceSegmentationFilter.txx"
 #endif
 
 #endif

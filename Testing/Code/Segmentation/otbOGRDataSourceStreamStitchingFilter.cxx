@@ -16,13 +16,13 @@
 
 =========================================================================*/
 
-#include "otbFusionOGRTileFilter.h"
+#include "otbOGRDataSourceStreamStitchingFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itksys/SystemTools.hxx"
 #include "otbOGRDataSourceWrapper.h"
 
-int otbFusionOGRTileFilter(int argc, char * argv[])
+int otbOGRDataSourceStreamStitchingFilter(int argc, char * argv[])
 {
   if (argc != 6)
     {
@@ -42,7 +42,7 @@ int otbFusionOGRTileFilter(int argc, char * argv[])
   typedef float PixelType;
   typedef otb::Image<PixelType, Dimension> ImageType;
 
-  typedef otb::FusionOGRTileFilter<ImageType>   FilterType;
+  typedef otb::OGRDataSourceStreamStitchingFilter<ImageType>   FilterType;
   typedef otb::ImageFileReader<ImageType>       ReaderType;
   
   ReaderType::Pointer reader = ReaderType::New();

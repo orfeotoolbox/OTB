@@ -15,14 +15,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFusionOGRTileFilter_h
-#define __otbFusionOGRTileFilter_h
+#ifndef __otbOGRDataSourceStreamStitchingFilter_h
+#define __otbOGRDataSourceStreamStitchingFilter_h
 
 #include "otbOGRDataSourceWrapper.h"
 #include "otbMacro.h"
 
 //#if(GDAL_VERSION_NUM < 1800)
-//#error FusionOGRTileFilter requires GDAL version >= 1.8.0
+//#error OGRDataSourceStreamStitchingFilter requires GDAL version >= 1.8.0
 //#endif
 
 #include "itkProcessObject.h"
@@ -32,7 +32,7 @@
 namespace otb
 {
 
-/** \class FusionOGRTileFilter
+/** \class OGRDataSourceStreamStitchingFilter
  *  \brief This filter fusion the geometries in a layer (\c OGRLayer) along streaming lines.
  *  It is a in-line filter which means that the result of the fusion overwrites the input layer.
  *  The strategy for merging polygons is quite simple. A polygon P1 is merge with a polygon P2 if:
@@ -51,13 +51,13 @@ namespace otb
  *
  */
 template <class TInputImage>
-class ITK_EXPORT FusionOGRTileFilter :
+class ITK_EXPORT OGRDataSourceStreamStitchingFilter :
     public itk::ProcessObject
 {
 public:
 
    /** typedef for the classes standards. */
-  typedef FusionOGRTileFilter                 Self;
+  typedef OGRDataSourceStreamStitchingFilter                 Self;
   typedef itk::ProcessObject                  Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
@@ -87,7 +87,7 @@ public:
   itkNewMacro(Self);
 
   /** Return the name of the class. */
-  itkTypeMacro(FusionOGRTileFilter, ProcessObject);
+  itkTypeMacro(OGRDataSourceStreamStitchingFilter, ProcessObject);
   
   /** Set the input OGRDataSource */
   void SetOGRDataSource( OGRDataSourcePointerType ogrDS );
@@ -111,8 +111,8 @@ public:
   virtual void GenerateData();
   
 protected:
-  FusionOGRTileFilter();
-  virtual ~FusionOGRTileFilter() {}
+  OGRDataSourceStreamStitchingFilter();
+  virtual ~OGRDataSourceStreamStitchingFilter() {}
   
   struct FusionStruct
   {
@@ -145,7 +145,7 @@ protected:
   double GetLengthOGRGeometryCollection(OGRGeometryCollection * intersection);
 
 private:
-  FusionOGRTileFilter(const Self &);  //purposely not implemented
+  OGRDataSourceStreamStitchingFilter(const Self &);  //purposely not implemented
   void operator =(const Self&);      //purposely not implemented
   
   SizeType m_StreamSize;
@@ -159,7 +159,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFusionOGRTileFilter.txx"
+#include "otbOGRDataSourceStreamStitchingFilter.txx"
 #endif
 
 #endif

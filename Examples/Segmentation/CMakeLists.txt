@@ -126,7 +126,7 @@ TARGET_LINK_LIBRARIES(WatershedSegmentation OTBCommon OTBIO ITKAlgorithms ITKNum
 
 
 ADD_EXECUTABLE(StreamingMeanShiftSegmentation StreamingMeanShiftSegmentation.cxx )
-TARGET_LINK_LIBRARIES(StreamingMeanShiftSegmentation OTBCommon OTBIO OTBOBIA OTBOGRAdapters)
+TARGET_LINK_LIBRARIES(StreamingMeanShiftSegmentation OTBCommon OTBIO OTBSegmentation OTBOGRAdapters)
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Segmentation)
@@ -442,6 +442,6 @@ ADD_TEST(seTeStreamingMeanShiftSegmentationTest ${EXE_TESTS}
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbSegmentationExamplesTests otbSegmentationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbSegmentationExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBOGRAdapters OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+TARGET_LINK_LIBRARIES(otbSegmentationExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBOGRAdapters OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting OTBSegmentation)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

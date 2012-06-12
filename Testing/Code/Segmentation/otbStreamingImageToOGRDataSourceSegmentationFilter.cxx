@@ -17,19 +17,19 @@
 =========================================================================*/
 
 #include "otbVectorImage.h"
-#include "otbStreamingVectorizedSegmentationOGR.h"
+#include "otbStreamingImageToOGRDataSourceSegmentationFilter.h"
 #include "otbImageFileReader.h"
 
 #include "otbMeanShiftVectorImageFilter.h"
 #include "otbMeanShiftImageFilter.h"
 
 
-#include "otbPersistentImageToOGRDataFilter.h"
+#include "otbPersistentImageToOGRDataSourceFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 
 #include "otbOGRDataSourceWrapper.h"
 
-int otbStreamingVectorizedSegmentationOGRNew(int argc, char * argv[])
+int otbStreamingImageToOGRDataSourceSegmentationFilterNew(int argc, char * argv[])
 {
   typedef float InputPixelType;
   const unsigned int Dimension = 2;
@@ -37,16 +37,16 @@ int otbStreamingVectorizedSegmentationOGRNew(int argc, char * argv[])
   /** Typedefs */
   typedef otb::Image<InputPixelType,  Dimension>          ImageType;
   typedef otb::MeanShiftImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
-  typedef otb::StreamingVectorizedSegmentationOGR<ImageType, MeanShiftImageFilterType>::FilterType StreamingVectorizedSegmentationOGRType;
+  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter<ImageType, MeanShiftImageFilterType>::FilterType StreamingImageToOGRDataSourceSegmentationFilterType;
 
-  StreamingVectorizedSegmentationOGRType::Pointer filter = StreamingVectorizedSegmentationOGRType::New();
+  StreamingImageToOGRDataSourceSegmentationFilterType::Pointer filter = StreamingImageToOGRDataSourceSegmentationFilterType::New();
 
   std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }
 
-int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
+int otbStreamingImageToOGRDataSourceSegmentationFilter(int argc, char * argv[])
 {
 
   if (argc != 13)
@@ -82,13 +82,13 @@ int otbStreamingVectorizedSegmentationOGR(int argc, char * argv[])
 
   //old mean shift filter
   typedef otb::MeanShiftVectorImageFilter<ImageType, ImageType, LabelImageType> SegmentationFilterType;
-  typedef otb::StreamingVectorizedSegmentationOGR<ImageType, SegmentationFilterType> StreamingVectorizedSegmentationOGRType;
+  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter<ImageType, SegmentationFilterType> StreamingImageToOGRDataSourceSegmentationFilterType;
   typedef otb::ImageFileReader<ImageType>                      ReaderType;
   typedef otb::ImageFileReader<LabelImageType>                 MaskReaderType;
 
   ReaderType::Pointer             reader = ReaderType::New();
   MaskReaderType::Pointer         maskReader = MaskReaderType::New();
-  StreamingVectorizedSegmentationOGRType::Pointer filter = StreamingVectorizedSegmentationOGRType::New();
+  StreamingImageToOGRDataSourceSegmentationFilterType::Pointer filter = StreamingImageToOGRDataSourceSegmentationFilterType::New();
 
   reader->SetFileName(imageName);
   reader->UpdateOutputInformation();

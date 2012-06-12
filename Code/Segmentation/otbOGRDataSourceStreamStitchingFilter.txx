@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFusionOGRTileFilter_txx
-#define __otbFusionOGRTileFilter_txx
+#ifndef __otbOGRDataSourceStreamStitchingFilter_txx
+#define __otbOGRDataSourceStreamStitchingFilter_txx
 
-#include "otbFusionOGRTileFilter.h"
+#include "otbOGRDataSourceStreamStitchingFilter.h"
 
 #include <iomanip>
 #include "ogrsf_frmts.h"
@@ -30,24 +30,24 @@ namespace otb
 {
 
 template<class TImage>
-FusionOGRTileFilter<TImage>
-::FusionOGRTileFilter() : m_Radius(2), m_LayerName("Layer")
+OGRDataSourceStreamStitchingFilter<TImage>
+::OGRDataSourceStreamStitchingFilter() : m_Radius(2), m_LayerName("Layer")
 {
    m_StreamSize.Fill(0);
 }
 
 template <class TInputImage>
 void
-FusionOGRTileFilter<TInputImage>
+OGRDataSourceStreamStitchingFilter<TInputImage>
 ::SetInput(const InputImageType *input)
 {
   this->Superclass::SetNthInput(0, const_cast<InputImageType *>(input));
 }
 
 template <class TInputImage>
-const typename FusionOGRTileFilter<TInputImage>
+const typename OGRDataSourceStreamStitchingFilter<TInputImage>
 ::InputImageType *
-FusionOGRTileFilter<TInputImage>
+OGRDataSourceStreamStitchingFilter<TInputImage>
 ::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
@@ -60,15 +60,15 @@ FusionOGRTileFilter<TInputImage>
 
 template<class TInputImage>
 void
-FusionOGRTileFilter<TInputImage>
+OGRDataSourceStreamStitchingFilter<TInputImage>
 ::SetOGRDataSource( OGRDataSourcePointerType ogrDS )
 {
    this->itk::ProcessObject::SetNthInput(1, ogrDS);
 }
 
 template<class TInputImage>
-typename FusionOGRTileFilter<TInputImage>::OGRDataSourceType *
-FusionOGRTileFilter<TInputImage>
+typename OGRDataSourceStreamStitchingFilter<TInputImage>::OGRDataSourceType *
+OGRDataSourceStreamStitchingFilter<TInputImage>
 ::GetOGRDataSource( void )
 {
    return static_cast<OGRDataSourceType *> (this->itk::ProcessObject::GetInput(1));
@@ -76,7 +76,7 @@ FusionOGRTileFilter<TInputImage>
 
 template<class TInputImage>
 double
-FusionOGRTileFilter<TInputImage>
+OGRDataSourceStreamStitchingFilter<TInputImage>
 ::GetLengthOGRGeometryCollection( OGRGeometryCollection * intersection )
 {
   double dfLength = 0.0;
@@ -100,7 +100,7 @@ FusionOGRTileFilter<TInputImage>
 }
 template<class TInputImage>
 void
-FusionOGRTileFilter<TInputImage>
+OGRDataSourceStreamStitchingFilter<TInputImage>
 ::ProcessStreamingLine( bool line )
 {
    typename InputImageType::ConstPointer inputImage = this->GetInput();
@@ -295,7 +295,7 @@ FusionOGRTileFilter<TInputImage>
 
 template<class TImage>
 void
-FusionOGRTileFilter<TImage>
+OGRDataSourceStreamStitchingFilter<TImage>
 ::GenerateData(void)
 {
    //Process column

@@ -29,6 +29,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Projections
   ${OTB_SOURCE_DIR}/Code/Radiometry
   ${OTB_SOURCE_DIR}/Code/SARPolarimetry
+  ${OTB_SOURCE_DIR}/Code/Segmentation
   ${OTB_SOURCE_DIR}/Code/Simulation
   ${OTB_SOURCE_DIR}/Code/SpatialReasoning
   ${OTB_SOURCE_DIR}/Code/Testing
@@ -259,6 +260,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Projections
   Radiometry
   SARPolarimetry
+  Segmentation
   Markov
   Fusion
   GeospatialAnalysis
