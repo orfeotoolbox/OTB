@@ -1204,7 +1204,17 @@ Application::GetOutputParametersSumUp()
         {
         std::pair<std::string, std::string> keyVal;
         keyVal.first = (*it);
-        keyVal.second = GetParameterAsString(*it);
+        if (type == ParameterType_Float)
+          {
+          std::ostringstream oss;
+          oss << std::setprecision(10);
+          oss << GetParameterFloat(*it);
+          keyVal.second = oss.str();
+          }
+        else
+          {
+          keyVal.second = GetParameterAsString(*it);
+          }
         res.push_back( keyVal );
         }
       }
