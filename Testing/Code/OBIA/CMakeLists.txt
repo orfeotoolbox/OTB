@@ -222,34 +222,8 @@ ADD_TEST(obTvLabelImageToLabelMapWithAdjacencyFilter ${OBIA_TESTS3}
   ${TEMP}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
 )
 
-ADD_TEST(obTuHooverMatrixFilterNew ${OBIA_TESTS1}
-    otbHooverMatrixFilterNew)
-
-ADD_TEST(obTvHooverMatrixFilter ${OBIA_TESTS1}
-    --compare-ascii ${NOTOL}
-    ${BASELINE_FILES}/obTvHooverMatrixFilter.txt
-    ${TEMP}/obTvHooverMatrixFilter.txt
-    otbHooverMatrixFilter
-    ${INPUTDATA}/Seg1InputForRCC8Graph.tif
-    ${INPUTDATA}/Seg2InputForRCC8Graph.tif
-    ${TEMP}/obTvHooverMatrixFilter.txt
-    )
-
-ADD_TEST(obTuHooverInstanceFilterNew ${OBIA_TESTS1}
-    otbHooverInstanceFilterNew)
-
 ADD_TEST(obTuLabelMapToAttributeImageFilterNew ${OBIA_TESTS1}
     otbLabelMapToAttributeImageFilterNew)
-
-ADD_TEST(obTvHooverInstanceFilterToAttributeImage ${OBIA_TESTS1}
-    --compare-image ${EPSILON_9}
-    ${BASELINE}/obTvHooverInstanceFilterToAttributeImage.tif
-    ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
-    otbHooverInstanceFilterToAttributeImage
-    ${INPUTDATA}/maur_GT.tif
-    ${INPUTDATA}/maur_labelled.tif
-    ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
-    )
 
 ADD_TEST(obTuLabelImageToVectorDataFilterNew ${OBIA_TESTS1}
     otbLabelImageToVectorDataFilterNew)
@@ -262,7 +236,6 @@ ADD_TEST(obTvLabelImageToVectorDataFilter ${OBIA_TESTS1}
     ${INPUTDATA}/labelImage_UnsignedChar.tif
     ${TEMP}/obTuLabelImageToVectorDataFilter.shp
     )
-
 
 ADD_TEST(obTuLabelImageToOGRDataSourceFilterNew ${OBIA_TESTS1}
     otbLabelImageToOGRDataSourceFilterNew)
@@ -330,11 +303,7 @@ otbMeanShiftStreamingConnectedComponentOBIATest.cxx
 otbMeanShiftConnectedComponentSegmentationFilterTest.cxx
 otbMeanShiftSegmentationFilter.cxx
 otbWatershedSegmentationFilter.cxx
-otbHooverMatrixFilterNew.cxx
-otbHooverMatrixFilter.cxx
-otbHooverInstanceFilterNew.cxx
 otbLabelMapToAttributeImageFilterNew.cxx
-otbHooverInstanceFilterToAttributeImage.cxx
 otbLabelImageToVectorDataFilterNew.cxx
 otbLabelImageToVectorDataFilter.cxx
 otbLabelImageToOGRDataSourceFilter.cxx

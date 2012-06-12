@@ -5,6 +5,35 @@ SET(SEGMENTATION_TESTS1 ${CXX_TEST_PATH}/otbSegmentationTests1)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
+
+# -------  otb::HooverMatrix &  otb::HooverInstance -------------
+
+ADD_TEST(obTuHooverMatrixFilterNew ${OBIA_TESTS1}
+    otbHooverMatrixFilterNew)
+
+ADD_TEST(obTvHooverMatrixFilter ${OBIA_TESTS1}
+    --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/obTvHooverMatrixFilter.txt
+    ${TEMP}/obTvHooverMatrixFilter.txt
+    otbHooverMatrixFilter
+    ${INPUTDATA}/Seg1InputForRCC8Graph.tif
+    ${INPUTDATA}/Seg2InputForRCC8Graph.tif
+    ${TEMP}/obTvHooverMatrixFilter.txt
+    )
+
+ADD_TEST(obTuHooverInstanceFilterNew ${OBIA_TESTS1}
+    otbHooverInstanceFilterNew)
+
+ADD_TEST(obTvHooverInstanceFilterToAttributeImage ${OBIA_TESTS1}
+    --compare-image ${EPSILON_9}
+    ${BASELINE}/obTvHooverInstanceFilterToAttributeImage.tif
+    ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
+    otbHooverInstanceFilterToAttributeImage
+    ${INPUTDATA}/maur_GT.tif
+    ${INPUTDATA}/maur_labelled.tif
+    ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
+    )
+
 # -------            otb::StreamingVectorizedSegmentation   -------------
 ADD_TEST(obTuStreamingImageToOGRDataSourceSegmentationFilterNew ${SEGMENTATION_TESTS1}
     otbStreamingImageToOGRDataSourceSegmentationFilterNew)
@@ -64,6 +93,10 @@ ADD_TEST(obTuOGRDataSourceStreamStitchingFilter ${SEGMENTATION_TESTS1}
 
 
 SET(Segmentation_SRCS1
+otbHooverMatrixFilterNew.cxx
+otbHooverMatrixFilter.cxx
+otbHooverInstanceFilterNew.cxx
+otbHooverInstanceFilterToAttributeImage.cxx
 otbStreamingImageToOGRDataSourceSegmentationFilter.cxx
 otbOGRDataSourceStreamStitchingFilter.cxx
 )

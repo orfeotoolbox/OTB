@@ -28,5 +28,8 @@ void RegisterTests()
 REGISTER_TEST(otbStreamingImageToOGRDataSourceSegmentationFilterNew);
 REGISTER_TEST(otbStreamingImageToOGRDataSourceSegmentationFilter);
 REGISTER_TEST(otbOGRDataSourceStreamStitchingFilter);
-
+REGISTER_TEST(otbHooverMatrixFilterNew);
+REGISTER_TEST(otbHooverMatrixFilter);
+REGISTER_TEST(otbHooverInstanceFilterNew);
+REGISTER_TEST(otbHooverInstanceFilterToAttributeImage);
 }
