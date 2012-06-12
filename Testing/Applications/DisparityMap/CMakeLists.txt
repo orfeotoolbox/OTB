@@ -97,9 +97,9 @@ OTB_TEST_APPLICATION(NAME apTvDmGridBasedImageResamplingRightTest
                              -out.sizex 158
                              -out.sizey 158
                      )
-
 SET_TESTS_PROPERTIES(apTvDmGridBasedImageResamplingRightTest PROPERTIES DEPENDS apTvDmStereoRectificationGridGeneratorTest)
 
+#--- BlockMatching ---#
 OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
                      APP  BlockMatching
                      OPTIONS -io.inleft ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
@@ -116,10 +116,10 @@ OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
                              -bm.medianfilter.radius 2
                              -bm.medianfilter.incoherence 2.0
                      )
-
 SET_TESTS_PROPERTIES(apTvDmBlockMatchingTest PROPERTIES DEPENDS apTvDmGridBasedImageResamplingRightTest)
 SET_TESTS_PROPERTIES(apTvDmBlockMatchingTest PROPERTIES DEPENDS apTvDmGridBasedImageResamplingLeftTest)
 
+#--- DisparityMapToElevationMap ---#
 OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
                      APP  DisparityMapToElevationMap
                      OPTIONS -io.in ${TEMP}/apTvDmBlockMatchingTest.tif
@@ -132,5 +132,4 @@ OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
                              -hmax 400
                              -elev.average.value 300
                      )
-
 SET_TESTS_PROPERTIES(apTvDmDisparityMapToElevationMap PROPERTIES DEPENDS apTvDmBlockMatchingTest)
