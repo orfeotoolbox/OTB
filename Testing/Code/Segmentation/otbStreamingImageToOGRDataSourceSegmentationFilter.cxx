@@ -24,7 +24,7 @@
 #include "otbMeanShiftImageFilter.h"
 
 
-#include "otbPersistentImageToOGRDataSourceFilter.h"
+#include "otbPersistentImageToOGRDataFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 
 #include "otbOGRDataSourceWrapper.h"
