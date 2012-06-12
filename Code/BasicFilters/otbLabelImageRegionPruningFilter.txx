@@ -237,7 +237,7 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
       for(LabelType curLabel = 1; curLabel <= regionCount; ++curLabel)
       {
 
-      if(m_PointCounts[curLabel] > m_MinRegionSize)
+      if((m_PointCounts[curLabel] ==0) || (m_PointCounts[curLabel] > m_MinRegionSize))
         {
         // do not process empty regions
         continue;
