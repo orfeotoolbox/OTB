@@ -25,9 +25,9 @@
 
 // Software Guide : BeginLatex
 //
-// This example demonstrates the use of the stereo reconstruction chain 
-// from an image pair. The images are assumed to come from the same sensor 
-// but with different positions. The approach presented here has the 
+// This example demonstrates the use of the stereo reconstruction chain
+// from an image pair. The images are assumed to come from the same sensor
+// but with different positions. The approach presented here has the
 // following steps:
 // \begin{itemize}
 // \item Epipolar resampling of the image pair
@@ -159,15 +159,15 @@ int main(int argc, char* argv[])
   
 // Software Guide : BeginLatex
 // The image pair is supposed to be in sensor geometry. From two images covering
-// nearly the same area, one can estimate a common epipolar geometry. In this geometry, 
+// nearly the same area, one can estimate a common epipolar geometry. In this geometry,
 // an altitude variation corresponds to an horizontal shift between the two images.
-// The filter \doxygen{otb}{StereorectificationDeformationFieldSource} computes the 
+// The filter \doxygen{otb}{StereorectificationDeformationFieldSource} computes the
 // deformation grids for each image.
-// 
-// These grids are sampled in epipolar geometry. They have two bands, containing the 
-// position offset (in physical space units) between the current epipolar point and the 
+//
+// These grids are sampled in epipolar geometry. They have two bands, containing the
+// position offset (in physical space units) between the current epipolar point and the
 // corresponding sensor point. They can be computed at a lower resolution than sensor
-// resolution. The application \code{StereoRectificationGridGenerator} also provides a 
+// resolution. The application \code{StereoRectificationGridGenerator} also provides a
 // simple tool to generate the epipolar grids for your image pair.
 // Software Guide : EndLatex
   
@@ -183,8 +183,8 @@ int main(int argc, char* argv[])
 // Software Guide : EndCodeSnippet
   
 // Software Guide : BeginLatex
-// Then, the sensor images can be resampled in epipolar geometry, using the 
-// \doxygen{otb}{StreamingWarpImageFilter}. The application 
+// Then, the sensor images can be resampled in epipolar geometry, using the
+// \doxygen{otb}{StreamingWarpImageFilter}. The application
 // \code{GridBasedImageResampling} also gives an easy access to this filter. The user
 // can choose the epipolar region to resample, as well as the resampling step.
 //
@@ -208,7 +208,7 @@ int main(int argc, char* argv[])
 // Software Guide : EndCodeSnippet
   
 // Software Guide : BeginLatex
-// The deformation grids are cast into deformation fields, then the left 
+// The deformation grids are cast into deformation fields, then the left
 // and right sensor images are resampled
 // Software Guide : EndLatex
   
@@ -247,7 +247,7 @@ int main(int argc, char* argv[])
 // Software Guide : EndCodeSnippet
   
 // Software Guide : BeginLatex
-// Since the resampling produces black regions around the image, it is useless 
+// Since the resampling produces black regions around the image, it is useless
 // to estimate disparities on these no-data regions. We use a \doxygen{otb}{BandMathImageFilter}
 // to produce a mask on left and right epipolar images.
 // Software Guide : EndLatex
@@ -265,23 +265,23 @@ int main(int argc, char* argv[])
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
-// Once the two sensor images have been resampled in epipolar geometry, the 
-// disparity map can be computed. The approach presented here is a 2D matching 
-// based on a pixel-wise metric optimization. This approach doesn't give the best 
-// results compared to global optimization methods, but it is suitable for 
-// streaming and threading on large images. 
-// 
+// Once the two sensor images have been resampled in epipolar geometry, the
+// disparity map can be computed. The approach presented here is a 2D matching
+// based on a pixel-wise metric optimization. This approach doesn't give the best
+// results compared to global optimization methods, but it is suitable for
+// streaming and threading on large images.
+//
 // The major filter used for this step is \doxygen{otb}{PixelWiseBlockMatchingImageFilter}.
-// The metric is computed on a window centered around the tested epipolar position. 
+// The metric is computed on a window centered around the tested epipolar position.
 // It performs a pixel-to-pixel matching between the two epipolar images. The output disparities
-// are given as index offset from left to right position. The following features are available 
+// are given as index offset from left to right position. The following features are available
 // in this filter:
 // \begin{itemize}
 // \item Available metrics : SSD, NCC and $L^{p}$ pseudo norm (computed on a square window)
 // \item Rectangular disparity exploration area.
 // \item Input masks for left and right images (optional).
 // \item Output metric values (optional).
-// \item Possibility to use input disparity estimate (as a uniform value or a full map) and an 
+// \item Possibility to use input disparity estimate (as a uniform value or a full map) and an
 // exploration radius around these values to reduce the size of the exploration area (optional).
 // \end{itemize}
 // Software Guide : EndLatex
@@ -302,8 +302,8 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginLatex
 // Some other filters have been added to enhance these pixel-to-pixel disparities. The filter
-// \doxygen{otb}{SubPixelDisparityImageFilter} can estimate the disparities with sub-pixel 
-// precision. Several interpolation methods can be used : parabollic fit, triangular fit, and 
+// \doxygen{otb}{SubPixelDisparityImageFilter} can estimate the disparities with sub-pixel
+// precision. Several interpolation methods can be used : parabollic fit, triangular fit, and
 // dichotomy search.
 // Software Guide : EndLatex
 
@@ -338,26 +338,26 @@ int main(int argc, char* argv[])
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
-// The application \code{PixelWiseBlockMatching} contain all these filters and 
+// The application \code{PixelWiseBlockMatching} contain all these filters and
 // provide a single interface to compute your disparity maps.
-// 
-// The disparity map obtained  with the previous step usually gives a good idea of 
-// the altitude profile. However, it is more usefull to study altitude with a DEM (Digital 
-// Elevation Model) representation. 
-// 
+//
+// The disparity map obtained  with the previous step usually gives a good idea of
+// the altitude profile. However, it is more usefull to study altitude with a DEM (Digital
+// Elevation Model) representation.
+//
 // The filter \doxygen{otb}{DisparityMapToDEMFilter} performs this last step. The behaviour
 // of this filter is to :
 // \begin{itemize}
 // \item Compute the DEM extent from the left sensor image envelope (spacing is set by the user)
 // \item Compute the left and right rays corresponding to each valid disparity
 // \item Compute the intersection with the \textit{mid-point} method
-// \item If the 3D point falls inside a DEM cell and has a greater elevation than the 
+// \item If the 3D point falls inside a DEM cell and has a greater elevation than the
 // current height, the cell height is updated
 // \end{itemize}
-// The rule of keeping the highest elevation makes sense for buildings seen from the side 
-// because the roof edges elevation has to be kept. However this rule is not suited for 
-// noisy disparities. 
-// 
+// The rule of keeping the highest elevation makes sense for buildings seen from the side
+// because the roof edges elevation has to be kept. However this rule is not suited for
+// noisy disparities.
+//
 // The application \code{DisparityMapToElevationMap} also gives an example of use.
 // Software Guide : EndLatex
 
