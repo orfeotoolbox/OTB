@@ -93,12 +93,12 @@ class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputIm
  */
 template <class TImageType,  class TSegmentationFilter>
 class PersistentStreamingLabelImageToOGRDataSourceFilter
-  : public otb::PersistentImageToOGRDataSourceFilter<TImageType>
+  : public otb::PersistentImageToOGRDataFilter<TImageType>
 {
 public:
   /** Standard Self typedef */
   typedef PersistentStreamingLabelImageToOGRDataSourceFilter     Self;
-  typedef PersistentImageToOGRDataSourceFilter<TImageType>       Superclass;
+  typedef PersistentImageToOGRDataFilter<TImageType>             Superclass;
   typedef itk::SmartPointer<Self>                          Pointer;
   typedef itk::SmartPointer<const Self>                    ConstPointer;
 

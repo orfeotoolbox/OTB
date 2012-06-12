@@ -31,11 +31,11 @@
 #include "otbWatershedSegmentationFilter.h"
 
 // Large scale vectorization framework
-#include "otbStreamingVectorizedSegmentationOGR.h"
+#include "otbStreamingImageToOGRDataSourceSegmentationFilter.h"
 #include "otbOGRDataSourceWrapper.h"
 
 // Fusion filter
-#include "otbFusionOGRTileFilter.h"
+#include "otbOGRDataSourceStreamStitchingFilter.h"
 
 namespace otb
 {
@@ -95,28 +95,28 @@ public:
 
   // Vectorize filters
   // Edison mean-shift
-  typedef otb::StreamingVectorizedSegmentationOGR
+  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter
   <FloatVectorImageType,
    EdisonSegmentationFilterType>          EdisontreamingVectorizedSegmentationOGRType;
 
   // Home made mean-shift
-  typedef otb::StreamingVectorizedSegmentationOGR
+  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter
   <FloatVectorImageType,
    MeanShiftSegmentationFilterType>       MeanShiftVectorizedSegmentationOGRType;
 
 
   // Connected components
-  typedef otb::StreamingVectorizedSegmentationOGR
+  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter
   <FloatVectorImageType,
    ConnectedComponentSegmentationFilterType>
   ConnectedComponentStreamingVectorizedSegmentationOGRType;
 
-  typedef otb::FusionOGRTileFilter
+  typedef otb::OGRDataSourceStreamStitchingFilter
   <FloatVectorImageType>                  FusionFilterType;
 
 
   // Watershed
-  typedef otb::StreamingVectorizedSegmentationOGR
+  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter
   <FloatImageType,
    WatershedSegmentationFilterType>      StreamingVectorizedWatershedFilterType;
 
@@ -322,12 +322,12 @@ private:
 
   template<class TInputImage, class TSegmentationFilter>
   FloatVectorImageType::SizeType
-  GenericApplySegmentation(otb::StreamingVectorizedSegmentationOGR<TInputImage,
+  GenericApplySegmentation(otb::StreamingImageToOGRDataSourceSegmentationFilter<TInputImage,
                                                                    TSegmentationFilter> * streamingVectorizedFilter, TInputImage * inputImage ,otb::ogr::DataSource::Pointer ogrDS, const unsigned int outputNb)
   {
     typedef  TSegmentationFilter             SegmentationFilterType;
     typedef  typename SegmentationFilterType::Pointer SegmentationFilterPointerType;
-    typedef otb::StreamingVectorizedSegmentationOGR
+    typedef otb::StreamingImageToOGRDataSourceSegmentationFilter
       <FloatVectorImageType,
        SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
 
