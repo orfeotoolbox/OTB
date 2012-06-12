@@ -21,7 +21,7 @@
 #include "otbVectorDataExtractROI.h"
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataProperties.h"
-#include "otbVectorDataToImageFilter.h"
+#include "otbVectorDataToMapFilter.h"
 #include "otbGeoInformationConversion.h"
 #include "otbRemoteSensingRegion.h"
 
@@ -57,7 +57,7 @@ public:
   typedef VectorDataProperties<VectorDataType> VectorDataPropertiesType;
 
   // Rasterization
-  typedef otb::VectorDataToImageFilter<VectorDataType, UInt8ImageType> VectorDataToImageFilterType;
+  typedef otb::VectorDataToMapFilter<VectorDataType, UInt8ImageType> VectorDataToMapFilterType;
 
   // Misc
   typedef otb::RemoteSensingRegion<double> RemoteSensingRegionType;
@@ -242,13 +242,13 @@ private:
     m_Vdextract->SetRegion(region);
     m_Vdextract->SetInput(m_Vproj->GetOutput());
     
-    m_VectorDataRendering = VectorDataToImageFilterType::New();
+    m_VectorDataRendering = VectorDataToMapFilterType::New();
     m_VectorDataRendering->SetInput(m_Vdextract->GetOutput());
     m_VectorDataRendering->SetSize(size);
     m_VectorDataRendering->SetOrigin(origin);
     m_VectorDataRendering->SetSpacing(spacing);
     m_VectorDataRendering->SetVectorDataProjectionWKT(outputProjectionRef);
-    m_VectorDataRendering->SetRenderingStyleType(VectorDataToImageFilterType::Binary);
+    m_VectorDataRendering->SetRenderingStyleType(VectorDataToMapFilterType::Binary);
   
     UInt8ImageType::Pointer outputImage = m_VectorDataRendering->GetOutput();
     if (HasValue("im"))
@@ -265,7 +265,7 @@ private:
   VectorDataPropertiesType::Pointer m_VdProperties;
   VectorDataProjectionFilterType::Pointer m_Vproj;
   VectorDataExtractROIType::Pointer m_Vdextract;
-  VectorDataToImageFilterType::Pointer m_VectorDataRendering;
+  VectorDataToMapFilterType::Pointer m_VectorDataRendering;
   
 };
 
