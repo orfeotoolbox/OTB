@@ -43,7 +43,7 @@
 #include "otbVectorDataFileReader.h"
 #include "otbVectorData.h"
 #include "otbVectorDataProjectionFilter.h"
-#include "otbVectorDataToImageFilter.h"
+#include "otbVectorDataToMapFilter.h"
 #include "otbAlphaBlendingFunction.h"
 
 #include "otbImageLayerRenderingModel.h"
@@ -168,12 +168,12 @@ int main( int argc, char * argv[] )
   spacing[0] = reader->GetOutput()->GetSpacing()[0];
   spacing[1] = reader->GetOutput()->GetSpacing()[1];
 
-  // set up the rendering of the vector data, the VectorDataToImageFilter uses the
+  // set up the rendering of the vector data, the VectorDataToMapFilter uses the
   // mapnik library to obtain a nice rendering
   typedef itk::RGBAPixel<unsigned char>                                AlphaPixelType;
   typedef otb::Image<AlphaPixelType, 2>                                 AlphaImageType;
-  typedef otb::VectorDataToImageFilter<VectorDataType, AlphaImageType> VectorDataToImageFilterType;
-  VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
+  typedef otb::VectorDataToMapFilter<VectorDataType, AlphaImageType> VectorDataToMapFilterType;
+  VectorDataToMapFilterType::Pointer vectorDataRendering = VectorDataToMapFilterType::New();
   vectorDataRendering->SetInput(projection->GetOutput());
 
   vectorDataRendering->SetSize(size);
@@ -192,7 +192,7 @@ int main( int argc, char * argv[] )
 
   // rendering of the quicklook: the quicklook is at an entire different scale, so we don't want to
   // render the same roads (only the main one).
-  VectorDataToImageFilterType::Pointer vectorDataRenderingQL = VectorDataToImageFilterType::New();
+  VectorDataToMapFilterType::Pointer vectorDataRenderingQL = VectorDataToMapFilterType::New();
   vectorDataRenderingQL->SetInput(projection->GetOutput());
 
   double qlRatio = generator->GetOptimalSubSamplingRate();

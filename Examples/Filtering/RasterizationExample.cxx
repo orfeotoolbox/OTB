@@ -24,7 +24,7 @@
 
 // Software Guide : BeginLatex
 //
-// The \doxygen{otb}{VectorDataToImageFilter} allows to perform
+// The \doxygen{otb}{VectorDataToMapFilter} allows to perform
 // rasterization of a given vector data as a binary mask. This example
 // will demonstrate how to use this filter to perform rasterization of
 // the SRTM water body masks available here:
@@ -37,7 +37,7 @@
 // Software Guide : BeginCodeSnippet
 #include "otbVectorData.h"
 #include "otbImage.h"
-#include "otbVectorDataToImageFilter.h"
+#include "otbVectorDataToMapFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbImageFileWriter.h"
@@ -66,15 +66,15 @@ int main(int argc, char * argv[])
   // Software Guide : BeginLatex
   //
   // Using these typedefs, we can define and instantiate the
-  // \doxygen{otb}{VectorDataToImageFilter}.
+  // \doxygen{otb}{VectorDataToMapFilter}.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorDataToImageFilter<VectorDataType,
-    ImageType>            VectorDataToImageFilterType;
-  VectorDataToImageFilterType::Pointer vectorDataRendering
-    = VectorDataToImageFilterType::New();
+  typedef otb::VectorDataToMapFilter<VectorDataType,
+    ImageType>            VectorDataToMapFilterType;
+  VectorDataToMapFilterType::Pointer vectorDataRendering
+    = VectorDataToMapFilterType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -163,7 +163,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginLatex
   //
   // Now, we can plug the the ROI filter to the
-  // \doxygen{otb}{VectorDataToImageFilter}.
+  // \doxygen{otb}{VectorDataToMapFilter}.
   //
   // Software Guide : EndLatex
   
@@ -184,7 +184,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  vectorDataRendering->SetRenderingStyleType(VectorDataToImageFilterType::Binary);
+  vectorDataRendering->SetRenderingStyleType(VectorDataToMapFilterType::Binary);
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex

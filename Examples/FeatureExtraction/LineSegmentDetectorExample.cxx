@@ -20,7 +20,7 @@
 #include "otbVectorData.h"
 
 #include "otbImageFileReader.h"
-#include "otbVectorDataToImageFilter.h"
+#include "otbVectorDataToMapFilter.h"
 #include "otbAlphaBlendingFunctor.h"
 #include "itkBinaryFunctorImageFilter.h"
 #include "otbImageFileWriter.h"
@@ -98,7 +98,7 @@ int main(int argc, char * argv[])
   //
   // In order to be able to display the results, we will draw the
   // detected segments on top of the input image. For this matter, we
-  // will use a \doxygen{otb}{VectorDataToImageFilter} which
+  // will use a \doxygen{otb}{VectorDataToMapFilter} which
   // is templated over the input vector data type and the output image
   // type, and a conbination of a \doxygen{itk}{binaryFunctorImageFilter}
   // and the \doxygen{otb}{Functor}{AlphaBlendingFunctor}.
@@ -107,7 +107,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::VectorData<PrecisionType> VectorDataType;
-  typedef otb::VectorDataToImageFilter<VectorDataType,
+  typedef otb::VectorDataToMapFilter<VectorDataType,
       ImageType> VectorDataRendererType;
   VectorDataRendererType::Pointer vectorDataRenderer = VectorDataRendererType::New();
 
