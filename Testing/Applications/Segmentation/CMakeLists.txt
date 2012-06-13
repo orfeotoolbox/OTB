@@ -67,6 +67,10 @@ SET(edison_parameters "-filter.edison.spatialr 5 -filter.edison.ranger 50 -filte
 SET(meanshift_parameters "-filter.meanshift.spatialr 5 -filter.meanshift.ranger 50 -filter.meanshift.minsize 10")
 SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.ogroptions OVERWRITE=YES")
 
+# validation option
+SET(meanshift_option "--without-threads")
+
+
 # Output type dependning on mode
 SET(raster_output_format ".tif")
 SET(raster_output_option " uint16")
@@ -99,9 +103,10 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                               -mode ${lmode}
                               -mode.${lmode}.out ${TEMP}/${OUTFILE}${${lmode}_output_option}
                               ${${lmode}_parameters}
-                     VALID    ${${lmode}_comparison}
+                     VALID    ${${lfilter}_option}
+                    		  ${${lmode}_comparison}
                               ${${lmode}_ref_path}/${OUTFILE}
-                              ${TEMP}/${OUTFILE}
+                              ${TEMP}/${OUTFILE}                           
                      )
 
 ENDFOREACH(filter)
