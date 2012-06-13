@@ -116,8 +116,8 @@ OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
                              -bm.medianfilter.radius 2
                              -bm.medianfilter.incoherence 2.0
                      )
-SET_TESTS_PROPERTIES(apTvDmBlockMatchingTest PROPERTIES DEPENDS apTvDmGridBasedImageResamplingRightTest)
-SET_TESTS_PROPERTIES(apTvDmBlockMatchingTest PROPERTIES DEPENDS apTvDmGridBasedImageResamplingLeftTest)
+set_property(TEST apTvDmBlockMatchingTest APPEND PROPERTY DEPENDS apTvDmGridBasedImageResamplingRightTest)
+set_property(TEST apTvDmBlockMatchingTest APPEND PROPERTY DEPENDS apTvDmGridBasedImageResamplingLeftTest)
 
 #--- DisparityMapToElevationMap ---#
 OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
