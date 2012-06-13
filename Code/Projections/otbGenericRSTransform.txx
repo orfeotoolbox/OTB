@@ -35,8 +35,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::GenericRSTransform() : Superclass(SpaceDimension, ParametersDimension),
                          m_DEMDirectory(""), m_GeoidFile(""),
                          m_AverageElevation(-32768.0),
-                         m_OptimizeInputTransform(true),
-                         m_OptimizeOutputTransform(true),
+                         m_OptimizeInputTransform(false),
+                         m_OptimizeOutputTransform(false), 
                          m_InputTiePoints(),
                          m_OutputTiePoints()
 
