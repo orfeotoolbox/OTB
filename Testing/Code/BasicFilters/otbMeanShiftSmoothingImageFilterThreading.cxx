@@ -27,7 +27,7 @@ int otbMeanShiftSmoothingImageFilterThreading(int argc, char * argv[])
   if (argc != 7)
     {
     std::cerr << "Usage: " << argv[0] <<
-    " inputFileName outputSingleThreadFileName outputMultiThreadFileName spatialBandwidth rangeBandwidth useOptimization"
+    " inputFileName outputSingleThreadFileName outputMultiThreadFileName spatialBandwidth rangeBandwidth useModeSearch"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -37,7 +37,7 @@ int otbMeanShiftSmoothingImageFilterThreading(int argc, char * argv[])
   const char *       outputMultiThreadFileName  = argv[3];
   const double       spatialBandwidth           = atof(argv[4]);
   const double       rangeBandwidth             = atof(argv[5]);
-  bool               useOptimization            = (atoi(argv[6])!=0);
+  bool               useModeSearch            = (atoi(argv[6])!=0);
 
   const unsigned int Dimension = 2;
   typedef float                                            PixelType;
@@ -58,13 +58,13 @@ int otbMeanShiftSmoothingImageFilterThreading(int argc, char * argv[])
   filterSingle->SetSpatialBandwidth(spatialBandwidth);
   filterSingle->SetRangeBandwidth(rangeBandwidth);
   filterSingle->SetInput(reader->GetOutput());
-  filterSingle->SetModeSearchOptimization(useOptimization);
+  filterSingle->SetModeSearch(useModeSearch);
   filterSingle->SetNumberOfThreads(1);
 
   filterMulti->SetSpatialBandwidth(spatialBandwidth);
   filterMulti->SetRangeBandwidth(rangeBandwidth);
   filterMulti->SetInput(reader->GetOutput());
-  filterMulti->SetModeSearchOptimization(useOptimization);
+  filterMulti->SetModeSearch(useModeSearch);
 
   WriterType::Pointer writerSingle = WriterType::New();
   WriterType::Pointer writerMulti  = WriterType::New();

@@ -411,7 +411,7 @@ private:
  *
  * MeanShifVector squared norm is compared with Threshold (set using Get/Set accessor) to define pixel convergence (1e-3 by default).
  * MaxIterationNumber defines maximum iteration number for each pixel convergence (set using Get/Set accessor). Set to 4 by default.
- * ModeSearchOptimization is a boolean value, to choose between optimized and non optimized algorithm. If set to true (by default), assign mode value to each pixel on a path covered in convergence steps.
+ * ModeSearch is a boolean value, to choose between optimized and non optimized algorithm. If set to true (by default), assign mode value to each pixel on a path covered in convergence steps.
  *
  * For more information on mean shift techniques, one might consider reading the following article:
  *
@@ -499,11 +499,12 @@ public:
   itkGetConstReferenceMacro(Threshold, double);
   itkSetMacro(Threshold, double);
 
-  /** Toggle mode search optimization, which is enabled by default.
+  /** Toggle mode search, which is enabled by default.
     * When off, the output label image is not available
+    * Be careful, with this option, the result will slightly depend on thread number.
     */
-  itkSetMacro(ModeSearchOptimization, bool);
-  itkGetConstReferenceMacro(ModeSearchOptimization, bool);
+  itkSetMacro(ModeSearch, bool);
+  itkGetConstReferenceMacro(ModeSearch, bool);
 
   /** Toggle bucket optimization, which is disabled by default.
     */
@@ -609,8 +610,8 @@ private:
    */
   typename ModeTableImageType::Pointer m_ModeTable;
 
-  /** Boolean to enable mode search optimization */
-  bool m_ModeSearchOptimization;
+  /** Boolean to enable mode search  */
+  bool m_ModeSearch;
   /** Boolean to enable bucket optimization */
   bool m_BucketOptimization;
 

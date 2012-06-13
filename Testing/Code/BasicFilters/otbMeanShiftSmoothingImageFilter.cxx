@@ -27,7 +27,7 @@ int otbMeanShiftSmoothingImageFilter(int argc, char * argv[])
   if (argc != 10 && argc != 11)
     {
     std::cerr << "Usage: " << argv[0] <<
-    " infname spatialfname spectralfname iterationfname labelfname spatialBandwidth rangeBandwidth threshold maxiterationnumber (useoptimization)"
+    " infname spatialfname spectralfname iterationfname labelfname spatialBandwidth rangeBandwidth threshold maxiterationnumber (usemodesearch)"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -41,10 +41,10 @@ int otbMeanShiftSmoothingImageFilter(int argc, char * argv[])
   const double       rangeBandwidth            = atof(argv[7]);
   const double       threshold                 = atof(argv[8]);
   const unsigned int maxiterationnumber        = atoi(argv[9]);
-  bool               useoptimization                 = true;
+  bool               usemodesearch                 = true;
   if(argc==11)
     {
-      useoptimization           = atoi(argv[10])!=0;
+      usemodesearch        = atoi(argv[10])!=0;
     }
 
   /* maxit - threshold */
@@ -75,7 +75,7 @@ int otbMeanShiftSmoothingImageFilter(int argc, char * argv[])
   filter->SetThreshold(threshold);
   filter->SetMaxIterationNumber(maxiterationnumber);
   filter->SetInput(reader->GetOutput());
-  filter->SetModeSearchOptimization(useoptimization);
+  filter->SetModeSearch(usemodesearch);
   //filter->SetNumberOfThreads(1);
   SpatialWriterType::Pointer writer1 = SpatialWriterType::New();
   WriterType::Pointer writer2 = WriterType::New();
@@ -89,7 +89,7 @@ int otbMeanShiftSmoothingImageFilter(int argc, char * argv[])
   writer2->SetInput(filter->GetRangeOutput());
   writer4->SetInput(filter->GetIterationOutput());
 
- if (useoptimization) //mode label image is only available with mode search optimization
+ if (usemodesearch) //mode label image is only available with mode search optimization
     {
     LabelWriterType::Pointer writer5 = LabelWriterType::New();
     writer5->SetFileName(labelfname);

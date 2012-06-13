@@ -42,7 +42,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   // , m_NumberOfComponentsPerPixel(...)
   // , m_JointImage(0)
   // , m_ModeTable(0)
-  , m_ModeSearchOptimization( true )
+  , m_ModeSearch( true )
   , m_BucketOptimization( false )
 {
   this->SetNumberOfOutputs(4);
@@ -316,13 +316,13 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
     }
 */
 
-  //TODO don't create mode table iterator when ModeSearchOptimization is set to false
+  //TODO don't create mode table iterator when ModeSearch is set to false
   m_ModeTable = ModeTableImageType::New();
   m_ModeTable->SetRegions(inputPtr->GetRequestedRegion());
   m_ModeTable->Allocate();
   m_ModeTable->FillBuffer(0);
 
-  if (m_ModeSearchOptimization)
+  if (m_ModeSearch)
     {
     // Image to store the status at each pixel:
     // 0 : no mode has been found yet
@@ -610,7 +610,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   // Variables used by mode search optimization
   // List of indices where the current pixel passes through
   std::vector<InputIndexType> pointList;
-  if(m_ModeSearchOptimization) pointList.resize(m_MaxIterationNumber);
+  if(m_ModeSearch) pointList.resize(m_MaxIterationNumber);
   // Number of times an already processed candidate pixel is encountered, resulting in no
   // further computation (Used for statistics only)
   unsigned int numBreaks = 0;
@@ -624,7 +624,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
 
     // if pixel has been already processed (by mode search optimization), skip
     typename ModeTableImageType::InternalPixelType const& currentPixelMode = modeTableIt.Get();
-    if(m_ModeSearchOptimization &&  currentPixelMode == 1)
+    if(m_ModeSearch &&  currentPixelMode == 1)
       {
       numBreaks++;
       continue;
@@ -645,7 +645,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
     while ((iteration < m_MaxIterationNumber) && (!hasConverged))
       {
 
-      if (m_ModeSearchOptimization)
+      if (m_ModeSearch)
         {
         // Find index of the pixel closest to the current jointPixel (not normalized by bandwidth)
         for (unsigned int comp = 0; comp < ImageDimension; comp++)
@@ -697,7 +697,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
             }
 
           }
-        } // end if (m_ModeSearchOptimization)
+        } // end if (m_ModeSearch)
 
       //Calculate meanShiftVector
       if(m_BucketOptimization)
@@ -740,7 +740,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
     const typename OutputIterationImageType::PixelType iterationPixel = iteration;
     iterationIt.Set(iterationPixel);
 
-    if (m_ModeSearchOptimization)
+    if (m_ModeSearch)
       {
       // Update the mode table now that the current pixel has been assigned
       modeTableIt.Set(1); // m_ModeTable->SetPixel(currentIndex, 1);
@@ -765,7 +765,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
         labelOutput->SetPixel(pointList[i], label);
         }
       }
-    else // if ModeSearchOptimization is not set LabelOutput can't be generated
+    else // if ModeSearch is not set LabelOutput can't be generated
       {
         LabelType labelZero=0;
         labelIt.Set(labelZero);
@@ -788,7 +788,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
 
   // Reassign mode labels
   // Note: Labels are only computed when mode search optimization is enabled
-  if (m_ModeSearchOptimization)
+  if (m_ModeSearch)
     {
     // New labels will be consecutive. The following vector contains the new
     // start label for each thread.
