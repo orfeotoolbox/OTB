@@ -29,6 +29,7 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
    m_MeanShiftFilter = MeanShiftFilterType::New();
    m_RegionMergingFilter = RegionMergingFilterType::New();
    m_RegionPruningFilter = RegionPruningFilterType::New();
+   m_RelabelFilter = RelabelComponentFilterType::New();
    this->SetMinRegionSize(100);
    this->SetNumberOfOutputs(2);
    this->SetNthOutput(0,TOutputLabelImage::New());
@@ -78,12 +79,17 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
 ::GenerateData()
 {
   this->m_MeanShiftFilter->SetInput(this->GetInput());
-  this->m_RegionMergingFilter->SetInputLabelImage(this->m_MeanShiftFilter->GetLabelOutput());
+
+  // Relabel output to avoid same label assigned to discontinuous areas
+
+  m_RelabelFilter->SetInput(this->m_MeanShiftFilter->GetLabelOutput());
+  this->m_RegionMergingFilter->SetInputLabelImage(this->m_RelabelFilter->GetOutput());
+
   this->m_RegionMergingFilter->SetInputSpectralImage(this->m_MeanShiftFilter->GetRangeOutput());
   this->m_RegionMergingFilter->SetRangeBandwidth(this->GetRangeBandwidth());
-  //std::cout << "MinRegionSize " << this->m_RegionPruningFilter->GetMinRegionSize() << std::endl;
   if (this->GetMinRegionSize() == 0)
     {
+
     m_RegionMergingFilter->GraftNthOutput(0, this->GetLabelOutput());
     m_RegionMergingFilter->GraftNthOutput(1, this->GetClusteredOutput());
     this->m_RegionMergingFilter->Update();
@@ -95,9 +101,9 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
 
     this->m_RegionPruningFilter->SetInputLabelImage(this->m_RegionMergingFilter->GetLabelOutput());
     this->m_RegionPruningFilter->SetInputSpectralImage(this->m_RegionMergingFilter->GetClusteredOutput());
-
     m_RegionPruningFilter->GraftNthOutput(0, this->GetLabelOutput());
     m_RegionPruningFilter->GraftNthOutput(1, this->GetClusteredOutput());
+
     this->m_RegionPruningFilter->Update();
     this->GraftNthOutput(0, m_RegionPruningFilter->GetLabelOutput());
     this->GraftNthOutput(1, m_RegionPruningFilter->GetClusteredOutput());

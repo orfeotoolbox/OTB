@@ -23,8 +23,57 @@
 #include "otbMeanShiftSmoothingImageFilter.h"
 #include "otbLabelImageRegionMergingFilter.h"
 #include "otbLabelImageRegionPruningFilter.h"
+#include "itkRelabelComponentImageFilter.h"
+#include <itkConnectedComponentFunctorImageFilter.h>
+
+
 
 namespace otb {
+
+
+namespace Functor
+{
+
+template<class TInput>
+class ITK_EXPORT ConnectedLabelFunctor
+{
+
+public:
+
+  typedef ConnectedLabelFunctor Self;
+
+  std::string GetNameOfClass()
+  {
+    return "ConnectedLabelFunctor";
+  }
+
+  inline bool operator()( TInput &p1,  TInput &p2)
+  {
+    //return static_cast<bool> (0);
+    return static_cast<bool> (p1==p2);
+  }
+
+
+  ConnectedLabelFunctor()
+  {
+
+  }
+
+  ~ConnectedLabelFunctor()
+  {
+  }
+
+private:
+
+  ConnectedLabelFunctor(const Self &); //purposely not implemented
+  void operator =(const Self &); //purposely not implemented
+
+};
+
+} // end of Functor namespace
+
+
+
 
 /** \class MeanShiftSegmentationFilter
 *
@@ -35,7 +84,7 @@ namespace otb {
 
 
 template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage = TInputImage, class TKernel = KernelUniform>
-class MeanShiftSegmentationFilter : public itk::ImageToImageFilter<TInputImage, TOutputLabelImage>
+class ITK_EXPORT MeanShiftSegmentationFilter : public itk::ImageToImageFilter<TInputImage, TOutputLabelImage>
 {
 public:
   /** Standard Self typedef */
@@ -67,12 +116,21 @@ public:
   typedef typename MeanShiftFilterType::Pointer                                                  MeanShiftFilterPointerType;
   // Region merging filter
   typedef typename MeanShiftFilterType::OutputLabelImageType                             InputLabelImageType;
+  typedef typename MeanShiftFilterType::LabelType                                        InputLabelPixelType;
   typedef LabelImageRegionMergingFilter<InputLabelImageType, MeanShiftFilteredImageType,
                                         OutputLabelImageType, OutputClusteredImageType>  RegionMergingFilterType;
   typedef typename RegionMergingFilterType::Pointer                                      RegionMergingFilterPointerType;
   typedef LabelImageRegionPruningFilter<OutputLabelImageType,OutputClusteredImageType,
                                           OutputLabelImageType, OutputClusteredImageType>  RegionPruningFilterType;
-  typedef typename RegionPruningFilterType::Pointer                                      RegionPruningFilterPointerType;
+  typedef typename RegionPruningFilterType::Pointer                                        RegionPruningFilterPointerType;
+
+
+
+    typedef Functor::ConnectedLabelFunctor<InputLabelPixelType> LabelFunctorType;
+
+    typedef itk::ConnectedComponentFunctorImageFilter<InputLabelImageType,InputLabelImageType,LabelFunctorType> RelabelComponentFilterType;
+    typedef typename RelabelComponentFilterType::Pointer   RelabelComponentFilterPointerType;
+
 
 
   /** Sets the spatial bandwidth (or radius in the case of a uniform kernel)
@@ -101,6 +159,7 @@ public:
   otbSetObjectMemberMacro(RegionPruningFilter,MinRegionSize,RealType);
   otbGetObjectMemberMacro(RegionPruningFilter,MinRegionSize,RealType);
 
+
   /** Returns the const image of region labels */
   const OutputLabelImageType * GetLabelOutput() const;
   /** Returns the image of region labels */
@@ -121,9 +180,10 @@ protected:
 
 private:
 
-  MeanShiftFilterPointerType     m_MeanShiftFilter;
-  RegionMergingFilterPointerType m_RegionMergingFilter;
-  RegionPruningFilterPointerType m_RegionPruningFilter;
+  MeanShiftFilterPointerType        m_MeanShiftFilter;
+  RegionMergingFilterPointerType    m_RegionMergingFilter;
+  RegionPruningFilterPointerType    m_RegionPruningFilter;
+  RelabelComponentFilterPointerType m_RelabelFilter;
 };
 
 
