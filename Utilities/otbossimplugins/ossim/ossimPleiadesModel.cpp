@@ -216,21 +216,31 @@ namespace ossimplugins
       {
          if (file.isFile())
          {
-            DIMxmlFile = file.path();
-            RPCxmlFile = file.path();
+            // DIMAPv1
+            ossimFilename DIMv1xmlFileTmp = file;
+            DIMv1xmlFileTmp.setFile("PHRDIMAP");
+            DIMv1xmlFileTmp.setExtension("XML");
 
-            ossimFilename DIMxmlFileTmp = file.file();
-            ossimFilename RPCxmlFileTmp;
+            if (DIMv1xmlFileTmp.isFile())
+              {
+              DIMxmlFile = DIMv1xmlFileTmp;
+              RPCxmlFile = DIMv1xmlFileTmp;
+              }
+            else
+              {
+              // DIMAPv2
+              DIMxmlFile = file.path();
+              RPCxmlFile = file.path();
+              ossimFilename DIMxmlFileTmp = file.file();
+              ossimFilename RPCxmlFileTmp;
 
-            DIMxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^IMG_", "DIM_");
+              DIMxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^IMG_", "DIM_");
+              DIMxmlFileTmp = DIMxmlFileTmp.replaceStrThatMatch("_R[0-9]+C[0-9]+\\.(JP2|TIF)$", ".XML");
+              RPCxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^DIM_", "RPC_");
 
-            DIMxmlFileTmp = DIMxmlFileTmp.replaceStrThatMatch("_R[0-9]+C[0-9]+\\.(JP2|TIF)$", ".XML");
-
-            RPCxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^DIM_", "RPC_");
-
-            DIMxmlFile = DIMxmlFile.dirCat(DIMxmlFileTmp);
-            RPCxmlFile = RPCxmlFile.dirCat(RPCxmlFileTmp);
-
+              DIMxmlFile = DIMxmlFile.dirCat(DIMxmlFileTmp);
+              RPCxmlFile = RPCxmlFile.dirCat(RPCxmlFileTmp);
+              }
          }
       }
 
@@ -300,7 +310,6 @@ namespace ossimplugins
          theLatOffset  = theSupportData->getLatOffset();
          theLonOffset  = theSupportData->getLonOffset();
          theHgtOffset  = theSupportData->getHeightOffset();
-
       }
 
       // TODO MSD Check if this part is necessary

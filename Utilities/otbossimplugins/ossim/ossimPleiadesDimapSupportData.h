@@ -57,6 +57,12 @@ namespace ossimplugins
       public ossimErrorStatusInterface
       {
       public:
+         enum ossimPleiadesDIMAPVersion
+         {
+            OSSIM_PLEIADES_UNKNOWN,
+            OSSIM_PLEIADES_DIMAPv1,
+            OSSIM_PLEIADES_DIMAPv2
+         };
 
          /** metadata subprofile type */
          enum ossimPleiadesMetadataSubProfile
@@ -129,7 +135,7 @@ namespace ossimplugins
          /** Zero based image rectangle, sub image if there is one. */
          void getImageRect(ossimDrect& rect)const;
 
-         bool allMetadataRead(){return (theProductIsOk && TheRpcIsOk);};
+         bool allMetadataRead(){return (theProductIsOk && theRpcIsOk);};
 
          std::vector<double> getLineNumCoeff() const {return theLineNumCoeff;};
          std::vector<double> getLineDenCoeff() const {return theLineDenCoeff;};
@@ -150,17 +156,16 @@ namespace ossimplugins
 
 
       private:
-         ossimPleiadesMetadataSubProfile theMetadataSubProfile;
+         ossimPleiadesDIMAPVersion theDIMAPVersion;
+         ossimPleiadesMetadataSubProfile theMetadataSubProfile; // only for DIMAPv2
          bool theProductIsOk;
-         bool TheRpcIsOk;
+         bool theRpcIsOk;
          ossimString theXmlDocumentRoot;
 
          ossimString                 theSensorID;
          ossimString                 theImageID;
          ossimString                 theProductionDate;
          ossimString                 theAcquisitionDate;
-         ossimString                 theFirstLineImagingTime;
-         ossimString                 theFirstLineImagingDate;
          ossimString                 theInstrument;
          ossimString                 theInstrumentIndex;
          ossimString                 theProcessingLevelString;
@@ -233,7 +238,8 @@ namespace ossimplugins
 
          bool parseRPCMetadata(ossimRefPtr<ossimXmlDocument> xmlDocument);
 
-         bool parseMetadataIdentification(ossimRefPtr<ossimXmlDocument> xmlDocument);
+         bool parseMetadataIdentificationDIMAPv1(ossimRefPtr<ossimXmlDocument> xmlDocument);
+         bool parseMetadataIdentificationDIMAPv2(ossimRefPtr<ossimXmlDocument> xmlDocument);
 
          /**
           * Dataset Identification:

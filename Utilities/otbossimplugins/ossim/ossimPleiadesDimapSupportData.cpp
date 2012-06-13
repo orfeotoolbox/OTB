@@ -126,17 +126,16 @@ namespace ossimplugins
 
    ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData ()
       :ossimErrorStatusInterface(),
+       theDIMAPVersion(OSSIM_PLEIADES_UNKNOWN),
        theMetadataSubProfile(OSSIM_PLEIADES_METADATA_SUBPROFILE_UNKNOWN),
        theProductIsOk(false),
-       TheRpcIsOk(false),
+       theRpcIsOk(false),
        theXmlDocumentRoot(),
 
        theSensorID(),
        theImageID(),
        theProductionDate(),
        theAcquisitionDate(),
-       theFirstLineImagingTime(),
-       theFirstLineImagingDate(),
        theInstrument(),
        theInstrumentIndex(),
        theProcessingLevelString(),
@@ -200,16 +199,15 @@ namespace ossimplugins
    void ossimPleiadesDimapSupportData::clearFields()
    {
       clearErrorStatus();
+      theDIMAPVersion = OSSIM_PLEIADES_UNKNOWN;
       theMetadataSubProfile = OSSIM_PLEIADES_METADATA_SUBPROFILE_UNKNOWN;
       theProductIsOk = false;
-      TheRpcIsOk = false;
+      theRpcIsOk = false;
       theXmlDocumentRoot = "";
       theImageID = "";
       theSensorID="";
       theProductionDate = "";
       theAcquisitionDate = "";
-      theFirstLineImagingTime = "";
-      theFirstLineImagingDate = "";
       theInstrument = "";
       theInstrumentIndex = "";
       theProcessingLevelString = "";
@@ -413,7 +411,8 @@ namespace ossimplugins
          return false;
       }
 
-      if (!parseMetadataIdentification(xmlDocument))
+      if (!parseMetadataIdentificationDIMAPv2(xmlDocument)
+          && !parseMetadataIdentificationDIMAPv1(xmlDocument))
       {
          if (traceDebug())
          {
@@ -425,7 +424,8 @@ namespace ossimplugins
          return false;
       }
 
-      if (theMetadataSubProfile == OSSIM_PLEIADES_METADATA_SUBPROFILE_PRODUCT)
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1
+          || theMetadataSubProfile == OSSIM_PLEIADES_METADATA_SUBPROFILE_PRODUCT)
       {
          if (theProductIsOk)
             clearFields();
@@ -547,7 +547,9 @@ namespace ossimplugins
 
          theProductIsOk = true;
       }
-      else
+
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1
+          || theMetadataSubProfile == OSSIM_PLEIADES_METADATA_SUBPROFILE_RPC)
       {
          // Parse RPC file
          if (theProcessingLevelString == "SENSOR")
@@ -559,14 +561,14 @@ namespace ossimplugins
                   << "\nparseRPCMetadata initialization failed.  Returning false" << std::endl;
                return false;
             }
-            TheRpcIsOk = true;
+            theRpcIsOk = true;
          }
          else
-            TheRpcIsOk = true;
+            theRpcIsOk = true;
       }
 
       if (theProcessingLevelString != "SENSOR")
-         TheRpcIsOk = true;
+         theRpcIsOk = true;
 
       if (traceDebug() && allMetadataRead())
       {
@@ -577,7 +579,6 @@ namespace ossimplugins
 
       return true;
    }
-
 
    ossimString ossimPleiadesDimapSupportData::getProcessingLevel() const
    {
@@ -1128,7 +1129,14 @@ namespace ossimplugins
       //---
       // Fetch the Image ID:
       //---
-      xpath = "/Product_Information/Delivery_Identification/JOB_ID";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Production/JOB_ID";
+      }
+      else
+      {
+         xpath = "/Product_Information/Delivery_Identification/JOB_ID";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, theImageID))
       {
@@ -1138,7 +1146,14 @@ namespace ossimplugins
       //---
       // Fetch the ProductionDate:
       //---
-      xpath = "/Product_Information/Delivery_Identification/PRODUCTION_DATE";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Production/DATASET_PRODUCTION_DATE";
+      }
+      else
+      {
+         xpath = "/Product_Information/Delivery_Identification/PRODUCTION_DATE";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, theProductionDate))
       {
@@ -1158,9 +1173,16 @@ namespace ossimplugins
       // Corner points:
       //---
       xml_nodes.clear();
-      xpath = "/Dataset_Content/Dataset_Extent/Vertex";
-      xpath = theXmlDocumentRoot + xpath;
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Product_Frame/Dataset_Frame/Vertex";
+      }
+      else
+      {
+         xpath = "/Dataset_Content/Dataset_Extent/Vertex";
+      }
 
+      xpath = theXmlDocumentRoot + xpath;
       xmlDocument->findNodes(xpath, xml_nodes);
       if (xml_nodes.size() != 4)
       {
@@ -1228,24 +1250,32 @@ namespace ossimplugins
          ++node;
       }
 
+
+
       //---
       // Center of frame.
       //---
       theRefGroundPoint.hgt = 0.0; // TODO needs to be looked up
 
-      xpath = "/Dataset_Content/Dataset_Extent/Center/LON";
-      xpath = theXmlDocumentRoot + xpath;
-      if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+      if (!readOneXmlNode(xmlDocument,
+                          theXmlDocumentRoot + "/Product_Frame/Dataset_Frame/Center/LON", // DIMAPv1
+                          nodeValue))
       {
-         return false;
+         if (!readOneXmlNode(xmlDocument,
+                             theXmlDocumentRoot + "/Dataset_Content/Dataset_Extent/Center/LON", // DIMAPv2
+                             nodeValue))
+         {
+            return false;
+         }
       }
       theRefGroundPoint.lon = nodeValue.toDouble();
 
-      xpath = "/Dataset_Content/Dataset_Extent/Center/LAT";
-      xpath = theXmlDocumentRoot + xpath;
-      if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+      if (!readOneXmlNode(xmlDocument, theXmlDocumentRoot + "/Dataset_Content/Dataset_Extent/Center/LAT", nodeValue))
       {
-         return false;
+         if (!readOneXmlNode(xmlDocument, theXmlDocumentRoot + "/Product_Frame/Dataset_Frame/Center/LAT", nodeValue))
+         {
+            return false;
+         }
       }
       theRefGroundPoint.lat = nodeValue.toDouble();
 
@@ -1267,9 +1297,17 @@ namespace ossimplugins
       thePhysicalBias.assign(theNumBands, 0.000);
 
       xml_nodes.clear();
-      xpath = "/Radiometric_Data/Radiometric_Calibration/Instrument_Calibration/Band_Measurement_List/Band_Radiance";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Image_Interpretation/Spectral_Band_Info";
+      }
+      else
+      {
+         xpath = "/Radiometric_Data/Radiometric_Calibration/Instrument_Calibration/Band_Measurement_List/Band_Radiance";
+      }
       xpath = theXmlDocumentRoot + xpath;
       xmlDocument->findNodes(xpath, xml_nodes);
+
       node = xml_nodes.begin();
       while (node != xml_nodes.end())
       {
@@ -1311,7 +1349,7 @@ namespace ossimplugins
          }
 
          sub_nodes.clear();
-         xpath = "BIAS";
+         xpath = (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1 ? "PHYSICAL_BIAS" : "BIAS");
          (*node)->findChildNodes(xpath, sub_nodes);
          if (sub_nodes.size() == 0)
          {
@@ -1321,7 +1359,7 @@ namespace ossimplugins
          thePhysicalBias[bandIndex] = sub_nodes[0]->getText().toDouble();
 
          sub_nodes.clear();
-         xpath = "GAIN";
+         xpath = (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1 ? "PHYSICAL_GAIN" : "GAIN");
          (*node)->findChildNodes(xpath, sub_nodes);
          if (sub_nodes.size() == 0)
          {
@@ -1333,11 +1371,15 @@ namespace ossimplugins
          ++node;
       }
 
-      theSolarIrradiance.assign(theNumBands, 0.000);
+      // Initialize to 999 : we find this value in some DIMAPv2 file
+      // and there is no such tag in DIMAPv1 file
+      theSolarIrradiance.assign(theNumBands, 999.000);
+
       xml_nodes.clear();
       xpath = "/Radiometric_Data/Radiometric_Calibration/Instrument_Calibration/Band_Measurement_List/Band_Solar_Irradiance";
       xpath = theXmlDocumentRoot + xpath;
       xmlDocument->findNodes(xpath, xml_nodes);
+
       node = xml_nodes.begin();
       while (node != xml_nodes.end())
       {
@@ -1408,114 +1450,165 @@ namespace ossimplugins
    bool ossimPleiadesDimapSupportData::parseRPCMetadata(
       ossimRefPtr<ossimXmlDocument> xmlDocument)
    {
-      static const char MODULE[] = "ossimPleiadesDimapSupportData::parseSensorMetadata";
-
+      static const char MODULE[] = "ossimPleiadesDimapSupportData::parseRPCMetadata";
       ossimString xpath, nodeValue;
       vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       //---
       // Fetch the Global RFM - Direct Model - Bias:
       //---
-      xpath = "/Rational_Function_Model/Resource_Reference/RESOURCE_ID";
-      xpath = theXmlDocumentRoot + xpath;
-      if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+
+      // RESOURCE_ID does not exists in DIMAPv1 file
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv2)
       {
-         return false;
+         xpath = "/Rational_Function_Model/Resource_Reference/RESOURCE_ID";
+         xpath = theXmlDocumentRoot + xpath;
+         if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+         {
+           ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG: Could not find: " << xpath << std::endl;
+           return false;
+         }
+         theSpecId = nodeValue;
       }
-      theSpecId = nodeValue;
 
       //---
-      // Fetch the Global RFM - Direct Model:
+      // Fetch the Global RFM - Inverse Model:
       //---
       xml_nodes.clear();
-      xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/Inverse_Model";
+      }
+      else
+      {
+        xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model";
+      }
       xpath = theXmlDocumentRoot + xpath;
       xmlDocument->findNodes(xpath, xml_nodes);
-      if (xml_nodes.size() == 0)
+      if (xml_nodes.empty())
       {
-         setErrorStatus();
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-         }
-         return false;
+        setErrorStatus();
+        if(traceDebug())
+        {
+           ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG: Could not find: " << xpath << std::endl;
+        }
+        return false;
       }
 
-      for (ossim_uint32 it = 1; it < 21; it ++)
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
       {
-         std::ostringstream valueStr;
-         valueStr << it;
+         std::vector<ossimString> coeffs;
 
          xml_nodes.clear();
-         xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/LINE_NUM_COEFF_";
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/Inverse_Model/F_ROW";
          xpath = theXmlDocumentRoot + xpath;
-         xpath = xpath + valueStr.str();
          xmlDocument->findNodes(xpath, xml_nodes);
-         if (xml_nodes.size() == 0)
-         {
-            setErrorStatus();
-            if(traceDebug())
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-            }
-            return false;
-         }
-         theLineNumCoeff.push_back(xml_nodes[0]->getText().toDouble());
+         coeffs = xml_nodes[0]->getText().split(" ", true);
+
+         const size_t nRow = coeffs.size() / 2;
+         for (size_t i = 0; i < nRow; i++)
+           {
+           theLineNumCoeff.push_back(coeffs[i].toDouble());
+           theLineDenCoeff.push_back(coeffs[i + nRow].toDouble());
+           }
 
          xml_nodes.clear();
-         xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/LINE_DEN_COEFF_";
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/Inverse_Model/F_COL";
          xpath = theXmlDocumentRoot + xpath;
-         xpath = xpath + valueStr.str();
          xmlDocument->findNodes(xpath, xml_nodes);
-         if (xml_nodes.size() == 0)
-         {
-            setErrorStatus();
-            if(traceDebug())
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-            }
-            return false;
-         }
-         theLineDenCoeff.push_back(xml_nodes[0]->getText().toDouble());
+         coeffs = xml_nodes[0]->getText().split(" ", true);
 
-         xml_nodes.clear();
-         xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/SAMP_NUM_COEFF_";
-         xpath = theXmlDocumentRoot + xpath;
-         xpath = xpath + valueStr.str();
-         xmlDocument->findNodes(xpath, xml_nodes);
-         if (xml_nodes.size() == 0)
-         {
-            setErrorStatus();
-            if(traceDebug())
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-            }
-            return false;
-         }
-         theSampNumCoeff.push_back(xml_nodes[0]->getText().toDouble());
-
-         xml_nodes.clear();
-         xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/SAMP_DEN_COEFF_";
-         xpath = theXmlDocumentRoot + xpath;
-         xpath = xpath + valueStr.str();
-         xmlDocument->findNodes(xpath, xml_nodes);
-         if (xml_nodes.size() == 0)
-         {
-            setErrorStatus();
-            if(traceDebug())
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-            }
-            return false;
-         }
-         theSampDenCoeff.push_back(xml_nodes[0]->getText().toDouble());
+         const size_t nCol = coeffs.size() / 2;
+         for (size_t i = 0; i < nCol; i++)
+           {
+           theSampNumCoeff.push_back(coeffs[i].toDouble());
+           theSampDenCoeff.push_back(coeffs[i + nCol].toDouble());
+           }
 
       }
+      else
+      {
+        for (ossim_uint32 it = 1; it < 21; it ++)
+        {
+           std::ostringstream valueStr;
+           valueStr << it;
 
+           xml_nodes.clear();
+           xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/LINE_NUM_COEFF_";
+           xpath = theXmlDocumentRoot + xpath;
+           xpath = xpath + valueStr.str();
+           xmlDocument->findNodes(xpath, xml_nodes);
+           if (xml_nodes.size() == 0)
+           {
+              setErrorStatus();
+              if(traceDebug())
+              {
+                 ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+              }
+              return false;
+           }
+           theLineNumCoeff.push_back(xml_nodes[0]->getText().toDouble());
+
+           xml_nodes.clear();
+           xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/LINE_DEN_COEFF_";
+           xpath = theXmlDocumentRoot + xpath;
+           xpath = xpath + valueStr.str();
+           xmlDocument->findNodes(xpath, xml_nodes);
+           if (xml_nodes.size() == 0)
+           {
+              setErrorStatus();
+              if(traceDebug())
+              {
+                 ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+              }
+              return false;
+           }
+           theLineDenCoeff.push_back(xml_nodes[0]->getText().toDouble());
+
+           xml_nodes.clear();
+           xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/SAMP_NUM_COEFF_";
+           xpath = theXmlDocumentRoot + xpath;
+           xpath = xpath + valueStr.str();
+           xmlDocument->findNodes(xpath, xml_nodes);
+           if (xml_nodes.size() == 0)
+           {
+              setErrorStatus();
+              if(traceDebug())
+              {
+                 ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+              }
+              return false;
+           }
+           theSampNumCoeff.push_back(xml_nodes[0]->getText().toDouble());
+
+           xml_nodes.clear();
+           xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/SAMP_DEN_COEFF_";
+           xpath = theXmlDocumentRoot + xpath;
+           xpath = xpath + valueStr.str();
+           xmlDocument->findNodes(xpath, xml_nodes);
+           if (xml_nodes.size() == 0)
+           {
+              setErrorStatus();
+              if(traceDebug())
+              {
+                 ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+              }
+              return false;
+           }
+           theSampDenCoeff.push_back(xml_nodes[0]->getText().toDouble());
+        }
+      }
       //---
-      // Fetch the Global RFM - Direct Model - Bias:
+      // Fetch the Global RFM - Inverse Model - Bias:
       //---
-      xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/ERR_BIAS_ROW";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/Inverse_Model/MODEL_PRECISION_ROW";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/ERR_BIAS_ROW";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1523,7 +1616,14 @@ namespace ossimplugins
       }
       theErrBiasX = nodeValue.toDouble();
 
-      xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/ERR_BIAS_COL";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/Inverse_Model/MODEL_PRECISION_COL";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/Inverse_Model/ERR_BIAS_COL";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1534,7 +1634,14 @@ namespace ossimplugins
       //---
       // Fetch the Global RFM validity parameters :
       //---
-      xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LONG_SCALE";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/RFM_Validity/Lon/A";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LONG_SCALE";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1542,7 +1649,14 @@ namespace ossimplugins
       }
       theLonScale = nodeValue.toDouble();
 
-      xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LONG_OFF";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/RFM_Validity/Lon/B";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LONG_OFF";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1550,7 +1664,14 @@ namespace ossimplugins
       }
       theLonOffset = nodeValue.toDouble();
 
-      xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LAT_SCALE";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/RFM_Validity/Lat/A";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LAT_SCALE";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1558,7 +1679,14 @@ namespace ossimplugins
       }
       theLatScale = nodeValue.toDouble();
 
-      xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LAT_OFF";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/RFM_Validity/Lat/B";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LAT_OFF";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1566,7 +1694,14 @@ namespace ossimplugins
       }
       theLatOffset = nodeValue.toDouble();
 
-      xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/HEIGHT_SCALE";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/RFM_Validity/Alt/A";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/HEIGHT_SCALE";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1574,7 +1709,14 @@ namespace ossimplugins
       }
       theHeightScale = nodeValue.toDouble();
 
-      xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/HEIGHT_OFF";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/RFM_Validity/Alt/B";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/HEIGHT_OFF";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1582,7 +1724,14 @@ namespace ossimplugins
       }
       theHeightOffset = nodeValue.toDouble();
 
-      xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/SAMP_SCALE";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/RFM_Validity/Col/A";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/SAMP_SCALE";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1590,7 +1739,14 @@ namespace ossimplugins
       }
       theSampScale = nodeValue.toDouble();
 
-      xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/SAMP_OFF";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/RFM_Validity/Col/B";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/SAMP_OFF";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1598,7 +1754,14 @@ namespace ossimplugins
       }
       theSampOffset = nodeValue.toInt32();
 
-      xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LINE_SCALE";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/RFM_Validity/Row/A";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LINE_SCALE";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1606,7 +1769,14 @@ namespace ossimplugins
       }
       theLineScale = nodeValue.toDouble();
 
-      xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LINE_OFF";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Geoposition/Rational_Sensor_Model/Global_RFM/RFM_Validity/Row/B";
+      }
+      else
+      {
+         xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/LINE_OFF";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1617,7 +1787,59 @@ namespace ossimplugins
       return true;
    }
 
-   bool ossimPleiadesDimapSupportData::parseMetadataIdentification(ossimRefPtr<ossimXmlDocument> xmlDocument)
+   bool ossimPleiadesDimapSupportData::parseMetadataIdentificationDIMAPv1(ossimRefPtr<ossimXmlDocument> xmlDocument)
+   {
+      static const char MODULE[] = "ossimPleiadesDimapSupportData::parseMetadataIdentification";
+
+      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      ossimString xpath, nodeValue;
+      theXmlDocumentRoot = "/PHR_Dimap_Document";
+
+      //---
+      // Get the version string which can be used as a key for parsing.
+      //---
+      xml_nodes.clear();
+      xpath = "/Metadata_Identification/METADATA_FORMAT";
+      xpath = theXmlDocumentRoot + xpath;
+
+      if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+        {
+        return false;
+        }
+      if (nodeValue != "DIMAP_PHR")
+        {
+        return false;
+        }
+
+      //---
+      // Check that it is a valid PHR DIMAPv2 file
+      //---
+      xpath = "/Metadata_Identification/METADATA_PROFILE";
+      xpath = theXmlDocumentRoot + xpath;
+      if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+      {
+         return false;
+      }
+
+      ossimString metadataProfile;
+      if ( nodeValue != "PHR_SYSTEM_RECTIFIED_PRODUCT" )
+        {
+        if (traceDebug())
+        {
+           ossimNotify(ossimNotifyLevel_DEBUG)
+              << "DEBUG:\n Not a PLEIADES DIMAPv1 file: METADATA_PROFILE is incorrect!" << std::endl;
+        }
+        return false;
+        }
+
+      // DIMAPv1 -> no subprofile
+      theMetadataSubProfile = OSSIM_PLEIADES_METADATA_SUBPROFILE_UNKNOWN;
+
+      theDIMAPVersion = OSSIM_PLEIADES_DIMAPv1;
+
+      return true;
+   }
+   bool ossimPleiadesDimapSupportData::parseMetadataIdentificationDIMAPv2(ossimRefPtr<ossimXmlDocument> xmlDocument)
    {
       static const char MODULE[] = "ossimPleiadesDimapSupportData::parseMetadataIdentification";
 
@@ -1634,7 +1856,7 @@ namespace ossimplugins
       xmlDocument->findNodes(xpath, xml_nodes);
       if (xml_nodes.size() == 0)
       {
-         // FIXME MSD: used to support peiades samples from SPOT-IMAGES website which are not coherent
+         // FIXME MSD: used to support Pleiades samples from SPOT-IMAGES website which are not coherent
          // with the specification (28/09/2012). Should be remove when first data will be available and sample
          // replaced.
          theXmlDocumentRoot = "/PHR_DIMAP_Document";
@@ -1738,6 +1960,8 @@ namespace ossimplugins
          return false;
       }
 
+      theDIMAPVersion = OSSIM_PLEIADES_DIMAPv2;
+
       return true;
    }
 
@@ -1766,7 +1990,14 @@ namespace ossimplugins
       //---
       // Fetch the Processing Level:
       //---
-      xpath = "/Processing_Information/Product_Settings/PROCESSING_LEVEL";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Product_Characteristics/PROCESSING_LEVEL";
+      }
+      else
+      {
+         xpath = "/Processing_Information/Product_Settings/PROCESSING_LEVEL";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, theProcessingLevelString))
       {
@@ -1776,7 +2007,14 @@ namespace ossimplugins
       //---
       // Fetch the Spectral Processing:
       //---
-      xpath = "/Processing_Information/Product_Settings/SPECTRAL_PROCESSING";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Product_Characteristics/Product_Image_Characteristics/SPECTRAL_PROCESSING";
+      }
+      else
+      {
+         xpath = "/Processing_Information/Product_Settings/SPECTRAL_PROCESSING";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, theSpectralProcessingString))
       {
@@ -1791,22 +2029,42 @@ namespace ossimplugins
       static const char MODULE[] = "ossimPleiadesDimapSupportData::parseRasterData";
       vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
       ossimString xpath, nodeValue;
-
       //---
       // Fetch if the product file is linked to one or many JP2 files:
       //---
-      xpath = "/Raster_Data/Data_Access/DATA_FILE_TILES";
-      xpath = theXmlDocumentRoot + xpath;
-      if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
       {
-         return false;
+         xpath = "/Product_Characteristics/Product_Image_Characteristics/Data_Access/Data_File/DATA_FILE_PATH";
+         xpath = theXmlDocumentRoot + xpath;
+         xmlDocument->findNodes(xpath, xml_nodes);
+
+         if (xml_nodes.size() > 1)
+         {
+            theMultiDataFile.setValue(true);
+         }
       }
-      theMultiDataFile.setValue(nodeValue);
+      else
+      {
+         xpath = "/Raster_Data/Data_Access/DATA_FILE_TILES";
+         xpath = theXmlDocumentRoot + xpath;
+         if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+         {
+            return false;
+         }
+         theMultiDataFile.setValue(nodeValue);
+      }
 
       //---
       // Fetch the MegaImageSize:
       //---
-      xpath = "/Raster_Data/Raster_Dimensions/NCOLS";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Raster_Dimensions/NCOLS";
+      }
+      else
+      {
+         xpath = "/Raster_Data/Raster_Dimensions/NCOLS";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1814,7 +2072,14 @@ namespace ossimplugins
       }
       theImageSize.samp = nodeValue.toInt();
 
-      xpath = "/Raster_Data/Raster_Dimensions/NROWS";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Raster_Dimensions/NROWS";
+      }
+      else
+      {
+         xpath = "/Raster_Data/Raster_Dimensions/NROWS";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1827,7 +2092,14 @@ namespace ossimplugins
          //---
          // Fetch the Number of MegaTiles:
          //---
-         xpath = "/Raster_Data/Raster_Dimensions/Tile_Set/NTILES";
+         if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+         {
+            xpath = "/Raster_Dimensions/Raster_Tiles/NTILES";
+         }
+         else
+         {
+            xpath = "/Raster_Data/Raster_Dimensions/Tile_Set/NTILES";
+         }
          xpath = theXmlDocumentRoot + xpath;
          if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
          {
@@ -1838,28 +2110,49 @@ namespace ossimplugins
          //---
          // Fetch the Number of MegaTiles in X and Y:
          //---
-         xml_nodes.clear();
-         xpath = "/Raster_Data/Raster_Dimensions/Tile_Set/Regular_Tiling/NTILES_COUNT";
-         xpath = theXmlDocumentRoot + xpath;
-         xmlDocument->findNodes(xpath, xml_nodes);
-         if (xml_nodes.size() == 0)
+         if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
          {
-            setErrorStatus();
-            if (traceDebug())
+            xpath = "/Raster_Dimensions/Raster_Tiles/RX_NB_OF_TILES";
+            xpath = theXmlDocumentRoot + xpath;
+            if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
             {
-               ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG: \nCould not find: " << xpath << std::endl;
+               return false;
             }
-            return false;
+            theNumberOfMegaTilesInRow = nodeValue.toUInt32();
+
+            xpath = "/Raster_Dimensions/Raster_Tiles/CY_NB_OF_TILES";
+            xpath = theXmlDocumentRoot + xpath;
+            if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+            {
+               return false;
+            }
+            theNumberOfMegaTilesInCol = nodeValue.toUInt32();
          }
+         else
+         {
+           xml_nodes.clear();
+           xpath = "/Raster_Data/Raster_Dimensions/Tile_Set/Regular_Tiling/NTILES_COUNT";
+           xpath = theXmlDocumentRoot + xpath;
+           xmlDocument->findNodes(xpath, xml_nodes);
+           if (xml_nodes.size() == 0)
+           {
+              setErrorStatus();
+              if (traceDebug())
+              {
+                 ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG: \nCould not find: " << xpath << std::endl;
+              }
+              return false;
+           }
 
-         ossimString attribute = "ntiles_x";
-         ossimString value;
-         xml_nodes[0]->getAttributeValue(value, attribute);
-         theNumberOfMegaTilesInRow = value.toUInt32();
+           ossimString attribute = "ntiles_x";
+           ossimString value;
+           xml_nodes[0]->getAttributeValue(value, attribute);
+           theNumberOfMegaTilesInRow = value.toUInt32();
 
-         attribute = "ntiles_y";
-         xml_nodes[0]->getAttributeValue(value, attribute);
-         theNumberOfMegaTilesInCol = value.toUInt32();
+           attribute = "ntiles_y";
+           xml_nodes[0]->getAttributeValue(value, attribute);
+           theNumberOfMegaTilesInCol = value.toUInt32();
+         }
 
          if (theNumberOfMegaTilesInRow * theNumberOfMegaTilesInCol != theNumberOfMegaTiles)
          {
@@ -1871,30 +2164,36 @@ namespace ossimplugins
             return false;
          }
 
-         //---
-         // Fetch the size of MegaTiles:
-         //---
-         xml_nodes.clear();
-         xpath = "/Raster_Data/Raster_Dimensions/Tile_Set/Regular_Tiling/NTILES_SIZE";
-         xpath = theXmlDocumentRoot + xpath;
-         xmlDocument->findNodes(xpath, xml_nodes);
-         if (xml_nodes.size() == 0)
+         if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv2)
          {
-            setErrorStatus();
-            if (traceDebug())
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-            }
-            return false;
+           //---
+           // Fetch the size of MegaTiles:
+           //---
+           xml_nodes.clear();
+           xpath = "/Raster_Data/Raster_Dimensions/Tile_Set/Regular_Tiling/NTILES_SIZE";
+           xpath = theXmlDocumentRoot + xpath;
+           xmlDocument->findNodes(xpath, xml_nodes);
+           if (xml_nodes.size() == 0)
+           {
+              setErrorStatus();
+              if (traceDebug())
+              {
+                 ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+              }
+              return false;
+           }
+
+           ossimString attribute;
+           ossimString value;
+
+           attribute = "nrows";
+           xml_nodes[0]->getAttributeValue(value, attribute);
+           theTileSize.line = value.toUInt32();
+
+           attribute = "ncols";
+           xml_nodes[0]->getAttributeValue(value, attribute);
+           theTileSize.samp = value.toUInt32();
          }
-
-         attribute = "nrows";
-         xml_nodes[0]->getAttributeValue(value, attribute);
-         theTileSize.line = value.toUInt32();
-
-         attribute = "ncols";
-         xml_nodes[0]->getAttributeValue(value, attribute);
-         theTileSize.samp = value.toUInt32();
 
       }
 
@@ -1910,7 +2209,15 @@ namespace ossimplugins
       //---
       // Fetch number of bands
       //---
-      xpath = "/Raster_Data/Raster_Dimensions/NBANDS";
+
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Raster_Dimensions/NBANDS";
+      }
+      else
+      {
+         xpath = "/Raster_Data/Raster_Dimensions/NBANDS";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -1927,7 +2234,14 @@ namespace ossimplugins
       // Fetch Band Display Order
       //---
       xml_nodes.clear();
-      xpath = "/Raster_Data/Raster_Display/Band_Display_Order/RED_CHANNEL";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Product_Characteristics/Product_Image_Characteristics/Image_Display_Order/RED_CHANNEL";
+      }
+      else
+      {
+         xpath = "/Raster_Data/Raster_Display/Band_Display_Order/RED_CHANNEL";
+      }
       xpath = theXmlDocumentRoot + xpath;
       xmlDocument->findNodes(xpath, xml_nodes);
       if (xml_nodes.size() == 0)
@@ -1944,7 +2258,14 @@ namespace ossimplugins
       if (theNumBands > 1)
       {
          xml_nodes.clear();
-         xpath = "/Raster_Data/Raster_Display/Band_Display_Order/GREEN_CHANNEL";
+         if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+         {
+            xpath = "/Product_Characteristics/Product_Image_Characteristics/Image_Display_Order/GREEN_CHANNEL";
+         }
+         else
+         {
+            xpath = "/Raster_Data/Raster_Display/Band_Display_Order/GREEN_CHANNEL";
+         }
          xpath = theXmlDocumentRoot + xpath;
          xmlDocument->findNodes(xpath, xml_nodes);
          if (xml_nodes.size() == 0)
@@ -1959,7 +2280,14 @@ namespace ossimplugins
          theBandOrder.push_back(xml_nodes[0]->getText());
 
          xml_nodes.clear();
-         xpath = "/Raster_Data/Raster_Display/Band_Display_Order/BLUE_CHANNEL";
+         if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+         {
+            xpath = "/Product_Characteristics/Product_Image_Characteristics/Image_Display_Order/BLUE_CHANNEL";
+         }
+         else
+         {
+            xpath = "/Raster_Data/Raster_Display/Band_Display_Order/BLUE_CHANNEL";
+         }
          xpath = theXmlDocumentRoot + xpath;
          xmlDocument->findNodes(xpath, xml_nodes);
          if (xml_nodes.size() == 0)
@@ -1976,7 +2304,14 @@ namespace ossimplugins
          if (theNumBands > 3)
          {
             xml_nodes.clear();
-            xpath = "/Raster_Data/Raster_Display/Band_Display_Order/ALPHA_CHANNEL";
+            if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+            {
+               xpath = "/Product_Characteristics/Product_Image_Characteristics/Image_Display_Order/ALPHA_CHANNEL";
+            }
+            else
+            {
+               xpath = "/Raster_Data/Raster_Display/Band_Display_Order/ALPHA_CHANNEL";
+            }
             xpath = theXmlDocumentRoot + xpath;
             xmlDocument->findNodes(xpath, xml_nodes);
             if (xml_nodes.size() == 0)
@@ -1988,6 +2323,7 @@ namespace ossimplugins
                }
                return false;
             }
+
             theBandOrder.push_back(xml_nodes[0]->getText());
          }
       }
@@ -2001,7 +2337,14 @@ namespace ossimplugins
       vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       xml_nodes.clear();
-      xpath = "/Geometric_Data/Use_Area/Located_Geometric_Values";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Data_Strip/Geometric_Header_List/Located_Geometric_Header";
+      }
+      else
+      {
+         xpath = "/Geometric_Data/Use_Area/Located_Geometric_Values";
+      }
       xpath = theXmlDocumentRoot + xpath;
       xmlDocument->findNodes(xpath, xml_nodes);
       if (xml_nodes.size() != 3 )
@@ -2056,7 +2399,15 @@ namespace ossimplugins
          // Fetch the Incidence Angle:
          //---
          sub_nodes.clear();
-         xpath = "Acquisition_Angles/INCIDENCE_ANGLE";
+
+         if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+         {
+            xpath = "Incidences/GLOBAL_INCIDENCE";
+         }
+         else
+         {
+            xpath = "Acquisition_Angles/INCIDENCE_ANGLE";
+         }
          (*node)->findChildNodes(xpath, sub_nodes);
          if (sub_nodes.size() == 0)
          {
@@ -2073,7 +2424,14 @@ namespace ossimplugins
          // Fetch the Viewing Angle:
          //---
          sub_nodes.clear();
-         xpath = "Acquisition_Angles/VIEWING_ANGLE";
+         if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+         {
+            xpath = "Pointing_Angles/PSI_XY";
+         }
+         else
+         {
+            xpath = "Acquisition_Angles/VIEWING_ANGLE";
+         }
          (*node)->findChildNodes(xpath, sub_nodes);
          if (sub_nodes.size() == 0)
          {
@@ -2090,7 +2448,14 @@ namespace ossimplugins
          // Fetch the Azimuth Angle:
          //---
          sub_nodes.clear();
-         xpath = "Acquisition_Angles/AZIMUTH_ANGLE";
+         if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+         {
+            xpath = "ORIENTATION";
+         }
+         else
+         {
+            xpath = "Acquisition_Angles/AZIMUTH_ANGLE";
+         }
          (*node)->findChildNodes(xpath, sub_nodes);
          if (sub_nodes.size() == 0)
          {
@@ -2124,7 +2489,14 @@ namespace ossimplugins
       // Fetch the mission index (1A ou 1B) ?
       // and generate theSensorID
       //---
-      xpath = "/Dataset_Sources/Source_Identification/Strip_Source/MISSION";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Data_Strip/Data_Strip_Identification/PLATFORM_NAME";
+      }
+      else
+      {
+         xpath = "/Dataset_Sources/Source_Identification/Strip_Source/MISSION";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -2145,7 +2517,14 @@ namespace ossimplugins
       // Fetch the mission index (1A ou 1B) ?
       // and generate theSensorID
       //---
-      xpath = "/Dataset_Sources/Source_Identification/Strip_Source/MISSION_INDEX";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Data_Strip/Data_Strip_Identification/PLATFORM_SERIAL_NUMBER";
+      }
+      else
+      {
+         xpath = "/Dataset_Sources/Source_Identification/Strip_Source/MISSION_INDEX";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
       {
@@ -2169,7 +2548,14 @@ namespace ossimplugins
       //---
       // Fetch the Instrument:
       //---
-      xpath = "/Dataset_Sources/Source_Identification/Strip_Source/INSTRUMENT";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Data_Strip/Data_Strip_Identification/PLATFORM_NAME";
+      }
+      else
+      {
+         xpath = "/Dataset_Sources/Source_Identification/Strip_Source/INSTRUMENT";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, theInstrument))
       {
@@ -2179,34 +2565,58 @@ namespace ossimplugins
       //---
       // Fetch the Instrument Index:
       //---
-      xpath = "/Dataset_Sources/Source_Identification/Strip_Source/INSTRUMENT_INDEX";
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+      {
+         xpath = "/Data_Strip/Data_Strip_Identification/PLATFORM_SERIAL_NUMBER";
+      }
+      else
+      {
+         xpath = "/Dataset_Sources/Source_Identification/Strip_Source/INSTRUMENT_INDEX";
+      }
       xpath = theXmlDocumentRoot + xpath;
       if (!readOneXmlNode(xmlDocument, xpath, theInstrumentIndex))
       {
          return false;
       }
 
-      //---
-      // Fetch the Imaging Date:
-      //---
-      xpath = "/Dataset_Sources/Source_Identification/Strip_Source/IMAGING_DATE";
-      xpath = theXmlDocumentRoot + xpath;
-      if (!readOneXmlNode(xmlDocument, xpath, theFirstLineImagingDate))
+      if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
       {
-         return false;
+        //---
+        // Fetch the Imaging Date:
+        //---
+        xpath = "/Data_Strip/UTC_Acquisition_Range/START";
+        xpath = theXmlDocumentRoot + xpath;
+        if (!readOneXmlNode(xmlDocument, xpath, theAcquisitionDate))
+        {
+           return false;
+        }
       }
-
-      //---
-      // Fetch the Imaging Time:
-      //---
-      xpath = "/Dataset_Sources/Source_Identification/Strip_Source/IMAGING_TIME";
-      xpath = theXmlDocumentRoot + xpath;
-      if (!readOneXmlNode(xmlDocument, xpath, theFirstLineImagingTime))
+      else
       {
-         return false;
-      }
+        //---
+        // Fetch the Imaging Date:
+        //---
+        ossimString firstLineImagingDate;
+        xpath = "/Dataset_Sources/Source_Identification/Strip_Source/IMAGING_DATE";
+        xpath = theXmlDocumentRoot + xpath;
+        if (!readOneXmlNode(xmlDocument, xpath, firstLineImagingDate))
+        {
+           return false;
+        }
 
-      theAcquisitionDate = theFirstLineImagingDate + "T" + theFirstLineImagingTime;
+        //---
+        // Fetch the Imaging Time:
+        //---
+        ossimString firstLineImagingTime;
+        xpath = "/Dataset_Sources/Source_Identification/Strip_Source/IMAGING_TIME";
+        xpath = theXmlDocumentRoot + xpath;
+        if (!readOneXmlNode(xmlDocument, xpath, firstLineImagingTime))
+        {
+           return false;
+        }
+
+        theAcquisitionDate = firstLineImagingDate + "T" + firstLineImagingTime;
+      }
 
       return true;
    }
