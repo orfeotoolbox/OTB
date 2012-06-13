@@ -65,7 +65,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest
 SET(cc_parameters "-filter.cc.expr distance<25")
 SET(edison_parameters "-filter.edison.spatialr 5 -filter.edison.ranger 50 -filter.edison.minsize 10")
 SET(meanshift_parameters "-filter.meanshift.spatialr 5 -filter.meanshift.ranger 50 -filter.meanshift.minsize 10")
-SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.ogroptions OVERWRITE=YES")
+SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.ogroptions  OVERWRITE=YES")
 
 # validation option
 SET(meanshift_option "--without-threads")
