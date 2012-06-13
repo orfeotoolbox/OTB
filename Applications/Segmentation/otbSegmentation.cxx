@@ -145,7 +145,8 @@ private:
                           " (i.e. remove nodes in polygons) according to a user-defined tolerance. The stitch option allows to application to try to stitch together polygons corresponding"
                           " to segmented region that may have been splitted by the tiling scheme. ");
 
-    SetDocLimitations("In raster mode, the application can not handle large input images. Stitching step of vector mode might become slow with very large input images.");
+    SetDocLimitations("In raster mode, the application can not handle large input images. Stitching step of vector mode might become slow with very large input images."
+                     " MeanShift filter results depends on threads number.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("MeanShiftSegmentation");
 
