@@ -90,7 +90,7 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 template <class TScalarType,
     unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
-void 
+void
 SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::AddTiePoint(const InputPointType & inputPoint, const OutputPointType & outputPoint)
 {
@@ -101,7 +101,7 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 template <class TScalarType,
     unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
-void 
+void
 SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::ClearTiePoints()
 {
@@ -112,7 +112,7 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 template <class TScalarType,
     unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
-double 
+double
 SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::Optimize()
 {

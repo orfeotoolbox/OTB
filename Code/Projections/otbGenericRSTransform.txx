@@ -36,7 +36,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
                          m_DEMDirectory(""), m_GeoidFile(""),
                          m_AverageElevation(-32768.0),
                          m_OptimizeInputTransform(false),
-                         m_OptimizeOutputTransform(false), 
+                         m_OptimizeOutputTransform(false),
                          m_InputTiePoints(),
                          m_OutputTiePoints()
 
@@ -171,7 +171,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       if(m_OptimizeInputTransform && !m_InputTiePoints.empty())
         {
         for(typename InputTiePointContainerType::const_iterator it = m_InputTiePoints.begin();
-            it!= m_InputTiePoints.end();++it)
+            it!= m_InputTiePoints.end(); ++it)
           {
           sensorModel->AddTiePoint(it->first,it->second);
           }
@@ -254,7 +254,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       if(m_OptimizeOutputTransform && !m_OutputTiePoints.empty())
         {
         for(typename OutputTiePointContainerType::const_iterator it = m_OutputTiePoints.begin();
-            it!= m_OutputTiePoints.end();++it)
+            it!= m_OutputTiePoints.end(); ++it)
           {
           sensorModel->AddTiePoint(it->second,it->first);
           }

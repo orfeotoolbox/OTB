@@ -204,8 +204,8 @@ void SensorModelAdapter::AddTiePoint(double x, double y, double z, double lon, d
   if (this->m_UseDEM)
     {
     double height = this->m_DEMHandler->GetHeightAboveMSL(lon, lat);
-    if(!ossim::isnan(height))  
-      {  
+    if(!ossim::isnan(height))
+      {
       ossimGPoint.height(height);
       }
     }

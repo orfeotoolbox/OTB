@@ -27,7 +27,6 @@
 #include <itkConnectedComponentFunctorImageFilter.h>
 
 
-
 namespace otb {
 
 
@@ -71,7 +70,6 @@ private:
 };
 
 } // end of Functor namespace
-
 
 
 
@@ -126,12 +124,10 @@ public:
   typedef typename RegionPruningFilterType::Pointer                                        RegionPruningFilterPointerType;
 
 
-
     typedef Functor::ConnectedLabelFunctor<InputLabelPixelType> LabelFunctorType;
 
     typedef itk::ConnectedComponentFunctorImageFilter<InputLabelImageType,InputLabelImageType,LabelFunctorType> RelabelComponentFilterType;
     typedef typename RelabelComponentFilterType::Pointer   RelabelComponentFilterPointerType;
-
 
 
   /** Sets the spatial bandwidth (or radius in the case of a uniform kernel)
