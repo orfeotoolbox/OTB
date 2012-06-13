@@ -115,13 +115,28 @@ public:
   itkSetMacro(OptimizeOutputTransform,bool);
   itkGetMacro(OptimizeOutputTransform,bool);
   itkBooleanMacro(OptimizeOutputTransform);
+  
+  void SetInputTiePoints(const InputTiePointContainerType & tiePoints)
+  {
+    m_InputTiePoints = tiePoints;
+    this->Modified();
+  }
 
-  itkSetMacro(InputTiePoints,InputTiePointContainerType);
-  itkGetConstReferenceMacro(InputTiePoints,InputTiePointContainerType);
+  const InputTiePointContainerType& GetInputTiePoinst() const
+  {
+    return m_InputTiePoints;
+  }
 
-  itkSetMacro(OutputTiePoints,OutputTiePointContainerType);
-  itkGetConstReferenceMacro(OutputTiePoints,OutputTiePointContainerType);
+  void SetOutputTiePoints(const OutputTiePointContainerType & tiePoints)
+  {
+    m_OutputTiePoints = tiePoints;
+    this->Modified();
+  }
 
+  const OutputTiePointContainerType& GetOutputTiePoinst() const
+  {
+    return m_OutputTiePoints;
+  }
 
   void AddInputTiePoint(const InputPointType & inputPoint, const InputPointType & wgs84Point);
   
