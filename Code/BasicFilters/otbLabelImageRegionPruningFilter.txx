@@ -226,10 +226,10 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
       for(LabelType curLabel = 1; curLabel <= regionCount; ++curLabel)
         {
         m_CanonicalLabels[curLabel] = curLabel;
-        if(m_PointCounts[curLabel] <= m_MinRegionSize)
+       /* if(m_PointCounts[curLabel] <= m_MinRegionSize)
                 {
                   minRegionCount++;
-                }
+                }*/
         }
     // std::cout<<minRegionCount<<" regions are too be fused"<<std::endl;
     // Iterate over all regions
