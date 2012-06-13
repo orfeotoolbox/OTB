@@ -25,9 +25,9 @@
 
 #include "ossim/projection/ossimProjection.h"
 #include "ossim/projection/ossimSensorModelFactory.h"
-#include "projection/ossimSensorModel.h"
+#include "ossim/projection/ossimSensorModel.h"
 #include "ossim/ossimPluginProjectionFactory.h"
-#include "base/ossimTieGptSet.h"
+#include "ossim/base/ossimTieGptSet.h"
 
 namespace otb
 {
