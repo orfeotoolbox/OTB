@@ -183,6 +183,7 @@ BOOST_AUTO_TEST_CASE(Add_n_Del_Fields)
     BOOST_CHECK_EQUAL(defn.GetFieldDefn(6), (void*)0);
     }
 
+#if GDAL_VERSION_NUM >= 1900
   l.DeleteField(1);
   BOOST_CHECK_EQUAL(defn.GetFieldCount(), 5);
 
@@ -198,6 +199,7 @@ BOOST_AUTO_TEST_CASE(Add_n_Del_Fields)
     ogr::FieldDefn f4(*defn.GetFieldDefn(4));
     BOOST_CHECK_EQUAL(f4, k_f5);
     }
+#endif
   // todo: add reoder tests
 }
 
@@ -225,7 +227,9 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
 
   // ----[ int
   ogr::Field f0 = g0[0];
+#if GDAL_VERSION_NUM >= 1800
   BOOST_CHECK_EQUAL(f0.GetName(), k_f0.GetName());
+#endif
   f0.SetValue(42);
   BOOST_ASSERT(f0.HasBeenSet());
   BOOST_CHECK_EQUAL(f0.GetValue<int>(), 42);
@@ -235,7 +239,9 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
 
   // ----[ double
   ogr::Field f1 = g0["OFTReal"];
+#if GDAL_VERSION_NUM >= 1800
   BOOST_CHECK_EQUAL(f1.GetName(), k_f1.GetName());
+#endif
   // f1.SetValue(42); // need to support types promotion
   f1.SetValue(42.0); // need to support types promotion
   BOOST_ASSERT(f1.HasBeenSet());
@@ -243,7 +249,9 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
 
   // ----[ string
   ogr::Field f2 = g0["OFTString"];
+#if GDAL_VERSION_NUM >= 1800
   BOOST_CHECK_EQUAL(f2.GetName(), k_f2.GetName());
+#endif
   f2.SetValue(("foobar")); // need to support types promotion
   BOOST_ASSERT(f2.HasBeenSet());
   BOOST_CHECK_EQUAL(f2.GetValue<std::string>(), "foobar");
