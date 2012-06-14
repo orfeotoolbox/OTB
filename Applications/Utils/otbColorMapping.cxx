@@ -130,12 +130,12 @@ public:
   {
     m_ChangeMap.clear();
   }
-  
+
   void SetNotFoundValue(const TOutput& notFoundValue)
   {
     m_NotFoundValue = notFoundValue;
   }
-  
+
   TOutput GetNotFoundValue()
   {
     return m_NotFoundValue;
@@ -375,7 +375,7 @@ public:
   typedef itk::ImageRegionSplitter<2>                 SplitterType;
   typedef RGBImageType::RegionType                    RegionType;
   typedef itk::ImageRegionConstIterator<RGBImageType> RGBImageIteratorType;
-  
+
   // Caster to convert a FloatImageType to LabelImageType
   typedef itk::CastImageFilter
     <FloatImageType, LabelImageType>                   CasterToLabelImageType;
@@ -401,6 +401,10 @@ private:
                       "is not implemented for the methods continuous LUT and support image LUT.\n ColorMapping uisng support image is not threaded.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageSVMClassifier");
+
+    AddDocTag("Utilities");
+    AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Meta);
     AddDocTag(Tags::Learning);
 
     // Build lut map
@@ -424,15 +428,15 @@ private:
     SetParameterDescription("in", "Input image filename");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out","Output image filename");
-    
+
     AddRAMParameter();
-    
+
     // --- OPERATION --- : Label to color / Color to label
     AddParameter(ParameterType_Choice, "op", "Operation");
     SetParameterDescription("op","Selection of the operation to execute (default is : label to color).");
-    
+
     AddChoice("op.labeltocolor","Label to color");
-    
+
     AddChoice("op.colortolabel","Color to label");
     AddParameter(ParameterType_Int, "op.colortolabel.notfound","Not Found Label");
     SetParameterDescription("op.colortolabel.notfound","Label to use for unknown colors.");
@@ -477,7 +481,7 @@ private:
     AddParameter(ParameterType_Float,"method.continuous.min","Mapping range lower value");
     SetParameterDescription("method.continuous.min","Set the lower input value of the mapping range.");
     SetParameterFloat("method.continuous.min", 0.);
-    
+
     AddParameter(ParameterType_Float,"method.continuous.max","Mapping range higher value");
     SetParameterDescription("method.continuous.max","Set the higher input value of the mapping range.");
     SetParameterFloat("method.continuous.max", 255.);
@@ -544,7 +548,7 @@ private:
       ComputeColorToLabel();
     }
   }
-  
+
   void ComputeLabelToColor()
   {
     if (GetParameterInt("method") == 0)
@@ -552,7 +556,7 @@ private:
       m_CasterToLabelImage = CasterToLabelImageType::New();
       m_CasterToLabelImage->SetInput(GetParameterFloatImage("in"));
       m_CasterToLabelImage->InPlaceOn();
-      
+
       m_CustomMapper = ChangeLabelFilterType::New();
       m_CustomMapper->SetInput(m_CasterToLabelImage->GetOutput());
       m_CustomMapper->SetNumberOfComponentsPerPixel(3);
@@ -594,7 +598,7 @@ private:
       m_CasterToLabelImage = CasterToLabelImageType::New();
       m_CasterToLabelImage->SetInput(GetParameterFloatImage("in"));
       m_CasterToLabelImage->InPlaceOn();
-      
+
       m_SegmentationColorMapper = LabelToRGBFilterType::New();
       m_SegmentationColorMapper->SetInput(m_CasterToLabelImage->GetOutput());
       m_SegmentationColorMapper->SetBackgroundValue(GetParameterInt("method.optimal.background"));
@@ -603,11 +607,11 @@ private:
     else if (GetParameterInt("method") == 3)
       {
       otbAppLogINFO(" look-up table calculated on support image ");
-      
+
       m_CasterToLabelImage = CasterToLabelImageType::New();
       m_CasterToLabelImage->SetInput(GetParameterFloatImage("in"));
       m_CasterToLabelImage->InPlaceOn();
-      
+
       // image normalisation of the sampling //
       FloatVectorImageType::Pointer supportImage = this->GetParameterImage("method.image.in");
       supportImage->UpdateOutputInformation();
@@ -738,7 +742,7 @@ private:
       m_RBGFromImageMapper = ChangeLabelFilterType::New();
       m_RBGFromImageMapper->SetInput(m_CasterToLabelImage->GetOutput());
       m_RBGFromImageMapper->SetNumberOfComponentsPerPixel(3);
-      
+
       std::map<LabelType, FloatVectorImageType::PixelType>::const_iterator
           mapIt = labelToMeanIntensityMap.begin();
       FloatVectorImageType::PixelType meanValue;
@@ -781,7 +785,7 @@ private:
       otbAppLogWARNING("Case not implemented");
       return;
       }
-    
+
     RGBImageType::Pointer input = GetParameterUInt8RGBImage("in");
     m_InverseMapper = ColorToLabelFilterType::New();
     m_InverseMapper->SetInput(input);
@@ -789,11 +793,11 @@ private:
     LabelVectorType notFoundValue(1);
     notFoundValue[0] = GetParameterInt("op.colortolabel.notfound");
     m_InverseMapper->GetFunctor().SetNotFoundValue(notFoundValue);
-    
+
     if(GetParameterInt("method")==0)
       {
       ReadLutFromFile(false);
-      
+
       SetParameterOutputImage<LabelVectorImageType>("out", m_InverseMapper->GetOutput());
       }
     else if(GetParameterInt("method")==2)
@@ -809,7 +813,7 @@ private:
       currentVectorLabel[0] = currentLabel;
       m_InverseMapper->GetFunctor().SetChange(background, currentVectorLabel);
       ++currentLabel;
-      
+
       // Setting up local streaming capabilities
       RegionType largestRegion = input->GetLargestPossibleRegion();
       SplitterType::Pointer splitter = SplitterType::New();
@@ -819,9 +823,9 @@ private:
                                           splitter,
                                           otb::SET_BUFFER_MEMORY_SIZE,
                                           0, 1048576*GetParameterInt("ram"), 0);
-      
+
       otbAppLogINFO("Number of divisions : "<<numberOfStreamDivisions);
-      
+
       // iteration over stream divisions
       RegionType streamingRegion;
       for (unsigned int index = 0; index<numberOfStreamDivisions; index++)
@@ -830,7 +834,7 @@ private:
         input->SetRequestedRegion(streamingRegion);
         input->PropagateRequestedRegion();
         input->UpdateOutputData();
-        
+
         RGBImageIteratorType it(input, streamingRegion);
         it.GoToBegin();
         while ( !it.IsAtEnd())
@@ -846,7 +850,7 @@ private:
           ++it;
           }
         }
-      
+
       SetParameterOutputImage<LabelVectorImageType>("out", m_InverseMapper->GetOutput());
       }
   }
@@ -863,10 +867,10 @@ private:
       }
 
     otbAppLogINFO("Parsing color map file " << GetParameterString("method.custom.lut") << "." << std::endl);
-    
+
     RGBPixelType    rgbcolor;
     LabelVectorType cvlabel(1);
-    
+
     while (!ifs.eof())
       {
       std::string line;
@@ -919,9 +923,9 @@ private:
   RGBFromImageValueFilterType::Pointer    m_RGBFromImageValueFilter;
 
   ColorToLabelFilterType::Pointer m_InverseMapper;
-  
+
   CasterToLabelImageType::Pointer m_CasterToLabelImage;
-  
+
 };
 }
 }
