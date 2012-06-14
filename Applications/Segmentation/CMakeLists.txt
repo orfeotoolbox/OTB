@@ -1,6 +1,6 @@
 
-OTB_CREATE_APPLICATION(NAME           MeanShiftSegmentation
-                       SOURCES        otbMeanShiftSegmentation.cxx
+OTB_CREATE_APPLICATION(NAME           MeanShiftSmoothing
+                       SOURCES        otbMeanShiftSmoothing.cxx
                        LINK_LIBRARIES OTBBasicFilters)
 
 OTB_CREATE_APPLICATION(NAME           ConnectedComponentSegmentation
