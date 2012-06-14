@@ -29,4 +29,5 @@ void RegisterTests()
   REGISTER_TEST(otbOssimElevManagerTest4);
   REGISTER_TEST(otbCreateProjectionWithOSSIM);
   REGISTER_TEST(otbCreateProjectionWithOTB);
+  REGISTER_TEST(otbTileImageFilterRSTransformTest);
 }
