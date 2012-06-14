@@ -22,6 +22,12 @@
 #include "itkDataObject.h"
 // #include "otbOGRLayerWrapper.h"
 #include "otbOGRDataSourceWrapper.h"
+#include "otbImageReference.h"
+
+namespace itk
+{
+class MetaDataDictionary;
+}
 
 namespace otb
 {
@@ -107,6 +113,23 @@ public:
    */
   bool IsSet() const;
 
+  /**\name Meta data dictionary */
+  //@{
+  itk::MetaDataDictionary      & GetMetaDataDictionary();
+  itk::MetaDataDictionary const& GetMetaDataDictionary() const;
+  //@}
+
+  /**\name Image reference (spacing + origin) */
+  //@{
+  typedef ogr::ImageReference<double>                            ImageReference;
+  /** imageReference setter. */
+  void SetImageReference(ImageReference const& imageReference)
+    { m_ImageReference = imageReference; }
+  /** imageReference getter. */
+  ImageReference const& GetImageReference() const
+    { return m_ImageReference; }
+  //@}
+
 protected:
   /** Default constructor.
    * This actual geometries set is an in-memory \c otb::ogr::DataSource.
@@ -130,6 +153,7 @@ protected:
 private:
   typedef boost::variant<ogr::DataSource::Pointer, ogr::Layer> AnyGeometriesSetType;
   AnyGeometriesSetType m_geometriesSet;
+  ImageReference       m_ImageReference;
   };
 
 } // end namespace otb

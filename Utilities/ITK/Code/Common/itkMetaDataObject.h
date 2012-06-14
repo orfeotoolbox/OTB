@@ -12,8 +12,8 @@
   Portions of this code are covered under the VTK copyright.
   See VTKCopyright.txt or http://www.kitware.com/VTKCopyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -128,7 +128,7 @@ public:
   virtual void Print(std::ostream& os) const;
 private:
   //This is made private to force the use of the MetaDataObject<MetaDataObjectType>::New() operator!
-  //void * operator new(size_t nothing) {};//purposefully not implemented
+  //void * operator new(size_t nothing) {}; //purposefully not implemented
   /**
    * \author Hans J. Johnson
    * A variable to store this derived type.
@@ -176,9 +176,9 @@ inline bool ExposeMetaData(MetaDataDictionary &Dictionary, const std::string key
     {
     return false;
     }
-  
+
   MetaDataObjectBase::Pointer baseObjectSmartPointer = Dictionary[key];
-  
+
   if(strcmp(typeid(T).name(),baseObjectSmartPointer->GetMetaDataObjectTypeName()) != 0)
     {
     return false;

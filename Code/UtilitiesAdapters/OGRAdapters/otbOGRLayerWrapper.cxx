@@ -26,6 +26,8 @@
 #include <boost/foreach.hpp>
 #include "ogrsf_frmts.h" // OGRDataSource & OGRLayer
 
+#include "otbOGRDataSourceWrapper.h"
+
 /*===========================================================================*/
 /*======================[ Construction & Destruction ]=======================*/
 /*===========================================================================*/
@@ -42,8 +44,9 @@ namespace  { // Anonymous namespace
 } // Anonymous namespace
 
 
-otb::ogr::Layer::Layer(OGRLayer* layer)
+otb::ogr::Layer::Layer(OGRLayer* layer, DataSourcePtr datasource)
 : m_Layer(layer, LeaveAloneDeleter())
+, m_DataSource(datasource)
 {
 }
 
@@ -329,4 +332,13 @@ bool otb::ogr::operator==(Layer const& lhs, Layer const& rhs)
 {
   const bool equal = lhs.m_Layer.get() == rhs.m_Layer.get();
   return equal;
+}
+
+itk::MetaDataDictionary & otb::ogr::Layer::GetMetaDataDictionary()
+{
+  if (!m_DataSource)
+    {
+    itkGenericExceptionMacro(<<"Cannot acces metadata dictionary from a layer constructed with an SQL request.");
+    }
+  return m_DataSource->GetMetaDataDictionary();
 }

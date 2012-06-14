@@ -50,7 +50,7 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayer(size_t i)
   assert(int(i) < GetLayersCount() && "Out-of-range index");
   OGRLayer * layer_ptr = GetLayerUnchecked(i);
   assert(layer_ptr && "No layer returned by OGR");
-  return otb::ogr::Layer(layer_ptr);
+  return otb::ogr::Layer(layer_ptr, this);
 }
 
 inline
@@ -123,7 +123,7 @@ Value otb::ogr::DataSource::layer_iter<Value>::dereference() const
   assert(m_DataSource
     && int(m_index) < m_DataSource->GetLayersCount()
     && "cannot dereference past end()");
-  return Value(m_DataSource->GetLayerUnchecked(m_index));
+  return Value(m_DataSource->GetLayerUnchecked(m_index), const_cast <DataSource*>(m_DataSource));
 }
 
 

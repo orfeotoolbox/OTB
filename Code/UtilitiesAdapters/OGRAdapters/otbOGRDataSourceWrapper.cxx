@@ -256,7 +256,7 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
       << "> in the OGRDataSource file <" << m_DataSource->GetName()
       <<">: " << CPLGetLastErrorMsg());
     }
-  Layer l(ol);
+  Layer l(ol, this);
   return l;
 }
 
@@ -275,7 +275,7 @@ otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
       << "> in the OGRDataSource file <" << m_DataSource->GetName()
       <<">: " << CPLGetLastErrorMsg());
     }
-  Layer l(ol);
+  Layer l(ol, this);
   return l;
 }
 
@@ -310,7 +310,7 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(size_t i)
     itkExceptionMacro( << "Unexpected error: cannot fetch " << i << "th layer in the OGRDataSource <"
       << m_DataSource->GetName() << ">: " << CPLGetLastErrorMsg());
     }
-    return otb::ogr::Layer(layer_ptr);
+    return otb::ogr::Layer(layer_ptr, this);
 }
 
 OGRLayer* otb::ogr::DataSource::GetLayerUnchecked(size_t i)
@@ -324,7 +324,7 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayer(std::string const& name)
 {
   assert(m_DataSource && "Datasource not initialized");
   OGRLayer * layer_ptr = m_DataSource->GetLayerByName(name.c_str());
-  return otb::ogr::Layer(layer_ptr);
+  return otb::ogr::Layer(layer_ptr, this);
 }
 
 
@@ -338,7 +338,7 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(std::string const& name)
       << "> in the OGRDataSource <" << m_DataSource->GetName() << ">: "
       << CPLGetLastErrorMsg());
     }
-  return otb::ogr::Layer(layer_ptr);
+  return otb::ogr::Layer(layer_ptr, this);
 }
 
 int otb::ogr::DataSource::GetLayersCount() const
@@ -364,7 +364,7 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
     // Cannot use the deleter made for result sets obtained from
     // OGRDataSource::ExecuteSQL because it checks for non-nullity....
     // *sigh*
-    return otb::ogr::Layer(0);
+    return otb::ogr::Layer(0, 0);
 #endif
     }
   return otb::ogr::Layer(layer_ptr, *m_DataSource);

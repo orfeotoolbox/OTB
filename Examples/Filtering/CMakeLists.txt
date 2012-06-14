@@ -63,6 +63,9 @@ ITKCommon ITKBasicFilters)
 ADD_EXECUTABLE(GeometriesFilter GeometriesFilter.cxx)
 TARGET_LINK_LIBRARIES(GeometriesFilter OTBOGRAdapters)
 
+ADD_EXECUTABLE(GeometriesChangeSpatialReference GeometriesChangeSpatialReference.cxx)
+TARGET_LINK_LIBRARIES(GeometriesChangeSpatialReference OTBOGRAdapters)
+
 IF(OTB_USE_MAPNIK)
 ADD_EXECUTABLE(RasterizationExample RasterizationExample.cxx)
 TARGET_LINK_LIBRARIES(RasterizationExample OTBCommon OTBIO OTBBasicFilters)

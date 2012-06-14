@@ -71,6 +71,10 @@ private:
   void Process(OutputGeometriesType &inout);
   void Process(InputGeometriesType const& source, OutputGeometriesType &destination);
   virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const=0;
+  virtual OGRSpatialReference*     DoDefineNewLayerSpatialReference(ogr::Layer const& source) const { return 0; }
+  virtual OGRwkbGeometryType       DoDefineNewLayerGeometryType(ogr::Layer const& source) const { return source.GetGeomType(); }
+  virtual std::vector<std::string> DoDefineNewLayerOptions(ogr::Layer const& source) const { return std::vector<std::string>(); }
+  virtual void FinalizeInitialisation() {}
   friend struct ::ProcessVisitor;
   };
 
@@ -85,6 +89,7 @@ struct TransformationFunctorDispatcher<TransformationFunctor, ogr::Layer>
   {
   typedef typename TransformationFunctor::TransformedElementType TransformedElementType;
   BOOST_MPL_ASSERT((boost::is_same<ogr::Layer, TransformedElementType>));
+  TransformationFunctorDispatcher() { }
   TransformationFunctorDispatcher(TransformationFunctor functor) : m_functor(functor){ }
   void operator()(ogr::Layer const& in, ogr::Layer & out) const
     {
@@ -94,6 +99,7 @@ struct TransformationFunctorDispatcher<TransformationFunctor, ogr::Layer>
     {
     m_functor(inout);
     }
+  TransformationFunctor * operator->() { return &m_functor; }
 private:
   TransformationFunctor m_functor;
   };
@@ -104,6 +110,7 @@ struct TransformationFunctorDispatcher<TransformationFunctor, OGRGeometry>
   {
   typedef typename TransformationFunctor::TransformedElementType TransformedElementType;
   BOOST_MPL_ASSERT((boost::is_same<OGRGeometry, TransformedElementType>));
+  TransformationFunctorDispatcher() { }
   TransformationFunctorDispatcher(TransformationFunctor functor) : m_functor(functor){ }
 
   void operator()(ogr::Layer const& in, ogr::Layer & out) const
@@ -137,6 +144,7 @@ struct TransformationFunctorDispatcher<TransformationFunctor, OGRGeometry>
       inout.SetFeature(feat);
       }
     }
+  TransformationFunctor * operator->() { return &m_functor; }
 private:
   TransformationFunctor m_functor;
   };

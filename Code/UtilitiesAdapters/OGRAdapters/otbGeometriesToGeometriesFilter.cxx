@@ -70,15 +70,19 @@ struct ProcessVisitor : boost::static_visitor<>
     assert(destination && "can't filter to a nil datasource");
     // std::cout << "G2GF: Process Visitor: DS("<<source->ogr().GetName()<<") -> DS("<<destination->ogr().GetName()<<") ...\n";
     for (otb::ogr::DataSource::const_iterator b = source->begin(), e = source->end()
-; b != e
-; ++b
+      ; b != e
+      ; ++b
     )
       {
       otb::ogr::Layer const& sourceLayer = *b;
       assert(sourceLayer && "unexpected nil source layer");
       // std::cout << "source layer name:" << sourceLayer.GetName() << "\n";
       otb::ogr::Layer destLayer = destination->CreateLayer(
-        sourceLayer.GetName(), 0, sourceLayer.GetGeomType());
+        sourceLayer.GetName(),
+        m_filter.DoDefineNewLayerSpatialReference(sourceLayer),
+        m_filter.DoDefineNewLayerGeometryType(sourceLayer),
+        otb::ogr::StringListConverter(m_filter.DoDefineNewLayerOptions(sourceLayer)).to_ogr()
+        );
       // std::cout << "layer created!\n";
       m_filter.DoProcessLayer(sourceLayer, destLayer);
       }
@@ -148,6 +152,8 @@ void otb::GeometriesToGeometriesFilter::GenerateData(void )
 {
   // std::cout << "G2GF::GenerateData\n";
   this->AllocateOutputs();
+  this->FinalizeInitialisation();
+
   InputGeometriesType::ConstPointer  input  = this->GetInput();
   // assert(input && "Cann't filter to a nil geometries set");
   OutputGeometriesType::Pointer      output = this->GetOutput();

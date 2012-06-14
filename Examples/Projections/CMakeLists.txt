@@ -31,6 +31,9 @@ ENDIF( OTB_USE_CURL )
 ADD_EXECUTABLE(VectorDataProjectionExample VectorDataProjectionExample.cxx )
 TARGET_LINK_LIBRARIES(VectorDataProjectionExample OTBProjections OTBCommon OTBIO)
 
+ADD_EXECUTABLE(GeometriesProjection GeometriesProjection.cxx )
+TARGET_LINK_LIBRARIES(GeometriesProjection OTBProjections OTBOGRAdapters)
+
 ADD_EXECUTABLE(VectorDataExtractROIExample VectorDataExtractROIExample.cxx )
 TARGET_LINK_LIBRARIES(VectorDataExtractROIExample OTBProjections OTBCommon OTBIO)
 
@@ -110,6 +113,18 @@ ADD_TEST(prTeVectorDataProjectionExampleTest ${EXE_TESTS}
         ${INPUTDATA}/Capitole-Shadows.kml
         ${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
             ${TEMP}/vectorDataProjectionExample.shp
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(prTeGeometriesProjectionTest ${EXE_TESTS}
+        --compare-ogr ${TOL}
+        ${BASELINE}/vectorDataProjectionExample.shp
+        ${TEMP}/geometriesProjectionExample.shp
+    GeometriesProjectionTest
+        ${INPUTDATA}/Capitole-Shadows.kml
+        ${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+            ${TEMP}/geometriesProjectionExample.shp
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 

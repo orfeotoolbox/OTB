@@ -32,8 +32,14 @@ class OGRDataSource;
 class OGRGeometry;
 class OGRFeatureDefn;
 
-namespace otb { namespace ogr {
+namespace itk
+{
+class MetaDataDictionary;
+} // itk namespace
 
+
+namespace otb { namespace ogr {
+class DataSource;
 class Layer;
 
 /**\ingroup gGeometry
@@ -64,16 +70,20 @@ bool operator==(Layer const& lhs, Layer const& rhs);
 class Layer
   {
 public:
-  /**\name ITK class typedefs */
+  /**\name ITK standard definitions */
   //@{
   typedef Layer                         Self;
+  itkTypeMacro(Layer, void);
   //@}
+
+  typedef itk::SmartPointer<DataSource> DataSourcePtr;
 
   /**\name Construction */
   //@{
   /**
    * Init constructor with a layer owned by a DataSource.
    * \param layer \c OGRLayer instance that is owned by a DataSource.
+   * \param datasource Pointer to the actual data source.
    * \throw None
    * On destruction of the proxy class, the internal \c OGRLayer is left alone.
    *
@@ -81,13 +91,15 @@ public:
    * is deleted, the layer won't be usable anymore. Unfortunatelly, there is no
    * mean to report this to this layer proxy.
    */
-  explicit Layer(OGRLayer* layer);
+  Layer(OGRLayer* layer, DataSourcePtr datasource);
 
   /**
    * Init constructor for layers that need to be released.
    * \param layer  \c OGRLayer owned by the client code.
    * \param sourceInChargeOfLifeTime  reference to the actual \c OGRDataSource
    * that knows how to release the layer.
+   * \post In this case, \c m_datasource is left null: we suppose (for now, that
+   * the layer won't need access to the datasource meta-information).
    *
    * \throw None
    * \internal
@@ -462,6 +474,12 @@ public:
   OGRwkbGeometryType GetGeomType() const;
 
   friend bool otb::ogr::operator==(Layer const& lhs, Layer const& rhs);
+
+  /**\name Meta data dictionary */
+  //@{
+  itk::MetaDataDictionary      & GetMetaDataDictionary();
+  itk::MetaDataDictionary const& GetMetaDataDictionary() const;
+  //@}
 private:
   /**
    * Internal encapsulation of \c OGRLayer::GetNextFeature().
@@ -481,6 +499,11 @@ private:
    * to correctly release the layer.
    */
   boost::shared_ptr<OGRLayer> m_Layer;
+
+  /** Related DataSource.
+   * Needed to acces OTB meta informations.
+   */
+  DataSourcePtr m_DataSource;
   };
 
 inline bool operator!=(Layer const& lhs, Layer const& rhs)

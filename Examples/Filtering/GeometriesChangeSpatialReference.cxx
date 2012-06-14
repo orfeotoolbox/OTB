@@ -24,32 +24,61 @@
 #include <iostream>
 #include "otbOGRDataSourceWrapper.h"
 #include "otbGeometriesSet.h"
+#include "otbOGRGeometryWrapper.h"
 
 /*===========================================================================*/
-/*=============================[ SwapXYFunctor ]=============================*/
+/*=========================[ Reprojection functor ]==========================*/
 /*===========================================================================*/
-struct SwapXYFunctor
+namespace internal
+{
+struct CoordTranfoDeleter
+{
+  void operator()(OGRCoordinateTransformation *p);
+};
+} // internal namespace
+
+struct ReprojectTransformationFunctor
 {
   typedef OGRGeometry TransformedElementType;
-  otb::ogr::UniqueGeometryPtr operator()(OGRGeometry const* in) const
-    {
-    otb::ogr::UniqueGeometryPtr out(in ? in->clone() : 0);
-    if (out)
-      {
-#if GDAL_VERSION_NUM >= 1900
-      out->swapXY();
-#else
-      assert(!"Sorry, This example filter requires GDAL v1.9.0 or later");
-#endif
-      }
-    return boost::move(out);
-    }
+
+  otb::ogr::UniqueGeometryPtr operator()(OGRGeometry const* in) const;
+  void setSpatialReferences(OGRSpatialReference & in, OGRSpatialReference & out);
+private:
+  boost::interprocess::unique_ptr<OGRCoordinateTransformation, internal::CoordTranfoDeleter> m_reprojector;
 };
+
+
+void internal::CoordTranfoDeleter::operator()(OGRCoordinateTransformation *p)
+{
+  OCTDestroyCoordinateTransformation(p);
+}
+
+otb::ogr::UniqueGeometryPtr
+ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
+{
+  otb::ogr::UniqueGeometryPtr out(in ? in->clone() : 0);
+  if (out)
+    {
+    const OGRErr err = out->transform(m_reprojector.get());
+    if (!err != OGRERR_NONE)
+      {
+      itkGenericExceptionMacro(<< "Cannot reproject a geometry: " << CPLGetLastErrorMsg());
+      }
+    }
+  else
+    return boost::move(out);
+}
+
+void ReprojectTransformationFunctor::setSpatialReferences(
+  OGRSpatialReference & in, OGRSpatialReference & out)
+{
+  m_reprojector.reset(OGRCreateCoordinateTransformation(&in, &out));
+}
 
 /*===========================================================================*/
 /*=================================[ main ]==================================*/
 /*===========================================================================*/
-typedef otb::DefaultGeometriesToGeometriesFilter<SwapXYFunctor> FilterType;
+typedef otb::DefaultGeometriesToGeometriesFilter<ReprojectTransformationFunctor> FilterType;
 
 int main (int argc, char **argv)
 {

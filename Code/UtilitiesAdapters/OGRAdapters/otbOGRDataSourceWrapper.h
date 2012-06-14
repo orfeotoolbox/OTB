@@ -27,8 +27,6 @@
 #include <boost/type_traits/is_const.hpp>
 #include <boost/noncopyable.hpp>
 
-#include "itkVector.h"
-#include "itkPoint.h"
 #include "itkDataObject.h"
 #include "itkMacro.h" // itkNewMacro
 #include "itkObjectFactory.h" // that should have been included by itkMacro.h
@@ -42,112 +40,6 @@ class OGRGeometry;
 // #include "ogr_core.h" // OGRwkbGeometryType, included from Layer
 
 namespace otb { namespace ogr {
-/**\ingroup gGeometry
- * \class ImageReference
- * \todo See how mix it with the \c otb::ogr::DataSource wrapper as it was
- * with \c VectorData.
- * \since OTB v 3.14.0
- */
-template <typename TPrecision> class ImageReference
-  {
-public:
-  typedef TPrecision PrecisionType;
-  enum { Dimension = 2 };
-  /**\name Standard ITK typedefs */
-  //@{
-  //@}
-  /**\name Template-parameters typedefs */
-  //@{
-  typedef itk::Vector<PrecisionType, 2> SpacingType;
-  typedef itk::Point<PrecisionType, 2>  OriginType;
-  typedef itk::Point<PrecisionType, 2>  PointType;
-  //@}
-
-  /** Default constructor.
-   * \post <tt>m_Spacing = {1,1}</tt>
-   * \post <tt>m_Origin = {0,0}</tt>
-   */
-  ImageReference()
-    {
-    m_Spacing.Fill(1);
-    m_Origin.Fill(0);
-    }
-  /** Init constructor.
-   * \post <tt>m_Spacing = spacing</tt>
-   * \post <tt>m_Origin = origin</tt>
-   */
-  ImageReference(SpacingType const& spacing, OriginType const& origin)
-    : m_Spacing(spacing), m_Origin(origin)
-    {
-    }
-
-  /**\name Origin property
-   * Represents the origin of the geometries in the image coordinates system.
-   */
-  //@{
-  itkGetConstReferenceMacro(Origin, OriginType);     //!< Origin getter.
-  itkSetMacro(Origin, OriginType);                   //!< Origin setter.
-  void SetOrigin(const TPrecision origin[Dimension]) //!< Origin setter.
-    {
-    const OriginType p(origin);
-    this->SetOrigin(p);
-    }
-  //@}
-
-  /**\name Spacing property
-   * Spacing of the geometries to put in the corresponding image coordinates.
-   */
-  //@{
-  itkGetConstReferenceMacro(Spacing, SpacingType);         //!< Spacing getter.
-  void SetSpacing(const SpacingType& spacing)              //!< Spacing setter.
-    {
-    itkDebugMacro("setting Spacing to " << spacing);
-    if (this->m_Spacing != spacing)
-      {
-      this->m_Spacing = spacing;
-      this->Modified();
-      }
-    }
-  void SetSpacing(const TPrecision spacing[Dimension]) //!< Spacing setter.
-    {
-    const SpacingType s(spacing);
-    this->SetSpacing(s);
-    }
-  //@}
-
-  /**
-   * Projects a point from the Data Source coordinates system to the image
-   * coordinates system.
-   * \param[in] point  point in Data Source coordinates system
-   * \param[out] physicalPoint  point in the image coordinates system.
-   * \throw None
-   */
-  void TransformPointToPhysicalPoint(const PointType& point, PointType& physicalPoint) const
-    {
-    for (size_t i=0; i!=Dimension; ++i)
-      physicalPoint[i] = point[i] * m_Spacing[i] + m_Origin[i];
-    }
-
-  /**
-   * Projects a point from the Data Source coordinates system to the image
-   * coordinates system.
-   * \param[in] point  point in Data Source coordinates system
-   * \return the point projected in the image coordinates system.
-   * \throw None
-   */
-  void TransformPointToPhysicalPoint(const PointType& point) const
-    {
-    // why no loop on VDimension ?
-    PointType physicalPoint;
-    for (size_t i=0; i!=Dimension; ++i)
-      physicalPoint[i] = point[i] * m_Spacing[i] + m_Origin[i];
-    return physicalPoint;
-    }
-private:
-  SpacingType                 m_Spacing;
-  OriginType                  m_Origin;
-  };
-
 /**\ingroup gGeometry
  * \class DataSource
  * \brief Collection of geometric objects.

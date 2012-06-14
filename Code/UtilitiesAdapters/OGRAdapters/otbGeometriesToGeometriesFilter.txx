@@ -27,7 +27,6 @@
 template <class TransformationFunctor>
 inline
 otb::DefaultGeometriesToGeometriesFilter<TransformationFunctor>::DefaultGeometriesToGeometriesFilter()
-: m_TransformationFunctor(TransformationFunctor())
 {}
 
 template <class TransformationFunctor>
