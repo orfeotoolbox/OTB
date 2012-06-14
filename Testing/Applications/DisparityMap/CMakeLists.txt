@@ -1,5 +1,5 @@
 SET(EPSILON_10 0.0000000001)
-
+SET(BASELINE_EXAMPLE ${OTB_DATA_ROOT}/Baseline/Examples/DisparityMap)
 #--- StereoSensorModelToElevationMap ---#
 
 OTB_TEST_APPLICATION(NAME  apTvDmStereoSensorModelToElevationMapTest
@@ -60,6 +60,7 @@ OTB_TEST_APPLICATION(NAME apTvDmFineRegistrationTest
                              ${TEMP}/apTvDmFineRegistrationTest.tif
                      )
 
+#stereo reconstruction of images pair
 #--- StereoRectificationGridGenerator ---#
 OTB_TEST_APPLICATION(NAME apTvDmStereoRectificationGridGeneratorTest
                      APP  StereoRectificationGridGenerator
@@ -67,14 +68,9 @@ OTB_TEST_APPLICATION(NAME apTvDmStereoRectificationGridGeneratorTest
                              -io.inright ${INPUTDATA}/sensor_stereo_right.tif
                              -io.outleft ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
                              -io.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
-                             -epi.elevation.avg.value 300
-                             -epi.scale 0.5
-                             -epi.step 5
-                     VALID   --compare-n-images ${EPSILON_7} 2
-                             ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput1.tif
-                             ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
-                             ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput2.tif
-                             ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
+                             -epi.elevation.avg.value 140
+                             -epi.scale 1.0
+                             -epi.step 4
                      )
 
 #--- GridBasedImageResampling ---#
@@ -105,12 +101,11 @@ OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
                      OPTIONS -io.inleft ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
                              -io.inright ${TEMP}/apTvDmGridBasedImageResamplingRightTest.tif
                              -io.out ${TEMP}/apTvDmBlockMatchingTest.tif
-                             -bm.minhd 25
-                             -bm.maxhd 45
-                             -bm.minvd 1
-                             -bm.maxvd 2
+                             -bm.minhd -24
+                             -bm.maxhd 0
+                             -bm.minvd 0
+                             -bm.maxvd 0
                              -mask.nodata 0
-                             -io.outmetric 1
                              -bm.metric ncc
                              -bm.subpixel dichotomy
                              -bm.medianfilter.radius 2
@@ -128,8 +123,12 @@ OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
                              -io.lgrid ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
                              -io.rgrid ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
                              -io.out ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
-                             -hmin 150
-                             -hmax 400
-                             -elev.average.value 300
+                             -hmin 130
+                             -hmax 220
+                             -elev.average.value 140
+                             -step 2.5
+                     VALID   --compare-image ${EPSILON_10}
+                             ${BASELINE_EXAMPLE}/elevationOutput.tif
+                             ${TEMP}/elevationOutput.tif
                      )
 SET_TESTS_PROPERTIES(apTvDmDisparityMapToElevationMap PROPERTIES DEPENDS apTvDmBlockMatchingTest)
