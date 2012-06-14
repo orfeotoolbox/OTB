@@ -83,28 +83,28 @@ public:
     typename Visitor::result_type
     apply(Visitor const& visitor)
       {
-      return boost::apply_visitor(visitor, m_geometriesSet);
+      return boost::apply_visitor(visitor, m_GeometriesSet);
       }
 
   template <typename Visitor>
     typename Visitor::result_type
     apply(Visitor const& visitor) const
       {
-      return boost::apply_visitor(visitor, m_geometriesSet);
+      return boost::apply_visitor(visitor, m_GeometriesSet);
       }
 
   template <typename Visitor>
     typename Visitor::result_type
     apply(Visitor const& visitor, Self & visitable)
       {
-      return boost::apply_visitor(visitor, m_geometriesSet, visitable.m_geometriesSet);
+      return boost::apply_visitor(visitor, m_GeometriesSet, visitable.m_GeometriesSet);
       }
 
   template <typename Visitor>
     typename Visitor::result_type
     apply(Visitor const& visitor, Self /*const*/& visitable) const
       {
-      return boost::apply_visitor(visitor, m_geometriesSet, visitable.m_geometriesSet);
+      return boost::apply_visitor(visitor, m_GeometriesSet, visitable.m_GeometriesSet);
       }
   //@}
 
@@ -152,7 +152,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 private:
   typedef boost::variant<ogr::DataSource::Pointer, ogr::Layer> AnyGeometriesSetType;
-  AnyGeometriesSetType m_geometriesSet;
+  AnyGeometriesSetType m_GeometriesSet;
   ImageReference       m_ImageReference;
   };
 

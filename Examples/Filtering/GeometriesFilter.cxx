@@ -60,7 +60,7 @@ int main (int argc, char **argv)
     }
   try
     {
-    const bool workingInplace = argc==2;
+    const bool workingInplace = argc == 2;
     const bool outputIsStdout = !workingInplace && !strcmp(argv[2], "-");
 
     const std::string inputFile = argv[1];

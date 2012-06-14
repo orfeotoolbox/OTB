@@ -29,17 +29,14 @@ namespace ogr
 {
 template <typename Tin, typename Tout>
 struct propagate_const
-{
-typedef Tout type;
-};
+{ typedef Tout type; };
 template <typename Tin, typename Tout>
 struct propagate_const<Tin const, Tout>
-{
-typedef typename boost::add_const<Tout>::type type;
-};
+{ typedef typename boost::add_const<Tout>::type type; };
 
 #define TRY_APPLY(TYPE, geometry, functor) \
-if (typename propagate_const<TGeometry, TYPE>::type * dc = dynamic_cast<typename propagate_const<TGeometry, TYPE>::type*>(geometry))\
+if (typename propagate_const<TGeometry, TYPE>::type * dc \
+  = dynamic_cast<typename propagate_const<TGeometry, TYPE>::type*>(geometry))\
 {\
   return functor(dc); \
 }

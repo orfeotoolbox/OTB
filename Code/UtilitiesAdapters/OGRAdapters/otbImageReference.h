@@ -42,7 +42,7 @@ public:
   itkTypeMacro(ImageReference, void);
   bool GetDebug() const
     {
-    return m_holder.GetDebug();
+    return m_Holder.GetDebug();
     }
   //@}
   /**\name Template-parameters typedefs */
@@ -57,7 +57,7 @@ public:
    * \post <tt>m_Origin = {0,0}</tt>
    */
   ImageReference(itk::Object const& holder)
-    : m_holder(holder)
+    : m_Holder(holder)
     {
     m_Spacing.Fill(1);
     m_Origin.Fill(0);
@@ -67,13 +67,13 @@ public:
    * \post <tt>m_Origin = origin</tt>
    */
   ImageReference(SpacingType const& spacing, OriginType const& origin, itk::Object const& holder)
-    : m_holder(holder) , m_Spacing(spacing), m_Origin(origin)
+    : m_Holder(holder) , m_Spacing(spacing), m_Origin(origin)
     {
     }
 
   void Modified() const
     {
-    m_holder.Modified();
+    m_Holder.Modified();
     }
 
   /**\name Origin property
@@ -155,7 +155,7 @@ public:
     }
 
 private:
-  itk::Object     const& m_holder;
+  itk::Object     const& m_Holder;
   SpacingType            m_Spacing;
   OriginType             m_Origin;
 };

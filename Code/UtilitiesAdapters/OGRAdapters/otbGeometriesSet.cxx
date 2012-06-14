@@ -57,20 +57,20 @@ otb::ogr::Layer & getRef(otb::ogr::Layer & layer)
 /*=======================[ Setting and construction ]========================*/
 /*===========================================================================*/
 otb::GeometriesSet::GeometriesSet()
-: m_geometriesSet(otb::ogr::DataSource::New())
+: m_GeometriesSet(otb::ogr::DataSource::New())
 , m_ImageReference(*this)
 {
 }
 
 otb::GeometriesSet::GeometriesSet(ogr::DataSource::Pointer datasource)
-: m_geometriesSet(datasource)
+: m_GeometriesSet(datasource)
 , m_ImageReference(*this)
 {
   assert(datasource && "unexpected nil datasource");
 }
 
 otb::GeometriesSet::GeometriesSet(ogr::Layer layer)
-: m_geometriesSet(layer)
+: m_GeometriesSet(layer)
 , m_ImageReference(*this)
 {
 }
@@ -99,13 +99,13 @@ otb::GeometriesSet::~GeometriesSet()
 void otb::GeometriesSet::Set(ogr::Layer layer)
 {
   assert(layer && "unexpected nil layer");
-  m_geometriesSet = layer;
+  m_GeometriesSet = layer;
 }
 
 void otb::GeometriesSet::Set(ogr::DataSource::Pointer datasource)
 {
   assert(datasource && "unexpected nil datasource");
-  m_geometriesSet = datasource;
+  m_GeometriesSet = datasource;
 }
 
 /*===========================================================================*/

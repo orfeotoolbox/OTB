@@ -193,7 +193,6 @@ struct TransformationFunctorDispatcher<TransformationFunctor, OGRGeometry>
 
   void operator()(ogr::Layer const& in, ogr::Layer & out) const
     {
-    // std::cout << "Converting layer " << in.GetName() << " -> " << out.GetName() << "\n";
     OGRFeatureDefn & defn = out.GetLayerDefn();
     for (ogr::Layer::const_iterator b = in.begin(), e = in.end(); b != e; ++b)
       {
@@ -208,7 +207,6 @@ struct TransformationFunctorDispatcher<TransformationFunctor, OGRGeometry>
 
   void operator()(ogr::Layer & inout) const
     {
-    // std::cout << "Converting layer " << inout.GetName() << "\n";
     OGRFeatureDefn & defn = inout.GetLayerDefn();
     // NB: We can't iterate with begin()/end() as SetFeature may invalidate the
     // iterators depending of the underlying drivers
@@ -270,7 +268,6 @@ protected:
 
   virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const
     {
-    // std::cout << "DG2GF::DoProcessLayer: L("<<source.GetName()<<") -> L("<<destination.GetName()<<") ...\n";
     if (source != destination)
       {
       m_TransformationFunctor(source, destination); // if TransformedElementType == layer

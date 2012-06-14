@@ -41,7 +41,6 @@ struct ProcessVisitor : boost::static_visitor<>
     : m_filter(filter) {}
   void operator()(otb::ogr::Layer const& source, otb::ogr::Layer & destination) const
     {
-    // std::cout << "G2GF: Process Visitor: L -> L ("<< source.GetName()<<")...\n";
     m_filter.DoProcessLayer(source, destination);
     }
 
@@ -49,7 +48,6 @@ struct ProcessVisitor : boost::static_visitor<>
     {
     assert(source && "can't filter a nil datasource");
     assert(destination && "can't filter to a nil datasource");
-    // std::cout << "G2GF: Process Visitor: DS("<<source->ogr().GetName()<<") -> DS("<<destination->ogr().GetName()<<") ...\n";
     for (otb::ogr::DataSource::const_iterator b = source->begin(), e = source->end()
      ; b != e
      ; ++b
@@ -57,33 +55,28 @@ struct ProcessVisitor : boost::static_visitor<>
       {
       otb::ogr::Layer const& sourceLayer = *b;
       assert(sourceLayer && "unexpected nil source layer");
-      // std::cout << "source layer name:" << sourceLayer.GetName() << "\n";
       otb::ogr::Layer destLayer = destination->CreateLayer(
         sourceLayer.GetName(),
         m_filter.DoDefineNewLayerSpatialReference(sourceLayer),
         m_filter.DoDefineNewLayerGeometryType(sourceLayer),
         otb::ogr::StringListConverter(m_filter.DoDefineNewLayerOptions(sourceLayer)).to_ogr()
       );
-      // std::cout << "layer created!\n";
       m_filter.DoProcessLayer(sourceLayer, destLayer);
       }
     }
 
   void operator()(otb::ogr::Layer & inout) const
     {
-    // std::cout << "G2GF: Process Visitor: L -> L ("<< source.GetName()<<")...\n";
     m_filter.DoProcessLayer(inout, inout);
     }
 
   void operator()(otb::ogr::DataSource::Pointer inout) const
     {
     assert(inout && "can't filter a nil datasource");
-    // std::cout << "G2GF: Process Visitor: DS("<<source->ogr().GetName()<<") -> DS("<<destination->ogr().GetName()<<") ...\n";
     for (otb::ogr::DataSource::iterator b = inout->begin(), e = inout->end(); b != e; ++b)
       {
       otb::ogr::Layer layer = *b;
       assert(layer && "unexpected nil source layer");
-      // std::cout << "source layer name:" << sourceLayer.GetName() << "\n";
       m_filter.DoProcessLayer(layer, layer);
       }
     }
@@ -128,7 +121,6 @@ otb::GeometriesToGeometriesFilter::GetInput(void )
 /*virtual*/ void otb::GeometriesToGeometriesFilter::Process(
   InputGeometriesType const& source, OutputGeometriesType & destination)
 {
-  // std::cout << "G2GF: Processing ...\n";
   // si layer, appelle virt process layer
   // si DS, loop et appelle virt process layer
   source.apply(ProcessVisitor(*this), destination);
@@ -137,7 +129,6 @@ otb::GeometriesToGeometriesFilter::GetInput(void )
 /*virtual*/ void otb::GeometriesToGeometriesFilter::Process(
   OutputGeometriesType & inout)
 {
-  // std::cout << "G2GF: Processing ...\n";
   // si layer, appelle virt process layer
   // si DS, loop et appelle virt process layer
   inout.apply(ProcessVisitor(*this));
@@ -159,7 +150,6 @@ void otb::GeometriesToGeometriesFilter::GenerateOutputInformation(void )
 /*virtual*/
 void otb::GeometriesToGeometriesFilter::GenerateData(void )
 {
-  // std::cout << "G2GF::GenerateData\n";
   this->DoAllocateOutputs();
   this->DoFinalizeInitialisation();
 

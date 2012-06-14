@@ -21,9 +21,8 @@
 /*===========================================================================*/
 
 /*===========================================================================*/
-/*==============================[ other stuff ]==============================*/
+/*==================[ DefaultGeometriesToGeometriesFilter ]==================*/
 /*===========================================================================*/
-
 template <class TransformationFunctor>
 inline
 otb::DefaultGeometriesToGeometriesFilter<TransformationFunctor>::DefaultGeometriesToGeometriesFilter()
