@@ -34,12 +34,12 @@ otb::GeometriesSource::GeometriesSource()
   // smartpointer... => NO
   // Superclass::SetNthOutput(0, 0);
 
-  // Moreover, the default, and correct, value will be set in AllocateOutputs if
+  // Moreover, the default, and correct, value will be set in DoAllocateOutputs if
   // nothing is set by then => nothing more to do.
-
 }
 
-/*virtual*/  otb::GeometriesSource::~GeometriesSource()
+/*virtual*/
+otb::GeometriesSource::~GeometriesSource()
 {
 }
 
@@ -61,7 +61,7 @@ void otb::GeometriesSource::SetOutput(OutputGeometriesType* output, unsigned int
   Superclass::SetNthOutput(idx, output);
 }
 
-/*virtual*/ void otb::GeometriesSource::AllocateOutputs()
+/*virtual*/ void otb::GeometriesSource::DoAllocateOutputs()
 {
   // The default behaviour is to prepare a in-memory OGR datasource in case
   // filters are piped.
@@ -77,6 +77,6 @@ void otb::GeometriesSource::SetOutput(OutputGeometriesType* output, unsigned int
 
 /*virtual*/ void otb::GeometriesSource::PrepareOutputs()
 {
-  AllocateOutputs();
+  DoAllocateOutputs();
   Superclass::PrepareOutputs();
 }

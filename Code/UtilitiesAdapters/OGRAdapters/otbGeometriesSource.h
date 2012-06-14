@@ -24,30 +24,38 @@
 #include "itkMacro.h"
 
 // Forward declarations
-namespace otb
-{
-namespace ogr
-{
+namespace otb {
+namespace ogr {
 class DataSource;
 class Layer;
 } // ogr namespace
 class GeometriesSet;
 } // otb namespace
 
+/**\defgroup GeometriesFilters
+ * \ingroup  gGeometry Filters
+ * Filters of geometries sets.
+ */
 
 namespace otb
 {
 
-// todo: disable graft
+/**\ingroup GeometriesFilters
+ * \class GeometriesSource
+ * Source of geometries & Root of the geometries filters hierarchy.
+ * This class provides a kind of \em reader for geometries sets.
+ * \todo: disable Graft
+ * \since OTB v 3.14.0
+ */
 class ITK_EXPORT GeometriesSource : public itk::ProcessObject, boost::noncopyable
   {
 public:
   /**\name Standard ITK typedefs */
   //@{
-  typedef GeometriesSource              Self;
-  typedef itk::ProcessObject            Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef GeometriesSource                     Self;
+  typedef itk::ProcessObject                   Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
   //@}
 
   /**\name I/O typedefs */
@@ -66,25 +74,38 @@ public:
   itkTypeMacro(VectorDataSource, itk::ProcessObject);
   //@}
 
+  /**\name GeometriesSet Output property. */
+  //@{
   /** Overriding \c GetOutput() functions */
   virtual OutputGeometriesType* GetOutput(void);
   /** Overriding \c GetOutput() functions */
   virtual OutputGeometriesType* GetOutput(unsigned int idx);
 
   virtual void SetOutput(OutputGeometriesType* output, unsigned int idx = 0);
+  //@}
+
+  /** Specialized hook for \c GeometriesSource.
+   * Makes sure the output(s) is (/are) allocated before initializing them.
+   */
   virtual void PrepareOutputs();
 
 protected:
+  /** Default constructor.
+   * \post Required number of outputs = 1
+   */
   GeometriesSource();
+  /** Destructor.
+   * Does nothing.
+   */
   virtual ~GeometriesSource();
 
-  /** Ensures that the output vector data are cleared before processing. */
-  virtual void  AllocateOutputs();
+  /** Ensures that the output geometries are allocated before processing.
+   * If the output hasn't been set, at this point, the default output geometries
+   * set will an <em>in-memory</em> \c DataSource.
+   * \post <tt>GetOutput() != NULL</tt>
+   */
+  virtual void  DoAllocateOutputs();
   };
 } // end namespace otb
-
-// #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbGeometriesSource.txx"
-// #endif
 
 #endif // __otbGeometriesSource_h

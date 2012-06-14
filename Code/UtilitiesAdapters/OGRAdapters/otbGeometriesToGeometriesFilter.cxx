@@ -27,33 +27,14 @@
 #include "otbMacro.h"
 
 /*===========================================================================*/
-/*==============================[ other stuff ]==============================*/
+/*============================[ ProcessVisitor ]=============================*/
 /*===========================================================================*/
-
-otb::GeometriesToGeometriesFilter::GeometriesToGeometriesFilter()
-{
-}
-
-/*virtual*/  otb::GeometriesToGeometriesFilter::~GeometriesToGeometriesFilter()
-{
-}
-
-/*virtual*/ void otb::GeometriesToGeometriesFilter::SetInput(
-  const InputGeometriesType * input)
-{
-  // Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(
-    0,
-    const_cast<InputGeometriesType *>(input));
-}
-
-const otb::GeometriesToGeometriesFilter::InputGeometriesType *
-otb::GeometriesToGeometriesFilter::GetInput(void )
-{
-  return static_cast <InputGeometriesType*>(Superclass::GetInput(0));
-}
-
-
+/**\ingroup GeometriesFilters
+ * \class ProcessVisitor
+ * \since OTB v 3.14.0
+ * \todo Group -> internal
+ * \todo Namespace -> ogr::internal ?
+ */
 struct ProcessVisitor : boost::static_visitor<>
 {
   ProcessVisitor(otb::GeometriesToGeometriesFilter const& filter)
@@ -82,7 +63,7 @@ struct ProcessVisitor : boost::static_visitor<>
         m_filter.DoDefineNewLayerSpatialReference(sourceLayer),
         m_filter.DoDefineNewLayerGeometryType(sourceLayer),
         otb::ogr::StringListConverter(m_filter.DoDefineNewLayerOptions(sourceLayer)).to_ogr()
-        );
+      );
       // std::cout << "layer created!\n";
       m_filter.DoProcessLayer(sourceLayer, destLayer);
       }
@@ -108,13 +89,41 @@ struct ProcessVisitor : boost::static_visitor<>
     }
 
   template <typename GT1, typename GT2> void operator()(GT1 const&, GT2 &) const
-      {
-      assert(!"You shall not mix DataSources and Layers in GeometriesToGeometriesFilter");
-      itkGenericExceptionMacro(<<"You shall not mix DataSources and Layers in GeometriesToGeometriesFilter");
-      }
+    {
+    assert(!"You shall not mix DataSources and Layers in GeometriesToGeometriesFilter");
+    itkGenericExceptionMacro(<<"You shall not mix DataSources and Layers in GeometriesToGeometriesFilter");
+    }
 private:
   otb::GeometriesToGeometriesFilter const& m_filter;
 };
+
+/*===========================================================================*/
+/*=====================[ GeometriesToGeometriesFilter ]======================*/
+/*===========================================================================*/
+
+otb::GeometriesToGeometriesFilter::GeometriesToGeometriesFilter()
+{
+}
+
+/*virtual*/
+otb::GeometriesToGeometriesFilter::~GeometriesToGeometriesFilter()
+{
+}
+
+/*virtual*/ void otb::GeometriesToGeometriesFilter::SetInput(
+  const InputGeometriesType * input)
+{
+  // Process object is not const-correct so the const_cast is required here
+  this->itk::ProcessObject::SetNthInput(
+    0,
+    const_cast<InputGeometriesType *>(input));
+}
+
+const otb::GeometriesToGeometriesFilter::InputGeometriesType *
+otb::GeometriesToGeometriesFilter::GetInput(void )
+{
+  return static_cast <InputGeometriesType*>(Superclass::GetInput(0));
+}
 
 /*virtual*/ void otb::GeometriesToGeometriesFilter::Process(
   InputGeometriesType const& source, OutputGeometriesType & destination)
@@ -151,8 +160,8 @@ void otb::GeometriesToGeometriesFilter::GenerateOutputInformation(void )
 void otb::GeometriesToGeometriesFilter::GenerateData(void )
 {
   // std::cout << "G2GF::GenerateData\n";
-  this->AllocateOutputs();
-  this->FinalizeInitialisation();
+  this->DoAllocateOutputs();
+  this->DoFinalizeInitialisation();
 
   InputGeometriesType::ConstPointer  input  = this->GetInput();
   // assert(input && "Cann't filter to a nil geometries set");
@@ -173,4 +182,25 @@ void otb::GeometriesToGeometriesFilter::GenerateData(void )
 
   chrono.Stop();
   otbMsgDevMacro(<< "GeometriesToGeometriesFilter: geometries processed in " << chrono.GetMeanTime() << " seconds.");
+}
+
+/*virtual*/
+OGRSpatialReference* otb::GeometriesToGeometriesFilter::DoDefineNewLayerSpatialReference(
+  ogr::Layer const& source) const
+{
+  return 0;
+}
+
+/*virtual*/
+OGRwkbGeometryType otb::GeometriesToGeometriesFilter::DoDefineNewLayerGeometryType(
+  ogr::Layer const& source) const
+{
+  return source.GetGeomType();
+}
+
+/*virtual*/
+std::vector<std::string> otb::GeometriesToGeometriesFilter::DoDefineNewLayerOptions(
+  ogr::Layer const& source) const
+{
+  return std::vector<std::string>();
 }

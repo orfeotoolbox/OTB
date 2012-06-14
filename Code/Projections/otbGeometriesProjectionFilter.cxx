@@ -201,7 +201,7 @@ void otb::GeometriesProjectionFilter::GenerateOutputInformation(void)
 }
 
 /*virtual*/
-void otb::GeometriesProjectionFilter::FinalizeInitialisation()
+void otb::GeometriesProjectionFilter::DoFinalizeInitialisation()
 {
   m_Transform = InternalTransformType::New();
 

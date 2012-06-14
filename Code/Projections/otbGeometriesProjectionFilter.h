@@ -116,7 +116,7 @@ public:
 private:
   virtual OGRSpatialReference* DoDefineNewLayerSpatialReference(ogr::Layer const& source) const;
   virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const;
-  virtual void FinalizeInitialisation();
+  virtual void DoFinalizeInitialisation();
 
 protected:
   /** Default constructor. */
