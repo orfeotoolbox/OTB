@@ -256,8 +256,8 @@ OGRSpatialReference* otb::GeometriesProjectionFilter::DoDefineNewLayerSpatialRef
   if (!m_OutputProjectionRef.empty())
     {
     char const* wkt_string = m_OutputProjectionRef.c_str();
-    OGRSpatialReference * res = static_cast <OGRSpatialReference*>(OSRNewSpatialReference(wkt_string));
-    return res;
+    OGRSpatialReference * osr = static_cast <OGRSpatialReference*>(OSRNewSpatialReference(wkt_string));
+    return osr;
     }
   else
     {

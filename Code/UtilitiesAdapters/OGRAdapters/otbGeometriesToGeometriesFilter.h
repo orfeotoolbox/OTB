@@ -164,19 +164,34 @@ struct TransformationFunctorDispatcher<TransformationFunctor, ogr::Layer>
   BOOST_MPL_ASSERT((boost::is_same<ogr::Layer, TransformedElementType>));
   TransformationFunctorDispatcher() { }
   TransformationFunctorDispatcher(TransformationFunctor functor) : m_functor(functor){ }
-  void operator()(ogr::Layer const& in, ogr::Layer & out) const
-    {
-    m_functor(in, out);
-    }
-  void operator()(ogr::Layer & inout) const
-    {
-    m_functor(inout);
-    }
+  void operator()(ogr::Layer const& in, ogr::Layer & out) const;
+  void operator()(ogr::Layer & inout) const;
   TransformationFunctor * operator->() { return &m_functor; }
 private:
   TransformationFunctor m_functor;
   };
 
+template <class TransformationFunctor>
+struct FieldTransformationPolicy
+  {
+  OGRFeatureDefn & getDefinition(ogr::Layer & outLayer) const
+    {
+    return outLayer.GetLayerDefn();
+    }
+  void fieldsTransform(ogr::Feature const& inoutFeature)
+    {
+    // default => do nothing for in-place transformation
+    }
+  void fieldsTransform(ogr::Feature const& inFeature, ogr::Feature & outFeature)
+    {
+    // default => copy all fields for copy transformation
+    assert(inFeature.GetSize() == outFeature.GetSize());
+    for (size_t i=0,N=inFeature.GetSize(); i!=N; ++i)
+      {
+      outFeature[i] = inFeature[i];
+      }
+    }
+  };
 
 /**\ingroup GeometriesFilters
  * Specialization for \c OGRGeometry.
@@ -189,37 +204,10 @@ struct TransformationFunctorDispatcher<TransformationFunctor, OGRGeometry>
   typedef typename TransformationFunctor::TransformedElementType TransformedElementType;
   BOOST_MPL_ASSERT((boost::is_same<OGRGeometry, TransformedElementType>));
   TransformationFunctorDispatcher() { }
-  TransformationFunctorDispatcher(TransformationFunctor functor) : m_functor(functor){ }
+  TransformationFunctorDispatcher(TransformationFunctor functor) : m_functor(functor){}
 
-  void operator()(ogr::Layer const& in, ogr::Layer & out) const
-    {
-    OGRFeatureDefn & defn = out.GetLayerDefn();
-    for (ogr::Layer::const_iterator b = in.begin(), e = in.end(); b != e; ++b)
-      {
-      ogr::Feature const feat = *b;
-      // TODO: field transformations...
-      ogr::UniqueGeometryPtr g = m_functor(feat.GetGeometry());
-      ogr::Feature dest(defn);
-      dest.SetGeometryDirectly(boost::move(g));
-      out.CreateFeature(dest);
-      }
-    }
-
-  void operator()(ogr::Layer & inout) const
-    {
-    OGRFeatureDefn & defn = inout.GetLayerDefn();
-    // NB: We can't iterate with begin()/end() as SetFeature may invalidate the
-    // iterators depending of the underlying drivers
-    // => we use start_at(), i.e. SetNextByIndex()
-    for (int i=0, N=inout.GetFeatureCount(true); i!=N; ++i)
-      {
-      ogr::Feature feat = *inout.start_at(i);
-      // TODO: field transformations...
-      ogr::UniqueGeometryPtr g = m_functor(feat.GetGeometry());
-      feat.SetGeometryDirectly(boost::move(g));
-      inout.SetFeature(feat);
-      }
-    }
+  void operator()(ogr::Layer const& in, ogr::Layer & out) const;
+  void operator()(ogr::Layer & inout) const;
   TransformationFunctor * operator->() { return &m_functor; }
 private:
   TransformationFunctor m_functor;
@@ -233,7 +221,9 @@ private:
  * \todo Find a better name
  */
 template <class TransformationFunctor>
-class ITK_EXPORT DefaultGeometriesToGeometriesFilter : public GeometriesToGeometriesFilter
+class ITK_EXPORT DefaultGeometriesToGeometriesFilter
+: public GeometriesToGeometriesFilter
+, public TransformationFunctorDispatcher<TransformationFunctor, typename TransformationFunctor::TransformedElementType>
 {
 public:
   /**\name Standard ITK typedefs */
@@ -266,21 +256,10 @@ protected:
   /** Destructor. */
   virtual ~DefaultGeometriesToGeometriesFilter();
 
-  virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const
-    {
-    if (source != destination)
-      {
-      m_TransformationFunctor(source, destination); // if TransformedElementType == layer
-      }
-    else
-      {
-      m_TransformationFunctor(destination); // if TransformedElementType == layer
-      }
-    };
+  virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const;
 private:
-  TransformationFunctorDispatcherType m_TransformationFunctor;
+  // TransformationFunctorDispatcherType m_TransformationFunctor;
 };
-
 
 } // end namespace otb
 
