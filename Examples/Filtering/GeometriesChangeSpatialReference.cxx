@@ -47,6 +47,7 @@ struct ReprojectTransformationFunctor
     {
     m_osr .reset (static_cast<OGRSpatialReference*>(OSRNewSpatialReference(wkt.c_str())));
     }
+  //TODO: find a way to call it from DoProcessLayer
   void UpdateTransformation(OGRSpatialReference & in)
     {
     SetSpatialReferences(in, *m_osr);
