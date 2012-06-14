@@ -44,6 +44,17 @@ ADD_TEST(dmTeSimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
  100 10 15 10 10 250 0.9
 )
 
+ADD_TEST(dmTeStereoReconstructionExampleTest ${EXE_TESTS}
+ --compare-image ${TOL}
+ ${BASELINE}/elevationOutput.tif
+ ${TEMP}/elevationOutput.tif
+ StereoReconstructionExampleTest
+ ${INPUTDATA}/sensor_stereo_left.tif
+ ${INPUTDATA}/sensor_stereo_right.tif
+ ${TEMP}/elevationOutput.tif
+ 140
+)
+
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbDisparityMapExamplesTests otbDisparityMapExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbDisparityMapExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)

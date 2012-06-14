@@ -24,8 +24,13 @@
 void RegisterTests()
 {
   REGISTER_TEST(SimpleDisparityMapEstimationExampleTest);
+  REGISTER_TEST(StereoReconstructionExampleTest);
 }
 
 #undef main
 #define main SimpleDisparityMapEstimationExampleTest
 #include "SimpleDisparityMapEstimationExample.cxx"
+
+#undef main
+#define main StereoReconstructionExampleTest
+#include "StereoReconstructionExample.cxx"
