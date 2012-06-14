@@ -24,27 +24,18 @@
 namespace otb
 {
 
-/** \class GeoInformationConversion
- *  \brief Helper to do the geo informations conversions used
- *         frequently.
+/**
+ *  \brief Helper functions to do the geo information conversions used frequently.
  *
- *  This class can help to build a WKT from a  valid EPSG number using
+ *  This namespace provides helpers functions to build a WKT from a valid EPSG number using
  *  the method ToWKT(int srid).
- *
- * \sa
  */
-class GeoInformationConversion
+namespace GeoInformationConversion
 {
-public:
   /** method used to create a wkt from an epsg number  */
-  static std::string ToWKT(int srid);
-  static std::string ToWKT(const std::string& candidateSrid);
-
-protected:
-  GeoInformationConversion(); // not implemented
-  virtual ~GeoInformationConversion(); // not implemented
-};
-
+  std::string ToWKT(int srid);
+  std::string ToWKT(const std::string& candidateSrid);
+}
 
 } // End namespace otb
 
