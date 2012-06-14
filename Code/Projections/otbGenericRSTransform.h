@@ -18,9 +18,6 @@
 #ifndef __otbGenericRSTransform_h
 #define __otbGenericRSTransform_h
 
-#include <iostream>
-#include <sstream>
-#include <stdio.h>
 #include "otbTransform.h"
 #include "itkMacro.h"
 #include "otbCompositeTransform.h"
@@ -52,13 +49,15 @@ class ITK_EXPORT GenericRSTransform : public otb::Transform<TScalarType,        
       NOutputDimensions>                                                       // Number of dimensions in the output space
 {
 public:
-  /** Standard class typedefs. */
+  /**\name Standard ITK typedefs */
+  //@{
   typedef otb::Transform<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>                Superclass;
+          NInputDimensions,
+          NOutputDimensions>                Superclass;
   typedef GenericRSTransform            Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
+  //@}
 
   typedef typename Superclass::ScalarType           ScalarType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
@@ -115,7 +114,7 @@ public:
   itkSetMacro(OptimizeOutputTransform,bool);
   itkGetMacro(OptimizeOutputTransform,bool);
   itkBooleanMacro(OptimizeOutputTransform);
-  
+
   void SetInputTiePoints(const InputTiePointContainerType & tiePoints)
   {
     m_InputTiePoints = tiePoints;
@@ -139,9 +138,9 @@ public:
   }
 
   void AddInputTiePoint(const InputPointType & inputPoint, const InputPointType & wgs84Point);
-  
+
   void AddOutputTiePoint(const OutputPointType & outputPoint, const InputPointType & wgs84Point);
-  
+
   void ClearInputTiePoints();
 
   void ClearOutputTiePoints();
