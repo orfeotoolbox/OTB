@@ -31,9 +31,10 @@
 /*===========================================================================*/
 namespace internal
 {
-struct CoordTranfoDeleter
+struct Deleters
 {
-  void operator()(OGRCoordinateTransformation *p);
+  void operator()(OGRCoordinateTransformation *p){ OCTDestroyCoordinateTransformation(p); }
+  void operator()(OGRSpatialReference *p){ OGRSpatialReference::DestroySpatialReference(p); }
 };
 } // internal namespace
 
@@ -42,16 +43,23 @@ struct ReprojectTransformationFunctor
   typedef OGRGeometry TransformedElementType;
 
   otb::ogr::UniqueGeometryPtr operator()(OGRGeometry const* in) const;
-  void setSpatialReferences(OGRSpatialReference & in, OGRSpatialReference & out);
+  void SetSpatialReferenceFromWkt(std::string const& wkt)
+    {
+    m_osr .reset (static_cast<OGRSpatialReference*>(OSRNewSpatialReference(wkt.c_str())));
+    }
+  void UpdateTransformation(OGRSpatialReference & in)
+    {
+    SetSpatialReferences(in, *m_osr);
+    }
 private:
-  boost::interprocess::unique_ptr<OGRCoordinateTransformation, internal::CoordTranfoDeleter> m_reprojector;
+  void SetSpatialReferences(OGRSpatialReference & in, OGRSpatialReference & out)
+    {
+    m_reprojector.reset(OGRCreateCoordinateTransformation(&in, &out));
+    }
+  boost::interprocess::unique_ptr<OGRCoordinateTransformation, internal::Deleters> m_reprojector;
+  boost::interprocess::unique_ptr<OGRSpatialReference,         internal::Deleters> m_osr;
 };
 
-
-void internal::CoordTranfoDeleter::operator()(OGRCoordinateTransformation *p)
-{
-  OCTDestroyCoordinateTransformation(p);
-}
 
 otb::ogr::UniqueGeometryPtr
 ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
@@ -65,14 +73,7 @@ ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
       itkGenericExceptionMacro(<< "Cannot reproject a geometry: " << CPLGetLastErrorMsg());
       }
     }
-  else
-    return boost::move(out);
-}
-
-void ReprojectTransformationFunctor::setSpatialReferences(
-  OGRSpatialReference & in, OGRSpatialReference & out)
-{
-  m_reprojector.reset(OGRCreateCoordinateTransformation(&in, &out));
+  return boost::move(out);
 }
 
 /*===========================================================================*/
@@ -80,38 +81,79 @@ void ReprojectTransformationFunctor::setSpatialReferences(
 /*===========================================================================*/
 typedef otb::DefaultGeometriesToGeometriesFilter<ReprojectTransformationFunctor> FilterType;
 
+struct Options
+{
+  Options(int argc, char **argv)
+    {
+    workingInplace = true;
+    outputIsStdout = false;
+
+    std::string inputFile = argv[1];
+    std::string outputFile = workingInplace ? argv[1] : argv[2];
+
+    for (int a=1; a!=argc; ++a)
+      {
+      if (!strcmp(argv[a], "-wkt"))
+        wkt = argv[a];
+      else if (!strcmp(argv[a], "-"))
+        outputIsStdout = true;
+      else if (inputFile.empty())
+        inputFile = argv[a];
+      else if (outputFile.empty())
+        {
+        outputFile = argv[a];
+        workingInplace = false;
+        }
+      else
+        throw std::runtime_error(usage(argv[0])+"Too many (unexpected) arguments");
+      }
+
+    if (!outputFile.empty() && outputIsStdout)
+      throw std::runtime_error(usage(argv[0])+"An output file ("+outputFile+") has already been set, cannot dump to stdout");
+    if (inputFile.empty())
+      throw std::runtime_error(usage(argv[0])+"Not enough parameters");
+    }
+  static std::string usage(std::string const& progname)
+    {
+    return progname + " <inputGeometriesFile> [<outputGeometriesFile>] -wkt <id>\n";
+    }
+  std::string inputFile;
+  std::string outputFile;
+  std::string wkt;
+  bool        workingInplace;
+  bool        outputIsStdout;
+};
+
 int main (int argc, char **argv)
 {
   if (argc < 2)
     {
-    std::cerr << argv[0] << " inputGeometriesFile [outputGeometriesFile]" << std::endl;
     return EXIT_FAILURE;
     }
   try
     {
-    const bool workingInplace = argc == 2;
-    const bool outputIsStdout = !workingInplace && !strcmp(argv[2], "-");
-
-    const std::string inputFile = argv[1];
-    const std::string outputFile = workingInplace ? argv[1] : argv[2];
+    const Options options(argc, argv);
 
     otb::ogr::DataSource::Pointer input = otb::ogr::DataSource::New(
-      inputFile,
-      workingInplace ? otb::ogr::DataSource::Modes::write : otb::ogr::DataSource::Modes::read);
+      options.inputFile,
+      options.workingInplace ? otb::ogr::DataSource::Modes::write : otb::ogr::DataSource::Modes::read);
 
     otb::ogr::DataSource::Pointer output
-      = workingInplace ? input
-      : outputIsStdout ? 0
-      :                  otb::ogr::DataSource::New( outputFile, otb::ogr::DataSource::Modes::write);
-    std::cout << "input: " << input -> ogr().GetName() << " should be: " << inputFile << "\n";
+      = options.workingInplace ? input
+      : options.outputIsStdout ? 0
+      :                  otb::ogr::DataSource::New( options.outputFile, otb::ogr::DataSource::Modes::write);
+    std::cout << "input: " << input -> ogr().GetName() << " should be: " << options.inputFile << "\n";
     if (output)
       {
-      std::cout << "output: " << output -> ogr().GetName() << " should be: " << outputFile << "\n";
+      std::cout << "output: " << output -> ogr().GetName() << " should be: " << options.outputFile << "\n";
       }
     // std::cout << "\n";
 
     FilterType::Pointer filter = FilterType::New();
-    if (!workingInplace)
+    // TODO: this make no sense for in-place transformations
+    (*filter)->SetSpatialReferenceFromWkt(options.wkt);
+
+    if (!options.workingInplace)
       {
       otb::GeometriesSet::Pointer in_set = otb::GeometriesSet::New(input);
       filter->SetInput(in_set);
