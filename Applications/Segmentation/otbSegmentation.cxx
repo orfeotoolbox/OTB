@@ -254,7 +254,7 @@ private:
 
     AddParameter(ParameterType_Empty, "mode.vector.neighbor", "8-neighbor connectivity");
     SetParameterDescription("mode.vector.neighbor",
-                            "Activate 8-Neighbourhood connectivity (default is 4).");
+                            "Activate 8-Neighborhood connectivity (default is 4).");
     MandatoryOff("mode.vector.neighbor");
     DisableParameter("mode.vector.neighbor");
 
