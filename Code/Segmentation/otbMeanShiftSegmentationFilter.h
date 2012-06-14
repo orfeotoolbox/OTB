@@ -72,7 +72,6 @@ private:
 } // end of Functor namespace
 
 
-
 /** \class MeanShiftSegmentationFilter
 *
 *  Performs segmentation of an image by chaining a mean shift filter and region

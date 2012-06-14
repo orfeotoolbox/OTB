@@ -51,8 +51,8 @@ struct ProcessVisitor : boost::static_visitor<>
     assert(destination && "can't filter to a nil datasource");
     // std::cout << "G2GF: Process Visitor: DS("<<source->ogr().GetName()<<") -> DS("<<destination->ogr().GetName()<<") ...\n";
     for (otb::ogr::DataSource::const_iterator b = source->begin(), e = source->end()
-      ; b != e
-      ; ++b
+     ; b != e
+     ; ++b
     )
       {
       otb::ogr::Layer const& sourceLayer = *b;
