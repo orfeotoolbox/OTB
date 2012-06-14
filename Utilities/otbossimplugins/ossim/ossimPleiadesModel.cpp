@@ -143,9 +143,7 @@ namespace ossimplugins
       // propagate a empty RPC model
       if (theSupportData->getProcessingLevel() == "SENSOR")
       {
-         //std::cout << "**** SAVE STATE WITH RPC" << std::endl;
          ossimRpcModel::saveState(kwl, prefix);
-         //print(std::cout);
          return true;
       }
       else
@@ -173,9 +171,7 @@ namespace ossimplugins
       // add a empty RPC model
       if (theSupportData->getProcessingLevel() == "SENSOR")
       {
-         //std::cout << "**** LOAD STATE WITH RPC" << std::endl;
          ossimRpcModel::loadState(kwl, prefix);
-         //print(std::cout);
          return true;
       }
       else
@@ -207,80 +203,79 @@ namespace ossimplugins
       ossimFilename RPCxmlFile;
 
       // Generate metadata and rpc filename
-      if (file.ext().downcase() != "jp2" && file.ext().downcase() != "tif")
+      if ( (file.ext().downcase() != "jp2" && file.ext().downcase() != "tif")
+          || !file.exists())
       {
          //not a valid file
          return false;
       }
       else
       {
-         if (file.isFile())
-         {
-            // DIMAPv1
-            ossimFilename DIMv1xmlFileTmp = file;
-            DIMv1xmlFileTmp.setFile("PHRDIMAP");
-            DIMv1xmlFileTmp.setExtension("XML");
+        // DIMAPv1
+        ossimFilename DIMv1xmlFileTmp = file;
+        DIMv1xmlFileTmp.setFile("PHRDIMAP");
+        DIMv1xmlFileTmp.setExtension("XML");
 
-            if (DIMv1xmlFileTmp.isFile())
-              {
-              DIMxmlFile = DIMv1xmlFileTmp;
-              RPCxmlFile = DIMv1xmlFileTmp;
-              }
-            else
-              {
-              // DIMAPv2
-              DIMxmlFile = file.path();
-              RPCxmlFile = file.path();
-              ossimFilename DIMxmlFileTmp = file.file();
-              ossimFilename RPCxmlFileTmp;
+        if (DIMv1xmlFileTmp.exists())
+          {
+          DIMxmlFile = DIMv1xmlFileTmp;
+          RPCxmlFile = DIMv1xmlFileTmp;
+          }
+        else
+          {
+          // DIMAPv2
+          DIMxmlFile = file.path();
+          RPCxmlFile = file.path();
+          ossimFilename DIMxmlFileTmp = file.file();
+          ossimFilename RPCxmlFileTmp;
 
-              DIMxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^IMG_", "DIM_");
-              DIMxmlFileTmp = DIMxmlFileTmp.replaceStrThatMatch("_R[0-9]+C[0-9]+\\.(JP2|TIF)$", ".XML");
-              RPCxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^DIM_", "RPC_");
+          DIMxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^IMG_", "DIM_");
+          DIMxmlFileTmp = DIMxmlFileTmp.replaceStrThatMatch("_R[0-9]+C[0-9]+\\.(JP2|TIF)$", ".XML");
+          RPCxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^DIM_", "RPC_");
 
-              DIMxmlFile = DIMxmlFile.dirCat(DIMxmlFileTmp);
-              RPCxmlFile = RPCxmlFile.dirCat(RPCxmlFileTmp);
-              }
-         }
+          DIMxmlFile = DIMxmlFile.dirCat(DIMxmlFileTmp);
+          RPCxmlFile = RPCxmlFile.dirCat(RPCxmlFileTmp);
+          }
+
+        if (!DIMxmlFile.exists())
+        {
+          if (traceDebug())
+          {
+            ossimNotify(ossimNotifyLevel_DEBUG) << "PHR main DIMAP file " << DIMxmlFile << " doesn't exist ...\n";
+          }
+          return false;
+        }
       }
 
       if (traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "metadata xml file: " << DIMxmlFile << "\n";
-         ossimNotify(ossimNotifyLevel_DEBUG) << "rpc xml file: " << RPCxmlFile << "\n";
+         ossimNotify(ossimNotifyLevel_DEBUG) << "Metadata xml file: " << DIMxmlFile << "\n";
+         ossimNotify(ossimNotifyLevel_DEBUG) << "RPC xml file: " << RPCxmlFile << "\n";
       }
 
       ossimString processingLevel;
       // Parse the metadata xml file
-      if (DIMxmlFile.exists())
+      if ( !theSupportData.valid() )
+         theSupportData = new ossimPleiadesDimapSupportData();
+
+      if(!theSupportData->parseXmlFile(DIMxmlFile))
       {
-         if ( !theSupportData.valid() )
-            theSupportData = new ossimPleiadesDimapSupportData();
-
-         if(!theSupportData->parseXmlFile(DIMxmlFile))
+         theSupportData = 0; // ossimRefPtr
+         if (traceDebug())
          {
-            theSupportData = 0; // ossimRefPtr
-            if (traceDebug())
-            {
-              ossimNotify(ossimNotifyLevel_DEBUG) << "ossimPleiadesModel::open DEBUG:"
-                                                  << "\nCould not open correctly DIMAP file" << std::endl;
-            }
-            return false;
+           ossimNotify(ossimNotifyLevel_DEBUG) << "ossimPleiadesModel::open DEBUG:"
+                                               << "\nCould not open correctly DIMAP file" << std::endl;
          }
-
-         theSensorID = theSupportData->getSensorID();
-         theImageID = theSupportData->getImageID();
-         // Get the processing level (ORTHO or SENSOR or perhaps MOSAIC ?)
-         processingLevel = theSupportData->getProcessingLevel();
-      }
-      else
-        {
-         ossimNotify(ossimNotifyLevel_DEBUG) << " PHR DIMAP file " << DIMxmlFile << " doesn't exist ...\n";
          return false;
-        }
+      }
+
+      theSensorID = theSupportData->getSensorID();
+      theImageID = theSupportData->getImageID();
+      // Get the processing level (ORTHO or SENSOR or perhaps MOSAIC ?)
+      processingLevel = theSupportData->getProcessingLevel();
 
       // Parse the RPC xml file if necessary
-      if (RPCxmlFile.exists() && (processingLevel == "SENSOR"))
+      if (RPCxmlFile.exists() && processingLevel == "SENSOR")
       {
          if (!theSupportData->parseXmlFile(RPCxmlFile))
          {

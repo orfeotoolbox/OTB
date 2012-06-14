@@ -449,7 +449,6 @@ namespace ossimplugins
             return false;
          }
 
-         //
          if (!parseProductInformation(xmlDocument))
          {
             if (traceDebug())
@@ -461,7 +460,6 @@ namespace ossimplugins
             return false;
          }
 
-         //
          if (!parseCoordinateReferenceSystem(xmlDocument))
          {
             if (traceDebug())
@@ -473,7 +471,6 @@ namespace ossimplugins
             return false;
          }
 
-         //
          if (!parseGeoposition(xmlDocument))
          {
             if (traceDebug())
@@ -485,7 +482,6 @@ namespace ossimplugins
             return false;
          }
 
-         //
          if (!parseProcessingInformation(xmlDocument))
          {
             if (traceDebug())
@@ -497,7 +493,6 @@ namespace ossimplugins
             return false;
          }
 
-         //
          if (!parseRasterData(xmlDocument))
          {
             if (traceDebug())
@@ -509,7 +504,6 @@ namespace ossimplugins
             return false;
          }
 
-         //
          if (!parseRadiometricData(xmlDocument))
          {
             ossimNotify(ossimNotifyLevel_FATAL)
@@ -518,7 +512,6 @@ namespace ossimplugins
             return false;
          }
 
-         //
          if (!parseGeometricData(xmlDocument))
          {
             ossimNotify(ossimNotifyLevel_FATAL)
@@ -527,7 +520,6 @@ namespace ossimplugins
             return false;
          }
 
-         //
          if (!parseQualityAssessment(xmlDocument))
          {
             ossimNotify(ossimNotifyLevel_FATAL)
@@ -536,7 +528,6 @@ namespace ossimplugins
             return false;
          }
 
-         //
          if (!parseDatasetSources(xmlDocument))
          {
             ossimNotify(ossimNotifyLevel_FATAL)
@@ -573,7 +564,6 @@ namespace ossimplugins
       if (traceDebug() && allMetadataRead())
       {
          printInfo(ossimNotify(ossimNotifyLevel_DEBUG));
-
          ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG: exited..." << std::endl;
       }
 
