@@ -63,7 +63,7 @@ private:
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image to analyse");
-    
+
     AddParameter(ParameterType_Empty, "keywordlist", "Display the OSSIM keywordlist");
     SetParameterDescription("keywordlist", "Output the OSSIM keyword list. It contains metadata information (sensor model, geometry ). Informations are stored in keyword list (pairs of key/value)");
     DisableParameter("keywordlist");
@@ -100,18 +100,20 @@ private:
     AddParameter(ParameterType_Int,"numberbands","Number Of Bands");
     SetParameterDescription("numberbands", "Number of bands");
     SetParameterRole("numberbands", Role_Output);
-    
+
     AddParameter(ParameterType_String,"sensor","Sensor id");
     SetParameterDescription("sensor", "Sensor identifier");
     SetParameterRole("sensor", Role_Output);
-   
+
     AddParameter(ParameterType_String,"id","Image id");
     SetParameterDescription("id", "Image identifier");
     SetParameterRole("id", Role_Output);
+    EnableParameter("id");
 
     AddParameter(ParameterType_String,"time","Acquisition time");
     SetParameterDescription("time", "Acquisition time.");
     SetParameterRole("time", Role_Output);
+    EnableParameter("time");
 
     AddParameter(ParameterType_Float,"ullat","Upper left lattitude");
     SetParameterDescription("ullat", "Lattitude of the upper left corner.");
@@ -157,10 +159,12 @@ private:
     AddParameter(ParameterType_String,"town", "Nearest town");
     SetParameterDescription("town", "Main town near center of image");
     SetParameterRole("town", Role_Output);
+    EnableParameter("town");
 
     AddParameter(ParameterType_String,"country","Country");
     SetParameterDescription("country", "Country of the image");
     SetParameterRole("country", Role_Output);
+    EnableParameter("country");
 
     AddParameter(ParameterType_Group, "rgb", "Default RGB Display");
     SetParameterDescription("rgb","This group of parameters allows to access to the default rgb composition.");
@@ -183,10 +187,12 @@ private:
     AddParameter(ParameterType_String,"projectionref","Projection");
     SetParameterDescription("projectionref", "Projection Coordinate System");
     SetParameterRole("projectionref", Role_Output);
+    EnableParameter("projectionref");
 
     AddParameter(ParameterType_String,"keyword","Keywordlist");
     SetParameterDescription("keyword","Image keyword list");
     SetParameterRole("keyword", Role_Output);
+    EnableParameter("keyword");
 
     AddParameter(ParameterType_Group, "gcp", "Ground Control Points informations");
     SetParameterDescription("gcp","This group of parameters allows to access to the GCPs informations.");
@@ -196,26 +202,32 @@ private:
     SetParameterDescription("gcp.count", "Number of GCPs");
     SetDefaultParameterInt("gcp.count", 0);
     SetParameterRole("gcp.count", Role_Output);
+    EnableParameter("gcp.count");
 
     AddParameter(ParameterType_String,"gcp.proj", "GCP Projection");
     SetParameterDescription("gcp.proj", "Projection Coordinate System for GCPs");
     SetParameterRole("gcp.proj", Role_Output);
+    EnableParameter("gcp.proj");
 
     AddParameter(ParameterType_StringList,"gcp.ids", "GCPs Id");
     SetParameterDescription("gcp.ids", "GCPs identifier");
     SetParameterRole("gcp.ids", Role_Output);
-    
+    EnableParameter("gcp.ids");
+
     AddParameter(ParameterType_StringList,"gcp.info", "GCPs Info");
     SetParameterDescription("gcp.info", "GCPs Information");
     SetParameterRole("gcp.info", Role_Output);
-    
+    EnableParameter("gcp.info");
+
     AddParameter(ParameterType_StringList,"gcp.imcoord", "GCPs Image Coordinates");
     SetParameterDescription("gcp.imcoord", "GCPs Image coordinates");
     SetParameterRole("gcp.imcoord", Role_Output);
-    
+    EnableParameter("gcp.imcoord");
+
     AddParameter(ParameterType_StringList, "gcp.geocoord", "GCPs Geographic Coordinates");
     SetParameterDescription("gcp.geocoord", "GCPs Geographic Coordinates");
     SetParameterRole("gcp.geocoord", Role_Output);
+    EnableParameter("gcp.geocoord");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
@@ -230,7 +242,7 @@ private:
   {
     std::ostringstream ossOutput;
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
-      
+
     ossOutput << std::endl << "Image general informations:" << std::endl;
 
     // Read informations
@@ -257,11 +269,11 @@ private:
     SetParameterFloat("spacingx", inImage->GetSpacing()[0]);
     SetParameterFloat("spacingy", inImage->GetSpacing()[1]);
     ossOutput << "\tSpacing :  [" << GetParameterFloat("spacingx") << "," << GetParameterFloat("spacingy") << "]" << std::endl;
-      
+
     //Estimate ground spacing
     GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
     groundSpacing->SetInputImage(inImage);
-      
+
     FloatType approxGroundSpacing;
     approxGroundSpacing.Fill(itk::NumericTraits<ValueType>::Zero);
 
@@ -270,7 +282,7 @@ private:
 
     index[0] = static_cast<FloatVectorImageType::IndexType::IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
     index[1] = static_cast<FloatVectorImageType::IndexType::IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
-      
+
     approxGroundSpacing = groundSpacing->EvaluateAtIndex(index);
 
     //Get image estimated ground spacing (in m)
@@ -280,12 +292,12 @@ private:
     ossOutput << "\tEstimated ground spacing (in meters): [" << GetParameterFloat("estimatedgroundspacingx") << "," << GetParameterFloat("estimatedgroundspacingy") << "]" << std::endl;
 
     ossOutput << std::endl << "Image acquisition informations:" << std::endl;
-      
+
     SetParameterString("sensor", metadataInterface->GetSensorID());
     ossOutput << "\tSensor : ";
     if (!GetParameterString("sensor").empty())
       ossOutput <<  GetParameterString("sensor");
-      
+
     ossOutput << std::endl;
 
     ossOutput << "\tImage identification number: ";
@@ -298,7 +310,7 @@ private:
     SetParameterString("projectionref", metadataInterface->GetProjectionRef());
     if (!GetParameterString("projectionref").empty())
       ossOutput << "\tImage projection : " << GetParameterString("projectionref") << std::endl;
-      
+
     // Format acquisition time
     //Test if this information is available and silently catch
     //associated exception
@@ -320,7 +332,7 @@ private:
       osstime<<metadataInterface->GetMinute();
       osstime<<":00";
       SetParameterString("time", osstime.str());
-      
+
       ossOutput << "\tAcquisition time : " << GetParameterString("time") << std::endl;
       }
     catch ( itk::ExceptionObject & /*err*/ )
@@ -337,7 +349,7 @@ private:
       double lrlon = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("lr_lon").c_str());
       double lllat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ll_lat").c_str());
       double lllon = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ll_lon").c_str());
-      
+
       double centerlat = 0.25*(ullat+urlat+lrlat+lllat);
       double centerlon = 0.25*(ullon+urlon+lrlon+lllon);
 
@@ -381,17 +393,17 @@ private:
     catch ( itk::ExceptionObject & /*err*/ )
       {
       }
-      
+
     SetParameterInt("rgb.r", metadataInterface->GetDefaultDisplay()[0]);
     SetParameterInt("rgb.g", metadataInterface->GetDefaultDisplay()[1]);
     SetParameterInt("rgb.b", metadataInterface->GetDefaultDisplay()[2]);
- 
+
     ossOutput << std::endl << "Image default RGB composition:" << std::endl;
     ossOutput << "\t[R, G, B] = [" << GetParameterInt("rgb.r") << "," << GetParameterInt("rgb.g") << "," << GetParameterInt("rgb.b") << "]" << std::endl;
 
     SetParameterInt("gcp.count", metadataInterface->GetGCPCount());
     SetParameterString("gcp.proj", metadataInterface->GetGCPProjection());
-      
+
     ossOutput << std::endl << "Ground control points information:" << std::endl;
     ossOutput << "\tNumber of GCPs = " << GetParameterInt("gcp.count") << std::endl;
     ossOutput << "\tGCPs projection = " << GetParameterString("gcp.proj") << std::endl;
@@ -399,12 +411,12 @@ private:
     std::vector<std::string> gcp_imcoord;
     std::vector<std::string> gcp_geocoord;
     std::vector<std::string> gcp_infos;
-      
+
     for(int gcpIdx = 0; gcpIdx  < GetParameterInt("gcp.count"); ++ gcpIdx)
       {
       if (gcpIdx == 0)
         ossOutput << "\tGCP individual informations:" << std::endl;
-        
+
       gcp_ids.push_back(metadataInterface->GetGCPId(gcpIdx));
       gcp_infos.push_back(metadataInterface->GetGCPInfo(gcpIdx));
       std::ostringstream oss;
@@ -418,7 +430,7 @@ private:
       ossOutput << "\t\tImage coordinates =" << gcp_imcoord.back() << std::endl;
       ossOutput << "\t\tGround  coordinates =" << gcp_geocoord.back() << std::endl;
       }
-      
+
     SetParameterStringList("gcp.ids", gcp_ids);
     SetParameterStringList("gcp.imcoord", gcp_imcoord);
     SetParameterStringList("gcp.geocoord", gcp_geocoord);
@@ -429,7 +441,7 @@ private:
       std::ostringstream osskeywordlist;
       osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
       SetParameterString("keyword", osskeywordlist.str());
-        
+
       ossOutput << std::endl << "Image OSSIM keywordlist (optional):" << std::endl;
       ossOutput << "\t" << GetParameterString("keyword") << std::endl;
       }
