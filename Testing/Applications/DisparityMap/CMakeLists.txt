@@ -114,6 +114,16 @@ OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
 set_property(TEST apTvDmBlockMatchingTest APPEND PROPERTY DEPENDS apTvDmGridBasedImageResamplingRightTest)
 set_property(TEST apTvDmBlockMatchingTest APPEND PROPERTY DEPENDS apTvDmGridBasedImageResamplingLeftTest)
 
+#--- BandMath application to mask disparity-----
+
+OTB_TEST_APPLICATION(NAME apTvDmDisparityMapLeftMask
+                     APP  BandMath
+                     OPTIONS -il ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
+                             -out ${TEMP}/apTvDmDisparityMapLeftMask.tif uint8
+                             -exp "if(im1b1 != 0,255,0)"
+                     )
+SET_TESTS_PROPERTIES(apTvDmDisparityMapLeftMask PROPERTIES DEPENDS apTvDmGridBasedImageResamplingLeftTest)
+
 #--- DisparityMapToElevationMap ---#
 OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
                      APP  DisparityMapToElevationMap
@@ -127,8 +137,10 @@ OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
                              -hmax 220
                              -elev.average.value 140
                              -step 2.5
+                             -io.mask ${TEMP}/apTvDmDisparityMapLeftMask.tif
                      VALID   --compare-image ${EPSILON_10}
                              ${BASELINE_EXAMPLE}/elevationOutput.tif
                              ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
                      )
-SET_TESTS_PROPERTIES(apTvDmDisparityMapToElevationMap PROPERTIES DEPENDS apTvDmBlockMatchingTest)
+set_property(TEST apTvDmDisparityMapToElevationMap APPEND PROPERTY DEPENDS apTvDmBlockMatchingTest)
+set_property(TEST apTvDmDisparityMapToElevationMap APPEND PROPERTY DEPENDS apTvDmDisparityMapLeftMask)
