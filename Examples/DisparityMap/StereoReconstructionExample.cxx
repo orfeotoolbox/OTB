@@ -32,7 +32,7 @@
 // \begin{itemize}
 // \item Epipolar resampling of the image pair
 // \item Dense disparity map estimation
-// \item Projection of the disparities on a DEM
+// \item Projection of the disparities on an existing Digital Elevation Model (DEM)
 // \end{itemize}
 // It is important to note that this method requires the sensor models with
 // a pose estimate for each image.
@@ -70,22 +70,22 @@ int main(int argc, char* argv[])
     std::cerr << "averageElevation  " << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   typedef otb::Image<float,2>                 FloatImageType;
   typedef otb::VectorImage<float,2>           FloatVectorImageType;
-  
+
   typedef otb::ImageList<FloatImageType>      ImageListType;
-  
+
   typedef otb::ImageListToVectorImageFilter
     <ImageListType,
      FloatVectorImageType>                    ImageListToVectorImageFilterType;
-  
+
   typedef otb::ImageFileReader
     <FloatImageType>                          ImageReaderType;
-  
+
   typedef otb::StreamingImageFileWriter
     <FloatImageType>                          WriterType;
-  
+
 // Software Guide : BeginLatex
 // This example demonstrates the use of the following filters :
 // \begin{itemize}
@@ -100,47 +100,47 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
   typedef otb::StereorectificationDeformationFieldSource
     <FloatImageType,FloatVectorImageType>     DeformationFieldSourceType;
-  
+
   typedef itk::Vector<double,2>               DeformationType;
   typedef otb::Image<DeformationType>         DeformationFieldType;
-  
+
   typedef itk::VectorCastImageFilter
     <FloatVectorImageType,
      DeformationFieldType>                    DeformationFieldCastFilterType;
-  
+
   typedef otb::StreamingWarpImageFilter
     <FloatImageType,
      FloatImageType,
      DeformationFieldType>                    WarpFilterType;
-  
+
   typedef otb::BCOInterpolateImageFunction
     <FloatImageType>                          BCOInterpolationType;
-  
+
   typedef otb::Functor::NCCBlockMatching
     <FloatImageType,FloatImageType>           NCCBlockMatchingFunctorType;
-  
+
   typedef otb::PixelWiseBlockMatchingImageFilter
     <FloatImageType,
      FloatImageType,
      FloatImageType,
      FloatImageType,
      NCCBlockMatchingFunctorType>             NCCBlockMatchingFilterType;
-  
+
   typedef otb::BandMathImageFilter
     <FloatImageType>                          BandMathFilterType;
-  
+
   typedef otb::SubPixelDisparityImageFilter
     <FloatImageType,
      FloatImageType,
      FloatImageType,
      FloatImageType,
      NCCBlockMatchingFunctorType>             NCCSubPixelDisparityFilterType;
-  
+
   typedef otb::DisparityMapMedianFilter
     <FloatImageType,
      FloatImageType,
      FloatImageType>                          MedianFilterType;
-  
+
   typedef otb::DisparityMapToDEMFilter
     <FloatImageType,
      FloatImageType,
@@ -148,15 +148,15 @@ int main(int argc, char* argv[])
      FloatVectorImageType,
      FloatImageType>                          DisparityToElevationFilterType;
 // Software Guide : EndCodeSnippet
-  
+
   double avgElevation = atof(argv[4]);
-  
+
   ImageReaderType::Pointer leftReader =  ImageReaderType::New();
   ImageReaderType::Pointer rightReader =  ImageReaderType::New();
-  
+
   leftReader->SetFileName(argv[1]);
   rightReader->SetFileName(argv[2]);
-  
+
 // Software Guide : BeginLatex
 // The image pair is supposed to be in sensor geometry. From two images covering
 // nearly the same area, one can estimate a common epipolar geometry. In this geometry,
@@ -164,13 +164,14 @@ int main(int argc, char* argv[])
 // The filter \doxygen{otb}{StereorectificationDeformationFieldSource} computes the
 // deformation grids for each image.
 //
-// These grids are sampled in epipolar geometry. They have two bands, containing the
-// position offset (in physical space units) between the current epipolar point and the
-// corresponding sensor point. They can be computed at a lower resolution than sensor
-// resolution. The application \code{StereoRectificationGridGenerator} also provides a
-// simple tool to generate the epipolar grids for your image pair.
+// These grids are sampled in epipolar geometry. They have two bands, containing
+// the position offset (in physical space units) between the current epipolar
+// point and the corresponding sensor point in horizontal and vertical
+// direction. They can be computed at a lower resolution than sensor
+// resolution. The application \code{StereoRectificationGridGenerator} also
+// provides a simple tool to generate the epipolar grids for your image pair.
 // Software Guide : EndLatex
-  
+
 // Software Guide : BeginCodeSnippet
   DeformationFieldSourceType::Pointer m_DeformationFieldSource = DeformationFieldSourceType::New();
   m_DeformationFieldSource->SetLeftImage(leftReader->GetOutput());
@@ -178,15 +179,16 @@ int main(int argc, char* argv[])
   m_DeformationFieldSource->SetGridStep(4);
   m_DeformationFieldSource->SetScale(1.0);
   m_DeformationFieldSource->SetAverageElevation(avgElevation);
-  
+
   m_DeformationFieldSource->Update();
 // Software Guide : EndCodeSnippet
-  
+
 // Software Guide : BeginLatex
 // Then, the sensor images can be resampled in epipolar geometry, using the
 // \doxygen{otb}{StreamingWarpImageFilter}. The application
 // \code{GridBasedImageResampling} also gives an easy access to this filter. The user
-// can choose the epipolar region to resample, as well as the resampling step.
+// can choose the epipolar region to resample, as well as the resampling step
+// and the interpolator.
 //
 // Note that the epipolar image size can be retrieved from the stereo rectification grid
 // filter.
@@ -196,30 +198,30 @@ int main(int argc, char* argv[])
   FloatImageType::SpacingType epipolarSpacing;
   epipolarSpacing[0] = 1.0;
   epipolarSpacing[1] = 1.0;
-  
+
   FloatImageType::SizeType epipolarSize;
   epipolarSize = m_DeformationFieldSource->GetRectifiedImageSize();
-  
+
   FloatImageType::PointType epipolarOrigin;
   epipolarOrigin[0] = 0.0;
   epipolarOrigin[1] = 0.0;
-  
+
   FloatImageType::PixelType defaultValue = 0;
 // Software Guide : EndCodeSnippet
-  
+
 // Software Guide : BeginLatex
 // The deformation grids are cast into deformation fields, then the left
-// and right sensor images are resampled
+// and right sensor images are resampled.
 // Software Guide : EndLatex
-  
+
 // Software Guide : BeginCodeSnippet
   DeformationFieldCastFilterType::Pointer m_LeftDeformationFieldCaster = DeformationFieldCastFilterType::New();
   m_LeftDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetLeftDeformationFieldOutput());
   m_LeftDeformationFieldCaster->GetOutput()->UpdateOutputInformation();
-  
+
   BCOInterpolationType::Pointer leftInterpolator = BCOInterpolationType::New();
   leftInterpolator->SetRadius(2);
-  
+
   WarpFilterType::Pointer m_LeftWarpImageFilter = WarpFilterType::New();
   m_LeftWarpImageFilter->SetInput(leftReader->GetOutput());
   m_LeftWarpImageFilter->SetDeformationField(m_LeftDeformationFieldCaster->GetOutput());
@@ -228,14 +230,14 @@ int main(int argc, char* argv[])
   m_LeftWarpImageFilter->SetOutputSpacing(epipolarSpacing);
   m_LeftWarpImageFilter->SetOutputOrigin(epipolarOrigin);
   m_LeftWarpImageFilter->SetEdgePaddingValue(defaultValue);
-  
+
   DeformationFieldCastFilterType::Pointer m_RightDeformationFieldCaster = DeformationFieldCastFilterType::New();
   m_RightDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetRightDeformationFieldOutput());
   m_RightDeformationFieldCaster->GetOutput()->UpdateOutputInformation();
-  
+
   BCOInterpolationType::Pointer rightInterpolator = BCOInterpolationType::New();
   rightInterpolator->SetRadius(2);
-  
+
   WarpFilterType::Pointer m_RightWarpImageFilter = WarpFilterType::New();
   m_RightWarpImageFilter->SetInput(rightReader->GetOutput());
   m_RightWarpImageFilter->SetDeformationField(m_RightDeformationFieldCaster->GetOutput());
@@ -245,10 +247,10 @@ int main(int argc, char* argv[])
   m_RightWarpImageFilter->SetOutputOrigin(epipolarOrigin);
   m_RightWarpImageFilter->SetEdgePaddingValue(defaultValue);
 // Software Guide : EndCodeSnippet
-  
+
 // Software Guide : BeginLatex
 // Since the resampling produces black regions around the image, it is useless
-// to estimate disparities on these no-data regions. We use a \doxygen{otb}{BandMathImageFilter}
+// to estimate disparities on these \textit{no-data} regions. We use a \doxygen{otb}{BandMathImageFilter}
 // to produce a mask on left and right epipolar images.
 // Software Guide : EndLatex
 
@@ -257,7 +259,7 @@ int main(int argc, char* argv[])
   m_LBandMathFilter->SetNthInput(0,m_LeftWarpImageFilter->GetOutput(),"inleft");
   std::string leftExpr = "if(inleft != 0,255,0)";
   m_LBandMathFilter->SetExpression(leftExpr);
-  
+
   BandMathFilterType::Pointer m_RBandMathFilter = BandMathFilterType::New();
   m_RBandMathFilter->SetNthInput(0,m_RightWarpImageFilter->GetOutput(),"inright");
   std::string rightExpr = "if(inright != 0,255,0)";
@@ -285,7 +287,7 @@ int main(int argc, char* argv[])
 // exploration radius around these values to reduce the size of the exploration area (optional).
 // \end{itemize}
 // Software Guide : EndLatex
-  
+
 // Software Guide : BeginCodeSnippet
   NCCBlockMatchingFilterType::Pointer m_NCCBlockMatcher = NCCBlockMatchingFilterType::New();
   m_NCCBlockMatcher->SetLeftInput(m_LeftWarpImageFilter->GetOutput());
@@ -301,9 +303,9 @@ int main(int argc, char* argv[])
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
-// Some other filters have been added to enhance these pixel-to-pixel disparities. The filter
+// Some other filters have been added to enhance these \textit{pixel-to-pixel} disparities. The filter
 // \doxygen{otb}{SubPixelDisparityImageFilter} can estimate the disparities with sub-pixel
-// precision. Several interpolation methods can be used : parabollic fit, triangular fit, and
+// precision. Several interpolation methods can be used : parabolic fit, triangular fit, and
 // dichotomy search.
 // Software Guide : EndLatex
 
@@ -318,7 +320,7 @@ int main(int argc, char* argv[])
 // parameters:
 // \begin{itemize}
 // \item The radius of the local neighborhood to compute the median
-// \item An inconherence threshold to reject disparities whose distance from the local median
+// \item An incoherence threshold to reject disparities whose distance from the local median
 // is superior to the threshold.
 // \end{itemize}
 // Software Guide : EndLatex
@@ -329,7 +331,7 @@ int main(int argc, char* argv[])
   m_HMedianFilter->SetRadius(2);
   m_HMedianFilter->SetIncoherenceThreshold(2.0);
   m_HMedianFilter->SetMaskInput(m_LBandMathFilter->GetOutput());
-  
+
   MedianFilterType::Pointer m_VMedianFilter = MedianFilterType::New();
   m_VMedianFilter->SetInput(m_NCCSubPixFilter->GetVerticalDisparityOutput());
   m_VMedianFilter->SetRadius(2);
@@ -338,14 +340,14 @@ int main(int argc, char* argv[])
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
-// The application \code{PixelWiseBlockMatching} contain all these filters and
-// provide a single interface to compute your disparity maps.
+// The application \code{PixelWiseBlockMatching} contains all these filters and
+// provides a single interface to compute your disparity maps.
 //
-// The disparity map obtained  with the previous step usually gives a good idea of
-// the altitude profile. However, it is more usefull to study altitude with a DEM (Digital
+// The disparity map obtained with the previous step usually gives a good idea of
+// the altitude profile. However, it is more useful to study altitude with a DEM (Digital
 // Elevation Model) representation.
 //
-// The filter \doxygen{otb}{DisparityMapToDEMFilter} performs this last step. The behaviour
+// The filter \doxygen{otb}{DisparityMapToDEMFilter} performs this last step. The behavior
 // of this filter is to :
 // \begin{itemize}
 // \item Compute the DEM extent from the left sensor image envelope (spacing is set by the user)
@@ -374,12 +376,12 @@ int main(int argc, char* argv[])
   m_DispToElev->SetDEMGridStep(2.5);
   m_DispToElev->SetDisparityMaskInput(m_LBandMathFilter->GetOutput());
   m_DispToElev->SetAverageElevation(avgElevation);
-  
+
   WriterType::Pointer m_DEMWriter = WriterType::New();
   m_DEMWriter->SetInput(m_DispToElev->GetOutput());
   m_DEMWriter->SetFileName(argv[3]);
   m_DEMWriter->Update();
 // Software Guide : EndCodeSnippet
-  
+
   return EXIT_SUCCESS;
 }
