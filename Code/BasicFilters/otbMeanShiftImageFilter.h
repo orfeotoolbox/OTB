@@ -33,6 +33,8 @@ namespace MeanShift
 /** \class ScalarBufferConverter
  *  \brief Small utilities class used for buffer conversion with EDISON standard.
  *   This class handles buffer conversion when pixel type is scalar.
+ *  \deprecated
+ *
  **/
 class ScalarBufferConverter
 {
@@ -90,8 +92,9 @@ public:
  * D. Comaniciu, P. Meer, "Mean Shift Analysis and Applications," iccv, p. 1197, Seventh International Conference
  * on Computer Vision (ICCV'99) - Volume 2, 1999
  *
- * \sa MeanShiftImageFilter
- * \sa MeanShiftVectorImageFilter
+ * \deprecated use MeanShiftSegmentationFilter instead
+ *
+ * \sa MeanShiftSmootingImageFilter, MeanShiftSegmentationFilter
  *
  * \ingroup ImageEnhancement
  */
