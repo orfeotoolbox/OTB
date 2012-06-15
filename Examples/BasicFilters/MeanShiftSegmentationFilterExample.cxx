@@ -105,7 +105,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   //  We instantiate the filter, the reader, and 2 writers (for the
-  //  labeled and clustered images ):
+  //  labeled and clustered images).
   //
   //  Software Guide : EndLatex
 
@@ -145,7 +145,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //
-  // Two another parameters can be set the maximum iteration number, which define maximum number of iteration until convergence.
+  // Two another parameters can be set  : the maximum iteration number, which defines maximum number of iteration until convergence.
   //  Algorithm iterative scheme will stop if convergence hasn't been reached after the maximum number of iterations.
   //  Threshold parameter defines mean-shift vector convergence value. Algorithm iterative scheme will stop if mean-shift vector is below this threshold or if iteration number reached maximum number of iterations.
   //  Software Guide : EndLatex
@@ -182,7 +182,7 @@ int main(int argc, char * argv[])
   // \includegraphics[width=0.40\textwidth]{MSLabeledOutput-pretty.eps}
   // \itkcaption[Mean Shift]{From top to bottom and left to right:
   // Original image, image filtered by
-  // mean shift after clustering clustering, and labeled image..}
+  // mean shift after clustering , and labeled image.}
   // \label{fig:MeanShiftSegmentationFilter}
   // \end{figure}
   // Software Guide : EndLatex
