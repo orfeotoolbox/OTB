@@ -28,6 +28,9 @@
 
 namespace otb
 {
+namespace Meanshift
+{
+
 template <typename T> inline T simple_pow(T const& v, unsigned int p)
 {
   T res = 1;
@@ -37,6 +40,7 @@ template <typename T> inline T simple_pow(T const& v, unsigned int p)
     }
   return res;
 }
+
 
 /** \class SpatialRangeJointDomainTransform
  *
@@ -92,6 +96,7 @@ private:
   RealType     m_SpatialBandwidth;
   RealType     m_RangeBandwidth;
 };
+
 
 class KernelUniform
 {
@@ -379,6 +384,8 @@ private:
   std::vector<int> m_NeighborhoodOffsetVector;
 };
 
+} // end namespace Meanshift
+
 /** \class MeanShiftSmoothingImageFilter
  *
  *
@@ -427,7 +434,7 @@ private:
  * \ingroup ImageSegmentation
  * \ingroup ImageEnhancement
  */
-template <class TInputImage, class TOutputImage, class TKernel = KernelUniform, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
+template <class TInputImage, class TOutputImage, class TKernel = Meanshift::KernelUniform, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
 class ITK_EXPORT MeanShiftSmoothingImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -621,7 +628,7 @@ private:
   of labels */
   unsigned int m_ThreadIdNumberOfBits;
 
-  typedef BucketImage<RealVectorImageType> BucketImageType;
+  typedef Meanshift::BucketImage<RealVectorImageType> BucketImageType;
   BucketImageType m_BucketImage;
 
 };

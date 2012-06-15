@@ -262,7 +262,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   // domain, i.e. spatial coordinates are concatenated to the range values.
   // Moreover, pixel components in this image are normalized by their respective
   // (spatial or range) bandwith.
-  typedef SpatialRangeJointDomainTransform<InputImageType, RealVectorImageType> FunctionType;
+  typedef Meanshift::SpatialRangeJointDomainTransform<InputImageType, RealVectorImageType> FunctionType;
   typedef otb::UnaryFunctorWithIndexWithOutputSizeImageFilter<InputImageType, RealVectorImageType, FunctionType> JointImageFunctorType;
 
   typename JointImageFunctorType::Pointer jointImageFunctor = JointImageFunctorType::New();
@@ -396,7 +396,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
 
   // An iterator on the neighborhood of the current pixel (in joint
   // spatial-range domain)
-  otb::FastImageRegionConstIterator<RealVectorImageType> it(jointImage, neighborhoodRegion);
+  otb::Meanshift::FastImageRegionConstIterator<RealVectorImageType> it(jointImage, neighborhoodRegion);
   //itk::ImageRegionConstIterator<RealVectorImageType> it(jointImage, neighborhoodRegion);
 
   it.GoToBegin();
