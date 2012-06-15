@@ -31,7 +31,7 @@ void RegisterTests()
   REGISTER_TEST(PrintableImageFilterExample1Test);
   REGISTER_TEST(PrintableImageFilterExample2Test);
   REGISTER_TEST(IndexedToRGBExampleTest);
-  REGISTER_TEST(MeanShiftVectorImageFilterExampleTest);
+  REGISTER_TEST(MeanShiftSegmentationFilterExampleTest);
   REGISTER_TEST(HillShadingExampleTest);
 }
 
@@ -64,8 +64,8 @@ void RegisterTests()
 #include "IndexedToRGBExample.cxx"
 
 #undef main
-#define main MeanShiftVectorImageFilterExampleTest
-#include "MeanShiftVectorImageFilterExample.cxx"
+#define main MeanShiftSegmentationFilterExampleTest
+#include "MeanShiftSegmentationFilterExample.cxx"
 
 #undef main
 #define main HillShadingExampleTest

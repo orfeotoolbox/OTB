@@ -19,8 +19,8 @@ TARGET_LINK_LIBRARIES(PrintableImageFilterExample OTBCommon OTBIO)
 ADD_EXECUTABLE(IndexedToRGBExample IndexedToRGBExample.cxx )
 TARGET_LINK_LIBRARIES(IndexedToRGBExample OTBCommon OTBIO)
 
-ADD_EXECUTABLE(MeanShiftVectorImageFilterExample MeanShiftVectorImageFilterExample.cxx )
-TARGET_LINK_LIBRARIES(MeanShiftVectorImageFilterExample OTBCommon OTBIO OTBBasicFilters)
+ADD_EXECUTABLE(MeanShiftSegmentationFilterExample MeanShiftSegmentationFilterExample.cxx )
+TARGET_LINK_LIBRARIES(MeanShiftSegmentationFilterExample OTBCommon OTBIO OTBBasicFilters OTBSegmentation)
 
 ADD_EXECUTABLE(HillShadingExample HillShadingExample.cxx )
 TARGET_LINK_LIBRARIES(HillShadingExample OTBCommon OTBIO OTBBasicFilters)
@@ -126,32 +126,27 @@ ADD_TEST(bfTeIndexedToRGBExampleTest ${EXE_TESTS}
         ${TEMP}/buildingExtractionIndexed_scaled.png
 )
 
-ADD_TEST(bfTeMeanShiftVectorImageFilterExampleTest ${EXE_TESTS}
-        --compare-n-images ${NOTOL} 6
-        ${BASELINE}/MSFilteredOutput.tif
-        ${TEMP}/MSFilteredOutput.tif
+ADD_TEST(bfTeMeanShiftSegmentationFilterExampleTest ${EXE_TESTS}
+        --compare-n-images ${NOTOL} 4
         ${BASELINE}/MSClusteredOutput.tif
         ${TEMP}/MSClusteredOutput.tif
-        ${BASELINE}/MSLabelledOutput.tif
-        ${TEMP}/MSLabelledOutput.tif
-        ${BASELINE}/MSBoundariesOutput.tif
-        ${TEMP}/MSBoundariesOutput.tif
-        ${BASELINE}/MSFilteredOutput-pretty.png
-        ${TEMP}/MSFilteredOutput-pretty.png
+        ${BASELINE}/MSLabeledOutput.tif
+        ${TEMP}/MSLabeledOutput.tif
+        ${BASELINE}/MSLabeledOutput-pretty.png
+        ${TEMP}/MSLabeledOutput-pretty.png
         ${BASELINE}/MSClusteredOutput-pretty.png
         ${TEMP}/MSClusteredOutput-pretty.png
-     MeanShiftVectorImageFilterExampleTest
+        MeanShiftSegmentationFilterExampleTest
         ${INPUTDATA}/ROI_QB_MUL_1.png
-        ${TEMP}/MSFilteredOutput.tif
+        ${TEMP}/MSLabeledOutput.tif
         ${TEMP}/MSClusteredOutput.tif
-        ${TEMP}/MSLabelledOutput.tif
-        ${TEMP}/MSBoundariesOutput.tif
-        ${TEMP}/MSFilteredOutput-pretty.png
+        ${TEMP}/MSLabeledOutput-pretty.png
         ${TEMP}/MSClusteredOutput-pretty.png
         16
         16
-        10
-        1.0
+        100
+        100
+        0.1
 )
 
 # ------- HillShadingExampleTest ----------
