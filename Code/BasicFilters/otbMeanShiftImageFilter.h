@@ -18,6 +18,8 @@
 #ifndef __otbMeanShiftImageFilter_h
 #define __otbMeanShiftImageFilter_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkImageToImageFilter.h"
 #include "itkVariableLengthVector.h"
 #include "otbImage.h"

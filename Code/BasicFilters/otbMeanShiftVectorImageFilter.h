@@ -18,6 +18,7 @@
 #ifndef __otbMeanShiftVectorImageFilter_h
 #define __otbMeanShiftVectorImageFilter_h
 
+#include "vcl_deprecated_header.h"
 #include "otbMeanShiftImageFilter.h"
 
 namespace otb
