@@ -871,6 +871,29 @@ ADD_TEST(coTvVectorDataToMapFilterNoFonts ${COMMON_TESTS9}
         ${TEMP}/coTvVectorDataToMapFilterNoFonts.png
 )
 
+
+# Deprecated class
+ADD_TEST(coTvVectorDataToImageFilter ${COMMON_TESTS9}
+     --compare-image ${NOTOL}
+                        ${BASELINE}/coTvVectorDataToMapFilter.png
+                     ${TEMP}/coTvVectorDataToImageFilter.png
+   otbVectorDataToImageFilter
+        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+        ${TEMP}/coTvVectorDataToImageFilter.png
+        ${INPUTDATA}/DejaVuSans.ttf # font
+)
+
+ADD_TEST(coTvVectorDataToImageFilterBinary ${COMMON_TESTS9}
+     --compare-image ${NOTOL}
+                        ${BASELINE}/coTvVectorDataToMapFilterBinary.png
+                     ${TEMP}/coTvVectorDataToImageFilterBinary.png
+   otbVectorDataToImageFilterBinary
+        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+        ${TEMP}/coTvVectorDataToImageFilterBinary.png
+)
+
+
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
@@ -1358,7 +1381,7 @@ otbVectorDataToMapFilter.cxx
 otbVectorDataToMapFilterSensorModel.cxx
 otbVectorDataToMapFilterWorld.cxx
 otbVectorDataToMapFilterNoFonts.cxx
-
+otbVectorDataToImageFilter.cxx
 )
 ENDIF(OTB_USE_MAPNIK)
 

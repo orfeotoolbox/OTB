@@ -30,4 +30,8 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataToMapFilterSensorModel);
   REGISTER_TEST(otbVectorDataToMapFilterWorld);
   REGISTER_TEST(otbVectorDataToMapFilterNoFonts);
+
+  // Deprecated
+  REGISTER_TEST(otbVectorDataToImageFilter);
+  REGISTER_TEST(otbVectorDataToImageFilterBinary);
 }
