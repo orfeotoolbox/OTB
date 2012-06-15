@@ -129,6 +129,6 @@ OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
                              -step 2.5
                      VALID   --compare-image ${EPSILON_10}
                              ${BASELINE_EXAMPLE}/elevationOutput.tif
-                             ${TEMP}/elevationOutput.tif
+                             ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
                      )
 SET_TESTS_PROPERTIES(apTvDmDisparityMapToElevationMap PROPERTIES DEPENDS apTvDmBlockMatchingTest)
