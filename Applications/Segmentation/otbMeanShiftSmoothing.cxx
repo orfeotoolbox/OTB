@@ -73,7 +73,6 @@ private:
 
 
 
-
     AddParameter(ParameterType_Int, "maxiter", "Maximum number of iterations");
     SetParameterDescription("maxiter", "Algorithm iterative scheme will stop if convergence hasn't been reached after the maximum number of iterations.");
     MandatoryOff("maxiter");

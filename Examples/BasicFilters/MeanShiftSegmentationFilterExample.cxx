@@ -141,7 +141,6 @@ int main(int argc, char * argv[])
   filter->SetSpatialBandwidth(spatialRadius);
   filter->SetRangeBandwidth(rangeRadius);
   filter->SetMinRegionSize(minRegionSize);
-
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //
@@ -151,10 +150,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   filter->SetMaxIterationNumber(maxiter);
   filter->SetThreshold(thres);
-
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //
@@ -169,7 +166,6 @@ int main(int argc, char * argv[])
 
   writer1->Update();
   writer2->Update();
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
