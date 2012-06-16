@@ -49,8 +49,8 @@ struct ProcessVisitor : boost::static_visitor<>
     assert(source && "can't filter a nil datasource");
     assert(destination && "can't filter to a nil datasource");
     for (otb::ogr::DataSource::const_iterator b = source->begin(), e = source->end()
-    ; b != e
-    ; ++b
+   ; b != e
+   ; ++b
     )
       {
       otb::ogr::Layer const& sourceLayer = *b;
