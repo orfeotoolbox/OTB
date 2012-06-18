@@ -8,7 +8,6 @@
 
 IF( LIBLAS_INCLUDE_DIR )
     # Already in cache, be silent
-    message("silent")
     SET( LIBLAS_FIND_QUIETLY TRUE )
 ENDIF( LIBLAS_INCLUDE_DIR )
 
