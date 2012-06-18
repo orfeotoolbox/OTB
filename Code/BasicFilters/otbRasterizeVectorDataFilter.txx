@@ -26,6 +26,7 @@ namespace otb
 template<class TVectorData, class TInputImage, class TOutputImage>
 RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
 ::RasterizeVectorDataFilter()
+ : m_OGRDataSourcePointer(0)
 {
   this->SetNumberOfRequiredInputs(1);
 }

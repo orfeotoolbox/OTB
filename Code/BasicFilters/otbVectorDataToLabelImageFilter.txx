@@ -28,7 +28,9 @@ namespace otb
 {
 template<class TVectorData, class TOutputImage>
 VectorDataToLabelImageFilter<TVectorData, TOutputImage>
-::VectorDataToLabelImageFilter() : m_BurnAttribute("FID")
+::VectorDataToLabelImageFilter()
+ : m_OGRDataSourcePointer(0),
+   m_BurnAttribute("FID")
 {
   this->SetNumberOfRequiredInputs(1);
 
