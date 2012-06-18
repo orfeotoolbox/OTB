@@ -32,7 +32,7 @@ using namespace otb;
 // int otbOGRDataSourceNew (int argc, char **argv)
 int main(int argc, char **argv)
 {
-  if (argc <1)
+  if (argc < 2)
     {
     std::cerr << "otbOGRDataSourceNew <shape-file>\n";
     return EXIT_FAILURE;
