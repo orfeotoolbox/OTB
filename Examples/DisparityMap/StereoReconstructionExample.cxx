@@ -210,7 +210,7 @@ int main(int argc, char* argv[])
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
-// The deformation grids are cast into deformation fields, then the left
+// The deformation grids are casted into deformation fields, then the left
 // and right sensor images are resampled.
 // Software Guide : EndLatex
 
