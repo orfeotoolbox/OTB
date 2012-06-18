@@ -1206,11 +1206,11 @@ ADD_TEST(bfTvVectorDataToLabelImageFilterSHP ${COMMON_TESTS14}
 )
 
 # ---------------------    otbOGRDataSourceToLabelImageFilter---------------------
-ADD_TEST(bfTuOGRDataSourceToLabelImageFilterNew ${COMMON_TESTS14}
+ADD_TEST(coTuOGRDataSourceToLabelImageFilterNew ${COMMON_TESTS14}
   otbOGRDataSourceToLabelImageFilterNew
 )
 
-ADD_TEST(bfTvOGRDataSourceToLabelImageFilterSHP ${COMMON_TESTS14}
+ADD_TEST(coTvOGRDataSourceToLabelImageFilterSHP ${COMMON_TESTS14}
   --compare-image 0.0
   ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
   ${TEMP}/bfTvOGRDataSourceToLabelImageFilter_Output.tif
