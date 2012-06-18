@@ -275,7 +275,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/PrintableImageFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/IndexedToRGBExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/DEMToRainbowExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/BasicFilters/MeanShiftVectorImageFilterExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/BasicFilters/MeanShiftSegmentationFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/HillShadingExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration1.cxx
@@ -292,6 +292,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/SimpleDisparityMapEstimationExample.cxx
   #${OTB_SOURCE_DIR}/Examples/DisparityMap/NCCRegistrationFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/FineRegistrationImageFilterExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/DisparityMap/StereoReconstructionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TextureExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/PanTexExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SFSExample.cxx
