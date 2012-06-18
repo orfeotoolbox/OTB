@@ -193,7 +193,7 @@ private:
     SetParameterRole("epi.rectsizey", Role_Output);
 
     AddParameter(ParameterType_Float,"epi.baseline","Mean baseline ratio");
-    SetParameterDescription("epi.baseline","This parameter is the mean value, in meters, of the baseline to sensor altitude ratio. It can be used to convert disparities to physical elevation, since a disparity of one pixel will corresspond to an elevation offset of this value with respect to the mean elevation.");
+    SetParameterDescription("epi.baseline","This parameter is the mean value, in pixels.meters^-1, of the baseline to sensor altitude ratio. It can be used to convert disparities to physical elevation, since a disparity of one pixel will correspond to an elevation offset of the invert of this value with respect to the mean elevation.");
     SetParameterRole("epi.baseline", Role_Output);
 
     AddParameter(ParameterType_Group,"inverse","Write inverse fields");
