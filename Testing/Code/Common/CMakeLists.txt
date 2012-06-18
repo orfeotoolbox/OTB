@@ -747,24 +747,7 @@ ADD_TEST(coTvRemoteSensingRegion ${COMMON_TESTS7}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests8 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------------  otb::QuickLookImageGenerator ----------------------------
-ADD_TEST(coTuQuickLookImageGeneratorNew ${COMMON_TESTS8}
-otbQuickLookImageGeneratorNew
-)
 
-ADD_TEST(coTvQuickLookImageGenerator ${COMMON_TESTS8}
-     --compare-image ${EPSILON_9}
-                        ${BASELINE}/coQuickLookImageGenerator.tif
-                     ${TEMP}/coQuickLookImageGenerator.tif
-   otbQuickLookImageGenerator
-        ${INPUTDATA}/qb_RoadExtract.img.hdr
-        ${TEMP}/coQuickLookImageGenerator.tif
-        10 # sr
-        2 # variance
-        0.5 # max error
-        4 # max kernel width
-        1 # usespacing
-)
 
 # -------------  otb::ImageRegionTileMapSplitter ----------------------------
 ADD_TEST(coTuImageRegionTileMapSplitterNew ${COMMON_TESTS8}
@@ -1361,8 +1344,6 @@ otbRemoteSensingRegion.cxx
 
 SET(BasicCommon_SRCS8
 otbCommonTests8.cxx
-otbQuickLookImageGeneratorNew.cxx
-otbQuickLookImageGenerator.cxx
 otbImageRegionTileMapSplitterNew.cxx
 otbImageRegionTileMapSplitter.cxx
 otbImageRegionSquareTileSplitter.cxx
