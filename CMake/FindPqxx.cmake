@@ -14,7 +14,7 @@ ENDIF( PQXX_INCLUDE_DIR )
 FIND_PATH( PQXX_INCLUDE_DIR pqxx/pqxx )
 
 FIND_LIBRARY( PQXX_LIBRARY
-              NAMES PQXX
+              NAMES pqxx
               PATH_SUFFIXES pqxx )
 
 # handle the QUIETLY and REQUIRED arguments and set PQXX_FOUND to TRUE if
