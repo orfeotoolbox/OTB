@@ -19,8 +19,8 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}
-//    OUTPUTS: {MSLabeledOutput.tif}, {MSClusteredOutput.tif} {MSLabeledOutput-pretty.png}, {MSClusteredOutput-pretty.png}
-//  16 16 100 100 0.1
+//    OUTPUTS: {MSLabeledOutput.tif}, {MSClusteredOutput.tif}, {MSLabeledOutput-pretty.png}, {MSClusteredOutput-pretty.png}
+//    16 16 100 100 0.1
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
