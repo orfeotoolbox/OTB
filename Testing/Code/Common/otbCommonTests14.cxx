@@ -35,4 +35,7 @@ void RegisterTests()
    REGISTER_TEST(otbOGRDataSourceToLabelImageFilterNew);
    REGISTER_TEST(otbOGRDataSourceToLabelImageFilter);
    REGISTER_TEST(otbPolygonizationRasterizationTest);
+   REGISTER_TEST(otbImageListToVectorImageFilterNew);
+   REGISTER_TEST(otbImageListToVectorImageFilter);
+   REGISTER_TEST(otbImageListToVectorImageFilter2);
 }

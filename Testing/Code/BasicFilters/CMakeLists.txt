@@ -331,32 +331,6 @@ ADD_TEST(bfTvVectorImageToImageListFilter ${BASICFILTERS_TESTS3}
 )
 
 
-# -------            otb::ImageListToVectorImageFilter   ----------------------------
-
-ADD_TEST(bfTuImageListToVectorImageFilterNew ${BASICFILTERS_TESTS3}
-         otbImageListToVectorImageFilterNew)
-
-
-ADD_TEST(bfTvImageListToVectorImageFilter ${BASICFILTERS_TESTS3}
-                --compare-image ${EPSILON_7}
-                    ${BASELINE}/bfTvImageListToVectorImageFilter.png
-                    ${TEMP}/bfTvImageListToVectorImageFilter.png
-                    otbImageListToVectorImageFilter
-          ${INPUTDATA}/poupees_c1.hdr
-          ${INPUTDATA}/poupees_c2.hdr
-          ${INPUTDATA}/poupees_c3.hdr
-            #${INPUTDATA}/poupees.c1.hdr
-                    #${INPUTDATA}/poupees.c2.hdr
-                    #${INPUTDATA}/poupees.c3.hdr
-                    ${TEMP}/bfTvImageListToVectorImageFilter.png
-)
-
-ADD_TEST(bfTvImageListToVectorImageFilter2 ${BASICFILTERS_TESTS3}
-                    otbImageListToVectorImageFilter2
-          ${INPUTDATA}/poupees_c1.hdr
-          ${INPUTDATA}/poupees_c2.hdr
-          ${INPUTDATA}/poupees_c3.hdr
-)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2848,9 +2822,6 @@ otbVectorRescaleIntensityImageFilterNew.cxx
 otbVectorRescaleIntensityImageFilter.cxx
 otbVectorImageToImageListFilterNew.cxx
 otbVectorImageToImageListFilter.cxx
-otbImageListToVectorImageFilterNew.cxx
-otbImageListToVectorImageFilter.cxx
-otbImageListToVectorImageFilter2.cxx
 otbShiftScaleVectorImageFilterNew.cxx
 otbShiftScaleVectorImageFilterTest.cxx
 )

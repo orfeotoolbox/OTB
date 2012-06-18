@@ -1241,6 +1241,35 @@ ADD_TEST(bfTvPolygonizationRasterization_Index ${COMMON_TESTS14}
   ${INPUTDATA}/QB_Toulouse_labelImage_Index.tif
 )
 
+
+# -------            otb::ImageListToVectorImageFilter   ----------------------------
+
+ADD_TEST(coTuImageListToVectorImageFilterNew ${COMMON_TESTS14}
+         otbImageListToVectorImageFilterNew)
+
+
+ADD_TEST(coTvImageListToVectorImageFilter ${COMMON_TESTS14}
+                --compare-image ${EPSILON_7}
+                    ${BASELINE}/bfTvImageListToVectorImageFilter.png
+                    ${TEMP}/coTvImageListToVectorImageFilter.png
+                    otbImageListToVectorImageFilter
+          ${INPUTDATA}/poupees_c1.hdr
+          ${INPUTDATA}/poupees_c2.hdr
+          ${INPUTDATA}/poupees_c3.hdr
+            #${INPUTDATA}/poupees.c1.hdr
+                    #${INPUTDATA}/poupees.c2.hdr
+                    #${INPUTDATA}/poupees.c3.hdr
+                    ${TEMP}/coTvImageListToVectorImageFilter.png
+)
+
+ADD_TEST(coTvImageListToVectorImageFilter2 ${COMMON_TESTS14}
+                    otbImageListToVectorImageFilter2
+          ${INPUTDATA}/poupees_c1.hdr
+          ${INPUTDATA}/poupees_c2.hdr
+          ${INPUTDATA}/poupees_c3.hdr
+)
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbCommonTests1.cxx
@@ -1414,6 +1443,9 @@ otbVectorDataRasterizeFilter.cxx
 otbVectorDataToLabelImageFilter.cxx
 otbOGRDataSourceToLabelImageFilter.cxx
 otbPolygonizationRasterizationTest.cxx
+otbImageListToVectorImageFilterNew.cxx
+otbImageListToVectorImageFilter.cxx
+otbImageListToVectorImageFilter2.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbCommonTests1 "${BasicCommon_SRCS1}" "OTBIO;OTBTesting")
