@@ -402,6 +402,48 @@ int otb::ogr::DataSource::Size(bool doForceComputation) const
 /*=================================[ Misc ]==================================*/
 /*===========================================================================*/
 
+void otb::ogr::DataSource::GetGlobalExtent(double & ulx, 
+                                           double & uly, 
+                                           double & lrx, 
+                                           double & lry, 
+                                           bool force) const
+{
+  OGREnvelope sExtent;
+  const_iterator lit = this->begin();
+  
+  const OGRErr res = lit->ogr().GetExtent(&sExtent,force);
+
+  if(res!= OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<< "Cannot retrieve extent of layer <"
+                              <<lit->GetName()<<">: " << CPLGetLastErrorMsg());
+    }
+  
+  ++lit;
+
+  for(; lit!=this->end();++lit)
+    {
+     OGREnvelope cExtent;
+     
+     const OGRErr cres = lit->ogr().GetExtent(&cExtent,force);
+
+     if(cres!= OGRERR_NONE)
+       {
+       itkGenericExceptionMacro(<< "Cannot retrieve extent of layer <"
+                                <<lit->GetName()<<">: " << CPLGetLastErrorMsg());
+       }
+
+     // Merge with previous layer
+     sExtent.Merge(cExtent);
+    }
+
+  ulx = sExtent.MinX;
+  uly = sExtent.MinY;
+  lrx = sExtent.MaxX;
+  lry = sExtent.MaxY;
+}
+
+
 /*virtual*/
 void otb::ogr::DataSource::PrintSelf(
   std::ostream& os, itk::Indent indent) const

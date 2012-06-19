@@ -212,6 +212,23 @@ public:
    */
   int Size(bool doForceComputation) const;
 
+  /** Allow to retrieve the union of the extents of all layers
+   *  \param[out] ulx reference to upper-left x coordinate of the
+   *  extent
+   *  \param[out] uly reference to upper-left y coordinate of the
+   *  extent
+   *  \param[out] lrx reference to lower-right x coordinate of the
+   *  extent
+   *  \param[out] uly reference to lower-right y coordinate of the
+   *  extent
+   *  \param[in] force Force computation of layers extents if not
+   *  available. May force the driver to walk all geometries to
+   *  compute the extent.
+   *  \throw itk::ExceptionObject if the layers extents can not be retrieved.
+   */ 
+  void GetGlobalExtent(double & ulx, double & uly, double & lrx, double & lry, bool force = false) const;
+
+
   /** Grafts data and information from one data source to another.
    * \deprecated \c OGRLayer has an embedded input iterator. As a consequence,
    * the layer cannot support multiple access to its elements.
