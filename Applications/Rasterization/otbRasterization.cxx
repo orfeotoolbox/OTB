@@ -81,13 +81,15 @@ private:
     SetParameterDescription( "im", "A reference image for extraction region and projection information (optional)" );
     MandatoryOff("im");
     
-    AddParameter(ParameterType_Float,  "szx",   "SizeX");
+    AddParameter(ParameterType_Int,  "szx",   "SizeX");
     SetParameterDescription( "szx", "OutputSize[0] (useless if support image is given)" );
     MandatoryOff("szx");
+    SetMinimumParameterIntValue("szx",1);
     
-    AddParameter(ParameterType_Float,  "szy",   "SizeY");
+    AddParameter(ParameterType_Int,  "szy",   "SizeY");
     SetParameterDescription( "szy", "OutputSize[1] (useless if support image is given)" );
     MandatoryOff("szy");
+    SetMinimumParameterIntValue("szy",1);
     
     AddParameter(ParameterType_Int,  "epsg",   "RSID");
     SetParameterDescription( "epsg", "Projection System RSID number (RSID 4326 for WGS84 32631 for UTM31N)  (useless if support image is given)" );
@@ -117,7 +119,7 @@ private:
     SetParameterDescription("mode","This parameter allows to choose between rasterization modes");
     
     AddChoice("mode.binary","Binary mode");
-    SetParameterDescription("mode.attribute","In this mode, pixels within a geometry will hold the user-defined foreground value");
+    SetParameterDescription("mode.binary","In this mode, pixels within a geometry will hold the user-defined foreground value");
 
     AddParameter(ParameterType_Float,"mode.binary.foreground","Foreground value");
     SetParameterDescription("mode.binary.foreground","Value of the pixels inside a geometry");
@@ -151,6 +153,36 @@ private:
 
     m_OgrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::read);
 
+    bool validInputProjRef = true;
+
+    otb::ogr::DataSource::const_iterator lit = m_OgrDS->begin();
+
+    if(lit==m_OgrDS->end())
+      {
+      otbAppLogFATAL("There are no layers in the input dataset.");
+      }
+    
+    std::string inputProjectionRef = lit->GetProjectionRef();
+
+    // Check if we have layers with different projection ref
+    for(;lit != m_OgrDS->end();++lit)
+      {
+      if(lit->GetProjectionRef() != inputProjectionRef)
+        {
+        otbAppLogWARNING("The input dataset have layers with different projection reference system. The application will base all extent computation on the srs of the first layer only.");
+        }
+      }
+
+    if(inputProjectionRef == "")
+      {
+      otbAppLogWARNING("Failed to find a valid projection ref in dataset. The application will asume that the given reference image or origin, spacing and size are consistent with the dataset geometry. Output EPSG code will be ignored.");
+      validInputProjRef = false;
+      }
+    else
+      {
+      otbAppLogINFO("Input dataset projection reference system is: "<<inputProjectionRef);
+      }
+
     // Retrieve extent
     double ulx, uly, lrx, lry;
     bool extentAvailable = true;
@@ -183,6 +215,11 @@ private:
         }
       }
 
+    if(extentAvailable)
+      {
+      otbAppLogINFO("Input dataset extent is ("<<ulx<<", "<<uly<<") ("<<lrx<<", "<<lry<<")");
+      }
+
 
     // region information
     SizeType size;
@@ -205,14 +242,13 @@ private:
       referenceImage = GetParameterUInt8Image("im");
       outputProjectionRef = referenceImage->GetProjectionRef();
   
-      size[0] = referenceImage->GetLargestPossibleRegion().GetSize(0);
-      size[1] = referenceImage->GetLargestPossibleRegion().GetSize(1);
+      size = referenceImage->GetLargestPossibleRegion().GetSize();
   
       origin = referenceImage->GetOrigin();
   
       spacing = referenceImage->GetSpacing();
       }
-    else if (HasValue("szx") && HasValue("szy"))
+    else if (HasValue("spx") && HasValue("spy"))
       {
       if (HasValue("epsg"))
         {
@@ -221,11 +257,11 @@ private:
         }
       else
         {
-        outputProjectionRef = m_OgrDS->GetProjectionRef();
+        outputProjectionRef = inputProjectionRef;
         }
 
-      size[0] = GetParameterFloat("szx");
-      size[1] = GetParameterFloat("szy");
+      spacing[0] = GetParameterFloat("spx");
+      spacing[1] = GetParameterFloat("spy");
 
       if ( HasValue("orx") && HasValue("ory"))
         {
@@ -238,22 +274,26 @@ private:
         origin[1] = uly;
         
         // Transform to output EPSG
-        RSTransformType::Pointer rsTransform = RSTransformType::New();
-        rsTransform->SetInputProjectionRef(m_OgrDS->GetProjectionRef());
-        rsTransform->SetOutputProjectionRef(outputProjectionRef);
-        rsTransform->InstanciateTransform();
+       
+        if(validInputProjRef)
+          {
+          RSTransformType::Pointer rsTransform = RSTransformType::New();
+          rsTransform->SetInputProjectionRef(inputProjectionRef);
+          rsTransform->SetOutputProjectionRef(outputProjectionRef);
+          rsTransform->InstanciateTransform();
 
-        origin = rsTransform->TransformPoint(origin);
+          origin = rsTransform->TransformPoint(origin);
+          }
         }
       else
         {
-        // Not handled for now, parameter is mandatory
+        otbAppLogFATAL(<<"The orx and ory parameters are not set and the dataset extent could not be retrieved. The application can not deterimine the origin of the output raster");
         }
 
-      if (HasValue("spx") && HasValue("spy"))
+      if (HasValue("szx") && HasValue("szy"))
         {
-        spacing[0] = GetParameterFloat("spx");
-        spacing[1] = GetParameterFloat("spy");
+        size[0] = GetParameterInt("szx");
+        size[1] = GetParameterInt("szy");
         }
       else if(extentAvailable)
         {
@@ -262,29 +302,31 @@ private:
         lrout[0] = lrx;
         lrout[1] = lry;
 
-        RSTransformType::Pointer rsTransform = RSTransformType::New();
-        rsTransform->SetInputProjectionRef(m_OgrDS->GetProjectionRef());
-        rsTransform->SetOutputProjectionRef(outputProjectionRef);
-        rsTransform->InstanciateTransform();
+        if(validInputProjRef)
+          {
+          RSTransformType::Pointer rsTransform = RSTransformType::New();
+          rsTransform->SetInputProjectionRef(inputProjectionRef);
+          rsTransform->SetOutputProjectionRef(outputProjectionRef);
+          rsTransform->InstanciateTransform();
 
-        lrout = rsTransform->TransformPoint(lrout);
-
-        spacing[0] = (origin[0] - lrout[0])/size[0];
-        spacing[1] = (origin[1] - lrout[1])/size[1];
+          lrout = rsTransform->TransformPoint(lrout);
+          }
+        size[0]=static_cast<unsigned int>((lrout[0] - origin[0])/spacing[0]);
+        size[1]=static_cast<unsigned int>((lrout[1] - origin[1])/spacing[1]);
         }
       else
         {
-        // Not handled for now, parameter is mandatory
+        otbAppLogFATAL(<<"The szx and szy parameters are not set and the dataset extent could not be retrieved. The application can not deterimine the size of the output raster");
+
         }
       }
     else
       {
-      otbAppLogFATAL("Input entry problem, if no reference image given, region size is needed ");
+      otbAppLogFATAL("No reference image was given, at least spx and spy parameters must be set.");
       }
   
       m_OGRDataSourceRendering = OGRDataSourceToMapFilterType::New();
       m_OGRDataSourceRendering->AddOGRDataSource(m_OgrDS);
-      m_OGRDataSourceRendering->SetBurnAttribute(GetParameterString("field"));
       m_OGRDataSourceRendering->SetOutputSize(size);
       m_OGRDataSourceRendering->SetOutputOrigin(origin);
       m_OGRDataSourceRendering->SetOutputSpacing(spacing);
@@ -301,8 +343,17 @@ private:
         m_OGRDataSourceRendering->SetBurnAttribute(GetParameterString("mode.attribute.field"));
         }
 
-      m_OGRDataSourceRendering->SetOutputProjectionRef(outputProjectionRef);
+      if(validInputProjRef)
+        {
+        m_OGRDataSourceRendering->SetOutputProjectionRef(outputProjectionRef);
+        }
       
+      otbAppLogINFO("Output projection reference system is: "<<outputProjectionRef);
+
+      otbAppLogINFO("Output origin: "<<origin);
+      otbAppLogINFO("Output size: "<<size);
+      otbAppLogINFO("Output spacing: "<<spacing);
+
       SetParameterOutputImage<FloatImageType>("out", m_OGRDataSourceRendering->GetOutput());
     
     }
