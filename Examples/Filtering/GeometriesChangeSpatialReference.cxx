@@ -33,8 +33,16 @@ namespace internal
 {
 struct Deleters
 {
-  void operator()(OGRCoordinateTransformation *p){ OCTDestroyCoordinateTransformation(p); }
-  void operator()(OGRSpatialReference *p){ OGRSpatialReference::DestroySpatialReference(p); }
+  void operator()(OGRCoordinateTransformation *p) const { OCTDestroyCoordinateTransformation(p); }
+  void operator()(OGRSpatialReference *p) const
+    {
+#if GDAL_VERSION_NUM >= 1700
+    OGRSpatialReference::DestroySpatialReference(p);
+#else
+#warning the following resource release may crash, please update your version of GDAL
+    delete p; // note there is no garanty
+#endif
+    }
 };
 } // internal namespace
 
