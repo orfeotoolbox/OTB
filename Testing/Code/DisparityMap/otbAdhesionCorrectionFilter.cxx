@@ -22,9 +22,9 @@ int otbAdhesionCorrectionFilterNew(int argc, char* argv[])
 {
   const unsigned int Dimension = 2;
   typedef float                                                         PixelType;
-  typedef otb::Image<PixelType, Dimension>                                      ImageType;
-  typedef unsigned char                                                         MaskPixelType;
-  typedef otb::Image<MaskPixelType, Dimension>                                 MaskType;
+  typedef otb::Image<PixelType, Dimension>                              ImageType;
+  typedef unsigned char                                                 MaskPixelType;
+  typedef otb::Image<MaskPixelType, Dimension>                          MaskType;
 
   typedef otb::AdhesionCorrectionFilter<ImageType, MaskType> AdhesionCorrectionFilterType;
 
@@ -36,6 +36,7 @@ int otbAdhesionCorrectionFilterNew(int argc, char* argv[])
 
 int otbAdhesionCorrectionFilter(int argc, char* argv[])
 {
+
    return EXIT_SUCCESS;
 }
 

@@ -32,7 +32,4 @@ void RegisterTests()
   REGISTER_TEST(otbStereoSensorModelToElevationMapFilter);
   REGISTER_TEST(otbStereorectificationDeformationFieldSourceNew);
   REGISTER_TEST(otbStereorectificationDeformationFieldSource);
-  REGISTER_TEST(otbPixelWiseBlockMatchingImageFilterNew);
-  REGISTER_TEST(otbPixelWiseBlockMatchingImageFilter);
-  REGISTER_TEST(otbPixelWiseBlockMatchingImageFilterNCC);
 }

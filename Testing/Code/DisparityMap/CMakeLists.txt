@@ -437,11 +437,14 @@ ${TEMP}/feTvStereorectificationDeformationFieldSourceOutput2.tif
 5
 )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #--------- otb::HorizontalPixelWiseBlockMatchingImageFilter -----------------------------------------
-ADD_TEST(dmTuPixelWiseBlockMatchingImageFilterNew ${DISPARITYMAP_TESTS3}
+ADD_TEST(dmTuPixelWiseBlockMatchingImageFilterNew ${DISPARITYMAP_TESTS4}
 otbPixelWiseBlockMatchingImageFilterNew)
 
-ADD_TEST(dmTvPixelWiseBlockMatchingImageFilter ${DISPARITYMAP_TESTS3}
+ADD_TEST(dmTvPixelWiseBlockMatchingImageFilter ${DISPARITYMAP_TESTS4}
 --compare-n-images ${NOTOL} 2
 ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
 ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
@@ -455,8 +458,7 @@ ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputMetric.tif
 2
 -10 +10
 )
-
-ADD_TEST(dmTvPixelWiseBlockMatchingImageFilterNCC ${DISPARITYMAP_TESTS3}
+ADD_TEST(dmTvPixelWiseBlockMatchingImageFilterNCC ${DISPARITYMAP_TESTS4}
 --compare-n-images ${NOTOL} 2
 ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
 ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
@@ -472,20 +474,61 @@ ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
 )
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------            otb::SubPixelDisparityImageFilterr   ----------
+ADD_TEST(dmTuSubPixelDisparityImageFilterNew ${DISPARITYMAP_TESTS4}
+         otbSubPixelDisparityImageFilterNew)
+
+        
+ADD_TEST(dmTvSubPixelDisparityImageFilterNCC ${DISPARITYMAP_TESTS4}
+--compare-n-images ${NOTOL} 3
+${BASELINE}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputHDisparity.tif
+${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputHDisparity.tif
+${BASELINE}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputVDisparity.tif
+${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputVDisparity.tif
+${BASELINE}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
+${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
+otbSubPixelDisparityImageFilter
+${EXAMPLEDATA}/StereoFixed.png
+${EXAMPLEDATA}/StereoMoving.png
+${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
+${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
+${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputHDisparity.tif
+${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputVDisparity.tif
+${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
+
+1 # NCC
+1 # Parabolic
+2 # radius
+-3 +3 # hdisp treshold
+-2 2 # vdisp treshold
+)
+
+SET_TESTS_PROPERTIES(dmTvSubPixelDisparityImageFilterNCC PROPERTIES DEPENDS dmTvPixelWiseBlockMatchingImageFilterNCC)
+
+
+
+# -------            otb::DisparityMapMedianFilter   ----------
+
+ADD_TEST(dmTuDisparityMapMedianFilterNew ${DISPARITYMAP_TESTS4}
+         otbDisparityMapMedianFilterNew)
+         
+ADD_TEST(dmTvDisparityMapMedianFilter ${DISPARITYMAP_TESTS4}
+--compare-image ${NOTOL} 
+		 ${BASELINE}/dmTvDisparityMapMedianFilterOutput.tif
+		 ${TEMP}/dmTvDisparityMapMedianFilterOutput.tif
+         otbDisparityMapMedianFilter
+         ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputHDisparity.tif
+         ${TEMP}/dmTvDisparityMapMedianFilterOutput.tif
+         2
+         2.0
+         )         
+
+SET_TESTS_PROPERTIES(dmTvDisparityMapMedianFilter PROPERTIES DEPENDS dmTvSubPixelDisparityImageFilterNCC)
+
 # -------            otb::AdhesionCorrectionFilter   ----------
 
 ADD_TEST(dmTuAdhesionCorrectionFilterNew ${DISPARITYMAP_TESTS4}
          otbAdhesionCorrectionFilterNew)
-
-ADD_TEST(dmTuDisparityMapMedianFilterNew ${DISPARITYMAP_TESTS4}
-         otbDisparityMapMedianFilterNew)
-
-ADD_TEST(dmTuSubPixelDisparityImageFilterrNew ${DISPARITYMAP_TESTS4}
-         otbSubPixelDisparityImageFilterNew)
-
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS1
@@ -523,13 +566,13 @@ otbFineRegistrationImageFilterNew.cxx
 otbFineRegistrationImageFilterTest.cxx
 otbStereoSensorModelToElevationMapFilter.cxx
 otbStereorectificationDeformationFieldSource.cxx
-otbPixelWiseBlockMatchingImageFilter.cxx
 )
 
 SET(BasicDisparityMap_SRCS4
 otbDisparityMapTests4.cxx
 otbAdhesionCorrectionFilter.cxx
 otbDisparityMapMedianFilter.cxx
+otbPixelWiseBlockMatchingImageFilter.cxx
 otbSubPixelDisparityImageFilter.cxx
 )
 

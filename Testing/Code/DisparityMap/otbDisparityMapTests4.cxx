@@ -26,5 +26,10 @@ void RegisterTests()
 {
   REGISTER_TEST(otbAdhesionCorrectionFilterNew);
   REGISTER_TEST(otbDisparityMapMedianFilterNew);
+  REGISTER_TEST(otbDisparityMapMedianFilter);
+  REGISTER_TEST(otbPixelWiseBlockMatchingImageFilterNew);
+  REGISTER_TEST(otbPixelWiseBlockMatchingImageFilter);
+  REGISTER_TEST(otbPixelWiseBlockMatchingImageFilterNCC);
+  REGISTER_TEST(otbSubPixelDisparityImageFilter);
   REGISTER_TEST(otbSubPixelDisparityImageFilterNew);              
 }
