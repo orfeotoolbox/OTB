@@ -14,15 +14,17 @@ OTB_TEST_APPLICATION(NAME apTvRsRasterizationLines
                 			  ${TEMP}/apTvRsRasterizationLines.tif)
 
 # Mapnik is not intended to rasterize big images (tile effects happen), GDAL should do the job
-# OTB_TEST_APPLICATION(NAME apTvRsRasterizationLinesStreaming
-#                     APP  Rasterization
-#                     OPTIONS -in   ${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
-#                             -im   ${BASELINE}/apTvRsRasterizationLines.tif
-#                 			 -out  ${TEMP}/apTvRsRasterizationLinesStreaming.tif uint8
-#                 			 -ram 1
-#                     VALID   --compare-image ${NOTOL}
-#                              ${BASELINE}/apTvRsRasterizationLines.tif
-#                			  ${TEMP}/apTvRsRasterizationLinesStreaming.tif)
+OTB_TEST_APPLICATION(NAME apTvRsRasterizationLinesStreaming
+                     APP  Rasterization
+                     OPTIONS -in   ${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
+                             -im   ${BASELINE}/apTvRsRasterizationLines.tif
+                             -out  ${TEMP}/apTvRsRasterizationLinesStreaming.tif uint8
+                 	     -ram 1
+                             -background 255
+                             -mode.binary.foreground 0
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvRsRasterizationLines.tif
+                	     ${TEMP}/apTvRsRasterizationLinesStreaming.tif)
 
 OTB_TEST_APPLICATION(NAME apTvRsRasterizationPoints
                      APP  Rasterization
