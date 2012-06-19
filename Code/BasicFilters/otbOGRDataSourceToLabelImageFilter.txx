@@ -202,7 +202,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
   for(unsigned int band = 0; band < nbBands;++band)
     {
      GDALRasterBandH hBand = GDALGetRasterBand(dataset, band + 1);
-     GDALSetRasterNoDataValue(hBand, m_BackgroundValue);
+     GDALFillRaster(hBand, m_BackgroundValue, 0);
     }
   
   // add the geoTransform to the dataset
