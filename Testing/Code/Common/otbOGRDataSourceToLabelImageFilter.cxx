@@ -45,13 +45,20 @@ int otbOGRDataSourceToLabelImageFilter(int argc, char* argv[])
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
-  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(argv[2], otb::ogr::DataSource::Modes::write);
+  bool mode = atoi(argv[4]);
+  unsigned char background = atoi(argv[5]);
+  unsigned char foreground = atoi(argv[6]);
+
+  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(argv[2], otb::ogr::DataSource::Modes::read);
   
   // rasterize
   RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
   rasterization->AddOGRDataSource(ogrDS);
   rasterization->SetOutputParametersFromImage(reader->GetOutput());
   rasterization->SetBurnAttribute("DN");
+  rasterization->SetBurnAttributeMode(mode);
+  rasterization->SetBackgroundValue(background);
+  rasterization->SetForegroundValue(foreground);
 
   /*otb::StandardOneLineFilterWatcher * watch = new otb::StandardOneLineFilterWatcher(rasterization.GetPointer(),
                                                                           "rasterization"); */

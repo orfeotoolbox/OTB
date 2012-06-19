@@ -1218,7 +1218,20 @@ ADD_TEST(coTvOGRDataSourceToLabelImageFilterSHP ${COMMON_TESTS14}
   ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
   ${INPUTDATA}/QB_Toulouse_ortho.shp
   ${TEMP}/bfTvOGRDataSourceToLabelImageFilter_Output.tif
+  1 0 255
 )
+
+ADD_TEST(bfTvOGRDataSourceToLabelImageFilterSHPForegroundMode ${COMMON_TESTS14}
+  --compare-image 0.0
+  ${INPUTDATA}/bfTvOGRDataSourceToLabelImageFilter_Output_ForegroundMode.tif
+  ${TEMP}/bfTvOGRDataSourceToLabelImageFilter_Output_ForegroundMode.tif
+  otbOGRDataSourceToLabelImageFilter
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
+  ${INPUTDATA}/QB_Toulouse_ortho_partial.shp
+  ${TEMP}/bfTvOGRDataSourceToLabelImageFilter_Output_ForegroundMode.tif
+  0 0 255
+)
+
 
 # ---------------------    otbPolygonizationRasterizationTest  ---------------------
 # bijectivity tests
