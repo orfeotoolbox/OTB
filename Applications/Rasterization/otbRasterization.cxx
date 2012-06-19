@@ -18,13 +18,11 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbVectorDataExtractROI.h"
-#include "otbVectorDataProjectionFilter.h"
-#include "otbVectorDataProperties.h"
-#include "otbVectorDataToMapFilter.h"
 #include "otbGeoInformationConversion.h"
-#include "otbRemoteSensingRegion.h"
 
+#include "otbOGRDataSourceWrapper.h"
+#include "otbOGRDataSourceToLabelImageFilter.h"
+// #include "otbGenericRSTransform.h"
 
 namespace otb
 {
@@ -47,22 +45,17 @@ public:
 
   /** Filters typedef */
   // the application produces a binary mask : no need to use a FloatVectorImageType
-  typedef UInt8ImageType::PointType   PointType;
-  typedef UInt8ImageType::SizeType    SizeType;
-  typedef UInt8ImageType::SpacingType SpacingType;
-  typedef UInt8ImageType::IndexType   IndexType;
+  typedef UInt8ImageType::PointType          PointType;
+  typedef UInt8ImageType::SizeType           SizeType;
+  typedef UInt8ImageType::SpacingType        SpacingType;
+  typedef UInt8ImageType::IndexType          IndexType;
   
-  typedef VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataProjectionFilterType;
-  typedef VectorDataExtractROI<VectorDataType> VectorDataExtractROIType;
-  typedef VectorDataProperties<VectorDataType> VectorDataPropertiesType;
-
-  // Rasterization
-  typedef otb::VectorDataToMapFilter<VectorDataType, UInt8ImageType> VectorDataToMapFilterType;
-
   // Misc
-  typedef otb::RemoteSensingRegion<double> RemoteSensingRegionType;
-  typedef RemoteSensingRegionType::SizeType SizePhyType;
+  // typedef otb::GenericRSTransform<>          RSTransformType;
   typedef otb::PipelineMemoryPrintCalculator MemoryCalculatorType;
+
+  // Exact rasterization mode
+  typedef otb::OGRDataSourceToLabelImageFilter<FloatImageType> OGRDataSourceToMapFilterType;
 
 private:
   void DoInit()
@@ -78,7 +71,7 @@ private:
    
     AddDocTag(Tags::Vector);
 
-    AddParameter(ParameterType_InputVectorData,  "in",   "InputVectorData");
+    AddParameter(ParameterType_InputFilename,  "in",   "InputVectorData");
     SetParameterDescription( "in", "The input vector data to be rasterized" );
     
     AddParameter(ParameterType_OutputImage,  "out",   "OutputImage");
@@ -90,11 +83,11 @@ private:
     
     AddParameter(ParameterType_Float,  "szx",   "SizeX");
     SetParameterDescription( "szx", "OutputSize[0] (useless if support image is given)" );
-    MandatoryOff("szx");
+    //MandatoryOff("szx");
     
     AddParameter(ParameterType_Float,  "szy",   "SizeY");
     SetParameterDescription( "szy", "OutputSize[1] (useless if support image is given)" );
-    MandatoryOff("szy");
+    //MandatoryOff("szy");
     
     AddParameter(ParameterType_Int,  "epsg",   "RSID");
     SetParameterDescription( "epsg", "Projection System RSID number (RSID 4326 for WGS84 32631 for UTM31N)  (useless if support image is given)" );
@@ -102,11 +95,11 @@ private:
     
     AddParameter(ParameterType_Float,  "orx",   "OriginX");
     SetParameterDescription( "orx", "OutputOrigin[0] (useless if support image is given)" );
-    MandatoryOff("orx");
+    //MandatoryOff("orx");
     
     AddParameter(ParameterType_Float,  "ory",   "OriginY");
     SetParameterDescription( "ory", "OutputOrigin[1] (useless if support image is given)" );
-    MandatoryOff("ory");
+    //MandatoryOff("ory");
     
     AddParameter(ParameterType_Float,  "spx",   "SpacingX");
     SetParameterDescription( "spx", "OutputSpacing[0] (useless if support image is given)" );
@@ -116,6 +109,13 @@ private:
     SetParameterDescription( "spy", "OutputSpacing[1] (useless if support image is given)" );
     MandatoryOff("spy");
     
+    AddParameter(ParameterType_Choice,"mode","Rasterization mode");
+    SetParameterDescription("mode","This parameter allows to choose between rasterization modes");
+    
+    AddParameter(ParameterType_String,"field","The attribute field to burn");
+    SetParameterDescription("field","Name of the attribute field to burn");
+    SetParameterString("field","DN");
+
     AddRAMParameter();
     
     SetDocExampleParameterValue("in","qb_RoadExtract_classification.shp");
@@ -132,17 +132,15 @@ private:
   
   
   void DoExecute()
-    {
-    VectorDataType::Pointer inputVData = GetParameterVectorData("in");
-    inputVData->Update();
-    
+    {    
     UInt8ImageType::Pointer referenceImage;
-    
+
+    m_OgrDS = otb::ogr::DataSource::New(GetParameterString("inputVData"), otb::ogr::DataSource::Modes::read);
+
     // region information
     SizeType size;
     PointType origin;
     SpacingType spacing;
-    SizePhyType sizePhy;
   
     // reading projection information
     // two choice :
@@ -166,9 +164,6 @@ private:
       origin = referenceImage->GetOrigin();
   
       spacing = referenceImage->GetSpacing();
-  
-      sizePhy[0] = size[0] * spacing[0];
-      sizePhy[1] = size[1] * spacing[1];
       }
     else if (HasValue("szx") && HasValue("szy"))
       {
@@ -179,12 +174,8 @@ private:
         }
       else
         {
-        outputProjectionRef = inputVData->GetProjectionRef();
+        outputProjectionRef = m_OgrDS->GetProjectionRef();
         }
-
-      m_VdProperties = VectorDataPropertiesType::New();
-      m_VdProperties->SetVectorDataObject(inputVData);
-      m_VdProperties->ComputeBoundingRegion();
 
       size[0] = GetParameterFloat("szx");
       size[1] = GetParameterFloat("szy");
@@ -196,7 +187,7 @@ private:
         }
       else
         {
-        origin = m_VdProperties->GetBoundingRegion().GetIndex();
+        // Not handled for now, parameter is mandatory
         }
 
       if (HasValue("spx") && HasValue("spy"))
@@ -206,66 +197,28 @@ private:
         }
       else
         {
-        spacing[0] = m_VdProperties->GetBoundingRegion().GetSize()[0] / size[0];
-        spacing[1] = m_VdProperties->GetBoundingRegion().GetSize()[1] / size[1];
+        // Not handled for now, parameter is mandatory
         }
-
-      sizePhy[0] = size[0] * spacing[0];
-      sizePhy[1] = size[1] * spacing[1];
-
       }
     else
       {
       otbAppLogFATAL("Input entry problem, if no reference image given, region size is needed ");
       }
   
-    // Reprojecting the VectorData
-    m_Vproj = VectorDataProjectionFilterType::New();
-    m_Vproj->SetInput(inputVData);
-    m_Vproj->SetInputProjectionRef(inputVData->GetProjectionRef());
-    m_Vproj->SetOutputProjectionRef(outputProjectionRef);
-    if (HasValue("im"))
-      {
-      m_Vproj->SetOutputKeywordList(referenceImage->GetImageKeywordlist());
-      }
-  
-    RemoteSensingRegionType region;
-    region.SetSize(sizePhy);
-    region.SetOrigin(origin);
-    region.SetRegionProjection(outputProjectionRef);
-    if (HasValue("im"))
-      {
-      region.SetKeywordList(referenceImage->GetImageKeywordlist());
-      }
-    
-    m_Vdextract = VectorDataExtractROIType::New();
-    m_Vdextract->SetRegion(region);
-    m_Vdextract->SetInput(m_Vproj->GetOutput());
-    
-    m_VectorDataRendering = VectorDataToMapFilterType::New();
-    m_VectorDataRendering->SetInput(m_Vdextract->GetOutput());
-    m_VectorDataRendering->SetSize(size);
-    m_VectorDataRendering->SetOrigin(origin);
-    m_VectorDataRendering->SetSpacing(spacing);
-    m_VectorDataRendering->SetVectorDataProjectionWKT(outputProjectionRef);
-    m_VectorDataRendering->SetRenderingStyleType(VectorDataToMapFilterType::Binary);
-  
-    UInt8ImageType::Pointer outputImage = m_VectorDataRendering->GetOutput();
-    if (HasValue("im"))
-      {
-      outputImage->SetMetaDataDictionary(referenceImage->GetMetaDataDictionary());
-      }
-    
-    AddProcess(m_VectorDataRendering,"Rasterization");
-    
-    SetParameterOutputImage<UInt8ImageType>("out", outputImage);
+      m_OGRDataSourceRendering = OGRDataSourceToMapFilterType::New();
+      m_OGRDataSourceRendering->AddOGRDataSource(m_OgrDS);
+      m_OGRDataSourceRendering->SetBurnAttribute(GetParameterString("field"));
+      m_OGRDataSourceRendering->SetOutputSize(size);
+      m_OGRDataSourceRendering->SetOutputOrigin(origin);
+      m_OGRDataSourceRendering->SetOutputSpacing(spacing);
+      m_OGRDataSourceRendering->SetOutputProjectionRef(outputProjectionRef);
+      
+      SetParameterOutputImage<FloatImageType>("out", m_OGRDataSourceRendering->GetOutput());
     
     }
   
-  VectorDataPropertiesType::Pointer m_VdProperties;
-  VectorDataProjectionFilterType::Pointer m_Vproj;
-  VectorDataExtractROIType::Pointer m_Vdextract;
-  VectorDataToMapFilterType::Pointer m_VectorDataRendering;
+  otb::ogr::DataSource::Pointer m_OgrDS;
+  OGRDataSourceToMapFilterType::Pointer m_OGRDataSourceRendering;
   
 };
 
