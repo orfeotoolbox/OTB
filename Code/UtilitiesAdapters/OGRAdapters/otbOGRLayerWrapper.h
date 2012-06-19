@@ -283,6 +283,11 @@ public:
    */
   OGRSpatialReference const* GetSpatialRef() const;
 
+  /** Returns the projection ref associated with the layer
+   * \return The projection ref (wkt string) associated with the layer
+   */
+  std::string GetProjectionRef() const;
+
   /**\name Iteration */
   //@{
   /**\ingroup gGeometry

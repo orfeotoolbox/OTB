@@ -229,6 +229,26 @@ OGRSpatialReference const* otb::ogr::Layer::GetSpatialRef() const
   return m_Layer->GetSpatialRef();
 }
 
+std::string otb::ogr::Layer::GetProjectionRef() const
+{
+  char * wkt;
+  
+  const OGRErr res = m_Layer->GetSpatialRef()->exportToWkt(&wkt);
+
+  if(res !=  OGRERR_NONE)
+    {
+    itkGenericExceptionMacro(<< "Cannot convert spatial reference to wkt string for layer <"
+                              <<m_Layer->GetName()<<">: " << CPLGetLastErrorMsg());
+    }
+
+  std::string stringWkt(wkt);
+
+  // According to documentation, argument of exportToWkt() should be freed
+  OGRFree(wkt);
+
+  return stringWkt;
+}
+
 /*===========================================================================*/
 /*==========================[ Feature Definition ]===========================*/
 /*===========================================================================*/
