@@ -33,13 +33,20 @@ namespace otb {
  *  \brief Burn geometries from the specified VectorData into raster
  *
  *  This class handles burning several input \c OGRDataSource into the
- *  output raster.  The burn values are extracted from a field set by
- *  the user (default field is DN).
+ *  output raster.  It has two different modes:
+ *  - either the burn values are extracted from a field set by
+ *    the user (default field is DN). This is the default behaviour,
+ *  - or the burn values are made of foreground (when inside
+ *    geometries) and background (outside geometries) values, which can
+ *    be set by the user. One can set this behaviour by disable the
+ *    BurnAttributeMode using the BurnAttributeModeOff() method.
+ *
+ *  Please note that the background value is also used in
+ *  BurnAttributeModeOn() to fill areas where there are no geometries.
  *
  *  Setting the output raster informations can be done in two ways by:
  *    - Setting the Origin/Size/Spacing of the output image
  *    - Using an existing image as support via SetOutputParametersFromImage(ImageBase)
- *
  *
  */
 template < class TOutputImage >
@@ -112,6 +119,19 @@ public:
   itkSetStringMacro(BurnAttribute);
   itkGetStringMacro(BurnAttribute);
 
+  /** Set/Get the background value */
+  itkSetMacro(BackgroundValue,OutputImageInternalPixelType);
+  itkGetConstReferenceMacro(BackgroundValue,OutputImageInternalPixelType);
+
+  /** Set/Get the foreground value */
+  itkSetMacro(ForegroundValue,OutputImageInternalPixelType);
+  itkGetConstReferenceMacro(ForegroundValue,OutputImageInternalPixelType);
+
+  /** Set/Get the BurnAttributeMode flag */
+  itkSetMacro(BurnAttributeMode,bool);
+  itkGetConstReferenceMacro(BurnAttributeMode,bool);
+  itkBooleanMacro(BurnAttributeMode);
+
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
@@ -140,7 +160,10 @@ private:
   OutputSpacingType             m_OutputSpacing;
   OutputOriginType              m_OutputOrigin;
   OutputSizeType                m_OutputSize;
-  OutputIndexType               m_OutputStartIndex;
+  OutputIndexType               m_OutputStartIndex;  
+  OutputImageInternalPixelType  m_BackgroundValue;
+  OutputImageInternalPixelType  m_ForegroundValue;
+  bool                          m_BurnAttributeMode;
 }; // end of class VectorDataToLabelImageFilter
 
 } // end of namespace otb

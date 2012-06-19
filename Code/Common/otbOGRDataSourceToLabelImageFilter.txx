@@ -27,7 +27,10 @@ namespace otb
 {
 template< class TOutputImage>
 OGRDataSourceToLabelImageFilter<TOutputImage>
-::OGRDataSourceToLabelImageFilter() : m_BurnAttribute("DN")
+::OGRDataSourceToLabelImageFilter() : m_BurnAttribute("DN"), 
+                                      m_BackgroundValue(0), 
+                                      m_ForegroundValue(255),
+                                      m_BurnAttributeMode(true)
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -195,6 +198,13 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
   // Add the projection ref to the dataset
   GDALSetProjection (dataset, this->GetOutput()->GetProjectionRef().c_str());
 
+  // Set the nodata value
+  for(unsigned int band = 0; band < nbBands;++band)
+    {
+     GDALRasterBandH hBand = GDALGetRasterBand(dataset, band + 1);
+     GDALFillRaster(hBand, m_BackgroundValue, 0);
+    }
+  
   // add the geoTransform to the dataset
   itk::VariableLengthVector<double> geoTransform(6);
 
@@ -217,13 +227,19 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
    if (dataset != NULL)
      {
      std::vector<std::string> options;
-     options.push_back("ATTRIBUTE="+m_BurnAttribute);
+     
+     std::vector<double> foreground(nbBands,m_ForegroundValue);
+
+     if(m_BurnAttributeMode)
+       {
+       options.push_back("ATTRIBUTE="+m_BurnAttribute);
+       }
 
      GDALRasterizeLayers( dataset, nbBands,
                           &m_BandsToBurn[0],
                           m_SrcDataSetLayers.size(),
                           &(m_SrcDataSetLayers[0]),
-                          NULL, NULL, NULL,
+                          NULL, NULL, &foreground[0],
                           ogr::StringListConverter(options).to_ogr(),
                           NULL, NULL );
      // release the dataset
