@@ -74,7 +74,7 @@ ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
       itkGenericExceptionMacro(<< "Cannot reproject a geometry: " << CPLGetLastErrorMsg());
       }
     }
-  return boost::move(out);
+  return otb::move(out);
 }
 
 /*===========================================================================*/

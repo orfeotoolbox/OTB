@@ -42,7 +42,7 @@ struct SwapXYFunctor
       assert(!"Sorry, This example filter requires GDAL v1.9.0 or later");
 #endif
       }
-    return boost::move(out);
+    return otb::move(out);
     }
 };
 

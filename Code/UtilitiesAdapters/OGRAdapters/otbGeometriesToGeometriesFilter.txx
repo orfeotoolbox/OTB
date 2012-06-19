@@ -88,7 +88,7 @@ void otb::TransformationFunctorDispatcher<TransformationFunctor,OGRGeometry>::op
     // TODO: field transformations...
     ogr::UniqueGeometryPtr g = m_functor(feat.GetGeometry());
     ogr::Feature dest(defn);
-    dest.SetGeometryDirectly(boost::move(g));
+    dest.SetGeometryDirectly(otb::move(g));
     out.CreateFeature(dest);
     }
 }
@@ -107,7 +107,7 @@ void otb::TransformationFunctorDispatcher<TransformationFunctor,OGRGeometry>::op
     ogr::Feature feat = *inout.start_at(i);
     // TODO: field transformations...
     ogr::UniqueGeometryPtr g = m_functor(feat.GetGeometry());
-    feat.SetGeometryDirectly(boost::move(g));
+    feat.SetGeometryDirectly(otb::move(g));
     inout.SetFeature(feat);
     }
 }

@@ -53,7 +53,7 @@ otb::ReprojectTransformationFunctor::ByCopy::operator()(TGeometry const* in) con
   if (out)
     m_Reprojector.do_transform(*out);
   ogr::UniqueGeometryPtr res(out.release());
-  return boost::move(res);
+  return otb::move(res);
 }
 
 template <typename TGeometry>
@@ -165,7 +165,7 @@ otb::ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
 {
   otb::ogr::UniqueGeometryPtr res
     = ogr::apply<otb::ogr::UniqueGeometryPtr>(in, ByCopy(*this));
-  return boost::move(res);
+  return otb::move(res);
 }
 
 void otb::ReprojectTransformationFunctor::apply_inplace(OGRGeometry * inout) const
