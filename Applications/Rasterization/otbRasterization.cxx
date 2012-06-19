@@ -22,7 +22,7 @@
 
 #include "otbOGRDataSourceWrapper.h"
 #include "otbOGRDataSourceToLabelImageFilter.h"
-// #include "otbGenericRSTransform.h"
+#include "otbGenericRSTransform.h"
 
 namespace otb
 {
@@ -51,7 +51,7 @@ public:
   typedef UInt8ImageType::IndexType          IndexType;
   
   // Misc
-  // typedef otb::GenericRSTransform<>          RSTransformType;
+  typedef otb::GenericRSTransform<>          RSTransformType;
   typedef otb::PipelineMemoryPrintCalculator MemoryCalculatorType;
 
   // Exact rasterization mode
@@ -109,10 +109,27 @@ private:
     SetParameterDescription( "spy", "OutputSpacing[1] (useless if support image is given)" );
     MandatoryOff("spy");
         
-    AddParameter(ParameterType_String,"field","The attribute field to burn");
-    SetParameterDescription("field","Name of the attribute field to burn");
-    SetParameterString("field","DN");
+    AddParameter(ParameterType_Float,"background", "Background value");
+    SetParameterDescription("background","Default value for pixels which do not belong to any geometry");
+    SetDefaultParameterFloat("background",0.);
 
+    AddParameter(ParameterType_Choice,"mode","Rasterization mode");
+    SetParameterDescription("mode","This parameter allows to choose between rasterization modes");
+    
+    AddChoice("mode.binary","Binary mode");
+    SetParameterDescription("mode.attribute","In this mode, pixels within a geometry will hold the user-defined foreground value");
+
+    AddParameter(ParameterType_Float,"mode.binary.foreground","Foreground value");
+    SetParameterDescription("mode.binary.foreground","Value of the pixels inside a geometry");
+    SetDefaultParameterFloat("mode.binary.foreground",255);
+    
+    AddChoice("mode.attribute","Attribute burning mode");
+    SetParameterDescription("mode.attribute","In this mode, pixels within a geometry will hold the value of a user-defined field extracted from this geometry.");
+
+    AddParameter(ParameterType_String,"mode.attribute.field","The attribute field to burn");
+    SetParameterDescription("mode.attribute.field","Name of the attribute field to burn");
+    SetParameterString("mode.attribute.field","DN");
+    
     AddRAMParameter();
     
     SetDocExampleParameterValue("in","qb_RoadExtract_classification.shp");
@@ -133,6 +150,39 @@ private:
     UInt8ImageType::Pointer referenceImage;
 
     m_OgrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::read);
+
+    // Retrieve extent
+    double ulx, uly, lrx, lry;
+    bool extentAvailable = true;
+
+    try
+      {
+      m_OgrDS->GetGlobalExtent(ulx,uly,lrx,lry);
+      }
+    catch(itk::ExceptionObject & err)
+      {
+      extentAvailable = false;
+      }
+
+    if(!extentAvailable && 
+       (!(HasValue("spx") && HasValue("spy")) 
+        || (!(HasValue("orx") && HasValue("ory")))))
+      {
+      otbAppLogWARNING(<<"Failed to retrieve the spatial extent of the dataset. The application will retry in force mode,  which means it might have to walk the entire dataset to determine extent. This might be a long process for large datasets. Consider setting the orx, ory, spx and spy parameters.");
+
+      try
+        {
+        m_OgrDS->GetGlobalExtent(ulx,uly,lrx,lry);
+        extentAvailable = true;
+        }
+      catch(itk::ExceptionObject & err)
+        {
+        extentAvailable = false;
+
+        otbAppLogFATAL(<<"Failed to retrieve the sapatial extent of the dataset in force mode. The spatial extent is mandatory when orx, ory, spx and spy parameters are not set, consider setting them.");
+        }
+      }
+
 
     // region information
     SizeType size;
@@ -182,6 +232,19 @@ private:
         origin[0] = GetParameterFloat("orx");
         origin[1] = GetParameterFloat("ory");
         }
+      else if(extentAvailable)
+        {
+        origin[0] = ulx;
+        origin[1] = uly;
+        
+        // Transform to output EPSG
+        RSTransformType::Pointer rsTransform = RSTransformType::New();
+        rsTransform->SetInputProjectionRef(m_OgrDS->GetProjectionRef());
+        rsTransform->SetOutputProjectionRef(outputProjectionRef);
+        rsTransform->InstanciateTransform();
+
+        origin = rsTransform->TransformPoint(origin);
+        }
       else
         {
         // Not handled for now, parameter is mandatory
@@ -191,6 +254,23 @@ private:
         {
         spacing[0] = GetParameterFloat("spx");
         spacing[1] = GetParameterFloat("spy");
+        }
+      else if(extentAvailable)
+        {
+        // Transform to output EPSG
+        PointType lrout;
+        lrout[0] = lrx;
+        lrout[1] = lry;
+
+        RSTransformType::Pointer rsTransform = RSTransformType::New();
+        rsTransform->SetInputProjectionRef(m_OgrDS->GetProjectionRef());
+        rsTransform->SetOutputProjectionRef(outputProjectionRef);
+        rsTransform->InstanciateTransform();
+
+        lrout = rsTransform->TransformPoint(lrout);
+
+        spacing[0] = (origin[0] - lrout[0])/size[0];
+        spacing[1] = (origin[1] - lrout[1])/size[1];
         }
       else
         {
@@ -208,6 +288,19 @@ private:
       m_OGRDataSourceRendering->SetOutputSize(size);
       m_OGRDataSourceRendering->SetOutputOrigin(origin);
       m_OGRDataSourceRendering->SetOutputSpacing(spacing);
+      m_OGRDataSourceRendering->SetBackgroundValue(GetParameterFloat("background"));
+      
+      if(GetParameterString("mode") == "binary")
+        {
+        m_OGRDataSourceRendering->SetBurnAttributeMode(false);
+        m_OGRDataSourceRendering->SetForegroundValue(GetParameterFloat("mode.binary.foreground"));
+        }
+      else if(GetParameterString("mode") == "attribute")
+        {
+        m_OGRDataSourceRendering->SetBurnAttributeMode(true);
+        m_OGRDataSourceRendering->SetBurnAttribute(GetParameterString("mode.attribute.field"));
+        }
+
       m_OGRDataSourceRendering->SetOutputProjectionRef(outputProjectionRef);
       
       SetParameterOutputImage<FloatImageType>("out", m_OGRDataSourceRendering->GetOutput());
