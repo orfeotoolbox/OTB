@@ -131,7 +131,7 @@ private:
     SetDocLongDescription("This application allows to performs block-matching to estimate pixel-wise disparities "
       "between two images. The application allows to choose the block-matching method to use. It also allows to input"
       " masks (related to the left and right input image) of pixels for which the disparity should be investigated. "
-      "Additionnaly, two criterions can be optionnaly used to disable disparity investigation for some pixel: a "
+      "Additionally, two criteria can be optionally used to disable disparity investigation for some pixel: a "
       "no-data value, and a threshold on the local variance. This allows to speed-up computation by avoiding to "
       "investigate disparities that will not be reliable anyway. For efficiency reasons, if the optimal metric values"
       " image is desired, it will be concatenated to the output image (which will then have three bands : horizontal "
