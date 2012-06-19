@@ -1223,7 +1223,7 @@ ADD_TEST(coTvOGRDataSourceToLabelImageFilterSHP ${COMMON_TESTS14}
 
 ADD_TEST(bfTvOGRDataSourceToLabelImageFilterSHPForegroundMode ${COMMON_TESTS14}
   --compare-image 0.0
-  ${INPUTDATA}/bfTvOGRDataSourceToLabelImageFilter_Output_ForegroundMode.tif
+  ${BASELINE}/bfTvOGRDataSourceToLabelImageFilter_Output_ForegroundMode.tif
   ${TEMP}/bfTvOGRDataSourceToLabelImageFilter_Output_ForegroundMode.tif
   otbOGRDataSourceToLabelImageFilter
   ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
