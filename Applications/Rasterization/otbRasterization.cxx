@@ -83,11 +83,11 @@ private:
     
     AddParameter(ParameterType_Float,  "szx",   "SizeX");
     SetParameterDescription( "szx", "OutputSize[0] (useless if support image is given)" );
-    //MandatoryOff("szx");
+    MandatoryOff("szx");
     
     AddParameter(ParameterType_Float,  "szy",   "SizeY");
     SetParameterDescription( "szy", "OutputSize[1] (useless if support image is given)" );
-    //MandatoryOff("szy");
+    MandatoryOff("szy");
     
     AddParameter(ParameterType_Int,  "epsg",   "RSID");
     SetParameterDescription( "epsg", "Projection System RSID number (RSID 4326 for WGS84 32631 for UTM31N)  (useless if support image is given)" );
@@ -95,11 +95,11 @@ private:
     
     AddParameter(ParameterType_Float,  "orx",   "OriginX");
     SetParameterDescription( "orx", "OutputOrigin[0] (useless if support image is given)" );
-    //MandatoryOff("orx");
+    MandatoryOff("orx");
     
     AddParameter(ParameterType_Float,  "ory",   "OriginY");
     SetParameterDescription( "ory", "OutputOrigin[1] (useless if support image is given)" );
-    //MandatoryOff("ory");
+    MandatoryOff("ory");
     
     AddParameter(ParameterType_Float,  "spx",   "SpacingX");
     SetParameterDescription( "spx", "OutputSpacing[0] (useless if support image is given)" );
@@ -108,10 +108,7 @@ private:
     AddParameter(ParameterType_Float,  "spy",   "SpacingY");
     SetParameterDescription( "spy", "OutputSpacing[1] (useless if support image is given)" );
     MandatoryOff("spy");
-    
-    AddParameter(ParameterType_Choice,"mode","Rasterization mode");
-    SetParameterDescription("mode","This parameter allows to choose between rasterization modes");
-    
+        
     AddParameter(ParameterType_String,"field","The attribute field to burn");
     SetParameterDescription("field","Name of the attribute field to burn");
     SetParameterString("field","DN");
@@ -135,7 +132,7 @@ private:
     {    
     UInt8ImageType::Pointer referenceImage;
 
-    m_OgrDS = otb::ogr::DataSource::New(GetParameterString("inputVData"), otb::ogr::DataSource::Modes::read);
+    m_OgrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::read);
 
     // region information
     SizeType size;
