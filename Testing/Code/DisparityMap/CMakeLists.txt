@@ -5,6 +5,8 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(DISPARITYMAP_TESTS1 ${CXX_TEST_PATH}/otbDisparityMapTests1)
 SET(DISPARITYMAP_TESTS2 ${CXX_TEST_PATH}/otbDisparityMapTests2)
 SET(DISPARITYMAP_TESTS3 ${CXX_TEST_PATH}/otbDisparityMapTests3)
+SET(DISPARITYMAP_TESTS4 ${CXX_TEST_PATH}/otbDisparityMapTests4)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -283,6 +285,10 @@ ADD_TEST(dmTvSinusoidDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
           15 10 10 250 0.95 4 25
 )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # ------- otb::StreamingWarpImageFilter  ----------
 
 
@@ -467,8 +473,18 @@ ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------            otb::AdhesionCorrectionFilter   ----------
+
+ADD_TEST(dmTuAdhesionCorrectionFilterNew ${DISPARITYMAP_TESTS4}
+         otbAdhesionCorrectionFilterNew)
+
+ADD_TEST(dmTuDisparityMapMedianFilterNew ${DISPARITYMAP_TESTS4}
+         otbDisparityMapMedianFilterNew)
+
+ADD_TEST(dmTuSubPixelDisparityImageFilterrNew ${DISPARITYMAP_TESTS4}
+         otbSubPixelDisparityImageFilterNew)
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -510,8 +526,17 @@ otbStereorectificationDeformationFieldSource.cxx
 otbPixelWiseBlockMatchingImageFilter.cxx
 )
 
+SET(BasicDisparityMap_SRCS4
+otbDisparityMapTests4.cxx
+otbAdhesionCorrectionFilter.cxx
+otbDisparityMapMedianFilter.cxx
+otbSubPixelDisparityImageFilter.cxx
+)
+
 OTB_ADD_EXECUTABLE(otbDisparityMapTests1 "${BasicDisparityMap_SRCS1}" "OTBDisparityMap;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbDisparityMapTests2 "${BasicDisparityMap_SRCS2}" "OTBDisparityMap;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbDisparityMapTests3 "${BasicDisparityMap_SRCS3}" "OTBDisparityMap;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbDisparityMapTests4 "${BasicDisparityMap_SRCS4}" "OTBDisparityMap;OTBIO;OTBTesting")
+
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
