@@ -147,7 +147,7 @@ private:
   
   
   void DoExecute()
-    {    
+    {
     UInt8ImageType::Pointer referenceImage;
 
     m_OgrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::read);
@@ -164,7 +164,7 @@ private:
     std::string inputProjectionRef = lit->GetProjectionRef();
 
     // Check if we have layers with different projection ref
-    for(;lit != m_OgrDS->end();++lit)
+    for(; lit != m_OgrDS->end(); ++lit)
       {
       if(lit->GetProjectionRef() != inputProjectionRef)
         {
@@ -195,8 +195,8 @@ private:
       extentAvailable = false;
       }
 
-    if(!extentAvailable && 
-       (!(HasValue("spx") && HasValue("spy")) 
+    if(!extentAvailable &&
+       (!(HasValue("spx") && HasValue("spy"))
         || (!(HasValue("orx") && HasValue("ory")))))
       {
       otbAppLogWARNING(<<"Failed to retrieve the spatial extent of the dataset. The application will retry in force mode,  which means it might have to walk the entire dataset to determine extent. This might be a long process for large datasets. Consider setting the orx, ory, spx and spy parameters.");

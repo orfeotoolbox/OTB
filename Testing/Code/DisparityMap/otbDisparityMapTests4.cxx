@@ -31,5 +31,5 @@ void RegisterTests()
   REGISTER_TEST(otbPixelWiseBlockMatchingImageFilter);
   REGISTER_TEST(otbPixelWiseBlockMatchingImageFilterNCC);
   REGISTER_TEST(otbSubPixelDisparityImageFilter);
-  REGISTER_TEST(otbSubPixelDisparityImageFilterNew);              
+  REGISTER_TEST(otbSubPixelDisparityImageFilterNew);
 }

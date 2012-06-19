@@ -27,8 +27,8 @@ namespace otb
 {
 template< class TOutputImage>
 OGRDataSourceToLabelImageFilter<TOutputImage>
-::OGRDataSourceToLabelImageFilter() : m_BurnAttribute("DN"), 
-                                      m_BackgroundValue(0), 
+::OGRDataSourceToLabelImageFilter() : m_BurnAttribute("DN"),
+                                      m_BackgroundValue(0),
                                       m_ForegroundValue(255),
                                       m_BurnAttributeMode(true)
 {
@@ -199,7 +199,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
   GDALSetProjection (dataset, this->GetOutput()->GetProjectionRef().c_str());
 
   // Set the nodata value
-  for(unsigned int band = 0; band < nbBands;++band)
+  for(unsigned int band = 0; band < nbBands; ++band)
     {
      GDALRasterBandH hBand = GDALGetRasterBand(dataset, band + 1);
      GDALFillRaster(hBand, m_BackgroundValue, 0);

@@ -160,7 +160,7 @@ private:
   OutputSpacingType             m_OutputSpacing;
   OutputOriginType              m_OutputOrigin;
   OutputSizeType                m_OutputSize;
-  OutputIndexType               m_OutputStartIndex;  
+  OutputIndexType               m_OutputStartIndex;
   OutputImageInternalPixelType  m_BackgroundValue;
   OutputImageInternalPixelType  m_ForegroundValue;
   bool                          m_BurnAttributeMode;

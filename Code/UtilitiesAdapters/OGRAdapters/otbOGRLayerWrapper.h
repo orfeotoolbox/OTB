@@ -202,7 +202,7 @@ public:
    *  available. May force the driver to walk all geometries to
    *  compute the extent.
    *  \throw itk::ExceptionObject if the extent can not be retrieved.
-  */ 
+  */
   void GetExtent(double & ulx, double & uly, double & lrx, double & lry, bool force = false) const;
 
   /** Prints self into stream. */

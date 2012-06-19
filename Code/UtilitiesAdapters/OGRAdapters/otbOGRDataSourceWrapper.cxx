@@ -402,17 +402,17 @@ int otb::ogr::DataSource::Size(bool doForceComputation) const
 /*=================================[ Misc ]==================================*/
 /*===========================================================================*/
 
-void otb::ogr::DataSource::GetGlobalExtent(double & ulx, 
-                                           double & uly, 
-                                           double & lrx, 
-                                           double & lry, 
+void otb::ogr::DataSource::GetGlobalExtent(double & ulx,
+                                           double & uly,
+                                           double & lrx,
+                                           double & lry,
                                            bool force) const
 {
   OGREnvelope sExtent;
   const_iterator lit = this->begin();
   
   if(lit==this->end())
-    { 
+    {
     itkGenericExceptionMacro(<< "Cannot compute global extent because there are no layers in the DataSource");
     }
 
@@ -427,7 +427,7 @@ void otb::ogr::DataSource::GetGlobalExtent(double & ulx,
   
   ++lit;
 
-  for(; lit!=this->end();++lit)
+  for(; lit!=this->end(); ++lit)
     {
      OGREnvelope cExtent;
      

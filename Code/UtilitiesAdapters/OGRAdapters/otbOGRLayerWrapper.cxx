@@ -171,7 +171,7 @@ void otb::ogr::Layer::GetExtent(double& ulx, double& uly, double& lrx, double& l
   ulx = sExtent.MinX;
   uly = sExtent.MinY;
   lrx = sExtent.MaxX;
-  lry = sExtent.MaxY;  
+  lry = sExtent.MaxY;
 }
 
 OGRLayer & otb::ogr::Layer::ogr()

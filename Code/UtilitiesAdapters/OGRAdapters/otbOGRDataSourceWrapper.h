@@ -225,7 +225,7 @@ public:
    *  available. May force the driver to walk all geometries to
    *  compute the extent.
    *  \throw itk::ExceptionObject if the layers extents can not be retrieved.
-   */ 
+   */
   void GetGlobalExtent(double & ulx, double & uly, double & lrx, double & lry, bool force = false) const;
 
 
