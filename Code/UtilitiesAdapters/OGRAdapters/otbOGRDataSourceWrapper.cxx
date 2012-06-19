@@ -411,7 +411,13 @@ void otb::ogr::DataSource::GetGlobalExtent(double & ulx,
   OGREnvelope sExtent;
   const_iterator lit = this->begin();
   
-  const OGRErr res = lit->ogr().GetExtent(&sExtent,force);
+  if(lit==this->end())
+    { 
+    itkGenericExceptionMacro(<< "Cannot compute global extent because there are no layers in the DataSource");
+    }
+
+    const OGRErr res = lit->ogr().GetExtent(&sExtent,force);
+
 
   if(res!= OGRERR_NONE)
     {
