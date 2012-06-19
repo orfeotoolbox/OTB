@@ -189,6 +189,22 @@ public:
   */
   std::string GetName() const;
 
+  /** Allow to retrieve the extent of the layer
+   *  \param[out] ulx reference to upper-left x coordinate of the
+   *  extent
+   *  \param[out] uly reference to upper-left y coordinate of the
+   *  extent
+   *  \param[out] lrx reference to lower-right x coordinate of the
+   *  extent
+   *  \param[out] uly reference to lower-right y coordinate of the
+   *  extent
+   *  \param[in] force Force computation of the extent if not
+   *  available. May force the driver to walk all geometries to
+   *  compute the extent.
+   *  \throw itk::ExceptionObject if the extent can not be retrieved.
+  */ 
+  void GetExtent(double & ulx, double & uly, double & lrx, double & lry, bool force = false) const;
+
   /** Prints self into stream. */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

@@ -158,6 +158,22 @@ std::string otb::ogr::Layer::GetName() const
 #endif
 }
 
+void otb::ogr::Layer::GetExtent(double& ulx, double& uly, double& lrx, double& lry, bool force) const
+{
+  OGREnvelope sExtent;
+  const OGRErr res = m_Layer->GetExtent(&sExtent,force);
+  if(res != OGRERR_NONE)
+    {
+     itkGenericExceptionMacro(<< "Cannot retrieve extent of layer <"
+                              <<GetName()<<">: " << CPLGetLastErrorMsg());
+    }
+
+  ulx = sExtent.MinX;
+  uly = sExtent.MinY;
+  lrx = sExtent.MaxX;
+  lry = sExtent.MaxY;  
+}
+
 OGRLayer & otb::ogr::Layer::ogr()
 {
   assert(m_Layer && "OGRLayer not initialized");
