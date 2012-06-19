@@ -61,68 +61,68 @@ private:
   void DoInit()
     {
     SetName("Rasterization");
-    SetDescription("Reproject and Rasterize a Vector Data.");
+    SetDescription("Rasterize a vector dataset.");
 
     SetDocName("Rasterization");
-    SetDocLongDescription("Reproject and Rasterize a Vector Data according to a support image if any, or following the output image propreties set by the user. The application generates an output image in a binary style");
+    SetDocLongDescription("This application allows to reproject and rasterize a vector dataset. The grid of the rasterized output can be set by using a reference image, or by setting all parmeters (origin, size, spacing) by hand. In the latter case, at least the spacing (ground sampling distance) is needed (other parameters are computed automatically). The rasterized output can also be in a different projection reference system than the input dataset.\n There are two rasterize mode available in the application. The first is the binary mode: it allows to render all pixels belonging to a geometry of the input dataset in the foreground color, while rendering the other in background color. The second one allows to render pixels belonging to a geometry woth respect to an attribute of this geometry. The field of the attribute to render can be set by the user. In the second mode, the background value is still used for unassociated pixels.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("For now, support of input dataset with multiple layers having different projection reference system is limited.");
    
     AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_InputFilename,  "in",   "InputVectorData");
-    SetParameterDescription( "in", "The input vector data to be rasterized" );
+    SetParameterDescription( "in", "The input vector dataset to be rasterized" );
     
     AddParameter(ParameterType_OutputImage,  "out",   "OutputImage");
-    SetParameterDescription( "out", "An output image containing the rasterized vector data" );
+    SetParameterDescription( "out", "An output image containing the rasterized vector dataset" );
     
     AddParameter(ParameterType_InputImage,  "im",   "InputImage");
-    SetParameterDescription( "im", "A reference image for extraction region and projection information (optional)" );
+    SetParameterDescription( "im", "A reference image from which to import output grid and projection reference system information." );
     MandatoryOff("im");
     
-    AddParameter(ParameterType_Int,  "szx",   "SizeX");
-    SetParameterDescription( "szx", "OutputSize[0] (useless if support image is given)" );
+    AddParameter(ParameterType_Int,  "szx",   "Output size x");
+    SetParameterDescription( "szx", "Output size along x axis (useless if support image is given)" );
     MandatoryOff("szx");
     SetMinimumParameterIntValue("szx",1);
     
-    AddParameter(ParameterType_Int,  "szy",   "SizeY");
-    SetParameterDescription( "szy", "OutputSize[1] (useless if support image is given)" );
+    AddParameter(ParameterType_Int,  "szy",   "Output size y");
+    SetParameterDescription( "szy", "Output size along y axis (useless if support image is given)" );
     MandatoryOff("szy");
     SetMinimumParameterIntValue("szy",1);
     
-    AddParameter(ParameterType_Int,  "epsg",   "RSID");
-    SetParameterDescription( "epsg", "Projection System RSID number (RSID 4326 for WGS84 32631 for UTM31N)  (useless if support image is given)" );
+    AddParameter(ParameterType_Int,  "epsg",   "Output EPSG code");
+    SetParameterDescription( "epsg", "EPSG code for the output projection reference system (EPSG 4326 for WGS84, 32631 for UTM31N...,useless if support image is given)" );
     MandatoryOff("epsg");
     
-    AddParameter(ParameterType_Float,  "orx",   "OriginX");
-    SetParameterDescription( "orx", "OutputOrigin[0] (useless if support image is given)" );
+    AddParameter(ParameterType_Float,  "orx",   "Output Upper-left x");
+    SetParameterDescription( "orx", "Output upper-left x coordinate (useless if support image is given)" );
     MandatoryOff("orx");
     
-    AddParameter(ParameterType_Float,  "ory",   "OriginY");
-    SetParameterDescription( "ory", "OutputOrigin[1] (useless if support image is given)" );
+    AddParameter(ParameterType_Float,  "ory",   "Output Upper-left y");
+    SetParameterDescription( "ory", "Output upper-left y coordinate (useless if support image is given)" );
     MandatoryOff("ory");
     
-    AddParameter(ParameterType_Float,  "spx",   "SpacingX");
-    SetParameterDescription( "spx", "OutputSpacing[0] (useless if support image is given)" );
+    AddParameter(ParameterType_Float,  "spx",   "Spacing (GSD) x");
+    SetParameterDescription( "spx", "Spacing (ground sampling distance) along x axis (useless if support image is given)" );
     MandatoryOff("spx");
     
-    AddParameter(ParameterType_Float,  "spy",   "SpacingY");
-    SetParameterDescription( "spy", "OutputSpacing[1] (useless if support image is given)" );
+    AddParameter(ParameterType_Float,  "spy",   "Spacing (GSD) y");
+    SetParameterDescription( "spy", "Spacing (ground sampling distance) along y axis (useless if support image is given)" );
     MandatoryOff("spy");
         
     AddParameter(ParameterType_Float,"background", "Background value");
-    SetParameterDescription("background","Default value for pixels which do not belong to any geometry");
+    SetParameterDescription("background","Default value for pixels not belonging to any geometry");
     SetDefaultParameterFloat("background",0.);
 
     AddParameter(ParameterType_Choice,"mode","Rasterization mode");
-    SetParameterDescription("mode","This parameter allows to choose between rasterization modes");
+    SetParameterDescription("mode","Choice of rasterization modes");
     
     AddChoice("mode.binary","Binary mode");
     SetParameterDescription("mode.binary","In this mode, pixels within a geometry will hold the user-defined foreground value");
 
     AddParameter(ParameterType_Float,"mode.binary.foreground","Foreground value");
-    SetParameterDescription("mode.binary.foreground","Value of the pixels inside a geometry");
+    SetParameterDescription("mode.binary.foreground","Value for pixels inside a geometry");
     SetDefaultParameterFloat("mode.binary.foreground",255);
     
     AddChoice("mode.attribute","Attribute burning mode");
@@ -136,9 +136,8 @@ private:
     
     SetDocExampleParameterValue("in","qb_RoadExtract_classification.shp");
     SetDocExampleParameterValue("out", "rasterImage.tif");
-    SetDocExampleParameterValue("szx","1100");
-    SetDocExampleParameterValue("szy","1100");
-    
+    SetDocExampleParameterValue("spx","1.");
+    SetDocExampleParameterValue("spy","1.");
     }
 
   void DoUpdateParameters()
