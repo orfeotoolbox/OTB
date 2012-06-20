@@ -178,14 +178,14 @@ private:
 
       try
         {
-        inputProjectionRef = m_OgrDS->GetGlobalExtent(ulx,uly,lrx,lry);
+        inputProjectionRef = m_OgrDS->GetGlobalExtent(ulx,uly,lrx,lry,true);
         extentAvailable = true;
         }
       catch(itk::ExceptionObject & err)
         {
         extentAvailable = false;
 
-        otbAppLogFATAL(<<"Failed to retrieve the spatial extent of the dataset in force mode. The spatial extent is mandatory when orx, ory, spx and spy parameters are not set, consider setting them.");
+        otbAppLogFATAL(<<"Failed to retrieve the spatial extent of the dataset in force mode. The spatial extent is mandatory when orx, ory, spx and spy parameters are not set, consider setting them. Error from library: "<<err.GetDescription());
         }
       }
 
