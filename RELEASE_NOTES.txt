@@ -1,4 +1,39 @@
-OTB-v.3.12.0 - Changes since version 3.10.0 (2011/??/??)
+OTB-v.3.14.0 - Changes since version 3.12.0 (2012/01/31)
+-----------------------------------------
+* Library
+* System
+* Monteverdi
+* Bug fixes
+  * Monteverdi
+    * 0000527: While saving dataset with rescaling option, the channels n° > 3 are incorrect
+
+  * OTB-Packaging
+    * 0000525: Python not found during ubuntu package build
+    * 0000526: Fix input of bfTvPolygonizationRasterization_WGS84
+
+  * Orfeo Toolbox (OTB)
+    * 0000558: GetParameterFloat method of WrapperApplication class does not returns exactly input value
+    * 0000548: Parameters default values should appear in command line help interface of OTB applications
+    * 0000550: BlockMatching application throws an exception  when the "sub-pixel" mode is activated
+    * 0000549: Error message related to boost_any_cast in  StereoRectificationGridGenerator application
+    * 0000547: MeanShiftFilter validation test is fialinf for Iteration and Spatial output
+    * 0000537: Impossible to set rescale type for Convert application
+    * 0000542: Problem with win arch and testing
+    * 0000521: Applications do not work anymore (Wrapper problem)
+    * 0000522: otbApplicationLauncherQT is not reflecting the Disable/Enable state correctly
+    * 0000511: Tags are repeated twice in Application, when using Qt framework
+
+  * OTB-lib
+    * 0000535: Must rename test uaTvGeometricSarSenorModelAdapterTest in uaTvGeometricSarSenSorModelAdapterTest
+    * 0000532: OTB_SHOW_ALL_MSG_DEBUG option changes apTvClTrainSVMImagesClassifierQB456 test results
+    * 0000512: OTB cmake configuration warns for a gdal/geotiff  conflict but I can open tiff file
+
+  * OTB-applications
+    * 0000515: Space managing in command line
+    * 0000510: OTB-Applications cannot compile when the sources are located in a directory with spaces in its name
+
+
+OTB-v.3.12.0 - Changes since version 3.10.0 (2011/06/30)
 -----------------------------------------
 * Library
   * MaximumAutocorrelationFactorImageFilter

@@ -118,6 +118,13 @@ private:
 
     changeFilter->SetInput1(GetParameterImage("in1"));
     changeFilter->SetInput2(GetParameterImage("in2"));
+    changeFilter->GetOutput()->UpdateOutputInformation();
+
+    otbAppLogINFO("Input 1 mean: "<<changeFilter->GetMean1());
+    otbAppLogINFO("Input 2 mean: "<<changeFilter->GetMean2());
+    otbAppLogINFO("Input 1 transform: "<<changeFilter->GetV1());
+    otbAppLogINFO("Input 2 transform: "<<changeFilter->GetV2());
+    otbAppLogINFO("Rho: "<<changeFilter->GetRho());
 
     m_Ref = changeFilter;
 

@@ -117,6 +117,12 @@ public:
   typedef vnl_vector<RealType>                                 VnlVectorType;
   typedef vnl_matrix<RealType>                                 VnlMatrixType;
 
+  /** Get the mean of bands from image 1 */
+  itkGetMacro(Mean1,VnlVectorType);
+
+  /** Get the mean of bands from image 2 */
+  itkGetMacro(Mean2,VnlVectorType);
+
   /** Get the linear combinations of bands of image 1 associated to
    *  multivariate alteration detector. This is a square matrix of
    *  size nbBand of image 1. */
