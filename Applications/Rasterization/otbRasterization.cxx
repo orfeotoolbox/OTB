@@ -254,8 +254,8 @@ private:
         }
       else if(extentAvailable)
         {
-        origin[0] = ulx;
-        origin[1] = uly;
+        origin[0] = (spacing[0] > 0 ? ulx : lrx);
+        origin[1] = (spacing[1] > 0 ? uly : lry);
         
         // Transform to output EPSG
        
@@ -283,8 +283,8 @@ private:
         {
         // Transform to output EPSG
         PointType lrout;
-        lrout[0] = lrx;
-        lrout[1] = lry;
+        lrout[0] = (spacing[0] > 0 ? lrx : ulx);
+        lrout[1] = (spacing[1] > 0 ? lry : uly);
 
         if(validInputProjRef)
           {
