@@ -66,7 +66,7 @@ public:
   void ClearPixelDescription();
 
   /** Update the pixel description */
-  void UpdatePixelDescription(const IndexType& index);
+  void UpdatePixelDescription(const IndexType& index, bool usePlaceName = true);
 
 protected:
   /** Constructor */

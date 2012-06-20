@@ -114,7 +114,7 @@ public:
             index += m_Offset;
 
             // Communicate new index to model
-            m_Model->UpdatePixelDescription(index);
+            m_Model->UpdatePixelDescription(index, m_UsePlaceName);
 
             return true;
             break;
@@ -141,9 +141,14 @@ public:
   itkSetMacro(Offset, OffsetType);
   itkGetMacro(Offset, OffsetType);
 
+  /** Get PlaceName flag */
+  itkSetMacro(UsePlaceName, bool);
+  itkGetMacro(UsePlaceName, bool);
+
 protected:
   /** Constructor */
-  PixelDescriptionActionHandler() : m_View(), m_Model()
+  PixelDescriptionActionHandler() : m_View(), m_Model(), 
+                                    m_UsePlaceName(true)
   {
     m_Offset.Fill(0);
   }
@@ -168,6 +173,9 @@ private:
 
   // Pointer to the model
   ModelPointerType m_Model;
+
+  // Flag to get the placename
+  bool             m_UsePlaceName;
 
 }; // end class
 } // end namespace otb

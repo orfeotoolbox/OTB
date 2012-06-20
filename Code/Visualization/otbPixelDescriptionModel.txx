@@ -47,7 +47,7 @@ PixelDescriptionModel<TOutputImage>
 template <class TOutputImage>
 void
 PixelDescriptionModel<TOutputImage>
-::UpdatePixelDescription(const IndexType& index)
+::UpdatePixelDescription(const IndexType& index, bool usePlaceName)
 {
   // The output stringstream
   std::ostringstream oss;
@@ -60,7 +60,7 @@ PixelDescriptionModel<TOutputImage>
     if (it.Get()->GetVisible())
       {
       // Get the pixel description
-      oss << it.Get()->GetPixelDescription(index) << std::endl;
+      oss << it.Get()->GetPixelDescription(index, usePlaceName) << std::endl;
       }
     }
   m_PixelDescription = oss.str();

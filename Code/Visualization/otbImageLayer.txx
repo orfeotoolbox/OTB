@@ -263,7 +263,7 @@ ImageLayer<TImage, TOutputImage>
 template <class TImage, class TOutputImage>
 std::string
 ImageLayer<TImage, TOutputImage>
-::GetPixelDescription(const IndexType& index)
+::GetPixelDescription(const IndexType& index, bool getPlaceName)
 {
   //FIXME only if necessary
   this->UpdateListSample();
@@ -307,21 +307,25 @@ ImageLayer<TImage, TOutputImage>
 
       if (m_Transform->GetTransformAccuracy() == Projection::PRECISE) oss << "(precise location)" << std::endl;
       if (m_Transform->GetTransformAccuracy() == Projection::ESTIMATE) oss << "(estimated location)" << std::endl;
-
-      // We do not want to refresh the location if we are pointing in the scroll view
-      if (m_Image->GetBufferedRegion().IsInside(index))
+      
+      // Get the placeName if asked for
+      if (getPlaceName)
         {
-        if (m_CoordinateToName->SetLonLat(point))
+        // We do not want to refresh the location if we are pointing in the scroll view
+        if (m_Image->GetBufferedRegion().IsInside(index))
           {
-          m_CoordinateToName->Evaluate();
+          if (m_CoordinateToName->SetLonLat(point))
+            {
+            m_CoordinateToName->Evaluate();
+            }
           }
+
+        m_PlaceName = m_CoordinateToName->GetPlaceName();
+        m_CountryName = m_CoordinateToName->GetCountryName();
+
+        if (m_PlaceName != "") oss << otbGetTextMacro("Near") << " " << m_PlaceName << std::endl;
+        if (m_CountryName != "") oss << " " << otbGetTextMacro("in") << " " << m_CountryName << std::endl;
         }
-
-      m_PlaceName = m_CoordinateToName->GetPlaceName();
-      m_CountryName = m_CoordinateToName->GetCountryName();
-
-      if (m_PlaceName != "") oss << otbGetTextMacro("Near") << " " << m_PlaceName << std::endl;
-      if (m_CountryName != "") oss << " " << otbGetTextMacro("in") << " " << m_CountryName << std::endl;
       }
     else
       {

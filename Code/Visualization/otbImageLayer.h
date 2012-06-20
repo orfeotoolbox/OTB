@@ -182,7 +182,7 @@ public:
   virtual void Render();
 
   /** Get the pixel description */
-  virtual std::string GetPixelDescription(const IndexType& index);
+  virtual std::string GetPixelDescription(const IndexType& index, bool getPlaceName = true);
 
   /** Get the pixel location */
   virtual PointType GetPixelLocation(const IndexType& index);

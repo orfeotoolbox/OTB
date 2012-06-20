@@ -69,7 +69,7 @@ public:
   virtual void Render() = 0;
 
   /** Get the pixel description */
-  virtual std::string GetPixelDescription(const IndexType& index) = 0;
+  virtual std::string GetPixelDescription(const IndexType& index, bool getPlaceName = true) = 0;
 
   /** Get the pixel value in TLayerValuePrecision type */
   virtual LayerValueType GetValueAtIndex(const IndexType& index) = 0;
