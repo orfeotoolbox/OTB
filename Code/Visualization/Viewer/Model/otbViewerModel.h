@@ -207,9 +207,9 @@ protected:
   /** Destructor */
   virtual ~ViewerModel();
 
-  /** Built Visu & Controller*/
-  virtual VisuViewPointerType BuiltVisu(VisuModelPointerType pRendering);
-  virtual WidgetControllerPointerType BuiltController(VisuModelPointerType modelRenderingLayer,
+  /** Build Visu & Controller*/
+  virtual VisuViewPointerType BuildVisu(VisuModelPointerType pRendering);
+  virtual WidgetControllerPointerType BuildController(VisuModelPointerType modelRenderingLayer,
                                                       VisuViewPointerType visuView ,
                                                       PixelDescriptionModelType::Pointer pixelModel);
 

@@ -306,7 +306,7 @@ ViewerModel
   rendering->Update();
 
   /** View*/
-  VisuViewPointerType visuView = this->BuiltVisu(rendering);
+  VisuViewPointerType visuView = this->BuildVisu(rendering);
 
   /** Build the pixelDescription View*/
   PixelDescriptionViewType::Pointer pixelView = PixelDescriptionViewType::New();
@@ -315,9 +315,9 @@ ViewerModel
   pixelView->SetModel(pixelModel);
 
   /** Controller*/
-  WidgetControllerPointerType controller = this->BuiltController(rendering, visuView , pixelModel );
+  WidgetControllerPointerType controller = this->BuildController(rendering, visuView , pixelModel );
 
-  /** Finish Builting the visu*/
+  /** Finish Building the visu*/
   visuView->SetController(controller);
 
   /** Build the curve Widget */
@@ -389,7 +389,7 @@ ViewerModel
     rendering->Update();
 
     /** View*/
-    VisuViewPointerType visuView = this->BuiltVisu(rendering);
+    VisuViewPointerType visuView = this->BuildVisu(rendering);
 
     /** Build the pixelDescription View*/
     PixelDescriptionViewType::Pointer pixelView = PixelDescriptionViewType::New();
@@ -398,9 +398,9 @@ ViewerModel
     pixelView->SetModel(pixelModel);
 
     /** Controller*/
-    WidgetControllerPointerType controller = this->BuiltController(rendering, visuView , pixelModel );
+    WidgetControllerPointerType controller = this->BuildController(rendering, visuView , pixelModel );
 
-    /** Finish Builting the visu*/
+    /** Finish Building the visu*/
     visuView->SetController(controller);
 
     /** Build the curve Widget */
@@ -443,12 +443,12 @@ ViewerModel
 
 
 /**
- * Built a part of the visu, create a pointer and add a model to the visu
+ * Build a part of the visu, create a pointer and add a model to the visu
  */
 ViewerModel
 ::VisuViewPointerType
 ViewerModel
-::BuiltVisu(VisuModelPointerType pRendering)
+::BuildVisu(VisuModelPointerType pRendering)
 {
   VisuViewPointerType visuView = VisuViewType::New();
   visuView->SetModel(pRendering);
@@ -462,7 +462,7 @@ ViewerModel
 ViewerModel
 ::WidgetControllerPointerType
 ViewerModel
-::BuiltController(VisuModelPointerType modelRenderingLayer,
+::BuildController(VisuModelPointerType modelRenderingLayer,
                   VisuViewPointerType visuView,
                   PixelDescriptionModelPointerType pixelModel)
 {
@@ -695,7 +695,6 @@ ViewerModel
   rightController->AddActionHandler( leftChangeHandler);
   leftController->AddActionHandler(rightChangeHandler);
 
-
   // Add the change scaled handler
   ChangeScaleHandlerType::Pointer rightChangeScaleHandler =ChangeScaleHandlerType::New();
   rightChangeScaleHandler->SetModel(rightRenderModel );
@@ -739,7 +738,7 @@ ViewerModel
   VisuViewPointerType              view       = objTracked.pVisuView;
   PixelDescriptionModelPointerType pixelModel = objTracked.pPixelModel;
 
-  objTracked.pWidgetController = this->BuiltController(render, view, pixelModel);
+  objTracked.pWidgetController = this->BuildController(render, view, pixelModel);
   view->SetController(m_ObjectTrackedList.at(selectedItem-1).pWidgetController);
 }
 
