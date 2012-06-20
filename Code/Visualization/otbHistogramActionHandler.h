@@ -129,27 +129,33 @@ public:
           if (m_ModifyLeft)
             {
             double tx = x - abcisseL;
-            m_LeftAsymptote->SetAbcisse(m_LeftAsymptote->GetAbcisse() + tx);
-            m_Curve->redraw();
+            if ( m_LeftAsymptote->GetAbcisse() + tx < m_RightAsymptote->GetAbcisse())
+              {
+              m_LeftAsymptote->SetAbcisse(m_LeftAsymptote->GetAbcisse() + tx);
+              m_Curve->redraw();
 
-            //  Update The Rendering Function min and max
-            ParametersType param = m_RenderingFunction->GetParameters();
-            param.SetElement(2 * m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
-            param.SetElement(2 * m_Channel + 1, m_RightAsymptote->GetAbcisse());
-            m_RenderingFunction->SetParameters(param);
+              //  Update The Rendering Function min and max
+              ParametersType param = m_RenderingFunction->GetParameters();
+              param.SetElement(2 * m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
+              param.SetElement(2 * m_Channel + 1, m_RightAsymptote->GetAbcisse());
+              m_RenderingFunction->SetParameters(param);
+              }
             }
 
           if (m_ModifyRight)
             {
             double tx = x - abcisseR;
-            m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx);
-            m_Curve->redraw();
-
-            //  Update The Rendering Function min and max
-            ParametersType param = m_RenderingFunction->GetParameters();
-            param.SetElement(2 * m_Channel, m_LeftAsymptote->GetAbcisse());
-            param.SetElement(2 * m_Channel + 1, m_RightAsymptote->GetAbcisse() + tx);
-            m_RenderingFunction->SetParameters(param);
+            if (m_RightAsymptote->GetAbcisse() + tx > m_LeftAsymptote->GetAbcisse())
+              {
+              m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx);
+              m_Curve->redraw();
+              
+              //  Update The Rendering Function min and max
+              ParametersType param = m_RenderingFunction->GetParameters();
+              param.SetElement(2 * m_Channel, m_LeftAsymptote->GetAbcisse());
+              param.SetElement(2 * m_Channel + 1, m_RightAsymptote->GetAbcisse() + tx);
+              m_RenderingFunction->SetParameters(param);
+              }
             }
           return true;
           }
