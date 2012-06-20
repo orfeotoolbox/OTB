@@ -21,7 +21,7 @@
 #include "otbStandardWriterWatcher.h"
 #include "otbImageFileReader.h"
 
- const unsigned int Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef float                                                         PixelType;
   typedef otb::Image<PixelType, Dimension>                              ImageType;
   typedef float                                                         MaskPixelType;
