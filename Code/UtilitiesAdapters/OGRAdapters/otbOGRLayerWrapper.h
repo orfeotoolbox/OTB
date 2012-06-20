@@ -32,12 +32,6 @@ class OGRDataSource;
 class OGRGeometry;
 class OGRFeatureDefn;
 
-namespace itk
-{
-class MetaDataDictionary;
-} // itk namespace
-
-
 namespace otb { namespace ogr {
 class DataSource;
 class Layer;
@@ -76,7 +70,9 @@ public:
   itkTypeMacro(Layer, void);
   //@}
 
+#if 0
   typedef itk::SmartPointer<DataSource> DataSourcePtr;
+#endif
 
   /**\name Construction */
   //@{
@@ -91,7 +87,7 @@ public:
    * is deleted, the layer won't be usable anymore. Unfortunatelly, there is no
    * mean to report this to this layer proxy.
    */
-  Layer(OGRLayer* layer, DataSourcePtr datasource);
+  Layer(OGRLayer* layer/*, DataSourcePtr datasource*/);
 
   /**
    * Init constructor for layers that need to be released.
@@ -189,18 +185,21 @@ public:
   */
   std::string GetName() const;
 
-  /** Allow to retrieve the extent of the layer
-   *  \param[out] ulx reference to upper-left x coordinate of the
-   *  extent
-   *  \param[out] uly reference to upper-left y coordinate of the
-   *  extent
-   *  \param[out] lrx reference to lower-right x coordinate of the
-   *  extent
-   *  \param[out] uly reference to lower-right y coordinate of the
-   *  extent
-   *  \param[in] force Force computation of the extent if not
-   *  available. May force the driver to walk all geometries to
-   *  compute the extent.
+  /** Retrieves the extent of the layer.
+   *  \param[in] force Force computation of the extent if not available. May
+   *  force the driver to walk all geometries to compute the extent.
+   *  \return the extent of the layer
+   *  \throw itk::ExceptionObject if the extent can not be retrieved.
+  */
+  OGREnvelope GetExtent(bool force = false) const;
+
+  /** Retrieves the extent of the layer.
+   *  \param[out] ulx reference to upper-left x coordinate of the extent
+   *  \param[out] uly reference to upper-left y coordinate of the extent
+   *  \param[out] lrx reference to lower-right x coordinate of the extent
+   *  \param[out] uly reference to lower-right y coordinate of the extent
+   *  \param[in] force Force computation of the extent if not available. May
+   *  force the driver to walk all geometries to compute the extent.
    *  \throw itk::ExceptionObject if the extent can not be retrieved.
   */
   void GetExtent(double & ulx, double & uly, double & lrx, double & lry, bool force = false) const;
@@ -277,13 +276,14 @@ public:
   void SetSpatialFilterRect(double dfMinX, double dfMinY, double dfMaxX, double dfMaxY);
   //@}
 
-  /**Spatial Reference property.
+  /** Spatial Reference property.
+   * \note Read-only property. In order to set this property, you'll have to
+   * create a new layer with a spatial reference.
    * \internal the I/O spatial reference is an undeletable pointer, that may be null.
-   * \note Read-only property
    */
   OGRSpatialReference const* GetSpatialRef() const;
 
-  /** Returns the projection ref associated with the layer
+  /** Returns the projection ref associated with the layer.
    * \return The projection ref (wkt string) associated with the layer
    */
   std::string GetProjectionRef() const;
@@ -496,11 +496,6 @@ public:
 
   friend bool otb::ogr::operator==(Layer const& lhs, Layer const& rhs);
 
-  /**\name Meta data dictionary */
-  //@{
-  itk::MetaDataDictionary      & GetMetaDataDictionary();
-  itk::MetaDataDictionary const& GetMetaDataDictionary() const;
-  //@}
 private:
   /**
    * Internal encapsulation of \c OGRLayer::GetNextFeature().
@@ -521,10 +516,12 @@ private:
    */
   boost::shared_ptr<OGRLayer> m_Layer;
 
+#if 0
   /** Related DataSource.
    * Needed to acces OTB meta informations.
    */
   DataSourcePtr m_DataSource;
+#endif
   };
 
 inline bool operator!=(Layer const& lhs, Layer const& rhs)

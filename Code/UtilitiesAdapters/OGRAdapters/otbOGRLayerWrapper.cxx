@@ -44,9 +44,11 @@ namespace  { // Anonymous namespace
 } // Anonymous namespace
 
 
-otb::ogr::Layer::Layer(OGRLayer* layer, DataSourcePtr datasource)
+otb::ogr::Layer::Layer(OGRLayer* layer/*, DataSourcePtr datasource*/)
 : m_Layer(layer, LeaveAloneDeleter())
-, m_DataSource(datasource)
+#if 0
+  , m_DataSource(datasource)
+#endif
 {
 }
 
@@ -158,16 +160,22 @@ std::string otb::ogr::Layer::GetName() const
 #endif
 }
 
-void otb::ogr::Layer::GetExtent(double& ulx, double& uly, double& lrx, double& lry, bool force) const
+OGREnvelope otb::ogr::Layer::GetExtent(bool force/* = false */) const
 {
+  assert(m_Layer && "OGRLayer not initialized");
   OGREnvelope sExtent;
   const OGRErr res = m_Layer->GetExtent(&sExtent,force);
   if(res != OGRERR_NONE)
     {
-     itkGenericExceptionMacro(<< "Cannot retrieve extent of layer <"
-                              <<GetName()<<">: " << CPLGetLastErrorMsg());
+    itkGenericExceptionMacro(<< "Cannot retrieve extent of layer <"
+      <<GetName()<<">: " << CPLGetLastErrorMsg());
     }
+  return sExtent;
+}
 
+void otb::ogr::Layer::GetExtent(double& ulx, double& uly, double& lrx, double& lry, bool force) const
+{
+  const OGREnvelope sExtent = GetExtent(force);
   ulx = sExtent.MinX;
   uly = sExtent.MinY;
   lrx = sExtent.MaxX;
@@ -231,13 +239,9 @@ OGRSpatialReference const* otb::ogr::Layer::GetSpatialRef() const
 
 std::string otb::ogr::Layer::GetProjectionRef() const
 {
-  char * wkt;
-  std::string stringWkt = "";
-
   assert(m_Layer && "OGRLayer not initialized");
-
-  OGRSpatialReference * srs = m_Layer->GetSpatialRef();
-
+  char * wkt = 0;
+  OGRSpatialReference const* srs = GetSpatialRef();
   if(srs)
     {
     const OGRErr res = srs->exportToWkt(&wkt);
@@ -245,16 +249,17 @@ std::string otb::ogr::Layer::GetProjectionRef() const
     if(res !=  OGRERR_NONE)
       {
       itkGenericExceptionMacro(<< "Cannot convert spatial reference to wkt string for layer <"
-                               <<m_Layer->GetName()<<">: " << CPLGetLastErrorMsg());
+        <<m_Layer->GetName()<<">: " << CPLGetLastErrorMsg());
       }
-    stringWkt = wkt;
 
-    // According to documentation, argument of exportToWkt() should be
-    // freed
+    assert(wkt);
+    const std::string stringWkt(wkt);
+    // According to documentation, argument of exportToWkt() should be freed
     CPLFree(wkt);
+    return stringWkt;
     }
 
-  return stringWkt;
+  return "";
 }
 
 /*===========================================================================*/
@@ -376,13 +381,4 @@ bool otb::ogr::operator==(Layer const& lhs, Layer const& rhs)
 {
   const bool equal = lhs.m_Layer.get() == rhs.m_Layer.get();
   return equal;
-}
-
-itk::MetaDataDictionary & otb::ogr::Layer::GetMetaDataDictionary()
-{
-  if (!m_DataSource)
-    {
-    itkGenericExceptionMacro(<<"Cannot acces metadata dictionary from a layer constructed with an SQL request.");
-    }
-  return m_DataSource->GetMetaDataDictionary();
 }

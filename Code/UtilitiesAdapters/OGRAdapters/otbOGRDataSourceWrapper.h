@@ -123,8 +123,10 @@ public:
 
   /**\name Projection Reference property */
   //@{
+#if 0
   void SetProjectionRef(const std::string& projectionRef);
   std::string GetProjectionRef() const;
+#endif
   //@}
 
   /** Clears the data source.
@@ -212,26 +214,28 @@ public:
    */
   int Size(bool doForceComputation) const;
 
-  /** Allow to retrieve the union of the extents of all
-   *  layers. In case of multiple layers with different SRS, the
-   *  global extent is expressed in the SRS of the first layer.
-   *  \param[out] ulx reference to upper-left x coordinate of the
-   *  extent
-   *  \param[out] uly reference to upper-left y coordinate of the
-   *  extent
-   *  \param[out] lrx reference to lower-right x coordinate of the
-   *  extent
-   *  \param[out] uly reference to lower-right y coordinate of the
-   *  extent
-   *  \param[in] force Force computation of layers extents if not
-   *  available. May force the driver to walk all geometries to
-   *  compute the extent.
-   *  \return The Wkt of the extent projection (which is the wkt of
-   *  the first layer SRS)
+  /** Retrieves the union of the extents of all layers.
+   *  \param[out] ulx reference to upper-left x coordinate of the extent
+   *  \param[out] uly reference to upper-left y coordinate of the extent
+   *  \param[out] lrx reference to lower-right x coordinate of the extent
+   *  \param[out] uly reference to lower-right y coordinate of the extent
+   *  \param[in] force Force computation of layers extents if not available. May
+   *  force the driver to walk all geometries to compute the extent.
+   *  \return The Wkt of the extent projection (which is the wkt of the first
+   *  layer SRS)
    *  \throw itk::ExceptionObject if the layers extents can not be retrieved.
    */
-    std::string GetGlobalExtent(double & ulx, double & uly, double & lrx, double & lry, bool force = false) const;
+  std::string GetGlobalExtent(double & ulx, double & uly, double & lrx, double & lry, bool force = false) const;
 
+  /** Retrieves the union of the extents of all layers.
+   *  \param[in] force Force computation of layers extents if not available. May
+   *  force the driver to walk all geometries to compute the extent.
+   *  \param[out] outwkt The Wkt of the extent projection (which is the wkt of
+   *  the first layer SRS); if null, nothing is returned this way
+   *  \return the extent of all layers
+   *  \throw itk::ExceptionObject if the layers extents can not be retrieved.
+   */
+  OGREnvelope GetGlobalExtent(bool force = false, std::string * outwkt=0) const;
 
   /** Grafts data and information from one data source to another.
    * \deprecated \c OGRLayer has an embedded input iterator. As a consequence,
