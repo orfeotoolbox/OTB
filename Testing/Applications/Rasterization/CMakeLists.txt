@@ -59,3 +59,15 @@ OTB_TEST_APPLICATION(NAME apTvRsRasterizationPolygons
                      VALID   --compare-image ${NOTOL}
                               ${BASELINE}/apTvRsRasterizationPolygons.tif
                 	      ${TEMP}/apTvRsRasterizationPolygons.tif)
+
+OTB_TEST_APPLICATION(NAME apTvRsRasterizationPolygons2LayersWith2SRS
+                     APP  Rasterization
+                     OPTIONS -in  ${INPUTDATA}/ToulouseRoad-examples_2layers_2srs.sqlite
+                             -spx 1.
+                             -spy -1.
+                             -out ${TEMP}/apTvRsRasterizationPolygons2LayersWith2SRS.tif uint8
+                             -background 255
+                             -mode.binary.foreground 0
+                     VALID   --compare-image ${NOTOL}
+                              ${BASELINE}/apTvRsRasterizationPolygons2LayersWith2SRS.tif
+                	      ${TEMP}/apTvRsRasterizationPolygons2LayersWith2SRS.tif)
