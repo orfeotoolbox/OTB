@@ -174,7 +174,7 @@ private:
        (!(HasValue("spx") && HasValue("spy"))
         || (!(HasValue("orx") && HasValue("ory")))))
       {
-      otbAppLogWARNING(<<"Failed to retrieve the spatial extent of the dataset. The application will retry in force mode,  which means it might have to walk the entire dataset to determine extent. This might be a long process for large datasets. Consider setting the orx, ory, spx and spy parameters.");
+      otbAppLogWARNING(<<"Failed to retrieve the spatial extent of the dataset. The application will retry in force mode, which means it might have to walk the entire dataset to determine extent. This might be a long process for large datasets. Consider setting the orx, ory, spx and spy parameters.");
 
       try
         {
@@ -185,7 +185,7 @@ private:
         {
         extentAvailable = false;
 
-        otbAppLogFATAL(<<"Failed to retrieve the sapatial extent of the dataset in force mode. The spatial extent is mandatory when orx, ory, spx and spy parameters are not set, consider setting them.");
+        otbAppLogFATAL(<<"Failed to retrieve the spatial extent of the dataset in force mode. The spatial extent is mandatory when orx, ory, spx and spy parameters are not set, consider setting them.");
         }
       }
 
@@ -196,7 +196,7 @@ private:
 
     if(inputProjectionRef == "")
       {
-      otbAppLogWARNING("Failed to find a valid projection ref in dataset. The application will asume that the given reference image or origin, spacing and size are consistent with the dataset geometry. Output EPSG code will be ignored.");
+      otbAppLogWARNING("Failed to find a valid projection ref in dataset. The application will assume that the given reference image or origin, spacing and size are consistent with the dataset geometry. Output EPSG code will be ignored.");
       validInputProjRef = false;
       }
     else
@@ -271,7 +271,7 @@ private:
         }
       else
         {
-        otbAppLogFATAL(<<"The orx and ory parameters are not set and the dataset extent could not be retrieved. The application can not deterimine the origin of the output raster");
+        otbAppLogFATAL(<<"The orx and ory parameters are not set and the dataset extent could not be retrieved. The application can not determine the origin of the output raster");
         }
 
       if (HasValue("szx") && HasValue("szy"))
