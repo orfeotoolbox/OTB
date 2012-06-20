@@ -147,7 +147,7 @@ public:
 
 protected:
   /** Constructor */
-  PixelDescriptionActionHandler() : m_View(), m_Model(), 
+  PixelDescriptionActionHandler() : m_View(), m_Model(),
                                     m_UsePlaceName(true)
   {
     m_Offset.Fill(0);
