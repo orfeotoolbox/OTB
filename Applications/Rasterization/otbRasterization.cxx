@@ -152,35 +152,10 @@ private:
 
     m_OgrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::read);
 
-    bool validInputProjRef = true;
+    bool validInputProjRef = false;
+    std::string inputProjectionRef = "";
 
     otb::ogr::DataSource::const_iterator lit = m_OgrDS->begin();
-
-    if(lit==m_OgrDS->end())
-      {
-      otbAppLogFATAL("There are no layers in the input dataset.");
-      }
-    
-    std::string inputProjectionRef = lit->GetProjectionRef();
-
-    // Check if we have layers with different projection ref
-    for(; lit != m_OgrDS->end(); ++lit)
-      {
-      if(lit->GetProjectionRef() != inputProjectionRef)
-        {
-        otbAppLogWARNING("The input dataset have layers with different projection reference system. The application will base all extent computation on the srs of the first layer only.");
-        }
-      }
-
-    if(inputProjectionRef == "")
-      {
-      otbAppLogWARNING("Failed to find a valid projection ref in dataset. The application will asume that the given reference image or origin, spacing and size are consistent with the dataset geometry. Output EPSG code will be ignored.");
-      validInputProjRef = false;
-      }
-    else
-      {
-      otbAppLogINFO("Input dataset projection reference system is: "<<inputProjectionRef);
-      }
 
     // Retrieve extent
     double ulx, uly, lrx, lry;
@@ -188,7 +163,7 @@ private:
 
     try
       {
-      m_OgrDS->GetGlobalExtent(ulx,uly,lrx,lry);
+      inputProjectionRef = m_OgrDS->GetGlobalExtent(ulx,uly,lrx,lry);
       }
     catch(itk::ExceptionObject & err)
       {
@@ -203,7 +178,7 @@ private:
 
       try
         {
-        m_OgrDS->GetGlobalExtent(ulx,uly,lrx,lry);
+        inputProjectionRef = m_OgrDS->GetGlobalExtent(ulx,uly,lrx,lry);
         extentAvailable = true;
         }
       catch(itk::ExceptionObject & err)
@@ -219,6 +194,16 @@ private:
       otbAppLogINFO("Input dataset extent is ("<<ulx<<", "<<uly<<") ("<<lrx<<", "<<lry<<")");
       }
 
+    if(inputProjectionRef == "")
+      {
+      otbAppLogWARNING("Failed to find a valid projection ref in dataset. The application will asume that the given reference image or origin, spacing and size are consistent with the dataset geometry. Output EPSG code will be ignored.");
+      validInputProjRef = false;
+      }
+    else
+      {
+      validInputProjRef = true;
+      otbAppLogINFO("Input dataset projection reference system is: "<<inputProjectionRef);
+      }
 
     // region information
     SizeType size;
