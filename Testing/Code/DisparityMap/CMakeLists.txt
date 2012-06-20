@@ -550,6 +550,12 @@ ADD_TEST(dmTuAdhesionCorrectionFilterNew ${DISPARITYMAP_TESTS4}
 
 SET_TESTS_PROPERTIES(dmTuAdhesionCorrectionFilter PROPERTIES DEPENDS dmTvDisparityMapMedianFilter)
 
+# -------            otb::DisparityMapToDEMFilter   ----------
+
+ADD_TEST(dmTuDisparityMapToDEMFilterNew ${DISPARITYMAP_TESTS4}
+         otbDisparityMapToDEMFilterNew)
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS1
 otbDisparityMapTests1.cxx
@@ -592,8 +598,10 @@ SET(BasicDisparityMap_SRCS4
 otbDisparityMapTests4.cxx
 otbAdhesionCorrectionFilter.cxx
 otbDisparityMapMedianFilter.cxx
+otbDisparityMapToDEMFilter.cxx
 otbPixelWiseBlockMatchingImageFilter.cxx
 otbSubPixelDisparityImageFilter.cxx
+
 )
 
 OTB_ADD_EXECUTABLE(otbDisparityMapTests1 "${BasicDisparityMap_SRCS1}" "OTBDisparityMap;OTBIO;OTBTesting")
