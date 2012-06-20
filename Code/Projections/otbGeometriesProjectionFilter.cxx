@@ -205,16 +205,9 @@ void otb::GeometriesProjectionFilter::DoFinalizeInitialisation()
 {
   m_Transform = InternalTransformType::New();
 
-  InputGeometriesType::ConstPointer   input      = this->GetInput();
-  const itk::MetaDataDictionary&      inputDict  = input->GetMetaDataDictionary();
-  OutputGeometriesType::Pointer       output     = this->GetOutput();
-  itk::MetaDataDictionary&            outputDict = output->GetMetaDataDictionary();
-
-  // m_Transform->SetInputDictionary(input->GetMetaDataDictionary());
-  m_Transform->SetInputDictionary(inputDict);
-  m_Transform->SetOutputDictionary(output->GetMetaDataDictionary());
-
-  m_Transform->SetInputProjectionRef(m_InputProjectionRef);
+  // The InputProjectionRef can only be set once per layer, once the layer to
+  // process is known
+  // m_Transform->SetInputProjectionRef(m_InputProjectionRef);
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->SetInputKeywordList(m_InputKeywordList);
   m_Transform->SetOutputKeywordList(m_OutputKeywordList);
@@ -227,7 +220,9 @@ void otb::GeometriesProjectionFilter::DoFinalizeInitialisation()
   m_Transform->SetOutputSpacing(OutputImageReference.GetSpacing());
   m_Transform->SetOutputOrigin(OutputImageReference.GetOrigin());
 
-  m_Transform->InstanciateTransform();
+  // As the InputProjectionRef can't be known yet, InstanciateTransform() will
+  // be called from DoProcessLayer
+  // m_Transform->InstanciateTransform();
 
   m_TransformationFunctor->SetOnePointTransformation(m_Transform);
 
@@ -236,16 +231,8 @@ void otb::GeometriesProjectionFilter::DoFinalizeInitialisation()
   // only the m_Transform will know
   m_OutputProjectionRef = m_Transform->GetOutputProjectionRef();
 
-  //If the projection information for the output is provided, propagate it
-
-  if (m_OutputKeywordList.GetSize() != 0)
-    {
-    itk::EncapsulateMetaData<ImageKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, m_OutputKeywordList);
-    }
-  if (!m_OutputProjectionRef.empty())
-    {
-    itk::EncapsulateMetaData<std::string>(outputDict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef);
-    }
+  // InputGeometriesType::ConstPointer   input      = this->GetInput();
+  OutputGeometriesType::Pointer       output     = this->GetOutput();
   output->SetImageReference(OutputImageReference);
 }
 
@@ -268,6 +255,11 @@ OGRSpatialReference* otb::GeometriesProjectionFilter::DoDefineNewLayerSpatialRef
 /*virtual*/
 void otb::GeometriesProjectionFilter::DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const
 {
+  // Finish the initialization phase as somethings depends on the current layer
+  // to process.
+  m_Transform->SetInputProjectionRef(source.GetProjectionRef());
+  m_Transform->InstanciateTransform();
+
   // std::cout << "GPF::DoProcessLayer: L("<<source.GetName()<<") -> L("<<destination.GetName()<<") ...\n";
   if (source != destination)
     {

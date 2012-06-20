@@ -152,6 +152,7 @@ void otb::GeometriesSet::PrintSelf(std::ostream& os, itk::Indent indent) const
   this->apply(Printer(os, indent));
 }
 
+#if 0
 /*===========================================================================*/
 /*=========================[ GetMetaDataDictionary ]=========================*/
 /*===========================================================================*/
@@ -176,3 +177,4 @@ itk::MetaDataDictionary const& otb::GeometriesSet::GetMetaDataDictionary() const
 {
   return const_cast <GeometriesSet *>(this)->GetMetaDataDictionary();
 }
+#endif

@@ -148,11 +148,12 @@ public:
     }
   //@}
 
-  /**\name Projection references accessors and mutators */
+  /**\name Projection references accessors and mutators
+   * Projection references accessors and mutators.
+   * As the Input Projection Reference comes from the Input Geometries set, it
+   * can't be set independently.
+   */
   //@{
-  itkSetStringMacro(InputProjectionRef);
-  itkGetStringMacro(InputProjectionRef);
-
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
   //@}
@@ -175,7 +176,6 @@ private:
   InternalTransformPointerType                    m_Transform;
   //@}
 
-  std::string                                     m_InputProjectionRef; // in WKT format!
   std::string                                     m_OutputProjectionRef; // in WKT format!
   ImageKeywordlist                                m_InputKeywordList;
   ImageKeywordlist                                m_OutputKeywordList;
