@@ -71,13 +71,13 @@ private:
    
     AddDocTag(Tags::Vector);
 
-    AddParameter(ParameterType_InputFilename,  "in",   "InputVectorData");
+    AddParameter(ParameterType_InputFilename,  "in",   "Input vector dataset");
     SetParameterDescription( "in", "The input vector dataset to be rasterized" );
     
-    AddParameter(ParameterType_OutputImage,  "out",   "OutputImage");
+    AddParameter(ParameterType_OutputImage,  "out",   "Ouptut image");
     SetParameterDescription( "out", "An output image containing the rasterized vector dataset" );
     
-    AddParameter(ParameterType_InputImage,  "im",   "InputImage");
+    AddParameter(ParameterType_InputImage,  "im",   "Input reference image");
     SetParameterDescription( "im", "A reference image from which to import output grid and projection reference system information." );
     MandatoryOff("im");
     
