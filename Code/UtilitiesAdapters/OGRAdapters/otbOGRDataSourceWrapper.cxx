@@ -402,13 +402,14 @@ int otb::ogr::DataSource::Size(bool doForceComputation) const
 /*=================================[ Misc ]==================================*/
 /*===========================================================================*/
 
-void otb::ogr::DataSource::GetGlobalExtent(double & ulx,
+std::string otb::ogr::DataSource::GetGlobalExtent(double & ulx,
                                            double & uly,
                                            double & lrx,
                                            double & lry,
                                            bool force) const
 {
   OGREnvelope sExtent;
+
   const_iterator lit = this->begin();
   
   if(lit==this->end())
@@ -416,7 +417,11 @@ void otb::ogr::DataSource::GetGlobalExtent(double & ulx,
     itkGenericExceptionMacro(<< "Cannot compute global extent because there are no layers in the DataSource");
     }
 
-    const OGRErr res = lit->ogr().GetExtent(&sExtent,force);
+  std::string outwkt = lit->GetProjectionRef();
+
+  const OGRSpatialReference * ref_srs = lit->GetSpatialRef();
+  
+  const OGRErr res = lit->ogr().GetExtent(&sExtent,force);
 
 
   if(res!= OGRERR_NONE)
@@ -429,8 +434,8 @@ void otb::ogr::DataSource::GetGlobalExtent(double & ulx,
 
   for(; lit!=this->end(); ++lit)
     {
-     OGREnvelope cExtent;
-     
+    OGREnvelope cExtent;
+    
      const OGRErr cres = lit->ogr().GetExtent(&cExtent,force);
 
      if(cres!= OGRERR_NONE)
@@ -438,6 +443,35 @@ void otb::ogr::DataSource::GetGlobalExtent(double & ulx,
        itkGenericExceptionMacro(<< "Cannot retrieve extent of layer <"
                                 <<lit->GetName()<<">: " << CPLGetLastErrorMsg());
        }
+     
+     const OGRSpatialReference * current_srs = lit->GetSpatialRef();
+
+     // If both srs are valid and if they are different
+     if(ref_srs && current_srs && current_srs->IsSame(ref_srs) == 0)
+       {
+       // Reproject cExtent in ref_srs
+       // OGRCreateCoordinateTransformation is not const-correct
+       OGRCoordinateTransformation * coordTransformation = OGRCreateCoordinateTransformation(
+         const_cast<OGRSpatialReference *>(current_srs),
+         const_cast<OGRSpatialReference *>(ref_srs));
+
+       coordTransformation->Transform(1,&cExtent.MinX,&cExtent.MinY);
+       coordTransformation->Transform(1,&cExtent.MaxX,&cExtent.MaxY);
+
+       double real_minx = std::min(cExtent.MinX,cExtent.MaxX);
+       double real_miny = std::min(cExtent.MinY,cExtent.MaxY);
+       double real_maxx = std::max(cExtent.MinX,cExtent.MaxX);
+       double real_maxy = std::max(cExtent.MinY,cExtent.MaxY);
+
+       cExtent.MinX = real_minx;
+       cExtent.MinY = real_miny;
+       cExtent.MaxX = real_maxx;
+       cExtent.MaxY = real_maxy;
+
+       CPLFree(coordTransformation);
+       }
+
+     // If srs are invalid, we assume that extent are coherent
 
      // Merge with previous layer
      sExtent.Merge(cExtent);
@@ -447,6 +481,8 @@ void otb::ogr::DataSource::GetGlobalExtent(double & ulx,
   uly = sExtent.MinY;
   lrx = sExtent.MaxX;
   lry = sExtent.MaxY;
+
+  return outwkt;
 }
 
 

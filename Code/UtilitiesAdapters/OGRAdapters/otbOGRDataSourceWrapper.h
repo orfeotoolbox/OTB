@@ -212,7 +212,9 @@ public:
    */
   int Size(bool doForceComputation) const;
 
-  /** Allow to retrieve the union of the extents of all layers
+  /** Allow to retrieve the union of the extents of all
+   *  layers. In case of multiple layers with different SRS, the
+   *  global extent is expressed in the SRS of the first layer.
    *  \param[out] ulx reference to upper-left x coordinate of the
    *  extent
    *  \param[out] uly reference to upper-left y coordinate of the
@@ -224,9 +226,11 @@ public:
    *  \param[in] force Force computation of layers extents if not
    *  available. May force the driver to walk all geometries to
    *  compute the extent.
+   *  \return The Wkt of the extent projection (which is the wkt of
+   *  the first layer SRS)
    *  \throw itk::ExceptionObject if the layers extents can not be retrieved.
    */
-  void GetGlobalExtent(double & ulx, double & uly, double & lrx, double & lry, bool force = false) const;
+    std::string GetGlobalExtent(double & ulx, double & uly, double & lrx, double & lry, bool force = false) const;
 
 
   /** Grafts data and information from one data source to another.
