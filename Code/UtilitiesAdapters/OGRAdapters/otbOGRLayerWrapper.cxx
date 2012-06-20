@@ -232,7 +232,8 @@ OGRSpatialReference const* otb::ogr::Layer::GetSpatialRef() const
 std::string otb::ogr::Layer::GetProjectionRef() const
 {
   char * wkt;
-  
+  std::string stringWkt = "";
+
   assert(m_Layer && "OGRLayer not initialized");
 
   OGRSpatialReference * srs = m_Layer->GetSpatialRef();
@@ -246,14 +247,10 @@ std::string otb::ogr::Layer::GetProjectionRef() const
       itkGenericExceptionMacro(<< "Cannot convert spatial reference to wkt string for layer <"
                                <<m_Layer->GetName()<<">: " << CPLGetLastErrorMsg());
       }
-    }
+    stringWkt = wkt;
 
-  std::string stringWkt(wkt);
-
-  // According to documentation, argument of exportToWkt() should be
-  // freed
-  if(srs)
-    {
+    // According to documentation, argument of exportToWkt() should be
+    // freed
     CPLFree(wkt);
     }
 
