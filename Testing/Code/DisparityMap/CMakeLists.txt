@@ -529,6 +529,26 @@ SET_TESTS_PROPERTIES(dmTvDisparityMapMedianFilter PROPERTIES DEPENDS dmTvSubPixe
 
 ADD_TEST(dmTuAdhesionCorrectionFilterNew ${DISPARITYMAP_TESTS4}
          otbAdhesionCorrectionFilterNew)
+         
+ ADD_TEST(dmTuAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
+       otbAdhesionCorrectionFilter
+         ${INPUTDATA}/StereoFixedEdges.tif
+         ${TEMP}/dmTvDisparityMapMedianFilterOutput.tif
+         ${INPUTDATA}/BlankMask.tif
+         ${INPUTDATA}/MedianOutputEdges.tif
+         ${INPUTDATA}/BlankMask.tif
+         ${TEMP}/dmTvAdhesionCorrectionFilterDisparity.tif
+         ${TEMP}/dmTvAdhesionCorrectionFilterMask.tif
+         ${TEMP}/dmTvAdhesionCorrectionFilterRiskEdges.tif
+  		 3
+  		 0.25
+         10
+         30
+         100.0
+         100.0
+         )                 
+
+SET_TESTS_PROPERTIES(dmTuAdhesionCorrectionFilter PROPERTIES DEPENDS dmTvDisparityMapMedianFilter)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS1
