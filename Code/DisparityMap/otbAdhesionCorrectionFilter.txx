@@ -486,7 +486,7 @@ AdhesionCorrectionFilter<TImage, TMask>
               index[0]=index_pos[0]-1;
               index2[0]=index_pos[0]+i;
               index2[1]=index_pos[1];
-              if (std::fabs(old_disparityPtr->GetPixel(index) - old_disparityPtr->GetPixel(index2)) > m_Tolerance)
+              if (vcl_abs(old_disparityPtr->GetPixel(index) - old_disparityPtr->GetPixel(index2)) > m_Tolerance)
                 {
                 if (old_disparityPtr->GetPixel(index) < old_disparityPtr->GetPixel(index2))
                   {
@@ -580,7 +580,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       old_maskIt.SetIndex(index_pos);
       if (old_maskIt.Get() != 0 && old_maskPtr->GetPixel(index) != 0)
         {
-        if (std::fabs(old_disparityPtr->GetPixel(index_pos) - old_disparityPtr->GetPixel(index)) > m_Tolerance)
+        if (vcl_abs(old_disparityPtr->GetPixel(index_pos) - old_disparityPtr->GetPixel(index)) > m_Tolerance)
           {
           if (old_disparityPtr->GetPixel(index) > old_disparityPtr->GetPixel(index_pos) &&
               disparity_jump->GetPixel(index_pos) == 0)
@@ -850,7 +850,7 @@ AdhesionCorrectionFilter<TImage, TMask>
               l++;
               }
             }
-          dif = (int) std::fabs(pix[0]-pix[1]);
+          dif = (int) vcl_abs(pix[0]-pix[1]);
           risk_edgesIt.SetIndex(index_pos);
           if (dif==1 || dif==7) risk_edgesIt.Set(2);
           }
@@ -893,7 +893,7 @@ AdhesionCorrectionFilter<TImage, TMask>
             // The extend the border, it has to be as prevalent as before //
             canny_edgesIt.SetIndex(index_pos_actual);
             if (canny_edgesIt.Get()>m_DiscontinuityHighThreshold &&
-                std::fabs(canny_edgesIt.Get() - canny_edges->GetPixel(index_pos_old)) < m_MaxEdgeGap)
+                vcl_abs(canny_edgesIt.Get() - canny_edges->GetPixel(index_pos_old)) < m_MaxEdgeGap)
               {
               if (outputriskedgesPtr->GetPixel(index_pos_actual) ==0 && canny_edges->GetPixel(index_pos_actual) > m_max)
                 {
@@ -1456,7 +1456,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       if (old_maskIt.Get() == 0) k++;
       else
         {
-        if (std::fabs(old_disparityPtr->GetPixel(index_pos)-disp)>m_Tolerance && k<=win)
+        if (vcl_abs(old_disparityPtr->GetPixel(index_pos)-disp)>m_Tolerance && k<=win)
           {//only small holes
           disparity_jump2It.SetIndex(index_pos);
           if (old_disparityPtr->GetPixel(index_pos)>disp)  disparity_jump2It.Set(5);
@@ -1500,7 +1500,7 @@ AdhesionCorrectionFilter<TImage, TMask>
             if (old_maskPtr->GetPixel(index_pos0)==0) k++;
             else
               {
-              if (std::fabs(old_disparityPtr->GetPixel(index_pos0)-disp)>m_Tolerance/2 && k<=win)
+              if (vcl_abs(old_disparityPtr->GetPixel(index_pos0)-disp)>m_Tolerance/2 && k<=win)
                 {//only small holes
                 disparity_jump2It.SetIndex(index_pos0);
                 if (old_disparityPtr->GetPixel(index_pos0)>disp)  disparity_jump2It.Set(8);
