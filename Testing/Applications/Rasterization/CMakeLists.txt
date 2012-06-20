@@ -1,5 +1,3 @@
-
-IF( OTB_USE_MAPNIK )
 IF( OTB_DATA_USE_LARGEINPUT )
 
 OTB_TEST_APPLICATION(NAME apTvRsRasterizationLines
@@ -61,5 +59,3 @@ OTB_TEST_APPLICATION(NAME apTvRsRasterizationPolygons
                      VALID   --compare-image ${NOTOL}
                               ${BASELINE}/apTvRsRasterizationPolygons.tif
                 	      ${TEMP}/apTvRsRasterizationPolygons.tif)
-
-ENDIF( OTB_USE_MAPNIK )
