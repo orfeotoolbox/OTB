@@ -157,9 +157,6 @@ public:
               m_RenderingFunction->SetParameters(param);
               }
             }
-          std::cout <<"left Abcisse : "<< m_LeftAsymptote->GetAbcisse() 
-                    << " right abisse : "<<  m_RightAsymptote->GetAbcisse() 
-                    << std::endl;
           return true;
           }
         }
