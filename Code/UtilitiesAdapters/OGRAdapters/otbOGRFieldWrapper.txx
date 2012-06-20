@@ -435,7 +435,11 @@ void otb::ogr::Field::Assign(Field const& f)
 {
   CheckInvariants();
   f.CheckInvariants();
-  assert(f.GetDefinition() == this->GetDefinition() && "Cannot assign from a field that doesn't have the same definition");
+  assert(f.GetType() == this->GetType() && "Cannot assign from a field that doesn't have the same definition");
+  // We can't assume the following as sometimes field names are altered by the
+  // datasource driver; for instance, shp driver truncates field names to 8
+  // characters.
+  // assert(f.GetDefinition() == this->GetDefinition() && "Cannot assign from a field that doesn't have the same definition");
   UncheckedAssign(f);
   CheckInvariants();
 }

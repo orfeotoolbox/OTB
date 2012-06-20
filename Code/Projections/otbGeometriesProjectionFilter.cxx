@@ -278,3 +278,11 @@ void otb::GeometriesProjectionFilter::DoProcessLayer(ogr::Layer const& source, o
     m_TransformationFunctor(destination); // if TransformedElementType == layer
     }
 }
+
+/*virtual*/
+void otb::GeometriesProjectionFilter::DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const
+
+{
+  std::cout << "otb::GeometriesProjectionFilter::DoDefineNewLayerFields\n";
+  m_TransformationFunctor.DefineFields(source, dest);
+}

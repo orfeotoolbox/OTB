@@ -23,21 +23,21 @@
 /*===========================================================================*/
 /*==================[ DefaultGeometriesToGeometriesFilter ]==================*/
 /*===========================================================================*/
-template <class TransformationFunctor>
+template <class TransformationFunctor, class FieldTransformationPolicy>
 inline
-otb::DefaultGeometriesToGeometriesFilter<TransformationFunctor>::DefaultGeometriesToGeometriesFilter()
+otb::DefaultGeometriesToGeometriesFilter<TransformationFunctor, FieldTransformationPolicy>::DefaultGeometriesToGeometriesFilter()
 {}
 
-template <class TransformationFunctor>
+template <class TransformationFunctor, class FieldTransformationPolicy>
 inline
 /*virtual*/
-otb::DefaultGeometriesToGeometriesFilter<TransformationFunctor>::~DefaultGeometriesToGeometriesFilter()
+otb::DefaultGeometriesToGeometriesFilter<TransformationFunctor, FieldTransformationPolicy>::~DefaultGeometriesToGeometriesFilter()
 {}
 
-template <class TransformationFunctor>
+template <class TransformationFunctor, class FieldTransformationPolicy>
 inline
 /*virtual*/
-void otb::DefaultGeometriesToGeometriesFilter<TransformationFunctor>::DoProcessLayer(
+void otb::DefaultGeometriesToGeometriesFilter<TransformationFunctor, FieldTransformationPolicy>::DoProcessLayer(
   otb::ogr::Layer const& source, otb::ogr::Layer & destination) const
 {
   if (source != destination)
@@ -56,17 +56,17 @@ void otb::DefaultGeometriesToGeometriesFilter<TransformationFunctor>::DoProcessL
 /*================[ TransformationFunctorDispatcher<layer> ]=================*/
 /*===========================================================================*/
 
-template <class TransformationFunctor>
+template <class TransformationFunctor, class FieldTransformationPolicy>
 inline
-void otb::TransformationFunctorDispatcher<TransformationFunctor,otb::ogr::Layer>::operator()(
+void otb::TransformationFunctorDispatcher<TransformationFunctor,otb::ogr::Layer,FieldTransformationPolicy>::operator()(
   otb::ogr::Layer const& in, otb::ogr::Layer & out) const
 {
   m_functor(in, out);
 }
 
-template <class TransformationFunctor>
+template <class TransformationFunctor, class FieldTransformationPolicy>
 inline
-void otb::TransformationFunctorDispatcher<TransformationFunctor,otb::ogr::Layer>::operator()(
+void otb::TransformationFunctorDispatcher<TransformationFunctor,otb::ogr::Layer,FieldTransformationPolicy>::operator()(
   otb::ogr::Layer & inout) const
 
 {
@@ -76,26 +76,26 @@ void otb::TransformationFunctorDispatcher<TransformationFunctor,otb::ogr::Layer>
 /*===========================================================================*/
 /*=============[ TransformationFunctorDispatcher<OGRGeometry> ]==============*/
 /*===========================================================================*/
-template <class TransformationFunctor>
+template <class TransformationFunctor, class FieldTransformationPolicy>
 inline
-void otb::TransformationFunctorDispatcher<TransformationFunctor,OGRGeometry>::operator()(
+void otb::TransformationFunctorDispatcher<TransformationFunctor,OGRGeometry,FieldTransformationPolicy>::operator()(
   otb::ogr::Layer const& in, otb::ogr::Layer & out) const
 {
   OGRFeatureDefn & defn = out.GetLayerDefn();
   for (ogr::Layer::const_iterator b = in.begin(), e = in.end(); b != e; ++b)
     {
     ogr::Feature const feat = *b;
-    // TODO: field transformations...
     ogr::UniqueGeometryPtr g = m_functor(feat.GetGeometry());
     ogr::Feature dest(defn);
     dest.SetGeometryDirectly(otb::move(g));
+    this->fieldsTransform(feat, dest);
     out.CreateFeature(dest);
     }
 }
 
-template <class TransformationFunctor>
+template <class TransformationFunctor, class FieldTransformationPolicy>
 inline
-void otb::TransformationFunctorDispatcher<TransformationFunctor,OGRGeometry>::operator()(
+void otb::TransformationFunctorDispatcher<TransformationFunctor,OGRGeometry,FieldTransformationPolicy>::operator()(
   otb::ogr::Layer & inout) const
 {
   OGRFeatureDefn & defn = inout.GetLayerDefn();
@@ -105,7 +105,7 @@ void otb::TransformationFunctorDispatcher<TransformationFunctor,OGRGeometry>::op
   for (int i=0, N=inout.GetFeatureCount(true); i!=N; ++i)
     {
     ogr::Feature feat = *inout.start_at(i);
-    // TODO: field transformations...
+    this->fieldsTransform(feat);
     ogr::UniqueGeometryPtr g = m_functor(feat.GetGeometry());
     feat.SetGeometryDirectly(otb::move(g));
     inout.SetFeature(feat);

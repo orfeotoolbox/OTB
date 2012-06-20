@@ -99,7 +99,8 @@ public:
    */
   Field(Feature & feature, size_t index);
   /// %Field definition accessor.
-  FieldDefn const& GetDefinition() const;
+  FieldDefn const& GetDefinition() const
+    { return m_Definition; }
   /// %Field type accessor.
   OGRFieldType GetType() const
     { return m_Definition.GetType(); }

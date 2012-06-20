@@ -117,6 +117,7 @@ private:
   virtual OGRSpatialReference* DoDefineNewLayerSpatialReference(ogr::Layer const& source) const;
   virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const;
   virtual void DoFinalizeInitialisation();
+  virtual void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const;
 
 protected:
   /** Default constructor. */
@@ -160,7 +161,7 @@ private:
   //@{
   typedef ReprojectTransformationFunctor                          TransformationFunctorType;
   typedef TransformationFunctorType::TransformedElementType       TransformedElementType;
-  typedef TransformationFunctorDispatcher<TransformationFunctorType, TransformedElementType>
+  typedef TransformationFunctorDispatcher<TransformationFunctorType, TransformedElementType, FieldCopyTransformation>
                                                                   TransformationFunctorDispatcherType;
 
   TransformationFunctorDispatcherType             m_TransformationFunctor;

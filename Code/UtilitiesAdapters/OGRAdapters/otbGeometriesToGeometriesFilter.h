@@ -120,6 +120,8 @@ private:
    */
   virtual std::vector<std::string> DoDefineNewLayerOptions(ogr::Layer const& source) const;
 
+  virtual void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const = 0;
+
   /** Hook used to conclude the initialization phase.
    * As ITK doesn't follow a <em>the constructor set the object in a final, and
    * ready to be used, state</em>, this step is required to do that once all
@@ -130,6 +132,38 @@ private:
   virtual void                     DoFinalizeInitialisation() {}
   //@}
   friend struct ::ProcessVisitor;
+  };
+
+struct FieldCopyTransformation
+  {
+  OGRFeatureDefn & getDefinition(ogr::Layer & outLayer) const
+    {
+    return outLayer.GetLayerDefn();
+    }
+  void fieldsTransform(ogr::Feature const& inoutFeature) const
+    {
+    // default => do nothing for in-place transformation
+    }
+  void fieldsTransform(ogr::Feature const& inFeature, ogr::Feature & outFeature) const
+    {
+    // default => copy all fields for copy transformation
+    assert(inFeature.GetSize() == outFeature.GetSize());
+    for (size_t i=0,N=inFeature.GetSize(); i!=N; ++i)
+      {
+      outFeature[i].Assign(inFeature[i]);
+      }
+    }
+
+  void DefineFields(ogr::Layer const& source, ogr::Layer & dest) const
+    {
+    std::cout << " FieldCopyTransformation::DefineFields()\n";
+    OGRFeatureDefn & inDefinition = source.GetLayerDefn();
+    for (int i=0,N=inDefinition.GetFieldCount(); i!=N; ++i)
+      {
+      std::cout << "  - " << ogr::FieldDefn(*inDefinition.GetFieldDefn(i)) << "\n";
+      dest.CreateField(*inDefinition.GetFieldDefn(i));
+      }
+    }
   };
 
 
@@ -147,7 +181,7 @@ private:
  * \since OTB v 3.14.0
  * \todo Add a specialization for \c ogr::Feature.
  */
-template <class TransformationFunctor, class TransformedElementType>
+template <class TransformationFunctor, class TransformedElementType, class FieldTransformationPolicy = FieldCopyTransformation>
 struct TransformationFunctorDispatcher
   {
   };
@@ -157,8 +191,9 @@ struct TransformationFunctorDispatcher
  * \tparam TransformationFunctor actual transformation functor
  * \since OTB v 3.14.0
  */
-template <class TransformationFunctor>
-struct TransformationFunctorDispatcher<TransformationFunctor, ogr::Layer>
+template <class TransformationFunctor, class FieldTransformationPolicy>
+struct TransformationFunctorDispatcher<TransformationFunctor, ogr::Layer, FieldTransformationPolicy>
+: FieldTransformationPolicy
   {
   typedef typename TransformationFunctor::TransformedElementType TransformedElementType;
   BOOST_MPL_ASSERT((boost::is_same<ogr::Layer, TransformedElementType>));
@@ -171,35 +206,14 @@ private:
   TransformationFunctor m_functor;
   };
 
-template <class TransformationFunctor>
-struct FieldTransformationPolicy
-  {
-  OGRFeatureDefn & getDefinition(ogr::Layer & outLayer) const
-    {
-    return outLayer.GetLayerDefn();
-    }
-  void fieldsTransform(ogr::Feature const& inoutFeature)
-    {
-    // default => do nothing for in-place transformation
-    }
-  void fieldsTransform(ogr::Feature const& inFeature, ogr::Feature & outFeature)
-    {
-    // default => copy all fields for copy transformation
-    assert(inFeature.GetSize() == outFeature.GetSize());
-    for (size_t i=0,N=inFeature.GetSize(); i!=N; ++i)
-      {
-      outFeature[i] = inFeature[i];
-      }
-    }
-  };
-
 /**\ingroup GeometriesFilters
  * Specialization for \c OGRGeometry.
  * \tparam TransformationFunctor actual transformation functor
  * \since OTB v 3.14.0
  */
-template <class TransformationFunctor>
-struct TransformationFunctorDispatcher<TransformationFunctor, OGRGeometry>
+template <class TransformationFunctor, class FieldTransformationPolicy>
+struct TransformationFunctorDispatcher<TransformationFunctor, OGRGeometry, FieldTransformationPolicy>
+: FieldTransformationPolicy
   {
   typedef typename TransformationFunctor::TransformedElementType TransformedElementType;
   BOOST_MPL_ASSERT((boost::is_same<OGRGeometry, TransformedElementType>));
@@ -220,10 +234,10 @@ private:
  * \since OTB v 3.14.0
  * \todo Find a better name
  */
-template <class TransformationFunctor>
+template <class TransformationFunctor, class FieldTransformationPolicy = FieldCopyTransformation>
 class ITK_EXPORT DefaultGeometriesToGeometriesFilter
 : public GeometriesToGeometriesFilter
-, public TransformationFunctorDispatcher<TransformationFunctor, typename TransformationFunctor::TransformedElementType>
+, public TransformationFunctorDispatcher<TransformationFunctor, typename TransformationFunctor::TransformedElementType, FieldTransformationPolicy>
 {
 public:
   /**\name Standard ITK typedefs */
@@ -237,7 +251,7 @@ public:
   //@{
   typedef TransformationFunctor                                  TransformationFunctorType;
   typedef typename TransformationFunctor::TransformedElementType TransformedElementType;
-  typedef TransformationFunctorDispatcher<TransformationFunctorType, TransformedElementType>
+  typedef TransformationFunctorDispatcher<TransformationFunctorType, TransformedElementType, FieldTransformationPolicy>
                                                                  TransformationFunctorDispatcherType;
   //@}
 
@@ -257,6 +271,10 @@ protected:
   virtual ~DefaultGeometriesToGeometriesFilter();
 
   virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const;
+  virtual void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const
+    {
+    this->DefineFields(source, dest);
+    }
 private:
   // TransformationFunctorDispatcherType m_TransformationFunctor;
 };
