@@ -391,6 +391,11 @@ OGREnvelope otb::ogr::DataSource::GetGlobalExtent(bool force/* = false */, std::
   const OGRSpatialReference * ref_srs = lit->GetSpatialRef();
   OGREnvelope sExtent = lit->GetExtent(force);
 
+  if (outwkt)
+    {
+    *outwkt = lit->GetProjectionRef();
+    }
+
   ++lit;
 
   for(; lit!=this->end(); ++lit)
@@ -399,7 +404,7 @@ OGREnvelope otb::ogr::DataSource::GetGlobalExtent(bool force/* = false */, std::
 
     const OGRSpatialReference * current_srs = lit->GetSpatialRef();
 
-    // If both srs are valid and if they are different
+  // If both srs are valid and if they are different
     if(ref_srs && current_srs && current_srs->IsSame(ref_srs) == 0)
       {
       // Reproject cExtent in ref_srs
@@ -434,10 +439,6 @@ OGREnvelope otb::ogr::DataSource::GetGlobalExtent(bool force/* = false */, std::
     sExtent.Merge(cExtent);
     } // for each layer
 
-  if (outwkt)
-    {
-    *outwkt = lit->GetProjectionRef();
-    }
   return sExtent;
 }
 
