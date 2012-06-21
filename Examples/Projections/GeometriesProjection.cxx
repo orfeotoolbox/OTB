@@ -35,8 +35,6 @@
 
 #include "otbGeometriesProjectionFilter.h"
 #include "otbGeometriesSet.h"
-// #include "otbGeometriesFileReader.h"
-// #include "otbGeometriesFileWriter.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"

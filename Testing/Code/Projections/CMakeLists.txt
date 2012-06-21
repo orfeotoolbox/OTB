@@ -1136,6 +1136,37 @@ ADD_TEST(prTvVectorDataProjectionFilterPolygons ${PROJECTIONS_TESTS3}
 )
 
 
+#test points
+ADD_TEST(prTvGeometriesProjectionFilterPoints ${PROJECTIONS_TESTS3}
+        --compare-ogr ${NOTOL}
+            ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
+            ${TEMP}/prTvGeometriesProjectionFilterPoints.shp
+        otbGeometriesProjectionFilter
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${TEMP}/prTvGeometriesProjectionFilterPoints.shp
+)
+
+#test lines
+ADD_TEST(prTvGeometriesProjectionFilterLines ${PROJECTIONS_TESTS3}
+        --compare-ogr ${NOTOL}
+            ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
+            ${TEMP}/prTvGeometriesProjectionFilterLines.shp
+        otbGeometriesProjectionFilter
+        ${INPUTDATA}/ToulouseRoad-examples.shp
+        ${TEMP}/prTvGeometriesProjectionFilterLines.shp
+)
+
+# test polygons
+ADD_TEST(prTvGeometriesProjectionFilterPolygons ${PROJECTIONS_TESTS3}
+        --compare-ogr  ${NOTOL}
+            ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
+            ${TEMP}/prTvGeometriesProjectionFilterPolygons.shp
+        otbGeometriesProjectionFilter
+        ${INPUTDATA}/Capitole-Shadows.shp
+        ${TEMP}/prTvGeometriesProjectionFilterPolygons.shp
+)
+
+
 # test to sensor
 # NB: no prj file here as it is in sensor geometry
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -1645,6 +1676,7 @@ otbVectorDataProjectionFilterFromMapToGeo.cxx
 otbVectorDataProjectionFilterFromMapToImage.cxx
 otbVectorDataProjectionFilterFromGeoToMap.cxx
 otbVectorDataIntoImageProjectionFilterTest.cxx
+otbGeometriesProjectionFilter.cxx
 otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx
 otbTileMapTransform.cxx
