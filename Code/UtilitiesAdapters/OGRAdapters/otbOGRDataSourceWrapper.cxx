@@ -132,6 +132,29 @@ otb::ogr::DataSource::DataSource(OGRDataSource * source)
 {
 }
 
+otb::ogr::DataSource::Pointer otb::ogr::DataSource::CreateDataSourceFromDriver(std::string const& filename)
+{
+  // Hand made factory based on file extension.
+  char const* driverName = DeduceDriverName(filename);
+  if (!driverName)
+    {
+    itkGenericExceptionMacro(<< "No OGR driver known to OTB to create and handle a DataSource named <"
+      <<filename<<">.");
+    }
+
+  OGRSFDriver * d = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
+  assert(d && "OGR driver not found");
+  OGRDataSource * source = d->CreateDataSource(filename.c_str());
+  if (!source) {
+    itkGenericExceptionMacro(<< "Failed to create OGRDataSource <"<<filename
+      <<"> (driver name: " << driverName<<">: " << CPLGetLastErrorMsg());
+  }
+  source->SetDriver(d);
+  otb::ogr::DataSource::Pointer res = new otb::ogr::DataSource(source);
+  res->UnRegister();
+  return res;
+}
+
 otb::ogr::DataSource::Pointer
 otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
 {
@@ -141,16 +164,45 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
   // std::cout << "Opening datasource " << filename << " update=" << update << "\n";
   if (itksys::SystemTools::FileExists(filename.c_str()))
     {
-    OGRDataSource * source = OGRSFDriverRegistrar::Open(filename.c_str(), update);
-    if (!source)
+    if (!update)
       {
-      itkGenericExceptionMacro(<< "Failed to open OGRDataSource file "
-        << filename<<": " << CPLGetLastErrorMsg());
+      OGRDataSource * source = OGRSFDriverRegistrar::Open(filename.c_str(), update);
+      if (!source)
+        {
+        itkGenericExceptionMacro(<< "Failed to open OGRDataSource file "
+          << filename<<": " << CPLGetLastErrorMsg());
+        }
+      Pointer res = new DataSource(source);
+      res->UnRegister();
+      return res;
       }
-    Pointer res = new DataSource(source);
-    res->UnRegister();
-    return res;
-    }
+    else
+      {
+      // Attempt to delete the datasource if it already exists
+      OGRDataSource * poDS = OGRSFDriverRegistrar::Open(filename.c_str(), TRUE);
+
+      if (poDS != NULL)
+        {
+        OGRSFDriver * ogrDriver = poDS->GetDriver();
+        OGRDataSource::DestroyDataSource(poDS);
+        //Erase the data if possible
+        if (ogrDriver->TestCapability(ODrCDeleteDataSource))
+          {
+          //Delete datasource
+          OGRErr ret = ogrDriver->DeleteDataSource(filename.c_str());
+          if (ret != OGRERR_NONE)
+            {
+            itkGenericOutputMacro(<< "Deletion of data source " << filename
+                            << " failed: " << CPLGetLastErrorMsg());
+            }
+          }
+        else
+          {
+          itkGenericOutputMacro(<< "Cannot delete data source " << filename);
+          }
+        } // if (poDS != NULL)
+      } // else if (update)
+    } // if (itksys::SystemTools::FileExists(filename.c_str()))
   else
     {
     if (! update)
@@ -158,26 +210,8 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
       itkGenericExceptionMacro(<< "No DataSource named <"<<filename<<"> exists,"
         " and the file opening mode does not permit updates. DataSource creation is thus aborted.");
       }
-    // Hand made factory based on file extension.
-    char const* driverName = DeduceDriverName(filename);
-    if (!driverName)
-      {
-      itkGenericExceptionMacro(<< "No OGR driver known to OTB to create and handle a DataSource named <"
-        <<filename<<">.");
-      }
-
-    OGRSFDriver * d = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
-    assert(d && "OGR driver not found");
-    OGRDataSource * source = d->CreateDataSource(filename.c_str());
-    if (!source) {
-      itkGenericExceptionMacro(<< "Failed to create OGRDataSource <"<<filename
-        <<"> (driver name: " << driverName<<">: " << CPLGetLastErrorMsg());
     }
-    source->SetDriver(d);
-    Pointer res = new DataSource(source);
-    res->UnRegister();
-    return res;
-    }
+  return CreateDataSourceFromDriver(filename);
 }
 
 /*static*/

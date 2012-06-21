@@ -471,6 +471,8 @@ protected:
    */
   virtual ~DataSource();
 
+  static Pointer CreateDataSourceFromDriver(std::string const& filename);
+
   /** Prints self into stream. */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
