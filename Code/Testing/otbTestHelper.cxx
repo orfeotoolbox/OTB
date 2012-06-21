@@ -661,8 +661,8 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
   // if there are discrepencies, create an diff image
   if (status.GetSquaredNorm() > 0 && m_ReportErrors)
     {
-    typedef otb::PrintableImageFilter<ImageType> RescaleType;
-    typedef RescaleType::OutputImageType         OutputType;
+    typedef otb::PrintableImageFilter<ImageType>               RescaleType;
+    typedef RescaleType::OutputImageType                       OutputType;
     typedef otb::ImageFileWriter<RescaleType::OutputImageType> WriterType;
 
     RescaleType::Pointer rescale = RescaleType::New();
@@ -1131,7 +1131,6 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   otbCheckStringValue("INFO: using driver", ref_poDriver->GetName(), test_poDriver->GetName(), nbdiff, m_ReportErrors);
 
-  //    otbCheckStringValue("INFO: Internal data source name", ref_poDS->GetName(), test_poDS->GetName(), nbdiff, m_ReportErrors );
   std::string strRefName(ref_poDS->GetName());
   std::string strTestName(test_poDS->GetName());
   if (strRefName != strTestName)
@@ -1684,8 +1683,8 @@ bool TestHelper::CompareLines(const std::string& strfileref,
             {
 
             if ((strNumRef != strNumTest) && (vcl_abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
-                && (vcl_abs(atof(strNumRef.c_str()) - atof(strNumTest.c_str())) > epsilon * vcl_abs(atof(
-                                                                                                      strNumRef.c_str())))) //epsilon as relative error
+                && (vcl_abs(atof(strNumRef.c_str()) - atof(strNumTest.c_str()))
+                    > epsilon * vcl_abs(atof(strNumRef.c_str())))) //epsilon as relative error
               {
               if (m_ReportErrors)
                 {
@@ -1727,7 +1726,8 @@ bool TestHelper::CompareLines(const std::string& strfileref,
             {
 
             if ((strRef != strTest) && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
-                && (vcl_abs(atof(strRef.c_str()) - atof(strTest.c_str())) > epsilon * vcl_abs(atof(strRef.c_str()))))    //epsilon as relative error
+                && (vcl_abs(atof(strRef.c_str()) - atof(strTest.c_str()))
+                    > epsilon * vcl_abs(atof(strRef.c_str()))))    //epsilon as relative error
               {
               if (m_ReportErrors)
                 {

@@ -71,7 +71,7 @@ int main(int ac, char* av[])
   bool   lIgnoreOrder(false);
   double epsilonBoundary(0.0);
 
-  typedef otb::TestHelper::StringList StringList;
+  typedef otb::TestHelper::StringList   StringList;
   typedef otb::TestHelper::StringListIt StringListIt;
 
   StringList baselineFilenamesBinary;
