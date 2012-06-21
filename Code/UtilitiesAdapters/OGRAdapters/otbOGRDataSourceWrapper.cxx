@@ -160,13 +160,14 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
 {
   Drivers::Init();
 
-  const bool update = mode & Modes::write;
+  const bool write = mode & Modes::write;
   // std::cout << "Opening datasource " << filename << " update=" << update << "\n";
   if (itksys::SystemTools::FileExists(filename.c_str()))
     {
-    if (!update)
+    if (mode & Modes::read)
       {
-      OGRDataSource * source = OGRSFDriverRegistrar::Open(filename.c_str(), update);
+      // Open in read mode
+      OGRDataSource * source = OGRSFDriverRegistrar::Open(filename.c_str(), FALSE);
       if (!source)
         {
         itkGenericExceptionMacro(<< "Failed to open OGRDataSource file "
@@ -176,7 +177,20 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
       res->UnRegister();
       return res;
       }
-    else
+    else if (mode & Modes::append)
+      {
+      // Open in "update" mode
+      OGRDataSource * source = OGRSFDriverRegistrar::Open(filename.c_str(), TRUE);
+      if (!source)
+        {
+        itkGenericExceptionMacro(<< "Failed to open OGRDataSource file "
+          << filename<<": " << CPLGetLastErrorMsg());
+        }
+      Pointer res = new DataSource(source);
+      res->UnRegister();
+      return res;
+      }
+    else if (mode & Modes::write)
       {
       // Attempt to delete the datasource if it already exists
       OGRDataSource * poDS = OGRSFDriverRegistrar::Open(filename.c_str(), TRUE);
@@ -205,7 +219,8 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
     } // if (itksys::SystemTools::FileExists(filename.c_str()))
   else
     {
-    if (! update)
+    // File does not exists
+    if (mode & Modes::read || mode & Modes::append)
       {
       itkGenericExceptionMacro(<< "No DataSource named <"<<filename<<"> exists,"
         " and the file opening mode does not permit updates. DataSource creation is thus aborted.");

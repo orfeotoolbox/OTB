@@ -94,7 +94,7 @@ public:
    * \note Read/Write mode should have been <tt>read | write</tt>, but actually
    * OGR data source are always at least in read mode.
    */
-  struct Modes { enum type { invalid, read=1, write=2, MAX__ }; };
+  struct Modes { enum type { invalid, read=1, write=2, append=4, MAX__ }; };
 
   /**
    * Builder from an existing named data source.
