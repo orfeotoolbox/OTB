@@ -260,7 +260,6 @@ void otb::GeometriesProjectionFilter::DoProcessLayer(ogr::Layer const& source, o
   m_Transform->SetInputProjectionRef(source.GetProjectionRef());
   m_Transform->InstanciateTransform();
 
-  // std::cout << "GPF::DoProcessLayer: L("<<source.GetName()<<") -> L("<<destination.GetName()<<") ...\n";
   if (source != destination)
     {
     m_TransformationFunctor(source, destination); // if TransformedElementType == layer
@@ -275,6 +274,5 @@ void otb::GeometriesProjectionFilter::DoProcessLayer(ogr::Layer const& source, o
 void otb::GeometriesProjectionFilter::DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const
 
 {
-  std::cout << "otb::GeometriesProjectionFilter::DoDefineNewLayerFields\n";
   m_TransformationFunctor.DefineFields(source, dest);
 }

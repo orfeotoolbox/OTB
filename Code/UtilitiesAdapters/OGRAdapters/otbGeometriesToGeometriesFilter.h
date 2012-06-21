@@ -156,11 +156,9 @@ struct FieldCopyTransformation
 
   void DefineFields(ogr::Layer const& source, ogr::Layer & dest) const
     {
-    std::cout << " FieldCopyTransformation::DefineFields()\n";
     OGRFeatureDefn & inDefinition = source.GetLayerDefn();
     for (int i=0,N=inDefinition.GetFieldCount(); i!=N; ++i)
       {
-      std::cout << "  - " << ogr::FieldDefn(*inDefinition.GetFieldDefn(i)) << "\n";
       dest.CreateField(*inDefinition.GetFieldDefn(i));
       }
     }

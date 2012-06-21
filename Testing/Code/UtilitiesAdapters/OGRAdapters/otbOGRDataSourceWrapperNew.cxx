@@ -104,8 +104,6 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_mem_add_n_del_layer)
   BOOST_CHECK_THROW(ds->GetLayerChecked(1), itk::ExceptionObject);
   BOOST_CHECK_EQUAL(ds->Size(false), 0);
   BOOST_CHECK_EQUAL(ds->Size(true), 0);
-
-  std::cout << "End of scope" << std::endl;
 }
 
 BOOST_AUTO_TEST_CASE(OGRDataSource_new_exceptions)

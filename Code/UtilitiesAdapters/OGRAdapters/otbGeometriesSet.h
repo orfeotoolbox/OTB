@@ -113,14 +113,6 @@ public:
    */
   bool IsSet() const;
 
-#if 0
-  /**\name Meta data dictionary */
-  //@{
-  itk::MetaDataDictionary      & GetMetaDataDictionary();
-  itk::MetaDataDictionary const& GetMetaDataDictionary() const;
-  //@}
-#endif
-
   /**\name Image reference (spacing + origin) */
   //@{
   typedef ogr::ImageReference<double>                            ImageReference;
