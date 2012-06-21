@@ -60,7 +60,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 ::SetMedianDisparityInput( const TImage * medianmap )
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(1, const_cast<TImage *>( medianmap ));
+  this->SetNthInput(1, const_cast<TImage *>( medianmap ));
 }
 
 template <class TImage,   class TMask>
@@ -69,7 +69,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 ::SetMedianMaskInput( const TMask * medianmask)
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(2, const_cast<TMask *>( medianmask ));
+  this->SetNthInput(2, const_cast<TMask *>( medianmask ));
 }
 
 template <class TImage,   class TMask>
@@ -78,7 +78,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 ::SetEdgesDisparityInput( const TImage * cannymedianmap)
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(3, const_cast<TImage *>( cannymedianmap ));
+  this->SetNthInput(3, const_cast<TImage *>( cannymedianmap ));
 }
 
 template <class TImage,   class TMask>
@@ -87,7 +87,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 ::SetSubPixelMaskInput( const TMask * subpixelmask)
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(4, const_cast<TMask *>( subpixelmask ));
+  this->SetNthInput(4, const_cast<TMask *>( subpixelmask ));
 }
 
 template <class TImage,   class TMask>
