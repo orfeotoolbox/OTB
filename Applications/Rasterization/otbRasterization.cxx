@@ -166,7 +166,7 @@ private:
       {
       inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry);
       }
-    catch(itk::ExceptionObject & err)
+    catch(const itk::ExceptionObject&)
       {
       extentAvailable = false;
       }
