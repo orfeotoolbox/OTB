@@ -532,22 +532,25 @@ ADD_TEST(dmTuAdhesionCorrectionFilterNew ${DISPARITYMAP_TESTS4}
          otbAdhesionCorrectionFilterNew)
          
 ADD_TEST(dmTuAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
-       otbAdhesionCorrectionFilter
-         ${INPUTDATA}/StereoFixedEdges.tif
-         ${TEMP}/dmTvDisparityMapMedianFilterOutput.tif
-         ${INPUTDATA}/BlankMask.tif
-         ${INPUTDATA}/MedianOutputEdges.tif
-         ${INPUTDATA}/BlankMask.tif
-         ${TEMP}/dmTvAdhesionCorrectionFilterDisparity.tif
-         ${TEMP}/dmTvAdhesionCorrectionFilterMask.tif
-         ${TEMP}/dmTvAdhesionCorrectionFilterRiskEdges.tif
-  		 3
-  		 0.25
-         10
-         30
-         100.0
-         100.0
-         )                 
+   --compare-n-images ${EPSILON_4} 3
+        ${BASELINE}/dmTuAdhesionCorrectionMethod_Corrected.tif
+        ${TEMP}/dmTuAdhesionCorrectionMethod_Corrected.tif
+        ${BASELINE}/dmTuAdhesionCorrectionMethod_CorrectedMask.png
+        ${TEMP}/dmTuAdhesionCorrectionMethod_CorrectedMask.png
+       ${BASELINE}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
+        ${TEMP}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
+	otbAdhesionCorrectionFilter
+        ${INPUTDATA}/AdhesionCorrectionFilter_MedianInput
+        ${INPUTDATA}/AdhesionCorrectionFilter_MedianMaskInput.png
+        ${INPUTDATA}/AdhesionCorrectionFilter_SubpixelDisparityInput
+        ${INPUTDATA}/AdhesionCorrectionFilter_SubpixelMaskInput.png
+        ${INPUTDATA}/AdhesionCorrectionFilter_CannyRefInput
+        ${INPUTDATA}/AdhesionCorrectionFilter_CannyMedianInput
+        4 0.25
+        ${TEMP}/dmTuAdhesionCorrectionMethod_Corrected.tif
+        ${TEMP}/dmTuAdhesionCorrectionMethod_CorrectedMask.png
+        ${TEMP}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
+        )                 
 
 SET_TESTS_PROPERTIES(dmTuAdhesionCorrectionFilter PROPERTIES DEPENDS dmTvDisparityMapMedianFilter)
 

@@ -21,20 +21,20 @@
 #include "otbStandardWriterWatcher.h"
 #include "otbImageFileReader.h"
 
-  const unsigned int Dimension = 2;
-  typedef float                                                         PixelType;
-  typedef otb::Image<PixelType, Dimension>                              ImageType;
-  typedef float                                                         MaskPixelType;
-  typedef otb::Image<MaskPixelType, Dimension>                          MaskType;
+const unsigned int Dimension = 2;
+typedef float                                                         PixelType;
+typedef otb::Image<PixelType, Dimension>                              ImageType;
+typedef float                                                         MaskPixelType;
+typedef otb::Image<MaskPixelType, Dimension>                          MaskType;
 
 
-  typedef otb::ImageFileReader<ImageType>               ReaderType;
-  typedef otb::ImageFileReader<MaskType>                MaskReaderType;
+typedef otb::ImageFileReader<ImageType>               ReaderType;
+typedef otb::ImageFileReader<MaskType>                MaskReaderType;
 
-  typedef otb::StreamingImageFileWriter<ImageType>                      WriterType;
-  typedef otb::StreamingImageFileWriter<MaskType>                       MaskWriterType;
+typedef otb::StreamingImageFileWriter<ImageType>                      WriterType;
+typedef otb::StreamingImageFileWriter<MaskType>                       MaskWriterType;
 
-  typedef otb::AdhesionCorrectionFilter<ImageType, MaskType> AdhesionCorrectionFilterType;
+typedef otb::AdhesionCorrectionFilter<ImageType, MaskType> AdhesionCorrectionFilterType;
 
 int otbAdhesionCorrectionFilterNew(int argc, char* argv[])
 {
@@ -42,70 +42,92 @@ int otbAdhesionCorrectionFilterNew(int argc, char* argv[])
   // Instantiation
   AdhesionCorrectionFilterType::Pointer filter = AdhesionCorrectionFilterType::New();
 
-   return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 
 int otbAdhesionCorrectionFilter(int argc, char* argv[])
 {
-  if ((argc != 15))
+
+  if (argc != 12)
     {
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " imageinput_fname meddispinput_fname medmaskinput_fname edgedispinput_fname  subpixmaskinput_fname"
-        << std::endl;
-    std::cerr << " ouputmap_filename  outputmask_filename outputriskedges_filename ";
-    std::cerr << " radius tolerance discontinuitythres discontinuityhighthres edgethres maxedgegap ";
+    std::cerr << "MedianDisparityFileName MedianMaskFileName SubpixelDisparityFileName SubpixelMaskFileName CannyRefFileName CannyMedianFileName Radius Tolerance";
+    std::cerr << " CorrectedDisparityFileName CorrectedMaskFileName RiskEdgesFileName";
     return EXIT_FAILURE;
     }
-  AdhesionCorrectionFilterType::Pointer filter = AdhesionCorrectionFilterType::New();
 
-  ReaderType::Pointer inReader = ReaderType::New();
-  inReader->SetFileName(argv[1]);
+  const unsigned int ImageDimension = 2;
+  typedef double PixelType;
+  typedef otb::Image<unsigned char, ImageDimension>  MaskImageType;
+  typedef otb::Image<PixelType, ImageDimension> ImageType;
+  typedef otb::ImageFileReader<ImageType> InputReaderType;
 
-  ReaderType::Pointer medianDispReader = ReaderType::New();
-    medianDispReader->SetFileName(argv[2]);
+  const char* medianDisparityFileName = argv[1] ; 
+  const char* medianMaskFileName = argv[2] ; 
+  const char* subpixelDisparityFileName = argv[3] ; 
+  const char* subpixelMaskFileName = argv[4] ; 
+  const char* cannyRefFileName = argv[5] ; 
+  const char* cannyMedianFileName = argv[6] ; 
+  const unsigned int radius = atoi(argv[7]) ;
+  const float tolerance = atof(argv[8]) ; 
+  const char* correctedDisparityFileName = argv[9] ; 
+  const char* correctedMaskFileName = argv[10] ; 
+  const char* riskEdgesFileName = argv[11] ; 
+    
+  typedef otb::ImageFileReader<ImageType> DisparityMapReaderType;
+  DisparityMapReaderType::Pointer mediandisparityreader = DisparityMapReaderType::New();
+  mediandisparityreader->SetFileName(medianDisparityFileName);
 
-  MaskReaderType::Pointer medianMaskReader = MaskReaderType::New();
-  medianMaskReader->SetFileName(argv[3]);
+  typedef otb::ImageFileReader<MaskImageType> MaskReaderType;
+  MaskReaderType::Pointer medianmaskreader = MaskReaderType::New();
+  medianmaskreader->SetFileName(medianMaskFileName);
+	
+  DisparityMapReaderType::Pointer subpixeldisparityreader = DisparityMapReaderType::New();
+  subpixeldisparityreader->SetFileName(subpixelDisparityFileName);
+
+  typedef otb::ImageFileReader<MaskImageType> MaskReaderType;
+  MaskReaderType::Pointer subpixelmaskreader = MaskReaderType::New();
+  subpixelmaskreader->SetFileName(subpixelMaskFileName);
+	
+  /// Edge images are read from Canny filtering performed with MARC2
+  InputReaderType::Pointer cannyrefReader = InputReaderType::New();
+  cannyrefReader->SetFileName(cannyRefFileName);
+	
+  InputReaderType::Pointer cannymedianReader = InputReaderType::New();
+  cannymedianReader->SetFileName(cannyMedianFileName);
+
+  typedef otb::AdhesionCorrectionFilter<ImageType, MaskImageType> AdhesionCorrectionFilterType;
+  AdhesionCorrectionFilterType::Pointer adhesioncorrectionfilter = AdhesionCorrectionFilterType::New();
+
+  adhesioncorrectionfilter->SetInput(cannyrefReader->GetOutput());
+  adhesioncorrectionfilter->SetMedianDisparityInput(mediandisparityreader->GetOutput());
+  adhesioncorrectionfilter->SetMedianMaskInput(medianmaskreader->GetOutput());
+  adhesioncorrectionfilter->SetEdgesDisparityInput(cannymedianReader->GetOutput());
+  adhesioncorrectionfilter->SetSubPixelMaskInput(subpixelmaskreader->GetOutput());
+  adhesioncorrectionfilter->SetRadius(radius);
+  adhesioncorrectionfilter->SetTolerance(tolerance);
+  adhesioncorrectionfilter->SetDiscontinuityThreshold(10);
+  adhesioncorrectionfilter->SetDiscontinuityHighThreshold(30);
+  adhesioncorrectionfilter->SetMaxEdgeGap(10);
+  adhesioncorrectionfilter->SetEdgeThreshold(30); 
 
 
-  ReaderType::Pointer edgeDispReader = ReaderType::New();
-  edgeDispReader->SetFileName(argv[4]);
+  typedef otb::StreamingImageFileWriter<ImageType> DFWriterType;
+  DFWriterType::Pointer dfWriter = DFWriterType::New();
+  dfWriter->SetFileName(correctedDisparityFileName);
+  dfWriter->SetInput(adhesioncorrectionfilter->GetOutput());
+  dfWriter->Update();
 
-  MaskReaderType::Pointer subPixelMaskReader = MaskReaderType::New();
-  subPixelMaskReader->SetFileName(argv[5]);
+  typedef otb::StreamingImageFileWriter<MaskImageType> MaskWriterType;
+  MaskWriterType::Pointer mask_writer = MaskWriterType::New();
+  mask_writer->SetInput(adhesioncorrectionfilter->GetOutputMask());
+  mask_writer->SetFileName(correctedMaskFileName);
+  mask_writer->Update();
 
-  filter->SetInput(inReader->GetOutput());
-  filter->SetMedianDisparityInput(medianDispReader->GetOutput());
-  filter->SetMedianMaskInput(medianMaskReader->GetOutput());
-  filter->SetEdgesDisparityInput(edgeDispReader->GetOutput());
-  filter->SetSubPixelMaskInput(subPixelMaskReader->GetOutput());
-
-  filter->SetRadius(atoi(argv[9]));
-  filter->SetTolerance(atof(argv[10]));
-  filter->SetDiscontinuityThreshold(atof(argv[11]));
-  filter->SetDiscontinuityHighThreshold(atof(argv[12]));
-  filter->SetEdgeThreshold(atof(argv[13]));
-  filter->SetMaxEdgeGap(atof(argv[14]));
-
-
-WriterType  ::Pointer dispWriter = WriterType::New();
-  dispWriter->SetInput(filter->GetOutput());
-  dispWriter->SetFileName(argv[6]);
-  otb::StandardWriterWatcher watcher1(dispWriter, filter, "Computing disparity ");
-
-  dispWriter->Update();
-
-  WriterType::Pointer maskWriter = WriterType::New();
-  maskWriter->SetInput(filter->GetOutputMask());
-  maskWriter->SetFileName(argv[7]);
-
-  maskWriter->Update();
-
-  WriterType::Pointer edgeWriter = WriterType::New();
-  edgeWriter->SetInput(filter->GetOutputRiskEdges());
-  edgeWriter->SetFileName(argv[8]);
-
-  edgeWriter->Update();
+  DFWriterType::Pointer riskedgesWriter = DFWriterType::New();
+  riskedgesWriter->SetFileName(riskEdgesFileName);
+  riskedgesWriter->SetInput(adhesioncorrectionfilter->GetOutputRiskEdges());
+  riskedgesWriter->Update();
 
   return EXIT_SUCCESS;
 }
