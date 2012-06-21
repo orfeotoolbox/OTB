@@ -148,14 +148,15 @@ private:
   
   void DoExecute()
     {
+    otb::ogr::DataSource::Pointer ogrDS;
     UInt8ImageType::Pointer referenceImage;
 
-    m_OgrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::read);
+    ogrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::read);
 
     bool validInputProjRef = false;
     std::string inputProjectionRef = "";
 
-    otb::ogr::DataSource::const_iterator lit = m_OgrDS->begin();
+    otb::ogr::DataSource::const_iterator lit = ogrDS->begin();
 
     // Retrieve extent
     double ulx, uly, lrx, lry;
@@ -163,7 +164,7 @@ private:
 
     try
       {
-      inputProjectionRef = m_OgrDS->GetGlobalExtent(ulx,uly,lrx,lry);
+      inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry);
       }
     catch(itk::ExceptionObject & err)
       {
@@ -178,7 +179,7 @@ private:
 
       try
         {
-        inputProjectionRef = m_OgrDS->GetGlobalExtent(ulx,uly,lrx,lry,true);
+        inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry,true);
         extentAvailable = true;
         }
       catch(itk::ExceptionObject & err)
@@ -310,7 +311,7 @@ private:
       }
   
       m_OGRDataSourceRendering = OGRDataSourceToMapFilterType::New();
-      m_OGRDataSourceRendering->AddOGRDataSource(m_OgrDS);
+      m_OGRDataSourceRendering->AddOGRDataSource(ogrDS);
       m_OGRDataSourceRendering->SetOutputSize(size);
       m_OGRDataSourceRendering->SetOutputOrigin(origin);
       m_OGRDataSourceRendering->SetOutputSpacing(spacing);
@@ -342,7 +343,6 @@ private:
     
     }
   
-  otb::ogr::DataSource::Pointer m_OgrDS;
   OGRDataSourceToMapFilterType::Pointer m_OGRDataSourceRendering;
   
 };
