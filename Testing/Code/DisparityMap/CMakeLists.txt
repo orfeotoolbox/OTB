@@ -1,6 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
+SET(BASELINE_EXAMPLE ${OTB_DATA_ROOT}/Baseline/Examples/DisparityMap)  
 
 SET(DISPARITYMAP_TESTS1 ${CXX_TEST_PATH}/otbDisparityMapTests1)
 SET(DISPARITYMAP_TESTS2 ${CXX_TEST_PATH}/otbDisparityMapTests2)
@@ -437,6 +438,7 @@ ${TEMP}/feTvStereorectificationDeformationFieldSourceOutput2.tif
 5
 )
 
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -495,7 +497,6 @@ ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
 ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputHDisparity.tif
 ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputVDisparity.tif
 ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
-
 1 # NCC
 1 # Parabolic
 2 # radius
@@ -530,7 +531,7 @@ SET_TESTS_PROPERTIES(dmTvDisparityMapMedianFilter PROPERTIES DEPENDS dmTvSubPixe
 ADD_TEST(dmTuAdhesionCorrectionFilterNew ${DISPARITYMAP_TESTS4}
          otbAdhesionCorrectionFilterNew)
          
- ADD_TEST(dmTuAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
+ADD_TEST(dmTuAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
        otbAdhesionCorrectionFilter
          ${INPUTDATA}/StereoFixedEdges.tif
          ${TEMP}/dmTvDisparityMapMedianFilterOutput.tif
@@ -554,7 +555,26 @@ SET_TESTS_PROPERTIES(dmTuAdhesionCorrectionFilter PROPERTIES DEPENDS dmTvDispari
 
 ADD_TEST(dmTuDisparityMapToDEMFilterNew ${DISPARITYMAP_TESTS4}
          otbDisparityMapToDEMFilterNew)
+         
 
+
+ADD_TEST(dmTvDisparityMapToDEMFilter ${DISPARITYMAP_TESTS4}
+--compare-image ${NOTOL}
+		 ${BASELINE_EXAMPLE}/elevationOutput.tif
+		 ${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
+         otbDisparityMapToDEMFilter
+         ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
+         ${INPUTDATA}/sensor_stereo_left.tif
+         ${INPUTDATA}/sensor_stereo_right.tif
+         ${INPUTDATA}/sensor_stereo_rectif_left.tif
+         ${INPUTDATA}/sensor_stereo_rectif_right.tif
+         ${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
+         130
+         220
+         140
+         2.5
+         ${INPUTDATA}/sensor_stereo_dmap_mask.tif
+         )                              
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS1
