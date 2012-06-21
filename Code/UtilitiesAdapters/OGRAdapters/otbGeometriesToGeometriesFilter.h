@@ -120,6 +120,11 @@ private:
    */
   virtual std::vector<std::string> DoDefineNewLayerOptions(ogr::Layer const& source) const;
 
+  /**
+   * Hook used to define the fields of the new layer.
+   * \param[in] source  source \c Layer -- for reference
+   * \param[in,out] dest  destination \c Layer
+   */
   virtual void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const = 0;
 
   /** Hook used to conclude the initialization phase.
@@ -134,16 +139,32 @@ private:
   friend struct ::ProcessVisitor;
   };
 
+/**\ingroup GeometriesFilters
+ * Helper class to operate an exact copy of the fields from a source layer.
+ * \since OTB v 3.14.0
+ */
 struct FieldCopyTransformation
   {
   OGRFeatureDefn & getDefinition(ogr::Layer & outLayer) const
     {
     return outLayer.GetLayerDefn();
     }
+  /**
+   * In-place transformation: does nothing.
+   * \param[in] inoutFeature  \c Feature to change.
+   * \throw Nothing
+   */
   void fieldsTransform(ogr::Feature const& inoutFeature) const
     {
     // default => do nothing for in-place transformation
     }
+  /**
+   * By-Copy transformation: copies all fields.
+   * \param[in] inFeature  input \c Feature
+   * \param[in,out] outFeature  output \c Feature
+   *
+   * \throw itk::ExceptionObject if the fields cannot be copied.
+   */
   void fieldsTransform(ogr::Feature const& inFeature, ogr::Feature & outFeature) const
     {
     // default => copy all fields for copy transformation
@@ -154,6 +175,12 @@ struct FieldCopyTransformation
       }
     }
 
+  /**
+   * Defines the fields in the destination layer.
+   * \param[in] source  source \c Layer
+   * \param[in,out] dest  destination \c Layer
+   * \throw itk::ExceptionObject in case the operation can't succeed.
+   */
   void DefineFields(ogr::Layer const& source, ogr::Layer & dest) const
     {
     OGRFeatureDefn & inDefinition = source.GetLayerDefn();

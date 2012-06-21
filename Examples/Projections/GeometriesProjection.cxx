@@ -130,8 +130,8 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   filter->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist()); // nec qd capteur
-  filter->OutputImageReference.SetOrigin(imageReader->GetOutput()->GetOrigin()); // nec qd capteur
-  filter->OutputImageReference.SetSpacing(imageReader->GetOutput()->GetSpacing()); // nec qd capteur
+  filter->SetOutputOrigin(imageReader->GetOutput()->GetOrigin()); // nec qd capteur
+  filter->SetOutputSpacing(imageReader->GetOutput()->GetSpacing()); // nec qd capteur
   filter->SetOutputProjectionRef( imageReader->GetOutput()->GetProjectionRef()); // ~ wkt
   // Software Guide : EndCodeSnippet
 
