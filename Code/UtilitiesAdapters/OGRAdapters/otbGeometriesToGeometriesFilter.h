@@ -168,10 +168,12 @@ struct FieldCopyTransformation
   void fieldsTransform(ogr::Feature const& inFeature, ogr::Feature & outFeature) const
     {
     // default => copy all fields for copy transformation
-    assert(inFeature.GetSize() == outFeature.GetSize());
+
+    //assert(inFeature.GetSize() == outFeature.GetSize());
+
     for (size_t i=0,N=inFeature.GetSize(); i!=N; ++i)
       {
-      outFeature[i].Assign(inFeature[i]);
+      outFeature[inFeature[i].GetName()].Assign(inFeature[i]);
       }
     }
 
