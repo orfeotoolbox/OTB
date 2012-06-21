@@ -1136,6 +1136,37 @@ ADD_TEST(prTvVectorDataProjectionFilterPolygons ${PROJECTIONS_TESTS3}
 )
 
 
+#test points
+ADD_TEST(prTvGeometriesProjectionFilterPoints ${PROJECTIONS_TESTS3}
+        --compare-ogr ${NOTOL}
+            ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
+            ${TEMP}/prTvGeometriesProjectionFilterPoints.shp
+        otbGeometriesProjectionFilter
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${TEMP}/prTvGeometriesProjectionFilterPoints.shp
+)
+
+#test lines
+ADD_TEST(prTvGeometriesProjectionFilterLines ${PROJECTIONS_TESTS3}
+        --compare-ogr ${NOTOL}
+            ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
+            ${TEMP}/prTvGeometriesProjectionFilterLines.shp
+        otbGeometriesProjectionFilter
+        ${INPUTDATA}/ToulouseRoad-examples.shp
+        ${TEMP}/prTvGeometriesProjectionFilterLines.shp
+)
+
+# test polygons
+ADD_TEST(prTvGeometriesProjectionFilterPolygons ${PROJECTIONS_TESTS3}
+        --compare-ogr  ${NOTOL}
+            ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
+            ${TEMP}/prTvGeometriesProjectionFilterPolygons.shp
+        otbGeometriesProjectionFilter
+        ${INPUTDATA}/Capitole-Shadows.shp
+        ${TEMP}/prTvGeometriesProjectionFilterPolygons.shp
+)
+
+
 # test to sensor
 # NB: no prj file here as it is in sensor geometry
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -1181,6 +1212,25 @@ ADD_TEST(prTvVectorDataProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
 )
 SET_TESTS_PROPERTIES(prTvVectorDataProjectionFilterFromGeoToMap PROPERTIES DEPENDS prTvVectorDataProjectionFilterFromMapToGeo)
 
+
+
+ADD_TEST(prTvGeometriesProjectionFilterFromMapToEPSG_UTM ${PROJECTIONS_TESTS3}
+         --compare-ogr ${NOTOL}
+           ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
+           ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_UTM.shp
+         otbGeometriesProjectionFilterFromMapToEPSG
+           ${INPUTDATA}/ToulouseRoad-examples.shp
+           ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_UTM.shp
+           32631 )
+
+ADD_TEST(prTvGeometriesProjectionFilterFromMapToEPSG_WGS84 ${PROJECTIONS_TESTS3}
+         --compare-ogr ${NOTOL}
+           ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+           ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.kml
+         otbGeometriesProjectionFilterFromMapToEPSG
+           ${INPUTDATA}/ToulousePoints-examples.shp
+           ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.kml
+           4326 )
 
 
 ###################
@@ -1645,12 +1695,14 @@ otbVectorDataProjectionFilterFromMapToGeo.cxx
 otbVectorDataProjectionFilterFromMapToImage.cxx
 otbVectorDataProjectionFilterFromGeoToMap.cxx
 otbVectorDataIntoImageProjectionFilterTest.cxx
+otbGeometriesProjectionFilter.cxx
 otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx
 otbTileMapTransform.cxx
 otbVectorDataExtractROIandProjection.cxx
 otbGenericRSTransformGenericConversionCheckingFromGCP.cxx
 otbForwardBackwardProjectionConsistency.cxx
+otbGeometriesProjectionFilterFromMapToEPSG.cxx
 )
 
 SET(Projections_SRCS4

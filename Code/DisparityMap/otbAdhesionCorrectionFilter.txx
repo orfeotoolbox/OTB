@@ -60,7 +60,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 ::SetMedianDisparityInput( const TImage * medianmap )
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(1, const_cast<TImage *>( medianmap ));
+  this->SetNthInput(1, const_cast<TImage *>( medianmap ));
 }
 
 template <class TImage,   class TMask>
@@ -69,7 +69,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 ::SetMedianMaskInput( const TMask * medianmask)
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(2, const_cast<TMask *>( medianmask ));
+  this->SetNthInput(2, const_cast<TMask *>( medianmask ));
 }
 
 template <class TImage,   class TMask>
@@ -78,7 +78,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 ::SetEdgesDisparityInput( const TImage * cannymedianmap)
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(3, const_cast<TImage *>( cannymedianmap ));
+  this->SetNthInput(3, const_cast<TImage *>( cannymedianmap ));
 }
 
 template <class TImage,   class TMask>
@@ -87,7 +87,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 ::SetSubPixelMaskInput( const TMask * subpixelmask)
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(4, const_cast<TMask *>( subpixelmask ));
+  this->SetNthInput(4, const_cast<TMask *>( subpixelmask ));
 }
 
 template <class TImage,   class TMask>
@@ -438,15 +438,15 @@ AdhesionCorrectionFilter<TImage, TMask>
     }
 
   new_disparityIt.GoToBegin();
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
     {
     index_pos=new_disparityIt.GetIndex();
     if (new_disparityIt.GetIndex()[1] >= outputPtr->GetRequestedRegion().GetIndex()[1] &&
-        new_disparityIt.GetIndex()[1] < m_ImageSize[1] - win)
+        new_disparityIt.GetIndex()[1] < static_cast<int>(m_ImageSize[1]) - win)
       {
       old_maskIt.SetIndex(index_pos);
       while (old_maskIt.Get() == 0 &&
-        new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0])
+             new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0])
         {
         ++new_disparityIt;
         old_maskIt.SetIndex(new_disparityIt.GetIndex());
@@ -455,7 +455,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       disparity_jumpIt.SetIndex(index_pos);
       disparity_jumpIt.Set(-1); // first disparity in the epipolar line
       int k=0;
-      while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - win)
+      while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - win)
         {
         index_pos = new_disparityIt.GetIndex();
         if (old_maskPtr->GetPixel(index_pos) == 0) // holes in the disparity map
@@ -468,7 +468,7 @@ AdhesionCorrectionFilter<TImage, TMask>
             index[1]=index_pos[1];
             old_maskIt.SetIndex(index);
             new_disparityIt.SetIndex(index);
-            while(new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
+            while(new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] &&
                   old_maskIt.Get()==0)
               {
               i++;
@@ -476,7 +476,7 @@ AdhesionCorrectionFilter<TImage, TMask>
               new_disparityIt.SetIndex(index);
               old_maskIt.SetIndex(index);
               }
-            if (new_disparityIt.GetIndex()[0] ==  outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
+            if (new_disparityIt.GetIndex()[0] ==  static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
               {
               disparity_jumpIt.SetIndex(index_pos);
               disparity_jumpIt.Set(4);
@@ -559,12 +559,12 @@ AdhesionCorrectionFilter<TImage, TMask>
 
   new_disparityIt.GoToBegin();
   
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
     {
     index_pos = new_disparityIt.GetIndex();
     old_maskIt.SetIndex(index_pos);
     while (old_maskIt.Get() == 0 &&
-      new_disparityIt.GetIndex()[0] < outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
+           new_disparityIt.GetIndex()[0] < static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
       {
       ++new_disparityIt;
       old_maskIt.SetIndex(new_disparityIt.GetIndex());
@@ -572,7 +572,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     index_pos = new_disparityIt.GetIndex();
     old_disparityIt.SetIndex(index_pos);
     double disp = old_disparityIt.Get();
-    while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
+    while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
       {
       index_pos = new_disparityIt.GetIndex();
       index = index_pos;
@@ -609,11 +609,11 @@ AdhesionCorrectionFilter<TImage, TMask>
 
   new_disparityIt.GoToBegin();
 
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
     {
     index_pos = new_disparityIt.GetIndex();
     ++new_disparityIt;
-    while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
+    while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
       {
       index_pos = new_disparityIt.GetIndex();
       disparity_jumpIt.SetIndex(index_pos);
@@ -637,8 +637,8 @@ AdhesionCorrectionFilter<TImage, TMask>
                 l++;
                 index2[1] = index_pos[1] + l;
                 }
-              if (index2[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
-                  index2[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1]) // add this condition to avoid seg fault
+              if (index2[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] &&
+                  index2[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1]) // add this condition to avoid seg fault
                 {
                 disparity_jump2It.SetIndex(index2);
                 disparity_jump2It.Set(7);
@@ -659,17 +659,17 @@ AdhesionCorrectionFilter<TImage, TMask>
   
   new_disparityIt.GoToBegin();
   
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
     {
     index_pos = new_disparityIt.GetIndex();
     old_maskIt.SetIndex(index_pos);
     while (old_maskIt.Get() == 0 &&
-           new_disparityIt.GetIndex()[0] < outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
+           new_disparityIt.GetIndex()[0] < static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
       {
       ++new_disparityIt;
       old_maskIt.SetIndex(new_disparityIt.GetIndex());
       }
-    while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
+    while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
       {
       index_pos = new_disparityIt.GetIndex();
       disparity_jumpIt.SetIndex(index_pos);
@@ -715,10 +715,10 @@ AdhesionCorrectionFilter<TImage, TMask>
 
   // Exploring the left-right epipolar direction
   new_disparityIt.GoToBegin();
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
     {
     index_pos = new_disparityIt.GetIndex();
-    while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
+    while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
       {
       index_pos = new_disparityIt.GetIndex();
       disparity_jumpIt.SetIndex(index_pos);
@@ -727,10 +727,10 @@ AdhesionCorrectionFilter<TImage, TMask>
       if (disparity_jumpIt.Get() == 1)
         {
         int l=1;
-        while (index_pos[0]+l<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
+        while (index_pos[0]+l<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] &&
                l<=big_dist &&
-               index_pos[0]+l<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
-               index_pos[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+               index_pos[0]+l<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] &&
+               index_pos[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
           {
           index = index_pos;
           index[0] = index_pos[0] + l;
@@ -745,10 +745,10 @@ AdhesionCorrectionFilter<TImage, TMask>
       if (disparity_jumpIt.Get() == 3)
         {
         int l=1;
-        while (index_pos[0]+l<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
+        while (index_pos[0]+l<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] &&
                l<=big_dist &&
-               index_pos[0]+l<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
-               index_pos[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] )
+               index_pos[0]+l<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] &&
+               index_pos[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1] )
           {
           index = index_pos;
           index[0] = index_pos[0] + l;
@@ -765,8 +765,8 @@ AdhesionCorrectionFilter<TImage, TMask>
         int l=-1;
         while (index_pos[0]+l>=outputPtr->GetRequestedRegion().GetIndex()[0] &&
                l>=-big_dist &&
-               index_pos[0]+l<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
-               index_pos[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+               index_pos[0]+l<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] &&
+               index_pos[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
           {
           index = index_pos;
           index[0] = index_pos[0] + l;
@@ -783,8 +783,8 @@ AdhesionCorrectionFilter<TImage, TMask>
         int l=-1;
         while (index_pos[0]+l>=outputPtr->GetRequestedRegion().GetIndex()[0] &&
                l>=-big_dist &&
-               index_pos[0]+l<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
-               index_pos[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+               index_pos[0]+l<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] &&
+               index_pos[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
           {
           index = index_pos;
           index[0] = index_pos[0] + l;
@@ -815,10 +815,10 @@ AdhesionCorrectionFilter<TImage, TMask>
   
   new_disparityIt.GoToBegin();
 
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
     {
     index_pos = new_disparityIt.GetIndex();
-    while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]-1)
+    while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0]-1)
       {
       index_pos = new_disparityIt.GetIndex();
       risk_edgesIt.SetIndex(index_pos);
@@ -869,11 +869,11 @@ AdhesionCorrectionFilter<TImage, TMask>
 
   new_disparityIt.GoToBegin();
 
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] -1)
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1] -1)
     {
     index_pos = new_disparityIt.GetIndex();
     ++new_disparityIt;
-    while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
+    while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
       {
       index_pos = new_disparityIt.GetIndex();
       risk_edgesIt.SetIndex(index_pos);
@@ -935,12 +935,12 @@ AdhesionCorrectionFilter<TImage, TMask>
   
   new_disparityIt.GoToBegin();
 
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
     {
     index_pos = new_disparityIt.GetIndex();
     if (index_pos[1]>=big_win + outputPtr->GetRequestedRegion().GetIndex()[1])
       {
-      while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
+      while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
         {
         index_pos = new_disparityIt.GetIndex();
         auxIt.SetIndex(index_pos);
@@ -954,9 +954,9 @@ AdhesionCorrectionFilter<TImage, TMask>
             for(int i= -big_win; i<= big_win; i++)
               {
               if (index_pos[0] + i >= old_disparityPtr->GetRequestedRegion().GetIndex()[0] &&
-                  index_pos[0] + i < old_disparityPtr->GetRequestedRegion().GetSize()[0] + old_disparityPtr->GetRequestedRegion().GetIndex()[0] &&
+                  index_pos[0] + i < static_cast<int>(old_disparityPtr->GetRequestedRegion().GetSize()[0]) + old_disparityPtr->GetRequestedRegion().GetIndex()[0] &&
                   index_pos[1] + j >= old_disparityPtr->GetRequestedRegion().GetIndex()[1] &&
-                  index_pos[1] + j < old_disparityPtr->GetRequestedRegion().GetSize()[1] + old_disparityPtr->GetRequestedRegion().GetIndex()[1])
+                  index_pos[1] + j < static_cast<int>(old_disparityPtr->GetRequestedRegion().GetSize()[1]) + old_disparityPtr->GetRequestedRegion().GetIndex()[1])
                 {
                 index_pos0[0] = index_pos[0] + i;
                 index_pos0[1] = index_pos[1] + j;
@@ -981,9 +981,9 @@ AdhesionCorrectionFilter<TImage, TMask>
               for(int i= -win; i<= win; i++)
                 {
                 if (index_pos[0] + i >= outputPtr->GetRequestedRegion().GetIndex()[0] &&
-                    index_pos[0] + i < outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
+                    index_pos[0] + i < static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] &&
                     index_pos[1] + j >= outputPtr->GetRequestedRegion().GetIndex()[1] &&
-                    index_pos[1] + j < outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+                    index_pos[1] + j < static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
                   {
                   index_pos0[0] = index_pos[0] + i;
                   index_pos0[1] = index_pos[1] + j;
@@ -1010,10 +1010,10 @@ AdhesionCorrectionFilter<TImage, TMask>
   
   new_disparityIt.GoToBegin();
   
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1]- 1)
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1]- 1)
     {
     ++new_disparityIt;
-    while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]-1)
+    while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0]-1)
       {
       index_pos = new_disparityIt.GetIndex();
       risk_edgesIt.SetIndex(index_pos);
@@ -1049,18 +1049,18 @@ AdhesionCorrectionFilter<TImage, TMask>
   
   new_disparityIt.GoToBegin();
 
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
     {
     index_pos = new_disparityIt.GetIndex();
     old_maskIt.SetIndex(index_pos);
     while (old_maskIt.Get() == 0 &&
-      new_disparityIt.GetIndex()[0] < outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]- 1)
+      new_disparityIt.GetIndex()[0] < static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0]- 1)
       {
       ++new_disparityIt;
       old_maskIt.SetIndex(new_disparityIt.GetIndex());
       }
     index_pos = new_disparityIt.GetIndex();
-    while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
+    while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
       {
       index_pos = new_disparityIt.GetIndex();
       int pp=0;
@@ -1199,7 +1199,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         l=patch_side;
         index[0]=index_pos[0]+l;
         index[1]=index_pos[1];
-        while ((new_disparityIt.GetIndex()[0] + l) < outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]- 1 &&
+        while ((new_disparityIt.GetIndex()[0] + l) < static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0]- 1 &&
                 l>=0 &&
                 disparity_jump->GetPixel(index) != 2)
           {
@@ -1261,7 +1261,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         l=big_dist;
         index[0]=index_pos[0]+l;
         index[1]=index_pos[1];
-        while ((new_disparityIt.GetIndex()[0] + l) < outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]- 1 &&
+        while ((new_disparityIt.GetIndex()[0] + l) < static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0]- 1 &&
                 l>=0 &&
                 disparity_jump->GetPixel(index) != 4)
           {
@@ -1331,8 +1331,8 @@ AdhesionCorrectionFilter<TImage, TMask>
             index2[1]=index_pos[1]+k;
             if (index2[0]>=outputPtr->GetRequestedRegion().GetIndex()[0] &&
                 index2[1]>=outputPtr->GetRequestedRegion().GetIndex()[1] &&
-                index2[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
-                index2[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+                index2[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] &&
+                index2[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
               {
               new_disparityIt.SetIndex(index2);
               new_maskIt.SetIndex(index2);
@@ -1354,17 +1354,17 @@ AdhesionCorrectionFilter<TImage, TMask>
   
   new_disparityIt.GoToBegin();
   
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
     {
     index_pos = new_disparityIt.GetIndex();
     old_maskIt.SetIndex(index_pos);
     while (old_maskIt.Get() == 0 &&
-      new_disparityIt.GetIndex()[0] < outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
+      new_disparityIt.GetIndex()[0] < static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
       {
       ++new_disparityIt;
       old_maskIt.SetIndex(new_disparityIt.GetIndex());
       }
-    while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
+    while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
       {
       index_pos = new_disparityIt.GetIndex();
       index[0]=index_pos[0]+1;
@@ -1379,7 +1379,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         index[0]=index_pos[0]+i;
         disparity_jumpIt.SetIndex(index);
         while (i<=patch_side_small &&
-          disparity_jumpIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1 &&
+          disparity_jumpIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1 &&
           disparity_jumpIt.Get()==0)
           {
           new_disparityIt.SetIndex(index);
@@ -1403,7 +1403,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         index[0]=index_pos[0]+i;
         disparity_jumpIt.SetIndex(index);
         while (i>=-patch_side_small &&
-          disparity_jumpIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1 &&
+          disparity_jumpIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1 &&
           disparity_jumpIt.Get()==0 )
           {
           new_disparityIt.SetIndex(index);
@@ -1435,13 +1435,13 @@ AdhesionCorrectionFilter<TImage, TMask>
 
   new_disparityIt.GoToBegin();
 
-  while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
+  while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
     {
     index2 = new_disparityIt.GetIndex();
     index=index2;
     old_maskIt.SetIndex(index2);
     while (old_maskIt.Get() == 0 &&
-      new_disparityIt.GetIndex()[1] < outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
+      new_disparityIt.GetIndex()[1] < static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
       {
       index[1]=index[1]+1;
       old_maskIt.SetIndex(index);
@@ -1449,7 +1449,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       }
     double disp=old_disparityPtr->GetPixel(index);
     int k=0;
-    while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] -1)
+    while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1] -1)
       {
       index_pos = new_disparityIt.GetIndex();
       old_maskIt.SetIndex(index_pos);
@@ -1480,12 +1480,12 @@ AdhesionCorrectionFilter<TImage, TMask>
 
   new_disparityIt.GoToBegin();
   
-  while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
+  while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
     {
     int k=0;
     index2 = new_disparityIt.GetIndex();
     index=index2;
-    while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
+    while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
       {
       index_pos = new_disparityIt.GetIndex();
       if (disparity_jump2->GetPixel(index_pos) == 7)
@@ -1493,7 +1493,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         double disp=old_disparityPtr->GetPixel(index_pos);
         for (int i=0; i<=big_dist; i++)
           {
-          if (index_pos[1]+i < outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+          if (index_pos[1]+i < static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
             {
             index_pos0[0]=index_pos[0];
             index_pos0[1]=index_pos[1]+i;
@@ -1527,12 +1527,12 @@ AdhesionCorrectionFilter<TImage, TMask>
 
   new_disparityIt.GoToBegin();
   
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1]-1)
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1]-1)
     {
     index_pos = new_disparityIt.GetIndex();
     old_maskIt.SetIndex(index_pos);
     while (old_maskIt.Get() == 0 &&
-      new_disparityIt.GetIndex()[0] < outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
+      new_disparityIt.GetIndex()[0] < static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
       {
       ++new_disparityIt;
       old_maskIt.SetIndex(new_disparityIt.GetIndex());
@@ -1552,8 +1552,8 @@ AdhesionCorrectionFilter<TImage, TMask>
             index2[1]=index_pos[1]+k;
             if (index2[0]>=outputPtr->GetRequestedRegion().GetIndex()[0] &&
                 index2[1]>=outputPtr->GetRequestedRegion().GetIndex()[1] &&
-                index2[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] &&
-                index2[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+                index2[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] &&
+                index2[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
               {
               new_disparityIt.SetIndex(index2);
               new_maskIt.SetIndex(index2);
@@ -1572,10 +1572,10 @@ AdhesionCorrectionFilter<TImage, TMask>
   /** Remove pixels risking adhesion in the vertical direction(perpendicular to epipolar) */
 
   new_disparityIt.GoToBegin();
-  while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
+  while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
     {
     index2 = new_disparityIt.GetIndex();
-    while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
+    while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
       {
       index_pos = new_disparityIt.GetIndex();
       if (outputriskedgesPtr->GetPixel(index_pos) != 0)
@@ -1668,10 +1668,10 @@ AdhesionCorrectionFilter<TImage, TMask>
   /** remove pixels around disparity jumps with no risk edges */
 
   new_disparityIt.GoToBegin();
-  while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
+  while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
     {
     index2 = new_disparityIt.GetIndex();
-    while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
+    while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
       {
       index_pos = new_disparityIt.GetIndex();
       if (disparity_jump2->GetPixel(index_pos) == 5 || disparity_jump2->GetPixel(index_pos) == 8)
@@ -1680,7 +1680,7 @@ AdhesionCorrectionFilter<TImage, TMask>
         index[0]=index_pos[0];
         index[1]=index_pos[1]+l;
         while (l<=patch_side_small &&
-          index_pos[1]+l<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] -1 &&
+          index_pos[1]+l<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1] -1 &&
           disparity_jump2->GetPixel(index) != 6)
           {
           new_disparityIt.SetIndex(index);
@@ -1723,10 +1723,10 @@ AdhesionCorrectionFilter<TImage, TMask>
   int nb_disp =3;
   new_disparityIt.GoToBegin();
 
-  while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] -1)
+  while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1] -1)
     {
     index_pos = new_disparityIt.GetIndex();
-    while (new_disparityIt.GetIndex()[0] <outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
+    while (new_disparityIt.GetIndex()[0] <static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
       {
       index_pos = new_disparityIt.GetIndex();
       new_maskIt.SetIndex(index_pos);

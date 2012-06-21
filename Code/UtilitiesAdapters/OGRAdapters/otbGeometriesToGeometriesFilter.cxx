@@ -139,13 +139,6 @@ otb::GeometriesToGeometriesFilter::GetInput(void )
 void otb::GeometriesToGeometriesFilter::GenerateOutputInformation(void )
 {
   Superclass::GenerateOutputInformation();
-
-#if 0
-  // Apply only with data sources
-  OutputGeometriesType::Pointer output = this->GetOutput();
-  InputGeometriesType::Pointer  input = this->GetInput();
-  output->SetMetaDataDictionary(input->GetMetaDataDictionary());
-#endif
 }
 
 /*virtual*/

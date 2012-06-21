@@ -58,6 +58,7 @@ namespace boost {
  *
  * \sa http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3350.html about
  * \c contiguous_iterator_tag.
+ * \since OTB v 3.14.0
  * @{
  */
 template <typename Range> struct is_contiguous

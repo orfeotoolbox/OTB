@@ -1,6 +1,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
+SET(BASELINE_EXAMPLE ${OTB_DATA_ROOT}/Baseline/Examples/DisparityMap)  
 
 SET(DISPARITYMAP_TESTS1 ${CXX_TEST_PATH}/otbDisparityMapTests1)
 SET(DISPARITYMAP_TESTS2 ${CXX_TEST_PATH}/otbDisparityMapTests2)
@@ -437,6 +438,7 @@ ${TEMP}/feTvStereorectificationDeformationFieldSourceOutput2.tif
 5
 )
 
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -495,7 +497,6 @@ ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
 ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputHDisparity.tif
 ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputVDisparity.tif
 ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
-
 1 # NCC
 1 # Parabolic
 2 # radius
@@ -530,23 +531,26 @@ SET_TESTS_PROPERTIES(dmTvDisparityMapMedianFilter PROPERTIES DEPENDS dmTvSubPixe
 ADD_TEST(dmTuAdhesionCorrectionFilterNew ${DISPARITYMAP_TESTS4}
          otbAdhesionCorrectionFilterNew)
          
- ADD_TEST(dmTuAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
-       otbAdhesionCorrectionFilter
-         ${INPUTDATA}/StereoFixedEdges.tif
-         ${TEMP}/dmTvDisparityMapMedianFilterOutput.tif
-         ${INPUTDATA}/BlankMask.tif
-         ${INPUTDATA}/MedianOutputEdges.tif
-         ${INPUTDATA}/BlankMask.tif
-         ${TEMP}/dmTvAdhesionCorrectionFilterDisparity.tif
-         ${TEMP}/dmTvAdhesionCorrectionFilterMask.tif
-         ${TEMP}/dmTvAdhesionCorrectionFilterRiskEdges.tif
-  		 3
-  		 0.25
-         10
-         30
-         100.0
-         100.0
-         )                 
+ADD_TEST(dmTuAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
+   --compare-n-images ${EPSILON_4} 3
+        ${BASELINE}/dmTuAdhesionCorrectionMethod_Corrected.tif
+        ${TEMP}/dmTuAdhesionCorrectionMethod_Corrected.tif
+        ${BASELINE}/dmTuAdhesionCorrectionMethod_CorrectedMask.png
+        ${TEMP}/dmTuAdhesionCorrectionMethod_CorrectedMask.png
+       ${BASELINE}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
+        ${TEMP}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
+	otbAdhesionCorrectionFilter
+        ${INPUTDATA}/AdhesionCorrectionFilter_MedianInput
+        ${INPUTDATA}/AdhesionCorrectionFilter_MedianMaskInput.png
+        ${INPUTDATA}/AdhesionCorrectionFilter_SubpixelDisparityInput
+        ${INPUTDATA}/AdhesionCorrectionFilter_SubpixelMaskInput.png
+        ${INPUTDATA}/AdhesionCorrectionFilter_CannyRefInput
+        ${INPUTDATA}/AdhesionCorrectionFilter_CannyMedianInput
+        4 0.25
+        ${TEMP}/dmTuAdhesionCorrectionMethod_Corrected.tif
+        ${TEMP}/dmTuAdhesionCorrectionMethod_CorrectedMask.png
+        ${TEMP}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
+        )                 
 
 SET_TESTS_PROPERTIES(dmTuAdhesionCorrectionFilter PROPERTIES DEPENDS dmTvDisparityMapMedianFilter)
 
@@ -554,7 +558,26 @@ SET_TESTS_PROPERTIES(dmTuAdhesionCorrectionFilter PROPERTIES DEPENDS dmTvDispari
 
 ADD_TEST(dmTuDisparityMapToDEMFilterNew ${DISPARITYMAP_TESTS4}
          otbDisparityMapToDEMFilterNew)
+         
 
+
+ADD_TEST(dmTvDisparityMapToDEMFilter ${DISPARITYMAP_TESTS4}
+--compare-image ${NOTOL}
+		 ${BASELINE_EXAMPLE}/elevationOutput.tif
+		 ${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
+         otbDisparityMapToDEMFilter
+         ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
+         ${INPUTDATA}/sensor_stereo_left.tif
+         ${INPUTDATA}/sensor_stereo_right.tif
+         ${INPUTDATA}/sensor_stereo_rectif_left.tif
+         ${INPUTDATA}/sensor_stereo_rectif_right.tif
+         ${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
+         130
+         220
+         140
+         2.5
+         ${INPUTDATA}/sensor_stereo_dmap_mask.tif
+         )                              
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS1

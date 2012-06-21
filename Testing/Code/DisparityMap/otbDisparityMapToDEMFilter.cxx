@@ -32,7 +32,7 @@
   typedef float                                                        PixelType;
   typedef otb::Image<PixelType, Dimension>                             FloatImageType;
   typedef unsigned char                                                MaskPixelType;
-    typedef otb::Image<MaskPixelType, Dimension>                           MaskImageType;
+  typedef otb::Image<MaskPixelType, Dimension>                         MaskImageType;
   typedef otb::VectorImage<PixelType, Dimension>                       FloatVectorImageType;
 
   typedef otb::ImageList<FloatImageType>                  ImageListType;
@@ -40,11 +40,12 @@
     <FloatVectorImageType, ImageListType>                 VectorImageToListFilterType;
 
 
-  typedef otb::ImageFileReader<FloatVectorImageType>                   ReaderType;
+  typedef otb::ImageFileReader<FloatVectorImageType>            ReaderType;
   typedef otb::ImageFileReader<MaskImageType>                   MaskReaderType;
-  typedef otb::StreamingImageFileWriter  <FloatImageType>        WriterType;
+  typedef otb::StreamingImageFileWriter  <FloatImageType>       WriterType;
 
-   typedef otb::DisparityMapToDEMFilter <FloatImageType, FloatVectorImageType>      DisparityToElevationFilterType;
+  typedef otb::DisparityMapToDEMFilter <FloatImageType, FloatVectorImageType>      DisparityToElevationFilterType;
+
 int otbDisparityMapToDEMFilterNew(int argc, char* argv[])
 {
 
@@ -63,7 +64,7 @@ int otbDisparityMapToDEMFilter(int argc, char* argv[])
         << " dispinput_fname sensorleftinput_fname sensorrighttinput_fname gridleftinput_fname gridrightinput_fname"
         << std::endl;
     std::cerr << " ouputDEM_filename " << std::endl;
-    std::cerr << " elevmin elevmax DEMGridStep avgelev (maskinput_fname) " << std::endl;
+    std::cerr << " elevmin elevmax avgelev DEMgridstep (maskinput_fname) " << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -93,20 +94,14 @@ int otbDisparityMapToDEMFilter(int argc, char* argv[])
 
   filter->SetElevationMin(atof(argv[7]));
   filter->SetElevationMax(atof(argv[8]));
-  filter->SetDEMGridStep(atof(argv[9]));
-  filter->SetAverageElevation(atof(argv[10]));
-
-  // m_DispToElev->SetElevationMin(130.0);
-  //   m_DispToElev->SetElevationMax(220.0);
-  //   m_DispToElev->SetDEMGridStep(2.5);
-  //   m_DispToElev->SetAverageElevation(avgElevation);
-
+  filter->SetDEMGridStep(atof(argv[10]));
+  filter->SetAverageElevation(atof(argv[9]));
 
   MaskReaderType::Pointer maskReader;
   if (argc == 12)
     {
     maskReader = MaskReaderType::New();
-    gridRightReader->SetFileName(argv[11]);
+    maskReader->SetFileName(argv[11]);
     filter->SetDisparityMaskInput(maskReader->GetOutput());
     }
 

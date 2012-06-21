@@ -27,12 +27,20 @@ namespace otb
 {
 namespace ogr
 {
+/**\ingroup boost
+ * \brief propagation of const-qualifier.
+ * \note This type traits is likelly to appear in boost at some point in time.
+ * \note As a consequence, it follows C++ standard and boost naming policy.
+ * \since OTB v 3.14.0
+ * @{
+ */
 template <typename Tin, typename Tout>
 struct propagate_const
 { typedef Tout type; };
 template <typename Tin, typename Tout>
 struct propagate_const<Tin const, Tout>
 { typedef typename boost::add_const<Tout>::type type; };
+/** @} */
 
 #define TRY_APPLY(TYPE, geometry, functor) \
 if (typename propagate_const<TGeometry, TYPE>::type * dc \
@@ -42,6 +50,22 @@ if (typename propagate_const<TGeometry, TYPE>::type * dc \
 }
 
 
+/**\ingroup gGeometry
+ * External polymorphic call of functions on \c OGRGeometry.
+ * This helper function tries to polymorphically dispatch the call of a function
+ * on the right \c OGRGeometry subtype.
+ * \internal
+ * In a perfect world, \c OGRGeometry would have provided a visitor to extend
+ * the number of functions to polymorphically %apply on them. As this isn't the
+ * case, \c apply executes many downcasts until it finds the right subtype.
+ *
+ * \tparam TResult type of the result
+ * \tparam TGeometry matched an \c OGRGeometry that may or may not be const
+ * qualified.
+ * \tparam TFunctor functor to apply on the geometry.
+ * \todo Support a list of types to check
+ * \since OTB v 3.14.0
+ */
 template <typename TResult, class TGeometry, typename TFunctor>
 TResult apply(TGeometry * geometry, TFunctor functor)
 {

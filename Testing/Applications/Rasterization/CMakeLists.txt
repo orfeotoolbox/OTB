@@ -71,3 +71,29 @@ OTB_TEST_APPLICATION(NAME apTvRsRasterizationPolygons2LayersWith2SRS
                      VALID   --compare-image ${NOTOL}
                               ${BASELINE}/apTvRsRasterizationPolygons2LayersWith2SRS.tif
                 	      ${TEMP}/apTvRsRasterizationPolygons2LayersWith2SRS.tif)
+
+
+# Image in UTM, KML in WGS84
+OTB_TEST_APPLICATION(NAME apTvRsRasterizationShadowsKML
+                     APP  Rasterization
+                     OPTIONS -in   ${INPUTDATA}/Capitole-Shadows.kml
+                             -im   ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -out  ${TEMP}/apTvRsRasterizationShadowsKML.tif
+                             -background 255
+                             -mode.binary.foreground 0
+                     VALID   --compare-image ${NOTOL}
+                              ${BASELINE}/apTvRsRasterizationShadowsKML.tif
+                	            ${TEMP}/apTvRsRasterizationShadowsKML.tif)
+
+# Image in UTM, SHP in UTM
+OTB_TEST_APPLICATION(NAME apTvRsRasterizationShadowsSHP
+                     APP  Rasterization
+                     OPTIONS -in   ${INPUTDATA}/Capitole-Shadows.shp
+                             -im   ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -out  ${TEMP}/apTvRsRasterizationShadowsSHP.tif
+                             -background 255
+                             -mode.binary.foreground 0
+                     VALID   --compare-image ${NOTOL}
+                              ${BASELINE}/apTvRsRasterizationShadowsSHP.tif
+                	            ${TEMP}/apTvRsRasterizationShadowsSHP.tif)
+  	      

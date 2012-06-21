@@ -119,10 +119,10 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTeGeometriesProjectionTest ${EXE_TESTS}
         --compare-ogr ${TOL}
-        ${BASELINE}/vectorDataProjectionExample.shp
+        ${BASELINE}/geometriesProjectionExample.shp
         ${TEMP}/geometriesProjectionExample.shp
     GeometriesProjectionTest
-        ${INPUTDATA}/Capitole-Shadows.kml
+        ${INPUTDATA}/Capitole-Shadows.shp
         ${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
             ${TEMP}/geometriesProjectionExample.shp
 )

@@ -249,7 +249,7 @@ std::string otb::ogr::Layer::GetProjectionRef() const
     if(res !=  OGRERR_NONE)
       {
       itkGenericExceptionMacro(<< "Cannot convert spatial reference to wkt string for layer <"
-        <<m_Layer->GetName()<<">: " << CPLGetLastErrorMsg());
+        <<GetName()<<">: " << CPLGetLastErrorMsg());
       }
 
     assert(wkt);

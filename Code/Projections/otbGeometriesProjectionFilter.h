@@ -29,10 +29,25 @@ class OGRCoordinateTransformation;
 namespace otb
 {
 
+/**\ingroup Projection GeometriesFilters
+ * Internal functor used to reproject a \c OGRGeometry.
+ *
+ * \internal
+ * As \c OGRGeometry isn't open to new functions through a \em Visitor design
+ * pattern, this class use a nasty hack: it try to downcast to any possible
+ * subtype of \c OGRGeometry.
+ *
+ * \since OTB v 3.14.0
+ * \todo Move into an \c internal namespace.
+ */
 struct ReprojectTransformationFunctor
 {
   typedef OGRGeometry TransformedElementType;
 
+  /**\ingroup Projection GeometriesFilters
+   * Internal functor used to reproject a \c OGRGeometry: \em By-Copy transformation policy.
+   * \since OTB v 3.14.0
+   */
   struct ByCopy
     {
     ByCopy(ReprojectTransformationFunctor const& reprojector) : m_Reprojector(reprojector){}
@@ -42,6 +57,10 @@ struct ReprojectTransformationFunctor
     ReprojectTransformationFunctor const& m_Reprojector;
     };
 
+  /**\ingroup Projection GeometriesFilters
+   * Internal functor used to reproject a \c OGRGeometry: \em In-Place transformation policy.
+   * \since OTB v 3.14.0
+   */
   struct InPlace
     {
     InPlace(ReprojectTransformationFunctor const& reprojector) : m_Reprojector(reprojector){}
@@ -80,6 +99,28 @@ private:
 };
 
 
+/**\ingroup Projection GeometriesFilters
+ * \class GeometriesProjectionFilter
+ * Projection filter for OGR geometries sets.
+ * \since OTB v 3.14.0
+ *
+ * \param[in] InputGeometriesSet
+ * \param[in] InputKeywordList if the \em InputGeometriesSet doesn't have a
+ * projection reference (i.e. a \c OGRSpatialReference), this filter will use
+ * the \em InputKeywordList to describe the positionning of the geometries set.
+ *
+ * \param[in,out] OutputGeometriesSet This set of geometries needs to be given to
+ * the filter (in order to set the exact output file/OGR driver). However the
+ * filter is in charge of filling the geometries set.
+ * \param[in] OutputProjectionRef wkt description of the \c OGRSpatialReference
+ * to project the \em InputGeometriesSet into.
+ * \param[in] OutputKeywordList if no \em OutputProjectionRef is set, the
+ * projection will be done according to the \em OutputKeywordList.
+ *
+ * \note Unlike \c VectorDataProjectionFilter, we have to explicitly set which
+ * to use between projection reference or keyword list. There is no \em
+ * MetaDataDictionary property.
+ */
 class ITK_EXPORT GeometriesProjectionFilter : public GeometriesToGeometriesFilter
 {
 public:
@@ -106,11 +147,8 @@ public:
   // typedef Superclass::InputGeometriesPointer  InputGeometriesPointer;
   typedef Superclass::OutputGeometriesType       OutputGeometriesType;
   // typedef Superclass::OutputGeometriesPointer OutputGeometriesPointer;
-  //@}
+  typedef ogr::ImageReference<double>            ImageReference;
 
-  /**\name Class typedefs */
-  //@{
-  typedef ogr::ImageReference<double>                            ImageReference;
   //@}
 
 private:
@@ -128,9 +166,25 @@ protected:
   virtual void GenerateOutputInformation(void);
 
 public:
-  ImageReference InputImageReference;
-  ImageReference OutputImageReference;
-
+  /**\name Image Reference (origin, spacing) */
+  //@{
+  void SetInputSpacing(ImageReference::SpacingType const& spacing)
+    {
+    m_InputImageReference.SetSpacing(spacing);
+    }
+  void SetOutputSpacing(ImageReference::SpacingType const& spacing)
+    {
+    m_OutputImageReference.SetSpacing(spacing);
+    }
+  void SetInputOrigin(ImageReference::OriginType const& origin)
+    {
+    m_InputImageReference.SetOrigin(origin);
+    }
+  void SetOutputOrigin(ImageReference::OriginType const& origin)
+    {
+    m_OutputImageReference.SetOrigin(origin);
+    }
+  //@}
   /**\name Keywords lists accessors and mutators */
   //@{
   itkGetMacro(InputKeywordList, ImageKeywordlist);
@@ -174,6 +228,12 @@ private:
   typedef TransformationFunctorType::InternalTransformPointerType InternalTransformPointerType;
 
   InternalTransformPointerType                    m_Transform;
+  //@}
+
+  /**\name Image Reference (origin, spacing) */
+  //@{
+  ImageReference                                  m_InputImageReference;
+  ImageReference                                  m_OutputImageReference;
   //@}
 
   std::string                                     m_OutputProjectionRef; // in WKT format!

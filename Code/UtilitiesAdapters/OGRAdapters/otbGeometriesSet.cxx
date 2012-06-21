@@ -151,30 +151,3 @@ void otb::GeometriesSet::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->apply(Printer(os, indent));
 }
-
-#if 0
-/*===========================================================================*/
-/*=========================[ GetMetaDataDictionary ]=========================*/
-/*===========================================================================*/
-struct MetaDataDictionaryGetter : boost::static_visitor<itk::MetaDataDictionary&>
-{
-  itk::MetaDataDictionary& operator()(otb::ogr::Layer layer) const
-    {
-    return layer.GetMetaDataDictionary();
-    }
-  itk::MetaDataDictionary& operator()(otb::ogr::DataSource::Pointer datasource) const
-    {
-    return datasource->GetMetaDataDictionary();
-    }
-};
-
-itk::MetaDataDictionary & otb::GeometriesSet::GetMetaDataDictionary()
-{
-  return this->apply(MetaDataDictionaryGetter());
-}
-
-itk::MetaDataDictionary const& otb::GeometriesSet::GetMetaDataDictionary() const
-{
-  return const_cast <GeometriesSet *>(this)->GetMetaDataDictionary();
-}
-#endif

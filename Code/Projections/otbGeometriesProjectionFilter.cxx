@@ -179,8 +179,8 @@ void otb::ReprojectTransformationFunctor::apply_inplace(OGRGeometry * inout) con
 /*===========================================================================*/
 
 otb::GeometriesProjectionFilter::GeometriesProjectionFilter()
-: InputImageReference(*this)
-, OutputImageReference(*this)
+: m_InputImageReference(*this)
+, m_OutputImageReference(*this)
 {
 }
 
@@ -215,10 +215,10 @@ void otb::GeometriesProjectionFilter::DoFinalizeInitialisation()
   m_Transform->SetGeoidFile(m_GeoidFile);
   m_Transform->SetAverageElevation(k_averageElevation);
 
-  m_Transform->SetInputSpacing(InputImageReference.GetSpacing());
-  m_Transform->SetInputOrigin(InputImageReference.GetOrigin());
-  m_Transform->SetOutputSpacing(OutputImageReference.GetSpacing());
-  m_Transform->SetOutputOrigin(OutputImageReference.GetOrigin());
+  m_Transform->SetInputSpacing(m_InputImageReference.GetSpacing());
+  m_Transform->SetInputOrigin(m_InputImageReference.GetOrigin());
+  m_Transform->SetOutputSpacing(m_OutputImageReference.GetSpacing());
+  m_Transform->SetOutputOrigin(m_OutputImageReference.GetOrigin());
 
   // As the InputProjectionRef can't be known yet, InstanciateTransform() will
   // be called from DoProcessLayer
@@ -233,7 +233,7 @@ void otb::GeometriesProjectionFilter::DoFinalizeInitialisation()
 
   // InputGeometriesType::ConstPointer   input      = this->GetInput();
   OutputGeometriesType::Pointer       output     = this->GetOutput();
-  output->SetImageReference(OutputImageReference);
+  output->SetImageReference(m_OutputImageReference);
 }
 
 /*virtual*/
@@ -260,7 +260,6 @@ void otb::GeometriesProjectionFilter::DoProcessLayer(ogr::Layer const& source, o
   m_Transform->SetInputProjectionRef(source.GetProjectionRef());
   m_Transform->InstanciateTransform();
 
-  // std::cout << "GPF::DoProcessLayer: L("<<source.GetName()<<") -> L("<<destination.GetName()<<") ...\n";
   if (source != destination)
     {
     m_TransformationFunctor(source, destination); // if TransformedElementType == layer
@@ -275,6 +274,5 @@ void otb::GeometriesProjectionFilter::DoProcessLayer(ogr::Layer const& source, o
 void otb::GeometriesProjectionFilter::DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const
 
 {
-  std::cout << "otb::GeometriesProjectionFilter::DoDefineNewLayerFields\n";
   m_TransformationFunctor.DefineFields(source, dest);
 }
