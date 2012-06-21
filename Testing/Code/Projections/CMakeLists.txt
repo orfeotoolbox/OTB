@@ -1214,6 +1214,25 @@ SET_TESTS_PROPERTIES(prTvVectorDataProjectionFilterFromGeoToMap PROPERTIES DEPEN
 
 
 
+ADD_TEST(prTvGeometriesProjectionFilterFromMapToEPSG_UTM ${PROJECTIONS_TESTS3}
+         --compare-ogr ${NOTOL}
+           ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
+           ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_UTM.shp
+         otbGeometriesProjectionFilterFromMapToEPSG
+           ${INPUTDATA}/ToulouseRoad-examples.shp
+           ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_UTM.shp
+           32631 )
+
+ADD_TEST(prTvGeometriesProjectionFilterFromMapToEPSG_WGS84 ${PROJECTIONS_TESTS3}
+         --compare-ogr ${NOTOL}
+           ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+           ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.kml
+         otbGeometriesProjectionFilterFromMapToEPSG
+           ${INPUTDATA}/ToulousePoints-examples.shp
+           ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.kml
+           4326 )
+
+
 ###################
 # TESTS ABOUT REPROJECTION INTO AN IMAGE OF A VECTORDATA
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -1683,6 +1702,7 @@ otbTileMapTransform.cxx
 otbVectorDataExtractROIandProjection.cxx
 otbGenericRSTransformGenericConversionCheckingFromGCP.cxx
 otbForwardBackwardProjectionConsistency.cxx
+otbGeometriesProjectionFilterFromMapToEPSG.cxx
 )
 
 SET(Projections_SRCS4

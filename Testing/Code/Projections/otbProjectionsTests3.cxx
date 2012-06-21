@@ -47,4 +47,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataIntoImageProjectionFilterTest);
   REGISTER_TEST(otbGenericRSTransformGenericConversionCheckingFromGCP);
   REGISTER_TEST(otbForwardBackwardProjectionConsistency);
+  REGISTER_TEST(otbGeometriesProjectionFilterFromMapToEPSG);
+
 }
