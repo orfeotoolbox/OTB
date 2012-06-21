@@ -413,18 +413,18 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
         }
       }
 
-    
+
     // Ignore lines with "RTTI" and "Modified Time" inside by default : to avoid multibaseline
     // between Linux and Win32 plateforms
     if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
       {
       if(isToBeIgnoredForAnyComparison(strfileref))
         ignoreCurrentLineRef = true;
-      
+
       if(isToBeIgnoredForAnyComparison(strfiletest))
         ignoreCurrentLineTest = true;
       }
-    
+
     //Compare the lines only if none is supposed to be ignored
     //Note: the iterator increment will take care of moving only the
     //ignored one if the order does not matter
@@ -664,7 +664,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
     typedef otb::PrintableImageFilter<ImageType> RescaleType;
     typedef RescaleType::OutputImageType         OutputType;
     typedef otb::ImageFileWriter<RescaleType::OutputImageType> WriterType;
-    
+
     RescaleType::Pointer rescale = RescaleType::New();
     WriterType::Pointer writer = WriterType::New();
     writer->SetInput(rescale->GetOutput());
@@ -672,15 +672,15 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
     std::cout << "<DartMeasurement name=\"ImageError " << cpt << "\" type=\"numeric/double\">";
     std::cout << status;
     std::cout << "</DartMeasurement>" << std::endl;
-    
+
     std::cout << "<DartMeasurement name=\"NumberOfPixelsWithDifferences " << cpt << "\" type=\"numeric/integer\">";
     std::cout << numberOfPixelsWithDifferences;
     std::cout << "</DartMeasurement>" << std::endl;
-    
+
     std::cout << "<DartMeasurement name=\"ToleranceDiffPixelImage\" type=\"numeric/double\">";
     std::cout << toleranceDiffPixelImage;
     std::cout << "</DartMeasurement>" << std::endl;
-    
+
     diff->UpdateOutputInformation();
     ImageType::SizeType size = diff->GetOutput()->GetLargestPossibleRegion().GetSize();
 
@@ -691,12 +691,12 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
       try
         {
         rescale->SetInput(diff->GetOutput());
-        
+
         for (unsigned int i = 1; i <= std::min(diff->GetOutput()->GetNumberOfComponentsPerPixel(), 3U); ++i)
           {
           rescale->SetChannel(i);
           }
-        
+
         rescale->Update();
         }
       catch (...)
@@ -712,7 +712,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
         {
         itkGenericExceptionMacro(<< "Error during write of " << diffName.str());
         }
-      
+
       std::cout << "<DartMeasurementFile name=\"DifferenceImage " << cpt << "\" type=\"image/png\">";
       std::cout << diffName.str();
       std::cout << "</DartMeasurementFile>" << std::endl;
@@ -728,7 +728,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
 
     baselineReader->UpdateOutputInformation();
     size = baselineReader->GetOutput()->GetLargestPossibleRegion().GetSize();
-    
+
     if( size[0]*size[1] <= m_MaxArea)
       {
       std::ostringstream baseName;
@@ -751,7 +751,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
         {
         itkGenericExceptionMacro(<< "Error during write of " << baseName.str());
         }
-      
+
       std::cout << "<DartMeasurementFile name=\"BaselineImage " << cpt << "\" type=\"image/png\">";
       std::cout << baseName.str();
       std::cout << "</DartMeasurementFile>" << std::endl;
@@ -767,7 +767,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
 
     testReader->UpdateOutputInformation();
     size = testReader->GetOutput()->GetLargestPossibleRegion().GetSize();
-    
+
     if( size[0]*size[1] <= m_MaxArea)
       {
       std::ostringstream testName;
@@ -790,7 +790,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
         {
         itkGenericExceptionMacro(<< "Error during write of " << testName.str());
         }
-      
+
       std::cout << "<DartMeasurementFile name=\"TestImage " << cpt << "\" type=\"image/png\">";
       std::cout << testName.str();
       std::cout << "</DartMeasurementFile>" << std::endl;
@@ -1223,7 +1223,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       // If no verbose and an diff was found, exit checking. The full checking will be executed in verbose mode
       if ((!m_ReportErrors) && (nbdiff != 0)) return (1);
       } //if(nbdiff == 0)
-    
+
     }
 
   /* -------------------------------------------------------------------- */
@@ -1231,7 +1231,6 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   OGRDataSource::DestroyDataSource( ref_poDS );
   OGRDataSource::DestroyDataSource( test_poDS );
-  OGRCleanupAll();
 
   return (nbdiff != 0) ? 1 : 0;
 }

@@ -2,8 +2,8 @@
 # Sources of non-templated classes.
 FILE(GLOB OTBTesting_SRCS "*.cxx" )
 
-# Remove the otbTestDriver cause only an executable is nedded 
- LIST(REMOVE_ITEM OTBTesting_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbTestDriver.cxx" )
+# Remove the otbTestDriver cause only an executable is nedded
+LIST(REMOVE_ITEM OTBTesting_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbTestDriver.cxx" )
 
 
 ADD_LIBRARY(OTBTesting ${OTBTesting_SRCS})
@@ -11,7 +11,7 @@ ADD_LIBRARY(OTBTesting ${OTBTesting_SRCS})
 #    PROPERTIES
 #    LINK_INTERFACE_LIBRARIES ""
 #)
-TARGET_LINK_LIBRARIES (OTBTesting OTBBasicFilters OTBIO OTBCommon ITKBasicFilters)
+TARGET_LINK_LIBRARIES (OTBTesting OTBBasicFilters OTBIO OTBCommon ITKBasicFilters OTBOGRAdapters)
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(OTBTesting PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 ENDIF(OTB_LIBRARY_PROPERTIES)
@@ -39,9 +39,9 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(otbTestDriver.cxx PROPERTIES COMPILE_FLAGS -w)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_EXECUTABLE(otbTestDriver otbTestDriver.cxx) 
+ADD_EXECUTABLE(otbTestDriver otbTestDriver.cxx)
 TARGET_LINK_LIBRARIES(otbTestDriver OTBIO OTBTesting)
-SET(ITK_TEST_DRIVER "${EXECUTABLE_OUTPUT_PATH}/otbTestDriver" 
+SET(ITK_TEST_DRIVER "${EXECUTABLE_OUTPUT_PATH}/otbTestDriver"
     CACHE INTERNAL "otbTestDriver path to be used by subprojects")
 
 IF(NOT OTB_INSTALL_NO_DEVELOPMENT)

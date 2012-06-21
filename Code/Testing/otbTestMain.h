@@ -28,6 +28,7 @@
 #include "itkMultiThreader.h"
 #include "itkMacro.h"
 
+#include "otbOGRDriversInit.h"
 #include "otbTestHelper.h"
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
@@ -87,6 +88,7 @@ int main(int ac, char* av[])
   StringList ignoredLines;
   ignoredLines.clear();
 
+  otb::ogr::Drivers::Init();
   otb::TestHelper::Pointer testHelper = otb::TestHelper::New();
 
   RegisterTests();
@@ -410,7 +412,7 @@ int main(int ac, char* av[])
       return -1;
       }
     std::cout << "-------------  End control baseline tests    -------------" << std::endl;
-    
+
     return result;
     }
 }
