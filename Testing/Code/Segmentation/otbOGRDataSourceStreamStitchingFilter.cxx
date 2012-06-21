@@ -76,7 +76,7 @@ int otbOGRDataSourceStreamStitchingFilter(int argc, char * argv[])
   ImageType::SizeType streamSize;
   streamSize.Fill(size);
   
-  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(tmpOGRfname, otb::ogr::DataSource::Modes::write);
+  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(tmpOGRfname, otb::ogr::DataSource::Modes::append);
   
   filter->SetInput(reader->GetOutput());
   filter->SetOGRDataSource(ogrDS);
