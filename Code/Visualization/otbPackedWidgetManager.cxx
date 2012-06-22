@@ -157,4 +157,11 @@ PackedWidgetManager
   m_PackedWidget->m_ZoomGroup->label(label);
 }
 
+int
+PackedWidgetManager
+::Shown()
+{
+  m_PackedWidget->m_Window->shown();
+}
+
 }
