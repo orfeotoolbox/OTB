@@ -35,7 +35,7 @@
 #include "otbOGRDataSourceWrapper.h"
 
 // Fusion filter
-#include "otbOGRDataSourceStreamStitchingFilter.h"
+#include "otbOGRLayerStreamStitchingFilter.h"
 
 namespace otb
 {
@@ -111,7 +111,7 @@ public:
    ConnectedComponentSegmentationFilterType>
   ConnectedComponentStreamingVectorizedSegmentationOGRType;
 
-  typedef otb::OGRDataSourceStreamStitchingFilter
+  typedef otb::OGRLayerStreamStitchingFilter
   <FloatVectorImageType>                  FusionFilterType;
 
 
@@ -569,13 +569,11 @@ private:
       if(IsParameterEnabled("mode.vector.stitch"))
         {
         otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
-        const std::string layerName = this->GetParameterString("mode.vector.layername");
 
         FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
         fusionFilter->SetInput(GetParameterFloatVectorImage("in"));
-        fusionFilter->SetOGRDataSource(ogrDS);
+        fusionFilter->SetOGRLayer(layer);
         fusionFilter->SetStreamSize(streamSize);
-        fusionFilter->SetLayerName(layerName);
 
         AddProcess(fusionFilter, "Stitching polygons");
         fusionFilter->GenerateData();
