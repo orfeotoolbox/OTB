@@ -438,7 +438,7 @@ private:
     const std::string segType = GetParameterString("filter");
 
     otb::ogr::DataSource::Pointer ogrDS;
-    otb::ogr::Layer layer(NULL);
+    otb::ogr::Layer layer(NULL, false);
 
     OGRSpatialReference oSRS(GetParameterFloatVectorImage("in")->GetProjectionRef().c_str());
 
@@ -451,7 +451,7 @@ private:
       if(GetParameterString("mode.vector.outmode") == "ovw")
         {
         // Create the datasource
-        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
+        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerOverwrite);
 
         // and create the layer since we are in overwrite mode, the
         // datasource is blank

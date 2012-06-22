@@ -36,7 +36,7 @@ int otbGeometriesProjectionFilterFromMapToEPSG(int argc, char * argv[])
   typedef otb::GeometriesSet OutputGeometriesType;
 
   otb::ogr::DataSource::Pointer input = otb::ogr::DataSource::New(
-      inputVDFilename, otb::ogr::DataSource::Modes::read);
+      inputVDFilename, otb::ogr::DataSource::Modes::Read);
   InputGeometriesType::Pointer in_set = InputGeometriesType::New(input);
 
   typedef otb::GeometriesProjectionFilter GeometriesFilterType;
@@ -46,7 +46,7 @@ int otbGeometriesProjectionFilterFromMapToEPSG(int argc, char * argv[])
   filter->SetOutputProjectionRef( otb::GeoInformationConversion::ToWKT(epsg) );
 
   otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(
-      outputVDFilename, otb::ogr::DataSource::Modes::write);
+      outputVDFilename, otb::ogr::DataSource::Modes::Overwrite);
   OutputGeometriesType::Pointer out_set = OutputGeometriesType::New(output);
 
   filter->SetOutput(out_set);

@@ -87,7 +87,7 @@ public:
    * is deleted, the layer won't be usable anymore. Unfortunatelly, there is no
    * mean to report this to this layer proxy.
    */
-  Layer(OGRLayer* layer/*, DataSourcePtr datasource*/);
+  Layer(OGRLayer* layer, bool modifiable);
 
   /**
    * Init constructor for layers that need to be released.
@@ -103,7 +103,7 @@ public:
    * OGRDataSource::ExecuteSQL(). It's actually the constructor called by \c
    * DataSource::ExecuteSQL().
    */
-  Layer(OGRLayer* layer, OGRDataSource& sourceInChargeOfLifeTime);
+  Layer(OGRLayer* layer, OGRDataSource& sourceInChargeOfLifeTime, bool modifiable);
   //@}
 
   /**\name Features collection */
@@ -515,6 +515,8 @@ private:
    * to correctly release the layer.
    */
   boost::shared_ptr<OGRLayer> m_Layer;
+
+  bool m_Modifiable;
 
 #if 0
   /** Related DataSource.

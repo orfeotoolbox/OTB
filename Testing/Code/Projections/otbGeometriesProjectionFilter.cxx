@@ -38,7 +38,7 @@ int otbGeometriesProjectionFilter(int argc, char * argv[])
   typedef otb::GeometriesSet InputGeometriesType;
   typedef otb::GeometriesSet OutputGeometriesType;
   otb::ogr::DataSource::Pointer input = otb::ogr::DataSource::New(
-    argv[1], otb::ogr::DataSource::Modes::read);
+    argv[1], otb::ogr::DataSource::Modes::Read);
   InputGeometriesType::Pointer in_set = InputGeometriesType::New(input);
 
   typedef otb::GeometriesProjectionFilter GeometriesFilterType;
@@ -54,7 +54,7 @@ int otbGeometriesProjectionFilter(int argc, char * argv[])
   otb::StandardFilterWatcher watcher(filter, "GeometriesProjection");
 
   otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(
-    argv[2], otb::ogr::DataSource::Modes::write);
+    argv[2], otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
   OutputGeometriesType::Pointer out_set = OutputGeometriesType::New(output);
 
   filter->SetOutput(out_set);

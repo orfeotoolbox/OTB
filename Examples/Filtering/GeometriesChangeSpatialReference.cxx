@@ -145,12 +145,12 @@ int main (int argc, char **argv)
 
     otb::ogr::DataSource::Pointer input = otb::ogr::DataSource::New(
       options.inputFile,
-      options.workingInplace ? otb::ogr::DataSource::Modes::write : otb::ogr::DataSource::Modes::read);
+      options.workingInplace ? otb::ogr::DataSource::Modes::Update_LayerOverwrite : otb::ogr::DataSource::Modes::Read);
 
     otb::ogr::DataSource::Pointer output
       = options.workingInplace ? input
       : options.outputIsStdout ? 0
-      :                  otb::ogr::DataSource::New( options.outputFile, otb::ogr::DataSource::Modes::write);
+      :                  otb::ogr::DataSource::New( options.outputFile, otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
     std::cout << "input: " << input -> ogr().GetName() << " should be: " << options.inputFile << "\n";
     if (output)
       {

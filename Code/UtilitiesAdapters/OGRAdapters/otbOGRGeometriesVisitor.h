@@ -83,6 +83,7 @@ TResult apply(TGeometry * geometry, TFunctor functor)
       {
       // functor(geometry);
       }
+    return TResult(); // keep compiler happy
 }
 } // ogr namespace
 

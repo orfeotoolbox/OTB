@@ -44,16 +44,18 @@ namespace  { // Anonymous namespace
 } // Anonymous namespace
 
 
-otb::ogr::Layer::Layer(OGRLayer* layer/*, DataSourcePtr datasource*/)
-: m_Layer(layer, LeaveAloneDeleter())
+otb::ogr::Layer::Layer(OGRLayer* layer, bool modifiable)
+:   m_Layer(layer, LeaveAloneDeleter())
+  , m_Modifiable(modifiable)
 #if 0
   , m_DataSource(datasource)
 #endif
 {
 }
 
-otb::ogr::Layer::Layer(OGRLayer* layer, OGRDataSource& sourceInChargeOfLifeTime)
-: m_Layer(layer,  boost::bind(&OGRDataSource::ReleaseResultSet, boost::ref(sourceInChargeOfLifeTime), _1))
+otb::ogr::Layer::Layer(OGRLayer* layer, OGRDataSource& sourceInChargeOfLifeTime, bool modifiable)
+:   m_Layer(layer,  boost::bind(&OGRDataSource::ReleaseResultSet, boost::ref(sourceInChargeOfLifeTime), _1))
+  , m_Modifiable(modifiable)
 {
   assert(layer && "A null OGRlayer cannot belong to an OGRDataSource" );
   // OGR always refuses "delete 0". *sigh*
@@ -106,6 +108,13 @@ otb::ogr::Layer::const_iterator otb::ogr::Layer::cstart_at(size_t index) const
 void otb::ogr::Layer::CreateFeature(Feature feature)
 {
   assert(m_Layer && "OGRLayer not initialized");
+
+  if (!m_Modifiable)
+    {
+    itkGenericExceptionMacro(<< "Cannot create a new feature in the layer <"
+      <<GetName()<<">: layer is not modifiable");
+    }
+
   const OGRErr res = m_Layer->CreateFeature(&feature.ogr());
   if (res != OGRERR_NONE)
     {
@@ -117,6 +126,13 @@ void otb::ogr::Layer::CreateFeature(Feature feature)
 void otb::ogr::Layer::DeleteFeature(long nFID)
 {
   assert(m_Layer && "OGRLayer not initialized");
+
+  if (!m_Modifiable)
+    {
+    itkGenericExceptionMacro(<< "Cannot create a new feature in the layer <"
+      <<GetName()<<">: layer is not modifiable");
+    }
+
   const OGRErr res = m_Layer->DeleteFeature(nFID);
   if (res != OGRERR_NONE)
     {
@@ -139,6 +155,13 @@ otb::ogr::Feature otb::ogr::Layer::GetFeature(long nFID)
 void otb::ogr::Layer::SetFeature(Feature feature)
 {
   assert(m_Layer && "OGRLayer not initialized");
+
+  if (!m_Modifiable)
+    {
+    itkGenericExceptionMacro(<< "Cannot create a new feature in the layer <"
+      <<GetName()<<">: layer is not modifiable");
+    }
+
   const OGRErr res = m_Layer->SetFeature(&feature.ogr());
   if (res != OGRERR_NONE)
     {
@@ -275,6 +298,13 @@ void otb::ogr::Layer::CreateField(
   FieldDefn const& field, bool bApproxOK/* = true */)
 {
   assert(m_Layer && "OGRLayer not initialized");
+
+  if (!m_Modifiable)
+    {
+    itkGenericExceptionMacro(<< "Cannot create a new field in the layer <"
+      <<GetName()<<">: layer is not modifiable");
+    }
+
   const OGRErr res = m_Layer->CreateField(&field.ogr(), bApproxOK);
   if (res != OGRERR_NONE)
     {
@@ -286,6 +316,13 @@ void otb::ogr::Layer::CreateField(
 void otb::ogr::Layer::DeleteField(size_t fieldIndex)
 {
   assert(m_Layer && "OGRLayer not initialized");
+
+  if (!m_Modifiable)
+    {
+    itkGenericExceptionMacro(<< "Cannot delete field in the layer <"
+      <<GetName()<<">: layer is not modifiable");
+    }
+
 #if GDAL_VERSION_NUM < 1900
   itkGenericExceptionMacro("OGRLayer::DeleteField is not supported by OGR v"
     << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
@@ -303,6 +340,13 @@ void otb::ogr::Layer::AlterFieldDefn(
   size_t fieldIndex, FieldDefn const& newFieldDefn, int nFlags)
 {
   assert(m_Layer && "OGRLayer not initialized");
+
+  if (!m_Modifiable)
+    {
+    itkGenericExceptionMacro(<< "Cannot alter field definition in the layer <"
+      <<GetName()<<">: layer is not modifiable");
+    }
+
 #if GDAL_VERSION_NUM < 1900
   itkGenericExceptionMacro("OGRLayer::AlterFieldDefn is not supported by OGR v"
     << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
@@ -322,6 +366,13 @@ void otb::ogr::Layer::AlterFieldDefn(
 void otb::ogr::Layer::ReorderField(size_t oldPos, size_t newPos)
 {
   assert(m_Layer && "OGRLayer not initialized");
+
+  if (!m_Modifiable)
+    {
+    itkGenericExceptionMacro(<< "Cannot reorder fields in the layer <"
+      <<GetName()<<">: layer is not modifiable");
+    }
+
 #if GDAL_VERSION_NUM < 1900
   itkGenericExceptionMacro("OGRLayer::ReorderField is not supported by OGR v"
     << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
@@ -338,6 +389,13 @@ void otb::ogr::Layer::ReorderField(size_t oldPos, size_t newPos)
 void otb::ogr::Layer::ReorderFields(int * map)
 {
   assert(m_Layer && "OGRLayer not initialized");
+
+  if (!m_Modifiable)
+    {
+    itkGenericExceptionMacro(<< "Cannot reorder fields in the layer <"
+      <<GetName()<<">: layer is not modifiable");
+    }
+
 #if GDAL_VERSION_NUM < 1900
   itkGenericExceptionMacro("OGRLayer::ReorderField is not supported by OGR v"
     << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
