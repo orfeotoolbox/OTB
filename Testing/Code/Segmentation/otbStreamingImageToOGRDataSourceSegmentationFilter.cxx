@@ -17,7 +17,7 @@
 =========================================================================*/
 
 #include "otbVectorImage.h"
-#include "otbStreamingImageToOGRDataSourceSegmentationFilter.h"
+#include "otbStreamingImageToOGRLayerSegmentationFilter.h"
 #include "otbImageFileReader.h"
 
 #include "otbMeanShiftVectorImageFilter.h"
