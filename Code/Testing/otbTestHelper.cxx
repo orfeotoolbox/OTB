@@ -1238,6 +1238,12 @@ void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOp
 {
   if (fpOut == NULL) fpOut = stdout;
 
+  if(!feature)
+    {
+    fprintf(fpOut, "NULL feature encountered\n");
+    return;
+    }
+
   fprintf(fpOut, "OGRFeature:%ld\n", feature->GetFID());
 
   const char* pszDisplayFields =
