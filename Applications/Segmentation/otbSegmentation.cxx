@@ -451,7 +451,7 @@ private:
       if(GetParameterString("mode.vector.outmode") == "ovw")
         {
         // Create the datasource
-        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerOverwrite);
+        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
 
         // and create the layer since we are in overwrite mode, the
         // datasource is blank
