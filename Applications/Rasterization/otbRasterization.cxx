@@ -151,7 +151,7 @@ private:
     otb::ogr::DataSource::Pointer ogrDS;
     UInt8ImageType::Pointer referenceImage;
 
-    ogrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::read);
+    ogrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
 
     bool validInputProjRef = false;
     std::string inputProjectionRef = "";
