@@ -82,7 +82,9 @@ struct StringListConverter
    */
   char ** to_ogr() const
     {
-    return const_cast <char**>(&m_raw[0]);
+    return m_raw.size() == 1
+            ? NULL
+            : const_cast <char**>(&m_raw[0]);
     }
 private:
   std::vector<char const*> m_raw;
