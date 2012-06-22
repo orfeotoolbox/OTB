@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
   //
   // Finally we connect the pipeline
   // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet  
+  // Software Guide : BeginCodeSnippet
   filter->SetInput(reader->GetOutput());
   filter->SetInputMask(maskReader->GetOutput());
   filter->SetOGRLayer(ogrLayer);
@@ -257,12 +257,12 @@ int main(int argc, char *argv[])
   fusionFilter->SetOGRLayer(ogrLayer);
   // Software Guide : EndCodeSnippet
   
-  // Software Guide : BeginLatex 
+  // Software Guide : BeginLatex
   // We set the size of the tile used,
   // which may be different from the one we set in the
   // \doxygen{otb}{StreamingVectorizedSegmentation} filter but can be
-  // retrieved using the \code{GetStreamSize()} method.  
-  // Software Guide : EndLatex 
+  // retrieved using the \code{GetStreamSize()} method.
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   fusionFilter->SetStreamSize(filter->GetStreamSize());

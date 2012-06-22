@@ -115,7 +115,7 @@ PersistentImageToOGRLayerFilter<TImage>
 
   // call the processing function for this tile
   OGRDataSourcePointerType currentTileVD = this->ProcessTile();
-  OGRLayerType srcLayer = currentTileVD->GetLayerChecked(0);  
+  OGRLayerType srcLayer = currentTileVD->GetLayerChecked(0);
 
 
   // Check spatial reference matches
