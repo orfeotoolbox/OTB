@@ -31,7 +31,7 @@
 #include "otbWatershedSegmentationFilter.h"
 
 // Large scale vectorization framework
-#include "otbStreamingImageToOGRDataSourceSegmentationFilter.h"
+#include "otbStreamingImageToOGRLayerSegmentationFilter.h"
 #include "otbOGRDataSourceWrapper.h"
 
 // Fusion filter
@@ -95,18 +95,18 @@ public:
 
   // Vectorize filters
   // Edison mean-shift
-  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter
+  typedef otb::StreamingImageToOGRLayerSegmentationFilter
   <FloatVectorImageType,
    EdisonSegmentationFilterType>          EdisontreamingVectorizedSegmentationOGRType;
 
   // Home made mean-shift
-  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter
+  typedef otb::StreamingImageToOGRLayerSegmentationFilter
   <FloatVectorImageType,
    MeanShiftSegmentationFilterType>       MeanShiftVectorizedSegmentationOGRType;
 
 
   // Connected components
-  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter
+  typedef otb::StreamingImageToOGRLayerSegmentationFilter
   <FloatVectorImageType,
    ConnectedComponentSegmentationFilterType>
   ConnectedComponentStreamingVectorizedSegmentationOGRType;
@@ -116,7 +116,7 @@ public:
 
 
   // Watershed
-  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter
+  typedef otb::StreamingImageToOGRLayerSegmentationFilter
   <FloatImageType,
    WatershedSegmentationFilterType>      StreamingVectorizedWatershedFilterType;
 
@@ -337,12 +337,12 @@ private:
 
   template<class TInputImage, class TSegmentationFilter>
   FloatVectorImageType::SizeType
-  GenericApplySegmentation(otb::StreamingImageToOGRDataSourceSegmentationFilter<TInputImage,
-                                                                   TSegmentationFilter> * streamingVectorizedFilter, TInputImage * inputImage ,otb::ogr::DataSource::Pointer ogrDS, const unsigned int outputNb)
+  GenericApplySegmentation(otb::StreamingImageToOGRLayerSegmentationFilter<TInputImage,
+                           TSegmentationFilter> * streamingVectorizedFilter, TInputImage * inputImage, const otb::ogr::Layer& layer, const unsigned int outputNb)
   {
     typedef  TSegmentationFilter             SegmentationFilterType;
     typedef  typename SegmentationFilterType::Pointer SegmentationFilterPointerType;
-    typedef otb::StreamingImageToOGRDataSourceSegmentationFilter
+    typedef otb::StreamingImageToOGRLayerSegmentationFilter
       <FloatVectorImageType,
        SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
 
@@ -363,7 +363,7 @@ private:
       streamingVectorizedFilter->SetInputMask(this->GetParameterUInt32Image("mode.vector.inmask"));
       otbAppLogINFO(<<"Use a mask as input." << std::endl);
       }
-    streamingVectorizedFilter->SetOGRDataSource(ogrDS);
+    streamingVectorizedFilter->SetOGRLayer(layer);
 
     if (tileSize != 0)
       {
@@ -386,14 +386,12 @@ private:
       streamingVectorizedFilter->SetFilterSmallObject(true);
       streamingVectorizedFilter->SetMinimumObjectSize(minSize);
       }
-
-    const std::string layerName = this->GetParameterString("mode.vector.layername");
+    
     const std::string fieldName = this->GetParameterString("mode.vector.fieldname");
 
     // Retrieve start label parameter
     const unsigned int startLabel = this->GetParameterInt("mode.vector.startlabel");
 
-    streamingVectorizedFilter->SetLayerName(layerName);
     streamingVectorizedFilter->SetFieldName(fieldName);
     streamingVectorizedFilter->SetStartLabel(startLabel);
 
@@ -409,13 +407,7 @@ private:
       }
 
     if (segModeType == "vector")
-      {
-      // Handle OGR options
-      if(IsParameterEnabled("mode.vector.ogroptions"))
-        {
-        streamingVectorizedFilter->GetFilter()->SetOGRLayerCreationOptions(GetParameterStringList("mode.vector.ogroptions"));
-        }
-      
+      {      
       otbAppLogINFO(<<"Large scale segmentation mode which output vector data" << std::endl);
       AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
 
@@ -446,12 +438,34 @@ private:
     const std::string segType = GetParameterString("filter");
 
     otb::ogr::DataSource::Pointer ogrDS;
+    otb::ogr::Layer layer(NULL);
+
+    OGRSpatialReference oSRS(GetParameterFloatVectorImage("in")->GetProjectionRef().c_str());
 
     if(segModeType=="vector")
       {
       // Retrieve output filename as well as layer names
       std::string dataSourceName = GetParameterString("mode.vector.out");
-      ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
+
+      // Create the DataSource in the appropriate mode
+      if(GetParameterString("mode.vector.outmode") == "ovw")
+        {
+        // Create the datasource
+        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
+
+        // and create the layer since we are in overwrite mode, the
+        // datasource is blank
+        layer = ogrDS->CreateLayer(GetParameterString("mode.vector.layername"),
+                                   &oSRS,wkbMultiPolygon,
+                                   otb::ogr::StringListConverter(GetParameterStringList("mode.vector.ogroptions")).to_ogr());
+        // And create the field
+        OGRFieldDefn field(this->GetParameterString("mode.vector.fieldname").c_str(),OFTInteger);
+        layer.CreateField(field,true);
+        }
+      else
+        {
+        otbAppLogFATAL(<<"outmode not handled yet");
+        }
       }
 
     // The actual stream size used
@@ -471,7 +485,7 @@ private:
       ccVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(
         GetParameterString(
           "filter.cc.expr"));
-      streamSize = GenericApplySegmentation<FloatVectorImageType,ConnectedComponentSegmentationFilterType>(ccVectorizationFilter,this->GetParameterFloatVectorImage("in"),ogrDS, 0);
+      streamSize = GenericApplySegmentation<FloatVectorImageType,ConnectedComponentSegmentationFilterType>(ccVectorizationFilter,this->GetParameterFloatVectorImage("in"),layer, 0);
       }
     else if (segType == "edison")
       {
@@ -494,7 +508,7 @@ private:
       edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
       edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
 
-      streamSize = GenericApplySegmentation<FloatVectorImageType,EdisonSegmentationFilterType>(edisonVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS,2);
+      streamSize = GenericApplySegmentation<FloatVectorImageType,EdisonSegmentationFilterType>(edisonVectorizationFilter, this->GetParameterFloatVectorImage("in"), layer,2);
       }
     else if (segType == "meanshift")
       {
@@ -522,7 +536,7 @@ private:
       meanShiftVectorizationFilter->GetSegmentationFilter()->SetThreshold(threshold);
       meanShiftVectorizationFilter->GetSegmentationFilter()->SetMinRegionSize(minimumObjectSize);
 
-      streamSize = this->GenericApplySegmentation<FloatVectorImageType,MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, this->GetParameterFloatVectorImage("in"), ogrDS, 0);
+      streamSize = this->GenericApplySegmentation<FloatVectorImageType,MeanShiftSegmentationFilterType>(meanShiftVectorizationFilter, this->GetParameterFloatVectorImage("in"), layer, 0);
       }
     else if(segType == "watershed")
       {
@@ -540,7 +554,7 @@ private:
       watershedVectorizedFilter->GetSegmentationFilter()->SetThreshold(GetParameterFloat("filter.watershed.threshold"));
       watershedVectorizedFilter->GetSegmentationFilter()->SetLevel(GetParameterFloat("filter.watershed.level"));
 
-      streamSize = this->GenericApplySegmentation<FloatImageType,WatershedSegmentationFilterType>(watershedVectorizedFilter,gradientMagnitudeFilter->GetOutput(),ogrDS,0);
+      streamSize = this->GenericApplySegmentation<FloatImageType,WatershedSegmentationFilterType>(watershedVectorizedFilter,gradientMagnitudeFilter->GetOutput(), layer,0);
       }
     else
       {
