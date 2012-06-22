@@ -87,37 +87,7 @@ template<class TImage>
 void
 PersistentImageToOGRLayerFilter<TImage>
 ::Initialize()
-{
-   
-   // std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
-   // bool projectionInformationAvailable = !projectionRefWkt.empty();
-   // OGRSpatialReference * oSRS = NULL;
-   // if(projectionInformationAvailable)
-   // {
-   //    oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
-   // }
-   
-   
-   // OGRLayerPointerType ogrDS = this->GetOGRLayer();
-
-   // ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, otb::ogr::StringListConverter(m_OGRLayerCreationOptions).to_ogr());
-   // OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
-   
-   // //Handle the case of shapefile. A shapefile is a layer and not a datasource.
-   // //The layer name in a shapefile is the shapefile's name.
-   // //This is not the case for a database as sqlite or PG.
-   // if (ogrDS->GetLayersCount() == 1)
-   // {
-   //    ogrDS->GetLayer(0).CreateField(field, true);
-   // }
-   // else
-   // {
-   //    ogrDS->GetLayer(m_LayerName).CreateField(field, true);
-   // }
-
-   // //CSLDestroy( options );
-
-}
+{}
 
 
 template<class TImage>
@@ -134,7 +104,6 @@ PersistentImageToOGRLayerFilter<TImage>
   {
      this->m_StreamSize = this->GetInput()->GetRequestedRegion().GetSize();
   }
-
 
   // call the processing function for this tile
   OGRDataSourcePointerType currentTileVD = this->ProcessTile();
