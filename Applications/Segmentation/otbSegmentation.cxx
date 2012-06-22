@@ -438,7 +438,7 @@ private:
     const std::string segType = GetParameterString("filter");
 
     otb::ogr::DataSource::Pointer ogrDS;
-    otb::ogr::Layer layer(NULL);
+    otb::ogr::Layer layer(NULL, false);
 
     OGRSpatialReference oSRS(GetParameterFloatVectorImage("in")->GetProjectionRef().c_str());
 

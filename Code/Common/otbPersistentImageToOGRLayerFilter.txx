@@ -33,7 +33,7 @@ namespace otb
 
 template<class TImage>
 PersistentImageToOGRLayerFilter<TImage>
-::PersistentImageToOGRLayerFilter() : m_OGRLayer(NULL)
+::PersistentImageToOGRLayerFilter() : m_OGRLayer(NULL, false)
 {
    m_StreamSize.Fill(0);
 }
