@@ -110,7 +110,7 @@ public:
                              ///< When requesting a layer, it is opened in overwrite mode
                              ///< with OVERWRITE=YES creation option.
                              ///< If the layer does not exists, it is created on the fly
-      Update_LayerAppend,    ///< Open data source in update mode with layers being updated
+      Update_LayerUpdate,    ///< Open data source in update mode with layers being updated
                              ///<
                              ///< New geometries are added to existing layers.
                              ///< If the layer does not exists, it is created on the fly
@@ -519,9 +519,16 @@ private:
    */
   OGRLayer* GetLayerUnchecked(size_t i) const;
 
+  bool IsLayerModifiable(size_t i) const;
+
+  bool IsLayerModifiable(std::string const& name) const;
+
+  size_t GetLayerID(std::string const& name) const;
+
 private:
   OGRDataSource  *m_DataSource;
   Modes::type    m_OpenMode;
+  int            m_FirstModifiableLayerID;
   }; // end class DataSource
 } } // end namespace otb::ogr
 

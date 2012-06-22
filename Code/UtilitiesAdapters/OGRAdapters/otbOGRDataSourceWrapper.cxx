@@ -115,7 +115,8 @@ char const* DeduceDriverName(std::string filename)
 
 otb::ogr::DataSource::DataSource()
 : m_DataSource(0),
-  m_OpenMode(Modes::Update_LayerOverwrite)
+  m_OpenMode(Modes::Update_LayerOverwrite),
+  m_FirstModifiableLayerID(0)
 {
   Drivers::Init();
 
@@ -130,8 +131,10 @@ otb::ogr::DataSource::DataSource()
 
 otb::ogr::DataSource::DataSource(OGRDataSource * source, Modes::type mode)
 : m_DataSource(source),
-  m_OpenMode(mode)
+  m_OpenMode(mode),
+  m_FirstModifiableLayerID(0)
 {
+  m_FirstModifiableLayerID = GetLayersCount();
 }
 
 otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string const& datasourceName, Modes::type mode)
@@ -345,6 +348,20 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
   char ** papszOptions/* = NULL */)
 {
   assert(m_DataSource && "Datasource not initialized");
+
+  switch (m_OpenMode)
+  {
+    case Modes::Invalid:
+      assert(false && "Invalid OGRDataSource opening mode");
+      itkGenericExceptionMacro(<< "Invalid OGRDataSource opening mode");
+      break;
+    case Modes::Read:
+      itkGenericExceptionMacro(<< "OGRDataSource is opened in Read mode : cannot create a layer");
+      break;
+    default:
+      break;
+  }
+
   OGRLayer * ol = m_DataSource->CreateLayer(
     name.c_str(), poSpatialRef, eGType, papszOptions);
   if (!ol)
@@ -353,7 +370,9 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
       << "> in the OGRDataSource file <" << m_DataSource->GetName()
       <<">: " << CPLGetLastErrorMsg());
     }
-  Layer l(ol/*, this*/);
+
+  const bool modifiable = true;
+  Layer l(ol, modifiable);
   return l;
 }
 
@@ -363,6 +382,20 @@ otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
   char ** papszOptions/* = NULL */)
 {
   assert(m_DataSource && "Datasource not initialized");
+
+  switch (m_OpenMode)
+  {
+    case Modes::Invalid:
+      assert(false && "Invalid OGRDataSource opening mode");
+      itkGenericExceptionMacro(<< "Invalid OGRDataSource opening mode");
+      break;
+    case Modes::Read:
+      itkGenericExceptionMacro(<< "OGRDataSource is opened in Read mode : cannot create a layer");
+      break;
+    default:
+      break;
+  }
+
   OGRLayer * l0 = &srcLayer.ogr();
   OGRLayer * ol = m_DataSource->CopyLayer(l0, newName.c_str(), papszOptions);
   if (!ol)
@@ -372,12 +405,31 @@ otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
       << "> in the OGRDataSource file <" << m_DataSource->GetName()
       <<">: " << CPLGetLastErrorMsg());
     }
-  Layer l(ol/*, this*/);
+  const bool modifiable = true;
+  Layer l(ol, modifiable);
   return l;
 }
 
 void otb::ogr::DataSource::DeleteLayer(size_t i)
 {
+  assert(m_DataSource && "Datasource not initialized");
+
+  switch (m_OpenMode)
+  {
+    case Modes::Invalid:
+      assert(false && "Invalid OGRDataSource opening mode");
+      itkGenericExceptionMacro(<< "Invalid OGRDataSource opening mode");
+      break;
+    case Modes::Read:
+      itkGenericExceptionMacro(<< "OGRDataSource is opened in Read mode : cannot delete a layer");
+      break;
+    case Modes::Update_LayerCreateOnly:
+      itkGenericExceptionMacro(<< "OGRDataSource is opened in Update_LayerCreateOnly mode : cannot delete a layer");
+      break;
+    default:
+      break;
+  }
+
   const int nb_layers = GetLayersCount();
   if (int(i) >= nb_layers)
     {
@@ -392,6 +444,49 @@ void otb::ogr::DataSource::DeleteLayer(size_t i)
     }
 }
 
+bool otb::ogr::DataSource::IsLayerModifiable(size_t i) const
+{
+  switch(m_OpenMode)
+  {
+    case Modes::Read:
+      return false;
+    case Modes::Update_LayerCreateOnly:
+      return int(i) >= m_FirstModifiableLayerID;
+    default:
+      return true;
+  }
+}
+
+bool otb::ogr::DataSource::IsLayerModifiable(std::string const& layername) const
+{
+  switch(m_OpenMode)
+  {
+    case Modes::Read:
+      return false;
+    case Modes::Update_LayerCreateOnly:
+      return int(GetLayerID(layername)) >= m_FirstModifiableLayerID;
+    default:
+      return true;
+  }
+}
+
+size_t otb::ogr::DataSource::GetLayerID(std::string const& name) const
+{
+  for (int i = 0;
+       i < GetLayersCount();
+       i++)
+    {
+    if (GetLayer(i).GetName() == name)
+      {
+      return i;
+      }
+    }
+
+  itkExceptionMacro( << "Cannot fetch any layer named <" << name
+    << "> in the OGRDataSource <" << m_DataSource->GetName() << ">: "
+    << CPLGetLastErrorMsg());
+  return 0; // keep compiler happy
+}
 
 otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(size_t i)
 {
@@ -407,7 +502,7 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(size_t i)
     itkExceptionMacro( << "Unexpected error: cannot fetch " << i << "th layer in the OGRDataSource <"
       << m_DataSource->GetName() << ">: " << CPLGetLastErrorMsg());
     }
-    return otb::ogr::Layer(layer_ptr/*, this*/);
+  return otb::ogr::Layer(layer_ptr, IsLayerModifiable(i));
 }
 
 OGRLayer* otb::ogr::DataSource::GetLayerUnchecked(size_t i)
@@ -421,9 +516,8 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayer(std::string const& name)
 {
   assert(m_DataSource && "Datasource not initialized");
   OGRLayer * layer_ptr = m_DataSource->GetLayerByName(name.c_str());
-  return otb::ogr::Layer(layer_ptr/*, this*/);
+  return otb::ogr::Layer(layer_ptr, IsLayerModifiable(name));
 }
-
 
 otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(std::string const& name)
 {
@@ -435,7 +529,7 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(std::string const& name)
       << "> in the OGRDataSource <" << m_DataSource->GetName() << ">: "
       << CPLGetLastErrorMsg());
     }
-  return otb::ogr::Layer(layer_ptr/*, this*/);
+  return otb::ogr::Layer(layer_ptr, IsLayerModifiable(name));
 }
 
 int otb::ogr::DataSource::GetLayersCount() const
@@ -450,6 +544,7 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
   char        const* pszDialect)
 {
   assert(m_DataSource && "Datasource not initialized");
+  const bool modifiable = false;
   OGRLayer * layer_ptr = m_DataSource->ExecuteSQL(
     statement.c_str(), poSpatialFilter, pszDialect);
   if (!layer_ptr)
@@ -461,10 +556,11 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
     // Cannot use the deleter made for result sets obtained from
     // OGRDataSource::ExecuteSQL because it checks for non-nullity....
     // *sigh*
-    return otb::ogr::Layer(0/*, 0*/);
+
+    return otb::ogr::Layer(0, modifiable);
 #endif
     }
-  return otb::ogr::Layer(layer_ptr, *m_DataSource);
+  return otb::ogr::Layer(layer_ptr, *m_DataSource, modifiable);
 }
 
 
