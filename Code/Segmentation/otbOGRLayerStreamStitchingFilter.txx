@@ -31,7 +31,7 @@ namespace otb
 
 template<class TImage>
 OGRDataSourceStreamStitchingFilter<TImage>
-::OGRDataSourceStreamStitchingFilter() : m_Radius(2), m_LayerName("Layer")
+::OGRDataSourceStreamStitchingFilter() : m_Radius(2), m_OGRLayer(NULL)
 {
    m_StreamSize.Fill(0);
 }
@@ -61,17 +61,18 @@ OGRDataSourceStreamStitchingFilter<TInputImage>
 template<class TInputImage>
 void
 OGRDataSourceStreamStitchingFilter<TInputImage>
-::SetOGRDataSource( OGRDataSourcePointerType ogrDS )
+::SetOGRLayer( const OGRLayerType& ogrLayer )
 {
-   this->itk::ProcessObject::SetNthInput(1, ogrDS);
+  m_OGRLayer = ogrLayer;
+  this->Modified();
 }
 
 template<class TInputImage>
-typename OGRDataSourceStreamStitchingFilter<TInputImage>::OGRDataSourceType *
+const typename OGRDataSourceStreamStitchingFilter<TInputImage>::OGRLayerType &
 OGRDataSourceStreamStitchingFilter<TInputImage>
-::GetOGRDataSource( void )
+::GetOGRDataSource( void ) const
 {
-   return static_cast<OGRDataSourceType *> (this->itk::ProcessObject::GetInput(1));
+   return m_OGRLayer;
 }
 
 template<class TInputImage>
@@ -104,13 +105,6 @@ OGRDataSourceStreamStitchingFilter<TInputImage>
 ::ProcessStreamingLine( bool line )
 {
    typename InputImageType::ConstPointer inputImage = this->GetInput();
-   OGRDataSourcePointerType inputDataSource = this->GetOGRDataSource();
-   //Handle the case of shapefile. A shapefile is a layer and not a datasource.
-   //The layer name in a shapefile is the shapefile's name.
-   //This is not the case for a database as sqlite or PG.
-   OGRLayerType inputLayer = inputDataSource->GetLayersCount() == 1
-                          ? inputDataSource->GetLayer(0)
-                          : inputDataSource->GetLayerChecked(m_LayerName);
 
    //compute the number of stream division in row and column
    SizeType imageSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
@@ -121,7 +115,7 @@ OGRDataSourceStreamStitchingFilter<TInputImage>
 
    for(unsigned int x=1; x<=nbColStream; x++)
    {
-      inputLayer.ogr().StartTransaction();
+      m_OGRLayer.ogr().StartTransaction();
       for(unsigned int y=1; y<=nbRowStream; y++)
       {
          //First we get all the feature that intersect the streaming line of the Upper/left stream
@@ -155,12 +149,12 @@ OGRDataSourceStreamStitchingFilter<TInputImage>
          OriginType  lrCorner;
          inputImage->TransformIndexToPhysicalPoint(LowerRightCorner, lrCorner);
 
-         inputLayer.SetSpatialFilterRect(ulCorner[0],lrCorner[1],lrCorner[0],ulCorner[1]);
+         m_OGRLayer.SetSpatialFilterRect(ulCorner[0],lrCorner[1],lrCorner[0],ulCorner[1]);
 
-         OGRLayerType::const_iterator featIt = inputLayer.begin();
-         for(; featIt!=inputLayer.end(); ++featIt)
+         OGRLayerType::const_iterator featIt = m_OGRLayer.begin();
+         for(; featIt!=m_OGRLayer.end(); ++featIt)
          {
-            FeatureStruct s(inputLayer.GetLayerDefn());
+            FeatureStruct s(m_OGRLayer.GetLayerDefn());
             s.feat = *featIt;
             s.fusioned = false;
             upperStreamFeatureList.push_back(s);
@@ -192,11 +186,11 @@ OGRDataSourceStreamStitchingFilter<TInputImage>
          inputImage->TransformIndexToPhysicalPoint(UpperLeftCorner, ulCorner);
          inputImage->TransformIndexToPhysicalPoint(LowerRightCorner, lrCorner);
 
-         inputLayer.SetSpatialFilterRect(ulCorner[0],lrCorner[1],lrCorner[0],ulCorner[1]);
+         m_OGRLayer.SetSpatialFilterRect(ulCorner[0],lrCorner[1],lrCorner[0],ulCorner[1]);
 
-         for(featIt = inputLayer.begin(); featIt!=inputLayer.end(); ++featIt)
+         for(featIt = m_OGRLayer.begin(); featIt!=m_OGRLayer.end(); ++featIt)
          {
-            FeatureStruct s(inputLayer.GetLayerDefn());
+            FeatureStruct s(m_OGRLayer.GetLayerDefn());
             s.feat = *featIt;
             s.fusioned = false;
             lowerStreamFeatureList.push_back(s);
@@ -266,16 +260,16 @@ OGRDataSourceStreamStitchingFilter<TInputImage>
                upperStreamFeatureList[fusionList[i].indStream1].fusioned = true;
                lowerStreamFeatureList[fusionList[i].indStream2].fusioned = true;
                ogr::UniqueGeometryPtr fusionPolygon = ogr::Union(*upper.feat.GetGeometry(),*lower.feat.GetGeometry());
-               OGRFeatureType fusionFeature(inputLayer.GetLayerDefn());
+               OGRFeatureType fusionFeature(m_OGRLayer.GetLayerDefn());
                fusionFeature.SetGeometry( fusionPolygon.get() );
 
                ogr::Field field = upper.feat[0];
                try
                  {
                  fusionFeature[0].SetValue(field.GetValue<int>());
-                 inputLayer.CreateFeature(fusionFeature);
-                 inputLayer.DeleteFeature(lower.feat.GetFID());
-                 inputLayer.DeleteFeature(upper.feat.GetFID());
+                 m_OGRLayer.CreateFeature(fusionFeature);
+                 m_OGRLayer.DeleteFeature(lower.feat.GetFID());
+                 m_OGRLayer.DeleteFeature(upper.feat.GetFID());
                  }
                catch(itk::ExceptionObject& err)
                  {
@@ -284,12 +278,12 @@ OGRDataSourceStreamStitchingFilter<TInputImage>
             }
          }
       } //end for x
-      inputLayer.ogr().CommitTransaction();
+      m_OGRLayer.ogr().CommitTransaction();
 
       // Update progress
       progress.CompletedPixel();
    } //end for y
-   inputLayer.ogr().CommitTransaction();
+   m_OGRLayer.ogr().CommitTransaction();
 
 }
 
@@ -298,6 +292,11 @@ void
 OGRDataSourceStreamStitchingFilter<TImage>
 ::GenerateData(void)
 {
+  if(!m_OGRLayer)
+    {
+    itkExceptionMacro(<<"Input OGR layer is null!");
+    }
+
    //Process column
    this->ProcessStreamingLine(false);
    //Process row

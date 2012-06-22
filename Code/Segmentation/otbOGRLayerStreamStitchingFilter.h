@@ -15,14 +15,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataSourceStreamStitchingFilter_h
-#define __otbOGRDataSourceStreamStitchingFilter_h
+#ifndef __otbOGRLayerStreamStitchingFilter_h
+#define __otbOGRLayerStreamStitchingFilter_h
 
 #include "otbOGRDataSourceWrapper.h"
 #include "otbMacro.h"
 
 //#if(GDAL_VERSION_NUM < 1800)
-//#error OGRDataSourceStreamStitchingFilter requires GDAL version >= 1.8.0
+//#error OGRLayerStreamStitchingFilter requires GDAL version >= 1.8.0
 //#endif
 
 #include "itkProcessObject.h"
@@ -32,7 +32,7 @@
 namespace otb
 {
 
-/** \class OGRDataSourceStreamStitchingFilter
+/** \class OGRLayerStreamStitchingFilter
  *  \brief This filter fusion the geometries in a layer (\c OGRLayer) along streaming lines.
  *  It is a in-line filter which means that the result of the fusion overwrites the input layer.
  *  The strategy for merging polygons is quite simple. A polygon P1 is merge with a polygon P2 if:
@@ -51,33 +51,30 @@ namespace otb
  *
  */
 template <class TInputImage>
-class ITK_EXPORT OGRDataSourceStreamStitchingFilter :
+class ITK_EXPORT OGRLayerStreamStitchingFilter :
     public itk::ProcessObject
 {
 public:
 
    /** typedef for the classes standards. */
-  typedef OGRDataSourceStreamStitchingFilter                 Self;
-  typedef itk::ProcessObject                  Superclass;
-  typedef itk::SmartPointer<Self>             Pointer;
-  typedef itk::SmartPointer<const Self>       ConstPointer;
+  typedef OGRLayerStreamStitchingFilter        Self;
+  typedef itk::ProcessObject                   Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
   
   /** Definition of the input image */
-  typedef TInputImage                           InputImageType;
-  typedef typename InputImageType::PixelType    InputPixelType;
-  typedef typename InputImageType::IndexType    InputIndexType;
-  typedef typename InputImageType::SizeType     SizeType;
-  typedef typename InputImageType::RegionType   RegionType;
-  typedef typename InputImageType::SpacingType  SpacingType;
-  typedef typename InputImageType::PointType    OriginType;
-  typedef typename InputImageType::IndexType    IndexType;
+  typedef TInputImage                          InputImageType;
+  typedef typename InputImageType::PixelType   InputPixelType;
+  typedef typename InputImageType::IndexType   InputIndexType;
+  typedef typename InputImageType::SizeType    SizeType;
+  typedef typename InputImageType::RegionType  RegionType;
+  typedef typename InputImageType::SpacingType SpacingType;
+  typedef typename InputImageType::PointType   OriginType;
+  typedef typename InputImageType::IndexType   IndexType;
   
-  typedef ogr::DataSource                            OGRDataSourceType;
-  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
-  typedef ogr::Layer                                 OGRLayerType;
-  typedef ogr::Feature                               OGRFeatureType;
+  typedef ogr::Layer                           OGRLayerType;
+  typedef ogr::Feature                         OGRFeatureType;
 
-  
   /** Set the input image of this process object.  */
   virtual void SetInput(const InputImageType *input);
   /** Get the input image. */
@@ -87,12 +84,12 @@ public:
   itkNewMacro(Self);
 
   /** Return the name of the class. */
-  itkTypeMacro(OGRDataSourceStreamStitchingFilter, ProcessObject);
+  itkTypeMacro(OGRLayerStreamStitchingFilter, ProcessObject);
   
-  /** Set the input OGRDataSource */
-  void SetOGRDataSource( OGRDataSourcePointerType ogrDS );
-  /** Get the input OGRDataSource*/
-  OGRDataSourceType * GetOGRDataSource( void );
+  /** Set the input OGRLayer */
+  void SetOGRLayer( const OGRLayerType & ogrLayer );
+  /** Get the input OGRLayer */
+  const OGRLayerType & GetOGRLayer( void ) const;
   
   /** Set the stream size.
    * As this filter is intended to be used right after the \c StreamingVectorizedSegmentation,
@@ -101,18 +98,13 @@ public:
   itkSetMacro(StreamSize, SizeType);
   /** Get stream size*/
   itkGetMacro(StreamSize, SizeType);
-  
-  /** Set the name of the layer in the input \c OGRDataSource, that contains the polygons to merge.*/
-  itkSetStringMacro(LayerName);
-  /** Get the layer name. */
-  itkGetStringMacro(LayerName);
-  
+    
   /** Generate Data method. This method must be called explicitly (not through the \c Update method). */
   virtual void GenerateData();
   
 protected:
-  OGRDataSourceStreamStitchingFilter();
-  virtual ~OGRDataSourceStreamStitchingFilter() {}
+  OGRLayerStreamStitchingFilter();
+  virtual ~OGRLayerStreamStitchingFilter() {}
   
   struct FusionStruct
   {
@@ -145,12 +137,12 @@ protected:
   double GetLengthOGRGeometryCollection(OGRGeometryCollection * intersection);
 
 private:
-  OGRDataSourceStreamStitchingFilter(const Self &);  //purposely not implemented
+  OGRLayerStreamStitchingFilter(const Self &);  //purposely not implemented
   void operator =(const Self&);      //purposely not implemented
   
   SizeType m_StreamSize;
   unsigned int m_Radius;
-  std::string m_LayerName;
+  OGRLayerType m_OGRLayer;
 
 
 };
@@ -159,7 +151,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataSourceStreamStitchingFilter.txx"
+#include "otbOGRLayerStreamStitchingFilter.txx"
 #endif
 
 #endif
