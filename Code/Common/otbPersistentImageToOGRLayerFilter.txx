@@ -92,7 +92,7 @@ PersistentImageToOGRLayerFilter<TImage>
   // the spatial reference of the input image
   OGRSpatialReference oSRS(this->GetInput()->GetProjectionRef().c_str());
   
-  if(!oSRS.IsSame(m_OGRLayer.GetSpatialRef()))
+  if(m_OGRLayer.GetSpatialRef() && !oSRS.IsSame(m_OGRLayer.GetSpatialRef()))
      {
      itkExceptionMacro(<<"Spatial reference of input image and target layer do not match!");
      }
@@ -119,7 +119,7 @@ PersistentImageToOGRLayerFilter<TImage>
 
 
   // Check spatial reference matches
-  if(!srcLayer.GetSpatialRef()->IsSame(m_OGRLayer.GetSpatialRef()))
+  if(srcLayer.GetSpatialRef() && m_OGRLayer.GetSpatialRef() && !srcLayer.GetSpatialRef()->IsSame(m_OGRLayer.GetSpatialRef()))
      {
      itkExceptionMacro(<<"Spatial reference of internal and target layers do not match!");
      }
