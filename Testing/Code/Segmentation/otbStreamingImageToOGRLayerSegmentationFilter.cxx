@@ -100,10 +100,10 @@ int otbStreamingImageToOGRLayerSegmentationFilter(int argc, char * argv[])
   // TODO: Change once flags have been updated
   otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
   
-  OGRSpatialReference * oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(reader->GetOutput()->GetProjectionRef().c_str()));
+  OGRSpatialReference oSRS(reader->GetOutput()->GetProjectionRef().c_str());
 
   // Create the layer
-  otb::ogr::Layer oLayer = ogrDS->CreateLayer(layerName,oSRS,wkbMultiPolygon,NULL);
+  otb::ogr::Layer oLayer = ogrDS->CreateLayer(layerName,&oSRS,wkbMultiPolygon,NULL);
 
   // Create the field
   OGRFieldDefn field(fieldName.c_str(),OFTInteger);

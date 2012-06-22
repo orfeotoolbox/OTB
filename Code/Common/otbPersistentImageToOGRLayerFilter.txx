@@ -87,8 +87,16 @@ template<class TImage>
 void
 PersistentImageToOGRLayerFilter<TImage>
 ::Initialize()
-{}
-
+{
+  // Ensure that spatial reference of the output layer matches with
+  // the spatial reference of the input image
+  OGRSpatialReference oSRS(this->GetInput()->GetProjectionRef().c_str());
+  
+  if(!oSRS.IsSame(m_OGRLayer.GetSpatialRef()))
+     {
+     itkExceptionMacro(<<"Spatial reference of input image and target layer do not match!");
+     }
+}
 
 template<class TImage>
 void
@@ -108,7 +116,14 @@ PersistentImageToOGRLayerFilter<TImage>
   // call the processing function for this tile
   OGRDataSourcePointerType currentTileVD = this->ProcessTile();
   OGRLayerType srcLayer = currentTileVD->GetLayerChecked(0);  
-  
+
+
+  // Check spatial reference matches
+  if(!srcLayer.GetSpatialRef()->IsSame(m_OGRLayer.GetSpatialRef()))
+     {
+     itkExceptionMacro(<<"Spatial reference of internal and target layers do not match!");
+     }
+ 
   //Copy features contained in the memory layer (srcLayer) in the output layer
   itk::TimeProbe chrono;
   chrono.Start();
