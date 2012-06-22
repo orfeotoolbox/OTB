@@ -49,7 +49,7 @@ int otbOGRDataSourceToLabelImageFilter(int argc, char* argv[])
   unsigned char background = atoi(argv[5]);
   unsigned char foreground = atoi(argv[6]);
 
-  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(argv[2], otb::ogr::DataSource::Modes::read);
+  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(argv[2], otb::ogr::DataSource::Modes::Read);
   
   // rasterize
   RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();

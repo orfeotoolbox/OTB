@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
   // Here we used a non existing filename to create a new file in writing mode.
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
+  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex

@@ -94,7 +94,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
     otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(
-      argv[1], otb::ogr::DataSource::Modes::read);
+      argv[1], otb::ogr::DataSource::Modes::Read);
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -104,7 +104,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
     otb::ogr::DataSource::Pointer destination = otb::ogr::DataSource::New(
-      argv[2], otb::ogr::DataSource::Modes::write);
+      argv[2], otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
     otb::ogr::Layer destLayer = destination->CreateLayer(
       argv[2], 0, wkbMultiPolygon);
 // Software Guide : EndCodeSnippet

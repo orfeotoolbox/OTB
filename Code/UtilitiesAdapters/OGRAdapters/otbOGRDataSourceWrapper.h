@@ -85,7 +85,7 @@ public:
    * \see \c DataSource()
    */
   itkNewMacro(Self);
-  itkTypeMacro(Layer, DataObject);
+  itkTypeMacro(DataSource, DataObject);
   //@}
   /**\name Creation functions */
   //@{
@@ -94,11 +94,38 @@ public:
    * \note Read/Write mode should have been <tt>read | write</tt>, but actually
    * OGR data source are always at least in read mode.
    */
-  struct Modes { enum type { invalid, read=1, write=2, append=4, MAX__ }; };
+  struct Modes {
+    enum type
+    {
+      Invalid,
+      Read, ///< Open data source in read-only mode
+      Overwrite, ///< Open data source in overwrite mode
+                 ///<
+                 ///< Data source is deleted if it exists
+                 ///< and a new data source is created
+                 ///< Warning : this can delete a whole database
+                 ///<           if the existing datasource contains a list of layers
+      Update_LayerOverwrite, ///< Open data source in update mode with layers being overwritten
+                             ///<
+                             ///< When requesting a layer, it is opened in overwrite mode
+                             ///< with OVERWRITE=YES creation option.
+                             ///< If the layer does not exists, it is created on the fly
+      Update_LayerAppend,    ///< Open data source in update mode with layers being updated
+                             ///<
+                             ///< New geometries are added to existing layers.
+                             ///< If the layer does not exists, it is created on the fly
+      Update_LayerCreateOnly,///< Open data source in update mode with layers being created only
+                             ///<
+                             ///< This option prevents the loss of data.
+                             ///< One can open an existing database with existing layer, and
+                             ///< and add new layers to it.
+                             ///< Only non-existing layers can be requested
+      MAX__ };
+  };
 
   /**
    * Builder from an existing named data source.
-   * \param[in] filename filename of the data source
+   * \param[in] datasourcename OGR identifier of the data source
    * \param[in] mode     opening mode (read or read-write)
    * \return a newly created \c DataSource.
    * \throw itk::ExceptionObject if the inner \c OGRDataSource cannot be
@@ -106,7 +133,7 @@ public:
    * \note \c OGRRegisterAll() is implicitly called on construction
    * \see \c DataSource(OGRDataSource *)
    */
-  static Pointer New(std::string const& filename, Modes::type mode=Modes::read);
+  static Pointer New(std::string const& datasourcename, Modes::type mode = Modes::Read);
   /**
    * Builder from a built \c OGRDataSource.
    * \param[in,out] source  \c OGRDataSource already constructed.
@@ -118,7 +145,7 @@ public:
    * \note No condition is assumed on the non-nullity of \c source.
    * \see \c DataSource(OGRDataSource *)
    */
-  static Pointer New(OGRDataSource * source);
+  static Pointer New(OGRDataSource * sourcemode, Modes::type mode = Modes::Read);
   //@}
 
   /**\name Projection Reference property */
@@ -465,13 +492,13 @@ protected:
   /** Init constructor.
    * \post The newly constructed object owns the \c source parameter.
    */
-  DataSource(OGRDataSource * source);
+  DataSource(OGRDataSource * source, Modes::type mode);
   /** Destructor.
    * \post The \c OGRDataSource owned is released (if not null).
    */
   virtual ~DataSource();
 
-  static Pointer CreateDataSourceFromDriver(std::string const& filename);
+  static Pointer OpenDataSource(std::string const& datasourceName, Modes::type mode);
 
   /** Prints self into stream. */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -494,7 +521,7 @@ private:
 
 private:
   OGRDataSource  *m_DataSource;
-  // ImageReference  m_ImageReference;
+  Modes::type    m_OpenMode;
   }; // end class DataSource
 } } // end namespace otb::ogr
 

@@ -96,7 +96,7 @@ int otbStreamingImageToOGRDataSourceSegmentationFilter(int argc, char * argv[])
   maskReader->SetFileName(maskName);
   maskReader->UpdateOutputInformation();
   
-  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
+  otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
 
   filter->SetInput(reader->GetOutput());
   filter->SetInputMask(maskReader->GetOutput());

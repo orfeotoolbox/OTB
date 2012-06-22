@@ -437,7 +437,7 @@ private:
       {
       // Retrieve output filename as well as layer names
       std::string dataSourceName = GetParameterString("mode.vector.out");
-      ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
+      ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerOverwrite);
       }
 
     // The actual stream size used

@@ -114,7 +114,8 @@ char const* DeduceDriverName(std::string filename)
 
 
 otb::ogr::DataSource::DataSource()
-: m_DataSource(0)
+: m_DataSource(0),
+  m_OpenMode(Modes::Update_LayerOverwrite)
 {
   Drivers::Init();
 
@@ -127,13 +128,47 @@ otb::ogr::DataSource::DataSource()
   m_DataSource->SetDriver(d);
 }
 
-otb::ogr::DataSource::DataSource(OGRDataSource * source)
-: m_DataSource(source)
+otb::ogr::DataSource::DataSource(OGRDataSource * source, Modes::type mode)
+: m_DataSource(source),
+  m_OpenMode(mode)
 {
 }
 
-otb::ogr::DataSource::Pointer otb::ogr::DataSource::CreateDataSourceFromDriver(std::string const& filename)
+otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string const& datasourceName, Modes::type mode)
 {
+  bool update = (mode != Modes::Read);
+
+  OGRDataSource * source = OGRSFDriverRegistrar::Open(datasourceName.c_str(), update);
+  if (!source)
+    {
+    // In read mode, this is a failure
+    // In write mode (Overwrite and Update), create the data source transparently
+    if (mode == Modes::Read)
+      {
+      itkGenericExceptionMacro(<< "Failed to open OGRDataSource file "
+        << datasourceName<<" : " << CPLGetLastErrorMsg());
+      }
+
+    // Hand made factory based on file extension.
+    char const* driverName = DeduceDriverName(datasourceName);
+    if (!driverName)
+      {
+      itkGenericExceptionMacro(<< "No OGR driver known to OTB to create and handle a DataSource named <"
+        <<datasourceName<<">.");
+      }
+
+    OGRSFDriver * d = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
+    assert(d && "OGR driver not found");
+    source = d->CreateDataSource(datasourceName.c_str());
+    if (!source) {
+      itkGenericExceptionMacro(<< "Failed to create OGRDataSource <"<<datasourceName
+        <<"> (driver name: <" << driverName<<">: " << CPLGetLastErrorMsg());
+    }
+    source->SetDriver(d);
+    }
+  return otb::ogr::DataSource::New(source, mode);
+
+#if 0
   // Hand made factory based on file extension.
   char const* driverName = DeduceDriverName(filename);
   if (!driverName)
@@ -150,16 +185,52 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::CreateDataSourceFromDriver(s
       <<"> (driver name: " << driverName<<">: " << CPLGetLastErrorMsg());
   }
   source->SetDriver(d);
-  otb::ogr::DataSource::Pointer res = new otb::ogr::DataSource(source);
+  otb::ogr::DataSource::Pointer res = new otb::ogr::DataSource(source, mode);
   res->UnRegister();
   return res;
+#endif
+}
+
+void DeleteDataSource(std::string const& datasourceName)
+{
+  // Attempt to delete the datasource if it already exists
+  OGRDataSource * poDS = OGRSFDriverRegistrar::Open(datasourceName.c_str(), TRUE);
+
+  if (poDS != NULL)
+    {
+    OGRSFDriver * ogrDriver = poDS->GetDriver();
+    OGRDataSource::DestroyDataSource(poDS);
+    //Erase the data if possible
+    if (ogrDriver->TestCapability(ODrCDeleteDataSource))
+      {
+      //Delete datasource
+      OGRErr ret = ogrDriver->DeleteDataSource(datasourceName.c_str());
+      if (ret != OGRERR_NONE)
+        {
+        itkGenericOutputMacro(<< "Deletion of data source " << datasourceName
+                        << " failed: " << CPLGetLastErrorMsg());
+        }
+      }
+    else
+      {
+      itkGenericOutputMacro(<< "Cannot delete data source " << datasourceName);
+      }
+    } // if (poDS != NULL)
 }
 
 otb::ogr::DataSource::Pointer
-otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
+otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
 {
   Drivers::Init();
 
+  if (mode == Modes::Overwrite)
+    {
+    DeleteDataSource(datasourceName);
+    }
+
+  return OpenDataSource(datasourceName, mode);
+
+#if 0
   const bool write = mode & Modes::write;
   // std::cout << "Opening datasource " << filename << " update=" << update << "\n";
   if (itksys::SystemTools::FileExists(filename.c_str()))
@@ -227,13 +298,14 @@ otb::ogr::DataSource::New(std::string const& filename, Modes::type mode)
       }
     }
   return CreateDataSourceFromDriver(filename);
+#endif
 }
 
 /*static*/
 otb::ogr::DataSource::Pointer
-otb::ogr::DataSource::New(OGRDataSource * source)
+otb::ogr::DataSource::New(OGRDataSource * source, Modes::type mode)
 {
-  Pointer res = new DataSource(source);
+  Pointer res = new DataSource(source, mode);
   res->UnRegister();
   return res;
 }

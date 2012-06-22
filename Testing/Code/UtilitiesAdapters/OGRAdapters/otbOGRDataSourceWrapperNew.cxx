@@ -108,9 +108,9 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_mem_add_n_del_layer)
 
 BOOST_AUTO_TEST_CASE(OGRDataSource_new_exceptions)
 {
-  BOOST_CHECK_THROW(ogr::DataSource::New("name-that-shall-not-exist.shp", ogr::DataSource::Modes::read),
+  BOOST_CHECK_THROW(ogr::DataSource::New("name-that-shall-not-exist.shp", ogr::DataSource::Modes::Read),
     itk::ExceptionObject);
-  BOOST_CHECK_THROW(ogr::DataSource::New("unsupported.extension", ogr::DataSource::Modes::write),
+  BOOST_CHECK_THROW(ogr::DataSource::New("unsupported.extension", ogr::DataSource::Modes::Overwrite),
     itk::ExceptionObject)
 }
 
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp)
 {
   const std::string k_shp = "SomeShapeFile";
   const std::string k_one = k_shp;
-  ogr::DataSource::Pointer ds = ogr::DataSource::New(k_shp+".shp", ogr::DataSource::Modes::write);
+  ogr::DataSource::Pointer ds = ogr::DataSource::New(k_shp+".shp", ogr::DataSource::Modes::Overwrite);
 
   BOOST_CHECK_EQUAL(ds->GetLayersCount(), 0);
   ogr::Layer l = ds -> CreateLayer(k_one);
@@ -301,7 +301,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp_with_features)
 {
   const std::string k_shp = "SomeShapeFileWithFeatures";
   const std::string k_one = k_shp;
-  ogr::DataSource::Pointer ds = ogr::DataSource::New(k_shp+".shp", ogr::DataSource::Modes::write);
+  ogr::DataSource::Pointer ds = ogr::DataSource::New(k_shp+".shp", ogr::DataSource::Modes::Overwrite);
 
   ogr::Layer l = ds -> CreateLayer(k_one, 0, wkbPoint);
 
