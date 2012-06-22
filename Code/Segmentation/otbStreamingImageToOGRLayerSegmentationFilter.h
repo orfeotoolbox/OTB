@@ -92,13 +92,13 @@ class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputIm
  * \Note
  */
 template <class TImageType,  class TSegmentationFilter>
-class PersistentStreamingLabelImageToOGRLayerFilter
+class PersistentImageToOGRLayerSegmentationFilter
   : public otb::PersistentImageToOGRLayerFilter<TImageType>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentStreamingLabelImageToOGRLayerFilter     Self;
-  typedef PersistentImageToOGRLayerFilter<TImageType>             Superclass;
+  typedef PersistentImageToOGRLayerSegmentationFilter      Self;
+  typedef PersistentImageToOGRLayerFilter<TImageType>      Superclass;
   typedef itk::SmartPointer<Self>                          Pointer;
   typedef itk::SmartPointer<const Self>                    ConstPointer;
 
@@ -121,7 +121,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentStreamingLabelImageToOGRLayerFilter, PersistentImageToOGRLayerFilter);
+  itkTypeMacro(PersistentImageToOGRLayerSegmentationFilter, PersistentImageToOGRLayerFilter);
   
   /** Return a pointer to the segmentation filter used. */
   itkGetObjectMacro(SegmentationFilter, SegmentationFilterType);
@@ -178,13 +178,13 @@ public:
   virtual const LabelImageType * GetInputMask(void);
 
 protected:
-  PersistentStreamingLabelImageToOGRLayerFilter();
+  PersistentImageToOGRLayerSegmentationFilter();
 
-  virtual ~PersistentStreamingLabelImageToOGRLayerFilter();
+  virtual ~PersistentImageToOGRLayerSegmentationFilter();
 
 
 private:
-  PersistentStreamingLabelImageToOGRLayerFilter(const Self &); //purposely not implemented
+  PersistentImageToOGRLayerSegmentationFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   virtual OGRDataSourcePointerType ProcessTile();
@@ -229,14 +229,14 @@ private:
  */
 template <class TImageType,  class TSegmentationFilter>
 class ITK_EXPORT StreamingImageToOGRLayerSegmentationFilter :
-public PersistentFilterStreamingDecorator<PersistentStreamingLabelImageToOGRLayerFilter<TImageType, TSegmentationFilter> >
+public PersistentFilterStreamingDecorator<PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter> >
 {
 
 public:
   /** Standard Self typedef */
   typedef StreamingImageToOGRLayerSegmentationFilter Self;
   typedef PersistentFilterStreamingDecorator
-  <PersistentStreamingLabelImageToOGRLayerFilter<TImageType, TSegmentationFilter> >   Superclass;
+  <PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter> >   Superclass;
   typedef itk::SmartPointer<Self>                                                    Pointer;
   typedef itk::SmartPointer<const Self>                                              ConstPointer;
 
@@ -248,13 +248,13 @@ public:
 
   typedef TSegmentationFilter                      SegmentationFilterType;
   typedef TImageType                               InputImageType;
-  typedef typename PersistentStreamingLabelImageToOGRLayerFilter<TImageType,
+  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType,
                TSegmentationFilter>::LabelPixelType                           LabelPixelType;
-  typedef typename PersistentStreamingLabelImageToOGRLayerFilter<TImageType,
+  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType,
                TSegmentationFilter>::LabelImageType                           LabelImageType;
-  typedef typename PersistentStreamingLabelImageToOGRLayerFilter<TImageType,
+  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType,
                TSegmentationFilter>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
-  typedef typename PersistentStreamingLabelImageToOGRLayerFilter<TImageType,
+  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType,
                TSegmentationFilter>::OGRLayerType                             OGRLayerType;
 
   typedef typename InputImageType::SizeType                                   SizeType;
@@ -285,6 +285,17 @@ public:
   {
     this->GetFilter()->SetOGRLayer(ogrLayer);
   }
+
+  void SetFieldName( const std::string & fieldName )
+  {
+    this->GetFilter()->SetFieldName(fieldName);
+  }
+
+  const std::string & GetFieldName() const
+  {
+    return this->GetFilter()->GetFieldName();
+  }
+
 
   SegmentationFilterType * GetSegmentationFilter()
   {

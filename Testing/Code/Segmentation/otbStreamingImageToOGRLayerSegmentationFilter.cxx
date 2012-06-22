@@ -96,14 +96,24 @@ int otbStreamingImageToOGRLayerSegmentationFilter(int argc, char * argv[])
   maskReader->SetFileName(maskName);
   maskReader->UpdateOutputInformation();
   
+  // Create the output data-source in overwrite mode
+  // TODO: Change once flags have been updated
   otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
+  
+  OGRSpatialReference * oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(reader->GetOutput()->GetProjectionRef().c_str()));
+
+  // Create the layer
+  otb::ogr::Layer oLayer = ogrDS->CreateLayer(layerName,oSRS,wkbMultiPolygon,NULL);
+
+  // Create the field
+  OGRFieldDefn field(fieldName.c_str(),OFTInteger);
+  oLayer.CreateField(field,true);
 
   filter->SetInput(reader->GetOutput());
   filter->SetInputMask(maskReader->GetOutput());
-//  filter->SetOGRLayer(ogrDS);
-  //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
+  filter->SetOGRLayer(oLayer);
   filter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
-  //filter->SetFieldName(fieldName);
+  filter->SetFieldName(fieldName);
   filter->SetStartLabel(1);
   filter->SetUse8Connected(false);
   filter->SetFilterSmallObject(filterSmallObj);

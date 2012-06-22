@@ -247,7 +247,21 @@ private:
     AddParameter(ParameterType_OutputFilename, "mode.vector.out", "Output vector file");
     SetParameterDescription("mode.vector.out", "The output vector file or database (name can be anything understood by OGR)");
 
+    AddParameter(ParameterType_Choice,"mode.vector.outmode","Writing mode for the output vector file");
+    SetParameterDescription("mode.vector.outmode","This allows to set the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.");
 
+    AddChoice("mode.vector.outmode.ovw","Overwrite output vector file if existing.");
+    SetParameterDescription("mode.vector.outmode.ovw","If the output vector file already exists, it is completely destroyed (including all its layers) and recreated from scratch.");
+
+    AddChoice("mode.vector.outmode.ulovw","Update output vector file, overwrite existing layer");
+    SetParameterDescription("mode.vector.outmode.ulovw","The output vector file is opened in update mode if existing. If the output layer already exists, it si completely destroyed and recreated from scracth.");
+    
+    AddChoice("mode.vector.outmode.ulu","Update output vector file, update existing layer");
+    SetParameterDescription("mode.vector.outmode.ulu","The output vector file is opened in update mode if existing. If the output layer already exists, the new geometries are appened to the layer.");
+
+    AddChoice("mode.vector.outmode.ulco","Update output vector file, only allow to create new layers");
+    SetParameterDescription("mode.vector.outmode.ulu","The output vector file is opened in update mode if existing. If the output layer already exists, the application stops, leaving it untouched.");
+    
     AddParameter(ParameterType_InputImage, "mode.vector.inmask", "Mask Image");
     SetParameterDescription("mode.vector.inmask", "Only pixels whose mask value is strictly positive will be segmented.");
     MandatoryOff("mode.vector.inmask");

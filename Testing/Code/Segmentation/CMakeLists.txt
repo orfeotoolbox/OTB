@@ -69,14 +69,14 @@ ADD_TEST(obTuMeanShiftSegmentationFilterPruning ${SEGMENTATION_TESTS1}
       )
 
 # -------            otb::StreamingVectorizedSegmentation   -------------
-ADD_TEST(obTuStreamingImageToOGRDataSourceSegmentationFilterNew ${SEGMENTATION_TESTS1}
-    otbStreamingImageToOGRDataSourceSegmentationFilterNew)
+ADD_TEST(obTuStreamingImageToOGRLayerSegmentationFilterNew ${SEGMENTATION_TESTS1}
+    otbStreamingImageToOGRLayerSegmentationFilterNew)
 
-ADD_TEST(obTvStreamingImageToOGRDataSourceSegmentationFilter ${SEGMENTATION_TESTS1}
+ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilter ${SEGMENTATION_TESTS1}
      --compare-ogr  ${EPSILON_8}
      ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutput.sqlite
      ${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
-     otbStreamingImageToOGRDataSourceSegmentationFilter
+     otbStreamingImageToOGRLayerSegmentationFilter
      ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
      ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif
      ${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
@@ -91,11 +91,11 @@ ADD_TEST(obTvStreamingImageToOGRDataSourceSegmentationFilter ${SEGMENTATION_TEST
      0.2 #Simplification tolerance
      )
 
-ADD_TEST(obTvStreamingImageToOGRDataSourceSegmentationFilterHalfSpacing ${SEGMENTATION_TESTS1}
+ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilterHalfSpacing ${SEGMENTATION_TESTS1}
      --compare-ogr  ${EPSILON_8}
      ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationHalfSpacingOutput.sqlite
      ${TEMP}/obTvStreamingVectorizedSegmentationHalfSpacingOutput.sqlite
-     otbStreamingImageToOGRDataSourceSegmentationFilter
+     otbStreamingImageToOGRLayerSegmentationFilter
      ${INPUTDATA}/QB_Toulouse_Ortho_PAN_HalfSpacing.tif
      ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask_HalfSpacing.tif
      ${TEMP}/obTvStreamingVectorizedSegmentationHalfSpacingOutput.sqlite
@@ -133,7 +133,7 @@ otbHooverInstanceFilterNew.cxx
 otbHooverInstanceFilterToAttributeImage.cxx
 otbWatershedSegmentationFilter.cxx
 otbMeanShiftSegmentationFilter.cxx
-otbStreamingImageToOGRDataSourceSegmentationFilter.cxx
+otbStreamingImageToOGRLayerSegmentationFilter.cxx
 otbOGRDataSourceStreamStitchingFilter.cxx
 )
 
