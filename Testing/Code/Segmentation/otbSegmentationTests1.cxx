@@ -25,8 +25,8 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbStreamingImageToOGRDataSourceSegmentationFilterNew);
-REGISTER_TEST(otbStreamingImageToOGRDataSourceSegmentationFilter);
+REGISTER_TEST(otbStreamingImageToOGRLayerSegmentationFilterNew);
+REGISTER_TEST(otbStreamingImageToOGRLayerSegmentationFilter);
 REGISTER_TEST(otbOGRDataSourceStreamStitchingFilter);
 REGISTER_TEST(otbHooverMatrixFilterNew);
 REGISTER_TEST(otbHooverMatrixFilter);

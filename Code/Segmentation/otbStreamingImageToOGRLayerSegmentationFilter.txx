@@ -18,10 +18,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingImageToOGRDataSourceSegmentationFilter_txx
-#define __otbStreamingImageToOGRDataSourceSegmentationFilter_txx
+#ifndef __otbStreamingImageToOGRLayerSegmentationFilter_txx
+#define __otbStreamingImageToOGRLayerSegmentationFilter_txx
 
-#include "otbStreamingImageToOGRDataSourceSegmentationFilter.h"
+#include "otbStreamingImageToOGRLayerSegmentationFilter.h"
 
 #include "otbVectorDataTransformFilter.h"
 #include "itkAffineTransform.h"
@@ -34,8 +34,8 @@ namespace otb
 {
 
 template <class TImageType, class TSegmentationFilter>
-PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilter>
-::PersistentStreamingLabelImageToOGRDataSourceFilter() : m_TileMaxLabel(0), m_StartLabel(0), m_Use8Connected(false),
+PersistentStreamingLabelImageToOGRLayerFilter<TImageType, TSegmentationFilter>
+::PersistentStreamingLabelImageToOGRLayerFilter() : m_TileMaxLabel(0), m_StartLabel(0), m_SegmentationFilter(), m_FieldName("DN"), m_Use8Connected(false),
   m_FilterSmallObject(false), m_MinimumObjectSize(1),m_Simplify(false), m_SimplificationTolerance(0.3)
 {
    this->SetNumberOfInputs(3);
@@ -45,23 +45,23 @@ PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilt
 }
 
 template <class TImageType, class TSegmentationFilter>
-PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilter>
-::~PersistentStreamingLabelImageToOGRDataSourceFilter()
+PersistentStreamingLabelImageToOGRLayerFilter<TImageType, TSegmentationFilter>
+::~PersistentStreamingLabelImageToOGRLayerFilter()
 {
 }
 
 template <class TImageType, class TSegmentationFilter>
 void
-PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilter>
+PersistentStreamingLabelImageToOGRLayerFilter<TImageType, TSegmentationFilter>
 ::SetInputMask(const LabelImageType *mask)
 {
   this->itk::ProcessObject::SetNthInput(2, const_cast<LabelImageType *>(mask));
 }
 
 template <class TImageType, class TSegmentationFilter>
-const typename PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilter>
+const typename PersistentStreamingLabelImageToOGRLayerFilter<TImageType, TSegmentationFilter>
 ::LabelImageType *
-PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilter>
+PersistentStreamingLabelImageToOGRLayerFilter<TImageType, TSegmentationFilter>
 ::GetInputMask(void)
 {
   return static_cast<const LabelImageType *>(this->itk::ProcessObject::GetInput(2));
@@ -69,8 +69,8 @@ PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilt
 
 
 template <class TImageType, class TSegmentationFilter>
-typename PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilter>::OGRDataSourcePointerType
-PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilter>
+typename PersistentStreamingLabelImageToOGRLayerFilter<TImageType, TSegmentationFilter>::OGRDataSourcePointerType
+PersistentStreamingLabelImageToOGRLayerFilter<TImageType, TSegmentationFilter>
 ::ProcessTile()
 {
   otbMsgDebugMacro(<< "tile number : " << m_TileNumber);
@@ -120,7 +120,7 @@ PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilt
   }
 
   labelImageToOGRDataFilter->SetInput(dynamic_cast<LabelImageType *>(m_SegmentationFilter->GetOutputs().at(labelImageIndex).GetPointer()));
-  labelImageToOGRDataFilter->SetFieldName(this->GetFieldName());
+  labelImageToOGRDataFilter->SetFieldName(m_FieldName);
   labelImageToOGRDataFilter->SetUse8Connected(m_Use8Connected);
   labelImageToOGRDataFilter->Update();
 

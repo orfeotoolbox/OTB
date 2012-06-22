@@ -29,7 +29,7 @@
 
 #include "otbOGRDataSourceWrapper.h"
 
-int otbStreamingImageToOGRDataSourceSegmentationFilterNew(int argc, char * argv[])
+int otbStreamingImageToOGRLayerSegmentationFilterNew(int argc, char * argv[])
 {
   typedef float InputPixelType;
   const unsigned int Dimension = 2;
@@ -37,16 +37,16 @@ int otbStreamingImageToOGRDataSourceSegmentationFilterNew(int argc, char * argv[
   /** Typedefs */
   typedef otb::Image<InputPixelType,  Dimension>          ImageType;
   typedef otb::MeanShiftImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
-  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter<ImageType, MeanShiftImageFilterType>::FilterType StreamingImageToOGRDataSourceSegmentationFilterType;
+  typedef otb::StreamingImageToOGRLayerSegmentationFilter<ImageType, MeanShiftImageFilterType>::FilterType StreamingImageToOGRLayerSegmentationFilterType;
 
-  StreamingImageToOGRDataSourceSegmentationFilterType::Pointer filter = StreamingImageToOGRDataSourceSegmentationFilterType::New();
+  StreamingImageToOGRLayerSegmentationFilterType::Pointer filter = StreamingImageToOGRLayerSegmentationFilterType::New();
 
   std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }
 
-int otbStreamingImageToOGRDataSourceSegmentationFilter(int argc, char * argv[])
+int otbStreamingImageToOGRLayerSegmentationFilter(int argc, char * argv[])
 {
 
   if (argc != 13)
@@ -82,13 +82,13 @@ int otbStreamingImageToOGRDataSourceSegmentationFilter(int argc, char * argv[])
 
   //old mean shift filter
   typedef otb::MeanShiftVectorImageFilter<ImageType, ImageType, LabelImageType> SegmentationFilterType;
-  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter<ImageType, SegmentationFilterType> StreamingImageToOGRDataSourceSegmentationFilterType;
+  typedef otb::StreamingImageToOGRLayerSegmentationFilter<ImageType, SegmentationFilterType> StreamingImageToOGRLayerSegmentationFilterType;
   typedef otb::ImageFileReader<ImageType>                      ReaderType;
   typedef otb::ImageFileReader<LabelImageType>                 MaskReaderType;
 
   ReaderType::Pointer             reader = ReaderType::New();
   MaskReaderType::Pointer         maskReader = MaskReaderType::New();
-  StreamingImageToOGRDataSourceSegmentationFilterType::Pointer filter = StreamingImageToOGRDataSourceSegmentationFilterType::New();
+  StreamingImageToOGRLayerSegmentationFilterType::Pointer filter = StreamingImageToOGRLayerSegmentationFilterType::New();
 
   reader->SetFileName(imageName);
   reader->UpdateOutputInformation();
@@ -100,11 +100,10 @@ int otbStreamingImageToOGRDataSourceSegmentationFilter(int argc, char * argv[])
 
   filter->SetInput(reader->GetOutput());
   filter->SetInputMask(maskReader->GetOutput());
-  filter->SetOGRDataSource(ogrDS);
+//  filter->SetOGRLayer(ogrDS);
   //filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
   filter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
-  filter->SetLayerName(layerName);
-  filter->SetFieldName(fieldName);
+  //filter->SetFieldName(fieldName);
   filter->SetStartLabel(1);
   filter->SetUse8Connected(false);
   filter->SetFilterSmallObject(filterSmallObj);

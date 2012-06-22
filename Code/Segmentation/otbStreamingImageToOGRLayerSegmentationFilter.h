@@ -18,14 +18,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingImageToOGRDataSourceSegmentationFilter_h
-#define __otbStreamingImageToOGRDataSourceSegmentationFilter_h
+#ifndef __otbStreamingImageToOGRLayerSegmentationFilter_h
+#define __otbStreamingImageToOGRLayerSegmentationFilter_h
 
 #include "itkExtractImageFilter.h"
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-#include "otbPersistentImageToOGRDataSourceFilter.h"
+#include "otbPersistentImageToOGRLayerFilter.h"
 #include "otbRelabelComponentImageFilter.h"
 #include "itkMultiplyImageFilter.h"
 
@@ -88,17 +88,17 @@ class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputIm
 
 /** \class PersistentStreamingLabelImageToOGRDataFilter
  * \brief This filter is a framework for large scale segmentation.
- * For a detailed description @see StreamingImageToOGRDataSourceSegmentationFilter
+ * For a detailed description @see StreamingImageToOGRLayerSegmentationFilter
  * \Note
  */
 template <class TImageType,  class TSegmentationFilter>
-class PersistentStreamingLabelImageToOGRDataSourceFilter
-  : public otb::PersistentImageToOGRDataSourceFilter<TImageType>
+class PersistentStreamingLabelImageToOGRLayerFilter
+  : public otb::PersistentImageToOGRLayerFilter<TImageType>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentStreamingLabelImageToOGRDataSourceFilter     Self;
-  typedef PersistentImageToOGRDataSourceFilter<TImageType>             Superclass;
+  typedef PersistentStreamingLabelImageToOGRLayerFilter     Self;
+  typedef PersistentImageToOGRLayerFilter<TImageType>             Superclass;
   typedef itk::SmartPointer<Self>                          Pointer;
   typedef itk::SmartPointer<const Self>                    ConstPointer;
 
@@ -121,10 +121,13 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentStreamingLabelImageToOGRDataSourceFilter, PersistentImageToOGRDataSourceFilter);
+  itkTypeMacro(PersistentStreamingLabelImageToOGRLayerFilter, PersistentImageToOGRLayerFilter);
   
   /** Return a pointer to the segmentation filter used. */
   itkGetObjectMacro(SegmentationFilter, SegmentationFilterType);
+
+  itkSetStringMacro(FieldName);
+  itkGetStringMacro(FieldName);
   
   /** Set the first Label value (default is 1). Incremental step is 1.*/
   void SetStartLabel(const LabelPixelType & label)
@@ -175,13 +178,13 @@ public:
   virtual const LabelImageType * GetInputMask(void);
 
 protected:
-  PersistentStreamingLabelImageToOGRDataSourceFilter();
+  PersistentStreamingLabelImageToOGRLayerFilter();
 
-  virtual ~PersistentStreamingLabelImageToOGRDataSourceFilter();
+  virtual ~PersistentStreamingLabelImageToOGRLayerFilter();
 
 
 private:
-  PersistentStreamingLabelImageToOGRDataSourceFilter(const Self &); //purposely not implemented
+  PersistentStreamingLabelImageToOGRLayerFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   virtual OGRDataSourcePointerType ProcessTile();
@@ -191,6 +194,8 @@ private:
   LabelPixelType m_StartLabel;
   typename SegmentationFilterType::Pointer m_SegmentationFilter;
   
+  std::string m_FieldName;
+
   unsigned int m_TileNumber;
   bool m_Use8Connected;
   bool m_FilterSmallObject;
@@ -201,7 +206,7 @@ private:
   
 };
 
-/** \class StreamingImageToOGRDataSourceSegmentationFilter
+/** \class StreamingImageToOGRLayerSegmentationFilter
  * \brief This filter is a framework for large scale segmentation.
  * It is a persistent filter that process the input image tile by tile.
  * This filter is templated over the segmentation filter. This later is used to segment each tile of the input image.
@@ -214,7 +219,7 @@ private:
  * using the \c OGRGeometry::Simplify() method, based on Douglas-Peuker algorithm.
  * - FilterSmallObject option : if set to true, polygons with a size less than MinimumObjectSize (in pixels)
  * are discarded.
- * Finally all features contained in the "memory" DataSource are copied into the input DataSource,
+ * Finally all features contained in the "memory" DataSource are copied into the input Layer,
  * in the layer specified with the \c SetLayerName() method.
  *
  * \Note The Use8Connected parameter can be turn on and it will be used in \c GDALPolygonize(). But be carreful, it
@@ -223,15 +228,15 @@ private:
  * All pixels with a value of 0 in the input mask image will not be suitable for vectorization.
  */
 template <class TImageType,  class TSegmentationFilter>
-class ITK_EXPORT StreamingImageToOGRDataSourceSegmentationFilter :
-public PersistentFilterStreamingDecorator<PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilter> >
+class ITK_EXPORT StreamingImageToOGRLayerSegmentationFilter :
+public PersistentFilterStreamingDecorator<PersistentStreamingLabelImageToOGRLayerFilter<TImageType, TSegmentationFilter> >
 {
 
 public:
   /** Standard Self typedef */
-  typedef StreamingImageToOGRDataSourceSegmentationFilter Self;
+  typedef StreamingImageToOGRLayerSegmentationFilter Self;
   typedef PersistentFilterStreamingDecorator
-  <PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType, TSegmentationFilter> >   Superclass;
+  <PersistentStreamingLabelImageToOGRLayerFilter<TImageType, TSegmentationFilter> >   Superclass;
   typedef itk::SmartPointer<Self>                                                    Pointer;
   typedef itk::SmartPointer<const Self>                                              ConstPointer;
 
@@ -239,16 +244,18 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(StreamingImageToOGRDataSourceSegmentationFilter, PersistentFilterStreamingDecorator);
+  itkTypeMacro(StreamingImageToOGRLayerSegmentationFilter, PersistentFilterStreamingDecorator);
 
   typedef TSegmentationFilter                      SegmentationFilterType;
   typedef TImageType                               InputImageType;
-  typedef typename PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType,
+  typedef typename PersistentStreamingLabelImageToOGRLayerFilter<TImageType,
                TSegmentationFilter>::LabelPixelType                           LabelPixelType;
-  typedef typename PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType,
+  typedef typename PersistentStreamingLabelImageToOGRLayerFilter<TImageType,
                TSegmentationFilter>::LabelImageType                           LabelImageType;
-  typedef typename PersistentStreamingLabelImageToOGRDataSourceFilter<TImageType,
+  typedef typename PersistentStreamingLabelImageToOGRLayerFilter<TImageType,
                TSegmentationFilter>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
+  typedef typename PersistentStreamingLabelImageToOGRLayerFilter<TImageType,
+               TSegmentationFilter>::OGRLayerType                             OGRLayerType;
 
   typedef typename InputImageType::SizeType                                   SizeType;
 
@@ -273,27 +280,15 @@ public:
   {
     return this->GetFilter()->GetInputMask();
   }
-  /** Set the \c ogr::DataSource in which the layer LayerName will be created. */
-  void SetOGRDataSource( OGRDataSourcePointerType ogrDS )
+  /** Set the \c ogr::Layer in which the layer LayerName will be created. */
+  void SetOGRLayer( const OGRLayerType & ogrLayer )
   {
-    this->GetFilter()->SetOGRDataSource(ogrDS);
+    this->GetFilter()->SetOGRLayer(ogrLayer);
   }
 
   SegmentationFilterType * GetSegmentationFilter()
   {
      return this->GetFilter()->GetSegmentationFilter();
-  }
-  /** Set the Field Name in which labels will be written. (default is "DN")
-   * A field FieldName is created in the output layer LayerName. The Field type is Integer.
-   */
-  void SetFieldName(const std::string & field)
-  {
-     this->GetFilter()->SetFieldName(field);
-  }
-  
-  const std::string & GetFieldName()
-  {
-     return this->GetFilter()->GetFieldName();
   }
   
   /** Set the first Label value (default is 1). Incremental step is 1.*/
@@ -305,13 +300,6 @@ public:
   const LabelPixelType & GetStartLabel()
   {
      return this->GetFilter()->GetStartLabel();
-  }
-  /** Set the name of the output layer in which polygons will be writen.
-  * This layer is created in the input \c ogr::DataSource.
-  */
-  void SetLayerName(const std::string & fileName)
-  {
-     this->GetFilter()->SetLayerName(fileName);
   }
   
   /** Retrieve the actual streamsize used */
@@ -381,12 +369,12 @@ public:
   
 protected:
   /** Constructor */
-  StreamingImageToOGRDataSourceSegmentationFilter() {}
+  StreamingImageToOGRLayerSegmentationFilter() {}
   /** Destructor */
-  virtual ~StreamingImageToOGRDataSourceSegmentationFilter() {}
+  virtual ~StreamingImageToOGRLayerSegmentationFilter() {}
 
 private:
-  StreamingImageToOGRDataSourceSegmentationFilter(const Self &); //purposely not implemented
+  StreamingImageToOGRLayerSegmentationFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 };
 
@@ -394,7 +382,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingImageToOGRDataSourceSegmentationFilter.txx"
+#include "otbStreamingImageToOGRLayerSegmentationFilter.txx"
 #endif
 
 #endif

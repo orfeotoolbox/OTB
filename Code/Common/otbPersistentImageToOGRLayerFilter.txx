@@ -33,7 +33,7 @@ namespace otb
 
 template<class TImage>
 PersistentImageToOGRLayerFilter<TImage>
-::PersistentImageToOGRLayerFilter() : m_Layer()
+::PersistentImageToOGRLayerFilter() : m_OGRLayer(NULL)
 {
    m_StreamSize.Fill(0);
 }
@@ -56,7 +56,7 @@ PersistentImageToOGRLayerFilter<TImage>
 template<class TImage>
 const typename PersistentImageToOGRLayerFilter<TImage>::OGRLayerType&
 PersistentImageToOGRLayerFilter<TImage>
-::GetOGRLayer( void )
+::GetOGRLayer( void ) const
 {
   return m_OGRLayer;
 }
@@ -137,13 +137,13 @@ PersistentImageToOGRLayerFilter<TImage>
 
 
   // call the processing function for this tile
-  OGRLayerPointerType currentTileVD = this->ProcessTile();
+  OGRDataSourcePointerType currentTileVD = this->ProcessTile();
   OGRLayerType srcLayer = currentTileVD->GetLayerChecked(0);  
   
   //Copy features contained in the memory layer (srcLayer) in the output layer
   itk::TimeProbe chrono;
   chrono.Start();
-  dstLayer.ogr().StartTransaction();
+  m_OGRLayer.ogr().StartTransaction();
   OGRLayerType::const_iterator featIt = srcLayer.begin();
   for(; featIt!=srcLayer.end(); ++featIt)
   {

@@ -66,8 +66,10 @@ public:
   typedef typename InputImageType::PixelType         PixelType;
   typedef typename InputImageType::InternalPixelType InternalPixelType;
 
+  typedef ogr::DataSource                            OGRDataSourceType;
+  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
   typedef ogr::Layer                                 OGRLayerType;
-
+  typedef ogr::Feature                               OGRFeatureType;
 
   void AllocateOutputs();
   virtual void Reset(void);
@@ -77,17 +79,7 @@ public:
    * \note This methode must be called before the call of Update .
    */
   virtual void Initialize(void);
-    
-  /** Set the Field Name in which labels will be written. (default is "DN")
-   * A field FieldName is created in the Layer. The Field type is Integer.
-   */
-  itkSetMacro(FieldName, std::string);
-  
-  /**
-   * Return the Field name in which labels have been written.
-   */
-  itkGetMacro(FieldName, std::string);
-  
+      
   /** Get the size of the tile used for streaming.
    * This is useful if you use for example the \c OGRFusionTileFilter
    * for fusioning streaming tiles.
@@ -95,9 +87,9 @@ public:
   itkGetMacro(StreamSize, SizeType);
   
   /** Set the \c ogr::Layer in which the geometries will be dumped */
-  void SetOGRLayer( OGRLayerType * ogrLayer );
+  void SetOGRLayer( const OGRLayerType & ogrLayer );
   /** Get the \c ogr::Layer output. */
-  OGRLayerType * GetOGRLayer( void );
+  const OGRLayerType & GetOGRLayer( void ) const;
 
 protected:
   PersistentImageToOGRLayerFilter();
@@ -112,9 +104,11 @@ private:
   PersistentImageToOGRLayerFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  virtual OGRLayerPointerType ProcessTile() = 0;
+  virtual OGRDataSourcePointerType ProcessTile() = 0;
   
-  std::string m_FieldName;
+  // The layer where to dump geometries
+  OGRLayerType m_OGRLayer;
+
   SizeType m_StreamSize;
 }; // end of class
 } // end namespace otb
