@@ -1179,6 +1179,16 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
 )
+
+ADD_TEST(prTvGeometriesProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
+        --compare-ogr  ${NOTOL}
+            ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
+            ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
+        otbGeometriesProjectionFilterFromMapToSensor
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
+)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
@@ -1190,6 +1200,15 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
 )
 
+ADD_TEST(prTvGeometriesProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
+        --compare-ascii ${NOTOL}
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+        ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.kml
+        otbGeometriesProjectionFilterFromMapToGeo
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.kml
+)
+
 ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
         --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
@@ -1198,6 +1217,16 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
         ${INPUTDATA}/ToulousePoints-examples.shp
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.shp
+)
+
+ADD_TEST(prTvGeometriesProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
+        --compare-ascii ${NOTOL}
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
+        ${TEMP}/prTvGeometriesProjectionFilterFromMapToImage.shp
+        otbGeometriesProjectionFilterFromMapToImage
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${TEMP}/prTvGeometriesProjectionFilterFromMapToImage.shp
 )
 
 # With QGIS the two vectordata are equal
@@ -1211,6 +1240,16 @@ ADD_TEST(prTvVectorDataProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvVectorDataProjectionFilterFromGeoToMap.shp
 )
 SET_TESTS_PROPERTIES(prTvVectorDataProjectionFilterFromGeoToMap PROPERTIES DEPENDS prTvVectorDataProjectionFilterFromMapToGeo)
+ADD_TEST(prTvGeometriesProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
+        #--compare-ascii ${NOTOL}
+        #${INPUTDATA}/ToulousePoints-examples.shp
+        #${TEMP}/prTvGeometriesProjectionFilterFromGeoToMap.shp
+        otbGeometriesProjectionFilterFromGeoToMap
+        ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.kml
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${TEMP}/prTvGeometriesProjectionFilterFromGeoToMap.shp
+)
+SET_TESTS_PROPERTIES(prTvGeometriesProjectionFilterFromGeoToMap PROPERTIES DEPENDS prTvGeometriesProjectionFilterFromMapToGeo)
 
 
 
@@ -1695,13 +1734,17 @@ otbVectorDataProjectionFilterFromMapToGeo.cxx
 otbVectorDataProjectionFilterFromMapToImage.cxx
 otbVectorDataProjectionFilterFromGeoToMap.cxx
 otbVectorDataIntoImageProjectionFilterTest.cxx
-otbGeometriesProjectionFilter.cxx
 otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx
 otbTileMapTransform.cxx
 otbVectorDataExtractROIandProjection.cxx
 otbGenericRSTransformGenericConversionCheckingFromGCP.cxx
 otbForwardBackwardProjectionConsistency.cxx
+otbGeometriesProjectionFilter.cxx
+otbGeometriesProjectionFilterFromMapToSensor.cxx
+otbGeometriesProjectionFilterFromMapToGeo.cxx
+otbGeometriesProjectionFilterFromMapToImage.cxx
+otbGeometriesProjectionFilterFromGeoToMap.cxx
 otbGeometriesProjectionFilterFromMapToEPSG.cxx
 )
 
