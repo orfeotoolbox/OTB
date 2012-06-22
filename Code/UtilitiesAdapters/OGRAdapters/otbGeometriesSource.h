@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorDataSource, itk::ProcessObject);
+  itkTypeMacro(GeometriesSource, itk::ProcessObject);
   //@}
 
   /**\name GeometriesSet Output property. */
