@@ -31,7 +31,7 @@ namespace otb
 
 template<class TImage>
 OGRLayerStreamStitchingFilter<TImage>
-::OGRLayerStreamStitchingFilter() : m_Radius(2), m_OGRLayer(NULL)
+::OGRLayerStreamStitchingFilter() : m_Radius(2), m_OGRLayer(NULL, false)
 {
    m_StreamSize.Fill(0);
 }

@@ -345,7 +345,7 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
   std::string const& name,
   OGRSpatialReference * poSpatialRef/* = NULL */,
   OGRwkbGeometryType eGType/* = wkbUnknown */,
-  char ** papszOptions/* = NULL */)
+  std::vector<std::string> const& papszOptions/* = NULL */)
 {
   assert(m_DataSource && "Datasource not initialized");
 
@@ -362,8 +362,16 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
       break;
   }
 
+  // Make a local copy
+  std::vector<std::string> options(papszOptions);
+  if (m_OpenMode == Modes::Update_LayerOverwrite)
+    {
+    options.push_back("OVERWRITE=YES");
+    }
+  char** papszOptionsChar = otb::ogr::StringListConverter(options).to_ogr();
+
   OGRLayer * ol = m_DataSource->CreateLayer(
-    name.c_str(), poSpatialRef, eGType, papszOptions);
+    name.c_str(), poSpatialRef, eGType, papszOptionsChar);
   if (!ol)
     {
     itkGenericExceptionMacro(<< "Failed to create the layer <"<<name

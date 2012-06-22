@@ -129,7 +129,7 @@ PersistentImageToOGRDataFilter<TImage>
    
    OGRDataSourcePointerType ogrDS = this->GetOGRDataSource();
 
-   ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, otb::ogr::StringListConverter(m_OGRLayerCreationOptions).to_ogr());
+   ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, m_OGRLayerCreationOptions);
    OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
    
    //Handle the case of shapefile. A shapefile is a layer and not a datasource.

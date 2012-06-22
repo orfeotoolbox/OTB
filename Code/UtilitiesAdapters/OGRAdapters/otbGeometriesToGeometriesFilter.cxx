@@ -59,7 +59,7 @@ struct ProcessVisitor : boost::static_visitor<>
         sourceLayer.GetName(),
         m_filter.DoDefineNewLayerSpatialReference(sourceLayer),
         m_filter.DoDefineNewLayerGeometryType(sourceLayer),
-        otb::ogr::StringListConverter(m_filter.DoDefineNewLayerOptions(sourceLayer)).to_ogr()
+        m_filter.DoDefineNewLayerOptions(sourceLayer)
       );
       m_filter.DoDefineNewLayerFields(sourceLayer, destLayer);
       m_filter.DoProcessLayer(sourceLayer, destLayer);

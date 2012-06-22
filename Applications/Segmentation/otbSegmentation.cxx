@@ -451,13 +451,13 @@ private:
       if(GetParameterString("mode.vector.outmode") == "ovw")
         {
         // Create the datasource
-        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerOverwrite);
+        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
 
         // and create the layer since we are in overwrite mode, the
         // datasource is blank
         layer = ogrDS->CreateLayer(GetParameterString("mode.vector.layername"),
                                    &oSRS,wkbMultiPolygon,
-                                   otb::ogr::StringListConverter(GetParameterStringList("mode.vector.ogroptions")).to_ogr());
+                                   GetParameterStringList("mode.vector.ogroptions"));
         // And create the field
         OGRFieldDefn field(this->GetParameterString("mode.vector.fieldname").c_str(),OFTInteger);
         layer.CreateField(field,true);

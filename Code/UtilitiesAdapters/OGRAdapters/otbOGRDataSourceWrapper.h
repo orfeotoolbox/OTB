@@ -311,7 +311,7 @@ public:
     std::string        const& name,
     OGRSpatialReference     * poSpatialRef = NULL,
     OGRwkbGeometryType        eGType = wkbUnknown,
-    char                   ** papszOptions = NULL);
+    std::vector<std::string> const& papszOptions = std::vector<std::string>());
 
   /**
    * Deletes the i-th layer from the data source.
