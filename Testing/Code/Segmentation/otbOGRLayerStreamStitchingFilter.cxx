@@ -16,13 +16,13 @@
 
 =========================================================================*/
 
-#include "otbOGRDataSourceStreamStitchingFilter.h"
+#include "otbOGRLayerStreamStitchingFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itksys/SystemTools.hxx"
 #include "otbOGRDataSourceWrapper.h"
 
-int otbOGRDataSourceStreamStitchingFilter(int argc, char * argv[])
+int otbOGRLayerStreamStitchingFilter(int argc, char * argv[])
 {
   if (argc != 6)
     {
@@ -42,7 +42,7 @@ int otbOGRDataSourceStreamStitchingFilter(int argc, char * argv[])
   typedef float PixelType;
   typedef otb::Image<PixelType, Dimension> ImageType;
 
-  typedef otb::OGRDataSourceStreamStitchingFilter<ImageType>   FilterType;
+  typedef otb::OGRLayerStreamStitchingFilter<ImageType>   FilterType;
   typedef otb::ImageFileReader<ImageType>       ReaderType;
   
   ReaderType::Pointer reader = ReaderType::New();
@@ -79,9 +79,8 @@ int otbOGRDataSourceStreamStitchingFilter(int argc, char * argv[])
   otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(tmpOGRfname, otb::ogr::DataSource::Modes::append);
   
   filter->SetInput(reader->GetOutput());
-  filter->SetOGRDataSource(ogrDS);
+  filter->SetOGRLayer(ogrDS->GetLayer(layerName));
   filter->SetStreamSize(streamSize);
-  filter->SetLayerName(layerName);
   filter->GenerateData();
 
   return EXIT_SUCCESS;

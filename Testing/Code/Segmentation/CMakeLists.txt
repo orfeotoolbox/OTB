@@ -112,12 +112,12 @@ ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilterHalfSpacing ${SEGMENTATIO
 
 
 
-# -------            otb::OGRDataSourceStreamStitchingFilter   -------------
-ADD_TEST(obTuOGRDataSourceStreamStitchingFilter ${SEGMENTATION_TESTS1}
+# -------            otb::OGRLayerStreamStitchingFilter   -------------
+ADD_TEST(obTuOGRLayerStreamStitchingFilter ${SEGMENTATION_TESTS1}
     --compare-ogr  ${EPSILON_8}
     ${BASELINE_FILES}/obTvFusionOGRTile.shp
     ${TEMP}/obTvFusionOGRTile.shp
-    otbOGRDataSourceStreamStitchingFilter
+    otbOGRLayerStreamStitchingFilter
     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
     ${INPUTDATA}/QB_Toulouse_Ortho_withTiles.shp
     ${TEMP}/obTvFusionOGRTile.shp
@@ -134,7 +134,7 @@ otbHooverInstanceFilterToAttributeImage.cxx
 otbWatershedSegmentationFilter.cxx
 otbMeanShiftSegmentationFilter.cxx
 otbStreamingImageToOGRLayerSegmentationFilter.cxx
-otbOGRDataSourceStreamStitchingFilter.cxx
+otbOGRLayerStreamStitchingFilter.cxx
 )
 
 ADD_EXECUTABLE(otbSegmentationTests1 otbSegmentationTests1.cxx ${Segmentation_SRCS1})
