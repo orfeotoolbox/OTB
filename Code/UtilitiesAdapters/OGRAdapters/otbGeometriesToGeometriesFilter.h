@@ -19,6 +19,7 @@
 #define __otbGeometriesToGeometriesFilter_h
 
 #include "otbGeometriesSource.h"
+#include <map>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include "otbOGRFeatureWrapper.h"
@@ -165,32 +166,28 @@ struct FieldCopyTransformation
    *
    * \throw itk::ExceptionObject if the fields cannot be copied.
    */
-  void fieldsTransform(ogr::Feature const& inFeature, ogr::Feature & outFeature) const
-    {
-    // default => copy all fields for copy transformation
-
-    //assert(inFeature.GetSize() == outFeature.GetSize());
-
-    for (size_t i=0,N=inFeature.GetSize(); i!=N; ++i)
-      {
-      outFeature[inFeature[i].GetName()].Assign(inFeature[i]);
-      }
-    }
+  void fieldsTransform(ogr::Feature const& inFeature, ogr::Feature & outFeature) const;
 
   /**
    * Defines the fields in the destination layer.
+   * The default action is to copy all fieds from one layer to another.
    * \param[in] source  source \c Layer
    * \param[in,out] dest  destination \c Layer
    * \throw itk::ExceptionObject in case the operation can't succeed.
    */
-  void DefineFields(ogr::Layer const& source, ogr::Layer & dest) const
-    {
-    OGRFeatureDefn & inDefinition = source.GetLayerDefn();
-    for (int i=0,N=inDefinition.GetFieldCount(); i!=N; ++i)
-      {
-      dest.CreateField(*inDefinition.GetFieldDefn(i));
-      }
-    }
+  void DefineFields(ogr::Layer const& source, ogr::Layer & dest) const;
+private:
+  /** Associative table to know how fields are mapped from one layer to another.
+   * This table is necesary as:
+   * - some data source drivers add their own fields (as a consequence, the
+   * number of fields differ between two layers).
+   * - other data source drivers truncate the name of the fields (as a
+   * consequence, we can't rely on field names).
+   * \todo \c std::map may not be the fastest structure available => use a
+   * (sorted?) vector of pairs of ints, and search with a simple \c std::find
+   * (as we can expect the number of fields to be quite low).
+   */
+  mutable std::map<int,int> m_SourceToDestFieldIndicesMap;
   };
 
 

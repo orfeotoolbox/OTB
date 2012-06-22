@@ -188,3 +188,36 @@ std::vector<std::string> otb::GeometriesToGeometriesFilter::DoDefineNewLayerOpti
 {
   return std::vector<std::string>();
 }
+
+/*===========================================================================*/
+/*========================[ FieldCopyTransformation ]========================*/
+/*===========================================================================*/
+void otb::FieldCopyTransformation::DefineFields(
+  otb::ogr::Layer const& source, otb::ogr::Layer & dest) const
+{
+  OGRFeatureDefn & inDefinition = source.GetLayerDefn();
+  OGRFeatureDefn & outDefinition = dest.GetLayerDefn();
+  for (int i=0,N=inDefinition.GetFieldCount(); i!=N; ++i)
+    {
+    dest.CreateField(*inDefinition.GetFieldDefn(i));
+    // assume the definition is updated automatically
+    m_SourceToDestFieldIndicesMap[i] = outDefinition.GetFieldCount()-1;
+    }
+}
+
+
+void otb::FieldCopyTransformation::fieldsTransform(
+  otb::ogr::Feature const& inFeature, otb::ogr::Feature & outFeature) const
+{
+  // default => copy all fields for copy transformation
+
+  // The following can't be assumed because of Drivers like KML that always add
+  // two fields: "Description" and "Name"
+  //assert(inFeature.GetSize() == outFeature.GetSize());
+
+  for (size_t i=0,N=inFeature.GetSize(); i!=N; ++i)
+    {
+    int const indexNewField = m_SourceToDestFieldIndicesMap[i];
+    outFeature[indexNewField].Assign(inFeature[i]);
+    }
+}
