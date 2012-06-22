@@ -18,10 +18,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentImageToOGRDataSourceFilter_txx
-#define __otbPersistentImageToOGRDataSourceFilter_txx
+#ifndef __otbPersistentImageToOGRLayerFilter_txx
+#define __otbPersistentImageToOGRLayerFilter_txx
 
-#include "otbPersistentImageToOGRDataSourceFilter.h"
+#include "otbPersistentImageToOGRLayerFilter.h"
 #include "itkTimeProbe.h"
 #include <boost/foreach.hpp>
 #include <stdio.h>
@@ -32,67 +32,38 @@ namespace otb
 {
 
 template<class TImage>
-PersistentImageToOGRDataSourceFilter<TImage>
-::PersistentImageToOGRDataSourceFilter() : m_FieldName("DN"), m_LayerName("Layer"), m_GeometryType(wkbMultiPolygon)
+PersistentImageToOGRLayerFilter<TImage>
+::PersistentImageToOGRLayerFilter() : m_Layer()
 {
-   this->SetNumberOfInputs(2);
-   this->SetNumberOfRequiredInputs(2);
    m_StreamSize.Fill(0);
 }
 
 template<class TImage>
-PersistentImageToOGRDataSourceFilter<TImage>
-::~PersistentImageToOGRDataSourceFilter()
+PersistentImageToOGRLayerFilter<TImage>
+::~PersistentImageToOGRLayerFilter()
 {
 }
 
 template<class TImage>
 void
-PersistentImageToOGRDataSourceFilter<TImage>
-::SetOGRDataSource( OGRDataSourcePointerType ogrDS )
+PersistentImageToOGRLayerFilter<TImage>
+::SetOGRLayer(const OGRLayerType & ogrLayer)
 {
-   this->itk::ProcessObject::SetNthInput(1, ogrDS);
-}
-
-template<class TImage>
-typename PersistentImageToOGRDataSourceFilter<TImage>::OGRDataSourceType *
-PersistentImageToOGRDataSourceFilter<TImage>
-::GetOGRDataSource( void )
-{
-   return static_cast<OGRDataSourceType *> (this->itk::ProcessObject::GetInput(1));
-}
-
-template<class TImage>
-void
-PersistentImageToOGRDataSourceFilter<TImage>
-::AddOGRLayerCreationOption(const std::string& option)
-{
-  m_OGRLayerCreationOptions.push_back(option);
+  m_OGRLayer = ogrLayer;
   this->Modified();
 }
 
 template<class TImage>
-void
-PersistentImageToOGRDataSourceFilter<TImage>
-::ClearOGRLayerCreationOptions()
+const typename PersistentImageToOGRLayerFilter<TImage>::OGRLayerType&
+PersistentImageToOGRLayerFilter<TImage>
+::GetOGRLayer( void )
 {
-  m_OGRLayerCreationOptions.clear();
-  this->Modified();
+  return m_OGRLayer;
 }
 
 template<class TImage>
 void
-PersistentImageToOGRDataSourceFilter<TImage>
-::SetOGRLayerCreationOptions(const std::vector<std::string>&  options)
-{
-  m_OGRLayerCreationOptions = options;
-  this->Modified();
-}
-
-
-template<class TImage>
-void
-PersistentImageToOGRDataSourceFilter<TImage>
+PersistentImageToOGRLayerFilter<TImage>
 ::AllocateOutputs()
 {
   // Nothing that needs to be allocated for the outputs : the output is not meant to be used
@@ -100,75 +71,74 @@ PersistentImageToOGRDataSourceFilter<TImage>
 
 template<class TImage>
 void
-PersistentImageToOGRDataSourceFilter<TImage>
+PersistentImageToOGRLayerFilter<TImage>
 ::Reset()
 {
 }
 
 template<class TImage>
 void
-PersistentImageToOGRDataSourceFilter<TImage>
+PersistentImageToOGRLayerFilter<TImage>
 ::Synthetize()
 {
 }
 
 template<class TImage>
 void
-PersistentImageToOGRDataSourceFilter<TImage>
+PersistentImageToOGRLayerFilter<TImage>
 ::Initialize()
 {
    
-   std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
-   bool projectionInformationAvailable = !projectionRefWkt.empty();
-   OGRSpatialReference * oSRS = NULL;
-   if(projectionInformationAvailable)
-   {
-      oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
-   }
+   // std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
+   // bool projectionInformationAvailable = !projectionRefWkt.empty();
+   // OGRSpatialReference * oSRS = NULL;
+   // if(projectionInformationAvailable)
+   // {
+   //    oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
+   // }
    
    
-   OGRDataSourcePointerType ogrDS = this->GetOGRDataSource();
+   // OGRLayerPointerType ogrDS = this->GetOGRLayer();
 
-   ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, otb::ogr::StringListConverter(m_OGRLayerCreationOptions).to_ogr());
-   OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
+   // ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, otb::ogr::StringListConverter(m_OGRLayerCreationOptions).to_ogr());
+   // OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
    
-   //Handle the case of shapefile. A shapefile is a layer and not a datasource.
-   //The layer name in a shapefile is the shapefile's name.
-   //This is not the case for a database as sqlite or PG.
-   if (ogrDS->GetLayersCount() == 1)
-   {
-      ogrDS->GetLayer(0).CreateField(field, true);
-   }
-   else
-   {
-      ogrDS->GetLayer(m_LayerName).CreateField(field, true);
-   }
+   // //Handle the case of shapefile. A shapefile is a layer and not a datasource.
+   // //The layer name in a shapefile is the shapefile's name.
+   // //This is not the case for a database as sqlite or PG.
+   // if (ogrDS->GetLayersCount() == 1)
+   // {
+   //    ogrDS->GetLayer(0).CreateField(field, true);
+   // }
+   // else
+   // {
+   //    ogrDS->GetLayer(m_LayerName).CreateField(field, true);
+   // }
 
-   //CSLDestroy( options );
+   // //CSLDestroy( options );
 
 }
 
 
 template<class TImage>
 void
-PersistentImageToOGRDataSourceFilter<TImage>
+PersistentImageToOGRLayerFilter<TImage>
 ::GenerateData()
 {
-  
+  if(!m_OGRLayer)
+    {
+    itkExceptionMacro(<<"Output OGRLayer is null.");
+    }
+
   if (this->GetStreamSize()[0]==0 && this->GetStreamSize()[1]==0)
   {
      this->m_StreamSize = this->GetInput()->GetRequestedRegion().GetSize();
   }
-  
-  // call the processing function for this tile
-  OGRDataSourcePointerType currentTileVD = this->ProcessTile();
-  OGRLayerType srcLayer = currentTileVD->GetLayerChecked(0);
 
-  OGRDataSourcePointerType ogrDS = this->GetOGRDataSource();
-  OGRLayerType dstLayer = ogrDS->GetLayersCount() == 1
-                          ? ogrDS->GetLayer(0)
-                          : ogrDS->GetLayer(m_LayerName);
-  
+
+  // call the processing function for this tile
+  OGRLayerPointerType currentTileVD = this->ProcessTile();
+  OGRLayerType srcLayer = currentTileVD->GetLayerChecked(0);  
   
   //Copy features contained in the memory layer (srcLayer) in the output layer
   itk::TimeProbe chrono;
@@ -177,12 +147,12 @@ PersistentImageToOGRDataSourceFilter<TImage>
   OGRLayerType::const_iterator featIt = srcLayer.begin();
   for(; featIt!=srcLayer.end(); ++featIt)
   {
-      OGRFeatureType dstFeature(dstLayer.GetLayerDefn());
+      OGRFeatureType dstFeature(m_OGRLayer.GetLayerDefn());
       dstFeature.SetFrom( *featIt, TRUE );
-      dstLayer.CreateFeature( dstFeature );
+      m_OGRLayer.CreateFeature( dstFeature );
   }
   
-  dstLayer.ogr().CommitTransaction();
+  m_OGRLayer.ogr().CommitTransaction();
   chrono.Stop();
   otbMsgDebugMacro(<< "write ogr tile took " << chrono.GetTotal() << " sec");
   
@@ -190,7 +160,7 @@ PersistentImageToOGRDataSourceFilter<TImage>
 
 template<class TImage>
 void
-PersistentImageToOGRDataSourceFilter<TImage>
+PersistentImageToOGRLayerFilter<TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

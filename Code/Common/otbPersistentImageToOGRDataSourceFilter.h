@@ -18,13 +18,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentImageToOGRDataSourceFilter_h
-#define __otbPersistentImageToOGRDataSourceFilter_h
+#ifndef __otbPersistentImageToOGRLayerFilter_h
+#define __otbPersistentImageToOGRLayerFilter_h
 
 #include "otbPersistentImageFilter.h"
 
 #include "otbLabelImageToOGRDataSourceFilter.h"
-#include "otbOGRDataSourceWrapper.h"
+#include "otbOGRLayerWrapper.h"
 
 #include "itkMacro.h"
 #include <string>
@@ -32,33 +32,31 @@
 namespace otb
 {
 
-/** \class PersistentImageToOGRDataSourceFilter
+/** \class PersistentImageToOGRLayerFilter
  *  \brief Perform vectorization in a persistent way.
  *
  *  This filter is a generic filter. It is the base class of the Large scale segmentation framework.
- *  The \c Initialize() method is used to create the new layer (LayerName) in the input \c OGRDataSource,
- *  and the field (FieldName) in the layer. This field will contain the label of the polygon in the input image.
  *  The \c ProcessTile() method is pure virtual and is implemented in sub class
  *  (@see \c PersistentStreamingLabelImageToOGRDataFilter). It returns a "memory" DataSource.
- *  This filter only copy each feature of the layer in the "memory" DataSource into the LayerName layer in the
- *  input \c OGRDataSource set by \c SetOGRDataSource() method.
+ *  This filter only copy each feature of the layer in the "memory" DataSource into the
+ *  input \c OGRLayer set by \c SetOGRLayer() method.
  *
  * \sa PersistentImageFilter
  *
  */
 template<class TImage>
-class ITK_EXPORT PersistentImageToOGRDataSourceFilter :
+class ITK_EXPORT PersistentImageToOGRLayerFilter :
   public PersistentImageFilter<TImage, TImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentImageToOGRDataSourceFilter                  Self;
+  typedef PersistentImageToOGRLayerFilter                  Self;
   typedef PersistentImageFilter<TImage, TImage>           Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentImageToOGRDataSourceFilter, PersistentImageFilter);
+  itkTypeMacro(PersistentImageToOGRLayerFilter, PersistentImageFilter);
 
   typedef TImage                                     InputImageType;
   typedef typename InputImageType::Pointer           InputImagePointer;
@@ -68,28 +66,20 @@ public:
   typedef typename InputImageType::PixelType         PixelType;
   typedef typename InputImageType::InternalPixelType InternalPixelType;
 
-  typedef ogr::DataSource                            OGRDataSourceType;
-  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
   typedef ogr::Layer                                 OGRLayerType;
-  typedef ogr::Feature                               OGRFeatureType;
 
 
   void AllocateOutputs();
   virtual void Reset(void);
   virtual void Synthetize(void);
   
-  /** This method creates the output layer in the OGRDataSource set by the user.
-   * The name of the layer is set by \c SetLayerName .
+  /** This method creates the output layer in the OGRLayer set by the user.
    * \note This methode must be called before the call of Update .
    */
   virtual void Initialize(void);
-  
-  /** Set/Get the name of the output layer to write in the \c ogr::DataSource. */
-  itkSetStringMacro(LayerName);
-  itkGetStringMacro(LayerName);
-  
+    
   /** Set the Field Name in which labels will be written. (default is "DN")
-   * A field FieldName is created in the output layer LayerName. The Field type is Integer.
+   * A field FieldName is created in the Layer. The Field type is Integer.
    */
   itkSetMacro(FieldName, std::string);
   
@@ -104,23 +94,14 @@ public:
    */
   itkGetMacro(StreamSize, SizeType);
   
-  /** Set the \c ogr::DataSource in which the layer LayerName will be created. */
-  void SetOGRDataSource( OGRDataSourcePointerType ogrDS );
-  /** Get the \c ogr::DataSource output. */
-  OGRDataSourceType * GetOGRDataSource( void );
-
-  /** Add one option for OGR layer creation */
-  void AddOGRLayerCreationOption(const std::string& option);
-
-  /** Clear all OGR layer creation options */
-  void ClearOGRLayerCreationOptions();
-  
-  /** Set the OGR layer creation options */
-  void SetOGRLayerCreationOptions(const std::vector<std::string> & options);
+  /** Set the \c ogr::Layer in which the geometries will be dumped */
+  void SetOGRLayer( OGRLayerType * ogrLayer );
+  /** Get the \c ogr::Layer output. */
+  OGRLayerType * GetOGRLayer( void );
 
 protected:
-  PersistentImageToOGRDataSourceFilter();
-  virtual ~PersistentImageToOGRDataSourceFilter();
+  PersistentImageToOGRLayerFilter();
+  virtual ~PersistentImageToOGRLayerFilter();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -128,22 +109,18 @@ protected:
 
 
 private:
-  PersistentImageToOGRDataSourceFilter(const Self &); //purposely not implemented
+  PersistentImageToOGRLayerFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  virtual OGRDataSourcePointerType ProcessTile() = 0;
+  virtual OGRLayerPointerType ProcessTile() = 0;
   
   std::string m_FieldName;
-  std::string m_LayerName;
-  OGRwkbGeometryType m_GeometryType;
   SizeType m_StreamSize;
-  std::vector<std::string> m_OGRLayerCreationOptions;
-
 }; // end of class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentImageToOGRDataSourceFilter.txx"
+#include "otbPersistentImageToOGRLayerFilter.txx"
 #endif
 
 #endif
