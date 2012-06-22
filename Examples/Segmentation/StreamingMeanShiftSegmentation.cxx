@@ -28,7 +28,7 @@
 // of the input image. In this example we will use the \doxygen{otb}{MeanShiftVectorImageFilter}.
 // The labeled output image of each tile is then vectorized (using a filter based on GDALPolygonize)
 // and stored into a \doxygen{otb}{ogr}{Layer} within the \doxygen{otb}{ogr}{DataSource}
-// set as input. Finally a fusion filter, \doxygen{otb}{OGRDataSourceStreamStitchingFilter}, is used to merge polygons
+// set as input. Finally a fusion filter, \doxygen{otb}{OGRLayerStreamStitchingFilter}, is used to merge polygons
 // at tile border.
 //
 // Let's take a look at the code.
@@ -40,7 +40,7 @@
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
 #include "otbMeanShiftVectorImageFilter.h"
 #include "otbOGRDataSourceWrapper.h"
-#include "otbOGRDataSourceStreamStitchingFilter.h"
+#include "otbOGRLayerStreamStitchingFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbVectorImage.h"
@@ -236,36 +236,36 @@ int main(int argc, char *argv[])
   // Software Guide : BeginLatex
   //
   // The segmentation is done, but as it works tile by tile, we need to fusion polygons at tile border.
-  // We use the \doxygen{otb}{OGRDataSourceStreamStitchingFilter}. This filter uses a simple fusion strategy.
+  // We use the \doxygen{otb}{OGRLayerStreamStitchingFilter}. This filter uses a simple fusion strategy.
   // Polygons that have the largest intersection over a tile are fusioned. Each polygon can be fusioned
   // only once per tile border (row and column).
   // Let's look at the code for fusioning.
-  // As usual we declared and instanciate the \doxygen{otb}{OGRDataSourceStreamStitchingFilter}.
+  // As usual we declared and instanciate the \doxygen{otb}{OGRLayerStreamStitchingFilter}.
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  typedef otb::OGRDataSourceStreamStitchingFilter<ImageType>   FusionFilterType;
+  typedef otb::OGRLayerStreamStitchingFilter<ImageType>   FusionFilterType;
   FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
-  // Next we set the input image and the input \doxygen{otb}{ogr}{DataSource}.
+  // Next we set the input image and the input \doxygen{otb}{ogr}{Layer}.
   // The image is internally used in the filter to compute coordinates of streaming tiles.
   // The DataSource is the one containing the segmentation results.
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   fusionFilter->SetInput(reader->GetOutput());
-  fusionFilter->SetOGRDataSource(ogrDS);
+  fusionFilter->SetOGRLayer(ogrLayer);
   // Software Guide : EndCodeSnippet
   
-  // Software Guide : BeginLatex
-  // We set the name of the layer containing segmentation results which is the same that we used
-  // for the \doxygen{otb}{StreamingVectorizedSegmentation} filter. We also set the size of the
-  // tile used, which may be different from the one we set in the \doxygen{otb}{StreamingVectorizedSegmentation} filter
-  // but can be retrieved using the \code{GetStreamSize()} method.
-  // Software Guide : EndLatex
+  // Software Guide : BeginLatex 
+  // We set the size of the tile used,
+  // which may be different from the one we set in the
+  // \doxygen{otb}{StreamingVectorizedSegmentation} filter but can be
+  // retrieved using the \code{GetStreamSize()} method.  
+  // Software Guide : EndLatex 
+
   // Software Guide : BeginCodeSnippet
   fusionFilter->SetStreamSize(filter->GetStreamSize());
-  fusionFilter->SetLayerName(layerName);
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
