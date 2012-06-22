@@ -103,7 +103,7 @@ int otbStreamingImageToOGRLayerSegmentationFilter(int argc, char * argv[])
   OGRSpatialReference oSRS(reader->GetOutput()->GetProjectionRef().c_str());
 
   // Create the layer
-  otb::ogr::Layer oLayer = ogrDS->CreateLayer(layerName,&oSRS,wkbMultiPolygon,NULL);
+  otb::ogr::Layer oLayer = ogrDS->CreateLayer(layerName,&oSRS,wkbMultiPolygon);
 
   // Create the field
   OGRFieldDefn field(fieldName.c_str(),OFTInteger);
