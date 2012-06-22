@@ -121,7 +121,6 @@ ADD_TEST(obTuOGRLayerStreamStitchingFilter ${SEGMENTATION_TESTS1}
     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
     ${INPUTDATA}/QB_Toulouse_Ortho_withTiles.shp
     ${TEMP}/obTvFusionOGRTile.shp
-    layer
     112
     )
 

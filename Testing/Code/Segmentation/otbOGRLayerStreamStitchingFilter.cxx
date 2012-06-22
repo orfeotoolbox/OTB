@@ -24,18 +24,17 @@
 
 int otbOGRLayerStreamStitchingFilter(int argc, char * argv[])
 {
-  if (argc != 6)
+  if (argc != 5)
     {
       std::cerr << "Usage: " << argv[0];
-      std::cerr << " inputImage inputOGR outputOGR layerName streamingSize" << std::endl;
+      std::cerr << " inputImage inputOGR outputOGR streamingSize" << std::endl;
       return EXIT_FAILURE;
     }
   
   const char * infname      = argv[1];
   const char * inOGRfname   = argv[2];
   const char * tmpOGRfname  = argv[3];
-  const char * layerName    = argv[4];
-  unsigned int size         = atoi(argv[5]);
+  unsigned int size         = atoi(argv[4]);
   
   /** Typedefs */
   const unsigned int Dimension = 2;
@@ -69,6 +68,7 @@ int otbOGRLayerStreamStitchingFilter(int argc, char * argv[])
   out = outPathName+"/"+outBaseName+".prj";
   itksys::SystemTools::CopyAFile(in.c_str(),out.c_str(),true);
 
+  const std::string layerName = outBaseName;
   
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
