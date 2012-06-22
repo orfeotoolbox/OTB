@@ -457,7 +457,7 @@ private:
         // datasource is blank
         layer = ogrDS->CreateLayer(GetParameterString("mode.vector.layername"),
                                    &oSRS,wkbMultiPolygon,
-                                   otb::ogr::StringListConverter(GetParameterStringList("mode.vector.ogroptions")).to_ogr());
+                                   GetParameterStringList("mode.vector.ogroptions"));
         // And create the field
         OGRFieldDefn field(this->GetParameterString("mode.vector.fieldname").c_str(),OFTInteger);
         layer.CreateField(field,true);

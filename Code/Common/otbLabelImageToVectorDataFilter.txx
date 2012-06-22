@@ -184,7 +184,7 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
     //Create the output layer for GDALPolygonize().
     ogr::DataSource::Pointer ogrDS = ogr::DataSource::New();
     
-    OGRLayerType outputLayer = ogrDS->CreateLayer("layer",NULL,wkbPolygon,NULL);
+    OGRLayerType outputLayer = ogrDS->CreateLayer("layer",NULL,wkbPolygon);
     
     OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
     outputLayer.CreateField(field, true);

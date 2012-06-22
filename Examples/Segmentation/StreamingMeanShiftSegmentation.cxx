@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  otb::ogr::Layer ogrLayer = ogrDS->CreateLayer(layerName,&oSRS,wkbMultiPolygon,NULL);
+  otb::ogr::Layer ogrLayer = ogrDS->CreateLayer(layerName,&oSRS,wkbMultiPolygon);
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
