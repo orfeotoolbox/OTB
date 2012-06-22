@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataSourceStreamStitchingFilter_txx
-#define __otbOGRDataSourceStreamStitchingFilter_txx
+#ifndef __otbOGRLayerStreamStitchingFilter_txx
+#define __otbOGRLayerStreamStitchingFilter_txx
 
-#include "otbOGRDataSourceStreamStitchingFilter.h"
+#include "otbOGRLayerStreamStitchingFilter.h"
 
 #include <iomanip>
 #include "ogrsf_frmts.h"
@@ -30,24 +30,24 @@ namespace otb
 {
 
 template<class TImage>
-OGRDataSourceStreamStitchingFilter<TImage>
-::OGRDataSourceStreamStitchingFilter() : m_Radius(2), m_OGRLayer(NULL)
+OGRLayerStreamStitchingFilter<TImage>
+::OGRLayerStreamStitchingFilter() : m_Radius(2), m_OGRLayer(NULL)
 {
    m_StreamSize.Fill(0);
 }
 
 template <class TInputImage>
 void
-OGRDataSourceStreamStitchingFilter<TInputImage>
+OGRLayerStreamStitchingFilter<TInputImage>
 ::SetInput(const InputImageType *input)
 {
   this->Superclass::SetNthInput(0, const_cast<InputImageType *>(input));
 }
 
 template <class TInputImage>
-const typename OGRDataSourceStreamStitchingFilter<TInputImage>
+const typename OGRLayerStreamStitchingFilter<TInputImage>
 ::InputImageType *
-OGRDataSourceStreamStitchingFilter<TInputImage>
+OGRLayerStreamStitchingFilter<TInputImage>
 ::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
@@ -60,7 +60,7 @@ OGRDataSourceStreamStitchingFilter<TInputImage>
 
 template<class TInputImage>
 void
-OGRDataSourceStreamStitchingFilter<TInputImage>
+OGRLayerStreamStitchingFilter<TInputImage>
 ::SetOGRLayer( const OGRLayerType& ogrLayer )
 {
   m_OGRLayer = ogrLayer;
@@ -68,16 +68,16 @@ OGRDataSourceStreamStitchingFilter<TInputImage>
 }
 
 template<class TInputImage>
-const typename OGRDataSourceStreamStitchingFilter<TInputImage>::OGRLayerType &
-OGRDataSourceStreamStitchingFilter<TInputImage>
-::GetOGRDataSource( void ) const
+const typename OGRLayerStreamStitchingFilter<TInputImage>::OGRLayerType &
+OGRLayerStreamStitchingFilter<TInputImage>
+::GetOGRLayer( void ) const
 {
    return m_OGRLayer;
 }
 
 template<class TInputImage>
 double
-OGRDataSourceStreamStitchingFilter<TInputImage>
+OGRLayerStreamStitchingFilter<TInputImage>
 ::GetLengthOGRGeometryCollection( OGRGeometryCollection * intersection )
 {
   double dfLength = 0.0;
@@ -101,7 +101,7 @@ OGRDataSourceStreamStitchingFilter<TInputImage>
 }
 template<class TInputImage>
 void
-OGRDataSourceStreamStitchingFilter<TInputImage>
+OGRLayerStreamStitchingFilter<TInputImage>
 ::ProcessStreamingLine( bool line )
 {
    typename InputImageType::ConstPointer inputImage = this->GetInput();
@@ -289,7 +289,7 @@ OGRDataSourceStreamStitchingFilter<TInputImage>
 
 template<class TImage>
 void
-OGRDataSourceStreamStitchingFilter<TImage>
+OGRLayerStreamStitchingFilter<TImage>
 ::GenerateData(void)
 {
   if(!m_OGRLayer)
