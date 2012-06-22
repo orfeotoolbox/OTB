@@ -23,7 +23,7 @@
 // Software Guide : BeginLatex
 //
 // The following example illustrates how to segment very large images
-// using the \doxygen{otb}{StreamingVectorizedSegmentation}. This filter is
+// using the \doxygen{otb}{StreamingImageToOGRLayerSegmentationFilter}. This filter is
 // templated over the segmentation filter that will be used to segment each tile
 // of the input image. In this example we will use the \doxygen{otb}{MeanShiftVectorImageFilter}.
 // The labeled output image of each tile is then vectorized (using a filter based on GDALPolygonize)
@@ -37,7 +37,7 @@
 #include <iostream>
 
 // Software Guide : BeginCodeSnippet
-#include "otbStreamingImageToOGRDataSourceSegmentationFilter.h"
+#include "otbStreamingImageToOGRLayerSegmentationFilter.h"
 #include "otbMeanShiftVectorImageFilter.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "otbOGRDataSourceStreamStitchingFilter.h"
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginCodeSnippet
   //typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
   typedef otb::MeanShiftVectorImageFilter <ImageType, ImageType, LabelImageType>  SegmentationFilterType;
-  typedef otb::StreamingImageToOGRDataSourceSegmentationFilter<ImageType, SegmentationFilterType> StreamingVectorizedSegmentationType;
+  typedef otb::StreamingImageToOGRLayerSegmentationFilter<ImageType, SegmentationFilterType> StreamingVectorizedSegmentationType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -118,6 +118,12 @@ int main(int argc, char *argv[])
   StreamingVectorizedSegmentationType::Pointer filter = StreamingVectorizedSegmentationType::New();
   // Software Guide : EndCodeSnippet
   
+  reader->SetFileName(imageName);
+  reader->UpdateOutputInformation();
+  
+  maskReader->SetFileName(maskName);
+  maskReader->UpdateOutputInformation();
+
   // Software Guide : BeginLatex
   //
   // The instanciation of the DataSource is slightly different as usual.
@@ -131,7 +137,42 @@ int main(int argc, char *argv[])
   // Software Guide : BeginCodeSnippet
   otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::write);
   // Software Guide : EndCodeSnippet
+
   
+  // Software Guide : BeginLatex
+  //
+  // Next, we will create the layer inside the DataSource that will
+  // hold the polygons from the vectorized segmentation. First, we
+  // need to retrieve the spatial reference from the input image.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  OGRSpatialReference oSRS(reader->GetOutput()->GetProjectionRef().c_str());
+  // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // Now, we can create the layer.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  otb::ogr::Layer ogrLayer = ogrDS->CreateLayer(layerName,&oSRS,wkbMultiPolygon,NULL);
+  // Software Guide : EndCodeSnippet
+  
+  // Software Guide : BeginLatex
+  //
+  // Last, we need to create a field inside the layer that will hold
+  // the identifier of the polygons.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  OGRFieldDefn ogrField(fieldName.c_str(),OFTInteger);
+  ogrLayer.CreateField(ogrField,true);
+  // Software Guide : EndCodeSnippet
+
   // Software Guide : BeginLatex
   //
   // Now we set the parameters to the segmentation filter.The \doxygen{otb}{MeanShiftVectorImageFilter}
@@ -153,7 +194,6 @@ int main(int argc, char *argv[])
   // \begin{itemize}
   //  \item tile size : use \code{SetTileDimensionTiledStreaming()} for square tile or \code{SetNumberOfLinesStrippedStreaming()}
   // for Strip.
-  // \item layer name : name of the layer that will be created in the input \doxygen{otb}{ogr}{DataSource}.
   // \item field name : name of the field that will contained the label values. (default is "DN").
   // \item start label : first label. Each polygons have a unique label (incremented by one).
   // \item option to filter small polygons (default to false).
@@ -164,7 +204,6 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   filter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
-  filter->SetLayerName(layerName);
   filter->SetFieldName(fieldName);
   filter->SetStartLabel(1);
   filter->SetFilterSmallObject(filterSmallObj);
@@ -173,23 +212,15 @@ int main(int argc, char *argv[])
   filter->SetSimplificationTolerance(tolerance);
   // Software Guide : EndCodeSnippet
   
-  
   // Software Guide : BeginLatex
   //
   // Finally we connect the pipeline
   // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
-  reader->SetFileName(imageName);
-  reader->UpdateOutputInformation();
-  
-  maskReader->SetFileName(maskName);
-  maskReader->UpdateOutputInformation();
-  
+  // Software Guide : BeginCodeSnippet  
   filter->SetInput(reader->GetOutput());
   filter->SetInputMask(maskReader->GetOutput());
-  filter->SetOGRDataSource(ogrDS);
+  filter->SetOGRLayer(ogrLayer);
   // Software Guide : EndCodeSnippet
-  
   
   // Software Guide : BeginLatex
   //
