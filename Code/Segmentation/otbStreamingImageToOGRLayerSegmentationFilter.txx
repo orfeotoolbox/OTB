@@ -97,7 +97,6 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
   chrono1.Start();
   m_SegmentationFilter->SetInput(extract->GetOutput());
   m_SegmentationFilter->UpdateLargestPossibleRegion();
-  m_SegmentationFilter->Update();
 
   chrono1.Stop();
   otbMsgDebugMacro(<<"segmentation took " << chrono1.GetTotal() << " sec");
