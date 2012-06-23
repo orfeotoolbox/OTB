@@ -2,7 +2,7 @@ IF(WIN32)
 
 IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES inttypes.h stdint.h
-          DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbmsinttypes
+          DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbmsinttypes
           COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
 

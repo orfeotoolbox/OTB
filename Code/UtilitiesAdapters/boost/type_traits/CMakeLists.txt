@@ -5,6 +5,6 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   # INSTALL(FILES ${__files1}
   # INSTALL(FILES ${__files1} ${__files2}
   INSTALL(FILES ${__files1} ${__files2} ${__files3}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/UtilitiesAdapters/boost/type_traits
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/UtilitiesAdapters/boost/type_traits
     COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)

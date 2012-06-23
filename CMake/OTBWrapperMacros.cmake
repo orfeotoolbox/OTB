@@ -29,9 +29,9 @@ macro(OTB_CREATE_APPLICATION)
      set_target_properties(${APPLICATION_TARGET_NAME} PROPERTIES SUFFIX ".dylib")
    endif()
 
-   # When called from the OTB build system, use OTB_INSTALL_APP_DIR_CM24
-   if (NOT APPLICATION_INSTALL_PATH AND OTB_INSTALL_APP_DIR_CM24)
-     set(APPLICATION_INSTALL_PATH ${OTB_INSTALL_APP_DIR_CM24})
+   # When called from the OTB build system, use OTB_INSTALL_APP_DIR
+   if (NOT APPLICATION_INSTALL_PATH AND OTB_INSTALL_APP_DIR)
+     set(APPLICATION_INSTALL_PATH ${OTB_INSTALL_APP_DIR})
    endif()
    
    if (APPLICATION_INSTALL_PATH)
@@ -71,10 +71,10 @@ macro(OTB_CREATE_APPLICATION)
                DESTINATION ${APPLICATION_BINARY_PATH}
                FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
     
-          if (OTB_INSTALL_BIN_DIR_CM24)
+          if (OTB_INSTALL_BIN_DIR)
               # Install a version of this script if we are inside the OTB build
               install(PROGRAMS ${SCRIPT_CLI_INSTALLABLE}
-                      DESTINATION ${OTB_INSTALL_BIN_DIR_CM24}
+                      DESTINATION ${OTB_INSTALL_BIN_DIR}
                       COMPONENT RuntimeLibraries)
           endif()
       endif()
@@ -100,10 +100,10 @@ macro(OTB_CREATE_APPLICATION)
                DESTINATION ${APPLICATION_BINARY_PATH}
                FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
 
-          if (OTB_INSTALL_BIN_DIR_CM24)
+          if (OTB_INSTALL_BIN_DIR)
               # Install a version of this script if we are inside the OTB build
               install(PROGRAMS ${SCRIPT_GUI_INSTALLABLE}
-                      DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
+                      DESTINATION ${OTB_INSTALL_BIN_DIR})
           endif()
       endif()
    #endif(NOT WIN32)

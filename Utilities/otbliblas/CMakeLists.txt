@@ -74,31 +74,31 @@ ENDIF(OTB_LIBRARY_PROPERTIES)
 
 IF(NOT OTB_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS otbliblas
-    RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+    RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 
 IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/*.hpp")
   INSTALL(FILES ${__files1}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbliblas/include/liblas
     COMPONENT Development)
   FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/detail/*.hpp")
   INSTALL(FILES ${__files2}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/detail
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbliblas/include/liblas/detail
     COMPONENT Development)
   FILE(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/capi/*.h")
   INSTALL(FILES ${__files3}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/capi
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbliblas/include/liblas/capi
     COMPONENT Development)
   FILE(GLOB __files4 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/external/property_tree/*.hpp")
   INSTALL(FILES ${__files4}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/external/property_tree
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbliblas/include/liblas/external/property_tree
     COMPONENT Development)
   FILE(GLOB __files5 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/external/property_tree/detail/*.hpp")
   INSTALL(FILES ${__files5}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/external/property_tree/detail
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbliblas/include/liblas/external/property_tree/detail
     COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
 

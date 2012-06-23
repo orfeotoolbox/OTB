@@ -33,7 +33,7 @@ jdsample.c jdcolor.c jquant1.c jquant2.c jdmerge.c
 
 ADD_LIBRARY(fltk_jpeg ${systemdependent_SRCS} ${common_SRCS} ${compression_SRCS} ${decompression_SRCS})
 INSTALL(TARGETS fltk_jpeg
-        RUNTIME DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
-        LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
-        ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+        RUNTIME DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+        LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+        ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 

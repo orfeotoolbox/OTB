@@ -66,11 +66,11 @@ if ( OTB_WRAP_PYTHON )
     )
 
   install( TARGETS _otbApplication
-           DESTINATION ${OTB_INSTALL_PYTHON_DIR_CM24} )
+           DESTINATION ${OTB_INSTALL_PYTHON_DIR} )
 
   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/otbApplication.py
                  ${CMAKE_CURRENT_BINARY_DIR}/otbApplication.pyc
-           DESTINATION ${OTB_INSTALL_PYTHON_DIR_CM24} )
+           DESTINATION ${OTB_INSTALL_PYTHON_DIR} )
 
 endif()
 
@@ -123,7 +123,7 @@ if ( OTB_WRAP_JAVA )
   # Prefer using OTB_INSTALL_JAVA_DIR which defaults to something that honors CMAKE_INSTALL_PREFIX
   # Using the system-wide Java extension dir usually require admin privileges,
   # and shall better be left to packagers.
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.otb.application.jar DESTINATION ${OTB_INSTALL_JAVA_DIR_CM24})
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.otb.application.jar DESTINATION ${OTB_INSTALL_JAVA_DIR})
 
 endif()
 

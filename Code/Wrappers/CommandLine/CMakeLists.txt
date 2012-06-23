@@ -8,9 +8,9 @@ IF(OTB_LIBRARY_PROPERTIES)
 ENDIF(OTB_LIBRARY_PROPERTIES)
 
 install(TARGETS OTBWrapperCommandLine
-        RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR_CM24}
-        LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR_CM24}
-        ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR_CM24})
+        RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR}
+        LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR}
+        ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR})
 
         
 
@@ -23,9 +23,9 @@ target_link_libraries(otbApplicationLauncherCommandLine
                        OTBApplicationEngine)
 
 install(TARGETS otbApplicationLauncherCommandLine
-        RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR_CM24}
-        LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR_CM24}
-        ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR_CM24})
+        RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR}
+        LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR}
+        ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR})
 
 # Where we will install the script in the build tree
 get_target_property(CLI_OUPUT_DIR otbApplicationLauncherCommandLine RUNTIME_OUTPUT_DIRECTORY)
@@ -50,7 +50,7 @@ configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.bat.installtree.in
                 ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbcli.bat
                 @ONLY )
 install(PROGRAMS ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbcli.bat
-        DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
+        DESTINATION ${OTB_INSTALL_BIN_DIR})
 
 else()
 configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.buildtree.in
@@ -63,6 +63,6 @@ configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.installtree.in
                 ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbcli
                 @ONLY )
 install(PROGRAMS ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbcli
-        DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
+        DESTINATION ${OTB_INSTALL_BIN_DIR})
 
 endif()
