@@ -66,11 +66,13 @@ if ( OTB_WRAP_PYTHON )
     )
 
   install( TARGETS _otbApplication
-           DESTINATION ${OTB_INSTALL_PYTHON_DIR} )
+           DESTINATION ${OTB_INSTALL_PYTHON_DIR}
+           COMPONENT RuntimeLibraries )
 
   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/otbApplication.py
                  ${CMAKE_CURRENT_BINARY_DIR}/otbApplication.pyc
-           DESTINATION ${OTB_INSTALL_PYTHON_DIR} )
+           DESTINATION ${OTB_INSTALL_PYTHON_DIR}
+           COMPONENT RuntimeLibraries )
 
 endif()
 
@@ -123,7 +125,9 @@ if ( OTB_WRAP_JAVA )
   # Prefer using OTB_INSTALL_JAVA_DIR which defaults to something that honors CMAKE_INSTALL_PREFIX
   # Using the system-wide Java extension dir usually require admin privileges,
   # and shall better be left to packagers.
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.otb.application.jar DESTINATION ${OTB_INSTALL_JAVA_DIR})
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.otb.application.jar
+          DESTINATION ${OTB_INSTALL_JAVA_DIR}
+          COMPONENT RuntimeLibraries )
 
 endif()
 
@@ -161,9 +165,9 @@ if ( OTB_WRAP_LUA )
   endif()
   
   install(TARGETS otbApplicationLua
-          RUNTIME DESTINATION bin
-          LIBRARY DESTINATION lib
-          ARCHIVE DESTINATION lib/static)
+          RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries 
+          LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries 
+          ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development )
 
 endif()
 
@@ -186,9 +190,9 @@ if ( OTB_WRAP_RUBY )
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationRUBY_wrap.cxx COMPILE_FLAGS "-w")
 
   install(TARGETS otbapplication
-          RUNTIME DESTINATION bin
-          LIBRARY DESTINATION lib
-          ARCHIVE DESTINATION lib/static)
+          RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+          LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+          ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
 endif()
 

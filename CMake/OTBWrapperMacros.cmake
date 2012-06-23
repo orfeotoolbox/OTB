@@ -36,7 +36,8 @@ macro(OTB_CREATE_APPLICATION)
    
    if (APPLICATION_INSTALL_PATH)
      install(TARGETS ${APPLICATION_TARGET_NAME}
-             LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH})
+             LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
+             COMPONENT RuntimeLibraries)
    endif()
    
    # Generate a quickstart script in the build dir
@@ -103,7 +104,8 @@ macro(OTB_CREATE_APPLICATION)
           if (OTB_INSTALL_BIN_DIR)
               # Install a version of this script if we are inside the OTB build
               install(PROGRAMS ${SCRIPT_GUI_INSTALLABLE}
-                      DESTINATION ${OTB_INSTALL_BIN_DIR})
+                      DESTINATION ${OTB_INSTALL_BIN_DIR}
+                      COMPONENT RuntimeLibraries)
           endif()
       endif()
    #endif(NOT WIN32)
