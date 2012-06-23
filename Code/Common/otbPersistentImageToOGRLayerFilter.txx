@@ -88,6 +88,9 @@ void
 PersistentImageToOGRLayerFilter<TImage>
 ::Initialize()
 {
+  // Make sure input projection ref is set
+  const_cast<InputImageType*>(this->GetInput())->UpdateOutputInformation();
+
   // Ensure that spatial reference of the output layer matches with
   // the spatial reference of the input image
   OGRSpatialReference oSRS(this->GetInput()->GetProjectionRef().c_str());
