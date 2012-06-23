@@ -27,7 +27,7 @@
 /*===========================================================================*/
 /*==============================[ other stuff ]==============================*/
 /*===========================================================================*/
-int otbGeometriesProjectionFilterFromMapToGeo(int argc, char **argv)
+int otbGeometriesProjectionFilterFromMapToGeo(int argc, char* argv[])
 {
   if (argc < 2)
     {
