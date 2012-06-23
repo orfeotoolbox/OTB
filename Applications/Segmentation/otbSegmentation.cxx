@@ -140,10 +140,10 @@ private:
                           " ColorMapping application to render regions with contrasted colours. Please note that this mode loads the whole input image into memory, and as such"
                           " can not handle large images. \n\nTo segment large data, one can use the vector mode. In this case, the output of the application is a"
                           " vector file or database. The input image is split into tiles (whose size can be set using the tilesize parameter), and each tile is loaded, segmented"
-                          " with the chosen algorithm, vectorized, and written into the output file or database. This piece-wise behaviour ensure that memory will never get overloaded,"
+                          " with the chosen algorithm, vectorized, and written into the output file or database. This piece-wise behavior ensure that memory will never get overloaded,"
                           " and that images of any size can be processed. There are few more options in the vector mode. The simplify option allows to simplify the geometry"
                           " (i.e. remove nodes in polygons) according to a user-defined tolerance. The stitch option allows to application to try to stitch together polygons corresponding"
-                          " to segmented region that may have been splitted by the tiling scheme. ");
+                          " to segmented region that may have been split by the tiling scheme. ");
 
     SetDocLimitations("In raster mode, the application can not handle large input images. Stitching step of vector mode might become slow with very large input images."
                      " MeanShift filter results depends on threads number.");
@@ -165,14 +165,14 @@ private:
     AddParameter(ParameterType_Int, "filter.meanshift.spatialr", "Spatial radius");
     SetParameterDescription("filter.meanshift.spatialr", "Spatial radius of the neighborhood.");
     AddParameter(ParameterType_Float, "filter.meanshift.ranger", "Range radius");
-    SetParameterDescription("filter.meanshift.ranger", "Range radius defining the radius (expressed in radiometry unit) in the multi-spectral space.");
+    SetParameterDescription("filter.meanshift.ranger", "Range radius defining the radius (expressed in radiometry unit) in the multispectral space.");
     AddParameter(ParameterType_Float, "filter.meanshift.thres", "Mode convergence threshold");
     SetParameterDescription("filter.meanshift.thres", "Algorithm iterative scheme will stop if mean-shift "
                             "vector is below this threshold or if iteration number reached maximum number of iterations.");
     AddParameter(ParameterType_Int, "filter.meanshift.maxiter", "Maximum number of iterations");
     SetParameterDescription("filter.meanshift.maxiter", "Algorithm iterative scheme will stop if convergence hasn't been reached after the maximum number of iterations.");
-    AddParameter(ParameterType_Int, "filter.meanshift.minsize", "Mininum region size");
-    SetParameterDescription("filter.meanshift.minsize", "Minimun size of a region (in pixel unit) in segmentation. Smaller clusters will be merged to the neighbouring cluster with the closest radiometry."
+    AddParameter(ParameterType_Int, "filter.meanshift.minsize", "Minimum region size");
+    SetParameterDescription("filter.meanshift.minsize", "Minimum size of a region (in pixel unit) in segmentation. Smaller clusters will be merged to the neighboring cluster with the closest radiometry."
       " If set to 0 no pruning is done.");
 
     //AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
@@ -197,8 +197,8 @@ private:
     SetParameterDescription("filter.edison.spatialr", "Spatial radius defining neighborhood.");
     AddParameter(ParameterType_Float, "filter.edison.ranger", "Range radius");
     SetParameterDescription("filter.edison.ranger", "Range radius defining the radius (expressed in radiometry unit) in the multi-spectral space.");
-    AddParameter(ParameterType_Int, "filter.edison.minsize", "Mininum region size");
-    SetParameterDescription("filter.edison.minsize", "Minimun size of a region in segmentation. Smaller clusters will be merged to the neighbouring cluster with the closest radiometry.");
+    AddParameter(ParameterType_Int, "filter.edison.minsize", "Minimum region size");
+    SetParameterDescription("filter.edison.minsize", "Minimum size of a region in segmentation. Smaller clusters will be merged to the neighboring cluster with the closest radiometry.");
     AddParameter(ParameterType_Float, "filter.edison.scale", "Scale factor");
     SetParameterDescription("filter.edison.scale", "Scaling of the image before processing. This is useful for images with narrow decimal ranges (like [0,1] for instance). ");
     SetDefaultParameterInt("filter.edison.spatialr", 5);
@@ -254,10 +254,10 @@ private:
     SetParameterDescription("mode.vector.outmode.ovw","If the output vector file already exists, it is completely destroyed (including all its layers) and recreated from scratch.");
 
     AddChoice("mode.vector.outmode.ulovw","Update output vector file, overwrite existing layer");
-    SetParameterDescription("mode.vector.outmode.ulovw","The output vector file is opened in update mode if existing. If the output layer already exists, it si completely destroyed and recreated from scracth.");
+    SetParameterDescription("mode.vector.outmode.ulovw","The output vector file is opened in update mode if existing. If the output layer already exists, it si completely destroyed and recreated from scratch.");
     
     AddChoice("mode.vector.outmode.ulu","Update output vector file, update existing layer");
-    SetParameterDescription("mode.vector.outmode.ulu","The output vector file is opened in update mode if existing. If the output layer already exists, the new geometries are appened to the layer.");
+    SetParameterDescription("mode.vector.outmode.ulu","The output vector file is opened in update mode if existing. If the output layer already exists, the new geometries are appended to the layer.");
 
     AddChoice("mode.vector.outmode.ulco","Update output vector file, only allow to create new layers");
     SetParameterDescription("mode.vector.outmode.ulu","The output vector file is opened in update mode if existing. If the output layer already exists, the application stops, leaving it untouched.");
