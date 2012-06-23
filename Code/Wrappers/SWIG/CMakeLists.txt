@@ -119,7 +119,11 @@ if ( OTB_WRAP_JAVA )
   string(REGEX REPLACE "include"  "jre/lib/ext" JAVA_EXTENSION_DIR ${JAVA_INCLUDE_PATH} )
 
   # Add the install target
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.otb.application.jar DESTINATION ${JAVA_EXTENSION_DIR})
+  # -- install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.otb.application.jar DESTINATION ${JAVA_EXTENSION_DIR})
+  # Prefer using OTB_INSTALL_JAVA_DIR which defaults to something that honors CMAKE_INSTALL_PREFIX
+  # Using the system-wide Java extension dir usually require admin privileges,
+  # and shall better be left to packagers.
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.otb.application.jar DESTINATION ${OTB_INSTALL_JAVA_DIR_CM24})
 
 endif()
 
