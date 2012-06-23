@@ -161,7 +161,7 @@ int
 PackedWidgetManager
 ::Shown()
 {
-  m_PackedWidget->m_Window->shown();
+  return m_PackedWidget->m_Window->shown();
 }
 
 }
