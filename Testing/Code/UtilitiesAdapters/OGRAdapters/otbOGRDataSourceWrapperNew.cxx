@@ -172,6 +172,8 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   shp_filename = itksys::SystemTools::ConvertToOutputPath(shp_filename.c_str());
   std::cout << "shp_filename : " << shp_filename << std::endl;
 
+  const std::string layer1 = k_name;
+
   // Cannot create read data source if file does not exists
   BOOST_CHECK_THROW(ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Read),
                     itk::ExceptionObject);
@@ -187,7 +189,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   ogr::DataSource::Pointer ds
     = ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Overwrite);
   BOOST_ASSERT(ds);
-  ogr::Layer l = ds -> CreateLayer(k_name, 0, wkbPoint);
+  ogr::Layer l = ds -> CreateLayer(layer1, 0, wkbPoint);
   OGRFeatureDefn & defn = l.GetLayerDefn();
   l.CreateField(k_f0);
   l.CreateField(k_f1);
@@ -205,7 +207,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   ogr::DataSource::Pointer ds
     = ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Read);
   BOOST_ASSERT(ds);
-  ogr::Layer l = ds -> GetLayerChecked(0);
+  ogr::Layer l = ds -> GetLayerChecked(layer1);
   BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 1);
   ogr::Feature f = l.GetFeature(0);
   BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 42);
@@ -221,7 +223,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   ogr::DataSource::Pointer ds
     = ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Overwrite);
   BOOST_ASSERT(ds);
-  ogr::Layer l = ds -> CreateLayer(k_name, 0, wkbPoint);
+  ogr::Layer l = ds -> CreateLayer(layer1, 0, wkbPoint);
   OGRFeatureDefn & defn = l.GetLayerDefn();
   l.CreateField(k_f0);
   l.CreateField(k_f1);
@@ -239,7 +241,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   ogr::DataSource::Pointer ds
     = ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Read);
   BOOST_ASSERT(ds);
-  ogr::Layer l = ds -> GetLayerChecked(0);
+  ogr::Layer l = ds -> GetLayerChecked(layer1);
   BOOST_ASSERT(l.GetFeatureCount(true) == 1);
   ogr::Feature f = l.GetFeature(0);
   BOOST_ASSERT(f[0].GetValue<int>() == 43);
@@ -258,7 +260,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
 
   // Check that we can read the file
   BOOST_ASSERT(ds);
-  ogr::Layer l = ds -> GetLayerChecked(0);
+  ogr::Layer l = ds -> GetLayerChecked(layer1);
   BOOST_ASSERT(l.GetFeatureCount(true) == 1);
   ogr::Feature f = l.GetFeature(0);
   BOOST_ASSERT(f[0].GetValue<int>() == 43);
