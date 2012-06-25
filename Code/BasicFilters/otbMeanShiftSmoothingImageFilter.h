@@ -25,7 +25,7 @@
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include <vcl_algorithm.h>
 
-#define   USEBUCKET 0 // don't use bucket optimization
+
 namespace otb
 {
 namespace Meanshift
@@ -177,7 +177,7 @@ private:
   unsigned int m_NumberOfComponentsPerPixel;
 };
 
-#ifdef USEBUCKET //disable bucket mode
+#if 0 //disable bucket mode
 /** \class BucketImage
  *
  * This class indexes pixels in a N-dimensional image into a N+1-dimensional
@@ -529,7 +529,7 @@ public:
   ;itkGetConstReferenceMacro(ModeSearch, bool)
   ;
 
-#ifdef USEBUCKET
+#if 0
   /** Toggle bucket optimization, which is disabled by default.
    */
   itkSetMacro(BucketOptimization, bool)
@@ -596,7 +596,7 @@ protected:
   virtual void CalculateMeanShiftVector(const typename RealVectorImageType::Pointer inputImagePtr,
                                         const RealVector& jointPixel, const OutputRegionType& outputRegion,
                                         RealVector& meanShiftVector);
-#ifdef USEBUCKET
+#if 0
   virtual void CalculateMeanShiftVectorBucket(const RealVector& jointPixel, RealVector& meanShiftVector);
 #endif
 
@@ -640,7 +640,7 @@ private:
   /** Boolean to enable mode search  */
   bool m_ModeSearch;
 
-#ifdef USEBUCKET
+#if 0
   /** Boolean to enable bucket optimization */
   bool m_BucketOptimization;
 #endif
@@ -651,7 +651,7 @@ private:
    of labels */
   unsigned int m_ThreadIdNumberOfBits;
 
-#ifdef USEBUCKET
+#if 0
   typedef Meanshift::BucketImage<RealVectorImageType> BucketImageType;
   BucketImageType m_BucketImage;
 #endif

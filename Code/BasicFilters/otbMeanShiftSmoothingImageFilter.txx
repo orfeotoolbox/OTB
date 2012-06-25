@@ -40,7 +40,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       // , m_JointImage(0)
       // , m_ModeTable(0)
       , m_ModeSearch(true)
-#ifdef USEBUCKET
+#if 0
       , m_BucketOptimization(false)
 #endif
 {
@@ -246,7 +246,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   jointImageFunctor->Update();
   m_JointImage = jointImageFunctor->GetOutput();
 
-#ifdef USEBUCKET
+#if 0
   if (m_BucketOptimization)
     {
     // Create bucket image
@@ -442,7 +442,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     }
 }
 
-#ifdef USEBUCKET
+#if 0
 // Calculates the mean shift vector at the position given by jointPixel
 template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::CalculateMeanShiftVectorBucket(
@@ -674,7 +674,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
         } // end if (m_ModeSearch)
 
       //Calculate meanShiftVector
-#ifdef USEBUCKET
+#if 0
       if (m_BucketOptimization)
         {
         this->CalculateMeanShiftVectorBucket(jointPixel, meanShiftVector);
@@ -684,7 +684,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
 #endif
         this->CalculateMeanShiftVector(m_JointImage, jointPixel, requestedRegion, meanShiftVector);
 
-#ifdef USEBUCKET
+#if 0
         }
 #endif
 
