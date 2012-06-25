@@ -158,36 +158,34 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
     }
 
   const std::string k_name = boost::unit_test::framework::master_test_suite().argv[1];
-
-  std::cout << "Working in directory : " << k_name << std::endl;
+  const std::string workingdir = k_name + "/shp";
 
   // Create an empty temporary directory for the test
-  if ( itksys::SystemTools::FileExists(k_name.c_str()) )
+  if ( itksys::SystemTools::FileExists(workingdir.c_str()) )
     {
-    itksys::SystemTools::RemoveADirectory(k_name.c_str());
+    itksys::SystemTools::RemoveADirectory(workingdir.c_str());
     }
-  itksys::SystemTools::MakeDirectory(k_name.c_str());
+  itksys::SystemTools::MakeDirectory(workingdir.c_str());
 
-  std::string shp_filename = k_name + "/" + k_name + ".shp";
-  shp_filename = itksys::SystemTools::ConvertToOutputPath(shp_filename.c_str());
-  std::cout << "shp_filename : " << shp_filename << std::endl;
+  std::string filename = workingdir + "/" + k_name + ".shp";
+  filename = itksys::SystemTools::ConvertToOutputPath(filename.c_str());
 
   const std::string layer1 = k_name;
 
   // Cannot create read data source if file does not exists
-  BOOST_CHECK_THROW(ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Read),
+  BOOST_CHECK_THROW(ogr::DataSource::New(filename, ogr::DataSource::Modes::Read),
                     itk::ExceptionObject);
 
   // Check invalid modes
-  BOOST_CHECK_THROW(ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Invalid),
+  BOOST_CHECK_THROW(ogr::DataSource::New(filename, ogr::DataSource::Modes::Invalid),
                     itk::ExceptionObject);
-  BOOST_CHECK_THROW(ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::MAX__),
+  BOOST_CHECK_THROW(ogr::DataSource::New(filename, ogr::DataSource::Modes::MAX__),
                     itk::ExceptionObject);
 
   // Overwrite mode supports the creation of file if it does not exists
   {
   ogr::DataSource::Pointer ds
-    = ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Overwrite);
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Overwrite);
   BOOST_ASSERT(ds);
   ogr::Layer l = ds -> CreateLayer(layer1, 0, wkbPoint);
   OGRFeatureDefn & defn = l.GetLayerDefn();
@@ -205,7 +203,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   // Read file we have written
   {
   ogr::DataSource::Pointer ds
-    = ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Read);
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Read);
   BOOST_ASSERT(ds);
   ogr::Layer l = ds -> GetLayerChecked(layer1);
   BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 1);
@@ -221,7 +219,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   // Now really test overwriting the file already exists)
   {
   ogr::DataSource::Pointer ds
-    = ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Overwrite);
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Overwrite);
   BOOST_ASSERT(ds);
   ogr::Layer l = ds -> CreateLayer(layer1, 0, wkbPoint);
   OGRFeatureDefn & defn = l.GetLayerDefn();
@@ -239,13 +237,13 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   // Read file we have written
   {
   ogr::DataSource::Pointer ds
-    = ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Read);
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Read);
   BOOST_ASSERT(ds);
   ogr::Layer l = ds -> GetLayerChecked(layer1);
-  BOOST_ASSERT(l.GetFeatureCount(true) == 1);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 1);
   ogr::Feature f = l.GetFeature(0);
-  BOOST_ASSERT(f[0].GetValue<int>() == 43);
-  BOOST_ASSERT(f[1].GetValue<double>() == 43.0);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 43);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 43.0);
 
   ogr::UniqueGeometryPtr p = f.StealGeometry();
   const OGRPoint ref(43, 43);
@@ -256,21 +254,21 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   // Open in Update_LayerUpdate
   {
   ogr::DataSource::Pointer ds
-    = ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Update_LayerUpdate);
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Update_LayerUpdate);
 
   // Check that we can read the file
   BOOST_ASSERT(ds);
   ogr::Layer l = ds -> GetLayerChecked(layer1);
-  BOOST_ASSERT(l.GetFeatureCount(true) == 1);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 1);
   ogr::Feature f = l.GetFeature(0);
-  BOOST_ASSERT(f[0].GetValue<int>() == 43);
-  BOOST_ASSERT(f[1].GetValue<double>() == 43.0);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 43);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 43.0);
 
   ogr::UniqueGeometryPtr p = f.StealGeometry();
   const OGRPoint ref(43, 43);
   BOOST_CHECK(ogr::Equals(*p, ref));
 
-  // Add a new feature
+  // Add a second feature
   ogr::Feature f2(l.GetLayerDefn());
   f2[0].SetValue(44);
   f2[1].SetValue(44.0);
@@ -281,30 +279,297 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   }
 
 
-  // Read file we have written
+  // Read the file we have written
   {
   ogr::DataSource::Pointer ds
-    = ogr::DataSource::New(shp_filename, ogr::DataSource::Modes::Read);
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Read);
   BOOST_ASSERT(ds);
   ogr::Layer l = ds -> GetLayerChecked(0);
-  BOOST_ASSERT(l.GetFeatureCount(true) == 2);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 2);
 
   ogr::Feature f = l.GetFeature(0);
-  BOOST_ASSERT(f[0].GetValue<int>() == 43);
-  BOOST_ASSERT(f[1].GetValue<double>() == 43.0);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 43);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 43.0);
   ogr::UniqueGeometryPtr p1 = f.StealGeometry();
   const OGRPoint ref1(43, 43);
   BOOST_CHECK(ogr::Equals(*p1, ref1));
 
   f = l.GetFeature(1);
-  BOOST_ASSERT(f[0].GetValue<int>() == 44);
-  BOOST_ASSERT(f[1].GetValue<double>() == 44.0);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 44);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 44.0);
   ogr::UniqueGeometryPtr p2 = f.StealGeometry();
   const OGRPoint ref2(44, 44);
   BOOST_CHECK(ogr::Equals(*p2, ref2));
 
   }
 
+#if 0 // shp files do not support Update_LayerOverwrite
+  // Open in Update_LayerOverwrite
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Update_LayerOverwrite);
+
+  // Check that we can read the file
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds -> CreateLayer(layer1);
+  BOOST_ASSERT(l.GetFeatureCount(true) == 2);
+
+
+  ogr::Feature f = l.GetFeature(0);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 43);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 43.0);
+  ogr::UniqueGeometryPtr p1 = f.StealGeometry();
+  const OGRPoint ref1(43, 43);
+  BOOST_CHECK(ogr::Equals(*p1, ref1));
+
+  f = l.GetFeature(1);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 44);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 44.0);
+  ogr::UniqueGeometryPtr p2 = f.StealGeometry();
+  const OGRPoint ref2(44, 44);
+  BOOST_CHECK(ogr::Equals(*p2, ref2));
+
+  // Add a new feature
+  ogr::Feature f3(l.GetLayerDefn());
+  f3[0].SetValue(45);
+  f3[1].SetValue(45.0);
+  const OGRPoint p3(45, 45);
+  f3.SetGeometry(&p3);
+  l.CreateFeature(f3);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(false), 1);
+  }
+
+
+  // Read file we have written
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Read);
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds -> GetLayerChecked(0);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 1);
+
+  ogr::Feature f = l.GetFeature(0);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 43);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 43.0);
+  ogr::UniqueGeometryPtr p1 = f.StealGeometry();
+  const OGRPoint ref1(43, 43);
+  BOOST_CHECK(ogr::Equals(*p1, ref1));
+
+  f = l.GetFeature(1);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 44);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 44.0);
+  ogr::UniqueGeometryPtr p2 = f.StealGeometry();
+  const OGRPoint ref2(44, 44);
+  BOOST_CHECK(ogr::Equals(*p2, ref2));
+
+  }
+#endif
+
+}
+
+
+
+BOOST_AUTO_TEST_CASE(OGRDataSource_sqlite_overwrite)
+{
+  if (boost::unit_test::framework::master_test_suite().argc < 2)
+    {
+    BOOST_THROW_EXCEPTION( std::runtime_error("not enough arguments") );
+    }
+
+  const std::string k_name = boost::unit_test::framework::master_test_suite().argv[1];
+  const std::string workingdir = k_name + "/sqlite";
+
+  // Create an empty temporary directory for the test
+  if ( itksys::SystemTools::FileExists(workingdir.c_str()) )
+    {
+    itksys::SystemTools::RemoveADirectory(workingdir.c_str());
+    }
+  itksys::SystemTools::MakeDirectory(workingdir.c_str());
+
+  std::string filename = workingdir + "/" + k_name + ".sqlite";
+  filename = itksys::SystemTools::ConvertToOutputPath(filename.c_str());
+
+  const std::string layer1 = k_name;
+
+  // Cannot create read data source if file does not exists
+  BOOST_CHECK_THROW(ogr::DataSource::New(filename, ogr::DataSource::Modes::Read),
+                    itk::ExceptionObject);
+
+  // Check invalid modes
+  BOOST_CHECK_THROW(ogr::DataSource::New(filename, ogr::DataSource::Modes::Invalid),
+                    itk::ExceptionObject);
+  BOOST_CHECK_THROW(ogr::DataSource::New(filename, ogr::DataSource::Modes::MAX__),
+                    itk::ExceptionObject);
+
+  // Overwrite mode supports the creation of file if it does not exists
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Overwrite);
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds -> CreateLayer(layer1, 0, wkbPoint);
+  OGRFeatureDefn & defn = l.GetLayerDefn();
+  l.CreateField(k_f0);
+  l.CreateField(k_f1);
+  ogr::Feature f(defn);
+  f[0].SetValue(42);
+  f[1].SetValue(42.0);
+  const OGRPoint p(42, 42);
+  f.SetGeometry(&p);
+  l.CreateFeature(f);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(false), 1);
+  }
+
+  // Read file we have written
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Read);
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds->GetLayerChecked(layer1);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 1);
+  ogr::Feature f = *l.begin();
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 42);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 42.0);
+
+  ogr::UniqueGeometryPtr p = f.StealGeometry();
+  const OGRPoint ref(42, 42);
+  BOOST_CHECK(ogr::Equals(*p, ref));
+  }
+
+  // Now really test overwriting the file already exists)
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Overwrite);
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds -> CreateLayer(layer1, 0, wkbPoint);
+  OGRFeatureDefn & defn = l.GetLayerDefn();
+  l.CreateField(k_f0);
+  l.CreateField(k_f1);
+  ogr::Feature f(defn);
+  f[0].SetValue(43);
+  f[1].SetValue(43.0);
+  const OGRPoint p(43, 43);
+  f.SetGeometry(&p);
+  l.CreateFeature(f);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(false), 1);
+  }
+
+  // Read file we have written
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Read);
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds -> CreateLayer(layer1);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 1);
+  ogr::Feature f = *l.begin();
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 43);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 43.0);
+
+  ogr::UniqueGeometryPtr p = f.StealGeometry();
+  const OGRPoint ref(43, 43);
+  BOOST_CHECK(ogr::Equals(*p, ref));
+  }
+
+
+  // Open in Update_LayerUpdate
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Update_LayerUpdate);
+
+  // Check that we can read the file
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds -> CreateLayer(layer1);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 1);
+
+  ogr::Layer::iterator fIt = l.begin();
+
+  ogr::Feature f = *fIt;
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 43);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 43.0);
+
+  ogr::UniqueGeometryPtr p = f.StealGeometry();
+  const OGRPoint ref(43, 43);
+  BOOST_CHECK(ogr::Equals(*p, ref));
+
+  // Add a second feature
+  ogr::Feature f2(l.GetLayerDefn());
+  f2[0].SetValue(44);
+  f2[1].SetValue(44.0);
+  const OGRPoint p2(44, 44);
+  f2.SetGeometry(&p2);
+  l.CreateFeature(f2);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(false), 2);
+  }
+
+
+  // Read the file we have written
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Read);
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds -> CreateLayer(layer1);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 2);
+
+  ogr::Layer::iterator fIt = l.begin();
+  ogr::Feature f = *fIt;
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 43);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 43.0);
+  ogr::UniqueGeometryPtr p1 = f.StealGeometry();
+  const OGRPoint ref1(43, 43);
+  BOOST_CHECK(ogr::Equals(*p1, ref1));
+
+  f = *++fIt;
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 44);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 44.0);
+  ogr::UniqueGeometryPtr p2 = f.StealGeometry();
+  const OGRPoint ref2(44, 44);
+  BOOST_CHECK(ogr::Equals(*p2, ref2));
+
+  }
+
+  // Open in Update_LayerOverwrite
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Update_LayerOverwrite);
+
+  // Check that we can read the file
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds -> CreateLayer(layer1, 0, wkbPoint);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 0);
+
+  OGRFeatureDefn & defn = l.GetLayerDefn();
+  l.CreateField(k_f0);
+  l.CreateField(k_f1);
+
+
+  // Add a new feature
+  ogr::Feature f3(l.GetLayerDefn());
+  f3[0].SetValue(45);
+  f3[1].SetValue(45.0);
+  const OGRPoint p3(45, 45);
+  f3.SetGeometry(&p3);
+  l.CreateFeature(f3);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(false), 1);
+  }
+
+
+  // Read file we have written
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Read);
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds -> CreateLayer(layer1);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 1);
+
+  ogr::Layer::iterator fIt = l.begin();
+
+  ogr::Feature f = *fIt;
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 45);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 45.0);
+  ogr::UniqueGeometryPtr p1 = f.StealGeometry();
+  const OGRPoint ref1(45, 45);
+  BOOST_CHECK(ogr::Equals(*p1, ref1));
+
+  }
 
 }
 

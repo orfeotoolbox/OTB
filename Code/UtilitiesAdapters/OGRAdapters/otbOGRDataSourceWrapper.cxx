@@ -115,7 +115,7 @@ char const* DeduceDriverName(std::string filename)
 
 otb::ogr::DataSource::DataSource()
 : m_DataSource(0),
-  m_OpenMode(Modes::Update_LayerOverwrite),
+  m_OpenMode(Modes::Update_LayerUpdate),
   m_FirstModifiableLayerID(0)
 {
   Drivers::Init();
@@ -170,28 +170,6 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
     source->SetDriver(d);
     }
   return otb::ogr::DataSource::New(source, mode);
-
-#if 0
-  // Hand made factory based on file extension.
-  char const* driverName = DeduceDriverName(filename);
-  if (!driverName)
-    {
-    itkGenericExceptionMacro(<< "No OGR driver known to OTB to create and handle a DataSource named <"
-      <<filename<<">.");
-    }
-
-  OGRSFDriver * d = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
-  assert(d && "OGR driver not found");
-  OGRDataSource * source = d->CreateDataSource(filename.c_str());
-  if (!source) {
-    itkGenericExceptionMacro(<< "Failed to create OGRDataSource <"<<filename
-      <<"> (driver name: " << driverName<<">: " << CPLGetLastErrorMsg());
-  }
-  source->SetDriver(d);
-  otb::ogr::DataSource::Pointer res = new otb::ogr::DataSource(source, mode);
-  res->UnRegister();
-  return res;
-#endif
 }
 
 void DeleteDataSource(std::string const& datasourceName)
@@ -210,13 +188,13 @@ void DeleteDataSource(std::string const& datasourceName)
       OGRErr ret = ogrDriver->DeleteDataSource(datasourceName.c_str());
       if (ret != OGRERR_NONE)
         {
-        itkGenericOutputMacro(<< "Deletion of data source " << datasourceName
+        itkGenericExceptionMacro(<< "Deletion of data source " << datasourceName
                         << " failed: " << CPLGetLastErrorMsg());
         }
       }
     else
       {
-      itkGenericOutputMacro(<< "Cannot delete data source " << datasourceName);
+      itkGenericExceptionMacro(<< "Cannot delete data source " << datasourceName);
       }
     } // if (poDS != NULL)
 }
@@ -237,76 +215,6 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
     }
 
   return OpenDataSource(datasourceName, mode);
-
-#if 0
-  const bool write = mode & Modes::write;
-  // std::cout << "Opening datasource " << filename << " update=" << update << "\n";
-  if (itksys::SystemTools::FileExists(filename.c_str()))
-    {
-    if (mode & Modes::read)
-      {
-      // Open in read mode
-      OGRDataSource * source = OGRSFDriverRegistrar::Open(filename.c_str(), FALSE);
-      if (!source)
-        {
-        itkGenericExceptionMacro(<< "Failed to open OGRDataSource file "
-          << filename<<": " << CPLGetLastErrorMsg());
-        }
-      Pointer res = new DataSource(source);
-      res->UnRegister();
-      return res;
-      }
-    else if (mode & Modes::append)
-      {
-      // Open in "update" mode
-      OGRDataSource * source = OGRSFDriverRegistrar::Open(filename.c_str(), TRUE);
-      if (!source)
-        {
-        itkGenericExceptionMacro(<< "Failed to open OGRDataSource file "
-          << filename<<": " << CPLGetLastErrorMsg());
-        }
-      Pointer res = new DataSource(source);
-      res->UnRegister();
-      return res;
-      }
-    else if (mode & Modes::write)
-      {
-      // Attempt to delete the datasource if it already exists
-      OGRDataSource * poDS = OGRSFDriverRegistrar::Open(filename.c_str(), TRUE);
-
-      if (poDS != NULL)
-        {
-        OGRSFDriver * ogrDriver = poDS->GetDriver();
-        OGRDataSource::DestroyDataSource(poDS);
-        //Erase the data if possible
-        if (ogrDriver->TestCapability(ODrCDeleteDataSource))
-          {
-          //Delete datasource
-          OGRErr ret = ogrDriver->DeleteDataSource(filename.c_str());
-          if (ret != OGRERR_NONE)
-            {
-            itkGenericOutputMacro(<< "Deletion of data source " << filename
-                            << " failed: " << CPLGetLastErrorMsg());
-            }
-          }
-        else
-          {
-          itkGenericOutputMacro(<< "Cannot delete data source " << filename);
-          }
-        } // if (poDS != NULL)
-      } // else if (update)
-    } // if (itksys::SystemTools::FileExists(filename.c_str()))
-  else
-    {
-    // File does not exists
-    if (mode & Modes::read || mode & Modes::append)
-      {
-      itkGenericExceptionMacro(<< "No DataSource named <"<<filename<<"> exists,"
-        " and the file opening mode does not permit updates. DataSource creation is thus aborted.");
-      }
-    }
-  return CreateDataSourceFromDriver(filename);
-#endif
 }
 
 /*static*/
@@ -354,39 +262,97 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
 {
   assert(m_DataSource && "Datasource not initialized");
 
+  // In read mode, try to return an existing layer.
+  // and throw if not found
+  if (m_OpenMode == Modes::Read)
+    {
+    otb::ogr::Layer l = GetLayerChecked(name); // will throw if not existing
+    itkGenericOutputMacro(<< "Requesting layer creation in read-only OGRDataSource. Returning the existing layer");
+    return l;
+    }
+
+  // Other mode : Check if the layer already exists.
+  otb::ogr::Layer layer = GetLayer(name); // won't throw on failure
+
   switch (m_OpenMode)
   {
-    case Modes::Invalid:
-      assert(false && "Invalid OGRDataSource opening mode");
-      itkGenericExceptionMacro(<< "Invalid OGRDataSource opening mode");
-      break;
-    case Modes::Read:
-      itkGenericExceptionMacro(<< "OGRDataSource is opened in Read mode : cannot create a layer");
-      break;
-    default:
-      break;
+  case Modes::Update_LayerOverwrite:
+    {
+    // First delete the layer
+    if (layer)
+      {
+      DeleteLayer(GetLayerID(name));
+      }
+
+    // Then create it
+    OGRLayer * ol = m_DataSource->CreateLayer(
+      name.c_str(), poSpatialRef, eGType, otb::ogr::StringListConverter(papszOptions).to_ogr());
+    if (!ol)
+      {
+      itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
+        << "> in the OGRDataSource file <" << m_DataSource->GetName()
+        <<">: " << CPLGetLastErrorMsg());
+      }
+
+    const bool modifiable = true;
+    return Layer(ol, modifiable);
+    }
+    break;
+  case Modes::Overwrite:
+  case Modes::Update_LayerUpdate:
+    {
+    if (layer)
+      {
+      return layer;
+      }
+    else
+      {
+      // Then create it
+      OGRLayer * ol = m_DataSource->CreateLayer(
+        name.c_str(), poSpatialRef, eGType, otb::ogr::StringListConverter(papszOptions).to_ogr());
+      if (!ol)
+        {
+        itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
+          << "> in the OGRDataSource file <" << m_DataSource->GetName()
+          <<">: " << CPLGetLastErrorMsg());
+        }
+
+      const bool modifiable = true;
+      return Layer(ol, modifiable);
+      }
+    }
+    break;
+  case Modes::Update_LayerCreateOnly:
+    {
+    // The layer exists. Returns it
+    // It will be non-modifiable if already existing at OGRDataSource creation time
+    if (layer)
+      {
+      return layer;
+      }
+
+    // Case where the layer does not exists
+    OGRLayer * ol = m_DataSource->CreateLayer(
+      name.c_str(), poSpatialRef, eGType, otb::ogr::StringListConverter(papszOptions).to_ogr());
+    if (!ol)
+      {
+      itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
+        << "> in the OGRDataSource file <" << m_DataSource->GetName()
+        <<">: " << CPLGetLastErrorMsg());
+      }
+
+    const bool modifiable = true;
+    return Layer(ol, modifiable);
+    }
+    break;
+  default :
+    assert(false && "Should never be there");
+    itkGenericExceptionMacro(<< "OGRDataSource opening mode not supported");
+    break;
   }
 
-  // Make a local copy
-  std::vector<std::string> options(papszOptions);
-  if (m_OpenMode == Modes::Update_LayerOverwrite)
-    {
-    options.push_back("OVERWRITE=YES");
-    }
-  char** papszOptionsChar = otb::ogr::StringListConverter(options).to_ogr();
-
-  OGRLayer * ol = m_DataSource->CreateLayer(
-    name.c_str(), poSpatialRef, eGType, papszOptionsChar);
-  if (!ol)
-    {
-    itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
-      << "> in the OGRDataSource file <" << m_DataSource->GetName()
-      <<">: " << CPLGetLastErrorMsg());
-    }
-
-  const bool modifiable = true;
-  Layer l(ol, modifiable);
-  return l;
+  itkGenericExceptionMacro(<< "OGRDataSource opening mode not supported");
+  return Layer(0, false); // keep compiler happy
 }
 
 otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
