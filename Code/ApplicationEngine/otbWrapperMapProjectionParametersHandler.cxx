@@ -41,11 +41,13 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   app->AddParameter(ParameterType_Int, oss.str(), "Zone number");
   app->SetParameterDescription(oss.str(),"The zone number ranges from 1 to 60 and allows to define the transverse mercator projection (along with the hemisphere)");
   app->SetMinimumParameterIntValue(oss.str(), 1);
+  app->SetDefaultParameterInt(oss.str(), 31);
   
   oss.str("");
   oss <<key<<".utm" <<".northhem";
   app->AddParameter(ParameterType_Empty, oss.str(),  "Northern Hemisphere");
   app->SetParameterDescription(oss.str(),"The transverse mercator projections are defined by their zone number as well as the hemisphere. Activate this parameter if your image is in the northern hemisphere.");
+
 
   // lambert2
   oss.str("");
