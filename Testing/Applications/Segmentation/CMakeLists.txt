@@ -110,6 +110,8 @@ ENDFOREACH(mode)
 SET(filter "CC")
 SET(mode "Vector")
 
+STRING(TOLOWER ${filter} lfilter)
+
 # Add a test for ULOVW
 SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulovw")
                      
@@ -167,7 +169,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
                               ${${lmode}_parameters}
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
-                              ${${lmode}_ref_path}/${OUTFILE}
+                              ${${lmode}_ref_path}/${OUTFILE}_ULCO
                               ${TEMP}/${OUTFILE}                           
                      )
 
