@@ -23,6 +23,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 #include <boost/foreach.hpp>
+#include <boost/algorithm/string.hpp>
 #include "itksys/SystemTools.hxx"
 #include "otbOGRDataSourceWrapper.h"
 
@@ -389,7 +390,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_sqlite_overwrite)
   std::string filename = workingdir + "/" + k_name + ".sqlite";
   filename = itksys::SystemTools::ConvertToOutputPath(filename.c_str());
 
-  const std::string layer1 = k_name;
+  const std::string layer1 = boost::algorithm::to_lower_copy(k_name);
 
   // Cannot create read data source if file does not exists
   BOOST_CHECK_THROW(ogr::DataSource::New(filename, ogr::DataSource::Modes::Read),
