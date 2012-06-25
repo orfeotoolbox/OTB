@@ -224,6 +224,11 @@ void DeleteDataSource(std::string const& datasourceName)
 otb::ogr::DataSource::Pointer
 otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
 {
+  if (mode < Modes::Read || mode >= Modes::MAX__)
+    {
+    itkGenericExceptionMacro(<< "Wrong mode when opening " << datasourceName);
+    }
+
   Drivers::Init();
 
   if (mode == Modes::Overwrite)
