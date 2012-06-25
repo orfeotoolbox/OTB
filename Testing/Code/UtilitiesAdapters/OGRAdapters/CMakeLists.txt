@@ -33,9 +33,10 @@ IF(OTB_USE_EXTERNAL_BOOST)
 
 
     # -------------  otb::OGRDataSourceWrapper ----------------------------
-    ADD_TEST(coTuOGRDataSourceWrapperNew ${OGR_TESTS}
-      otbOGRDataSourceWrapperNew
-      )
+    ADD_TEST(NAME coTuOGRDataSourceWrapperNew 
+             COMMAND ${OGR_TESTS} coTuOGRDataSourceWrapperNew
+             WORKING_DIRECTORY ${TEMP})
+             
   ENDIF(Boost_UNIT_TEST_FRAMEWORK_FOUND)
 ELSE(OTB_USE_EXTERNAL_BOOST)
   MESSAGE(WARNING
