@@ -185,4 +185,35 @@ SplittedWidgetManager
   m_SplittedWidget->m_ZoomGroup->label(label);
 }
 
+int
+SplittedWidgetManager
+::ZoomWidgetShown()
+{
+  return m_SplittedWidget->m_ZoomGroup->shown();
+}
+
+int
+SplittedWidgetManager
+::FullWidgetShown()
+{
+  return m_SplittedWidget->m_FullGroup->shown();
+}
+
+void
+SplittedWidgetManager
+::SetResizable(bool resize)
+{
+  if (resize)
+    {
+    m_SplittedWidget->m_FullGroup->resizable(m_SplittedWidget->m_FullGroup);
+    m_SplittedWidget->m_ZoomGroup->resizable(m_SplittedWidget->m_ZoomGroup);
+    }
+  else
+    {
+    // If the resizable is NULL then all widgets remain a fixed size
+    m_SplittedWidget->m_FullGroup->resizable(NULL);
+    m_SplittedWidget->m_ZoomGroup->resizable(NULL);
+    }
+}
+
 }

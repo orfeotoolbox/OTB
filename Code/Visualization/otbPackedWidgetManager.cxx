@@ -164,4 +164,19 @@ PackedWidgetManager
   return m_PackedWidget->m_Window->shown();
 }
 
+void
+PackedWidgetManager
+::SetResizable(bool resize)
+{
+  if (resize)
+    {
+    m_PackedWidget->m_Window->resizable(m_PackedWidget->m_Window);
+    }
+  else
+    {
+    // If the resizable is NULL then all widgets remain a fixed size
+    m_PackedWidget->m_Window->resizable(NULL);
+    }
+}
+
 }

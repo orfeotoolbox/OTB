@@ -61,6 +61,9 @@ public:
   virtual void SetLabelScrollWidget(const char * label);
   virtual void SetLabelFullWidget(const char * label);
   virtual void SetLabelZoomWidget(const char * label);
+  virtual int  ZoomWidgetShown();
+  virtual int  FullWidgetShown();
+  virtual void SetResizable(bool resize);
 
 protected:
   /** Constructor */
@@ -79,7 +82,6 @@ private:
   void operator =(const Self&); // purposely not implemented
 
   ImageWidgetSplittedManagerType* m_SplittedWidget;
-
 };
 }
 #endif
