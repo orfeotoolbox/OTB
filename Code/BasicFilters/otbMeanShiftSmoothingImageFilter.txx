@@ -30,20 +30,19 @@
 
 namespace otb
 {
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::MeanShiftSmoothingImageFilter()
-: m_RangeBandwidth( 16. )
-  , m_SpatialBandwidth( 3 )
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::MeanShiftSmoothingImageFilter() :
+  m_RangeBandwidth(16.), m_SpatialBandwidth(3)
   // , m_SpatialRadius(???)
-  , m_Threshold( 1e-3 )
-  , m_MaxIterationNumber( 10 )
-  // , m_Kernel(...)
-  // , m_NumberOfComponentsPerPixel(...)
-  // , m_JointImage(0)
-  // , m_ModeTable(0)
-  , m_ModeSearch( true )
-  , m_BucketOptimization( false )
+      , m_Threshold(1e-3), m_MaxIterationNumber(10)
+      // , m_Kernel(...)
+      // , m_NumberOfComponentsPerPixel(...)
+      // , m_JointImage(0)
+      // , m_ModeTable(0)
+      , m_ModeSearch(true)
+#ifdef USEBUCKET
+      , m_BucketOptimization(false)
+#endif
 {
   this->SetNumberOfOutputs(4);
   this->SetNthOutput(0, OutputImageType::New());
@@ -52,89 +51,74 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   this->SetNthOutput(3, OutputLabelImageType::New());
 }
 
-
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::~ MeanShiftSmoothingImageFilter()
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::~MeanShiftSmoothingImageFilter()
 {
 }
 
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 const typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputSpatialImageType *
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::GetSpatialOutput() const
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::GetSpatialOutput() const
 {
-  return static_cast<const OutputSpatialImageType *>(this->itk::ProcessObject::GetOutput(1));
+  return static_cast<const OutputSpatialImageType *> (this->itk::ProcessObject::GetOutput(1));
 }
 
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputSpatialImageType *
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::GetSpatialOutput()
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::GetSpatialOutput()
 {
-  return static_cast<OutputSpatialImageType *>(this->itk::ProcessObject::GetOutput(1));
+  return static_cast<OutputSpatialImageType *> (this->itk::ProcessObject::GetOutput(1));
 }
 
-
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 const typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputImageType *
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::GetRangeOutput() const
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::GetRangeOutput() const
 {
-  return static_cast<const OutputImageType *>(this->itk::ProcessObject::GetOutput(0));
+  return static_cast<const OutputImageType *> (this->itk::ProcessObject::GetOutput(0));
 }
 
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputImageType *
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::GetRangeOutput()
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::GetRangeOutput()
 {
-  return static_cast<OutputImageType *>(this->itk::ProcessObject::GetOutput(0));
+  return static_cast<OutputImageType *> (this->itk::ProcessObject::GetOutput(0));
 }
 
-
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputIterationImageType *
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::GetIterationOutput()
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::GetIterationOutput()
 {
-  return static_cast<OutputIterationImageType *>(this->itk::ProcessObject::GetOutput(2));
+  return static_cast<OutputIterationImageType *> (this->itk::ProcessObject::GetOutput(2));
 }
 
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 const typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputIterationImageType *
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::GetIterationOutput() const
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::GetIterationOutput() const
 {
-  return static_cast<OutputIterationImageType *>(this->itk::ProcessObject::GetOutput(2));
+  return static_cast<OutputIterationImageType *> (this->itk::ProcessObject::GetOutput(2));
 }
 
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputLabelImageType *
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::GetLabelOutput()
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::GetLabelOutput()
 {
-  return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(3));
+  return static_cast<OutputLabelImageType *> (this->itk::ProcessObject::GetOutput(3));
 }
 
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 const typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::OutputLabelImageType *
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::GetLabelOutput() const
+MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::GetLabelOutput() const
 {
-  return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(3));
+  return static_cast<OutputLabelImageType *> (this->itk::ProcessObject::GetOutput(3));
 }
 
-
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-void
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::AllocateOutputs()
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::AllocateOutputs()
 {
-  typename OutputSpatialImageType::Pointer   spatialOutputPtr = this->GetSpatialOutput();
-  typename OutputImageType::Pointer          rangeOutputPtr = this->GetRangeOutput();
+  typename OutputSpatialImageType::Pointer spatialOutputPtr = this->GetSpatialOutput();
+  typename OutputImageType::Pointer rangeOutputPtr = this->GetRangeOutput();
   typename OutputIterationImageType::Pointer iterationOutputPtr = this->GetIterationOutput();
-  typename OutputLabelImageType::Pointer     labelOutputPtr = this->GetLabelOutput();
+  typename OutputLabelImageType::Pointer labelOutputPtr = this->GetLabelOutput();
 
   spatialOutputPtr->SetBufferedRegion(spatialOutputPtr->GetRequestedRegion());
   spatialOutputPtr->Allocate();
@@ -147,13 +131,10 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
 
   labelOutputPtr->SetBufferedRegion(labelOutputPtr->GetRequestedRegion());
   labelOutputPtr->Allocate();
- }
+}
 
-
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-void
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::GenerateOutputInformation()
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
 
@@ -169,32 +150,28 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
     }
 }
 
-
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-void
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::GenerateInputRequestedRegion()
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::GenerateInputRequestedRegion()
 {
   // Call superclass implementation
   Superclass::GenerateInputRequestedRegion();
 
   // Retrieve input pointers
-  InputImagePointerType inPtr  = const_cast<TInputImage *>(this->GetInput());
+  InputImagePointerType inPtr = const_cast<TInputImage *> (this->GetInput());
   OutputImagePointerType outRangePtr = this->GetRangeOutput();
 
   // Check pointers before using them
-  if ( !inPtr || !outRangePtr )
+  if (!inPtr || !outRangePtr)
     {
     return;
     }
-
 
   // Retrieve requested region (TODO: check if we need to handle
   // region for outHDispPtr)
   RegionType outputRequestedRegion = outRangePtr->GetRequestedRegion();
 
   // Pad by the appropriate radius
-  RegionType inputRequestedRegion  = outputRequestedRegion;
+  RegionType inputRequestedRegion = outputRequestedRegion;
 
   // Initializes the spatial radius from kernel bandwidth
   m_SpatialRadius.Fill(m_Kernel.GetRadius(m_SpatialBandwidth));
@@ -202,43 +179,40 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   inputRequestedRegion.PadByRadius(m_SpatialRadius);
 
   // Crop the input requested region at the input's largest possible region
-   if ( inputRequestedRegion.Crop(inPtr->GetLargestPossibleRegion()) )
-     {
-     inPtr->SetRequestedRegion( inputRequestedRegion );
-     return;
-     }
-   else
-     {
-     // Couldn't crop the region (requested region is outside the largest
-     // possible region).  Throw an exception.
+  if (inputRequestedRegion.Crop(inPtr->GetLargestPossibleRegion()))
+    {
+    inPtr->SetRequestedRegion(inputRequestedRegion);
+    return;
+    }
+  else
+    {
+    // Couldn't crop the region (requested region is outside the largest
+    // possible region).  Throw an exception.
 
-     // store what we tried to request (prior to trying to crop)
-     inPtr->SetRequestedRegion( inputRequestedRegion );
+    // store what we tried to request (prior to trying to crop)
+    inPtr->SetRequestedRegion(inputRequestedRegion);
 
-     // build an exception
-     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-     e.SetLocation(ITK_LOCATION);
-     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-     e.SetDataObject(inPtr);
-     throw e;
-     }
+    // build an exception
+    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+    e.SetLocation(ITK_LOCATION);
+    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+    e.SetDataObject(inPtr);
+    throw e;
+    }
 
 }
 
-
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-void
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::BeforeThreadedGenerateData()
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::BeforeThreadedGenerateData()
 {
   // typedef itk::ImageRegionConstIteratorWithIndex<InputImageType> InputIteratorWithIndexType;
   // typedef itk::ImageRegionIterator<RealVectorImageType> JointImageIteratorType;
 
-  OutputSpatialImagePointerType         outSpatialPtr = this->GetSpatialOutput();
-  OutputImagePointerType                outRangePtr   = this->GetRangeOutput();
-  typename InputImageType::ConstPointer inputPtr      = this->GetInput();
+  OutputSpatialImagePointerType outSpatialPtr = this->GetSpatialOutput();
+  OutputImagePointerType outRangePtr = this->GetRangeOutput();
+  typename InputImageType::ConstPointer inputPtr = this->GetInput();
   typename OutputIterationImageType::Pointer iterationOutput = this->GetIterationOutput();
-  typename OutputSpatialImageType::Pointer   spatialOutput = this->GetSpatialOutput();
+  typename OutputSpatialImageType::Pointer spatialOutput = this->GetSpatialOutput();
 
   //InputIndexType index;
 
@@ -246,7 +220,6 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   m_SpatialRadius.Fill(m_Kernel.GetRadius(m_SpatialBandwidth));
 
   m_NumberOfComponentsPerPixel = this->GetInput()->GetNumberOfComponentsPerPixel();
-
 
   // Allocate output images
   this->AllocateOutputs();
@@ -257,64 +230,67 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   zero.Fill(0);
   spatialOutput->FillBuffer(zero);
 
-
   // m_JointImage is the input data expressed in the joint spatial-range
   // domain, i.e. spatial coordinates are concatenated to the range values.
   // Moreover, pixel components in this image are normalized by their respective
   // (spatial or range) bandwith.
   typedef Meanshift::SpatialRangeJointDomainTransform<InputImageType, RealVectorImageType> FunctionType;
-  typedef otb::UnaryFunctorWithIndexWithOutputSizeImageFilter<InputImageType, RealVectorImageType, FunctionType> JointImageFunctorType;
+  typedef otb::UnaryFunctorWithIndexWithOutputSizeImageFilter<InputImageType, RealVectorImageType, FunctionType>
+      JointImageFunctorType;
 
   typename JointImageFunctorType::Pointer jointImageFunctor = JointImageFunctorType::New();
 
   jointImageFunctor->SetInput(inputPtr);
-  jointImageFunctor->GetFunctor().Initialize(ImageDimension, m_NumberOfComponentsPerPixel, m_SpatialBandwidth, m_RangeBandwidth);
+  jointImageFunctor->GetFunctor().Initialize(ImageDimension, m_NumberOfComponentsPerPixel, m_SpatialBandwidth,
+                                             m_RangeBandwidth);
   jointImageFunctor->Update();
   m_JointImage = jointImageFunctor->GetOutput();
 
-  if(m_BucketOptimization)
+#ifdef USEBUCKET
+  if (m_BucketOptimization)
     {
-  // Create bucket image
-  // Note: because values in the input m_JointImage are normalized, the
-  // rangeRadius argument is just 1
-    m_BucketImage = BucketImageType(static_cast<typename RealVectorImageType::ConstPointer>(m_JointImage),
-                                    m_JointImage->GetRequestedRegion(),
-                                    m_Kernel.GetRadius(m_SpatialBandwidth), 1, ImageDimension);
+    // Create bucket image
+    // Note: because values in the input m_JointImage are normalized, the
+    // rangeRadius argument is just 1
+    m_BucketImage = BucketImageType(static_cast<typename RealVectorImageType::ConstPointer> (m_JointImage),
+                                    m_JointImage->GetRequestedRegion(), m_Kernel.GetRadius(m_SpatialBandwidth), 1,
+                                    ImageDimension);
     }
-/*
-  // Allocate the joint domain image
-  m_JointImage = RealVectorImageType::New();
-  m_JointImage->SetNumberOfComponentsPerPixel(ImageDimension + m_NumberOfComponentsPerPixel);
-  m_JointImage->SetRegions(inputPtr->GetRequestedRegion());
-  m_JointImage->Allocate();
+#endif
+  /*
+   // Allocate the joint domain image
+   m_JointImage = RealVectorImageType::New();
+   m_JointImage->SetNumberOfComponentsPerPixel(ImageDimension + m_NumberOfComponentsPerPixel);
+   m_JointImage->SetRegions(inputPtr->GetRequestedRegion());
+   m_JointImage->Allocate();
 
-  InputIteratorWithIndexType inputIt(inputPtr, inputPtr->GetRequestedRegion());
-  JointImageIteratorType jointIt(m_JointImage, inputPtr->GetRequestedRegion());
+   InputIteratorWithIndexType inputIt(inputPtr, inputPtr->GetRequestedRegion());
+   JointImageIteratorType jointIt(m_JointImage, inputPtr->GetRequestedRegion());
 
-  // Initialize the joint image with scaled values
-  inputIt.GoToBegin();
-  jointIt.GoToBegin();
+   // Initialize the joint image with scaled values
+   inputIt.GoToBegin();
+   jointIt.GoToBegin();
 
-  while (!inputIt.IsAtEnd())
-    {
-    typename InputImageType::PixelType const& inputPixel = inputIt.Get();
-    index = inputIt.GetIndex();
+   while (!inputIt.IsAtEnd())
+   {
+   typename InputImageType::PixelType const& inputPixel = inputIt.Get();
+   index = inputIt.GetIndex();
 
-    RealVector & jointPixel = jointIt.Get();
-    for(unsigned int comp = 0; comp < ImageDimension; comp++)
-      {
-      jointPixel[comp] = index[comp] / m_SpatialBandwidth;
-      }
-    for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
-      {
-      jointPixel[ImageDimension + comp] = inputPixel[comp] / m_RangeBandwidth;
-      }
-    // jointIt.Set(jointPixel);
+   RealVector & jointPixel = jointIt.Get();
+   for(unsigned int comp = 0; comp < ImageDimension; comp++)
+   {
+   jointPixel[comp] = index[comp] / m_SpatialBandwidth;
+   }
+   for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
+   {
+   jointPixel[ImageDimension + comp] = inputPixel[comp] / m_RangeBandwidth;
+   }
+   // jointIt.Set(jointPixel);
 
-    ++inputIt;
-    ++jointIt;
-    }
-*/
+   ++inputIt;
+   ++jointIt;
+   }
+   */
 
   //TODO don't create mode table iterator when ModeSearch is set to false
   m_ModeTable = ModeTableImageType::New();
@@ -343,48 +319,47 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       n >>= 1;
       m_ThreadIdNumberOfBits++;
       }
-    if(m_ThreadIdNumberOfBits == 0) m_ThreadIdNumberOfBits = 1; // minimum 1 bit
+    if (m_ThreadIdNumberOfBits == 0) m_ThreadIdNumberOfBits = 1; // minimum 1 bit
     m_NumLabels.SetSize(numThreads);
-    for(unsigned int i = 0; i < numThreads; i++)
+    for (unsigned int i = 0; i < numThreads; i++)
       {
-      m_NumLabels[i] = static_cast<LabelType>(i) << (sizeof(LabelType)*8 - m_ThreadIdNumberOfBits);
+      m_NumLabels[i] = static_cast<LabelType> (i) << (sizeof(LabelType) * 8 - m_ThreadIdNumberOfBits);
       }
 
     }
 
 }
 
-
 // Calculates the mean shift vector at the position given by jointPixel
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-void
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::CalculateMeanShiftVector(
-  const typename RealVectorImageType::Pointer jointImage, const RealVector& jointPixel,
-  const OutputRegionType& outputRegion, RealVector& meanShiftVector)
- {
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::CalculateMeanShiftVector(
+                                                                                                                        const typename RealVectorImageType::Pointer jointImage,
+                                                                                                                        const RealVector& jointPixel,
+                                                                                                                        const OutputRegionType& outputRegion,
+                                                                                                                        RealVector& meanShiftVector)
+{
   const unsigned int jointDimension = ImageDimension + m_NumberOfComponentsPerPixel;
 
   InputIndexType inputIndex;
   InputIndexType regionIndex;
-  InputSizeType  regionSize;
+  InputSizeType regionSize;
 
   assert(meanShiftVector.GetSize() == jointDimension);
   meanShiftVector.Fill(0);
 
   // Calculates current pixel neighborhood region, restricted to the output image region
-  for(unsigned int comp = 0; comp < ImageDimension; ++comp)
+  for (unsigned int comp = 0; comp < ImageDimension; ++comp)
     {
     inputIndex[comp] = jointPixel[comp] * m_SpatialBandwidth;
 
-    regionIndex[comp] = vcl_max(
-      static_cast<long int>(outputRegion.GetIndex().GetElement(comp)),
-      static_cast<long int>(inputIndex[comp] - m_SpatialRadius[comp]));
+    regionIndex[comp] = vcl_max(static_cast<long int> (outputRegion.GetIndex().GetElement(comp)),
+                                static_cast<long int> (inputIndex[comp] - m_SpatialRadius[comp]));
     const long int indexRight = vcl_min(
-      static_cast<long int>(outputRegion.GetIndex().GetElement(comp) + outputRegion.GetSize().GetElement(comp) - 1),
-      static_cast<long int>(inputIndex[comp] + m_SpatialRadius[comp]));
+                                        static_cast<long int> (outputRegion.GetIndex().GetElement(comp)
+                                            + outputRegion.GetSize().GetElement(comp) - 1),
+                                        static_cast<long int> (inputIndex[comp] + m_SpatialRadius[comp]));
 
-    regionSize[comp] = vcl_max(0l, indexRight - static_cast<long int>(regionIndex[comp]) + 1);
+    regionSize[comp] = vcl_max(0l, indexRight - static_cast<long int> (regionIndex[comp]) + 1);
     }
 
   RegionType neighborhoodRegion;
@@ -400,85 +375,85 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   //itk::ImageRegionConstIterator<RealVectorImageType> it(jointImage, neighborhoodRegion);
 
   it.GoToBegin();
-  while(!it.IsAtEnd())
+  while (!it.IsAtEnd())
     {
-    jointNeighbor.SetData(const_cast<RealType*>(it.GetPixelPointer()));
+    jointNeighbor.SetData(const_cast<RealType*> (it.GetPixelPointer()));
 
     // Compute the squared norm of the difference
     // This is the L2 norm, TODO: replace by the templated norm
     RealType norm2 = 0;
-    for(unsigned int comp = 0; comp < jointDimension; comp++)
+    for (unsigned int comp = 0; comp < jointDimension; comp++)
       {
       const RealType d = jointNeighbor[comp] - jointPixel[comp];
-      norm2 += d*d;
+      norm2 += d * d;
       }
 
     // Compute pixel weight from kernel
     const RealType weight = m_Kernel(norm2);
-/*
-    // The following code is an alternative way to compute norm2 and weight
-    // It separates the norms of spatial and range elements
-    RealType spatialNorm2;
-    RealType rangeNorm2;
-    spatialNorm2 = 0;
-    for (unsigned int comp = 0; comp < ImageDimension; comp++)
-      {
-      RealType d;
-      d = jointNeighbor[comp] - jointPixel[comp];
-      spatialNorm2 += d*d;
-      }
+    /*
+     // The following code is an alternative way to compute norm2 and weight
+     // It separates the norms of spatial and range elements
+     RealType spatialNorm2;
+     RealType rangeNorm2;
+     spatialNorm2 = 0;
+     for (unsigned int comp = 0; comp < ImageDimension; comp++)
+     {
+     RealType d;
+     d = jointNeighbor[comp] - jointPixel[comp];
+     spatialNorm2 += d*d;
+     }
 
-    if(spatialNorm2 >= 1.0)
-      {
-      weight = 0;
-      }
-    else
-      {
-      rangeNorm2 = 0;
-      for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
-        {
-        RealType d;
-        d = jointNeighbor[ImageDimension + comp] - jointPixel[ImageDimension + comp];
-        rangeNorm2 += d*d;
-        }
+     if(spatialNorm2 >= 1.0)
+     {
+     weight = 0;
+     }
+     else
+     {
+     rangeNorm2 = 0;
+     for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
+     {
+     RealType d;
+     d = jointNeighbor[ImageDimension + comp] - jointPixel[ImageDimension + comp];
+     rangeNorm2 += d*d;
+     }
 
-      weight = (rangeNorm2 <= 1.0)? 1.0 : 0.0;
-      }
-*/
+     weight = (rangeNorm2 <= 1.0)? 1.0 : 0.0;
+     }
+     */
 
     // Update sum of weights
     weightSum += weight;
 
     // Update mean shift vector
-    for(unsigned int comp = 0; comp < jointDimension; comp++)
+    for (unsigned int comp = 0; comp < jointDimension; comp++)
       {
       meanShiftVector[comp] += weight * jointNeighbor[comp];
       }
 
-
     ++it;
     }
 
-  if(weightSum > 0)
+  if (weightSum > 0)
     {
-    for(unsigned int comp = 0; comp < jointDimension; comp++)
+    for (unsigned int comp = 0; comp < jointDimension; comp++)
       {
       meanShiftVector[comp] = meanShiftVector[comp] / weightSum - jointPixel[comp];
       }
     }
- }
+}
 
+#ifdef USEBUCKET
 // Calculates the mean shift vector at the position given by jointPixel
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-void
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::CalculateMeanShiftVectorBucket(const RealVector& jointPixel, RealVector& meanShiftVector)
- {
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::CalculateMeanShiftVectorBucket(
+                                                                                                                              const RealVector& jointPixel,
+                                                                                                                              RealVector& meanShiftVector)
+{
   const unsigned int jointDimension = ImageDimension + m_NumberOfComponentsPerPixel;
 
   RealType weightSum = 0;
 
-  for(unsigned int comp = 0; comp < jointDimension; comp++)
+  for (unsigned int comp = 0; comp < jointDimension; comp++)
     {
     meanShiftVector[comp] = 0;
     }
@@ -486,34 +461,35 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   RealVector jointNeighbor(ImageDimension + m_NumberOfComponentsPerPixel);
 
   InputIndexType index;
-  for(unsigned int dim = 0; dim < ImageDimension; ++dim)
+  for (unsigned int dim = 0; dim < ImageDimension; ++dim)
     {
     index[dim] = jointPixel[dim] * m_SpatialBandwidth + 0.5;
     }
 
-  const std::vector<unsigned int> neighborBuckets = m_BucketImage.GetNeighborhoodBucketListIndices(
-    m_BucketImage.BucketIndexToBucketListIndex(
-      m_BucketImage.GetBucketIndex(jointPixel, index)
-    )
-  );
+  const std::vector<unsigned int>
+      neighborBuckets = m_BucketImage.GetNeighborhoodBucketListIndices(
+                                                                       m_BucketImage.BucketIndexToBucketListIndex(
+                                                                                                                  m_BucketImage.GetBucketIndex(
+                                                                                                                                               jointPixel,
+                                                                                                                                               index)));
 
   unsigned int numNeighbors = m_BucketImage.GetNumberOfNeighborBuckets();
-  for(unsigned int neighborIndex = 0; neighborIndex < numNeighbors; ++neighborIndex)
+  for (unsigned int neighborIndex = 0; neighborIndex < numNeighbors; ++neighborIndex)
     {
     const typename BucketImageType::BucketType & bucket = m_BucketImage.GetBucket(neighborBuckets[neighborIndex]);
-    if(bucket.empty()) continue;
+    if (bucket.empty()) continue;
     typename BucketImageType::BucketType::const_iterator it = bucket.begin();
-    while(it != bucket.end())
+    while (it != bucket.end())
       {
-      jointNeighbor.SetData(const_cast<RealType*>(*it));
+      jointNeighbor.SetData(const_cast<RealType*> (*it));
 
       // Compute the squared norm of the difference
       // This is the L2 norm, TODO: replace by the templated norm
       RealType norm2 = 0;
-      for(unsigned int comp = 0; comp < jointDimension; comp++)
+      for (unsigned int comp = 0; comp < jointDimension; comp++)
         {
         const RealType d = jointNeighbor[comp] - jointPixel[comp];
-        norm2 += d*d;
+        norm2 += d * d;
         }
 
       // Compute pixel weight from kernel
@@ -523,7 +499,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       weightSum += weight;
 
       // Update mean shift vector
-      for(unsigned int comp = 0; comp < jointDimension; comp++)
+      for (unsigned int comp = 0; comp < jointDimension; comp++)
         {
         meanShiftVector[comp] += weight * jointNeighbor[comp];
         }
@@ -532,56 +508,55 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       }
     }
 
-  if(weightSum > 0)
+  if (weightSum > 0)
     {
-    for(unsigned int comp = 0; comp < jointDimension; comp++)
+    for (unsigned int comp = 0; comp < jointDimension; comp++)
       {
       meanShiftVector[comp] = meanShiftVector[comp] / weightSum - jointPixel[comp];
       }
     }
- }
+}
+#endif
 
-
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-void
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, int threadId)
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::ThreadedGenerateData(
+                                                                                                                    const OutputRegionType& outputRegionForThread,
+                                                                                                                    int threadId)
 {
   // at the first iteration
 
 
   // Retrieve output images pointers
-  typename OutputSpatialImageType::Pointer   spatialOutput = this->GetSpatialOutput();
-  typename OutputImageType::Pointer          rangeOutput = this->GetRangeOutput();
+  typename OutputSpatialImageType::Pointer spatialOutput = this->GetSpatialOutput();
+  typename OutputImageType::Pointer rangeOutput = this->GetRangeOutput();
   typename OutputIterationImageType::Pointer iterationOutput = this->GetIterationOutput();
-  typename OutputLabelImageType::Pointer     labelOutput = this->GetLabelOutput();
+  typename OutputLabelImageType::Pointer labelOutput = this->GetLabelOutput();
 
   // Get input image pointer
   typename InputImageType::ConstPointer input = this->GetInput();
 
   // defines input and output iterators
-  typedef itk::ImageRegionIterator<OutputImageType>               OutputIteratorType;
-  typedef itk::ImageRegionIterator<OutputSpatialImageType>        OutputSpatialIteratorType;
-  typedef itk::ImageRegionIterator<OutputIterationImageType>      OutputIterationIteratorType;
-  typedef itk::ImageRegionIterator<OutputLabelImageType>          OutputLabelIteratorType;
-
+  typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
+  typedef itk::ImageRegionIterator<OutputSpatialImageType> OutputSpatialIteratorType;
+  typedef itk::ImageRegionIterator<OutputIterationImageType> OutputIterationIteratorType;
+  typedef itk::ImageRegionIterator<OutputLabelImageType> OutputLabelIteratorType;
 
   const unsigned int jointDimension = ImageDimension + m_NumberOfComponentsPerPixel;
 
-  typename OutputImageType::PixelType          rangePixel(m_NumberOfComponentsPerPixel);
-  typename OutputSpatialImageType::PixelType   spatialPixel(ImageDimension);
+  typename OutputImageType::PixelType rangePixel(m_NumberOfComponentsPerPixel);
+  typename OutputSpatialImageType::PixelType spatialPixel(ImageDimension);
 
   RealVector jointPixel;
 
-
   RealVector bandwidth(jointDimension);
-  for (unsigned int comp = 0; comp < ImageDimension; comp++) bandwidth[comp] = m_SpatialBandwidth;
-  for (unsigned int comp = ImageDimension; comp < jointDimension; comp++) bandwidth[comp] = m_RangeBandwidth;
+  for (unsigned int comp = 0; comp < ImageDimension; comp++)
+    bandwidth[comp] = m_SpatialBandwidth;
+  for (unsigned int comp = ImageDimension; comp < jointDimension; comp++)
+    bandwidth[comp] = m_RangeBandwidth;
 
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   RegionType const& requestedRegion = input->GetRequestedRegion();
-
 
   typedef itk::ImageRegionConstIteratorWithIndex<RealVectorImageType> JointImageIteratorType;
   JointImageIteratorType jointIt(m_JointImage, outputRegionForThread);
@@ -593,7 +568,6 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
 
   typedef itk::ImageRegionIterator<ModeTableImageType> ModeTableImageIteratorType;
   ModeTableImageIteratorType modeTableIt(m_ModeTable, outputRegionForThread);
-
 
   jointIt.GoToBegin();
   rangeIt.GoToBegin();
@@ -610,21 +584,19 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   // Variables used by mode search optimization
   // List of indices where the current pixel passes through
   std::vector<InputIndexType> pointList;
-  if(m_ModeSearch) pointList.resize(m_MaxIterationNumber);
+  if (m_ModeSearch) pointList.resize(m_MaxIterationNumber);
   // Number of times an already processed candidate pixel is encountered, resulting in no
   // further computation (Used for statistics only)
   unsigned int numBreaks = 0;
   // index of the current pixel updated during the mean shift loop
   InputIndexType modeCandidate;
 
-  for (; !jointIt.IsAtEnd();
-       ++jointIt, ++rangeIt, ++spatialIt, ++iterationIt,
-         ++modeTableIt, ++labelIt, progress.CompletedPixel())
+  for (; !jointIt.IsAtEnd(); ++jointIt, ++rangeIt, ++spatialIt, ++iterationIt, ++modeTableIt, ++labelIt, progress.CompletedPixel())
     {
 
     // if pixel has been already processed (by mode search optimization), skip
     typename ModeTableImageType::InternalPixelType const& currentPixelMode = modeTableIt.Get();
-    if(m_ModeSearch &&  currentPixelMode == 1)
+    if (m_ModeSearch && currentPixelMode == 1)
       {
       numBreaks++;
       continue;
@@ -658,7 +630,8 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
         // but not 2 (pixel in current search path), and pixel has actually moved
         // from its initial position, and pixel candidate is inside the output
         // region, then perform optimization tasks
-        if (modeCandidate != currentIndex && m_ModeTable->GetPixel(modeCandidate) != 2 && outputRegionForThread.IsInside(modeCandidate))
+        if (modeCandidate != currentIndex && m_ModeTable->GetPixel(modeCandidate) != 2
+            && outputRegionForThread.IsInside(modeCandidate))
           {
           // Obtain the data point to see if it close to jointPixel
           RealType diff = 0;
@@ -666,20 +639,21 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
           for (unsigned int comp = ImageDimension; comp < jointDimension; comp++)
             {
             const RealType d = candidatePixel[comp] - jointPixel[comp];
-            diff += d*d;
+            diff += d * d;
             }
 
           if (diff < 0.5) // Spectral value is close enough
             {
             // If no mode has been associated to the candidate pixel then
             // associate it to the upcoming mode
-            if( m_ModeTable->GetPixel(modeCandidate) == 0)
+            if (m_ModeTable->GetPixel(modeCandidate) == 0)
               {
               // Add the candidate to the list of pixels that will be assigned the
               // finally calculated mode value
               pointList[pointCount++] = modeCandidate;
               m_ModeTable->SetPixel(modeCandidate, 2);
-              } else // == 1
+              }
+            else // == 1
               {
               // The candidate pixel has already been assigned to a mode
               // Assign the same value
@@ -700,14 +674,19 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
         } // end if (m_ModeSearch)
 
       //Calculate meanShiftVector
-      if(m_BucketOptimization)
+#ifdef USEBUCKET
+      if (m_BucketOptimization)
         {
         this->CalculateMeanShiftVectorBucket(jointPixel, meanShiftVector);
         }
       else
         {
+#endif
         this->CalculateMeanShiftVector(m_JointImage, jointPixel, requestedRegion, meanShiftVector);
+
+#ifdef USEBUCKET
         }
+#endif
 
       // Compute mean shift vector squared norm (not normalized by bandwidth)
       // and add mean shift vector to current joint pixel
@@ -715,7 +694,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       for (unsigned int comp = 0; comp < jointDimension; comp++)
         {
         const double v = meanShiftVector[comp] * bandwidth[comp];
-        meanShiftVectorSqNorm += v*v;
+        meanShiftVectorSqNorm += v * v;
         jointPixel[comp] += meanShiftVector[comp];
         }
 
@@ -724,12 +703,12 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       iteration++;
       }
 
-    for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
+    for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
       {
       rangePixel[comp] = jointPixel[ImageDimension + comp] * m_RangeBandwidth;
       }
 
-    for(unsigned int comp = 0; comp < ImageDimension; comp++)
+    for (unsigned int comp = 0; comp < ImageDimension; comp++)
       {
       spatialPixel[comp] = jointPixel[comp] * m_SpatialBandwidth - currentIndex[comp];
       }
@@ -751,7 +730,8 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
         {
         m_NumLabels[threadId]++;
         label = m_NumLabels[threadId];
-        } else // the loop exited through a break. Use the already assigned mode label
+        }
+      else // the loop exited through a break. Use the already assigned mode label
         {
         label = labelOutput->GetPixel(modeCandidate);
         }
@@ -767,20 +747,17 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       }
     else // if ModeSearch is not set LabelOutput can't be generated
       {
-        LabelType labelZero=0;
-        labelIt.Set(labelZero);
+      LabelType labelZero = 0;
+      labelIt.Set(labelZero);
       }
 
     }
   // std::cout << "numBreaks: " << numBreaks << " Break ratio: " << numBreaks / (RealType)outputRegionForThread.GetNumberOfPixels() << std::endl;
 }
 
-
 /* after threaded convergence test */
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-void
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::AfterThreadedGenerateData()
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::AfterThreadedGenerateData()
 {
   typename OutputLabelImageType::Pointer labelOutput = this->GetLabelOutput();
   typedef itk::ImageRegionIterator<OutputLabelImageType> OutputLabelIteratorType;
@@ -799,23 +776,25 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       {
       // Retrieve the number of labels in the thread by removing the threadId
       // from the most significant bits
-      LabelType localNumLabel = m_NumLabels[i-1] & ( (static_cast<LabelType>(1) << (sizeof(LabelType)*8 - m_ThreadIdNumberOfBits)) - static_cast<LabelType>(1) );
-      newLabelOffset[i] = localNumLabel + newLabelOffset[i-1];
+      LabelType localNumLabel = m_NumLabels[i - 1] & ((static_cast<LabelType> (1) << (sizeof(LabelType) * 8
+          - m_ThreadIdNumberOfBits)) - static_cast<LabelType> (1));
+      newLabelOffset[i] = localNumLabel + newLabelOffset[i - 1];
       }
 
     labelIt.GoToBegin();
 
-    while ( !labelIt.IsAtEnd() )
+    while (!labelIt.IsAtEnd())
       {
       LabelType const label = labelIt.Get();
 
       // Get threadId from most significant bits
-      const unsigned int threadId = label >> (sizeof(LabelType)*8 - m_ThreadIdNumberOfBits);
+      const unsigned int threadId = label >> (sizeof(LabelType) * 8 - m_ThreadIdNumberOfBits);
 
       // Relabeling
       // First get the label number by removing the threadId bits
       // Then add the label offset specific to the threadId
-      LabelType newLabel = label & ( (static_cast<LabelType>(1) << (sizeof(LabelType)*8 - m_ThreadIdNumberOfBits)) - static_cast<LabelType>(1) );
+      LabelType newLabel = label & ((static_cast<LabelType> (1) << (sizeof(LabelType) * 8 - m_ThreadIdNumberOfBits))
+          - static_cast<LabelType> (1));
       newLabel += newLabelOffset[threadId];
 
       labelIt.Set(newLabel);
@@ -825,16 +804,15 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
 
 }
 
-
-template <class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-void
-MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
+void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::PrintSelf(
+                                                                                                         std::ostream& os,
+                                                                                                         itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Spatial bandwidth: "                << m_SpatialBandwidth               << std::endl;
-  os << indent << "Range bandwidth: "                  << m_RangeBandwidth                 << std::endl;
- }
+  os << indent << "Spatial bandwidth: " << m_SpatialBandwidth << std::endl;
+  os << indent << "Range bandwidth: " << m_RangeBandwidth << std::endl;
+}
 
 } // end namespace otb
 

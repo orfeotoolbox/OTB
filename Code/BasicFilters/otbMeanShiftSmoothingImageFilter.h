@@ -1,20 +1,20 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
+ Program:   ORFEO Toolbox
+ Language:  C++
+ Date:      $Date$
+ Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
+ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+ See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the above copyright notices for more information.
 
-=========================================================================*/
+ =========================================================================*/
 #ifndef __otbMeanShiftSmoothingImageFilter_h
 #define __otbMeanShiftSmoothingImageFilter_h
 
@@ -25,22 +25,21 @@
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include <vcl_algorithm.h>
 
-
+#define   USEBUCKET 0 // don't use bucket optimization
 namespace otb
 {
 namespace Meanshift
 {
 
-template <typename T> inline T simple_pow(T const& v, unsigned int p)
+template<typename T> inline T simple_pow(T const& v, unsigned int p)
 {
   T res = 1;
-  for (unsigned int i=0; i!=p; ++i)
+  for (unsigned int i = 0; i != p; ++i)
     {
     res *= v;
     }
   return res;
 }
-
 
 /** \class SpatialRangeJointDomainTransform
  *
@@ -55,33 +54,35 @@ class SpatialRangeJointDomainTransform
 public:
   typedef double RealType;
 
-  SpatialRangeJointDomainTransform() {}
+  SpatialRangeJointDomainTransform()
+  {
+  }
   // ~SpatialRangeJointDomainTransform() {}
 
-  typename TOutputJointImage::PixelType operator()
-  (const typename TInputImage::PixelType & inputPixel, const typename TInputImage::IndexType & index) const
+  typename TOutputJointImage::PixelType operator()(const typename TInputImage::PixelType & inputPixel,
+                                                   const typename TInputImage::IndexType & index) const
   {
     typename TOutputJointImage::PixelType jointPixel(m_ImageDimension + m_NumberOfComponentsPerPixel);
 
-    for(unsigned int comp = 0; comp < m_ImageDimension; comp++)
+    for (unsigned int comp = 0; comp < m_ImageDimension; comp++)
       {
       jointPixel[comp] = index[comp] / m_SpatialBandwidth;
       }
-    for(unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
+    for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
       {
       jointPixel[m_ImageDimension + comp] = inputPixel[comp] / m_RangeBandwidth;
       }
     return jointPixel;
   }
 
-  void Initialize(unsigned int _ImageDimension, unsigned int numberOfComponentsPerPixel_,
-                  RealType spatialBandwidth_, RealType rangeBandwidth_)
+  void Initialize(unsigned int _ImageDimension, unsigned int numberOfComponentsPerPixel_, RealType spatialBandwidth_,
+                  RealType rangeBandwidth_)
   {
-    m_ImageDimension             = _ImageDimension;
+    m_ImageDimension = _ImageDimension;
     m_NumberOfComponentsPerPixel = numberOfComponentsPerPixel_;
-    m_SpatialBandwidth           = spatialBandwidth_;
-    m_RangeBandwidth             = rangeBandwidth_;
-    m_OutputSize                 = m_ImageDimension + m_NumberOfComponentsPerPixel;
+    m_SpatialBandwidth = spatialBandwidth_;
+    m_RangeBandwidth = rangeBandwidth_;
+    m_OutputSize = m_ImageDimension + m_NumberOfComponentsPerPixel;
   }
 
   unsigned int GetOutputSize() const
@@ -93,10 +94,9 @@ private:
   unsigned int m_ImageDimension;
   unsigned int m_NumberOfComponentsPerPixel;
   unsigned int m_OutputSize;
-  RealType     m_SpatialBandwidth;
-  RealType     m_RangeBandwidth;
+  RealType m_SpatialBandwidth;
+  RealType m_RangeBandwidth;
 };
-
 
 class KernelUniform
 {
@@ -106,11 +106,13 @@ public:
   // KernelUniform() {}
   // ~KernelUniform() {}
 
-  RealType operator() (RealType x) const{
+  RealType operator()(RealType x) const
+  {
     return (x <= 1) ? 1.0 : 0.0;
   }
 
-  RealType GetRadius(RealType bandwidth) const {
+  RealType GetRadius(RealType bandwidth) const
+  {
     return bandwidth;
   }
 };
@@ -123,12 +125,14 @@ public:
   // KernelGaussian() {}
   // ~KernelGaussian() {}
 
-  RealType operator() (RealType x) const {
-    return vcl_exp(-0.5*x);
+  RealType operator()(RealType x) const
+  {
+    return vcl_exp(-0.5 * x);
   }
 
-  RealType GetRadius(RealType bandwidth) const {
-    return 3.0*bandwidth;
+  RealType GetRadius(RealType bandwidth) const
+  {
+    return 3.0 * bandwidth;
   }
 };
 
@@ -138,25 +142,28 @@ public:
  * access to pixels in vector images through the method GetPixelPointer
  */
 template<typename TImage>
-class FastImageRegionConstIterator
-  : public itk::ImageRegionConstIterator<TImage>
+class FastImageRegionConstIterator: public itk::ImageRegionConstIterator<TImage>
 {
 public:
   /** Standard class typedef. */
-  typedef FastImageRegionConstIterator<TImage>   Self;
-  typedef itk::ImageRegionConstIterator<TImage>  Superclass;
+  typedef FastImageRegionConstIterator<TImage> Self;
+  typedef itk::ImageRegionConstIterator<TImage> Superclass;
 
-  typedef typename Superclass::ImageType    ImageType;
-  typedef typename Superclass::RegionType   RegionType;
+  typedef typename Superclass::ImageType ImageType;
+  typedef typename Superclass::RegionType RegionType;
 
-  typedef typename TImage::PixelType         PixelType;
+  typedef typename TImage::PixelType PixelType;
   typedef typename TImage::InternalPixelType InternalPixelType;
 
-  itkTypeMacro(FastImageRegionConstIterator, ImageRegionConstIterator);
+  itkTypeMacro(FastImageRegionConstIterator, ImageRegionConstIterator)
+  ;
 
-  FastImageRegionConstIterator() : Superclass() {}
-  FastImageRegionConstIterator(const ImageType *ptr, const RegionType &region)
-    : Superclass(ptr, region)
+  FastImageRegionConstIterator() :
+    Superclass()
+  {
+  }
+  FastImageRegionConstIterator(const ImageType *ptr, const RegionType &region) :
+    Superclass(ptr, region)
   {
     m_NumberOfComponentsPerPixel = ptr->GetNumberOfComponentsPerPixel();
   }
@@ -170,58 +177,58 @@ private:
   unsigned int m_NumberOfComponentsPerPixel;
 };
 
-
+#ifdef USEBUCKET //disable bucket mode
 /** \class BucketImage
-  *
-  * This class indexes pixels in a N-dimensional image into a N+1-dimensional
-  * array of buckets. Each pixel is stored into one bucket depending on its
-  * position on the lattice (the width of a bucket is given at construction) and
-  * one spectral component (also given at construction by spectralCoordinate).
-  *
-  * The (spatially and spectrally) neighboring buckets of pixels can then be
-  * obtained by using GetNeighborhoodBucketListIndices().
-  */
-template <class TImage>
+ *
+ * This class indexes pixels in a N-dimensional image into a N+1-dimensional
+ * array of buckets. Each pixel is stored into one bucket depending on its
+ * position on the lattice (the width of a bucket is given at construction) and
+ * one spectral component (also given at construction by spectralCoordinate).
+ *
+ * The (spatially and spectrally) neighboring buckets of pixels can then be
+ * obtained by using GetNeighborhoodBucketListIndices().
+ */
+template<class TImage>
 class BucketImage
 {
 public:
-  typedef TImage                                 ImageType;
-  typedef typename ImageType::ConstPointer       ImageConstPointerType;
-  typedef typename ImageType::PixelType          PixelType;
-  typedef typename ImageType::InternalPixelType  InternalPixelType;
-  typedef typename ImageType::RegionType         RegionType;
-  typedef typename ImageType::IndexType          IndexType;
+  typedef TImage ImageType;
+  typedef typename ImageType::ConstPointer ImageConstPointerType;
+  typedef typename ImageType::PixelType PixelType;
+  typedef typename ImageType::InternalPixelType InternalPixelType;
+  typedef typename ImageType::RegionType RegionType;
+  typedef typename ImageType::IndexType IndexType;
 
-  typedef double  RealType;
+  typedef double RealType;
 
   static const unsigned int ImageDimension = ImageType::ImageDimension;
 
   /** The bucket image has dimension N+1 (ie. usually 3D for most images) */
-  typedef std::vector<typename ImageType::SizeType::SizeValueType>   BucketImageSizeType;
+  typedef std::vector<typename ImageType::SizeType::SizeValueType> BucketImageSizeType;
   typedef std::vector<typename ImageType::IndexType::IndexValueType> BucketImageIndexType;
   //typedef std::vector<long> BucketImageIndexType;
 
 
   /** pixel buckets typedefs and declarations */
-  typedef const typename ImageType::InternalPixelType *    ImageDataPointerType;
-  typedef std::vector<ImageDataPointerType>          BucketType;
-  typedef std::vector<BucketType>                    BucketListType;
+  typedef const typename ImageType::InternalPixelType * ImageDataPointerType;
+  typedef std::vector<ImageDataPointerType> BucketType;
+  typedef std::vector<BucketType> BucketListType;
 
-  BucketImage() {}
+  BucketImage()
+  {
+  }
 
   /** Constructor for the bucket image. It operates on the specified
-    * region.
-    * spatialRadius specifies the width of a bucket in pixels.
-    * rangeRadius is the spectral width for the specified spectral coordinate in
-    * one bucket.
-    * spectralCoordinate is the index of the pixel used for classification in buckets.
-    */
-  BucketImage(ImageConstPointerType image, const RegionType & region, RealType spatialRadius, RealType rangeRadius, unsigned int spectralCoordinate)
-    : m_Image( image )
-    , m_Region( region )
-    , m_SpatialRadius( spatialRadius )
-    , m_RangeRadius( rangeRadius )
-    , m_SpectralCoordinate( spectralCoordinate )
+   * region.
+   * spatialRadius specifies the width of a bucket in pixels.
+   * rangeRadius is the spectral width for the specified spectral coordinate in
+   * one bucket.
+   * spectralCoordinate is the index of the pixel used for classification in buckets.
+   */
+  BucketImage(ImageConstPointerType image, const RegionType & region, RealType spatialRadius, RealType rangeRadius,
+              unsigned int spectralCoordinate) :
+    m_Image(image), m_Region(region), m_SpatialRadius(spatialRadius), m_RangeRadius(rangeRadius),
+        m_SpectralCoordinate(spectralCoordinate)
   {
 
     // Find max and min of the used spectral band
@@ -230,7 +237,7 @@ public:
     InternalPixelType minValue = inputIt.Get()[spectralCoordinate];
     InternalPixelType maxValue = minValue;
     ++inputIt;
-    while( !inputIt.IsAtEnd() )
+    while (!inputIt.IsAtEnd())
       {
       const PixelType &p = inputIt.Get();
       minValue = vcl_min(minValue, p[m_SpectralCoordinate]);
@@ -243,15 +250,15 @@ public:
 
     // Compute bucket image dimensions. Note: empty buckets are at each border
     // to simplify image border issues
-    m_DimensionVector.resize(ImageDimension+1); // NB: pays for a 0-innit
-    for(unsigned int dim = 0; dim < ImageDimension; ++dim)
+    m_DimensionVector.resize(ImageDimension + 1); // NB: pays for a 0-innit
+    for (unsigned int dim = 0; dim < ImageDimension; ++dim)
       {
       m_DimensionVector[dim] = m_Region.GetSize()[dim] / m_SpatialRadius + 3;
       }
-    m_DimensionVector[ImageDimension] = (unsigned int)((maxValue - minValue) / m_RangeRadius) + 3;
+    m_DimensionVector[ImageDimension] = (unsigned int) ((maxValue - minValue) / m_RangeRadius) + 3;
 
     unsigned int numBuckets = m_DimensionVector[0];
-    for(unsigned int dim = 1; dim <= ImageDimension; ++dim)
+    for (unsigned int dim = 1; dim <= ImageDimension; ++dim)
       numBuckets *= m_DimensionVector[dim];
 
     m_BucketList.resize(numBuckets);
@@ -262,7 +269,7 @@ public:
     FastImageRegionConstIterator<ImageType> fastIt(m_Image, m_Region);
     fastIt.GoToBegin();
 
-    while( !it.IsAtEnd() )
+    while (!it.IsAtEnd())
       {
       const IndexType & index = it.GetIndex();
       const PixelType & pixel = it.Get();
@@ -280,15 +287,15 @@ public:
     // Prepare neighborhood offset vector
     // BucketImageIndexType zeroOffsetIndex(ImageDimension+1);
     std::vector<BucketImageIndexType> neighborsIndexList;
-    neighborsIndexList.reserve(simple_pow(3, ImageDimension+1));
-    neighborsIndexList.resize(1, BucketImageIndexType(ImageDimension+1)); // zeroOffsetIndex
+    neighborsIndexList.reserve(simple_pow(3, ImageDimension + 1));
+    neighborsIndexList.resize(1, BucketImageIndexType(ImageDimension + 1)); // zeroOffsetIndex
     // neighborsIndexList.push_back(zeroOffsetIndex);
-    for(unsigned dim = 0; dim <= ImageDimension; ++dim)
+    for (unsigned dim = 0; dim <= ImageDimension; ++dim)
       {
       // take all neighbors already in the list and add their direct neighbor
       // along the current dim
       const unsigned int curSize = neighborsIndexList.size();
-      for(unsigned int i = 0; i < curSize; ++i)
+      for (unsigned int i = 0; i < curSize; ++i)
         {
         BucketImageIndexType index = neighborsIndexList[i];
         index[dim]--;
@@ -300,33 +307,35 @@ public:
     // Convert all neighbors n-dimensional indices to bucket list 1D indices
     const unsigned int neighborhoodOffsetVectorSize = neighborsIndexList.size();
     m_NeighborhoodOffsetVector.reserve(neighborhoodOffsetVectorSize);
-    for(unsigned int i = 0; i < neighborhoodOffsetVectorSize; ++i)
+    for (unsigned int i = 0; i < neighborhoodOffsetVectorSize; ++i)
       {
       const int listIndex = BucketIndexToBucketListIndex(neighborsIndexList[i]);
       m_NeighborhoodOffsetVector.push_back(listIndex);
       }
   }
 
-  ~BucketImage() {}
+  ~BucketImage()
+  {
+  }
 
   /** Returns the N+1-dimensional bucket index for a given pixel value at the given index */
   BucketImageIndexType GetBucketIndex(const PixelType & pixel, const IndexType & index)
   {
-    BucketImageIndexType bucketIndex(ImageDimension+1);
-    for(unsigned int dim = 0; dim < ImageDimension; ++dim)
+    BucketImageIndexType bucketIndex(ImageDimension + 1);
+    for (unsigned int dim = 0; dim < ImageDimension; ++dim)
       {
       bucketIndex[dim] = (index[dim] - m_Region.GetIndex()[dim]) / m_SpatialRadius + 1;
-        }
+      }
     bucketIndex[ImageDimension] = (pixel[m_SpectralCoordinate] - m_MinValue) / m_RangeRadius + 1;
     return bucketIndex;
   }
 
   /** Converts a N+1-dimensional bucket index into the 1D list index useable by
-  GetBucket() */
+   GetBucket() */
   int BucketIndexToBucketListIndex(const BucketImageIndexType & bucketIndex) const
   {
     int bucketListIndex = bucketIndex[0];
-    for(unsigned int dim = 1; dim <= ImageDimension; ++dim)
+    for (unsigned int dim = 1; dim <= ImageDimension; ++dim)
       {
       bucketListIndex = bucketListIndex * m_DimensionVector[dim] + bucketIndex[dim];
       }
@@ -335,16 +344,16 @@ public:
 
   /** Retrieves the list of all buckets in the neighborhood of the given bucket */
   std::vector<unsigned int> GetNeighborhoodBucketListIndices(int bucketIndex) const
-    {
+  {
     const unsigned int neighborhoodOffsetVectorSize = m_NeighborhoodOffsetVector.size();
     std::vector<unsigned int> indices(neighborhoodOffsetVectorSize);
 
-    for(unsigned int i = 0; i < neighborhoodOffsetVectorSize; ++i)
+    for (unsigned int i = 0; i < neighborhoodOffsetVectorSize; ++i)
       {
       indices[i] = bucketIndex + m_NeighborhoodOffsetVector[i];
       }
     return indices;
-    }
+  }
 
   /* Returns the list of pixels (actually pointer to pixel data) contained in a bucket */
   const BucketType & GetBucket(unsigned int index) const
@@ -368,7 +377,7 @@ private:
   /** Range radius (at a single dimension) of one bucket of pixels */
   RealType m_RangeRadius;
   /** pixels are separated in buckets depending on their spatial position and
-  also their value at one coordinate */
+   also their value at one coordinate */
   unsigned int m_SpectralCoordinate;
   /** Min and Max of selected spectral coordinate */
   InternalPixelType m_MinValue;
@@ -379,10 +388,11 @@ private:
   /** This vector holds the dimensions of the 3D (ND?) bucket image */
   BucketImageSizeType m_DimensionVector;
   /** Vector of offsets in the buckets list to get all buckets in the
-    * neighborhood
-    */
+   * neighborhood
+   */
   std::vector<int> m_NeighborhoodOffsetVector;
 };
+#endif
 
 } // end namespace Meanshift
 
@@ -434,89 +444,98 @@ private:
  * \ingroup ImageSegmentation
  * \ingroup ImageEnhancement
  */
-template <class TInputImage, class TOutputImage, class TKernel = Meanshift::KernelUniform, class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
-class ITK_EXPORT MeanShiftSmoothingImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template<class TInputImage, class TOutputImage, class TKernel = Meanshift::KernelUniform,
+    class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
+class ITK_EXPORT MeanShiftSmoothingImageFilter: public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedef */
-  typedef MeanShiftSmoothingImageFilter                      Self;
+  typedef MeanShiftSmoothingImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
-  typedef double                                             RealType;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef double RealType;
 
   /** Type macro */
-  itkTypeMacro(MeanShiftSmoothingImageFilter, ImageToImageFilter);
-  itkNewMacro(Self);
+  itkTypeMacro(MeanShiftSmoothingImageFilter, ImageToImageFilter)
+  ;itkNewMacro(Self)
+  ;
 
   /** Template parameters typedefs */
 
-  typedef TInputImage                             InputImageType;
-  typedef typename InputImageType::Pointer        InputImagePointerType;
-  typedef typename InputImageType::PixelType      InputPixelType;
-  typedef typename InputImageType::IndexType      InputIndexType;
-  typedef typename InputImageType::SizeType       InputSizeType;
+  typedef TInputImage InputImageType;
+  typedef typename InputImageType::Pointer InputImagePointerType;
+  typedef typename InputImageType::PixelType InputPixelType;
+  typedef typename InputImageType::IndexType InputIndexType;
+  typedef typename InputImageType::SizeType InputSizeType;
   typedef typename InputImageType::IndexValueType InputIndexValueType;
-  typedef typename InputImageType::PointType      PointType;
-  typedef typename InputImageType::RegionType     RegionType;
-  typedef typename InputImageType::SizeType       SizeType;
+  typedef typename InputImageType::PointType PointType;
+  typedef typename InputImageType::RegionType RegionType;
+  typedef typename InputImageType::SizeType SizeType;
 
-  typedef TOutputImage                          OutputImageType;
-  typedef typename OutputImageType::Pointer     OutputImagePointerType;
-  typedef typename OutputImageType::PixelType   OutputPixelType;
-  typedef typename OutputImageType::RegionType  OutputRegionType;
+  typedef TOutputImage OutputImageType;
+  typedef typename OutputImageType::Pointer OutputImagePointerType;
+  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename OutputImageType::RegionType OutputRegionType;
 
-  typedef TOutputIterationImage                       OutputIterationImageType;
+  typedef TOutputIterationImage OutputIterationImageType;
 
-  typedef unsigned long                                         LabelType;
+  typedef unsigned long LabelType;
   typedef otb::Image<LabelType, InputImageType::ImageDimension> OutputLabelImageType;
 
   typedef otb::VectorImage<RealType, InputImageType::ImageDimension> OutputSpatialImageType;
-  typedef typename OutputSpatialImageType::Pointer                   OutputSpatialImagePointerType;
-  typedef typename OutputSpatialImageType::PixelType                 OutputSpatialPixelType;
+  typedef typename OutputSpatialImageType::Pointer OutputSpatialImagePointerType;
+  typedef typename OutputSpatialImageType::PixelType OutputSpatialPixelType;
 
   typedef TKernel KernelType;
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
-  typedef itk::VariableLengthVector<RealType>                        RealVector;
+  typedef itk::VariableLengthVector<RealType> RealVector;
   typedef otb::VectorImage<RealType, InputImageType::ImageDimension> RealVectorImageType;
   typedef otb::Image<unsigned short, InputImageType::ImageDimension> ModeTableImageType;
 
   /** Sets the spatial bandwidth (or radius in the case of a uniform kernel)
-    * of the neighborhood for each pixel
-    */
-  itkSetMacro(SpatialBandwidth, RealType);
-  itkGetConstReferenceMacro(SpatialBandwidth, RealType);
+   * of the neighborhood for each pixel
+   */
+  itkSetMacro(SpatialBandwidth, RealType)
+  ;itkGetConstReferenceMacro(SpatialBandwidth, RealType)
+  ;
 
   /** Sets the spectral bandwidth (or radius for a uniform kernel) for pixels
-    * to be included in the same mode
-    */
-  itkSetMacro(RangeBandwidth, RealType);
-  itkGetConstReferenceMacro(RangeBandwidth, RealType);
+   * to be included in the same mode
+   */
+  itkSetMacro(RangeBandwidth, RealType)
+  ;itkGetConstReferenceMacro(RangeBandwidth, RealType)
+  ;
 
   /** Sets the maximum number of algorithm iterations */
-  itkGetConstReferenceMacro(MaxIterationNumber, unsigned int);
-  itkSetMacro(MaxIterationNumber, unsigned int);
+  itkGetConstReferenceMacro(MaxIterationNumber, unsigned int)
+  ;itkSetMacro(MaxIterationNumber, unsigned int)
+  ;
 
   /** Sets the threshold value for the mean shift vector's squared norm,
-    * under which convergence is assumed
-    */
-  itkGetConstReferenceMacro(Threshold, double);
-  itkSetMacro(Threshold, double);
+   * under which convergence is assumed
+   */
+  itkGetConstReferenceMacro(Threshold, double)
+  ;itkSetMacro(Threshold, double)
+  ;
 
   /** Toggle mode search, which is enabled by default.
-    * When off, the output label image is not available
-    * Be careful, with this option, the result will slightly depend on thread number.
-    */
-  itkSetMacro(ModeSearch, bool);
-  itkGetConstReferenceMacro(ModeSearch, bool);
+   * When off, the output label image is not available
+   * Be careful, with this option, the result will slightly depend on thread number.
+   */
+  itkSetMacro(ModeSearch, bool)
+  ;itkGetConstReferenceMacro(ModeSearch, bool)
+  ;
 
+#ifdef USEBUCKET
   /** Toggle bucket optimization, which is disabled by default.
-    */
-  itkSetMacro(BucketOptimization, bool);
-  itkGetConstReferenceMacro(BucketOptimization, bool);
+   */
+  itkSetMacro(BucketOptimization, bool)
+  ;itkGetConstReferenceMacro(BucketOptimization, bool)
+  ;
+#endif
 
   /** Returns the const spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
   const OutputSpatialImageType * GetSpatialOutput() const;
@@ -529,7 +548,7 @@ public:
 
   /** Returns the spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
   OutputSpatialImageType * GetSpatialOutput();
-   /** Returns the spectral image output */
+  /** Returns the spectral image output */
   OutputImageType * GetRangeOutput();
   /** Returns the number of iterations done at each pixel */
   OutputIterationImageType * GetIterationOutput();
@@ -538,29 +557,27 @@ public:
 
 protected:
 
-
   /** GenerateOutputInformation
-    *  Define output pixel size
-    *
-    **/
-   virtual void GenerateOutputInformation(void);
+   *  Define output pixel size
+   *
+   **/
+  virtual void GenerateOutputInformation(void);
 
-   virtual void GenerateInputRequestedRegion();
+  virtual void GenerateInputRequestedRegion();
 
-   virtual void BeforeThreadedGenerateData();
+  virtual void BeforeThreadedGenerateData();
 
-   /** MeanShiftFilter can be implemented as a multithreaded filter.
-      * Therefore, this implementation provides a ThreadedGenerateData()
-      * routine which is called for each processing thread. The output
-      * image data is allocated automatically by the superclass prior to
-      * calling ThreadedGenerateData().  ThreadedGenerateData can only
-      * write to the portion of the output image specified by the
-      * parameter "outputRegionForThread"
-      *
-      * \sa ImageToImageFilter::ThreadedGenerateData(),
-      *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
-                               int threadId );
+  /** MeanShiftFilter can be implemented as a multithreaded filter.
+   * Therefore, this implementation provides a ThreadedGenerateData()
+   * routine which is called for each processing thread. The output
+   * image data is allocated automatically by the superclass prior to
+   * calling ThreadedGenerateData().  ThreadedGenerateData can only
+   * write to the portion of the output image specified by the
+   * parameter "outputRegionForThread"
+   *
+   * \sa ImageToImageFilter::ThreadedGenerateData(),
+   *     ImageToImageFilter::GenerateData() */
+  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread, int threadId);
 
   virtual void AfterThreadedGenerateData();
 
@@ -579,19 +596,22 @@ protected:
   virtual void CalculateMeanShiftVector(const typename RealVectorImageType::Pointer inputImagePtr,
                                         const RealVector& jointPixel, const OutputRegionType& outputRegion,
                                         RealVector& meanShiftVector);
+#ifdef USEBUCKET
   virtual void CalculateMeanShiftVectorBucket(const RealVector& jointPixel, RealVector& meanShiftVector);
+#endif
+
 private:
   MeanShiftSmoothingImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&);             //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Range bandwidth */
-  RealType        m_RangeBandwidth;
+  RealType m_RangeBandwidth;
 
   /** Spatial bandwidth */
-  RealType      m_SpatialBandwidth;
+  RealType m_SpatialBandwidth;
 
   /** Radius of pixel neighborhood, determined by the kernel from the spatial bandwidth  */
-  InputSizeType      m_SpatialRadius;
+  InputSizeType m_SpatialRadius;
 
   /** Threshold on the squared norm of the mean shift vector to decide when to stop iterating **/
   double m_Threshold;
@@ -600,7 +620,7 @@ private:
   unsigned int m_MaxIterationNumber;
 
   /** Kernel object, implementing operator() which returns a weight between 0 and 1
-* depending on the squared norm given in parameter **/
+   * depending on the squared norm given in parameter **/
   KernelType m_Kernel;
 
   /** Number of components per pixel in the input image */
@@ -619,17 +639,22 @@ private:
 
   /** Boolean to enable mode search  */
   bool m_ModeSearch;
+
+#ifdef USEBUCKET
   /** Boolean to enable bucket optimization */
   bool m_BucketOptimization;
+#endif
 
   /** Mode counters (local to each thread) */
   itk::VariableLengthVector<LabelType> m_NumLabels;
   /** Number of bits used to represent the threadId in the most significant bits
-  of labels */
+   of labels */
   unsigned int m_ThreadIdNumberOfBits;
 
+#ifdef USEBUCKET
   typedef Meanshift::BucketImage<RealVectorImageType> BucketImageType;
   BucketImageType m_BucketImage;
+#endif
 
 };
 
