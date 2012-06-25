@@ -9,8 +9,8 @@ What OTB does provide---besides the toolbox proper---is a
 large set of test files and examples that will introduce you to OTB concepts
 and will show you how to use OTB in your own projects. 
 
-Since the release 3.12, OTB embedded a specific framework to generate applications
-in more user-friendly way. The majority of the applications available in the
+Since the release 3.12, OTB embeds a specific framework to generate applications
+in a more user-friendly way. The majority of the applications available in the
 OTB-Applications packages have been revamped into the main OTB package. Now if you 
 activate the specific option \code{BUILD\_APPLICATIONS}, OTB build for each 
 application one shared library (also known as plugin). This plugin can be
@@ -60,7 +60,7 @@ intend to do.
 \hline
 \textbf{MacOS X 10.5 and higher} &  & app's DMG file (see section~\ref{ssec:mac_binaries}) &  & \\
 \hline
-\textbf{Ubuntu Linux 11.10, 11.04, 10.10 and 10.04 (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries})&  \\
+\textbf{Ubuntu Linux 12.04, 11.10, and 10.04 (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries})&  \\
 \hline
 \textbf{OpenSuse 11.X and higher (32/64 bits)} & RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) & \\
 \hline
@@ -136,10 +136,11 @@ Click on the file to launch Monteverdi.
 
 \subsection{Linux}
 
-\subsubsection{Ubuntu 10.04, 10.10, 11.04 and 11.10}
+\subsubsection{Ubuntu 10.04, 11.10 and 12.04}
 \label{ssec:ubuntu_binaries}
-For Ubuntu 10.04 (Lucid Lynx), 10.10 (Maverick Meerkat), 11.04 (Natty Narwhal) and 11.10 (Oneiric Ocelot), OTB, 
-OTB-Applications, Monteverdi and OTB-Wrapping packages are available through APT repositories.
+For Ubuntu 10.04 (Lucid Lynx), 11.10 (Oneiric Ocelot) and 12.04 (Precise Pangolin), OTB, 
+OTB-Applications, Monteverdi and OTB-Wrapping packages are available as Debian packages 
+through APT repositories.
 
 If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
 \begin{verbatim}
@@ -309,7 +310,7 @@ MS-Windows, Linux on Intel-compatible hardware, Solaris and Mac
 OSX.  It is known to work with the following compilers:
 \begin{itemize}
 \item Visual Studio C++ 9.0 .NET 2008, Visual Studio Express 2008 and 2010 on MS-Windows
-\item GCC (4.1.X, 4.2.X, 4.3.X, 4.4.X, 4.5.X, 4.6.X) on Unix/Linux systems
+\item GCC (4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7) on Unix/Linux systems
 \item GCC on Mac (OSX 10.5, OSX 10.6) systems
 \end{itemize}
 
@@ -337,7 +338,7 @@ hg clone http://hg.orfeo-toolbox.org/OTB
 
 Using Mercurial, you can easily navigate through the different version. For instance, this brings you to the 3.12.0 source code version:
 \begin{verbatim}
-hg update -r 3.12.0
+hg update -r 3.14.0
 \end{verbatim}
 
 And this brings you to the latest development version:
