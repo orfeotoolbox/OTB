@@ -250,6 +250,9 @@ private:
     AddParameter(ParameterType_Choice,"mode.vector.outmode","Writing mode for the output vector file");
     SetParameterDescription("mode.vector.outmode","This allows to set the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.");
 
+    AddChoice("mode.vector.outmode.ulco","Update output vector file, only allow to create new layers");
+    SetParameterDescription("mode.vector.outmode.ulco","The output vector file is opened in update mode if existing. If the output layer already exists, the application stops, leaving it untouched.");
+
     AddChoice("mode.vector.outmode.ovw","Overwrite output vector file if existing.");
     SetParameterDescription("mode.vector.outmode.ovw","If the output vector file already exists, it is completely destroyed (including all its layers) and recreated from scratch.");
 
@@ -258,9 +261,6 @@ private:
     
     AddChoice("mode.vector.outmode.ulu","Update output vector file, update existing layer");
     SetParameterDescription("mode.vector.outmode.ulu","The output vector file is opened in update mode if existing. If the output layer already exists, the new geometries are appended to the layer.");
-
-    AddChoice("mode.vector.outmode.ulco","Update output vector file, only allow to create new layers");
-    SetParameterDescription("mode.vector.outmode.ulu","The output vector file is opened in update mode if existing. If the output layer already exists, the application stops, leaving it untouched.");
     
     AddParameter(ParameterType_InputImage, "mode.vector.inmask", "Mask Image");
     SetParameterDescription("mode.vector.inmask", "Only pixels whose mask value is strictly positive will be segmented.");
@@ -447,8 +447,13 @@ private:
       // Retrieve output filename as well as layer names
       std::string dataSourceName = GetParameterString("mode.vector.out");
 
+      // Retrieve the output vector opening mode
+      std::string outmode = GetParameterString("mode.vector.outmode");
+
+      std::vector<std::string> options = GetParameterStringList("mode.vector.ogroptions");
+
       // Create the DataSource in the appropriate mode
-      if(GetParameterString("mode.vector.outmode") == "ovw")
+      if(outmode == "ovw")
         {
         // Create the datasource
         ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
@@ -457,14 +462,57 @@ private:
         // datasource is blank
         layer = ogrDS->CreateLayer(GetParameterString("mode.vector.layername"),
                                    &oSRS,wkbMultiPolygon,
-                                   GetParameterStringList("mode.vector.ogroptions"));
+                                   options);
+        // And create the field
+        OGRFieldDefn field(this->GetParameterString("mode.vector.fieldname").c_str(),OFTInteger);
+        layer.CreateField(field,true);
+        }
+      else if(outmode == "ulovw")
+        {
+        // Create the datasource
+        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerOverwrite);
+
+        // and create the layer since we are in overwrite mode, the
+        // datasource is blank
+        layer = ogrDS->CreateLayer(GetParameterString("mode.vector.layername"),
+                                   &oSRS,wkbMultiPolygon,
+                                   options);
+        // And create the field
+        OGRFieldDefn field(this->GetParameterString("mode.vector.fieldname").c_str(),OFTInteger);
+        layer.CreateField(field,true);
+        
+        }
+      else if(outmode == "ulu")
+        {
+        // Create the datasource
+        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
+        // and create the layer since we are in overwrite mode, the
+        // datasource is blank
+        layer = ogrDS->CreateLayer(GetParameterString("mode.vector.layername"),
+                                   &oSRS,wkbMultiPolygon,
+                                   options);
+        // And create the field
+        OGRFieldDefn field(this->GetParameterString("mode.vector.fieldname").c_str(),OFTInteger);
+        layer.CreateField(field,true);
+
+        }
+      else if(outmode == "ulco")
+        {
+        // Create the datasource
+        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
+
+        // and create the layer since we are in overwrite mode, the
+        // datasource is blank
+        layer = ogrDS->CreateLayer(GetParameterString("mode.vector.layername"),
+                                   &oSRS,wkbMultiPolygon,
+                                   options);
         // And create the field
         OGRFieldDefn field(this->GetParameterString("mode.vector.fieldname").c_str(),OFTInteger);
         layer.CreateField(field,true);
         }
       else
         {
-        otbAppLogFATAL(<<"outmode not handled yet");
+        otbAppLogFATAL(<<"outmode not handled yet: "<< outmode);
         }
       }
 
