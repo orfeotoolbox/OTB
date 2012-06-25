@@ -148,7 +148,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                               ${${lmode}_parameters}
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
-                              ${${lmode}_ref_path}/${OUTFILE}
+                              ${${lmode}_ref_path}/${OUTFILE}_ULU
                               ${TEMP}/${OUTFILE}                           
                      )
 
@@ -169,7 +169,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
                               ${${lmode}_parameters}
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
-                              ${${lmode}_ref_path}/${OUTFILE}_ULCO
+                              ${${lmode}_ref_path}/${OUTFILE}
                               ${TEMP}/${OUTFILE}                           
                      )
 
