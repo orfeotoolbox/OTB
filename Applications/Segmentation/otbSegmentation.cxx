@@ -491,9 +491,15 @@ private:
         layer = ogrDS->CreateLayer(GetParameterString("mode.vector.layername"),
                                    &oSRS,wkbMultiPolygon,
                                    options);
-        // And create the field
-        OGRFieldDefn field(this->GetParameterString("mode.vector.fieldname").c_str(),OFTInteger);
-        layer.CreateField(field,true);
+
+        // And create the field if necessary
+        std::string fieldName = this->GetParameterString("mode.vector.fieldname");
+        OGRFeatureDefn & ogrFeatureDfn = layer.GetLayerDefn();
+        if (-1 != ogrFeatureDfn.GetFieldIndex(fieldName.c_str()))
+          {
+          OGRFieldDefn field(fieldName.c_str(),OFTInteger);
+          layer.CreateField(field,true);
+          }
 
         }
       else if(outmode == "ulco")
