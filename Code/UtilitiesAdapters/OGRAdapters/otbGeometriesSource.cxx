@@ -61,7 +61,8 @@ void otb::GeometriesSource::SetOutput(OutputGeometriesType* output, unsigned int
   Superclass::SetNthOutput(idx, output);
 }
 
-/*virtual*/ void otb::GeometriesSource::DoAllocateOutputs()
+/*virtual*/
+void otb::GeometriesSource::DoAllocateOutputs()
 {
   // The default behaviour is to prepare a in-memory OGR datasource in case
   // filters are piped.
@@ -72,10 +73,13 @@ void otb::GeometriesSource::SetOutput(OutputGeometriesType* output, unsigned int
     GeometriesSet::Pointer gs = GeometriesSet::New(); // in-memory DataSource
     assert(gs);
     this->SetOutput(gs);
+    ///\todo Check whether we need to increase the count of the \c GeometriesSet as
+    ///it'll get reelased at the end of function the scope.
     }
 }
 
-/*virtual*/ void otb::GeometriesSource::PrepareOutputs()
+/*virtual*/
+void otb::GeometriesSource::PrepareOutputs()
 {
   DoAllocateOutputs();
   Superclass::PrepareOutputs();

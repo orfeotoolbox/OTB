@@ -36,7 +36,6 @@ class GeometriesSet;
  * \ingroup  gGeometry Filters
  * Filters of geometries sets.
  */
-
 namespace otb
 {
 
@@ -44,7 +43,22 @@ namespace otb
  * \class GeometriesSource
  * Source of geometries & Root of the geometries filters hierarchy.
  * This class provides a kind of \em reader for geometries sets.
- * \todo: disable Graft
+ *
+ * Unlike others filters, the \em output has to be built from outside and given
+ * to the \c GeometriesSource. If no \em output has been defined at the moment
+ * the filter begins processing, by default the \c ogr::DataSource will have
+ * have an \em in-memory storage.
+ *
+ * \internal
+ * This particular behaviour is the consequence that, to exist, a \c
+ * ogr::DataSource needs to know how it is stored. We could have permitted to
+ * work on an \em in-memory \c ogr::DataSource, and then store the result into
+ * another \em on-disk \c ogr::DataSource. This wouldn't have been efficient at
+ * all. Hence the design adopted.
+ *
+ * \note As OGR data sources don't support multiple re-rentrant access, a \c
+ * ogr::DataSource can't be grafted, and as a consequence, \c GeometriesSource
+ * subtypes can't be grafted as well.
  * \since OTB v 3.14.0
  */
 class ITK_EXPORT GeometriesSource : public itk::ProcessObject, boost::noncopyable
@@ -81,17 +95,27 @@ public:
   /** Overriding \c GetOutput() functions */
   virtual OutputGeometriesType* GetOutput(unsigned int idx);
 
+  /**
+   * Output mutator.
+   * \param[in,out] output  \c GeometriesSource where output result will be
+   * written.
+   * \param[in] idx  index of the output assigned to the \c GeometriesSource.
+   *
+   * \throw std::bad_alloc if no new output can be added.
+   */
   virtual void SetOutput(OutputGeometriesType* output, unsigned int idx = 0);
   //@}
 
-  /** Specialized hook for \c GeometriesSource.
-   * Makes sure the output(s) is (/are) allocated before initializing them.
+  /** \c ProcessObject hook Specialized for \c GeometriesSource.
+   * This function makes sure the output(s) is (/are) allocated before
+   * initializing them.
+   * \post <tt>GetOutput() != NULL</tt>
    */
   virtual void PrepareOutputs();
 
 protected:
   /** Default constructor.
-   * \post Required number of outputs = 1
+   * \post Required number of outputs == 1
    */
   GeometriesSource();
   /** Destructor.
@@ -101,7 +125,7 @@ protected:
 
   /** Ensures that the output geometries are allocated before processing.
    * If the output hasn't been set, at this point, the default output geometries
-   * set will an <em>in-memory</em> \c DataSource.
+   * set will be an <em>in-memory</em> \c ogr::DataSource.
    * \post <tt>GetOutput() != NULL</tt>
    */
   virtual void  DoAllocateOutputs();

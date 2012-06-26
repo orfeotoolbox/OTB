@@ -80,6 +80,7 @@ protected:
 private:
   void Process(OutputGeometriesType &inout);
   void Process(InputGeometriesType const& source, OutputGeometriesType &destination);
+
   /**\name Filter specialization hooks.
    * Filter specialization hooks.
    * These functions are meant to be specialized by the actual filter.
