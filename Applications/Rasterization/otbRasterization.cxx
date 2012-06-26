@@ -156,8 +156,6 @@ private:
     bool validInputProjRef = false;
     std::string inputProjectionRef = "";
 
-    otb::ogr::DataSource::const_iterator lit = ogrDS->begin();
-
     // Retrieve extent
     double ulx, uly, lrx, lry;
     bool extentAvailable = true;
