@@ -1081,9 +1081,9 @@ AdhesionCorrectionFilter<TImage, TMask>
         if (disparity_jump->GetPixel(index) == 1)
           {
           pp++;
-          for (int i=l+1; i<=0; i++)
+          for (int ii=l+1; ii<=0; ii++)
             {
-            index[0]=index_pos[0]+i;
+            index[0]=index_pos[0]+ii;
             new_disparityIt.SetIndex(index);
             new_disparityIt.Set(0);
             new_maskIt.SetIndex(index);
@@ -1147,9 +1147,9 @@ AdhesionCorrectionFilter<TImage, TMask>
         if(disparity_jump->GetPixel(index) == 3)
           {
           pp++;
-          for(int i=l+1; i<=0; i++)
+          for(int ii=l+1; ii<=0; ii++)
             {
-            index[0]=index_pos[0]+i;
+            index[0]=index_pos[0]+ii;
             new_disparityIt.SetIndex(index);
             new_disparityIt.Set(0);
             new_maskIt.SetIndex(index);
@@ -1210,9 +1210,9 @@ AdhesionCorrectionFilter<TImage, TMask>
         if(disparity_jump->GetPixel(index)==2)
           {
           pp++;
-          for (int i=l-1; i>=0; i--)
+          for (int ii=l-1; ii>=0; ii--)
             {
-            index[0]=index_pos[0]+i;
+            index[0]=index_pos[0]+ii;
             new_disparityIt.SetIndex(index);
             new_disparityIt.Set(0);
             new_maskIt.SetIndex(index);
@@ -1272,9 +1272,9 @@ AdhesionCorrectionFilter<TImage, TMask>
         if (disparity_jump->GetPixel(index) == 4)
           {
           pp++;
-          for (int i=l-1; i>=0; i--)
+          for (int ii=l-1; ii>=0; ii--)
             {
-            index[0]=index_pos[0]+i;
+            index[0]=index_pos[0]+ii;
             new_disparityIt.SetIndex(index);
             new_disparityIt.Set(0);
             new_maskIt.SetIndex(index);
