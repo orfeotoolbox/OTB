@@ -575,9 +575,12 @@ private:
       m_ContinuousColorMapper->UseInputImageExtremaForScalingOff();
 
       // Set the lut
-      std::string lut = GetParameterString("method.continuous.lut");
+      std::string lutTmp = GetParameterString("method.continuous.lut");
+      std::string lutNameParam =  "method.continuous.lut." + lutTmp;
+      std::string lut = GetParameterName(lutNameParam);
 
       otbAppLogINFO("LUT: "<<lut<<std::endl);
+
       if (lut == "Relief")
         {
         ReliefColorMapFunctorType::Pointer reliefFunctor = ReliefColorMapFunctorType::New();
@@ -587,6 +590,7 @@ private:
         {
         m_ContinuousColorMapper->SetColormap((ColorMapFilterType::ColormapEnumType) m_LutMap[lut]);
         }
+
 
       m_ContinuousColorMapper->GetColormap()->SetMinimumInputValue(GetParameterFloat("method.continuous.min"));
       m_ContinuousColorMapper->GetColormap()->SetMaximumInputValue(GetParameterFloat("method.continuous.max"));
