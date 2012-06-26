@@ -28,6 +28,7 @@ MACRO(itkCHECK_CXX_ACCEPTS_FLAGS FLAGS VAR)
    SET(_UNKNOWN_FLAG_MSGS
      "ignoring unknown option"
      "unrecognized option"
+     "unrecognized command line option"
      "Incorrect command line option"
    )
    FOREACH(MSG ${_UNKNOWN_FLAG_MSGS})
