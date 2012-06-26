@@ -401,7 +401,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
     // 3 - Next, we will compute epipolar lines direction in both
     // images
-    double a1,b1,a2,b2;
+    double a1,b1,a2;
 
     // First, for image 1
 
@@ -454,7 +454,6 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     endLine2 = m_LeftToRightTransform->TransformPoint(epiPoint1);
     
     a2 = (endLine2[1] - startLine2[1]) / (endLine2[0] - startLine2[0]);
-    b2 = startLine2[1] - a2 * startLine2[0];
 
     // 4 - Determine position of next points
 
