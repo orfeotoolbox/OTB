@@ -28,7 +28,7 @@ RCC8EdgeIterator<TGraph>
 ::RCC8EdgeIterator()
 {
   m_Graph = GraphType::New();
-  tie(m_Iter, m_End) = edges(*m_Graph->GetGraph());
+  boost::tuples::tie(m_Iter, m_End) = edges(*m_Graph->GetGraph());
 }
 /**
  * Copy operator.
@@ -49,7 +49,7 @@ RCC8EdgeIterator<TGraph>
 ::RCC8EdgeIterator(TGraph * graph)
 {
   m_Graph = graph;
-  tie(m_Iter, m_End) = edges(*m_Graph->GetGraph());
+  boost::tuples::tie(m_Iter, m_End) = edges(*m_Graph->GetGraph());
 }
 /**
  * Get the current edge value.
@@ -132,7 +132,7 @@ void
 RCC8EdgeIterator<TGraph>
 ::GoToBegin(void)
 {
-  tie(m_Iter, m_End) = edges(*m_Graph->GetGraph());
+  boost::tuples::tie(m_Iter, m_End) = edges(*m_Graph->GetGraph());
 }
 /**
  * Increment.

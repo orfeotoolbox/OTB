@@ -28,7 +28,7 @@ RCC8InEdgeIterator<TGraph>
 ::RCC8InEdgeIterator()
 {
   m_Graph = GraphType::New();
-  tie(m_Iter, m_End) = in_edges(0, *m_Graph->GetGraph());
+  boost::tuples::tie(m_Iter, m_End) = in_edges(0, *m_Graph->GetGraph());
 }
 /**
  * Copy operator.
@@ -51,7 +51,7 @@ RCC8InEdgeIterator<TGraph>
 {
   m_Graph = graph;
   m_VertexIndex = vertex;
-  tie(m_Iter, m_End) = in_edges(vertex, *m_Graph->GetGraph());
+  boost::tuples::tie(m_Iter, m_End) = in_edges(vertex, *m_Graph->GetGraph());
 }
 /**
  * Get the current edge value.
@@ -109,7 +109,7 @@ void
 RCC8InEdgeIterator<TGraph>
 ::GoToBegin(void)
 {
-  tie(m_Iter, m_End) = in_edges(m_VertexIndex, *m_Graph->GetGraph());
+  boost::tuples::tie(m_Iter, m_End) = in_edges(m_VertexIndex, *m_Graph->GetGraph());
 }
 /**
  * Increment.
