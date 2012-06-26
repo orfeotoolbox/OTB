@@ -948,7 +948,7 @@ AdhesionCorrectionFilter<TImage, TMask>
           {
           double m_max = -10000000.;
           double m_min = -m_max;
-          int Count=0;
+          Count=0;
           for(int j= -big_win; j<= big_win; j++)
             {
             for(int i= -big_win; i<= big_win; i++)
