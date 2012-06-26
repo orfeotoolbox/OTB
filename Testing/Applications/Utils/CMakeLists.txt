@@ -291,3 +291,17 @@ OTB_TEST_APPLICATION(NAME apTvUtPixelValue
                              ${BASELINE_FILES}/apTvUtPixelValue.txt
                 	     ${TEMP}/apTvUtPixelValue.txt
                              )
+#--- ColorMapping ---
+OTB_TEST_APPLICATION(NAME apTvUtColorMappingContinuousLUTJet
+                     APP ColorMapping
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif 
+                             -method continuous
+                             -method.continuous.lut jet
+                             -method.continuous.min 100 
+                             -method.continuous.max 500
+                             -out ${TEMP}/QB_Toulouse_Ortho_PAN_LUTJet.tif uint8
+                     VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE}/apTvUtColorMappingContinuousLUTJet.tif
+                	         ${TEMP}/QB_Toulouse_Ortho_PAN_LUTJet.tif)
+       
+             
