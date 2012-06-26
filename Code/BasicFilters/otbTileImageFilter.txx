@@ -63,8 +63,6 @@ TileImageFilter<TImage>
   typename ImageType::SpacingType spacing = this->GetInput()->GetSpacing();
   unsigned int nbComp = this->GetInput()->GetNumberOfComponentsPerPixel();
 
-  typename ImageType::SizeType outputSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
-
   m_ColumnsSizes.clear();
   m_RowsSizes.clear();
 
