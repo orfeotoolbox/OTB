@@ -1737,9 +1737,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double ya = static_cast<double>(vDisp_i -1);
       double yb = static_cast<double>(vDisp_i);
       double yc = static_cast<double>(vDisp_i +1);
-      double s_ya = neighborsMetric[1][0];
       double s_yb = neighborsMetric[1][1];
-      double s_yc = neighborsMetric[1][2];
       
       double yd;
       double s_yd;
@@ -1761,7 +1759,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           if ((s_yd<s_yb && m_Minimize) || (s_yd>s_yb && !m_Minimize))
             {
             ya = yb;
-            s_ya = s_yb;
             
             yb = yd;
             s_yb = s_yd;
@@ -1769,7 +1766,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           else
             {
             yc = yd;
-            s_yc = s_yd;
             }
           }
         else
@@ -1785,7 +1781,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           if ((s_yd<s_yb && m_Minimize) || (s_yd>s_yb && !m_Minimize))
             {
             yc = yb;
-            s_yc = s_yb;
             
             yb = yd;
             s_yb = s_yd;
@@ -1793,7 +1788,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           else
             {
             ya = yd;
-            s_ya = s_yd;
             }
           }
         }
@@ -1806,9 +1800,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double xa = static_cast<double>(hDisp_i -1);
       double xb = static_cast<double>(hDisp_i);
       double xc = static_cast<double>(hDisp_i +1);
-      double s_xa = neighborsMetric[0][1];
       double s_xb = neighborsMetric[1][1];
-      double s_xc = neighborsMetric[2][1];
       
       double xd;
       double s_xd;
@@ -1830,7 +1822,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           if ((s_xd<s_xb && m_Minimize) || (s_xd>s_xb && !m_Minimize))
             {
             xa = xb;
-            s_xa = s_xb;
             
             xb = xd;
             s_xb = s_xd;
@@ -1838,7 +1829,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           else
             {
             xc = xd;
-            s_xc = s_xd;
             }
           }
         else
@@ -1854,7 +1844,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           if ((s_xd<s_xb && m_Minimize) || (s_xd>s_xb && !m_Minimize))
             {
             xc = xb;
-            s_xc = s_xb;
             
             xb = xd;
             s_xb = s_xd;
@@ -1862,7 +1851,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           else
             {
             xa = xd;
-            s_xa = s_xd;
             }
           }
         }
@@ -1876,18 +1864,12 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       double ya = static_cast<double>(vDisp_i - 1);
       double xb = static_cast<double>(hDisp_i);
       double yb = static_cast<double>(vDisp_i);
-      double xc = static_cast<double>(hDisp_i);
       double yc = static_cast<double>(vDisp_i + 1);
       double xe = static_cast<double>(hDisp_i - 1);
       double ye = static_cast<double>(vDisp_i);
       double xf = static_cast<double>(hDisp_i + 1);
-      double yf = static_cast<double>(vDisp_i);
       
-      double s_a = neighborsMetric[1][0];
       double s_b = neighborsMetric[1][1];
-      double s_c = neighborsMetric[1][2];
-      double s_e = neighborsMetric[0][1];
-      double s_f = neighborsMetric[2][1];
       
       double xd = xb;
       double yd = yb;
@@ -1913,7 +1895,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
             centreHasMoved = true;
             
             ya = yb;
-            s_a = s_b;
             
             yb = yd;
             s_b = s_d;
@@ -1921,7 +1902,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           else
             {
             yc = yd;
-            s_c = s_d;
             }
           }
         else
@@ -1940,7 +1920,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
             centreHasMoved = true;
             
             yc = yb;
-            s_c = s_b;
             
             yb = yd;
             s_b = s_d;
@@ -1948,14 +1927,12 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           else
             {
             ya = yd;
-            s_a = s_d;
             }
           }
         if (centreHasMoved)
           {
           // update points e and f
           ye = yb;
-          yf = yb;
           
           offsetTransfo[0] = xe - static_cast<double>(hDisp_i);
           offsetTransfo[1] = ye - static_cast<double>(vDisp_i);
@@ -1963,14 +1940,13 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
-          s_e = m_Functor(leftIt,shiftedIt);
+
           
           offsetTransfo[0] = xf - static_cast<double>(hDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
-          s_f = m_Functor(leftIt,shiftedIt);
           }
         
         // Horizontal step
@@ -1991,7 +1967,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
             centreHasMoved = true;
             
             xe = xb;
-            s_e = s_b;
             
             xb = xd;
             s_b = s_d;
@@ -1999,7 +1974,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           else
             {
             xf = xd;
-            s_f = s_d;
             }
           }
         else
@@ -2018,7 +1992,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
             centreHasMoved = true;
             
             xf = xb;
-            s_f = s_b;
             
             xb = xd;
             s_b = s_d;
@@ -2026,14 +1999,12 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           else
             {
             xe = xd;
-            s_e = s_d;
             }
           }
         if (centreHasMoved)
           {
           // update a and c
           xa = xb;
-          xc = xb;
           
           offsetTransfo[0] = xa - static_cast<double>(hDisp_i);
           offsetTransfo[1] = ya - static_cast<double>(vDisp_i);
@@ -2041,14 +2012,12 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
-          s_a = m_Functor(leftIt,shiftedIt);
           
           offsetTransfo[1] = yc - static_cast<double>(vDisp_i);
           transfo->SetOffset(offsetTransfo);
           resampler->Modified();
           resampler->Update();
           shiftedIt.Initialize(m_Radius,resampler->GetOutput(),tinyShiftedRegion);
-          s_c = m_Functor(leftIt,shiftedIt);
           }
         
         }
