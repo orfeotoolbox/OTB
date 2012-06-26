@@ -156,7 +156,7 @@ public:
   typedef typename TImage::InternalPixelType InternalPixelType;
 
   itkTypeMacro(FastImageRegionConstIterator, ImageRegionConstIterator)
- ;
+;
 
   FastImageRegionConstIterator() :
     Superclass()
@@ -458,8 +458,8 @@ public:
 
   /** Type macro */
   itkTypeMacro(MeanShiftSmoothingImageFilter, ImageToImageFilter)
- ; itkNewMacro(Self)
- ;
+; itkNewMacro(Self)
+;
 
   /** Template parameters typedefs */
 
@@ -499,42 +499,42 @@ public:
    * of the neighborhood for each pixel
    */
   itkSetMacro(SpatialBandwidth, RealType)
- ; itkGetConstReferenceMacro(SpatialBandwidth, RealType)
- ;
+; itkGetConstReferenceMacro(SpatialBandwidth, RealType)
+;
 
   /** Sets the spectral bandwidth (or radius for a uniform kernel) for pixels
    * to be included in the same mode
    */
   itkSetMacro(RangeBandwidth, RealType)
- ; itkGetConstReferenceMacro(RangeBandwidth, RealType)
- ;
+; itkGetConstReferenceMacro(RangeBandwidth, RealType)
+;
 
   /** Sets the maximum number of algorithm iterations */
   itkGetConstReferenceMacro(MaxIterationNumber, unsigned int)
- ; itkSetMacro(MaxIterationNumber, unsigned int)
- ;
+; itkSetMacro(MaxIterationNumber, unsigned int)
+;
 
   /** Sets the threshold value for the mean shift vector's squared norm,
    * under which convergence is assumed
    */
   itkGetConstReferenceMacro(Threshold, double)
- ; itkSetMacro(Threshold, double)
- ;
+; itkSetMacro(Threshold, double)
+;
 
   /** Toggle mode search, which is enabled by default.
    * When off, the output label image is not available
    * Be careful, with this option, the result will slightly depend on thread number.
    */
   itkSetMacro(ModeSearch, bool)
- ; itkGetConstReferenceMacro(ModeSearch, bool)
- ;
+; itkGetConstReferenceMacro(ModeSearch, bool)
+;
 
 #if 0
   /** Toggle bucket optimization, which is disabled by default.
    */
   itkSetMacro(BucketOptimization, bool)
- ; itkGetConstReferenceMacro(BucketOptimization, bool)
- ;
+; itkGetConstReferenceMacro(BucketOptimization, bool)
+;
 #endif
 
   /** Returns the const spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
