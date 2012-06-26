@@ -131,12 +131,10 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULOVW
                               ${TEMP}/${OUTFILE}                           
                      )
 
-SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULOVW PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode})
+SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULOVW PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode} RESSOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULU
 SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulu")
-                     
-SET(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                      APP      Segmentation
@@ -152,12 +150,10 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                               ${TEMP}/${OUTFILE}                           
                      )
 
-SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULU PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode})
+SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULU PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode} RESSOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULCO
 SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulco")
-                     
-SET(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
                      APP      Segmentation
@@ -173,4 +169,4 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
                               ${TEMP}/${OUTFILE}                           
                      )
 
-SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULCO PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode} WILL_FAIL TRUE)
+SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULCO PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode} WILL_FAIL TRUE RESSOURCE_LOCK ${OUTFILE})
