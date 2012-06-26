@@ -121,7 +121,7 @@ void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::GenerateData ()
 {
-  switch ( DirectionOfTransformation )
+  switch ( static_cast<int>(DirectionOfTransformation) )
   {
   case static_cast<int>(Transform::FORWARD):
     return ForwardGenerateData();
