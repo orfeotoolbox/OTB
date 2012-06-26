@@ -204,7 +204,7 @@ MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter
 
   //define default kernel paramerters...
   kernelType k[2] = {Uniform, Uniform};
-  int        P[2] = {2, inputPtr->GetNumberOfComponentsPerPixel()};
+  int        P[2] = {2, static_cast<int>(inputPtr->GetNumberOfComponentsPerPixel())};
   float      tempH[2] = {1.0, 1.0};
 
   edisonProcessor.DefineKernel(k, tempH, P, 2);
