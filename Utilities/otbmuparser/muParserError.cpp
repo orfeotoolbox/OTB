@@ -27,80 +27,49 @@
 
 namespace mu
 {
-  const ParserErrorMsg ParserErrorMsg::m_Instance;
-
-  //------------------------------------------------------------------------------
-  const ParserErrorMsg& ParserErrorMsg::Instance()
+ParserErrorMsg ParserErrorMsg::Instance()
   {
-    return m_Instance;
+  return ParserErrorMsg();
   }
+
+static string_type::value_type const* m_vErrMsg[] = {
+  _T("Unexpected operator \"$TOK$\" found at position $POS$")
+    , _T("Undefined token \"$TOK$\" found at position $POS$.")
+    , _T("Unexpected end of expression at position $POS$")
+    , _T("Unexpected argument separator at position $POS$")
+    , _T("Function arguments used without a function (position: $POS$)")
+    , _T("Unexpected value \"$TOK$\" found at position $POS$")
+    , _T("Unexpected variable \"$TOK$\" found at position $POS$")
+    , _T("Unexpected parenthesis \"$TOK$\" at position $POS$")
+    , _T("Unexpected string token found at position $POS$.")
+    , _T("String function called with a non string type of argument.")
+    , _T("String value used where a numerical argument is expected.")
+    , _T("Missing parenthesis")
+    , _T("Unexpected function \"$TOK$\" at position $POS$")
+    , _T("Unterminated string starting at position $POS$.")
+    , _T("Too many parameters for function \"$TOK$\" at expression position $POS$")
+    , _T("Too few parameters for function \"$TOK$\" at expression position $POS$")
+    , _T("No suitable overload for operator \"$TOK$\" at position $POS$.")
+    , _T("Function result is a string.")
+    , _T("Invalid function-, variable- or constant name.")
+    , _T("user defined binary operator \"$TOK$\" conflicts with a built in operator.")
+    , _T("Invalid pointer to callback function.")
+    , _T("Invalid pointer to variable.")
+    , _T("Expression is empty.")
+    , _T("Name conflict")
+    , _T("Invalid value for operator priority (must be greater or equal to zero).")
+    , _T("Domain error")
+    , _T("Divide by zero")
+    , _T("Parser error.")
+    , _T("Decimal separator is identic to function argument separator.")
+    , _T("Internal error")
+    , _T("")
+};
 
   //------------------------------------------------------------------------------
   string_type ParserErrorMsg::operator[](unsigned a_iIdx) const
   {
-    return (a_iIdx<m_vErrMsg.size()) ? m_vErrMsg[a_iIdx] : string_type();
-  }
-
-
-  //---------------------------------------------------------------------------
-  ParserErrorMsg::~ParserErrorMsg()
-  {}
-
-  //---------------------------------------------------------------------------
-  /** \brief Assignement operator is deactivated.
-  */
-  ParserErrorMsg& ParserErrorMsg::operator=(const ParserErrorMsg& )
-  {
-    assert(false);
-    return *this;
-  }
-
-  //---------------------------------------------------------------------------
-  ParserErrorMsg::ParserErrorMsg(const ParserErrorMsg&)
-  {}
-
-  //---------------------------------------------------------------------------
-  ParserErrorMsg::ParserErrorMsg()
-    :m_vErrMsg(0)
-  {
-    m_vErrMsg.resize(ecCOUNT);
-
-    m_vErrMsg[ecUNASSIGNABLE_TOKEN]  = _T("Undefined token \"$TOK$\" found at position $POS$.");
-    m_vErrMsg[ecINTERNAL_ERROR]      = _T("Internal error");
-    m_vErrMsg[ecINVALID_NAME]        = _T("Invalid function-, variable- or constant name.");
-    m_vErrMsg[ecINVALID_FUN_PTR]     = _T("Invalid pointer to callback function.");
-    m_vErrMsg[ecEMPTY_EXPRESSION]    = _T("Expression is empty.");
-    m_vErrMsg[ecINVALID_VAR_PTR]     = _T("Invalid pointer to variable.");
-    m_vErrMsg[ecUNEXPECTED_OPERATOR] = _T("Unexpected operator \"$TOK$\" found at position $POS$");
-    m_vErrMsg[ecUNEXPECTED_EOF]      = _T("Unexpected end of expression at position $POS$");
-    m_vErrMsg[ecUNEXPECTED_ARG_SEP]  = _T("Unexpected argument separator at position $POS$");
-    m_vErrMsg[ecUNEXPECTED_PARENS]   = _T("Unexpected parenthesis \"$TOK$\" at position $POS$");
-    m_vErrMsg[ecUNEXPECTED_FUN]      = _T("Unexpected function \"$TOK$\" at position $POS$");
-    m_vErrMsg[ecUNEXPECTED_VAL]      = _T("Unexpected value \"$TOK$\" found at position $POS$");
-    m_vErrMsg[ecUNEXPECTED_VAR]      = _T("Unexpected variable \"$TOK$\" found at position $POS$");
-    m_vErrMsg[ecUNEXPECTED_ARG]      = _T("Function arguments used without a function (position: $POS$)");
-    m_vErrMsg[ecMISSING_PARENS]      = _T("Missing parenthesis");
-    m_vErrMsg[ecTOO_MANY_PARAMS]     = _T("Too many parameters for function \"$TOK$\" at expression position $POS$");
-    m_vErrMsg[ecTOO_FEW_PARAMS]      = _T("Too few parameters for function \"$TOK$\" at expression position $POS$");
-    m_vErrMsg[ecDIV_BY_ZERO]         = _T("Divide by zero");
-    m_vErrMsg[ecDOMAIN_ERROR]        = _T("Domain error");
-    m_vErrMsg[ecNAME_CONFLICT]       = _T("Name conflict");
-    m_vErrMsg[ecOPT_PRI]             = _T("Invalid value for operator priority (must be greater or equal to zero).");
-    m_vErrMsg[ecBUILTIN_OVERLOAD]    = _T("user defined binary operator \"$TOK$\" conflicts with a built in operator.");
-    m_vErrMsg[ecUNEXPECTED_STR]      = _T("Unexpected string token found at position $POS$.");
-    m_vErrMsg[ecUNTERMINATED_STRING] = _T("Unterminated string starting at position $POS$.");
-    m_vErrMsg[ecSTRING_EXPECTED]     = _T("String function called with a non string type of argument.");
-    m_vErrMsg[ecVAL_EXPECTED]        = _T("String value used where a numerical argument is expected.");
-    m_vErrMsg[ecOPRT_TYPE_CONFLICT]  = _T("No suitable overload for operator \"$TOK$\" at position $POS$.");
-    m_vErrMsg[ecGENERIC]             = _T("Parser error.");
-    m_vErrMsg[ecLOCALE]              = _T("Decimal separator is identic to function argument separator.");
-    m_vErrMsg[ecSTR_RESULT]          = _T("Function result is a string.");
-
-    #if defined(_DEBUG)
-      for (int i=0; i<ecCOUNT; ++i)
-        if (!m_vErrMsg[i].length())
-          assert(false);
-    #endif
+    return m_vErrMsg[(a_iIdx<ecCOUNT) ? a_iIdx : ecCOUNT];
   }
 
   //---------------------------------------------------------------------------

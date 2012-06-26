@@ -1,26 +1,26 @@
 /*
-                 __________                                      
-    _____   __ __\______   \_____  _______  ______  ____ _______ 
+                 __________
+    _____   __ __\______   \_____  _______  ______  ____ _______
    /     \ |  |  \|     ___/\__  \ \_  __ \/  ___/_/ __ \\_  __ \
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
-  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
-        \/                       \/            \/      \/        
+  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|
+        \/                       \/            \/      \/
   Copyright (C) 2004-2008 Ingo Berg
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this
   software and associated documentation files (the "Software"), to deal in the Software
-  without restriction, including without limitation the rights to use, copy, modify, 
-  merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
+  without restriction, including without limitation the rights to use, copy, modify,
+  merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
   permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-  The above copyright notice and this permission notice shall be included in all copies or 
+  The above copyright notice and this permission notice shall be included in all copies or
   substantial portions of the Software.
 
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
-  NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
-  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+  NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #ifndef MU_PARSER_ERROR_H
@@ -35,7 +35,7 @@
 
 #include "muParserDef.h"
 
-/** \file 
+/** \file
     \brief This file defines the error class used by the parser.
 */
 
@@ -68,12 +68,12 @@ enum EErrorCodes
   // Invalid Parser input Parameters
   ecINVALID_NAME        = 18, ///< Invalid function, variable or constant name.
   ecBUILTIN_OVERLOAD    = 19, ///< Trying to overload builtin operator
-  ecINVALID_FUN_PTR     = 20, ///< Invalid callback function pointer 
-  ecINVALID_VAR_PTR     = 21, ///< Invalid variable pointer 
+  ecINVALID_FUN_PTR     = 20, ///< Invalid callback function pointer
+  ecINVALID_VAR_PTR     = 21, ///< Invalid variable pointer
   ecEMPTY_EXPRESSION    = 22, ///< The Expression is empty
   ecNAME_CONFLICT       = 23, ///< Name conflict
   ecOPT_PRI             = 24, ///< Invalid operator priority
-  // 
+  //
   ecDOMAIN_ERROR        = 25, ///< catch division by zero, sqrt(-1), log(0) (currently unused)
   ecDIV_BY_ZERO         = 26, ///< Division by zero (currently unused)
   ecGENERIC             = 27, ///< Generic error
@@ -82,7 +82,7 @@ enum EErrorCodes
   // internal errors
   ecINTERNAL_ERROR      = 29, ///< Internal error of any kind.
 
-  // The last two are special entries 
+  // The last two are special entries
   ecCOUNT,                    ///< This is no error code, It just stores just the total number of error codes
   ecUNDEFINED           = -1  ///< Undefined message, placeholder to detect unassigned error messages
 };
@@ -90,27 +90,14 @@ enum EErrorCodes
 //---------------------------------------------------------------------------
 /** \brief A class that handles the error messages.
 */
-class ParserErrorMsg
+struct ParserErrorMsg
 {
-public:
-    typedef ParserErrorMsg self_type;
-
-    ParserErrorMsg& operator=(const ParserErrorMsg &);
-    ParserErrorMsg(const ParserErrorMsg&);
-    ParserErrorMsg();
-
-   ~ParserErrorMsg();
-
-    static const ParserErrorMsg& Instance();
-    string_type operator[](unsigned a_iIdx) const;
-
-private:
-    std::vector<string_type>  m_vErrMsg;  ///< A vector with the predefined error messages
-    static const self_type m_Instance;    ///< The instance pointer
+  string_type operator[](unsigned int a_iIdx) const;
+  static ParserErrorMsg Instance();
 };
 
 //---------------------------------------------------------------------------
-/** \brief Error class of the parser. 
+/** \brief Error class of the parser.
 
   Part of the math parser package.
 
@@ -121,7 +108,7 @@ private:
 private:
     //------------------------------------------------------------------------------
     /** \brief Replace all ocuurences of a substring with another string. */
-    void ReplaceSubString( string_type &strSource, 
+    void ReplaceSubString( string_type &strSource,
                            const string_type &strFind,
                            const string_type &strReplaceWith);
     void Reset();
@@ -134,11 +121,11 @@ public:
                  const string_type &sTok,
                  const string_type &sFormula = string_type(_T("(formula is not available)")),
                  int a_iPos = -1);
-    ParserError( EErrorCodes a_iErrc, 
-                 int a_iPos, 
+    ParserError( EErrorCodes a_iErrc,
+                 int a_iPos,
                  const string_type &sTok);
-    ParserError( const char_type *a_szMsg, 
-                 int a_iPos = -1, 
+    ParserError( const char_type *a_szMsg,
+                 int a_iPos = -1,
                  const string_type &sTok = string_type());
     ParserError(const ParserError &a_Obj);
     ParserError& operator=(const ParserError &a_Obj);
@@ -155,12 +142,11 @@ private:
     string_type m_strMsg;     ///< The message string
     string_type m_strFormula; ///< Formula string
     string_type m_strTok;     ///< Token related with the error
-    int m_iPos;               ///< Formula position related to the error 
+    int m_iPos;               ///< Formula position related to the error
     EErrorCodes m_iErrc;      ///< Error code
-    const ParserErrorMsg &m_ErrMsg;
-};		
+    const ParserErrorMsg m_ErrMsg;
+};
 
 } // namespace mu
 
 #endif
-
