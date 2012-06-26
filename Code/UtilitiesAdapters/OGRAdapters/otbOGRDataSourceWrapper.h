@@ -520,10 +520,10 @@ private:
   OGRLayer* GetLayerUnchecked(size_t i) const;
 
   bool IsLayerModifiable(size_t i) const;
-
   bool IsLayerModifiable(std::string const& name) const;
 
   size_t GetLayerID(std::string const& name) const;
+  int GetLayerIDUnchecked(std::string const& name) const;
 
 private:
   OGRDataSource  *m_DataSource;

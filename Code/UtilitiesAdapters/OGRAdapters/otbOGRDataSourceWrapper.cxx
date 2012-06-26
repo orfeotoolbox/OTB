@@ -440,11 +440,21 @@ bool otb::ogr::DataSource::IsLayerModifiable(size_t i) const
 bool otb::ogr::DataSource::IsLayerModifiable(std::string const& layername) const
 {
   assert(m_DataSource && "Datasource not initialized");
-  const size_t id = GetLayerID(layername);
-  return IsLayerModifiable(id);
+  switch(m_OpenMode)
+  {
+    case Modes::Read:
+      return false;
+    case Modes::Update_LayerCreateOnly:
+        {
+        const int id = this->GetLayerIDUnchecked(layername);
+        return id >= m_FirstModifiableLayerID;
+        }
+    default:
+      return true;
+  }
 }
 
-size_t otb::ogr::DataSource::GetLayerID(std::string const& name) const
+int otb::ogr::DataSource::GetLayerIDUnchecked(std::string const& name) const
 {
   assert(m_DataSource && "Datasource not initialized");
   for (int i = 0, N = GetLayersCount(); i < N; i++)
@@ -457,10 +467,18 @@ size_t otb::ogr::DataSource::GetLayerID(std::string const& name) const
       return i;
       }
     }
+  return -1;
+}
 
-  itkExceptionMacro( << "Cannot fetch any layer named <" << name
-    << "> in the OGRDataSource <" << m_DataSource->GetName() << ">: "
-    << CPLGetLastErrorMsg());
+size_t otb::ogr::DataSource::GetLayerID(std::string const& name) const
+{
+  int const id = GetLayerIDUnchecked(name);
+  if (id < 0)
+    {
+    itkExceptionMacro( << "Cannot fetch any layer named <" << name
+      << "> in the OGRDataSource <" << m_DataSource->GetName() << ">: "
+      << CPLGetLastErrorMsg());
+    }
   return 0; // keep compiler happy
 }
 
