@@ -443,7 +443,10 @@ bool otb::ogr::DataSource::IsLayerModifiable(std::string const& layername) const
     case Modes::Read:
       return false;
     case Modes::Update_LayerCreateOnly:
-      return int(GetLayerID(layername)) >= m_FirstModifiableLayerID;
+      if (GetLayer(layername))
+        return int(GetLayerID(layername)) >= m_FirstModifiableLayerID;
+      else
+        return false;
     default:
       return true;
   }
@@ -495,7 +498,7 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayer(std::string const& name)
 {
   assert(m_DataSource && "Datasource not initialized");
   OGRLayer * layer_ptr = m_DataSource->GetLayerByName(name.c_str());
-  return otb::ogr::Layer(layer_ptr, IsLayerModifiable(name));
+  return otb::ogr::Layer(layer_ptr, layer_ptr ? IsLayerModifiable(name) : false);
 }
 
 otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(std::string const& name)

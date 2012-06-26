@@ -304,6 +304,72 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
 
   }
 
+
+  // Open in Update_LayerCreateOnly
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Update_LayerCreateOnly);
+
+  // Check that we can read the file
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds -> GetLayerChecked(0);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 2);
+
+  ogr::Feature f = l.GetFeature(0);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 43);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 43.0);
+  ogr::UniqueGeometryPtr p1 = f.StealGeometry();
+  const OGRPoint ref1(43, 43);
+  BOOST_CHECK(ogr::Equals(*p1, ref1));
+
+  f = l.GetFeature(1);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 44);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 44.0);
+  ogr::UniqueGeometryPtr p2 = f.StealGeometry();
+  const OGRPoint ref2(44, 44);
+  BOOST_CHECK(ogr::Equals(*p2, ref2));
+
+
+  // Cannot modify a layer which already exists
+  std::string name = l.GetName();
+  ogr::Layer createdlayer = ds->CreateLayer(name);
+
+  OGRFeatureDefn & defn = l.GetLayerDefn();
+  ogr::Feature f2(defn);
+  f2[0].SetValue(45);
+  f2[1].SetValue(45.0);
+  const OGRPoint p(45, 45);
+  f2.SetGeometry(&p);
+  BOOST_CHECK_THROW(l.CreateFeature(f2), itk::ExceptionObject);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 2);
+
+  }
+
+
+  // Read the file we have written
+  {
+  ogr::DataSource::Pointer ds
+    = ogr::DataSource::New(filename, ogr::DataSource::Modes::Read);
+  BOOST_ASSERT(ds);
+  ogr::Layer l = ds -> GetLayerChecked(0);
+  BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 2);
+
+  ogr::Feature f = l.GetFeature(0);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 43);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 43.0);
+  ogr::UniqueGeometryPtr p1 = f.StealGeometry();
+  const OGRPoint ref1(43, 43);
+  BOOST_CHECK(ogr::Equals(*p1, ref1));
+
+  f = l.GetFeature(1);
+  BOOST_CHECK_EQUAL(f[0].GetValue<int>(), 44);
+  BOOST_CHECK_EQUAL(f[1].GetValue<double>(), 44.0);
+  ogr::UniqueGeometryPtr p2 = f.StealGeometry();
+  const OGRPoint ref2(44, 44);
+  BOOST_CHECK(ogr::Equals(*p2, ref2));
+
+  }
+
 #if 0 // shp files do not support Update_LayerOverwrite
   // Open in Update_LayerOverwrite
   {
