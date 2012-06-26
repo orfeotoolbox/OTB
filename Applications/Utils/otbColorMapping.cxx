@@ -394,11 +394,11 @@ private:
                           "to a colored image using continuous look-up table, in order to enhance image interpretation. Several "
                           "look-up tables can been chosen with different color ranges.\n-The optimal method computes an optimal "
                           "look-up table. When processing a segmentation label image (label to color), the color difference between"
-                          " adjacent segmented regions is maximised. When processing an unknown color image (color to label), all "
+                          " adjacent segmented regions is maximized. When processing an unknown color image (color to label), all "
                           "the present colors are mapped to a continuous label list.\n - The support image method uses a color support "
                           "image to associate an average color to each region.");
     SetDocLimitations("The segmentation optimal method does not support streaming, and thus large images. The operation color to label "
-                      "is not implemented for the methods continuous LUT and support image LUT.\n ColorMapping uisng support image is not threaded.");
+                      "is not implemented for the methods continuous LUT and support image LUT.\n ColorMapping using support image is not threaded.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageSVMClassifier");
 
@@ -487,8 +487,8 @@ private:
     SetParameterFloat("method.continuous.max", 255.);
 
     // Optimal LUT
-    AddChoice("method.optimal","Compute an optimised look-up table");
-    SetParameterDescription("method.optimal","[label to color] Compute an optimal look-up table such that neighbouring labels"
+    AddChoice("method.optimal","Compute an optimized look-up table");
+    SetParameterDescription("method.optimal","[label to color] Compute an optimal look-up table such that neighboring labels"
                             " in a segmentation are mapped to highly contrasted colors.\n"
                             "[color to label] Searching all the colors present in the image to compute a continuous label list");
     AddParameter(ParameterType_Int,"method.optimal.background", "Background label");
@@ -503,13 +503,13 @@ private:
     SetParameterDescription("method.image.in", "Support image filename. LUT is calculated using the mean af pixel value on the area."
                             " First of all image is normalized with extrema rejection");
     AddParameter(ParameterType_Int, "method.image.low", "lower quantile");
-    SetParameterDescription("method.image.low","lower quantile for image normalisation");
+    SetParameterDescription("method.image.low","lower quantile for image normalization");
     MandatoryOff("method.image.low");
     SetParameterInt("method.image.low", 2);
     SetMinimumParameterIntValue("method.image.low", 0);
     SetMaximumParameterIntValue("method.image.low", 100);
     AddParameter(ParameterType_Int, "method.image.up", "upper quantile");
-    SetParameterDescription("method.image.up","upper quantile for image normalisation");
+    SetParameterDescription("method.image.up","upper quantile for image normalization");
     MandatoryOff("method.image.up");
     SetParameterInt("method.image.up", 2);
     SetMinimumParameterIntValue("method.image.up", 0);
