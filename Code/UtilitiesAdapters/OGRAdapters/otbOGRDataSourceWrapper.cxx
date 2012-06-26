@@ -425,6 +425,7 @@ void otb::ogr::DataSource::DeleteLayer(size_t i)
 
 bool otb::ogr::DataSource::IsLayerModifiable(size_t i) const
 {
+  assert(m_DataSource && "Datasource not initialized");
   switch(m_OpenMode)
   {
     case Modes::Read:
@@ -438,27 +439,20 @@ bool otb::ogr::DataSource::IsLayerModifiable(size_t i) const
 
 bool otb::ogr::DataSource::IsLayerModifiable(std::string const& layername) const
 {
-  switch(m_OpenMode)
-  {
-    case Modes::Read:
-      return false;
-    case Modes::Update_LayerCreateOnly:
-      if (GetLayer(layername))
-        return int(GetLayerID(layername)) >= m_FirstModifiableLayerID;
-      else
-        return false;
-    default:
-      return true;
-  }
+  assert(m_DataSource && "Datasource not initialized");
+  const size_t id = GetLayerID(layername);
+  return IsLayerModifiable(id);
 }
 
 size_t otb::ogr::DataSource::GetLayerID(std::string const& name) const
 {
-  for (int i = 0;
-       i < GetLayersCount();
-       i++)
+  assert(m_DataSource && "Datasource not initialized");
+  for (int i = 0, N = GetLayersCount(); i < N; i++)
     {
-    if (GetLayer(i).GetName() == name)
+    OGRLayer * raw_layer = GetLayerUnchecked(i);
+    // wrapping to give access to GetName() that doesn't exist with all version of gdal/ogr
+    Layer layer(raw_layer, false);
+    if (layer.GetName() == name)
       {
       return i;
       }
@@ -472,6 +466,7 @@ size_t otb::ogr::DataSource::GetLayerID(std::string const& name) const
 
 otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(size_t i)
 {
+  assert(m_DataSource && "Datasource not initialized");
   const int nb_layers = GetLayersCount();
   if (int(i) >= nb_layers)
     {
@@ -538,7 +533,6 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
     // Cannot use the deleter made for result sets obtained from
     // OGRDataSource::ExecuteSQL because it checks for non-nullity....
     // *sigh*
-
     return otb::ogr::Layer(0, modifiable);
 #endif
     }
