@@ -682,7 +682,7 @@ void GDALImageIO::InternalReadImageInformation()
     int blockSizeY = 0;
 
     dataset->GetRasterBand(1)->GetBlockSize(&blockSizeX, &blockSizeY);
-    
+
     if(blockSizeX > 0 && blockSizeY > 0)
       {
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, blockSizeX);
@@ -1116,9 +1116,9 @@ void GDALImageIO::Write(const void* buffer)
     if( gdalDriverShortName.compare("JPEG") == 0 )
       {
       option[0] = const_cast<char *>("QUALITY=95");
- 
+
       }
-    
+
     GDALDataset* hOutputDS = driver->CreateCopy( realFileName.c_str(), m_Dataset->GetDataSet(), FALSE,
                                                  option, NULL, NULL );
     GDALClose(hOutputDS);
@@ -1272,7 +1272,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
       unsigned int nbPixelPerTile = ReferenceTileSizeInBytes / m_BytePerPixel / m_NbBands;
       unsigned int idealTileDimension = static_cast<unsigned int>( vcl_sqrt(static_cast<float>(nbPixelPerTile)) );
-      
+
       // Set tileDimension to the nearest power of two and aligned to
       // 16 pixels (needed by tiff spec)
       unsigned int tileDimension = 16;
@@ -1415,12 +1415,13 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* -------------------------------------------------------------------- */
 
   std::string              svalue = "";
-  std::vector<std::string> keys = dict.GetKeys();
-  MetaDataKey              key;
+  std::vector<std::string>   keys = dict.GetKeys();
+  std::string const   metadataKey = MetaDataKey::MetadataKey;
 
   for (unsigned int itkey = 0; itkey < keys.size(); ++itkey)
     {
-    if (keys[itkey].compare(0, key.MetadataKey.length(), key.MetadataKey) == 0)
+    /// \todo Why not <tt>keys[itkey] == MetadataKey::MetadataKey</tt> ?
+    if (keys[itkey].compare(0, metadataKey.length(), metadataKey) == 0)
       {
       itk::ExposeMetaData<std::string>(dict, keys[itkey], svalue);
       unsigned int equalityPos = svalue.find_first_of('=');

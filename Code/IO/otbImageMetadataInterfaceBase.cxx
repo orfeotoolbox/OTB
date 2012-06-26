@@ -432,7 +432,7 @@ ImageMetadataInterfaceBase::GetYPixelSpacing() const
     }
 
   return 0;
- 
+
 }
 
 
@@ -455,12 +455,11 @@ ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent, cons
   // by the ExposeMetaData method
 
   MetaDataDictionaryType dict2 = dict;
-  MetaDataKey            key;
 
   for (unsigned int itkey = 0; itkey < keys.size(); ++itkey)
     {
 
-    switch (key.GetKeyType(keys[itkey]))
+    switch (MetaDataKey::GetKeyType(keys[itkey]))
       {
       case MetaDataKey::TSTRING:
         itk::ExposeMetaData<std::string>(dict2, keys[itkey], svalue);

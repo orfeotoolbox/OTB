@@ -23,44 +23,43 @@
 
 namespace otb
 {
+namespace MetaDataKey
+{
+char const* DriverShortNameKey = "DriverShortName";
+char const* DriverLongNameKey = "DriverLongName";
 
-const std::string MetaDataKey::DriverShortNameKey = "DriverShortName";
-const std::string MetaDataKey::DriverLongNameKey = "DriverLongName";
+char const* ProjectionRefKey = "ProjectionRef";
 
-const std::string MetaDataKey::ProjectionRefKey = "ProjectionRef";
+char const* GCPProjectionKey = "GCPProjection";
+char const* GCPParametersKey = "GCP_";
+char const* GCPCountKey = "GCPCount";
 
-const std::string MetaDataKey::GCPProjectionKey = "GCPProjection";
-const std::string MetaDataKey::GCPParametersKey = "GCP_";
-const std::string MetaDataKey::GCPCountKey = "GCPCount";
+char const* GeoTransformKey = "GeoTransform";
 
-const std::string MetaDataKey::GeoTransformKey = "GeoTransform";
+char const* MetadataKey = "Metadata_";
+char const* SubMetadataKey = "SubMetadata_";
 
-const std::string MetaDataKey::MetadataKey = "Metadata_";
-const std::string MetaDataKey::SubMetadataKey = "SubMetadata_";
+char const* UpperLeftCornerKey = "UpperLeftCorner";
+char const* UpperRightCornerKey = "UpperRightCorner";
+char const* LowerLeftCornerKey = "LowerLeftCorner";
+char const* LowerRightCornerKey = "LowerRightCorner";
 
-const std::string MetaDataKey::UpperLeftCornerKey = "UpperLeftCorner";
-const std::string MetaDataKey::UpperRightCornerKey = "UpperRightCorner";
-const std::string MetaDataKey::LowerLeftCornerKey = "LowerLeftCorner";
-const std::string MetaDataKey::LowerRightCornerKey = "LowerRightCorner";
+char const* ColorTableNameKey = "ColorTableName";
+char const* ColorEntryCountKey = "ColorEntryCount";
+char const* ColorEntryAsRGBKey = "ColorEntryAsRGB";
 
-const std::string MetaDataKey::ColorTableNameKey = "ColorTableName";
-const std::string MetaDataKey::ColorEntryCountKey = "ColorEntryCount";
-const std::string MetaDataKey::ColorEntryAsRGBKey = "ColorEntryAsRGB";
+char const* OSSIMKeywordlistKey = "OSSIMKeywordlist";
+char const* OSSIMKeywordlistDelimiterKey = "OSSIMKeywordlistDelimiter";
 
-const std::string MetaDataKey::OSSIMKeywordlistKey = "OSSIMKeywordlist";
-const std::string MetaDataKey::OSSIMKeywordlistDelimiterKey = "OSSIMKeywordlistDelimiter";
+char const* VectorDataKeywordlistKey = "VectorDataKeywordlist";
+char const* VectorDataKeywordlistDelimiterKey = "VectorDataKeywordlistDelimiter";
 
-const std::string MetaDataKey::VectorDataKeywordlistKey = "VectorDataKeywordlist";
-const std::string MetaDataKey::VectorDataKeywordlistDelimiterKey = "VectorDataKeywordlistDelimiter";
+char const* ResolutionFactor = "ResolutionFactor";
+char const* CacheSizeInBytes = "CacheSizeInBytes";
 
-const std::string MetaDataKey::ResolutionFactor = "ResolutionFactor";
-const std::string MetaDataKey::CacheSizeInBytes = "CacheSizeInBytes";
-
-const std::string MetaDataKey::TileHintX = "TileHintX";
-const std::string MetaDataKey::TileHintY = "TileHintY";
-
-MetaDataKey::MetaDataKey() {}
-MetaDataKey::~MetaDataKey() {}
+char const* TileHintX = "TileHintX";
+char const* TileHintY = "TileHintY";
+}
 
 const MetaDataKey::KeyTypeDef Types[] =
   {

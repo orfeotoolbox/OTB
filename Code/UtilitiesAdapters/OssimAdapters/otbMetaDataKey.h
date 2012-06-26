@@ -26,55 +26,45 @@
 
 namespace otb
 {
-/** \class MetaDataKey
- *
- * \brief Creation of an otb::MetaDataKey class that defines the
- * key of metadata used in the metadata dictionary.
- *
+/** \namespace MetaDataKey
+ * Definition of the key of metadata used in the metadata dictionary.
  */
-class ITK_EXPORT MetaDataKey
+namespace MetaDataKey
 {
-public:
+  extern char const* DriverShortNameKey;
+  extern char const* DriverLongNameKey;
 
-  typedef MetaDataKey Self;
+  extern char const* ProjectionRefKey;
 
-  MetaDataKey();
-  virtual ~MetaDataKey();
+  extern char const* GCPProjectionKey;
+  extern char const* GCPParametersKey;
+  extern char const* GCPCountKey;
 
-  static const std::string DriverShortNameKey;
-  static const std::string DriverLongNameKey;
+  extern char const* GeoTransformKey;
 
-  static const std::string ProjectionRefKey;
+  extern char const* MetadataKey;
+  extern char const* SubMetadataKey;
 
-  static const std::string GCPProjectionKey;
-  static const std::string GCPParametersKey;
-  static const std::string GCPCountKey;
+  extern char const* UpperLeftCornerKey;
+  extern char const* UpperRightCornerKey;
+  extern char const* LowerLeftCornerKey;
+  extern char const* LowerRightCornerKey;
 
-  static const std::string GeoTransformKey;
+  extern char const* ColorTableNameKey;
+  extern char const* ColorEntryCountKey;
+  extern char const* ColorEntryAsRGBKey;
 
-  static const std::string MetadataKey;
-  static const std::string SubMetadataKey;
+  extern char const* OSSIMKeywordlistKey;
+  extern char const* OSSIMKeywordlistDelimiterKey;
 
-  static const std::string UpperLeftCornerKey;
-  static const std::string UpperRightCornerKey;
-  static const std::string LowerLeftCornerKey;
-  static const std::string LowerRightCornerKey;
+  extern char const* VectorDataKeywordlistKey;
+  extern char const* VectorDataKeywordlistDelimiterKey;
 
-  static const std::string ColorTableNameKey;
-  static const std::string ColorEntryCountKey;
-  static const std::string ColorEntryAsRGBKey;
+  extern char const* ResolutionFactor;
+  extern char const* CacheSizeInBytes;
 
-  static const std::string OSSIMKeywordlistKey;
-  static const std::string OSSIMKeywordlistDelimiterKey;
-
-  static const std::string VectorDataKeywordlistKey;
-  static const std::string VectorDataKeywordlistDelimiterKey;
-
-  static const std::string ResolutionFactor;
-  static const std::string CacheSizeInBytes;
-
-  static const std::string TileHintX;
-  static const std::string TileHintY;
+  extern char const* TileHintX;
+  extern char const* TileHintY;
 
 
   enum  KeyType
@@ -112,12 +102,7 @@ public:
 
   typedef std::vector<double>               VectorType;
   typedef itk::VariableLengthVector<double> VariableLengthVectorType;
-
-private:
-  MetaDataKey(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
-};
+}
 
 /** \class OTB_GCP
  *
@@ -154,7 +139,7 @@ public:
   ~OTB_GCP();
 
   OTB_GCP(const OTB_GCP &pGcp);
-  
+
   void operator =(const OTB_GCP& pGcp);
 
   void Print(std::ostream& os) const;
