@@ -1,39 +1,153 @@
-OTB-v.3.14.0 - Changes since version 3.12.0 (2012/01/31)
+OTB-v.3.14.0 - Changes since version 3.12.0 (2012/06/28)
 -----------------------------------------
+
 * Library
+  * New MeanShift implementation
+    * Add MeanShiftSmoothingImageFilter class with threading support
+    * Add MeanShiftKernels class
+    * Add MeanShiftConnectedComponentSegmentationFilter class to concatenate MeanShift filter and connected component
+    * Add MeanShiftSegmentationFilter which performs segmentation of an image by chaining a mean shift filter and region merging filter.
+    * Move MeanShiftVectorImageFilterExample to MeanShiftSegmentationFilterExample
+    * MeanShiftImageFilter and MeanShiftVectorImageFilter are now deprecated
+
+  * OGR encapsulation for use in large-scale segmentation framework
+    * Add a method converting a DataTree node to a list of OGRLayer*
+    * Add OGRDataSourceWrapper, OGRDriversInit, OGRLayerWrapper, OGRFieldWrapper,  OGRFeatureWrapper, OGRGeometryWrapper and OGR classes to encapsulate OGR in the otb namespace
+    * Add GeometriesProjectionFilter, GeometriesSet, GeometriesSource and GeometriesToGeometriesFilter classes to encapsulate OGR Geometries projection
+    * Add OGRHelpers class for easier conversion to OGR string
+    * Add GeometriesProjectionFilter filter to 
+    * Add ImageReference, OGRGeometriesVisitor classes
+
+  * Large-scale Segmentation Framework (OBIA)
+    * Create a new repository Segmentation
+    * Add GdalDataTypeBridge
+    * Add LabelImageToVectorDataFilter class
+    * Add StreamingImageToOGRLayerSegmentationFilter class which allow stream segmentation and vectorization of the output label image (based on OGRWrappers)
+    * Add LabelImageToOGRDataSourceFilter class to use GDALPolygonize method to transform a Label image into a OGRDataSource
+    * Add PersistentImageToOGRDataFilter class. This class is a generic PersistentImageFilter, which encapsulate any filter which produces OGR data from an input Image
+    * Add option 4Connected/8Connected for Polygonization in LabelImageToVectorDataFilter and LabelImageToOGRDataSourceFilter
+    * Add OGRLayerStreamStitchingFilter class to make fusion of geometries in a layer (ogr) along streaming lines (based on OGRWrappers).
+    * Add LabelImageRegionMergingFilter class
+    * Add Example about OGRWrappers and HooverMetrics
+   
+  * Pleiades Support
+    * enhance support of PHR data with DIMAPv2 official root_tag
+    * manage all cases from geotransform return by GDALJP2metadata
+    * enhance support of PHR data with GML box and Sensor Model
+    * Add TileImageFilter to support mosaic tiled images 
+    * Support of TIFF pleiades image and associated DIMAP metadata
+    * upport for DIMAPv1 metadata format 
+
+  * Stereo-rectification framework
+    * Add StereorectificationDeformationFieldSource class
+    * Add BlockMatchingImageFilter class for fast 2D block-matching
+    * Add NCCBlockMatching functor
+    * Add LPBlockMatching functor
+    * Adding an optionnal geoid file, and the possibility to use height above ellispoid in DEMToImageGenerator
+    * Add SubPixelDisparityImageFilter class to interpolate disparities
+    * Add DisparityMapMedianFilter class
+    * Add AdhesionCorrectionFilter class
+    * Add DisparityMapToDEMFilter
+    * Add example in DisparityMap/StereoReconstructionExample
+
+  * Miscellaneous
+    * Modify otbImageLayer to enable the contrast stretch on full or zoom view in Monteverdi Viewer module
+    * Add RasterizeVectorDataFilter class
+    * Add VectorDataToLabelImageFilter for VectorData rasterization using an attribute to get the color for burning
+    * Add GDALDriverManagerWrapper class
+    * Add VectorDataEditVertexActionHandler class to allow user editing of vertex in vector data.
+    * Add VectorDataTranslateGeometryActionHandler class to handles the user action for geometries translation
+    * Add VectorDataEditionModel class for vertex edition and geometries translation
+    * Add a method to remove a specific geometry in the VectorData
+    * AddVectorData method always do notification, add a flag (set to true by default) to allow disabling it
+    * Enhance the support for Spot 1,2,3 metadata related to radiometry
+    * Add UnaryFunctorWithIndexWithOutputSizeImageFilter which implements neighborhood-wise generic operation on image
+    * Add WatershedSegmentationFilter composite filter to allow use of itk watershed inside large segmentation framework
+    * Add LabelImageRegionPruningFilter filter to merges regions in the input label image according to the input image of spectral values and the RangeBandwidth parameter.
+    * Rename VectorDataToImageFilter to VectorDataToMapFilter
+    * Move Hoover framework to Code/Segmentation
+    * Make RationalTransform inheriting from otb::Transform instead of itk::Transform
+    * Add Spacing and Origin to RationalTransform
+    * Fix bug in computation of NDBBBI for Spectral rule based classifier
+    * Remove deprecated classes :
+      * QuickLookImageGenerator (replaced by StreamingShrinkImageFilter)
+      * GeometricMomentImageFunction (unused)
+    * Improve removal of geometries in VectorDataEditionModel
+    * HistogramActionHandler : avoid changing positions outside viewed range
+    * PixelDescriptionModel : make the request for placename optional (lags when internet access is slow)
+    * PackedWidgetManager : add Shown method, add Resizable setter
+    * Patch internal muparser to avoid bugs with static storage varialbe deallocation in plugin context 
+    * Modify MetaDataKey to avoid bugs with static storage varialbe deallocation in plugin context 
+    * Enable KML writing using OGR (was previously done internally by libkml)
+    * GenericRSTransform can now be optimized using a set of tie-points, calling ossim internal sensor model refining implementation
+
+  * New Applications
+    * Add PixelValue application
+    * Add HooverCompareSegmentation application
+    * Add GridBasedImageResampling application to perform grid-based image resampling
+    * Add StereoRectificationGridGenerator application
+    * Add RadiometricWaterIndices application
+    * Add FineRegistration application for pixel-wise horizontal block matching
+    * Add BlockMatching application
+    * Add DimensionalityReduction application
+    * Add LargeScaleSegmentation application
+    * Add DisparityMapToElevationMap application
+    * Add ComputeImageFeatures application
+
+  * Misc. Applications
+    * Add image origin to ReadImageInfoApplication
+    * Use now InputFilenameParameter and OutputFilenameParameter instead of FilenameParameter
+    * Use InputFilename and OuputFilename instead of Filename
+    * New option in SVMClassifier application: sample.edg (non mandatory) to manage special cases with small samples 
+    * In KMeansClassification, Changing the random intialisation method since it can generate centroids that are too far from the image distribution and will never move
+    * Add AddRANDParameter option in order to set mersenne twister seed for test reproducibility purpose
+    * Display which key is wrong in a set of application parameters
+    * Improve the help return by application
+    * MeanShiftSegmentation application, which duplicates Segmentation application has been renamed to MeanShiftSmoothing application
+    * Rasterization application rewritten to use the new OGRDataSourceToLabelImageFilter filter
+      The application can rasterize in binary mode or burn the value of a specified field (similar to gdal_rasterize)
+    * ColorMapping : fix settings of predefined colormap
+    * otbViewer improvements : add handling of HDF and JPEG2000 files
+   
 * System
-* Monteverdi
-* Bug fixes
-  * Monteverdi
-    * 0000527: While saving dataset with rescaling option, the channels n° > 3 are incorrect
+  * Update internal Ossim to revision 20606
+  * Support for Mapnik2
+  * Make siftfast compilation optional (OTB_USE_SIFTFAST cmake option)
+  * Support external tinyXML
+  * Support external muparser
+  * Support external libkml
+  * Add a FindOSSIM.cmake to detect OSSIM easier
+  * Update internal boost to 1.49.0
+  * Suppress galib from OTB source tree (wasn't used)
+  * Suppress KNN from OTB source tree (wasn't used)
+  * Enhance/Add find_package support for OpenThread, Ossim, Expat, PQxx, Curl, GetText, ICUUC and LTDL
+  * Make installation with OTB_WRAP_JAVA honor CMAKE_INSTALL_PREFIX
+  * New compilers supported :
+    * clang 3.2 (current development version)
+    * gcc 4.6, 4.7, 4.8-dev
+    * Intel icc
 
-  * OTB-Packaging
-    * 0000525: Python not found during ubuntu package build
-    * 0000526: Fix input of bfTvPolygonizationRasterization_WGS84
+* Misc.
+  * Added FLTK License
+  * GDAL copyright notice removed because GDAL source code is not provided with OTB
+  * OpenJPEG copyright file updated
 
-  * Orfeo Toolbox (OTB)
-    * 0000558: GetParameterFloat method of WrapperApplication class does not returns exactly input value
-    * 0000548: Parameters default values should appear in command line help interface of OTB applications
-    * 0000550: BlockMatching application throws an exception  when the "sub-pixel" mode is activated
-    * 0000549: Error message related to boost_any_cast in  StereoRectificationGridGenerator application
-    * 0000547: MeanShiftFilter validation test is fialinf for Iteration and Spatial output
-    * 0000537: Impossible to set rescale type for Convert application
-    * 0000542: Problem with win arch and testing
-    * 0000521: Applications do not work anymore (Wrapper problem)
-    * 0000522: otbApplicationLauncherQT is not reflecting the Disable/Enable state correctly
-    * 0000511: Tags are repeated twice in Application, when using Qt framework
-
+* Bug fixes :
   * OTB-lib
-    * 0000535: Must rename test uaTvGeometricSarSenorModelAdapterTest in uaTvGeometricSarSenSorModelAdapterTest
-    * 0000532: OTB_SHOW_ALL_MSG_DEBUG option changes apTvClTrainSVMImagesClassifierQB456 test results
-    * 0000512: OTB cmake configuration warns for a gdal/geotiff  conflict but I can open tiff file
+    * 0000511: Fixed application tags registered twice 
+    * 0000495: Fixed also for StreamingImageVirtualWriter
+    * 0000515: Fix trouble with filename containing spaces in CommandLineLauncher
+    * 0000521: Fix ApplicationRegistry with a safe Init of the applications
+    * 0000476: Fix bug about multibaseline management 
+    * 0000549: Adding an additionnal check ot see if output parameter is enabled before displaying it
+    * 0000550: SubPixelDisparityImageFilter : fix region management between right image and right mask
 
-  * OTB-applications
-    * 0000515: Space managing in command line
-    * 0000510: OTB-Applications cannot compile when the sources are located in a directory with spaces in its name
+OSSIM: fix for mantis issue #422 - make QB metadata handling symetric
+OSSIM: patch for matis issue #351 - EPSG 3857 support
 
+Travail de JML sur l'optimization des GCP ?
 
-OTB-v.3.12.0 - Changes since version 3.10.0 (2011/06/30)
+OTB-v.3.12.0 - Changes since version 3.10.0 (2011/??/??)
 -----------------------------------------
 * Library
   * MaximumAutocorrelationFactorImageFilter
