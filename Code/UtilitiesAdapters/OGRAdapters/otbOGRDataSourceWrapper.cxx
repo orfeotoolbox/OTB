@@ -161,7 +161,12 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
       }
 
     OGRSFDriver * d = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
-    assert(d && "OGR driver not found");
+
+    if(!d)
+      {
+      itkGenericExceptionMacro(<<"Could not create OGR driver "<<driverName<<", check your OGR configuration for available drivers.");
+      }
+
     source = d->CreateDataSource(datasourceName.c_str());
     if (!source) {
       itkGenericExceptionMacro(<< "Failed to create OGRDataSource <"<<datasourceName
