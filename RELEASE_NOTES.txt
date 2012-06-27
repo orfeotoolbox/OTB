@@ -134,20 +134,35 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/06/28)
 
 * Bug fixes :
   * OTB-lib
-    * 0000511: Fixed application tags registered twice 
-    * 0000495: Fixed also for StreamingImageVirtualWriter
-    * 0000515: Fix trouble with filename containing spaces in CommandLineLauncher
-    * 0000521: Fix ApplicationRegistry with a safe Init of the applications
-    * 0000476: Fix bug about multibaseline management 
-    * 0000549: Adding an additionnal check ot see if output parameter is enabled before displaying it
-    * 0000550: SubPixelDisparityImageFilter : fix region management between right image and right mask
+    * 0000559: Even if OTB_USE_MAPNICK is ON, otbapp_Rasterization does not get compiled
+    * 0000550: BlockMatching application throws an exception  when the "sub-pixel" mode is activated
+    * 0000549: Error message related to boost_any_cast in  StereoRectificationGridGenerator application
+    * 0000521: Applications do not work anymore (Wrapper problem)
+    * 0000557: Weird default value for RAM parameter in OTB application
+    * 0000544: SWIG 2.0.5 not supported on mac
+    * 0000554: OTB compilation : error while loading libfltk.so.9
+    * 0000558: GetParameterFloat method of WrapperApplication class does not returns exactly input value
+    * 0000547: MeanShiftFilter validation test is fialinf for Iteration and Spatial output
+    * 0000542: Problem with win arch and testing
+    * 0000522: otbApplicationLauncherQT is not reflecting the Disable/Enable state correctly
+    * 0000511: Tags are repeated twice in Application, when using Qt framework
+    * 0000532: OTB_SHOW_ALL_MSG_DEBUG option changes apTvClTrainSVMImagesClassifierQB456 test results
 
-OSSIM: fix for mantis issue #422 - make QB metadata handling symetric
-OSSIM: patch for matis issue #351 - EPSG 3857 support
+  * Monteverdi
+    * 0000560: Monteverdi compilation error
+    * 0000527: While saving dataset with rescaling option, the channels n° > 3 are incorrect
 
-Travail de JML sur l'optimization des GCP ?
+  * OTB-Packaging
+    * 0000525: Python not found during ubuntu package build
+    * 0000526: Fix input of bfTvPolygonizationRasterization_WGS84
 
-OTB-v.3.12.0 - Changes since version 3.10.0 (2011/??/??)
+  * OTB-applications
+    * 0000518: Missing GDAL dependencies
+    * 0000515: Space managing in command line
+    * 0000510: OTB-Applications cannot compile when the sources are located in a directory with spaces in its name
+
+
+OTB-v.3.12.0 - Changes since version 3.10.0 (2011/01/31)
 -----------------------------------------
 * Library
   * MaximumAutocorrelationFactorImageFilter
