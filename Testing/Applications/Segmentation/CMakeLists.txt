@@ -131,7 +131,9 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULOVW
                               ${TEMP}/${OUTFILE}                           
                      )
 
-SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULOVW PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode} RESSOURCE_LOCK ${OUTFILE})
+SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULOVW
+                     PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
+                                RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULU
 SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulu")
@@ -150,7 +152,9 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                               ${TEMP}/${OUTFILE}                           
                      )
 
-SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULU PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode} RESSOURCE_LOCK ${OUTFILE})
+SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULU
+                     PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
+                                RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULCO
 SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulco")
@@ -169,4 +173,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
                               ${TEMP}/${OUTFILE}                           
                      )
 
-SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULCO PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode} WILL_FAIL TRUE RESSOURCE_LOCK ${OUTFILE})
+SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULCO
+                     PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
+                                WILL_FAIL TRUE
+                                RESOURCE_LOCK ${OUTFILE})
