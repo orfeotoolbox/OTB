@@ -20,6 +20,7 @@
 
 #include "otbCurves2DWidget.h"
 #include "otbVerticalAsymptoteCurve.h"
+#include "itkNumericTraits.h"
 
 namespace otb
 {
@@ -129,14 +130,16 @@ public:
           if (m_ModifyLeft)
             {
             double tx = x - abcisseL;
-            if ( m_LeftAsymptote->GetAbcisse() + tx < m_RightAsymptote->GetAbcisse())
+            double newLeftAbcisse = m_LeftAsymptote->GetAbcisse() + tx;
+            if ( newLeftAbcisse < m_RightAsymptote->GetAbcisse()
+                 && newLeftAbcisse >= m_MinimumAbcisse)
               {
-              m_LeftAsymptote->SetAbcisse(m_LeftAsymptote->GetAbcisse() + tx);
+              m_LeftAsymptote->SetAbcisse(newLeftAbcisse);
               m_Curve->redraw();
 
               //  Update The Rendering Function min and max
               ParametersType param = m_RenderingFunction->GetParameters();
-              param.SetElement(2 * m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
+              param.SetElement(2 * m_Channel, newLeftAbcisse);
               param.SetElement(2 * m_Channel + 1, m_RightAsymptote->GetAbcisse());
               m_RenderingFunction->SetParameters(param);
               }
@@ -145,15 +148,18 @@ public:
           if (m_ModifyRight)
             {
             double tx = x - abcisseR;
-            if (m_RightAsymptote->GetAbcisse() + tx > m_LeftAsymptote->GetAbcisse())
+            double newRightAbcisse = m_RightAsymptote->GetAbcisse() + tx;
+            //std::cout <<"right abcisse "<< newRightAbcisse << " max "<< m_MaximumAbcisse  << std::endl;
+            if (newRightAbcisse > m_LeftAsymptote->GetAbcisse() 
+                &&  newRightAbcisse <  m_MaximumAbcisse)
               {
-              m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx);
+              m_RightAsymptote->SetAbcisse(newRightAbcisse + tx);
               m_Curve->redraw();
               
               //  Update The Rendering Function min and max
               ParametersType param = m_RenderingFunction->GetParameters();
               param.SetElement(2 * m_Channel, m_LeftAsymptote->GetAbcisse());
-              param.SetElement(2 * m_Channel + 1, m_RightAsymptote->GetAbcisse() + tx);
+              param.SetElement(2 * m_Channel + 1, newRightAbcisse);
               m_RenderingFunction->SetParameters(param);
               }
             }
@@ -182,6 +188,12 @@ public:
   /** Set/Get the rendering Function */
   itkSetObjectMacro(RenderingFunction, RenderingFunctionType);
 
+  /** Set Extremum of the histogram (used as limit for the
+    * asymptotes). If not set, values are initialized to double type extremum
+    */
+  itkSetMacro(MaximumAbcisse, double);
+  itkSetMacro(MinimumAbcisse, double);
+
   /** Set/Get the channel dealed with in the image*/
   itkSetMacro(Channel, unsigned int);
 
@@ -192,6 +204,8 @@ protected:
     m_Channel = 0;
     m_ModifyLeft  = false;
     m_ModifyRight = false;
+    m_MaximumAbcisse = itk::NumericTraits<double>::max();
+    m_MinimumAbcisse = itk::NumericTraits<double>::NonpositiveMin();
     }
 
   /** Destructor */
@@ -228,6 +242,10 @@ private:
 
   //Channel we're dealing handling
   unsigned int m_Channel;
+
+  // extremum of the histogram used as limit for the abcisse
+  double         m_MaximumAbcisse;
+  double         m_MinimumAbcisse;
 
 }; // end class
 } // end namespace otb
