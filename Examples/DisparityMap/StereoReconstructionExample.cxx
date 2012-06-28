@@ -95,6 +95,7 @@ int main(int argc, char* argv[])
 // \item \doxygen{otb}{otbSubPixelDisparityImageFilter}
 // \item \doxygen{otb}{otbDisparityMapMedianFilter}
 // \item \doxygen{otb}{DisparityMapToDEMFilter}
+// \end{itemize}
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
