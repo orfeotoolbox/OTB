@@ -61,6 +61,8 @@ public:
   virtual void SetLabelScrollWidget(const char * label);
   virtual void SetLabelFullWidget(const char * label);
   virtual void SetLabelZoomWidget(const char * label);
+  virtual void SetLabelHistogramWidget(const char * label);
+  virtual void SetLabelPixelDescriptionWidget(const char * label);
   virtual int  ZoomWidgetShown();
   virtual int  FullWidgetShown();
   virtual void SetResizable(bool resize);

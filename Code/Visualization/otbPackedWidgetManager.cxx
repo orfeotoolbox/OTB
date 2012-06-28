@@ -157,6 +157,20 @@ PackedWidgetManager
   m_PackedWidget->m_ZoomGroup->label(label);
 }
 
+void
+PackedWidgetManager
+::SetLabelHistogramWidget(const char * label)
+{
+  m_PackedWidget->m_HistogramsGroup->label(label);
+}
+
+void 
+PackedWidgetManager
+::SetLabelPixelDescriptionWidget(const char * label)
+{
+  m_PackedWidget->m_PixelDescriptionGroup->label(label);
+}
+
 int
 PackedWidgetManager
 ::Shown()

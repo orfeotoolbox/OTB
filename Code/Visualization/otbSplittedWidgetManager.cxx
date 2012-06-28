@@ -185,6 +185,20 @@ SplittedWidgetManager
   m_SplittedWidget->m_ZoomGroup->label(label);
 }
 
+void
+SplittedWidgetManager
+::SetLabelHistogramWidget(const char * label)
+{
+  m_SplittedWidget->m_HistogramsGroup->label(label);
+}
+
+void 
+SplittedWidgetManager
+::SetLabelPixelDescriptionWidget(const char * label)
+{
+  m_SplittedWidget->m_PixelDescriptionGroup->label(label);
+}
+
 int
 SplittedWidgetManager
 ::ZoomWidgetShown()
@@ -198,6 +212,7 @@ SplittedWidgetManager
 {
   return m_SplittedWidget->m_FullGroup->shown();
 }
+
 
 void
 SplittedWidgetManager
