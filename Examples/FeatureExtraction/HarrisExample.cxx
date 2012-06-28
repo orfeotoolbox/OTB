@@ -108,7 +108,8 @@ int main(int argc, char *argv[])
   // \mu(\mathbf{x},\sigma_I,\sigma_D) = \sigma_D^2 g(\sigma_I)\star
   // \left[\begin{array}{cc} L_x^2(\mathbf{x},\sigma_D) &
   // L_xL_y(\mathbf{x},\sigma_D)\\ L_xL_y(\mathbf{x},\sigma_D)&
-  // L_y^2(\mathbf{x},\sigma_D) \end{array}\right] \end{equation}
+  // L_y^2(\mathbf{x},\sigma_D) \end{array}\right]
+  // \end{equation}
   // The output of the detector is $$det(\mu) - \alpha trace^2(\mu).$$
   //
   //  Software Guide : EndLatex

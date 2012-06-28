@@ -201,6 +201,7 @@ int main(int argc, char *argv[])
   // \item simplify option : simplification of polygon vertex (default to false).This can reduced very efficiently the size
   // of the output file with no real impact on the results.
   // \item simplification tolerance
+  // \end{itemize}
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   filter->GetStreamer()->SetTileDimensionTiledStreaming(tileSize);
