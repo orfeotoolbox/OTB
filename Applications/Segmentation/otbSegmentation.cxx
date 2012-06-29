@@ -549,8 +549,8 @@ private:
       //segmentation parameters
       const unsigned int
         spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.edison.spatialr"));
-      const unsigned int
-        rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.edison.ranger"));
+      const float
+        rangeRadius = static_cast<float> (this->GetParameterFloat("filter.edison.ranger"));
       const unsigned int
         minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("filter.edison.minsize"));
       const float scale = this->GetParameterFloat("filter.edison.scale");
@@ -575,8 +575,8 @@ private:
       //segmentation parameters
       const unsigned int
         spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.spatialr"));
-      const unsigned int
-        rangeRadius = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.ranger"));
+      const float
+        rangeRadius = static_cast<float> (this->GetParameterFloat("filter.meanshift.ranger"));
        const unsigned int
             minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("filter.meanshift.minsize"));
 
