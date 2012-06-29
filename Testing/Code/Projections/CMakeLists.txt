@@ -1210,7 +1210,7 @@ ADD_TEST(prTvGeometriesProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
 )
 
 ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
-        --compare-ascii ${NOTOL}
+        --compare-ogr ${NOTOL}
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.shp
         otbVectorDataProjectionFilterFromMapToImage
@@ -1220,7 +1220,7 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
 )
 
 ADD_TEST(prTvGeometriesProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
-        --compare-ascii ${NOTOL}
+        --compare-ogr ${NOTOL}
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
         ${TEMP}/prTvGeometriesProjectionFilterFromMapToImage.shp
         otbGeometriesProjectionFilterFromMapToImage
@@ -1230,7 +1230,7 @@ ADD_TEST(prTvGeometriesProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
 )
 
 # With QGIS the two vectordata are equal
-ADD_TEST(prTvVectorDataProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
+ADD_TEST(prTuVectorDataProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         #--compare-ascii ${NOTOL}
         #${INPUTDATA}/ToulousePoints-examples.shp
         #${TEMP}/prTvVectorDataProjectionFilterFromGeoToMap.shp
@@ -1239,8 +1239,8 @@ ADD_TEST(prTvVectorDataProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/prTvVectorDataProjectionFilterFromGeoToMap.shp
 )
-SET_TESTS_PROPERTIES(prTvVectorDataProjectionFilterFromGeoToMap PROPERTIES DEPENDS prTvVectorDataProjectionFilterFromMapToGeo)
-ADD_TEST(prTvGeometriesProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
+SET_TESTS_PROPERTIES(prTuVectorDataProjectionFilterFromGeoToMap PROPERTIES DEPENDS prTvVectorDataProjectionFilterFromMapToGeo)
+ADD_TEST(prTuGeometriesProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         #--compare-ascii ${NOTOL}
         #${INPUTDATA}/ToulousePoints-examples.shp
         #${TEMP}/prTvGeometriesProjectionFilterFromGeoToMap.shp
@@ -1249,7 +1249,7 @@ ADD_TEST(prTvGeometriesProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/prTvGeometriesProjectionFilterFromGeoToMap.shp
 )
-SET_TESTS_PROPERTIES(prTvGeometriesProjectionFilterFromGeoToMap PROPERTIES DEPENDS prTvGeometriesProjectionFilterFromMapToGeo)
+SET_TESTS_PROPERTIES(prTuGeometriesProjectionFilterFromGeoToMap PROPERTIES DEPENDS prTvGeometriesProjectionFilterFromMapToGeo)
 
 
 
