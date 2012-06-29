@@ -3,47 +3,44 @@
 \index{Installation}
 
 This section describes the process for installing OTB on your system. 
-OTB is a toolbox, and as such, once it is installed in your computer, provided by default a set of useful libraries. You can use
-these libraries to build your own applications based on it. By default,  
-What OTB does provide---besides the toolbox proper---is a
+OTB is a toolbox, and as such, once it is installed in your computer, provides by default a set of useful libraries. You can use
+these libraries to build your own applications based on it. What OTB does provide, besides the toolbox, is a
 large set of test files and examples that will introduce you to OTB concepts
 and will show you how to use OTB in your own projects. 
 
 Since the release 3.12, OTB embeds a specific framework to generate applications
 in a more user-friendly way. The majority of the applications available in the
-OTB-Applications packages have been revamped into the main OTB package. Now if you 
-activate the specific option \code{BUILD\_APPLICATIONS}, OTB build for each 
+now deprecated \code{OTB-Applications} package have been revamped into the main \code{OTB} package. Now if you 
+activate the specific option \code{BUILD\_APPLICATIONS}, OTB builds for each 
 application one shared library (also known as plugin). This plugin can be
-auto-loaded into appropriate tools wihtout recompiling, and is able to
-fully describe its parameters, behaviour and documentation.
+auto-loaded into appropriate tools without recompiling, and is able to
+fully describe its own parameters, behaviour and documentation.
 
-The tools to use these plugins can be extended, but OTB shipped the
+The tools to use these plugins can be extended, but OTB is shipped with the
 following:
 \begin{itemize}
 \item A command-line launcher, which is almost equivalent to the former
-  OTB-Applications command-line interface,
+  \code{OTB-Applications} command-line interface,
 \item A graphical launcher, with an auto-generated Qt interface,
   providing ergonomic parameters setting, display of documentation,
   and progress reporting,
 \item A C and SWIG interface, which means that any application can be
-  loaded set-up and executed into a high-level language such as \textbf{Python}
+  loaded, set up and executed into a high-level language such as \textbf{Python}
   for instance.
 \end{itemize}  
 
-For the moment, the former \textbf{OTB-Applications} package will be keep available 
+For the moment, the former \textbf{OTB-Applications} package will be kept available 
 but will no longer be maintained.
 
-The classical OTB powered applications are keep available and will continue
-to be maintained:
+The classical OTB powered applications are still available and will still be maintained:
 \begin{description}
-\item [Monteverdi]{An integrated applications giving graphical access to a lot of OTB 
-functionnalities.}
+\item [Monteverdi]{An integrated application giving graphical access to a lot of OTB 
+functionalities.}
 \item[OTB-Wrapping]{Calling OTB from Python or Java (see chapter~\ref{chap:wrappings}).}
 \end{description}
 
 There are two ways to install OTB on your system: installing from a binary distribution,
-or compiling from sources (Table~\ref{tab:installation}). What you need depends on your system, and on what you
-intend to do.
+or compiling from sources (Table~\ref{tab:installation}). What you need depends on your system, and on what you intend to do.
 
 \begin{center}
 \begin{tiny}
