@@ -235,7 +235,34 @@ ADD_CUSTOM_TARGET(SoftwareGuide_HTML_targz
 		  ALL
 		  COMMAND ${TAR_COMMAND} cvzf SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}-html.tar.gz SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}
 		  WORKING_DIRECTORY ${SoftwareGuide_BINARY_DIR}
-		  COMMENT "Building HTML documentation tar.gz"
+		  COMMENT "Building Software Guide HTML documentation tar.gz"
 		  )
 ADD_DEPENDENCIES(SoftwareGuide_HTML_targz SoftwareGuide_HTML)
+
+
+# FAQ
+
+CONFIGURE_FILE(
+${SoftwareGuide_SOURCE_DIR}/generate_FAQ.sh.in
+${SoftwareGuide_BINARY_DIR}/generate_FAQ.sh
+IMMEDIATE
+)
+
+ADD_CUSTOM_COMMAND(
+  OUTPUT    OTB-FAQ.pdf
+  COMMAND   ${SH_COMMAND} ${SoftwareGuide_BINARY_DIR}/generate_FAQ.sh
+#  DEPENDS   SoftwareGuide.pdf
+  COMMENT   "Generating FAQ"
+)
+
+ADD_CUSTOM_TARGET(FAQ ALL DEPENDS OTB-FAQ.pdf)
+
+ADD_CUSTOM_TARGET(FAQ_HTML_targz
+		  ALL
+		  COMMAND ${TAR_COMMAND} cvzf OTB-FAQ-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}-html.tar.gz OTB-FAQ-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}
+		  WORKING_DIRECTORY ${SoftwareGuide_BINARY_DIR}
+		  COMMENT "Building FAQ HTML documentation tar.gz"
+		  )
+ADD_DEPENDENCIES(FAQ_HTML_targz  FAQ)
+
 
