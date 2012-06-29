@@ -199,6 +199,7 @@ public:
 
   void AddNewLabel(TLabel label, TValue value)
   {
+
     TValue newValue;
     newValue.SetSize(value.Size());
     for (unsigned int index = 0; index < value.Size(); index++)
@@ -251,17 +252,34 @@ public:
   {
     MeanValueMapType MeanMap;
 
-    for(unsigned int i=0; i<m_WeigthingMap.size(); i++)
+    typename std::map<TLabel, unsigned int>::iterator mapIt = m_WeigthingMap.begin();
+    typename std::map<TLabel, TValue>::iterator sumIt = m_LabelToImageIntensityMap.begin();
+
+    unsigned int pixelSize = m_MinVal.Size();
+    while (mapIt != m_WeigthingMap.end())
       {
-      TValue value = m_LabelToImageIntensityMap[i];
-      for (unsigned int index = 0; index < value.Size(); index++)
-           {
-            value[index]=value[index]/static_cast<float>(m_WeigthingMap[i]);
-           }
-      MeanMap[i]=value;
+      TLabel i = mapIt->first;
+
+      float weight = static_cast<float> (mapIt->second);
+      TValue sum = sumIt->second;
+      TValue value;
+      value.SetSize(pixelSize);
+      if (sum.Size() == 0)
+        {
+        value.Fill(0.0);
+        }
+      else
+        {
+        for (unsigned int index = 0; index < sum.Size(); index++)
+          {
+          value[index] = sum[index] / weight;
+          }
+        }
+
+      MeanMap[i] = value;
+      ++mapIt;
+      ++sumIt;
       }
-
-
     return MeanMap;
   }
 
@@ -757,17 +775,17 @@ private:
         {
 
         LabelType clabel = mapIt->first;
-        if (clabel == 0)
+        meanValue = mapIt->second; //meanValue.Size() is null if label is not present in label image
+        if (clabel == 0 || meanValue.Size()==0)
           {
           color.Fill(0.0);
           }
         else
           {
-
-          meanValue = mapIt->second;
           for (int RGB = 0; RGB < 3; RGB++)
             {
             unsigned int dispIndex = RGBIndex[RGB];
+
             color[RGB] = ((meanValue.GetElement(dispIndex) - minVal.GetElement(dispIndex)) / (
                 maxVal.GetElement(dispIndex) - minVal.GetElement(dispIndex))) * 255.0;
             }
