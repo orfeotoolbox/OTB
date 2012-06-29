@@ -292,7 +292,7 @@ OTB_TEST_APPLICATION(NAME apTvUtPixelValue
                 	     ${TEMP}/apTvUtPixelValue.txt
                              )
 #--- ColorMapping ---
-OTB_TEST_APPLICATION(NAME apTvUtColorMappingContinuousLUTJet
+OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorContinuousLUTJet
                      APP ColorMapping
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif 
                              -method continuous
@@ -300,8 +300,102 @@ OTB_TEST_APPLICATION(NAME apTvUtColorMappingContinuousLUTJet
                              -method.continuous.min 100 
                              -method.continuous.max 500
                              -out ${TEMP}/QB_Toulouse_Ortho_PAN_LUTJet.tif uint8
-                     VALID --compare-ascii ${EPSILON_7}
+                     VALID --compare-image ${EPSILON_7}
                              ${BASELINE}/apTvUtColorMappingContinuousLUTJet.tif
                 	         ${TEMP}/QB_Toulouse_Ortho_PAN_LUTJet.tif)
+                	         
        
-             
+OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorCustomLUTQB
+                     APP ColorMapping
+                     OPTIONS -in ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                             -method custom
+                             -method.custom.lut ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI_PNG_ColorTable.txt
+                             -out ${TEMP}/apTvUtColorMappingLabelToColorCustomLUTQB.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                	         ${BASELINE}/apTvUtColorMappingLabelToColorCustomLUTQB.tif
+                	         ${TEMP}/apTvUtColorMappingLabelToColorCustomLUTQB.tif)
+
+OTB_TEST_APPLICATION(NAME apTvUtColorMappingColorToLabelCustomLUTQB
+                     APP ColorMapping
+                     OPTIONS -in ${TEMP}/apTvUtColorMappingLabelToColorCustomLUTQB.tif
+                             -op colortolabel
+                     		 -op.colortolabel.notfound 0
+                             -method custom
+                             -method.custom.lut ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI_PNG_ColorTable.txt
+                             -out ${TEMP}/apTvUtColorMappingColorToLabelCustomLUTQB.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                	         ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                	         ${TEMP}/apTvUtColorMappingColorToLabelCustomLUTQB.tif)
+
+SET_TESTS_PROPERTIES(apTvUtColorMappingColorToLabelCustomLUTQB PROPERTIES DEPENDS apTvUtColorMappingLabelToColorCustomLUTQB)
+
+
+OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorCustomLUT
+                     APP ColorMapping
+                     OPTIONS -in ${INPUTDATA}/labelImage_UnsignedChar.tif
+                             -method custom
+                             -method.custom.lut ${INPUTDATA}/labelImage_UnsignedChar_lut.dat
+                             -out ${TEMP}/apTvUtColorMappingLabelToColorCustomLUT.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                	         ${BASELINE}/apTvUtColorMappingLabelToColorCustomLUT.tif
+                	         ${TEMP}/apTvUtColorMappingLabelToColorCustomLUT.tif)
+
+OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorOptimalLUTQB
+                     APP ColorMapping
+                     OPTIONS -in ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                             -method optimal
+                             -out ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUTQB.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtColorMappingLabelToColorOptimalLUTQB.tif
+                	         ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUTQB.tif)
+ 
+OTB_TEST_APPLICATION(NAME apTvUtColorMappingColorToLabelOptimalLUTQB
+                     APP ColorMapping
+                     OPTIONS -in ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUTQB.tif
+                             -method optimal
+                             -op colortolabel
+                     		 -op.colortolabel.notfound 0
+                             -out ${TEMP}/apTvUtColorMappingColorToLabelOptimalLUTQB.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtColorMappingColorToLabelOptimalLUTQB.tif  
+                             ${TEMP}/apTvUtColorMappingColorToLabelOptimalLUTQB.tif) 
+  
+SET_TESTS_PROPERTIES(apTvUtColorMappingColorToLabelOptimalLUTQB PROPERTIES DEPENDS apTvUtColorMappingLabelToColorOptimalLUTQB)
+
+                	         
+OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorOptimalLUT
+                     APP ColorMapping
+                     OPTIONS -in ${INPUTDATA}/labelImage_UnsignedChar.tif
+                             -method optimal
+                             -out ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUT.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtColorMappingLabelToColorOptimalLUT.tif
+                	         ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUT.tif)
+
+SET_TESTS_PROPERTIES(apTvUtColorMappingColorToLabelOptimalLUTQB PROPERTIES DEPENDS apTvUtColorMappingLabelToLabelOptimalLUTQB)
+
+OTB_TEST_APPLICATION(NAME apTvUtColorMappingColorToLabelOptimalLUT
+                     APP ColorMapping
+                     OPTIONS -in ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUT.tif
+                     		 -op colortolabel
+                     		 -op.colortolabel.notfound 255
+                             -method optimal
+                             -out ${TEMP}/apTvUtColorMappingColorToLabelOptimalLUT.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/labelImage_UnsignedChar.tif
+                             ${TEMP}/apTvUtColorMappingColorToLabelOptimalLUT.tif)
+
+SET_TESTS_PROPERTIES(apTvUtColorMappingColorToLabelOptimalLUT PROPERTIES DEPENDS apTvUtColorMappingLabelToLabelOptimalLUT)
+ 
+OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorSupportImage
+                     APP ColorMapping
+                     OPTIONS -in ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                             -method image
+                             -method.image.in ${EXAMPLEDATA}/ROI_QB_MUL_1.tif
+                             -out ${TEMP}/apTvUtColorMappingLabelToColorSupportImage.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtColorMappingLabelToColorSupportImage.tif
+                	         ${TEMP}/apTvUtColorMappingLabelToColorSupportImage.tif) 
+                	         
+                	         
+                         	                     
