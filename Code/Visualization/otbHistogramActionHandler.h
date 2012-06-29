@@ -149,7 +149,7 @@ public:
             {
             double tx = x - abcisseR;
             double newRightAbcisse = m_RightAsymptote->GetAbcisse() + tx;
-            if (newRightAbcisse > m_LeftAsymptote->GetAbcisse() 
+            if (newRightAbcisse > m_LeftAsymptote->GetAbcisse()
                 &&  newRightAbcisse <  m_MaximumAbcisse)
               {
               m_RightAsymptote->SetAbcisse(newRightAbcisse + tx);

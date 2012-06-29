@@ -164,7 +164,7 @@ PackedWidgetManager
   m_PackedWidget->m_HistogramsGroup->label(label);
 }
 
-void 
+void
 PackedWidgetManager
 ::SetLabelPixelDescriptionWidget(const char * label)
 {

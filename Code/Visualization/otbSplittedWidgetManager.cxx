@@ -192,7 +192,7 @@ SplittedWidgetManager
   m_SplittedWidget->m_HistogramsGroup->label(label);
 }
 
-void 
+void
 SplittedWidgetManager
 ::SetLabelPixelDescriptionWidget(const char * label)
 {
