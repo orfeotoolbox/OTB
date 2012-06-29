@@ -33,27 +33,27 @@ MARK_AS_ADVANCED(TAR_COMMAND)
 # Verify that we found all the components we need
 #
 IF(NOT LATEX_COMPILER)
-  MESSAGE("Latex compiler was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(WARNING "Latex compiler was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT LATEX_COMPILER)
 
 IF(NOT BIBTEX_COMPILER)
-  MESSAGE("BibTeX executable was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(WARNING "BibTeX executable was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT BIBTEX_COMPILER)
 
 IF(NOT DVIPS_CONVERTER)
-  MESSAGE("dvips executable was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(WARNING "dvips executable was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT DVIPS_CONVERTER)
 
 IF(NOT PS2PDF_CONVERTER)
-  MESSAGE("ps2pdf executable was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(WARNING "ps2pdf executable was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT PS2PDF_CONVERTER)
 
 IF(NOT MAKEINDEX_COMPILER)
-  MESSAGE("makeindex executable was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(WARNING "makeindex executable was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT MAKEINDEX_COMPILER)
 
 IF(NOT TEX4HT_COMPILER)
-  MESSAGE("htlatex executable was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(WARNING "htlatex executable was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT TEX4HT_COMPILER)
 
 
@@ -88,7 +88,7 @@ SET (RELEASE_NOTES_SRC RELEASE_NOTES.txt)
       #  COMMAND ${CMAKE_COMMAND} -E copy ${OTB_SOURCE_DIR}/${RELEASE_NOTES_SRC}  ${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}
        # COMMENT   "Copying the Release Notes"
    #)
-EXEC_PROGRAM(${CMAKE_COMMAND} ARGS -E copy "\"${OTB_SOURCE_DIR}/${RELEASE_NOTES_SRC}\"" "\"${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}\"")
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy "${OTB_SOURCE_DIR}/${RELEASE_NOTES_SRC}" "${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}")
    
 #
 # File that defines the path to .cxx examples in ITK sources
@@ -141,7 +141,7 @@ ENDIF(GENERATE_WRAPPING_DOC)
 
 
 FOREACH( file ${Tex_SRCS})
-MESSAGE("Processing File " ${file})
+MESSAGE(STATUS "Processing File " ${file})
 SET( SoftwareGuide_Tex_SRCS
    ${SoftwareGuide_Tex_SRCS} ${SoftwareGuide_SOURCE_DIR}/Latex/${file}
  )
@@ -156,12 +156,12 @@ FOREACH( exampletexname ${JAVA_EXAMPLES_TEX_FILES})
 ENDFOREACH( exampletexname )
 
 #Generate random contributor list
-EXECUTE_PROCESS(WORKING_DIRECTORY ${SoftwareGuide_SOURCE_DIR}/Latex/ COMMAND python  generateRandomContributorList.py)
-MESSAGE(STATUS "Generating contributor list done")
+MESSAGE(STATUS "Generating contributors list")
+EXECUTE_PROCESS(COMMAND python  generateRandomContributorList.py
+                WORKING_DIRECTORY ${SoftwareGuide_SOURCE_DIR}/Latex/ )
+MESSAGE(STATUS "Generating contributors list done")
 
 IF(LATEX_COMPILER)
-
-  MESSAGE("Have latex compiler")
 
   IF (NOT UNIX)
     #SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex;${SoftwareGuide_SOURCE_DIR};${SoftwareGuide_SOURCE_DIR}/Latex;${SoftwareGuide_SOURCE_DIR}/Art;${SoftwareGuide_BINARY_DIR};${SoftwareGuide_BINARY_DIR}/Examples;${SoftwareGuide_BINARY_DIR}/Wrappings/Java;${SoftwareGuide_BINARY_DIR}/Art;${SoftwareGuide_BINARY_DIR}/Latex)
@@ -217,7 +217,6 @@ IF(LATEX_COMPILER)
   SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.dvi)
   
   IF(DVIPS_CONVERTER)
-    MESSAGE("DVIPS converter")
     ADD_CUSTOM_COMMAND(
       SOURCE    SoftwareGuide.dvi
       COMMAND   ${DVIPS_WRAPPER1}

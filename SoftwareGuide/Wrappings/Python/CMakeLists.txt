@@ -12,7 +12,7 @@ FIND_PROGRAM(PERLCXXPARSER
 )
 
 
-ADD_CUSTOM_TARGET(SoftwareGuideWrapping  ALL echo)
+ADD_CUSTOM_TARGET(SoftwareGuideWrappingPython  ALL echo)
 
 #
 # At some point we should replace the manual OTB_EXAMPLES_SRCS with
@@ -39,15 +39,14 @@ SET(OTB_PYTHON_EXAMPLES_SRCS
 #
 IF( PERL_FOUND AND PERLCXXPARSER )
   FOREACH(example ${OTB_PYTHON_EXAMPLES_SRCS})
-    MESSAGE("Processing python wrapping example ${example}")
+    MESSAGE(STATUS "Processing python wrapping example ${example}")
     GET_FILENAME_COMPONENT(TEX_FILE ${example} NAME_WE)
     SET(TEX_FILE ${SoftwareGuide_BINARY_DIR}/Wrappings/Python/${TEX_FILE}Python.tex)
-    MESSAGE("Tex file: ${TEX_FILE}")
     ADD_CUSTOM_COMMAND(
       SOURCE    ${example}
       COMMAND   ${PERL_EXECUTABLE}
       ARGS      ${PERLCXXPARSER} ${example} ${TEX_FILE}
-      TARGET    SoftwareGuidePythonWrappings
+      TARGET    SoftwareGuideWrappingPython
       DEPENDS   ${PERLCXXPARSER} ${example}
       OUTPUTS   ${TEX_FILE}
       )

@@ -12,7 +12,7 @@ FIND_PROGRAM(PERLCXXPARSER
 )
 
 
-ADD_CUSTOM_TARGET(SoftwareGuideWrapping  ALL echo)
+ADD_CUSTOM_TARGET(SoftwareGuideWrappingJava  ALL echo)
 
 #
 # At some point we should replace the manual OTB_EXAMPLES_SRCS with
@@ -36,15 +36,14 @@ SET(OTB_JAVA_EXAMPLES_SRCS
 #
 IF( PERL_FOUND AND PERLCXXPARSER )
   FOREACH(example ${OTB_JAVA_EXAMPLES_SRCS})
-    MESSAGE("Processing java wrapping example ${example}")
+    MESSAGE(STATUS "Processing java wrapping example ${example}")
     GET_FILENAME_COMPONENT(TEX_FILE ${example} NAME_WE)
     SET(TEX_FILE ${SoftwareGuide_BINARY_DIR}/Wrappings/Java/${TEX_FILE}Java.tex)
-    MESSAGE("Tex file: ${TEX_FILE}")
     ADD_CUSTOM_COMMAND(
       SOURCE    ${example}
       COMMAND   ${PERL_EXECUTABLE}
       ARGS      ${PERLCXXPARSER} ${example} ${TEX_FILE}
-      TARGET    SoftwareGuideJavaWrappings
+      TARGET    SoftwareGuideWrappingJava
       DEPENDS   ${PERLCXXPARSER} ${example}
       OUTPUTS   ${TEX_FILE}
       )

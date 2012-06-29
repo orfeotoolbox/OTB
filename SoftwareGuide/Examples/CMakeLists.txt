@@ -461,18 +461,16 @@ IF( BUILD_FIGURES )
     # Run Perl script on each example to generate .cmake files
     GET_FILENAME_COMPONENT(EXAMPLE_FILE_BASE ${example} NAME_WE)
 
+    MESSAGE(STATUS "Processing example ${example}")
+
     # Parse the source file, foo.cxx to generate a foo.cmake containing above macros.
     IF(PERL_FOUND AND RUN_EXAMPLES_SCRIPT)
       SET( ExampleCmakeFile "${Examples_BINARY_DIR}/${EXAMPLE_FILE_BASE}.cmake")
       GET_FILENAME_COMPONENT(TEX_FILE ${example} NAME_WE)
       SET(TEX_FILE ${SoftwareGuide_BINARY_DIR}/Examples/${TEX_FILE}.tex)
-      EXEC_PROGRAM(${PERL_EXECUTABLE}
-#"${SoftwareGuide_BINARY_DIR}/Art/Generated" ${Examples_BINARY_DIR}
-#THOMAS
-#        ARGS      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} "${IsAnInputFile}" ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder}
-#        ARGS      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} "${OTB_DATA_PATHS}" ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder} ${OTB_DATA_PATHS}
-	ARGS       ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_DIR}/bin ${OTB_DATA_PATHS} ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder}
-      )
+      
+      EXECUTE_PROCESS(COMMAND ${PERL_EXECUTABLE} 
+                      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_DIR}/bin ${OTB_DATA_PATHS} ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder} )
       # MESSAGE( ARGS ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} ${OTB_DATA_PATHS} ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder})
       # Include each of the generated .cmake files in dependencies list
       # only if the file is generated (if it has command line tags)

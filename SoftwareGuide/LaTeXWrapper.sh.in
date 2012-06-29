@@ -3,4 +3,4 @@
 TEXINPUTS=$TEXINPUTS:${ITK_TEXINPUTS}
 export TEXINPUTS
 
-${LATEX_COMPILER} -file-line-error "$@"
+${LATEX_COMPILER} -file-line-error -halt-on-error "$@"
