@@ -33,27 +33,27 @@ MARK_AS_ADVANCED(TAR_COMMAND)
 # Verify that we found all the components we need
 #
 IF(NOT LATEX_COMPILER)
-  MESSAGE(WARNING "Latex compiler was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(FATAL_ERROR "Latex compiler was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT LATEX_COMPILER)
 
 IF(NOT BIBTEX_COMPILER)
-  MESSAGE(WARNING "BibTeX executable was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(FATAL_ERROR "BibTeX executable was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT BIBTEX_COMPILER)
 
 IF(NOT DVIPS_CONVERTER)
-  MESSAGE(WARNING "dvips executable was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(FATAL_ERROR "dvips executable was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT DVIPS_CONVERTER)
 
 IF(NOT PS2PDF_CONVERTER)
-  MESSAGE(WARNING "ps2pdf executable was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(FATAL_ERROR "ps2pdf executable was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT PS2PDF_CONVERTER)
 
 IF(NOT MAKEINDEX_COMPILER)
-  MESSAGE(WARNING "makeindex executable was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(FATAL_ERROR "makeindex executable was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT MAKEINDEX_COMPILER)
 
 IF(NOT TEX4HT_COMPILER)
-  MESSAGE(WARNING "htlatex executable was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(FATAL_ERROR "htlatex executable was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT TEX4HT_COMPILER)
 
 
@@ -161,11 +161,7 @@ EXECUTE_PROCESS(COMMAND python  generateRandomContributorList.py
                 WORKING_DIRECTORY ${SoftwareGuide_SOURCE_DIR}/Latex/ )
 MESSAGE(STATUS "Generating contributors list done")
 
-IF(LATEX_COMPILER)
-
   IF (NOT UNIX)
-    #SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex;${SoftwareGuide_SOURCE_DIR};${SoftwareGuide_SOURCE_DIR}/Latex;${SoftwareGuide_SOURCE_DIR}/Art;${SoftwareGuide_BINARY_DIR};${SoftwareGuide_BINARY_DIR}/Examples;${SoftwareGuide_BINARY_DIR}/Wrappings/Java;${SoftwareGuide_BINARY_DIR}/Art;${SoftwareGuide_BINARY_DIR}/Latex)
-    
     SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex;${SoftwareGuide_SOURCE_DIR};${SoftwareGuide_SOURCE_DIR}/Latex;${SoftwareGuide_SOURCE_DIR}/Art;${SoftwareGuide_BINARY_DIR};${SoftwareGuide_BINARY_DIR}/Examples;${SoftwareGuide_BINARY_DIR}/Art;${SoftwareGuide_BINARY_DIR}/Latex;${SoftwareGuide_BINARY_DIR}/Wrappings/Java;${SoftwareGuide_BINARY_DIR}/Wrappings/Python)
 
     CONFIGURE_FILE(${SoftwareGuide_SOURCE_DIR}/LaTeXWrapper.bat.in
@@ -184,7 +180,6 @@ IF(LATEX_COMPILER)
       SET (LATEX_WRAPPER2 "")
     ENDIF (TEX4HT_COMPILER)
   ELSE (NOT UNIX)
-    #SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex:${SoftwareGuide_SOURCE_DIR}:${SoftwareGuide_SOURCE_DIR}/Latex:${SoftwareGuide_SOURCE_DIR}/Art:${SoftwareGuide_BINARY_DIR}:${SoftwareGuide_BINARY_DIR}/Examples:${SoftwareGuide_BINARY_DIR}/Wrappings/Java:${SoftwareGuide_BINARY_DIR}/Art:${SoftwareGuide_BINARY_DIR}/Latex)
     SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex:${SoftwareGuide_SOURCE_DIR}:${SoftwareGuide_SOURCE_DIR}/Latex:${SoftwareGuide_SOURCE_DIR}/Art:${SoftwareGuide_BINARY_DIR}:${SoftwareGuide_BINARY_DIR}/Examples:${SoftwareGuide_BINARY_DIR}/Art:${SoftwareGuide_BINARY_DIR}/Latex:${SoftwareGuide_BINARY_DIR}/Wrappings/Java:${SoftwareGuide_BINARY_DIR}/Wrappings/Python)
     
     CONFIGURE_FILE(${SoftwareGuide_SOURCE_DIR}/LaTeXWrapper.sh.in
@@ -204,88 +199,29 @@ IF(LATEX_COMPILER)
     ENDIF (TEX4HT_COMPILER)
   ENDIF (NOT UNIX)
 
-
   ADD_CUSTOM_COMMAND(
-    SOURCE    ${SoftwareGuide_Tex_SRCS}  ${ITK_EXAMPLES_TEX_SRCS}
-    COMMAND   ${LATEX_WRAPPER1}
-    ARGS      ${LATEX_WRAPPER2}
-              ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.tex
+    OUTPUT    SoftwareGuide.pdf
+    COMMAND   ${LATEX_WRAPPER1} ${LATEX_WRAPPER2} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.tex
+    COMMAND   ${MAKEINDEX_COMPILER} SoftwareGuide
+    COMMAND   ${BIBTEX_COMPILER} SoftwareGuide
+    COMMAND   ${LATEX_WRAPPER1} ${LATEX_WRAPPER2} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.tex
+    COMMAND   ${LATEX_WRAPPER1} ${LATEX_WRAPPER2} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.tex
+    COMMAND   ${DVIPS_WRAPPER1} ${DVIPS_WRAPPER2} SoftwareGuide.dvi ${DVIPS_CONVERTER_OPTIONS} -o  SoftwareGuide.ps
+    COMMAND   ${PS2PDF_CONVERTER} ${PS2PDF_CONVERTER_OPTIONS} SoftwareGuide.ps
     DEPENDS   ${SoftwareGuide_Tex_SRCS} ${ITK_EXAMPLES_TEX_SRCS}
-    OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.dvi
-    COMMENT   "Generating dvi file"
+    COMMENT   "Generating pdf file"
   )
-  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.dvi)
-  
-  IF(DVIPS_CONVERTER)
-    ADD_CUSTOM_COMMAND(
-      SOURCE    SoftwareGuide.dvi
-      COMMAND   ${DVIPS_WRAPPER1}
-      ARGS      ${DVIPS_WRAPPER2}
-                SoftwareGuide.dvi ${DVIPS_CONVERTER_OPTIONS} -o  SoftwareGuide.ps
-      DEPENDS   SoftwareGuide.ind SoftwareGuide.bbl SoftwareGuide.dvi
-      OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.ps
-      COMMENT   "Generating ps file"
-    )
-  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.ps)
 
-  ENDIF(DVIPS_CONVERTER)
-
-  IF(PS2PDF_CONVERTER)
-    ADD_CUSTOM_COMMAND(
-      SOURCE    SoftwareGuide.ps
-      COMMAND   ${PS2PDF_CONVERTER}
-      ARGS      ${PS2PDF_CONVERTER_OPTIONS} SoftwareGuide.ps
-      OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.pdf
-      COMMENT   "Generating pdf file"
-    )
-    SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.pdf)
-  ENDIF(PS2PDF_CONVERTER)
-
-  IF(MAKEINDEX_COMPILER)
-    ADD_CUSTOM_COMMAND(
-      SOURCE    ${SoftwareGuide_Tex_SRCS}  ${ITK_EXAMPLES_TEX_SRCS}
-      COMMAND   ${LATEX_WRAPPER1}
-      ARGS      ${LATEX_WRAPPER2}
-                ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.tex
-      OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.idx
-      COMMENT   "Generating idx file"
-    )
-  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.idx)
-  
-    ADD_CUSTOM_COMMAND(
-      SOURCE    SoftwareGuide.idx
-      COMMAND   ${MAKEINDEX_COMPILER}
-      ARGS      SoftwareGuide
-      OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.ind
-      COMMENT   "Generating ind file"
-    )
-  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.ind)
-  ENDIF(MAKEINDEX_COMPILER)
-
-  IF(BIBTEX_COMPILER)
-    ADD_CUSTOM_COMMAND(
-      SOURCE    SoftwareGuide.aux
-      COMMAND   ${BIBTEX_COMPILER}
-      ARGS      SoftwareGuide
-      OUTPUT    ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.bbl
-      COMMENT   "Generating bbl file"
-    )
-  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.bbl)
-  ENDIF(BIBTEX_COMPILER)
-           
-ENDIF(LATEX_COMPILER)
-
-
-ADD_CUSTOM_TARGET(SoftwareGuideLatex ALL DEPENDS ${TEX_OUTPUTS})
+ADD_CUSTOM_TARGET(SoftwareGuide_Pdf ALL DEPENDS SoftwareGuide.pdf)
 
 # Rename the SoftwareGuide.pdf file into SoftwareGuide-version.pdf
 SET(FINAL_DOC_NAME "${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
-ADD_CUSTOM_TARGET(SoftwareGuideRenamePdf
+ADD_CUSTOM_TARGET(SoftwareGuide_RenamePdf
                   ALL
    		  ${CMAKE_COMMAND} -E rename ${SoftwareGuide_BINARY_DIR}/Latex/SoftwareGuide.pdf ${FINAL_DOC_NAME}.pdf
                   COMMENT "Renaming the pdf document" 
        )
-ADD_DEPENDENCIES(SoftwareGuideRenamePdf SoftwareGuideLatex)
+ADD_DEPENDENCIES(SoftwareGuide_RenamePdf SoftwareGuide_Pdf)
 
 ADD_CUSTOM_TARGET(SoftwareGuide_HTML
 		  ALL
@@ -293,8 +229,7 @@ ADD_CUSTOM_TARGET(SoftwareGuide_HTML
 		  WORKING_DIRECTORY ${SoftwareGuide_BINARY_DIR}
 		  COMMENT "Building HTML documentation"
 		  )
-ADD_DEPENDENCIES(SoftwareGuide_HTML SoftwareGuideLatex)
-
+ADD_DEPENDENCIES(SoftwareGuide_HTML SoftwareGuide_RenamePdf)
 
 ADD_CUSTOM_TARGET(SoftwareGuide_HTML_targz
 		  ALL
