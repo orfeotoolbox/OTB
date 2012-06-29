@@ -149,7 +149,6 @@ public:
             {
             double tx = x - abcisseR;
             double newRightAbcisse = m_RightAsymptote->GetAbcisse() + tx;
-            //std::cout <<"right abcisse "<< newRightAbcisse << " max "<< m_MaximumAbcisse  << std::endl;
             if (newRightAbcisse > m_LeftAsymptote->GetAbcisse() 
                 &&  newRightAbcisse <  m_MaximumAbcisse)
               {
