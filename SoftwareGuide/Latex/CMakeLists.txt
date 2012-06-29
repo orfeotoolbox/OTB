@@ -12,6 +12,23 @@ FIND_PROGRAM(TEX4HT_COMPILER
 )
 MARK_AS_ADVANCED(TEX4HT_COMPILER)
 
+
+FIND_PROGRAM(SH_COMMAND
+  NAMES sh
+  PATHS /usr/bin
+)
+MARK_AS_ADVANCED(SH_COMMAND)
+
+
+FIND_PROGRAM(TAR_COMMAND
+  NAMES tar
+  PATHS /usr/bin
+)
+MARK_AS_ADVANCED(TAR_COMMAND)
+
+
+
+
 #
 # Verify that we found all the components we need
 #
@@ -270,3 +287,21 @@ ADD_CUSTOM_TARGET(SoftwareGuideRenamePdf
                   COMMENT "Renaming the pdf document" 
        )
 ADD_DEPENDENCIES(SoftwareGuideRenamePdf SoftwareGuideLatex)
+
+ADD_CUSTOM_TARGET(SoftwareGuide_HTML
+		  ALL
+		  COMMAND ${SH_COMMAND} ${SoftwareGuide_BINARY_DIR}/Tex4htWrapper.sh SoftwareGuide
+		  WORKING_DIRECTORY ${SoftwareGuide_BINARY_DIR}
+		  COMMENT "Building HTML documentation"
+		  )
+ADD_DEPENDENCIES(SoftwareGuide_HTML SoftwareGuideLatex)
+
+
+ADD_CUSTOM_TARGET(SoftwareGuide_HTML_targz
+		  ALL
+		  COMMAND ${TAR_COMMAND} cvzf SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}-html.tar.gz SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}
+		  WORKING_DIRECTORY ${SoftwareGuide_BINARY_DIR}
+		  COMMENT "Building HTML documentation tar.gz"
+		  )
+ADD_DEPENDENCIES(SoftwareGuide_HTML_targz SoftwareGuide_HTML)
+
