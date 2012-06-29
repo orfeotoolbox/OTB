@@ -231,13 +231,22 @@ ADD_CUSTOM_TARGET(SoftwareGuide_HTML
 		  )
 ADD_DEPENDENCIES(SoftwareGuide_HTML SoftwareGuide_RenamePdf)
 
+ADD_CUSTOM_TARGET(SoftwareGuide_HTML_index
+		  ALL
+		  COMMAND ln -s SoftwareGuide.html index.html
+		  WORKING_DIRECTORY ${SoftwareGuide_BINARY_DIR}/SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}
+		  COMMENT "Building HTML documentation index.html"
+		  )
+ADD_DEPENDENCIES(SoftwareGuide_HTML_index SoftwareGuide_HTML)
+
+
 ADD_CUSTOM_TARGET(SoftwareGuide_HTML_targz
 		  ALL
 		  COMMAND ${TAR_COMMAND} cvzf SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}-html.tar.gz SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}
 		  WORKING_DIRECTORY ${SoftwareGuide_BINARY_DIR}
 		  COMMENT "Building Software Guide HTML documentation tar.gz"
 		  )
-ADD_DEPENDENCIES(SoftwareGuide_HTML_targz SoftwareGuide_HTML)
+ADD_DEPENDENCIES(SoftwareGuide_HTML_targz SoftwareGuide_HTML_index)
 
 
 # FAQ
