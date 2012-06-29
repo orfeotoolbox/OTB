@@ -537,8 +537,8 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "ROI_QB_MUL_1_SVN_CLASS_MULTI.png");
     SetDocExampleParameterValue("method", "custom");
-    SetDocExampleParameterValue("method.custom.lut", "ColorTable.txt");
-    SetDocExampleParameterValue("out", "clLabeledFancyImageQB123_1.tif");
+    SetDocExampleParameterValue("method.custom.lut", "ROI_QB_MUL_1_SVN_CLASS_MULTI_PNG_ColorTable.txt");
+    SetDocExampleParameterValue("out", "Colorized_ROI_QB_MUL_1_SVN_CLASS_MULTI.tif");
  }
 
   void DoUpdateParameters()
