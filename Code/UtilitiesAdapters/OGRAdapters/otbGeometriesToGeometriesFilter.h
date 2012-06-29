@@ -18,6 +18,14 @@
 #ifndef __otbGeometriesToGeometriesFilter_h
 #define __otbGeometriesToGeometriesFilter_h
 
+/**\ingroup GeometriesFilters
+ * \file    otbGeometriesToGeometriesFilter.h
+ * \since   OTB v 3.14.0
+ * Commons definitions for geometries filter definition.
+ * This file contains all the main classes required to define new geometries
+ * transformations.
+ */
+
 #include "otbGeometriesSource.h"
 #include <map>
 #include <boost/mpl/assert.hpp>
@@ -25,7 +33,11 @@
 #include "otbOGRFeatureWrapper.h"
 #include "otbOGRLayerWrapper.h"
 
+// forward declarations
+namespace otb { namespace internal {
 struct ProcessVisitor;
+} } // otb::internal namespace
+
 namespace otb
 {
 /**\ingroup GeometriesFilters
@@ -74,11 +86,24 @@ protected:
    */
   virtual ~GeometriesToGeometriesFilter();
 
-  virtual void GenerateOutputInformation(void);
+  /** Processes the input to fill the output.
+   * This is the main processing function. It either works \em in-place or by
+   * \em copying the transformed input \c Feature s into the output.
+   */
   virtual void GenerateData(void);
 
 private:
+  /** \e In-place processing function.
+   * \param[in,out] inout the geometries set that'll be modified by the filter.
+   * \pre The filter must have been initialized
+   */
   void Process(OutputGeometriesType &inout);
+  /** \e By-copy processing function.
+   * \param[in] source the geometries set to transform
+   * \param[out] destination the resulting geometries set.
+   * \pre The filter must have been initialized
+   * \pre The \c destination must be ready to receive a result.
+   */
   void Process(InputGeometriesType const& source, OutputGeometriesType &destination);
 
   /**\name Filter specialization hooks.
@@ -138,7 +163,7 @@ private:
    */
   virtual void                     DoFinalizeInitialisation() {}
   //@}
-  friend struct ::ProcessVisitor;
+  friend struct otb::internal::ProcessVisitor;
   };
 
 /**\ingroup GeometriesFilters
@@ -203,6 +228,16 @@ private:
  * This functor dispatcher is meant to work:
  * - on a single \c ogr::Layer (in that case, it acts as a in-place filter).
  * - or on a pair of \c ogr::Layer s (in that case, it acts as a copy filter).
+ *
+ * Specializations are expected to provide:
+ * - a typedef \c TransformedElementType which is expected to match \c
+ * TransformationFunctor::TransformedElementType;
+ * - one overload of \c operator() one that takes a reference to a \c ogr::Layer
+ * for \em in-place transformation;
+ * - another overload of \c operator() one that takes a const reference, and a
+ * reference to \c ogr::Layer for \em by-copy transformation;
+ * - and one overload to <tt>operator->()</tt> that returns a pointer to the
+ * actual \c TransformationFunctor.
  * \since OTB v 3.14.0
  * \todo Add a specialization for \c ogr::Feature.
  */
@@ -213,6 +248,12 @@ struct TransformationFunctorDispatcher
 
 /**\ingroup GeometriesFilters
  * Specialization for \c ogr::Layer.
+ * It simply forwards the call to the internal functor that'll have to do all
+ * the transformation work.
+ *
+ * If you need to change the number of elements in a layer, use a \c
+ * TransformationFunctor that works on layers. The dispatching mecanism will
+ * automatically end up here.
  * \tparam TransformationFunctor actual transformation functor
  * \since OTB v 3.14.0
  */
@@ -234,6 +275,19 @@ private:
 /**\ingroup GeometriesFilters
  * Specialization for \c OGRGeometry.
  * \tparam TransformationFunctor actual transformation functor
+ *
+ * In this case, the \c TransformationFunctor works on \c OGRGeometry (instead
+ * of \c ogr::Layer). The default behaviour provided is to loop on all the \c
+ * ogr::Feature s of the original layer, and for each feature:
+ * - build a new one (in case of the \emm by-copy policy),
+ * - build a new geometry thanks to the \c TransformationFunctor, which will be
+ * assigned to the output feature,
+ * - transform the fields from the input layer,
+ * - and update the feature in the output layer.
+ *
+ * \note In the case of the \em by-copy policy, fields transformation cannot
+ * change the number of fields nor their nature. Only field values may be
+ * modified.
  * \since OTB v 3.14.0
  */
 template <class TransformationFunctor, class FieldTransformationPolicy>
@@ -256,6 +310,12 @@ private:
 /**\ingroup GeometriesFilters
  * \class DefaultGeometriesToGeometriesFilter
  * Generic helper class to filter geometries sets given a tranformation functor.
+ * This generic class provides the default behaviour for most filters that we
+ * may need to implement.
+ *
+ * Thanks to it, we just need to provide a \c TransformationFunctor, and a \c
+ * FieldTransformationPolicy (if the default no-transformation policy is not
+ * what we need).
  * \since OTB v 3.14.0
  * \todo Find a better name
  */
@@ -295,13 +355,29 @@ protected:
   /** Destructor. */
   virtual ~DefaultGeometriesToGeometriesFilter();
 
+  /**
+   * Hook that actually filters an OGR \c Layer.
+   * \param[in]     source      Input layer
+   * \param[in,out] destination Output layer
+   *
+   * This specialization just forwards the transformation to the \c
+   * m_TransformationFunctor.
+   * \note When <tt>source == destination</tt>, it means this is an \em in-place
+   * filter.
+   */
   virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const;
+  /**
+   * Hook used to define the fields of the new layer.
+   * \param[in] source  source \c Layer -- for reference
+   * \param[in,out] dest  destination \c Layer
+   *
+   * Just forwards the fields definition to the \c FieldTransformationPolicy
+   * inherited from the \c TransformationFunctorDispatcherType.
+   */
   virtual void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const
     {
     this->DefineFields(source, dest);
     }
-private:
-  // TransformationFunctorDispatcherType m_TransformationFunctor;
 };
 
 } // end namespace otb

@@ -31,19 +31,47 @@
 /*===========================================================================*/
 /**\ingroup GeometriesFilters
  * \class ProcessVisitor
+ * Internal class used to dispatch filters on either \c ogr::DataSource, or \c
+ * ogr::Layer.
+ * As \c GeometriesSet is a variant that can contain either a \c ogr::DataSource
+ * or a \c ogr::Layer, we need a way to dispath filtering operations on the
+ * right type. This is done thanks to \c ProcessVisitor.
  * \since OTB v 3.14.0
- * \todo Group -> internal
- * \todo Namespace -> ogr::internal ?
  */
-struct ProcessVisitor : boost::static_visitor<>
+struct otb::internal::ProcessVisitor : boost::static_visitor<>
 {
   ProcessVisitor(otb::GeometriesToGeometriesFilter const& filter)
     : m_filter(filter) {}
+  /**
+   * Processes layers (\em by-copy).
+   * \param[in] source  source layer
+   * \param[in,out] destination  destination layer.
+   * \throw WhatEver the filter throws.
+   *
+   * This is the \em leaf operation that forwards the call to the polymorphic
+   * \c GeometriesToGeometriesFilter::DoProcessLayer() function.
+   */
   void operator()(otb::ogr::Layer const& source, otb::ogr::Layer & destination) const
     {
     m_filter.DoProcessLayer(source, destination);
     }
 
+  /**
+   * Processes data sources (\em by-copy).
+   * \param[in] source  source data source
+   * \param[in,out] destination  destination data source
+   * \throw WhatEver the filter throws.
+   * \throw itk::ExceptionObject if the construction of a new layer fails
+   *
+   * For each layer in the \c source, this operation:
+   * - builds a new layer in the \c destination data source (according to the
+   *   choices made in the actual specialization of \c
+   *   GeometriesToGeometriesFilter regarding layer options, layer spatial
+   *   reference, geometries type, ...);
+   * - defines new fileds in the new layer;
+   * - and finally processes the layer thanks to the polymorphic \c
+   *   GeometriesToGeometriesFilter::DoProcessLayer() function.
+   */
   void operator()(otb::ogr::DataSource::Pointer source, otb::ogr::DataSource::Pointer destination) const
     {
     assert(source && "can't filter a nil datasource");
@@ -66,11 +94,27 @@ struct ProcessVisitor : boost::static_visitor<>
       }
     }
 
+  /**
+   * Processes layers (\em in-place).
+   * \param[in,out] inout  layer to modify
+   * \throw WhatEver the filter throws.
+   *
+   * This is the \em leaf operation that forwards the call to the polymorphic
+   * \c GeometriesToGeometriesFilter::DoProcessLayer() function.
+   */
   void operator()(otb::ogr::Layer & inout) const
     {
     m_filter.DoProcessLayer(inout, inout);
     }
 
+  /**
+   * Processes data sources (\em in-place).
+   * \param[in,out] inout  data source to modify
+   * \throw WhatEver the filter throws.
+   *
+   * This operation finally processes each layer of the \c source thanks to the
+   * polymorphic \c GeometriesToGeometriesFilter::DoProcessLayer() function.
+   */
   void operator()(otb::ogr::DataSource::Pointer inout) const
     {
     assert(inout && "can't filter a nil datasource");
@@ -82,6 +126,13 @@ struct ProcessVisitor : boost::static_visitor<>
       }
     }
 
+  /**
+   * Fall-back visiting function for invalid mixed tranformations (layer ->
+   * datasource).
+   * The only transformations accepted are
+   * - layer -> layer,
+   * - and data source -> data source.
+   */
   template <typename GT1, typename GT2> void operator()(GT1 const&, GT2 &) const
     {
     assert(!"You shall not mix DataSources and Layers in GeometriesToGeometriesFilter");
@@ -124,7 +175,7 @@ otb::GeometriesToGeometriesFilter::GetInput(void )
 {
   // si layer, appelle virt process layer
   // si DS, loop et appelle virt process layer
-  source.apply(ProcessVisitor(*this), destination);
+  source.apply(internal::ProcessVisitor(*this), destination);
 }
 
 /*virtual*/ void otb::GeometriesToGeometriesFilter::Process(
@@ -132,13 +183,7 @@ otb::GeometriesToGeometriesFilter::GetInput(void )
 {
   // si layer, appelle virt process layer
   // si DS, loop et appelle virt process layer
-  inout.apply(ProcessVisitor(*this));
-}
-
-/*virtual*/
-void otb::GeometriesToGeometriesFilter::GenerateOutputInformation(void )
-{
-  Superclass::GenerateOutputInformation();
+  inout.apply(internal::ProcessVisitor(*this));
 }
 
 /*virtual*/

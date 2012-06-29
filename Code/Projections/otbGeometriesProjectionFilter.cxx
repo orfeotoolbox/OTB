@@ -43,27 +43,6 @@ const double k_averageElevation = -32768.0;
 /*======================[ Reprojection Transformation ]======================*/
 /*===========================================================================*/
 
-
-template <typename TGeometry>
-otb::ogr::UniqueGeometryPtr
-otb::ReprojectTransformationFunctor::ByCopy::operator()(TGeometry const* in) const
-{
-  boost::interprocess::unique_ptr<TGeometry, ogr::internal::GeometryDeleter>
-    out(in ? static_cast <TGeometry*>(in->clone()) : 0); // OGR clone doesn't use covariant return ...
-  if (out)
-    m_Reprojector.do_transform(*out);
-  ogr::UniqueGeometryPtr res(out.release());
-  return otb::move(res);
-}
-
-template <typename TGeometry>
-void
-otb::ReprojectTransformationFunctor::InPlace::operator()(TGeometry * inout) const
-{
-  if (inout)
-    m_Reprojector.do_transform(*inout);
-}
-
 #if 0
 void do_transform(OGRLinearRing & g) const
 {
@@ -71,7 +50,7 @@ void do_transform(OGRLinearRing & g) const
 }
 #endif
 
-void otb::ReprojectTransformationFunctor::do_transform(OGRPoint & g) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRPoint & g) const
 {
   typedef InternalTransformType::InputPointType  InputPointType;
   typedef InternalTransformType::OutputPointType OutputPointType;
@@ -84,7 +63,7 @@ void otb::ReprojectTransformationFunctor::do_transform(OGRPoint & g) const
   g.setY(outPoint[1]);
 }
 
-void otb::ReprojectTransformationFunctor::do_transform(OGRLineString & g) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRLineString & g) const
 {
   OGRPoint point;
   for (int i=0, N=g.getNumPoints(); i!=N; ++i)
@@ -96,13 +75,13 @@ void otb::ReprojectTransformationFunctor::do_transform(OGRLineString & g) const
 }
 
 #if 0
-void otb::ReprojectTransformationFunctor::do_transform(OGRCurve & g) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRCurve & g) const
 {
   assert(!"OGRCurve is just an interface, they can't be reprojected yet");
 }
 #endif
 
-void otb::ReprojectTransformationFunctor::do_transform(OGRPolygon & g) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRPolygon & g) const
 {
   // Note: OGRPolygon interface states that rings obtained through
   // getInteriorRing() and getExteriorRing() shall not be modified.
@@ -131,25 +110,25 @@ void otb::ReprojectTransformationFunctor::do_transform(OGRPolygon & g) const
 }
 
 #if 0
-void otb::ReprojectTransformationFunctor::do_transform(OGRSurface & g) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRSurface & g) const
 {
   assert(!"OGRSurface is just an interface, they can't be reprojected yet");
 }
 
-void otb::ReprojectTransformationFunctor::do_transform(OGRMultiLineString & g) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRMultiLineString & g) const
 {
 }
 
-void otb::ReprojectTransformationFunctor::do_transform(OGRMultiPoint & g) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRMultiPoint & g) const
 {
 }
 
-void otb::ReprojectTransformationFunctor::do_transform(OGRMultiPolygon & g) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRMultiPolygon & g) const
 {
 }
 #endif
 
-void otb::ReprojectTransformationFunctor::do_transform(OGRGeometryCollection & col) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRGeometryCollection & col) const
 {
   for (int i=0, N=col.getNumGeometries(); i!=N; ++i)
     {
@@ -160,15 +139,15 @@ void otb::ReprojectTransformationFunctor::do_transform(OGRGeometryCollection & c
 }
 
 otb::ogr::UniqueGeometryPtr
-otb::ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
-// otb::ReprojectTransformationFunctor::apply(OGRGeometry const* in) const
+otb::internal::ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
+// otb::internal::ReprojectTransformationFunctor::apply(OGRGeometry const* in) const
 {
   otb::ogr::UniqueGeometryPtr res
     = ogr::apply<otb::ogr::UniqueGeometryPtr>(in, ByCopy(*this));
   return otb::move(res);
 }
 
-void otb::ReprojectTransformationFunctor::apply_inplace(OGRGeometry * inout) const
+void otb::internal::ReprojectTransformationFunctor::apply_inplace(OGRGeometry * inout) const
 {
   if (inout)
     ogr::apply<void>(inout, InPlace(*this));
@@ -260,14 +239,13 @@ void otb::GeometriesProjectionFilter::DoProcessLayer(ogr::Layer const& source, o
   m_Transform->SetInputProjectionRef(source.GetProjectionRef());
   m_Transform->InstanciateTransform();
 
-  if (source != destination)
+  if (source == destination)
     {
-    m_TransformationFunctor(source, destination); // if TransformedElementType == layer
+    itkExceptionMacro(<<"Geometries projection filter cannot work in-place as the resulting layers will have a new spatial reference."
+      " Please supply too different geometries sets to work on.");
     }
-  else
-    {
-    m_TransformationFunctor(destination); // if TransformedElementType == layer
-    }
+
+  m_TransformationFunctor(source, destination); // if TransformedElementType == layer
 }
 
 /*virtual*/
