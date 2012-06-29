@@ -58,7 +58,7 @@ SET(DVIPS_CONVERTER_OPTIONS  -D600)
 
 # Option for html generation
 SET(TEX4HT_OPTIONS html,2,sections+)
-SET (HTML_OUTPUT "Html")
+SET (HTML_OUTPUT "SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 
 #
 #copy release_notes from source tree
