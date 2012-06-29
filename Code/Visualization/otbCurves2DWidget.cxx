@@ -247,6 +247,11 @@ void Curves2DWidget::RenderAxis()
   screenLabelPosition[0] = this->w() - m_Margins[0] - 5 * m_XAxisLabel.size();
   screenLabelPosition[1] = xAxisYPos - 10;
   gl_draw(m_XAxisLabel.c_str(), (float) screenLabelPosition[0], (float) screenLabelPosition[1]);
+
+  // Draw the title of the curve
+  screenLabelPosition[0] = this->w() - m_Margins[0] - 7 * m_Title.size();
+  screenLabelPosition[1] = this->h() - m_Margins[1] - 10;
+  gl_draw(m_Title.c_str(), (float) screenLabelPosition[0], (float) screenLabelPosition[1]);
 }
 
 void Curves2DWidget::RenderGrid()

@@ -136,6 +136,10 @@ public:
   /** Get curve by ID instead of index */
   CurvePointerType GetCurveByItsId(unsigned int id);
 
+  /** Set the title of the curve */
+  itkSetStringMacro(Title);
+  itkGetStringMacro(Title);
+
 protected:
   /** Constructor */
   Curves2DWidget();
@@ -199,6 +203,9 @@ private:
 
   // Space to screen transform
   AffineTransformPointerType m_SpaceToScreenTransform;
+
+  // Title
+  std::string       m_Title;
 
 }; // end class
 } // end namespace otb
