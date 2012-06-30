@@ -50,10 +50,10 @@ public:
 
   /** Standard macro */
   itkNewMacro(Self)
- ;
+;
 
   itkTypeMacro(VectorDataReprojection, otb::Application)
- ;
+;
 
 private:
   void DoInit()
