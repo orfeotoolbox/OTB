@@ -47,13 +47,13 @@ or compiling from sources (Table~\ref{tab:installation}). What you need depends 
 \begin{table}[!htbp]
 \begin{tabular}{|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|}
 \hline
-& \textbf{OTB library and internal applications} & \textbf{Monteverdi} & \textbf{OTB-Applications} & \textbf{Wrapping (Java and Python)} \\
+& \textbf{OTB library and internal applications} & \textbf{Monteverdi} & \textbf{former OTB-Applications} & \textbf{Wrapping (Java and Python)} \\
 \hline
 \textbf{Any platform} & 
   Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source}) 
 & Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source})\\
 \hline
-\textbf{Windows 2000/XP/Vista/Seven} & OSGeo4W installer for internal applications & Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries})& Windows installer (see section~\ref{ssec:windows_binaries})& Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries}) \\
+\textbf{Windows 2000/XP/Vista/Seven} & OSGeo4W installer for internal applications & Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries})& Build from source (see section~\ref{sec:source})& OSGeo4W installer (see section~\ref{ssec:windows_binaries}) \\
 \hline
 \textbf{MacOS X 10.5 and higher} &  & app's DMG file (see section~\ref{ssec:mac_binaries}) &  & \\
 \hline
@@ -76,53 +76,33 @@ or compiling from sources (Table~\ref{tab:installation}). What you need depends 
 \subsection{Windows 2000/XP/Vista/Seven}
 \label{ssec:windows_binaries}
 
-For Windows 2000/XP/Vista/Seven users, classical installation programs exists for Monteverdi, 
-old OTB-Applications and OTB-Wrapping. This is the old way, we recommend to use the new install
-process directly through OSGeo4W which is described later in this paragraph. 
+For Windows 2000/XP/Vista/Seven users, there is a classical installation program for Monteverdi, available from the 
+\href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}. This is the old way, we highly recommend to use the new install
+process directly through OSGeo4W which is described in this paragraph. 
 
-The classical installers depends on dependencies that can be installed through \href{http://trac.osgeo.org/osgeo4w/}{OSGeo4W}. The packages that
-need to be installed are:
+Since version 3.12, we provide OTB packages through OSGeo4W for Windows 2000/XP/Vista/Seven users. Packages for the new OTB applications, Monteverdi and 
+OTB-Wrapping are available directly in the OSGeo4W installer with the following names:
 \begin{itemize}
-\item gdal,
-\item curl, 
-\item libtiff,
-\item libgeotiff,
-\item libjpeg,
-\item zlib, 
-\item libpng,
-\item mapnik,
-\item gettext.
-\end{itemize}\label{OSGeo4W_lib}
-Remember that the corresponding dlls are to be accessible in the system path. To ensure so, add
-the OSGeo4W bin directory to your system path.
-
-Once the dependencies have been properly installed, please go the the 
-\href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}, to
-get the installer. Double-click on the installer and let it guide you through the 
-installation process.
-
-Since OTB 3.12, we provide OTB packages through OSGeo4W for new OTB Applications, Monteverdi and 
-OTB-Wrapping. This packages are available directly in the OSGeo4W installer with the following names:
-\begin{itemize}
-\item \textbf{otb-bin} and \textbf{otb-python} respectively for command lines and QT applications, and for python applications
-\item \textbf{otb-monteverdi} for monteverdi application 
-\item \textbf{otb-wrapping} for low levelPython/Java bindings.
+\item \textbf{otb-bin} for command line and QT applications
+\item \textbf{otb-python} for python applications
+\item \textbf{otb-monteverdi} for the Monteverdi application 
+\item \textbf{otb-wrapping} for low level Python/Java bindings.
 \end{itemize}
-Select the package you want add let it guide by the installation process which will manage the installation of all dependecies needed.
-In the case of \textbf{otb-monteverdi}, monteverdi will be directly install in OSGeo4W repository and some shortcuts will be added to your desktop 
-and in the start menu. You can now use directly monteverdi from your desktop, from the starter menu and from an OSGeo4W shell with command monteverdi. 
+Follow the instructions in the installer and select the packages you want to add. The installer will proceed with the installation of selected packages and all their dependencies.
+In the case of \textbf{otb-monteverdi}, Monteverdi will be directly installed in the OSGeo4W repository and a shortcut will be added to your desktop 
+and in the start menu (in the OSGeo4W folder). You can now use directly Monteverdi from your desktop, from the start menu and from an OSGeo4W shell with command \texttt{monteverdi}. 
 For the \textbf{otb-bin} packages, it will be available directly in the OSGeo4W shell, for example run 
 \begin{verbatim}
 otbgui_BandMath.
 \end{verbatim}
  We recommended to use this way to install internal applications of OTB on Windows. 
-If you want use the \textbf{otb-python} package, for example in QGIS, please following the install note found in the \href{http://wiki.orfeo-toolbox.org/index.php/Quantum_GIS_access_to_OTB_applications#Notes_for_Windows_users}{OTB wiki}. You can simply check into a OSGeo4W shell the list of available application:
+If you want to use the \textbf{otb-python} package, for example in QGIS, please following the install note found in the \href{http://wiki.orfeo-toolbox.org/index.php/Quantum_GIS_access_to_OTB_applications#Notes_for_Windows_users}{OTB wiki}. You can simply check from an OSGeo4W shell the list of available applications:
 \begin{verbatim}
 python
 import otbApplication
 print str( otbApplication.Registry.GetAvailableApplications() )
 \end{verbatim}
-For more information you can read the OTB Cookbook which provide useful information about these new OTB Application. 
+For more information you can read the OTB Cookbook which provides useful information about these new OTB applications. 
 
 \subsection{MacOS X}
 \label{ssec:mac_binaries}
@@ -453,41 +433,33 @@ version based on MFC.}
 
 \textbf{\underline{On Windows:}}
 \index{Downloading libraries from OSGeo4W}
-The OTB needs some external library to work. On Windows, we recommended to use the OSGeo4Windows tools to get those libraries. Please refer to the section \ref{OSGeo4W_lib} to do the procedure.
+The OTB needs some external libraries to work, as described in the table of section \ref{sec:FAQInstall}. On Windows, we recommended to use the OSGeo4W tool to get those libraries. However, as several of these libraries are optional or internal to OTB, the minimum requirement for compiling OTB is to install Gdal.
+\begin{enumerate}
+\item Download and start the OSGeo4w setup in advanced mode
+\item Select the gdal package located in Libs folder
+\item Optionally select the other libraries you want to use as external
+\item Proceed with the installation.
+\end{enumerate}
+
 \index{Configuring CMake on Windows}
-On windows, you need to create the binary directory before launching CMake.
-Here, you'll use the following one:
+On windows, you will first create a directory to hold the binaries to be built.
+Your directory structure may look as follows:
 \begin{verbatim}
 * OTB
 |- OTB_SOURCE_DIR 
 |- OTB_BINARY_DIR
 \end{verbatim}
+where \texttt{OTB_SOURCE_DIR} contains is the base directory of the OTB source code, and 
+\texttt{OTB_BINARY_DIR} is empty for now.
 
-Launch CMake executable, on the top of the GUI, select the source and binary directory.
-Then press \emph{Configure}, the \emph{Generate} button will be accessible only when
-every needed CMake variable will be set.
-The CMake GUI is used to specify the source and build
-directories (Figure \ref{fig:CMakeGUI}).
-Here is a list recommended variables to set :  
-\begin{itemize}
-\item OTB\_USE\_EXTERNAL\_BOOST:BOOL=ON
-\item OTB\_USE\_MAPNIK:BOOL=ON
-\item MAPNIK\_INCLUDE\_DIR:PATH=C:/OSGeo4W/include/mapnik
-\item MAPNIK\_LIBRARY:FILEPATH=C:/OSGeo4W/lib/mapnik.lib
-\item OTB\_USE\_CURL:BOOL=ON
-\item OTB\_USE\_EXTERNAL\_EXPAT:BOOL=ON
-\item OTB\_USE\_LIBLAS:BOOL=OFF
-\item OTB\_USE\_GETTEXT:BOOL=OFF
-\item OTB\_USE\_JPEG2000:BOOL=ON
-\end{itemize}
+Launch the CMake executable. On the top of the GUI (Figure \ref{fig:CMakeGUI}), select the source and binary directories, then press \emph{Configure}.
+Variables appear at the center of the CMake GUI. You must set some of these variables to tell CMake about your system. The first thing to do is to enable the \emph{Advanced} checkbox and change the value of the OSGEO4W_ROOT variable to the directory where you installed OSGeo4W. Then press \emph{Configure} again.
 
-You'll probably need to push several times \emph{Configure} to have access to the variable and to check 
-the \emph{Advanced} button to have access to the advanced CMake variable.
-When this is done, push \emph{Generate}, the CMake window will close itself.
+The \emph{Generate} button will be accessible only when all required CMake variables are correctly set. At this time, push \emph{Generate}, wait for the end of the generation process then close the CMake window.
 
 \index{Compiling OTB on Windows}
-Now, you can go in your \emph{binary directory} (here OTB\_BINARY\_DIR). CMake has generated Makefiles or
-Visual Studio projects. You can open the solution and generate the \texttt{ALL\_BUILD} project.
+Now, you can go in your \emph{binary directory} (here \texttt{OTB\_BINARY\_DIR}). CMake has generated Makefiles or
+Visual Studio project files. You can open the solution and build the \texttt{ALL\_BUILD} project.
 If you plan to run executables from within the Visual Studio environment, you should open the Visual Studio 
 solution file from the OSGeo4W shell. To do this, simply drag-and-drop the ".sln" file to an OSGeo4W shell 
 and press Enter.
