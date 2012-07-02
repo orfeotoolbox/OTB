@@ -79,29 +79,39 @@ public:
   // Implement the NCC operator
   inline MetricValueType operator()(ConstNeighborhoodIteratorType & a, ConstNeighborhoodIteratorType & b) const
   {
-    MetricValueType meanA(0),meanB(0), sigmaA(0), sigmaB(0), cov(0), ncc(0);
-    
+    //MetricValueType meanA(0),meanB(0), sigmaA(0), sigmaB(0), cov(0), ncc(0);
+    double  meanA=0.0;
+    double  meanB=0.0;
+    double  sigmaA=0.0;
+    double  sigmaB=0.0;
+    double  cov=0.0;
+    double  ncc=0.0;
+    double  valueA;
+    double  valueB;
+    double size=a.Size();
     // For some reason, iterators do not work on neighborhoods
-    for(unsigned int i = 0; i<a.Size(); ++i)
+    for(unsigned int i = 0; i<size; ++i)
       {
-      meanA+=a.GetPixel(i);
-      meanB+=b.GetPixel(i);
+      meanA+=static_cast<double>(a.GetPixel(i));
+      meanB+=static_cast<double>(b.GetPixel(i));
       }
     
     // Compute mean
-    meanA/=a.Size();
-    meanB/=b.Size();
+    meanA/=size;
+    meanB/=size;
 
-    for(unsigned int i = 0; i<a.Size(); ++i)
+    for(unsigned int i = 0; i<size; ++i)
       {
-      cov+=(a.GetPixel(i)-meanA)*(b.GetPixel(i)-meanB);
-      sigmaA+=(a.GetPixel(i)-meanA)*(a.GetPixel(i)-meanA);
-      sigmaB+=(b.GetPixel(i)-meanB)*(b.GetPixel(i)-meanB);
+      valueA=static_cast<double>(a.GetPixel(i));
+      valueB=static_cast<double>(b.GetPixel(i));
+      cov+=(valueA-meanA)*(valueB-meanB);
+      sigmaA+=(valueA-meanA)*(valueA-meanA);
+      sigmaB+=(valueB-meanB)*(valueB-meanB);
       }
     
-    cov/=a.Size()-1;
-    sigmaA/=a.Size()-1;
-    sigmaB/=a.Size()-1;
+    cov/=size-1;
+    sigmaA/=size-1;
+    sigmaB/=size-1;
     sigmaA = vcl_sqrt(sigmaA);
     sigmaB = vcl_sqrt(sigmaB);
 
@@ -114,7 +124,7 @@ public:
       ncc = 0;
       }
 
-    return ncc;
+    return static_cast<MetricValueType>(ncc);
   }
 };
 
