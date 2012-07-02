@@ -90,7 +90,7 @@ public:
     spacePoint[0]     = m_RightAsymptote->GetAbcisse();
     double abcisseR  = m_Curve->TransformPoint(spacePoint)[0];
 
-    if (widgetId == m_Curve->GetIdentifier())
+    if (widgetId == m_Curve->GetIdentifier() && this->GetIsActive())
       {
       switch (event)
         {
