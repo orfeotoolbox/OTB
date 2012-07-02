@@ -1425,7 +1425,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 
   /**   Vertical lines (perpendicular to epipolar lines) */
 
-  /** Jumps of the disaprity map in the other diection
+  /** Jumps of the disparity map in the other direction
    *  disparity_jump_2:     flag 7---> special case: intersections
    *        flag 5---> jump due to an upper border
    *        flag 6---> jump due to an lower border
@@ -1580,77 +1580,86 @@ AdhesionCorrectionFilter<TImage, TMask>
       index_pos = new_disparityIt.GetIndex();
       if (outputriskedgesPtr->GetPixel(index_pos) != 0)
         {
-        int l=0-big_dist;
-        index[0]=index_pos[0];
-        index[1]=index_pos[1]+l;
+        int l = 0 - vcl_min(big_dist,static_cast<int>(index_pos[1]));//out of bound checking
+        index[0] = index_pos[0];
+        index[1] = index_pos[1] + l;
+
         while(l<=0 && disparity_jump2->GetPixel(index) != 5)
-          {
-          l++;
-          index[1]=index_pos[1]+l;
-          }
-        index[1]=index_pos[1]+l;
+         {
+         l++;
+         index[1]=index_pos[1]+l;
+         }
+
+
+        index[1] = index_pos[1] + l;
         disparity_jump2It.SetIndex(index);
-        if(disparity_jump2It.Get() ==5 && l != 0) disparity_jump2It.Set(0);
-        for(int i=l; i<=0; i++)
+        if (disparity_jump2It.Get() == 5 && l != 0) disparity_jump2It.Set(0);
+        for (int i = l; i <= 0; i++)
           {
-          index[1]=index_pos[1]+i;
+          index[1] = index_pos[1] + i;
           new_disparityIt.SetIndex(index);
           new_maskIt.SetIndex(index);
           new_disparityIt.Set(0);
           new_maskIt.Set(0);
           }
-        l=big_dist;
-        index[0]=index_pos[0];
-        index[1]=index_pos[1]+l;
-        while(l>=0 && disparity_jump2->GetPixel(index) != 6)
+
+        int maxSize=static_cast<int>(disparity_jump2->GetRequestedRegion().GetSize()[1]);
+        l = vcl_min(static_cast<int>((maxSize-1)- index_pos[1]),big_dist); //out of bound checking
+        index[0] = index_pos[0];
+        index[1] = index_pos[1] + l;
+        while (l >= 0 && disparity_jump2->GetPixel(index) != 6)
           {
           l--;
-          index[1]=index_pos[1]+l;
+          index[1] = index_pos[1] + l;
           }
-        index[1]=index_pos[1]+l;
+        index[1] = index_pos[1] + l;
         disparity_jump2It.SetIndex(index);
-        if(disparity_jump2It.Get() == 6 && l != 0) disparity_jump2It.Set(0);
-        for(int i=l; i>=0; i--)
+        if (disparity_jump2It.Get() == 6 && l != 0) disparity_jump2It.Set(0);
+        for (int i = l; i >= 0; i--)
           {
-          index[1]=index_pos[1]+i;
+          index[1] = index_pos[1] + i;
           new_disparityIt.SetIndex(index);
           new_maskIt.SetIndex(index);
           new_disparityIt.Set(0);
           new_maskIt.Set(0);
           }
-        l=-big_dist;
-        index[0]=index_pos[0];
-        index[1]=index_pos[1]+l;
-        while(l<=0 && disparity_jump2->GetPixel(index) != 8)
+        l = 0 - vcl_min(big_dist,static_cast<int>(index_pos[1]));
+
+        index[0] = index_pos[0];
+        index[1] = index_pos[1]+l;
+
+        while (l <= 0 && disparity_jump2->GetPixel(index) != 8)
           {
           l++;
-          index[1]=index_pos[1]+l;
+          index[1] = index_pos[1] + l;
           }
-        index[1]=index_pos[1]+l;
+        index[1] = index_pos[1] + l;
         disparity_jump2It.SetIndex(index);
-        if(disparity_jump2It.Get() == 8 && l != 0) disparity_jump2It.Set(0);
-        for(int i=l; i<=0; i++)
+        if (disparity_jump2It.Get() == 8 && l != 0) disparity_jump2It.Set(0);
+        for (int i = l; i <= 0; i++)
           {
-          index[1]=index_pos[1]+i;
+          index[1] = index_pos[1] + i;
           new_disparityIt.SetIndex(index);
           new_maskIt.SetIndex(index);
           new_disparityIt.Set(0);
           new_maskIt.Set(0);
           }
-        l=big_dist;
-        index[0]=index_pos[0];
-        index[1]=index_pos[1]+l;
-        while(l>=0 && disparity_jump2->GetPixel(index) != 9)
+
+        l = vcl_min(static_cast<int>((maxSize-1)- index_pos[1]),big_dist);
+
+        index[0] = index_pos[0];
+        index[1] = index_pos[1] + l;
+        while (l >= 0 && disparity_jump2->GetPixel(index) != 9)
           {
           l--;
-          index[1]=index_pos[1]+l;
+          index[1] = index_pos[1] + l;
           }
-        index[1]=index_pos[1]+l;
+        index[1] = index_pos[1] + l;
         disparity_jump2It.SetIndex(index);
-        if(disparity_jump2It.Get() == 9 && l != 0) disparity_jump2It.Set(0);
-        for(int i=l; i>=0; i--)
+        if (disparity_jump2It.Get() == 9 && l != 0) disparity_jump2It.Set(0);
+        for (int i = l; i >= 0; i--)
           {
-          index[1]=index_pos[1]+i;
+          index[1] = index_pos[1] + i;
           new_disparityIt.SetIndex(index);
           new_maskIt.SetIndex(index);
           new_disparityIt.Set(0);
