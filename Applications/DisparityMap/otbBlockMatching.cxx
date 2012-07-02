@@ -677,7 +677,7 @@ private:
 
     if (IsParameterEnabled("bm.medianfilter.radius") && IsParameterEnabled("bm.medianfilter.incoherence"))
       {
-      GetLogger()->Info('\n' + "Applies a median filter to smooth the disparity map" + '\n');
+      otbAppLogINFO("Applies a median filter to smooth the disparity map"<<std::endl);
       if (minhdisp < maxhdisp)
         {
         m_HMedianFilter->SetInput(hdispImage);
