@@ -1580,7 +1580,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       index_pos = new_disparityIt.GetIndex();
       if (outputriskedgesPtr->GetPixel(index_pos) != 0)
         {
-        int l = 0 - vcl_min(big_dist,static_cast<int>(index_pos[1]));//out of bound checking
+        int l = 0 - vcl_min(big_dist,static_cast<int>(index_pos[1])); //out of bound checking
         index[0] = index_pos[0];
         index[1] = index_pos[1] + l;
 
