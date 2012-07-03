@@ -91,6 +91,26 @@ ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilter ${SEGMENTATION_TESTS1}
      0.2 #Simplification tolerance
      )
 
+ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilterQBOrthoWGS84shp ${SEGMENTATION_TESTS1}
+     --compare-ogr  ${EPSILON_8}
+     ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutputQBOrthoWGS84.shp
+     ${TEMP}/obTvStreamingVectorizedSegmentationOutputQBOrthoWGS84.shp
+     otbStreamingImageToOGRLayerSegmentationFilter
+     ${INPUTDATA}/QB_Toulouse_Ortho_PAN_WGS84.tif
+     ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask_WGS84.tif
+     ${TEMP}/obTvStreamingVectorizedSegmentationOutputQBOrthoWGS84.shp
+     NewLayer
+     100
+     5
+     15.
+     100
+     1 #filter small object
+     200 #minimum size of object
+     0 #Simplify Flag
+     0.2 #Simplification tolerance
+     )
+
+
 ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilterHalfSpacing ${SEGMENTATION_TESTS1}
      --compare-ogr  ${EPSILON_8}
      ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationHalfSpacingOutput.sqlite
