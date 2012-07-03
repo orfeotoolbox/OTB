@@ -28,7 +28,7 @@ namespace otb
   * \brief Build a vector data containing the polygon of the image envelope
   *
   * This filter uses the GenericRSTransform to project the four corners of the image into ground position.
-  * If the sampling rate is not null, the image edges are also projected (using one point every 
+  * If the sampling rate is not null, the image edges are also projected (using one point every
   * "m_SamplingRate" pixels).
   * In case of raw image geometry, a DEM directory or average elevation can be set for better accuracy.
   *
