@@ -29,7 +29,8 @@ namespace otb
 template <class TInputImage, class TOutputVectorData>
 ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
 ::ImageToEnvelopeVectorDataFilter() : m_DEMDirectory(""), m_GeoidFile(""),
-                                      m_AverageElevation(-32768.0)
+                                      m_AverageElevation(-32768.0),
+                                      m_SamplingRate(0)
 {
   this->SetNumberOfInputs(1);
   this->SetNumberOfOutputs(1);
@@ -148,6 +149,9 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
   inputPtr->TransformIndexToPhysicalPoint(ll, llp);
 
   this->InstantiateTransform();
+  
+  typename InputImageType::IndexType edgeIndex;
+  typename InputImageType::PointType edgePoint;
 
   // Build envelope polygon
   typename PolygonType::Pointer envelope = PolygonType::New();
@@ -156,18 +160,81 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
+  
+  if (m_SamplingRate>0)
+    {
+    edgeIndex = ul;
+    edgeIndex[0]+=m_SamplingRate;
+    while (edgeIndex[0]<ur[0])
+      {
+      inputPtr->TransformIndexToPhysicalPoint(edgeIndex, edgePoint);
+      current = m_Transform->TransformPoint(edgePoint);
+      vertex[0] = current[0];
+      vertex[1] = current[1];
+      envelope->AddVertex(vertex);
+      edgeIndex[0]+=m_SamplingRate;
+      }
+    }
+  
   current = m_Transform->TransformPoint(urp);
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
+  
+  if (m_SamplingRate>0)
+    {
+    edgeIndex = ur;
+    edgeIndex[1]+=m_SamplingRate;
+    while (edgeIndex[1]<lr[1])
+      {
+      inputPtr->TransformIndexToPhysicalPoint(edgeIndex, edgePoint);
+      current = m_Transform->TransformPoint(edgePoint);
+      vertex[0] = current[0];
+      vertex[1] = current[1];
+      envelope->AddVertex(vertex);
+      edgeIndex[1]+=m_SamplingRate;
+      }
+    }
+  
   current = m_Transform->TransformPoint(lrp);
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
+  
+  if (m_SamplingRate>0)
+    {
+    edgeIndex = lr;
+    edgeIndex[0]-=m_SamplingRate;
+    while (edgeIndex[0]>ll[0])
+      {
+      inputPtr->TransformIndexToPhysicalPoint(edgeIndex, edgePoint);
+      current = m_Transform->TransformPoint(edgePoint);
+      vertex[0] = current[0];
+      vertex[1] = current[1];
+      envelope->AddVertex(vertex);
+      edgeIndex[0]-=m_SamplingRate;
+      }
+    }
+  
   current = m_Transform->TransformPoint(llp);
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
+  
+  if (m_SamplingRate>0)
+    {
+    edgeIndex = ll;
+    edgeIndex[1]-=m_SamplingRate;
+    while (edgeIndex[1]>ul[1])
+      {
+      inputPtr->TransformIndexToPhysicalPoint(edgeIndex, edgePoint);
+      current = m_Transform->TransformPoint(edgePoint);
+      vertex[0] = current[0];
+      vertex[1] = current[1];
+      envelope->AddVertex(vertex);
+      edgeIndex[1]-=m_SamplingRate;
+      }
+    }
 
   // Add polygon to the VectorData tree
   OutputDataTreePointerType tree = outputPtr->GetDataTree();

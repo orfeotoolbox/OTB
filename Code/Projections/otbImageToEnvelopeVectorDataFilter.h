@@ -28,6 +28,8 @@ namespace otb
   * \brief Build a vector data containing the polygon of the image envelope
   *
   * This filter uses the GenericRSTransform to project the four corners of the image into ground position.
+  * If the sampling rate is not null, the image edges are also projected (using one point every 
+  * "m_SamplingRate" pixels).
   * In case of raw image geometry, a DEM directory or average elevation can be set for better accuracy.
   *
   * This filter supports user-specified output projection. If no projection is defined, the standard WGS84
@@ -91,6 +93,9 @@ public:
 
   itkSetMacro(AverageElevation, double);
   itkGetMacro(AverageElevation, double);
+  
+  itkSetMacro(SamplingRate, unsigned int);
+  itkGetMacro(SamplingRate, unsigned int);
 
 protected:
   ImageToEnvelopeVectorDataFilter();
@@ -113,6 +118,7 @@ private:
   std::string                  m_DEMDirectory;
   std::string                  m_GeoidFile;
   double                       m_AverageElevation;
+  unsigned int                 m_SamplingRate;      // Sampling rate for edges (in pixels)
 };
 
 } // end namespace otb

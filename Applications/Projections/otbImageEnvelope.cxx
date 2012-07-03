@@ -67,6 +67,12 @@ private:
     AddParameter(ParameterType_OutputVectorData,  "out",   "Output Vector Data");
     SetParameterDescription("out", "Vector data file containing the envelope");
 
+    AddParameter(ParameterType_Int, "sr", "Sampling Rate");
+    SetParameterDescription("sr", "Sampling rate for image edges (in pixel)");
+    SetDefaultParameterInt("sr",0);
+    MandatoryOff("sr");
+    DisableParameter("sr");
+    
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
     
@@ -90,6 +96,7 @@ private:
     
     m_Envelope = EnvelopeFilterType::New();
     m_Envelope->SetInput(input);
+    m_Envelope->SetSamplingRate(GetParameterInt("sr"));
     
     // Elevation through the elevation handler
     if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
