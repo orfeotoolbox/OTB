@@ -231,6 +231,9 @@ protected:
   unsigned int PixelSize(ImagePointerType image, RGBPixelType* v) const;
   unsigned int PixelSize(ImagePointerType image, RGBAPixelType* v) const;
 
+  itkGetMacro(ApproxGroundSpacing, FloatType);
+  itkGetObjectMacro(Transform, TransformType);
+
 private:
   ImageLayer(const Self&);     // purposely not implemented
   void operator =(const Self&); // purposely not implemented
