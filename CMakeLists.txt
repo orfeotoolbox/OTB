@@ -176,6 +176,8 @@ IF(NOT OTB_INSTALL_PACKAGE_DIR)
   SET(OTB_INSTALL_PACKAGE_DIR ${OTB_INSTALL_LIB_DIR})
 ENDIF(NOT OTB_INSTALL_PACKAGE_DIR)
 
+SET(OTB_INSTALL_CMAKEMODULE_DIR ${OTB_INSTALL_PACKAGE_DIR}/cmakemodules)
+
 IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   SET(OTB_INSTALL_NO_DEVELOPMENT 0)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
@@ -374,7 +376,6 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
     ${OTB_BINARY_DIR}/OTBBuildSettings.cmake
     ${OTB_BINARY_DIR}/OTBLibraryDepends.cmake
     ${OTB_BINARY_DIR}/UseOTB.cmake
-    ${OTB_SOURCE_DIR}/CMake/FindOpenThreads.cmake
     ${OTB_SOURCE_DIR}/CMake/OTBParseArguments.cmake
     ${OTB_SOURCE_DIR}/CMake/OTBWrapperMacros.cmake
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
@@ -383,6 +384,24 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES ${OTB_BINARY_DIR}/otbConfigure.h
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}
     COMPONENT Development)
+  
+  INSTALL(FILES
+    ${OTB_SOURCE_DIR}/CMake/FindEXPAT.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindFLTK.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindGettext.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindGettextLib.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindICUUC.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindLibKML.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindLibLAS.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindLTDL.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindMercurial.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindMuParser.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindOpenThreads.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindPqxx.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindTinyXML.cmake
+    DESTINATION ${OTB_INSTALL_CMAKEMODULE_DIR}
+    COMPONENT Development)
+
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
 #-----------------------------------------------------------------------------
