@@ -135,11 +135,11 @@ ELSE(METAIO_FOR_VTK)
   IF(METAIO_FOR_ITK)
     IF(NOT ITK_INSTALL_NO_LIBRARIES)
       INSTALL(TARGETS ${METAIO_NAMESPACE}
-              RUNTIME DESTINATION ${ITK_INSTALL_BIN_DIR_CM24} 
+              RUNTIME DESTINATION ${ITK_INSTALL_BIN_DIR} 
                       COMPONENT RuntimeLibraries
-              LIBRARY DESTINATION ${ITK_INSTALL_LIB_DIR_CM24} 
+              LIBRARY DESTINATION ${ITK_INSTALL_LIB_DIR} 
                       COMPONENT RuntimeLibraries
-              ARCHIVE DESTINATION ${ITK_INSTALL_LIB_DIR_CM24} 
+              ARCHIVE DESTINATION ${ITK_INSTALL_LIB_DIR} 
                       COMPONENT Development
               )
       #TODO: Install Copyright.txt
@@ -147,7 +147,7 @@ ELSE(METAIO_FOR_VTK)
     IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
       FILE(GLOB __files "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
       INSTALL(FILES ${__files}
-              DESTINATION ${ITK_INSTALL_INCLUDE_DIR_CM24}/Utilities/MetaIO
+              DESTINATION ${ITK_INSTALL_INCLUDE_DIR}/Utilities/MetaIO
                           COMPONENT Development)
     ENDIF(NOT ITK_INSTALL_NO_DEVELOPMENT)
   ELSE(METAIO_FOR_ITK)

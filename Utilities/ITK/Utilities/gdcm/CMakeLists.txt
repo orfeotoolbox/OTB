@@ -155,6 +155,6 @@ CONFIGURE_FILE(${GDCM_SOURCE_DIR}/gdcmConfigure.h.in
                ${GDCM_BINARY_DIR}/gdcmConfigure.h @ONLY IMMEDIATE)
 
 INSTALL(FILES ${GDCM_BINARY_DIR}/gdcmConfigure.h
-  DESTINATION ${ITK_INSTALL_INCLUDE_DIR_CM24}/gdcm/src
+  DESTINATION ${ITK_INSTALL_INCLUDE_DIR}/gdcm/src
   COMPONENT Development)
 

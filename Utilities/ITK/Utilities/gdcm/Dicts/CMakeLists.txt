@@ -114,7 +114,7 @@ INSTALL(FILES
   ${GDCM_SOURCE_DIR}/Dicts/DicomDir.dic
   ${GDCM_SOURCE_DIR}/Dicts/DictGroupName.dic
   ${GDCM_BINARY_DIR}/Dicts/gdcm.dic
-  DESTINATION ${ITK_INSTALL_INCLUDE_DIR_CM24}/gdcm/Dicts
+  DESTINATION ${ITK_INSTALL_INCLUDE_DIR}/gdcm/Dicts
   COMPONENT RuntimeLibraries
   )
 
