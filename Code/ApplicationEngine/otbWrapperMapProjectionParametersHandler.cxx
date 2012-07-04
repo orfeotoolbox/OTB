@@ -178,7 +178,7 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
                                            app->GetParameterFloat( scale.str()) );
     return transMercatorProjection->GetWkt();
     }
-    break;*/
+    break; */
     case Map_WGS84:
     {
     return otb::GeoInformationConversion::ToWKT(4326);
