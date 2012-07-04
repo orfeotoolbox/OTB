@@ -138,7 +138,7 @@ else(OTB_USE_EXTERNAL_FLTK)
   FIND_PROGRAM(FLTK_FLUID_EXECUTABLE fluid PATHS
                ${OTB_BINARY_DIRS}
                ${OTB_BINARY_DIRS}/Release
-			   ${OTB_BINARY_DIRS}/MinSizeRel
+               ${OTB_BINARY_DIRS}/MinSizeRel
                ${OTB_BINARY_DIRS}/RelWithDebInfo
                ${OTB_BINARY_DIRS}/Debug
                NO_SYSTEM_PATH)
@@ -151,7 +151,7 @@ IF(OTB_USE_EXTERNAL_LIBLAS)
       INCLUDE_DIRECTORIES(${LIBLAS_INCLUDE_DIR})
     ENDIF(LIBLAS_INCLUDE_DIR)
 
-	FIND_LIBRARY(LIBLAS_LIBRARY NAMES liblas_c liblas)
+    FIND_LIBRARY(LIBLAS_LIBRARY NAMES liblas_c liblas)
 
     IF (NOT LIBLAS_LIBRARY)
         MESSAGE(FATAL_ERROR
@@ -161,8 +161,6 @@ ENDIF(OTB_USE_EXTERNAL_LIBLAS)
 ENDIF(OTB_USE_LIBLAS)
 
 IF(OTB_USE_MAPNIK)
-
-
         FIND_PATH(MAPNIK_INCLUDE_DIR mapnik/map.hpp PATHS)
         MARK_AS_ADVANCED(MAPNIK_INCLUDE_DIR)
 
@@ -173,8 +171,8 @@ IF(OTB_USE_MAPNIK)
         MARK_AS_ADVANCED(FREETYPE2_INCLUDE_DIR)
 
         # libicuuc (http://site.icu-project.org/) is a unicode library mapnik relies on.
-		# mapnik includes drag icu includes
-		# when linking with mapnik, need to link with libicuuc (at least since 1.42 release)
+        # mapnik includes drag icu includes
+        # when linking with mapnik, need to link with libicuuc (at least since 1.42 release)
         FIND_PATH(ICUUC_INCLUDE_DIR unicode/unistr.h)
         MARK_AS_ADVANCED(ICUUC_INCLUDE_DIR)
 
