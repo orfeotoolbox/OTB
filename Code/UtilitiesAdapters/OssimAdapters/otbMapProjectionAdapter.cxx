@@ -348,12 +348,14 @@ void MapProjectionAdapter::ApplyParametersToProjection()
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
+
       projection->setFalseNorthing(value);
       }
     it = m_ParameterStore.find("FalseEasting");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
+
       projection->setFalseEasting(value);
       }
     it = m_ParameterStore.find("StandardParallel1");
@@ -427,15 +429,27 @@ void MapProjectionAdapter::ApplyParametersToProjection()
       }
     }
 
-  // Apply parameters to trasnmercator
+  // Apply parameters to transmercator
   if (projectionName.compare("ossimTransMercatorProjection") == 0)
     {
-    ossimTransMercatorProjection* projection = dynamic_cast<ossimTransMercatorProjection*>(this->GetMapProjection());
+    ossimTransMercatorProjection* projection = dynamic_cast<ossimTransMercatorProjection*> (this->GetMapProjection());
     it = m_ParameterStore.find("ScaleFactor");
     if (it != m_ParameterStore.end())
       {
       double scale = atof((*it).second.c_str());
       projection->setScaleFactor(scale);
+      }
+    it = m_ParameterStore.find("FalseNorthing");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setFalseNorthing(value);
+      }
+    it = m_ParameterStore.find("FalseEasting");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setFalseEasting(value);
       }
     }
 
