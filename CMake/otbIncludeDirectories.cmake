@@ -232,7 +232,7 @@ ENDIF(OTB_USE_EXTERNAL_ITK)
 #-----------------------------------------------------------------------------
 # Include directories from the install tree.
 # Alls install dirs must been RELATIVE PATH, except for the external libraries, specify by the ABSOLUE PATH
-SET(OTB_INSTALL_INCLUDE_PATH "${CMAKE_INSTALL_PREFIX}${OTB_INSTALL_INCLUDE_DIR}")
+# SET(OTB_INSTALL_INCLUDE_PATH "${CMAKE_INSTALL_PREFIX}${OTB_INSTALL_INCLUDE_DIR}")
 #           SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS} )
 
 #           SET(OTB_INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib/otb")
