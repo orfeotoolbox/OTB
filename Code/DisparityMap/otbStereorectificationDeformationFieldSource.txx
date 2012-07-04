@@ -130,16 +130,16 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // Setup the DEM handler if needed
   typename DEMHandler::Pointer demHandler = DEMHandler::New();
-  
+
   bool useDEM = false;
 
-  
-  
+
+
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
   leftToGroundTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
-  
+
   if(m_DEMDirectory!="")
     {
     demHandler->OpenDEMDirectory(m_DEMDirectory);
@@ -175,7 +175,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   outputSpacing.Fill(m_Scale * m_GridStep);
   outputSpacing[0]*=m_LeftImage->GetSpacing()[0];
   outputSpacing[1]*=m_LeftImage->GetSpacing()[1];
-  
+
   // Then, we retrieve the origin of the left input image
   double localElevation = m_AverageElevation;
 
@@ -193,7 +193,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // Next, we will compute the parameters of the local epipolar line
   // at the left image origin
   TDPointType rightEpiPoint, leftEpiLineStart, leftEpiLineEnd;
-  
+
   // This point is the image of the left input image origin at the
   // average elevation
   rightEpiPoint = m_LeftToRightTransform->TransformPoint(leftInputOrigin);
@@ -202,12 +202,12 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // of rightEpiPoint at a lower elevation (using the offset)
   rightEpiPoint[2] = localElevation - m_ElevationOffset;
   leftEpiLineStart = m_RightToLeftTransform->TransformPoint(rightEpiPoint);
-  
+
   // The ending of the epipolar line in the left image is the image
   // of rightEpiPoint at a higher elevation (using the offset)
   rightEpiPoint[2] = localElevation + m_ElevationOffset;
   leftEpiLineEnd = m_RightToLeftTransform->TransformPoint(rightEpiPoint);
-  
+
   // Now, we can compute the equation of the epipolar line y = a*x+b
   // (do not forget that the y axis is flip in our case)
   // TODO: Add some division by zero check here (but this would only
@@ -263,7 +263,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   SizeType outputSize;
   outputSize[0] = (m_RectifiedImageSize[0] / m_GridStep + 1 );
   outputSize[1] = (m_RectifiedImageSize[1] / m_GridStep + 1);
-  
+
   // Build the output largest region
   RegionType outputLargestRegion;
   outputLargestRegion.SetSize(outputSize);
@@ -306,9 +306,9 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // Setup the DEM handler if needed
   typename DEMHandler::Pointer demHandler = DEMHandler::New();
-  
+
   bool useDEM = false;
-  
+
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
@@ -354,16 +354,16 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // We define the iterators we will use
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType> IteratorType;
-  
+
   IteratorType it1(leftDFPtr,leftDFPtr->GetLargestPossibleRegion());
   IteratorType it2(rightDFPtr,rightDFPtr->GetLargestPossibleRegion());
 
   it1.GoToBegin();
   it2.GoToBegin();
- 
+
   // Reset the mean baseline ratio
   m_MeanBaselineRatio = 0;
- 
+
   // Set-up progress reporting
   itk::ProgressReporter progress(this, 0, leftDFPtr->GetLargestPossibleRegion().GetNumberOfPixels());
 
@@ -383,7 +383,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // 2 - Next, we will fill the deformation fields
     typename OutputImageType::PixelType dFValue1 = it1.Get();
     typename OutputImageType::PixelType dFValue2 = it2.Get();
-    
+
     // We must cast iterators position to physical space
     PointType currentDFPoint1, currentDFPoint2;
     leftDFPtr->TransformIndexToPhysicalPoint(it1.GetIndex(), currentDFPoint1);
@@ -394,14 +394,14 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     dFValue1[1] = currentPoint1[1] - currentDFPoint1[1];
     dFValue2[0] = currentPoint2[0] - currentDFPoint2[0];
     dFValue2[1] = currentPoint2[1] - currentDFPoint2[1];
-    
+
     // And set the values
     it1.Set(dFValue1);
     it2.Set(dFValue2);
 
     // 3 - Next, we will compute epipolar lines direction in both
     // images
-    double a1,b1,a2;
+    double a1,a2;
 
     // First, for image 1
 
@@ -421,7 +421,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // of epiPoint2 at a lower elevation (using the offset)
     epiPoint2[2] = localElevation - m_ElevationOffset;
     startLine1 = m_RightToLeftTransform->TransformPoint(epiPoint2);
-    
+
     // The endning of the epipolar line in the left image is the image
     // of epiPoint2 at a higher elevation (using the offset)
     epiPoint2[2] = localElevation + m_ElevationOffset;
@@ -435,13 +435,12 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
                                 / (2 * m_ElevationOffset);
 
     m_MeanBaselineRatio+=localBaselineRatio;
-    
+
     // Now, we can compute the equation of the epipolar line y = a*x+b
     // (do not forget that the y axis is flip in our case)
     // TODO: Add some division by zero check here (but this would only
     // happen in case the images are almost epipolar already)
     a1 = (endLine1[1] - startLine1[1]) / (endLine1[0] - startLine1[0]);
-    b1 = startLine1[1] - a1 * startLine1[0];
 
     // We do the same for image 2
     currentPoint2[2] = localElevation;
@@ -452,7 +451,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
     epiPoint1[2] = localElevation + m_ElevationOffset;
     endLine2 = m_LeftToRightTransform->TransformPoint(epiPoint1);
-    
+
     a2 = (endLine2[1] - startLine2[1]) / (endLine2[0] - startLine2[0]);
 
     // 4 - Determine position of next points
@@ -470,7 +469,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
     currentPoint1[2] = localElevation;
     startLine2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
-    
+
     // Now we move currentPoint1
     currentPoint1[0]+=deltax1;
     currentPoint1[1]+=deltay1;
@@ -478,7 +477,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
     // And we compute the equivalent displacement in right image
     endLine2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
-    
+
     double iscale = vcl_sqrt((endLine2[0]-startLine2[0])*(endLine2[0]-startLine2[0])
                              +
                              (endLine2[1]-startLine2[1])*(endLine2[1]-startLine2[1]));
@@ -518,11 +517,11 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // Last, we move forward
     ++it1;
     ++it2;
-    
+
     // Update progress
     progress.CompletedPixel();
     }
-    
+
   // Compute the mean baseline ratio
   m_MeanBaselineRatio /= leftDFPtr->GetBufferedRegion().GetNumberOfPixels();
 }
