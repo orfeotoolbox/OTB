@@ -240,7 +240,6 @@ IF(OTB_USE_PQXX)
                         "Cannot find PQXX include directory. Please set PQXX_INCLUDE_DIR or SET OTB_USE_PQXX OFF.")
         ENDIF (NOT PQXX_INCLUDE_DIR)
 
-
         FIND_LIBRARY(PQXX_LIBRARY pqxx )
         MARK_AS_ADVANCED(PQXX_LIBRARY)
         IF (NOT PQXX_LIBRARY)
@@ -254,10 +253,6 @@ IF(OTB_USE_PQXX)
                 MESSAGE(FATAL_ERROR
                         "Cannot find PQ library. Please set PQ_LIBRARY or SET OTB_USE_PQXX OFF.")
         ENDIF (NOT PQ_LIBRARY)
-
-
-        # Add compiler option
-        ADD_DEFINITIONS(-DOTB_USE_PQXX)
 
         INCLUDE_DIRECTORIES(${PQXX_INCLUDE_DIR})
 

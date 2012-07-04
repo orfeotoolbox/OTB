@@ -7,7 +7,6 @@ IF(OTB_USE_PQXX)
   FIND_PACKAGE(Pqxx)
   IF(PQXX_FOUND)
     MESSAGE(STATUS "Activating Pqxx support")
-    ADD_DEFINITIONS(-DOTB_USE_PQXX)
   ELSE(PQXX_FOUND)
     # Generate an error if no external Pqxx is available
     MESSAGE(FATAL_ERROR "Pqxx required but not found. "
