@@ -96,8 +96,9 @@ needed for the evolution of OTB.
 \section{Licence}
 \subsection{Which is the OTB licence?}
 OTB is distributed under a CeCILL free software licence:\\
-\url{http://www.cecill.info/licences/Licence_CeCILL_V2-en.html}.
-
+\url{http://www.cecill.info/licences/Licence_CeCILL_V2-en.html} which 
+is recognized by the Free Software Fundation. It can be considered 
+similar to the GNU GPL licence. 
 
 \subsection{If I write an application using OTB am I forced to distribute that application?}
 No. The license gives you the option to distribute your application if
@@ -112,7 +113,9 @@ The CeCILL licence or the GNU GPL licence.
 \subsection{I am a commercial user. Is there any restriction on the
   use of OTB?}
 OTB can be used internally ("in-house") without restriction, but only
-redistributed in other software that is under the CeCILL licence.
+redistributed in other software that is under the CeCILL licence. 
+Moreover you need to distribute the source of your application to your
+users and only them.
 
 \section{Getting OTB}
 
@@ -122,9 +125,12 @@ Anybody can download the OTB at no cost.
 \subsection{Where can I download the OTB?}
 Go to \url{http://www.orfeo-toolbox.org}
  and follow the "download OTB" link. You will have access to the OTB
-source code and to the Software User's Guide. Binary packages are also provided for the current version.
-OTB and Monteverdi are integrated in OsGeo-Live since version 4.5.
-You can find more informations about the project at \url{http://live.osgeo.org/}.
+source code, to the Software User's Guide and to the Cookbook of the last release. 
+Binary packages are also provided for the current version.
+OTB and Monteverdi are also integrated in OsGeo-Live since version 4.5.
+You can find more informations about the project at \url{http://live.osgeo.org/}. 
+Moreover you can found the last release of Monteverdi and OTB applications through 
+the OsGeo4W installer. 
 
 \subsection{How to get the latest bleeding-edge version?}\label{sec:FAQMercurial}
 You can get the current development version, as our repository is public, using Mercurial (available at \url{http://www.selenic.com/mercurial}). Be aware that, even if the golden rule is {\em what is commited will compile}, this is not always the case. Changes are usually more than ten per day.
@@ -144,10 +150,10 @@ Later if you want to update your source, from the OTB source directory, just do:
 A simple \texttt{make} in your OTB binary directory will be enough to update the library (recompiling only the necessary stuff).
 
 
-\section{Installing OTB}
+\section{Compiling and installing OTB from source}
 \label{sec:FAQInstall}
 \subsection{Which platforms are supported?}
-OTB is a multi-platform library. It has successfully been installed on
+OTB is a multi-platform library. It has successfully been  compiled and installed from source on
 the following platforms:
 \begin{itemize}
   \item Linux/Unix with GCC (4.1.X, 4.2.X, 4.3.X, 4.4.X, 4.5.X, 4.6.X)
@@ -158,14 +164,14 @@ the following platforms:
   \item Open Solaris
 \end{itemize}
 
-\subsection{Which libraries/packages are needed before installing
+\subsection{Which libraries/packages are needed before compiling and installing
  OTB?}
 The following table gathered the library (mandatory or not) used in the OTB. Some of them are included in the OTB but can be used as external libraries.
 
 \begin{center}
 \begin{tiny}
 \begin{table}[!htbp]
-\begin{tabular}{|p{0.15\textwidth}|p{0.45\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|p{0.1\textwidth}|}
+\begin{tabular}{|p{0.15\textwidth}|p{0.45\textwidth}|p{0.1\textwidth}|p{0.15\textwidth}|p{0.1\textwidth}|}
 \hline
 \textbf{Library} & \textbf{Web site} & \textbf{Mandatory} & \textbf{Where} & \textbf{Minimum version} \\
 \hline
@@ -199,7 +205,7 @@ The following table gathered the library (mandatory or not) used in the OTB. Som
 \hline
 \textbf{liblas} & \url{http://www.liblas.org} & no & Intern/\textbf{Extern} & - \\
 \hline
-\textbf{boost} & \url{http://www.boost.org} & no & Intern\textbf{Extern} & - \\
+\textbf{boost} & \url{http://www.boost.org} & no & Intern/\textbf{Extern} & - \\
 \hline
 \textbf{openthreads} & \url{http://www.openscenegraph.org} & no & Intern/Extern & - \\
 \hline
@@ -222,7 +228,7 @@ The following table gathered the library (mandatory or not) used in the OTB. Som
 \textbf{libSVM} & \url{http://www.csie.ntu.edu.tw/~cjlin/libsvm} & yes & Intern & - \\
 \hline
 \end{tabular}
-\caption{Libraries used in the OTB.}
+\caption{Libraries used in the OTB. In the column Where, the default behavior during the configuration of OTB is indicated by when the status is bolded. For example, by default internal FLTK library is used.}
 \label{tab:installation2}
 \end{table}
 \end{tiny}
@@ -231,13 +237,13 @@ The following table gathered the library (mandatory or not) used in the OTB. Som
 
 
 \subsection{Main steps}
-In order to install OTB on your system follow these steps (in the
+In order to compile and install OTB on your system follow these steps (in the
 given order):
 \begin{enumerate}
   \item Install CMake (binary packages are available for most platforms).
   \item Install GDAL (binary packages are available for most platforms,
         on windows, look for osgeo4w \url{http://trac.osgeo.org/osgeo4w/}).
-  \item Install OTB using CMake for the configuration.
+  \item Compile and install OTB using CMake for the configuration.
 \end{enumerate}
 
 We assume that you will install everything on a directory called
@@ -256,7 +262,7 @@ packages, you can skip to step 4.
 
 \begin{enumerate}
 
-\item Install GDAL (or \textbf{use your distribution package})
+\item Install GDAL from source (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
       gunzip gdal.1.9.0.tar.gz
@@ -278,7 +284,7 @@ Actually, since this is the last step in the GDAL install procedure, when you ge
 
 The \texttt{--without-python} option passed to the \texttt{configure} step avoids this. However, some users may want to have Python bindings, so recommending this option for the install may not be OK for everybody.
 
-\item Install CMake (or \textbf{use your distribution package})
+\item Install CMake from source (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
       gunzip cmake-2.8.8.tar.gz
@@ -292,7 +298,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
       your path with \texttt{export PATH=\$PATH:INSTALL\_DIR/bin} or
       something similar.
 
-\item Install Fltk (optional) using CMake (do not use the configure script) (or for more simplicity \textbf{use your distribution package})
+\item Install Fltk from source (optional) using CMake (do not use the configure script) (or for more simplicity \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
       bunzip2 fltk-1.3.0-source.tar.bz2 OR
@@ -314,10 +320,9 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 
    You can also choose to use the FLTK version we included in the source of OTB, in this case, everything will be compile at the same time. To do that, you will have to set the option \texttt{OTB\_USE\_EXTERNAL\_FLTK} to \texttt{OFF}
 
-\item Install OTB
-  Please refers to the SoftwareGuide section : \ref{sec:source}
-
-  If you want to put OTB in a standard location, you can proceed with:
+\item Compile and install OTB from source
+  Please refers to the SoftwareGuide section : Building from sources (\ref{sec:source})
+  If you want to put your OTB in a standard location, you can proceed with:
 
   \begin{verbatim}
       make install
