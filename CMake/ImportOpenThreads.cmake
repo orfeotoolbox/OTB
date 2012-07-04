@@ -1,12 +1,6 @@
 MESSAGE(STATUS "Importing OpenThreads...")
-#-----------------------------------------------------------------------------
-# Option for OpenThreads (necessary because used by the OSSIM library)
-# Find OpenThread library
-IF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
-        FIND_PACKAGE(OpenThreads)
-ELSE(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
-        INCLUDE(${OTB_SOURCE_DIR}/CMake/FindOpenThreads.cmake)
-ENDIF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
+
+FIND_PACKAGE(OpenThreads)
 
 MARK_AS_ADVANCED(OPENTHREADS_INCLUDE_DIR)
 MARK_AS_ADVANCED(OPENTHREADS_LIBRARY)
