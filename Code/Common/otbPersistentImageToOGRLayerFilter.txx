@@ -89,16 +89,28 @@ PersistentImageToOGRLayerFilter<TImage>
 ::Initialize()
 {
   // Make sure input projection ref is set
-  const_cast<InputImageType*>(this->GetInput())->UpdateOutputInformation();
+  const_cast<InputImageType*> (this->GetInput())->UpdateOutputInformation();
 
   // Ensure that spatial reference of the output layer matches with
   // the spatial reference of the input image
   OGRSpatialReference oSRS(this->GetInput()->GetProjectionRef().c_str());
-  
-  if(m_OGRLayer.GetSpatialRef() && !oSRS.IsSame(m_OGRLayer.GetSpatialRef()))
-     {
-     itkExceptionMacro(<<"Spatial reference of input image and target layer do not match!");
-     }
+
+  // when dealing with .shp OGRSPatialreference is morphed to ESRI WKT,
+  // which results in small difference in WKT with some projection reference
+  // so the comparison must be done with WKT and ESRI WKT Mantis #ref567
+  OGRSpatialReference oSRSESRI(this->GetInput()->GetProjectionRef().c_str());
+
+  oSRSESRI.morphToESRI();
+  oSRSESRI.morphFromESRI();
+  if (m_OGRLayer.GetSpatialRef() && (!oSRS.IsSame(m_OGRLayer.GetSpatialRef())
+      && !oSRSESRI.IsSame(m_OGRLayer.GetSpatialRef())))
+    {
+    if ((oSRS.Validate() != OGRERR_NONE) && (oSRSESRI.Validate() != OGRERR_NONE))
+      {
+      itkExceptionMacro(<<"Input projection ref is not valid");
+      }
+    itkExceptionMacro(<<"Spatial reference of input image and target layer do not match!");
+    }
 }
 
 template<class TImage>
