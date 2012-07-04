@@ -449,11 +449,11 @@ Your directory structure may look as follows:
 |- OTB_SOURCE_DIR 
 |- OTB_BINARY_DIR
 \end{verbatim}
-where \texttt{OTB_SOURCE_DIR} contains is the base directory of the OTB source code, and 
-\texttt{OTB_BINARY_DIR} is empty for now.
+where \texttt{OTB\_SOURCE\_DIR} contains is the base directory of the OTB source code, and 
+\texttt{OTB\_BINARY\_DIR} is empty for now.
 
 Launch the CMake executable. On the top of the GUI (Figure \ref{fig:CMakeGUI}), select the source and binary directories, then press \emph{Configure}.
-Variables appear at the center of the CMake GUI. You must set some of these variables to tell CMake about your system. The first thing to do is to enable the \emph{Advanced} checkbox and change the value of the OSGEO4W_ROOT variable to the directory where you installed OSGeo4W. Then press \emph{Configure} again.
+Variables appear at the center of the CMake GUI. You must set some of these variables to tell CMake about your system. The first thing to do is to enable the \emph{Advanced} checkbox and change the value of the \texttt{OSGEO4W\_ROOT} variable to the directory where you installed OSGeo4W. Then press \emph{Configure} again.
 
 The \emph{Generate} button will be accessible only when all required CMake variables are correctly set. At this time, push \emph{Generate}, wait for the end of the generation process then close the CMake window.
 
