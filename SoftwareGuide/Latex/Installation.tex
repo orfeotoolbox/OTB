@@ -76,9 +76,8 @@ or compiling from sources (Table~\ref{tab:installation}). What you need depends 
 \subsection{Windows 2000/XP/Vista/Seven}
 \label{ssec:windows_binaries}
 
-For Windows 2000/XP/Vista/Seven users, there is a classical installation program for Monteverdi, available from the 
-\href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}. This is the old way, we highly recommend to use the new install
-process directly through OSGeo4W which is described in this paragraph. 
+For Windows 2000/XP/Vista/Seven users, there is a classical standalone installation program for Monteverdi, available from the 
+\href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}. There are another way to install Monteverdi directly through through OSGeo4W. With this new way, you can install other OTB packages as described in the following paragraph. 
 
 Since version 3.12, we provide OTB packages through OSGeo4W for Windows 2000/XP/Vista/Seven users. Packages for the new OTB applications, Monteverdi and 
 OTB-Wrapping are available directly in the OSGeo4W installer with the following names:
@@ -113,9 +112,9 @@ Click on the file to launch Monteverdi.
 
 \subsection{Linux}
 
-\subsubsection{Ubuntu 10.04, 11.10 and 12.04}
+\subsubsection{Ubuntu 10.04, 10.10, 11.10 and 12.04}
 \label{ssec:ubuntu_binaries}
-For Ubuntu 10.04 (Lucid Lynx), 11.10 (Oneiric Ocelot) and 12.04 (Precise Pangolin), OTB, 
+For Ubuntu 10.04 (Lucid Lynx), 10.10 (Maverick Meerkat), 11.10 (Oneiric Ocelot) and 12.04 (Precise Pangolin), OTB, 
 OTB-Applications, Monteverdi and OTB-Wrapping packages are available as Debian packages 
 through APT repositories.
 
@@ -345,7 +344,8 @@ download and install this library on your system. OTB requires at least the vers
   functionnality.  
 \end{itemize}
 
-See section \ref{sec:FAQInstall} for quick installation guidelines.
+See section \ref{sec:FAQInstall} for quick installation guidelines for GDAL or Fltk if you don't have access 
+to standard packages.
 
 \subsection{Configuring OTB}
 \label{sec:ConfiguringOTB}
@@ -386,7 +386,7 @@ IRIX, HP, Mac and Linux. Alternatively you can download the source
 code and build CMake on your system. Follow the instructions in the
 CMake Web page for downloading and installing the software.
 
-For Unix/Linux systems, an additional help can be found in the \ref{sec:FAQInstall}
+For Unix/Linux systems, an additional help can be found, to compile Cmake from source, in the \ref{sec:FAQInstall}
 section, subsection Unix/Linux Platforms.
 
 \index{CMake!OTB tree}
@@ -487,7 +487,6 @@ Once the interface open, you can push \emph{c} (for Configure), or/and \emph{t} 
 \emph{/usr} and will be found automatically by CMake. Set the following recommended CMake variables:
 \begin{itemize}
 \item OTB\_USE\_EXTERNAL\_BOOST:BOOL=ON
-\item OTB\_USE\_MAPNIK:BOOL=ON
 \item OTB\_USE\_CURL:BOOL=ON
 \item OTB\_USE\_EXTERNAL\_EXPAT:BOOL=ON
 \item OTB\_USE\_LIBLAS:BOOL=ON
