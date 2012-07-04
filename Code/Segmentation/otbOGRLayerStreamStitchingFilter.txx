@@ -273,7 +273,7 @@ OGRLayerStreamStitchingFilter<TInputImage>
                  }
                catch(itk::ExceptionObject& err)
                  {
-                 otbDebugMacro(<<"An exception was caught during fusion: "<<err);
+                   otbWarningMacro(<<"An exception was caught during fusion: "<<err);
                  }
             }
          }

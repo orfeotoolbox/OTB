@@ -163,7 +163,7 @@ namespace otb
       { \
       command; \
       } \
-    catch (const std::exception& stde)   { \
+    catch (const std::exception&)   { \
       throw; } \
     catch (...) \
       { \
