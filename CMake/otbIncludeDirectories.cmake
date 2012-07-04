@@ -54,6 +54,11 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbconfigfile
 )
 
+IF(USE_FFTWF OR USE_FFTWD)
+SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+    ${FFTW_INCLUDE_PATH})
+ENDIF(USE_FFTWF OR USE_FFTWD)
+
 IF(OTB_USE_EXTERNAL_BOOST)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
     ${Boost_INCLUDE_DIR} )
@@ -399,7 +404,6 @@ ELSE(OTB_USE_EXTERNAL_ITK)
               Utilities/ITK/Utilities/vxl/vcl
               Utilities/ITK/Utilities/vxl/core
               Utilities/ITK/Utilities
-              Utilities/ITK/Utilities/itkExtHdrs
-)
+              Utilities/ITK/Utilities/itkExtHdrs)
 
 ENDIF(OTB_USE_EXTERNAL_ITK)
