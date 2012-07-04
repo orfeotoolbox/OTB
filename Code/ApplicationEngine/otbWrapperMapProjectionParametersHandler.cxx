@@ -62,7 +62,7 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   app->SetParameterDescription(oss.str(), "This is a Lambert 93 projection mainly used in France.");
 
   // Transmercator
-  oss.str("");
+  /*oss.str("");
   oss << key<<".transmercator";
   app->AddChoice(oss.str(),  "Transmercator");
   app->SetParameterDescription(oss.str(),
@@ -85,7 +85,7 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   app->AddParameter(ParameterType_Float, subParamKey.str(), "Scale factor");
   app->SetParameterDescription(subParamKey.str(), " Transmercator scale factor value.");
   app->SetDefaultParameterFloat(subParamKey.str(), 1.);
-
+  */
   // wgs84
   oss.str("");
   oss << key<<".wgs";
@@ -159,7 +159,7 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     return lambert93Projection->GetWkt();
     }
     break;
-    case Map_Transmercator:
+    /*case Map_Transmercator:
     {
     typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
     TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
@@ -178,7 +178,7 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
                                            app->GetParameterFloat( scale.str()) );
     return transMercatorProjection->GetWkt();
     }
-    break;
+    break;*/
     case Map_WGS84:
     {
     return otb::GeoInformationConversion::ToWKT(4326);

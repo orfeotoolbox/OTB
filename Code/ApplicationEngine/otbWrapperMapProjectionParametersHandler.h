@@ -31,7 +31,7 @@ enum
   Map_Utm,
   Map_Lambert2,
   Map_Lambert93,
-  Map_Transmercator,
+  //Map_Transmercator,
   Map_WGS84,
   Map_Epsg
 };
