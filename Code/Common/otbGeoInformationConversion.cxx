@@ -18,8 +18,12 @@
 #include "otbGeoInformationConversion.h"
 
 #include "ogr_spatialref.h"
+#include "ogr_core.h"
+
 #include "cpl_conv.h"
 #include "boost/lexical_cast.hpp"
+
+
 
 namespace otb
 {
@@ -58,6 +62,13 @@ std::string GeoInformationConversion::ToWKT(const std::string& candidateSrid)
     {
     return wkt;
     }
+}
+
+bool GeoInformationConversion::IsESRIValidWKT(const std::string &wkt)
+{
+  OGRSpatialReference SRS(wkt.c_str());
+  SRS.morphToESRI();
+  return SRS.Validate()!=OGRERR_NONE;
 }
 
 } // End namespace otb
