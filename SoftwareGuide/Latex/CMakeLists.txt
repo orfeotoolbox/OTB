@@ -233,6 +233,7 @@ ADD_DEPENDENCIES(SoftwareGuide_HTML SoftwareGuide_RenamePdf)
 
 ADD_CUSTOM_TARGET(SoftwareGuide_HTML_index
 		  ALL
+		  COMMAND rm -f index.html
 		  COMMAND ln -s SoftwareGuide.html index.html
 		  WORKING_DIRECTORY ${SoftwareGuide_BINARY_DIR}/SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}
 		  COMMENT "Building HTML documentation index.html"
