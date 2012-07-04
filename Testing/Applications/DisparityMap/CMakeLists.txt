@@ -110,6 +110,9 @@ OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
                              -bm.subpixel dichotomy
                              -bm.medianfilter.radius 2
                              -bm.medianfilter.incoherence 2.0
+                     VALID   --compare-image ${EPSILON_10}
+                     		 ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
+                     		 ${TEMP}/apTvDmBlockMatchingTest.tif
                      )
 set_property(TEST apTvDmBlockMatchingTest APPEND PROPERTY DEPENDS apTvDmGridBasedImageResamplingRightTest)
 set_property(TEST apTvDmBlockMatchingTest APPEND PROPERTY DEPENDS apTvDmGridBasedImageResamplingLeftTest)
