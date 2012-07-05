@@ -57,4 +57,9 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "WARNING non-zero return value in ctest"
   ".*Microsoft.*include.*.h.*[Ww]arning.*"
   ".*gdal_priv.h.*[Ww]arning.*"
+  
+  # Ignore clang's summary warning, assuming prior text has matched some
+  # other warning expression:
+  "[0-9,]+ warnings? generated."
+  
   )
