@@ -20,6 +20,7 @@ IF(USE_FFTWD OR USE_FFTWF)
   )
 
   FIND_PATH(FFTW_INCLUDE_PATH fftw3.h ${FFTW_INC_SEARCHPATH})
+  MARK_AS_ADVANCED(FFTW_INCLUDE_PATH)
 
   IF(FFTW_INCLUDE_PATH)
     SET(FFTW_INCLUDE ${FFTW_INCLUDE_PATH})
@@ -38,10 +39,12 @@ IF(USE_FFTWD OR USE_FFTWF)
   )
 
   IF(USE_FFTWD)
-    MARK_AS_ADVANCED(FFTWD_LIB)
+    
 #   OPTION(FFTWD_LIB "The full path to the fftw3 library (including the library)" )
     FIND_LIBRARY(FFTWD_LIB fftw3 ${FFTW_LIB_SEARCHPATH}) #Double Precision Lib
     FIND_LIBRARY(FFTWD_THREADS_LIB fftw3_threads ${FFTW_LIB_SEARCHPATH}) #Double Precision Lib only if compiled with threads support
+    MARK_AS_ADVANCED(FFTWD_LIB)
+    MARK_AS_ADVANCED(FFTWD_THREADS_LIB)
 
     IF(FFTWD_LIB)
       SET(FFTWD_FOUND 1)
@@ -52,10 +55,11 @@ IF(USE_FFTWD OR USE_FFTWF)
   ENDIF(USE_FFTWD)
 
   IF(USE_FFTWF)
-    MARK_AS_ADVANCED(FFTWF_LIB)
 #   OPTION(FFTWF_LIB "The full path to the fftw3f library (including the library)" )
     FIND_LIBRARY(FFTWF_LIB fftw3f ${FFTW_LIB_SEARCHPATH}) #Single Precision Lib
     FIND_LIBRARY(FFTWF_THREADS_LIB fftw3f_threads ${FFTW_LIB_SEARCHPATH}) #Single Precision Lib only if compiled with threads support
+    MARK_AS_ADVANCED(FFTWF_LIB)
+    MARK_AS_ADVANCED(FFTWF_THREADS_LIB)
 
     IF(FFTWF_LIB)
       SET(FFTWF_FOUND 1)
