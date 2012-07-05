@@ -386,6 +386,7 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
     COMPONENT Development)
   
   INSTALL(FILES
+    ${OTB_SOURCE_DIR}/CMake/FindFFTW.cmake
     ${OTB_SOURCE_DIR}/CMake/FindEXPAT.cmake
     ${OTB_SOURCE_DIR}/CMake/FindFLTK.cmake
     ${OTB_SOURCE_DIR}/CMake/FindGettext.cmake
