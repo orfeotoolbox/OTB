@@ -244,7 +244,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
             CHECK_HDF4OPEN_SYMBOL
             )
     IF(NOT CHECK_HDF4OPEN_SYMBOL)
-      MESSAGE(WARNING "CHECK_HDF4OPEN_SYMBOL test failed : your platform exhibits a problem to read HDF4 files. So the tests with HDF4 will be deactivated" )
+      MESSAGE(STATUS "CHECK_HDF4OPEN_SYMBOL test failed : your platform exhibits a problem to read HDF4 files. So the tests with HDF4 will be deactivated" )
     ENDIF(NOT CHECK_HDF4OPEN_SYMBOL)
   ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 
