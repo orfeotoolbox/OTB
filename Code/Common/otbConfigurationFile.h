@@ -31,7 +31,7 @@ namespace otb
 /** \class ConfigurationFile
  *  \brief Manage OTB ConfigurationFile file
  *
- *  The path to the file can be set with environment variable OTB_CONFIG
+ *  The path to the file can be set with environment variable OTB_CONFIG_FILE
  *
 */
 

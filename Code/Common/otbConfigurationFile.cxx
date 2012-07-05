@@ -35,7 +35,7 @@ ConfigurationFile
     if (!itksys::SystemTools::FileExists(envVar, true))
       {
       itkWarningMacro(<< "When loading the OTB configuration file, "
-                         "the OTB_CONFIG env. var was found, but points a non-existant file : "
+                         "the OTB_CONFIG_FILE env. var was found, but points a non-existant file : "
                       << envVar);
       }
     else
