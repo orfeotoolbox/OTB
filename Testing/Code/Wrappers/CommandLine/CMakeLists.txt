@@ -152,6 +152,6 @@ otbWrapperCommandLineParserTests.cxx
 otbWrapperCommandLineLauncherTests.cxx
 )
 
-include_directories(${CMAKE_SOURCE_DIR}/Code/Wrappers/CommandLine ${CMAKE_SOURCE_DIR}/Code/Core)
+include_directories(${CMAKE_SOURCE_DIR}/Code/Wrappers/CommandLine)
 add_executable(otbWrapperCommandLineTests ${Wrapper_Command_Line_SRCS})
 target_link_libraries(otbWrapperCommandLineTests OTBIO OTBCommon OTBTesting OTBWrapperCommandLine)
