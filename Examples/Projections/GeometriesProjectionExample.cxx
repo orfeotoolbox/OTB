@@ -18,18 +18,12 @@
 
 // Software Guide : BeginLatex
 //
-// Let's assume that you have a KML file (hence in geographical coordinates)
-// that you would like to superpose to some image with a specific map projection.
-// Of course, you could use the handy ogr2ogr tool to do that, but it won't
-// integrate so seamlessly into your OTB application.
+// Instead of using \doxygen{otb}{VectorData} to apply projections as
+// explained in \ref{sec:VectorDataProjection}, we can also \emph{directly} work
+// on OGR data types thanks to \doxygen{otb}{GeometriesProjectionFilter}.
 //
-// You can also suppose that the image on which you want to superpose
-// the data is not in a specific map projection but a raw image from a
-// particular sensor.  Thanks to OTB, the same code below will be able
-// to do the appropriate conversion.
-//
-// This example demonstrates the use of the
-// \doxygen{otb}{GeometriesProjectionFilter}.
+// This example demonstrates how to proceed with this alternative set of vector
+// data types.
 //
 // Software Guide : EndLatex
 
@@ -41,19 +35,19 @@
 
 int main(int argc, char* argv[])
 {
-
   if (argc < 4)
     {
     std::cerr << argv[0] <<
     " <input vector filename> <input image name> <output vector filename>\n";
-
     return EXIT_FAILURE;
     }
 
   // Software Guide : BeginLatex
   //
-  // Declare the vector data type that you would like to use in your
-  // application.
+  // Declare the geometries type that you would like to use in your
+  // application. Unlike \doxygen{otb}{VectorData}, \doxygen{otb}{GeometriesSet}
+  // is a single type for any kind of geometries set (OGR data source, or OGR
+  // layer).
   //
   // Software Guide : EndLatex
 
@@ -64,9 +58,9 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // Declare and instantiate the vector data reader:
-  // \doxygen{otb}{GeometriesFileReader}. The call to the
-  // \code{UpdateOutputInformation()} method fill up the header information.
+  // First, declare and instantiate the data source
+  // \subdoxygen{otb}{ogr}{DataSource}. Then, encapsulate this data source into
+  // a \doxygen{otb}{GeometriesSet}.
   //
   // Software Guide : EndLatex
 
@@ -96,7 +90,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // The \doxygen{otb}{GeometriesProjectionFilter} will do the work of
-  // converting the vector data coordinates. It is usually a good idea
+  // converting the geometries coordinates. It is usually a good idea
   // to use it when you design applications reading or saving vector
   // data.
   //
@@ -127,15 +121,28 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist()); // nec qd capteur
-  filter->SetOutputOrigin(imageReader->GetOutput()->GetOrigin()); // nec qd capteur
-  filter->SetOutputSpacing(imageReader->GetOutput()->GetSpacing()); // nec qd capteur
-  filter->SetOutputProjectionRef( imageReader->GetOutput()->GetProjectionRef()); // ~ wkt
+  // necessary for sensors
+  filter->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
+  // necessary for sensors
+  filter->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
+  // necessary for sensors
+  filter->SetOutputSpacing(imageReader->GetOutput()->GetSpacing());
+  // ~ wkt
+  filter->SetOutputProjectionRef( imageReader->GetOutput()->GetProjectionRef());
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
   // Finally, the result is saved into a new vector file.
+  // Unlike other OTB filters, \doxygen{otb}{GeometriesProjectionFilter} expects
+  // to be given a valid output geometries set where to store the result of its
+  // processing -- otherwise the result will be an in-memory data source, and
+  // not stored in a file nor a data base.
+  //
+  // Then, the processing is started by calling \code{Update()}. The actual
+  // serialization of the results is guaranteed to be completed when the ouput
+  // geometries set object goes out of scope, or when \code{SyncToDisk} is
+  // called.
   //
   // Software Guide : EndLatex
 
@@ -150,9 +157,9 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // It is worth noting that none of this code is specific to the
-  // vector data format. Whether you pass a shapefile, or a KML file,
-  // the correct driver will be automatically instantiated.
+  // Once again, it is worth noting that none of this code is specific to the
+  // vector data format. Whether you pass a shapefile, or a KML file, the
+  // correct driver will be automatically instantiated.
   //
   // Software Guide : EndLatex
 

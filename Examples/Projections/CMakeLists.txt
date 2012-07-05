@@ -31,8 +31,8 @@ ENDIF( OTB_USE_CURL )
 ADD_EXECUTABLE(VectorDataProjectionExample VectorDataProjectionExample.cxx )
 TARGET_LINK_LIBRARIES(VectorDataProjectionExample OTBProjections OTBCommon OTBIO)
 
-ADD_EXECUTABLE(GeometriesProjection GeometriesProjection.cxx )
-TARGET_LINK_LIBRARIES(GeometriesProjection OTBProjections OTBOGRAdapters)
+ADD_EXECUTABLE(GeometriesProjectionExample GeometriesProjectionExample.cxx )
+TARGET_LINK_LIBRARIES(GeometriesProjectionExample OTBProjections OTBOGRAdapters)
 
 ADD_EXECUTABLE(VectorDataExtractROIExample VectorDataExtractROIExample.cxx )
 TARGET_LINK_LIBRARIES(VectorDataExtractROIExample OTBProjections OTBCommon OTBIO)

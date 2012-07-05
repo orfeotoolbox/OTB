@@ -44,7 +44,7 @@ void RegisterTests()
 
 #undef main
 #define main GeometriesProjectionTest
-#include "GeometriesProjection.cxx"
+#include "GeometriesProjectionExample.cxx"
 
 #undef main
 #define main EstimateRPCSensorModelExample
