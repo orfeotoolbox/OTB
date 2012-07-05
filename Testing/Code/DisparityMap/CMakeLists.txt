@@ -492,8 +492,8 @@ ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
 otbSubPixelDisparityImageFilter
 ${EXAMPLEDATA}/StereoFixed.png
 ${EXAMPLEDATA}/StereoMoving.png
-${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
-${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
+${INPUTDATA}/StereoPixelWiseBlockMatchingDisparity.tif
+${INPUTDATA}/StereoPixelWiseBlockMatchingMetric.tif
 ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputHDisparity.tif
 ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputVDisparity.tif
 ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
@@ -503,10 +503,6 @@ ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
 -3 +3 # hdisp treshold
 -2 2 # vdisp treshold
 )
-
-SET_TESTS_PROPERTIES(dmTvSubPixelDisparityImageFilterNCC PROPERTIES DEPENDS dmTvPixelWiseBlockMatchingImageFilterNCC)
-
-
 
 # -------            otb::DisparityMapMedianFilter   ----------
 
@@ -529,15 +525,15 @@ ADD_TEST(dmTvDisparityMapMedianFilter ${DISPARITYMAP_TESTS4}
 ADD_TEST(dmTuAdhesionCorrectionFilterNew ${DISPARITYMAP_TESTS4}
          otbAdhesionCorrectionFilterNew)
          
-ADD_TEST(dmTuAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
+ADD_TEST(dmTvAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
    --compare-n-images ${EPSILON_4} 3
         ${BASELINE}/dmTuAdhesionCorrectionMethod_Corrected.tif
         ${TEMP}/dmTuAdhesionCorrectionMethod_Corrected.tif
         ${BASELINE}/dmTuAdhesionCorrectionMethod_CorrectedMask.png
         ${TEMP}/dmTuAdhesionCorrectionMethod_CorrectedMask.png
-       ${BASELINE}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
+        ${BASELINE}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
         ${TEMP}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
-	otbAdhesionCorrectionFilter
+	    otbAdhesionCorrectionFilter
         ${INPUTDATA}/AdhesionCorrectionFilter_MedianInput
         ${INPUTDATA}/AdhesionCorrectionFilter_MedianMaskInput.png
         ${INPUTDATA}/AdhesionCorrectionFilter_SubpixelDisparityInput
@@ -549,8 +545,6 @@ ADD_TEST(dmTuAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
         ${TEMP}/dmTuAdhesionCorrectionMethod_CorrectedMask.png
         ${TEMP}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
         )                 
-
-SET_TESTS_PROPERTIES(dmTuAdhesionCorrectionFilter PROPERTIES DEPENDS dmTvDisparityMapMedianFilter)
 
 # -------            otb::DisparityMapToDEMFilter   ----------
 
