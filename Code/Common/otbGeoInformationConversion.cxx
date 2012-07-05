@@ -67,7 +67,7 @@ bool GeoInformationConversion::IsESRIValidWKT(const std::string &wkt)
 {
   OGRSpatialReference SRS(wkt.c_str());
   SRS.morphToESRI();
-  return SRS.Validate()!=OGRERR_NONE;
+  return SRS.Validate()==OGRERR_NONE;
 }
 
 } // End namespace otb
