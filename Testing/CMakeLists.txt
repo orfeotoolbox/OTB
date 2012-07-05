@@ -88,7 +88,7 @@ ELSE(OTB_BINARY_DIR)
     INCLUDE(${OTB_USE_FILE})
     ADD_SUBDIRECTORY(Code)
   ELSE(OTB_FOUND)
-    MESSAGE("OTB not found.  Please set OTB_DIR")
+    MESSAGE(FATAL_ERROR "OTB not found.  Please set OTB_DIR")
   ENDIF(OTB_FOUND)
   
   CONFIGURE_FILE(../CMake/CTestCustom.cmake.in CTestCustom.cmake)
