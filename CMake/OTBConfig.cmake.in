@@ -57,14 +57,6 @@ SET(OTB_BUILD_SETTINGS_FILE "@OTB_BUILD_SETTINGS_FILE@")
 # Whether OTB was built with shared libraries.
 SET(OTB_BUILD_SHARED_LIBS "@OTB_BUILD_SHARED_LIBS@")
 
-# Whether OTB was built with Tcl wrapping support.
-SET(OTB_CSWIG_TCL "@OTB_CSWIG_TCL@")
-SET(OTB_CSWIG_PYTHON "@OTB_CSWIG_PYTHON@")
-SET(OTB_CSWIG_JAVA "@OTB_CSWIG_JAVA@")
-
-# Path to CableSwig configuration used by OTB.
-SET(OTB_CableSwig_DIR "@OTB_CableSwig_DIR_CONFIG@")
-
 # The OTB library dependencies.
 IF(NOT OTB_NO_LIBRARY_DEPENDS AND
     EXISTS "@OTB_LIBRARY_DEPENDS_FILE@")
