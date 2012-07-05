@@ -44,7 +44,7 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
   "vcl_deprecated_header"
   "backward_warning"
-  "Utilities"
+  "[Uu]tilities"
   "warning LNK4221"
   "ranlib:.*file:.*has no symbols"
   "ranlib: file: .+ has no symbols"
@@ -53,5 +53,8 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "Fl_Image.H:.*warning:.*dereferencing type-punned pointer will break strict-aliasing rules.*"
   "warning -.: directory name .* does not exist"
   "ld.*warning.*duplicate dylib.*"
-  "pyconfig.h:.*warning:.*XOPEN.*SOURCE.*redefined"
+  ".*pyconfig.h:.*warning:.*XOPEN.*SOURCE.*redefined.*"
+  "WARNING non-zero return value in ctest"
+  ".*Microsoft.*include.*.h.*[Ww]arning.*"
+  ".*gdal_priv.h.*[Ww]arning.*"
   )
