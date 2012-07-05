@@ -454,8 +454,10 @@ private:
       //projection ref conversion to ESRI need to be tested in case of .shp
       if ((dataSourceName.find(".shp") != string::npos) && (!projRef.empty()))
         {
+
         if (!(otb::GeoInformationConversion::IsESRIValidWKT(projRef)))
           {
+          otbAppLogFATAL(<<"Image projection reference "<<std::endl<< projRef);
           itkExceptionMacro(<<"Image spatial reference can't be converted to ESRI. Use another output format (kml,SQLite,...) to overcome .shp limitation ");
           }
         }
