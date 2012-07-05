@@ -2,22 +2,22 @@ PROJECT(OBIAExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(ImageToLabelToImage ImageToLabelToImage.cxx )
-TARGET_LINK_LIBRARIES(ImageToLabelToImage OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(ImageToLabelToImage OTBCommon OTBIO)
 
 ADD_EXECUTABLE(ShapeAttributeComputation ShapeAttributeComputation.cxx )
-TARGET_LINK_LIBRARIES(ShapeAttributeComputation OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(ShapeAttributeComputation OTBCommon OTBIO)
 
 ADD_EXECUTABLE(KeepNObjects KeepNObjects.cxx )
-TARGET_LINK_LIBRARIES(KeepNObjects OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(KeepNObjects OTBCommon OTBIO)
 
 ADD_EXECUTABLE(RadiometricAttributesLabelMapFilterExample RadiometricAttributesLabelMapFilterExample.cxx )
-TARGET_LINK_LIBRARIES(RadiometricAttributesLabelMapFilterExample OTBCommon OTBIO OTBBasicFilters OTBSpatialReasoning  OTBFeatureExtraction OTBLearning ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(RadiometricAttributesLabelMapFilterExample OTBCommon OTBIO OTBBasicFilters OTBSpatialReasoning  OTBFeatureExtraction OTBLearning)
 
 ADD_EXECUTABLE(LabelMapToVectorData LabelMapToVectorData.cxx )
-TARGET_LINK_LIBRARIES(LabelMapToVectorData OTBCommon OTBIO OTBBasicFilters ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(LabelMapToVectorData OTBCommon OTBIO OTBBasicFilters)
 
 ADD_EXECUTABLE(HooverMetricsEstimation HooverMetricsEstimation.cxx )
-TARGET_LINK_LIBRARIES(HooverMetricsEstimation OTBCommon OTBIO OTBBasicFilters ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(HooverMetricsEstimation OTBCommon OTBIO OTBBasicFilters)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

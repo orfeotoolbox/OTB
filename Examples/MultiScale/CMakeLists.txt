@@ -8,11 +8,11 @@ ADD_EXECUTABLE(MorphologicalPyramidSynthesisFilterExample MorphologicalPyramidSy
 TARGET_LINK_LIBRARIES(MorphologicalPyramidSynthesisFilterExample OTBCommon OTBIO OTBMultiScale)
 
 ADD_EXECUTABLE(MorphologicalPyramidSegmenterExample MorphologicalPyramidSegmenterExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmenterExample OTBCommon OTBIO OTBMultiScale  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmenterExample OTBCommon OTBIO OTBMultiScale )
 
 
 ADD_EXECUTABLE(MorphologicalPyramidSegmentationExample MorphologicalPyramidSegmentationExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmentationExample OTBCommon OTBIO OTBMultiScale ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmentationExample OTBCommon OTBIO OTBMultiScale)
 
 
 

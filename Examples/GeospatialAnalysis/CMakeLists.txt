@@ -2,7 +2,7 @@ PROJECT(GeospatialAnalysisExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(PostGISCreateTable PostGISCreateTable.cxx )
-TARGET_LINK_LIBRARIES(PostGISCreateTable OTBCommon OTBIO OTBGeospatialAnalysis ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(PostGISCreateTable OTBCommon OTBIO OTBGeospatialAnalysis)
 
 
 
