@@ -62,7 +62,7 @@ OTB_TEST_APPLICATION(NAME apTvDmFineRegistrationTest
 
 #stereo reconstruction of images pair
 #--- StereoRectificationGridGenerator ---#
-OTB_TEST_APPLICATION(NAME apTvDmStereoRectificationGridGeneratorTest
+OTB_TEST_APPLICATION(NAME apTuDmStereoRectificationGridGeneratorTest
                      APP  StereoRectificationGridGenerator
                      OPTIONS -io.inleft ${INPUTDATA}/sensor_stereo_left.tif
                              -io.inright ${INPUTDATA}/sensor_stereo_right.tif
@@ -74,32 +74,30 @@ OTB_TEST_APPLICATION(NAME apTvDmStereoRectificationGridGeneratorTest
                      )
 
 #--- GridBasedImageResampling ---#
-OTB_TEST_APPLICATION(NAME apTvDmGridBasedImageResamplingLeftTest
+OTB_TEST_APPLICATION(NAME apTuDmGridBasedImageResamplingLeftTest
                      APP  GridBasedImageResampling
                      OPTIONS -io.in ${INPUTDATA}/sensor_stereo_left.tif
                              -io.out ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
-                             -grid.in ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
+                             -grid.in ${INPUTDATA}/sensor_stereo_rectif_left.tif
                              -out.sizex 158
                              -out.sizey 158
                      )
 
-SET_TESTS_PROPERTIES(apTvDmGridBasedImageResamplingLeftTest PROPERTIES DEPENDS apTvDmStereoRectificationGridGeneratorTest)
 
-OTB_TEST_APPLICATION(NAME apTvDmGridBasedImageResamplingRightTest
+OTB_TEST_APPLICATION(NAME apTuDmGridBasedImageResamplingRightTest
                      APP  GridBasedImageResampling
                      OPTIONS -io.in ${INPUTDATA}/sensor_stereo_right.tif
                              -io.out ${TEMP}/apTvDmGridBasedImageResamplingRightTest.tif
-                             -grid.in ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
+                             -grid.in ${INPUTDATA}/sensor_stereo_rectif_right.tif
                              -out.sizex 158
                              -out.sizey 158
                      )
-SET_TESTS_PROPERTIES(apTvDmGridBasedImageResamplingRightTest PROPERTIES DEPENDS apTvDmStereoRectificationGridGeneratorTest)
 
 #--- BlockMatching ---#
 OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
                      APP  BlockMatching
-                     OPTIONS -io.inleft ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
-                             -io.inright ${TEMP}/apTvDmGridBasedImageResamplingRightTest.tif
+                     OPTIONS -io.inleft ${INPUTDATA}/sensor_stereo_left_gridbasedresampling.tif
+                             -io.inright ${INPUTDATA}/sensor_stereo_right_gridbasedresampling.tif
                              -io.out ${TEMP}/apTvDmBlockMatchingTest.tif
                              -bm.minhd -24
                              -bm.maxhd 0
@@ -114,36 +112,23 @@ OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
                      		 ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
                      		 ${TEMP}/apTvDmBlockMatchingTest.tif
                      )
-set_property(TEST apTvDmBlockMatchingTest APPEND PROPERTY DEPENDS apTvDmGridBasedImageResamplingRightTest)
-set_property(TEST apTvDmBlockMatchingTest APPEND PROPERTY DEPENDS apTvDmGridBasedImageResamplingLeftTest)
 
-#--- BandMath application to mask disparity-----
-
-OTB_TEST_APPLICATION(NAME apTvDmDisparityMapLeftMask
-                     APP  BandMath
-                     OPTIONS -il ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
-                             -out ${TEMP}/apTvDmDisparityMapLeftMask.tif uint8
-                             -exp "if(im1b1 != 0,255,0)"
-                     )
-SET_TESTS_PROPERTIES(apTvDmDisparityMapLeftMask PROPERTIES DEPENDS apTvDmGridBasedImageResamplingLeftTest)
 
 #--- DisparityMapToElevationMap ---#
 OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
                      APP  DisparityMapToElevationMap
-                     OPTIONS -io.in ${TEMP}/apTvDmBlockMatchingTest.tif
+                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
                              -io.left ${INPUTDATA}/sensor_stereo_left.tif
                              -io.right ${INPUTDATA}/sensor_stereo_right.tif
-                             -io.lgrid ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
-                             -io.rgrid ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
+                             -io.lgrid ${INPUTDATA}/sensor_stereo_rectif_left.tif
+                             -io.rgrid ${INPUTDATA}/sensor_stereo_rectif_right.tif
                              -io.out ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
                              -hmin 130
                              -hmax 220
                              -elev.average.value 140
                              -step 2.5
-                             -io.mask ${TEMP}/apTvDmDisparityMapLeftMask.tif
+                             -io.mask ${INPUTDATA}/sensor_stereo_dmap_mask.tif
                      VALID   --compare-image ${EPSILON_10}
                              ${BASELINE_EXAMPLE}/elevationOutput.tif
                              ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
                      )
-set_property(TEST apTvDmDisparityMapToElevationMap APPEND PROPERTY DEPENDS apTvDmBlockMatchingTest)
-set_property(TEST apTvDmDisparityMapToElevationMap APPEND PROPERTY DEPENDS apTvDmDisparityMapLeftMask)
