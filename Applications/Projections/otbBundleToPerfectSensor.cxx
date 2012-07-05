@@ -159,7 +159,7 @@ private:
     if(IsParameterEnabled("lms") && HasValue("lms"))
       {
       double defScalarSpacing = GetParameterFloat("lms");
-      std::cout << "Generating coarse deformation field (spacing="<<defScalarSpacing<<")" << std::endl;
+      otbAppLogINFO(<< "Generating coarse deformation field (spacing="<<defScalarSpacing<<")" << std::endl);
       FloatVectorImageType::SpacingType defSpacing;
 
       defSpacing[0] = defScalarSpacing;
