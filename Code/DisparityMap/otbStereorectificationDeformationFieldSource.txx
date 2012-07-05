@@ -134,7 +134,6 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   bool useDEM = false;
 
 
-
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
