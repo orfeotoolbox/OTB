@@ -518,13 +518,11 @@ ADD_TEST(dmTvDisparityMapMedianFilter ${DISPARITYMAP_TESTS4}
 		 ${BASELINE}/dmTvDisparityMapMedianFilterOutput.tif
 		 ${TEMP}/dmTvDisparityMapMedianFilterOutput.tif
          otbDisparityMapMedianFilter
-         ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputHDisparity.tif
+         ${INPUTDATA}/StereoHDisparity.tif
          ${TEMP}/dmTvDisparityMapMedianFilterOutput.tif
          2
          2.0
          )         
-
-SET_TESTS_PROPERTIES(dmTvDisparityMapMedianFilter PROPERTIES DEPENDS dmTvSubPixelDisparityImageFilterNCC)
 
 # -------            otb::AdhesionCorrectionFilter   ----------
 
