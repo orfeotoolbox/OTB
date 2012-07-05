@@ -325,6 +325,8 @@ IF(FLTK_FOUND)
   ELSE(APPLE)
     SET(FLTK_LIBRARIES ${FLTK_LIBRARIES} ${FLTK_PLATFORM_DEPENDENT_LIBS})
   ENDIF(APPLE)
+  
+  SET(FLTK_INCLUDE_DIRS ${FLTK_INCLUDE_DIR})
 
   # The following deprecated settings are for compatibility with CMake 1.4
   SET (HAS_FLTK ${FLTK_FOUND})
