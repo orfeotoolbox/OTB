@@ -20,7 +20,8 @@ SET(OTB_LIBRARY_DIRS_CONFIG ${OTB_LIBRARY_PATH})
 # Binary directory
 SET(OTB_BINARY_DIRS_CONFIG ${EXECUTABLE_OUTPUT_PATH})
 
-
+# Package directories (cmake files...)
+SET(OTB_CMAKEMODULE_DIRS_CONFIG ${OTB_SOURCE_DIR}/CMake)
 
 #            SET(OTB_LIBRARY_DIRS_CONFIG ${OTB_LIBRARY_DIRS_CONFIG} ${GDAL_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} ${FLTK_LIBRARY_DIRS})
 
@@ -71,6 +72,9 @@ SET(OTB_LIBRARY_DIRS_CONFIG "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_LIB_DIR}")
 
 # Binary directories
 SET(OTB_BINARY_DIRS_CONFIG "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_BIN_DIR}")
+
+# Package directories (cmake files...)
+SET(OTB_CMAKEMODULE_DIRS_CONFIG "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}")
 
 #-----------------------------------------------------------------------------
 # Configure OTBConfig.cmake for the INSTALL tree.
