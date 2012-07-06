@@ -4,8 +4,6 @@
 #   TINYXML_FOUND        - True if TinyXML found.
 #   TINYXML_INCLUDE_DIRS - where to find tinyxml.h, etc.
 #   TINYXML_LIBRARIES    - List of libraries when using TinyXML.
-#   TIXML_USE_STL        - ON or undefined whether STL support is found
-#                          can be used directly in a #cmakedefine
 #
 
 IF( TINYXML_INCLUDE_DIR )
@@ -32,18 +30,9 @@ IF(TINYXML_FOUND)
   SET(TINYXML_INCLUDE_DIRS ${TINYXML_INCLUDE_DIR})
   SET(TINYXML_LIBRARIES    ${TINYXML_LIBRARY})
 
-  # Check if STL support is enabled with macro TIXML_USE_STL
-  TRY_COMPILE(TIXML_USE_STL
-              ${CMAKE_CURRENT_BINARY_DIR}/CMake
-              ${CMAKE_CURRENT_SOURCE_DIR}/CMake/otbTestTinyXMLUseSTL.cxx
-              CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${TINYXML_INCLUDE_DIRS}" "-DLINK_LIBRARIES:STRING=${TINYXML_LIBRARIES}"
-              COMPILE_DEFINITIONS "-DTIXML_USE_STL"
-              OUTPUT_VARIABLE OUTPUT)
-
 ELSE(TINYXML_FOUND)
 
   SET(TINYXML_INCLUDE_DIRS)
   SET(TINYXML_LIBRARIES)
-  SET(TIXML_USE_STL)
 
 ENDIF(TINYXML_FOUND)
