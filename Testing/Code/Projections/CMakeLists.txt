@@ -1235,23 +1235,20 @@ ADD_TEST(prTuVectorDataProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         #${INPUTDATA}/ToulousePoints-examples.shp
         #${TEMP}/prTvVectorDataProjectionFilterFromGeoToMap.shp
         otbVectorDataProjectionFilterFromGeoToMap
-        ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+        ${INPUTDATA}/ToulousePointsWGS.kml
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/prTvVectorDataProjectionFilterFromGeoToMap.shp
 )
-SET_TESTS_PROPERTIES(prTuVectorDataProjectionFilterFromGeoToMap PROPERTIES DEPENDS prTvVectorDataProjectionFilterFromMapToGeo)
+
 ADD_TEST(prTuGeometriesProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         #--compare-ascii ${NOTOL}
         #${INPUTDATA}/ToulousePoints-examples.shp
         #${TEMP}/prTvGeometriesProjectionFilterFromGeoToMap.shp
         otbGeometriesProjectionFilterFromGeoToMap
-        ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.kml
+        ${INPUTDATA}/ToulousePointsWGS.kml
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/prTvGeometriesProjectionFilterFromGeoToMap.shp
 )
-SET_TESTS_PROPERTIES(prTuGeometriesProjectionFilterFromGeoToMap PROPERTIES DEPENDS prTvGeometriesProjectionFilterFromMapToGeo)
-
-
 
 ADD_TEST(prTvGeometriesProjectionFilterFromMapToEPSG_UTM ${PROJECTIONS_TESTS3}
          --compare-ogr ${NOTOL}
