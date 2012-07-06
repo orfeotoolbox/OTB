@@ -267,3 +267,9 @@ ENDIF(BUILD_APPLICATIONS)
 ADD_TEST(FA-0000437-WriteImageCentOS ${CXX_TEST_PATH}/0000437-WriteImageCentOS
   ${OTB_DATA_ROOT}/Baseline/OTB/Fa/FA-0000437-WriteImageCentOSInput.tif
   ${TEMP}/FA-0000437-WriteImageCentOSOutput.tif)
+  
+  
+ADD_TEST(NAME otbVectorDataToLabelImageFilterWithoutReader
+  COMMAND ${CXX_TEST_PATH}/otbVectorDataToLabelImageFilterWithoutReader
+  ${TEMP}/rasterizedVectorData.tif)
+  

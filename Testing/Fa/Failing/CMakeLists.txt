@@ -27,12 +27,6 @@ ADD_TEST(NAME FA-0000495-StreamingImageFileWriterProgressReporting
                   ${TEMP}/FA-0000495-output1.tif
                   ${TEMP}/FA-0000495-output2.tif)
 
-
-ADD_TEST(NAME otbVectorDataToLabelImageFilterWithoutReader
-  COMMAND ${CXX_TEST_PATH}/otbVectorDataToLabelImageFilterWithoutReader
-  ${TEMP}/rasterizedVectorData.tif)
-
-
 # -------       Vectorization issue   -----------------------------------
 # http://bugs.orfeo-toolbox.org/view.php?id=94
  ADD_TEST(FA-0000094-fe-PolygonsVectorization ${CXX_TEST_PATH}/0000094-PolygonsVectorization

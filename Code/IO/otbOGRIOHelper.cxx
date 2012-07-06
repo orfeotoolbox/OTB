@@ -18,7 +18,7 @@
 #include "otbOGRIOHelper.h"
 
 #include "ogrsf_frmts.h"
-
+#include "otbOGR.h"
 #include "itkTimeProbe.h"
 
 namespace otb
@@ -165,7 +165,9 @@ OGRIOHelper
 
 OGRIOHelper
 ::OGRIOHelper()
-{}
+{
+  otb::ogr::Drivers::Init();
+}
 
 
 OGRIOHelper
