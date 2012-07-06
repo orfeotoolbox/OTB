@@ -45,6 +45,11 @@ IF(USE_FFTWD OR USE_FFTWF)
     FIND_LIBRARY(FFTWD_THREADS_LIB fftw3_threads ${FFTW_LIB_SEARCHPATH}) #Double Precision Lib only if compiled with threads support
     MARK_AS_ADVANCED(FFTWD_LIB)
     MARK_AS_ADVANCED(FFTWD_THREADS_LIB)
+    
+    # handle the QUIETLY and REQUIRED arguments and set FFTWD_FOUND to TRUE if 
+    # all listed variables are TRUE
+    INCLUDE(FindPackageHandleStandardArgs)
+    FIND_PACKAGE_HANDLE_STANDARD_ARGS(FFTW DEFAULT_MSG FFTWD_LIB FFTW_INCLUDE_PATH)
 
     IF(FFTWD_LIB)
       SET(FFTWD_FOUND 1)
@@ -60,6 +65,11 @@ IF(USE_FFTWD OR USE_FFTWF)
     FIND_LIBRARY(FFTWF_THREADS_LIB fftw3f_threads ${FFTW_LIB_SEARCHPATH}) #Single Precision Lib only if compiled with threads support
     MARK_AS_ADVANCED(FFTWF_LIB)
     MARK_AS_ADVANCED(FFTWF_THREADS_LIB)
+
+    # handle the QUIETLY and REQUIRED arguments and set FFTWD_FOUND to TRUE if 
+    # all listed variables are TRUE
+    INCLUDE(FindPackageHandleStandardArgs)
+    FIND_PACKAGE_HANDLE_STANDARD_ARGS(FFTW DEFAULT_MSG FFTWF_LIB FFTW_INCLUDE_PATH)
 
     IF(FFTWF_LIB)
       SET(FFTWF_FOUND 1)
