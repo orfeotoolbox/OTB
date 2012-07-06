@@ -37,7 +37,7 @@
 // \relatedClasses
 //  \begin{itemize}
 //  \item \doxygen{otb}{ScalarImageToTexturesFilter}
-//  \item \doxygen{otb}{ScalarIamgeToAdvancedTexturesFilter}
+//  \item \doxygen{otb}{ScalarImageToAdvancedTexturesFilter}
 //  \end{itemize}
 //
 // The first step required to use this filter is to include its header file.
