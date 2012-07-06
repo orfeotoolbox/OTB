@@ -41,14 +41,15 @@ MARK_AS_ADVANCED(   LIBKML_INCLUDE_DIR
 # all listed variables are TRUE
 INCLUDE( FindPackageHandleStandardArgs )
 FIND_PACKAGE_HANDLE_STANDARD_ARGS( LibKML DEFAULT_MSG
-                                    LIBKML_INCLUDE_DIR
                                     LIBKML_BASE_LIBRARY
                                     LIBKML_CONVENIENCE_LIBRARY
                                     LIBKML_DOM_LIBRARY
                                     LIBKML_ENGINE_LIBRARY
                                     LIBKML_REGIONATOR_LIBRARY
                                     LIBKML_XSD_LIBRARY
-                                    LIBKML_MINIZIP_LIBRARY )
+                                    LIBKML_MINIZIP_LIBRARY
+                                    LIBKML_INCLUDE_DIR
+                                     )
 
 IF(LIBKML_FOUND)
   SET(LIBKML_INCLUDE_DIRS ${LIBKML_INCLUDE_DIR})
