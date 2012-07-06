@@ -94,7 +94,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToImage
 # With QGIS the two vectordata are equal              			  
 OTB_TEST_APPLICATION(NAME  apTuPrVectorDataReprojectionFromImageToMap
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp
+                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePointsUTM31N.shp
                      		 -in.kwl ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                  			 -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromImageToMap.shp
                              -out.proj user 
@@ -104,9 +104,7 @@ OTB_TEST_APPLICATION(NAME  apTuPrVectorDataReprojectionFromImageToMap
 #                    VALID   --compare-ogr ${NOTOL}
 #                            ${INPUTDATA}/ToulousePoints-examples.shp
 #                    		 ${TEMP}/apTvPrVectorDataReprojectionFromImageToMap.shp)                 			  
-                 			  
- SET_TESTS_PROPERTIES(apTuPrVectorDataReprojectionFromImageToMap PROPERTIES DEPENDS apTvPrVectorDataReprojectionFromMapToImage)
-                 			  
+                 			                   			  
                  			  
 OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToGeo
                      APP  VectorDataReprojection
@@ -156,7 +154,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # With QGIS the two vectordata are equal  
 OTB_TEST_APPLICATION(NAME  apTuPrVectorDataReprojectionFromGeoToMap
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.kml
+                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePointsWGS.kml
                  			 -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromGeoToMap.shp
                              -out.proj image 
                              -out.proj.image.in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif)
@@ -164,8 +162,6 @@ OTB_TEST_APPLICATION(NAME  apTuPrVectorDataReprojectionFromGeoToMap
 #                             ${INPUTDATA}/ToulousePoints-examples.shp
 #                    	  	  ${TEMP}/apTvPrVectorDataReprojectionFromGeoToMap.shp)
                  			  
-
-SET_TESTS_PROPERTIES(apTuPrVectorDataReprojectionFromGeoToMap PROPERTIES DEPENDS apTvPrVectorDataReprojectionFromMapToGeo)
 
 
 
