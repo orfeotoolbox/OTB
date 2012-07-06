@@ -372,8 +372,6 @@ OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorOptimalLUT
                              ${BASELINE}/apTvUtColorMappingLabelToColorOptimalLUT.tif
                 	         ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUT.tif)
 
-SET_TESTS_PROPERTIES(apTvUtColorMappingColorToLabelOptimalLUTQB PROPERTIES DEPENDS apTvUtColorMappingLabelToLabelOptimalLUTQB)
-
 OTB_TEST_APPLICATION(NAME apTvUtColorMappingColorToLabelOptimalLUT
                      APP ColorMapping
                      OPTIONS -in ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUT.tif
