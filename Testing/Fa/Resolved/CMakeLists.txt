@@ -268,7 +268,20 @@ ADD_TEST(FA-0000437-WriteImageCentOS ${CXX_TEST_PATH}/0000437-WriteImageCentOS
   ${OTB_DATA_ROOT}/Baseline/OTB/Fa/FA-0000437-WriteImageCentOSInput.tif
   ${TEMP}/FA-0000437-WriteImageCentOSOutput.tif)
   
-  
+
+ADD_TEST(NAME FA-000478-UncaughtException
+         COMMAND  ${CXX_TEST_PATH}/0000478-UncaughtException
+                  $<TARGET_FILE_DIR:otbapp_StereoSensorModelToElevationMap>
+                  ${OTB_DATA_ROOT}/Examples/sensor_stereo_left.tif 
+                  ${OTB_DATA_ROOT}/Examples/sensor_stereo_right.tif 
+                  ${TEMP}/FA-0000478-output.tif)
+
+ADD_TEST(NAME FA-0000495-StreamingImageFileWriterProgressReporting
+         COMMAND  ${CXX_TEST_PATH}/0000495-StreamingImageFileWriterProgressReporting
+                  ${OTB_DATA_ROOT}/Examples/sensor_stereo_left.tif
+                  ${TEMP}/FA-0000495-output1.tif
+                  ${TEMP}/FA-0000495-output2.tif)
+
 ADD_TEST(NAME otbVectorDataToLabelImageFilterWithoutReader
   COMMAND ${CXX_TEST_PATH}/otbVectorDataToLabelImageFilterWithoutReader
   ${TEMP}/rasterizedVectorData.tif)
