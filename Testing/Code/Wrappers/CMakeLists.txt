@@ -10,7 +10,7 @@ if ( OTB_WRAP_JAVA )
   add_subdirectory(Java)
 endif ()
 
-if ( OTB_WRAP_QT )
+if ( OTB_WRAP_QT AND OTB_USE_VISU_GUI )
   add_subdirectory(Qt)
 endif ()
 
