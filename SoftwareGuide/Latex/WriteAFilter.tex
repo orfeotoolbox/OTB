@@ -477,6 +477,8 @@ behave badly, and possibly even deadlock or crash.
 
 
 \section{Filter Conventions}
+\label{sec:FilterConventions}
+\index{pipeline!filter conventions}
 
 In order to fully participate in the ITK pipeline, filters are expected to
 follow certain conventions, and provide certain interfaces.  This section
@@ -529,6 +531,8 @@ be included, bracketed by a test for manual instantiation, thus:
 \end{verbatim}
 
 \subsection{Optional}
+\label{sec:FilterPrinting}
+\index{pipeline!printing a filter}
 
 A filter can be printed to an \code{std::ostream} (such as \code{std::cout})
 by implementing the following method:
@@ -541,6 +545,8 @@ by implementing the following method:
 supplied output stream.  This is particularly useful for debugging.
 
 \subsection{Useful Macros}
+\label{sec:UsefulMacros}
+\index{pipeline!useful macros}
 
 Many convenience macros are provided by ITK, to simplify filter coding. 
 Some of these are described below:
