@@ -118,11 +118,14 @@ For Ubuntu 10.04 (Lucid Lynx), 10.10 (Maverick Meerkat), 11.10 (Oneiric Ocelot) 
 OTB-Applications, Monteverdi and OTB-Wrapping packages are available as Debian packages 
 through APT repositories.
 
-If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
+Since release 3.14, we advise to use now the  orfeotoolbox-stable-ubuntugis with last version of gdal and qgis.
+You can add it by using these command-lines:
 \begin{verbatim}
 sudo aptitude install add-apt-repository 
-sudo add-apt-repository ppa:otb/orfeotoolbox-stable
+sudo apt-add-repository ppa:ubuntugis/ubuntugis-unstable
+sudo add-apt-repository ppa:otb/orfeotoolbox-stable-ubuntugis
 \end{verbatim}
+
 Now run:
 \begin{verbatim}
 sudo aptitude update
@@ -155,20 +158,33 @@ sudo aptitude install otb-wrapping-python otb-wrapping-java
 If you are using \emph{Synaptic}, you can add the repositories, update and install the packages through the
 graphical interface.
 
-If you want to use OTB with bleeding edge versions of gdal and qgis, there is an alternate UbuntuGIS repository.
-You can add it by using these command-lines:
+If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
 \begin{verbatim}
 sudo aptitude install add-apt-repository 
-sudo apt-add-repository ppa:ubuntugis/ubuntugis-unstable
-sudo add-apt-repository ppa:otb/orfeotoolbox-stable-ubuntugis
+sudo add-apt-repository ppa:otb/orfeotoolbox-stable
 \end{verbatim}
-Now run:
+
+%% If you want to use OTB with bleeding edge versions of gdal and qgis, there is an alternate UbuntuGIS repository.
+%% You can add it by using these command-lines:
+%% \begin{verbatim}
+%% sudo aptitude install add-apt-repository 
+%% sudo apt-add-repository ppa:ubuntugis/ubuntugis-unstable
+%% sudo add-apt-repository ppa:otb/orfeotoolbox-stable-ubuntugis
+%% \end{verbatim}
+%% Now run:
+%% \begin{verbatim}
+%% sudo aptitude update
+%% \end{verbatim}
+%% Following the guidlines for orfeotoolbox ppa install you can select the package you want or install all
+%% \begin{verbatim}
+%% sudo aptitude install libotb otbapp monteverdi otb-wrapping-python otb-wrapping-java
+%% \end{verbatim}
+
+The orfeotoolbox stable PPA repository is also available and use standard version of the gdal package. 
+If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
 \begin{verbatim}
-sudo aptitude update
-\end{verbatim}
-Following the guidlines for orfeotoolbox ppa install you can select the package you want or install all
-\begin{verbatim}
-sudo aptitude install libotb otbapp monteverdi otb-wrapping-python otb-wrapping-java
+sudo aptitude install add-apt-repository 
+sudo add-apt-repository ppa:otb/orfeotoolbox-stable
 \end{verbatim}
 
 Be careful not to add the two repositories, since they may cause incompatibilities.
@@ -188,7 +204,7 @@ As the previous cases, select which packages you will install.
 sudo aptitude install libotb otb-bin otb-bin-qt otb-python otbapp monteverdi
 \end{verbatim}
 
-For further informations about ubuntu packages go to \href{https://launchpad.net/~otb/+archive/orfeotoolbox-stable}{orfeotoolbox-stable} launchpad page and click on \textbf{Read about installing}.
+For further informations about ubuntu packages go to \href{https://launchpad.net/~otb/+archive/orfeotoolbox-stable-ubuntugis}{orfeotoolbox-stable-ubuntugis} launchpad page and click on \textbf{Read about installing}.
 
 \textbf{apt-add-repository} will try to retrieve the GPG keys of the repositories to certify the origin of the packages. If you are behind a http proxy, this step won't work and apt-add-repository will stall and eventually quit. You can temporarily ignore this error and proceed with the update step. Following this, aptitude update will issue a warning about a signature problem. This warning won't prevent you from installing the packages.
 
