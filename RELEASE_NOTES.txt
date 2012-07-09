@@ -1,5 +1,5 @@
-OTB-v.3.14.0 - Changes since version 3.12.0 (2012/06/28)
------------------------------------------
+OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
+--------------------------------------------------------
 
 * Library
   * New MeanShift implementation
@@ -113,6 +113,16 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/06/28)
       by libkml)
     * GenericRSTransform can now be optimized using a set of tie-points,
       calling ossim internal sensor model refining implementation
+    * PackedWidgetManager & SplittedWidgetManager : add method to set the
+      label of each group
+    * HistogramActionHandler : limit moves of asymptots with min/max of
+      histogram
+    * Curve2DWidget : add label support for each histogram
+    * ImageToEnvelopeVectorDataFilter : support a sampling rate in pixels
+      to be able to generate more than the four corners
+    * GeoInformationConversion : add IsESRIValidWKT to test WKT for shp
+      file support
+    * OGRIOHelper : ensure OGR driver manager is initialized when we need it
 
   * New Applications
     * Add PixelValue application
@@ -128,6 +138,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/06/28)
     * Add LargeScaleSegmentation application
     * Add DisparityMapToElevationMap application
     * Add ComputeImageFeatures application
+    * Add VectorDataReprojection application
 
   * Misc. Applications
     * Add image origin to ReadImageInfoApplication
@@ -150,9 +161,17 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/06/28)
         The application can rasterize in binary mode or burn the value of
         a specified field (similar to gdal_rasterize)
     * ColorMapping : fix settings of predefined colormap
+    * ColorMapping : fix mode "method.image" in case image contains
+      continuous labels
+    * ImageEnveloppe : expose new sampling rate parameter
     * otbViewer improvements : add handling of HDF and JPEG2000 files
+    * Remove custom Transmercator projection settings from application
 
 * System
+  * Added FLTK License
+  * GDAL copyright notice removed because GDAL source code is not provided
+    with OTB
+  * OpenJPEG copyright file updated
   * Update internal Ossim to revision 20606
   * Support for Mapnik2
   * Make siftfast compilation optional (OTB_USE_SIFTFAST cmake option)
@@ -165,60 +184,70 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/06/28)
   * Suppress KNN from OTB source tree (wasn't used)
   * Enhance/Add find_package support for OpenThread, Ossim, Expat, PQxx,
     Curl, GetText, ICUUC and LTDL
+  * Install OTB-custom FindXXX.cmake files along with OTB, to be used
+    from external projects
   * Make installation with OTB_WRAP_JAVA honor CMAKE_INSTALL_PREFIX
   * New compilers supported :
     * clang 3.2 (current development version)
     * gcc 4.6, 4.7, 4.8-dev
     * Intel icc
 
-* Misc.
-  * Added FLTK License
-  * GDAL copyright notice removed because GDAL source code is not provided
-    with OTB
-  * OpenJPEG copyright file updated
-
 * Bug fixes :
   * OTB-lib
-    * 0000559: Even if OTB_USE_MAPNICK is ON, otbapp_Rasterization does
-      not get compiled
-    * 0000550: BlockMatching application throws an exception when the
-      "sub-pixel" mode is activated
-    * 0000549: Error message related to boost_any_cast in
-      StereoRectificationGridGenerator application
-    * 0000521: Applications do not work anymore (Wrapper problem)
+    * 0000532: OTB_SHOW_ALL_MSG_DEBUG option changes 
+               apTvClTrainSVMImagesClassifierQB456 test results
+    * 0000568: Unable to compile OTB with a local version of the
+               FFTW library
+    * 0000531: Cannot compile OTB 3.12.0 with external FLTK 1.3
+               on Windows
+    * 0000564: ColorMapping application crash when using support
+               image with input label image which contains holes in label
+    * 0000563: Can not install OTB elsewhere than /usr/lib anymore
     * 0000557: Weird default value for RAM parameter in OTB application
     * 0000544: SWIG 2.0.5 not supported on mac
     * 0000554: OTB compilation : error while loading libfltk.so.9
-    * 0000558: GetParameterFloat method of WrapperApplication class does
-      not returns exactly input value
-    * 0000547: MeanShiftFilter validation test is fialinf for Iteration
-      and Spatial output
+    * 0000559: Even if OTB_USE_MAPNICK is ON, otbapp_Rasterization
+               does not get compiled
+    * 0000558: GetParameterFloat method of WrapperApplication
+               class does not returns exactly input value
+    * 0000550: BlockMatching application throws an exception
+               when the "sub-pixel" mode is activated
+    * 0000549: Error message related to boost_any_cast in
+               StereoRectificationGridGenerator application
+    * 0000547: MeanShiftFilter validation test is fialinf for
+               Iteration and Spatial output
     * 0000542: Problem with win arch and testing
-    * 0000522: otbApplicationLauncherQT is not reflecting the
-      Disable/Enable state correctly
-    * 0000511: Tags are repeated twice in Application, when using Qt
-      framework
-    * 0000532: OTB_SHOW_ALL_MSG_DEBUG option changes
-      apTvClTrainSVMImagesClassifierQB456 test results
+    * 0000521: Applications do not work anymore (Wrapper problem)
+    * 0000522: otbApplicationLauncherQT is not reflecting
+               the Disable/Enable state correctly
+    * 0000511: Tags are repeated twice in Application, when using Qt framework
 
   * Monteverdi
+    * 0000555: monteverdi -in does not work with JP2 images
     * 0000560: Monteverdi compilation error
-    * 0000527: While saving dataset with rescaling option, the channels
-      n° > 3 are incorrect
-
-  * OTB-Packaging
-    * 0000525: Python not found during ubuntu package build
-    * 0000526: Fix input of bfTvPolygonizationRasterization_WGS84
+    * 0000527: While saving dataset with rescaling option,
+               the channels n° > 3 are incorrect
 
   * OTB-applications
     * 0000518: Missing GDAL dependencies
     * 0000515: Space managing in command line
-    * 0000510: OTB-Applications cannot compile when the sources are
-      located in a directory with spaces in its name
+    * 0000510: OTB-Applications cannot compile when the sources
+               are located in a directory with spaces in its name
 
+  * OTB-Packaging
+    * 0000545: Issues with Monteverdi 1.10 binary 
+               applications on Mac OSX 10.6  (SL)
+    * 0000525: Python not found during ubuntu package build
+    * 0000526: Fix input of bfTvPolygonizationRasterization_WGS84
+
+  * Server administration
+    * 0000519: Search button of current OTB doxygen documentation
+               is broken
+    * 0000523: Update doxygen version to get
+               the same layout as the ITKv4 doxygen website
 
 OTB-v.3.12.0 - Changes since version 3.10.0 (2011/01/31)
------------------------------------------
+--------------------------------------------------------
 * Library
   * MaximumAutocorrelationFactorImageFilter
   * MultivariateAlterationDetector
@@ -552,7 +581,7 @@ OTB-v.3.12.0 - Changes since version 3.10.0 (2011/01/31)
 
 
 OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/30)
------------------------------------------
+--------------------------------------------------------
 * Monteverdi
   * New Rasterization module
   * New ImageStatistics module
@@ -792,7 +821,7 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/30)
     * 0000272: problem with installation
 
 OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
------------------------------------------
+--------------------------------------------------------
 
 * Monteverdi
   * New Polarimetric Synthesis module
@@ -888,7 +917,7 @@ OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
 
 
 OTB-v.3.6.0 - Changes since version 3.4.0 (2010/10/07)
------------------------------------------
+--------------------------------------------------------
 
 * Monteverdi
   * New Vectorization module: creates vector data (polygons, lines and
@@ -952,7 +981,7 @@ OTB-v.3.6.0 - Changes since version 3.4.0 (2010/10/07)
   * Lots of coverage improvements
 
 OTB-v.3.4.0 - Changes since version 3.2.0 (2010/06/30)
------------------------------------------
+--------------------------------------------------------
 
 * Applications
   * New utility otbConvertSensorToGeoPoint to convert from sensor
@@ -992,7 +1021,7 @@ OTB-v.3.4.0 - Changes since version 3.2.0 (2010/06/30)
 
 
 OTB-v.3.2.0 - Changes since version 3.0.0 (2010/01/15)
------------------------------------------
+--------------------------------------------------------
 
 * Applications
   * Monteverdi, a new all-in one user-friendly graphical tool
@@ -1036,7 +1065,7 @@ OTB-v.3.2.0 - Changes since version 3.0.0 (2010/01/15)
 
 
 OTB-v.3.0.0 - Changes since version 2.8.0 (2009/05/11)
------------------------------------------
+--------------------------------------------------------
 
 * Applications
   - Urban area extraction (Pléaides, QB, Ikonos, SPOT5). For more
@@ -1079,7 +1108,7 @@ OTB-v.3.0.0 - Changes since version 2.8.0 (2009/05/11)
 
 
 OTB-v.2.8.0 - Changes since version 2.6.0 (2009/01/15)
------------------------------------------
+--------------------------------------------------------
 
 * System
 	- ITK version updated to 3.10.1
@@ -1102,7 +1131,7 @@ OTB-v.2.8.0 - Changes since version 2.6.0 (2009/01/15)
 
 
 OTB-v.2.6.0 - Changes since version 2.4.0 (2008/10/31)
------------------------------------------
+--------------------------------------------------------
 
 * System
 	- GCC 4.3 compatibility
@@ -1132,7 +1161,7 @@ OTB-v.2.6.0 - Changes since version 2.4.0 (2008/10/31)
 
 
 OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
------------------------------------------
+--------------------------------------------------------
 
 	- Added OTB_DISABLE_CXX_EXAMPLES_TESTING : allows to generate or
 	  not only examples testing
@@ -1196,7 +1225,7 @@ OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
   - Corrections on new SAR models integrated to OSSIM during release 2.2.0
 
 OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
------------------------------------------
+--------------------------------------------------------
 
 
 *BasicFilters:
@@ -1331,7 +1360,7 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
 
 
 OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
------------------------------------------
+--------------------------------------------------------
 
 
 *Projections
@@ -1411,7 +1440,7 @@ OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
 
 
 OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
------------------------------------------
+--------------------------------------------------------
 
 *BasicFilters:
 
@@ -1578,7 +1607,7 @@ OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 
 
 OTB-v.1.4.1 - Changes since version 1.4.0
------------------------------------------
+--------------------------------------------------------
 
 *Platforms:
 	- Minor corrections of main ./CMakeLists.txt to support users
@@ -1586,7 +1615,7 @@ OTB-v.1.4.1 - Changes since version 1.4.0
 	    install directory when using internal ITK.
 
 OTB-v.1.4.0 - Changes since version 1.2.1
------------------------------------------
+--------------------------------------------------------
 
 *IO:
 
@@ -1674,7 +1703,7 @@ OTB-v.1.4.0 - Changes since version 1.2.1
 
 
 OTB-v.1.2.1 - Changes since version 1.2.0
------------------------------------------
+--------------------------------------------------------
 
 *IO:
 	- Improved support of geographic meta data handling in pipeline
@@ -1707,7 +1736,7 @@ OTB-v.1.2.1 - Changes since version 1.2.0
 
 
 OTB-v.1.2.0 - Changes since version 1.0.2
------------------------------------------
+--------------------------------------------------------
 
 *Platforms:
 	- OTB can now been compiled on several new platforms :
@@ -1787,7 +1816,7 @@ OTB-v.1.2.0 - Changes since version 1.0.2
 
 
 OTB-v.1.0.2 - Changes since version 1.0.1
------------------------------------------
+--------------------------------------------------------
 
 - OTB can now been compiled on several new platforms :
        - Microsoft Visual Studio .NET 2005 (8.0).
@@ -1805,7 +1834,7 @@ Note : On MS Windows platforms, if you have any problem related
 
 
 OTB-v.1.0.1 - Changes since version 1.0.0
------------------------------------------
+--------------------------------------------------------
 
 - Building the visualization functionnalities is now an option
     (OTB_USE_VISU variable within CMake). This allows you to build OTB
