@@ -19,7 +19,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {sensor_stereo_left.tif}, {sensor_stereo_right.tif}
-//    OUTPUTS: {elevationOutput.tif}
+//    OUTPUTS: {elevationOutput.tif},{elevationOutputPrintable.png}
 //    140
 //  Software Guide : EndCommandLineArgs
 
@@ -58,15 +58,16 @@
 #include "itkVectorCastImageFilter.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
+#include "itkRescaleIntensityImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 
 int main(int argc, char* argv[])
 {
-  if (argc != 5)
+  if (argc != 6)
     {
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " sensorImage1 sensorImage2 outputDEM ";
+    std::cerr << " sensorImage1 sensorImage2 outputDEM outputDEMPNG";
     std::cerr << "averageElevation  " << std::endl;
     return EXIT_FAILURE;
     }
@@ -86,6 +87,14 @@ int main(int argc, char* argv[])
   typedef otb::StreamingImageFileWriter
     <FloatImageType>                          WriterType;
 
+  typedef unsigned char                       OutputPixelType;
+  typedef otb::Image<OutputPixelType, 2>      OutputImageType;
+
+  typedef itk::RescaleIntensityImageFilter<FloatImageType,
+      OutputImageType> RescalerType;
+
+  typedef otb::StreamingImageFileWriter
+    <OutputImageType>                         OutputWriterType;
 // Software Guide : BeginLatex
 // This example demonstrates the use of the following filters :
 // \begin{itemize}
@@ -150,7 +159,7 @@ int main(int argc, char* argv[])
      FloatImageType>                          DisparityToElevationFilterType;
 // Software Guide : EndCodeSnippet
 
-  double avgElevation = atof(argv[4]);
+  double avgElevation = atof(argv[5]);
 
   ImageReaderType::Pointer leftReader =  ImageReaderType::New();
   ImageReaderType::Pointer rightReader =  ImageReaderType::New();
@@ -382,7 +391,32 @@ int main(int argc, char* argv[])
   m_DEMWriter->SetInput(m_DispToElev->GetOutput());
   m_DEMWriter->SetFileName(argv[3]);
   m_DEMWriter->Update();
-// Software Guide : EndCodeSnippet
+
+  RescalerType::Pointer fieldRescaler = RescalerType::New();
+  fieldRescaler->SetInput(m_DispToElev->GetOutput());
+  fieldRescaler->SetOutputMaximum(255);
+  fieldRescaler->SetOutputMinimum(0);
+
+  OutputWriterType::Pointer fieldWriter = OutputWriterType::New();
+  fieldWriter->SetInput(fieldRescaler->GetOutput());
+  fieldWriter->SetFileName(argv[4]);
+  fieldWriter->Update();
+  // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // Figure~\ref{fig:STEREORECONSTRUCTIONOUTPUT} shows the result of applying
+  // terrain reconstruction based using pixel-wise block matching, sub-pixel
+  // interpolation and DEM estimation using a pair of Pleiades images over the
+  // \textit{Stadium} in Toulouse, France.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.4\textwidth]{elevationOutputPrintable.eps}
+  // \itkcaption[From stereo pair to elevation]{DEM image estimated from the disparity.}
+  // \label{fig:STEREORECONSTRUCTIONOUTPUT}
+  // \end{figure}
+  //
+  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

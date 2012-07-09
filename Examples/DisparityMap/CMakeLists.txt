@@ -52,6 +52,7 @@ ADD_TEST(dmTeStereoReconstructionExampleTest ${EXE_TESTS}
  ${INPUTDATA}/sensor_stereo_left.tif
  ${INPUTDATA}/sensor_stereo_right.tif
  ${TEMP}/elevationOutput.tif
+ ${TEMP}/elevationOutputPrintable.png
  140
 )
 
