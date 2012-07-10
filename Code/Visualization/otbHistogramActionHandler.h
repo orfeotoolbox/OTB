@@ -90,6 +90,13 @@ public:
     spacePoint[0]     = m_RightAsymptote->GetAbcisse();
     double abcisseR  = m_Curve->TransformPoint(spacePoint)[0];
 
+    spacePoint[0] = m_MinimumAbcisse;
+    double minScreenAbs = m_Curve->TransformPoint(spacePoint)[0];
+
+    spacePoint[0] = m_MaximumAbcisse;
+    double maxScreenAbs = m_Curve->TransformPoint(spacePoint)[0];
+
+
     if (widgetId == m_Curve->GetIdentifier() && this->GetIsActive())
       {
       switch (event)
@@ -129,8 +136,8 @@ public:
 
           if (m_ModifyLeft)
             {
-            double tx = x - abcisseL;
-            double newLeftAbcisse = m_LeftAsymptote->GetAbcisse() + tx;
+            double newLeftAbcisse = m_MinimumAbcisse
+                 + (m_MaximumAbcisse - m_MinimumAbcisse) / (maxScreenAbs - minScreenAbs) * (x - minScreenAbs);
             if ( newLeftAbcisse < m_RightAsymptote->GetAbcisse()
                  && newLeftAbcisse >= m_MinimumAbcisse)
               {
@@ -147,8 +154,8 @@ public:
 
           if (m_ModifyRight)
             {
-            double tx = x - abcisseR;
-            double newRightAbcisse = m_RightAsymptote->GetAbcisse() + tx;
+            double newRightAbcisse = m_MinimumAbcisse
+                 + (m_MaximumAbcisse - m_MinimumAbcisse) / (maxScreenAbs - minScreenAbs) * (x - minScreenAbs);
             if (newRightAbcisse > m_LeftAsymptote->GetAbcisse()
                 &&  newRightAbcisse <  m_MaximumAbcisse)
               {
