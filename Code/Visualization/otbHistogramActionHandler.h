@@ -152,7 +152,7 @@ public:
             if (newRightAbcisse > m_LeftAsymptote->GetAbcisse()
                 &&  newRightAbcisse <  m_MaximumAbcisse)
               {
-              m_RightAsymptote->SetAbcisse(newRightAbcisse + tx);
+              m_RightAsymptote->SetAbcisse(newRightAbcisse);
               m_Curve->redraw();
               
               //  Update The Rendering Function min and max
