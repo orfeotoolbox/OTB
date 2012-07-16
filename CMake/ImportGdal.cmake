@@ -226,7 +226,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
     MESSAGE(WARNING "CHECK_XTIFFOPEN_SYMBOL test failed : your platform exhibits a gdal/geotiff conflict. "
     "Opening a TIF file may generate a crash. This is most probably because the gdal library you configured"
     "embeds its own version of libgeotiff and is ABI incompatible with the system libgeotiff\n"
-    "You might consider building GDAL yourself without using --with-hide-internal-symbols"
+    "You might consider building GDAL yourself without using --with-hide-internal-symbols "
     "and pointing GEOTIFF_INCLUDE_DIRS to the geotiff headers included in gdal sources" )
   ENDIF(NOT CHECK_XTIFFOPEN_SYMBOL)
   ENDIF(NOT WIN32)
