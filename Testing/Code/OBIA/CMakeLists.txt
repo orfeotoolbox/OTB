@@ -159,7 +159,7 @@ ADD_TEST(obTuMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFil
       "distance<10"
       20
       "SHAPE_Elongation>10"
-      5 )
+      5)
 
 #TODO JGT add validation test
 ADD_TEST(obTuMeanShiftConnectedComponentSegmentationFilter ${OBIA_TESTS1}
@@ -168,8 +168,6 @@ ADD_TEST(obTuMeanShiftConnectedComponentSegmentationFilter ${OBIA_TESTS1}
       ${TEMP}/obTuMeanShiftConnectedComponentSegmentationImage.png
       9
       9
-      50
-      10
       0.01
       ""
       "distance<0.2"
