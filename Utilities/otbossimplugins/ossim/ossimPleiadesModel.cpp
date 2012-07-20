@@ -231,6 +231,10 @@ namespace ossimplugins
 
           DIMxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^IMG_", "DIM_");
           DIMxmlFileTmp = DIMxmlFileTmp.replaceStrThatMatch("_R[0-9]+C[0-9]+\\.(JP2|TIF)$", ".XML");
+          // Check if it is an XML extension
+          if( DIMxmlFileTmp.ext() != "xml")
+            return false;
+
           RPCxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^DIM_", "RPC_");
 
           DIMxmlFile = DIMxmlFile.dirCat(DIMxmlFileTmp);
