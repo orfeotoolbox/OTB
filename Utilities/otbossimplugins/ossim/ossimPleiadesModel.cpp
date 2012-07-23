@@ -236,6 +236,8 @@ namespace ossimplugins
             return false;
 
           RPCxmlFileTmp = DIMxmlFileTmp.file().replaceStrThatMatch("^DIM_", "RPC_");
+          if( DIMxmlFileTmp.ext() != "XML")
+            return false;
 
           DIMxmlFile = DIMxmlFile.dirCat(DIMxmlFileTmp);
           RPCxmlFile = RPCxmlFile.dirCat(RPCxmlFileTmp);
