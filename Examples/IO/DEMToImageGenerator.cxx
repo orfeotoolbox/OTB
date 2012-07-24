@@ -245,7 +245,7 @@ int main(int argc, char * argv[])
   //
   // \begin{figure} \center
   // \includegraphics[width=0.24\textwidth]{pretty_DEMToImageGenerator.eps}
-  // \itkcaption[ARVI Example]{DEMToImageGenerator image.}
+  // \itkcaption[DEM To Image generator Example]{DEMToImageGenerator image.}
   // \label{fig:DEMToImageGenerator}
   // \end{figure}
   //
