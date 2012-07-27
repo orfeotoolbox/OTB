@@ -43,7 +43,16 @@ IF(OTB_USE_VISU_GUI)
           
           # Only if we used a FLTK 1.3.0 because in FLTK 1.1.>=9 is already done
           IF(FLTK_USE_FILE)
-            INCLUDE(${FLTK_USE_FILE})
+            INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
+            
+            # UseFLTK is buggy on windows, so we do not import it
+            # The definition of FLTK_EXE_LINKER_FLAGS in FLTKConfig.cmake
+            # is not valid and we end up with
+            # CMAKE_EXE_LINKER_FLAGS = " /STACK:10000000 /machine:X86 ; /STACK:10000000 /machine:X86"
+            # The ";" in the middle creates link error :
+            # impossible d'ouvrir le fichier en entrΘe ';.obj'
+            
+            # INCLUDE(${FLTK_USE_FILE})
           ENDIF(FLTK_USE_FILE)
           
         ELSE(OTB_USE_EXTERNAL_FLTK)
@@ -62,8 +71,8 @@ IF(OTB_USE_VISU_GUI)
 		  
         ENDIF(OTB_USE_EXTERNAL_FLTK)
 
-        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES};${FLTK_PLATFORM_DEPENDENT_LIBS}")
-        
+#        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES};${FLTK_PLATFORM_DEPENDENT_LIBS}")
+        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES}")
         IF(APPLE)
           SET(OTB_VISU_GUI_LIBRARIES "${OTB_VISU_GUI_LIBRARIES};-Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
         ENDIF(APPLE)

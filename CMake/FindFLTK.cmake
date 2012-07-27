@@ -171,7 +171,7 @@ IF(FLTK_BUILT_WITH_CMAKE) # FLTK was build using CMak
                FL FLTK_USE_SYSTEM_ZLIB
                )
         
-  ELSE (FLUID_COMMAND)  
+  ELSE (FLUID_COMMAND)
     # If fluid command is not available we try to use the 1.3.0 version  
      
     # Create the version string
@@ -179,26 +179,52 @@ IF(FLTK_BUILT_WITH_CMAKE) # FLTK was build using CMak
       
     # Fluid executable
     SET(FLTK_FLUID_EXECUTABLE ${FLTK_FLUID_EXECUTABLE} CACHE FILEPATH "Fluid executable")
-         
-    SET(FLTK_BASE_LIBRARY ${FLTK_LIB_DIR}/libfltk.so)
-    SET(FLTK_GL_LIBRARY ${FLTK_LIB_DIR}/libfltk_gl.so)
-    SET(FLTK_FORMS_LIBRARY ${FLTK_LIB_DIR}/libfltk_forms.so)
-    SET(FLTK_IMAGES_LIBRARY ${FLTK_LIB_DIR}/libfltk_images.so)
+
+    # Using the fltk shared lib ion a static build does not work (undefined symbol)
+    IF (BUILD_SHARED_LIBS)
+        FIND_LIBRARY(FLTK_BASE_LIBRARY
+                     NAMES fltkdll fltkdlld fltk
+                     PATHS ${FLTK_LIB_DIR})
+        FIND_LIBRARY(FLTK_GL_LIBRARY
+                     NAMES fltkgldll fltkgldlld fltk_gl
+                     PATHS ${FLTK_LIB_DIR})
+        FIND_LIBRARY(FLTK_IMAGES_LIBRARY
+                     NAMES fltkimagesdll fltkimagesdlld fltk_images
+                     PATHS ${FLTK_LIB_DIR})
+        FIND_LIBRARY(FLTK_FORMS_LIBRARY
+                     NAMES fltkformsdll fltkformsdlld fltk_forms
+                     PATHS ${FLTK_LIB_DIR})
+    ELSE(BUILD_SHARED_LIBS)
+        FIND_LIBRARY(FLTK_BASE_LIBRARY
+                     NAMES fltk fltkd
+                     PATHS ${FLTK_LIB_DIR})
+        FIND_LIBRARY(FLTK_GL_LIBRARY
+                     NAMES fltkgl fltkgld fltk_gl
+                     PATHS ${FLTK_LIB_DIR})
+        FIND_LIBRARY(FLTK_IMAGES_LIBRARY
+                     NAMES fltkimages fltkimagesd fltk_images
+                     PATHS ${FLTK_LIB_DIR})
+        FIND_LIBRARY(FLTK_FORMS_LIBRARY
+                     NAMES fltkforms fltkformsd fltk_forms
+                     PATHS ${FLTK_LIB_DIR})
+    ENDIF(BUILD_SHARED_LIBS)
 
   ENDIF (FLUID_COMMAND)
-    
-  SET(FLTK_IMAGES_LIBS "")
-  IF(FLFLTK_USE_SYSTEM_JPEG)
-    SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_jpeg)
-  ENDIF(FLFLTK_USE_SYSTEM_JPEG)
-  IF(FLFLTK_USE_SYSTEM_PNG)
-    SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_png)
-  ENDIF(FLFLTK_USE_SYSTEM_PNG)
-  IF(FLFLTK_USE_SYSTEM_ZLIB)
-    SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_zlib)
-  ENDIF(FLFLTK_USE_SYSTEM_ZLIB)
-  SET(FLTK_IMAGES_LIBS "${FLTK_IMAGES_LIBS}" CACHE INTERNAL
-      "Extra libraries for fltk_images library.")
+
+# Disable support for FLTK built with internal version of jpeg/png/zlib
+# Those variable were not used further anyhow.
+#  SET(FLTK_IMAGES_LIBS "")
+#  IF(FLFLTK_USE_SYSTEM_JPEG)
+#    SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_jpeg)
+#  ENDIF(FLFLTK_USE_SYSTEM_JPEG)
+#  IF(FLFLTK_USE_SYSTEM_PNG)
+#    SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_png)
+#  ENDIF(FLFLTK_USE_SYSTEM_PNG)
+#  IF(FLFLTK_USE_SYSTEM_ZLIB)
+#    SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_zlib)
+#  ENDIF(FLFLTK_USE_SYSTEM_ZLIB)
+#  SET(FLTK_IMAGES_LIBS "${FLTK_IMAGES_LIBS}" CACHE INTERNAL
+#      "Extra libraries for fltk_images library.")
 
 ELSE(FLTK_BUILT_WITH_CMAKE) # FLTK was not build using CMake
 
