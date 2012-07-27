@@ -128,7 +128,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
- 
+
     AddDocTag(Tags::Learning);
 
     AddParameter(ParameterType_InputImageList, "il", "Input Image List");
@@ -141,7 +141,7 @@ private:
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
-    
+
     AddParameter(ParameterType_OutputFilename, "out", "Output filename");
     SetParameterDescription("out", "Output file, which contains the performances of the SVM model.");
     MandatoryOff("out");
@@ -325,7 +325,7 @@ private:
       otbAppLogINFO("F-score of class [" << itClasses << "] vs all: " << confMatCalc->GetFScores()[itClasses] << "\n" << std::endl);
       }
     otbAppLogINFO("Global performance, Kappa index: " << confMatCalc->GetKappaIndex() << std::endl);
-
+    otbAppLogINFO("Global performance, Overall accuracy: " << confMatCalc->GetOverallAccuracy() << std::endl);
     //--------------------------
     // Save output in a ascii file (if needed)
     if (IsParameterEnabled("out"))
@@ -336,6 +336,7 @@ private:
       file << "Recall of the different class: " << confMatCalc->GetRecalls() << std::endl;
       file << "F-score of the different class: " << confMatCalc->GetFScores() << std::endl;
       file << "Kappa index: " << confMatCalc->GetKappaIndex() << std::endl;
+      file << "Overall accuracy index: " << confMatCalc->GetOverallAccuracy() << std::endl;
       file.close();
       }
   }

@@ -183,27 +183,29 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
   m_Precisions = MeasurementType(m_NumberOfClasses);
   m_Recalls = MeasurementType(m_NumberOfClasses);
   m_FScores = MeasurementType(m_NumberOfClasses);
-  m_Precisions.Fill(0);
-  m_Recalls.Fill(0);
-  m_FScores.Fill(0);
+  m_Precisions.Fill(0.);
+  m_Recalls.Fill(0.);
+  m_FScores.Fill(0.);
+
+  const double epsilon = 0.0000000001;
 
   if (m_NumberOfClasses != 2)
     {
     for (unsigned int i = 0; i < m_NumberOfClasses; ++i)
       {
-      if (this->m_TruePositiveValues[i] + this->m_FalsePositiveValues[i] != 0)
+      if (vcl_abs(this->m_TruePositiveValues[i] + this->m_FalsePositiveValues[i]) > epsilon)
         {
         this->m_Precisions[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
             + this->m_FalsePositiveValues[i]);
         }
 
-      if (this->m_TruePositiveValues[i] + this->m_FalseNegativeValues[i] !=0)
+      if (vcl_abs(this->m_TruePositiveValues[i] + this->m_FalseNegativeValues[i]) > epsilon)
         {
         this->m_Recalls[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
           + this->m_FalseNegativeValues[i]);
         }
 
-      if (this->m_Recalls[i] + this->m_Precisions[i] != 0)
+      if (vcl_abs(this->m_Recalls[i] + this->m_Precisions[i]) > 0)
         {
         this->m_FScores[i] = 2 * this->m_Recalls[i] * this->m_Precisions[i]
             / (this->m_Recalls[i] + this->m_Precisions[i]);
@@ -212,15 +214,15 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
     }
   else
     {
-    if (this->m_TruePositiveValue + this->m_FalsePositiveValue != 0 )
+    if (vcl_abs(this->m_TruePositiveValue + this->m_FalsePositiveValue) > epsilon)
       {
       this->m_Precision = this->m_TruePositiveValue / (this->m_TruePositiveValue + this->m_FalsePositiveValue);
       }
-    if (this->m_TruePositiveValue + this->m_FalseNegativeValue != 0)
+    if (vcl_abs(this->m_TruePositiveValue + this->m_FalseNegativeValue) > epsilon)
       {
       this->m_Recall = this->m_TruePositiveValue / (this->m_TruePositiveValue + this->m_FalseNegativeValue);
       }
-    if (this->m_Recall + this->m_Precision != 0)
+    if (vcl_abs(this->m_Recall + this->m_Precision) > epsilon)
       {
       this->m_FScore = 2 * this->m_Recall * this->m_Precision / (this->m_Recall + this->m_Precision);
       }
@@ -228,11 +230,10 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
 
   luckyRate /= vcl_pow(m_NumberOfSamples, 2.0);
 
-  if (luckyRate != 1 )
+  if (vcl_abs(luckyRate-1) > epsilon)
     {
     m_KappaIndex = (m_OverallAccuracy - luckyRate) / (1 - luckyRate);
     }
-
 }
 
 template <class TRefListLabel, class TProdListLabel>
