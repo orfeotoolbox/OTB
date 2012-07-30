@@ -119,11 +119,11 @@ template <class TVectorData, class TOutputImage>
 void
 VectorDataToLabelImageFilter<TVectorData, TOutputImage>
 ::SetOutputParametersFromImage(const ImageBaseType * src)
-{ 
+{
   this->SetOutputOrigin ( src->GetOrigin() );
   this->SetOutputSpacing ( src->GetSpacing() );
   this->SetOutputSize ( src->GetLargestPossibleRegion().GetSize() );
-  typename ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(src->GetMetaDataDictionary());
+  ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(src->GetMetaDataDictionary());
   this->SetOutputProjectionRef(imi->GetProjectionRef());
 }
 
