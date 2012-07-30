@@ -118,16 +118,13 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
 template <class TVectorData, class TOutputImage>
 void
 VectorDataToLabelImageFilter<TVectorData, TOutputImage>
-::SetOutputParametersFromImage(const ImageBaseType * image)
-{
-  const OutputImageType * src = dynamic_cast<const OutputImageType*>(image);
-  
+::SetOutputParametersFromImage(const ImageBaseType * src)
+{ 
   this->SetOutputOrigin ( src->GetOrigin() );
   this->SetOutputSpacing ( src->GetSpacing() );
-  //this->SetOutputStartIndex ( src->GetLargestPossibleRegion().GetIndex() );
   this->SetOutputSize ( src->GetLargestPossibleRegion().GetSize() );
-  this->SetOutputProjectionRef(src->GetProjectionRef());
-  //this->SetOutputKeywordList(src->GetImageKeywordlist());
+  typename ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(src->GetMetaDataDictionary());
+  this->SetOutputProjectionRef(imi->GetProjectionRef());
 }
 
 template<class TVectorData, class TOutputImage>
