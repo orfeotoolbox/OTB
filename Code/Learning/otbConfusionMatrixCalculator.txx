@@ -205,7 +205,7 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
           + this->m_FalseNegativeValues[i]);
         }
 
-      if (vcl_abs(this->m_Recalls[i] + this->m_Precisions[i]) > 0)
+      if (vcl_abs(this->m_Recalls[i] + this->m_Precisions[i]) > epsilon)
         {
         this->m_FScores[i] = 2 * this->m_Recalls[i] * this->m_Precisions[i]
             / (this->m_Recalls[i] + this->m_Precisions[i]);
