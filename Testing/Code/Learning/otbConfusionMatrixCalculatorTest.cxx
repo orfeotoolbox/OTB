@@ -78,6 +78,11 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
+
+/*
+compare to results obtained with source code available here
+http://en.wikibooks.org/wiki/Algorithm_Implementation/Statistics/Fleiss%27_kappa
+*/
 int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
 {
 
@@ -203,8 +208,6 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
 
   CalculatorType::ConfusionMatrixType confmat = calculator->GetConfusionMatrix();
 
-  std::cout << "confusion matrix" << std::endl  << confmat << std::endl;
-
   // double totalError = 0.0;
 
   // for (int i = 0; i < nbClasses; ++i)
@@ -235,6 +238,8 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
   //   return EXIT_FAILURE;
   //   }
 
+  std::cout << "confusion matrix" << std::endl  << confmat << std::endl;
+
   for (int itClasses = 0; itClasses < nbClasses; itClasses++)
       {
       std::cout << "Precision of class [" << itClasses << "] vs all: " << calculator->GetPrecisions()[itClasses] << std::endl;
@@ -244,9 +249,18 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
   std::cout << "Precision of the different class: " << calculator->GetPrecisions() << std::endl;
   std::cout << "Recall of the different class: " << calculator->GetRecalls() << std::endl;
   std::cout << "F-score of the different class: " << calculator->GetFScores() << std::endl;
-  std::cout << "Kappa index: " << calculator->GetKappaIndex() << std::endl;
 
   std::cout << "Kappa = " << calculator->GetKappaIndex() << std::endl;
   std::cout << "OA = " << calculator->GetOverallAccuracy() << std::endl;
-  return EXIT_SUCCESS;
+
+  const double oa = 3 / static_cast<double>(nbSamples);
+
+  if (vcl_abs (calculator->GetOverallAccuracy() - oa) > 0.000001)
+    {
+    return EXIT_FAILURE;
+    }
+  else
+    {
+    return EXIT_SUCCESS;
+    }
 }
