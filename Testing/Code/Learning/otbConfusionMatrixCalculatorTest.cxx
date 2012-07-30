@@ -165,9 +165,9 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
   ConfusionMatrixType confusionMatrix = ConfusionMatrixType(nbClasses, nbClasses);
   confusionMatrix.Fill(0);
 
-  // confusionMatrix(0,1) = ;
-  // confusionMatrix(0,1) = ;
-  // confusionMatrix(0,1) = ;
+  // confusionMatrix(0,1) =;
+  // confusionMatrix(0,1) =;
+  // confusionMatrix(0,1) =;
 
   for (int i = 0; i < nbSamples; ++i)
     {
