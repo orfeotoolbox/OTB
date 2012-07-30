@@ -71,7 +71,6 @@ IF(OTB_USE_VISU_GUI)
 		  
         ENDIF(OTB_USE_EXTERNAL_FLTK)
 
-#        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES};${FLTK_PLATFORM_DEPENDENT_LIBS}")
         SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES}")
         IF(APPLE)
           SET(OTB_VISU_GUI_LIBRARIES "${OTB_VISU_GUI_LIBRARIES};-Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
