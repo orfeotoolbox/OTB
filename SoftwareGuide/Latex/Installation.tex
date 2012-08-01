@@ -118,7 +118,11 @@ For Ubuntu 10.04 (Lucid Lynx), 10.10 (Maverick Meerkat), 11.10 (Oneiric Ocelot) 
 OTB-Applications, Monteverdi and OTB-Wrapping packages are available as Debian packages 
 through APT repositories.
 
-Since release 3.14, we advise to use now the  orfeotoolbox-stable-ubuntugis with last version of gdal and qgis.
+Since release 3.14, we advise to use now the \textbf{orfeotoolbox-stable-ubuntugis} repository (based on ubuntugis-unstable ppa).
+The installation of OTB through this PPA provides an alternate
+''homemade'' gdal 1.9 version which allows to avoid the GTiff which is still
+present for now in the orfeotoolbox-stable repository.
+
 You can add it by using these command-lines:
 \begin{verbatim}
 sudo aptitude install add-apt-repository 
@@ -180,7 +184,8 @@ sudo add-apt-repository ppa:otb/orfeotoolbox-stable
 %% sudo aptitude install libotb otbapp monteverdi otb-wrapping-python otb-wrapping-java
 %% \end{verbatim}
 
-The orfeotoolbox stable PPA repository is also available and use standard version of the gdal package. 
+The orfeotoolbox stable PPA repository is also available and use standard version of the gdal package (with the GTiff crash with current version, see \url{http://bugs.orfeo-toolbox.org/view.php?id=86}{here}). 
+
 If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
 \begin{verbatim}
 sudo aptitude install add-apt-repository 
