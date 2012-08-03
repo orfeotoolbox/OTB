@@ -9,9 +9,11 @@ TARGET_LINK_LIBRARIES(FuzzyConnectednessImageFilter OTBIO OTBCommon ITKNumerics)
 #TARGET_LINK_LIBRARIES(HybridSegmentationFuzzyVoronoi OTBIO OTBCommon ITKNumerics)
 
 #Examples using SIFT
+IF(OTB_USE_SIFTFAST)
 ADD_EXECUTABLE(SIFTDisparityMapEstimation SIFTDisparityMapEstimation.cxx )
 TARGET_LINK_LIBRARIES(SIFTDisparityMapEstimation OTBFeatureExtraction OTBCommon OTBIO
 ITKIO)
+ENDIF(OTB_USE_SIFTFAST)
 
 ADD_EXECUTABLE(EstimateAffineTransformationExample EstimateAffineTransformationExample.cxx )
 TARGET_LINK_LIBRARIES(EstimateAffineTransformationExample OTBFeatureExtraction OTBCommon OTBIO OTBProjections
@@ -72,6 +74,7 @@ ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${EXE_TESTS}
 )
 
 # -----SIFTDisparityMapEstimationTest---------
+IF(OTB_USE_SIFTFAST)
 ADD_TEST(dmTeSIFTDisparityMapEstimationTest ${EXE_TESTS}
   --compare-image ${TOL}
    ${BASELINE}/SIFTdeformationFieldOutput.png
@@ -81,7 +84,7 @@ SIFTDisparityMapEstimationTest
    ${INPUTDATA}/ROISpot5Warped.png
    ${TEMP}/SIFTdeformationFieldOutput.png
 )
-
+ENDIF(OTB_USE_SIFTFAST)
 
 ADD_TEST(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 4
