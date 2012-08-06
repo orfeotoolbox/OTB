@@ -51,21 +51,21 @@ bool ReadDataFile(const char * infname, InputListSampleType * samples, TargetLis
 
         InputSampleType sample(nbfeatures);
         sample.Fill(0);
-        
+
         std::string::size_type pos = line.find_first_of(" ", 0);
-        
+
         // Parse label
         TargetSampleType label;
         label[0] = atoi(line.substr(0, pos).c_str());
-        
+
         bool endOfLine = false;
-        
+
         unsigned int id = 0;
-        
+
         while(!endOfLine)
           {
           std::string::size_type nextpos = line.find_first_of(" ", pos+1);
-          
+
           if(nextpos == std::string::npos)
             {
             endOfLine = true;
@@ -80,9 +80,9 @@ bool ReadDataFile(const char * infname, InputListSampleType * samples, TargetLis
             pos = nextpos;
             }
           }
-        
-        std::cout<<"New sample: "<<sample<<", label: "<<label<<std::endl;
-        
+
+        //std::cout<<"New sample: "<<sample<<", label: "<<label<<std::endl;
+
         samples->PushBack(sample);
         labels->PushBack(label);
         }

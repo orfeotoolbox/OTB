@@ -62,15 +62,18 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
   //Mat var_type = Mat(ATTRIBUTES_PER_SAMPLE + 1, 1, CV_8U );
-
+  //std::cout << "priors " << m_Priors[0] << std::endl;
   //Define random forests paramneters
   //FIXME do this in the constructor?
+
+  float * priorsFirstAddr = m_Priors.empty() ? 0 : &m_Priors.front();
+
   CvRTParams params = CvRTParams(m_MaxDepth, // max depth
                                        m_MinSampleCount, // min sample count
                                        m_RegressionAccuracy, // regression accuracy: N/A here
                                        m_ComputeSurrogateSplit, // compute surrogate split, no missing data
                                        m_MaxNumberOfCategories, // max number of categories (use sub-optimal algorithm for larger numbers)
-                                       &m_Priors[0], // the array of priors
+                                       priorsFirstAddr, // the array of priors
                                        m_CalculateVariableImportance,  // calculate variable importance
                                        m_MaxNumberOfVariables,       // number of variables randomly selected at node and used to find the best split(s).
 				       m_MaxNumberOfTrees,	 // max number of trees in the forest
@@ -112,7 +115,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
     target[0] = static_cast<TOutputValue>(result);
 
-    std::cout<<"Sample: "<<sIt.GetMeasurementVector()<<", predicted: "<<target[0]<<std::endl;
+    //std::cout<<"Sample: "<<sIt.GetMeasurementVector()<<", predicted: "<<target[0]<<std::endl;
 
     targets->PushBack(target);
     }

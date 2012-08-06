@@ -89,6 +89,9 @@ public:
   itkGetMacro(MinSampleCount, int);
   itkSetMacro(MinSampleCount, int);
 
+  /* Termination criteria for regression trees. If all absolute differences
+  * between an estimated value in a node and values of train samples in this node
+  * are less than this parameter then the node will not be split */
   itkGetMacro(RegressionAccuracy, double);
   itkSetMacro(RegressionAccuracy, bool);
   itkGetMacro(ComputeSurrogateSplit, bool);
@@ -106,6 +109,22 @@ public:
   */
   itkGetMacro(MaxNumberOfCategories, int);
   itkSetMacro(MaxNumberOfCategories, int);
+
+  /*  The array of a priori class probabilities, sorted by the class label
+  * value. The parameter can be used to tune the decision tree preferences toward
+  * a certain class. For example, if you want to detect some rare anomaly
+  * occurrence, the training base will likely contain much more normal cases than
+  * anomalies, so a very good classification performance will be achieved just by
+  * considering every case as normal. To avoid this, the priors can be specified,
+  * where the anomaly probability is artificially increased (up to 0.5 or even
+  * greater), so the weight of the misclassified anomalies becomes much bigger,
+  * and the tree is adjusted properly. You can also think about this parameter as
+  * weights of prediction categories which determine relative weights that you
+  * give to misclassification. That is, if the weight of the first category is 1
+  * and the weight of the second category is 10, then each mistake in predicting
+  * the second category is equivalent to making 10 mistakes in predicting the
+  first category. */
+
   std::vector<float> GetPriors() const
   {
     return m_Priors;
