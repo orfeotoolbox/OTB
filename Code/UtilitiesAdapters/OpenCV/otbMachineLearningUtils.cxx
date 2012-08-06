@@ -42,44 +42,50 @@ bool ReadDataFile(const char * infname, InputListSampleType * samples, TargetLis
 
       if(nbfeatures == 0)
         {
-        nbfeatures = std::count(line.begin(),line.end(),' ');
+        nbfeatures = std::count(line.begin(),line.end(),' ')-1;
         std::cout<<"Found "<<nbfeatures<<" features per samples"<<std::endl;
         }
 
-      InputSampleType sample(nbfeatures);
-      sample.Fill(0);
-
-      std::string::size_type pos = line.find_first_of(" ", 0);
-
-      // Parse label
-      TargetSampleType label;
-      label[0] = atoi(line.substr(0, pos).c_str());
-
-      bool endOfLine = false;
-
-      unsigned int id = 0;
-
-      while(!endOfLine)
+      if(line.size()>1)
         {
-        std::string::size_type nextpos = line.find_first_of(" ", pos+1);
 
-        if(nextpos == std::string::npos)
+        InputSampleType sample(nbfeatures);
+        sample.Fill(0);
+        
+        std::string::size_type pos = line.find_first_of(" ", 0);
+        
+        // Parse label
+        TargetSampleType label;
+        label[0] = atoi(line.substr(0, pos).c_str());
+        
+        bool endOfLine = false;
+        
+        unsigned int id = 0;
+        
+        while(!endOfLine)
           {
-          endOfLine = true;
-          nextpos = line.size()-1;
+          std::string::size_type nextpos = line.find_first_of(" ", pos+1);
+          
+          if(nextpos == std::string::npos)
+            {
+            endOfLine = true;
+            nextpos = line.size()-1;
+            }
+          else
+            {
+            std::string feature = line.substr(pos,nextpos-pos);
+            std::string::size_type semicolonpos = feature.find_first_of(":");
+            sample[id] = atof(feature.substr(0,semicolonpos).c_str());
+            ++id;
+            pos = nextpos;
+            }
           }
-        else
-          {
-          std::string feature = line.substr(pos,nextpos-pos);
-          std::string::size_type semicolonpos = feature.find_first_of(":");
-          sample[id] = atof(feature.substr(0,semicolonpos).c_str());
-          ++id;
-          pos = nextpos;
-          }
+        
+        std::cout<<"New sample: "<<sample<<", label: "<<label<<std::endl;
+        
+        samples->PushBack(sample);
+        labels->PushBack(label);
         }
-      
-      samples->PushBack(sample);
-      labels->PushBack(label);
       }
 
     std::cout<<"Retrieved "<<samples->Size()<<" samples"<<std::endl;

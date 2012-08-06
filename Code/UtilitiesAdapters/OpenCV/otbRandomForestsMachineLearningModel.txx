@@ -34,7 +34,6 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   m_RegressionAccuracy = 0;
   m_ComputeSurrogateSplit = false;
   m_MaxNumberOfCategories = 15;
-  m_Priors = 0;
   m_CalculateVariableImportance = false;
   m_MaxNumberOfVariables = 4;
   m_MaxNumberOfTrees = 100;
@@ -71,7 +70,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
                                        m_RegressionAccuracy, // regression accuracy: N/A here
                                        m_ComputeSurrogateSplit, // compute surrogate split, no missing data
                                        m_MaxNumberOfCategories, // max number of categories (use sub-optimal algorithm for larger numbers)
-                                       m_Priors, // the array of priors
+                                       &m_Priors[0], // the array of priors
                                        m_CalculateVariableImportance,  // calculate variable importance
                                        m_MaxNumberOfVariables,       // number of variables randomly selected at node and used to find the best split(s).
 				       m_MaxNumberOfTrees,	 // max number of trees in the forest
@@ -87,7 +86,6 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   //train the RT model
   m_RFModel->train(samples, CV_ROW_SAMPLE, labels,
 	       cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
-  
 }
 
 template <class TInputValue, class TOutputValue>
@@ -107,18 +105,13 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
       sIt!=this->GetInputListSample()->End();++sIt)
     {
     otb::SampleToMat<InputSampleType>(sIt.GetMeasurementVector(),sample);
-  
-    cv::Mat label;
-    label.create(1,1,CV_16UC1);
 
-    double result = m_RFModel->predict(sample, label);
+    double result = m_RFModel->predict(sample);
 
     TargetSampleType target;
+
+    target[0] = static_cast<TOutputValue>(result);
     
-    std::cout<<label.empty()<<std::endl;
-
-    target[0] = label.at<int>(0,0);
-
     std::cout<<"Sample: "<<sIt.GetMeasurementVector()<<", predicted: "<<target[0]<<std::endl;
 
     targets->PushBack(target);

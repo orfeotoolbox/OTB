@@ -78,6 +78,11 @@ public:
   /* itkSetObjectMacro(TargetListSample,TargetListSampleType); */
   /* itkGetObjectMacro(TargetListSample,TargetListSampleType); */
   
+  void SetPriors(const std::vector<float> & priors)
+  {
+    m_Priors = priors;
+  }
+
 protected:
   /** Constructor */
   RandomForestsMachineLearningModel();
@@ -104,7 +109,7 @@ private:
   double m_RegressionAccuracy;
   bool m_ComputeSurrogateSplit;
   unsigned int m_MaxNumberOfCategories;
-  float * m_Priors;
+  std::vector<float> m_Priors;
   bool m_CalculateVariableImportance;
   unsigned int m_MaxNumberOfVariables;
   unsigned int m_MaxNumberOfTrees;
