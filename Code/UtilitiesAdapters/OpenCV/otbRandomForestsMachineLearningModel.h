@@ -105,7 +105,9 @@ public:
    * clustering all the samples into max categories clusters that is some
    * categories are merged together. The clustering is applied only in n>2-class
    * classification problems for categorical variables with N > max_categories
-   * possible values. In case of regression and 2-class classification the optimal split can be found efficiently without employing clustering, thus the parameter is not used in these cases.
+   * possible values. In case of regression and 2-class classification the
+   * optimal split can be found efficiently without employing clustering, thus
+   * the parameter is not used in these cases.
   */
   itkGetMacro(MaxNumberOfCategories, int);
   itkSetMacro(MaxNumberOfCategories, int);
