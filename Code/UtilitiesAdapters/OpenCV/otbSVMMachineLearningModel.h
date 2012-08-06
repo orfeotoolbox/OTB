@@ -67,6 +67,22 @@ public:
   /** Load the model from file */
   virtual void Load(char * filename, const char * name=0);
 
+  //Setters/Getters to SVM model
+  itkGetMacro(SVMType, int);
+  itkSetMacro(SVMType, int);
+
+  itkGetMacro(KernelType, int);
+  itkSetMacro(KernelType, int);
+
+  itkGetMacro(TermCriteriaType, int);
+  itkSetMacro(TermCriteriaType, int);
+
+  itkGetMacro(MaxIter, int);
+  itkSetMacro(MaxIter, int);
+
+  itkGetMacro(Epsilon, int);
+  itkSetMacro(Epsilon, int);
+
 protected:
   /** Constructor */
   SVMMachineLearningModel();
