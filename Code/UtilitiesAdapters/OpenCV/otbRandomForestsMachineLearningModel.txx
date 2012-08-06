@@ -102,8 +102,6 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   TargetListSampleType * targets = this->GetTargetListSample();
   targets->Clear();
 
-  std::cout<<"InputListSample size: "<<this->GetInputListSample()->Size()<<std::endl;
-
   for(typename InputListSampleType::ConstIterator sIt = this->GetInputListSample()->Begin();
       sIt!=this->GetInputListSample()->End();++sIt)
     {
@@ -115,13 +113,8 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
     target[0] = static_cast<TOutputValue>(result);
 
-    //std::cout<<"Sample: "<<sIt.GetMeasurementVector()<<", predicted: "<<target[0]<<std::endl;
-
     targets->PushBack(target);
     }
-
-  //this->SetTargetListSample(otb::MatToListSample<TargetListSampleType>(labels));
-  //convert Mat to listsample
 }
 
 template <class TInputValue, class TOutputValue>

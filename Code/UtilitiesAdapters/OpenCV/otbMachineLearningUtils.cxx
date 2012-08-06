@@ -79,10 +79,7 @@ bool ReadDataFile(const char * infname, InputListSampleType * samples, TargetLis
             ++id;
             pos = nextpos;
             }
-          }
-
-        //std::cout<<"New sample: "<<sample<<", label: "<<label<<std::endl;
-
+          }        
         samples->PushBack(sample);
         labels->PushBack(label);
         }
