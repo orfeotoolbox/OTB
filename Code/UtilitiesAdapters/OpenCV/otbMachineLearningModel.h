@@ -53,7 +53,8 @@ public:
   virtual void Train() = 0;
 
   /** Predict values using the model */
-  virtual void Predict()= 0;
+  virtual TargetSampleType Predict(const InputSampleType& input) const = 0;
+  void PredictAll();
 
   /** Save the model to file */
   virtual void Save(char * filename, const char * name=0) = 0;

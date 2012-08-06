@@ -58,29 +58,22 @@ KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
+typename KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
+::TargetSampleType
 KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
-::Predict()
+::Predict(const InputSampleType & input) const
 {
   //convert listsample to Mat
   cv::Mat sample;
+  otb::SampleToMat<InputSampleType>(input,sample);
 
-  TargetListSampleType * targets = this->GetTargetListSample();
-  targets->Clear();
+  double result = m_KNearestModel->find_nearest(sample,m_K);
 
-  for(typename InputListSampleType::ConstIterator sIt = this->GetInputListSample()->Begin();
-      sIt!=this->GetInputListSample()->End();++sIt)
-    {
-    otb::SampleToMat<InputSampleType>(sIt.GetMeasurementVector(),sample);
+  TargetSampleType target;
 
-    double result = m_KNearestModel->find_nearest(sample,m_K);
+  target[0] = static_cast<TOutputValue>(result);
 
-    TargetSampleType target;
-
-    target[0] = static_cast<TOutputValue>(result);
-
-    targets->PushBack(target);
-    }
+  return target;
 }
 
 template <class TInputValue, class TOutputValue>

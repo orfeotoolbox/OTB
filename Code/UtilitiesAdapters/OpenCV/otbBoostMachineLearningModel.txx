@@ -65,31 +65,25 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
+typename BoostMachineLearningModel<TInputValue,TOutputValue>
+::TargetSampleType
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::Predict()
+::Predict(const InputSampleType & input) const
 {
   //convert listsample to Mat
   cv::Mat sample;
 
-  TargetListSampleType * targets = this->GetTargetListSample();
-  targets->Clear();
-
-  for(typename InputListSampleType::ConstIterator sIt = this->GetInputListSample()->Begin();
-      sIt!=this->GetInputListSample()->End();++sIt)
-    {
-    otb::SampleToMat<InputSampleType>(sIt.GetMeasurementVector(),sample);
+  otb::SampleToMat<InputSampleType>(input,sample);
     
-    cv::Mat missing  = cv::Mat(1,sIt.GetMeasurementVector().Size(), CV_8U );
-    missing.setTo(0);
-    double result = m_BoostModel->predict(sample,missing);
+  cv::Mat missing  = cv::Mat(1,input.Size(), CV_8U );
+  missing.setTo(0);
+  double result = m_BoostModel->predict(sample,missing);
 
-    TargetSampleType target;
-
-    target[0] = static_cast<TOutputValue>(result);
-
-    targets->PushBack(target);
-    }
+  TargetSampleType target;
+  
+  target[0] = static_cast<TOutputValue>(result);
+  
+  return target;
 }
 
 template <class TInputValue, class TOutputValue>

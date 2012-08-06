@@ -59,7 +59,7 @@ public:
   virtual void Train();
 
   /** Predict values using the model */
-  virtual void Predict();
+  virtual TargetSampleType Predict(const InputSampleType & input) const;
 
   /** Save the model to file */
   virtual void Save(char * filename, const char * name=0);

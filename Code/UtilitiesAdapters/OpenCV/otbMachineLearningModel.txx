@@ -37,6 +37,21 @@ MachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 MachineLearningModel<TInputValue,TOutputValue>
+::PredictAll()
+{
+  TargetListSampleType * targets = this->GetTargetListSample();
+  targets->Clear();
+
+  for(typename InputListSampleType::ConstIterator sIt = this->GetInputListSample()->Begin();
+      sIt!=this->GetInputListSample()->End();++sIt)
+    {
+    targets->PushBack(this->Predict(sIt.GetMeasurementVector()));
+    }
+}
+
+template <class TInputValue, class TOutputValue>
+void
+MachineLearningModel<TInputValue,TOutputValue>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation

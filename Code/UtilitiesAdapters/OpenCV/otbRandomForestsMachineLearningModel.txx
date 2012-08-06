@@ -92,29 +92,23 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
+typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
+::TargetSampleType
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::Predict()
+::Predict(const InputSampleType & value) const
 {
   //convert listsample to Mat
   cv::Mat sample;
 
-  TargetListSampleType * targets = this->GetTargetListSample();
-  targets->Clear();
-
-  for(typename InputListSampleType::ConstIterator sIt = this->GetInputListSample()->Begin();
-      sIt!=this->GetInputListSample()->End();++sIt)
-    {
-    otb::SampleToMat<InputSampleType>(sIt.GetMeasurementVector(),sample);
-
+  otb::SampleToMat<InputSampleType>(value,sample);
+  
     double result = m_RFModel->predict(sample);
 
     TargetSampleType target;
 
     target[0] = static_cast<TOutputValue>(result);
 
-    targets->PushBack(target);
-    }
+    return target[0];
 }
 
 template <class TInputValue, class TOutputValue>
