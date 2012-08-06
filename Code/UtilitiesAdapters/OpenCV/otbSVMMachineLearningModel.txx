@@ -68,29 +68,23 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
+typename SVMMachineLearningModel<TInputValue,TOutputValue>
+::TargetSampleType
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::Predict()
+::Predict(const InputSampleType & input) const
 {
   //convert listsample to Mat
   cv::Mat sample;
 
-  TargetListSampleType * targets = this->GetTargetListSample();
-  targets->Clear();
-
-  for(typename InputListSampleType::ConstIterator sIt = this->GetInputListSample()->Begin();
-      sIt!=this->GetInputListSample()->End();++sIt)
-    {
-    otb::SampleToMat<InputSampleType>(sIt.GetMeasurementVector(),sample);
-
-    double result = m_SVMModel->predict(sample,false);
-
-    TargetSampleType target;
-
-    target[0] = static_cast<TOutputValue>(result);
-
-    targets->PushBack(target);
-    }
+  otb::SampleToMat<InputSampleType>(input,sample);
+  
+  double result = m_SVMModel->predict(sample,false);
+  
+  TargetSampleType target;
+  
+  target[0] = static_cast<TOutputValue>(result);
+ 
+  return target;
 }
 
 template <class TInputValue, class TOutputValue>
