@@ -21,7 +21,7 @@
 #include "otbRandomForestsMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
 
-namespace otb 
+namespace otb
 {
 
 template <class TInputValue, class TOutputValue>
@@ -37,7 +37,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   m_CalculateVariableImportance = false;
   m_MaxNumberOfVariables = 4;
   m_MaxNumberOfTrees = 100;
-  m_ForrestAccuracy = 0.01;
+  m_ForestAccuracy = 0.01;
   m_TerminationCriteria = CV_TERMCRIT_ITER | CV_TERMCRIT_EPS;
 }
 
@@ -58,7 +58,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   //convert listsample to opencv matrix
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
-  
+
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
   //Mat var_type = Mat(ATTRIBUTES_PER_SAMPLE + 1, 1, CV_8U );
@@ -74,7 +74,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
                                        m_CalculateVariableImportance,  // calculate variable importance
                                        m_MaxNumberOfVariables,       // number of variables randomly selected at node and used to find the best split(s).
 				       m_MaxNumberOfTrees,	 // max number of trees in the forest
-                                       m_ForrestAccuracy,				// forrest accuracy
+                                       m_ForestAccuracy,				// forrest accuracy
                                        m_TerminationCriteria // termination cirteria
                                       );
 
@@ -111,7 +111,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
     TargetSampleType target;
 
     target[0] = static_cast<TOutputValue>(result);
-    
+
     std::cout<<"Sample: "<<sIt.GetMeasurementVector()<<", predicted: "<<target[0]<<std::endl;
 
     targets->PushBack(target);

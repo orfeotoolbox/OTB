@@ -31,7 +31,7 @@
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT RandomForestsMachineLearningModel 
+class ITK_EXPORT RandomForestsMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:
@@ -77,12 +77,67 @@ public:
   /* /\** Target accessors *\/ */
   /* itkSetObjectMacro(TargetListSample,TargetListSampleType); */
   /* itkGetObjectMacro(TargetListSample,TargetListSampleType); */
-  
+
+  //Setters of RT parameters (documentation get from opencv doxygen 2.4)
+  /* the depth of the tree. A low value will likely underfit and conversely a
+   * high value will likely overfit. The optimal value can be obtained using cross
+   * validation or other suitable methods. */
+  itkGetMacro(MaxDepth, int);
+  /* minimum samples required at a leaf node for it to be split. A reasonable
+   * value is a small percentage of the total data e.g. 1%. */
+  itkGetMacro(MinSampleCount, int);
+
+  itkGetMacro(RegressionAccuracy, double);
+  itkGetMacro(ComputeSurrogateSplit, bool);
+  /* Cluster possible values of a categorical variable into K \leq
+   * max_categories clusters to find a suboptimal split. If a discrete variable,
+   * on which the training procedure tries to make a split, takes more than
+   * max_categories values, the precise best subset estimation may take a very
+   * long time because the algorithm is exponential. Instead, many decision
+   * trees engines (including ML) try to find sub-optimal split in this case by
+   * clustering all the samples into max categories clusters that is some
+   * categories are merged together. The clustering is applied only in n>2-class
+   * classification problems for categorical variables with N > max_categories
+   * possible values. In case of regression and 2-class classification the optimal split can be found efficiently without employing clustering, thus the parameter is not used in these cases.
+  */
+  itkGetMacro(MaxNumberOfCategories, int);
+
+  std::vector<float> GetPriors() const
+  {
+    return m_Priors;
+  }
+
   void SetPriors(const std::vector<float> & priors)
   {
     m_Priors = priors;
   }
+  /* If true then variable importance will be calculated and then it can be
+  retrieved by CvRTrees::get_var_importance(). */
+  itkGetMacro(CalculateVariableImportance, int);
+  /* The size of the randomly selected subset of features at each tree node and
+  * that are used to find the best split(s). If you set it to 0 then the size will
+  be set to the square root of the total number of features. */
+  itkGetMacro(MaxNumberOfVariables, int);
+  /* The maximum number of trees in the forest (surprise, surprise). Typically
+  * the more trees you have the better the accuracy. However, the improvement in
+  * accuracy generally diminishes and asymptotes pass a certain number of
+  * trees. Also to keep in mind, the number of tree increases the prediction time
+  linearly. */
+  itkGetMacro(MaxNumberOfTrees, int);
+  /* Sufficient accuracy (OOB error) */
+  itkGetMacro(ForestAccuracy, float);
+  /* The type of the termination criteria */
+  itkGetMacro(TerminationCriteria, int);
 
+  cv::Mat GetVariableImportance()
+  {
+    return m_RFModel->getVarImportance();
+  }
+
+  float GetTrainError()
+  {
+    return m_RFModel->get_train_error();
+  }
 protected:
   /** Constructor */
   RandomForestsMachineLearningModel();
@@ -104,16 +159,16 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   CvRTrees * m_RFModel;
-  unsigned int m_MaxDepth;
-  unsigned int m_MinSampleCount;
-  double m_RegressionAccuracy;
+  int m_MaxDepth;
+  int m_MinSampleCount;
+  float m_RegressionAccuracy;
   bool m_ComputeSurrogateSplit;
-  unsigned int m_MaxNumberOfCategories;
+  int m_MaxNumberOfCategories;
   std::vector<float> m_Priors;
   bool m_CalculateVariableImportance;
-  unsigned int m_MaxNumberOfVariables;
-  unsigned int m_MaxNumberOfTrees;
-  double m_ForrestAccuracy;
+  int m_MaxNumberOfVariables;
+  int m_MaxNumberOfTrees;
+  float m_ForestAccuracy;
   int m_TerminationCriteria;
 };
 } // end namespace otb
