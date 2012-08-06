@@ -66,14 +66,14 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   //Define random forests paramneters
   //FIXME do this in the constructor?
 
-  float * priorsFirstAddr = m_Priors.empty() ? 0 : &m_Priors.front();
+  float * priors = m_Priors.empty() ? 0 : &m_Priors.front();
 
   CvRTParams params = CvRTParams(m_MaxDepth, // max depth
                                        m_MinSampleCount, // min sample count
                                        m_RegressionAccuracy, // regression accuracy: N/A here
                                        m_ComputeSurrogateSplit, // compute surrogate split, no missing data
                                        m_MaxNumberOfCategories, // max number of categories (use sub-optimal algorithm for larger numbers)
-                                       priorsFirstAddr, // the array of priors
+                                       priors, // the array of priors
                                        m_CalculateVariableImportance,  // calculate variable importance
                                        m_MaxNumberOfVariables,       // number of variables randomly selected at node and used to find the best split(s).
 				       m_MaxNumberOfTrees,	 // max number of trees in the forest
