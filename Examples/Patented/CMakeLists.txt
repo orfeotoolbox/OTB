@@ -126,7 +126,7 @@ TARGET_LINK_LIBRARIES(otbPatentedExamplesTests  ITKAlgorithms ITKStatistics OTBB
 
 IF(OTB_USE_SIFTFAST)
 ADD_EXECUTABLE(otbPatentedExamplesTests2 otbPatentedExamplesTests2.cxx)
-TARGET_LINK_LIBRARIES(otbPatentedExamplesTests  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBFeatureExtraction OTBTesting)
+TARGET_LINK_LIBRARIES(otbPatentedExamplesTests2  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBFeatureExtraction OTBTesting)
 ENDIF(OTB_USE_SIFTFAST)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
