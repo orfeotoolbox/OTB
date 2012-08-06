@@ -157,10 +157,10 @@ public:
   itkGetMacro(TerminationCriteria, int);
   itkSetMacro(TerminationCriteria, int);
 
-  cv::Mat GetVariableImportance()
-  {
-    return m_RFModel->getVarImportance();
-  }
+  // cv::Mat GetVariableImportance()
+  // {
+  //   return m_RFModel->getVarImportance();
+  // }
 
   float GetTrainError()
   {
