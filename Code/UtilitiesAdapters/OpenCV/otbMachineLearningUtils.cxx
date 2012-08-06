@@ -75,8 +75,8 @@ bool ReadDataFile(const char * infname, InputListSampleType * samples, TargetLis
             {
             std::string feature = line.substr(pos,nextpos-pos);
             std::string::size_type semicolonpos = feature.find_first_of(":");
-            sample[id] = atof(feature.substr(0,semicolonpos).c_str());
-            ++id;
+            id = atoi(feature.substr(0,semicolonpos).c_str());
+            sample[id] = atof(feature.substr(semicolonpos+1,feature.size()-semicolonpos).c_str());
             pos = nextpos;
             }
           }        
