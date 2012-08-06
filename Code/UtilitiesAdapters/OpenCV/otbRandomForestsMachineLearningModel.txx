@@ -98,14 +98,30 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   //convert listsample to Mat
   cv::Mat sample;
 
+  TargetListSampleType * targets = this->GetTargetListSample();
+  targets->Clear();
+
+  std::cout<<"InputListSample size: "<<this->GetInputListSample()->Size()<<std::endl;
+
   for(typename InputListSampleType::ConstIterator sIt = this->GetInputListSample()->Begin();
-      sIt!=this->GetInputListSample()->Begin();++sIt)
+      sIt!=this->GetInputListSample()->End();++sIt)
     {
     otb::SampleToMat<InputSampleType>(sIt.GetMeasurementVector(),sample);
   
     cv::Mat label;
+    label.create(1,1,CV_16UC1);
 
     double result = m_RFModel->predict(sample, label);
+
+    TargetSampleType target;
+    
+    std::cout<<label.empty()<<std::endl;
+
+    target[0] = label.at<int>(0,0);
+
+    std::cout<<"Sample: "<<sIt.GetMeasurementVector()<<", predicted: "<<target[0]<<std::endl;
+
+    targets->PushBack(target);
     }
 
   //this->SetTargetListSample(otb::MatToListSample<TargetListSampleType>(labels));
