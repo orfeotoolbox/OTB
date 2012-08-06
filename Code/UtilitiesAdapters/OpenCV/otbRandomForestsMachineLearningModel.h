@@ -83,12 +83,16 @@ public:
    * high value will likely overfit. The optimal value can be obtained using cross
    * validation or other suitable methods. */
   itkGetMacro(MaxDepth, int);
+  itkSetMacro(MaxDepth, int);
   /* minimum samples required at a leaf node for it to be split. A reasonable
    * value is a small percentage of the total data e.g. 1%. */
   itkGetMacro(MinSampleCount, int);
+  itkSetMacro(MinSampleCount, int);
 
   itkGetMacro(RegressionAccuracy, double);
+  itkSetMacro(RegressionAccuracy, bool);
   itkGetMacro(ComputeSurrogateSplit, bool);
+  itkSetMacro(ComputeSurrogateSplit, bool);
   /* Cluster possible values of a categorical variable into K \leq
    * max_categories clusters to find a suboptimal split. If a discrete variable,
    * on which the training procedure tries to make a split, takes more than
@@ -101,7 +105,7 @@ public:
    * possible values. In case of regression and 2-class classification the optimal split can be found efficiently without employing clustering, thus the parameter is not used in these cases.
   */
   itkGetMacro(MaxNumberOfCategories, int);
-
+  itkSetMacro(MaxNumberOfCategories, int);
   std::vector<float> GetPriors() const
   {
     return m_Priors;
@@ -114,20 +118,25 @@ public:
   /* If true then variable importance will be calculated and then it can be
   retrieved by CvRTrees::get_var_importance(). */
   itkGetMacro(CalculateVariableImportance, int);
+  itkSetMacro(CalculateVariableImportance, int);
   /* The size of the randomly selected subset of features at each tree node and
   * that are used to find the best split(s). If you set it to 0 then the size will
   be set to the square root of the total number of features. */
   itkGetMacro(MaxNumberOfVariables, int);
+  itkSetMacro(MaxNumberOfVariables, int);
   /* The maximum number of trees in the forest (surprise, surprise). Typically
   * the more trees you have the better the accuracy. However, the improvement in
   * accuracy generally diminishes and asymptotes pass a certain number of
   * trees. Also to keep in mind, the number of tree increases the prediction time
   linearly. */
   itkGetMacro(MaxNumberOfTrees, int);
+  itkSetMacro(MaxNumberOfTrees, int);
   /* Sufficient accuracy (OOB error) */
   itkGetMacro(ForestAccuracy, float);
+  itkSetMacro(ForestAccuracy, float);
   /* The type of the termination criteria */
   itkGetMacro(TerminationCriteria, int);
+  itkSetMacro(TerminationCriteria, int);
 
   cv::Mat GetVariableImportance()
   {
