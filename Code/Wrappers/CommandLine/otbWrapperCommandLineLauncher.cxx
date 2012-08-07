@@ -158,7 +158,7 @@ bool CommandLineLauncher::ExecuteAndWriteOutput()
       {
       return false;
       }
-  
+
     if( m_Application->ExecuteAndWriteOutput() == 0 )
       {
       this->DisplayOutputParameters();
@@ -178,7 +178,7 @@ bool CommandLineLauncher::ExecuteAndWriteOutput()
     m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, "An unknown exception has been raised during application execution" );
     return false;
     }
-    
+
   return true;
 }
 
@@ -380,7 +380,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           std::cerr << "ERROR: No value associated to the parameter : \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
           return INVALIDNUMBEROFVALUE;
           }
-        
+
         // Ensure that the parameter is enabled
         m_Application->EnableParameter(paramKey);
 
@@ -525,7 +525,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
             break;
             }
           currentParam = currentParam->GetRoot();
-          
+
           if (currentParam->IsRoot())
             {
             // the missing parameter is on an active branch : we need it
@@ -534,7 +534,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           }
         }
       }
-    
+
     if( mustBeSet )
       {
       if (!paramExists)
@@ -557,7 +557,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           }
         }
       }
-    
+
     // Check if non mandatory parameter have values
     else
       {
@@ -621,12 +621,12 @@ void CommandLineLauncher::DisplayHelp()
         m_MaxKeySize = appKeyList[i].size();
       }
     }
-  
+
   //// progress report parameter
   std::string bigKey = "progress";
   for(unsigned int i=0; i<m_MaxKeySize-std::string("progress").size(); i++)
     bigKey.append(" ");
-    
+
   std::cerr << "        -"<<bigKey<<" <boolean>        Report progress " << std::endl;
 
   for (unsigned int i = 0; i < nbOfParam; i++)
@@ -698,7 +698,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   std::string bigKey = paramKey;
   for(unsigned int i=0; i<m_MaxKeySize-paramKey.size(); i++)
     bigKey.append(" ");
-    
+
   oss<< "-" << bigKey << " ";
 
   // Display the type the parameter
@@ -731,13 +731,14 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     }
   else
     itkExceptionMacro("Not handled parameter type.");
-  
-  
+
+
   oss<< " " << param->GetName() << " ";
-  
+
   if (type == ParameterType_OutputImage)
     {
     oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double]";
+    oss << " (default value is float)";
     }
 
 
@@ -753,7 +754,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
       if( i != keys.size()-1 )
         oss << "/";
       }
-    
+
     oss << "]";
     }
 
@@ -764,7 +765,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   else
     {
     oss<<" (optional";
-    
+
     if(m_Application->IsParameterEnabled(paramKey))
       {
       oss<<", on by default";
@@ -835,7 +836,7 @@ bool CommandLineLauncher::CheckKeyValidity(std::string& refKey)
   appKeyList.push_back("help");
   appKeyList.push_back("progress");
   appKeyList.push_back("testenv");
-  
+
   // Check if each key in the expression exists in the application
   for (unsigned int i = 0; i < expKeyList.size(); i++)
     {
@@ -875,7 +876,7 @@ void CommandLineLauncher::DisplayOutputParameters()
     oss << std::endl;
     }
 
-  
+
   if ( m_Parser->IsAttributExists("-testenv", m_Expression) )
     {
     std::vector<std::string> val = m_Parser->GetAttribut("-testenv", m_Expression);
@@ -891,7 +892,7 @@ void CommandLineLauncher::DisplayOutputParameters()
       ofs.close();
       }
     }
-  
+
   std::cout << "Output parameters value:" << std::endl;
   std::cout << oss.str() << std::endl;
 }
