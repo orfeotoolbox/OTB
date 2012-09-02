@@ -23,44 +23,46 @@
 #include "otbMath.h"
 #include "otbAeronetData.h"
 
-#include "ossim/base/ossimDate.h"
-
 namespace otb
 {
 
 namespace internal
 {
-/**
- * Generate date method
- */
-ossimLocalTm
-ParseDate(const std::string& date, const std::string& time)
+
+typedef struct
 {
-  ossimLocalTm currentDate;
-  ossimString  word("");
-  word = date[0];
-  word += date[1];
-  currentDate.setDay(word.toInt());
-  word = date[3];
-  word += date[4];
-  currentDate.setMonth(word.toInt());
-  word =  date[6];
-  word += date[7];
-  word += date[8];
-  word += date[9];
-  currentDate.setYear(word.toInt());
+   int year;
+   int month;
+   int day;
+   int hour;
+   int minute;
+   int second;
+} Date;
 
-  word = time[0];
-  word += time[1];
-  currentDate.setHour(word.toInt());
-  word = time[3];
-  word += time[4];
-  currentDate.setMin(word.toInt());
-  word =  time[6];
-  word += time[7];
-  currentDate.setSec(word.toInt());
+double GetJulian(const Date& date)
+{
+  // From
+  // http://en.wikipedia.org/wiki/Julian_day#Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number
+  // the value is slightly different than the one provided by the ossim
+  // method, but this is now correct according to
+  // http://aa.usno.navy.mil/data/docs/JulianDate.php
+  int a = (14-date.month)/12.0;
+  int y = date.year + 4800 - a;
+  int m = date.month + 12 * a - 3;
+  int jdn = date.day + (153 * m +2)/5 + 365*y + y/4 - y/100 + y/400 - 32045;
+  return jdn + (date.hour-12)/24. + date.minute/1440. + date.second/86400.;
+}
 
-  return currentDate;
+Date ParseDate(const std::string& d, const std::string& t)
+{
+  Date date;
+  date.day = atoi(d.substr(0,2).c_str());
+  date.month = atoi(d.substr(3,2).c_str());
+  date.year = atoi(d.substr(6,4).c_str());
+  date.hour = atoi(t.substr(0,2).c_str());
+  date.minute = atoi(t.substr(3,2).c_str());
+  date.second = atoi(t.substr(6,2).c_str());
+  return date;
 }
 }
 
@@ -157,8 +159,8 @@ AeronetFileReader
   unsigned int col_vapor            = 19;
   unsigned int col_solarZenithAngle = 44;
 
-  ossimLocalTm current_date = internal::ParseDate(line[col_date], line[col_time]);
-  double       dcurrent_date = current_date.getJulian();
+  internal::Date current_date = internal::ParseDate(line[col_date], line[col_time]);
+  double       dcurrent_date = GetJulian(current_date);
   // Check hour +/- epsilon
   if (vcl_abs(dcurrent_date - ref_date) < epsilon)
     {
@@ -271,14 +273,8 @@ AeronetFileReader
     }
 
   //Compute input date
-  ossimLocalTm inputDate;
-  inputDate.setDay(m_Day);
-  inputDate.setMonth(m_Month);
-  inputDate.setYear(m_Year);
-  inputDate.setHour(m_Hour);
-  inputDate.setMin(m_Minute);
-  inputDate.setSec(0);
-  double dinputDate = inputDate.getJulian();
+  internal::Date date = {m_Year, m_Month, m_Day, m_Hour, m_Minute, 0};
+  double dinputDate = internal::GetJulian(date);
 
   MatrixString tabStr;
   // if so, parse it and select only valid lines for the input date
@@ -292,10 +288,10 @@ AeronetFileReader
     // Select only valid lines: good day
     if (listStr.size() > 0)
       {
-      ossimLocalTm currentDate = internal::ParseDate(listStr[col_date], listStr[col_time]);
+      internal::Date currentDate = internal::ParseDate(listStr[col_date], listStr[col_time]);
       if ((listStr[col_670] != "N/A") &&
           (listStr[col_440] != "N/A") &&
-          (static_cast<int>(currentDate.getJulian()) == static_cast<int>(dinputDate))
+          (static_cast<int>(GetJulian(currentDate)) == static_cast<int>(dinputDate))
           )
         {
         tabStr.push_back(listStr);
@@ -312,17 +308,10 @@ AeronetFileReader
     }
 
   //Compute time for one hour
-  ossimLocalTm temp;
-  temp.setDay(m_Day);
-  temp.setMonth(m_Month);
-  temp.setYear(m_Year);
-  temp.setMin(0);
-  temp.setSec(0);
-
-  temp.setHour(10);
-  double dhour1 = temp.getJulian();
-  temp.setHour(11);
-  double dhour2 = temp.getJulian();
+  internal::Date temp = {m_Year, m_Month, m_Day, 10, 0, 0};
+  double dhour1 = internal::GetJulian(temp);
+  temp.hour = 11;
+  double dhour2 = internal::GetJulian(temp);
   // Update epsilon for one hour
   double epsilon = m_Epsilon * (dhour2 - dhour1);
 
@@ -333,7 +322,6 @@ AeronetFileReader
   for (unsigned int idCurrentLine = 0; idCurrentLine < tabStr.size(); idCurrentLine++)
     {
     VectorString current_line2 = tabStr[idCurrentLine];
-    ossimLocalTm currentDate = internal::ParseDate(current_line2[col_date], current_line2[col_time]);
     ParseValidLine(dinputDate, current_line2, epsilon, water, angst, tau_day, solarZenithAngle);
     }
 
