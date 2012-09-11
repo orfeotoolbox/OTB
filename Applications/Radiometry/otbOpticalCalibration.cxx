@@ -242,9 +242,6 @@ namespace otb
               else
                 {
                   m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionCoef(lImageMetadataInterface->GetSpectralSensitivity());
-                  OpticalImageMetadataInterface::WavelengthSpectralBandVectorType tmp = lImageMetadataInterface->GetSpectralSensitivity();
-                  std::cout << "ICI" << std::endl;
-                  std::cout << "tmp->GetNthElement(0)->GetFilterFunctionValues()[0] " << tmp->GetNthElement(0)->GetFilterFunctionValues()[0] << std::endl;
                 }
 
               // Aeronet file
