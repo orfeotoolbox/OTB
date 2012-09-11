@@ -103,7 +103,7 @@ public:
    * in most cases, this method won't change the value, but for SPOT data, the bands are set up as
    *  2 1 0 3 in the tiff file, this method which is overloaded for SPOT enables to retrieve the
    *  proper band. */
-  //virtual unsigned int BandIndexToWavelengthPosition(unsigned int i) const;
+  unsigned int BandIndexToWavelengthPosition(unsigned int i) const;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */

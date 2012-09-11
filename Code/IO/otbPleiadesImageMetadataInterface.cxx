@@ -663,17 +663,27 @@ PleiadesImageMetadataInterface
 }
 
 // TODO MSD need to update this function
-//Comment this part as relative response
-//FIXME check if this is coherent with other sensor
-// unsigned int
-// PleiadesImageMetadataInterface
-// ::BandIndexToWavelengthPosition(unsigned int i) const
-// {
-//   otbMsgDevMacro(<< "Pleiades detected: band 0 and 2 inverted");
-//   if (i == 0) return 2;
-//   if (i == 2) return 0;
-//   return i;
-// }
+// Comment this part as relative response
+// FIXME check if this is coherent with other sensor
+unsigned int
+PleiadesImageMetadataInterface
+::BandIndexToWavelengthPosition(unsigned int i) const
+{
+  int nbBands = this->GetNumberOfBands();
+  //Panchromatic case
+  if (nbBands == 1)
+    {
+    return 0;
+    }
+  else
+    {
+    otbMsgDevMacro(<< "Pleiades detected: band 0 and 2 inverted");
+    if (i == 0) return 2;
+    if (i == 2) return 0;
+    }
+
+  return i;
+}
 
 std::vector<unsigned int>
 PleiadesImageMetadataInterface
