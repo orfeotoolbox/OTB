@@ -19,14 +19,16 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif
                  			  ${TEMP}/apTvPrOrthorectifTest_UTM.tif)
 
-ENDIF(OTB_DATA_USE_LARGEINPUT) 
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME apTvPrRigidTransformResample
                      APP  RigidTransformResample
                      OPTIONS -in ${INPUTDATA}/poupees.tif
                  			       -out ${TEMP}/apTvPrRigidTransformResampleTest.tif
-                             -tx 5 
-                             -ty -5
+                             -transform.type translation
+                             -transform.type.translation.tx 5
+                             -transform.type.translation.ty -5
+                             -interpolator nn
                      VALID   --compare-image ${NOTOL}
                               ${BASELINE}/owTvRigidTransformResampleTest.tif
                 			  ${TEMP}/apTvPrRigidTransformResampleTest.tif)
@@ -79,48 +81,48 @@ OTB_TEST_APPLICATION(NAME apTvPrBundleToPerfectSensor
                      VALID  --compare-image ${EPSILON_7}
                         ${BASELINE}/apTvPrBundleToPerfectSensor.tif
                         ${TEMP}/apTvPrBundleToPerfectSensor.tif)
-                        
+
 
 OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToImage
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp
-                             -out.proj image  
+                             -out.proj image
                              -out.proj.image.in  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                      VALID   --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp)
 
-# With QGIS the two vectordata are equal              			  
+# With QGIS the two vectordata are equal
 OTB_TEST_APPLICATION(NAME  apTuPrVectorDataReprojectionFromImageToMap
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePointsUTM31N.shp
                      		     -in.kwl ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromImageToMap.shp
-                             -out.proj user 
+                             -out.proj user
                              -out.proj.user.map utm
                              -out.proj.user.map.utm.northhem true
                  	           -out.proj.user.map.utm.zone 31)
 #                    VALID   --compare-ogr ${NOTOL}
 #                            ${INPUTDATA}/ToulousePoints-examples.shp
-#                    		 ${TEMP}/apTvPrVectorDataReprojectionFromImageToMap.shp)                 			  
-                 			                   			  
-                 			  
+#                    		 ${TEMP}/apTvPrVectorDataReprojectionFromImageToMap.shp)
+
+
 OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToGeo
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.kml
-                             -out.proj user 
+                             -out.proj user
                              -out.proj.user.map  wgs
                      VALID   --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.kml)
-                  
+
 OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToMap
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.kml
-                             -out.proj user 
+                             -out.proj user
                              -out.proj.user.map  lambert93
                      VALID   --compare-ascii ${NOTOL}
                               ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.kml
@@ -130,20 +132,20 @@ OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToMap2
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.kml
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.kml
-                             -out.proj user 
+                             -out.proj user
                              -out.proj.user.map  utm
                              -out.proj.user.map.utm.northhem true
                  	           -out.proj.user.map.utm.zone 31
                      VALID   --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToMap2.kml
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.kml)
-                             
+
 IF(OTB_DATA_USE_LARGEINPUT)
 OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
                  			 -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp
-                             -out.proj image 
+                             -out.proj image
                              -out.proj.image.in ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
                      VALID   --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
@@ -151,23 +153,23 @@ OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToSensor
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
-# With QGIS the two vectordata are equal  
+# With QGIS the two vectordata are equal
 OTB_TEST_APPLICATION(NAME  apTuPrVectorDataReprojectionFromGeoToMap
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePointsWGS.kml
                  			 -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromGeoToMap.shp
-                             -out.proj image 
+                             -out.proj image
                              -out.proj.image.in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif)
 #                     VALID   --compare-ogr ${NOTOL}
 #                             ${INPUTDATA}/ToulousePoints-examples.shp
 #                    	  	  ${TEMP}/apTvPrVectorDataReprojectionFromGeoToMap.shp)
-                 			  
 
 
 
 
 
 
-                 			                   			            
-                       
-                        
+
+
+
+
