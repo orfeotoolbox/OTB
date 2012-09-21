@@ -25,8 +25,8 @@
 #include "otbMachineLearningModel.h"
 
 //include opencv
-#include <cv.h>       // opencv general include file
-#include <ml.h>		  // opencv machine learning include file
+#include <opencv.hpp>       // opencv general include file
+#include <ml/ml.hpp>		  // opencv machine learning include file
 
 namespace otb
 {
