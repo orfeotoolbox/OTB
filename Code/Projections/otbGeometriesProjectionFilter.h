@@ -254,6 +254,16 @@ public:
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
   //@}
+  
+  /**\name Elevation data
+   * Accessors and mutators for DEM directory and geoid file
+   */
+  //@{
+  itkSetStringMacro(DEMDirectory);
+  itkGetStringMacro(DEMDirectory);
+  itkSetStringMacro(GeoidFile);
+  itkGetStringMacro(GeoidFile);
+  //@}
 private:
   /**\name Functor definition */
   //@{
