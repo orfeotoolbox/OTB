@@ -43,6 +43,7 @@ enum
 
 enum
 {
+  Transform_Identity,
   Transform_Translation,
   Transform_Rotation,
 };
@@ -65,7 +66,7 @@ public:
   typedef itk::TranslationTransform<double, FloatVectorImageType::ImageDimension> TransformType;
   typedef otb::StreamingResampleImageFilter<FloatVectorImageType, FloatVectorImageType, double>    ResampleFilterType;
 
-  //typedef itk::IdentityTransform<double, FloatVectorImageType::ImageDimension>      IdentityTransformType;
+  typedef itk::IdentityTransform<double, FloatVectorImageType::ImageDimension>      IdentityTransformType;
 
   typedef itk::ScalableAffineTransform<double, FloatVectorImageType::ImageDimension> ScalableTransformType;
   typedef ScalableTransformType::OutputVectorType                         OutputVectorType;
@@ -103,6 +104,16 @@ private:
 
     AddParameter(ParameterType_Choice, "transform.type", "Type of transformation");
     SetParameterDescription("transform.type","Type of transformation. Available transformations are translation and rotation with scaling factor");
+
+    AddChoice("transform.type.id", "translation");
+    SetParameterDescription("transform.type.id","translation");
+
+    AddParameter(ParameterType_Float,"transform.type.id.scalex",   "The X translation (in physical units)");
+    SetParameterDescription("transform.type.id.scalex","The translation value along X axis (in physical units).");
+    SetDefaultParameterFloat("transform.type.id.scalex",1.);
+    AddParameter(ParameterType_Float,"transform.type.id.scaley",   "The Y translation (in physical units)");
+    SetParameterDescription("transform.type.id.scaley","The translation value along Y axis (in physical units)");
+    SetDefaultParameterFloat("transform.type.id.scaley",1.);
 
     AddChoice("transform.type.translation", "translation");
     SetParameterDescription("transform.type.translation","translation");
@@ -198,6 +209,37 @@ private:
     // Get Transform
     switch ( GetParameterInt("transform.type") )
       {
+      case Transform_Identity:
+      {
+      IdentityTransformType::Pointer transform = IdentityTransformType::New();
+
+      // Scale Transform
+      OutputVectorType scale;
+      scale[0] = 1.0 / GetParameterFloat("transform.type.id.scalex");
+      scale[1] = 1.0 / GetParameterFloat("transform.type.id.scaley");
+
+      // Evaluate spacing
+      FloatVectorImageType::SpacingType spacing = inputImage->GetSpacing();
+      FloatVectorImageType::SpacingType OutputSpacing;
+      OutputSpacing=spacing;
+
+      //FIXME Find a way to update the output image spacing after resampling
+      OutputSpacing[0] = spacing[0] * scale[0];
+      OutputSpacing[1] = spacing[1] * scale[1];
+
+      m_Resampler->SetOutputSpacing(OutputSpacing);
+      m_Resampler->SetTransform(transform);
+
+      // Evaluate size
+      ResampleFilterType::SizeType recomputedSize;
+      recomputedSize[0] = inputImage->GetLargestPossibleRegion().GetSize()[0] / scale[0];
+      recomputedSize[1] = inputImage->GetLargestPossibleRegion().GetSize()[1] / scale[1];
+
+      m_Resampler->SetOutputSize(recomputedSize);
+      otbAppLogINFO( << "Output image size : " << recomputedSize );
+      }
+      break;
+
       case Transform_Translation:
       {
       TransformType::Pointer transform = TransformType::New();
