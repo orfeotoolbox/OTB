@@ -499,10 +499,11 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         }
       }
 
-    // Check if mandatory parameter are present and have value
-    // A param has to be set if it is mandatory and :
-    // is root OR its parent is active
-    // NB: a root parameter is not active
+    // When a parameter is mandatory :
+    // it must be set if :
+    //  - The param is root
+    //  - The param is not root and belonging to a Mandatory Group
+    //    wich is activated
     bool mustBeSet = false;
     const bool hasValue = m_Application->HasValue(paramKey);
 
@@ -657,6 +658,8 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
 {
   // Display the type the type
   ParameterType type = m_Application->GetParameterType(paramKey);
+  
+  // Discard Group parameters (they don't need a value)
   if (type == ParameterType_Group)
     {
     return "";
@@ -664,10 +667,11 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
 
   std::ostringstream oss;
 
-  // Check if mandatory parameter are present and have value
-  // A param has to be set if it is mandatory and :
-  // is root OR its parent is active
-  // NB: a root parameter is not active
+  // When a parameter is mandatory :
+  // it must be set if :
+  //  - The param is root
+  //  - The param is not root and belonging to a Mandatory Group
+  //    wich is activated
   bool isMissing = false;
   if (!m_Parser->IsAttributExists(std::string("-").append(paramKey), m_Expression))
     {
@@ -675,11 +679,28 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
       {
       if( param->GetMandatory() && param->GetRole() != Role_Output )
         {
-        if( param->GetRoot()->GetActive() || param->IsRoot() || param->GetRoot()->GetMandatory() )
+        if( param->IsRoot() || param->GetRoot()->IsRoot())
           {
-          if (type != ParameterType_Group)
+          // the parameter is a root or inside a group at root level
+          isMissing = true;
+          }
+        else
+          {
+          Parameter* currentParam = param->GetRoot();
+          while (!currentParam->IsRoot())
             {
-            isMissing = true;
+            if (!currentParam->GetActive())
+              {
+              // the missing parameter is not on an active branch : we can ignore it
+              break;
+              }
+            currentParam = currentParam->GetRoot();
+
+            if (currentParam->IsRoot())
+              {
+              // the missing parameter is on an active branch : we need it
+              isMissing = true;
+              }
             }
           }
         }
