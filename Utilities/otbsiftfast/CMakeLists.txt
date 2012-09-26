@@ -199,36 +199,17 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #target_link_libraries(siftfast libsiftfast)
 
 # check for OpenMP
-if( NOT DEFINED USE_OPENMP OR USE_OPENMP  )
-
-  if( WIN32 )
-    CHECK_INCLUDE_FILE(omp.h HAVE_OMP_H)
-    if( HAVE_OMP_H )
-      message(STATUS "Using OpenMP")
-      check_cxx_compiler_flag(/openmp HAVE_OPENMP)
-
-      if( HAVE_OPENMP )
-        message(STATUS "compiling with openmp support")
-        add_definitions("/openmp")
-      endif()
-    endif()
-  elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-
-    # check if compilers supports -fopenmp
-    INCLUDE(CheckCCompilerFlag)
-    check_cxx_compiler_flag(-fopenmp HAVE_OPENMP)
-    check_library_exists(gomp omp_get_num_threads "" HAS_GOMP_LIB)
-
-    if( HAVE_OPENMP AND HAS_GOMP_LIB )
-      message(STATUS "compiling with openmp support")
-      add_definitions("-fopenmp")
-      target_link_libraries(otbsiftfast gomp)
-      set(OPENMP_LFLAGS "-lgomp")
-    endif()
-  endif()
+find_package(OpenMP)
+if(OPENMP_FOUND)
+  message(STATUS "Enabling OpenMP support")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+else()
+  message(STATUS "Disabling OpenMP support")
 endif()
 
-#Instal TARGET & FILES for otb-lib
+#Install TARGET & FILES for otb-lib
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(otbsiftfast PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 ENDIF(OTB_LIBRARY_PROPERTIES)
