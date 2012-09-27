@@ -287,43 +287,44 @@ private:
       //GetLogger()->Info("Atmospheric correction parameters : " + oss.str());
 
       //Compute adjacency effect
-        m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter
-        = SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
+      //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter
+      //   = SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
 
-        m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-      m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
-        SetAtmosphericRadiativeTerms(
-          m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms());
-      m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
-        m_AtmosphericParam->GetViewingZenithalAngle());
-      m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(GetParameterInt("radius"));
+      //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
+      //   SetAtmosphericRadiativeTerms(
+      //     m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms());
+      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
+      //   m_AtmosphericParam->GetViewingZenithalAngle());
+      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(GetParameterInt("radius"));
 
-      //estimate ground spacing in kilometers
-      GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
+      // //estimate ground spacing in kilometers
+      // GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
 
-      groundSpacing->SetInputImage(inImage);
-      IndexType  index;
+      // groundSpacing->SetInputImage(inImage);
+      // IndexType  index;
 
-      vnl_random rand;
+      // vnl_random rand;
 
-      index[0] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
-      index[1] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
-      FloatType tmpSpacing = groundSpacing->EvaluateAtIndex(index);
+      // index[0] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
+      // index[1] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
+      // FloatType tmpSpacing = groundSpacing->EvaluateAtIndex(index);
 
-      const float spacingInKilometers = (std::max(tmpSpacing[0], tmpSpacing[1])) / 1000.;
+      // const float spacingInKilometers = (std::max(tmpSpacing[0], tmpSpacing[1])) / 1000.;
 
-      // std::ostringstream oss2;
-      //  oss2.str("");
-      //  oss2 << spacingInKilometers;
+      // // std::ostringstream oss2;
+      // //  oss2.str("");
+      // //  oss2 << spacingInKilometers;
 
-      //  GetLogger()->Info("Spacing in kilometers " + oss2.str());
-      m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
-        SetPixelSpacingInKilometers(spacingInKilometers);
+      // //  GetLogger()->Info("Spacing in kilometers " + oss2.str());
+      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
+      //   SetPixelSpacingInKilometers(spacingInKilometers);
 
-      //rescale the surface reflectance in milli-reflectance
-      m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->UpdateOutputInformation();
-      //m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->Update();
-      m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
+      // //rescale the surface reflectance in milli-reflectance
+      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->UpdateOutputInformation();
+      // //m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->Update();
+      // m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
+      m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
       }
       break;
       }
