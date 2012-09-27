@@ -49,17 +49,31 @@ bool PlaceNameToLonLat::Evaluate()
     m_PlaceName.replace(loc, 1, "+");
     loc = m_PlaceName.find(" ", loc);
     }
+  // TODO : replace unsafe ASCII character with "%" followed by their hex equivalent
 
+  // Geonames service
   if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
     {
     std::ostringstream urlStream;
-    urlStream << "http://maps.google.com/maps?q=";
+    urlStream << "http://api.geonames.org/search?q=";
     urlStream << m_PlaceName;
-    urlStream << "&sll=38.9594,-95.2655&sspn=119.526,360&output=kml&ie=utf-8&v=2.2&cv=4.2.0180.1134&hl=en";
+    urlStream << "&maxRows=1&type=xml&orderby=relevance&username=otbteam";
     RetrieveXML(urlStream);
     if ( m_RequestSucceed )
-      ParseXMLGoogle();
+      ParseXMLGeonames();
     }
+  
+  // Google Maps service 
+  // if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
+  //   {
+  //   std::ostringstream urlStream;
+  //   urlStream << "http://maps.google.com/maps?q=";
+  //   urlStream << m_PlaceName;
+  //   urlStream << "&sll=38.9594,-95.2655&sspn=119.526,360&output=kml&ie=utf-8&v=2.2&cv=4.2.0180.1134&hl=en";
+  //   RetrieveXML(urlStream);
+  //   if ( m_RequestSucceed )
+  //     ParseXMLGoogle();
+  //   }
 
   // Yahoo new PlaceFinder API need an application ID to be able
   // to use it
@@ -136,7 +150,20 @@ void PlaceNameToLonLat::ParseXMLGoogle()
 
 void PlaceNameToLonLat::ParseXMLGeonames()
 {
+  TiXmlDocument doc;
+  doc.Parse(m_CurlOutput.c_str());
 
+  TiXmlHandle docHandle(&doc);
+  TiXmlElement* childLat = docHandle.FirstChild("geonames").FirstChild("geoname").FirstChild("lat").Element();
+  if (childLat)
+    {
+    m_Lat = atof(childLat->GetText());
+    }
+  TiXmlElement* childLon = docHandle.FirstChild("geonames").FirstChild("geoname").FirstChild("lng").Element();
+  if (childLon)
+    {
+    m_Lon = atof(childLon->GetText());
+    }
 }
 
 } // namespace otb

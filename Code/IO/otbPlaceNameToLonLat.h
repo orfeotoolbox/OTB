@@ -62,7 +62,7 @@ protected:
   void RetrieveXML(const std::ostringstream& urlStream);
   void ParseXMLYahoo();
   void ParseXMLGoogle();
-  void ParseXMLGeonames(); //Not implemented yet TODO
+  void ParseXMLGeonames();
 
 private:
   PlaceNameToLonLat(const Self &);  //purposely not implemented
