@@ -20,7 +20,7 @@ namespace ossimplugins
 
 
    static const char PREFIX[]          = "imageNoise.";
-   static const char TIME_UTC[] = "timeUTC";
+   static const char TIME_UTC_KW[] = "timeUTC";
    static const char NOISE_ESTIMATE[] = "noiseEstimate.";
    static const char REFERENCE_POINT[] = "referencePoint";
    static const char VALIDITY_RANGE_MIN[] = "validityRangeMin";
@@ -74,7 +74,7 @@ namespace ossimplugins
          pfx = prefix;
       }
       pfx += PREFIX;
-      kwl.add(pfx.c_str(), TIME_UTC,  _timeUTC);
+      kwl.add(pfx.c_str(), TIME_UTC_KW,  _timeUTC);
 
       pfx2 = pfx + NOISE_ESTIMATE;
       kwl.add(pfx2.c_str(), VALIDITY_RANGE_MIN,  _validityRangeMin);
@@ -106,7 +106,7 @@ namespace ossimplugins
       const char* lookup = 0;
 
       pfx += PREFIX;
-      lookup = kwl.find(pfx.c_str(), TIME_UTC);
+      lookup = kwl.find(pfx.c_str(), TIME_UTC_KW);
       if (lookup)
       {
          s = lookup;
@@ -115,7 +115,7 @@ namespace ossimplugins
       else
       {
          ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE << " Keyword not found: " << TIME_UTC << " in "<<pfx.c_str()<<" path.\n";
+            << MODULE << " Keyword not found: " << TIME_UTC_KW << " in "<<pfx.c_str()<<" path.\n";
          result = false;
       }
       pfx2 = pfx + NOISE_ESTIMATE;
