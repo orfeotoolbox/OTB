@@ -837,8 +837,8 @@ bool CommandLineLauncher::CheckUnicity()
 bool CommandLineLauncher::CheckParametersPrefix()
 {
   bool res = true;
-  // Check if the chain "-" appears in the expression
-  if (m_Expression.find("--") != std::string::npos )
+  // Check if the chain " --" appears in the expression, could be a common mistake
+  if (m_Expression.find(" --") != std::string::npos )
     {
     res = false;
     }
