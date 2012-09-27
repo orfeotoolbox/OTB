@@ -63,7 +63,7 @@ bool PlaceNameToLonLat::Evaluate()
       ParseXMLGeonames();
     }
   
-  // Google Maps service 
+  // Google Maps service
   // if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
   //   {
   //   std::ostringstream urlStream;
