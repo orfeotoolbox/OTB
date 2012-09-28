@@ -103,16 +103,16 @@ private:
     SetParameterDescription("transform","This group of parameters allows to set the transformation to apply.");
 
     AddParameter(ParameterType_Choice, "transform.type", "Type of transformation");
-    SetParameterDescription("transform.type","Type of transformation. Available transformations are translation and rotation with scaling factor");
+    SetParameterDescription("transform.type","Type of transformation. Available transformations are spatial scaling, translation and rotation with scaling factor");
 
-    AddChoice("transform.type.id", "translation");
-    SetParameterDescription("transform.type.id","translation");
+    AddChoice("transform.type.id", "id");
+    SetParameterDescription("transform.type.id","Spatial scaling");
 
-    AddParameter(ParameterType_Float,"transform.type.id.scalex",   "The X translation (in physical units)");
-    SetParameterDescription("transform.type.id.scalex","The translation value along X axis (in physical units).");
+    AddParameter(ParameterType_Float,"transform.type.id.scalex",   "X scaling");
+    SetParameterDescription("transform.type.id.scalex","Scaling factor between the output X spacing and the input X spacing");
     SetDefaultParameterFloat("transform.type.id.scalex",1.);
-    AddParameter(ParameterType_Float,"transform.type.id.scaley",   "The Y translation (in physical units)");
-    SetParameterDescription("transform.type.id.scaley","The translation value along Y axis (in physical units)");
+    AddParameter(ParameterType_Float,"transform.type.id.scaley",   "Y scaling");
+    SetParameterDescription("transform.type.id.scaley","Scaling factor between the output Y spacing and the input Y spacing");
     SetDefaultParameterFloat("transform.type.id.scaley",1.);
 
     AddChoice("transform.type.translation", "translation");
@@ -132,12 +132,12 @@ private:
     SetParameterDescription("transform.type.rotation.angle","The rotation angle in degree (values between -180 and 180)");
     SetDefaultParameterFloat("transform.type.rotation.angle",0.);
 
-    AddParameter(ParameterType_Float, "transform.type.rotation.scalex", "X factor");
-    SetParameterDescription("transform.type.rotation.scalex","X factor");
+    AddParameter(ParameterType_Float, "transform.type.rotation.scalex", "X scaling");
+    SetParameterDescription("transform.type.rotation.scalex","Scale factor between the X spacing of the rotated output image and the X spacing of the unrotated image");
     SetDefaultParameterFloat("transform.type.rotation.scalex",1.);
 
-    AddParameter(ParameterType_Float, "transform.type.rotation.scaley", "Y factor");
-    SetParameterDescription("transform.type.rotation.scaley","Y factor");
+    AddParameter(ParameterType_Float, "transform.type.rotation.scaley", "Y scaling");
+    SetParameterDescription("transform.type.rotation.scaley","Scale factor between the Y spacing of the rotated output image and the Y spacing of the unrotated image");
     SetDefaultParameterFloat("transform.type.rotation.scaley",1.);
 
     // Interpolators
@@ -161,8 +161,9 @@ private:
     SetDocExampleParameterValue("in", "qb_toulouse_sub.tif");
     SetDocExampleParameterValue("out", "rigitTransformImage.tif");
     SetDocExampleParameterValue("transform.type", "rotation");
-    SetDocExampleParameterValue("transform.type.scalex", "4.");
-    SetDocExampleParameterValue("transform.type.scaley", "4.");
+    SetDocExampleParameterValue("transform.type.rotation.angle", "20");
+    SetDocExampleParameterValue("transform.type.rotation.scalex", "2.");
+    SetDocExampleParameterValue("transform.type.rotation.scaley", "2.");
   }
 
   void DoUpdateParameters()
@@ -223,7 +224,6 @@ private:
       FloatVectorImageType::SpacingType OutputSpacing;
       OutputSpacing=spacing;
 
-      //FIXME Find a way to update the output image spacing after resampling
       OutputSpacing[0] = spacing[0] * scale[0];
       OutputSpacing[1] = spacing[1] * scale[1];
 
@@ -303,7 +303,7 @@ private:
       else transform->Rotate2D( - rot_angle * CONST_PI_180 );
 
       transform->SetCenter( centerPoint );
-      transform->Scale( scale );
+      // transform->Scale( scale ); // Scaling is done by modification of the output spacing
 
       //inverse transform
       ScalableTransformType::Pointer inverseTransform = ScalableTransformType::New();
@@ -369,11 +369,8 @@ private:
 
       // Evaluate spacing
       FloatVectorImageType::SpacingType OutputSpacing;
-      OutputSpacing=spacing;
-
-      //FIXME Find a way to update the output image spacing after resampling
-      //OutputSpacing[0] = scale[0] * spacing[0];
-      //OutputSpacing[1] = scale[1] * spacing[1];
+      OutputSpacing[0] = scale[0] * spacing[0];
+      OutputSpacing[1] = scale[1] * spacing[1];
 
       m_Resampler->SetOutputSpacing(OutputSpacing);
 
