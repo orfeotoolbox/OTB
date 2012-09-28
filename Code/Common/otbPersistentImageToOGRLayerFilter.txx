@@ -109,7 +109,9 @@ PersistentImageToOGRLayerFilter<TImage>
       {
       itkExceptionMacro(<<"Input projection ref is not valid");
       }
-    itkExceptionMacro(<<"Spatial reference of input image and target layer do not match!");
+    itkExceptionMacro(<<"Spatial reference of input image and target layer do not match! "<< std::endl
+                      << "Input image : "<< this->GetInput()->GetProjectionRef()<< std::endl
+                      << "Target layer : "<<m_OGRLayer.GetProjectionRef());
     }
 }
 
