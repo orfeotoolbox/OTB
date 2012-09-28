@@ -2134,13 +2134,21 @@ namespace ossimplugins
               return false;
            }
 
-           ossimString attribute = "ntiles_x";
            ossimString value;
-           xml_nodes[0]->getAttributeValue(value, attribute);
+           ossimString attribute = "ntiles_x";
+           if (!xml_nodes[0]->getAttributeValue(value, attribute))
+           {
+             attribute = "ntiles_R";
+             xml_nodes[0]->getAttributeValue(value, attribute);
+           }
            theNumberOfMegaTilesInRow = value.toUInt32();
 
            attribute = "ntiles_y";
-           xml_nodes[0]->getAttributeValue(value, attribute);
+           if (!xml_nodes[0]->getAttributeValue(value, attribute))
+           {
+             attribute = "ntiles_C";
+             xml_nodes[0]->getAttributeValue(value, attribute);
+           }
            theNumberOfMegaTilesInCol = value.toUInt32();
          }
 
