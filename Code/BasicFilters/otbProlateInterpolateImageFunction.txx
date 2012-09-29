@@ -35,7 +35,7 @@ ProlateFunction<TInput, TOutput>
   for (unsigned int i = 0; i < m_Radius + 1; ++i)
     {
     unsigned int ival =
-      static_cast<unsigned int>(static_cast<double>(m_OriginalProfileSize * i) / static_cast<double>(m_Radius + 1));
+      static_cast<unsigned int>(static_cast<double>(m_OriginalProfile.size() * i) / static_cast<double>(m_Radius + 1));
     resampledProfile[i] = m_OriginalProfile[ival];
     }
   vnl_fft_1d<double> v1d(1024);
