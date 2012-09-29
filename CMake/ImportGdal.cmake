@@ -72,8 +72,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
               libgeotiff)
   MARK_AS_ADVANCED(GEOTIFF_INCLUDE_DIRS)
   IF (NOT GEOTIFF_INCLUDE_DIRS)
-  MESSAGE(FATAL_ERROR
-           "Cannot find geotiff headers. Please set GEOTIFF_INCLUDE_DIRS.")
+    MESSAGE(FATAL_ERROR "Cannot find geotiff headers. Please set GEOTIFF_INCLUDE_DIRS.")
   ENDIF (NOT GEOTIFF_INCLUDE_DIRS)
 
   # Find tiff headers
@@ -81,8 +80,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
               HINTS ${GDAL_INCLUDE_DIR})
   MARK_AS_ADVANCED(TIFF_INCLUDE_DIRS)
   IF (NOT TIFF_INCLUDE_DIRS)
-  MESSAGE(FATAL_ERROR
-           "Cannot find libtiff headers. Please set TIFF_INCLUDE_DIRS.")
+    MESSAGE(FATAL_ERROR "Cannot find libtiff headers. Please set TIFF_INCLUDE_DIRS.")
   ENDIF (NOT TIFF_INCLUDE_DIRS)
 
   # Find jpeg headers
@@ -91,8 +89,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
   FIND_PATH(JPEG_INCLUDE_DIRS jpeglib.h ${GDAL_INCLUDE_DIR})
   MARK_AS_ADVANCED(JPEG_INCLUDE_DIRS)
   IF (NOT JPEG_INCLUDE_DIRS)
-  MESSAGE(FATAL_ERROR
-           "Cannot find jpeg headers. Please set JPEG_INCLUDE_DIRS.")
+    MESSAGE(FATAL_ERROR "Cannot find jpeg headers. Please set JPEG_INCLUDE_DIRS.")
   ENDIF (NOT JPEG_INCLUDE_DIRS)
   INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIRS})
 
@@ -101,8 +98,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
               HINTS ${GDAL_INCLUDE_DIR})
   MARK_AS_ADVANCED(OGR_INCLUDE_DIRS)
   IF (NOT OGR_INCLUDE_DIRS)
-  MESSAGE(FATAL_ERROR
-           "Cannot find ogr headers. Please set OGR_INCLUDE_DIRS.")
+    MESSAGE(FATAL_ERROR "Cannot find ogr headers. Please set OGR_INCLUDE_DIRS.")
   ENDIF (NOT OGR_INCLUDE_DIRS)
   INCLUDE_DIRECTORIES(${OGR_INCLUDE_DIRS})
 
@@ -120,8 +116,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
     FIND_LIBRARY(TIFF_LIBRARY NAMES tiff libtiff_i)
     MARK_AS_ADVANCED(TIFF_LIBRARY)
     IF (NOT TIFF_LIBRARY)
-      MESSAGE(FATAL_ERROR
-              "Cannot find tiff library. Please set TIFF_LIBRARY.")
+      MESSAGE(FATAL_ERROR "Cannot find tiff library. Please set TIFF_LIBRARY.")
     ENDIF (NOT TIFF_LIBRARY)
   ENDIF(GDAL_HAS_TIFF)
 
@@ -139,8 +134,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
     FIND_LIBRARY(GEOTIFF_LIBRARY NAMES geotiff geotiff_i)
     MARK_AS_ADVANCED(GEOTIFF_LIBRARY)
     IF (NOT GEOTIFF_LIBRARY)
-      MESSAGE(FATAL_ERROR
-              "Cannot find geotiff library. Please set GEOTIFF_LIBRARY.")
+      MESSAGE(FATAL_ERROR "Cannot find geotiff library. Please set GEOTIFF_LIBRARY.")
     ENDIF (NOT GEOTIFF_LIBRARY)
   ENDIF(GDAL_HAS_GEOTIFF)
 
@@ -158,8 +152,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
     FIND_LIBRARY(JPEG_LIBRARY NAMES jpeg jpeg_i)
     MARK_AS_ADVANCED(JPEG_LIBRARY)
     IF (NOT JPEG_LIBRARY)
-      MESSAGE(FATAL_ERROR
-              "Cannot find jpeg library. Please set JPEG_LIBRARY.")
+      MESSAGE(FATAL_ERROR "Cannot find jpeg library. Please set JPEG_LIBRARY.")
     ENDIF (NOT JPEG_LIBRARY)
   ENDIF(GDAL_HAS_JPEG)
 
@@ -178,8 +171,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
     FIND_LIBRARY(OGR_LIBRARY ogr PATHS)
     MARK_AS_ADVANCED(OGR_LIBRARY)
     IF (NOT OGR_LIBRARY)
-      MESSAGE(FATAL_ERROR
-              "Cannot find ogr library. Please set OGR_LIBRARY.")
+      MESSAGE(FATAL_ERROR "Cannot find ogr library. Please set OGR_LIBRARY.")
     ENDIF (NOT OGR_LIBRARY)
   ENDIF(GDAL_HAS_OGR)
 
