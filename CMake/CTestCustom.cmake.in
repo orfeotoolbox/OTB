@@ -1,11 +1,11 @@
 #
-# Note that the ITK/CMakeLists.txt file configures this file
+# Note that the OTB/CMakeLists.txt file configures this file
 #
 #               CMake/CTestCustom.cmake.in
 #
 # to this file
 #
-#       ${ITK_BINARY_DIR}/CTestCustom.cmake
+#       ${OTB_BINARY_DIR}/CTestCustom.cmake
 #
 #----------------------------------------------------------------------
 #
@@ -53,7 +53,6 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "Fl_Image.H:.*warning:.*dereferencing type-punned pointer will break strict-aliasing rules.*"
   "warning -.: directory name .* does not exist"
   "ld.*warning.*duplicate dylib.*"
-  ".*pyconfig.h:.*warning:.*XOPEN.*SOURCE.*redefined.*"
   "WARNING non-zero return value in ctest"
   ".*Microsoft.*include.*.h.*[Ww]arning.*"
   ".*gdal_priv.h.*[Ww]arning.*"
