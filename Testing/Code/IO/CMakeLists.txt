@@ -46,9 +46,9 @@ ENDIF(OTB_USE_CURL)
 SET(IO_TESTS20    ${CXX_TEST_PATH}/otbIOTests20)
 SET(IO_TESTS21    ${CXX_TEST_PATH}/otbIOTests21)
 
-IF(CHECK_GDAL_BUILDED_WITH_HDF)
+IF(CHECK_GDAL_BUILT_WITH_HDF)
   SET(IO_TESTS22    ${CXX_TEST_PATH}/otbIOTests22)
-ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
+ENDIF(CHECK_GDAL_BUILT_WITH_HDF)
 
 SET(IO_TESTS23    ${CXX_TEST_PATH}/otbIOTests23)
 
@@ -3250,7 +3250,7 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Tests about multidataset file like hdf4 or hdf5 (hdf, hdf5, hdf4, h5, h4, he5, he4)
 
-IF(CHECK_GDAL_BUILDED_WITH_HDF)
+IF(CHECK_GDAL_BUILT_WITH_HDF)
 
 IF(CHECK_HDF4OPEN_SYMBOL)
 # Tests to check if we can open hdf files using a otb::VectorImage and IFReader->SetDatasetNumber() function.
@@ -3318,7 +3318,7 @@ ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
          -startX 100 -startY 20 -sizeX 200 -sizeY 100
          -channels 1 )
 
-ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
+ENDIF(CHECK_GDAL_BUILT_WITH_HDF)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests23 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3881,13 +3881,13 @@ otbComplexImageManipulationTest.cxx
 otbGDALReadPxlComplex.cxx
 )
 
-IF(CHECK_GDAL_BUILDED_WITH_HDF)
+IF(CHECK_GDAL_BUILT_WITH_HDF)
 SET(BasicIO_SRCS22
 otbIOTests22.cxx
 otbVectorImageTest.cxx
 otbMultiDatasetReadingInfo.cxx
 )
-ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
+ENDIF(CHECK_GDAL_BUILT_WITH_HDF)
 
 SET(BasicIO_SRCS23
 otbIOTests23.cxx
@@ -3953,8 +3953,8 @@ ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 OTB_ADD_EXECUTABLE(otbIOTests21 "${BasicIO_SRCS21}" "OTBIO;OTBTesting")
 
-IF(CHECK_GDAL_BUILDED_WITH_HDF)
+IF(CHECK_GDAL_BUILT_WITH_HDF)
   OTB_ADD_EXECUTABLE(otbIOTests22 "${BasicIO_SRCS22}" "OTBIO;OTBTesting")
-ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
+ENDIF(CHECK_GDAL_BUILT_WITH_HDF)
 
 OTB_ADD_EXECUTABLE(otbIOTests23 "${BasicIO_SRCS23}" "OTBIO;OTBTesting")
