@@ -20,7 +20,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
   MESSAGE(STATUS "  GDAL includes : ${GDAL_INCLUDE_DIR}")
   MESSAGE(STATUS "  GDAL library  : ${GDAL_LIBRARY}")
 
-  IF(NOT WIN32)
+  IF(UNIX)
     # Find gdal version with gdal-config
     FIND_PROGRAM(GDALCONFIG_EXECUTABLE gdal-config)
     MARK_AS_ADVANCED(GDALCONFIG_EXECUTABLE)
@@ -42,14 +42,14 @@ IF(OTB_USE_EXTERNAL_GDAL)
        MESSAGE(STATUS "CHECK_GDAL_BUILDED_WITH_HDF test failed : GDAL is not built with hdf support. So the HDF tests will be deactivated. Formats supported by your GDAL: " [ ${GDAL_FORMATS} ] )
        SET(CHECK_GDAL_BUILDED_WITH_HDF 0 CACHE INTERNAL "GDAL_BUILDED_WITH_HDF" FORCE)
     ENDIF(${GDAL_FORMATS} MATCHES "hdf")
-
-  ELSE (NOT WIN32)
+  ELSE (UNIX)
   	# For WIN32 platform, GDAL is automatically built with HDF support.
     SET(CHECK_GDAL_BUILDED_WITH_HDF 1 CACHE INTERNAL "GDAL_BUILDED_WITH_HDF" FORCE)
     # GDAL_INCLUDE_DIR has already been checked here
     FILE(READ "${GDAL_INCLUDE_DIR}/gdal_version.h" _gdal_version_h_CONTENTS)
     STRING(REGEX REPLACE ".*# *define GDAL_RELEASE_NAME *\"([0-9.]+)\".*" "\\1" GDAL_VERSION "${_gdal_version_h_CONTENTS}")
-  ENDIF (NOT WIN32)
+  ENDIF (UNIX)
+
   MESSAGE(STATUS "  GDAL version is " ${GDAL_VERSION})
   SET(GDAL_VERSION ${GDAL_VERSION} CACHE STRING "GDAL version" FORCE)
   MARK_AS_ADVANCED(GDAL_VERSION)
