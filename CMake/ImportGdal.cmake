@@ -21,19 +21,17 @@ IF(OTB_USE_EXTERNAL_GDAL)
   MESSAGE(STATUS "  GDAL library  : ${GDAL_LIBRARY}")
 
   IF(UNIX)
-    # Find gdal version with gdal-config
-    FIND_PROGRAM(GDALCONFIG_EXECUTABLE gdal-config)
-    MARK_AS_ADVANCED(GDALCONFIG_EXECUTABLE)
-    IF (NOT EXISTS ${GDALCONFIG_EXECUTABLE})
-      MESSAGE(FATAL_ERROR "gdal-config not found or set to a wrong path. Please check GDALCONFIG_EXECUTABLE")
-    ENDIF(NOT EXISTS ${GDALCONFIG_EXECUTABLE})
-    
-    EXECUTE_PROCESS(COMMAND ${GDALCONFIG_EXECUTABLE} --version
+    IF (NOT GDAL_CONFIG)
+      MESSAGE(FATAL_ERROR
+              "Cannot find gdal-config. Set GDAL_CONFIG")
+    ENDIF(NOT GDAL_FOUND)
+   
+    EXECUTE_PROCESS(COMMAND ${GDAL_CONFIG} --version
                     OUTPUT_VARIABLE GDAL_VERSION
                     OUTPUT_STRIP_TRAILING_WHITESPACE)
    
     # Detect if gdal support hdf format
-    EXECUTE_PROCESS(COMMAND ${GDALCONFIG_EXECUTABLE} --formats
+    EXECUTE_PROCESS(COMMAND ${GDAL_CONFIG} --formats
                     OUTPUT_VARIABLE GDAL_FORMATS
                     OUTPUT_STRIP_TRAILING_WHITESPACE )
     IF ( ${GDAL_FORMATS} MATCHES "hdf" )
