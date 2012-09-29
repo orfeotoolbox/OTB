@@ -67,7 +67,7 @@ public:
   /**\name ITK standard definitions */
   //@{
   typedef Layer                         Self;
-  const char *GetNameOfClass() const {return "Layer";}
+  const char *GetNameOfClass() const {return "Layer"; }
   //@}
 
 #if 0
