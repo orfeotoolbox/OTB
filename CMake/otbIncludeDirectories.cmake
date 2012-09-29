@@ -1,8 +1,3 @@
-# $Id$
-#-----------------------------------------------------------------------------
-# Include directories for other projects installed on the system.
-SET(OTB_INCLUDE_DIRS_SYSTEM "")
-
 #-----------------------------------------------------------------------------
 # Include directories from the build tree.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_BINARY_DIR})

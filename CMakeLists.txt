@@ -275,7 +275,6 @@ INCLUDE(${OTB_SOURCE_DIR}/CMake/otbIncludeDirectories.cmake)
 INCLUDE_DIRECTORIES(
   ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
-  ${OTB_INCLUDE_DIRS_SYSTEM}
 )
 
 #-----------------------------------------------------------------------------
