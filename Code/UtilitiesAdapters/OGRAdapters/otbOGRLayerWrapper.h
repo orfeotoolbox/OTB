@@ -67,7 +67,7 @@ public:
   /**\name ITK standard definitions */
   //@{
   typedef Layer                         Self;
-  itkTypeMacro(Layer, void);
+  const char *GetNameOfClass() const {return "Layer";}
   //@}
 
 #if 0
