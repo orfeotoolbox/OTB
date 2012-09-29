@@ -39,7 +39,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
        SET(CHECK_GDAL_BUILT_WITH_HDF 0 CACHE INTERNAL "GDAL_BUILT_WITH_HDF" FORCE)
     ENDIF(${GDAL_FORMATS} MATCHES "hdf")
   ELSE (UNIX)
-  	# For WIN32 platform, GDAL is automatically built with HDF support.
+  	# For WIN32 platform, we suppose that GDAL is built with HDF support (case with OSGeo4W)
     SET(CHECK_GDAL_BUILT_WITH_HDF 1 CACHE INTERNAL "GDAL_BUILT_WITH_HDF" FORCE)
     # GDAL_INCLUDE_DIR has already been checked here
     FILE(READ "${GDAL_INCLUDE_DIR}/gdal_version.h" _gdal_version_h_CONTENTS)
