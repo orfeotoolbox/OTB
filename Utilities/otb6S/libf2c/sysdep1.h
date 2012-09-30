@@ -10,7 +10,9 @@
 
 #ifdef __linux__
 #define USE_LARGEFILE
+#ifndef OFF_T
 #define OFF_T __off64_t
+#endif
 #endif
 
 #ifdef _AIX43
@@ -39,8 +41,12 @@
 #ifndef OFF_T
 #define OFF_T off64_t
 #endif
+#ifndef _LARGEFILE_SOURCE
 #define _LARGEFILE_SOURCE
+#endif
+#ifndef _LARGEFILE64_SOURCE
 #define _LARGEFILE64_SOURCE
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 #define FOPEN fopen64
