@@ -219,6 +219,7 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
   // copy the lists to the output
   PointsContainerType * outputPointsContainer = this->GetOutput()->GetPoints();
+  unsigned long currentIndex = outputPointsContainer->Size();
 
   typedef typename PointsContainerType::ConstIterator OutputPointsContainerIterator;
   for (unsigned int i = 0; i < this->m_PointsContainerPerThread.size(); ++i)
@@ -229,12 +230,14 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
            it != this->m_PointsContainerPerThread[i]->End();
            ++it)
         {
-        outputPointsContainer->push_back(it.Value());
+        outputPointsContainer->InsertElement(currentIndex,it.Value());
+        ++currentIndex;
         }
       }
     }
 
   PointDataContainerType * outputPointDataContainer = this->GetOutput()->GetPointData();
+  currentIndex = outputPointDataContainer->Size();
 
   typedef typename PointDataContainerType::ConstIterator OutputPointDataContainerIterator;
   for (unsigned int i = 0; i < this->m_PointDataContainerPerThread.size(); ++i)
@@ -245,7 +248,8 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
            it != this->m_PointDataContainerPerThread[i]->End();
            ++it)
         {
-        outputPointDataContainer->push_back(it.Value());
+        outputPointDataContainer->InsertElement(currentIndex,it.Value());
+        ++currentIndex;
         }
       }
     }

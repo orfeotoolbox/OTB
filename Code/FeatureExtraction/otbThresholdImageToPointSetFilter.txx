@@ -51,6 +51,8 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 
   typename OutputPointSetType::PointType position;
   inputIt.GoToBegin();
+  
+  unsigned long currentIndex = 0;
 
   while (!inputIt.IsAtEnd())
     {
@@ -61,8 +63,9 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
       const IndexType index = inputIt.GetIndex();
       position[0] = index[0];
       position[1] = index[1];
-      this->m_PointsContainerPerThread[threadId]->push_back(position);
-      this->m_PointDataContainerPerThread[threadId]->push_back(static_cast<typename PointDataContainerType::Element>(value));
+      this->m_PointsContainerPerThread[threadId]->InsertElement(currentIndex,position);
+      this->m_PointDataContainerPerThread[threadId]->InsertElement(currentIndex,static_cast<typename PointDataContainerType::Element>(value));
+      ++currentIndex;
       }
     ++inputIt;
     progress.CompletedPixel();  // potential exception thrown here
