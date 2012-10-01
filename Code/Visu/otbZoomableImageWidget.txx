@@ -92,16 +92,18 @@ bool
 ZoomableImageWidget<TPixel>
 ::UpdateOpenGlBufferedRegionRequested(void)
 {
+  /*
   RegionType viewed = this->GetViewedRegion();
   RegionType buffered = this->GetBufferedRegion();
   IndexType  viewedULCorner = viewed.GetIndex();
   IndexType  bufferedULCorner = buffered.GetIndex();
   IndexType  viewedRDCorner = viewed.GetIndex() + viewed.GetSize();
   IndexType  bufferedRDCorner = buffered.GetIndex() + buffered.GetSize();
-//  return ( viewedULCorner[0]<bufferedULCorner[0]
-//       ||viewedULCorner[1]<bufferedULCorner[1]
-//       ||viewedRDCorner[0]>bufferedRDCorner[0]
-//       ||viewedRDCorner[1]>bufferedRDCorner[1]);
+  return ( viewedULCorner[0]<bufferedULCorner[0]
+           ||viewedULCorner[1]<bufferedULCorner[1]
+           ||viewedRDCorner[0]>bufferedRDCorner[0]
+           ||viewedRDCorner[1]>bufferedRDCorner[1] );
+  */
   return true;
 }
 
