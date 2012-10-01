@@ -260,10 +260,6 @@ int main(int argc, char * argv[])
       static_cast<unsigned int>(size[1])
       && static_cast<unsigned int>(index[0]) <
       static_cast<unsigned int>(size[0])
-      && static_cast<unsigned int>(index[1]) >=
-      static_cast<unsigned int>(0)
-      && static_cast<unsigned int>(index[0]) >=
-      static_cast<unsigned int>(0))
       {
       outputImage->SetPixel(index, keyPixel);
 
