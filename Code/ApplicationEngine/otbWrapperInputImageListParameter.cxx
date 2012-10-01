@@ -47,8 +47,8 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
     const std::string filename = filenames[i];
     // TODO : when the logger will be available, redirect the exception
     // in the logger (like what is done in MsgReporter)
-    if (!filename.empty()
-        && itksys::SystemTools::FileExists(filename.c_str()))
+    // File existance checked by the reader
+    if (!filename.empty())
       {
       ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
       reader->SetFileName(filename);
@@ -94,8 +94,8 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
 {
   // TODO : when the logger will be available, redirect the exception
   // in the logger (like what is done in MsgReporter)
-  if (!filename.empty()
-      && itksys::SystemTools::FileExists(filename.c_str()))
+  // File existance checked by the reader
+  if (!filename.empty())
     {
     ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
     reader->SetFileName(filename);
@@ -130,8 +130,8 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
 
   // TODO : when the logger will be available, redirect the exception
   // in the logger (like what is done in MsgReporter)
-  if (!filename.empty()
-      && itksys::SystemTools::FileExists(filename.c_str()))
+  // File existance checked by the reader
+  if (!filename.empty())
     {
     ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
     reader->SetFileName(filename);
