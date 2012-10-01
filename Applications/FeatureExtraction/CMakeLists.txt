@@ -10,6 +10,10 @@ OTB_CREATE_APPLICATION(NAME           RadiometricIndices
 OTB_CREATE_APPLICATION(NAME HaralickTextureExtraction
                        SOURCES otbHaralickTextureExtraction.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME HomologousPointsExtraction
+                       SOURCES otbHomologousPointsExtraction.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction)
                        
 OTB_CREATE_APPLICATION(NAME SFSTextureExtraction
                        SOURCES otbSFSTextureExtraction.cxx
