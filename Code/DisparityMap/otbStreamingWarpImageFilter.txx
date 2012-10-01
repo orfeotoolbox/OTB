@@ -235,7 +235,7 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
     
     for (unsigned int dim = 0; dim<DeformationFieldType::ImageDimension; ++dim)
       {
-      if (contiIndex[dim] < static_cast<double>(defRegion.GetIndex(dim)) || 
+      if (contiIndex[dim] < static_cast<double>(defRegion.GetIndex(dim)) ||
           contiIndex[dim] > static_cast<double>(defRegion.GetIndex(dim)+defRegion.GetSize(dim)-1))
         {
         outputIt.Set(paddingValue);
