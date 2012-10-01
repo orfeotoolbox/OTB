@@ -28,6 +28,7 @@
 #include "ossim/ossimTileMapModel.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 
+#include "otbSensorModelAdapter.h"
 
 namespace otb
 {
@@ -182,8 +183,48 @@ ReadGeometry(const std::string& filename)
     if (!handler)
       {
       otbMsgDevMacro(<< "OSSIM Open Image FAILED ! ");
-      }
 
+      // In some corner cases, ossim is unable to create a ossimImageHandler
+      // instance for the provided file.
+      // This can happen for TIFF+geom files where the ossimTiffTileSource
+      // fails when trying to open the TIFF file (for example
+      // because ossim is compiled with a libtiff without BigTIFF support
+      // and when the actual TIFF file exceeds the Large File limit).
+      // In such cases, we don't actually need ossim to interpret the TIFF file,
+      // and just want a valid ossimKeywordlist corresponding to a sensor model.
+
+      // Here is implemented a shortcut used as a fallback scenario,
+      // where we bypass the ossimImageHandlerRegistry
+      // and directly create a ossimKeywordlist from the ".geom" file.
+
+      // We then verify it is a valid sensor model by using otb::SensorModelAdapter
+      // which uses ossimSensorModelFactory and ossimPluginProjectionFactory internally,
+      // thus by-passing the need for a valid ossimImageHandler.
+
+      // Try to find a ".geom" file next to 'filename'
+      ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
+      if (ossimGeomFile.exists() && ossimGeomFile.isFile())
+        {
+        // Interpret the geom file as a KWL
+        ossimKeywordlist kwl(ossimGeomFile);
+
+        // Check that the geom file results in a valid ossimKeywordlist
+        if (kwl.getErrorStatus() == ossimErrorCodes::OSSIM_OK)
+          {
+          // Be sure there is a corresponding instance of ossimSensorModel
+          // which understands this kwl
+          SensorModelAdapter::Pointer sensorModel = SensorModelAdapter::New();
+          ImageKeywordlist otbkwl;
+          otbkwl.SetKeywordlist(kwl);
+          sensorModel->CreateProjection(otbkwl);
+
+          if (sensorModel->IsValidSensorModel())
+            {
+            geom_kwl = kwl;
+            }
+          }
+        }
+      }
     else
       {
       otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
