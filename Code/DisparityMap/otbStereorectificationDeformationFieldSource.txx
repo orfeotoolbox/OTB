@@ -260,8 +260,8 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // And also the size of the deformation field
   SizeType outputSize;
-  outputSize[0] = (m_RectifiedImageSize[0] / m_GridStep + 1 );
-  outputSize[1] = (m_RectifiedImageSize[1] / m_GridStep + 1);
+  outputSize[0] = (m_RectifiedImageSize[0] / m_GridStep + 2 );
+  outputSize[1] = (m_RectifiedImageSize[1] / m_GridStep + 2);
 
   // Build the output largest region
   RegionType outputLargestRegion;

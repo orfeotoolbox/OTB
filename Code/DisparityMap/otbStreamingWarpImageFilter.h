@@ -64,10 +64,15 @@ public:
   typedef TInputImage                              InputImageType;
   typedef typename  InputImageType::Pointer        InputImagePointerType;
   typedef TOutputImage                             OutputImageType;
+  typedef typename OutputImageType::PointType      PointType;
+  typedef typename OutputImageType::IndexType      IndexType;
+  typedef typename OutputImageType::PixelType      PixelType;
   typedef typename OutputImageType::Pointer        OutputImagePointerType;
+  typedef typename OutputImageType::RegionType     OutputImageRegionType;
   typedef TDeformationField                        DeformationFieldType;
   typedef typename DeformationFieldType::PixelType DeformationValueType;
   typedef typename DeformationFieldType::Pointer   DeformationFieldPointerType;
+  typedef typename DeformationFieldType::RegionType DeformationFieldRegionType;
 
   /** Accessors */
   itkSetMacro(MaximumDeformation, DeformationValueType);
@@ -85,6 +90,12 @@ protected:
    * produce its output. As such, we need to overload the GenerateInputRequestedRegion() method.
    */
   virtual void GenerateInputRequestedRegion();
+  
+  /**
+   * Re-implement the method ThreadedGenerateData to mask area outside the deformation grid
+   */
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                            int threadId );
 
 private:
   StreamingWarpImageFilter(const Self &); //purposely not implemented

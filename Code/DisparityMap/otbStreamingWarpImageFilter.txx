@@ -202,6 +202,52 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
     }
  }
 
+
+template<class TInputImage, class TOutputImage, class TDeformationField>
+void
+StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
+::ThreadedGenerateData(
+  const OutputImageRegionType& outputRegionForThread,
+  int threadId )
+  {
+  // the superclass itk::WarpImageFilter is doing the actual warping
+  Superclass::ThreadedGenerateData(outputRegionForThread,threadId);
+  
+  // second pass on the thread region to mask pixels outside the deformation grid
+  const PixelType paddingValue = this->GetEdgePaddingValue();
+  OutputImagePointerType outputPtr = this->GetOutput();
+  DeformationFieldPointerType fieldPtr = this->GetDeformationField();
+  
+  DeformationFieldRegionType defRegion = fieldPtr->GetLargestPossibleRegion();
+  
+  itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(
+    outputPtr, outputRegionForThread );
+  IndexType currentIndex;
+  PointType currentPoint;
+  itk::ContinuousIndex<double,DeformationFieldType::ImageDimension> contiIndex;
+  
+  while(!outputIt.IsAtEnd())
+    {
+    // get the output image index
+    currentIndex = outputIt.GetIndex();
+    outputPtr->TransformIndexToPhysicalPoint(currentIndex,currentPoint);
+    fieldPtr->TransformPhysicalPointToContinuousIndex(currentPoint,contiIndex);
+    
+    for (unsigned int dim = 0; dim<DeformationFieldType::ImageDimension; ++dim)
+      {
+      if (contiIndex[dim] < static_cast<double>(defRegion.GetIndex(dim)) || 
+          contiIndex[dim] > static_cast<double>(defRegion.GetIndex(dim)+defRegion.GetSize(dim)-1))
+        {
+        outputIt.Set(paddingValue);
+        break;
+        }
+      }
+    ++outputIt;
+    }
+  
+  }
+
+
 template<class TInputImage, class TOutputImage, class TDeformationField>
 void
 StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
