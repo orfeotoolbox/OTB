@@ -311,26 +311,22 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
-  RSTransform2DType::Pointer rightToGroundTransform = RSTransform2DType::New();
 
   leftToGroundTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
-  rightToGroundTransform->SetInputKeywordList(m_RightImage->GetImageKeywordlist());
+
 
   if(m_DEMDirectory!="")
     {
     demHandler->OpenDEMDirectory(m_DEMDirectory);
     leftToGroundTransform->SetDEMDirectory(m_DEMDirectory);
-    rightToGroundTransform->SetDEMDirectory(m_DEMDirectory);
     useDEM = true;
     }
   if(m_GeoidFile!="")
     {
     leftToGroundTransform->SetGeoidFile(m_GeoidFile);
-    rightToGroundTransform->SetGeoidFile(m_GeoidFile);
     demHandler->OpenGeoidFile(m_GeoidFile);
     }
   leftToGroundTransform->InstanciateTransform();
-  rightToGroundTransform->InstanciateTransform();
 
   // Retrieve the output pointers
   OutputImageType * leftDFPtr = this->GetLeftDeformationFieldOutput();
