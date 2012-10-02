@@ -42,7 +42,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbossimplugins/ossim
   ${OTB_SOURCE_DIR}/Utilities/InsightJournal
   ${OTB_SOURCE_DIR}/Utilities/otb6S
-  ${OTB_SOURCE_DIR}/Utilities/otbliblas/include
   ${OTB_SOURCE_DIR}/Utilities/otbedison/segm
   ${OTB_SOURCE_DIR}/Utilities/otbedison/prompt
   ${OTB_SOURCE_DIR}/Utilities/otbedison/edge
@@ -89,6 +88,16 @@ ELSE(OTB_USE_EXTERNAL_TINYXML)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
       ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib)
 ENDIF(OTB_USE_EXTERNAL_TINYXML)
+
+IF(OTB_USE_LIBLAS)
+  IF(OTB_USE_EXTERNAL_LIBLAS)
+    SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+        ${LIBLAS_INCLUDE_DIRS})
+  ELSE()
+    SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+        ${OTB_SOURCE_DIR}/Utilities/otbliblas/include)
+  ENDIF()
+ENDIF()
 
 IF(OTB_USE_EXTERNAL_MUPARSER)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
@@ -278,7 +287,6 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Utilities/otbsvm
   Utilities/InsightJournal
   Utilities/otb6S
-  Utilities/otbliblas/include
   Utilities/otbedison
   Utilities/otbconfigfile
 )
@@ -335,6 +343,17 @@ ELSE(OTB_USE_EXTERNAL_FLTK)
         SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   		        Utilities/FLTK)
 ENDIF(OTB_USE_EXTERNAL_FLTK)
+
+#For liblas headers
+IF(OTB_USE_LIBLAS)
+  IF(OTB_USE_EXTERNAL_LIBLAS)
+    SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
+        ${LIBLAS_INCLUDE_DIRS})
+  ELSE()
+    SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+        Utilities/otbliblas/include)
+  ENDIF()
+ENDIF()
 
 #For TinyXML header file
 IF(OTB_USE_EXTERNAL_TINYXML)
