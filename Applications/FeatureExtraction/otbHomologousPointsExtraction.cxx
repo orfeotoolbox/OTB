@@ -89,6 +89,8 @@ private:
     AddParameter(ParameterType_Int,"binsize","Size of bin");
     AddParameter(ParameterType_Int,"binstep","Step between bins");
 
+    AddParameter(ParameterType_Empty,"2wgs84","Export points from image 2 in wgs84");
+
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
@@ -108,7 +110,7 @@ private:
     unsigned int bin_size = GetParameterInt("binsize");
     unsigned int bin_step = GetParameterInt("binstep");
     unsigned int nb_bins_x = size[0]/(bin_size + bin_step);
-    unsigned int nb_bins_y = size[0]/(bin_size + bin_step);
+    unsigned int nb_bins_y = size[1]/(bin_size + bin_step);
 
     FloatImageType::SpacingType spacing1 = this->GetParameterImage("in1")->GetSpacing();
     FloatImageType::SpacingType spacing2 = this->GetParameterImage("in2")->GetSpacing();
@@ -122,6 +124,11 @@ private:
     rsTransform->SetOutputKeywordList(this->GetParameterImage("in2")->GetImageKeywordlist());
     rsTransform->SetOutputProjectionRef(this->GetParameterImage("in2")->GetProjectionRef());
 
+    RSTransformType::Pointer rsTransform2ToWGS84 = RSTransformType::New();
+    rsTransform2ToWGS84->SetInputKeywordList(this->GetParameterImage("in2")->GetImageKeywordlist());
+    rsTransform2ToWGS84->SetInputProjectionRef(this->GetParameterImage("in2")->GetProjectionRef());
+    
+
     // Elevation through the elevation handler
     if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
       {
@@ -131,22 +138,28 @@ private:
         {
         rsTransform->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
         rsTransform->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+        rsTransform2ToWGS84->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        rsTransform2ToWGS84->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
         }
         break;
         case Elevation_Average:
         {
         rsTransform->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        rsTransform2ToWGS84->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
         }
         break;
         }
       }
 
     rsTransform->InstanciateTransform();
+    rsTransform2ToWGS84->InstanciateTransform();
 
-    unsigned int precision = 20;
+    unsigned int precision = 30;
 
     std::ofstream file;
     file.open(GetParameterString("out").c_str());
+    file<<std::fixed;
+    file.precision(12);
 
     for(unsigned int i = 0; i<nb_bins_x;++i)
       {
@@ -168,19 +181,17 @@ private:
         region1.SetIndex(index1);
         region1.SetSize(size1);
 
+        region1.Crop(this->GetParameterImage("in1")->GetLargestPossibleRegion());
+
         otbAppLogINFO("("<<i<<"/"<<nb_bins_x<<", "<<j<<"/"<<nb_bins_y<<") Considering region1 : "<<region1);
 
         ExtractChannelFilterType::Pointer extractChannel1 = ExtractChannelFilterType::New();
         extractChannel1->SetInput(this->GetParameterImage("in1"));
         extractChannel1->SetChannel(1);
-        extractChannel1->SetStartX(startx);
-        extractChannel1->SetStartY(starty);
-        extractChannel1->SetSizeX(bin_size);
-        extractChannel1->SetSizeY(bin_size);
+        extractChannel1->SetExtractionRegion(region1);
         
         SiftFilterType::Pointer sift1 = SiftFilterType::New();
         sift1->SetInput(extractChannel1->GetOutput());
-
 
         // We need to find the corresponding region in image 2
         FloatImageType::PointType ul1, ur1, ll1, lr1, p1, p2, p3, p4, ul2, lr2;
@@ -214,8 +225,8 @@ private:
         index2[0] = vcl_floor((ul2[0]-origin2[0])/spacing2[0]);
         index2[1] = vcl_floor((ul2[1]-origin2[1])/spacing2[1]);
 
-        size2[0] = vcl_ceil((lr2[0]-ul2[0])/spacing2[0]);
-        size2[1] = vcl_ceil((lr2[1]-ul2[1])/spacing2[1]);
+        size2[0] = vcl_ceil((lr2[0]-ul2[0])/vcl_abs(spacing2[0]));
+        size2[1] = vcl_ceil((lr2[1]-ul2[1])/vcl_abs(spacing2[1]));
 
         FloatImageType::RegionType region2;
         region2.SetIndex(index2);
@@ -263,9 +274,20 @@ private:
 
             double error = vcl_sqrt((point2[0]-pprime[0])*(point2[0]-pprime[0])+(point2[1]-pprime[1])*(point2[1]-pprime[1]));
 
+            std::cout<<point1<<" "<<point2<<" "<<pprime<<" "<<error<<std::endl;
+
             if(error<2*precision)
               {
-              file<<point1[0]<<"\t"<<point1[1]<<"\t"<<point2[0]<<"\t"<<point2[1]<<std::endl;
+              if(IsParameterEnabled("2wgs84"))
+                {
+                pprime = rsTransform2ToWGS84->TransformPoint(point2);
+
+                file<<point1[0]<<"\t"<<point1[1]<<"\t"<<pprime[0]<<"\t"<<pprime[1]<<std::endl;
+                }
+              else
+                {
+                file<<point1[0]<<"\t"<<point1[1]<<"\t"<<point2[0]<<"\t"<<point2[1]<<std::endl;
+                }
               }
             else
               {
