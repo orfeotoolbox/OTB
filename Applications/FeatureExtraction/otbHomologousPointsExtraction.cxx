@@ -29,6 +29,7 @@
 
 #include "itkPointSet.h"
 #include "itkEuclideanDistance.h"
+#include "otbGenericRSTransform.h"
 
 namespace otb
 {
@@ -58,6 +59,7 @@ public:
   typedef PointSetType::PointType                            PointType;
   typedef otb::MultiToMonoChannelExtractROI<ValueType,
                                             ValueType>      ExtractChannelFilterType;
+  typedef otb::GenericRSTransform<>                         RSTransformType;
 
   /** Standard macro */
   itkNewMacro(Self);
@@ -84,6 +86,12 @@ private:
     AddParameter(ParameterType_InputImage, "in2", "Input Image 2");
     SetParameterDescription("in2"," Second input image");
 
+    AddParameter(ParameterType_Int,"binsize","Size of bin");
+    AddParameter(ParameterType_Int,"binstep","Step between bins");
+
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
+
     AddParameter(ParameterType_OutputFilename,"out","Output file with tie points");
     SetParameterDescription("out","File containing the list of tie points");
   }
@@ -95,57 +103,185 @@ private:
 
   void DoExecute()
   {
-    ExtractChannelFilterType::Pointer extractChannel1 = ExtractChannelFilterType::New();
-    extractChannel1->SetInput(this->GetParameterImage("in1"));
-    extractChannel1->SetChannel(1);
+    FloatImageType::SizeType size = this->GetParameterImage("in1")->GetLargestPossibleRegion().GetSize();
 
-    SiftFilterType::Pointer sift1 = SiftFilterType::New();
-    sift1->SetInput(extractChannel1->GetOutput());
-//    sift1->SetScalesNumber(1);
+    unsigned int bin_size = GetParameterInt("binsize");
+    unsigned int bin_step = GetParameterInt("binstep");
+    unsigned int nb_bins_x = size[0]/(bin_size + bin_step);
+    unsigned int nb_bins_y = size[0]/(bin_size + bin_step);
 
-    ExtractChannelFilterType::Pointer extractChannel2 = ExtractChannelFilterType::New();
-    extractChannel2->SetInput(this->GetParameterImage("in2"));
-    extractChannel2->SetChannel(1);
+    FloatImageType::SpacingType spacing1 = this->GetParameterImage("in1")->GetSpacing();
+    FloatImageType::SpacingType spacing2 = this->GetParameterImage("in2")->GetSpacing();
     
-    SiftFilterType::Pointer sift2 = SiftFilterType::New();
-    sift2->SetInput(extractChannel2->GetOutput());
-//    sift2->SetScalesNumber(1);
+    FloatImageType::PointType origin1 = this->GetParameterImage("in1")->GetOrigin();
+    FloatImageType::PointType origin2 = this->GetParameterImage("in2")->GetOrigin();
 
-    sift1->Update();
+    RSTransformType::Pointer rsTransform = RSTransformType::New();
+    rsTransform->SetInputKeywordList(this->GetParameterImage("in1")->GetImageKeywordlist());
+    rsTransform->SetInputProjectionRef(this->GetParameterImage("in1")->GetProjectionRef());
+    rsTransform->SetOutputKeywordList(this->GetParameterImage("in2")->GetImageKeywordlist());
+    rsTransform->SetOutputProjectionRef(this->GetParameterImage("in2")->GetProjectionRef());
 
-    otbAppLogINFO("Found " << sift1->GetOutput()->GetNumberOfPoints()<<" points in image 1.");
+    // Elevation through the elevation handler
+    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
+      {
+      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+        {
+        case Elevation_DEM:
+        {
+        rsTransform->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        rsTransform->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+        }
+        break;
+        case Elevation_Average:
+        {
+        rsTransform->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        }
+        break;
+        }
+      }
 
-    sift2->Update();
+    rsTransform->InstanciateTransform();
 
-    otbAppLogINFO("Found " << sift2->GetOutput()->GetNumberOfPoints()<<" points in image 2.");
-
-    MatchingFilterType::Pointer matchingFilter = MatchingFilterType::New();
-    matchingFilter->SetInput1(sift1->GetOutput());
-    matchingFilter->SetInput2(sift2->GetOutput());
-    matchingFilter->Update();
-
-    LandmarkListType::Pointer landmarks = matchingFilter->GetOutput();
-
-    otbAppLogINFO("Found " << landmarks->Size() <<" homologous points.");
+    unsigned int precision = 20;
 
     std::ofstream file;
     file.open(GetParameterString("out").c_str());
-    
-    for (LandmarkListType::Iterator it = landmarks->Begin();
-         it != landmarks->End(); ++it)
+
+    for(unsigned int i = 0; i<nb_bins_x;++i)
       {
-      PointType point1 = it.Get()->GetPoint1();
-      PointType point2 = it.Get()->GetPoint2();
-      
-      file<<point1[0]<<"\t"<<point1[1]<<"\t"<<point2[0]<<"\t"<<point2[1]<<std::endl;
-    }
+      for(unsigned int j = 0; j<nb_bins_y; ++j)
+        {
+        unsigned int startx = bin_step/2 + i*(bin_size + bin_step);
+        unsigned int starty = bin_step/2 + j*(bin_size + bin_step);
+        
+
+        FloatImageType::SizeType size1;
+        FloatImageType::IndexType index1;
+        FloatImageType::RegionType region1;
+
+        index1[0]=startx;
+        index1[1]=starty;
+        size1[0] = bin_size;
+        size1[1] = bin_size;
+
+        region1.SetIndex(index1);
+        region1.SetSize(size1);
+
+        otbAppLogINFO("("<<i<<"/"<<nb_bins_x<<", "<<j<<"/"<<nb_bins_y<<") Considering region1 : "<<region1);
+
+        ExtractChannelFilterType::Pointer extractChannel1 = ExtractChannelFilterType::New();
+        extractChannel1->SetInput(this->GetParameterImage("in1"));
+        extractChannel1->SetChannel(1);
+        extractChannel1->SetStartX(startx);
+        extractChannel1->SetStartY(starty);
+        extractChannel1->SetSizeX(bin_size);
+        extractChannel1->SetSizeY(bin_size);
+        
+        SiftFilterType::Pointer sift1 = SiftFilterType::New();
+        sift1->SetInput(extractChannel1->GetOutput());
+
+
+        // We need to find the corresponding region in image 2
+        FloatImageType::PointType ul1, ur1, ll1, lr1, p1, p2, p3, p4, ul2, lr2;
+
+        ul1[0] = origin1[0] + startx * spacing1[0];
+        ul1[1] = origin1[1] + starty * spacing1[1];
+
+        ur1[0] = origin1[0] + (startx+bin_size) * spacing1[0];
+        ur1[1] = origin1[1] + starty * spacing1[1];
+
+        lr1[0] = origin1[0] + (startx+bin_size) * spacing1[0];
+        lr1[1] = origin1[1] + (starty+bin_size) * spacing1[1];
+
+        ll1[0] = origin1[0] + (startx) * spacing1[0];
+        ll1[1] = origin1[1] + (starty+bin_size) * spacing1[1];
+
+        p1 = rsTransform->TransformPoint(ul1);
+        p2 = rsTransform->TransformPoint(ur1);
+        p3 = rsTransform->TransformPoint(lr1);
+        p4 = rsTransform->TransformPoint(ll1);
+
+        ul2[0] = std::min(std::min(p1[0],p2[0]),std::min(p3[0],p4[0]));
+        ul2[1] = std::min(std::min(p1[1],p2[1]),std::min(p3[1],p4[1]));
+
+        lr2[0] = std::max(std::max(p1[0],p2[0]),std::max(p3[0],p4[0]));
+        lr2[1] = std::max(std::max(p1[1],p2[1]),std::max(p3[1],p4[1]));
+
+        FloatImageType::IndexType index2;
+        FloatImageType::SizeType size2;
+
+        index2[0] = vcl_floor((ul2[0]-origin2[0])/spacing2[0]);
+        index2[1] = vcl_floor((ul2[1]-origin2[1])/spacing2[1]);
+
+        size2[0] = vcl_ceil((lr2[0]-ul2[0])/spacing2[0]);
+        size2[1] = vcl_ceil((lr2[1]-ul2[1])/spacing2[1]);
+
+        FloatImageType::RegionType region2;
+        region2.SetIndex(index2);
+        region2.SetSize(size2);
+        region2.PadByRadius(2*precision);
+
+        if(region2.Crop(this->GetParameterImage("in2")->GetLargestPossibleRegion()))
+          {        
+          otbAppLogINFO("Corresponding region2 is "<<region2);
+
+          ExtractChannelFilterType::Pointer extractChannel2 = ExtractChannelFilterType::New();
+          extractChannel2->SetInput(this->GetParameterImage("in2"));
+          extractChannel2->SetChannel(1);
+          extractChannel2->SetExtractionRegion(region2);
+
+          SiftFilterType::Pointer sift2 = SiftFilterType::New();
+          sift2->SetInput(extractChannel2->GetOutput());
+
+          sift1->Update();
+
+          otbAppLogINFO("Found " << sift1->GetOutput()->GetNumberOfPoints()<<" points in region 1.");
+
+          sift2->Update();
+
+          otbAppLogINFO("Found " << sift2->GetOutput()->GetNumberOfPoints()<<" points in region 2.");
+
+          MatchingFilterType::Pointer matchingFilter = MatchingFilterType::New();
+          matchingFilter->SetInput1(sift1->GetOutput());
+          matchingFilter->SetInput2(sift2->GetOutput());
+          matchingFilter->Update();
+          
+          LandmarkListType::Pointer landmarks = matchingFilter->GetOutput();
+          
+          otbAppLogINFO("Found " << landmarks->Size() <<" homologous points.");
+          
+          unsigned int discarded  = 0;
+
+          for (LandmarkListType::Iterator it = landmarks->Begin();
+               it != landmarks->End(); ++it)
+            {
+            PointType point1 = it.Get()->GetPoint1();
+            PointType point2 = it.Get()->GetPoint2();
+          
+            PointType pprime = rsTransform->TransformPoint(point1);
+
+            double error = vcl_sqrt((point2[0]-pprime[0])*(point2[0]-pprime[0])+(point2[1]-pprime[1])*(point2[1]-pprime[1]));
+
+            if(error<2*precision)
+              {
+              file<<point1[0]<<"\t"<<point1[1]<<"\t"<<point2[0]<<"\t"<<point2[1]<<std::endl;
+              }
+            else
+              {
+              ++discarded;
+              }
+            }
+
+          otbAppLogINFO(<<discarded<<" points discarded");
+          }
+        }
+      }
     file.close();
-
   }
-
 };
+}
+}
 
-}
-}
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::HomologousPointsExtraction)
