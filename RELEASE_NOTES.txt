@@ -1,3 +1,48 @@
+OTB-v.3.14.1 - Changes since version 3.14.0 (2012/10/02)
+--------------------------------------------------------
+
+* Library
+  * Support external FLTK 1.3 on windows
+  * Simplify GDAL import during configuration
+  * Remove ossim dependencies from aeronet file reader
+  * Add adjacency effect in OpticalCalibration application
+  * Improve Pleiades support :
+    * TOA optical calibration available
+    * Improve support of mega tiles products
+  
+
+* Monteverdi
+  * Support of MacOSX 10.8
+
+* Bug fixes :
+  * OTB-lib
+    * 0000577: Remove the need for both GDAL_CONFIG and GDALCONFIG_EXECUTABLE
+    * 0000573: tiff error in ossim when we read big uncompress JPEG2000 with Pleiades Primary level
+    * 0000552: Application GridBasedImageResampling doesn't behave properly outside the input grid
+    * 0000576: ImageToPointSetFilter work only with PointSets of type DefaultStaticMeshTraits
+    * 0000575: Not able to access SDS layers in HDF4 datasets using BandMath
+    * 0000572: using Segmentation application with .kml vector output using input which is not in WGS84 causes error
+    * 0000586: OTB does not compile with gcc 4.7 on some distros
+    * 0000579: Can not use files with "--" in their names in applications
+    * 0000556: Help parameters display output wrong MISSING parameters with application launched via command line
+    * 0000507: Java wrapper installation
+
+  * Monteverdi
+    * 0000570: SVM classification module works only with three bands images
+    * 0000583: Weird spacing value for the Resampling module output
+    * 0000581: Mean Shift Clustering Crash
+    * 0000474: In TileMap Import module, search place by name does not work anymore
+    * 0000529: Monteverdi fails to build using fltk 1.3 opensuse 12.1
+    * 0000582: Save/Quit button in the Resampling module does not close the module
+    * 0000571: Monteverdi crash in SVM Classification when trying to import SVM model twice
+
+  * Documentation
+    * 0000366: SG-html has 2 "bibliography"
+    * 0000371: Generate_FAQ script needs updates
+    * 0000367: Software Guide HTML : missing index.html
+    * 0000372: clean up Cookbook generation logs
+
+
 OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
 --------------------------------------------------------
 
