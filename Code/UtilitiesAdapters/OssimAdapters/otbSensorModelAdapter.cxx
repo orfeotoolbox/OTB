@@ -120,7 +120,9 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
 
     otbMsgDevMacro(<< "USING DEM ! ");
 
-    while ((diffHeight > m_Epsilon) && (nbIter < m_NbIter))
+    bool nanHeight = false;
+
+    while (!nanHeight && (diffHeight > m_Epsilon) && (nbIter < m_NbIter))
       {
       otbMsgDevMacro(<< "Iter " << nbIter);
 
@@ -128,10 +130,18 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
 
       heightTmp = this->m_DEMHandler->GetHeightAboveMSL(lon, lat);
 
-      this->m_SensorModel->lineSampleHeightToWorld(ossimPoint, heightTmp, ossimGPointRef);
-
+      if(ossim::isnan(heightTmp))
+        {
+        nanHeight = true;
+        this->m_SensorModel->lineSampleToWorld(ossimPoint, ossimGPointRef);
+        }
+      else
+        {
+        this->m_SensorModel->lineSampleHeightToWorld(ossimPoint, heightTmp, ossimGPointRef);
+        }
+      
       diffHeight = fabs(heightTmp - height);
-
+      
       ++nbIter;
       }
     ossimGPoint = ossimGPointRef;
