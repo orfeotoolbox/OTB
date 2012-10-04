@@ -75,6 +75,8 @@ public:
 
   /** Region gl component typedef */
   typedef RegionGlComponent                       RegionGlComponentType;
+  typedef typename RegionGlComponent::ColorType   ColorType;
+  
   typedef typename RegionGlComponentType::Pointer RegionGlComponentPointerType;
 
   /**
@@ -102,6 +104,19 @@ public:
 
   /** Clear the widgets buffers  */
   void ClearBuffer();
+
+  /** Method to set the ExtractRegionGlComponent color */
+  void SetExtractRegionGlComponentColor(const ColorType& color)
+  {
+    m_ExtractRegionGlComponent->SetColor(color);
+  }
+  
+  /** Method to set the ScaledExtractRegionGlComponent color */
+  void SetScaledExtractRegionGlComponent(const ColorType& color)
+  {
+    m_ScaledExtractRegionGlComponent->SetColor(color);
+  }
+  
 
 protected:
   /** Constructor */
