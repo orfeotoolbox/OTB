@@ -214,6 +214,7 @@ private:
       {
       IdentityTransformType::Pointer transform = IdentityTransformType::New();
 
+      m_Resampler->SetOutputParametersFromImage( inputImage );
       // Scale Transform
       OutputVectorType scale;
       scale[0] = 1.0 / GetParameterFloat("transform.type.id.scalex");
