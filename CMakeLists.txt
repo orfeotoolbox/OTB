@@ -28,8 +28,8 @@ INCLUDE(SourceStatus)
 #-----------------------------------------------------------------------------
 # OTB version number.  An even minor number corresponds to releases.
 SET(OTB_VERSION_MAJOR "3")
-SET(OTB_VERSION_MINOR "14")
-SET(OTB_VERSION_PATCH "1")
+SET(OTB_VERSION_MINOR "15")
+SET(OTB_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
@@ -379,11 +379,11 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
     ${OTB_SOURCE_DIR}/CMake/OTBWrapperMacros.cmake
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
     COMPONENT Development)
-    
+
   INSTALL(FILES ${OTB_BINARY_DIR}/otbConfigure.h
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}
     COMPONENT Development)
-  
+
   INSTALL(FILES
     ${OTB_SOURCE_DIR}/CMake/FindFFTW.cmake
     ${OTB_SOURCE_DIR}/CMake/FindEXPAT.cmake
