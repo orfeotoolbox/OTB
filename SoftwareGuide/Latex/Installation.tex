@@ -2,16 +2,16 @@
 \label{chapter:Installation}
 \index{Installation}
 
-This section describes the process for installing OTB on your system. 
+This section describes the process for installing OTB on your system.
 OTB is a toolbox, and as such, once it is installed in your computer, provides by default a set of useful libraries. You can use
 these libraries to build your own applications based on it. What OTB does provide, besides the toolbox, is a
 large set of test files and examples that will introduce you to OTB concepts
-and will show you how to use OTB in your own projects. 
+and will show you how to use OTB in your own projects.
 
 Since the release 3.12, OTB embeds a specific framework to generate applications
 in a more user-friendly way. The majority of the applications available in the
-now deprecated \code{OTB-Applications} package have been revamped into the main \code{OTB} package. Now if you 
-activate the specific option \code{BUILD\_APPLICATIONS}, OTB builds for each 
+now deprecated \code{OTB-Applications} package have been revamped into the main \code{OTB} package. Now if you
+activate the specific option \code{BUILD\_APPLICATIONS}, OTB builds for each
 application one shared library (also known as plugin). This plugin can be
 auto-loaded into appropriate tools without recompiling, and is able to
 fully describe its own parameters, behaviour and documentation.
@@ -27,14 +27,14 @@ following:
 \item A C and SWIG interface, which means that any application can be
   loaded, set up and executed into a high-level language such as \textbf{Python}
   for instance.
-\end{itemize}  
+\end{itemize}
 
-For the moment, the former \textbf{OTB-Applications} package will be kept available 
+For the moment, the former \textbf{OTB-Applications} package will be kept available
 but will no longer be maintained.
 
 The classical OTB powered applications are still available and will still be maintained:
 \begin{description}
-\item [Monteverdi]{An integrated application giving graphical access to a lot of OTB 
+\item [Monteverdi]{An integrated application giving graphical access to a lot of OTB
 functionalities.}
 \item[OTB-Wrapping]{Calling OTB from Python or Java (see chapter~\ref{chap:wrappings}).}
 \end{description}
@@ -49,8 +49,8 @@ or compiling from sources (Table~\ref{tab:installation}). What you need depends 
 \hline
 & \textbf{OTB library and internal applications} & \textbf{Monteverdi} & \textbf{former OTB-Applications} & \textbf{Wrapping (Java and Python)} \\
 \hline
-\textbf{Any platform} & 
-  Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source}) 
+\textbf{Any platform} &
+  Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source})
 & Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source})\\
 \hline
 \textbf{Windows 2000/XP/Vista/Seven} & OSGeo4W installer for internal applications & Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries})& Build from source (see section~\ref{sec:source})& OSGeo4W installer (see section~\ref{ssec:windows_binaries}) \\
@@ -76,37 +76,37 @@ or compiling from sources (Table~\ref{tab:installation}). What you need depends 
 \subsection{Windows 2000/XP/Vista/Seven}
 \label{ssec:windows_binaries}
 
-For Windows 2000/XP/Vista/Seven users, there is a classical standalone installation program for Monteverdi, available from the 
-\href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}. There are another way to install Monteverdi directly through through OSGeo4W. With this new way, you can install other OTB packages as described in the following paragraph. 
+For Windows 2000/XP/Vista/Seven users, there is a classical standalone installation program for Monteverdi, available from the
+\href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}. There are another way to install Monteverdi directly through through OSGeo4W. With this new way, you can install other OTB packages as described in the following paragraph.
 
-Since version 3.12, we provide OTB packages through OSGeo4W for Windows 2000/XP/Vista/Seven users. Packages for the new OTB applications, Monteverdi and 
+Since version 3.12, we provide OTB packages through OSGeo4W for Windows 2000/XP/Vista/Seven users. Packages for the new OTB applications, Monteverdi and
 OTB-Wrapping are available directly in the OSGeo4W installer with the following names:
 \begin{itemize}
 \item \textbf{otb-bin} for command line and QT applications
 \item \textbf{otb-python} for python applications
-\item \textbf{otb-monteverdi} for the Monteverdi application 
+\item \textbf{otb-monteverdi} for the Monteverdi application
 \item \textbf{otb-wrapping} for low level Python/Java bindings.
 \end{itemize}
 Follow the instructions in the installer and select the packages you want to add. The installer will proceed with the installation of selected packages and all their dependencies.
-In the case of \textbf{otb-monteverdi}, Monteverdi will be directly installed in the OSGeo4W repository and a shortcut will be added to your desktop 
-and in the start menu (in the OSGeo4W folder). You can now use directly Monteverdi from your desktop, from the start menu and from an OSGeo4W shell with command \texttt{monteverdi}. 
-For the \textbf{otb-bin} packages, it will be available directly in the OSGeo4W shell, for example run 
+In the case of \textbf{otb-monteverdi}, Monteverdi will be directly installed in the OSGeo4W repository and a shortcut will be added to your desktop
+and in the start menu (in the OSGeo4W folder). You can now use directly Monteverdi from your desktop, from the start menu and from an OSGeo4W shell with command \texttt{monteverdi}.
+For the \textbf{otb-bin} packages, it will be available directly in the OSGeo4W shell, for example run
 \begin{verbatim}
 otbgui_BandMath.
 \end{verbatim}
- We recommended to use this way to install internal applications of OTB on Windows. 
+ We recommended to use this way to install internal applications of OTB on Windows.
 If you want to use the \textbf{otb-python} package, for example in QGIS, please following the install note found in the \href{http://wiki.orfeo-toolbox.org/index.php/Quantum_GIS_access_to_OTB_applications#Notes_for_Windows_users}{OTB wiki}. You can simply check from an OSGeo4W shell the list of available applications:
 \begin{verbatim}
 python
 import otbApplication
 print str( otbApplication.Registry.GetAvailableApplications() )
 \end{verbatim}
-For more information you can read the OTB Cookbook which provides useful information about these new OTB applications. 
+For more information you can read the OTB Cookbook which provides useful information about these new OTB applications.
 
 \subsection{MacOS X}
 \label{ssec:mac_binaries}
 
-For MacOS X, a .dmg file is available for Monteverdi for MacOS X 10.5 and higher. 
+For MacOS X, a .dmg file is available for Monteverdi for MacOS X 10.5 and higher.
 Please go the the \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}.
 Click on the file to launch Monteverdi.
 
@@ -114,20 +114,17 @@ Click on the file to launch Monteverdi.
 
 \subsubsection{Ubuntu 10.04, 10.10, 11.10 and 12.04}
 \label{ssec:ubuntu_binaries}
-For Ubuntu 10.04 (Lucid Lynx), 10.10 (Maverick Meerkat), 11.10 (Oneiric Ocelot) and 12.04 (Precise Pangolin), OTB, 
-OTB-Applications, Monteverdi and OTB-Wrapping packages are available as Debian packages 
-through APT repositories.
+For Ubuntu 10.04 (Lucid Lynx), 10.10 (Maverick Meerkat), 11.10 (Oneiric Ocelot)
+and 12.04 (Precise Pangolin), OTB, OTB-Applications, Monteverdi and OTB-Wrapping
+packages are available as Debian packages through APT repositories.
 
-Since release 3.14, we advise to use now the \textbf{orfeotoolbox-stable-ubuntugis} repository (based on ubuntugis-unstable ppa).
-The installation of OTB through this PPA provides an alternate
-''homemade'' gdal 1.9 version which allows to avoid the GTiff which is still
-present for now in the orfeotoolbox-stable repository.
+Since release 3.14.1, OTB packages are available in the
+\href{https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable}{ubuntugis-unstable} repository.
 
 You can add it by using these command-lines:
 \begin{verbatim}
-sudo aptitude install add-apt-repository 
+sudo aptitude install add-apt-repository
 sudo apt-add-repository ppa:ubuntugis/ubuntugis-unstable
-sudo add-apt-repository ppa:otb/orfeotoolbox-stable-ubuntugis
 \end{verbatim}
 
 Now run:
@@ -137,11 +134,6 @@ sudo aptitude update
 If you want only OTB libraries, please use:
 \begin{verbatim}
 sudo aptitude install libotb
-\end{verbatim}
-
-If you want old OTB Applications, please use:
-\begin{verbatim}
-sudo aptitude install otbapp
 \end{verbatim}
 
 If you want new OTB Applications, please use:
@@ -159,19 +151,27 @@ If you want Python/Java wrapping, please use:
 sudo aptitude install otb-wrapping-python otb-wrapping-java
 \end{verbatim}
 
+If you want old OTB Applications, please use:
+\begin{verbatim}
+sudo aptitude install otbapp
+\end{verbatim}
+
 If you are using \emph{Synaptic}, you can add the repositories, update and install the packages through the
 graphical interface.
 
-If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
-\begin{verbatim}
-sudo aptitude install add-apt-repository 
-sudo add-apt-repository ppa:otb/orfeotoolbox-stable
-\end{verbatim}
+For further informations about Ubuntu packages go to
+\href{https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable}{ubuntugis-unstable}
+launchpad page and click on \textbf{Read about installing}.
+%% If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
+%% \begin{verbatim}
+%% sudo aptitude install add-apt-repository
+%% sudo add-apt-repository ppa:otb/orfeotoolbox-stable
+%% \end{verbatim}
 
 %% If you want to use OTB with bleeding edge versions of gdal and qgis, there is an alternate UbuntuGIS repository.
 %% You can add it by using these command-lines:
 %% \begin{verbatim}
-%% sudo aptitude install add-apt-repository 
+%% sudo aptitude install add-apt-repository
 %% sudo apt-add-repository ppa:ubuntugis/ubuntugis-unstable
 %% sudo add-apt-repository ppa:otb/orfeotoolbox-stable-ubuntugis
 %% \end{verbatim}
@@ -184,20 +184,20 @@ sudo add-apt-repository ppa:otb/orfeotoolbox-stable
 %% sudo aptitude install libotb otbapp monteverdi otb-wrapping-python otb-wrapping-java
 %% \end{verbatim}
 
-The orfeotoolbox stable PPA repository is also available and use standard version of the gdal package (with the GTiff crash with current version, see \url{http://bugs.orfeo-toolbox.org/view.php?id=86}{here}). 
+%% The orfeotoolbox stable PPA repository is also available and use standard version of the gdal package (with the GTiff crash with current version, see \url{http://bugs.orfeo-toolbox.org/view.php?id=86}{here}).
 
-If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
+%% If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
+%% \begin{verbatim}
+%% sudo aptitude install add-apt-repository
+%% sudo add-apt-repository ppa:otb/orfeotoolbox-stable
+%% \end{verbatim}
+
+Moreover, \textbf{nightly} builds for all OTB projects are also available
+through APT repositories.  If you are using apt command-line tools, use these
+command-lines to add the otb repository to apt sources:
+
 \begin{verbatim}
-sudo aptitude install add-apt-repository 
-sudo add-apt-repository ppa:otb/orfeotoolbox-stable
-\end{verbatim}
-
-Be careful not to add the two repositories, since they may cause incompatibilities.
-
-Moreover, nightly builds for all OTB projects are also available through APT repositories.
-If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
-\begin{verbatim}
-sudo aptitude install add-apt-repository 
+sudo aptitude install add-apt-repository
 sudo add-apt-repository ppa:otb/orfeotoolbox-nightly
 \end{verbatim}
 Now run:
@@ -209,23 +209,28 @@ As the previous cases, select which packages you will install.
 sudo aptitude install libotb otb-bin otb-bin-qt otb-python otbapp monteverdi
 \end{verbatim}
 
-For further informations about ubuntu packages go to \href{https://launchpad.net/~otb/+archive/orfeotoolbox-stable-ubuntugis}{orfeotoolbox-stable-ubuntugis} launchpad page and click on \textbf{Read about installing}.
+Be careful not to add the two repositories, since they may cause incompatibilities.
 
-\textbf{apt-add-repository} will try to retrieve the GPG keys of the repositories to certify the origin of the packages. If you are behind a http proxy, this step won't work and apt-add-repository will stall and eventually quit. You can temporarily ignore this error and proceed with the update step. Following this, aptitude update will issue a warning about a signature problem. This warning won't prevent you from installing the packages.
+\textbf{apt-add-repository} will try to retrieve the GPG keys of the
+repositories to certify the origin of the packages. If you are behind a http
+proxy, this step won't work and apt-add-repository will stall and eventually
+quit. You can temporarily ignore this error and proceed with the update
+step. Following this, aptitude update will issue a warning about a signature
+problem. This warning won't prevent you from installing the packages.
 
 \subsubsection{OpenSuse 11.X and higher}
 \label{ssec:opensuse_binaries}
 
-For OpenSuse 11.X and higher, OTB, OTB-Applications, Monteverdi and 
+For OpenSuse 11.X and higher, OTB, OTB-Applications, Monteverdi and
 OTB-Wrapping packages are available through \emph{zypper}.
 
 First, you need to add the appropriate repositories with these command-lines (please replace $11.4$ by your OpenSuse version):
 \begin{verbatim}
-sudo zypper ar 
+sudo zypper ar
 http://download.opensuse.org/repositories/games/openSUSE_11.4/ Games
-sudo zypper ar 
+sudo zypper ar
 http://download.opensuse.org/repositories/Application:/Geo/openSUSE_11.4/ GEO
-sudo zypper ar 
+sudo zypper ar
 http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_11.4/ tzotsos
 \end{verbatim}
 
@@ -253,11 +258,11 @@ sudo zypper install Orfeo-Applications-beta
 There is also support for the recently introduced 'rolling' openSUSE distribution named 'Tumbleweed'.
 For Tumbleweed you need to add the following repositories with these command-lines:
 \begin{verbatim}
-sudo zypper ar 
+sudo zypper ar
 http://download.opensuse.org/repositories/games/openSUSE_Tumbleweed/ Games
-sudo zypper ar 
+sudo zypper ar
 http://download.opensuse.org/repositories/Application:/Geo/openSUSE_Tumbleweed/ GEO
-sudo zypper ar 
+sudo zypper ar
 http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_Tumbleweed/ tzotsos
 \end{verbatim}
 and then add the OTB packages as shown above.
@@ -270,12 +275,12 @@ Since 3.12 version, OTB packages (OTB, monteverdi, OTB-Applications) are availab
 
   \item Configure your system to pass through your HTTP(S) proxy,
 
-  \item Add required extra repositories: EPEL, ELGIS and centosplus, 
+  \item Add required extra repositories: EPEL, ELGIS and centosplus,
 
 \end{enumerate}
 can be found in the previous file.
 
-So if you want OTB and monteverdi packages, you need to install a standard RPM packages which is available on OTB website: 
+So if you want OTB and monteverdi packages, you need to install a standard RPM packages which is available on OTB website:
    \begin{verbatim}
    wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/
          gdal-1.8.0-5.i386.rpm
@@ -284,7 +289,7 @@ So if you want OTB and monteverdi packages, you need to install a standard RPM p
 We can now get and install (replace version number by the current):
 
 \begin{enumerate}
-\item OTB libraries and new OTB application package: 
+\item OTB libraries and new OTB application package:
    \begin{verbatim}
    wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/
          OrfeoToolbox-3.11.0-1.i386.rpm
@@ -352,7 +357,7 @@ The OTB depends on several libraries:
 \item GDAL: The support of remote sensing imagery formats is ensured
   through the use of the GDAL library. Please see
   \url{http://www.remotesensing.org/gdal/} for informations on how to install.
-\item OSSIM: Image geometry library, it handles for example the sensor geometric models. 
+\item OSSIM: Image geometry library, it handles for example the sensor geometric models.
   Please see \url{http://www.ossim.org} for informations on how to install.
 download and install this library on your system. OTB requires at least the version 1.6.
 \item Fltk: this library is used for the visualization
@@ -360,12 +365,12 @@ download and install this library on your system. OTB requires at least the vers
   dowloading and installing Fltk. OTB has been tested with version 1.1.9,
   1.1.10 and 1.3. You also have the choice to use OTB's internal
   version (which is 1.1.9) if you don't have FLTK already installed.
-\item gettext (optional): Since version 3.2, OTB includes experimental support 
-  for internationalization. Gettext is required to activate this 
-  functionnality.  
+\item gettext (optional): Since version 3.2, OTB includes experimental support
+  for internationalization. Gettext is required to activate this
+  functionnality.
 \end{itemize}
 
-See section \ref{sec:FAQInstall} for quick installation guidelines for GDAL or Fltk if you don't have access 
+See section \ref{sec:FAQInstall} for quick installation guidelines for GDAL or Fltk if you don't have access
 to standard packages.
 
 \subsection{Configuring OTB}
@@ -412,15 +417,15 @@ section, subsection Unix/Linux Platforms.
 
 \index{CMake!OTB tree}
 Running CMake initially requires that you provide two pieces of
-information: 
+information:
 \begin{itemize}
 \item Where the source code directory is located (ex.: OTB\_SOURCE\_DIR),
-\item Where the object code is to be produced: (ex.: OTB\_BINARY\_DIR). 
+\item Where the object code is to be produced: (ex.: OTB\_BINARY\_DIR).
 \end{itemize}
 These are referred to as the \emph{source directory} and the \emph{binary directory}.
 We recommend setting the binary directory to be different than the source directory (an
 \emph{out-of-source} build), but OTB will still build if they are set
-to a directory inside the source directory (an \emph{in-source} build). 
+to a directory inside the source directory (an \emph{in-source} build).
 
 \subsubsection{Compiling OTB}
 CMake runs in an interactive mode in that you iteratively select
@@ -467,10 +472,10 @@ On windows, you will first create a directory to hold the binaries to be built.
 Your directory structure may look as follows:
 \begin{verbatim}
 * OTB
-|- OTB_SOURCE_DIR 
+|- OTB_SOURCE_DIR
 |- OTB_BINARY_DIR
 \end{verbatim}
-where \texttt{OTB\_SOURCE\_DIR} contains is the base directory of the OTB source code, and 
+where \texttt{OTB\_SOURCE\_DIR} contains is the base directory of the OTB source code, and
 \texttt{OTB\_BINARY\_DIR} is empty for now.
 
 Launch the CMake executable. On the top of the GUI (Figure \ref{fig:CMakeGUI}), select the source and binary directories, then press \emph{Configure}.
@@ -481,13 +486,13 @@ The \emph{Generate} button will be accessible only when all required CMake varia
 \index{Compiling OTB on Windows}
 Now, you can go in your \emph{binary directory} (here \texttt{OTB\_BINARY\_DIR}). CMake has generated Makefiles or
 Visual Studio project files. You can open the solution and build the \texttt{ALL\_BUILD} project.
-If you plan to run executables from within the Visual Studio environment, you should open the Visual Studio 
-solution file from the OSGeo4W shell. To do this, simply drag-and-drop the ".sln" file to an OSGeo4W shell 
+If you plan to run executables from within the Visual Studio environment, you should open the Visual Studio
+solution file from the OSGeo4W shell. To do this, simply drag-and-drop the ".sln" file to an OSGeo4W shell
 and press Enter.
 
 Windows platforms didn't support to build with shared libraries. If you experience any problem
 with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
-built size might reach 1~GB. 
+built size might reach 1~GB.
 
 That should be all! Otherwise, subscribe to
 otb-users@googlegroups.com and you will get some help.
@@ -533,7 +538,7 @@ the normal build process, about 2500 small tests programs will be compiled. This
 will verify that the basic components of OTB have been correctly built on your
 system.
 
-Set the CMake variables \code{BUILD\_TESTING} and \code{BUILD\_EXAMPLES} to ON will activate 
+Set the CMake variables \code{BUILD\_TESTING} and \code{BUILD\_EXAMPLES} to ON will activate
 the compilation of the examples and the tests and slow down the build process.
 The examples distributed with the toolbox are a helpful resource for learning how to use OTB
 components but are not essential for the use of the toolbox itself. The testing
@@ -542,7 +547,7 @@ capabilities of OTB classes. Due to the large number of tests, enabling the
 testing option will considerably increase the build time.  It is not
 desirable to enable this option for a first build of the toolbox.
 
-Set the CMake variable \code{BUILD\_APPLICATION} to ON will activate the compilation of new applications and the launchers needed to use it. A complete list of these applications, described in the OTB Cookbook, can be found on \href{http://orfeo-toolbox.org/Applications/index.html}{OTB Website}. 
+Set the CMake variable \code{BUILD\_APPLICATION} to ON will activate the compilation of new applications and the launchers needed to use it. A complete list of these applications, described in the OTB Cookbook, can be found on \href{http://orfeo-toolbox.org/Applications/index.html}{OTB Website}.
 
 
 
