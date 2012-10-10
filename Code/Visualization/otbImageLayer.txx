@@ -272,6 +272,7 @@ ImageLayer<TImage, TOutputImage>
   m_RenderingFunction->Initialize(m_Image->GetMetaDataDictionary()); //FIXME check, but the call must be done in the generator. To be moved to the layer?
   // The ouptut stringstream
   std::ostringstream oss;
+  oss << otbGetTextMacro("Index") << ": " << index << std::endl;
   oss << otbGetTextMacro("Layer") << ": " << this->GetName();
   oss << std::endl << otbGetTextMacro("Image size") << ": " << m_Image->GetLargestPossibleRegion().GetSize() << std::endl;
 
