@@ -335,7 +335,7 @@ private:
     m_Map[20][5]="green";
 
     ClearChoices("list");
-    for ( unsigned int i=0 ; i<m_Map.size(); i++ )
+    for ( unsigned int i=0; i<m_Map.size(); i++ )
       {
       AddChoice(m_Map[i][0],m_Map[i][1]);
       }

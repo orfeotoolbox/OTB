@@ -1903,7 +1903,7 @@ PleiadesImageMetadataInterface
     itkExceptionMacro(<< "Invalid number of bands...");
     }
 
-  for (unsigned int k = 0 ; k < nbBands ; ++k)
+  for (unsigned int k = 0; k < nbBands; ++k)
     {
     wavelengthSpectralBand->PushBack(FilterFunctionValues::New());
     }
@@ -1911,7 +1911,7 @@ PleiadesImageMetadataInterface
   unsigned int j = 0;
   for (std::list <std::vector<float> >::const_iterator it = tmpSpectralBandList.begin(); it != tmpSpectralBandList.end(); ++it)
     {
-    for (unsigned int k = 0 ; k < nbBands ; ++k)
+    for (unsigned int k = 0; k < nbBands; ++k)
       {
       if (this->BandIndexToWavelengthPosition(k) == j)
         {
