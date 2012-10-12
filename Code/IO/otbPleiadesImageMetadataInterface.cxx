@@ -127,10 +127,48 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
 
-  // TODO MSD check with a real product the correct order of the value
+  // Check if the default irradiance are present : "999"
+  bool isFakeRadiance = true;
   for (unsigned int i = 0; i < outputValues.size(); ++i)
     {
-    outputValuesVariableLengthVector[i] = outputValues[i];
+    if (vcl_abs(outputValues[i] - 999.0) > 0.01)
+      {
+      isFakeRadiance = false;
+      break;
+      }
+    }
+  
+  if (isFakeRadiance)
+    {
+    // Use pre-computed radiances, choose between P and MS mode
+    if (outputValues.size() == 1)
+      {
+      // Pan
+      outputValuesVariableLengthVector[0] = 1548.71;
+      }
+    else
+      {
+      // MS, ordered as B0, B1, B2, B3
+      double defaultRadiance[4] =
+        {
+          1915.01,
+          1830.57,
+          1594.06,
+          1060.01
+        };
+      for (unsigned int i = 0; i < outputValues.size(); ++i)
+        {
+        outputValuesVariableLengthVector[i] = defaultRadiance[this->BandIndexToWavelengthPosition(i)];
+        }
+      }
+    }
+  else
+    {
+    // Use BandIndexToWavelengthPosition because values in keywordlist are sorted by wavelength
+    for (unsigned int i = 0; i < outputValues.size(); ++i)
+      {
+      outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
+      }
     }
 
 
@@ -471,10 +509,10 @@ PleiadesImageMetadataInterface
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
 
-  // TODO MSD check with a real product the correct order of the value
+  // Use BandIndexToWavelengthPosition because values in keywordlist are sorted by wavelength
   for (unsigned int i = 0; i < outputValues.size(); ++i)
     {
-    outputValuesVariableLengthVector[i] = outputValues[i];
+    outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
     }
 
 
@@ -515,10 +553,10 @@ PleiadesImageMetadataInterface
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
 
-  // TODO MSD check with a real product the correct order of the value
+  // Use BandIndexToWavelengthPosition because values in keywordlist are sorted by wavelength
   for (unsigned int i = 0; i < outputValues.size(); ++i)
     {
-    outputValuesVariableLengthVector[i] = outputValues[i];
+    outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
     }
 
   return outputValuesVariableLengthVector;
@@ -708,6 +746,7 @@ PleiadesImageMetadataInterface
   std::vector<unsigned int> rgb(3);
 
   // TODO MSD remove this limitation when we get a real pleiades image
+  // Band order in PHR products seems to be always the same : RGB => keep the flag off
   bool realProduct = false;
   if (realProduct)
     {
@@ -1848,7 +1887,7 @@ PleiadesImageMetadataInterface
         0.0076144,
         0.0061346
       };
-//Add multispectral bands to the temporary list
+    //Add multispectral bands to the temporary list
     const std::vector<float> vb1 (b1, b1 + sizeof(b1) / sizeof(float) );
     tmpSpectralBandList.push_back(vb1);
     const std::vector<float> vb2 (b2, b2 + sizeof(b2) / sizeof(float) );
@@ -1857,20 +1896,32 @@ PleiadesImageMetadataInterface
     tmpSpectralBandList.push_back(vb3);
     const std::vector<float> vb4 (b4, b4 + sizeof(b4) / sizeof(float) );
     tmpSpectralBandList.push_back(vb4);
+
     }
   else
     {
     itkExceptionMacro(<< "Invalid number of bands...");
     }
 
+  for (unsigned int k = 0 ; k < nbBands ; ++k)
+    {
+    wavelengthSpectralBand->PushBack(FilterFunctionValues::New());
+    }
+  
   unsigned int j = 0;
   for (std::list <std::vector<float> >::const_iterator it = tmpSpectralBandList.begin(); it != tmpSpectralBandList.end(); ++it)
     {
-    wavelengthSpectralBand->PushBack(FilterFunctionValues::New());
-    wavelengthSpectralBand->GetNthElement(j)->SetFilterFunctionValues(*it);
-    wavelengthSpectralBand->GetNthElement(j)->SetMinSpectralValue(0.430);
-    wavelengthSpectralBand->GetNthElement(j)->SetMaxSpectralValue(0.950);
-    wavelengthSpectralBand->GetNthElement(j)->SetUserStep(0.0025);
+    for (unsigned int k = 0 ; k < nbBands ; ++k)
+      {
+      if (this->BandIndexToWavelengthPosition(k) == j)
+        {
+        wavelengthSpectralBand->GetNthElement(k)->SetFilterFunctionValues(*it);
+        wavelengthSpectralBand->GetNthElement(k)->SetMinSpectralValue(0.430);
+        wavelengthSpectralBand->GetNthElement(k)->SetMaxSpectralValue(0.950);
+        wavelengthSpectralBand->GetNthElement(k)->SetUserStep(0.0025);
+        break;
+        }
+      }
     ++j;
     }
 
