@@ -12,6 +12,7 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_QuickbirdXS
                      APP  OpticalCalibration
                      OPTIONS -in ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
                              -level toa
+                             -noclamp true
                              -out ${TEMP}/apTvRaOpticalCalibration_QuickbirdXS.tif
                      VALID   --compare-image ${EPSILON_7}
                              ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
