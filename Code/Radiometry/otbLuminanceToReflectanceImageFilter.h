@@ -57,7 +57,8 @@ class LuminanceToReflectanceImageFunctor
 public:
   LuminanceToReflectanceImageFunctor() :
     m_SolarIllumination(1.0),
-    m_IlluminationCorrectionCoefficient(1.0)
+    m_IlluminationCorrectionCoefficient(1.0),
+    m_UseClamp(false)
   {}
 
   virtual ~LuminanceToReflectanceImageFunctor() {}
@@ -70,6 +71,10 @@ public:
   {
     m_IlluminationCorrectionCoefficient = coef;
   }
+  void SetUseClamp(bool useClamp)
+  {
+    m_UseClamp = useClamp;
+  }
 
   double GetSolarIllumination()
   {
@@ -78,6 +83,10 @@ public:
   double GetIlluminationCorrectionCoefficient()
   {
     return m_IlluminationCorrectionCoefficient;
+  }
+  bool GetUseClamp()
+  {
+    return m_UseClamp;
   }
 
   inline TOutput operator ()(const TInput& inPixel) const
@@ -88,7 +97,12 @@ public:
            * static_cast<double>(CONST_PI)
            * m_IlluminationCorrectionCoefficient
            / m_SolarIllumination;
-
+    
+    if (m_UseClamp)
+    {
+      temp = std::max(temp,0.0);
+      temp = std::min(temp,1.0);
+    }
     outPixel = static_cast<TOutput>(temp);
 
     return outPixel;
@@ -97,6 +111,7 @@ public:
 private:
   double m_SolarIllumination;
   double m_IlluminationCorrectionCoefficient;
+  double m_UseClamp;
 };
 }
 
@@ -214,6 +229,11 @@ public:
   /** Give the IsSetFluxNormalizationCoefficient boolean. */
   itkGetConstReferenceMacro(IsSetFluxNormalizationCoefficient, bool);
 
+  /** Set the UseClamp boolean. */
+  itkSetMacro(UseClamp, bool);
+  /** Give the UseClamp boolean. */
+  itkGetConstReferenceMacro(UseClamp, bool);
+  
 protected:
   /** Constructor */
   LuminanceToReflectanceImageFilter() :
@@ -221,7 +241,8 @@ protected:
     m_FluxNormalizationCoefficient(1.),
     m_Day(0),
     m_Month(0),
-    m_IsSetFluxNormalizationCoefficient(false)
+    m_IsSetFluxNormalizationCoefficient(false),
+    m_UseClamp(false)
     {
     m_SolarIllumination.SetSize(0);
     };
@@ -296,6 +317,7 @@ protected:
         }
       functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
       functor.SetSolarIllumination(static_cast<double>(m_SolarIllumination[i]));
+      functor.SetUseClamp(m_UseClamp);
 
       this->GetFunctorVector().push_back(functor);
       }
@@ -316,6 +338,8 @@ private:
   /** Used to know if the user has set a value for the FluxNormalizationCoefficient parameter
    * or if the class has to compute it */
   bool m_IsSetFluxNormalizationCoefficient;
+  /** Clamp values to [0,1] */
+  bool m_UseClamp;
 
 };
 
