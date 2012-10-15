@@ -127,7 +127,7 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
 
-  // Check if the default irradiance are present : "999"
+  // Check if the default irradiance are present ("999", see bug #601 on Mantis)
   bool isFakeRadiance = true;
   for (unsigned int i = 0; i < outputValues.size(); ++i)
     {
@@ -149,7 +149,7 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
     else
       {
       // MS, ordered as B0, B1, B2, B3
-      double defaultRadiance[4] =
+      const double defaultRadiance[4] =
         {
           1915.01,
           1830.57,
