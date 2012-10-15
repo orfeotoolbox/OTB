@@ -235,7 +235,7 @@ private:
  *  this class evaluates an ImageFunction (set by SetDescriptorsFunction()) at each point of the vector data
  *  over the image.
  *  It generates a ListSample containing the descriptors values for each sample,
- *  along with a label ListSample containing the label associatged with each sample.
+ *  along with a label ListSample containing the label associated with each sample.
  *  The label is read from the vector data using the data field "Class", read as an int
  *
  *  This class is streaming capable and multithreaded
