@@ -65,7 +65,6 @@ ListSampleGenerator<TImage, TVectorData>
   m_MaxValidationSize(-1),
   m_ValidationTrainingProportion(0.0),
   m_PolygonEdgeInclusion(false),
-  m_NumberOfClasses(0),
   m_ClassKey("Class"),
   m_ClassMinSize(-1)
 {
@@ -280,13 +279,11 @@ ListSampleGenerator<TImage, TVectorData>
       }
 
     m_ClassMinSize = minSize;
-    m_NumberOfClasses = m_ClassesSize.size();
     }
   else
     {
     otbWarningMacro("no polygon found");
     m_ClassMinSize = 0;
-    m_NumberOfClasses = 0;
     }
 }
 
