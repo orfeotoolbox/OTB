@@ -1902,26 +1902,15 @@ PleiadesImageMetadataInterface
     {
     itkExceptionMacro(<< "Invalid number of bands...");
     }
-
-  for (unsigned int k = 0; k < nbBands; ++k)
-    {
-    wavelengthSpectralBand->PushBack(FilterFunctionValues::New());
-    }
   
   unsigned int j = 0;
   for (std::list <std::vector<float> >::const_iterator it = tmpSpectralBandList.begin(); it != tmpSpectralBandList.end(); ++it)
     {
-    for (unsigned int k = 0; k < nbBands; ++k)
-      {
-      if (this->BandIndexToWavelengthPosition(k) == j)
-        {
-        wavelengthSpectralBand->GetNthElement(k)->SetFilterFunctionValues(*it);
-        wavelengthSpectralBand->GetNthElement(k)->SetMinSpectralValue(0.430);
-        wavelengthSpectralBand->GetNthElement(k)->SetMaxSpectralValue(0.950);
-        wavelengthSpectralBand->GetNthElement(k)->SetUserStep(0.0025);
-        break;
-        }
-      }
+    wavelengthSpectralBand->PushBack(FilterFunctionValues::New());
+    wavelengthSpectralBand->GetNthElement(j)->SetFilterFunctionValues(*it);
+    wavelengthSpectralBand->GetNthElement(j)->SetMinSpectralValue(0.430);
+    wavelengthSpectralBand->GetNthElement(j)->SetMaxSpectralValue(0.950);
+    wavelengthSpectralBand->GetNthElement(j)->SetUserStep(0.0025);
     ++j;
     }
 
