@@ -126,19 +126,6 @@ ListSampleGenerator<TImage, TVectorData>
   return static_cast<const VectorDataType *>(this->ProcessObject::GetInput(1));
 }
 
-
-/**
- *
- */
-//template < class TImage, class TVectorData >
-//typename ListSampleGenerator<TImage, TVectorData>::DataObjectPointer
-//ListSampleGenerator<TImage, TVectorData>
-//::MakeOutput(unsigned int itkNotUsed(idx))
-//{
-//  typename ListSampleType::Pointer listSample = ListSampleType::New();
-//  return static_cast<itk::DataObject*>(listSample);
-//}
-
 /**
  *
  */
