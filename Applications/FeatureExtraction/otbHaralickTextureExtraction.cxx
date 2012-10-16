@@ -34,11 +34,11 @@ namespace otb
 namespace Wrapper
 {
 
-class TextureExtraction : public Application
+class HaralickTextureExtraction : public Application
 {
 public:
 /** Standard class typedefs. */
-typedef TextureExtraction             Self;
+typedef HaralickTextureExtraction     Self;
 typedef Application                   Superclass;
 typedef itk::SmartPointer<Self>       Pointer;
 typedef itk::SmartPointer<const Self> ConstPointer;
@@ -60,18 +60,18 @@ typedef ImageListToVectorImageFilter<ImageListType, FloatVectorImageType>      I
 /** Standard macro */
 itkNewMacro(Self);
 
-itkTypeMacro(TextureExtraction, otb::Application);
+itkTypeMacro(HaralickTextureExtraction, otb::Application);
 
 private:
 
 void DoInit()
 {
-SetName("TextureExtraction");
+SetName("HaralickTextureExtraction");
 SetDescription("Computes textures on every pixel of the input image selected channel");
 
 // Documentation
-SetDocName("Texture Extraction");
-SetDocLongDescription("This application computes Haralick, advanced an higher order texture on a mono band image");
+SetDocName("Haralick Texture Extraction");
+SetDocLongDescription("This application computes Haralick, advanced an higher order textures on a mono band image");
 SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otbScalarImageToTexturesFilter, otbScalarImageToAdvancedTexturesFilter and otbScalarImageToHigherOrderTexturesFilter classes");
@@ -162,6 +162,13 @@ void DoUpdateParameters()
 void DoExecute()
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+  inImage->UpdateOutputInformation();
+
+  if( GetParameterInt("channel") > inImage->GetNumberOfComponentsPerPixel() )
+    {
+    otbAppLogCRITICAL("Selected band is not available...");
+    return;
+    }
 
   RadiusType radius;
   radius[0] = GetParameterInt("parameters.xrad");
@@ -272,4 +279,4 @@ ImageListToVectorImageFilterType::Pointer m_HigConcatener;
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::TextureExtraction)
+OTB_APPLICATION_EXPORT(otb::Wrapper::HaralickTextureExtraction)

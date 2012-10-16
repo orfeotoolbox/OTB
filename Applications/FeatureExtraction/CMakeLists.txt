@@ -3,8 +3,8 @@ OTB_CREATE_APPLICATION(NAME LineSegmentDetection
                        SOURCES otbLineSegmentDetection.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
                        
-OTB_CREATE_APPLICATION(NAME TextureExtraction
-                       SOURCES otbTextureExtraction.cxx
+OTB_CREATE_APPLICATION(NAME HaralickTextureExtraction
+                       SOURCES otbHaralickTextureExtraction.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
                        
 #OTB_CREATE_APPLICATION(NAME ComputeImageFeatures
