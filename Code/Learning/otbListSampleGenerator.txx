@@ -65,7 +65,9 @@ ListSampleGenerator<TImage, TVectorData>
   m_MaxValidationSize(-1),
   m_ValidationTrainingProportion(0.0),
   m_PolygonEdgeInclusion(false),
-  m_ClassKey("Class")
+  m_NumberOfClasses(0),
+  m_ClassKey("Class"),
+  m_ClassMinSize(-1)
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
@@ -232,12 +234,10 @@ ListSampleGenerator<TImage, TVectorData>
           }
         }
       }
-    
     }
 
   assert(m_TrainingListSample->Size() == m_TrainingListLabel->Size());
   assert(m_ValidationListSample->Size() == m_ValidationListLabel->Size());
-
 }
 
 template <class TImage, class TVectorData>
@@ -261,7 +261,7 @@ ListSampleGenerator<TImage, TVectorData>
       m_ClassesSize[datanode->GetFieldAsInt(m_ClassKey)] += area;
       }
     }
-
+  m_NumberOfClasses = m_ClassesSize.size();
 }
 
 template <class TImage, class TVectorData>

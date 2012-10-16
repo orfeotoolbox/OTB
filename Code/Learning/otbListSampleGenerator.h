@@ -169,8 +169,10 @@ private:
   bool           m_PolygonEdgeInclusion; // if true take into consideration pixel which are on polygon edge
                                            //  useful, when dealing with small polygon area (1 or two pixels)
                                            // false by default
+  unsigned short m_NumberOfClasses;
   std::string    m_ClassKey;
-
+  double         m_ClassMinSize;
+  
   ListSamplePointerType m_TrainingListSample;
   ListLabelPointerType  m_TrainingListLabel;
   ListSamplePointerType m_ValidationListSample;
