@@ -173,16 +173,31 @@ ListSampleGenerator<TImage, TVectorData>
 
   m_ClassesSamplesNumberTraining.clear();
   m_ClassesSamplesNumberValidation.clear();
+  
+  typename ImageType::RegionType imageLargestRegion = image->GetLargestPossibleRegion();
+  
+  typedef typename VectorDataType::DataNodeType         DataNodeType;
+  typedef typename DataNodeType::PolygonType            PolygonType;
+  typedef typename DataNodeType::PolygonPointerType     PolygonPointerType;
+  typedef typename DataNodeType::PolygonListType        PolygonListType;
+  typedef typename DataNodeType::PolygonListPointerType PolygonListPointerType;
 
   TreeIteratorType itVector(vectorData->GetDataTree());
-  itVector.GoToBegin();
-  while (!itVector.IsAtEnd())
+  for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
     {
     if (itVector.Get()->IsPolygonFeature())
       {
+      PolygonPointerType exteriorRing = itVector.Get()->GetPolygonExteriorRing();
+
       typename ImageType::RegionType polygonRegion =
-        otb::TransformPhysicalRegionToIndexRegion(itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion(),
+        otb::TransformPhysicalRegionToIndexRegion(exteriorRing->GetBoundingRegion(),
                                                   image.GetPointer());
+
+      const bool hasIntersection = polygonRegion.Crop(imageLargestRegion);
+      if (!hasIntersection)
+      {
+        continue;
+      }
 
       image->SetRequestedRegion(polygonRegion);
       image->PropagateRequestedRegion();
@@ -190,14 +205,34 @@ ListSampleGenerator<TImage, TVectorData>
 
       typedef itk::ImageRegionConstIteratorWithIndex<ImageType> IteratorType;
       IteratorType it(image, polygonRegion);
-      it.GoToBegin();
-      while (!it.IsAtEnd())
+      
+      for (it.GoToBegin(); !it.IsAtEnd(); ++it)
         {
         itk::ContinuousIndex<double, 2> point;
         image->TransformIndexToPhysicalPoint(it.GetIndex(), point);
-        if (itVector.Get()->GetPolygonExteriorRing()->IsInside(point) ||
-             (itVector.Get()->GetPolygonExteriorRing()->IsOnEdge(point) && (this->GetPolygonEdgeInclusion())))
+        
+        if (exteriorRing->IsInside(point) ||
+             (exteriorRing->IsOnEdge(point) && (this->GetPolygonEdgeInclusion())))
           {
+          PolygonListPointerType interiorRings = itVector.Get()->GetPolygonInteriorRings();
+
+          bool isInsideInteriorRing = false;
+          for (typename PolygonListType::Iterator interiorRing = interiorRings->Begin();
+               interiorRing != interiorRings->End();
+               ++interiorRing)
+            {
+            if ( interiorRing.Get()->IsInside(point)
+                 || (interiorRing.Get()->IsOnEdge(point) && this->GetPolygonEdgeInclusion()) )
+              {
+              isInsideInteriorRing = true;
+              break;
+              }
+            }
+          if (isInsideInteriorRing)
+            {
+            continue; // skip this pixel and continue
+            }
+              
           double randomValue = m_RandomGenerator->GetUniformVariate(0.0, 1.0);
           if (randomValue < m_ClassesProbTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)])
             {
@@ -216,10 +251,9 @@ ListSampleGenerator<TImage, TVectorData>
             }
           //Note: some samples may not be used at all
           }
-        ++it;
         }
       }
-    ++itVector;
+    
     }
 
   assert(m_TrainingListSample->Size() == m_TrainingListLabel->Size());
@@ -236,7 +270,13 @@ ListSampleGenerator<TImage, TVectorData>
 
   //Compute pixel area:
   typename ImageType::Pointer image = const_cast<ImageType*> (this->GetInput());
-  double pixelArea = vcl_abs(image->GetSpacing()[0] * image->GetSpacing()[1]);
+  const double pixelArea = vcl_abs(image->GetSpacing()[0] * image->GetSpacing()[1]);
+  
+  typedef typename VectorDataType::DataNodeType         DataNodeType;
+  typedef typename DataNodeType::PolygonType            PolygonType;
+  typedef typename DataNodeType::PolygonPointerType     PolygonPointerType;
+  typedef typename DataNodeType::PolygonListType        PolygonListType;
+  typedef typename DataNodeType::PolygonListPointerType PolygonListPointerType;
 
   typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
   TreeIteratorType itVector(vectorData->GetDataTree());
@@ -245,6 +285,7 @@ ListSampleGenerator<TImage, TVectorData>
     {
     if (itVector.Get()->IsPolygonFeature())
       {
+      
       m_ClassesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] += itVector.Get()->GetPolygonExteriorRing()->GetArea()
           / pixelArea; // in pixel
       }
