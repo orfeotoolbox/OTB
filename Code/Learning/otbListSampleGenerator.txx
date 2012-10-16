@@ -280,8 +280,7 @@ ListSampleGenerator<TImage, TVectorData>
 
   typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
   TreeIteratorType itVector(vectorData->GetDataTree());
-  itVector.GoToBegin();
-  while (!itVector.IsAtEnd())
+  for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
     {
     if (itVector.Get()->IsPolygonFeature())
       {
@@ -289,21 +288,20 @@ ListSampleGenerator<TImage, TVectorData>
       m_ClassesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] += itVector.Get()->GetPolygonExteriorRing()->GetArea()
           / pixelArea; // in pixel
       }
-    ++itVector;
     }
 
   if (!m_ClassesSize.empty())
     {
-    std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
-    double minSize = itmap->second;
-    ++itmap;
-    while (itmap != m_ClassesSize.end())
+    double minSize = itk::NumericTraits<double>::max();
+
+    for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
+         itmap != m_ClassesSize.end();
+         ++itmap)
       {
       if (minSize > itmap->second)
         {
         minSize = itmap->second;
         }
-      ++itmap;
       }
 
     m_ClassMinSize = minSize;
