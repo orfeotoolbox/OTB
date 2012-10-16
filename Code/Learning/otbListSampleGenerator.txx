@@ -146,8 +146,8 @@ ListSampleGenerator<TImage, TVectorData>
 
   VectorDataPointerType vectorData = const_cast<VectorDataType*>(this->GetInputVectorData());
 
-  //Gather some information about the relative size of the classes
-  //we would like to have the same number of samples per class
+  // Gather some information about the relative size of the classes
+  // We would like to have the same number of samples per class
   this->GenerateClassStatistics();
 
   this->ComputeClassSelectionProbability();
