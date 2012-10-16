@@ -40,7 +40,8 @@ namespace otb
  *  Classes are specified by the VectorData with a metadata identified by
  *  a specific key. This key can be provided by the SetClassKey() method
  *  (using "Class" as a default key).
-
+ *
+ *  The input VectorData is supposed to be fully contained within the image extent
  *
  */
 template <class TImage, class TVectorData>
@@ -66,9 +67,7 @@ public:
   typedef typename ImageType::RegionType   ImageRegionType;
   typedef TVectorData                      VectorDataType;
   typedef typename VectorDataType::Pointer VectorDataPointerType;
-
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
-
+  
   /** List to store the pixel values */
   typedef typename ImageType::PixelType           SampleType;
   typedef itk::Statistics::ListSample<SampleType> ListSampleType;
@@ -148,7 +147,19 @@ private:
   ListSampleGenerator(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  typedef typename VectorDataType::DataNodeType         DataNodeType;
+  typedef typename DataNodeType::PolygonType            PolygonType;
+  typedef typename DataNodeType::PolygonPointerType     PolygonPointerType;
+  typedef typename DataNodeType::PolygonListType        PolygonListType;
+  typedef typename DataNodeType::PolygonListPointerType PolygonListPointerType;
+  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
+  
   void ComputeClassSelectionProbability();
+  
+  // Crop the polygon wrt the image largest region,
+  // and return the resulting size in pixel units
+  // This does not handle interior rings
+  double GetPolygonAreaInPixelsUnits(DataNodeType* polygonDataNode, ImageType* image);
 
   long int m_MaxTrainingSize; // number of training samples (-1 = no limit)
   long int m_MaxValidationSize; // number of validation samples (-1 = no limit)

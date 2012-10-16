@@ -163,12 +163,6 @@ ListSampleGenerator<TImage, TVectorData>
   
   typename ImageType::RegionType imageLargestRegion = image->GetLargestPossibleRegion();
   
-  typedef typename VectorDataType::DataNodeType         DataNodeType;
-  typedef typename DataNodeType::PolygonType            PolygonType;
-  typedef typename DataNodeType::PolygonPointerType     PolygonPointerType;
-  typedef typename DataNodeType::PolygonListType        PolygonListType;
-  typedef typename DataNodeType::PolygonListPointerType PolygonListPointerType;
-
   TreeIteratorType itVector(vectorData->GetDataTree());
   for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
     {
@@ -255,28 +249,22 @@ ListSampleGenerator<TImage, TVectorData>
 {
   m_ClassesSize.clear();
 
-  //Compute pixel area:
-  typename ImageType::Pointer image = const_cast<ImageType*> (this->GetInput());
-  const double pixelArea = vcl_abs(image->GetSpacing()[0] * image->GetSpacing()[1]);
-  
-  typedef typename VectorDataType::DataNodeType         DataNodeType;
-  typedef typename DataNodeType::PolygonType            PolygonType;
-  typedef typename DataNodeType::PolygonPointerType     PolygonPointerType;
-  typedef typename DataNodeType::PolygonListType        PolygonListType;
-  typedef typename DataNodeType::PolygonListPointerType PolygonListPointerType;
-
+  ImageType* image = const_cast<ImageType*> (this->GetInput());
   typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
+  
+  // Compute cumulative area of all polygons of each class
   TreeIteratorType itVector(vectorData->GetDataTree());
   for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
     {
-    if (itVector.Get()->IsPolygonFeature())
+    DataNodeType* datanode = itVector.Get();
+    if (datanode->IsPolygonFeature())
       {
-      
-      m_ClassesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] += itVector.Get()->GetPolygonExteriorRing()->GetArea()
-          / pixelArea; // in pixel
+      double area = GetPolygonAreaInPixelsUnits(datanode, image);
+      m_ClassesSize[datanode->GetFieldAsInt(m_ClassKey)] += area;
       }
     }
 
+  // Compute the class with the minimum number of pixels
   if (!m_ClassesSize.empty())
     {
     double minSize = itk::NumericTraits<double>::max();
@@ -351,7 +339,29 @@ ListSampleGenerator<TImage, TVectorData>
     {
     m_ClassesProbValidation[itmap->first] = minSizeValidation / itmap->second;
     }
+}
 
+template <class TImage, class TVectorData>
+double
+ListSampleGenerator<TImage, TVectorData>
+::GetPolygonAreaInPixelsUnits(DataNodeType* polygonDataNode, ImageType* image)
+{
+  const double pixelArea = vcl_abs(image->GetSpacing()[0] * image->GetSpacing()[1]);
+  
+  // Compute area of exterior ring in pixels
+  PolygonPointerType exteriorRing = polygonDataNode->GetPolygonExteriorRing();
+  double area = exteriorRing->GetArea() / pixelArea;
+  
+  // Remove contribution of all interior rings
+  PolygonListPointerType interiorRings = polygonDataNode->GetPolygonInteriorRings();
+  for (typename PolygonListType::Iterator interiorRing = interiorRings->Begin();
+      interiorRing != interiorRings->End();
+      ++interiorRing)
+  {
+    area -= interiorRing.Get()->GetArea() / pixelArea;
+  }
+  
+  return area;
 }
 
 template <class TImage, class TVectorData>
