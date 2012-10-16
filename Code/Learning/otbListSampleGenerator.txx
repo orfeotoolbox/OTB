@@ -299,17 +299,7 @@ ListSampleGenerator<TImage, TVectorData>
   m_ClassesProbValidation.clear();
 
   //Go through the classes size to find the smallest one
-  double minSizeTraining = -1;
-  for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
-       itmap != m_ClassesSize.end();
-       ++itmap)
-    {
-    if ((minSizeTraining < 0) || (minSizeTraining > itmap->second))
-      {
-      minSizeTraining = itmap->second;
-      }
-    }
-
+  double minSizeTraining = m_ClassMinSize;
   double minSizeValidation = minSizeTraining;
 
   //Apply the proportion between training and validation samples (all training by default)
