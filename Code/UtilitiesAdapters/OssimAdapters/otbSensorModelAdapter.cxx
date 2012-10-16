@@ -245,4 +245,41 @@ double SensorModelAdapter::Optimize()
   return precision;
 }
 
+bool SensorModelAdapter::ReadGeomFile(const std::string & infile)
+{
+  ossimKeywordlist geom;
+
+  geom.add(infile.c_str());
+  
+  m_SensorModel = ossimSensorModelFactory::instance()->createProjection(geom);
+  
+  if (m_SensorModel == NULL)
+    {
+    m_SensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
+    }
+  
+  return (m_SensorModel != NULL);
+}
+
+bool SensorModelAdapter::WriteGeomFile(const std::string & outfile)
+{
+  // If tie points and model are allocated
+  if(m_SensorModel != NULL)
+    {
+    // try to retrieve a sensor model
+    ossimSensorModel * sensorModel = NULL;
+    sensorModel = dynamic_cast<ossimSensorModel *>(m_SensorModel);
+
+    ossimKeywordlist geom;
+
+    bool success = sensorModel->saveState(geom);
+
+    if(success)
+      {
+      return geom.write(outfile.c_str());
+      }
+    }
+  return false;
+}
+
 } // namespace otb
