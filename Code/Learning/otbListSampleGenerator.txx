@@ -282,8 +282,7 @@ ListSampleGenerator<TImage, TVectorData>
     }
   else
     {
-    otbWarningMacro("no polygon found");
-    m_ClassMinSize = 0;
+    itkGenericExceptionMacro(<< "No training sample found inside image")
     }
 }
 
