@@ -170,7 +170,6 @@ private:
                                            //  useful, when dealing with small polygon area (1 or two pixels)
                                            // false by default
   std::string    m_ClassKey;
-  double         m_ClassMinSize;
 
   ListSamplePointerType m_TrainingListSample;
   ListLabelPointerType  m_TrainingListLabel;

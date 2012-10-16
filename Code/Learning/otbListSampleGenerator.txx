@@ -65,8 +65,7 @@ ListSampleGenerator<TImage, TVectorData>
   m_MaxValidationSize(-1),
   m_ValidationTrainingProportion(0.0),
   m_PolygonEdgeInclusion(false),
-  m_ClassKey("Class"),
-  m_ClassMinSize(-1)
+  m_ClassKey("Class")
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
@@ -263,27 +262,6 @@ ListSampleGenerator<TImage, TVectorData>
       }
     }
 
-  // Compute the class with the minimum number of pixels
-  if (!m_ClassesSize.empty())
-    {
-    double minSize = itk::NumericTraits<double>::max();
-
-    for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
-         itmap != m_ClassesSize.end();
-         ++itmap)
-      {
-      if (minSize > itmap->second)
-        {
-        minSize = itmap->second;
-        }
-      }
-
-    m_ClassMinSize = minSize;
-    }
-  else
-    {
-    itkGenericExceptionMacro(<< "No training sample found inside image")
-    }
 }
 
 template <class TImage, class TVectorData>
@@ -293,16 +271,30 @@ ListSampleGenerator<TImage, TVectorData>
 {
   m_ClassesProbTraining.clear();
   m_ClassesProbValidation.clear();
+  
+  // Sanity check
+  if (m_ClassesSize.empty())
+    {
+    itkGenericExceptionMacro(<< "No training sample found inside image");
+    }
 
-  //Go through the classes size to find the smallest one
-  double minSizeTraining = m_ClassMinSize;
-  double minSizeValidation = minSizeTraining;
+  // Go through the classes size to find the smallest one
+  double minSize = itk::NumericTraits<double>::max();
+  for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
+        itmap != m_ClassesSize.end();
+        ++itmap)
+    {
+    if (minSize > itmap->second)
+      {
+      minSize = itmap->second;
+      }
+    }
 
-  //Apply the proportion between training and validation samples (all training by default)
-  minSizeTraining *= (1.0 - m_ValidationTrainingProportion);
-  minSizeValidation *= m_ValidationTrainingProportion;
+  // Apply the proportion between training and validation samples (all training by default)
+  double minSizeTraining   = minSize * (1.0 - m_ValidationTrainingProportion);
+  double minSizeValidation = minSize * m_ValidationTrainingProportion;
 
-  //Apply the limit if specified by the user
+  // Apply the limit if specified by the user
   if ((m_MaxTrainingSize != -1) && (m_MaxTrainingSize < minSizeTraining))
     {
     minSizeTraining = m_MaxTrainingSize;
@@ -312,7 +304,7 @@ ListSampleGenerator<TImage, TVectorData>
     minSizeValidation = m_MaxValidationSize;
     }
 
-  //Compute the probability selection for each class
+  // Compute the probability selection for each class
   for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
        itmap != m_ClassesSize.end();
        ++itmap)
