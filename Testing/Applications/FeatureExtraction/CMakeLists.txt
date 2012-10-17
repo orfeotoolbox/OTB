@@ -23,10 +23,21 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME  apTvFEHaralickTextureExtraction
                      APP  HaralickTextureExtraction
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif                             -channel 1 
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif                             
+                             -channel 1 
                              -har.out ${TEMP}/apTvFEHaralickTextureExtraction.tif
                              -parameters.min 127
                              -parameters.max 1578
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFEHaralickTextureExtraction.tif
                  		     ${TEMP}/apTvFEHaralickTextureExtraction.tif)
+                 		     
+OTB_TEST_APPLICATION(NAME  apTvFESFSTextureExtraction
+                     APP  SFSTextureExtraction
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif                             
+                             -channel 1 
+                             -out ${TEMP}/apTvFESFSTextureExtraction.tif
+                     VALID   --compare-image ${NOTOL}
+                   			 ${BASELINE}/apTvFESFSTextureExtraction.tif
+                 		     ${TEMP}/apTvFESFSTextureExtraction.tif)
+                 		     
