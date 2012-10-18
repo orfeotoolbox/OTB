@@ -65,7 +65,7 @@ SetDocName("SFS Texture Extraction");
 SetDocLongDescription("This application computes SFS textures on a mono band image");
 SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
-SetDocSeeAlso("otbSFSTexturesImageFilter classe");
+SetDocSeeAlso("otbSFSTexturesImageFilter class");
 
 AddDocTag("Textures");
 AddDocTag(Tags::FeatureExtraction);
