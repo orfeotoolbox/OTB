@@ -120,38 +120,37 @@ AddParameter(ParameterType_Int,"parameters.nbbin","Histogram number of bin");
 SetParameterDescription("parameters.nbbin", "Histogram number of bin");
 SetDefaultParameterInt("parameters.nbbin", 8);
 
-AddParameter(ParameterType_Group, "har", "Haralick Texture Features");
-SetParameterDescription("har","This group of parameters defines the 8 local Haralick texture feature output image.\
+AddParameter(ParameterType_Choice, "texture", "Texture Set Selection");
+SetParameterDescription("texture", "Choice of The Texture Set");
+
+AddChoice("texture.simple", "Simple Haralick Texture Features");
+SetParameterDescription("texture.simple","This group of parameters defines the 8 local Haralick texture feature output image.\
     The image channels are: Energy, Entropy, Correlation, Inverse Difference Moment,\
     Inertia, Cluster Shade, Cluster Prominence and Haralick Correlation");
-AddParameter(ParameterType_OutputImage, "har.out", "8 Local Haralick Texture Feature Output Image");
-SetParameterDescription("har.out", "Output image containing the Haralick texture features.");
-MandatoryOff("har.out");
-EnableParameter("har.out");
 
-AddParameter(ParameterType_Group, "adv", "Advanced Texture Features");
-SetParameterDescription("adv","This group of parameters defines the 9 advanced texture feature output image.\
+AddChoice("texture.advanced", "Advanced Texture Features");
+SetParameterDescription("texture.advanced","This group of parameters defines the 9 advanced texture feature output image.\
     The image channels are: Mean, Variance, Sum Average, Sum Variance,\
     Sum Entropy, Difference of Entropies, Difference of Variances, IC1 and IC2");
-AddParameter(ParameterType_OutputImage, "adv.out", "Advanced Texture Feature Output Image");
-SetParameterDescription("adv.out", "Output image containing the advanced texture features.");
-MandatoryOff("adv.out");
 
-AddParameter(ParameterType_Group, "hig", "Higher Order Texture Features");
-SetParameterDescription("hig","This group of parameters defines the 11 higher order texture feature output image.\
+AddChoice("texture.higher", "Higher Order Texture Features");
+SetParameterDescription("texture.higher","This group of parameters defines the 11 higher order texture feature output image.\
     The image channels are: Short Run Emphasis, Long Run Emphasis, Grey-Level Nonuniformity, Run Length Nonuniformity, Run Percentage, \
     Low Grey-Level Run Emphasis, High Grey-Level Run Emphasis, Short Run Low Grey-Level Emphasis, Short Run High Grey-Level Emphasis, \
     Long Run Low Grey-Level Emphasis and Long Run High Grey-Level Emphasis");
-AddParameter(ParameterType_OutputImage, "hig.out", "11 Local Higher Order Texture Feature Output Image");
-SetParameterDescription("hig.out", "Output image containing the higher order texture features.");
-MandatoryOff("hig.out");
+
+AddParameter(ParameterType_OutputImage, "out", "Output Image");
+SetParameterDescription("out", "Output image containing the selected texture features.");
+MandatoryOff("out");
+EnableParameter("out");
+
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
 SetDocExampleParameterValue("channel", "2");
 SetDocExampleParameterValue("parameters.xrad", "3");
 SetDocExampleParameterValue("parameters.yrad", "3");
-SetDocExampleParameterValue("har.out", "HaralickTextures.tif");
+SetDocExampleParameterValue("texture.simple", "HaralickTextures.tif");
 }
 
 void DoUpdateParameters()
@@ -170,6 +169,8 @@ void DoExecute()
     return;
     }
 
+  const std::string texType = GetParameterString("texture");
+
   RadiusType radius;
   radius[0] = GetParameterInt("parameters.xrad");
   radius[1] = GetParameterInt("parameters.yrad");
@@ -187,19 +188,19 @@ void DoExecute()
   m_ExtractorFilter->SetChannel(GetParameterInt("channel"));
   m_ExtractorFilter->UpdateOutputInformation();
 
-  m_HarTexFilter = HarTexturesFilterType::New();
+  m_HarTexFilter    = HarTexturesFilterType::New();
   m_HarImageList    = ImageListType::New();
   m_HarConcatener   = ImageListToVectorImageFilterType::New();
 
-  m_AdvTexFilter = AdvTexturesFilterType::New();
+  m_AdvTexFilter  = AdvTexturesFilterType::New();
   m_AdvImageList  = ImageListType::New();
   m_AdvConcatener = ImageListToVectorImageFilterType::New();
 
-  m_HigTexFilter = HigTexturesFilterType::New();
+  m_HigTexFilter  = HigTexturesFilterType::New();
   m_HigImageList  = ImageListType::New();
   m_HigConcatener = ImageListToVectorImageFilterType::New();
 
-  if( this->HasValue("har.out") )
+  if( texType == "simple" )
     {
     m_HarTexFilter->SetInput(const_cast<FloatImageType*>(m_ExtractorFilter->GetOutput()));
     m_HarTexFilter->SetRadius(radius);
@@ -217,10 +218,10 @@ void DoExecute()
     m_HarImageList->PushBack(m_HarTexFilter->GetClusterProminenceOutput());
     m_HarImageList->PushBack(m_HarTexFilter->GetHaralickCorrelationOutput());
     m_HarConcatener->SetInput(m_HarImageList);
-    SetParameterOutputImage("har.out", m_HarConcatener->GetOutput());
+    SetParameterOutputImage("out", m_HarConcatener->GetOutput());
     }
 
-  if( this->HasValue("adv.out") )
+  if( texType == "advanced" )
     {
     m_AdvTexFilter->SetInput(const_cast<FloatImageType*>(m_ExtractorFilter->GetOutput()));
     m_AdvTexFilter->SetRadius(radius);
@@ -238,10 +239,10 @@ void DoExecute()
     m_AdvImageList->PushBack(m_AdvTexFilter->GetIC1Output());
     m_AdvImageList->PushBack(m_AdvTexFilter->GetIC2Output());
     m_AdvConcatener->SetInput(m_AdvImageList);
-    SetParameterOutputImage("adv.out", m_AdvConcatener->GetOutput());
+    SetParameterOutputImage("out", m_AdvConcatener->GetOutput());
     }
 
-  if( this->HasValue("hig.out") )
+  if( texType == "higher" )
     {
     m_HigTexFilter->SetInput(const_cast<FloatImageType*>(m_ExtractorFilter->GetOutput()));
     m_HigTexFilter->SetRadius(radius);
@@ -261,11 +262,12 @@ void DoExecute()
     m_HigImageList->PushBack(m_HigTexFilter->GetLongRunLowGreyLevelEmphasisOutput());
     m_HigImageList->PushBack(m_HigTexFilter->GetLongRunHighGreyLevelEmphasisOutput());
     m_HigConcatener->SetInput(m_HigImageList);
-    SetParameterOutputImage("hig.out", m_HigConcatener->GetOutput());
+    SetParameterOutputImage("out", m_HigConcatener->GetOutput());
     }
 
 }
 ExtractorFilterType::Pointer m_ExtractorFilter;
+
 HarTexturesFilterType::Pointer            m_HarTexFilter;
 ImageListType::Pointer                    m_HarImageList;
 ImageListToVectorImageFilterType::Pointer m_HarConcatener;
