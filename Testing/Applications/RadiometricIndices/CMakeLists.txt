@@ -25,6 +25,9 @@ OTB_TEST_APPLICATION(NAME  apTvRIRadiometricWaterIndices
 OTB_TEST_APPLICATION(NAME  apTvRIRadiometricIndices_veg
                      APP  RadiometricIndices
                      OPTIONS -in ${INPUTDATA}/veryverySmallFSATSW.tif
+                     		 -channels.red 3
+                     		 -channels.green 2
+                     		 -channels.nir 4
                              -list Vegetation:NDVI Vegetation:RVI Vegetation:IPVI
                              -out ${TEMP}/apTvRIRadiometricIndices_veg.tif
                      VALID   --compare-image ${NOTOL}
@@ -35,6 +38,9 @@ OTB_TEST_APPLICATION(NAME  apTvRIRadiometricIndices_wat
                      APP  RadiometricIndices
                      OPTIONS -in ${INPUTDATA}/veryverySmallFSATSW.tif
                              -list Water:NDWI2
+                             -channels.red 3
+                     		 -channels.green 2
+                     		 -channels.nir 4
                              -out ${TEMP}/apTvRIRadiometricIndices_wat.tif
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvRIRadiometricWaterIndices_.tif
