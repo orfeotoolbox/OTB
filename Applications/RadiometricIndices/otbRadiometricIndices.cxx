@@ -175,10 +175,27 @@ private:
     //SetParameterDescription("channels.rho1240", "1240nm band channel index");
     //SetDefaultParameterInt("channels.rho1240", 1);
 
-    //AddParameter(ParameterType_Group, "index", "Indices selection");
     AddParameter(ParameterType_ListView,  "list", "Available Radiometric Indices");
-    SetParameterDescription("list","List of available radiometric indices.");
-
+    SetParameterDescription("list","List of available radiometric indices.\
+        Vegetation:NDVI - Normalized difference vegetation index\
+        Vegetation:TNDVI - Transformed normalized difference vegetation index\
+        Vegetation:RVI - Ratio vegetation index\
+        Vegetation:SAVI - Soil adjusted vegetation index\
+        Vegetation:TSAVI - Transformed soil adjusted vegetation index\
+        Vegetation:MSAVI - Modified soil adjusted vegetation index\
+        Vegetation:MSAVI2 - Modified soil adjusted vegetation index 2\
+        Vegetation:GEMI - Global environment monitoring index\
+        Vegetation:IPVI - Infrared percentage vegetation index\
+        Water:NDWI - Normalized difference water index (Gao 1996)\
+        Water:NDWI2 - Normalized difference water index (Mc Feeters 1996)\
+        Water:MNDWI - Modified normalized difference water index (Xu 2006)\
+        Water:NDPI - Normalized difference pond index (Lacaux & al)\
+        Water:NDTI - Normalized difference turbidity index (Lacaux & al)\
+        Water:SRWI - Simple ratio water index\
+        Soil:RI - Redness index\
+        Soil:CI - Color index\
+        Soil:BI - Brightness index\
+        Soil:BI2 - Brightness index 2");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
