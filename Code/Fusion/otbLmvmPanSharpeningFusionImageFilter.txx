@@ -50,7 +50,8 @@ LmvmPanSharpeningFusionImageFilter
   m_Filter.Fill(1);
 
   // Instantiate fusion filter
-  m_FusionFilter = FusionFilterType::New();
+  m_FusionStep1Filter = FusionStep1FilterType::New();
+  m_FusionStep2Filter = FusionStep2FilterType::New();
 
   // Set-up progress reporting
   m_ProgressAccumulator = itk::ProgressAccumulator::New();
@@ -59,7 +60,8 @@ LmvmPanSharpeningFusionImageFilter
   m_ProgressAccumulator->RegisterInternalFilter(m_PanNoiseFilter, 0.2);
   m_ProgressAccumulator->RegisterInternalFilter(m_XsVectorConvolutionFilter, 0.2);
   m_ProgressAccumulator->RegisterInternalFilter(m_XsVectorNoiseFilter, 0.2);
-  m_ProgressAccumulator->RegisterInternalFilter(m_FusionFilter, 0.2);
+  m_ProgressAccumulator->RegisterInternalFilter(m_FusionStep1Filter, 0.1);
+  m_ProgressAccumulator->RegisterInternalFilter(m_FusionStep2Filter, 0.1);
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
@@ -151,17 +153,18 @@ LmvmPanSharpeningFusionImageFilter
   m_XsVectorNoiseFilter->SetFilter(m_XsNoiseFilter);
   
   
-  m_FusionFilter->SetInput1(this->GetXsInput());
-  m_FusionFilter->SetInput2(m_PanConvolutionFilter->GetOutput());
-  m_FusionFilter->SetInput3(m_XsVectorConvolutionFilter->GetOutput());
-  m_FusionFilter->SetInput4(m_XsVectorNoiseFilter->GetOutput());
-  m_FusionFilter->SetInput5(m_PanNoiseFilter->GetOutput());
-  m_FusionFilter->SetInput6(this->GetPanInput());
+  m_FusionStep1Filter->SetInput2(m_XsVectorNoiseFilter->GetOutput());
+  m_FusionStep1Filter->SetInput1(m_PanConvolutionFilter->GetOutput());
+  m_FusionStep1Filter->SetInput3(this->GetPanInput());
+  
+  m_FusionStep2Filter->SetInput1(m_FusionStep1Filter->GetOutput());
+  m_FusionStep2Filter->SetInput3(m_PanNoiseFilter->GetOutput());
+  m_FusionStep2Filter->SetInput2(m_XsVectorConvolutionFilter->GetOutput());
 
   // Wire composite filter
-  m_FusionFilter->GraftOutput(this->GetOutput());
-  m_FusionFilter->Update();
-  this->GraftOutput(m_FusionFilter->GetOutput());
+  m_FusionStep2Filter->GraftOutput(this->GetOutput());
+  m_FusionStep2Filter->Update();
+  this->GraftOutput(m_FusionStep2Filter->GetOutput());
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>

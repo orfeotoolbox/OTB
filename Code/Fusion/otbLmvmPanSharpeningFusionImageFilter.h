@@ -67,7 +67,8 @@ public:
     TPanImageType::ImageDimension>                InternalImageType;
     
   /** Single band Xs image type */
-  typedef otb::Image<TXsImageType::PixelType,
+  typedef typename TXsImageType::PixelType 	 XsPixelType;
+  typedef otb::Image<XsPixelType,
     TXsImageType::ImageDimension>                XsBandImageType;
   
   /** Internal image type used as Xs smoothing and local standard deviation filter output */
@@ -122,19 +123,38 @@ private:
    * This functor applies the LMVM
    * operation. It is intended for internal use only.
    */
-  class FusionFunctor
+  class FusionFunctor1
   {
   public:
     // Implement the fusion as a six arguments operator
-    typename TOutputImageType::PixelType operator()(const typename TXsImageType::PixelType& xsPixel,
-                                                    const TInternalPrecision& smoothPanchroPixel,
-						    const typename InternalVectorImageType::PixelType& smoothXsPixel,
+    typename TOutputImageType::PixelType operator()(const TInternalPrecision& smoothPanchroPixel,
 						    const typename InternalVectorImageType::PixelType& stdXsPixel,
-						    const TInternalPrecision& stdPanchroPixel,
                                                     const typename TPanImageType::PixelType& sharpPanchroPixel) const
     {
       // Build output pixel
-      typename TOutputImageType::PixelType output(xsPixel.Size());
+      typename TOutputImageType::PixelType output(stdXsPixel.Size());
+
+      // Perform fusion for each band with appropriate casting
+      for(unsigned int i = 0; i < stdXsPixel.Size(); ++i)
+        {
+        output[i] = static_cast<typename TOutputImageType::InternalPixelType>(
+          (sharpPanchroPixel - (smoothPanchroPixel * stdXsPixel[i])));
+        }
+      // Returns the output pixel
+      return output;
+    }
+  };
+  
+  class FusionFunctor2
+  {
+  public:
+    // Implement the fusion as a six arguments operator
+    typename TOutputImageType::PixelType operator()(const typename TOutputImageType::PixelType& functor1Pixel,
+                                                    const typename InternalVectorImageType::PixelType& smoothXsPixel,
+						    const TInternalPrecision& stdPanchroPixel) const
+    {
+      // Build output pixel
+      typename TOutputImageType::PixelType output(smoothXsPixel.Size());
 
       TInternalPrecision scale = 1.;
 
@@ -144,10 +164,10 @@ private:
       }
 
       // Perform fusion for each band with appropriate casting
-      for(unsigned int i = 0; i < xsPixel.Size(); ++i)
+      for(unsigned int i = 0; i < smoothXsPixel.Size(); ++i)
         {
         output[i] = static_cast<typename TOutputImageType::InternalPixelType>(
-          (((sharpPanchroPixel - (smoothPanchroPixel * stdXsPixel[i])) * scale) + smoothXsPixel[i]));
+          ((functor1Pixel[i] * scale) + smoothXsPixel[i]));
         }
       // Returns the output pixel
       return output;
@@ -158,17 +178,25 @@ private:
    *  Typedef of the TernaryFunctorImageFilter applying the fusion functor to
    *  p, p_smooth, p_std, xs_smooth, xs_std and xs.
    */
-  typedef itk::TernaryFunctorImageFilter<TXsImageType,
-                                         InternalImageType,
+  typedef itk::TernaryFunctorImageFilter<InternalImageType,
 					 InternalVectorImageType,
-					 InternalVectorImageType,
-                                         InternalImageType,
 					 TPanImageType,
                                          TOutputImageType,
-                                         FusionFunctor>     FusionFilterType;
+                                         FusionFunctor1>     FusionStep1FilterType;
 
   /** Pointer to the fusion filter */
-  typename FusionFilterType::Pointer      m_FusionFilter;
+  typename FusionStep1FilterType::Pointer      m_FusionStep1Filter;
+  
+  
+  typedef itk::TernaryFunctorImageFilter<TOutputImageType,
+                                         InternalVectorImageType,
+					 InternalImageType,
+					 TOutputImageType,
+                                         FusionFunctor2>     FusionStep2FilterType;
+
+  /** Pointer to the fusion filter */
+  typename FusionStep1FilterType::Pointer      m_FusionStep2Filter;
+  
 
   /** Typedef of the convolution filter performing Pan smoothing */
   typedef otb::ConvolutionImageFilter
