@@ -67,7 +67,7 @@ public:
     TPanImageType::ImageDimension>                InternalImageType;
     
   /** Single band Xs image type */
-  typedef typename TXsImageType::PixelType 	 XsPixelType;
+  typedef typename TXsImageType::InternalPixelType  XsPixelType;
   typedef otb::Image<XsPixelType,
     TXsImageType::ImageDimension>                XsBandImageType;
   
