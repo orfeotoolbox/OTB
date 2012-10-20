@@ -195,7 +195,7 @@ private:
                                          FusionFunctor2>     FusionStep2FilterType;
 
   /** Pointer to the fusion filter */
-  typename FusionStep1FilterType::Pointer      m_FusionStep2Filter;
+  typename FusionStep2FilterType::Pointer      m_FusionStep2Filter;
   
 
   /** Typedef of the convolution filter performing Pan smoothing */
