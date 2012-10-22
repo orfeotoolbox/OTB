@@ -483,7 +483,7 @@ private:
   void DoExecute()
   {
 
-    unsigned int nbChan = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
+    int nbChan = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
 
     if (   (this->GetParameterInt("channels.blue")  <= nbChan)
         && (this->GetParameterInt("channels.green") <= nbChan)
