@@ -86,6 +86,12 @@ public:
   /** Is sensor model valid method. return false if the m_SensorModel is null*/
   bool IsValidSensorModel();
 
+  /** Read geom file and instanciate sensor model */
+  bool ReadGeomFile(const std::string & infile);
+  
+  /** Write geom file corresponding to sensor model */
+  bool WriteGeomFile(const std::string& outfile);
+
 protected:
   SensorModelAdapter();
   virtual ~SensorModelAdapter();
