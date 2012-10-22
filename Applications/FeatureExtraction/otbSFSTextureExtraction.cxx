@@ -130,8 +130,7 @@ void DoExecute()
 
   if( GetParameterInt("channel") > nBComp )
     {
-    otbAppLogCRITICAL("Selected band is not available...");
-    return;
+    itkExceptionMacro(<< "The specified channel index is invalid.");
     }
 
   m_ExtractorFilter = ExtractorFilterType::New();

@@ -166,8 +166,7 @@ void DoExecute()
 
   if( GetParameterInt("channel") > nBComp )
     {
-    otbAppLogCRITICAL("Selected band is not available...");
-    return;
+    itkExceptionMacro(<< "The specified channel index is invalid.");
     }
 
   const std::string texType = GetParameterString("texture");

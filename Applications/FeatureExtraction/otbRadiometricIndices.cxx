@@ -568,7 +568,7 @@ private:
 
       if( m_ImageList->Size() == 0 )
         {
-        otbAppLogCRITICAL("No indices selected...");
+        itkExceptionMacro(<< "No indices selected...");
         }
 
       m_Concatener->SetInput( m_ImageList );
@@ -578,7 +578,7 @@ private:
       }
     else
       {
-      otbAppLogINFO("Wrong Band Number...");
+      itkExceptionMacro(<< "At least one needed channel has an invalid index");
       }
 
   }
