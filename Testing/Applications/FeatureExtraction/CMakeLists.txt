@@ -21,6 +21,30 @@ OTB_TEST_APPLICATION(NAME   apTvFeLineSegmentDetectionNoRescale
   
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+OTB_TEST_APPLICATION(NAME  apTvFERadiometricIndices_veg
+                     APP  RadiometricIndices
+                     OPTIONS -in ${INPUTDATA}/veryverySmallFSATSW.tif
+                     		 -channels.red 3
+                     		 -channels.green 2
+                     		 -channels.nir 4
+                             -list Vegetation:NDVI Vegetation:RVI Vegetation:IPVI
+                             -out ${TEMP}/apTvFERadiometricIndices_veg.tif
+                     VALID   --compare-image ${NOTOL}
+                   			 ${BASELINE}/apTvRIRadiometricVegetationIndices.tif
+                 		     ${TEMP}/apTvFERadiometricIndices_veg.tif)
+
+OTB_TEST_APPLICATION(NAME  apTvFERadiometricIndices_wat
+                     APP  RadiometricIndices
+                     OPTIONS -in ${INPUTDATA}/veryverySmallFSATSW.tif
+                             -list Water:NDWI2
+                             -channels.red 3
+                     		 -channels.green 2
+                     		 -channels.nir 4
+                             -out ${TEMP}/apTvFERadiometricIndices_wat.tif
+                     VALID   --compare-image ${NOTOL}
+                   			 ${BASELINE}/apTvRIRadiometricWaterIndices_.tif
+                 		     ${TEMP}/apTvFERadiometricIndices_wat.tif)
+
 OTB_TEST_APPLICATION(NAME  apTvFEHaralickTextureExtraction
                      APP  HaralickTextureExtraction
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif                             
