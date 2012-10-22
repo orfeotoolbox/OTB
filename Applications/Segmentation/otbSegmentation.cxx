@@ -141,7 +141,6 @@ public:
   LabeledConnectedComponentStreamingVectorizedSegmentationOGRType;
 
 
-
   typedef otb::OGRLayerStreamStitchingFilter
   <FloatVectorImageType>                  FusionFilterType;
 
