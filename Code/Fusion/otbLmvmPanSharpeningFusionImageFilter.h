@@ -138,7 +138,7 @@ private:
       for(unsigned int i = 0; i < stdXsPixel.Size(); ++i)
         {
         output[i] = static_cast<typename TOutputImageType::InternalPixelType>(
-          (sharpPanchroPixel - (smoothPanchroPixel * stdXsPixel[i])));
+          ((sharpPanchroPixel - smoothPanchroPixel) * stdXsPixel[i]));
         }
       // Returns the output pixel
       return output;
