@@ -29,6 +29,13 @@
 #include "otbVectorImageToAmplitudeImageFilter.h"
 #include "itkGradientMagnitudeImageFilter.h"
 #include "otbWatershedSegmentationFilter.h"
+#include "otbMultiScaleConvexOrConcaveClassificationFilter.h"
+#include "itkBinaryBallStructuringElement.h"
+#include "otbMorphologicalOpeningProfileFilter.h"
+#include "otbMorphologicalClosingProfileFilter.h"
+#include "otbProfileToProfileDerivativeFilter.h"
+#include "otbProfileDerivativeToMultiScaleCharacteristicsFilter.h"
+#include "itkScalarConnectedComponentImageFilter.h"
 
 // Large scale vectorization framework
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
@@ -38,7 +45,6 @@
 #include "otbOGRLayerStreamStitchingFilter.h"
 
 #include "otbGeoInformationConversion.h"
-
 namespace otb
 {
 namespace Wrapper
@@ -79,6 +85,11 @@ public:
    FunctorType,
    MaskImageType >                        ConnectedComponentSegmentationFilterType;
 
+  typedef itk::ScalarConnectedComponentImageFilter
+  <LabelImageType,
+   LabelImageType>                        LabeledConnectedComponentSegmentationFilterType;
+
+
   // Watershed
   typedef otb::VectorImageToAmplitudeImageFilter
   <FloatVectorImageType,
@@ -89,6 +100,18 @@ public:
 
   typedef otb::WatershedSegmentationFilter
   <FloatImageType,LabelImageType>         WatershedSegmentationFilterType;
+
+  // Geodesic morphology multiscale segmentation
+  typedef itk::BinaryBallStructuringElement<FloatImageType::PixelType, 2> StructuringElementType;
+  typedef otb::MorphologicalOpeningProfileFilter<FloatImageType, FloatImageType, StructuringElementType>
+  OpeningProfileFilterType;
+  typedef otb::MorphologicalClosingProfileFilter<FloatImageType, FloatImageType, StructuringElementType>
+  ClosingProfileFilterType;
+  typedef otb::ProfileToProfileDerivativeFilter<FloatImageType, FloatImageType> DerivativeFilterType;
+  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<FloatImageType,FloatImageType, LabelImageType>
+  MultiScaleCharacteristicsFilterType;
+  typedef otb::MultiScaleConvexOrConcaveClassificationFilter<FloatImageType,LabelImageType> MultiScaleClassificationFilterType;
+  
 
 
   // mask filter
@@ -112,6 +135,11 @@ public:
   <FloatVectorImageType,
    ConnectedComponentSegmentationFilterType>
   ConnectedComponentStreamingVectorizedSegmentationOGRType;
+  typedef otb::StreamingImageToOGRLayerSegmentationFilter
+  <LabelImageType,
+   LabeledConnectedComponentSegmentationFilterType>
+  LabeledConnectedComponentStreamingVectorizedSegmentationOGRType;
+
 
   typedef otb::OGRLayerStreamStitchingFilter
   <FloatVectorImageType>                  FusionFilterType;
@@ -134,7 +162,7 @@ private:
 
     // Documentation
     SetDocName("Segmentation");
-    SetDocLongDescription("This application allows to perform various segmentation algorithms on an multispectral image."
+    SetDocLongDescription("This application allows to perform various segmentation algorithms on a multispectral image."
                           "Available segmentation algorithms are two different versions of Mean-Shift segmentation algorithm (one being multi-threaded),"
                           " simple pixel based connected components according to a user-defined criterion, and watershed from the gradient of the intensity"
                           " (norm of spectral bands vector). The application has two different modes that affects the nature of its output.\n\nIn raster mode,"
@@ -241,6 +269,22 @@ private:
     AddChoice("mode.raster", "Standard segmentation with labeled raster output");
     SetParameterDescription("mode.raster","In this mode, the application will output a standard labeled raster. This mode can not handle large data.");
 
+    // GeoMorpho
+    AddChoice("filter.geomorpho","Multiscale Geodesic Morphology");
+
+    AddParameter(ParameterType_Int,"filter.geomorpho.size","Profile Size");
+    SetParameterDescription("filter.geomorpho.size","TODO");
+    SetDefaultParameterInt("filter.geomorpho.size",5);
+    AddParameter(ParameterType_Int,"filter.geomorpho.step","Profile Step");
+    SetParameterDescription("filter.geomorpho.step","TODO");
+    SetDefaultParameterInt("filter.geomorpho.step",1);
+    AddParameter(ParameterType_Int,"filter.geomorpho.start","Profile Start");
+    SetParameterDescription("filter.geomorpho.start","TODO");
+    SetDefaultParameterInt("filter.geomorpho.start",1);
+    AddParameter(ParameterType_Float,"filter.geomorpho.sigma","Sigma for decision rule");
+    SetParameterDescription("filter.geomorpho.sigma","TODO");
+    SetDefaultParameterFloat("filter.geomorpho.sigma",1.);
+
     //Raster mode parameters
     AddParameter(ParameterType_OutputImage,  "mode.raster.out",    "Output labeled image");
     SetParameterDescription( "mode.raster.out", "The output labeled image.");
@@ -345,7 +389,7 @@ private:
     typedef  TSegmentationFilter             SegmentationFilterType;
     typedef  typename SegmentationFilterType::Pointer SegmentationFilterPointerType;
     typedef otb::StreamingImageToOGRLayerSegmentationFilter
-      <FloatVectorImageType,
+      <TInputImage,
        SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
 
     // Retrieve tile size parameter
@@ -636,6 +680,73 @@ private:
                                                                                                           watershedVectorizedFilter,
                                                                                                           gradientMagnitudeFilter->GetOutput(),
                                                                                                           layer, 0);
+            }
+
+        else
+          if (segType == "geomorpho")
+            {
+            otbAppLogINFO(<<"Using multiscale geodesic morphology segmentation."<<std::endl);
+
+            
+            unsigned int profileSize = GetParameterInt("filter.geomorpho.size");
+            unsigned int initialValue = GetParameterInt("filter.geomorpho.start");
+            unsigned int step = GetParameterInt("filter.geomorpho.step");
+            double       sigma = GetParameterFloat("filter.geomorpho.sigma");
+
+
+            AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
+
+            amplitudeFilter->SetInput(this->GetParameterFloatVectorImage("in"));
+
+            OpeningProfileFilterType::Pointer oprofileFilter = OpeningProfileFilterType::New();
+            oprofileFilter->SetInput(amplitudeFilter->GetOutput());
+            oprofileFilter->SetProfileSize(profileSize);
+            oprofileFilter->SetInitialValue(initialValue);
+            oprofileFilter->SetStep(step);
+            
+            ClosingProfileFilterType::Pointer cprofileFilter = ClosingProfileFilterType::New();
+            cprofileFilter->SetInput(amplitudeFilter->GetOutput());
+            cprofileFilter->SetProfileSize(profileSize);
+            cprofileFilter->SetInitialValue(initialValue);
+            cprofileFilter->SetStep(step);
+            
+            DerivativeFilterType::Pointer oderivativeFilter = DerivativeFilterType::New();
+            oderivativeFilter->SetInput(oprofileFilter->GetOutput());
+            
+            DerivativeFilterType::Pointer cderivativeFilter = DerivativeFilterType::New();
+            cderivativeFilter->SetInput(cprofileFilter->GetOutput());
+            
+            MultiScaleCharacteristicsFilterType::Pointer omsCharFilter = MultiScaleCharacteristicsFilterType::New();
+            omsCharFilter->SetInput(oderivativeFilter->GetOutput());
+            omsCharFilter->SetInitialValue(initialValue);
+            omsCharFilter->SetStep(step);
+            
+            MultiScaleCharacteristicsFilterType::Pointer cmsCharFilter = MultiScaleCharacteristicsFilterType::New();
+            cmsCharFilter->SetInput(cderivativeFilter->GetOutput());
+            cmsCharFilter->SetInitialValue(initialValue);
+            cmsCharFilter->SetStep(step);
+            
+            MultiScaleClassificationFilterType::Pointer classificationFilter = MultiScaleClassificationFilterType::New();
+            classificationFilter->SetOpeningProfileDerivativeMaxima(omsCharFilter->GetOutput());
+            classificationFilter->SetOpeningProfileCharacteristics(omsCharFilter->GetOutputCharacteristics());
+            classificationFilter->SetClosingProfileDerivativeMaxima(cmsCharFilter->GetOutput());
+            classificationFilter->SetClosingProfileCharacteristics(cmsCharFilter->GetOutputCharacteristics());
+            classificationFilter->SetSigma(sigma);
+            classificationFilter->SetLabelSeparator(initialValue + profileSize * step);
+            
+            LabeledConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
+              ccVectorizationFilter = LabeledConnectedComponentStreamingVectorizedSegmentationOGRType::New();
+            
+            if (HasValue("mode.vector.inmask"))
+              {
+              ccVectorizationFilter->GetSegmentationFilter()->SetMaskImage(
+                this->GetParameterUInt32Image("mode.vector.inmask"));
+        }
+
+            streamSize = GenericApplySegmentation<LabelImageType, LabeledConnectedComponentSegmentationFilterType> (
+        ccVectorizationFilter,                                                                      classificationFilter->GetOutput(),
+                                                                                                             layer, 0);
+            
             }
           else
             {

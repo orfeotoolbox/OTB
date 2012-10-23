@@ -125,11 +125,12 @@ void DoExecute()
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   inImage->UpdateOutputInformation();
+  int nBComp = inImage->GetNumberOfComponentsPerPixel();
 
-  if( GetParameterInt("channel") > inImage->GetNumberOfComponentsPerPixel() )
+
+  if( GetParameterInt("channel") > nBComp )
     {
-    otbAppLogCRITICAL("Selected band is not available...");
-    return;
+    itkExceptionMacro(<< "The specified channel index is invalid.");
     }
 
   m_ExtractorFilter = ExtractorFilterType::New();
