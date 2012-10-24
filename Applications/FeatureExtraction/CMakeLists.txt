@@ -14,3 +14,12 @@ OTB_CREATE_APPLICATION(NAME HaralickTextureExtraction
 OTB_CREATE_APPLICATION(NAME SFSTextureExtraction
                        SOURCES otbSFSTextureExtraction.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME BinaryMorphologicalOperation
+                       SOURCES otbBinaryMorphologicalOperation.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME GrayScaleMorphologicalOperation
+                       SOURCES otbGrayScaleMorphologicalOperation.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+                       
