@@ -56,6 +56,16 @@ ADD_TEST(obTuMeanShiftSegmentationFilter ${SEGMENTATION_TESTS1}
       0.1
       )
 
+ADD_TEST(obTvMorphologicalProfilesSegmentationFilter ${SEGMENTATION_TESTS1}
+      otbMorphologicalProfilesSegmentationFilter
+      ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+      ${TEMP}/obTvMorphologicalProfilesSegmentationFilter.tif
+      1
+      1
+      5
+      )
+
+
 ADD_TEST(obTuMeanShiftSegmentationFilterPruning ${SEGMENTATION_TESTS1}
       otbMeanShiftSegmentationFilter
       ${INPUTDATA}/ROI_QB_MUL_4.tif
@@ -152,6 +162,7 @@ otbHooverInstanceFilterNew.cxx
 otbHooverInstanceFilterToAttributeImage.cxx
 otbWatershedSegmentationFilter.cxx
 otbMeanShiftSegmentationFilter.cxx
+otbMorphologicalProfilesSegmentationFilter.cxx
 otbStreamingImageToOGRLayerSegmentationFilter.cxx
 otbOGRLayerStreamStitchingFilter.cxx
 )

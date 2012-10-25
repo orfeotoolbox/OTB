@@ -34,4 +34,5 @@ REGISTER_TEST(otbHooverInstanceFilterNew);
 REGISTER_TEST(otbHooverInstanceFilterToAttributeImage);
 REGISTER_TEST(otbWatershedSegmentationFilter);
 REGISTER_TEST(otbMeanShiftSegmentationFilter);
+REGISTER_TEST(otbMorphologicalProfilesSegmentationFilter);
 }
