@@ -29,13 +29,7 @@
 #include "otbVectorImageToAmplitudeImageFilter.h"
 #include "itkGradientMagnitudeImageFilter.h"
 #include "otbWatershedSegmentationFilter.h"
-#include "otbMultiScaleConvexOrConcaveClassificationFilter.h"
-#include "itkBinaryBallStructuringElement.h"
-#include "otbMorphologicalOpeningProfileFilter.h"
-#include "otbMorphologicalClosingProfileFilter.h"
-#include "otbProfileToProfileDerivativeFilter.h"
-#include "otbProfileDerivativeToMultiScaleCharacteristicsFilter.h"
-#include "itkScalarConnectedComponentImageFilter.h"
+#include "otbMorphologicalProfilesSegmentationFilter.h"
 
 // Large scale vectorization framework
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
@@ -102,16 +96,7 @@ public:
   <FloatImageType,LabelImageType>         WatershedSegmentationFilterType;
 
   // Geodesic morphology multiscale segmentation
-  typedef itk::BinaryBallStructuringElement<FloatImageType::PixelType, 2> StructuringElementType;
-  typedef otb::MorphologicalOpeningProfileFilter<FloatImageType, FloatImageType, StructuringElementType>
-  OpeningProfileFilterType;
-  typedef otb::MorphologicalClosingProfileFilter<FloatImageType, FloatImageType, StructuringElementType>
-  ClosingProfileFilterType;
-  typedef otb::ProfileToProfileDerivativeFilter<FloatImageType, FloatImageType> DerivativeFilterType;
-  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<FloatImageType,FloatImageType, LabelImageType>
-  MultiScaleCharacteristicsFilterType;
-  typedef otb::MultiScaleConvexOrConcaveClassificationFilter<FloatImageType,LabelImageType> MultiScaleClassificationFilterType;
-  
+  typedef otb::MorphologicalProfilesSegmentationFilter<FloatImageType,LabelImageType> MorphologicalProfilesSegmentationFilterType;
 
 
   // mask filter
@@ -135,11 +120,10 @@ public:
   <FloatVectorImageType,
    ConnectedComponentSegmentationFilterType>
   ConnectedComponentStreamingVectorizedSegmentationOGRType;
-  typedef otb::StreamingImageToOGRLayerSegmentationFilter
-  <LabelImageType,
-   LabeledConnectedComponentSegmentationFilterType>
-  LabeledConnectedComponentStreamingVectorizedSegmentationOGRType;
 
+  // Morphological profiles
+  typedef otb::StreamingImageToOGRLayerSegmentationFilter
+  <FloatImageType,MorphologicalProfilesSegmentationFilterType> MorphoVectorizedSegmentationOGRType;
 
   typedef otb::OGRLayerStreamStitchingFilter
   <FloatVectorImageType>                  FusionFilterType;
@@ -698,53 +682,14 @@ private:
 
             amplitudeFilter->SetInput(this->GetParameterFloatVectorImage("in"));
 
-            OpeningProfileFilterType::Pointer oprofileFilter = OpeningProfileFilterType::New();
-            oprofileFilter->SetInput(amplitudeFilter->GetOutput());
-            oprofileFilter->SetProfileSize(profileSize);
-            oprofileFilter->SetInitialValue(initialValue);
-            oprofileFilter->SetStep(step);
-            
-            ClosingProfileFilterType::Pointer cprofileFilter = ClosingProfileFilterType::New();
-            cprofileFilter->SetInput(amplitudeFilter->GetOutput());
-            cprofileFilter->SetProfileSize(profileSize);
-            cprofileFilter->SetInitialValue(initialValue);
-            cprofileFilter->SetStep(step);
-            
-            DerivativeFilterType::Pointer oderivativeFilter = DerivativeFilterType::New();
-            oderivativeFilter->SetInput(oprofileFilter->GetOutput());
-            
-            DerivativeFilterType::Pointer cderivativeFilter = DerivativeFilterType::New();
-            cderivativeFilter->SetInput(cprofileFilter->GetOutput());
-            
-            MultiScaleCharacteristicsFilterType::Pointer omsCharFilter = MultiScaleCharacteristicsFilterType::New();
-            omsCharFilter->SetInput(oderivativeFilter->GetOutput());
-            omsCharFilter->SetInitialValue(initialValue);
-            omsCharFilter->SetStep(step);
-            
-            MultiScaleCharacteristicsFilterType::Pointer cmsCharFilter = MultiScaleCharacteristicsFilterType::New();
-            cmsCharFilter->SetInput(cderivativeFilter->GetOutput());
-            cmsCharFilter->SetInitialValue(initialValue);
-            cmsCharFilter->SetStep(step);
-            
-            MultiScaleClassificationFilterType::Pointer classificationFilter = MultiScaleClassificationFilterType::New();
-            classificationFilter->SetOpeningProfileDerivativeMaxima(omsCharFilter->GetOutput());
-            classificationFilter->SetOpeningProfileCharacteristics(omsCharFilter->GetOutputCharacteristics());
-            classificationFilter->SetClosingProfileDerivativeMaxima(cmsCharFilter->GetOutput());
-            classificationFilter->SetClosingProfileCharacteristics(cmsCharFilter->GetOutputCharacteristics());
-            classificationFilter->SetSigma(sigma);
-            classificationFilter->SetLabelSeparator(initialValue + profileSize * step);
-            
-            LabeledConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
-              ccVectorizationFilter = LabeledConnectedComponentStreamingVectorizedSegmentationOGRType::New();
-            
-            if (HasValue("mode.vector.inmask"))
-              {
-              ccVectorizationFilter->GetSegmentationFilter()->SetMaskImage(
-                this->GetParameterUInt32Image("mode.vector.inmask"));
-        }
+            MorphoVectorizedSegmentationOGRType::Pointer morphoVectorizedSegmentation = MorphoVectorizedSegmentationOGRType::New();
+            morphoVectorizedSegmentation->GetSegmentationFilter()->SetProfileStart(initialValue);
+            morphoVectorizedSegmentation->GetSegmentationFilter()->SetProfileSize(profileSize);
+            morphoVectorizedSegmentation->GetSegmentationFilter()->SetProfileStep(step);
+            morphoVectorizedSegmentation->GetSegmentationFilter()->SetSigma(sigma);
 
-            streamSize = GenericApplySegmentation<LabelImageType, LabeledConnectedComponentSegmentationFilterType> (
-        ccVectorizationFilter,                                                                      classificationFilter->GetOutput(),
+            streamSize = GenericApplySegmentation<FloatImageType, MorphologicalProfilesSegmentationFilterType> (
+        morphoVectorizedSegmentation,                                                                     amplitudeFilter->GetOutput(),
                                                                                                              layer, 0);
             
             }
