@@ -57,7 +57,7 @@ public:
   #ifdef OTB_USE_SIFTFAST
   typedef SiftFastImageFilter<FloatImageType,PointSetType>   SiftFilterType;
   #else
-  typedef ImageToSIFTKeyPointSetFilter<FloatImageType,PointSetType> SiftFilterType
+  typedef ImageToSIFTKeyPointSetFilter<FloatImageType,PointSetType> SiftFilterType;
   #endif
 
   typedef ImageToSURFKeyPointSetFilter<FloatImageType,PointSetType> SurfFilterType;
