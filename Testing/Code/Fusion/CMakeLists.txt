@@ -42,6 +42,20 @@ ADD_TEST(fuTvSimpleRcsPanSharpeningFusionImageFilter ${FUSION_TESTS1}
         ${TEMP}/fuTvRcsPanSharpeningFusion.tif
 )
 
+# -------    otb::LmvmPanSharpeningFusionImageFilter   -------------------
+ADD_TEST(fuTuLmvmPanSharpeningFusionImageFilterNew ${FUSION_TESTS1}
+        otbLmvmPanSharpeningFusionImageFilterNew
+)
+
+ADD_TEST(fuTvLmvmPanSharpeningFusionImageFilter ${FUSION_TESTS1}
+    --compare-image ${EPSILON_8}  ${BASELINE}/fuTvLmvmPanSharpeningFusion.tif
+                           ${TEMP}/fuTvLmvmPanSharpeningFusion.tif
+        otbLmvmPanSharpeningFusionImageFilter
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+        ${TEMP}/fuTvLmvmPanSharpeningFusion.tif
+)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFusion2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,6 +68,8 @@ otbBayesianFusionFilterNew.cxx
 otbBayesianFusionFilter.cxx
 otbSimpleRcsPanSharpeningFusionImageFilterNew.cxx
 otbSimpleRcsPanSharpeningFusionImageFilter.cxx
+otbLmvmPanSharpeningFusionImageFilterNew.cxx
+otbLmvmPanSharpeningFusionImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbFusionTests1 "${Fusion_SRCS1}" "OTBFusion;OTBIO;OTBTesting")
