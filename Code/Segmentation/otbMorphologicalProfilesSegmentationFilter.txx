@@ -38,7 +38,7 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOuputImage,TInternalPrecisi
   m_OpeningDerivativeProfile = DerivativeFilterType::New();
   m_ClosingDerivativeProfile = DerivativeFilterType::New();
   m_OpeningCharacteristicsFilter = MultiScaleCharacteristicsFilterType::New();
-  m_ClosingCharacteristicsFilter = MultiScaleCharacteristicsFilterType::New();  
+  m_ClosingCharacteristicsFilter = MultiScaleCharacteristicsFilterType::New();
   // Wire pipeline
   m_OpeningDerivativeProfile->SetInput(m_OpeningProfile->GetOutput());
   m_ClosingDerivativeProfile->SetInput(m_ClosingProfile->GetOutput());

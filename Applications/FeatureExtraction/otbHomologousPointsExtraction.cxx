@@ -322,7 +322,7 @@ private:
       FloatImageType::PointType origin1 = this->GetParameterImage("in1")->GetOrigin();
       FloatImageType::PointType origin2 = this->GetParameterImage("in2")->GetOrigin();
 
-      for(unsigned int i = 0; i<nb_bins_x;++i)
+      for(unsigned int i = 0; i<nb_bins_x; ++i)
         {
         for(unsigned int j = 0; j<nb_bins_y; ++j)
           {
@@ -391,7 +391,7 @@ private:
           region2.PadByRadius(static_cast<unsigned int>(GetParameterInt("precision")));
 
           if(region2.Crop(this->GetParameterImage("in2")->GetLargestPossibleRegion()))
-            {        
+            {
             otbAppLogINFO("Corresponding region2 is "<<region2.GetIndex()<<", "<<region2.GetSize());
 
             extractChannel2->SetExtractionRegion(region2);

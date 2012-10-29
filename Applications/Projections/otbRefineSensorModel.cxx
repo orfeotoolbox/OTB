@@ -112,7 +112,7 @@ private:
       use_avg_elevation = true;
       }
       break;
-      }  
+      }
 
   // Parse the input file for ground control points
   std::ifstream ifs;
@@ -189,7 +189,7 @@ private:
     }
 
   for(TiePointsType::const_iterator it = tiepoints.begin();
-      it!=tiepoints.end();++it)
+      it!=tiepoints.end(); ++it)
     {
     PointType tmpPoint,tmpPointX,tmpPointY;
     sm->ForwardTransformPoint(it->first[0],it->first[1],it->first[2],tmpPoint[0],tmpPoint[1],tmpPoint[2]);

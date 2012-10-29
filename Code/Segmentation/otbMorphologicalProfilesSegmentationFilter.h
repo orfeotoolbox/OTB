@@ -31,7 +31,7 @@ namespace otb
 {
 /** \class MorphologicalProfilesSegmentationFilter
 *   \brief This class implements segmentation by morphological profiles
-*  
+*
 *   This filter implements segmentation based on the morphological
 *   profiles, based on this work:
 *   \par
@@ -40,7 +40,7 @@ namespace otb
 *   satellite imagery. IEEE Transactions on geoscience and remote sensing, vol. 39,
 *   NO. 2, February 2001, p. 309-320.
 *   \par
-* 
+*
 *   This filter is composite and creates the full pipeline to
 *   implement the method. the
 *   otb::MultiScaleConvexOrConcaveClassificationFilter is wired to an
@@ -53,7 +53,7 @@ namespace otb
 *   \sa otb::MultiScaleConvexOrConcaveClassificationFilter
 */
 template <class TInputImage,  class TOuputImage, class TInternalPrecision = float, class TStructuringElement = itk::BinaryBallStructuringElement<typename TInputImage::PixelType, TInputImage::ImageDimension> >
-class ITK_EXPORT MorphologicalProfilesSegmentationFilter 
+class ITK_EXPORT MorphologicalProfilesSegmentationFilter
   : public itk::ImageToImageFilter<TInputImage, TOuputImage>
 {
 public:
