@@ -68,6 +68,11 @@ private:
     SetParameterDescription("keywordlist", "Output the OSSIM keyword list. It contains metadata information (sensor model, geometry ). Informations are stored in keyword list (pairs of key/value)");
     DisableParameter("keywordlist");
     MandatoryOff("keywordlist");
+
+    AddParameter(ParameterType_OutputFilename, "outkwl", "Write the OSSIM keywordlist to a geom file");
+    SetParameterDescription("outkwl", "This option allows to extract the OSSIM keywordlist of the image into a geom file.");
+    MandatoryOff("outkwl");
+    
     //Create output parameters to store image informations
     AddParameter(ParameterType_Int,"sizex","Size X");
     SetParameterDescription("sizex","X size (in pixels)");
@@ -448,6 +453,14 @@ private:
 
     //Display image informations in the dedicated logger
     otbAppLogINFO( << ossOutput.str() );
+
+    if(IsParameterEnabled("outkwl"))
+      {
+      metadataInterface->GetImageKeywordlist()
+      
+
+      }
+
   }
 
 };

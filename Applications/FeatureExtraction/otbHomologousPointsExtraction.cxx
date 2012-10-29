@@ -21,8 +21,11 @@
 // Elevation handler
 #include "otbWrapperElevationParametersHandler.h"
 
+#ifdef OTB_USE_SIFTFAST
 #include "otbSiftFastImageFilter.h"
+#else
 #include "otbImageToSIFTKeyPointSetFilter.h"
+#endif
 #include "otbImageToSURFKeyPointSetFilter.h"
 #include "otbKeyPointSetsMatchingFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
