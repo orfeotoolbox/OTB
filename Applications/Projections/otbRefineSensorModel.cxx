@@ -21,6 +21,8 @@
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperElevationParametersHandler.h"
 #include "otbSensorModelAdapter.h"
+#include "itkPoint.h"
+#include "otbGeographicalDistance.h"
 
 namespace otb
 {
@@ -35,6 +37,12 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  typedef itk::Point<double,3>                 PointType;
+  typedef otb::GeographicalDistance<PointType> DistanceType;
+
+  typedef std::pair<PointType,PointType>       TiePointType;
+  typedef std::vector<TiePointType>            TiePointsType;
+  
   /** Standard macro */
   itkNewMacro(Self);
   itkTypeMacro(RefineSensorModel, otb::Application);
@@ -59,6 +67,11 @@ private:
 
     AddParameter(ParameterType_InputFilename,"inpoints","Input file containing tie points");
     SetParameterDescription("inpoints","Input file containing tie points. Points are stored in following format: row col lon lat. Line beginning with # are ignored.");
+
+    AddParameter(ParameterType_OutputFilename,"outstat","Output file containing output precision statistics");
+    SetParameterDescription("outstat","Output file containing the following info: ref_lon ref_lat elevation predicted_lon predicted_lat x_error(meters) y_error(meters) overall_error(meters)");
+    MandatoryOff("outstat");
+    DisableParameter("outstat");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
@@ -105,6 +118,8 @@ private:
   std::ifstream ifs;
   ifs.open(GetParameterString("inpoints").c_str());
    
+  TiePointsType tiepoints;
+
   while(!ifs.eof())
     {
     std::string line;
@@ -134,19 +149,85 @@ private:
       else
         z = avg_elevation;
 
-      std::cout<<"x="<<x<<", y="<<y<<", z="<<z<<", lon="<<lon<<", lat="<<lat<<std::endl;
-
+      otbAppLogINFO("Adding tie point x="<<x<<", y="<<y<<", z="<<z<<", lon="<<lon<<", lat="<<lat);
+      
       sm->AddTiePoint(x,y,z,lon,lat);
+
+      PointType p1,p2;
+      p1[0]=x;
+      p1[1]=y;
+      p1[2]=z;
+      p2[0]=lon;
+      p2[1]=lat;
+
+      tiepoints.push_back(std::make_pair(p1,p2));
+
       }
     }
   ifs.close();
   
-  std::cout<<"Optimization..."<<std::endl;
+  otbAppLogINFO("Optimization in progress ...");
   sm->Optimize();
-  std::cout<<"Done."<<std::endl;
+  otbAppLogINFO("Done.");
 
   bool canWrite = sm->WriteGeomFile(GetParameterString("outgeom"));
-  }
+
+  double rmse = 0;
+  double rmsex = 0;
+  double rmsey = 0;
+
+  DistanceType::Pointer distance = DistanceType::New();
+
+
+  std::ofstream ofs;
+  ofs<<std::fixed;
+  ofs.precision(12);
+  if(IsParameterEnabled("outstat"))
+    {
+    ofs.open(GetParameterString("outstat").c_str());
+    ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
+    }
+
+  for(TiePointsType::const_iterator it = tiepoints.begin();
+      it!=tiepoints.end();++it)
+    {
+    PointType tmpPoint,tmpPointX,tmpPointY;
+    sm->ForwardTransformPoint(it->first[0],it->first[1],it->first[2],tmpPoint[0],tmpPoint[1],tmpPoint[2]);
+
+
+    
+    tmpPointX = tmpPoint;
+    tmpPointX[1] = it->second[1];
+
+    tmpPointY = tmpPoint;
+    tmpPointY[0] = it->second[0];
+
+    double gerror = distance->Evaluate(it->second,tmpPoint);
+    double xerror = distance->Evaluate(it->second,tmpPointX);
+    double yerror = distance->Evaluate(it->second,tmpPointY);
+
+    if(IsParameterEnabled("outstat"))
+      ofs<<it->second[0]<<"\t"<<it->second[1]<<"\t"<<it->first[2]<<"\t"<<tmpPoint[0]<<"\t"<<tmpPoint[1]<<"\t"<<xerror<<"\t"<<yerror<<"\t"<<gerror<<std::endl;
+
+    rmse += gerror*gerror;
+    rmsex+=xerror*xerror;
+    rmsey+=yerror*yerror;
+    }
+
+  rmse/=tiepoints.size();
+  rmse=vcl_sqrt(rmse);
+  rmsex/=tiepoints.size();
+  rmsex=vcl_sqrt(rmsex);
+  rmsey/=tiepoints.size();
+  rmsey=vcl_sqrt(rmsey);
+
+  otbAppLogINFO("Estimated Overall Root Mean Square Error: "<<rmse<<" meters");
+  otbAppLogINFO("Estimated Horizontal Root Mean Square Error: "<<rmsex<<" meters");
+  otbAppLogINFO("Estimated Vertical Root Mean Square Error: "<<rmsey<<" meters");
+
+  if(IsParameterEnabled("outstat"))
+    ofs.close();
+}
 };
 }
 }
