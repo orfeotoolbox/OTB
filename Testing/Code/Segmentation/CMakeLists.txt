@@ -57,6 +57,9 @@ ADD_TEST(obTuMeanShiftSegmentationFilter ${SEGMENTATION_TESTS1}
       )
 
 ADD_TEST(obTvMorphologicalProfilesSegmentationFilter ${SEGMENTATION_TESTS1}
+      --compare-image ${NOTOL}
+      ${BASELINE}/obTvMorphologicalProfilesSegmentationFilter.tif
+      ${TEMP}/obTvMorphologicalProfilesSegmentationFilter.tif
       otbMorphologicalProfilesSegmentationFilter
       ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
       ${TEMP}/obTvMorphologicalProfilesSegmentationFilter.tif
