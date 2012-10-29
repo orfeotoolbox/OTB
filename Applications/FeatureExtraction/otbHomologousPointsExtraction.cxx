@@ -126,7 +126,7 @@ private:
     AddParameter(ParameterType_Empty,"mfilter","Filter points according to geographical or sensor based colocalisation");
     SetParameterDescription("mfilter","If enabled, this option allows to filter matches according to colocalisation from sensor or geographical information, using the given tolerancy expressed in pixels");
       
-    AddParameter(ParameterType_Empty,"2wgs84","If enabled, points from second image will be exported in WGS84.");
+    AddParameter(ParameterType_Empty,"2wgs84","If enabled, points from second image will be exported in WGS84");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
