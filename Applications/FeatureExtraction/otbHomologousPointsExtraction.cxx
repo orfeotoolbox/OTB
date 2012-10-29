@@ -22,6 +22,7 @@
 #include "otbWrapperElevationParametersHandler.h"
 
 #include "otbSiftFastImageFilter.h"
+#include "otbImageToSIFTKeyPointSetFilter.h"
 #include "otbImageToSURFKeyPointSetFilter.h"
 #include "otbKeyPointSetsMatchingFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
@@ -48,7 +49,14 @@ public:
   typedef FloatVectorImageType::PixelType                    RealVectorType;
   typedef FloatVectorImageType::InternalPixelType            ValueType;
   typedef itk::PointSet<RealVectorType,2>                    PointSetType;
+
+  // This is ugly ...
+  #ifdef OTB_USE_SIFTFAST
   typedef SiftFastImageFilter<FloatImageType,PointSetType>   SiftFilterType;
+  #else
+  typedef ImageToSIFTKeyPointSetFilter<FloatImageType,PointSetType> SiftFilterType
+  #endif
+
   typedef ImageToSURFKeyPointSetFilter<FloatImageType,PointSetType> SurfFilterType;
 
   typedef itk::Statistics::EuclideanDistance<RealVectorType> DistanceType;
