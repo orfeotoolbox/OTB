@@ -456,11 +456,8 @@ private:
 
     if(IsParameterEnabled("outkwl"))
       {
-      metadataInterface->GetImageKeywordlist()
-      
-
+      WriteGeometry(metadataInterface->GetImageKeywordlist(),GetParameterString("outkwl"));
       }
-
   }
 
 };
