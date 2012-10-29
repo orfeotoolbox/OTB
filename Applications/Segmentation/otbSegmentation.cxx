@@ -254,20 +254,24 @@ private:
     SetParameterDescription("mode.raster","In this mode, the application will output a standard labeled raster. This mode can not handle large data.");
 
     // GeoMorpho
-    AddChoice("filter.geomorpho","Multiscale Geodesic Morphology");
-
-    AddParameter(ParameterType_Int,"filter.geomorpho.size","Profile Size");
-    SetParameterDescription("filter.geomorpho.size","TODO");
-    SetDefaultParameterInt("filter.geomorpho.size",5);
-    AddParameter(ParameterType_Int,"filter.geomorpho.step","Profile Step");
-    SetParameterDescription("filter.geomorpho.step","TODO");
-    SetDefaultParameterInt("filter.geomorpho.step",1);
-    AddParameter(ParameterType_Int,"filter.geomorpho.start","Profile Start");
-    SetParameterDescription("filter.geomorpho.start","TODO");
-    SetDefaultParameterInt("filter.geomorpho.start",1);
-    AddParameter(ParameterType_Float,"filter.geomorpho.sigma","Sigma for decision rule");
-    SetParameterDescription("filter.geomorpho.sigma","TODO");
-    SetDefaultParameterFloat("filter.geomorpho.sigma",1.);
+    AddChoice("filter.mprofiles","Morphological profiles based segmentation");
+    SetParameterDescription("filter.mprofiles","Segmentation based on morphological profiles, as described in Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE: A new approach for the morphological segmentation of high resolution satellite imagery. IEEE Transactions on geoscience and remote sensing, vol. 39, NO. 2, February 2001, p. 309-320.");
+    AddParameter(ParameterType_Int,"filter.mprofiles.size","Profile Size");
+    SetParameterDescription("filter.mprofiles.size","Size of the profiles");
+    SetDefaultParameterInt("filter.mprofiles.size",5);
+    SetMinimumParameterIntValue("filter.mprofiles.size",2);
+    AddParameter(ParameterType_Int,"filter.mprofiles.start","Initial radius");
+    SetParameterDescription("filter.mprofiles.start","Initial radius of the structuring element (in pixels)");
+    SetDefaultParameterInt("filter.mprofiles.start",1);
+    SetMinimumParameterIntValue("filter.mprofiles.start",1);
+    AddParameter(ParameterType_Int,"filter.mprofiles.step","Radius step.");
+    SetParameterDescription("filter.mprofiles.step","Radius step along the profile (in pixels)");
+    SetDefaultParameterInt("filter.mprofiles.step",1);
+    SetMinimumParameterIntValue("filter.mprofiles.step",1);
+    AddParameter(ParameterType_Float,"filter.mprofiles.sigma","Threshold of the final decision rule");
+    SetParameterDescription("filter.mprofiles.sigma","Profiles values under the threshold will be ignored.");
+    SetDefaultParameterFloat("filter.mprofiles.sigma",1.);
+    SetMinimumParameterIntValue("filter.mprofiles.sigma",0.);
 
     //Raster mode parameters
     AddParameter(ParameterType_OutputImage,  "mode.raster.out",    "Output labeled image");
@@ -667,15 +671,15 @@ private:
             }
 
         else
-          if (segType == "geomorpho")
+          if (segType == "mprofiles")
             {
             otbAppLogINFO(<<"Using multiscale geodesic morphology segmentation."<<std::endl);
 
             
-            unsigned int profileSize = GetParameterInt("filter.geomorpho.size");
-            unsigned int initialValue = GetParameterInt("filter.geomorpho.start");
-            unsigned int step = GetParameterInt("filter.geomorpho.step");
-            double       sigma = GetParameterFloat("filter.geomorpho.sigma");
+            unsigned int profileSize = GetParameterInt("filter.mprofiles.size");
+            unsigned int initialValue = GetParameterInt("filter.mprofiles.start");
+            unsigned int step = GetParameterInt("filter.mprofiles.step");
+            double       sigma = GetParameterFloat("filter.mprofiles.sigma");
 
 
             AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
