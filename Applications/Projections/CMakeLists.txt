@@ -38,4 +38,7 @@ OTB_CREATE_APPLICATION(NAME           GridBasedImageResampling
 OTB_CREATE_APPLICATION(NAME           VectorDataReprojection
                        SOURCES        otbVectorDataReprojection.cxx
                        LINK_LIBRARIES OTBBasicFilters;OTBIO;OTBOGRAdapters;OTBProjections)
-                       
+
+OTB_CREATE_APPLICATION(NAME           RefineSensorModel
+                       SOURCES        otbRefineSensorModel.cxx
+                       LINK_LIBRARIES OTBProjections)
