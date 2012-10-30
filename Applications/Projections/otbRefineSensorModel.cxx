@@ -69,7 +69,7 @@ private:
     SetParameterDescription("inpoints","Input file containing tie points. Points are stored in following format: row col lon lat. Line beginning with # are ignored.");
 
     AddParameter(ParameterType_OutputFilename,"outstat","Output file containing output precision statistics");
-    SetParameterDescription("outstat","Output file containing the following info: ref_lon ref_lat elevation predicted_lon predicted_lat x_error(meters) y_error(meters) overall_error(meters)");
+    SetParameterDescription("outstat","Output file containing the following info: ref_lon ref_lat elevation predicted_lon predicted_lat x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) overall_error(meters)");
     MandatoryOff("outstat");
     DisableParameter("outstat");
 
@@ -85,11 +85,13 @@ private:
 
   void DoExecute()
   {
-    otb::SensorModelAdapter::Pointer sm = otb::SensorModelAdapter::New();
+    otb::SensorModelAdapter::Pointer sm     = otb::SensorModelAdapter::New();
+    otb::SensorModelAdapter::Pointer sm_ref = otb::SensorModelAdapter::New();
     
     // Read the geom file
     bool canRead = sm->ReadGeomFile(GetParameterString("ingeom"));
-    
+    canRead = sm_ref->ReadGeomFile(GetParameterString("ingeom"));
+
   // Setup elevation
 
     otb::DEMHandler::Pointer demHandler = otb::DEMHandler::New();
@@ -102,6 +104,8 @@ private:
       {
       sm->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
       sm->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+      sm_ref->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+      sm_ref->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
       demHandler->OpenDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
       demHandler->OpenGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
       }
@@ -168,13 +172,24 @@ private:
   
   otbAppLogINFO("Optimization in progress ...");
   sm->Optimize();
-  otbAppLogINFO("Done.");
+  otbAppLogINFO("Done.\n");
 
   bool canWrite = sm->WriteGeomFile(GetParameterString("outgeom"));
 
   double rmse = 0;
   double rmsex = 0;
   double rmsey = 0;
+
+  double meanx = 0;
+  double meany = 0;
+
+  double rmse_ref = 0;
+  double rmsex_ref = 0;
+  double rmsey_ref = 0;
+
+  double meanx_ref = 0;
+  double meany_ref = 0;
+
 
   DistanceType::Pointer distance = DistanceType::New();
 
@@ -185,15 +200,15 @@ private:
   if(IsParameterEnabled("outstat"))
     {
     ofs.open(GetParameterString("outstat").c_str());
-    ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
+    ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
     }
 
   for(TiePointsType::const_iterator it = tiepoints.begin();
       it!=tiepoints.end(); ++it)
     {
-    PointType tmpPoint,tmpPointX,tmpPointY;
+    PointType tmpPoint,tmpPointX,tmpPointY, tmpPoint_ref, tmpPointX_ref,tmpPointY_ref;
     sm->ForwardTransformPoint(it->first[0],it->first[1],it->first[2],tmpPoint[0],tmpPoint[1],tmpPoint[2]);
-
+    sm_ref->ForwardTransformPoint(it->first[0],it->first[1],it->first[2],tmpPoint_ref[0],tmpPoint_ref[1],tmpPoint_ref[2]);
 
     
     tmpPointX = tmpPoint;
@@ -202,28 +217,99 @@ private:
     tmpPointY = tmpPoint;
     tmpPointY[0] = it->second[0];
 
+    tmpPointX_ref = tmpPoint_ref;
+    tmpPointX_ref[1] = it->second[1];
+
+    tmpPointY_ref = tmpPoint_ref;
+    tmpPointY_ref[0] = it->second[0];
+
+
     double gerror = distance->Evaluate(it->second,tmpPoint);
-    double xerror = distance->Evaluate(it->second,tmpPointX);
-    double yerror = distance->Evaluate(it->second,tmpPointY);
+    double xerror = (it->second[0]-tmpPointX[0]>0 ? 1 : -1)*distance->Evaluate(it->second,tmpPointX);
+    double yerror = (it->second[1]-tmpPointY[1]>0 ? 1 : -1)*distance->Evaluate(it->second,tmpPointY);
+    
+    double gerror_ref = distance->Evaluate(it->second,tmpPoint_ref);
+    double xerror_ref = (it->second[0]-tmpPointX_ref[0]>0 ? 1 : -1)*distance->Evaluate(it->second,tmpPointX_ref);
+    double yerror_ref = (it->second[1]-tmpPointY_ref[1]>0 ? 1 : -1)*distance->Evaluate(it->second,tmpPointY_ref);
+
 
     if(IsParameterEnabled("outstat"))
-      ofs<<it->second[0]<<"\t"<<it->second[1]<<"\t"<<it->first[2]<<"\t"<<tmpPoint[0]<<"\t"<<tmpPoint[1]<<"\t"<<xerror<<"\t"<<yerror<<"\t"<<gerror<<std::endl;
+      ofs<<it->second[0]<<"\t"<<it->second[1]<<"\t"<<it->first[2]<<"\t"<<tmpPoint[0]<<"\t"<<tmpPoint[1]<<"\t"<<xerror_ref<<"\t"<<yerror_ref<<"\t"<<gerror_ref<<"\t"<<xerror<<"\t"<<yerror<<"\t"<<gerror<<std::endl;
 
     rmse += gerror*gerror;
-    rmsex+=xerror*xerror;
-    rmsey+=yerror*yerror;
+    rmsex+= xerror*xerror;
+    rmsey+= yerror*yerror;
+
+    meanx += xerror;
+    meany += yerror;
+
+    rmse_ref += gerror_ref*gerror_ref;
+    rmsex_ref+=xerror_ref*xerror_ref;
+    rmsey_ref+=yerror_ref*yerror_ref;
+
+    meanx_ref += xerror_ref;
+    meany_ref += yerror_ref;
+
+
     }
 
   rmse/=tiepoints.size();
-  rmse=vcl_sqrt(rmse);
+
   rmsex/=tiepoints.size();
-  rmsex=vcl_sqrt(rmsex);
+
   rmsey/=tiepoints.size();
+
+
+  meanx/=tiepoints.size();
+  meany/=tiepoints.size();
+
+
+  rmse_ref/=tiepoints.size();
+
+  rmsex_ref/=tiepoints.size();
+
+  rmsey_ref/=tiepoints.size();
+
+
+  meanx_ref/=tiepoints.size();
+  meany_ref/=tiepoints.size();
+
+
+
+  double stdevx = vcl_sqrt(rmsex - meanx * meanx);
+  double stdevy = vcl_sqrt(rmsey - meany * meany);
+
+  double stdevx_ref = vcl_sqrt(rmsex_ref - meanx_ref * meanx_ref);
+  double stdevy_ref = vcl_sqrt(rmsey_ref - meany_ref * meany_ref);
+
+
+  rmse=vcl_sqrt(rmse);
+  rmsex=vcl_sqrt(rmsex);
   rmsey=vcl_sqrt(rmsey);
 
-  otbAppLogINFO("Estimated Overall Root Mean Square Error: "<<rmse<<" meters");
-  otbAppLogINFO("Estimated Horizontal Root Mean Square Error: "<<rmsex<<" meters");
-  otbAppLogINFO("Estimated Vertical Root Mean Square Error: "<<rmsey<<" meters");
+  rmse_ref=vcl_sqrt(rmse_ref);
+  rmsex_ref=vcl_sqrt(rmsex_ref);
+  rmsey_ref=vcl_sqrt(rmsey_ref);
+
+  otbAppLogINFO("Estimation of input geom file accuracy: ");
+  otbAppLogINFO("Overall Root Mean Square Error: "<<rmse_ref<<" meters");
+  otbAppLogINFO("Horizontal Mean Error: "<<meanx_ref<<" meters");
+  otbAppLogINFO("Horizontal standard deviation: "<<stdevx_ref<<" meters");
+  otbAppLogINFO("Horizontal Root Mean Square Error: "<<rmsex_ref<<" meters");
+  otbAppLogINFO("Vertical Mean Error: "<<meany_ref<<" meters");
+  otbAppLogINFO("Vertical standard deviation: "<<stdevy_ref<<" meters");
+  otbAppLogINFO("Vertical Root Mean Square Error: "<<rmsey_ref<<" meters\n");
+
+  otbAppLogINFO("Estimation of final accuracy: ");
+
+  otbAppLogINFO("Overall Root Mean Square Error: "<<rmse<<" meters");
+  otbAppLogINFO("Horizontal Mean Error: "<<meanx<<" meters");
+  otbAppLogINFO("Horizontal standard deviation: "<<stdevx<<" meters");
+  otbAppLogINFO("Horizontal Root Mean Square Error: "<<rmsex<<" meters");
+  otbAppLogINFO("Vertical Mean Error: "<<meany<<" meters");
+  otbAppLogINFO("Vertical standard deviation: "<<stdevy<<" meters");
+  otbAppLogINFO("Vertical Root Mean Square Error: "<<rmsey<<" meters");
+
 
   if(IsParameterEnabled("outstat"))
     ofs.close();
