@@ -83,29 +83,38 @@ public:
 
         // Compute new scale
         double newScale = m_View->GetZoomWidget()->GetIsotropicZoom() * vcl_pow(m_ScaleRatio, -dy);
-        if (newScale >= 1.0)
+
+        if (newScale >= 1.0 )
           {
-          m_View->GetZoomWidget()->SetIsotropicZoom(newScale);
+          // compute the new size of the extracted region, if less than
+          // 1 pixel dont allow the zoom
+          double sizex = m_View->GetZoomWidget()->w() / newScale;
+          double sizey = m_View->GetZoomWidget()->h() / newScale;
 
-          // If set, update the IsotropicZoom of the second view
-          if(m_ViewToUpdate.IsNotNull())
+          if (sizex > 1. && sizey >1.)
             {
-            m_ViewToUpdate->GetZoomWidget()->SetIsotropicZoom(newScale);
+            m_View->GetZoomWidget()->SetIsotropicZoom(newScale);
+            
+            // If set, update the IsotropicZoom of the second view
+            if(m_ViewToUpdate.IsNotNull())
+              {
+              m_ViewToUpdate->GetZoomWidget()->SetIsotropicZoom(newScale);
+              }
+            
+            RegionType region = m_Model->GetScaledExtractRegion();
+            
+            typename RegionType::IndexType index = region.GetIndex();
+            typename RegionType::SizeType size = region.GetSize();
+            index[0] += size[0] / 2;
+            index[1] += size[1] / 2;
+            size[0] = static_cast<unsigned int>(m_View->GetZoomWidget()->w() / m_View->GetZoomWidget()->GetIsotropicZoom());
+            size[1] = static_cast<unsigned int>(m_View->GetZoomWidget()->h() / m_View->GetZoomWidget()->GetIsotropicZoom());
+            region.SetSize(size);
+            m_Model->SetScaledExtractRegion(region);
+            m_Model->SetScaledExtractRegionCenter(index);
+            // Update the model
+            m_Model->Update();    
             }
-
-          RegionType region = m_Model->GetScaledExtractRegion();
-
-          typename RegionType::IndexType index = region.GetIndex();
-          typename RegionType::SizeType size = region.GetSize();
-          index[0] += size[0] / 2;
-          index[1] += size[1] / 2;
-          size[0] = static_cast<unsigned int>(m_View->GetZoomWidget()->w() / m_View->GetZoomWidget()->GetIsotropicZoom());
-          size[1] = static_cast<unsigned int>(m_View->GetZoomWidget()->h() / m_View->GetZoomWidget()->GetIsotropicZoom());
-          region.SetSize(size);
-          m_Model->SetScaledExtractRegion(region);
-          m_Model->SetScaledExtractRegionCenter(index);
-          // Update the model
-          m_Model->Update();
           }
         return true;
         }
