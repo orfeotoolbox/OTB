@@ -275,7 +275,6 @@ private:
   meany_ref/=tiepoints.size();
 
 
-
   double stdevx = vcl_sqrt(rmsex - meanx * meanx);
   double stdevy = vcl_sqrt(rmsey - meany * meany);
 

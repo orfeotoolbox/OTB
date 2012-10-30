@@ -113,7 +113,7 @@ public:
             m_Model->SetScaledExtractRegion(region);
             m_Model->SetScaledExtractRegionCenter(index);
             // Update the model
-            m_Model->Update();    
+            m_Model->Update();
             }
           }
         return true;
