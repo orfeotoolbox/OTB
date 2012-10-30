@@ -271,7 +271,7 @@ private:
     AddParameter(ParameterType_Float,"filter.mprofiles.sigma","Threshold of the final decision rule");
     SetParameterDescription("filter.mprofiles.sigma","Profiles values under the threshold will be ignored.");
     SetDefaultParameterFloat("filter.mprofiles.sigma",1.);
-    SetMinimumParameterIntValue("filter.mprofiles.sigma",0.);
+    SetMinimumParameterFloatValue("filter.mprofiles.sigma",0.);
 
     //Raster mode parameters
     AddParameter(ParameterType_OutputImage,  "mode.raster.out",    "Output labeled image");
@@ -292,10 +292,10 @@ private:
 
     AddChoice("mode.vector.outmode.ulovw","Update output vector file, overwrite existing layer");
     SetParameterDescription("mode.vector.outmode.ulovw","The output vector file is opened in update mode if existing. If the output layer already exists, it si completely destroyed and recreated from scratch.");
-    
+
     AddChoice("mode.vector.outmode.ulu","Update output vector file, update existing layer");
     SetParameterDescription("mode.vector.outmode.ulu","The output vector file is opened in update mode if existing. If the output layer already exists, the new geometries are appended to the layer.");
-    
+
     AddParameter(ParameterType_InputImage, "mode.vector.inmask", "Mask Image");
     SetParameterDescription("mode.vector.inmask", "Only pixels whose mask value is strictly positive will be segmented.");
     MandatoryOff("mode.vector.inmask");
@@ -420,7 +420,7 @@ private:
       streamingVectorizedFilter->SetFilterSmallObject(true);
       streamingVectorizedFilter->SetMinimumObjectSize(minSize);
       }
-    
+
     const std::string fieldName = this->GetParameterString("mode.vector.fieldname");
 
     // Retrieve start label parameter
@@ -675,7 +675,7 @@ private:
             {
             otbAppLogINFO(<<"Using multiscale geodesic morphology segmentation."<<std::endl);
 
-            
+
             unsigned int profileSize = GetParameterInt("filter.mprofiles.size");
             unsigned int initialValue = GetParameterInt("filter.mprofiles.start");
             unsigned int step = GetParameterInt("filter.mprofiles.step");
@@ -695,7 +695,7 @@ private:
             streamSize = GenericApplySegmentation<FloatImageType, MorphologicalProfilesSegmentationFilterType> (
         morphoVectorizedSegmentation,                                                                     amplitudeFilter->GetOutput(),
                                                                                                              layer, 0);
-            
+
             }
           else
             {
