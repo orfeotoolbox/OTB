@@ -704,6 +704,8 @@ private:
 
     if (segModeType == "vector")
       {
+      otbAppLogINFO(<<"Stream size: " << streamSize);
+
       ogrDS->SyncToDisk();
 
       // Stitching mode
