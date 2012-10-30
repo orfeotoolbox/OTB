@@ -121,6 +121,10 @@ AddChoice("filter.dilate", "Dilate");
 AddParameter(ParameterType_Float, "filter.dilate.foreval", "Foreground Value");
 SetParameterDescription("filter.dilate.foreval", "The Foreground Value");
 SetDefaultParameterFloat("filter.dilate.foreval", 1.0);
+AddParameter(ParameterType_Float, "filter.dilate.backval", "Background Value");
+SetParameterDescription("filter.dilate.backval", "The Background Value");
+SetDefaultParameterFloat("filter.dilate.backval", 0.0);
+
 //Erode
 AddChoice("filter.erode", "Erode");
 AddParameter(ParameterType_Float, "filter.erode.foreval", "Foreground Value");
@@ -191,6 +195,7 @@ void DoExecute()
       m_DilFilter->SetKernel(se);
       m_DilFilter->SetInput(m_ExtractorFilter->GetOutput());
       m_DilFilter->SetForegroundValue(GetParameterFloat("filter.dilate.foreval"));
+      m_DilFilter->SetBackgroundValue(GetParameterFloat("filter.dilate.backval"));
       SetParameterOutputImage("out", m_DilFilter->GetOutput());
       }
 
@@ -234,6 +239,7 @@ void DoExecute()
       m_DilFilter->SetKernel(se);
       m_DilFilter->SetInput(m_ExtractorFilter->GetOutput());
       m_DilFilter->SetForegroundValue(GetParameterFloat("filter.dilate.foreval"));
+      m_DilFilter->SetBackgroundValue(GetParameterFloat("filter.dilate.backval"));
       SetParameterOutputImage("out", m_DilFilter->GetOutput());
       }
 
