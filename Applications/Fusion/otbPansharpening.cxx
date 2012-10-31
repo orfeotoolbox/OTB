@@ -38,7 +38,7 @@ class Pansharpening : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef Pansharpening         Self;
+  typedef Pansharpening                 Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
