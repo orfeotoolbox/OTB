@@ -192,8 +192,8 @@ ListSampleGenerator<TImage, TVectorData>
         itk::ContinuousIndex<double, 2> point;
         image->TransformIndexToPhysicalPoint(it.GetIndex(), point);
         
-        if (exteriorRing->IsInside(point) ||
-             (exteriorRing->IsOnEdge(point) && (this->GetPolygonEdgeInclusion())))
+        if ( exteriorRing->IsInside(point) ||
+             (this->GetPolygonEdgeInclusion() && exteriorRing->IsOnEdge(point)) )
           {
           PolygonListPointerType interiorRings = itVector.Get()->GetPolygonInteriorRings();
 
@@ -203,7 +203,7 @@ ListSampleGenerator<TImage, TVectorData>
                ++interiorRing)
             {
             if ( interiorRing.Get()->IsInside(point)
-                 || (interiorRing.Get()->IsOnEdge(point) && this->GetPolygonEdgeInclusion()) )
+                 || (this->GetPolygonEdgeInclusion() && interiorRing.Get()->IsOnEdge(point)) )
               {
               isInsideInteriorRing = true;
               break;
