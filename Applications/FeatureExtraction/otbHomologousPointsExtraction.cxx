@@ -194,55 +194,63 @@ private:
       matchingFilter->SetInput2(surf2->GetOutput());
       }
 
-    matchingFilter->Update();
-    
-    LandmarkListType::Pointer landmarks = matchingFilter->GetOutput();
-    
-    otbAppLogINFO("Found " << landmarks->Size() <<" homologous points.");
-    
-    unsigned int discarded  = 0;
-    
-    for (LandmarkListType::Iterator it = landmarks->Begin();
-         it != landmarks->End(); ++it)
+    try
       {
-      PointType point1 = it.Get()->GetPoint1();
-      PointType point2 = it.Get()->GetPoint2();
+
+      matchingFilter->Update();
       
-      double error = 0;
-      PointType pprime;
-
-      bool filtered = false;
-
-      if(IsParameterEnabled("mfilter"))
+      LandmarkListType::Pointer landmarks = matchingFilter->GetOutput();
+    
+      otbAppLogINFO("Found " << landmarks->Size() <<" homologous points.");
+      
+      unsigned int discarded  = 0;
+      
+      for (LandmarkListType::Iterator it = landmarks->Begin();
+           it != landmarks->End(); ++it)
         {
-        pprime = rsTransform->TransformPoint(point1);
-        error = vcl_sqrt((point2[0]-pprime[0])*(point2[0]-pprime[0])+(point2[1]-pprime[1])*(point2[1]-pprime[1]));
-
-        if(error>GetParameterFloat("precision"))
+        PointType point1 = it.Get()->GetPoint1();
+        PointType point2 = it.Get()->GetPoint2();
+        
+        double error = 0;
+        PointType pprime;
+        
+        bool filtered = false;
+        
+        if(IsParameterEnabled("mfilter"))
           {
-          filtered = true;
-          }
-        }
-            
-      if(!filtered)
-        {
-        if(IsParameterEnabled("2wgs84"))
-          {
-          pprime = rsTransform2ToWGS84->TransformPoint(point2);
+          pprime = rsTransform->TransformPoint(point1);
+          error = vcl_sqrt((point2[0]-pprime[0])*(point2[0]-pprime[0])+(point2[1]-pprime[1])*(point2[1]-pprime[1]));
           
-          file<<point1[0]<<"\t"<<point1[1]<<"\t"<<pprime[0]<<"\t"<<pprime[1]<<std::endl;
+          if(error>GetParameterFloat("precision"))
+            {
+            filtered = true;
+            }
+          }
+        
+        if(!filtered)
+          {
+          if(IsParameterEnabled("2wgs84"))
+            {
+            pprime = rsTransform2ToWGS84->TransformPoint(point2);
+            
+            file<<point1[0]<<"\t"<<point1[1]<<"\t"<<pprime[0]<<"\t"<<pprime[1]<<std::endl;
+            }
+          else
+            {
+            file<<point1[0]<<"\t"<<point1[1]<<"\t"<<point2[0]<<"\t"<<point2[1]<<std::endl;
+            }
           }
         else
           {
-          file<<point1[0]<<"\t"<<point1[1]<<"\t"<<point2[0]<<"\t"<<point2[1]<<std::endl;
+          ++discarded;
           }
         }
-      else
-        {
-        ++discarded;
-        }
+      otbAppLogINFO(<<discarded<<" points discarded");
       }
-    otbAppLogINFO(<<discarded<<" points discarded");
+    catch(itk::ExceptionObject & err)
+      {
+      // silent catch
+      }
   }
  
 
