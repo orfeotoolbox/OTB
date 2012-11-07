@@ -20,9 +20,11 @@
 #include "otbWrapperApplicationFactory.h"
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperElevationParametersHandler.h"
+#include "otbWrapperMapProjectionParametersHandler.h"
 #include "otbSensorModelAdapter.h"
 #include "itkPoint.h"
-#include "otbGeographicalDistance.h"
+#include "itkEuclideanDistance.h"
+#include "otbGenericRSTransform.h"
 
 namespace otb
 {
@@ -38,10 +40,12 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef itk::Point<double,3>                 PointType;
-  typedef otb::GeographicalDistance<PointType> DistanceType;
+  typedef itk::Statistics::EuclideanDistance<PointType> DistanceType;
 
   typedef std::pair<PointType,PointType>       TiePointType;
   typedef std::vector<TiePointType>            TiePointsType;
+
+  typedef otb::GenericRSTransform<double,3,3>  RSTransformType;   
   
   /** Standard macro */
   itkNewMacro(Self);
@@ -73,6 +77,9 @@ private:
     MandatoryOff("outstat");
     DisableParameter("outstat");
 
+    // Build the Output Map Projection
+    MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
+
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
     
@@ -102,10 +109,6 @@ private:
       {
       case Elevation_DEM:
       {
-      sm->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-      sm->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-      sm_ref->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-      sm_ref->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
       demHandler->OpenDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
       demHandler->OpenGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
       }
@@ -149,7 +152,7 @@ private:
       lat = atof(line.substr(pos, nextpos).c_str());
       
       if(!use_avg_elevation)
-        z = demHandler->GetHeightAboveMSL(lon,lat);
+        z = demHandler->GetHeightAboveEllipsoid(lon,lat);
       else
         z = avg_elevation;
 
@@ -163,6 +166,7 @@ private:
       p1[2]=z;
       p2[0]=lon;
       p2[1]=lat;
+      p2[2]=z;
 
       tiepoints.push_back(std::make_pair(p1,p2));
 
@@ -193,6 +197,9 @@ private:
 
   DistanceType::Pointer distance = DistanceType::New();
 
+  RSTransformType::Pointer rsTransform = RSTransformType::New();
+  rsTransform->SetOutputProjectionRef(MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map"));
+  rsTransform->InstanciateTransform();
 
   std::ofstream ofs;
   ofs<<std::fixed;
@@ -206,35 +213,30 @@ private:
   for(TiePointsType::const_iterator it = tiepoints.begin();
       it!=tiepoints.end(); ++it)
     {
-    PointType tmpPoint,tmpPointX,tmpPointY, tmpPoint_ref, tmpPointX_ref,tmpPointY_ref;
+    PointType tmpPoint,tmpPoint_ref,ref;
     sm->ForwardTransformPoint(it->first[0],it->first[1],it->first[2],tmpPoint[0],tmpPoint[1],tmpPoint[2]);
     sm_ref->ForwardTransformPoint(it->first[0],it->first[1],it->first[2],tmpPoint_ref[0],tmpPoint_ref[1],tmpPoint_ref[2]);
 
+    tmpPoint = rsTransform->TransformPoint(tmpPoint);
+    tmpPoint_ref = rsTransform->TransformPoint(tmpPoint_ref);
+
+    ref[0] = it->second[0];
+    ref[1] = it->second[1];
+    ref[2] = it->second[2];
+
+    ref = rsTransform->TransformPoint(ref);
+
+    double gerror = distance->Evaluate(ref,tmpPoint);
+    double xerror = ref[0]-tmpPoint[0];
+    double yerror = ref[1]-tmpPoint[1];
     
-    tmpPointX = tmpPoint;
-    tmpPointX[1] = it->second[1];
-
-    tmpPointY = tmpPoint;
-    tmpPointY[0] = it->second[0];
-
-    tmpPointX_ref = tmpPoint_ref;
-    tmpPointX_ref[1] = it->second[1];
-
-    tmpPointY_ref = tmpPoint_ref;
-    tmpPointY_ref[0] = it->second[0];
-
-
-    double gerror = distance->Evaluate(it->second,tmpPoint);
-    double xerror = (it->second[0]-tmpPointX[0]>0 ? 1 : -1)*distance->Evaluate(it->second,tmpPointX);
-    double yerror = (it->second[1]-tmpPointY[1]>0 ? 1 : -1)*distance->Evaluate(it->second,tmpPointY);
-    
-    double gerror_ref = distance->Evaluate(it->second,tmpPoint_ref);
-    double xerror_ref = (it->second[0]-tmpPointX_ref[0]>0 ? 1 : -1)*distance->Evaluate(it->second,tmpPointX_ref);
-    double yerror_ref = (it->second[1]-tmpPointY_ref[1]>0 ? 1 : -1)*distance->Evaluate(it->second,tmpPointY_ref);
+    double gerror_ref = distance->Evaluate(ref,tmpPoint_ref);
+    double xerror_ref = ref[0]-tmpPoint_ref[0];
+    double yerror_ref = ref[1]-tmpPoint_ref[1];
 
 
     if(IsParameterEnabled("outstat"))
-      ofs<<it->second[0]<<"\t"<<it->second[1]<<"\t"<<it->first[2]<<"\t"<<tmpPoint[0]<<"\t"<<tmpPoint[1]<<"\t"<<xerror_ref<<"\t"<<yerror_ref<<"\t"<<gerror_ref<<"\t"<<xerror<<"\t"<<yerror<<"\t"<<gerror<<std::endl;
+      ofs<<ref[0]<<"\t"<<ref[1]<<"\t"<<it->first[2]<<"\t"<<tmpPoint[0]<<"\t"<<tmpPoint[1]<<"\t"<<tmpPoint[2]<<"\t"<<xerror_ref<<"\t"<<yerror_ref<<"\t"<<gerror_ref<<"\t"<<xerror<<"\t"<<yerror<<"\t"<<gerror<<std::endl;
 
     rmse += gerror*gerror;
     rmsex+= xerror*xerror;
@@ -292,22 +294,22 @@ private:
 
   otbAppLogINFO("Estimation of input geom file accuracy: ");
   otbAppLogINFO("Overall Root Mean Square Error: "<<rmse_ref<<" meters");
-  otbAppLogINFO("Horizontal Mean Error: "<<meanx_ref<<" meters");
-  otbAppLogINFO("Horizontal standard deviation: "<<stdevx_ref<<" meters");
-  otbAppLogINFO("Horizontal Root Mean Square Error: "<<rmsex_ref<<" meters");
-  otbAppLogINFO("Vertical Mean Error: "<<meany_ref<<" meters");
-  otbAppLogINFO("Vertical standard deviation: "<<stdevy_ref<<" meters");
-  otbAppLogINFO("Vertical Root Mean Square Error: "<<rmsey_ref<<" meters\n");
+  otbAppLogINFO("X Mean Error: "<<meanx_ref<<" meters");
+  otbAppLogINFO("X standard deviation: "<<stdevx_ref<<" meters");
+  otbAppLogINFO("X Root Mean Square Error: "<<rmsex_ref<<" meters");
+  otbAppLogINFO("Y Mean Error: "<<meany_ref<<" meters");
+  otbAppLogINFO("Y standard deviation: "<<stdevy_ref<<" meters");
+  otbAppLogINFO("Y Root Mean Square Error: "<<rmsey_ref<<" meters\n");
 
   otbAppLogINFO("Estimation of final accuracy: ");
 
   otbAppLogINFO("Overall Root Mean Square Error: "<<rmse<<" meters");
-  otbAppLogINFO("Horizontal Mean Error: "<<meanx<<" meters");
-  otbAppLogINFO("Horizontal standard deviation: "<<stdevx<<" meters");
-  otbAppLogINFO("Horizontal Root Mean Square Error: "<<rmsex<<" meters");
-  otbAppLogINFO("Vertical Mean Error: "<<meany<<" meters");
-  otbAppLogINFO("Vertical standard deviation: "<<stdevy<<" meters");
-  otbAppLogINFO("Vertical Root Mean Square Error: "<<rmsey<<" meters");
+  otbAppLogINFO("X Mean Error: "<<meanx<<" meters");
+  otbAppLogINFO("X standard deviation: "<<stdevx<<" meters");
+  otbAppLogINFO("X Root Mean Square Error: "<<rmsex<<" meters");
+  otbAppLogINFO("Y Mean Error: "<<meany<<" meters");
+  otbAppLogINFO("Y standard deviation: "<<stdevy<<" meters");
+  otbAppLogINFO("Y Root Mean Square Error: "<<rmsey<<" meters");
 
 
   if(IsParameterEnabled("outstat"))
