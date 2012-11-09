@@ -33,10 +33,15 @@ namespace otb
 /** \class DEMHandler
  *
  * \brief Class for Reading a DEM data
+ * 
+ * This class is the single configuration and access point for
+ * elevation handling in images projections and localisation functions.
  *
- * This class is based on ossimElevManager.
- * It allows to obtain height above MSL(Mean Sea Level) of a geographic point
- * Handle DTED and SRTM formats.
+ * It is based on ossimElevManager.
+ * It allows to obtain height above Ellipsoid or MSL(Mean Sea Level)
+ * of a geographic point.
+ *
+ * It handles both DTED and SRTM formats.
  * \ingroup Images
  *
  */
@@ -52,8 +57,13 @@ public:
 
   typedef itk::Point<double, 2> PointType;
 
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+  /** Method for creation through the object factory. 
+   *  \deprecated DEMHandler is now a singleton class, use Instance method instead.
+   */
+  itkLegacyMacro(static Self * New());
+
+  /** Retrieve the singleton instance */
+  static Self * Instance();
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(DEMHandler, Object);
@@ -87,6 +97,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   ossimElevManager* m_ElevManager;
+
+  static Self::Pointer m_Singleton;
 
 };
 

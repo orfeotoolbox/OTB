@@ -28,6 +28,21 @@
 namespace otb
 {
 
+DEMHandler * DEMHandler::Instance()
+{
+  // Check for singleton
+  if(m_Singleton.IsNull())
+    {
+    m_Singleton = ::itk::ObjectFactory<Self>::Create();
+    }
+  return m_Singleton;
+}
+
+DEMHandler * DEMHandler::New()
+{
+  return Instance();
+}
+
 DEMHandler
 ::DEMHandler() :
   m_ElevManager(ossimElevManager::instance())
