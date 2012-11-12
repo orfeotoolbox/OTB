@@ -19,6 +19,8 @@
 #define __otbRadiometricMomentsImageFunction_h
 
 #include "itkImageFunction.h"
+#include "otbRadiometricMomentsFunctor.h"
+#include "itkConstNeighborhoodIterator.h"
 #include "itkFixedArray.h"
 
 namespace otb
@@ -74,6 +76,9 @@ public:
 
   typedef TCoordRep                                CoordRepType;
 
+  typedef Functor::RadiometricMomentsFunctor< itk::ConstNeighborhoodIterator<InputImageType>, ScalarRealType>
+                                                   FunctorType;
+
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputImageType::ImageDimension);
@@ -112,6 +117,7 @@ private:
   void operator =(const Self&);  //purposely not implemented
 
   unsigned int m_NeighborhoodRadius;
+  FunctorType m_Functor;
 };
 
 } // namespace otb
