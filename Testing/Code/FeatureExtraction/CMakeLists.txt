@@ -1543,6 +1543,20 @@ ADD_TEST(feTvHistogramOfOrientedGradientCovariantImageFunction ${FEATUREEXTRACTI
   5 273 64
 )
 
+# ------ otb::RadiometricMomentsImageFilter --------
+ADD_TEST(feTuRadiometricMomentsImageFilterNew ${FEATUREEXTRACTION_TESTS16}
+         otbRadiometricMomentsImageFilterNew)
+         
+ADD_TEST(feTvRadiometricMomentsImageFilter ${FEATUREEXTRACTION_TESTS16}
+         --compare-image ${EPSILON_8}  
+			${BASELINE}/feTvRadiometricMomentsImageFilter.tif
+            ${TEMP}/feTvRadiometricMomentsImageFilter.tif
+        otbRadiometricMomentsImageFilter
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${TEMP}/feTvRadiometricMomentsImageFilter.tif
+        3 #radius
+        )
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbFeatureExtractionTests1.cxx
@@ -1742,6 +1756,7 @@ otbImageFunctionAdaptor.cxx
 otbMetaImageFunction.cxx
 otbHaralickTexturesImageFunction.cxx
 otbHistogramOfOrientedGradientCovariantImageFunction.cxx
+otbRadiometricMomentsImageFilter.cxx
 )
 
 
