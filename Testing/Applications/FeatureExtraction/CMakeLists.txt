@@ -90,5 +90,15 @@ OTB_TEST_APPLICATION(NAME  apTvFEGrayScaleMorphologicalOperation
                              -out ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFEGrayScaleMorphologicalOperation.tif
-                 		     ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif)	     
+                 		     ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif)	  
+                 		     
+OTB_TEST_APPLICATION(NAME  apTvFELocalStatisticExtraction
+                     APP  LocalStatisticExtraction
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif                             
+                             -channel 1 
+                             -radius 3
+                             -out ${TEMP}/apTvFELocalStatisticExtraction.tif
+                     VALID   --compare-image ${NOTOL}
+                   			 ${BASELINE}/feTvRadiometricMomentsImageFilter.tif
+                 		     ${TEMP}/apTvFELocalStatisticExtraction.tif)      		        
                  		     
