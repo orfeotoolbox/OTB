@@ -1,3 +1,4 @@
-#ADD_SUBDIRECTORY(Modules)
-#ADD_SUBDIRECTORY(Common)
-#ADD_SUBDIRECTORY(Application)
+# PROJECT(Monteverdi2)
+
+add_subdirectory(Application)
+#add_subdirectory(Common)
