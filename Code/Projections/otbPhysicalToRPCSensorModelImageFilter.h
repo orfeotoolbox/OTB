@@ -92,18 +92,9 @@ public:
   itkSetMacro(GridSize, SizeType);
   itkGetConstReferenceMacro(GridSize, SizeType);
 
-  /** Set/Get the DEM directory*/
-  itkSetStringMacro(DEMDirectory);
-  itkGetStringMacro(DEMDirectory);
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
 
-  /** Set/Get the DEM directory*/
-  itkSetStringMacro(GeoidFile);
-  itkGetStringMacro(GeoidFile);
-
-  /** Set/Get the AverageElevation*/
-  itkSetMacro(AverageElevation, double);
-  itkGetMacro(AverageElevation, double);
-  
   /** Set Grid size with an unsigned int parmeter*/
   void SetGridSize(unsigned int inSize)
   {
@@ -139,9 +130,6 @@ private:
   /** The rpc model estimator */
   GCPsToSensorModelPointerType       m_GCPsToSensorModelFilter;
   
-  std::string                        m_DEMDirectory;
-  std::string                        m_GeoidFile;
-  double                             m_AverageElevation;
   SizeType                           m_GridSize;
   bool                               m_OutputInformationGenerated;
 

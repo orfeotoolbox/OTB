@@ -33,9 +33,6 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 ::StereorectificationDeformationFieldSource() :
-  m_AverageElevation(0),
-  m_DEMDirectory(""),
-  m_GeoidFile(""),
   m_ElevationOffset(50),
   m_Scale(1),
   m_GridStep(1),
@@ -129,7 +126,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   m_RightImage->UpdateOutputInformation();
 
   // Setup the DEM handler if needed
-  typename DEMHandler::Pointer demHandler = DEMHandler::New();
+  typename DEMHandler::Pointer demHandler = DEMHandler::Instance();
 
   bool useDEM = false;
 
@@ -139,17 +136,6 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
   leftToGroundTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
 
-  if(m_DEMDirectory!="")
-    {
-    demHandler->OpenDEMDirectory(m_DEMDirectory);
-    leftToGroundTransform->SetDEMDirectory(m_DEMDirectory);
-    useDEM = true;
-    }
-  if(m_GeoidFile!="")
-    {
-    leftToGroundTransform->SetGeoidFile(m_GeoidFile);
-    demHandler->OpenGeoidFile(m_GeoidFile);
-    }
   leftToGroundTransform->InstanciateTransform();
 
   // Retrieve the deformation field pointers
@@ -176,7 +162,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   outputSpacing[1]*=m_LeftImage->GetSpacing()[1];
 
   // Then, we retrieve the origin of the left input image
-  double localElevation = m_AverageElevation;
+  double localElevation = otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid();
 
   if(useDEM)
     {
@@ -314,18 +300,6 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   leftToGroundTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
 
-
-  if(m_DEMDirectory!="")
-    {
-    demHandler->OpenDEMDirectory(m_DEMDirectory);
-    leftToGroundTransform->SetDEMDirectory(m_DEMDirectory);
-    useDEM = true;
-    }
-  if(m_GeoidFile!="")
-    {
-    leftToGroundTransform->SetGeoidFile(m_GeoidFile);
-    demHandler->OpenGeoidFile(m_GeoidFile);
-    }
   leftToGroundTransform->InstanciateTransform();
 
   // Retrieve the output pointers
@@ -336,7 +310,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   TDPointType currentPoint1, currentPoint2,nextLineStart1,nextLineStart2, startLine1, endLine1, startLine2, endLine2, epiPoint1, epiPoint2;
 
   // Then, we retrieve the origin of the left input image
-  double localElevation = m_AverageElevation;
+  double localElevation = otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid();
 
   // Initialize
   currentPoint1 = m_OutputOriginInLeftImage;

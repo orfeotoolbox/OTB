@@ -28,7 +28,7 @@ namespace otb
  */
 template <class TInputVectorData, class TInputImage>
 VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
-::VectorDataIntoImageProjectionFilter() : m_DEMDirectory(""), m_GeoidFile("")
+::VectorDataIntoImageProjectionFilter()
 {
   m_OutputSpacing.Fill(1);
   m_OutputOrigin.Fill(0);
@@ -178,19 +178,7 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   //std::cout << "remote sensing region ProjRef: " << rsRegion.GetRegionProjection() << std::endl;
 
   // Set the cartographic region to the extract roi filter
-  m_VdExtractFilter->SetRegion(rsRegion);
-
-  if (!m_DEMDirectory.empty())
-    {
-    m_VdExtractFilter->SetDEMDirectory(m_DEMDirectory);
-
-    // Set the geoid file if dem is available
-    if (!m_GeoidFile.empty())
-      {
-      m_VdExtractFilter->SetGeoidFile(m_GeoidFile);
-      }
-    }
-  
+  m_VdExtractFilter->SetRegion(rsRegion);  
 
   // Reproject VectorData in image projection
   m_VdProjFilter->SetInputProjectionRef(this->GetInput()->GetProjectionRef());
@@ -214,16 +202,6 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
     {
     m_VdProjFilter->SetOutputOrigin(this->GetOutputOrigin());
     m_VdProjFilter->SetOutputSpacing(this->GetOutputSpacing());
-    }
-
-  if (!m_DEMDirectory.empty())
-    {
-    m_VdProjFilter->SetDEMDirectory(m_DEMDirectory);
-    }
-
-  if (!m_GeoidFile.empty())
-    {
-    m_VdProjFilter->SetGeoidFile(m_GeoidFile);
     }
 
   m_VdProjFilter->Update();

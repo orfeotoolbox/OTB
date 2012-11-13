@@ -20,6 +20,7 @@
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbRemoteSensingRegion.h"
+#include "otbDEMHandler.h"
 #include "itkMacro.h"
 
 namespace otb
@@ -97,14 +98,8 @@ public:
   const RegionType& GetRegion()
   {return m_ROI; }
 
-  itkSetStringMacro(DEMDirectory);
-  itkGetStringMacro(DEMDirectory);
-
-  itkSetStringMacro(GeoidFile);
-  itkGetStringMacro(GeoidFile);
-
-  itkSetMacro(AverageElevation, double);
-  itkGetMacro(AverageElevation, double);
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
 
 protected:
   VectorDataExtractROI();
@@ -144,13 +139,8 @@ private:
   bool        m_ProjectionNeeded;
   RegionType  m_ROI;
   RegionType  m_GeoROI;
-  std::string m_DEMDirectory;
-  std::string m_GeoidFile;
-
-  double m_AverageElevation;
 
   unsigned int m_Kept;
-
 };
 
 } // end namespace otb

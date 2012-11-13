@@ -63,9 +63,8 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(SensorModelAdapter, itk::Object);
 
-  void SetDEMDirectory(const std::string& directory);
-
-  void SetGeoidFile(const std::string& geoidFile);
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
 
   /** Create the projection ( m_Model). Called by the SetImageGeometry methods */
   void CreateProjection(const ImageKeywordlist& image_kwl);

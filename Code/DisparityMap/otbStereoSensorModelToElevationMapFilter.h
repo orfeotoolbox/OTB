@@ -122,42 +122,24 @@ public:
   /** Get the output correlation map */
   TOutputHeight * GetCorrelationOutput();
 
-  /** Set the directory containing the DEM tiles */
-  itkSetStringMacro(DEMDirectory);
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
 
-  /** Get the directory containing the DEM tiles */
-  itkGetStringMacro(DEMDirectory);
-
-  /** Set the path to the geoid file */
-  itkSetStringMacro(GeoidFile);
-
-  /** Get the path to tyhe geoid file */
-  itkGetStringMacro(GeoidFile);
-
-  /** Set the use DEM flag. If set to true, the local elevation is
+  /** \deprecated Set the use DEM flag. If set to true, the local elevation is
    *  extracted from a DEM + geoid. If set to false, average elevation
    *  is used. Default is false. */
-  itkSetMacro(UseDEM, bool);
+  itkLegacyMacro(itkSetMacro(UseDEM, bool));
 
-  /** Get the use DEM flag. If set to true, the local elevation is
+  /** \deprecated Get the use DEM flag. If set to true, the local elevation is
    *  extracted from a DEM + geoid. If set to false, average elevation
    *  is used. Default is false. */
-  itkGetMacro(UseDEM, bool);
+  itkLegacyMacro(itkGetMacro(UseDEM, bool));
 
-  /** Toggle the use DEM flag. If set to true, the local elevation is
+  /** \deprecated Toggle the use DEM flag. If set to true, the local elevation is
    *  extracted from a DEM + geoid. If set to false, average elevation
-   *  is used. Default is false. */
-  itkBooleanMacro(UseDEM);
-
-  /** Set the average elevation to consider if no DEM is used. Default
-   *  is 0.
+   *  is used. Default is false. 
    */
-  itkSetMacro(AverageElevation, double);
-
-  /** Get the average elevation to consider if no DEM is used. Default
-   *  is 0.
-   */
-  itkGetMacro(AverageElevation, double);
+  itkLegacyMacro(itkBooleanMacro(UseDEM));
 
   /** Set the lower offset for the local elevation
    * exploration. Default is -20 meters.
@@ -259,15 +241,6 @@ private:
   /** If set to true, the local elevation is extracted from a DEM +
   geoid. If set to false, average elevation is used. Default is false. */
   bool m_UseDEM;
-
-  /** Directory containing the DEM tiles. */
-  std::string m_DEMDirectory;
-
-  /** Path to the geoid file */
-  std::string m_GeoidFile;
-
-  /** Average elevation to consider if no DEM is used. */
-  double m_AverageElevation;
 
   /** Threshold of the correlation to keep estimated height. */
   double m_CorrelationThreshold;

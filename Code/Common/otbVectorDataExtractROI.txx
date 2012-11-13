@@ -41,10 +41,6 @@ VectorDataExtractROI<TVectorData>
 ::VectorDataExtractROI() :
   m_ProjectionNeeded(false),
   m_ROI(),
-  m_GeoROI(),
-  m_DEMDirectory(""),
-  m_GeoidFile(""),
-  m_AverageElevation(-32768),
   m_Kept(0)
 {
 }
@@ -460,9 +456,6 @@ VectorDataExtractROI<TVectorData>
   genericTransform->SetOutputDictionary(inputDict);
   genericTransform->SetOutputOrigin(this->GetInput()->GetOrigin());
   genericTransform->SetOutputSpacing(this->GetInput()->GetSpacing());
-  genericTransform->SetDEMDirectory(m_DEMDirectory);
-  genericTransform->SetGeoidFile(m_GeoidFile);
-  genericTransform->SetAverageElevation(m_AverageElevation);
   genericTransform->InstanciateTransform();
 
   otbMsgDevMacro(<< genericTransform);

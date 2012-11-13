@@ -160,15 +160,10 @@ public:
   /** Set/Get the VectorData to render */
   itkSetObjectMacro(VectorData, VectorDataType);
   itkGetObjectMacro(VectorData, VectorDataType);
-
-  /** Set/Get the DEM directory */
-  itkSetStringMacro(DEMDirectory);
-  itkGetStringMacro(DEMDirectory);
-
-  /** Set/Get the DEM directory */
-  itkSetStringMacro(GeoidFile);
-  itkGetStringMacro(GeoidFile);
-
+  
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
+  
   /** Set/Get the Label */
   itkSetStringMacro(Label);
   itkGetStringMacro(Label);
@@ -229,12 +224,6 @@ private:
 
   /** StandardRenderingFunction */
   StandardRenderingFunctionPointerType m_RenderingFunction;
-
-  /** Path to the DEMDirectory (used if a VectorData is rendered */
-  std::string m_DEMDirectory;
-
-  /** GeoidFile filename (used if a VectorData is rendered */
-  std::string m_GeoidFile;
 
   /** */
   WidgetManagerPointerType m_DisplayWindow;

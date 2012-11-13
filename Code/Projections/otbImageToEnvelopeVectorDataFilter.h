@@ -85,14 +85,8 @@ public:
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
 
-  itkSetStringMacro(DEMDirectory);
-  itkGetStringMacro(DEMDirectory);
-
-  itkSetStringMacro(GeoidFile);
-  itkGetStringMacro(GeoidFile);
-
-  itkSetMacro(AverageElevation, double);
-  itkGetMacro(AverageElevation, double);
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
   
   itkSetMacro(SamplingRate, unsigned int);
   itkGetMacro(SamplingRate, unsigned int);
@@ -115,9 +109,6 @@ private:
 
   InternalTransformPointerType m_Transform;
   std::string                  m_OutputProjectionRef;
-  std::string                  m_DEMDirectory;
-  std::string                  m_GeoidFile;
-  double                       m_AverageElevation;
   unsigned int                 m_SamplingRate;      // Sampling rate for edges (in pixels)
 };
 

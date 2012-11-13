@@ -156,9 +156,9 @@ public:
   /** Macro to set the SRID we want to project Data in*/
   itkSetMacro(SRID, int);
 
-  /** Set the DEM Direcotory */
-  itkSetStringMacro(DEMDirectory);
-  
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
+
 protected:
   MapFileProductWriter();
   virtual ~MapFileProductWriter();
@@ -232,8 +232,6 @@ private:
   std::ofstream                m_File;
   int                          m_SRID;
 
-  // DEM directory
-  std::string                  m_DEMDirectory;
 };
 
 } // end namespace otb

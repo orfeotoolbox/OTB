@@ -70,14 +70,8 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataIntoImageProjectionFilter, VectorDataToVectorDataFilter);
 
-  itkSetStringMacro(DEMDirectory);
-  itkGetStringMacro(DEMDirectory);
-
-  itkSetStringMacro(GeoidFile);
-  itkGetStringMacro(GeoidFile);
-
-  itkSetMacro(AverageElevation, double);
-  itkGetMacro(AverageElevation, double);
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
 
   void SetInputVectorData(InputVectorDataPointer input)
   {
@@ -123,10 +117,6 @@ protected:
 private:
   VectorDataIntoImageProjectionFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
-  std::string m_DEMDirectory;
-  std::string m_GeoidFile;
-  double      m_AverageElevation;
 
   ImagePointerType m_InputImage;
 

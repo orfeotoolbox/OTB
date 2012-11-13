@@ -42,11 +42,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   m_ElevationMin = 0.0;
   m_ElevationMax = 100.0;
   m_DEMGridStep = 10.0;
-  
-  m_AverageElevation = 0.0;
-  m_DEMDirectory = "";
-  m_GeoidFile = "";
-  
+    
   m_InputSplitter = SplitterType::New();
   m_UsedInputSplits = 1;
 }
@@ -258,31 +254,11 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
-  leftToGroundTransform->SetInputKeywordList(leftImgPtr->GetImageKeywordlist());
-  if(m_DEMDirectory!="")
-    {
-    leftToGroundTransform->SetDEMDirectory(m_DEMDirectory);
-    }
-  if(m_GeoidFile!="")
-    {
-    leftToGroundTransform->SetGeoidFile(m_GeoidFile);
-    }
-  leftToGroundTransform->SetAverageElevation(m_AverageElevation);
-  
+  leftToGroundTransform->SetInputKeywordList(leftImgPtr->GetImageKeywordlist());  
   leftToGroundTransform->InstanciateTransform();
   
   RSTransform2DType::Pointer rightToGroundTransform = RSTransform2DType::New();
-  rightToGroundTransform->SetInputKeywordList(rightImgPtr->GetImageKeywordlist());
-  if(m_DEMDirectory!="")
-    {
-    rightToGroundTransform->SetDEMDirectory(m_DEMDirectory);
-    }
-  if(m_GeoidFile!="")
-    {
-    rightToGroundTransform->SetGeoidFile(m_GeoidFile);
-    }
-  rightToGroundTransform->SetAverageElevation(m_AverageElevation);
-  
+  rightToGroundTransform->SetInputKeywordList(rightImgPtr->GetImageKeywordlist());  
   rightToGroundTransform->InstanciateTransform();
   
   // left image
@@ -390,15 +366,6 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   typename DEMImageType::SpacingType outSpacing = outputDEM->GetSpacing();
   
   RSTransformType::Pointer groundToLeftTransform = RSTransformType::New();
-  if(m_DEMDirectory!="")
-    {
-    groundToLeftTransform->SetDEMDirectory(m_DEMDirectory);
-    }
-  if(m_GeoidFile!="")
-    {
-    groundToLeftTransform->SetGeoidFile(m_GeoidFile);
-    }
-  groundToLeftTransform->SetAverageElevation(m_AverageElevation);
   groundToLeftTransform->SetOutputKeywordList(leftSensor->GetImageKeywordlist());
   groundToLeftTransform->InstanciateTransform();
   
@@ -691,22 +658,6 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   
   leftToGroundTransform->SetInputKeywordList(leftSensor->GetImageKeywordlist());
   rightToGroundTransform->SetInputKeywordList(rightSensor->GetImageKeywordlist());
-  
-  typename DEMHandler::Pointer demHandler = DEMHandler::New();
-  
-  if(m_DEMDirectory!="")
-    {
-    leftToGroundTransform->SetDEMDirectory(m_DEMDirectory);
-    rightToGroundTransform->SetDEMDirectory(m_DEMDirectory);
-    demHandler->OpenDEMDirectory(m_DEMDirectory);
-    }
-  if(m_GeoidFile!="")
-    {
-    leftToGroundTransform->SetGeoidFile(m_GeoidFile);
-    rightToGroundTransform->SetGeoidFile(m_GeoidFile);
-    demHandler->OpenGeoidFile(m_GeoidFile);
-    }
-  demHandler->SetDefaultHeightAboveEllipsoid(m_AverageElevation);
     
   leftToGroundTransform->InstanciateTransform();
   rightToGroundTransform->InstanciateTransform();

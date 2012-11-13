@@ -117,21 +117,8 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro( StereorectificationDeformationFieldSource, ImageSource );
 
-  /** Get/Set the average elevation */
-  itkSetMacro(AverageElevation,double);
-  itkGetConstReferenceMacro(AverageElevation,double);
-
-  /** Get/Set the DEM directory */
-  itkSetStringMacro(DEMDirectory);
-  itkGetStringMacro(DEMDirectory);
-
-  /** Get/Set the geoid file */
-  itkSetStringMacro(GeoidFile);
-  itkGetStringMacro(GeoidFile);
-
-  /** Get/Set the elevation offset */
-  itkSetMacro(ElevationOffset,double);
-  itkGetConstReferenceMacro(ElevationOffset,double);
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
 
   /** Get/Set the scale */
   itkSetMacro(Scale,double);
@@ -191,15 +178,6 @@ private:
                                                             // not
                                                             // implemented
   void operator=( const Self& ); //purposely not implemented
-
-  /** Disparity will be null for this elevation */
-  double m_AverageElevation;
-
-  /** The DEM directory if used */
-  std::string m_DEMDirectory;
-
-  /** The geoid file if used */
-  std::string m_GeoidFile;
 
   /** This elevation offset is used to compute the epipolar direction */
   double m_ElevationOffset;

@@ -190,9 +190,6 @@ void otb::GeometriesProjectionFilter::DoFinalizeInitialisation()
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->SetInputKeywordList(m_InputKeywordList);
   m_Transform->SetOutputKeywordList(m_OutputKeywordList);
-  m_Transform->SetDEMDirectory(m_DEMDirectory);
-  m_Transform->SetGeoidFile(m_GeoidFile);
-  m_Transform->SetAverageElevation(k_averageElevation);
 
   m_Transform->SetInputSpacing(m_InputImageReference.GetSpacing());
   m_Transform->SetInputOrigin(m_InputImageReference.GetOrigin());

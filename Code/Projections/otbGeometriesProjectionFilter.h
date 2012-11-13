@@ -254,15 +254,10 @@ public:
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
   //@}
-  
-  /**\name Elevation data
-   * Accessors and mutators for DEM directory and geoid file
-   */
-  //@{
-  itkSetStringMacro(DEMDirectory);
-  itkGetStringMacro(DEMDirectory);
-  itkSetStringMacro(GeoidFile);
-  itkGetStringMacro(GeoidFile);
+
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
+
   //@}
 private:
   /**\name Functor definition */
@@ -292,9 +287,6 @@ private:
   std::string                                     m_OutputProjectionRef; // in WKT format!
   ImageKeywordlist                                m_InputKeywordList;
   ImageKeywordlist                                m_OutputKeywordList;
-
-  std::string                                     m_DEMDirectory;
-  std::string                                     m_GeoidFile;
 };
 } // end namespace otb
 

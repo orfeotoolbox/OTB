@@ -33,9 +33,9 @@ namespace otb
 {
 
 SensorModelAdapter::SensorModelAdapter():
-  m_SensorModel(NULL), m_TiePoints(NULL), m_UseDEM(false), m_Epsilon(0.0001),  m_NbIter(1) // FIXME keeping the original value but...
+  m_SensorModel(NULL), m_TiePoints(NULL), m_UseDEM(true), m_Epsilon(0.0001),  m_NbIter(1) // FIXME keeping the original value but...
 {
-  m_DEMHandler = DEMHandler::New();
+  m_DEMHandler = DEMHandler::Instance();
   m_TiePoints = new ossimTieGptSet();
 }
 
@@ -78,18 +78,6 @@ bool SensorModelAdapter::IsValidSensorModel()
     {
       return true;
     }
-}
-
-
-void SensorModelAdapter::SetDEMDirectory(const std::string& directory)
-{
-  m_DEMHandler->OpenDEMDirectory(directory);
-  m_UseDEM = true;
-}
-
-void SensorModelAdapter::SetGeoidFile(const std::string& geoidFile)
-{
-  m_DEMHandler->OpenGeoidFile(geoidFile);
 }
 
 void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,

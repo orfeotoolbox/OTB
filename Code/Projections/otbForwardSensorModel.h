@@ -72,8 +72,6 @@ public:
   /** Compute the world coordinates. */
   OutputPointType TransformPoint(const InputPointType& point) const;
 
-  virtual void AddTiePoint(const InputPointType & inputPoint, const OutputPointType & outputPoint);
-
 protected:
   ForwardSensorModel();
   virtual ~ForwardSensorModel();

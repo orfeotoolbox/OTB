@@ -35,13 +35,6 @@ PhysicalToRPCSensorModelImageFilter<TImage>
   // Initialize the rpc estimator
   m_GCPsToSensorModelFilter = GCPsToSensorModelType::New();
   
-  // Initialize the DEMDirectory
-  m_DEMDirectory = "";
-  
-  // Initialize the average elevation used
-  //  0. or -32768.0 ???
-  m_AverageElevation = 0.;
-
   // Initialize the gridSize : 16 points to have a correct estimation
   // of the model
   m_GridSize.Fill(4);
@@ -73,29 +66,6 @@ PhysicalToRPCSensorModelImageFilter<TImage>
     // Generate GCPs from physical sensor model
     RSTransformPointerType  rsTransform = RSTransformType::New();
     rsTransform->SetInputKeywordList(input->GetImageKeywordlist());
-  
-    if(!m_DEMDirectory.empty())
-      {
-      // Set the DEM & Average Elevation to the Remote Sensing Transform
-      rsTransform->SetDEMDirectory(m_DEMDirectory);
-      rsTransform->SetAverageElevation(m_AverageElevation);
-    
-      // Generate DEMHandler & set it to the GCP2sensorModel
-      typename DEMHandler::Pointer demHandler = DEMHandler::New();
-      demHandler->OpenDEMDirectory(m_DEMDirectory.c_str());
-      m_GCPsToSensorModelFilter->SetUseDEM(true);
-      m_GCPsToSensorModelFilter->SetDEMHandler(demHandler);
-      }
-
-    if(!m_GeoidFile.empty())
-      {
-      // Set the DEM & Average Elevation to the Remote Sensing Transform
-      rsTransform->SetGeoidFile(m_GeoidFile);
-    
-      // Generate DEMHandler & set it to the GCP2sensorModel
-      m_GCPsToSensorModelFilter->GetDEMHandler()->OpenGeoidFile(m_GeoidFile);
-      }
-
     rsTransform->InstanciateTransform();
   
     // Compute the size of the grid

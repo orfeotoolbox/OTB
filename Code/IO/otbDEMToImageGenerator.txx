@@ -29,7 +29,7 @@ template<class TDEMImage>
 DEMToImageGenerator<TDEMImage>
 ::DEMToImageGenerator()
 {
-  m_DEMHandler = DEMHandlerType::New();
+  m_DEMHandler = DEMHandlerType::Instance();
   m_OutputSpacing[0] = 0.0001;
   m_OutputSpacing[1] = -0.0001;
   m_OutputSize[0] = 1;
@@ -38,43 +38,8 @@ DEMToImageGenerator<TDEMImage>
   m_OutputOrigin[1] = 0;
   m_AboveEllipsoid = false;
 
-  // Value defined in the norm for points SRTM doesn't have information.
-  m_DefaultUnknownValue = static_cast<PixelType>(-32768);
-
   m_Transform         = GenericRSTransformType::New();
 }
-
-// DEM folder specification method
-template<class TDEMImage>
-void
-DEMToImageGenerator<TDEMImage>::
-SetDEMDirectoryPath(const char* DEMDirectory)
-{
-  m_DEMHandler->OpenDEMDirectory(DEMDirectory);
-}
-template<class TDEMImage>
-void
-DEMToImageGenerator<TDEMImage>::
-SetDEMDirectoryPath(const std::string& DEMDirectory)
-{
-  this->SetDEMDirectoryPath(DEMDirectory.c_str());
-}
-
-template<class TDEMImage>
-void
-DEMToImageGenerator<TDEMImage>::
-SetGeoidFile(const char* path)
-{
-  m_DEMHandler->OpenGeoidFile(path);
-}
-template<class TDEMImage>
-void
-DEMToImageGenerator<TDEMImage>::
-SetGeoidFile(const std::string& path)
-{
-  this->SetGeoidFile(path.c_str());
-}
-
 
 // GenerateOutputInformation method
 template <class TDEMImage>

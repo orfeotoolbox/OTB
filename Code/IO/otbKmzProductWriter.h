@@ -158,14 +158,8 @@ public:
   /** Set the size of the tiles to produce */
   itkSetMacro(TileSize, int);
 
-  /** Set the DEM Direcotory */
-  itkSetStringMacro(DEMDirectory);
-
-  /** Set the geoid file if any */
-  itkSetStringMacro(GeoidFile);
-
-  /** Set the geoid file if any */
-  itkSetMacro(AverageElevation, double);
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
 
 protected:
   KmzProductWriter();
@@ -317,11 +311,6 @@ private:
 
   // Vector used to store legend and description
   LegendVectorType       m_LegendVector;
-
-  // DEM directory
-  std::string            m_DEMDirectory;
-  std::string            m_GeoidFile;
-  double                 m_AverageElevation;
 };
 
 } // end namespace otb

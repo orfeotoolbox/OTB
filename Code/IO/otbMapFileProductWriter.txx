@@ -120,8 +120,6 @@ MapFileProductWriter<TInputImage>
     otbMsgDevMacro( "Sensor Model detected : Reprojecting in the targer SRID" );
     m_GenericRSResampler->SetInput(this->GetInput());
     m_GenericRSResampler->SetOutputParametersFromMap(otb::GeoInformationConversion::ToWKT(m_SRID));
-    if (!m_DEMDirectory.empty())
-      m_GenericRSResampler->SetDEMDirectory(m_DEMDirectory);
     m_VectorImage = m_GenericRSResampler->GetOutput();
     m_VectorImage->UpdateOutputInformation();
     }
@@ -365,8 +363,6 @@ MapFileProductWriter<TInputImage>
         m_Transform  = TransformType::New();
         m_Transform->SetInputProjectionRef(m_GenericRSResampler->GetOutputProjectionRef());
         m_Transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(m_SRID));
-        if(!m_DEMDirectory.empty())
-          m_Transform->SetDEMDirectory(m_DEMDirectory);
         m_Transform->InstanciateTransform();
         
         InputPointType  inputPoint;

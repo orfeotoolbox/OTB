@@ -79,15 +79,9 @@ public:
    * Return false if not model found.
    */
   virtual void SetImageGeometry(const ImageKeywordlist& image_kwl);
-
-  /** Set/Get the average elevation if the DEM is not used*/
-  itkSetMacro(AverageElevation, TScalarType);
-  itkGetMacro(AverageElevation, TScalarType);
-
-  virtual void SetDEMDirectory(const std::string& directory);
-
-  virtual void SetGeoidFile(const std::string& geoidFile);
-
+    
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
 
   /** Is sensor model valid method. return false if the sensor model is null */
   bool IsValidSensorModel()
@@ -115,9 +109,6 @@ protected:
   ImageKeywordlist m_ImageKeywordlist;
   /** Pointer on an ossim projection (created with the keywordlist) */
   SensorModelAdapter::Pointer m_Model;
-
-  /** Specify an average elevation to use */
-  TScalarType m_AverageElevation;
 
 private:
   SensorModelBase(const Self &); //purposely not implemented

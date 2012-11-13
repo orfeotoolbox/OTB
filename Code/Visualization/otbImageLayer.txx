@@ -357,7 +357,6 @@ ImageLayer<TImage, TOutputImage>
   m_Transform->SetInputDictionary(inputDict);
   m_Transform->SetInputOrigin(m_Image->GetOrigin());
   m_Transform->SetInputSpacing(m_Image->GetSpacing());
-  //  m_Transform->SetDEMDirectory(m_DEMDirectory);
   m_Transform->InstanciateTransform();
 
   //Set parameters of the ground spacing image calculators

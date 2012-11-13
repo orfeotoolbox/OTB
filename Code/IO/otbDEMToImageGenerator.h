@@ -95,8 +95,8 @@ public:
   itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
   /** Set/Get the Default Unknown Value. */
-  itkSetMacro(DefaultUnknownValue, PixelType);
-  itkGetConstReferenceMacro(DefaultUnknownValue, PixelType);
+  itkLegacyMacro(itkSetMacro(DefaultUnknownValue, PixelType));
+  itkLegacyMacro(itkGetConstReferenceMacro(DefaultUnknownValue, PixelType));
 
   /** Set/Get the Default Unknown Value. */
   itkSetObjectMacro(Transform, GenericRSTransformType);
@@ -111,12 +111,23 @@ public:
   void InstanciateTransform();
 
   /** Set the DEM directory. */
-  virtual void SetDEMDirectoryPath(const char* DEMDirectory);
-  virtual void SetDEMDirectoryPath(const std::string& DEMDirectory);
 
-  /** Set the DEM directory. */
-  virtual void SetGeoidFile(const char* path);
-  virtual void SetGeoidFile(const std::string& path);
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
+
+  itkLegacyMacro(
+    virtual void SetDEMDirectoryPath(const char* DEMDirectory)
+    {
+      SetDEMDirectory(DEMDirectory);
+    }
+    )
+
+    itkLegacyMacro(
+      virtual void SetDEMDirectoryPath(const std::string& DEMDirectory)
+      {
+        SetDEMDirectory(DEMDirectory);
+      }
+      )
 
   /**
    * Set/Get input & output projections.

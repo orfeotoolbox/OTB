@@ -74,8 +74,6 @@ public:
   // Transform of geographic point in image sensor index -- Backward Compatibility
   //  OutputPointType TransformPoint(const InputPointType &point, double height) const;
 
-  virtual void AddTiePoint(const InputPointType & inputPoint, const OutputPointType & outputPoint);
-
 protected:
   InverseSensorModel();
   virtual ~InverseSensorModel();

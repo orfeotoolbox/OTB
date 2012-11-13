@@ -52,11 +52,8 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   m_VarianceThreshold = 4;
   m_SubtractInitialElevation = false;
 
-  // DEM handling
+  // DEM handling (deprecated)
   m_UseDEM = false;
-  m_AverageElevation = 0;
-  m_DEMDirectory="";
-  m_GeoidFile="";
 }
 
 template <class TInputImage, class TOutputHeight>
@@ -164,15 +161,6 @@ void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   transform->SetInputKeywordList(masterPtr->GetImageKeywordlist());
   transform->SetOutputKeywordList(slavePtr->GetImageKeywordlist());
 
-  // Set the elevation
-  if(m_UseDEM)
-    {
-    transform->SetDEMDirectory(m_DEMDirectory);
-    }
-  else
-    {
-    transform->SetAverageElevation(m_AverageElevation);
-    }
   transform->InstanciateTransform();
 
   typename GenericRSTransformType::ParametersType params(1);
@@ -285,25 +273,15 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   m_Interpolator->SetInputImage(this->GetSlaveInput());
   this->GetCorrelationOutput()->FillBuffer(0.);
 
-  if( !m_UseDEM )
-    {
-    // Initialize with average elevation
-    this->GetOutput()->FillBuffer(m_AverageElevation);
-    return;
-    }
-
+  // Initialize with average elevation
+  this->GetOutput()->FillBuffer(otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid());
 
   // Initialize with DEM elevation (not threadable because of some
   // mutex in ossim)
   OutputImageType * outputPtr  = this->GetOutput();
 
-  typename DEMHandler::Pointer demHandler = DEMHandler::New();
-  demHandler->OpenDEMDirectory(m_DEMDirectory);
-  demHandler->OpenGeoidFile(m_GeoidFile);
-
   typename GenericRSTransformType::Pointer rsTransform = GenericRSTransformType::New();
   rsTransform->SetInputKeywordList(outputPtr->GetImageKeywordlist());
-  rsTransform->SetDEMDirectory(m_DEMDirectory);
   rsTransform->InstanciateTransform();
 
   // Fill ouptut
@@ -317,7 +295,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 
     // Transform to geo point
     geoPoint = rsTransform->TransformPoint(outputPoint);
-    outputIt.Set(demHandler->GetHeightAboveEllipsoid(geoPoint));
+    outputIt.Set(otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(geoPoint));
     }
 
 }
@@ -398,8 +376,6 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   itk::ImageRegionIteratorWithIndex<OutputImageType> correlIt(correlPtr, outputRegionForThread);
 
   // Transform elevation set-up
-  transform->SetAverageElevation(0.);
-  transform->SetDEMDirectory("");
   transform->InstanciateTransform();
 
   // Start visiting buffer again

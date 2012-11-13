@@ -33,8 +33,6 @@ namespace otb
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::GenericRSTransform() : Superclass(SpaceDimension, ParametersDimension),
-                         m_DEMDirectory(""), m_GeoidFile(""),
-                         m_AverageElevation(-32768.0),
                          m_OptimizeInputTransform(false),
                          m_OptimizeOutputTransform(false),
                          m_InputTiePoints(),
@@ -154,20 +152,6 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 
     if (sensorModel->IsValidSensorModel())
       {
-      if (!m_DEMDirectory.empty())
-        {
-        sensorModel->SetDEMDirectory(m_DEMDirectory);
-
-        // Set Geoid file only if used is used
-        if (!m_GeoidFile.empty())
-          {
-          sensorModel->SetGeoidFile(m_GeoidFile);
-          }
-        }
-      else if (m_AverageElevation != -32768.0)
-        {
-        sensorModel->SetAverageElevation(m_AverageElevation);
-        }
       if(m_OptimizeInputTransform && !m_InputTiePoints.empty())
         {
         for(typename InputTiePointContainerType::const_iterator it = m_InputTiePoints.begin();
@@ -238,19 +222,6 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     
     if (sensorModel->IsValidSensorModel())
       {
-      if (!m_DEMDirectory.empty())
-        {
-        sensorModel->SetDEMDirectory(m_DEMDirectory);
-        // set the geoid file if any only when dem is used
-        if (!m_GeoidFile.empty())
-          {
-          sensorModel->SetGeoidFile(m_GeoidFile);
-          }
-        }
-      else if (m_AverageElevation != -32768.0)
-        {
-        sensorModel->SetAverageElevation(m_AverageElevation);
-        }
       if(m_OptimizeOutputTransform && !m_OutputTiePoints.empty())
         {
         for(typename OutputTiePointContainerType::const_iterator it = m_OutputTiePoints.begin();
@@ -283,9 +254,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   m_TransformUpToDate = true;
 
   //The accuracy information is a simplistic model for now and should be refined
-  if ((inputTransformIsSensor || outputTransformIsSensor) && (m_DEMDirectory.empty()))
+  if ((inputTransformIsSensor || outputTransformIsSensor))
     {
-    //Sensor model without DEM
+    //Sensor model
     m_TransformAccuracy = Projection::ESTIMATE;
     }
   else if (firstTransformGiveGeo && !outputTransformIsSensor && !outputTransformIsMap)
@@ -359,10 +330,6 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   // Switch origins
   inverseTransform->SetInputOrigin(m_OutputOrigin);
   inverseTransform->SetOutputOrigin(m_InputOrigin);
-
-  // Copy some more parameters
-  inverseTransform->SetAverageElevation(m_AverageElevation);
-  inverseTransform->SetDEMDirectory(m_DEMDirectory);
 
   // Copy optimization parameters
   inverseTransform->SetInputTiePoints(m_OutputTiePoints);

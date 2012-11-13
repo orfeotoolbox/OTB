@@ -139,18 +139,9 @@ public:
   itkSetMacro(DEMGridStep, double);
   itkGetConstReferenceMacro(DEMGridStep, double);
   
-  /** Get/Set the average elevation */
-  itkSetMacro(AverageElevation,double);
-  itkGetConstReferenceMacro(AverageElevation,double);
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
 
-  /** Get/Set the DEM directory */
-  itkSetStringMacro(DEMDirectory);
-  itkGetStringMacro(DEMDirectory);
-
-  /** Get/Set the geoid file */
-  itkSetStringMacro(GeoidFile);
-  itkGetStringMacro(GeoidFile);
-  
 protected:
   /** Constructor */
   DisparityMapToDEMFilter();
@@ -185,16 +176,7 @@ private:
   
   /** DEM grid step (in meters) */
   double m_DEMGridStep;
-  
-  /** DEM Directory */
-  std::string m_DEMDirectory;
-  
-  /** Geoid File */
-  std::string m_GeoidFile;
-  
-  /** Average Elevation */
-  double m_AverageElevation;
-  
+    
   /** Region splitter for input disparity maps */
   SplitterType::Pointer m_InputSplitter;
   

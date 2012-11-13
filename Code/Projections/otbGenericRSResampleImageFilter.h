@@ -194,35 +194,8 @@ public:
     return m_Transform->GetInputKeywordList();
   }
   
-  /** Set/Get the DEMDirectory*/
-  void SetDEMDirectory(const std::string&  dem)
-  {
-    m_Transform->SetDEMDirectory(dem);
-    m_InputRpcEstimator->SetDEMDirectory(dem);
-    m_OutputRpcEstimator->SetDEMDirectory(dem);
-    this->Modified();
-  }
-  otbGetObjectMemberConstMacro(Transform, DEMDirectory, std::string);
-
-  /** Set/Get the GeoidFile*/
-  void SetGeoidFile(const std::string&  geoidFile)
-  {
-    m_Transform->SetGeoidFile(geoidFile);
-    m_InputRpcEstimator->SetGeoidFile(geoidFile);
-    m_OutputRpcEstimator->SetGeoidFile(geoidFile);
-    this->Modified();
-  }
-  otbGetObjectMemberConstMacro(Transform, GeoidFile, std::string);
-
-  /** Method to Set the Average Elevation used */
-  void SetAverageElevation(double elevation)
-  {
-    m_Transform->SetAverageElevation(elevation);
-    m_InputRpcEstimator->SetAverageElevation(elevation);
-    m_OutputRpcEstimator->SetAverageElevation(elevation);
-    this->Modified();
-  }
-  otbGetObjectMemberConstMacro(Transform, AverageElevation, double);
+  // Deprecated calls to elevation setters
+  otbLegacyElevationMacro();
   
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);

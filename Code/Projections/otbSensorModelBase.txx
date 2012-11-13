@@ -33,7 +33,6 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::SensorModelBase() : Superclass(OutputSpaceDimension, 0) //FIXME
 {
   m_Model = SensorModelAdapter::New();
-  m_AverageElevation = -32768; // used as a invalid value
 }
 
 template <class TScalarType,
@@ -65,27 +64,6 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
   m_ImageKeywordlist = image_kwl;
   m_Model->CreateProjection(m_ImageKeywordlist);
 }
-
-template <class TScalarType,
-    unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-void
-SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
-::SetDEMDirectory(const std::string& directory)
-{
-  m_Model->SetDEMDirectory(directory);
-}
-
-template <class TScalarType,
-    unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-void
-SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
-::SetGeoidFile(const std::string& geoidFile)
-{
-  m_Model->SetGeoidFile(geoidFile);
-}
-
 
 template <class TScalarType,
     unsigned int NInputDimensions,

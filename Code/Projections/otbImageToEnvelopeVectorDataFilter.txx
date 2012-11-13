@@ -28,9 +28,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputVectorData>
 ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
-::ImageToEnvelopeVectorDataFilter() : m_DEMDirectory(""), m_GeoidFile(""),
-                                      m_AverageElevation(-32768.0),
-                                      m_SamplingRate(0)
+::ImageToEnvelopeVectorDataFilter() : m_SamplingRate(0)
 {
   this->SetNumberOfInputs(1);
   this->SetNumberOfOutputs(1);
@@ -113,9 +111,6 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->SetInputProjectionRef(inputPtr->GetProjectionRef());
   m_Transform->SetInputKeywordList(inputPtr->GetImageKeywordlist());
-  m_Transform->SetDEMDirectory(m_DEMDirectory);
-  m_Transform->SetGeoidFile(m_GeoidFile);
-  m_Transform->SetAverageElevation(m_AverageElevation);
   m_Transform->InstanciateTransform();
 }
 
