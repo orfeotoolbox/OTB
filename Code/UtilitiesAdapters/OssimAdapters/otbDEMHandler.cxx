@@ -45,7 +45,9 @@ DEMHandler * DEMHandler::New()
 
 DEMHandler
 ::DEMHandler() :
-  m_ElevManager(ossimElevManager::instance())
+  m_ElevManager(ossimElevManager::instance()),
+  m_GeoidFile(""),
+  m_DefaultHeightAboveEllipsoid(0)
 {
 }
 
@@ -87,6 +89,9 @@ DEMHandler
     ossimRefPtr<ossimGeoid> geoidPtr = new ossimGeoidEgm96(geoid);
     if (geoidPtr->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
       {
+      // Ossim does not allow to retrieve the geoid file path
+      // We therefore must keep it on our side
+      m_GeoidFile = geoidFile;
       otbMsgDevMacro(<< "Geoid successfully opened");
       ossimGeoidManager::instance()->addGeoid(geoidPtr);
       geoidPtr.release();
@@ -149,7 +154,37 @@ void
 DEMHandler
 ::SetDefaultHeightAboveEllipsoid(double h)
 {
+  // Ossim does not allow to retrieve the default height above
+  // ellipsoid We therefore must keep it on our side
+  double m_DefaultHeightAboveEllipsoid = h;
   m_ElevManager->setDefaultHeightAboveEllipsoid(h);
+}
+
+double
+DEMHandler
+::GetDefaultHeightAboveEllipsoid() const
+{
+  // Ossim does not allow to retrieve the default height above
+  // ellipsoid We therefore must keep it on our side
+  return m_DefaultHeightAboveEllipsoid;
+}
+
+std::string DEMHandler::GetDEMDirectory(unsigned int idx) const
+{
+  std::string demDir = "";
+
+  if(m_ElevManager->getNumberOfElevationDatabases() > 0)
+    {
+    demDir = m_ElevManager->getElevationDatabase(idx)->getConnectionString().string();
+    }
+  return demDir;
+}
+
+std::string DEMHandler::GetGeoidFile() const
+{
+  // Ossim does not allow to retrieve the geoid file path
+  // We therefore must keep it on our side
+  return m_GeoidFile;
 }
 
 void

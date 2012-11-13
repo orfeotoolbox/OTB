@@ -28,6 +28,34 @@
 
 class ossimElevManager;
 
+// This macro is here to replace deprecated elevation setup in all
+// classes at once
+#define otbLegacyElevationMacro()                                       \
+  itkLegacyMacro(void SetDEMDirectory(const std::string & dem)          \
+  {                                                                     \
+    otb::DEMHandler::Instance()->OpenDEMDirectory(dem);                 \
+  })                                                                    \
+  itkLegacyMacro(std::string GetDEMDirectory() const                    \
+  {                                                                     \
+    return otb::DEMHandler::Instance()->GetDEMDirectory();              \
+  })                                                                    \
+  itkLegacyMacro(void SetGeoidFile(const std::string & geoid)           \
+  {                                                                     \
+    otb::DEMHandler::Instance()->OpenGeoidFile(geoid);                  \
+  })                                                                    \
+  itkLegacyMacro(std::string GetGeoidFile() const                       \
+  {                                                                     \
+    return otb::DEMHandler::Instance()->GetGeoidFile();                 \
+  })                                                                    \
+  itkLegacyMacro(void SetAverageElevation(double elevation)             \
+  {                                                                     \
+  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(elevation);  \
+  })                                                                    \
+  itkLegacyMacro(double GetAverageElevation() const                     \
+  {                                                                     \
+  return otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid(); \
+  })                                                                    \
+
 namespace otb
 {
 /** \class DEMHandler
@@ -90,6 +118,16 @@ public:
   /** Set the default height above ellipsoid in case no information is available*/
   virtual void SetDefaultHeightAboveEllipsoid(double h);
 
+  /** Set the default height above ellipsoid in case no information is available*/
+  double GetDefaultHeightAboveEllipsoid() const;
+
+
+  /** Get DEM directory */
+  std::string GetDEMDirectory(unsigned int idx = 0) const;
+
+  /** Get Goid file */
+  std::string GetGeoidFile() const;
+
 protected:
   DEMHandler();
   virtual ~DEMHandler() {}
@@ -97,6 +135,14 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   ossimElevManager* m_ElevManager;
+
+  // Ossim does not allow to retrieve the geoid file path
+  // We therefore must keep it on our side
+  std::string m_GeoidFile;
+
+  // Ossim does not allow to retrieve the default height above
+  // ellipsoid We therefore must keep it on our side
+  double m_DefaultHeightAboveEllipsoid;
 
   static Self::Pointer m_Singleton;
 
