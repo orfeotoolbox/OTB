@@ -19,6 +19,7 @@
 #include "mvdMainWindow.h"
 #include "ui_mvdMainWindow.h"
 
+
 //
 // System includes (sorted by alphabetic order)
 
@@ -54,6 +55,14 @@ MainWindow
 
   addDockWidget( Qt::LeftDockWidgetArea, dock_widget );
 */
+
+  // TODO : uncomment to use the otbQGLImageWiget
+  // glWidget = new otb::QGLImageWidget();
+  // QHBoxLayout *mainLayout = new QHBoxLayout;
+  // mainLayout->addWidget(m_QGLWidget);
+  // setLayout(mainLayout);
+  // setWindowTitle(tr("OTB QGL Window"));
+  
 
   QObject::connect(
     m_UI->action_Quit, SIGNAL( activated() ),
