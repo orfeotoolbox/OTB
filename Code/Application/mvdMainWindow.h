@@ -64,14 +64,14 @@ public:
 protected:
 
 //
-// SLOTS
-private slots:
-  void on_action_Quit_activated();
-
-//
 //
 private:
   Ui::MainWindow* m_UI;
+
+//
+// SLOTS
+private slots:
+  void on_action_Open_activated();
 };
 
 } // end namespace 'mvd'

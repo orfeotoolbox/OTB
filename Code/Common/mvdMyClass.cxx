@@ -6,7 +6,7 @@
   Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved .
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
 
@@ -16,15 +16,13 @@
 
 =========================================================================*/
 
-#include "mvdApplication.h"
+#include "mvdMyClass.h"
 
 //
 // System includes (sorted by alphabetic order)
-#include <iostream>
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QApplication>
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -32,37 +30,21 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
-//
-// Class pre-declaration.
-//
-// Class implementation.
 namespace mvd
 {
 
-Application
-::Application( int& argc, char** argv ) :
-  QApplication( argc, argv )
-{
-  QObject::connect(
-    this, SIGNAL( aboutToQuit() ),
-    this, SLOT( OnAboutToQuit() )
-    );
-}
-
-Application
-::~Application()
+MyClass
+::MyClass()
 {
 }
 
-//
-// SLOTS
-//
-
-void
-Application
-::OnAboutToQuit()
+MyClass
+::~MyClass()
 {
-  qDebug( ">DEBUG< mvd::Application::OnAboutToQuit()" );
 }
+
+/*******************************************************************************/
+/* SLOTS                                                                       */
+/*******************************************************************************/
 
 } // end namespace 'mvd'

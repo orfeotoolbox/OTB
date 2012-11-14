@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="m_CentralWidget"/>
   <widget class="QMenuBar" name="m_MenuBar">
    <property name="geometry">
     <rect>
@@ -27,13 +27,14 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="action_Open"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
    <addaction name="menu_File"/>
   </widget>
   <widget class="QStatusBar" name="m_StatusBar"/>
-  <widget class="QToolBar" name="mToolBar">
+  <widget class="QToolBar" name="m_ToolBar">
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -50,6 +51,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_Open">
+   <property name="text">
+    <string>&amp;Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
  </widget>

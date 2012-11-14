@@ -66,15 +66,15 @@ MainWindow
 {
 }
 
-//
-// SLOTS
-//
+/*******************************************************************************/
+/* SLOTS                                                                       */
+/*******************************************************************************/
 
 void
 MainWindow
-::on_action_Quit_activated()
+::on_action_Open_activated()
 {
-  //qApp->quit();
+  qDebug( ">DEBUG< mvd::MainWindow::on_action_Open_activated()." );
 }
 
 } // end namespace 'mvd'
