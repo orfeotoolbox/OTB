@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
+  Program:   Monteverdi2
   Language:  C++
   Date:      $Date$
   Version:   $Revision$

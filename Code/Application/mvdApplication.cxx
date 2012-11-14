@@ -1,12 +1,12 @@
 /*=========================================================================
 
-  Program:   qTutor
+  Program:   Monteverdi2
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
 
 
-  Copyright (c) 
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved .
   See OTBCopyright.txt for details.
 
 

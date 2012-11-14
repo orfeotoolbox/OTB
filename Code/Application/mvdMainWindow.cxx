@@ -1,12 +1,12 @@
 /*=========================================================================
 
-  Program:   qTutor
+  Program:   Monteverdi2
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
 
 
-  Copyright (c) 
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
 
@@ -38,9 +38,9 @@ namespace mvd
 MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
   QMainWindow( parent, flags ),
-  ui( new Ui::MainWindow() )
+  m_UI( new Ui::MainWindow() )
 {
-  ui->setupUi( this );
+  m_UI->setupUi( this );
 
 /*
   QDockWidget* dock_widget = new DockWidget( tr( "Dock Widget" ), this );
@@ -56,7 +56,7 @@ MainWindow
 */
 
   QObject::connect(
-    ui->action_Quit, SIGNAL( activated() ),
+    m_UI->action_Quit, SIGNAL( activated() ),
     qApp, SLOT( quit() )
     );
 }

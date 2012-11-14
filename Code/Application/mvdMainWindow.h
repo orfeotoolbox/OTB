@@ -1,12 +1,12 @@
 /*=========================================================================
 
-  Program:   qTutor
+  Program:   Monteverdi2
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
 
 
-  Copyright (c) 
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
 
@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __MainWindow_h
-#define __MainWindow_h
+#ifndef __mvdMainWindow_h
+#define __mvdMainWindow_h
 
 //
 // System includes (sorted by alphabetic order)
@@ -37,7 +37,7 @@
 namespace Ui
 {
 class MainWindow;
-};
+}
 
 namespace mvd
 {
@@ -71,7 +71,7 @@ private slots:
 //
 //
 private:
-  Ui::MainWindow* ui;
+  Ui::MainWindow* m_UI;
 };
 
 } // end namespace 'mvd'
