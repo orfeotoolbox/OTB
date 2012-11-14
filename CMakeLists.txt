@@ -110,6 +110,7 @@ set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard.")
 set(Monteverdi2_INCLUDE_DIRS
   ${OTB_INCLUDE_DIRS}
   ${Monteverdi2_SOURCE_DIR}/Code
+  ${Monteverdi2_BINARY_DIR}/Code/Application
   )
 
 #----------------------------------------------------------------------------
