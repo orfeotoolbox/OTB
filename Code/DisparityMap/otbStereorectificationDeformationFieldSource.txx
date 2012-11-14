@@ -41,7 +41,8 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   m_LeftToRightTransform(),
   m_RightToLeftTransform(),
   m_OutputOriginInLeftImage(),
-  m_MeanBaselineRatio(0)
+  m_MeanBaselineRatio(0),
+  m_UseDEM(false)
 {
   // Set the number of outputs to 2 (one deformation field for each
   // image)
@@ -128,9 +129,6 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // Setup the DEM handler if needed
   typename DEMHandler::Pointer demHandler = DEMHandler::Instance();
 
-  bool useDEM = false;
-
-
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
@@ -164,7 +162,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // Then, we retrieve the origin of the left input image
   double localElevation = otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid();
 
-  if(useDEM)
+  if(m_UseDEM)
     {
     RSTransform2DType::InputPointType tmpPoint;
     localElevation = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(m_LeftImage->GetOrigin()));
@@ -292,8 +290,6 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // Setup the DEM handler if needed
   typename DEMHandler::Pointer demHandler = DEMHandler::Instance();
 
-  bool useDEM = false;
-
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
@@ -376,7 +372,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
     // This point is the image of the left input image origin at the
     // average elevation
-    if(useDEM)
+    if(m_UseDEM)
       {
       RSTransform2DType::InputPointType tmpPoint;
       tmpPoint[0] = currentPoint1[0];

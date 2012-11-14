@@ -22,6 +22,7 @@
 #include "otbGenericRSTransform.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkVector.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -154,6 +155,10 @@ public:
   /** Return the left deformation field */
   OutputImageType * GetRightDeformationFieldOutput();
 
+  itkSetMacro(UseDEM,bool);
+  itkGetMacro(UseDEM,bool);
+  itkBooleanMacro(UseDEM);
+
 protected:
   /** Constructor */
   StereorectificationDeformationFieldSource( void );
@@ -212,6 +217,11 @@ private:
   /** This variable contains the estimated mean baseline ratio over
    *  the image */
   double m_MeanBaselineRatio;
+
+  /** If set to true, elevation is retrieved through
+   *  DEMHandler::GetHeightAboveEllipsoid(). If false, elevation is
+   *  retrieved from DEMHandler::GetDefaultHeightAboveEllipsoid() */
+  bool m_UseDEM;
 };
 
 } // End namespace otb
