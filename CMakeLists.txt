@@ -109,9 +109,14 @@ set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard.")
 # Include directories
 set(Monteverdi2_INCLUDE_DIRS
   ${OTB_INCLUDE_DIRS}
-  ${Monteverdi2_SOURCE_DIR}/Code
+  ${Monteverdi2_SOURCE_DIR}/Code/
+  ${Monteverdi2_SOURCE_DIR}/Code/Common
+  ${Monteverdi2_SOURCE_DIR}/Code/Application
+  ${Monteverdi2_BINARY_DIR}/Code/Common
   ${Monteverdi2_BINARY_DIR}/Code/Application
   )
+
+include_directories(${Monteverdi2_INCLUDE_DIRS})
 
 #----------------------------------------------------------------------------
 # Installation vars:
@@ -198,12 +203,6 @@ if("${_PREFIX}" STREQUAL "${_BUILD}")
     "This is not supported."
     )
 endif("${_PREFIX}" STREQUAL "${_BUILD}")
-
-#----------------------------------------------------------------------------
-set(Monteverdi2_INCLUDE_DIRS ${Monteverdi2_INCLUDE_DIRS} ${Monteverdi2_SOURCE_DIR}/Code/Application)
-
-#----------------------------------------------------------------------------
-include_directories(${Monteverdi2_INCLUDE_DIRS})
 
 #----------------------------------------------------------------------------
 # Code location
