@@ -89,15 +89,6 @@ public:
     return m_Model->IsValidSensorModel();
   }
 
-  /** Add a tie point to optimize sensor model */
-  virtual void AddTiePoint(const InputPointType & inputPoint, const OutputPointType & outputPoint);
-
-  /** Clear tie points */
-  void ClearTiePoints();
-
-  /** Optimize sensor model */
-  double Optimize();
-
 protected:
   SensorModelBase();
   virtual ~SensorModelBase();
