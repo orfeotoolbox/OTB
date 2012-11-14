@@ -83,7 +83,7 @@ RadiometricMomentsImageFunction<TInputImage, TCoordRep>
 
   itk::VariableLengthVector<ScalarRealType> tmp(m_Functor(it));
 
-  for (unsigned int i=0; i<4;i++)
+  for (unsigned int i=0; i<4; i++)
     {
     moments[i] = tmp[i];
     }
