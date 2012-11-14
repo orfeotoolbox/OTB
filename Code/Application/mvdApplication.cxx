@@ -1,12 +1,12 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
+  Program:   qTutor
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  Copyright (c) 
   See OTBCopyright.txt for details.
 
 
@@ -16,41 +16,55 @@
 
 =========================================================================*/
 
-//#include "ConfigureMonteverdi.h"
+#include "mvdApplication.h"
 
 //
 // System includes (sorted by alphabetic order)
-#include <cstdlib>
+#include <iostream>
 
 //
 // Qt includes (sorted by alphabetic order)
+#include <QApplication>
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdApplication.h"
-#include "mvdMainWindow.h"
 
 //
-// Main functions definitions.
+// Class pre-declaration.
 //
-
-//
-// MAIN
-//
-int
-main( int argc, char* argv[] )
+// Class implementation.
+namespace mvd
 {
-  mvd::Application application( argc, argv );
-  mvd::MainWindow main_window;
 
-  main_window.show();
+Application
+::Application( int& argc, char** argv ) :
+  QApplication( argc, argv )
+{
+  QObject::connect(
+    this, SIGNAL( aboutToQuit() ),
+    this, SLOT( OnAboutToQuit() )
+    );
+}
 
-  return application.exec();
+Application
+::~Application()
+{
 }
 
 //
-// Main function implementation.
+// SLOTS
 //
+
+void
+Application
+::OnAboutToQuit()
+{
+  qDebug( ">DEBUG< mvd::Application::OnAboutToQuit()" );
+  qWarning( ">WARNING< mvd::Application::OnAboutToQuit()" );
+  std::cout << ">info< mvd::Application::OnAboutToQuit()" << std::endl;
+}
+
+} // end namespace 'mvd'

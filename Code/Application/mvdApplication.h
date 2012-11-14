@@ -1,12 +1,12 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
+  Program:   qTutor
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  Copyright (c) 
   See OTBCopyright.txt for details.
 
 
@@ -16,41 +16,64 @@
 
 =========================================================================*/
 
-//#include "ConfigureMonteverdi.h"
+#ifndef __Application_h
+#define __Application_h
 
 //
 // System includes (sorted by alphabetic order)
-#include <cstdlib>
 
 //
 // Qt includes (sorted by alphabetic order)
+#include <QApplication>
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdApplication.h"
-#include "mvdMainWindow.h"
 
 //
-// Main functions definitions.
-//
+// Class pre-declaration.
 
 //
-// MAIN
-//
-int
-main( int argc, char* argv[] )
+// Class declaration.
+namespace mvd
 {
-  mvd::Application application( argc, argv );
-  mvd::MainWindow main_window;
-
-  main_window.show();
-
-  return application.exec();
-}
+/** \class Application
+ *
+ */
+class Application
+  : public QApplication
+{
+  Q_OBJECT;
 
 //
-// Main function implementation.
 //
+public:
+
+/** Constructor */
+  Application( int& argc, char** argv );
+
+/** Destructor */
+  virtual ~Application();
+
+//
+//
+protected:
+
+//
+// SLOTS
+private slots:
+/**
+*
+*/
+  void OnAboutToQuit();
+
+//
+//
+private:
+};
+
+} // end namespace 'mvd'
+
+#endif // __Application_h
