@@ -73,11 +73,6 @@ public:
 
   typedef typename Superclass::InverseTransformBasePointer InverseTransformBasePointer;
 
-  typedef std::pair<InputPointType,InputPointType>  InputTiePointType;
-  typedef std::pair<OutputPointType,InputPointType> OutputTiePointType;
-  typedef std::vector<InputTiePointType>            InputTiePointContainerType;
-  typedef std::vector<OutputTiePointType>           OutputTiePointContainerType;
-
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -100,44 +95,6 @@ public:
 
   // Deprecated calls to elevation setters
   otbLegacyElevationMacro();
-
-  itkSetMacro(OptimizeInputTransform,bool);
-  itkGetMacro(OptimizeInputTransform,bool);
-  itkBooleanMacro(OptimizeInputTransform);
-
-  itkSetMacro(OptimizeOutputTransform,bool);
-  itkGetMacro(OptimizeOutputTransform,bool);
-  itkBooleanMacro(OptimizeOutputTransform);
-
-  void SetInputTiePoints(const InputTiePointContainerType & tiePoints)
-  {
-    m_InputTiePoints = tiePoints;
-    this->Modified();
-  }
-
-  const InputTiePointContainerType& GetInputTiePoinst() const
-  {
-    return m_InputTiePoints;
-  }
-
-  void SetOutputTiePoints(const OutputTiePointContainerType & tiePoints)
-  {
-    m_OutputTiePoints = tiePoints;
-    this->Modified();
-  }
-
-  const OutputTiePointContainerType& GetOutputTiePoinst() const
-  {
-    return m_OutputTiePoints;
-  }
-
-  void AddInputTiePoint(const InputPointType & inputPoint, const InputPointType & wgs84Point);
-
-  void AddOutputTiePoint(const OutputPointType & outputPoint, const InputPointType & wgs84Point);
-
-  void ClearInputTiePoints();
-
-  void ClearOutputTiePoints();
 
   /** Set/Get Dictionary*/
   const itk::MetaDataDictionary& GetInputDictionary() const
@@ -258,12 +215,6 @@ private:
   GenericTransformPointerType   m_OutputTransform;
   mutable bool                  m_TransformUpToDate;
   Projection::TransformAccuracy m_TransformAccuracy;
-
-  bool                          m_OptimizeInputTransform;
-  bool                          m_OptimizeOutputTransform;
-  InputTiePointContainerType    m_InputTiePoints;
-  OutputTiePointContainerType   m_OutputTiePoints;
-
 };
 
 } // namespace otb
