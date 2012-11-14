@@ -2,6 +2,10 @@ PROJECT(Monteverdi2)
 
 cmake_minimum_required(VERSION 2.6)
 
+if(WIN32)
+  add_definitions(-DWIN32)
+endif(WIN32)
+
 #----------------------------------------------------------------------------
 # Monteverdi2 version number.  An even minor number corresponds to releases.
 set(Monteverdi2_VERSION_MAJOR "0")
@@ -39,6 +43,17 @@ else(OTB_FOUND)
     FATAL_ERROR
     "OTB not found. Please set OTB_DIR")
 endif(OTB_FOUND)
+
+#----------------------------------------------------------------------------
+# Qt4 settings
+find_package( Qt4 REQUIRED QtCore QtGui)
+include( ${QT_USE_FILE} )
+add_definitions( ${QT_DEFINITIONS} )
+# Add binary dir to build paths in order to include Qt4 wrapped files.
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
+# Choose Qt4 libraries.
+set( QT_USE_QTCORE TRUE )
+set( QT_USE_QTGUI TRUE )
 
 #----------------------------------------------------------------------------
 # Include OTB CMake modules path.
