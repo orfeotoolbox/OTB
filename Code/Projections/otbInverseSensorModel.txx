@@ -44,18 +44,24 @@ InverseSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
 {
   double lon = point[0];
   double lat = point[1];
-  double h = otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid();
+  double x, y, z;
+
   if (InputPointType::PointDimension == 3)
     {
-    h = point[2];
+    double h = point[2];
+
+    this->m_Model->InverseTransformPoint(lon, lat, h, x, y, z);
     }
-  double x, y, z;
-  this->m_Model->InverseTransformPoint(lon, lat, h, x, y, z);
+  else
+    {
+    this->m_Model->InverseTransformPoint(lon, lat, x, y, z);
+    }
 
   OutputPointType outputPoint;
 
   outputPoint[0] = x;
   outputPoint[1] = y;
+
   if (OutputPointType::PointDimension == 3)
     {
     outputPoint[2] = z;

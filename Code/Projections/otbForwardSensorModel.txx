@@ -42,13 +42,19 @@ ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
 {
   double x = point[0];
   double y = point[1];
-  double z = otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid();
+
+  double lon, lat, h;
+
   if (InputPointType::PointDimension == 3)
     {
-    z = point[2];
+    double z = point[2];
+
+    this->m_Model->ForwardTransformPoint(x, y, z, lon, lat, h);
     }
-  double lon, lat, h;
-  this->m_Model->ForwardTransformPoint(x, y, z, lon, lat, h);
+  else
+    {
+    this->m_Model->ForwardTransformPoint(x, y, lon, lat, h);
+    }
 
   OutputPointType outputPoint;
   outputPoint[0] = lon;
