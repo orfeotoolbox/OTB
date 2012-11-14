@@ -30,12 +30,15 @@ namespace otb
 /** Initialize the singleton */
 DEMHandler::Pointer DEMHandler::m_Singleton = NULL;
 
-DEMHandler * DEMHandler::Instance()
+DEMHandler::Pointer DEMHandler::Instance()
 {
+  std::cout<<"Instance called "<<m_Singleton<<std::endl;
   // Check for singleton
-  if(m_Singleton.IsNull())
+  if(!m_Singleton)
     {
+    std::cout<<"Singleton is null: "<<m_Singleton<<std::endl;
     m_Singleton = ::itk::ObjectFactory<Self>::Create();
+    std::cout<<"Singleton created: "<<m_Singleton<<std::endl;
     }
   return m_Singleton;
 }

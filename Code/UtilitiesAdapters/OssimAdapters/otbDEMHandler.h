@@ -91,7 +91,7 @@ public:
   itkLegacyMacro(static Self * New());
 
   /** Retrieve the singleton instance */
-  static Self * Instance();
+  static Pointer Instance();
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(DEMHandler, Object);
