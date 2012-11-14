@@ -101,7 +101,7 @@ private:
 
   // Setup elevation
 
-    otb::DEMHandler::Pointer demHandler = otb::DEMHandler::New();
+    otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
 
     double avg_elevation = 0;
     bool use_avg_elevation = false;

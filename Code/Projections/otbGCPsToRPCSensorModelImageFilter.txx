@@ -49,7 +49,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
   m_RpcProjection = RPCProjectionAdapter::New();
 
   /** Create the DEM handler */
-  m_DEMHandler = DEMHandler::New();
+  m_DEMHandler = DEMHandler::Instance();
 }
 
 template <class TImage>

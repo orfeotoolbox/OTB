@@ -71,7 +71,7 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
   // Distances
   DistanceType::Pointer distance = DistanceType::New();
 
-  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::New();
+  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
   // demHandler->OpenDEMDirectory(demDir);
   // demHandler->OpenGeoidFile(geoidFile); TODO: use geoid
 

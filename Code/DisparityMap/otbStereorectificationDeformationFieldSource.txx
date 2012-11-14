@@ -290,7 +290,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   this->AllocateOutputs();
 
   // Setup the DEM handler if needed
-  typename DEMHandler::Pointer demHandler = DEMHandler::New();
+  typename DEMHandler::Pointer demHandler = DEMHandler::Instance();
 
   bool useDEM = false;
 

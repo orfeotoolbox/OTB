@@ -66,7 +66,7 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
   DistanceType::Pointer distance = DistanceType::New();
   GeoDistanceType::Pointer geoDistance = GeoDistanceType::New();
 
-  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::New();
+  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
   // demHandler->OpenDEMDirectory(demDir);
   // demHandler->OpenGeoidFile(geoidFile); TODO: use geoid
 

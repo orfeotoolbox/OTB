@@ -100,7 +100,7 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
   DistanceType::Pointer distance = DistanceType::New();
   GeoDistanceType::Pointer geoDistance = GeoDistanceType::New();
 
-  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::New();
+  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
   demHandler->OpenDEMDirectory(argv[2]);
   demHandler->OpenGeoidFile(argv[3]);
   double heightAboveMSL = demHandler->GetHeightAboveMSL(refGeoPt);
