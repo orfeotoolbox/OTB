@@ -70,16 +70,34 @@ public:
   void CreateProjection(const ImageKeywordlist& image_kwl);
   // FIXME check if it should be protected instead
 
+  /** Forward sensor modelling with elevation (above ellipsoid) provided by the user */
   void ForwardTransformPoint(double x, double y, double z,
                              double& lon, double& lat, double& h) const;
 
+  /** Forward sensor modelling with elevation (above ellipsoid) estimated by the
+   *  algorithm */
+  void ForwardTransformPoint(double x, double y,
+                             double& lon, double& lat, double& h) const;
+
+  /** Inverse sensor modelling with elevation (above ellipsoid) provided by the user */
   void InverseTransformPoint(double lon, double lat, double h,
                              double& x, double& y, double& z) const;
 
+  /** Inverse sensor modelling with elevation (above ellipsoid) from DEMHandler */
+  void InverseTransformPoint(double lon, double lat,
+                             double& x, double& y, double& z) const;
+
+
+  /** Add a tie point with elevation (above ellipsoid) provided by the user */
   void AddTiePoint(double x, double y, double z, double lon, double lat);
 
+  /** Add a tie point with elevation (above ellipsoid) from DEMHandler */
+  void AddTiePoint(double x, double y, double lon, double lat);
+
+  /** Clear all tie points */
   void ClearTiePoints();
 
+  /** Optimize sensor model with respect to tie points */
   double Optimize();
 
   /** Is sensor model valid method. return false if the m_SensorModel is null*/
@@ -105,16 +123,6 @@ private:
 
   /** Object that read and use DEM */
   DEMHandler::Pointer m_DEMHandler;
-
-  /** Specify if DEM is used in Point Transformation */
-  bool m_UseDEM;
-
-  /** Difference between consecutives heights in iterative transform point with DEM */
-  double m_Epsilon; //FIXME check if required
-
-  /** Number of iterations in iterative transform point with DEM */
-  double m_NbIter; //FIXME check if required
-
 };
 
 } // namespace otb

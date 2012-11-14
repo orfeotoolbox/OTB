@@ -33,7 +33,7 @@ namespace otb
 {
 
 SensorModelAdapter::SensorModelAdapter():
-  m_SensorModel(NULL), m_TiePoints(NULL), m_UseDEM(true), m_Epsilon(0.0001),  m_NbIter(1) // FIXME keeping the original value but...
+  m_SensorModel(NULL), m_TiePoints(NULL) // FIXME keeping the original value but...
 {
   m_DEMHandler = DEMHandler::Instance();
   m_TiePoints = new ossimTieGptSet();
@@ -83,68 +83,33 @@ bool SensorModelAdapter::IsValidSensorModel()
 void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
                                                double& lon, double& lat, double& h) const
 {
-  ossimDpt ossimPoint(x, y);
-
-  // Calculation
-  ossimGpt ossimGPoint;
-
   if (this->m_SensorModel == NULL)
     {
-    itkExceptionMacro(<< "ForwardTransformPoint(): Invalid Model pointer m_SensorModel == NULL !");
+    itkExceptionMacro(<< "ForwardTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
     }
 
-  //Use of DEM: need iteration to reach the correct point
-  if (this->m_UseDEM)
+  ossimDpt ossimPoint(x, y);
+  ossimGpt ossimGPoint;
+
+  this->m_SensorModel->lineSampleHeightToWorld(ossimPoint,z, ossimGPoint);
+
+  lon = ossimGPoint.lon;
+  lat = ossimGPoint.lat;
+  h = ossimGPoint.hgt;
+}
+
+void SensorModelAdapter::ForwardTransformPoint(double x, double y,
+                                               double& lon, double& lat, double& h) const
+{
+  if (this->m_SensorModel == NULL)
     {
-    this->m_SensorModel->lineSampleToWorld(ossimPoint, ossimGPoint);
-    lon = ossimGPoint.lon;
-    lat = ossimGPoint.lat;
-
-    ossimGpt ossimGPointRef = ossimGPoint;
-    double height(0.), heightTmp(0.);
-    double                diffHeight = 100; // arbitrary value
-    itk::Point<double, 2> currentPoint;
-    int                   nbIter = 0;
-
-    otbMsgDevMacro(<< "USING DEM ! ");
-
-    bool nanHeight = false;
-
-    while (!nanHeight && (diffHeight > m_Epsilon) && (nbIter < m_NbIter))
-      {
-      otbMsgDevMacro(<< "Iter " << nbIter);
-
-      if (nbIter != 0) height = heightTmp;
-
-      heightTmp = this->m_DEMHandler->GetHeightAboveMSL(lon, lat);
-
-      if(ossim::isnan(heightTmp))
-        {
-        nanHeight = true;
-        this->m_SensorModel->lineSampleToWorld(ossimPoint, ossimGPointRef);
-        }
-      else
-        {
-        this->m_SensorModel->lineSampleHeightToWorld(ossimPoint, heightTmp, ossimGPointRef);
-        }
-      
-      diffHeight = fabs(heightTmp - height);
-      
-      ++nbIter;
-      }
-    ossimGPoint = ossimGPointRef;
+    itkExceptionMacro(<< "ForwardTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
     }
-  //Altitude of the point is provided (in the sensor coordinate) could be an
-  //average elevation
-  else if (z != -32768)
-    {
-    this->m_SensorModel->lineSampleHeightToWorld(ossimPoint, z, ossimGPoint);
-    }
-  //Otherwise, just don't consider the altitude
-  else
-    {
-    this->m_SensorModel->lineSampleToWorld(ossimPoint, ossimGPoint);
-    }
+
+  ossimDpt ossimPoint(x, y);
+  ossimGpt ossimGPoint;
+
+  this->m_SensorModel->lineSampleToWorld(ossimPoint, ossimGPoint);
 
   lon = ossimGPoint.lon;
   lat = ossimGPoint.lat;
@@ -154,67 +119,69 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
 void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
                                                double& x, double& y, double& z) const
 {
-  // Initialize with value from the function parameters
-  ossimGpt ossimGPoint(lat, lon, h);
-
-  // In case a DEM is used, override the elevation parameter by the DEM value
-  if (this->m_UseDEM)
-    {
-    double height = this->m_DEMHandler->GetHeightAboveMSL(lon, lat);
-    // If the DEM handler cannot give the height for the (lon, lat) point,
-    // either because the tile is not available or the value in the tile are all -32768,
-    // it will return ossim::nan()
-    ossimGPoint.height(height);
-    }
-
-  // If the 'h' parameter is -32768 (case where OTB classes use a default AverageElevation value)
-  if (ossimGPoint.height() == -32768)
-    {
-    otbMsgDevMacro(<< "The given altitude corresponds to NoData (value is -32768)");
-    ossimGPoint.height( ossim::nan() );
-    }
-
-  ossimDpt ossimDPoint;
-
   if (this->m_SensorModel == NULL)
     {
-    itkExceptionMacro(<< "InverseTransformPoint(): Invalid Model pointer m_SensorModel == NULL !");
+    itkExceptionMacro(<< "InverseTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
     }
 
-  // Note: the -32768 is only here to show unknown altitude and should never be
-  // passed to ossim.
-  // We should either have a NaN, either a valid elevation value
-  assert(ossim::isnan(ossimGPoint.height()) || (ossimGPoint.height() > -1000));
+  // Initialize with value from the function parameters
+  ossimGpt ossimGPoint(lat, lon, h);
+  ossimDpt ossimDPoint;
 
-  this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" call "lineSampleHeightToWorld" method for take in care elevation information.
+  this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint); 
+
   x = ossimDPoint.x;
   y = ossimDPoint.y;
   z = ossimGPoint.height();
 }
 
 
+void SensorModelAdapter::InverseTransformPoint(double lon, double lat,
+                                               double& x, double& y, double& z) const
+{
+  if (this->m_SensorModel == NULL)
+    {
+    itkExceptionMacro(<< "InverseTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
+    }
+
+  // Get elevation from DEMHandler
+  double h = m_DEMHandler->GetHeightAboveEllipsoid(lon,lat);
+
+  // Initialize with value from the function parameters
+  ossimGpt ossimGPoint(lat, lon, h);
+  ossimDpt ossimDPoint;
+
+  this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint); 
+
+  x = ossimDPoint.x;
+  y = ossimDPoint.y;
+  z = ossimGPoint.height();
+}
+
 void SensorModelAdapter::AddTiePoint(double x, double y, double z, double lon, double lat)
 {
   // Create the tie point
   ossimDpt imagePoint(x,y);
-  ossimGpt ossimGPoint(lat, lon);
-
-  if (this->m_UseDEM)
-    {
-    double height = this->m_DEMHandler->GetHeightAboveMSL(lon, lat);
-    if(!ossim::isnan(height))
-      {
-      ossimGPoint.height(height);
-      }
-    }
-  else if (z != -32768)
-    {
-    ossimGPoint.height(z);
-    }
+  ossimGpt ossimGPoint(lat, lon, z);
 
   // Add the tie point to the container
   m_TiePoints->addTiePoint(new ossimTieGpt(ossimGPoint,imagePoint,0));
 }
+
+void SensorModelAdapter::AddTiePoint(double x, double y, double lon, double lat)
+{
+  // Create the tie point
+  ossimDpt imagePoint(x,y);
+
+  // Get elevation from DEMHandler
+  double z = m_DEMHandler->GetHeightAboveEllipsoid(lon,lat);
+
+  ossimGpt ossimGPoint(lat, lon, z);
+
+  // Add the tie point to the container
+  m_TiePoints->addTiePoint(new ossimTieGpt(ossimGPoint,imagePoint,0));
+}
+
 
 void SensorModelAdapter::ClearTiePoints()
 {
