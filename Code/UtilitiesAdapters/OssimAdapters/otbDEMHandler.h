@@ -144,7 +144,7 @@ protected:
   // ellipsoid We therefore must keep it on our side
   double m_DefaultHeightAboveEllipsoid;
 
-  static Self::Pointer m_Singleton;
+  static Pointer m_Singleton;
 
 };
 

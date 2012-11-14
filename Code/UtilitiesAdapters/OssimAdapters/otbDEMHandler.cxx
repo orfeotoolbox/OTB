@@ -27,6 +27,8 @@
 
 namespace otb
 {
+/** Initialize the singleton */
+DEMHandler::Pointer DEMHandler::m_Singleton = NULL;
 
 DEMHandler * DEMHandler::Instance()
 {
