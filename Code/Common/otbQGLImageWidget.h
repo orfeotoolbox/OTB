@@ -1,7 +1,7 @@
 #ifndef __otbQGLImageWidget_h__
 #define __otbQGLImageWidget_h__
 
-#include <QtOpenGL/qgl.h>
+#include <QGLWidget>
 
 #include "itkRGBAPixel.h"
 #include "itkAffineTransform.h"
