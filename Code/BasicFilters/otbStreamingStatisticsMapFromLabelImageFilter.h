@@ -95,16 +95,7 @@ public:
   virtual const LabelImageType * GetInputLabelImage();
   
   /** Return the computed Mean for each label in the input label image */
-  MeanValueMapType GetMeanValueMap() const
-  {
-    return this->GetMeanValueMap()->Get();
-  }
-
-  /** Return the computed Mean for each label in the input label image */
-  MeanValueMapObjectType* GetMeanValueMap();
-
-  /** Return the computed Mean for each label in the input label image */
-  const MeanValueMapObjectType* GetMeanValueMap() const;
+  MeanValueMapType GetMeanValueMap() const;
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */

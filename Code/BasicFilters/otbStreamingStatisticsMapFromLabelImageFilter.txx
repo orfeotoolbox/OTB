@@ -90,19 +90,11 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 }
 
 template<class TInputVectorImage, class TLabelImage>
-typename PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>::MeanValueMapObjectType*
-PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
-::GetMeanValueMap()
-{
-  return static_cast<MeanValueMapObjectType*>(this->itk::ProcessObject::GetOutput(1));
-}
-
-template<class TInputVectorImage, class TLabelImage>
-const typename PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>::MeanValueMapObjectType*
+typename PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>::MeanValueMapType
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
 ::GetMeanValueMap() const
 {
-  return static_cast<const MeanValueMapObjectType*>(this->itk::ProcessObject::GetOutput(1));
+  return m_RadiometricValueAccumulator;
 }
 
 template<class TInputVectorImage, class TLabelImage>
@@ -146,7 +138,6 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
    {
       it->second = it->second / m_LabelPopulation[it->first];
    }
-   this->GetMeanValueMap()->Set(m_RadiometricValueAccumulator);
 }
 
 template<class TInputVectorImage, class TLabelImage>

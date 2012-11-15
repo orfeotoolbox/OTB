@@ -21,6 +21,7 @@
 
 #include <fstream>
 #include <map>
+
 // Include differents method for color mapping
 #include "otbChangeLabelImageFilter.h"
 #include "itkLabelToRGBImageFilter.h"
@@ -42,14 +43,11 @@
 #include "otbVisualizationPixelTraits.h"
 
 #include "itkImageRegionConstIterator.h"
-#include "otbVisualizationPixelTraits.h"
-#include "otbObjectList.h"
-
-#include "itkImageRegionConstIterator.h"
 #include "otbUnaryFunctorImageFilter.h"
 #include "itkBinaryFunctorImageFilter.h"
 
 #include "itkCastImageFilter.h"
+#include "otbStreamingStatisticsMapFromLabelImageFilter.h"
 
 namespace otb
 {
@@ -381,6 +379,8 @@ public:
   typedef itk::BinaryFunctorImageFilter
     <LabelImageType, FloatVectorImageType,
     LabelImageType, RGBFromImageValueFunctorType>     RGBFromImageValueFilterType;
+  typedef otb::StreamingStatisticsMapFromLabelImageFilter<FloatVectorImageType, LabelImageType>
+    StreamingStatisticsMapFromLabelImageFilterType;
 
   // Inverse mapper for color->label operation
   typedef otb::UnaryFunctorImageFilter
@@ -630,10 +630,6 @@ private:
       {
       otbAppLogINFO(" look-up table calculated on support image ");
 
-      m_CasterToLabelImage = CasterToLabelImageType::New();
-      m_CasterToLabelImage->SetInput(GetParameterFloatImage("in"));
-      m_CasterToLabelImage->InPlaceOn();
-
       // image normalisation of the sampling //
       FloatVectorImageType::Pointer supportImage = this->GetParameterImage("method.image.in");
       supportImage->UpdateOutputInformation();
@@ -707,9 +703,7 @@ private:
       // assign listSample
 
       HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
-      //histogramFilter->SetListSample(pixelRepresentationListSample);
       histogramFilter->SetListSample(listSample);
-
       histogramFilter->SetNumberOfBins(256);
       histogramFilter->NoDataFlagOn();
 
@@ -750,6 +744,15 @@ private:
       functor.SetMinVal(minVal);
       functor.SetMaxVal(maxVal);
 
+      m_CasterToLabelImage = CasterToLabelImageType::New();
+      m_CasterToLabelImage->SetInput(GetParameterFloatImage("in"));
+      m_CasterToLabelImage->InPlaceOn();
+
+      m_StatisticsMapFromLabelImageFilter = StreamingStatisticsMapFromLabelImageFilterType::New();
+      m_StatisticsMapFromLabelImageFilter->SetInput(GetParameterImage("method.image.in"));
+      m_StatisticsMapFromLabelImageFilter->SetInputLabelImage(m_CasterToLabelImage->GetOutput());
+      m_StatisticsMapFromLabelImageFilter->Update();
+/*
       m_RGBFromImageValueFilter = RGBFromImageValueFilterType::New();
       m_RGBFromImageValueFilter->SetInput1(m_CasterToLabelImage->GetOutput());
       m_RGBFromImageValueFilter->SetInput2(this->GetParameterImage("method.image.in"));
@@ -757,26 +760,30 @@ private:
       m_RGBFromImageValueFilter->SetNumberOfThreads(1);
 
       m_RGBFromImageValueFilter->Update();
-
-      std::map<LabelType, FloatVectorImageType::PixelType>
-          labelToMeanIntensityMap = m_RGBFromImageValueFilter->GetFunctor().GetMeanIntensity();
+*/
+      StreamingStatisticsMapFromLabelImageFilterType::MeanValueMapType
+          labelToMeanIntensityMap = m_StatisticsMapFromLabelImageFilter->GetMeanValueMap();
 
       m_RBGFromImageMapper = ChangeLabelFilterType::New();
       m_RBGFromImageMapper->SetInput(m_CasterToLabelImage->GetOutput());
       m_RBGFromImageMapper->SetNumberOfComponentsPerPixel(3);
 
-      std::map<LabelType, FloatVectorImageType::PixelType>::const_iterator
+      StreamingStatisticsMapFromLabelImageFilterType::MeanValueMapType::const_iterator
           mapIt = labelToMeanIntensityMap.begin();
       FloatVectorImageType::PixelType meanValue;
 
       otbAppLogINFO("The map contains :"<<labelToMeanIntensityMap.size()<<" labels."<<std::endl);
       VectorPixelType color(3);
-      while (mapIt != labelToMeanIntensityMap.end())
-        {
 
+      typedef itk::NumericTraits<FloatVectorImageType::InternalPixelType> NumericTraitsType;
+
+      for (mapIt = labelToMeanIntensityMap.begin();
+           mapIt != labelToMeanIntensityMap.end();
+           ++mapIt)
+        {
         LabelType clabel = mapIt->first;
         meanValue = mapIt->second; //meanValue.Size() is null if label is not present in label image
-        if (clabel == 0 || meanValue.Size()==0)
+        if (meanValue.Size()==0)
           {
           color.Fill(0.0);
           }
@@ -786,14 +793,17 @@ private:
             {
             unsigned int dispIndex = RGBIndex[RGB];
 
-            color[RGB] = ((meanValue.GetElement(dispIndex) - minVal.GetElement(dispIndex)) / (
-                maxVal.GetElement(dispIndex) - minVal.GetElement(dispIndex))) * 255.0;
+            // Convert the radiometric value to [0, 255]
+            // using the clamping from histogram cut
+            color[RGB] = NumericTraitsType::Clamp( meanValue[dispIndex]
+                                                   , minVal[dispIndex]
+                                                   , maxVal[dispIndex] )
+                         / (maxVal[dispIndex] - minVal[dispIndex])
+                         * 255.0;
             }
           }
         otbAppLogINFO("Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
         m_RBGFromImageMapper->SetChange(clabel, color);
-
-        ++mapIt;
         }
 
       SetParameterOutputImage("out", m_RBGFromImageMapper->GetOutput());
@@ -943,6 +953,7 @@ private:
   std::map<std::string, unsigned int> m_LutMap;
   ChangeLabelFilterType::Pointer m_RBGFromImageMapper;
   RGBFromImageValueFilterType::Pointer    m_RGBFromImageValueFilter;
+  StreamingStatisticsMapFromLabelImageFilterType::Pointer m_StatisticsMapFromLabelImageFilter;
 
   ColorToLabelFilterType::Pointer m_InverseMapper;
 
