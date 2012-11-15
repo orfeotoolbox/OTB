@@ -47,13 +47,13 @@ endif(OTB_FOUND)
 #----------------------------------------------------------------------------
 # Qt4 settings
 find_package( Qt4 REQUIRED QtCore QtGui)
-include( ${QT_USE_FILE} )
-add_definitions( ${QT_DEFINITIONS} )
-# Add binary dir to build paths in order to include Qt4 wrapped files.
-include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
-# Choose Qt4 libraries.
+
+# setup Qt environement
 set( QT_USE_QTCORE TRUE )
 set( QT_USE_QTGUI TRUE )
+set( QT_USE_QTOPENGL TRUE)
+
+include( ${QT_USE_FILE} )
 
 #----------------------------------------------------------------------------
 # Include OTB CMake modules path.
@@ -108,7 +108,6 @@ set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard.")
 #----------------------------------------------------------------------------
 # Include directories
 set(Monteverdi2_INCLUDE_DIRS
-  ${OTB_INCLUDE_DIRS}
   ${Monteverdi2_SOURCE_DIR}/Code/
   ${Monteverdi2_SOURCE_DIR}/Code/Common
   ${Monteverdi2_SOURCE_DIR}/Code/Application
