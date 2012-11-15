@@ -128,25 +128,13 @@ private:
     AddParameter(ParameterType_Group,"epi","Epipolar  geometry and grid parameters");
     SetParameterDescription("epi","Parameters of the epipolar geometry and output grids");
 
-    AddParameter(ParameterType_Choice,"epi.elevation","Elevation management");
-    SetParameterDescription("epi.elevation","Manage elevation source for stereo-rectification");
-    AddChoice("epi.elevation.avg","User-defined average elevation");
-    SetParameterDescription("epi.elevation.avg","Average elevation defined by user");
+    ElevationParametersHandler::AddElevationParameters(this, "epi.elevation");
 
-    AddParameter(ParameterType_Float,"epi.elevation.avg.value","Average elevation value");
-    SetParameterDescription("epi.elevation.avg.value","Average elevation value");
-
-    AddChoice("epi.elevation.avgdem","Average elevation computed from DEM");
+    AddParameter(ParameterType_Empty,"epi.elevation.avgdem","Average elevation computed from DEM");
     SetParameterDescription("epi.elevation.avgdem","Average elevation computed from the provided DEM");
+    MandatoryOff("epi.elevation.avgdem");
 
-    AddParameter(ParameterType_Directory,"epi.elevation.avgdem.path","DEM directory");
-    SetParameterDescription("epi.elevation.avgdem.path","Path to the DEM directory");
-
-    AddParameter(ParameterType_InputFilename,"epi.elevation.avgdem.geoid","Geoid file");
-    SetParameterDescription("epi.elevation.avgdem.geoid","Path to the geoid file");
-    MandatoryOff("epi.elevation.avgdem.geoid");
-
-     AddParameter(ParameterType_Int,"epi.elevation.avgdem.step","Sub-sampling step");
+    AddParameter(ParameterType_Int,"epi.elevation.avgdem.step","Sub-sampling step");
     SetParameterDescription("epi.elevation.avgdem.step","Step of sub-sampling for average elevation estimation");
     SetDefaultParameterInt("epi.elevation.avgdem.step",1);
     SetMinimumParameterIntValue("epi.elevation.avgdem.step",1);
@@ -165,16 +153,6 @@ private:
     SetParameterDescription("epi.elevation.avgdem.maxdisp","Disparity corresponding to estimated maximum elevation over the left image");
     SetParameterRole("epi.elevation.avgdem.maxdisp",Role_Output);
     DisableParameter("epi.elevation.avgdem.maxdisp");
-
-    AddChoice("epi.elevation.dem","Elevation from DEM");
-    SetParameterDescription("epi.elevation.dem","Local elevations from the provided DEM");
-
-    AddParameter(ParameterType_Directory,"epi.elevation.dem.path","DEM directory");
-    SetParameterDescription("epi.elevation.dem.path","Path to the DEM directory");
-
-    AddParameter(ParameterType_InputFilename,"epi.elevation.dem.geoid","Geoid file");
-    SetParameterDescription("epi.elevation.dem.geoid","Path to the geoid file");
-    MandatoryOff("epi.elevation.dem.geoid");
 
     AddParameter(ParameterType_Float,"epi.scale","Scale of epipolar images");
     SetParameterDescription("epi.scale","The scale parameter allows to generated zoomed-in (scale < 1) or zoomed-out (scale > 1) epipolar images.");
@@ -232,12 +210,10 @@ private:
     m_DeformationFieldSource->SetGridStep(GetParameterInt("epi.step"));
     m_DeformationFieldSource->SetScale(GetParameterFloat("epi.scale"));
 
-    if(GetParameterString("epi.elevation") == "avg")
-      {
+    // Setup the DEM Handler
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"epi.elevation");
 
-      m_DeformationFieldSource->SetAverageElevation(GetParameterFloat("epi.elevation.avg.value"));
-      }
-    else if(GetParameterString("epi.elevation") == "avgdem")
+    if(IsParameterEnabled("epi.elevation.avgdem"))
       {
       // TODO: Implement me
       FloatImageType::PointType   origin  = GetParameterImage("io.inleft")->GetOrigin();
@@ -249,7 +225,6 @@ private:
       spacing[0]*=GetParameterInt("epi.elevation.avgdem.step");
       spacing[1]*=GetParameterInt("epi.elevation.avgdem.step");
 
-      m_DEMToImageGenerator->SetDEMDirectoryPath(GetParameterString("epi.elevation.avgdem.path"));
       m_DEMToImageGenerator->SetOutputOrigin(origin);
       m_DEMToImageGenerator->SetOutputSize(size);
       m_DEMToImageGenerator->SetOutputSpacing(spacing);
@@ -260,29 +235,15 @@ private:
 
       m_DEMToImageGenerator->AboveEllipsoidOn();
 
-      if(IsParameterEnabled("epi.elevation.avgdem.geoid"))
-        {
-        m_DEMToImageGenerator->SetGeoidFile(GetParameterString("epi.elevation.avgdem.geoid"));
-        }
-
       m_StatisticsFilter->SetInput(m_DEMToImageGenerator->GetOutput());
       AddProcess(m_StatisticsFilter,"Computing DEM statistics ...");
       m_StatisticsFilter->Update();
 
-      m_DeformationFieldSource->SetAverageElevation(m_StatisticsFilter->GetMean());
+      otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(m_StatisticsFilter->GetMean());
       
       EnableParameter("epi.elevation.avgdem.value");
       SetParameterFloat("epi.elevation.avgdem.value",m_StatisticsFilter->GetMean());
 
-      }
-    else if(GetParameterString("epi.elevation") == "dem")
-      {
-      m_DeformationFieldSource->SetDEMDirectory(GetParameterString("epi.elevation.dem.path"));
-
-      if(IsParameterEnabled("epi.elevation.dem.geoid"))
-        {
-        m_DeformationFieldSource->SetGeoidFile(GetParameterString("epi.elevation.dem.geoid"));
-        }
       }
 
     AddProcess(m_DeformationFieldSource, "Computing epipolar grids ...");

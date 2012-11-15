@@ -126,29 +126,8 @@ private:
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     resampler->SetInterpolator(interpolator);
     
-    // Elevation through the elevation handler
-    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
-      {
-      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
-        {
-        case Elevation_DEM:
-        {
-        resampler->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-        resampler->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-        }
-        break;
-        case Elevation_Average:
-        {
-        resampler->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-        }
-        break;
-        //   Commented cause using a tiff file is not implemented yet
-        //  case Elevation_Tiff:
-        //  {
-        //  }
-        //  break;
-        }
-      }
+    // Setup the DEM Handler
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     // Set up output image informations
     FloatVectorImageType::SpacingType spacing = panchro->GetSpacing();

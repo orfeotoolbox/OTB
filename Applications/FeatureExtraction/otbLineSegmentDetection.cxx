@@ -169,29 +169,8 @@ private:
       //vproj->SetInputOrigin(GetParameterImage("in")->GetOrigin());
       //vproj->SetInputSpacing(GetParameterImage("in")->GetSpacing());
 
-      // Elevation through the elevation handler
-      if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
-        {
-        switch(ElevationParametersHandler::GetElevationType(this, "elev"))
-          {
-          case Elevation_DEM:
-          {
-          vproj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-          vproj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-          }
-          break;
-          case Elevation_Average:
-          {
-          vproj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-          }
-          break;
-          //   Commented cause using a tiff file is not implemented yet
-          //  case Elevation_Tiff:
-          //  {
-          //  }
-          //  break;
-          }
-        }
+      // Setup the DEM Handler
+      otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
       AddProcess(vproj, "Reprojecting output vector data");
       vproj->Update();

@@ -283,27 +283,8 @@ private:
     extractChannel2->SetInput(this->GetParameterImage("in2"));
     extractChannel2->SetChannel(GetParameterInt("band2"));
     
-    // Elevation through the elevation handler
-    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
-      {
-      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
-        {
-        case Elevation_DEM:
-        {
-        rsTransform->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-        rsTransform->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-        rsTransform2ToWGS84->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-        rsTransform2ToWGS84->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-        }
-        break;
-        case Elevation_Average:
-        {
-        rsTransform->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-        rsTransform2ToWGS84->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-        }
-        break;
-        }
-      }
+    // Setup the DEM Handler
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     rsTransform->InstanciateTransform();
     rsTransform2ToWGS84->InstanciateTransform();

@@ -205,30 +205,8 @@ private:
       vdreproj->SetInput(vectorData);
       vdreproj->SetUseOutputSpacingAndOriginFromImage(false);
 
-      // Elevation through the elevation handler
-      if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
-        {
-        switch(ElevationParametersHandler::GetElevationType(this, "elev"))
-          {
-          case Elevation_DEM:
-          {
-          vdreproj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-          vdreproj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-          }
-          break;
-          case Elevation_Average:
-          {
-          vdreproj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-          }
-          break;
-          //   Commented cause using a tiff file is not implemented yet
-          //  case Elevation_Tiff:
-          //  {
-          //  }
-          //  break;
-          }
-        }
-
+      // Setup the DEM Handler
+      otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
       vdreproj->Update();
 
       //Sample list generator

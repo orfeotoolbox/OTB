@@ -146,29 +146,8 @@ private:
     vprojIm->SetInputVectorData(inVectorData);
     vprojIm->SetInputImage(inImage);
 
-    // Elevation through the elevation handler
-    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
-      {
-      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
-        {
-        case Elevation_DEM:
-        {
-        vprojIm->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-        vprojIm->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-        }
-        break;
-        case Elevation_Average:
-        {
-        vprojIm->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-        }
-        break;
-        //   Commented cause using a tiff file is not implemented yet
-        //  case Elevation_Tiff:
-        //  {
-        //  }
-        //  break;
-        }
-      }
+    // Setup the DEM Handler
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     vprojIm->SetUseOutputSpacingAndOriginFromImage(true); // we want index as input;
     vprojIm->Update();
@@ -271,26 +250,8 @@ private:
         vproj->SetOutputOrigin(inImage->GetOrigin());
         vproj->SetOutputSpacing(inImage->GetSpacing());
 
-        // Elevation through the elevation handler
-        switch(ElevationParametersHandler::GetElevationType(this, "elev"))
-          {
-          case Elevation_DEM:
-          {
-          vproj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-          vproj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-          }
-          break;
-          case Elevation_Average:
-          {
-          vproj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-          }
-          break;
-          //   Commented cause using a tiff file is not implemented yet
-          //  case Elevation_Tiff:
-          //  {
-          //  }
-          //  break;
-          }
+        // Setup the DEM Handler
+        otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
         vproj->Update();
         m_ProjectedVectorData = vproj->GetOutput();

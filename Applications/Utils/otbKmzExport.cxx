@@ -99,29 +99,8 @@ private:
     kmzWriter->SetInput( this->GetParameterImage("in") );
     kmzWriter->SetPath( this->GetParameterString("out") );
 
-    // Elevation through the elevation handler
-    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
-      {
-      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
-        {
-        case Elevation_DEM:
-        {
-        kmzWriter->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-        kmzWriter->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-        }
-        break;
-        case Elevation_Average:
-        {
-        kmzWriter->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-        }
-        break;
-        //   Commented cause using a tiff file is not implemented yet
-        //  case Elevation_Tiff:
-        //  {
-        //  }
-        //  break;
-        }
-      }
+    // Setup the DEM Handler
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     // If the tile size is set
     if( this->HasValue("tilesize") )

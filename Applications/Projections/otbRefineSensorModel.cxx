@@ -96,34 +96,15 @@ private:
     otb::SensorModelAdapter::Pointer sm_ref = otb::SensorModelAdapter::New();
     
     // Read the geom file
-    bool canRead = sm->ReadGeomFile(GetParameterString("ingeom"));
-    canRead = sm_ref->ReadGeomFile(GetParameterString("ingeom"));
+    sm->ReadGeomFile(GetParameterString("ingeom"));
+    sm_ref->ReadGeomFile(GetParameterString("ingeom"));
 
-  // Setup elevation
+    // Setup the DEM Handler
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
-    otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
-
-    double avg_elevation = 0;
-    bool use_avg_elevation = false;
-    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
-      {
-      case Elevation_DEM:
-      {
-      demHandler->OpenDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-      demHandler->OpenGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-      }
-      break;
-      case Elevation_Average:
-      {
-      avg_elevation = ElevationParametersHandler::GetAverageElevation(this, "elev");
-      use_avg_elevation = true;
-      }
-      break;
-      }
-
-  // Parse the input file for ground control points
-  std::ifstream ifs;
-  ifs.open(GetParameterString("inpoints").c_str());
+    // Parse the input file for ground control points
+    std::ifstream ifs;
+    ifs.open(GetParameterString("inpoints").c_str());
    
   TiePointsType tiepoints;
 
@@ -151,10 +132,7 @@ private:
       nextpos = line.find_first_of("\t", pos);
       lat = atof(line.substr(pos, nextpos).c_str());
       
-      if(!use_avg_elevation)
-        z = demHandler->GetHeightAboveEllipsoid(lon,lat);
-      else
-        z = avg_elevation;
+      z = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(lon,lat);
 
       otbAppLogINFO("Adding tie point x="<<x<<", y="<<y<<", z="<<z<<", lon="<<lon<<", lat="<<lat);
       

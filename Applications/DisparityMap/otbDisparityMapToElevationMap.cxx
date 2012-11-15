@@ -157,23 +157,8 @@ private:
       m_DispToElev->SetDisparityMaskInput(this->GetParameterUInt8Image("io.mask"));
       }
 
-    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
-      {
-      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
-        {
-        case Elevation_DEM:
-        {
-        m_DispToElev->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-        m_DispToElev->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-        }
-        break;
-        case Elevation_Average:
-        {
-        m_DispToElev->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-        }
-        break;
-        }
-      }
+    // Setup the DEM Handler
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     m_DispToElev->UpdateOutputInformation();
     FloatVectorImageType::RegionType outputRegion = m_DispToElev->GetOutput()->GetLargestPossibleRegion();
