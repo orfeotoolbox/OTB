@@ -33,6 +33,11 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
+ namespace otb 
+ {
+ class QGLImageWidget;
+ }
+
 //
 // Class pre-declaration.
 namespace Ui

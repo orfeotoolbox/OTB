@@ -78,6 +78,7 @@ MainWindow
 
   // Set the GLImageWidget as the centralWidget in MainWindow.
   setCentralWidget( new otb::QGLImageWidget( this ) );
+  
 
 // Connect Quit action of main menu to QApplication's quit() slot.
   QObject::connect(
