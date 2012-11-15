@@ -47,19 +47,14 @@ public:
     */
   static void AddElevationParameters(Application::Pointer app, const std::string & key);
 
-  /**
-    * Helper method : Get the elevation type selected by the user
-    * projection picked up by the user
-    *
-    */
-  static ElevationType GetElevationType(const Application::Pointer app, const std::string& key);
-
   /** Method for getting the value of the elevation mode selected */
-  static const std::string GetDEMDirectory(const Application::Pointer app, const std::string& key);
-  static float GetAverageElevation(const Application::Pointer app, const std::string& key);
+  static float GetDefaultElevation(const Application::Pointer app, const std::string& key);
   static const std::string GetGeoidFile(const Application::Pointer app, const std::string& key);
+  static const std::string GetDEMDirectory(const Application::Pointer app, const std::string& key);
   static bool IsGeoidUsed(const Application::Pointer app, const std::string& key);
-  static bool IsElevationEnabled(const Application::Pointer app, const std::string & key);
+  static bool IsDEMUsed(const Application::Pointer app, const std::string & key);
+
+  static void SetupDEMHandlerFromElevationParameters(const Application::Pointer app, const std::string& key);
 
 protected:
   ElevationParametersHandler(); // not implemented
