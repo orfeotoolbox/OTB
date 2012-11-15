@@ -24,7 +24,7 @@
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QApplication>
+#include <QtGui>
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -39,6 +39,7 @@
 namespace mvd
 {
 
+/*****************************************************************************/
 Application
 ::Application( int& argc, char** argv ) :
   QApplication( argc, argv )
@@ -47,22 +48,32 @@ Application
     this, SIGNAL( aboutToQuit() ),
     this, SLOT( OnAboutToQuit() )
     );
+
+  InitializeUI();
 }
 
+/*****************************************************************************/
 Application
 ::~Application()
 {
 }
 
-//
-// SLOTS
-//
+/*****************************************************************************/
+void
+Application::InitializeUI()
+{
+}
 
+/*****************************************************************************/
+/* SLOTS                                                                     */
+/*****************************************************************************/
 void
 Application
 ::OnAboutToQuit()
 {
   qDebug( ">DEBUG< mvd::Application::OnAboutToQuit()" );
 }
+
+/*****************************************************************************/
 
 } // end namespace 'mvd'

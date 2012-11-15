@@ -62,16 +62,17 @@ public:
 protected:
 
 //
+//
+private:
+  void InitializeUI();
+
+//
 // SLOTS
 private slots:
 /**
-*
-*/
+ *
+ */
   void OnAboutToQuit();
-
-//
-//
-private:
 };
 
 } // end namespace 'mvd'

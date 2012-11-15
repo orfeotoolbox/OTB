@@ -1,5 +1,35 @@
+/*=========================================================================
+
+  Program:   Monteverdi2
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
 #include "otbQGLImageWidget.h"
+
+//
+// System includes (sorted by alphabetic order)
+
+//
+// Qt includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
 #include "itkImageRegionConstIteratorWithIndex.h"
+
+//
+// Monteverdi includes (sorted by alphabetic order)
 
 namespace otb
 {
@@ -151,11 +181,12 @@ void QGLImageWidget::initializeGL()
 
  void QGLImageWidget::paintGL()
  {
-   unsigned int nb_displayed_rows;
-   unsigned int nb_displayed_cols;
-   unsigned int first_displayed_row;
-   unsigned int first_displayed_col;
+   unsigned int nb_displayed_cols = m_OpenGlBufferedRegion.GetSize()[ 0 ];
+   unsigned int nb_displayed_rows = m_OpenGlBufferedRegion.GetSize()[ 1 ];
+   unsigned int first_displayed_col = m_OpenGlBufferedRegion.GetIndex()[ 0 ];
+   unsigned int first_displayed_row = m_OpenGlBufferedRegion.GetIndex()[ 1 ];
 
+/*
    if( m_Extent.GetIndex()[0] >= 0 )
     {
     nb_displayed_cols = m_OpenGlBufferedRegion.GetSize()[0];
@@ -177,12 +208,13 @@ void QGLImageWidget::initializeGL()
     nb_displayed_rows = m_H / m_IsotropicZoom;
     first_displayed_row = (m_OpenGlBufferedRegion.GetSize()[1] - nb_displayed_rows) / 2;
     }
+*/
 
-
+/*
    RegionType::IndexType startPosition = m_Extent.GetIndex();
    startPosition[0] = startPosition[0] < 0 ? 0 : startPosition[0];
    startPosition[1] = startPosition[1] < 0 ? 0 : startPosition[1];
-
+*/
    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
    glPixelStorei(GL_UNPACK_ROW_LENGTH, m_OpenGlBufferedRegion.GetSize()[0]);
    glPixelStorei(GL_UNPACK_SKIP_PIXELS, first_displayed_col);
@@ -191,7 +223,8 @@ void QGLImageWidget::initializeGL()
    glClear(GL_COLOR_BUFFER_BIT);
    glPixelZoom(m_IsotropicZoom,m_IsotropicZoom);
 
-   glRasterPos2f(startPosition[0], startPosition[1]);
+   // glRasterPos2f(startPosition[0], startPosition[1]);
+   glRasterPos2f(first_displayed_col, first_displayed_row);
    glDrawPixels(nb_displayed_cols,
                 nb_displayed_rows,
                 GL_RGB,

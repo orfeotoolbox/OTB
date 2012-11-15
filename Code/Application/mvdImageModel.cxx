@@ -16,13 +16,10 @@
 
 =========================================================================*/
 
-/*******************************************************************************/
-
-//#include "ConfigureMonteverdi.h"
+#include "mvdMyClass.h"
 
 //
 // System includes (sorted by alphabetic order)
-//#include <cstdlib>
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -30,24 +27,24 @@
 //
 // OTB includes (sorted by alphabetic order)
 
+//
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdApplication.h"
-#include "mvdMainWindow.h"
 
-//
-// MAIN
-//
-int
-main( int argc, char* argv[] )
+namespace mvd
 {
-  mvd::Application application( argc, argv );
-  mvd::MainWindow main_window;
 
-  main_window.show();
-  
-  return application.exec();
+MyClass
+::MyClass()
+{
 }
 
-//
-// Main functions implementations.
-//
+MyClass
+::~MyClass()
+{
+}
+
+/*******************************************************************************/
+/* SLOTS                                                                       */
+/*******************************************************************************/
+
+} // end namespace 'mvd'

@@ -2,6 +2,8 @@ PROJECT(Monteverdi2)
 
 cmake_minimum_required(VERSION 2.6)
 
+#----------------------------------------------------------------------------
+# ensure WIN32 definition
 if(WIN32)
   add_definitions(-DWIN32)
 endif(WIN32)
@@ -28,12 +30,6 @@ add_definitions(-DNOMINMAX -DOSSIM_STATIC)
 endif(WIN32)
 
 #----------------------------------------------------------------------------
-# ensure WIN32 definition
-if(WIN32)
-  add_definitions(-DWIN32)
-endif(WIN32)
-
-#----------------------------------------------------------------------------
 # Link to the Orfeo ToolBox
 find_package(OTB PATHS /usr/lib/otb)
 if(OTB_FOUND)
@@ -47,13 +43,13 @@ endif(OTB_FOUND)
 #----------------------------------------------------------------------------
 # Qt4 settings
 find_package( Qt4 REQUIRED QtCore QtGui)
-include( ${QT_USE_FILE} )
-add_definitions( ${QT_DEFINITIONS} )
-# Add binary dir to build paths in order to include Qt4 wrapped files.
-include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
-# Choose Qt4 libraries.
+
+# setup Qt environement
 set( QT_USE_QTCORE TRUE )
 set( QT_USE_QTGUI TRUE )
+set( QT_USE_QTOPENGL TRUE)
+
+include( ${QT_USE_FILE} )
 
 #----------------------------------------------------------------------------
 # Include OTB CMake modules path.
@@ -80,8 +76,8 @@ endif(Mercurial_FOUND)
 
 #----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
-#configure_file(${Monteverdi2_SOURCE_DIR}/ConfigureMonteverdi2.h.in
-#               ${Monteverdi2_BINARY_DIR}/ConfigureMonteverdi2.h)
+configure_file(${Monteverdi2_SOURCE_DIR}/ConfigureMonteverdi2.h.in
+               ${Monteverdi2_BINARY_DIR}/ConfigureMonteverdi2.h)
 
 #----------------------------------------------------------------------------
 #Build shared libraries for monteverdi
@@ -108,7 +104,6 @@ set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard.")
 #----------------------------------------------------------------------------
 # Include directories
 set(Monteverdi2_INCLUDE_DIRS
-  ${OTB_INCLUDE_DIRS}
   ${Monteverdi2_SOURCE_DIR}/Code/
   ${Monteverdi2_SOURCE_DIR}/Code/Common
   ${Monteverdi2_SOURCE_DIR}/Code/Application

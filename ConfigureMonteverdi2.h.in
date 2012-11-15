@@ -1,0 +1,9 @@
+// Monteverdi version
+#define Monteverdi2_VERSION_MAJOR @Monteverdi2_VERSION_MAJOR@
+#define Monteverdi2_VERSION_MINOR @Monteverdi2_VERSION_MINOR@
+#define Monteverdi2_VERSION_PATCH @Monteverdi2_VERSION_PATCH@
+#define Monteverdi2_VERSION_STRING "@Monteverdi2_VERSION_STRING@"
+
+#define Monteverdi2_SOURCE_DIR "@Monteverdi2_SOURCE_DIR@"
+
+#define Monteverdi2_FLOATING_TYPE @Monteverdi2_FLOATING_TYPE@

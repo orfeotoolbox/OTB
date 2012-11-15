@@ -26,6 +26,9 @@
 // Qt includes (sorted by alphabetic order)
 
 //
+// ITK includes (sorted by alphabetic order)
+
+//
 // OTB includes (sorted by alphabetic order)
 
 //
@@ -44,8 +47,6 @@ namespace mvd
  */
 class MyClass
 {
-//
-//
 public:
 
 /** Constructor */
@@ -54,16 +55,11 @@ public:
 /** Destructor */
   virtual ~MyClass();
 
-//
-//
 protected:
 
-//
-//
 private:
 
-//
-// SLOTS
+//private slots:
 };
 
 } // end namespace 'mvd'

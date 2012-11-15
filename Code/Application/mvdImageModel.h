@@ -16,71 +16,56 @@
 
 =========================================================================*/
 
-#ifndef __mvdMainWindow_h
-#define __mvdMainWindow_h
+#ifndef __mvdMyClass_h
+#define __mvdMyClass_h
 
 //
 // System includes (sorted by alphabetic order)
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QtGui>
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbQGLImageWidget.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
 
 //
 // Class pre-declaration.
-namespace Ui
+namespace
 {
-class MainWindow;
 }
 
 namespace mvd
 {
-/** \class MainWindow
+/** \class MyClass
  *
  */
-class MainWindow
-  : public QMainWindow
+class MyClass
 {
-  Q_OBJECT;
-
+//
+//
 public:
 
-  /** Constructor */
-  MainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
+/** Constructor */
+  MyClass();
 
-  /** Destructor */
-  virtual ~MainWindow();
+/** Destructor */
+  virtual ~MyClass();
 
-  /** Method to get the instance*/
-  inline otb::QGLImageWidget* GetGLImageWidget()
-  {
-    return dynamic_cast< ::otb::QGLImageWidget* >( centralWidget() );
-  }
-
-  /** Method to get the instance*/
-  inline const otb::QGLImageWidget* GetGLImageWidget() const
-  {
-    return const_cast< const MainWindow* >( this )->GetGLImageWidget();
-  }
-
+//
+//
 protected:
 
+//
+//
 private:
-  void Initialize();
 
-  Ui::MainWindow* m_UI;
-
-private slots:
-  void on_action_Open_activated();
+//
+// SLOTS
 };
 
 } // end namespace 'mvd'
 
-#endif // __MainWindow_h
+#endif // __mvdMyClass_h
