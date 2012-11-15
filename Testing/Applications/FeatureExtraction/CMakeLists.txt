@@ -102,3 +102,12 @@ OTB_TEST_APPLICATION(NAME  apTvFELocalStatisticExtraction
                    			 ${BASELINE}/feTvRadiometricMomentsImageFilter.tif
                  		     ${TEMP}/apTvFELocalStatisticExtraction.tif)      		        
                  		     
+OTB_TEST_APPLICATION(NAME  apTvFEEdgeExtraction
+                     APP  EdgeExtraction
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif                             
+                             -channel 1 
+                             -filter sobel
+                             -out ${TEMP}/apTvFEEdgeExtraction.tif
+                     VALID   --compare-image ${NOTOL}
+                   			 ${BASELINE}/apTvFEEdgeExtraction.tif
+                 		     ${TEMP}/apTvFEEdgeExtraction.tif)  

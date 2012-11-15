@@ -30,4 +30,7 @@ OTB_CREATE_APPLICATION(NAME GrayScaleMorphologicalOperation
 OTB_CREATE_APPLICATION(NAME LocalStatisticExtraction
                        SOURCES otbLocalStatisticExtraction.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction)
-                       
+     
+OTB_CREATE_APPLICATION(NAME EdgeExtraction
+                       SOURCES otbEdgeExtraction.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction)                     
