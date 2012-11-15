@@ -43,7 +43,8 @@ MainWindow
 {
   m_UI->setupUi( this );
 
-/*
+  
+  /*
   QDockWidget* dock_widget = new DockWidget( tr( "Dock Widget" ), this );
 
   dock_widget->setAllowedAreas(
@@ -51,19 +52,14 @@ MainWindow
     Qt::RightDockWidgetArea
     );
 
-  // dockWidget->setWidget( dockWidgetContents );
-
+  dockWidget->setWidget( dockWidgetContents );
   addDockWidget( Qt::LeftDockWidgetArea, dock_widget );
-*/
+  */
 
-  // TODO : uncomment to use the otbQGLImageWiget
-  // glWidget = new otb::QGLImageWidget();
-  // QHBoxLayout *mainLayout = new QHBoxLayout;
-  // mainLayout->addWidget(m_QGLWidget);
-  // setLayout(mainLayout);
-  // setWindowTitle(tr("OTB QGL Window"));
+  // Set the GLImageWidget as the centralWidget in MainWindow
+  m_QGLWidget = new otb::QGLImageWidget();
+  this->setCentralWidget(m_QGLWidget);
   
-
   QObject::connect(
     m_UI->action_Quit, SIGNAL( activated() ),
     qApp, SLOT( quit() )

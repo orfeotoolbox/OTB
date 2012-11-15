@@ -24,14 +24,19 @@
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QMainWindow>
+#include <QtGui>
 
 //
 // OTB includes (sorted by alphabetic order)
-//#include "otbQGLImageWidget.h"
+#include "otbQGLImageWidget.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+
+ namespace otb 
+ {
+ class QGLImageWidget;
+ }
 
 //
 // Class pre-declaration.
@@ -41,10 +46,7 @@ class MainWindow;
 }
 
 
- // namespace otb 
- // {
- // class QGLImageWidget;
- // };
+
 
 
 namespace mvd
@@ -67,11 +69,11 @@ public:
 /** Destructor */
   virtual ~MainWindow();
 
-  // /** Method to get the instance*/
-  // otb::QGLImageWidget* GetGLImageWidget()
-  // {
-  //   return m_QGLWidget;
-  // }
+  /** Method to get the instance*/
+  otb::QGLImageWidget* GetGLImageWidget()
+  {
+    return m_QGLWidget;
+  }
 
 //
 //
@@ -82,7 +84,7 @@ protected:
 private:
   Ui::MainWindow* m_UI;
 
-  //otb::QGLImageWidget * m_QGLWidget;
+  otb::QGLImageWidget * m_QGLWidget;
 
 //
 // SLOTS

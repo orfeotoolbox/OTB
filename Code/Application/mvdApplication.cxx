@@ -24,7 +24,7 @@
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QApplication>
+#include <QtGui>
 
 //
 // OTB includes (sorted by alphabetic order)
