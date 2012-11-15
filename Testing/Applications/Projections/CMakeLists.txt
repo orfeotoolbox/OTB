@@ -5,8 +5,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM
                      APP  OrthoRectification
                      OPTIONS -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
                  			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM.tif
-                                         -elev  dem
-                 			 -elev.dem.path ${INPUTDATA}/DEM/srtm_directory/
+                 			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
                  		     -outputs.ulx  374100.8
                  			 -outputs.uly  4829184.8
                  			 -outputs.sizex 500

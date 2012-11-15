@@ -13,9 +13,8 @@ OTB_TEST_APPLICATION(NAME  apTvDmStereoSensorModelToElevationMapTest
                              -minh -20.0
                              -maxh 20.0
                              -step 1.0
-                             -elev dem
-                             -elev.dem.path ${INPUTDATA}/DEM/srtm_directory/
-                             -elev.dem.geoid ${INPUTDATA}/DEM/egm96.grd
+                             -elev.dem ${INPUTDATA}/DEM/srtm_directory/
+                             -elev.geoid ${INPUTDATA}/DEM/egm96.grd
                      VALID   --compare-image ${EPSILON_10}
                              ${BASELINE}/apTvDmStereoSensorModelToElevationMapTest.tif
                              ${TEMP}/apTvDmStereoSensorModelToElevationMapTest.tif)
@@ -31,9 +30,8 @@ OTB_TEST_APPLICATION(NAME  apTvDmStereoSensorModelToElevationMapWithSmoothing
                              -minh -20.0
                              -maxh 20.0
                              -step 1.0
-                             -elev dem
-                             -elev.dem.path ${INPUTDATA}/DEM/srtm_directory/
-                             -elev.dem.geoid ${INPUTDATA}/DEM/egm96.grd
+                             -elev.dem ${INPUTDATA}/DEM/srtm_directory/
+                             -elev.geoid ${INPUTDATA}/DEM/egm96.grd
                              -rgs 2.0
                              -sgs 2.0
                      VALID   --compare-image ${EPSILON_10}
@@ -68,7 +66,7 @@ OTB_TEST_APPLICATION(NAME apTuDmStereoRectificationGridGeneratorTest
                              -io.inright ${INPUTDATA}/sensor_stereo_right.tif
                              -io.outleft ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
                              -io.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
-                             -epi.elevation.avg.value 140
+                             -epi.elevation.default 140
                              -epi.scale 1.0
                              -epi.step 4
                      )
@@ -125,7 +123,7 @@ OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
                              -io.out ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
                              -hmin 130
                              -hmax 220
-                             -elev.average.value 140
+                             -elev.default 140
                              -step 2.5
                              -io.mask ${INPUTDATA}/sensor_stereo_dmap_mask.tif
                      VALID   --compare-image ${EPSILON_10}

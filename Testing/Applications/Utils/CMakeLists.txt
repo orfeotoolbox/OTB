@@ -162,8 +162,7 @@ OTB_TEST_APPLICATION(NAME apTvUtKmzExport
                              -out ${TEMP}/apTvUtKmzExport.kmz
                              -logo ${INPUTDATA}/cnes.png
                              -legend ${INPUTDATA}/otb_big.png
-                             -elev dem
-                             -elev.dem.path ${INPUTDATA}/DEM/srtm_directory)
+                             -elev.dem ${INPUTDATA}/DEM/srtm_directory)
 
 
 IF(OTB_DATA_USE_LARGEINPUT)
