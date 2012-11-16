@@ -44,7 +44,9 @@ int
 main( int argc, char* argv[] )
 {
   mvd::Application application( argc, argv );
+  mvd::MainWindow main_window;
   
+/*
   // image reader 
   typedef itk::RGBAPixel<unsigned char>   PixelType;
   typedef otb::Image<PixelType, 2>        ImageType;
@@ -62,6 +64,8 @@ main( int argc, char* argv[] )
   main_window.GetGLImageWidget()->SetIsotropicZoom(1);
   main_window.GetGLImageWidget()->ReadBuffer(image, region);
   main_window.resize( region.GetSize()[0], region.GetSize()[1] );
+*/
+
   main_window.show();
   
   return application.exec();

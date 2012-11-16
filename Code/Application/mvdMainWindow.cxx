@@ -22,10 +22,12 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <exception>
 
 //
 // Qt includes (sorted by alphabetic order)
 #include <QFileDialog>
+#include <QMessageBox>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -115,8 +117,18 @@ MainWindow
   otb::QGLImageWidget* widget = GetGLImageWidget();
 
   ReaderType::Pointer reader( ReaderType::New() );
+
   reader->SetFileName( filename.toLatin1().data() );
-  reader->UpdateOutputInformation();
+
+  try
+    {
+    reader->UpdateOutputInformation();
+    }
+  catch( std::exception& exc )
+    {
+    QMessageBox::warning( this, tr("Exception!"), exc.what() );
+    return;
+    }
 
   ImageType::Pointer image( reader->GetOutput() );
 
