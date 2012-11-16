@@ -85,6 +85,9 @@ public:
 
   itkSetObjectMacro(Curl, CurlHelperInterface);
 
+  itkSetMacro(ExtGEOMFilename, std::string);
+  itkGetMacro(ExtGEOMFilename, std::string);
+
 protected:
   ImageFileReader();
   virtual ~ImageFileReader();
@@ -109,7 +112,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   std::string m_ExceptionMessage;
-
+  std::string m_ExtGEOMFilename;
   CurlHelperInterface::Pointer m_Curl;
 };
 
