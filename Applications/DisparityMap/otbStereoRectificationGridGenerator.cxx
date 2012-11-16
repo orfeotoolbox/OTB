@@ -130,7 +130,7 @@ private:
 
     ElevationParametersHandler::AddElevationParameters(this, "epi.elevation");
 
-    AddParameter(ParameterType_Empty,"epi.elevation.avgdem","Average elevation computed from DEM");
+    AddParameter(ParameterType_Group,"epi.elevation.avgdem","Average elevation computed from DEM");
     SetParameterDescription("epi.elevation.avgdem","Average elevation computed from the provided DEM");
     MandatoryOff("epi.elevation.avgdem");
 
