@@ -25,23 +25,6 @@
 
 namespace otb
 {
-/**--------------------------------------------------------
- * Constant indexes for neighbors offsets
- --------------------------------------------------------*/
-template <class TInputImage, class TOutputPointSet>
-const typename ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>::OffsetType
-ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>::m_Offsets[8] =
-  {
-       {{-1, -1}}, //0
-       {{-1, 0}}, //1
-       {{-1, 1}}, //2
-       {{ 0, -1}}, //3
-       {{ 0, 1}}, //4
-       {{ 1, -1}}, //5
-       {{ 1, 0}}, //6
-       {{ 1, 1}}, //7
-  };
-
 /**---------------------------------------------------------
  * Constructor
  ----------------------------------------------------------*/
@@ -49,6 +32,23 @@ template <class TInputImage, class TOutputPointSet>
 ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
 ::ImageToSURFKeyPointSetFilter()
 {
+  m_Offsets[0][0]=-1;
+  m_Offsets[0][1]=-1;
+  m_Offsets[1][0]=-1;
+  m_Offsets[1][1]= 0;
+  m_Offsets[2][0]=-1;
+  m_Offsets[2][1]= 1;
+  m_Offsets[3][0]= 0;
+  m_Offsets[3][1]=-1;
+  m_Offsets[4][0]= 0;
+  m_Offsets[4][1]= 1;
+  m_Offsets[5][0]= 1;
+  m_Offsets[5][1]=-1;
+  m_Offsets[6][0]= 1;
+  m_Offsets[6][1]= 0;
+  m_Offsets[7][0]= 1;
+  m_Offsets[7][1]= 1;
+
   m_OctavesNumber = 1;
   m_ScalesNumber = 3;
   m_NumberOfPoints = 0;

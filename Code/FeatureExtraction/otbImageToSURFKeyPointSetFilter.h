@@ -240,7 +240,7 @@ private:
   unsigned int m_DifferentSamplePoints;
   
   /** Offsets vector, conveniance datas */
-  static const OffsetType m_Offsets[8];
+  OffsetType m_Offsets[8];
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
