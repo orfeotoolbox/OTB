@@ -254,11 +254,11 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
-  leftToGroundTransform->SetInputKeywordList(leftImgPtr->GetImageKeywordlist());  
+  leftToGroundTransform->SetInputKeywordList(leftImgPtr->GetImageKeywordlist());
   leftToGroundTransform->InstanciateTransform();
   
   RSTransform2DType::Pointer rightToGroundTransform = RSTransform2DType::New();
-  rightToGroundTransform->SetInputKeywordList(rightImgPtr->GetImageKeywordlist());  
+  rightToGroundTransform->SetInputKeywordList(rightImgPtr->GetImageKeywordlist());
   rightToGroundTransform->InstanciateTransform();
   
   // left image

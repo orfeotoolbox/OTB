@@ -61,7 +61,7 @@ namespace otb
 /** \class DEMHandler
  *
  * \brief Class for Reading a DEM data
- * 
+ *
  * This class is the single configuration and access point for
  * elevation handling in images projections and localisation functions.
  *
@@ -85,7 +85,7 @@ public:
 
   typedef itk::Point<double, 2> PointType;
 
-  /** Method for creation through the object factory. 
+  /** Method for creation through the object factory.
    *  \deprecated DEMHandler is now a singleton class, use Instance method instead.
    */
   itkLegacyMacro(static Self * New());

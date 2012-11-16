@@ -137,7 +137,7 @@ public:
 
   /** \deprecated Toggle the use DEM flag. If set to true, the local elevation is
    *  extracted from a DEM + geoid. If set to false, average elevation
-   *  is used. Default is false. 
+   *  is used. Default is false.
    */
   itkLegacyMacro(itkBooleanMacro(UseDEM));
 

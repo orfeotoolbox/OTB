@@ -128,7 +128,7 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
   ossimGpt ossimGPoint(lat, lon, h);
   ossimDpt ossimDPoint;
 
-  this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint); 
+  this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint);
 
   x = ossimDPoint.x;
   y = ossimDPoint.y;
@@ -151,7 +151,7 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat,
   ossimGpt ossimGPoint(lat, lon, h);
   ossimDpt ossimDPoint;
 
-  this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint); 
+  this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint);
 
   x = ossimDPoint.x;
   y = ossimDPoint.y;

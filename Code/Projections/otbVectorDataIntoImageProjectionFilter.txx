@@ -178,7 +178,7 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   //std::cout << "remote sensing region ProjRef: " << rsRegion.GetRegionProjection() << std::endl;
 
   // Set the cartographic region to the extract roi filter
-  m_VdExtractFilter->SetRegion(rsRegion);  
+  m_VdExtractFilter->SetRegion(rsRegion);
 
   // Reproject VectorData in image projection
   m_VdProjFilter->SetInputProjectionRef(this->GetInput()->GetProjectionRef());

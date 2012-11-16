@@ -45,7 +45,7 @@ public:
   typedef std::pair<PointType,PointType>       TiePointType;
   typedef std::vector<TiePointType>            TiePointsType;
 
-  typedef otb::GenericRSTransform<double,3,3>  RSTransformType;   
+  typedef otb::GenericRSTransform<double,3,3>  RSTransformType;
   
   /** Standard macro */
   itkNewMacro(Self);

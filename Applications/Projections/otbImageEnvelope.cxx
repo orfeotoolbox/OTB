@@ -99,7 +99,7 @@ private:
     m_Envelope->SetSamplingRate(GetParameterInt("sr"));
     
     // Setup the DEM Handler
-    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");    
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
     if (HasValue("proj"))
       {
       m_Envelope->SetOutputProjectionRef(GetParameterString("proj"));
