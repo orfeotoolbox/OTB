@@ -29,7 +29,6 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   app->AddParameter(ParameterType_Group, key, "Elevation management");
   app->SetParameterDescription(key,
                                "This group of parameters allows to manage elevation values. Supported formats are SRTM, DTED or any geotiff processed by the DEM import application");
-  app->MandatoryOff(key);
 
   // DEM directory
   std::ostringstream oss;
