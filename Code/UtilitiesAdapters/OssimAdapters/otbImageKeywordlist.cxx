@@ -210,10 +210,8 @@ ReadGeometryFromImage(const std::string& filename)
       // Try to find a ".geom" file next to 'filename'
       ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
 
-      ReadGeometryFromGEOMFile(ossimGeomFile);
 
-      /*
-       if (ossimGeomFile.exists() && ossimGeomFile.isFile())
+      if (ossimGeomFile.exists() && ossimGeomFile.isFile())
         {
         // Interpret the geom file as a KWL
         ossimKeywordlist kwl(ossimGeomFile);
@@ -234,7 +232,6 @@ ReadGeometryFromImage(const std::string& filename)
             }
           }
         }
-      */
       }
     else
       {
@@ -279,8 +276,7 @@ ImageKeywordlist
 ReadGeometryFromGEOMFile(const std::string& filename)
 {
   ossimKeywordlist geom_kwl;
-
-  ossimFilename ossimGeomFile = ossimFilename(filename);
+  ImageKeywordlist otb_kwl;
 
   if (ossimGeomFile.exists() && ossimGeomFile.isFile())
     {
@@ -304,7 +300,6 @@ ReadGeometryFromGEOMFile(const std::string& filename)
       }
     }
 
-  ImageKeywordlist otb_kwl;
   otb_kwl.SetKeywordlist(geom_kwl);
 
   return otb_kwl;

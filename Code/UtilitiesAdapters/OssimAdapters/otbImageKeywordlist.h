@@ -100,6 +100,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
+  ossimKeywordlist InternalReadGeometry(const std::string& filename);
 
   /** Geo informations are in this map */
   KeywordlistMap m_Keywordlist;
@@ -113,8 +114,9 @@ private:
 std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
 
 // Free function to handle the keywordlist <-> files
-itkLegacyMacro(ImageKeywordlist ReadGeometry(const std::string& filename));
+itkLegacyMacro(ImageKeywordlist ReadGeometry(const std::string& filename)); //OTB 3.15
 ImageKeywordlist ReadGeometryFromImage(const std::string& filename);
+ImageKeywordlist ReadGeometryFromGEOMFile(const std::string& filename);
 void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);
 
 } //namespace otb
