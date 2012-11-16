@@ -100,8 +100,6 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ossimKeywordlist InternalReadGeometry(const std::string& filename);
-
   /** Geo informations are in this map */
   KeywordlistMap m_Keywordlist;
 
