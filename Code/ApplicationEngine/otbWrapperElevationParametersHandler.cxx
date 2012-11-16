@@ -91,7 +91,7 @@ void ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(const Ap
   otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(GetDefaultElevation(app,key));
 
   std::ostringstream oss;
-  oss<<"Elevation management: setting default height above ellipsoid to  " << GetDefaultElevation(app,key) << " meters";
+  oss<<"Elevation management: setting default height above ellipsoid to  " << GetDefaultElevation(app,key) << " meters"<<std::endl;
 
   app->GetLogger()->Info(oss.str());
 
@@ -99,7 +99,7 @@ void ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(const Ap
   if(IsGeoidUsed(app,key))
     {
     oss.str("");
-    oss<<"Elevation management: using geoid file ("<<GetGeoidFile(app,key)<<")";
+    oss<<"Elevation management: using geoid file ("<<GetGeoidFile(app,key)<<")"<<std::endl;
     otb::DEMHandler::Instance()->OpenGeoidFile(GetGeoidFile(app,key));
     app->GetLogger()->Info(oss.str());
     }
@@ -108,7 +108,7 @@ void ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(const Ap
   if(IsDEMUsed(app,key))
     {
     oss.str("");
-    oss<<"Elevation management: using DEM directory ("<<GetDEMDirectory(app,key)<<")";
+    oss<<"Elevation management: using DEM directory ("<<GetDEMDirectory(app,key)<<")"<<std::endl;
     otb::DEMHandler::Instance()->OpenDEMDirectory(GetDEMDirectory(app,key));
     app->GetLogger()->Info(oss.str());
     }
