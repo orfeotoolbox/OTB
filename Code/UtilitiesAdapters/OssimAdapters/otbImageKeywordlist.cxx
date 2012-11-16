@@ -150,6 +150,12 @@ operator <<(std::ostream& os, const ImageKeywordlist& kwl)
 ImageKeywordlist
 ReadGeometry(const std::string& filename)
 {
+  return ReadGeometryFromImage(filename);
+}
+
+ImageKeywordlist
+ReadGeometryFromImage(const std::string& filename)
+{
   // Trying to read ossim MetaData
   bool             hasMetaData = false;
   ossimKeywordlist geom_kwl; // = new ossimKeywordlist();

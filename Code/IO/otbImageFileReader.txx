@@ -375,7 +375,7 @@ ImageFileReader<TOutputImage>
   output->SetDirection(direction);   // Set the image direction cosines
 
   // Update otb Keywordlist
-  ImageKeywordlist otb_kwl = ReadGeometry(lFileNameOssimKeywordlist);
+  ImageKeywordlist otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist);
 
   // Pass the depth parameter from the tilemap around
   if (strcmp(this->m_ImageIO->GetNameOfClass(), "TileMapImageIO") == 0)
