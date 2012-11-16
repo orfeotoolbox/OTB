@@ -32,11 +32,17 @@ DEMHandler::Pointer DEMHandler::m_Singleton = NULL;
 
 DEMHandler::Pointer DEMHandler::Instance()
 {
-  // Check for singleton
-  if(!m_Singleton)
+  if(m_Singleton.GetPointer() == NULL)
     {
-    m_Singleton = ::itk::ObjectFactory<Self>::Create();
+    m_Singleton = itk::ObjectFactory<Self>::Create();
+
+    if(m_Singleton.GetPointer() == NULL)
+      {
+      m_Singleton = new DEMHandler;
+      }
+    m_Singleton->UnRegister();
     }
+  
   return m_Singleton;
 }
 
