@@ -38,6 +38,9 @@
 
 #include "otbGDALDriverManagerWrapper.h"
 
+#include <boost/algorithm/string/predicate.hpp>
+#include "otbOGRHelpers.h"
+
 namespace otb
 {
 
@@ -1108,19 +1111,32 @@ void GDALImageIO::Write(const void* buffer)
       itkExceptionMacro(<< "Unable to instantiate driver " << gdalDriverShortName << " to write " << m_FileName);
       }
 
-    // If JPEG, set the JPEG compression quality to 95.
-    char * option[2];
-    option[0] = NULL;
-    option[1] = NULL;
-    // If JPEG, set the image quality
+    GDALCreationOptionsType creationOptions = m_CreationOptions;
+
+    // If not initialized in m_CreationOptions, force JPEG quality to 95
     if( gdalDriverShortName.compare("JPEG") == 0 )
       {
-      option[0] = const_cast<char *>("QUALITY=95");
-
+      size_t i;
+      for (i = 0; i < creationOptions.size(); ++i)
+        {
+        if (boost::algorithm::starts_with(creationOptions[i], "QUALITY="))
+          {
+          // User has set the QUALITY argument
+          // -> Do not touch it
+          break;
+          }
+        }
+      if (i == creationOptions.size())
+        {
+        // User did not set the QUALITY argument
+        // Force it to 95 by default...
+        creationOptions.push_back("QUALITY=95");
+        }
       }
 
     GDALDataset* hOutputDS = driver->CreateCopy( realFileName.c_str(), m_Dataset->GetDataSet(), FALSE,
-                                                 option, NULL, NULL );
+                                                 otb::ogr::StringListConverter(creationOptions).to_ogr(),
+                                                 NULL, NULL );
     GDALClose(hOutputDS);
     }
 

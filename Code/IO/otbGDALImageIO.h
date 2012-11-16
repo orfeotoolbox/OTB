@@ -50,6 +50,8 @@ public:
   typedef itk::ImageIOBase        Superclass;
   typedef itk::SmartPointer<Self> Pointer;
 
+  typedef std::vector<std::string> GDALCreationOptionsType;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -72,6 +74,17 @@ public:
   /** Set/Get the dataset index to extract (starting at 0)*/
   itkSetMacro(DatasetNumber, unsigned int);
   itkGetMacro(DatasetNumber, unsigned int);
+
+  /** Set/Get the options */
+  void SetOptions(const GDALCreationOptionsType& opts)
+  {
+    m_CreationOptions = opts;
+  }
+
+  GDALCreationOptionsType GetOptions(void)
+  {
+    return m_CreationOptions;
+  }
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -174,6 +187,10 @@ private:
   /** Whether the pixel type (otb side, not gdal side) is Vector
    * this information has to be provided by the reader */
   bool m_IsVectorImage;
+
+  /**
+   *  Creation Options */
+  GDALCreationOptionsType m_CreationOptions;
 
 };
 
