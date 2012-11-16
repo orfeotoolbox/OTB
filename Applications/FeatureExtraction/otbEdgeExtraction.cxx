@@ -21,12 +21,10 @@
 
 #include "itkGradientMagnitudeImageFilter.h"
 #include "itkSobelEdgeDetectionImageFilter.h"
-#include "itkCannyEdgeDetectionImageFilter.h"
+//#include "itkCannyEdgeDetectionImageFilter.h"
 #include "otbTouziEdgeDetectorImageFilter.h"
 
 #include "otbMultiToMonoChannelExtractROI.h"
-
-#include "itkTimeProbe.h"
 
 namespace otb
 {
@@ -48,8 +46,8 @@ typedef itk::GradientMagnitudeImageFilter<FloatImageType, FloatImageType>
                                                     GradientFilterType;
 typedef itk::SobelEdgeDetectionImageFilter<FloatImageType, FloatImageType>
                                                     SobelFilterType;
-typedef itk::CannyEdgeDetectionImageFilter<FloatImageType, FloatImageType>
-                                                    CannyFilterType;
+//typedef itk::CannyEdgeDetectionImageFilter<FloatImageType, FloatImageType>
+//                                                    CannyFilterType;
 typedef TouziEdgeDetectorImageFilter<FloatImageType, FloatImageType>
                                                     TouziFilterType;
 
@@ -85,11 +83,11 @@ SetMinimumParameterIntValue("channel", 1);
 
 AddRAMParameter();
 
-AddParameter(ParameterType_Choice, "filter", "Egde feature");
+AddParameter(ParameterType_Choice, "filter", "Edge feature");
 SetParameterDescription("filter", "Choice of edge feature");
 
 //Gradient Section
-AddChoice("filter.gradient", "Gardient");
+AddChoice("filter.gradient", "Gradient");
 
 //Sobel Section
 AddChoice("filter.sobel", "Sobel");
@@ -176,7 +174,7 @@ void DoExecute()
     m_TouziFilter->SetRadius(rad);
     SetParameterOutputImage("out", m_TouziFilter->GetOutput());
     }
-
+/*
   if( edgeType == "canny" )
     {
 
@@ -188,14 +186,6 @@ void DoExecute()
 
     SetParameterOutputImage("out", m_CannyFilter->GetOutput());
     }
-
-  /*
-  m_Filter = FilterType::New();
-  m_Filter->SetInput(const_cast<FloatImageType*>(m_ExtractorFilter->GetOutput()));
-  m_Filter->SetRadius(GetParameter("radius"));
-  m_Filter->UpdateOutputInformation();
-
-  SetParameterOutputImage("out", m_Filter->GetOutput());
 */
 }
 
