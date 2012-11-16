@@ -209,7 +209,11 @@ ReadGeometryFromImage(const std::string& filename)
 
       // Try to find a ".geom" file next to 'filename'
       ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
-      if (ossimGeomFile.exists() && ossimGeomFile.isFile())
+
+      ReadGeometryFromGEOMFile(ossimGeomFile);
+
+      /*
+       if (ossimGeomFile.exists() && ossimGeomFile.isFile())
         {
         // Interpret the geom file as a KWL
         ossimKeywordlist kwl(ossimGeomFile);
@@ -230,6 +234,7 @@ ReadGeometryFromImage(const std::string& filename)
             }
           }
         }
+      */
       }
     else
       {
@@ -262,6 +267,41 @@ ReadGeometryFromImage(const std::string& filename)
     {
     otbMsgDevMacro(<< "OSSIM MetaData present ! ");
     otbMsgDevMacro(<< geom_kwl);
+    }
+
+  ImageKeywordlist otb_kwl;
+  otb_kwl.SetKeywordlist(geom_kwl);
+
+  return otb_kwl;
+}
+
+ImageKeywordlist
+ReadGeometryFromGEOMFile(const std::string& filename)
+{
+  ossimKeywordlist geom_kwl;
+
+  ossimFilename ossimGeomFile = ossimFilename(filename);
+
+  if (ossimGeomFile.exists() && ossimGeomFile.isFile())
+    {
+    // Interpret the geom file as a KWL
+    ossimKeywordlist kwl(ossimGeomFile);
+
+    // Check that the geom file results in a valid ossimKeywordlist
+    if (kwl.getErrorStatus() == ossimErrorCodes::OSSIM_OK)
+      {
+      // Be sure there is a corresponding instance of ossimSensorModel
+      // which understands this kwl
+      SensorModelAdapter::Pointer sensorModel = SensorModelAdapter::New();
+      ImageKeywordlist otbkwl;
+      otbkwl.SetKeywordlist(kwl);
+      sensorModel->CreateProjection(otbkwl);
+
+      if (sensorModel->IsValidSensorModel())
+        {
+        geom_kwl = kwl;
+        }
+      }
     }
 
   ImageKeywordlist otb_kwl;
