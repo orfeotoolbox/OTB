@@ -151,7 +151,7 @@ void DoExecute()
   m_GradientFilter    = GradientFilterType::New();
   m_SobelFilter       = SobelFilterType::New();
   m_TouziFilter       = TouziFilterType::New();
-  m_CannyFilter       = CannyFilterType::New();
+  //m_CannyFilter       = CannyFilterType::New();
 
   if( edgeType == "gradient" )
     {
@@ -193,7 +193,7 @@ ExtractorFilterType::Pointer m_ExtractorFilter;
 GradientFilterType::Pointer  m_GradientFilter;
 SobelFilterType::Pointer     m_SobelFilter;
 TouziFilterType::Pointer     m_TouziFilter;
-CannyFilterType::Pointer     m_CannyFilter;
+//CannyFilterType::Pointer     m_CannyFilter;
 };
 }
 }
