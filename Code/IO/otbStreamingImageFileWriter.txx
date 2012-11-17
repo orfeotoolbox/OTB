@@ -424,6 +424,13 @@ StreamingImageFileWriter<TInputImage>
     itkExceptionMacro(<< "No filename was specified");
     }
 
+
+  // Make sure CanWriteFile is called
+  //  either from ImageIOFactory::CreateImageIO or directly in this file
+  // GDALImageIO uses it to store the filename
+  //  and later answer to CanStreamWrite()
+  // This is a needed workaround to a defect in the itk::ImageIO interface
+
   if (m_ImageIO.IsNull())   //try creating via factory
     {
     itkDebugMacro(<< "Attempting factory creation of ImageIO for file: "
@@ -435,16 +442,21 @@ StreamingImageFileWriter<TInputImage>
     }
   else
     {
-    if (m_FactorySpecifiedImageIO && !m_ImageIO->CanWriteFile(m_FileName.c_str()))
+    if (!m_ImageIO->CanWriteFile(m_FileName.c_str()))
       {
       itkDebugMacro(<< "ImageIO exists but doesn't know how to write file:"
                     << m_FileName);
-      itkDebugMacro(<< "Attempting creation of ImageIO with a factory for file:"
-                    << m_FileName);
-      m_ImageIO = ImageIOFactory::CreateImageIO(m_FileName.c_str(),
-                                                itk::ImageIOFactory::WriteMode);
-      m_FactorySpecifiedImageIO = true;
+
+      if (m_FactorySpecifiedImageIO)
+        {
+        itkDebugMacro(<< "Attempting creation of ImageIO with a factory for file:"
+                      << m_FileName);
+        m_ImageIO = ImageIOFactory::CreateImageIO(m_FileName.c_str(),
+                                                  itk::ImageIOFactory::WriteMode);
+        m_FactorySpecifiedImageIO = true;
+        }
       }
+
     }
 
   if (m_ImageIO.IsNull())
