@@ -1004,7 +1004,6 @@ bool GDALImageIO::CanStreamWrite()
     itkDebugMacro(<< "Unable to instantiate driver " << gdalDriverShortName);
     m_CanStreamWrite = false;
     }
-
   if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, NULL ) != NULL )
     {
     m_CanStreamWrite = true;
@@ -1013,6 +1012,7 @@ bool GDALImageIO::CanStreamWrite()
     {
     m_CanStreamWrite = false;
     }
+
   return m_CanStreamWrite;
 }
 
@@ -1111,27 +1111,11 @@ void GDALImageIO::Write(const void* buffer)
       itkExceptionMacro(<< "Unable to instantiate driver " << gdalDriverShortName << " to write " << m_FileName);
       }
 
-    GDALCreationOptionsType creationOptions = m_CreationOptions;
-
     // If not initialized in m_CreationOptions, force JPEG quality to 95
-    if( gdalDriverShortName.compare("JPEG") == 0 )
+    GDALCreationOptionsType creationOptions = m_CreationOptions;
+    if( gdalDriverShortName == "JPEG" && !CreationOptionContains( "QUALITY=" ) )
       {
-      size_t i;
-      for (i = 0; i < creationOptions.size(); ++i)
-        {
-        if (boost::algorithm::starts_with(creationOptions[i], "QUALITY="))
-          {
-          // User has set the QUALITY argument
-          // -> Do not touch it
-          break;
-          }
-        }
-      if (i == creationOptions.size())
-        {
-        // User did not set the QUALITY argument
-        // Force it to 95 by default...
-        creationOptions.push_back("QUALITY=95");
-        }
+      creationOptions.push_back("QUALITY=95");
       }
 
     GDALDataset* hOutputDS = driver->CreateCopy( realFileName.c_str(), m_Dataset->GetDataSet(), FALSE,
@@ -1242,7 +1226,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
         if( m_BytePerPixel == 8 )
           {
             itkWarningMacro(<< "Cast an unsigned long (64 bits) image into an unsigned int (32 bits) one.")
-              }
+          }
         m_PxType->pixType = GDT_UInt32;
       }
     else if (this->GetComponentType() == FLOAT)
@@ -1274,34 +1258,53 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   if (m_CanStreamWrite)
     {
-
-    // Force tile mode for TIFF format. Tile mode is a lot more
-    // efficient when writing huge tiffs
-    if( driverShortName.compare("GTiff") == 0 )
+    // Force tile mode for TIFF format if no creation option are given
+    GDALCreationOptionsType creationOptions = m_CreationOptions;
+    if( driverShortName == "GTiff"  )
       {
-      otbMsgDevMacro(<< "Enabling TIFF Tiled mode")
-      papszOptions = CSLAddNameValue( papszOptions, "TILED", "YES" );
-
-      // Use a fixed tile size
-      // Take as reference is a 256*256 short int 4 bands tile
-      const unsigned int ReferenceTileSizeInBytes = 256 * 256 * 4 * 2;
-
-      unsigned int nbPixelPerTile = ReferenceTileSizeInBytes / m_BytePerPixel / m_NbBands;
-      unsigned int idealTileDimension = static_cast<unsigned int>( vcl_sqrt(static_cast<float>(nbPixelPerTile)) );
-
-      // Set tileDimension to the nearest power of two and aligned to
-      // 16 pixels (needed by tiff spec)
-      unsigned int tileDimension = 16;
-      while(2*tileDimension < idealTileDimension)
+      if ( CreationOptionContains( "TILED=YES" ) )
         {
-        tileDimension*=2;
+        // User requested tiled TIFF explicitly
+        //
+        // Let GDAL set up the BLOCKXSIZE and BLOCKYSIZE
+        // or suppose the user have set it also along with TILED=YES
+        // This allows the user to have complete
+        // control over the tiling scheme
         }
-      otbMsgDevMacro(<< "Tile dimension : " << tileDimension << " * " << tileDimension)
+      else if ( CreationOptionContains( "BLOCKYSIZE=" ) )
+        {
+        // User did not set "TILED=YES" but set "BLOCKYSIZE="
+        // -> He requested a stripped TIFF
+        }
+      else
+        {
+        // User did not specify "TILED=YES" nor "BLOCKYSIZE=?"
+        // Switch to TILED mode automatically, and choose BLOCKXSIZE and BLOCKYSIZE for him
 
-      std::ostringstream oss;
-      oss << tileDimension;
-      papszOptions = CSLAddNameValue( papszOptions, "BLOCKXSIZE", oss.str().c_str() );
-      papszOptions = CSLAddNameValue( papszOptions, "BLOCKYSIZE", oss.str().c_str() );
+        otbMsgDevMacro(<< "Enabling TIFF Tiled mode")
+
+        // Use a fixed tile size
+        // Take as reference is a 256*256 short int 4 bands tile
+        const unsigned int ReferenceTileSizeInBytes = 256 * 256 * 4 * 2;
+        const unsigned int NbPixelPerTile = ReferenceTileSizeInBytes / m_BytePerPixel / m_NbBands;
+        const unsigned int IdealTileDimension = static_cast<unsigned int>( vcl_sqrt(static_cast<float>(NbPixelPerTile)) );
+
+        // Set tileDimension to the nearest power of two and aligned to
+        // 16 pixels (needed by TIFF spec)
+        unsigned int tileDimension = 16;
+        while(2*tileDimension < IdealTileDimension)
+          {
+          tileDimension*=2;
+          }
+        otbMsgDevMacro(<< "Tile dimension : " << tileDimension << " * " << tileDimension)
+
+        std::ostringstream tileDimensionStr;
+        tileDimensionStr << tileDimension;
+
+        creationOptions.push_back( "TILED=YES" );
+        creationOptions.push_back( std::string("BLOCKXSIZE=") + tileDimensionStr.str() );
+        creationOptions.push_back( std::string("BLOCKYSIZE=") + tileDimensionStr.str() );
+        }
       }
 
     m_Dataset = GDALDriverManagerWrapper::GetInstance().Create(
@@ -1309,12 +1312,12 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
                      GetGdalWriteImageFileName(driverShortName, m_FileName),
                      m_Dimensions[0], m_Dimensions[1],
                      m_NbBands, m_PxType->pixType,
-                     papszOptions);
+                     otb::ogr::StringListConverter(creationOptions).to_ogr());
     }
   else
     {
-    // buffer casted in unsigned long cause under Win32 the adress
-    // don't begin with 0x, the adress in not interpreted as
+    // buffer casted in unsigned long cause under Win32 the address
+    // doesn't begin with 0x, the address in not interpreted as
     // hexadecimal but alpha numeric value, then the conversion to
     // integer make us pointing to an non allowed memory block => Crash.
     std::ostringstream stream;
@@ -1537,5 +1540,17 @@ bool GDALImageIO::GDALInfoReportCorner(const char * /*corner_name*/, double x, d
   return IsTrue;
 }
 
+bool GDALImageIO::CreationOptionContains(std::string partialOption) const
+{
+  size_t i;
+  for (i = 0; i < m_CreationOptions.size(); ++i)
+    {
+    if (boost::algorithm::starts_with(m_CreationOptions[i], partialOption))
+      {
+      break;
+      }
+    }
+  return (i != m_CreationOptions.size());
+}
 
 } // end namespace otb

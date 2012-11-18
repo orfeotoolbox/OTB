@@ -165,6 +165,10 @@ private:
 
   std::string FilenameToGdalDriverShortName(const std::string& name) const;
 
+  /** Test whether m_CreationOptions has an option
+   *  \param partialOption The beginning of a creation option (for example "QUALITY=")
+   */
+  bool CreationOptionContains(std::string partialOption) const;
 
   /** GDAL parameters. */
   typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;
