@@ -31,4 +31,6 @@ void RegisterTests()
   REGISTER_TEST(otbStreamingImageFilterTest);
   REGISTER_TEST(otbStreamingImageFileWriterTest);
   REGISTER_TEST(otbPipeline);
+  REGISTER_TEST(otbGDALImageIOTest_uint8);
+  REGISTER_TEST(otbGDALImageIOTest_uint16);
 }

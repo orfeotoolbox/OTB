@@ -456,7 +456,6 @@ ADD_TEST(ioTvStreamingPipeline_TIF2PNG ${IO_TESTS2}
          ${TEMP}/ioPipeline.png
          )
 
-
 # --- Image FLOAT
 ADD_TEST(ioTvImageFileReaderFloatBSQ2HDR ${IO_TESTS2}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R4.hd
@@ -542,7 +541,82 @@ ADD_TEST(ioTvStreamingWithIFWriterBSQWithStreaming ${IO_TESTS2}
 SET_TESTS_PROPERTIES(ioTvStreamingWithIFWriterBSQWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2BSQ)
 
 
+ADD_TEST(ioTvGDALImageIO_Tiff_NoOption ${IO_TESTS2}
+   --compare-image ${NOTOL} ${INPUTDATA}/maur_rgb.tif
+                            ${TEMP}/ioTvGDALImageIO_Tiff_NoOption.tif
+         otbGDALImageIOTest_uint16
+         ${INPUTDATA}/maur_rgb.tif
+         ${TEMP}/ioTvGDALImageIO_Tiff_NoOption.tif
+         )
 
+ADD_TEST(ioTvGDALImageIO_Tiff_12bits ${IO_TESTS2}
+   --compare-image ${NOTOL} ${INPUTDATA}/maur_rgb.tif
+                            ${TEMP}/ioTvGDALImageIO_Tiff_12bits.tif
+         otbGDALImageIOTest_uint16
+         ${INPUTDATA}/maur_rgb.tif
+         ${TEMP}/ioTvGDALImageIO_Tiff_12bits.tif
+         "NBITS=12"
+         )
+
+ADD_TEST(ioTvGDALImageIO_Tiff_Stripped ${IO_TESTS2}
+   --compare-image ${NOTOL} ${INPUTDATA}/maur_rgb.tif
+                            ${TEMP}/ioTvGDALImageIO_Tiff_stripped.tif
+         otbGDALImageIOTest_uint16
+         ${INPUTDATA}/maur_rgb.tif
+         ${TEMP}/ioTvGDALImageIO_Tiff_stripped.tif
+         "BLOCKYSIZE=10"
+         )
+
+ADD_TEST(ioTvGDALImageIO_Tiff_Tiled_16x16 ${IO_TESTS2}
+   --compare-image ${NOTOL} ${INPUTDATA}/maur_rgb.tif
+                            ${TEMP}/ioTvGDALImageIO_Tiff_tiled_16x16.tif
+         otbGDALImageIOTest_uint16
+         ${INPUTDATA}/maur_rgb.tif
+         ${TEMP}/ioTvGDALImageIO_Tiff_tiled_16x16.tif
+         "TILED=YES"
+         "BLOCKXSIZE=16"
+         "BLOCKYSIZE=16"
+         )
+
+ADD_TEST(ioTvGDALImageIO_Tiff_JPEG_20 ${IO_TESTS2}
+   --compare-image ${NOTOL} ${BASELINE}/ioTvGDALImageIO_Tiff_JPEG_20.tif
+                            ${TEMP}/ioTvGDALImageIO_Tiff_JPEG_20.tif
+         otbGDALImageIOTest_uint8
+         ${INPUTDATA}/maur_rgb_24bpp.tif
+         ${TEMP}/ioTvGDALImageIO_Tiff_JPEG_20.tif
+         "COMPRESS=JPEG"
+         "JPEG_QUALITY=20"
+         "PHOTOMETRIC=YCBCR"
+         )
+
+ADD_TEST(ioTvGDALImageIO_Tiff_JPEG_99 ${IO_TESTS2}
+   --compare-image ${NOTOL} ${BASELINE}/ioTvGDALImageIO_Tiff_JPEG_99.tif
+                            ${TEMP}/ioTvGDALImageIO_Tiff_JPEG_99.tif
+         otbGDALImageIOTest_uint8
+         ${INPUTDATA}/maur_rgb_24bpp.tif
+         ${TEMP}/ioTvGDALImageIO_Tiff_JPEG_99.tif
+         "COMPRESS=JPEG"
+         "JPEG_QUALITY=99"
+         "PHOTOMETRIC=YCBCR"
+         )
+
+ADD_TEST(ioTvGDALImageIO_JPEG_20 ${IO_TESTS2}
+   --compare-image ${NOTOL} ${BASELINE}/ioTvGDALImageIO_JPEG_20.jpg
+                            ${TEMP}/ioTvGDALImageIO_JPEG_20.jpg
+         otbGDALImageIOTest_uint8
+         ${INPUTDATA}/maur_rgb_24bpp.tif
+         ${TEMP}/ioTvGDALImageIO_JPEG_20.jpg
+         "QUALITY=20"
+         )
+
+ADD_TEST(ioTvGDALImageIO_JPEG_99 ${IO_TESTS2}
+   --compare-image ${NOTOL} ${BASELINE}/ioTvGDALImageIO_JPEG_99.jpg
+                            ${TEMP}/ioTvGDALImageIO_JPEG_99.jpg
+         otbGDALImageIOTest_uint8
+         ${INPUTDATA}/maur_rgb_24bpp.tif
+         ${TEMP}/ioTvGDALImageIO_JPEG_99.jpg
+         "QUALITY=99"
+         )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3674,6 +3748,7 @@ otbDoubleImageIOTest.cxx
 otbStreamingImageFilterTest.cxx
 otbStreamingImageFileWriterTest.cxx
 otbPipeline.cxx
+otbGDALImageIOTest.cxx
 )
 SET(BasicIO_SRCS3
 otbIOTests3.cxx
