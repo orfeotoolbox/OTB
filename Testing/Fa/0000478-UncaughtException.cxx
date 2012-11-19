@@ -43,9 +43,8 @@ int main(int argc,char* argv[])
   myApp->SetParameterString("ref", argv[2]);
   myApp->SetParameterString("sec", argv[3]);
   myApp->SetParameterString("out", argv[4]);
-  myApp->SetParameterString("elev","dem");
-  myApp->SetParameterString("elev.dem.path", "FAKE_DEM_PATH");
-  myApp->SetParameterString("elev.dem.geoid", "FAKE_GEOID_PATH");
+  myApp->SetParameterString("elev.dem", "FAKE_DEM_PATH");
+  myApp->SetParameterString("elev.geoid", "FAKE_GEOID_PATH");
   
   std::cout << "Try-catch section" << std::endl;
   try
