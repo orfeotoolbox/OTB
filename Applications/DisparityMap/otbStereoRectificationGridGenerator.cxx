@@ -254,7 +254,7 @@ private:
     SetParameterInt("epi.rectsizey",m_DeformationFieldSource->GetRectifiedImageSize()[1]);
     SetParameterFloat("epi.baseline",m_DeformationFieldSource->GetMeanBaselineRatio());
 
-    if(GetParameterString("epi.elevation") == "avgdem")
+    if(IsParameterEnabled("epi.elevation.avgdem"))
       {
       EnableParameter("epi.elevation.avgdem.mindisp");
       SetParameterFloat("epi.elevation.avgdem.mindisp",(m_StatisticsFilter->GetMinimum()-m_StatisticsFilter->GetMean())
