@@ -10,9 +10,8 @@ StereoSensorModelToElevationMap = otbApplication.Registry.CreateApplication("Ste
 StereoSensorModelToElevationMap.SetParameterString("ref", sys.argv[1])
 StereoSensorModelToElevationMap.SetParameterString("sec", sys.argv[2])
 StereoSensorModelToElevationMap.SetParameterString("out", sys.argv[3])
-StereoSensorModelToElevationMap.SetParameterString("elev", "dem")
-StereoSensorModelToElevationMap.SetParameterString("elev.dem.path",  "dem_wrong_path")
-StereoSensorModelToElevationMap.SetParameterString("elev.dem.geoid", "geoid_wrong_file")
+StereoSensorModelToElevationMap.SetParameterString("elev.dem",  "dem_wrong_path")
+StereoSensorModelToElevationMap.SetParameterString("elev.geoid", "geoid_wrong_file")
 
 # This bug verifies that a proper exception is raised during ExecuteAndWriteOutput
 try:
