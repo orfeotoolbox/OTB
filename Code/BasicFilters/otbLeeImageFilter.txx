@@ -149,8 +149,8 @@ void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
         sum += dPixel;
         sum2 += dPixel * dPixel;
         }
-      E_I   = sum / double(neighborhoodSize);
-      Var_I = sum2 / double(neighborhoodSize) - E_I * E_I;
+      E_I   = sum / static_cast<double>(neighborhoodSize);
+      Var_I = sum2 / static_cast<double>(neighborhoodSize) - E_I * E_I;
       I = static_cast<double>(bit.GetCenterPixel());
       if (E_I == 0)
         {
