@@ -163,22 +163,22 @@ void FrostImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
       NormFilter  = 0.0;
       FrostFilter = 0.0;
 
-      const double rad_x = static_cast<double>(m_Radius[0]);
-      const double rad_y = static_cast<double>(m_Radius[1]);
+      const int rad_x = m_Radius[0];
+      const int rad_y = m_Radius[1];
 
-      for (double x = -rad_x; x <= rad_x; ++x)
+      for (int x = -rad_x; x <= rad_x; ++x)
         {
-        for (double y = -rad_y; y <= rad_y; ++y)
+        for (int y = -rad_y; y <= rad_y; ++y)
           {
-          double Dist = double(vcl_sqrt(x * x + y * y));
-          off[0] = static_cast<int>(x);
-          off[1] = static_cast<int>(y);
-//    i = (unsigned int)((y+rad_y)*(2*rad_y+1)+(x+rad_x));
+          double Dist = vcl_sqrt(x * x + y * y);
+          off[0] = x;
+          off[1] = y;
+
           dPixel = static_cast<double>(bit.GetPixel(off));
-//    dPixel= static_cast<double>( bit.GetPixel(i));
+
           CoefFilter = Alpha * vcl_exp(-Alpha * Dist);
-          NormFilter  = NormFilter  + CoefFilter;
-          FrostFilter = FrostFilter + (CoefFilter * dPixel);
+          NormFilter += CoefFilter;
+          FrostFilter += (CoefFilter * dPixel);
           }
         }
 
