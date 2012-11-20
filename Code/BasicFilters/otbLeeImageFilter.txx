@@ -124,18 +124,16 @@ void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
 
   double Cr2, Cv2, E_I, I, Var_I, dPixel;
 
-  //  dPixel = this->getNbVues();
-  dPixel = m_NbLooks;
-  //Calcul du rapport
-  Cv2 = 1. / (vcl_sqrt(dPixel));
-  Cv2 = Cv2 * Cv2;
+  //Compute the ratio using the number of looks
+  Cv2 = 1. / (vcl_sqrt(m_NbLooks));
+  Cv2 *= Cv2;
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit = faceList.begin(); fit != faceList.end(); ++fit)
     {
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
-    unsigned int neighborhoodSize = bit.Size();
+    const unsigned int neighborhoodSize = bit.Size();
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
