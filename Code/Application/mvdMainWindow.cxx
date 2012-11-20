@@ -19,7 +19,8 @@
 #include "mvdMainWindow.h"
 #include "ui_mvdMainWindow.h"
 
-
+#include "otbImageLayer.h"
+#include "otbImageLayerGenerator.h"
 //
 // System includes (sorted by alphabetic order)
 #include <exception>
@@ -78,8 +79,11 @@ MainWindow
   addDockWidget( Qt::LeftDockWidgetArea, dock_widget );
   */
 
+  // Instanciate a QImageView
+  m_ImageView = ImageViewType::New();
+
   // Set the GLImageWidget as the centralWidget in MainWindow.
-  setCentralWidget( new otb::QGLImageWidget( this ) );
+  setCentralWidget( m_ImageView->GetFullWidget() );
   
 
 // Connect Quit action of main menu to QApplication's quit() slot.
@@ -105,51 +109,44 @@ MainWindow
     return;
     }
 
-//
-// TODO: Move piece of code below to ImageModel.
-  
-  // image reader 
-  typedef itk::RGBAPixel<unsigned char>   PixelType;
-  typedef otb::Image<PixelType, 2>        ImageType;
-  typedef ImageType::RegionType           RegionType;
-  typedef otb::ImageFileReader<ImageType>   ReaderType;
-
-  otb::QGLImageWidget* widget = GetGLImageWidget();
-
+  //
+  // TODO: Move piece of code below to ImageModel.
   ReaderType::Pointer reader( ReaderType::New() );
-
   reader->SetFileName( filename.toLatin1().data() );
+  reader->UpdateOutputInformation();
 
-  try
-    {
-    reader->UpdateOutputInformation();
-    }
-  catch( std::exception& exc )
-    {
-    QMessageBox::warning( this, tr("Exception!"), exc.what() );
-    return;
-    }
+  // typedef support for layers   
+  typedef ImageLayer<VectorImageType, ImageType> LayerType;
+  typedef LayerType::Pointer                      LayerPointerType;
+  typedef ImageLayerGenerator<LayerType>          LayerGeneratorType;
+  typedef LayerGeneratorType::RenderingFunctionType       RenderingFunctionType;
+  
+  // Layer Generator
+  LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
+  layerGenerator->SetImage(reader->GetOutput());
+  layerGenerator->GenerateQuicklookOff();
+  layerGenerator->GenerateLayer();
+  
+  // Layer Rendering Model
+  RenderingModelType::Pointer imageModel = RenderingModelType::New();
 
-  ImageType::Pointer image( reader->GetOutput() );
+  // TODO : temporary cause we need an extractRegion to setup the
+  // ExtractROI filter.
+  RegionType  region;
+  region = imageModel->GetExtractRegion();
+  RegionType::SizeType size;
+  size[0] = static_cast<unsigned int>(this->width());
+  size[1] = static_cast<unsigned int>(this->height());
+  region.SetSize(size);  
+  imageModel->SetExtractRegion(region);
+  
+  // Add the layer to the model
+  imageModel->AddLayer(layerGenerator->GetLayer());
+  imageModel->Update();
 
-  RegionType region( image->GetLargestPossibleRegion() );
-
-  if( widget->width() < image->GetLargestPossibleRegion().GetSize( 0 ) )
-    {
-    region.SetSize( 0, widget->width() );
-    }
-
-  if( widget->height() < image->GetLargestPossibleRegion().GetSize( 1 ) )
-    {
-    region.SetSize( 1, widget->height() );
-    }
-
-  image->SetRequestedRegion( region );
-  image->Update();
-
-  widget->SetIsotropicZoom(1);
-  widget->ReadBuffer(image, region);
-  // main_window.resize( region.GetSize()[0], region.GetSize()[1] );
+  // Update the image view
+  m_ImageView->SetModel(imageModel);
+  m_ImageView->Update();
 }
 
 /*****************************************************************************/

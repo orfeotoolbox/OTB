@@ -28,15 +28,17 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbQGLImageWidget.h"
+#include "mvdImageView.h"
+#include "itkRGBAPixel.h"
+#include "otbVectorImage.h"
+#include "otbImageLayerRenderingModel.h"
+#include "otbImageFileReader.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
 
- namespace otb 
- {
- class QGLImageWidget;
- }
+using namespace otb;
+using namespace itk;
 
 //
 // Class pre-declaration.
@@ -57,23 +59,19 @@ class MainWindow
 
 public:
 
+  typedef otb::VectorImage<double , 2>    VectorImageType;
+  typedef itk::RGBAPixel<unsigned char>   PixelType;
+  typedef otb::Image<PixelType, 2>        ImageType;
+  typedef ImageType::RegionType           RegionType;
+  typedef otb::ImageFileReader<VectorImageType>   ReaderType;
+  typedef otb::ImageLayerRenderingModel<ImageType>  RenderingModelType;
+  typedef mvd::ImageView<RenderingModelType>             ImageViewType;
+  
   /** Constructor */
   MainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
 
   /** Destructor */
   virtual ~MainWindow();
-
-  /** Method to get the instance*/
-  inline otb::QGLImageWidget* GetGLImageWidget()
-  {
-    return dynamic_cast< ::otb::QGLImageWidget* >( centralWidget() );
-  }
-
-  /** Method to get the instance*/
-  inline const otb::QGLImageWidget* GetGLImageWidget() const
-  {
-    return const_cast< const MainWindow* >( this )->GetGLImageWidget();
-  }
 
 protected:
 
@@ -81,6 +79,7 @@ private:
   void Initialize();
 
   Ui::MainWindow* m_UI;
+  ImageViewType::Pointer m_ImageView;
 
 private slots:
   void on_action_Open_activated();
