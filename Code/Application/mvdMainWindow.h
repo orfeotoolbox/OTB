@@ -59,13 +59,14 @@ class MainWindow
 
 public:
 
-  typedef otb::VectorImage<double , 2>    VectorImageType;
+  typedef otb::VectorImage<double, 2>    VectorImageType;
   typedef itk::RGBAPixel<unsigned char>   PixelType;
   typedef otb::Image<PixelType, 2>        ImageType;
   typedef ImageType::RegionType           RegionType;
-  typedef otb::ImageFileReader<VectorImageType>   ReaderType;
-  typedef otb::ImageLayerRenderingModel<ImageType>  RenderingModelType;
-  typedef mvd::ImageView<RenderingModelType>             ImageViewType;
+
+  typedef otb::ImageFileReader<VectorImageType>    ReaderType;
+  typedef otb::ImageLayerRenderingModel<ImageType> RenderingModelType;
+  typedef mvd::ImageView<RenderingModelType>       ImageViewType;
   
   /** Constructor */
   MainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );

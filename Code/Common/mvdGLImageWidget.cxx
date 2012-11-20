@@ -129,7 +129,9 @@ void GLImageWidget::UpdateTransforms(int w, int h)
 
   // Image to screen translation
   AffineTransformType::OutputVectorType translation;
-  translation[0] = m_SubsamplingRate * (m_OpenGlBufferedRegion.GetIndex()[0] - m_Extent.GetIndex()[0] / m_IsotropicZoom);
+  translation[0] = m_SubsamplingRate *
+  (m_OpenGlBufferedRegion.GetIndex()[0] - 
+    m_Extent.GetIndex()[0] / m_IsotropicZoom);
   translation[1] = m_SubsamplingRate *
                    (((m_Extent.GetIndex()[1] +
                       m_Extent.GetSize()[1]) / m_IsotropicZoom) + m_OpenGlBufferedRegion.GetIndex()[1]);

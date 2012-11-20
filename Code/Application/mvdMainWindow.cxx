@@ -116,10 +116,10 @@ MainWindow
   reader->UpdateOutputInformation();
 
   // typedef support for layers   
-  typedef ImageLayer<VectorImageType, ImageType> LayerType;
-  typedef LayerType::Pointer                      LayerPointerType;
-  typedef ImageLayerGenerator<LayerType>          LayerGeneratorType;
-  typedef LayerGeneratorType::RenderingFunctionType       RenderingFunctionType;
+  typedef ImageLayer<VectorImageType, ImageType>    LayerType;
+  typedef LayerType::Pointer                        LayerPointerType;
+  typedef ImageLayerGenerator<LayerType>            LayerGeneratorType;
+  typedef LayerGeneratorType::RenderingFunctionType RenderingFunctionType;
   
   // Layer Generator
   LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();

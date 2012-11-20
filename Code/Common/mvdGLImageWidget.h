@@ -18,7 +18,6 @@
 #ifndef __mvdGLImageWidget_h__
 #define __mvdGLImageWidget_h__
 
-
 //
 // System includes (sorted by alphabetic order)
 
@@ -50,7 +49,6 @@ typedef itk::AffineTransform<double, 2>      AffineTransformType;
 typedef AffineTransformType::InputPointType  PointType;
 typedef AffineTransformType::InputVectorType VectorType;
 typedef itk::FixedArray<double, 4>           ColorType;
-
 
 namespace mvd
 {
