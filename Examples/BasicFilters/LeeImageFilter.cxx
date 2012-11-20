@@ -160,19 +160,6 @@ int main(int argc, char * argv[])
   filter->SetNbLooks(atoi(argv[4]));
   // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
-  //  The filter is executed by invoking the \code{Update()} method. If the
-  //  filter is part of a larger image processing pipeline, calling
-  //  \code{Update()} on a downstream filter will also trigger update of this
-  //  filter.
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  filter->Update();
-  // Software Guide : EndCodeSnippet
-
   writer->SetFileName(argv[2]);
   writer->Update();
 
