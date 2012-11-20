@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbQGLImageWidget_h__
-#define __otbQGLImageWidget_h__
+#ifndef __mvdGLImageWidget_h__
+#define __mvdGLImageWidget_h__
 
 
 //
@@ -25,6 +25,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 #include <QGLWidget>
+#include <QtGui>
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -51,20 +52,20 @@ typedef AffineTransformType::InputVectorType VectorType;
 typedef itk::FixedArray<double, 4>           ColorType;
 
 
-namespace otb
+namespace mvd
 {
 
-/** \class QGLImageWidget
+/** \class GLImageWidget
  *
  */
-class QGLImageWidget : public QGLWidget
+class GLImageWidget : public QGLWidget
 {
   Q_OBJECT;
 
 public:
-  QGLImageWidget(QWidget *parent = 0);
+  GLImageWidget(QWidget *parent = 0);
 
-  virtual ~QGLImageWidget();
+  virtual ~GLImageWidget();
 
 public:
   virtual void ReadBuffer(const ImageType * image, const RegionType& region);
@@ -87,6 +88,9 @@ protected:
   void initializeGL();
   void resizeGL(int w, int h);
   void paintGL();
+  void mouseMoveEvent ( QMouseEvent * event );
+  void mousePressEvent ( QMouseEvent * event );
+
 
   /** Update the image to screen transform */
   //void UpdateTransforms(int w, int h);
@@ -128,7 +132,10 @@ private:
   RegionType m_Extent;
 
   GLint m_W, m_H;
-
+  
+  int m_MousePressEventX;
+  int m_MousePressEventY;
+  
   /** Space to screen transform */
   //AffineTransformType::Pointer m_ImageToScreenTransform;
   //AffineTransformType::Pointer m_ScreenToImageTransform;

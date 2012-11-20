@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbQGLImageWidget.h"
+#include "mvdGLImageWidget.h"
 
 //
 // System includes (sorted by alphabetic order)
@@ -31,10 +31,10 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
-namespace otb
+namespace mvd
 {
 
-QGLImageWidget::QGLImageWidget(QWidget *parent)
+GLImageWidget::GLImageWidget(QWidget *parent)
 : QGLWidget(parent),
   m_IsotropicZoom(1.0),
   m_OpenGlBuffer(NULL),
@@ -45,12 +45,12 @@ QGLImageWidget::QGLImageWidget(QWidget *parent)
 {
 }
 
-QGLImageWidget::~QGLImageWidget()
+GLImageWidget::~GLImageWidget()
 {
   this->ClearBuffer();
 }
 
-void QGLImageWidget::ReadBuffer(const ImageType * image, const RegionType& region)
+void GLImageWidget::ReadBuffer(const ImageType * image, const RegionType& region)
 {
   // Before doing anything, check if region is inside the buffered
   // region of image
@@ -86,7 +86,7 @@ void QGLImageWidget::ReadBuffer(const ImageType * image, const RegionType& regio
   m_OpenGlBufferedRegion = region;
 }
 
-void QGLImageWidget::ClearBuffer()
+void GLImageWidget::ClearBuffer()
 {
   // Delete previous buffer if needed
   if (m_OpenGlBuffer != NULL)
@@ -100,7 +100,7 @@ void QGLImageWidget::ClearBuffer()
 }
 
 /*
-void QGLImageWidget::UpdateTransforms(int w, int h)
+void GLImageWidget::UpdateTransforms(int w, int h)
 {
   std::cout << "UpdateTransforms" << std::endl;
 
@@ -146,13 +146,13 @@ void QGLImageWidget::UpdateTransforms(int w, int h)
 }
 */
 
-void QGLImageWidget::initializeGL()
+void GLImageWidget::initializeGL()
  {
    glClearColor(0.0, 0.0, 0.0, 0.0);
    glShadeModel(GL_FLAT);
  }
 
- void QGLImageWidget::resizeGL(int w, int h)
+ void GLImageWidget::resizeGL(int w, int h)
  {
    RegionType::SizeType size;
    size [0] = static_cast<unsigned int>(m_IsotropicZoom * static_cast<double>(m_OpenGlBufferedRegion.GetSize()[0]));
@@ -179,7 +179,7 @@ void QGLImageWidget::initializeGL()
 
 }
 
- void QGLImageWidget::paintGL()
+ void GLImageWidget::paintGL()
  {
    unsigned int nb_displayed_cols = m_OpenGlBufferedRegion.GetSize()[ 0 ];
    unsigned int nb_displayed_rows = m_OpenGlBufferedRegion.GetSize()[ 1 ];
@@ -233,6 +233,24 @@ void QGLImageWidget::initializeGL()
 
 
    glFlush();
+
+   std::cout << "Paint GL done "<< std::endl;
  }
+
+void GLImageWidget::mousePressEvent(  QMouseEvent * event)
+{
+  std::cout <<" !!!! Mouse press event  " << std::endl;
+  std::cout <<"x " << event->x()<< std::endl;
+  m_MousePressEventX = event->x();
+  m_MousePressEventY = event->y();
+}
+
+void GLImageWidget::mouseMoveEvent(  QMouseEvent * event)
+{
+  // std::cout <<" !!!! Mouse move event "<< event->x() <<","<<event->y() << std::endl;
+  // // translation
+  // int tx = event->x() - m_MousePressEventX;
+  // int ty = event->y() - m_MousePressEventY;
+}
 
 }
