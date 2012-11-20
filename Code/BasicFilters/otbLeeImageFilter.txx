@@ -152,7 +152,9 @@ void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
       E_I   = sum / static_cast<double>(neighborhoodSize);
       Var_I = sum2 / static_cast<double>(neighborhoodSize) - E_I * E_I;
       I = static_cast<double>(bit.GetCenterPixel());
-      if (E_I == 0)
+
+      const double epsilon = 0.0000000001;
+      if (vcl_abs(E_I) < epsilon)
         {
         dPixel = itk::NumericTraits<OutputPixelType>::Zero;
         }
