@@ -59,7 +59,7 @@ class MainWindow
 
 public:
 
-  typedef otb::VectorImage<double, 2>    VectorImageType;
+  typedef otb::VectorImage<double, 2>     VectorImageType;
   typedef itk::RGBAPixel<unsigned char>   PixelType;
   typedef otb::Image<PixelType, 2>        ImageType;
   typedef ImageType::RegionType           RegionType;
