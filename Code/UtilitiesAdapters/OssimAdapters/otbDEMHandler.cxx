@@ -164,7 +164,7 @@ DEMHandler
 {
   // Ossim does not allow to retrieve the default height above
   // ellipsoid We therefore must keep it on our side
-  double m_DefaultHeightAboveEllipsoid = h;
+  m_DefaultHeightAboveEllipsoid = h;
   m_ElevManager->setDefaultHeightAboveEllipsoid(h);
 }
 
