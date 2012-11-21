@@ -34,6 +34,8 @@
 #include "itkPointSet.h"
 #include "itkEuclideanDistance.h"
 #include "otbGenericRSTransform.h"
+#include "otbOGRDataSourceWrapper.h"
+#include "ogrsf_frmts.h"
 
 namespace otb
 {
@@ -144,6 +146,11 @@ private:
 
     AddParameter(ParameterType_OutputFilename,"out","Output file with tie points");
     SetParameterDescription("out","File containing the list of tie points");
+
+    AddParameter(ParameterType_OutputFilename,"outvector","Output vector file with tie points");
+    SetParameterDescription("outvector","File containing segments representing matches ");
+    MandatoryOff("outvector");
+    DisableParameter("outvector");
   }
 
   void DoUpdateParameters()
@@ -151,7 +158,7 @@ private:
 
   }
 
-  void Match(FloatImageType * im1, FloatImageType * im2, RSTransformType * rsTransform, RSTransformType * rsTransform2ToWGS84, std::ofstream & file)
+  void Match(FloatImageType * im1, FloatImageType * im2, RSTransformType * rsTransform, RSTransformType * rsTransform1ToWGS84,RSTransformType * rsTransform2ToWGS84, std::ofstream & file, OGRMultiLineString * mls = NULL)
   {
     MatchingFilterType::Pointer matchingFilter = MatchingFilterType::New();
 
@@ -212,16 +219,16 @@ private:
         PointType point2 = it.Get()->GetPoint2();
         
         double error = 0;
-        PointType pprime;
+        PointType pprime1,pprime2;
         
         bool filtered = false;
         
         if(IsParameterEnabled("mfilter"))
           {
-          pprime = rsTransform->TransformPoint(point1);
-          error = vcl_sqrt((point2[0]-pprime[0])*(point2[0]-pprime[0])+(point2[1]-pprime[1])*(point2[1]-pprime[1]));
+          pprime1 = rsTransform->TransformPoint(point1);
+          error = vcl_sqrt((point2[0]-pprime1[0])*(point2[0]-pprime1[0])+(point2[1]-pprime1[1])*(point2[1]-pprime1[1]));
           
-          if(error>GetParameterFloat("precision"))
+          if(error>GetParameterFloat("precision")*vcl_sqrt(vcl_abs(im2->GetSpacing()[0]*im2->GetSpacing()[1])))
             {
             filtered = true;
             }
@@ -231,14 +238,26 @@ private:
           {
           if(IsParameterEnabled("2wgs84"))
             {
-            pprime = rsTransform2ToWGS84->TransformPoint(point2);
+            pprime2 = rsTransform2ToWGS84->TransformPoint(point2);
             
-            file<<point1[0]<<"\t"<<point1[1]<<"\t"<<pprime[0]<<"\t"<<pprime[1]<<std::endl;
+            file<<point1[0]<<"\t"<<point1[1]<<"\t"<<pprime2[0]<<"\t"<<pprime2[1]<<std::endl;
             }
           else
             {
             file<<point1[0]<<"\t"<<point1[1]<<"\t"<<point2[0]<<"\t"<<point2[1]<<std::endl;
             }
+          
+          if(mls)
+            {
+             pprime1 = rsTransform1ToWGS84->TransformPoint(point1);
+             pprime2 = rsTransform2ToWGS84->TransformPoint(point2);
+
+             OGRLineString ls;
+             ls.addPoint(pprime1[0],pprime1[1]);
+             ls.addPoint(pprime2[0],pprime2[1]);
+             mls->addGeometry(&ls);
+            }
+
           }
         else
           {
@@ -256,6 +275,8 @@ private:
 
   void DoExecute()
   {
+    OGRMultiLineString mls;
+
     // Setting up RS Transform
     RSTransformType::Pointer rsTransform = RSTransformType::New();
     rsTransform->SetInputKeywordList(this->GetParameterImage("in1")->GetImageKeywordlist());
@@ -263,10 +284,13 @@ private:
     rsTransform->SetOutputKeywordList(this->GetParameterImage("in2")->GetImageKeywordlist());
     rsTransform->SetOutputProjectionRef(this->GetParameterImage("in2")->GetProjectionRef());
 
+    RSTransformType::Pointer rsTransform1ToWGS84 = RSTransformType::New();
+    rsTransform1ToWGS84->SetInputKeywordList(this->GetParameterImage("in1")->GetImageKeywordlist());
+    rsTransform1ToWGS84->SetInputProjectionRef(this->GetParameterImage("in1")->GetProjectionRef());
+
     RSTransformType::Pointer rsTransform2ToWGS84 = RSTransformType::New();
     rsTransform2ToWGS84->SetInputKeywordList(this->GetParameterImage("in2")->GetImageKeywordlist());
     rsTransform2ToWGS84->SetInputProjectionRef(this->GetParameterImage("in2")->GetProjectionRef());
-    
 
     // Setting up output file
     std::ofstream file;
@@ -287,13 +311,14 @@ private:
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     rsTransform->InstanciateTransform();
+    rsTransform1ToWGS84->InstanciateTransform();
     rsTransform2ToWGS84->InstanciateTransform();
 
 
     if(GetParameterString("mode")=="full")
       {
       // Launch detection on whole images
-      Match(extractChannel1->GetOutput(),extractChannel2->GetOutput(),rsTransform,rsTransform2ToWGS84,file);
+      Match(extractChannel1->GetOutput(),extractChannel2->GetOutput(),rsTransform,rsTransform1ToWGS84,rsTransform2ToWGS84,file,&mls);
 
       }
     else if(GetParameterString("mode")=="geobins")
@@ -385,12 +410,31 @@ private:
 
             extractChannel2->SetExtractionRegion(region2);
 
-            Match(extractChannel1->GetOutput(),extractChannel2->GetOutput(),rsTransform,rsTransform2ToWGS84,file);
+            Match(extractChannel1->GetOutput(),extractChannel2->GetOutput(),rsTransform,rsTransform1ToWGS84,rsTransform2ToWGS84,file,&mls);
             }
           }
         
         }
       file.close();
+
+      if(IsParameterEnabled("outvector"))
+        {
+        // Create the datasource (for matches export)
+        otb::ogr::Layer layer(NULL, false);
+        otb::ogr::DataSource::Pointer ogrDS;
+       
+        ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);
+        std::string projref = "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]";
+        OGRSpatialReference oSRS(projref.c_str());
+      
+        // and create the layer
+        layer = ogrDS->CreateLayer("matches", &oSRS, wkbMultiLineString);
+        OGRFeatureDefn & defn = layer.GetLayerDefn();
+        ogr::Feature feature(defn);
+        
+        feature.SetGeometry(&mls);
+        layer.CreateFeature(feature);
+        }
       }
   }
 };
