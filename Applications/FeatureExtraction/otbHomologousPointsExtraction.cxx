@@ -115,6 +115,16 @@ private:
     AddChoice("algorithm.sift","SIFT algorithm");
     AddChoice("algorithm.surf","SURF algorithm");
 
+    AddParameter(ParameterType_Float,"threshold","Distance threshold for matching");
+    SetParameterDescription("threshold","The distance threshold for matching.");
+    SetMinimumParameterFloatValue("threshold",0.0);
+    SetDefaultParameterFloat("threshold",0.6);
+
+    AddParameter(ParameterType_Empty,"backmatching","Use back-matching to filter matches.");
+    SetParameterDescription("backmatching","If set to true, matches should be consistent in both ways.");
+    MandatoryOff("backmatching");
+    DisableParameter("backmatching");
+
     AddParameter(ParameterType_Choice,"mode","Keypoints search mode");
 
     AddChoice("mode.full","Extract and match all keypoints (no streaming)");
@@ -199,6 +209,8 @@ private:
     
       matchingFilter->SetInput1(surf1->GetOutput());
       matchingFilter->SetInput2(surf2->GetOutput());
+      matchingFilter->SetDistanceThreshold(GetParameterFloat("threshold"));
+      matchingFilter->SetUseBackMatching(IsParameterEnabled("backmatching"));
       }
 
     try
