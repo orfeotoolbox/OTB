@@ -370,7 +370,7 @@ private:
 
           region1.Crop(this->GetParameterImage("in1")->GetLargestPossibleRegion());
 
-          otbAppLogINFO("("<<i<<"/"<<nb_bins_x<<", "<<j<<"/"<<nb_bins_y<<") Considering region1 : "<<region1.GetIndex()<<", "<<region1.GetSize());
+          otbAppLogINFO("("<<i+1<<"/"<<nb_bins_x<<", "<<j+1<<"/"<<nb_bins_y<<") Considering region1 : "<<region1.GetIndex()<<", "<<region1.GetSize());
 
        
           extractChannel1->SetExtractionRegion(region1);
