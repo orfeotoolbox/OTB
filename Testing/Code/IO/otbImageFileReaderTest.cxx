@@ -52,3 +52,31 @@ int otbImageFileReaderTest(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
+
+int otbImageFileReaderWithExternalGEOMFile(int argc, char* argv[])
+{
+  // Verify the number of parameters in the command line
+  const char * inputFilename  = argv[1];
+  const char * inputGEOMFilename  = argv[2];
+  const char * outputFilename = argv[3];
+
+  typedef float InputPixelType;
+  const unsigned int Dimension = 2;
+
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+
+  ReaderType::Pointer reader = ReaderType::New();
+
+  std::ofstream file;
+  file.open(outputFilename);
+
+  reader->SetFileName(inputFilename);
+  reader->SetExtGEOMFilename(inputGEOMFilename);
+  reader->Update();
+
+  file << reader->GetOutput()->GetImageKeywordlist();
+
+  return EXIT_SUCCESS;
+}

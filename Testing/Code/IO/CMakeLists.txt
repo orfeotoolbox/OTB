@@ -3725,6 +3725,17 @@ ADD_TEST(raTuWavelengthSpectralBandsNew ${IO_TESTS23}
   ENDFOREACH(NBBANDS ${NBBANDS_LIST})
 
 ENDFOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
+
+ADD_TEST(ioTvImageFileReaderWithExternalGEOMFile ${IO_TESTS1}
+--compare-ascii ${NOTOL}
+         ${BASELINE}/ioImageFileReaderWithExternalGEOMFile.txt
+         ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
+	otbImageFileReaderWithExternalGEOMFile
+        ${INPUTDATA}/ToulouseExtract_WithGeom.tif
+        ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
+        ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
+        )
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx

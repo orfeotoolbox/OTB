@@ -29,6 +29,7 @@ void RegisterTests()
   REGISTER_TEST(otbMWImageIOTestCanRead);
   REGISTER_TEST(otbMWImageIOTestCanWrite);
   REGISTER_TEST(otbImageFileReaderTest);
+  REGISTER_TEST(otbImageFileReaderWithExternalGEOMFile);
   REGISTER_TEST(otbImageFileReaderTestFloat);
   REGISTER_TEST(otbShortImageIOTest);
   REGISTER_TEST(otbImageIOFactoryNew);
