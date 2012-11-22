@@ -42,6 +42,9 @@ WorldView2ImageMetadataInterface::CanRead() const
 WorldView2ImageMetadataInterface::VariableLengthVectorType
 WorldView2ImageMetadataInterface::GetSolarIrradiance() const
 {
+  // Used the solari irradiance provided by DigitalGlobe here:
+  // http://www.digitalglobe.com/downloads/Radiometric_Use_of_WorldView-2_Imagery.pdf
+
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
     {
@@ -64,7 +67,7 @@ WorldView2ImageMetadataInterface::GetSolarIrradiance() const
   if (keywordStringBId == panchro)
     {
     outputValuesVariableLengthVector.SetSize(1);
-    outputValuesVariableLengthVector.Fill(1603.40);
+    outputValuesVariableLengthVector.Fill(1580.8140);
     }
   else
     {
@@ -79,35 +82,35 @@ WorldView2ImageMetadataInterface::GetSolarIrradiance() const
       double SolarIrradianceValue = 0.0;
       if(bandNameList[i] == "C")
         {
-        SolarIrradianceValue = 1777.10;
+        SolarIrradianceValue = 1758.2229;
         }
       else if(bandNameList[i] == "B")
         {
-        SolarIrradianceValue = 2015.68;
+        SolarIrradianceValue = 1974.2416;
         }
       else if(bandNameList[i] == "G")
         {
-        SolarIrradianceValue = 1829.06;
+        SolarIrradianceValue = 1856.4104;
         }
       else if(bandNameList[i] == "Y")
         {
-        SolarIrradianceValue = 1701.80;
+        SolarIrradianceValue = 1738.4791;
         }
       else if(bandNameList[i] == "R")
         {
-        SolarIrradianceValue = 1539.54;
+        SolarIrradianceValue = 1559.4555;
         }
       else if(bandNameList[i] == "RE")
         {
-        SolarIrradianceValue = 1345.03;
+        SolarIrradianceValue = 1342.0695;
         }
       else if(bandNameList[i] == "N")
         {
-        SolarIrradianceValue = 1045.50;
+        SolarIrradianceValue = 1069.7302;
         }
       else if(bandNameList[i] == "N2")
         {
-        SolarIrradianceValue = 883.20;
+        SolarIrradianceValue = 861.2866;
         }
       outputValuesVariableLengthVector[i] = SolarIrradianceValue;
       }
@@ -362,7 +365,7 @@ WorldView2ImageMetadataInterface::GetProductionYear() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
- 
+
   std::string key("support_data.generation_date");
   if (!imageKeywordlist.HasKey(key))
     {
