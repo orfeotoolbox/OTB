@@ -63,6 +63,7 @@ WorldView2ImageMetadataInterface::GetSolarIrradiance() const
   std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
   std::string panchro("P");
   std::string multi("Multi");
+  std::string ms1("MS1");
 
   if (keywordStringBId == panchro)
     {
@@ -403,12 +404,14 @@ WorldView2ImageMetadataInterface
   std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
   std::string panchro("P");
   std::string multi("Multi");
+  std::string ms1("MS1");
+
   if (keywordStringBId == panchro)
     {
     outputValuesVariableLengthVector.SetSize(1);
     outputValuesVariableLengthVector.Fill(0.0);
     }
-  else if (keywordStringBId == multi)
+  else if (keywordStringBId == multi || keywordStringBId == ms1)
     {
     std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
     std::vector<std::string> bandNameList;
@@ -452,7 +455,9 @@ WorldView2ImageMetadataInterface
   std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
   std::string panchro("P");
   std::string multi("Multi");
-  if (keywordStringBId != panchro && keywordStringBId != multi)
+  std::string ms1("MS1");
+
+  if (keywordStringBId != panchro && keywordStringBId != multi && keywordStringBId != ms1)
     {
     itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
     }
@@ -581,7 +586,9 @@ WorldView2ImageMetadataInterface
   std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
   std::string panchro("P");
   std::string multi("Multi");
-  if (keywordStringBId != panchro && keywordStringBId != multi)
+  std::string ms1("MS1");
+
+  if (keywordStringBId != panchro && keywordStringBId != multi && keywordStringBId != ms1)
     {
     itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
     }
@@ -665,8 +672,9 @@ WorldView2ImageMetadataInterface
   std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
   std::string panchro("P");
   std::string multi("Multi");
+  std::string ms1("MS1");
 
-  if (keywordStringBId != panchro && keywordStringBId != multi)
+  if (keywordStringBId != panchro && keywordStringBId != multi && keywordStringBId != ms1)
     {
     itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
     }
@@ -799,8 +807,9 @@ WorldView2ImageMetadataInterface
   std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
   std::string panchro("P");
   std::string multi("Multi");
+  std::string ms1("MS1");
 
-  if (keywordStringBId != panchro && keywordStringBId != multi)
+  if (keywordStringBId != panchro && keywordStringBId != multi && keywordStringBId != ms1)
     {
     itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
     }
