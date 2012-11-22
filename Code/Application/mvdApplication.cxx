@@ -31,6 +31,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "ConfigureMonteverdi2.h"
 
 //
 // Class pre-declaration.
@@ -44,12 +45,12 @@ Application
 ::Application( int& argc, char** argv ) :
   QApplication( argc, argv )
 {
+  InitializeLocale();
+
   QObject::connect(
     this, SIGNAL( aboutToQuit() ),
     this, SLOT( OnAboutToQuit() )
     );
-
-  InitializeUI();
 }
 
 /*****************************************************************************/
@@ -59,9 +60,55 @@ Application
 }
 
 /*****************************************************************************/
-void
-Application::InitializeUI()
+/*
+bool
+Application::Initialize()
 {
+  InitializeLocale();
+
+  return true;
+}
+*/
+
+/*****************************************************************************/
+void
+Application::InitializeLocale()
+{
+  QString localeName( QLocale::system().name() );
+
+  QString localeFilename( QString( PROJECT_NAME ).toLower() +
+			  "_" +
+			  localeName );
+
+  QTranslator localeTranslator;
+
+  if( !localeTranslator.load( localeFilename ) )
+    {
+// TODO: Log error while loading locale translation file.
+// TODO: Add QMessageBox::warning()!
+    qDebug(
+      ">DEBUG> Failed to load '%s' locale translation file",
+      localeFilename.toLatin1().data()
+    );
+
+    return;
+    }
+
+  installTranslator( &localeTranslator );
+
+  qDebug(
+    ">DEBUG> Successfully loaded '%s' locale translation file.",
+    localeFilename.toLatin1().data()
+  );
+
+// TODO: Log locale translation filename used.
+
+/* May be usefull...
+  QTextCodec::setCodecForTr( QTextCodec::codecForName( "utf8" ) );
+*/
+
+// TODO: Record locale translation filename used in UI component (e.g.
+// AboutDialog, Settings dialog, Information dialog etc.)
 }
 
 /*****************************************************************************/
@@ -71,7 +118,7 @@ void
 Application
 ::OnAboutToQuit()
 {
-  qDebug( ">DEBUG< mvd::Application::OnAboutToQuit()" );
+  qDebug( ">DEBUG> mvd::Application::OnAboutToQuit()" );
 }
 
 /*****************************************************************************/

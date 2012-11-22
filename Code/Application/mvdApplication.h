@@ -57,6 +57,13 @@ public:
 /** Destructor */
   virtual ~Application();
 
+/**
+ */
+  // bool Initialize();
+
+
+signals:
+
 //
 //
 protected:
@@ -64,7 +71,9 @@ protected:
 //
 //
 private:
-  void InitializeUI();
+/**
+ */
+  void InitializeLocale();
 
 //
 // SLOTS

@@ -24,6 +24,7 @@
 
 //
 // Qt includes (sorted by alphabetic order)
+#include <QObject>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -45,8 +46,11 @@ namespace mvd
 /** \class MyClass
  *
  */
-class MyClass
+class MyClass :
+    public QObject
 {
+  Q_OBJECT;
+
 public:
 
 /** Constructor */
@@ -55,11 +59,13 @@ public:
 /** Destructor */
   virtual ~MyClass();
 
+signals:
+
 protected:
 
 private:
 
-//private slots:
+private slots:
 };
 
 } // end namespace 'mvd'

@@ -41,6 +41,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "ConfigureMonteverdi2.h"
 
 namespace mvd
 {
@@ -67,6 +68,9 @@ void
 MainWindow
 ::Initialize()
 {
+  setObjectName( "mvd::MainWindow" );
+  setWindowTitle( PROJECT_NAME );
+
   /*
   QDockWidget* dock_widget = new DockWidget( tr( "Dock Widget" ), this );
   
@@ -79,12 +83,17 @@ MainWindow
   addDockWidget( Qt::LeftDockWidgetArea, dock_widget );
   */
 
+/*
+** WARNING: Do not mix QObject allocation system with the ITK one!
+** (reason: QObject instances are linked in a parent-children tree;
+** deallocaingt an object (especially widgets) deallocates its
+** children).
+*/
   // Instanciate a QImageView
   m_ImageView = ImageViewType::New();
 
   // Set the GLImageWidget as the centralWidget in MainWindow.
   setCentralWidget( m_ImageView->GetFullWidget() );
-  
 
 // Connect Quit action of main menu to QApplication's quit() slot.
   QObject::connect(
@@ -95,6 +104,18 @@ MainWindow
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
+/*****************************************************************************/
+void
+MainWindow::OnTranslatorLoaded( const QString& filename )
+{
+  qDebug(
+    filename.isNull()
+    ? ">DEBUG> Failed to load '%s' translation file."
+    : ">DEBUG> Loaded '%s' translation file.",
+    filename.toLatin1().data()
+  );
+}
+
 /*****************************************************************************/
 void
 MainWindow

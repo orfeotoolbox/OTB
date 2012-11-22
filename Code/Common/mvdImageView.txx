@@ -178,9 +178,11 @@ ImageView<TViewerModel>
     {
     otbMsgDevMacro(<< "ImageView::UpdateFullWidget(): redrawing full widget");
 
+/*
     std::cout <<" m_Model->GetRasterizedExtract()->GetLargestPossibleRegion() "
               <<  m_Model->GetRasterizedExtract()->GetLargestPossibleRegion() << std::endl;
-    
+*/
+  
     m_FullWidget->ReadBuffer(m_Model->GetRasterizedExtract(), m_Model->GetRasterizedExtract()
                              ->GetLargestPossibleRegion());
 

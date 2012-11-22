@@ -42,7 +42,7 @@ endif(OTB_FOUND)
 
 #----------------------------------------------------------------------------
 # Qt4 settings
-find_package( Qt4 REQUIRED QtCore QtGui)
+find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL)
 
 # setup Qt environement
 set( QT_USE_QTCORE TRUE )
@@ -111,7 +111,7 @@ set(Monteverdi2_INCLUDE_DIRS
   ${Monteverdi2_BINARY_DIR}/Code/Application
   )
 
-include_directories(${Monteverdi2_INCLUDE_DIRS})
+include_directories(${Monteverdi2_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
 
 #----------------------------------------------------------------------------
 # Installation vars:

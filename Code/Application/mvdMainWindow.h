@@ -83,6 +83,7 @@ private:
   ImageViewType::Pointer m_ImageView;
 
 private slots:
+  void OnTranslatorLoaded( const QString& );
   void on_action_Open_activated();
 };
 

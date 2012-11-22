@@ -236,13 +236,15 @@ void GLImageWidget::initializeGL()
 
    glFlush();
 
-   std::cout << "Paint GL done "<< std::endl;
+//   std::cout << "Paint GL done "<< std::endl;
  }
 
 void GLImageWidget::mousePressEvent(  QMouseEvent * event)
 {
+/*
   std::cout <<" !!!! Mouse press event  " << std::endl;
   std::cout <<"x " << event->x()<< std::endl;
+*/
   m_MousePressEventX = event->x();
   m_MousePressEventY = event->y();
 }
