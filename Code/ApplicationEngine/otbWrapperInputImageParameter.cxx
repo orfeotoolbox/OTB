@@ -22,6 +22,8 @@
 #include "otbImageToVectorImageCastFilter.h"
 #include "otbWrapperTypes.h"
 
+#include <boost/algorithm/string.hpp>
+
 namespace otb
 {
 namespace Wrapper
@@ -44,6 +46,8 @@ InputImageParameter::~InputImageParameter()
 bool
 InputImageParameter::SetFromFileName(const std::string& filename)
 {
+  otbMsgDevMacro(<< "SetFromFileName()");
+
   // First clear previous file choosen
   this->ClearValue();
 
@@ -53,8 +57,32 @@ InputImageParameter::SetFromFileName(const std::string& filename)
   // myfile.tif:2 for example, or myfile.tif:nocarto
   if (!filename.empty())
     {
+    // Smart Filename Handling
+    std::vector<std::string> main;
+    std::vector<std::string> ops;
+    std::map<std::string, std::string> opsMap;
+
+    boost::split(main, filename, boost::is_any_of("?"), boost::token_compress_on);
+    std::cout << "main.size: " << main.size() << std::endl;
+    if (main.size()>1)
+      {
+      boost::split(ops, main[1], boost::is_any_of("&"), boost::token_compress_on);
+      }
+
+    for (unsigned int i=0; i<ops.size(); i++)
+      {
+      std::vector<std::string> tmp;
+      boost::split(tmp, ops[i], boost::is_any_of("="), boost::token_compress_on);
+      opsMap[tmp[0]]=tmp[1];
+      }
+
     FloatVectorReaderType::Pointer reader = FloatVectorReaderType::New();
-    reader->SetFileName(filename);
+    reader->SetFileName(main[0]);
+    reader->SetExtGEOMFilename(opsMap["geom"]);
+
+    otbMsgDevMacro(<< "Filename: " << main[0]);
+    otbMsgDevMacro(<< "Geom File: " << opsMap["geom"]);
+
     try
       {
       reader->UpdateOutputInformation();
@@ -112,6 +140,8 @@ template <class TOutputImage>
 TOutputImage *
 InputImageParameter::GetImage()
 {
+  otbMsgDevMacro(<< "GetImage()");
+
   // Used m_PreviousFileName because if not, when the user call twice GetImage,
   // it without changing the filename, it returns 2 different
   // image pointers
@@ -127,7 +157,32 @@ InputImageParameter::GetImage()
       m_PreviousFileName = m_FileName;
       typedef otb::ImageFileReader<TOutputImage> ReaderType;
       typename ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(m_FileName);
+
+      // Smart Filename Handling
+      std::vector<std::string> main;
+      std::vector<std::string> ops;
+      std::map<std::string, std::string> opsMap;
+
+      boost::split(main, m_FileName, boost::is_any_of("?"), boost::token_compress_on);
+      std::cout << "main.size: " << main.size() << std::endl;
+      if (main.size()>1)
+        {
+        boost::split(ops, main[1], boost::is_any_of("&"), boost::token_compress_on);
+        }
+
+      for (unsigned int i=0; i<ops.size(); i++)
+        {
+        std::vector<std::string> tmp;
+        boost::split(tmp, ops[i], boost::is_any_of("="), boost::token_compress_on);
+        opsMap[tmp[0]]=tmp[1];
+        }
+
+      reader->SetFileName(main[0]);
+      reader->SetExtGEOMFilename(opsMap["geom"]);
+
+      otbMsgDevMacro(<< "Filename: " << main[0]);
+      otbMsgDevMacro(<< "Geom File: " << opsMap["geom"]);
+
       try
         {
         reader->UpdateOutputInformation();
@@ -229,7 +284,6 @@ InputImageParameter::GetImage()
         {
         return CastImage<DoubleVectorImageType, TOutputImage> ();
         }
-    
       else if (dynamic_cast<UInt8RGBAImageType*> (m_Image.GetPointer()))
         {
         return CastImage<UInt8RGBAImageType, TOutputImage> ();
