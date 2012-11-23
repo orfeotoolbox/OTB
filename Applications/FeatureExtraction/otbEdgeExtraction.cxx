@@ -130,8 +130,9 @@ void DoExecute()
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   inImage->UpdateOutputInformation();
+  int nbChan = inImage->GetNumberOfComponentsPerPixel();
 
-  if( GetParameterInt("channel") > inImage->GetNumberOfComponentsPerPixel() )
+  if( GetParameterInt("channel") > nbChan )
     {
     otbAppLogCRITICAL("Selected band is not available...");
     return;
