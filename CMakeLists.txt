@@ -132,61 +132,24 @@ include_directories(${Monteverdi2_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
 # Monteverdi2_INSTALL_NO_DOCUMENTATION - do not install documentation files
 
 if(NOT Monteverdi2_INSTALL_BIN_DIR)
-  set(Monteverdi2_INSTALL_BIN_DIR "/bin")
+  set(Monteverdi2_INSTALL_BIN_DIR "bin")
 endif(NOT Monteverdi2_INSTALL_BIN_DIR)
 
 if(NOT Monteverdi2_INSTALL_LIB_DIR)
-  set(Monteverdi2_INSTALL_LIB_DIR "/lib/otb")
+  set(Monteverdi2_INSTALL_LIB_DIR "lib/otb")
 endif(NOT Monteverdi2_INSTALL_LIB_DIR)
 
 if(NOT Monteverdi2_INSTALL_DATA_DIR)
-  set(Monteverdi2_INSTALL_DATA_DIR "/share/otb")
+  set(Monteverdi2_INSTALL_DATA_DIR "share/otb")
 endif(NOT Monteverdi2_INSTALL_DATA_DIR)
 
 if(NOT Monteverdi2_INSTALL_INCLUDE_DIR)
-  set(Monteverdi2_INSTALL_INCLUDE_DIR "/include/otb")
+  set(Monteverdi2_INSTALL_INCLUDE_DIR "include/otb")
 endif(NOT Monteverdi2_INSTALL_INCLUDE_DIR)
 
 if(NOT Monteverdi2_INSTALL_PACKAGE_DIR)
-  set(Monteverdi2_INSTALL_PACKAGE_DIR ${Monteverdi2_INSTALL_LIB_DIR}
-    CACHE INTERNAL "")
+  set(Monteverdi2_INSTALL_PACKAGE_DIR ${Monteverdi2_INSTALL_LIB_DIR})
 endif(NOT Monteverdi2_INSTALL_PACKAGE_DIR)
-
-if(NOT Monteverdi2_INSTALL_NO_DEVELOPMENT)
-  set(Monteverdi2_INSTALL_NO_DEVELOPMENT 0)
-endif(NOT Monteverdi2_INSTALL_NO_DEVELOPMENT)
-
-if(NOT Monteverdi2_INSTALL_NO_RUNTIME)
-  set(Monteverdi2_INSTALL_NO_RUNTIME 0)
-endif(NOT Monteverdi2_INSTALL_NO_RUNTIME)
-
-if(NOT Monteverdi2_INSTALL_NO_DOCUMENTATION)
-  set(Monteverdi2_INSTALL_NO_DOCUMENTATION 0)
-endif(NOT Monteverdi2_INSTALL_NO_DOCUMENTATION)
-
-set(Monteverdi2_INSTALL_NO_LIBRARIES)
-if(Monteverdi2_BUILD_SHARED_LIBS)
-  if(Monteverdi2_INSTALL_NO_RUNTIME AND Monteverdi2_INSTALL_NO_DEVELOPMENT)
-    set(Monteverdi2_INSTALL_NO_LIBRARIES 1)
-  endif(Monteverdi2_INSTALL_NO_RUNTIME AND Monteverdi2_INSTALL_NO_DEVELOPMENT)
-else(Monteverdi2_BUILD_SHARED_LIBS)
-  if(Monteverdi2_INSTALL_NO_DEVELOPMENT)
-    set(Monteverdi2_INSTALL_NO_LIBRARIES 1)
-  endif(Monteverdi2_INSTALL_NO_DEVELOPMENT)
-endif(Monteverdi2_BUILD_SHARED_LIBS)
-
-#----------------------------------------------------------------------------
-# Because INSTALL_* commands require a leading / and because INSTALL (cmake 2.4
-# and newer) requires no leading / to install under INSTALL_PREFIX, we
-# are stripping the leading /. In the future, there should be no leading
-# / in any install directory variables
-string(REGEX REPLACE "^/" "" Monteverdi2_INSTALL_LIB_DIR_CM24 "${Monteverdi2_INSTALL_LIB_DIR}")
-string(REGEX REPLACE "^/" "" Monteverdi2_INSTALL_BIN_DIR_CM24 "${Monteverdi2_INSTALL_BIN_DIR}")
-string(REGEX REPLACE "^/" "" Monteverdi2_INSTALL_INCLUDE_DIR_CM24 "${Monteverdi2_INSTALL_INCLUDE_DIR}")
-string(REGEX REPLACE "^/" "" Monteverdi2_INSTALL_PACKAGE_DIR_CM24 "${Monteverdi2_INSTALL_PACKAGE_DIR}")
-string(REGEX REPLACE "^/" "" Monteverdi2_INSTALL_DOXYGEN_DIR_CM24 "${Monteverdi2_INSTALL_DOXYGEN_DIR}")
-string(REGEX REPLACE "^/" "" Monteverdi2_INSTALL_TCL_DIR_CM24 "${Monteverdi2_INSTALL_TCL_DIR}")
-string(REGEX REPLACE "^/" "" Monteverdi2_INSTALL_JAVA_DIR_CM24 "${Monteverdi2_INSTALL_JAVA_DIR}")
 
 #----------------------------------------------------------------------------
 # Make sure the user does not try to install on top of the build tree.
@@ -246,12 +209,10 @@ export_library_dependencies(${Monteverdi2_LIBRARY_DEPENDS_FILE})
 set(Monteverdi2_LIBRARY_DIRS ${OTB_LIBRARY_DIRS} ${LIBRARY_OUTPUT_PATH})
 
 #set(Monteverdi2_USE_FILE ${Monteverdi2_BINARY_DIR}/UseMonteverdi2.cmake)
-
 #configure_file(${Monteverdi2_SOURCE_DIR}/Monteverdi2Config.cmake.in
 #               ${Monteverdi2_BINARY_DIR}/Monteverdi2Config.cmake @ONLY IMMEDIATE)
 #configure_file(${Monteverdi2_SOURCE_DIR}/UseMonteverdi2.cmake.in
 #               ${Monteverdi2_USE_FILE} @ONLY IMMEDIATE)
-
 
 #----------------------------------------------------------------------------
 # Setup valgrind option (default hard coded value is ctest is invalid).

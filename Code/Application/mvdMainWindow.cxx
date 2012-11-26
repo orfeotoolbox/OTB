@@ -109,9 +109,11 @@ void
 MainWindow::OnTranslatorLoaded( const QString& filename )
 {
   qDebug(
-    filename.isNull()
-    ? ">DEBUG> Failed to load '%s' translation file."
-    : ">DEBUG> Loaded '%s' translation file.",
+    QString(
+      filename.isNull()
+      ? tr( ">DEBUG> Failed to load '%s' translation file." )
+      : tr( ">DEBUG> Loaded '%s' translation file." )
+    ).toLatin1().data(),
     filename.toLatin1().data()
   );
 }

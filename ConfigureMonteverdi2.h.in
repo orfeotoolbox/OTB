@@ -11,3 +11,5 @@
 //#define Monteverdi2_SOURCE_DIR "@Monteverdi2_SOURCE_DIR@"
 
 #define Monteverdi2_FLOATING_TYPE @Monteverdi2_FLOATING_TYPE@
+
+#define Monteverdi2_BIN_DIR @@

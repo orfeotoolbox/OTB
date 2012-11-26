@@ -8,15 +8,15 @@ set( Monteverdi2_TS_TRANSLATIONS
 #
 # Configuration option to enable creation/merging of source .ts files
 # Default value is: OFF.
-option( MERGE_TS_TRANSLATIONS "Create/merge .ts source translation files. WARNING: 'make clean' will delete the source .ts files!.")
+option( MERGE_TS "Create/merge .ts source translation files. WARNING: 'make clean' will delete the source .ts files!." OFF)
 #
 # Sources to translate.
-if( MERGE_TS_TRANSLATIONS )
+if( MERGE_TS )
   qt4_create_translation( Monteverdi2_QM_TRANSLATIONS
     ${i18n_SOURCES}
     ${Monteverdi2_TS_TRANSLATIONS}
     )
-endif( MERGE_TS_TRANSLATIONS )
+endif()
 #
 # Locale binary translation files.
 qt4_add_translation( Monteverdi2_QM_TRANSLATIONS
@@ -28,9 +28,6 @@ add_custom_target( i18n ALL DEPENDS ${Monteverdi2_QM_TRANSLATIONS} )
 #
 #----------------------------------------------------------------------------
 # Locale human-readable translation files.
-# if( NOT OTB_INSTALL_NO_LIBRARIES )
-#   install(
-#     TARGETS i18n
-#     FILES DESTINATION ${}
-#     )
-# endif( NOT OTB_INSTALL_NO_LIBRARIES )
+install(
+  FILES ${Monteverdi2_QM_TRANSLATIONS} DESTINATION ${Monteverdi2_INSTALL_DATA_DIR}
+  )

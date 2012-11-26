@@ -40,7 +40,7 @@
 namespace mvd
 {
 
-/*****************************************************************************/
+/*******************************************************************************/
 Application
 ::Application( int& argc, char** argv ) :
   QApplication( argc, argv )
@@ -53,13 +53,12 @@ Application
     );
 }
 
-/*****************************************************************************/
+/*******************************************************************************/
 Application
 ::~Application()
 {
 }
 
-/*****************************************************************************/
 /*
 bool
 Application::Initialize()
@@ -70,15 +69,14 @@ Application::Initialize()
 }
 */
 
-/*****************************************************************************/
+/*******************************************************************************/
 void
 Application::InitializeLocale()
 {
   QString localeName( QLocale::system().name() );
 
-  QString localeFilename( QString( PROJECT_NAME ).toLower() +
-			  "_" +
-			  localeName );
+  QString localeFilename( localeName );
+
 
   QTranslator localeTranslator;
 
@@ -86,20 +84,16 @@ Application::InitializeLocale()
     {
 // TODO: Log error while loading locale translation file.
 // TODO: Add QMessageBox::warning()!
-    qDebug(
-      ">DEBUG> Failed to load '%s' locale translation file",
-      localeFilename.toLatin1().data()
-    );
+    qDebug()
+      << tr( ">DEBUG> Failed to load '%1' locale translation file." ).arg( localeFilename );
 
     return;
     }
 
   installTranslator( &localeTranslator );
 
-  qDebug(
-    ">DEBUG> Successfully loaded '%s' locale translation file.",
-    localeFilename.toLatin1().data()
-  );
+  qDebug()
+    << tr( ">DEBUG> Successfully loaded '%1' locale translation file." ).arg( localeFilename );
 
 // TODO: Log locale translation filename used.
 
@@ -111,16 +105,14 @@ Application::InitializeLocale()
 // AboutDialog, Settings dialog, Information dialog etc.)
 }
 
-/*****************************************************************************/
-/* SLOTS                                                                     */
-/*****************************************************************************/
+/*******************************************************************************/
+/* SLOTS                                                                       */
+/*******************************************************************************/
 void
 Application
 ::OnAboutToQuit()
 {
-  qDebug( ">DEBUG> mvd::Application::OnAboutToQuit()" );
+  qDebug() << tr( ">DEBUG> mvd::Application::OnAboutToQuit()." );
 }
-
-/*****************************************************************************/
 
 } // end namespace 'mvd'

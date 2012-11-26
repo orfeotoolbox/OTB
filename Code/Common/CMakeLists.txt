@@ -39,13 +39,11 @@ target_link_libraries(Monteverdi2_Common
 
 #############################################################################
 # INSTALL Common application.
-if(NOT OTB_INSTALL_NO_LIBRARIES)
-  install(
-    TARGETS Monteverdi2_Common
-    #RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR_CM24} COMPONENT Runtime
-    LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR_CM24} COMPONENT Runtime
-    #ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR_CM24} COMPONENT Development
+install(
+  TARGETS Monteverdi2_Common
+  RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Runtime
+  LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Runtime
+  ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Development
 )
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
 
 #############################################################################
