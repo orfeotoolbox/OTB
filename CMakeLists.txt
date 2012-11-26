@@ -2,6 +2,8 @@ PROJECT(Monteverdi2)
 
 cmake_minimum_required(VERSION 2.6)
 
+set( CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH} )
+
 #----------------------------------------------------------------------------
 # ensure WIN32 definition
 if(WIN32)
@@ -104,9 +106,10 @@ set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard.")
 #----------------------------------------------------------------------------
 # Include directories
 set(Monteverdi2_INCLUDE_DIRS
-  ${Monteverdi2_SOURCE_DIR}/Code/
+  # ${Monteverdi2_SOURCE_DIR}/Code/
   ${Monteverdi2_SOURCE_DIR}/Code/Common
   ${Monteverdi2_SOURCE_DIR}/Code/Application
+  #
   ${Monteverdi2_BINARY_DIR}/Code/Common
   ${Monteverdi2_BINARY_DIR}/Code/Application
   )
@@ -201,7 +204,30 @@ endif("${_PREFIX}" STREQUAL "${_BUILD}")
 
 #----------------------------------------------------------------------------
 # Code location
+include( i18n_qt4 )
 add_subdirectory(Code)
+
+#############################################################################
+# Qt4 translations.
+#----------------------------------------------------------------------------
+# Locale human-readable translation files.
+# set( Monteverdi2_TS_TRANSLATIONS
+#   Code/i18n/fr_FR.UTF-8.ts
+# )
+# #
+# # Sources to translate.
+# qt4_create_translation( i18n/Monteverdi2_QM_TRANSLATIONS
+#   ${i18n_SOURCES}
+#   ${Monteverdi2_TS_TRANSLATIONS}
+# )
+# #
+# # Locale binary translation files.
+# qt4_add_translation( i18n/Monteverdi2_QM_TRANSLATIONS
+#   ${Monteverdi2_TS_TRANSLATIONS}
+# )
+# #
+# # Custom build target.
+# add_custom_target( i18n DEPENDS ${Monteverdi2_QM_TRANSLATIONS} )
 
 #----------------------------------------------------------------------------
 # Include the Packaging subdir after every other dir

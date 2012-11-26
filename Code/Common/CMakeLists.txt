@@ -11,6 +11,18 @@ qt4_wrap_cpp( Common_HEADERS_MOC ${Common_HEADERS} )
 qt4_wrap_ui( Common_FORMS_HEADERS ${Common_FORMS}  )
 qt4_add_resources( Common_RESOURCES_RCC ${Common_RESOURCES} )
 
+########################################################################
+# Qt4 translations.
+
+# Sources files to translate.
+add_to_qt4_i18n_sources( 
+  ${Common_SOURCES}
+  ${Common_HEADERS}
+  ${Common_FORMS}
+  ${Common_HEADERS_MOC}
+  ${Common_FORMS_HEADERS}
+)
+
 #############################################################################
 add_library(Monteverdi2_Common
   ${Common_SOURCES}
