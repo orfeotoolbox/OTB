@@ -497,13 +497,46 @@ WorldView2ImageMetadataInterface
 
   if (keywordStringBId == panchro)
     {
-    outputValuesVariableLengthVector[0] = 1.0 / outputValuesVariableLengthVector[0];
+    // In the case of WorldView-2, we need to divide the absolute calibration
+    // factor by the effective bandwidth see for details:
+    // http://www.digitalglobe.com/downloads/Radiometric_Use_of_WorldView-2_Imagery.pdf
+    // These values are not retrieved by the ossimQuickBirdMetadata class as
+    // there are specific to WV2 We did not retrieve those values in the ossim
+    // class and consider them as constant values
+
+    const double effectiveBandWidthPan = 2.846000e-01;
+    outputValuesVariableLengthVector[0] = effectiveBandWidthPan / outputValuesVariableLengthVector[0];
     }
   else
     {
+    // Also need to divide by the effective bandwidth available
+    // We consider the 2 cases with 4 or 8 bands in WV2 multispectral product
+    VariableLengthVectorType effectiveBandwidthVariableLengthVector;
+    effectiveBandwidthVariableLengthVector.SetSize(bandNameList.size());
+    effectiveBandwidthVariableLengthVector.Fill(1.);
+
+    if (bandNameList.size() == 8)
+      {
+      effectiveBandwidthVariableLengthVector[0] = 4.730000e-02;
+      effectiveBandwidthVariableLengthVector[1] = 5.430000e-02;
+      effectiveBandwidthVariableLengthVector[2] = 6.300000e-02;
+      effectiveBandwidthVariableLengthVector[3] = 3.740000e-02;
+      effectiveBandwidthVariableLengthVector[4] = 5.740000e-02;
+      effectiveBandwidthVariableLengthVector[5] = 3.930000e-02;
+      effectiveBandwidthVariableLengthVector[6] = 9.890000e-02;
+      effectiveBandwidthVariableLengthVector[7] = 9.960000e-02;
+      }
+    else if (bandNameList.size() == 4)
+      {
+      effectiveBandwidthVariableLengthVector[0] = 5.430000e-02;
+      effectiveBandwidthVariableLengthVector[1] = 6.300000e-02;
+      effectiveBandwidthVariableLengthVector[2] = 5.740000e-02;
+      effectiveBandwidthVariableLengthVector[3] = 9.890000e-02;
+      }
+
     for(unsigned int i = 0; i < bandNameList.size(); ++i)
       {
-      outputValuesVariableLengthVector[i] = 1.000 / outputValuesVariableLengthVector[i];
+      outputValuesVariableLengthVector[i] = effectiveBandwidthVariableLengthVector[i] / outputValuesVariableLengthVector[i];
       }
     }
 
