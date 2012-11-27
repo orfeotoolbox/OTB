@@ -25,6 +25,8 @@
 #include "itkPoint.h"
 #include "itkEuclideanDistance.h"
 #include "otbGenericRSTransform.h"
+#include "otbOGRDataSourceWrapper.h"
+#include "ogrsf_frmts.h"
 
 namespace otb
 {
@@ -77,6 +79,11 @@ private:
     MandatoryOff("outstat");
     DisableParameter("outstat");
 
+    AddParameter(ParameterType_OutputFilename,"outvector","Output vector file with residues");
+    SetParameterDescription("outvector","File containing segments representing residues");
+    MandatoryOff("outvector");
+    DisableParameter("outvector");
+
     // Build the Output Map Projection
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
 
@@ -92,6 +99,8 @@ private:
 
   void DoExecute()
   {
+    OGRMultiLineString mls;
+
     otb::SensorModelAdapter::Pointer sm     = otb::SensorModelAdapter::New();
     otb::SensorModelAdapter::Pointer sm_ref = otb::SensorModelAdapter::New();
     
@@ -204,6 +213,11 @@ private:
 
     ref = rsTransform->TransformPoint(ref);
 
+    OGRLineString ls;
+    ls.addPoint(tmpPoint[0],tmpPoint[1]);
+    ls.addPoint(ref[0],ref[1]);
+    mls.addGeometry(&ls);
+
     double gerror = distance->Evaluate(ref,tmpPoint);
     double xerror = ref[0]-tmpPoint[0];
     double yerror = ref[1]-tmpPoint[1];
@@ -292,7 +306,27 @@ private:
 
   if(IsParameterEnabled("outstat"))
     ofs.close();
-}
+
+
+if(IsParameterEnabled("outvector"))
+  {
+  // Create the datasource (for matches export)
+  otb::ogr::Layer layer(NULL, false);
+  otb::ogr::DataSource::Pointer ogrDS;
+  
+  ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);
+  std::string projref = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map");
+  OGRSpatialReference oSRS(projref.c_str());
+  
+  // and create the layer
+  layer = ogrDS->CreateLayer("matches", &oSRS, wkbMultiLineString);
+  OGRFeatureDefn & defn = layer.GetLayerDefn();
+  ogr::Feature feature(defn);
+  
+  feature.SetGeometry(&mls);
+  layer.CreateFeature(feature);
+  }
+  }
 };
 }
 }
