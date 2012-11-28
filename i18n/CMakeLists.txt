@@ -3,6 +3,7 @@
 #----------------------------------------------------------------------------
 # Locale human-readable translation files.
 set( Monteverdi2_TS_TRANSLATIONS
+#  en_US.ts
   fr_FR.ts
 )
 #

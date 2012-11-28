@@ -22,7 +22,7 @@ set(Monteverdi2_VERSION_PATCH "0")
 #----------------------------------------------------------------------------
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
-set(Monteverdi2_VERSION_STRING "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}")
+set(Monteverdi2_VERSION_STRING "${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}.${Monteverdi2_VERSION_PATCH}")
 
 #----------------------------------------------------------------------------
 set(Monteverdi2_FLOATING_TYPE "float" CACHE STRING "The type of data in which input images are read (double/float)." )

@@ -71,8 +71,12 @@ protected:
 //
 //
 private:
-/**
- */
+  /**
+   */
+  void InitializeCore();
+
+  /**
+   */
   void InitializeLocale();
 
 //
