@@ -503,6 +503,7 @@ WorldView2ImageMetadataInterface
     // These values are not retrieved by the ossimQuickBirdMetadata class as
     // there are specific to WV2 We did not retrieve those values in the ossim
     // class and consider them as constant values
+    // FIXME: add the effectivebandwidth in the ossim keywordlist
 
     const double effectiveBandWidthPan = 2.846000e-01;
     outputValuesVariableLengthVector[0] = effectiveBandWidthPan / outputValuesVariableLengthVector[0];
