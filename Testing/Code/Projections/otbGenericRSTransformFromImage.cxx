@@ -32,8 +32,14 @@ typedef otb::VectorImage<double, 2>       ImageType;
 typedef otb::ImageFileReader<ImageType>   ReaderType;
 typedef otb::GenericRSTransform<>         TransformType;
 typedef TransformType::InputPointType     PointType;
+
+typedef otb::GenericRSTransform<double,3,3> Transform3DType;
+typedef Transform3DType::InputPointType     Point3DType;
+
 typedef itk::Statistics::EuclideanDistance<ImageType::PointType> DistanceType;
+typedef itk::Statistics::EuclideanDistance<Point3DType> Distance3DType;
 typedef otb::GeographicalDistance<ImageType::PointType>          GeoDistanceType;
+typedef otb::GeographicalDistance<Point3DType>          GeoDistance3DType;
 
 int otbGenericRSTransformFromImage(int argc, char* argv[])
 {
@@ -84,6 +90,12 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
   double imgTol = atof(argv[9]);
   double geoTol = atof(argv[10]);
 
+  Point3DType refImgPt3d, refGeoPt3d,estimatedImgPt3d, estimatedGeoPt3d;
+  refImgPt3d[0] = refImgPt[0];
+  refImgPt3d[1] = refImgPt[1];
+  refGeoPt3d[0] = refGeoPt[0];
+  refGeoPt3d[1] = refGeoPt[1];
+
   bool pass = true;
 
 // Reader
@@ -98,12 +110,14 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
   oSRS.exportToWkt(&wgsRef);
 
   DistanceType::Pointer distance = DistanceType::New();
+  Distance3DType::Pointer distance3d = Distance3DType::New();
+
   GeoDistanceType::Pointer geoDistance = GeoDistanceType::New();
+  GeoDistance3DType::Pointer geoDistance3d = GeoDistance3DType::New();
 
   otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
   demHandler->OpenDEMDirectory(argv[2]);
   demHandler->OpenGeoidFile(argv[3]);
-  double heightAboveMSL = demHandler->GetHeightAboveMSL(refGeoPt);
   double heightAboveEllipsoid = demHandler->GetHeightAboveEllipsoid(refGeoPt);
 
   // Instanciate WGS->Image transform
@@ -111,7 +125,6 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
   wgs2img->SetInputProjectionRef(wgsRef);
   wgs2img->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
   wgs2img->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  wgs2img->SetDEMDirectory(argv[2]);
   wgs2img->InstanciateTransform();
 
   // Instanciate Image->WGS transform
@@ -119,8 +132,23 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
   img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
   img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   img2wgs->SetOutputProjectionRef(wgsRef);
-  img2wgs->SetDEMDirectory(argv[2]);
   img2wgs->InstanciateTransform();
+
+
+// Instanciate WGS->Image transform 3D
+  Transform3DType::Pointer wgs2img3d = Transform3DType::New();
+  wgs2img3d->SetInputProjectionRef(wgsRef);
+  wgs2img3d->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
+  wgs2img3d->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+  wgs2img3d->InstanciateTransform();
+
+  // Instanciate Image->WGS transform 3D
+  Transform3DType::Pointer img2wgs3d = Transform3DType::New();
+  img2wgs3d->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
+  img2wgs3d->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+  img2wgs3d->SetOutputProjectionRef(wgsRef);
+  img2wgs3d->InstanciateTransform();
+
 
   std::cout<< std::setprecision(8) << std::endl;
 
@@ -130,7 +158,7 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
   std::cout<<"Height: "<<refHeight<<std::endl;
 
   std::cout<<"-------------------- "<<std::endl;
-  std::cout<<"Using elevation from "<<demdir<<std::endl;
+  std::cout<<"Using geoid and height above ellipsoid from "<<demdir<<std::endl;
   
   estimatedImgPt = wgs2img->TransformPoint(refGeoPt);
   std::cout<<"Inverse(refGeo): "<<refGeoPt<<" -> "<< estimatedImgPt <<std::endl;
@@ -159,23 +187,13 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
 
   std::cout<<"-------------------- "<<std::endl;
   std::cout<<"Using reference elevation: "<<std::endl;
-  wgs2img = TransformType::New();
-  wgs2img->SetInputProjectionRef(wgsRef);
-  wgs2img->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
-  wgs2img->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  wgs2img->SetAverageElevation(refHeight);
-  wgs2img->InstanciateTransform();
 
-  img2wgs = TransformType::New();
-  img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
-  img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  img2wgs->SetOutputProjectionRef(wgsRef);
-  img2wgs->SetAverageElevation(refHeight);
-  img2wgs->InstanciateTransform();
+  refImgPt3d[2] = refHeight;
+  refGeoPt3d[2] = refHeight;
 
-  estimatedGeoPt = img2wgs->TransformPoint(refImgPt);
-  std::cout<<"Forward(refImg): "<<refImgPt<<" -> " << estimatedGeoPt<<std::endl;
-  geoRes = geoDistance->Evaluate(refGeoPt, estimatedGeoPt);
+  estimatedGeoPt3d = img2wgs3d->TransformPoint(refImgPt3d);
+  std::cout<<"Forward(refImg): "<<refImgPt3d<<" -> " << estimatedGeoPt3d<<std::endl;
+  geoRes = geoDistance3d->Evaluate(refGeoPt3d, estimatedGeoPt3d);
   std::cout<<"Residual: "<<geoRes<<" meters"<<std::endl;
 
   if(geoRes > geoTol)
@@ -184,9 +202,9 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
     std::cerr<<"Geographic (WGS84) residual is too high: "<<geoRes<<" meters"<<std::endl;
     }
   
-  estimatedImgPt = wgs2img->TransformPoint(refGeoPt);
-  std::cout<<"Inverse(refGeo): "<<refGeoPt<<" -> "<< estimatedImgPt <<std::endl;
-  imgRes = distance->Evaluate(refImgPt, estimatedImgPt);
+  estimatedImgPt3d = wgs2img3d->TransformPoint(refGeoPt3d);
+  std::cout<<"Inverse(refGeo): "<<refGeoPt3d<<" -> "<< estimatedImgPt3d <<std::endl;
+  imgRes = distance3d->Evaluate(refImgPt3d, estimatedImgPt3d);
   std::cout<<"Residual: "<<imgRes<<" pixels"<<std::endl;
 
   if(imgRes > imgTol)
@@ -197,23 +215,13 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
 
   std::cout<<"-------------------- "<<std::endl;
   std::cout<<"Using fixed height above ellipsoid: "<<heightAboveEllipsoid<<std::endl;
-  wgs2img = TransformType::New();
-  wgs2img->SetInputProjectionRef(wgsRef);
-  wgs2img->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
-  wgs2img->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  wgs2img->SetAverageElevation(heightAboveEllipsoid);
-  wgs2img->InstanciateTransform();
 
-  img2wgs = TransformType::New();
-  img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
-  img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  img2wgs->SetOutputProjectionRef(wgsRef);
-  img2wgs->SetAverageElevation(heightAboveEllipsoid);
-  img2wgs->InstanciateTransform();
+  refImgPt3d[2] = heightAboveEllipsoid;
+  refGeoPt3d[2] = heightAboveEllipsoid;
 
-  estimatedGeoPt = img2wgs->TransformPoint(refImgPt);
-  std::cout<<"Forward(refImg): "<<refImgPt<<" -> " << estimatedGeoPt<<std::endl;
-  geoRes = geoDistance->Evaluate(refGeoPt, estimatedGeoPt);
+  estimatedGeoPt3d = img2wgs3d->TransformPoint(refImgPt3d);
+  std::cout<<"Forward(refImg): "<<refImgPt3d<<" -> " << estimatedGeoPt3d<<std::endl;
+  geoRes = geoDistance3d->Evaluate(refGeoPt3d, estimatedGeoPt3d);
   std::cout<<"Residual: "<<geoRes<<" meters"<<std::endl;
 
   if(geoRes > geoTol)
@@ -222,9 +230,9 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
     std::cerr<<"Geographic (WGS84) residual is too high: "<<geoRes<<" meters"<<std::endl;
     }
   
-  estimatedImgPt = wgs2img->TransformPoint(refGeoPt);
+  estimatedImgPt3d = wgs2img3d->TransformPoint(refGeoPt3d);
   std::cout<<"Inverse(refGeo): "<<refGeoPt<<" -> "<< estimatedImgPt <<std::endl;
-  imgRes = distance->Evaluate(refImgPt, estimatedImgPt);
+  imgRes = distance3d->Evaluate(refImgPt3d, estimatedImgPt3d);
   std::cout<<"Residual: "<<imgRes<<" pixels"<<std::endl;
 
   if(imgRes > imgTol)
@@ -232,45 +240,6 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
     pass = false;
     std::cerr<<"Image residual is too high: "<<imgRes<<" pixels"<<std::endl;
     }
-
-  std::cout<<"-------------------- "<<std::endl;
-  std::cout<<"Using fixed height above MSL: "<<heightAboveMSL<<std::endl;
-  wgs2img = TransformType::New();
-  wgs2img->SetInputProjectionRef(wgsRef);
-  wgs2img->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
-  wgs2img->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  wgs2img->SetAverageElevation(heightAboveMSL);
-  wgs2img->InstanciateTransform();
-
-  img2wgs = TransformType::New();
-  img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
-  img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  img2wgs->SetOutputProjectionRef(wgsRef);
-  img2wgs->SetAverageElevation(heightAboveMSL);
-  img2wgs->InstanciateTransform();
-
-  estimatedGeoPt = img2wgs->TransformPoint(refImgPt);
-  std::cout<<"Forward(refImg): "<<refImgPt<<" -> " << estimatedGeoPt<<std::endl;
-  geoRes = geoDistance->Evaluate(refGeoPt, estimatedGeoPt);
-  std::cout<<"Residual: "<<geoRes<<" meters"<<std::endl;
-
-  if(geoRes > geoTol)
-    {
-    pass = false;
-    std::cerr<<"Geographic (WGS84) residual is too high: "<<geoRes<<" meters"<<std::endl;
-    }
-  
-  estimatedImgPt = wgs2img->TransformPoint(refGeoPt);
-  std::cout<<"Inverse(refGeo): "<<refGeoPt<<" -> "<< estimatedImgPt <<std::endl;
-  imgRes = distance->Evaluate(refImgPt, estimatedImgPt);
-  std::cout<<"Residual: "<<imgRes<<" pixels"<<std::endl;
-
-  if(imgRes > imgTol)
-    {
-    pass = false;
-    std::cerr<<"Image residual is too high: "<<imgRes<<" pixels"<<std::endl;
-    }
-
 
   if(pass)
     {
