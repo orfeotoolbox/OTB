@@ -233,6 +233,14 @@ ReadGeometryFromImage(const std::string& filename)
           otb_kwl.SetKeywordlist(geom_kwl);
           }
         }
+      
+      // If still no metadata, try the ".geom" file
+      if (!hasMetaData && otb_kwl.GetSize() == 0)
+        {
+        ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
+        otb_kwl = ReadGeometryFromGEOMFile(ossimGeomFile);
+        }
+      
       }
     // Free memory
     delete handler;
@@ -266,17 +274,18 @@ ReadGeometryFromGEOMFile(const std::string& filename)
     // Check that the geom file results in a valid ossimKeywordlist
     if (kwl.getErrorStatus() == ossimErrorCodes::OSSIM_OK)
       {
-      // Be sure there is a corresponding instance of ossimSensorModel
-      // which understands this kwl
-      SensorModelAdapter::Pointer sensorModel = SensorModelAdapter::New();
-      ImageKeywordlist otbkwl;
-      otbkwl.SetKeywordlist(kwl);
-      sensorModel->CreateProjection(otbkwl);
-
-      if (sensorModel->IsValidSensorModel())
-        {
-        geom_kwl = kwl;
-        }
+//       // Be sure there is a corresponding instance of ossimSensorModel
+//       // which understands this kwl
+//       SensorModelAdapter::Pointer sensorModel = SensorModelAdapter::New();
+//       ImageKeywordlist otbkwl;
+//       otbkwl.SetKeywordlist(kwl);
+//       sensorModel->CreateProjection(otbkwl);
+// 
+//       if (sensorModel->IsValidSensorModel())
+//         {
+//         geom_kwl = kwl;
+//         }
+      geom_kwl = kwl;
       }
     }
 
