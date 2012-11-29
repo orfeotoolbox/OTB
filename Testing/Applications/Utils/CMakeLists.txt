@@ -394,5 +394,13 @@ OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorSupportImage
                              ${BASELINE}/apTvUtColorMappingLabelToColorSupportImage.tif
                 	         ${TEMP}/apTvUtColorMappingLabelToColorSupportImage.tif) 
                 	         
-                	         
+#--- Testing Extended Filename -----
+
+OTB_TEST_APPLICATION(NAME apTvUtGeomExtendedFilename
+                     APP  Convert
+                     OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
+                             -out ${TEMP}/apTvUtGeomExtendedFilename.tif
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
+                             ${TEMP}/apTvUtGeomExtendedFilename.geom)                	         
                          	                     
