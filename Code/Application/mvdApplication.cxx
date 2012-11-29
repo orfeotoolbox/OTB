@@ -154,7 +154,7 @@ Application::InitializeLocale()
 
       // TODO: Use log system to trace message.
       qDebug()
-	<< tr( "Running from install directory '%1'" ).arg( install_i18n_dir.path() );
+	<< tr( "Running from install directory '%1'" ).arg( Monteverdi2_INSTALL_BIN_DIR );
       }
     // Otherwise
     else
