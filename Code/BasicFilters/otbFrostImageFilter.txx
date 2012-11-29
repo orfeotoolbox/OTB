@@ -170,7 +170,7 @@ void FrostImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
         {
         for (int y = -rad_y; y <= rad_y; ++y)
           {
-          double Dist = vcl_sqrt(x * x + y * y);
+          double Dist = vcl_sqrt(static_cast<double>(x * x + y * y));
           off[0] = x;
           off[1] = y;
 
