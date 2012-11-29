@@ -280,7 +280,7 @@ ReadGeometryFromGEOMFile(const std::string& filename)
 //       ImageKeywordlist otbkwl;
 //       otbkwl.SetKeywordlist(kwl);
 //       sensorModel->CreateProjection(otbkwl);
-// 
+//
 //       if (sensorModel->IsValidSensorModel())
 //         {
 //         geom_kwl = kwl;
