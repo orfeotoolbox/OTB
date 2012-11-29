@@ -58,7 +58,7 @@ public:
   LuminanceToReflectanceImageFunctor() :
     m_SolarIllumination(1.0),
     m_IlluminationCorrectionCoefficient(1.0),
-    m_UseClamp(false)
+    m_UseClamp(true)
   {}
 
   virtual ~LuminanceToReflectanceImageFunctor() {}
@@ -97,11 +97,11 @@ public:
            * static_cast<double>(CONST_PI)
            * m_IlluminationCorrectionCoefficient
            / m_SolarIllumination;
-    
+
     if (m_UseClamp)
     {
-      temp = std::max(temp,0.0);
-      temp = std::min(temp,1.0);
+      temp = std::max(temp,0.);
+      temp = std::min(temp,1.);
     }
     outPixel = static_cast<TOutput>(temp);
 
@@ -233,7 +233,7 @@ public:
   itkSetMacro(UseClamp, bool);
   /** Give the UseClamp boolean. */
   itkGetConstReferenceMacro(UseClamp, bool);
-  
+
 protected:
   /** Constructor */
   LuminanceToReflectanceImageFilter() :
@@ -242,7 +242,7 @@ protected:
     m_Day(0),
     m_Month(0),
     m_IsSetFluxNormalizationCoefficient(false),
-    m_UseClamp(false)
+    m_UseClamp(true)
     {
     m_SolarIllumination.SetSize(0);
     };
