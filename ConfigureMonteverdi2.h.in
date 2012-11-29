@@ -1,5 +1,9 @@
 //
-// Qt includes
+// System includes (sorted by alphabetic order).
+#include <cassert>
+ 
+//
+// Qt includes (sorted by alphabetic order).
 #include <QDebug> // temporary (experimental version).
 
 //
@@ -15,9 +19,18 @@
 
 //
 // Directories
-#define Monteverdi2_INSTALL_INCLUDE_DIR "@Monteverdi2_INSTALL_INCLUDE_DIR@"
-#define Monteverdi2_INSTALL_LIB_DIR "@Monteverdi2_INSTALL_LIB_DIR@"
-#define Monteverdi2_INSTALL_DATA_DIR "@Monteverdi2_INSTALL_DATA_DIR@"
+#define Monteverdi2_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@"
+#define Monteverdi2_INSTALL_BIN_DIR "@CMAKE_INSTALL_PREFIX@/@Monteverdi2_INSTALL_BIN_DIR@"
+#define Monteverdi2_INSTALL_INCLUDE_DIR "@CMAKE_INSTALL_PREFIX@/@Monteverdi2_INSTALL_INCLUDE_DIR@"
+#define Monteverdi2_INSTALL_LIB_DIR "@CMAKE_INSTALL_PREFIX@/@Monteverdi2_INSTALL_LIB_DIR@"
+#define Monteverdi2_INSTALL_DATA_DIR "@CMAKE_INSTALL_PREFIX@/@Monteverdi2_INSTALL_DATA_DIR@"
+//
+// Sub-directories
+#define Monteverdi2_INSTALL_DATA_I18N_DIR Monteverdi2_INSTALL_DATA_DIR "/i18n"
+
+//
+// Files
+#define Monteverdi2_CONFIGURE_FILE "@Monteverdi2_CONFIGURE_FILE@"
 
 //
 // Miscellaneous

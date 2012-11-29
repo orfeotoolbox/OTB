@@ -77,6 +77,10 @@ private:
 
   /**
    */
+  void InitializeDataDir();
+
+  /**
+   */
   void InitializeLocale();
 
 //

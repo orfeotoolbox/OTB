@@ -80,11 +80,6 @@ if(Mercurial_FOUND)
 endif(Mercurial_FOUND)
 
 #----------------------------------------------------------------------------
-# Configure files with settings for use by the build.
-configure_file(${Monteverdi2_SOURCE_DIR}/ConfigureMonteverdi2.h.in
-               ${Monteverdi2_BINARY_DIR}/ConfigureMonteverdi2.h)
-
-#----------------------------------------------------------------------------
 #Build shared libraries for monteverdi
 #By default, import the option from the OTB configuration
 set(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED_LIBS})
@@ -120,16 +115,12 @@ set(Monteverdi2_INCLUDE_DIRS
 include_directories(${Monteverdi2_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
 
 #----------------------------------------------------------------------------
-# Installation vars:
-#
+# Installation directories:
 # Monteverdi2_INSTALL_BIN_DIR          - binary dir (executables)
 # Monteverdi2_INSTALL_LIB_DIR          - library dir (libs)
 # Monteverdi2_INSTALL_DATA_DIR         - share dir (say, examples, data, etc)
 # Monteverdi2_INSTALL_INCLUDE_DIR      - include dir (headers)
 # Monteverdi2_INSTALL_PACKAGE_DIR      - package/export configuration files
-# Monteverdi2_INSTALL_NO_DEVELOPMENT   - do not install development files
-# Monteverdi2_INSTALL_NO_RUNTIME       - do not install runtime files
-# Monteverdi2_INSTALL_NO_DOCUMENTATION - do not install documentation files
 
 if(NOT Monteverdi2_INSTALL_BIN_DIR)
   set(Monteverdi2_INSTALL_BIN_DIR "bin")
@@ -152,26 +143,16 @@ if(NOT Monteverdi2_INSTALL_PACKAGE_DIR)
 endif(NOT Monteverdi2_INSTALL_PACKAGE_DIR)
 
 #----------------------------------------------------------------------------
-# Make sure the user does not try to install on top of the build tree.
-if(WIN32 OR APPLE OR UNIX)
-  string(TOLOWER "${CMAKE_INSTALL_PREFIX}" _PREFIX)
-  string(TOLOWER "${Monteverdi2_BINARY_DIR}" _BUILD)
-else(WIN32 OR APPLE OR UNIX)
-  set(_PREFIX "${CMAKE_INSTALL_PREFIX}")
-  set(_BUILD "${Monteverdi2_BINARY_DIR}")
-endif(WIN32 OR APPLE OR UNIX)
-if("${_PREFIX}" STREQUAL "${_BUILD}")
-  message(FATAL_ERROR
-    "The current CMAKE_INSTALL_PREFIX points at the build tree:\n"
-    "  ${CMAKE_INSTALL_PREFIX}\n"
-    "This is not supported."
-    )
-endif("${_PREFIX}" STREQUAL "${_BUILD}")
+include( PreventInSourceBuilds )
+include( PreventInstallOnBuildTree )
 
 #----------------------------------------------------------------------------
-# Code location
-add_subdirectory( Code )
-add_subdirectory( i18n )
+# Configure files with settings for use by the build.
+set( Monteverdi2_CONFIGURE_FILE "ConfigureMonteverdi2.h" )
+configure_file(
+  ${Monteverdi2_SOURCE_DIR}/${Monteverdi2_CONFIGURE_FILE}.in
+  ${Monteverdi2_BINARY_DIR}/${Monteverdi2_CONFIGURE_FILE}
+)
 
 #----------------------------------------------------------------------------
 # Include the Packaging subdir after every other dir
@@ -179,12 +160,17 @@ add_subdirectory( i18n )
 #add_subdirectory(Packaging)
 
 #-----------------------------------------------------------------------------
-# Output directories.
-set(LIBRARY_OUTPUT_PATH ${Monteverdi2_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all libraries.")
-set(EXECUTABLE_OUTPUT_PATH ${Monteverdi2_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all executables.")
-mark_as_advanced(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
-#set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
+# Output (build) directories.
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${Monteverdi2_BINARY_DIR}/bin )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${Monteverdi2_BINARY_DIR}/lib )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${Monteverdi2_BINARY_DIR}/lib )
 
+#----------------------------------------------------------------------------
+# Code location
+add_subdirectory( Code )
+add_subdirectory( i18n )
+
+#----------------------------------------------------------------------------
 # Enable / Disable testing
 #option(BUILD_TESTING  "Build testing." OFF)
 
@@ -200,20 +186,18 @@ mark_as_advanced(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 
 #----------------------------------------------------------------------------
 # Generate Monteverdi2Config.cmake
-
 # Save library dependencies.
-set(Monteverdi2_LIBRARY_DEPENDS_FILE ${Monteverdi2_BINARY_DIR}/Monteverdi2LibraryDepends.cmake)
-export_library_dependencies(${Monteverdi2_LIBRARY_DEPENDS_FILE})
+# set(Monteverdi2_LIBRARY_DEPENDS_FILE ${Monteverdi2_BINARY_DIR}/Monteverdi2LibraryDepends.cmake)
+# export_library_dependencies(${Monteverdi2_LIBRARY_DEPENDS_FILE})
 
-# Library directory.
-set(Monteverdi2_LIBRARY_DIRS ${OTB_LIBRARY_DIRS} ${LIBRARY_OUTPUT_PATH})
-
-#set(Monteverdi2_USE_FILE ${Monteverdi2_BINARY_DIR}/UseMonteverdi2.cmake)
-#configure_file(${Monteverdi2_SOURCE_DIR}/Monteverdi2Config.cmake.in
-#               ${Monteverdi2_BINARY_DIR}/Monteverdi2Config.cmake @ONLY IMMEDIATE)
-#configure_file(${Monteverdi2_SOURCE_DIR}/UseMonteverdi2.cmake.in
-#               ${Monteverdi2_USE_FILE} @ONLY IMMEDIATE)
+# # Library directory.
+# set(Monteverdi2_LIBRARY_DIRS ${OTB_LIBRARY_DIRS} ${LIBRARY_OUTPUT_PATH})
+# set(Monteverdi2_USE_FILE ${Monteverdi2_BINARY_DIR}/UseMonteverdi2.cmake)
+# configure_file(${Monteverdi2_SOURCE_DIR}/Monteverdi2Config.cmake.in
+#                ${Monteverdi2_BINARY_DIR}/Monteverdi2Config.cmake @ONLY IMMEDIATE)
+# configure_file(${Monteverdi2_SOURCE_DIR}/UseMonteverdi2.cmake.in
+#                ${Monteverdi2_USE_FILE} @ONLY IMMEDIATE)
 
 #----------------------------------------------------------------------------
 # Setup valgrind option (default hard coded value is ctest is invalid).
-#set(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
+# set(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
