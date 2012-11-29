@@ -63,7 +63,6 @@ InputImageParameter::SetFromFileName(const std::string& filename)
     std::map<std::string, std::string> opsMap;
 
     boost::split(main, filename, boost::is_any_of("?"), boost::token_compress_on);
-    std::cout << "main.size: " << main.size() << std::endl;
     if (main.size()>1)
       {
       boost::split(ops, main[1], boost::is_any_of("&"), boost::token_compress_on);
@@ -164,7 +163,6 @@ InputImageParameter::GetImage()
       std::map<std::string, std::string> opsMap;
 
       boost::split(main, m_FileName, boost::is_any_of("?"), boost::token_compress_on);
-      std::cout << "main.size: " << main.size() << std::endl;
       if (main.size()>1)
         {
         boost::split(ops, main[1], boost::is_any_of("&"), boost::token_compress_on);
