@@ -48,7 +48,8 @@ namespace mvd
 /*******************************************************************************/
 Application
 ::Application( int& argc, char** argv ) :
-  QApplication( argc, argv )
+  QApplication( argc, argv ),
+  m_IsRunningFromBuildDir( false )
 {
   InitializeCore();
 
@@ -109,12 +110,6 @@ Application::InitializeDataDir()
 void
 Application::InitializeLocale()
 {
-  /*
-  qDebug() << "UI languages: " << QLocale::system().uiLanguages();
-  qDebug() << "System: " << QLocale::system();
-  qDebug() << "en_US: " << QLocale( QLocale::English, QLocale::UnitedStates );
-  */
-
   //
   // 1. default UI language is en-US (no translation).
   QLocale sys_lc( QLocale::system() );
@@ -129,16 +124,14 @@ Application::InitializeLocale()
   //
   // 2. Choose i18n path between build dir and install dir.
   QDir i18n_dir;
-
   QDir bin_dir( QDir::cleanPath( QCoreApplication::applicationDirPath() ) );
-  qDebug() << "Binary dir: " << bin_dir;
   QDir build_i18n_dir( bin_dir );
 
   // If build dir is identified...
   if( build_i18n_dir.cd( "../i18n" ) &&
       build_i18n_dir.exists( "../" Monteverdi2_CONFIGURE_FILE ) )
     {
-    qDebug() << "Build I18N dir: " << build_i18n_dir;
+    m_IsRunningFromBuildDir = true;
 
     // ...use build dir as prioritary load path for translation.
     i18n_dir = build_i18n_dir;
@@ -150,9 +143,9 @@ Application::InitializeLocale()
   // Otherwise...
   else
     {
-    QDir install_i18n_dir( QDir::cleanPath( Monteverdi2_INSTALL_DATA_I18N_DIR ) );
-    qDebug() << "Install data dir: " << install_i18n_dir;
+    m_IsRunningFromBuildDir = false;
 
+    QDir install_i18n_dir( QDir::cleanPath( Monteverdi2_INSTALL_DATA_I18N_DIR ) );
     // ...if install data dir is identified
     if( install_i18n_dir.exists() )
       {
@@ -189,7 +182,6 @@ Application::InitializeLocale()
   //
   // 4. Load QTranslator.
   QString lc_filename( i18n_dir.filePath( lc_name ) );
-  qDebug() << "Filename: " << lc_name;
   // (a) No need to new QTranslator() here nor delete in destructor...
   QTranslator lc_translator;
   if( !lc_translator.load( lc_name, i18n_dir.path() ) )

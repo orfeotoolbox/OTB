@@ -83,12 +83,16 @@ private:
    */
   void InitializeLocale();
 
+  /**
+   */
+  bool m_IsRunningFromBuildDir;
+
 //
 // SLOTS
 private slots:
-/**
- *
- */
+  /**
+   *
+   */
   void OnAboutToQuit();
 };
 
