@@ -61,6 +61,15 @@ public:
   /** The pixel type of the output image. */
   //typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
 
+  /** The reading option structure. */
+  struct readerOptions
+  {
+      std::string  fileName;
+      std::string  extGEOMFileName;
+      unsigned int subDatasetIndex;
+      unsigned int resolutionFactor;
+  };
+
   /** Prepare image allocation at the first call of the pipeline processing */
   virtual void GenerateOutputInformation(void);
 
@@ -74,26 +83,16 @@ public:
    * enlarge the RequestedRegion to the size of the image on disk. */
   virtual void EnlargeOutputRequestedRegion(itk::DataObject *output);
 
-  /** Set/Get the additional index to extract (starting at 0)
-   * used
-   * in the case of image file containing multiple datasets (Modis hdf files for example)
-   * or
-   * in the case of JPEG2000 image file containing multiple resolution
-   * */
-  itkSetMacro(AdditionalNumber, unsigned int);
-  itkGetMacro(AdditionalNumber, unsigned int);
-
   itkSetObjectMacro(Curl, CurlHelperInterface);
 
-  itkSetMacro(ExtGEOMFilename, std::string);
-  itkGetMacro(ExtGEOMFilename, std::string);
+  virtual void SetFileName(const char* extendedFileName);
+  virtual void SetFileName(std::string extendedFileName);
+  virtual const char* GetFileName () const;
 
 protected:
   ImageFileReader();
   virtual ~ImageFileReader();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  unsigned int m_AdditionalNumber;
 
 private:
   /** Test whether the given filename exist and it is readable,
@@ -111,8 +110,11 @@ private:
   ImageFileReader(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  std::string m_ExceptionMessage;
-  std::string m_ExtGEOMFilename;
+  std::string   m_ExceptionMessage;
+
+  std::string   m_ExtendedFilename;
+  readerOptions m_Options;
+
   CurlHelperInterface::Pointer m_Curl;
 };
 

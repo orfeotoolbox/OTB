@@ -35,6 +35,8 @@
 #include "otbTileMapImageIO.h" //FIXME avoid requiring TileMapImageIO here
 #include "otbCurlHelper.h"
 
+#include <boost/algorithm/string.hpp>
+
 namespace otb
 {
 
@@ -51,9 +53,15 @@ bool PixelIsComplex(const T& /*dummy*/)
 
 template <class TOutputImage>
 ImageFileReader<TOutputImage>
-::ImageFileReader() : itk::ImageFileReader<TOutputImage>(), m_AdditionalNumber(0)
+::ImageFileReader() : itk::ImageFileReader<TOutputImage>()
 {
   m_Curl = CurlHelper::New();
+
+  // Reader options
+  m_Options.fileName  = "";
+  m_Options.extGEOMFileName  = "";
+  m_Options.subDatasetIndex  = 0;
+  m_Options.resolutionFactor  = 0;
 }
 
 template <class TOutputImage>
@@ -299,14 +307,14 @@ ImageFileReader<TOutputImage>
       imageIO->SetIsVectorImage(false);
 
     // Pass the dataset number (used for hdf files for example)
-    imageIO->SetDatasetNumber(m_AdditionalNumber);
+    imageIO->SetDatasetNumber(m_Options.subDatasetIndex);
     }
 
   // Special actions for the JPEG2000ImageIO
   if( strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0 )
     {
     itk::EncapsulateMetaData<unsigned int>(dict,
-                                           MetaDataKey::ResolutionFactor, m_AdditionalNumber);
+                                           MetaDataKey::ResolutionFactor, m_Options.resolutionFactor);
     itk::EncapsulateMetaData<unsigned int>(dict,
                                            MetaDataKey::CacheSizeInBytes, 135000000);
     }
@@ -376,14 +384,14 @@ ImageFileReader<TOutputImage>
 
   // Update otb Keywordlist
   ImageKeywordlist otb_kwl;
-  if (m_ExtGEOMFilename == "")
+  if (m_Options.extGEOMFileName == "")
     {
     otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist);
     otbMsgDevMacro(<< "Loading internal kwl");
     }
   else
     {
-    otb_kwl = ReadGeometryFromGEOMFile(m_ExtGEOMFilename);
+    otb_kwl = ReadGeometryFromGEOMFile(m_Options.extGEOMFileName);
     otbMsgDevMacro(<< "Loading external kwl");
     }
 
@@ -480,19 +488,6 @@ ImageFileReader<TOutputImage>
     return;
     }
 
-  // Test if we have a file with an additional information specified
-  // (used for hdf dataset or jpeg2000 resolution)
-  std::string realfile(this->m_FileName);
-  unsigned int addNum;
-  if (System::ParseFileNameForAdditonalInfo(this->m_FileName, realfile, addNum))
-    {
-    otbMsgDevMacro(<< "Filename with additinal information specification detected");
-    otbMsgDevMacro(<< " - " << realfile);
-    otbMsgDevMacro(<< " - " << addNum);
-    this->m_FileName = realfile;
-    m_AdditionalNumber = addNum;
-    }
-
   // Test if the file exists.
   if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
     {
@@ -587,6 +582,59 @@ ImageFileReader<TOutputImage>
   otbMsgDevMacro(<< "lFileNameGdal : " << GdalFileName.c_str());
   otbMsgDevMacro(<< "fic_trouve : " << fic_trouve);
   return (fic_trouve);
+}
+
+template <class TOutputImage>
+void
+ImageFileReader<TOutputImage>
+::SetFileName(std::string extendedFileName)
+{
+  this->SetFileName(extendedFileName.c_str());
+}
+
+template <class TOutputImage>
+void
+ImageFileReader<TOutputImage>
+::SetFileName(const char* extendedFileName)
+{
+  this->m_ExtendedFilename = extendedFileName;
+  std::vector<std::string> main;
+  std::vector<std::string> ops;
+  std::map< std::string, std::string > map;
+
+  // Retrieve file name
+  boost::split(main, m_ExtendedFilename, boost::is_any_of("?"), boost::token_compress_on);
+
+  // Retrieve options
+  if (main.size()>1)
+    {
+    boost::split(ops, main[1], boost::is_any_of("&"), boost::token_compress_on);
+
+    for (unsigned int i=0; i<ops.size(); i++)
+      {
+      std::vector<std::string> tmp;
+      boost::split(tmp, ops[i], boost::is_any_of("="), boost::token_compress_on);
+      if (tmp.size()>1)
+        {
+        map[tmp[0]]=tmp[1];
+        }
+      }
+    }
+
+  m_Options.fileName = main[0];
+  m_Options.extGEOMFileName = map["geom"];
+  m_Options.subDatasetIndex = atoi(map["sdataidx"].c_str());
+  m_Options.resolutionFactor = atoi(map["resol"].c_str());
+
+  this->m_FileName = m_Options.fileName;
+}
+
+template <class TOutputImage>
+const char*
+ImageFileReader<TOutputImage>
+::GetFileName () const
+{
+return this->m_ExtendedFilename.c_str();
 }
 
 } //namespace otb
