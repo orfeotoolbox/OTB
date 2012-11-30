@@ -2108,42 +2108,40 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # --------------------------------------------------------------------------------
 # New test suite:
 
-# Tests to check if we can open JPEG2000 files using a otb::VectorImage and IFReader->SetAdditionalNumber() function.
+# Tests to check if we can open JPEG2000 files specifying the resolution factor.
 # no access to data only PrintSelf() method.
 ADD_TEST(ioTvMultiResolutionReading0 ${IO_TESTS13}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
                              ${TEMP}/ioTvMultiResolutionReading0.txt
       otbVectorImageTest
-      ${INPUTDATA}/bretagne.j2k
+      ${INPUTDATA}/bretagne.j2k?&resol=0
       ${TEMP}/ioTvMultiResolutionReading0.txt
-      0
       )
 ADD_TEST(ioTvMultiResolutionReading3 ${IO_TESTS13}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
                              ${TEMP}/ioTvMultiResolutionReading3.txt
       otbVectorImageTest
-      ${INPUTDATA}/bretagne.j2k
+      ${INPUTDATA}/bretagne.j2k?&resol=3
       ${TEMP}/ioTvMultiResolutionReading3.txt
-      3
       )
-
+### The following syntax is no longer supported ###
 # Tests to check if we can open JPEG2000 files using a otb::VectorImage
 # and filename:ResolutionFactor syntax.
 # no access to data only PrintSelf() method.
-ADD_TEST(ioTvMultiResolutionReadingInName0 ${IO_TESTS13}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
-                            ${TEMP}/ioTvMultiResolutionReadingInName0.txt
-      otbVectorImageTest
-      ${INPUTDATA}/bretagne.j2k:0
-      ${TEMP}/ioTvMultiResolutionReadingInName0.txt
-      )
-ADD_TEST(ioTvMultiResolutionReadingInName3 ${IO_TESTS13}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
-                            ${TEMP}/ioTvMultiResolutionReadingInName3.txt
-      otbVectorImageTest
-      ${INPUTDATA}/bretagne.j2k:3
-      ${TEMP}/ioTvMultiResolutionReadingInName3.txt
-      )
+#ADD_TEST(ioTvMultiResolutionReadingInName0 ${IO_TESTS13}
+#  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
+#                            ${TEMP}/ioTvMultiResolutionReadingInName0.txt
+#      otbVectorImageTest
+#      ${INPUTDATA}/bretagne.j2k:0
+#      ${TEMP}/ioTvMultiResolutionReadingInName0.txt
+#      )
+#ADD_TEST(ioTvMultiResolutionReadingInName3 ${IO_TESTS13}
+#  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
+#                            ${TEMP}/ioTvMultiResolutionReadingInName3.txt
+#      otbVectorImageTest
+#      ${INPUTDATA}/bretagne.j2k:3
+#      ${TEMP}/ioTvMultiResolutionReadingInName3.txt
+#      )
 
 # Test to check behavior of function JPEG2000reader->GetResolutionInfo()
 # which return info about resolution available in the JPEG2000 file.
@@ -2173,7 +2171,7 @@ ADD_TEST(ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res0 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_p1_06.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_OUT.tif
          otbMultiChannelExtractROI
-            ${INPUTDATA}/jpeg2000_conf_p1_06.j2k:0
+            ${INPUTDATA}/jpeg2000_conf_p1_06.j2k?&resol=0
             ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_OUT.tif
             )
 
@@ -2183,7 +2181,7 @@ ADD_TEST(ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res4 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4_OUT.tif
          otbMultiChannelExtractROI
-            ${INPUTDATA}/jpeg2000_conf_p1_06.j2k:4
+            ${INPUTDATA}/jpeg2000_conf_p1_06.j2k?&resol=4
             ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4_OUT.tif
             )
 
@@ -2193,7 +2191,7 @@ ADD_TEST(ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res0 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
          otbMultiChannelExtractROI
-            ${INPUTDATA}/lena512color.jp2:0
+            ${INPUTDATA}/lena512color.jp2?&resol=0
             ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
             -startX 150 -startY 75 -sizeX 100 -sizeY 50 )
 
@@ -2203,7 +2201,7 @@ ADD_TEST(ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res5 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_res5.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res5_OUT.tif
          otbMultiChannelExtractROI
-            ${INPUTDATA}/lena512color.jp2:5
+            ${INPUTDATA}/lena512color.jp2?&resol=5
             ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res5_OUT.tif
             )
 
@@ -2213,7 +2211,7 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res0_1 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40_OUT.tif
          otbMultiChannelExtractROI
-            ${INPUTDATA}/bretagne.j2k:0
+            ${INPUTDATA}/bretagne.j2k?&resol=0
             ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40_OUT.tif
             -startX 700 -startY 1000 -sizeX 50 -sizeY 40 )
 
@@ -2222,7 +2220,7 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res0_2 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20_OUT.tif
          otbMultiChannelExtractROI
-            ${INPUTDATA}/bretagne.j2k:0
+            ${INPUTDATA}/bretagne.j2k?&resol=0
             ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20_OUT.tif
             -startX 1260 -startY 950 -sizeX 40 -sizeY 20 )
 
@@ -2231,7 +2229,7 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_OUT.tif
          otbMultiChannelExtractROI
-            ${INPUTDATA}/bretagne.j2k:3
+            ${INPUTDATA}/bretagne.j2k?&resol=3
             ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_OUT.tif )
 
 # Read area inside one tile at resolution 3
@@ -2239,7 +2237,7 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3_1 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30_OUT.tif
          otbMultiChannelExtractROI
-           ${INPUTDATA}/bretagne.j2k:3
+           ${INPUTDATA}/bretagne.j2k?&resol=3
            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30_OUT.tif
            -startX 90 -startY 70 -sizeX 20 -sizeY 30 )
 
@@ -2248,7 +2246,7 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3_2 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60_OUT.tif
          otbMultiChannelExtractROI
-           ${INPUTDATA}/bretagne.j2k:3
+           ${INPUTDATA}/bretagne.j2k?&resol=3
            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60_OUT.tif
            -startX 40 -startY 30 -sizeX 80 -sizeY 60 )
 
@@ -2257,7 +2255,7 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res5 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif
          otbMultiChannelExtractROI
-           ${INPUTDATA}/bretagne.j2k:5
+           ${INPUTDATA}/bretagne.j2k?&resol=5
            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif )
 
 # --------------------------------------------------------------------------------
@@ -2343,9 +2341,8 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
              --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
                                        ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
              otbVectorImageTest
-                ${current_file}
+                ${current_file}?&resol=0
                 ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
-                0
              )
 
   IF (NOT PHR_TIFF_FILE)
@@ -2354,9 +2351,8 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
              --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
                                        ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
              otbVectorImageTest
-                ${current_file}
+                ${current_file}?&resol=5
                 ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
-                5
              )
   ENDIF (NOT PHR_TIFF_FILE)
             
@@ -3327,41 +3323,40 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
 IF(CHECK_GDAL_BUILT_WITH_HDF)
 
 IF(CHECK_HDF4OPEN_SYMBOL)
-# Tests to check if we can open hdf files using a otb::VectorImage and IFReader->SetDatasetNumber() function.
+# Tests to check if we can open hdf files using a otb::VectorImage specifying the sub-dataset index.
 # no access to data only PrintSelf() method.
 ADD_TEST(ioTvMultiDatasetReading1 ${IO_TESTS22}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
                              ${TEMP}/ioTvMultiDatasetReading1.txt
       otbVectorImageTest
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=0
       ${TEMP}/ioTvMultiDatasetReading1.txt
-      0
       )
 ADD_TEST(ioTvMultiDatasetReading2 ${IO_TESTS22}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
                              ${TEMP}/ioTvMultiDatasetReading2.txt
       otbVectorImageTest
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
       ${TEMP}/ioTvMultiDatasetReading2.txt
-      5
       )
-
+      
+### The following syntax is no longer supported ###
 # Tests to check if we can open hdf files using a otb::VectorImage and filename:NumSubDataset syntax.
 # no access to data only PrintSelf() method.
-ADD_TEST(ioTvMultiDatasetReadingInName1 ${IO_TESTS22}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
-                             ${TEMP}/ioTvMultiDatasetReadingInName1.txt
-      otbVectorImageTest
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:0
-      ${TEMP}/ioTvMultiDatasetReadingInName1.txt
-      )
-ADD_TEST(ioTvMultiDatasetReadingInName2 ${IO_TESTS22}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
-                             ${TEMP}/ioTvMultiDatasetReadingInName2.txt
-      otbVectorImageTest
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
-      ${TEMP}/ioTvMultiDatasetReadingInName2.txt
-      )
+#ADD_TEST(ioTvMultiDatasetReadingInName1 ${IO_TESTS22}
+#  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
+#                             ${TEMP}/ioTvMultiDatasetReadingInName1.txt
+#      otbVectorImageTest
+#      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:0
+#      ${TEMP}/ioTvMultiDatasetReadingInName1.txt
+#      )
+#ADD_TEST(ioTvMultiDatasetReadingInName2 ${IO_TESTS22}
+#  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
+#                             ${TEMP}/ioTvMultiDatasetReadingInName2.txt
+#      otbVectorImageTest
+#      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
+#      ${TEMP}/ioTvMultiDatasetReadingInName2.txt
+#      )
 
 # Test to check behavior of function readerGDAL->GetSubDatasetInfo() which return info about subdataset.
 ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS22}
@@ -3377,7 +3372,7 @@ ADD_TEST(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
                      ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
          otbMultiChannelExtractROI
-         ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
+         ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
          ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
          -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
          -channels 1 )
@@ -3387,7 +3382,7 @@ ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1.tif
                      ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
          otbMultiChannelExtractROI
-         ${INPUTDATA}/GSSTF_NCEP.2b.2008.12.31.he5:3
+         ${INPUTDATA}/GSSTF_NCEP.2b.2008.12.31.he5?&sdataidx=3
          ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
          -startX 100 -startY 20 -sizeX 200 -sizeY 100
          -channels 1 )
@@ -3726,16 +3721,15 @@ ADD_TEST(raTuWavelengthSpectralBandsNew ${IO_TESTS23}
 
 ENDFOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
 
-ADD_TEST(ioTvImageFileReaderWithExternalGEOMFile ${IO_TESTS1}
+ADD_TEST(ioTvImageFileReaderWithExtendedFileName_GEOM ${IO_TESTS1}
 --compare-ascii ${NOTOL}
          ${BASELINE}/ioImageFileReaderWithExternalGEOMFile.txt
          ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
-	otbImageFileReaderWithExternalGEOMFile
-        ${INPUTDATA}/ToulouseExtract_WithGeom.tif
-        ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
+	otbImageFileReaderWithExtendedFilename
+        ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
         ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
         )
-
+        
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx

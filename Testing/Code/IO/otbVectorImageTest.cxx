@@ -38,11 +38,6 @@ int otbVectorImageLegacyTest(int argc, char* argv[])
 
   const char * inputFilename  = argv[1];
   const char * outputAsciiFilename  = argv[2];
-  int addNumber = -1;
-  if (argc > 3)
-    {
-    addNumber = atoi(argv[3]);
-    }
 
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
@@ -52,10 +47,6 @@ int otbVectorImageLegacyTest(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName(inputFilename);
-  if (addNumber != -1)
-    {
-    reader->SetAdditionalNumber(addNumber);
-    }
   reader->UpdateOutputInformation();
 
   InputImageType::Pointer image = InputImageType::New();
@@ -136,16 +127,11 @@ int otbVectorImageTest(int argc, char* argv[])
 {
   if (argc < 3)
     {
-    std::cout << argv[0] << "<image> <output information> [dataset number]" << std::endl;
+    std::cout << argv[0] << "<image> <output information>" << std::endl;
     return EXIT_FAILURE;
     }
   const char * inputFilename  = argv[1];
   const char * outputAsciiFilename  = argv[2];
-  int addNumber = -1;
-  if (argc > 3)
-    {
-    addNumber = atoi(argv[3]);
-    }
 
   typedef double PixelType;
   const unsigned int Dimension = 2;
@@ -155,10 +141,6 @@ int otbVectorImageTest(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName(inputFilename);
-  if (addNumber != -1)
-    {
-    reader->SetAdditionalNumber(addNumber);
-    }
   reader->UpdateOutputInformation();
 
   std::ofstream file;
