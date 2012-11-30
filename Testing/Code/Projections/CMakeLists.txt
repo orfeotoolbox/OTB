@@ -930,11 +930,11 @@ otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
 ${LARGEINPUT}/PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF
 ${INPUTDATA}/DEM/srtm_directory/
 ${INPUTDATA}/DEM/egm96.grd
-27760 25888 # IGN reference point based inside CNES (site 31555A point c)
+6933 6472 # IGN reference point based inside CNES (site 31555A point c)
 1.48353 43.55968 # IGN reference point lon/lat
 192.205 # IGN reference point elevation (prec < 10 cm)
-1 # Tolerance in pixels according to values found in RPC-DIMAPv2 file (ERR_BIAS_ROW and ERR_BIAS_COL)
-1 # Tolerance in meters according to values found in RPC-DIMAPv2 file (ERR_BIAS_X and ERR_BIAS_Y)
+35 # Tolerance in pixels (performances in february 2012)
+20 # Tolerance in meters (performances in february 2012)
 )
 
 # TODO MSD need to update the tolerance values and used a real pleiades file
@@ -946,8 +946,8 @@ ${INPUTDATA}/DEM/egm96.grd
 20000 28010 # IGN reference point based inside CNES (site 31555A point c)
 1.48353 43.55968 # IGN reference point lon/lat
 192.205 # IGN reference point elevation (prec < 10 cm)
-1 # Tolerance in pixels according to values found in RPC-DIMAPv2 file (ERR_BIAS_ROW and ERR_BIAS_COL)
-1 # Tolerance in meters according to values found in RPC-DIMAPv2 file (ERR_BIAS_X and ERR_BIAS_Y)
+37 # Tolerance in pixels (performances in february 2012)
+20 # Tolerance in meters (performances in february 2012)
 )
 
 
