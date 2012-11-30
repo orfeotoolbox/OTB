@@ -251,12 +251,17 @@ ViewerModel
   if( isJPEG2000 )
     {
     ReaderPointerType jpeg2000QLReader = ReaderType::New();
-    jpeg2000QLReader->SetFileName(filename);
     unsigned int resSize = this->GetJPEG2000Resolution( filename ).size();
 
     if( resSize > 0 )
-      jpeg2000QLReader->SetAdditionalNumber( resSize-1 );
-    
+      {
+      std::string qlFname = filename + "?&resol=resSize-1";
+      jpeg2000QLReader->SetFileName(qlFname);
+      }
+    else
+      {
+      jpeg2000QLReader->SetFileName(filename);
+      }
     jpeg2000QLReader->Update();
     quicklook= jpeg2000QLReader->GetOutput();
     quicklook->DisconnectPipeline();
