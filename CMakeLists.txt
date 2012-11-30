@@ -168,6 +168,7 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${Monteverdi2_BINARY_DIR}/lib )
 #----------------------------------------------------------------------------
 # Code location
 add_subdirectory( Code )
+# i18n directory must be added after all source files (see add_qt1_i18n_sources).
 add_subdirectory( i18n )
 
 #----------------------------------------------------------------------------
