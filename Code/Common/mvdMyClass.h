@@ -51,20 +51,38 @@ class MyClass :
 {
   Q_OBJECT;
 
+//
+// Public methods.
 public:
 
-/** Constructor */
+  /** Constructor */
   MyClass();
 
-/** Destructor */
+  /** Destructor */
   virtual ~MyClass();
 
+//
+// SIGNALS.
 signals:
 
+//
+// Protected methods.
 protected:
 
+//
+// Protected attributes.
+protected:
+
+//
+// Private methods.
 private:
 
+
+//
+// Private attributes.
+
+//
+// SLOTS.
 private slots:
 };
 

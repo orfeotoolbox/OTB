@@ -67,16 +67,6 @@ Application
 {
 }
 
-/*
-bool
-Application::Initialize()
-{
-  InitializeLocale();
-
-  return true;
-}
-*/
-
 /*******************************************************************************/
 void
 Application::InitializeCore()

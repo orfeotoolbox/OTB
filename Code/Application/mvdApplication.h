@@ -48,28 +48,25 @@ class Application
   Q_OBJECT;
 
 //
-//
+// Public methods.
 public:
 
-/** Constructor */
+  /** Constructor */
   Application( int& argc, char** argv );
 
-/** Destructor */
+  /** Destructor */
   virtual ~Application();
 
-/**
- */
-  // bool Initialize();
-
-
+//
+// SIGNALS.
 signals:
 
 //
-//
+// Protected methods.
 protected:
 
 //
-//
+// Private methods.
 private:
   /**
    */
@@ -83,6 +80,9 @@ private:
    */
   void InitializeLocale();
 
+//
+// Private attributes.
+private:
   /**
    */
   bool m_IsRunningFromBuildDir;
