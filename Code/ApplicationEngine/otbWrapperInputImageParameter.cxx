@@ -57,30 +57,8 @@ InputImageParameter::SetFromFileName(const std::string& filename)
   // myfile.tif:2 for example, or myfile.tif:nocarto
   if (!filename.empty())
     {
-    // Smart Filename Handling
-    std::vector<std::string> main;
-    std::vector<std::string> ops;
-    std::map<std::string, std::string> opsMap;
-
-    boost::split(main, filename, boost::is_any_of("?"), boost::token_compress_on);
-    if (main.size()>1)
-      {
-      boost::split(ops, main[1], boost::is_any_of("&"), boost::token_compress_on);
-      }
-
-    for (unsigned int i=0; i<ops.size(); i++)
-      {
-      std::vector<std::string> tmp;
-      boost::split(tmp, ops[i], boost::is_any_of("="), boost::token_compress_on);
-      opsMap[tmp[0]]=tmp[1];
-      }
-
     FloatVectorReaderType::Pointer reader = FloatVectorReaderType::New();
-    reader->SetFileName(main[0]);
-    reader->SetExtGEOMFilename(opsMap["geom"]);
-
-    otbMsgDevMacro(<< "Filename: " << main[0]);
-    otbMsgDevMacro(<< "Geom File: " << opsMap["geom"]);
+    reader->SetFileName(filename);
 
     try
       {
@@ -156,30 +134,7 @@ InputImageParameter::GetImage()
       m_PreviousFileName = m_FileName;
       typedef otb::ImageFileReader<TOutputImage> ReaderType;
       typename ReaderType::Pointer reader = ReaderType::New();
-
-      // Smart Filename Handling
-      std::vector<std::string> main;
-      std::vector<std::string> ops;
-      std::map<std::string, std::string> opsMap;
-
-      boost::split(main, m_FileName, boost::is_any_of("?"), boost::token_compress_on);
-      if (main.size()>1)
-        {
-        boost::split(ops, main[1], boost::is_any_of("&"), boost::token_compress_on);
-        }
-
-      for (unsigned int i=0; i<ops.size(); i++)
-        {
-        std::vector<std::string> tmp;
-        boost::split(tmp, ops[i], boost::is_any_of("="), boost::token_compress_on);
-        opsMap[tmp[0]]=tmp[1];
-        }
-
-      reader->SetFileName(main[0]);
-      reader->SetExtGEOMFilename(opsMap["geom"]);
-
-      otbMsgDevMacro(<< "Filename: " << main[0]);
-      otbMsgDevMacro(<< "Geom File: " << opsMap["geom"]);
+      reader->SetFileName(m_FileName);
 
       try
         {
