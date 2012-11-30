@@ -14,7 +14,7 @@ option( MERGE_TS "Create/merge .ts source translation files. WARNING: 'make clea
 # Sources to translate.
 if( MERGE_TS )
   #message( "Merging I18N sources/translations." )
-  message( "I18N sources: '${Monteverdi2_I18N_SOURCE_FILES}'" )
+  #message( "I18N sources: '${Monteverdi2_I18N_SOURCE_FILES}'" )
   #message( "I18N translations: '${Monteverdi2_TS_TRANSLATIONS}'" )
   qt4_create_translation( Monteverdi2_QM_TRANSLATIONS
     ${Monteverdi2_I18N_SOURCE_FILES}

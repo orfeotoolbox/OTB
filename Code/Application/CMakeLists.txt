@@ -19,8 +19,8 @@ add_to_qt4_i18n_sources(
   ${Application_SOURCES}
   ${Application_HEADERS}
   ${Application_FORMS}
-  ${Application_HEADERS_MOC}
-  ${Application_FORMS_HEADERS}
+  #${Application_HEADERS_MOC}
+  #${Application_FORMS_HEADERS}
 )
 
 #############################################################################
