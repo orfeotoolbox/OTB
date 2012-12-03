@@ -108,9 +108,12 @@ Application
   // 1. default UI language is en-US (no translation).
   QLocale sys_lc( QLocale::system() );
   QLocale en_US_lc( QLocale::English, QLocale::UnitedStates );
-  if( sys_lc.language()==en_US_lc.language() &&
-      sys_lc.country()==en_US_lc.country() &&
-      sys_lc.script()==en_US_lc.script() )
+  if( sys_lc.language()==en_US_lc.language()
+      && sys_lc.country()==en_US_lc.country()
+#if QT_VERSION>=0x040800
+      && sys_lc.script()==en_US_lc.script()
+#endif
+  )
     {
     return;
     }
