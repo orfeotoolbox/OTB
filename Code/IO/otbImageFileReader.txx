@@ -62,6 +62,7 @@ ImageFileReader<TOutputImage>
   m_Options.extGEOMFileName  = "";
   m_Options.subDatasetIndex  = 0;
   m_Options.resolutionFactor  = 0;
+  m_Options.skipProjRef = false;
 }
 
 template <class TOutputImage>
@@ -437,6 +438,12 @@ ImageFileReader<TOutputImage>
       }
     }
 
+  // If Skip ProjectionRef is activated, remove ProjRef from dict
+  if (m_Options.skipProjRef)
+    {
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, "");
+    }
+
   //Copy MetaDataDictionary from instantiated reader to output image.
   output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
   this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
@@ -625,6 +632,10 @@ ImageFileReader<TOutputImage>
   m_Options.extGEOMFileName = map["geom"];
   m_Options.subDatasetIndex = atoi(map["sdataidx"].c_str());
   m_Options.resolutionFactor = atoi(map["resol"].c_str());
+  if (map["skippr"] == "true")
+    {
+    m_Options.skipProjRef = true;
+    }
 
   this->m_FileName = m_Options.fileName;
 }

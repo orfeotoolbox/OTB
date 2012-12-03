@@ -28,6 +28,12 @@ namespace otb
 /** \class ImageFileReader
  * \brief Resource to read an image from a file.
  *
+ * Available options for extended file name are:
+ * - &geom : to specify an external geom file
+ * - &sdataidx : sub-dataset index for composite files
+ * - &resol : resolution factor for jpeg200 files
+ * - &skippr : switch to skip the projection referentiel in ortho-ready files
+ *
  * \sa ImageSeriesReader
  * \sa ImageIOBase
  *
@@ -68,6 +74,7 @@ public:
       std::string  extGEOMFileName;
       unsigned int subDatasetIndex;
       unsigned int resolutionFactor;
+      bool         skipProjRef;
   };
 
   /** Prepare image allocation at the first call of the pipeline processing */
