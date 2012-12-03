@@ -638,6 +638,7 @@ ImageFileReader<TOutputImage>
     }
 
   this->m_FileName = m_Options.fileName;
+  this->Modified();
 }
 
 template <class TOutputImage>
