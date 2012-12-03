@@ -106,20 +106,6 @@ MainWindow
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
-MainWindow::OnTranslatorLoaded( const QString& filename )
-{
-  qDebug(
-    QString(
-      filename.isNull()
-      ? tr( ">DEBUG> Failed to load '%s' translation file." )
-      : tr( ">DEBUG> Loaded '%s' translation file." )
-    ).toLatin1().data(),
-    filename.toLatin1().data()
-  );
-}
-
-/*****************************************************************************/
-void
 MainWindow
 ::on_action_Open_activated()
 {
