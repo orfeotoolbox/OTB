@@ -26,6 +26,7 @@
 // Qt includes (sorted by alphabetic order)
 #include <QApplication>
 #include <QDir>
+#include <QLibraryInfo>
 #include <QLocale>
 #include <QMessageBox>
 #include <QTranslator>
@@ -69,7 +70,8 @@ Application
 
 /*******************************************************************************/
 void
-Application::InitializeCore()
+Application
+::InitializeCore()
 {
   //
   // Setup application tags.
@@ -92,13 +94,15 @@ Application::InitializeCore()
 
 /*******************************************************************************/
 void
-Application::InitializeDataDir()
+Application
+::InitializeDataDir()
 {
 }
 
 /*******************************************************************************/
 void
-Application::InitializeLocale()
+Application
+::InitializeLocale()
 {
   //
   // 1. default UI language is en-US (no translation).
@@ -166,20 +170,44 @@ Application::InitializeLocale()
     }
 
   //
-  // 3. Desired locale name.
-  QString lc_name( QLocale::system().name() );
+  // 3.1 Stack Qt translator.
+  Application::LoadAndInstallTranslator(
+    "qt_" + sys_lc.name(),
+    QLibraryInfo::location( QLibraryInfo::TranslationsPath  )
+  );
 
   //
-  // 4. Load QTranslator.
-  QString lc_filename( i18n_dir.filePath( lc_name ) );
-  // (a) No need to new QTranslator() here nor delete in destructor...
+  // 3.2 Stack Monteverdi2 translator as prioritary over Qt translator.
+  Application::LoadAndInstallTranslator( sys_lc.name(), i18n_dir.path() );
+
+  // TODO: Record locale translation filename(s) used in UI component (e.g.
+  // AboutDialog, Settings dialog, Information dialog etc.)
+}
+
+/*******************************************************************************/
+bool
+Application
+::LoadAndInstallTranslator(const QString& filename,
+			   const QString& directory,
+			   const QString& searchDelimiters,
+			   const QString& suffix )
+{
+  QString filename_ext(
+    filename +
+    ( suffix.isNull()
+	? ".qm"
+	: suffix )
+  );
+
+  // (a) No need to new translator() here nor delete in destructor...
   QTranslator lc_translator;
-  if( !lc_translator.load( lc_name, i18n_dir.path() ) )
+
+  if( !lc_translator.load( filename, directory, searchDelimiters, suffix ) )
     {
     QString message(
       tr( "Failed to load '%1' translation file in '%2'." )
-      .arg( lc_name )
-      .arg( i18n_dir.path() )
+      .arg( filename_ext )
+      .arg( directory )
     );
 
     // TODO: Use log system to trace error while loading locale translation file.
@@ -189,24 +217,23 @@ Application::InitializeLocale()
     // TODO: morph into better HMI design.
     QMessageBox::warning( NULL, "Warning", message );
 
-    return;
+    return false;
     }
 
   // (a) ...because of Qt private implementation and shallow-copies mecanisms.
-  installTranslator( &lc_translator );
+  QCoreApplication::installTranslator( &lc_translator );
 
   QString message(
     tr( "Successfully loaded '%1' translation file in '%2'." )
-    .arg( lc_name )
-    .arg( i18n_dir.path() )
+    .arg( filename_ext )
+    .arg( directory )
   );
 
   // TODO: Log locale translation filename used.
 
   qDebug() << message;
 
-  // TODO: Record locale translation filename used in UI component (e.g.
-  // AboutDialog, Settings dialog, Information dialog etc.)
+  return true;
 }
 
 /*******************************************************************************/

@@ -80,6 +80,13 @@ private:
    */
   void InitializeLocale();
 
+  /**
+   */
+  static bool LoadAndInstallTranslator( const QString& filename,
+					const QString& directory =QString(),
+					const QString& searchDelimiters =QString(),
+					const QString& suffix =QString() );
+
 //
 // Private attributes.
 private:
