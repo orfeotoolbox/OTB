@@ -27,4 +27,5 @@ void RegisterTests()
   REGISTER_TEST(otbPlatformPositionComputeBaselineTest);
   REGISTER_TEST(otbGeometricSarSensorModelAdapterNewTest);
   REGISTER_TEST(otbGeometricSarSensorModelAdapterTest);
+  REGISTER_TEST(otbRPCSolverAdapterTest);
 }
