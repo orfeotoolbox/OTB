@@ -5,19 +5,19 @@
     <name>MainWindow</name>
     <message>
         <source>MainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenêtre principale</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fichier</translation>
     </message>
     <message>
         <source>toolBar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Barre d&apos;outils</translation>
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Quitter</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ouvrir</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
@@ -36,27 +36,27 @@
     <name>mvd::Application</name>
     <message>
         <source>Running from build directory &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Exécution depuis le répertoire de compilation &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Running from install directory &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Exécution depuis le répertoire d&apos;installation &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Failed to access translation-files directory &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec d&apos;accès au répertoire &apos;%1&apos; contenant les fichiers de traduction.</translation>
     </message>
     <message>
         <source>Failed to load &apos;%1&apos; translation file in &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de chargement du fichier traduction &apos;%1&apos; depuis le répertoire &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>Successfully loaded &apos;%1&apos; translation file in &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de traduction &apos;%1&apos; chargé avec succès depuis le répertoire &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>&gt;DEBUG&gt; mvd::Application::OnAboutToQuit().</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -71,7 +71,7 @@
     </message>
     <message>
         <source>Open file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir fichier...</translation>
     </message>
 </context>
 </TS>
