@@ -20,6 +20,9 @@
 
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 
+#include "otbRPCSolverAdapter.h"
+#include "otbGenericRSTransform.h"
+
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 
@@ -34,8 +37,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
   m_UseDEM(false),
   m_MeanElevation(0.),
   m_DEMHandler(),
-  m_GCPsContainer(),
-  m_RpcProjection()
+  m_GCPsContainer()
 {
   // This filter does not modify the image buffer, but only its
   // metadata.Therefore, it can be run inplace to reduce memory print.
@@ -44,9 +46,6 @@ GCPsToRPCSensorModelImageFilter<TImage>
 
   // Clear the GCPs container
   this->ClearGCPs();
-
-  // Create projection
-  m_RpcProjection = RPCProjectionAdapter::New();
 
   /** Create the DEM handler */
   m_DEMHandler = DEMHandler::Instance();
@@ -119,7 +118,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
   if (m_UseDEM)
     {
     // If so, use it to get the elevation
-    double height = m_DEMHandler->GetHeightAboveMSL(groundPoint);
+    double height = m_DEMHandler->GetHeightAboveEllipsoid(groundPoint);
     // To avoid nan value
     if (height != height) height = 0;
     groundPointWithElevation[2] = height;
@@ -220,24 +219,17 @@ GCPsToRPCSensorModelImageFilter<TImage>
   this->Modified();
 }
 
-/** Transform point */
-template <class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::TransformPoint(const Point2DType sensorPoint, Point3DType& groundPoint, double height)
-{
-  double lon, lat, h;
-  m_RpcProjection->TransformPoint(sensorPoint[0], sensorPoint[1], height, lon, lat, h);
-  groundPoint[0] = lon;
-  groundPoint[1] = lat;
-  groundPoint[2] = h;
-}
-
 template <class TImage>
 void
 GCPsToRPCSensorModelImageFilter<TImage>
 ::ComputeErrors()
 {
+  typedef GenericRSTransform<double,3,3> RSTransformType;
+
+  RSTransformType::Pointer rsTransform = RSTransformType::New();
+  rsTransform->SetInputKeywordList(m_Keywordlist);
+  rsTransform->InstanciateTransform();
+
   ContinuousIndexType   idFix, idOut;
   Continuous3DIndexType idOut3D, idTrans3D;
 
@@ -257,8 +249,12 @@ GCPsToRPCSensorModelImageFilter<TImage>
     groundPoint = m_GCPsContainer[i].second;
 
     // Compute Transform
-    Point3DType groundPointTemp;
-    this->TransformPoint(sensorPoint, groundPointTemp, groundPoint[2]);
+    Point3DType groundPointTemp, sensorPointTemp;
+    sensorPointTemp[0] = sensorPoint[0];
+    sensorPointTemp[1] = sensorPoint[1];
+    sensorPointTemp[2] = groundPoint[2];
+
+    groundPointTemp = rsTransform->TransformPoint(sensorPointTemp);
 
     // Compute Euclidian distance
     idFix[0] = sensorPoint[0];
@@ -295,21 +291,23 @@ GCPsToRPCSensorModelImageFilter<TImage>
   // First, retrieve the image pointer
   typename TImage::Pointer imagePtr = this->GetOutput();
 
+  typename TImage::PointType ul = this->GetInput()->GetOrigin();
+  typename TImage::SizeType size = this->GetInput()->GetLargestPossibleRegion().GetSize();
+  typename TImage::SpacingType spacing = this->GetInput()->GetSpacing();
+
+  typename TImage::PointType lr;
+  lr[0] = ul[0] + size[0]*spacing[0];
+  lr[1] = ul[1] + size[1]*spacing[1];
+
   double rmsError;
   ImageKeywordlist otb_kwl;
-  m_RpcProjection->Solve(m_GCPsContainer, rmsError, otb_kwl);
+  otb::RPCSolverAdapter::Solve(m_GCPsContainer, ul, lr, rmsError, otb_kwl);
 
   // Retrieve the residual ground error
   m_RMSGroundError = rmsError;
 
   // Compute errors
   this->ComputeErrors();
-
-  typename TImage::PointType startId = this->GetInput()->GetOrigin();
-  typename TImage::SizeType size = this->GetInput()->GetLargestPossibleRegion().GetSize();
-
-  m_RpcProjection->AddGroundRect( otb_kwl, startId, size );
-
  
   m_Keywordlist = otb_kwl;
 

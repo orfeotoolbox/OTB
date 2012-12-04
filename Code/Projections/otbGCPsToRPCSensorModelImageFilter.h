@@ -21,7 +21,6 @@
 #include "itkCastImageFilter.h"
 #include "otbDEMHandler.h"
 
-#include "otbRPCProjectionAdapter.h"
 #include "otbImageKeywordlist.h"
 
 namespace otb {
@@ -161,9 +160,6 @@ public:
   /** Clear all GCPs */
   void ClearGCPs();
 
-  /** Transform point */
-  void TransformPoint(const Point2DType sensorPoint, Point3DType& groundPoint, double height = 0.);
-
 protected:
   /** Constructor */
   GCPsToRPCSensorModelImageFilter();
@@ -208,9 +204,6 @@ private:
 
   /** Container of GCPs */
   GCPsContainerType m_GCPsContainer;
-
-  /** RPC Projection */
-  RPCProjectionAdapter::Pointer m_RpcProjection;
 
   /** Keywordlist */
   ImageKeywordlist m_Keywordlist;
