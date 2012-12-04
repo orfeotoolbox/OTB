@@ -72,7 +72,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
   typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPsToSensorModelFilterType;
   typedef GCPsToSensorModelFilterType::Point2DType        Point2DType;
   typedef GCPsToSensorModelFilterType::Point3DType        Point3DType;
-  typedef otb::GenericRSTransform<double, 2, 2>           GenericRSTransformType;
+  typedef otb::GenericRSTransform<double,3, 3>           GenericRSTransformType;
   typedef otb::GeographicalDistance<ImageType::PointType>          GeoDistanceType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -112,12 +112,13 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
   
   GenericRSTransformType::Pointer grsTrasnform = GenericRSTransformType::New();
   grsTrasnform->SetInputKeywordList(rpcEstimator->GetKeywordlist());
+  std::cout<<rpcEstimator->GetKeywordlist()<<std::endl;
   grsTrasnform->SetOutputProjectionRef("4326");
 
   // Set the DEM Directory if any
   if(parseResult->IsOptionPresent("--DEMDirectory"))
     {
-    grsTrasnform->SetDEMDirectory(parseResult->GetParameterString("--DEMDirectory"));
+    otb::DEMHandler::Instance()->OpenDEMDirectory(parseResult->GetParameterString("--DEMDirectory"));
     }
   else
     {
@@ -132,24 +133,28 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
   
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
-    ImageType::IndexType index;
-    index[0] = parseResult->GetParameterFloat("--GroudControlPoints",     gcpId * 5);
-    index[1] = parseResult->GetParameterFloat("--GroudControlPoints", 1 + gcpId * 5);
+    Point3DType point;
+    point[0] = parseResult->GetParameterFloat("--GroudControlPoints",     gcpId * 5);
+    point[1] = parseResult->GetParameterFloat("--GroudControlPoints", 1 + gcpId * 5);
+    point[2] = parseResult->GetParameterFloat("--GroudControlPoints", 4 + gcpId * 5);
 
-    ImageType::PointType point, transformedPoint;
-    reader->GetOutput()->TransformIndexToPhysicalPoint(index, point);
+    Point3DType transformedPoint;
     transformedPoint = grsTrasnform->TransformPoint(point);
     
+    Point2DType transformedPoint2D;
+    transformedPoint2D[0] = transformedPoint[0];
+    transformedPoint2D[1] = transformedPoint[1];
+
     // reference point
-    ImageType::PointType geoPoint;
+    Point2DType geoPoint;
     geoPoint[0] = parseResult->GetParameterFloat("--GroudControlPoints", 2 + gcpId * 5);
     geoPoint[1] = parseResult->GetParameterFloat("--GroudControlPoints", 3 + gcpId * 5);
 
     // Search for nans
-    if ( vnl_math_isnan(transformedPoint[0]) || vnl_math_isnan(transformedPoint[1]) )
+    if ( vnl_math_isnan(transformedPoint2D[0]) || vnl_math_isnan(transformedPoint2D[1]) )
       {
       std::cout << "Reference : "<< geoPoint
-                <<" --> Result of the reprojection using the estimated RpcModel "<<  transformedPoint
+                <<" --> Result of the reprojection using the estimated RpcModel "<<  transformedPoint2D
                 << std::endl;
       std::cout<<"The result of the projection is nan, there is a problem with the estimated RpcModel "
                << std::endl<<std::endl;
@@ -157,12 +162,12 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
       }
     
     // Search for wrong projection results
-    double residual = geoDistance->Evaluate(geoPoint, transformedPoint);
+    double residual = geoDistance->Evaluate(geoPoint, transformedPoint2D);
     if( residual > parseResult->GetParameterFloat("--ErrorAllowed"))
       {
       std::cout << "Reference : "<< geoPoint
                 <<" --> Result of the reprojection using the estimated RpcModel "
-                << grsTrasnform->TransformPoint(point)
+                << transformedPoint2D
                 << std::endl
                 << " Residual ["<< residual << "] is higher than the tolerance ["
                 << parseResult->GetParameterFloat("--ErrorAllowed")
