@@ -16,14 +16,18 @@
 
 =========================================================================*/
 
-#ifndef __mvdMyClass_h
-#define __mvdMyClass_h
+#ifndef __mvdImageModel_h
+#define __mvdImageModel_h
 
 //
 // System includes (sorted by alphabetic order)
 
 //
 // Qt includes (sorted by alphabetic order)
+#include <QObject>
+
+//
+// ITK includes (sorted by alphabetic order)
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -32,40 +36,60 @@
 // Monteverdi includes (sorted by alphabetic order)
 
 //
-// Class pre-declaration.
+// External classes pre-declaration.
 namespace
 {
 }
 
 namespace mvd
 {
-/** \class MyClass
+//
+// Internal classes pre-declaration.
+
+/** \class ImageModel
  *
  */
-class MyClass
+class ImageModel :
+    public QObject
 {
+  Q_OBJECT;
+
 //
-//
+// Public methods.
 public:
 
-/** Constructor */
-  MyClass();
+  /** Constructor */
+  ImageModel( QObject* parent =NULL );
 
-/** Destructor */
-  virtual ~MyClass();
+  /** Destructor */
+  virtual ~ImageModel();
 
 //
+// SIGNALS.
+signals:
+
 //
+// Protected methods.
 protected:
 
 //
+// Protected attributes.
+protected:
+
 //
+// Private methods.
+private:
+
+
+//
+// Private attributes.
 private:
 
 //
-// SLOTS
+// SLOTS.
+private slots:
 };
 
 } // end namespace 'mvd'
 
-#endif // __mvdMyClass_h
+#endif // __mvdImageModel_h

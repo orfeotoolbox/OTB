@@ -25,6 +25,9 @@
 // Qt includes (sorted by alphabetic order)
 
 //
+// ITK includes (sorted by alphabetic order)
+
+//
 // OTB includes (sorted by alphabetic order)
 
 //
@@ -32,19 +35,31 @@
 
 namespace mvd
 {
+/*
+  TRANSLATOR mvd::ImageModel
 
-MyClass
-::MyClass()
+  Necessary for lupdate to be aware of C++ namespaces.
+
+  Context comment for translator.
+*/
+
+/*****************************************************************************/
+ImageModel
+::ImageModel( QObject* parent ) :
+  QObject( parent )
 {
 }
 
-MyClass
-::~MyClass()
+/*****************************************************************************/
+ImageModel
+::~ImageModel()
 {
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
+/*****************************************************************************/
+/* SLOTS                                                                     */
+/*****************************************************************************/
+
+/*****************************************************************************/
 
 } // end namespace 'mvd'
