@@ -57,7 +57,8 @@ int otbImageFileReaderWithExtendedFilename(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char * outputFilename1 = argv[2];
+  const char * outputFilename2 = argv[3];
 
   typedef float InputPixelType;
   const unsigned int Dimension = 2;
@@ -68,13 +69,20 @@ int otbImageFileReaderWithExtendedFilename(int argc, char* argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
 
-  std::ofstream file;
-  file.open(outputFilename);
+  std::ofstream file1;
+  file1.open(outputFilename1);
+
+  std::ofstream file2;
+  file2.open(outputFilename2);
 
   reader->SetFileName(inputFilename);
   reader->Update();
 
-  file << reader->GetOutput()->GetImageKeywordlist();
+  file1 << reader->GetOutput()->GetImageKeywordlist();
+
+  file2 << "ProjRef: " << reader->GetOutput()->GetProjectionRef() << std::endl;
+  file2 << "Origin: "  << reader->GetOutput()->GetOrigin() << std::endl;
+  file2 << "Spacing: " << reader->GetOutput()->GetSpacing() << std::endl;
 
   return EXIT_SUCCESS;
 }

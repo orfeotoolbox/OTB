@@ -3721,15 +3721,27 @@ ADD_TEST(raTuWavelengthSpectralBandsNew ${IO_TESTS23}
 
 ENDFOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
 
-ADD_TEST(ioTvImageFileReaderWithExtendedFileName_GEOM ${IO_TESTS1}
+ADD_TEST(ioTvImageFileReaderExtendedFileName_GEOM ${IO_TESTS1}
 --compare-ascii ${NOTOL}
          ${BASELINE}/ioImageFileReaderWithExternalGEOMFile.txt
          ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
 	otbImageFileReaderWithExtendedFilename
         ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
         ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
-        )
+        ${TEMP}/ioImageFileReaderWithExternalGEOMFile_pr.txt
         
+        )
+
+ADD_TEST(ioTvImageFileReaderExtendedFileName_SkipPR ${IO_TESTS1}
+--compare-ascii ${NOTOL}
+         ${BASELINE}/ioImageFileReaderExtendedFileName_SkipPR.txt
+         ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.txt
+	otbImageFileReaderWithExtendedFilename
+        ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipcarto=true
+        ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR_kwl.txt
+        ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.txt
+        )
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
