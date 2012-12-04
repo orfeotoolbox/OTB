@@ -103,7 +103,14 @@ MetaDataKey::KeyType MetaDataKey::GetKeyType(const std::string& name)
   return (ktype);
 }
 
-OTB_GCP::OTB_GCP() {};
+OTB_GCP::OTB_GCP()
+ : m_GCPCol(0),
+   m_GCPRow(0),
+   m_GCPX(0),
+   m_GCPY(0),
+   m_GCPZ(0)
+{
+}
 
 OTB_GCP::OTB_GCP(const OTB_GCP &pGcp)
 {
