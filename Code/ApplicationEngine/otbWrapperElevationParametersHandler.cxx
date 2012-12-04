@@ -54,7 +54,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   oss.str("");
   oss << key<<".geoid";
   app->AddParameter(ParameterType_InputFilename, oss.str(), "Geoid File");
-  app->SetParameterDescription(oss.str(),"Use a geoid grid to get the height above the ellipsoid used");
+  app->SetParameterDescription(oss.str(),"Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles.");
   app->MandatoryOff(oss.str());
   
   std::string geoidFromConfig = otb::ConfigurationFile::GetInstance()->GetGeoidFile();
@@ -73,7 +73,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   oss.str("");
   oss << key <<".default";
   app->AddParameter(ParameterType_Float, oss.str(), "Default elevation");
-  app->SetParameterDescription(oss.str(),"This parameter allows to set the default height above ellipsoid when there is no elevation coverage from DEM (or if DEM directory is not set).");
+  app->SetParameterDescription(oss.str(),"This parameter allows to set the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value.");
   app->SetDefaultParameterFloat(oss.str(), 0.);
 
  // TODO : not implemented yet
