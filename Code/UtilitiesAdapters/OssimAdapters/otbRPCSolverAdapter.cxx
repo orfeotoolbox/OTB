@@ -34,10 +34,10 @@ RPCSolverAdapter::~RPCSolverAdapter()
 {}
 
 void
-RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer, 
-                        const Point2DType& ulImagePoint, 
+RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
+                        const Point2DType& ulImagePoint,
                         const Point2DType& lrImagePoint,
-                        double& rmsError, 
+                        double& rmsError,
                         ImageKeywordlist& otb_kwl)
 {
   // TODO: for now, this is a simple transfer of what was done in the
@@ -99,9 +99,9 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
 }
 
 bool RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
-                    const Point2DType& ulImagePoint, 
+                    const Point2DType& ulImagePoint,
                     const Point2DType& lrImagePoint,
-                    double& rmsError, 
+                    double& rmsError,
                     const std::string & outgeom)
  {
    // Declare an empty keywordlist

@@ -72,9 +72,9 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
   otb::RPCSolverAdapter::GCPsContainerType gcps;
 
   // Generate gcps
-  for(unsigned int i = 0; i < gridSize;++i)
+  for(unsigned int i = 0; i < gridSize; ++i)
     {
-    for(unsigned int j = 0; j < gridSize;++j)
+    for(unsigned int j = 0; j < gridSize; ++j)
       {
       ImageType::IndexType currentIndex;
       currentIndex[0] = i*stepx;
@@ -136,7 +136,7 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
   bool fail = false;
 
   for(otb::RPCSolverAdapter::GCPsContainerType::iterator it = gcps.begin();
-      it != gcps.end();++it)
+      it != gcps.end(); ++it)
     {
     Point2DType imgPoint,groundPoint, groundPoint2dRef;
     Point3DType imgPoint3D,groundPoint3D;

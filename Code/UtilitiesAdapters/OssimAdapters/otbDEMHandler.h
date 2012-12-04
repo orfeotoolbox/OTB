@@ -67,22 +67,22 @@ namespace otb
  * functions. Since this class is a singleton, the New() method is
  * deprecated and will be removed in future release. Please use the
  * DEMHandler::Instance() method instead.
- * 
+ *
  * Please be aware that a proper instanciation and parameter setting
  * of this class is advised before any call to geometric filters or
  * functionalities. Ossim internal accesses to elevation are also
  * configured by this class and this will ensure consistency
  * throughout the library.
- * 
+ *
  * The class allows to configure a directory containing DEM tiles
  * (DTED or SRTM supported) using the OpenDEMDirectory() method. The
  * OpenGeoidFile() method allows to input a geoid file as well. Last,
  * a default height above ellipsoid can be set using the
- * SetDefaultHeightAboveEllipsoid() method. 
- * 
+ * SetDefaultHeightAboveEllipsoid() method.
+ *
  * The class allows to retrieve either height above ellipsoid or
  * height above Mean Sea Level (MSL).
- * 
+ *
  * Here is the complete description of both methods outpout depending
  * on the class configuration for the SRTM DEM (in the following, no
  * SRTM means DEMDirectory not set, or no coverage for point, or
@@ -93,7 +93,7 @@ namespace otb
  * - No SRTM but geoid available: geoid_offset
  * - SRTM available, but no geoid: srtm_value
  * - No SRTM and no geoid available: default height above ellipsoid
- * 
+ *
  * GetHeightAboveMSL():
  * - SRTM and geoid both available: srtm_value
  * - No SRTM but geoid available: BUGGY CASE (returns NaN)
@@ -103,7 +103,7 @@ namespace otb
  * Please note that OSSIM internal calls for sensor modelling use the
  * height above ellipsoid, and follow the same logic as the
  * GetHeightAboveEllipsoid() method.
- *  
+ *
  * DEM directory can either contain DTED or SRTM formats.
  * \ingroup Images
  *

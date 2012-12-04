@@ -40,9 +40,9 @@ class ImageKeywordlist;
  *
  * This class is used inside the GCPsToRPCSensorModelImageFilter and should not
  * be used directly outside.
- * 
+ *
  * \deprecated Please use the RpcSolverAdapter class static methods instead
- * 
+ *
  * \sa GCPsToRPCSensorModelImageFilter
  **/
 

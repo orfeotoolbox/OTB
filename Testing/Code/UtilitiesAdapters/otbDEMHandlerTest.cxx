@@ -75,12 +75,12 @@ int otbDEMHandlerTest(int argc, char * argv[])
     {
     height = demHandler->GetHeightAboveMSL(point);
 
-    std::cout<<"height above MSL ("<<longitude<<", "<<latitude<<") = "<<height<<" meters"<<std::endl;  
+    std::cout<<"height above MSL ("<<longitude<<", "<<latitude<<") = "<<height<<" meters"<<std::endl;
     }
   else
     {
     height = demHandler->GetHeightAboveEllipsoid(point);
-    std::cout<<"height above ellipsoid ("<<longitude<<", "<<latitude<<") = "<<height<<" meters"<<std::endl;  
+    std::cout<<"height above ellipsoid ("<<longitude<<", "<<latitude<<") = "<<height<<" meters"<<std::endl;
     }
 
   // Check for Nan

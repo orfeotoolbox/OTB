@@ -56,18 +56,18 @@ public:
    *  by other OTB and classes (like GenericRSTransform for instance).
    */
   static void Solve(const GCPsContainerType& gcpContainer,
-                    const Point2DType& ulImagePoint, 
+                    const Point2DType& ulImagePoint,
                     const Point2DType& lrImagePoint,
-                    double& rmsError, 
+                    double& rmsError,
                     ImageKeywordlist& otb_kwl);
 
   /** Solve RPC modelling from a set of GCPs and image bounds. The
-   * estimated RPC model is written to a geom file 
+   * estimated RPC model is written to a geom file
    */
   static bool Solve(const GCPsContainerType& gcpContainer,
-                    const Point2DType& ulImagePoint, 
+                    const Point2DType& ulImagePoint,
                     const Point2DType& lrImagePoint,
-                    double& rmsError, 
+                    double& rmsError,
                     const std::string & outgeom);
 
 
