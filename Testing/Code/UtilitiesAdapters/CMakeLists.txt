@@ -74,16 +74,255 @@ ADD_TEST(uaTvRPCSolverAdapterNotEnoughPointsTest
          )
 SET_TESTS_PROPERTIES(uaTvRPCSolverAdapterNotEnoughPointsTest PROPERTIES WILL_FAIL TRUE)
 
-         
-         
-
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+# Exhaustive DEM handler testing
+
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/DEM/egm96.grd
+  40
+  8.434583
+  44.647083
+  0
+  383.580313671
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_Geoid
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/DEM/egm96.grd
+  40
+  8.434583
+  44.647083
+  1
+  339.513
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  no
+  40
+  8.434583
+  44.647083
+  0
+  339.513
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  no
+  40
+  8.434583
+  44.647083
+  1
+  339.513
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  no
+  no
+  40
+  8.434583
+  44.647083
+  0
+  40
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  no
+  no
+  40
+  8.434583
+  44.647083
+  1
+  40
+  0.001
+)
+
+
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoData
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/DEM/egm96.grd
+  40
+  8.687917
+  44.237917
+  0
+  45.7464
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoData
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/DEM/egm96.grd
+  40
+  8.687917
+  44.237917
+  1
+  -5.7464
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoData
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  no
+  40
+  8.687917
+  44.237917
+  0
+  40
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoData
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  no
+  40
+  8.687917
+  44.237917
+  1
+  40
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid_NoData
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  no
+  no
+  40
+  8.687917
+  44.237917
+  0
+  40
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid_NoData
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  no
+  no
+  40
+  8.687917
+  44.237917
+  1
+  40
+  0.001
+)
+
+
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoSRTMCoverage
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/DEM/egm96.grd
+  20
+  10. # Point not covered
+  10. # Point not covered
+  0
+  21.569 # Geoid offset
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoSRTMCoverage
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/DEM/egm96.grd
+  20
+  10. # Point not covered
+  10. # Point not covered
+  1
+  -1.569
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoSRTMCoverage
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  no
+  20
+  10. # Point not covered
+  10. # Point not covered
+  0
+  20
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoSRTMCoverage
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  no
+  20
+  10. # Point not covered
+  10. # Point not covered
+  1
+  20
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_BadSRTM_Geoid
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/poupeesTIF/
+  ${INPUTDATA}/DEM/egm96.grd
+  40
+  8.434583
+  44.647083
+  0
+  383.580313671
+  0.001
+)
+
+SET_TESTS_PROPERTIES(uaTvDEMHandler_AboveEllipsoid_BadSRTM_Geoid PROPERTIES WILL_FAIL 1)
+
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/poupees.jpg
+  40
+  8.434583
+  44.647083
+  0
+  339.513
+  0.001
+)
+
 
 SET(UtilitiesAdapters_SRCS1
 otbUtilitiesAdaptersTests1.cxx
 otbPlatformPositionAdapter.cxx
 otbGeometricSarSensorModelAdapter.cxx
 otbRPCSolverAdapterTest.cxx
+otbDEMHandlerTest.cxx
 )
 
 

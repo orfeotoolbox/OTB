@@ -28,4 +28,5 @@ void RegisterTests()
   REGISTER_TEST(otbGeometricSarSensorModelAdapterNewTest);
   REGISTER_TEST(otbGeometricSarSensorModelAdapterTest);
   REGISTER_TEST(otbRPCSolverAdapterTest);
+  REGISTER_TEST(otbDEMHandlerTest);
 }
