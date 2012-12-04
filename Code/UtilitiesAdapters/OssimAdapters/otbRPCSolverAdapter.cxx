@@ -88,26 +88,11 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
   rmsError = rpcSolver->getRmsError();
 
   // Retrieve the output RPC projection
-  ossimRefPtr<ossimRpcModel> rpcModel = dynamic_cast<ossimRpcModel*>(rpcSolver->createRpcModel()->getProjection());
-
-  // Add spacings
-  rpcModel->setMetersPerPixel(rpcSolver->createRpcProjection()->getProjection()->getMetersPerPixel());
-
-  // Add ground rectangle
-  ossimDrect imageRectangle(ulImagePoint[0],ulImagePoint[1],lrImagePoint[0],lrImagePoint[1]);
-  
-  ossimGpt ulGround, lrGround, urGround, llGround;
-
-  rpcModel->lineSampleToWorld(imageRectangle.ul(),ulGround);
-  rpcModel->lineSampleToWorld(imageRectangle.lr(),lrGround);
-  rpcModel->lineSampleToWorld(imageRectangle.ur(),urGround);
-  rpcModel->lineSampleToWorld(imageRectangle.ll(),llGround);
-
-  rpcModel->setGroundRect(ulGround, urGround, lrGround, llGround);
+  ossimRefPtr<ossimRpcProjection> rpcProjection = dynamic_cast<ossimRpcProjection*>(rpcSolver->createRpcProjection()->getProjection());
 
   // Export the sensor model in an ossimKeywordlist
   ossimKeywordlist geom_kwl;
-  rpcModel->saveState(geom_kwl);
+  rpcProjection->saveState(geom_kwl);
   
   // Build an otb::ImageKeywordList
   otb_kwl.SetKeywordlist(geom_kwl);
