@@ -130,6 +130,33 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid
   0.001
 )
 
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_NoSRTM_Geoid
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  no
+  ${INPUTDATA}/DEM/egm96.grd
+  40
+  8.434583
+  44.647083
+  0
+  44.067113
+  0.001
+)
+
+ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_Geoid
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  no
+  ${INPUTDATA}/DEM/egm96.grd
+  40
+  8.434583
+  44.647083
+  1
+  -5.7464
+  0.001
+)
+
+
 ADD_TEST(uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
