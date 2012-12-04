@@ -49,8 +49,12 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
   std::cout<<"GeoTol: "<<geoTol<<" meters"<<std::endl;
   std::cout<<"ImgTol: "<<imgTol<<" pixels"<<std::endl;
   
-  otb::DEMHandler::Instance()->OpenDEMDirectory(demdir);
-  otb::DEMHandler::Instance()->OpenGeoidFile(geoid);
+   otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
+   demHandler->SetDefaultHeightAboveEllipsoid(0);
+   if(demdir!="no")
+     demHandler->OpenDEMDirectory(demdir);
+   if(geoid!="no")
+     demHandler->OpenGeoidFile(geoid);
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -90,7 +94,7 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
 
       gcps.push_back(std::make_pair(currentPoint,current3DWgs84Point));
 
-      std::cout<<"Adding gcp: "<<currentPoint<<" <-> " << current3DWgs84Point<<std::endl;
+      std::cout<<currentPoint[0]<<" "<<currentPoint[1]<<" "<< current3DWgs84Point[0]<<" "<<current3DWgs84Point[1]<<" "<<current3DWgs84Point[2]<<std::endl;
       }
     }
   
