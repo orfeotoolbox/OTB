@@ -104,6 +104,13 @@ DEMHandler
       otbMsgDevMacro(<< "Geoid successfully opened");
       ossimGeoidManager::instance()->addGeoid(geoidPtr);
       geoidPtr.release();
+
+      // Force geoid fallback
+      m_ElevManager->setUseGeoidIfNullFlag(true);
+      // The previous flag will be ignored if
+      // defaultHeightAboveEllipsoid is not NaN
+      m_ElevManager->setDefaultHeightAboveEllipsoid(ossim::nan());
+
       }
     else
       {
