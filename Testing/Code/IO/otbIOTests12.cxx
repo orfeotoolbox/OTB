@@ -24,8 +24,6 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbDEMHandlerNew);
-  REGISTER_TEST(otbDEMHandlerTest);
   REGISTER_TEST(otbDEMToImageGeneratorNew);
   REGISTER_TEST(otbDEMToImageGeneratorTest);
   REGISTER_TEST(otbDEMToImageGeneratorFromImageTest);

@@ -1961,19 +1961,6 @@ ADD_TEST(ioTvPipelineMetadataHandlingWithUFFilterTest ${IO_TESTS11}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS12 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# ---  otb::DEMHandler ---
-ADD_TEST(ioTuDEMHandlerNew ${IO_TESTS12} otbDEMHandlerNew )
-
-ADD_TEST(ioTvDEMHandler ${IO_TESTS12}
---compare-ascii ${EPSILON_9}         ${BASELINE_FILES}/ioDEMGetHeightAboveMSL.txt
-                        ${TEMP}/ioDEMGetHeightAboveMSL.txt
-        otbDEMHandlerTest
-        ${INPUTDATA}/DEM/srtm_directory
-        ${INPUTDATA}/DEM/egm96.grd
-        ${TEMP}/ioDEMGetHeightAboveMSL.txt
-        3.6999 44.08
-        )
-
 # ---  otb::DEMToImageGenerator ---
 ADD_TEST(ioTuDEMToImageGeneratorNew ${IO_TESTS12} otbDEMToImageGeneratorNew )
 
@@ -3847,8 +3834,6 @@ otbPipelineMetadataHandlingWithUFFilterTest.cxx
 
 SET(BasicIO_SRCS12
 otbIOTests12.cxx
-otbDEMHandlerNew.cxx
-otbDEMHandlerTest.cxx
 otbDEMToImageGeneratorNew.cxx
 otbDEMToImageGeneratorTest.cxx
 otbDEMToImageGeneratorFromImageTest.cxx
