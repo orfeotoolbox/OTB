@@ -112,29 +112,10 @@ OTB_GCP::OTB_GCP()
 {
 }
 
-OTB_GCP::OTB_GCP(const OTB_GCP &pGcp)
+OTB_GCP::~OTB_GCP()
 {
-  m_Id = pGcp.m_Id;
-  m_Info = pGcp.m_Info;
-  m_GCPCol = pGcp.m_GCPCol;
-  m_GCPRow = pGcp.m_GCPRow;
-  m_GCPX = pGcp.m_GCPX;
-  m_GCPY = pGcp.m_GCPY;
-  m_GCPZ = pGcp.m_GCPZ;
 }
 
-OTB_GCP::~OTB_GCP() {};
-
-void OTB_GCP::operator =(const OTB_GCP& pGcp)
-{
-  m_Id = pGcp.m_Id;
-  m_Info = pGcp.m_Info;
-  m_GCPCol = pGcp.m_GCPCol;
-  m_GCPRow = pGcp.m_GCPRow;
-  m_GCPX = pGcp.m_GCPX;
-  m_GCPY = pGcp.m_GCPY;
-  m_GCPZ = pGcp.m_GCPZ;
-}
 void OTB_GCP::Print(std::ostream& os) const
 {
   os << "   GCP Id = " << this->m_Id << std::endl;

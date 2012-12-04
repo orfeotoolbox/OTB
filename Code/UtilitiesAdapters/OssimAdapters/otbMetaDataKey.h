@@ -138,10 +138,6 @@ public:
   OTB_GCP();
   ~OTB_GCP();
 
-  OTB_GCP(const OTB_GCP &pGcp);
-
-  void operator =(const OTB_GCP& pGcp);
-
   void Print(std::ostream& os) const;
 };
 
