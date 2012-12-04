@@ -36,13 +36,16 @@
 // Monteverdi includes (sorted by alphabetic order)
 
 //
-// Class pre-declaration.
+// External classes pre-declaration.
 namespace
 {
 }
 
 namespace mvd
 {
+//
+// Internal classes pre-declaration.
+
 /** \class MyClass
  *
  */
@@ -56,7 +59,7 @@ class MyClass :
 public:
 
   /** Constructor */
-  MyClass();
+  MyClass( QObject* parent =NULL );
 
   /** Destructor */
   virtual ~MyClass();
@@ -80,6 +83,7 @@ private:
 
 //
 // Private attributes.
+private:
 
 //
 // SLOTS.

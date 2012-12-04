@@ -97,4 +97,12 @@
         <translation></translation>
     </message>
 </context>
+<context>
+    <name>mvd::MyClass</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
 </TS>

@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "mvdMyClass.h"
+#include "mvdImageModel.h"
 
 //
 // System includes (sorted by alphabetic order)

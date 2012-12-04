@@ -35,10 +35,18 @@
 
 namespace mvd
 {
+/*
+  TRANSLATOR mvd::MyClass
+
+  Necessary for lupdate to be aware of C++ namespaces.
+
+  Context comment for translator.
+*/
 
 /*****************************************************************************/
 MyClass
-::MyClass()
+::MyClass( QObject* parent ) :
+  QObject( parent )
 {
 }
 
