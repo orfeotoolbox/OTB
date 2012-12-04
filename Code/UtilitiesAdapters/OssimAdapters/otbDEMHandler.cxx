@@ -57,6 +57,7 @@ DEMHandler
   m_GeoidFile(""),
   m_DefaultHeightAboveEllipsoid(0)
 {
+  m_ElevManager->setDefaultHeightAboveEllipsoid(m_DefaultHeightAboveEllipsoid);
 }
 
 void
@@ -146,8 +147,8 @@ DEMHandler
   ossimGpt ossimWorldPoint;
   ossimWorldPoint.lon = lon;
   ossimWorldPoint.lat = lat;
-  otbMsgDevMacro(<< "Geoid offset: " << ossimGeoidManager::instance()->offsetFromEllipsoid(ossimWorldPoint));
   height = m_ElevManager->getHeightAboveEllipsoid(ossimWorldPoint);
+
   return height;
 }
 
