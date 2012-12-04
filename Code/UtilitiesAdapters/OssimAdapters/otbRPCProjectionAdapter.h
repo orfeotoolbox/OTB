@@ -18,6 +18,8 @@
 #ifndef __otbRPCProjectionAdapter_h
 #define __otbRPCProjectionAdapter_h
 
+#include "vcl_deprecated_header.h"
+
 #include <vector>
 
 #include "itkObject.h"
@@ -38,7 +40,9 @@ class ImageKeywordlist;
  *
  * This class is used inside the GCPsToRPCSensorModelImageFilter and should not
  * be used directly outside.
- *
+ * 
+ * \deprecated Please use the RpcSolverAdapter class static methods instead
+ * 
  * \sa GCPsToRPCSensorModelImageFilter
  **/
 
