@@ -80,7 +80,9 @@ Application
 {
   //
   //
+#if 1
   QTextCodec::setCodecForTr( QTextCodec::codecForName( "utf8" ) );
+#endif
 
   //
   // Setup application tags.
@@ -180,7 +182,7 @@ Application
       // TODO: Use log system to trace error while loading locale translation file.
 
       qDebug() << message;
-      
+
       // TODO: morph into better HMI design.
       QMessageBox::critical( NULL, tr( "Critical error!" ), message );
 
@@ -190,14 +192,14 @@ Application
 
   //
   // 3.1 Stack Qt translator.
-  Application::LoadAndInstallTranslator(
+  LoadAndInstallTranslator(
     "qt_" + sys_lc.name(),
     QLibraryInfo::location( QLibraryInfo::TranslationsPath  )
   );
 
   //
   // 3.2 Stack Monteverdi2 translator as prioritary over Qt translator.
-  Application::LoadAndInstallTranslator( sys_lc.name(), i18n_dir.path() );
+  LoadAndInstallTranslator( sys_lc.name(), i18n_dir.path() );
 
   // TODO: Record locale translation filename(s) used in UI component (e.g.
   // AboutDialog, Settings dialog, Information dialog etc.)
@@ -218,10 +220,10 @@ Application
 	: suffix )
   );
 
-  // (a) No need to new translator() here nor delete in destructor...
-  QTranslator lc_translator;
+  // (a) Do need to new QTranslator() here!
+  QTranslator* lc_translator = new QTranslator( this );
 
-  if( !lc_translator.load( filename, directory, searchDelimiters, suffix ) )
+  if( !lc_translator->load( filename, directory, searchDelimiters, suffix ) )
     {
     QString message(
       tr( "Failed to load '%1' translation file from '%2'." )
@@ -239,8 +241,9 @@ Application
     return false;
     }
 
-  // (a) ...because of Qt private implementation and shallow-copies mecanisms.
-  QCoreApplication::installTranslator( &lc_translator );
+  // (a) ...because QTranslator needs to be alive during the whole
+  // lifespan of the application.
+  QCoreApplication::installTranslator( lc_translator );
 
   QString message(
     tr( "Successfully loaded '%1' translation file from '%2'." )
