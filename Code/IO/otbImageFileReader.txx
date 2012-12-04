@@ -62,7 +62,7 @@ ImageFileReader<TOutputImage>
   m_Options.extGEOMFileName  = "";
   m_Options.subDatasetIndex  = 0;
   m_Options.resolutionFactor  = 0;
-  m_Options.skipProjRef = false;
+  m_Options.skipCarto = false;
 }
 
 template <class TOutputImage>
@@ -379,6 +379,15 @@ ImageFileReader<TOutputImage>
       }
     }
 
+  if (m_Options.skipCarto)
+    {
+    for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
+      {
+      origin[i] = 0.0;
+      spacing[i] = 1.0;
+      }
+    }
+
   output->SetSpacing(spacing);       // Set the image spacing
   output->SetOrigin(origin);         // Set the image origin
   output->SetDirection(direction);   // Set the image direction cosines
@@ -439,7 +448,7 @@ ImageFileReader<TOutputImage>
     }
 
   // If Skip ProjectionRef is activated, remove ProjRef from dict
-  if (m_Options.skipProjRef)
+  if (m_Options.skipCarto)
     {
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, "");
     }
@@ -632,9 +641,9 @@ ImageFileReader<TOutputImage>
   m_Options.extGEOMFileName = map["geom"];
   m_Options.subDatasetIndex = atoi(map["sdataidx"].c_str());
   m_Options.resolutionFactor = atoi(map["resol"].c_str());
-  if (map["skippr"] == "true")
+  if (map["skipcarto"] == "true")
     {
-    m_Options.skipProjRef = true;
+    m_Options.skipCarto = true;
     }
 
   this->m_FileName = m_Options.fileName;
