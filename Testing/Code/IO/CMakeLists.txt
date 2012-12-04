@@ -3729,6 +3729,16 @@ ADD_TEST(ioTvImageFileReaderExtendedFileName_SkipPR ${IO_TESTS1}
         ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.txt
         )
 
+ADD_TEST(ioTvImageFileReaderExtendedFileName_mix1 ${IO_TESTS1}
+--compare-ascii ${NOTOL}
+         ${BASELINE}/ioImageFileReaderExtendedFileName_mix1pr.txt
+         ${TEMP}/ioImageFileReaderExtendedFileName_mix1pr.txt
+	otbImageFileReaderWithExtendedFilename
+        ${INPUTDATA}/bretagne.j2k?&skipcarto=true&resol=2
+        ${TEMP}/ioImageFileReaderExtendedFileName_mix1kwl.txt
+        ${TEMP}/ioImageFileReaderExtendedFileName_mix1pr.txt
+        )
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx

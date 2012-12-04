@@ -384,7 +384,14 @@ ImageFileReader<TOutputImage>
     for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
       {
       origin[i] = 0.0;
-      spacing[i] = 1.0;
+      if ( m_Options.resolutionFactor != 0 )
+        {
+        spacing[i] = 1.0*vcl_pow(2, m_Options.resolutionFactor);
+        }
+      else
+        {
+        spacing[i] = 1.0;
+        }
       }
     }
 
