@@ -36,19 +36,22 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+// Warning! it's generally not a good idea to use namespaces in header files.
 using namespace otb;
 using namespace itk;
 
 //
-// Class pre-declaration.
+// External class pre-declaration.
+
+namespace mvd
+{
+//
+// Internal class pre-declaration.
 namespace Ui
 {
 class MainWindow;
 }
 
-namespace mvd
-{
 /** \class MainWindow
  *
  */

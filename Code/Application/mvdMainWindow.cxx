@@ -45,12 +45,19 @@
 
 namespace mvd
 {
+/*
+  TRANSLATOR mvd::MainWindow
+
+  Necessary for lupdate to be aware of C++ namespaces.
+
+  Context comment for translator.
+*/
 
 /*****************************************************************************/
 MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
   QMainWindow( parent, flags ),
-  m_UI( new Ui::MainWindow() )
+  m_UI( new mvd::Ui::MainWindow() )
 {
   m_UI->setupUi( this );
 

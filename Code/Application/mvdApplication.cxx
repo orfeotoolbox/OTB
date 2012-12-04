@@ -29,6 +29,7 @@
 #include <QLibraryInfo>
 #include <QLocale>
 #include <QMessageBox>
+#include <QTextCodec>
 #include <QTranslator>
 
 //
@@ -39,12 +40,16 @@
 #include "ConfigureMonteverdi2.h"
 
 //
-// Class pre-declaration.
-
-//
 // Class implementation.
 namespace mvd
 {
+/*
+  TRANSLATOR mvd::Application
+
+  Necessary for lupdate to be aware of C++ namespaces.
+
+  Context comment for translator.
+*/
 
 /*******************************************************************************/
 Application
@@ -74,6 +79,10 @@ Application
 ::InitializeCore()
 {
   //
+  //
+  QTextCodec::setCodecForTr( QTextCodec::codecForName( "utf8" ) );
+
+  //
   // Setup application tags.
   QCoreApplication::setApplicationName(
     PROJECT_NAME
@@ -85,7 +94,7 @@ Application
   //
   // Setup organization tags.
   QCoreApplication::setOrganizationName(
-    "Centre National d'Etudes Spatiales (CNES)"
+    tr( "Centre National d'Etudes Spatiales (CNES)" )
   );
   QCoreApplication::setOrganizationDomain(
     "orfeo-toolbox.org"
@@ -107,11 +116,18 @@ Application
   //
   // 1. default UI language is en-US (no translation).
   QLocale sys_lc( QLocale::system() );
-  QLocale en_US_lc( QLocale::English, QLocale::UnitedStates );
-  if( sys_lc.language()==en_US_lc.language()
-      && sys_lc.country()==en_US_lc.country()
+  QLocale ui_lc(
+#if 1
+    QLocale::English, QLocale::UnitedStates
+#else
+    QLocale::C, QLocale::AnyCountry
+#endif
+  );
+
+  if( sys_lc.language()==ui_lc.language()
+      && sys_lc.country()==ui_lc.country()
 #if QT_VERSION>=0x040800
-      && sys_lc.script()==en_US_lc.script()
+      && sys_lc.script()==ui_lc.script()
 #endif
   )
     {
@@ -135,7 +151,7 @@ Application
 
     // TODO: Use log system to trace message.
     qDebug()
-      << tr( "Running from build directory '%1'" ).arg( bin_dir.path() );
+      << tr( "Running from build directory '%1'." ).arg( bin_dir.path() );
     }
   // Otherwise...
   else
@@ -151,7 +167,7 @@ Application
 
       // TODO: Use log system to trace message.
       qDebug()
-	<< tr( "Running from install directory '%1'" ).arg( Monteverdi2_INSTALL_BIN_DIR );
+	<< tr( "Running from install directory '%1'." ).arg( Monteverdi2_INSTALL_BIN_DIR );
       }
     // Otherwise
     else
@@ -166,7 +182,7 @@ Application
       qDebug() << message;
       
       // TODO: morph into better HMI design.
-      QMessageBox::critical( NULL, "Critical...", message );
+      QMessageBox::critical( NULL, tr( "Critical error!" ), message );
 
       return;
       }
@@ -208,7 +224,7 @@ Application
   if( !lc_translator.load( filename, directory, searchDelimiters, suffix ) )
     {
     QString message(
-      tr( "Failed to load '%1' translation file in '%2'." )
+      tr( "Failed to load '%1' translation file from '%2'." )
       .arg( filename_ext )
       .arg( directory )
     );
@@ -218,7 +234,7 @@ Application
     qDebug() << message;
 
     // TODO: morph into better HMI design.
-    QMessageBox::warning( NULL, "Warning", message );
+    QMessageBox::warning( NULL, tr( "Warning!" ), message );
 
     return false;
     }
@@ -227,7 +243,7 @@ Application
   QCoreApplication::installTranslator( &lc_translator );
 
   QString message(
-    tr( "Successfully loaded '%1' translation file in '%2'." )
+    tr( "Successfully loaded '%1' translation file from '%2'." )
     .arg( filename_ext )
     .arg( directory )
   );
