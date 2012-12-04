@@ -60,16 +60,51 @@ namespace otb
 {
 /** \class DEMHandler
  *
- * \brief Class for Reading a DEM data
+ * \brief Single access point for DEM data retrieval
  *
  * This class is the single configuration and access point for
- * elevation handling in images projections and localisation functions.
+ * elevation handling in images projections and localisation
+ * functions. Since this class is a singleton, the New() method is
+ * deprecated and will be removed in future release. Please use the
+ * DEMHandler::Instance() method instead.
+ * 
+ * Please be aware that a proper instanciation and parameter setting
+ * of this class is advised before any call to geometric filters or
+ * functionalities. Ossim internal accesses to elevation are also
+ * configured by this class and this will ensure consistency
+ * throughout the library.
+ * 
+ * The class allows to configure a directory containing DEM tiles
+ * (DTED or SRTM supported) using the OpenDEMDirectory() method. The
+ * OpenGeoidFile() method allows to input a geoid file as well. Last,
+ * a default height above ellipsoid can be set using the
+ * SetDefaultHeightAboveEllipsoid() method. 
+ * 
+ * The class allows to retrieve either height above ellipsoid or
+ * height above Mean Sea Level (MSL).
+ * 
+ * Here is the complete description of both methods outpout depending
+ * on the class configuration for the SRTM DEM (in the following, no
+ * SRTM means DEMDirectory not set, or no coverage for point, or
+ * srtm_value is no_data).
  *
- * It is based on ossimElevManager.
- * It allows to obtain height above Ellipsoid or MSL(Mean Sea Level)
- * of a geographic point.
+ * GetHeightAboveEllipsoid():
+ * - SRTM and geoid both available: srtm_value + geoid_offset
+ * - No SRTM but geoid available: geoid_offset
+ * - SRTM available, but no geoid: srtm_value
+ * - No SRTM and no geoid available: default height above ellipsoid
+ * 
+ * GetHeightAboveMSL():
+ * - SRTM and geoid both available: srtm_value
+ * - No SRTM but geoid available: BUGGY CASE (returns NaN)
+ * - SRTM available, but no geoid: srtm_value
+ * - No SRTM and no geoid available: default height above ellipsoid
  *
- * It handles both DTED and SRTM formats.
+ * Please note that OSSIM internal calls for sensor modelling use the
+ * height above ellipsoid, and follow the same logic as the
+ * GetHeightAboveEllipsoid() method.
+ *  
+ * DEM directory can either contain DTED or SRTM formats.
  * \ingroup Images
  *
  */
