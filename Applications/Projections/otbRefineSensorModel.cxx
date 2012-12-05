@@ -57,12 +57,15 @@ private:
   void DoInit()
   {
     SetName("RefineSensorModel");
-    SetDescription("Perform LSQR to fit sensor model to a set of tie points");
+    SetDescription("Perform least-square fit of a sensor model to a set of tie points");
     
     SetDocName("Refine Sensor Model");
-    SetDocLongDescription("TODO");
-    
+    SetDocLongDescription("This application reads a geom file containing a sensor model and a text file containing a list of ground control point, and performs a least-square fit of the sensor model adjustable parameters to these tie points. It produces an updated geom file as output, as well as an optional ground control points based statistics file and a vector file containing residues. The output geom file can then be used to ortho-rectify the data more accurately. Plaease note that for a proper use of the application, elevation must be correctly set (including DEM and geoid file). The map parameters allows to choose a map projection in which the accuracy will be estimated in meters.");
+
+    AddDocTag(Tags::Geometry);
+
     SetDocLimitations("None");
+    SetDocSeeAlso("OrthoRectication,HomologousPointsExtraction");
     SetDocAuthors("OTB-Team");
     
     AddParameter(ParameterType_InputFilename,"ingeom","Input geom file");
@@ -89,7 +92,13 @@ private:
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
-    
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("ingeom", "input.geom");
+    SetDocExampleParameterValue("outgeom","output.geom");
+    SetDocExampleParameterValue("inpoints","points.txt");
+    SetDocExampleParameterValue("map","epsg");
+    SetDocExampleParameterValue("map.epsg.code","32631");
   }
 
   void DoUpdateParameters()
