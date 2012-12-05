@@ -125,26 +125,6 @@ Application
     return;
     }
 
-  /*
-  QLocale ui_lc(
-#if 1
-    QLocale::English, QLocale::UnitedStates
-#else
-    QLocale::C, QLocale::AnyCountry
-#endif
-  );
-
-  if( sys_lc.language()==ui_lc.language()
-      && sys_lc.country()==ui_lc.country()
-#if QT_VERSION>=0x040800
-      && sys_lc.script()==ui_lc.script()
-#endif
-  )
-    {
-    return;
-    }
-  */
-
   //
   // 2. Choose i18n path between build dir and install dir.
   QDir i18n_dir;
