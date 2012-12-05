@@ -80,7 +80,6 @@ protected:
 // Private methods.
 private:
 
-
 //
 // Private attributes.
 private:

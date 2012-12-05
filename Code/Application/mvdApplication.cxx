@@ -116,8 +116,16 @@ Application
 ::InitializeLocale()
 {
   //
-  // 1. default UI language is en-US (no translation).
+  // 1. default UI language is english (no translation).
   QLocale sys_lc( QLocale::system() );
+  if( sys_lc.language()==QLocale::C ||
+      ( sys_lc.language()==QLocale::English &&
+	sys_lc.country()==QLocale::UnitedStates ) )
+    {
+    return;
+    }
+
+  /*
   QLocale ui_lc(
 #if 1
     QLocale::English, QLocale::UnitedStates
@@ -135,6 +143,7 @@ Application
     {
     return;
     }
+  */
 
   //
   // 2. Choose i18n path between build dir and install dir.
@@ -233,7 +242,7 @@ Application
 
     // TODO: Use log system to trace error while loading locale translation file.
 
-    qDebug() << message;
+    qWarning() << message;
 
     // TODO: morph into better HMI design.
     QMessageBox::warning( NULL, tr( "Warning!" ), message );
