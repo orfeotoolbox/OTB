@@ -386,7 +386,7 @@ ImageFileReader<TOutputImage>
       origin[i] = 0.0;
       if ( m_Options.resolutionFactor != 0 )
         {
-        spacing[i] = 1.0*vcl_pow(2, m_Options.resolutionFactor);
+        spacing[i] = 1.0*vcl_pow((double)2, (double)m_Options.resolutionFactor);
         }
       else
         {
