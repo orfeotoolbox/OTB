@@ -83,15 +83,18 @@ private:
   void DoInit()
   {
     SetName("HomologousPointsExtraction");
+    SetDocName("Homologous points extraction");
     SetDescription("Allows to compute homologous points between images using keypoints");
     SetDocLongDescription("This application allows to compute homologous points between images using keypoints. SIFT or SURF keypoints can be used and the band on which keypoints are computed can be set independantly for both images."
       " The application offers two modes : the first is the full mode where keypoints are extracted from the full extent of both images (please note that in this mode large image file are not supported). The second mode, called geobins, allows to set-up spatial binning so as to get fewer points spread accross the entire image. In this mode, the corresponding spatial bin in the second image is estimated using geographical transform or sensor modelling, and is padded according to the user defined precision. Last, in both modes the application can filter matches whose colocalisation in first image exceed this precision. The elevation parameters are to deal more precisely with sensor modelling in case of sensor geometry data.");
     // Documentation
     SetDocName("Homologous Points Extraction");
     SetDocLimitations("Full mode does not handle large images.");
+    SetDocSeeAlso("RefineSensorModel");
     SetDocAuthors("OTB-Team");
 
     AddDocTag(Tags::FeatureExtraction);
+    AddDocTag(Tags::Geometry);
 
     AddParameter(ParameterType_InputImage, "in1", "Input Image 1");
     SetParameterDescription("in1"," First input image");
@@ -161,6 +164,12 @@ private:
     SetParameterDescription("outvector","File containing segments representing matches ");
     MandatoryOff("outvector");
     DisableParameter("outvector");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("io.in1", "sensor_stereo_left.tif");
+    SetDocExampleParameterValue("io.in2","sensor_stereo_right.tif");
+    SetDocExampleParameterValue("mode","full");
+    SetDocExampleParameterValue("out","homologous.txt");
   }
 
   void DoUpdateParameters()
