@@ -495,8 +495,8 @@ bool ossimSonomaSensor::saveState(ossimKeywordlist& kwl, const char* prefix)cons
    ossimSensorModel::saveState(kwl, prefix);
    
    ossimString mount;
-   ossim_uint32 rowIdx = 0;
-   ossim_uint32 colIdx = 0;
+   ossim_int32 rowIdx = 0;
+   ossim_int32 colIdx = 0;
 
    for(rowIdx = 0; rowIdx < m_mount.Nrows(); ++rowIdx)
    {

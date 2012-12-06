@@ -8,9 +8,10 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageToPlaneNormalFilter.cpp 20198 2011-11-03 13:23:40Z dburken $
+// $Id: ossimImageToPlaneNormalFilter.cpp 21631 2012-09-06 18:10:55Z dburken $
 #include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimKeywordNames.h>

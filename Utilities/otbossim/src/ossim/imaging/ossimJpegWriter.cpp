@@ -5,7 +5,7 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimJpegWriter.cpp 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimJpegWriter.cpp 21184 2012-06-29 15:13:09Z dburken $
 
 #include <cstdlib>
 #include <cstdio>
@@ -196,8 +196,6 @@ bool ossimJpegWriter::writeFile()
       long maxY = (long)theInputConnection->getNumberOfTilesVertical();
       long maxX = (long)theInputConnection->getNumberOfTilesHorizontal();
       
-      ossimProcessInterface::ossimProcessStatus processStatus = getProcessStatus();
-      
       double tileCount = 0.0;
       double totalTiles = theInputConnection->getNumberOfTiles();
       //
@@ -274,7 +272,6 @@ bool ossimJpegWriter::writeFile()
                << "lines_to_copy:  " << lines_to_copy << endl;
          }
          
-         processStatus = getProcessStatus();
          if(!needsAborting())
          {
             // Now copy the buffer that should be full to the jpeg file.

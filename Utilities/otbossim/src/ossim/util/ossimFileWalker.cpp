@@ -29,6 +29,7 @@ ossimFileWalker::ossimFileWalker()
      m_jobQueue(new ossimJobMultiThreadQueue(new ossimJobQueue(), 1)),     
      m_filteredExtensions(0),
      m_recurseFlag(true),
+     m_waitOnDirFlag(false),
      m_abortFlag(false),
      m_mutex()
 {
@@ -213,7 +214,7 @@ void ossimFileWalker::walkDir(const ossimFilename& dir)
          valid_file = d.getNext(f);
       }
       m_mutex.unlock();
-      
+
       //---
       // Process files first before recursing directories.  If a file is a directory base image,
       // e.g. RPF, then the callee should call ossimFileWalker::setRecurseFlag to false to
@@ -252,6 +253,21 @@ void ossimFileWalker::walkDir(const ossimFilename& dir)
          m_mutex.unlock();
 
          ++i;
+      }
+
+      if ( m_waitOnDirFlag )
+      {
+         // FOREVER loop until all jobs are completed.
+         while (1)
+         {
+            if ( OpenThreads::Thread::microSleep(250) == 0 )
+            {
+               if ( m_jobQueue->hasJobsToProcess() == false )
+               {
+                  break;
+               }
+            }
+         }
       }
 
       m_mutex.lock();
@@ -394,9 +410,12 @@ void ossimFileWalker::initializeDefaultFilterList()
    
    // The rest alphabetical.
    m_filteredExtensions.push_back(std::string("aux"));
+   m_filteredExtensions.push_back(std::string("bin"));
    m_filteredExtensions.push_back(std::string("dbf"));
+   m_filteredExtensions.push_back(std::string("hdr"));
    m_filteredExtensions.push_back(std::string("jpw"));
    m_filteredExtensions.push_back(std::string("kwl"));
+   m_filteredExtensions.push_back(std::string("log"));
    m_filteredExtensions.push_back(std::string("out"));
    m_filteredExtensions.push_back(std::string("prj"));
    m_filteredExtensions.push_back(std::string("save"));
@@ -415,6 +434,13 @@ void ossimFileWalker::setRecurseFlag(bool flag)
 {
    m_mutex.lock();
    m_recurseFlag = flag;
+   m_mutex.unlock();
+}
+
+void ossimFileWalker::setWaitOnDirFlag(bool flag)
+{
+   m_mutex.lock();
+   m_waitOnDirFlag = flag;
    m_mutex.unlock();
 }
 

@@ -11,7 +11,7 @@
 //   Contains implementation of class ossimSensorModelFactory
 //
 //*****************************************************************************
-//  $Id: ossimSensorModelFactory.cpp 20238 2011-11-09 18:39:10Z gpotts $
+//  $Id: ossimSensorModelFactory.cpp 21522 2012-08-23 13:57:45Z dburken $
 #include <fstream>
 #include <algorithm>
 #include <ossim/projection/ossimSensorModelFactory.h>
@@ -51,8 +51,13 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/projection/ossimSkyBoxLearSensor.h>
 #include <ossim/projection/ossimIpodSensor.h>
+#include <ossim/projection/ossimPpjFrameSensor.h>
+#include <ossim/projection/ossimAlphaSensorHRI.h>
+#include <ossim/projection/ossimAlphaSensorHSI.h>
 #include <ossim/support_data/ossimFfL7.h>
 #include <ossim/support_data/ossimFfL5.h>
+#include <ossim/support_data/ossimPpjFrameSensorFile.h>
+#include <ossim/support_data/ossimAlphaSensorSupportData.h>
 
 //***
 // ADD_MODEL: List names of all sensor models produced by this factory:
@@ -205,6 +210,18 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
    {
       return new ossimRS1SarModel;
    }
+   if(name == STATIC_TYPE_NAME(ossimPpjFrameSensor))
+   {
+      return new ossimPpjFrameSensor;
+   }
+   if(name == STATIC_TYPE_NAME(ossimAlphaSensorHRI))
+   {
+      return new ossimAlphaSensorHRI;
+   }
+   if(name == STATIC_TYPE_NAME(ossimAlphaSensorHSI))
+   {
+      return new ossimAlphaSensorHSI;
+   }
 
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
@@ -257,6 +274,9 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimBuckeyeSensor));
    typeList.push_back(STATIC_TYPE_NAME(ossimSkyBoxLearSensor));
    typeList.push_back(STATIC_TYPE_NAME(ossimIpodSensor));
+   typeList.push_back(STATIC_TYPE_NAME(ossimPpjFrameSensor));
+   typeList.push_back(STATIC_TYPE_NAME(ossimAlphaSensorHRI));
+   typeList.push_back(STATIC_TYPE_NAME(ossimAlphaSensorHSI));
 
    //***
    // ADD_MODEL: Please leave this comment for the next programmer. Add above.
@@ -268,6 +288,7 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
 ossimProjection* ossimSensorModelFactory::createProjection(
    const ossimFilename& filename, ossim_uint32  entryIdx) const
 {
+   if(!filename.exists()) return 0;
    static const char MODULE[] = "ossimSensorModelFactory::createProjection";
    
    ossimKeywordlist kwl;
@@ -487,6 +508,82 @@ ossimProjection* ossimSensorModelFactory::createProjection(
       }
    }
    
+   ossimFilename ppjFilename = filename;
+   ppjFilename = ppjFilename.setExtension("ppj");
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " DEBUG: testing ossimPpjFrameSensor" << std::endl;
+   }
+   if(ppjFilename.exists())
+   {
+      ossimRefPtr<ossimPpjFrameSensorFile> ppjFile = new ossimPpjFrameSensorFile();
+
+      if(ppjFile->readFile(ppjFilename))
+      {
+         ossimRefPtr<ossimPpjFrameSensor> sensor = new ossimPpjFrameSensor();
+         ossimDpt imageSize = ppjFile->getImageSize();
+         sensor->setFocalLength(ppjFile->getIntrinsic()[0][0], ppjFile->getIntrinsic()[1][1]);
+         sensor->setPrincipalPoint(ppjFile->getPrincipalPoint());
+         sensor->setecef2CamMatrix(ppjFile->getExtrinsic().SymSubMatrix(1,3));
+         sensor->setCameraPosition(ppjFile->getPlatformPosition());
+         sensor->setImageSize(imageSize);
+         sensor->setImageRect(ossimDrect(0,0,imageSize.x-1, imageSize.y-1));
+         sensor->setRefImgPt(ossimDpt(imageSize.x*.5, imageSize.y*.5));
+         sensor->setAveragePrjectedHeight(ppjFile->getAverageProjectedHeight());
+         sensor->updateModel();
+         return sensor.release();         
+      }
+      ppjFile = 0;
+   }
+   
+   ossimFilename hdrFilename = filename;
+   hdrFilename = hdrFilename.setExtension("hdr"); // image.hdr
+   if ( !hdrFilename.exists() )   
+   {     
+      hdrFilename = filename;
+      hdrFilename.string() += ".hdr"; // image.ras.hdr
+   }
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " DEBUG: testing ossimAlphaSensor\nheader file: " << hdrFilename << std::endl;
+   }
+   if(hdrFilename.exists())
+   {
+      ossimRefPtr<ossimAlphaSensorSupportData> supData = new ossimAlphaSensorSupportData();
+      if(supData->readSupportFiles(hdrFilename))
+      {
+         if (supData->isHSI())
+         {
+            if(traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  << MODULE << " DEBUG: loading ossimAlphaSensorHSI" << std::endl;
+            }
+            ossimRefPtr<ossimAlphaSensorHSI> sensor = new ossimAlphaSensorHSI();
+            if ( sensor->initialize( *(supData.get()) ) )
+            {
+               return (ossimProjection*)sensor.release();
+            }
+         }
+         else
+         {
+            if(traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  << MODULE << " DEBUG: loading ossimAlphaSensorHRI" << std::endl;
+            }
+            ossimRefPtr<ossimAlphaSensorHRI> sensor = new ossimAlphaSensorHRI();
+            if ( sensor->initialize( *(supData.get()) ) )
+            {
+               return (ossimProjection*)sensor.release();
+            }
+         }
+      }
+      supData = 0;
+   }
+
    model = new ossimCoarseGridModel(geomFile);
    if(model.valid())
    {

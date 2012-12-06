@@ -6,14 +6,14 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimFreeTypeFont.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimFreeTypeFont.h 21749 2012-09-18 14:06:13Z dburken $
 #ifndef ossimFreeTypeFont_HEADER
 #define ossimFreeTypeFont_HEADER
 
 #include <ossim/ossimConfig.h> /* To pick up OSSIM_HAS_FREETYPE. */
 
 #if OSSIM_HAS_FREETYPE
-#  include "ossimFont.h"
+#  include <ossim/font/ossimFont.h>
 #  include <ft2build.h>
 #  include FT_FREETYPE_H
 //#include <freetype/freetype.h>

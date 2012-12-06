@@ -19,8 +19,8 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef ossimCallback1wRet_HEADER
-#define ossimCallback1wRet_HEADER 1
+#ifndef ossimCallback2wRet_HEADER
+#define ossimCallback2wRet_HEADER 1
 
 /**
  * @class ossimCallback2wRet
@@ -75,7 +75,8 @@ template <class P1, class P2, class RT> class ossimCallback2wRet
 {
 public:
    ossimCallback2wRet(){}
+   virtual ~ossimCallback2wRet(){}
    virtual RT operator()(P1 p1, P2 p2) const = 0;
 };
 
-#endif
+#endif /* #ifndef ossimCallback2wRet_HEADER */

@@ -7,7 +7,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.h 20438 2012-01-11 15:27:52Z gpotts $
+// $Id: ossimKeywordlist.h 21527 2012-08-26 16:50:49Z dburken $
 
 #ifndef ossimKeywordlist_HEADER
 #define ossimKeywordlist_HEADER 1
@@ -49,6 +49,8 @@ public:
                     bool                 expandEnvVars = false);
 
    ~ossimKeywordlist();
+
+   static const std::string NULL_KW;
 
    /*!
     *  Reads file and adds keywords to the KeywordMap.
@@ -130,14 +132,6 @@ public:
       
       return result.c_str();
    }
-   /*!
-    * Allows you to extract out a sub keywordlist from another
-    * you can also collapse the hieracrchy by setting
-    * strip prefix to true.
-    */
-   void add(const ossimKeywordlist& kwl,
-            const char* prefix=0,
-            bool stripPrefix=true);
 
    // Methods to add keywords to list.
    void addPair(const std::string& key,
@@ -148,166 +142,188 @@ public:
                 const std::string& key,
                 const std::string& value,
                 bool               overwrite = true);
-
    
-   void add(const char*   key,
-            const char*   value,
-            bool          overwrite = true);
-
-   void add(const char*   prefix,
-            const char*   key,
-            const char*   value,
-            bool          overwrite = true);
-
-   void add(const char*   key,
-            char          value,
-            bool          overwrite = true);
-
-   void add(const char*   prefix,
-            const char*   key,
-            char          value,
-            bool          overwrite = true);
-
-   void add(const char*   key,
-            ossim_int16   value,
-            bool          overwrite = true);
-
-   void add(const char*   prefix,
-            const char*   key,
-            ossim_int16   value,
-            bool          overwrite = true);
-
-   void add(const char*   key,
-            ossim_uint16  value,
-            bool          overwrite = true);
-
-   void add(const char*   prefix,
-            const char*   key,
-            ossim_uint16  value,
-            bool          overwrite = true);
-
-   void add(const char*   key,
-            ossim_int32   value,
-            bool          overwrite = true);
-
-   void add(const char*   prefix,
-            const char*   key,
-            ossim_int32   value,
-            bool          overwrite = true);
-
-   void add(const char*   key,
-            ossim_uint32  value,
-            bool          overwrite = true);
-
-   void add(const char*   prefix,
-            const char*   key,
-            ossim_uint32  value,
-            bool          overwrite = true);
-
-   void add(const char*   key,
-            ossim_int64   value,
-            bool          overwrite = true);
-
-   void add(const char*   prefix,
-            const char*   key,
-            ossim_int64   value,
-            bool          overwrite = true);
-
-   void add(const char*   key,
-            ossim_uint64  value,
-            bool          overwrite = true);
-
-   void add(const char*   prefix,
-            const char*   key,
-            ossim_uint64  value,
-            bool          overwrite = true);
-
-   /**
-    * @param key Key for key-value pair.
-    *
-    * @param value Value to pair with key.  Note this will be stored as a
-    * string.
-    * 
-    * @param precision Decimal point precision of the output. (default = 8)
-    *
-    * @param trimZeroFlag If true trailing '0's and any trailing '.' will
-    * be trimmed from the converted string.  (default = false)
-    *
-    * @param scientific If true output will be in scientific notation else
-    * fixed is used. (default = false)
-    */
-   void add(const char*   key,
-            ossim_float32 value,
-            bool          overwrite    = true,
-            int           precision    = 8);
-
-   /**
-    * @param key Key for key-value pair.
-    *
-    * @param value Value to pair with key.  Note this will be stored as a
-    * string.
-    * 
-    * @param precision Decimal point precision of the output. (default = 8)
-    *
-    * @param trimZeroFlag If true trailing '0's and any trailing '.' will
-    * be trimmed from the converted string.  (default = false)
-    *
-    * @param scientific If true output will be in scientific notation else
-    * fixed is used. (default = false)
-    */
-   void add(const char*   prefix,
-            const char*   key,
-            ossim_float32 value,
-            bool          overwrite    = true,
-            int           precision    = 8);
-
-   /**
-    * @param key Key for key-value pair.
-    *
-    * @param value Value to pair with key.  Note this will be stored as a
-    * string.
-    * 
-    * @param precision Decimal point precision of the output. (default = 15)
-    *
-    * @param trimZeroFlag If true trailing '0's and any trailing '.' will
-    * be trimmed from the converted string.  (default = false)
-    *
-    * @param scientific If true output will be in scientific notation else
-    * fixed is used. (default = false)
-    */
-   void add(const char*   key,
-            ossim_float64 value,
-            bool          overwrite    = true,
-            int           precision    = 15);
-
-   /**
-    * @param key Key for key-value pair.
-    *
-    * @param value Value to pair with key.  Note this will be stored as a
-    * string.
-    * 
-    * @param precision Decimal point precision of the output. (default = 15)
-    *
-    * @param trimZeroFlag If true trailing '0's and any trailing '.' will
-    * be trimmed from the converted string.  (default = false)
-    *
-    * @param scientific If true output will be in scientific notation else
-    * fixed is used. (default = false)
-    */
-   void add(const char*   prefix,
-            const char*   key,
-            ossim_float64 value,
-            bool          overwrite    = true,
-            int           precision    = 15);
-
    /*!
+    * Allows you to extract out a sub keywordlist from another
+    * you can also collapse the hieracrchy by setting
+    * strip prefix to true.
+    */
+   void add(const ossimKeywordlist& kwl,
+            const char* prefix=0,
+            bool stripPrefix=true);
+  
+   void add(const char*   key,
+            const char*   value,
+            bool          overwrite = true);
+
+   void add(const char*   prefix,
+            const char*   key,
+            const char*   value,
+            bool          overwrite = true);
+
+   void add(const char*   key,
+            char          value,
+            bool          overwrite = true);
+
+   void add(const char*   prefix,
+            const char*   key,
+            char          value,
+            bool          overwrite = true);
+
+   void add(const char*   key,
+            ossim_int16   value,
+            bool          overwrite = true);
+
+   void add(const char*   prefix,
+            const char*   key,
+            ossim_int16   value,
+            bool          overwrite = true);
+
+   void add(const char*   key,
+            ossim_uint16  value,
+            bool          overwrite = true);
+
+   void add(const char*   prefix,
+            const char*   key,
+            ossim_uint16  value,
+            bool          overwrite = true);
+
+   void add(const char*   key,
+            ossim_int32   value,
+            bool          overwrite = true);
+
+   void add(const char*   prefix,
+            const char*   key,
+            ossim_int32   value,
+            bool          overwrite = true);
+
+   void add(const char*   key,
+            ossim_uint32  value,
+            bool          overwrite = true);
+
+   void add(const char*   prefix,
+            const char*   key,
+            ossim_uint32  value,
+            bool          overwrite = true);
+
+   void add(const char*   key,
+            ossim_int64   value,
+            bool          overwrite = true);
+
+   void add(const char*   prefix,
+            const char*   key,
+            ossim_int64   value,
+            bool          overwrite = true);
+
+   void add(const char*   key,
+            ossim_uint64  value,
+            bool          overwrite = true);
+
+   void add(const char*   prefix,
+            const char*   key,
+            ossim_uint64  value,
+            bool          overwrite = true);
+
+   /**
+    * @param key Key for key-value pair.
+    *
+    * @param value Value to pair with key.  Note this will be stored as a
+    * string.
+    * 
+    * @param precision Decimal point precision of the output. (default = 8)
+    *
+    * @param trimZeroFlag If true trailing '0's and any trailing '.' will
+    * be trimmed from the converted string.  (default = false)
+    *
+    * @param scientific If true output will be in scientific notation else
+    * fixed is used. (default = false)
+    */
+   void add(const char*   key,
+            ossim_float32 value,
+            bool          overwrite    = true,
+            int           precision    = 8);
+
+   /**
+    * @param key Key for key-value pair.
+    *
+    * @param value Value to pair with key.  Note this will be stored as a
+    * string.
+    * 
+    * @param precision Decimal point precision of the output. (default = 8)
+    *
+    * @param trimZeroFlag If true trailing '0's and any trailing '.' will
+    * be trimmed from the converted string.  (default = false)
+    *
+    * @param scientific If true output will be in scientific notation else
+    * fixed is used. (default = false)
+    */
+   void add(const char*   prefix,
+            const char*   key,
+            ossim_float32 value,
+            bool          overwrite    = true,
+            int           precision    = 8);
+
+   /**
+    * @param key Key for key-value pair.
+    *
+    * @param value Value to pair with key.  Note this will be stored as a
+    * string.
+    * 
+    * @param precision Decimal point precision of the output. (default = 15)
+    *
+    * @param trimZeroFlag If true trailing '0's and any trailing '.' will
+    * be trimmed from the converted string.  (default = false)
+    *
+    * @param scientific If true output will be in scientific notation else
+    * fixed is used. (default = false)
+    */
+   void add(const char*   key,
+            ossim_float64 value,
+            bool          overwrite    = true,
+            int           precision    = 15);
+
+   /**
+    * @param key Key for key-value pair.
+    *
+    * @param value Value to pair with key.  Note this will be stored as a
+    * string.
+    * 
+    * @param precision Decimal point precision of the output. (default = 15)
+    *
+    * @param trimZeroFlag If true trailing '0's and any trailing '.' will
+    * be trimmed from the converted string.  (default = false)
+    *
+    * @param scientific If true output will be in scientific notation else
+    * fixed is used. (default = false)
+    */
+   void add(const char*   prefix,
+            const char*   key,
+            ossim_float64 value,
+            bool          overwrite    = true,
+            int           precision    = 15);
+
+   /**
+    * @brief Checks for key in map.
+    *
+    * Note that "find" and findKey will alway return an empty string even if
+    * the key in not in the map.
+    *
+    * @return true if key is in map even if value is empty; false, if not.
+    */
+   bool hasKey( const std::string& key ) const;
+   
+   /**
     *  @brief Find methods that take std::string(s).
     *  Searches the map for key(/prefix) and returns the resulting value
     *  or an empty string if the key was not found.
+    *  @param key e.g. "number_line"
+    *  @param prefix e..g "image0."
+    *  @return Reference to string.  This will be emptry if not found or
+    *  if value is empty.
     */
-   std::string findKey(const std::string& key) const;
-   std::string findKey(const std::string& prefix,
-                       const std::string& key) const;
+   const std::string& findKey(const std::string& key) const;
+   const std::string& findKey(const std::string& prefix,
+                              const std::string& key) const;
    
    const char* find(const char* key) const;
    const char* find(const char* prefix,

@@ -1237,14 +1237,14 @@ void ossimRpfCacheTileSource::populateLut()
    theLut = 0;
    if(m_fileNames.size() > 0)
    {
-      bool found = false;
+      // bool found = false;
       ossimRpfFrameEntry tempEntry;
       ossimRpfFrame aFrame;
       ossimFilename fileName = m_fileNames[0].split("|")[0];
-      if (fileName.exists())
-      {
-         found = true;
-      }
+      // if (fileName.exists())
+      // {
+      //    found = true;
+      // }
 
       if(aFrame.parseFile(fileName)
          == ossimErrorCodes::OSSIM_OK)

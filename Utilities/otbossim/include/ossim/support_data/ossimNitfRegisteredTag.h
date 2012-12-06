@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRegisteredTag.h 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfRegisteredTag.h 21842 2012-10-11 21:00:41Z dburken $
 #ifndef ossimNitfRegisteredTag_HEADER
 #define ossimNitfRegisteredTag_HEADER
 
@@ -43,6 +43,13 @@ public:
    virtual void parseStream(std::istream& in)=0;
    virtual void writeStream(std::ostream& out)=0;
 
+   /**
+    * @brief Returns the length in bytes of the tag from the CEL or REL field.
+    *
+    * The entire TRE length is 11 plus this(the size of the CEL or REL field).
+    *
+    * @return Length of REDATA or CEDATA.
+    */
    virtual ossim_uint32 getSizeInBytes()const=0;
 
    virtual void setProperty(ossimRefPtr<ossimProperty> property);

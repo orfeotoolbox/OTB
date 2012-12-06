@@ -7,13 +7,13 @@
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiBandHistogram.cpp 17205 2010-04-24 18:10:01Z dburken $
-#include <fstream>
-using namespace std;
+//  $Id: ossimMultiBandHistogram.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/base/ossimMultiBandHistogram.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimNotify.h>
 #include <ossim/imaging/ossimImageSource.h>
+#include <fstream>
 
 ossimMultiBandHistogram::ossimMultiBandHistogram()
 {  
@@ -316,7 +316,7 @@ bool ossimMultiBandHistogram::importHistogram(const ossimFilename& file)
 {
    if(file.exists())
    {
-      ifstream input(file.c_str());
+      std::ifstream input(file.c_str());
 
       return importHistogram(input);
    }

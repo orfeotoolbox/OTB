@@ -104,7 +104,7 @@ ossimRS1SarModel::~ossimRS1SarModel()
 //******************************************************************************
 //  loadSate()
 //******************************************************************************
-bool ossimRS1SarModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
+bool ossimRS1SarModel::loadState(const ossimKeywordlist& /* kwl */, const char* /* prefix */)
 {
    // NOT YET IMPLEMENTED
    setErrorStatus();
@@ -114,7 +114,7 @@ bool ossimRS1SarModel::loadState(const ossimKeywordlist& kwl, const char* prefix
 //******************************************************************************
 //  saveState()
 //******************************************************************************
-bool ossimRS1SarModel::saveState(ossimKeywordlist& kwl, const char* prefix) const
+bool ossimRS1SarModel::saveState(ossimKeywordlist& /* kwl */, const char* /* prefix */) const
 {
    // NOT YET IMPLEMENTED
    setErrorStatus();
@@ -125,7 +125,7 @@ bool ossimRS1SarModel::saveState(ossimKeywordlist& kwl, const char* prefix) cons
 //! Given an image point, returns a ray originating at some arbitrarily high
 //! point (in this model at the sensor position) and pointing towards the target.
 //*************************************************************************************************
-void ossimRS1SarModel::imagingRay(const ossimDpt& image_point, ossimEcefRay& image_ray) const
+void ossimRS1SarModel::imagingRay(const ossimDpt& image_point, ossimEcefRay& /* image_ray */) const
 {
    const char* MODULE = "ossimRS1SarModel::imagingRay()";
 
@@ -176,7 +176,7 @@ void ossimRS1SarModel::imagingRay(const ossimDpt& image_point, ossimEcefRay& ima
    // origin (after the range vector was established):
    ossimEcefVector rangeVector     = localORP - ecfArpPos;
    ossimEcefVector rangeNormal     = rangeVector.cross(ecfArpVel);
-   ossimEcefVector zDirection      = rangeNormal.cross(rangeVector);
+   // ossimEcefVector zDirection      = rangeNormal.cross(rangeVector);
    ossimLsrSpace localVehicleSpace (ossimEcefPoint(ecfArpPos + thePosCorrection), // origin
                                     rangeNormal,  // X-direction
                                     rangeVector, 0);   // Y-direction (Z not specified
@@ -239,8 +239,8 @@ void ossimRS1SarModel::lineSampleHeightToWorld(const ossimDpt& image_point,
    static const char MODULE[] = "ossimRS1SarModel::lineSampleHeightToWorld()";
    if (traceDebug())  CLOG << "entering..." << endl;
 
-   static const int    MAX_NUM_ITERS = 50;
-   static const double MAX_ELEV_DIFF = 0.001;
+   // static const int    MAX_NUM_ITERS = 50;
+   // static const double MAX_ELEV_DIFF = 0.001;
 
    ossimEcefRay imaging_ray;
    imagingRay(image_point, imaging_ray);

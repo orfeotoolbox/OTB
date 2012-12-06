@@ -13,7 +13,7 @@
 // Container class for four double points representing a rectangle.
 // 
 //*******************************************************************
-//  $Id: ossimDrect.h 19180 2011-03-22 17:36:33Z oscarkramer $
+//  $Id: ossimDrect.h 21560 2012-08-30 12:09:03Z gpotts $
 
 #ifndef ossimDrect_HEADER
 #define ossimDrect_HEADER
@@ -44,6 +44,7 @@
 //***
 class ossimIrect;
 class ossimPolygon;
+class ossimKeywordlist;
 
 //*******************************************************************
 // CLASS:  ossimDrect
@@ -562,6 +563,12 @@ public:
     * @return true or false to indicate successful parsing.
     */
    bool toRect(const ossimString& rectString);
+
+   bool saveState(ossimKeywordlist& kwl,
+                  const char* prefix=0)const;
+   bool loadState(const ossimKeywordlist& kwl,
+                  const char* prefix=0);
+
    /*!
     * Will subdivide this rect into four partitions.
     */

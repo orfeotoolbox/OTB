@@ -6,10 +6,7 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimGeneralRasterWriter.cpp 19942 2011-08-12 16:12:42Z gpotts $
-
-#include <cstdlib>
-#include <fstream>
+//  $Id: ossimGeneralRasterWriter.cpp 21962 2012-11-30 15:44:32Z dburken $
 
 #include <ossim/imaging/ossimGeneralRasterWriter.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -24,6 +21,8 @@
 #include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/base/ossimEndian.h>
 
+#include <cstdlib>
+#include <fstream>
 
 static ossimTrace traceDebug("ossimGeneralRasterWriter:debug");
 
@@ -36,22 +35,12 @@ static const char DEFAULT_FILE_NAME[] = "output.ras";
 ossimGeneralRasterWriter::ossimGeneralRasterWriter()
    :
       ossimImageFileWriter(),
-      theRlevel(0)
-{
-  setOutputImageType(OSSIM_GENERAL_RASTER_BSQ);
-
-  // Since there is no internal geometry set the flag to write out one.
-  setWriteExternalGeometryFlag(true);
-  theOutputByteOrder = ossimEndian().getSystemEndianType();
-}
-
-ossimGeneralRasterWriter::ossimGeneralRasterWriter(
-   ossimImageSource* inputSource, const ossimFilename& file)
-   :
-      ossimImageFileWriter(file,
-                         inputSource,
-                         NULL),
-      theRlevel(0)
+      theOutputStream(0),
+      theOwnsStreamFlag(false),
+      theRlevel(0),
+      theOutputByteOrder(OSSIM_LITTLE_ENDIAN),
+      theMinPerBand(0),
+      theMaxPerBand(0)
 {
   setOutputImageType(OSSIM_GENERAL_RASTER_BSQ);
 
@@ -70,121 +59,150 @@ ossimGeneralRasterWriter::~ossimGeneralRasterWriter()
 
 bool ossimGeneralRasterWriter::isOpen()const
 {
-   // fstream::is_open not const; hence, the messy code...
-   return const_cast<std::ofstream*>(&theFileStream)->is_open();
+   return ( theOutputStream ? true : false );
 }
 
 bool ossimGeneralRasterWriter::open()
 {
-   if(isOpen())
-   {
-      close();
-   }
-
-   theFileStream.open(theFilename.c_str(), ios::out | ios::binary);
+   bool result = false;
    
-   if(theFileStream.is_open())
+   close();
+
+   // Check for empty filenames.
+   if ( theFilename.size() )
    {
-      return true;
+      std::ofstream* os = new std::ofstream();
+      os->open(theFilename.c_str(), ios::out | ios::binary);
+      
+      if(os->is_open())
+      {
+         theOutputStream = os;
+         theOwnsStreamFlag = true;
+         result = true;
+      }
+      else
+      {
+         delete os;
+         os = 0;
+      }
    }
 
-   return false;
+   return result;
 }
 
 void ossimGeneralRasterWriter::close()
 {
-   if (theFileStream.is_open())
+   if (theOutputStream)      
    {
-      theFileStream.close();
+      theOutputStream->flush();
+      if (theOwnsStreamFlag)
+      {
+         delete theOutputStream;
+         theOwnsStreamFlag = false;
+      }
+      theOutputStream = 0;
    }
-   theFileStream.clear();
 }
 
 bool ossimGeneralRasterWriter::writeFile()
 {
-   static const char MODULE[] = "ossimGeneralRasterWriter::writeFile";
-   
-   if( getErrorStatus() != ossimErrorCodes::OSSIM_OK )
-   {
-      ossimNotify(ossimNotifyLevel_FATAL)
-         << MODULE << " ERROR:"
-         << "\nError status previously set!" << std::endl;
-      return false;
-   }
-   
-   if(!theInputConnection->isMaster())
-   {
-      theInputConnection->slaveProcessTiles();
-      return true;
-   }
-   
-   open();
-   
-   if(theFileStream.fail())
-   {
-      ossimNotify(ossimNotifyLevel_FATAL)
-         << MODULE << " ERROR:"
-         << "\nOutput file not open:  " << theFilename.c_str()
-         << "\nReturning from method." << std::endl;
-      setErrorStatus();
-      return false;
-   }
+   bool result = false;
 
-   bool result = true;
-   // Write the file with the image data.
-   if ( (theOutputImageType == "general_raster_bip") ||
-        (theOutputImageType == "general_raster_bip_envi") )
+   if( theInputConnection.valid() && ( getErrorStatus() == ossimErrorCodes::OSSIM_OK ) )
    {
-      result = writeToBip();
-   }
-   else if ( (theOutputImageType == "general_raster_bil") ||
-             (theOutputImageType == "general_raster_bil_envi") )
-   {
-      result = writeToBil();
-   }
-   else if ( (theOutputImageType == "general_raster_bsq") ||
-             (theOutputImageType == "general_raster_bsq_envi") )
-   {
-      result = writeToBsq();
-   }
-   else
-   {
-      ossimNotify(ossimNotifyLevel_FATAL)
-         << MODULE << " ERROR:"
-         << "\nUnsupported output type:  " << theOutputImageType << std::endl;
-      result = false;
-   }
-   
-   if (result)
-   {
-      // Flush the stream to disk...
-      theFileStream.flush();
-
-      // Do this only on the master process. Note left to right precedence!
-      if (getSequencer() && getSequencer()->isMaster())
+      //---
+      // Make sure we can open the file.  Note only the master process is used for
+      // writing...
+      //---
+      if(theInputConnection->isMaster())
       {
-         //---
-         // Write the header out.  We do this last since we must
-         // compute min max pixel while we are writting the image.
-         // since the header is an external text file this is Ok
-         // to do.
-         //---
-         writeHeader();
-
-         if (theOutputImageType.contains("envi"))
+         if (!isOpen())
          {
-            writeEnviHeader();
+            open();
          }
       }
+
+      result = writeStream();
+
+      if ( result )
+      {
+         // Do this only on the master process. Note left to right precedence!
+         if (getSequencer() && getSequencer()->isMaster())
+         {
+            //---
+            // Write the header out.  We do this last since we must
+            // compute min max pixel while we are writting the image.
+            // since the header is an external text file this is Ok
+            // to do.
+            //---
+            writeHeader();
+            
+            if (theOutputImageType.contains("envi"))
+            {
+               writeEnviHeader();
+            }
+         }
+      } 
+
+      close();
    }
-   
-   if (traceDebug()) CLOG << " Exited..." << std::endl;
 
-   close();
-   
    return result;
-}
+   
+} // End: ossimGeneralRasterWriter::writeFile()
 
+bool ossimGeneralRasterWriter::writeStream()
+{
+   static const char MODULE[] = "ossimGeneralRasterWriter::writeStream";
+
+   bool result = false;
+   
+   if( theInputConnection.valid() && theOutputStream &&
+       ( getErrorStatus() == ossimErrorCodes::OSSIM_OK ) )
+   {
+      if ( theInputConnection->isMaster() )
+      {
+         // Write the file with the image data.
+         if ( (theOutputImageType == "general_raster_bip") ||
+              (theOutputImageType == "general_raster_bip_envi") )
+         {
+            result = writeToBip();
+         }
+         else if ( (theOutputImageType == "general_raster_bil") ||
+                   (theOutputImageType == "general_raster_bil_envi") )
+         {
+            result = writeToBil();
+         }
+         else if ( (theOutputImageType == "general_raster_bsq") ||
+                   (theOutputImageType == "general_raster_bsq_envi") )
+         {
+            result = writeToBsq();
+         }
+         else
+         {
+            ossimNotify(ossimNotifyLevel_FATAL)
+               << MODULE << " ERROR:"
+               << "\nUnsupported output type:  " << theOutputImageType << std::endl;
+            result = false;
+         }
+
+         if ( result )
+         {
+            // Flush the stream to disk...
+            theOutputStream->flush();
+         }
+      }
+      else // Matching else: if ( theInputConnection->isMaster() )
+      {
+         // Slave process:
+         theInputConnection->slaveProcessTiles();
+         result = true;
+      }
+   }
+
+   return result;
+   
+} // End: ossimGeneralRasterWriter::writeStream()
 
 bool ossimGeneralRasterWriter::writeToBip()
 {
@@ -294,8 +312,8 @@ bool ossimGeneralRasterWriter::writeToBip()
                            buf,
                            lineBytes/ossim::scalarSizeInBytes(scalarType));
             }
-            theFileStream.write((char*)buf, lineBytes);
-            if (theFileStream.fail())
+            theOutputStream->write((char*)buf, lineBytes);
+            if (theOutputStream->fail())
             {
                ossimNotify(ossimNotifyLevel_FATAL)
                   << MODULE << " ERROR:"
@@ -426,8 +444,8 @@ bool ossimGeneralRasterWriter::writeToBil()
                            buf,
                            bytesInLine/ossim::scalarSizeInBytes(scalarType));
             }
-            theFileStream.write((char*)buf, bytesInLine);
-            if (theFileStream.fail())
+            theOutputStream->write((char*)buf, bytesInLine);
+            if (theOutputStream->fail())
             {
                ossimNotify(ossimNotifyLevel_FATAL)
                   << MODULE << " ERROR:"
@@ -566,8 +584,8 @@ bool ossimGeneralRasterWriter::writeToBsq()
          
          // Put the file pointer in the right spot.
          streampos pos = file_band_offset * band + start_line * bytesInLine;
-         theFileStream.seekp(pos, ios::beg);
-         if (theFileStream.fail())
+         theOutputStream->seekp(pos, ios::beg);
+         if (theOutputStream->fail())
          {
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " ERROR:"
                  << "Error returned seeking to image data position!" << std::endl;
@@ -585,9 +603,9 @@ bool ossimGeneralRasterWriter::writeToBsq()
                            bytesInLine/ossim::scalarSizeInBytes(scalarType));
             }
 
-            theFileStream.write((char*)buf, bytesInLine);
+            theOutputStream->write((char*)buf, bytesInLine);
             
-            if (theFileStream.fail())
+            if (theOutputStream->fail())
             {
                ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " ERROR:"
                     << "Error returned writing line!" << std::endl;
@@ -709,19 +727,19 @@ void ossimGeneralRasterWriter::writeHeader() const
                                                      getOutputScalarType());
    
    os << "// *** ossim meta data general raster header file ***\n"
-      << ossimKeywordNames::IMAGE_FILE_KW << ":  "
+      << ossimKeywordNames::FILENAME_KW << ": " 
       << theFilename.file().c_str() << "\n"
-      << ossimKeywordNames::IMAGE_TYPE_KW << ":  "
+      << ossimKeywordNames::IMAGE_TYPE_KW << ": "
       << getOutputImageTypeString() << "\n"
-      << ossimKeywordNames::INTERLEAVE_TYPE_KW << ":  "
+      << ossimKeywordNames::INTERLEAVE_TYPE_KW << ": "
       << interleaveType.c_str() << "\n"
       << ossimKeywordNames::NUMBER_BANDS_KW << ":  "
       << theInputConnection->getNumberOfOutputBands() << "\n"
-      << ossimKeywordNames::NUMBER_LINES_KW << ":  "
+      << ossimKeywordNames::NUMBER_LINES_KW << ": "
       << (theAreaOfInterest.lr().y - theAreaOfInterest.ul().y + 1) << "\n"
-      << ossimKeywordNames::NUMBER_SAMPLES_KW << ":  "
+      << ossimKeywordNames::NUMBER_SAMPLES_KW << ": "
       << (theAreaOfInterest.lr().x - theAreaOfInterest.ul().x + 1) << "\n"
-      << ossimKeywordNames::SCALAR_TYPE_KW << ":  "
+      << ossimKeywordNames::SCALAR_TYPE_KW << ": "
       << scalar.c_str() << "\n"
       << ossimKeywordNames::BYTE_ORDER_KW <<": "
       << ((theOutputByteOrder==OSSIM_BIG_ENDIAN)?"big_endian":"little_endian")
@@ -833,4 +851,15 @@ ossimString ossimGeneralRasterWriter::getInterleaveString() const
       interleaveType = "bsq";
    }
    return interleaveType;
+}
+
+bool ossimGeneralRasterWriter::setOutputStream(std::ostream& stream)
+{
+   if (theOwnsStreamFlag && theOutputStream)
+   {
+      delete theOutputStream;
+   }
+   theOutputStream = &stream;
+   theOwnsStreamFlag = false;
+   return true;
 }

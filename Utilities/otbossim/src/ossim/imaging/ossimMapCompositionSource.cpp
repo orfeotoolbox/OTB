@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMapCompositionSource.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimMapCompositionSource.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimMapCompositionSource.h>
 #include <ossim/imaging/ossimU8ImageData.h>
@@ -17,6 +17,7 @@
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/imaging/ossimAnnotationFontObject.h>
 #include <ossim/imaging/ossimAnnotationLineObject.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/font/ossimFontFactoryRegistry.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimDms.h>

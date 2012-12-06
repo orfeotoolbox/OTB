@@ -1,6 +1,9 @@
 #include <ossim/imaging/ossimHistogramMatchFilter.h>
 #include <ossim/base/ossimFilenameProperty.h>
 #include <ossim/base/ossimBooleanProperty.h>
+#include <ossim/base/ossimVisitor.h>
+#include <ossim/imaging/ossimImageData.h>
+#include <ossim/imaging/ossimImageHandler.h>
 
 RTTI_DEF1(ossimHistogramMatchFilter, "ossimHistogramMatchFilter", ossimImageSourceFilter);
 ossimHistogramMatchFilter::ossimHistogramMatchFilter()
@@ -231,17 +234,24 @@ bool ossimHistogramMatchFilter::saveState(ossimKeywordlist& kwl,
 
 void ossimHistogramMatchFilter::autoLoadInputHistogram()
 {
-   ossimConnectableObject* obj = findObjectOfType("ossimImageHandler",
-                                                  CONNECTABLE_DIRECTION_INPUT);
-   if(obj)
+   ossimTypeNameVisitor visitor(ossimString("ossimImageHandler"),
+                                true,
+                                ossimVisitor::VISIT_CHILDREN|ossimVisitor::VISIT_INPUTS);
+   accept(visitor);
+   
+   if ( visitor.getObjects().size() )
    {
-      ossimRefPtr<ossimProperty> prop = obj->getProperty("histogram_filename");
-      if(prop.valid())
+      ossimRefPtr<ossimImageHandler> ih = visitor.getObjectAs<ossimImageHandler>( 0 );
+      if ( ih.valid() )
       {
-         ossimFilename inputHisto = ossimFilename(prop->valueToString());
-         if(inputHisto.exists())
+         ossimRefPtr<ossimProperty> prop = ih->getProperty("histogram_filename");
+         if( prop.valid() )
          {
-            setInputHistogram(inputHisto);
+            ossimFilename inputHisto = ossimFilename(prop->valueToString());
+            if( inputHisto.exists() )
+            {
+               setInputHistogram(inputHisto);
+            }
          }
       }
    }

@@ -13,7 +13,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevCellHandler.h 16143 2009-12-19 03:09:01Z okramer $
+// $Id: ossimElevCellHandler.h 21210 2012-07-03 13:11:20Z gpotts $
 
 
 #ifndef ossimElevCellHandler_HEADER
@@ -72,12 +72,13 @@ public:
     */
    virtual bool pointHasCoverage(const ossimGpt&) const;
 
+   virtual bool getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& gpt) const;
    /**
     * METHODS: accuracyLE90(), accuracyCE90()
     * Returns the vertical and horizontal accuracy (90% confidence):
     */
-   virtual double getAccuracyLE90(const ossimGpt&) const;
-   virtual double getAccuracyCE90(const ossimGpt&) const;
+ // virtual double getAccuracyLE90(const ossimGpt&) const;
+ //  virtual double getAccuracyCE90(const ossimGpt&) const;
 
    bool canConnectMyInputTo(ossim_int32 inputIndex,
                             const ossimConnectableObject* object)const;

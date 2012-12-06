@@ -15,20 +15,21 @@
 // frequency counts for each of these buckets.
 //
 //********************************************************************
-// $Id: ossimHistogram.cpp 19805 2011-07-11 11:10:12Z gpotts $
-//
+// $Id: ossimHistogram.cpp 21742 2012-09-14 19:00:24Z dburken $
 
-#include <stdio.h>
+#include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimHistogram.h>
+#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimThinPlateSpline.h>
+#include <ossim/base/ossimDpt.h>
+#include <cmath>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 using namespace std;
 
-#include <math.h>
-#include <ossim/base/ossimCommon.h>
-#include <ossim/base/ossimHistogram.h>
-#include <ossim/base/ossimNotifyContext.h>
-#include <ossim/base/ossimThinPlateSpline.h>
+
 
 // nonstandard versions that use operator>, so they behave differently
 // than std:::min/max and ossim::min/max.  kept here for now for that
@@ -42,33 +43,38 @@ using namespace std;
 static const int MEAN_FLAG = 1, SD_FLAG = 2;
 RTTI_DEF1(ossimHistogram, "ossimHistogram", ossimObject);
 ossimHistogram::ossimHistogram()
+   :
+   stats_consistent(MEAN_FLAG | SD_FLAG),
+   vals(new float [1]),
+   counts(new float [1]),
+   num(0),
+   delta(0.0),
+   vmin(0),
+   vmax(0),
+   mean(0.0),
+   standard_dev(0.0)
 {
-   vals = new float [1];
    vals[0] = 0.0;
-   counts = new float [1];
    counts[0] = 0.0;
-   num = 0;
-   vmin = 0;
-   vmax = 0;
-   delta = 0.0;
-   mean = 0.0;
-   standard_dev = 0.0;
-   stats_consistent = 0;
-   stats_consistent |= (MEAN_FLAG | SD_FLAG);
 }
 
 ossimHistogram::ossimHistogram(int xres, float val1, float val2)
+   :
+   stats_consistent(MEAN_FLAG | SD_FLAG),
+   vals(new float [xres]),
+   counts(new float [xres]),
+   num(xres),
+   delta(0.0),
+   vmin(0),
+   vmax(0),
+   mean(0.0),
+   standard_dev(0.0)
 {
-   vals = new float [xres];
-   counts = new float [xres];
-   num = xres;
    vmax = MAX(val1, val2);
    vmin = MIN(val1, val2);
-   delta = (vmax - vmin) / xres;
+   delta = (vmax - vmin + 1) / xres;
    mean = (float)((vmax + vmin)/2.0);
    standard_dev = (float)((vmax - vmin)/(2.0*sqrt(3.0)));
-   stats_consistent = 0;
-   stats_consistent |= (MEAN_FLAG | SD_FLAG);
    int i = 0;
 
    if (vals == NULL || counts == NULL)
@@ -92,19 +98,27 @@ ossimHistogram::ossimHistogram(int xres, float val1, float val2)
 }
 
 ossimHistogram::ossimHistogram(float* uvals, float* ucounts, int xres)
+   :
+   stats_consistent(MEAN_FLAG | SD_FLAG),
+   vals(uvals),
+   counts(ucounts),
+   num(xres),
+   delta(0.0),
+   vmin(0),
+   vmax(0),
+   mean(0.0),
+   standard_dev(0.0)
 {
-   vals = uvals;
-   counts = ucounts;
-   num = xres;
-   delta = vals[1] - vals[0]; // Changed this from delta = 1.0
-//  vmax = GetMaxVal();
-//  vmin = GetMinVal(); JAF version
-   vmin = uvals[0] - .5f*delta;
-   vmax = uvals[num-1] + .5f*delta;
-   mean = GetMean();
-   standard_dev = GetStandardDev();
-   stats_consistent = 0;
-   stats_consistent |= (MEAN_FLAG | SD_FLAG);
+   if ( ( xres >= 2 ) && uvals && ucounts )
+   {
+      delta = vals[1] - vals[0]; // Changed this from delta = 1.0
+      //  vmax = GetMaxVal();
+      //  vmin = GetMinVal(); JAF version
+      vmin = uvals[0] - .5f*delta;
+      vmax = uvals[num-1] + .5f*delta;
+      mean = GetMean();
+      standard_dev = GetStandardDev();
+   }   
 }
 //-----------------------------------------------------------
 // -- Copy constructor
@@ -1348,6 +1362,33 @@ bool ossimHistogram::saveState(ossimKeywordlist& kwl,
            "max_value",
            vmax,
            true);
+   
+
+
+   ossimString binArrayList = "(";
+   bool firstValue = true;
+
+   for(ossim_int32 index = 0; index < num; ++index)
+   {
+      if(fabs(counts[index]) > FLT_EPSILON)
+      {
+
+         if(!firstValue)
+         {
+            binArrayList += ",";
+         }
+         else
+         {
+            firstValue = false;
+         }
+         binArrayList += "("+ossimString::toString(index)+","+ossimString::toString(counts[index])+")";
+     }
+   }
+
+   binArrayList += ")";
+
+   kwl.add(prefix, "bins", binArrayList, true);
+#if 0
    ossimString binValue = "";
    for(ossim_int32 index = 0; index < num; ++index)
    {
@@ -1363,7 +1404,7 @@ bool ossimHistogram::saveState(ossimKeywordlist& kwl,
                  true);
       }
    }
-   
+#endif   
    return true;
 }
 
@@ -1394,21 +1435,45 @@ bool ossimHistogram::loadState(const ossimKeywordlist& kwl,
          {
             maxValue = (ossim_float32)ossimString(max_value).toDouble();
          }
-         ossimKeywordlist binsKwl;
-         ossim_uint32 offset = (ossim_uint32)(ossimString(prefix)+"bin").size();
-         ossimString regExpression =  ossimString("^(") + ossimString(prefix) + "bin[0-9]+)";
-         kwl.extractKeysThatMatch(binsKwl,regExpression);
-         const ossimKeywordlist::KeywordMap& kwlMap = binsKwl.getMap();
-         ossimKeywordlist::KeywordMap::const_iterator iter = kwlMap.begin();
+
          create(bins, minValue, maxValue);
          float* countsPtr = GetCounts();
          memset(countsPtr, '\0', bins*sizeof(float));
-         while(iter != kwlMap.end())
+         // this is new style histogram creation
+         //
+         ossimString binsString = kwl.find(prefix, "bins");
+         if(!binsString.empty())
          {
-            ossimString numberStr(iter->first.begin() + offset,
-                                  iter->first.end());
-            countsPtr[numberStr.toUInt32()] = ossimString(iter->second).toDouble();
-            ++iter;
+            std::vector<ossimDpt> result;
+            ossim::toVector(result, binsString);
+            if(!result.empty())
+            {
+               ossim_uint32 idx = 0;
+               for(idx = 0; idx < result.size();++idx)
+               {
+                  ossim_uint32 binIdx = static_cast<ossim_uint32>(result[idx].x);
+                  if(binIdx < bins)
+                  {
+                     countsPtr[binIdx] = result[idx].y;
+                  }
+               }
+            }
+         }
+         else
+         {
+            ossimKeywordlist binsKwl;
+            ossim_uint32 offset = (ossim_uint32)(ossimString(prefix)+"bin").size();
+            ossimString regExpression =  ossimString("^(") + ossimString(prefix) + "bin[0-9]+)";
+            kwl.extractKeysThatMatch(binsKwl,regExpression);
+            const ossimKeywordlist::KeywordMap& kwlMap = binsKwl.getMap();
+            ossimKeywordlist::KeywordMap::const_iterator iter = kwlMap.begin();
+            while(iter != kwlMap.end())
+            {
+               ossimString numberStr(iter->first.begin() + offset,
+                                     iter->first.end());
+               countsPtr[numberStr.toUInt32()] = ossimString(iter->second).toDouble();
+               ++iter;
+            }
          }
          
          return true;

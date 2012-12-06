@@ -8,8 +8,10 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRLevelFilter.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimRLevelFilter.cpp 21631 2012-09-06 18:10:55Z dburken $
 #include <ossim/imaging/ossimRLevelFilter.h>
+#include <ossim/imaging/ossimImageData.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/base/ossimTrace.h>
@@ -183,7 +185,7 @@ ossimRefPtr<ossimImageData> ossimRLevelFilter::getTile(
 {
    if(!theInputConnection)
    {
-      return NULL;
+      return 0;
    }
 
    if(!isSourceEnabled())

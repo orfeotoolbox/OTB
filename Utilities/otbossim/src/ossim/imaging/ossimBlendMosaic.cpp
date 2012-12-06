@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBlendMosaic.cpp 19900 2011-08-04 14:19:57Z dburken $
+// $Id: ossimBlendMosaic.cpp 20696 2012-03-19 12:36:40Z dburken $
 
 #include <ossim/imaging/ossimBlendMosaic.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -61,7 +61,7 @@ ossimRefPtr<ossimImageData> ossimBlendMosaic::getTile(
    const ossimIrect& tileRect,
    ossim_uint32 resLevel)
 {   
-   ossimIpt origin = tileRect.ul();
+   // ossimIpt origin = tileRect.ul();
    if(!isSourceEnabled())
    {
       return ossimImageMosaic::getTile(tileRect, resLevel);
@@ -219,7 +219,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimBlendMosaic::combine(
   ossim_uint32 band;
   double currentWeight = 1.0;
   double previousWeight = 1.0;
-  double sumOfWeights   = 1;
+  // double sumOfWeights   = 1;
   long offset = 0;
   long row    = 0;
   long col    = 0;
@@ -251,7 +251,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimBlendMosaic::combine(
       // set the current weight for the current tile.
       currentWeight = theWeights[layerIdx];
 
-      sumOfWeights = previousWeight+currentWeight;
+      // sumOfWeights = previousWeight+currentWeight;
       if( (currentStatus != OSSIM_EMPTY) &&
 	  (currentStatus != OSSIM_NULL))
        {	 
@@ -332,123 +332,121 @@ template <class T> ossimRefPtr<ossimImageData> ossimBlendMosaic::combine(
 }
 
 template <class T> ossimRefPtr<ossimImageData> ossimBlendMosaic::combineNorm(
-   T,
-   const ossimIrect& tileRect,
-   ossim_uint32 resLevel)
+   T, const ossimIrect& tileRect, ossim_uint32 resLevel)
 {
-  ossimRefPtr<ossimImageData> currentImageData=NULL;
-  ossim_uint32 band;
-  double currentWeight = 1.0;
-  double previousWeight = 1.0;
-  double sumOfWeights   = 1;
-  long offset = 0;
-  long row    = 0;
-  long col    = 0;
-  ossim_uint32 layerIdx = 0;
-  currentImageData = getNextNormTile(layerIdx, 0, tileRect, resLevel);
+   ossimRefPtr<ossimImageData> currentImageData=NULL;
+   ossim_uint32 band;
+   double currentWeight = 1.0;
+   double previousWeight = 1.0;
+   // double sumOfWeights   = 1;
+   long offset = 0;
+   long row    = 0;
+   long col    = 0;
+   ossim_uint32 layerIdx = 0;
+   currentImageData = getNextNormTile(layerIdx, 0, tileRect, resLevel);
   
-  if(!currentImageData.get()) // if we don't have one then return theTile
-  {
-     return theTile;
-  }
-  theNormResult->makeBlank();
-  float** srcBands  = new float*[theLargestNumberOfInputBands];
-  float** destBands = new float*[theLargestNumberOfInputBands];
-  float*  nullPix   = new float[theTile->getNumberOfBands()];
+   if(!currentImageData.get()) // if we don't have one then return theTile
+   {
+      return theTile;
+   }
+   theNormResult->makeBlank();
+   float** srcBands  = new float*[theLargestNumberOfInputBands];
+   float** destBands = new float*[theLargestNumberOfInputBands];
+   float*  nullPix   = new float[theTile->getNumberOfBands()];
   
-  previousWeight = theWeights[layerIdx];
-  //    // now get the previous weight and then combine the two into one.
-  // let's assign the bands
-  for(band = 0; band < theLargestNumberOfInputBands; ++band)
-  {
-     destBands[band] = static_cast<float*>(theNormResult->getBuf(band));
-     nullPix[band]   = static_cast<float>(theNormResult->getNullPix(band));
-  }
-  while(currentImageData.get())
-  {
-     ossimDataObjectStatus currentStatus     = currentImageData->getDataObjectStatus();
+   previousWeight = theWeights[layerIdx];
+   //    // now get the previous weight and then combine the two into one.
+   // let's assign the bands
+   for(band = 0; band < theLargestNumberOfInputBands; ++band)
+   {
+      destBands[band] = static_cast<float*>(theNormResult->getBuf(band));
+      nullPix[band]   = static_cast<float>(theNormResult->getNullPix(band));
+   }
+   while(currentImageData.get())
+   {
+      ossimDataObjectStatus currentStatus     = currentImageData->getDataObjectStatus();
      
-     // set the current weight for the current tile.
-     currentWeight = theWeights[layerIdx];
+      // set the current weight for the current tile.
+      currentWeight = theWeights[layerIdx];
      
-     sumOfWeights = previousWeight+currentWeight;
-     if( (currentStatus != OSSIM_EMPTY) &&
-         (currentStatus != OSSIM_NULL))
-     {	 
-        long h = (long)currentImageData->getHeight();
-        long w = (long)currentImageData->getWidth();
-        offset = 0;
-        ossim_uint32 minNumberOfBands = currentImageData->getNumberOfBands();
+      // sumOfWeights = previousWeight+currentWeight;
+      if( (currentStatus != OSSIM_EMPTY) &&
+          (currentStatus != OSSIM_NULL))
+      {	 
+         long h = (long)currentImageData->getHeight();
+         long w = (long)currentImageData->getWidth();
+         offset = 0;
+         ossim_uint32 minNumberOfBands = currentImageData->getNumberOfBands();
         
-        // let's assign the bands
-        for(band = 0; band < minNumberOfBands; ++band)
-        {
-           srcBands[band]  = static_cast<float*>(currentImageData->getBuf(band));
-        }
-        for(;band < theLargestNumberOfInputBands; ++band)
-        {
-           srcBands[band]  = srcBands[minNumberOfBands - 1];
-        }
+         // let's assign the bands
+         for(band = 0; band < minNumberOfBands; ++band)
+         {
+            srcBands[band]  = static_cast<float*>(currentImageData->getBuf(band));
+         }
+         for(;band < theLargestNumberOfInputBands; ++band)
+         {
+            srcBands[band]  = srcBands[minNumberOfBands - 1];
+         }
         
-        if(currentStatus == OSSIM_PARTIAL)
-        {
-           for(row = 0; row < h; ++row)
-           {
-              for(col = 0; col < w; ++col)
-              {
-                 if(!currentImageData->isNull(offset))
-                 {
-                    for(band = 0; band < theLargestNumberOfInputBands; ++band)
-                    {
-                       if(destBands[band][offset] != nullPix[band])
-                       {
-                          destBands[band][offset] = static_cast<float>((destBands[band][offset]*previousWeight + 
-                                                                        srcBands[band][offset]*currentWeight)/(previousWeight+currentWeight));
-                       }
-                       else
-                       {
-                          destBands[band][offset] = srcBands[band][offset];
-                       }
-                    }	 
-                 }
-                 ++offset;
-              }
-           }
-        }
-        else
-        {
-           for(row = 0; row < h; ++row)
-           {
-              for(col = 0; col < w; ++col)
-              {
-                 for(band = 0; band < theLargestNumberOfInputBands; ++band)
-                 {			
-                    if(destBands[band][offset] != nullPix[band])
-                    {
-                       destBands[band][offset] = static_cast<float>((destBands[band][offset]*previousWeight+ 
-                                                                     srcBands[band][offset]*currentWeight)/(previousWeight + currentWeight));
-                    }
-                    else
-                    {
-                       destBands[band][offset] = srcBands[band][offset];
-                    }
-                 }
+         if(currentStatus == OSSIM_PARTIAL)
+         {
+            for(row = 0; row < h; ++row)
+            {
+               for(col = 0; col < w; ++col)
+               {
+                  if(!currentImageData->isNull(offset))
+                  {
+                     for(band = 0; band < theLargestNumberOfInputBands; ++band)
+                     {
+                        if(destBands[band][offset] != nullPix[band])
+                        {
+                           destBands[band][offset] = static_cast<float>((destBands[band][offset]*previousWeight + 
+                                                                         srcBands[band][offset]*currentWeight)/(previousWeight+currentWeight));
+                        }
+                        else
+                        {
+                           destBands[band][offset] = srcBands[band][offset];
+                        }
+                     }	 
+                  }
                   ++offset;
-              }
-           }
-        }
-     }
-     currentImageData = getNextNormTile(layerIdx, tileRect, resLevel);
-     previousWeight   = (previousWeight+currentWeight)/2.0;
-  }
-  theNormResult->validate();
-  theTile->copyNormalizedBufferToTile((float*)theNormResult->getBuf());
-  delete [] srcBands;
-  delete [] destBands;
-  delete [] nullPix;
-  theTile->validate();
+               }
+            }
+         }
+         else
+         {
+            for(row = 0; row < h; ++row)
+            {
+               for(col = 0; col < w; ++col)
+               {
+                  for(band = 0; band < theLargestNumberOfInputBands; ++band)
+                  {			
+                     if(destBands[band][offset] != nullPix[band])
+                     {
+                        destBands[band][offset] = static_cast<float>((destBands[band][offset]*previousWeight+ 
+                                                                      srcBands[band][offset]*currentWeight)/(previousWeight + currentWeight));
+                     }
+                     else
+                     {
+                        destBands[band][offset] = srcBands[band][offset];
+                     }
+                  }
+                  ++offset;
+               }
+            }
+         }
+      }
+      currentImageData = getNextNormTile(layerIdx, tileRect, resLevel);
+      previousWeight   = (previousWeight+currentWeight)/2.0;
+   }
+   theNormResult->validate();
+   theTile->copyNormalizedBufferToTile((float*)theNormResult->getBuf());
+   delete [] srcBands;
+   delete [] destBands;
+   delete [] nullPix;
+   theTile->validate();
 
-  return theTile;   
+   return theTile;   
 }
 
 bool ossimBlendMosaic::saveState(ossimKeywordlist& kwl,

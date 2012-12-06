@@ -11,12 +11,11 @@
 // Contains definition of class ossimXmlDocument. This class provides read-only
 // parsing and accessing of an XML document file.
 //*****************************************************************************
-// $Id: ossimXmlDocument.cpp 20370 2011-12-15 13:46:06Z gpotts $
+// $Id: ossimXmlDocument.cpp 21579 2012-08-31 14:24:11Z dburken $
 
 
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimXmlAttribute.h>
-#include <ossim/base/ossimXmlNode.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimRegExp.h>
 #include <ossim/base/ossimNotifyContext.h>

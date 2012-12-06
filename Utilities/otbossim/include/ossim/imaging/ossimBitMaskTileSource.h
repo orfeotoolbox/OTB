@@ -15,6 +15,8 @@
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimBitMaskWriter.h>
 
+class ossimImageGeometry;
+
 //*************************************************************************************************
 //! This is the image handler for providing mask pixels to an ossimMaskFilter object.
 //!
@@ -89,7 +91,7 @@ public:
 
    //! There is no geometry associated with a mask file -- it is pixel-for-pixel mapped to
    //! an image file. The image file must have the valid geometry.
-   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry() { return NULL; }
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
    //! Overrides base class implementation.
    virtual ossim_uint32 getNumberOfDecimationLevels() const;

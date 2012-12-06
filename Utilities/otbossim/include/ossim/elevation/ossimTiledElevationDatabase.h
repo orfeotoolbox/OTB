@@ -98,26 +98,19 @@ public:
     */
    virtual bool pointHasCoverage(const ossimGpt& gpt) const;
 
-   /**
-    * Statisfies pure virtual ossimElevSource::getAccuracyLE90.
-    * @return The vertical accuracy (90% confidence) in the
-    * region of gpt:
-    */
-   virtual double getAccuracyLE90(const ossimGpt& gpt) const;
-   
-   /**
-    * Statisfies pure virtual ossimElevSource::getAccuracyCE90.
-    * @return The horizontal accuracy (90% confidence) in the
-    * region of gpt.
-    */
-   virtual double getAccuracyCE90(const ossimGpt& gpt) const;
 
    /** @brief Initialize from keyword list. */
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 
    /** @brief Save the state to a keyword list. */
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix)const;
+   
+    bool getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& /*gpt*/) const
+    {
+       info.makeNan();
 
+       return false;
+    }
    /**
     * @brief ProcessFile method.
     *

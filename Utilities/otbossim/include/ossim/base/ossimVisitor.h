@@ -1,4 +1,4 @@
-// $Id: ossimVisitor.h 20489 2012-01-23 20:07:56Z dburken $
+// $Id: ossimVisitor.h 21850 2012-10-21 20:09:55Z dburken $
 
 #ifndef ossimVisitor_HEADER
 #define ossimVisitor_HEADER 1
@@ -57,44 +57,29 @@ public:
    ossimCollectionVisitor(const ossimCollectionVisitor& src);
    ListRef& getObjects();
    const ListRef& getObjects()const;
-   ossimObject* getObject(ossim_uint32 idx = 0)
-   {
-      if(idx < m_collection.size())
-      {
-         return m_collection[idx].get();
-      }
-      
-      return 0;
-   }
-   const ossimObject* getObject(ossim_uint32 idx = 0)const
-   {
-      if(idx < m_collection.size())
-      {
-         return m_collection[idx].get();
-      }
-      
-      return 0;
-   }
-   template <class T>
-   T* getObjectAs(ossim_uint32 idx=0)
+   ossimObject* getObject(ossim_uint32 idx = 0);
+   const ossimObject* getObject(ossim_uint32 idx = 0)const;
+
+   // Inlined to force template instantiation.
+   template <class T> T* getObjectAs(ossim_uint32 idx=0)
    {
       if(idx < m_collection.size())
       {
          return dynamic_cast<T*>(m_collection[idx].get());
       }
-      
       return 0;
    }
-   template<class T>
-   const T* getObjectAs(ossim_uint32 idx=0)const
+
+   // Inlined to force template instantiation.
+   template<class T> const T* getObjectAs(ossim_uint32 idx=0)const
    {
       if(idx < m_collection.size())
       {
          return dynamic_cast<const T*>(m_collection[idx].get());
       }
-      
       return 0;
    }
+
    virtual void reset();
  
 protected:
@@ -105,10 +90,13 @@ protected:
 class OSSIM_DLL ossimIdVisitor : public ossimVisitor
 {
 public:
+   ossimIdVisitor(int visitorType =(VISIT_INPUTS|VISIT_CHILDREN));
    ossimIdVisitor(const ossimId& id = ossimId(), int visitorType =(VISIT_INPUTS|VISIT_CHILDREN));
    ossimIdVisitor(const ossimIdVisitor& src);
    virtual ossimRefPtr<ossimVisitor> dup()const;
    virtual void visit(ossimConnectableObject* obj);
+
+   /** @brief Resets m_object to 0, calls ossimVisitor::reset(). */
    virtual void reset();
    
    ossimConnectableObject* getObject();

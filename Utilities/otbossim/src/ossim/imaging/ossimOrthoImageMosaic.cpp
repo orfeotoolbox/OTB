@@ -5,10 +5,12 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimOrthoImageMosaic.cpp 17932 2010-08-19 20:34:35Z dburken $
+//  $Id: ossimOrthoImageMosaic.cpp 21631 2012-09-06 18:10:55Z dburken $
 #include <ossim/imaging/ossimOrthoImageMosaic.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/imaging/ossimImageData.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 

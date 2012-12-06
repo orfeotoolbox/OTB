@@ -14,7 +14,6 @@
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatap.h>
 #include <ossim/matrix/newmatio.h>
-
 enum HeightRefType_t
 {
    AT_HGT = 0,
@@ -50,6 +49,17 @@ public:
     * @return Height at reference point.
     */
    virtual ossim_float64 getRefHeight(const ossimGpt& pg) const;
+   
+   /**
+    * @brief Method to get surface information string.
+    *
+    * @param pg   Reference point.
+    * @param info ossimElevationAccuracyInfo string.
+    *
+    * @return true on success, false on error.
+    */
+  // virtual bool getSurfaceInfo
+  //    (const ossimGpt& pg, ossimElevationAccuracyInfo& info) const;
    
    /**
     * @brief Method to get surface covariance matrix.

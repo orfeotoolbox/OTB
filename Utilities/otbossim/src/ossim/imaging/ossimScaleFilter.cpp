@@ -8,9 +8,10 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimScaleFilter.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimScaleFilter.cpp 21631 2012-09-06 18:10:55Z dburken $
 #include <ossim/imaging/ossimScaleFilter.h>
 #include <ossim/imaging/ossimFilter.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimDiscreteConvolutionKernel.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>

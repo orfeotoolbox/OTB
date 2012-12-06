@@ -11,10 +11,7 @@
 //*************************************************************************************************
 //  $Id: ossimQbTileFilesHandler.cpp 2814 2011-07-05 13:40:16Z oscar.kramer $
 
-#include <algorithm>
-
 #include <ossim/imaging/ossimQbTileFilesHandler.h>
-#include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimRegExp.h>
 #include <ossim/base/ossimRefPtr.h>
@@ -25,10 +22,13 @@
 #include <ossim/base/ossimPolygon.h>
 #include <ossim/base/ossimStdOutProgress.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/imaging/ossimImageGeometry.h>
+#include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimTiffOverviewBuilder.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/support_data/ossimQuickbirdTile.h>
 #include <ossim/projection/ossimQuickbirdRpcModel.h>
+#include <algorithm>
 
 RTTI_DEF1(ossimQbTileFilesHandler, "ossimQbTileFilesHandler", ossimTiledImageHandler)
 

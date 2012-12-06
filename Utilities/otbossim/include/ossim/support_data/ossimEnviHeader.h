@@ -7,34 +7,68 @@
 // Description:
 // 
 // Class for reading and writing an ENVI (The Environment for Visualizing
-// Images) header file.
+// Images) header file.  This parses envi header and places in a keyword
+// list.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimEnviHeader.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimEnviHeader.h 21519 2012-08-22 21:16:25Z dburken $
+
 #ifndef ossimEnviHeader_HEADER
-#define ossimEnviHeader_HEADER
+#define ossimEnviHeader_HEADER 1
 
-#include <ossim/base/ossimErrorStatusInterface.h>
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimString.h>
-
-
-class ossimFilename;
-class ossimKeywordlist;
+#include <ossim/base/ossimReferenced.h>
+#include <iosfwd>
 
 /**
  * Class for reading and writing an ENVI (The Environment for Visualizing
  * Images) header file.
  */
-class OSSIM_DLL ossimEnviHeader : public ossimErrorStatusInterface
+class OSSIM_DLL ossimEnviHeader : public ossimReferenced
 {
 public:
-
    /** default construtor */
    ossimEnviHeader();
 
    /** virtual destructor */
    virtual ~ossimEnviHeader();
+
+   virtual void reset();
+
+   /** @return Const reference to map. */
+   const ossimKeywordlist& getMap() const;
+   
+   /** @return Reference to map. */
+   ossimKeywordlist& getMap();
+
+   /**
+    * @brief Gets value for key.
+    * @param key
+    * @param value
+    * @return true if key is in map even if value is empty; false, if not.
+    */
+   bool getValue( const ossimString& key, ossimString& value ) const;
+
+   /**
+    * @brief Gets value for key.
+    * @param key
+    * @param value
+    * @return true if key is in map even if value is empty; false, if not.
+    */
+   bool findCaseInsensitive( const ossimString& key,
+                             ossimString& value ) const;
+
+   /**
+    * @brief Gets value for key.
+    * @param key
+    * @param value
+    * @return true if key is in map even if value is empty; false, if not.
+    */
+   bool findSubStringCaseInsensitive( const ossimString& key,
+                                      ossimString& value) const;
 
    /**
     * Opens an envi header.
@@ -60,6 +94,10 @@ public:
     * @return Reference to the stream passed.
     */
    std::ostream& print(std::ostream& out) const;
+
+   /** @brief friend operator<< */
+   friend OSSIM_DLL std::ostream& operator<<(std::ostream& out,
+                                             const ossimEnviHeader& obj);
 
    /**
     * @return The description of the file.
@@ -178,12 +216,12 @@ public:
    void setSensorType(const ossimString& sensorType);
 
    /**
-    * @return The envi byte order.
+    * @return If key "byte order" found returns the envi byte order; else,
+    * system byte order.  
     *
     * @note (Same as the ossimByteOrder enumeration):
     * 0 = LITTLE_ENDIAN,
     * 1 = BIG_ENDIAN
-    * 
     */
    ossimByteOrder getByteOrder() const;
    
@@ -198,13 +236,25 @@ public:
     * @return The x start.
     */
    ossim_int32 getXStart() const;
-
+   
    /**
     * Sets the x start.
     * 
     * @param xStart
     */
    void setXStart(ossim_int32 xstart);
+   
+   /**
+    * @return The x start.
+    */
+   ossim_int32 getYStart() const;
+   
+   /**
+    * Sets the y start.
+    * 
+    * @param ystart
+    */
+   void setYStart(ossim_int32 ystart);
 
    /**
     * @return The envi map info string.
@@ -310,27 +360,31 @@ public:
     */
    bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 
+   /**
+    * @brief Global method to test first line of file for "ENVI".
+    * @return true on success, false on error.
+    */
+   static bool isEnviHeader( const ossimFilename& file );
+
+   /**
+    * @brief Global method to test first line of stream for "ENVI".
+    * @return true on success, false on error.
+    */
+   static bool isEnviHeader( std::istream& in );
+
+   /** @return Path to envi header file. */
+   const ossimFilename& getFile() const;
+   
 private:
 
-   void parseDescription(std::ifstream& is);
-   void parseWavelength(std::ifstream& is);
-   void parseBandNames(std::ifstream& is);
-
-   ossimString         theDescription;
-   ossim_uint32        theSamples;
-   ossim_uint32        theLines;
-   ossim_uint32        theBands;
-   ossim_uint32        theHeaderOffset;
-   ossimString         theFileType;
-   ossim_uint32        theDataType;
-   ossimString         theInterleave;
-   ossimString         theSensorType;
-   ossimByteOrder      theByteOrder;
-   ossim_int32         theXStart;
-   ossimString         theMapInfo;
-   ossimString         theWavelengthUnits;
-   std::vector<ossimString> theBandName;
-   std::vector<ossimString> theWavelength;
+   /**
+    * @brief Parses stream.
+    * @return true on success, false on error.
+    */
+   bool readStream(std::istream& in);
+   
+   ossimFilename       m_file; // Name of header file.
+   ossimKeywordlist    m_keywords;
 };
 #endif /* #ifndef ossimEnviHeader_HEADER */
 

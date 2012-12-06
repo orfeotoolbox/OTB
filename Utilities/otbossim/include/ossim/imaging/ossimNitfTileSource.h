@@ -11,17 +11,17 @@
 // Contains class declaration for NitfTileSource.
 //
 //*******************************************************************
-//  $Id: ossimNitfTileSource.h 17932 2010-08-19 20:34:35Z dburken $
-#ifndef ossimNitfTileSource_HEADER
-#define ossimNitfTileSource_HEADER
+//  $Id: ossimNitfTileSource.h 21445 2012-08-03 20:30:10Z dburken $
 
-#include <fstream>
+#ifndef ossimNitfTileSource_HEADER
+#define ossimNitfTileSource_HEADER 1
 
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
 #include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/support_data/ossimNitfFileHeader.h>
 #include <ossim/support_data/ossimNitfImageHeader.h>
+#include <fstream>
 
 struct jpeg_decompress_struct;
 
@@ -254,10 +254,26 @@ protected:
 
    /**
     * @brief Allocates everything for current entry.
+    *
+    * This is called on an open() or a entry change to an already open nitf
+    * file.
+    *
+    * This does not allocate buffers and tiles to keep open and
+    * setCurrentEntry times to a minimum.  Buffers are allocated on first
+    * grab of pixel data by allocatBuffers method.
+    * 
     * @return True on success, false on error.
-    * @note allocate is called on a entry change to an already open nitf file.
     */
    virtual bool allocate();
+
+   /**
+    * @brief Allocates buffers for current entry.
+    *
+    * This is called on first getTile().
+    * 
+    * @return True on success, false on error.
+    */
+   virtual bool allocateBuffers();
 
    /**
     * @param hdr Pointer to image header.
@@ -501,7 +517,14 @@ protected:
    //---
    std::vector<std::streamoff>   theNitfBlockOffset;
    std::vector<ossim_uint32>     theNitfBlockSize;
-   mutable bool                  m_isJpeg12Bit;
+   
+   bool m_isJpeg12Bit;
+
+   //---
+   // If set to true indicates scanForJpegBlockOffsets() needs to be called
+   // prior to grabbing a block.
+   //---
+   bool m_jpegOffsetsDirty;
    
 TYPE_DATA
 };

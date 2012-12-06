@@ -9,12 +9,13 @@
 // Image handler class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimSrtmTileSource.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimSrtmTileSource.h>
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/support_data/ossimSrtmSupportData.h>
 
 RTTI_DEF1(ossimSrtmTileSource,
@@ -66,13 +67,14 @@ bool ossimSrtmTileSource::open()
    ossimGeneralRasterInfo generalRasterInfo;
    bool result = generalRasterInfo.loadState(kwl);
    
-   theMetaData.loadState(kwl);
-   
+   // theMetaData.loadState(kwl);
+   theMetaData = generalRasterInfo.getImageMetaData();
+
    if(result)
    {
        result =  ossimGeneralRasterTileSource::open(generalRasterInfo);
    }
-   
+
    if (traceDebug())
    {
       CLOG << " Exited with " << (result?"true":"false") << " ..."

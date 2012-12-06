@@ -30,7 +30,7 @@ class OSSIM_DLL ossimElevManager : public ossimElevSource
 public: 
    typedef std::vector<ossimRefPtr<ossimElevationDatabase> > ElevationDatabaseListType;
    
-   class ConnectionStringVisitor : public ossimVisitor
+   class OSSIM_DLL ConnectionStringVisitor : public ossimVisitor
    {
    public:
       ConnectionStringVisitor(const ossimString& value):m_connectionString(value){}
@@ -54,16 +54,8 @@ public:
    
    virtual double getHeightAboveEllipsoid(const ossimGpt& gpt);
    virtual double getHeightAboveMSL(const ossimGpt& gpt);
-   virtual double getAccuracyLE90(const ossimGpt& /*gpt*/) const
-   {
-      std::cout << "ossimElevManager::getAccuracyLE90(): NOT IMPLEMENTED!!!\n";
-      return 0.0;
-   }
-   virtual double getAccuracyCE90(const ossimGpt& /*gpt*/) const
-   {
-      return 0.0;
-      std::cout << "ossimElevManager::getAccuracyLE90(): NOT IMPLEMENTED!!!\n";
-   }
+
+
    virtual bool pointHasCoverage(const ossimGpt& /*gpt*/) const
    {
       std::cout << "ossimElevManager::pointHasCoverage(): NOT IMPLEMENTED!!!\n";
@@ -74,7 +66,8 @@ public:
       std::cout << "ossimElevManager::pointHasCoverage(): NOT IMPLEMENTED AND SHOULD NOT BE USED AT THIS LEVEL!!!\n";
       return 1.0;
    }
-   
+   virtual bool getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& gpt) const;
+  
    ossim_uint32 getNumberOfElevationDatabases()const
    {
       return (ossim_uint32)m_elevationDatabaseList.size();

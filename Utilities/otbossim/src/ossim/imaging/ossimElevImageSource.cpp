@@ -11,9 +11,7 @@
 // manager.
 // 
 //*******************************************************************
-//  $Id: ossimElevImageSource.cpp 9094 2006-06-13 19:12:40Z dburken $
-
-#include <time.h>
+//  $Id: ossimElevImageSource.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimElevImageSource.h>
 #include <ossim/elevation/ossimElevManager.h>
@@ -21,6 +19,8 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/imaging/ossimImageData.h>
+#include <ctime>
 
 RTTI_DEF1(ossimElevImageSource, "ossimElevImageSource", ossimImageSource)
 

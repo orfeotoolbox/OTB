@@ -9,7 +9,7 @@
 // Contains class implementaiton for the class "ossim LandsatTileSource".
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
+//  $Id: ossimLandsatTileSource.cpp 21512 2012-08-22 11:53:57Z dburken $
 
 #include <ossim/imaging/ossimLandsatTileSource.h>
 #include <ossim/base/ossimDirectory.h>
@@ -180,7 +180,7 @@ bool ossimLandsatTileSource::open()
    theMetaData.clear();
    theMetaData.setScalarType(OSSIM_UINT8);
    theMetaData.setNumberOfBands((ossim_uint32)fileList.size());   
-   theImageData = generalRasterInfo;
+   m_rasterInfo = generalRasterInfo;
    if(initializeHandler())
    {
       theImageFile = tempFilename;

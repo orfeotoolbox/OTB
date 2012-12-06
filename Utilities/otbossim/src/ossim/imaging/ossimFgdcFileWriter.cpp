@@ -11,20 +11,21 @@
 // Committe (FGDC) format.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimFgdcFileWriter.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimFgdcFileWriter.cpp 21631 2012-09-06 18:10:55Z dburken $
 
-#include <fstream>
-using namespace std;
 
 #include <ossim/imaging/ossimFgdcFileWriter.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimXmlNode.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <fstream>
+using namespace std;
 
 RTTI_DEF1(ossimFgdcFileWriter, "ossimFgdcFileWriter", ossimMetadataFileWriter)
 

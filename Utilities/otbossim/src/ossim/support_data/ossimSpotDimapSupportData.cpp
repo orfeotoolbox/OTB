@@ -9,7 +9,7 @@
 // Contains definition of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.cpp 20194 2011-11-01 17:31:13Z dburken $
+// $Id: ossimSpotDimapSupportData.cpp 20609 2012-02-27 12:05:13Z gpotts $
 
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
 #include <ossim/base/ossimFilename.h>

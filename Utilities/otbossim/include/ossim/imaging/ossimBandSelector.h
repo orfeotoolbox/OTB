@@ -8,14 +8,16 @@
 // Description:  Contains class declaration for ossimBandSelector.
 // 
 //*******************************************************************
-//  $Id: ossimBandSelector.h 19807 2011-07-13 11:55:12Z gpotts $
+//  $Id: ossimBandSelector.h 21631 2012-09-06 18:10:55Z dburken $
 #ifndef ossimBandSelector_HEADER
-#define ossimBandSelector_HEADER
+#define ossimBandSelector_HEADER 1
 
-#include <vector>
+
 #include <ossim/imaging/ossimImageSourceFilter.h>
-
+#include <vector>
+ 
 class ossimImageData;
+class ossimImageHandler;
 
 class OSSIM_DLL ossimBandSelector : public ossimImageSourceFilter
 {
@@ -28,6 +30,7 @@ public:
       ossimBandSelectorWithinRangeFlagState_OUT_OF_RANGE = 2,
 
    };
+
    ossimBandSelector();
    virtual ~ossimBandSelector();
    
@@ -66,6 +69,20 @@ public:
     */
    virtual ossim_uint32 getNumberOfOutputBands() const;
 
+   /**
+    * @brief Returns the number of input bands.
+    *
+    * Overrides ossimImageSourceFilter::getNumberOfInputBands to check for a
+    * single image chain band selectable image handler on the input.  If one
+    * is present it returns it's number of input bands instead of the number
+    * of the input connection's output bands(our input).  This is needed so
+    * callers, e.g. band selector dialog box can query the number of bands
+    * available.
+    *
+    * @return Number of bands available.
+    */
+   virtual ossim_uint32 getNumberOfInputBands()const;   
+
    virtual void initialize();
    
    virtual double getMinPixelValue(ossim_uint32 band=0)const;
@@ -96,8 +113,8 @@ public:
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;						  
-						  
    virtual bool isSourceEnabled()const;
+
 protected:
 
    /**
@@ -108,22 +125,34 @@ protected:
    /**
     * Will check all combinations of the band list to see if its 
     */
-   void checkPassThrough() const;
+   void checkPassThrough();
 
    /**
     * @return true if all bands in theOutputBandList are less than the
     * number of input's bands.
     */
    bool outputBandsWithinInputRange() const;
+
+   /**
+    * @brief Finds and returns band selectable image handler.
+    *
+    * To get a valid pointer there must be one and only one image handler on
+    * the input connection and it must be a band selector.  In other words,
+    * must be a single image chain input and
+    * ossimImageHandler::isBandSelector() must return true.
+    *
+    * @return Pointer to image handler wrapped in an ossimRefPtr on success;
+    * null, on error.
+    */
+   ossimRefPtr<ossimImageHandler> getBandSelectableImageHandler() const;
    
    
-   ossimRefPtr<ossimImageData> theTile;
-   std::vector<ossim_uint32>        theOutputBandList;
-   mutable ossimBandSelectorWithinRangeFlagState theWithinRangeFlag;
-  // bool theOrderedCorrectlyFlag;
-   mutable bool thePassThroughFlag;
+   ossimRefPtr<ossimImageData>           theTile;
+   std::vector<ossim_uint32>             theOutputBandList;
+   ossimBandSelectorWithinRangeFlagState theWithinRangeFlag;
+   bool                                  thePassThroughFlag;
 
 TYPE_DATA
 };
 
-#endif
+#endif /* #ifndef ossimBandSelector_HEADER */

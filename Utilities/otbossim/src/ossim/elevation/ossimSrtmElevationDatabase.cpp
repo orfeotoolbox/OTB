@@ -53,6 +53,41 @@ bool ossimSrtmElevationDatabase::open(const ossimString& connectionString)
    return result;
 }
 
+bool ossimSrtmElevationDatabase::getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& gpt) const
+{
+   bool result = false;
+   info.makeNan();
+
+   if(pointHasCoverage(gpt))
+   {
+      result = true;
+      if(m_meanSpacing > 100.0)
+      {
+         // 30 arc second
+         info.m_absoluteCE  = 20.0;
+         info.m_absoluteLE = 16.0;
+         info.m_surfaceName = "SRTM30";
+
+      }
+      else if (m_meanSpacing > 40.0)
+      {
+        // SRTM 3 arc
+         info.m_absoluteCE  = 20.0;
+         info.m_absoluteLE = 16.0;
+         info.m_surfaceName = "SRTM3";
+      }
+      else
+      {
+          // SRTM 1 arc
+         info.m_absoluteCE = 20.0;
+         info.m_absoluteLE = 10.0;
+         info.m_surfaceName = "SRTM1";
+       }
+   }
+
+   return result;
+}
+
 bool ossimSrtmElevationDatabase::openSrtmDirectory(const ossimFilename& dir)
 {
    if(traceDebug())

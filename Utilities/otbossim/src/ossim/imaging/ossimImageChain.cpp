@@ -8,17 +8,13 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.cpp 20322 2011-12-06 01:00:55Z oscarkramer $
-#include <algorithm>
-#include <iostream>
-#include <iterator>
+// $Id: ossimImageChain.cpp 21850 2012-10-21 20:09:55Z dburken $
 
 #include <ossim/imaging/ossimImageChain.h>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimConnectableContainer.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimNotifyContext.h>
-#include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimTrace.h>
@@ -26,6 +22,11 @@
 #include <ossim/base/ossimObjectEvents.h>
 #include <ossim/base/ossimIdManager.h>
 #include <ossim/base/ossimVisitor.h>
+#include <ossim/imaging/ossimImageData.h>
+#include <ossim/imaging/ossimImageGeometry.h>
+#include <algorithm>
+#include <iostream>
+#include <iterator>
 
 static ossimTrace traceDebug("ossimImageChain");
 
@@ -91,7 +92,7 @@ bool ossimImageChain::addLast(ossimConnectableObject* obj)
    {
       ossimConnectableObject* lastSource = imageChainList()[ imageChainList().size() -1].get();
 //      if(dynamic_cast<ossimImageSource*>(obj)&&lastSource)
-         if(lastSource)
+      if(lastSource)
       {
 //         obj->disconnect();
          ossimConnectableObject::ConnectableObjectList tempIn = getInputList();
@@ -505,7 +506,7 @@ bool ossimImageChain::removeChild(ossimConnectableObject* object)
          ossimConnectableObject::ConnectableObjectList output = object->getOutputList();
          object->changeOwner(0);// set the owner to 0
          bool erasingBeginning = (current == imageChainList().begin());
-         bool erasingEnd = (current+1) == imageChainList().end();
+         // bool erasingEnd = (current+1) == imageChainList().end();
          current = imageChainList().erase(current);
          object->disconnect();
          
@@ -548,10 +549,14 @@ bool ossimImageChain::removeChild(ossimConnectableObject* object)
 
 ossimConnectableObject* ossimImageChain::removeChild(const ossimId& id)
 {
-   ossimConnectableObject* obj = findObject(id, true);
-
-   removeChild(obj);
-   
+   ossimIdVisitor visitor( id,
+                           (ossimVisitor::VISIT_CHILDREN|ossimVisitor::VISIT_INPUTS ) );
+   accept( visitor );
+   ossimConnectableObject* obj = visitor.getObject();
+   if ( obj )
+   {
+      removeChild(obj);
+   }
    return obj;
 }
 
@@ -682,6 +687,17 @@ bool ossimImageChain::insertRight(ossimConnectableObject* newObj,
 bool ossimImageChain::insertRight(ossimConnectableObject* newObj,
                                   const ossimId& id)
 {
+
+#if 1
+   ossimIdVisitor visitor( id, ossimVisitor::VISIT_CHILDREN );
+   accept( visitor );
+   ossimConnectableObject* obj = visitor.getObject();
+   if ( obj )
+   {
+      return insertRight(newObj, obj);
+   }
+   return false;
+#else
    ossimConnectableObject* obj = findObject(id, false);
    if(obj)
    {
@@ -689,6 +705,7 @@ bool ossimImageChain::insertRight(ossimConnectableObject* newObj,
    }
 
    return false;
+#endif
 }
 
 bool ossimImageChain::insertLeft(ossimConnectableObject* newObj,
@@ -729,15 +746,26 @@ bool ossimImageChain::insertLeft(ossimConnectableObject* newObj,
 }
 
 bool ossimImageChain::insertLeft(ossimConnectableObject* newObj,
-                                  const ossimId& id)
+                                 const ossimId& id)
 {
+#if 1
+   ossimIdVisitor visitor( id,
+                           ossimVisitor::VISIT_CHILDREN|ossimVisitor::VISIT_INPUTS);
+   accept( visitor );
+   ossimConnectableObject* obj = visitor.getObject();
+   if ( obj )
+   {
+      return insertLeft(newObj, obj);
+   }
+   return false;
+#else
    ossimConnectableObject* obj = findObject(id, false);
    if(obj)
    {
       return insertLeft(newObj, obj);
    }
-
    return false;
+#endif   
 }
 
 bool ossimImageChain::replace(ossimConnectableObject* newObj,
@@ -919,13 +947,14 @@ double ossimImageChain::getMaxPixelValue(ossim_uint32 band)const
 
 void ossimImageChain::getOutputBandList(std::vector<ossim_uint32>& bandList) const
 {
-   if((imageChainList().size() > 0)&&(isSourceEnabled()))
+   if( (imageChainList().size() > 0) && isSourceEnabled() )
    {
-      ossimImageSource* inter = PTR_CAST(ossimImageSource,
-                                                  imageChainList()[0].get());
-      if(inter)
+      ossimRefPtr<const ossimImageSource> inter =
+         dynamic_cast<const ossimImageSource*>( imageChainList()[0].get() );
+      if( inter.valid() )
       {
-         return inter->getOutputBandList(bandList);
+         // cout << "cn: " << inter->getClassName() << endl;
+         inter->getOutputBandList(bandList);
       }
    }
 }
@@ -1333,26 +1362,59 @@ void ossimImageChain::findInputConnectionIds(vector<ossimId>& result,
 
 bool ossimImageChain::connectAllSources(const map<ossimId, vector<ossimId> >& idMapping)
 {
+   // cout << "this->getId(): " << this->getId() << endl;
+   
    if(idMapping.size())
    {
       map<ossimId, vector<ossimId> >::const_iterator iter = idMapping.begin();
 
+      
       while(iter != idMapping.end())
       {
+         // cout << "(*iter).first): " << (*iter).first << endl;
+#if 0
          ossimConnectableObject* currentSource = findObject((*iter).first);
+#else
+         ossimIdVisitor visitor( (*iter).first,
+                                 (ossimVisitor::VISIT_CHILDREN ) );
+                                  // ossimVisitor::VISIT_INPUTS ) );
+         accept( visitor );
+         ossimConnectableObject* currentSource = visitor.getObject();
+#endif
 
          if(currentSource)
          {
+            // cout << "currentSource->getClassName: " << currentSource->getClassName() << endl;
             long upperBound = (long)(*iter).second.size();
             for(long index = 0; index < upperBound; ++index)
             {
+               //cout << "(*iter).second[index]: " << (*iter).second[index] << endl;
+               
                if((*iter).second[index].getId() > -1)
                {
-                  ossimConnectableObject* inputSource = PTR_CAST(ossimConnectableObject, findObject((*iter).second[index]));
-                  currentSource->connectMyInputTo(index, inputSource);
-                  
+#if 0
+                  ossimConnectableObject* inputSource =
+                      PTR_CAST(ossimConnectableObject, findObject((*iter).second[index]));
+#else
+                  visitor.reset();
+                  visitor.setId( (*iter).second[index] );
+                  accept( visitor );
+                  ossimConnectableObject* inputSource = visitor.getObject();
+#endif
+                  // cout << "inputSource is " << (inputSource?"good...":"null...") << endl;
+                  if ( inputSource )
+                  {
+                     // cout << "inputSource->getClassName(): " << inputSource->getClassName() << endl;
+ 
+                     // Check for connection to self.
+                     if ( this != inputSource )
+                     {
+                        currentSource->connectMyInputTo(index, inputSource);
+                     }
+                     // else warning???
+                  }
                }
-               else
+               else // -1 id
                {
                   currentSource->disconnectMyInput((ossim_int32)index);
                }
@@ -1367,6 +1429,7 @@ bool ossimImageChain::connectAllSources(const map<ossimId, vector<ossimId> >& id
       }
    }
 
+   // abort();
    return true;
 }
 
@@ -1719,9 +1782,10 @@ void ossimImageChain::accept(ossimVisitor& visitor)
    {
       visitor.visit(this);
       ossimVisitor::VisitorType currentType = visitor.getVisitorType();
-      // lets make sure inputs and outputs are turned off for we are traversing all children and we should not have
-      // to have that enabled
-      //
+      //---
+      // Lets make sure inputs and outputs are turned off for we are traversing all children
+      // and we should not have to have that enabled.
+      //---
       visitor.turnOffVisitorType(ossimVisitor::VISIT_INPUTS|ossimVisitor::VISIT_OUTPUTS);
       if(visitor.getVisitorType() & ossimVisitor::VISIT_CHILDREN)
       {

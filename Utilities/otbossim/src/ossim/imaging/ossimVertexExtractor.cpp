@@ -6,7 +6,7 @@
 // TR # 136 kminear      Fix extractVertices method
 //
 //*************************************************************************
-// $Id: ossimVertexExtractor.cpp 15836 2009-10-30 12:29:09Z dburken $
+// $Id: ossimVertexExtractor.cpp 21184 2012-06-29 15:13:09Z dburken $
 
 #include <fstream>
 using namespace std;
@@ -597,12 +597,12 @@ bool ossimVertexExtractor::extractVertices()
          ossim_int32 line1_pt1 = (line1_pt2 + line1_pt0)/2;
          ossim_int32 line1_pt3 = (line1_pt2 + line1_pt4)/2;
          
-         double line1RegPtsSamples[] = {theRightEdge[line1_pt1],
-                                        theRightEdge[line1_pt2],
-                                        theRightEdge[line1_pt3]};
-         double line1RegPtsLines[] = {-line1_pt1,
-                                      -line1_pt2,
-                                      -line1_pt3};
+         double line1RegPtsSamples[] = { static_cast<double>(theRightEdge[line1_pt1]),
+                                         static_cast<double>(theRightEdge[line1_pt2]),
+                                         static_cast<double>(theRightEdge[line1_pt3]) };
+         double line1RegPtsLines[] = { static_cast<double>(-line1_pt1),
+                                       static_cast<double>(-line1_pt2),
+                                       static_cast<double>(-line1_pt3) };
          
          double sum_xy_line1 = 0.0;
          double sum_x_line1 = 0.0;
@@ -681,311 +681,310 @@ bool ossimVertexExtractor::extractVertices()
                         minValuePt3, minOffsetPt3 );
          line2_pt3 = line2_pt3-100 + minOffsetPt3;
          
-         //***
-            // Find the line within 100 lines of line2_ptx that has the
-            // minimum sample.  This will cut off the 'fringe'
-            //***
-            
-            double line2RegPtsSamples[] = {theRightEdge[line2_pt1],
-                                           theRightEdge[line2_pt2],
-                                           theRightEdge[line2_pt3]};
-            double line2RegPtsLines[] = {-line2_pt1,
-                                         -line2_pt2,
-                                         -line2_pt3};
-            
-            double sum_xy_line2 = 0.0;
-            double sum_x_line2 = 0.0;
-            double sum_y_line2 = 0.0;
-            double mean_x_line2 = 0.0;
-            double mean_y_line2 = 0.0;
-            double sum_x_squared_line2 = 0.0;
-            double sum_squared_x_line2 = 0.0;   
-            double b_line2;
-            double a_line2;
-            double num_elements_line2 = 3.0;
+         //---
+         // Find the line within 100 lines of line2_ptx that has the
+         // minimum sample.  This will cut off the 'fringe'
+         //---
+         double line2RegPtsSamples[] = { static_cast<double>(theRightEdge[line2_pt1]),
+                                         static_cast<double>(theRightEdge[line2_pt2]),
+                                         static_cast<double>(theRightEdge[line2_pt3]) };
+         double line2RegPtsLines[] = { static_cast<double>(-line2_pt1),
+                                       static_cast<double>(-line2_pt2),
+                                       static_cast<double>(-line2_pt3) };
          
+         double sum_xy_line2 = 0.0;
+         double sum_x_line2 = 0.0;
+         double sum_y_line2 = 0.0;
+         double mean_x_line2 = 0.0;
+         double mean_y_line2 = 0.0;
+         double sum_x_squared_line2 = 0.0;
+         double sum_squared_x_line2 = 0.0;   
+         double b_line2;
+         double a_line2;
+         double num_elements_line2 = 3.0;
+         
+         for(ossim_int32 i = 0; i < num_elements_line2; ++i)
+         {
+            sum_xy_line2 = sum_xy_line2
+               + (line2RegPtsSamples[i]*line2RegPtsLines[i]);
+            
+            sum_x_line2 = sum_x_line2 + line2RegPtsSamples[i];
+            sum_y_line2 = sum_y_line2 + line2RegPtsLines[i];
+            
+            sum_squared_x_line2 = sum_squared_x_line2
+               + line2RegPtsSamples[i]*line2RegPtsSamples[i];
+         }
+
+         sum_x_squared_line2 = sum_x_line2*sum_x_line2; 
+         mean_y_line2 = sum_y_line2/num_elements_line2;
+         mean_x_line2 = sum_x_line2/num_elements_line2;
+         b_line2 = (sum_xy_line2 - (sum_x_line2*sum_y_line2)/num_elements_line2)
+            / (sum_squared_x_line2 - (sum_x_squared_line2/num_elements_line2));
+         a_line2 = mean_y_line2 - b_line2*mean_x_line2;
+
+         if(traceDebug())
+         {
             for(ossim_int32 i = 0; i < num_elements_line2; ++i)
             {
-               sum_xy_line2 = sum_xy_line2
-                  + (line2RegPtsSamples[i]*line2RegPtsLines[i]);
-            
-               sum_x_line2 = sum_x_line2 + line2RegPtsSamples[i];
-               sum_y_line2 = sum_y_line2 + line2RegPtsLines[i];
-            
-               sum_squared_x_line2 = sum_squared_x_line2
-                  + line2RegPtsSamples[i]*line2RegPtsSamples[i];
+               ossimNotify(ossimNotifyLevel_DEBUG) << setprecision(15) << "line2RegPtsLines[" << i << "]:  "
+                                                   <<line2RegPtsLines[i]
+                                                   << "\nline2RegPtsSamples[" << i << "]:  "
+                                                   <<line2RegPtsSamples[i]
+                                                   <<std::endl;
             }
-
-            sum_x_squared_line2 = sum_x_line2*sum_x_line2; 
-            mean_y_line2 = sum_y_line2/num_elements_line2;
-            mean_x_line2 = sum_x_line2/num_elements_line2;
-            b_line2 = (sum_xy_line2 - (sum_x_line2*sum_y_line2)/num_elements_line2)
-               / (sum_squared_x_line2 - (sum_x_squared_line2/num_elements_line2));
-            a_line2 = mean_y_line2 - b_line2*mean_x_line2;
-
-            if(traceDebug())
-            {
-               for(ossim_int32 i = 0; i < num_elements_line2; ++i)
-               {
-                  ossimNotify(ossimNotifyLevel_DEBUG) << setprecision(15) << "line2RegPtsLines[" << i << "]:  "
-                                                      <<line2RegPtsLines[i]
-                                                      << "\nline2RegPtsSamples[" << i << "]:  "
-                                                      <<line2RegPtsSamples[i]
-                                                      <<std::endl;
-               }
-               ossimNotify(ossimNotifyLevel_DEBUG) << "\na_line2:  " << a_line2
-                                                   << "\nb_line2:  " << b_line2 << std::endl;
+            ossimNotify(ossimNotifyLevel_DEBUG) << "\na_line2:  " << a_line2
+                                                << "\nb_line2:  " << b_line2 << std::endl;
                
-            }
+         }
          
-            //End regression line2
+         //End regression line2
             
-            //Intersect lines 1 and 2 to get the ur corner vertex
+         //Intersect lines 1 and 2 to get the ur corner vertex
 
-            double ur_x = (a_line1 - a_line2)/(b_line2 - b_line1);
-            double ur_y = -(a_line1 + b_line1*ur_x);
+         double ur_x = (a_line1 - a_line2)/(b_line2 - b_line1);
+         double ur_y = -(a_line1 + b_line1*ur_x);
             
-            //Regression Line 3
+         //Regression Line 3
             
-            ossim_int32 line3_pt0 = leftMostSampleLine;
-            ossim_int32 line3_pt4 = bottomLine;
-            ossim_int32 line3_pt2 = (line3_pt0 + line3_pt4)/2;
-            ossim_int32 line3_pt1 = (line3_pt2 + line3_pt0)/2;
-            ossim_int32 line3_pt3 = (line3_pt2 + line3_pt4)/2;
+         ossim_int32 line3_pt0 = leftMostSampleLine;
+         ossim_int32 line3_pt4 = bottomLine;
+         ossim_int32 line3_pt2 = (line3_pt0 + line3_pt4)/2;
+         ossim_int32 line3_pt1 = (line3_pt2 + line3_pt0)/2;
+         ossim_int32 line3_pt3 = (line3_pt2 + line3_pt4)/2;
             
-            double line3RegPtsSamples[] = {theLeftEdge[line3_pt1],
-                                           theLeftEdge[line3_pt2],
-                                           theLeftEdge[line3_pt3]};
-            double line3RegPtsLines[] = {-line3_pt1,
-                                         -line3_pt2,
-                                         -line3_pt3};
+         double line3RegPtsSamples[] = { static_cast<double>(theLeftEdge[line3_pt1]),
+                                         static_cast<double>(theLeftEdge[line3_pt2]),
+                                         static_cast<double>(theLeftEdge[line3_pt3]) };
+         double line3RegPtsLines[] = { static_cast<double>(-line3_pt1),
+                                       static_cast<double>(-line3_pt2),
+                                       static_cast<double>(-line3_pt3) };
             
-            double sum_xy_line3 = 0.0;
-            double sum_x_line3 = 0.0;
-            double sum_y_line3 = 0.0;
-            double mean_x_line3 = 0.0;
-            double mean_y_line3 = 0.0;
-            double sum_x_squared_line3 = 0.0;
-            double sum_squared_x_line3 = 0.0;   
-            double b_line3;
-            double a_line3;
-            double num_elements_line3 = 3.0;
+         double sum_xy_line3 = 0.0;
+         double sum_x_line3 = 0.0;
+         double sum_y_line3 = 0.0;
+         double mean_x_line3 = 0.0;
+         double mean_y_line3 = 0.0;
+         double sum_x_squared_line3 = 0.0;
+         double sum_squared_x_line3 = 0.0;   
+         double b_line3;
+         double a_line3;
+         double num_elements_line3 = 3.0;
             
+         for(ossim_int32 i = 0; i < num_elements_line3; ++i)
+         {
+            sum_xy_line3 = sum_xy_line3
+               + (line3RegPtsSamples[i]*line3RegPtsLines[i]);
+               
+            sum_x_line3 = sum_x_line3 + line3RegPtsSamples[i];
+            sum_y_line3 = sum_y_line3 + line3RegPtsLines[i];
+               
+            sum_squared_x_line3 = sum_squared_x_line3
+               + line3RegPtsSamples[i]*line3RegPtsSamples[i];
+               
+         }
+            
+         sum_x_squared_line3 = sum_x_line3*sum_x_line3; 
+         mean_y_line3 = sum_y_line3/num_elements_line3;
+         mean_x_line3 = sum_x_line3/num_elements_line3;
+         b_line3 = (sum_xy_line3 - (sum_x_line3*sum_y_line3)/num_elements_line3)
+            / (sum_squared_x_line3 - (sum_x_squared_line3/num_elements_line3));
+         a_line3 = mean_y_line3 - b_line3*mean_x_line3;
+            
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG) << "\n\n a_line3:  " << a_line3 <<std::endl;
+            ossimNotify(ossimNotifyLevel_DEBUG) << " b_line3:  " << b_line3 <<std::endl;
+               
+               
             for(ossim_int32 i = 0; i < num_elements_line3; ++i)
             {
-               sum_xy_line3 = sum_xy_line3
-                  + (line3RegPtsSamples[i]*line3RegPtsLines[i]);
-               
-               sum_x_line3 = sum_x_line3 + line3RegPtsSamples[i];
-               sum_y_line3 = sum_y_line3 + line3RegPtsLines[i];
-               
-               sum_squared_x_line3 = sum_squared_x_line3
-                  + line3RegPtsSamples[i]*line3RegPtsSamples[i];
-               
-            }
-            
-            sum_x_squared_line3 = sum_x_line3*sum_x_line3; 
-            mean_y_line3 = sum_y_line3/num_elements_line3;
-            mean_x_line3 = sum_x_line3/num_elements_line3;
-            b_line3 = (sum_xy_line3 - (sum_x_line3*sum_y_line3)/num_elements_line3)
-               / (sum_squared_x_line3 - (sum_x_squared_line3/num_elements_line3));
-            a_line3 = mean_y_line3 - b_line3*mean_x_line3;
-            
-            if(traceDebug())
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG) << "\n\n a_line3:  " << a_line3 <<std::endl;
-               ossimNotify(ossimNotifyLevel_DEBUG) << " b_line3:  " << b_line3 <<std::endl;
-               
-               
-               for(ossim_int32 i = 0; i < num_elements_line3; ++i)
-               {
                   
-                  ossimNotify(ossimNotifyLevel_DEBUG) << setprecision(15) << "line3RegPtsLines[" << i << "]:  "
-                                                      <<line3RegPtsLines[i]
-                                                      << "\nline3RegPtsSamples[" << i << "]:  "
-                                                      <<line3RegPtsSamples[i]
-                                                      << std::endl;
-               }
+               ossimNotify(ossimNotifyLevel_DEBUG) << setprecision(15) << "line3RegPtsLines[" << i << "]:  "
+                                                   <<line3RegPtsLines[i]
+                                                   << "\nline3RegPtsSamples[" << i << "]:  "
+                                                   <<line3RegPtsSamples[i]
+                                                   << std::endl;
             }
-            //End regression line3
+         }
+         //End regression line3
             
-            //Intersect lines 2 and 3 to get the lr corner vertex
+         //Intersect lines 2 and 3 to get the lr corner vertex
             
-            double lr_x = (a_line3 - a_line2)/(b_line2 - b_line3);
-            double lr_y = -(a_line3 + b_line3*lr_x);
+         double lr_x = (a_line3 - a_line2)/(b_line2 - b_line3);
+         double lr_y = -(a_line3 + b_line3*lr_x);
             
-            //End Regression Line3
+         //End Regression Line3
             
-            //Regression Line 4
+         //Regression Line 4
             
-            ossim_int32 line4_pt0 = leftMostSampleLine;
-            ossim_int32 line4_pt4 = topLine;
-            ossim_int32 line4_pt2 = (line4_pt0 + line4_pt4)/2;
-            ossim_int32 line4_pt1 = (line4_pt2 + line4_pt0)/2;
-            ossim_int32 line4_pt3 = (line4_pt2 + line4_pt4)/2;
+         ossim_int32 line4_pt0 = leftMostSampleLine;
+         ossim_int32 line4_pt4 = topLine;
+         ossim_int32 line4_pt2 = (line4_pt0 + line4_pt4)/2;
+         ossim_int32 line4_pt1 = (line4_pt2 + line4_pt0)/2;
+         ossim_int32 line4_pt3 = (line4_pt2 + line4_pt4)/2;
             
 //             //***
 //                // Find the line within 100 lines of line2_ptx that has the maximum
 //                // sample.  This will cut off the 'fringe'.
 //                //***
             
-            ossim_int32 maxValueLine4Pt1;
-            ossim_int32 maxOffsetLine4Pt1;
-            getMaxAndIndex(&theLeftEdge[line4_pt1-100],&theLeftEdge[line4_pt1+100],
-                           maxValueLine4Pt1, maxOffsetLine4Pt1 );
-            line4_pt1 = line4_pt1-100 + maxOffsetLine4Pt1;
+         ossim_int32 maxValueLine4Pt1;
+         ossim_int32 maxOffsetLine4Pt1;
+         getMaxAndIndex(&theLeftEdge[line4_pt1-100],&theLeftEdge[line4_pt1+100],
+                        maxValueLine4Pt1, maxOffsetLine4Pt1 );
+         line4_pt1 = line4_pt1-100 + maxOffsetLine4Pt1;
             
             
-            ossim_int32 maxValueLine4Pt2;
-            ossim_int32 maxOffsetLine4Pt2;
-            getMaxAndIndex(&theLeftEdge[line4_pt2-100],&theLeftEdge[line4_pt2+100],
-                           maxValueLine4Pt2, maxOffsetLine4Pt2 );
-            line4_pt2 = line4_pt2-100 + maxOffsetLine4Pt2;
+         ossim_int32 maxValueLine4Pt2;
+         ossim_int32 maxOffsetLine4Pt2;
+         getMaxAndIndex(&theLeftEdge[line4_pt2-100],&theLeftEdge[line4_pt2+100],
+                        maxValueLine4Pt2, maxOffsetLine4Pt2 );
+         line4_pt2 = line4_pt2-100 + maxOffsetLine4Pt2;
             
             
-            ossim_int32 maxValueLine4Pt3;
-            ossim_int32 maxOffsetLine4Pt3;
-            getMaxAndIndex(&theLeftEdge[line4_pt3-100],&theLeftEdge[line4_pt3+100],
-                           maxValueLine4Pt3, maxOffsetLine4Pt3 );
-            line4_pt3 = line4_pt3-100 + maxOffsetLine4Pt3;
+         ossim_int32 maxValueLine4Pt3;
+         ossim_int32 maxOffsetLine4Pt3;
+         getMaxAndIndex(&theLeftEdge[line4_pt3-100],&theLeftEdge[line4_pt3+100],
+                        maxValueLine4Pt3, maxOffsetLine4Pt3 );
+         line4_pt3 = line4_pt3-100 + maxOffsetLine4Pt3;
             
             
             
             
-            double line4RegPtsSamples[] = {theLeftEdge[line4_pt1],
-                                           theLeftEdge[line4_pt2],
-                                           theLeftEdge[line4_pt3]};
-            double line4RegPtsLines[] = {-line4_pt1,
-                                         -line4_pt2,
-                                         -line4_pt3};
+         double line4RegPtsSamples[] = { static_cast<double>(theLeftEdge[line4_pt1]),
+                                         static_cast<double>(theLeftEdge[line4_pt2]),
+                                         static_cast<double>(theLeftEdge[line4_pt3]) };
+         double line4RegPtsLines[] = { static_cast<double>(-line4_pt1),
+                                       static_cast<double>(-line4_pt2),
+                                       static_cast<double>(-line4_pt3) };
             
-            double sum_xy_line4 = 0.0;
-            double sum_x_line4 = 0.0;
-            double sum_y_line4 = 0.0;
-            double mean_x_line4 = 0.0;
-            double mean_y_line4 = 0.0;
-            double sum_x_squared_line4 = 0.0;
-            double sum_squared_x_line4 = 0.0;   
-            double b_line4;
-            double a_line4;
-            double num_elements_line4 = 3.0;
+         double sum_xy_line4 = 0.0;
+         double sum_x_line4 = 0.0;
+         double sum_y_line4 = 0.0;
+         double mean_x_line4 = 0.0;
+         double mean_y_line4 = 0.0;
+         double sum_x_squared_line4 = 0.0;
+         double sum_squared_x_line4 = 0.0;   
+         double b_line4;
+         double a_line4;
+         double num_elements_line4 = 3.0;
+         for(ossim_int32 i = 0; i < num_elements_line4; ++i)
+         {
+            sum_xy_line4 = sum_xy_line4
+               + (line4RegPtsSamples[i]*line4RegPtsLines[i]);
+               
+            sum_x_line4 = sum_x_line4 + line4RegPtsSamples[i];
+            sum_y_line4 = sum_y_line4 + line4RegPtsLines[i];
+               
+            sum_squared_x_line4 = sum_squared_x_line4
+               + line4RegPtsSamples[i]*line4RegPtsSamples[i];
+               
+               
+         }
+            
+         sum_x_squared_line4 = sum_x_line4*sum_x_line4; 
+         mean_y_line4 = sum_y_line4/num_elements_line4;
+         mean_x_line4 = sum_x_line4/num_elements_line4;
+         b_line4 = (sum_xy_line4 - (sum_x_line4*sum_y_line4)/num_elements_line4)
+            / (sum_squared_x_line4 - (sum_x_squared_line4/num_elements_line4));
+         a_line4 = mean_y_line4 - b_line4*mean_x_line4;
+            
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)<<"\na_line4:  "<< a_line4
+                                               <<"\nb_line4:  "<< b_line4 <<std::endl;
+               
             for(ossim_int32 i = 0; i < num_elements_line4; ++i)
             {
-               sum_xy_line4 = sum_xy_line4
-                  + (line4RegPtsSamples[i]*line4RegPtsLines[i]);
-               
-               sum_x_line4 = sum_x_line4 + line4RegPtsSamples[i];
-               sum_y_line4 = sum_y_line4 + line4RegPtsLines[i];
-               
-               sum_squared_x_line4 = sum_squared_x_line4
-                  + line4RegPtsSamples[i]*line4RegPtsSamples[i];
-               
-               
-            }
-            
-            sum_x_squared_line4 = sum_x_line4*sum_x_line4; 
-            mean_y_line4 = sum_y_line4/num_elements_line4;
-            mean_x_line4 = sum_x_line4/num_elements_line4;
-            b_line4 = (sum_xy_line4 - (sum_x_line4*sum_y_line4)/num_elements_line4)
-               / (sum_squared_x_line4 - (sum_x_squared_line4/num_elements_line4));
-            a_line4 = mean_y_line4 - b_line4*mean_x_line4;
-            
-            if(traceDebug())
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG)<<"\na_line4:  "<< a_line4
-                                                  <<"\nb_line4:  "<< b_line4 <<std::endl;
-               
-               for(ossim_int32 i = 0; i < num_elements_line4; ++i)
-               {
                   
-                  ossimNotify(ossimNotifyLevel_DEBUG) << setprecision(15) << "line4RegPtsLines[" << i << "]:  "
-                                                      <<line4RegPtsLines[i]
-                                                      << "\nline4RegPtsSamples[" << i << "]:  "
-                                                      <<line4RegPtsSamples[i]
-                                                      << std::endl;  
+               ossimNotify(ossimNotifyLevel_DEBUG) << setprecision(15) << "line4RegPtsLines[" << i << "]:  "
+                                                   <<line4RegPtsLines[i]
+                                                   << "\nline4RegPtsSamples[" << i << "]:  "
+                                                   <<line4RegPtsSamples[i]
+                                                   << std::endl;  
                   
-               }
             }
-            //End regression line4
+         }
+         //End regression line4
             
-            //Intersect lines 3 and 4 to get the ll corner vertex
+         //Intersect lines 3 and 4 to get the ll corner vertex
             
-            double ll_x = (a_line4 - a_line3)/(b_line3 - b_line4);
-            double ll_y = -(a_line4 + b_line4*ll_x);
+         double ll_x = (a_line4 - a_line3)/(b_line3 - b_line4);
+         double ll_y = -(a_line4 + b_line4*ll_x);
             
-            //End Regression Line4
+         //End Regression Line4
             
-            //Intersect lines 4 and 1 to get the ul corner vertex
+         //Intersect lines 4 and 1 to get the ul corner vertex
             
-            double ul_x = (a_line4 - a_line1)/(b_line1 - b_line4);
-            double ul_y = -(a_line4 + b_line4*ul_x);
+         double ul_x = (a_line4 - a_line1)/(b_line1 - b_line4);
+         double ul_y = -(a_line4 + b_line4*ul_x);
             
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)<<"\n\nInitial corners for tilted right:   "
+                                               <<"\ncorner0:  ("<<ul_x<<", "<<ul_y<<")"
+                                               <<"\ncorner1:  ("<<ur_x<<", "<<ur_y<<")"
+                                               <<"\ncorner2:  ("<<lr_x<<", "<<lr_y<<")"
+                                               <<"\ncorner3:  ("<<ll_x<<", "<<ll_y<<")"<<std::endl<<std::endl;
+         }
+            
+         leftCornerLine_A = (ossim_int32)ul_y;
+         leftCorner_A = (ossim_int32)ul_x; //0
+            
+         rightCornerLine_A = (ossim_int32)ur_y;
+         rightCorner_A = (ossim_int32)ur_x; //1
+            
+         rightCornerLine_B = (ossim_int32)lr_y;
+         rightCorner_B =(ossim_int32)lr_x; //2
+            
+         leftCornerLine_B = (ossim_int32)ll_y;
+         leftCorner_B =(ossim_int32)ll_x; //3
+            
+            
+         // Check for bad corner points due to irregular shape image
+            
+         //for corner 0 (ul), sample should be between left and right most samples
+         //                   line can go negative due to jagged edges 
+            
+         //for corner 1 (ur), sample can go > than num samples
+         //                   line should be between top and bottom lines
+            
+         //for corner 2 (lr), line should be between top and bottom line + 200
+         //                   sample should be between left and right most sample
+            
+         //for corner 3 (ll), line should be between top and bottom line
+         //                   sample should can go negative due to jagged edges
+            
+         if(        (leftCornerLine_A < (topLine - 300))
+                    || (leftCornerLine_A > total_lines)
+                    || (leftCorner_A > rightMostSample)
+                    || (leftCorner_A < leftMostSample)
+                       
+                    || (rightCornerLine_A < topLine)
+                    || (rightCornerLine_A > bottomLine)
+                    || (rightCorner_A < leftMostSample)
+                    || (rightCorner_A > (rightMostSample + 200))
+                       
+                       
+                    || (rightCornerLine_B < topLine)
+                    || (rightCornerLine_B > (bottomLine + 200))
+                    || (rightCorner_B < leftMostSample)
+                    || (rightCorner_B > rightMostSample)
+                       
+                    || (leftCornerLine_B > bottomLine)   
+                    || (leftCornerLine_B < topLine)
+                    || (leftCorner_B > rightMostSample)   
+                    || (leftCorner_B < (leftMostSample - 200))    )
+               
+               
+               
+         {
+            right = false;
             if (traceDebug())
             {
-               ossimNotify(ossimNotifyLevel_DEBUG)<<"\n\nInitial corners for tilted right:   "
-                                                  <<"\ncorner0:  ("<<ul_x<<", "<<ul_y<<")"
-                                                  <<"\ncorner1:  ("<<ur_x<<", "<<ur_y<<")"
-                                                  <<"\ncorner2:  ("<<lr_x<<", "<<lr_y<<")"
-                                                  <<"\ncorner3:  ("<<ll_x<<", "<<ll_y<<")"<<std::endl<<std::endl;
+               ossimNotify(ossimNotifyLevel_DEBUG) <<"\n\n***Case = NOT TILTED RIGHT...***"<<std::endl;
             }
-            
-            leftCornerLine_A = (ossim_int32)ul_y;
-            leftCorner_A = (ossim_int32)ul_x; //0
-            
-            rightCornerLine_A = (ossim_int32)ur_y;
-            rightCorner_A = (ossim_int32)ur_x; //1
-            
-            rightCornerLine_B = (ossim_int32)lr_y;
-            rightCorner_B =(ossim_int32)lr_x; //2
-            
-            leftCornerLine_B = (ossim_int32)ll_y;
-            leftCorner_B =(ossim_int32)ll_x; //3
-            
-            
-            // Check for bad corner points due to irregular shape image
-            
-            //for corner 0 (ul), sample should be between left and right most samples
-            //                   line can go negative due to jagged edges 
-            
-            //for corner 1 (ur), sample can go > than num samples
-            //                   line should be between top and bottom lines
-            
-            //for corner 2 (lr), line should be between top and bottom line + 200
-            //                   sample should be between left and right most sample
-            
-            //for corner 3 (ll), line should be between top and bottom line
-            //                   sample should can go negative due to jagged edges
-            
-            if(        (leftCornerLine_A < (topLine - 300))
-                       || (leftCornerLine_A > total_lines)
-                       || (leftCorner_A > rightMostSample)
-                       || (leftCorner_A < leftMostSample)
-                       
-                       || (rightCornerLine_A < topLine)
-                       || (rightCornerLine_A > bottomLine)
-                       || (rightCorner_A < leftMostSample)
-                       || (rightCorner_A > (rightMostSample + 200))
-                       
-                       
-                       || (rightCornerLine_B < topLine)
-                       || (rightCornerLine_B > (bottomLine + 200))
-                       || (rightCorner_B < leftMostSample)
-                       || (rightCorner_B > rightMostSample)
-                       
-                       || (leftCornerLine_B > bottomLine)   
-                       || (leftCornerLine_B < topLine)
-                       || (leftCorner_B > rightMostSample)   
-                       || (leftCorner_B < (leftMostSample - 200))    )
-               
-               
-               
-            {
-               right = false;
-               if (traceDebug())
-               {
-                  ossimNotify(ossimNotifyLevel_DEBUG) <<"\n\n***Case = NOT TILTED RIGHT...***"<<std::endl;
-               }
-            }
+         }
       }           
       
       //tilted left
@@ -1058,12 +1057,12 @@ bool ossimVertexExtractor::extractVertices()
                                                 <<"   minValueLine1Pt3:  "<<minValueLine1Pt3<<std::endl<<std::endl;
          }
          
-         double line1RegPtsSamples[] = {theRightEdge[line1_pt1],
-                                        theRightEdge[line1_pt2],
-                                        theRightEdge[line1_pt3]};
-         double line1RegPtsLines[] = {-line1_pt1,
-                                      -line1_pt2,
-                                      -line1_pt3};
+         double line1RegPtsSamples[] = { static_cast<double>(theRightEdge[line1_pt1]),
+                                         static_cast<double>(theRightEdge[line1_pt2]),
+                                         static_cast<double>(theRightEdge[line1_pt3])};
+         double line1RegPtsLines[] = { static_cast<double>(-line1_pt1),
+                                       static_cast<double>(-line1_pt2),
+                                       static_cast<double>(-line1_pt3) };
          
          double sum_xy_line1 = 0.0;
          double sum_x_line1 = 0.0;
@@ -1122,12 +1121,12 @@ bool ossimVertexExtractor::extractVertices()
          ossim_int32 line2_pt1 = (line2_pt2 + line2_pt0)/2;
          ossim_int32 line2_pt3 = (line2_pt2 + line2_pt4)/2;
       
-         double line2RegPtsSamples[] = {theRightEdge[line2_pt1],
-                                        theRightEdge[line2_pt2],
-                                        theRightEdge[line2_pt3]};
-         double line2RegPtsLines[] = {-line2_pt1,
-                                      -line2_pt2,
-                                      -line2_pt3};
+         double line2RegPtsSamples[] = { static_cast<double>(theRightEdge[line2_pt1]),
+                                         static_cast<double>(theRightEdge[line2_pt2]),
+                                         static_cast<double>(theRightEdge[line2_pt3]) };
+         double line2RegPtsLines[] = { static_cast<double>(-line2_pt1),
+                                       static_cast<double>(-line2_pt2),
+                                       static_cast<double>(-line2_pt3) };
       
          double sum_xy_line2 = 0.0;
          double sum_x_line2 = 0.0;
@@ -1209,12 +1208,12 @@ bool ossimVertexExtractor::extractVertices()
          line3_pt3 = line3_pt3-100 + maxOffsetLine3Pt3;
       
       
-         double line3RegPtsSamples[] = {theLeftEdge[line3_pt1],
-                                        theLeftEdge[line3_pt2],
-                                        theLeftEdge[line3_pt3]};
-         double line3RegPtsLines[] = {-line3_pt1,
-                                      -line3_pt2,
-                                      -line3_pt3};
+         double line3RegPtsSamples[] = { static_cast<double>(theLeftEdge[line3_pt1]),
+                                         static_cast<double>(theLeftEdge[line3_pt2]),
+                                         static_cast<double>(theLeftEdge[line3_pt3]) };
+         double line3RegPtsLines[] = { static_cast<double>(-line3_pt1),
+                                       static_cast<double>(-line3_pt2),
+                                       static_cast<double>(-line3_pt3) };
       
          double sum_xy_line3 = 0.0;
          double sum_x_line3 = 0.0;
@@ -1279,12 +1278,12 @@ bool ossimVertexExtractor::extractVertices()
          ossim_int32 line4_pt3 = (line4_pt2 + line4_pt4)/2;
       
       
-         double line4RegPtsSamples[] = {theLeftEdge[line4_pt1],
-                                        theLeftEdge[line4_pt2],
-                                        theLeftEdge[line4_pt3]};
-         double line4RegPtsLines[] = {-line4_pt1,
-                                      -line4_pt2,
-                                      -line4_pt3};
+         double line4RegPtsSamples[] = { static_cast<double>(theLeftEdge[line4_pt1]),
+                                         static_cast<double>(theLeftEdge[line4_pt2]),
+                                         static_cast<double>(theLeftEdge[line4_pt3])};
+         double line4RegPtsLines[] = { static_cast<double>(-line4_pt1),
+                                       static_cast<double>(-line4_pt2),
+                                       static_cast<double>(-line4_pt3) };
       
          double sum_xy_line4 = 0.0;
          double sum_x_line4 = 0.0;
@@ -1515,8 +1514,8 @@ bool ossimVertexExtractor::extractVertices()
          rightCorner_A = (rightMostSample); //1
 
       }
-         //Look for non-null starting at topLine and going down
-         //Starting at right most samp and moving left 
+      //Look for non-null starting at topLine and going down
+      //Starting at right most samp and moving left 
          
       bool foundURcornera = false;
       bool foundURcornerb = false;

@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.h 20230 2011-11-08 17:33:13Z dburken $
+// $Id: ossimImageSource.h 21637 2012-09-06 21:17:57Z dburken $
 #ifndef ossimImageSource_HEADER
 #define ossimImageSource_HEADER 1
 
@@ -105,9 +105,14 @@ public:
    virtual ossim_uint32 getNumberOfOutputBands() const;
 
    /**
-    * Initializes bandList to the zero based order of output bands.
+    * @brief Initializes bandList.
+    * 
+    * This implementation initializes to the zero based order of input bands.
+    * Derived classes that are band selectors should override.
+    *
+    * @param bandList Initialized by this.
     */
-   virtual void getOutputBandList(std::vector<ossim_uint32>& bandList) const;
+   virtual void getOutputBandList( std::vector<ossim_uint32>& bandList ) const;
 
    /**
     * This will be used to query the output pixel type of the tile source.
@@ -126,11 +131,10 @@ public:
    virtual ossim_uint32 getTileHeight() const;
 
    /**
-         * Each band has a null pixel associated with it.  The null pixel 
+    * Each band has a null pixel associated with it.  The null pixel 
     * represents an invalid value.
     */ 
    virtual double getNullPixelValue(ossim_uint32 band=0)const;
-   
    
    /**
     * Returns the min pixel of the band.
@@ -189,31 +193,34 @@ public:
     *
     * The default implementation is to return the bounding rect.
     */
-   virtual void getValidImageVertices(std::vector<ossimIpt>& validVertices,
-                                      ossimVertexOrdering ordering=OSSIM_CLOCKWISE_ORDER,
-                                      ossim_uint32 resLevel=0)const;
+   virtual void getValidImageVertices(
+      std::vector<ossimIpt>& validVertices,
+      ossimVertexOrdering ordering=OSSIM_CLOCKWISE_ORDER,
+      ossim_uint32 resLevel=0)const;
 
-   //! Returns the image geometry object associated with this tile source or NULL if not defined.
-   //! The geometry contains full-to-local image transform as well as projection (image-to-world)
-   //! Default implementation returns the image geometry object associated with the next  
-   //! (left) input source (if any) connected to this source in the chain, or NULL.
+   /**
+    * Returns the image geometry object associated with this tile source or
+    * NULL if not defined. The geometry contains full-to-local image transform
+    * as well as projection (image-to-world). Default implementation returns
+    * the image geometry object associated with the next  
+    * (left) input source (if any) connected to this source in the chain, or
+    * NULL.
+    */
    virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
-   //! Default implementation sets geometry of the first input to the geometry specified.
-   virtual void setImageGeometry(const ossimImageGeometry* geom);
-
    /**
-    * Default method to call input's saveImageGeometry.
+    * Default implementation sets geometry of the first input to the geometry
+    * specified.
     */
+   virtual void setImageGeometry(const ossimImageGeometry* geom);
+       
+   /** Default method to call input's saveImageGeometry. */
    virtual void saveImageGeometry() const;
    
-   /**
-    * Default method to call input's saveImageGeometry.
-    */
+   /** Default method to call input's saveImageGeometry. */
    virtual void saveImageGeometry(const ossimFilename& geometry_file) const;
    
    virtual void initialize()=0;
-   
    
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
@@ -227,6 +234,7 @@ public:
    virtual bool isIndexedData() const;
    
 protected:
+
    ossimImageSource (const ossimImageSource& rhs);
    const ossimImageSource& operator= (const ossimImageSource&);
 

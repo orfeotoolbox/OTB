@@ -1,4 +1,4 @@
-//*******************************************************************
+ //*******************************************************************
 // Copyright (C) 2001 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
@@ -10,10 +10,10 @@
 // Contains class declaration for ossimGeneralRasterWriter.
 //
 //*******************************************************************
-//  $Id: ossimGeneralRasterWriter.h 16081 2009-12-10 20:56:36Z eshirschorn $
+// $Id: ossimGeneralRasterWriter.h 21962 2012-11-30 15:44:32Z dburken $
 
 #ifndef ossimGeneralRasterWriter_HEADER
-#define ossimGeneralRasterWriter_HEADER
+#define ossimGeneralRasterWriter_HEADER 1
 
 #include <ossim/imaging/ossimImageFileWriter.h>
 #include <ossim/base/ossimIrect.h>
@@ -24,10 +24,10 @@
 class ossimGeneralRasterWriter : public ossimImageFileWriter
 {
 public:
-   ossimGeneralRasterWriter();
-   ossimGeneralRasterWriter(ossimImageSource* inputSource,
-                            const ossimFilename& file=ossimFilename(""));
 
+   /** @brief default constructor */
+   ossimGeneralRasterWriter();
+   
    /**
     * void getImageTypeList(std::vector<ossimString>& imageTypeList)const
     *
@@ -69,11 +69,37 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
+
+   /**
+    * @brief Method to write the image to a stream.
+    *
+    * Callers must call setOutputStream(...) method prior to this.
+    *
+    * @return true on success, false on error.
+    */
+   virtual bool writeStream();
+
+   /**
+    * @brief Sets the output stream to write to.
+    *
+    * The stream will not be closed/deleted by this object.
+    *
+    * @param output The stream to write to.
+    */
+   virtual bool setOutputStream(std::ostream& stream);
+   
 protected:
+
+   /**
+    * Write out the file.
+    * @return true on success, false on error.
+    */
+   virtual bool writeFile();
+
+   /** @brief Protected ( this is a ossimRefPtr) destructor. */
    virtual ~ossimGeneralRasterWriter();
 
 private:
-   virtual bool writeFile();
 
    /**
     *  Writes image data to output file in BIP(Band Interleaved by Pixel)
@@ -113,9 +139,8 @@ private:
     */
    ossimString getInterleaveString() const;
    
-   
-   std::ofstream       theFileStream;
-   bool                theOverviewFlag;
+   std::ostream*       theOutputStream;
+   bool                theOwnsStreamFlag;
    ossim_uint32        theRlevel;
    ossimByteOrder      theOutputByteOrder;
    

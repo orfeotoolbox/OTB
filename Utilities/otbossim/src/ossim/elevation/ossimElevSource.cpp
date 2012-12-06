@@ -15,7 +15,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevSource.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimElevSource.cpp 21380 2012-07-25 13:18:31Z gpotts $
 
 #include <ossim/elevation/ossimElevSource.h>
 #include <ossim/base/ossimPreferences.h>
@@ -135,7 +135,7 @@ double ossimElevSource::getHeightAboveEllipsoid(const ossimGpt& /* argGpt */)
 //  algorithm will be employed.
 //
 //*****************************************************************************
-bool ossimElevSource::intersectRay(const ossimEcefRay& ray, ossimGpt& gpt)
+bool ossimElevSource::intersectRay(const ossimEcefRay& ray, ossimGpt& gpt, double defaultElevValue)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimElevSource::intersectRay: entering..." << std::endl;
 
@@ -182,7 +182,7 @@ bool ossimElevSource::intersectRay(const ossimEcefRay& ray, ossimGpt& gpt)
       // Intersect ray with ellipsoid inflated by h_ellips:
       //
       h_ellips = getHeightAboveEllipsoid(gpt);
-      if ( ossim::isnan(h_ellips) ) h_ellips = 0.0;
+      if ( ossim::isnan(h_ellips) ) h_ellips = defaultElevValue;
       
       intersected = ellipsoid->nearestIntersection(ray,
                                                    h_ellips,

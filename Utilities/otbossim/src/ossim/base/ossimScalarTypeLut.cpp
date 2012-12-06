@@ -9,7 +9,7 @@
 // Contains class definition for ossimScalarTypeLUT.
 // 
 //*******************************************************************
-//  $Id: ossimScalarTypeLut.cpp 19448 2011-04-26 15:15:07Z dburken $
+//  $Id: ossimScalarTypeLut.cpp 21527 2012-08-26 16:50:49Z dburken $
 
 #include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/base/ossimString.h>
@@ -122,6 +122,35 @@ ossimScalarTypeLut::ossimScalarTypeLut()
    theTable.push_back(entry);
 
    entry.init(OSSIM_NORMALIZED_DOUBLE, "N64");
+   theTable.push_back(entry);
+
+   // Forms from old code "radiometry" key in ossimImageMetaData:
+   
+   entry.init(OSSIM_UINT8, "8-bit");
+   theTable.push_back(entry);
+
+   entry.init(OSSIM_USHORT11, "11-bit");
+   theTable.push_back(entry);
+
+   entry.init(OSSIM_UINT16, "16-bit unsigned");
+   theTable.push_back(entry);
+
+   entry.init(OSSIM_SINT16, "16-bit signed");
+   theTable.push_back(entry);
+   
+   entry.init(OSSIM_UINT32, "32-bit unsigned");
+   theTable.push_back(entry);
+
+   entry.init(OSSIM_FLOAT32, "float");
+   theTable.push_back(entry);
+   
+   entry.init(OSSIM_NORMALIZED_FLOAT, "normalized float");
+   theTable.push_back(entry);
+
+   entry.init(OSSIM_FLOAT64, "double");
+   theTable.push_back(entry);
+   
+   entry.init(OSSIM_NORMALIZED_DOUBLE, "normalized double");
    theTable.push_back(entry);
 }
 

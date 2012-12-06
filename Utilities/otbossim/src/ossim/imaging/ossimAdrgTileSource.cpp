@@ -9,9 +9,7 @@
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
-
-#include <iostream>
+// $Id: ossimAdrgTileSource.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimAdrgHeader.h>
@@ -25,12 +23,14 @@
 #include <ossim/base/ossimUnitTypeLut.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimContainerProperty.h>
+#include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/imaging/ossimImageGeometry.h>
+#include <ossim/imaging/ossimTiffTileSource.h>
+#include <ossim/imaging/ossimU8ImageData.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
-#include <ossim/imaging/ossimTiffTileSource.h>
-#include <ossim/imaging/ossimImageDataFactory.h>
-#include <ossim/imaging/ossimU8ImageData.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <iostream>
 
 RTTI_DEF1(ossimAdrgTileSource, "ossimAdrgTileSource", ossimImageHandler)
 

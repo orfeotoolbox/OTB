@@ -5,12 +5,14 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimGeoPolyCutter.cpp 18423 2010-11-16 16:05:12Z gpotts $
-#include <algorithm>
+// $Id: ossimGeoPolyCutter.cpp 21631 2012-09-06 18:10:55Z dburken $
+
 #include <ossim/imaging/ossimGeoPolyCutter.h>
-#include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimCommon.h>
+#include <ossim/imaging/ossimImageGeometry.h>
+#include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <algorithm>
 
 static const char* NUMBER_POLYGONS_KW = "number_polygons";
 

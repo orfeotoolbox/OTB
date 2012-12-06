@@ -169,11 +169,11 @@ bool ossimTilingPoly::nextFeature()
          }
          else
          {
-            std::vector<ossimGpt> points = m_features[tileId].m_polygon;
-            for (ossim_uint32 i = 0; i < points.size(); i++)
-            {
-               ossimGpt point = points[i];
-            }
+            // std::vector<ossimGpt> points = m_features[tileId].m_polygon;
+            // for (ossim_uint32 i = 0; i < points.size(); i++)
+            // {
+            //    ossimGpt point = points[i];
+            // }
             m_exteriorCut->setPolygon(m_features[tileId].m_polygon);
             setRect();
          }

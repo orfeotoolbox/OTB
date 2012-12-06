@@ -10,7 +10,7 @@
 // Contains class definition for ossimIrect.
 // 
 //*******************************************************************
-//  $Id: ossimIrect.cpp 19682 2011-05-31 14:21:20Z dburken $
+//  $Id: ossimIrect.cpp 21560 2012-08-30 12:09:03Z gpotts $
 
 #include <ostream>
 #include <sstream>
@@ -589,7 +589,9 @@ bool ossimIrect::saveState(ossimKeywordlist& kwl,
            ossimKeywordNames::TYPE_KW,
            "ossimIrect",
            true);
-   
+
+   kwl.add(prefix, "rect", toString());
+ #if 0  
    if(hasNans())
    {
       kwl.add(prefix,
@@ -628,41 +630,37 @@ bool ossimIrect::saveState(ossimKeywordlist& kwl,
               theLrCorner.y,
               true);
    }
-
+#endif
    return true;
 }
 
 bool ossimIrect::loadState(const ossimKeywordlist& kwl,
                            const char* prefix)
 {
-   const char* ulx = kwl.find(prefix, "ul_x");
-   const char* uly = kwl.find(prefix, "ul_y");
-   const char* lrx = kwl.find(prefix, "lr_x");
-   const char* lry = kwl.find(prefix, "lr_y");
+  makeNan();
+  const char* ulx = kwl.find(prefix, "ul_x");
+  const char* uly = kwl.find(prefix, "ul_y");
+  const char* lrx = kwl.find(prefix, "lr_x");
+  const char* lry = kwl.find(prefix, "lr_y");
+  const char* rect = kwl.find(prefix, "rect");
 
-   if(ulx&&uly&&lrx&&lry)
-   {
-      if( (ossimString(ulx).trim().upcase() == "NAN") ||
-          (ossimString(uly).trim().upcase() == "NAN") ||
-          (ossimString(lrx).trim().upcase() == "NAN") ||
-          (ossimString(lry).trim().upcase() == "NAN"))
-      {
-         makeNan();
-      }
-      else
-      {
-         *this = ossimIrect(ossimString(ulx).toInt32(),
-                            ossimString(uly).toInt32(),
-                            ossimString(lrx).toInt32(),
-                            ossimString(lry).toInt32());
-      }
-   }
-   else
-   {
-      makeNan();
-      
-      return false;
-   }
+  if(ulx&&uly&&lrx&&lry)
+  {
+    if( (ossimString(ulx).trim().upcase() != "NAN") &&
+        (ossimString(uly).trim().upcase() != "NAN") &&
+        (ossimString(lrx).trim().upcase() != "NAN") &&
+        (ossimString(lry).trim().upcase() != "NAN"))
+    {
+      *this = ossimIrect(ossimString(ulx).toInt32(),
+                         ossimString(uly).toInt32(),
+                         ossimString(lrx).toInt32(),
+                         ossimString(lry).toInt32());
+    }
+  }
+  else if(rect)
+  {
+      toRect(rect);
+  }
    
    return true;
 }

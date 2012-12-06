@@ -13,6 +13,7 @@
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimKeyword.h>
 #include <ossim/base/ossimNumericProperty.h>
 
 static const ossimKeyword FILTER_RADIUS_KW = ossimKeyword("filter_radius", "");

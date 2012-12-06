@@ -7,7 +7,7 @@
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiResLevelHistogram.cpp 13133 2008-07-04 02:09:36Z gpotts $
+//  $Id: ossimMultiResLevelHistogram.cpp 20610 2012-02-27 12:19:25Z gpotts $
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
 #include <ossim/base/ossimKeyword.h>
@@ -149,7 +149,8 @@ ossimRefPtr<ossimMultiBandHistogram> ossimMultiResLevelHistogram::addHistogram()
    return result;
 }
 
-bool ossimMultiResLevelHistogram::setHistogram(ossimRefPtr<ossimMultiBandHistogram> histo, ossim_uint32 resLevel)
+bool ossimMultiResLevelHistogram::setHistogram(ossimRefPtr<ossimMultiBandHistogram> histo, 
+                                               ossim_uint32 resLevel)
 {
    if(resLevel < getNumberOfResLevels())
    {

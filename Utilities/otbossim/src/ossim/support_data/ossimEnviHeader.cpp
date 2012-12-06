@@ -10,18 +10,43 @@
 // Images) header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimEnviHeader.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
-
-#include <fstream>
-#include <string>
+// $Id: ossimEnviHeader.cpp 21527 2012-08-26 16:50:49Z dburken $
 
 #include <ossim/support_data/ossimEnviHeader.h>
 #include <ossim/base/ossimCommon.h>
-#include <ossim/base/ossimKeywordNames.h>
-#include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimString.h>
+#include <ossim/base/ossimTrace.h>
+#include <algorithm>
+#include <fstream>
+#include <string>
+
+typedef  std::unary_function<std::pair<ossimString, ossimString>, bool> KwlCompareFunctionType;
+typedef  std::pair<const ossimString, ossimString> KwlComparePairType;
+
+class KwlKeyCaseInsensitiveEquals : public KwlCompareFunctionType
+{
+public:
+   KwlKeyCaseInsensitiveEquals(const ossimString& key):m_key(key){}
+   virtual bool operator()(const KwlComparePairType& rhs)const
+   {
+      return (m_key == rhs.first.downcase());
+   }
+   ossimString m_key;
+};
+class KwlKeySubStringCaseInsensitive : public KwlCompareFunctionType
+{
+public:
+   KwlKeySubStringCaseInsensitive(const ossimString& key):m_key(key){}
+   virtual bool operator()(const KwlComparePairType& rhs)const
+   {
+      return (rhs.first.downcase().contains(m_key));
+   }
+   ossimString m_key;
+};
 
 // Define keywords not already found in ossimKeywordNames.
 static const char HEADER_OFFSET_KW[]    = "header_offset";
@@ -29,6 +54,7 @@ static const char FILE_TYPE_KW[]        = "file_type";
 static const char DATA_TYPE_KW[]        = "data_type";
 static const char SENSOR_TYPE_KW[]      = "sensor_type";
 static const char X_START_KW[]          = "x_start";
+static const char Y_START_KW[]          = "y_start";
 static const char MAP_INFO_KW[]         = "map_info";
 static const char WAVELENGTH_UNITS_KW[] = "wavelength_units";
 static const char BAND_NAME_KW[]        = "band_name";
@@ -38,182 +64,147 @@ static ossimTrace traceDebug(ossimString("ossimEnviHeader:debug"));
 
 ossimEnviHeader::ossimEnviHeader()
    :
-   ossimErrorStatusInterface(),
-   theDescription(),
-   theSamples(0),
-   theLines(0),
-   theBands(0),
-   theHeaderOffset(0),
-   theFileType("ENVI Standard"),
-   theDataType(0),
-   theInterleave("Unknown"),
-   theSensorType(),
-   theByteOrder(OSSIM_LITTLE_ENDIAN),
-   theXStart(0),
-   theMapInfo(),
-   theWavelengthUnits("Unknown"),
-   theBandName(),
-   theWavelength()   
+   m_file(),
+   m_keywords()
 {
    // Start the byte order of with the machine byte order.
-   theByteOrder = ossim::byteOrder();
+   m_keywords[FILE_TYPE_KW] = "ENVI Standard";
+   setByteorder(ossim::byteOrder());   
 }
 
 ossimEnviHeader::~ossimEnviHeader()
 {
 }
 
+void ossimEnviHeader::reset()
+{
+   m_file.string().clear();
+   m_keywords.clear();
+   m_keywords[FILE_TYPE_KW] = "ENVI Standard";
+   setByteorder(ossim::byteOrder());
+}
+
+const ossimKeywordlist& ossimEnviHeader::getMap() const
+{
+   return m_keywords;
+}
+
+ossimKeywordlist& ossimEnviHeader::getMap()
+{
+   return m_keywords;
+}
+
+bool ossimEnviHeader::getValue( const ossimString& key, ossimString& value ) const
+{
+   bool result = false;
+   value.string() = m_keywords.findKey( key.string());
+   if( value.size() )
+   {
+      result = true;
+   }
+   else
+   {
+      result = m_keywords.hasKey( key.string() );
+   }
+   return result;
+}
+
+bool ossimEnviHeader::findCaseInsensitive(const ossimString& key, ossimString& value) const
+{
+   return m_keywords.findValue<KwlKeyCaseInsensitiveEquals>(
+      value, KwlKeyCaseInsensitiveEquals(key));
+}
+
+bool ossimEnviHeader::findSubStringCaseInsensitive(const ossimString& key,
+                                                   ossimString& value) const
+{
+   return m_keywords.findValue<KwlKeySubStringCaseInsensitive>(
+      value, KwlKeySubStringCaseInsensitive(key));
+}
+
 bool ossimEnviHeader::open(const ossimFilename& file)
 {
-   std::ifstream is(file.c_str(), std::ios_base::in);
-   if (!is)
+   bool result = false;
+
+   reset(); // Clear the map, file name.
+
+   std::ifstream in;
+   in.open(file.c_str(), std::ios::in | std::ios::binary);
+   if( in.is_open() )
    {
-      setErrorStatus();
-      return false;
+      result = readStream( in );
+      if ( result )
+      {
+         m_file = file;
+      }
    }
 
-   std::string s;
-   is >> s;
+   return result;
+}
 
-   if (s != "ENVI")
+bool ossimEnviHeader::readStream(std::istream& in)
+{
+   reset();
+   bool result = isEnviHeader( in );
+   if ( result )
    {
-      setErrorStatus();
-      return false;
-   }
-
-   // Parse the file.
-   while (is)
-   {
-      // read something.
-      is >> s;
+      m_keywords.clear();
       
-      if (s == "description")
+      while(!in.eof()&&in.good())
       {
-         parseDescription(is);
-      }
-      else if (s == "samples")
-      {
-         is >> s; // eat the =
-         is >> theSamples;
-      }
-      else if (s == "lines")
-      {
-         is >> s; // eat the =
-         is >> theLines;
-      }
-      else if (s == "bands")
-      {
-         is >> s; // eat the =
-         is >> theBands;
-      }
-      else if (s == "header")
-      {
-         is >> s;
-         if (s == "offset")
+         // read name
+         ossimString name = "";
+         ossimString value = "";
+         ossim::skipws(in);
+         int c = static_cast<char>(in.get());
+         while((c != '=')&&(in.good())&&!in.eof())
          {
-            is >> s; // eat the =
-            is >> theHeaderOffset;
+            name +=static_cast<char>(c);
+            c = in.get();
+         }
+         ossim::skipws(in);
+         c = in.get();
+         
+         if(in.good()&&!in.eof())
+         {
+            if(c == '{') // continue til '}'
+            {
+               c = in.get();
+               while((c != '}')&&(in.good())&&!in.eof())
+               {
+                  value +=static_cast<char>(c);
+                  c = in.get();
+               }
+            }
+            else
+            {
+               while(((c != '\n')&&(c!='\r'))&&(in.good())&&!in.eof())
+               {
+                  value +=static_cast<char>(c);
+                  c = (in.get());
+               }
+               
+            }
+            m_keywords.add(name.trim(), value);
          }
       }
-      else if (s == "file")
+
+      // Test for minimum set of keywords needed.
+      if (m_keywords["samples"].empty() || m_keywords["lines"].empty() || 
+          m_keywords["bands"].empty())
       {
-         is >> s;
-         if (s == "type")
-         {
-            is >> s; // eat the =
-            std::getline(is, s);
-            theFileType = s;
-         }
-      }
-      else if (s == "data")
-      {
-         is >> s;
-         if (s == "type")
-         {
-            is >> s; // eat the =
-            is >> theDataType;
-         }
-      }
-      else if (s == "interleave")
-      {
-         is >> s; // eat the =
-         is >> theInterleave;
-      }
-      else if (s == "sensor")
-      {
-         is >> s;
-         if (s == "type")
-         {
-            is >> s; // eat the =
-            is >> theSensorType;
-         }
-      }
-      else if (s == "byte")
-      {
-         is >> s;
-         if (s == "order")
-         {
-            is >> s; // eat the =
-            int i;
-            is >> i;
-            theByteOrder = (i == 1 ? OSSIM_BIG_ENDIAN : OSSIM_LITTLE_ENDIAN);
-         }
-      }
-      else if (s == "x")
-      {
-         is >> s;
-         if (s == "start")
-         {
-            is >> s; // eat the =
-            is >> theXStart;
-         }
-      }
-      else if (s == "map")
-      {
-         is >> s;
-         if (s == "info")
-         {
-            is >> s; // eat the =
-            getline(is, theMapInfo); // one big string
-         }
-      }
-      else if (s == "wavelength")
-      {
-         is >> s;
-         if (s == "units")
-         {
-            is >> s; // eat the =
-            is >> theWavelengthUnits;
-         }
-         else if (s == "=")
-         {
-            parseWavelength(is);
-         }
-      }
-      else if (s == "band")
-      {
-         is >> s;
-         if (s == "names")
-         {
-            parseBandNames(is);
-         }
+         result =  false;
       }
    }
 
-   // Must have these; else, error.
-   if (!theSamples || !theLines || !theBands)
-   {
-      return false;
-   }
-   
-   return true;
+   return result;
 }
 
 bool ossimEnviHeader::writeFile(const ossimFilename& file)
 {
-   if (theDescription.empty())
+   if (m_keywords["description"].empty())
    {
-      theDescription = file;
+      m_keywords["description"] = file.c_str();
    }
    
    std::ofstream out(file.c_str(), std::ios_base::out);
@@ -230,259 +221,203 @@ bool ossimEnviHeader::writeFile(const ossimFilename& file)
 
 std::ostream& ossimEnviHeader::print(std::ostream& out) const
 {
-   out << "ENVI"
-       << "\ndescription = {\n" << theDescription << "}"
-       << "\nsamples = " << theSamples
-       << "\nlines   = " << theLines
-       << "\nbands   = " << theBands
-       << "\nheader offset = " << theHeaderOffset
-       << "\nfile type = " << theFileType
-       << "\ndata type = " << theDataType
-       << "\ninterleave = " << theInterleave;
-   if (theSensorType.size())
-   {
-      out << "\nsensor type = " << theSensorType;
-   }
-
-   out << "\nbyte order = " << theByteOrder;
-
-   if (theXStart)
-   {
-      out << "\nx start = " << theXStart;
-   }
-
-   if (theMapInfo.size())
-   {
-      out << "\nmap info = " << theMapInfo;
-   }
-
-   if (theWavelength.size())
-   {
-      out << "\nwavelength units = " << theWavelengthUnits;
-   }
-
-   if (theBandName.size())
-   {
-      out << "\nband names = {";
-      ossim_uint32 i;
-      ossim_uint32 size = (ossim_uint32)theBandName.size();
-      for (i = 0; i < size; ++i)
-      {
-         out << "\n " << theBandName[i];
-         if (i < size-1)
-         {
-            out << ",";
-         }
-         else
-         {
-            out << "}";
-         }
-      }
-   }
-   else
-   {
-      out << "\nband names = {";
-      ossim_uint32 i;
-      for (i = 0; i < theBands; ++i)
-      {
-         out << "\nBand " << (i+1);
-         if (i < theBands-1)
-         {
-            out << ",";
-         }
-         else
-         {
-            out << "}";
-         }
-      }
-   }
-   
-   if (theWavelength.size())
-   {
-      out << "\nwavelength = {\n";
-      ossim_uint32 i;
-      ossim_uint32 size = (ossim_uint32)theWavelength.size();
-      for (i = 0; i < size; ++i)
-      {
-         out << theWavelength[i];
-         if (i < size-1)
-         {
-            out << ", ";
-         }
-         else
-         {
-            out << "}";
-         }
-      }
-   }
-
-   out << std::endl;
-   
+   out << "ENVI" << "\n" << m_keywords << std::endl;
    return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const ossimEnviHeader& obj)
+{
+   return obj.print( out );
 }
 
 ossimString ossimEnviHeader::getDescription() const
 {
-   return theDescription;
+   return m_keywords["description"];
 }
 
 void ossimEnviHeader::setDescription(const ossimString& description)
 {
-   theDescription = description;
+   m_keywords["description"] = description.c_str();
 }
 
 ossim_uint32 ossimEnviHeader::getSamples() const
 {
-   return theSamples;
+   ossim_uint32 result = 0;
+   ossimString value = m_keywords[ std::string("samples") ];
+   if( value.size() )
+   {
+      result = value.toUInt32();
+   }
+   return result;
 }
 
 void ossimEnviHeader::setSamples(ossim_uint32 samples)
 {
-   theSamples = samples;
+   m_keywords[ std::string("samples") ] = ossimString::toString(samples).c_str();
 }
 
 ossim_uint32 ossimEnviHeader::getLines() const
 {
-   return theLines;
+   ossim_uint32 result = 0;
+   ossimString value = m_keywords["lines"];
+   if( value.size() )
+   {
+      result = value.toUInt32();
+   }
+   return result;
 }
 
 void ossimEnviHeader::setLines(ossim_uint32 lines)
 {
-   theLines = lines;
+   m_keywords["lines"] = ossimString::toString(lines).c_str();
 }
 
 ossim_uint32 ossimEnviHeader::getBands() const
 {
-   return theBands;
+   ossim_uint32 result = 0;
+   ossimString value = m_keywords["bands"];
+   if( value.size() )
+   {
+      result = value.toUInt32();
+   }
+   return result;
 }
 
 void ossimEnviHeader::setBands(ossim_uint32 bands)
 {
-   theBands = bands;
+   m_keywords["bands"] = ossimString::toString(bands).c_str();
 }
 
 ossim_uint32 ossimEnviHeader::getHeaderOffset() const
 {
-   return theHeaderOffset;
+   ossim_uint32 result = 0;
+   ossimString value = m_keywords["header offset"];
+   if( value.size() )
+   {
+      result = value.toUInt32();
+   }
+   return result;
 }
 
 void ossimEnviHeader::setHeaderOffset(ossim_uint32 headerOffset)
 {
-   theHeaderOffset = headerOffset;
+   m_keywords["header offset"] = ossimString::toString(headerOffset).c_str();
 }
 
 ossimString ossimEnviHeader::getFileType() const
 {
-   return theFileType;
+   return m_keywords[FILE_TYPE_KW];
 }
 
 void ossimEnviHeader::setFileType(const ossimString& fileType)
 {
-   theFileType = fileType;
+    m_keywords[FILE_TYPE_KW] = fileType.c_str();
 }
 
 ossim_uint32 ossimEnviHeader::getDataType() const
 {
-   return theDataType;
+   return ossimString(m_keywords["data type"]).toUInt32();
 }
 
 ossimScalarType ossimEnviHeader::getOssimScalarType() const
 {
-   switch( theDataType )
+   ossim_uint32 dataTypeInt = ossimString(m_keywords["data type"]).toUInt32();
+   
+   ossimScalarType result = OSSIM_SCALAR_UNKNOWN;
+
+   switch( dataTypeInt )
    {
       case 1:
-         return OSSIM_UINT8;
-
+         result = OSSIM_UINT8;
+         break;
       case 2:
-         return OSSIM_SINT16;
-
+         result = OSSIM_SINT16;
+         break;
       case 3:
-         return OSSIM_SINT32;
-
+         result = OSSIM_SINT32;
+         break;
       case 4:
-         return OSSIM_FLOAT32;
-
+         result = OSSIM_FLOAT32;
+         break;
       case 5:
-         return OSSIM_FLOAT64;
-
+         result = OSSIM_FLOAT64;
+         break;
       case 6:
-         return OSSIM_CFLOAT32;
-
+         result = OSSIM_CFLOAT32;
+         break;
       case 9:
-         return OSSIM_CFLOAT64;
-
+         result = OSSIM_CFLOAT64;
+         break;
       case 12:
-         return OSSIM_UINT16;
-
+         result = OSSIM_UINT16;
+         break;
       case 13:
-         return OSSIM_UINT32;
-
+         result = OSSIM_UINT32;
+         break;
       default:
-         return OSSIM_SCALAR_UNKNOWN;
+         break;
    }
 
-   return OSSIM_SCALAR_UNKNOWN;
+   return result;
 }
 
 void ossimEnviHeader::setDataType(ossimScalarType scalar)
 {
+   ossimString dataTypeString = "";
    switch( scalar )
    {
       case OSSIM_UINT8:
-         theDataType = 1;
+         dataTypeString = "1";
          break;
-
       case OSSIM_SINT16:
-         theDataType = 2;
+         dataTypeString = "2";
          break;
-
       case OSSIM_SINT32:
-         theDataType = 3;
+         dataTypeString = "3";
          break;
-
       case OSSIM_FLOAT32:
-         theDataType = 4;
+         dataTypeString = "4";
          break;
-
       case OSSIM_FLOAT64:
-         theDataType = 5;
+         dataTypeString = "5";
          break;
-
       case OSSIM_CFLOAT32:
-         theDataType = 6;
+         dataTypeString = "6";
          break;
-
       case OSSIM_CFLOAT64:
-         theDataType = 9;
+         dataTypeString = "9";
          break;
-
       case OSSIM_UINT16:
-         theDataType = 12;
+         dataTypeString = "12";
          break;
-
       case OSSIM_UINT32:
-         theDataType = 13;
+         dataTypeString = "13";
          break;
-
       default:
          break;
+   }
+   
+   if(!dataTypeString.empty())
+   {
+      m_keywords["data type"] = dataTypeString.c_str();
    }
 }
 ossimString ossimEnviHeader::getInterleaveType() const
 {
-   return theInterleave;
+   return m_keywords["interleave"];
 }
 ossimInterleaveType ossimEnviHeader::getOssimInterleaveType() const
 {
-   if (theInterleave == "bsq")
+   ossimString interleave = getInterleaveType();
+   if (interleave == "bsq")
    {
       return OSSIM_BSQ;
    }
-   else if  (theInterleave == "bil")
+   else if  (interleave == "bil")
    {
       return OSSIM_BIL;
    }
-   else if  (theInterleave == "bip")
+   else if  (interleave == "bip")
    {
       return OSSIM_BIP;
    }
@@ -494,65 +429,109 @@ ossimInterleaveType ossimEnviHeader::getOssimInterleaveType() const
 
 void ossimEnviHeader::setInterleaveType(ossimInterleaveType interleave)
 {
+   std::string interleaveString = "";
    switch (interleave)
    {
       case OSSIM_BIL:
-         theInterleave = "bil";
+         interleaveString = "bil";
          break;
-         
       case OSSIM_BSQ:
-         theInterleave = "bsq";
+         interleaveString = "bsq";
          break;
-         
       case OSSIM_BIP:
-         theInterleave = "bip";
+         interleaveString = "bip";
          break;
       default:
-         theInterleave = "Unknown";
+         interleaveString = "Unknown";
          break;
    }
+   m_keywords["interleave"] = interleaveString;
 }
 
 ossimString ossimEnviHeader::getSensorType() const
 {
-   return theSensorType;
+   return m_keywords["sensor type"];
 }
 
 void ossimEnviHeader::setSensorType(const ossimString& sensorType)
 {
-   theSensorType = sensorType;
+   m_keywords["sensor type"] = sensorType.c_str();
 }
 
 ossimByteOrder ossimEnviHeader::getByteOrder() const
 {
-   // 0 = little
-   // 1 = big
-   return theByteOrder;
+   ossimByteOrder result = ossim::byteOrder(); // System byte order.
+   std::string value = m_keywords["byte order"];
+   if ( value.size() )
+   {
+      // 0 = LITTLE_ENDIAN
+      // 1 = BIG_ENDIAN
+      ossim_int32 order = ossimString(value).toInt32();
+      result = order ? OSSIM_BIG_ENDIAN : OSSIM_LITTLE_ENDIAN;
+   }
+   return result;
 }
 
 void ossimEnviHeader::setByteorder(ossimByteOrder byteOrder)
 {
-   theByteOrder = byteOrder;
+   if(byteOrder==OSSIM_LITTLE_ENDIAN)
+   {
+      m_keywords["byte order"] = "0";
+   }
+   else
+   {
+      m_keywords["byte order"] = "1";
+   }
 }
 
 ossim_int32 ossimEnviHeader::getXStart() const
 {
-   return theXStart;
+   ossim_int32 result = 0;
+   std::string s = m_keywords.findKey( std::string("x start") );
+   if ( !s.size() )
+   {
+      s = m_keywords.findKey( std::string("sample start") );
+   }
+   if ( s.size() )
+   {
+      result = ossimString( s ).toInt32();
+   }
+   return result;
 }
 
 void ossimEnviHeader::setXStart(ossim_int32 xstart)
 {
-   theXStart = xstart;
+   m_keywords["x start"] = ossimString::toString(xstart).c_str();
+}
+
+ossim_int32 ossimEnviHeader::getYStart() const
+{
+   ossim_int32 result = 0;
+   std::string s = m_keywords.findKey( std::string("y start") );
+   if ( !s.size() )
+   {
+      s = m_keywords.findKey( std::string("line start") );
+   }
+   if ( s.size() )
+   {
+      result = ossimString( s ).toInt32();
+   }
+   return result;
+}
+
+void ossimEnviHeader::setYStart(ossim_int32 ystart)
+{
+   m_keywords["y start"] = ossimString::toString(ystart).c_str();
 }
 
 ossimString ossimEnviHeader::getMapInfo() const
 {
-   return theMapInfo;
+   return m_keywords["map info"];
 }
 
 void ossimEnviHeader::setMapInfo(const ossimString& mapInfo)
 {
-   theMapInfo = mapInfo;
+   m_keywords["map info"] = mapInfo.c_str();
 }
 
 void ossimEnviHeader::setMapInfo(const ossimKeywordlist& kwl,
@@ -566,7 +545,7 @@ void ossimEnviHeader::setMapInfo(const ossimKeywordlist& kwl,
          << kwl
          << std::endl;
    }
-
+   ossimString mapInfoString;
    const char* lookup;
    
    // Get the projection type.
@@ -592,7 +571,7 @@ void ossimEnviHeader::setMapInfo(const ossimKeywordlist& kwl,
    if (lookup)
    {
       ossimString os = lookup;
-      if (os = "WGE")
+      if (os == "WGE")
       {
          datum = "WGS-84";
       }
@@ -625,294 +604,179 @@ void ossimEnviHeader::setMapInfo(const ossimKeywordlist& kwl,
          return;
       }
                  
-      theMapInfo = "{Geographic Lat/Lon, 1.0000, 1.0000, ";
-      theMapInfo += tieLon;
-      theMapInfo += ", ";
-      theMapInfo += tieLat;
-      theMapInfo += ", ";
-      theMapInfo += degLon;
-      theMapInfo += ", ";
-      theMapInfo += degLat;
-      theMapInfo += ", ";
-      theMapInfo += datum;
-      theMapInfo += ", units=degrees}";
+      mapInfoString = "{Geographic Lat/Lon, 1.0000, 1.0000, ";
+      mapInfoString += tieLon;
+      mapInfoString += ", ";
+      mapInfoString += tieLat;
+      mapInfoString += ", ";
+      mapInfoString += degLon;
+      mapInfoString += ", ";
+      mapInfoString += degLat;
+      mapInfoString += ", ";
+      mapInfoString += datum;
+      mapInfoString += ", units=degrees}";
    }
 
+   m_keywords["map info"] = mapInfoString.c_str();
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimEnviHeader::setMapInfo DEBUG:"
-         << "\ntheMapInfo:  " << theMapInfo
+         << "\ntheMapInfo:  " << mapInfoString
          << std::endl;
    }
 }
 
 ossimString ossimEnviHeader::getWavelengthUnits() const
 {
-   return theWavelengthUnits;
+   return m_keywords["wavelength units"];
 }
 
 void ossimEnviHeader::setWavelengthUnits(const ossimString& waveLengthUnits)
 {
-   theWavelengthUnits = waveLengthUnits;
+   
+   m_keywords["wavelength units"] = waveLengthUnits.c_str();
 }
 
 void ossimEnviHeader::getBandNames(std::vector<ossimString>& bandNames) const
 {
-   bandNames = theBandName;
+   bandNames.clear();
+   ossimString bandNamesString = m_keywords["band names"];
+   bandNamesString.split(bandNames, ",");
 }
 
 void ossimEnviHeader::setBandNames(const std::vector<ossimString>& bandNames)
 {
-   theBandName = bandNames;
+   ossimString value;
+   value.join(bandNames, ",");
+   m_keywords["band names"] = value.c_str();
 }
 
 void ossimEnviHeader::getWavelengths(std::vector<ossimString>& waveLengths)
    const
 {
-   waveLengths = theWavelength;
+   waveLengths.clear();
+   ossimString bandNamesString = m_keywords[WAVELENGTH_KW];
+   bandNamesString.split(waveLengths, ",");
 }
 
 void ossimEnviHeader::setWavelengths(
    const std::vector<ossimString>& wavelengths)
 {
-   theWavelength = wavelengths;
-}
-
-void ossimEnviHeader::parseDescription(std::ifstream& is)
-{
-   bool record = false;
-   theDescription.clear();
-   char c = '\0';
-
-   while (c != '}')
-   {
-      is.get(c);
-      if (c == '{') // start record.
-      {
-         record = true;
-         continue;
-      }
-      else if (c == '}') // finished recording
-      {
-         break;
-      }
-      else if (!is) // something bad happened.
-      {
-         setErrorStatus();
-         return;
-      }
-
-      if (record)
-      {
-         theDescription.push_back(c);
-      }
-   }
-}
-
-void ossimEnviHeader::parseWavelength(std::ifstream& is)
-{
-   bool record = false;
-   theWavelength.clear();
-   char c = '\0';
-
-   std::string bandWavelength;
-   
-   while (c != '}')
-   {
-      is.get(c);
-      if (c == '{') // start record.
-      {
-         record = true;
-         continue;
-      }
-      else if (c == '\n')
-      {
-         continue; // skip newlines
-      }
-      else if (c == '}') // finished recording
-      {
-         theWavelength.push_back(bandWavelength);
-         break;
-      }
-      else if (c == ',')
-      {
-         theWavelength.push_back(bandWavelength);
-         bandWavelength.clear();
-         continue;
-      }
-
-      if (!is) // something bad happened.
-      {
-         setErrorStatus();
-         return;
-      }
-
-      if (record)
-      {
-         bandWavelength.push_back(c);
-      }
-   }
-}
-
-void ossimEnviHeader::parseBandNames(std::ifstream& is)
-{
-   bool record = false;
-   theBandName.clear();
-   char c = '\0';
-
-   std::string bandName;
-   
-   while (c != '}')
-   {
-      is.get(c);
-      if (c == '{') // start record.
-      {
-         record = true;
-         continue;
-      }
-      else if (c == '\n')
-      {
-         continue; // skip newlines
-      }
-      else if (c == '}') // finished recording
-      {
-         ossimString os = bandName;
-         os.trim();
-         theBandName.push_back(os);
-         break;
-      }
-      else if (c == ',')
-      {
-         ossimString os = bandName;
-         os.trim();
-         theBandName.push_back(os);
-         bandName.clear();
-         continue;
-      }
-
-      if (!is) // something bad happened.
-      {
-         setErrorStatus();
-         return;
-      }
-
-      if (record)
-      {
-         bandName.push_back(c);
-      }
-   }
+   ossimString value;
+   value.join(wavelengths, ",");
+   m_keywords[WAVELENGTH_KW] = value.c_str();
 }
 
 bool ossimEnviHeader::loadState(const ossimKeywordlist& kwl,
                                 const char* prefix)
 {
-   const char* lookup;
+   std::string lookup;
+   std::string pfx = (prefix ? prefix: "" );
    ossimString s;
 
-   lookup = kwl.find(prefix, ossimKeywordNames::DESCRIPTION_KW);
-   if (lookup)
+   reset();
+
+   lookup = kwl.findKey(pfx, std::string(ossimKeywordNames::FILENAME_KW));
+   if (lookup.size())
    {
-      theDescription = lookup;
+      m_file.string() = lookup;
+   }
+  
+   lookup = kwl.findKey(pfx, std::string(ossimKeywordNames::DESCRIPTION_KW));
+   if (lookup.size())
+   {
+      setDescription(lookup);
    }
 
-   lookup = kwl.find(prefix, ossimKeywordNames::NUMBER_SAMPLES_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, std::string(ossimKeywordNames::NUMBER_SAMPLES_KW));
+   if (lookup.size())
    {
-      s = lookup;
-      theSamples = s.toUInt32();
+      m_keywords["samples"] = lookup;
    }
    
-   lookup = kwl.find(prefix, ossimKeywordNames::NUMBER_LINES_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, std::string(ossimKeywordNames::NUMBER_LINES_KW));
+   if (lookup.size())
    {
-      s = lookup;
-      theLines = s.toUInt32();
+      m_keywords["lines"] = lookup;
    }
 
-   lookup = kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, std::string(ossimKeywordNames::NUMBER_BANDS_KW));
+   if (lookup.size())
    {
-      s = lookup;
-      theBands = s.toUInt32();
+      m_keywords["bands"] = lookup;
    }
 
-   lookup = kwl.find(prefix, HEADER_OFFSET_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, std::string(HEADER_OFFSET_KW));
+   if (lookup.size())
    {
-      s = lookup;
-      theHeaderOffset = s.toUInt32();
+      m_keywords["header offset"] = lookup;
    }
 
-   lookup = kwl.find(prefix, FILE_TYPE_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, std::string(FILE_TYPE_KW));
+   if (lookup.size())
    {
-      theFileType = lookup;
+       m_keywords["file_type"] = lookup;
    }
 
-   lookup = kwl.find(prefix, DATA_TYPE_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, DATA_TYPE_KW);
+   if (lookup.size())
    {
-      s = lookup;
-      theDataType = s.toUInt32();
+      m_keywords["data type"] = lookup;
    }
 
-   lookup = kwl.find(prefix, ossimKeywordNames::INTERLEAVE_TYPE_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, std::string(ossimKeywordNames::INTERLEAVE_TYPE_KW));
+   if (lookup.size())
    {
-      theInterleave = lookup;
+      m_keywords["interleave"] = lookup;
    }
 
-   lookup = kwl.find(prefix, SENSOR_TYPE_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, std::string(SENSOR_TYPE_KW));
+   if (lookup.size())
    {
-      theSensorType = lookup;
+      m_keywords["sensor type"] = lookup;
    }
 
-   lookup = kwl.find(prefix, ossimKeywordNames::BYTE_ORDER_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, std::string(ossimKeywordNames::BYTE_ORDER_KW));
+   if (lookup.size())
    {
       s = lookup;
       s.downcase();
       if (s == "little_endian")
       {
-         theByteOrder = OSSIM_LITTLE_ENDIAN;
+         m_keywords["byte order"] = "0";
       }
       else if (s == "big_endian")
       {
-         theByteOrder= OSSIM_BIG_ENDIAN;
+         m_keywords["byte order"] = "1";
       }
       else
       {
-         ossim_uint32 i = s.toUInt32();
-         if (i == 0)
-         {
-            theByteOrder = OSSIM_LITTLE_ENDIAN;
-         }
-         else if (i == 1)
-         {
-            theByteOrder= OSSIM_BIG_ENDIAN;
-         }
+         m_keywords["byte order"] = lookup;
       }
    }
    
-   lookup = kwl.find(prefix, X_START_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, std::string(X_START_KW));
+   if (lookup.size())
    {
-      s = lookup;
-      theXStart = (ossimByteOrder)s.toInt32();
+      m_keywords["x start"] = lookup;
+   }
+   lookup = kwl.findKey(pfx, std::string(Y_START_KW));
+   if (lookup.size())
+   {
+      m_keywords["y start"] = lookup;
    }
 
-   lookup = kwl.find(prefix, MAP_INFO_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, std::string(MAP_INFO_KW));
+   if (lookup.size())
    {
-      theMapInfo = lookup;
+      m_keywords["map info"] = lookup;
    }
 
-   lookup = kwl.find(prefix, WAVELENGTH_UNITS_KW);
-   if (lookup)
+   lookup = kwl.findKey(pfx, std::string(WAVELENGTH_UNITS_KW));
+   if (lookup.size())
    {
-      theWavelengthUnits = lookup;
+      m_keywords["wavelength units"] = lookup;
    }
 
    ossim_uint32 n;
@@ -923,47 +787,96 @@ bool ossimEnviHeader::loadState(const ossimKeywordlist& kwl,
    n = kwl.numberOf(prefix, BAND_NAME_KW);
    if (n)
    {
-      theBandName.clear();
+      ossimString value = "";
       count = 0;
       while ( (count < n) || (count > MAX_TRIES) )
       {
          s = BAND_NAME_KW;
          s += ossimString::toString(count);
-         lookup = kwl.find(prefix, s);
-         if (lookup)
+         lookup = kwl.findKey(pfx, s.string());
+         if (lookup.size())
          {
-            theBandName.push_back(ossimString(lookup));
+            if(!value.empty())
+            {
+               value += ossimString(lookup);
+            }
+            else
+            {
+               value += (", " + ossimString(lookup));
+
+            }
+            
          }
          ++count;
       }
+      m_keywords["band names"] = value.c_str();
    }
             
    // Get the band names.
    n = kwl.numberOf(prefix, WAVELENGTH_KW);
    if (n)
    {
-      theWavelength.clear();
+      ossimString value;
       count = 0;
       while ( (count < n) || (count > MAX_TRIES) )
       {
          s = WAVELENGTH_KW;
          s += ossimString::toString(count);
-         lookup = kwl.find(prefix, s);
-         if (lookup)
+         lookup = kwl.findKey(pfx, s.string());
+         if (lookup.size())
          {
-            theWavelength.push_back(ossimString(lookup));
+            if(!value.empty())
+            {
+               value += ossimString(lookup);
+            }
+            else
+            {
+               value += (", " + ossimString(lookup));
+            }
          }
          ++count;
       }
+      m_keywords["wavelength"] = value.c_str();
    }
-
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimEnviHeader::loadState DEUG\n"
-         << *this
-         << std::endl;
+         << "ossimEnviHeader::loadState DEUG\n";
+      print(ossimNotify(ossimNotifyLevel_DEBUG));
    }
    
    return true;
+}
+
+bool ossimEnviHeader::isEnviHeader( const ossimFilename& file )
+{
+   bool result = false;
+   std::ifstream in;
+   in.open(file.c_str(), std::ios::in | std::ios::binary);
+   if ( in.is_open() )
+   {
+      result = isEnviHeader( in );
+      in.close();
+   }
+   return result;
+}
+
+bool ossimEnviHeader::isEnviHeader( std::istream& in )
+{
+   bool result = false;
+   ossim::skipws(in);
+   char eh[5];
+   in.read(eh, 4);
+   eh[4] = '\0';
+   std::string s(eh);
+   if ( s == "ENVI" )
+   {
+      result = true;
+   }
+   return result;
+}
+
+const ossimFilename& ossimEnviHeader::getFile() const
+{
+   return m_file;
 }

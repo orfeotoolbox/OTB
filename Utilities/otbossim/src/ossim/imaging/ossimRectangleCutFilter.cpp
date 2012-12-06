@@ -8,11 +8,13 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRectangleCutFilter.cpp 18938 2011-02-22 17:57:10Z gpotts $
+// $Id: ossimRectangleCutFilter.cpp 21631 2012-09-06 18:10:55Z dburken $
 #include <ossim/imaging/ossimRectangleCutFilter.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimCommon.h>
+#include <ossim/imaging/ossimImageData.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 
 static ossimTrace traceDebug("ossimRectangleCutFilter:debug");
 

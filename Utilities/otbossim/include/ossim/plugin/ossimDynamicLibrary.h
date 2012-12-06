@@ -8,14 +8,12 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDynamicLibrary.h 13600 2008-09-24 15:11:44Z gpotts $
+// $Id: ossimDynamicLibrary.h 20694 2012-03-19 12:22:05Z dburken $
 #ifndef ossimDynamicLibrary_HEADER
-#define ossimDynamicLibrary_HEADER
+#define ossimDynamicLibrary_HEADER 1
 
 #include <ossim/base/ossimString.h>
-#include <ossim/base/ossimRtti.h>
 #include <ossim/base/ossimReferenced.h>
-
 #include <ossim/ossimConfig.h>
 
 #if defined(_WIN32) || defined(__WIN32__)
@@ -46,21 +44,20 @@ public:
    void *getSymbol(const ossimString& name) const;
 
    const ossimString& getName()const
-      {
-         return theLibraryName;
-      }
+   {
+      return theLibraryName;
+   }
    
 protected:
-    // the handle to DLL or NULL
+   // the handle to DLL or NULL
 #if defined(_WIN32)
-	HINSTANCE theLibrary;
+   HINSTANCE theLibrary;
 #else
-	void* theLibrary;
+   void* theLibrary;
 #endif
    ossimString theLibraryName;
 
-TYPE_DATA
 };
 
-
 #endif
+

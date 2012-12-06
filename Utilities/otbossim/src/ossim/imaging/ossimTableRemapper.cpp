@@ -16,7 +16,7 @@
 // uses a normalized remap table (more scalar independent).
 //
 //*************************************************************************
-// $Id: ossimTableRemapper.cpp 17495 2010-06-01 23:21:42Z gpotts $
+// $Id: ossimTableRemapper.cpp 21787 2012-09-30 21:27:09Z gpotts $
 
 #include <ossim/imaging/ossimTableRemapper.h>
 #include <ossim/base/ossimTrace.h>
@@ -72,6 +72,7 @@ void ossimTableRemapper::initialize()
    // Note:  This will reset "theInputConnection" if it changed...
    //---
    ossimImageSourceFilter::initialize();
+   destroy();
    if (theInputConnection)
    {
       // Since we override "getOutputScalarType" make sure something's set.
@@ -82,12 +83,12 @@ void ossimTableRemapper::initialize()
 
       if (theTile.valid())
       {
-         if ( theTile->getNumberOfBands() !=
-              theInputConnection->getNumberOfOutputBands() )
-         {
+         //if ( theTile->getNumberOfBands() !=
+         //     theInputConnection->getNumberOfOutputBands() )
+        // {
             // Wipe everything slick. The next getTile will call allocate.
-            destroy();
-         }
+        //    destroy();
+        // }
       }
    }
 
@@ -107,15 +108,17 @@ void ossimTableRemapper::allocate(const ossimIrect& rect)
       ossim_uint32 width  = rect.width();
       ossim_uint32 height = rect.height();
       theInputScalarType  = theInputConnection->getOutputScalarType();
-      
-      theTile =
-         ossimImageDataFactory::instance()->create(this,
-                                                   getOutputScalarType(),
-                                                   getNumberOfOutputBands(),
-                                                   width,
-                                                   height);
-
+    
+      theTile =  ossimImageDataFactory::instance()->create(this,this);
+      theTile->setImageRectangle(rect); 
+     // theTile =
+     //    ossimImageDataFactory::instance()->create(this,
+     //                                              getOutputScalarType(),
+     //                                              getNumberOfOutputBands(),
+     //                                              width,x
+     //                                              height);
       theTile->initialize();
+
 
       if (theInputScalarType !=  getOutputScalarType() &&
           theTableType == ossimTableRemapper::NATIVE)
@@ -131,7 +134,9 @@ void ossimTableRemapper::allocate(const ossimIrect& rect)
                                                      getNumberOfOutputBands(),
                                                      width,
                                                      height);
+         theTmpTile->setMinPix(theTile->getMinPix(), theTile->getNumberOfBands());
          theTmpTile->initialize();
+
       }
 
       if (theTableType == ossimTableRemapper::NORMALIZED ||
@@ -313,6 +318,17 @@ template <class T> void ossimTableRemapper::remapFromNativeTable(
             {
                d[pixel] = rt[table_index];
             }
+//            else if(table_index < 0)
+//            {
+//               if(theTableBinCount > 1)
+//               {
+//                  d[pixel] = rt[1];
+//               }
+//               else
+//               {
+//                  d[pixel] = table_index;
+ //              }
+ //           }
             else
             {
                if(theTableBinCount>0)
@@ -371,14 +387,18 @@ void ossimTableRemapper::remapFromNormalizedTable(
       for (ossim_uint32 pixel = 0; pixel < PPB; ++pixel)
       {
          // Get the source pixel...
-         ossim_uint32 index
+         ossim_uint32 idx
             = static_cast<ossim_uint32>(buf[pixel]*theTableBinCount+0.5);
 
-         if(index < theTableBinCount)
+         if((idx < theTableBinCount))
          {
             // If within range use to index the remap table; else, null.
-            p = (index < theTableBinCount) ? rt[index] : 0.0;
+            p = (idx < theTableBinCount) ? rt[idx] : 0.0;
          }
+//         else if(idx < 0)
+//         {
+//            p = 0.0;
+//         }
          else 
          {
             p = 1.0;

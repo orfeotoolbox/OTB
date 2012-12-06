@@ -15,7 +15,7 @@
 // as the raster file but with an .ers extension.
 //
 //*******************************************************************
-//  $Id: ossimERSTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
+//  $Id: ossimERSTileSource.cpp 21512 2012-08-22 11:53:57Z dburken $
 
 #include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/support_data/ossimERS.h>
@@ -100,7 +100,7 @@ bool ossimERSTileSource::open(const ossimFilename& fileName)
          ossim_uint32 bands = static_cast<ossim_uint32>(theHdr->theBands);
          for(i = 0; i < bands; ++i)
          {
-            genRasterInfo.setNullPixelValue(i, theHdr->theNullCell);
+            genRasterInfo.getImageMetaData().setNullPix(i, theHdr->theNullCell);
          }
       }
       ossimFilename metadataFile = fne;
@@ -119,15 +119,15 @@ bool ossimERSTileSource::open(const ossimFilename& fileName)
          {
             if(theMetaData.getMinValuesValidFlag())
             {
-               genRasterInfo.setMinPixelValue(i, theMetaData.getMinPix(i));
+               genRasterInfo.getImageMetaData().setMinPix(i, theMetaData.getMinPix(i));
             }
             if(theMetaData.getMaxValuesValidFlag())
             {
-               genRasterInfo.setMaxPixelValue(i, theMetaData.getMaxPix(i));
+               genRasterInfo.getImageMetaData().setMaxPix(i, theMetaData.getMaxPix(i));
             }
             if(theMetaData.getNullValuesValidFlag())
             {
-               genRasterInfo.setNullPixelValue(i, theMetaData.getNullPix(i));
+               genRasterInfo.getImageMetaData().setNullPix(i, theMetaData.getNullPix(i));
             }
          }
       }

@@ -6,15 +6,17 @@
 // Author: Oscar Kramer
 //
 //*************************************************************************************************
-//  $Id: ossimEpsgProjectionDatabase.h 19879 2011-07-30 16:21:50Z dburken $
+//  $Id: ossimEpsgProjectionDatabase.h 21511 2012-08-21 22:00:11Z dburken $
 
 #ifndef ossimEpsgProjectionDatabase_HEADER
-#define ossimEpsgProjectionDatabase_HEADER
+#define ossimEpsgProjectionDatabase_HEADER 1
 
 #include <ossim/projection/ossimProjectionFactoryBase.h>
 #include <ossim/base/ossimFilename.h>
-#include <fstream>
 #include <ossim/projection/ossimMapProjection.h>
+#include <OpenThreads/Mutex>
+#include <fstream>
+
 
 class ossimProjection;
 class ossimString;
@@ -110,9 +112,9 @@ protected:
    ossimMapProjection* createProjFromFormatBRecord(ProjDbRecord* record) const;
 
    //!  ### HACK ###
-   //! UTM projections as specified in the EPSG are indistinguishable from regular TM. Unfortunately
-   //! OSSIM does make a distinction. For the time being, parse the code and programmatically arrive 
-   //! at the UTM projection.
+   //! UTM projections as specified in the EPSG are indistinguishable from regular TM.
+   //! Unfortunately OSSIM does make a distinction. For the time being, parse the code and
+   //! programmatically arrives at the UTM projection.
    ossimMapProjection* createProjFromUtmCode(ossim_uint32 code) const;
 
    //! Given UTM projection, derives the associated EPSG code. This is faster than a Db lookup.
@@ -122,8 +124,9 @@ protected:
    void initialize();
 
    mutable std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> > m_projDatabase;
+   mutable OpenThreads::Mutex m_mutex;
    static ossimEpsgProjectionDatabase*  m_instance; //!< Singleton implementation
-
+   
 };
 
 #endif

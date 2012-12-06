@@ -7,10 +7,9 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.cpp 20230 2011-11-08 17:33:13Z dburken $
+// $Id: ossimImageSource.cpp 21637 2012-09-06 21:17:57Z dburken $
 
 #include <ossim/imaging/ossimImageSource.h>
-#include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimProperty.h>
 #include <ossim/base/ossimKeywordNames.h>
 
@@ -306,11 +305,18 @@ void ossimImageSource::saveImageGeometry(const ossimFilename& geometry_file) con
 
 void ossimImageSource::getOutputBandList(std::vector<ossim_uint32>& bandList) const
 {
-   bandList.clear();
-   const ossim_uint32 BANDS = getNumberOfOutputBands();
-   for (ossim_uint32 band = 0; band < BANDS; ++band)
+   const ossim_uint32 INPUT_BANDS = getNumberOfInputBands();
+   if ( INPUT_BANDS )
    {
-      bandList.push_back(band);
+      bandList.resize( INPUT_BANDS );
+      for ( ossim_uint32 band = 0; band < INPUT_BANDS; ++band )
+      {
+         bandList[band] = band;
+      }
+   }
+   else
+   {
+      bandList.clear();
    }
 }
 

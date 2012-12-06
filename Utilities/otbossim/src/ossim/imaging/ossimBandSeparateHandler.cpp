@@ -14,15 +14,15 @@
 //*************************************************************************************************
 //  $Id: ossimBandSeparateHandler.cpp 2644 2011-05-26 15:20:11Z oscar.kramer $
 
-#include <algorithm>
-
 #include <ossim/imaging/ossimBandSeparateHandler.h>
-#include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimStdOutProgress.h>
+#include <ossim/imaging/ossimImageGeometry.h>
+#include <ossim/imaging/ossimImageHandlerRegistry.h>
+#include <algorithm>
 
 RTTI_DEF1(ossimBandSeparateHandler, "ossimBandSeparateHandler", ossimImageHandler)
 

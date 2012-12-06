@@ -12,16 +12,14 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 20133 2011-10-12 19:03:47Z oscarkramer $
-
-#include <algorithm>
+//  $Id: ossimImageHandler.cpp 21804 2012-10-05 14:18:45Z dburken $
 
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimBooleanProperty.h>
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimException.h>
 #include <ossim/base/ossimContainerEvent.h>
 #include <ossim/base/ossimEventIds.h>
-#include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimFilenameProperty.h>
 #include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossimStringProperty.h>
@@ -31,7 +29,6 @@
 #include <ossim/base/ossimPolygon.h>
 #include <ossim/base/ossimStdOutProgress.h>
 #include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/imaging/ossimHistogramWriter.h>
 #include <ossim/imaging/ossimImageGeometryRegistry.h>
@@ -39,17 +36,13 @@
 #include <ossim/imaging/ossimImageHistogramSource.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/imaging/ossimTiffOverviewBuilder.h>
-
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
-
-#include <ossim/support_data/ossimSupportFilesList.h>
+#include <algorithm>
 
 RTTI_DEF1(ossimImageHandler, "ossimImageHandler", ossimImageSource)
 
-//***
 // Static trace for debugging
-//***
 static ossimTrace traceDebug("ossimImageHandler:debug");
 
 // Property keywords.
@@ -60,7 +53,7 @@ static const char SUPPLEMENTARY_DIRECTORY_KW[] = "supplementary_directory";
 static const char VALID_VERTICES_FILE_KW[]     = "valid_vertices_file";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 20133 2011-10-12 19:03:47Z oscarkramer $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 21804 2012-10-05 14:18:45Z dburken $";
 #endif
 
 // GARRETT! All of the decimation factors are scattered throughout. We want to fold that into 
@@ -133,7 +126,7 @@ bool ossimImageHandler::saveState(ossimKeywordlist& kwl,
    kwl.add(prefix, START_RES_LEVEL_KW, theStartingResLevel, true);
    kwl.add(prefix, OPEN_OVERVIEW_FLAG_KW, (theOpenOverviewFlag?"1":"0"), true);
    kwl.add(prefix, ossimKeywordNames::PIXEL_TYPE_KW, (ossim_uint16) thePixelType, true);
-   
+
    return true;
 }
 
@@ -253,7 +246,9 @@ bool ossimImageHandler::loadState(const ossimKeywordlist& kwl,
 
    lookup = kwl.find(prefix, ossimKeywordNames::PIXEL_TYPE_KW);
    if (lookup)
+   {
       thePixelType = (ossimPixelType) atoi(lookup);
+   }
 
    if(traceDebug())
    {
@@ -720,27 +715,38 @@ ossimRefPtr<ossimImageGeometry> ossimImageHandler::getExternalImageGeometry() co
       // Open the geom file as a KWL and initialize our geometry object:
       filename = filename.expand();
       ossimKeywordlist geomKwl(filename);
-      
-      // Try loadState with no prefix.
-      ossimString prefix = "";
-      const char* lookup = geomKwl.find(prefix.c_str(), ossimKeywordNames::TYPE_KW);
 
-      if (!lookup)
+      // Try loadState with no prefix.
+      std::string prefix = "";
+      std::string key = ossimKeywordNames::TYPE_KW;
+      std::string value = geomKwl.findKey(prefix, key);
+
+      if ( value.empty() || (value != "ossimImageGeometry") )
       {
-         // Try with "image0 type prefix.
-         prefix = "image"+ossimString::toString(getCurrentEntry()) + ".";
-         lookup = geomKwl.find(prefix.c_str(), ossimKeywordNames::TYPE_KW);
+         // Try with "image0." type prefix.
+         prefix += std::string("image") + ossimString::toString(getCurrentEntry()).string() +
+            std::string(".");
+         value = geomKwl.findKey(prefix, key);
+         
+         if ( value.empty() || (value != "ossimImageGeometry") )
+         {
+            // Try with "image0.geometry." prefix.
+            prefix += std::string( "geometry." );
+            value = geomKwl.findKey(prefix, key);
+            
+            if ( value.empty() || (value != "ossimImageGeometry") )
+            {
+               // Try with "geometry." prefix.
+               prefix = std::string( "geometry." );
+               value = geomKwl.findKey(prefix, key);
+            }
+         }
       }
       
-      if (lookup)
+      if ( value == "ossimImageGeometry" )
       {
          geom = new ossimImageGeometry;
-         if(geom->loadState(geomKwl, prefix.c_str()))
-         {
-            // add the geom file to the support data list:
-            ossimSupportFilesList::instance()->add(filename);
-         }
-         else
+         if( !geom->loadState(geomKwl, prefix.c_str()) )
          {
             geom = 0;
          }
@@ -1096,6 +1102,86 @@ bool ossimImageHandler::isBandSelector() const
 bool ossimImageHandler::setOutputBandList(const std::vector<ossim_uint32>& /* band_list */)
 {
    return false;
+}
+
+bool ossimImageHandler::setOutputToInputBandList()
+{
+   bool result = false;
+   if ( isBandSelector() )
+   {
+      std::vector<ossim_uint32> bandList;
+      ossimImageSource::getOutputBandList( bandList );
+      result = setOutputBandList( bandList );
+   }
+   return result;
+}
+
+bool ossimImageHandler::isIdentityBandList( const std::vector<ossim_uint32>& bandList ) const
+{
+   bool result = false;
+   const ossim_uint32 BANDS = bandList.size();
+   if ( BANDS )
+   {
+      std::vector<ossim_uint32> inputList;
+      ossimImageSource::getOutputBandList( inputList ); // This populates an identity band list.
+
+      if ( inputList.size() == BANDS )
+      {
+         ossim_uint32 band = 0;
+         while ( band < BANDS )
+         {
+            if ( inputList[band] != bandList[band] )
+            {
+               break;
+            }
+            ++band;
+         }
+         if ( band == BANDS )
+         {
+            result = true;
+         }
+      }
+   }
+   return result;
+}
+
+// Protected convenience method:
+bool ossimImageHandler::setOutputBandList(const std::vector<ossim_uint32>& inBandList,
+                                          std::vector<ossim_uint32>& outBandList)
+{
+   bool result = false;
+
+   const ossim_uint32 INPUT_BANDS  = getNumberOfInputBands();
+   const ossim_uint32 OUTPUT_BANDS = inBandList.size();
+
+   if ( INPUT_BANDS && OUTPUT_BANDS )
+   {
+      result = true;
+      outBandList.resize( OUTPUT_BANDS );
+      for ( ossim_uint32 band = 0; band < OUTPUT_BANDS; ++band )
+      {
+         if ( inBandList[band] < INPUT_BANDS )
+         {
+            outBandList[band] = inBandList[band];
+         }
+         else // Out of range...
+         {
+            result = false;
+            break;
+         }
+      }
+      if ( result && theOverview.valid() )
+      {
+         result = theOverview->setOutputBandList( inBandList );
+      }
+   }
+
+   if ( result == false )
+   {
+      ossimImageSource::getOutputBandList( outBandList ); // Set to identity.
+   }
+
+   return result;
 }
 
 bool ossimImageHandler::isImageTiled() const

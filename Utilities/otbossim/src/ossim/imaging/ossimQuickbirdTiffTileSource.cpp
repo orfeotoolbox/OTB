@@ -13,9 +13,10 @@
 // Quick Bird ".TIL" files.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimQuickbirdTiffTileSource.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimQuickbirdTiffTileSource.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimQuickbirdTiffTileSource.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/support_data/ossimQuickbirdTile.h>
 #include <ossim/projection/ossimQuickbirdRpcModel.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>

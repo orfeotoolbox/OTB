@@ -5,13 +5,14 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 20316 2011-12-02 15:56:38Z oscarkramer $
+// $Id: ossimImageHandlerFactory.cpp 21512 2012-08-22 11:53:57Z dburken $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
 #include <ossim/imaging/ossimCibCadrgTileSource.h>
 #include <ossim/imaging/ossimDoqqTileSource.h>
 #include <ossim/imaging/ossimDtedTileSource.h>
+#include <ossim/imaging/ossimEnviTileSource.h>
 #include <ossim/imaging/ossimNitfTileSource.h>
 #include <ossim/imaging/ossimQuickbirdNitfTileSource.h>
 #include <ossim/imaging/ossimSrtmTileSource.h>
@@ -175,6 +176,12 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName,
       //---
       if (copyFilename.ext() != "ovr")
       {
+         // Note:  ENVI should be in front of general raster..
+         if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying ENVI...\n";
+         result = new ossimEnviTileSource;
+         result->setOpenOverviewFlag(openOverview);         
+         if (result->open(copyFilename))  break;
+
          // Note:  SRTM should be in front of general raster..
          if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying SRTM...\n";
          result = new ossimSrtmTileSource;
@@ -301,6 +308,11 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
       result = new ossimERSTileSource;
       if (result->loadState(kwl, prefix))  break;
 
+      // Note:  ENVI should be in front of general raster...
+      if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying ENVI...\n"<< std::endl;
+      result  = new ossimEnviTileSource();
+      if (result->loadState(kwl, prefix))  break;
+
       // Note:  SRTM should be in front of general raster...
       if(traceDebug())  ossimNotify(ossimNotifyLevel_DEBUG) << M<< "trying SRTM...\n"<< std::endl;
       result  = new ossimSrtmTileSource();
@@ -425,6 +437,13 @@ ossimImageHandler* ossimImageHandlerFactory::openFromExtension(const ossimFilena
          if(result->open(fileName)) break;
       }  
 
+      if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying HRI,HSI\n";
+      if ( (ext == "hri") || (ext == "hsi") )
+      {
+         result = new ossimEnviTileSource;
+         if(result->open(fileName)) break;
+      }  
+
       if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Trying DEM...\n";
       if (ext == "dem")
       {
@@ -509,6 +528,10 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
    if(STATIC_TYPE_NAME(ossimDtedTileSource) == typeName)
    {
       return new ossimDtedTileSource();
+   }
+   if(STATIC_TYPE_NAME(ossimEnviTileSource) == typeName)
+   {
+      return new ossimEnviTileSource();
    }
    if(STATIC_TYPE_NAME(ossimJpegTileSource) == typeName)
    {
@@ -665,6 +688,13 @@ void ossimImageHandlerFactory::getImageHandlersBySuffix(ossimImageHandlerFactory
       return;
    }  
    
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing HRI,HSI...\n";
+   if ( (testExt == "hri") || (testExt == "hsi") )
+   {
+      result.push_back(new ossimEnviTileSource);
+      return;
+   }  
+   
    if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing DEM...\n";
    if (testExt == "dem")
    {
@@ -786,6 +816,7 @@ void ossimImageHandlerFactory::getTypeNameList(std::vector<ossimString>& typeLis
    typeList.push_back(STATIC_TYPE_NAME(ossimAdrgTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimCcfTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimCibCadrgTileSource));
+   typeList.push_back(STATIC_TYPE_NAME(ossimEnviTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimRpfCacheTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimImageCacheTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimDoqqTileSource));

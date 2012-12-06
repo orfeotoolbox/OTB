@@ -7,7 +7,7 @@
 // Description:  Interface class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderBase.cpp 19724 2011-06-06 21:07:15Z dburken $
+// $Id: ossimOverviewBuilderBase.cpp 21745 2012-09-16 15:21:53Z dburken $
 
 #include <ossim/imaging/ossimOverviewBuilderBase.h>
 #include <ossim/base/ossimIpt.h>
@@ -28,6 +28,7 @@ ossimOverviewBuilderBase::ossimOverviewBuilderBase()
      m_histoMode(OSSIM_HISTO_MODE_UNKNOWN),
      m_bitMaskSpec(),
      m_imageHandler(0),
+     m_originalBandList(0),
      m_maskWriter(0),
      m_maskFilter(0),
      m_outputFile(ossimFilename::NIL),
@@ -48,6 +49,34 @@ ossimOverviewBuilderBase::~ossimOverviewBuilderBase()
 bool ossimOverviewBuilderBase::setOutputWriter(ossimImageFileWriter* /* outputWriter */)
 {
    return false;
+}
+
+bool ossimOverviewBuilderBase::setInputSource(ossimImageHandler* imageSource)
+{
+   bool result = false;
+   if ( imageSource )
+   {
+      if ( imageSource->getErrorStatus() == ossimErrorCodes::OSSIM_OK )
+      {
+         m_imageHandler = imageSource;
+
+         // Check handler to see if it's filtering bands.
+         if ( m_imageHandler->isBandSelector() )
+         { 
+            // Capture for finalize method.
+            m_imageHandler->getOutputBandList( m_originalBandList );
+            
+            // Set output list to input.
+            m_imageHandler->setOutputToInputBandList();
+         }
+
+         // This will set the flag to scan for min, max, nulls if needed.
+         initializeScanOptions();
+         
+         result = true;
+      }
+   }
+   return result;
 }
 
 bool ossimOverviewBuilderBase::hasOverviewType(const ossimString& type) const
@@ -108,6 +137,14 @@ ossimHistogramMode ossimOverviewBuilderBase::getHistogramMode() const
 void ossimOverviewBuilderBase::setHistogramMode(ossimHistogramMode mode)
 {
    m_histoMode = mode;
+}
+
+void ossimOverviewBuilderBase::finalize()
+{
+   if ( m_imageHandler.valid() && m_imageHandler->isBandSelector() && m_originalBandList.size() )
+   {
+      m_imageHandler->setOutputBandList( m_originalBandList );
+   }
 }
 
 void ossimOverviewBuilderBase::setBitMaskSpec(const ossimKeywordlist& bit_mask_spec)

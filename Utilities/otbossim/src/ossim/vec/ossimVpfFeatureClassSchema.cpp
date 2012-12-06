@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //********************************************************************
-// $Id: ossimVpfFeatureClassSchema.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimVpfFeatureClassSchema.cpp 20936 2012-05-18 14:45:00Z oscarkramer $
 #include <ossim/vec/ossimVpfLibrary.h>
 #include <ossim/vec/ossimVpfCoverage.h>
 #include <ossim/vec/ossimVpfFeatureClassSchema.h>
@@ -55,7 +55,7 @@ void ossimVpfFeatureClassSchema::closeTable()
 void ossimVpfFeatureClassSchema::getFeatureClasses(std::vector<ossimString>& featureClassArray)const
 {
    featureClassArray.clear();
-   std::map<ossimString, ossimVpfFeatureClassSchemaNode>::const_iterator featureClassIter = theFeatureClassMap.begin();
+   std::map<ossimString, ossimVpfFeatureClassSchemaNode, ossimStringLtstr>::const_iterator featureClassIter = theFeatureClassMap.begin();
 
    while(featureClassIter != theFeatureClassMap.end())
    {
@@ -67,7 +67,7 @@ void ossimVpfFeatureClassSchema::getFeatureClasses(std::vector<ossimString>& fea
 bool ossimVpfFeatureClassSchema::getFeatureClassNode(const ossimString& featureClass,
                                                      ossimVpfFeatureClassSchemaNode& featureClassNode)const
 {
-   std::map<ossimString, ossimVpfFeatureClassSchemaNode>::const_iterator fIter = theFeatureClassMap.find(featureClass);
+   std::map<ossimString, ossimVpfFeatureClassSchemaNode, ossimStringLtstr>::const_iterator fIter = theFeatureClassMap.find(featureClass);
 
    if(fIter != theFeatureClassMap.end())
    {

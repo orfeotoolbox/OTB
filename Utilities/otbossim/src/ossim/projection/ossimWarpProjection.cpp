@@ -9,7 +9,7 @@
 //   implementation of a warping interpolation model.
 //
 //*****************************************************************************
-//  $Id: ossimWarpProjection.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimWarpProjection.cpp 21214 2012-07-03 16:20:11Z dburken $
 
 #include <ossim/projection/ossimWarpProjection.h>
 RTTI_DEF1(ossimWarpProjection, "ossimWarpProjection", ossimProjection);
@@ -227,7 +227,7 @@ bool ossimWarpProjection::loadState(const ossimKeywordlist& kwl,
 
 //   bool good_load;
 //   int  err_stat;
-   bool result = true;
+   // bool result = true;
    
    ossimString projPrefix = ossimString(prefix) + PROJECTION_PREFIX;
    ossimString affinePrefix = ossimString(prefix) + AFFINE_PREFIX;
@@ -243,6 +243,13 @@ bool ossimWarpProjection::loadState(const ossimKeywordlist& kwl,
 
    theClientProjection = ossimProjectionFactoryRegistry::instance()->createProjection(kwl, projPrefix.c_str());
 
+   if ( theClientProjection.valid() )
+   {
+      theWarpTransform->loadState(kwl,   quadwarpPrefix.c_str());
+      theAffineTransform->loadState(kwl, affinePrefix.c_str()); 
+   }
+   
+#if 0 /* set but not used warning... */
    if(!theClientProjection)
    {
       result = false;
@@ -252,6 +259,7 @@ bool ossimWarpProjection::loadState(const ossimKeywordlist& kwl,
       theWarpTransform->loadState(kwl,   quadwarpPrefix.c_str());
       theAffineTransform->loadState(kwl, affinePrefix.c_str());
    }
+#endif
    
    return ossimProjection::loadState(kwl, prefix);
 }

@@ -10,12 +10,13 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimQuickbirdNitfTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
+//  $Id: ossimQuickbirdNitfTileSource.cpp 21631 2012-09-06 18:10:55Z dburken $
 #include <ossim/imaging/ossimQuickbirdNitfTileSource.h>
 #include <ossim/support_data/ossimQuickbirdTile.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossim2dTo2dShiftTransform.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/support_data/ossimNitfImageHeader.h>
 
 RTTI_DEF1(ossimQuickbirdNitfTileSource, "ossimQuickbirdNitfTileSource", ossimNitfTileSource);

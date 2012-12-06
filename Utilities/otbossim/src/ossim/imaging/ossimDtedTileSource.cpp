@@ -11,11 +11,7 @@
 // Contains class declaration for ossimDtedTileSource.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.cpp 20393 2011-12-19 14:02:23Z dburken $
-
-#include <cstdlib>
-#include <iostream>
-using namespace std;
+// $Id: ossimDtedTileSource.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimDtedTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -27,10 +23,14 @@ using namespace std;
 #include <ossim/base/ossimDatum.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
-#include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimImageData.h>
+#include <ossim/imaging/ossimImageGeometry.h>
+#include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/support_data/ossimDtedInfo.h>
+#include <cstdlib>
+#include <iostream>
+using namespace std;
 
 RTTI_DEF1(ossimDtedTileSource, "ossimDtedTileSource", ossimImageHandler)
 

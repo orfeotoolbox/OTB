@@ -9,7 +9,7 @@
 // Description: Common file for global functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.cpp 20240 2011-11-09 21:53:55Z dburken $
+// $Id: ossimCommon.cpp 20610 2012-02-27 12:19:25Z gpotts $
 
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimConstants.h>

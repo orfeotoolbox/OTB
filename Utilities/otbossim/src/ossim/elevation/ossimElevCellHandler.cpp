@@ -15,7 +15,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevCellHandler.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimElevCellHandler.cpp 21214 2012-07-03 16:20:11Z dburken $
 
 #include <ossim/elevation/ossimElevCellHandler.h>
 #include <ossim/base/ossimKeyword.h>
@@ -79,6 +79,7 @@ const ossimElevCellHandler& ossimElevCellHandler::operator=(
    return *this;
 }
 
+
 ossimFilename ossimElevCellHandler::getFilename() const
 {
    return theFilename;
@@ -89,14 +90,14 @@ double ossimElevCellHandler::getMeanSpacingMeters() const
    return theMeanSpacing;
 }
 
-double ossimElevCellHandler::getAccuracyLE90(const ossimGpt&) const
+bool ossimElevCellHandler::getAccuracyInfo(ossimElevationAccuracyInfo& info,
+                                           const ossimGpt& /* gpt*/ ) const
 {
-   return theAbsLE90;
-}
+  info.m_confidenceLevel = .9;
+  info.m_absoluteLE = theAbsLE90;
+  info.m_absoluteCE = theAbsCE90;
 
-double ossimElevCellHandler::getAccuracyCE90(const ossimGpt&) const
-{
-   return theAbsCE90;
+  return info.hasValidAbsoluteError();
 }
 
 bool ossimElevCellHandler::canConnectMyInputTo(

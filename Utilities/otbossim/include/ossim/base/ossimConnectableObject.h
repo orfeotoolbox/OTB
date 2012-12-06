@@ -11,12 +11,11 @@
 // all connectable objects.
 //
 //*************************************************************************
-// $Id: ossimConnectableObject.h 20316 2011-12-02 15:56:38Z oscarkramer $
+// $Id: ossimConnectableObject.h 21852 2012-10-21 20:16:04Z dburken $
 
 #ifndef ossimConnectableObject_HEADER
-#define ossimConnectableObject_HEADER
+#define ossimConnectableObject_HEADER 1
 
-#include <vector>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimId.h>
@@ -24,7 +23,7 @@
 #include <ossim/base/ossimListenerManager.h>
 #include <ossim/base/ossimPropertyInterface.h>
 #include <ossim/base/ossimRefPtr.h>
-
+#include <vector>
 
 class ossimVisitor;
 class ossimConnectableContainer;
@@ -56,17 +55,17 @@ public:
     * All connectable objects will have id's.  This allows us to
     * set the id of this object.
     */
-   void setId(const ossimId& id){theId = id;}
+   void setId(const ossimId& id);
 
    /**
     * Will allow us to get this object's id.
     */
-   const ossimId& getId()const{return theId;}
+   const ossimId& getId()const;
    
    /**
     * Fetches the current owner, most likely a container but not limited to one.
     */
-   const ossimObject* getOwner() const { return theOwner; }
+   const ossimObject* getOwner() const;
 
    /**
     * Permits changing the object's owner.
@@ -84,61 +83,77 @@ public:
     * want both checked then pass
     * CONNECTABLE_DIRECTION_INPUT | CONNECTABLE_DIRECTION_OUTPUT
     */
-   virtual bool isConnected(ossimConnectableObjectDirectionType direction = CONNECTABLE_DIRECTION_INPUT)const;
+   virtual bool isConnected(
+      ossimConnectableObjectDirectionType direction = CONNECTABLE_DIRECTION_INPUT)const;
 
 
    /*!
-    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
-    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    * These methods are now deprecated.  You can achieve the same thing by
+    * using the new visitor design pattern.  If this does not achieve exactly
+    * what you want then you can derive new rules by overriding the virtual
+    * visit method in ossimVisitor
     *
     * <pre>
-    *    ossimIdVisitor visitor(id, false, ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
+    *    ossimIdVisitor visitor(id, false, ossimVisitor::VISIT_CHILDREN |
+    *    ossimVisitor::VISIT_INPUTS);
     *    connectableObject->accept(visitor);
     *    ossimRefPtr<ossimConnectableObject> object = visitor.getObject();
     * </pre>
     */
-   OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject* findConnectableObject(const ossimId& id));
+   OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject* findConnectableObject(
+                             const ossimId& id));
 
    /*!
-    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
-    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    * These methods are now deprecated.  You can achieve the same thing by
+    * using the new visitor design pattern.  If this does not achieve exactly
+    * what you want then you can derive new rules by overriding the virtual
+    * visit method in ossimVisitor
     *
     * <pre>
-    *    ossimTypeIdVisitor visitor(typeId, true, ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
+    *    ossimTypeIdVisitor visitor(typeId, true, ossimVisitor::VISIT_CHILDREN |
+    *    ossimVisitor::VISIT_INPUTS);
     *    connectableObject->accept(visitor);
     *    ossimRefPtr<ossimConnectableObject> object = visitor.getObject();
     * </pre>
     */
-   OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject* findObjectOfType(RTTItypeid typeId,
-                                                    ossimConnectableObjectDirectionType directionType,
-                                                    bool recurse = true));
+   OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject* findObjectOfType(
+                             RTTItypeid typeId,
+                             ossimConnectableObjectDirectionType directionType,
+                             bool recurse = true));
 
    /*!
-    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
-    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    * These methods are now deprecated.  You can achieve the same thing by
+    * using the new visitor design pattern.  If this does not 
+    * achieve exactly what you want then you can derive new rules by overriding
+    * the virtual visit method in ossimVisitor
     *
     * <pre>
-    *    ossimTypeNameVisitor visitor(typeName, true, ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
+    *    ossimTypeNameVisitor visitor(typeName, true,
+    *    ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
     *    connectableObject->accept(visitor);
     *    ossimRefPtr<ossimConnectableObject> object = visitor.getObject();
     * </pre>
     */
-   OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject* findObjectOfType(const ossimString& obj,
-                                                    ossimConnectableObjectDirectionType directionType,
-                                                    bool recurse = true));
-
+   OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject* findObjectOfType(
+                             const ossimString& obj,
+                             ossimConnectableObjectDirectionType directionType,
+                             bool recurse = true));
+   
    /*!
-    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
-    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    * These methods are now deprecated.  You can achieve the same thing by
+    * using the new visitor design pattern.  If this does not 
+    * achieve exactly what you want then you can derive new rules by overriding
+    * the virtual visit method in ossimVisitor
     *
     * <pre>
-    *    ossimTypeNameVisitor visitor(typeName, true, ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
+    *    ossimTypeNameVisitor visitor(typeName, true,
+    *    ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
     *    connectableObject->accept(visitor);
     *    ossimRefPtr<ossimConnectableObject> object = visitor.getObject();
     * </pre>
     */
    OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject* findInputObjectOfType(
-      const ossimString& className));
+                             const ossimString& className));
    
    /**
     * Return a valid index of the input list if the passed in object
@@ -165,31 +180,33 @@ public:
    virtual ossim_int32 findOutputIndex(const ossimId& id);
    
    /**
-    * Should return the first available index to connect to.  The connectMyInputTo
-    * that just takes another ossimConnectableObject as input and not an index
-    * will call this method.  By default this method will find the first open
-    * slot (not null) or append o the list if it's dynamic.  if the list is
-    * dynamic it calls conConnectMyInputTo(index, object) on an index = to listSize.
-    * 
+    * Should return the first available index to connect to.  The
+    * connectMyInputTo that just takes another ossimConnectableObject as input
+    * and not an index will call this method.  By default this method will find
+    * the first open slot (not null) or append o the list if it's dynamic. If
+    * the list is dynamic it calls conConnectMyInputTo(index, object) on an
+    * index = to listSize.
     */
-   virtual ossim_int32 getMyInputIndexToConnectTo(ossimConnectableObject* object)const;
+   virtual ossim_int32 getMyInputIndexToConnectTo(
+      ossimConnectableObject* object)const;
    
 
    /**
-    * Should return the first available index to connect to.  The connectMyOutputTo
-    * that just takes another ossimConnectableObject as input and not an index
-    * will call this method.  By default this method will find the first open
-    * slot (not null) or append to the list if it's dynamic.  if the list is
-    * dynamic it calls canConnectMyOutputTo(index, object) on an index = to listSize.
-    * 
+    * Should return the first available index to connect to.  The
+    * connectMyOutputTo that just takes another ossimConnectableObject as input\
+    * and not an index will call this method.  By default this method will find
+    * the first open slot (not null) or append to the list if it's dynamic. If
+    * the list is dynamic it calls canConnectMyOutputTo(index, object) on an
+    * index = to listSize.
     */
-   virtual ossim_int32 getMyOutputIndexToConnectTo(ossimConnectableObject* object)const;
+   virtual ossim_int32 getMyOutputIndexToConnectTo(
+      ossimConnectableObject* object)const;
    
    /**
     * required to be overriden by derived classes
     */
-   virtual bool canConnectMyInputTo(ossim_int32 myInputIndex,
-                                    const ossimConnectableObject* object)const=0;
+   virtual bool canConnectMyInputTo(
+      ossim_int32 myInputIndex, const ossimConnectableObject* object)const=0;
    
    /**
     * default implementation is to allow anyone to connect to us.
@@ -211,10 +228,11 @@ public:
     * Will disconnect the object at the given input index and generate
     * a connection event.
     */
-   virtual ossimRefPtr<ossimConnectableObject> disconnectMyInput(ossim_int32 inputIndex,
-                                                                 bool disconnectOutputFlag=true,
-                                                                 bool createEventFlag = true);
-  
+   virtual ossimRefPtr<ossimConnectableObject> disconnectMyInput(
+      ossim_int32 inputIndex,
+      bool disconnectOutputFlag=true,
+      bool createEventFlag = true);
+   
   /**
    * Finds the index of the passed in input and calls
    * disconnectMyInput(inputIndex, disconnectOutputFlag, createEventFlag);
@@ -237,10 +255,11 @@ public:
     * says do you want this method to disconnect the output pointer to
     * this object.
     */
-   virtual ossimRefPtr<ossimConnectableObject> disconnectMyOutput(ossim_int32 outputIndex,
-                                                                  bool disconnectInputFlag=true,
-                                                                  bool createEventFlag = true);
-  
+   virtual ossimRefPtr<ossimConnectableObject> disconnectMyOutput(
+      ossim_int32 outputIndex,
+      bool disconnectInputFlag=true,
+      bool createEventFlag = true);
+   
    /**
     * Will disconnect the output object.  It will get the index of
     * the object and call disconnectMyOutput(index, disconnectOutputFlag).
@@ -322,18 +341,12 @@ public:
    /**
     * Returns the number of input objects.
     */
-   virtual ossim_uint32 getNumberOfInputs()const
-      {
-         return (ossim_uint32)theInputObjectList.size();
-      }
+   virtual ossim_uint32 getNumberOfInputs()const;
 
    /**
     * Return the number of output objects
     */
-   virtual ossim_uint32 getNumberOfOutputs()const
-      {
-         return (ossim_uint32)theOutputObjectList.size();
-      }
+   virtual ossim_uint32 getNumberOfOutputs()const;
    
    /**
     * returns the object at the specified index.
@@ -371,15 +384,10 @@ public:
     */
    virtual void setNumberOfInputs(ossim_int32 numberOfInputs);
 
-   virtual bool getInputListIsFixedFlag()const
-      {
-         return theInputListIsFixedFlag;
-      }
+   virtual bool getInputListIsFixedFlag()const;
+   
+   virtual bool getOutputListIsFixedFlag()const;
 
-   virtual bool getOutputListIsFixedFlag()const
-      {
-         return theOutputListIsFixedFlag;
-      }
    /**
     * Will set the number of outputs.  This will expand the list if the
     * number of outputs is larger than the current number of outputs.
@@ -388,55 +396,59 @@ public:
     */
    virtual void setNumberOfOutputs(ossim_int32 numberOfInputs);
    
-   const ConnectableObjectList& getInputList()const
-      {
-         return theInputObjectList;
-      }
-   const ConnectableObjectList& getOutputList()const
-      {
-         return theOutputObjectList;
-      }
-   ConnectableObjectList& getInputList()
-      {
-         return theInputObjectList;
-      }
-   ConnectableObjectList& getOutputList()
-      {
-         return theOutputObjectList;
-      }
+   const ConnectableObjectList& getInputList()const;
+
+   const ConnectableObjectList& getOutputList()const;
+
+   ConnectableObjectList& getInputList();
+
+   ConnectableObjectList& getOutputList();
 
    /*!
-    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
-    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    * These methods are now deprecated.  You can achieve the same thing by
+    * using the new visitor design pattern.  If this does not achieve exactly
+    * what you want then you can derive new rules by overriding the virtual
+    * visit method in ossimVisitor
     *
     * <pre>
-    *    ossimTypeNameVisitor visitor("<put type name here>", false, ossimVisitor::VISIT_CHILDREN);
+    *    ossimTypeNameVisitor visitor("<put type name here>",
+    *    false, ossimVisitor::VISIT_CHILDREN);
     *    connectableObject->accept(visitor);
     *    ossimCollectionVisitor::List& collection = visitor.getObjects();
     * </pre>
     */
-    OSSIM_DEPRECATE_METHOD(virtual void findAllObjectsOfType(ConnectableObjectList& result, const RTTItypeid& typeInfo, bool recurse=true) );
-
+    OSSIM_DEPRECATE_METHOD(virtual void findAllObjectsOfType(
+                              ConnectableObjectList& result,
+                              const RTTItypeid& typeInfo, bool recurse=true) );
+    
    /*!
-    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
-    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    * These methods are now deprecated.  You can achieve the same thing by
+    * using the new visitor design pattern.  If this does not achieve exactly
+    * what you want then you can derive new rules by overriding the virtual
+    * visit method in ossimVisitor
     *
     * <pre>
-    *    ossimTypeNameVisitor visitor("<put type name here>", false, ossimVisitor::VISIT_CHILDREN);
+    *    ossimTypeNameVisitor visitor("<put type name here>", false,
+    *    ossimVisitor::VISIT_CHILDREN);
     *    connectableObject->accept(visitor);
     *    ossimCollectionVisitor::List& collection = visitor.getObjects();
     * </pre>
     */
-   OSSIM_DEPRECATE_METHOD(virtual void findAllObjectsOfType(ConnectableObjectList& result,
-                                     const ossimString& className,
-                                     bool recurse=true));
-   
+   OSSIM_DEPRECATE_METHOD(virtual void findAllObjectsOfType(
+                             ConnectableObjectList& result,
+                             const ossimString& className,
+                             bool recurse=true));
+
+#if 0 /* Deprecated code. Left here until thoroughly debugged. (drb) */
    /*!
-    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
-    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    * These methods are now deprecated.  You can achieve the same thing by
+    * using the new visitor design pattern.  If this does not 
+    * achieve exactly what you want then you can derive new rules by overriding
+    * the virtual visit method in ossimVisitor
     *
     * <pre>
-    *    ossimTypeIdVisitor visitor(<put type id here>, false, ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
+    *    ossimTypeIdVisitor visitor(<put type id here>, false,
+    *    ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
     *    connectableObject->accept(visitor);
     *    ossimCollectionVisitor::List& collection = visitor.getObjects();
     * </pre>
@@ -446,55 +458,28 @@ public:
       const RTTItypeid& typeInfo,
       bool propagateToInputs=true,
       bool recurseChildren=false));
-
+   
    /*!
-    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
-    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    * These methods are now deprecated.  You can achieve the same thing by
+    * using the new visitor design pattern.  If this does not 
+    * achieve exactly what you want then you can derive new rules by overriding
+    * the virtual visit method in ossimVisitor
     *
     * <pre>
-    *    ossimTypeNameVisitor visitor("<put type name here>", false, ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
+    *    ossimTypeNameVisitor visitor("<put type name here>",
+    *    false, ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
     *    connectableObject->accept(visitor);
     *    ossimCollectionVisitor::List& collection = visitor.getObjects();
     * </pre>
     */
+   
    OSSIM_DEPRECATE_METHOD(virtual void findAllInputsOfType(
-      ConnectableObjectList& result,
-      const ossimString& className,
-      bool propagateToInputs=true,
-      bool recurseChildren=false));
-   
-   /*!
-    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
-    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
-    *
-    * <pre>
-    *    ossimTypeNameVisitor visitor("<put type name here>", false, ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
-    *    connectableObject->accept(visitor);
-    *    ossimCollectionVisitor::List& collection = visitor.getObjects();
-    * </pre>
-    */
-   OSSIM_DEPRECATE_METHOD(virtual void findAllOutputsOfType(
-      ConnectableObjectList& result,
-      const ossimString& className,
-      bool propagateToOutputs=true,
-      bool recurseChildren=false));
-   
-   /*!
-    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
-    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
-    *
-    * <pre>
-    *    ossimTypeIdVisitor visitor(<put type id here>, false, ossimVisitor::VISIT_CHILDREN | ossimVisitor::VISIT_INPUTS);
-    *    connectableObject->accept(visitor);
-    *    ossimCollectionVisitor::List& collection = visitor.getObjects();
-    * </pre>
-    */
-   OSSIM_DEPRECATE_METHOD(virtual void findAllOutputsOfType(
-      ConnectableObjectList& result,
-      const RTTItypeid& typeInfo,
-      bool propagateToOutputs=true,
-      bool recurseChildren=false));
-   
+                             ConnectableObjectList& result,
+                             const ossimString& className,
+                             bool propagateToInputs=true,
+                             bool recurseChildren=false));
+#endif  /* deprecated code. (drb) */
+
    virtual void propagateEventToOutputs(ossimEvent& event);
    virtual void propagateEventToInputs(ossimEvent& event);
 
@@ -539,7 +524,8 @@ public:
                                              const char* prefix=0) const;
 
    /**
-    * Inserts this object and all of its children and inputs into the container provided.
+    * Inserts this object and all of its children and inputs into the container
+    * provided.
     * @return Returns TRUE if successful.
     */
    virtual bool fillContainer(ossimConnectableContainer& container);
@@ -573,15 +559,16 @@ public:
     */     
    bool moveInputToBottom(const ossimId& id);
    
-   
    /**
-    *
     * We will add a visitor interface for all connectable objects.
-    *
     */
    virtual void accept(ossimVisitor& visitor);
    
 protected:
+
+   ossimConnectableObject* findObjectOfType(
+      ConnectableObjectList* connectableList,
+      ossimVisitor& visitor );
    
    ossimId      theId;
    ossimString  theDescription;
@@ -600,15 +587,15 @@ protected:
    /**
     * Holds a list of input objects.
     */
-   ConnectableObjectList     theInputObjectList;
+   ConnectableObjectList theInputObjectList;
    
    /**
     * Holds a list of output objects.
     */
-   ConnectableObjectList     theOutputObjectList;
+   ConnectableObjectList theOutputObjectList;
 
 private:
 TYPE_DATA
 };
 
-#endif
+#endif /* #ifndef ossimConnectableObject_HEADER */

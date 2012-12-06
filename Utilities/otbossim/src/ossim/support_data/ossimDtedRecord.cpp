@@ -17,7 +17,7 @@
 //         User Header Label (UHL) in South to North profile sequence.
 //
 //********************************************************************
-// $Id: ossimDtedRecord.cpp 14248 2009-04-08 19:38:11Z dburken $
+// $Id: ossimDtedRecord.cpp 20611 2012-02-27 12:21:51Z gpotts $
 
 #include <iostream>
 

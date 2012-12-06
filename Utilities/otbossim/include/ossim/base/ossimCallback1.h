@@ -74,6 +74,7 @@ template <class P1> class ossimCallback1
 {
 public:
    ossimCallback1(){}
+   virtual ~ossimCallback1(){}
    virtual void operator()(P1 p1) const = 0;
 };
 

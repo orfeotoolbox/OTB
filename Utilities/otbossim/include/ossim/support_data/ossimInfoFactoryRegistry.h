@@ -13,15 +13,15 @@
 #define ossimInfoFactoryRegistry_HEADER 1
 
 #include <ossim/base/ossimConstants.h> /* for OSSIM_DLL macro */
+#include <OpenThreads/Mutex>
 #include <vector>
-#include <ossim/base/ossimFactoryListInterface.h>
-#include <ossim/support_data/ossimInfoBase.h>
-#include <ossim/support_data/ossimInfoFactoryInterface.h>
 
 // Forward class declarations.
+class ossimInfoFactoryInterface;
+class ossimInfoBase;
 class ossimFilename;
 
-class OSSIM_DLL ossimInfoFactoryRegistry :  public ossimFactoryListInterface<ossimInfoFactoryInterface, ossimInfoBase>
+class OSSIM_DLL ossimInfoFactoryRegistry
 {
 public:
    
@@ -34,6 +34,25 @@ public:
     * @return Pointer to the instance of the registry.
     */
    static ossimInfoFactoryRegistry* instance();
+
+   /**
+    * @brief Method to add factory to registry.
+    * @param factory Factory to register.
+    */
+   void registerFactory(ossimInfoFactoryInterface* factory);
+
+   /**
+    * @brief Adds factory to the front of the registry.
+    * @param factory Factory to register.
+    */
+   void registerFactoryToFront( ossimInfoFactoryInterface* factory );
+                               
+   /**
+    * Method to remove a factory from the registry.  Used by plugins when they
+    * are unloaded.
+    * @param factory Factory to remove.
+    */
+   void unregisterFactory(ossimInfoFactoryInterface* factory);
 
    /**
     * @brief Create method.
@@ -60,7 +79,9 @@ protected:
    const ossimInfoFactoryRegistry& operator=(
       const ossimInfoFactoryRegistry& rhs);
    
- //  std::vector<ossimInfoFactoryInterface*> theFactoryList;
+   std::vector<ossimInfoFactoryInterface*> m_factoryList;
+
+   OpenThreads::Mutex m_mutex;
 
    static ossimInfoFactoryRegistry* m_instance;
 };

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimTopographicCorrectionFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
+// $Id: ossimTopographicCorrectionFilter.cpp 21184 2012-06-29 15:13:09Z dburken $
 #include <algorithm>
 #include <sstream>
 #include <ossim/imaging/ossimTopographicCorrectionFilter.h>
@@ -345,9 +345,9 @@ void ossimTopographicCorrectionFilter::executeTopographicCorrectionTemplate(
    ossim_float64 colorNp = 0;
    ossim_float64 colorMin = 0;
    ossim_float64 colorMax = 0;
-   ossim_float64 outputDelta = 0;;
-   ossim_float64 outputMin = 0;
-   ossim_float64 outputMax = 0;
+   // ossim_float64 outputDelta = 0;;
+   // ossim_float64 outputMin = 0;
+   // ossim_float64 outputMax = 0;
    ossim_float64 outputNp;
    double  normalNp = normalData->getNullPix(0);
    double  LPrime = 0.0;
@@ -369,9 +369,9 @@ void ossimTopographicCorrectionFilter::executeTopographicCorrectionTemplate(
       double* normalZ  = (double*)normalData->getBuf(2);
       double numerator = cosineZenith + theC[mappedBand];
       outputNp  = (ossim_float64)outputData->getNullPix(b);
-      outputMin = (ossim_float64)outputData->getMinPix(b);
-      outputMax = (ossim_float64)outputData->getMaxPix(b);
-      outputDelta = outputMax - outputMin;
+      // outputMin = (ossim_float64)outputData->getMinPix(b);
+      // outputMax = (ossim_float64)outputData->getMaxPix(b);
+      // outputDelta = outputMax - outputMin;
       colorDataBand    = (T*)(colorData->getBuf(b));
       colorNp          = (ossim_float64)(colorData->getNullPix(b));
       colorMin         = (ossim_float64)(colorData->getMinPix(b));
@@ -457,9 +457,9 @@ void ossimTopographicCorrectionFilter::executeTopographicCorrectionMinnaertTempl
    ossim_float64 colorNp = 0;
    ossim_float64 colorMin = 0;
    ossim_float64 colorMax = 0;
-   ossim_float64 outputDelta = 0;;
-   ossim_float64 outputMin = 0;
-   ossim_float64 outputMax = 0;
+   // ossim_float64 outputDelta = 0;;
+   // ossim_float64 outputMin = 0;
+   // ossim_float64 outputMax = 0;
    ossim_float64 outputNp;
    double  normalNp = normalData->getNullPix(0);
    double  LPrime = 0.0;
@@ -480,9 +480,9 @@ void ossimTopographicCorrectionFilter::executeTopographicCorrectionMinnaertTempl
       double* normalY  = (double*)normalData->getBuf(1);
       double* normalZ  = (double*)normalData->getBuf(2);
       outputNp  = (ossim_float64)outputData->getNullPix(b);
-      outputMin = (ossim_float64)outputData->getMinPix(b);
-      outputMax = (ossim_float64)outputData->getMaxPix(b);
-      outputDelta = outputMax - outputMin;
+      // outputMin = (ossim_float64)outputData->getMinPix(b);
+      // outputMax = (ossim_float64)outputData->getMaxPix(b);
+      // outputDelta = outputMax - outputMin;
       colorDataBand    = (T*)(colorData->getBuf(b));
       colorNp          = (ossim_float64)(colorData->getNullPix(b));
       colorMin         = (ossim_float64)(colorData->getMinPix(b));

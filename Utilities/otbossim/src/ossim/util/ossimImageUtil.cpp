@@ -63,11 +63,14 @@ static std::string CREATE_HISTOGRAM_KW      = "create_histogram";
 static std::string CREATE_HISTOGRAM_FAST_KW = "create_histogram_fast";
 static std::string CREATE_HISTOGRAM_R0_KW   = "create_histogram_r0";
 static std::string CREATE_OVERVIEWS_KW      = "create_overviews";
+static std::string FALSE_KW                 = "false";
 static std::string FILE_KW                  = "file";
 static std::string OUTPUT_DIRECTORY_KW      = "output_directory";
+static std::string OUTPUT_FILENAMES_KW      = "output_filenames";
 static std::string OVERVIEW_STOP_DIM_KW     = "overview_stop_dimension";
 static std::string OVERVIEW_TYPE_KW         = "overview_type";
 static std::string READER_PROP_KW           = "reader_prop";
+static std::string REBUILD_HISTOGRAM_KW     = "rebuild_histogram";
 static std::string REBUILD_OVERVIEWS_KW     = "rebuild_overviews";
 static std::string SCAN_MIN_MAX_KW          = "scan_for_min_max";
 static std::string SCAN_MIN_MAX_NULL_KW     = "scan_for_min_max_null";
@@ -137,15 +140,17 @@ void ossimImageUtil::addArguments(ossimArgumentParser& ap)
 
    au->addCommandLineOption("--compression-quality", "Compression quality for TIFF JPEG takes values from 0 to 100, where 100 is best.  For J2K plugin, numerically_lossless, visually_lossless, lossy");
    
-   au->addCommandLineOption("--compression-type", "Compression type can be: NONE, JPEG, PACKBITS, or DEFLATE");
+   au->addCommandLineOption("--compression-type", "Compression type can be: deflate, jpeg, lzw, none or packbits");
 
-   au->addCommandLineOption("--create-histogram", "Computes full histogram alongside overview.");
+   au->addCommandLineOption("--ch or --create-histogram", "Computes full histogram alongside overview.");
    
-   au->addCommandLineOption("--create-histogram-fast", "Computes a histogram in fast mode which samples partial tiles.");
+   au->addCommandLineOption("--chf or --create-histogram-fast", "Computes a histogram in fast mode which samples partial tiles.");
 
    au->addCommandLineOption("--create-histogram-r0", "Forces create-histogram code to compute a histogram using r0 instead of the starting resolution for the overview builder. Can require a separate pass of R0 layer if the base image has built in overviews.");
 
    au->addCommandLineOption("-d", "<output_directory> Write overview to output directory specified.");
+
+   au->addCommandLineOption("--of or --output-files", "Output image files we can open, exluding overviews.");
    
    au->addCommandLineOption("-h", "Display this information");
 
@@ -155,7 +160,9 @@ void ossimImageUtil::addArguments(ossimArgumentParser& ap)
 
    au->addCommandLineOption("--ot", "<overview_type> Overview type. see list at bottom for valid types. (default=ossim_tiff_box)");
 
-   au->addCommandLineOption("-r or --rebuild", "Rebuild overviews even if they are already present.");
+   au->addCommandLineOption("-r or --rebuild-overviews", "Rebuild overviews even if they are already present.");
+   
+   au->addCommandLineOption("--rebuild-histogram", "Rebuild histogram even if they are already present.");
 
    au->addCommandLineOption("--reader-prop", "Adds a property to send to the reader. format is name=value");
 
@@ -204,32 +211,21 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
          ossimArgumentParser::ossimParameter sp1(ts1);
          std::string ts2;
          ossimArgumentParser::ossimParameter sp2(ts2);
-         ossim_uint32 readerPropKeyIndex = 0;
-         ossim_uint32 writerPropKeyIndex = 0;         
 
-         if (ap.read("-a") || ap.read("--include-fullres"))
+         if( ap.read("-a") || ap.read("--include-fullres") )
          {
-            ossimString key = WRITER_PROP_KW;
-            key += ossimString::toString(writerPropKeyIndex++);
-            std::string value = COPY_ALL_FLAG_KW;
-            value += "true";
-            m_kwl->addPair( key.string(), value );
+            setCopyAllFlag( true );
             if ( ap.argc() < 2 )
             {
                break;
             }
          }
 
-         if(ap.read("--compression-quality", sp1))
+         if( ap.read("--compression-quality", sp1) )
          {
-            if (ts1.size())
+            if ( ts1.size() )
             {
-               ossimString key = WRITER_PROP_KW;
-               key += ossimString::toString(writerPropKeyIndex++);
-               std::string value = ossimKeywordNames::COMPRESSION_QUALITY_KW;
-               value += "=";
-               value += ts1;
-               m_kwl->addPair( key.string(), value );
+               setCompressionQuality( ts1 );
             }
             if ( ap.argc() < 2 )
             {
@@ -237,50 +233,57 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
             }
          }
 
-         if(ap.read("--compression-type", sp1))
+         if( ap.read("--compression-type", sp1) )
          {
-            ossimString key = WRITER_PROP_KW;
-            key += ossimString::toString(writerPropKeyIndex++);
-            std::string value = ossimKeywordNames::COMPRESSION_TYPE_KW;
-            value += "=";
-            value += ts1;
-            m_kwl->addPair( key.string(), value );
+            if ( ts1.size() )
+            {
+               setCompressionType( ts1 );
+            }
             if ( ap.argc() < 2 )
             {
                break;
             }
          }
          
-         if( ap.read("--create-histogram"))
+         if( ap.read("--ch") || ap.read("--create-histogram") )
          {
-            m_kwl->addPair( CREATE_HISTOGRAM_KW, TRUE_KW );
+            setCreateHistogramFlag( true );
             if ( ap.argc() < 2 )
             {
                break;
             }
          }
          
-         if( ap.read("--create-histogram-fast"))
+         if( ap.read("--chf") || ap.read("--create-histogram-fast") )
          {
-            m_kwl->addPair( CREATE_HISTOGRAM_FAST_KW, TRUE_KW );
+            setCreateHistogramFastFlag( true );
             if ( ap.argc() < 2 )
             {
                break;
             }
          }
          
-         if( ap.read("--create-histogram-r0"))
+         if( ap.read("--create-histogram-r0") )
          {
-            m_kwl->addPair( CREATE_HISTOGRAM_R0_KW, TRUE_KW );
+            setCreateHistogramR0Flag( true );
             if ( ap.argc() < 2 )
             {
                break;
             }
          }
-
+         
          if( ap.read("-d", sp1) )
          {
-            m_kwl->addPair( OUTPUT_DIRECTORY_KW, ts1 );
+            setOutputDirectory( ts1 );
+            if ( ap.argc() < 2 )
+            {
+               break;
+            }
+         }
+
+         if( ap.read("--of") || ap.read("--output-files") )
+         {
+            setOutputFileNamesFlag( true );
             if ( ap.argc() < 2 )
             {
                break;
@@ -289,25 +292,34 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
          
          if( ap.read("-o") )
          {
-            m_kwl->addPair( CREATE_OVERVIEWS_KW, TRUE_KW );
+            setCreateOverviewsFlag( true );
             if ( ap.argc() < 2 )
             {
                break;
             }
          }        
-
+         
          if( ap.read("--ot", sp1) )
          {
-            m_kwl->addPair( OVERVIEW_TYPE_KW, ts1 );
+            setOverviewType( ts1 );
+            if ( ap.argc() < 2 )
+            {
+               break;
+            }
+         }
+         
+         if( ap.read("-r") || ap.read("--rebuild-overviews") )
+         {
+            setRebuildOverviewsFlag( true );
             if ( ap.argc() < 2 )
             {
                break;
             }
          }
 
-         if(ap.read("-r") || ap.read("--rebuild"))
+         if( ap.read("--rebuild-histogram") )
          {
-            m_kwl->addPair( REBUILD_OVERVIEWS_KW, TRUE_KW );
+            setRebuildHistogramFlag( true );
             if ( ap.argc() < 2 )
             {
                break;
@@ -318,9 +330,9 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
          {
             if (ts1.size())
             {
-               ossimString key = READER_PROP_KW;
-               key += ossimString::toString(readerPropKeyIndex++);
-               m_kwl->addPair( key.string(), ts1 );
+               std::string key = READER_PROP_KW;
+               key += ossimString::toString( getNextReaderPropIndex() ).string();
+               addOption( key, ts1 );
             }
          }
          if ( ap.argc() < 2 )
@@ -330,7 +342,7 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
          
          if( ap.read("--scanForMinMax" ) )
          {
-            m_kwl->addPair( SCAN_MIN_MAX_KW, TRUE_KW );
+            setScanForMinMax( true );
             if ( ap.argc() < 2 )
             {
                break;
@@ -339,7 +351,7 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
 
          if( ap.read("--scanForMinMaxNull" ) )
          {
-            m_kwl->addPair( SCAN_MIN_MAX_NULL_KW, TRUE_KW );
+            setScanForMinMaxNull( true );
             if ( ap.argc() < 2 )
             {
                break;
@@ -348,7 +360,7 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
          
          if( ap.read("-s", sp1) )
          {
-            m_kwl->addPair( OVERVIEW_STOP_DIM_KW, ts1 );
+            setOverviewStopDimension( ts1 );
             if ( ap.argc() < 2 )
             {
                break;
@@ -357,18 +369,7 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
 
          if ( ap.read("-tile-size", sp1))
          {
-            ossim_int32 tileSize = ossimString(ts1).toInt32();
-            if ((tileSize % 16) == 0)
-            {
-               m_kwl->addPair( TILE_SIZE_KW, ts1 );
-            }
-            else
-            {
-               ossimNotify(ossimNotifyLevel_NOTICE)
-                  << M << " NOTICE:"
-                  << "\nTile width must be a multiple of 16!"
-                  << std::endl;
-            }
+            setTileSize( ossimString(ts1).toInt32() );
             if ( ap.argc() < 2 )
             {
                break;
@@ -388,9 +389,9 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
          {
             if (ts1.size())
             {
-               ossimString key = WRITER_PROP_KW;
-               key += ossimString::toString(writerPropKeyIndex++);
-               m_kwl->addPair( key.string(), ts1 );
+               std::string key = WRITER_PROP_KW;
+               key += ossimString::toString( getNextWriterPropIndex() ).string();
+               addOption( key, ts1 );
             }
          }
          if ( ap.argc() < 2 )
@@ -411,24 +412,24 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
          
       } // End while (forever) loop.
 
+      if(ap.argc() > 1)
+      {
+         for (ossim_int32 i = 0; i < (ap.argc()-1); ++i)
+         {
+            ossimString kw = "file";
+            kw += ossimString::toString(i);
+            std::string value = ap[i+1];
+            m_kwl->addPair(kw.string(), value, true);
+         }
+      }
+      else
+      {
+         usage(ap);
+         result = false;
+      }
+
    } // not usage
 
-   if(ap.argc() > 1)
-   {
-      for (ossim_int32 i = 0; i < (ap.argc()-1); ++i)
-      {
-         ossimString kw = "file";
-         kw += ossimString::toString(i);
-         std::string value = ap[i+1];
-         m_kwl->addPair(kw.string(), value, true);
-      }
-   }
-   else
-   {
-      usage(ap);
-      result = false;
-   }
-         
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -463,6 +464,9 @@ void ossimImageUtil::execute()
       m_fileWalker->initializeDefaultFilterList();
       
       m_fileWalker->setNumberOfThreads( getNumberOfThreads() );
+
+      // Must set this so we can stop recursion on directory based images.
+      m_fileWalker->setWaitOnDirFlag( true );
 
       ossimCallback1<const ossimFilename&>* cb =
          new ProcessFileCB(this, &ossimImageUtil::processFile);
@@ -528,9 +532,13 @@ void ossimImageUtil::processFile(const ossimFilename& file)
          << M << " entered...\n" << "file: " << file << "\n";
    }
 
+   ossimNotify(ossimNotifyLevel_NOTICE) << "Processing file: " << file << "\n";
+
    m_mutex.lock();
    ossimRefPtr<ossimImageHandler> ih =
       ossimImageHandlerRegistry::instance()->open(file, true, true);
+
+
    m_mutex.unlock();
 
    if ( ih.valid() )
@@ -543,13 +551,20 @@ void ossimImageUtil::processFile(const ossimFilename& file)
          m_mutex.unlock();
       }
 
+ 
       // Set any reader props:
       ossimPropertyInterface* pi = dynamic_cast<ossimPropertyInterface*>(ih.get());
       if ( pi ) setProps(pi);
 
       bool consumedHistogramOptions  = false;
       bool consumedCmmOptionsOptions = false;
-      
+ 
+      if ( getOutputFileNamesFlag() )
+      {
+         // Simply output the file name of any images we can open:
+         ossimNotify(ossimNotifyLevel_NOTICE) << ih->getFilename().expand(); 
+      }
+     
       if ( createOverviews() )
       {
          // Skip shape files...
@@ -602,7 +617,7 @@ void ossimImageUtil::createOverview(ossimRefPtr<ossimImageHandler>& ih,
 
       // Create the overview builder:
       ossimString overviewType;
-      getOverviewType(overviewType.string());
+      getOverviewType( overviewType.string() );
       ossimRefPtr<ossimOverviewBuilderBase> ob =
          ossimOverviewBuilderFactoryRegistry::instance()->createBuilder(overviewType);
       if ( ob.valid() )
@@ -663,44 +678,6 @@ void ossimImageUtil::createOverview(ossimRefPtr<ossimImageHandler>& ih,
             outputFile.remove();
          }
       }
-
-      //---
-      // Set create histogram code...
-      //
-      // Notes:
-      // 1) Must put this logic after any removal of external overview file.
-      // 
-      // 2) Base file could have built in overviews, e.g. jp2 files.  So the sequensor could
-      //    start at R6 even if there is no external overview file.
-      //
-      // 3) If user want the histogram from R0 the overview builder can do as long as
-      //    ossimImageHandler::getNumberOfDecimationLevels returns 1.  If we are starting
-      //    overview building at R6 then we must do the create histogram in a separate path.
-      //---
-      ossimHistogramMode histoMode = OSSIM_HISTO_MODE_UNKNOWN;
-      if ( createHistogram() ||
-           ( createHistogramR0() && ( ih->getNumberOfDecimationLevels() == 1 ) ) )
-      {
-         histoMode = OSSIM_HISTO_MODE_NORMAL;
-      }
-      else if ( createHistogramFast() )
-      {
-         histoMode = OSSIM_HISTO_MODE_FAST;
-      }
-
-      if ( histoMode != OSSIM_HISTO_MODE_UNKNOWN )
-      {
-         consumedHistogramOptions = true;
-         ob->setHistogramMode(histoMode);
-      }
-
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "Histogram mode: " << histoMode << "\n";
-      }
-
-      ossimNotify(ossimNotifyLevel_NOTICE)
-         << "Creating overviews for file: " << ih->getFilename() << std::endl;
          
       if (useEntryIndex)
       {
@@ -709,14 +686,70 @@ void ossimImageUtil::createOverview(ossimRefPtr<ossimImageHandler>& ih,
          ossimNotify(ossimNotifyLevel_NOTICE) << "entry number: "<< entry << std::endl;
       }
 
-      ob->setOutputFile(outputFile);
-      ob->setInputSource(ih.get());
-
-      // Create the overview for this entry in this file:
-      if ( ob->execute() == false )
+      if ( hasRequiredOverview( ih, ob ) == false )
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "Error returned creating overviews for file: " << ih->getFilename() << std::endl;
+         //---
+         // Set create histogram code...
+         //
+         // Notes:
+         // 1) Must put this logic after any removal of external overview file.
+         // 
+         // 2) Base file could have built in overviews, e.g. jp2 files.  So the sequensor could
+         //    start at R6 even if there is no external overview file.
+         //
+         // 3) If user want the histogram from R0 the overview builder can do as long as
+         //    ossimImageHandler::getNumberOfDecimationLevels returns 1.  If we are starting
+         //    overview building at R6 then we must do the create histogram in a separate path.
+         //---
+         ossimHistogramMode histoMode = OSSIM_HISTO_MODE_UNKNOWN;
+         if ( createHistogram() ||
+              ( createHistogramR0() && ( ih->getNumberOfDecimationLevels() == 1 ) ) )
+         {
+            histoMode = OSSIM_HISTO_MODE_NORMAL;
+         }
+         else if ( createHistogramFast() )
+         {
+            histoMode = OSSIM_HISTO_MODE_FAST;
+         }
+         
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG) << "Histogram mode: " << histoMode << "\n";
+         }
+         
+         if ( histoMode != OSSIM_HISTO_MODE_UNKNOWN )
+         {
+            consumedHistogramOptions = true;
+            ob->setHistogramMode(histoMode);
+            
+            ossimNotify(ossimNotifyLevel_NOTICE)
+               << "Creating overviews with histogram for file: " << ih->getFilename() << std::endl;
+         }
+         else
+         {
+            if ( histoMode != OSSIM_HISTO_MODE_UNKNOWN )
+            {
+               consumedHistogramOptions = false;  
+               ossimNotify(ossimNotifyLevel_NOTICE)
+                  << "Creating overviews for file: " << ih->getFilename() << std::endl;
+            }
+         }
+         
+         ob->setOutputFile(outputFile);
+         ob->setInputSource(ih.get());
+         
+         // Create the overview for this entry in this file:
+         if ( ob->execute() == false )
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "Error returned creating overviews for file: " << ih->getFilename() << std::endl;
+         }
+      }
+      else
+      {
+         consumedHistogramOptions = false;
+         ossimNotify(ossimNotifyLevel_NOTICE)
+            << "Image has required reduced resolution data sets." << std::endl;
       }
    }
 
@@ -724,6 +757,46 @@ void ossimImageUtil::createOverview(ossimRefPtr<ossimImageHandler>& ih,
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << M << " exited...\n";
    }
+}
+
+bool ossimImageUtil::hasRequiredOverview( ossimRefPtr<ossimImageHandler>& ih,
+                                          ossimRefPtr<ossimOverviewBuilderBase>& ob )
+{
+   bool result = false;
+   if ( ih.valid() && ob.valid() && ( getCopyAllFlag() == false ) )
+   {
+      if ( ih->getClassName() == "ossimCcfTileSource" )
+      {
+         // CCF reader does not use external overviews.
+         result = true;
+      }
+      else
+      {
+         // Note we always have one rset
+         ossim_uint32 required = 1;
+         
+         ossim_uint32 startingResLevel      = ih->getNumberOfDecimationLevels();
+         ossim_uint32 overviewStopDimension = ob->getOverviewStopDimension();
+         
+         ossim_uint32 largestImageDimension =
+            ih->getNumberOfSamples(0) >
+            ih->getNumberOfLines(0) ?
+            ih->getNumberOfSamples(0) :
+            ih->getNumberOfLines(0);
+         
+         while(largestImageDimension > overviewStopDimension)
+         {
+            largestImageDimension /= 2;
+            ++required;
+         }
+         
+         if ( startingResLevel >= required )
+         {
+            result = true;
+         }
+      }
+   }
+   return result;
 }
 
 void ossimImageUtil::createHistogram(ossimRefPtr<ossimImageHandler>& ih)
@@ -771,68 +844,92 @@ void ossimImageUtil::createHistogram(ossimRefPtr<ossimImageHandler>& ih,
    
    if ( ih.valid() )
    {
-      ossimNotify(ossimNotifyLevel_NOTICE)
-         << "Computing histogram for file: " << ih->getFilename() << std::endl;
-      
       if (useEntryIndex)
       {
          ih->setCurrentEntry(entry);
          ossimNotify(ossimNotifyLevel_NOTICE) << "entry number: "<< entry << std::endl;
       }
-      
+
       ossimFilename outputFile =
          ih->getFilenameWithThisExtension(ossimString(".his"), useEntryIndex);
-      
-      ossimRefPtr<ossimImageHistogramSource> histoSource = new ossimImageHistogramSource;
-      ossimRefPtr<ossimHistogramWriter> writer = new ossimHistogramWriter;
-      
-      histoSource->setMaxNumberOfRLevels(1); // Currently hard coded...
-      
+
+      // Only build if needed:
+      if ( (outputFile.exists() == false) || rebuildHistogram() )
+      {
+         ossimNotify(ossimNotifyLevel_NOTICE)
+            << "Computing histogram for file: " << ih->getFilename() << std::endl;
+
+         // Check handler to see if it's filtering bands.
+         std::vector<ossim_uint32> originalBandList(0);
+         if ( ih->isBandSelector() )
+         { 
+            // Capture for finalize method.
+            ih->getOutputBandList( originalBandList );
+            
+            // Set output list to input.
+            ih->setOutputToInputBandList();
+         }
+
+         ossimRefPtr<ossimImageHistogramSource> histoSource = new ossimImageHistogramSource;
+         ossimRefPtr<ossimHistogramWriter> writer = new ossimHistogramWriter;
+         
+         histoSource->setMaxNumberOfRLevels(1); // Currently hard coded...
+         
 #if 0 /* TODO tmp drb */
-      if( !ossim::isnan(histoMin) )
-      {
-         histoSource->setMinValueOverride(histoMin);
-      }
-      
-      if( !ossim::isnan(histoMax) )
-      {
-         histoSource->setMaxValueOverride(histoMax);
-      }
-      
-      if(histoBins > 0)
-      {
-         histoSource->setNumberOfBinsOverride(histoBins);
-      }
+         if( !ossim::isnan(histoMin) )
+         {
+            histoSource->setMinValueOverride(histoMin);
+         }
+         
+         if( !ossim::isnan(histoMax) )
+         {
+            histoSource->setMaxValueOverride(histoMax);
+         }
+         
+         if(histoBins > 0)
+         {
+            histoSource->setNumberOfBinsOverride(histoBins);
+         }
 #endif
-      
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "Histogram mode: " << getHistogramMode() << "\n";
-      }
+         
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "Histogram mode: " << getHistogramMode() << "\n";
+         }
+         
+         // Connect histogram source to image handler.
+         histoSource->setComputationMode( getHistogramMode() );
+         histoSource->connectMyInputTo(0, ih.get() );
+         histoSource->enableSource();
+         
+         // Connect writer to histogram source.
+         writer->connectMyInputTo(0, histoSource.get());
+         writer->setFilename(outputFile);
+         theStdOutProgress.setFlushStreamFlag(true);
+         writer->addListener(&theStdOutProgress);
+         
+         // Compute...
+         writer->execute();
+         
+         writer=0;
 
-      // Connect histogram source to image handler.
-      histoSource->setComputationMode( getHistogramMode() );
-      histoSource->connectMyInputTo(0, ih.get() );
-      histoSource->enableSource();
+         // Reset the band list.
+         if ( ih->isBandSelector() && originalBandList.size() )
+         {
+            ih->setOutputBandList( originalBandList );
+         }
 
-      // Connect writer to histogram source.
-      writer->connectMyInputTo(0, histoSource.get());
-      writer->setFilename(outputFile);
-      theStdOutProgress.setFlushStreamFlag(true);
-      writer->addListener(&theStdOutProgress);
-
-      // Compute...
-      writer->execute();
+      } // Matches: if ( (outputFile.exists() == false) || rebuildHistogram() )
       
-      writer=0;
-      
-   } // if ( ih.valid() )
+   } // Matches: if ( ih.valid() )
 
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << M << " exited...\n";
    }
-}
+
+} // End: ossimImageUtil::createHistogram #2
 
 void ossimImageUtil::usage(ossimArgumentParser& ap)
 {
@@ -848,11 +945,27 @@ void ossimImageUtil::usage(ossimArgumentParser& ap)
    // Write usage.
    ap.getApplicationUsage()->write(ossimNotify(ossimNotifyLevel_INFO));
 
-   ossimNotify(ossimNotifyLevel_INFO)
-      << " examples:\n\n" 
-      << std::endl;
-
    outputOverviewWriterTypes();
+   
+   ossimNotify(ossimNotifyLevel_INFO)
+      << "\nExample commands:\n"
+      << "\n// A single image standard tiff overviews, histogram:\n"
+      << "ossim-preproc -o --ch <file>\n"
+      << "\n// A single image with j2k overviews(requires kakadu plugin), histogram:\n"
+      << "ossim-preproc --ot ossim_kakadu_nitf_j2k --ch <file>\n"
+      << "\n// j2k, histogram, 4 threads\n"
+      << "\n// standard tiff overviews, full histogram, 4 threads:\n"
+      << "ossim-preproc -r -o --ch --threads 4 <directory_to_walk>\n"
+      << "\n// j2k, histogram (fast mode), 4 threads\n"
+      << "ossim-preproc -r --ot ossim_kakadu_nitf_j2k --chf --threads 4 "
+      << "<directory_to_walk>\n"
+      << "\n// tiff, jpeg compression, histogram, 4 threads\n"
+      << "ossim-preproc -r --ch --compression-quality 75 --compression-type "
+      << "jpeg --threads 4 <directory_to_walk>\n"
+      << "\nNOTES:\n"
+      << "\n  --ch  equals --create-histogram"
+      << "\n  --chf equals --create-histogram-fast"
+      << std::endl;
 }
 
 // Private method:
@@ -886,7 +999,11 @@ bool ossimImageUtil::isDirectoryBasedImage(const ossimImageHandler* ih) const
    return result;
 }
 
-// Private method:
+void ossimImageUtil::setCreateOverviewsFlag( bool flag )
+{
+   addOption( CREATE_OVERVIEWS_KW, ( flag ? TRUE_KW : FALSE_KW ) );
+}
+
 bool ossimImageUtil::createOverviews() const
 {
    bool result = false;
@@ -896,6 +1013,15 @@ bool ossimImageUtil::createOverviews() const
       result = ossimString(lookup).toBool();
    }
    return result;
+}
+
+void ossimImageUtil::setRebuildOverviewsFlag( bool flag )
+{
+   addOption( REBUILD_OVERVIEWS_KW, ( flag ? TRUE_KW : FALSE_KW ) );
+   if ( flag )
+   {
+      setCreateOverviewsFlag( true ); // Turn on overview building.
+   }
 }
 
 bool ossimImageUtil::rebuildOverviews() const
@@ -909,6 +1035,31 @@ bool ossimImageUtil::rebuildOverviews() const
    return result;
 }
 
+void ossimImageUtil::setRebuildHistogramFlag( bool flag )
+{
+   addOption( REBUILD_HISTOGRAM_KW, ( flag ? TRUE_KW : FALSE_KW ) );
+   if ( flag )
+   {
+      setCreateHistogramFlag( true ); // Turn on histogram building.
+   }
+}
+
+bool ossimImageUtil::rebuildHistogram() const
+{
+   bool result = false;
+   std::string lookup = m_kwl->findKey( REBUILD_HISTOGRAM_KW );
+   if ( lookup.size() )
+   {
+      result = ossimString(lookup).toBool();
+   }
+   return result;
+}
+
+void ossimImageUtil::setScanForMinMax( bool flag )
+{
+   addOption( SCAN_MIN_MAX_KW, ( flag ? TRUE_KW : FALSE_KW ) ); 
+}
+
 bool ossimImageUtil::scanForMinMax() const
 {
    bool result = false;
@@ -920,6 +1071,11 @@ bool ossimImageUtil::scanForMinMax() const
    return result;
 }
 
+void ossimImageUtil::setScanForMinMaxNull( bool flag )
+{
+   addOption( SCAN_MIN_MAX_NULL_KW, ( flag ? TRUE_KW : FALSE_KW ) ); 
+}
+
 bool ossimImageUtil::scanForMinMaxNull() const
 {
    bool result = false;
@@ -929,6 +1085,92 @@ bool ossimImageUtil::scanForMinMaxNull() const
       result = ossimString(lookup).toBool();
    }
    return result;
+}
+
+void ossimImageUtil::setCompressionQuality( const std::string& quality )
+{
+   if ( quality.size() )
+   {
+      std::string key = WRITER_PROP_KW;
+      key += ossimString::toString( getNextWriterPropIndex() ).string();
+      std::string value = ossimKeywordNames::COMPRESSION_QUALITY_KW;
+      value += "=";
+      value += quality;
+      addOption( key, value );
+   }
+}
+
+void ossimImageUtil::setCompressionType(const std::string& type)
+{
+   if ( type.size() )
+   {
+      std::string key = WRITER_PROP_KW;
+      key += ossimString::toString( getNextWriterPropIndex() ).string();
+      std::string value = ossimKeywordNames::COMPRESSION_TYPE_KW;
+      value += "=";
+      value += type;
+      addOption( key, value );
+   }   
+}
+
+void ossimImageUtil::setCopyAllFlag( bool flag )
+{
+   // Add this for hasRequiredOverview method.
+   std::string key   = COPY_ALL_FLAG_KW;
+   std::string value = ( flag ? TRUE_KW : FALSE_KW );
+   addOption( key, value );
+
+   // Add as a writer prop:
+   key = WRITER_PROP_KW;
+   key += ossimString::toString( getNextWriterPropIndex() ).string();
+   value = COPY_ALL_FLAG_KW;
+   value += "=";
+   value += ( flag ? TRUE_KW : FALSE_KW );
+   addOption( key, value );
+}
+
+bool ossimImageUtil::getCopyAllFlag() const
+{
+   bool result = false;
+   std::string lookup = m_kwl->findKey( COPY_ALL_FLAG_KW );
+   if ( lookup.size() )
+   {
+      ossimString os(lookup);
+      result = os.toBool();
+   }
+   return result;
+}
+
+void ossimImageUtil::setOutputFileNamesFlag( bool flag )
+{
+   std::string key   = OUTPUT_FILENAMES_KW;
+   std::string value = ( flag ? TRUE_KW : FALSE_KW );
+   addOption( key, value );
+}
+
+bool ossimImageUtil::getOutputFileNamesFlag() const
+{
+   bool result = false;
+   std::string lookup = m_kwl->findKey( OUTPUT_FILENAMES_KW );
+   if ( lookup.size() )
+   {
+      ossimString os(lookup);
+      result = os.toBool();
+   }
+   return result;
+}
+
+void ossimImageUtil::setOutputDirectory( const std::string& directory )
+{
+   std::string key = OUTPUT_DIRECTORY_KW;
+   addOption( key, directory );
+}
+   
+void ossimImageUtil::setOverviewType( const std::string& type )
+{
+   std::string key = OVERVIEW_TYPE_KW;
+   addOption( key, type );
+   setCreateOverviewsFlag( true ); // Assume caller wants overviews.
 }
 
 void ossimImageUtil::getOverviewType(std::string& type) const
@@ -944,7 +1186,6 @@ void ossimImageUtil::getOverviewType(std::string& type) const
    }
 }
 
-// 
 void ossimImageUtil::setProps(ossimPropertyInterface* pi) const
 {
    if ( pi )
@@ -963,7 +1204,7 @@ void ossimImageUtil::setProps(ossimPropertyInterface* pi) const
       if ( propCount )
       {
          ossim_uint32 foundProps = 0;
-         ossim_int32 index = 0;
+         ossim_uint32 index = 0;
          
          // (propCount+100) is to allow for holes like reader_prop0, reader_prop2...
          while ( (foundProps < propCount) && (index < (propCount+100) ) ) 
@@ -991,6 +1232,32 @@ void ossimImageUtil::setProps(ossimPropertyInterface* pi) const
    }
 }
 
+void ossimImageUtil::setOverviewStopDimension( ossim_uint32 dimension )
+{
+   addOption( OVERVIEW_STOP_DIM_KW, dimension );
+}
+
+void ossimImageUtil::setOverviewStopDimension( const std::string& dimension )
+{
+   addOption( OVERVIEW_STOP_DIM_KW, dimension );
+}
+
+void ossimImageUtil::setTileSize( ossim_uint32 tileSize )
+{
+   if ((tileSize % 16) == 0)
+   {
+      addOption( TILE_SIZE_KW, tileSize );
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_NOTICE)
+         << "ossimImageUtil::setTileSize NOTICE:"
+         << "\nTile width must be a multiple of 16!"
+         << std::endl;
+   }
+}
+
+
 ossim_uint32 ossimImageUtil::getOverviewStopDimension() const
 {
    ossim_uint32 result = 0;
@@ -1000,6 +1267,11 @@ ossim_uint32 ossimImageUtil::getOverviewStopDimension() const
       result = ossimString(lookup).toUInt32();
    }
    return result;
+}
+
+void ossimImageUtil::setCreateHistogramFlag( bool flag )
+{
+   addOption( CREATE_HISTOGRAM_KW, ( flag ? TRUE_KW : FALSE_KW ) );
 }
 
 bool ossimImageUtil::createHistogram() const
@@ -1013,6 +1285,11 @@ bool ossimImageUtil::createHistogram() const
    return result;
 }
 
+void ossimImageUtil::setCreateHistogramFastFlag( bool flag )
+{
+   addOption( CREATE_HISTOGRAM_FAST_KW, ( flag ? TRUE_KW : FALSE_KW ) );
+}
+
 bool ossimImageUtil::createHistogramFast() const
 {
    bool result = false;
@@ -1022,6 +1299,11 @@ bool ossimImageUtil::createHistogramFast() const
       result = ossimString(lookup).toBool();
    }
    return result;
+}
+
+void ossimImageUtil::setCreateHistogramR0Flag( bool flag )
+{
+   addOption( CREATE_HISTOGRAM_R0_KW, ( flag ? TRUE_KW : FALSE_KW ) );
 }
 
 bool ossimImageUtil::createHistogramR0() const
@@ -1053,6 +1335,16 @@ ossimHistogramMode ossimImageUtil::getHistogramMode() const
    return result;
 }
 
+void ossimImageUtil::setNumberOfThreads( ossim_uint32 threads )
+{
+   addOption( THREADS_KW, threads );
+}
+
+void ossimImageUtil::setNumberOfThreads( const std::string& threads )
+{
+   addOption( THREADS_KW, threads );
+}
+
 ossim_uint32 ossimImageUtil::getNumberOfThreads() const
 {
    ossim_uint32 result;
@@ -1068,3 +1360,76 @@ ossim_uint32 ossimImageUtil::getNumberOfThreads() const
    return result;
 }
 
+ossim_uint32 ossimImageUtil::getNextWriterPropIndex() const
+{
+   ossim_uint32 result = m_kwl->numberOf( WRITER_PROP_KW.c_str() );
+   if ( result )
+   {
+      ossim_uint32 foundProps = 0;
+      ossim_uint32 index = 0;
+
+      //---
+      // Loop until we find the last index used for WRITER_PROP_KW.
+      // (result+100) is to allow for holes like writer_prop0, writer_prop2...
+      //---
+      while ( (foundProps < result) && (index < (result+100) ) ) 
+      {
+         ossimString key = WRITER_PROP_KW;
+         key += ossimString::toString(index);
+         std::string lookup = m_kwl->findKey( key.string() );
+         if ( lookup.size() )
+         {
+            ++foundProps;
+         }
+         ++index;
+      }
+      result = index;
+   }
+   return result;
+}
+
+ossim_uint32 ossimImageUtil::getNextReaderPropIndex() const
+{
+   ossim_uint32 result = m_kwl->numberOf( READER_PROP_KW.c_str() );
+   if ( result )
+   {
+      ossim_uint32 foundProps = 0;
+      ossim_uint32 index = 0;
+      
+      //---
+      // Loop until we find the last index used for WRITER_PROP_KW.
+      // (result+100) is to allow for holes like reader_prop0, reader_prop2...
+      //---
+      while ( (foundProps < result) && (index < (result+100) ) ) 
+      {
+         ossimString key = READER_PROP_KW;
+         key += ossimString::toString(index);
+         std::string lookup = m_kwl->findKey( key.string() );
+         if ( lookup.size() )
+         {
+            ++foundProps;
+         }
+         ++index;
+      }
+      result = index;
+   }
+   return result;
+}
+
+void ossimImageUtil::addOption( const std::string& key, ossim_uint32 value )
+{
+   addOption( key, ossimString::toString( value ).string() );
+}
+
+void ossimImageUtil::addOption(  const std::string& key, const std::string& value )
+{
+   m_mutex.lock();
+   if ( m_kwl.valid() )
+   {
+      if ( key.size() && value.size() )
+      {
+         m_kwl->addPair( key, value );
+      }
+   }
+   m_mutex.unlock();
+}

@@ -305,7 +305,7 @@ bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
    kwl.clear();
    if(kwl.addFile(geomFile))
    {
-      theGeneralRasterInfo.theNullHeightValue = generalInfo.getNullPixelValue(0);
+      theGeneralRasterInfo.theNullHeightValue = generalInfo.getImageMetaData().getNullPix(0);
       theGeneralRasterInfo.theImageRect       = generalInfo.imageRect();
       theGeneralRasterInfo.theUl              = theGeneralRasterInfo.theImageRect.ul();
       theGeneralRasterInfo.theLr              = theGeneralRasterInfo.theImageRect.lr();
@@ -313,7 +313,7 @@ bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
       theGeneralRasterInfo.theHeight          = theGeneralRasterInfo.theImageRect.height();
       theGeneralRasterInfo.theImageRect       = generalInfo.imageRect();
       theGeneralRasterInfo.theByteOrder       = generalInfo.getImageDataByteOrder();
-      theGeneralRasterInfo.theScalarType      = generalInfo.getScalarType();
+      theGeneralRasterInfo.theScalarType      = generalInfo.getImageMetaData().getScalarType();
       theGeneralRasterInfo.theBytesPerRawLine = generalInfo.bytesPerRawLine();
 
       //add  by simbla

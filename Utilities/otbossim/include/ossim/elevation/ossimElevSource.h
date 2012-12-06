@@ -10,7 +10,7 @@
 //   all objects providing height information given horizontal ground position.
 //
 //*****************************************************************************
-// $Id: ossimElevSource.h 16104 2009-12-17 18:09:59Z gpotts $
+// $Id: ossimElevSource.h 21380 2012-07-25 13:18:31Z gpotts $
 
 #ifndef ossimElevSource_HEADER
 #define ossimElevSource_HEADER
@@ -20,7 +20,7 @@
 #include <ossim/base/ossimGrect.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimGeoid.h>
-
+#include <ossim/elevation/ossimElevationAccuracyInfo.h>
 class ossimEcefRay;
 class ossimKeywordlist;
 
@@ -31,7 +31,6 @@ class ossimKeywordlist;
 class OSSIM_DLL ossimElevSource : public ossimSource
 {
 public:
-
 
    virtual const ossimElevSource& operator = (const ossimElevSource& src);
    /**
@@ -58,7 +57,7 @@ public:
     *
     *  Returns true if good intersection found.
     */
-   bool intersectRay(const ossimEcefRay& ray, ossimGpt& gpt);
+   bool intersectRay(const ossimEcefRay& ray, ossimGpt& gpt, double defaultElevValue = 0.0);
    
    /**
     * Access methods for the bounding elevations:
@@ -84,13 +83,18 @@ public:
     */
    virtual double getMeanSpacingMeters() const = 0;
 
+
+   virtual bool getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& gpt) const =0;
+
+
+
    /**
     * METHODS: accuracyLE90(), accuracyCE90()
     * Returns the vertical and horizontal accuracy (90% confidence) in the
     * region of gpt:
     */
-   virtual double getAccuracyLE90(const ossimGpt& gpt) const = 0;
-   virtual double getAccuracyCE90(const ossimGpt& gpt) const = 0;
+   //virtual double getAccuracyLE90(const ossimGpt& gpt) const = 0;
+   //virtual double getAccuracyCE90(const ossimGpt& gpt) const = 0;
 
 
    /**

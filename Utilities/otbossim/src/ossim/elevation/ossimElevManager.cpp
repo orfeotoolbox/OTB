@@ -19,7 +19,7 @@
 //              Initial coding.
 //<
 //**************************************************************************
-// $Id: ossimElevManager.cpp 20109 2011-09-23 12:51:28Z gpotts $
+// $Id: ossimElevManager.cpp 21970 2012-12-05 18:19:32Z okramer $
 
 #include <algorithm>
 #include <ossim/elevation/ossimElevManager.h>
@@ -78,62 +78,67 @@ ossimElevManager::~ossimElevManager()
 
 double ossimElevManager::getHeightAboveEllipsoid(const ossimGpt& gpt)
 {
-   if(!isSourceEnabled())
-   {
+   if (!isSourceEnabled())
       return ossim::nan();
-   }
+
    double result = ossim::nan();
-   ossim_uint32 idx = 0;
+   for (ossim_uint32 idx = 0; (idx < m_elevationDatabaseList.size()) && ossim::isnan(result); ++idx)
    {
-    //  OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
-      for(;(idx < m_elevationDatabaseList.size())&&ossim::isnan(result); ++idx)
+      result = m_elevationDatabaseList[idx]->getHeightAboveEllipsoid(gpt);
+   }
+
+   if (ossim::isnan(result))
+   {
+      // No elevation value was returned from the database, so try next best alternatives depending
+      // on ossim_preferences settings. Priority goes to default ellipsoid height if available:
+      if (!ossim::isnan(m_defaultHeightAboveEllipsoid))
       {
-         result = m_elevationDatabaseList[idx]->getHeightAboveEllipsoid(gpt);
+         result = m_defaultHeightAboveEllipsoid;
+      }
+      else if (m_useGeoidIfNullFlag)
+      {
+         result = ossimGeoidManager::instance()->offsetFromEllipsoid(gpt);
       }
    }
-   if(ossim::isnan(result))
-   {
-      result = m_defaultHeightAboveEllipsoid;
-   }
-   if(m_useGeoidIfNullFlag&&ossim::isnan(result))
-   {
-      result = ossimGeoidManager::instance()->offsetFromEllipsoid(gpt);
-   }
-   if(!ossim::isnan(result)&&!ossim::isnan(m_elevationOffset))
-   {
+
+   // Next, ossim_preferences may have indicated an elevation offset to use (top of trees, error
+   // bias, etc):
+   if (!ossim::isnan(m_elevationOffset) && !ossim::isnan(result))
       result += m_elevationOffset;
-   }
+
    return result;
 }
 
 double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
 {
-   if(!isSourceEnabled())
-   {
+   if (!isSourceEnabled())
       return ossim::nan();
-   }
+
    double result = ossim::nan();
+   for (ossim_uint32 idx = 0; (idx < m_elevationDatabaseList.size()) && ossim::isnan(result); ++idx)
    {
-     // OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
-      
-      ossim_uint32 idx = 0;
-      for(;(idx < m_elevationDatabaseList.size())&&ossim::isnan(result); ++idx)
+      result = m_elevationDatabaseList[idx]->getHeightAboveMSL(gpt);
+   }
+
+   if (ossim::isnan(result) && m_useGeoidIfNullFlag)
+   {
+      // No elevation value was returned from the database, so try next best alternatives depending
+      // on ossim_preferences settings. First default to height at MSL itself:
+      result = 0.0; // MSL
+      if (!ossim::isnan(m_defaultHeightAboveEllipsoid))
       {
-         result = m_elevationDatabaseList[idx]->getHeightAboveMSL(gpt);
+         // Use the default height above ellipsoid corrected for best guess of MSL above ellipsoid
+         // (i.e., the geoid):
+         double dh = ossimGeoidManager::instance()->offsetFromEllipsoid(gpt);
+         if (!ossim::isnan(dh))
+            result = m_defaultHeightAboveEllipsoid - dh;
       }
    }
-   if(ossim::isnan(result)&&!ossim::isnan(m_defaultHeightAboveEllipsoid))
-   {
-      result = m_defaultHeightAboveEllipsoid;
-      // Use first available geoid to offset the ellipsoid height. This at least gets us close: 
-      double dh = ossimGeoidManager::instance()->offsetFromEllipsoid(gpt);
-      if (!ossim::isnan(dh))
-         result -= dh;
-   }
-   if(!ossim::isnan(result)&&(!ossim::isnan(m_elevationOffset)))
-   {
+
+   // ossim_preferences may have indicated an elevation offset to use (top of trees, error bias, etc)
+   if (!ossim::isnan(result) && (!ossim::isnan(m_elevationOffset)))
       result += m_elevationOffset;
-   }
+
    return result;
 }
 
@@ -229,6 +234,19 @@ void ossimElevManager::accept(ossimVisitor& visitor)
    {
       m_elevationDatabaseList[idx]->accept(visitor);
    }
+}
+
+bool ossimElevManager::getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& gpt) const
+{
+   for(ossim_uint32 idx = 0;(idx < m_elevationDatabaseList.size()); ++idx)
+   {
+      if(m_elevationDatabaseList[idx]->getAccuracyInfo(info, gpt))
+      {
+         return true;
+      }
+   }
+
+   return false;
 }
 
 bool ossimElevManager::saveState(ossimKeywordlist& kwl,

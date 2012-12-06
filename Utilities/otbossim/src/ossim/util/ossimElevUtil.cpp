@@ -12,7 +12,7 @@
 // models(dems).
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimElevUtil.cpp 20489 2012-01-23 20:07:56Z dburken $
+// $Id: ossimElevUtil.cpp 21963 2012-12-04 16:28:12Z dburken $
 
 #include <ossim/util/ossimElevUtil.h>
 
@@ -31,8 +31,6 @@
 #include <ossim/base/ossimStdOutProgress.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimVisitor.h>
-#include <ossim/base/ossimConnectableContainer.h>
 
 #include <ossim/imaging/ossimBumpShadeTileSource.h>
 #include <ossim/imaging/ossimFilterResampler.h>
@@ -47,6 +45,7 @@
 #include <ossim/imaging/ossimImageWriterFactoryRegistry.h>
 #include <ossim/imaging/ossimIndexToRgbLutFilter.h>
 #include <ossim/imaging/ossimScalarRemapper.h>
+#include <ossim/imaging/ossimTwoColorView.h>
 
 #include <ossim/init/ossimInit.h>
 
@@ -60,9 +59,9 @@
 
 #include <string>
 
-static ossimTrace traceDebug   = ossimTrace("ossimElevUtil:debug");
-static ossimTrace traceLog     = ossimTrace("ossimElevUtil:log");
-static ossimTrace traceOptions = ossimTrace("ossimElevUtil:options");
+static ossimTrace traceDebug("ossimElevUtil:debug");
+static ossimTrace traceLog("ossimElevUtil:log");
+static ossimTrace traceOptions("ossimElevUtil:options");
 
 static const char COLOR_BLUE_KW[]           = "color_blue";
 static const char COLOR_GREEN_KW[]          = "color_green";
@@ -96,6 +95,12 @@ static const char TRUE_KW[]                 = "true";
 static const char WRITER_KW[]               = "writer";
 static const char WRITER_PROPERTY_KW[]      = "writer_property";
 
+static const char TWOCMV_OLD_INPUT_BAND_KW[]      = "2cmv_old_input_band";
+static const char TWOCMV_NEW_INPUT_BAND_KW[]      = "2cmv_new_input_band";
+static const char TWOCMV_RED_OUTPUT_SOURCE_KW[]   = "2cmv_red_output_source";
+static const char TWOCMV_GREEN_OUTPUT_SOURCE_KW[] = "2cmv_green_output_source";
+static const char TWOCMV_BLUE_OUTPUT_SOURCE_KW[]  = "2cmv_blue_output_source";
+
 ossimElevUtil::ossimElevUtil()
    : ossimReferenced(),
      m_operation(OSSIM_DEM_OP_UNKNOWN),
@@ -123,7 +128,7 @@ void ossimElevUtil::addArguments(ossimArgumentParser& ap)
    
    appuse->setDescription(ap.getApplicationName()+" Utility application for generating elevation products from dem data.");
    
-   appuse->addCommandLineOption("--azimuth", "<azimuth>\nhillshade option - Light source azimuth angle for bump shade.\nRange: 0 to 360, Default = 180.0");
+   appuse->addCommandLineOption("--azimuth", "<azimuth>\nhillshade option - Light source azimuth angle for bump shade.\nRange: 0 to 360, Default = 180.0");   
 
    appuse->addCommandLineOption("--central-meridian","<central_meridian_in_decimal_degrees>\nNote if set this will be used for the central meridian of the projection.  This can be used to lock the utm zone.");
 
@@ -153,7 +158,7 @@ void ossimElevUtil::addArguments(ossimArgumentParser& ap)
    
    appuse->addCommandLineOption("--meters", "<meters>\nSpecifies an override for the meters per pixel");
       
-   appuse->addCommandLineOption("--op","<operation>\nOperation to perform. Valid operations are \"color-relief\", \"hillshade\" and \"ortho\".");
+   appuse->addCommandLineOption("--op","<operation>\nOperation to perform. Valid operations are \"color-relief\", \"hillshade\", \"2cmv\"(two color multi view) and \"ortho\".");
 
    appuse->addCommandLineOption("--options-keyword-list","<options.kwl>  This can be all or part of the application options.  To get a template you can turn on trace to the ossimElevUtil class by adding \"-T ossimElevUtil\" to your command.");
 
@@ -174,11 +179,21 @@ void ossimElevUtil::addArguments(ossimArgumentParser& ap)
 
    appuse->addCommandLineOption("-t or --thumbnail", "<max_dimension>\nSpecify a thumbnail "
       "resolution.\nScale will be adjusted so the maximum dimension = argument given.");
-   
+
    appuse->addCommandLineOption("-w or --writer","<writer>\nSpecifies the output writer.  Default uses output file extension to determine writer.");
    
    appuse->addCommandLineOption("--writer-prop", "<writer-property>\nPasses a name=value pair to the writer for setting it's property. Any number of these can appear on the line.");
-}
+
+   appuse->addCommandLineOption("--2cmv-old-input-band", "<band>\nBand to use for two color multi view old input.\n");   
+   appuse->addCommandLineOption("--2cmv-new-input-band", "<band>\nBand to use for two color multi view new input.\n");
+   
+   appuse->addCommandLineOption("--2cmv-red-output-source", "<source>\nTwo color multi view source input for red output.  Either, old, new, or mp(min pix).  Default=old.\n");
+   
+   appuse->addCommandLineOption("--2cmv-green-output-source", "<source>\nTwo color multi view source input for green output.  Either, old, new, or mp(min pix).  Default=new.\n");
+   
+   appuse->addCommandLineOption("--2cmv-blue-output-source", "<source>\nTwo color multi view source input for blue output.  Either, old, new, or mp(min pix).  Default=new.\n");
+   
+} // End: ossimElevUtil::addArguments
 
 bool ossimElevUtil::initialize(ossimArgumentParser& ap)
 {
@@ -310,7 +325,6 @@ bool ossimElevUtil::initialize(ossimArgumentParser& ap)
    {
       m_kwl->add( SRC_FILE_KW, tempString1.c_str() );
    }
-   
 
    if( ap.read("--meters", stringParam1) )
    {
@@ -384,7 +398,7 @@ bool ossimElevUtil::initialize(ossimArgumentParser& ap)
    if( ap.read("-t", stringParam1) || ap.read("--thumbnail", stringParam1) )
    {
       m_kwl->add( THUMBNAIL_RESOLUTION_KW, tempString1.c_str() );
-   }   
+   }
 
    if( ap.read("-w", stringParam1) || ap.read("--writer", stringParam1) )
    {
@@ -397,6 +411,30 @@ bool ossimElevUtil::initialize(ossimArgumentParser& ap)
       key += ossimString::toString(propIdx);
       m_kwl->add(key, tempString1.c_str() );
       ++propIdx;
+   }
+   
+   if( ap.read("--2cmv-old-input-band", stringParam1) )
+   {
+      m_kwl->add( TWOCMV_OLD_INPUT_BAND_KW, tempString1.c_str() );
+   }
+
+   if( ap.read("--2cmv-new-input-band", stringParam1) )
+   {
+      m_kwl->add( TWOCMV_NEW_INPUT_BAND_KW, tempString1.c_str() );
+   }
+   if( ap.read("--2cmv-red-output-source", stringParam1) )
+   {
+      m_kwl->add( TWOCMV_RED_OUTPUT_SOURCE_KW, tempString1.c_str() );
+   }
+   
+   if( ap.read("--2cmv-green-output-source", stringParam1) )
+   {
+      m_kwl->add( TWOCMV_GREEN_OUTPUT_SOURCE_KW, tempString1.c_str() );
+   }
+   
+   if( ap.read("--2cmv-blue-output-source", stringParam1) )
+   {
+      m_kwl->add( TWOCMV_BLUE_OUTPUT_SOURCE_KW, tempString1.c_str() );
    }
 
    // End of arg parsing.
@@ -514,6 +552,10 @@ void ossimElevUtil::initialize()
       {
          m_operation = OSSIM_DEM_OP_ORTHO;
       }
+      else if ( s == "2cmv" )
+      {
+         m_operation = OSSIM_DEM_OP_2CMV;
+      }
       else
       {
          std::string errMsg = "unknown operation: ";
@@ -535,6 +577,16 @@ void ossimElevUtil::initialize()
    //---
    initializeSrcKwl();
 
+   // Check for required inputs. Do this after initializeSrcKwl.
+   if ( m_operation == OSSIM_DEM_OP_2CMV )
+   {
+      if ( getNumberOfInputs() != 2 )
+      {
+         std::string errMsg = "Two color multiview operation requires two inputs.";
+         throw ossimException(errMsg);
+      }
+   }
+   
    // Create chains for any dem sources.
    addDemSources();
 
@@ -707,6 +759,10 @@ void ossimElevUtil::execute()
    else if ( m_operation == OSSIM_DEM_OP_ORTHO )
    {
       source = combineLayers();
+   }
+   else if ( m_operation == OSSIM_DEM_OP_2CMV )
+   {
+      source = combine2CmvLayers(); // Two Color Multiview.
    }
 
    if ( source.valid() )
@@ -2327,6 +2383,165 @@ ossimRefPtr<ossimImageSource> ossimElevUtil::combineLayers()
    return result;
 }
 
+ossimRefPtr<ossimImageSource> ossimElevUtil::combine2CmvLayers()
+{
+   static const char MODULE[] = "ossimElevUtil::combine2CmvLayers()";
+   if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
+   }
+
+   ossimRefPtr<ossimImageSource> result = 0;
+
+   ossim_uint32 layerCount = (ossim_uint32) (m_demLayer.size() + m_imgLayer.size());
+
+   // Must have two and only two inputs.
+   if ( layerCount == 2 )
+   {     
+      ossimRefPtr<ossimConnectableObject> oldImg = 0;
+      ossimRefPtr<ossimConnectableObject> newImg = 0;
+
+      //---
+      // Expecting two image layers.  We'll code it for flexabilty though...
+      // - Take old and new from m_imgLayer if present.
+      // - Use m_demLayer only if missing.
+      // - Using first image found as old, second new.
+      //---
+
+      // Most likely case, two image layers.
+      if ( m_imgLayer.size() )
+      {
+         oldImg = m_imgLayer[0].get();
+         
+         if ( m_imgLayer.size() == 2 )
+         {
+            newImg = m_imgLayer[1].get();
+         }
+      }
+
+      if ( m_demLayer.size() )
+      {
+         if ( !oldImg.valid() )
+         {
+            oldImg = m_demLayer[0].get();
+         }
+
+         if ( !newImg.valid() )
+         {
+            if ( m_demLayer.size() == 1 )
+            {
+               newImg = m_demLayer[0].get();
+            }
+            else if ( m_demLayer.size() == 2 )
+            {
+               newImg = m_demLayer[1].get();
+            }
+         }
+      }
+
+      if ( newImg.valid() && oldImg.valid() )
+      {
+         // Input 0 is old, 1 is new.
+         ossimRefPtr<ossimTwoColorView> tcmv = new ossimTwoColorView;
+         tcmv->connectMyInputTo( 0, oldImg.get() );
+         tcmv->connectMyInputTo( 1, newImg.get() );
+
+         // Look for 2cmv options.
+         ossim_uint32 oldInputBandIndex = 0;
+         ossim_uint32 newInputBandIndex = 0;
+         ossimTwoColorView::ossimTwoColorMultiViewOutputSource redOutputSource = ossimTwoColorView::OLD;
+         ossimTwoColorView::ossimTwoColorMultiViewOutputSource grnOutputSource = ossimTwoColorView::NEW;
+         ossimTwoColorView::ossimTwoColorMultiViewOutputSource bluOutputSource = ossimTwoColorView::NEW;
+
+         ossimString os;
+         std::string key = TWOCMV_OLD_INPUT_BAND_KW;
+         std::string val = m_kwl->findKey( key );
+         
+         if ( val.size() )
+         {
+            os = val;
+            oldInputBandIndex = os.toUInt32();
+         }
+         
+         key = TWOCMV_NEW_INPUT_BAND_KW;
+         val = m_kwl->findKey( key );
+         if ( val.size() )
+         {
+            os = val;
+            newInputBandIndex = os.toUInt32();
+         }
+
+         key = TWOCMV_RED_OUTPUT_SOURCE_KW;
+         val = m_kwl->findKey( key );
+         if ( val.size() )
+         {
+            os = val;
+            os.downcase();
+            
+            if ( os == "new" )
+            {
+               redOutputSource = ossimTwoColorView::NEW;
+            }
+            else if ( os == "MIN" )
+            {
+               redOutputSource = ossimTwoColorView::MIN;
+            }
+         }
+
+         key = TWOCMV_GREEN_OUTPUT_SOURCE_KW;
+         val = m_kwl->findKey( key );
+         if ( val.size() )
+         {
+            os = val;
+            os.downcase();
+            
+            if ( os == "old" )
+            {
+               grnOutputSource = ossimTwoColorView::OLD;
+            }
+            else if ( os == "MIN" )
+            {
+               grnOutputSource = ossimTwoColorView::MIN;
+            }
+         }
+
+         key = TWOCMV_BLUE_OUTPUT_SOURCE_KW;
+         val = m_kwl->findKey( key );
+         if ( val.size() )
+         {
+            os = val;
+            os.downcase();
+            
+            if ( os == "old" )
+            {
+               bluOutputSource = ossimTwoColorView::OLD;
+            }
+            else if ( os == "MIN" )
+            {
+               bluOutputSource = ossimTwoColorView::MIN;
+            }
+         }
+
+         // Set options.
+         tcmv->setBandIndexMapping( oldInputBandIndex,
+                                    newInputBandIndex,
+                                    redOutputSource,
+                                    grnOutputSource,
+                                    bluOutputSource );
+         tcmv->initialize();
+
+         result = tcmv.get();
+      }
+   }
+   
+   if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exited...\n";
+   }
+   
+   return result;
+}
+
 ossimRefPtr<ossimImageSource> ossimElevUtil::addIndexToRgbLutFilter(
    ossimRefPtr<ossimImageSource> &source) const
 {
@@ -2977,7 +3192,14 @@ void ossimElevUtil::usage(ossimArgumentParser& ap)
    // Print the valid writer types.
    ossimNotify(ossimNotifyLevel_NOTICE)
       << "\nValid output writer types for \"-w\" or \"--writer\" option:\n\n";
-
+   
    ossimImageWriterFactoryRegistry::instance()->
       printImageTypeList( ossimNotify(ossimNotifyLevel_NOTICE) );
+
+   // Keeping single line in tact for examples for cut and paste purposes.
+   ossimNotify(ossimNotifyLevel_INFO)
+      << "\nExample commands ( assuming calling application is ossim-dem):\n"
+      << "\n// A two color multi view with cut box.  First image is old, second image is new:\n"
+      << "ossim-dem --cut-bbox-ll 28.092885092033352 -80.664539599998633 28.109128691071547 -80.626914963229325 --op 2cmv oldMLB.tif newMLB.tif outputs/2cmv-test1.tif\n"
+      << std::endl;
 }

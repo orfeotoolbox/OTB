@@ -948,3 +948,180 @@ void ossimImageGeometry::applyScale(const ossimDpt& scale, bool recenterTiePoint
       }
    }
 }
+
+ossimAdjustableParameterInterface* ossimImageGeometry::getAdjustableParameterInterface()
+{
+   return PTR_CAST(ossimAdjustableParameterInterface, getProjection());
+}
+
+const ossimAdjustableParameterInterface* ossimImageGeometry::getAdjustableParameterInterface()const
+{
+   return dynamic_cast<const ossimAdjustableParameterInterface*>(getProjection());
+
+}
+
+bool ossimImageGeometry::computeImageToGroundPartialsWRTAdjParam(ossimDpt& result,
+                                                                           const ossimGpt& gpt,
+                                                                           ossim_uint32 idx,
+                                                                           ossim_float64 paramDelta)
+{
+   double den = 0.5/paramDelta; // this is the same as dividing by 2*delta
+   
+   result = ossimDpt(0.0,0.0);
+   ossimAdjustableParameterInterface* adjustableParamInterface = getAdjustableParameterInterface();
+   
+   if(!adjustableParamInterface) return false;
+   if(idx >= adjustableParamInterface->getNumberOfAdjustableParameters()) return false;
+   
+   ossimDpt p1, p2;
+   double middle = adjustableParamInterface->getAdjustableParameter(idx);
+   
+   //set parm to high value
+   adjustableParamInterface->setAdjustableParameter(idx, middle + paramDelta, true);
+   worldToLocal(gpt, p1);
+   
+   //set parm to low value and gte difference
+   adjustableParamInterface->setAdjustableParameter(idx, middle - paramDelta, true);
+   worldToLocal(gpt, p2);
+   
+   //get partial derivative
+   result = (p2-p1)*den;
+   
+   //reset param
+   adjustableParamInterface->setAdjustableParameter(idx, middle, true);
+   
+   return !result.hasNans();
+}
+                         
+bool ossimImageGeometry::computeImageToGroundPartialsWRTAdjParams(NEWMAT::Matrix& result, 
+                                                                            const ossimGpt& gpt,
+                                                                            ossim_float64 paramDelta)
+{
+   ossimAdjustableParameterInterface* adjustableParamInterface = getAdjustableParameterInterface();
+   
+   ossim_uint32 nAdjustables = adjustableParamInterface->getNumberOfAdjustableParameters();
+   
+   ossim_uint32 idx = 0;
+   
+   result = NEWMAT::Matrix(nAdjustables, 2);
+   for(;idx < nAdjustables; ++idx)
+   {
+      ossimDpt paramResResult;
+      computeImageToGroundPartialsWRTAdjParam(paramResResult,
+                                                        gpt,
+                                                        idx,
+                                                        paramDelta);
+      result[idx][0] = paramResResult.x;
+      result[idx][1] = paramResResult.y;
+   }
+   
+   return true;
+}
+
+bool ossimImageGeometry::computeImageToGroundPartialsWRTAdjParams(NEWMAT::Matrix& result,
+                                                                            const ossimGpt& gpt,
+                                                                            const DeltaParamList& deltas)
+{
+   
+   ossimAdjustableParameterInterface* adjustableParamInterface = getAdjustableParameterInterface();
+   
+   ossim_uint32 nAdjustables = adjustableParamInterface->getNumberOfAdjustableParameters();
+   
+   if(nAdjustables != deltas.size()) return false;
+   ossim_uint32 idx = 0;
+   
+   result = NEWMAT::Matrix(nAdjustables, 2);
+   for(;idx < nAdjustables; ++idx)
+   {
+      ossimDpt paramResResult;
+      computeImageToGroundPartialsWRTAdjParam(paramResResult,
+                                                        gpt,
+                                                        idx,
+                                                        deltas[idx]);
+      // ROWxCOL
+      result[idx][0] = paramResResult.x;
+      result[idx][1] = paramResResult.y;
+   }
+   
+   return true;
+}
+
+bool ossimImageGeometry::computeGroundToImagePartials(NEWMAT::Matrix& result,
+                                                      const ossimGpt& gpt,
+                                                      const ossimDpt3d& deltaLlh)
+{
+   if(!getProjection()) return false;
+   ossimDpt p1;
+   ossimDpt p2;
+   
+   ossimDpt deltaWithRespectToLon;
+   ossimDpt deltaWithRespectToLat;
+   ossimDpt deltaWithRespectToH;
+   ossim_float64 h = ossim::isnan(gpt.height())?0.0:gpt.height();
+
+   // do the change in lon first for the dx, dy
+   //
+   worldToLocal(ossimGpt(gpt.latd(), gpt.lond()+deltaLlh.x, h, gpt.datum()), p1);
+   worldToLocal(ossimGpt(gpt.latd(), gpt.lond()-deltaLlh.x, h, gpt.datum()), p2);
+   
+   double den = 0.5/deltaLlh.x; // this is the same as dividing by 2*delta
+   deltaWithRespectToLon = (p2-p1)*den;
+   
+    
+   // do the change in lat for the dx, dy
+   //
+   worldToLocal(ossimGpt(gpt.latd()+deltaLlh.y, gpt.lond(), h, gpt.datum()), p1);
+   worldToLocal(ossimGpt(gpt.latd()-deltaLlh.y, gpt.lond(), h, gpt.datum()), p2);
+   
+   den = 0.5/deltaLlh.y; // this is the same as dividing by 2*delta
+   deltaWithRespectToLat = (p2-p1)*den;
+
+   
+   // do the change in height first for the dx, dy
+   //
+   worldToLocal(ossimGpt(gpt.latd(), gpt.lond(), h+deltaLlh.z, gpt.datum()), p1);
+   worldToLocal(ossimGpt(gpt.latd(), gpt.lond(), h-deltaLlh.z, gpt.datum()), p2);
+   
+   den = 0.5/deltaLlh.z; // this is the same as dividing by 2*delta
+   deltaWithRespectToH = (p2-p1)*den;
+   
+   
+   result = NEWMAT::Matrix(3,2);
+   
+   // set the matrix
+   //
+   result[1][0] = deltaWithRespectToLon.x*DEG_PER_RAD; 
+   result[1][1] = deltaWithRespectToLon.y*DEG_PER_RAD; 
+   result[0][0] = deltaWithRespectToLat.x*DEG_PER_RAD; 
+   result[0][1] = deltaWithRespectToLat.y*DEG_PER_RAD; 
+   result[2][0] = deltaWithRespectToH.x; 
+   result[2][1] = deltaWithRespectToH.y; 
+   
+   
+   return true; 
+}
+
+bool ossimImageGeometry::computeGroundToImagePartials(NEWMAT::Matrix& result,
+                                                      const ossimGpt& gpt)
+{
+   ossimDpt mpp = getMetersPerPixel();
+   ossimGpt originPoint;
+   ossim_float64 len = mpp.length();
+   
+   if(len > FLT_EPSILON)
+   {
+      ossim_float64 delta = originPoint.metersPerDegree().length();
+   
+      delta = len/delta;
+      
+      return computeGroundToImagePartials(result, 
+                                          gpt, 
+                                          ossimDpt3d(delta,
+                                                     delta,
+                                                     len));
+   }
+   
+   return false;
+}
+
+

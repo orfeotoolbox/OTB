@@ -5,6 +5,7 @@
 //
 //-------------------------------------------------------------------
 //  $Id$
+
 #include <ossim/imaging/ossimTwoColorView.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 
@@ -13,19 +14,23 @@ RTTI_DEF1(ossimTwoColorView,
           ossimImageCombiner);
 
 ossimTwoColorView::ossimTwoColorView()
-:ossimImageCombiner(0, 2, 0, true, false) ,
-theByPassFlag(true),
-theNativeFlag(false),
-theNewInput(0),
-theOldInput(0),
-theNewBufferDestinationIndex(2),
-theOldBufferDestinationIndex(0),
-theMinBufferDestinationIndex(1){
+   :
+   ossimImageCombiner(0, 2, 0, true, false) ,
+   m_byPassFlag(true),
+   m_nativeFlag(false),
+   m_newInput(0),
+   m_oldInput(0),
+   m_newInputBandIndex(0),
+   m_oldInputBandIndex(0),
+   m_redSource(ossimTwoColorView::OLD),
+   m_grnSource(ossimTwoColorView::NEW),
+   m_bluSource(ossimTwoColorView::NEW)
+{
 }
 
 ossim_uint32 ossimTwoColorView::getNumberOfOutputBands() const
 {
-   if(theByPassFlag||!isSourceEnabled())
+   if(m_byPassFlag||!isSourceEnabled())
    {
       return ossimImageCombiner::getNumberOfOutputBands();
    }
@@ -34,42 +39,30 @@ ossim_uint32 ossimTwoColorView::getNumberOfOutputBands() const
 
 ossimScalarType ossimTwoColorView::getOutputScalarType() const
 {
-   if(theByPassFlag||!isSourceEnabled())
+   if(m_byPassFlag||!isSourceEnabled())
    {
       return ossimImageCombiner::getOutputScalarType();
    }
    return OSSIM_UINT8;
 }
 
-void ossimTwoColorView::setIndexMapping(ossim_uint32 newIndex,
-                                        ossim_uint32 oldIndex)
+void ossimTwoColorView::setBandIndexMapping(
+   ossim_uint32 oldInputBandIndex,
+   ossim_uint32 newInputBandIndex,
+   ossimTwoColorMultiViewOutputSource redOutputSource,
+   ossimTwoColorMultiViewOutputSource grnOutputSource,
+   ossimTwoColorMultiViewOutputSource bluOutputSource)
 {
-   if(((newIndex < 3)&&(oldIndex < 3))&&
-      (newIndex != oldIndex))
-   {
-      theNewBufferDestinationIndex = newIndex;
-      theOldBufferDestinationIndex = oldIndex;
-      if((theNewBufferDestinationIndex != 0)&&
-         (theOldBufferDestinationIndex != 0))
-      {
-         theMinBufferDestinationIndex = 0;
-      }
-      else if((theNewBufferDestinationIndex != 1)&&
-              (theOldBufferDestinationIndex != 1))
-      {
-         theMinBufferDestinationIndex = 1;
-      }
-      else if((theNewBufferDestinationIndex != 2)&&
-              (theOldBufferDestinationIndex != 2))
-      {
-         theMinBufferDestinationIndex = 2;
-      }
-   }
+   m_oldInputBandIndex = oldInputBandIndex;
+   m_newInputBandIndex = newInputBandIndex;
+   m_redSource = redOutputSource;
+   m_grnSource = grnOutputSource;
+   m_bluSource = bluOutputSource;
 }
 
 double ossimTwoColorView::getNullPixelValue(ossim_uint32 band)const
 {
-   if(theByPassFlag||!isSourceEnabled())
+   if(m_byPassFlag||!isSourceEnabled())
    {
       return ossimImageCombiner::getNullPixelValue(band);
    }
@@ -78,7 +71,7 @@ double ossimTwoColorView::getNullPixelValue(ossim_uint32 band)const
 
 double ossimTwoColorView::getMinPixelValue(ossim_uint32 band)const
 {
-   if(theByPassFlag||!isSourceEnabled())
+   if(m_byPassFlag||!isSourceEnabled())
    {
       return ossimImageCombiner::getMinPixelValue(band);
    }
@@ -87,7 +80,7 @@ double ossimTwoColorView::getMinPixelValue(ossim_uint32 band)const
 
 double ossimTwoColorView::getMaxPixelValue(ossim_uint32 band)const
 {
-   if(theByPassFlag||!isSourceEnabled())
+   if(m_byPassFlag||!isSourceEnabled())
    {
       return ossimImageCombiner::getMaxPixelValue(band);
    }
@@ -98,168 +91,33 @@ ossimRefPtr<ossimImageData> ossimTwoColorView::getTile(const ossimIrect& rect,
                                                        ossim_uint32 resLevel)
 {
    ossim_uint32 tileIdx = 0;
-   if(theByPassFlag||!isSourceEnabled())
+   if(m_byPassFlag||!isSourceEnabled())
    {
       return getNextTile(tileIdx, 0, rect, resLevel);
    }
-   if(!theTwoColorTile.valid())
+   if(!m_twoColorTile.valid())
    {
       allocate();
    }
-   if(!theTwoColorTile.valid())
+   if(!m_twoColorTile.valid())
    {
-      return theTwoColorTile;
+      return m_twoColorTile;
    }
-   theTwoColorTile->setImageRectangle(rect);
-   theTwoColorTile->makeBlank();
+   m_twoColorTile->setImageRectangle(rect);
+   m_twoColorTile->makeBlank();
    
-   ossimRefPtr<ossimImageData> newData = theNewInput->getTile(rect, resLevel);
-   ossimRefPtr<ossimImageData> oldData = theOldInput->getTile(rect, resLevel);
+   ossimRefPtr<ossimImageData> newData = m_newInput->getTile(rect, resLevel);
+   ossimRefPtr<ossimImageData> oldData = m_oldInput->getTile(rect, resLevel);
+
    runAlgorithm(newData.get(), oldData.get());
-   
-#if 0
-   // do the new band first
-   ossimRefPtr<ossimImageData> newData = getNextNormTile(tileIdx, 0, rect, resLevel);
-   newData = newData.valid()?(ossimImageData*)newData->dup():(ossimImageData*)0;
-   ossimRefPtr<ossimImageData> oldData = getNextNormTile(tileIdx,rect, resLevel);
-   oldData = oldData.valid()?(ossimImageData*)oldData->dup():(ossimImageData*)0;
-   
-   ossim_float32 newNullPix = 0.0;
-   ossim_float32 oldNullPix = 0.0;
-   const ossim_float32* newBuf = 0;
-   const ossim_float32* oldBuf = 0;
-   ossim_float32 tempValue = 0.0;
-   ossim_uint32 idx = 0;
-   ossim_uint32 maxIdx = theTwoColorTile->getWidth()*theTwoColorTile->getHeight();
-   ossim_uint8* newDestBuf = static_cast<ossim_uint8*>(theTwoColorTile->getBuf(theNewBufferDestinationIndex));
-   ossim_uint8* oldDestBuf = static_cast<ossim_uint8*>(theTwoColorTile->getBuf(theOldBufferDestinationIndex));
-   ossim_uint8* minDestBuf = static_cast<ossim_uint8*>(theTwoColorTile->getBuf(theMinBufferDestinationIndex));
-   
-   
-   if(newData.valid())
-   {
-      newBuf     = static_cast<ossim_float32*>(newData->getBuf(0));
-      newNullPix = static_cast<ossim_float32>(newData->getNullPix(0));
-   }
-   if(oldData.valid())
-   {
-      oldBuf = static_cast<ossim_float32*>(oldData->getBuf(0));   
-      oldNullPix    = static_cast<ossim_float32>(oldData->getNullPix(0));
-   }
-   
-   if(!newBuf&&!oldBuf)
-   {
-      return theTwoColorTile;
-   }
-   if(newBuf&&oldBuf)
-   {
-      
-      for(idx = 0; idx < maxIdx;++idx)
-      {
-         if((*newBuf == newNullPix)&&
-            (*oldBuf == oldNullPix))
-         {
-            *newDestBuf = 0;
-            *oldDestBuf = 0;
-            *minDestBuf = 0;
-         }
-         else
-         {
-            if(*newBuf == newNullPix)
-            {
-               *newDestBuf = 1;
-            }
-            else
-            {
-               tempValue = (*newBuf)*255;
-               if(tempValue < 1) tempValue = 1;
-               else if(tempValue > 255) tempValue = 255;
-               
-               *newDestBuf = (ossim_uint8)(tempValue);
-            }
-            if(*oldBuf == oldNullPix)
-            {
-               *oldDestBuf = 1;
-            }
-            else
-            {
-               // do old buffer channel
-               tempValue = (*oldBuf)*255;
-               if(tempValue < 1) tempValue = 1;
-               else if(tempValue > 255) tempValue = 255;
-               
-               *oldDestBuf = (ossim_uint8)(tempValue);
-            }
-            *minDestBuf = 1;
-         }
-         ++newBuf;
-         ++oldBuf;
-         ++minDestBuf;
-         ++newDestBuf;
-         ++oldDestBuf;
-      }
-   }
-   else if(newBuf)
-   {
-      for(idx = 0; idx < maxIdx;++idx)
-      {
-         if(*newBuf == newNullPix)
-         {
-            *newDestBuf = 0;
-            *oldDestBuf = 0;
-            *minDestBuf = 0;
-         }
-         else
-         {
-            tempValue = (*newBuf)*255;
-            if(tempValue < 1) tempValue = 1;
-            else if(tempValue > 255) tempValue = 255;
-            
-            *newDestBuf = (ossim_uint8)(tempValue);
-            *oldDestBuf = 1;
-            *minDestBuf = 1;
-         }
-         ++newBuf;
-         ++minDestBuf;
-         ++newDestBuf;
-         ++oldDestBuf;
-      }
-   }
-   else if(oldBuf)
-   {
-      for(idx = 0; idx < maxIdx;++idx)
-      {
-         if(*oldBuf == oldNullPix)
-         {
-            *newDestBuf = 0;
-            *oldDestBuf = 0;
-            *minDestBuf = 0;
-         }
-         else
-         {
-            tempValue = (*oldBuf)*255;
-            if(tempValue < 1) tempValue = 1;
-            else if(tempValue > 255) tempValue = 255;
-            
-            *oldDestBuf = (ossim_uint8)(tempValue);
-            *newDestBuf = 1;
-            *minDestBuf = 1;
-         }
-         ++oldBuf;
-         ++minDestBuf;
-         ++newDestBuf;
-         ++oldDestBuf;
-      }
-   }
-   
-#endif
-   theTwoColorTile->validate();
-   return theTwoColorTile;
-   
+
+   m_twoColorTile->validate();
+
+   return m_twoColorTile;
 }
 void ossimTwoColorView::runAlgorithm(ossimImageData* newData, ossimImageData* oldData)
 {
-   if(theNativeFlag)
+   if(m_nativeFlag)
    {
       runNative8(newData, oldData);
    }
@@ -271,258 +129,239 @@ void ossimTwoColorView::runAlgorithm(ossimImageData* newData, ossimImageData* ol
 
 void ossimTwoColorView::runNative8(ossimImageData* newData, ossimImageData* oldData)
 {
-   // do the new band first
-   ossim_uint8 newNullPix = 0;
-   ossim_uint8 oldNullPix = 0;
-   const ossim_uint8* newBuf = 0;
-   const ossim_uint8* oldBuf = 0;
-   ossim_uint32 idx = 0;
-   ossim_uint32 maxIdx = theTwoColorTile->getWidth()*theTwoColorTile->getHeight();
-   ossim_uint8* newDestBuf = static_cast<ossim_uint8*>(theTwoColorTile->getBuf(theNewBufferDestinationIndex));
-   ossim_uint8* oldDestBuf = static_cast<ossim_uint8*>(theTwoColorTile->getBuf(theOldBufferDestinationIndex));
-   ossim_uint8* minDestBuf = static_cast<ossim_uint8*>(theTwoColorTile->getBuf(theMinBufferDestinationIndex));
-   
-   if(newData)
+   if ( newData && oldData && m_twoColorTile.valid() &&
+        ( m_twoColorTile->getNumberOfBands() == 3 ) )
    {
-      newBuf     = static_cast<ossim_uint8*>(newData->getBuf(0));
-      newNullPix = static_cast<ossim_uint8>(newData->getNullPix(0));
-      
-   }
-   if(oldData)
-   {
-      oldBuf = static_cast<ossim_uint8*>(oldData->getBuf(0));   
-      oldNullPix    = static_cast<ossim_uint8>(oldData->getNullPix(0));
-   }
-   if(!newBuf&&!oldBuf)
-   {
-      return;
-   }
-   if(newBuf&&oldBuf)
-   {
-      for(idx = 0; idx < maxIdx;++idx)
+      // old, new, red, green, blue buffers...
+      ossim_uint8* o = static_cast<ossim_uint8*>( oldData->getBuf(m_oldInputBandIndex) );
+      ossim_uint8* n = static_cast<ossim_uint8*>( newData->getBuf(m_newInputBandIndex) );
+      ossim_uint8* r = static_cast<ossim_uint8*>( m_twoColorTile->getBuf(0) );
+      ossim_uint8* g = static_cast<ossim_uint8*>( m_twoColorTile->getBuf(1) );
+      ossim_uint8* b = static_cast<ossim_uint8*>( m_twoColorTile->getBuf(2) );
+
+      if ( o && n && r && g && b )
       {
-         if((*newBuf == newNullPix)&&
-            (*oldBuf == oldNullPix))
+         // Assuming null pix of 0 for 8 bit.
+         const ossim_uint8 MP = 1;
+         const ossim_uint8 NP = 0;
+
+         ossim_uint8 newPix = 0;
+         ossim_uint8 oldPix = 0;
+         
+         const ossim_uint32 MAX_IDX = m_twoColorTile->getSizePerBand();
+         
+         for(ossim_uint32 idx = 0; idx < MAX_IDX; ++idx)
          {
-            *newDestBuf = 0;
-            *oldDestBuf = 0;
-            *minDestBuf = 0;
-         }
-         else
-         {
-            if(*newBuf == newNullPix)
+            if( ( *n == NP ) && ( *o == NP ) )
             {
-               *newDestBuf = 1;
+               // Both inputs null, set all outputs null.
+               *r = NP;
+               *b = NP;
+               *g = NP;
             }
-            else
+            else 
             {
-               *newDestBuf = *newBuf;
+               // At least one input is not null.
+               newPix = (*n != NP) ? *n : MP;
+               oldPix = (*o != NP) ? *o : MP;
+
+               // Set red, OLD is default so check first:
+               if ( m_redSource == ossimTwoColorView::OLD )
+               {
+                  *r = oldPix;
+               }
+               else if ( m_redSource == ossimTwoColorView::NEW )
+               {
+                  *r = newPix;
+               }
+               else
+               {
+                  *r = MP;
+               }
+
+               // Set green, NEW is default so check first:
+               if ( m_grnSource == ossimTwoColorView::NEW )
+               {
+                  *g = newPix;
+               }
+               else if ( m_grnSource == ossimTwoColorView::OLD )
+               {
+                  *g = oldPix;
+               }
+               else
+               {
+                  *g = MP;
+               }
+
+               // Set blue, NEW is default so check first:
+               if ( m_grnSource == ossimTwoColorView::NEW )
+               {
+                  *b = newPix;
+               }
+               else if ( m_grnSource == ossimTwoColorView::OLD )
+               {
+                  *b = oldPix;
+               }
+               else
+               {
+                  *b = MP;
+               }
             }
-            if(*oldBuf == oldNullPix)
-            {
-               *oldDestBuf = 1;
-            }
-            else
-            {
-               *oldDestBuf = *oldBuf;
-            }
-            *minDestBuf = 1;
+
+            // Next pixel:
+            ++n;
+            ++o;
+            ++r;
+            ++g;
+            ++b;
          }
-         ++newBuf;
-         ++oldBuf;
-         ++minDestBuf;
-         ++newDestBuf;
-         ++oldDestBuf;
-      }
-   }
-   else if(newBuf)
-   {
-      for(idx = 0; idx < maxIdx;++idx)
-      {
-         if(*newBuf == newNullPix)
-         {
-            *newDestBuf = 0;
-            *oldDestBuf = 0;
-            *minDestBuf = 0;
-         }
-         else
-         {
-            *newDestBuf = *newBuf;
-            *oldDestBuf = 1;
-            *minDestBuf = 1;
-         }
-         ++newBuf;
-         ++minDestBuf;
-         ++newDestBuf;
-         ++oldDestBuf;
-      }
-   }
-   else if(oldBuf)
-   {
-      for(idx = 0; idx < maxIdx;++idx)
-      {
-         if(*oldBuf == oldNullPix)
-         {
-            *newDestBuf = 0;
-            *oldDestBuf = 0;
-            *minDestBuf = 0;
-         }
-         else
-         {
-            *oldDestBuf = *oldBuf;
-            *newDestBuf = 1;
-            *minDestBuf = 1;
-         }
-         ++oldBuf;
-         ++minDestBuf;
-         ++newDestBuf;
-         ++oldDestBuf;
       }
    }
 }
 
 void ossimTwoColorView::runNorm(ossimImageData* newData, ossimImageData* oldData)
 {
-   // do the new band first
-   ossim_float32 tempValue=0.0;
-   ossim_uint8 newNullPix = 0;
-   ossim_uint8 oldNullPix = 0;
-   std::vector<ossim_float32> newDataBuffer;
-   std::vector<ossim_float32> oldDataBuffer;
-   
-   ossim_float32* newBuf = 0;
-   ossim_float32* oldBuf = 0;
-   ossim_uint32 idx = 0;
-   ossim_uint32 maxIdx = theTwoColorTile->getWidth()*theTwoColorTile->getHeight();
-   ossim_uint8* newDestBuf = static_cast<ossim_uint8*>(theTwoColorTile->getBuf(theNewBufferDestinationIndex));
-   ossim_uint8* oldDestBuf = static_cast<ossim_uint8*>(theTwoColorTile->getBuf(theOldBufferDestinationIndex));
-   ossim_uint8* minDestBuf = static_cast<ossim_uint8*>(theTwoColorTile->getBuf(theMinBufferDestinationIndex));
+   if ( newData && oldData && m_twoColorTile.valid() &&
+        ( m_twoColorTile->getNumberOfBands() == 3 ) )
+   {
+      const ossim_uint32 MAX_IDX = m_twoColorTile->getSizePerBand();
+      
+      // Buffers for normalized oldData and newData tiles.
+      std::vector<ossim_float32> oldDataBuffer(MAX_IDX);
+      std::vector<ossim_float32> newDataBuffer(MAX_IDX);
 
-   if(newData&&newData->getBuf())
-   {
-      newDataBuffer.resize(theTwoColorTile->getWidth()*theTwoColorTile->getHeight());
-      newBuf     = &newDataBuffer.front();
-      newData->copyTileBandToNormalizedBuffer(0, newBuf);
-      newNullPix = 0;
-   }
-   if(oldData&&oldData->getBuf())
-   {
-      oldDataBuffer.resize(theTwoColorTile->getWidth()*theTwoColorTile->getHeight());
-      oldBuf     = &oldDataBuffer.front();
-      oldData->copyTileBandToNormalizedBuffer(0, oldBuf);
-      oldNullPix = 0;
-   }
-   if(!newBuf&&!oldBuf)
-   {
-      return;
-   }
-   if(newBuf&&oldBuf)
-   {
-      for(idx = 0; idx < maxIdx;++idx)
+      // old and new input buffers.
+      ossim_float32* o = &oldDataBuffer.front();      
+      ossim_float32* n = &newDataBuffer.front();
+
+      // Normalize/copy to buffers.
+      newData->copyTileBandToNormalizedBuffer(m_newInputBandIndex, n);
+      oldData->copyTileBandToNormalizedBuffer(m_oldInputBandIndex, o);
+      
+      // Get the output buffers.
+      ossim_uint8* r = static_cast<ossim_uint8*>( m_twoColorTile->getBuf(0) );
+      ossim_uint8* g = static_cast<ossim_uint8*>( m_twoColorTile->getBuf(1) );
+      ossim_uint8* b = static_cast<ossim_uint8*>( m_twoColorTile->getBuf(2) );
+
+      if ( o && n && r && g && b )
       {
-         if((*newBuf == newNullPix)&&
-            (*oldBuf == oldNullPix))
+         // Assuming null pix of 0 for 8 bit.
+         const ossim_uint8 MP = 1;
+         const ossim_uint8 NP = 0;
+
+         ossim_uint8   newPix = 0;
+         ossim_uint8   oldPix = 0;
+         ossim_float32 tmpPix = 0.0;
+         
+         const ossim_uint32 MAX_IDX = m_twoColorTile->getSizePerBand();
+         
+         for(ossim_uint32 idx = 0; idx < MAX_IDX; ++idx)
          {
-            *newDestBuf = 0;
-            *oldDestBuf = 0;
-            *minDestBuf = 0;
-         }
-         else
-         {
-            if(*newBuf == newNullPix)
+            if( ( *n == NP ) && ( *o == NP ) )
             {
-               *newDestBuf = 1;
+               // Both inputs null, set all outputs null.
+               *r = NP;
+               *b = NP;
+               *g = NP;
             }
-            else
+            else 
             {
-               tempValue = (*newBuf)*255;
-               if(tempValue < 1) tempValue = 1;
-               else if(tempValue > 255) tempValue = 255;
+               // At least one input is not null.
                
-               *newDestBuf = (ossim_uint8)(tempValue);
+               // Set the newPix:
+               if ( *n != NP )
+               {
+                  // Un-normalize:
+                  tmpPix = (*n) * 255.0;
+
+                  // Clamp to min/max.
+                  tmpPix = (tmpPix <= 255.0) ? ( (tmpPix >= 1.0) ? tmpPix : 1.0) : 255.0;
+
+                  // Copy
+                  newPix = static_cast<ossim_uint8>( tmpPix );
+               }
+               else
+               {
+                  newPix = MP;
+               }
+
+               // Set the oldPix:
+               if ( *o != NP )
+               {
+                  // Un-normalize:
+                  tmpPix = (*o) * 255.0;
+
+                  // Clamp to min/max.
+                  tmpPix = (tmpPix <= 255.0) ? ( (tmpPix >= 1.0) ? tmpPix : 1.0) : 255.0;
+
+                  // Copy
+                  oldPix = static_cast<ossim_uint8>( tmpPix );
+               }
+               else
+               {
+                  oldPix = MP;
+               }
+
+               // Set red, OLD is default so check first:
+               if ( m_redSource == ossimTwoColorView::OLD )
+               {
+                  *r = oldPix;
+               }
+               else if ( m_redSource == ossimTwoColorView::NEW )
+               {
+                  *r = newPix;
+               }
+               else
+               {
+                  *r = MP;
+               }
+
+               // Set green, NEW is default so check first:
+               if ( m_grnSource == ossimTwoColorView::NEW )
+               {
+                  *g = newPix;
+               }
+               else if ( m_grnSource == ossimTwoColorView::OLD )
+               {
+                  *g = oldPix;
+               }
+               else
+               {
+                  *g = MP;
+               }
+
+               // Set blue, NEW is default so check first:
+               if ( m_grnSource == ossimTwoColorView::NEW )
+               {
+                  *b = newPix;
+               }
+               else if ( m_grnSource == ossimTwoColorView::OLD )
+               {
+                  *b = oldPix;
+               }
+               else
+               {
+                  *b = MP;
+               }
             }
-            if(*oldBuf == oldNullPix)
-            {
-               *oldDestBuf = 1;
-            }
-            else
-            {
-               // do old buffer channel
-               tempValue = (*oldBuf)*255;
-               if(tempValue < 1) tempValue = 1;
-               else if(tempValue > 255) tempValue = 255;
-               
-               *oldDestBuf = (ossim_uint8)(tempValue);
-            }
-            *minDestBuf = 1;
+
+            // Next pixel:
+            ++n;
+            ++o;
+            ++r;
+            ++g;
+            ++b;
          }
-         ++newBuf;
-         ++oldBuf;
-         ++minDestBuf;
-         ++newDestBuf;
-         ++oldDestBuf;
-      }
-   }
-   else if(newBuf)
-   {
-      for(idx = 0; idx < maxIdx;++idx)
-      {
-         if(*newBuf == newNullPix)
-         {
-            *newDestBuf = 0;
-            *oldDestBuf = 0;
-            *minDestBuf = 0;
-         }
-         else
-         {
-            tempValue = (*newBuf)*255;
-            if(tempValue < 1) tempValue = 1;
-            else if(tempValue > 255) tempValue = 255;
-            
-            *newDestBuf = (ossim_uint8)(tempValue);
-            *oldDestBuf = 1;
-            *minDestBuf = 1;
-         }
-         ++newBuf;
-         ++minDestBuf;
-         ++newDestBuf;
-         ++oldDestBuf;
-      }
-   }
-   else if(oldBuf)
-   {
-      for(idx = 0; idx < maxIdx;++idx)
-      {
-         if(*oldBuf == oldNullPix)
-         {
-            *newDestBuf = 0;
-            *oldDestBuf = 0;
-            *minDestBuf = 0;
-         }
-         else
-         {
-            tempValue = (*oldBuf)*255;
-            if(tempValue < 1) tempValue = 1;
-            else if(tempValue > 255) tempValue = 255;
-            
-            *oldDestBuf = (ossim_uint8)(tempValue);
-            *newDestBuf = 1;
-            *minDestBuf = 1;
-         }
-         ++oldBuf;
-         ++minDestBuf;
-         ++newDestBuf;
-         ++oldDestBuf;
       }
    }
 }
 
 void ossimTwoColorView::allocate()
 {
-   theTwoColorTile = ossimImageDataFactory::instance()->create(this, this);
-   if(theTwoColorTile.valid())
+   m_twoColorTile = ossimImageDataFactory::instance()->create(this, this);
+   if(m_twoColorTile.valid())
    {
-      theTwoColorTile->initialize();
+      m_twoColorTile->initialize();
    }
 }
 
@@ -530,29 +369,51 @@ void ossimTwoColorView::allocate()
 void ossimTwoColorView::initialize()
 {
    ossimImageCombiner::initialize();
-   theNewInput = 0;
-   theOldInput = 0;
-   theTwoColorTile = 0;
-   theNativeFlag = false;
-   theByPassFlag = false;
+   m_newInput = 0;
+   m_oldInput = 0;
+   m_twoColorTile = 0;
+   m_nativeFlag = false;
+   m_byPassFlag = false;
+
    if(getNumberOfInputs() < 2)
    {
-      theByPassFlag = true;
+      m_byPassFlag = true;
    }
    else 
    {
-      theNewInput = PTR_CAST(ossimImageSource, getInput(0));
-      theOldInput = PTR_CAST(ossimImageSource, getInput(1));
-      if(!theNewInput||!theOldInput)
+      m_oldInput = dynamic_cast<ossimImageSource*>( getInput(0) );
+      m_newInput = dynamic_cast<ossimImageSource*>( getInput(1) );
+
+      //---
+      // Range check band selection. This can be set from setBandIndexMapping method which
+      // does no error checking because inputs may not be set.
+      //----
+      if ( m_oldInput.valid() )
       {
-         theByPassFlag = true;
+         if ( m_oldInputBandIndex >= m_oldInput->getNumberOfOutputBands() )
+         {
+            m_oldInputBandIndex = 0;
+         }
+      }
+      
+      if ( m_newInput.valid() )
+      {
+         if ( m_newInputBandIndex >= m_newInput->getNumberOfOutputBands() )
+         {
+            m_newInputBandIndex = 0;
+         }
+      }
+         
+      if(!m_newInput||!m_oldInput)
+      {
+         m_byPassFlag = true;
       }
       else
       {
-         if((theNewInput->getOutputScalarType() == OSSIM_UINT8)&&
-            (theOldInput->getOutputScalarType() == OSSIM_UINT8))
+         if((m_newInput->getOutputScalarType() == OSSIM_UINT8)&&
+            (m_oldInput->getOutputScalarType() == OSSIM_UINT8))
          {
-            theNativeFlag = true;
+            m_nativeFlag = true;
          }
       }
    }

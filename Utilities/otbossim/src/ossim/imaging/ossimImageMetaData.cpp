@@ -10,14 +10,18 @@
 // Contains class definition for ossimImageMetaData.
 // 
 //*******************************************************************
-//  $Id: ossimImageMetaData.cpp 20265 2011-11-18 12:19:39Z gpotts $
-#include <vector>
-#include <algorithm>
+//  $Id: ossimImageMetaData.cpp 21745 2012-09-16 15:21:53Z dburken $
+
 #include <ossim/imaging/ossimImageMetaData.h>
+#include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/base/ossimTrace.h>
+#include <algorithm>
+#include <iostream>
+#include <vector>
 
 static ossimTrace traceDebug("ossimImageMetaData:debug");
 
@@ -25,7 +29,11 @@ ossimImageMetaData::ossimImageMetaData()
    :theNullPixelArray(0),
     theMinPixelArray(0),
     theMaxPixelArray(0),
+    theMinValuesValidFlag(false),
+    theMaxValuesValidFlag(false),
+    theNullValuesValidFlag(false),
     theScalarType(OSSIM_SCALAR_UNKNOWN),
+    theBytesPerPixel(0),
     theNumberOfBands(0)
 {
 }
@@ -35,7 +43,11 @@ ossimImageMetaData::ossimImageMetaData(ossimScalarType aType,
    :theNullPixelArray(0),
     theMinPixelArray(0),
     theMaxPixelArray(0),
+    theMinValuesValidFlag(false),
+    theMaxValuesValidFlag(false),
+    theNullValuesValidFlag(false),
     theScalarType(aType),
+    theBytesPerPixel(0),
     theNumberOfBands(numberOfBands)
 {
    if(theNumberOfBands)
@@ -46,19 +58,68 @@ ossimImageMetaData::ossimImageMetaData(ossimScalarType aType,
       
       setDefaultsForArrays();
    }
+   theBytesPerPixel = ossim::scalarSizeInBytes( aType );
 }
 
 ossimImageMetaData::ossimImageMetaData(const ossimImageMetaData& rhs)
-:theNullPixelArray(0),
-theMinPixelArray(0),
-theMaxPixelArray(0),
-theMinValuesValidFlag(false),
-theMaxValuesValidFlag(false),
-theNullValuesValidFlag(false),
-theScalarType(OSSIM_SCALAR_UNKNOWN),
-theNumberOfBands(0)
+   :
+   theNullPixelArray(0),
+   theMinPixelArray(0),
+   theMaxPixelArray(0),
+   theMinValuesValidFlag(rhs.theMinValuesValidFlag),
+   theMaxValuesValidFlag(rhs.theMaxValuesValidFlag),
+   theNullValuesValidFlag(rhs.theNullValuesValidFlag),
+   theScalarType(rhs.theScalarType),
+   theBytesPerPixel(rhs.theBytesPerPixel),
+   theNumberOfBands(rhs.theNumberOfBands)
 {
-   assign(rhs);
+   if(theNumberOfBands)
+   {
+      theNullPixelArray = new double[theNumberOfBands];
+      theMinPixelArray  = new double[theNumberOfBands];
+      theMaxPixelArray  = new double[theNumberOfBands];
+      
+      std::copy(rhs.theNullPixelArray,
+                rhs.theNullPixelArray+theNumberOfBands,
+                theNullPixelArray);
+      std::copy(rhs.theMinPixelArray,
+                rhs.theMinPixelArray+theNumberOfBands,
+                theMinPixelArray);
+      std::copy(rhs.theMaxPixelArray,
+                rhs.theMaxPixelArray+theNumberOfBands,
+                theMaxPixelArray);
+   }
+}
+
+const ossimImageMetaData& ossimImageMetaData::operator=( const ossimImageMetaData& rhs )
+{
+   if( this != &rhs )
+   {
+      clear();
+      theMinValuesValidFlag  = rhs.theMinValuesValidFlag;
+      theMaxValuesValidFlag  = rhs.theMaxValuesValidFlag;
+      theNullValuesValidFlag = rhs.theNullValuesValidFlag;
+      theNumberOfBands       = rhs.theNumberOfBands;
+      theScalarType          = rhs.theScalarType;
+      theBytesPerPixel       = rhs.theBytesPerPixel;
+      if(theNumberOfBands)
+      {
+         theNullPixelArray = new double[theNumberOfBands];
+         theMinPixelArray  = new double[theNumberOfBands];
+         theMaxPixelArray  = new double[theNumberOfBands];
+         
+         std::copy(rhs.theNullPixelArray,
+                   rhs.theNullPixelArray+theNumberOfBands,
+                   theNullPixelArray);
+         std::copy(rhs.theMinPixelArray,
+                   rhs.theMinPixelArray+theNumberOfBands,
+                   theMinPixelArray);
+         std::copy(rhs.theMaxPixelArray,
+                   rhs.theMaxPixelArray+theNumberOfBands,
+                   theMaxPixelArray);
+      }
+   }
+   return *this;
 }
 
 ossimImageMetaData::~ossimImageMetaData()
@@ -84,27 +145,7 @@ void ossimImageMetaData::clear()
       theMaxPixelArray = 0;
    }
    theScalarType    = OSSIM_SCALAR_UNKNOWN;
-   theNumberOfBands = 0;
-}
-
-void ossimImageMetaData::clearBandInfo()
-{
-   if(theNullPixelArray)
-   {
-      delete [] theNullPixelArray;
-      theNullPixelArray = 0;
-   }
-   if(theMinPixelArray)
-   {
-      delete [] theMinPixelArray;
-      theMinPixelArray = 0;
-   }
-   if(theMaxPixelArray)
-   {
-      delete [] theMaxPixelArray;
-      theMaxPixelArray = 0;
-   }
-   theScalarType    = OSSIM_SCALAR_UNKNOWN;
+   theBytesPerPixel = 0;
    theNumberOfBands = 0;
 }
 
@@ -150,240 +191,54 @@ void ossimImageMetaData::setNumberOfBands(ossim_uint32 numberOfBands)
    }
 }
 
-void ossimImageMetaData::assign(const ossimImageMetaData& rhs)
+bool ossimImageMetaData::loadState(const ossimKeywordlist& kwl, const char* prefix)
 {
-   if(this != &rhs)
-   {
-      clear();
-      theNumberOfBands = rhs.getNumberOfBands();
-      theScalarType    = rhs.getScalarType();
-      
-      if(theNumberOfBands)
-      {
-         theNullPixelArray = new double[theNumberOfBands];
-         theMinPixelArray  = new double[theNumberOfBands];
-         theMaxPixelArray  = new double[theNumberOfBands];
-         
-         std::copy(rhs.getNullPixelArray(),
-                   rhs.getNullPixelArray()+theNumberOfBands,
-                   theNullPixelArray);
-         std::copy(rhs.getMinPixelArray(),
-                   rhs.getMinPixelArray()+theNumberOfBands,
-                   theMinPixelArray);
-         std::copy(rhs.getMaxPixelArray(),
-                   rhs.getMaxPixelArray()+theNumberOfBands,
-                   theMaxPixelArray);
-      }
-   }
-}
-
-bool ossimImageMetaData::loadState(const ossimKeywordlist& kwl,
-				   const char* prefix)
-{
-   static const char MODULE[] = "ossimImageMetaData::loadState";
-
-   if (traceDebug())
-   {
-      CLOG << " Entered..."
-           << "\nkwl:\n" << kwl
-           << "\nprefix:  " << (prefix?prefix:"") << std::endl;
-   }
+   bool result = false; // return status
    
-   bool result = true;
+   // Clear the object:
    clear();
 
-   ossim_int32 scalar =
-      ossimScalarTypeLut::instance()->getEntryNumber(kwl, prefix);
-   if (scalar == ossimLookUpTable::NOT_FOUND)
+   std::string pfx = ( prefix ? prefix : "" );
+   
+   ossim_uint32 bands = getBandCount( kwl, pfx );
+   if ( bands )
    {
-      theScalarType = OSSIM_SCALAR_UNKNOWN;
+      result = true;
 
-      ossimString lookupStr = kwl.find( prefix, "radiometry" );
-      if ( lookupStr.empty() == false )
-      {
-         if ( lookupStr.contains("8-bit") )
-         {
-            theScalarType = OSSIM_UINT8;
-         }
-         else
-         if ( lookupStr.contains("11-bit") )
-         {
-            theScalarType = OSSIM_USHORT11;
-         }
-         else
-         if ( lookupStr.contains("16-bit unsigned") )
-         {
-            theScalarType =  OSSIM_UINT16;
-         }
-         else
-         if ( lookupStr.contains("16-bit signed") )
-         {
-            theScalarType =  OSSIM_SINT16;
-         }
-         else
-         if ( lookupStr.contains("32-bit unsigned") )
-         {
-            theScalarType =  OSSIM_UINT32;
-         }
-         else
-         if ( lookupStr.contains("float") )
-         {
-            theScalarType =  OSSIM_FLOAT32;
-         }
-         else
-         if ( lookupStr.contains("normalized float") )
-         {
-            theScalarType =  OSSIM_FLOAT32;
-         }
-         else
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << MODULE
-               << "\nERROR: Unrecognized pixel scalar type description: " 
-               <<  lookupStr
-               << std::endl;
-         }
-      }
+      setNumberOfBands( bands );
+      
+      theMinValuesValidFlag  = true;
+      theMaxValuesValidFlag  = true;
+      theNullValuesValidFlag = true;
+
+      updateMetaData( kwl, pfx ); // Initializes the rest of object.
    }
    else
    {
-      theScalarType = static_cast<ossimScalarType>(scalar);
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << " ERROR:\n"
+            << "Required keyword not found:  " << ossimKeywordNames::NUMBER_BANDS_KW << std::endl;
+      }
    }
-
-   const char* kwlLookup =
-      kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW);
-   if (kwlLookup)
-   {
-      theNumberOfBands = ossimString(kwlLookup).toInt();
-      setNumberOfBands(theNumberOfBands);
-   }
-  
-   loadBandInfo(kwl, prefix);
-
+   
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "\ntheScalarType:  " << theScalarType
-         << "\ntheNumberOfBands: " << theNumberOfBands
-         << "\ntheMinValuesValidFlag: " << theMinValuesValidFlag
-         << "\ntheMaxValuesValidFlag: " << theMaxValuesValidFlag
-         << "\ntheNullValuesValidFlag: " << theNullValuesValidFlag;
-          
-      for (ossim_uint32 band = 0; band < theNumberOfBands; ++band)
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "\ntheMinValuesValidFlag[" << band << "]: "
-            << theMinPixelArray[band]
-            << "\ntheMaxValuesValidFlag[" << band << "]: "
-            << theMaxPixelArray[band]
-            << "\ntheNullValuesValidFlag[" << band << "]: "
-            << theNullPixelArray[band];
-      }
-      ossimNotify(ossimNotifyLevel_DEBUG) << std::endl;
+      print( ossimNotify(ossimNotifyLevel_DEBUG) );
    }
-   
 
-   if(!theNumberOfBands)
-   {
-      result = false;
-   }
    return result;
-}
-
-void ossimImageMetaData::loadBandInfo(const ossimKeywordlist& kwl,
-                                      const char* prefix)
-{
-   ossimString copyPrefix;
-   if (prefix)
-   {
-      copyPrefix = prefix;
-   }
-   
-   ossimString regExpression =  ossimString("^(") + copyPrefix + "band[0-9]+.)";
-   std::vector<ossimString> keys =
-      kwl.getSubstringKeyList( regExpression );
-   
-   ossim_uint32 numberOfBands = (ossim_uint32)keys.size();
-
-   theMinValuesValidFlag  = true;
-   theMaxValuesValidFlag  = true;
-   theNullValuesValidFlag = true;
-
-   if(!numberOfBands)
-   {
-      theMinValuesValidFlag  = false;
-      theMaxValuesValidFlag  = false;
-      theNullValuesValidFlag = false;
-      return;
-   }
-   if((!theNumberOfBands)||
-      (theNumberOfBands != numberOfBands))
-   {
-      setNumberOfBands(numberOfBands);
-   }
-   
-   int offset = (int)(copyPrefix+"band").size();
-   int idx = 0;
-   std::vector<int> theNumberList(numberOfBands);
-   for(idx = 0; idx < (int)theNumberList.size();++idx)
-     {
-       ossimString numberStr(keys[idx].begin() + offset,
-			     keys[idx].end());
-       theNumberList[idx] = numberStr.toInt();
-     }
-   std::sort(theNumberList.begin(), theNumberList.end());
-   for(idx=0;idx < (int)theNumberList.size();++idx)
-   {
-      ossimString newPrefix = copyPrefix;
-      newPrefix += ossimString("band");
-      newPrefix += ossimString::toString(theNumberList[idx]);
-      newPrefix += ossimString(".");
-
-      const char* minValue = kwl.find(newPrefix.c_str(),
-                                      ossimKeywordNames::MIN_VALUE_KW);
-      const char* maxValue = kwl.find(newPrefix.c_str(),
-                                      ossimKeywordNames::MAX_VALUE_KW);
-      const char* nullValue = kwl.find(newPrefix.c_str(),
-                                       ossimKeywordNames::NULL_VALUE_KW);
-
-      if(minValue)
-      {
-         theMinPixelArray[idx] = ossimString(minValue).toDouble();
-      }
-      else
-      {
-         theMinValuesValidFlag = false;
-         theMinPixelArray[idx] = ossim::defaultMin(theScalarType);
-      }
-      if(maxValue)
-      {
-         theMaxPixelArray[idx] = ossimString(maxValue).toDouble();
-      }
-      else
-      {
-         theMaxValuesValidFlag = false;
-         theMaxPixelArray[idx] = ossim::defaultMax(theScalarType);
-      }
-      if(nullValue)
-      {
-         theNullPixelArray[idx] = ossimString(nullValue).toDouble();
-      }
-      else
-      {
-         theNullValuesValidFlag = false;
-         theNullPixelArray[idx] = ossim::defaultNull(theScalarType);
-      }
-   }
 }
 
 bool ossimImageMetaData::saveState(ossimKeywordlist& kwl,
 				   const char* prefix)const
 {
-   if(theNullPixelArray&&theMinPixelArray&&theMaxPixelArray)
+   if ( theNumberOfBands )
    {
-      ossim_int32 band = 0;
+      ossim_uint32 band = 0;
       
-      for (band=0; band<(ossim_int32)theNumberOfBands; ++band)
+      for (band=0; band < theNumberOfBands; ++band)
       {
          ossimString kwMin = (ossimKeywordNames::BAND_KW +
                               ossimString::toString(band+1) + "." +
@@ -408,14 +263,17 @@ bool ossimImageMetaData::saveState(ossimKeywordlist& kwl,
                  theNullPixelArray[band],
                  true);
       }
+      // std::cout << "added bands ******************" << std::endl;
       kwl.add(prefix,
 	      ossimKeywordNames::NUMBER_BANDS_KW,
-	      (ossim_int32)theNumberOfBands,
+	      theNumberOfBands,
 	      true);
       kwl.add(prefix,
 	      ossimKeywordNames::SCALAR_TYPE_KW,
 	      (ossimScalarTypeLut::instance()->getEntryString(theScalarType)),
 	      true);
+
+      kwl.add( prefix, "bytes_per_pixel", theBytesPerPixel, true );
    }
    
    return true;
@@ -428,12 +286,18 @@ ossim_uint32 ossimImageMetaData::getNumberOfBands()const
 
 void ossimImageMetaData::setScalarType(ossimScalarType aType)
 {
-   theScalarType = aType;
+   theScalarType    = aType;
+   theBytesPerPixel = ossim::scalarSizeInBytes( aType );
 }
 
 ossimScalarType ossimImageMetaData::getScalarType()const
 {
    return theScalarType;
+}
+
+ossim_uint32 ossimImageMetaData::getBytesPerPixel() const
+{
+   return theBytesPerPixel;
 }
 
 void ossimImageMetaData::setMinPix(ossim_uint32 band, double pix)
@@ -537,17 +401,135 @@ bool ossimImageMetaData::getNullValuesValidFlag()const
    return theNullValuesValidFlag;
 }
 
-const ossimImageMetaData& ossimImageMetaData::operator=(
-   const ossimImageMetaData& rhs)
-{
-   assign(rhs);
-   
-   return *this;
-}
-
 bool ossimImageMetaData::isValid()const
 {
    return (theNumberOfBands > 0);
 //    return ((theNumberOfBands>0)&&
 //            (theScalarType != OSSIM_SCALAR_UNKNOWN));
+}
+
+void ossimImageMetaData::updateMetaData(
+   const ossimKeywordlist& kwl, const std::string& prefix )
+{
+   ossimString value;
+   std::string key;
+   
+   // Get the bands:
+   if ( !theNumberOfBands )
+   {
+      ossim_uint32 bands = getBandCount( kwl, prefix );
+      if ( bands )
+      {
+         setNumberOfBands( bands );
+      }
+   }
+
+   if ( theNumberOfBands )
+   {
+      //---
+      // See if bands are zero or one based.  Bands are ONE based in the "omd"
+      // file! If band0 is present assume zero based.
+      //---
+
+      ossimString regExpression = std::string("^(") + prefix + std::string("band0+.)");
+      std::vector<ossimString> keys = kwl.getSubstringKeyList( regExpression );
+
+      ossim_uint32 startBand = (keys.size() ? 0 : 1);
+
+      ossim_uint32 limit = theNumberOfBands+startBand; // For for loop:
+      
+      std::string bs = "band"; // band sting
+      std::string base;
+      
+      for ( ossim_uint32 band = startBand; band < limit; ++band )
+      {
+         base = bs + ossimString::toString( band ).string() + std::string(".") ;
+
+         // Min:
+         key = base + std::string(ossimKeywordNames::MIN_VALUE_KW);
+         value =  kwl.findKey( prefix, key );
+         
+         if ( value.size() )
+         {
+            theMinPixelArray[ band - startBand  ] = value.toFloat64();
+         }
+
+         // Max:
+         key = base + std::string(ossimKeywordNames::MAX_VALUE_KW);
+         value =  kwl.findKey( prefix, key );
+         if ( value.size() )
+         {
+            theMaxPixelArray[ band - startBand ] = value.toFloat64();
+         }
+
+         // Null:
+         key = base + std::string(ossimKeywordNames::NULL_VALUE_KW);
+         value =  kwl.findKey( prefix, key );
+         if ( value.size() )
+         {
+            theNullPixelArray[ band - startBand ] = value.toFloat64();
+         }
+      }  
+   }
+
+   // Scalar, only look for if not set.
+   if ( theScalarType == OSSIM_SCALAR_UNKNOWN )
+   {
+      std::string key = ossimKeywordNames::SCALAR_TYPE_KW; // "scalar_type"
+      value.string() = kwl.findKey( prefix, key );
+      if ( value.empty() )
+      {
+         key = "radiometry";
+         value.string() = kwl.findKey( prefix, key );
+      }
+      if ( value.size() )
+      {
+         theScalarType = ossimScalarTypeLut::instance()->getScalarTypeFromString( value );
+      }
+      
+      if ( theScalarType != OSSIM_SCALAR_UNKNOWN )
+      {
+         theBytesPerPixel = ossim::scalarSizeInBytes( theScalarType );
+      }
+   }
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimImageMetaData::updateMetaData DEBUG"
+         << *this << std::endl;
+   }
+}
+
+std::ostream& ossimImageMetaData::print(std::ostream& out) const
+{
+   ossimKeywordlist kwl;
+   saveState( kwl, 0 );
+   out << kwl << std::endl;
+   return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const ossimImageMetaData& obj)
+{
+   return obj.print( out );
+}
+
+ossim_uint32 ossimImageMetaData::getBandCount(const ossimKeywordlist& kwl,
+                                              const std::string& prefix) const
+{
+   ossim_uint32 result = 0;
+
+   ossimString value;
+   value.string() = kwl.findKey( prefix, std::string(ossimKeywordNames::NUMBER_BANDS_KW) );
+   if ( value.size() )
+   {
+      result = value.toUInt32();
+   }
+   else
+   {
+      value.string() = std::string("^(") + prefix + std::string("band[0-9]+.)");
+      std::vector<ossimString> keys = kwl.getSubstringKeyList( value );
+      result = static_cast<ossim_uint32>( keys.size() );
+   }
+   return result;   
 }

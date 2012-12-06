@@ -9,7 +9,7 @@
 // LATITUDE AND LONGITUDE VALUES ARE IN DEGREES.
 //
 //*******************************************************************
-//  $Id: ossimGpt.cpp 20105 2011-09-21 17:50:35Z dburken $
+//  $Id: ossimGpt.cpp 20615 2012-02-27 12:43:12Z gpotts $
 
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimEcefPoint.h>

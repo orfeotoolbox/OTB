@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.cpp 20408 2011-12-22 16:55:35Z dburken $
+// $Id: ossimGeoTiff.cpp 21024 2012-05-30 08:45:13Z dburken $
 
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/base/ossimTrace.h>
@@ -53,7 +53,7 @@ static const ossimGeoTiffDatumLut DATUM_LUT;
 OpenThreads::Mutex ossimGeoTiff::theMutex;
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 20408 2011-12-22 16:55:35Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 21024 2012-05-30 08:45:13Z dburken $";
 #endif
 
 //---
@@ -63,6 +63,26 @@ static ossimTrace traceDebug("ossimGeoTiff:debug");
 
 // Prototype, defined at bottom of this file. ArcMAP 9.2 bug workaround.
 ossim_uint16 getMetersEquivalentHarnCode(ossim_uint16 feet_harn_code);
+
+//---
+// This was created to remove/hide "libgetiff/geo_normalize.h" in ossimGeoTiff.h.
+//---
+class ossimPrivateGtifDef
+{
+public:
+   ossimPrivateGtifDef()
+      : m_defs(0)
+   {}
+   ~ossimPrivateGtifDef()
+   {
+      if ( m_defs )
+      {
+         delete m_defs;
+         m_defs = 0;
+      }
+   }
+   GTIFDefn* m_defs;
+};
 
 //*************************************************************************************************
 // CONSTRUCTOR
@@ -99,7 +119,7 @@ ossimGeoTiff::ossimGeoTiff()
       theFalseEasting(0.0),
       theFalseNorthing(0.0),
       theScaleFactor(0.0),
-      theNormalizedDefinitions(0)
+      thePrivateDefinitions(new ossimPrivateGtifDef())
 {
 }
 
@@ -138,7 +158,7 @@ ossimGeoTiff::ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx)
       theFalseEasting(0.0),
       theFalseNorthing(0.0),
       theScaleFactor(0.0),
-      theNormalizedDefinitions(0)
+      thePrivateDefinitions(new ossimPrivateGtifDef())
 {
    if (traceDebug())
    {
@@ -175,10 +195,10 @@ ossimGeoTiff::ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx)
 
 ossimGeoTiff::~ossimGeoTiff()
 {
-   if(theNormalizedDefinitions)
+   if(thePrivateDefinitions)
    {
-      delete theNormalizedDefinitions;
-      theNormalizedDefinitions = 0;
+      delete thePrivateDefinitions;
+      thePrivateDefinitions = 0;
    }
    if(theTiffPtr)
    {
@@ -346,7 +366,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
          gcs = USER_DEFINED;
 
          std::ostringstream os;
-         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 20408 $ $Date: 2011-12-22 17:55:35 +0100 (jeu., 22 déc. 2011) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 21024 $ $Date: 2012-05-30 10:45:13 +0200 (mer. 30 mai 2012) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
          GTIFKeySet(gtif,
                     GeogCitationGeoKey,
@@ -982,12 +1002,12 @@ bool ossimGeoTiff::readTags(
    }
    theTiffPtr = tiff;
    
-   if(theNormalizedDefinitions)
+   if(thePrivateDefinitions->m_defs)
    {
-      delete theNormalizedDefinitions;
+      delete thePrivateDefinitions->m_defs;;
    }
-   theNormalizedDefinitions = new GTIFDefn;
-   GTIFGetDefn(gtif, theNormalizedDefinitions);
+   thePrivateDefinitions->m_defs = new GTIFDefn;
+   GTIFGetDefn(gtif, thePrivateDefinitions->m_defs);
    ossim_uint32 idx = 0;
    theGeoKeysPresentFlag = true;
    if(traceDebug())
@@ -1007,12 +1027,12 @@ bool ossimGeoTiff::readTags(
    {
    }
    theScaleFactor     = 0.0;
-   theModelType       = theNormalizedDefinitions->Model;
-   theGcsCode         = theNormalizedDefinitions->GCS;
-   thePcsCode         = theNormalizedDefinitions->PCS;
-   theDatumCode       = theNormalizedDefinitions->Datum;
-   theAngularUnits    = theNormalizedDefinitions->UOMAngle;
-   theLinearUnitsCode = theNormalizedDefinitions->UOMLength;
+   theModelType       = thePrivateDefinitions->m_defs->Model;
+   theGcsCode         = thePrivateDefinitions->m_defs->GCS;
+   thePcsCode         = thePrivateDefinitions->m_defs->PCS;
+   theDatumCode       = thePrivateDefinitions->m_defs->Datum;
+   theAngularUnits    = thePrivateDefinitions->m_defs->UOMAngle;
+   theLinearUnitsCode = thePrivateDefinitions->m_defs->UOMLength;
 
    if (theAngularUnits == ANGULAR_DMS_HEMISPHERE)
    {
@@ -1091,63 +1111,63 @@ bool ossimGeoTiff::readTags(
       thePcsCitation = ossimString(buf);
    }
    GTIFKeyGet(gtif, ProjCoordTransGeoKey , &theCoorTransGeoCode, 0, 1);
-   for(idx = 0; idx < (ossim_uint32)theNormalizedDefinitions->nParms; ++idx)
+   for(idx = 0; idx < (ossim_uint32)thePrivateDefinitions->m_defs->nParms; ++idx)
    {
-      switch(theNormalizedDefinitions->ProjParmId[idx])
+      switch(thePrivateDefinitions->m_defs->ProjParmId[idx])
       {
          case ProjStdParallel1GeoKey:
          {
-            theStdPar1 = theNormalizedDefinitions->ProjParm[idx];
+            theStdPar1 = thePrivateDefinitions->m_defs->ProjParm[idx];
             break;
          }
          case ProjStdParallel2GeoKey:
          {
-            theStdPar2 = theNormalizedDefinitions->ProjParm[idx];
+            theStdPar2 = thePrivateDefinitions->m_defs->ProjParm[idx];
             break;
          }
          case ProjOriginLongGeoKey:
          {
-            theOriginLon = theNormalizedDefinitions->ProjParm[idx];
+            theOriginLon = thePrivateDefinitions->m_defs->ProjParm[idx];
             break;
          }
          case ProjOriginLatGeoKey:
          {
-            theOriginLat = theNormalizedDefinitions->ProjParm[idx];
+            theOriginLat = thePrivateDefinitions->m_defs->ProjParm[idx];
             break;
          }
          case ProjFalseEastingGeoKey:
          {
-            theFalseEasting = theNormalizedDefinitions->ProjParm[idx];
+            theFalseEasting = thePrivateDefinitions->m_defs->ProjParm[idx];
             break;
          }
          case ProjFalseNorthingGeoKey:
          {
-            theFalseNorthing = theNormalizedDefinitions->ProjParm[idx];
+            theFalseNorthing = thePrivateDefinitions->m_defs->ProjParm[idx];
             break;
          }
          case ProjCenterLongGeoKey:
          {
-            theOriginLon = theNormalizedDefinitions->ProjParm[idx];
+            theOriginLon = thePrivateDefinitions->m_defs->ProjParm[idx];
             break;
          }
          case ProjCenterLatGeoKey:
          {
-            theOriginLat = theNormalizedDefinitions->ProjParm[idx];
+            theOriginLat = thePrivateDefinitions->m_defs->ProjParm[idx];
             break;
          }
          case ProjFalseOriginLatGeoKey:
          {
-            theOriginLat = theNormalizedDefinitions->ProjParm[idx];
+            theOriginLat = thePrivateDefinitions->m_defs->ProjParm[idx];
             break;
          }
          case ProjFalseOriginLongGeoKey:
          {
-            theOriginLon = theNormalizedDefinitions->ProjParm[idx];
+            theOriginLon = thePrivateDefinitions->m_defs->ProjParm[idx];
             break;
          }
          case ProjScaleAtNatOriginGeoKey:
          {
-            theScaleFactor = theNormalizedDefinitions->ProjParm[idx];
+            theScaleFactor = thePrivateDefinitions->m_defs->ProjParm[idx];
             break;
          }
       }

@@ -33,7 +33,11 @@ public:
 
    const ossimElevationDatabase& operator = (const ossimElevationDatabase& rhs);
       
-   virtual double getMeanSpacingMeters() const
+   virtual bool getAccuracyInfo(ossimElevationAccuracyInfo& /*info*/, const ossimGpt& /*gpt*/) const
+   {
+      return false;
+   }
+  virtual double getMeanSpacingMeters() const
    {
       return m_meanSpacing;
    }

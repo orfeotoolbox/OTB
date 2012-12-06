@@ -173,6 +173,9 @@ void ossimTiledElevationDatabase::mapRegion(const ossimGrect& region)
             m_fileWalker->initializeDefaultFilterList();
 
             m_fileWalker->setNumberOfThreads( ossim::getNumberOfThreads() );
+
+            // Must set this so we can stop recursion on directory based images.
+            m_fileWalker->setWaitOnDirFlag( true );
             
             cb = new ProcessFileCB(this, &ossimTiledElevationDatabase::processFile);
             m_fileWalker->registerProcessFileCallback(cb);
@@ -383,16 +386,6 @@ bool ossimTiledElevationDatabase::pointHasCoverage(const ossimGpt& gpt) const
       return theGroundRect.pointWithin(gpt);
    }
    return false;
-}
-
-double ossimTiledElevationDatabase::getAccuracyLE90(const ossimGpt& /* gpt */) const
-{
-   return 0;
-}
-
-double ossimTiledElevationDatabase::getAccuracyCE90(const ossimGpt& /* gpt */) const
-{
-   return 0;
 }
 
 bool ossimTiledElevationDatabase::loadState(const ossimKeywordlist& kwl, const char* prefix)

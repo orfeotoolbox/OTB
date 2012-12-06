@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.h 20133 2011-10-12 19:03:47Z oscarkramer $
+// $Id: ossimGeoTiff.h 21023 2012-05-29 20:32:22Z dburken $
 
 #ifndef ossimGeoTiff_HEADER
 #define ossimGeoTiff_HEADER 1
@@ -24,12 +24,12 @@
 #include <vector>
 
 #include <tiffio.h>
-#include <geo_normalize.h>
 #include <OpenThreads/Mutex>
 #include <OpenThreads/ScopedLock>
 
 class ossimFilename;
 class ossimKeywordlist;
+class ossimPrivateGtifDef;
 class ossimProjection;
 class ossimTieGptSet;
 
@@ -282,9 +282,9 @@ private:
    double                theFalseNorthing;                 // key 3083
    double                theScaleFactor;                   // key 3092
    
-   GTIFDefn*             theNormalizedDefinitions;
+   ossimPrivateGtifDef*  thePrivateDefinitions;
+   
    static OpenThreads::Mutex theMutex;
-
 };
 
 #endif

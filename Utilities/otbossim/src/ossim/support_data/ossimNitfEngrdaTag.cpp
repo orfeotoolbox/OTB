@@ -246,6 +246,7 @@ std::ostream& ossimNitfEngrdaTag::printData(std::ostream& out,
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << "ossimNitfEngrdaTag::printData WARNING unhandled data type."
+         << "Data type = " << (char)element.theEngTyp << "\n"
          << std::endl;
    } 
    return out;

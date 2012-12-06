@@ -12,18 +12,18 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 20133 2011-10-12 19:03:47Z oscarkramer $
+// $Id: ossimImageHandler.h 21745 2012-09-16 15:21:53Z dburken $
 #ifndef ossimImageHandler_HEADER
 #define ossimImageHandler_HEADER 1
 
 #include <ossim/imaging/ossimImageSource.h>
-#include <ossim/imaging/ossimImageMetaData.h>
 #include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimNBandLutDataObject.h>
-#include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimIrect.h>
+#include <ossim/base/ossimNBandLutDataObject.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/imaging/ossimFilterResampler.h>
+#include <ossim/imaging/ossimImageMetaData.h>
 
 /**
  *  This class defines an abstract Handler which all image handlers(loaders)
@@ -112,8 +112,6 @@ public:
     */
    virtual ossimFilename createDefaultMetadataFilename() const;
 
-   
-
    /**
     *  @return ossimFilename represents an external OSSIM histogram filename.
     */
@@ -124,7 +122,6 @@ public:
     */
    virtual ossimFilename createDefaultValidVerticesFilename() const;
    
-
    /**
     *  Outputs vertices to file and updates the internal vertex
     *  array variable "theValidImageVertices".
@@ -151,7 +148,6 @@ public:
     *  @return true on success, false on error.
     */
    virtual bool openValidVertices();
-
 
    /**
     *  Pure virtual open.  Derived classes must implement.
@@ -405,18 +401,42 @@ public:
                                       ossim_uint32 resLevel=0)const;
 
    /**
-    * Indicates whether or not the image handler can control output
+    * @brief Indicates whether or not the image handler can control output
     * band selection via the setOutputBandList method.
+    * @return true if band selector; false, if not.
     */
    virtual bool isBandSelector() const;
 
    /**
-    * If the image handler "isBandSeletor()" then the band selection
+    * @brief If the image handler "isBandSeletor()" then the band selection
     * of the output chip can be controlled.
-    * Returns true on success, false on error.
+    *
+    * This method returns false. Derived classes that are band selectors should
+    * override.
+    *
+    * @param band_list Requested bands.
+    * 
+    * @return true on success, false on error.
     */
    virtual bool setOutputBandList(const std::vector<ossim_uint32>& band_list);
-
+ 
+   /**
+    * @brief If the image handler "isBandSeletor()" then the band selection
+    * of the output are set to input or identity.  Does nothing and returns
+    * false if not a band selector.
+    * 
+    * @return If band selector, returns the output of setOutputBandList; if
+    * not, returns false.
+    */
+   virtual bool setOutputToInputBandList();
+ 
+   /**
+    * @brief Convenience method to see if band list is identity.
+    * @param bandList List to check.
+    * @return true if band selector; false, if not.
+    */
+   virtual bool isIdentityBandList( const std::vector<ossim_uint32>& bandList ) const;
+   
    /**
     * Indicates whether or not the image is tiled internally.
     * This implementation returns true if (getImageTileWidth() &&
@@ -674,20 +694,34 @@ protected:
    virtual void completeOpen();
    
    /**
-   * @brief Convenience method to set things needed in the image geometry from
-   * the image handler.  At time of writing sets the decimation and image size.
-   * @param geom ossimImageGeometry to initiale.
-   */
+    * @brief Convenience method to set things needed in the image geometry from
+    * the image handler.  At time of writing sets the decimation and image size.
+    * @param geom ossimImageGeometry to initiale.
+    */
    void initImageParameters(ossimImageGeometry* geom) const;
+   
+   /**
+    * @brief Virtual method determines the decimation factors at each resolution level. This
+    * base class implementation computes the decimation by considering the ratios in image size
+    * between resolution levels, with fuzzy logic for rounding ratios to the nearest power of 2
+    * if possible. Derived classes need to override this method if the decimations are provided
+    * as part of the image metadata.
+    */
+   virtual void establishDecimationFactors();
 
    /**
-   * @brief Virtual method determines the decimation factors at each resolution level. This
-   * base class implementation computes the decimation by considering the ratios in image size
-   * between resolution levels, with fuzzy logic for rounding ratios to the nearest power of 2
-   * if possible. Derived classes need to override this method if the decimations are provided
-   * as part of the image metadata.
-   */
-   virtual void establishDecimationFactors();
+    * @brief Convenience method to set output band list.
+    *
+    * This performs range checking and calls theOverview->setOutputBandList
+    * on success.
+    * 
+    * @param inBandList The new band list.
+    * @param outBandList Band list to initialize.
+    * @return true on success, false on error.
+    */
+   virtual bool setOutputBandList(const std::vector<ossim_uint32>& inBandList,
+                                  std::vector<ossim_uint32>& outBandList);
+
 
    ossimFilename theImageFile;
    ossimFilename theOverviewFile;

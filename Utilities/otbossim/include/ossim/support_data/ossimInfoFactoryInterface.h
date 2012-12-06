@@ -14,16 +14,26 @@
 #define ossimInfoFactoryInterface_HEADER
 
 #include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimObjectFactory.h>
+// #include <ossim/base/ossimObjectFactory.h>
 
 class ossimFilename;
 class ossimInfoBase;
 
+//---
+// Note: Deriving from ossimObjectFactory is being backed out as no
+// ossimObjectFactory interfaces were ever called and it introduces warning in
+// the header file so anyone who #includes this gets warnings...
+//
+// We can add back if there is a interface from ossimObjectFactory needed;
+// else, please leave out.
+// 
+// drb 20120518
+//---
 
 /**
  * @brief Info factory.
  */
-class OSSIM_DLL ossimInfoFactoryInterface : public ossimObjectFactory
+class OSSIM_DLL ossimInfoFactoryInterface // : public ossimObjectFactory
 {
 public:
 
@@ -43,7 +53,8 @@ public:
     * for memory.
     */
    virtual ossimInfoBase* create(const ossimFilename& file) const = 0;
-   
+
+#if 0
    virtual ossimObject* createObject(const ossimString& typeName)const
    {
       return 0;
@@ -62,6 +73,7 @@ public:
    {
       
    }
+#endif
    
 };
 

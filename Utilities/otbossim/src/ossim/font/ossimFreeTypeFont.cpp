@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimFreeTypeFont.cpp 20070 2011-09-07 18:48:35Z dburken $
+// $Id: ossimFreeTypeFont.cpp 21518 2012-08-22 21:15:56Z dburken $
 
 // ossimFreeTypeFont.h should be load prior to checking for OSSIM_HAS_FREETYPE.
 #include <ossim/font/ossimFreeTypeFont.h>
@@ -51,7 +51,7 @@ ossimFreeTypeFont::ossimFreeTypeFont(const ossimFilename& fontFile)
                               fontFile.c_str(),
                               0,
                               &theFontFace );
-         if((error == FT_Err_Unknown_File_Format))
+         if (error == FT_Err_Unknown_File_Format)
          {
             if (traceDebug())
             {
@@ -109,7 +109,7 @@ ossimFreeTypeFont::ossimFreeTypeFont(const ossimFreeTypeFont& rhs)
                               rhs.theFontFile.c_str(),
                               0,
                               &theFontFace );
-         if((error == FT_Err_Unknown_File_Format))
+         if(error == FT_Err_Unknown_File_Format)
          {
             if (traceDebug())
             {

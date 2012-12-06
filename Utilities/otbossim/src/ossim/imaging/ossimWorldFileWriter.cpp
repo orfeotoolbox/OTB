@@ -6,7 +6,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimWorldFileWriter.cpp 17932 2010-08-19 20:34:35Z dburken $
+//  $Id: ossimWorldFileWriter.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimWorldFileWriter.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -19,7 +19,9 @@
 // #include <ossim/projection/ossimStatePlaneProjectionFactory.h>
 #include <ossim/base/ossimUnitConversionTool.h>
 #include <ossim/base/ossimUnitTypeLut.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimImageSource.h>
+
 
 RTTI_DEF1(ossimWorldFileWriter,
           "ossimWorldFileWriter",

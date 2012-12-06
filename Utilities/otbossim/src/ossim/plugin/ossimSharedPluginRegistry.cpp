@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimSharedPluginRegistry.cpp 18967 2011-02-25 19:40:48Z gpotts $
+// $Id: ossimSharedPluginRegistry.cpp 20608 2012-02-27 12:03:40Z gpotts $
 #include <algorithm>
 #include <iterator>
 #include <ossim/plugin/ossimSharedPluginRegistry.h>

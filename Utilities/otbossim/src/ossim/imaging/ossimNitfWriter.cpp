@@ -7,13 +7,8 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNitfWriter.cpp 20123 2011-10-11 17:55:44Z dburken $
+//  $Id: ossimNitfWriter.cpp 21631 2012-09-06 18:10:55Z dburken $
 
-#include <fstream>
-#include <algorithm>
-#include <sstream>
-#include <iomanip>
-#include <tiffio.h>
 #include <ossim/imaging/ossimNitfWriter.h>
 #include <ossim/base/ossimBooleanProperty.h>
 #include <ossim/base/ossimContainerProperty.h>
@@ -28,6 +23,7 @@
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimRectangleCutFilter.h>
 #include <ossim/support_data/ossimNitfCommon.h>
 #include <ossim/support_data/ossimNitfGeoPositioningTag.h>
@@ -36,6 +32,11 @@
 #include <ossim/support_data/ossimNitfProjectionParameterTag.h>
 #include <ossim/support_data/ossimNitfNameConversionTables.h>
 #include <ossim/support_data/ossimNitfBlockaTag.h>
+#include <tiffio.h>
+#include <fstream>
+#include <algorithm>
+#include <sstream>
+#include <iomanip>
 
 RTTI_DEF1(ossimNitfWriter, "ossimNitfWriter", ossimNitfWriterBase);
 

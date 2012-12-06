@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.cpp 20123 2011-10-11 17:55:44Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.cpp 21518 2012-08-22 21:15:56Z dburken $
 #include <sstream>
 #include <iomanip>
 #include <cstring> // for memset
@@ -236,7 +236,7 @@ void ossimNitfImageHeaderV2_1::parseStream(std::istream &in)
       if(theBlockMaskRecordLength>0)
       {
          ossim_uint32 totalNumber = 0;
-         if((theImageMode[0] == 'S'))
+         if(theImageMode[0] == 'S')
          {
              totalNumber = getNumberOfBlocksPerRow()*getNumberOfBlocksPerCol()*getNumberOfBands();
          }
@@ -258,12 +258,11 @@ void ossimNitfImageHeaderV2_1::parseStream(std::istream &in)
          }
          delete [] blockRead;
       }
-      if((thePadPixelMaskRecordLength > 0)||
-         (( (getCompressionCode().upcase() == "M3"))&&
-          (thePadPixelMaskRecordLength == 0)))
+      if( (thePadPixelMaskRecordLength > 0) ||
+          ( (getCompressionCode().upcase() == "M3") && (thePadPixelMaskRecordLength == 0) ) )
       {
          ossim_uint32 totalNumber = 0;
-         if((theImageMode[0] == 'S'))
+         if(theImageMode[0] == 'S')
          {
             totalNumber = getNumberOfBlocksPerRow()*getNumberOfBlocksPerCol()*getNumberOfBands();
          }

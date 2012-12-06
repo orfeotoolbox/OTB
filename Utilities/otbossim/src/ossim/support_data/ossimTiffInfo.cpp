@@ -2120,9 +2120,15 @@ std::ostream& ossimTiffInfo::printValue(std::ostream& out,
          
          getArrayValue(num, valueArray, 0);
          getArrayValue(den, valueArray, 1);
-         
-         // out << num << " / " << den << "\n";
-         out << (num/den) << "\n";
+
+         if ( den )
+         {
+            out << (num/den) << "\n";
+         }
+         else
+         {
+            out << num << " / " << den << "\n";
+         }
          
          break;
          

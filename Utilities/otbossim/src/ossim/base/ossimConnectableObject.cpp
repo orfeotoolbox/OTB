@@ -5,7 +5,8 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableObject.cpp 20452 2012-01-13 17:47:45Z gpotts $
+// $Id: ossimConnectableObject.cpp 21850 2012-10-21 20:09:55Z dburken $
+
 #include <ossim/base/ossimConnectableObject.h>
 #include <ossim/base/ossimIdManager.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -15,8 +16,8 @@
 #include <ossim/base/ossimConnectableContainer.h>
 #include <ossim/base/ossimTextProperty.h>
 #include <ossim/base/ossimNotify.h>
-#include <algorithm>
 #include <ossim/base/ossimVisitor.h>
+#include <algorithm>
 
 RTTI_DEF3(ossimConnectableObject,
           "ossimConnectableObject",
@@ -173,6 +174,208 @@ ossimConnectableObject* ossimConnectableObject::findConnectableObject(const ossi
    
    return 0;
 }
+
+ossimConnectableObject* ossimConnectableObject::findObjectOfType(
+   RTTItypeid typeId,
+   ossimConnectableObjectDirectionType directionType,
+   bool recurse)
+{
+   ossimConnectableObject* result = 0;
+
+   if(directionType != CONNECTABLE_DIRECTION_NONE)
+   {
+      ConnectableObjectList* connectableList = 0;
+
+      if ( CONNECTABLE_DIRECTION_INPUT )
+      {
+         connectableList = &theInputObjectList;
+      }
+      else // (directionType == CONNECTABLE_DIRECTION_OUTPUT)
+      {
+         connectableList = &theOutputObjectList;
+      }
+
+      // see if it is in the immediate list
+      for(ossim_uint32 index = 0; index < connectableList->size(); ++index)
+      {
+         if( (*connectableList)[index].valid() )
+         {
+            if( (*connectableList)[index]->canCastTo( typeId ) )
+            {
+               result = (*connectableList)[index].get();
+               break;
+            }
+         }
+      }
+
+      if ( !result )
+      {
+         ossimVisitor::VisitorType vType = ossimVisitor::VISIT_NONE;
+         
+         if ( CONNECTABLE_DIRECTION_INPUT )
+         {
+            if ( recurse )
+            {
+               // Cast needed for compiler...
+               vType = (ossimVisitor::VisitorType)
+                  (ossimVisitor::VISIT_INPUTS|ossimVisitor::VISIT_CHILDREN);
+            }
+            else
+            {
+               vType = ossimVisitor::VISIT_INPUTS;
+            }
+         }
+         else // (directionType == CONNECTABLE_DIRECTION_OUTPUT)
+         {
+            if ( recurse )
+            {
+               // Cast needed for compiler...
+               vType = (ossimVisitor::VisitorType)
+                  (ossimVisitor::VISIT_OUTPUTS|ossimVisitor::VISIT_CHILDREN);
+            }
+            else
+            {
+               vType = ossimVisitor::VISIT_OUTPUTS;
+            }
+         }
+         
+         ossimTypeIdVisitor visitor( typeId,
+                                     true, // firstofTypeFlag
+                                     vType );
+
+
+         this->accept( visitor );
+         result = dynamic_cast<ossimConnectableObject*>( visitor.getObject(0) );
+      }
+      
+   } // Matches: if(directionType != CONNECTABLE_DIRECTION_NONE)
+   
+   return result;
+   
+} // End: findObjectOfType( RTTItypeid ...
+
+ossimConnectableObject* ossimConnectableObject::findObjectOfType(
+   const ossimString& className,
+   ossimConnectableObjectDirectionType directionType,
+   bool recurse )
+{
+   ossimConnectableObject* result = 0;
+   
+   if(directionType != CONNECTABLE_DIRECTION_NONE)
+   {
+      ConnectableObjectList* connectableList = 0;
+      
+      if ( CONNECTABLE_DIRECTION_INPUT )
+      {
+         connectableList = &theInputObjectList;
+      }
+      else // (directionType == CONNECTABLE_DIRECTION_OUTPUT)
+      {
+         connectableList = &theOutputObjectList;
+      }
+      
+      // see if it is in the immediate list
+      for(ossim_uint32 index = 0; index < connectableList->size(); ++index)
+      {
+         if( (*connectableList)[index].valid() )
+         {
+            if( (*connectableList)[index]->canCastTo( className ) )
+            {
+               result = (*connectableList)[index].get();
+               break;
+            }
+         }
+      }
+      
+      if ( !result )
+      {
+         ossimVisitor::VisitorType vType = ossimVisitor::VISIT_NONE;
+         
+         if ( CONNECTABLE_DIRECTION_INPUT )
+         {
+            if ( recurse )
+            {
+               // Cast needed for compiler...
+               vType = (ossimVisitor::VisitorType)
+                  (ossimVisitor::VISIT_INPUTS|ossimVisitor::VISIT_CHILDREN);
+            }
+            else
+            {
+               vType = ossimVisitor::VISIT_INPUTS;
+            }
+         }
+         else // (directionType == CONNECTABLE_DIRECTION_OUTPUT)
+         {
+            if ( recurse )
+            {
+               // Cast needed for compiler...
+               vType = (ossimVisitor::VisitorType)
+                  (ossimVisitor::VISIT_OUTPUTS|ossimVisitor::VISIT_CHILDREN);
+            }
+            else
+            {
+               vType = ossimVisitor::VISIT_OUTPUTS;
+            }
+         }
+         
+         ossimTypeNameVisitor visitor( className,
+                                       true, // firstofTypeFlag
+                                       vType );
+         this->accept( visitor );
+         result = dynamic_cast<ossimConnectableObject*>( visitor.getObject(0) );
+      }
+      
+   } // Matches: if(directionType != CONNECTABLE_DIRECTION_NONE)
+   
+   return result;
+   
+} // End: findObjectOfType( const ossimString& className ...
+
+ossimConnectableObject* ossimConnectableObject::findInputObjectOfType(
+   const ossimString& className)
+{
+   ossimConnectableObject* result = 0;
+   
+   // See if we are of class type.
+   if ( canCastTo( className ) )
+   {
+      result = this;
+   }
+
+   if ( !result )
+   {
+      ConnectableObjectList* connectableList = &theInputObjectList;
+
+      // see if it is in the immediate list
+      for(ossim_uint32 index = 0; index < connectableList->size(); ++index)
+      {
+         if( (*connectableList)[index].valid() )
+         {
+            if( (*connectableList)[index]->canCastTo( className ) )
+            {
+               result = (*connectableList)[index].get();
+               break;
+            }
+         }
+      }
+      
+      if ( !result )
+      {
+         ossimTypeNameVisitor visitor( className,
+                                       true, // firstofTypeFlag
+                                       (ossimVisitor::VISIT_INPUTS|
+                                        ossimVisitor::VISIT_CHILDREN) );
+         this->accept( visitor );
+         result = dynamic_cast<ossimConnectableObject*>( visitor.getObject(0) );
+      }
+   }
+   
+   return result;
+   
+} // End: findInputObjectOfType( const ossimString& className )
+
+// Old findObject findInputObject code kept here until debugged to satisfaction.
+#if 0 /* drb */
 
 ossimConnectableObject* ossimConnectableObject::findObjectOfType(RTTItypeid typeId,
                                                                  ossimConnectableObjectDirectionType directionType,
@@ -392,6 +595,8 @@ ossimConnectableObject* ossimConnectableObject::findInputObjectOfType(
    }
    return result;
 }
+#endif /* drb */
+// End: Old findObject findInputObject code kept here until debugged to satisfaction.
 
 ossim_int32 ossimConnectableObject::findInputIndex(const ossimConnectableObject* object)
 {
@@ -541,8 +746,12 @@ void ossimConnectableObject::disconnect(const ossimId& id)
    }
    else
    {
-      ossimConnectableObject* object = findConnectableObject(id);
-      disconnect(object);
+      ossimIdVisitor visitor( id,
+                              (ossimVisitor::VISIT_CHILDREN |
+                               ossimVisitor::VISIT_INPUTS   |
+                               ossimVisitor::VISIT_OUTPUTS) );
+      accept( visitor );
+      disconnect( visitor.getObject() );
    }
 }
 
@@ -1138,31 +1347,31 @@ bool ossimConnectableObject::connectMyOutputTo(ConnectableObjectList& outputList
    return result;
 }
 
-ossimConnectableObject* ossimConnectableObject::getInput(ossim_uint32 index)
+ossimConnectableObject* ossimConnectableObject::getInput(ossim_uint32 idx)
 {
-   if(index < theInputObjectList.size())
+   if(idx < theInputObjectList.size())
    {
-      return theInputObjectList[index].get();
+      return theInputObjectList[idx].get();
    }
    
    return 0;
 }
 
-const ossimConnectableObject* ossimConnectableObject::getInput(ossim_uint32 index)const
+const ossimConnectableObject* ossimConnectableObject::getInput(ossim_uint32 idx)const
 {
-   if(index < theInputObjectList.size())
+   if( idx < theInputObjectList.size())
    {
-      return theInputObjectList[index].get();
+      return theInputObjectList[idx].get();
    }
    
    return 0;
 }
 
-ossimConnectableObject* ossimConnectableObject::getOutput(ossim_uint32 index)
+ossimConnectableObject* ossimConnectableObject::getOutput(ossim_uint32 idx)
 {
-   if(index < theOutputObjectList.size())
+   if(idx < theOutputObjectList.size())
    {
-      return theOutputObjectList[index].get();
+      return theOutputObjectList[idx].get();
    }
    
    return 0;
@@ -1369,11 +1578,11 @@ void ossimConnectableObject::setNumberOfOutputs(ossim_int32 numberOfOutputs)
 }
 
 
-const ossimConnectableObject* ossimConnectableObject::getOutput(ossim_uint32 index)const
+const ossimConnectableObject* ossimConnectableObject::getOutput(ossim_uint32 idx)const
 {
-   if(index < theOutputObjectList.size())
+   if(idx < theOutputObjectList.size())
    {
-      return theOutputObjectList[index].get();
+      return theOutputObjectList[idx].get();
    }
    
    return 0;
@@ -1430,7 +1639,7 @@ void ossimConnectableObject::findAllObjectsOfType(ConnectableObjectList& result,
    }
 }
 
-
+#if 0
 void ossimConnectableObject::findAllInputsOfType(ConnectableObjectList& result,
                                                  const RTTItypeid& typeInfo,
                                                  bool propagateToInputs,
@@ -1552,124 +1761,7 @@ void ossimConnectableObject::findAllInputsOfType(ConnectableObjectList& result,
       }
    }
 }
-
-void ossimConnectableObject::findAllOutputsOfType(ConnectableObjectList& result,
-                                                  const RTTItypeid& typeInfo,
-                                                  bool propagateToOutputs,
-                                                  bool recurseChildren)
-{
-   int j;
-   // go through children first
-   //
-   ossimConnectableContainerInterface* inter = PTR_CAST(ossimConnectableContainerInterface,
-                                                        this);
-   if(inter&&recurseChildren)
-   {
-      ConnectableObjectList tempList = inter->findAllObjectsOfType(typeInfo,
-                                                                   true);
-      
-      for(j = 0; j < (int)tempList.size(); ++j)
-      {
-         ConnectableObjectList::iterator iter = std::find(result.begin(), result.end(), tempList[j]);
-         if(iter == result.end())
-         {
-            result.push_back(tempList[j]);
-         }
-      }
-   }
-   for(ossim_uint32 i = 0; i < getNumberOfOutputs(); ++i)
-   {
-      ossimConnectableObject* current = getOutput(i);
-      if(current&&(current->canCastTo(typeInfo)))
-      {
-         result.push_back(current);
-      }
-      ossimConnectableContainerInterface* inter = PTR_CAST(ossimConnectableContainerInterface,
-                                                           current);
-      if(inter)
-      {
-         ConnectableObjectList tempList = inter->findAllObjectsOfType(typeInfo, true);
-         for(j = 0; j < (int)tempList.size(); ++j)
-         {
-            ConnectableObjectList::iterator iter = std::find(result.begin(), result.end(), tempList[j]);
-            if(iter == result.end())
-            {
-               result.push_back(tempList[j]);
-            }
-         }
-      }
-      
-      if(propagateToOutputs&&current)
-      {
-         current->findAllOutputsOfType(result,
-                                       typeInfo,
-                                       true,
-                                       recurseChildren);
-      }
-   }
-}
-
-void ossimConnectableObject::findAllOutputsOfType(ConnectableObjectList& result,
-                                                  const ossimString& className,
-                                                  bool propagateToOutputs,
-                                                  bool recurseChildren)
-{
-   int j;
-   // go through children first
-   //
-   ossimConnectableContainerInterface* inter = PTR_CAST(ossimConnectableContainerInterface,
-                                                        this);
-   if(inter&&recurseChildren)
-   {
-      ConnectableObjectList tempList = inter->findAllObjectsOfType(className,
-                                                                   true);
-      
-      for(j = 0; j < (int)tempList.size(); ++j)
-      {
-         ConnectableObjectList::iterator iter = std::find(result.begin(), result.end(), tempList[j]);
-         if(iter == result.end())
-         {
-            result.push_back(tempList[j]);
-         }
-      }
-   }
-   for(ossim_uint32 i = 0; i < getNumberOfOutputs(); ++i)
-   {
-      ossimConnectableObject* current = getOutput(i);
-      if(current&&(current->canCastTo(className)))
-      {
-         ConnectableObjectList::iterator iter = std::find(result.begin(), result.end(), current);
-         if(iter == result.end())
-         {
-            result.push_back(current);
-         }
-      }
-      ossimConnectableContainerInterface* inter = PTR_CAST(ossimConnectableContainerInterface,
-                                                           current);
-      if(inter)
-      {
-         ConnectableObjectList tempList = inter->findAllObjectsOfType(className,
-                                                                      true);
-         for(j = 0; j < (int)tempList.size(); ++j)
-         {
-            ConnectableObjectList::iterator iter = std::find(result.begin(), result.end(), tempList[j]);
-            if(iter == result.end())
-            {
-               result.push_back(tempList[j]);
-            }
-         }
-      }
-      
-      if(propagateToOutputs&&current)
-      {
-         current->findAllOutputsOfType(result,
-                                       className,
-                                       true,
-                                       recurseChildren);
-      }
-   }
-}
-
+#endif
 
 void ossimConnectableObject::propagateEventToOutputs(ossimEvent& event)
 {
@@ -2197,4 +2289,59 @@ void ossimConnectableObject::accept(ossimVisitor& visitor)
          } 
       }  
    }
+}
+
+void ossimConnectableObject::setId(const ossimId& id)
+{
+   theId = id;
+}
+
+const ossimId& ossimConnectableObject::getId()const
+{
+   return theId;
+}
+
+const ossimObject* ossimConnectableObject::getOwner() const
+{
+   return theOwner;
+}
+
+ossim_uint32 ossimConnectableObject::getNumberOfInputs()const
+{
+   return (ossim_uint32)theInputObjectList.size();
+}
+
+ossim_uint32 ossimConnectableObject::getNumberOfOutputs()const
+{
+   return (ossim_uint32)theOutputObjectList.size();
+}
+
+bool ossimConnectableObject::getInputListIsFixedFlag()const
+{
+   return theInputListIsFixedFlag;
+}
+
+bool ossimConnectableObject::getOutputListIsFixedFlag()const
+{
+   return theOutputListIsFixedFlag;
+}
+
+const ossimConnectableObject::ConnectableObjectList& ossimConnectableObject::getInputList()const
+{
+   return theInputObjectList;
+}
+
+const ossimConnectableObject::ConnectableObjectList& ossimConnectableObject::getOutputList()const
+{
+   return theOutputObjectList;
+}
+
+ossimConnectableObject::ConnectableObjectList& ossimConnectableObject::getInputList()
+{
+   return theInputObjectList;
+}
+
+ossimConnectableObject::ConnectableObjectList& ossimConnectableObject::getOutputList()
+{
+   return theOutputObjectList;
 }

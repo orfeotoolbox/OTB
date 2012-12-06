@@ -15,12 +15,15 @@
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotify.h>
+#include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/imaging/ossimImageHandlerRegistry.h>
+#include <ossim/elevation/ossimElevationAccuracyInfo.h>
 
 
 static ossimTrace traceDebug(ossimString("ossimHgtRef:debug"));
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimHgtRef.cpp 17195 2010-04-23 17:32:18Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimHgtRef.cpp 21399 2012-07-27 18:19:22Z gpotts $";
 #endif
 
 
@@ -104,6 +107,65 @@ ossim_float64 ossimHgtRef::getRefHeight(const ossimGpt& pg) const
    return refHgt;
 }
 
+//*****************************************************************************
+//  METHOD: ossimHgtRef::getSurfaceInfo()
+//  
+//  Get reference surface information.
+//  
+//*****************************************************************************
+
+#if 0
+bool ossimHgtRef::getSurfaceInfo(const ossimGpt& pg,
+                                       ossimElevationAccuracyInfo& info) const
+{
+   bool infoOK = false;
+
+  // ossimElevManager::ElevationDatabaseListType dbList;  
+  // std::vector<ossimFilename> cellList;
+
+
+   //double hgt =  ossimElevManager::instance()->getHeightAboveEllipsoid(pg);
+
+
+/*
+
+   dbList = ossimElevManager::instance()->getElevationDatabaseList();
+   ossim_uint32 idx;
+
+   for(idx=0; idx < dbList.size(); ++idx)
+   {
+      double h = dbList[idx]->getHeightAboveEllipsoid(pg);
+      if (!ossim::isnan(h))
+      {
+         hgt = h;
+         break;
+      }
+   }
+  */ 
+   /*
+   if (!ossim::isnan(hgt))
+   {
+      ossimElevManager::instance()->getOpenCellList(cellList);
+
+      ossimRefPtr<ossimImageHandler> ih =
+            ossimImageHandlerRegistry::instance()->open(cellList[idx]);
+      ossimString hanType(ih->getClassName().c_str());
+
+      ossimImageGeometry* geom = ih->getImageGeometry().get();
+      gsd = geom->getMetersPerPixel();
+
+      info = hanType;
+   }
+   else
+   {
+      info = "No Surface";
+   }
+   */
+   infoOK = true;
+
+   return infoOK;
+}
+#endif
 
 //*****************************************************************************
 //  METHOD: ossimHgtRef::getSurfaceCovMatrix()
@@ -111,12 +173,14 @@ ossim_float64 ossimHgtRef::getRefHeight(const ossimGpt& pg) const
 //  Get reference surface covariance matrix.
 //  
 //*****************************************************************************
-bool ossimHgtRef::getSurfaceCovMatrix(const ossimGpt& /* pg */, NEWMAT::Matrix& cov) const
+bool ossimHgtRef::getSurfaceCovMatrix(const ossimGpt& pg, NEWMAT::Matrix& cov) const
 {
    
    ossim_float64 refCE;
    ossim_float64 refLE;
-   
+   ossimString info;
+   ossimDpt gsd;
+
    switch (theCurrentHeightRefType)
    {
       case AT_HGT:
@@ -128,16 +192,85 @@ bool ossimHgtRef::getSurfaceCovMatrix(const ossimGpt& /* pg */, NEWMAT::Matrix& 
          break;
          
       case AT_DEM:
+      {
+
          // Set the reference CE/LE
          //   Note: currently set to SRTM spec in METERS
+         //    refCE = 20.0;
+         //    refLE = 16.0;
          //        (ref: www2.jpl.nas.gov/srtm/statistics.html)
          //  "refCE = ossimElevManager::instance()->getAccuracyCE90(pg)" is
          //    the desirable operation here (if it is implemented)
-         refCE = 20.0;
-         refLE = 16.0;
-         
+         // ================================================
+         //  This is one step closer to automatic
+         //  access to elevation surface accuracy
+         //   TODO...
+         //     [1] load from OSSIM_PREFERENCES?
+         //     [2] does DTED header/metadata have info?
+         // ================================================
+         ossimElevationAccuracyInfo info;
+         ossimElevManager::instance()->getAccuracyInfo(info, pg);
+
+         if(info.hasValidAbsoluteError())
+         {
+            refCE = info.m_absoluteCE;
+            refLE = info.m_absoluteLE;
+         }
+         else
+         {
+            refCE = 20.0;
+            refLE = 16.0;
+         }
+#if 0
+         if (getSurfaceInfo(pg, info, gsd))
+         {
+            if (info.contains("Srtm"))
+            {
+               if (gsd.x < 50.0)
+               {
+                  // SRTM 1 arc
+                  refCE = 20.0;
+                  refLE = 10.0;
+               }
+               else
+               {
+                  // SRTM 3 arc
+                  refCE = 20.0;
+                  refLE = 16.0;
+               }
+            }
+            else if (info.contains("Dted"))
+            {
+               if (gsd.x < 50.0)
+               {
+                  // DTED level 2
+                  refCE = 40.0;
+                  refLE = 20.0;
+               }
+               else
+               {
+                  // DTED level 1
+                  refCE = 50.0;
+                  refLE = 30.0;
+               }
+            }
+            else
+            {
+               // Other
+               refCE = 20.0;
+               refLE = 16.0;
+            }
+         }
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               //<< "DEBUG: info: " << info
+               << " ref: " << refCE << "/" << refLE << endl;
+         }
+#endif
+
          break;
-         
+      }
       default:
          return false;
          break;
@@ -279,6 +412,8 @@ ossimColumnVector3d ossimHgtRef::getLocalTerrainNormal(const ossimGpt& pg) const
             mpd = pg.metersPerDegree();
             ossim_float64 dLon = delta/mpd.x;
             ossim_float64 dLat = delta/mpd.y;
+
+
             for (ossim_int32 lon=-1; lon<=1; ++lon)
             {
                ossim_float64 clon = pg.lond()+lon*dLon;
@@ -318,10 +453,14 @@ ossimColumnVector3d ossimHgtRef::getLocalTerrainNormal(const ossimGpt& pg) const
              ossim::isnan(tNorm[2]))
          {
             tNorm = tNorm.zAligned();
-            ossimNotify(ossimNotifyLevel_WARN)
-               << "WARNING: ossimHgtRef::getLocalTerrainNormal(): "
-               << "\n   error... terrain normal set to vertical..."
-               << std::endl;
+            if(traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_WARN)
+                  << "WARNING: ossimHgtRef::getLocalTerrainNormal(): "
+                  << "\n   error... terrain normal set to vertical..."
+                  << std::endl;
+               
+            }
          }
          break;
          

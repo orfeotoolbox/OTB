@@ -145,6 +145,22 @@ bool ossimDtedElevationDatabase::openDtedDirectory(const ossimFilename& dir)
    return result;
 }
 
+bool ossimDtedElevationDatabase::getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& gpt) const
+{
+   bool result = false;
+   
+   m_mutex.lock();
+   ossimDtedElevationDatabase* thisPtr = const_cast<ossimDtedElevationDatabase*>(this);
+   ossimRefPtr<ossimElevCellHandler> tempHandler = thisPtr->getOrCreateCellHandler(gpt);
+   m_mutex.unlock();
+
+   if(tempHandler.valid())
+   {
+      result = tempHandler->getAccuracyInfo(info, gpt);
+   }
+  return result;
+}
+
 void ossimDtedElevationDatabase::createRelativePath(ossimFilename& file, const ossimGpt& gpt)const
 {
    ossimFilename lon, lat;

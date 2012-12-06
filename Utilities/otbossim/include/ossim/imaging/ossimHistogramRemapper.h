@@ -28,7 +28,7 @@
 //   but is provided for convenience.
 //   
 //*************************************************************************
-// $Id: ossimHistogramRemapper.h 19786 2011-06-24 15:17:30Z gpotts $
+// $Id: ossimHistogramRemapper.h 21787 2012-09-30 21:27:09Z gpotts $
 #ifndef ossimHistogramRemapper_HEADER
 #define ossimHistogramRemapper_HEADER
 
@@ -60,7 +60,6 @@ public:
                                                ossim_uint32 resLevel=0);
 
    virtual void initialize();
-
    /**
     * - Disables this source.
     * - Sets all clip points to default.
@@ -514,6 +513,8 @@ private:
     */
    void setNullCount();
 
+   void initializeMinMaxOutput();
+   
    /**
     * Initialized base class (ossimTableRemapper) values:
     * - theTableBinCount
@@ -542,6 +543,11 @@ private:
     */
    void setBypassFlag(bool flag);
 
+   /**
+   * If we are dirty then it will init what it needs and then set
+   * the dirty back to false;
+   */
+   void makeClean();
 
    StretchMode                   theStretchMode;
    bool                          theDirtyFlag;
@@ -557,7 +563,8 @@ private:
 
    // Internally bypassed flag.
    bool theBypassFlag;
-   
+   bool theResetBandIndicesFlag;
+
    TYPE_DATA
 };
 

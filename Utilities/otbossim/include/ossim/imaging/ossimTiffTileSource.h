@@ -13,7 +13,7 @@
 // ossimTiffTileSource  is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimTiffTileSource.h 20492 2012-01-25 13:05:12Z gpotts $
+//  $Id: ossimTiffTileSource.h 21631 2012-09-06 18:10:55Z dburken $
 
 #ifndef ossimTiffTileSource_HEADER
 #define ossimTiffTileSource_HEADER 1
@@ -21,6 +21,7 @@
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimIrect.h>
 #include <tiffio.h>
+#include <vector>
 
 class ossimImageData;
 class ossimTiffOverviewTileSource;
@@ -78,6 +79,29 @@ public:
     */
    virtual ossim_uint32 getNumberOfInputBands() const;
    virtual ossim_uint32 getNumberOfOutputBands () const;
+
+   /**
+    * @brief Indicates whether or not the image handler can control output
+    * band selection via the setOutputBandList method.
+    *
+    * Overrides: ossimImageHandler::isBandSelector
+    *
+    * @return true
+    */
+   virtual bool isBandSelector() const;
+
+   /**
+    * @brief If the image handler "isBandSeletor()" then the band selection
+    * of the output chip can be controlled.
+    *
+    * Overrides: ossimImageHandler::setOutputBandList
+    * 
+    * @return true on success, false on error.
+    */
+   virtual bool setOutputBandList(const std::vector<ossim_uint32>& band_list);
+
+   /** @brief Initializes bandList to the zero based order of output bands. */
+   virtual void getOutputBandList(std::vector<ossim_uint32>& bandList) const;
    
    /**
     *  Returns the number of lines in the image.
@@ -225,8 +249,6 @@ private:
    ossim_uint32 getCurrentTiffRLevel() const;
    
    ossimString getReadMethod(ossim_uint32 directory) const;
-
-   bool allocateBuffer();
    
    bool loadTile(const ossimIrect& tile_rect,
                  const ossimIrect& clip_rect,
@@ -252,8 +274,6 @@ private:
    
    void setReadMethod();
    
-   virtual bool initializeBuffers();
-
    /**
     * Change tiff directory and sets theCurrentDirectory.
     *
@@ -285,6 +305,15 @@ private:
     * @return true is so; else, false.  If level is zero returns false.
     */
    bool isPowerOfTwoDecimation(ossim_uint32 dir) const;
+
+   /** @brief Allocates theTile. */
+   void allocateTile();
+
+   /**
+    * @brief Allocates theBuffer
+    * @return true on success; false, on error.
+    */
+   bool allocateBuffer();  
    
    ossimRefPtr<ossimImageData> theTile;
    
@@ -319,13 +348,12 @@ private:
    std::vector<ossim_uint32> theRowsPerStrip;
    std::vector<ossim_uint32> theImageTileWidth;
    std::vector<ossim_uint32> theImageTileLength;
-   
    std::vector<ossim_uint32> theImageDirectoryList;
+   
    ossim_uint32              theCurrentTiffRlevel;
-   
    ossim_int32               theCompressionType;
+   std::vector<ossim_uint32> theOutputBandList;
    
-
 TYPE_DATA
 };
 

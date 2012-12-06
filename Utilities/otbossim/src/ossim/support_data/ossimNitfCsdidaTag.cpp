@@ -125,8 +125,8 @@ void ossimNitfCsdidaTag::clearFields()
    theProcessTime[14] = '\0';
    theReservedField2[2] = '\0';
    theReservedField3[2] = '\0';
-   theReservedField4[1] = '\0';
-   theReservedField5[1] = '\0';
+   theReservedField4[0] = '\0';
+   theReservedField5[0] = '\0';
    theSoftwareVersionNumber[10] = '\0';
 }
 

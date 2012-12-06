@@ -7,9 +7,11 @@
 //*************************************************************************
 //
 #ifndef ossimMemoryImageSource_HEADER
-#define ossimMemoryImageSource_HEADER
+#define ossimMemoryImageSource_HEADER 1
 
 #include <ossim/base/ossimConstants.h>
+#include <ossim/imaging/ossimImageData.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimImageSource.h>
 
 class OSSIM_DLL ossimMemoryImageSource : public ossimImageSource

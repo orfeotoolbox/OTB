@@ -11,11 +11,11 @@
 //-----------------------------------------------------------------------------
 // $Id$
 
-#include <string>
-
 #include <ossim/projection/ossimImageProjectionModel.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/projection/ossimProjection.h>
+#include <string>
 
 RTTI_DEF1(ossimImageProjectionModel,
           "ossimImageProjectionModel",

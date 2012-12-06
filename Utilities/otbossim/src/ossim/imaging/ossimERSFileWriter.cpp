@@ -10,12 +10,13 @@
 // writing an ERS header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimERSFileWriter.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimERSFileWriter.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimERSFileWriter.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimIrect.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimMapProjection.h>

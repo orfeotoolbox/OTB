@@ -1,4 +1,4 @@
-// $Id: ossimVisitor.cpp 20490 2012-01-23 20:08:47Z dburken $
+// $Id: ossimVisitor.cpp 21850 2012-10-21 20:09:55Z dburken $
 
 #include <ossim/base/ossimVisitor.h>
 #include <ossim/base/ossimConnectableObject.h>
@@ -68,16 +68,28 @@ bool ossimVisitor::stopTraversal()const
    return m_stopTraversalFlag;
 }
 
+
+ossimIdVisitor::ossimIdVisitor(int visitorType)
+   :
+   ossimVisitor(visitorType),
+   m_object(0),
+   m_id(0)
+{
+}
+
 ossimIdVisitor::ossimIdVisitor(const ossimId& id, int visitorType)
-:ossimVisitor(visitorType),
-m_id(id)
+   :
+   ossimVisitor(visitorType),
+   m_object(0),
+   m_id(id)
 {
 }
 
 ossimIdVisitor::ossimIdVisitor(const ossimIdVisitor& src)
-:ossimVisitor(src),
-m_object(src.m_object),
-m_id(src.m_id)
+   :
+   ossimVisitor(src),
+   m_object(src.m_object),
+   m_id(src.m_id)
 {
 }
 
@@ -143,6 +155,24 @@ ossimCollectionVisitor::ListRef& ossimCollectionVisitor::getObjects()
 const ossimCollectionVisitor::ListRef& ossimCollectionVisitor::getObjects()const
 {
    return m_collection;
+}
+
+ossimObject* ossimCollectionVisitor::getObject(ossim_uint32 idx)
+{
+   if(idx < m_collection.size())
+   {
+      return m_collection[idx].get();
+   }
+   return 0;
+}
+
+const ossimObject* ossimCollectionVisitor::getObject(ossim_uint32 idx)const
+{
+   if(idx < m_collection.size())
+   {
+      return m_collection[idx].get();
+   }
+   return 0;
 }
 
 void ossimCollectionVisitor::reset()

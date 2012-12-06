@@ -10,7 +10,7 @@
 //
 // Contains class definition for ossimDrect.
 //*******************************************************************
-//  $Id: ossimDrect.cpp 19682 2011-05-31 14:21:20Z dburken $
+//  $Id: ossimDrect.cpp 21560 2012-08-30 12:09:03Z gpotts $
 
 #include <iostream>
 #include <sstream>
@@ -18,6 +18,8 @@
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimPolygon.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimKeywordNames.h>
 
 // XXX not replaced with std::max since the test is backward here
 //     and will give a different answer in the case of nan.
@@ -593,6 +595,33 @@ bool ossimDrect::toRect(const ossimString& rectString)
       
    }
    return result;
+}
+
+bool ossimDrect::saveState(ossimKeywordlist& kwl,
+                           const char* prefix)const
+{
+   kwl.add(prefix,
+           ossimKeywordNames::TYPE_KW,
+           "ossimDrect",
+           true);
+
+   kwl.add(prefix, "rect", toString());
+
+   return true;
+}
+
+bool ossimDrect::loadState(const ossimKeywordlist& kwl,
+                           const char* prefix)
+{
+  const char* rect = kwl.find(prefix, "rect");
+  makeNan();
+
+  if(rect)
+  {
+      toRect(rect);
+  }
+   
+   return true;
 }
 
 //*******************************************************************

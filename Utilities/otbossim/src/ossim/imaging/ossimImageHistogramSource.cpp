@@ -5,11 +5,12 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageHistogramSource.cpp 19900 2011-08-04 14:19:57Z dburken $
+// $Id: ossimImageHistogramSource.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimImageHistogramSource.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
+#include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageSourceSequencer.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimTrace.h>
@@ -467,26 +468,14 @@ bool ossimImageHistogramSource::loadState(const ossimKeywordlist& kwl,
    ossimHistogramSource::loadState(kwl, prefix);  
    setNumberOfInputs(2);
    ossimString rect = kwl.find(prefix, "rect");
+
    if(!rect.empty())
    {
-      std::vector<ossimString> values;
-      
-      rect.split(values, ",");
-      if(values.size() == 4)
-      {
-         ossim_int32 x = ossim::round<int, double>(values[0].trim().toDouble());
-         ossim_int32 y = ossim::round<int, double>(values[1].trim().toDouble());
-         ossim_int32 w = ossim::round<int, double>(values[2].trim().toDouble());
-         ossim_int32 h = ossim::round<int, double>(values[3].trim().toDouble());
-         theAreaOfInterest = ossimIrect(x, 
-                                        y,
-                                        x+w-1,
-                                        y+h-1);
-      }
+      loadState(kwl, prefix);
    }
    else 
    {
-      ossimString newPrefix = ossimString(prefix) + "rect.";
+      ossimString newPrefix = ossimString(prefix) + "area_of_interest.";
       theAreaOfInterest.loadState(kwl, newPrefix);
    }
    
@@ -496,7 +485,7 @@ bool ossimImageHistogramSource::loadState(const ossimKeywordlist& kwl,
    {
       theComputationMode = OSSIM_HISTO_MODE_NORMAL;
    }
-   else if(mode = "fast")
+   else if(mode == "fast")
    {
       theComputationMode = OSSIM_HISTO_MODE_FAST;
    }
@@ -522,7 +511,7 @@ bool ossimImageHistogramSource::saveState(ossimKeywordlist& kwl,
    bool result = ossimHistogramSource::saveState(kwl, prefix);
    if(result)
    {
-      ossimString newPrefix = ossimString(prefix) + "rect.";
+      ossimString newPrefix = ossimString(prefix) + "area_of_interest.";
       theAreaOfInterest.saveState(kwl, newPrefix);
    }
    return result;

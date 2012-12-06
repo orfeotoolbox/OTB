@@ -7,7 +7,7 @@
 // Description: Base class for tuple-based ossimSensorModel metric operations.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSensorModelTuple.cpp 12582 2008-03-27 19:37:27Z dhicks $
+// $Id: ossimSensorModelTuple.cpp 21805 2012-10-05 14:20:02Z dhicks $
 
 #include <ossim/projection/ossimSensorModelTuple.h>
 #include <ossim/projection/ossimPositionQualityEvaluator.h>
@@ -20,12 +20,13 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimNotify.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 
 static ossimTrace traceDebug(ossimString("ossimSensorModelTuple:debug"));
 static ossimTrace traceExec(ossimString("ossimSensorModelTuple:exec"));
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimSensorModelTuple.cpp 12582 2008-03-27 19:37:27Z dhicks $";
+static const char OSSIM_ID[] = "$Id: ossimSensorModelTuple.cpp 21805 2012-10-05 14:20:02Z dhicks $";
 #endif
 
 ossimRpcPqeInputs::ossimRpcPqeInputs()
@@ -177,6 +178,7 @@ intersect(const DptSet_t   obs,
    bool covOK = true;
    bool epOK;
    ossim_int32 nImages = (ossim_int32)obs.size();
+
    
    // Matrices
    NEWMAT::SymmetricMatrix N(3);
@@ -189,24 +191,29 @@ intersect(const DptSet_t   obs,
    NEWMAT::Matrix B(2,3);
    NEWMAT::SymmetricMatrix W(2);
    
-   // Get a priori ground estimate
+   // Get a priori ground estimate using first point
    ossimGpt estG;
-   theImages[0]->lineSampleHeightToWorld(obs[0], ossim::nan(), estG);
+   theImages[1]->lineSampleToWorld(obs[1], estG);
    
-   for (int iter=0; iter<3; iter++)
+   for (int iter=0; iter<5; iter++)
    {   
       N = 0.0;
       C = 0.0;
 
+// cout<<"\n Iter: "<<iter;
       // Loop over observations
       for (int i=0; i<nImages; i++)
       {
          ossimDpt resid;
-         if (!getGroundObsEqComponents(i, iter, obs[i], estG, resid, B, W))
+         // if (!getGroundObsEqComponents(i, iter, obs[i], estG, resid, B, W))
+         if (!getGroundObsEqComponents(i, obs[i], estG, resid, B, W))
+         {
             covOK = false;
+         }
          
          F[0] = resid.x;
          F[1] = resid.y;
+// cout<<"\n  F{"<<i+1<<"}: "<<F[0]<<", "<<F[1];
 
          // Form coefficient matrix & discrepancy vector
          BtWF << B.t() * W * F;
@@ -219,20 +226,25 @@ intersect(const DptSet_t   obs,
       Ni = invert(N);
       dR = Ni * C;
 
+// cout<<"\n    dR: ("<<dR[0]<<", "<<dR[1]<<", "<<dR[2]<<")"<<endl;
+
       // Update estimate
-      ossimEcefPoint estECF(estG);
-      for (ossim_int32 i=0; i<3; i++)
-         estECF[i] += dR[i];
-      ossimGpt upd(estECF);
-      estG = upd;
-      
+      double latUpd = estG.latd()   - dR[0];
+      double lonUpd = estG.lond()   - dR[1];
+      double hgtUpd = estG.height() - dR[2];
+
+      estG.latd(latUpd);
+      estG.lond(lonUpd);
+      estG.height(hgtUpd);
+
+
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "DEBUG: intersect:\n"
             << "  iteration:\n" << iter
-            << "  C:\n"  << C 
-            << "  Ni:\n" << Ni 
+            // << "  C:\n"  << C 
+            // << "  Ni:\n" << Ni 
             << "  dR:\n" << dR <<std::endl;
       }
    
@@ -242,7 +254,7 @@ intersect(const DptSet_t   obs,
    ossimEcefPoint finalEst(estG);
    pt = finalEst;
    
-   // Return ropagated covariance matrix
+   // Return propagated covariance matrix
    if (covOK)
    {
       covMat = Ni;
@@ -336,49 +348,40 @@ intersect(const ossim_int32&     img,
 //*****************************************************************************
 bool ossimSensorModelTuple::getGroundObsEqComponents(
       const ossim_int32 img,
-      const ossim_int32 iter,
       const ossimDpt& obs,
       const ossimGpt& ptEst,
       ossimDpt& resid,
       NEWMAT::Matrix& B,
       NEWMAT::SymmetricMatrix& W) const
 {
-    //   Initialize the observations on 1st iteration
-   if (iter==0)
-   {
-      ossimGpt ptObs(obs.samp,obs.line);
-      theImages[img]->getForwardDeriv(OBS_INIT, ptObs);
-   }
+   // Temporary image geometry
+   ossimImageGeometry* iGeom = new ossimImageGeometry(NULL, theImages[img]);
 
-   //   Evaluate the partials and residuals
-   resid = theImages[img]->getForwardDeriv(EVALUATE, ptEst);
+   // Evaluate residuals
+   ossimDpt computedImg;
+   iGeom->worldToLocal(ptEst, computedImg);
+   resid = obs - computedImg;
 
-   //   Retrieve the partials
-   ossimDpt pWRTx = theImages[img]->getForwardDeriv(P_WRT_X, ptEst);
-   ossimDpt pWRTy = theImages[img]->getForwardDeriv(P_WRT_Y, ptEst);
-   ossimDpt pWRTz = theImages[img]->getForwardDeriv(P_WRT_Z, ptEst);
+   // Evaluate partials B(2X3)
+   NEWMAT::Matrix Bt(3,2);
+   iGeom->computeGroundToImagePartials(Bt, ptEst);
+   B = Bt.t();
 
    // Get covariance matrix & form weight matrix
    NEWMAT::SymmetricMatrix Cov(2);
    ossimSensorModel::CovMatStatus covStatus;
    covStatus = theImages[img]->getObsCovMat(obs,Cov);
-   NEWMAT::Matrix Wfull = invert(Cov);
-   W << Wfull;
 
-   B[0][0] = pWRTx.u;
-   B[1][0] = pWRTx.v;
-   B[0][1] = pWRTy.u;
-   B[1][1] = pWRTy.v;
-   B[0][2] = pWRTz.u;
-   B[1][2] = pWRTz.v;
-   
-   if (traceDebug())
+   if (covStatus == ossimSensorModel::COV_INVALID)
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG: getGroundObsEqComponents:"
-         << "\n  pWRTx: "<<pWRTx
-         << "\n  pWRTy: "<<pWRTy
-         << "\n  pWRTz: "<<pWRTz <<std::endl;
+      W = 0.0;
+      W(1,1) = 1.0;
+      W(2,2) = 1.0;
+   }
+   else
+   {
+      NEWMAT::Matrix Wfull = invert(Cov);
+      W << Wfull;
    }
    
    bool covOK = false;
@@ -492,13 +495,16 @@ bool ossimSensorModelTuple::computeSingleInterCov(
          ossim_float64 scaled1SigmaHgtRng = abs(scaledHgtRng/theSurfLE90);
          surfLE = scaled1SigmaHgtRng*1.6449;
          
-         ossimNotify(ossimNotifyLevel_INFO)
-            << "\n computeSingleInterCov() RPC NoDEM state selected..."
-            << "\n   RPC Height Scale = " << rpcPar.hgtScale <<" m"
-            << "\n    Scale Divisor   = " <<abs(theSurfCE90)
-            << "\n    1-Sigma Divisor = "<<abs(theSurfLE90)
-            << std::endl;
-      }
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_INFO)
+               << "\n computeSingleInterCov() RPC NoDEM state selected..."
+               << "\n   RPC Height Scale = " << rpcPar.hgtScale <<" m"
+               << "\n    Scale Divisor   = " <<abs(theSurfCE90)
+               << "\n    1-Sigma Divisor = "<<abs(theSurfLE90)
+               << std::endl;
+          }
+     }
       else
       {
          surfCE = theSurfCE90;
@@ -518,16 +524,19 @@ bool ossimSensorModelTuple::computeSingleInterCov(
          theRpcPqeInputs.theSurfaceNormalVector = surfN;
          theRpcPqeInputs.theSurfaceCovMatrix    = surfCovENU;
          
-         ossimNotify(ossimNotifyLevel_INFO)
-            << "\n RPC error prop parameters..."
-            << "\n   Elevation Angle  = " << tEl*DEG_PER_RAD<< " deg"
-            << "\n   Azimuth Angle    = " << tAz*DEG_PER_RAD<<" deg"
-            << "\n   RPC Bias Error   = " <<model->getBiasError() <<" m"
-            << "\n   RPC Random Error = " <<model->getRandError()<<" m"
-            << "\n            surfN   = " <<surfN
-            << "\n       surfCovENU   = \n" <<surfCovENU
-            << std::endl;
-         
+          if(traceDebug())
+          {
+             ossimNotify(ossimNotifyLevel_INFO)
+                        << "\n RPC error prop parameters..."
+                        << "\n   Elevation Angle  = " << tEl*DEG_PER_RAD<< " deg"
+                        << "\n   Azimuth Angle    = " << tAz*DEG_PER_RAD<<" deg"
+                        << "\n   RPC Bias Error   = " <<model->getBiasError() <<" m"
+                        << "\n   RPC Random Error = " <<model->getRandError()<<" m"
+                        << "\n            surfN   = " <<surfN
+                        << "\n       surfCovENU   = \n" <<surfCovENU
+                        << std::endl;
+          }        
+
          ossimEcefPoint pt(ptG);
          
          ossimPositionQualityEvaluator qev
@@ -554,7 +563,7 @@ bool ossimSensorModelTuple::computeSingleInterCov(
       // Standard covariance matrix formation
       // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       // Image contribution
-      covOK = getGroundObsEqComponents(img, 0, obs, ptG, resid, B, W);
+      covOK = getGroundObsEqComponents(img, obs, ptG, resid, B, W);
       BtWB << B.t() * W * B;
 
       // Height contribution
@@ -569,9 +578,12 @@ bool ossimSensorModelTuple::computeSingleInterCov(
       // Check for special case of "no DEM" error propagation, only used for RPC
       if (theSurfAccRepresentsNoDEM)
       {
-         ossimNotify(ossimNotifyLevel_INFO)
-            << "\n computeSingleInterCov() RPC NoDEM state selected..."
-            << " Not valid for this sensor model" << std::endl;
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_INFO)
+               << "\n computeSingleInterCov() RPC NoDEM state selected..."
+               << " Not valid for this sensor model" << std::endl;
+         }
       }
       
       if (hgtRef.getSurfaceCovMatrix(theSurfCE90, theSurfLE90, surfCovENU))

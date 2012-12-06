@@ -58,7 +58,7 @@
      
 // END OF COPYRIGHT STATEMENT
 //*************************************************************************
-// $Id: ossimRgbImage.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimRgbImage.cpp 21184 2012-06-29 15:13:09Z dburken $
 
 #include <cstdlib>
 #include <cmath>
@@ -1066,7 +1066,7 @@ void ossimRgbImage::drawFilledArc (int cx,
    ossimIpt pts[3];
    int i;
    int lx = 0, ly = 0;
-   int fx, fy;
+   // int fx, fy;
    int w2, h2;
    w2 = w / 2;
    h2 = h / 2;
@@ -1090,11 +1090,11 @@ void ossimRgbImage::drawFilledArc (int cx,
          pts[2].y = cy;
          drawFilledPolygon (pts, 3);
       }
-      else
-      {
-         fx = x;
-         fy = y;
-      }
+      // else
+      // {
+      //   fx = x;
+      //   fy = y;
+      // }
       lx = x;
       ly = y;
    }
@@ -1113,7 +1113,7 @@ void ossimRgbImage::drawArc (int cx,
    }
    int i;
    int lx = 0, ly = 0;
-   int fx, fy;
+   // int fx, fy;
    int w2, h2;
    w2 = w / 2;
    h2 = h / 2;
@@ -1130,11 +1130,11 @@ void ossimRgbImage::drawArc (int cx,
       {
          drawLine (lx, ly, x, y);
       }
-      else
-      {
-         fx = x;
-         fy = y;
-      }
+      // else
+      //       {
+      //          fx = x;
+      //          fy = y;
+      //       }
       lx = x;
       ly = y;
    }

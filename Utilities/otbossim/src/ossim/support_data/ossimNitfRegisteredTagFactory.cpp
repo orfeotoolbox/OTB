@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRegisteredTagFactory.cpp 18883 2011-02-09 15:20:25Z dburken $
+// $Id: ossimNitfRegisteredTagFactory.cpp 20689 2012-03-14 18:31:20Z gpotts $
 
 #include <ossim/support_data/ossimNitfRegisteredTagFactory.h>
 
@@ -34,7 +34,10 @@
 #include <ossim/support_data/ossimNitfSensraTag.h>
 #include <ossim/support_data/ossimNitfStdidcTag.h>
 #include <ossim/support_data/ossimNitfUse00aTag.h>
-
+#include <ossim/support_data/ossimNitfHistoaTag.h>
+#include <ossim/support_data/ossimNitfCsccgaTag.h>
+#include <ossim/support_data/ossimNitfCsproaTag.h>
+#include <ossim/support_data/ossimNitfExoptaTag.h>
 
 RTTI_DEF1(ossimNitfRegisteredTagFactory, "ossimNitfRegisteredTagFactory", ossimNitfTagFactory);
 
@@ -60,6 +63,10 @@ static const char RPCA_TAG[]                 = "RPC00A";
 static const char SENSRA_TAG[]               = "SENSRA";
 static const char STDIDC_TAG[]               = "STDIDC";
 static const char USE00A_TAG[]               = "USE00A";
+static const char HISTOA_TAG[]               = "HISTOA";
+static const char CSCCGA_TAG[]               = "CSCCGA";
+static const char CSPROA_TAG[]               = "CSPROA";
+static const char EXOPTA_TAG[]               = "EXOPTA";
 
 ossimNitfRegisteredTagFactory::ossimNitfRegisteredTagFactory()
 {
@@ -166,6 +173,21 @@ ossimRefPtr<ossimNitfRegisteredTag> ossimNitfRegisteredTagFactory::create(
    {
       return new ossimNitfUse00aTag;
    }
-   
+   else if(tagName == HISTOA_TAG)
+   {
+      return new ossimNitfHistoaTag;
+   }
+   else if(tagName == CSCCGA_TAG)
+   {
+      return new ossimNitfCsccgaTag;
+   }
+   else if(tagName == CSPROA_TAG)
+   {
+      return new ossimNitfCsproaTag;
+   }
+   else if(tagName == EXOPTA_TAG)
+   {
+      return new ossimNitfExoptaTag;
+   }
    return NULL;
 }

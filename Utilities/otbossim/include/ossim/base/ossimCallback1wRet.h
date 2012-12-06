@@ -74,7 +74,8 @@ template <class P1, class RT> class ossimCallback1wRet
 {
 public:
    ossimCallback1wRet(){}
+   virtual ~ossimCallback1wRet(){}
    virtual RT operator()(P1 p1) const = 0;
 };
 
-#endif
+#endif /* #ifndef ossimCallback1wRet_HEADER */

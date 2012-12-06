@@ -8,17 +8,18 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimMeanMedianFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
-
-#include <vector>
-#include <algorithm>
-#include <numeric>
-using namespace std;
+//  $Id: ossimMeanMedianFilter.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimMeanMedianFilter.h>
 #include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossimBooleanProperty.h>
 #include <ossim/base/ossimStringProperty.h>
+#include <ossim/imaging/ossimImageData.h>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+using namespace std;
+
 
 RTTI_DEF1(ossimMeanMedianFilter,
           "ossimMeanMedianFilter",

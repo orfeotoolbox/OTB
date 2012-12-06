@@ -10,7 +10,7 @@
 //
 // Contains class definition for ossimGeneralRasterTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.cpp 19900 2011-08-04 14:19:57Z dburken $
+//  $Id: ossimGeneralRasterTileSource.cpp 21962 2012-11-30 15:44:32Z dburken $
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -47,14 +47,16 @@ static const ossimInterleaveTypeLut ILUT;
 ossimGeneralRasterTileSource::ossimGeneralRasterTileSource()
    :
       ossimImageHandler(),
-      theTile(0),
-      theBuffer(0),
-      theBufferInterleave(OSSIM_BIL),
-      theFileStrList(0),
-      theImageData(),
-      theBufferRect(0, 0, 0, 0),
-      theSwapBytesFlag(false),
-      theBufferSizeInPixels(0)
+      m_tile(0),
+      m_buffer(0),
+      m_lineBuffer(0),
+      m_bufferInterleave(OSSIM_BIL),
+      m_fileStrList(0),
+      m_rasterInfo(),
+      m_bufferRect(0, 0, 0, 0),
+      m_swapBytesFlag(false),
+      m_bufferSizeInPixels(0),
+      m_outputBandList(0)
 {}
 
 ossimGeneralRasterTileSource::~ossimGeneralRasterTileSource()
@@ -65,21 +67,26 @@ ossimGeneralRasterTileSource::~ossimGeneralRasterTileSource()
 ossimRefPtr<ossimImageData> ossimGeneralRasterTileSource::getTile(
    const ossimIrect& tile_rect, ossim_uint32 resLevel)
 {
-   if (theTile.valid())
+   if ( m_tile.valid() == false )
+   {
+      allocateTile(); // First time through...
+   }
+   
+   if (m_tile.valid())
    {
       // Image rectangle must be set prior to calling getTile.
-      theTile->setImageRectangle(tile_rect);
+      m_tile->setImageRectangle(tile_rect);
       
-      if ( getTile( theTile.get(), resLevel ) == false )
+      if ( getTile( m_tile.get(), resLevel ) == false )
       {
-         if (theTile->getDataObjectStatus() != OSSIM_NULL)
+         if (m_tile->getDataObjectStatus() != OSSIM_NULL)
          {
-            theTile->makeBlank();
+            m_tile->makeBlank();
          }
       }
    }
    
-   return theTile;
+   return m_tile;
 }
 
 bool ossimGeneralRasterTileSource::getTile(ossimImageData* result,
@@ -134,9 +141,6 @@ bool ossimGeneralRasterTileSource::getTile(ossimImageData* result,
             // Make the tile rectangle zero base.
             result->setImageRectangle(tile_rect);
 
-            // This will reallocate the buffer if needed.
-            checkBuffer(tile_rect);
-
             // Initialize the tile if needed as we're going to stuff it.
             if (result->getDataObjectStatus() == OSSIM_NULL)
             {
@@ -145,10 +149,9 @@ bool ossimGeneralRasterTileSource::getTile(ossimImageData* result,
 
             ossimIrect clip_rect = tile_rect.clipToRect(image_rect);
 
-            if ( ! tile_rect.completely_within(theBufferRect) )
+            if ( ! tile_rect.completely_within(m_bufferRect) )
             {
                // A new buffer must be loaded.
-               
                if ( !tile_rect.completely_within(clip_rect) )
                {
                   //---
@@ -158,15 +161,21 @@ bool ossimGeneralRasterTileSource::getTile(ossimImageData* result,
                   //---
                   result->makeBlank();
                }
-               
+
+               // Reallocate the buffer if needed.
+               if ( m_bufferSizeInPixels != result->getSize() )
+               {
+                  allocateBuffer( result );
+               }
+
                ossimIpt size(static_cast<ossim_int32>(result->getWidth()),
                              static_cast<ossim_int32>(result->getHeight()));
-               
+
                if( !fillBuffer(clip_rect.ul(), size) )
                {
                   ossimNotify(ossimNotifyLevel_WARN)
                      << "Error from fill buffer..."
-                     << endl;
+                     << std::endl;
                   //---
                   // Error in filling buffer.
                   //---
@@ -175,10 +184,10 @@ bool ossimGeneralRasterTileSource::getTile(ossimImageData* result,
                }
             }
             
-            result->loadTile(theBuffer,
-                             theBufferRect,
+            result->loadTile(m_buffer,
+                             m_bufferRect,
                              clip_rect,
-                             theBufferInterleave);
+                             m_bufferInterleave);
             result->validate();
 
             // Set the rectangle back.
@@ -194,144 +203,150 @@ bool ossimGeneralRasterTileSource::getTile(ossimImageData* result,
    return status;
 }
 
-//*******************************************************************
-// Private Method:
-//*******************************************************************
-     bool ossimGeneralRasterTileSource::fillBuffer(const ossimIpt& origin,
-                                                   const ossimIpt& size)
+bool ossimGeneralRasterTileSource::fillBuffer(const ossimIpt& origin, const ossimIpt& size)
 {
+
    static const char MODULE[] = "ossimGeneralRasterTileSource::fillBuffer";
 
    // Note:  InterleaveType enumerations in "constants.h" file.
    bool status = false;
-   switch (theImageData.interleaveType())
+   switch ( m_rasterInfo.interleaveType() )
    {
       case OSSIM_BIP:
+      {
          status = fillBIP(origin, size);
          break;
+      }
       case OSSIM_BIL:
+      {
          status = fillBIL(origin, size);
          break;
+      }
       case OSSIM_BSQ:
+      {
          status = fillBSQ(origin, size);
          break;
+      }
       case OSSIM_BSQ_MULTI_FILE:
+      {
          status = fillBsqMultiFile(origin, size);
          break;
+      }
       default:
+      {
          ossimNotify(ossimNotifyLevel_WARN)
             << MODULE << " ERROR:\n"
             << " Unsupported interleave type:  "
-            << ILUT.getEntryString(theImageData.interleaveType())
-            << endl;
+            << ILUT.getEntryString(m_rasterInfo.interleaveType())
+            << std::endl;
+      }
    }
    
-   if (status && theSwapBytesFlag)
+   if (status && m_swapBytesFlag)
    {
       ossimEndian oe;
-      oe.swap(theImageData.getScalarType(),
-              theBuffer,
-              theBufferSizeInPixels);
+      oe.swap(m_rasterInfo.getImageMetaData().getScalarType(),
+              m_buffer,
+              m_bufferSizeInPixels);
    }
 
    return status;
 }
 
-//*******************************************************************
-// Private Method:
-//*******************************************************************
-bool ossimGeneralRasterTileSource::fillBIP(const ossimIpt& origin,
-                                           const ossimIpt& size )
+bool ossimGeneralRasterTileSource::fillBIP(const ossimIpt& origin, const ossimIpt& size )
 {
-   static const char MODULE[] = "ossimGeneralRasterTileSource::fillBIP";
-   
-   //***
-   // This will fill a buffer the full width of valid samples * getHeight().
-   //***
-   theBufferRect.set_ul(origin);
+   static const char MODULE[] = "ossimGeneralRasterTileSource::fillBIP ";
 
-   theBufferRect.set_lry(min( (origin.y + size.y -1),
-                              theImageData.imageRect().lr().y));
-   theBufferRect.set_lrx(min( (origin.x + size.x -1),
-                              theImageData.imageRect().lr().x));
-   
-   ossim_sint64 currentLine = origin.y;
-   
-   //***
-   // Seek position.  The seek position must take into account:
-   // 1).  Any header offset "theOffsetInBytes".
-   // 2).  Any line offset "theLineOffset."
-   // 3).  Number of bands.
-   //
-   // NOTE:  seekPos is in bytes so theBytesPerPixel must be taken into
-   //        account also.
-   //***
-   std::streampos offset = theImageData.offsetToFirstValidSample() +
-        currentLine * theImageData.bytesPerRawLine() +
-        static_cast<ossim_uint64>(origin.x) * theImageData.bytesPerPixel() *
-        static_cast<ossim_uint64>(theImageData.numberOfBands());
+   m_bufferRect.set_ul(origin);
+   m_bufferRect.set_lry(min( (origin.y + size.y -1),
+                              m_rasterInfo.imageRect().lr().y));
+   m_bufferRect.set_lrx(min( (origin.x + size.x -1),
+                              m_rasterInfo.imageRect().lr().x));
 
-#if 0
-   if (traceDebug())
-   {
+   const ossim_int32 WIDTH                  = static_cast<ossim_int32>( m_bufferRect.width() ); 
+   const ossim_int32 HEIGHT                 = static_cast<ossim_int32>( m_bufferRect.height() ); 
+   const ossim_int32 INPUT_BANDS            = m_rasterInfo.numberOfBands();
+   const ossim_int32 OUTPUT_BANDS           = static_cast<ossim_int32>( m_outputBandList.size() );
+   const ossim_int32 BYTES_PER_PIXEL        = m_rasterInfo.bytesPerPixel();
+   const ossim_int32 INPUT_BYTES_PER_SAMPLE = BYTES_PER_PIXEL * INPUT_BANDS;
+   const ossim_int32 OUTPUT_BYTES_PER_SAMPLE = BYTES_PER_PIXEL * OUTPUT_BANDS;
+   
+   // Seek position.
+   std::streamoff rasterOffset = m_rasterInfo.offsetToFirstValidSample() +
+        origin.y * m_rasterInfo.bytesPerRawLine() +
+        origin.x * INPUT_BYTES_PER_SAMPLE;
+
+    // Input line buffer, all bands.
+   std::streamsize inputLineBufferWidth = WIDTH * INPUT_BYTES_PER_SAMPLE;
+  
+   // Output buffer width:
+   std::streamsize outputLineBufferWidth = WIDTH * OUTPUT_BYTES_PER_SAMPLE;
+
+#if 0 /* Please keep for debug. (drb) */
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "\nDEBUG:"
          << "\norigin:                 " << origin
-         << "\nSeek position:          " << offset
-         << "\nStarting line number:   " << currentLine << endl;
-   }
+         << "\nSeek position:          " << rasterOffset
+         << "\ninputLineBufferWidth:   " << inputLineBufferWidth
+         << "\noutputLineBufferWidth:  " << outputLineBufferWidth
+         << "\nINPUT_BANDS:            " << INPUT_BANDS
+         << "\nOUTPUT_BANDS:           " << OUTPUT_BANDS
+         << std::endl;
 #endif
    
-   //***
-   // Loop through and process lines. 
-   //***
-   ossim_uint64 linesProcessed = 0;
+   ossim_int32 bufferOffset = 0;   
    
-   size_t buffer_width = theBufferRect.width() * theImageData.numberOfBands() *
-                         theImageData.bytesPerPixel();
-   
-   ossim_uint8* buf = theBuffer;
-
-   ossim_uint64 height = size.y;
-   
-   while ((currentLine <= static_cast<ossim_sint64>(theImageData.imageRect().lr().y)) &&
-          linesProcessed < height)
+   // Line loop:
+   ossim_int32 currentLine = 0;
+   while ( currentLine < HEIGHT )
    {
-      //***
       // Seek to line.
-      //***
-      theFileStrList[0]->seekg(offset, ios::beg);
-      if (!(*theFileStrList[0]))
+      m_fileStrList[0]->seekg(rasterOffset, ios::beg);
+      if (!(*m_fileStrList[0]))
       {
          theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-         ossimNotify(ossimNotifyLevel_WARN) << MODULE << " ERROR:\n"
-                                            << " Seek error!  Returning with error..." << endl;
+         ossimNotify(ossimNotifyLevel_WARN)
+            << MODULE << " ERROR:\n"
+            << " Seek error!  Returning with error..." << std::endl;
          return false;
       }
 
-      //***
-      // Read the line of image data.   
-      //***
-      theFileStrList[0]->read((char*)buf, (std::streamsize)buffer_width);
-      if ((long)theFileStrList[0]->gcount() !=  (long)buffer_width) 
+      // Read image data from line for all bands into line buffer.   
+      m_fileStrList[0]->read( (char*)m_lineBuffer, inputLineBufferWidth );
+      if ( m_fileStrList[0]->gcount() != inputLineBufferWidth ) 
       {
          theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-         ossimNotify(ossimNotifyLevel_WARN) << MODULE << "\nERROR:  Reading image line." << endl;
+         ossimNotify(ossimNotifyLevel_WARN)
+            << MODULE << "\nERROR:  Reading image line." << std::endl;
          return false;
       }
-
+      
+      // Sample loop:
+      for ( ossim_int32 sample = 0; sample < WIDTH; ++sample )
+      {
+         // Band loop:
+         for ( ossim_int32 band = 0; band < OUTPUT_BANDS; ++band )
+         {
+            ossim_int32 selectedBand = static_cast<ossim_int32>(m_outputBandList[band]);
+            memcpy( (void*)(m_buffer + bufferOffset +
+                            sample * OUTPUT_BYTES_PER_SAMPLE +
+                            band * BYTES_PER_PIXEL),
+                    (void*)(m_lineBuffer +
+                            sample * INPUT_BYTES_PER_SAMPLE + 
+                            selectedBand * BYTES_PER_PIXEL),
+                    BYTES_PER_PIXEL );
+         }
+      }
+               
       ++currentLine;
-      ++linesProcessed;
-      buf += buffer_width;
-      offset += theImageData.bytesPerRawLine();
+      bufferOffset += outputLineBufferWidth;
+      rasterOffset += m_rasterInfo.bytesPerRawLine();
    }
    
    return true;
-}
    
-//*******************************************************************
-// Private Method:
-//*******************************************************************
+} // End: bool ossimGeneralRasterTileSource::fillBipBandSelect(...
+
 bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin,
                                            const ossimIpt& size)
 {
@@ -340,44 +355,42 @@ bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin,
    //***
    // This will fill a buffer the full width of valid samples * tileHeight().
    //***
-   theBufferRect.set_ul(origin);
-   theBufferRect.set_lry(min((origin.y + size.y - 1),
-                             theImageData.imageRect().lr().y));
-   theBufferRect.set_lrx(min((origin.x + size.x - 1),
-                             theImageData.imageRect().lr().x));
+   m_bufferRect.set_ul(origin);
+   m_bufferRect.set_lry(min((origin.y + size.y - 1),
+                             m_rasterInfo.imageRect().lr().y));
+   m_bufferRect.set_lrx(min((origin.x + size.x - 1),
+                             m_rasterInfo.imageRect().lr().x));
    
    ossim_sint64 currentLine = origin.y;
-   // Start seek position.
-   std::streampos offset = (static_cast<ossim_uint64>(theImageData.offsetToFirstValidSample()) +
-                            currentLine * static_cast<ossim_uint64>(theImageData.bytesPerRawLine()) *
-                            theImageData.numberOfBands() +
-                            origin.x * theImageData.bytesPerPixel());
 
-   //***
+   // Start seek position.
+   std::streamoff offset = ( m_rasterInfo.offsetToFirstValidSample() +
+                             currentLine * m_rasterInfo.bytesPerRawLine() *
+                             m_rasterInfo.numberOfBands() +
+                             origin.x * m_rasterInfo.bytesPerPixel() );
+
+   //---
    // Loop through and process lines. 
-   //***
+   //---
    ossim_uint64 linesProcessed = 0;
    
-   size_t buffer_width = theBufferRect.width() * theImageData.bytesPerPixel();
+   std::streamsize buffer_width = m_bufferRect.width() * m_rasterInfo.bytesPerPixel();
    
-   ossim_uint8* buf = theBuffer;
+   ossim_uint8* buf = m_buffer;
 
-#if 0
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "\nDEBUG:"
-         << "\norigin:                 " << origin
-         << "\nSeek position:          " << offset
-         << "\nStarting line number:   " << currentLine
-         << "\nbuffer_width:           " << buffer_width << endl;
-   }
+#if 0 /* Please leave for debug.  (drb) */
+   ossimNotify(ossimNotifyLevel_DEBUG)
+      << "\nDEBUG:"
+      << "\norigin:                 " << origin
+      << "\nSeek position:          " << offset
+      << "\nStarting line number:   " << currentLine
+      << "\nbuffer_width:           " << buffer_width << std::endl;
 #endif
 
    ossim_uint64 height    = size.y;
-   ossim_sint64 num_bands = theImageData.numberOfBands();
+   ossim_sint64 num_bands = m_rasterInfo.numberOfBands();
    
-   while ((currentLine <= static_cast<ossim_sint64>(theImageData.imageRect().lr().y)) &&
+   while ((currentLine <= static_cast<ossim_sint64>(m_rasterInfo.imageRect().lr().y)) &&
           linesProcessed < height)
    {
       for (ossim_int32 band = 0; band < num_bands; ++band)
@@ -385,29 +398,29 @@ bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin,
          //***
          // Seek to line.
          //***
-         theFileStrList[0]->seekg(offset, ios::beg);
-         if (!theFileStrList[0])
+         m_fileStrList[0]->seekg(offset, ios::beg);
+         if (!m_fileStrList[0])
          {
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-             ossimNotify(ossimNotifyLevel_WARN) << MODULE << " ERROR:\n"
-                                                << " Seek error!  Returning with error..." << endl;
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << " ERROR:\n"
+               << " Seek error!  Returning with error..." << std::endl;
             return false;
          }
          
-         //***
          // Read the line of image data.   
-         //***
-         theFileStrList[0]->read((char*)buf, (std::streamsize)buffer_width);
-         if ((long)theFileStrList[0]->gcount() !=  (long)buffer_width) 
+         m_fileStrList[0]->read( (char*)buf, buffer_width );
+
+         if ( m_fileStrList[0]->gcount() != buffer_width ) 
          {
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
             ossimNotify(ossimNotifyLevel_WARN) << MODULE << "\nERROR:  Reading image line."
-                                               << "\ncurrentLine:  " << currentLine << endl;
+                                               << "\ncurrentLine:  " << currentLine << std::endl;
             return false;
          }
 
          buf += buffer_width;
-         offset += theImageData.bytesPerRawLine();
+         offset += m_rasterInfo.bytesPerRawLine();
 
       } // End of band loop.
       
@@ -426,92 +439,82 @@ bool ossimGeneralRasterTileSource::fillBSQ(const ossimIpt& origin,
 {
    static const char MODULE[] = "ossimGeneralRasterTileSource::fillBSQ";
 
-   //***
    // This will fill a buffer the full width of valid samples * tileHeight().
-   //***
-   theBufferRect.set_ul(origin);
+
+   m_bufferRect.set_ul(origin);
    
-   theBufferRect.set_lry(min((origin.y + size.y -1),
-                             theImageData.imageRect().lr().y));
-   theBufferRect.set_lrx(min((origin.x + size.x - 1),
-                             theImageData.imageRect().lr().x));
+   m_bufferRect.set_lry(min((origin.y + size.y -1),
+                             m_rasterInfo.imageRect().lr().y));
+   m_bufferRect.set_lrx(min((origin.x + size.x - 1),
+                             m_rasterInfo.imageRect().lr().x));
    
-   //***
    // Start seek position.
-   //***
-   std::streampos startSeekPosition
-      = theImageData.offsetToFirstValidSample() +
-        static_cast<ossim_sint64>(origin.y) *
-        theImageData.bytesPerRawLine() +
-        static_cast<ossim_sint64>(origin.x) *
-        theImageData.bytesPerPixel();
+   std::streamoff startSeekPosition
+      = m_rasterInfo.offsetToFirstValidSample() +
+        origin.y * m_rasterInfo.bytesPerRawLine() +
+        origin.x * m_rasterInfo.bytesPerPixel();
 
-   //***
-   // Loop through and process lines. 
-   //***
-   size_t buffer_width = theBufferRect.width() * theImageData.bytesPerPixel();
+   std::streamsize buffer_width = m_bufferRect.width() * m_rasterInfo.bytesPerPixel();
    
-   ossim_uint8* buf = (ossim_uint8*)theBuffer;
+   ossim_uint8* buf = (ossim_uint8*)m_buffer;
 
-#if 0
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "\nDEBUG:"
-         << "\norigin:                 " << origin
-         << "\nSeek position:          " << startSeekPosition
-         << "\nStarting line number:   " << origin.y
-         << "\nbuffer_width:           " << buffer_width
-         << "\nbytesPerRawLine():      "
-         << theImageData.bytesPerRawLine()
-         << "\ntheImageData.offsetToFirstValidSample():  "
-         << theImageData.offsetToFirstValidSample() << endl;
-   }
+   std::streamoff bandOffset
+      = m_rasterInfo.bytesPerRawLine() * m_rasterInfo.rawLines();
+
+#if 0 /* Please leave for debug. (drb) */
+   ossimNotify(ossimNotifyLevel_DEBUG)
+      << "\nDEBUG:"
+      << "\norigin:                 " << origin
+      << "\nSeek position:          " << startSeekPosition
+      << "\nStarting line number:   " << origin.y
+      << "\nbuffer_width:           " << buffer_width
+      << "\nbytesPerRawLine():      "
+      << m_rasterInfo.bytesPerRawLine()
+      << "\nm_rasterInfo.offsetToFirstValidSample():  "
+      << m_rasterInfo.offsetToFirstValidSample()
+      << "\nbandOffset: " << bandOffset << std::endl;
 #endif
 
-   std::streampos bandOffset
-      = theImageData.bytesPerRawLine() * theImageData.rawLines();
-
-   ossim_int32 num_bands = theImageData.numberOfBands();
+   ossim_int32 num_bands = m_rasterInfo.numberOfBands();
    ossim_int32 height    = size.y;
-   
+
+   // Band loop:
    for (ossim_int32 band = 0; band < num_bands; ++band)
    {
       ossim_sint64 currentLine    = origin.y;
       ossim_sint64 linesProcessed = 0;
 
-      std::streampos offset = startSeekPosition + (band * bandOffset);
-      
-      while (currentLine <= theImageData.imageRect().lr().y &&
+      std::streamoff offset = startSeekPosition + (band * bandOffset);
+
+      // Line loop:
+      while (currentLine <= m_rasterInfo.imageRect().lr().y &&
              linesProcessed < height)
       {
-         //***
          // Seek to line.
-         //***
-         theFileStrList[0]->seekg(offset, ios::beg);
-         if (!theFileStrList[0])
+         m_fileStrList[0]->seekg(offset, ios::beg);
+         if (!m_fileStrList[0])
          {
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-            ossimNotify(ossimNotifyLevel_WARN) << MODULE << " ERROR:\n"
-                                               << " Seek error!  Returning with error..." << endl;
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << " ERROR:\n"
+               << " Seek error!  Returning with error..." << std::endl;
             return false;
          }
          
-         //***
          // Read the line of image data.   
-         //***
-         theFileStrList[0]->read((char*)buf, (std::streamsize)buffer_width);
-         if ((long)theFileStrList[0]->gcount() !=  (long)buffer_width) 
+         m_fileStrList[0]->read( (char*)buf, buffer_width );
+         if ( m_fileStrList[0]->gcount() != buffer_width ) 
          {
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-            ossimNotify(ossimNotifyLevel_WARN) << MODULE << "\nERROR:  Reading image line."
-                                               << "\ncurrentLine:  " << currentLine << endl;
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << "\nERROR:  Reading image line."
+               << "\ncurrentLine:  " << currentLine << std::endl;
             return false;
          }
 
          // Increment everybody accordingly.
          buf += buffer_width;
-         offset += theImageData.bytesPerRawLine();
+         offset += m_rasterInfo.bytesPerRawLine();
          ++linesProcessed;
          ++currentLine;
 
@@ -525,39 +528,34 @@ bool ossimGeneralRasterTileSource::fillBSQ(const ossimIpt& origin,
 //*******************************************************************
 // Private Method:
 //*******************************************************************
-bool ossimGeneralRasterTileSource::fillBsqMultiFile(const ossimIpt& origin,
-                                                    const ossimIpt& size)
+bool ossimGeneralRasterTileSource::fillBsqMultiFile(const ossimIpt& origin, const ossimIpt& size)
 {
-   static const char MODULE[]
-      = "ossimGeneralRasterTileSource::fillBsqMultiFile";
+   static const char MODULE[] = "ossimGeneralRasterTileSource::fillBsqMultiFile";
 
-   if (traceDebug()) CLOG << " Entered..." << endl;
+   if (traceDebug()) CLOG << " Entered..." << std::endl;
    
-   
-   //***
+
    // This will fill a buffer the full width of valid samples * tileHeight().
-   //***
-   theBufferRect.set_ul(origin);
+   m_bufferRect.set_ul(origin);
    
-   theBufferRect.set_lry(min((origin.y + size.y -1),
-                             theImageData.imageRect().lr().y));
-   theBufferRect.set_lrx(min((origin.x + size.x - 1),
-                             theImageData.imageRect().lr().x));
+   m_bufferRect.set_lry(min((origin.y + size.y -1),
+                             m_rasterInfo.imageRect().lr().y));
+   m_bufferRect.set_lrx(min((origin.x + size.x - 1),
+                             m_rasterInfo.imageRect().lr().x));
    
-   //***
+   //---
    // Start seek position.
-   //***
-   std::streampos startSeekPosition
-      = theImageData.offsetToFirstValidSample() +
-      origin.y * theImageData.bytesPerRawLine() +
-      origin.x * theImageData.bytesPerPixel();
-
-   //***
-   // Loop through and process lines. 
-   //***
-   size_t buffer_width = theBufferRect.width() * theImageData.bytesPerPixel();
+   //---
+   std::streamoff startSeekPosition = m_rasterInfo.offsetToFirstValidSample() +
+      origin.y * m_rasterInfo.bytesPerRawLine() +
+      origin.x * m_rasterInfo.bytesPerPixel();
    
-   ossim_uint8* buf = (ossim_uint8*)theBuffer;
+   //---
+   // Loop through and process lines. 
+   //---
+   std::streamsize buffer_width = m_bufferRect.width() * m_rasterInfo.bytesPerPixel();
+   
+   ossim_uint8* buf = (ossim_uint8*)m_buffer;
 
 #if 0
    if (traceDebug())
@@ -568,60 +566,63 @@ bool ossimGeneralRasterTileSource::fillBsqMultiFile(const ossimIpt& origin,
          << "\nSeek position:          " << startSeekPosition
          << "\nStarting line number:   " << origin.y
          << "\nbuffer_width:           " << buffer_width
-         << "\nbuffer_rect:            " << theBufferRect
+         << "\nbuffer_rect:            " << m_bufferRect
          << "\nbytesPerRawLine():      "
-         << theImageData.bytesPerRawLine()
-         << "\ntheImageData.offsetToFirstValidSample():  "
-         << theImageData.offsetToFirstValidSample() << endl;
+         << m_rasterInfo.bytesPerRawLine()
+         << "\nm_rasterInfo.offsetToFirstValidSample():  "
+         << m_rasterInfo.offsetToFirstValidSample() << std::endl;
    }
 #endif
 
-   ossim_int32 num_bands = theImageData.numberOfBands();
-   ossim_int32 height    = size.y;
-   
-   for (ossim_int32 band = 0; band < num_bands; ++band)
+   // ossim_int32 num_bands = m_rasterInfo.numberOfBands();
+   std::vector<ossim_uint32>::const_iterator bandIter = m_outputBandList.begin();
+   while ( bandIter != m_outputBandList.end() )
    {
       ossim_int32 currentLine    = origin.y;
       ossim_int32 linesProcessed = 0;
-
-      ossim_int64 offset = startSeekPosition;
+      ossim_int64 offset         = startSeekPosition;
       
-      while (currentLine <= theImageData.imageRect().lr().y &&
-             linesProcessed < height)
+      while (currentLine <= m_rasterInfo.imageRect().lr().y && linesProcessed < size.y)
       {
-         //***
+         //---
          // Seek to line.
-         //***
-         theFileStrList[band]->seekg(offset, ios::beg);
-         if (!theFileStrList[band])
+         //---
+         m_fileStrList[ *bandIter ]->seekg(offset, ios::beg);
+
+         if ( !m_fileStrList[ *bandIter ] )
          {
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-            ossimNotify(ossimNotifyLevel_WARN) << MODULE << " ERROR:\n"
-                                                << " Seek error!  Returning with error..." << endl;
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << " ERROR:\n"
+               << " Seek error!  Returning with error..." << std::endl;
             return false;
          }
          
-         //***
+         //---
          // Read the line of image data.   
-         //***
-         theFileStrList[band]->read((char*)buf, (std::streamsize)buffer_width);
-         if ((long)theFileStrList[band]->gcount() !=  (long)buffer_width) 
+         //---
+         m_fileStrList[ *bandIter ]->read((char*)buf, buffer_width);
+         
+         if ( m_fileStrList[ *bandIter ]->gcount() != buffer_width) 
          {
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-            ossimNotify(ossimNotifyLevel_WARN) << MODULE << "\nERROR:  Reading image line."
-                                               << "\ncurrentLine:  " << currentLine << endl;
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << "\nERROR:  Reading image line."
+               << "\ncurrentLine:  " << currentLine << std::endl;
             return false;
          }
 
          // Increment everybody accordingly.
          buf += buffer_width;
-         offset += theImageData.bytesPerRawLine();
+         offset += m_rasterInfo.bytesPerRawLine();
          ++linesProcessed;
          ++currentLine;
-
+         
       } // End of line loop.
 
-   } // End of band loop.
+      ++bandIter; // Next band...
+
+   } // End: while ( bandIter ! = m_outputBandList.end() )
    
    return true;
 }
@@ -630,11 +631,29 @@ bool ossimGeneralRasterTileSource::fillBsqMultiFile(const ossimIpt& origin,
 // Public method:
 //*******************************************************************
 bool ossimGeneralRasterTileSource::saveState(ossimKeywordlist& kwl,
-                                        const char* prefix) const
-{
-   theImageData.saveState(kwl, prefix);
+                                             const char* prefix) const
+{   
+   // Our stuff:
+   m_rasterInfo.saveState(kwl, prefix);
+
+   // Base class:
+   bool result = ossimImageHandler::saveState(kwl, prefix);
    
-   return ossimImageHandler::saveState(kwl, prefix);
+   if ( result && isBandSelector() && m_outputBandList.size() )
+   {
+      if ( isIdentityBandList( m_outputBandList ) == false )
+      {
+         // If we're not identity output the bands.
+         ossimString bandsString;
+         ossim::toSimpleStringList(bandsString, m_outputBandList);
+         kwl.add(prefix,
+                 ossimKeywordNames::BANDS_KW,
+                 bandsString,
+                 true);
+      }
+   }
+   
+   return result;
 }
 
 //*******************************************************************
@@ -643,15 +662,23 @@ bool ossimGeneralRasterTileSource::saveState(ossimKeywordlist& kwl,
 bool ossimGeneralRasterTileSource::loadState(const ossimKeywordlist& kwl,
                                              const char* prefix)
 {
-   if (ossimImageHandler::loadState(kwl, prefix))
-   {
-      if (open())
-      {
-         return true;
-      }
-   }
+   bool result = false;
+   m_outputBandList.clear();
 
-   return false;
+   if ( ossimImageHandler::loadState(kwl, prefix) )
+   {  
+      // Set the band list if key is present.
+      std::string pfx = ( prefix ? prefix : "" );
+      std::string key = ossimKeywordNames::BANDS_KW;
+      ossimString value;
+      value.string() = kwl.findKey( pfx, key );
+      if ( value.size() )
+      {
+         ossim::toSimpleVector( m_outputBandList, value );
+      }
+      result = open();
+   }
+   return result;
 }
 
 //*******************************************************************
@@ -659,8 +686,7 @@ bool ossimGeneralRasterTileSource::loadState(const ossimKeywordlist& kwl,
 //*******************************************************************
 ossimScalarType ossimGeneralRasterTileSource::getOutputScalarType() const
 {
-   return ( theTile.valid() ? theTile->getScalarType()
-            : OSSIM_SCALAR_UNKNOWN );
+   return m_rasterInfo.getImageMetaData().getScalarType();
 }
 
 //*******************************************************************
@@ -668,7 +694,18 @@ ossimScalarType ossimGeneralRasterTileSource::getOutputScalarType() const
 //*******************************************************************
 ossim_uint32 ossimGeneralRasterTileSource::getTileWidth() const
 {
-   return ( theTile.valid() ? theTile->getWidth() : 0 );
+   ossim_uint32 result = 0;
+   if ( m_tile.valid() )
+   {
+      m_tile->getWidth();
+   }
+   else
+   {
+      ossimIpt tileSize;
+      ossim::defaultTileSize(tileSize);
+      result = tileSize.x;
+   }
+   return result;
 }
 
 //*******************************************************************
@@ -676,7 +713,18 @@ ossim_uint32 ossimGeneralRasterTileSource::getTileWidth() const
 //*******************************************************************
 ossim_uint32 ossimGeneralRasterTileSource::getTileHeight() const
 {
-   return ( theTile.valid() ? theTile->getHeight() : 0 );
+   ossim_uint32 result = 0;
+   if ( m_tile.valid() )
+   {
+      m_tile->getHeight();
+   }
+   else
+   {
+      ossimIpt tileSize;
+      ossim::defaultTileSize(tileSize);
+      result = tileSize.y;
+   }
+   return result;
 }
 
 //*******************************************************************
@@ -701,7 +749,7 @@ ossimGeneralRasterTileSource::isValidRLevel(ossim_uint32 reduced_res_level) cons
          << MODULE
          << " Invalid reduced_res_level:  " << reduced_res_level
          << "\nHighest available:  " << (getNumberOfDecimationLevels() - 1)
-         << endl;
+         << std::endl;
       return false;
    }
 }
@@ -716,7 +764,7 @@ ossimGeneralRasterTileSource::getNumberOfLines(ossim_uint32 reduced_res_level) c
 {
    if (reduced_res_level == 0)
    {
-      return theImageData.validLines();
+      return m_rasterInfo.validLines();
    }
    else if (theOverview.valid())
    {
@@ -729,12 +777,12 @@ ossimGeneralRasterTileSource::getNumberOfLines(ossim_uint32 reduced_res_level) c
 //*******************************************************************
 // Public method:
 //*******************************************************************
-ossim_uint32 ossimGeneralRasterTileSource::
-getNumberOfSamples(ossim_uint32 reduced_res_level) const
+ossim_uint32 ossimGeneralRasterTileSource::getNumberOfSamples(
+   ossim_uint32 reduced_res_level) const
 {
    if (reduced_res_level == 0)
    {
-      return theImageData.validSamples();
+      return m_rasterInfo.validSamples();
    }
    else if (theOverview.valid())
    {
@@ -746,167 +794,87 @@ getNumberOfSamples(ossim_uint32 reduced_res_level) const
 
 double ossimGeneralRasterTileSource::getNullPixelValue(ossim_uint32 band) const
 {
-   return theImageData.getNullPixelValue(band);
+   return m_rasterInfo.getImageMetaData().getNullPix(band);
 }
 
 double ossimGeneralRasterTileSource::getMinPixelValue(ossim_uint32 band)const
 {
-   return theImageData.getMinPixelValue(band);
+   return m_rasterInfo.getImageMetaData().getMinPix(band);
 }
 
 double ossimGeneralRasterTileSource::getMaxPixelValue(ossim_uint32 band)const
 {
-   return theImageData.getMaxPixelValue(band);
+   return m_rasterInfo.getImageMetaData().getMaxPix(band);
 }
 
 bool ossimGeneralRasterTileSource::open()
 {
    static const char MODULE[] = "ossimGeneralRasterTileSource::open";
-   if (traceDebug()) CLOG << " Entered..." << endl;
+
+   if (traceDebug()) CLOG << " Entered..." << std::endl;
+   
+   bool result = false;
    
    if(isOpen())
    {
       close();
    }
    
+   //---
+   // Find the header file:
    //
+   // We need lines, samples, bands, scalar and interleave at a minimum:
+   // 
    // A general raster image requires a keyword list to get essential image
    // information or meta data as its sometimes called.  The meta data file
-   // can have three types of extensions: ".omd", ".hdr" and ".kwl"
+   // can have four types of extensions: ".omd", ".hdr", ".kwl" and xml.
    // Look for them in that order.
    // Note that the ".omd" extension is for "Ossim Meta Data" and was made
    // up to avoid conflicting with other software packages ".hdr" files.
-   //
-   
-   ossimFilename hdr = theImageFile;
-   
-   hdr.setExtension("omd");   
-   
-   // See if it's readable.
-   if ( ! hdr.isReadable() )
+   //---
+   if ( m_rasterInfo.open( theImageFile ) )
    {
-      hdr.setExtension("hdr");   
+      theMetaData = m_rasterInfo.getImageMetaData();
       
-      // See if this one's readable.
-      if ( ! hdr.isReadable() )
+      result = initializeHandler();
+      if ( result )
       {
-         // Ok try .kwl extension.
-         hdr.setExtension("kwl");   
-         if ( ! hdr.isReadable() )
+         completeOpen();
+
+         if ( isBandSelector() && m_outputBandList.size() && ( isIdentityBandList( m_outputBandList ) == false ) )
          {
-            //try .xml extension
-            hdr.setExtension("xml");
-            if (!hdr.isReadable())
-            {
-               // No header file so get out.
-               return false;
-            }
+            // This does range checking and will pass to overview if open.
+            setOutputBandList( m_outputBandList );
          }
       }
    }
-   
-   if (traceDebug())
+
+   if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE
-         << "\nHeader file:  " << hdr.c_str() << endl;
+         << MODULE << " Exit status: " << (result?"true":"false") << std::endl;
    }
-   
-   // Give the header file to the keyword list object.
-   ossimKeywordlist kwl(hdr);
-   
-   if (hdr.ext() == "xml")
-   {
-      kwl.clear();
-      ossimKeywordlist xmlKwl = getXmlInfo(hdr);
-      if (xmlKwl.getSize() > 0)
-      {
-         kwl.addList(xmlKwl);
-         if (kwl.getSize() > 0)
-         {
-            kwl.setErrorStatus(ossimErrorCodes::OSSIM_OK);
-         }
-      }
-      else
-      {
-         return false;
-      }
-   }
-   
-   if ((kwl.getSize() == 0) || (kwl.find(ossimKeywordNames::NUMBER_SAMPLES_KW) == 0))
-   {
-      if (hdr.ext().downcase() != "hdr")
-      {
-         hdr = hdr.setExtension("hdr");
-      }
-      if (hdr.exists())
-      {
-         ossimKeywordlist hdrKwl = getHdrInfo(hdr);
-         if (hdrKwl.getSize() > 0)
-         {
-            kwl.addList(hdrKwl);
-            if (kwl.getSize() > 0)
-            {
-               kwl.setErrorStatus(ossimErrorCodes::OSSIM_OK);
-            }
-         }
-      }
-   }
-   
-   // Check for errors.
-   if (kwl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN)
-             << MODULE
-             << " Keywordlist open error detected." << endl;
-      }
-      
-      return false;
-   }
-   
-   //
-   // If the file name passed to us was the header it's assumed the image_file
-   // keyword is present else assume it's the image file and add if to the
-   // keyword list.  This will overwrite the "image_file" in the header if
-   // it's in there.
-   //
-   if (theImageFile != hdr)
-   {
-      kwl.add(ossimKeywordNames::FILENAME_KW,
-              theImageFile.c_str(),
-              true);
-   }
-
-   ossimGeneralRasterInfo generalRasterInfo;
-   
-   bool status = generalRasterInfo.loadState(kwl);
-   theMetaData.loadState(kwl);
-   // Let the load state do the rest...
-   //   bool status = loadState(kwl);
-   if(status)
-   {
-      status = open(generalRasterInfo);
-   }
-   
-   if (traceDebug()) CLOG << " Exited..." << endl;
-   
-   return status;
+   return result;
 }
-
-bool ossimGeneralRasterTileSource::open(const ossimGeneralRasterInfo& info)
+                                             
+bool ossimGeneralRasterTileSource::open( const ossimGeneralRasterInfo& info )
 {
-   if(isOpen())
+   if( isOpen() )
    {
       close();
    }
    
-   theImageData = info;
+   m_rasterInfo = info;
    
-   if(initializeHandler())
+   if( initializeHandler() )
    {
-      completeOpen();
+      completeOpen();  
+
+       if ( isBandSelector() && m_outputBandList.size() && ( isIdentityBandList( m_outputBandList ) == false ) )
+       { 
+          // This does range checking and will pass to overview if open.
+          setOutputBandList( m_outputBandList );
+       }
    }
    else
    {
@@ -918,48 +886,20 @@ bool ossimGeneralRasterTileSource::open(const ossimGeneralRasterInfo& info)
 
 bool ossimGeneralRasterTileSource::initializeHandler()
 {
-   //***
-   // This private method assumes that "theImageData" object has been
+   //---
+   // This private method assumes that "m_rasterInfo" object has been
    // initialized.  Note that "close() should have already been called if
    // there was an open file prior to this.
-   //***
-   if(isOpen())
-   {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "ossimGeneralRasterTileSource::initialize() Coding Error!"
-         << "\nFile was not closed prior to initialize call!"
-         << "\nReturning false..."
-         << endl;
-      return false;
-   }
-   
-//   theSubImageOffset = theImageData.subImageOffset();
-
-   ossim_uint32 number_of_bands = theImageData.numberOfBands();
-
-//    std::streampos expectedSizeInBytes;
-
-//    if (theImageData.interleaveType() != OSSIM_BSQ_MULTI_FILE)
-//    {
-//       expectedSizeInBytes = theImageData.validSamples()  *
-//                             theImageData.validLines()    *
-//                             number_of_bands *
-//                             theImageData.bytesPerPixel();
-//    }
-//    else
-//    {
-//       expectedSizeInBytes = theImageData.validSamples()  *
-//                             theImageData.validLines()    *
-//                             theImageData.bytesPerPixel();
-//    }
-   
-   vector<ossimFilename> aList = theImageData.getImageFileList();
+   //---
+   std::vector<ossimFilename> aList = m_rasterInfo.getImageFileList();
 
    for (ossim_uint32 i=0; i<aList.size(); ++i)
    {
+      ossimFilename f = aList[i];
+      
       // open it...
       ossimRefPtr<ossimIFStream> is = ossimStreamFactoryRegistry::instance()->
-         createNewIFStream(aList[i], std::ios::in|std::ios::binary);
+         createNewIFStream(f, std::ios::in|std::ios::binary);
 
       // check the stream...
       if(is.valid())
@@ -970,165 +910,70 @@ bool ossimGeneralRasterTileSource::initializeHandler()
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
             ossimNotify(ossimNotifyLevel_WARN)
                << "ossimGeneralRasterTileSource::open" << " ERROR:\n"
-               << "Cannot open:  " << aList[i].c_str() << endl;
+               << "Cannot open:  " << f.c_str() << std::endl;
             is = 0;
             return false;
          }
       }
-#if 0
-      // check the size
-      if ((!is->isCompressed()) &&
-          (aList[i].fileSize() < expectedSizeInBytes))
-      {
-         theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-         if (traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << "ossimGeneralRasterTileSource::open ERROR:"
-               << "\nFile size not big enough!"
-               << "\nExpected:  " << expectedSizeInBytes
-               << "\nGot:       " << aList[i].fileSize()
-               << "\nFile:      " << aList[i]
-               << "\nReturning with error..." << endl;
-         }
-         return false;
-      }
-#endif
-      theFileStrList.push_back(is); // Add it to the list...
+
+      // Check the file size (removed).
+
+      m_fileStrList.push_back(is); // Add it to the list...
    }
 
    if ((aList.size()==1) && theImageFile.empty())
    {
       theImageFile = aList[0];
    }
-   
-   //***
-   // Determine the pixel type and make the appropriate tiles.
-   //***
-   ossimScalarType scalar = theImageData.getScalarType();
-   
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimGeneralRasterTileSource::open DEBUG:"
-         << "\nScalar type:  "
-         << ossimScalarTypeLut::instance()->
-         getEntryString(theImageData.getScalarType())
-         << endl;
-   }
-
-   // Make the tiles for the getTile return.
-                            
-   ossimImageDataFactory* idf = ossimImageDataFactory::instance();
-
-   theTile = idf->create(this,
-                         scalar,
-                         number_of_bands);
-   
-   theTile->initialize();
-
-   // These values can be overridden by loadState...
-   for(ossim_uint32 band = 0; band < number_of_bands; ++ band)
-     {
-       theTile->setNullPix(theImageData.getNullPixelValue(band), band);
-       theTile->setMinPix(theImageData.getMinPixelValue(band), band);
-       theTile->setMaxPix(theImageData.getMaxPixelValue(band), band);
-     }
-   theTile->makeBlank();
-   // Store the size of the buffer in pixels for swapping bytes.
-   theBufferSizeInPixels = theTile->getWidth() * theTile->getHeight() *
-                           number_of_bands;
-   
-   // Get the buffer size.  This is bytes, not pixels.
-   ossim_int32 buffer_size = theBufferSizeInPixels * theImageData.bytesPerPixel();
-
-   if(theBuffer)
-   {
-      delete [] theBuffer;
-      theBuffer = 0;
-   }
-   theBuffer = new ossim_uint8[buffer_size];
 
    // Set the buffer interleave type.
-   theBufferInterleave = theImageData.interleaveType();
-   if (theBufferInterleave == OSSIM_BSQ_MULTI_FILE)
+   m_bufferInterleave = m_rasterInfo.interleaveType();
+   if (m_bufferInterleave == OSSIM_BSQ_MULTI_FILE)
    {
-      theBufferInterleave = OSSIM_BSQ;
+      m_bufferInterleave = OSSIM_BSQ;
    }
 
-   // Zero out the buffer rect.
-   theBufferRect = ossimIrect(0, 0, 0, 0);
-   
-//    // Check for an overview if not already initialized.
-//    if (!theOverview)
-//    {
-//       openOverview();
-//    }
+   if ( m_outputBandList.empty() )
+   {
+      // Set starting output band list to identity.
+      ossimImageSource::getOutputBandList( m_outputBandList );
+   }
 
-//    // Check for valid image vertices file if not already initialized.
-//    if (theValidImageVertices.size() == 0)
-//    {
-//       openValidVertices();
-//    }
-
-   //***
+   //---
    // Get the byte order of the image data and host machine.  If different,
    // set the swap bytes flag...
-   //***
-   if (theImageData.getImageDataByteOrder() != ossim::byteOrder())
+   //---
+   if (m_rasterInfo.getImageDataByteOrder() != ossim::byteOrder())
    {
-      theSwapBytesFlag = true;
+      m_swapBytesFlag = true;
    }
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimGeneralRasterTileSource::open" << " DEBUG:"
+         << "ossimGeneralRasterTileSource::initializeHandler()" << " DEBUG:"
+         << "\nScalar type:  "
+         << ossimScalarTypeLut::instance()->
+         getEntryString(m_rasterInfo.getImageMetaData().getScalarType())
          << "\nByte swapping is "
-         << (theSwapBytesFlag?"enabled.":"not enabled.")
-         << "\ntheBufferSizeInPixels:  " << theBufferSizeInPixels
-         << "\nbuffer size:  " << buffer_size
-         << "\nImageData:\n";
-      theImageData.print(ossimNotify(ossimNotifyLevel_DEBUG));
+         << (m_swapBytesFlag?"enabled.":"not enabled.")
+         // << "\nm_bufferSizeInPixels:  " << m_bufferSizeInPixels
+         // << "\nbuffer size:  " << buffer_size
+         << "\nRasterInfo:\n";
+      m_rasterInfo.print(ossimNotify(ossimNotifyLevel_DEBUG));
    }
    
    return true;
 }
 
-void ossimGeneralRasterTileSource::checkBuffer(const ossimIrect& rect)
-{
-  if((theBufferRect.width()*theBufferRect.height()) !=
-     (rect.width()*rect.height()))
-    {
-      if(theBuffer)
-	{
-	  delete [] theBuffer;
-	  theBuffer = 0;
-	}
-    }
-
-  if(!theBuffer)
-    {
-      ossim_uint32 number_of_bands = theImageData.numberOfBands();
-      theBufferSizeInPixels = rect.width()*rect.height()*number_of_bands;
-      
-      // Get the buffer size.  This is bytes, not pixels.
-      ossim_int32 buffer_size = theBufferSizeInPixels * theImageData.bytesPerPixel();
-      
-      theBuffer = new ossim_uint8[buffer_size];
-      theBufferRect = ossimIrect(0,0,0,0);
-    }
-}
-
-
 bool ossimGeneralRasterTileSource::isOpen() const
 {
    bool result = false;
-   if (theFileStrList.size() > 0)
+   if (m_fileStrList.size() > 0)
    {
-      if(theFileStrList[0].valid())
+      if(m_fileStrList[0].valid())
       {
-         result = !(theFileStrList[0]->fail());
+         result = !(m_fileStrList[0]->fail());
       }
    }
    return result;
@@ -1138,22 +983,30 @@ void ossimGeneralRasterTileSource::close()
 {
    ossimImageHandler::close();  // base class
 
-   theTile = 0;
-   if (theBuffer)
+   m_tile = 0; // Not a leak, ref ptr.
+   
+   if ( m_buffer )
    {
-      delete [] theBuffer;
-      theBuffer = 0;
+      delete [] m_buffer;
+      m_buffer = 0;
+      m_bufferSizeInPixels = 0; // Must zero out for check in getTile method.
    }
 
-   std::vector<ossimRefPtr<ossimIFStream> >::iterator is = theFileStrList.begin();
-   while (is != theFileStrList.end())
+   if ( m_lineBuffer )
+   {
+      delete [] m_lineBuffer;
+      m_lineBuffer = 0;
+   }
+
+   std::vector<ossimRefPtr<ossimIFStream> >::iterator is = m_fileStrList.begin();
+   while (is != m_fileStrList.end())
    {
       (*is)->close();
       // delete (*is);
       // (*is) = 0;
       ++is;
    }
-   theFileStrList.clear();
+   m_fileStrList.clear();
 }
 
 ossim_uint32 ossimGeneralRasterTileSource::getImageTileWidth() const
@@ -1178,12 +1031,21 @@ ossimString ossimGeneralRasterTileSource::getLongName()const
 
 ossim_uint32 ossimGeneralRasterTileSource::getNumberOfInputBands() const
 {
-   return theImageData.numberOfBands();
+   return m_rasterInfo.getImageMetaData().getNumberOfBands();
 }
 
 ossim_uint32 ossimGeneralRasterTileSource::getNumberOfOutputBands() const
 {
-   return getNumberOfInputBands();
+   ossim_uint32 result = 0;
+   if ( isBandSelector() && m_outputBandList.size() )
+   {
+      result = m_outputBandList.size();
+   }
+   else
+   {
+      result = m_rasterInfo.getImageMetaData().getNumberOfBands();
+   }  
+   return result;
 }
 
 ossimKeywordlist ossimGeneralRasterTileSource::getHdrInfo(ossimFilename hdrFile)
@@ -1200,7 +1062,7 @@ ossimKeywordlist ossimGeneralRasterTileSource::getHdrInfo(ossimFilename hdrFile)
    ossim_float32 noData = -9999;
    ossimString scalarType = "ossim_uint8";
    ossim_int32 numBands = 1;
-   ossim_int32 skipBytes = 0;
+   // ossim_int32 skipBytes = 0;
    ossim_int32 numBits = -1; 
    ossimString chPixelType = "N"; // not defined
    ossimString interleaveType = "BIL";
@@ -1221,11 +1083,11 @@ ossimKeywordlist ossimGeneralRasterTileSource::getHdrInfo(ossimFilename hdrFile)
       geoKwl.add(ossimKeywordNames::NUMBER_LINES_KW, lines);
    }
 
-   lookup = kwl.find("skipbytes");
-   if (lookup)
-   {
-      skipBytes = ossimString(lookup).toInt();
-   }
+   // lookup = kwl.find("skipbytes");
+   // if (lookup)
+   // {
+   //    skipBytes = ossimString(lookup).toInt();
+   // }
 
    lookup = kwl.find("nbands");
    if (lookup)
@@ -1618,4 +1480,122 @@ ossimRefPtr<ossimImageGeometry> ossimGeneralRasterTileSource::getImageGeometry()
    } // Matches first if ( !theGeometry.valid() )
 
    return theGeometry;
+}
+
+bool ossimGeneralRasterTileSource::isBandSelector() const
+{
+   bool result = false;
+   if ( m_rasterInfo.interleaveType() == OSSIM_BSQ_MULTI_FILE )
+   {
+      result = true;
+   }
+   else if ( m_rasterInfo.interleaveType() == OSSIM_BIP )
+   {
+      // Added for hyper spectral data with 256 bands.
+      const ossim_int32 THRESHOLD = 4;
+      if ( m_rasterInfo.numberOfBands() >= THRESHOLD )
+      {
+         result = true;
+      }
+   }
+   if ( result && theOverview.valid() )
+   {
+      result = theOverview->isBandSelector();
+   }   
+   return result;
+}
+
+bool ossimGeneralRasterTileSource::setOutputBandList(const std::vector<ossim_uint32>& band_list)
+{
+   bool result = false;
+   if ( isBandSelector() )
+   {
+      // Making a copy as passed in list could be our m_outputBandList.
+      std::vector<ossim_uint32> inputList = band_list;
+      result = ossimImageHandler::setOutputBandList( inputList, m_outputBandList );
+      if ( result && m_tile.valid() )
+      {
+         if ( m_tile->getNumberOfBands() != m_outputBandList.size() )
+         {
+            m_tile = 0; // Force a reinitialize on next getTile.
+         }
+      }
+   }
+   return result;
+}
+
+void ossimGeneralRasterTileSource::getOutputBandList(std::vector<ossim_uint32>& bandList) const
+{
+   bandList = m_outputBandList;
+}
+
+void ossimGeneralRasterTileSource::allocateTile()
+{
+   m_tile = 0;
+   ossim_uint32 bands = 0;
+   if ( m_outputBandList.empty() )
+   {
+      bands = m_rasterInfo.numberOfBands();
+   }
+   else
+   {
+      bands = m_outputBandList.size();
+   }
+   
+   if ( bands )
+   {
+      m_tile = ossimImageDataFactory::instance()->create(
+         this, m_rasterInfo.getImageMetaData().getScalarType(), bands );
+      
+      if ( m_tile.valid() )
+      {
+         // These values can be overridden by loadState...
+         for(ossim_uint32 band = 0; band < bands; ++ band)
+         {
+            m_tile->setNullPix(m_rasterInfo.getImageMetaData().getNullPix(band), band);
+            m_tile->setMinPix(m_rasterInfo.getImageMetaData().getMinPix(band), band);
+            m_tile->setMaxPix(m_rasterInfo.getImageMetaData().getMaxPix(band), band);
+         }
+         m_tile->initialize(); // This does a makeBlank().
+      }
+   }
+}
+
+void ossimGeneralRasterTileSource::allocateBuffer( const ossimImageData* tile )
+{
+   if( m_buffer )
+   {
+      delete [] m_buffer;
+      m_buffer = 0;
+      m_bufferSizeInPixels = 0; // Must zero out for check in getTile method.
+   }
+   if ( m_lineBuffer )
+   {
+      delete [] m_lineBuffer;
+      m_lineBuffer = 0;
+   }
+   
+   if ( tile )
+   {
+      // Store the size of the buffer in pixels for swapping bytes.
+      m_bufferSizeInPixels = tile->getSize();
+      if ( m_bufferSizeInPixels )
+      {
+         // Initialize buffer. This is bytes, not pixels.
+         m_buffer = new ossim_uint8[ tile->getSizeInBytes() ];
+         
+         // Zero out the buffer rect.
+         m_bufferRect = ossimIrect(0, 0, 0, 0);
+      }
+
+      if ( m_rasterInfo.interleaveType() == OSSIM_BIP )
+      {
+         // Big enough to hold a whole line all bands.
+         ossim_uint32 widthInBytes =
+            tile->getWidth() * m_rasterInfo.getImageMetaData().getNumberOfBands() *
+            m_rasterInfo.getImageMetaData().getBytesPerPixel();
+         
+         m_lineBuffer = new ossim_uint8[ widthInBytes ];
+      }
+   }
 }

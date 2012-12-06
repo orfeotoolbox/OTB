@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimPolyCutter.cpp 19907 2011-08-05 19:55:46Z dburken $
+// $Id: ossimPolyCutter.cpp 21518 2012-08-22 21:15:56Z dburken $
 #include <ossim/imaging/ossimPolyCutter.h>
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -110,7 +110,7 @@ ossimRefPtr<ossimImageData> ossimPolyCutter::getTile(const ossimIrect& tileRect,
 //       ossimActiveEdgeTable aet;
       
       
-      if((theCutType == OSSIM_POLY_NULL_OUTSIDE))
+      if(theCutType == OSSIM_POLY_NULL_OUTSIDE)
       {
          if(boundingRect.intersects(tileRect))
          {

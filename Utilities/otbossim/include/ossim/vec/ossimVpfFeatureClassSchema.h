@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //********************************************************************
-// $Id: ossimVpfFeatureClassSchema.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimVpfFeatureClassSchema.h 20936 2012-05-18 14:45:00Z oscarkramer $
 #ifndef ossimVpfFeatureClassSchema_HEADER
 #define ossimVpfFeatureClassSchema_HEADER
 #include <iostream>
@@ -60,7 +60,7 @@ public:
 protected:
    ossimVpfCoverage* theCoverage;
    ossimFilename     theSchemaTableName;
-   std::map<ossimString, ossimVpfFeatureClassSchemaNode> theFeatureClassMap;
+   std::map<ossimString, ossimVpfFeatureClassSchemaNode, ossimStringLtstr> theFeatureClassMap;
    
    bool validateColumnNames()const;
    void setFeatureClassMapping();

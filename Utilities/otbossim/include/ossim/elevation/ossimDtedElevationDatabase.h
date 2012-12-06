@@ -35,21 +35,7 @@ public:
       return filename.exists();
    }
    
-   /**
-    * METHODS: accuracyLE90(), accuracyCE90()
-    * Returns the vertical and horizontal accuracy (90% confidence) in the
-    * region of gpt:
-    */
-   virtual double getAccuracyLE90(const ossimGpt& /* gpt */) const
-   {
-      std::cout << "ossimDtedDatabase::getAccuracyLE90 \n";
-      return 0.0;
-   }
-   virtual double getAccuracyCE90(const ossimGpt& /* gpt */) const
-   {
-      std::cout << "ossimDtedDatabase::getAccuracyCE90 \n";
-      return 0.0;
-   }
+   virtual bool getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& gpt) const;
    virtual double getHeightAboveMSL(const ossimGpt&);
    virtual double getHeightAboveEllipsoid(const ossimGpt& gpt);
    virtual ossim_uint64 createId(const ossimGpt& pt)const

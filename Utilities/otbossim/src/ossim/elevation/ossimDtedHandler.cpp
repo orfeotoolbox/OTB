@@ -9,7 +9,7 @@
 //   from disk. This elevation files are memory mapped.
 //
 //*****************************************************************************
-// $Id: ossimDtedHandler.cpp 20448 2012-01-12 17:35:11Z gpotts $
+// $Id: ossimDtedHandler.cpp 21214 2012-07-03 16:20:11Z dburken $
 
 #include <cstdlib>
 #include <cstring> /* for memcpy */
@@ -96,6 +96,20 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file, bool memoryMa
 ossimDtedHandler::~ossimDtedHandler()
 {
    close();
+}
+
+bool ossimDtedHandler::getAccuracyInfo(ossimElevationAccuracyInfo& info,
+                                       const ossimGpt& /* gpt */ ) const
+{
+  info.m_confidenceLevel = .9;
+  info.m_absoluteLE = m_acc.absLE();
+  info.m_absoluteCE = m_acc.absCE();
+  info.m_relativeLE = m_acc.relLE();
+  info.m_relativeCE = m_acc.relCE();
+
+  info.m_surfaceName = m_dsi.productLevel();
+
+  return info.hasValidAbsoluteError();
 }
 
 double ossimDtedHandler::getHeightAboveMSL(const ossimGpt& gpt)

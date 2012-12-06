@@ -129,6 +129,18 @@ public:
    void setRecurseFlag(bool flag);
 
    /**
+    * @brief Sets waitOnDir flag.
+    *
+    * If set to true each directory is processed in entirety before sub
+    * directories are recursed.  This allows callers of setRecurseFlag
+    * to disable directory walking.  If your code is calling setRecurseFlag
+    * this flag should be set to true.
+    *
+    * @param flag true to wait, false to not wait. Defaulted to false in the constructor. 
+    */   
+   void setWaitOnDirFlag(bool flag);
+
+   /**
     * @brief If set to true this stops files walking (aborts).
     * @param flag True to abort current "walk".
     */
@@ -207,6 +219,7 @@ private:
    ossimRefPtr<ossimJobMultiThreadQueue> m_jobQueue;
    std::vector<std::string>              m_filteredExtensions;
    bool                                  m_recurseFlag;
+   bool                                  m_waitOnDirFlag;
    bool                                  m_abortFlag;
    OpenThreads::Mutex                    m_mutex;
 };

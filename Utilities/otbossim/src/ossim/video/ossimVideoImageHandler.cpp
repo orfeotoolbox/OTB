@@ -12,6 +12,7 @@
 
 #include <ossim/video/ossimVideoImageHandler.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 
 RTTI_DEF1(ossimVideoImageHandler, "ossimVideoImageHandler", ossimImageHandler)
 

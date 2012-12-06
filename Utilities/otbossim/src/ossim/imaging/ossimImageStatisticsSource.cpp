@@ -8,9 +8,9 @@
 //
 //*************************************************************************
 #include <ossim/imaging/ossimImageStatisticsSource.h>
+#include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageSourceSequencer.h>
-
 
 ossimImageStatisticsSource::ossimImageStatisticsSource()
       :ossimSource(0,
@@ -96,42 +96,42 @@ void ossimImageStatisticsSource::computeStatisticsTemplate(T /* dummyVariable */
       
       while( (dataObject=sequencer->getNextTile()).valid() )
       {
-		  ossim_uint32 bandIdx = 0;
-		  bands                = dataObject->getNumberOfBands();
-		  ossimDataObjectStatus status = dataObject->getDataObjectStatus();
-		  if((status != OSSIM_EMPTY)&&
-			 (dataObject->getBuf()))
-		  {
-			  ossim_uint32 offsetMax = dataObject->getWidth()*dataObject->getHeight();
-			  for(bandIdx = 0; bandIdx < bands; ++bandIdx)
-			  {
-				  ossim_float64 pixelCount = 0.0;
-				  ossim_uint32 offset = 0;
-				  T* dataPtr   = static_cast<T*>(dataObject->getBuf(bandIdx));
-				  T nullPixel = static_cast<T>(dataObject->getNullPix(bandIdx)); 
-				  for(offset = 0; offset < offsetMax; ++offset)
-				  {
-					  if((*dataPtr) != nullPixel)
-					  {
-						  theMean[bandIdx] += *dataPtr;
-						  if((*dataPtr) < theMin[bandIdx])
-						  {
-							  theMin[bandIdx] = (*dataPtr);
-						  }
-						  if((*dataPtr) > theMax[bandIdx])
-						  {
-							  theMax[bandIdx] = (*dataPtr);
-						  }
-						  ++pixelCount;
-					  }
-					  ++dataPtr;
-				  }
-				  if(pixelCount > 0)
-				  {
-					  theMean[bandIdx] /= pixelCount;
-				  }
-			  }
-		  }
+         ossim_uint32 bandIdx = 0;
+         bands = dataObject->getNumberOfBands();
+         ossimDataObjectStatus status = dataObject->getDataObjectStatus();
+         if((status != OSSIM_EMPTY)&&
+            (dataObject->getBuf()))
+         {
+            ossim_uint32 offsetMax = dataObject->getWidth()*dataObject->getHeight();
+            for(bandIdx = 0; bandIdx < bands; ++bandIdx)
+            {
+               ossim_float64 pixelCount = 0.0;
+               ossim_uint32 offset = 0;
+               T* dataPtr   = static_cast<T*>(dataObject->getBuf(bandIdx));
+               T nullPixel = static_cast<T>(dataObject->getNullPix(bandIdx)); 
+               for(offset = 0; offset < offsetMax; ++offset)
+               {
+                  if((*dataPtr) != nullPixel)
+                  {
+                     theMean[bandIdx] += *dataPtr;
+                     if((*dataPtr) < theMin[bandIdx])
+                     {
+                        theMin[bandIdx] = (*dataPtr);
+                     }
+                     if((*dataPtr) > theMax[bandIdx])
+                     {
+                        theMax[bandIdx] = (*dataPtr);
+                     }
+                     ++pixelCount;
+                  }
+                  ++dataPtr;
+               }
+               if(pixelCount > 0)
+               {
+                  theMean[bandIdx] /= pixelCount;
+               }
+            }
+         }
       }
    }
    

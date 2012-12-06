@@ -17,6 +17,19 @@
 class OSSIM_DLL ossimTwoColorView : public ossimImageCombiner
 {
 public:
+
+   /**
+    * @brief Enumerations for mapping inputs to red, green and blue
+    * output channels.
+    */
+   enum ossimTwoColorMultiViewOutputSource
+   {
+      UNKNOWN = 0,
+      MIN     = 1,
+      OLD     = 2,
+      NEW     = 3
+   };
+   
    ossimTwoColorView();
    virtual ossim_uint32 getNumberOfOutputBands() const;
    /**
@@ -31,14 +44,42 @@ public:
    double getMaxPixelValue(ossim_uint32 band)const;
    
    /**
-    * Will allow you to change the mapping of the new input and old input to the output band.  
-    * Indexing from 0 based band numbering, by default the new channel (input 0) will be mapped to 
-    * the output tile's blue channel (band 2) and the input 1 will be mapped to the red channel (band 0) 
-    * and the green will have the value of min pix.  Use this method to change the new and old default output
-    * mappings.
+    * @brief Sets which bands to use from inputs, and which inputs to use for
+    * output red, green and blue channels.
+    *
+    * This method does no error checking as the inputs may or may not be set
+    * prior to this call.  ossimTwoColorView::initialize() will verify once
+    * inputs are established.  So if an input band is out of range band
+    * 0 (first band) will be used.
+    *
+    * Callers should ensure initialize is called after this.
+    *
+    * @param oldInputBandIndex Zero based band index for old input. Default=0
+    * * 
+    * @param newInputBandIndex Zero based band index for new input. Default=0.
+    * 
+    * @param redOutputSource default=OLD.  Can be:
+    *    ossimTwoColorMultiViewOutputSource::OLD
+    *    ossimTwoColorMultiViewOutputSource::NEW
+    *    ossimTwoColorMultiViewOutputSource::MIN
+    *    
+    * @param grnOutputSource default=NEW.  Can be:
+    *    ossimTwoColorMultiViewOutputSource::OLD
+    *    ossimTwoColorMultiViewOutputSource::NEW
+    *    ossimTwoColorMultiViewOutputSource::MIN
+    *    
+    * @param bluOutputSource default=NEW.  Can be:
+    *    ossimTwoColorMultiViewOutputSource::OLD
+    *    ossimTwoColorMultiViewOutputSource::NEW
+    *    ossimTwoColorMultiViewOutputSource::MIN   
     */
-   void setIndexMapping(ossim_uint32 newIndex,
-                        ossim_uint32 oldIndex);
+   void setBandIndexMapping(
+      ossim_uint32 oldInputBandIndex,
+      ossim_uint32 newInputBandIndex,
+      ossimTwoColorMultiViewOutputSource redOutputSource,
+      ossimTwoColorMultiViewOutputSource grnOutputSource,
+      ossimTwoColorMultiViewOutputSource bluOutputSource);
+
    virtual void initialize();
    
 protected:
@@ -47,16 +88,18 @@ protected:
    void runNative8(ossimImageData* newData,   ossimImageData* oldData);
    void runNorm(ossimImageData* newData,   ossimImageData* oldData);
    
-   bool theByPassFlag;
-   bool theNativeFlag;
-   ossimRefPtr<ossimImageData> theTwoColorTile;
-   ossimImageSource* theNewInput;
-   ossimImageSource* theOldInput;
-   ossim_uint32 theNewBufferDestinationIndex;
-   ossim_uint32 theOldBufferDestinationIndex;
-   ossim_uint32 theMinBufferDestinationIndex;
+   bool                               m_byPassFlag;
+   bool                               m_nativeFlag;
+   ossimRefPtr<ossimImageData>        m_twoColorTile;
+   ossimRefPtr<ossimImageSource>      m_newInput;
+   ossimRefPtr<ossimImageSource>      m_oldInput;
+   ossim_uint32                       m_newInputBandIndex;
+   ossim_uint32                       m_oldInputBandIndex;
+   ossimTwoColorMultiViewOutputSource m_redSource;
+   ossimTwoColorMultiViewOutputSource m_grnSource;
+   ossimTwoColorMultiViewOutputSource m_bluSource;
 
 TYPE_DATA
 };
 
-#endif
+#endif /* #ifndef ossimTwoColorView_HEADER */

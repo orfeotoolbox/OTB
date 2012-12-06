@@ -25,7 +25,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.h 20075 2011-09-08 16:44:03Z gpotts $
+//  $Id: ossimSensorModel.h 21807 2012-10-05 14:22:02Z dhicks $
 
 #ifndef ossimSensorModel_HEADER
 #define ossimSensorModel_HEADER
@@ -246,10 +246,11 @@ public:
 
    /*!
     * METHOD: getObsCovMat()
-    * gives 2X2 covariance matrix of observations
+    * @brief Gives 2X2 covariance matrix of observations
     */
    virtual ossimSensorModel::CovMatStatus getObsCovMat(
-      const ossimDpt& ipos, NEWMAT::SymmetricMatrix& Cov);
+      const ossimDpt& ipos, NEWMAT::SymmetricMatrix& Cov,
+      const ossim_float64 defPointingSigma = 0.5);
 
    /**
     * @brief Implementation of pure virtual

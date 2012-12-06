@@ -20,6 +20,7 @@
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimImageSourceSequencer.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>

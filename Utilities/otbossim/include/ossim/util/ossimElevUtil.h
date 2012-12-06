@@ -14,7 +14,7 @@
 // digital elevation model(DEM) operations.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimElevUtil.h 20489 2012-01-23 20:07:56Z dburken $
+// $Id: ossimElevUtil.h 21939 2012-11-15 20:39:16Z dburken $
 
 #ifndef ossimElevUtil_HEADER
 #define ossimElevUtil_HEADER 1
@@ -63,7 +63,8 @@ public:
       OSSIM_DEM_OP_UNKNOWN      = 0,
       OSSIM_DEM_OP_HILL_SHADE   = 1,
       OSSIM_DEM_OP_COLOR_RELIEF = 2,
-      OSSIM_DEM_OP_ORTHO        = 3
+      OSSIM_DEM_OP_ORTHO        = 3,
+      OSSIM_DEM_OP_2CMV         = 4  // Two color multiview.
    };
 
    /** emumerated output projections */
@@ -324,6 +325,11 @@ private:
 
    /** @brief Combines dems(m_demLayer) and images(m_imgLayer). */
    ossimRefPtr<ossimImageSource> combineLayers();
+
+   /** @brief Combines two images into a two color multi view chain.
+    * @return ossimRefPtr with pointer to ossimImageSource.  Can be null.
+    */
+   ossimRefPtr<ossimImageSource> combine2CmvLayers();
 
    /**
     * @brief Creates ossimIndexToRgbLutFilter and connects to source.

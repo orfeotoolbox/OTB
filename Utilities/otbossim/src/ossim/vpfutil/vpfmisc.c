@@ -423,7 +423,7 @@ void displaymessage( char *s, ... )
 
 void display_message(char *str)
 {
-    fprintf(stderr, "%s", str);
+   fprintf(stderr, "%s", str);
 }
 
 

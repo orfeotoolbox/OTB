@@ -16,7 +16,7 @@
 //              Derived from ossimElevCellHandler.
 //<
 //*****************************************************************************
-// $Id: ossimDtedHandler.h 20448 2012-01-12 17:35:11Z gpotts $
+// $Id: ossimDtedHandler.h 21210 2012-07-03 13:11:20Z gpotts $
 
 #ifndef ossimDtedHandler_HEADER
 #define ossimDtedHandler_HEADER
@@ -88,6 +88,7 @@ public:
 
    virtual bool isOpen()const;
    
+   virtual bool getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& gpt) const;
    
    const ossimDtedVol& vol()const
    {

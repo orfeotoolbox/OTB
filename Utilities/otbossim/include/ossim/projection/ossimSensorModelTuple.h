@@ -6,7 +6,7 @@
 //
 // Description: Base class for tuple-based ossimSensorModel metric operations.
 //----------------------------------------------------------------------------
-// $Id: ossimSensorModelTuple.h 12459 2008-02-11 18:05:01Z dburken $
+// $Id: ossimSensorModelTuple.h 21806 2012-10-05 14:20:45Z dhicks $
 #ifndef ossimSensorModelTuple_HEADER
 #define ossimSensorModelTuple_HEADER
 
@@ -189,7 +189,6 @@ private:
     * @param img Image set index of current image.
     */
    bool getGroundObsEqComponents(const ossim_int32 img,
-                                 const ossim_int32 iter,
                                  const ossimDpt& obs,
                                  const ossimGpt& ptEst,
                                  ossimDpt& resid,

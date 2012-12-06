@@ -9,7 +9,7 @@
 // Contains definition of class ossimXmlNode.
 // 
 //*****************************************************************************
-// $Id: ossimXmlNode.cpp 20369 2011-12-15 13:45:24Z gpotts $
+// $Id: ossimXmlNode.cpp 20747 2012-04-18 15:24:12Z gpotts $
 
 #include <iostream>
 #include <stack>
@@ -381,10 +381,13 @@ void ossimXmlNode::findChildNodes(const ossimString& xpath,
    if (rel_xpath[static_cast<std::string::size_type>(0)] ==
        XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
-      ossimNotify(ossimNotifyLevel_WARN)
-      << "WARNING: ossimXmlNode::findChildNodes\n"
-      << "Only relative XPaths can be searched from a node. "
-      << "Returning null list...\n";
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "WARNING: ossimXmlNode::findChildNodes\n"
+            << "Only relative XPaths can be searched from a node. "
+             << "Returning null list...\n";
+         }
       return;
    }
    
@@ -445,10 +448,14 @@ const ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& x
    if (rel_xpath[static_cast<std::string::size_type>(0)] ==
        XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
-      ossimNotify(ossimNotifyLevel_WARN)
-      << "WARNING: ossimXmlNode::findChildNodes\n"
-      << "Only relative XPaths can be searched from a node. "
-      << "Returning null list...\n";
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+         << "WARNING: ossimXmlNode::findChildNodes\n"
+         << "Only relative XPaths can be searched from a node. "
+         << "Returning null list...\n";
+
+      }
       return 0;
    }
    
@@ -511,10 +518,13 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& xpath)
    if (rel_xpath[static_cast<std::string::size_type>(0)] ==
        XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
-      ossimNotify(ossimNotifyLevel_WARN)
-      << "WARNING: ossimXmlNode::findChildNodes\n"
-      << "Only relative XPaths can be searched from a node. "
-      << "Returning null list...\n";
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+         << "WARNING: ossimXmlNode::findChildNodes\n"
+         << "Only relative XPaths can be searched from a node. "
+         << "Returning null list...\n";
+      }
       return 0;
    }
    
@@ -804,9 +814,13 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::addNode(const ossimString& relPath,
    if (relXpath[static_cast<std::string::size_type>(0)] ==
        XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
-      ossimNotify(ossimNotifyLevel_WARN) << "WARNING: ossimXmlNode::findChildNodes\n"
-      << "Only relative XPaths can be searched from a node. "
-      << "Returning null list...\n";
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << "WARNING: ossimXmlNode::findChildNodes\n"
+         << "Only relative XPaths can be searched from a node. "
+         << "Returning null list...\n";
+         
+      }
       return 0;
    }
    

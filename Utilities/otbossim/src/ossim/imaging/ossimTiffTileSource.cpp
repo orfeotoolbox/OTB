@@ -12,13 +12,15 @@
 // Contains class definition for TiffTileSource.
 //
 //*******************************************************************
-//  $Id: ossimTiffTileSource.cpp 20493 2012-01-25 13:06:57Z gpotts $
+//  $Id: ossimTiffTileSource.cpp 21745 2012-09-16 15:21:53Z dburken $
 
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/support_data/ossimTiffInfo.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimPreferences.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimDpt.h>
@@ -32,6 +34,7 @@
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <xtiffio.h>
+#include <geo_normalize.h>
 #include <cstdlib> /* for abs(int) */
 
 RTTI_DEF1(ossimTiffTileSource, "ossimTiffTileSource", ossimImageHandler)
@@ -89,7 +92,11 @@ ossimTiffTileSource::ossimTiffTileSource()
       thePhotometric(0),
       theRowsPerStrip(0),
       theImageTileWidth(0),
-      theImageTileLength(0)
+      theImageTileLength(0),
+      theImageDirectoryList(0),
+      theCurrentTiffRlevel(0),
+      theCompressionType(0),
+      theOutputBandList(0)
 {}
 
 ossimTiffTileSource::~ossimTiffTileSource()
@@ -98,14 +105,18 @@ ossimTiffTileSource::~ossimTiffTileSource()
 }
 
 ossimRefPtr<ossimImageData> ossimTiffTileSource::getTile(
-   const  ossimIrect& tile_rect,
-   ossim_uint32 resLevel)
+   const ossimIrect& tile_rect, ossim_uint32 resLevel )
 {
-   if (theTile.valid())
+   if ( theTile.valid() == false )
+   {
+      allocateTile(); // First time through...
+   }
+   
+   if ( theTile.valid() )
    {
       // Image rectangle must be set prior to calling getTile.
       theTile->setImageRectangle(tile_rect);
-      theTile->makeBlank();
+
       if ( getTile( theTile.get(), resLevel ) == false )
       {
          if (theTile->getDataObjectStatus() != OSSIM_NULL)
@@ -121,7 +132,7 @@ ossimRefPtr<ossimImageData> ossimTiffTileSource::getTile(
 bool ossimTiffTileSource::getTile(ossimImageData* result,
                                   ossim_uint32 resLevel)
 {
-   static const char MODULE[] ="ossimTiffTileSource::getTile(rect, res)";
+   static const char MODULE[] = "ossimTiffTileSource::getTile(ossimImageData*, resLevel)";
 
    bool status = false;
    
@@ -167,17 +178,7 @@ bool ossimTiffTileSource::getTile(ossimImageData* result,
             }
          }
 
-         //---
-         // Subtract any sub image offset to get the zero based image space
-         // rectangle.
-         //---
          ossimIrect tile_rect = result->getImageRectangle();
-
-         //---
-         // This should be the zero base image rectangle for this res level.
-         // Note passed the non adjusted resLevel by design.
-         //---
-         ossimIrect zeroBasedTileRect = tile_rect;
 
          //---
          // This should be the zero base image rectangle for this res level.
@@ -185,10 +186,8 @@ bool ossimTiffTileSource::getTile(ossimImageData* result,
          //---
          ossimIrect image_rect = getImageRectangle(resLevel);
 
-         //---
          // See if any point of the requested tile is in the image.
-         //---
-         if ( zeroBasedTileRect.intersects(image_rect) )
+         if ( tile_rect.intersects(image_rect) )
          {
             // Initialize the tile if needed as we're going to stuff it.
             if (result->getDataObjectStatus() == OSSIM_NULL)
@@ -221,12 +220,15 @@ bool ossimTiffTileSource::getTile(ossimImageData* result,
                if (reallocateBuffer)
                {
                   // NOTE: Using this buffer will be a thread issue. (drb) 
-                  allocateBuffer();
+                  status = allocateBuffer();
                }
+            }
+
+            if ( status )
+            {  
+               ossimIrect clip_rect = tile_rect.clipToRect( image_rect );
                
-               ossimIrect clip_rect = zeroBasedTileRect.clipToRect(image_rect);
-               
-               if ( !zeroBasedTileRect.completely_within(clip_rect) )
+               if ( !tile_rect.completely_within( clip_rect ) )
                {
                   //---
                   // We're not going to fill the whole tile so start with a
@@ -236,7 +238,7 @@ bool ossimTiffTileSource::getTile(ossimImageData* result,
                }
                
                // Load the tile buffer with data from the tif.
-               if ( loadTile(zeroBasedTileRect, clip_rect, result) )
+               if ( loadTile( tile_rect, clip_rect, result ) )
                {
                   result->validate();
                   status = true;
@@ -280,12 +282,31 @@ bool ossimTiffTileSource::getTile(ossimImageData* result,
 bool ossimTiffTileSource::saveState(ossimKeywordlist& kwl,
                                     const char* prefix) const
 {
-   kwl.add(prefix,
-           "apply_color_palette_flag",
-           theApplyColorPaletteFlag,
-           true);
-   // Currently nothing to do here.
-   return ossimImageHandler::saveState(kwl, prefix);
+   bool result = ossimImageHandler::saveState(kwl, prefix);
+   
+   if ( result )
+   {
+      if ( isBandSelector() && theOutputBandList.size() )
+      {
+         if ( isIdentityBandList( theOutputBandList ) == false )
+         {
+            // If we're not identity output the bands.
+            ossimString bandsString;
+            ossim::toSimpleStringList(bandsString, theOutputBandList);
+            kwl.add(prefix,
+                    ossimKeywordNames::BANDS_KW,
+                    bandsString,
+                    true);
+         }
+      }
+      
+      kwl.add(prefix,
+              "apply_color_palette_flag",
+              theApplyColorPaletteFlag,
+              true);
+   }
+   
+   return result;
 }
 
 //*******************************************************************
@@ -294,23 +315,39 @@ bool ossimTiffTileSource::saveState(ossimKeywordlist& kwl,
 bool ossimTiffTileSource::loadState(const ossimKeywordlist& kwl,
                                     const char* prefix)
 {
+   bool result = false;
+   theOutputBandList.clear();
+
    if (ossimImageHandler::loadState(kwl, prefix))
    {
-      ossimString flag = kwl.find(prefix,
-                                  "apply_color_palette_flag");
-      if(flag != "")
+      std::string pfx = ( prefix ? prefix : "" );
+      std::string key = "apply_color_palette_flag";
+      ossimString value;
+      
+      value.string() = kwl.findKey( pfx, key );
+      if ( value.size() )
       {
-         theApplyColorPaletteFlag = flag.toBool();
+         theApplyColorPaletteFlag = value.toBool();
       }
       else
       {
          theApplyColorPaletteFlag = true;
       }
-      
-     return open();
-   }
 
-   return false;
+      key = ossimKeywordNames::BANDS_KW;
+      value.string() = kwl.findKey( pfx, key );
+      if ( value.size() )
+      {
+         ossim::toSimpleVector( theOutputBandList, value );
+      }
+      
+      if ( open() ) 
+      {
+         // Set the band list after open so that the overview also gets set.
+         result = true;
+      }
+   }
+   return result;
 }
 
 bool ossimTiffTileSource::open(const ossimFilename& image_file)
@@ -634,6 +671,7 @@ bool ossimTiffTileSource::open()
       }
       else
       {
+         // Strip tiff:
          theImageTileWidth[dir]  = 0;
          theImageTileLength[dir] = 0;
          if( !TIFFGetField( theTiffPtr, TIFFTAG_ROWSPERSTRIP,
@@ -641,17 +679,37 @@ bool ossimTiffTileSource::open()
          {
             theRowsPerStrip[dir] = 1;
          }
-         // Let's default the tile size to something efficient
-         //
-         theImageTileWidth[dir] = theImageWidth[dir];
+         
+         theImageTileWidth[dir]  = theImageWidth[dir];
          theImageTileLength[dir] = theRowsPerStrip[dir];
-         if(theImageTileWidth[dir] > 2048) theImageTileWidth[dir] = 2048;
-         if(theImageTileWidth[dir] < 64) theImageTileWidth[dir] = 64;
-         if(theImageTileLength[dir] > 128) theImageTileLength[dir] = 128;
-         if(theImageTileLength[dir] < 64) theImageTileLength[dir] = 64;
+
+         //---
+         // Let's default the tile size to something efficient.
+         //
+         // NOTE:
+         //
+         // This is not used by the strip reader method.  Only by the getImageTileHeight
+         // and getImageTileHeight methods.
+         //---
+         if ( theImageTileWidth[dir] > 256 )
+         {
+            theImageTileWidth[dir] = 256;
+         }
+         else if( theImageTileWidth[dir] < 64 )
+         {
+            theImageTileWidth[dir]  = 64;
+         }
+         if( theImageTileLength[dir] > 256 )
+         {
+            theImageTileLength[dir] = 256;
+         }
+         else if(theImageTileLength[dir] < 64)
+         {
+            theImageTileLength[dir] = 64;
+         }
       }
       
-   }// End of "for (ossim_uint32 dir=0; dir<theNumberOfDirectories; dir++)"
+   } // End of "for (ossim_uint32 dir=0; dir<theNumberOfDirectories; dir++)"
    
    // Reset the directory back to "0".
    if (setTiffDirectory(0) == false)
@@ -770,11 +828,16 @@ bool ossimTiffTileSource::open()
    // Let base-class finish the rest:
    completeOpen();
 
-   // ESH 05/2009 -- If memory allocations failed, then
-   // let's bail out of this driver and hope another one
-   // can handle the image ok. I.e. InitializeBuffers()
-   // was changed to return a boolean success/fail flag.
-   bool bSuccess = initializeBuffers();
+   if ( isBandSelector() && theOutputBandList.size() && ( isIdentityBandList( theOutputBandList ) == false ) )
+   {
+      // This does range checking and will pass to overview if open.
+      setOutputBandList( theOutputBandList );
+   }
+   
+   //---
+   // Note: Logic changed to leave theTile and theBuffer uninitialized until first getTile(...)
+   // request. (drb)
+   //---
 
    if (traceDebug())
    {
@@ -783,7 +846,7 @@ bool ossimTiffTileSource::open()
    }
    
    // Finished...
-   return bSuccess;
+   return true;
 }
    
 ossim_uint32 ossimTiffTileSource::getNumberOfLines( ossim_uint32 resLevel ) const
@@ -900,35 +963,43 @@ bool ossimTiffTileSource::loadTile(const ossimIrect& tile_rect,
 {
    static const char MODULE[] = "ossimTiffTileSource::loadTile";
 
-   bool status = false;
-   
-   switch(theReadMethod[theCurrentDirectory])
+   bool status = true;
+
+   if ( !theBuffer )
    {
-      case READ_TILE:
-         status = loadFromTile(clip_rect, result);
-         break;
-         
-      case READ_SCAN_LINE:
-         status = loadFromScanLine(clip_rect, result);
-         break;
-         
-      case READ_RGBA_U8_TILE:
-         status = loadFromRgbaU8Tile(tile_rect, clip_rect, result);
-         break;
-         
-      case READ_RGBA_U8_STRIP:
-        status = loadFromRgbaU8Strip(tile_rect, clip_rect, result);
-         break;
-         
-      case READ_RGBA_U8A_STRIP:
-         status = loadFromRgbaU8aStrip(tile_rect, clip_rect, result);
-         break;
-         
-      default:
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE << " Unsupported tiff type!" << endl;
-         status = false;
-         break;
+      status = allocateBuffer();
+   }
+
+   if ( status )
+   {
+      switch(theReadMethod[theCurrentDirectory])
+      {
+         case READ_TILE:
+            status = loadFromTile(clip_rect, result);
+            break;
+            
+         case READ_SCAN_LINE:
+            status = loadFromScanLine(clip_rect, result);
+            break;
+            
+         case READ_RGBA_U8_TILE:
+            status = loadFromRgbaU8Tile(tile_rect, clip_rect, result);
+            break;
+            
+         case READ_RGBA_U8_STRIP:
+            status = loadFromRgbaU8Strip(tile_rect, clip_rect, result);
+            break;
+            
+         case READ_RGBA_U8A_STRIP:
+            status = loadFromRgbaU8aStrip(tile_rect, clip_rect, result);
+            break;
+            
+         default:
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << " Unsupported tiff type!" << endl;
+            status = false;
+            break;
+      }
    }
    
    return status;
@@ -1031,17 +1102,15 @@ bool ossimTiffTileSource::loadFromTile(const ossimIrect& clip_rect,
                                        ossimImageData* result)
 {
    static const char MODULE[] = "ossimTiffTileSource::loadFromTile";
-
+   
    ossim_int32 tileSizeRead = 0;
-   //***
+   
+   //---
    // Shift the upper left corner of the "clip_rect" to the an even tile
    // boundary.  Note this will shift in the upper left direction.
-   //***
+   //---
    ossimIpt tileOrigin = clip_rect.ul();
    adjustToStartOfTile(tileOrigin);
-   ossimInterleaveType type =
-   (thePlanarConfig[theCurrentDirectory] == PLANARCONFIG_CONTIG) ?
-   OSSIM_BIP : OSSIM_BIL;
    ossimIpt ulTilePt       = tileOrigin;
 //   ossimIpt subImageOffset = getSubImageOffset(getCurrentTiffRLevel()+theStartingResLevel);
 
@@ -1101,7 +1170,7 @@ bool ossimTiffTileSource::loadFromTile(const ossimIrect& clip_rect,
                   result->loadTile(theBuffer,
                                   bufRectWithOffset,
                                   clipRectWithOffset,
-                                  type);
+                                  OSSIM_BIP);
                }
                else if(tileSizeRead < 0)
                {
@@ -1117,21 +1186,29 @@ bool ossimTiffTileSource::loadFromTile(const ossimIrect& clip_rect,
             }
             else
             {
-               // band separate tiles...
-               for (ossim_uint32 band=0; band<theSamplesPerPixel; ++band)
+               if ( theOutputBandList.empty() )
                {
-                  tileSizeRead = TIFFReadTile(theTiffPtr,
-                                              theBuffer,
-                                              ulTilePt.x,
-                                              ulTilePt.y,
-                                              0,
-                                              band);
+                  // This will set to identity.
+                  ossimImageSource::getOutputBandList( theOutputBandList );
+               }
+               
+               // band separate tiles...
+               std::vector<ossim_uint32>::const_iterator bandIter = theOutputBandList.begin();
+               ossim_uint32 destinationBand = 0;
+               while ( bandIter != theOutputBandList.end() )
+               {
+                  tileSizeRead = TIFFReadTile( theTiffPtr,
+                                               theBuffer,
+                                               ulTilePt.x,
+                                               ulTilePt.y,
+                                               0,
+                                               (*bandIter) );
                   if(tileSizeRead > 0)
                   {
-                     result->loadBand(theBuffer,
-                                     bufRectWithOffset,
-                                     clipRectWithOffset,
-                                     band);
+                     result->loadBand( theBuffer,
+                                       bufRectWithOffset,
+                                       clipRectWithOffset,
+                                       destinationBand );
                   }
                   else if (tileSizeRead < 0)
                   {
@@ -1144,6 +1221,8 @@ bool ossimTiffTileSource::loadFromTile(const ossimIrect& clip_rect,
                      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
                      return false;
                   }
+                  ++bandIter; // Next band...
+                  ++destinationBand;
                }
             }
 
@@ -1224,9 +1303,9 @@ bool ossimTiffTileSource::loadFromRgbaU8Tile(const ossimIrect& tile_rect,
                          theImageTileWidth[theCurrentDirectory]  - 1,
                          ulTilePt.y +
                          theImageTileLength[theCurrentDirectory] - 1);
-         
+
          if ( getCurrentTiffRLevel() != theBufferRLevel ||
-              tiff_tile_rect     != theBufferRect)
+              tiff_tile_rect != theBufferRect)
          {
             // Need to grab a new tile.
             // Read a tile into the buffer.
@@ -1345,20 +1424,16 @@ bool ossimTiffTileSource::loadFromRgbaU8Strip(const ossimIrect& tile_rect,
                                 OUTPUT_TILE_WIDTH + clip_rect.ul().x -
                                 tile_rect.ul().x;
 
-#if 0
-   if (traceDebug())
-   {
-      CLOG << "DEBUG:"
-           << "\nsamples:         " << theSamplesPerPixel
-           << "\ntile_rect:       " << tile_rect
-           << "\nclip_rect:       " << clip_rect
-           << "\nstarting_strip:  " << starting_strip
-           << "\nending_strip:    " << ending_strip
-           << "\nstrip_width:     " << strip_width
-           << "\noutput_tile_offset:  " << output_tile_offset
-
-           << endl;
-   }
+#if 0 /* Please keep for debug: */
+   CLOG << "DEBUG:"
+        << "\nsamples:         " << theSamplesPerPixel
+        << "\ntile_rect:       " << tile_rect
+        << "\nclip_rect:       " << clip_rect
+        << "\nstarting_strip:  " << starting_strip
+        << "\nending_strip:    " << ending_strip
+        << "\nstrip_width:     " << strip_width
+        << "\noutput_tile_offset:  " << output_tile_offset
+        << endl;
 #endif
    
    //***
@@ -1377,16 +1452,30 @@ bool ossimTiffTileSource::loadFromRgbaU8Strip(const ossimIrect& tile_rect,
    // Loop through strips...
    for (ossim_uint32 strip=starting_strip; strip<=ending_strip; strip++)
    {
-      if (TIFFReadRGBAStrip(theTiffPtr,
-                            (strip*theRowsPerStrip[theCurrentDirectory]),
-                            (uint32*)theBuffer) == 0) // use tiff typedef
+      if ( (theBufferRLevel != theCurrentDirectory) ||
+           ( clip_rect.completely_within( theBufferRect ) == false ) )
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE << " Error reading strip!" <<endl;
-         delete [] d;
-         return false;
-      }
+         if (TIFFReadRGBAStrip(theTiffPtr,
+                               (strip*theRowsPerStrip[theCurrentDirectory]),
+                               (uint32*)theBuffer) == 0) // use tiff typedef
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << " Error reading strip!" <<endl;
+            delete [] d;
+            return false;
+         }
 
+         // Capture rect and rlevel of buffer:
+         theBufferRLevel = theCurrentDirectory;
+         theBufferRect = ossimIrect(
+            0,
+            starting_strip,
+            theImageWidth[theCurrentDirectory]-1,
+            (ending_strip-starting_strip) ? (ending_strip-starting_strip) *
+            theRowsPerStrip[theCurrentDirectory] - 1 :
+            theRowsPerStrip[theCurrentDirectory] - 1 );
+      }
+      
       //***
       // If the last strip is a partial strip then the first line of the
       // strip will be the last line of the image.
@@ -1419,8 +1508,8 @@ bool ossimTiffTileSource::loadFromRgbaU8Strip(const ossimIrect& tile_rect,
             // orgainized from top to bottom so the lineBuf must be offset
             // accordingly.
             //
-               ossim_uint32* s = (ossim_uint32*)(theBuffer+ ((theRowsPerStrip[theCurrentDirectory] - row -
-                                                              strip_offset - 1) * strip_width + clip_rect.ul().x * 4));
+            ossim_uint32* s = (ossim_uint32*)(theBuffer+ ((theRowsPerStrip[theCurrentDirectory] - row -
+                                                           strip_offset - 1) * strip_width + clip_rect.ul().x * 4));
             
             // Copy the data to the output buffer.
             ossim_uint32 i=0;
@@ -1671,102 +1760,6 @@ ossimString ossimTiffTileSource::getReadMethod(ossim_uint32 directory) const
    }
 }      
 
-bool ossimTiffTileSource::allocateBuffer()
-{
-   //***
-   // Allocate memory for a buffer to hold data grabbed from the tiff file.
-   //***
-   ossim_uint32 buffer_size=0;
-   switch (theReadMethod[theCurrentDirectory])
-   {
-      case READ_RGBA_U8_TILE:
-         buffer_size = theImageTileWidth[theCurrentDirectory]*
-            theImageTileWidth[theCurrentDirectory]*theBytesPerPixel*4;
-         break;
-         
-      case READ_TILE:
-         if (thePlanarConfig[theCurrentDirectory] == PLANARCONFIG_CONTIG)
-         {
-            buffer_size = theImageTileWidth[theCurrentDirectory] *
-               theImageTileLength[theCurrentDirectory] *
-               theBytesPerPixel * theSamplesPerPixel;
-         }
-         else
-         {
-            buffer_size = theImageTileWidth[theCurrentDirectory] *
-               theImageTileLength[theCurrentDirectory] *
-               theBytesPerPixel;
-         }
-         break;
-         
-      case READ_RGBA_U8_STRIP:
-      case READ_RGBA_U8A_STRIP:
-         buffer_size = theImageWidth[0]*theRowsPerStrip[theCurrentDirectory]*
-            theBytesPerPixel*4;
-         break;
-         
-      case READ_SCAN_LINE:
-      {
-#if OSSIM_BUFFER_SCAN_LINE_READS
-         // Buffer a image width by tile height.
-         buffer_size = theImageWidth[0] * theBytesPerPixel *
-            theSamplesPerPixel * theCurrentTileHeight;
-#else
-         buffer_size = theImageWidth[0] * theBytesPerPixel * theSamplesPerPixel;
-#endif
-         break;
-      }
-      default:
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "Unknown read method!" << endl;
-         print(ossimNotify(ossimNotifyLevel_WARN));
-         return false;
-         break;
-   }
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimTiffTileSource::allocateBuffer DEBUG:"
-         << "\nbuffer_size:  " << buffer_size
-         << endl;
-   }
-
-   theBufferRect.makeNan();
-   theBufferRLevel = theCurrentDirectory;
-
-   bool bSuccess = true;
-   if (buffer_size != theBufferSize)
-   {
-      theBufferSize = buffer_size;
-      if (theBuffer)
-      {
-         delete [] theBuffer;
-      }
-
-      // ESH 05/2009 -- Fix for ticket #738:  
-      // image_info crashing on aerial_ortho image during ingest
-      try
-      {
-         theBuffer = new ossim_uint8[buffer_size];
-      }
-      catch(...)
-      {
-         theBuffer = 0;
-         bSuccess = false;
-         if (traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << "ossimTiffTileSource::allocateBuffer WARN:"
-               << "\nNot enough memory: buffer_size:  " << buffer_size
-               << endl;
-         }
-      }
-   }
-
-   return bSuccess;
-}
-
 ossim_uint32 ossimTiffTileSource::getNumberOfDirectories() const
 {
    return theNumberOfDirectories;
@@ -1841,7 +1834,12 @@ void ossimTiffTileSource::setApplyColorPaletteFlag(bool flag)
       
       setReadMethod();
 
-      initializeBuffers();
+      theTile = 0;
+      if (theBuffer)
+      {
+         delete [] theBuffer;
+         theBuffer = 0;
+      }
    }
 }
 
@@ -1923,7 +1921,67 @@ ossim_uint32 ossimTiffTileSource::getNumberOfInputBands() const
 
 ossim_uint32 ossimTiffTileSource::getNumberOfOutputBands () const
 {
-   return getNumberOfInputBands();
+   ossim_uint32 bands = theOutputBandList.size();
+   if ( !bands )
+   {
+      bands = getNumberOfInputBands();
+   }
+   return bands;
+}
+
+bool ossimTiffTileSource::isBandSelector() const
+{
+   bool result = false;
+   if ( isOpen() && theReadMethod.size() && ( theReadMethod.size() == thePlanarConfig.size() ) )
+   {
+      // Tiled band separate currently is only coded to be band selector.
+      result = true;
+      for ( ossim_uint32 i = 0; i < theReadMethod.size(); ++i )
+      {
+         if ( ( theReadMethod[i] != READ_TILE ) ||
+              ( thePlanarConfig[i] == PLANARCONFIG_CONTIG ) )
+         {
+            result = false;
+            break;
+         }
+      }
+      if ( result && theOverview.valid() )
+      {
+         result = theOverview->isBandSelector();
+      }
+   }
+   return result;
+}
+
+bool ossimTiffTileSource::setOutputBandList(const std::vector<ossim_uint32>& band_list)
+{
+   bool result = false;
+   if ( isBandSelector() )
+   {
+      // Making a copy as passed in list could be our m_outputBandList.
+      std::vector<ossim_uint32> inputList = band_list;
+      result = ossimImageHandler::setOutputBandList( inputList, theOutputBandList );
+      if ( result && theTile.valid() )
+      {
+         if ( theTile->getNumberOfBands() != theOutputBandList.size() )
+         {
+            theTile = 0; // Force a reinitialize on next getTile.
+         }
+      }
+   }
+   return result;
+}
+
+void ossimTiffTileSource::getOutputBandList(std::vector<ossim_uint32>& bandList) const
+{
+   if ( theOutputBandList.size() )
+   {
+      bandList = theOutputBandList;
+   }
+   else
+   {
+      ossimImageSource::getOutputBandList( bandList );
+   }
 }
 
 bool ossimTiffTileSource::isOpen()const
@@ -2045,35 +2103,6 @@ void ossimTiffTileSource::setReadMethod()
    // Reset the directory back to "0".
    setTiffDirectory(0);
 }
-
-bool ossimTiffTileSource::initializeBuffers()
-{
-   if(theBuffer)
-   {
-      delete [] theBuffer;
-      theBuffer = 0;
-   }
-
-   ossimImageDataFactory* idf = ossimImageDataFactory::instance();
-
-   theTile = idf->create(this,
-                         this);
-   
-   //
-   // Tiles are constructed with no buffer storage.  Call initialize for
-   // "theTile" to allocate memory.  Leave "theBlankTile" with a
-   // ossimDataObjectStatus of OSSIM_NULL since no data will ever be
-   // stuffed in it.
-   //
-   theTile->initialize();
-
-   // The width and height mus be set prior to call to allocateBuffer.
-   theCurrentTileWidth  = theTile->getWidth();
-   theCurrentTileHeight = theTile->getHeight();
-   
-   return allocateBuffer();
-}
-
 
 void ossimTiffTileSource::setProperty(ossimRefPtr<ossimProperty> property)
 {
@@ -2403,4 +2432,130 @@ bool ossimTiffTileSource::isPowerOfTwoDecimation(ossim_uint32 level) const
       }
    }
    return result;
+}
+
+void ossimTiffTileSource::allocateTile()
+{
+   theTile = 0;
+   ossim_uint32 bands = 0;
+   if ( theOutputBandList.empty() )
+   {
+      bands = getNumberOfOutputBands();
+   }
+   else
+   {
+      bands = theOutputBandList.size();
+   }
+
+   if ( bands )
+   {
+      theTile = ossimImageDataFactory::instance()->create( this, getOutputScalarType(), bands );
+      if ( theTile.valid() )
+      {
+         theTile->initialize();
+         
+         // The width and height mus be set prior to call to allocateBuffer.
+         theCurrentTileWidth  = theTile->getWidth();
+         theCurrentTileHeight = theTile->getHeight();
+      }
+   }
+}
+
+bool ossimTiffTileSource::allocateBuffer()
+{
+   bool bSuccess = true;
+
+   // Allocate memory for a buffer to hold data grabbed from the tiff file.
+   ossim_uint32 buffer_size=0;
+   switch (theReadMethod[theCurrentDirectory])
+   {
+      case READ_RGBA_U8_TILE:
+      {
+         buffer_size = theImageTileWidth[theCurrentDirectory]*
+            theImageTileWidth[theCurrentDirectory]*theBytesPerPixel*4;
+         break;
+      }  
+      case READ_TILE:
+      {
+         if (thePlanarConfig[theCurrentDirectory] == PLANARCONFIG_CONTIG)
+         {
+            buffer_size = theImageTileWidth[theCurrentDirectory] *
+               theImageTileLength[theCurrentDirectory] *
+               theBytesPerPixel * theSamplesPerPixel;
+         }
+         else
+         {
+            buffer_size = theImageTileWidth[theCurrentDirectory] *
+               theImageTileLength[theCurrentDirectory] *
+               theBytesPerPixel;
+         }
+         break;
+      }  
+      case READ_RGBA_U8_STRIP:
+      case READ_RGBA_U8A_STRIP:
+      {
+         buffer_size = theImageWidth[0]*theRowsPerStrip[theCurrentDirectory]*
+            theBytesPerPixel*4;
+         break;
+      }  
+      case READ_SCAN_LINE:
+      {
+#if OSSIM_BUFFER_SCAN_LINE_READS
+         // Buffer a image width by tile height.
+         buffer_size = theImageWidth[0] * theBytesPerPixel *
+            theSamplesPerPixel * theCurrentTileHeight;
+#else
+         buffer_size = theImageWidth[0] * theBytesPerPixel * theSamplesPerPixel;
+#endif
+         break;
+      }
+      default:
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "Unknown read method!" << endl;
+         print(ossimNotify(ossimNotifyLevel_WARN));
+         bSuccess = false;
+      }
+   }
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimTiffTileSource::allocateBuffer DEBUG:"
+         << "\nbuffer_size:  " << buffer_size
+         << endl;
+   }
+
+   theBufferRect.makeNan();
+   theBufferRLevel = theCurrentDirectory;
+
+   if ( bSuccess && ( buffer_size != theBufferSize ) )
+   {
+      theBufferSize = buffer_size;
+      if (theBuffer)
+      {
+         delete [] theBuffer;
+      }
+
+      // ESH 05/2009 -- Fix for ticket #738:  
+      // image_info crashing on aerial_ortho image during ingest
+      try
+      {
+         theBuffer = new ossim_uint8[buffer_size];
+      }
+      catch(...)
+      {
+         theBuffer = 0;
+         bSuccess = false;
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimTiffTileSource::allocateBuffer WARN:"
+               << "\nNot enough memory: buffer_size:  " << buffer_size
+               << endl;
+         }
+      }
+   }
+
+   return bSuccess;
 }

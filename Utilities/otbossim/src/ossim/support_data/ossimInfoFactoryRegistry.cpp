@@ -20,6 +20,7 @@ ossimInfoFactoryRegistry* ossimInfoFactoryRegistry::m_instance = 0;
 
 ossimInfoFactoryRegistry::~ossimInfoFactoryRegistry()
 {
+   m_factoryList.clear();
 }
 
 ossimInfoFactoryRegistry* ossimInfoFactoryRegistry::instance()
@@ -29,6 +30,42 @@ ossimInfoFactoryRegistry* ossimInfoFactoryRegistry::instance()
       m_instance = new ossimInfoFactoryRegistry;
    }
    return m_instance;
+}
+
+void ossimInfoFactoryRegistry::registerFactory(
+   ossimInfoFactoryInterface* factory)
+{
+   if (factory)
+   {
+      m_mutex.lock();
+      m_factoryList.push_back(factory);
+      m_mutex.unlock();
+   }
+}
+
+void ossimInfoFactoryRegistry::registerFactoryToFront(
+   ossimInfoFactoryInterface* factory)
+{
+   if (factory)
+   {
+      m_mutex.lock();
+      m_factoryList.insert( m_factoryList.begin(), factory );
+      m_mutex.unlock();
+   }
+}
+
+void ossimInfoFactoryRegistry::unregisterFactory(
+   ossimInfoFactoryInterface* factory)
+{
+   m_mutex.lock();
+   std::vector<ossimInfoFactoryInterface*>::iterator i =
+      std::find(m_factoryList.begin(), m_factoryList.end(), factory);
+   
+   if( i != m_factoryList.end() )
+   {
+      m_factoryList.erase(i);
+   }
+   m_mutex.unlock();
 }
 
 ossimInfoBase* ossimInfoFactoryRegistry::create(
@@ -54,6 +91,8 @@ ossimInfoBase* ossimInfoFactoryRegistry::create(
 
 /** hidden from use default constructor */
 ossimInfoFactoryRegistry::ossimInfoFactoryRegistry()
+   : m_factoryList(),
+     m_mutex()
 {
    this->registerFactory(ossimInfoFactory::instance());
 }

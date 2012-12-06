@@ -7,11 +7,9 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimPluginLibrary.cpp 18967 2011-02-25 19:40:48Z gpotts $
+// $Id: ossimPluginLibrary.cpp 20694 2012-03-19 12:22:05Z dburken $
 #include <ossim/plugin/ossimPluginLibrary.h>
 #include <iostream>
-
-RTTI_DEF1(ossimPluginLibrary, "ossimPluginLibrary", ossimDynamicLibrary);
 
 ossimPluginLibrary::ossimPluginLibrary()
    :ossimDynamicLibrary(),

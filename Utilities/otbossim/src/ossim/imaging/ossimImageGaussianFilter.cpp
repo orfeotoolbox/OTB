@@ -4,11 +4,13 @@
 // See LICENSE.txt file in the top level directory for more details.
 // class ossimImageGaussianFilter : tile source
 //*******************************************************************
-// $Id: ossimImageGaussianFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
-#include <cmath>
+// $Id: ossimImageGaussianFilter.cpp 21631 2012-09-06 18:10:55Z dburken $
+
 #include <ossim/imaging/ossimImageGaussianFilter.h>
 #include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossimBooleanProperty.h>
+#include <ossim/imaging/ossimImageData.h>
+#include <cmath>
 
 RTTI_DEF1(ossimImageGaussianFilter, "ossimImageGaussianFilter", ossimImageSourceFilter);
 

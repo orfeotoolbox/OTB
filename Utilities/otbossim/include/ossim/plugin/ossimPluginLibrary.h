@@ -5,9 +5,9 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimPluginLibrary.h 18967 2011-02-25 19:40:48Z gpotts $
+// $Id: ossimPluginLibrary.h 20694 2012-03-19 12:22:05Z dburken $
 #ifndef ossimPluginLibrary_HEADER
-#define ossimPluginLibrary_HEADER
+#define ossimPluginLibrary_HEADER 1
 #include <ossim/plugin/ossimSharedObjectBridge.h>
 #include <ossim/plugin/ossimDynamicLibrary.h>
 
@@ -25,8 +25,6 @@ public:
 protected:
    ossimString m_options;
    ossimSharedObjectInfo* m_info;
-
-TYPE_DATA
 };
 
 #endif 

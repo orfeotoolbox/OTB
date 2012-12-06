@@ -8,10 +8,11 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBandClipFilter.cpp 12912 2008-05-28 15:05:54Z gpotts $
+// $Id: ossimBandClipFilter.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimBandClipFilter.h>
 #include <ossim/base/ossimNotifyContext.h>
+#include <ossim/imaging/ossimImageData.h>
 
 RTTI_DEF1(ossimBandClipFilter, "ossimBandClipFilter", ossimImageSourceFilter);
 

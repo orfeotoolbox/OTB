@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimLandsatTopoCorrectionFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimLandsatTopoCorrectionFilter.cpp 21850 2012-10-21 20:09:55Z dburken $
 #include <ossim/imaging/ossimLandsatTopoCorrectionFilter.h>
 #include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
 #include <ossim/support_data/ossimFfL7.h>
@@ -17,7 +17,7 @@
 #include <ossim/base/ossim2dLinearRegression.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimKeywordNames.h>
-
+#include <ossim/base/ossimVisitor.h>
 #include <iostream>
 
 RTTI_DEF1(ossimLandsatTopoCorrectionFilter, "ossimLandsatTopoCorrectionFilter",ossimTopographicCorrectionFilter);
@@ -77,21 +77,20 @@ ossimFilename ossimLandsatTopoCorrectionFilter::findLandsatHeader()
    {
       return result;
    }
-   ossimConnectableObject::ConnectableObjectList handlerList;
 
-   getInput(0)->findAllInputsOfType(handlerList,
-                                    STATIC_TYPE_INFO(ossimImageHandler),
-                                    true,
-                                    true);
+   ossimTypeNameVisitor visitor(ossimString("ossimImageHandler"),
+                                true,
+                                ossimVisitor::VISIT_CHILDREN|ossimVisitor::VISIT_INPUTS);
+   getInput(0)->accept(visitor);
    
-   ossimImageHandler* handler = NULL;
-
-   if(handlerList.size())
+   // If there are multiple image handlers, e.g. a mosaic do not uses.
+   ossimRefPtr<ossimImageHandler> handler = 0;   
+   if ( visitor.getObjects().size() == 1 )
    {
-      handler = (ossimImageHandler*)handlerList[0].get();
+      handler = visitor.getObjectAs<ossimImageHandler>( 0 );
    }
 
-   if(handler)
+   if( handler.valid() )
    {
       ossimFilename imageFile = handler->getFilename();
       imageFile.setExtension("fst");

@@ -5,7 +5,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.cpp 20440 2012-01-11 16:29:48Z gpotts $
+// $Id: ossimKeywordlist.cpp 21527 2012-08-26 16:50:49Z dburken $
 
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDirectory.h>
@@ -28,8 +28,10 @@ static const char NULL_KEY_NOTICE[]
 
 #ifdef OSSIM_ID_ENABLED
 static const bool TRACE = false;
-static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 20440 2012-01-11 16:29:48Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 21527 2012-08-26 16:50:49Z dburken $";
 #endif
+
+const std::string ossimKeywordlist::NULL_KW = "";
 
 ossimKeywordlist::ossimKeywordlist(const ossimKeywordlist& src)
 :m_map(src.m_map),
@@ -551,18 +553,31 @@ void ossimKeywordlist::writeToStream(std::ostream& out) const
    }
 }
 
-std::string ossimKeywordlist::findKey(const std::string& key) const
+bool ossimKeywordlist::hasKey( const std::string& key ) const
 {
-   std::string result;
+   bool result = false;
    KeywordMap::const_iterator i = m_map.find(key);
    if (i != m_map.end())
    {
-      result = (*i).second;
+      result = true;
    }
    return result;
 }
 
-std::string ossimKeywordlist::findKey(const std::string& prefix, const std::string& key) const
+const std::string& ossimKeywordlist::findKey(const std::string& key) const
+{
+   // std::string result;
+   KeywordMap::const_iterator i = m_map.find(key);
+   if (i != m_map.end())
+   {
+      // result = (*i).second;
+      return (*i).second;
+   }
+   return ossimKeywordlist::NULL_KW;
+}
+
+const std::string& ossimKeywordlist::findKey(const std::string& prefix,
+                                             const std::string& key) const
 {
    std::string k = prefix+key;
    return findKey(k);
@@ -707,43 +722,15 @@ ossimKeywordlist::getMapEntry(const ossimString& key)
 bool ossimKeywordlist::parseFile(const ossimFilename& file,
                                  bool ignoreBinaryChars)
 {
+   if(!file.exists()) return false;
+   bool result = false;
    std::ifstream is;
    is.open(file.c_str(), std::ios::in | std::ios::binary);
    
-   if ( !is.is_open() )
+   if(!is.fail())
    {
-      // ESH 07/2008, Trac #234: OSSIM is case sensitive 
-      // when using worldfile templates during ingest
-      // -- If first you don't succeed with the user-specified
-      // filename, try again with the results of a case insensitive search.
-      ossimDirectory directory(file.path());
-      ossimFilename filename(file.file());
-      
-      std::vector<ossimFilename> result;
-      bool bSuccess = directory.findCaseInsensitiveEquivalents( filename, result );
-      if ( bSuccess == true )
-      {
-         int numResults = (int)result.size();
-         int i;
-         for ( i=0; i<numResults && !is.is_open(); ++i )
-         {
-            is.open( result[i].c_str(), std::ios::in | std::ios::binary );
-         }
-      }
-      
-      if ( !is.is_open() )
-      {
-         if ( traceDebug() ) 
-         {
-            // report all errors that aren't existence problems.
-            // we want to know about things like permissions, too many open files, etc.
-            ossimNotify(ossimNotifyLevel_DEBUG)
-            << "Error opening file: " << file.c_str() << std::endl;
-         }
-         return false;
-      }
+      result = parseStream(is, ignoreBinaryChars);
    }
-   bool result = parseStream(is, ignoreBinaryChars);
    
    is.close();
    

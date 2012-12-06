@@ -12,7 +12,7 @@
 // See class doxygen descriptions below for more.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimInfo.h 20122 2011-10-11 17:23:03Z dburken $
+// $Id: ossimInfo.h 21773 2012-09-26 00:08:19Z dlucas $
 
 #ifndef ossimInfo_HEADER
 #define ossimInfo_HEADER 1
@@ -59,9 +59,8 @@ public:
     * all options and put in keyword list m_kwl.
     * 
     * @param ap Arg parser to initialize from.
+    *
     * @return true, indicating process should continue with execute.
-    * @note A throw with an error message of "usage" is used to get out when
-    * a usage is printed.
     */
    bool initialize(ossimArgumentParser& ap);
 
@@ -114,7 +113,7 @@ public:
                      ossimKeywordlist& kwl);
    
    /**
-    * @brief Opens image.
+    * @brief Opens image handler and stores in m_img data member.
     * @param Image to open.
     * @note Throws ossimException if image cannot be opened.
     */
@@ -216,7 +215,14 @@ public:
     *
     * @return true if entry info was saved to keyword list false if not.
     */
-   bool getImageGeometryInfo(ossim_uint32 entry, ossimKeywordlist& kwl, bool dnoFlag);
+   bool getImageGeometryInfo( ossim_uint32 entry, 
+                              ossimKeywordlist& kwl, 
+                              bool dnoFlag );
+
+   void getCenterImage(ossimKeywordlist& kwl);
+   bool getCenterImage(ossim_uint32 entry, ossimKeywordlist& kwl);
+   void getCenterGround(ossimKeywordlist& kwl);
+   bool getCenterGround(ossim_uint32 entry, ossimKeywordlist& kwl);
 
    /**
     * @brief Populates keyword list with image rectangle.
@@ -401,7 +407,112 @@ public:
    void getRadiometry(ossimScalarType scalar, std::string& s) const;
    
 private:
+ 
+   /**
+    * @brief Populates keyword list with metadata.
+    * @param ih Pointer to an image handler.
+    * @param kwl Keyword list to populate.
+    */
+   void getImageMetadata( const ossimImageHandler* ih, 
+                          ossimKeywordlist& kwl ) const;
+ 
+  /**
+   * @brief Populates keyword list with palette data.
+   * @param ih Pointer to an image handler.
+   * @param kwl Keyword list to populate.
+   */
+   void getImagePalette( ossimImageHandler* ih, 
+                         ossimKeywordlist& kwl ) const;
+  
+   /**
+    * @brief Populates keyword list with general image information.
+    * @param ih Pointer to an image handler.
+    * @param kwl Keyword list to populate.
+    * @param dnoFlag If true no entries flaged as overviews will be output.
+    */
+   void getImageInfo( ossimImageHandler* ih, 
+                      ossimKeywordlist& kwl, 
+                      bool dnoFlag ) const;
 
+   /**
+    * @brief Populates keyword list with general image information.
+    * @param ih Pointer to an image handler.
+    * @param entry Entry number to select.  Note this is the entry number from
+    * the getEntryList call not a simple zero based entry index.
+    * @param kwl Keyword list to populate.
+    * @param dnoFlag If true no entries flaged as overviews will be output.
+    * @return true if entry info was saved to keyword list false if not.
+    */
+   bool getImageInfo( ossimImageHandler* ih, 
+                      ossim_uint32 entry, 
+                      ossimKeywordlist& kwl, 
+                      bool dnoFlag ) const;
+   
+   /**
+    * @brief Populates keyword list with image geometry/projection information.
+    * @param ih Pointer to an image handler.
+    * @param kwl Keyword list to populate.
+    * @param dnoFlag If true no entries flaged as overviews will be output.
+    */
+   void getImageGeometryInfo( ossimImageHandler* ih,
+                              ossimKeywordlist& kwl, 
+                              bool dnoFlag ) const;
+
+   /**
+    * @brief Populates keyword list with image geometry/projection information.
+    * @param ih Pointer to an image handler.
+    * @param entry Entry number to select.  Note this is the entry number
+    * from the getEntryList call not a simple zero based entry index.
+    * @param kwl Keyword list to populate.
+    * @param dnoFlag If true no entries flaged as overviews will be output.
+    * @return true if entry info was saved to keyword list false if not.
+    */
+   bool getImageGeometryInfo( ossimImageHandler* ih,
+                              ossim_uint32 entry, 
+                              ossimKeywordlist& kwl, 
+                              bool dnoFlag ) const;
+
+   void getCenterImage( ossimImageHandler* ih,
+                      ossimKeywordlist& kwl ) const;
+   bool getCenterImage( ossimImageHandler* ih,
+                      ossim_uint32 entry, 
+                      ossimKeywordlist& kwl ) const;
+   void getCenterGround( ossimImageHandler* ih,
+                      ossimKeywordlist& kwl ) const;
+   bool getCenterGround( ossimImageHandler* ih,
+                      ossim_uint32 entry, 
+                      ossimKeywordlist& kwl ) const;
+
+   /**
+    * @brief Populates keyword list with image rectangle.
+    *
+    * @param kwl Keyword list to populate.
+    */
+   void getImageRect( ossimImageHandler* ih,
+                      ossimKeywordlist& kwl ) const;
+
+   /**
+    * @brief Populates keyword list with image rectangle.
+    * @param entry Entry number to select.  Note this is the entry number from
+    * the getEntryList call not a simple zero based entry index.
+    * @param kwl Keyword list to populate.
+    * @return true if entry info was saved to keyword list false if not.
+    */
+   bool getImageRect( ossimImageHandler* ih,
+                      ossim_uint32 entry, 
+                      ossimKeywordlist& kwl ) const;
+
+   /** @return true if current open image entry is an overview. */
+   bool isImageEntryOverview( const ossimImageHandler* ih ) const;
+
+  /**
+   * @brief Opens image.
+   * @param Image to open.
+   * @return ossimRefPtr with image handler.
+   * @note Throws ossimException if image cannot be opened.
+   */
+   ossimRefPtr<ossimImageHandler> openImageHandler(const ossimFilename& file) const;
+   
    /** @brief Initializes arg parser and outputs usage. */
    void usage(ossimArgumentParser& ap);
 

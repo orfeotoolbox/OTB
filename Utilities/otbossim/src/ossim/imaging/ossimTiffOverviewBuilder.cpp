@@ -11,13 +11,7 @@
 // Contains class definition for TiffOverviewBuilder
 // 
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.cpp 20206 2011-11-04 15:16:31Z dburken $
-
-#include <algorithm> /* for std::fill */
-// #include <cstring>
-#include <sstream>
-using namespace std;
-#include <xtiffio.h>
+//  $Id: ossimTiffOverviewBuilder.cpp 21653 2012-09-07 15:03:08Z dburken $
 
 #include <ossim/imaging/ossimTiffOverviewBuilder.h>
 #include <ossim/parallel/ossimMpi.h>
@@ -44,6 +38,11 @@ using namespace std;
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/support_data/ossimGeoTiff.h>
 
+#include <xtiffio.h>
+#include <algorithm> /* for std::fill */
+#include <sstream>
+using namespace std;
+
 RTTI_DEF1(ossimTiffOverviewBuilder,
           "ossimTiffOverviewBuilder",
           ossimOverviewBuilderBase)
@@ -54,7 +53,7 @@ static ossimTrace traceDebug("ossimTiffOverviewBuilder:degug");
 static const char COPY_ALL_KW[] = "copy_all_flag";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 20206 2011-11-04 15:16:31Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 21653 2012-09-07 15:03:08Z dburken $";
 #endif
 
 
@@ -188,7 +187,7 @@ bool ossimTiffOverviewBuilder::execute()
          << MODULE << " NOTICE:"
          << "\nImage has required reduced resolution data sets.\nReturning..."
          << std::endl;
-      return false;
+      return true;
    }
    
    // If alpha bit mask generation was requested, then need to instantiate the mask writer object.
@@ -444,8 +443,9 @@ bool ossimTiffOverviewBuilder::execute()
      
       setCurrentMessage(ossimString("Finished..."));
    }
-
    
+   finalize();  // Reset band list if a band selector.
+
    return true;
 }
 
@@ -877,12 +877,36 @@ bool ossimTiffOverviewBuilder::setTags(TIFF* tif,
    
    TIFFSetField( tif, TIFFTAG_TILEWIDTH,  m_tileWidth  );
    TIFFSetField( tif, TIFFTAG_TILELENGTH, m_tileHeight );
-   
-   // Set the compression related tags...
-   TIFFSetField( tif, TIFFTAG_COMPRESSION, m_tiffCompressType );
-   if (m_tiffCompressType == COMPRESSION_JPEG)
+
+   //---
+   // Only turn on compression for 8 bit, one or three band data.  Not sure what compression
+   // types can handle what but this was crashing ossim-prepoc on a directory walk with jpeg
+   // compression.
+   //---
+   if ( ( m_imageHandler->getOutputScalarType() == OSSIM_UINT8 ) &&
+        ( ( m_imageHandler->getNumberOfInputBands() == 3 ) ||
+          ( m_imageHandler->getNumberOfInputBands() == 1 ) ) )
    {
-      TIFFSetField( tif, TIFFTAG_JPEGQUALITY,  m_jpegCompressQuality);
+      // Set the compression related tags...
+      TIFFSetField( tif, TIFFTAG_COMPRESSION, m_tiffCompressType );
+      if (m_tiffCompressType == COMPRESSION_JPEG)
+      {
+         TIFFSetField( tif, TIFFTAG_JPEGQUALITY,  m_jpegCompressQuality);
+      }
+   }
+   else
+   {
+      if ( traceDebug() && (m_tiffCompressType != COMPRESSION_NONE ) )
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimTiffOverviewBuilder::setTags WARNING:\n"
+         << "Compression not set for this data type:\n"
+         << "scalar type: "
+         << ossimScalarTypeLut::instance()->getEntryString(m_imageHandler->getOutputScalarType())
+         << "\nband count: " << m_imageHandler->getNumberOfInputBands()
+         << std::endl;
+      }
+      TIFFSetField( tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE );
    }
    
    // Set the min/max values.
@@ -1076,156 +1100,132 @@ bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
 {
    static const char MODULE[] = "ossimTiffOverviewBuilder::initializeFromHandler";
 
-   m_imageHandler = imageSource;
+   bool result = ossimOverviewBuilderBase::setInputSource( imageSource );
    
-   if (!m_imageHandler)
+   if ( result )
    {
-      // Set the error...
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " ERROR:"
-         << "\nNull image handler pointer passed to constructor! Returning..."
-         << std::endl;
-      ossimSetError(getClassName(),
-                    ossimErrorCodes::OSSIM_ERROR,
-                    "%s File %s line %d\nNULL pointer passed to constructor!",
-                    MODULE,
-                    __FILE__,
-                    __LINE__);
-      return false;
-   }
-   else if (m_imageHandler->getErrorStatus() ==
-            ossimErrorCodes::OSSIM_ERROR)
-   {
-      // Set the error...
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " ERROR:"
-         << "\nError detected in image handler!  Returning..."
-         << std::endl;
-      ossimSetError(getClassName(),
-                    ossimErrorCodes::OSSIM_ERROR,
-                    "%s file %s line %d\nImageHandler error detected!",
-                    MODULE,
-                    __FILE__,
-                    __LINE__);
-      return false;
-   }
-
-   if(!m_outputTileSizeSetFlag)
-   {
-      ossimIpt tileSize;
-      ossim::defaultTileSize(tileSize);
-
-#if 0
-      if(m_imageHandler->getBoundingRect().width() != m_imageHandler->getImageTileWidth())
+      if(!m_outputTileSizeSetFlag)
       {
-         tileSize = ossimIpt(m_imageHandler->getImageTileWidth(),
-                             m_imageHandler->getImageTileHeight());
+         ossimIpt tileSize;
+         ossim::defaultTileSize(tileSize);
+         m_tileWidth  = tileSize.x;
+         m_tileHeight = tileSize.y;
       }
-#endif
       
-      m_tileWidth  = tileSize.x;
-      m_tileHeight = tileSize.y;
-   }
+      if (traceDebug())
+      {
+         CLOG << "DEBUG:"
+              << "\nm_tileWidth:   " << m_tileWidth
+              << "\nm_tileHeight:  " << m_tileHeight
+              << "\nSource image is tiled:  "
+              << (m_imageHandler->isImageTiled()?"true":"false")
+              << "\nm_imageHandler->getTileWidth():  "
+              << m_imageHandler->getTileWidth()
+              << "\nm_imageHandler->getTileHeight():  "
+              << m_imageHandler->getTileHeight()
+              << "\nm_imageHandler->getImageTileWidth():  "
+              << m_imageHandler->getImageTileWidth()
+              << "\nm_imageHandler->getImageTileHeight():  "
+              << m_imageHandler->getImageTileHeight()
+              << std::endl;
+      }
 
-   // This will set the flag to scan for min, max, nulls if needed.
-   initializeScanOptions();
+      switch(m_imageHandler->getOutputScalarType())
+      {
+         case OSSIM_UINT8:
+            m_bitsPerSample = 8;
+            m_bytesPerPixel = 1;
+            m_sampleFormat  = SAMPLEFORMAT_UINT;
+            break;
+            
+         case OSSIM_USHORT11:
+         case OSSIM_UINT16:
+            m_bitsPerSample = 16;
+            m_bytesPerPixel = 2;
+            m_sampleFormat  = SAMPLEFORMAT_UINT;
+            break;
+            
+         case OSSIM_SINT16:
+            m_bitsPerSample = 16;
+            m_bytesPerPixel = 2;
+            m_sampleFormat  = SAMPLEFORMAT_INT;
+            break;
+            
+         case OSSIM_SINT32:
+            m_bitsPerSample = 32;
+            m_bytesPerPixel = 4;
+            m_sampleFormat  = SAMPLEFORMAT_INT;
+            break;
+            
+         case OSSIM_UINT32:
+            m_bitsPerSample = 32;
+            m_bytesPerPixel = 4;
+            m_sampleFormat  = SAMPLEFORMAT_UINT;
+            break;
+            
+         case OSSIM_FLOAT32:
+            m_bitsPerSample = 32;
+            m_bytesPerPixel = 4;
+            m_sampleFormat  = SAMPLEFORMAT_IEEEFP;
+            break;
+            
+         case OSSIM_NORMALIZED_DOUBLE:
+         case OSSIM_FLOAT64:
+            m_bitsPerSample = 64;
+            m_bytesPerPixel = 8;
+            m_sampleFormat  = SAMPLEFORMAT_IEEEFP;
+            break;
+            
+         default:
+            // Set the error...
+            theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << " ERROR:"
+               << "\nUnknow pixel type:  "
+               << (ossimScalarTypeLut::instance()->
+                   getEntryString(m_imageHandler->getOutputScalarType()))
+               << std::endl;
+            ossimSetError(getClassName(),
+                          ossimErrorCodes::OSSIM_ERROR,
+                          "Unknown pixel type!",
+                          __FILE__,
+                          __LINE__);
+            result = false;
+      }
+
+      if ( result )
+      {
+         m_tileSizeInBytes = m_tileWidth * m_tileHeight * m_bytesPerPixel;
+         
+         //---
+         // Make a buffer to pass to pass to the write tile methods when an image
+         // handler returns a null tile.
+         //---
+         m_nullDataBuffer.resize(m_tileSizeInBytes);
       
-   if (traceDebug())
+         // Fill it with zeroes.
+         std::fill(m_nullDataBuffer.begin(), m_nullDataBuffer.end(), 0);
+      }
+   }
+   else
    {
-      CLOG << "DEBUG:"
-           << "\nm_tileWidth:   " << m_tileWidth
-           << "\nm_tileHeight:  " << m_tileHeight
-           << "\nSource image is tiled:  "
-           << (m_imageHandler->isImageTiled()?"true":"false")
-           << "\nm_imageHandler->getTileWidth():  "
-           << m_imageHandler->getTileWidth()
-           << "\nm_imageHandler->getTileHeight():  "
-           << m_imageHandler->getTileHeight()
-           << "\nm_imageHandler->getImageTileWidth():  "
-           << m_imageHandler->getImageTileWidth()
-           << "\nm_imageHandler->getImageTileHeight():  "
-           << m_imageHandler->getImageTileHeight()
-           << std::endl;
+      // Set the error...
+      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " ERROR:"
+         << "\nSetting image handler as input failed!"
+         << std::endl;
+      ossimSetError(getClassName(),
+                    ossimErrorCodes::OSSIM_ERROR,
+                    "%s File %s line %d\nSetting image handler as input failed!",
+                    MODULE,
+                    __FILE__,
+                    __LINE__);
    }
 
-   switch(m_imageHandler->getOutputScalarType())
-   {
-      case OSSIM_UINT8:
-         m_bitsPerSample = 8;
-         m_bytesPerPixel = 1;
-         m_sampleFormat  = SAMPLEFORMAT_UINT;
-         break;
-         
-      case OSSIM_USHORT11:
-      case OSSIM_UINT16:
-         m_bitsPerSample = 16;
-         m_bytesPerPixel = 2;
-         m_sampleFormat  = SAMPLEFORMAT_UINT;
-         break;
-      
-      case OSSIM_SINT16:
-         m_bitsPerSample = 16;
-         m_bytesPerPixel = 2;
-         m_sampleFormat  = SAMPLEFORMAT_INT;
-         break;
-         
-      case OSSIM_SINT32:
-         m_bitsPerSample = 32;
-         m_bytesPerPixel = 4;
-         m_sampleFormat  = SAMPLEFORMAT_INT;
-         break;
-         
-      case OSSIM_UINT32:
-         m_bitsPerSample = 32;
-         m_bytesPerPixel = 4;
-         m_sampleFormat  = SAMPLEFORMAT_UINT;
-         break;
-      
-      case OSSIM_FLOAT32:
-         m_bitsPerSample = 32;
-         m_bytesPerPixel = 4;
-         m_sampleFormat  = SAMPLEFORMAT_IEEEFP;
-         break;
-         
-      case OSSIM_NORMALIZED_DOUBLE:
-      case OSSIM_FLOAT64:
-         m_bitsPerSample = 64;
-         m_bytesPerPixel = 8;
-         m_sampleFormat  = SAMPLEFORMAT_IEEEFP;
-         break;
-         
-      default:
-         // Set the error...
-         theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE << " ERROR:"
-            << "\nUnknow pixel type:  "
-            << (ossimScalarTypeLut::instance()->
-                getEntryString(m_imageHandler->getOutputScalarType()))
-            << std::endl;
-         ossimSetError(getClassName(),
-                       ossimErrorCodes::OSSIM_ERROR,
-                       "Unknown pixel type!",
-                       __FILE__,
-                       __LINE__);
-         return false;
-   }
+   return result;
 
-   m_tileSizeInBytes = m_tileWidth * m_tileHeight * m_bytesPerPixel;
-
-   //---
-   // Make a buffer to pass to pass to the write tile methods when an image
-   // handler returns a null tile.
-   //---
-   m_nullDataBuffer.resize(m_tileSizeInBytes);
-
-   // Fill it with zeroes.
-   std::fill(m_nullDataBuffer.begin(), m_nullDataBuffer.end(), 0);
-
-   return true;
-}
+} // End: ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
 
 bool ossimTiffOverviewBuilder::setOverviewType(const ossimString& type)
 {

@@ -793,180 +793,180 @@ void ossimVpfAnnotationFeatureInfo::buildFaceFeature(const ossimFilename& tableN
 						     const ossimFilename& /* primitive */, //face
 						     const ossimString&   /* primitiveKey */) // id
 {
-  ossimFilename tableFileName      = theCoverage.getPath().dirCat(tableName);
-  ossimFilename primitiveTableName;
-  ossimFilename rngTableName;
-  ossimFilename edgTableName;
-  ossimVpfTable table;
-  ossimVpfTable primitiveTable;
-  ossimVpfTable rngTable;
-  ossimVpfTable edgTable;
-  vector<ossimGeoPolygon> thePolyList;
+   ossimFilename tableFileName      = theCoverage.getPath().dirCat(tableName);
+   ossimFilename primitiveTableName;
+   ossimFilename rngTableName;
+   ossimFilename edgTableName;
+   ossimVpfTable table;
+   ossimVpfTable primitiveTable;
+   ossimVpfTable rngTable;
+   ossimVpfTable edgTable;
+   vector<ossimGeoPolygon> thePolyList;
   
-  if(table.openTable(tableFileName))
-    {
+   if(table.openTable(tableFileName))
+   {
       vector<ossimString> columnValues = table.getColumnValues(tableKey.trim()); // fac_id
       vector<ossimString> tileIds;
       bool isTiled = false;
       if(table.getColumnPosition("tile_id") >= 0)
-	{
-	  tileIds = table.getColumnValues("tile_id");
-	  isTiled = true;
-	}
-      ossim_int32 coordinateValuePosition = 0;
+      {
+         tileIds = table.getColumnValues("tile_id");
+         isTiled = true;
+      }
+      // ossim_int32 coordinateValuePosition = 0;
       ossim_int32 startEdgePosition = 0;
       ossim_int32 rngPtrPosition = 0;
       if(!isTiled)
-	{
-	  primitiveTableName = theCoverage.getPath().dirCat("fac");
-	  rngTableName = theCoverage.getPath().dirCat("rng");
-	  edgTableName = theCoverage.getPath().dirCat("edg");
-	  if(!primitiveTable.openTable(primitiveTableName)||
-	     !rngTable.openTable(rngTableName)||
-	     !edgTable.openTable(edgTableName))
-	    {
-	      return;
-	    }
-	  coordinateValuePosition = edgTable.getColumnPosition("coordinates");
-	  startEdgePosition = rngTable.getColumnPosition("start_edge");
-	  rngPtrPosition = primitiveTable.getColumnPosition("ring_ptr");
-	} // else will get for each face in loop below
+      {
+         primitiveTableName = theCoverage.getPath().dirCat("fac");
+         rngTableName = theCoverage.getPath().dirCat("rng");
+         edgTableName = theCoverage.getPath().dirCat("edg");
+         if(!primitiveTable.openTable(primitiveTableName)||
+            !rngTable.openTable(rngTableName)||
+            !edgTable.openTable(edgTableName))
+         {
+            return;
+         }
+         // coordinateValuePosition = edgTable.getColumnPosition("coordinates");
+         startEdgePosition = rngTable.getColumnPosition("start_edge");
+         rngPtrPosition = primitiveTable.getColumnPosition("ring_ptr");
+      } // else will get for each face in loop below
 
       ossim_int32 tileId = -1;
 
       for(ossim_uint32 idx = 0; idx < columnValues.size();++idx) // for each face feature
-	{
-	  if(isTiled)		// then get table names because we didn't get them above
-	    {
-	      if((tileId != tileIds[idx].toInt())||
-		 (tileId < 0))
-		{
-		  tileId = tileIds[idx].toInt();
-		  ossimFilename filename = theCoverage.getLibrary()->getTileName(tileIds[idx].toInt());
-		  if(theCoverage.getPath().dirCat(filename).dirCat("fac").exists())
-		    {
-		      primitiveTableName = theCoverage.getPath().dirCat(filename).dirCat("fac");
-		      rngTableName = theCoverage.getPath().dirCat(filename).dirCat("rng");
-		      edgTableName = theCoverage.getPath().dirCat(filename).dirCat("edg");
-		    }
-		  else if(theCoverage.getPath().dirCat(filename.downcase()).dirCat("fac").exists())
-		    {
-		      primitiveTableName = theCoverage.getPath().dirCat(filename.downcase()).dirCat("fac");
-		      rngTableName = theCoverage.getPath().dirCat(filename.downcase()).dirCat("rng");
-		      edgTableName = theCoverage.getPath().dirCat(filename.downcase()).dirCat("edg");
-		    }
-		  if(!primitiveTable.openTable(primitiveTableName)||
-		     !rngTable.openTable(rngTableName)||
-		     !edgTable.openTable(edgTableName))
-		    {
-		      return;
-		    }
-		  coordinateValuePosition = edgTable.getColumnPosition("coordinates");
-		  startEdgePosition = rngTable.getColumnPosition("start_edge");
-		  rngPtrPosition = primitiveTable.getColumnPosition("ring_ptr");
-		}
-	    } // if(isTiled)
+      {
+         if(isTiled)		// then get table names because we didn't get them above
+         {
+            if((tileId != tileIds[idx].toInt())||
+               (tileId < 0))
+            {
+               tileId = tileIds[idx].toInt();
+               ossimFilename filename = theCoverage.getLibrary()->getTileName(tileIds[idx].toInt());
+               if(theCoverage.getPath().dirCat(filename).dirCat("fac").exists())
+               {
+                  primitiveTableName = theCoverage.getPath().dirCat(filename).dirCat("fac");
+                  rngTableName = theCoverage.getPath().dirCat(filename).dirCat("rng");
+                  edgTableName = theCoverage.getPath().dirCat(filename).dirCat("edg");
+               }
+               else if(theCoverage.getPath().dirCat(filename.downcase()).dirCat("fac").exists())
+               {
+                  primitiveTableName = theCoverage.getPath().dirCat(filename.downcase()).dirCat("fac");
+                  rngTableName = theCoverage.getPath().dirCat(filename.downcase()).dirCat("rng");
+                  edgTableName = theCoverage.getPath().dirCat(filename.downcase()).dirCat("edg");
+               }
+               if(!primitiveTable.openTable(primitiveTableName)||
+                  !rngTable.openTable(rngTableName)||
+                  !edgTable.openTable(edgTableName))
+               {
+                  return;
+               }
+               // coordinateValuePosition = edgTable.getColumnPosition("coordinates");
+               startEdgePosition = rngTable.getColumnPosition("start_edge");
+               rngPtrPosition = primitiveTable.getColumnPosition("ring_ptr");
+            }
+         } // if(isTiled)
 
-	  // get the outer ring id for this face
-	  int thisFaceId = columnValues[idx].toInt();
-	  int rngId = -1;
+         // get the outer ring id for this face
+         int thisFaceId = columnValues[idx].toInt();
+         int rngId = -1;
 
-	  if (thisFaceId <= primitiveTable.getNumberOfRows())
+         if (thisFaceId <= primitiveTable.getNumberOfRows())
 	    rngId = readRngId(thisFaceId,
 			      rngPtrPosition,
 			      primitiveTable);           // face table
-	  else
-             if(traceDebug())
-             {
-                ossimNotify(ossimNotifyLevel_DEBUG) << "not getting face " << thisFaceId << " from tile " << tileId << " " << primitiveTableName <<
-                   " bacause it has only " << primitiveTable.getNumberOfRows() << " rows" << endl;
-             }
+         else
+            if(traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG) << "not getting face " << thisFaceId << " from tile " << tileId << " " << primitiveTableName <<
+                  " bacause it has only " << primitiveTable.getNumberOfRows() << " rows" << endl;
+            }
 
-	  if(rngId > 0)
-	    {
-	      int startEdge = readStartEdgeId(rngId,
-					      startEdgePosition,
-					      rngTable);
-	      int outerStartEdge = startEdge;
-	      if(startEdge > 0 )
-              {
-                 ossimGeoPolygon polygon;
+         if(rngId > 0)
+         {
+            int startEdge = readStartEdgeId(rngId,
+                                            startEdgePosition,
+                                            rngTable);
+            int outerStartEdge = startEdge;
+            if(startEdge > 0 )
+            {
+               ossimGeoPolygon polygon;
                  
-                 myFaceCount ++;
+               myFaceCount ++;
                  
-                 int ringTableFaceIdColumn = rngTable.getColumnPosition("face_id");
-                 int ringFaceId = readTableCellAsInt(rngId, ringTableFaceIdColumn, rngTable);
+               int ringTableFaceIdColumn = rngTable.getColumnPosition("face_id");
+               int ringFaceId = readTableCellAsInt(rngId, ringTableFaceIdColumn, rngTable);
                  
-                 if (thisFaceId != ringFaceId) {
-		    // as of Mon Dec 20 2004, this has not been observed in vmap0 or vmap1
-                    if(traceDebug())
-                    {
-                       ossimNotify(ossimNotifyLevel_DEBUG) << "rejecting face " << thisFaceId << " from " << tableFileName <<
-                       " because it's ring (" << rngId << ") has face " << ringFaceId << " and startEdgeId " << startEdge << endl;
-                    }
-                 } else {
-		    readGeoPolygon( polygon,
-				    thisFaceId,
-				    startEdge,
-				    edgTable );
+               if (thisFaceId != ringFaceId) {
+                  // as of Mon Dec 20 2004, this has not been observed in vmap0 or vmap1
+                  if(traceDebug())
+                  {
+                     ossimNotify(ossimNotifyLevel_DEBUG) << "rejecting face " << thisFaceId << " from " << tableFileName <<
+                        " because it's ring (" << rngId << ") has face " << ringFaceId << " and startEdgeId " << startEdge << endl;
+                  }
+               } else {
+                  readGeoPolygon( polygon,
+                                  thisFaceId,
+                                  startEdge,
+                                  edgTable );
                     
-		    // get the inner rings (holes)
-		    int faceIdPosition = rngTable.getColumnPosition("face_id");
-		    int innerRingOffset = 1;
-		    int rowFaceId = -1;
-		    if (rngId + innerRingOffset <= rngTable.getNumberOfRows())
-		      rowFaceId = rngTable.getColumnValueAsString( rngId + innerRingOffset, faceIdPosition ).toInt();
-		    while (rowFaceId == thisFaceId && rngId + innerRingOffset <= rngTable.getNumberOfRows()) {	// while there are more inner rings
-		      startEdge = readStartEdgeId(rngId + innerRingOffset, startEdgePosition, rngTable);
+                  // get the inner rings (holes)
+                  int faceIdPosition = rngTable.getColumnPosition("face_id");
+                  int innerRingOffset = 1;
+                  int rowFaceId = -1;
+                  if (rngId + innerRingOffset <= rngTable.getNumberOfRows())
+                     rowFaceId = rngTable.getColumnValueAsString( rngId + innerRingOffset, faceIdPosition ).toInt();
+                  while (rowFaceId == thisFaceId && rngId + innerRingOffset <= rngTable.getNumberOfRows()) {	// while there are more inner rings
+                     startEdge = readStartEdgeId(rngId + innerRingOffset, startEdgePosition, rngTable);
 
-		      if (startEdge == outerStartEdge) {
+                     if (startEdge == outerStartEdge) {
 			// as of Mon Dec 20 2004, this has not been observed in vmap0 or vmap1
-                         if(traceDebug())
-                         {
-                            ossimNotify(ossimNotifyLevel_DEBUG) << "rejecting hole in face "
-                                                                << thisFaceId << " because inner ring "
-                                                                << rngId + innerRingOffset
-                                                                << " touches outer ring " << rngId << endl;
-                         }
+                        if(traceDebug())
+                        {
+                           ossimNotify(ossimNotifyLevel_DEBUG) << "rejecting hole in face "
+                                                               << thisFaceId << " because inner ring "
+                                                               << rngId + innerRingOffset
+                                                               << " touches outer ring " << rngId << endl;
+                        }
 
 			innerRingOffset ++;
 			rowFaceId = rngTable.getColumnValueAsString( rngId + innerRingOffset, faceIdPosition ).toInt();
 			continue;
-		      }
+                     }
 
-		      if(startEdge > 0 )
-			{
-			  ossimGeoPolygon holePolygon;
+                     if(startEdge > 0 )
+                     {
+                        ossimGeoPolygon holePolygon;
 		  
-			  readGeoPolygon( holePolygon,
-					  thisFaceId,
-					  startEdge,
-					  edgTable );
-			  if(holePolygon.size())
-			    polygon.addHole( holePolygon );
-			}
+                        readGeoPolygon( holePolygon,
+                                        thisFaceId,
+                                        startEdge,
+                                        edgTable );
+                        if(holePolygon.size())
+                           polygon.addHole( holePolygon );
+                     }
 
-		      innerRingOffset ++;
-		    if (rngId + innerRingOffset <= rngTable.getNumberOfRows())
-		      rowFaceId = rngTable.getColumnValueAsString( rngId + innerRingOffset, faceIdPosition ).toInt();
-		    }
+                     innerRingOffset ++;
+                     if (rngId + innerRingOffset <= rngTable.getNumberOfRows())
+                        rowFaceId = rngTable.getColumnValueAsString( rngId + innerRingOffset, faceIdPosition ).toInt();
+                  }
 
-		    readAttributes(polygon, table, idx + 1); // third parm is one-based row
+                  readAttributes(polygon, table, idx + 1); // third parm is one-based row
 
-		    thePolyList.push_back(polygon);
-		  }
-		}
-	    }
-	} // each fac_id
-    }
-  ossimGeoAnnotationMultiPolyObject* annotation = new ossimGeoAnnotationMultiPolyObject(thePolyList);
-  annotation->setColor(thePenColor.getR(),
-                       thePenColor.getG(),
-                       thePenColor.getB());
-  annotation->setThickness(theThickness);
-  annotation->setFillFlag(theFillEnabledFlag);
+                  thePolyList.push_back(polygon);
+               }
+            }
+         }
+      } // each fac_id
+   }
+   ossimGeoAnnotationMultiPolyObject* annotation = new ossimGeoAnnotationMultiPolyObject(thePolyList);
+   annotation->setColor(thePenColor.getR(),
+                        thePenColor.getG(),
+                        thePenColor.getB());
+   annotation->setThickness(theThickness);
+   annotation->setFillFlag(theFillEnabledFlag);
   
-  theAnnotationArray.push_back(annotation);
+   theAnnotationArray.push_back(annotation);
 }
 
 void ossimVpfAnnotationFeatureInfo::readAttributes(ossimGeoPolygon& polygon, ossimVpfTable& table, int row) {

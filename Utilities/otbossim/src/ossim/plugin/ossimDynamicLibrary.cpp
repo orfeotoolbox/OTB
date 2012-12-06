@@ -7,14 +7,11 @@
 // Author: Garrett Potts
 //
 //*********************************************************************
-// $Id: ossimDynamicLibrary.cpp 16098 2009-12-15 15:13:16Z dburken $
+// $Id: ossimDynamicLibrary.cpp 20694 2012-03-19 12:22:05Z dburken $
 #include <ossim/plugin/ossimDynamicLibrary.h>
 #include <ossim/plugin/ossimSharedObjectBridge.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
-
-
-RTTI_DEF(ossimDynamicLibrary, "ossimDynamicLibrary");
 
 // Static trace for debugging.
 static ossimTrace traceDebug(ossimString("ossimDynamicLibrary:debug"));

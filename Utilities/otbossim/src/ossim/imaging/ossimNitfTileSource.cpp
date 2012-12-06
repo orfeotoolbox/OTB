@@ -9,7 +9,7 @@
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 20458 2012-01-17 01:28:55Z gpotts $
+//  $Id: ossimNitfTileSource.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimNitfTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -27,6 +27,7 @@
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimBooleanProperty.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimJpegMemSrc.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/imaging/ossimJpegDefaultTable.h>
@@ -39,11 +40,6 @@
 #include <ossim/support_data/ossimNitfStdidcTag.h>
 #include <ossim/support_data/ossimNitfVqCompressionHeader.h>
 
-
-#if defined(JPEG_DUAL_MODE_8_12)
-#undef JPEG_DUAL_MODE_8_12 
-#endif
-
 #if defined(JPEG_DUAL_MODE_8_12)
 #include <ossim/imaging/ossimNitfTileSource_12.h>
 #endif
@@ -55,7 +51,7 @@
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 20458 2012-01-17 01:28:55Z gpotts $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 21631 2012-09-06 18:10:55Z dburken $";
 #endif
    
 //---
@@ -107,7 +103,8 @@ ossimNitfTileSource::ossimNitfTileSource()
       theCompressedBuf(0),
       theNitfBlockOffset(0),
       theNitfBlockSize(0),
-      m_isJpeg12Bit(false)
+      m_isJpeg12Bit(false),
+      m_jpegOffsetsDirty(false)
 {
    if (traceDebug())
    {
@@ -143,7 +140,7 @@ void ossimNitfTileSource::destroy()
 
    theCacheTile = 0;
    theTile      = 0;
-   theOverview = 0;
+   theOverview  = 0;
  }
 
 bool ossimNitfTileSource::isOpen()const
@@ -162,18 +159,6 @@ bool ossimNitfTileSource::open()
    
    theErrorStatus = ossimErrorCodes::OSSIM_OK;
 
-   // *** HACK *** 
-   //To get around 2 GB Files. Send "false" if file size over 2GB. 
-   //That way GDAL plugin handles the file, which is working. 
-   //TODO: Fix OSSIM to handle over 2 GB files for windows 32bit
-#if defined(WIN32)
-   const ossim_int64 TWO_GIG_MAX = 2147483647; // (2^31)-1
-   if ( theImageFile.fileSize() > TWO_GIG_MAX )
-   {
-      return false;
-   }
-#endif
-  
    if ( parseFile() )
    {
       result = allocate();
@@ -302,6 +287,15 @@ bool ossimNitfTileSource::parseFile()
          theEntryList.push_back(i);
          theCacheEnabledFlag = true;
          theNitfImageHeader.push_back(hdr);
+
+         if (hdr->getBitsPerPixelPerBand() == 8)
+         {
+            m_isJpeg12Bit = false;
+         }
+         else if (hdr->getBitsPerPixelPerBand() == 12)
+         {
+           m_isJpeg12Bit = true;
+         }
       }
       else
       {
@@ -315,11 +309,12 @@ bool ossimNitfTileSource::parseFile()
          return false;
       }
    }
+
    if(theEntryList.size()<1)
    {
       return false;
    }
-
+   
    //### WHY IS THIS HERE? THIS CAUSED A BUG BECAUSE theCurrentEntry was previously initialized 
    //### in loadState() according to a KWL. Any entry index in the KWL was being ignored.
    //if(theEntryList.size()>0)
@@ -397,6 +392,11 @@ bool ossimNitfTileSource::allocate()
       theCacheId = -1;
    }
 
+   // Clear buffers:
+   theTile = 0;
+   theCacheTile = 0;
+   theCompressedBuf.clear();
+
    // Set the scalar type.
    initializeScalarType();
    if (theScalarType == OSSIM_SCALAR_UNKNOWN)
@@ -420,9 +420,6 @@ bool ossimNitfTileSource::allocate()
    {
       return false;
    }
-
-   // Set the decimation factor.
-   //establishDecimationFactors(); <-- THIS SHOULD HAVE BEEN DONE IN ossimImageHandler::completOpen()
    
    // Initialize the image rectangle. before the cache size is done
    if (initializeImageRect() == false)
@@ -454,6 +451,11 @@ bool ossimNitfTileSource::allocate()
       return false;
    }
 
+   return true;
+}
+
+bool ossimNitfTileSource::allocateBuffers()
+{
    //---
    // Initialize the cache tile.  This will be used for a block buffer even
    // if the cache is disabled.
@@ -497,12 +499,10 @@ bool ossimNitfTileSource::canUncompress(const ossimNitfImageHeader* hdr) const
          if (hdr->getBitsPerPixelPerBand() == 8)
          {
             result = true;
-            m_isJpeg12Bit = false;
          }
          else if (hdr->getBitsPerPixelPerBand() == 12)
          {
            result = true;
-           m_isJpeg12Bit = true;
          }
          else
          {
@@ -848,10 +848,11 @@ bool ossimNitfTileSource::initializeBlockSize()
       }
       case READ_JPEG_BLOCK:
       {
-         theBlockSizeInBytes    *= theNumberOfInputBands;
-         if (scanForJpegBlockOffsets() == false)
+         theBlockSizeInBytes *= theNumberOfInputBands;
+         ossimString code = hdr->getCompressionCode();
+         if (code == "C3") // jpeg
          {
-            return false;
+            m_jpegOffsetsDirty  = true;
          }
          break;
       }
@@ -1123,6 +1124,7 @@ void ossimNitfTileSource::initializeCacheSize()
          << endl;
    }
 }
+
 void ossimNitfTileSource::initializeCacheTileInterLeaveType()
 {
    theCacheTileInterLeaveType = OSSIM_INTERLEAVE_UNKNOWN;
@@ -1229,9 +1231,14 @@ ossimRefPtr<ossimImageData> ossimNitfTileSource::getTile(
       return ossimRefPtr<ossimImageData>();
    }
 
-   if (!theTile.valid())
+   if ( !theTile.valid() )
    {
-      return theTile;
+      // First call to getTile:
+      allocateBuffers();
+      if ( !theTile.valid() )
+      {
+         return theTile;
+      }
    }
 
    // Rectangle must be set prior to getOverviewTile call.
@@ -1819,7 +1826,6 @@ bool ossimNitfTileSource::getPosition(std::streamoff& streamPosition,
    //
    streamPosition = 0;
    
-   
    const ossimNitfImageHeader* hdr = getCurrentImageHeader();
    if (!hdr)
    {
@@ -2042,38 +2048,34 @@ ossimScalarType ossimNitfTileSource::getOutputScalarType() const
 
 ossim_uint32 ossimNitfTileSource::getTileWidth() const
 {
+   ossim_uint32 result = 0;
    if(!theCacheSize.hasNans()&& theCacheSize.x > 0)
    {
-      return theCacheSize.x;
+      result = theCacheSize.x;
    }
-#if 0
-   if (theTile.valid())
+   else
    {
-      return theTile->getWidth();
+      ossimIpt tileSize;
+      ossim::defaultTileSize(tileSize);
+      result = static_cast<ossim_uint32>(tileSize.x);
    }
-#endif
-   ossimIpt tileSize;
-   ossim::defaultTileSize(tileSize);
-   return static_cast<ossim_uint32>(tileSize.x);
+   return result;
 }
 
 ossim_uint32 ossimNitfTileSource::getTileHeight() const
 {
-   
+   ossim_uint32 result = 0;
    if(!theCacheSize.hasNans()&& theCacheSize.y > 0)
    {
-      return theCacheSize.y;
+      result = theCacheSize.y;
    }
-#if 0
-   if (theTile.valid())
+   else
    {
-      return theTile->getHeight();
+      ossimIpt tileSize;
+      ossim::defaultTileSize(tileSize);
+      result = static_cast<ossim_uint32>(tileSize.y);
    }
-#endif
-
-   ossimIpt tileSize;
-   ossim::defaultTileSize(tileSize);
-   return static_cast<ossim_uint32>(tileSize.y);
+   return result;
 }
 
 ossim_uint32 ossimNitfTileSource::getNumberOfInputBands() const
@@ -2941,13 +2943,40 @@ bool ossimNitfTileSource::scanForJpegBlockOffsets()
 
 bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
 {
-   ossim_uint32 blockNumber = getBlockNumber(ossimIpt(x,y));
+   ossim_uint32 blockNumber = getBlockNumber( ossimIpt(x,y) );
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimNitfTileSource::uncompressJpegBlock DEBUG:"
          << "\nblockNumber:  " << blockNumber
+         << std::endl;
+   }
+
+   //---
+   // Logic to hold off on scanning for offsets until a block is actually needed
+   // to speed up loads for things like ossim-info that don't actually read
+   // pixel data.
+   //---
+   if ( m_jpegOffsetsDirty )
+   {
+      if ( scanForJpegBlockOffsets() )
+      {
+         m_jpegOffsetsDirty = false;
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "ossimNitfTileSource::uncompressJpegBlock scan for offsets error!"
+            << "\nReturning error..." << endl;
+         theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+         return false;
+      }
+   }
+   
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
          << "\noffset to block: " << theNitfBlockOffset[blockNumber]
          << "\nblock size: " << theNitfBlockSize[blockNumber]
          << std::endl;
@@ -2968,11 +2997,11 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
       return false;
    }
-
+   
    if (m_isJpeg12Bit)
    {
 #if defined(JPEG_DUAL_MODE_8_12)
-     return ossimNitfTileSource_12::uncompressJpeg12Block(x,y,theCacheTile, 
+      return ossimNitfTileSource_12::uncompressJpeg12Block(x,y,theCacheTile, 
        getCurrentImageHeader(), theCacheSize, compressedBuf, theReadBlockSizeInBytes, 
        theNumberOfOutputBands);
 #endif  
@@ -2986,13 +3015,13 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
     * to working space (which is allocated as needed by the JPEG library).
     */
    jpeg_decompress_struct cinfo;
-
+   
    /* We use our private extension JPEG error handler.
     * Note that this struct must live as long as the main JPEG parameter
     * struct, to avoid dangling-pointer problems.
     */
    ossimJpegErrorMgr jerr;
-
+   
    /* Step 1: allocate and initialize JPEG decompression object */
    
    /* We set up the normal JPEG error routines, then override error_exit. */

@@ -16,7 +16,7 @@ public:
    class OSSIM_DLL Record : public ossimReferenced
       {
       public:
-         typedef std::map<ossimString, ossimString> FieldMapType;
+         typedef std::map<ossimString, ossimString, ossimStringLtstr> FieldMapType;
          typedef std::vector<ossimString> FieldValueListType;
                   
          Record(ossimCsvFile* csvFile);

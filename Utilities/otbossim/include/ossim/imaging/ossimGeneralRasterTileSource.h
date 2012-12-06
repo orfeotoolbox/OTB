@@ -12,15 +12,17 @@
 // ossimGeneralRasterTileSource is derived from ImageHandler which is
 // derived from ossimTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.h 19900 2011-08-04 14:19:57Z dburken $
+//  $Id: ossimGeneralRasterTileSource.h 21631 2012-09-06 18:10:55Z dburken $
 
 #ifndef ossimGeneralRasterTileSource_HEADER
-#define ossimGeneralRasterTileSource_HEADER
+#define ossimGeneralRasterTileSource_HEADER 1
 
 
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimIoStream.h>
 #include <ossim/imaging/ossimGeneralRasterInfo.h>
+#include <vector>
+  
 
 class  ossimImageData;
 
@@ -143,35 +145,68 @@ public:
    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
 
    virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
-   
+
+   /**
+    * @brief Indicates whether or not the image handler can control output
+    * band selection via the setOutputBandList method.
+    *
+    * Overrides: ossimImageHandler::isBandSelector
+    *
+    * @return true
+    */
+   virtual bool isBandSelector() const;
+
+   /**
+    * @brief If the image handler "isBandSeletor()" then the band selection
+    * of the output chip can be controlled.
+    *
+    * Overrides: ossimImageHandler::setOutputBandList
+    * 
+    * @return true on success, false on error.
+    */
+   virtual bool setOutputBandList(const std::vector<ossim_uint32>& band_list);
+
+   /** @brief Initializes bandList to the zero based order of output bands. */
+   virtual void getOutputBandList(std::vector<ossim_uint32>& bandList) const;
+
 protected:
    virtual ~ossimGeneralRasterTileSource();
    /**
     *  Methods return true on succes false on error.
     */
    virtual bool fillBuffer(const ossimIpt& origin, const ossimIpt& size);
-   virtual bool fillBIP(const ossimIpt& origin, const ossimIpt& size); 
+   virtual bool fillBIP(const ossimIpt& origin, const ossimIpt& size);
    virtual bool fillBIL(const ossimIpt& origin, const ossimIpt& size);
    virtual bool fillBSQ(const ossimIpt& origin, const ossimIpt& size);
    virtual bool fillBsqMultiFile(const ossimIpt& origin, const ossimIpt& size);
 
-   virtual bool initializeHandler();
-   virtual void checkBuffer(const ossimIrect& rect);
    virtual ossimKeywordlist getHdrInfo(ossimFilename hdrFile);
    virtual ossimKeywordlist getXmlInfo(ossimFilename xmlFile);
+
+   bool initializeHandler();
    
-   ossimRefPtr<ossimImageData>  theTile;
-   ossim_uint8*                 theBuffer;
-   ossimInterleaveType          theBufferInterleave;
-   std::vector<ossimRefPtr<ossimIFStream> > theFileStrList;
-//   vector<istream*>            theFileStrList;   
-   ossimGeneralRasterInfo       theImageData;
-   ossimIrect                   theBufferRect;
-   bool                         theSwapBytesFlag;
-   ossim_uint32                 theBufferSizeInPixels;
+   ossimRefPtr<ossimImageData>              m_tile;
+   ossim_uint8*                             m_buffer;
+   ossim_uint8*                             m_lineBuffer;
+   ossimInterleaveType                      m_bufferInterleave;
+   std::vector<ossimRefPtr<ossimIFStream> > m_fileStrList;
+   // std::vector< std::ifstream* >            m_fileStrList;   
+   ossimGeneralRasterInfo                   m_rasterInfo;
+   ossimIrect                               m_bufferRect;
+   bool                                     m_swapBytesFlag;
+   ossim_uint32                             m_bufferSizeInPixels;
+   std::vector<ossim_uint32>                m_outputBandList;
+
+private:
+   
+   /** @brief Allocates m_tile. */
+   void allocateTile();
+
+   /** @brief Allocates m_buffer */
+   void allocateBuffer( const ossimImageData* tile );
+   
 
 TYPE_DATA
 };
 
-#endif
-
+#endif /* #ifndef ossimGeneralRasterTileSource_HEADER */

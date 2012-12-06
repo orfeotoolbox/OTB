@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageFileWriter.
 //*******************************************************************
-//  $Id: ossimImageFileWriter.cpp 19944 2011-08-12 18:10:54Z gpotts $
+//  $Id: ossimImageFileWriter.cpp 21963 2012-12-04 16:28:12Z dburken $
 
 
 #include <tiff.h> /* for tiff compression defines */
@@ -51,7 +51,7 @@ static ossimTrace traceDebug("ossimImageFileWriter:debug");
 static const ossimString AUTO_CREATE_DIRECTORY_KW("auto_create_directory");
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 19944 2011-08-12 18:10:54Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 21963 2012-12-04 16:28:12Z dburken $";
 #endif
 
 RTTI_DEF3(ossimImageFileWriter,
@@ -131,22 +131,40 @@ void ossimImageFileWriter::initialize()
    if(theInputConnection.valid())
    {
       theInputConnection->initialize();
-      setAreaOfInterest(theInputConnection->getBoundingRect());
+
+      //---
+      // Area Of Interest(AOI):
+      // There are two AOIs to keep in sync.
+      // One owned by this base: ossimImageWriter::theAreaOfInterest
+      // One owned by the theInputConntion: ossimImageSourceSequencer::theAreaOfInterest
+      //---
+      if ( theAreaOfInterest.hasNans() == false )
+      {
+         //---
+         // ossimImageSourceSequencer::setAreaOfInterest does more than just set the
+         // variable, so only call if out of sync to avoid wasted cycles.
+         //--- 
+         if ( theAreaOfInterest != theInputConnection->getBoundingRect() )
+         {
+            theInputConnection->setAreaOfInterest( theAreaOfInterest );
+         }
+      }
+      else
+      {
+         // Set this AOI to bounding rect of input.
+         theAreaOfInterest = theInputConnection->getBoundingRect();
+      }
    }
 }
 
 void ossimImageFileWriter::changeSequencer(ossimImageSourceSequencer* sequencer)
 {
-   if(!sequencer) return;
-   if(theInputConnection.valid())
+   if( sequencer )
    {
-      sequencer->setAreaOfInterest(theInputConnection->getAreaOfInterest());
+      theInputConnection = sequencer;
+      theInputConnection->connectMyInputTo(0, getInput(0));
    }
-
-   theInputConnection = sequencer;
-   theInputConnection->connectMyInputTo(0, getInput(0));
 }
-
 
 bool ossimImageFileWriter::saveState(ossimKeywordlist& kwl,
                                  const char* prefix)const
@@ -973,10 +991,20 @@ const ossimObject* ossimImageFileWriter::getObject() const
 
 void ossimImageFileWriter::setAreaOfInterest(const ossimIrect& inputRect)
 {
+   // This sets "theAreaOfInterest".
    ossimImageWriter::setAreaOfInterest(inputRect);
-   if(theInputConnection.valid())
+   
+   if( theInputConnection.valid() )
    {
-      theInputConnection->setAreaOfInterest(inputRect);
+      //---
+      // ossimImageSourceSequencer::setAreaOfInterest does more than just set the
+      // variable, so only call if out of sync to avoid wasted cycles.
+      //--- 
+      if ( theAreaOfInterest != theInputConnection->getBoundingRect() )
+      {
+         // Set the sequencer area of interest.
+         theInputConnection->setAreaOfInterest(inputRect);
+      }
    }
 }
 
@@ -1061,7 +1089,7 @@ bool ossimImageFileWriter::execute()
       path.createDirectory(true);
    }
    setProcessStatus(ossimProcessInterface::PROCESS_STATUS_EXECUTING);
-   setPercentComplete(0.0);
+   //setPercentComplete(0.0); let writeFile set the precent complete
    bool wroteFile = true;
    bool result    = true;
    if (theWriteImageFlag)
@@ -1281,7 +1309,7 @@ void ossimImageFileWriter::setProperty(ossimRefPtr<ossimProperty> property)
    {
       theScaleToEightBitFlag = property->valueToString().toBool();
    }
-   else if(property->getName() == SCALE_TO_EIGHT_BIT_KW)
+   else if(property->getName() == AUTO_CREATE_DIRECTORY_KW)
    {
       theAutoCreateDirectoryFlag = property->valueToString().toBool();
    }

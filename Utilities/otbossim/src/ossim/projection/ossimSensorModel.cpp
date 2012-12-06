@@ -27,7 +27,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.cpp 19438 2011-04-22 17:25:02Z gpotts $
+//  $Id: ossimSensorModel.cpp 21808 2012-10-05 14:23:33Z dhicks $
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -1066,13 +1066,52 @@ void ossimSensorModel::imagingRay(const ossimDpt& image_point,
 //*****************************************************************************
 //  METHOD: ossimSensorModel::getObsCovMat()
 //  
-//  Default implementation for computing imaging ray from image point.
+//  Default implementation for forming observation covariance matrix.
+//
+//    Note: At this base class level, the only error source currently
+//          considered is mensuration error.  This is obviously optimistic,
+//          but is included as a placeholder/example, and is presently
+//          the trivial case.
 //  
 //*****************************************************************************
 ossimSensorModel::CovMatStatus ossimSensorModel::getObsCovMat(
-   const ossimDpt& /* ipos */ , NEWMAT::SymmetricMatrix& /* Cov */ )
+   const ossimDpt& /* ipos */ , NEWMAT::SymmetricMatrix& Cov, const ossim_float64 defPointingSigma)
 {
-   return ossimSensorModel::COV_INVALID;
+   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   // Mensuration error contribution
+   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   //  Sensitivity matrix
+   NEWMAT::SymmetricMatrix B(2);
+   B = 0.0;
+   B(1,1) = 1.0;
+   B(2,2) = B(1,1);
+
+   //  Pointing covariance matrix
+   NEWMAT::SymmetricMatrix P(2);
+   P = 0.0;
+   P(1,1) = defPointingSigma*defPointingSigma;
+   P(2,2) = P(1,1);
+
+   //  Propagate
+   NEWMAT::SymmetricMatrix Cm;
+   Cm << B * P * B.t();
+
+   // ~~~~~~~~~~~~~~~~~~~~
+   // Sum total covariance
+   // ~~~~~~~~~~~~~~~~~~~~
+   NEWMAT::SymmetricMatrix Ctot = Cm; //+ other contributors as identified
+
+   // ~~~~~~~~~~~~~~~~~~
+   // Propagate to image
+   // ~~~~~~~~~~~~~~~~~~
+   NEWMAT::SymmetricMatrix Bi(2);
+   Bi = 0.0;
+   Bi(1,1) = 1.0;
+   Bi(2,2) = Bi(1,1);
+
+   Cov << Bi * Ctot * Bi.t();
+
+   return ossimSensorModel::COV_PARTIAL;
 }
 
 void ossimSensorModel::computeGsd()

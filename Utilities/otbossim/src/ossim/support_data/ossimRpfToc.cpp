@@ -9,7 +9,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfToc.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimRpfToc.cpp 21214 2012-07-03 16:20:11Z dburken $
 
 #include <ossim/support_data/ossimRpfToc.h>
 #include <ossim/base/ossimErrorCodes.h>
@@ -327,8 +327,8 @@ void ossimRpfToc::createTocAndCopyFrames( const ossimFilename& dotRpfFile,
    ossimRefPtr<ossimProperty> prop = new ossimStringProperty();
    ossimString field;
    ossimString s;
-   std::streampos fileHeaderLength = 0;
-   std::streampos fileLength = 0;
+   // std::streampos fileHeaderLength = 0;
+   // std::streampos fileLength = 0;
       
    ossimRefPtr<ossimNitfFileHeaderV2_0> fileHdr = new ossimNitfFileHeaderV2_0();
    

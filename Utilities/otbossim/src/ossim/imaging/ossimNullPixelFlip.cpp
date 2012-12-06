@@ -9,7 +9,9 @@
 // 
 //*******************************************************************
 //  $Id$
+
 #include <ossim/imaging/ossimNullPixelFlip.h>
+#include <ossim/imaging/ossimImageData.h>
 
 RTTI_DEF1(ossimNullPixelFlip, "ossimNullPixelFlip", ossimImageSourceFilter);
 ossimNullPixelFlip::ossimNullPixelFlip()

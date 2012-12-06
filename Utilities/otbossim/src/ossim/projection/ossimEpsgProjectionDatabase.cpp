@@ -8,7 +8,7 @@
 // DESCRIPTION: Projection database for EPSG coded projections provided in database files
 //
 //*************************************************************************************************
-//  $Id: ossimEpsgProjectionDatabase.cpp 20447 2012-01-12 17:33:47Z gpotts $
+//  $Id: ossimEpsgProjectionDatabase.cpp 21519 2012-08-22 21:16:25Z dburken $
 #include <ossim/projection/ossimEpsgProjectionDatabase.h>
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -173,9 +173,14 @@ ossimEpsgProjectionDatabase::~ossimEpsgProjectionDatabase()
 //! Constructor loads all DB CSV files specified in the ossim prefs
 //*************************************************************************************************
 ossimEpsgProjectionDatabase::ossimEpsgProjectionDatabase()
+   :
+   m_projDatabase(),
+   m_mutex()
 {
    // Read the ossim preferences for Db CSV files.
+   m_mutex.lock();
    initialize();
+   m_mutex.unlock();
 }
 
 //*************************************************************************************************
@@ -235,8 +240,6 @@ void ossimEpsgProjectionDatabase::initialize()
          db_record->csvRecord = line.explode(","); // ONLY CSV FILES CONSIDERED HERE
          if (db_record->csvRecord.size())
          {
-            ossimRefPtr<ossimMapProjection> proj;
-
             // Check if primary EPSG database format A:
             if (format_id == EPSG_DB_FORMAT_A)
             {
@@ -307,31 +310,41 @@ ossimProjection* ossimEpsgProjectionDatabase::findProjection(ossim_uint32 epsg_c
       if (db_iter != m_projDatabase.end())
       {
          // See if a projection has already been created for this entry:
-         ProjDbRecord* db_record = db_iter->second.get();
-         if (db_record->proj.valid())
-            proj = (ossimMapProjection*) db_record->proj->dup();
-         else
+         m_mutex.lock();
+         ossimRefPtr<ProjDbRecord> db_record = db_iter->second;
+         if ( db_record.valid() )
          {
-            // Try decoding the EPSG code before accessing DB:
-            proj = createProjFromUtmCode(epsg_code);
-            if (proj)
+            if (db_record->proj.valid())
+               proj = (ossimMapProjection*) db_record->proj->dup();
+            else
             {
-               db_record->proj = proj;
-               db_record->datumValid = true;
+               // Try decoding the EPSG code before accessing DB:
+               proj = createProjFromUtmCode(epsg_code);
+               if (proj)
+               {
+                  db_record->proj = proj;
+                  db_record->datumValid = true;
+               }
+               else if (db_iter->second->csvFormat == FORMAT_A)
+               {
+                  proj = createProjFromFormatARecord( db_record.get() );
+               }
+               else if (db_iter->second->csvFormat == FORMAT_B)
+               {
+                  proj = createProjFromFormatBRecord( db_record.get() );
+               }
+               
+               if (proj)
+               {
+                  // To save allocated memory, get rid of the original CSV entry since a real 
+                  // projection is now represented in the database:
+                  db_record->csvRecord.clear();
+                  db_record->csvFormat = NOT_ASSIGNED;
+               }
             }
-            else if (db_iter->second->csvFormat == FORMAT_A)
-               proj = createProjFromFormatARecord(db_record);
-            else if (db_iter->second->csvFormat == FORMAT_B)
-               proj = createProjFromFormatBRecord(db_record);
 
-            if (proj)
-            {
-               // To save allocated memory, get rid of the original CSV entry since a real 
-               // projection is now represented in the database:
-               db_record->csvRecord.clear();
-               db_record->csvFormat = NOT_ASSIGNED;
-            }
-         }
+         } // Matches: if  ( db_record.valid() )
+         m_mutex.unlock();
       }
    }
 
@@ -376,20 +389,23 @@ ossimProjection* ossimEpsgProjectionDatabase::findProjection(const ossimString& 
    std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter = m_projDatabase.begin();
    while ((db_iter != m_projDatabase.end()) && !proj)
    {
-      ProjDbRecord* db_record = db_iter->second.get();
-      split_db_name.clear();
-      db_record->name.split(split_db_name, separators, true);
-      if (split_spec == split_db_name)
+      ossimRefPtr<ProjDbRecord> db_record = db_iter->second;
+      if ( db_record.valid() )
       {
-         // We may already have instantiated this projection, in which case just return its copy.
-         // Otherwise, create the projection from the EPSG code that corresponds to the name:
-         if (db_record->proj.valid())
-            proj = (ossimMapProjection*) db_record->proj->dup();
-         else
-            proj = findProjection(db_record->code);
-         return proj;
+         split_db_name.clear();
+         db_record->name.split(split_db_name, separators, true);
+         if (split_spec == split_db_name)
+         {
+            // We may already have instantiated this projection, in which case just return its copy.
+            // Otherwise, create the projection from the EPSG code that corresponds to the name:
+            if (db_record->proj.valid())
+               proj = (ossimMapProjection*) db_record->proj->dup();
+            else
+               proj = findProjection(db_record->code);
+            return proj;
+         }
       }
-      db_iter++;
+      ++db_iter;
    }
     
    // No hit? Could be that just a datum was identified, in which case we need a simple 
@@ -416,10 +432,13 @@ ossim_uint32 ossimEpsgProjectionDatabase::findProjectionCode(const ossimString& 
    std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter = m_projDatabase.begin();
    while (db_iter != m_projDatabase.end())
    {
-      ProjDbRecord* db_record = db_iter->second.get();
-      if (db_record->name == proj_name)
-         return (db_record->code);
-      db_iter++;
+      ossimRefPtr<ProjDbRecord> db_record = db_iter->second.get();
+      if ( db_record.valid() )
+      {
+         if (db_record->name == proj_name)
+            return (db_record->code);
+      }
+      ++db_iter;
    }
       
    return 0;
@@ -449,29 +468,32 @@ ossimEpsgProjectionDatabase::findProjectionCode(const ossimMapProjection& lost_p
    }
 
    ossimString lookup;
-   std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter = m_projDatabase.begin();
+   std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter =
+      m_projDatabase.begin();
    while ((db_iter != m_projDatabase.end()) && (found_code == 0))
    {
-      ProjDbRecord* db_record = db_iter->second.get();
-      
-      // Has a projection already been created for this db iter?
-      if (!db_record->proj.valid())
+      ossimRefPtr<ProjDbRecord> db_record = db_iter->second;
+      if ( db_record.valid() )
       {
-         // No projection has been created yet for this DB entry. 
-         // NOTE: THIS IS VERY SLOW BECAUSE WE ARE INSTANTIATING EVERY PROJECTION IN THE DB!!!
-         db_record->proj = dynamic_cast<ossimMapProjection*>(findProjection(db_record->code));
+         // Has a projection already been created for this db iter?
+         if (!db_record->proj.valid())
+         {
+            // No projection has been created yet for this DB entry. 
+            // NOTE: THIS IS VERY SLOW BECAUSE WE ARE INSTANTIATING EVERY PROJECTION IN THE DB!!!
+            db_record->proj = dynamic_cast<ossimMapProjection*>(findProjection(db_record->code));
+         }
+         if (db_record->proj.valid() && (*(db_record->proj.get()) == lost_proj))
+         {
+            found_code = db_record->code;
+            
+            // Hack to remap projection code 4087 to 4326 (which is not really a projection 
+            // code but other packages like to see 4326 for geographic projections.
+            // Hacked under protest (OLK, 08/2010)
+            if (found_code == 4087)
+               found_code = 4326;
+         }
       }
-      if (db_record->proj.valid() && (*(db_record->proj.get()) == lost_proj))
-      {
-         found_code = db_record->code;
-
-         // Hack to remap projection code 4087 to 4326 (which is not really a projection 
-         // code but other packages like to see 4326 for geographic projections.
-         // Hacked under protest (OLK, 08/2010)
-         if (found_code == 4087)
-            found_code = 4326;
-      }
-      db_iter++;
+      ++db_iter;
    }
    return found_code;
 }
@@ -503,14 +525,17 @@ void ossimEpsgProjectionDatabase::getProjectionsList(std::vector<ossimString>& l
    std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter = m_projDatabase.begin();
    while (db_iter != m_projDatabase.end())
    {
-      ProjDbRecord* db_record = db_iter->second.get();
-      ossimString record ("EPSG:");
-      record += ossimString::toString(db_record->code);
-      record += "  \"";
-      record += db_record->name;
-      record += "\"";
-      list.push_back(record);
-      db_iter++;
+      ossimRefPtr<ProjDbRecord> db_record = db_iter->second;
+      if ( db_record.valid() )
+      {
+         ossimString record ("EPSG:");
+         record += ossimString::toString(db_record->code);
+         record += "  \"";
+         record += db_record->name;
+         record += "\"";
+         list.push_back(record);
+      }
+      ++db_iter;
    }
    return;
 }

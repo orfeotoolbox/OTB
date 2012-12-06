@@ -12,7 +12,7 @@
 // Utility class for getting information from the ossim library.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimInfo.cpp 20184 2011-10-20 13:16:44Z dburken $
+// $Id: ossimInfo.cpp 21773 2012-09-26 00:08:19Z dlucas $
 
 #include <ossim/util/ossimInfo.h>
 #include <ossim/base/ossimArgumentParser.h>
@@ -51,6 +51,8 @@
 #include <iomanip>
 #include <vector>
 
+static const char CENTER_GROUND_KW[]        = "center_ground";
+static const char CENTER_IMAGE_KW[]         = "center_image";
 static const char CONFIGURATION_KW[]        = "configuration";
 static const char DATUMS_KW[]               = "datums";
 static const char DEG2RAD_KW[]              = "deg2rad";
@@ -65,6 +67,7 @@ static const char FT2MTRS_KW[]              = "ft2mtrs";
 static const char FT2MTRS_US_SURVEY_KW[]    = "ft2mtrs_us_survey";
 static const char GEOM_INFO_KW[]            = "geometry_info";
 static const char HEIGHT_KW[]               = "height";
+static const char IMAGE_CENTER_KW[]         = "image_center";
 static const char IMAGE_FILE_KW[]           = "image_file";
 static const char IMAGE_INFO_KW[]           = "image_info";
 static const char IMAGE_RECT_KW[]           = "image_rect";
@@ -108,6 +111,12 @@ void ossimInfo::addArguments(ossimArgumentParser& ap)
    au->setCommandLineUsage(usageString);
 
    // Set the command line options:
+   au->addCommandLineOption("-c", "Will print ground and image center.");
+
+   au->addCommandLineOption("--cg", "Will print out ground center.");
+
+   au->addCommandLineOption("--ci", "Will print out image center.");
+
    au->addCommandLineOption("--config", "Displays configuration info.");
 
    au->addCommandLineOption("-d", "A generic dump if one is available.");
@@ -196,6 +205,8 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
       //---
       m_kwl->clear();
 
+      bool requiresInputImage = false;
+      
       while ( 1 ) //  While forever loop...
       {
          // Used throughout below:
@@ -204,6 +215,33 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
          std::string ts2;
          ossimArgumentParser::ossimParameter sp2(ts2);
          const char TRUE_KW[] = "true";
+
+         if( ap.read("-c") )
+         {
+            m_kwl->add( IMAGE_CENTER_KW, TRUE_KW );
+            if ( ap.argc() < 2 )
+            {
+               break;
+            }
+         }
+
+         if( ap.read("--cg") )
+         {
+            m_kwl->add( CENTER_GROUND_KW, TRUE_KW );
+            if ( ap.argc() < 2 )
+            {
+               break;
+            }
+         }
+
+         if( ap.read("--ci") )
+         {
+            m_kwl->add( CENTER_IMAGE_KW, TRUE_KW );
+            if ( ap.argc() < 2 )
+            {
+               break;
+            }
+         }
 
          if( ap.read("--config") || ap.read("--configuration") )
          {
@@ -234,6 +272,7 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
          if( ap.read("-d") )
          {
             m_kwl->add( DUMP_KW, TRUE_KW );
+            requiresInputImage = true;
             if ( ap.argc() < 2 )
             {
                break;
@@ -244,6 +283,7 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
          {
             m_kwl->add( DUMP_KW, TRUE_KW );
             m_kwl->add( DUMP_NO_OVERVIEWS_KW, TRUE_KW );
+            requiresInputImage = true;
             if ( ap.argc() < 2 )
             {
                break;
@@ -305,6 +345,7 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
          if( ap.read("-i") )
          {
             m_kwl->add( IMAGE_INFO_KW, TRUE_KW );
+            requiresInputImage = true;
             if ( ap.argc() < 2 )
             {
                break;
@@ -314,6 +355,7 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
          if( ap.read("-m") )
          {
             m_kwl->add( METADATA_KW, TRUE_KW );
+            requiresInputImage = true;
             if ( ap.argc() < 2 )
             {
                break;
@@ -369,6 +411,7 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
          if( ap.read("-p") )
          {
             m_kwl->add( GEOM_INFO_KW, TRUE_KW );
+            requiresInputImage = true;
             if ( ap.argc() < 2 )
             {
                break;
@@ -378,6 +421,7 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
          if( ap.read("--palette") )
          {
             m_kwl->add( PALETTE_KW, TRUE_KW );
+            requiresInputImage = true;
             if ( ap.argc() < 2 )
             {
                break;
@@ -414,6 +458,7 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
          if( ap.read("-r") )
          {
             m_kwl->add( IMAGE_RECT_KW, TRUE_KW );
+            requiresInputImage = true;
             if ( ap.argc() < 2 )
             {
                break;
@@ -490,6 +535,14 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
       if ( ap.argc() == 2 )
       {
          m_kwl->add( IMAGE_FILE_KW, ap[1]  );
+      }
+
+      if ( requiresInputImage && ( ap.argc() == 1 ) )
+      {
+         usage(ap);
+         
+         // continue_after_init to false
+         result = false;
       }
 
    } // not usage
@@ -768,14 +821,34 @@ ossim_uint32 ossimInfo::executeImageOptions(const ossimFilename& file)
       }
       dumpImage(file, dnoFlag);
    }
+   
+   bool centerGroundFlag = false;
+   bool centerImageFlag  = false;
+   bool imageCenterFlag  = false;
+   bool imageRectFlag    = false;
+   bool metaDataFlag     = false;
+   bool paletteFlag      = false;
+   bool imageInfoFlag    = false;
+   bool imageGeomFlag    = false;
+   
+   // Center Ground:
+   lookup = m_kwl->find( CENTER_GROUND_KW );
+   if ( lookup )
+   {
+      ++consumedKeys;
+      value = lookup;
+      centerGroundFlag = value.toBool();
+   }
 
-   
-   bool imageRectFlag = false;
-   bool metaDataFlag  = false;
-   bool paletteFlag   = false;
-   bool imageInfoFlag = false;
-   bool imageGeomFlag = false;
-   
+   // Center Image:
+   lookup = m_kwl->find( CENTER_IMAGE_KW );
+   if ( lookup )
+   {
+      ++consumedKeys;
+      value = lookup;
+      centerImageFlag = value.toBool();
+   }
+
    // Metadata:
    lookup = m_kwl->find( METADATA_KW );
    if ( lookup )
@@ -792,6 +865,15 @@ ossim_uint32 ossimInfo::executeImageOptions(const ossimFilename& file)
       ++consumedKeys;
       value = lookup;
       paletteFlag = value.toBool();
+   }
+
+   // Image center:
+   lookup = m_kwl->find( IMAGE_CENTER_KW );
+   if ( lookup )
+   {
+      ++consumedKeys;
+      value = lookup;
+      imageCenterFlag = value.toBool();
    }
 
    // Image rect:
@@ -834,7 +916,7 @@ ossim_uint32 ossimInfo::executeImageOptions(const ossimFilename& file)
       imageGeomFlag = true;
    }
 
-   if ( imageRectFlag || metaDataFlag || paletteFlag || imageInfoFlag || imageGeomFlag )
+   if ( centerGroundFlag || centerImageFlag || imageCenterFlag || imageRectFlag || metaDataFlag || paletteFlag || imageInfoFlag || imageGeomFlag )
    {
       // Requires open image.
       if ( m_img.valid() == false )
@@ -844,6 +926,22 @@ ossim_uint32 ossimInfo::executeImageOptions(const ossimFilename& file)
 
       // Output keyword list.
       ossimKeywordlist okwl;
+
+      if ( centerGroundFlag )
+      {
+         getCenterGround(okwl);
+      }
+
+      if ( centerImageFlag )
+      {
+         getCenterImage(okwl);
+      }
+
+      if ( imageCenterFlag )
+      {
+         getCenterGround(okwl);
+         getCenterImage(okwl);
+      }
 
       if ( imageRectFlag )
       {
@@ -976,41 +1074,49 @@ void ossimInfo::getImageInfo(const ossimFilename& file,
    {
       dumpImage(file, dnoFlag, kwl);
    }
+
+   // These flags requires open image.
    if ( imageGeomFlag || imageInfoFlag || metaDataFlag || paletteFlag )
    {
-      // Requires open image.
-      if ( m_img.valid() == false )
+      // Note: openImageHandler throws ossimException if it can't open.
+      ossimRefPtr<ossimImageHandler> ih = openImageHandler( file );
+      if ( ih.valid() )
       {
-         openImage(file);
+         if ( metaDataFlag )
+         {
+            getImageMetadata( ih.get(), kwl );
+         }
+         if ( paletteFlag )
+         {
+            getImagePalette( ih.get(), kwl );
+         }
+         if ( imageInfoFlag )
+         {
+            getImageInfo( ih.get(), kwl, dnoFlag );
+         }
+         if ( imageGeomFlag )
+         {
+            getImageGeometryInfo( ih.get(), kwl, dnoFlag) ;
+         }
       }
-      if ( metaDataFlag )
-      {
-         getImageMetadata(kwl);
-      }
-      if ( paletteFlag )
-      {
-         getImagePalette(kwl);
-      }
-      if ( imageInfoFlag )
-      {
-         getImageInfo(kwl, dnoFlag);
-      }
-      if ( imageGeomFlag )
-      {
-         getImageGeometryInfo(kwl, dnoFlag);
-      } 
    }
 }
 
 void ossimInfo::openImage(const ossimFilename& file)
 {
-   m_img = ossimImageHandlerRegistry::instance()->open(file);
-   if ( m_img.valid() == false )
+   m_img = openImageHandler( file );
+}
+
+ossimRefPtr<ossimImageHandler> ossimInfo::openImageHandler(const ossimFilename& file) const
+{
+   ossimRefPtr<ossimImageHandler> result = ossimImageHandlerRegistry::instance()->open(file);
+   if ( result.valid() == false )
    {
       std::string errMsg = "ossimInfo::openImage ERROR:\nCould not open: ";
       errMsg += file.string();
       throw ossimException(errMsg);
    }
+   return result;
 }
 
 void ossimInfo::closeImage()
@@ -1062,13 +1168,20 @@ void ossimInfo::dumpImage(const ossimFilename& file,
          << "No dump available for:  " << file.c_str() << std::endl;
    }
 }
-
 void ossimInfo::getImageMetadata(ossimKeywordlist& kwl) const
 {
    if ( m_img.valid() )
    {
+      getImageMetadata( m_img.get(), kwl);
+   }
+}
+
+void ossimInfo::getImageMetadata(const ossimImageHandler* ih, ossimKeywordlist& kwl) const
+{
+   if ( ih )
+   {
       std::vector< ossimRefPtr< ossimProperty > > list;
-      m_img->getPropertyList(list);
+      ih->getPropertyList(list);
       std::vector< ossimRefPtr< ossimProperty > >::const_iterator i = list.begin();
       while (i != list.end())
       {
@@ -1106,46 +1219,63 @@ void ossimInfo::getImageMetadata(ossimKeywordlist& kwl) const
          ++i;
       }
       
-   } // if ( m_img.valid() )
-}
+   } // if ( ih )
+
+} // End: getImageMetadata(ossimImageHandler* ih, ossimKeywordlist& kwl)
 
 void ossimInfo::getImagePalette(ossimKeywordlist& kwl)
 {
    if ( m_img.valid() )
    {
-      if(m_img->getLut().valid())
+      getImagePalette( m_img.get(), kwl );
+   }
+}
+
+void ossimInfo::getImagePalette(ossimImageHandler* ih, ossimKeywordlist& kwl) const
+{
+   if ( ih )
+   {
+      if(ih->getLut().valid())
       {
          ossim_uint32 entryIdx = 0;
          std::vector<ossim_uint32> entryList;
-         m_img->getEntryList(entryList);
-         for(entryIdx = 0; entryIdx < m_img->getNumberOfEntries();++entryIdx)
+         ih->getEntryList(entryList);
+         for(entryIdx = 0; entryIdx < ih->getNumberOfEntries();++entryIdx)
          {
-            m_img->setCurrentEntry(entryList[entryIdx]);
+            ih->setCurrentEntry(entryList[entryIdx]);
             ossimString prefix = "image";
             prefix = prefix + ossimString::toString(entryList[entryIdx]) + ".lut.";
-            if(m_img->getLut().valid())
+            if(ih->getLut().valid())
             {
-               m_img->getLut()->saveState(kwl, prefix);
+               ih->getLut()->saveState(kwl, prefix);
             }
          }
       }
       
-   } // if ( m_img.valid() )
+   } // if ( ih )
 }
 
 void ossimInfo::getImageInfo(ossimKeywordlist& kwl, bool dnoFlag)
 {
    if ( m_img.valid() )
    {
+      getImageInfo( m_img.get(), kwl, dnoFlag );
+   }
+}
+
+void ossimInfo::getImageInfo( ossimImageHandler* ih, ossimKeywordlist& kwl, bool dnoFlag ) const
+{
+   if ( ih )
+   {
       ossim_uint32 numEntries = 0;
 
       std::vector<ossim_uint32> entryList;
-      m_img->getEntryList(entryList);
+      ih->getEntryList(entryList);
 
       std::vector<ossim_uint32>::const_iterator i = entryList.begin();
       while ( i != entryList.end() )
       {
-         if ( getImageInfo( (*i), kwl, dnoFlag ) )
+         if ( getImageInfo( ih, (*i), kwl, dnoFlag ) )
          {
             ++numEntries;
          }
@@ -1154,16 +1284,27 @@ void ossimInfo::getImageInfo(ossimKeywordlist& kwl, bool dnoFlag)
       
       kwl.add(ossimKeywordNames::NUMBER_ENTRIES_KW, numEntries, true);
 
-   } // if ( m_img.valid() )
+   } // if ( ih )
 }
    
-bool ossimInfo::getImageInfo(ossim_uint32 entry, ossimKeywordlist& kwl, bool dnoFlag)
+bool ossimInfo::getImageInfo( ossim_uint32 entry, ossimKeywordlist& kwl, bool dnoFlag )
+{
+   bool result = false;
+   if ( m_img.valid() )
+   {
+      result = getImageInfo( m_img.get(), entry, kwl, dnoFlag );
+   }
+   return result;
+}
+ 
+bool ossimInfo::getImageInfo( ossimImageHandler* ih, ossim_uint32 entry, 
+                              ossimKeywordlist& kwl, bool dnoFlag ) const
 {
    bool result = false;
    
-   if ( m_img.valid() )
+   if ( ih )
    {
-      if ( m_img->setCurrentEntry(entry) )
+      if ( ih->setCurrentEntry(entry) )
       {
          bool outputEntry = true;
          if ( dnoFlag )
@@ -1181,69 +1322,75 @@ bool ossimInfo::getImageInfo(ossim_uint32 entry, ossimKeywordlist& kwl, bool dno
             ossimString prefix = "image";
             prefix = prefix + ossimString::toString(entry) + ".";
             kwl.add(prefix, ossimKeywordNames::ENTRY_KW, entry, true);
-            kwl.add(prefix, "image_handler", m_img->getClassName().c_str(), true);
-            if (m_img->getOverview())
+            kwl.add(prefix, "type", ih->getClassName().c_str(), true);
+            if (ih->getOverview())
             {
-               kwl.add(prefix, "overview_handler",
-                       m_img->getOverview()->getClassName().c_str(), true);
+               kwl.add(prefix, "overview.type",
+                       ih->getOverview()->getClassName().c_str(), true);
             }
             
-            ossimDrect boundingRect = m_img->getBoundingRect();
+            ossimDrect boundingRect = ih->getBoundingRect();
             kwl.add(prefix,ossimKeywordNames::UL_X_KW, boundingRect.ul().x, true);
             kwl.add(prefix,ossimKeywordNames::UL_Y_KW, boundingRect.ul().y, true);
             kwl.add(prefix,ossimKeywordNames::LR_X_KW, boundingRect.lr().x, true);
             kwl.add(prefix,ossimKeywordNames::LR_Y_KW, boundingRect.lr().y, true);
             
-            const ossim_uint32 BANDS = m_img->getNumberOfInputBands();
+            const ossim_uint32 BANDS = ih->getNumberOfInputBands();
             kwl.add(prefix,ossimKeywordNames::NUMBER_INPUT_BANDS_KW, BANDS, true);
             kwl.add(prefix,ossimKeywordNames::NUMBER_OUTPUT_BANDS_KW,
-                    m_img->getNumberOfOutputBands(), true);
+                    ih->getNumberOfOutputBands(), true);
             kwl.add(prefix,ossimKeywordNames::NUMBER_LINES_KW,
                     boundingRect.height(), true);
             kwl.add(prefix,ossimKeywordNames::NUMBER_SAMPLES_KW,
                     boundingRect.width(), true);
             
-            ossimScalarType scalar = m_img->getOutputScalarType();
+            ossimScalarType scalar = ih->getOutputScalarType();
             
             for(ossim_uint32 i = 0; i < BANDS; ++i)
             {
                ossimString band = ossimString("band") + ossimString::toString(i) + ".";
                
-               kwl.add(prefix, band+"null_value", m_img->getNullPixelValue(i), true);
-               kwl.add(prefix, band+"min_value", m_img->getMinPixelValue(i), true);
-               kwl.add(prefix, band+"max_value", m_img->getMaxPixelValue(i), true);
+               kwl.add(prefix, band+"null_value", ih->getNullPixelValue(i), true);
+               kwl.add(prefix, band+"min_value", ih->getMinPixelValue(i), true);
+               kwl.add(prefix, band+"max_value", ih->getMaxPixelValue(i), true);
             }
             
             // Output Radiometry.
             std::string rad;
             getRadiometry(scalar, rad);
             kwl.add(prefix, "radiometry", rad.c_str(), true);
-            kwl.add(prefix,"number_decimation_levels", m_img->getNumberOfDecimationLevels(), true);
+            kwl.add(prefix,"number_decimation_levels", ih->getNumberOfDecimationLevels(), true);
             
          } // if ( outputEntry )
          
-      } // if ( m_img->setCurrentEntry(entry) )
+      } // if ( ih->setCurrentEntry(entry) )
       
-   } // if ( m_img.valid() )
+   } // if ( ih )
    
    return result;
-}
 
-
+} // End: ossimInfo::getImageInfo( ih, entry...
 
 void ossimInfo::getImageGeometryInfo(ossimKeywordlist& kwl, bool dnoFlag)
 {
    if ( m_img.valid() )
    {
-      ossim_uint32 numEntries = 0;
+      getImageGeometryInfo( m_img.get(), kwl, dnoFlag );
+   }
+}
+
+void ossimInfo::getImageGeometryInfo( ossimImageHandler* ih, ossimKeywordlist& kwl, bool dnoFlag) const
+{
+   if ( ih )
+   {      ossim_uint32 numEntries = 0;
 
       std::vector<ossim_uint32> entryList;
-      m_img->getEntryList(entryList);
+      ih->getEntryList(entryList);
 
       std::vector<ossim_uint32>::const_iterator i = entryList.begin();
       while ( i != entryList.end() )
       {
-         if ( getImageGeometryInfo( (*i), kwl, dnoFlag ) )
+         if ( getImageGeometryInfo( ih, (*i), kwl, dnoFlag ) )
          {
             ++numEntries;
          }
@@ -1252,16 +1399,29 @@ void ossimInfo::getImageGeometryInfo(ossimKeywordlist& kwl, bool dnoFlag)
       
       kwl.add(ossimKeywordNames::NUMBER_ENTRIES_KW, numEntries, true);
 
-   } // if ( m_img.valid() )
+   } // if ( ih )
 }
    
 bool ossimInfo::getImageGeometryInfo(ossim_uint32 entry, ossimKeywordlist& kwl, bool dnoFlag)
 {
-   bool result = false;
-   
+   bool result = false; 
    if ( m_img.valid() )
    {
-      if ( m_img->setCurrentEntry(entry) )
+      getImageGeometryInfo( m_img.get(), entry, kwl, dnoFlag );
+   }
+   return result;
+}
+
+bool ossimInfo::getImageGeometryInfo( ossimImageHandler* ih,
+                                      ossim_uint32 entry, 
+                                      ossimKeywordlist& kwl, 
+                                      bool dnoFlag) const
+{
+   bool result = false;
+   
+   if ( ih )
+   {      
+      if ( ih->setCurrentEntry(entry) )
       {
          bool outputEntry = true;
          if ( dnoFlag )
@@ -1274,13 +1434,13 @@ bool ossimInfo::getImageGeometryInfo(ossim_uint32 entry, ossimKeywordlist& kwl, 
 
          if ( outputEntry )
          {
-            ossimRefPtr<ossimImageGeometry> geom = m_img->getImageGeometry();
+            ossimRefPtr<ossimImageGeometry> geom = ih->getImageGeometry();
             if(geom.valid())
             {
                result = true;
                
                ossimString prefix = "image";
-               prefix = prefix + ossimString::toString(entry) + ".";
+               prefix = prefix + ossimString::toString(entry) + ossimString(".geometry.");
                
                geom->saveState(kwl, prefix);
                
@@ -1292,7 +1452,7 @@ bool ossimInfo::getImageGeometryInfo(ossim_uint32 entry, ossimKeywordlist& kwl, 
                ossimGpt lrg;
                ossimGpt urg;
 
-               ossimDrect outputRect = m_img->getBoundingRect();
+               ossimDrect outputRect = ih->getBoundingRect();
 
                geom->localToWorld(outputRect.ul(), ulg);
                geom->localToWorld(outputRect.ll(), llg);
@@ -1352,65 +1512,235 @@ bool ossimInfo::getImageGeometryInfo(ossim_uint32 entry, ossimKeywordlist& kwl, 
 
          } // if ( outputEntry )
 
-      } // if ( m_img->setCurrentEntry(entry) )
+      } // if ( ih->setCurrentEntry(entry) )
 
-   } // if ( m_img.valid() )
-
-   if ( !result )
-   {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "No geometry for file " << m_img->getFilename() << std::endl;
-   }
+      if ( !result )
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "No geometry for file " << ih->getFilename() << std::endl;
+      }
+      
+   } // if ( ih )
    
    return result;
+
+} // End: ossimInfo::getImageGeometryInfo( ih, entry...
+
+void ossimInfo::getCenterImage(ossimKeywordlist& kwl)
+{
+   if ( m_img.valid() )
+   {
+      getCenterImage( m_img.get(), kwl );
+   }
+}
+
+void ossimInfo::getCenterImage( ossimImageHandler* ih, ossimKeywordlist& kwl) const
+{
+   if ( ih )
+   {  
+      ossim_uint32 numEntries = 0;
+      
+      std::vector<ossim_uint32> entryList;
+      ih->getEntryList(entryList);
+      
+      std::vector<ossim_uint32>::const_iterator i = entryList.begin();
+      while ( i != entryList.end() )
+      {
+         if ( getCenterImage( ih, (*i), kwl ) )
+         {
+            ++numEntries;
+         }
+         ++i;
+      }
+   } 
+}
+   
+bool ossimInfo::getCenterImage(ossim_uint32 entry, ossimKeywordlist& kwl)
+{
+   bool result = false;   
+   if ( m_img.valid() )
+   {
+      result = getCenterImage( m_img.get(), entry, kwl );
+   }
+   return result;
+}
+
+bool ossimInfo::getCenterImage( ossimImageHandler* ih,
+                              ossim_uint32 entry, 
+                              ossimKeywordlist& kwl ) const
+{
+   bool result = false;
+   
+   if ( ih )
+   {
+      if ( ih->setCurrentEntry(entry) )
+      {
+         ossimString prefix = "image";
+         prefix = prefix + ossimString::toString(entry) + ".";
+         ossimDrect outputRect = ih->getBoundingRect();
+         ossimDpt iPt = outputRect.midPoint();
+         kwl.add(prefix, "center_image", iPt.toString().c_str(), true);
+         result = true;
+
+      } // if ( ih->setCurrentEntry(entry) )
+
+      if ( !result )
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "Could not get image center for: " << ih->getFilename() << std::endl;
+      }
+      
+   } // if ( ih )
+
+   return result;
+
+}
+
+void ossimInfo::getCenterGround(ossimKeywordlist& kwl)
+{
+   if ( m_img.valid() )
+   {
+      getCenterGround( m_img.get(), kwl );
+   }
+}
+
+void ossimInfo::getCenterGround( ossimImageHandler* ih, ossimKeywordlist& kwl) const
+{
+   if ( ih )
+   {  
+      ossim_uint32 numEntries = 0;
+      
+      std::vector<ossim_uint32> entryList;
+      ih->getEntryList(entryList);
+      
+      std::vector<ossim_uint32>::const_iterator i = entryList.begin();
+      while ( i != entryList.end() )
+      {
+         if ( getCenterGround( ih, (*i), kwl ) )
+         {
+            ++numEntries;
+         }
+         ++i;
+      }
+   } 
+}
+   
+bool ossimInfo::getCenterGround(ossim_uint32 entry, ossimKeywordlist& kwl)
+{
+   bool result = false;   
+   if ( m_img.valid() )
+   {
+      result = getCenterGround( m_img.get(), entry, kwl );
+   }
+   return result;
+}
+
+bool ossimInfo::getCenterGround( ossimImageHandler* ih,
+                              ossim_uint32 entry, 
+                              ossimKeywordlist& kwl ) const
+{
+   bool result = false;
+   
+   if ( ih )
+   {
+      if ( ih->setCurrentEntry(entry) )
+      {
+         ossimString prefix = "image";
+         prefix = prefix + ossimString::toString(entry) + ".";
+
+         ossimRefPtr<ossimImageGeometry> geom = ih->getImageGeometry();
+         if(geom.valid())
+         {
+            ossimDpt iPt;
+            ossimGpt gPt;
+            geom->localToWorld(iPt, gPt);
+            kwl.add(prefix, "center_ground", gPt.toString().c_str(), true);
+         }
+
+         result = true;
+
+      } // if ( ih->setCurrentEntry(entry) )
+
+      if ( !result )
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "Could not get ground center for: " << ih->getFilename() << std::endl;
+      }
+      
+   } // if ( ih )
+
+   return result;
+
 }
 
 void ossimInfo::getImageRect(ossimKeywordlist& kwl)
 {
    if ( m_img.valid() )
    {
+      getImageRect( m_img.get(), kwl );
+   }
+}
+
+void ossimInfo::getImageRect( ossimImageHandler* ih, ossimKeywordlist& kwl) const
+{
+   if ( ih )
+   {  
       ossim_uint32 numEntries = 0;
-
+      
       std::vector<ossim_uint32> entryList;
-      m_img->getEntryList(entryList);
-
+      ih->getEntryList(entryList);
+      
       std::vector<ossim_uint32>::const_iterator i = entryList.begin();
       while ( i != entryList.end() )
       {
-         if ( getImageRect( (*i), kwl ) )
+         if ( getImageRect( ih, (*i), kwl ) )
          {
             ++numEntries;
          }
          ++i;
       }
-   } // if ( m_img.valid() )
+   } // if ( ih )
 }
    
 bool ossimInfo::getImageRect(ossim_uint32 entry, ossimKeywordlist& kwl)
 {
-   bool result = false;
-   
+   bool result = false;   
    if ( m_img.valid() )
    {
-      if ( m_img->setCurrentEntry(entry) )
+      result = getImageRect( m_img.get(), entry, kwl );
+   }
+   return result;
+}
+
+bool ossimInfo::getImageRect( ossimImageHandler* ih,
+                              ossim_uint32 entry, 
+                              ossimKeywordlist& kwl ) const
+{
+   bool result = false;
+   
+   if ( ih )
+   {
+      if ( ih->setCurrentEntry(entry) )
       {
          ossimString prefix = "image";
          prefix = prefix + ossimString::toString(entry) + ".";
-         ossimIrect outputRect = m_img->getBoundingRect();
+         ossimIrect outputRect = ih->getBoundingRect();
          kwl.add(prefix, "image_rectangle", outputRect.toString().c_str(), true);
          result = true;
 
-      } // if ( m_img->setCurrentEntry(entry) )
-   } // if ( m_img.valid() )
+      } // if ( ih->setCurrentEntry(entry) )
 
-   if ( !result )
-   {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "Could not get image rectangle for: " << m_img->getFilename() << std::endl;
-   }
-   
+      if ( !result )
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "Could not get image rectangle for: " << ih->getFilename() << std::endl;
+      }
+      
+   } // if ( ih )
+
    return result;
-}
+
+} // End: getImageRect( ih, entry...
 
 // Note be sure to m_img->setCurrentEntry before calling.
 bool ossimInfo::isImageEntryOverview() const
@@ -1418,8 +1748,18 @@ bool ossimInfo::isImageEntryOverview() const
    bool result = false; // Have to prove it.
    if ( m_img.valid() )
    {
+      result = isImageEntryOverview( m_img.get() );
+   }
+   return result;
+}
+ 
+bool ossimInfo::isImageEntryOverview( const ossimImageHandler* ih ) const
+{
+   bool result = false; // Have to prove it.
+   if ( ih )
+   {     
       ossimString s = "imag";
-      ossimRefPtr<ossimProperty> prop = m_img->getProperty(s);
+      ossimRefPtr<ossimProperty> prop = ih->getProperty(s);
       if (prop.valid())
       {
          ossimString s;

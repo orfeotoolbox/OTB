@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageData.cpp 19977 2011-08-17 17:09:54Z dburken $
+// $Id: ossimImageData.cpp 21864 2012-10-22 14:59:23Z dburken $
 
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimSource.h>
@@ -400,171 +400,182 @@ void ossimImageData::getNormalizedFloat(ossim_uint32 offset,
                                         ossim_float32& result)const
 {
    // Make sure that the types and width and height are good.
-   if( (getDataObjectStatus() == OSSIM_NULL) &&
-       (bandNumber < getNumberOfDataComponents()) )
+   if( (getDataObjectStatus() != OSSIM_NULL) && (bandNumber < getNumberOfDataComponents()) )
    {
-      return;
-   }
-   
-   ossim_float32 delta =  m_maxPixelValue[bandNumber] - m_minPixelValue[bandNumber];
-   switch (getScalarType())
-   {
-      case OSSIM_UINT8:
+      ossim_float32 p = 0.0;
+
+      switch (getScalarType())
       {
-         const unsigned char* sourceBuf = getUcharBuf(bandNumber);
-         result = (sourceBuf[offset] - m_minPixelValue[bandNumber])/delta;
-         break;
-      }
-      case OSSIM_SINT8:
-      {
-         const ossim_sint8* sourceBuf = static_cast<const ossim_sint8*>(getBuf(bandNumber));
-         result = (sourceBuf[offset] - m_minPixelValue[bandNumber])/delta;
-         break;
-      }
-      case OSSIM_USHORT11:
-      case OSSIM_UINT16:
-      {
-         const ossim_uint16* sourceBuf = getUshortBuf(bandNumber);
-         result = (sourceBuf[offset] - m_minPixelValue[bandNumber])/delta;
-         break;
-      }
-      case OSSIM_SINT16:
-      {
-         const ossim_sint16* sourceBuf = getSshortBuf(bandNumber);
-         result = (sourceBuf[offset] - m_minPixelValue[bandNumber])/delta;
-         break;
-      }
-      case OSSIM_UINT32:
-      {
-         const ossim_uint32* sourceBuf =
-            static_cast<const ossim_uint32*>(getBuf(bandNumber));
-         result = (sourceBuf[offset] - m_minPixelValue[bandNumber])/delta;
-         break;
-      }
-      case OSSIM_SINT32:
-      {
-         const ossim_sint32* sourceBuf = static_cast<const ossim_sint32*>(getBuf(bandNumber));
-         result = (sourceBuf[offset] - m_minPixelValue[bandNumber])/delta;
-         break;
-      }
-      case OSSIM_NORMALIZED_FLOAT:
-      case OSSIM_FLOAT32:
-      {
-         const ossim_float32* sourceBuf = getFloatBuf(bandNumber);
-         result = (sourceBuf[offset] - m_minPixelValue[bandNumber])/delta;
-         break;
-      }
-      case OSSIM_FLOAT64:
-      case OSSIM_NORMALIZED_DOUBLE:
-      {
-         const ossim_float64* sourceBuf = getDoubleBuf(bandNumber);
-         result = (sourceBuf[offset] - m_minPixelValue[bandNumber])/delta;
-         break;
-      }
-      case OSSIM_SCALAR_UNKNOWN:
-      default:
-      {
-         // Shouldn't hit this.
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimImageData::setNormalizedFloat Unsupported scalar type!"
-            << std::endl;
+         case OSSIM_UINT8:
+         {
+            const unsigned char* sourceBuf = getUcharBuf(bandNumber);
+            p = sourceBuf[offset];
+            break;
+         }
+         case OSSIM_SINT8:
+         {
+            const ossim_sint8* sourceBuf = static_cast<const ossim_sint8*>(getBuf(bandNumber));
+            p = sourceBuf[offset];
+            break;
+         }
+         case OSSIM_USHORT11:
+         case OSSIM_UINT16:
+         {
+            const ossim_uint16* sourceBuf = getUshortBuf(bandNumber);
+            p = sourceBuf[offset];
+            break;
+         }
+         case OSSIM_SINT16:
+         {
+            const ossim_sint16* sourceBuf = getSshortBuf(bandNumber);
+            p = sourceBuf[offset];
+            break;
+         }
+         case OSSIM_UINT32:
+         {
+            const ossim_uint32* sourceBuf =
+               static_cast<const ossim_uint32*>(getBuf(bandNumber));
+            p = sourceBuf[offset];
+            break;
+         }
+         case OSSIM_SINT32:
+         {
+            const ossim_sint32* sourceBuf = static_cast<const ossim_sint32*>(getBuf(bandNumber));
+            p = sourceBuf[offset];
+            break;
+         }
+         case OSSIM_NORMALIZED_FLOAT:
+         case OSSIM_FLOAT32:
+         {
+            const ossim_float32* sourceBuf = getFloatBuf(bandNumber);
+            p = sourceBuf[offset];
+            break;
+         }
+         case OSSIM_FLOAT64:
+         case OSSIM_NORMALIZED_DOUBLE:
+         {
+            const ossim_float64* sourceBuf = getDoubleBuf(bandNumber);
+            p = sourceBuf[offset];
+            break;
+         }
+         case OSSIM_SCALAR_UNKNOWN:
+         default:
+         {
+            // Shouldn't hit this.
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimImageData::setNormalizedFloat Unsupported scalar type!"
+               << std::endl;
+         }
          
-         result = 0;
+      } // Matches: switch (getScalarType())
+
+      if ( p != m_nullPixelValue[bandNumber] )
+      {
+         const ossim_float32 DELTA = m_maxPixelValue[bandNumber] - m_minPixelValue[bandNumber] - 1;
+         const ossim_float32 OFFSET_TO_ONE = 1 - m_minPixelValue[bandNumber];
+         
+         result = ( p <= m_maxPixelValue[bandNumber] ) ?
+            ( ( p >= m_minPixelValue[bandNumber] ) ? ( p + OFFSET_TO_ONE ) / DELTA : 0.0 ) : 1.0;
       }
-   }
-}
+      else
+      {
+         result = 0.0;
+      }
+      
+   } // Matches: if( (getDataObjectStatus() ...
+   
+} // End: ossimImageData::getNormalizedFloat
 
 void ossimImageData::setNormalizedFloat(ossim_uint32 offset,
                                         ossim_uint32 bandNumber,
                                         ossim_float32 inputValue)
 {
    // Make sure that the types and width and height are good.
-   if( (getDataObjectStatus() == OSSIM_NULL)&&
-       (bandNumber < getNumberOfDataComponents()) )
+   if( (getDataObjectStatus() != OSSIM_NULL) && (bandNumber < getNumberOfDataComponents()) )
    {
-      return;
-   }
+
+      ossim_float32 p = 0.0;
+
+      if ( inputValue )
+      {
+         const ossim_float32 DELTA = m_maxPixelValue[bandNumber] - m_minPixelValue[bandNumber] - 1;
+         const ossim_float32 OFFSET_TO_MIN = m_minPixelValue[bandNumber] - 1;
+         p = inputValue * DELTA + OFFSET_TO_MIN + 0.5;
+         if ( p > m_maxPixelValue[bandNumber] )
+         {
+            p = m_maxPixelValue[bandNumber];
+         }
+      }
+      else
+      {
+         p = m_nullPixelValue[bandNumber];
+      }
    
-   ossim_float32 delta =  m_maxPixelValue[bandNumber] - m_minPixelValue[bandNumber];
-   switch (getScalarType())
-   {
-      case OSSIM_UINT8:
+      switch (getScalarType())
       {
-         unsigned char* sourceBuf = getUcharBuf(bandNumber);
-         sourceBuf[offset] =
-            static_cast<ossim_uint8>(m_minPixelValue[bandNumber] +
-                                     delta*inputValue);
-         
-         break;
-      }
-      case OSSIM_SINT8:
-      {
-         ossim_sint8* sourceBuf = static_cast<ossim_sint8*>(getBuf(bandNumber));
-         sourceBuf[offset] =
-            static_cast<ossim_sint8>(m_minPixelValue[bandNumber] +
-                                     delta*inputValue);
-         break;
-      }
-      case OSSIM_USHORT11:
-      case OSSIM_UINT16:
-      {
-         ossim_uint16* sourceBuf = getUshortBuf(bandNumber);
-         sourceBuf[offset] =
-            static_cast<ossim_uint16>(m_minPixelValue[bandNumber] +
-                                      delta*inputValue);
-         break;
-      }
-      case OSSIM_SINT16:
-      {
-         ossim_sint16* sourceBuf = getSshortBuf(bandNumber);
-         sourceBuf[offset] =
-            static_cast<ossim_sint16>(m_minPixelValue[bandNumber] +
-                                      delta*inputValue);
-         break;
-      }
-      case OSSIM_UINT32:
-      {
-         ossim_uint32* sourceBuf =
-            static_cast<ossim_uint32*>(getBuf(bandNumber));
-         sourceBuf[offset] =
-            static_cast<ossim_uint32>(m_minPixelValue[bandNumber] +
-                                      delta*inputValue);
-         break;
-      }
-      case OSSIM_SINT32:
-      {
-         ossim_sint32* sourceBuf = static_cast<ossim_sint32*>(getBuf(bandNumber));
-         sourceBuf[offset] =
-            static_cast<ossim_sint32>(m_minPixelValue[bandNumber] +
-                                      delta*inputValue);
-         break;
-      }
-      case OSSIM_NORMALIZED_FLOAT:
-      case OSSIM_FLOAT32:
-      {
-         ossim_float32* sourceBuf = getFloatBuf(bandNumber);
-         sourceBuf[offset] =
-            static_cast<ossim_float32>(m_minPixelValue[bandNumber] +
-                                       delta*inputValue);
-         break;
-      }
-      case OSSIM_FLOAT64:
-      case OSSIM_NORMALIZED_DOUBLE:
-      {
-         ossim_float64* sourceBuf = getDoubleBuf(bandNumber);
-         sourceBuf[offset] =
-            static_cast<ossim_float64>(m_minPixelValue[bandNumber]
-                                       + delta*inputValue);
-      break;
-   }
-   case OSSIM_SCALAR_UNKNOWN:
-   default:
-      // Shouldn't hit this.
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "ossimImageData::setNormalizedFloat Unsupported scalar type!"
-         << std::endl;
-   }
-}
+         case OSSIM_UINT8:
+         {
+            unsigned char* sourceBuf = getUcharBuf(bandNumber);
+            sourceBuf[offset] = static_cast<ossim_uint8>( p );
+            break;
+         }
+         case OSSIM_SINT8:
+         {
+            ossim_sint8* sourceBuf = static_cast<ossim_sint8*>(getBuf(bandNumber));
+            sourceBuf[offset] = static_cast<ossim_sint8>( p );
+            break;
+         }
+         case OSSIM_USHORT11:
+         case OSSIM_UINT16:
+         {
+            ossim_uint16* sourceBuf = getUshortBuf(bandNumber);
+            sourceBuf[offset] = static_cast<ossim_uint16>( p );
+            break;
+         }
+         case OSSIM_SINT16:
+         {
+            ossim_sint16* sourceBuf = getSshortBuf(bandNumber);
+            sourceBuf[offset] = static_cast<ossim_sint16>( p );
+            break;
+         }
+         case OSSIM_UINT32:
+         {
+            ossim_uint32* sourceBuf = static_cast<ossim_uint32*>(getBuf(bandNumber));
+            sourceBuf[offset] = static_cast<ossim_uint32>( p );
+            break;
+         }
+         case OSSIM_SINT32:
+         {
+            ossim_sint32* sourceBuf = static_cast<ossim_sint32*>(getBuf(bandNumber));
+            sourceBuf[offset] = static_cast<ossim_sint32>( p );
+            break;
+         }
+         case OSSIM_NORMALIZED_FLOAT:
+         case OSSIM_FLOAT32:
+         {
+            ossim_float32* sourceBuf = getFloatBuf(bandNumber);
+            sourceBuf[offset] = p;
+            break;
+         }
+         case OSSIM_FLOAT64:
+         case OSSIM_NORMALIZED_DOUBLE:
+         {
+            ossim_float64* sourceBuf = getDoubleBuf(bandNumber);
+            sourceBuf[offset] = p;
+            break;
+         }
+         case OSSIM_SCALAR_UNKNOWN:
+         default:
+            // Shouldn't hit this.
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimImageData::setNormalizedFloat Unsupported scalar type!"
+               << std::endl;
+            
+      } // Matches: switch (getScalarType())
+
+   } // Matches: if( (getDataObjectStatus() ...
+   
+} // End: ossimImageData::setNormalizedFloat
 
 void ossimImageData::convertToNormalizedFloat(ossimImageData* result)const
 {
@@ -812,16 +823,22 @@ void ossimImageData::populateHistogram(ossimRefPtr<ossimMultiBandHistogram> hist
          for(ossim_uint32 band = 0; band < numberOfBands; ++band)
          {
             ossimRefPtr<ossimHistogram> currentHisto = histo->getHistogram(band);
-            ossim_uint8* buffer = (ossim_uint8*)getBuf(band);
-         
             if(currentHisto.valid())
             {
-               ossimRefPtr<ossimHistogram> currentHisto = histo->getHistogram(band);
-               
-               if(currentHisto.valid())
+               float* histoBins = currentHisto->GetCounts();
+               int binCount = currentHisto->GetRes();
+               ossim_uint8* buffer = (ossim_uint8*)getBuf(band);
+               ossim_uint32 upperBound = getWidth()*getHeight();
+               if ( binCount == 256 )
                {
-                  ossim_uint32 upperBound = getWidth()*getHeight();
                   for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
+                  {
+                     ++histoBins[ buffer[offset] ];
+                  }
+               }
+               else
+               {
+                 for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
                   {
                      currentHisto->UpCount((float)buffer[offset]);
                   }

@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEcefModel.cpp 20485 2012-01-23 18:22:38Z gpotts $
+//  $Id: ossimApplanixEcefModel.cpp 21214 2012-07-03 16:20:11Z dburken $
 #include <sstream>
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -28,7 +28,7 @@ static ossimTrace traceDebug("ossimApplanixEcefModel:debug");
 RTTI_DEF1(ossimApplanixEcefModel, "ossimApplanixEcefModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 20485 2012-01-23 18:22:38Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 21214 2012-07-03 16:20:11Z dburken $";
 #endif
 
 ossimApplanixEcefModel::ossimApplanixEcefModel()
@@ -621,7 +621,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       int offset = (int)ossimString("d").size();
       ossim_uint32 idx = 0;
       std::vector<int> numberList(numberOfDistortions);
-      for(idx = 0; idx < (int)numberList.size();++idx)
+      for(idx = 0; idx < numberList.size();++idx)
       {
          ossimString numberStr(keys[idx].begin() + offset,
                                keys[idx].end());

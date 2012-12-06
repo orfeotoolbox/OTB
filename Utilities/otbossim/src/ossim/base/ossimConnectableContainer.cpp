@@ -6,10 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableContainer.cpp 20316 2011-12-02 15:56:38Z oscarkramer $
-
-#include <algorithm>
-#include <stack>
+// $Id: ossimConnectableContainer.cpp 21850 2012-10-21 20:09:55Z dburken $
 
 #include <ossim/base/ossimConnectableContainer.h>
 #include <ossim/base/ossimIdManager.h>
@@ -21,6 +18,9 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimVisitor.h>
+#include <algorithm>
+#include <stack>
+
 static ossimTrace traceDebug("ossimConnectableContainer:debug");
 
 RTTI_DEF2(ossimConnectableContainer, "ossimConnectableContainer", ossimConnectableObject, ossimConnectableContainerInterface);
@@ -392,16 +392,23 @@ bool ossimConnectableContainer::addChild(ossimConnectableObject* object)
    if(object)
    {
       // if it's not already a child
-      if(!findObject(object->getId()))
+      
+      ossimIdVisitor visitor(
+         object->getId(),
+         (ossimVisitor::VISIT_INPUTS|ossimVisitor::VISIT_CHILDREN) );
+      accept( visitor );
+      
+      // if(!findObject(object->getId()))
+      if ( !visitor.getObject() )      
       {
          object->changeOwner(this);
          theObjectMap.insert(std::make_pair(object->getId().getId(), object));
          object->addListener(theChildListener);
       }
-
+      
       return true;
    }
-
+   
    return false;
 }
 
@@ -674,27 +681,43 @@ bool ossimConnectableContainer::connectAllObjects(const std::map<ossimId, std::v
 {
    if(idMapping.size())
    {
+      
+      ossimIdVisitor visitor( (ossimVisitor::VISIT_INPUTS|ossimVisitor::VISIT_CHILDREN) );
+
       std::map<ossimId, std::vector<ossimId> >::const_iterator iter = idMapping.begin();
 
       while(iter != idMapping.end())
       {
-         ossimConnectableObject* currentObject = findObject((*iter).first);
+         visitor.setId( (*iter).first );
+         accept( visitor );
+         ossimConnectableObject* currentObject = visitor.getObject();
+         // ossimConnectableObject* currentObject = findObject((*iter).first);
 
          if(currentObject)
          {
             long upperBound = (long)(*iter).second.size();
             for(long index = 0; index < upperBound; ++index)
             {
-               ossimConnectableObject* inputObject = findObject((*iter).second[index]);
-
-               currentObject->connectMyInputTo(index, inputObject);
+               visitor.reset();
+               visitor.setId( (*iter).second[index] );
+               accept( visitor );
+               ossimConnectableObject* inputObject = visitor.getObject();
+               if ( inputObject )
+               {
+                  currentObject->connectMyInputTo(index, inputObject);
+               }
+               // ossimConnectableObject* inputObject = findObject((*iter).second[index]);
+               // currentObject->connectMyInputTo(index, inputObject);
             }
          }
          else
          {
-            ossimNotify(ossimNotifyLevel_FATAL) << "ossimConnectableContainer::connectAllObjects, Could not find " << (*iter).first << " for source: \n";
+            ossimNotify(ossimNotifyLevel_FATAL)
+               << "ossimConnectableContainer::connectAllObjects, Could not find "
+               << (*iter).first << " for source: \n";
             return false;
          }
+         visitor.reset();
          ++iter;
       }
    }
@@ -786,8 +809,8 @@ bool ossimConnectableContainer::fillContainer(ossimConnectableContainer& contain
 {
    connectablObjectMapType::iterator current;
    current = theObjectMap.begin();
-   ossim_uint32 i = 0;
-   bool fill_ok;
+   // ossim_uint32 i = 0;
+   // bool fill_ok;
    while(current != theObjectMap.end())
    {
       ossimRefPtr<ossimConnectableObject> currentObject = current->second;

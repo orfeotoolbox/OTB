@@ -8,14 +8,15 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimDoqqTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
+//  $Id: ossimDoqqTileSource.cpp 21631 2012-09-06 18:10:55Z dburken $
 #include <ossim/imaging/ossimDoqqTileSource.h>
-#include <ossim/support_data/ossimDoqq.h>
-#include <ossim/imaging/ossimGeneralRasterInfo.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimContainerProperty.h>
+#include <ossim/imaging/ossimGeneralRasterInfo.h>
+#include <ossim/imaging/ossimImageGeometry.h>
+#include <ossim/support_data/ossimDoqq.h>
 
 RTTI_DEF1(ossimDoqqTileSource,
           "ossimDoqqTileSource",

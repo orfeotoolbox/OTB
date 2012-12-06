@@ -13,7 +13,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEllipsoid.cpp 19640 2011-05-25 15:58:00Z oscarkramer $
+//  $Id: ossimEllipsoid.cpp 21164 2012-06-24 20:17:58Z dhicks $
 
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimDpt.h>
@@ -239,14 +239,17 @@ bool ossimEllipsoid::nearestIntersection(const ossimEcefRay& ray,
    //***
    // Now apply solved t to ray to extrapolate correct distance to intersection
    //***
-   bool rtnval = false;
-   if (t >= 0)
-   {
-      rtnval = true;
-      rtnPt  = ray.extend(t); 
-//       rtnPt  = ray.extend(t*theA); 
-   }
+//    bool rtnval = false;
+//    if (t >= 0)
+//    {
+//       rtnval = true;
+//       rtnPt  = ray.extend(t); 
+// //       rtnPt  = ray.extend(t*theA); 
+//    }
       
+   bool rtnval = true;
+   rtnPt  = ray.extend(t); 
+
    return rtnval; 
 }
 

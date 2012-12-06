@@ -8,10 +8,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimReadmeFileWriter.cpp 17932 2010-08-19 20:34:35Z dburken $
-
-#include <iostream>
-using namespace std;
+//  $Id: ossimReadmeFileWriter.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimReadmeFileWriter.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -20,9 +17,12 @@ using namespace std;
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageSource.h>
+#include <iostream>
+using namespace std;
 
 RTTI_DEF1(ossimReadmeFileWriter,
           "ossimReadmeFileWriter",

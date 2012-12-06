@@ -12,20 +12,20 @@
 //*******************************************************************
 //  $Id: ossimBitMaskTileSource.cpp 2644 2011-05-26 15:20:11Z oscar.kramer $
 
-#include <math.h>
-
 #include <ossim/imaging/ossimBitMaskTileSource.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimErrorContext.h>
 #include <ossim/base/ossimInterleaveTypeLut.h>
 #include <ossim/base/ossimScalarTypeLut.h>
-#include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/imaging/ossimBitMaskWriter.h>
+#include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/imaging/ossimImageGeometry.h>
+#include <cmath>
 
 RTTI_DEF1_INST(ossimBitMaskTileSource, "ossimBitMaskTileSource", ossimImageHandler);
 
@@ -332,6 +332,11 @@ ossim_uint32 ossimBitMaskTileSource::getNumberOfSamples(ossim_uint32 res_Level) 
       n = m_bufferSizes[res_Level-theStartingResLevel].x;
 
    return n*8; // 8 pixels represented in one mask byte entry
+}
+
+ossimRefPtr<ossimImageGeometry> ossimBitMaskTileSource::getImageGeometry()
+{
+   return 0;
 }
 
 //*******************************************************************

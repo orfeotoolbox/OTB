@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOrthoIgen.cpp 20409 2011-12-22 16:57:05Z dburken $
+// $Id: ossimOrthoIgen.cpp 21962 2012-11-30 15:44:32Z dburken $
 
 
 #include <ossim/parallel/ossimOrthoIgen.h>
@@ -19,6 +19,7 @@
 #include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/base/ossimStdOutProgress.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimVisitor.h>
 #include <ossim/imaging/ossimBandSelector.h>
 #include <ossim/imaging/ossimCacheTileSource.h>
 #include <ossim/imaging/ossimGeoAnnotationSource.h>
@@ -2237,8 +2238,15 @@ void ossimOrthoIgen::setupHistogram(ossimImageChain* input_chain, const ossimSrc
 
    // Need to insert any histogram object to the left of the renderer in the chain. Search for a 
    // renderer and save for later:
-   ossimConnectableObject* renderer = PTR_CAST(ossimConnectableObject,
-      input_chain->findFirstObjectOfType(ossimString("ossimImageRenderer")));
+   // ossimConnectableObject* renderer = PTR_CAST(ossimConnectableObject,
+   //    input_chain->findFirstObjectOfType(ossimString("ossimImageRenderer")));
+
+   ossimTypeNameVisitor visitor( ossimString("ossimImageRenderer"),
+                                 true, // firstofTypeFlag
+                                 (ossimVisitor::VISIT_INPUTS|
+                                  ossimVisitor::VISIT_CHILDREN) );
+   input_chain->accept( visitor );
+   ossimRefPtr<ossimImageRenderer> renderer = visitor.getObjectAs<ossimImageRenderer>(0);
 
    // Histo Match?
    if (theTargetHistoFileName.isReadable())
@@ -2294,8 +2302,8 @@ void ossimOrthoIgen::setupHistogram(ossimImageChain* input_chain, const ossimSrc
       }
 
       // The source and target histos are compatible, insert to the left of renderer if one exists:
-      if (renderer)
-         input_chain->insertLeft(forwardEq.get(), renderer);
+      if ( renderer.valid() )
+         input_chain->insertLeft( forwardEq.get(), renderer.get() );
       else
          input_chain->addFirst(forwardEq.get());
       input_chain->insertRight(inverseEq.get(), forwardEq.get());
@@ -2306,8 +2314,8 @@ void ossimOrthoIgen::setupHistogram(ossimImageChain* input_chain, const ossimSrc
    // Remaining possibilities (clip or stretch) require a remapper.
    // Insert to the left of renderer if one exists:
    ossimRefPtr<ossimHistogramRemapper> remapper = new ossimHistogramRemapper;
-   if (renderer)
-      input_chain->insertLeft(remapper.get(), renderer);
+   if ( renderer.valid() )
+      input_chain->insertLeft( remapper.get(), renderer.get() );
    else
       input_chain->addFirst(remapper.get());
 
@@ -2401,15 +2409,21 @@ bool ossimOrthoIgen::createHistogram(ossimImageChain* chain, const ossimFilename
 void ossimOrthoIgen::addChainCache(ossimImageChain* chain) const
 {
    if (chain)
-   {  
-      ossimConnectableObject* renderer =
-         PTR_CAST(ossimConnectableObject,
-                  chain->findFirstObjectOfType(ossimString("ossimImageRenderer")));
+   {
+      //ossimConnectableObject* renderer =
+      //   PTR_CAST(ossimConnectableObject,
+      //             chain->findFirstObjectOfType(ossimString("ossimImageRenderer")));
 
-      if (renderer)
+      ossimTypeNameVisitor visitor( ossimString("ossimImageRenderer"),
+                                    true, // firstofTypeFlag
+                                    (ossimVisitor::VISIT_INPUTS|
+                                     ossimVisitor::VISIT_CHILDREN) );
+      chain->accept( visitor );
+      ossimRefPtr<ossimImageRenderer> renderer = visitor.getObjectAs<ossimImageRenderer>(0);
+      if ( renderer.valid() )
       {
          ossimCacheTileSource* cache = new ossimCacheTileSource();
-         chain->insertLeft(cache, renderer);
+         chain->insertLeft( cache, renderer.get() );
       }
    }
 }
@@ -2446,6 +2460,7 @@ void ossimOrthoIgen::establishMosaicTiePoint()
       return;
 
    // Need to find all image handlers to query for their UL ground point:
+#if 0
    ossimConnectableObject::ConnectableObjectList clientList;
    theProductChain->findAllInputsOfType(clientList, STATIC_TYPE_INFO(ossimImageHandler), true, true);
 
@@ -2455,7 +2470,20 @@ void ossimOrthoIgen::establishMosaicTiePoint()
          "Expected to find image handler in the chain but none was identified."<<std::endl;
       return;
    }
+#endif
 
+   ossimTypeNameVisitor visitor( ossimString("ossimImageHandler"),
+                                 false, // firstofTypeFlag
+                                 (ossimVisitor::VISIT_INPUTS|
+                                  ossimVisitor::VISIT_CHILDREN) );
+   theProductChain->accept( visitor );
+
+   if ( visitor.getObjects().empty() )
+   {
+      ossimNotify(ossimNotifyLevel_WARN)<<"ossimOrthoIgen::establishMosaicTiePoint() WARNING -- "
+         "Expected to find image handler in the chain but none was identified."<<std::endl;
+      return;
+   }
    ossimGpt tie_gpt_i, tie_gpt;
    ossimDpt tie_dpt_i, tie_dpt;
    tie_gpt.makeNan();
@@ -2464,12 +2492,14 @@ void ossimOrthoIgen::establishMosaicTiePoint()
 
 
    // Loop over all input handlers and latch the most NW tiepoint as the mosaic TP:
-   ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
-   while (iter != clientList.end())
+   //   ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
+   // while (iter != clientList.end())
+   for( ossim_uint32 i = 0; i < visitor.getObjects().size(); ++i )
    {
-      ossimImageHandler* handler = PTR_CAST(ossimImageHandler, (*iter).get());
-      iter++;
+      // ossimImageHandler* handler = PTR_CAST(ossimImageHandler, (*iter).get());
+      // iter++;
 
+      ossimImageHandler* handler = visitor.getObjectAs<ossimImageHandler>( i );
       if (!handler) break;
 
       ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
@@ -2747,15 +2777,23 @@ bool ossimOrthoIgen::isAffectedByElevation()
    bool result = false;
    
    // Get a list of all the image handlers.
-   ossimConnectableObject::ConnectableObjectList clientList;
-   theProductChain->findAllInputsOfType(clientList, STATIC_TYPE_INFO(ossimImageHandler),
-                                        true, true);
+   // ossimConnectableObject::ConnectableObjectList clientList;
+   // theProductChain->findAllInputsOfType(clientList, STATIC_TYPE_INFO(ossimImageHandler),
+   //                                      true, true);
 
+   ossimTypeNameVisitor visitor( ossimString("ossimImageHandler"),
+                                 false, // firstofTypeFlag
+                                 (ossimVisitor::VISIT_INPUTS|
+                                  ossimVisitor::VISIT_CHILDREN) );
+   theProductChain->accept( visitor );
+   
    // Loop over all input handlers and see if affected by elevation.
-   ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
-   while (iter != clientList.end())
+   // ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
+   // while (iter != clientList.end())
+   for( ossim_uint32 i = 0; i < visitor.getObjects().size(); ++i )
    {
-      ossimRefPtr<ossimImageHandler> handler = PTR_CAST(ossimImageHandler, (*iter).get());
+      // ossimRefPtr<ossimImageHandler> handler = PTR_CAST(ossimImageHandler, (*iter).get());
+      ossimRefPtr<ossimImageHandler> handler =  visitor.getObjectAs<ossimImageHandler>( i );
       if ( handler.valid() )
       {
          ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
@@ -2772,7 +2810,7 @@ bool ossimOrthoIgen::isAffectedByElevation()
             }
          }
       }
-      ++iter;
+      // ++iter;
    }
    return result;
 }
@@ -2784,15 +2822,25 @@ bool ossimOrthoIgen::isAffectedByElevation()
 void ossimOrthoIgen::reComputeChainGsds()
 {
    // Get a list of all the image handlers.
-   ossimConnectableObject::ConnectableObjectList clientList;
-   theProductChain->findAllInputsOfType(clientList, STATIC_TYPE_INFO(ossimImageHandler),
-                                        true, true);
+   // ossimConnectableObject::ConnectableObjectList clientList;
+   // theProductChain->findAllInputsOfType(clientList, STATIC_TYPE_INFO(ossimImageHandler),
+   //                                      true, true);
    
    // Loop over all input handlers and see if affected by elevation.
-   ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
-   while (iter != clientList.end())
+   // ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
+   // while (iter != clientList.end())
+
+   ossimTypeNameVisitor visitor( ossimString("ossimImageHandler"),
+                                 false, // firstofTypeFlag
+                                 (ossimVisitor::VISIT_INPUTS|
+                                  ossimVisitor::VISIT_CHILDREN) );
+   theProductChain->accept( visitor );
+
+   for( ossim_uint32 i = 0; i < visitor.getObjects().size(); ++i )
    {
-      ossimRefPtr<ossimImageHandler> handler = PTR_CAST(ossimImageHandler, (*iter).get());
+      // ossimRefPtr<ossimImageHandler> handler = PTR_CAST(ossimImageHandler, (*iter).get());
+
+      ossimRefPtr<ossimImageHandler> handler =  visitor.getObjectAs<ossimImageHandler>( i );
       if ( handler.valid() )
       {
          ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
@@ -2806,7 +2854,7 @@ void ossimOrthoIgen::reComputeChainGsds()
             }
          }
       }
-      ++iter;
+      // ++iter;
    }
 }
 
@@ -2836,31 +2884,45 @@ void ossimOrthoIgen::setProductGsd()
          origin.lat = 0.0;
          origin.lon = theProductProjection->getOrigin().lon;
 
-         ossimConnectableObject::ConnectableObjectList clientList;
-         theProductChain->findAllInputsOfType(clientList, STATIC_TYPE_INFO(ossimImageHandler), 1, 1);
-         ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
+         // ossimConnectableObject::ConnectableObjectList clientList;
+         // theProductChain->findAllInputsOfType(clientList, STATIC_TYPE_INFO(ossimImageHandler), 1, 1);
+         // ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
+
+         ossimTypeNameVisitor visitor( ossimString("ossimImageHandler"),
+                                       false, // firstofTypeFlag
+                                       (ossimVisitor::VISIT_INPUTS|
+                                        ossimVisitor::VISIT_CHILDREN) );
+         theProductChain->accept( visitor );
+         
          ossimDpt center_pt;
          ossimGpt geocenter;
          int num_contributors = 0;
-         while (iter != clientList.end())
+         // while (iter != clientList.end())
+
+         for( ossim_uint32 i = 0; i < visitor.getObjects().size(); ++i )
          {
-            ossimImageHandler* handler = PTR_CAST(ossimImageHandler, (*iter).get());
-            if (!handler)
-               break;
-
-            iter++;
-            ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
-            if (!geom.valid()) 
-               continue; // Skip over any non geometry inputs (e.g., masks)
-
-            handler->getBoundingRect().getCenter(center_pt);
-            if (!geom->localToWorld(center_pt, geocenter))  
-               continue;
-            if (num_contributors == 0)
-               origin.lat = geocenter.lat;
+            // ossimImageHandler* handler = PTR_CAST(ossimImageHandler, (*iter).get());
+            ossimRefPtr<ossimImageHandler> handler =  visitor.getObjectAs<ossimImageHandler>( i );
+            if ( handler.valid() )
+            {
+               // iter++;
+               ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
+               if (!geom.valid()) 
+                  continue; // Skip over any non geometry inputs (e.g., masks)
+               
+               handler->getBoundingRect().getCenter(center_pt);
+               if (!geom->localToWorld(center_pt, geocenter))  
+                  continue;
+               if (num_contributors == 0)
+                  origin.lat = geocenter.lat;
+               else
+                  origin.lat += geocenter.lat;
+               ++num_contributors;
+            }
             else
-               origin.lat += geocenter.lat;
-            ++num_contributors;
+            {
+               break;
+            }
          }
 
          // Compute average latitude among all contributors:

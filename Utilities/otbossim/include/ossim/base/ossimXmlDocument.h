@@ -10,20 +10,19 @@
 // parsing and accessing of an XML document file.
 // 
 //*****************************************************************************
-// $Id: ossimXmlDocument.h 20357 2011-12-13 15:13:58Z gpotts $
+// $Id: ossimXmlDocument.h 21579 2012-08-31 14:24:11Z dburken $
 #ifndef ossimXmlDocument_HEADER
-#define ossimXmlDocument_HEADER
+#define ossimXmlDocument_HEADER 1
 
-#include <vector>
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimErrorStatusInterface.h>
-#include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/base/ossimXmlNode.h>
+#include <vector>
 
-class ossimXmlNode;
-
-class OSSIMDLLEXPORT ossimXmlDocument : public ossimObject,
-                                     public ossimErrorStatusInterface
+class OSSIMDLLEXPORT ossimXmlDocument :
+   public ossimObject, public ossimErrorStatusInterface
 {
 public:
    ossimXmlDocument(const ossimFilename& xmlFileName="");

@@ -30,21 +30,27 @@ public:
    }
    virtual bool open(const ossimString& connectionString);
    virtual bool pointHasCoverage(const ossimGpt& gpt) const;
+
+   virtual bool getAccuracyInfo(ossimElevationAccuracyInfo& /*info*/, const ossimGpt& /*gpt*/) const
+   {
+      return false;
+   }
+
    /**
     * METHODS: accuracyLE90(), accuracyCE90()
     * Returns the vertical and horizontal accuracy (90% confidence) in the
     * region of gpt:
     */
-   virtual double getAccuracyLE90(const ossimGpt& /* gpt */) const
-   {
-      std::cout << "ossimGeneralElevationDatabase::getAccuracyLE90 \n";
-      return 0.0;
-   }
-   virtual double getAccuracyCE90(const ossimGpt& /* gpt */) const
-   {
-      std::cout << "ossimGeneralElevationDatabase::getAccuracyCE90 \n";
-      return 0.0;
-   }
+//   virtual double getAccuracyLE90(const ossimGpt& /* gpt */) const
+//   {
+//      std::cout << "ossimGeneralElevationDatabase::getAccuracyLE90 \n";
+//      return 0.0;
+//   }
+//   virtual double getAccuracyCE90(const ossimGpt& /* gpt */) const
+ //  {
+ //     std::cout << "ossimGeneralElevationDatabase::getAccuracyCE90 \n";
+ //     return 0.0;
+ //  }
    virtual double getHeightAboveMSL(const ossimGpt&);
    virtual double getHeightAboveEllipsoid(const ossimGpt& gpt);
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix = 0);

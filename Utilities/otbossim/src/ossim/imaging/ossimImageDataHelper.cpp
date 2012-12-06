@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageDataHelper.cpp 18360 2010-11-01 15:12:12Z dburken $
+// $Id: ossimImageDataHelper.cpp 21184 2012-06-29 15:13:09Z dburken $
 #include <ossim/imaging/ossimImageDataHelper.h>
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/base/ossimLine.h>
@@ -358,7 +358,7 @@ void ossimImageDataHelper::copyInputToThis(const T* inputBuf,
    int x1, y1;
    int x2, y2;
    int ind1, ind2;
-   int ints;
+   // int ints;
    vector<int> polyInts;
    T* buf = reinterpret_cast<T*>(theImageData->getBuf());
    
@@ -372,7 +372,7 @@ void ossimImageDataHelper::copyInputToThis(const T* inputBuf,
    for (y = miny; (y <= maxy); y++)
    {
       polyInts.clear();
-      ints = 0;
+      // ints = 0;
       for (i = 0; (i < n); i++)
       {
          if (!i)
@@ -497,7 +497,7 @@ void ossimImageDataHelper::fill(T /* dummyVariable */,
    int x1, y1;
    int x2, y2;
    int ind1, ind2;
-   int ints;
+   // int ints;
    vector<int> polyInts;
    T* buf = reinterpret_cast<T*>(theImageData->getBuf());
    
@@ -511,7 +511,7 @@ void ossimImageDataHelper::fill(T /* dummyVariable */,
    for (y = miny; (y <= maxy); y++)
    {
       polyInts.clear();
-      ints = 0;
+      // ints = 0;
       for (i = 0; (i < n); i++)
       {
          if (!i)

@@ -7,17 +7,16 @@
 //
 // Contains class declaration for ossimNotify
 //-------------------------------------------------------------------
-//  $Id: ossimNotify.h 17195 2010-04-23 17:32:18Z dburken $
+//  $Id: ossimNotify.h 21458 2012-08-07 20:40:35Z dburken $
 #ifndef ossimNotify_HEADER
-#define ossimNotify_HEADER
-#include <iostream>
-#include <fstream>
+#define ossimNotify_HEADER 1
+
 #include <ossim/base/ossimErrorCodes.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimFilename.h>
+#include <iostream>
+#include <fstream>
 
-extern "C"
-{
 /**
   * Notification level enumeration.  This specifies the
   * level of the mesage being written.
@@ -104,5 +103,5 @@ OSSIMDLLEXPORT void  ossimSetError( const char *className,
  */
 OSSIMDLLEXPORT void  ossimSetInfo( const char *className,
                                    const char *fmtString=0, ...);
-}
-#endif
+
+#endif /* #ifndef ossimNotify_HEADER */

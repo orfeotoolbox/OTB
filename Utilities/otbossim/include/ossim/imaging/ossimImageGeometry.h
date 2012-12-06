@@ -23,6 +23,9 @@
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossim2dTo2dTransform.h>
 #include <vector>
+#include <ossim/matrix/newmat.h>
+#include <ossim/base/ossimDpt3d.h>
+#include <ossim/base/ossimAdjustableParameterInterface.h>
 
 class ossimIrect;
 
@@ -57,6 +60,8 @@ class ossimIrect;
 class OSSIM_DLL ossimImageGeometry : public ossimObject
 {
 public:
+   typedef std::vector<ossim_float64> DeltaParamList;
+   
    //! Default constructor defaults to unity transform with no projection.
    ossimImageGeometry();
    virtual ~ossimImageGeometry();
@@ -345,6 +350,38 @@ public:
 
    virtual bool isEqualTo(const ossimObject& obj, ossimCompareType compareType = OSSIM_COMPARE_FULL)const;
 
+
+
+   // If we have an adjustable parameter interface return one.
+   //
+   // @return a pointer to an ossimAdjustableParameterInterface or NULL if no
+   //         adjustable paramters exist
+   //
+   virtual ossimAdjustableParameterInterface* getAdjustableParameterInterface();
+   virtual const ossimAdjustableParameterInterface* getAdjustableParameterInterface()const;
+   
+   
+   // Compute partials from image to ground with respect to the adjustable parameters.
+   //
+   //
+   bool computeImageToGroundPartialsWRTAdjParam(ossimDpt& result,
+                                                          const ossimGpt& gpt,
+                                                          ossim_uint32 idx,
+                                                          ossim_float64 paramDelta=1.0);
+   bool computeImageToGroundPartialsWRTAdjParams(NEWMAT::Matrix& result,
+                                                           const ossimGpt& gpt,
+                                                           ossim_float64 paramDelta=1.0);
+   bool computeImageToGroundPartialsWRTAdjParams(NEWMAT::Matrix& result,
+                                                           const ossimGpt& gpt,
+                                                           const DeltaParamList& deltas);
+   
+   bool computeGroundToImagePartials(NEWMAT::Matrix& result,
+                                     const ossimGpt& gpt,
+                                     const ossimDpt3d& deltaLlh);
+   
+   bool computeGroundToImagePartials(NEWMAT::Matrix& result,
+                                     const ossimGpt& gpt);
+   
 protected:
    //! @brief Method to back out decimation of a point.
    //! @param rnPt Is a point in resolution n.

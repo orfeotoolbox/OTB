@@ -9,7 +9,7 @@
 // Support data class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmSupportData.cpp 18693 2011-01-17 18:49:15Z dburken $
+// $Id: ossimSrtmSupportData.cpp 21527 2012-08-26 16:50:49Z dburken $
 
 #include <cmath>
 #include <fstream>
@@ -100,6 +100,7 @@ bool ossimSrtmSupportData::setFilename(const ossimFilename& srtmFile,
    theMaxPixelValue = DEFAULT_MAX;
    
    // See if we have an ossim metadata file to initialize from.
+   bool outputOmd     = false;
    bool loadedFromOmd = false;
    
    ossimFilename omdFile = theFile;
@@ -126,17 +127,20 @@ bool ossimSrtmSupportData::setFilename(const ossimFilename& srtmFile,
          clear();
          return false;
       }
+      outputOmd = true;
    }
 
-   bool outputOmd = false;
    if (scanForMinMax)
    {
-      outputOmd = true;
       // These could have been picked up in the loadOmd.
       if ( (theMinPixelValue == DEFAULT_MIN) ||
            (theMaxPixelValue == DEFAULT_MAX) )
       {
-         if (!computeMinMax())
+         if ( computeMinMax() )
+         {
+            outputOmd = true;
+         }
+         else
          {
             if(traceDebug())
             {
@@ -296,6 +300,11 @@ bool ossimSrtmSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    kwl.add(prefix,
+           ossimKeywordNames::NUMBER_BANDS_KW,
+           1,
+           true);
+
+   kwl.add(prefix,
            ossimKeywordNames::NUMBER_LINES_KW,
            theNumberOfLines,
            true);
@@ -407,17 +416,17 @@ bool ossimSrtmSupportData::loadState(const ossimKeywordlist& kwl,
 bool ossimSrtmSupportData::loadOmd(const ossimKeywordlist& kwl,
                                    const char* prefix)
 {
-   ossimString bandPrefix;
+   std::string pfx;
+   std::string bandPrefix;
    
-   if (prefix)
+   if (prefix) // Cannot give null to std::string.
    {
+      pfx        = prefix;
       bandPrefix = prefix;
    }
    bandPrefix += "band1.";
    
-   ossimString s; // For numeric conversions.
-   
-   const char* lookup;
+   ossimString value;
 
    //---
    // Look for the min and max first since they could have been populated by
@@ -426,37 +435,33 @@ bool ossimSrtmSupportData::loadOmd(const ossimKeywordlist& kwl,
    //---
    
    // Not an error if not present.
-   lookup = kwl.find(bandPrefix, ossimKeywordNames::MIN_VALUE_KW);
-   if (lookup)
+   value.string() = kwl.findKey(bandPrefix, std::string(ossimKeywordNames::MIN_VALUE_KW));
+   if ( value.size() )
    {
-      s = lookup;
-      theMinPixelValue = static_cast<ossim_sint16>(s.toInt());
+      theMinPixelValue = value.toFloat64();
    }
-
+   
    // Not an error if not present.
-   lookup = kwl.find(bandPrefix.c_str(), ossimKeywordNames::MAX_VALUE_KW);
-   if (lookup)
+   value.string() = kwl.findKey(bandPrefix.c_str(), std::string(ossimKeywordNames::MAX_VALUE_KW));
+   if ( value.size() )
    {
-      s = lookup;
-      theMaxPixelValue = static_cast<ossim_sint16>(s.toInt());
+      theMaxPixelValue = value.toFloat64();
    }
-
-   lookup = kwl.find(prefix, ossimKeywordNames::NUMBER_LINES_KW);
-   if (lookup)
+   
+   value.string() = kwl.findKey(pfx, std::string(ossimKeywordNames::NUMBER_LINES_KW));
+   if ( value.size() )
    {
-      s = lookup;
-      theNumberOfLines = s.toUInt32();
+      theNumberOfLines = value.toUInt32();
    }
    else
    {
       return false;
    }
-
-   lookup = kwl.find(prefix, ossimKeywordNames::NUMBER_SAMPLES_KW);
-   if (lookup)
+   
+   value.string() = kwl.findKey(pfx, std::string(ossimKeywordNames::NUMBER_SAMPLES_KW));
+   if ( value.size() )
    {
-      s = lookup;
-      theNumberOfSamples = s.toUInt32();
+      theNumberOfSamples = value.toUInt32();
    }
    else
    {
@@ -467,22 +472,20 @@ bool ossimSrtmSupportData::loadOmd(const ossimKeywordlist& kwl,
    // Special case the tie point was stored as the upper left so we must
    // subtract one.
    //---
-   lookup = kwl.find(prefix, ossimKeywordNames::TIE_POINT_LAT_KW);
-   if (lookup)
+   value.string() = kwl.findKey(pfx, std::string(ossimKeywordNames::TIE_POINT_LAT_KW));
+   if ( value.size() )
    {
-      s = lookup;
-      theSouthwestLatitude = s.toDouble() - 1.0;
+      theSouthwestLatitude = value.toFloat64() - 1.0;
    }
    else
    {
       return false;
    }
 
-   lookup = kwl.find(prefix, ossimKeywordNames::TIE_POINT_LON_KW);
-   if (lookup)
+   value.string() = kwl.findKey(pfx, std::string(ossimKeywordNames::TIE_POINT_LON_KW));
+   if ( value.size() )
    {
-      s = lookup;
-      theSouthwestLongitude = s.toDouble();
+      theSouthwestLongitude = value.toFloat64();
    }
    else
    {
@@ -494,8 +497,7 @@ bool ossimSrtmSupportData::loadOmd(const ossimKeywordlist& kwl,
    if (scalar != ossimLookUpTable::NOT_FOUND)
    {
       theScalarType = (ossimScalarType)scalar;
-      if((theScalarType != OSSIM_FLOAT32)&&
-         (theScalarType != OSSIM_SINT16))
+      if((theScalarType != OSSIM_FLOAT32) && (theScalarType != OSSIM_SINT16))
       {
          return false;
       }
@@ -504,45 +506,6 @@ bool ossimSrtmSupportData::loadOmd(const ossimKeywordlist& kwl,
    {
       return false;
    }
-
-   //---
-   // Note:
-   // Getting spacing from keyword list was causing a error in the
-   // ossimSrtmHandler::getHeightAboveMSLTemplate where:
-   // 
-   // double yi = (theNwCornerPost.lat - gpt.lat) / theLatSpacing;
-   //
-   // resulted in: 3599.999999997120085
-   //
-   // when it should have been:
-   // 3600.0
-   //
-   // (drb)
-   //---
-   
-//    lookup = kwl.find(prefix,
-//                      ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON);
-//    if (lookup)
-//    {
-//       s = lookup;
-//       theLonSpacing = s.toDouble();
-//    }
-//    else
-//    {
-//       return false;
-//    }
-
-//    lookup = kwl.find(prefix,
-//                      ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT);
-//    if (lookup)
-//    {
-//       s = lookup;
-//       theLatSpacing = s.toDouble();
-//    }
-//    else
-//    {
-//       return false;
-//    }
    
    theLatSpacing = 1.0 / (theNumberOfLines   - 1);
    theLonSpacing = 1.0 / (theNumberOfSamples - 1);

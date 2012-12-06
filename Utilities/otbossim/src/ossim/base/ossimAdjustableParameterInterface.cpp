@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAdjustableParameterInterface.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimAdjustableParameterInterface.cpp 20610 2012-02-27 12:19:25Z gpotts $
 #include <algorithm>
 #include <ossim/base/ossimAdjustableParameterInterface.h>
 #include <ossim/base/ossimKeywordNames.h>

@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageWriter
 //*******************************************************************
-//  $Id: ossimImageFileWriter.h 19893 2011-08-04 11:43:57Z gpotts $
+//  $Id: ossimImageFileWriter.h 21963 2012-12-04 16:28:12Z dburken $
 
 #ifndef ossimImageFileWriter_HEADER
 #define ossimImageFileWriter_HEADER
@@ -214,10 +214,24 @@ public:
 
    virtual void setAreaOfInterest(const ossimIrect& inputRect);
 
+   /**
+    * @brief Sets the sequencer and connects it to the input of this.
+    *
+    * This does not set the area of interest.  Note stored as an ossimRefPtr.
+    *
+    * @param sequencer Pointer to a sequencer.
+    */
    virtual void changeSequencer(ossimImageSourceSequencer* sequencer);
 
    virtual ossimImageSourceSequencer* getSequencer();
 
+   /**
+    * @brief Initialize method.
+    *
+    * Calls theInputConnection->initialize() then syncs area of interest(AOI)
+    * with ossimImageWriter::theAreaOfInterest taking precedence over
+    * ossimImageSourceSequencer::theAreaOfInterest.
+    */
    virtual void initialize();
 
    /**

@@ -14,7 +14,7 @@
 //   elevations relative to the ellipsoid.
 //
 //*****************************************************************************
-//  $Id: ossimCoarseGridModel.cpp 19457 2011-04-27 16:05:42Z gpotts $
+//  $Id: ossimCoarseGridModel.cpp 20710 2012-04-03 19:43:46Z gpotts $
 
 #include <ossim/projection/ossimCoarseGridModel.h>
 
@@ -135,8 +135,15 @@ ossimCoarseGridModel::ossimCoarseGridModel(const ossimFilename& geom_file)
    theLatGrid.enableExtrapolation();
    theLonGrid.enableExtrapolation();
 
-   ossimKeywordlist kwl (geom_file);
-   loadState(kwl);
+   ossimKeywordlist kwl;
+   if(geom_file.exists()&&kwl.addFile(geom_file))
+   {
+      loadState(kwl);
+   }
+   else
+   {
+      ++theErrorStatus;
+   }
 
    if (traceExec())   ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimCoarseGridModel::ossimCoarseGridModel(geom_file): returning..." << std::endl;
    return;

@@ -325,14 +325,15 @@ bool ossimImageElevationDatabase::pointHasCoverage(const ossimGpt& gpt) const
    return result;
 }
 
-double ossimImageElevationDatabase::getAccuracyLE90(const ossimGpt& /* gpt */) const
-{
-   return 0;
-}
 
-double ossimImageElevationDatabase::getAccuracyCE90(const ossimGpt& /* gpt */) const
+bool ossimImageElevationDatabase::getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& gpt) const
 {
-   return 0;
+   if(pointHasCoverage(gpt))
+   {
+     info.m_surfaceName = "Image Elevation";
+   }
+
+   return false;
 }
 
 bool ossimImageElevationDatabase::loadState(const ossimKeywordlist& kwl, const char* prefix)

@@ -9,16 +9,18 @@
 // Filter to toggle pixel values.
 //
 //*************************************************************************
-// $Id: ossimPixelFlipper.cpp 19728 2011-06-06 21:31:17Z dburken $
+// $Id: ossimPixelFlipper.cpp 21631 2012-09-06 18:10:55Z dburken $
 
-#include <cstdlib>
+
 #include <ossim/imaging/ossimPixelFlipper.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/imaging/ossimImageData.h>
 #include <OpenThreads/ScopedLock>
+#include <cstdlib>
 
 RTTI_DEF1(ossimPixelFlipper, "ossimPixelFlipper", ossimImageSourceFilter)
 
@@ -37,7 +39,7 @@ static const char TARGET_LOWER_LIMIT_PROP_NAME[] = "target_range_lower_limit";
 static const char TARGET_UPPER_LIMIT_PROP_NAME[] = "target_range_upper_limit";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimPixelFlipper.cpp 19728 2011-06-06 21:31:17Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimPixelFlipper.cpp 21631 2012-09-06 18:10:55Z dburken $";
 #endif
 
 ossimPixelFlipper::ossimPixelFlipper(ossimObject* owner)

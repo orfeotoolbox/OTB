@@ -7,10 +7,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimIgen.cpp 20444 2012-01-12 14:45:52Z oscarkramer $
-
-#include <iterator>
-#include <sstream>
+// $Id: ossimIgen.cpp 21850 2012-10-21 20:09:55Z dburken $
 
 #include <ossim/ossimConfig.h> /* To pick up define OSSIM_HAS_MPI. */
 
@@ -25,6 +22,7 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimStdOutProgress.h>
+#include <ossim/base/ossimVisitor.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/imaging/ossimImageChain.h>
@@ -37,6 +35,8 @@
 #include <ossim/parallel/ossimMpi.h>
 #include <ossim/parallel/ossimMultiThreadSequencer.h>
 #include <ossim/parallel/ossimMtDebug.h> //### For debug/performance eval
+#include <iterator>
+#include <sstream>
 
 static ossimTrace traceDebug(ossimString("ossimIgen:debug"));
 static ossimTrace traceLog(ossimString("ossimIgen:log"));
@@ -319,17 +319,31 @@ bool ossimIgen::loadProductSpec()
    theContainer->loadState(theKwl);
 
    // There should be a product chain defined in the container:
-   ossimConnectableObject* obj = 
-      theContainer->findFirstObjectOfType(STATIC_TYPE_NAME(ossimImageChain), false);
-   theProductChain = PTR_CAST(ossimImageChain, obj);
+   // ossimConnectableObject* obj = 
+   //   theContainer->findFirstObjectOfType(STATIC_TYPE_NAME(ossimImageChain), false);
+   // theProductChain = PTR_CAST(ossimImageChain, obj);
+
+   ossimTypeNameVisitor visitor( ossimString("ossimImageChain"),
+                                 true, // firstofTypeFlag
+                                 (ossimVisitor::VISIT_INPUTS |
+                                  ossimVisitor::VISIT_CHILDREN) );
+   theContainer->accept( visitor );
+   theProductChain = visitor.getObjectAs<ossimImageChain>(0);
+   
    if (!theProductChain.valid())
    {
       // Search for a connectable container specified that contains the entire product chain:
-      ossimConnectableObject* obj2 = 
-         theContainer->findFirstObjectOfType(STATIC_TYPE_NAME(ossimImageFileWriter), true);
-      ossimImageFileWriter* writer = PTR_CAST(ossimImageFileWriter, obj2);
-      if (writer)
-         theProductChain = PTR_CAST(ossimImageChain, writer->getInput());
+      // ossimConnectableObject* obj2 = 
+      //    theContainer->findFirstObjectOfType(STATIC_TYPE_NAME(ossimImageFileWriter), true);
+      // ossimImageFileWriter* writer = PTR_CAST(ossimImageFileWriter, obj2);
+      visitor.reset();
+      visitor.setTypeName( ossimString( "ossimImageFileWriter" ) );
+      theContainer->accept( visitor );
+      ossimRefPtr<ossimImageFileWriter> writer = visitor.getObjectAs<ossimImageFileWriter>(0);
+      if ( writer.valid() )
+      {
+         theProductChain = dynamic_cast<ossimImageChain*>( writer->getInput() );
+      }
 
       if (!theProductChain.valid())
       {
@@ -341,8 +355,8 @@ bool ossimIgen::loadProductSpec()
 
    // The output projection is specified separately in the KWL:
    ossimString prefix = "product.projection.";
-   theProductProjection = PTR_CAST(ossimMapProjection, 
-      ossimProjectionFactoryRegistry::instance()->createProjection(theKwl, prefix));
+   theProductProjection = dynamic_cast<ossimMapProjection*>( 
+      ossimProjectionFactoryRegistry::instance()->createProjection(theKwl, prefix) );
 
    const char* lookup = theKwl.find("igen.write_to_stdout");
    if (lookup && ossimString(lookup).toBool())
@@ -403,10 +417,19 @@ void ossimIgen::outputProduct()
 
 
    // Look for the first writer (should be the only writer) in our list of objects:
-   ossimRefPtr<ossimImageFileWriter> writer  = 0;
-   ossimConnectableObject::ConnectableObjectList imageWriters =
-      theContainer->findAllObjectsOfType(STATIC_TYPE_INFO(ossimImageFileWriter), false);
-   if (imageWriters.size() == 0)
+
+   // ossimRefPtr<ossimImageFileWriter> writer  = 0;
+   // ossimConnectableObject::ConnectableObjectList imageWriters =
+   //    theContainer->findAllObjectsOfType(STATIC_TYPE_INFO(ossimImageFileWriter), false);
+
+   ossimTypeNameVisitor visitor( ossimString("ossimImageFileWriter"),
+                                 true, // firstofTypeFlag
+                                 (ossimVisitor::VISIT_INPUTS |
+                                  ossimVisitor::VISIT_CHILDREN) );
+   theContainer->accept( visitor );
+   ossimRefPtr<ossimImageFileWriter> writer = visitor.getObjectAs<ossimImageFileWriter>(0);
+   
+   if ( !writer.valid() )
    {
       sequencer = 0;
       std::string err = "ossimIgen::outputProduct() ERROR:  No image writer object was found in "
@@ -414,7 +437,7 @@ void ossimIgen::outputProduct()
       throw(ossimException(err));
    }
 
-   writer = PTR_CAST(ossimImageFileWriter, imageWriters[0].get());
+   // writer = PTR_CAST(ossimImageFileWriter, imageWriters[0].get());
    writer->changeSequencer(sequencer.get());
    writer->connectMyInputTo(theProductChain.get());
    
@@ -453,7 +476,7 @@ void ossimIgen::outputProduct()
       theTiling->initialize(*(theProductProjection.get()), theOutputRect);
 
       ossimRectangleCutFilter* cut = NULL;
-      ossimTilingPoly* tilingPoly = PTR_CAST(ossimTilingPoly, theTiling.get());
+      ossimTilingPoly* tilingPoly = dynamic_cast<ossimTilingPoly*>( theTiling.get() );
       if (tilingPoly == NULL)
       {
          cut = new ossimRectangleCutFilter;
@@ -613,21 +636,37 @@ bool ossimIgen::writeToFile(ossimImageFileWriter* writer)
 //*************************************************************************************************
 void ossimIgen::setView()
 {
-   if(!theProductChain.valid() || !theProductProjection.valid())
-      return;
-
-   // Find all view clients in the chain, and notify them of the new view:
-   ossimConnectableObject::ConnectableObjectList clientList;
-   theProductChain->findAllInputsOfType(clientList, STATIC_TYPE_INFO(ossimViewInterface), true, true);
-   for(ossim_uint32 i = 0; i < clientList.size();++i)
+   if( theProductChain.valid() && theProductProjection.valid() )
    {
-      ossimViewInterface* viewClient = PTR_CAST(ossimViewInterface, clientList[i].get());
-      if (viewClient)
-         viewClient->setView(theProductProjection->dup());
-   }
+      // Find all view clients in the chain, and notify them of the new view:
+#if 0
+      ossimConnectableObject::ConnectableObjectList clientList;
+      theProductChain->findAllInputsOfType(clientList, STATIC_TYPE_INFO(ossimViewInterface), true, true);
+      for(ossim_uint32 i = 0; i < clientList.size();++i)
+      {
+         ossimViewInterface* viewClient = dynamic_cast<ossimViewInterface*>( clientList[i].get() );
+         if (viewClient)
+            viewClient->setView(theProductProjection->dup());
+      }
+#endif
+      
+      ossimTypeNameVisitor visitor( ossimString("ossimViewInterface"),
+                                    false, // firstofTypeFlag
+                                    (ossimVisitor::VISIT_INPUTS|
+                                     ossimVisitor::VISIT_CHILDREN) );
+      theProductChain->accept( visitor );
+      for( ossim_uint32 i = 0; i < visitor.getObjects().size(); ++i )
+      {
+         ossimViewInterface* viewClient = visitor.getObjectAs<ossimViewInterface>( i );
+         if (viewClient)
+         {
+            viewClient->setView( theProductProjection->dup() );
+         }
+      }
 
-   // Force recompute of bounding rect:
-   initializeChain();
+      // Force recompute of bounding rect:
+      initializeChain();
+   }
 }
 
 //*************************************************************************************************
@@ -636,7 +675,7 @@ void ossimIgen::setView()
 void ossimIgen::initThumbnailProjection()
 {
    double thumb_size = ossim::max(theThumbnailSize.x, theThumbnailSize.y);
-   ossimMapProjection* mapProj = PTR_CAST (ossimMapProjection, theProductProjection.get());
+   ossimMapProjection* mapProj = dynamic_cast<ossimMapProjection*>(theProductProjection.get());
 
    if(mapProj && !theOutputRect.hasNans())
    {

@@ -9,7 +9,7 @@
 // Description:  Base class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderBase.h 19724 2011-06-06 21:07:15Z dburken $
+// $Id: ossimOverviewBuilderBase.h 21653 2012-09-07 15:03:08Z dburken $
 #ifndef ossimOverviewBuilderBase_HEADER
 #define ossimOverviewBuilderBase_HEADER 1
 
@@ -22,6 +22,7 @@
 #include <ossim/base/ossimString.h>
 #include <ossim/imaging/ossimBitMaskWriter.h>
 #include <ossim/imaging/ossimMaskFilter.h>
+#include <vector>
 
 class ossimImageFileWriter;
 class ossimFilename;
@@ -48,13 +49,13 @@ public:
    virtual bool setOutputWriter(ossimImageFileWriter* outputWriter);
 
    /**
-    * @brief Sets the input to the builder. (pure virtual)
+    * @brief Sets the input to the builder.
     * 
     * @param imageSource The input to the builder.
     * 
     * @return True on successful initialization, false on error.
     */
-   virtual bool setInputSource(ossimImageHandler* imageSource) = 0;
+   virtual bool setInputSource(ossimImageHandler* imageSource);
 
    /**
     * @brief Sets the output file name. (pure virtual)
@@ -142,6 +143,14 @@ public:
    virtual bool execute()=0;
 
    /**
+    * @brief Finalize method.  Should be called at end of execute.
+    *
+    * This implementation will reset the the output band list if the source
+    * image handler is a band selector.
+    */
+   virtual void finalize();
+
+   /**
     * @brief Specifies parameters (in KWL) for generation of an alpha (bit)
     * mask such that any full or partial null pixels will be masked out. A
     * mask file will be written to the source image directory with the image
@@ -216,6 +225,7 @@ protected:
    ossimHistogramMode m_histoMode; 
    ossimKeywordlist m_bitMaskSpec;
    ossimRefPtr<ossimImageHandler>  m_imageHandler;
+   std::vector<ossim_uint32>       m_originalBandList;
    ossimRefPtr<ossimBitMaskWriter> m_maskWriter;
    ossimRefPtr<ossimMaskFilter>    m_maskFilter;
    ossimFilename                   m_outputFile;

@@ -690,6 +690,90 @@ LMSfit(const EXPT_SET&                expset,
    return true;
 }
 
+
+/**
+ * Standard least squares
+ * Modified version of LMSfit that uses standard NEWMAT inverse as
+ *  alternative to SVD solution.
+ */
+bool
+SLSfit(const EXPT_SET&                expset,
+       const std::vector< VAR_TUPLE > obs_input,
+       const std::vector< T >         obs_output,
+       T*                             prms = NULL)
+{
+   //init
+   nullify();
+
+   //check size
+   int nobs = (int)obs_input.size();
+   if (nobs != (int)obs_output.size())
+   {
+      std::cerr<<"ossimPolynom::LMSfit ERROR observation input/output must have the same size"<<std::endl;
+      return false;
+   }
+   if (nobs<=0)
+   {
+      std::cerr<<"ossimPolynom::LMSfit ERROR observation count is zero"<<std::endl;
+      return false;
+   }
+   int ncoeff = (int)expset.size();  
+   if (ncoeff<=0)
+   {
+      std::cerr<<"ossimPolynom::LMSfit ERROR exponent count is zero"<<std::endl;
+      return false;
+   }
+   
+   // M : monom matrix
+   // k : polynomial coefficients
+   // v : output_obs
+   NEWMAT::Matrix M(nobs, ncoeff);
+   double elt;
+   int p;
+   typename EXPT_SET::const_iterator cit;
+   typename std::vector< VAR_TUPLE >::const_iterator oit;
+   int i,j;
+   for (cit=expset.begin(), j=1; cit != expset.end() ; ++cit, ++j) //loop on exponent tuples
+   {
+      for(oit=obs_input.begin(), i=1; oit!=obs_input.end();++oit, ++i) //loop on observations
+      {
+         elt=1.0;
+         for(int d=0;d<DIM;++d)
+         {
+            p = (*cit)[d];
+            if (p != 0)
+            {
+               elt *= std::pow( (*oit)[d], p );
+            }
+         }
+         M(i,j) = elt;
+      }
+   }
+
+   NEWMAT::ColumnVector v(nobs);
+   for(int o=0;o<nobs;++o)
+   {
+      v(o+1) = obs_output[o];
+   }
+
+   //perform solution
+   NEWMAT::ColumnVector bfit = (M.t()*M).i()*M.t()*v;
+
+   //compute RMS (optional, if rms non null)
+   if (prms!=NULL)
+   {
+      NEWMAT::ColumnVector delta = M*bfit - v;
+      *prms = std::sqrt( delta.SumSquare() / nobs);
+   }
+
+   //init polynom
+   for (cit=expset.begin(), j=1; cit != expset.end() ; ++cit, ++j) //loop on exponent tuples
+   {
+      setMonom(*cit, bfit(j));
+   }
+   return true;
+}
+
 protected:
    /**
     * protected data members

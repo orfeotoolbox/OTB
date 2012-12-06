@@ -10,7 +10,7 @@
 // Description: Class declaration for ortho-image generator.
 //
 //*************************************************************************
-// $Id: ossimOrthoIgen.h 20133 2011-10-12 19:03:47Z oscarkramer $
+// $Id: ossimOrthoIgen.h 20936 2012-05-18 14:45:00Z oscarkramer $
 
 #ifndef ossimOrthoIgen_HEADER
 #define ossimOrthoIgen_HEADER
@@ -52,7 +52,7 @@ public:
       OSSIM_CENTER_ORIGIN     = 0,
       OSSIM_UPPER_LEFT_ORIGIN = 1
    };
-   typedef std::map<ossimString,ossimString> PropertyMap;
+   typedef std::map<ossimString,ossimString, ossimStringLtstr> PropertyMap;
    
    ossimOrthoIgen();
 
@@ -146,6 +146,7 @@ protected:
    ossim_float64 theClipPixelMax;
    ossimString   theOutputRadiometry;
    ossimPixelType thePixelAlignment;
+
    /**
    * @brief Sets up the igen keyword list for the process.
    *
@@ -158,19 +159,17 @@ protected:
 
    /** 
    * Checks for the presence of a raster mask file alongside the image, and inserts the mask 
-   * filter in the chain if mask file exists. Returns pointer to the "current (last added) source 
-   * in the single image chain. 
+   * filter in the chain if mask file exists. Returns with current_src pointing to masker object 
    */
    ossimImageSource* setupRasterMask(ossimImageChain* single_image_chain,
-                                     const ossimSrcRecord& src_record);
+                        const ossimSrcRecord& src_record);
 
    /**
    * Insert a partial-pixel flipper to remap null-valued pixels to min according to info in the
-   * source record and/or command line. Returns pointer to the "current (last added) source in the 
-   * single image chain.
+   * source record and/or command line. Returns with current_src pointing to flipper object.
    */
    ossimImageSource* setupPixelFlipper(ossimImageChain* single_image_chain, 
-                                       const ossimSrcRecord& src_record);
+                          const ossimSrcRecord& src_record);
 
    /**
     * @brief Set up the writer for the process.

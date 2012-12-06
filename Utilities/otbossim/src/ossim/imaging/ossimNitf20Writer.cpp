@@ -9,11 +9,7 @@
 //*******************************************************************
 //  $Id: ossimNitf20Writer.cpp 2982 2011-10-10 21:28:55Z david.burken $
 
-#include <fstream>
-#include <algorithm>
-#include <sstream>
-#include <iomanip>
-#include <tiffio.h>
+
 #include <ossim/imaging/ossimNitf20Writer.h>
 #include <ossim/imaging/ossimNitfTileSource.h>
 #include <ossim/base/ossimDate.h>
@@ -32,6 +28,7 @@
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossimBooleanProperty.h>
+#include <ossim/base/ossimVisitor.h>
 #include <ossim/support_data/ossimNitfCommon.h>
 #include <ossim/support_data/ossimNitfGeoPositioningTag.h>
 #include <ossim/support_data/ossimNitfLocalGeographicTag.h>
@@ -39,6 +36,11 @@
 #include <ossim/support_data/ossimNitfProjectionParameterTag.h>
 #include <ossim/support_data/ossimNitfNameConversionTables.h>
 #include <ossim/support_data/ossimNitfBlockaTag.h>
+#include <tiffio.h>
+#include <fstream>
+#include <algorithm>
+#include <sstream>
+#include <iomanip>
 
 RTTI_DEF1(ossimNitf20Writer, "ossimNitf20Writer", ossimNitfWriterBase);
 
@@ -626,10 +628,19 @@ void ossimNitf20Writer::addTags()
    
    if(theCopyFieldsFlag)
    {
-      ossimConnectableObject* obj = findObjectOfType("ossimImageHandler",
-                                                     ossimConnectableObject::CONNECTABLE_DIRECTION_INPUT);
-      ossimNitfTileSource* nitf = dynamic_cast<ossimNitfTileSource*>(obj);
-      if(nitf)
+      ossimTypeNameVisitor visitor(ossimString("ossimNitfTileSource"),
+                                   true,
+                                   (ossimVisitor::VISIT_CHILDREN|ossimVisitor::VISIT_INPUTS));
+      accept(visitor);
+      
+      // If there are multiple image handlers, e.g. a mosaic do not uses.
+      ossimRefPtr<ossimNitfTileSource> nitf = 0;
+      if ( visitor.getObjects().size() == 1 )
+      {
+         nitf = visitor.getObjectAs<ossimNitfTileSource>( 0 );
+      }
+
+      if( nitf.valid() )
       {
          ossimString value;
          ossimPropertyInterface* fileHeaderProperties = dynamic_cast<ossimPropertyInterface*>(theFileHeader.get());

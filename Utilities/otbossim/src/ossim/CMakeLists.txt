@@ -44,6 +44,7 @@ FILE(GLOB ossim_vec_HDRS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT
 FILE(GLOB ossim_video_HDRS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/../../include/ossim/video/*.h")
 FILE(GLOB ossim_vpfutil_HDRS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/../../include/ossim/vpfutil/*.h")
 
+MESSAGE( "${ossim_HDRS}" )
 SET(OSSIM_HEADER_FILES 
 	${ossim_HDRS}
  	${ossim_base_HDRS} ${ossim_elevation_HDRS} ${ossim_font_HDRS}  ${ossim_imaging_HDRS} ${ossim_init_HDRS} ${ossim_kbool_HDRS} 
@@ -109,8 +110,8 @@ OSSIM_LINK_LIBRARY(${LIB_NAME}
                    COMPONENT_NAME ossim 
                    TYPE ${OSSIM_USER_DEFINED_DYNAMIC_OR_STATIC}
                    LIBRARIES ${ossimDependentLibs}
-#                   HEADERS "${OSSIM_HEADER_FILES}" 
-#                   PUBLIC_HEADERS "${ossim_HDRS}"
+                   HEADERS "${OSSIM_HEADER_FILES}" 
+                   PUBLIC_HEADERS "${ossim_HDRS}"
                    SOURCE_FILES "${ossim_SRCS}"
                    INSTALL_LIB VERSION_SYMLINKS INSTALL_HEADERS)
 

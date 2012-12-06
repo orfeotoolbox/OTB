@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFile.cpp 20326 2011-12-07 13:48:18Z dburken $
+// $Id: ossimNitfFile.cpp 21351 2012-07-20 13:27:15Z dburken $
 
 #include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/support_data/ossimNitfFileHeader.h>
@@ -238,6 +238,21 @@ bool ossimNitfFile::parseFile(const ossimFilename& file)
       try
       {
          theNitfFileHeader->parseStream(in);
+
+         // Sanity check the size before going on:
+         if ( file.fileSize() < theNitfFileHeader->getFileSize() )
+         {
+            if (traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_WARN)
+                  << "ossimNitfFile::parseFile ERROR:\n"
+                  << "File size is less than file length in header!"
+                  << "\nNITF FL field: " << theNitfFileHeader->getFileSize()
+                  << "\nActual file length: " << file.fileSize()
+                  << std::endl;
+            }
+            return false;
+         }
       }
       catch( const ossimException& e )
       {

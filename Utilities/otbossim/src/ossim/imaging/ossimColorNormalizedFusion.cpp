@@ -10,11 +10,12 @@
 // Description: Color normalized fusion
 //
 //*************************************************************************
-// $Id: ossimColorNormalizedFusion.cpp 11136 2007-06-04 13:26:35Z gpotts $
+// $Id: ossimColorNormalizedFusion.cpp 21631 2012-09-06 18:10:55Z dburken $
 
 #include <ossim/imaging/ossimColorNormalizedFusion.h>
-#include <ossim/base/ossimErrorContext.h>
 #include <ossim/base/ossimErrorCodes.h>
+#include <ossim/base/ossimErrorContext.h>
+#include <ossim/imaging/ossimImageData.h>
 
 RTTI_DEF1(ossimColorNormalizedFusion,
           "ossimColorNormalizedFusion",
