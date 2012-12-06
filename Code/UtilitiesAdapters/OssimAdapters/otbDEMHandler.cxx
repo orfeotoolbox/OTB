@@ -58,6 +58,8 @@ DEMHandler
   m_DefaultHeightAboveEllipsoid(0)
 {
   m_ElevManager->setDefaultHeightAboveEllipsoid(m_DefaultHeightAboveEllipsoid);
+  // Force geoid fallback
+  m_ElevManager->setUseGeoidIfNullFlag(true);
 }
 
 void
@@ -105,8 +107,6 @@ DEMHandler
       ossimGeoidManager::instance()->addGeoid(geoidPtr);
       geoidPtr.release();
 
-      // Force geoid fallback
-      m_ElevManager->setUseGeoidIfNullFlag(true);
       // The previous flag will be ignored if
       // defaultHeightAboveEllipsoid is not NaN
       m_ElevManager->setDefaultHeightAboveEllipsoid(ossim::nan());

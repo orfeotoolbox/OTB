@@ -161,7 +161,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_Geoid
   8.434583
   44.647083
   1
-  -5.7464
+  0
   0.001
 )
 
@@ -188,7 +188,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid
   8.434583
   44.647083
   1
-  40
+  0
   0.001
 )
 
@@ -215,7 +215,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoData
   8.687917
   44.237917
   1
-  -5.7464
+  0
   0.001
 )
 
@@ -241,7 +241,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoData
   8.687917
   44.237917
   1
-  40
+  0
   0.001
 )
 
@@ -267,7 +267,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid_NoData
   8.687917
   44.237917
   1
-  40
+  0
   0.001
 )
 
@@ -294,7 +294,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoSRTMCoverage
   10. # Point not covered
   10. # Point not covered
   1
-  -1.569
+  0
   0.001
 )
 
@@ -320,7 +320,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoSRTMCoverage
   10. # Point not covered
   10. # Point not covered
   1
-  20
+  0
   0.001
 )
 
