@@ -42,3 +42,7 @@ OTB_CREATE_APPLICATION(NAME           VectorDataReprojection
 OTB_CREATE_APPLICATION(NAME           RefineSensorModel
                        SOURCES        otbRefineSensorModel.cxx
                        LINK_LIBRARIES OTBProjections)
+
+OTB_CREATE_APPLICATION(NAME           GenerateRPCSensorModel
+                       SOURCES        otbGenerateRPCSensorModel.cxx
+                       LINK_LIBRARIES OTBProjections)
