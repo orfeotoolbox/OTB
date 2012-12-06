@@ -37,7 +37,8 @@ GCPsToRPCSensorModelImageFilter<TImage>
   m_UseDEM(false),
   m_MeanElevation(0.),
   m_DEMHandler(),
-  m_GCPsContainer()
+  m_GCPsContainer(), 
+  m_ModelUpToDate(false)
 {
   // This filter does not modify the image buffer, but only its
   // metadata.Therefore, it can be run inplace to reduce memory print.
@@ -58,6 +59,20 @@ GCPsToRPCSensorModelImageFilter<TImage>
   // Clear the GCPs container
   this->ClearGCPs();
 }
+
+
+template <class TImage>
+void
+GCPsToRPCSensorModelImageFilter<TImage>
+::Modified()
+{
+  // Call superclass implementation
+  this->Superclass::Modified();
+
+  // Deactivate up-to-date flag
+  m_ModelUpToDate = false;
+}
+
 
 template <class TImage>
 typename GCPsToRPCSensorModelImageFilter<TImage>
@@ -291,21 +306,26 @@ GCPsToRPCSensorModelImageFilter<TImage>
   // First, retrieve the image pointer
   typename TImage::Pointer imagePtr = this->GetOutput();
 
-  double rmsError;
-  ImageKeywordlist otb_kwl;
-  otb::RPCSolverAdapter::Solve(m_GCPsContainer, rmsError, otb_kwl);
-
-  // Retrieve the residual ground error
-  m_RMSGroundError = rmsError;
-
-  // Compute errors
-  this->ComputeErrors();
+  if(!m_ModelUpToDate)
+    {
+    double rmsError;
+    ImageKeywordlist otb_kwl;
+    otb::RPCSolverAdapter::Solve(m_GCPsContainer, rmsError, otb_kwl);
+    
+    // Retrieve the residual ground error
+    m_RMSGroundError = rmsError;
+    
+    // Compute errors
+    this->ComputeErrors();
  
-  m_Keywordlist = otb_kwl;
+    m_Keywordlist = otb_kwl;
 
-  // Encapsulate it
-  itk::MetaDataDictionary& dict = imagePtr->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+    // Encapsulate it
+    itk::MetaDataDictionary& dict = imagePtr->GetMetaDataDictionary();
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+
+    m_ModelUpToDate = true;
+    }
 }
 
 template <class TImage>

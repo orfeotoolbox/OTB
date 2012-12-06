@@ -173,6 +173,9 @@ protected:
    * GenerateOutputInformation() method */
   virtual void GenerateOutputInformation();
 
+  /** Drive the model up-to-date flag */
+  virtual void Modified();
+
 private:
   GCPsToRPCSensorModelImageFilter (const Self &);   // purposely not implemented
   void operator =(const Self&);    // purposely not implemented
@@ -207,6 +210,9 @@ private:
 
   /** Keywordlist */
   ImageKeywordlist m_Keywordlist;
+
+  /** Flag to see if model is up-to-date */
+  bool m_ModelUpToDate;
 
 }; // end of class
 
