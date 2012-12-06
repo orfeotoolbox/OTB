@@ -51,6 +51,7 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
+  reader->UpdateOutputInformation();
 
   GCPsToSensorModelFilterType::Pointer rpcEstimator = GCPsToSensorModelFilterType::New();
   rpcEstimator->SetInput(reader->GetOutput());
@@ -115,6 +116,10 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   utmMapProjection->SetZone(atoi(argv[9]));
   utmMapProjection->SetHemisphere(argv[10][0]);
   orthoRectifFilter->SetMapProjection(utmMapProjection);
+
+  ImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+  orthoRectifFilter->SetEdgePaddingValue(no_data);
+
 
   // Deformation Field spacing
   ImageType::SpacingType  gridSpacing;
