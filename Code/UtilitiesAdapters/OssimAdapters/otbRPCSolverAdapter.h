@@ -54,13 +54,18 @@ public:
   /** Solve RPC modelling from a set of GCPs and image bounds.
    *  The estimated RPC model is written in a keywordlist understood
    *  by other OTB and classes (like GenericRSTransform for instance).
+   *  Please note that at least 20 points are required to estimate the
+   *  RPC model. Between 20 and 40 points, the estimated model will
+   *  not provide elevation support, since there are not enough points
+   *  to estimate all the coefficients. Starting at 40 points, a full
+   *  RPC model is estimated.
    */
   static void Solve(const GCPsContainerType& gcpContainer,
                     double& rmsError,
                     ImageKeywordlist& otb_kwl);
 
   /** Solve RPC modelling from a set of GCPs and image bounds. The
-   * estimated RPC model is written to a geom file
+   * estimated RPC model is written to a geom file.
    */
   static bool Solve(const GCPsContainerType& gcpContainer,
                     double& rmsError,

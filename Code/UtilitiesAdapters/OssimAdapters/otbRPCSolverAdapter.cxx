@@ -18,6 +18,7 @@
 
 #include "otbRPCSolverAdapter.h"
 #include "otbImageKeywordlist.h"
+#include "otbMacro.h"
 
 #include "ossim/projection/ossimRpcSolver.h"
 #include "ossim/projection/ossimProjection.h"
@@ -68,13 +69,25 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
     }
 
   // Check for enough points
-  if(sensorPoints.size() < 40)
+  if(sensorPoints.size() < 20)
     {
-    itkGenericExceptionMacro(<<"At least 40 points are required to estimate the 80 parameters of the RPC model, but only "<<sensorPoints.size()<<" were given.");
+    itkGenericExceptionMacro(<<"At least 20 points are required to estimate the 40 parameters of a RPC model without elevation support, and 40 are required to estimate the 80 parameters of a RPC model with elevation support. Only "<<sensorPoints.size()<<" points were given.");
+    }
+
+  // By default, use elevation provided with ground control points
+  bool useElevation = true;
+
+  // If not enough points are given for a proper estimation of RPC
+  // with elevation support, disable elevation. This will result in
+  // all coefficients related to elevation set to zero.
+  if(sensorPoints.size()<40)
+    {
+    otbGenericWarningMacro("Only "<<sensorPoints.size()<<" ground control points are provided, can not estimate a RPC model with elevation support (at least 40 points required). Elevation support will be disabled for RPC estimation. All coefficients related to elevation will be set to zero, and elevation will have no effect on the resulting transform.");
+    useElevation = false; 
     }
   
   // Build the ossim rpc solver
-  ossimRefPtr<ossimRpcSolver> rpcSolver = new ossimRpcSolver(true, false);
+  ossimRefPtr<ossimRpcSolver> rpcSolver = new ossimRpcSolver(useElevation, false);
 
   // Call the solve method
   rpcSolver->solveCoefficients(sensorPoints, geoPoints);
