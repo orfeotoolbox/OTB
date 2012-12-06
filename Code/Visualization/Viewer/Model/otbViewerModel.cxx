@@ -230,13 +230,19 @@ ViewerModel
   bool isJPEG2000 = this->IsJPEG2000File(filename);
   bool isHDF = this->IsHDFFile(filename);
 
-  // If jpeg2000 or HDF, add the selected resolution at the end of the file name
-  if( isJPEG2000 || isHDF)
+  // If jpeg2000 or HDF, add the selected resolution at the end of the
+  // file name
+  if(isJPEG2000)
     {
-    otbFilepath += ":";
-    std::ostringstream ossRes;
-    ossRes << id;
-    otbFilepath += ossRes.str();
+    itk::OStringStream oss;
+    oss<<otbFilepath<<"?&resol="<<id;
+    otbFilepath = oss.str();
+    }
+  else if(isHDF)
+    {
+    itk::OStringStream oss;
+    oss<<otbFilepath<<"?&sdataidx="<<id;
+    otbFilepath = oss.str();
     }
 
   /** Reader*/
@@ -255,8 +261,9 @@ ViewerModel
 
     if( resSize > 0 )
       {
-      std::string qlFname = filename + "?&resol=resSize-1";
-      jpeg2000QLReader->SetFileName(qlFname);
+      itk::OStringStream oss;
+      oss<<filename<<"?&resol="<<resSize-1;
+      jpeg2000QLReader->SetFileName(oss.str());
       }
     else
       {
