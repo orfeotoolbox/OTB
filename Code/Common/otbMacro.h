@@ -108,6 +108,16 @@ namespace otb
       } \
     }
 
+#define otbGenericWarningMacro(x) \
+    { \
+    if (itk::Object::GetGlobalWarningDisplay()) \
+      { \
+      std::ostringstream itkmsg; \
+      itkmsg << "WARNING: In " __FILE__ ", line " << __LINE__ << ": " x <<"\n";\
+      itk::OutputWindowDisplayWarningText(itkmsg.str().c_str()); \
+      } \
+    }
+
 /** This macro is used to control condition. It use ONLY by the OTB developers
   *
   */
