@@ -83,7 +83,7 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
   if(sensorPoints.size()<40)
     {
     otbGenericWarningMacro("Only "<<sensorPoints.size()<<" ground control points are provided, can not estimate a RPC model with elevation support (at least 40 points required). Elevation support will be disabled for RPC estimation. All coefficients related to elevation will be set to zero, and elevation will have no effect on the resulting transform.");
-    useElevation = false; 
+    useElevation = false;
     }
   
   // Build the ossim rpc solver

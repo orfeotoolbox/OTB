@@ -37,7 +37,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
   m_UseDEM(false),
   m_MeanElevation(0.),
   m_DEMHandler(),
-  m_GCPsContainer(), 
+  m_GCPsContainer(),
   m_ModelUpToDate(false)
 {
   // This filter does not modify the image buffer, but only its
