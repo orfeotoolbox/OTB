@@ -102,23 +102,18 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
   otb::ImageKeywordlist rpcKwl;
   double rmse;
 
-  Point2DType ul = reader->GetOutput()->GetOrigin();
-  Point2DType lr;
-  lr[0] = ul[0] + size[0]*reader->GetOutput()->GetSpacing()[0];
-  lr[1] = ul[1] + size[1]*reader->GetOutput()->GetSpacing()[1];
-
-  // Call solver: either write geom and exit, or evaluate model precision
+ // Call solver: either write geom and exit, or evaluate model precision
   if(argc==8)
     {
     const std::string outgeom = argv[7];
-    bool success = otb::RPCSolverAdapter::Solve(gcps,ul,lr,rmse,outgeom);
+    bool success = otb::RPCSolverAdapter::Solve(gcps,rmse,outgeom);
     if(success)
       return EXIT_SUCCESS;
     else
       return EXIT_FAILURE;
     }
 
-  otb::RPCSolverAdapter::Solve(gcps,ul,lr,rmse,rpcKwl);
+  otb::RPCSolverAdapter::Solve(gcps,rmse,rpcKwl);
 
   std::cout<<"Optimization done, RMSE="<<rmse<<std::endl;
 

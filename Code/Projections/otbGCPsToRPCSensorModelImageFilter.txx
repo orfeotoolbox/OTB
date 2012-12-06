@@ -291,17 +291,9 @@ GCPsToRPCSensorModelImageFilter<TImage>
   // First, retrieve the image pointer
   typename TImage::Pointer imagePtr = this->GetOutput();
 
-  typename TImage::PointType ul = this->GetInput()->GetOrigin();
-  typename TImage::SizeType size = this->GetInput()->GetLargestPossibleRegion().GetSize();
-  typename TImage::SpacingType spacing = this->GetInput()->GetSpacing();
-
-  typename TImage::PointType lr;
-  lr[0] = ul[0] + size[0]*spacing[0];
-  lr[1] = ul[1] + size[1]*spacing[1];
-
   double rmsError;
   ImageKeywordlist otb_kwl;
-  otb::RPCSolverAdapter::Solve(m_GCPsContainer, ul, lr, rmsError, otb_kwl);
+  otb::RPCSolverAdapter::Solve(m_GCPsContainer, rmsError, otb_kwl);
 
   // Retrieve the residual ground error
   m_RMSGroundError = rmsError;

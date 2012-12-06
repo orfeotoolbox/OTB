@@ -35,8 +35,6 @@ RPCSolverAdapter::~RPCSolverAdapter()
 
 void
 RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
-                        const Point2DType& ulImagePoint,
-                        const Point2DType& lrImagePoint,
                         double& rmsError,
                         ImageKeywordlist& otb_kwl)
 {
@@ -56,21 +54,17 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
   for (gcpIt = gcpContainer.begin(); gcpIt != gcpContainer.end(); ++gcpIt)
     {
     // Check if point is inside bounds
-    if(gcpIt->first[0] >= ulImagePoint[0] && gcpIt->first[1] >= ulImagePoint[1]
-    && gcpIt->first[0] <= lrImagePoint[0] && gcpIt->first[1] <= lrImagePoint[1])
-      {
-      // Fill sensor point
-      sensorPoint = ossimDpt(gcpIt->first[0], gcpIt->first[1]);
-      
-      // Fill geo point (lat, lon, elev)
-      geoPoint =  ossimGpt(gcpIt->second[1], gcpIt->second[0], gcpIt->second[2]);
-      
-      // Add the sensor point to the list
-      sensorPoints.push_back(sensorPoint);
-
-      // Add the geo point to the list
-      geoPoints.push_back(geoPoint);
-      }
+    // Fill sensor point
+    sensorPoint = ossimDpt(gcpIt->first[0], gcpIt->first[1]);
+    
+    // Fill geo point (lat, lon, elev)
+    geoPoint =  ossimGpt(gcpIt->second[1], gcpIt->second[0], gcpIt->second[2]);
+    
+    // Add the sensor point to the list
+    sensorPoints.push_back(sensorPoint);
+    
+    // Add the geo point to the list
+    geoPoints.push_back(geoPoint);
     }
 
   // Check for enough points
@@ -99,8 +93,6 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
 }
 
 bool RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
-                    const Point2DType& ulImagePoint,
-                    const Point2DType& lrImagePoint,
                     double& rmsError,
                     const std::string & outgeom)
  {
@@ -108,7 +100,7 @@ bool RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
    ImageKeywordlist otb_kwl;
 
    // Call the Solve method that actually does the solving
-   Solve(gcpContainer,ulImagePoint,lrImagePoint,rmsError,otb_kwl);
+   Solve(gcpContainer,rmsError,otb_kwl);
 
    // Write the keywordlist to disk
    ossimKeywordlist kwl;
