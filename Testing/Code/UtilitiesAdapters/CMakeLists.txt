@@ -64,6 +64,15 @@ ADD_TEST(uaTvRPCSolverAdapterOutGeomTest
          ${TEMP}/uaTvRPCSolverAdapterOutGeomTest.geom
 )
 
+ADD_TEST(uaTvRPCSolverAdapterNotEnoughPointsForElevationTest
+         ${UtilitiesAdapters_TESTS1}
+         otbRPCSolverAdapterTest
+         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         5 0.25 0.35
+         no
+         no
+         )
+
 ADD_TEST(uaTvRPCSolverAdapterNotEnoughPointsTest
          ${UtilitiesAdapters_TESTS1}
          otbRPCSolverAdapterTest
