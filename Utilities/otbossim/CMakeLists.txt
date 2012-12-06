@@ -7,7 +7,7 @@ SET(OSSIM_RELEASE_NUMBER "?")
 SET(OSSIM_VERSION "${OSSIM_MAJOR_VERSION_NUMBER}-${OSSIM_MINOR_VERSION_NUMBER}-${OSSIM_PATCH_VERSION_NUMBER}" )
 
 # svn revision number of this ossim fork (used for .so versioning)
-SET(OSSIM_SVN_REVISION "20606")
+SET(OSSIM_SVN_REVISION "21971")
 # patch number for OTB modifications applied on top of OSSIM_SVN_REVISION (used for .so versioning)
 SET(OSSIM_OTB_PATCH "1")
 
