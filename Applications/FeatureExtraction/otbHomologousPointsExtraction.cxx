@@ -183,12 +183,14 @@ private:
 
     if(GetParameterString("algorithm")=="sift")
       {
+      otbAppLogINFO("Using SIFT points");
       SiftFilterType::Pointer sift1 = SiftFilterType::New();
       sift1->SetInput(im1);
         
       SiftFilterType::Pointer sift2 = SiftFilterType::New();
       sift2->SetInput(im2);
       
+      otbAppLogINFO("Doing update");
       sift1->Update();
     
       otbAppLogINFO("Found " << sift1->GetOutput()->GetNumberOfPoints()<<" sift points in image 1.");
@@ -208,6 +210,7 @@ private:
       SurfFilterType::Pointer surf2 = SurfFilterType::New();
       surf2->SetInput(im2);
       
+      otbAppLogINFO("Doing update");
       surf1->Update();
     
       otbAppLogINFO("Found " << surf1->GetOutput()->GetNumberOfPoints()<<" surf points in image 1.");
@@ -352,10 +355,9 @@ private:
       unsigned int nb_bins_y = size[1]/(bin_size + bin_step);
 
       FloatImageType::SpacingType spacing1 = this->GetParameterImage("in1")->GetSpacing();
-      FloatImageType::SpacingType spacing2 = this->GetParameterImage("in2")->GetSpacing();
-    
       FloatImageType::PointType origin1 = this->GetParameterImage("in1")->GetOrigin();
-      FloatImageType::PointType origin2 = this->GetParameterImage("in2")->GetOrigin();
+      
+      FloatVectorImageType::Pointer image2 = this->GetParameterImage("in2");
 
       for(unsigned int i = 0; i<nb_bins_x; ++i)
         {
@@ -386,7 +388,8 @@ private:
         
         
           // We need to find the corresponding region in image 2
-          FloatImageType::PointType ul1, ur1, ll1, lr1, p1, p2, p3, p4, ul2, lr2;
+          FloatImageType::PointType ul1, ur1, ll1, lr1, p1, p2, p3, p4;
+          itk::ContinuousIndex<double,2> i1, i2, i3, i4, i_min, i_max;
 
           ul1[0] = origin1[0] + startx * spacing1[0];
           ul1[1] = origin1[1] + starty * spacing1[1];
@@ -404,21 +407,26 @@ private:
           p2 = rsTransform->TransformPoint(ur1);
           p3 = rsTransform->TransformPoint(lr1);
           p4 = rsTransform->TransformPoint(ll1);
+          
+          image2->TransformPhysicalPointToContinuousIndex(p1,i1);
+          image2->TransformPhysicalPointToContinuousIndex(p2,i2);
+          image2->TransformPhysicalPointToContinuousIndex(p3,i3);
+          image2->TransformPhysicalPointToContinuousIndex(p4,i4);
 
-          ul2[0] = std::min(std::min(p1[0],p2[0]),std::min(p3[0],p4[0]));
-          ul2[1] = std::min(std::min(p1[1],p2[1]),std::min(p3[1],p4[1]));
+          i_min[0] = std::min(std::min(i1[0],i2[0]),std::min(i3[0],i4[0]));
+          i_min[1] = std::min(std::min(i1[1],i2[1]),std::min(i3[1],i4[1]));
 
-          lr2[0] = std::max(std::max(p1[0],p2[0]),std::max(p3[0],p4[0]));
-          lr2[1] = std::max(std::max(p1[1],p2[1]),std::max(p3[1],p4[1]));
+          i_max[0] = std::max(std::max(i1[0],i2[0]),std::max(i3[0],i4[0]));
+          i_max[1] = std::max(std::max(i1[1],i2[1]),std::max(i3[1],i4[1]));
 
           FloatImageType::IndexType index2;
           FloatImageType::SizeType size2;
 
-          index2[0] = vcl_floor((ul2[0]-origin2[0])/spacing2[0]);
-          index2[1] = vcl_floor((ul2[1]-origin2[1])/spacing2[1]);
+          index2[0] = vcl_floor(i_min[0]);
+          index2[1] = vcl_floor(i_min[1]);
 
-          size2[0] = vcl_ceil((lr2[0]-ul2[0])/vcl_abs(spacing2[0]));
-          size2[1] = vcl_ceil((lr2[1]-ul2[1])/vcl_abs(spacing2[1]));
+          size2[0] = vcl_ceil(i_max[0]-i_min[0]);
+          size2[1] = vcl_ceil(i_max[1]-i_min[1]);
 
           FloatImageType::RegionType region2;
           region2.SetIndex(index2);
