@@ -123,7 +123,7 @@ private:
     SetDefaultParameterFloat("transform.type.translation.tx",0.);
     AddParameter(ParameterType_Float,"transform.type.translation.ty",   "The Y translation (in physical units)");
     SetParameterDescription("transform.type.translation.ty","The translation value along Y axis (in physical units)");
-    SetDefaultParameterFloat("transform.type.translation.tx",0.);
+    SetDefaultParameterFloat("transform.type.translation.ty",0.);
 
     AddChoice("transform.type.rotation", "rotation");
     SetParameterDescription("transform.type.rotation","rotation");
