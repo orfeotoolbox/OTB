@@ -65,7 +65,7 @@ private:
     AddDocTag(Tags::Geometry);
 
     SetDocLimitations("None");
-    SetDocSeeAlso("OrthoRectication,HomologousPointsExtraction");
+    SetDocSeeAlso("OrthoRectification,HomologousPointsExtraction");
     SetDocAuthors("OTB-Team");
     
     AddParameter(ParameterType_InputFilename,"ingeom","Input geom file");
