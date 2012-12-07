@@ -197,7 +197,7 @@ private:
       it!=tiepoints.end(); ++it)
     {
     Point3DType tmpPoint,ref;
-    sm->ForwardTransformPoint(it->first[0],it->first[1],it->first[2],tmpPoint[0],tmpPoint[1],tmpPoint[2]);
+    sm->ForwardTransformPoint(it->first[0],it->first[1],it->second[2],tmpPoint[0],tmpPoint[1],tmpPoint[2]);
 
     tmpPoint = rsTransform->TransformPoint(tmpPoint);
 
