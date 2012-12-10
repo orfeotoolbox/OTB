@@ -16,21 +16,21 @@
 
 =========================================================================*/
 
-#ifndef __mvdApplication_h
-#define __mvdApplication_h
+#ifndef __mvdI18nApplication_h
+#define __mvdI18nApplication_h
 
 //
 // System includes (sorted by alphabetic order)
 
 //
 // Qt includes (sorted by alphabetic order)
+#include <QApplication>
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdI18nApplication.h"
 
 //
 // Class pre-declaration.
@@ -39,11 +39,11 @@
 // Class declaration.
 namespace mvd
 {
-/** \class Application
+/** \class I18nApplication
  *
  */
-class Application
-  : public I18nApplication
+class I18nApplication
+  : public QApplication
 {
   Q_OBJECT;
 
@@ -52,10 +52,10 @@ class Application
 public:
 
   /** Constructor */
-  Application( int& argc, char** argv );
+  I18nApplication( int& argc, char** argv );
 
   /** Destructor */
-  virtual ~Application();
+  virtual ~I18nApplication();
 
 //
 // SIGNALS.
@@ -70,20 +70,27 @@ protected:
 private:
   /**
    */
-  void InitializeCore();
+  void InitializeLocale();
+
+  /**
+   */
+  bool LoadAndInstallTranslator( const QString& filename,
+				 const QString& directory =QString(),
+				 const QString& searchDelimiters =QString(),
+				 const QString& suffix =QString() );
 
 //
 // Private attributes.
 private:
+  /**
+   */
+  bool m_IsRunningFromBuildDir;
 
 //
 // SLOTS
 private slots:
-  /**
-   */
-  void OnAboutToQuit();
 };
 
 } // end namespace 'mvd'
 
-#endif // __Application_h
+#endif // __I18nApplication_h
