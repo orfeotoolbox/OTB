@@ -21,3 +21,6 @@ OTB_CREATE_APPLICATION(NAME           ValidateSVMImagesClassifier
 OTB_CREATE_APPLICATION(NAME           SOMClassification
                        SOURCES        otbSOMClassification.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)                                            
+OTB_CREATE_APPLICATION(NAME           FusionOfClassifications
+                       SOURCES        otbFusionOfClassifications.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
