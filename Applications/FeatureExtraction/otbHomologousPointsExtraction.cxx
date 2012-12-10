@@ -190,7 +190,6 @@ private:
       SiftFilterType::Pointer sift2 = SiftFilterType::New();
       sift2->SetInput(im2);
       
-      otbAppLogINFO("Doing update");
       sift1->Update();
     
       otbAppLogINFO("Found " << sift1->GetOutput()->GetNumberOfPoints()<<" sift points in image 1.");
