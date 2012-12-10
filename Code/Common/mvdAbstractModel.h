@@ -16,15 +16,18 @@
 
 =========================================================================*/
 
-#ifndef __mvdI18nApplication_h
-#define __mvdI18nApplication_h
+#ifndef __mvdAbstractModel_h
+#define __mvdAbstractModel_h
 
 //
 // System includes (sorted by alphabetic order)
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QApplication>
+#include <QObject>
+
+//
+// ITK includes (sorted by alphabetic order)
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -34,17 +37,21 @@
 #include "ConfigureMonteverdi2.h"
 
 //
-// Class pre-declaration.
+// External classes pre-declaration.
+namespace
+{
+}
 
-//
-// Class declaration.
 namespace mvd
 {
-/** \class I18nApplication
+//
+// Internal classes pre-declaration.
+
+/** \class AbstractModel
  *
  */
-class Monteverdi2_EXPORT I18nApplication
-  : public QApplication
+class Monteverdi2_EXPORT AbstractModel :
+    public QObject
 {
   Q_OBJECT;
 
@@ -53,10 +60,10 @@ class Monteverdi2_EXPORT I18nApplication
 public:
 
   /** Constructor */
-  I18nApplication( int& argc, char** argv );
+  AbstractModel( QObject* parent =NULL );
 
   /** Destructor */
-  virtual ~I18nApplication();
+  virtual ~AbstractModel();
 
 //
 // SIGNALS.
@@ -67,31 +74,23 @@ signals:
 protected:
 
 //
+// Protected attributes.
+protected:
+
+//
 // Private methods.
 private:
-  /**
-   */
-  void InitializeLocale();
 
-  /**
-   */
-  bool LoadAndInstallTranslator( const QString& filename,
-				 const QString& directory =QString(),
-				 const QString& searchDelimiters =QString(),
-				 const QString& suffix =QString() );
 
 //
 // Private attributes.
 private:
-  /**
-   */
-  bool m_IsRunningFromBuildDir;
 
 //
-// SLOTS
+// SLOTS.
 private slots:
 };
 
 } // end namespace 'mvd'
 
-#endif // __I18nApplication_h
+#endif // __mvdAbstractModel_h

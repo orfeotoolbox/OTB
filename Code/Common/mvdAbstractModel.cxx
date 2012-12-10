@@ -16,15 +16,13 @@
 
 =========================================================================*/
 
-#ifndef __mvdMyClass_h
-#define __mvdMyClass_h
+#include "mvdAbstractModel.h"
 
 //
 // System includes (sorted by alphabetic order)
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QObject>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -34,63 +32,34 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ConfigureMonteverdi2.h"
-
-//
-// External classes pre-declaration.
-namespace
-{
-}
 
 namespace mvd
 {
-//
-// Internal classes pre-declaration.
+/*
+  TRANSLATOR mvd::AbstractModel
 
-/** \class MyClass
- *
- */
-class Monteverdi2_EXPORT MyClass :
-    public QObject
+  Necessary for lupdate to be aware of C++ namespaces.
+
+  Context comment for translator.
+*/
+
+/*******************************************************************************/
+AbstractModel
+::AbstractModel( QObject* parent ) :
+  QObject( parent )
 {
-  Q_OBJECT;
+}
 
-//
-// Public methods.
-public:
+/*******************************************************************************/
+AbstractModel
+::~AbstractModel()
+{
+}
 
-  /** Constructor */
-  MyClass( QObject* parent =NULL );
+/*******************************************************************************/
+/* SLOTS                                                                       */
+/*******************************************************************************/
 
-  /** Destructor */
-  virtual ~MyClass();
-
-//
-// SIGNALS.
-signals:
-
-//
-// Protected methods.
-protected:
-
-//
-// Protected attributes.
-protected:
-
-//
-// Private methods.
-private:
-
-
-//
-// Private attributes.
-private:
-
-//
-// SLOTS.
-private slots:
-};
+/*******************************************************************************/
 
 } // end namespace 'mvd'
-
-#endif // __mvdMyClass_h

@@ -1,3 +1,6 @@
+#ifndef __ConfigureMonteverdi2_h
+#define __ConfigureMonteverdi2_h
+
 //
 // System includes (sorted by alphabetic order).
 #include <cassert>
@@ -5,6 +8,18 @@
 //
 // Qt includes (sorted by alphabetic order).
 #include <QDebug> // temporary (experimental version).
+
+//
+// Windows DLL import/export macros.
+#if defined( _WIN32 )
+#if 0
+#define Monteverdi2_EXPORT __declspec( dllexport )
+#else
+#define Monteverdi2_EXPORT __declspec( dllimport )
+#endif
+#else
+#define Monteverdi2_EXPORT
+#endif
 
 //
 // Monteverdi2 project
@@ -35,4 +50,6 @@
 //
 // Miscellaneous
 #define Monteverdi2_FLOATING_TYPE @Monteverdi2_FLOATING_TYPE@
-#define Monteverdi2_IMAGE_DIMENSION_TYPE 2
+#define Monteverdi2_DIMENSION_TYPE 2
+
+#endif // __ConfigureMonteverdi2_h

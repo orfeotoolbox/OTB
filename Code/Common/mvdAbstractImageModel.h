@@ -16,47 +16,75 @@
 
 =========================================================================*/
 
-#ifndef __mvdI18nApplication_h
-#define __mvdI18nApplication_h
+#ifndef __mvdAbstractImageModel_h
+#define __mvdAbstractImageModel_h
 
 //
 // System includes (sorted by alphabetic order)
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QApplication>
+
+//
+// ITK includes (sorted by alphabetic order)
 
 //
 // OTB includes (sorted by alphabetic order)
+#include <otbImage.h>
+#include <otbImageFileReader.h>
+#include <otbVectorImage.h>
 
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "ConfigureMonteverdi2.h"
+#include "mvdAbstractModel.h"
 
 //
-// Class pre-declaration.
+// External classes pre-declaration.
+namespace
+{
+}
 
-//
-// Class declaration.
 namespace mvd
 {
-/** \class I18nApplication
+//
+// Internal classes pre-declaration.
+
+/** \class AbstractImageModel
  *
  */
-class Monteverdi2_EXPORT I18nApplication
-  : public QApplication
+class Monteverdi2_EXPORT AbstractImageModel :
+    public AbstractModel
 {
   Q_OBJECT;
 
 //
 // Public methods.
 public:
+  /**
+   */
+  typedef otb::Image< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION_TYPE >
+    TImage2f;
+  /**
+   */
+  typedef otb::ImageFileReader< TImage2f >
+    TImageFileReader2f;
+  /**
+   */
+  typedef
+    otb::VectorImage< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION_TYPE >
+    TVectorImage2f;
+  /**
+   */
+  typedef otb::ImageFileReader< TVectorImage2f >
+    TVectorImageFileReader2f;
+
 
   /** Constructor */
-  I18nApplication( int& argc, char** argv );
+  AbstractImageModel( QObject* parent =NULL );
 
   /** Destructor */
-  virtual ~I18nApplication();
+  virtual ~AbstractImageModel();
 
 //
 // SIGNALS.
@@ -67,31 +95,23 @@ signals:
 protected:
 
 //
+// Protected attributes.
+protected:
+
+//
 // Private methods.
 private:
-  /**
-   */
-  void InitializeLocale();
 
-  /**
-   */
-  bool LoadAndInstallTranslator( const QString& filename,
-				 const QString& directory =QString(),
-				 const QString& searchDelimiters =QString(),
-				 const QString& suffix =QString() );
 
 //
 // Private attributes.
 private:
-  /**
-   */
-  bool m_IsRunningFromBuildDir;
 
 //
-// SLOTS
+// SLOTS.
 private slots:
 };
 
 } // end namespace 'mvd'
 
-#endif // __I18nApplication_h
+#endif // __mvdAbstractImageModel_h
