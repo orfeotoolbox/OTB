@@ -20,17 +20,9 @@
 
 //
 // System includes (sorted by alphabetic order)
-#include <iostream>
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QApplication>
-#include <QDir>
-#include <QLibraryInfo>
-#include <QLocale>
-#include <QMessageBox>
-#include <QTextCodec>
-#include <QTranslator>
 
 //
 // OTB includes (sorted by alphabetic order)
