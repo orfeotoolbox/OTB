@@ -37,6 +37,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
+
 //
 // External classes pre-declaration.
 namespace
@@ -67,7 +68,10 @@ class ImageViewManipulator :
 // Public methods.
 public:
 
-  typedef itk::ImageRegion<2>     ImageRegionType;
+  typedef itk::ImageRegion<2>        ImageRegionType;
+  typedef ImageRegionType::IndexType IndexType;
+  typedef ImageRegionType::SizeType  SizeType;
+  
 
   /** Navigation context  */
   typedef struct 
@@ -104,7 +108,7 @@ public:
 
   const MouseContextType&  GetMouseContextType() const
   {
-    return m_MouseContextType;
+    return m_MouseContext;
   }
 
 //
@@ -130,7 +134,7 @@ private:
 // Private attributes.
 private:
   NavigationContextType  m_NavigationContext;
-  MouseContextType       m_MouseContextType;
+  MouseContextType       m_MouseContext;
 
 //
 // SLOTS.
