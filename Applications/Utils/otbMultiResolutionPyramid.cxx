@@ -76,7 +76,7 @@ private:
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
 
-    AddParameter(ParameterType_OutputFilename, "out", "Output Image");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out","will be used to get the prefix and the extension of the images to write");
 
     AddRAMParameter();
@@ -141,7 +141,7 @@ private:
     path  = itksys::SystemTools::GetFilenamePath(ofname);
     fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
     ext   = itksys::SystemTools::GetFilenameExtension(ofname);
-
+    
     unsigned int currentLevel = 1;
     unsigned int currentFactor = shrinkFactor;
 
@@ -175,7 +175,11 @@ private:
         
       // build the current image filename
       std::ostringstream oss;
-      oss <<path<<"/"<<fname<<"_"<<currentLevel<<ext;
+      if (!path.empty())
+        {
+        oss <<path<<"/";
+        }
+      oss <<fname<<"_"<<currentLevel<<ext;
 
       // writer label
       std::ostringstream osswriter;
@@ -184,6 +188,7 @@ private:
       // Set the filename of the current output image
       paramOut->SetFileName(oss.str());
       paramOut->SetValue(m_ShrinkFilter->GetOutput());
+      paramOut->SetPixelType(this->GetParameterOutputImagePixelType("out"));
       // Add the current level to be written
       paramOut->InitializeWriters();
       AddProcess(paramOut->GetWriter(), osswriter.str());
@@ -191,6 +196,9 @@ private:
 
       ++currentLevel;
       }
+    
+    // Disable this parameter since the images have already been produced
+    DisableParameter("out");
   }
 
   SmoothingVectorImageFilterType::Pointer   m_SmoothingFilter;
