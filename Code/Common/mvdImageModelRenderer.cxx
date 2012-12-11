@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "mvdMyClass.h"
+#include "mvdImageModelRenderer.h"
 
 //
 // System includes (sorted by alphabetic order)
@@ -36,7 +36,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::ImageModelRender
+  TRANSLATOR mvd::ImageModelRenderer
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -44,15 +44,15 @@ namespace mvd
 */
 
 /*****************************************************************************/
-ImageModelRender
-::ImageModelRender( QObject* parent ) :
+ImageModelRenderer
+::ImageModelRenderer( QObject* parent ) :
   QObject( parent )
 {
 }
 
 /*****************************************************************************/
-ImageModelRender
-::~ImageModelRender()
+ImageModelRenderer
+::~ImageModelRenderer()
 {
 }
 
