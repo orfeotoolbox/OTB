@@ -16,8 +16,7 @@
 
 =========================================================================*/
 
-#ifndef __mvdAbstractImageModel_h
-#define __mvdAbstractImageModel_h
+#include "mvdTypes.h"
 
 //
 // System includes (sorted by alphabetic order)
@@ -33,64 +32,17 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ConfigureMonteverdi2.h"
-#include "mvdAbstractModel.h"
-
-//
-// External classes pre-declaration.
-namespace
-{
-}
 
 namespace mvd
 {
-//
-// Internal classes pre-declaration.
+/*
+  TRANSLATOR mvd::Types
 
-/** \class AbstractImageModel
- *
- */
-class Monteverdi2_EXPORT AbstractImageModel :
-    public AbstractModel
-{
-  Q_OBJECT;
+  Necessary for lupdate to be aware of C++ namespaces.
 
-//
-// Public methods.
-public:
+  Context comment for translator.
+*/
 
-  /** Constructor */
-  AbstractImageModel( QObject* parent =NULL );
-
-  /** Destructor */
-  virtual ~AbstractImageModel();
-
-//
-// SIGNALS.
-signals:
-
-//
-// Protected methods.
-protected:
-
-//
-// Protected attributes.
-protected:
-
-//
-// Private methods.
-private:
-
-
-//
-// Private attributes.
-private:
-
-//
-// SLOTS.
-private slots:
-};
+/*******************************************************************************/
 
 } // end namespace 'mvd'
-
-#endif // __mvdAbstractImageModel_h
