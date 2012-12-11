@@ -57,7 +57,7 @@ void GLImageWidget::ReadBuffer(const ImageType * image, const RegionType& region
   // region of image
   if (!image->GetBufferedRegion().IsInside(region))
     {
-      //itkExceptionMacro(<< "Region to read is oustside of the buffered region.");
+    //itkExceptionMacro(<< "Region to read is oustside of the buffered region.");
     }
   // Delete previous buffer if needed
   this->ClearBuffer();
@@ -104,22 +104,25 @@ void GLImageWidget::ClearBuffer()
 /*
 void GLImageWidget::UpdateTransforms(int w, int h)
 {
-  std::cout << "UpdateTransforms" << std::endl;
 
   if (m_IsotropicZoom <= 0)
     {
-    //itkExceptionMacro(<< "Internal error: Isotropic zoom should be non null positive.");
+    itkExceptionMacro(<< "Internal error: Isotropic zoom should be non null positive.");
     }
 
   RegionType::IndexType index;
   RegionType::SizeType  size;
   // Update image extent
+  std::cout << " size1 " << size[1] << std::endl;
   size[0] = static_cast<unsigned int>(m_IsotropicZoom * static_cast<double>(m_OpenGlBufferedRegion.GetSize()[0]));
   size[1] = static_cast<unsigned int>(m_IsotropicZoom * static_cast<double>(m_OpenGlBufferedRegion.GetSize()[1]));
-  index[0] = (w - size[0]) / 2;
-  index[1] = (h - size[1]) / 2;
-  m_Extent.SetIndex(index);
+  index[0] = m_OpenGlBufferedRegion.GetIndex()[0];
+  index[1] = m_OpenGlBufferedRegion.GetIndex()[1];
+  std::cout <<"GLWidget x "<< this->x() << " y "<< this->y() << std::endl;
+  m_Extent.SetIndex(index) ;
   m_Extent.SetSize(size);
+
+  std::cout <<"m_Extent : "<< m_Extent << std::endl;
 
   // Image to screen matrix
   AffineTransformType::MatrixType s2iMatrix;
@@ -132,13 +135,12 @@ void GLImageWidget::UpdateTransforms(int w, int h)
   // Image to screen translation
   AffineTransformType::OutputVectorType translation;
   translation[0] = m_SubsamplingRate *
-  (m_OpenGlBufferedRegion.GetIndex()[0] - 
-    m_Extent.GetIndex()[0] / m_IsotropicZoom);
+    (m_OpenGlBufferedRegion.GetIndex()[0] - 
+     m_Extent.GetIndex()[0] / m_IsotropicZoom);
   translation[1] = m_SubsamplingRate *
-                   (((m_Extent.GetIndex()[1] +
-                      m_Extent.GetSize()[1]) / m_IsotropicZoom) + m_OpenGlBufferedRegion.GetIndex()[1]);
-  m_ScreenToImageTransform->SetTranslation(translation);
-
+    (((m_Extent.GetIndex()[1] +
+       m_Extent.GetSize()[1]) / m_IsotropicZoom) + m_OpenGlBufferedRegion.GetIndex()[1]);
+  m_ScreenToImageTransform->SetTranslation(translation) ;
 
   // Compute the inverse transform
   bool couldInvert = m_ScreenToImageTransform->GetInverse(m_ImageToScreenTransform);
@@ -146,7 +148,6 @@ void GLImageWidget::UpdateTransforms(int w, int h)
     {
     itkExceptionMacro(<< "Internal error: Could not invert ScreenToImageTransform.");
     }
-
 }
 */
 
@@ -183,89 +184,32 @@ void GLImageWidget::initializeGL()
 
 }
 
- void GLImageWidget::paintGL()
- {
-   unsigned int nb_displayed_cols = m_OpenGlBufferedRegion.GetSize()[ 0 ];
-   unsigned int nb_displayed_rows = m_OpenGlBufferedRegion.GetSize()[ 1 ];
-   unsigned int first_displayed_col = m_OpenGlBufferedRegion.GetIndex()[ 0 ];
-   unsigned int first_displayed_row = m_OpenGlBufferedRegion.GetIndex()[ 1 ];
+void GLImageWidget::paintGL()
+{
+  // Get the region to draw from the ImageViewManipulator navigation
+  // context 
+  const RegionType & region = m_ImageViewManipulator->GetNavigationContext().bufferedRegion;
 
-/*
-   if( m_Extent.GetIndex()[0] >= 0 )
-    {
-    nb_displayed_cols = m_OpenGlBufferedRegion.GetSize()[0];
-    first_displayed_col = 0;
-    }
-   else
-    {
-    nb_displayed_cols = m_W / m_IsotropicZoom;
-    first_displayed_col = (m_OpenGlBufferedRegion.GetSize()[0] - nb_displayed_cols) / 2;
-    }
+  std::cout <<"GLImageWidget::paintGL " << std::endl;
+  // use the model renderer to paint the requested region of the image
+  m_ImageModelRender->paintGL(m_OpenGlBuffer, region);
+}
 
-   if( m_Extent.GetIndex()[1] >= 0 )
-    {
-    nb_displayed_rows = m_OpenGlBufferedRegion.GetSize()[1];
-    first_displayed_row = 0;
-    }
-   else
-    {
-    nb_displayed_rows = m_H / m_IsotropicZoom;
-    first_displayed_row = (m_OpenGlBufferedRegion.GetSize()[1] - nb_displayed_rows) / 2;
-    }
-*/
-
-/*
-   RegionType::IndexType startPosition = m_Extent.GetIndex();
-   startPosition[0] = startPosition[0] < 0 ? 0 : startPosition[0];
-   startPosition[1] = startPosition[1] < 0 ? 0 : startPosition[1];
-*/
-
-   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-   glPixelStorei(GL_UNPACK_ROW_LENGTH, m_OpenGlBufferedRegion.GetSize()[0]);
-   glPixelStorei(GL_UNPACK_SKIP_PIXELS, first_displayed_col);
-   glPixelStorei(GL_UNPACK_SKIP_ROWS,first_displayed_row);
-
-   glClear(GL_COLOR_BUFFER_BIT);
-   glPixelZoom(m_IsotropicZoom,m_IsotropicZoom);
-
-   // glRasterPos2f(startPosition[0], startPosition[1]);
-   glRasterPos2f(first_displayed_col, first_displayed_row);
-   glDrawPixels(nb_displayed_cols,
-                nb_displayed_rows,
-                GL_RGB,
-                GL_UNSIGNED_BYTE,
-                m_OpenGlBuffer);
-
-
-   glFlush();
- }
-
+// Delegate the event to the ImageViewManipulator
 void GLImageWidget::mousePressEvent(  QMouseEvent * event)
 {
-/*
-  std::cout <<" !!!! Mouse press event  " << std::endl;
-  std::cout <<"x " << event->x()<< std::endl;
-*/
-  m_ImageViewManipulator->mousePressEvent(event);
   
-  // m_MousePressEventX = event->x();
-  // m_MousePressEventY = event->y();
+  m_ImageViewManipulator->mousePressEvent(event);
 }
 
 void GLImageWidget::mouseMoveEvent(  QMouseEvent * event)
 {
   m_ImageViewManipulator->mouseMoveEvent(event);
-
-  // std::cout <<" !!!! Mouse move event "<< event->x() <<","<<event->y() << std::endl;
-  // // translation
-  // int tx = event->x() - m_MousePressEventX;
-  // int ty = event->y() - m_MousePressEventY;
 }
 
 void GLImageWidget::resizeEvent( QResizeEvent  * event)
 {
   m_ImageViewManipulator->resizeEvent(event);
 }
-
 
 }
