@@ -33,7 +33,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ConfigureMonteverdi2.h"
+#include "mvdTypes.h"
 #include "mvdAbstractImageModel.h"
 
 //

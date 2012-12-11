@@ -34,7 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ConfigureMonteverdi2.h"
+#include "mvdTypes.h"
 
 //
 // External classes pre-declaration.

@@ -24,7 +24,6 @@
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QObject>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -35,6 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdTypes.h"
 
 //
 // External classes pre-declaration.

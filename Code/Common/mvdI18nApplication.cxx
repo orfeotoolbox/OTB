@@ -24,20 +24,12 @@
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QApplication>
-#include <QDir>
-#include <QLibraryInfo>
-#include <QLocale>
-#include <QMessageBox>
-#include <QTextCodec>
-#include <QTranslator>
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ConfigureMonteverdi2.h"
 
 //
 // Class implementation.

@@ -36,7 +36,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdImageViewManipulator.h"
 #include "mvdImageModelRenderer.h"
-//#include "mvdAbstractImageModel.h"
+#include "mvdAbstractImageModel.h"
 
 //
 // Global definitions.
@@ -147,6 +147,8 @@ private:
 
   /** Event handler pointer */
   ImageViewEventHandlerType* m_ImageViewManipulator;
+
+  /** Model Renderer pointer */
   ImageModelRendererType   * m_ImageModelRender;
 };
 

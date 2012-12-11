@@ -33,6 +33,7 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbImageFileReader.h"
+
 //
 // Monteverdi includes (sorted by alphabetic order)
 

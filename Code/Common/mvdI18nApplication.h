@@ -24,14 +24,13 @@
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QApplication>
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ConfigureMonteverdi2.h"
+#include "mvdTypes.h"
 
 //
 // Class pre-declaration.
