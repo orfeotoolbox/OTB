@@ -354,3 +354,27 @@ OTB_TEST_APPLICATION(NAME   apTvClSOMClassificationFull
                              ${TEMP}/apTvClSOMClassificationFull.tif
                              ${BASELINE}/apTvClSOMClassificationMap.hdr
                              ${TEMP}/apTvClSOMClassificationMap.hdr)
+
+# --- Fusion of classifications ---
+OTB_TEST_APPLICATION(NAME   apTvFusionOfClassifications2Inputs
+                     APP    FusionOfClassifications
+                     OPTIONS -il ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
+                                 ${OTBAPP_BASELINE}/clLabeledImageQB456_1.tif
+                             -undecided 100
+                             -out ${TEMP}/apTvFusionOfClassifications2InputsOutput.tif uint16
+                     VALID   --compare-image ${NOTOL}
+                     ${OTBAPP_BASELINE}/apTvFusionOfClassifications2InputsOutput.tif
+                     ${TEMP}/apTvFusionOfClassifications2InputsOutput.tif
+)
+
+OTB_TEST_APPLICATION(NAME   apTvFusionOfClassifications3Inputs
+                     APP    FusionOfClassifications
+                     OPTIONS -il ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
+                                 ${OTBAPP_BASELINE}/clLabeledImageQB456_1.tif
+                                 ${OTBAPP_BASELINE}/clLabeledImageQB1.tif
+                             -undecided 100
+                             -out ${TEMP}/apTvFusionOfClassifications3InputsOutput.tif uint16
+                     VALID   --compare-image ${NOTOL}
+                     ${OTBAPP_BASELINE}/apTvFusionOfClassifications3InputsOutput.tif
+                     ${TEMP}/apTvFusionOfClassifications3InputsOutput.tif
+)
