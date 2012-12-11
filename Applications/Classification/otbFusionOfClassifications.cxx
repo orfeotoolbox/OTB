@@ -82,7 +82,7 @@ private:
     LabelVotingFilterType::Pointer labelVotingFilter = LabelVotingFilterType::New();
     labelVotingFilter->SetLabelForUndecidedPixels(GetParameterInt("undecided"));
     
-    m_Filters.push_back(labelVotingFilter);
+    m_Filters.push_back(labelVotingFilter.GetPointer());
 
     //Iterate over all input images
     for (unsigned int imageId = 0; imageId < imageList->Size(); ++imageId)
@@ -91,18 +91,18 @@ private:
 
       ConverterType::Pointer converter = ConverterType::New();
       converter->SetInput(image);
-      converter->SetChannel(0);
+      converter->SetChannel(1);
 
-      labelVotingFilter->PushBackInput(converter->GetOutput());
+      labelVotingFilter->SetInput(imageId,converter->GetOutput());
 
       // Register filter
-      m_Filters.push_back(converter);
+      m_Filters.push_back(converter.GetPointer());
       }
 
      SetParameterOutputImage("out", labelVotingFilter->GetOutput());
   }
   
-  std::vector<itk::LightObject *> m_Filters;
+  std::vector<itk::LightObject::Pointer> m_Filters;
 };
 
 }
