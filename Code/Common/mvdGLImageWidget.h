@@ -34,6 +34,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdImageViewManipulator.h"
+#include "mvdImageModelRenderer.h"
+//#include "mvdAbstractImageModel.h"
 
 //
 // Global definitions.
@@ -61,6 +64,10 @@ class GLImageWidget : public QGLWidget
   Q_OBJECT;
 
 public:
+  
+  typedef ImageViewManipulator        ImageViewEventHandlerType;
+  typedef ImageModelRenderer          ImageModelRendererType;
+
   GLImageWidget(QWidget *parent = 0);
 
   virtual ~GLImageWidget();
@@ -88,7 +95,7 @@ protected:
   void paintGL();
   void mouseMoveEvent ( QMouseEvent * event );
   void mousePressEvent ( QMouseEvent * event );
-
+  void resizeEvent(QResizeEvent* event);
 
   /** Update the image to screen transform */
   //void UpdateTransforms(int w, int h);
@@ -138,6 +145,9 @@ private:
   //AffineTransformType::Pointer m_ImageToScreenTransform;
   //AffineTransformType::Pointer m_ScreenToImageTransform;
 
+  /** Event handler pointer */
+  ImageViewEventHandlerType* m_ImageViewManipulator;
+  ImageModelRendererType   * m_ImageModelRender;
 };
 
 }

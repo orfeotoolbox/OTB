@@ -43,6 +43,7 @@ GLImageWidget::GLImageWidget(QWidget *parent)
 /*,  m_ImageToScreenTransform(AffineTransformType::New()),
   m_ScreenToImageTransform(AffineTransformType::New()) */
 {
+  m_ImageViewManipulator = new ImageViewEventHandlerType(parent);
 }
 
 GLImageWidget::~GLImageWidget()
@@ -82,6 +83,7 @@ void GLImageWidget::ReadBuffer(const ImageType * image, const RegionType& region
     m_OpenGlBuffer[index + 2] = it.Get()[2];
     ++it;
     }
+  
   // Last, updating buffer size
   m_OpenGlBufferedRegion = region;
 }
@@ -217,6 +219,7 @@ void GLImageWidget::initializeGL()
    startPosition[0] = startPosition[0] < 0 ? 0 : startPosition[0];
    startPosition[1] = startPosition[1] < 0 ? 0 : startPosition[1];
 */
+
    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
    glPixelStorei(GL_UNPACK_ROW_LENGTH, m_OpenGlBufferedRegion.GetSize()[0]);
    glPixelStorei(GL_UNPACK_SKIP_PIXELS, first_displayed_col);
@@ -235,8 +238,6 @@ void GLImageWidget::initializeGL()
 
 
    glFlush();
-
-//   std::cout << "Paint GL done "<< std::endl;
  }
 
 void GLImageWidget::mousePressEvent(  QMouseEvent * event)
@@ -245,16 +246,26 @@ void GLImageWidget::mousePressEvent(  QMouseEvent * event)
   std::cout <<" !!!! Mouse press event  " << std::endl;
   std::cout <<"x " << event->x()<< std::endl;
 */
-  m_MousePressEventX = event->x();
-  m_MousePressEventY = event->y();
+  m_ImageViewManipulator->mousePressEvent(event);
+  
+  // m_MousePressEventX = event->x();
+  // m_MousePressEventY = event->y();
 }
 
 void GLImageWidget::mouseMoveEvent(  QMouseEvent * event)
 {
+  m_ImageViewManipulator->mouseMoveEvent(event);
+
   // std::cout <<" !!!! Mouse move event "<< event->x() <<","<<event->y() << std::endl;
   // // translation
   // int tx = event->x() - m_MousePressEventX;
   // int ty = event->y() - m_MousePressEventY;
 }
+
+void GLImageWidget::resizeEvent( QResizeEvent  * event)
+{
+  m_ImageViewManipulator->resizeEvent(event);
+}
+
 
 }
