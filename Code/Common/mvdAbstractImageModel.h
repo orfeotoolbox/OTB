@@ -59,9 +59,6 @@ class Monteverdi2_EXPORT AbstractImageModel :
 // Public methods.
 public:
 
-  /** Constructor */
-  AbstractImageModel( QObject* parent =NULL );
-
   /** Destructor */
   virtual ~AbstractImageModel();
 
@@ -72,6 +69,9 @@ signals:
 //
 // Protected methods.
 protected:
+
+  /** Constructor */
+  AbstractImageModel( QObject* parent =NULL );
 
 //
 // Protected attributes.

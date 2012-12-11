@@ -53,6 +53,10 @@ namespace mvd
 
 /**
  */
+typedef itk::Region< Monteverdi2_DIMENSION_TYPE >
+TRegion;
+/**
+ */
 typedef otb::Image< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION_TYPE >
 TImage2f;
 /**

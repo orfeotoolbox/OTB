@@ -59,9 +59,6 @@ class Monteverdi2_EXPORT AbstractModel :
 // Public methods.
 public:
 
-  /** Constructor */
-  AbstractModel( QObject* parent =NULL );
-
   /** Destructor */
   virtual ~AbstractModel();
 
@@ -72,6 +69,8 @@ signals:
 //
 // Protected methods.
 protected:
+  /** Constructor */
+  AbstractModel( QObject* parent =NULL );
 
 //
 // Protected attributes.

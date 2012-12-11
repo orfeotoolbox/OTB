@@ -33,7 +33,7 @@
 #include "mvdI18nApplication.h"
 
 //
-// Class pre-declaration.
+// External classes pre-declaration.
 
 //
 // Class declaration.
@@ -71,6 +71,10 @@ private:
   /**
    */
   void InitializeCore();
+
+  /**
+   */
+  void InitializeModel();
 
 //
 // Private attributes.

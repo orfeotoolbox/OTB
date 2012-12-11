@@ -26,6 +26,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "mvdDatasetModel.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -54,6 +55,8 @@ Application
     this, SIGNAL( aboutToQuit() ),
     this, SLOT( OnAboutToQuit() )
     );
+
+  InitializeModel();
 }
 
 /*******************************************************************************/
@@ -84,6 +87,13 @@ Application
   QCoreApplication::setOrganizationDomain(
     "orfeo-toolbox.org"
   );
+}
+
+/*******************************************************************************/
+void
+Application
+::InitializeModel()
+{
 }
 
 /*******************************************************************************/
