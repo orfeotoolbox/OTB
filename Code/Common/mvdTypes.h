@@ -24,6 +24,7 @@
 
 //
 // Qt includes (sorted by alphabetic order)
+#include <QtGui>
 
 //
 // ITK includes (sorted by alphabetic order)
