@@ -24,7 +24,9 @@
 //
 // Qt includes (sorted by alphabetic order)
 #include <QGLWidget>
-#include <QtGui>
+
+// this include must be added here to avoid compilation problem
+#include "mvdTypes.h"
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -52,6 +54,7 @@ typedef itk::AffineTransform<double, 2>      AffineTransformType;
 typedef AffineTransformType::InputPointType  PointType;
 typedef AffineTransformType::InputVectorType VectorType;
 typedef itk::FixedArray<double, 4>           ColorType;
+
 
 namespace mvd
 {
