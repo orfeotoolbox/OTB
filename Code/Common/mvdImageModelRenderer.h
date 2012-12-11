@@ -59,7 +59,8 @@ class ImageModelRenderer :
 // Public methods.
 public:
 
-  typedef itk::ImageRegion<2>           ImageRegionType;
+  //typedef mvd::Types::ImageRegionType           ImageRegionType;
+  typedef itk::ImageRegion<2>   ImageRegionType;
 
   /** Constructor */
   ImageModelRenderer( QObject* parent = NULL );
@@ -68,8 +69,9 @@ public:
   virtual ~ImageModelRenderer();
 
   /** */
-  void paintGL(){}
+  void paintGL(unsigned char* buffer, const ImageRegionType& region);
 
+  
 public slots:
   void updateGL(const ImageRegionType& region){}
 
