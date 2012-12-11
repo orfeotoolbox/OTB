@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdGLImageWidget_h__
-#define __mvdGLImageWidget_h__
+#ifndef __mvdGLImageWidget_h
+#define __mvdGLImageWidget_h
 
 //
 // System includes (sorted by alphabetic order)
