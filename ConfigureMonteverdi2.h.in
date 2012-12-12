@@ -12,13 +12,15 @@
 //
 // Windows DLL import/export macros.
 #if defined( _WIN32 )
-#if 0
-#define Monteverdi2_EXPORT __declspec( dllexport )
-#else
-#define Monteverdi2_EXPORT __declspec( dllimport )
+#  if 0 // Dynamic DLL vs. static LIB.
+#    if DLL_EXPORT // If exporting DLL symbols vs. DLL importing (.lib interface).
+#      define Monteverdi2_EXPORT __declspec( dllexport )
+#    else
+#      define Monteverdi2_EXPORT __declspec( dllimport )
+#    endif
 #endif
 #else
-#define Monteverdi2_EXPORT
+#  define Monteverdi2_EXPORT
 #endif
 
 //

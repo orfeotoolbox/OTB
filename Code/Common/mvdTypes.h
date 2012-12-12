@@ -28,6 +28,7 @@
 
 //
 // ITK includes (sorted by alphabetic order)
+#include <itkImageRegion.h>
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -53,8 +54,8 @@ namespace mvd
 
 /**
  */
-typedef itk::Region< Monteverdi2_DIMENSION_TYPE >
-TRegion;
+typedef itk::ImageRegion< Monteverdi2_DIMENSION_TYPE >
+TImageRegion2;
 /**
  */
 typedef otb::Image< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION_TYPE >
