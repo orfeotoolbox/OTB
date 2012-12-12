@@ -63,6 +63,8 @@ ImageFileReader<TOutputImage>
   m_Options.subDatasetIndex  = 0;
   m_Options.resolutionFactor  = 0;
   m_Options.skipCarto = false;
+
+  m_AdditionalNumber = 0;
 }
 
 template <class TOutputImage>
@@ -633,6 +635,14 @@ ImageFileReader<TOutputImage>
 
   this->m_FileName = m_Options.fileName;
   this->Modified();
+
+  /** Deprecated in OTB 3.16 **/
+  if (m_AdditionalNumber != 0)
+    {
+    m_Options.subDatasetIndex  = m_AdditionalNumber;
+    m_Options.resolutionFactor = m_AdditionalNumber;
+    }
+  /** Deprecated in OTB 3.16 **/
 }
 
 template <class TOutputImage>
