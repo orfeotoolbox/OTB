@@ -3,10 +3,6 @@ PROJECT(Monteverdi2)
 cmake_minimum_required(VERSION 2.6)
 
 #----------------------------------------------------------------------------
-# Environment.
-set(ENV{LANG} "C")
-
-#----------------------------------------------------------------------------
 # Modules
 set( CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH} )
 include( i18n_qt4 )
