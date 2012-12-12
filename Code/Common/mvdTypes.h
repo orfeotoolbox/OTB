@@ -25,7 +25,10 @@
 
 //
 // Qt includes (sorted by alphabetic order)
+//// Including QtGui here prevents conflicting with ITK at compile-time.
+#if 0 // re-activate when compile-type errors appear.
 #include <QtGui>
+#endif
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -56,24 +59,46 @@ namespace mvd
 /**
  */
 typedef itk::ImageRegion< Monteverdi2_DIMENSION_TYPE >
-TImageRegion2;
+ImageRegionType;
+/**
+ */
+typedef itk::Index< Monteverdi2_DIMENSION_TYPE >
+IndexType;
+
+/*******************************************************************************/
+
 /**
  */
 typedef otb::Image< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION_TYPE >
-TImage2f;
+ScalarImageType;
 /**
  */
-typedef otb::ImageFileReader< TImage2f >
-TImageFileReader2f;
+typedef otb::ImageFileReader< ScalarImageType >
+ScalarImageFileReaderType;
+
+/*******************************************************************************/
+
 /**
  */
 typedef
 otb::VectorImage< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION_TYPE >
-TVectorImage2f;
+VectorImageType;
 /**
  */
-typedef otb::ImageFileReader< TVectorImage2f >
-TVectorImageFileReader2f;
+typedef otb::ImageFileReader< VectorImageType >
+VectorImageFileReaderType;
+
+/*******************************************************************************/
+
+/**
+ */
+#if 1
+typedef mvd::VectorImageType DefaultImageType;
+typedef mvd::VectorImageFileReaderType DefaultImageFileReaderType;
+#else
+typedef mvd::ScalarImageType DefaultImageType;
+typedef mvd::ScalarImageFileReaderType DefaultImageFileReaderType;
+#endif
 
 /*******************************************************************************/
 

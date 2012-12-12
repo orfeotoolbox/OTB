@@ -42,6 +42,8 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "ConfigureMonteverdi2.h"
+#include "mvdApplication.h"
+#include "mvdVectorImageModel.h"
 
 namespace mvd
 {
@@ -57,7 +59,8 @@ namespace mvd
 MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
   QMainWindow( parent, flags ),
-  m_UI( new mvd::Ui::MainWindow() )
+  m_UI( new mvd::Ui::MainWindow() ),
+  m_ImageView()
 {
   m_UI->setupUi( this );
 
@@ -124,22 +127,48 @@ MainWindow
     {
     return;
     }
+ 
+  // TODO: Replace with complex model (list of DatasetModel) when implemented.
+  VectorImageModel* newVectorImageModel = new VectorImageModel();
 
-  //
-  // TODO: Move piece of code below to ImageModel.
-  ReaderType::Pointer reader( ReaderType::New() );
-  reader->SetFileName( filename.toLatin1().data() );
-  reader->UpdateOutputInformation();
+  newVectorImageModel->setObjectName(
+    "mvd::VectorImageModel('" + filename + "'"
+  );
+
+  try
+    {
+    newVectorImageModel->loadFile( filename );
+
+    dynamic_cast< Application* >( qApp )->SetModel( newVectorImageModel );
+    }
+  catch( std::exception& exc )
+    {
+    delete newVectorImageModel;
+    newVectorImageModel = NULL;
+
+    QMessageBox::warning( this, tr("Exception!"), exc.what() );
+    return;
+    }
 
   // typedef support for layers   
-  typedef ImageLayer<VectorImageType, ImageType>    LayerType;
+  typedef otb::ImageLayer<VectorImageType, ImageType>    LayerType;
   typedef LayerType::Pointer                        LayerPointerType;
-  typedef ImageLayerGenerator<LayerType>            LayerGeneratorType;
+  typedef otb::ImageLayerGenerator<LayerType>            LayerGeneratorType;
   typedef LayerGeneratorType::RenderingFunctionType RenderingFunctionType;
-  
+
   // Layer Generator
   LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
+#if 0
   layerGenerator->SetImage(reader->GetOutput());
+#else
+  layerGenerator->SetImage(
+//    dynamic_cast< VectorImageModel* >( mvdApp->GetModel()
+//    )->GetOutput( 0 )
+    dynamic_cast< VectorImageModel* >
+    ( dynamic_cast< Application* >
+      ( qApp )->GetModel() )->GetOutput( 0 )
+  );
+#endif
   layerGenerator->GenerateQuicklookOff();
   layerGenerator->GenerateLayer();
   

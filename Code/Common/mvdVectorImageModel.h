@@ -66,6 +66,25 @@ public:
   /** Destructor */
   virtual ~VectorImageModel();
 
+  /**
+   */
+  inline
+    DefaultImageFileReaderType::OutputImageType*
+    GetOutput( int index )
+  {
+    return m_ImageFileReader->GetOutput( index );
+  }
+  inline
+    const DefaultImageFileReaderType::OutputImageType*
+    GetOutput( int index ) const
+  {
+    const_cast< const VectorImageModel* >( this )->GetOutput( index );
+  }
+
+  /**
+   */
+  void loadFile( const QString& filename );
+
 //
 // SIGNALS.
 signals:
@@ -79,13 +98,17 @@ protected:
 protected:
 
 //
-// Private methods.
+// Private types.
 private:
 
+//
+// Private methods.
+private:
 
 //
 // Private attributes.
 private:
+  DefaultImageFileReaderType::Pointer m_ImageFileReader;
 
 //
 // SLOTS.

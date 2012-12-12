@@ -25,24 +25,28 @@
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QtGui>
+//#include <QtGui>
+
+//
+// ITK includes (sorted by alphabetic order)
+#include "itkRGBAPixel.h"
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "mvdImageView.h"
-#include "itkRGBAPixel.h"
-#include "otbVectorImage.h"
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageFileReader.h"
+#include "otbVectorImage.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-// Warning! it's generally not a good idea to use namespaces in header files.
-using namespace otb;
-using namespace itk;
+#include "ConfigureMonteverdi2.h"
+#include "mvdImageView.h"
 
 //
 // External class pre-declaration.
+namespace
+{
+}
 
 namespace mvd
 {
@@ -61,9 +65,11 @@ class MainWindow
 {
   Q_OBJECT;
 
+//
+// Public types.
 public:
 
-  typedef otb::VectorImage<double, 2>     VectorImageType;
+//  typedef otb::VectorImage<double, 2>     VectorImageType;
   typedef itk::RGBAPixel<unsigned char>   PixelType;
   typedef otb::Image<PixelType, 2>        ImageType;
   typedef ImageType::RegionType           RegionType;
@@ -72,20 +78,47 @@ public:
   typedef otb::ImageLayerRenderingModel<ImageType> RenderingModelType;
   typedef mvd::ImageView<RenderingModelType>       ImageViewType;
   
+//
+// Public methods.
+public:
   /** Constructor */
   MainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
 
   /** Destructor */
   virtual ~MainWindow();
 
+//
+// SIGNALS.
+signals:
+
+//
+// Protected methods.
 protected:
 
+//
+// Protected attributes.
+protected:
+
+//
+// Private SLOTS.
 private:
+  /**
+   */
   void Initialize();
 
+//
+// Private methods.
+private:
+  /**
+   */
   Ui::MainWindow* m_UI;
+
+  /**
+   */
   ImageViewType::Pointer m_ImageView;
 
+//
+// Private attributes.
 private slots:
   void on_action_Open_activated();
 };

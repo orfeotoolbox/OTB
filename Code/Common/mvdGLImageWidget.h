@@ -30,16 +30,19 @@
 #include "mvdTypes.h"
 
 //
-// OTB includes (sorted by alphabetic order)
+// ITK includes (sorted by alphabetic order)
 #include "itkRGBAPixel.h"
 #include "itkAffineTransform.h"
+
+//
+// OTB includes (sorted by alphabetic order)
 #include "otbImage.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdImageViewManipulator.h"
-#include "mvdImageModelRenderer.h"
 #include "mvdAbstractImageModel.h"
+#include "mvdImageModelRenderer.h"
+#include "mvdImageViewManipulator.h"
 
 //
 // Global definitions.

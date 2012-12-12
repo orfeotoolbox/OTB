@@ -48,8 +48,11 @@ namespace mvd
 /*******************************************************************************/
 Application
 ::Application( int& argc, char** argv ) :
-  I18nApplication( argc, argv )
+  I18nApplication( argc, argv ),
+  m_Model( NULL )
 {
+  IMPLEMENT_APP_SINGLETON( mvdApp );
+
   InitializeCore();
 
   QObject::connect(

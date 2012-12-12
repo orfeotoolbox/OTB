@@ -25,6 +25,7 @@
 
 //
 // Qt includes (sorted by alphabetic order)
+#include <QtGui>
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -34,12 +35,18 @@
 #include "mvdTypes.h"
 
 //
-// Class pre-declaration.
+// Macros.
+#define DECLARE_APP_SINGLETON( _type, _id ) class _type; static _type* _id;
+#define IMPLEMENT_APP_SINGLETON( _id ) { assert( _id==NULL ); _id = this; }
 
 //
-// Class declaration.
+// Class pre-declaration.
+
 namespace mvd
 {
+//
+// Class declaration.
+
 /** \class I18nApplication
  *
  */

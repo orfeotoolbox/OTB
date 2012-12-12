@@ -58,6 +58,28 @@ VectorImageModel
 }
 
 /*******************************************************************************/
+void
+VectorImageModel
+::loadFile( const QString& filename )
+{
+#if 1
+  DefaultImageFileReaderType::Pointer imageFileReader(
+    DefaultImageFileReaderType::New()
+  );
+
+  imageFileReader->SetFileName( filename.toLatin1().data() );
+  imageFileReader->UpdateOutputInformation();
+
+  m_ImageFileReader = imageFileReader;
+#else
+  m_ImageFileReader = DefaultImageFileReaderType::New();
+
+  m_ImageFileReader->SetFileName( filename.toLatin1().data() );
+  m_ImageFileReader->UpdateOutputInformation();
+#endif
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 
