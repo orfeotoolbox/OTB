@@ -1,0 +1,47 @@
+This work was packaged by:
+
+    OTB Team <contact@orfeo-toolbox.org>
+
+It can be downloaded from <http://hg.orfeo-toolbox.org/>, using command:
+
+    hg clone [-r <version>] http://hg.orfeo-toolbox.org/Monteverdi2
+
+The Monteverdi2 software is developed by the CNES (Centre National d'Etudes Spatiales).
+
+
+Internal dependencies (included third-party works):
+
+* None
+
+
+External dependencies (not included third-party works):
+
+* OTB (http://orfeo-toolbox.org)
+  distributed under the CeCILL licence version 2 (see Licence_CeCILL_V2-en.txt or
+  http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details).
+
+* Qt (http://qt.digia.com/)
+  distributed under the GNU LGPL 2.1 license
+
+
+Upstream Author(s):
+
+    Stephane ALBERT (CS) <stephane.albert@c-s.fr>
+    Manuel GRIZONNET (CNES) <manuel.grizonnet@cnes.fr>
+    Otmane LAHLOU (CS) <otmane.lahlou@c-s.fr>
+    Julien MICHEL (CNES) <julien.michel@orfeo-toolbox.org>
+    Mickael SAVINAUD (CS) <mickael.savinaud@c-s.fr>
+
+
+Copyright:
+
+    Copyright (c) 2012 Centre National d'Etudes Spatiales. All rights reserved.
+
+
+License:
+
+    Monteverdi2 is distributed under the CeCILL license version 2. See files
+    Licence_CeCILL_V2-en.txt (english version) or Licence_CeCILL_V2-fr.txt
+    (french version) for details. These licenses are also available online:
+    http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
+    http://www.cecill.info/licences/Licence_CeCILL_V2-fr.txt
