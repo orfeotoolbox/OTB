@@ -35,8 +35,6 @@
 #include "otbTileMapImageIO.h" //FIXME avoid requiring TileMapImageIO here
 #include "otbCurlHelper.h"
 
-#include <boost/algorithm/string.hpp>
-
 namespace otb
 {
 
@@ -56,6 +54,8 @@ ImageFileReader<TOutputImage>
 ::ImageFileReader() : itk::ImageFileReader<TOutputImage>()
 {
   m_Curl = CurlHelper::New();
+
+  m_FilenameHelper = FNameHelperType::New();
 
   // Reader options
   m_Options.fileName  = "";
@@ -620,35 +620,13 @@ void
 ImageFileReader<TOutputImage>
 ::SetFileName(const char* extendedFileName)
 {
-  this->m_ExtendedFilename = extendedFileName;
-  std::vector<std::string> main;
-  std::vector<std::string> ops;
-  std::map< std::string, std::string > map;
+  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
 
-  // Retrieve file name
-  boost::split(main, m_ExtendedFilename, boost::is_any_of("?"), boost::token_compress_on);
-
-  // Retrieve options
-  if (main.size()>1)
-    {
-    boost::split(ops, main[1], boost::is_any_of("&"), boost::token_compress_on);
-
-    for (unsigned int i=0; i<ops.size(); i++)
-      {
-      std::vector<std::string> tmp;
-      boost::split(tmp, ops[i], boost::is_any_of("="), boost::token_compress_on);
-      if (tmp.size()>1)
-        {
-        map[tmp[0]]=tmp[1];
-        }
-      }
-    }
-
-  m_Options.fileName = main[0];
-  m_Options.extGEOMFileName = map["geom"];
-  m_Options.subDatasetIndex = atoi(map["sdataidx"].c_str());
-  m_Options.resolutionFactor = atoi(map["resol"].c_str());
-  if (map["skipcarto"] == "true")
+  m_Options.fileName = m_FilenameHelper->GetSimpleFileName();
+  m_Options.extGEOMFileName = m_FilenameHelper->GetOptionMap()["geom"];
+  m_Options.subDatasetIndex = atoi(m_FilenameHelper->GetOptionMap()["sdataidx"].c_str());
+  m_Options.resolutionFactor = atoi(m_FilenameHelper->GetOptionMap()["resol"].c_str());
+  if (m_FilenameHelper->GetOptionMap()["skipcarto"] == "true")
     {
     m_Options.skipCarto = true;
     }
@@ -662,7 +640,7 @@ const char*
 ImageFileReader<TOutputImage>
 ::GetFileName () const
 {
-return this->m_ExtendedFilename.c_str();
+return this->m_FilenameHelper->GetSimpleFileName().c_str();
 }
 
 } //namespace otb

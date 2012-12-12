@@ -21,6 +21,7 @@
 #include "itkImageFileReader.h"
 #include "otbCurlHelperInterface.h"
 #include "otbImageKeywordlist.h"
+#include "otbExtendedFilenameHelper.h"
 
 namespace otb
 {
@@ -66,6 +67,9 @@ public:
 
   /** The pixel type of the output image. */
   //typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
+
+  /** The Filename Helper. */
+  typedef ExtendedFilenameHelper            FNameHelperType;
 
   /** The reading option structure. */
   struct readerOptions
@@ -119,8 +123,8 @@ private:
 
   std::string   m_ExceptionMessage;
 
-  std::string   m_ExtendedFilename;
-  readerOptions m_Options;
+  FNameHelperType::Pointer m_FilenameHelper;
+  readerOptions            m_Options;
 
   CurlHelperInterface::Pointer m_Curl;
 };
