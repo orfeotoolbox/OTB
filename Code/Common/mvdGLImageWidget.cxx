@@ -31,6 +31,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdApplication.h"
 
 namespace mvd
 {
@@ -191,9 +192,15 @@ void GLImageWidget::paintGL()
   // context 
   const RegionType & region = m_ImageViewManipulator->GetNavigationContext().bufferedRegion;
 
+  ImageModelRenderer::RenderingContext context(
+    dynamic_cast< const AbstractImageModel* >(
+      dynamic_cast< Application* >( qApp )->GetModel()
+    ), region
+  );
+
   std::cout <<"GLImageWidget::paintGL " << std::endl;
   // use the model renderer to paint the requested region of the image
-  m_ImageModelRender->paintGL(m_OpenGlBuffer, region);
+  m_ImageModelRender->paintGL( context );
 }
 
 // Delegate the event to the ImageViewManipulator

@@ -47,6 +47,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class AbstractImageModel;
 
 /** \class ImageModelRenderer
  *
@@ -55,6 +56,23 @@ class ImageModelRenderer :
     public QObject
 {
   Q_OBJECT;
+
+//
+// Public types.
+public:
+  struct RenderingContext
+  {
+    inline
+    RenderingContext( const AbstractImageModel* model =NULL,
+		      const ImageRegionType& region =ImageRegionType() ) :
+      m_AbstractImageModel( model ),
+      m_ImageRegion( region )
+    {
+    }
+
+    const AbstractImageModel* m_AbstractImageModel;
+    ImageRegionType m_ImageRegion;
+  };
 
 //
 // Public methods.
@@ -70,11 +88,8 @@ public:
   virtual ~ImageModelRenderer();
 
   /** */
-  void paintGL(unsigned char* buffer, const ImageRegionType& region);
+  void paintGL( const RenderingContext& context );
 
-  
-public slots:
-  void updateGL(const ImageRegionType& region){}
 
 //
 // SIGNALS.
