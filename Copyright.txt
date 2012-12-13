@@ -16,6 +16,10 @@ Internal dependencies (included third-party works):
 
 External dependencies (not included third-party works):
 
+* ITK (http://www.itk.org/),
+  distributed under the revised BSD license
+  (see ITKCopyright.txt)
+
 * OTB (http://orfeo-toolbox.org)
   distributed under the CeCILL licence version 2 (see Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details).
