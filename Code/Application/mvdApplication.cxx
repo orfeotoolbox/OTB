@@ -51,8 +51,6 @@ Application
   I18nApplication( argc, argv ),
   m_Model( NULL )
 {
-  IMPLEMENT_APP_SINGLETON( mvdApp );
-
   InitializeCore();
 
   QObject::connect(

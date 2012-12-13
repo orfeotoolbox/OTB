@@ -36,11 +36,13 @@
 
 //
 // Macros.
-#define DECLARE_APP_SINGLETON( _type, _id ) class _type; static _type* _id;
-#define IMPLEMENT_APP_SINGLETON( _id ) { assert( _id==NULL ); _id = this; }
+
 
 //
-// Class pre-declaration.
+// Classes pre-declaration.
+namespace
+{
+}
 
 namespace mvd
 {

@@ -45,8 +45,6 @@ namespace
 
 namespace mvd
 {
-DECLARE_APP_SINGLETON( Application, mvdApp );
-
 //
 // Class declaration.
 /** \class Application

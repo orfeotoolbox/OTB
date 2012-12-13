@@ -158,17 +158,13 @@ MainWindow
 
   // Layer Generator
   LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
-#if 0
-  layerGenerator->SetImage(reader->GetOutput());
-#else
+
   layerGenerator->SetImage(
-//    dynamic_cast< VectorImageModel* >( mvdApp->GetModel()
-//    )->GetOutput( 0 )
     dynamic_cast< VectorImageModel* >
     ( dynamic_cast< Application* >
       ( qApp )->GetModel() )->GetOutput( 0 )
   );
-#endif
+
   layerGenerator->GenerateQuicklookOff();
   layerGenerator->GenerateLayer();
   
