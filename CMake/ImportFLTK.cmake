@@ -24,8 +24,12 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
         # Display images using textures using video card acceleration
         #-------------------------------
-        OPTION(OTB_GL_USE_ACCEL "Use video card acceleration." OFF)
-        MARK_AS_ADVANCED(OTB_GL_USE_ACCEL)
+        
+	# This option has generated numerous issues
+	# It usually does not work when doing remote display.
+	# Simply disable the possibility to activate it
+	#OPTION(OTB_GL_USE_ACCEL "Use video card acceleration." OFF)
+        #MARK_AS_ADVANCED(OTB_GL_USE_ACCEL)
 
         #-------------------------------
         # FLTK Library
