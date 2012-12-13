@@ -26,9 +26,11 @@ GlWidget
 {
   m_Identifier = "Default";
 
-  #ifdef OTB_GL_USE_ACCEL
+#if 0
+  // OTB_GL_USE_ACCEL
   m_UseGlAcceleration = true;
-  #endif
+#endif
+
   // Default background color
   m_BackgroundColor.Fill(0);
 }
@@ -45,6 +47,8 @@ void GlWidget::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os, indent);
   // Display information about the widget
   os << indent << "Widget " << m_Identifier << ": " << std::endl;
+
+#if 0
   #ifndef OTB_GL_USE_ACCEL
   os << indent << indent << "OpenGl acceleration is not allowed." << std::endl;
   #else
@@ -57,10 +61,12 @@ void GlWidget::PrintSelf(std::ostream& os, itk::Indent indent) const
     os << indent << indent << "OpenGl acceleration is allowed but disabled." << std::endl;
     }
   #endif
+#endif
 }
 
 void GlWidget::draw()
 {
+#if 0
   // Check if Gl acceleration mode is correct
   #ifndef OTB_GL_USE_ACCEL
   if (m_UseGlAcceleration)
@@ -71,6 +77,7 @@ void GlWidget::draw()
     m_UseGlAcceleration = false;
     }
   #endif
+#endif
 
   // Set up Gl environement
   if (!this->valid())

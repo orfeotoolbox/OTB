@@ -108,11 +108,6 @@ void
 ImageWidgetBase<TPixel>
 ::Init(int /*x*/, int /*y*/, int /*w*/, int /*h*/, const char * /*l*/)
 {
-#ifdef OTB_GL_USE_ACCEL
-  otbMsgDevMacro(<< "Using OTB_GL_USE_ACCEL: ON");
-#else
-  otbMsgDevMacro(<< "Using OTB_GL_USE_ACCEL: OFF");
-#endif
   for (unsigned int i = 0; i < m_Image->GetNumberOfComponentsPerPixel(); ++i)
     {
     if (i >= m_TransferFunctionList->Size())
@@ -328,8 +323,6 @@ ImageWidgetBase<TPixel>
   this->ortho();
   glDisable(GL_BLEND);
 
-#ifndef OTB_GL_USE_ACCEL
-
   // To be consistent with old method
   int displayHeight = static_cast<int>(vcl_ceil(m_BufferedRegion.GetSize()[1] * m_OpenGlIsotropicZoom));
   int viewPortOffset = 0;
@@ -344,7 +337,11 @@ ImageWidgetBase<TPixel>
                GL_RGBA,
                GL_UNSIGNED_BYTE,
                m_OpenGlBuffer);
-#else
+
+
+#if 0
+/* This code use Texture to draw raster (OTB_GL_USE_ACCEL) */
+
   glEnable(GL_TEXTURE_2D);
   glColor4f(1.0, 1.0, 1.0, 0.0);
   GLuint texture;
@@ -376,7 +373,6 @@ ImageWidgetBase<TPixel>
   // if image overlay is activated, display image overlay
   if (m_ImageOverlayVisible)
     {
-#ifndef OTB_GL_USE_ACCEL
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDrawPixels(m_BufferedRegion.GetSize()[0],
@@ -387,7 +383,9 @@ ImageWidgetBase<TPixel>
 
     glDisable(GL_BLEND);
     glEnd();
-#else
+
+#if 0
+    /* This code use Texture to draw raster (OTB_GL_USE_ACCEL) */
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_2D);
@@ -471,11 +469,12 @@ ImageWidgetBase<TPixel>
   unsigned int index = 0;
   for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
-#ifdef OTB_GL_USE_ACCEL
-    index = GetBufferIndex(it.GetIndex());
-#else
     index = GetRevertedBufferIndex(it.GetIndex());
+#if 0
+    /* OTB_GL_USE_ACCEL */
+    index = GetBufferIndex(it.GetIndex());
 #endif
+
     switch (m_ViewModel)
       {
       case RGB:
@@ -553,10 +552,10 @@ ImageWidgetBase<TPixel>
     {
     for (it.GoToBegin(); !it.IsAtEnd(); ++it)
       {
-#ifdef OTB_GL_USE_ACCEL
-      index = GetBufferIndex(it.GetIndex());
-#else
       index = GetRevertedBufferIndex(it.GetIndex());
+#if 0
+      /* OTB_GL_USE_ACCEL */
+      index = GetBufferIndex(it.GetIndex());
 #endif
       if ((it.Get()[0] == 0) && (it.Get()[1] == 0) && (it.Get()[2] == 0))
         {
@@ -578,10 +577,10 @@ ImageWidgetBase<TPixel>
     {
     for (it.GoToBegin(); !it.IsAtEnd(); ++it)
       {
-#ifdef OTB_GL_USE_ACCEL
-      index = GetBufferIndex(it.GetIndex());
-#else
       index = GetRevertedBufferIndex(it.GetIndex());
+#if 0
+      /* OTB_GL_USE_ACCEL */
+      index = GetBufferIndex(it.GetIndex());
 #endif
       m_OpenGlImageOverlayBuffer[index] =  static_cast<unsigned char>(it.Get()[0]);
       m_OpenGlImageOverlayBuffer[index + 1] = static_cast<unsigned char>(it.Get()[1]);

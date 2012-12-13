@@ -21,12 +21,12 @@ otbImageWidget
 ${INPUTDATA}/poupees.png 0
 )
 
-IF(OTB_GL_USE_ACCEL)
-ADD_TEST(vrTvImageWidgetWithGlAcceleration ${VISUALIZATION_TESTS1}
-otbImageWidget
-${INPUTDATA}/poupees.png 1
-)
-ENDIF(OTB_GL_USE_ACCEL)
+#IF(OTB_GL_USE_ACCEL)
+#ADD_TEST(vrTvImageWidgetWithGlAcceleration ${VISUALIZATION_TESTS1}
+#otbImageWidget
+#${INPUTDATA}/poupees.png 1
+#)
+#ENDIF(OTB_GL_USE_ACCEL)
 
 
 ADD_TEST(vrTvImageWidgetImageDumpWithoutGlAcceleration ${VISUALIZATION_TESTS1}
@@ -40,17 +40,17 @@ ${TEMP}/vrTvImageWidgetImageDumpWithoutGlAcceleration.png
 2 # resize factor
 )
 
-IF(OTB_GL_USE_ACCEL)
-ADD_TEST(vrTvImageWidgetImageDumpWithGlAcceleration ${VISUALIZATION_TESTS1}
---compare-image ${NOTOL}
-${BASELINE}/vrTvImageWidgetImageDumpWithGlAcceleration.png
-${TEMP}/vrTvImageWidgetImageDumpWithGlAcceleration.png
-otbImageWidgetImageDump
-${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-1
-${TEMP}/vrTvImageWidgetImageDumpWithGlAcceleration.png
-)
-ENDIF(OTB_GL_USE_ACCEL)
+#IF(OTB_GL_USE_ACCEL)
+#ADD_TEST(vrTvImageWidgetImageDumpWithGlAcceleration ${VISUALIZATION_TESTS1}
+#--compare-image ${NOTOL}
+#${BASELINE}/vrTvImageWidgetImageDumpWithGlAcceleration.png
+#${TEMP}/vrTvImageWidgetImageDumpWithGlAcceleration.png
+#otbImageWidgetImageDump
+#${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+#1
+#${TEMP}/vrTvImageWidgetImageDumpWithGlAcceleration.png
+#)
+#ENDIF(OTB_GL_USE_ACCEL)
 
 #------------ otb::ImageWidgetActionHandler -------------
 

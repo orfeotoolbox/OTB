@@ -23,9 +23,6 @@
 #include <FL/Fl.H>
 #include "FL/Fl_Gl_Window.H"
 
-// This include is needed to get the OTB_GL_USE_ACCEL definition
-#include "otbConfigure.h"
-
 #include "itkFixedArray.h"
 #include "itkPoint.h"
 
