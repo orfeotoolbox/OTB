@@ -34,20 +34,20 @@ int otbExtendedFilenameToReaderOptions(int argc, char* argv[])
   std::ofstream file;
   file.open(outputFilename);
 
-  std::cout << helper->SimpleFileNameIsSet() << std::endl;
-  std::cout << helper->GetSimpleFileName() << std::endl;
+  file << helper->SimpleFileNameIsSet() << std::endl;
+  file << helper->GetSimpleFileName() << std::endl;
 
-  std::cout << helper->ExtGEOMFileNameIsSet() << std::endl;
-  std::cout << helper->GetExtGEOMFileName() << std::endl;
+  file << helper->ExtGEOMFileNameIsSet() << std::endl;
+  file << helper->GetExtGEOMFileName() << std::endl;
 
-  std::cout << helper->SubDatasetIndexIsSet() << std::endl;
-  std::cout << helper->GetSubDatasetIndex() << std::endl;
+  file << helper->SubDatasetIndexIsSet() << std::endl;
+  file << helper->GetSubDatasetIndex() << std::endl;
 
-  std::cout << helper->ResolutionFactorIsSet() << std::endl;
-  std::cout << helper->GetResolutionFactor() << std::endl;
+  file << helper->ResolutionFactorIsSet() << std::endl;
+  file << helper->GetResolutionFactor() << std::endl;
 
-  std::cout << helper->SkipCartoIsSet() << std::endl;
-  std::cout << helper->GetSkipCarto() << std::endl;
+  file << helper->SkipCartoIsSet() << std::endl;
+  file << helper->GetSkipCarto() << std::endl;
 
   return EXIT_SUCCESS;
 }
