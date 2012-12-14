@@ -17,8 +17,6 @@
 
 =========================================================================*/
 
-#include "mvdVectorImageModel.h"
-
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -28,12 +26,13 @@
 
 //
 // ITK includes (sorted by alphabetic order)
-
+#include "itkImageRegionConstIteratorWithIndex.h"
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdVectorImageModel.h"
 
 namespace mvd
 {
@@ -71,6 +70,80 @@ VectorImageModel
   imageFileReader->UpdateOutputInformation();
 
   m_ImageFileReader = imageFileReader;
+}
+
+
+void
+VectorImageModel
+::ClearBuffer()
+{
+  // Delete previous buffer if needed
+  if (m_RasterizedBuffer != NULL)
+    {
+    delete[] m_RasterizedBuffer;
+    m_RasterizedBuffer = NULL;
+    }
+}
+
+unsigned char *
+VectorImageModel
+::RasterizeRegion( const ImageRegionType& region)
+{
+  // Before doing anything, check if region is inside the buffered
+  // region of image
+  unsigned int currentIndex = 0;
+
+  // TODO : add some checking
+  const OutputImageType * image =  this->GetOutput(currentIndex);
+
+  // some checking
+  if (!image->GetBufferedRegion().IsInside(region))
+    {
+    //itkExceptionMacro(<< "Region to read is oustside of the buffered region.");
+    }
+
+  // Extract the region of interest in the image
+  m_ExtractFilter = ExtractFilterType::New();
+  m_ExtractFilter->SetInput(image);
+  m_ExtractFilter->SetExtractionRegion(region);
+
+  // Use the rendering filter to get 
+  m_RenderingFilter = RenderingFilterType::New();
+  m_RenderingFilter->SetInput(m_ExtractFilter->GetOutput());
+  m_RenderingFilter->GetRenderingFunction()->SetAutoMinMax(false);
+  m_RenderingFilter->GetOutput()->SetRequestedRegion(region);
+  m_RenderingFilter->Update();
+
+  //typedef otb::ImageFileWriter<OutputImageType>
+
+  // Delete previous buffer if needed
+  this->ClearBuffer();
+
+  // Allocate new memory
+  m_RasterizedBuffer = new unsigned char[3 * region.GetNumberOfPixels()];
+  //std::fill_n(m_RasterizedBuffer, 3 * region.GetNumberOfPixels(), 0);
+
+  // Declare the iterator
+  itk::ImageRegionConstIteratorWithIndex<RenderedImageType> it(m_RenderingFilter->GetOutput(), region);
+
+  // Go to begin
+  it.GoToBegin();
+
+  while (!it.IsAtEnd())
+    {
+    // Fill the buffer
+    unsigned int index = 0;
+    index = ComputeXAxisFlippedBufferIndex(it.GetIndex(), region);
+
+    // Fill the buffer
+    m_RasterizedBuffer[index]  = it.Get()[0];
+    m_RasterizedBuffer[index + 1] = it.Get()[1];
+    m_RasterizedBuffer[index + 2] = it.Get()[2];
+    ++it;
+    }
+  
+  // if ok return the  buffer
+  return m_RasterizedBuffer;
 }
 
 /*******************************************************************************/
