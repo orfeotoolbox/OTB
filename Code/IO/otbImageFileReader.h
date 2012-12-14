@@ -21,7 +21,7 @@
 #include "itkImageFileReader.h"
 #include "otbCurlHelperInterface.h"
 #include "otbImageKeywordlist.h"
-#include "otbExtendedFilenameHelper.h"
+#include "otbExtendedFilenameToReaderOptions.h"
 
 namespace otb
 {
@@ -29,12 +29,7 @@ namespace otb
 /** \class ImageFileReader
  * \brief Resource to read an image from a file.
  *
- * Available options for extended file name are:
- * - &geom : to specify an external geom file
- * - &sdataidx : sub-dataset index for composite files
- * - &resol : resolution factor for jpeg200 files
- * - &skipcarto : switch to skip the cartographic informations
- *
+ * \sa ExtendedFilenameToReaderOptions
  * \sa ImageSeriesReader
  * \sa ImageIOBase
  *
@@ -69,17 +64,7 @@ public:
   //typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
 
   /** The Filename Helper. */
-  typedef ExtendedFilenameHelper            FNameHelperType;
-
-  /** The reading option structure. */
-  struct readerOptions
-  {
-      std::string  fileName;
-      std::string  extGEOMFileName;
-      unsigned int subDatasetIndex;
-      unsigned int resolutionFactor;
-      bool         skipCarto;
-  };
+  typedef ExtendedFilenameToReaderOptions            FNameHelperType;
 
   /** Prepare image allocation at the first call of the pipeline processing */
   virtual void GenerateOutputInformation(void);
@@ -128,7 +113,6 @@ private:
   std::string   m_ExceptionMessage;
 
   FNameHelperType::Pointer m_FilenameHelper;
-  readerOptions            m_Options;
 
   CurlHelperInterface::Pointer m_Curl;
 };

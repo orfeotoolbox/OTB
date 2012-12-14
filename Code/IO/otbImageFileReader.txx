@@ -57,13 +57,6 @@ ImageFileReader<TOutputImage>
 
   m_FilenameHelper = FNameHelperType::New();
 
-  // Reader options
-  m_Options.fileName  = "";
-  m_Options.extGEOMFileName  = "";
-  m_Options.subDatasetIndex  = 0;
-  m_Options.resolutionFactor  = 0;
-  m_Options.skipCarto = false;
-
   m_AdditionalNumber = 0;
 }
 
@@ -310,14 +303,29 @@ ImageFileReader<TOutputImage>
       imageIO->SetIsVectorImage(false);
 
     // Pass the dataset number (used for hdf files for example)
-    imageIO->SetDatasetNumber(m_Options.subDatasetIndex);
+    if (m_FilenameHelper->SubDatasetIndexIsSet())
+      {
+      imageIO->SetDatasetNumber(m_FilenameHelper->GetSubDatasetIndex());
+      }
+    else
+      {
+      imageIO->SetDatasetNumber(m_AdditionalNumber);
+      }
     }
 
   // Special actions for the JPEG2000ImageIO
   if( strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0 )
     {
-    itk::EncapsulateMetaData<unsigned int>(dict,
-                                           MetaDataKey::ResolutionFactor, m_Options.resolutionFactor);
+    if (m_FilenameHelper->ResolutionFactorIsSet())
+      {
+      itk::EncapsulateMetaData<unsigned int>(dict,
+                                             MetaDataKey::ResolutionFactor, m_FilenameHelper->GetResolutionFactor());
+      }
+    else
+      {
+      itk::EncapsulateMetaData<unsigned int>(dict,
+                                             MetaDataKey::ResolutionFactor, m_AdditionalNumber);
+      }
     itk::EncapsulateMetaData<unsigned int>(dict,
                                            MetaDataKey::CacheSizeInBytes, 135000000);
     }
@@ -381,14 +389,14 @@ ImageFileReader<TOutputImage>
       }
     }
 
-  if (m_Options.skipCarto)
+  if (m_FilenameHelper->GetSkipCarto())
     {
     for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
       {
       origin[i] = 0.0;
-      if ( m_Options.resolutionFactor != 0 )
+      if ( m_FilenameHelper->GetResolutionFactor() != 0 )
         {
-        spacing[i] = 1.0*vcl_pow((double)2, (double)m_Options.resolutionFactor);
+        spacing[i] = 1.0*vcl_pow((double)2, (double)m_FilenameHelper->GetResolutionFactor());
         }
       else
         {
@@ -403,14 +411,14 @@ ImageFileReader<TOutputImage>
 
   // Update otb Keywordlist
   ImageKeywordlist otb_kwl;
-  if (m_Options.extGEOMFileName == "")
+  if (!m_FilenameHelper->ExtGEOMFileNameIsSet())
     {
     otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist);
     otbMsgDevMacro(<< "Loading internal kwl");
     }
   else
     {
-    otb_kwl = ReadGeometryFromGEOMFile(m_Options.extGEOMFileName);
+    otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
     otbMsgDevMacro(<< "Loading external kwl");
     }
 
@@ -457,7 +465,7 @@ ImageFileReader<TOutputImage>
     }
 
   // If Skip ProjectionRef is activated, remove ProjRef from dict
-  if (m_Options.skipCarto)
+  if (m_FilenameHelper->GetSkipCarto())
     {
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, "");
     }
@@ -623,26 +631,8 @@ ImageFileReader<TOutputImage>
 ::SetFileName(const char* extendedFileName)
 {
   this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
-
-  m_Options.fileName = m_FilenameHelper->GetSimpleFileName();
-  m_Options.extGEOMFileName = m_FilenameHelper->GetOptionMap()["geom"];
-  m_Options.subDatasetIndex = atoi(m_FilenameHelper->GetOptionMap()["sdataidx"].c_str());
-  m_Options.resolutionFactor = atoi(m_FilenameHelper->GetOptionMap()["resol"].c_str());
-  if (m_FilenameHelper->GetOptionMap()["skipcarto"] == "true")
-    {
-    m_Options.skipCarto = true;
-    }
-
-  this->m_FileName = m_Options.fileName;
+  this->m_FileName = this->m_FilenameHelper->GetSimpleFileName();
   this->Modified();
-
-  /** Deprecated in OTB 3.16 **/
-  if (m_AdditionalNumber != 0)
-    {
-    m_Options.subDatasetIndex  = m_AdditionalNumber;
-    m_Options.resolutionFactor = m_AdditionalNumber;
-    }
-  /** Deprecated in OTB 3.16 **/
 }
 
 template <class TOutputImage>
