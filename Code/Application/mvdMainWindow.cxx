@@ -25,7 +25,7 @@
 
 //
 // System includes (sorted by alphabetic order)
-#include <exception>
+#include <QtGui>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -56,12 +56,11 @@ namespace mvd
 /*****************************************************************************/
 MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
-  QMainWindow( parent, flags ),
-  m_UI( new mvd::Ui::MainWindow() ),
-  m_ImageView()
+  QMainWindow( parent, flags ), 
+  m_UI( new mvd::Ui::MainWindow() )
 {
   m_UI->setupUi( this );
-
+  m_ImageWidget =  new GLImageWidget(parent);
   Initialize();
 }
 
@@ -98,10 +97,10 @@ MainWindow
 ** children).
 */
   // Instanciate a QImageView
-  m_ImageView = ImageViewType::New();
+  //m_ImageView = ImageViewType::New();
 
   // Set the GLImageWidget as the centralWidget in MainWindow.
-  setCentralWidget( m_ImageView->GetFullWidget() );
+  setCentralWidget( m_ImageWidget );
 
 // Connect Quit action of main menu to QApplication's quit() slot.
   QObject::connect(
@@ -127,65 +126,65 @@ MainWindow
     }
  
   // TODO: Replace with complex model (list of DatasetModel) when implemented.
-  VectorImageModel* newVectorImageModel = new VectorImageModel();
+  m_VectorImageModel = new VectorImageModel();
 
-  newVectorImageModel->setObjectName(
+  m_VectorImageModel->setObjectName(
     "mvd::VectorImageModel('" + filename + "'"
   );
 
   try
     {
-    newVectorImageModel->loadFile( filename );
+    m_VectorImageModel->loadFile( filename );
 
-    dynamic_cast< Application* >( qApp )->SetModel( newVectorImageModel );
+    dynamic_cast< Application* >( qApp )->SetModel( m_VectorImageModel );
     }
   catch( std::exception& exc )
     {
-    delete newVectorImageModel;
-    newVectorImageModel = NULL;
+    delete m_VectorImageModel;
+    m_VectorImageModel = NULL;
 
     QMessageBox::warning( this, tr("Exception!"), exc.what() );
     return;
     }
 
-  // typedef support for layers   
-  typedef otb::ImageLayer<VectorImageType, ImageType>    LayerType;
-  typedef LayerType::Pointer                        LayerPointerType;
-  typedef otb::ImageLayerGenerator<LayerType>            LayerGeneratorType;
-  typedef LayerGeneratorType::RenderingFunctionType RenderingFunctionType;
+  // // typedef support for layers   
+  // typedef otb::ImageLayer<VectorImageType, ImageType>    LayerType;
+  // typedef LayerType::Pointer                        LayerPointerType;
+  // typedef otb::ImageLayerGenerator<LayerType>            LayerGeneratorType;
+  // typedef LayerGeneratorType::RenderingFunctionType RenderingFunctionType;
 
-  // Layer Generator
-  LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
+  // // Layer Generator
+  // LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
 
-  layerGenerator->SetImage(
-    dynamic_cast< VectorImageModel* >
-    ( dynamic_cast< Application* >
-      ( qApp )->GetModel() )->GetOutput( 0 )
-  );
+  // layerGenerator->SetImage(
+  //   dynamic_cast< VectorImageModel* >
+  //   ( dynamic_cast< Application* >
+  //     ( qApp )->GetModel() )->GetOutput( 0 )
+  // );
 
-  layerGenerator->GenerateQuicklookOff();
-  layerGenerator->GenerateLayer();
+  // layerGenerator->GenerateQuicklookOff();
+  // layerGenerator->GenerateLayer();
   
-  // Layer Rendering Model
-  RenderingModelType::Pointer imageModel = RenderingModelType::New();
+  // // Layer Rendering Model
+  // RenderingModelType::Pointer imageModel = RenderingModelType::New();
 
-  // TODO : temporary cause we need an extractRegion to setup the
-  // ExtractROI filter.
-  RegionType  region;
-  region = imageModel->GetExtractRegion();
-  RegionType::SizeType size;
-  size[0] = static_cast<unsigned int>(this->width());
-  size[1] = static_cast<unsigned int>(this->height());
-  region.SetSize(size);  
-  imageModel->SetExtractRegion(region);
+  // // TODO : temporary cause we need an extractRegion to setup the
+  // // ExtractROI filter.
+  // RegionType  region;
+  // region = imageModel->GetExtractRegion();
+  // RegionType::SizeType size;
+  // size[0] = static_cast<unsigned int>(this->width());
+  // size[1] = static_cast<unsigned int>(this->height());
+  // region.SetSize(size);  
+  // imageModel->SetExtractRegion(region);
   
-  // Add the layer to the model
-  imageModel->AddLayer(layerGenerator->GetLayer());
-  imageModel->Update();
+  // // Add the layer to the model
+  // imageModel->AddLayer(layerGenerator->GetLayer());
+  // imageModel->Update();
 
-  // Update the image view
-  m_ImageView->SetModel(imageModel);
-  m_ImageView->Update();
+  // // Update the image view
+  // //m_ImageView->SetModel(imageModel);
+  // //m_ImageView->Update();
 }
 
 /*****************************************************************************/

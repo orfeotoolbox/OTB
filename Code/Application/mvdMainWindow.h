@@ -35,17 +35,13 @@
 
 //
 // ITK includes (sorted by alphabetic order)
-#include "itkRGBAPixel.h"
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbImageLayerRenderingModel.h"
-#include "otbImageFileReader.h"
-#include "otbVectorImage.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdImageView.h"
+#include "mvdGLImageWidget.h"
 
 //
 // External class pre-declaration.
@@ -74,15 +70,6 @@ class Monteverdi2_EXPORT MainWindow
 // Public types.
 public:
 
-//  typedef otb::VectorImage<double, 2>     VectorImageType;
-  typedef itk::RGBAPixel<unsigned char>   PixelType;
-  typedef otb::Image<PixelType, 2>        ImageType;
-  typedef ImageType::RegionType           RegionType;
-
-  typedef otb::ImageFileReader<VectorImageType>    ReaderType;
-  typedef otb::ImageLayerRenderingModel<ImageType> RenderingModelType;
-  typedef mvd::ImageView<RenderingModelType>       ImageViewType;
-  
 //
 // Public methods.
 public:
@@ -120,8 +107,9 @@ private:
 
   /**
    */
-  ImageViewType::Pointer m_ImageView;
-
+  //ImageViewType::Pointer m_ImageView;
+  GLImageWidget *          m_ImageWidget;
+  VectorImageModel*        m_VectorImageModel;
 //
 // Private attributes.
 private slots:
