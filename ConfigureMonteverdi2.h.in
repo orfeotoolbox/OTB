@@ -11,15 +11,24 @@
 
 //
 // Windows DLL import/export macros.
-#if defined( _WIN32 )
-#  if 0 // Dynamic DLL vs. static LIB.
-#    if DLL_EXPORT // If exporting DLL symbols vs. DLL importing (.lib interface).
+#if defined( _WIN32 ) || defined( _WIN64 )
+// Dynamic DLL vs. static LIB.
+// TODO: Activate when dealing with dynamic-link libraries under Windows.
+#  define DYNAMIC_BUILD 0
+#  if DYNAMIC_BUILD // TODO: Use CMake macro to test dynamic/static building.
+#    if DLL_EXPORT // TODO: Use correct macro to test export/import.
+//     Export symbols when building .lib interface of DLL.
 #      define Monteverdi2_EXPORT __declspec( dllexport )
 #    else
+//     Import symbols when linking with .lib interface of DLL.
 #      define Monteverdi2_EXPORT __declspec( dllimport )
 #    endif
-#endif
+#  else
+//     Empty definition when build statically.
+#      define Monteverdi2_EXPORT
+#  endif
 #else
+// Empty definition on non Windows plateforms.
 #  define Monteverdi2_EXPORT
 #endif
 

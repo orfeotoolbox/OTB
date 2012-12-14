@@ -27,11 +27,11 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "mvdDatasetModel.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "ConfigureMonteverdi2.h"
+#include "mvdAbstractModel.h"
 
 //
 // Class implementation.
