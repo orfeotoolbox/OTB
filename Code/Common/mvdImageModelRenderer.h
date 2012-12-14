@@ -35,13 +35,13 @@
 
 //
 // ITK includes (sorted by alphabetic order)
-#include "itkImageRegion.h"
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdVectorImageModel.h"
 #include "mvdTypes.h"
 
 //
@@ -69,11 +69,11 @@ class ImageModelRenderer :
 public:
   struct RenderingContext
   {
-    inline
-    RenderingContext( const AbstractImageModel* model =NULL,
-		      const ImageRegionType& region =ImageRegionType() ) :
-      m_AbstractImageModel( model ),
-      m_ImageRegion( region )
+     inline
+     RenderingContext( const AbstractImageModel* model =NULL,
+                       const ImageRegionType& region =ImageRegionType() ) :
+       m_AbstractImageModel( model ),
+       m_ImageRegion( region )
     {
     }
 
@@ -85,9 +85,6 @@ public:
 // Public methods.
 public:
 
-  //typedef mvd::Types::ImageRegionType           ImageRegionType;
-  typedef itk::ImageRegion<2>   ImageRegionType;
-
   /** Constructor */
   ImageModelRenderer( QObject* parent = NULL );
 
@@ -96,7 +93,6 @@ public:
 
   /** */
   void paintGL( const RenderingContext& context );
-
 
 //
 // SIGNALS.
@@ -113,7 +109,6 @@ protected:
 //
 // Private methods.
 private:
-
 
 //
 // Private attributes.

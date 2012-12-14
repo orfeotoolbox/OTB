@@ -17,8 +17,6 @@
 
 =========================================================================*/
 
-#include "mvdImageModelRenderer.h"
-
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -26,6 +24,8 @@
 
 //
 // System includes (sorted by alphabetic order)
+// necessary for the opengl variables and methods
+#include <QtOpenGL>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -35,6 +35,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdImageModelRenderer.h"
 
 namespace mvd
 {
@@ -61,13 +62,18 @@ ImageModelRenderer
 
 /** Public methods */
 
-// TEMP : to do use an AbstractImageModel (or a ImageModel to get the
-// buffer to draw)
 void ImageModelRenderer::paintGL( const RenderingContext& context )
-//unsigned char* buffer, const ImageRegionType& region)
 {
-  unsigned char* buffer = NULL;
+  // the VectorImageModel used for the rendering
+  VectorImageModel * viModel = dynamic_cast<  VectorImageModel *>(
+    const_cast<AbstractImageModel*>(context.m_AbstractImageModel)
+    );
 
+  // the region of the image to render
+  const ImageRegionType&    region = context.m_ImageRegion;
+  unsigned char* buffer = viModel->RasterizeRegion(region);
+  
+  // if buffer not null do the rendering
   if (buffer != NULL)
     {
     unsigned int nb_displayed_cols = context.m_ImageRegion.GetSize()[ 0 ];
