@@ -45,9 +45,10 @@ public:
   typedef std::map< std::string, std::string > OptionMapType;
 
   void SetExtendedFileName(const char * extFname);
-  std::string GetExtendedFileName(void) const;
-  std::string GetSimpleFileName(void) const;
   OptionMapType GetOptionMap(void) const;
+
+  itkGetStringMacro(ExtendedFileName);
+  itkGetStringMacro(SimpleFileName);
 
 protected:
   ExtendedFilenameHelper() {}
@@ -56,11 +57,10 @@ protected:
 private:
   ExtendedFilenameHelper(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
+  itkSetStringMacro(SimpleFileName);
 
-  void SetSimpleFileName(const std::string & fname);
-
-  std::string                          m_ExtendedFilename;
-  std::string                          m_SimpleFilename;
+  std::string                          m_ExtendedFileName;
+  std::string                          m_SimpleFileName;
   OptionMapType                        m_OptionMap;
 
 };

@@ -25,12 +25,12 @@ void
 ExtendedFilenameHelper
 ::SetExtendedFileName(const char *extFname)
 {
-  this->m_ExtendedFilename = extFname;
+  this->m_ExtendedFileName = extFname;
   std::vector<std::string> tmp1;
   std::vector<std::string> tmp2;
-  if (!m_ExtendedFilename.empty())
+  if (!m_ExtendedFileName.empty())
     {
-    boost::split(tmp1, m_ExtendedFilename, boost::is_any_of("?"), boost::token_compress_on);
+    boost::split(tmp1, m_ExtendedFileName, boost::is_any_of("?"), boost::token_compress_on);
     this->SetSimpleFileName(tmp1[0]);
     if (tmp1.size()>1)
       {
@@ -48,32 +48,11 @@ ExtendedFilenameHelper
     }
 }
 
-std::string
-ExtendedFilenameHelper
-::GetExtendedFileName(void) const
-{
-  return this->m_ExtendedFilename;
-}
-
-std::string
-ExtendedFilenameHelper
-::GetSimpleFileName(void) const
-{
-  return this->m_SimpleFilename;
-}
-
 ExtendedFilenameHelper::OptionMapType
 ExtendedFilenameHelper
 ::GetOptionMap(void) const
 {
   return this->m_OptionMap;
-}
-
-void
-ExtendedFilenameHelper
-::SetSimpleFileName(const std::string &fname)
-{
-  this->m_SimpleFilename = fname;
 }
 
 } // end namespace otb
