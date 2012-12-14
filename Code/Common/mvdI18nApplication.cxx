@@ -20,11 +20,11 @@
 #include "mvdI18nApplication.h"
 
 //
-// System includes (sorted by alphabetic order)
-#include <iostream>
+// Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
 
 //
-// Qt includes (sorted by alphabetic order)
+// System includes (sorted by alphabetic order)
 
 //
 // OTB includes (sorted by alphabetic order)

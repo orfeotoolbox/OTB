@@ -20,10 +20,11 @@
 #include "mvdImageViewManipulator.h"
 
 //
-// System includes (sorted by alphabetic order)
+// Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
 
 //
-// Qt includes (sorted by alphabetic order)
+// System includes (sorted by alphabetic order)
 
 //
 // ITK includes (sorted by alphabetic order)

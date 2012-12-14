@@ -21,11 +21,17 @@
 #define __mvdMainWindow_h
 
 //
-// System includes (sorted by alphabetic order)
+// Configuration include.
+//// Included at first position before any other ones.
+#include "ConfigureMonteverdi2.h"
 
 //
 // Qt includes (sorted by alphabetic order)
-//#include <QtGui>
+//// Must be included before system/custom includes.
+#include <QtGui>
+
+//
+// System includes (sorted by alphabetic order)
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -39,7 +45,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ConfigureMonteverdi2.h"
 #include "mvdImageView.h"
 
 //
@@ -60,7 +65,7 @@ class MainWindow;
 /** \class MainWindow
  *
  */
-class MainWindow
+class Monteverdi2_EXPORT MainWindow
   : public QMainWindow
 {
   Q_OBJECT;

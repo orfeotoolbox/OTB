@@ -21,11 +21,17 @@
 #define __mvdImageViewManipulator_h
 
 //
-// System includes (sorted by alphabetic order)
+// Configuration include.
+//// Included at first position before any other ones.
+#include "ConfigureMonteverdi2.h"
 
 //
 // Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
 #include <QtGui>
+
+//
+// System includes (sorted by alphabetic order)
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -60,7 +66,7 @@ namespace mvd
  *  
  *   WIP
  */
-class ImageViewManipulator :
+class Monteverdi2_EXPORT ImageViewManipulator :
     public QObject
 {
   Q_OBJECT;

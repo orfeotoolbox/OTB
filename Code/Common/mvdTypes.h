@@ -21,14 +21,16 @@
 #define __mvdTypes_h
 
 //
-// System includes (sorted by alphabetic order)
+// Configuration include.
+//// Included at first position before any other ones.
+#include "ConfigureMonteverdi2.h"
 
 //
 // Qt includes (sorted by alphabetic order)
-//// Including QtGui here prevents conflicting with ITK at compile-time.
-#if 0 // re-activate when compile-type errors appear.
-#include <QtGui>
-#endif
+//// Must be included before system/custom includes.
+
+//
+// System includes (sorted by alphabetic order)
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -42,7 +44,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ConfigureMonteverdi2.h"
 
 //
 // External classes pre-declaration.

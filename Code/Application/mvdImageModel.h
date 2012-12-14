@@ -21,11 +21,17 @@
 #define __mvdImageModel_h
 
 //
-// System includes (sorted by alphabetic order)
+// Configuration include.
+//// Included at first position before any other ones.
+#include "ConfigureMonteverdi2.h"
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QObject>
+//// Must be included before system/custom includes.
+#include <QtCore>
+
+//
+// System includes (sorted by alphabetic order)
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -50,7 +56,7 @@ namespace mvd
 /** \class ImageModel
  *
  */
-class ImageModel :
+class Monteverdi2_EXPORT ImageModel :
     public QObject
 {
   Q_OBJECT;

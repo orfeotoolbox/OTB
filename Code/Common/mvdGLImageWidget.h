@@ -20,11 +20,17 @@
 #define __mvdGLImageWidget_h
 
 //
-// System includes (sorted by alphabetic order)
+// Configuration include.
+//// Included at first position before any other ones.
+#include "ConfigureMonteverdi2.h"
 
 //
 // Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
 #include <QGLWidget>
+
+//
+// System includes (sorted by alphabetic order)
 
 // this include must be added here to avoid compilation problem
 #include "mvdTypes.h"
@@ -66,7 +72,7 @@ namespace mvd
 /** \class GLImageWidget
  *
  */
-class GLImageWidget : public QGLWidget
+class Monteverdi2_EXPORT GLImageWidget : public QGLWidget
 {
   Q_OBJECT;
 

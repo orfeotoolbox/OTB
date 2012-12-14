@@ -21,10 +21,16 @@
 #define __mvdVectorImageModel_h
 
 //
-// System includes (sorted by alphabetic order)
+// Configuration include.
+//// Included at first position before any other ones.
+#include "ConfigureMonteverdi2.h"
 
 //
 // Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
+
+//
+// System includes (sorted by alphabetic order)
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -34,8 +40,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
 #include "mvdAbstractImageModel.h"
+#include "mvdTypes.h"
 
 //
 // External classes pre-declaration.

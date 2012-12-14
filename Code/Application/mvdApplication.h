@@ -21,10 +21,16 @@
 #define __mvdApplication_h
 
 //
-// System includes (sorted by alphabetic order)
+// Configuration include.
+//// Included at first position before any other ones.
+#include "ConfigureMonteverdi2.h"
 
 //
 // Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
+
+//
+// System includes (sorted by alphabetic order)
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -50,7 +56,7 @@ namespace mvd
 /** \class Application
  *
  */
-class Application
+class Monteverdi2_EXPORT Application
   : public I18nApplication
 {
   Q_OBJECT;

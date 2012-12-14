@@ -19,16 +19,13 @@
 #include "mvdMainWindow.h"
 #include "ui_mvdMainWindow.h"
 
-#include "otbImageLayer.h"
-#include "otbImageLayerGenerator.h"
+//
+// Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
+
 //
 // System includes (sorted by alphabetic order)
 #include <exception>
-
-//
-// Qt includes (sorted by alphabetic order)
-#include <QFileDialog>
-#include <QMessageBox>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -36,12 +33,13 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbImageLayer.h"
+#include "otbImageLayerGenerator.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ConfigureMonteverdi2.h"
 #include "mvdApplication.h"
 #include "mvdVectorImageModel.h"
 
