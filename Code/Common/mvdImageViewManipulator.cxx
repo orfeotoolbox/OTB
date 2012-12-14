@@ -80,7 +80,7 @@ void ImageViewManipulator::mousePressEvent(  QMouseEvent * event)
 
 void ImageViewManipulator::mouseMoveEvent(  QMouseEvent * event)
 {
-  std::cout <<" ImageViewManipulator::MouseMoveEvent" << std::endl;
+  //std::cout <<" ImageViewManipulator::MouseMoveEvent" << std::endl;
 
   // Update the mouse context
   m_MouseContext.dx = -event->x() + m_MouseContext.x;
@@ -90,7 +90,7 @@ void ImageViewManipulator::mouseMoveEvent(  QMouseEvent * event)
   ImageRegionType & currentRegion = m_NavigationContext.bufferedRegion;
 
   // print the region
-  std::cout << "Region Before offset : "<<   currentRegion << std::endl;
+  //std::cout << "Region Before offset : "<<   currentRegion << std::endl;
 
   // Apply the offset to the (start) index of the stored region
   ImageRegionType::OffsetType offset;
@@ -102,7 +102,7 @@ void ImageViewManipulator::mouseMoveEvent(  QMouseEvent * event)
   currentRegion.SetIndex(index);
 
   // print the region
-  std::cout << "Region After offset : "<< m_NavigationContext.bufferedRegion   << std::endl;    
+  //std::cout << "Region After offset : "<< m_NavigationContext.bufferedRegion   << std::endl;    
 }
 
 void ImageViewManipulator::mouseReleaseEvent(  QMouseEvent * event)
@@ -112,15 +112,15 @@ void ImageViewManipulator::mouseReleaseEvent(  QMouseEvent * event)
 
 void ImageViewManipulator::resizeEvent ( QResizeEvent * event )
 {
-  std::cout <<" ImageViewManipulator::resizeEvent" << std::endl;
-  std::cout <<"Widget Resized with new size "<< event->size().width() << ","
+  //std::cout <<" ImageViewManipulator::resizeEvent" << std::endl;
+  //std::cout <<"Widget Resized with new size "<< event->size().width() << ","
             << event->size().height() << std::endl;
 
   // Update the navigation context
   ImageRegionType & currentRegion = m_NavigationContext.bufferedRegion;
 
   // print the region
-  std::cout << "Region Before offset : "<<   currentRegion << std::endl;
+  //std::cout << "Region Before offset : "<<   currentRegion << std::endl;
 
   // Get the new widget size
   SizeType size;
@@ -129,7 +129,7 @@ void ImageViewManipulator::resizeEvent ( QResizeEvent * event )
  
   // Update the stored region with the new size
   currentRegion.SetSize(size);
-  std::cout << "Region After Resize : "<<   m_NavigationContext.bufferedRegion << std::endl;    
+  //std::cout << "Region After Resize : "<<   m_NavigationContext.bufferedRegion << std::endl;    
 
   //emit widgetResized(event->size().width(), event->size().height());
 }
