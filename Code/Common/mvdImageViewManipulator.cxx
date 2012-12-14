@@ -114,7 +114,7 @@ void ImageViewManipulator::resizeEvent ( QResizeEvent * event )
 {
   //std::cout <<" ImageViewManipulator::resizeEvent" << std::endl;
   //std::cout <<"Widget Resized with new size "<< event->size().width() << ","
-            << event->size().height() << std::endl;
+  //<< event->size().height() << std::endl;
 
   // Update the navigation context
   ImageRegionType & currentRegion = m_NavigationContext.bufferedRegion;
