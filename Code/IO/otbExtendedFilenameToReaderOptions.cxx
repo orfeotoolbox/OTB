@@ -41,7 +41,6 @@ ExtendedFilenameToReaderOptions
   m_Options.skipCarto.second = false;
 
   m_Options.nbSetOptions = 0;
-  std::cout << "Done" << std::endl;
 }
 
 void
@@ -81,7 +80,7 @@ ExtendedFilenameToReaderOptions
 
     if (   map["skipcarto"] == "On"
         || map["skipcarto"] == "on"
-        || map["skipcarto"] == "True"
+        || map["skipcarto"] == "ON"
         || map["skipcarto"] == "true"
         || map["skipcarto"] == "True"
         || map["skipcarto"] == "1"   )
