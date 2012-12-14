@@ -26,8 +26,7 @@
 
 //
 // Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
-#include <QGLWidget>
+#include <QtOpenGL>
 
 //
 // System includes (sorted by alphabetic order)
@@ -65,7 +64,6 @@ typedef AffineTransformType::InputPointType  PointType;
 typedef AffineTransformType::InputVectorType VectorType;
 typedef itk::FixedArray<double, 4>           ColorType;
 
-
 namespace mvd
 {
 
@@ -86,9 +84,6 @@ public:
   virtual ~GLImageWidget();
 
 public:
-  virtual void ReadBuffer(const ImageType * image, const RegionType& region);
-
-  void ClearBuffer();
 
   /** Set/Get the Isotropic zoom */
   void SetIsotropicZoom(double value)
@@ -112,28 +107,6 @@ protected:
 
   /** Update the image to screen transform */
   //void UpdateTransforms(int w, int h);
-
-  /** Compute the linear buffer index according to the 2D region and
-  * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
-  * \param index 2D index
-  * \param region 2D region
-  */
-  static inline unsigned int ComputeBufferIndex(const IndexType& index, const RegionType& region)
-  {
-    return (index[1] - region.GetIndex()[1]) * 3 * region.GetSize()[0] + 3 * (index[0] - region.GetIndex()[0]);
-  }
-
-  /** Compute the linear buffer index according to the 2D region and
-   * its 2D index.This method is used when OTB_GL_USE_ACCEL is OFF.
-   * The resulting buffer will be flipped over the X axis.
-   * \param index 2D index
-   * \param region 2D region
-   */
-  static inline unsigned int ComputeXAxisFlippedBufferIndex(const IndexType& index, const RegionType& region)
-  {
-    return (region.GetSize()[1] - 1 + region.GetIndex()[1] -
-            index[1]) * 3 * region.GetSize()[0] + 3 * (index[0] - region.GetIndex()[0]);
-  }
 
 private:
 

@@ -51,57 +51,7 @@ GLImageWidget::GLImageWidget(QWidget *parent)
 
 GLImageWidget::~GLImageWidget()
 {
-  this->ClearBuffer();
-}
-
-void GLImageWidget::ReadBuffer(const ImageType * image, const RegionType& region)
-{
-  // Before doing anything, check if region is inside the buffered
-  // region of image
-  if (!image->GetBufferedRegion().IsInside(region))
-    {
-    //itkExceptionMacro(<< "Region to read is oustside of the buffered region.");
-    }
-  // Delete previous buffer if needed
-  this->ClearBuffer();
-
-  // Allocate new memory
-  m_OpenGlBuffer = new unsigned char[3 * region.GetNumberOfPixels()];
-
-  // Declare the iterator
-  itk::ImageRegionConstIteratorWithIndex<ImageType> it(image, region);
-
-  // Go to begin
-  it.GoToBegin();
-
-  while (!it.IsAtEnd())
-    {
-    // Fill the buffer
-    unsigned int index = 0;
-    index = ComputeXAxisFlippedBufferIndex(it.GetIndex(), region);
-
-    // Fill the buffer
-    m_OpenGlBuffer[index]  = it.Get()[0];
-    m_OpenGlBuffer[index + 1] = it.Get()[1];
-    m_OpenGlBuffer[index + 2] = it.Get()[2];
-    ++it;
-    }
-  
-  // Last, updating buffer size
-  m_OpenGlBufferedRegion = region;
-}
-
-void GLImageWidget::ClearBuffer()
-{
-  // Delete previous buffer if needed
-  if (m_OpenGlBuffer != NULL)
-    {
-    delete[] m_OpenGlBuffer;
-    m_OpenGlBuffer = NULL;
-    }
-
-  // Last, updating buffer size
-  m_OpenGlBufferedRegion = RegionType();
+  //this->ClearBuffer();
 }
 
 /*
@@ -192,22 +142,24 @@ void GLImageWidget::paintGL()
   // Get the region to draw from the ImageViewManipulator navigation
   // context 
   const RegionType & region = m_ImageViewManipulator->GetNavigationContext().bufferedRegion;
+  
+  // Set the new rendering context to be known in the ModelRendere
+  const AbstractImageModel* aiModel=  dynamic_cast< const AbstractImageModel* >(
+    dynamic_cast< Application* >( qApp )->GetModel() );
 
-  ImageModelRenderer::RenderingContext context(
-    dynamic_cast< const AbstractImageModel* >(
-      dynamic_cast< Application* >( qApp )->GetModel()
-    ), region
-  );
-
-  std::cout <<"GLImageWidget::paintGL " << std::endl;
-  // use the model renderer to paint the requested region of the image
-  m_ImageModelRender->paintGL( context );
+  // setup the rendering context
+  if (aiModel)
+    {
+    ImageModelRenderer::RenderingContext context(aiModel, region);
+    
+    // use the model renderer to paint the requested region of the image
+    m_ImageModelRender->paintGL( context );
+    }
 }
 
 // Delegate the event to the ImageViewManipulator
 void GLImageWidget::mousePressEvent(  QMouseEvent * event)
 {
-  
   m_ImageViewManipulator->mousePressEvent(event);
 }
 
