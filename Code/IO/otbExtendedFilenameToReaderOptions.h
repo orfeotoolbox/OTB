@@ -27,6 +27,12 @@ namespace otb
 /** \class ExtendedFilenameToReaderOptions
  *  \brief Converts an extended filename to reader options.
  *
+ * Available options for extended file name are:
+ * - &geom : to specify an external geom file
+ * - &sdataidx : sub-dataset index for composite files
+ * - &resol : resolution factor for jpeg200 files
+ * - &skipcarto : switch to skip the cartographic informations
+ *
  *  \sa ImageFileReader
  */
 
