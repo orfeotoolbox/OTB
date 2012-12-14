@@ -20,6 +20,8 @@
 #ifndef __mvdAbstractModel_h
 #define __mvdAbstractModel_h
 
+#include "ConfigureMonteverdi2.h"
+
 //
 // Configuration include.
 //// Included at first position before any other ones.
@@ -41,7 +43,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
+
+//#include "mvdTypes.h"
 
 //
 // External classes pre-declaration.
