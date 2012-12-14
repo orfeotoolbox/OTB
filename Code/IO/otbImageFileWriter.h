@@ -105,9 +105,9 @@ public:
   /**
    * Enable/disable writing of a .geom file with the ossim keyword list along with the written image
    */
-  itkSetMacro(WriteGeomFile, bool);
-  itkGetMacro(WriteGeomFile, bool);
-  itkBooleanMacro(WriteGeomFile);
+  itkLegacyMacro( itkSetMacro(WriteGeomFile, bool) );
+  itkLegacyMacro( itkGetMacro(WriteGeomFile, bool) );
+  itkLegacyMacro( itkBooleanMacro(WriteGeomFile) );
 
 protected:
   ImageFileWriter();
