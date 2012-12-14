@@ -650,7 +650,7 @@ const char*
 ImageFileReader<TOutputImage>
 ::GetFileName () const
 {
-return this->m_FilenameHelper->GetSimpleFileName().c_str();
+return this->m_FilenameHelper->GetSimpleFileName();
 }
 
 } //namespace otb
