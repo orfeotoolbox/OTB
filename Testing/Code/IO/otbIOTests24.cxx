@@ -20,4 +20,5 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbExtendedFilenameToReaderOptions);
+  REGISTER_TEST(otbExtendedFilenameToWriterOptions);
 }

@@ -3756,11 +3756,28 @@ ADD_TEST(ioTvExtendedFilenameToReaderOptions_FullOptions ${IO_TESTS24}
 --compare-ascii ${NOTOL}
          ${BASELINE}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
          ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
-	otbExtendedFilenameToReaderOptions
+    otbExtendedFilenameToReaderOptions
         /home/data/filename.tif?&geom=/home/dev/custom.geom&sdataidx=2&resol=4&skipcarto=On
         ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
         )
+        
+ADD_TEST(ioTvExtendedFilenameToWriterOptions_NoOptions ${IO_TESTS24}
+--compare-ascii ${NOTOL}
+         ${BASELINE}/ioTvExtendedFilenameToWriterOptions_NoOptions.txt
+         ${TEMP}/ioTvExtendedFilenameToWriterOptions_NoOptions.txt
+	otbExtendedFilenameToWriterOptions
+        /home/data/filename.tif
+        ${TEMP}/ioTvExtendedFilenameToWriterOptions_NoOptions.txt
+        )
 
+ADD_TEST(ioTvExtendedFilenameToWriterOptions_FullOptions ${IO_TESTS24}
+--compare-ascii ${NOTOL}
+         ${BASELINE}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
+         ${TEMP}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
+	otbExtendedFilenameToWriterOptions
+        /home/data/filename.tif?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024
+        ${TEMP}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
+        )
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
@@ -4013,6 +4030,7 @@ otbGDALReadPxlComplex.cxx
 SET(BasicIO_SRCS24
 otbIOTests24.cxx
 otbExtendedFilenameToReaderOptionsTest.cxx
+otbExtendedFilenameToWriterOptionsTest.cxx
 )
 
 IF(OTB_USE_EXTERNAL_OSSIM)
