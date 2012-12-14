@@ -65,7 +65,7 @@ ExtendedFilenameToWriterOptions
     }
 
   MapIteratorType it;
-  for ( it=map.begin() ; it != map.end(); it++ )
+  for ( it=map.begin(); it != map.end(); it++ )
     {
     std::vector<std::string> tmp;
     boost::split(tmp, it->first, boost::is_any_of(":"), boost::token_compress_on);
