@@ -51,6 +51,7 @@ IF(CHECK_GDAL_BUILT_WITH_HDF)
 ENDIF(CHECK_GDAL_BUILT_WITH_HDF)
 
 SET(IO_TESTS23    ${CXX_TEST_PATH}/otbIOTests23)
+SET(IO_TESTS24    ${CXX_TEST_PATH}/otbIOTests24)
 
 # --------------------------------------------------------------------------------
 # Manage PHR data input   
@@ -3739,6 +3740,27 @@ ADD_TEST(ioTvImageFileReaderExtendedFileName_mix1 ${IO_TESTS1}
         ${TEMP}/ioImageFileReaderExtendedFileName_mix1pr.txt
         )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests24 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ADD_TEST(ioTvExtendedFilenameToReaderOptions_NoOptions ${IO_TESTS24}
+--compare-ascii ${NOTOL}
+         ${BASELINE}/ioTvExtendedFilenameToReaderOptions_NoOptions.txt
+         ${TEMP}/ioTvExtendedFilenameToReaderOptions_NoOptions.txt
+	otbExtendedFilenameToReaderOptions
+        /home/data/filename.tif
+        ${TEMP}/ioTvExtendedFilenameToReaderOptions_NoOptions.txt
+        )
+
+ADD_TEST(ioTvExtendedFilenameToReaderOptions_FullOptions ${IO_TESTS24}
+--compare-ascii ${NOTOL}
+         ${BASELINE}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
+         ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
+	otbExtendedFilenameToReaderOptions
+        /home/data/filename.tif?&geom=/home/dev/custom.geom&sdataidx=2&resol=4&skipcarto=On
+        ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
+        )
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
@@ -3988,6 +4010,11 @@ otbVectorImageStreamingFileWriterTestWithoutInput.cxx
 otbGDALReadPxlComplex.cxx
 )
 
+SET(BasicIO_SRCS24
+otbIOTests24.cxx
+otbExtendedFilenameToReaderOptionsTest.cxx
+)
+
 IF(OTB_USE_EXTERNAL_OSSIM)
   INCLUDE_DIRECTORIES( ${OSSIM_INCLUDE_DIR} )
 ELSE(OTB_USE_EXTERNAL_OSSIM)
@@ -4045,3 +4072,5 @@ IF(CHECK_GDAL_BUILT_WITH_HDF)
 ENDIF(CHECK_GDAL_BUILT_WITH_HDF)
 
 OTB_ADD_EXECUTABLE(otbIOTests23 "${BasicIO_SRCS23}" "OTBIO;OTBTesting")
+
+OTB_ADD_EXECUTABLE(otbIOTests24 "${BasicIO_SRCS24}" "OTBIO;OTBTesting")
