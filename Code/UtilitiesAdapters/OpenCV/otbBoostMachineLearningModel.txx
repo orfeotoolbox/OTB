@@ -21,7 +21,7 @@
 #include "otbBoostMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
 
-namespace otb 
+namespace otb
 {
 
 template <class TInputValue, class TOutputValue>
@@ -48,7 +48,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
   //convert listsample to opencv matrix
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
-  
+
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
@@ -74,15 +74,15 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat sample;
 
   otb::SampleToMat<InputSampleType>(input,sample);
-    
+
   cv::Mat missing  = cv::Mat(1,input.Size(), CV_8U );
   missing.setTo(0);
   double result = m_BoostModel->predict(sample,missing);
 
   TargetSampleType target;
-  
+
   target[0] = static_cast<TOutputValue>(result);
-  
+
   return target;
 }
 
@@ -100,6 +100,22 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 ::Load(char * filename, const char * name)
 {
   m_BoostModel->load(filename, name);
+}
+
+template <class TInputValue, class TOutputValue>
+bool
+BoostMachineLearningModel<TInputValue,TOutputValue>
+::CanReadFile(const char * file)
+{
+  return false;
+}
+
+template <class TInputValue, class TOutputValue>
+bool
+BoostMachineLearningModel<TInputValue,TOutputValue>
+::CanWriteFile(const char * file)
+{
+  return false;
 }
 
 template <class TInputValue, class TOutputValue>

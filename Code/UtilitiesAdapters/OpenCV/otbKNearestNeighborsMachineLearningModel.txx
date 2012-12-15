@@ -21,7 +21,7 @@
 #include "otbKNearestNeighborsMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
 
-namespace otb 
+namespace otb
 {
 
 template <class TInputValue, class TOutputValue>
@@ -49,7 +49,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
   //convert listsample to opencv matrix
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
-  
+
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
@@ -91,6 +91,23 @@ KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
 {
   m_KNearestModel->load(filename, name);
 }
+
+template <class TInputValue, class TOutputValue>
+bool
+KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
+::CanReadFile(const char * file)
+{
+  return false;
+}
+
+template <class TInputValue, class TOutputValue>
+bool
+KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
+::CanWriteFile(const char * file)
+{
+  return false;
+}
+
 
 template <class TInputValue, class TOutputValue>
 void

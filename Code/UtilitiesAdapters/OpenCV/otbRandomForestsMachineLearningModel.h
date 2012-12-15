@@ -70,6 +70,14 @@ public:
   /** Load the model from file */
   virtual void Load(char * filename, const char * name=0);
 
+  /** Determine the file type. Returns true if this ImageIO can read the
+   * file specified. */
+  virtual bool CanReadFile(const char*);
+
+  /** Determine the file type. Returns true if this ImageIO can write the
+   * file specified. */
+  virtual bool CanWriteFile(const char*);
+
   /* /\** Input accessors *\/ */
   /* itkSetObjectMacro(InputListSample,InputListSampleType); */
   /* itkGetObjectMacro(InputListSample,InputListSampleType); */

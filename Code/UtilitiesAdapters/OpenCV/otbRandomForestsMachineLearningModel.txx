@@ -101,7 +101,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat sample;
 
   otb::SampleToMat<InputSampleType>(value,sample);
-  
+
     double result = m_RFModel->predict(sample);
 
     TargetSampleType target;
@@ -126,6 +126,23 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 {
   m_RFModel->load(filename, name);
 }
+
+template <class TInputValue, class TOutputValue>
+bool
+RandomForestsMachineLearningModel<TInputValue,TOutputValue>
+::CanReadFile(const char * file)
+{
+  return true;
+}
+
+template <class TInputValue, class TOutputValue>
+bool
+RandomForestsMachineLearningModel<TInputValue,TOutputValue>
+::CanWriteFile(const char * file)
+{
+  return false;
+}
+
 
 template <class TInputValue, class TOutputValue>
 void

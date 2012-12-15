@@ -77,13 +77,13 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat sample;
 
   otb::SampleToMat<InputSampleType>(input,sample);
-  
+
   double result = m_SVMModel->predict(sample,false);
-  
+
   TargetSampleType target;
-  
+
   target[0] = static_cast<TOutputValue>(result);
- 
+
   return target;
 }
 
@@ -101,6 +101,22 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 ::Load(char * filename, const char * name)
 {
   m_SVMModel->load(filename, name);
+}
+
+template <class TInputValue, class TOutputValue>
+bool
+SVMMachineLearningModel<TInputValue,TOutputValue>
+::CanReadFile(const char * file)
+{
+  return false;
+}
+
+template <class TInputValue, class TOutputValue>
+bool
+SVMMachineLearningModel<TInputValue,TOutputValue>
+::CanWriteFile(const char * file)
+{
+  return false;
 }
 
 template <class TInputValue, class TOutputValue>

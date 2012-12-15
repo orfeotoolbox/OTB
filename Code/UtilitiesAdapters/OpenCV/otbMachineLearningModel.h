@@ -26,7 +26,7 @@
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT MachineLearningModel 
+class ITK_EXPORT MachineLearningModel
   : public itk::Object
 {
 public:
@@ -45,7 +45,7 @@ public:
   typedef TTargetValue                                  TargetValueType;
   typedef itk::FixedArray<TargetValueType,1>            TargetSampleType;
   typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(MachineLearningModel, itk::Object);
 
@@ -62,6 +62,14 @@ public:
   /** Load the model from file */
   virtual void Load(char * filename, const char * name=0) = 0;
 
+  /** Determine the file type. Returns true if this ImageIO can read the
+   * file specified. */
+  virtual bool CanReadFile(const char*) = 0;
+
+  /** Determine the file type. Returns true if this ImageIO can read the
+   * file specified. */
+  virtual bool CanWriteFile(const char*)  = 0;
+
   /** Input accessors */
   itkSetObjectMacro(InputListSample,InputListSampleType);
   itkGetObjectMacro(InputListSample,InputListSampleType);
@@ -69,7 +77,7 @@ public:
   /** Target accessors */
   itkSetObjectMacro(TargetListSample,TargetListSampleType);
   itkGetObjectMacro(TargetListSample,TargetListSampleType);
-  
+
 protected:
   /** Constructor */
   MachineLearningModel();

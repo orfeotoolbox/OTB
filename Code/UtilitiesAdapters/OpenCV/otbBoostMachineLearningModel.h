@@ -31,7 +31,7 @@
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT BoostMachineLearningModel 
+class ITK_EXPORT BoostMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:
@@ -66,6 +66,14 @@ public:
 
   /** Load the model from file */
   virtual bool Load(char * filename, const char * name=0);
+
+  /** Determine the file type. Returns true if this ImageIO can read the
+   * file specified. */
+  virtual bool CanReadFile(const char*);
+
+  /** Determine the file type. Returns true if this ImageIO can write the
+   * file specified. */
+  virtual bool CanWriteFile(const char*);
 
 protected:
   /** Constructor */
