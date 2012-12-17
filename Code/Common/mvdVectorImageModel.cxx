@@ -123,7 +123,7 @@ VectorImageModel
   m_RasterizedBuffer = new unsigned char[3 * region.GetNumberOfPixels()];
 
   // Declare the iterator
-  itk::ImageRegionConstIteratorWithIndex< DisplayImageType >
+  itk::ImageRegionConstIteratorWithIndex< RenderingFilterType::OutputImageType >
     it(m_RenderingFilter->GetOutput(), region);
 
   // Go to begin

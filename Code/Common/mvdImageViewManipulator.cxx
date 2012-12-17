@@ -48,8 +48,11 @@ namespace mvd
 /*****************************************************************************/
 ImageViewManipulator
 ::ImageViewManipulator( QObject* parent ) :
-  QObject( parent )
+  QObject( parent ),
+  m_NavigationContext(),
+  m_MouseContext()
 {
+  // TODO: Remove later because initialized in struct's default constructor and resizeEvent().
   this->InitializeContext(1,1);
 }
 
@@ -69,7 +72,7 @@ ImageViewManipulator
   initialSize[1] = height;
 
   // initialize with the given size
-  m_NavigationContext.bufferedRegion.SetSize(initialSize);
+  m_NavigationContext.m_ViewportImageRegion.SetSize(initialSize);
 }
 
 /******************************************************************************/
@@ -92,7 +95,7 @@ ImageViewManipulator
   m_MouseContext.dy = -event->y() + m_MouseContext.y;
 
   // Update the navigation context
-  ImageRegionType & currentRegion = m_NavigationContext.bufferedRegion;
+  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
   // print the region
   //std::cout << "Region Before offset : "<<   currentRegion << std::endl;
@@ -107,10 +110,10 @@ ImageViewManipulator
   currentRegion.SetIndex(index);
 
   // Constraint the region to the largestPossibleRegion
-  this->ConstrainRegion(currentRegion, m_ImageLargestRegion);
+  this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
 
   // print the region
-  //std::cout << "Region After offset : "<< m_NavigationContext.bufferedRegion   << std::endl;    
+  //std::cout << "Region After offset : "<< m_NavigationContext.m_BufferedRegion   << std::endl;    
 }
 
 /******************************************************************************/
@@ -126,7 +129,7 @@ void ImageViewManipulator
 ::resizeEvent( QResizeEvent * event )
 {
   // Update the navigation context
-  ImageRegionType & currentRegion = m_NavigationContext.bufferedRegion;
+  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
   // Get the new widget size
   ImageRegionType::SizeType size;
@@ -137,7 +140,7 @@ void ImageViewManipulator
   currentRegion.SetSize(size);
 
   // Constraint this region to the LargestPossibleRegion
-  this->ConstrainRegion(currentRegion, m_ImageLargestRegion);
+  this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
 }
 
 /******************************************************************************/

@@ -151,8 +151,9 @@ GLImageWidget
 
   // Get the region to draw from the ImageViewManipulator navigation
   // context 
-  const ImageRegionType & region = m_ImageViewManipulator->GetNavigationContext().bufferedRegion;
-  
+  const ImageRegionType region(
+    m_ImageViewManipulator->GetViewportImageRegion() );
+
   // Set the new rendering context to be known in the ModelRendere
   const AbstractImageModel* aiModel=  dynamic_cast< const AbstractImageModel* >(
     dynamic_cast< Application* >( qApp )->GetModel() );
