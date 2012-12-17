@@ -65,7 +65,7 @@ void ImageViewManipulator::InitializeContext(int width, int height)
   ImageRegionType::SizeType  initialSize;
   initialSize[0] = width;
   initialSize[1] = height;
-  
+
   // initialize with the given size
   m_NavigationContext.bufferedRegion.SetSize(initialSize);
 }
@@ -80,8 +80,6 @@ void ImageViewManipulator::mousePressEvent(  QMouseEvent * event)
 
 void ImageViewManipulator::mouseMoveEvent(  QMouseEvent * event)
 {
-  //std::cout <<" ImageViewManipulator::MouseMoveEvent" << std::endl;
-
   // Update the mouse context
   m_MouseContext.dx = -event->x() + m_MouseContext.x;
   m_MouseContext.dy = -event->y() + m_MouseContext.y;
@@ -101,6 +99,9 @@ void ImageViewManipulator::mouseMoveEvent(  QMouseEvent * event)
   IndexType    index = currentRegion.GetIndex() + offset;
   currentRegion.SetIndex(index);
 
+  // Constraint the region to the largestPossibleRegion
+  this->ConstrainRegion(currentRegion, m_ImageLargestRegion);
+
   // print the region
   //std::cout << "Region After offset : "<< m_NavigationContext.bufferedRegion   << std::endl;    
 }
@@ -112,15 +113,8 @@ void ImageViewManipulator::mouseReleaseEvent(  QMouseEvent * event)
 
 void ImageViewManipulator::resizeEvent ( QResizeEvent * event )
 {
-  //std::cout <<" ImageViewManipulator::resizeEvent" << std::endl;
-  //std::cout <<"Widget Resized with new size "<< event->size().width() << ","
-  //<< event->size().height() << std::endl;
-
   // Update the navigation context
   ImageRegionType & currentRegion = m_NavigationContext.bufferedRegion;
-
-  // print the region
-  //std::cout << "Region Before offset : "<<   currentRegion << std::endl;
 
   // Get the new widget size
   SizeType size;
@@ -129,11 +123,53 @@ void ImageViewManipulator::resizeEvent ( QResizeEvent * event )
  
   // Update the stored region with the new size
   currentRegion.SetSize(size);
-  //std::cout << "Region After Resize : "<<   m_NavigationContext.bufferedRegion << std::endl;    
 
-  //emit widgetResized(event->size().width(), event->size().height());
+  // Constraint this region to the LargestPossibleRegion
+  this->ConstrainRegion(currentRegion, m_ImageLargestRegion);
 }
 
+void
+ImageViewManipulator
+::ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest)
+{
+  SizeType zeroSize;
+  zeroSize.Fill(0);
+  
+  if (largest.GetSize() != zeroSize)
+    {
+    // Else we can constrain it
+    IndexType                     index = region.GetIndex();
+    ImageRegionType::SizeType size = region.GetSize();
+
+    // If region is larger than big, then crop
+    if (region.GetSize()[0] > largest.GetSize()[0])
+      {
+      size[0] = largest.GetSize()[0];
+      }
+    if (region.GetSize()[1] > largest.GetSize()[1])
+      {
+      size[1] = largest.GetSize()[1];
+      }
+
+    // Else we can constrain it
+    // For each dimension
+    for (unsigned int dim = 0; dim < ImageRegionType::ImageDimension; ++dim)
+      {
+      // push left if necessary
+      if (region.GetIndex()[dim] < largest.GetIndex()[dim])
+        {
+        index[dim] = largest.GetIndex()[dim];
+        }
+      // push right if necessary
+      if (index[dim] + size[dim] >= largest.GetIndex()[dim] + largest.GetSize()[dim])
+        {
+        index[dim] = largest.GetIndex()[dim] + largest.GetSize()[dim] - size[dim];
+        }
+      }
+    region.SetSize(size);
+    region.SetIndex(index);
+    }
+}
 
 /*****************************************************************************/
 /* SLOTS                                                                     */

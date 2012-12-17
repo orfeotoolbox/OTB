@@ -118,6 +118,11 @@ public:
     return m_MouseContext;
   }
 
+  void SetImageLargestRegion(const ImageRegionType & largestRegion)
+  {
+    m_ImageLargestRegion = largestRegion;
+  }
+
 //
 // SIGNALS.
 signals:
@@ -128,6 +133,7 @@ public slots:
 //
 // Protected methods.
 protected:
+  void ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest);
   
 //
 // Protected attributes.
@@ -142,6 +148,7 @@ private:
 private:
   NavigationContextType  m_NavigationContext;
   MouseContextType       m_MouseContext;
+  ImageRegionType        m_ImageLargestRegion;
 
 //
 // SLOTS.
