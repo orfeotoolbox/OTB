@@ -121,7 +121,8 @@ void
 ImageViewManipulator
 ::mouseReleaseEvent(  QMouseEvent * event)
 {
-  std::cout <<" Not Implemented yet ..." << std::endl;
+  //TODO: Implement mouseReleaseEvent.
+  //std::cout <<" Not Implemented yet ..." << std::endl;
 }
 
 /******************************************************************************/
