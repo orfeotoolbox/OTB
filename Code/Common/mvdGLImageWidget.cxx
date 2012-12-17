@@ -158,7 +158,7 @@ void GLImageWidget::resizeEvent( QResizeEvent  * event)
   m_ImageViewManipulator->resizeEvent(event);
 }
 
-void GLImageWidget::UpdateLargestPossibleRegion(const ImageRegionType& largestRegion)
+void GLImageWidget::onLargestPossibleRegionChanged(const ImageRegionType& largestRegion)
 {
   m_ImageViewManipulator->SetImageLargestRegion(largestRegion);
 }

@@ -98,7 +98,7 @@ public:
   }
 
 public slots:
-  void UpdateLargestPossibleRegion(const ImageRegionType& largestRegion);
+  void onLargestPossibleRegionChanged(const ImageRegionType& largestRegion);
 
 protected:
 
