@@ -74,17 +74,10 @@ class Monteverdi2_EXPORT ImageViewManipulator :
 // Public methods.
 public:
 
-  /*
-  typedef itk::ImageRegion<2>        ImageRegionType;
-  typedef ImageRegionType::IndexType IndexType;
-  typedef ImageRegionType::SizeType  SizeType;
-  */
-  
-
   /** Navigation context  */
-  typedef struct 
+  struct 
   {
-    ImageRegionType   bufferedRegion;
+    ImageRegionType bufferedRegion;
   } NavigationContextType;
 
   /** Mouse context */

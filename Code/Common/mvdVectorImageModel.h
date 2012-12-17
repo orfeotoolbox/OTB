@@ -130,16 +130,12 @@ private:
    */
   typedef RGBAImageType DisplayImageType;
 
-  //typedef DefaultImageFileReaderType::OutputImageType   OutputImageType;  
-
   /**
    * Extract filter.
    */
   typedef
     itk::ExtractImageFilter< SourceImageType, SourceImageType >
     ExtractFilterType;
-
-  // typedef ExtractFilterType::Pointer ExtractFilterPointerType;
 
   /**
    * Rendering filter.
@@ -148,8 +144,6 @@ private:
   typedef
     otb::RenderingImageFilter< SourceImageType, DisplayImageType >
     RenderingFilterType;
-
-  // typedef RenderingFilterType::OutputImageType RenderedImageType;
 
 //
 // Private methods.

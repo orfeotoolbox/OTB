@@ -48,23 +48,6 @@
 #include "mvdTypes.h"
 
 //
-// Global definitions.
-/*
-const unsigned int Dimension = 2;
-typedef itk::RGBAPixel<unsigned char>     PixelType;
-typedef otb::Image<PixelType, Dimension>  ImageType;
-typedef ImageType::RegionType             RegionType;
-typedef ImageType::IndexType              IndexType;
-typedef ImageType::SizeType               SizeType;
-
-// affine transform
-typedef itk::AffineTransform<double, 2>      AffineTransformType;
-typedef AffineTransformType::InputPointType  PointType;
-typedef AffineTransformType::InputVectorType VectorType;
-typedef itk::FixedArray<double, 4>           ColorType;
-*/
-
-//
 // External classes pre-declaration.
 namespace
 {
