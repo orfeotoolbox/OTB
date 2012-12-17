@@ -3787,7 +3787,16 @@ ADD_TEST(ioTvImageFileWriterExtendedFileName_GEOM ${IO_TESTS24}
         ${INPUTDATA}/ToulouseExtract_WithGeom.tif
         ${TEMP}/ioImageFileWriterExtendedFileName_GEOM.tif?&writegeom=ON
         )
-
+        
+ADD_TEST(ioTvImageFileWriterExtendedFileName_gdalco ${IO_TESTS24}
+--compare-image ${NOTOL}
+         ${BASELINE}/ioTvGDALImageIO_JPEG_20.jpg      
+         ${TEMP}/ioImageFileWriterExtendedFileName_gdalco.jpg
+	otbImageFileWriterWithExtendedFilename
+        ${INPUTDATA}/maur_rgb_24bpp.tif
+        ${TEMP}/ioImageFileWriterExtendedFileName_gdalco.jpg?&gdal:co:QUALITY=20
+        )
+        
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx

@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbImage.h"
+#include "otbVectorImage.h"
 #include "itkMacro.h"
 #include <iostream>
 
@@ -62,10 +63,10 @@ int otbImageFileWriterWithExtendedFilename(int argc, char* argv[])
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef float InputPixelType;
+  typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<InputImageType>  WriterType;
