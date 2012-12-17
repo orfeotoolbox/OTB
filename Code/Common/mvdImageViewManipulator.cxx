@@ -60,7 +60,9 @@ ImageViewManipulator
 }
 
 /*******************************************************************************/
-void ImageViewManipulator::InitializeContext(int width, int height)
+void
+ImageViewManipulator
+::InitializeContext(int width, int height)
 {
   ImageRegionType::SizeType  initialSize;
   initialSize[0] = width;
@@ -70,15 +72,20 @@ void ImageViewManipulator::InitializeContext(int width, int height)
   m_NavigationContext.bufferedRegion.SetSize(initialSize);
 }
 
-
-void ImageViewManipulator::mousePressEvent(  QMouseEvent * event)
+/******************************************************************************/
+void
+ImageViewManipulator
+::mousePressEvent(QMouseEvent * event)
 {
   // Update the context with the pressed position
   m_MouseContext.x = event->x();
   m_MouseContext.y = event->y();
 }
 
-void ImageViewManipulator::mouseMoveEvent(  QMouseEvent * event)
+/******************************************************************************/
+void
+ImageViewManipulator
+::mouseMoveEvent( QMouseEvent * event)
 {
   // Update the mouse context
   m_MouseContext.dx = -event->x() + m_MouseContext.x;
@@ -106,12 +113,17 @@ void ImageViewManipulator::mouseMoveEvent(  QMouseEvent * event)
   //std::cout << "Region After offset : "<< m_NavigationContext.bufferedRegion   << std::endl;    
 }
 
-void ImageViewManipulator::mouseReleaseEvent(  QMouseEvent * event)
+/******************************************************************************/
+void
+ImageViewManipulator
+::mouseReleaseEvent(  QMouseEvent * event)
 {
   std::cout <<" Not Implemented yet ..." << std::endl;
 }
 
-void ImageViewManipulator::resizeEvent( QResizeEvent * event )
+/******************************************************************************/
+void ImageViewManipulator
+::resizeEvent( QResizeEvent * event )
 {
   // Update the navigation context
   ImageRegionType & currentRegion = m_NavigationContext.bufferedRegion;
@@ -128,6 +140,7 @@ void ImageViewManipulator::resizeEvent( QResizeEvent * event )
   this->ConstrainRegion(currentRegion, m_ImageLargestRegion);
 }
 
+/******************************************************************************/
 void
 ImageViewManipulator
 ::ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest)
