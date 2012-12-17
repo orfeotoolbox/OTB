@@ -31,13 +31,10 @@
 //
 // System includes (sorted by alphabetic order)
 
-// this include must be added here to avoid compilation problem
-#include "mvdTypes.h"
-
 //
 // ITK includes (sorted by alphabetic order)
-#include "itkRGBAPixel.h"
-#include "itkAffineTransform.h"
+//#include "itkRGBAPixel.h"
+//#include "itkAffineTransform.h"
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -48,9 +45,11 @@
 #include "mvdAbstractImageModel.h"
 #include "mvdImageModelRenderer.h"
 #include "mvdImageViewManipulator.h"
+#include "mvdTypes.h"
 
 //
 // Global definitions.
+/*
 const unsigned int Dimension = 2;
 typedef itk::RGBAPixel<unsigned char>     PixelType;
 typedef otb::Image<PixelType, Dimension>  ImageType;
@@ -63,6 +62,7 @@ typedef itk::AffineTransform<double, 2>      AffineTransformType;
 typedef AffineTransformType::InputPointType  PointType;
 typedef AffineTransformType::InputVectorType VectorType;
 typedef itk::FixedArray<double, 4>           ColorType;
+*/
 
 //
 // External classes pre-declaration.
@@ -110,6 +110,8 @@ public:
     return 1.0;
   }
 
+//
+// Public SLOTS.
 public slots:
   void onLargestPossibleRegionChanged(const ImageRegionType& largestRegion);
 

@@ -35,14 +35,13 @@
 
 //
 // ITK includes (sorted by alphabetic order)
-#include "itkImageRegion.h"
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbImageFileReader.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdTypes.h"
 
 
 //
@@ -75,9 +74,11 @@ class Monteverdi2_EXPORT ImageViewManipulator :
 // Public methods.
 public:
 
+  /*
   typedef itk::ImageRegion<2>        ImageRegionType;
   typedef ImageRegionType::IndexType IndexType;
   typedef ImageRegionType::SizeType  SizeType;
+  */
   
 
   /** Navigation context  */

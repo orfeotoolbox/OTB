@@ -59,7 +59,7 @@ ImageViewManipulator
 {
 }
 
-
+/*******************************************************************************/
 void ImageViewManipulator::InitializeContext(int width, int height)
 {
   ImageRegionType::SizeType  initialSize;
@@ -117,7 +117,7 @@ void ImageViewManipulator::resizeEvent( QResizeEvent * event )
   ImageRegionType & currentRegion = m_NavigationContext.bufferedRegion;
 
   // Get the new widget size
-  SizeType size;
+  ImageRegionType::SizeType size;
   size[0] = event->size().width();
   size[1] = event->size().height();
  
@@ -132,7 +132,7 @@ void
 ImageViewManipulator
 ::ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest)
 {
-  SizeType zeroSize;
+  ImageRegionType::SizeType zeroSize;
   zeroSize.Fill(0);
   
   if (largest.GetSize() != zeroSize)
