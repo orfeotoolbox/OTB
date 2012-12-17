@@ -21,6 +21,7 @@
 #include "itkImageFileWriter.h"
 #include "otbImageIOFactory.h"
 #include "otbStreamingTraits.h"
+#include "otbExtendedFilenameToWriterOptions.h"
 
 namespace otb
 {
@@ -28,6 +29,7 @@ namespace otb
 /** \class ImageFileWriter
  * \brief This class writes image file format (a variety of formats are supported)
  *
+ * \sa ExtendedFilenameToWriterOptions
  * \sa ImageSeriesWriter
  * \sa ImageIOBase
  *
@@ -71,6 +73,9 @@ public:
   /** Type use to define number of divisions */
   typedef StreamingMode CalculationDivisionEnumType;
 
+  /** The Filename Helper. */
+  typedef ExtendedFilenameToWriterOptions            FNameHelperType;
+
   /** A special Write() method. It invokes the creating of the
     * specific otb::ImageIOFactory.
     */
@@ -102,6 +107,10 @@ public:
   /** Return the string to indicate the method use to calculate number of stream divisions. */
   std::string GetMethodUseToCalculateNumberOfStreamDivisions(void);
 
+  virtual void SetFileName(const char* extendedFileName);
+  virtual void SetFileName(std::string extendedFileName);
+  virtual const char* GetFileName () const;
+
   /**
    * Enable/disable writing of a .geom file with the ossim keyword list along with the written image
    */
@@ -129,6 +138,8 @@ private:
 
   /** Use to determine method of calculation number of divisions */
   CalculationDivisionEnumType m_CalculationDivision;
+
+  FNameHelperType::Pointer m_FilenameHelper;
 
   bool m_WriteGeomFile;
 };

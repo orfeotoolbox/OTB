@@ -47,6 +47,8 @@ ImageFileWriter<TInputImage>
   m_RegionSplitterUseToEstimateNumberOfStreamDivisions = itk::ImageRegionSplitter<InputImageDimension>::New();
 
   this->Superclass::SetNumberOfStreamDivisions(10);
+
+  m_FilenameHelper = FNameHelperType::New();
 }
 
 //---------------------------------------------------------
@@ -74,18 +76,24 @@ ImageFileWriter<TInputImage>
     this->SetNumberOfStreamDivisions(static_cast<unsigned int> (CalculateNumberOfStreamDivisions()));
     }
 
+  if ((strcmp(this->GetImageIO()->GetNameOfClass(), "GDALImageIO") == 0)
+      && m_FilenameHelper->gdalCreationOptionsIsSet()   )
+    {
+    typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
+    imageIO->SetOptions(m_FilenameHelper->GetgdalCreationOptions());
+    }
+
   this->Superclass::Write();
   //TODO: Force ImageIO destructor. Should be fixed once GDALImageIO
   //will be refactored.
   this->SetImageIO(NULL);
 
-  if (m_WriteGeomFile)
+  if (m_WriteGeomFile || m_FilenameHelper->GetWriteGEOMFile())
     {
     ImageKeywordlist otb_kwl;
     itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
     itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
     WriteGeometry(otb_kwl, this->GetFileName());
-
     }
 }
 
@@ -216,6 +224,31 @@ ImageFileWriter<TInputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+}
+
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetFileName(std::string extendedFileName)
+{
+  this->SetFileName(extendedFileName.c_str());
+}
+
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetFileName(const char* extendedFileName)
+{
+  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
+  Superclass::SetFileName(this->m_FilenameHelper->GetSimpleFileName());
+}
+
+template <class TInputImage>
+const char*
+ImageFileWriter<TInputImage>
+::GetFileName () const
+{
+return this->m_FilenameHelper->GetSimpleFileName();
 }
 
 } // end namespace otb
