@@ -164,7 +164,7 @@ ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS2}
                     ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg
         otbExtractROI_RGB
         ${INPUTDATA}/poupees.jpg
-        ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg
+        ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg?&gdal:co:QUALITY=95
         303 2 134 330 )
 
 ADD_TEST(coTvExtractROI_QB ${COMMON_TESTS2}
