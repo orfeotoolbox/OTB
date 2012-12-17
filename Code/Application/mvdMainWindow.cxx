@@ -109,8 +109,8 @@ MainWindow
   );
 
   // Connect the setLargestPossibleregion
-  QObject::connect(this, SIGNAL(setLargestPossibleRegion(const ImageRegionType&)), m_ImageWidget, 
-                   SLOT( UpdateLargestPossibleRegion(const ImageRegionType&)) );
+  QObject::connect(this, SIGNAL(largestPossibleRegionChanged(const ImageRegionType&)), m_ImageWidget, 
+                   SLOT( onLargestPossibleRegionChanged(const ImageRegionType&)) );
 }
 
 /*****************************************************************************/
@@ -142,7 +142,8 @@ MainWindow
     m_VectorImageModel->loadFile( filename );
 
     // set the largest possible region of the image
-    emit setLargestPossibleRegion(m_VectorImageModel->GetOutput(0)->GetLargestPossibleRegion());
+    // TODO:  rename signal name when handling DataSets collections
+    emit largestPossibleRegionChanged(m_VectorImageModel->GetOutput(0)->GetLargestPossibleRegion());
 
     dynamic_cast< Application* >( qApp )->SetModel( m_VectorImageModel );
     }

@@ -83,7 +83,7 @@ public:
 //
 // SIGNALS.
 signals:
-  void setLargestPossibleRegion(const ImageRegionType& largestRegion);
+  void largestPossibleRegionChanged(const ImageRegionType& largestRegion);
 
 //
 // Protected methods.

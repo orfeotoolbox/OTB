@@ -50,7 +50,7 @@ ImageViewManipulator
 ::ImageViewManipulator( QObject* parent ) :
   QObject( parent )
 {
-  this->InitializeContext(500,500);
+  this->InitializeContext(1,1);
 }
 
 /*****************************************************************************/
@@ -111,7 +111,7 @@ void ImageViewManipulator::mouseReleaseEvent(  QMouseEvent * event)
   std::cout <<" Not Implemented yet ..." << std::endl;
 }
 
-void ImageViewManipulator::resizeEvent ( QResizeEvent * event )
+void ImageViewManipulator::resizeEvent( QResizeEvent * event )
 {
   // Update the navigation context
   ImageRegionType & currentRegion = m_NavigationContext.bufferedRegion;

@@ -121,6 +121,10 @@ public:
   void SetImageLargestRegion(const ImageRegionType & largestRegion)
   {
     m_ImageLargestRegion = largestRegion;
+
+    // Need to call ConstrainRegion here cause not called when the input image
+    // is opened
+    this->ConstrainRegion(m_NavigationContext.bufferedRegion, m_ImageLargestRegion);
   }
 
 //
