@@ -103,8 +103,16 @@ public:
   /** Rasterize the buffered region in a buffer */
   unsigned char * RasterizeRegion(const ImageRegionType& region);
 
-  /** Clear buffer */
-  void ClearBuffer();
+  /** Set/Get the Channel list to render */
+  void SetChannelList(const std::vector<unsigned int> & channels)
+  {
+    m_Channels = channels;
+  }
+
+  const std::vector<unsigned int> & GetChannelList() const
+  {
+    return m_Channels;
+  }
 
 //
 // SIGNALS.
@@ -113,6 +121,9 @@ signals:
 //
 // Protected methods.
 protected:
+
+  /** Clear buffer */
+  void ClearBuffer();
 
 //
 // Protected attributes.

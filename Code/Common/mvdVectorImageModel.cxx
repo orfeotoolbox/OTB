@@ -73,8 +73,10 @@ VectorImageModel
 
   m_ImageFileReader = imageFileReader;
 
-  // setup the channel list for the rendering needs
+  // initialize the channel list for the rendering needs following the
+  // input image
   // TODO : See if if needs to be moved somewhere else
+  // TODO : use the default display
   if (m_ImageFileReader->GetOutput()->GetNumberOfComponentsPerPixel()  < 3)
     {
     m_Channels.resize(1);
