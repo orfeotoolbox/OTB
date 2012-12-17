@@ -56,6 +56,7 @@ VectorImageModel
 VectorImageModel
 ::~VectorImageModel()
 {
+  this->ClearBuffer();
 }
 
 /*******************************************************************************/
@@ -115,14 +116,11 @@ VectorImageModel
   m_RenderingFilter->GetOutput()->SetRequestedRegion(region);
   m_RenderingFilter->Update();
 
-  //typedef otb::ImageFileWriter<OutputImageType>
-
   // Delete previous buffer if needed
   this->ClearBuffer();
 
   // Allocate new memory
   m_RasterizedBuffer = new unsigned char[3 * region.GetNumberOfPixels()];
-  //std::fill_n(m_RasterizedBuffer, 3 * region.GetNumberOfPixels(), 0);
 
   // Declare the iterator
   itk::ImageRegionConstIteratorWithIndex<RenderedImageType> it(m_RenderingFilter->GetOutput(), region);
