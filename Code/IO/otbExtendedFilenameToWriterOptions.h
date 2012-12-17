@@ -29,8 +29,8 @@ namespace otb
  *  \brief Converts an extended filename to writer options.
  *
  * Available options for extended file name are:
- * - &geomwrite : to specify an external geom file
- * - &gdal:co:<KEY>  : sub-dataset index for composite files
+ * - &writegeom=ON : to activate the creation of an external geom file
+ * - &gdal:co:<KEY>=<VALUE> : the gdal creation option <KEY>
  *
  *  \sa ImageFileWriter
  */

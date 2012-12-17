@@ -48,22 +48,6 @@ ExtendedFilenameToWriterOptions
   m_Options.simpleFileName.first  = true;
   m_Options.simpleFileName.second = this->m_FilenameHelper->GetSimpleFileName();
 
-  if (!map["writegeom"].empty())
-    {
-    m_Options.writeGEOMFile.first = true;
-    m_Options.nbSetOptions ++;
-
-  if (   map["writegeom"] == "On"
-      || map["writegeom"] == "on"
-      || map["writegeom"] == "ON"
-      || map["writegeom"] == "true"
-      || map["writegeom"] == "True"
-      || map["writegeom"] == "1"   )
-      {
-      m_Options.writeGEOMFile.second = true;
-      }
-    }
-
   MapIteratorType it;
   for ( it=map.begin(); it != map.end(); it++ )
     {
@@ -76,7 +60,28 @@ ExtendedFilenameToWriterOptions
         m_Options.gdalCreationOptions.second.push_back(tmp[2] + "=" +it->second);
         m_Options.nbSetOptions ++;
         }
+    //std::cout << it->first << ":" << it->second << std::endl;
     }
+
+  if (!map["writegeom"].empty())
+     {
+     m_Options.writeGEOMFile.first = true;
+     m_Options.nbSetOptions ++;
+
+     if (   map["writegeom"] == "On"
+         || map["writegeom"] == "on"
+         || map["writegeom"] == "ON"
+         || map["writegeom"] == "true"
+         || map["writegeom"] == "True"
+         || map["writegeom"] == "1"   )
+       {
+       m_Options.writeGEOMFile.second = true;
+       }
+     }
+   else
+     {
+     //std::cout << "No Geom Option" << std::endl;
+     }
 
   if (m_Options.nbSetOptions < nbOpts)
     {
