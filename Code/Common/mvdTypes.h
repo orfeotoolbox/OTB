@@ -35,6 +35,7 @@
 //
 // ITK includes (sorted by alphabetic order)
 #include <itkImageRegion.h>
+#include <itkRGBAPixel.h>
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -59,23 +60,22 @@ namespace mvd
 
 /**
  */
-typedef itk::ImageRegion< Monteverdi2_DIMENSION_TYPE >
-ImageRegionType;
+typedef itk::ImageRegion< Monteverdi2_DIMENSION_TYPE > ImageRegionType;
 /**
  */
-typedef itk::Index< Monteverdi2_DIMENSION_TYPE >
-IndexType;
+typedef itk::Index< Monteverdi2_DIMENSION_TYPE > IndexType;
 
 /*******************************************************************************/
 
 /**
  */
-typedef otb::Image< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION_TYPE >
+typedef
+otb::Image< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION_TYPE >
 ScalarImageType;
 /**
  */
-typedef otb::ImageFileReader< ScalarImageType >
-ScalarImageFileReaderType;
+typedef
+otb::ImageFileReader< ScalarImageType > ScalarImageFileReaderType;
 
 /*******************************************************************************/
 
@@ -86,20 +86,25 @@ otb::VectorImage< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION_TYPE >
 VectorImageType;
 /**
  */
-typedef otb::ImageFileReader< VectorImageType >
-VectorImageFileReaderType;
+typedef otb::ImageFileReader< VectorImageType > VectorImageFileReaderType;
 
 /*******************************************************************************/
 
 /**
  */
-#if 1
+typedef itk::RGBAPixel< unsigned char > RGBAPixelType;
+/**
+ */
+typedef otb::Image< RGBAPixelType, Monteverdi2_DIMENSION_TYPE > RGBAImageType;
+
+/*******************************************************************************/
+
+/**
+ */
 typedef mvd::VectorImageType DefaultImageType;
+/**
+ */
 typedef mvd::VectorImageFileReaderType DefaultImageFileReaderType;
-#else
-typedef mvd::ScalarImageType DefaultImageType;
-typedef mvd::ScalarImageFileReaderType DefaultImageFileReaderType;
-#endif
 
 /*******************************************************************************/
 

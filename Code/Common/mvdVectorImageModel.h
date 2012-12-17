@@ -64,17 +64,6 @@ class Monteverdi2_EXPORT VectorImageModel :
 {
   Q_OBJECT;
 
-  // Public types
-  typedef DefaultImageFileReaderType::OutputImageType   OutputImageType;  
-
-  // Extract filter 
-  typedef itk::ExtractImageFilter<OutputImageType, OutputImageType> ExtractFilterType;
-  typedef ExtractFilterType::Pointer                                ExtractFilterPointerType;
-
-  // Rendering filter (from OutputImage to RGBA image)
-  typedef otb::RenderingImageFilter<OutputImageType>                RenderingFilterType;
-  typedef RenderingFilterType::OutputImageType                      RenderedImageType;
-
 //
 // Public methods.
 public:
@@ -86,15 +75,22 @@ public:
   virtual ~VectorImageModel();
 
   /**
+   * TEMPORARY!
    */
+  // TODO: Remove getter onto internal type when interface is designed.
   inline
-    OutputImageType *
+    DefaultImageType*
     GetOutput( int index )
   {
     return m_ImageFileReader->GetOutput( index );
   }
+
+  /**
+   * TEMPORARY!
+   */
+  // TODO: Remove getter onto internal type when interface is designed.
   inline
-    const OutputImageType *
+    const DefaultImageType*
     GetOutput( int index ) const
   {
     const_cast< const VectorImageModel* >( this )->GetOutput( index );
@@ -103,7 +99,6 @@ public:
   /**
    */
   void loadFile( const QString& filename );
-
 
   /** Rasterize the buffered region in a buffer */
   unsigned char * RasterizeRegion(const ImageRegionType& region);
@@ -126,6 +121,35 @@ protected:
 //
 // Private types.
 private:
+  /**
+   * In-memory storage type of source image (from file).
+   */
+  typedef DefaultImageType SourceImageType;
+  /**
+   * Display type of source image (to OpenGL).
+   */
+  typedef RGBAImageType DisplayImageType;
+
+  //typedef DefaultImageFileReaderType::OutputImageType   OutputImageType;  
+
+  /**
+   * Extract filter.
+   */
+  typedef
+    itk::ExtractImageFilter< SourceImageType, SourceImageType >
+    ExtractFilterType;
+
+  // typedef ExtractFilterType::Pointer ExtractFilterPointerType;
+
+  /**
+   * Rendering filter.
+   */
+  // 
+  typedef
+    otb::RenderingImageFilter< SourceImageType, DisplayImageType >
+    RenderingFilterType;
+
+  // typedef RenderingFilterType::OutputImageType RenderedImageType;
 
 //
 // Private methods.

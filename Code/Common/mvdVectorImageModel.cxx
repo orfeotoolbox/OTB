@@ -96,7 +96,7 @@ VectorImageModel
   unsigned int currentIndex = 0;
 
   // TODO : add some checking
-  const OutputImageType * image =  this->GetOutput(currentIndex);
+  const DefaultImageType* image =  this->GetOutput(currentIndex);
 
   // some checking
   if (!image->GetBufferedRegion().IsInside(region))
@@ -123,7 +123,8 @@ VectorImageModel
   m_RasterizedBuffer = new unsigned char[3 * region.GetNumberOfPixels()];
 
   // Declare the iterator
-  itk::ImageRegionConstIteratorWithIndex<RenderedImageType> it(m_RenderingFilter->GetOutput(), region);
+  itk::ImageRegionConstIteratorWithIndex< DisplayImageType >
+    it(m_RenderingFilter->GetOutput(), region);
 
   // Go to begin
   it.GoToBegin();
