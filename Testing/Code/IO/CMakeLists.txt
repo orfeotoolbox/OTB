@@ -3709,37 +3709,6 @@ ADD_TEST(raTuWavelengthSpectralBandsNew ${IO_TESTS23}
 
 ENDFOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
 
-ADD_TEST(ioTvImageFileReaderExtendedFileName_GEOM ${IO_TESTS1}
---compare-ascii ${NOTOL}
-         ${BASELINE}/ioImageFileReaderWithExternalGEOMFile.txt
-         ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
-	otbImageFileReaderWithExtendedFilename
-        ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
-        ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
-        ${TEMP}/ioImageFileReaderWithExternalGEOMFile_pr.txt
-        
-        )
-
-ADD_TEST(ioTvImageFileReaderExtendedFileName_SkipPR ${IO_TESTS1}
---compare-ascii ${NOTOL}
-         ${BASELINE}/ioImageFileReaderExtendedFileName_SkipPR.txt
-         ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.txt
-	otbImageFileReaderWithExtendedFilename
-        ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipcarto=true
-        ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR_kwl.txt
-        ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.txt
-        )
-
-ADD_TEST(ioTvImageFileReaderExtendedFileName_mix1 ${IO_TESTS1}
---compare-ascii ${NOTOL}
-         ${BASELINE}/ioImageFileReaderExtendedFileName_mix1pr.txt
-         ${TEMP}/ioImageFileReaderExtendedFileName_mix1pr.txt
-	otbImageFileReaderWithExtendedFilename
-        ${INPUTDATA}/bretagne.j2k?&skipcarto=true&resol=2
-        ${TEMP}/ioImageFileReaderExtendedFileName_mix1kwl.txt
-        ${TEMP}/ioImageFileReaderExtendedFileName_mix1pr.txt
-        )
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests24 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3778,6 +3747,47 @@ ADD_TEST(ioTvExtendedFilenameToWriterOptions_FullOptions ${IO_TESTS24}
         /home/data/filename.tif?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024
         ${TEMP}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
         )
+        
+ADD_TEST(ioTvImageFileReaderExtendedFileName_GEOM ${IO_TESTS24}
+--compare-ascii ${NOTOL}
+         ${BASELINE}/ioImageFileReaderWithExternalGEOMFile.txt
+         ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
+	otbImageFileReaderWithExtendedFilename
+        ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
+        ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
+        ${TEMP}/ioImageFileReaderWithExternalGEOMFile_pr.txt        
+        )
+
+ADD_TEST(ioTvImageFileReaderExtendedFileName_SkipPR ${IO_TESTS24}
+--compare-ascii ${NOTOL}
+         ${BASELINE}/ioImageFileReaderExtendedFileName_SkipPR.txt
+         ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.txt
+	otbImageFileReaderWithExtendedFilename
+        ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipcarto=true
+        ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR_kwl.txt
+        ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.txt
+        )
+
+ADD_TEST(ioTvImageFileReaderExtendedFileName_mix1 ${IO_TESTS24}
+--compare-ascii ${NOTOL}
+         ${BASELINE}/ioImageFileReaderExtendedFileName_mix1pr.txt
+         ${TEMP}/ioImageFileReaderExtendedFileName_mix1pr.txt
+	otbImageFileReaderWithExtendedFilename
+        ${INPUTDATA}/bretagne.j2k?&skipcarto=true&resol=2
+        ${TEMP}/ioImageFileReaderExtendedFileName_mix1kwl.txt
+        ${TEMP}/ioImageFileReaderExtendedFileName_mix1pr.txt
+        )
+
+ADD_TEST(ioTvImageFileWriterExtendedFileName_GEOM ${IO_TESTS24}
+--ignore-order --compare-ascii ${NOTOL}
+         ${INPUTDATA}/ToulouseExtract_WithGeom.geom         
+         ${TEMP}/ioImageFileWriterExtendedFileName_GEOM.geom
+--ignore-lines-with 2 ce90_absolute ce90_relative
+	otbImageFileWriterWithExtendedFilename
+        ${INPUTDATA}/ToulouseExtract_WithGeom.tif
+        ${TEMP}/ioImageFileWriterExtendedFileName_GEOM.tif?&writegeom=ON
+        )
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
@@ -4031,6 +4041,7 @@ SET(BasicIO_SRCS24
 otbIOTests24.cxx
 otbExtendedFilenameToReaderOptionsTest.cxx
 otbExtendedFilenameToWriterOptionsTest.cxx
+otbExtendedFilenameTest.cxx
 )
 
 IF(OTB_USE_EXTERNAL_OSSIM)
