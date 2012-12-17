@@ -57,7 +57,7 @@ GLImageWidget
   m_ScreenToImageTransform(AffineTransformType::New()) */
 {
   m_ImageViewManipulator = new ImageViewManipulator(parent);
-  m_ImageModelRenderer   = new ImageModelRendererType(parent);
+  m_ImageModelRenderer   = new ImageModelRenderer(parent);
 }
 
 /*******************************************************************************/
