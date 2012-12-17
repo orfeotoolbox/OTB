@@ -49,7 +49,6 @@ GLImageWidget::GLImageWidget(QWidget *parent) :
 
 GLImageWidget::~GLImageWidget()
 {
-  //this->ClearBuffer();
 }
 
 /*
@@ -157,6 +156,11 @@ void GLImageWidget::mouseMoveEvent(  QMouseEvent * event)
 void GLImageWidget::resizeEvent( QResizeEvent  * event)
 {
   m_ImageViewManipulator->resizeEvent(event);
+}
+
+void GLImageWidget::UpdateLargestPossibleRegion(const ImageRegionType& largestRegion)
+{
+  m_ImageViewManipulator->SetImageLargestRegion(largestRegion);
 }
 
 }

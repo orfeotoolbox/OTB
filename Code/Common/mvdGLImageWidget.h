@@ -97,6 +97,9 @@ public:
     return 1.0;
   }
 
+public slots:
+  void UpdateLargestPossibleRegion(const ImageRegionType& largestRegion);
+
 protected:
 
   void initializeGL();
