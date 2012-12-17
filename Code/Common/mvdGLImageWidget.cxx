@@ -45,6 +45,7 @@ GLImageWidget::GLImageWidget(QWidget *parent) :
   m_ScreenToImageTransform(AffineTransformType::New()) */
 {
   m_ImageViewManipulator = new ImageViewEventHandlerType(parent);
+  m_ImageModelRenderer   = new ImageModelRendererType(parent);
 }
 
 GLImageWidget::~GLImageWidget()
