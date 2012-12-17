@@ -184,6 +184,9 @@ GLImageWidget
 ::mouseMoveEvent(  QMouseEvent * event)
 {
   m_ImageViewManipulator->mouseMoveEvent(event);
+
+  // repaint the buffer
+  this->update();
 }
 
 /*******************************************************************************/
