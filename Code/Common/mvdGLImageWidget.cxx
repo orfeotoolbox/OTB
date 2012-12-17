@@ -27,8 +27,11 @@
 // System includes (sorted by alphabetic order)
 
 //
-// OTB includes (sorted by alphabetic order)
+// ITK includes (sorted by alphabetic order)
 #include "itkImageRegionConstIteratorWithIndex.h"
+
+//
+// OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -36,21 +39,33 @@
 
 namespace mvd
 {
+/*
+  TRANSLATOR mvd::GLImageWidget
 
-GLImageWidget::GLImageWidget(QWidget *parent) :
+  Necessary for lupdate to be aware of C++ namespaces.
+
+  Context comment for translator.
+*/
+
+/*******************************************************************************/
+GLImageWidget
+::GLImageWidget(QWidget *parent) :
   QGLWidget(parent),
   m_ImageViewManipulator( NULL ),
   m_ImageModelRenderer( NULL )
 /*,  m_ImageToScreenTransform(AffineTransformType::New()),
   m_ScreenToImageTransform(AffineTransformType::New()) */
 {
-  m_ImageViewManipulator = new ImageViewEventHandlerType(parent);
+  m_ImageViewManipulator = new ImageViewManipulator(parent);
 }
 
-GLImageWidget::~GLImageWidget()
+/*******************************************************************************/
+GLImageWidget
+::~GLImageWidget()
 {
 }
 
+/*******************************************************************************/
 /*
 void GLImageWidget::UpdateTransforms(int w, int h)
 {
@@ -101,25 +116,35 @@ void GLImageWidget::UpdateTransforms(int w, int h)
 }
 */
 
-void GLImageWidget::initializeGL()
- {
-   glClearColor(0.0, 0.0, 0.0, 0.0);
-   glShadeModel(GL_FLAT);
- }
+/*******************************************************************************/
+void
+GLImageWidget
+::initializeGL()
+{
+  glClearColor(0.0, 0.0, 0.0, 0.0);
+  glShadeModel(GL_FLAT);
+}
 
- void GLImageWidget::resizeGL(int w, int h)
- {
-   glViewport(0, 0, (GLint)w, (GLint)h);
+/*******************************************************************************/
+void
+GLImageWidget
+::resizeGL(int width, int height)
+{
+  // TODO: Replace (GLint) casts with safer casts or no cast (if there is no compile-time warning).
+  glViewport(0, 0, (GLint)width, (GLint)height);
 
-   glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 
-   glMatrixMode(GL_PROJECTION);
-   glLoadIdentity();
-   glOrtho(0, (GLint)w, 0, (GLint)h, -1, 1);
- }
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(0, (GLint)width, 0, (GLint)height, -1, 1);
+}
 
-void GLImageWidget::paintGL()
+/*******************************************************************************/
+void
+GLImageWidget
+::paintGL()
 {
   // Clear back-buffer(s) before rendering sub-components.
   glClear( GL_COLOR_BUFFER_BIT );
@@ -142,18 +167,27 @@ void GLImageWidget::paintGL()
     }
 }
 
+/*******************************************************************************/
 // Delegate the event to the ImageViewManipulator
-void GLImageWidget::mousePressEvent(  QMouseEvent * event)
+void
+GLImageWidget
+::mousePressEvent(  QMouseEvent * event)
 {
   m_ImageViewManipulator->mousePressEvent(event);
 }
 
-void GLImageWidget::mouseMoveEvent(  QMouseEvent * event)
+/*******************************************************************************/
+void
+GLImageWidget
+::mouseMoveEvent(  QMouseEvent * event)
 {
   m_ImageViewManipulator->mouseMoveEvent(event);
 }
 
-void GLImageWidget::resizeEvent( QResizeEvent  * event)
+/*******************************************************************************/
+void
+GLImageWidget
+::resizeEvent( QResizeEvent  * event)
 {
   m_ImageViewManipulator->resizeEvent(event);
 }
@@ -162,5 +196,11 @@ void GLImageWidget::onLargestPossibleRegionChanged(const ImageRegionType& larges
 {
   m_ImageViewManipulator->SetImageLargestRegion(largestRegion);
 }
+
+/*******************************************************************************/
+/* SLOTS                                                                       */
+/*******************************************************************************/
+
+/*******************************************************************************/
 
 }

@@ -64,34 +64,47 @@ typedef AffineTransformType::InputPointType  PointType;
 typedef AffineTransformType::InputVectorType VectorType;
 typedef itk::FixedArray<double, 4>           ColorType;
 
+//
+// External classes pre-declaration.
+namespace
+{
+}
+
 namespace mvd
 {
+//
+// Internal classes pre-declaration.
 
 /** \class GLImageWidget
  *
  */
-class Monteverdi2_EXPORT GLImageWidget : public QGLWidget
+class Monteverdi2_EXPORT GLImageWidget :
+    public QGLWidget
 {
   Q_OBJECT;
 
+//
+// Public methods.
 public:
   
-  typedef ImageViewManipulator        ImageViewEventHandlerType;
-  typedef ImageModelRenderer          ImageModelRendererType;
-
+  /** Constructor */
   GLImageWidget(QWidget *parent = 0);
 
+  /** Destructor */
   virtual ~GLImageWidget();
 
-public:
-
-  /** Set/Get the Isotropic zoom */
-  inline void SetIsotropicZoom(double value)
+  /** Set Isotropic-zoom level. */
+  inline
+    void
+    SetIsotropicZoom(double value)
   {
     //TODO: Implement setter.
   }
 
-  double GetIsotropicZoom() const
+  /** Get Isotropic-zoom level. */
+  inline
+    double
+    GetIsotropicZoom() const
   {
     // TODO: Implement getter.
     return 1.0;
@@ -100,10 +113,15 @@ public:
 public slots:
   void onLargestPossibleRegionChanged(const ImageRegionType& largestRegion);
 
-protected:
+//
+// SIGNALS.
+signals:
 
+//
+// Protected methods.
+protected:
   void initializeGL();
-  void resizeGL(int w, int h);
+  void resizeGL(int widgth, int height);
   void paintGL();
   void mouseMoveEvent ( QMouseEvent * event );
   void mousePressEvent ( QMouseEvent * event );
@@ -112,17 +130,26 @@ protected:
   /** Update the image to screen transform */
   //void UpdateTransforms(int w, int h);
 
+//
+// Protected attributes.
+protected:
+
+//
+// Private methods.
 private:
 
+//
+// Private attributes.
+private:
   /** Space to screen transform */
   //AffineTransformType::Pointer m_ImageToScreenTransform;
   //AffineTransformType::Pointer m_ScreenToImageTransform;
 
   /** Event handler pointer */
-  ImageViewEventHandlerType* m_ImageViewManipulator;
+  ImageViewManipulator* m_ImageViewManipulator;
 
   /** Model Renderer pointer */
-  ImageModelRendererType   * m_ImageModelRenderer;
+  ImageModelRenderer* m_ImageModelRenderer;
 };
 
 }

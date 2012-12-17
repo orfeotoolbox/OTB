@@ -73,9 +73,6 @@ public:
   /** Destructor */
   virtual ~I18nApplication();
 
-  /** */
-  virtual bool notify( QObject* receiver, QEvent* event );
-
 //
 // SIGNALS.
 signals:

@@ -90,15 +90,6 @@ MainWindow
   addDockWidget( Qt::LeftDockWidgetArea, dock_widget );
   */
 
-/*
-** WARNING: Do not mix QObject allocation system with the ITK one!
-** (reason: QObject instances are linked in a parent-children tree;
-** deallocaingt an object (especially widgets) deallocates its
-** children).
-*/
-  // Instanciate a QImageView
-  //m_ImageView = ImageViewType::New();
-
   // Set the GLImageWidget as the centralWidget in MainWindow.
   setCentralWidget( m_ImageWidget );
 
