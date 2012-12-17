@@ -75,13 +75,13 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
   // if buffer not null do the rendering
   if (buffer != NULL)
     {
-    unsigned int nb_displayed_cols = context.m_ImageRegion.GetSize()[ 0 ];
-    unsigned int nb_displayed_rows = context.m_ImageRegion.GetSize()[ 1 ];
-    unsigned int first_displayed_col = context.m_ImageRegion.GetIndex()[ 0 ];
-    unsigned int first_displayed_row = context.m_ImageRegion.GetIndex()[ 1 ];
+    unsigned int nb_displayed_cols = region.GetSize()[ 0 ];
+    unsigned int nb_displayed_rows = region.GetSize()[ 1 ];
+    unsigned int first_displayed_col = region.GetIndex()[ 0 ];
+    unsigned int first_displayed_row = region.GetIndex()[ 1 ];
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, context.m_ImageRegion.GetSize()[0]);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, region.GetSize()[0]);
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, first_displayed_col);
     glPixelStorei(GL_UNPACK_SKIP_ROWS,first_displayed_row);
 
@@ -94,6 +94,7 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
                  GL_RGB,
                  GL_UNSIGNED_BYTE,
                  buffer);
+
     glFlush();
     }
 }
