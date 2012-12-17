@@ -22,10 +22,10 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
-#include <QtGui>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -102,11 +102,15 @@ MainWindow
   // Set the GLImageWidget as the centralWidget in MainWindow.
   setCentralWidget( m_ImageWidget );
 
-// Connect Quit action of main menu to QApplication's quit() slot.
+  // Connect Quit action of main menu to QApplication's quit() slot.
   QObject::connect(
     m_UI->action_Quit, SIGNAL( activated() ),
     qApp, SLOT( quit() )
   );
+
+  // Connect the setLargestPossibleregion
+  QObject::connect(this, SIGNAL(setLargestPossibleRegion(const ImageRegionType&)), m_ImageWidget, 
+                   SLOT( UpdateLargestPossibleRegion(const ImageRegionType&)) );
 }
 
 /*****************************************************************************/
@@ -132,9 +136,13 @@ MainWindow
     "mvd::VectorImageModel('" + filename + "')"
   );
 
+  // load file
   try
     {
     m_VectorImageModel->loadFile( filename );
+
+    // set the largest possible region of the image
+    emit setLargestPossibleRegion(m_VectorImageModel->GetOutput(0)->GetLargestPossibleRegion());
 
     dynamic_cast< Application* >( qApp )->SetModel( m_VectorImageModel );
     }
@@ -146,45 +154,6 @@ MainWindow
     QMessageBox::warning( this, tr("Exception!"), exc.what() );
     return;
     }
-
-  // // typedef support for layers   
-  // typedef otb::ImageLayer<VectorImageType, ImageType>    LayerType;
-  // typedef LayerType::Pointer                        LayerPointerType;
-  // typedef otb::ImageLayerGenerator<LayerType>            LayerGeneratorType;
-  // typedef LayerGeneratorType::RenderingFunctionType RenderingFunctionType;
-
-  // // Layer Generator
-  // LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
-
-  // layerGenerator->SetImage(
-  //   dynamic_cast< VectorImageModel* >
-  //   ( dynamic_cast< Application* >
-  //     ( qApp )->GetModel() )->GetOutput( 0 )
-  // );
-
-  // layerGenerator->GenerateQuicklookOff();
-  // layerGenerator->GenerateLayer();
-  
-  // // Layer Rendering Model
-  // RenderingModelType::Pointer imageModel = RenderingModelType::New();
-
-  // // TODO : temporary cause we need an extractRegion to setup the
-  // // ExtractROI filter.
-  // RegionType  region;
-  // region = imageModel->GetExtractRegion();
-  // RegionType::SizeType size;
-  // size[0] = static_cast<unsigned int>(this->width());
-  // size[1] = static_cast<unsigned int>(this->height());
-  // region.SetSize(size);  
-  // imageModel->SetExtractRegion(region);
-  
-  // // Add the layer to the model
-  // imageModel->AddLayer(layerGenerator->GetLayer());
-  // imageModel->Update();
-
-  // // Update the image view
-  // //m_ImageView->SetModel(imageModel);
-  // //m_ImageView->Update();
 }
 
 /*****************************************************************************/

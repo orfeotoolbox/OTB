@@ -42,6 +42,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdGLImageWidget.h"
+#include "mvdTypes.h"
 
 //
 // External class pre-declaration.
@@ -82,6 +83,7 @@ public:
 //
 // SIGNALS.
 signals:
+  void setLargestPossibleRegion(const ImageRegionType& largestRegion);
 
 //
 // Protected methods.
