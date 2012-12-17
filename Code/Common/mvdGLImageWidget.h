@@ -86,14 +86,15 @@ public:
 public:
 
   /** Set/Get the Isotropic zoom */
-  void SetIsotropicZoom(double value)
+  inline void SetIsotropicZoom(double value)
   {
-    m_IsotropicZoom = value;
+    //TODO: Implement setter.
   }
 
   double GetIsotropicZoom() const
   {
-    return m_IsotropicZoom;
+    // TODO: Implement getter.
+    return 1.0;
   }
 
 protected:
@@ -110,23 +111,6 @@ protected:
 
 private:
 
-  /** OpenGl zoom factor */
-  double m_IsotropicZoom;
-
-  /** OpenGl buffer      */
-  unsigned char * m_OpenGlBuffer;
-
-  /** OpenGl buffered region */
-  RegionType m_OpenGlBufferedRegion;
-
-  /** The display extent */
-  RegionType m_Extent;
-
-  GLint m_W, m_H;
-  
-  int m_MousePressEventX;
-  int m_MousePressEventY;
-  
   /** Space to screen transform */
   //AffineTransformType::Pointer m_ImageToScreenTransform;
   //AffineTransformType::Pointer m_ScreenToImageTransform;

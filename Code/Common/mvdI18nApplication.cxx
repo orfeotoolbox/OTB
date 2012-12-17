@@ -58,6 +58,25 @@ I18nApplication
 ::~I18nApplication()
 {
 }
+/*******************************************************************************/
+bool
+I18nApplication::notify( QObject* receiver, QEvent* event)
+{
+  return QApplication::notify( receiver, event );
+
+  /*
+  try
+    {
+    return QApplication::notify( receiver, event );
+    }
+  catch( std::exception& exc)
+    {
+    qCritical() << exc.what();
+    }
+
+  return false;
+  */
+}
 
 /*******************************************************************************/
 void

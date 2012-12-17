@@ -38,11 +38,7 @@ namespace mvd
 {
 
 GLImageWidget::GLImageWidget(QWidget *parent)
-: QGLWidget(parent),
-  m_IsotropicZoom(1.0),
-  m_OpenGlBuffer(NULL),
-  m_OpenGlBufferedRegion(),
-  m_Extent()
+: QGLWidget(parent)
 /*,  m_ImageToScreenTransform(AffineTransformType::New()),
   m_ScreenToImageTransform(AffineTransformType::New()) */
 {
@@ -112,30 +108,15 @@ void GLImageWidget::initializeGL()
 
  void GLImageWidget::resizeGL(int w, int h)
  {
-   RegionType::SizeType size;
-   size [0] = static_cast<unsigned int>(m_IsotropicZoom * static_cast<double>(m_OpenGlBufferedRegion.GetSize()[0]));
-   size [1] = static_cast<unsigned int>(m_IsotropicZoom * static_cast<double>(m_OpenGlBufferedRegion.GetSize()[1]));
+   glViewport(0, 0, (GLint)w, (GLint)h);
 
-   RegionType::IndexType index;
-   index[0] = (w - static_cast<int>(size[0])) / 2;
-   index[1] = (h - static_cast<int>(size[1])) / 2;
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
 
-   m_Extent.SetIndex(index);
-   m_Extent.SetSize(size);
-
-   m_W = (GLint)w;
-   m_H =  (GLint)h;
-
-  glViewport(0, 0, m_W, m_H);
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(0, m_W, 0, m_H, -1, 1);
-
-}
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   glOrtho(0, (GLint)w, 0, (GLint)h, -1, 1);
+ }
 
 void GLImageWidget::paintGL()
 {

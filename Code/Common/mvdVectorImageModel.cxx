@@ -47,7 +47,8 @@ namespace mvd
 /*******************************************************************************/
 VectorImageModel
 ::VectorImageModel( QObject* parent ) :
-  AbstractImageModel( parent )
+  AbstractImageModel( parent ),
+  m_RasterizedBuffer( NULL )
 {
 }
 

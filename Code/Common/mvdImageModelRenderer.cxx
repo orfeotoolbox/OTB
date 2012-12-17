@@ -25,7 +25,6 @@
 //
 // System includes (sorted by alphabetic order)
 // necessary for the opengl variables and methods
-#include <QtOpenGL>
 
 //
 // ITK includes (sorted by alphabetic order)
