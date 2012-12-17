@@ -1111,13 +1111,7 @@ void GDALImageIO::Write(const void* buffer)
       itkExceptionMacro(<< "Unable to instantiate driver " << gdalDriverShortName << " to write " << m_FileName);
       }
 
-    // If not initialized in m_CreationOptions, force JPEG quality to 95
     GDALCreationOptionsType creationOptions = m_CreationOptions;
-    if( gdalDriverShortName == "JPEG" && !CreationOptionContains( "QUALITY=" ) )
-      {
-      creationOptions.push_back("QUALITY=95");
-      }
-
     GDALDataset* hOutputDS = driver->CreateCopy( realFileName.c_str(), m_Dataset->GetDataSet(), FALSE,
                                                  otb::ogr::StringListConverter(creationOptions).to_ogr(),
                                                  NULL, NULL );
