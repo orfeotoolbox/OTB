@@ -85,8 +85,6 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, first_displayed_col);
     glPixelStorei(GL_UNPACK_SKIP_ROWS,first_displayed_row);
 
-    glClear(GL_COLOR_BUFFER_BIT);
-
     // TODO : need an accessor to isotropic zoom
     glPixelZoom(1.0/*m_IsotropicZoom,m_IsotropicZoom*/,1.0);
 

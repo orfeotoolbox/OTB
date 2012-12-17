@@ -129,7 +129,7 @@ MainWindow
   m_VectorImageModel = new VectorImageModel();
 
   m_VectorImageModel->setObjectName(
-    "mvd::VectorImageModel('" + filename + "'"
+    "mvd::VectorImageModel('" + filename + "')"
   );
 
   try

@@ -37,8 +37,10 @@
 namespace mvd
 {
 
-GLImageWidget::GLImageWidget(QWidget *parent)
-: QGLWidget(parent)
+GLImageWidget::GLImageWidget(QWidget *parent) :
+  QGLWidget(parent),
+  m_ImageViewManipulator( NULL ),
+  m_ImageModelRenderer( NULL )
 /*,  m_ImageToScreenTransform(AffineTransformType::New()),
   m_ScreenToImageTransform(AffineTransformType::New()) */
 {
@@ -120,6 +122,9 @@ void GLImageWidget::initializeGL()
 
 void GLImageWidget::paintGL()
 {
+  // Clear back-buffer(s) before rendering sub-components.
+  glClear( GL_COLOR_BUFFER_BIT );
+
   // Get the region to draw from the ImageViewManipulator navigation
   // context 
   const RegionType & region = m_ImageViewManipulator->GetNavigationContext().bufferedRegion;
@@ -134,7 +139,7 @@ void GLImageWidget::paintGL()
     ImageModelRenderer::RenderingContext context(aiModel, region);
     
     // use the model renderer to paint the requested region of the image
-    m_ImageModelRender->paintGL( context );
+    m_ImageModelRenderer->paintGL( context );
     }
 }
 

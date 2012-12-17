@@ -119,7 +119,7 @@ private:
   ImageViewEventHandlerType* m_ImageViewManipulator;
 
   /** Model Renderer pointer */
-  ImageModelRendererType   * m_ImageModelRender;
+  ImageModelRendererType   * m_ImageModelRenderer;
 };
 
 }
