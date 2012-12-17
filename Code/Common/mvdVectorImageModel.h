@@ -166,6 +166,9 @@ private:
   ExtractFilterType::Pointer          m_ExtractFilter;
   RenderingFilterType::Pointer        m_RenderingFilter;
 
+  // channel list type
+  std::vector<unsigned int >          m_Channels;
+
 //
 // SLOTS.
 private slots:

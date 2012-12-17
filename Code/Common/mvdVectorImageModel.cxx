@@ -72,8 +72,22 @@ VectorImageModel
   imageFileReader->UpdateOutputInformation();
 
   m_ImageFileReader = imageFileReader;
-}
 
+  // setup the channel list for the rendering needs
+  // TODO : See if if needs to be moved somewhere else
+  if (m_ImageFileReader->GetOutput()->GetNumberOfComponentsPerPixel()  < 3)
+    {
+    m_Channels.resize(1);
+    m_Channels[0]  = 0;
+    }
+  else
+    {
+    m_Channels.resize(3);
+    m_Channels[0]  = 0;
+    m_Channels[1]  = 1;
+    m_Channels[2]  = 2;
+    }
+}
 
 void
 VectorImageModel
@@ -108,11 +122,12 @@ VectorImageModel
   m_ExtractFilter = ExtractFilterType::New();
   m_ExtractFilter->SetInput(image);
   m_ExtractFilter->SetExtractionRegion(region);
-
+  
   // Use the rendering filter to get 
   m_RenderingFilter = RenderingFilterType::New();
   m_RenderingFilter->SetInput(m_ExtractFilter->GetOutput());
   m_RenderingFilter->GetRenderingFunction()->SetAutoMinMax(false);
+  m_RenderingFilter->GetRenderingFunction()->SetChannelList(m_Channels);
   m_RenderingFilter->GetOutput()->SetRequestedRegion(region);
   m_RenderingFilter->Update();
 
@@ -132,7 +147,7 @@ VectorImageModel
     {
     // Fill the buffer
     unsigned int index = 0;
-    index = ComputeXAxisFlippedBufferIndex(it.GetIndex(), region);
+    index = ComputeBufferIndex(it.GetIndex(), region);
 
     // Fill the buffer
     m_RasterizedBuffer[index]  = it.Get()[0];
