@@ -1252,8 +1252,9 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   if (m_CanStreamWrite)
     {
-    // Force tile mode for TIFF format if no creation option are given
     GDALCreationOptionsType creationOptions = m_CreationOptions;
+/*
+    // Force tile mode for TIFF format if no creation option are given
     if( driverShortName == "GTiff"  )
       {
       if ( CreationOptionContains( "TILED=YES" ) )
@@ -1300,7 +1301,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
         creationOptions.push_back( std::string("BLOCKYSIZE=") + tileDimensionStr.str() );
         }
       }
-
+*/
     m_Dataset = GDALDriverManagerWrapper::GetInstance().Create(
                      driverShortName,
                      GetGdalWriteImageFileName(driverShortName, m_FileName),
