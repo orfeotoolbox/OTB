@@ -150,7 +150,7 @@ VectorImageModel
     {
     // Fill the buffer
     unsigned int index = 0;
-    index = ComputeBufferIndex(it.GetIndex(), region);
+    index = ComputeXAxisFlippedBufferIndex(it.GetIndex(), region);
 
     // Fill the buffer
     m_RasterizedBuffer[index]  = it.Get()[0];
