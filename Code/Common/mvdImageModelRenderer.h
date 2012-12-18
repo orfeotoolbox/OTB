@@ -90,10 +90,10 @@ public:
 //
 // Public methods.
 public:
-
+private:
   /** Constructor */
   ImageModelRenderer( QObject* parent = NULL );
-
+public:
   /** Destructor */
   virtual ~ImageModelRenderer();
 

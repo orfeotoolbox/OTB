@@ -95,12 +95,9 @@ void
 VectorImageModel
 ::ClearBuffer()
 {
-  // Delete previous buffer if needed
-  if (m_RasterizedBuffer != NULL)
-    {
-    delete[] m_RasterizedBuffer;
-    m_RasterizedBuffer = NULL;
-    }
+  // Delete previous buffer if needed 
+  delete[] m_RasterizedBuffer;
+  m_RasterizedBuffer = NULL;
 }
 
 unsigned char *

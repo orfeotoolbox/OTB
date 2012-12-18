@@ -43,8 +43,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractImageModel.h"
-#include "mvdImageModelRenderer.h"
-#include "mvdImageViewManipulator.h"
 #include "mvdTypes.h"
 
 //
@@ -57,6 +55,8 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class ImageModelRenderer;
+class ImageViewManipulator;
 
 /** \class GLImageWidget
  *

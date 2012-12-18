@@ -59,8 +59,7 @@ ImageModelRenderer
 {
 }
 
-/** Public methods */
-
+/*****************************************************************************/
 void ImageModelRenderer::paintGL( const RenderingContext& context )
 {
   // the VectorImageModel used for the rendering

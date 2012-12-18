@@ -41,6 +41,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdApplication.h"
+#include "mvdGLImageWidget.h"
 #include "mvdVectorImageModel.h"
 
 namespace mvd
@@ -60,7 +61,7 @@ MainWindow
   m_UI( new mvd::Ui::MainWindow() )
 {
   m_UI->setupUi( this );
-  m_ImageWidget =  new GLImageWidget(parent);
+
   Initialize();
 }
 
@@ -91,7 +92,7 @@ MainWindow
   */
 
   // Set the GLImageWidget as the centralWidget in MainWindow.
-  setCentralWidget( m_ImageWidget );
+  setCentralWidget( new GLImageWidget( this ) );
 
   // Connect Quit action of main menu to QApplication's quit() slot.
   QObject::connect(
@@ -100,8 +101,9 @@ MainWindow
   );
 
   // Connect the setLargestPossibleregion
-  QObject::connect(this, SIGNAL(largestPossibleRegionChanged(const ImageRegionType&)), m_ImageWidget, 
-                   SLOT( onLargestPossibleRegionChanged(const ImageRegionType&)) );
+  QObject::connect(
+    this, SIGNAL(largestPossibleRegionChanged(const ImageRegionType&)),
+    centralWidget(), SLOT( onLargestPossibleRegionChanged(const ImageRegionType&)) );
 }
 
 /*****************************************************************************/

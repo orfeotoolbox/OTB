@@ -32,6 +32,8 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "mvdImageModelRenderer.h"
+#include "mvdImageViewManipulator.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -56,8 +58,8 @@ GLImageWidget
 /*,  m_ImageToScreenTransform(AffineTransformType::New()),
   m_ScreenToImageTransform(AffineTransformType::New()) */
 {
-  m_ImageViewManipulator = new ImageViewManipulator(parent);
-  m_ImageModelRenderer   = new ImageModelRenderer(parent);
+  m_ImageViewManipulator = new ImageViewManipulator( this );
+//  m_ImageModelRenderer   = new ImageModelRenderer( this );
 }
 
 /*******************************************************************************/

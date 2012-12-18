@@ -41,7 +41,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdGLImageWidget.h"
 #include "mvdTypes.h"
 
 //
@@ -54,6 +53,8 @@ namespace mvd
 {
 //
 // Internal class pre-declaration.
+class VectorImageModel;
+
 namespace Ui
 {
 class MainWindow;
@@ -110,8 +111,7 @@ private:
   /**
    */
   //ImageViewType::Pointer m_ImageView;
-  GLImageWidget *          m_ImageWidget;
-  VectorImageModel*        m_VectorImageModel;
+  VectorImageModel* m_VectorImageModel;
 //
 // Private attributes.
 private slots:
