@@ -588,6 +588,9 @@ ADD_TEST(ioTvGDALImageIO_Tiff_JPEG_20 ${IO_TESTS2}
          "COMPRESS=JPEG"
          "JPEG_QUALITY=20"
          "PHOTOMETRIC=YCBCR"
+         "TILED=YES"
+         "BLOCKXSIZE=256"
+         "BLOCKYSIZE=256"
          )
 
 ADD_TEST(ioTvGDALImageIO_Tiff_JPEG_99 ${IO_TESTS2}
@@ -599,6 +602,9 @@ ADD_TEST(ioTvGDALImageIO_Tiff_JPEG_99 ${IO_TESTS2}
          "COMPRESS=JPEG"
          "JPEG_QUALITY=99"
          "PHOTOMETRIC=YCBCR"
+         "TILED=YES"
+         "BLOCKXSIZE=256"
+         "BLOCKYSIZE=256"
          )
 
 ADD_TEST(ioTvGDALImageIO_JPEG_20 ${IO_TESTS2}
