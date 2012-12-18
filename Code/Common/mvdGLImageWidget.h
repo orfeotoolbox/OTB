@@ -33,8 +33,6 @@
 
 //
 // ITK includes (sorted by alphabetic order)
-//#include "itkRGBAPixel.h"
-//#include "itkAffineTransform.h"
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -42,7 +40,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractImageModel.h"
 #include "mvdTypes.h"
 
 //

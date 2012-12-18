@@ -34,13 +34,12 @@
 
 //
 // ITK includes (sorted by alphabetic order)
-#
+
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractModel.h"
 #include "mvdI18nApplication.h"
 
 //
@@ -53,6 +52,8 @@ namespace mvd
 {
 //
 // Class declaration.
+class AbstractModel;
+
 /** \class Application
  *
  */
@@ -73,13 +74,9 @@ public:
 
   /**
    */
-  inline void SetModel( AbstractModel* model )
-  {
-    delete m_Model;
-
-    m_Model = model;
-    m_Model->setParent( this );
-  }
+  // Method could be inline but it's better not new/delete in inline
+  // methods (heap and memory-alignment contexts).
+  void SetModel( AbstractModel* model );
 
  /**
   */

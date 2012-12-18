@@ -71,6 +71,17 @@ Application
 /*******************************************************************************/
 void
 Application
+::SetModel( AbstractModel* model )
+{
+  delete m_Model;
+
+  m_Model = model;
+  m_Model->setParent( this );
+}
+
+/*******************************************************************************/
+void
+Application
 ::InitializeCore()
 {
   //
