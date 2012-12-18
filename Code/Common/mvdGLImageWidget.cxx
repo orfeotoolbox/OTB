@@ -162,7 +162,7 @@ GLImageWidget
   // setup the rendering context
   if (aiModel)
     {
-    ImageModelRenderer::RenderingContext context(aiModel, region);
+    ImageModelRenderer::RenderingContext context(aiModel, region, this->width(), this->height());
     
     // use the model renderer to paint the requested region of the image
     m_ImageModelRenderer->paintGL( context );
