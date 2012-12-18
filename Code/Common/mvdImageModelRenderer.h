@@ -71,14 +71,20 @@ public:
   {
      inline
      RenderingContext( const AbstractImageModel* model =NULL,
-                       const ImageRegionType& region =ImageRegionType() ) :
+                       const ImageRegionType& region =ImageRegionType(), 
+                       unsigned int width = 0,
+                       unsigned int height = 0) :
        m_AbstractImageModel( model ),
-       m_ImageRegion( region )
+       m_ImageRegion( region ),
+       m_WidgetWidth(width),
+       m_WidgetHeight(height)
     {
     }
 
     const AbstractImageModel* m_AbstractImageModel;
     ImageRegionType m_ImageRegion;
+    unsigned int m_WidgetWidth;
+    unsigned int m_WidgetHeight;
   };
 
 //
