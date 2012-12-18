@@ -97,9 +97,6 @@ ImageViewManipulator
   // Update the navigation context
   ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
-  // print the region
-  //std::cout << "Region Before offset : "<<   currentRegion << std::endl;
-
   // Apply the offset to the (start) index of the stored region
   ImageRegionType::OffsetType offset;
   offset[0] = m_MouseContext.dx;
@@ -111,9 +108,6 @@ ImageViewManipulator
 
   // Constraint the region to the largestPossibleRegion
   this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
-
-  // print the region
-  //std::cout << "Region After offset : "<< m_NavigationContext.m_BufferedRegion   << std::endl;    
 }
 
 /******************************************************************************/
