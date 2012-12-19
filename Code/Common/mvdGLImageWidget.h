@@ -36,7 +36,6 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbImage.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)

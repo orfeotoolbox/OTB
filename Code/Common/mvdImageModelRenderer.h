@@ -41,7 +41,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdVectorImageModel.h"
 #include "mvdTypes.h"
 
 //

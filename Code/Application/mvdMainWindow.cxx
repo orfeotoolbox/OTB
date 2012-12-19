@@ -29,14 +29,9 @@
 
 //
 // ITK includes (sorted by alphabetic order)
-#include "itkRGBAPixel.h"
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbImageLayer.h"
-#include "otbImageLayerGenerator.h"
-#include "otbImage.h"
-#include "otbImageFileReader.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
