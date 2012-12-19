@@ -53,7 +53,6 @@ namespace mvd
 {
 //
 // Internal class pre-declaration.
-class VectorImageModel;
 
 namespace Ui
 {
@@ -108,10 +107,6 @@ private:
    */
   Ui::MainWindow* m_UI;
 
-  /**
-   */
-  //ImageViewType::Pointer m_ImageView;
-  VectorImageModel* m_VectorImageModel;
 //
 // Private attributes.
 private slots:

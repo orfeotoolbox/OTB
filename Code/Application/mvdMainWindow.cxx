@@ -123,27 +123,28 @@ MainWindow
     }
  
   // TODO: Replace with complex model (list of DatasetModel) when implemented.
-  m_VectorImageModel = new VectorImageModel();
+  VectorImageModel* model = new VectorImageModel();
 
-  m_VectorImageModel->setObjectName(
+  model->setObjectName(
     "mvd::VectorImageModel('" + filename + "')"
   );
 
   // load file
   try
     {
-    m_VectorImageModel->loadFile( filename );
+    model->loadFile( filename );
+
+    dynamic_cast< Application* >( qApp )->SetModel( model );
 
     // set the largest possible region of the image
     // TODO:  rename signal name when handling DataSets collections
-    emit largestPossibleRegionChanged(m_VectorImageModel->GetOutput(0)->GetLargestPossibleRegion());
-
-    dynamic_cast< Application* >( qApp )->SetModel( m_VectorImageModel );
+    // TODO: move signal into mvdApplication and link it to DockWidget and ImageView.
+    emit largestPossibleRegionChanged(model->GetOutput(0)->GetLargestPossibleRegion());
     }
   catch( std::exception& exc )
     {
-    delete m_VectorImageModel;
-    m_VectorImageModel = NULL;
+    delete model;
+    model = NULL;
 
     QMessageBox::warning( this, tr("Exception!"), exc.what() );
     return;

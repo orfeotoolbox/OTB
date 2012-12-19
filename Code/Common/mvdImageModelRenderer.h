@@ -97,7 +97,7 @@ public:
   virtual ~ImageModelRenderer();
 
   /** */
-  void paintGL( const RenderingContext& context );
+  virtual void paintGL( const RenderingContext& context );
 
 //
 // SIGNALS.
