@@ -16,11 +16,18 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdMyClass.h"
+#ifndef __mvdAboutDialog_h
+#define __mvdAboutDialog_h
+
+//
+// Configuration include.
+//// Included at first position before any other ones.
+#include "ConfigureMonteverdi2.h"
 
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -34,33 +41,68 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
+//
+// External classes pre-declaration.
+namespace
+{
+}
+
 namespace mvd
 {
-/*
-  TRANSLATOR mvd::MyClass
-
-  Necessary for lupdate to be aware of C++ namespaces.
-
-  Context comment for translator.
-*/
-
-/*******************************************************************************/
-MyClass
-::MyClass( QObject* parent ) :
-  QObject( parent )
+//
+// Internal classes pre-declaration.
+namespace Ui
 {
+class AboutDialog;
 }
 
-/*******************************************************************************/
-MyClass
-::~MyClass()
+/** \class AboutDialog
+ *
+ */
+class Monteverdi2_EXPORT AboutDialog :
+    public QDialog
 {
-}
+  Q_OBJECT;
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
+//
+// Public methods.
+public:
 
-/*******************************************************************************/
+  /** Constructor */
+  AboutDialog( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+
+  /** Destructor */
+  virtual ~AboutDialog();
+
+//
+// SIGNALS.
+signals:
+
+//
+// Protected methods.
+protected:
+
+//
+// Protected attributes.
+protected:
+
+//
+// Private methods.
+private:
+
+
+//
+// Private attributes.
+private:
+  /**
+   */
+  Ui::AboutDialog* m_UI;
+
+//
+// SLOTS.
+private slots:
+};
 
 } // end namespace 'mvd'
+
+#endif // __mvdAboutDialog_h

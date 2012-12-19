@@ -111,6 +111,7 @@ private:
 // Private attributes.
 private slots:
   void on_action_Open_activated();
+  void on_action_About_activated();
 };
 
 } // end namespace 'mvd'

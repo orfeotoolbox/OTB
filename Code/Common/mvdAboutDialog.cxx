@@ -16,7 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdMyClass.h"
+#include "mvdAboutDialog.h"
+#include "ui_mvdAboutDialog.h"
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -37,7 +38,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::MyClass
+  TRANSLATOR mvd::AboutDialog
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -45,15 +46,20 @@ namespace mvd
 */
 
 /*******************************************************************************/
-MyClass
-::MyClass( QObject* parent ) :
-  QObject( parent )
+AboutDialog
+::AboutDialog( QWidget* parent, Qt::WindowFlags flags ) :
+  QDialog( parent ),
+  m_UI( new mvd::Ui::AboutDialog() )
 {
+  m_UI->setupUi( this );
+
+  m_UI->m_ProjectLabel->setText( PROJECT_NAME );
+  m_UI->m_VersionLabel->setText( Monteverdi2_VERSION_STRING );
 }
 
 /*******************************************************************************/
-MyClass
-::~MyClass()
+AboutDialog
+::~AboutDialog()
 {
 }
 

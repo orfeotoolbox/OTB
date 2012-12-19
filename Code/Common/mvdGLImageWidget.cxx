@@ -165,8 +165,6 @@ GLImageWidget
   // setup the rendering context
   if (aiModel)
     {
-    // this->width() should be equal to width of ViewportImageRegion.
-    // this->height() should be equal to height of ViewportImageRegion.
     ImageModelRenderer::RenderingContext context(aiModel, region, this->width(), this->height());
 
     // use the model renderer to paint the requested region of the image

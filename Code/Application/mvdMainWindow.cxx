@@ -35,6 +35,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdAboutDialog.h"
 #include "mvdApplication.h"
 #include "mvdGLImageWidget.h"
 #include "mvdVectorImageModel.h"
@@ -144,6 +145,16 @@ MainWindow
     QMessageBox::warning( this, tr("Exception!"), exc.what() );
     return;
     }
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_About_activated()
+{
+  AboutDialog aboutDialog( this );
+
+  aboutDialog.exec();
 }
 
 /*****************************************************************************/
