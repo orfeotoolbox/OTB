@@ -452,10 +452,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
   InputImagePointer inputPtr = const_cast<TInputImage *>(this->GetInput());
   PixelType& threadMin  = m_ThreadMin [threadId];
   PixelType& threadMax  = m_ThreadMax [threadId];
-  RealPixelType& threadFirstOrder  = m_ThreadFirstOrderAccumulators [threadId];
-  MatrixType&    threadSecondOrder = m_ThreadSecondOrderAccumulators[threadId];
-  RealType& threadFirstOrderComponent  = m_ThreadFirstOrderComponentAccumulators [threadId];
-  RealType& threadSecondOrderComponent = m_ThreadSecondOrderComponentAccumulators[threadId];
+
 
   itk::ImageRegionConstIteratorWithIndex<TInputImage> it(inputPtr, outputRegionForThread);
 
@@ -480,6 +477,9 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 
     if (m_EnableFirstOrderStats)
       {
+      RealPixelType& threadFirstOrder  = m_ThreadFirstOrderAccumulators [threadId];
+      RealType& threadFirstOrderComponent  = m_ThreadFirstOrderComponentAccumulators [threadId];
+
       threadFirstOrder += vectorValue;
 
       for (unsigned int i = 0; i < vectorValue.GetSize(); ++i)
@@ -490,6 +490,9 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 
     if (m_EnableSecondOrderStats)
       {
+      MatrixType&    threadSecondOrder = m_ThreadSecondOrderAccumulators[threadId];
+      RealType& threadSecondOrderComponent = m_ThreadSecondOrderComponentAccumulators[threadId];
+
       for (unsigned int r = 0; r < threadSecondOrder.Rows(); ++r)
         {
         for (unsigned int c = 0; c < threadSecondOrder.Cols(); ++c)
