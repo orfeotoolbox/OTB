@@ -2118,24 +2118,6 @@ ADD_TEST(ioTvMultiResolutionReading3 ${IO_TESTS13}
       ${INPUTDATA}/bretagne.j2k?&resol=3
       ${TEMP}/ioTvMultiResolutionReading3.txt
       )
-### The following syntax is no longer supported ###
-# Tests to check if we can open JPEG2000 files using a otb::VectorImage
-# and filename:ResolutionFactor syntax.
-# no access to data only PrintSelf() method.
-#ADD_TEST(ioTvMultiResolutionReadingInName0 ${IO_TESTS13}
-#  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
-#                            ${TEMP}/ioTvMultiResolutionReadingInName0.txt
-#      otbVectorImageTest
-#      ${INPUTDATA}/bretagne.j2k:0
-#      ${TEMP}/ioTvMultiResolutionReadingInName0.txt
-#      )
-#ADD_TEST(ioTvMultiResolutionReadingInName3 ${IO_TESTS13}
-#  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
-#                            ${TEMP}/ioTvMultiResolutionReadingInName3.txt
-#      otbVectorImageTest
-#      ${INPUTDATA}/bretagne.j2k:3
-#      ${TEMP}/ioTvMultiResolutionReadingInName3.txt
-#      )
 
 # Test to check behavior of function JPEG2000reader->GetResolutionInfo()
 # which return info about resolution available in the JPEG2000 file.
@@ -3334,24 +3316,6 @@ ADD_TEST(ioTvMultiDatasetReading2 ${IO_TESTS22}
       ${TEMP}/ioTvMultiDatasetReading2.txt
       )
       
-### The following syntax is no longer supported ###
-# Tests to check if we can open hdf files using a otb::VectorImage and filename:NumSubDataset syntax.
-# no access to data only PrintSelf() method.
-#ADD_TEST(ioTvMultiDatasetReadingInName1 ${IO_TESTS22}
-#  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
-#                             ${TEMP}/ioTvMultiDatasetReadingInName1.txt
-#      otbVectorImageTest
-#      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:0
-#      ${TEMP}/ioTvMultiDatasetReadingInName1.txt
-#      )
-#ADD_TEST(ioTvMultiDatasetReadingInName2 ${IO_TESTS22}
-#  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
-#                             ${TEMP}/ioTvMultiDatasetReadingInName2.txt
-#      otbVectorImageTest
-#      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
-#      ${TEMP}/ioTvMultiDatasetReadingInName2.txt
-#      )
-
 # Test to check behavior of function readerGDAL->GetSubDatasetInfo() which return info about subdataset.
 ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS22}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
