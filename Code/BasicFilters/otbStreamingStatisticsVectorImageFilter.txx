@@ -1,4 +1,5 @@
 /*=========================================================================
+
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -14,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbStreamingStatisticsVectorImageFilter_txx
 #define __otbStreamingStatisticsVectorImageFilter_txx
 #include "otbStreamingStatisticsVectorImageFilter.h"
