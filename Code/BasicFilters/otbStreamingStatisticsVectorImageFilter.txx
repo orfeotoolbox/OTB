@@ -1,5 +1,4 @@
 /*=========================================================================
-
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -9,15 +8,13 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-Some parts of this code are derived from ITK. See ITKCopyright.txt
-for details.
-
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbStreamingStatisticsVectorImageFilter_txx
 #define __otbStreamingStatisticsVectorImageFilter_txx
 #include "otbStreamingStatisticsVectorImageFilter.h"
@@ -381,14 +378,14 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 
     if (m_EnableFirstOrderStats)
       {
-      streamFirstOrderAccumulator   += m_ThreadFirstOrderAccumulators [threadId];
-      streamFirstOrderComponentAccumulator += m_ThreadFirstOrderComponentAccumulators [threadId];
+      streamFirstOrderAccumulator += m_ThreadFirstOrderAccumulators[threadId];
+      streamFirstOrderComponentAccumulator += m_ThreadFirstOrderComponentAccumulators[threadId];
       }
 
     if (m_EnableSecondOrderStats)
       {
-      streamSecondOrderAccumulator  += m_ThreadSecondOrderAccumulators[threadId];
-      streamSecondOrderComponentAccumulator += m_ThreadSecondOrderComponentAccumulators [threadId];
+      streamSecondOrderAccumulator += m_ThreadSecondOrderAccumulators[threadId];
+      streamSecondOrderComponentAccumulator += m_ThreadSecondOrderComponentAccumulators[threadId];
       }
     }
 
