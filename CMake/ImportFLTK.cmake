@@ -34,7 +34,11 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
         # FLTK Library
         #-------------------------------
-        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+
+        # Use an external version of FLTK by default
+        # FLTK is now packaged on most systems
+        # Internal FLTK version is 1.1 and there is some issue Monteverdi
+        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
         MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
 
         IF(OTB_USE_EXTERNAL_FLTK)
