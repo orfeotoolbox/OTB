@@ -396,7 +396,7 @@ OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorSupportImage
                 	         
 #--- Testing Extended Filename -----
 
-OTB_TEST_APPLICATION(NAME apTvUtGeomExtendedFilename
+OTB_TEST_APPLICATION(NAME apTvUtConvertExtendedFilename_readerGEOM
                      APP  Convert
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
                              -out ${TEMP}/apTvUtGeomExtendedFilename.tif
@@ -404,3 +404,13 @@ OTB_TEST_APPLICATION(NAME apTvUtGeomExtendedFilename
                              ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
                              ${TEMP}/apTvUtGeomExtendedFilename.geom)                	         
                          	                     
+OTB_TEST_APPLICATION(NAME apTuUtReadImageInfoExtendedFilename_reader
+                     APP  ReadImageInfo
+                     OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipgeom=true&skipcarto=true
+                     )
+                     
+OTB_TEST_APPLICATION(NAME apTuUtConvertExtendedFilename_writer
+                     APP  Convert
+                     OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif
+                             -out ${TEMP}/apTvUtGeomExtendedFilename.tif?&gdal:co:TILED=YES&writegeom=false
+                     )                   
