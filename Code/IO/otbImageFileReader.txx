@@ -471,8 +471,20 @@ ImageFileReader<TOutputImage>
     }
 
   //Copy MetaDataDictionary from instantiated reader to output image.
-  output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
-  this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
+  if (!m_FilenameHelper->GetSkipGeom())
+    {
+    output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
+    this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
+    }
+  else
+    {
+    itk::MetaDataDictionary dictLight;
+    std::string projRef;
+    itk::ExposeMetaData(dict, MetaDataKey::ProjectionRefKey, projRef);
+    itk::EncapsulateMetaData<std::string>(dictLight, MetaDataKey::ProjectionRefKey, projRef);
+    output->SetMetaDataDictionary(dictLight);
+    this->SetMetaDataDictionary(dictLight);
+    }
 
   typedef typename TOutputImage::IndexType IndexType;
 

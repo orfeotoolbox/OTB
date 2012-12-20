@@ -32,6 +32,7 @@ namespace otb
  * - &sdataidx : sub-dataset index for composite files
  * - &resol : resolution factor for jpeg200 files
  * - &skipcarto : switch to skip the cartographic informations
+ * - &skipgeom  : switch to skip the geometric informations
  *
  *  \sa ImageFileReader
  */
@@ -59,6 +60,7 @@ public:
     std::pair< bool, unsigned int >  subDatasetIndex;
     std::pair< bool, unsigned int >  resolutionFactor;
     std::pair< bool, bool         >  skipCarto;
+    std::pair< bool, bool         >  skipGeom;
     unsigned int                     nbSetOptions;
   };
 
@@ -75,6 +77,8 @@ public:
   unsigned int GetResolutionFactor () const;
   bool SkipCartoIsSet () const;
   bool GetSkipCarto () const;
+  bool SkipGeomIsSet () const;
+  bool GetSkipGeom () const;
 
 protected:
   ExtendedFilenameToReaderOptions();

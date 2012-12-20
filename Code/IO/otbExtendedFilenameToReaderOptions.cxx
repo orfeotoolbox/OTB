@@ -40,6 +40,9 @@ ExtendedFilenameToReaderOptions
   m_Options.skipCarto.first  = false;
   m_Options.skipCarto.second = false;
 
+  m_Options.skipGeom.first  = false;
+  m_Options.skipGeom.second = false;
+
   m_Options.nbSetOptions = 0;
 }
 
@@ -89,9 +92,25 @@ ExtendedFilenameToReaderOptions
       }
     }
 
+  if (!map["skipgeom"].empty())
+    {
+    m_Options.skipGeom.first = true;
+    m_Options.nbSetOptions ++;
+
+    if (   map["skipgeom"] == "On"
+        || map["skipgeom"] == "on"
+        || map["skipgeom"] == "ON"
+        || map["skipgeom"] == "true"
+        || map["skipgeom"] == "True"
+        || map["skipgeom"] == "1"   )
+      {
+      m_Options.skipGeom.second = true;
+      }
+    }
+
   if (m_Options.nbSetOptions < nbOpts)
     {
-    itkWarningMacro("Some unknown reader options have been detected")
+    itkWarningMacro("Some unknown reader options have been detected");
     }
 }
 
@@ -158,6 +177,19 @@ ExtendedFilenameToReaderOptions
 ::GetSkipCarto () const
 {
   return m_Options.skipCarto.second;
+}
+
+bool
+ExtendedFilenameToReaderOptions
+::SkipGeomIsSet () const
+{
+  return m_Options.skipGeom.first;
+}
+bool
+ExtendedFilenameToReaderOptions
+::GetSkipGeom () const
+{
+  return m_Options.skipGeom.second;
 }
 
 } // end namespace otb
