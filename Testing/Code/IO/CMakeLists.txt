@@ -3740,8 +3740,8 @@ ADD_TEST(ioTvImageFileReaderExtendedFileName_SkipPR ${IO_TESTS24}
 
 ADD_TEST(ioTvImageFileReaderExtendedFileName_SkipGeom ${IO_TESTS24}
 --compare-ascii ${NOTOL}
-         ${BASELINE}/ioImageFileReaderExtendedFileName_SkipGeom.txt
-         ${TEMP}/ioImageFileReaderExtendedFileName_SkipGeom.txt
+         ${BASELINE}/ioImageFileReaderExtendedFileName_Skipgeom_pr.txt
+         ${TEMP}/ioImageFileReaderExtendedFileName_Skipgeom_pr.txt
 	otbImageFileReaderWithExtendedFilename
         ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipgeom=true
         ${TEMP}/ioImageFileReaderExtendedFileName_Skipgeom_kwl.txt
