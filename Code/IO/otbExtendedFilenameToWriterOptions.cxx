@@ -30,7 +30,7 @@ ExtendedFilenameToWriterOptions
   m_Options.simpleFileName.second = "";
 
   m_Options.writeGEOMFile.first  = false;
-  m_Options.writeGEOMFile.second = false;
+  m_Options.writeGEOMFile.second = true;
 
   m_Options.gdalCreationOptions.first  = false;
 
@@ -68,14 +68,14 @@ ExtendedFilenameToWriterOptions
      m_Options.writeGEOMFile.first = true;
      m_Options.nbSetOptions ++;
 
-     if (   map["writegeom"] == "On"
-         || map["writegeom"] == "on"
-         || map["writegeom"] == "ON"
-         || map["writegeom"] == "true"
-         || map["writegeom"] == "True"
-         || map["writegeom"] == "1"   )
+     if (   map["writegeom"] == "Off"
+         || map["writegeom"] == "off"
+         || map["writegeom"] == "OFF"
+         || map["writegeom"] == "false"
+         || map["writegeom"] == "False"
+         || map["writegeom"] == "0"   )
        {
-       m_Options.writeGEOMFile.second = true;
+       m_Options.writeGEOMFile.second = false;
        }
      }
    else

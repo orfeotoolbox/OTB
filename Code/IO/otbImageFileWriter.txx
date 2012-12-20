@@ -36,7 +36,7 @@ namespace otb
 template <class TInputImage>
 ImageFileWriter<TInputImage>
 ::ImageFileWriter() : itk::ImageFileWriter<TInputImage>()
-  , m_WriteGeomFile(false)
+  , m_WriteGeomFile(true)
 {
   m_BufferMemorySize = 0;
   m_BufferNumberOfLinesDivisions = 0;
@@ -88,7 +88,7 @@ ImageFileWriter<TInputImage>
   //will be refactored.
   this->SetImageIO(NULL);
 
-  if (m_WriteGeomFile || m_FilenameHelper->GetWriteGEOMFile())
+  if (m_WriteGeomFile && m_FilenameHelper->GetWriteGEOMFile())
     {
     ImageKeywordlist otb_kwl;
     itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
