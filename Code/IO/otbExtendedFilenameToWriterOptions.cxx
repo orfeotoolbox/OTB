@@ -34,7 +34,7 @@ ExtendedFilenameToWriterOptions
 
   m_Options.gdalCreationOptions.first  = false;
 
-  m_Options.nbSetOptions = 0;
+  m_Options.optionList.push_back("writegeom");
 }
 
 void
@@ -43,7 +43,6 @@ ExtendedFilenameToWriterOptions
 {
   this->m_FilenameHelper->SetExtendedFileName(extFname);
   MapType map = this->m_FilenameHelper->GetOptionMap();
-  unsigned int nbOpts = map.size();
 
   m_Options.simpleFileName.first  = true;
   m_Options.simpleFileName.second = this->m_FilenameHelper->GetSimpleFileName();
@@ -58,16 +57,12 @@ ExtendedFilenameToWriterOptions
         {
         m_Options.gdalCreationOptions.first = true;
         m_Options.gdalCreationOptions.second.push_back(tmp[2] + "=" +it->second);
-        m_Options.nbSetOptions ++;
         }
-    //std::cout << it->first << ":" << it->second << std::endl;
     }
 
   if (!map["writegeom"].empty())
      {
      m_Options.writeGEOMFile.first = true;
-     m_Options.nbSetOptions ++;
-
      if (   map["writegeom"] == "Off"
          || map["writegeom"] == "off"
          || map["writegeom"] == "OFF"
@@ -78,14 +73,30 @@ ExtendedFilenameToWriterOptions
        m_Options.writeGEOMFile.second = false;
        }
      }
-   else
-     {
-     //std::cout << "No Geom Option" << std::endl;
-     }
 
-  if (m_Options.nbSetOptions < nbOpts)
+  //Option Checking
+  for ( it=map.begin(); it != map.end(); it++ )
     {
-    itkWarningMacro("Some unknown reader options have been detected")
+    std::vector<std::string> tmp;
+    boost::split(tmp, it->first, boost::is_any_of(":"), boost::token_compress_on);
+    if (tmp.size()>2)
+      {
+      if (!(tmp[0]=="gdal") || !(tmp[1]=="co"))
+        {
+        itkWarningMacro("Unknown option detected: " << it->first << ".");
+        }
+      }
+    else
+      {
+      bool isKnown=false;
+      for (unsigned int i=0; i<m_Options.optionList.size(); i++)
+        {
+        if (m_Options.optionList[i]==it->first)
+          isKnown=true;
+        }
+      if(!isKnown)
+        itkWarningMacro("Unknown option detected: " << it->first << ".");
+      }
     }
 }
 

@@ -58,7 +58,7 @@ public:
     std::pair< bool, std::string  >              simpleFileName;
     std::pair< bool, bool  >                     writeGEOMFile;
     std::pair< bool, GDALCOType >                gdalCreationOptions;
-    unsigned int                                 nbSetOptions;
+    std::vector<std::string>                     optionList;
   };
 
   /* Set Methods */
