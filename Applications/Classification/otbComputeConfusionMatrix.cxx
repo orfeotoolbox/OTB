@@ -148,7 +148,7 @@ private:
       reference = this->GetParameterImage<Int32ImageType>("ref.raster.in");
       }
     else
-      {      
+      {
       ogrRef = otb::ogr::DataSource::New(GetParameterString("ref.vector.in"), otb::ogr::DataSource::Modes::Read);
       field = this->GetParameterString("ref.vector.field");
       
@@ -173,8 +173,8 @@ private:
     
     otbAppLogINFO("Number of stream divisions : "<<numberOfStreamDivisions);
     
-    for (unsigned int index=0 ; index<numberOfStreamDivisions ; index++)
-      { 
+    for (unsigned int index=0; index<numberOfStreamDivisions; index++)
+      {
       streamRegion = splitter->GetSplit(index, numberOfStreamDivisions, input->GetLargestPossibleRegion());
       
       input->SetRequestedRegion(streamRegion);
