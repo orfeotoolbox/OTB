@@ -24,3 +24,7 @@ OTB_CREATE_APPLICATION(NAME           SOMClassification
 OTB_CREATE_APPLICATION(NAME           FusionOfClassifications
                        SOURCES        otbFusionOfClassifications.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
+
+OTB_CREATE_APPLICATION(NAME           ComputeConfusionMatrix
+                       SOURCES        otbComputeConfusionMatrix.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
