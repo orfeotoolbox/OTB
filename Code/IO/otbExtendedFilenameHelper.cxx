@@ -47,7 +47,7 @@ ExtendedFilenameHelper
             }
           else
             {
-            itkWarningMacro("Duplicate option detected: " << tmp[0] << ". Using value " << tmp[1] << ".");
+            itkWarningMacro("Duplicated option detected: " << tmp[0] << ". Using value " << tmp[1] << ".");
             }
           }
         }
