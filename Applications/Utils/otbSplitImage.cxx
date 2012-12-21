@@ -64,7 +64,7 @@ private:
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in","Input multiband image filename.");
 
-    AddParameter(ParameterType_OutputFilename, "out", "Output Image");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out",
                             "Output filename that will be used to get the prefix and the extension of the output images to write");
 
@@ -105,7 +105,11 @@ private:
       
       // build the current output filename
       std::ostringstream oss;
-      oss <<path<<"/"<<fname<<"_"<<i<<ext;
+      if (!path.empty())
+        {
+        oss <<path<<"/";
+        }
+      oss <<fname<<"_"<<i<<ext;
       
       // Create an output parameter to write the current output image
       OutputImageParameter::Pointer paramOut = OutputImageParameter::New();
@@ -117,6 +121,7 @@ private:
       // Set the filename of the current output image
       paramOut->SetFileName(oss.str());
       paramOut->SetValue(m_Filter->GetOutput());
+      paramOut->SetPixelType(this->GetParameterOutputImagePixelType("out"));
       // Add the current level to be written
       paramOut->InitializeWriters();
       AddProcess(paramOut->GetWriter(), osswriter.str());
@@ -125,7 +130,7 @@ private:
 
     // Disable the output Image parameter to avoid writing
     // the last image (Application::ExecuteAndWriteOutput method)
-    GetParameterByKey("out")->SetActive(false);
+    DisableParameter("out");
   }
 
   FilterType::Pointer        m_Filter;
