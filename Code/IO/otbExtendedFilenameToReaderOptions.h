@@ -51,6 +51,7 @@ public:
 
   typedef ExtendedFilenameHelper                    FNameHelperType;
   typedef FNameHelperType::OptionMapType            MapType;
+  typedef MapType::iterator                         MapIteratorType;
 
   /** The reader option structure. */
   struct OptionType
@@ -61,7 +62,7 @@ public:
     std::pair< bool, unsigned int >  resolutionFactor;
     std::pair< bool, bool         >  skipCarto;
     std::pair< bool, bool         >  skipGeom;
-    unsigned int                     nbSetOptions;
+    std::vector<std::string>         optionList;
   };
 
   /* Set Methods */

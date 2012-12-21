@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbExtendedFilenameToReaderOptions.h"
+#include <boost/algorithm/string.hpp>
 
 namespace otb
 {
@@ -43,7 +44,11 @@ ExtendedFilenameToReaderOptions
   m_Options.skipGeom.first  = false;
   m_Options.skipGeom.second = false;
 
-  m_Options.nbSetOptions = 0;
+  m_Options.optionList.push_back("geom");
+  m_Options.optionList.push_back("sdataidx");
+  m_Options.optionList.push_back("resol");
+  m_Options.optionList.push_back("skipcarto");
+  m_Options.optionList.push_back("skipgeom");
 }
 
 void
@@ -52,7 +57,6 @@ ExtendedFilenameToReaderOptions
 {
   this->m_FilenameHelper->SetExtendedFileName(extFname);
   MapType map = this->m_FilenameHelper->GetOptionMap();
-  unsigned int nbOpts = map.size();
 
   m_Options.simpleFileName.first  = true;
   m_Options.simpleFileName.second = this->m_FilenameHelper->GetSimpleFileName();
@@ -61,26 +65,21 @@ ExtendedFilenameToReaderOptions
     {
     m_Options.extGEOMFileName.first  = true;
     m_Options.extGEOMFileName.second = map["geom"];
-    m_Options.nbSetOptions ++;
     }
   if (!map["sdataidx"].empty())
     {
     m_Options.subDatasetIndex.first  = true;
     m_Options.subDatasetIndex.second = atoi(map["sdataidx"].c_str());
-    m_Options.nbSetOptions ++;
     }
   if (!map["resol"].empty())
     {
     m_Options.resolutionFactor.first  = true;
     m_Options.resolutionFactor.second = atoi(map["resol"].c_str());
-    m_Options.nbSetOptions ++;
     }
 
   if (!map["skipcarto"].empty())
     {
     m_Options.skipCarto.first = true;
-    m_Options.nbSetOptions ++;
-
     if (   map["skipcarto"] == "On"
         || map["skipcarto"] == "on"
         || map["skipcarto"] == "ON"
@@ -95,8 +94,6 @@ ExtendedFilenameToReaderOptions
   if (!map["skipgeom"].empty())
     {
     m_Options.skipGeom.first = true;
-    m_Options.nbSetOptions ++;
-
     if (   map["skipgeom"] == "On"
         || map["skipgeom"] == "on"
         || map["skipgeom"] == "ON"
@@ -108,9 +105,18 @@ ExtendedFilenameToReaderOptions
       }
     }
 
-  if (m_Options.nbSetOptions < nbOpts)
+  //Option Checking
+  MapIteratorType it;
+  for ( it=map.begin(); it != map.end(); it++ )
     {
-    itkWarningMacro("Some unknown reader options have been detected");
+    bool isKnown=false;
+    for (unsigned int i=0; i<m_Options.optionList.size(); i++)
+      {
+      if (m_Options.optionList[i]==it->first)
+        isKnown=true;
+      }
+    if(!isKnown)
+      itkWarningMacro("Unknown option detected: " << it->first << ".");
     }
 }
 
