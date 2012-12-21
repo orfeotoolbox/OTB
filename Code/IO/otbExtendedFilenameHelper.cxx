@@ -41,12 +41,20 @@ ExtendedFilenameHelper
         boost::split(tmp, tmp2[i], boost::is_any_of("="), boost::token_compress_on);
         if (tmp.size()>1)
           {
-          m_OptionMap[tmp[0]]=tmp[1];
+          if (m_OptionMap[tmp[0]].empty())
+            {
+            m_OptionMap[tmp[0]]=tmp[1];
+            }
+          else
+            {
+            itkWarningMacro("Duplicate option detected: " << tmp[0] << ". Using value " << tmp[1] << ".");
+            }
           }
         }
       }
     }
 }
+
 
 ExtendedFilenameHelper::OptionMapType
 ExtendedFilenameHelper
