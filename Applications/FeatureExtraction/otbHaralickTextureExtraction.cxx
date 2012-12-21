@@ -24,6 +24,7 @@
 #include "otbScalarImageToHigherOrderTexturesFilter.h"
 
 #include "otbMultiToMonoChannelExtractROI.h"
+#include "otbClampImageFilter.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 
@@ -44,7 +45,8 @@ typedef itk::SmartPointer<Self>       Pointer;
 typedef itk::SmartPointer<const Self> ConstPointer;
 
 typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,FloatVectorImageType::InternalPixelType>
-ExtractorFilterType;
+                                                                               ExtractorFilterType;
+typedef ClampImageFilter<FloatImageType, FloatImageType>                       ClampFilterType;
 
 typedef ScalarImageToTexturesFilter<FloatImageType, FloatImageType>            HarTexturesFilterType;
 typedef ScalarImageToAdvancedTexturesFilter<FloatImageType, FloatImageType>    AdvTexturesFilterType;
@@ -188,6 +190,11 @@ void DoExecute()
   m_ExtractorFilter->SetChannel(GetParameterInt("channel"));
   m_ExtractorFilter->UpdateOutputInformation();
 
+  m_ClampFilter = ClampFilterType::New();
+  m_ClampFilter->SetInput(m_ExtractorFilter->GetOutput());
+  m_ClampFilter->SetLower(GetParameterFloat("parameters.min"));
+  m_ClampFilter->SetUpper(GetParameterFloat("parameters.max"));
+
   m_HarTexFilter    = HarTexturesFilterType::New();
   m_HarImageList    = ImageListType::New();
   m_HarConcatener   = ImageListToVectorImageFilterType::New();
@@ -202,7 +209,7 @@ void DoExecute()
 
   if( texType == "simple" )
     {
-    m_HarTexFilter->SetInput(const_cast<FloatImageType*>(m_ExtractorFilter->GetOutput()));
+    m_HarTexFilter->SetInput(const_cast<FloatImageType*>(m_ClampFilter->GetOutput()));
     m_HarTexFilter->SetRadius(radius);
     m_HarTexFilter->SetOffset(offset);
     m_HarTexFilter->SetInputImageMinimum(GetParameterFloat("parameters.min"));
@@ -223,7 +230,7 @@ void DoExecute()
 
   if( texType == "advanced" )
     {
-    m_AdvTexFilter->SetInput(const_cast<FloatImageType*>(m_ExtractorFilter->GetOutput()));
+    m_AdvTexFilter->SetInput(const_cast<FloatImageType*>(m_ClampFilter->GetOutput()));
     m_AdvTexFilter->SetRadius(radius);
     m_AdvTexFilter->SetOffset(offset);
     m_AdvTexFilter->SetInputImageMinimum(GetParameterFloat("parameters.min"));
@@ -244,7 +251,7 @@ void DoExecute()
 
   if( texType == "higher" )
     {
-    m_HigTexFilter->SetInput(const_cast<FloatImageType*>(m_ExtractorFilter->GetOutput()));
+    m_HigTexFilter->SetInput(const_cast<FloatImageType*>(m_ClampFilter->GetOutput()));
     m_HigTexFilter->SetRadius(radius);
     m_HigTexFilter->SetOffset(offset);
     m_HigTexFilter->SetInputImageMinimum(GetParameterFloat("parameters.min"));
@@ -267,6 +274,7 @@ void DoExecute()
 
 }
 ExtractorFilterType::Pointer m_ExtractorFilter;
+ClampFilterType::Pointer     m_ClampFilter;
 
 HarTexturesFilterType::Pointer            m_HarTexFilter;
 ImageListType::Pointer                    m_HarImageList;
