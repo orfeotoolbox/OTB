@@ -186,10 +186,24 @@ void
 GLImageWidget
 ::mouseMoveEvent(  QMouseEvent * event)
 {
+  QCursor dragCursor;
+  dragCursor.setShape(Qt::ClosedHandCursor) ;
+  this->setCursor(dragCursor);
+
   m_ImageViewManipulator->mouseMoveEvent(event);
 
   // repaint the buffer
   this->update();
+}
+
+/*******************************************************************************/
+void
+GLImageWidget
+::mouseReleaseEvent(  QMouseEvent * event)
+{
+  QCursor stdCursor;
+  stdCursor.setShape(Qt::ArrowCursor) ;
+  this->setCursor(stdCursor);
 }
 
 /*******************************************************************************/

@@ -105,6 +105,7 @@ protected:
   void resizeGL(int widgth, int height);
   void paintGL();
   void mouseMoveEvent ( QMouseEvent * event );
+  void mouseReleaseEvent ( QMouseEvent * event );
   void mousePressEvent ( QMouseEvent * event );
   void resizeEvent(QResizeEvent* event);
 
