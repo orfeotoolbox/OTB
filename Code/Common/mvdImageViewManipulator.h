@@ -154,6 +154,8 @@ private:
     MouseContextType() :
       x( 0 ),
       y( 0 ),
+      xMove( 0 ),
+      yMove( 0 ),
       dx( 0 ),
       dy( 0 )
     {
@@ -161,6 +163,8 @@ private:
 
     int x;  // mousePress x
     int y;  // mousePress y
+    int xMove;  // for mouseMove x
+    int yMove;  // for mouseMove y
     int dx; // mouseMove in x (Drag)
     int dy; // mouseMove in y (Drag)
   };

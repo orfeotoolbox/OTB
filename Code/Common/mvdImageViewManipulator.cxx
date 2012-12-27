@@ -83,6 +83,10 @@ ImageViewManipulator
   // Update the context with the pressed position
   m_MouseContext.x = event->x();
   m_MouseContext.y = event->y();
+
+  // Update the context with the pressed position for the mouseMoveEvent
+  m_MouseContext.xMove = event->x();
+  m_MouseContext.yMove = event->y();
 }
 
 /******************************************************************************/
@@ -91,8 +95,8 @@ ImageViewManipulator
 ::mouseMoveEvent( QMouseEvent * event)
 {
   // Update the mouse context
-  m_MouseContext.dx = -event->x() + m_MouseContext.x;
-  m_MouseContext.dy = -event->y() + m_MouseContext.y;
+  m_MouseContext.dx = -event->x() + m_MouseContext.xMove;
+  m_MouseContext.dy = -event->y() + m_MouseContext.yMove;
 
   // Update the navigation context
   ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
@@ -108,6 +112,11 @@ ImageViewManipulator
 
   // Constraint the region to the largestPossibleRegion
   this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
+
+  // Update the position of the first press to take into account the
+  // last drag
+  m_MouseContext.xMove -=  m_MouseContext.dx;
+  m_MouseContext.yMove -=  m_MouseContext.dy;
 }
 
 /******************************************************************************/
