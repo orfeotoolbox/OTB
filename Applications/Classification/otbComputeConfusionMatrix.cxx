@@ -195,7 +195,7 @@ private:
         {
         if (itRef.Get() != nodata)
           {
-          if (itRef.Get()>0 && itRef.Get()<=static_cast<int>(nbClasses) && 
+          if (itRef.Get()>0 && itRef.Get()<=static_cast<int>(nbClasses) &&
               itInput.Get()>0 && itInput.Get()<=static_cast<int>(nbClasses))
             {
             m_Matrix[itInput.Get()-1][itRef.Get()-1] ++;
