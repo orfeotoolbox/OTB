@@ -69,7 +69,7 @@ private:
   SetDocAuthors("OTB-Team");
   SetDocSeeAlso(" ");
 
-  AddDocTag(Tags::Classification);
+  AddDocTag(Tags::Learning);
 
   AddParameter(ParameterType_InputImage, "in", "Input Image");
   SetParameterDescription( "in", "The input classification image." );
