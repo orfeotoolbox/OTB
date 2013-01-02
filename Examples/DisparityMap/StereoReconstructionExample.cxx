@@ -59,6 +59,7 @@
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
+#include "otbDEMHandler.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -160,6 +161,7 @@ int main(int argc, char* argv[])
 // Software Guide : EndCodeSnippet
 
   double avgElevation = atof(argv[5]);
+  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(avgElevation);
 
   ImageReaderType::Pointer leftReader =  ImageReaderType::New();
   ImageReaderType::Pointer rightReader =  ImageReaderType::New();
@@ -188,7 +190,7 @@ int main(int argc, char* argv[])
   m_DeformationFieldSource->SetRightImage(rightReader->GetOutput());
   m_DeformationFieldSource->SetGridStep(4);
   m_DeformationFieldSource->SetScale(1.0);
-  m_DeformationFieldSource->SetAverageElevation(avgElevation);
+  //m_DeformationFieldSource->SetAverageElevation(avgElevation);
 
   m_DeformationFieldSource->Update();
 // Software Guide : EndCodeSnippet
@@ -381,11 +383,11 @@ int main(int argc, char* argv[])
   m_DispToElev->SetRightInput(rightReader->GetOutput());
   m_DispToElev->SetLeftEpipolarGridInput(m_DeformationFieldSource->GetLeftDeformationFieldOutput());
   m_DispToElev->SetRightEpipolarGridInput(m_DeformationFieldSource->GetRightDeformationFieldOutput());
-  m_DispToElev->SetElevationMin(130.0);
-  m_DispToElev->SetElevationMax(220.0);
+  m_DispToElev->SetElevationMin(avgElevation-10.0);
+  m_DispToElev->SetElevationMax(avgElevation+80.0);
   m_DispToElev->SetDEMGridStep(2.5);
   m_DispToElev->SetDisparityMaskInput(m_LBandMathFilter->GetOutput());
-  m_DispToElev->SetAverageElevation(avgElevation);
+  //m_DispToElev->SetAverageElevation(avgElevation);
 
   WriterType::Pointer m_DEMWriter = WriterType::New();
   m_DEMWriter->SetInput(m_DispToElev->GetOutput());
