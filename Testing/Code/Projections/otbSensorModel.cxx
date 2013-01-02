@@ -23,6 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbForwardSensorModel.h"
 #include "otbInverseSensorModel.h"
+#include "otbDEMHandler.h"
 
 int otbSensorModel(int argc, char* argv[])
 {
@@ -51,6 +52,8 @@ int otbSensorModel(int argc, char* argv[])
   file << reader->GetOutput()->GetImageKeywordlist();
 
   file << "\n*** TRANSFORM ***\n";
+  
+  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(16.19688987731934);
 
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
@@ -60,7 +63,6 @@ int otbSensorModel(int argc, char* argv[])
      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
      return EXIT_FAILURE;
    }
-  forwardSensorModel->SetAverageElevation(16.19688987731934);
 
   itk::Point<double, 2> imagePoint;
   imagePoint[0] = 10;
@@ -80,7 +82,6 @@ int otbSensorModel(int argc, char* argv[])
      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
      return EXIT_FAILURE;
    }
-  inverseSensorModel->SetAverageElevation(16.19688987731934);
 
   itk::Point<double, 2> reversedImagePoint;
   reversedImagePoint = inverseSensorModel->TransformPoint(geoPoint);
