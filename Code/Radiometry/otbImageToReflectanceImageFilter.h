@@ -70,6 +70,10 @@ public:
   {
     m_LumToReflecFunctor.SetIlluminationCorrectionCoefficient(coef);
   }
+  void SetUseClamp(bool useClamp)
+  {
+    m_LumToReflecFunctor.SetUseClamp(useClamp);
+  }
 
   double GetAlpha()
   {
@@ -86,6 +90,10 @@ public:
   double GetIlluminationCorrectionCoefficient()
   {
     return m_LumToReflecFunctor.GetIlluminationCorrectionCoefficient();
+  }
+  bool GetUseClamp()
+  {
+    return m_LumToReflecFunctor.GetUseClamp();
   }
 
   inline TOutput operator ()(const TInput& inPixel) const
@@ -188,6 +196,11 @@ public:
   itkSetMacro(ZenithalSolarAngle, double);
   /** Give the zenithal solar angle. */
   itkGetConstReferenceMacro(ZenithalSolarAngle, double);
+  
+  /** Set the useClamp flag. */
+  itkSetMacro(UseClamp,bool);
+  /** Give the useClamp flag. */
+  itkGetConstReferenceMacro(UseClamp,bool);
 
   /** Set/Get the sun elevation angle (internally handled by the zenithal angle)*/
   virtual void SetElevationSolarAngle(double elevationAngle)
@@ -227,6 +240,7 @@ protected:
   ImageToReflectanceImageFilter() :
     m_ZenithalSolarAngle(120.), //invalid value which will lead to negative radiometry
     m_FluxNormalizationCoefficient(1.),
+    m_UseClamp(true),
     m_IsSetFluxNormalizationCoefficient(false),
     m_Day(0),
     m_Month(0)
@@ -323,6 +337,7 @@ protected:
       functor.SetAlpha(m_Alpha[i]);
       functor.SetBeta(m_Beta[i]);
       functor.SetSolarIllumination(m_SolarIllumination[i]);
+      functor.SetUseClamp(m_UseClamp);
       this->GetFunctorVector().push_back(functor);
       }
   }
@@ -337,6 +352,8 @@ private:
   double m_FluxNormalizationCoefficient;
   /** Solar illumination value. */
   VectorType m_SolarIllumination;
+  /** Flag to activate clamping between 0 and 1 */
+  bool m_UseClamp;
   /** Used to know if the user has set a value for the FluxNormalizationCoefficient parameter
    * or if the class has to compute it */
   bool m_IsSetFluxNormalizationCoefficient;

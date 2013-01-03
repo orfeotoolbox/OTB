@@ -48,6 +48,7 @@ int otbImageToReflectanceImageFilterAuto(int argc, char * argv[])
   // Instantiating object
   ImageToReflectanceImageFilterType::Pointer filter = ImageToReflectanceImageFilterType::New();
   filter->SetInput(reader->GetOutput());
+  filter->SetUseClamp(false);
 
   RoiFilterType::Pointer roiFilter = RoiFilterType::New();
   roiFilter->SetStartX(1000);

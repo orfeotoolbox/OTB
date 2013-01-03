@@ -71,6 +71,7 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
 
   filter->SetZenithalSolarAngle(angle);
   filter->SetSolarIllumination(solarIllumination);
+  filter->SetUseClamp(false);
   if (argc == 9)
     {
     filter->SetFluxNormalizationCoefficient(flux);

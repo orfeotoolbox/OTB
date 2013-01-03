@@ -54,6 +54,7 @@ int otbLuminanceToReflectanceImageFilterAuto(int argc, char * argv[])
 
   LuminanceToReflectanceImageFilterType::Pointer filterToReflectance = LuminanceToReflectanceImageFilterType::New();
   filterToReflectance->SetInput(filterToLuminance->GetOutput());
+  filterToReflectance->SetUseClamp(false);
 
   RoiFilterType::Pointer roiFilter = RoiFilterType::New();
   roiFilter->SetStartX(1000);

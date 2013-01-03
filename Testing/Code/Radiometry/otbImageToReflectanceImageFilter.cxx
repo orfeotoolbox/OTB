@@ -80,6 +80,7 @@ int otbImageToReflectanceImageFilter(int argc, char * argv[])
   filter->SetBeta(beta);
   filter->SetZenithalSolarAngle(angle);
   filter->SetSolarIllumination(solarIllumination);
+  filter->SetUseClamp(false);
 
   if (argc == 17)
     {
