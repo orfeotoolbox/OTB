@@ -176,25 +176,25 @@ VectorImageModel
 {
   m_Region = region;
   // Don't do anything if the region did not changed
-  // moveMoveEvent (Drag region).
   if ( m_PreviousRegion!=region ||
        m_Settings.IsDirty() )
     {
-    // check the current and the previous region have some pixels in
+    // check that the current and the previous region have some pixels in
     // common 
     ImageRegionType  tempPreviousRegionRegion = m_PreviousRegion;
     bool res =  tempPreviousRegionRegion.Crop(region);
 
-    // if the first time, image must be read
+    // if the first time or no pixels in common , reload all the
     if ( res &&
 	 m_PreviousRegion!=ImageRegionType() &&
 	 !m_Settings.IsDirty() )
       {
+      // Compute loaded region, and the four regions not
       // Compute loaeded region, and region not loaded yet within the
       // new requested region
       this->ComputeRegionsToLoad(m_Region);
 
-      // Copy the previous buffer into a temporary buf to get the
+      // Copy the previous buffer into a temporary buf to access the
       // previously loaded data
       unsigned char * previousRasterizedBuffer =  
         new unsigned char[3 * m_PreviousRegion.GetNumberOfPixels()];
@@ -231,8 +231,7 @@ VectorImageModel
           }
         }
       
-      // Get the image pixels within not loaded region and add them to
-      // the buffer
+      // Dump pixels not loaded in the m_RasterizedBuffer
       for (unsigned int idx = 0; idx < m_RegionsToLoadVector.size() ; idx++)
         {
         this->DumpImagePixelsWithinRegionIntoBuffer(m_RegionsToLoadVector[idx]);
