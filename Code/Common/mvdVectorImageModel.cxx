@@ -27,7 +27,7 @@
 //
 // ITK includes (sorted by alphabetic order)
 #include "itkImageRegionConstIteratorWithIndex.h"
-#include "itkImageRegionConstIterator.h"
+
 //
 // OTB includes (sorted by alphabetic order)
 
