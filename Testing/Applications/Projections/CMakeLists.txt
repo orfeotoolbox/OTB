@@ -14,7 +14,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM
                  			 -outputs.spacingy  -0.5
                  			 -map utm
                  			 -opt.gridspacing 4 # Spacing of the deformation field
-                     VALID   --compare-image ${NOTOL}
+                     VALID   --compare-image ${EPSILON_4}
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif
                  			  ${TEMP}/apTvPrOrthorectifTest_UTM.tif)
 
