@@ -182,6 +182,38 @@ private:
             index[1]) * 3 * region.GetSize()[0] + 3 * (index[0] - region.GetIndex()[0]);
   }
 
+  /** Compute the image index according a linear buffer index and its
+   * 2D region
+   * \param index 2D index
+   * \param region 2D region
+   */
+  static inline IndexType
+    ComputeImageIndexFromFlippedBuffer(const unsigned int & index, const ImageRegionType& region)
+  {
+    IndexType imageIndex;
+    imageIndex[0] =  ( index % region.GetSize(0) ) + region.GetIndex()[0];
+
+    imageIndex[1] =  region.GetSize()[1] - 1 + region.GetIndex()[1]
+      - vcl_floor( index / region.GetSize(0) );
+
+    return imageIndex;
+  }
+
+  /** Dump pixel of the current image within the region into the
+  * m_RasterizedBuffer used for OpenGl rendering
+  * \param region 2D region
+  */
+  void DumpImagePixelsWithinRegionIntoBuffer(const ImageRegionType& region);
+
+  /** Compute the regions to be loaded and computes the already loaded
+  * region (intersection with the previous requested region for
+  * rasterization). Four regions are computed here {upper, lower,
+  * right, left} region. Each region with size greater than 0 is added
+  * to the m_RegionsToLoadVector vector.
+  * \param region 2D region
+  */
+  void ComputeRegionsToLoad(const ImageRegionType& region);
+
 //
 // Private attributes.
 private:
@@ -197,6 +229,18 @@ private:
 
   // channel list type
   std::vector<unsigned int >          m_Channels;
+
+  // store the previously requested region
+  ImageRegionType                     m_PreviousRegion;
+
+  // Store the already loaded region
+  ImageRegionType                     m_AlreadyLoadedRegion;
+
+  // store the current requested region
+  ImageRegionType                     m_Region;
+
+  // Vector storing the region to load
+  std::vector<ImageRegionType >       m_RegionsToLoadVector;
 
 //
 // SLOTS.
