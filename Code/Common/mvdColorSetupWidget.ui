@@ -1,36 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>mvd::ColorSetupWidget</class>
+ <widget class="QWidget" name="mvd::ColorSetupWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>210</width>
-    <height>130</height>
+    <width>208</width>
+    <height>149</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="locale">
+   <locale language="C" country="AnyCountry"/>
+  </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <spacer name="horizontalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>138</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item row="0" column="1">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="m_FileComponentLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
          <horstretch>0</horstretch>
@@ -38,7 +28,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>File component</string>
+        <string>&lt;p align=&quot;center&quot;&gt;File&lt;br/&gt;component&lt;br/&gt;&amp;darr;&lt;/p&gt;</string>
        </property>
       </widget>
      </item>
@@ -58,7 +48,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="m_RedLabel">
          <property name="text">
           <string>Video RED</string>
          </property>
@@ -68,16 +58,23 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="m_RLabel">
+         <property name="text">
+          <string>&lt;span style=&quot;color:#000000;background-color:#FF4444&quot;&gt;&amp;nbsp;&lt;b&gt;R&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>&lt;span style=&quot;color:#000000;background-color:#FF0000&quot;&gt;&amp;nbsp;&lt;b&gt;&amp;larr;&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
+          <string>&lt;span&gt;&lt;b&gt;&amp;larr;&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item row="1" column="1">
-      <widget class="QComboBox" name="comboBox_6">
+      <widget class="QComboBox" name="m_RedComboBox">
        <item>
         <property name="text">
          <string>PIR</string>
@@ -121,7 +118,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="m_GreenLabel">
          <property name="text">
           <string>Video GREEN</string>
          </property>
@@ -131,16 +128,23 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="m_GLabel">
+         <property name="text">
+          <string>&lt;span style=&quot;color:#000000;background-color:#44FF44&quot;&gt;&amp;nbsp;&lt;b&gt;G&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>&lt;span style=&quot;color:#000000;background-color:#00FF00&quot;&gt;&amp;nbsp;&lt;b&gt;&amp;larr;&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
+          <string>&lt;span&gt;&lt;b&gt;&amp;larr;&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item row="2" column="1">
-      <widget class="QComboBox" name="comboBox_7">
+      <widget class="QComboBox" name="m_GreenComboBox">
        <item>
         <property name="text">
          <string>0</string>
@@ -184,7 +188,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="m_BlueLabel">
          <property name="text">
           <string>Video BLUE</string>
          </property>
@@ -194,16 +198,23 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="m_BLabel">
+         <property name="text">
+          <string>&lt;span style=&quot;color:#CCCCCC;background-color:#4444FF&quot;&gt;&amp;nbsp;&lt;b&gt;B&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>&lt;span style=&quot;color:#CCCCCC;background-color:#0000FF&quot;&gt;&amp;nbsp;&lt;b&gt;&amp;larr;&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
+          <string>&lt;span&gt;&lt;b&gt;&amp;larr;&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item row="3" column="1">
-      <widget class="QComboBox" name="comboBox_8">
+      <widget class="QComboBox" name="m_BlueComboBox">
        <item>
         <property name="text">
          <string>PIR</string>
@@ -231,16 +242,31 @@
        </item>
       </widget>
      </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="m_ColorSetupLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>Color Setup</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
-  <zorder>label_4</zorder>
-  <zorder>layoutWidget</zorder>
-  <zorder>horizontalSpacer_4</zorder>
-  <zorder>horizontalSpacer_4</zorder>
-  <zorder>horizontalSpacer</zorder>
-  <zorder>horizontalSpacer_2</zorder>
-  <zorder>horizontalSpacer_3</zorder>
  </widget>
  <resources/>
  <connections/>
