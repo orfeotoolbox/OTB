@@ -26,6 +26,11 @@
 #include "ConfigureMonteverdi2.h"
 
 //
+// Monteverdi includes (sorted by alphabetic order)
+#include "mvdAbstractImageModel.h"
+#include "mvdTypes.h"
+
+//
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
 
@@ -39,11 +44,6 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbRenderingImageFilter.h"
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractImageModel.h"
-#include "mvdTypes.h"
 
 //
 // External classes pre-declaration.
