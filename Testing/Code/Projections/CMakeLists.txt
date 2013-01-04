@@ -1632,7 +1632,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
 
 
 ADD_TEST(prTvotbGenericRSResampleImageFilter ${PROJECTIONS_TESTS4}
-  --compare-image ${NOTOL}
+  --compare-image ${EPSILON_4}
     ${BASELINE}/prTvotbGenericRSResampleImageFilterOutput.tif
     ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
     otbGenericRSResampleImageFilter
@@ -1662,7 +1662,7 @@ FOREACH( file ${SENSOR_TYPES})
   STRING(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
   # Tests
   ADD_TEST(prTvotbGenericRSResampleImageFilterFromMap_${sensor_name} ${PROJECTIONS_TESTS4}
-    --compare-image ${NOTOL}
+    --compare-image ${EPSILON_4}
     ${BASELINE}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
     ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
     otbGenericRSResampleImageFilterFromMap
