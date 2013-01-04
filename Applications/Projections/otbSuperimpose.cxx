@@ -46,9 +46,9 @@ public:
 
   typedef unsigned short int PixelType;
 
-  typedef otb::BCOInterpolateImageFunction<UInt16VectorImageType>   InterpolatorType;
-  typedef otb::GenericRSResampleImageFilter<UInt16VectorImageType,
-                                            UInt16VectorImageType>  ResamplerType;
+  typedef otb::BCOInterpolateImageFunction<FloatVectorImageType>   InterpolatorType;
+  typedef otb::GenericRSResampleImageFilter<FloatVectorImageType,
+                                            FloatVectorImageType>  ResamplerType;
 
 private:
   void DoInit()
@@ -99,40 +99,46 @@ private:
   void DoExecute()
   {
     // Get the inputs
-    UInt16VectorImageType* refImage = GetParameterUInt16VectorImage("inr");
-    UInt16VectorImageType* movingImage = GetParameterUInt16VectorImage("inm");
+    FloatVectorImageType* refImage = GetParameterImage("inr");
+    FloatVectorImageType* movingImage = GetParameterImage("inm");
     
     // Resample filter
     m_Resampler    = ResamplerType::New();
     m_Interpolator = InterpolatorType::New();
+    m_Interpolator->SetRadius(2);
     m_Resampler->SetInterpolator(m_Interpolator);
     
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
     
     // Set up output image informations
-    UInt16VectorImageType::SpacingType spacing = refImage->GetSpacing();
-    UInt16VectorImageType::IndexType   start   = refImage->GetLargestPossibleRegion().GetIndex();
-    UInt16VectorImageType::SizeType    size    = refImage->GetLargestPossibleRegion().GetSize();
-    UInt16VectorImageType::PointType   origin  = refImage->GetOrigin();
+    FloatVectorImageType::SpacingType spacing = refImage->GetSpacing();
+    FloatVectorImageType::IndexType   start   = refImage->GetLargestPossibleRegion().GetIndex();
+    FloatVectorImageType::SizeType    size    = refImage->GetLargestPossibleRegion().GetSize();
+    FloatVectorImageType::PointType   origin  = refImage->GetOrigin();
 
     if(IsParameterEnabled("lms"))
       {
-      float defScalarSpacing = GetParameterFloat("lms");
+      float defScalarSpacing = vcl_abs(GetParameterFloat("lms"));
       std::cout<<"Generating coarse deformation field (spacing="<<defScalarSpacing<<")"<<std::endl;
-      UInt16VectorImageType::SpacingType defSpacing;
+      FloatVectorImageType::SpacingType defSpacing;
 
       defSpacing[0] = defScalarSpacing;
       defSpacing[1] = defScalarSpacing;
       
+      if (spacing[0]<0.0) defSpacing[0] *= -1.0;
+      if (spacing[1]<0.0) defSpacing[1] *= -1.0;
+    
       m_Resampler->SetDeformationFieldSpacing(defSpacing);
       }
     
-    UInt16VectorImageType::PixelType defaultValue;
-    itk::PixelBuilder<UInt16VectorImageType::PixelType>::Zero(defaultValue,
+    FloatVectorImageType::PixelType defaultValue;
+    itk::PixelBuilder<FloatVectorImageType::PixelType>::Zero(defaultValue,
                                                               movingImage->GetNumberOfComponentsPerPixel());
 
     m_Resampler->SetInput(movingImage);
+    m_Resampler->SetInputKeywordList(movingImage->GetImageKeywordlist());
+    m_Resampler->SetInputProjectionRef(movingImage->GetProjectionRef());
     m_Resampler->SetOutputOrigin(origin);
     m_Resampler->SetOutputSpacing(spacing);
     m_Resampler->SetOutputSize(size);
