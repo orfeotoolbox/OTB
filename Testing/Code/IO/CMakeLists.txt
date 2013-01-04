@@ -2371,7 +2371,7 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
              --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_res5.tif
                                            ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif
              otbMultiChannelExtractROI
-                -ushort ${current_file}:5
+                -ushort ${current_file}?resol=5
                 -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif
                 -channels 1
                 -time
