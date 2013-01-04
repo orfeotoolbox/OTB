@@ -39,9 +39,9 @@ namespace otb {
  * The structuring element is assumed to be composed of binary
  * values (zero or one). Only elements of the structuring element
  * having values > 0 are candidates for affecting the center pixel.
- * 
- * For the each input image pixel, 
- *   - NeighborhoodIterator gives neighbors of the pixel. 
+ *
+ * For the each input image pixel,
+ *   - NeighborhoodIterator gives neighbors of the pixel.
  *   - Evaluate() member function returns the more representative label value among
  *     the image neighbors where the kernel has elements > 0.
  *   - Replace the original label value with the more representative label value
@@ -70,10 +70,10 @@ public:
   typedef NeighborhoodMajorityVotingImageFilter Self;
   //typedef itk::MorphologyImageFilter<TInputImage, TOutputImage, TKernel> Superclass;
   typedef itk::MorphologyImageFilter<
-		    TInputImage,
-		    TInputImage,
-		    itk::BinaryBallStructuringElement< typename TInputImage::PixelType, TInputImage::ImageDimension >
-		    > Superclass;
+                  TInputImage,
+                  TInputImage,
+                  itk::BinaryBallStructuringElement< typename TInputImage::PixelType, TInputImage::ImageDimension >
+                  > Superclass;
 
   typedef itk::SmartPointer<Self>         Pointer;
   typedef itk::SmartPointer<const Self>   ConstPointer;
@@ -83,7 +83,7 @@ public:
 
   /** Runtime information support. */
   itkTypeMacro(NeighborhoodMajorityVotingImageFilter,
-		  itk::MorphologyImageFilter);
+                itk::MorphologyImageFilter);
 
   /** Declaration of pixel type. */
   typedef typename Superclass::PixelType PixelType;
@@ -112,12 +112,11 @@ public:
 
   /** NeighborhoodDimension constant */
   itkStaticConstMacro(KernelDimension, unsigned int,
-		  	  	  	  BallStructuringType::NeighborhoodDimension);
+                                           BallStructuringType::NeighborhoodDimension);
   
 
   /** Type of the pixels in the Kernel. */
   typedef typename BallStructuringType::PixelType            KernelPixelType;
-
 
 
 #ifdef ITK_USE_CONCEPT_CHECKING
@@ -132,20 +131,19 @@ public:
 #endif
 
 
-
   //Creates a SetNoDataValue method
   virtual void SetNoDataValue(const PixelType _arg)
   {
-	  itkDebugMacro("setting NoDataValue to " << _arg);
-	  if (this->m_NoDataValue != _arg)
-		{
-		this->m_NoDataValue = _arg;
+         itkDebugMacro("setting NoDataValue to " << _arg);
+         if (this->m_NoDataValue != _arg)
+              {
+              this->m_NoDataValue = _arg;
 
-		m_MajorityVotingBoundaryCondition.SetConstant(m_NoDataValue);
-		this->OverrideBoundaryCondition(&m_MajorityVotingBoundaryCondition);
+              m_MajorityVotingBoundaryCondition.SetConstant(m_NoDataValue);
+              this->OverrideBoundaryCondition(&m_MajorityVotingBoundaryCondition);
 
-		this->Modified();
-		}
+              this->Modified();
+              }
   }
 
   //Creates a SetUndefinedValue method
@@ -155,19 +153,19 @@ public:
   /** Set kernel (structuring element). */
   virtual void SetRadiusNeighborhood(const RadiusType _arg)
   {
-	  itkDebugMacro("setting RadiusNeighborhood to " << _arg);
-	  if (this->m_RadiusNeighborhood != _arg)
-		{
-		this->m_RadiusNeighborhood = _arg;
+         itkDebugMacro("setting RadiusNeighborhood to " << _arg);
+         if (this->m_RadiusNeighborhood != _arg)
+              {
+              this->m_RadiusNeighborhood = _arg;
 
-		//Kernel Setting
-		BallStructuringType seBall;
-		seBall.SetRadius(m_RadiusNeighborhood);
-		seBall.CreateStructuringElement();
-		this->SetKernel(seBall);
+              //Kernel Setting
+              BallStructuringType seBall;
+              seBall.SetRadius(m_RadiusNeighborhood);
+              seBall.CreateStructuringElement();
+              this->SetKernel(seBall);
 
-		this->Modified();
-		}
+              this->Modified();
+              }
   }
 
 

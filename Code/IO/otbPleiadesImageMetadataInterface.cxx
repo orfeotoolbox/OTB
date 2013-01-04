@@ -159,7 +159,7 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
     for (unsigned int i = 0; i < outputValues.size(); ++i)
       {
       int wavelenghPos = this->BandIndexToWavelengthPosition(i);
-      if (vcl_abs(outputValues[wavelenghPos] - defaultRadianceMS[wavelenghPos]) > 
+      if (vcl_abs(outputValues[wavelenghPos] - defaultRadianceMS[wavelenghPos]) >
           (tolerance * defaultRadianceMS[wavelenghPos]))
         {
         outputValuesVariableLengthVector[i] = defaultRadianceMS[wavelenghPos];

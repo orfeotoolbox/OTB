@@ -25,7 +25,7 @@
 #include "otbNeighborhoodMajorityVotingImageFilter.h"
 
 int otbNeighborhoodMajorityVotingImageFilterNew(int argc, char* argv[])
-{    
+{
   typedef unsigned char LabelPixelType;
   const unsigned int Dimension = 2;
 
