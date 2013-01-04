@@ -311,6 +311,21 @@ ADD_TEST(leTvSVMImageClassificationFilter ${LEARNING_TESTS3}
  ${INPUTDATA}/ROI_QB_MUL_4.tif
  ${INPUTDATA}/svm_model_image
  ${TEMP}/leSVMImageClassificationFilterOutput.tif)
+ 
+
+# ------- otb::SVMImageClassificationFilterWithNeighborhoodMajorityVoting ---------------------------
+ 
+ADD_TEST(leTvSVMImageClassificationFilterWithNeighborhoodMajorityVoting ${LEARNING_TESTS5}
+ --compare-image ${NOTOL}
+ ${BASELINE}/leSVMImageClassificationWithNMVFilterOutput.tif
+ ${TEMP}/leSVMImageClassificationWithNMVFilterOutput.tif
+otbNeighborhoodMajorityVotingImageFilterTest
+ ${TEMP}/leSVMImageClassificationFilterOutput.tif
+ ${TEMP}/leSVMImageClassificationWithNMVFilterOutput.tif
+ )
+ 
+SET_TESTS_PROPERTIES(leTvSVMImageClassificationFilterWithNeighborhoodMajorityVoting PROPERTIES DEPENDS leTvSVMImageClassificationFilter)
+
 
 # ------- otb::SVMImageClassificationWithRuleFilter ----------------------
 
@@ -628,6 +643,23 @@ ADD_TEST(leTvDecisionTreeWithRealValues ${LEARNING_TESTS5}
 otbDecisionTreeWithRealValues)
 
 
+ADD_TEST(leTuNeighborhoodMajorityVotingImageFilterNew ${LEARNING_TESTS5}
+otbNeighborhoodMajorityVotingImageFilterNew)
+
+ADD_TEST(leTvNeighborhoodMajorityVotingImageFilterTest ${LEARNING_TESTS5}
+ --compare-image ${NOTOL}
+ ${BASELINE}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5.tif
+ ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5.tif
+otbNeighborhoodMajorityVotingImageFilterTest
+ ${INPUTDATA}/Classification/QB_1_ortho_4Cls_N_Classified_OTB.tif
+ ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5.tif
+ 2 #xRadius
+ 5 #yRadius
+ 128 #NoDataValue
+ 10 #UndefinedValue
+ )
+
+
 # Testing srcs
 SET(BasicLearning_SRCS1
 otbLearningTests1.cxx
@@ -704,6 +736,8 @@ otbLearningTests5.cxx
 otbDecisionTreeNew.cxx
 otbDecisionTreeBuild.cxx
 otbDecisionTreeWithRealValues.cxx
+otbNeighborhoodMajorityVotingImageFilterNew.cxx
+otbNeighborhoodMajorityVotingImageFilterTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
