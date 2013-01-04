@@ -15,7 +15,7 @@ qt4_add_resources( Application_RESOURCES_RCC ${Application_RESOURCES} )
 # Qt4 translations.
 
 # Sources files to translate.
-add_to_qt4_i18n_sources( 
+add_to_qt4_i18n_sources(
   ${Application_SOURCES}
   ${Application_HEADERS}
   ${Application_FORMS}
@@ -32,6 +32,17 @@ add_executable(monteverdi2
   ${Application_QM_TRANSLATIONS}
 )
 
+add_library(Monteverdi2_Application
+  ${Application_SOURCES}
+  ${Application_FORMS_HEADERS}
+  ${Application_HEADERS_MOC}
+  ${Application_RESOURCES_RCC}
+)
+
+target_link_libraries(Monteverdi2_Application
+  Monteverdi2_Common
+  ${QT_LIBRARIES}
+)
 #############################################################################
 target_link_libraries(monteverdi2 Monteverdi2_Common
   ${QT_LIBRARIES}

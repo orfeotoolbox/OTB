@@ -1,0 +1,7 @@
+MAKE_DIRECTORY(${Monteverdi_BINARY_DIR}/Temporary)
+
+
+ADD_SUBDIRECTORY(Application)
+ADD_SUBDIRECTORY(Common)
+ADD_SUBDIRECTORY(Modules)
+ADD_SUBDIRECTORY(TestSystem)
