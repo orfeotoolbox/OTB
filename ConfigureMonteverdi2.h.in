@@ -53,6 +53,6 @@
 //
 // Miscellaneous
 #define Monteverdi2_FLOATING_TYPE @Monteverdi2_FLOATING_TYPE@
-#define Monteverdi2_DIMENSION_TYPE int( 2 )
+#define Monteverdi2_DIMENSION int( 2 )
 
 #endif // __ConfigureMonteverdi2_h

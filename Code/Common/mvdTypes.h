@@ -60,17 +60,17 @@ namespace mvd
 
 /**
  */
-typedef itk::ImageRegion< Monteverdi2_DIMENSION_TYPE > ImageRegionType;
+typedef itk::ImageRegion< Monteverdi2_DIMENSION > ImageRegionType;
 /**
  */
-typedef itk::Index< Monteverdi2_DIMENSION_TYPE > IndexType;
+typedef itk::Index< Monteverdi2_DIMENSION > IndexType;
 
 /*******************************************************************************/
 
 /**
  */
 typedef
-otb::Image< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION_TYPE >
+otb::Image< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION >
 ScalarImageType;
 /**
  */
@@ -82,7 +82,7 @@ otb::ImageFileReader< ScalarImageType > ScalarImageFileReaderType;
 /**
  */
 typedef
-otb::VectorImage< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION_TYPE >
+otb::VectorImage< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION >
 VectorImageType;
 /**
  */
@@ -95,7 +95,7 @@ typedef otb::ImageFileReader< VectorImageType > VectorImageFileReaderType;
 typedef itk::RGBAPixel< unsigned char > RGBAPixelType;
 /**
  */
-typedef otb::Image< RGBAPixelType, Monteverdi2_DIMENSION_TYPE > RGBAImageType;
+typedef otb::Image< RGBAPixelType, Monteverdi2_DIMENSION > RGBAImageType;
 
 /*******************************************************************************/
 

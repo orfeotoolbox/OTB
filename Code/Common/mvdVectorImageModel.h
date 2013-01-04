@@ -240,7 +240,7 @@ private:
   ImageRegionType                     m_Region;
 
   // Vector storing the region to load
-  std::vector<ImageRegionType >       m_RegionsToLoadVector;
+  std::vector< ImageRegionType >       m_RegionsToLoadVector;
 
 //
 // SLOTS.
