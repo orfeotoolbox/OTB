@@ -127,50 +127,49 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
 
-  // Check if the default irradiance are present ("999", see bug #601 on Mantis)
-  bool isFakeRadiance = true;
-  for (unsigned int i = 0; i < outputValues.size(); ++i)
+  // Check that values read from metadata is not too far from the standard realistic values
+  // '999' are likely to be dummy values (see Mantis #601)
+  const double defaultRadianceP = 1548.71;
+  // MS, ordered as B0, B1, B2, B3
+  const double defaultRadianceMS[4] =
     {
-    if (vcl_abs(outputValues[i] - 999.0) > 0.01)
-      {
-      isFakeRadiance = false;
-      break;
-      }
-    }
+      1915.01,
+      1830.57,
+      1594.06,
+      1060.01
+    };
+  // tolerance threshold
+  double tolerance = 0.05;
   
-  if (isFakeRadiance)
+  if (outputValues.size() == 1)
     {
-    // Use pre-computed radiances, choose between P and MS mode
-    if (outputValues.size() == 1)
+    // Pan
+    if (vcl_abs(outputValues[0] - defaultRadianceP) > (tolerance * defaultRadianceP))
       {
-      // Pan
-      outputValuesVariableLengthVector[0] = 1548.71;
+      outputValuesVariableLengthVector[0] = defaultRadianceP;
       }
     else
       {
-      // MS, ordered as B0, B1, B2, B3
-      const double defaultRadiance[4] =
-        {
-          1915.01,
-          1830.57,
-          1594.06,
-          1060.01
-        };
-      for (unsigned int i = 0; i < outputValues.size(); ++i)
-        {
-        outputValuesVariableLengthVector[i] = defaultRadiance[this->BandIndexToWavelengthPosition(i)];
-        }
+      outputValuesVariableLengthVector[0] = outputValues[0];
       }
     }
   else
     {
-    // Use BandIndexToWavelengthPosition because values in keywordlist are sorted by wavelength
+    // MS
     for (unsigned int i = 0; i < outputValues.size(); ++i)
       {
-      outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
+      int wavelenghPos = this->BandIndexToWavelengthPosition(i);
+      if (vcl_abs(outputValues[wavelenghPos] - defaultRadianceMS[wavelenghPos]) > 
+          (tolerance * defaultRadianceMS[wavelenghPos]))
+        {
+        outputValuesVariableLengthVector[i] = defaultRadianceMS[wavelenghPos];
+        }
+      else
+        {
+        outputValuesVariableLengthVector[i] = outputValues[wavelenghPos];
+        }
       }
     }
-
 
   return outputValuesVariableLengthVector;
 }
