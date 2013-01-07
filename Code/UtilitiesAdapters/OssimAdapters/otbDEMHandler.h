@@ -96,9 +96,9 @@ namespace otb
  *
  * GetHeightAboveMSL():
  * - SRTM and geoid both available: srtm_value
- * - No SRTM but geoid available: BUGGY CASE (returns NaN)
+ * - No SRTM but geoid available: 0
  * - SRTM available, but no geoid: srtm_value
- * - No SRTM and no geoid available: default height above ellipsoid
+ * - No SRTM and no geoid available: 0
  *
  * Please note that OSSIM internal calls for sensor modelling use the
  * height above ellipsoid, and follow the same logic as the
