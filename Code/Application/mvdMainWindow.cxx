@@ -103,6 +103,10 @@ MainWindow::InitializeDockWidgets()
     new ColorSetupWidget( videoColorSetupDockWidget )
   );
   videoColorSetupDockWidget->setFloating( true );
+  videoColorSetupDockWidget->setFeatures(
+    QDockWidget::DockWidgetMovable |
+    QDockWidget::DockWidgetFloatable
+  );
 
   addDockWidget( Qt::LeftDockWidgetArea, videoColorSetupDockWidget );
 
