@@ -153,8 +153,8 @@ LmvmPanSharpeningFusionImageFilter
   m_XsVectorNoiseFilter->SetFilter(m_XsNoiseFilter);
   
   
-  m_FusionStep1Filter->SetInput2(m_XsVectorNoiseFilter->GetOutput());
-  m_FusionStep1Filter->SetInput1(m_PanConvolutionFilter->GetOutput());
+  m_FusionStep1Filter->SetInput1(m_XsVectorNoiseFilter->GetOutput());
+  m_FusionStep1Filter->SetInput2(m_PanConvolutionFilter->GetOutput());
   m_FusionStep1Filter->SetInput3(this->GetPanInput());
   
   m_FusionStep2Filter->SetInput1(m_FusionStep1Filter->GetOutput());

@@ -127,9 +127,10 @@ private:
   {
   public:
     // Implement the fusion as a six arguments operator
-    typename TOutputImageType::PixelType operator()(const TInternalPrecision& smoothPanchroPixel,
-                                              const typename InternalVectorImageType::PixelType& stdXsPixel,
-                                                    const typename TPanImageType::PixelType& sharpPanchroPixel) const
+    typename TOutputImageType::PixelType operator()(
+      const typename InternalVectorImageType::PixelType& stdXsPixel,
+      const TInternalPrecision& smoothPanchroPixel,
+      const typename TPanImageType::PixelType& sharpPanchroPixel) const
     {
       // Build output pixel
       typename TOutputImageType::PixelType output(stdXsPixel.Size());
@@ -178,9 +179,9 @@ private:
    *  Typedef of the TernaryFunctorImageFilter applying the fusion functor to
    *  p, p_smooth, p_std, xs_smooth, xs_std and xs.
    */
-  typedef itk::TernaryFunctorImageFilter<InternalImageType,
-                                    InternalVectorImageType,
-                                    TPanImageType,
+  typedef itk::TernaryFunctorImageFilter<InternalVectorImageType,
+                                         InternalImageType,
+                                         TPanImageType,
                                          TOutputImageType,
                                          FusionFunctor1>     FusionStep1FilterType;
 
