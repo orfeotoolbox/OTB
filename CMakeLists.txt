@@ -207,6 +207,8 @@ INCLUDE(CheckCXXSourceRuns)
 #-----------------------------------------------------------------------------
 # External libraries
 
+SET(CMAKE_TRY_COMPILE_CONFIGURATION Release)
+
 FIND_PACKAGE(OSGeo4W)
 # Put GDAL first, since on Windows, include dirs for other libs (curl, expat, mapnik)  contain gdal 1.5 includes
 INCLUDE(ImportGdal)
