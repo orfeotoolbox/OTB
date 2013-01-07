@@ -205,24 +205,7 @@ ADD_TEST(srTvPolygonListToRCC8GraphFilter ${SPATIALREASONING_TESTS2}
                 ${BASELINE_FILES}/srTvPolygonListToRCC8GraphFilterOuptut.dot
                 ${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot
          otbPolygonListToRCC8GraphFilter
-         4
-         ${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot
-         ${INPUTDATA}/rcc8_mire1.png
-         ${INPUTDATA}/rcc8_mire2.png
-         ${INPUTDATA}/rcc8_mire3.png
-         ${INPUTDATA}/rcc8_mire4.png)
-
-ADD_TEST(srTvPolygonListToRCC8GraphFilter2 ${SPATIALREASONING_TESTS2}
-        --compare-ascii ${NOTOL}
-                ${BASELINE_FILES}/srTvPolygonListToRCC8GraphFilter2Ouptut.dot
-                ${TEMP}/srTvPolygonListToRCC8GraphFilter2Ouptut.dot
-         otbPolygonListToRCC8GraphFilter
-         3
-         ${TEMP}/srTvPolygonListToRCC8GraphFilter2Ouptut.dot
-         ${INPUTDATA}/Seg3InputForRCC8Graph.tif
-         ${INPUTDATA}/Seg4InputForRCC8Graph.tif
-         ${INPUTDATA}/Seg5InputForRCC8Graph.tif
-)
+         ${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSPATIALREASONINGTests3 ~~~~~~~~~~~~~~~~~~~~~~
