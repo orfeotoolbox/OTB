@@ -46,12 +46,12 @@ private:
   void DoInit()
   {
     SetName("FusionOfClassifications");
-    SetDescription("TODO");
+    SetDescription("Fuses several classifications maps of the same image by majority voting on class labels.");
     SetDocName("Fusion of Classifications");
-    SetDocLongDescription("TODO");
+    SetDocLongDescription("This application allows to fuse several classifications maps and produce a single more robust classification map. Fusion is done by mean of majority voting on class labels: for each pixel, the class with the highest number of votes is selected. In case of number of votes equality, the undecided label is attributed to the pixel.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("");
+    SetDocSeeAlso("SVMImagesClassifier application");
  
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Analysis);
@@ -65,6 +65,11 @@ private:
 
     AddParameter(ParameterType_OutputImage,"out","The output classification image");
     SetParameterDescription("out","The output classification image resulting from the fusion of the input classification images");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("il", "classification1.tif classification2.tif");
+    SetDocExampleParameterValue("out","classification_fused.tif");
+    SetDocExampleParameterValue("undecided","10");
   }
 
   void DoUpdateParameters()
