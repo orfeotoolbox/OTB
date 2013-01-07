@@ -37,6 +37,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAboutDialog.h"
 #include "mvdApplication.h"
+#include "mvdColorSetupWidget.h"
 #include "mvdGLImageWidget.h"
 #include "mvdVectorImageModel.h"
 
@@ -75,20 +76,7 @@ MainWindow
   setObjectName( "mvd::MainWindow" );
   setWindowTitle( PROJECT_NAME );
 
-  /*
-  QDockWidget* dock_widget = new DockWidget( tr( "Dock Widget" ), this );
-  
-  dock_widget->setAllowedAreas(
-    Qt::LeftDockWidgetArea |
-    Qt::RightDockWidgetArea
-  );
-
-  dockWidget->setWidget( dockWidgetContents );
-  addDockWidget( Qt::LeftDockWidgetArea, dock_widget );
-  */
-
-  // Set the GLImageWidget as the centralWidget in MainWindow.
-  setCentralWidget( new GLImageWidget( this ) );
+  InitializeDockWidgets();
 
   // Connect Quit action of main menu to QApplication's quit() slot.
   QObject::connect(
@@ -100,6 +88,26 @@ MainWindow
   QObject::connect(
     this, SIGNAL(largestPossibleRegionChanged(const ImageRegionType&)),
     centralWidget(), SLOT( onLargestPossibleRegionChanged(const ImageRegionType&)) );
+}
+
+/*****************************************************************************/
+void
+MainWindow::InitializeDockWidgets()
+{
+  QDockWidget* videoColorSetupDockWidget =
+    new QDockWidget( tr( "Video color setup" ), this );
+
+  // You can use findChild( "videoColorSetupDockWidget" ) to get dock-widget.
+  videoColorSetupDockWidget->setObjectName( "videoColorSetupDockWidget" );
+  videoColorSetupDockWidget->setWidget(
+    new ColorSetupWidget( videoColorSetupDockWidget )
+  );
+  videoColorSetupDockWidget->setFloating( true );
+
+  addDockWidget( Qt::LeftDockWidgetArea, videoColorSetupDockWidget );
+
+  // Set the GLImageWidget as the centralWidget in MainWindow.
+  setCentralWidget( new GLImageWidget( this ) );
 }
 
 /*****************************************************************************/

@@ -65,6 +65,36 @@ class Monteverdi2_EXPORT VectorImageModel :
   Q_OBJECT;
 
 //
+//
+public:
+  class Settings
+  {
+    //
+    // Public types.
+  public:
+    typedef std::vector< unsigned int > ChannelVector;
+
+    //
+    // Public methods.
+  public:
+    Settings() :
+      m_RGBChannels(),
+      m_RenderingFuncParams()
+    {
+    }
+
+    ~Settings() 
+    {
+    }
+
+    //
+    // Public attributes.
+  public:
+    ChannelVector m_RGBChannels;
+    ParametersType m_RenderingFuncParams;
+  };
+
+//
 // Public methods.
 public:
 
@@ -102,17 +132,6 @@ public:
 
   /** Rasterize the buffered region in a buffer */
   unsigned char * RasterizeRegion(const ImageRegionType& region);
-
-  /** Set/Get the Channel list to render */
-  void SetChannelList(const std::vector<unsigned int> & channels)
-  {
-    m_Channels = channels;
-  }
-
-  const std::vector<unsigned int> & GetChannelList() const
-  {
-    return m_Channels;
-  }
 
 //
 // SIGNALS.
@@ -227,8 +246,10 @@ private:
   ExtractFilterType::Pointer          m_ExtractFilter;
   RenderingFilterType::Pointer        m_RenderingFilter;
 
-  // channel list type
-  std::vector<unsigned int >          m_Channels;
+  /**
+   * User-configurable settings of image-model.
+   */
+  Settings m_Settings;
 
   // store the previously requested region
   ImageRegionType                     m_PreviousRegion;

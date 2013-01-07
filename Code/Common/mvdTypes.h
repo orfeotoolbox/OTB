@@ -34,6 +34,7 @@
 
 //
 // ITK includes (sorted by alphabetic order)
+#include <itkArray.h>
 #include <itkImageRegion.h>
 #include <itkRGBAPixel.h>
 
@@ -64,6 +65,9 @@ typedef itk::ImageRegion< Monteverdi2_DIMENSION > ImageRegionType;
 /**
  */
 typedef itk::Index< Monteverdi2_DIMENSION > IndexType;
+/**
+ */
+typedef itk::Array< double > ParametersType;
 
 /*******************************************************************************/
 

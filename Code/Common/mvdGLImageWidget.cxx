@@ -52,21 +52,59 @@ namespace mvd
 
 /*******************************************************************************/
 GLImageWidget
-::GLImageWidget(QWidget *parent) :
-  QGLWidget(parent),
+::GLImageWidget( QWidget* parent,
+		 const QGLWidget* shareWidget,
+		 Qt::WindowFlags flags ) :
+  QGLWidget( parent, shareWidget, flags ),
+  m_ImageViewManipulator( NULL ),
+  m_ImageModelRenderer( NULL )
+{
+  Initialize();
+}
+
+/*******************************************************************************/
+GLImageWidget
+::GLImageWidget( QGLContext* context,
+		 QWidget* parent,
+		 const QGLWidget* shareWidget,
+		 Qt::WindowFlags flags ) :
+  QGLWidget( context, parent, shareWidget, flags ),
+  m_ImageViewManipulator( NULL ),
+  m_ImageModelRenderer( NULL )
+{
+  Initialize();
+}
+
+/*******************************************************************************/
+GLImageWidget
+::GLImageWidget( const QGLFormat& format,
+		 QWidget* parent,
+		 const QGLWidget* shareWidget,
+		 Qt::WindowFlags flags ) :
+  QGLWidget( format, parent, shareWidget, flags ),
   m_ImageViewManipulator( NULL ),
   m_ImageModelRenderer( NULL )
 /*,  m_ImageToScreenTransform(AffineTransformType::New()),
   m_ScreenToImageTransform(AffineTransformType::New()) */
 {
-  m_ImageViewManipulator = new ImageViewManipulator( this );
-  m_ImageModelRenderer   = new ImageModelRenderer( this );
+  Initialize();
 }
 
 /*******************************************************************************/
 GLImageWidget
 ::~GLImageWidget()
 {
+  // m_ImageViewManipulator (deleted as a child of a QObjet parent).
+  // m_ImageModelRenderer (deleted as a child of a QObjet parent).
+}
+
+/*******************************************************************************/
+void
+GLImageWidget
+::Initialize()
+{
+  m_ImageViewManipulator = new ImageViewManipulator( this );
+  m_ImageModelRenderer = new ImageModelRenderer( this );
 }
 
 /*******************************************************************************/

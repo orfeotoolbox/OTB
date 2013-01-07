@@ -16,9 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-#ifndef __mvdMainWindow_h
-#define __mvdMainWindow_h
+#ifndef __mvdColorSetupWidget_h
+#define __mvdColorSetupWidget_h
 
 //
 // Configuration include.
@@ -41,10 +40,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
 
 //
-// External class pre-declaration.
+// External classes pre-declaration.
 namespace
 {
 }
@@ -52,38 +50,33 @@ namespace
 namespace mvd
 {
 //
-// Internal class pre-declaration.
-
+// Internal classes pre-declaration.
 namespace Ui
 {
-class MainWindow;
+class ColorSetupWidget;
 }
 
-/** \class MainWindow
+/** \class ColorSetupWidget
  *
  */
-class Monteverdi2_EXPORT MainWindow
-  : public QMainWindow
+class Monteverdi2_EXPORT ColorSetupWidget :
+    public QWidget
 {
   Q_OBJECT;
 
 //
-// Public types.
-public:
-
-//
 // Public methods.
 public:
+
   /** Constructor */
-  MainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
+  ColorSetupWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor */
-  virtual ~MainWindow();
+  virtual ~ColorSetupWidget();
 
 //
 // SIGNALS.
 signals:
-  void largestPossibleRegionChanged(const ImageRegionType& largestRegion);
 
 //
 // Protected methods.
@@ -94,27 +87,22 @@ protected:
 protected:
 
 //
-// Private SLOTS.
-private:
-  /**
-   */
-  void Initialize();
-  void InitializeDockWidgets();
-
-//
 // Private methods.
 private:
-  /**
-   */
-  Ui::MainWindow* m_UI;
+
 
 //
 // Private attributes.
+private:
+  /**
+   */
+  Ui::ColorSetupWidget* m_UI;
+
+//
+// SLOTS.
 private slots:
-  void on_action_Open_activated();
-  void on_action_About_activated();
 };
 
 } // end namespace 'mvd'
 
-#endif // __MainWindow_h
+#endif // __mvdColorSetupWidget_h

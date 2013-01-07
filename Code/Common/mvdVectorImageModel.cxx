@@ -49,8 +49,15 @@ namespace mvd
 VectorImageModel
 ::VectorImageModel( QObject* parent ) :
   AbstractImageModel( parent ),
+  m_ImageFileReader(),
   m_RasterizedBuffer( NULL ),
-  m_PreviousRegion(ImageRegionType())
+  m_ExtractFilter(),
+  m_RenderingFilter(),
+  m_Settings(),
+  m_PreviousRegion(),
+  m_AlreadyLoadedRegion(),
+  m_Region(),
+  m_RegionsToLoadVector()
 {
 }
 
@@ -81,15 +88,15 @@ VectorImageModel
   // TODO : use the default display
   if (m_ImageFileReader->GetOutput()->GetNumberOfComponentsPerPixel()  < 3)
     {
-    m_Channels.resize(1);
-    m_Channels[0]  = 0;
+    m_Settings.m_RGBChannels.resize(1);
+    m_Settings.m_RGBChannels[0] = 0;
     }
   else
     {
-    m_Channels.resize(3);
-    m_Channels[0]  = 0;
-    m_Channels[1]  = 1;
-    m_Channels[2]  = 2;
+    m_Settings.m_RGBChannels.resize(3);
+    m_Settings.m_RGBChannels[0] = 0;
+    m_Settings.m_RGBChannels[1] = 1;
+    m_Settings.m_RGBChannels[2] = 2;
     }
 }
 
@@ -98,11 +105,8 @@ VectorImageModel
 ::ClearBuffer()
 {
   // Delete previous buffer if needed
-  if (m_RasterizedBuffer != NULL)
-    {
-    delete[] m_RasterizedBuffer;
-    m_RasterizedBuffer = NULL;
-    }
+  delete[] m_RasterizedBuffer;
+  m_RasterizedBuffer = NULL;
 }
 
 unsigned char *
@@ -224,7 +228,8 @@ VectorImageModel
   m_RenderingFilter = RenderingFilterType::New();
   m_RenderingFilter->SetInput(m_ExtractFilter->GetOutput());
   m_RenderingFilter->GetRenderingFunction()->SetAutoMinMax(false);
-  m_RenderingFilter->GetRenderingFunction()->SetChannelList(m_Channels);
+  m_RenderingFilter->GetRenderingFunction()->SetChannelList(
+    m_Settings.m_RGBChannels );
   m_RenderingFilter->GetOutput()->SetRequestedRegion(region);
   m_RenderingFilter->Update();
 

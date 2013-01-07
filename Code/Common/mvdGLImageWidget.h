@@ -65,9 +65,25 @@ class Monteverdi2_EXPORT GLImageWidget :
 //
 // Public methods.
 public:
+  /** Constructor */
+  GLImageWidget( QWidget* parent =NULL,
+		 const QGLWidget* shareWidget =NULL,
+		 Qt::WindowFlags f =0 );
+
+  /** Constructor */
+  GLImageWidget( QGLContext* context,
+		 QWidget* parent =NULL,
+		 const QGLWidget* shareWidget =NULL,
+		 Qt::WindowFlags f =0 );
   
   /** Constructor */
-  GLImageWidget(QWidget *parent = 0);
+  GLImageWidget( const QGLFormat& format,
+		 QWidget* parent =NULL,
+		 const QGLWidget *shareWidget =NULL,
+		 Qt::WindowFlags f =0 );
+
+  /** Constructor */
+  // GLImageWidget( QWidget* parent =NULL, Qt::WindowFlags flags=0);
 
   /** Destructor */
   virtual ~GLImageWidget();
@@ -119,6 +135,8 @@ protected:
 //
 // Private methods.
 private:
+  /** Construction code (factorizes constructors initializations). */
+  void Initialize();
 
 //
 // Private attributes.
