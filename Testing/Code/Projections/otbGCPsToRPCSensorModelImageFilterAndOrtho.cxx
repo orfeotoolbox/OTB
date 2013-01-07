@@ -123,8 +123,9 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
 
   // Deformation Field spacing
   ImageType::SpacingType  gridSpacing;
-  gridSpacing[0] = atof(argv[11]);
-  gridSpacing[1] = -atof(argv[11]);
+  gridSpacing[0] = 16.0 * atof(argv[7]);
+  gridSpacing[1] = 16.0 * atof(argv[8]);
+  
   orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
 
   writer->SetInput(orthoRectifFilter->GetOutput());
