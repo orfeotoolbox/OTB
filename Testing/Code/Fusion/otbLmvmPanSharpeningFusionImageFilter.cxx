@@ -50,8 +50,8 @@ int otbLmvmPanSharpeningFusionImageFilter(int argc, char * argv[])
   panchroReader->SetFileName(panchro);
 
   PanchroImageType::SizeType radius;
-  radius[0] = 3;
-  radius[1] = 3;
+  radius[0] = 5;
+  radius[1] = 5;
   itk::Array<double> filterCoeffs;
   filterCoeffs.SetSize((2 * radius[0] + 1) * (2 * radius[1] + 1));
 

@@ -160,6 +160,8 @@ LmvmPanSharpeningFusionImageFilter
   m_FusionStep2Filter->SetInput1(m_FusionStep1Filter->GetOutput());
   m_FusionStep2Filter->SetInput3(m_PanNoiseFilter->GetOutput());
   m_FusionStep2Filter->SetInput2(m_XsVectorConvolutionFilter->GetOutput());
+  
+  m_FusionStep2Filter->UpdateOutputInformation();
 
   // Wire composite filter
   m_FusionStep2Filter->GraftOutput(this->GetOutput());
