@@ -31,7 +31,7 @@ namespace otb
  * memory print will be done, and the number of divisions will then be computed to fit
  * the available RAM
  *
- * \sa StreamingImageFileWriter
+ * \sa ImageFileWriter
  * \sa StreamingImageVirtualFileWriter
  */
 template<class TImage>

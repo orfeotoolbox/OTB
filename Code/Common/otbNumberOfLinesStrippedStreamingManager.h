@@ -30,7 +30,7 @@ namespace otb
  * You can use SetNumberOfLinesPerStrip to ask for a specific number of lines per strip.
  * The number of strips will be computed to fit this requirements as close as possible.
  *
- * \sa StreamingImageFileWriter
+ * \sa ImageFileWriter
  * \sa StreamingImageVirtualFileWriter
  */
 template<class TImage>

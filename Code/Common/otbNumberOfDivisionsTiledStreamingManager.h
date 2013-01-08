@@ -30,7 +30,7 @@ namespace otb
  * You can use SetNumberOfDivisions to ask for a specific number of divisions.
  * The number of strips will be computed to fit this requirements as close as possible.
  *
- * \sa StreamingImageFileWriter
+ * \sa ImageFileWriter
  * \sa StreamingImageVirtualFileWriter
  */
 template<class TImage>

@@ -20,7 +20,7 @@
 
 #include "itkImageBase.h"
 #include "otbWrapperParameter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 namespace otb
 {
@@ -106,12 +106,12 @@ protected:
   ComplexImagePixelType         m_ComplexPixelType;
 
 
-  typedef otb::StreamingImageFileWriter<ComplexFloatImageType>  ComplexFloatWriterType;
-  typedef otb::StreamingImageFileWriter<ComplexDoubleImageType> ComplexDoubleWriterType;
+  typedef otb::ImageFileWriter<ComplexFloatImageType>  ComplexFloatWriterType;
+  typedef otb::ImageFileWriter<ComplexDoubleImageType> ComplexDoubleWriterType;
 
 
-  typedef otb::StreamingImageFileWriter<ComplexFloatVectorImageType>  ComplexVectorFloatWriterType;
-  typedef otb::StreamingImageFileWriter<ComplexDoubleVectorImageType> ComplexVectorDoubleWriterType;
+  typedef otb::ImageFileWriter<ComplexFloatVectorImageType>  ComplexVectorFloatWriterType;
+  typedef otb::ImageFileWriter<ComplexDoubleVectorImageType> ComplexVectorDoubleWriterType;
 
 
   ComplexFloatWriterType::Pointer  m_ComplexFloatWriter;

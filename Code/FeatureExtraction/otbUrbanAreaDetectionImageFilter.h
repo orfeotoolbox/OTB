@@ -38,7 +38,7 @@
 #include "itkBinaryThresholdImageFilter.h"
 
 // POUR TEST
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkMultiplyImageFilter.h"
 
 namespace otb

@@ -59,7 +59,7 @@ typedef enum
  *
  *  It provides common definitions to all StreamingTraits specializations
  *
- * \sa StreamingImageFileWriter
+ * \sa ImageFileWriter
  * \sa StreamingStatisticsImageFilter
  * \sa StreamingResampleImageFilter
  */
@@ -113,7 +113,7 @@ public:
  *  \note
  *  This class is specialized for otb::VectorImage because VectorImage support less interpolator types
  *
- * \sa StreamingImageFileWriter
+ * \sa ImageFileWriter
  * \sa StreamingStatisticsImageFilter
  * \sa StreamingResampleImageFilter
  */
@@ -163,7 +163,7 @@ public:
   *  \note
   *  This class is specialized for otb::VectorImage because VectorImage support less interpolator types
   *
-  * \sa StreamingImageFileWriter
+  * \sa ImageFileWriter
   * \sa StreamingStatisticsImageFilter
   * \sa StreamingResampleImageFilter
   */

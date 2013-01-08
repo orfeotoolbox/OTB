@@ -18,7 +18,7 @@
 #ifndef __otbStreamingResampleImageFilter_txx
 #define __otbStreamingResampleImageFilter_txx
 
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 #include "itkProgressAccumulator.h"
 

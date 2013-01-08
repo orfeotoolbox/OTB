@@ -23,7 +23,7 @@
 #include "otbExtractROI.h"
 #include "otbMacro.h"
 
-// #include "otbStreamingImageFileWriter.h"
+// #include "otbImageFileWriter.h"
 //
 
 namespace otb
@@ -190,8 +190,8 @@ DisparityMapEstimationMethod<TFixedImage, TMovingImage, TPointSet>
 //     std::cout<<"Moving extract origin: "<<movingExtractor->GetOutput()->GetOrigin()<<std::endl;
 //     std::cout<<"Moving extract spacing: "<<movingExtractor->GetOutput()->GetSpacing()<<std::endl;
 
-//     typedef otb::StreamingImageFileWriter<FixedImageType> FixedWriterType;
-//      typedef otb::StreamingImageFileWriter<MovingImageType> MovingWriterType;
+//     typedef otb::ImageFileWriter<FixedImageType> FixedWriterType;
+//      typedef otb::ImageFileWriter<MovingImageType> MovingWriterType;
 
 //      typename FixedWriterType::Pointer fwriter = FixedWriterType::New();
 //      typename MovingWriterType::Pointer mwriter = MovingWriterType::New();

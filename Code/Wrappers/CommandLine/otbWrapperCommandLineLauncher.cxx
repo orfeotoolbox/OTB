@@ -40,7 +40,7 @@
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperStringListParameter.h"
 
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 
 #include "otbWrapperApplicationRegistry.h"

@@ -43,7 +43,7 @@ namespace otb
  *  can be retrieved with GetStreamingMode and GetNumberOfSplits.
  *  The different splits can be retrieved with GetSplit
  *
- * \sa StreamingImageFileWriter
+ * \sa ImageFileWriter
  * \sa StreamingImageVirtualFileWriter
  */
 template<class TImage>

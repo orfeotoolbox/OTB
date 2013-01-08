@@ -34,7 +34,7 @@ namespace otb
  *
  * The tile dimension is always aligned on a multiple of 16 (as in TIFF spec)
  *
- * \sa StreamingImageFileWriter
+ * \sa ImageFileWriter
  * \sa StreamingImageVirtualFileWriter
  */
 template<class TImage>

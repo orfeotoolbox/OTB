@@ -37,7 +37,7 @@ namespace otb
  * number of divisions will then be computed to fit the available RAM.
  *
  * \sa ImageRegionAdaptativeSplitter
- * \sa StreamingImageFileWriter
+ * \sa ImageFileWriter
  * \sa StreamingImageVirtualFileWriter
  */
 template<class TImage>

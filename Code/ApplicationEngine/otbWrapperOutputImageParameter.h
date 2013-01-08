@@ -21,7 +21,7 @@
 //#include "otbVectorImage.h"
 #include "itkImageBase.h"
 #include "otbWrapperParameter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 namespace otb
 {
@@ -112,24 +112,24 @@ protected:
   std::string            m_FileName;
   ImagePixelType         m_PixelType;
 
-  typedef otb::StreamingImageFileWriter<UInt8ImageType>  UInt8WriterType;
-  typedef otb::StreamingImageFileWriter<Int16ImageType>  Int16WriterType;
-  typedef otb::StreamingImageFileWriter<UInt16ImageType> UInt16WriterType;
-  typedef otb::StreamingImageFileWriter<Int32ImageType>  Int32WriterType;
-  typedef otb::StreamingImageFileWriter<UInt32ImageType> UInt32WriterType;
-  typedef otb::StreamingImageFileWriter<FloatImageType>  FloatWriterType;
-  typedef otb::StreamingImageFileWriter<DoubleImageType> DoubleWriterType;
+  typedef otb::ImageFileWriter<UInt8ImageType>  UInt8WriterType;
+  typedef otb::ImageFileWriter<Int16ImageType>  Int16WriterType;
+  typedef otb::ImageFileWriter<UInt16ImageType> UInt16WriterType;
+  typedef otb::ImageFileWriter<Int32ImageType>  Int32WriterType;
+  typedef otb::ImageFileWriter<UInt32ImageType> UInt32WriterType;
+  typedef otb::ImageFileWriter<FloatImageType>  FloatWriterType;
+  typedef otb::ImageFileWriter<DoubleImageType> DoubleWriterType;
 
-  typedef otb::StreamingImageFileWriter<UInt8VectorImageType>  VectorUInt8WriterType;
-  typedef otb::StreamingImageFileWriter<Int16VectorImageType>  VectorInt16WriterType;
-  typedef otb::StreamingImageFileWriter<UInt16VectorImageType> VectorUInt16WriterType;
-  typedef otb::StreamingImageFileWriter<Int32VectorImageType>  VectorInt32WriterType;
-  typedef otb::StreamingImageFileWriter<UInt32VectorImageType> VectorUInt32WriterType;
-  typedef otb::StreamingImageFileWriter<FloatVectorImageType>  VectorFloatWriterType;
-  typedef otb::StreamingImageFileWriter<DoubleVectorImageType> VectorDoubleWriterType;
+  typedef otb::ImageFileWriter<UInt8VectorImageType>  VectorUInt8WriterType;
+  typedef otb::ImageFileWriter<Int16VectorImageType>  VectorInt16WriterType;
+  typedef otb::ImageFileWriter<UInt16VectorImageType> VectorUInt16WriterType;
+  typedef otb::ImageFileWriter<Int32VectorImageType>  VectorInt32WriterType;
+  typedef otb::ImageFileWriter<UInt32VectorImageType> VectorUInt32WriterType;
+  typedef otb::ImageFileWriter<FloatVectorImageType>  VectorFloatWriterType;
+  typedef otb::ImageFileWriter<DoubleVectorImageType> VectorDoubleWriterType;
 
-  typedef otb::StreamingImageFileWriter<UInt8RGBAImageType>  RGBAUInt8WriterType;
-  typedef otb::StreamingImageFileWriter<UInt8RGBImageType>   RGBUInt8WriterType;
+  typedef otb::ImageFileWriter<UInt8RGBAImageType>  RGBAUInt8WriterType;
+  typedef otb::ImageFileWriter<UInt8RGBImageType>   RGBUInt8WriterType;
 
   UInt8WriterType::Pointer  m_UInt8Writer;
   Int16WriterType::Pointer  m_Int16Writer;
