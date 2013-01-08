@@ -57,6 +57,19 @@ namespace
 // Type definitions.
 namespace mvd
 {
+
+/*******************************************************************************/
+
+/**
+ */
+typedef std::vector< std::string > StringVector;
+/**
+ */
+typedef std::vector< unsigned int > UIntVector;
+/**
+ */
+typedef std::list< std::string > StringList;
+
 /*******************************************************************************/
 
 /**

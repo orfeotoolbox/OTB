@@ -64,6 +64,25 @@ class Monteverdi2_EXPORT ColorSetupWidget :
 {
   Q_OBJECT;
 
+  /** */
+  Q_PROPERTY( QStringList m_Components
+	      READ GetComponents
+	      WRITE SetComponents );
+
+//
+// Public types.
+public:
+  enum Channel
+  {
+    CHANNEL_NONE = -1,
+
+    CHANNEL_RED = 0,
+    CHANNEL_GREEN = 1,
+    CHANNEL_BLUE = 2,
+
+    CHANNEL_COUNT
+  };
+
 //
 // Public methods.
 public:
@@ -74,9 +93,17 @@ public:
   /** Destructor */
   virtual ~ColorSetupWidget();
 
+  /** */
+  void SetComponents( const QStringList& );
+
+  /** */
+  QStringList GetComponents() const;
+
 //
 // SIGNALS.
 signals:
+  /** */
+  void currentChannelIndexChanged( Channel channel, int index );
 
 //
 // Protected methods.
@@ -90,7 +117,6 @@ protected:
 // Private methods.
 private:
 
-
 //
 // Private attributes.
 private:
@@ -101,6 +127,29 @@ private:
 //
 // SLOTS.
 private slots:
+  /** */
+  inline
+    void
+    onRedIndexChanged( int index )
+  {
+    emit currentChannelIndexChanged( CHANNEL_RED, index );
+  }
+
+  /** */
+  inline
+    void
+    onGreenIndexChanged( int index )
+  {
+    emit currentChannelIndexChanged( CHANNEL_GREEN, index );
+  }
+
+  /** */
+  inline
+    void
+    onBlueIndexChanged( int index )
+  {
+    emit currentChannelIndexChanged( CHANNEL_BLUE, index );
+  }
 };
 
 } // end namespace 'mvd'

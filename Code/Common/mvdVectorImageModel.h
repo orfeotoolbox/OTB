@@ -128,6 +128,10 @@ public:
 
   /**
    */
+  QStringList GetBandNames() const; 
+
+  /**
+   */
   void loadFile( const QString& filename );
 
   /** Rasterize the buffered region in a buffer */

@@ -69,6 +69,36 @@ VectorImageModel
 }
 
 /*******************************************************************************/
+QStringList
+VectorImageModel
+::GetBandNames() const
+{
+  assert( m_ImageFileReader->GetNumberOfOutputs()==1 );
+
+  itk::MetaDataDictionary metaDataDict(
+    m_ImageFileReader->GetOutput( 0 )->GetMetaDataDictionary()
+  );
+
+  DefaultImageType::ImageMetadataInterfacePointerType metaData(
+    otb::ImageMetadataInterfaceFactory::CreateIMI( metaDataDict )
+  );
+
+  StringVector stdBandNames( metaData->GetBandName() );
+  QStringList qBandNames;
+
+  std::transform(
+    stdBandNames.begin(), stdBandNames.end(),
+    qBandNames.end(),
+    QString::fromStdString
+  );
+
+  qDebug() << "stdBandNames.size(): " << stdBandNames.size();
+  qDebug() << qBandNames;
+
+  return qBandNames;
+}
+
+/*******************************************************************************/
 void
 VectorImageModel
 ::loadFile( const QString& filename )
@@ -82,6 +112,7 @@ VectorImageModel
 
   m_ImageFileReader = imageFileReader;
 
+#if 1
   // initialize the channel list for the rendering needs following the
   // input image
   // TODO : See if if needs to be moved somewhere else
@@ -98,6 +129,9 @@ VectorImageModel
     m_Settings.m_RGBChannels[1] = 1;
     m_Settings.m_RGBChannels[2] = 2;
     }
+#else
+  
+#endif
 }
 
 void

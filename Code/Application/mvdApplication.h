@@ -97,6 +97,7 @@ public:
 //
 // SIGNALS.
 signals:
+  void selectedModelChanged( const AbstractModel* );
 
 //
 // Protected methods.

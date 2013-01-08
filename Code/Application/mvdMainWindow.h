@@ -44,6 +44,10 @@
 #include "mvdTypes.h"
 
 //
+// Some constants.
+#define VIDEO_COLOR_SETUP_DOCK "videoColorSetupDock"
+
+//
 // External class pre-declaration.
 namespace
 {
@@ -53,6 +57,7 @@ namespace mvd
 {
 //
 // Internal class pre-declaration.
+class AbstractModel;
 
 namespace Ui
 {
@@ -96,10 +101,27 @@ protected:
 //
 // Private SLOTS.
 private:
-  /**
-   */
+  /** */
   void Initialize();
+
+  /** */
   void InitializeDockWidgets();
+
+  /** */
+  inline
+    const QDockWidget*
+    GetVideoColorSetupDock() const
+  {
+    return const_cast< const MainWindow* >( this )->GetVideoColorSetupDock();
+  }
+
+  /** */
+  inline
+    QDockWidget*
+    GetVideoColorSetupDock()
+  {
+    return findChild< QDockWidget* >( VIDEO_COLOR_SETUP_DOCK );  
+  }
 
 //
 // Private methods.
@@ -113,6 +135,8 @@ private:
 private slots:
   void on_action_Open_activated();
   void on_action_About_activated();
+
+  void onSelectedModelChanged( const AbstractModel* );
 };
 
 } // end namespace 'mvd'

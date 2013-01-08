@@ -88,27 +88,34 @@ MainWindow
   QObject::connect(
     this, SIGNAL(largestPossibleRegionChanged(const ImageRegionType&)),
     centralWidget(), SLOT( onLargestPossibleRegionChanged(const ImageRegionType&)) );
+
+  // Connect Appllication and MainWindow when selected model has been
+  // changed.
+  QObject::connect(
+    qApp, SIGNAL( selectedModelChanged( const AbstractModel* ) ),
+    this, SLOT( onSelectedModelChanged( const AbstractModel* ) )
+  );
 }
 
 /*****************************************************************************/
 void
 MainWindow::InitializeDockWidgets()
 {
-  QDockWidget* videoColorSetupDockWidget =
+  QDockWidget* videoColorSetupDock =
     new QDockWidget( tr( "Video color setup" ), this );
 
-  // You can use findChild( "videoColorSetupDockWidget" ) to get dock-widget.
-  videoColorSetupDockWidget->setObjectName( "videoColorSetupDockWidget" );
-  videoColorSetupDockWidget->setWidget(
-    new ColorSetupWidget( videoColorSetupDockWidget )
+  // You can use findChild( "videoColorSetupDock" ) to get dock-widget.
+  videoColorSetupDock->setObjectName( VIDEO_COLOR_SETUP_DOCK );
+  videoColorSetupDock->setWidget(
+    new ColorSetupWidget( videoColorSetupDock )
   );
-  videoColorSetupDockWidget->setFloating( true );
-  videoColorSetupDockWidget->setFeatures(
+  videoColorSetupDock->setFloating( true );
+  videoColorSetupDock->setFeatures(
     QDockWidget::DockWidgetMovable |
     QDockWidget::DockWidgetFloatable
   );
 
-  addDockWidget( Qt::LeftDockWidgetArea, videoColorSetupDockWidget );
+  addDockWidget( Qt::LeftDockWidgetArea, videoColorSetupDock );
 
   // Set the GLImageWidget as the centralWidget in MainWindow.
   setCentralWidget( new GLImageWidget( this ) );
@@ -167,6 +174,19 @@ MainWindow
   AboutDialog aboutDialog( this );
 
   aboutDialog.exec();
+}
+
+/*****************************************************************************/
+void
+MainWindow::onSelectedModelChanged( const AbstractModel* model )
+{
+  ColorSetupWidget* colorSetupWidget =
+    qobject_cast< ColorSetupWidget*  >( GetVideoColorSetupDock()->widget() );
+
+  const VectorImageModel* vectorImageModel =
+    dynamic_cast< const VectorImageModel* >( model );
+
+  colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
 }
 
 /*****************************************************************************/

@@ -77,6 +77,8 @@ Application
 
   m_Model = model;
   m_Model->setParent( this );
+
+  emit selectedModelChanged( m_Model );
 }
 
 /*******************************************************************************/
