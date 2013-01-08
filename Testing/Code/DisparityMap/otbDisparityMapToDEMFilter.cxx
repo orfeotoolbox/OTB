@@ -95,7 +95,8 @@ int otbDisparityMapToDEMFilter(int argc, char* argv[])
   filter->SetElevationMin(atof(argv[7]));
   filter->SetElevationMax(atof(argv[8]));
   filter->SetDEMGridStep(atof(argv[10]));
-  filter->SetAverageElevation(atof(argv[9]));
+
+  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(atof(argv[9]));
 
   MaskReaderType::Pointer maskReader;
   if (argc == 12)

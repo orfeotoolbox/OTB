@@ -46,6 +46,8 @@ int otbTileImageFilterRSTransformTest(int argc, char * argv[])
   TileImageFilterType::Pointer tileFilter = TileImageFilterType::New();
   tileFilter->SetLayout(layout);
 
+  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(0);
+
   for(unsigned int i = 0; i<numberOfImages; ++i)
     {
     if(i+3 > (unsigned int)argc)
@@ -71,7 +73,6 @@ int otbTileImageFilterRSTransformTest(int argc, char * argv[])
     // Set-up transform
     RSTransformType::Pointer rsTransform = RSTransformType::New();
     rsTransform->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-    rsTransform->SetAverageElevation(0);
     rsTransform->InstanciateTransform();
     transforms.push_back(rsTransform);
 
@@ -83,7 +84,6 @@ int otbTileImageFilterRSTransformTest(int argc, char * argv[])
   // Build RS transform for tiled image
   RSTransformType::Pointer mosaicRsTransform = RSTransformType::New();
   mosaicRsTransform->SetInputKeywordList(tileFilter->GetOutput()->GetImageKeywordlist());
-  mosaicRsTransform->SetAverageElevation(0);
   mosaicRsTransform->InstanciateTransform();
   
   // Check that individual RSTransform gives the same result as tiled
