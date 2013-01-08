@@ -320,12 +320,14 @@ GCPsToRPCSensorModelImageFilter<TImage>
  
     m_Keywordlist = otb_kwl;
 
-    // Encapsulate it
-    itk::MetaDataDictionary& dict = imagePtr->GetMetaDataDictionary();
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-
     m_ModelUpToDate = true;
     }
+
+   // Update image keywordlist. We need to do it at each stream
+   // because it will be overwritten by up-stream
+   // GenerateOutputInformation() calls.
+    itk::MetaDataDictionary& dict = imagePtr->GetMetaDataDictionary();
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, m_Keywordlist);
 }
 
 template <class TImage>
