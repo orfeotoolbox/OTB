@@ -56,7 +56,7 @@ if(argc!=8)
 // Software Guide : BeginLatex
 //
 // This class is a singleton, the New() method is deprecated and will be removed
-// in future release. Please use the DEMHandler::Instance() method instead.
+// in future release. We need to use the \code{Instance()} method instead.
 //
 // Software Guide : EndLatex
 
@@ -68,11 +68,10 @@ if(argc!=8)
 
 // Software Guide : BeginLatex
 //
-// The class allows to configure a directory containing DEM tiles (DTED or SRTM
-// supported) using the OpenDEMDirectory() method. The OpenGeoidFile() method
+// It allows to configure a directory containing DEM tiles (DTED or SRTM
+// supported) using the \code{OpenDEMDirectory()} method. The \code{OpenGeoidFile()} method
 // allows to input a geoid file as well. Last, a default height above ellipsoid
-// can be set using the SetDefaultHeightAboveEllipsoid() method.
-// demHandler->SetDefaultHeightAboveEllipsoid(defaultHeight);
+// can be set using the \code{SetDefaultHeightAboveEllipsoid()} method.
 //
 // Software Guide : EndLatex
 
@@ -96,22 +95,24 @@ if(argc!=8)
   // (MSL) using the methods \code{GetHeightAboveEllipsoid()} and
   // \code{GetHeightAboveMSL()}.  Outputs of these methods depend on the
   // configuration of the class \doxygen{otb}{DEMHandler} and the different
-  // cases are: For \code{GetHeightAboveEllipsoid()}:
+  // cases are:
+  //
+  // For \code{GetHeightAboveEllipsoid()}:
   //
   // \begin{itemize}
-  // \item DEM and geoid both available: dem_value + geoid_offset
-  // \item No SDEM but geoid available: geoid_offset
-  // \item DEM available, but no geoid: dem_value
+  // \item DEM and geoid both available: $dem\_value + geoid\_offset$
+  // \item No DEM but geoid available: geoid\_offset
+  // \item DEM available, but no geoid: dem\_value
   // \item No DEM and no geoid available: default height above ellipsoid
   // \end{itemize}
   //
   // For \code{GetHeightAboveMSL()}:
   //
   // \begin{itemize}
-  // \item DEM and geoid both available: srtm_value
-  // \item No DEM but geoid available: 0
-  // \item DEM available, but no geoid: srtm_value
-  // \item No DEM and no geoid available: 0
+  // \item DEM and geoid both available: srtm\_value
+  // \item No DEM but geoid available: $0$
+  // \item DEM available, but no geoid: srtm\_value
+  // \item No DEM and no geoid available: $0$
   // \end{itemize}
   //
   // Software Guide : EndLatex
@@ -124,15 +125,21 @@ if(argc!=8)
   double height = -32768;
 
   height = demHandler->GetHeightAboveMSL(point);
-  std::cout<<"height above MSL ("<<longitude<<", "<<latitude<<") = "<<height<<" meters"<<std::endl;
+  std::cout<<"height above MSL ("<<longitude<<","
+           <<latitude<<") = "<<height<<" meters"<<std::endl;
 
   height = demHandler->GetHeightAboveEllipsoid(point);
-  std::cout<<"height above ellipsoid ("<<longitude<<", "<<latitude<<") = "<<height<<" meters"<<std::endl;
+  std::cout<<"height above ellipsoid ("<<longitude
+           <<", "<<latitude<<") = "<<height<<" meters"<<std::endl;
   // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex Please note that OSSIM internal calls for
-  // sensor modelling use the height above ellipsoid, and follow the same logic
-  // as the GetHeightAboveEllipsoid() method.  Software Guide : EndLatex
+  //
+  // Software Guide : BeginLatex
+  //
+  // Note that OSSIM internal calls for sensor
+  // modelling use the height above ellipsoid, and follow the same logic as the
+  // GetHeightAboveEllipsoid() method.
+  //
+  //Software Guide : EndLatex
 
   // Check for Nan
   if(vnl_math_isnan(height))
