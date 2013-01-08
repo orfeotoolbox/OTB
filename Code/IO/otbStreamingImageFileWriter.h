@@ -22,6 +22,7 @@
 #include "itkImageIOBase.h"
 #include "itkImageToImageFilter.h"
 #include "otbStreamingManager.h"
+#include "otbExtendedFilenameToWriterOptions.h"
 
 namespace otb
 {
@@ -73,6 +74,9 @@ public:
   typedef typename OutputImageType::RegionType   OutputImageRegionType;
   typedef typename OutputImageType::PixelType    OutputImagePixelType;
   typedef typename Superclass::DataObjectPointer DataObjectPointer;
+
+  /** The Filename Helper. */
+  typedef ExtendedFilenameToWriterOptions            FNameHelperType;
 
   /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -180,21 +184,10 @@ public:
   virtual void UpdateOutputData(itk::DataObject * itkNotUsed(output));
 
   /** ImageFileWriter Methods */
-
-  /** Specify the name of the output file to write. */
-  itkGetStringMacro(FileName);
-
-  /**
-   * Set the filename and destroy the current driver.
-   * \param filename the name of the file.
-   */
-  virtual void SetFileName(std::string filename)
-  {
-    m_FileName = filename;
-    m_ImageIO = NULL;
-    this->Modified();
-  }
-
+  virtual void SetFileName(const char* extendedFileName);
+  virtual void SetFileName(std::string extendedFileName);
+  virtual const char* GetFileName () const;
+  
   /** Specify the region to write. If left NULL, then the whole image
    * is written. */
   void SetIORegion(const itk::ImageIORegion& region);
@@ -222,10 +215,10 @@ public:
   /**
    * Enable/disable writing of a .geom file with the ossim keyword list along with the written image
    */
-  itkSetMacro(WriteGeomFile, bool);
-  itkGetMacro(WriteGeomFile, bool);
-  itkBooleanMacro(WriteGeomFile);
-
+  itkLegacyMacro( itkSetMacro(WriteGeomFile, bool) );
+  itkLegacyMacro( itkGetMacro(WriteGeomFile, bool) );
+  itkLegacyMacro( itkBooleanMacro(WriteGeomFile) );
+  
 protected:
   StreamingImageFileWriter();
   virtual ~StreamingImageFileWriter();
@@ -281,7 +274,10 @@ private:
                                      // MetaDataDictionary from the
                                      // input or not.
   
-  bool m_WriteGeomFile;              // Write a geom file to store the kwl
+  bool m_WriteGeomFile;              // Write a geom file to store the
+                                     // kwl
+
+  FNameHelperType::Pointer m_FilenameHelper;
 
   StreamingManagerPointerType m_StreamingManager;
 
