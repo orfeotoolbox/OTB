@@ -1361,7 +1361,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     // If there is no ProjectionRef, and the GeoTransform is not the identity,
     // then saving also GCPs is undefined behavior for GDAL, and a WGS84 projection crs
     // is assigned arbitrarily
-    itkWarningMacro(<< "Skipping GCPs saving to prevent GDAL from assigning a WGS84 projection ref to the file")
+    otbMsgDevMacro(<< "Skipping GCPs saving to prevent GDAL from assigning a WGS84 projection ref to the file")
     }
   else
     {
