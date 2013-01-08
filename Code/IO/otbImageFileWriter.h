@@ -44,9 +44,15 @@ namespace otb
  * ImageFileWriter will write directly the streaming buffer in the image file, so
  * that the output image never needs to be completely allocated
  *
- * \sa ImageFileWriter
+ * ImageFileWriter supports extended filenames, which allow to control
+ * some properties of the output file. See
+ * http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for more
+ * information.
+ * 
+ * \sa ImageFileReader
  * \sa ImageSeriesReader
  * \sa ImageIOBase
+ * \sa ExtendedFilenameToReaderOptions
  */
 template <class TInputImage>
 class ITK_EXPORT ImageFileWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
