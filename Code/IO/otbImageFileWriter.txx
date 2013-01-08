@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingImageFileWriter_txx
-#define __otbStreamingImageFileWriter_txx
+#ifndef __otbImageFileWriter_txx
+#define __otbImageFileWriter_txx
 
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkImageFileWriter.h"
 
 #include "itkObjectFactoryBase.h"
@@ -51,8 +51,8 @@ namespace otb
  *
  */
 template <class TInputImage>
-StreamingImageFileWriter<TInputImage>
-::StreamingImageFileWriter()
+ImageFileWriter<TInputImage>
+::ImageFileWriter()
   : m_NumberOfDivisions(0),
     m_CurrentDivision(0),
     m_DivisionProgress(0.0),
@@ -77,14 +77,14 @@ StreamingImageFileWriter<TInputImage>
  *
  */
 template <class TInputImage>
-StreamingImageFileWriter<TInputImage>
-::~StreamingImageFileWriter()
+ImageFileWriter<TInputImage>
+::~ImageFileWriter()
 {
 }
 
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetNumberOfDivisionsStrippedStreaming(unsigned int nbDivisions)
 {
   typedef NumberOfDivisionsStrippedStreamingManager<TInputImage> NumberOfDivisionsStrippedStreamingManagerType;
@@ -96,7 +96,7 @@ StreamingImageFileWriter<TInputImage>
 
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetNumberOfDivisionsTiledStreaming(unsigned int nbDivisions)
 {
   typedef NumberOfDivisionsTiledStreamingManager<TInputImage> NumberOfDivisionsTiledStreamingManagerType;
@@ -108,7 +108,7 @@ StreamingImageFileWriter<TInputImage>
 
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetNumberOfLinesStrippedStreaming(unsigned int nbLinesPerStrip)
 {
   typedef NumberOfLinesStrippedStreamingManager<TInputImage> NumberOfLinesStrippedStreamingManagerType;
@@ -120,7 +120,7 @@ StreamingImageFileWriter<TInputImage>
 
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetAutomaticStrippedStreaming(unsigned int availableRAM, double bias)
 {
   typedef RAMDrivenStrippedStreamingManager<TInputImage> RAMDrivenStrippedStreamingManagerType;
@@ -133,7 +133,7 @@ StreamingImageFileWriter<TInputImage>
 
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetTileDimensionTiledStreaming(unsigned int tileDimension)
 {
   typedef TileDimensionTiledStreamingManager<TInputImage> TileDimensionTiledStreamingManagerType;
@@ -145,7 +145,7 @@ StreamingImageFileWriter<TInputImage>
 
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetAutomaticTiledStreaming(unsigned int availableRAM, double bias)
 {
   typedef RAMDrivenTiledStreamingManager<TInputImage> RAMDrivenTiledStreamingManagerType;
@@ -157,7 +157,7 @@ StreamingImageFileWriter<TInputImage>
 
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetAutomaticAdaptativeStreaming(unsigned int availableRAM, double bias)
 {
   typedef RAMDrivenAdaptativeStreamingManager<TInputImage> RAMDrivenAdaptativeStreamingManagerType;
@@ -173,7 +173,7 @@ StreamingImageFileWriter<TInputImage>
  */
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetBufferMemorySize(unsigned long memory_size_divisions)
 {
   itkWarningMacro("SetBufferMemorySize is DEPRECATED. "
@@ -190,7 +190,7 @@ StreamingImageFileWriter<TInputImage>
  */
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetBufferNumberOfLinesDivisions(unsigned long nb_lines_divisions)
 {
   itkWarningMacro("SetBufferNumberOfLinesDivisions is DEPRECATED. "
@@ -207,7 +207,7 @@ StreamingImageFileWriter<TInputImage>
  */
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetNumberOfStreamDivisions(unsigned long nb_divisions)
 {
   itkWarningMacro("SetNumberOfStreamDivisions is DEPRECATED. "
@@ -223,7 +223,7 @@ StreamingImageFileWriter<TInputImage>
  */
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetAutomaticNumberOfStreamDivisions(void)
 {
   itkWarningMacro("SetAutomaticNumberOfStreamDivisions is DEPRECATED. "
@@ -238,7 +238,7 @@ StreamingImageFileWriter<TInputImage>
  */
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetTilingStreamDivisions(void)
 {
   itkWarningMacro("SetTilingStreamDivisions is DEPRECATED. "
@@ -250,7 +250,7 @@ StreamingImageFileWriter<TInputImage>
 
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetTilingStreamDivisions(unsigned long nb_divisions)
 {
   itkWarningMacro("SetTilingStreamDivisions is DEPRECATED. "
@@ -266,7 +266,7 @@ StreamingImageFileWriter<TInputImage>
  */
 template <class TInputImage>
 unsigned long
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::GetNumberOfStreamDivisions(void)
 {
   return m_StreamingManager->GetNumberOfSplits();
@@ -277,7 +277,7 @@ StreamingImageFileWriter<TInputImage>
  */
 template <class TInputImage>
 std::string
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::GetMethodUseToCalculateNumberOfStreamDivisions(void)
 {
   itkWarningMacro("GetMethodUseToCalculateNumberOfStreamDivisions is DEPRECATED");
@@ -289,7 +289,7 @@ StreamingImageFileWriter<TInputImage>
  */
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -340,7 +340,7 @@ StreamingImageFileWriter<TInputImage>
 //---------------------------------------------------------
 template<class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetIORegion(const itk::ImageIORegion& region)
 {
   itkDebugMacro("setting IORegion to " << region);
@@ -354,7 +354,7 @@ StreamingImageFileWriter<TInputImage>
 
 template<class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::GenerateInputRequestedRegion()
  {
   Superclass::GenerateInputRequestedRegion();
@@ -378,7 +378,7 @@ StreamingImageFileWriter<TInputImage>
  */
 template<class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::UpdateOutputData(itk::DataObject *itkNotUsed(output))
 {
   unsigned int idx;
@@ -672,7 +672,7 @@ StreamingImageFileWriter<TInputImage>
  */
 template<class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::GenerateData(void)
 {
   const InputImageType * input = this->GetInput();
@@ -765,7 +765,7 @@ StreamingImageFileWriter<TInputImage>
 
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetFileName(std::string extendedFileName)
 {
   this->SetFileName(extendedFileName.c_str());
@@ -773,7 +773,7 @@ StreamingImageFileWriter<TInputImage>
 
 template <class TInputImage>
 void
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::SetFileName(const char* extendedFileName)
 {
   this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
@@ -784,7 +784,7 @@ StreamingImageFileWriter<TInputImage>
 
 template <class TInputImage>
 const char*
-StreamingImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage>
 ::GetFileName () const
 {
 return this->m_FilenameHelper->GetSimpleFileName();

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingImageFileWriter_h
-#define __otbStreamingImageFileWriter_h
+#ifndef __otbImageFileWriter_h
+#define __otbImageFileWriter_h
 
 #include "otbMacro.h"
 #include "itkImageIOBase.h"
@@ -27,21 +27,21 @@
 namespace otb
 {
 
-/** \class StreamingImageFileWriter
+/** \class ImageFileWriter
  * \brief Writes image data to a single file with streaming process.
  *
- * StreamingImageFileWriter writes its input data to a single output file.
- * StreamingImageFileWriter interfaces with an ImageIO class to write out the
+ * ImageFileWriter writes its input data to a single output file.
+ * ImageFileWriter interfaces with an ImageIO class to write out the
  * data whith streaming process.
  *
- * StreamingImageFileWriter will divide the output into several pieces
+ * ImageFileWriter will divide the output into several pieces
  * (controlled by SetNumberOfDivisionsStrippedStreaming, SetNumberOfLinesStrippedStreaming,
  * SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming or SetAutomaticTiledStreaming),
  * and call the upstream pipeline for each piece, tiling the individual outputs into one large
  * output. This reduces the memory footprint for the application since
  * each filter does not have to process the entire dataset at once.
  *
- * StreamingImageFileWriter will write directly the streaming buffer in the image file, so
+ * ImageFileWriter will write directly the streaming buffer in the image file, so
  * that the output image never needs to be completely allocated
  *
  * \sa ImageFileWriter
@@ -49,11 +49,11 @@ namespace otb
  * \sa ImageIOBase
  */
 template <class TInputImage>
-class ITK_EXPORT StreamingImageFileWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
+class ITK_EXPORT ImageFileWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef StreamingImageFileWriter                          Self;
+  typedef ImageFileWriter                          Self;
   typedef itk::ImageToImageFilter<TInputImage, TInputImage> Superclass;
   typedef itk::SmartPointer<Self>                           Pointer;
   typedef itk::SmartPointer<const Self>                     ConstPointer;
@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(StreamingImageFileWriter, itk::ImageToImageFilter);
+  itkTypeMacro(ImageFileWriter, itk::ImageToImageFilter);
 
   /** Some typedefs for the input and output. */
   typedef TInputImage                            InputImageType;
@@ -220,8 +220,8 @@ public:
   itkLegacyMacro( itkBooleanMacro(WriteGeomFile) );
   
 protected:
-  StreamingImageFileWriter();
-  virtual ~StreamingImageFileWriter();
+  ImageFileWriter();
+  virtual ~ImageFileWriter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Does the real work. */
@@ -231,8 +231,8 @@ protected:
 
 
 private:
-  StreamingImageFileWriter(const StreamingImageFileWriter &); //purposely not implemented
-  void operator =(const StreamingImageFileWriter&); //purposely not implemented
+  ImageFileWriter(const ImageFileWriter &); //purposely not implemented
+  void operator =(const ImageFileWriter&); //purposely not implemented
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
   {
@@ -288,7 +288,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingImageFileWriter.txx"
+#include "otbImageFileWriter.txx"
 #endif
 
 #endif
