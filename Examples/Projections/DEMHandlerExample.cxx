@@ -136,7 +136,7 @@ if(argc!=8)
   //
   // Note that OSSIM internal calls for sensor
   // modelling use the height above ellipsoid, and follow the same logic as the
-  // GetHeightAboveEllipsoid() method.
+  // \code{GetHeightAboveEllipsoid()} method.
   //
   //Software Guide : EndLatex
 
