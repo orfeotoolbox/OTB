@@ -40,7 +40,7 @@
 #include "itkMacro.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
@@ -96,8 +96,8 @@ int main(int argc, char * argv[])
   typedef otb::Image<ColorPixelType, Dimension>  RGBImageType;
 
   typedef otb::ImageFileReader<ImageType>               ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>      WriterType;
-  typedef otb::StreamingImageFileWriter<LabelImageType> LabelWriterType;
+  typedef otb::ImageFileWriter<ImageType>      WriterType;
+  typedef otb::ImageFileWriter<LabelImageType> LabelWriterType;
 
   typedef otb::MeanShiftSegmentationFilter<ImageType, LabelImageType, ImageType> FilterType;
   // Software Guide : EndCodeSnippet

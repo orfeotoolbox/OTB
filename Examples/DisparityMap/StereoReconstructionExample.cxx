@@ -53,7 +53,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkVectorCastImageFilter.h"
 #include "otbImageList.h"
@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileReader
     <FloatImageType>                          ImageReaderType;
 
-  typedef otb::StreamingImageFileWriter
+  typedef otb::ImageFileWriter
     <FloatImageType>                          WriterType;
 
   typedef unsigned char                       OutputPixelType;
@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
   typedef itk::RescaleIntensityImageFilter<FloatImageType,
       OutputImageType> RescalerType;
 
-  typedef otb::StreamingImageFileWriter
+  typedef otb::ImageFileWriter
     <OutputImageType>                         OutputWriterType;
 // Software Guide : BeginLatex
 // This example demonstrates the use of the following filters :

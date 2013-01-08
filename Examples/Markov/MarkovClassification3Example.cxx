@@ -42,7 +42,7 @@
 
 
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImage.h"
 #include "otbMarkovRandomFieldFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
@@ -96,7 +96,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< InputImageType >              ReaderType;
-  typedef otb::StreamingImageFileWriter< LabelledImageType >  WriterType;
+  typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -286,7 +286,7 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::StreamingImageFileWriter<RGBImageType> WriterRescaledType;
+  typedef otb::ImageFileWriter<RGBImageType> WriterRescaledType;
 
   WriterRescaledType::Pointer writerRescaled = WriterRescaledType::New();
 

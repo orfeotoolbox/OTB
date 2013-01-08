@@ -31,7 +31,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 #include "otbOrthoRectificationFilter.h"
 #include "otbGenericMapProjection.h"
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
   typedef otb::VectorImage<double, 2>                    DoubleVectorImageType;
   typedef otb::ImageFileReader<ImageType>                ReaderType;
   typedef otb::ImageFileReader<VectorImageType>          VectorReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
+  typedef otb::ImageFileWriter<VectorImageType> WriterType;
 
   ReaderType::Pointer       readerPAN = ReaderType::New();
   VectorReaderType::Pointer readerXS = VectorReaderType::New();

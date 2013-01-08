@@ -31,7 +31,7 @@
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int main(int argc, char * argv[])
 {
@@ -70,13 +70,13 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  // Then, we need an \doxygen{otb}{StreamingImageFileWriter}
+  // Then, we need an \doxygen{otb}{ImageFileWriter}
   // also templated with the image type.
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   // Software Guide : EndCodeSnippet
 

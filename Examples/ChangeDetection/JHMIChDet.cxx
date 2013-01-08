@@ -17,7 +17,7 @@
 =========================================================================*/
 
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImage.h"
 #include "itkShiftScaleImageFilter.h"
 #include "otbJoinHistogramMIImageFilter.h"
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 
   typedef otb::ImageFileReader<InputImageType1>          ReaderType1;
   typedef otb::ImageFileReader<InputImageType2>          ReaderType2;
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   typedef itk::ShiftScaleImageFilter<ChangeImageType,
       OutputImageType> RescalerType;

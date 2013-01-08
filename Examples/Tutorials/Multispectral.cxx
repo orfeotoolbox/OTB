@@ -43,7 +43,7 @@
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "itkShiftScaleImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
@@ -135,7 +135,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::Image<PixelType, 2>                 ImageType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName(argv[2]);
@@ -207,7 +207,7 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::StreamingImageFileWriter<VectorImageType> VectorWriterType;
+  typedef otb::ImageFileWriter<VectorImageType> VectorWriterType;
   VectorWriterType::Pointer writerVector = VectorWriterType::New();
 
   writerVector->SetFileName(argv[3]);

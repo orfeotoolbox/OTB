@@ -36,7 +36,7 @@
 #include "otbImage.h"
 #include "otbSOMMap.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int main(int argc, char * argv[])
 {
@@ -94,7 +94,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<ImageType>                 ReaderType;
   typedef otb::ImageFileReader<SOMMapType>                SOMReaderType;
-  typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
+  typedef otb::ImageFileWriter<LabeledImageType> WriterType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //

@@ -39,7 +39,7 @@
 // Software Guide : EndLatex
 
 #include "otbImage.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 #include "itkRecursiveGaussianImageFilter.h"
 #include "itkWarpImageFilter.h"
@@ -221,7 +221,7 @@ int main(int argc, char** argv)
   // The execution of the \doxygen{otb}{FineRegistrationImageFilter} will be triggered by
   // the \code{Update()} call on the writer at the end of the
   // pipeline. Make sure to use a
-  // \doxygen{otb}{StreamingImageFileWriter} if you want to benefit
+  // \doxygen{otb}{ImageFileWriter} if you want to benefit
   // from the streaming features.
   //
   // Software Guide : EndLatex
@@ -243,7 +243,7 @@ int main(int argc, char** argv)
   fieldRescaler->SetOutputMaximum(255);
   fieldRescaler->SetOutputMinimum(0);
 
-  typedef otb::StreamingImageFileWriter<OutputImageType> DFWriterType;
+  typedef otb::ImageFileWriter<OutputImageType> DFWriterType;
 
   DFWriterType::Pointer dfWriter = DFWriterType::New();
   dfWriter->SetFileName(argv[3]);
@@ -272,7 +272,7 @@ int main(int argc, char** argv)
   metricRescaler->SetOutputMinimum(0);
   metricRescaler->SetOutputMaximum(255);
 
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   WriterType::Pointer writer1 = WriterType::New();
   writer1->SetInput(metricRescaler->GetOutput());

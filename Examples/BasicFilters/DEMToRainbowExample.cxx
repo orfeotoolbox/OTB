@@ -50,7 +50,7 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbScalarToRainbowRGBPixelFunctor.h"
@@ -75,7 +75,7 @@ int main(int argc, char * argv[])
   typedef itk::RGBPixel<UCharPixelType>               RGBPixelType;
   typedef otb::Image<PixelType, 2>                    ImageType;
   typedef otb::Image<RGBPixelType, 2>                 RGBImageType;
-  typedef otb::StreamingImageFileWriter<RGBImageType> WriterType;
+  typedef otb::ImageFileWriter<RGBImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[1]);

@@ -41,7 +41,7 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkScalarToRGBPixelFunctor.h"
 
@@ -85,7 +85,7 @@ int main(int argc, char * argv[])
   colormapper->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
 
-  typedef otb::StreamingImageFileWriter<RGBImageType> WriterType;
+  typedef otb::ImageFileWriter<RGBImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputRGBFilename);
   writer->SetInput(colormapper->GetOutput());
@@ -99,7 +99,7 @@ int main(int argc, char * argv[])
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetInput(reader->GetOutput());
 
-  typedef otb::StreamingImageFileWriter<OutputImageType> UCharWriterType;
+  typedef otb::ImageFileWriter<OutputImageType> UCharWriterType;
   UCharWriterType::Pointer writer2 = UCharWriterType::New();
   writer2->SetFileName(outputScaledFilename);
   writer2->SetInput(rescaler->GetOutput());

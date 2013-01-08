@@ -18,7 +18,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
 
@@ -94,13 +94,13 @@ int main(int argc, char* argv[])
   //  can be vey large, we will force the pipeline to use
   //  streaming. For this purpose, the file writer will be
   //  streamed. This is achieved by using the
-  //  \doxygen{otb}{StreamingImageFileWriter} class.
+  //  \doxygen{otb}{ImageFileWriter} class.
   //
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<InputImageType>           ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   //  Software Guide : EndCodeSnippet
 
   
@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
   typedef otb::PrintableImageFilter<InputImageType,InputImageType>   InputPrintFilterType;
   typedef otb::PrintableImageFilter<OutputImageType,OutputImageType> OutputPrintFilterType;
   typedef InputPrintFilterType::OutputImageType                      VisuImageType;
-  typedef otb::StreamingImageFileWriter<VisuImageType>               VisuWriterType;
+  typedef otb::ImageFileWriter<VisuImageType>               VisuWriterType;
   
   //  The \doxygen{otb}{MultivariateAlterationDetectorImageFilter} is templated over
   //  the type of the input images and the type of the generated change

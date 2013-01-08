@@ -72,7 +72,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 // Software Guide : EndCodeSnippet
 
@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::StreamingImageFileWriter<VectorIntImageType> WriterType;
+  typedef otb::ImageFileWriter<VectorIntImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(fusion->GetOutput());
@@ -161,7 +161,7 @@ int main(int argc, char* argv[])
   typedef otb::VectorImage<unsigned char,
       2>
   VectorCharImageType;
-  typedef otb::StreamingImageFileWriter<VectorCharImageType> PNGWriterType;
+  typedef otb::ImageFileWriter<VectorCharImageType> PNGWriterType;
   PNGWriterType::Pointer pngwriter = PNGWriterType::New();
 
   printable->SetInput(fusion->GetOutput());

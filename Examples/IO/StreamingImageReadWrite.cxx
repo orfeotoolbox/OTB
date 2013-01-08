@@ -38,7 +38,7 @@
 //  this is transparent for the programmer, and if a streaming loop is
 //  used at the end of the pipeline, the read operation will be
 //  streamed. For the file writing, the
-//  \doxygen{otb}{StreamingImageFileWriter} has to be used.
+//  \doxygen{otb}{ImageFileWriter} has to be used.
 //
 //  The first step for performing streamed reading and writing is to include the
 //  following headers.
@@ -46,14 +46,14 @@
 //  \index{otb::ImageFileReader|textbf}
 //  \index{otb::ImageFileReader!header}
 //
-//  \index{otb::StreamingImageFileWriter|textbf}
-//  \index{otb::StreamingImageFileWriter!header}
+//  \index{otb::ImageFileWriter|textbf}
+//  \index{otb::ImageFileWriter!header}
 //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 // Software Guide : EndCodeSnippet
 
 #include "itkRescaleIntensityImageFilter.h"
@@ -88,14 +88,14 @@ int main(int argc, char * argv[])
   //  classes are parameterized over the image type. We will rescale
   //  the intensities of the as an example of intermediate processing step.
   //
-  //  \index{otb::StreamingImageFileWriter!Instantiation}
+  //  \index{otb::ImageFileWriter!Instantiation}
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<ImageType>                        ReaderType;
   typedef itk::RescaleIntensityImageFilter<ImageType, ImageType> RescalerType;
-  typedef otb::StreamingImageFileWriter<ImageType>               WriterType;
+  typedef otb::ImageFileWriter<ImageType>               WriterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -128,9 +128,9 @@ int main(int argc, char * argv[])
   //  for the rescaler.
   //
   //  \index{otb::ImageFileReader!SetFileName()}
-  //  \index{otb::StreamingImageFileWriter!SetFileName()}
+  //  \index{otb::ImageFileWriter!SetFileName()}
   //  \index{SetFileName()!otb::ImageFileReader}
-  //  \index{SetFileName()!otb::StreamingImageFileWriter}
+  //  \index{SetFileName()!otb::ImageFileWriter}
   //
   //  Software Guide : EndLatex
 

@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 // Software Guide : BeginLatex
 //
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 //
 // We will start by defining the types for the images, the image file
 // reader and the image file writer. The writer will be a
-// \doxygen{otb}{StreamingImageFileWriter} which will allow us to set
+// \doxygen{otb}{ImageFileWriter} which will allow us to set
 // the number of stream divisions we want to apply when writing the
 // output image, which can be very large.
 //
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
   typedef otb::Image<int, 2>                             ImageType;
   typedef otb::VectorImage<int, 2>                       VectorImageType;
   typedef otb::ImageFileReader<VectorImageType>          ReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
+  typedef otb::ImageFileWriter<VectorImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

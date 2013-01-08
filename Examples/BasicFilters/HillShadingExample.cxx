@@ -40,7 +40,7 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 #include "otbDEMToImageGenerator.h"
 #include "otbHillShadingFilter.h"
@@ -72,8 +72,8 @@ int main(int argc, char * argv[])
   typedef otb::Image<PixelType, 2>                       ImageType;
   typedef otb::Image<RGBPixelType, 2>                    RGBImageType;
   typedef otb::Image<UCharPixelType, 2>                  ScalarImageType;
-  typedef otb::StreamingImageFileWriter<RGBImageType>    WriterType;
-  typedef otb::StreamingImageFileWriter<ScalarImageType> ScalarWriterType;
+  typedef otb::ImageFileWriter<RGBImageType>    WriterType;
+  typedef otb::ImageFileWriter<ScalarImageType> ScalarWriterType;
 
   ScalarWriterType::Pointer writer = ScalarWriterType::New();
   writer->SetFileName(argv[1]);

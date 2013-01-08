@@ -36,7 +36,7 @@
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkGradientMagnitudeImageFilter.h"
 
 int main(int argc, char * argv[])
@@ -63,7 +63,7 @@ int main(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
 
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(argv[1]);

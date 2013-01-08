@@ -59,7 +59,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
 int main(int argc, char * argv[])
@@ -115,7 +115,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef PrintableFilterType::OutputImageType           OutputImageType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   // Software Guide : EndCodeSnippet
 
   WriterType::Pointer writer = WriterType::New();

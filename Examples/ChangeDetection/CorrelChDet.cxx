@@ -17,7 +17,7 @@
 =========================================================================*/
 
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImage.h"
 #include "itkShiftScaleImageFilter.h"
 #include "otbCommandProgressUpdate.h"
@@ -87,14 +87,14 @@ int main(int argc, char* argv[])
   //  can be vey large, we will force the pipeline to use
   //  streaming. For this purpose, the file writer will be
   //  streamed. This is achieved by using the
-  //  \doxygen{otb}{StreamingImageFileWriter} class.
+  //  \doxygen{otb}{ImageFileWriter} class.
   //
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<InputImageType1>          ReaderType1;
   typedef otb::ImageFileReader<InputImageType2>          ReaderType2;
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   //  Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

@@ -41,7 +41,7 @@
 #include "otbObjectList.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char** argv)
@@ -152,7 +152,7 @@ int main(int argc, char** argv)
 //  Software Guide : BeginLatex
 //
 //  We plug the image list as input of the filter and use a
-//  \doxygen{otb}{StreamingImageFileWriter} to write the result image
+//  \doxygen{otb}{ImageFileWriter} to write the result image
 //  to a file, so that the streaming capabilities of all the readers
 //  and the filter are used.
 //
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
 // Software Guide : BeginCodeSnippet
   iL2VI->SetInput(imageList);
 
-  typedef otb::StreamingImageFileWriter<VectorImageType> ImageWriterType;
+  typedef otb::ImageFileWriter<VectorImageType> ImageWriterType;
 
   ImageWriterType::Pointer imageWriter = ImageWriterType::New();
 

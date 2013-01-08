@@ -34,7 +34,7 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkCastImageFilter.h"
 
@@ -71,7 +71,7 @@ int main(int argc, char * argv[])
   rescaler->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
 
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
   writer->SetInput(rescaler->GetOutput());

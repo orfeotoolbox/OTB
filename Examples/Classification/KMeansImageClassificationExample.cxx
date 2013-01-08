@@ -32,7 +32,7 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int main(int argc, char * argv[])
 {
@@ -86,7 +86,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<ImageType>                 ReaderType;
-  typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
+  typedef otb::ImageFileWriter<LabeledImageType> WriterType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
