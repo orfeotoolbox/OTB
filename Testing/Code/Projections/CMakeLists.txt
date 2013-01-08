@@ -869,7 +869,7 @@ ADD_TEST(prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithoutDEM $
 
 ADD_TEST(prTvGCPsToRPCSensorModelImageFilterAndOrtho ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}
-         ${BASELINE_FILES}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
+         ${BASELINE}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
          ${TEMP}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
          otbGCPsToRPCSensorModelImageFilterAndOrtho
      ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
