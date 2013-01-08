@@ -94,6 +94,10 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   gridSpacing[1] = -atof(argv[11]);
   orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
   
+  VectorImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+  no_data.Fill(0);
+  orthoRectifFilter->SetEdgePaddingValue(no_data);
+  
   writer->SetInput(orthoRectifFilter->GetOutput());
   writer->SetNumberOfDivisionsTiledStreaming(4);
   writer->Update();
