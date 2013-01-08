@@ -86,7 +86,6 @@ if(argc!=8)
 
   demHandler->OpenDEMDirectory(demdir);
   demHandler->OpenGeoidFile(geoid);
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
