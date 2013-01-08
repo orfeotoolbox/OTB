@@ -40,6 +40,9 @@ TARGET_LINK_LIBRARIES(VectorDataExtractROIExample OTBProjections OTBCommon OTBIO
 ADD_EXECUTABLE(EstimateRPCSensorModelExample EstimateRPCSensorModelExample.cxx )
 TARGET_LINK_LIBRARIES(EstimateRPCSensorModelExample OTBProjections OTBCommon OTBIO)
 
+ADD_EXECUTABLE(DEMHandlerExample DEMHandlerExample.cxx )
+TARGET_LINK_LIBRARIES(DEMHandlerExample OTBOssimAdapters OTBCommon OTBIO)
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Projections)
@@ -158,6 +161,17 @@ ADD_TEST(prTeEstimateRPCSensorModelExampleTest ${EXE_TESTS}
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(prTeDEMHandlerExampleTest ${EXE_TESTS}
+  DEMHandlerExampleTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/DEM/egm96.grd
+  40
+  8.434583
+  44.647083
+  383.580313671
+  0.001
+)
+
 IF( OTB_USE_CURL )
 ADD_TEST(prTePlaceNameToLonLatExampleTest ${EXE_TESTS2}
     PlaceNameToLonLatExampleTest
@@ -175,7 +189,7 @@ ENDIF( OTB_USE_CURL )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections OTBTesting)
+TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections OTBTesting OTBOssimAdapters)
 
 IF( OTB_USE_CURL )
   ADD_EXECUTABLE(otbProjectionsExamplesTests2 otbProjectionsExamplesTests2.cxx)
