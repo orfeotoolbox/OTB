@@ -18,7 +18,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbInnerProductPCAImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 
@@ -36,8 +36,8 @@ int otbInnerProductPCAImageFilter(int argc, char* argv[])
   typedef otb::Image<PixelType, Dimension>                      MonoImageType;
   typedef otb::VectorImage<PixelType, Dimension>                ImageType;
   typedef otb::ImageFileReader<ImageType>                       ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>              WriterType;
-  typedef otb::StreamingImageFileWriter<MonoImageType>          WriterType2;
+  typedef otb::ImageFileWriter<ImageType>              WriterType;
+  typedef otb::ImageFileWriter<MonoImageType>          WriterType2;
   typedef otb::InnerProductPCAImageFilter<ImageType, ImageType> PCAFilterType;
 
   ReaderType::Pointer reader     = ReaderType::New();

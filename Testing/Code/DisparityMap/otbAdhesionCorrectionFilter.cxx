@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbAdhesionCorrectionFilter.h"
 #include "otbImage.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"
 #include "otbImageFileReader.h"
 
@@ -31,8 +31,8 @@ typedef otb::Image<MaskPixelType, Dimension>                          MaskType;
 typedef otb::ImageFileReader<ImageType>               ReaderType;
 typedef otb::ImageFileReader<MaskType>                MaskReaderType;
 
-typedef otb::StreamingImageFileWriter<ImageType>                      WriterType;
-typedef otb::StreamingImageFileWriter<MaskType>                       MaskWriterType;
+typedef otb::ImageFileWriter<ImageType>                      WriterType;
+typedef otb::ImageFileWriter<MaskType>                       MaskWriterType;
 
 typedef otb::AdhesionCorrectionFilter<ImageType, MaskType> AdhesionCorrectionFilterType;
 
@@ -112,13 +112,13 @@ int otbAdhesionCorrectionFilter(int argc, char* argv[])
   adhesioncorrectionfilter->SetEdgeThreshold(30);
 
 
-  typedef otb::StreamingImageFileWriter<ImageType> DFWriterType;
+  typedef otb::ImageFileWriter<ImageType> DFWriterType;
   DFWriterType::Pointer dfWriter = DFWriterType::New();
   dfWriter->SetFileName(correctedDisparityFileName);
   dfWriter->SetInput(adhesioncorrectionfilter->GetOutput());
   dfWriter->Update();
 
-  typedef otb::StreamingImageFileWriter<MaskImageType> MaskWriterType;
+  typedef otb::ImageFileWriter<MaskImageType> MaskWriterType;
   MaskWriterType::Pointer mask_writer = MaskWriterType::New();
   mask_writer->SetInput(adhesioncorrectionfilter->GetOutputMask());
   mask_writer->SetFileName(correctedMaskFileName);

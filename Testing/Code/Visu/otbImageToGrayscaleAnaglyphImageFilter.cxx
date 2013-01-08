@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbImageToGrayscaleAnaglyphImageFilter(int argc, char * argv[])
 {
@@ -32,7 +32,7 @@ int otbImageToGrayscaleAnaglyphImageFilter(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, Dimension>                                          VectorImageType;
   typedef otb::ImageToGrayscaleAnaglyphImageFilter<ImageType, ImageType, VectorImageType> FilterType;
   typedef otb::ImageFileReader<ImageType>                                                 ReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType>                                  WriterType;
+  typedef otb::ImageFileWriter<VectorImageType>                                  WriterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();

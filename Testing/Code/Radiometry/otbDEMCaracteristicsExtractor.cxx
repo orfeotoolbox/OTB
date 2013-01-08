@@ -19,7 +19,7 @@
 
 #include "otbDEMCaracteristicsExtractor.h"
 #include "otbImage.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 
 int otbDEMCaracteristicsExtractor(int argc, char * argv[])
@@ -36,7 +36,7 @@ int otbDEMCaracteristicsExtractor(int argc, char * argv[])
 
   typedef otb::DEMCaracteristicsExtractor<InputImageType, InputImageType> DEMCaracteristicsExtractorType;
   typedef otb::ImageFileReader<InputImageType>                            ReaderType;
-  typedef otb::StreamingImageFileWriter<InputImageType>                   WriterType;
+  typedef otb::ImageFileWriter<InputImageType>                   WriterType;
 
   ReaderType::Pointer                     input = ReaderType::New();
   WriterType::Pointer                     slotWriter = WriterType::New();

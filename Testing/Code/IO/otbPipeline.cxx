@@ -18,14 +18,14 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbPipeline(int argc, char * argv[])
 {
   typedef otb::Image<unsigned char, 2>    ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);

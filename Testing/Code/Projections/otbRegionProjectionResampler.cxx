@@ -33,7 +33,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbStreamingResampleImageFilter.h"
 
 
@@ -61,7 +61,7 @@ int otbRegionProjectionResampler(int argc, char* argv[])
   typedef otb::Image<unsigned char, 2>                               CharImageType;
   typedef otb::Image<double, 2>                                      ImageType;
   typedef otb::ImageFileReader<ImageType>                            ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>                   WriterType;
+  typedef otb::ImageFileWriter<ImageType>                   WriterType;
   typedef otb::InverseSensorModel<double>                            ModelType;
   typedef itk::LinearInterpolateImageFunction<ImageType, double>     InterpolatorType;
   typedef itk::RescaleIntensityImageFilter<ImageType, CharImageType> RescalerType;

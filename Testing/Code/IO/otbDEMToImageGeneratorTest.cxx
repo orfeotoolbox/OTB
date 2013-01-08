@@ -18,7 +18,7 @@
 #include "itkMacro.h"
 
 #include "otbDEMToImageGenerator.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImage.h"
 #include "otbStandardFilterWatcher.h"
 
@@ -41,7 +41,7 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
   typedef DEMToImageGeneratorType::PointType       PointType;
   typedef DEMToImageGeneratorType::SizeType        SizeType;
   typedef DEMToImageGeneratorType::SpacingType     SpacingType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   // Instantiating object
   DEMToImageGeneratorType::Pointer object = DEMToImageGeneratorType::New();

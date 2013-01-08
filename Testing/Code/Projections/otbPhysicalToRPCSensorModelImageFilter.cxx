@@ -19,7 +19,7 @@
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
 {
@@ -52,7 +52,7 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
     estimator->SetGridSize(gridSize);
 
     // Write the resampled image
-    typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
+    typedef otb::ImageFileWriter<ImageType>    WriterType;
     WriterType::Pointer writer= WriterType::New();
     writer->SetAutomaticTiledStreaming();
     writer->WriteGeomFileOn();

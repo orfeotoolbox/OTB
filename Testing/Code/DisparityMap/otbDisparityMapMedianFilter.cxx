@@ -18,14 +18,14 @@
 #include "otbDisparityMapMedianFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"
 
  const unsigned int Dimension = 2;
  typedef float                                                         PixelType;
  typedef otb::Image<PixelType, Dimension>                              FloatImageType;
  typedef otb::ImageFileReader<FloatImageType>                          ReaderType;
- typedef otb::StreamingImageFileWriter<FloatImageType>                 FloatWriterType;
+ typedef otb::ImageFileWriter<FloatImageType>                 FloatWriterType;
 
  typedef otb::DisparityMapMedianFilter<FloatImageType,FloatImageType,FloatImageType>   DisparityMapMedianFilterType;
 

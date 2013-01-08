@@ -22,7 +22,7 @@
 #include "otbMultiScaleConvexOrConcaveClassificationFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImage.h"
 
 #include "itkMacro.h"
@@ -46,7 +46,7 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int argc, char * argv[])
   typedef otb::Image<LabeledPixelType, 2>        LabeledImageType;
 
   typedef otb::ImageFileReader<InputImageType>            ReaderType;
-  typedef otb::StreamingImageFileWriter<LabeledImageType> LabeledWriterType;
+  typedef otb::ImageFileWriter<LabeledImageType> LabeledWriterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
   typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InputImageType, StructuringElementType>

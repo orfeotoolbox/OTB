@@ -20,7 +20,7 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 #include "itkTernaryFunctorImageFilter.h"
 #include "otbAmplitudePhaseToRGBFunctor.h"
@@ -40,7 +40,7 @@ int otbAmplitudePhaseToRGBFunctor(int argc, char * argv[])
   typedef otb::Image<RGBPixelType, 2>  RGBImageType;
 
   typedef otb::ImageFileReader<ComplexImageType>      ReaderType;
-  typedef otb::StreamingImageFileWriter<RGBImageType> WriterType;
+  typedef otb::ImageFileWriter<RGBImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

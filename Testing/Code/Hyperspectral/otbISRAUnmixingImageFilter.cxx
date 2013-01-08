@@ -19,7 +19,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
 #include "otbStandardWriterWatcher.h"
 
@@ -30,7 +30,7 @@ typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
 typedef otb::ISRAUnmixingImageFilter<ImageType, ImageType, PixelType> UnmixingImageFilterType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
-typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+typedef otb::ImageFileWriter<ImageType> WriterType;
 
 int otbISRAUnmixingImageFilterNewTest(int argc, char * argv[])
 {

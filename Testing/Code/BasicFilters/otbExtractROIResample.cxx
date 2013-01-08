@@ -18,7 +18,7 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
 #include "itkIdentityTransform.h"
 #include "otbStreamingResampleImageFilter.h"
@@ -83,7 +83,7 @@ int otbExtractROIResample(int argc, char* argv[])
     filterResampleRoi->SetInput(reader->GetOutput());
     }
 
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer streamingWriter = WriterType::New();
 
   streamingWriter->SetFileName(argv[2]);

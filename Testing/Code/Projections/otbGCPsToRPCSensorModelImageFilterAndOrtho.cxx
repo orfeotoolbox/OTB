@@ -19,7 +19,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbMapProjections.h"
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
@@ -45,7 +45,7 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPsToSensorModelFilterType;
   typedef GCPsToSensorModelFilterType::Point2DType        Point2DType;
   typedef GCPsToSensorModelFilterType::Point3DType        Point3DType;
-  typedef otb::StreamingImageFileWriter<ImageType>                                  WriterType;
+  typedef otb::ImageFileWriter<ImageType>                                  WriterType;
   typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
   typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType;
 

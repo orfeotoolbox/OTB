@@ -18,7 +18,7 @@
 #include "otbMorphologicalClosingProfileFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImage.h"
 
 #include "itkMacro.h"
@@ -40,7 +40,7 @@ int otbMorphologicalClosingProfileFilter(int argc, char * argv[])
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>           ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
   typedef otb::MorphologicalClosingProfileFilter<InputImageType, InputImageType, StructuringElementType>

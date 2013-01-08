@@ -21,7 +21,7 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbConvolutionImageFilter.h"
 #include "otbOverlapSaveConvolutionImageFilter.h"
 #include "otbGaborFilterGenerator.h"
@@ -56,7 +56,7 @@ int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter(int argc, char *
 
   typedef otb::Image<PrecisionType, 2>                                 ImageType;
   typedef otb::ImageFileReader<ImageType>                              ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>                     WriterType;
+  typedef otb::ImageFileWriter<ImageType>                     WriterType;
   typedef otb::OverlapSaveConvolutionImageFilter<ImageType, ImageType> OSConvolutionFilterType;
   // Setting the same boundary conditions than the one used in the overlap save convolution filter
   typedef itk::ConstantBoundaryCondition<ImageType>                                BoundaryConditionType;

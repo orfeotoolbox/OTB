@@ -26,7 +26,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbInverseSensorModel.h"
 #include "otbStreamingResampleImageFilter.h"
 
@@ -54,7 +54,7 @@ int otbOrthoRectificationFilterWithDEM(int argc, char* argv[])
 
   typedef otb::Image<double, 2>                    ImageType;
   typedef otb::ImageFileReader<ImageType>          ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
   typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType;

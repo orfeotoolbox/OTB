@@ -24,11 +24,11 @@
 #include "otbImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 #include "itkMeanImageFilter.h"
 
-int otbStreamingImageFileWriterWithFilterTest(int argc, char* argv[])
+int otbImageFileWriterWithFilterTest(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];
@@ -50,7 +50,7 @@ int otbStreamingImageFileWriterWithFilterTest(int argc, char* argv[])
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>                  ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType>        StreamingWriterType;
+  typedef otb::ImageFileWriter<OutputImageType>        StreamingWriterType;
   typedef otb::ImageFileWriter<OutputImageType>                 WriterType;
   typedef itk::MeanImageFilter<InputImageType, OutputImageType> FilterType;
 

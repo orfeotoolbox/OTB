@@ -24,7 +24,7 @@
 #include "otbMacro.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbMapProjections.h"
 #include "itkComplexToModulusImageFilter.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
@@ -44,7 +44,7 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
 
   typedef otb::VectorImage<double, 2>                                               VectorImageType;
   typedef otb::ImageFileReader<VectorImageType>                                     ReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType>                            WriterType;
+  typedef otb::ImageFileWriter<VectorImageType>                            WriterType;
   typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
   typedef otb::OrthoRectificationFilter<VectorImageType, VectorImageType, UtmMapProjectionType> OrthoRectifFilterType;
 
@@ -128,7 +128,7 @@ int otbOrthoRectificationComplexFilter(int argc, char* argv[])
                           >
                         >                                                           ComplexToModulusFilterType;
   typedef otb::ImageFileReader<ComplexVectorImageType>                              ReaderType;
-  typedef otb::StreamingImageFileWriter<ModulusVectorImageType>                     WriterType;
+  typedef otb::ImageFileWriter<ModulusVectorImageType>                     WriterType;
   typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
   typedef otb::OrthoRectificationFilter<ModulusVectorImageType, ModulusVectorImageType, UtmMapProjectionType> OrthoRectifFilterType;
 

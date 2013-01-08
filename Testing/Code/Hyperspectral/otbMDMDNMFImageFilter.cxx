@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbImageFileReader.h"
 #include "otbVectorImage.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbMDMDNMFImageFilter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
 #include "otbStandardWriterWatcher.h"
@@ -38,7 +38,7 @@ int otbMDMDNMFImageFilterTest(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, 2>                 ImageType;
   typedef otb::MDMDNMFImageFilter<ImageType, ImageType>  MDMDNMFImageFilterType;
   typedef otb::ImageFileReader<ImageType>                ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>       WriterType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
   typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
   
   const char * inputImage = argv[1];
@@ -79,7 +79,7 @@ int otbMDMDNMFImageFilterTest2(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, 2>                 ImageType;
   typedef otb::MDMDNMFImageFilter<ImageType, ImageType>  MDMDNMFImageFilterType;
   typedef otb::ImageFileReader<ImageType>                ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>       WriterType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
   typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
   
   const char * inputImage = argv[1];

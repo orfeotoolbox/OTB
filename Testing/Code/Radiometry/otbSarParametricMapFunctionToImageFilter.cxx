@@ -20,7 +20,7 @@
 #include "otbFunctionToImageFilter.h"
 #include "otbSarParametricMapFunction.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkPointSet.h"
 
 
@@ -32,7 +32,7 @@ int otbSarParametricMapFunctionToImageFilter(int argc, char * argv[])
   typedef InputImageType::IndexType                                                 IndexType;
   typedef otb::Image<PixelType, Dimension>                                          OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                                      ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType>                            WriterType;
+  typedef otb::ImageFileWriter<OutputImageType>                            WriterType;
   typedef otb::SarParametricMapFunction<InputImageType>                             FunctionType;
   typedef otb::FunctionToImageFilter<InputImageType, OutputImageType, FunctionType> FilterType;
   typedef FunctionType::PointSetType                                                PointSetType;

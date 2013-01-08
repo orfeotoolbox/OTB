@@ -18,7 +18,7 @@
 #include "itkMacro.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbMeanShiftVectorImageFilter.h"
 
 int otbMeanShiftVectorImageFilter(int argc, char * argv[])
@@ -45,10 +45,10 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
   typedef float PixelType;
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef otb::MeanShiftVectorImageFilter<ImageType, ImageType> FilterType;
   typedef FilterType::LabeledOutputType LabeledImageType;
-  typedef otb::StreamingImageFileWriter<LabeledImageType> LabeledWriterType;
+  typedef otb::ImageFileWriter<LabeledImageType> LabeledWriterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();

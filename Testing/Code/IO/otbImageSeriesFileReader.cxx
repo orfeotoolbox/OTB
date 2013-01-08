@@ -22,7 +22,7 @@
 #include "otbVectorImage.h"
 #include "otbImageList.h"
 #include "otbImageSeriesFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itksys/SystemTools.hxx"
 
 int otbImageSeriesFileReader(int argc, char* argv[])
@@ -44,7 +44,7 @@ int otbImageSeriesFileReader(int argc, char* argv[])
 
   ImageListType * imageList = reader->GetOutput();
 
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   for (unsigned int i = 0; i < imageList->Size(); ++i)
     {

@@ -20,7 +20,7 @@
 #include "itkFixedArray.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbFineRegistrationImageFilter.h"
 #include "otbStandardFilterWatcher.h"
 #include "itkTimeProbe.h"
@@ -64,8 +64,8 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   typedef otb::Image< PixelType,  Dimension >                                  ImageType;
   typedef otb::Image<DeformationValueType, Dimension>                           FieldImageType;
   typedef otb::ImageFileReader< ImageType >                                    ReaderType;
-  typedef otb::StreamingImageFileWriter< ImageType >                           CorrelWriterType;
-  typedef otb::StreamingImageFileWriter< FieldImageType>                       FieldWriterType;
+  typedef otb::ImageFileWriter< ImageType >                           CorrelWriterType;
+  typedef otb::ImageFileWriter< FieldImageType>                       FieldWriterType;
   typedef otb::ExtractROI<PixelType, PixelType>                                ExtractFiltertype;
   typedef otb::FineRegistrationImageFilter<ImageType, ImageType, FieldImageType> RegistrationFilterType;
   

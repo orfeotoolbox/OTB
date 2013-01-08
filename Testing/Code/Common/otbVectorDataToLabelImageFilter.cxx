@@ -19,7 +19,7 @@
 =========================================================================*/
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
@@ -34,7 +34,7 @@ typedef otb::ImageFileReader<ImageType>                       ReaderType;
 typedef otb::VectorDataFileReader<VectorDataType>             VDReaderType;
 typedef otb::VectorDataProjectionFilter<VectorDataType,
                                         VectorDataType>       VDProjectionType;
-typedef otb::StreamingImageFileWriter<ImageType>              WriterType;
+typedef otb::ImageFileWriter<ImageType>              WriterType;
 typedef otb::VectorDataToLabelImageFilter<VectorDataType,
                                           ImageType>          RasterizationFilterType;
 

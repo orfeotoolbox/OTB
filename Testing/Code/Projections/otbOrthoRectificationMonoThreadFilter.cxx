@@ -25,7 +25,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbInverseSensorModel.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
@@ -48,7 +48,7 @@ int otbOrthoRectificationMonoThreadFilter(int argc, char* argv[])
   typedef otb::Image<PixelType, 2>                 ImageType;
   typedef otb::VectorImage<PixelType, 2>           VectorImageType;
   typedef otb::ImageFileReader<VectorImageType>    ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>                   ExtractorType;
   typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;

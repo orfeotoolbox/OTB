@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include <fstream>
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbStreamingResampleImageFilter.h"
 
 
@@ -183,7 +183,7 @@ int otbBCOInterpolateImageFunctionTest(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType>                                 ReaderType;
   typedef otb::StreamingResampleImageFilter<ImageType, ImageType, double>   StreamingResampleImageFilterType;
   typedef otb::BCOInterpolateImageFunction<ImageType, double>             InterpolatorType;
-  typedef otb::StreamingImageFileWriter<ImageType>                        WriterType;
+  typedef otb::ImageFileWriter<ImageType>                        WriterType;
 
   // Instantiating objects
   ReaderType::Pointer                         reader = ReaderType::New();
@@ -226,7 +226,7 @@ int otbBCOInterpolateImageFunctionVectorImageTest(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType>                                 ReaderType;
   typedef otb::StreamingResampleImageFilter<ImageType, ImageType, double>   StreamingResampleImageFilterType;
   typedef otb::BCOInterpolateImageFunction<ImageType, double>             InterpolatorType;
-  typedef otb::StreamingImageFileWriter<ImageType>                        WriterType;
+  typedef otb::ImageFileWriter<ImageType>                        WriterType;
 
   // Instantiating objects
   ReaderType::Pointer                         reader = ReaderType::New();

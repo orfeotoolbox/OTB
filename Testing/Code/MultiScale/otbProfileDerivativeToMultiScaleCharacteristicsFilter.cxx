@@ -20,7 +20,7 @@
 #include "otbProfileDerivativeToMultiScaleCharacteristicsFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImage.h"
 
 #include "itkMacro.h"
@@ -44,8 +44,8 @@ int otbProfileDerivativeToMultiScaleCharacteristicsFilter(int argc, char * argv[
   typedef otb::Image<LabeledPixelType, 2>        LabeledImageType;
 
   typedef otb::ImageFileReader<InputImageType>            ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType>  WriterType;
-  typedef otb::StreamingImageFileWriter<LabeledImageType> LabeledWriterType;
+  typedef otb::ImageFileWriter<OutputImageType>  WriterType;
+  typedef otb::ImageFileWriter<LabeledImageType> LabeledWriterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
   typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InputImageType, StructuringElementType>

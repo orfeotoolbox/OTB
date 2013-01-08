@@ -21,7 +21,7 @@
 #include "otbTextureImageFunction.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkVariableLengthVector.h"
 
@@ -36,7 +36,7 @@ int generic_TextureImageFunction(int argc, char * argv[])
   typedef typename TInputImage::SizeType              SizeType;
   typedef typename TInputImage::OffsetType            OffsetType;
   typedef otb::ImageFileReader<TInputImage>           ReaderType;
-  typedef otb::StreamingImageFileWriter<TOutputImage> WriterType;
+  typedef otb::ImageFileWriter<TOutputImage> WriterType;
 
   typedef otb::TextureImageFunction<TInputImage, TFunctor>                                    FunctionType;
   typedef otb::FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage, FunctionType> FilterType;

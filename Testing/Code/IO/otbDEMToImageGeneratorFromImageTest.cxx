@@ -18,7 +18,7 @@
 #include "itkMacro.h"
 
 
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -58,7 +58,7 @@ int otbDEMToImageGeneratorFromImageTest(int argc, char * argv[])
   typedef otb::DEMToImageGenerator<ImageType>      DEMToImageGeneratorType;
 
   typedef otb::ImageFileReader<VImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType> ExtractVFilterType;
   typedef otb::ExtractROI<PixelType, PixelType> ExtractFilterType;

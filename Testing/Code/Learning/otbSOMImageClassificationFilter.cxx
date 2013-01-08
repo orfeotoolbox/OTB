@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "otbSOMMap.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbSOMImageClassificationFilter(int argc, char * argv[])
 {
@@ -38,7 +38,7 @@ int otbSOMImageClassificationFilter(int argc, char * argv[])
   typedef otb::SOMImageClassificationFilter<ImageType, LabeledImageType, SOMMapType> ClassificationFilterType;
   typedef otb::ImageFileReader<ImageType>                                            ReaderType;
   typedef otb::ImageFileReader<SOMMapType>                                           SOMReaderType;
-  typedef otb::StreamingImageFileWriter<LabeledImageType>                            WriterType;
+  typedef otb::ImageFileWriter<LabeledImageType>                            WriterType;
 
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();

@@ -16,7 +16,7 @@
 
 =========================================================================*/
 #include "otbImage.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 
 #include "otbNCCRegistrationFilter.h"
@@ -89,7 +89,7 @@ int otbNCCRegistrationFilter(int argc, char* argv[])
 
   registrator->SetNumberOfIterations(atoi(argv[6]));
 
-  typedef otb::StreamingImageFileWriter<DeformationFieldType> DFWriterType;
+  typedef otb::ImageFileWriter<DeformationFieldType> DFWriterType;
   DFWriterType::Pointer dfWriter = DFWriterType::New();
   dfWriter->SetFileName(argv[3]);
   dfWriter->SetInput(registrator->GetOutput());

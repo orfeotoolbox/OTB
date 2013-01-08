@@ -20,7 +20,7 @@
 #include "otbFunctionWithNeighborhoodToImageFilter.h"
 #include "itkVarianceImageFunction.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbFunctionWithNeighborhoodToImageFilter(int argc, char * argv[])
 {
@@ -29,7 +29,7 @@ int otbFunctionWithNeighborhoodToImageFilter(int argc, char * argv[])
   typedef otb::Image<PixelType, Dimension>                                          InputImageType;
   typedef otb::Image<PixelType, Dimension>                                          OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                                      ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType>                            WriterType;
+  typedef otb::ImageFileWriter<OutputImageType>                            WriterType;
   typedef itk::VarianceImageFunction<InputImageType>                                FunctionType;
   typedef otb::FunctionWithNeighborhoodToImageFilter<InputImageType, OutputImageType, FunctionType> FilterType;
 

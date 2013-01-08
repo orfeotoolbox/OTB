@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "otbSOMMap.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkEuclideanDistance.h"
 
 
@@ -41,7 +41,7 @@ int otbSOMbasedImageFilterTest(int argc, char * argv[])
   typedef otb::SOMbasedImageFilter<ImageType, ImageType, DistanceType, SOMMapType>     SOMbasedImageFilterType;
   typedef otb::ImageFileReader<ImageType>                                              ReaderType;
   typedef otb::ImageFileReader<SOMMapType>                                             SOMReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>                                     WriterType;
+  typedef otb::ImageFileWriter<ImageType>                                     WriterType;
 
   // Instantiating object
   SOMbasedImageFilterType::Pointer filter = SOMbasedImageFilterType::New();

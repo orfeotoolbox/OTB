@@ -23,7 +23,7 @@
 #include <fstream>
 #include "otbImageFileWriter.h"
 #include "itkResampleImageFilter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "otbWindowedSincInterpolateImageGaussianFunction.h"
 #include "otbWindowedSincInterpolateImageHammingFunction.h"
@@ -76,7 +76,7 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   file.close();
 
   /**********************************************************/
-  //typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  //typedef otb::ImageFileWriter<ImageType> WriterType;
   //typedef otb::StreamingResampleImageFilter<ImageType, ImageType, double> StreamingResampleImageFilterType;
   typedef otb::ImageFileWriter<ImageType>                        WriterType;
   typedef itk::ResampleImageFilter<ImageType, ImageType, double> StreamingResampleImageFilterType;

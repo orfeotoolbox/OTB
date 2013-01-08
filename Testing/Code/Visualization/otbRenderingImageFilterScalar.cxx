@@ -18,7 +18,7 @@
 #include "otbRenderingImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkRGBPixel.h"
 
 int otbRenderingImageFilterScalar(int argc, char * argv[])
@@ -28,7 +28,7 @@ int otbRenderingImageFilterScalar(int argc, char * argv[])
   typedef otb::Image<itk::RGBPixel<unsigned char>, 2>                RGBImageType;
   typedef otb::RenderingImageFilter<ImageType, RGBImageType>         RenderingFilterType;
   typedef otb::ImageFileReader<ImageType>                            ReaderType;
-  typedef otb::StreamingImageFileWriter<RGBImageType>                WriterType;
+  typedef otb::ImageFileWriter<RGBImageType>                WriterType;
   typedef RenderingFilterType::RenderingFunctionType::ParametersType ParametersType;
 
   // Instantiation

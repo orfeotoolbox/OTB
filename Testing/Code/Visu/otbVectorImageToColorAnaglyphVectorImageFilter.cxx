@@ -20,7 +20,7 @@
 #include "otbVectorImageToColorAnaglyphVectorImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbVectorImageToColorAnaglyphVectorImageFilter(int argc, char * argv[])
 {
@@ -33,7 +33,7 @@ int otbVectorImageToColorAnaglyphVectorImageFilter(int argc, char * argv[])
       VectorImageType> FilterType;
   typedef otb::ImageFileReader<VectorImageType>
   ReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType>
+  typedef otb::ImageFileWriter<VectorImageType>
   WriterType;
 
   // Instantiating object

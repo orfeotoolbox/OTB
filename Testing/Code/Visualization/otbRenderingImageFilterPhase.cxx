@@ -19,7 +19,7 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkRGBPixel.h"
 #include "otbStandardRenderingFunction.h"
 #include "otbPhaseFunctor.h"
@@ -32,7 +32,7 @@ int otbRenderingImageFilterPhase(int argc, char * argv[])
   typedef otb::Image<itk::RGBPixel<unsigned char>, 2>        RGBImageType;
   typedef otb::RenderingImageFilter<ImageType, RGBImageType> RenderingFilterType;
   typedef otb::ImageFileReader<ImageType>                    ReaderType;
-  typedef otb::StreamingImageFileWriter<RGBImageType>        WriterType;
+  typedef otb::ImageFileWriter<RGBImageType>        WriterType;
   typedef otb::Function::PhaseFunctor<VectorPixelType>       PixelRepresentationFunctionType;
   typedef otb::Function::StandardRenderingFunction
   <VectorPixelType, itk::RGBPixel<unsigned char>,

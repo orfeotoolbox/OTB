@@ -24,7 +24,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 #include "itkMacro.h"
 #include "itkImageRegionIterator.h"
@@ -47,7 +47,7 @@ int otbImageScalarStreamingFileWriterTestWithoutInputGeneric(int argc, char* arg
   typedef typename ImageType::SizeType                  SizeType;
   typedef typename ImageType::IndexType                 IndexType;
   typedef itk::ImageRegionIterator<ImageType>           IteratorType;
-  typedef otb::StreamingImageFileWriter<ImageType>      WriterType;
+  typedef otb::ImageFileWriter<ImageType>      WriterType;
 
   typename ImageType::Pointer  image = ImageType::New();
   typename WriterType::Pointer writer = WriterType::New();
@@ -118,7 +118,7 @@ int otbImageComplexStreamingFileWriterTestWithoutInputGeneric(int argc, char* ar
   typedef typename ImageType::SizeType                  SizeType;
   typedef typename ImageType::IndexType                 IndexType;
   typedef itk::ImageRegionIterator<ImageType>           IteratorType;
-  typedef otb::StreamingImageFileWriter<ImageType>      WriterType;
+  typedef otb::ImageFileWriter<ImageType>      WriterType;
 
   typename ImageType::Pointer image = ImageType::New();
   typename WriterType::Pointer writer = WriterType::New();

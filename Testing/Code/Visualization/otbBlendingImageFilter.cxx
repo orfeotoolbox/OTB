@@ -19,7 +19,7 @@
 #include "otbImage.h"
 #include "itkRGBPixel.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbBlendingImageFilter(int argc, char * argv[])
 {
@@ -28,7 +28,7 @@ int otbBlendingImageFilter(int argc, char * argv[])
   typedef otb::Image<PixelType, 2>                 ImageType;
   typedef otb::BlendingImageFilter<ImageType>      BlendingFilterType;
   typedef otb::ImageFileReader<ImageType>          ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   // Instantiation
   BlendingFilterType::Pointer rendering = BlendingFilterType::New();

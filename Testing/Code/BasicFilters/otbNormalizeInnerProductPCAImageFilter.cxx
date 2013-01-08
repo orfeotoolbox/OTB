@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbNormalizeInnerProductPCAImageFilter.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
 
 int otbNormalizeInnerProductPCAImageFilter(int argc, char* argv[])
@@ -28,7 +28,7 @@ int otbNormalizeInnerProductPCAImageFilter(int argc, char* argv[])
   const char *       outputFilename = argv[2];
   typedef otb::VectorImage<PixelType, Dimension>                         ImageType;
   typedef otb::ImageFileReader<ImageType>                                ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>                       WriterType;
+  typedef otb::ImageFileWriter<ImageType>                       WriterType;
   typedef otb::NormalizeInnerProductPCAImageFilter<ImageType, ImageType> NormalizePCAFilterType;
 
   ReaderType::Pointer reader     = ReaderType::New();

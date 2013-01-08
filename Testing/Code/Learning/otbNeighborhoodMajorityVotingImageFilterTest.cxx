@@ -21,7 +21,7 @@
 #include <iostream>
 
 #include <otbImageFileReader.h>
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 #include "otbNeighborhoodMajorityVotingImageFilter.h"
 
@@ -35,7 +35,7 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[]) {
        typedef otb::Image<LabelPixelType, Dimension> LabelImageType;
 
        typedef otb::ImageFileReader<LabelImageType> ReaderType;
-       typedef otb::StreamingImageFileWriter<LabelImageType> WriterType;
+       typedef otb::ImageFileWriter<LabelImageType> WriterType;
 
        typedef otb::NeighborhoodMajorityVotingImageFilter<LabelImageType> NeighborhoodMajorityVotingFilterType;
        typedef NeighborhoodMajorityVotingFilterType::RadiusType RadiusType;

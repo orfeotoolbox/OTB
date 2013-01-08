@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include "otbStandardWriterWatcher.h"
 #include "itkGradientMagnitudeImageFilter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 
 int otbStandardWriterWatcher(int argc, char * argv[])
@@ -35,7 +35,7 @@ int otbStandardWriterWatcher(int argc, char * argv[])
   typedef otb::Image<PixelType, Dimension>                        ImageType;
   typedef otb::ImageFileReader<ImageType>                         ReaderType;
   typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> FilterType;
-  typedef otb::StreamingImageFileWriter<ImageType>                StreamingWriterType;
+  typedef otb::ImageFileWriter<ImageType>                StreamingWriterType;
   typedef otb::ImageFileWriter<ImageType>                         WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();

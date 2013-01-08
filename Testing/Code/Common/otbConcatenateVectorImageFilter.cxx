@@ -19,7 +19,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbConcatenateVectorImageFilter.h"
 
 int otbConcatenateVectorImageFilter(int argc, char * argv[])
@@ -31,7 +31,7 @@ int otbConcatenateVectorImageFilter(int argc, char * argv[])
   typedef unsigned char                                                                        InputPixelType;
   typedef otb::VectorImage<InputPixelType, Dimension>                                          VectorImageType;
   typedef otb::ImageFileReader<VectorImageType>                                                ReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType>                                       WriterType;
+  typedef otb::ImageFileWriter<VectorImageType>                                       WriterType;
   typedef otb::ConcatenateVectorImageFilter<VectorImageType, VectorImageType, VectorImageType> FilterType;
 
   ReaderType::Pointer reader1 = ReaderType::New();

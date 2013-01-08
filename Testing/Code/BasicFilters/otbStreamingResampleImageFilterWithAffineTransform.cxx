@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "itkVector.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
@@ -97,7 +97,7 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     resampler->SetEdgePaddingValue(defaultValue);
     
     // Write the resampled image
-    typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
+    typedef otb::ImageFileWriter<ImageType>    WriterType;
     WriterType::Pointer writer= WriterType::New();
     writer->SetNumberOfDivisionsTiledStreaming(4);
     writer->WriteGeomFileOn();

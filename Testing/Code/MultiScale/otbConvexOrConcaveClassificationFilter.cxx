@@ -18,7 +18,7 @@
 #include "otbConvexOrConcaveClassificationFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbConvexOrConcaveClassificationFilter(int argc, char * argv[])
 {
@@ -31,7 +31,7 @@ int otbConvexOrConcaveClassificationFilter(int argc, char * argv[])
   typedef otb::Image<unsigned char, 2> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>                                      ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType>                            WriterType;
+  typedef otb::ImageFileWriter<OutputImageType>                            WriterType;
   typedef otb::ConvexOrConcaveClassificationFilter<InputImageType, OutputImageType> ClassificationFilterType;
 
   // Instantiating objects

@@ -24,7 +24,7 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbImageFileWriterStreamingONERAComplex(int argc, char* argv[])
 {
@@ -35,7 +35,7 @@ int otbImageFileWriterStreamingONERAComplex(int argc, char* argv[])
   typedef std::complex<float>                      PixelType;
   typedef otb::Image<PixelType,  2>                ImageType;
   typedef otb::ImageFileReader<ImageType>          ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer complexReader = ReaderType::New();
   WriterType::Pointer complexWriter = WriterType::New();

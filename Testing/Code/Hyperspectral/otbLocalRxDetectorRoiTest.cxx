@@ -1,7 +1,7 @@
 #include "otbImageFileReader.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbLocalRxDetectorNonThreadFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbExtractROI.h"
@@ -16,7 +16,7 @@ int LocalRXDetectorROITest(int argc, char * argv[])
        typedef otb::ImageFileReader<VectorImageType> ReaderType;
        typedef unsigned char WritePixelType;
        typedef otb::Image<WritePixelType> WriteImageType;
-       typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+       typedef otb::ImageFileWriter<ImageType> WriterType;
        typedef itk::RescaleIntensityImageFilter<ImageType, WriteImageType> RescalerType;
        typedef otb::ExtractROI<ImageType::PixelType, ImageType::PixelType> ExtractRoiType;
 

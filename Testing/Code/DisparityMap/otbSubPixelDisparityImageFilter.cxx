@@ -18,7 +18,7 @@
 #include "otbSubPixelDisparityImageFilter.h"
 #include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"
 #include "otbImage.h"
 
@@ -54,7 +54,7 @@
 
 
   typedef otb::ImageFileReader<FloatImageType>               ReaderType;
-  typedef otb::StreamingImageFileWriter<FloatImageType>      WriterType;
+  typedef otb::ImageFileWriter<FloatImageType>      WriterType;
 
 int otbSubPixelDisparityImageFilterNew(int argc, char* argv[])
 {

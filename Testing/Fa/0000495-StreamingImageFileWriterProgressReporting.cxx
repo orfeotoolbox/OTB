@@ -18,7 +18,7 @@
 #include "otbImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkCastImageFilter.h"
 
 /* See #495 in the bug tracker for details */
@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
   
   typedef otb::Image<float, 2>                        ImageType;
   typedef otb::ImageFileReader<ImageType>             ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
+  typedef otb::ImageFileWriter<ImageType>    WriterType;
   typedef itk::CastImageFilter<ImageType, ImageType>  CastFilterType;
   
   bool hasObserver = false;

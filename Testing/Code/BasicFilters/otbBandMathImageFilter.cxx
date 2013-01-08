@@ -24,7 +24,7 @@
 #include "otbMath.h"
 #include "otbImage.h"
 #include "otbBandMathImageFilter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbBandMathImageFilterNew( int argc, char* argv[])
 {
@@ -187,7 +187,7 @@ int otbBandMathImageFilterWithIdx( int argc, char* argv[])
   //typedef float                                             PixelType;
   typedef otb::Image<PixelType, 2>                          ImageType;
   typedef otb::BandMathImageFilter<ImageType>               FilterType;
-  typedef otb::StreamingImageFileWriter<ImageType>          WriterType;
+  typedef otb::ImageFileWriter<ImageType>          WriterType;
 
   const unsigned int N = 100;
 

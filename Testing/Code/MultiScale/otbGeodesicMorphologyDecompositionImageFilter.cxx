@@ -18,7 +18,7 @@
 #include "otbGeodesicMorphologyDecompositionImageFilter.h"
 #include "otbGeodesicMorphologyDecompositionImageFilter.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImage.h"
 #include "itkBinaryBallStructuringElement.h"
 
@@ -36,7 +36,7 @@ int otbGeodesicMorphologyDecompositionImageFilter(int argc, char * argv[])
       2>                                                  StructuringElementType;
   typedef StructuringElementType::RadiusType       RadiusType;
   typedef otb::ImageFileReader<ImageType>          ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef otb::GeodesicMorphologyDecompositionImageFilter<ImageType, ImageType,
       StructuringElementType>
   GeodesicMorphologyDecompositionImageFilterType;

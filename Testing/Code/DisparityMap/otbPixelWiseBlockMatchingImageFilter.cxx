@@ -19,13 +19,13 @@
 #include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"
 
 typedef otb::Image<unsigned short>                    ImageType;
 typedef otb::Image<float>                             FloatImageType;
 typedef otb::ImageFileReader<ImageType>               ReaderType;
-typedef otb::StreamingImageFileWriter<FloatImageType> FloatWriterType;
+typedef otb::ImageFileWriter<FloatImageType> FloatWriterType;
 
 typedef otb::PixelWiseBlockMatchingImageFilter<ImageType,FloatImageType,FloatImageType,ImageType> PixelWiseBlockMatchingImageFilterType;
 

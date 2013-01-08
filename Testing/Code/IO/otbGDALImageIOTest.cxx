@@ -23,7 +23,7 @@
 #include <iostream>
 
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbGDALImageIO.h"
 
 template<class PixelType>
@@ -48,7 +48,7 @@ int otbGenericGDALImageIOTest(int argc, char* argv[])
   typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   typename ReaderType::Pointer reader = ReaderType::New();
   typename WriterType::Pointer writer = WriterType::New();

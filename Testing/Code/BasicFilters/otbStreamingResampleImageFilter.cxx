@@ -20,7 +20,7 @@
 #include "otbStreamingResampleImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkTranslationTransform.h"
 
 int otbStreamingResampleImageFilter(int argc, char * argv[])
@@ -36,7 +36,7 @@ int otbStreamingResampleImageFilter(int argc, char * argv[])
   typedef otb::Image<InputPixelType, Dimension>                InputImageType;
   typedef otb::Image<OutputPixelType, Dimension>               OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                 ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType>       WriterType;
+  typedef otb::ImageFileWriter<OutputImageType>       WriterType;
   typedef itk::TranslationTransform<InputPixelType, Dimension> TransformType;
   typedef otb::StreamingResampleImageFilter<InputImageType, OutputImageType,
       InterpolatorPrecisionType> StreamingResampleImageFilterType;

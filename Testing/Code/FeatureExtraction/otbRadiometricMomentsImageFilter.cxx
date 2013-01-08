@@ -19,7 +19,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbRadiometricMomentsImageFilter.h"
 
 int otbRadiometricMomentsImageFilterNew(int argc, char * argv[])
@@ -49,7 +49,7 @@ int otbRadiometricMomentsImageFilter(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension>         ImageType;
   typedef otb::ImageFileReader<ImageType>                ReaderType;
   typedef otb::VectorImage<InputPixelType,  Dimension>   VectorImageType;
-  typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
+  typedef otb::ImageFileWriter<VectorImageType> WriterType;
   typedef otb::RadiometricMomentsImageFilter<ImageType, VectorImageType> FilterType;
 
   ReaderType::Pointer reader = ReaderType::New();

@@ -18,7 +18,7 @@
 
 #include "itkMacro.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
@@ -37,7 +37,7 @@ int otbSimpleRcsPanSharpeningFusionImageFilter(int argc, char * argv[])
   typedef otb::Image<PixelType, Dimension>               PanchroImageType;
   typedef otb::ImageFileReader<VectorImageType>          VectorReaderType;
   typedef otb::ImageFileReader<PanchroImageType>         ImageReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType> VectorImageWriterType;
+  typedef otb::ImageFileWriter<VectorImageType> VectorImageWriterType;
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
     <PanchroImageType, VectorImageType,  VectorImageType, double> FilterType;
 

@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkTranslationTransform.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "otbStreamingTraits.h"
@@ -46,7 +46,7 @@ int otbStreamingResampleImageFilterCompareWithITK(int argc, char * argv[])
   //      typedef otb::VectorImage<OutputPixelType, Dimension> InputVectorImageType;
   typedef otb::ImageFileReader<InputImageType>                                                    ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                                                   WriterType;
-  typedef otb::StreamingImageFileWriter<OutputImageType>                                          StreamingWriterType;
+  typedef otb::ImageFileWriter<OutputImageType>                                          StreamingWriterType;
   typedef itk::TranslationTransform<InputPixelType, Dimension>                                    TransformType;
   typedef itk::NearestNeighborInterpolateImageFunction<InputImageType, InterpolatorPrecisionType> NNInterpolatorType;
 

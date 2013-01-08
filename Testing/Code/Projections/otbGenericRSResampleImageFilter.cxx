@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 #include <ogr_spatialref.h>
 
@@ -42,7 +42,7 @@ typedef ImageResamplerType::OriginType              OriginType;
 typedef ImageResamplerType::SpacingType             SpacingType;
 
 typedef otb::ImageFileReader<ImageType>             ReaderType;
-typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
+typedef otb::ImageFileWriter<ImageType>    WriterType;
 
 int otbGenericRSResampleImageFilterNew(int argc, char* argv[])
 {
@@ -199,7 +199,7 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
     }
 
   // Write the resampled image
-  typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
+  typedef otb::ImageFileWriter<ImageType>    WriterType;
   WriterType::Pointer writer= WriterType::New();
   writer->SetAutomaticTiledStreaming();
   writer->SetFileName(outfname);

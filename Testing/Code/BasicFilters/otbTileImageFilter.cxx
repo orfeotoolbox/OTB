@@ -19,14 +19,14 @@
 #include "otbVectorImage.h"
 #include "otbTileImageFilter.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 typedef otb::Image<unsigned char>                     ImageType;
 typedef otb::VectorImage<unsigned char>               VectorImageType;
 typedef otb::TileImageFilter<ImageType>                TileImageFilterType;
 typedef otb::TileImageFilter<VectorImageType>          TileVectorImageFilterType;
 typedef otb::ImageFileReader<VectorImageType>          VectorImageReaderType;
-typedef otb::StreamingImageFileWriter<VectorImageType> VectorImageWriterType;
+typedef otb::ImageFileWriter<VectorImageType> VectorImageWriterType;
 
 
 int otbTileImageFilterNew(int argc, char * argv[])

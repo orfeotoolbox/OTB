@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include <fstream>
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbStreamingResampleImageFilter.h"
 
 int otbProlateValidationTest(int argc, char * argv[])
@@ -35,7 +35,7 @@ int otbProlateValidationTest(int argc, char * argv[])
 
   typedef otb::Image<double, 2>                                           ImageType;
   typedef otb::ImageFileReader<ImageType>                                 ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>                        WriterType;
+  typedef otb::ImageFileWriter<ImageType>                        WriterType;
   typedef otb::StreamingResampleImageFilter<ImageType, ImageType, double> StreamingResampleImageFilterType;
 
   typedef otb::ProlateInterpolateImageFunction<ImageType> InterpolatorType;

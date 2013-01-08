@@ -1,7 +1,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbMeanShiftVectorImageFilter.h"
 
 //Code adapted from submission from Christophe Simler
@@ -44,22 +44,22 @@ int main(int argc, char *argv[])
   filter->SetMinimumRegionSize(minRegionSize);
 
   // sauvegarde de l'image filtree,
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType1;
+  typedef otb::ImageFileWriter<ImageType> WriterType1;
   WriterType1::Pointer writer1 = WriterType1::New();
   writer1->SetFileName(outfilenamefiltered);
 
   // sauvegarde de l'image segmente,
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType2;
+  typedef otb::ImageFileWriter<ImageType> WriterType2;
   WriterType2::Pointer writer2 = WriterType2::New();
   writer2->SetFileName(outfilenamesegmented);
 
   // sauvegarde de l'image labelisee
-  typedef otb::StreamingImageFileWriter<TLabeledOutput> WriterType3;
+  typedef otb::ImageFileWriter<TLabeledOutput> WriterType3;
   WriterType3::Pointer writer3 = WriterType3::New();
   writer3->SetFileName(outfilenamelabeled);
 
   // sauvegarde de l'image de contours
-  typedef otb::StreamingImageFileWriter<TLabeledOutput> WriterType4;
+  typedef otb::ImageFileWriter<TLabeledOutput> WriterType4;
   WriterType4::Pointer writer4 = WriterType4::New();
   writer4->SetFileName(outfilenameboundary);
 

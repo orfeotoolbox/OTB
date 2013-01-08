@@ -21,9 +21,9 @@
 #include "otbImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
-int otbStreamingImageFileWriterTestCalculateNumberOfDivisions(int argc, char* argv[])
+int otbImageFileWriterTestCalculateNumberOfDivisions(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];
@@ -35,7 +35,7 @@ int otbStreamingImageFileWriterTestCalculateNumberOfDivisions(int argc, char* ar
 
   typedef otb::Image<PixelType,  Dimension>        ImageType;
   typedef otb::ImageFileReader<ImageType>          ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> StreamingWriterType;
+  typedef otb::ImageFileWriter<ImageType> StreamingWriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);

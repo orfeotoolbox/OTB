@@ -18,7 +18,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbGDALDriverDoubleWritingTest(int argc, char * argv[])
 {
@@ -32,7 +32,7 @@ int otbGDALDriverDoubleWritingTest(int argc, char * argv[])
   typedef otb::VectorImage<double, 2>              ImageType;
   typedef otb::ImageFileReader<ImageType>          ReaderType;
   typedef otb::ImageFileWriter<ImageType>          WriterType;
-  typedef otb::StreamingImageFileWriter<ImageType> StreamingWriterType;
+  typedef otb::ImageFileWriter<ImageType> StreamingWriterType;
 
   ReaderType::Pointer          reader = ReaderType::New();
   WriterType::Pointer          writer = WriterType::New();

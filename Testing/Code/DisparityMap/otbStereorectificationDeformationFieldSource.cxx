@@ -18,7 +18,7 @@
 #include "itkVector.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbStereorectificationDeformationFieldSource.h"
 
 typedef itk::Vector<double,2>                               DeformationType;
@@ -27,7 +27,7 @@ typedef otb::Image<unsigned short>                          ImageType;
 typedef otb::StereorectificationDeformationFieldSource
    <ImageType,DeformationFieldType>                         DeformationFieldSourceType;
 typedef otb::ImageFileReader<ImageType>                     ReaderType;
-typedef otb::StreamingImageFileWriter<DeformationFieldType> WriterType;
+typedef otb::ImageFileWriter<DeformationFieldType> WriterType;
 
 int otbStereorectificationDeformationFieldSourceNew(int argc, char * argv[])
 {

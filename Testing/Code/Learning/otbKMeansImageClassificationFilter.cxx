@@ -19,7 +19,7 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbKMeansImageClassificationFilter(int argc, char * argv[])
 {
@@ -36,7 +36,7 @@ int otbKMeansImageClassificationFilter(int argc, char * argv[])
   typedef otb::KMeansImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
   typedef ClassificationFilterType::KMeansParametersType                    KMeansParametersType;
   typedef otb::ImageFileReader<ImageType>                                   ReaderType;
-  typedef otb::StreamingImageFileWriter<LabeledImageType>                   WriterType;
+  typedef otb::ImageFileWriter<LabeledImageType>                   WriterType;
 
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();

@@ -18,7 +18,7 @@
 #include "otbDisparityMapToDEMFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"
 #include "otbImageFileReader.h"
 
@@ -42,7 +42,7 @@
 
   typedef otb::ImageFileReader<FloatVectorImageType>            ReaderType;
   typedef otb::ImageFileReader<MaskImageType>                   MaskReaderType;
-  typedef otb::StreamingImageFileWriter  <FloatImageType>       WriterType;
+  typedef otb::ImageFileWriter  <FloatImageType>       WriterType;
 
   typedef otb::DisparityMapToDEMFilter <FloatImageType, FloatVectorImageType>      DisparityToElevationFilterType;
 

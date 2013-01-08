@@ -18,7 +18,7 @@
 
 #include "itkMacro.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
@@ -44,7 +44,7 @@ int otbBayesianFusionFilter(int argc, char * argv[])
   VectorReaderType;
   typedef otb::ImageFileReader<PanchroImageType>
   ImageReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType>
+  typedef otb::ImageFileWriter<VectorImageType>
   VectorImageWriterType;
   typedef otb::BayesianFusionFilter<VectorImageType, VectorImageType, PanchroImageType, VectorImageType> FilterType;
 

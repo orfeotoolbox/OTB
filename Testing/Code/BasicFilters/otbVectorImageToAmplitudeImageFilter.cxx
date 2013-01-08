@@ -19,7 +19,7 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbVectorImageToAmplitudeImageFilter(int argc, char * argv[])
 {
@@ -33,7 +33,7 @@ int otbVectorImageToAmplitudeImageFilter(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, Dimension>                             VectorImageType;
   typedef otb::VectorImageToAmplitudeImageFilter<VectorImageType, ImageType> FilterType;
   typedef otb::ImageFileReader<VectorImageType>                              ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>                           WriterType;
+  typedef otb::ImageFileWriter<ImageType>                           WriterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
