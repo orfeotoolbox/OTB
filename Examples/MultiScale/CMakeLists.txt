@@ -54,16 +54,16 @@ ADD_TEST(msTeMorphologicalPyramidAnalysisFilterExampleTest ${EXE_TESTS}
         ${BASELINE}/suburb2_sd_4.jpeg ${TEMP}/suburb2_sd_4.jpeg
         MorphologicalPyramidAnalysisFilterExampleTest
         ${INPUTDATA}/suburb2.jpeg
-        ${TEMP}/suburb2_an_1.jpeg         ${TEMP}/suburb2_an_2.jpeg
-        ${TEMP}/suburb2_an_3.jpeg         ${TEMP}/suburb2_an_4.jpeg
-        ${TEMP}/suburb2_sf_1.jpeg         ${TEMP}/suburb2_sf_2.jpeg
-        ${TEMP}/suburb2_sf_3.jpeg         ${TEMP}/suburb2_sf_4.jpeg
-        ${TEMP}/suburb2_if_1.jpeg         ${TEMP}/suburb2_if_2.jpeg
-        ${TEMP}/suburb2_if_3.jpeg         ${TEMP}/suburb2_if_4.jpeg
-        ${TEMP}/suburb2_id_1.jpeg         ${TEMP}/suburb2_id_2.jpeg
-        ${TEMP}/suburb2_id_3.jpeg         ${TEMP}/suburb2_id_4.jpeg
-        ${TEMP}/suburb2_sd_1.jpeg         ${TEMP}/suburb2_sd_2.jpeg
-        ${TEMP}/suburb2_sd_3.jpeg         ${TEMP}/suburb2_sd_4.jpeg
+        ${TEMP}/suburb2_an_1.jpeg?&gdal:co:QUALITY=95         ${TEMP}/suburb2_an_2.jpeg?&gdal:co:QUALITY=95
+        ${TEMP}/suburb2_an_3.jpeg?&gdal:co:QUALITY=95         ${TEMP}/suburb2_an_4.jpeg?&gdal:co:QUALITY=95
+        ${TEMP}/suburb2_sf_1.jpeg?&gdal:co:QUALITY=95         ${TEMP}/suburb2_sf_2.jpeg?&gdal:co:QUALITY=95
+        ${TEMP}/suburb2_sf_3.jpeg?&gdal:co:QUALITY=95         ${TEMP}/suburb2_sf_4.jpeg?&gdal:co:QUALITY=95
+        ${TEMP}/suburb2_if_1.jpeg?&gdal:co:QUALITY=95         ${TEMP}/suburb2_if_2.jpeg?&gdal:co:QUALITY=95
+        ${TEMP}/suburb2_if_3.jpeg?&gdal:co:QUALITY=95         ${TEMP}/suburb2_if_4.jpeg?&gdal:co:QUALITY=95
+        ${TEMP}/suburb2_id_1.jpeg?&gdal:co:QUALITY=95         ${TEMP}/suburb2_id_2.jpeg?&gdal:co:QUALITY=95
+        ${TEMP}/suburb2_id_3.jpeg?&gdal:co:QUALITY=95         ${TEMP}/suburb2_id_4.jpeg?&gdal:co:QUALITY=95
+        ${TEMP}/suburb2_sd_1.jpeg?&gdal:co:QUALITY=95         ${TEMP}/suburb2_sd_2.jpeg?&gdal:co:QUALITY=95
+        ${TEMP}/suburb2_sd_3.jpeg?&gdal:co:QUALITY=95         ${TEMP}/suburb2_sd_4.jpeg?&gdal:co:QUALITY=95
         4 2
 )
 
@@ -75,7 +75,7 @@ ADD_TEST(msTeMorphologicalPyramidSynthesisFilterExampleTest ${EXE_TESTS}
         ${TEMP}/suburb2_synthesis.jpeg
         MorphologicalPyramidSynthesisFilterExampleTest
         ${INPUTDATA}/suburb2.jpeg
-        ${TEMP}/suburb2_synthesis.jpeg
+        ${TEMP}/suburb2_synthesis.jpeg?&gdal:co:QUALITY=95
         4 2
 )
 
