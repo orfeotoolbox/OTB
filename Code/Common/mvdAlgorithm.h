@@ -54,22 +54,55 @@ namespace mvd
 // Internal classes pre-declaration.
 
 //
+// Functions declaration.
+
+/**
+ * Convert a StringVector object to a QStringList object.
+ *
+ * Because Qt uses a shallow mecanism to copy containers, the returned
+ * QStringList is shallow-copied.
+ */
+inline QStringList ToQStringList( const StringVector& sv );
+
+/**
+ * Append the content of a StringVector object to the content of a
+ * QStringList object.
+ *
+ * Because Qt uses a shallow mecanism to copy containers, the returned
+ * QStringList is shallow-copied.
+ */
+inline QStringList AppendToQStringList( QStringList& qsl,
+					const StringVector& sv );
+
 //
+// Inlined-functions implementations.
+//
+
+/*******************************************************************************/
 inline
 QStringList
 ToQStringList( const StringVector& sv )
 {
-  QStringList result;
+  QStringList qsl;
+  return AppendToQStringList( qsl, sv );
+}
 
+/*******************************************************************************/
+inline
+QStringList
+AppendToQStringList( QStringList& qsl, const StringVector& sv )
+{
   for( StringVector::const_iterator it( sv.begin() );
        it!=sv.end();
        ++ it )
     {
-    result.append( QString::fromStdString( *it  ) );
+    qsl.append( QString::fromStdString( *it  ) );
     }
 
-  return result;
+  return qsl;
 }
+
+/*******************************************************************************/
 
 } // end namespace 'mvd'
 

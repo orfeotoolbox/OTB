@@ -93,9 +93,7 @@ VectorImageModel
     stdBandNames.resize( output->GetNumberOfComponentsPerPixel() );
     }
 
-  QStringList qBandNames( ToQStringList( stdBandNames ) );
-
-  return qBandNames;
+  return ToQStringList( stdBandNames );
 }
 
 /*******************************************************************************/
