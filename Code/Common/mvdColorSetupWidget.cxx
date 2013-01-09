@@ -79,15 +79,11 @@ ColorSetupWidget
 void
 ColorSetupWidget::SetComponents( const QStringList& components )
 {
+  m_Components = components;
+
   m_UI->m_RedComboBox->clear();
   m_UI->m_GreenComboBox->clear();
   m_UI->m_BlueComboBox->clear();
-
-  /*
-  m_UI->m_RedComboBox->addItem( 0, "0 - NIL" );
-  m_UI->m_GreenComboBox->addItem( 0, "0 - NIL" );
-  m_UI->m_BlueComboBox->addItem( 0, "0 - NIL" );
-  */
 
   QStringList itemTexts( components );
 
@@ -97,7 +93,14 @@ ColorSetupWidget::SetComponents( const QStringList& components )
        i<itemTexts.size();
        ++ i )
     {
-    itemTexts[ i ].prepend( i + " - " );
+    if( itemTexts[ i ].isEmpty() )
+      {
+      itemTexts[ i ] = tr( "BAND %1" ).arg( i - 1 );
+      }
+    else
+      {
+      itemTexts[ i ].prepend( QString( "%1: " ).arg( i - 1) );
+      }
     }
 
   m_UI->m_RedComboBox->addItems( itemTexts );
@@ -128,22 +131,6 @@ ColorSetupWidget::SetComponents( const QStringList& components )
       m_UI->m_BlueComboBox->setCurrentIndex( 3 );
       break;
     }
-}
-
-/*******************************************************************************/
-QStringList
-ColorSetupWidget
-::GetComponents() const
-{
-  QStringList components;
-  for( int i=0; i<m_UI->m_RedComboBox->count(); ++i )
-    {
-    QStringList item( m_UI->m_RedComboBox->itemText( i ).split( "-" ) );
-
-    components.push_back( item[ 1 ].simplified() );
-    }
-
-  return components;
 }
 
 /*******************************************************************************/

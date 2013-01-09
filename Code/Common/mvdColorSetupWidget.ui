@@ -91,27 +91,22 @@
        </property>
        <item>
         <property name="text">
-         <string>PIR</string>
+         <string>NIL</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>R</string>
+         <string>BAND 0</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>V</string>
+         <string>BAND 1</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>MIR</string>
+         <string>BAND 2</string>
         </property>
        </item>
       </widget>
@@ -175,27 +170,22 @@
        </property>
        <item>
         <property name="text">
-         <string>0</string>
+         <string>NIL</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>1</string>
+         <string>BAND 0</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>2</string>
+         <string>BAND 1</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>3</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>4</string>
+         <string>BNAD 2</string>
         </property>
        </item>
       </widget>
@@ -259,27 +249,22 @@
        </property>
        <item>
         <property name="text">
-         <string>PIR</string>
+         <string>NIL</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>R</string>
+         <string>BAND 0</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B</string>
+         <string>BAND 1</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>4</string>
+         <string>BAND 2</string>
         </property>
        </item>
       </widget>

@@ -97,7 +97,12 @@ public:
   void SetComponents( const QStringList& );
 
   /** */
-  QStringList GetComponents() const;
+  inline
+    QStringList
+    GetComponents() const
+  {
+    return m_Components;
+  }
 
 //
 // SIGNALS.
@@ -120,9 +125,11 @@ private:
 //
 // Private attributes.
 private:
-  /**
-   */
+  /** */
   Ui::ColorSetupWidget* m_UI;
+
+  /** */
+  QStringList m_Components;
 
 //
 // SLOTS.

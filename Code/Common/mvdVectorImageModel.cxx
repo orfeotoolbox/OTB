@@ -33,6 +33,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdAlgorithm.h"
 #include "mvdVectorImageModel.h"
 
 namespace mvd
@@ -75,25 +76,24 @@ VectorImageModel
 {
   assert( m_ImageFileReader->GetNumberOfOutputs()==1 );
 
-  itk::MetaDataDictionary metaDataDict(
-    m_ImageFileReader->GetOutput( 0 )->GetMetaDataDictionary()
-  );
+  DefaultImageType::Pointer output( m_ImageFileReader->GetOutput( 0 ) );
+  itk::MetaDataDictionary dictionary( output->GetMetaDataDictionary() );
 
   DefaultImageType::ImageMetadataInterfacePointerType metaData(
-    otb::ImageMetadataInterfaceFactory::CreateIMI( metaDataDict )
+    otb::ImageMetadataInterfaceFactory::CreateIMI( dictionary )
   );
 
   StringVector stdBandNames( metaData->GetBandName() );
-  QStringList qBandNames;
 
-  std::transform(
-    stdBandNames.begin(), stdBandNames.end(),
-    qBandNames.end(),
-    QString::fromStdString
-  );
+  assert( stdBandNames.empty() ||
+	  stdBandNames.size()==output->GetNumberOfComponentsPerPixel() );
 
-  qDebug() << "stdBandNames.size(): " << stdBandNames.size();
-  qDebug() << qBandNames;
+  if( stdBandNames.empty() )
+    {
+    stdBandNames.resize( output->GetNumberOfComponentsPerPixel() );
+    }
+
+  QStringList qBandNames( ToQStringList( stdBandNames ) );
 
   return qBandNames;
 }
