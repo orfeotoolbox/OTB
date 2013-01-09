@@ -123,7 +123,7 @@ public:
     const DefaultImageType*
     GetOutput( int index ) const
   {
-    const_cast< const VectorImageModel* >( this )->GetOutput( index );
+    return const_cast< const VectorImageModel* >( this )->GetOutput( index );
   }
 
   /**

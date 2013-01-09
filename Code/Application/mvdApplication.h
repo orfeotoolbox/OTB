@@ -83,7 +83,7 @@ public:
   inline const AbstractModel*
   GetModel() const
   {
-    const_cast< const Application* >( this )->GetModel();
+    return const_cast< const Application* >( this )->GetModel();
   }
 
   /**

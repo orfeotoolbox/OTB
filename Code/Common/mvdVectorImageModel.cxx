@@ -311,7 +311,9 @@ VectorImageModel
   ImageRegionType::SizeType size;
 
   // Compute the already loaded region as a simple Crop
+  /* unused
   bool res =  m_AlreadyLoadedRegion.Crop(region);
+  */
 
   // ------ upper region
   upperRegion.SetIndex(region.GetIndex());
