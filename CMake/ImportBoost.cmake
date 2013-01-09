@@ -18,21 +18,22 @@ IF(OTB_USE_EXTERNAL_BOOST)
     MESSAGE(FATAL_ERROR
                   "Cannot build OTB project without boost library.  Please set Boost directories or set OTB_USE_EXTERNAL_BOOST to OFF to use the INTERNAL Boost version")
   ENDIF(Boost_FOUND)
-  
+
   # Test package completeness
   TRY_COMPILE(BOOST_IS_COMPLETE
               ${CMAKE_CURRENT_BINARY_DIR}/CMake
               ${CMAKE_CURRENT_SOURCE_DIR}/CMake/otbTestCompileBoost.cxx
-              CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${Boost_INCLUDE_DIR}" "-DLINK_DIRECTORIES:PATH=${Boost_LIBRARY_DIRS}"
-			  COMPILE_DEFINITIONS "-DBOOST_SERIALIZATION_DYN_LINK"
+              CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${Boost_INCLUDE_DIR}"
+                          "-DLINK_DIRECTORIES:PATH=${Boost_LIBRARY_DIRS}"
+              COMPILE_DEFINITIONS "-DBOOST_SERIALIZATION_DYN_LINK"
               OUTPUT_VARIABLE OUTPUT)
 
   IF(BOOST_IS_COMPLETE)
     MESSAGE(STATUS "  Testing external Boost library    -- yes")
-    
+
     # needed for automatic linking on msvc platform
     LINK_DIRECTORIES( ${Boost_LIBRARY_DIRS} )
-    
+
   ELSE(BOOST_IS_COMPLETE)
     MESSAGE(STATUS "  Testing external Boost library    -- no")
     MESSAGE(STATUS "  Forcing the OTB_USE_EXTERNAL_BOOST value to OFF")
