@@ -78,3 +78,7 @@ OTB_CREATE_APPLICATION(NAME           ColorMapping
 OTB_CREATE_APPLICATION(NAME           PixelValue
                        SOURCES        otbPixelValue.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon)
+
+OTB_CREATE_APPLICATION(NAME           TileFusion
+                       SOURCES        otbTileFusion.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon)
