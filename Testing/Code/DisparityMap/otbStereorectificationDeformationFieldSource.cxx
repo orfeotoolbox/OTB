@@ -60,7 +60,8 @@ int otbStereorectificationDeformationFieldSource(int argc, char * argv[])
   dfSource->SetRightImage(reader2->GetOutput());
   dfSource->SetGridStep(gridStep);
   dfSource->SetScale(scale);
-  dfSource->SetAverageElevation(avgElev);
+
+  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(avgElev);
 
   WriterType::Pointer writer1 = WriterType::New();
   writer1->SetInput(dfSource->GetLeftDeformationFieldOutput());

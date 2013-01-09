@@ -75,6 +75,7 @@ int otbForwardSensorModelGrid(int argc, char* argv[])
   outputGeoPointY->Allocate();
 
   double averageElevation = 16.19688987731934;
+  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(averageElevation);
 
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
@@ -84,8 +85,6 @@ int otbForwardSensorModelGrid(int argc, char* argv[])
        std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
        return EXIT_FAILURE;
      }
-
-  forwardSensorModel->SetAverageElevation(averageElevation);
 
   double deltaX = static_cast<double>(sizeIn[0]) / static_cast<double>(size_x);
   double deltaY = static_cast<double>(sizeIn[1]) / static_cast<double>(size_y);

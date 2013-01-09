@@ -41,6 +41,8 @@ int main(int argc, char* argv[])
   typedef otb::VectorImage<double, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
+  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(16.19688987731934);
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(filename);
   reader->UpdateOutputInformation();
@@ -56,7 +58,6 @@ int main(int argc, char* argv[])
     std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
     return EXIT_FAILURE;
     }
-  forwardSensorModel->SetAverageElevation(16.19688987731934);
 
   typedef otb::InverseSensorModel<double> InverseSensorModelType;
   InverseSensorModelType::Pointer inverseSensorModel = InverseSensorModelType::New();
@@ -66,7 +67,6 @@ int main(int argc, char* argv[])
     std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
     return EXIT_FAILURE;
     }
-  inverseSensorModel->SetAverageElevation(16.19688987731934);
 
   const int radius = 10;
   const double gridstep = 0.1;

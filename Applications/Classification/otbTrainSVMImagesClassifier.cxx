@@ -163,12 +163,12 @@ private:
     
     AddParameter(ParameterType_Int, "sample.mt", "Maximum training sample size");
     //MandatoryOff("mt");
-    SetDefaultParameterInt("sample.mt", -1);
-    SetParameterDescription("sample.mt", "Maximum size of the training sample list (default = -1).");
+    SetDefaultParameterInt("sample.mt", 1000);
+    SetParameterDescription("sample.mt", "Maximum size of the training sample list (default = 1000).");
     AddParameter(ParameterType_Int, "sample.mv", "Maximum validation sample size");
     // MandatoryOff("mv");
-    SetDefaultParameterInt("sample.mv", -1);
-    SetParameterDescription("sample.mv", "Maximum size of the validation sample list (default = -1)");
+    SetDefaultParameterInt("sample.mv", 1000);
+    SetParameterDescription("sample.mv", "Maximum size of the validation sample list (default = 1000)");
 
     AddParameter(ParameterType_Empty, "sample.edg", "On edge pixel inclusion");
     SetParameterDescription("sample.edg", "Take pixels on polygon edge into consideration when building training and validation samples.");

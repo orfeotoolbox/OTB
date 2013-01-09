@@ -144,7 +144,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
       }
 
     double averageElevation = atof(argv[14]);
-    transform->SetAverageElevation(averageElevation);
+    otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(averageElevation);
 
     std::cout<<"Average elevation "<<averageElevation<<" used."<<std::endl;
     }
@@ -156,7 +156,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
       return EXIT_FAILURE;
       }
 
-    transform->SetDEMDirectory(argv[14]);
+    otb::DEMHandler::Instance()->OpenDEMDirectory(argv[14]);
     
     std::cout<<"Elevation from DEM "<<argv[14]<<" used."<<std::endl;
     }

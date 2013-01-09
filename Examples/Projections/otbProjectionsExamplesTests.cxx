@@ -6,14 +6,16 @@
   Version:   $Revision$
 
 
-    Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-    See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
-    This software is distributed WITHOUT ANY WARRANTY; without even
-    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-    PURPOSE.  See the above copyright notices for more information.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 
 // this file defines the otbMultiScaleTest for the test driver
 // and all it expects is that you have a function called RegisterTests
@@ -28,6 +30,7 @@ void RegisterTests()
   REGISTER_TEST(VectorDataProjectionExampleTest);
   REGISTER_TEST(GeometriesProjectionTest);
   REGISTER_TEST(EstimateRPCSensorModelExample);
+  REGISTER_TEST(DEMHandlerExampleTest);
 }
 
 #undef main
@@ -49,3 +52,7 @@ void RegisterTests()
 #undef main
 #define main EstimateRPCSensorModelExample
 #include "EstimateRPCSensorModelExample.cxx"
+
+#undef main
+#define main DEMHandlerExampleTest
+#include "DEMHandlerExample.cxx"

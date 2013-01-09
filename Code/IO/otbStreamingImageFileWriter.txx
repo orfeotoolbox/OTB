@@ -43,6 +43,7 @@
 #include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
 
+
 namespace otb
 {
 
@@ -61,12 +62,15 @@ StreamingImageFileWriter<TInputImage>
     m_UseCompression(false),
     m_UseInputMetaDataDictionary(false),
     m_WriteGeomFile(false),
+    m_FilenameHelper(),
     m_IsObserving(true),
     m_ObserverID(0)
 {
   // By default, we use tiled streaming, with automatic tile size
   // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
   this->SetAutomaticAdaptativeStreaming();
+
+  m_FilenameHelper = FNameHelperType::New();
 }
 
 /**
@@ -480,6 +484,16 @@ StreamingImageFileWriter<TInputImage>
     e.SetLocation(ITK_LOCATION);
     throw e;
     }
+
+  // Manage extended filename
+  if ((strcmp(m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
+      && m_FilenameHelper->gdalCreationOptionsIsSet()   )
+    {
+    typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(m_ImageIO.GetPointer());
+    imageIO->SetOptions(m_FilenameHelper->GetgdalCreationOptions());
+    }
+
+
   /** End of Prepare ImageIO  : create ImageFactory */
 
   /**
@@ -740,7 +754,7 @@ StreamingImageFileWriter<TInputImage>
 
   m_ImageIO->Write(dataPtr);
 
-  if (m_WriteGeomFile)
+  if (m_WriteGeomFile  && m_FilenameHelper->GetWriteGEOMFile())
     {
     ImageKeywordlist otb_kwl;
     itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
@@ -748,6 +762,34 @@ StreamingImageFileWriter<TInputImage>
     WriteGeometry(otb_kwl, this->GetFileName());
     }
 }
+
+template <class TInputImage>
+void
+StreamingImageFileWriter<TInputImage>
+::SetFileName(std::string extendedFileName)
+{
+  this->SetFileName(extendedFileName.c_str());
+}
+
+template <class TInputImage>
+void
+StreamingImageFileWriter<TInputImage>
+::SetFileName(const char* extendedFileName)
+{
+  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
+  m_FileName = this->m_FilenameHelper->GetSimpleFileName();
+  m_ImageIO = NULL;
+  this->Modified();
+}
+
+template <class TInputImage>
+const char*
+StreamingImageFileWriter<TInputImage>
+::GetFileName () const
+{
+return this->m_FilenameHelper->GetSimpleFileName();
+}
+
 
 } // end namespace otb
 

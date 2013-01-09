@@ -122,7 +122,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
     }
   else
     {
-      grsTrasnform->SetAverageElevation(0);
+    otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(0);
     }
 
   grsTrasnform->InstanciateTransform();
