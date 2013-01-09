@@ -378,3 +378,20 @@ OTB_TEST_APPLICATION(NAME   apTvFusionOfClassifications3Inputs
                      ${OTBAPP_BASELINE}/apTvFusionOfClassifications3InputsOutput.tif
                      ${TEMP}/apTvFusionOfClassifications3InputsOutput.tif
 )
+
+
+# --- Compute confusion matrix ---
+OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrix
+                     APP    ComputeConfusionMatrix
+                     OPTIONS -in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
+                             -ref vector
+                             -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp
+                             -ref.vector.field Class
+                             -labels 4
+                             -out ${TEMP}/apTvComputeConfusionMatrixTconfusionOut.txt
+                     VALID   --compare-ascii ${NOTOL}
+                     ${OTBAPP_BASELINE}/apTvComputeConfusionMatrixTconfusionOut.txt
+                     ${TEMP}/apTvComputeConfusionMatrixTconfusionOut.txt
+)
+
+
