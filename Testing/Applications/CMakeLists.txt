@@ -45,7 +45,7 @@ add_test(NAME apTvDocAppli_${app}
            otbWrapperApplicationDocTest
            ${app}
            $<TARGET_FILE_DIR:otbapp_${app}> )
-       
+
 endforeach(app)
 
 add_subdirectory(CartographicDBValidation)
@@ -54,6 +54,7 @@ add_subdirectory(Classification)
 add_subdirectory(DimensionalityReduction)
 add_subdirectory(DisparityMap)
 add_subdirectory(FeatureExtraction)
+add_subdirectory(Fusion)
 add_subdirectory(Hyperspectral)
 add_subdirectory(Projections)
 add_subdirectory(Radiometry)
