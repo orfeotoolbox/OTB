@@ -413,4 +413,17 @@ OTB_TEST_APPLICATION(NAME apTuUtConvertExtendedFilename_writer
                      APP  Convert
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif
                              -out ${TEMP}/apTvUtGeomExtendedFilename.tif?&gdal:co:TILED=YES&writegeom=false
-                     )                   
+                     )
+
+OTB_TEST_APPLICATION(NAME apTvUtTileFusion
+                     APP TileFusion
+                     OPTIONS -il ${EXAMPLEDATA}/Scene_R1C1.png
+                                 ${EXAMPLEDATA}/Scene_R1C2.png
+                                 ${EXAMPLEDATA}/Scene_R2C1.png
+                                 ${EXAMPLEDATA}/Scene_R2C2.png
+                             -cols 2
+                             -rows 2
+                             -out ${TEMP}/apTvUtTileFusion.png uint8
+                     VALID   --compare-image ${NOTOL}
+                             ${EXAMPLEDATA}/Scene.png
+                           ${TEMP}/apTvUtTileFusion.png)
