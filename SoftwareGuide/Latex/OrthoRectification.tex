@@ -193,7 +193,7 @@ access it when needed.
 \label{sec:EvaluatingSensorModels}
 
 If no appropriate sensor model is available in the image meta-data,
-OTB offers the possibility to estimate a sensor model from the image. 
+OTB offers the possibility to estimate a sensor model from the image.
 
 \input{EstimateRPCSensorModelExample.tex}
 
@@ -357,6 +357,12 @@ ortho-rectification framework. An example is given in the next section.
 \label{sec:GeometriesProjection}
 \fi
 \input{GeometriesProjectionExample.tex}
+
+\section{Elevation management with OTB}
+\ifitkFullVersion
+\label{sec:DEMHandler}
+\fi
+\input{DEMHandlerExample.tex}
 
 \section{Vector data area extraction}
 \ifitkFullVersion
