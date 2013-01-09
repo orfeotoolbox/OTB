@@ -322,8 +322,8 @@ VectorImageModel
   lowerRegion.SetIndex(index);
 
   size[0] = region.GetSize()[0];
-  size[1] = vcl_abs( region.GetIndex()[1] + region.GetSize()[1] 
-                     - m_AlreadyLoadedRegion.GetIndex()[1] - m_AlreadyLoadedRegion.GetSize()[1] );
+  size[1] = vcl_abs( static_cast<int>(region.GetIndex()[1] + region.GetSize()[1] 
+                     - m_AlreadyLoadedRegion.GetIndex()[1] - m_AlreadyLoadedRegion.GetSize()[1] ));
   lowerRegion.SetSize(size);
 
   // ------- left region
@@ -340,8 +340,8 @@ VectorImageModel
   index[1] = m_AlreadyLoadedRegion.GetIndex()[1];
   rightRegion.SetIndex(index);
 
-  size[0] = vcl_abs(region.GetSize()[0] + region.GetIndex()[0] 
-                    - m_AlreadyLoadedRegion.GetIndex()[0] - m_AlreadyLoadedRegion.GetSize()[0]);
+size[0] = vcl_abs(static_cast<int>(region.GetSize()[0] + region.GetIndex()[0] 
+                                   - m_AlreadyLoadedRegion.GetIndex()[0] - m_AlreadyLoadedRegion.GetSize()[0]));
   size[1] = m_AlreadyLoadedRegion.GetSize()[1]; 
   rightRegion.SetSize(size);
 
