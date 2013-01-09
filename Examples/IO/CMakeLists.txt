@@ -56,6 +56,9 @@ TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO)
 ADD_EXECUTABLE(OGRWrappersExample OGRWrappersExample.cxx )
 TARGET_LINK_LIBRARIES(OGRWrappersExample OTBCommon OTBOGRAdapters)
 
+ADD_EXECUTABLE(DEMHandlerExample DEMHandlerExample.cxx )
+TARGET_LINK_LIBRARIES(DEMHandlerExample OTBOssimAdapters OTBCommon OTBIO)
+
 ADD_EXECUTABLE(DEMToImageGenerator DEMToImageGenerator.cxx )
 TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon )
 
@@ -73,46 +76,6 @@ IF( OTB_USE_CURL )
   ADD_EXECUTABLE(TileMapImageIOExample TileMapImageIOExample.cxx)
   TARGET_LINK_LIBRARIES(TileMapImageIOExample OTBIO OTBCommon)
 ENDIF( OTB_USE_CURL )
-
-
-#ADD_EXECUTABLE(ImageReadExportVTK ImageReadExportVTK.cxx )
-#TARGET_LINK_LIBRARIES(ImageReadExportVTK)
-
-#ADD_EXECUTABLE(RGBImageSeriesReadWrite RGBImageSeriesReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(RGBImageSeriesReadWrite)
-
-#ADD_EXECUTABLE(ImageSeriesReadWrite ImageSeriesReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(ImageSeriesReadWrite)
-
-#ADD_EXECUTABLE(ImageReadImageSeriesWrite ImageReadImageSeriesWrite.cxx )
-#TARGET_LINK_LIBRARIES(ImageReadImageSeriesWrite)
-
-#ADD_EXECUTABLE(DicomSeriesReadImageWrite DicomSeriesReadImageWrite.cxx )
-#TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite)
-
-#ADD_EXECUTABLE(DicomSeriesReadImageWrite2 DicomSeriesReadImageWrite2.cxx )
-#TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite2)
-
-#ADD_EXECUTABLE(DicomSeriesReadPrintTags DicomSeriesReadPrintTags.cxx )
-#TARGET_LINK_LIBRARIES(DicomSeriesReadPrintTags)
-
-#ADD_EXECUTABLE(DicomImageReadPrintTags DicomImageReadPrintTags.cxx )
-#TARGET_LINK_LIBRARIES(DicomImageReadPrintTags)
-
-#ADD_EXECUTABLE(DicomImageReadWrite DicomImageReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(DicomImageReadWrite)
-
-#ADD_EXECUTABLE(DicomImageReadChangeHeaderWrite DicomImageReadChangeHeaderWrite.cxx )
-#TARGET_LINK_LIBRARIES(DicomImageReadChangeHeaderWrite)
-
-#ADD_EXECUTABLE(DicomSeriesReadSeriesWrite DicomSeriesReadSeriesWrite.cxx )
-#TARGET_LINK_LIBRARIES(DicomSeriesReadSeriesWrite)
-
-#ADD_EXECUTABLE(DicomPrintPatientInformation DicomPrintPatientInformation.cxx )
-#TARGET_LINK_LIBRARIES(DicomPrintPatientInformation)
-
-#ADD_EXECUTABLE(TransformReadWrite TransformReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(TransformReadWrite)
 
 ADD_EXECUTABLE(ImageToKmzAndMapFileProductExample ImageToKmzAndMapFileProductExample.cxx)
 TARGET_LINK_LIBRARIES(ImageToKmzAndMapFileProductExample OTBIO)
@@ -169,6 +132,17 @@ ADD_TEST(ioTeDEMToImageGeneratorTest ${EXE_TESTS1}
           ${INPUTDATA}/DEM_srtm
          )
 
+ADD_TEST(prTeDEMHandlerExampleTest ${EXE_TESTS1}
+  DEMHandlerExampleTest
+  ${DATA}/DEM/srtm_directory/
+  ${DATA}/DEM/egm96.grd
+  40
+  8.434583
+  44.647083
+  383.580313671
+  0.001
+)
+
 # Testing the chain of creating a kmz and MapFilefrom
 # a non georeferenced image
 ADD_TEST(ioTeImageToKmzAndMapFileProductExample ${EXE_TESTS1}
@@ -205,7 +179,7 @@ ADD_TEST(ioTeImageToKmzAndMapFileProductExample ${EXE_TESTS1}
          399.000000 264.000000 -72.255020 18.523664 0.000000
          42.000000  232.000000 -72.426552 18.540876 0.000000
          )
-       
+
 
 IF( OTB_USE_CURL )
 ADD_TEST(ioTeTileMapImageIOExampleTest ${EXE_TESTS2}
@@ -219,8 +193,8 @@ ADD_TEST(ioTeTileMapImageIOExampleTest ${EXE_TESTS2}
          43.55968261
          12
          )
-         
-# Access to NearMap is subject to an "agreement" checkbox ... 
+
+# Access to NearMap is subject to an "agreement" checkbox ...
 # ADD_TEST(ioTeTileMapImageIOExample2Test ${EXE_TESTS2}
 # --compare-image ${HIGHTOL}  ${BASELINE}/nearMap.jpg
 #                         ${TEMP}/nearMap.jpg
@@ -267,7 +241,7 @@ ENDIF(OTB_USE_LIBLAS)
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbIOExamplesTests1 otbIOExamplesTests1.cxx)
-TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBCommon OTBTesting)
+TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBCommon OTBOssimAdapters OTBTesting)
 
 IF( OTB_USE_CURL )
   ADD_EXECUTABLE(otbIOExamplesTests2 otbIOExamplesTests2.cxx)

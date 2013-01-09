@@ -30,7 +30,6 @@ void RegisterTests()
   REGISTER_TEST(VectorDataProjectionExampleTest);
   REGISTER_TEST(GeometriesProjectionTest);
   REGISTER_TEST(EstimateRPCSensorModelExample);
-  REGISTER_TEST(DEMHandlerExampleTest);
 }
 
 #undef main
@@ -52,7 +51,3 @@ void RegisterTests()
 #undef main
 #define main EstimateRPCSensorModelExample
 #include "EstimateRPCSensorModelExample.cxx"
-
-#undef main
-#define main DEMHandlerExampleTest
-#include "DEMHandlerExample.cxx"
