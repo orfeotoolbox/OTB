@@ -37,6 +37,18 @@
 
 namespace mvd
 {
+
+namespace
+{
+
+const char* QCOMBOBOX_NAMES[ /* ColorSetupWidget::CHANNEL_COUNT */ ] = {
+  "m_RedComboBox",
+  "m_GreenComboBox",
+  "m_BlueComboBox"
+};
+
+}
+
 /*
   TRANSLATOR mvd::ColorSetupWidget
 
@@ -77,7 +89,8 @@ ColorSetupWidget
 
 /*******************************************************************************/
 void
-ColorSetupWidget::SetComponents( const QStringList& components )
+ColorSetupWidget
+::SetComponents( const QStringList& components )
 {
   m_Components = components;
 
@@ -87,7 +100,7 @@ ColorSetupWidget::SetComponents( const QStringList& components )
 
   QStringList itemTexts( components );
 
-  itemTexts.prepend( "NIL" );
+  itemTexts.prepend( tr( "none" ) );
 
   for( int i=1;
        i<itemTexts.size();
@@ -107,6 +120,7 @@ ColorSetupWidget::SetComponents( const QStringList& components )
   m_UI->m_GreenComboBox->addItems( itemTexts );
   m_UI->m_BlueComboBox->addItems( itemTexts );
 
+  /*
   switch( components.size() )
     {
     case 0:
@@ -131,6 +145,32 @@ ColorSetupWidget::SetComponents( const QStringList& components )
       m_UI->m_BlueComboBox->setCurrentIndex( 3 );
       break;
     }
+  */
+
+  // Black screen.
+  m_UI->m_RedComboBox->setCurrentIndex( 0 );
+  m_UI->m_GreenComboBox->setCurrentIndex( 0 );
+  m_UI->m_BlueComboBox->setCurrentIndex( 0 );
+}
+
+/*******************************************************************************/
+void
+ColorSetupWidget
+::SetCurrentIndex( Channel channel, int index )
+{
+  QComboBox* comboBox = findChild< QComboBox* >( QCOMBOBOX_NAMES[ channel ] );
+
+  comboBox->setCurrentIndex( index<0 ? 0 : index + 1 );
+}
+
+/*******************************************************************************/
+int
+ColorSetupWidget
+::GetCurrentIndex( Channel channel )
+{
+  QComboBox* comboBox = findChild< QComboBox* >( QCOMBOBOX_NAMES[ channel ] );
+
+  return comboBox->currentIndex() - 1;
 }
 
 /*******************************************************************************/

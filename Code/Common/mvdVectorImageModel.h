@@ -128,7 +128,16 @@ public:
 
   /**
    */
-  QStringList GetBandNames() const; 
+  QStringList GetBandNames() const;
+
+  /**
+   */
+  inline
+    const Settings&
+    GetSettings() const
+  {
+    return m_Settings;
+  }
 
   /**
    */
@@ -182,6 +191,20 @@ private:
 //
 // Private methods.
 private:
+
+  /** */
+  inline
+    DefaultImageType::ImageMetadataInterfacePointerType
+    GetMetadataInterface() const
+  {
+    assert( m_ImageFileReader->GetNumberOfOutputs()==1 );
+
+    itk::MetaDataDictionary dictionary(
+      m_ImageFileReader->GetOutput( 0 )->GetMetaDataDictionary()
+    );
+
+    return otb::ImageMetadataInterfaceFactory::CreateIMI( dictionary );
+  }
 
   /** Compute the linear buffer index according to the 2D region and
   * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.

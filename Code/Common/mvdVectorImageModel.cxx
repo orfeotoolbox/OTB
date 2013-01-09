@@ -77,13 +77,16 @@ VectorImageModel
   assert( m_ImageFileReader->GetNumberOfOutputs()==1 );
 
   DefaultImageType::Pointer output( m_ImageFileReader->GetOutput( 0 ) );
+
+  /*
   itk::MetaDataDictionary dictionary( output->GetMetaDataDictionary() );
 
   DefaultImageType::ImageMetadataInterfacePointerType metaData(
-    otb::ImageMetadataInterfaceFactory::CreateIMI( dictionary )
+    GetMetadataInferface()
   );
+  */
 
-  StringVector stdBandNames( metaData->GetBandName() );
+  StringVector stdBandNames( GetMetadataInterface()->GetBandName() );
 
   assert( stdBandNames.empty() ||
 	  stdBandNames.size()==output->GetNumberOfComponentsPerPixel() );
@@ -127,8 +130,10 @@ VectorImageModel
     m_Settings.m_RGBChannels[1] = 1;
     m_Settings.m_RGBChannels[2] = 2;
     }
+
 #else
-  
+  m_Settings.m_RGBChannels = GetMetadataInterface()->GetDefaultDisplay();
+
 #endif
 }
 

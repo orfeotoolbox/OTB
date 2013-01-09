@@ -62,7 +62,8 @@ namespace mvd
  * Because Qt uses a shallow mecanism to copy containers, the returned
  * QStringList is shallow-copied.
  */
-inline QStringList ToQStringList( const StringVector& sv );
+inline
+QStringList ToQStringList( const StringVector& sv );
 
 /**
  * Append the content of a StringVector object to the content of a
@@ -71,8 +72,9 @@ inline QStringList ToQStringList( const StringVector& sv );
  * Because Qt uses a shallow mecanism to copy containers, the returned
  * QStringList is shallow-copied.
  */
-inline QStringList AppendToQStringList( QStringList& qsl,
-					const StringVector& sv );
+inline
+QStringList AppendToQStringList( QStringList& qsl,
+				 const StringVector& sv );
 
 //
 // Inlined-functions implementations.

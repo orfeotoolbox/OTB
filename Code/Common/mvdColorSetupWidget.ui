@@ -91,7 +91,7 @@
        </property>
        <item>
         <property name="text">
-         <string>NIL</string>
+         <string>none</string>
         </property>
        </item>
        <item>
@@ -170,7 +170,7 @@
        </property>
        <item>
         <property name="text">
-         <string>NIL</string>
+         <string>none</string>
         </property>
        </item>
        <item>
@@ -249,7 +249,7 @@
        </property>
        <item>
         <property name="text">
-         <string>NIL</string>
+         <string>none</string>
         </property>
        </item>
        <item>

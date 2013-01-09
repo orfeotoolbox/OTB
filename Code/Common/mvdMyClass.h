@@ -52,8 +52,8 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
-/** \class MyClass
- *
+/**
+ * \class MyClass
  */
 class Monteverdi2_EXPORT MyClass :
     public QObject

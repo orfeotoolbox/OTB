@@ -187,6 +187,14 @@ MainWindow::onSelectedModelChanged( const AbstractModel* model )
     dynamic_cast< const VectorImageModel* >( model );
 
   colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
+
+  for( int i=0; i<ColorSetupWidget::CHANNEL_COUNT; ++i )
+    {
+    colorSetupWidget->SetCurrentIndex(
+      ColorSetupWidget::Channel( i ),
+      vectorImageModel->GetSettings().m_RGBChannels[ i ]
+    );
+    }
 }
 
 /*****************************************************************************/
