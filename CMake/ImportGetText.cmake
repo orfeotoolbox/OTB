@@ -4,11 +4,11 @@ OPTION(OTB_USE_GETTEXT "Get Text Library." OFF)
 MARK_AS_ADVANCED(OTB_USE_GETTEXT)
 
 IF(OTB_USE_GETTEXT)
-    
+
     FIND_PACKAGE(Gettext)
     MARK_AS_ADVANCED(GETTEXT_MSGMERGE_EXECUTABLE)
     MARK_AS_ADVANCED(GETTEXT_MSGFMT_EXECUTABLE)
-    
+
     IF(GETTEXT_FOUND)
       FIND_LIBRARY(GETTEXT_LIBRARY gettextlib DOC "GetText library")
       MARK_AS_ADVANCED(GETTEXT_LIBRARY)
@@ -16,7 +16,7 @@ IF(OTB_USE_GETTEXT)
         FIND_LIBRARY(GETTEXT_INTL_LIBRARY intl DOC "GetText intl library")
         MARK_AS_ADVANCED(GETTEXT_INTL_LIBRARY)
       ENDIF(APPLE OR WIN32)
-    
+
       IF(GETTEXT_LIBRARY)
           SET(OTB_I18N 1)
           MESSAGE(STATUS
@@ -31,21 +31,21 @@ IF(OTB_USE_GETTEXT)
             libintl.h
             DOC "Path to gettext include directory (where libintl.h can be found)")
           MARK_AS_ADVANCED(GETTEXT_INCLUDE_DIR)
-        
+
           IF(GETTEXT_INCLUDE_DIR)
             INCLUDE_DIRECTORIES(${GETTEXT_INCLUDE_DIR})
           ENDIF(GETTEXT_INCLUDE_DIR)
       ENDIF(GETTEXT_LIBRARY)
-      
+
       #MESSAGE(STATUS "  Enabling GetText support")
       MESSAGE(STATUS "  GetText includes: ${GETTEXT_INCLUDE_DIR}")
       MESSAGE(STATUS "  GetText library : ${GETTEXT_LIBRARY}")
       IF(APPLE OR WIN32)
         MESSAGE(STATUS "  GetText intl library  : ${GETTEXT_INTL_LIBRARY}")
       ENDIF(APPLE OR WIN32)
-    
+
       IF(BUILD_APPLICATIONS AND OTB_WRAP_QT)
-      			# Check bug 419 : conflict between gettext and Qt on some Ubuntu systems
+            # Check bug 419 : conflict between gettext and Qt on some Ubuntu systems
             SET(CMAKE_REQUIRED_INCLUDES "${QT_INCLUDES}")
             SET(CMAKE_REQUIRED_LIBRARIES "${QT_LIBRARIES};${GETTEXT_LIBRARY}")
             SET(CMAKE_REQUIRED_DEFINITIONS "${QT_DEFINITIONS}")
@@ -60,14 +60,13 @@ IF(OTB_USE_GETTEXT)
                   "You might consider deactivating the support of Gettext in OTB with the OTB_USE_GETTEXT cmake option.\n")
             ENDIF(NOT CHECK_QT_GETTEXT_CONFLICT)
       ENDIF(BUILD_APPLICATIONS AND OTB_WRAP_QT)
-      
+
     ELSE(GETTEXT_FOUND)
       SET(OTB_I18N 0)
       MESSAGE(STATUS
                   "  Gettext not found, internationalization will not be available")
     ENDIF(GETTEXT_FOUND)
-    
+
 ELSE(OTB_USE_GETTEXT)
     MESSAGE(STATUS "  Disabling GetText support")
 ENDIF(OTB_USE_GETTEXT)
-

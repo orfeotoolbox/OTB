@@ -21,11 +21,11 @@ IF(OTB_USE_EXTERNAL_GDAL)
     IF (NOT GDAL_CONFIG)
       MESSAGE(FATAL_ERROR "Cannot find gdal-config. Set GDAL_CONFIG")
     ENDIF(NOT GDAL_CONFIG)
-   
+
     EXECUTE_PROCESS(COMMAND ${GDAL_CONFIG} --version
                     OUTPUT_VARIABLE GDAL_VERSION
                     OUTPUT_STRIP_TRAILING_WHITESPACE)
-   
+
     # Detect if gdal support hdf format
     EXECUTE_PROCESS(COMMAND ${GDAL_CONFIG} --formats
                     OUTPUT_VARIABLE GDAL_FORMATS
@@ -37,7 +37,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
        SET(CHECK_GDAL_BUILT_WITH_HDF 0 CACHE INTERNAL "GDAL_BUILT_WITH_HDF" FORCE)
     ENDIF(${GDAL_FORMATS} MATCHES "hdf")
   ELSE (UNIX)
-  	# For WIN32 platform, we suppose that GDAL is built with HDF support (case with OSGeo4W)
+    # For WIN32 platform, we suppose that GDAL is built with HDF support (case with OSGeo4W)
     SET(CHECK_GDAL_BUILT_WITH_HDF 1 CACHE INTERNAL "GDAL_BUILT_WITH_HDF" FORCE)
     # GDAL_INCLUDE_DIR has already been checked here
     FILE(READ "${GDAL_INCLUDE_DIR}/gdal_version.h" _gdal_version_h_CONTENTS)
@@ -58,7 +58,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
   MARK_AS_ADVANCED(GDAL_VERSION_MAJOR_STRING)
   MARK_AS_ADVANCED(GDAL_VERSION_MINOR_STRING)
   MARK_AS_ADVANCED(GDAL_VERSION_PATCH_STRING)
-  
+
   MATH(EXPR GDAL_NUM_VERSION "((${GDAL_VERSION_MAJOR})*100+${GDAL_VERSION_MINOR})*100+${GDAL_VERSION_PATCH}")
 
   # Find geotiff headers
@@ -171,11 +171,11 @@ IF(OTB_USE_EXTERNAL_GDAL)
     ENDIF (NOT OGR_LIBRARY)
   ENDIF(GDAL_HAS_OGR)
 
-  
+
   # Check for some possible crashes when reading TIFF files, when GDAL embeds geotiff and tiff libraries
-  # Known to lead to a crash with the official gdal package available in ubuntu & debian 
+  # Known to lead to a crash with the official gdal package available in ubuntu & debian
   INCLUDE(CheckCXXSourceRunsWithArgs)
-  
+
   IF(NOT WIN32)
   # This test is known to fail with the Debian gdal package
   # On Windows, the try-compile are always run in Debug, leading to runtime issues, so we disable them
@@ -193,7 +193,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
     "You might consider building GDAL yourself without using --with-hide-internal-symbols\n"
     "and pointing GEOTIFF_INCLUDE_DIRS to the geotiff headers included in gdal sources" )
   ENDIF(NOT CHECK_GDALOPEN_SYMBOL)
-  
+
   # This test is known to fail with the Ubuntu gdal package
   SET(CMAKE_REQUIRED_INCLUDES ${GEOTIFF_INCLUDE_DIRS};${TIFF_INCLUDE_DIRS})
   SET(CMAKE_REQUIRED_LIBRARIES "${GDAL_LIBRARY};${GEOTIFF_LIBRARY};${TIFF_LIBRARY}")
@@ -220,7 +220,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
     SET(CMAKE_REQUIRED_LIBRARIES "${GDAL_LIBRARY}")
     CHECK_CXX_SOURCE_RUNS_ARGS(
             ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestHDF4Open.cxx
-            ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestHDF4Open.hdf 
+            ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestHDF4Open.hdf
             CHECK_HDF4OPEN_SYMBOL
             )
     IF(NOT CHECK_HDF4OPEN_SYMBOL)

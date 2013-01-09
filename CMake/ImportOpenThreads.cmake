@@ -11,7 +11,7 @@ IF(OPENTHREADS_FOUND)
 
         INCLUDE_DIRECTORIES(${OPENTHREADS_INCLUDE_DIR})
         LINK_DIRECTORIES( ${OPENTHREADS_LIBRARY} )
-                
+
         MESSAGE(STATUS "  Using OpenThreads external version")
         MESSAGE(STATUS "  OpenThreads includes : ${OPENTHREADS_INCLUDE_DIR}")
         MESSAGE(STATUS "  OpenThreads library  : ${OPENTHREADS_LIBRARY}")
@@ -26,7 +26,7 @@ ELSE(OPENTHREADS_FOUND)
         IF(NOT BUILD_SHARED_LIBS)
           ADD_DEFINITIONS(-DOT_LIBRARY_STATIC)
         ENDIF(NOT BUILD_SHARED_LIBS)
-        
+
         MESSAGE(STATUS "  Using OpenThreads internal version")
-        
+
 ENDIF(OPENTHREADS_FOUND)

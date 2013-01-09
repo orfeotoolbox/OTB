@@ -1,4 +1,3 @@
-
 MESSAGE(STATUS "Importing Ossim...")
 # Option for internal/external GDAL
 OPTION(OTB_USE_EXTERNAL_OSSIM "Use an outside build of Ossim." OFF)
@@ -9,4 +8,3 @@ IF(OTB_USE_EXTERNAL_OSSIM)
 ELSE(OTB_USE_EXTERNAL_OSSIM)
   SET(OSSIM_LIBRARIES otbossim)
 ENDIF(OTB_USE_EXTERNAL_OSSIM)
-

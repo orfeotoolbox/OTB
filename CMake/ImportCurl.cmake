@@ -19,7 +19,6 @@ IF(OTB_USE_CURL)
       MESSAGE(FATAL_ERROR "CURL required but not found. "
                           "Turn OTB_USE_CURL to OFF to disable CURL support")
     ENDIF(CURL_FOUND)
-ELSE(OTB_USE_CURL)    
+ELSE(OTB_USE_CURL)
         MESSAGE(STATUS "  Disabling Curl support")
 ENDIF(OTB_USE_CURL)
-
