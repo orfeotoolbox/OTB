@@ -25,6 +25,8 @@
 // MapProjection handler
 #include "otbWrapperMapProjectionParametersHandler.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
 
 namespace otb
 {
@@ -100,11 +102,14 @@ private:
     SetParameterDescription("out.proj.image.in", "Projection map will be found using image metadata");
     AddChoice("out.proj.user", "User defined projection");
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "out.proj.user.map");
+    
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in.vd", "VectorData_QB1.shp");
     SetDocExampleParameterValue("out.proj", "image");
-    SetDocExampleParameterValue("out.proj.image", "ROI_QB_MUL_1.tif");
+    SetDocExampleParameterValue("out.proj.image.in", "ROI_QB_MUL_1.tif");
     SetDocExampleParameterValue("out.vd","reprojected_vd.shp");
   }
 
@@ -116,6 +121,9 @@ private:
   void DoExecute()
   {
     GetLogger()->Debug("Entering DoExecute");
+    
+    // Setup the DEM Handler
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     // Get the input image
 
