@@ -97,7 +97,7 @@ private:
     layout[1] = this->GetParameterInt("rows");
     m_FusionFilter->SetLayout(layout);
     
-    for (unsigned int i=0;i<(layout[0]*layout[1]);i++)
+    for (unsigned int i=0; i<(layout[0]*layout[1]); i++)
       {
       m_FusionFilter->SetInput(i,tileList->GetNthElement(i));
       }
