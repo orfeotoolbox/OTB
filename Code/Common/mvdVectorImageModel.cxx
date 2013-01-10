@@ -132,7 +132,7 @@ VectorImageModel
     }
   */
 
-  m_Settings.m_RGBChannels = GetMetadataInterface()->GetDefaultDisplay();
+  m_Settings.SetRgbChannels( GetMetadataInterface()->GetDefaultDisplay() );
 }
 
 /*******************************************************************************/
@@ -153,7 +153,8 @@ VectorImageModel
   m_Region = region;
   // Don't do anything if the region did not changed
   // moveMoveEvent (Drag region).
-  if ( m_PreviousRegion != region )
+  if ( m_PreviousRegion!=region ||
+       m_Settings.IsDirty() )
     {
     // check the current and the previous region have some pixels in
     // common 
@@ -161,7 +162,9 @@ VectorImageModel
     bool res =  tempPreviousRegionRegion.Crop(region);
 
     // if the first time, image must be read
-    if ( m_PreviousRegion != ImageRegionType() && res)
+    if ( res &&
+	 m_PreviousRegion!=ImageRegionType() &&
+	 !m_Settings.IsDirty() )
       {
       // Compute loaeded region, and region not loaded yet within the
       // new requested region
@@ -265,8 +268,14 @@ VectorImageModel
   m_RenderingFilter = RenderingFilterType::New();
   m_RenderingFilter->SetInput(m_ExtractFilter->GetOutput());
   m_RenderingFilter->GetRenderingFunction()->SetAutoMinMax(false);
+  // TODO: Remove local variable.
+  // Local variable because RenderingFunction::SetChannels() gets a
+  // non-const std::vector< unsigned int >& as argument instead of a
+  // const one.
+  Settings::ChannelVector rgb( m_Settings.GetRgbChannels() );
   m_RenderingFilter->GetRenderingFunction()->SetChannelList(
-    m_Settings.m_RGBChannels );
+    rgb
+  );
   m_RenderingFilter->GetOutput()->SetRequestedRegion(region);
   m_RenderingFilter->Update();
 
@@ -372,12 +381,16 @@ void
 VectorImageModel
 ::onCurrentIndexChanged( ColorSetupWidget::Channel channel, int index )
 {
-  m_Settings.m_RGBChannels[ channel ] = index;
+  m_Settings.RgbChannel( channel ) = index;
 
-  m_RenderingFilter->GetRenderingFunction()->SetChannelList(
-    m_Settings.m_RGBChannels );
-  
-  DumpImagePixelsWithinRegionIntoBuffer( m_PreviousRegion );
+  // TODO: Remove local variable.
+  // Local variable because RenderingFunction::SetChannels() gets a
+  // non-const std::vector< unsigned int >& as argument instead of a
+  // const one.
+  Settings::ChannelVector rgb( m_Settings.GetRgbChannels() );
+  m_RenderingFilter->GetRenderingFunction()->SetChannelList( rgb );
+
+  emit settingsUpdated();
 }
 
 /*******************************************************************************/

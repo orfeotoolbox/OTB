@@ -78,20 +78,89 @@ public:
     //
     // Public methods.
   public:
+    /** Constructor */
     Settings() :
-      m_RGBChannels(),
+      m_IsDirty( false ),
+      m_RgbChannels(),
       m_RenderingFuncParams()
     {
     }
 
+    /** Destructor */
     ~Settings() 
     {
     }
 
+    /** */
+    bool
+    IsDirty() const
+    {
+      return m_IsDirty;
+    }
+
+    /** */
+    inline
+    void
+    SetDirty()
+    {
+      m_IsDirty = true;
+    }
+
+    /** */
+    inline void ClearDirty()
+    {
+      m_IsDirty = false;
+    }
+
+    /** */
+    inline
+    void
+    SetRgbChannels( const ChannelVector& rgb )
+    {
+      m_RgbChannels = rgb;
+      SetDirty();
+    }
+
+    /** */
+    inline
+    const ChannelVector&
+    GetRgbChannels() const
+    {
+      return m_RgbChannels;
+    }
+
+    /**
+     */
+    inline
+    ChannelVector::value_type&
+    RgbChannel( int i )
+    {
+      SetDirty();
+      return m_RgbChannels[ i ];
+    }
+
+    /**
+     */
+    inline
+    const ChannelVector::value_type&
+    RgbChannel( int i ) const
+    {
+      return m_RgbChannels[ i ];
+    }
+
     //
-    // Public attributes.
-  public:
-    ChannelVector m_RGBChannels;
+    // Private attributes.
+  private:
+    /** Flag which notices when display Settings has been modified and
+     * have not yet been rendered.
+     */
+    bool m_IsDirty;
+    /**
+     * Color-composition setup (file-component to video RGB-components).
+     */
+    ChannelVector m_RgbChannels;
+    /**
+     */
     ParametersType m_RenderingFuncParams;
   };
 
@@ -161,6 +230,9 @@ public slots:
 //
 // SIGNALS.
 signals:
+  /**
+   */
+  void settingsUpdated();
 
 //
 // Protected methods.

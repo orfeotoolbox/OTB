@@ -127,6 +127,7 @@ MainWindow::InitializeDockWidgets()
     QDockWidget::DockWidgetFloatable
   );
 
+  /*
   // Update OpenGL view when color-setup has changed.
   QObject::connect(
     videoColorSetupDock->widget(),
@@ -135,6 +136,7 @@ MainWindow::InitializeDockWidgets()
     centralWidget(),
     SLOT( updateGL()  )
   );
+  */
 
   // Add dock.
   addDockWidget( Qt::LeftDockWidgetArea, videoColorSetupDock );
@@ -200,10 +202,24 @@ MainWindow
   const VectorImageModel* vectorImageModel =
     qobject_cast< const VectorImageModel* >( app->GetModel() );
 
+  if( vectorImageModel==NULL )
+    {
+    return;
+    }
+
+  // Disconnect previously selected model from view.
+  QObject::disconnect(
+    vectorImageModel,
+    SIGNAL( settingsUpdated() ),
+    // to:
+    centralWidget(),
+    SLOT( updateGL() )
+  );
+
+
   QWidget* widget = GetVideoColorSetupDock()->widget();
 
-  if( vectorImageModel==NULL ||
-      widget==NULL )
+  if( widget==NULL )
     {
     return;
     }
@@ -229,10 +245,6 @@ MainWindow
   const VectorImageModel* vectorImageModel =
     qobject_cast< const VectorImageModel* >( model );
 
-  colorSetupWidget->blockSignals( true );
-  {
-  colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
-
   // Connect newly selected model to UI controller.
   QObject::connect(
     colorSetupWidget,
@@ -242,11 +254,25 @@ MainWindow
     SLOT( onCurrentIndexChanged( ColorSetupWidget::Channel, int ) )
   );
 
+  // Connect newly selected model to view.
+  QObject::connect(
+    vectorImageModel,
+    SIGNAL( settingsUpdated() ),
+    // to:
+    centralWidget(),
+    SLOT( updateGL()  )
+  );
+
+  // Setup color-setup controller.
+  colorSetupWidget->blockSignals( true );
+  {
+  colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
+
   for( int i=0; i<ColorSetupWidget::CHANNEL_COUNT; ++i )
     {
     colorSetupWidget->SetCurrentIndex(
       ColorSetupWidget::Channel( i ),
-      vectorImageModel->GetSettings().m_RGBChannels[ i ]
+      vectorImageModel->GetSettings().RgbChannel( i )
     );
     }
   }
