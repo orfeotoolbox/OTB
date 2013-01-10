@@ -260,7 +260,7 @@ VectorImageModel
   m_ExtractFilter = ExtractFilterType::New();
   m_ExtractFilter->SetInput(image);
   m_ExtractFilter->SetExtractionRegion(region);
-  
+
   // Use the rendering filter to get 
   m_RenderingFilter = RenderingFilterType::New();
   m_RenderingFilter->SetInput(m_ExtractFilter->GetOutput());
@@ -376,6 +376,8 @@ VectorImageModel
 
   m_RenderingFilter->GetRenderingFunction()->SetChannelList(
     m_Settings.m_RGBChannels );
+  
+  DumpImagePixelsWithinRegionIntoBuffer( m_PreviousRegion );
 }
 
 /*******************************************************************************/

@@ -171,7 +171,7 @@ signals:
    * \param index The curren-index in the component-list or -1 if the
    * undefined value has been selected.
    */
-  void currentIndexChanged( Channel channel, int index );
+  void currentIndexChanged( ColorSetupWidget::Channel channel, int index );
 
 //
 // Protected methods.
@@ -209,7 +209,7 @@ private slots:
     void
     onRedIndexChanged( int index )
   {
-    emit currentIndexChanged( CHANNEL_RED, index );
+    emit currentIndexChanged( CHANNEL_RED, index - 1 );
   }
 
   /**
@@ -220,7 +220,7 @@ private slots:
     void
     onGreenIndexChanged( int index )
   {
-    emit currentIndexChanged( CHANNEL_GREEN, index );
+    emit currentIndexChanged( CHANNEL_GREEN, index - 1 );
   }
 
 
@@ -232,7 +232,7 @@ private slots:
     void
     onBlueIndexChanged( int index )
   {
-    emit currentIndexChanged( CHANNEL_BLUE, index );
+    emit currentIndexChanged( CHANNEL_BLUE, index - 1 );
   }
 };
 

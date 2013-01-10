@@ -130,7 +130,7 @@ MainWindow::InitializeDockWidgets()
   // Update OpenGL view when color-setup has changed.
   QObject::connect(
     videoColorSetupDock->widget(),
-    SIGNAL( currentIndexChanged( Channel, int  ) ),
+    SIGNAL( currentIndexChanged( ColorSetupWidget::Channel, int  ) ),
     // to:
     centralWidget(),
     SLOT( updateGL()  )
@@ -168,12 +168,7 @@ MainWindow
     {
     model->loadFile( filename );
 
-    dynamic_cast< Application* >( qApp )->SetModel( model );
-
-    // set the largest possible region of the image
-    // TODO:  rename signal name when handling DataSets collections
-    // TODO: move signal into mvdApplication and link it to DockWidget and ImageView.
-    emit largestPossibleRegionChanged(model->GetOutput(0)->GetLargestPossibleRegion());
+    qobject_cast< Application* >( qApp )->SetModel( model );
     }
   catch( std::exception& exc )
     {
@@ -200,10 +195,10 @@ void
 MainWindow
 ::onAboutToChangeSelectedModel( const AbstractModel* )
 {
-  Application* app = dynamic_cast< Application* >( qApp );
+  Application* app = qobject_cast< Application* >( qApp );
 
   const VectorImageModel* vectorImageModel =
-    dynamic_cast< const VectorImageModel* >( app->GetModel() );
+    qobject_cast< const VectorImageModel* >( app->GetModel() );
 
   QWidget* widget = GetVideoColorSetupDock()->widget();
 
@@ -217,7 +212,7 @@ MainWindow
   QObject::disconnect(
     GetVideoColorSetupDock()->widget(),
     SIGNAL( currentIndexChanged( ColorSetupWidget::Channel, int ) ),
-    // to:
+    // from:
     vectorImageModel,
     SLOT( onCurrentIndexChanged( ColorSetupWidget::Channel, int ) )
   );
@@ -232,13 +227,15 @@ MainWindow
     qobject_cast< ColorSetupWidget*  >( GetVideoColorSetupDock()->widget() );
 
   const VectorImageModel* vectorImageModel =
-    dynamic_cast< const VectorImageModel* >( model );
+    qobject_cast< const VectorImageModel* >( model );
 
+  colorSetupWidget->blockSignals( true );
+  {
   colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
 
   // Connect newly selected model to UI controller.
   QObject::connect(
-    GetVideoColorSetupDock()->widget(),
+    colorSetupWidget,
     SIGNAL( currentIndexChanged( ColorSetupWidget::Channel, int ) ),
     // to:
     vectorImageModel,
@@ -252,6 +249,16 @@ MainWindow
       vectorImageModel->GetSettings().m_RGBChannels[ i ]
     );
     }
+  }
+  colorSetupWidget->blockSignals( false );
+
+  // set the largest possible region of the image
+  // TODO:  rename signal name when handling DataSets collections
+  // TODO: move signal into mvdApplication and link it to DockWidget
+  // and ImageView.
+  emit largestPossibleRegionChanged(
+    vectorImageModel->GetOutput( 0 )->GetLargestPossibleRegion()
+  );
 }
 
 /*****************************************************************************/

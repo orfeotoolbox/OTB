@@ -64,9 +64,9 @@ ImageModelRenderer
 void ImageModelRenderer::paintGL( const RenderingContext& context )
 {
   // the VectorImageModel used for the rendering
-  VectorImageModel * viModel = dynamic_cast<  VectorImageModel *>(
+  VectorImageModel * viModel = qobject_cast< VectorImageModel * >(
     const_cast<AbstractImageModel*>(context.m_AbstractImageModel)
-    );
+  );
 
   // the region of the image to render
   const ImageRegionType&    region = context.m_ImageRegion;

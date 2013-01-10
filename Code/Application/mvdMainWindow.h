@@ -112,7 +112,7 @@ private:
     const QDockWidget*
     GetVideoColorSetupDock() const
   {
-    return const_cast< const MainWindow* >( this )->GetVideoColorSetupDock();
+    return findChild< QDockWidget* >( VIDEO_COLOR_SETUP_DOCK );
   }
 
   /** */
@@ -120,7 +120,7 @@ private:
     QDockWidget*
     GetVideoColorSetupDock()
   {
-    return findChild< QDockWidget* >( VIDEO_COLOR_SETUP_DOCK );  
+    return findChild< QDockWidget* >( VIDEO_COLOR_SETUP_DOCK );
   }
 
 //

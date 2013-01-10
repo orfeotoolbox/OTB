@@ -124,7 +124,9 @@ public:
     const DefaultImageType*
     GetOutput( int index ) const
   {
-    return const_cast< const VectorImageModel* >( this )->GetOutput( index );
+    //return const_cast< VectorImageModel* >( this )->GetOutput( index
+    //);
+    return m_ImageFileReader->GetOutput( index );
   }
 
   /**

@@ -197,8 +197,8 @@ GLImageWidget
     m_ImageViewManipulator->GetViewportImageRegion() );
 
   // Set the new rendering context to be known in the ModelRendere
-  const AbstractImageModel* aiModel=  dynamic_cast< const AbstractImageModel* >(
-    dynamic_cast< Application* >( qApp )->GetModel() );
+  const AbstractImageModel* aiModel=  qobject_cast< const AbstractImageModel* >(
+    qobject_cast< Application* >( qApp )->GetModel() );
 
   // setup the rendering context
   if (aiModel)
