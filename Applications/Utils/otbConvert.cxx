@@ -157,7 +157,7 @@ private:
       {
       FloatVectorImageType::Pointer input = this->GetParameterImage("in");
       
-      FloatVectorImageType::Pointer mask; 
+      FloatVectorImageType::Pointer mask;
       bool useMask = false;
       if (IsParameterEnabled("mask"))
         {
@@ -247,7 +247,7 @@ private:
         itMask.GoToBegin();
         while (!it.IsAtEnd())
           {
-          // float values, so the threshold is set to 0.5 
+          // float values, so the threshold is set to 0.5
           if (itMask.Get()[0] < 0.5)
             {
             listSample->PushBack(it.Get());

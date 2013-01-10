@@ -32,12 +32,12 @@ namespace otb
  * ImageFileReader reads its output data from a single output file.
  * It interfaces with an ImageIO class to read in the data and
  * supports streaming (partial reading) if the source dataset does so.
- * 
+ *
  * ImageFileReader supports extended filenames, which allow to control
  * how the source dataset is read. See
  * http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for more
  * information.
- *  
+ *
  * \sa ExtendedFilenameToReaderOptions
  * \sa ImageSeriesReader
  * \sa ImageIOBase

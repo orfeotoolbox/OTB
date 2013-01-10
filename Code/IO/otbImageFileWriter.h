@@ -48,7 +48,7 @@ namespace otb
  * some properties of the output file. See
  * http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for more
  * information.
- * 
+ *
  * \sa ImageFileReader
  * \sa ImageSeriesReader
  * \sa ImageIOBase
