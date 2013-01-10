@@ -24,7 +24,7 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbStreamingImageFileWriterTestCalculateNumberOfDivisions);
-  REGISTER_TEST(otbStreamingImageFileWriterWithFilterTest);
+  REGISTER_TEST(otbImageFileWriterTestCalculateNumberOfDivisions);
+  REGISTER_TEST(otbImageFileWriterWithFilterTest);
   REGISTER_TEST(otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions);
 }
