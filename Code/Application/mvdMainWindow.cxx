@@ -76,6 +76,9 @@ MainWindow
   setObjectName( "mvd::MainWindow" );
   setWindowTitle( PROJECT_NAME );
 
+  // Set the GLImageWidget as the centralWidget in MainWindow.
+  setCentralWidget( new GLImageWidget( this ) );
+
   InitializeDockWidgets();
 
   // Connect Quit action of main menu to QApplication's quit() slot.
@@ -89,6 +92,13 @@ MainWindow
     this, SIGNAL(largestPossibleRegionChanged(const ImageRegionType&)),
     centralWidget(), SLOT( onLargestPossibleRegionChanged(const ImageRegionType&)) );
 
+  // Connect Appllication and MainWindow when selected model is about
+  // to change.
+  QObject::connect(
+    qApp, SIGNAL( aboutToChangeSelectedModel( const AbstractModel* ) ),
+    this, SLOT( onAboutToChangeSelectedModel( const AbstractModel* ) )
+  );
+
   // Connect Appllication and MainWindow when selected model has been
   // changed.
   QObject::connect(
@@ -101,9 +111,11 @@ MainWindow
 void
 MainWindow::InitializeDockWidgets()
 {
+  // New dock.
   QDockWidget* videoColorSetupDock =
     new QDockWidget( tr( "Video color setup" ), this );
 
+  // Setup dock.
   // You can use findChild( "videoColorSetupDock" ) to get dock-widget.
   videoColorSetupDock->setObjectName( VIDEO_COLOR_SETUP_DOCK );
   videoColorSetupDock->setWidget(
@@ -115,10 +127,17 @@ MainWindow::InitializeDockWidgets()
     QDockWidget::DockWidgetFloatable
   );
 
-  addDockWidget( Qt::LeftDockWidgetArea, videoColorSetupDock );
+  // Update OpenGL view when color-setup has changed.
+  QObject::connect(
+    videoColorSetupDock->widget(),
+    SIGNAL( currentIndexChanged( Channel, int  ) ),
+    // to:
+    centralWidget(),
+    SLOT( updateGL()  )
+  );
 
-  // Set the GLImageWidget as the centralWidget in MainWindow.
-  setCentralWidget( new GLImageWidget( this ) );
+  // Add dock.
+  addDockWidget( Qt::LeftDockWidgetArea, videoColorSetupDock );
 }
 
 /*****************************************************************************/
@@ -178,7 +197,36 @@ MainWindow
 
 /*****************************************************************************/
 void
-MainWindow::onSelectedModelChanged( const AbstractModel* model )
+MainWindow
+::onAboutToChangeSelectedModel( const AbstractModel* )
+{
+  Application* app = dynamic_cast< Application* >( qApp );
+
+  const VectorImageModel* vectorImageModel =
+    dynamic_cast< const VectorImageModel* >( app->GetModel() );
+
+  QWidget* widget = GetVideoColorSetupDock()->widget();
+
+  if( vectorImageModel==NULL ||
+      widget==NULL )
+    {
+    return;
+    }
+
+  // Disconnect previously selected model from UI controller.
+  QObject::disconnect(
+    GetVideoColorSetupDock()->widget(),
+    SIGNAL( currentIndexChanged( ColorSetupWidget::Channel, int ) ),
+    // to:
+    vectorImageModel,
+    SLOT( onCurrentIndexChanged( ColorSetupWidget::Channel, int ) )
+  );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::onSelectedModelChanged( const AbstractModel* model )
 {
   ColorSetupWidget* colorSetupWidget =
     qobject_cast< ColorSetupWidget*  >( GetVideoColorSetupDock()->widget() );
@@ -187,6 +235,15 @@ MainWindow::onSelectedModelChanged( const AbstractModel* model )
     dynamic_cast< const VectorImageModel* >( model );
 
   colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
+
+  // Connect newly selected model to UI controller.
+  QObject::connect(
+    GetVideoColorSetupDock()->widget(),
+    SIGNAL( currentIndexChanged( ColorSetupWidget::Channel, int ) ),
+    // to:
+    vectorImageModel,
+    SLOT( onCurrentIndexChanged( ColorSetupWidget::Channel, int ) )
+  );
 
   for( int i=0; i<ColorSetupWidget::CHANNEL_COUNT; ++i )
     {

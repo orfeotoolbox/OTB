@@ -113,7 +113,7 @@ VectorImageModel
 
   m_ImageFileReader = imageFileReader;
 
-#if 1
+  /*
   // initialize the channel list for the rendering needs following the
   // input image
   // TODO : See if if needs to be moved somewhere else
@@ -130,13 +130,12 @@ VectorImageModel
     m_Settings.m_RGBChannels[1] = 1;
     m_Settings.m_RGBChannels[2] = 2;
     }
+  */
 
-#else
   m_Settings.m_RGBChannels = GetMetadataInterface()->GetDefaultDisplay();
-
-#endif
 }
 
+/*******************************************************************************/
 void
 VectorImageModel
 ::ClearBuffer()
@@ -146,6 +145,7 @@ VectorImageModel
   m_RasterizedBuffer = NULL;
 }
 
+/*******************************************************************************/
 unsigned char *
 VectorImageModel
 ::RasterizeRegion( const ImageRegionType& region)
@@ -238,7 +238,7 @@ VectorImageModel
   return m_RasterizedBuffer;
 }
 
-
+/*******************************************************************************/
 void
 VectorImageModel
 ::DumpImagePixelsWithinRegionIntoBuffer(const ImageRegionType& region)
@@ -291,7 +291,7 @@ VectorImageModel
     }
 }
 
-
+/*******************************************************************************/
 void
 VectorImageModel
 ::ComputeRegionsToLoad(const ImageRegionType& region)
@@ -359,7 +359,7 @@ size[0] = vcl_abs(static_cast<int>(region.GetSize()[0] + region.GetIndex()[0]
   // add the left region if any pixel
   if ( leftRegion.GetNumberOfPixels() > 0 )
     m_RegionsToLoadVector.push_back(leftRegion);
-  
+
   // add the right region if any pixel
   if ( rightRegion.GetNumberOfPixels() > 0 )
     m_RegionsToLoadVector.push_back(rightRegion);
@@ -368,6 +368,15 @@ size[0] = vcl_abs(static_cast<int>(region.GetSize()[0] + region.GetIndex()[0]
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+void
+VectorImageModel
+::onCurrentIndexChanged( ColorSetupWidget::Channel channel, int index )
+{
+  m_Settings.m_RGBChannels[ channel ] = index;
+
+  m_RenderingFilter->GetRenderingFunction()->SetChannelList(
+    m_Settings.m_RGBChannels );
+}
 
 /*******************************************************************************/
 

@@ -97,6 +97,11 @@ public:
 //
 // SIGNALS.
 signals:
+  /**
+   */
+  void aboutToChangeSelectedModel( const AbstractModel* );
+  /**
+   */
   void selectedModelChanged( const AbstractModel* );
 
 //

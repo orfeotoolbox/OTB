@@ -136,6 +136,7 @@ private slots:
   void on_action_Open_activated();
   void on_action_About_activated();
 
+  void onAboutToChangeSelectedModel( const AbstractModel* );
   void onSelectedModelChanged( const AbstractModel* );
 };
 

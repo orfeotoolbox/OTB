@@ -75,6 +75,8 @@ Application
 {
   delete m_Model;
 
+  emit aboutToChangeSelectedModel( model );
+
   m_Model = model;
   m_Model->setParent( this );
 
