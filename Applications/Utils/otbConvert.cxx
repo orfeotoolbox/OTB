@@ -100,6 +100,26 @@ private:
     AddChoice("type.linear", "Linear");
     AddChoice("type.log2", "Log2");
     SetParameterString("type", "none");
+    
+    AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
+    SetParameterDescription("mask", "The masked pixels won't be used to adapt the dynamic (the mask must have the same dimensions as the input image)");
+    MandatoryOff("mask");
+    DisableParameter("mask");
+    
+    AddParameter(ParameterType_Group,"hcp","Histogram Cutting Parameters");
+    SetParameterDescription("hcp","Parameters to cut the histogram edges before rescaling");
+    
+    AddParameter(ParameterType_Float, "hcp.high", "High Cut Quantile");
+    SetParameterDescription("hcp.high", "Quantiles to cut from histogram high values before computing min/max rescaling (in percent, 2% by default)");
+    MandatoryOff("hcp.high");
+    SetDefaultParameterFloat("hcp.high", 2.0);
+    DisableParameter("hcp.high");
+    
+    AddParameter(ParameterType_Float, "hcp.low", "Low Cut Quantile");
+    SetParameterDescription("hcp.low", "Quantiles to cut from histogram low values before computing min/max rescaling (in percent, 2% by default)");
+    MandatoryOff("hcp.low");
+    SetDefaultParameterFloat("hcp.low", 2.0);
+    DisableParameter("hcp.low");
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image");
@@ -117,8 +137,8 @@ private:
     // Nothing to do here for the parameters : all are independent
   }
 
- template<class TImageType>
- void GenericDoExecute()
+  template<class TImageType>
+  void GenericDoExecute()
   {
     typename TImageType::Pointer castIm;
     
@@ -136,7 +156,14 @@ private:
     else
       {
       FloatVectorImageType::Pointer input = this->GetParameterImage("in");
-      input->UpdateOutputInformation();
+      
+      FloatVectorImageType::Pointer mask; 
+      bool useMask = false;
+      if (IsParameterEnabled("mask"))
+        {
+        mask = this->GetParameterImage("mask");
+        useMask = true;
+        }
 
       const unsigned int nbComp(input->GetNumberOfComponentsPerPixel());
       
@@ -179,30 +206,71 @@ private:
         
         shrinkFilter->SetInput(m_TransferLog->GetOutput());
         rescaler->SetInput(m_TransferLog->GetOutput());
+        shrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(GetParameterInt("ram"));
         shrinkFilter->Update();
         }
       else
         {
         shrinkFilter->SetInput(input);
         rescaler->SetInput(input);
+        shrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(GetParameterInt("ram"));
         shrinkFilter->Update();
         }
       
-      otbAppLogDEBUG( << "Shrink done" );
-        
+      ShrinkFilterType::Pointer maskShrinkFilter = ShrinkFilterType::New();
+      if (useMask)
+        {
+        maskShrinkFilter->SetShrinkFactor(shrinkFactor);
+        maskShrinkFilter->SetInput(mask);
+        maskShrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(GetParameterInt("ram"));
+        maskShrinkFilter->Update();
+        }
       
-      // TODO : how to deal with that?
-      shrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(GetParameterInt("ram"));
+      otbAppLogDEBUG( << "Shrink done" );
+      
       
       otbAppLogDEBUG( << "Evaluating input Min/Max..." );
       itk::ImageRegionConstIterator<FloatVectorImageType> it(shrinkFilter->GetOutput(), shrinkFilter->GetOutput()->GetLargestPossibleRegion());
+      itk::ImageRegionConstIterator<FloatVectorImageType> itMask;
+      if (useMask)
+        {
+        itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(maskShrinkFilter->GetOutput(),maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
+        }
       
       typename ListSampleType::Pointer listSample = ListSampleType::New();
       
       // Now we generate the list of samples
-      for(it.GoToBegin(); !it.IsAtEnd(); ++it)
+      if (useMask)
         {
-        listSample->PushBack(it.Get());
+        // Remove masked pixels
+        it.GoToBegin();
+        itMask.GoToBegin();
+        while (!it.IsAtEnd())
+          {
+          // float values, so the threshold is set to 0.5 
+          if (itMask.Get()[0] < 0.5)
+            {
+            listSample->PushBack(it.Get());
+            }
+          ++it;
+          ++itMask;
+          }
+        }
+      else
+        {
+        for(it.GoToBegin(); !it.IsAtEnd(); ++it)
+          {
+          listSample->PushBack(it.Get());
+          }
+        }
+      
+      // if all pixels were masked, we assume a wrong mask and then include all image
+      if (listSample->Size() == 0)
+        {
+        for(it.GoToBegin(); !it.IsAtEnd(); ++it)
+          {
+          listSample->PushBack(it.Get());
+          }
         }
  
       // And then the histogram
@@ -212,13 +280,13 @@ private:
       histogramsGenerator->NoDataFlagOn();
       histogramsGenerator->Update();
       
-      // And extract the 2% lower and upper quantile
+      // And extract the lower and upper quantile
       typename FloatVectorImageType::PixelType inputMin(nbComp), inputMax(nbComp);
       
       for(unsigned int i = 0; i < nbComp; ++i)
         {
-        inputMin[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0, 0.02);
-        inputMax[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0, 0.98);
+        inputMin[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0, 0.01 * GetParameterFloat("hcp.low"));
+        inputMax[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0, 1.0 - 0.01 * GetParameterFloat("hcp.high"));
         }
       
       otbAppLogDEBUG( << std::setprecision(5) << "Min/Max computation done : min=" << inputMin
