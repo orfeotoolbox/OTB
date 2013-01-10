@@ -55,10 +55,10 @@ public:
   
 protected:
   /** Constructor */
-  StreamingImageFileWriter();
+  StreamingImageFileWriter(){}
 
   /** Destructor */
-  virtual ~StreamingImageFileWriter();
+  virtual ~StreamingImageFileWriter(){}
 
 private:
   StreamingImageFileWriter(const StreamingImageFileWriter &); //purposely not implemented
