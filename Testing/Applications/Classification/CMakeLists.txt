@@ -390,7 +390,7 @@ OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixV
                              -labels 4
                              -out ${TEMP}/apTvComputeConfusionMatrixTconfusionVOut.txt
                      VALID   --compare-ascii ${NOTOL}
-                     ${OTBAPP_BASELINE}/apTvComputeConfusionMatrixTconfusionVOut.txt
+                     ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixTconfusionVOut.txt
                      ${TEMP}/apTvComputeConfusionMatrixTconfusionVOut.txt
 )
 
@@ -403,7 +403,7 @@ OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixR
                              -nodata 255
                              -out ${TEMP}/apTvComputeConfusionMatrixTconfusionROut.txt
                      VALID   --compare-ascii ${NOTOL}
-                     ${OTBAPP_BASELINE}/apTvComputeConfusionMatrixTconfusionROut.txt
+                     ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixTconfusionROut.txt
                      ${TEMP}/apTvComputeConfusionMatrixTconfusionROut.txt
 )
 
