@@ -419,3 +419,16 @@ OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixR
 #                     ${OTBAPP_BASELINE}/apTvComputeConfusionMatrixTconfusionROut.txt
 #                     ${TEMP}/apTvComputeConfusionMatrixTconfusionROut.txt
 #)
+
+OTB_TEST_APPLICATION(NAME   apTvClassificationRegMajorityVoting
+                     APP    ClassificationRegularisationMajorityVoting
+                     OPTIONS -io.in  ${INPUTDATA}/Classification/QB_1_ortho_4Cls_N_Classified_OTB.tif
+                             -io.out ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_APP.tif
+                             -ip.radiusx 2
+                             -ip.radiusy 5
+                             -ip.nodatavalue 128
+                             -ip.undefinedvalue 10
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5.tif
+                             ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_APP.tif
+)
