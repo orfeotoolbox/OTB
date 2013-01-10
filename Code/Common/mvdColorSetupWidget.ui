@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>202</width>
+    <width>211</width>
     <height>155</height>
    </rect>
   </property>
@@ -91,11 +91,6 @@
        </property>
        <item>
         <property name="text">
-         <string>none</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>BAND 0</string>
         </property>
        </item>
@@ -170,11 +165,6 @@
        </property>
        <item>
         <property name="text">
-         <string>none</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>BAND 0</string>
         </property>
        </item>
@@ -247,11 +237,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <item>
-        <property name="text">
-         <string>none</string>
-        </property>
-       </item>
        <item>
         <property name="text">
          <string>BAND 0</string>

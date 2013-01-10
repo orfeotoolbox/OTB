@@ -101,31 +101,29 @@ public:
   /**
    * Set the component-name list.
    *
-   * This sets up the content of the red, green and blue combo boxes
-   * prepending a undefined value as the first element. Each component
-   * name is prepended with its index (e.g. '<i>: NAME'), if
-   * non-empty. Otherwise, 'BAND <i>' is inserted into the combo-box.
+   * This sets up the content of the red, green and blue combo
+   * boxes. Each component name is prepended with its index
+   * (e.g. '<i>: NAME'), if non-empty. Otherwise, 'BAND <i>' is
+   * inserted into the combo-box.
    *
    * Calling SetComponents() resets the current-index of each
-   * combo-box to the first entry (i.e. the undefined value), which
-   * causes the currentIndexChanged() signal to be emitted for
-   * each component.
+   * combo-box to the first entry of the list, which causes the
+   * currentIndexChanged() signal to be emitted for each component.
    *
    * Example: The user { "Red", "Green", "Blue", "" } component-name
-   * list will be displayed as the { UNDEFINED_ITEM, "0: Red", "1:
-   * Green", "2: Blue", "BAND 3" } combo-box list.
+   * list will be displayed as the { "0: Red", "1: Green", "2: Blue",
+   * "BAND 3" } combo-box list.
    *
    * \param component component-name list.
    */
   void SetComponents( const QStringList& component );
 
   /**
-   * Get the component-name list (as opposing to the component-name
-   * combo-box list).
+   * Get the component-name list.
    *
    * Example: The user { "Red", "Green", "Blue", "" } list as it were
-   * set and not the displayed { UNDEFINED_ITEM, "0: Red", "1: Green",
-   * "2: Blue", "BAND 3" } combo-box list.
+   * set and not the displayed { "0: Red", "1: Green", "2: Blue",
+   * "BAND 3" } combo-box list.
    *
    * \return the component-name list.
    */
@@ -139,13 +137,12 @@ public:
   /**
    * Set the current (selected) index of a video channel.
    *
-   * Calling SetCurrentIndex let the currentIndexChanged()
+   * Calling SetCurrentIndex() let the currentIndexChanged()
    * signal to be emitted.
    *
    * \param channel The video channel for which to set the current
    * index.
-   * \param index The index in the component-name list of a negative
-   * value to select the undefined value.
+   * \param index The index in the component-name list.
    *
    * Example: If the { "Red", "Green", "Blue", "" } component-name
    * list has been set, index 1 set "1: Green" as the current select
@@ -155,8 +152,7 @@ public:
 
   /**
    * \return the current (selected) index of a video-channel in the
-   * component-name list (not the displayed combo-box list) or -1 if
-   * the undefined value has been selected.
+   * component-name list.
    */
   int GetCurrentIndex( Channel channel );
 
@@ -168,8 +164,7 @@ signals:
    * modified.
    *
    * \param channel The video-channel which has been modified.
-   * \param index The curren-index in the component-list or -1 if the
-   * undefined value has been selected.
+   * \param index The curren-index in the component-list.
    */
   void currentIndexChanged( ColorSetupWidget::Channel channel, int index );
 
@@ -209,7 +204,7 @@ private slots:
     void
     onRedIndexChanged( int index )
   {
-    emit currentIndexChanged( CHANNEL_RED, index - 1 );
+    emit currentIndexChanged( CHANNEL_RED, index );
   }
 
   /**
@@ -220,7 +215,7 @@ private slots:
     void
     onGreenIndexChanged( int index )
   {
-    emit currentIndexChanged( CHANNEL_GREEN, index - 1 );
+    emit currentIndexChanged( CHANNEL_GREEN, index );
   }
 
 
@@ -232,7 +227,7 @@ private slots:
     void
     onBlueIndexChanged( int index )
   {
-    emit currentIndexChanged( CHANNEL_BLUE, index - 1 );
+    emit currentIndexChanged( CHANNEL_BLUE, index );
   }
 };
 

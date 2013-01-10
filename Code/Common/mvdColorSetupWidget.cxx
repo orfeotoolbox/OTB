@@ -100,19 +100,17 @@ ColorSetupWidget
 
   QStringList itemTexts( components );
 
-  itemTexts.prepend( tr( "none" ) );
-
-  for( int i=1;
+  for( int i=0;
        i<itemTexts.size();
        ++ i )
     {
     if( itemTexts[ i ].isEmpty() )
       {
-      itemTexts[ i ] = tr( "BAND %1" ).arg( i - 1 );
+      itemTexts[ i ] = tr( "BAND %1" ).arg( i );
       }
     else
       {
-      itemTexts[ i ].prepend( QString( "%1: " ).arg( i - 1) );
+      itemTexts[ i ].prepend( QString( "%1: " ).arg( i ) );
       }
     }
 
@@ -160,7 +158,7 @@ ColorSetupWidget
 {
   QComboBox* comboBox = findChild< QComboBox* >( QCOMBOBOX_NAMES[ channel ] );
 
-  comboBox->setCurrentIndex( index<0 ? 0 : index + 1 );
+  comboBox->setCurrentIndex( index );
 }
 
 /*******************************************************************************/
@@ -170,7 +168,7 @@ ColorSetupWidget
 {
   QComboBox* comboBox = findChild< QComboBox* >( QCOMBOBOX_NAMES[ channel ] );
 
-  return comboBox->currentIndex() - 1;
+  return comboBox->currentIndex();
 }
 
 /*******************************************************************************/
