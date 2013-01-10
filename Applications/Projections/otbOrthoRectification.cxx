@@ -49,7 +49,9 @@ enum
 {
   Mode_UserDefined,
   Mode_AutomaticSize,
-  Mode_AutomaticSpacing
+  Mode_AutomaticSpacing,
+  Mode_OutputROI,
+  Mode_OrthoFit
 };
 
 namespace Wrapper
@@ -95,7 +97,7 @@ private:
     oss<<"A Digital Elevation Model can be specified to account for terrain deformations. "<<std::endl;
     oss<<"In case of SPOT5 images, the sensor model can be approximated by an RPC model in order to speed-up computation.";
     SetDocLongDescription(oss.str());
-    SetDocLimitations("Supported sensors are SPOT5 (TIF format), Ikonos, Quickbird, Worldview2, GeoEye.");
+    SetDocLimitations("Supported sensors are Pleiades, SPOT5 (TIF format), Ikonos, Quickbird, Worldview2, GeoEye.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Ortho-rectification chapter from the OTB Software Guide");
   
@@ -124,6 +126,11 @@ private:
     SetParameterDescription("outputs.mode.autosize","This mode allows you to automatically compute the optimal image size from given spacing (pixel size) values");
     AddChoice("outputs.mode.autospacing", "Automatic Spacing from Size");
     SetParameterDescription("outputs.mode.autospacing","This mode allows you to automatically compute the optimal image spacing (pixel size) from the given size");
+    AddChoice("outputs.mode.outputroi", "Automatic Size from Spacing and output corners");
+    SetParameterDescription("outputs.mode.outputroi","This mode allows you to automatically compute the optimal image size from spacing (pixel size) and output corners");
+    AddChoice("outputs.mode.orthofit", "Fit to ortho");
+    SetParameterDescription("outputs.mode.orthofit", "Fit the size, origin and spacing to an existing ortho image (uses the value of outputs.ortho)");
+    
     // Upper left point coordinates
     AddParameter(ParameterType_Float, "outputs.ulx", "Upper Left X");
     SetParameterDescription("outputs.ulx","Cartographic X coordinate of upper-left corner (meters for cartographic projections, degrees for geographic ones)");
@@ -146,6 +153,25 @@ private:
     AddParameter(ParameterType_Float, "outputs.spacingy", "Pixel Size Y");
     SetParameterDescription("outputs.spacingy","Size of each pixel along Y axis (meters for cartographic projections, degrees for geographic ones)");
 
+    // Lower right point coordinates
+    AddParameter(ParameterType_Float, "outputs.lrx", "Lower right X");
+    SetParameterDescription("outputs.lrx","Cartographic X coordinate of the lower-right corner (meters for cartographic projections, degrees for geographic ones)");
+
+    AddParameter(ParameterType_Float, "outputs.lry", "Lower right Y");
+    SetParameterDescription("outputs.lry","Cartographic Y coordinate of the lower-right corner (meters for cartographic projections, degrees for geographic ones)");
+    
+    // Existing ortho image that can be used to compute size, origin and spacing of the output
+    AddParameter(ParameterType_InputImage, "outputs.ortho", "Model ortho-mage");
+    SetParameterDescription("outputs.ortho","A model ortho-image that can be used to compute size, origin and spacing of the output");
+    
+    // Setup parameters for initial UserDefined mode
+    DisableParameter("outputs.lrx");
+    DisableParameter("outputs.lry");
+    DisableParameter("outputs.ortho");
+    MandatoryOff("outputs.lrx");
+    MandatoryOff("outputs.lry");
+    MandatoryOff("outputs.ortho");
+    
     AddParameter(ParameterType_Empty,"outputs.isotropic","Force isotropic spacing by default");
     std::ostringstream isotropOss;
     isotropOss << "Default spacing (pixel size) values are estimated from the sensor modeling of the image. It can therefore result in a non-isotropic spacing. ";
@@ -157,6 +183,7 @@ private:
     AddParameter(ParameterType_Float, "outputs.default", "Default pixel value");
     SetParameterDescription("outputs.default","Default value to write when outside of input image.");
     SetDefaultParameterFloat("outputs.default",0.);
+    MandatoryOff("outputs.default");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
@@ -249,50 +276,88 @@ private:
       if (!HasUserValue("outputs.spacingy"))
         SetParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
 
+      if (!HasUserValue("outputs.lrx"))
+       SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
+
+      if (!HasUserValue("outputs.lry"))
+       SetParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
+      
       // Handle the spacing and size field following the mode
       // choosed by the user
       switch (GetParameterInt("outputs.mode") )
         {
         case Mode_UserDefined:
         {
-        // Automatic set to off
+        // Automatic set to off except lower right coordinates
+        AutomaticValueOff("outputs.ulx");
+        AutomaticValueOff("outputs.uly");
         AutomaticValueOff("outputs.sizex");
         AutomaticValueOff("outputs.sizey");
         AutomaticValueOff("outputs.spacingx");
         AutomaticValueOff("outputs.spacingy");
+        AutomaticValueOn("outputs.lrx");
+        AutomaticValueOn("outputs.lry");
 
-        // Enable add the parameters
+        // Enable all the parameters except lower right coordinates
+        EnableParameter("outputs.ulx");
+        EnableParameter("outputs.uly");
         EnableParameter("outputs.spacingx");
         EnableParameter("outputs.spacingy");
         EnableParameter("outputs.sizex");
         EnableParameter("outputs.sizey");
+        DisableParameter("outputs.lrx");
+        DisableParameter("outputs.lry");
+        DisableParameter("outputs.ortho");
 
-        // Make all the parameters in this mode mandatory
+        // Make all the parameters in this mode mandatory except lower right coordinates
+        MandatoryOn("outputs.ulx");
+        MandatoryOn("outputs.uly");
         MandatoryOn("outputs.spacingx");
         MandatoryOn("outputs.spacingy");
         MandatoryOn("outputs.sizex");
         MandatoryOn("outputs.sizey");
+        MandatoryOff("outputs.lrx");
+        MandatoryOff("outputs.lry");
+        MandatoryOff("outputs.ortho");
+        
+        // Update lower right
+        SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
+        SetParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
         }
         break;
         case Mode_AutomaticSize:
         {
         // Disable the size fields
+        DisableParameter("outputs.ulx");
+        DisableParameter("outputs.uly");
         DisableParameter("outputs.sizex");
         DisableParameter("outputs.sizey");
         EnableParameter("outputs.spacingx");
         EnableParameter("outputs.spacingy");
+        DisableParameter("outputs.lrx");
+        DisableParameter("outputs.lry");
+        DisableParameter("outputs.ortho");
 
         // Update the automatic value mode of each filed
+        AutomaticValueOn("outputs.ulx");
+        AutomaticValueOn("outputs.uly");
         AutomaticValueOn("outputs.sizex");
         AutomaticValueOn("outputs.sizey");
         AutomaticValueOff("outputs.spacingx");
         AutomaticValueOff("outputs.spacingy");
+        AutomaticValueOn("outputs.lrx");
+        AutomaticValueOn("outputs.lry");
 
         // Adapat the status of the param to this mode
+        MandatoryOff("outputs.ulx");
+        MandatoryOff("outputs.uly");
         MandatoryOn("outputs.spacingx");
         MandatoryOn("outputs.spacingy");
         MandatoryOff("outputs.sizex");
         MandatoryOff("outputs.sizey");
+        MandatoryOff("outputs.lrx");
+        MandatoryOff("outputs.lry");
+        MandatoryOff("outputs.ortho");
 
         ResampleFilterType::SpacingType spacing;
         spacing[0] = GetParameterFloat("outputs.spacingx");
@@ -304,27 +369,49 @@ private:
         // Set the  processed size relative to this forced spacing
         SetParameterInt("outputs.sizex", genericRSEstimator->GetOutputSize()[0]);
         SetParameterInt("outputs.sizey", genericRSEstimator->GetOutputSize()[1]);
+        
+        // Reset Origin to default
+        SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0]);
+        SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1]);
+        
+        // Update lower right
+        SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
+        SetParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
         }
         break;
         case Mode_AutomaticSpacing:
         {
         // Disable the spacing fields and enable the size fields
+        DisableParameter("outputs.ulx");
+        DisableParameter("outputs.uly");
         DisableParameter("outputs.spacingx");
         DisableParameter("outputs.spacingy");
         EnableParameter("outputs.sizex");
         EnableParameter("outputs.sizey");
+        DisableParameter("outputs.lrx");
+        DisableParameter("outputs.lry");
+        DisableParameter("outputs.ortho");
 
         // Update the automatic value mode of each filed
+        AutomaticValueOn("outputs.ulx");
+        AutomaticValueOn("outputs.uly");
         AutomaticValueOn("outputs.spacingx");
         AutomaticValueOn("outputs.spacingy");
         AutomaticValueOff("outputs.sizex");
         AutomaticValueOff("outputs.sizey");
+        AutomaticValueOn("outputs.lrx");
+        AutomaticValueOn("outputs.lry");
 
         // Adapat the status of the param to this mode
+        MandatoryOff("outputs.ulx");
+        MandatoryOff("outputs.uly");
         MandatoryOff("outputs.spacingx");
         MandatoryOff("outputs.spacingy");
         MandatoryOn("outputs.sizex");
         MandatoryOn("outputs.sizey");
+        MandatoryOff("outputs.lrx");
+        MandatoryOff("outputs.lry");
+        MandatoryOff("outputs.ortho");
 
         ResampleFilterType::SizeType size;
         size[0] = GetParameterInt("outputs.sizex");
@@ -336,6 +423,115 @@ private:
         // Set the  processed spacing relative to this forced size
         SetParameterFloat("outputs.spacingx", genericRSEstimator->GetOutputSpacing()[0]);
         SetParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
+        
+        // Reset Origin to default
+        SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0]);
+        SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1]);
+        
+        // Update lower right
+        SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
+        SetParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
+        
+        }
+        break;
+        case Mode_OutputROI:
+        {
+          // Set the size according to the output ROI
+          EnableParameter("outputs.ulx");
+          EnableParameter("outputs.uly");
+          DisableParameter("outputs.sizex");
+          DisableParameter("outputs.sizey");
+          EnableParameter("outputs.spacingx");
+          EnableParameter("outputs.spacingy");
+          EnableParameter("outputs.lrx");
+          EnableParameter("outputs.lry");
+          DisableParameter("outputs.ortho");
+
+          // Update the automatic value mode of each filed
+          AutomaticValueOff("outputs.ulx");
+          AutomaticValueOff("outputs.uly");
+          AutomaticValueOn("outputs.sizex");
+          AutomaticValueOn("outputs.sizey");
+          AutomaticValueOff("outputs.spacingx");
+          AutomaticValueOff("outputs.spacingy");
+          AutomaticValueOff("outputs.lrx");
+          AutomaticValueOff("outputs.lry");
+
+          // Adapt the status of the param to this mode
+          MandatoryOn("outputs.ulx");
+          MandatoryOn("outputs.uly");
+          MandatoryOn("outputs.spacingx");
+          MandatoryOn("outputs.spacingy");
+          MandatoryOff("outputs.sizex");
+          MandatoryOff("outputs.sizey");
+          MandatoryOn("outputs.lrx");
+          MandatoryOn("outputs.lry");
+          MandatoryOff("outputs.ortho");
+
+          ResampleFilterType::SpacingType spacing;
+          spacing[0] = GetParameterFloat("outputs.spacingx");
+          spacing[1] = GetParameterFloat("outputs.spacingy");
+          
+          // Set the  processed size relative to this forced spacing
+          if (vcl_abs(spacing[0]) > 0.0)
+            SetParameterInt("outputs.sizex", static_cast<int>(vcl_ceil((GetParameterFloat("outputs.lrx")-GetParameterFloat("outputs.ulx"))/spacing[0])));
+          if (vcl_abs(spacing[1]) > 0.0)
+            SetParameterInt("outputs.sizey", static_cast<int>(vcl_ceil((GetParameterFloat("outputs.lry")-GetParameterFloat("outputs.uly"))/spacing[1])));
+        }
+        break;
+        case Mode_OrthoFit:
+        {
+          // Make all the parameters in this mode mandatory
+          MandatoryOff("outputs.ulx");
+          MandatoryOff("outputs.uly");
+          MandatoryOff("outputs.spacingx");
+          MandatoryOff("outputs.spacingy");
+          MandatoryOff("outputs.sizex");
+          MandatoryOff("outputs.sizey");
+          MandatoryOff("outputs.lrx");
+          MandatoryOff("outputs.lry");
+          MandatoryOn("outputs.ortho");
+          
+          // Disable the parameters
+          DisableParameter("outputs.ulx");
+          DisableParameter("outputs.uly");
+          DisableParameter("outputs.spacingx");
+          DisableParameter("outputs.spacingy");
+          DisableParameter("outputs.sizex");
+          DisableParameter("outputs.sizey");
+          DisableParameter("outputs.lrx");
+          DisableParameter("outputs.lry");
+          EnableParameter("outputs.ortho");
+          
+          if (HasValue("outputs.ortho"))
+          {
+            // Automatic set to on
+            AutomaticValueOn("outputs.ulx");
+            AutomaticValueOn("outputs.uly");
+            AutomaticValueOn("outputs.sizex");
+            AutomaticValueOn("outputs.sizey");
+            AutomaticValueOn("outputs.spacingx");
+            AutomaticValueOn("outputs.spacingy");
+            AutomaticValueOn("outputs.lrx");
+            AutomaticValueOn("outputs.lry");
+            
+            // input image
+            FloatVectorImageType::Pointer inOrtho = GetParameterImage("outputs.ortho");
+            
+            ResampleFilterType::OriginType orig = inOrtho->GetOrigin();
+            ResampleFilterType::SpacingType spacing = inOrtho->GetSpacing();
+            ResampleFilterType::SizeType size = inOrtho->GetLargestPossibleRegion().GetSize();
+            
+            SetParameterInt("outputs.sizex",size[0]);
+            SetParameterInt("outputs.sizey",size[1]);
+            SetParameterFloat("outputs.spacingx",spacing[0]);
+            SetParameterFloat("outputs.spacingy",spacing[1]);
+            SetParameterFloat("outputs.ulx", orig[0]);
+            SetParameterFloat("outputs.uly", orig[1]);
+            // Update lower right
+            SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
+            SetParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
+          }
         }
         break;
         }
@@ -357,6 +553,12 @@ private:
     m_ResampleFilter->SetInputProjectionRef(inImage->GetProjectionRef());
     m_ResampleFilter->SetInputKeywordList(inImage->GetImageKeywordlist());
     m_ResampleFilter->SetOutputProjectionRef(m_OutputProjectionRef);
+    
+    // Check size
+    if (GetParameterInt("outputs.sizex") <= 0 || GetParameterInt("outputs.sizey") <= 0)
+      {
+      otbAppLogCRITICAL("Wrong value : negative size : ("<<GetParameterInt("outputs.sizex")<<" , "<<GetParameterInt("outputs.sizey")<<")");
+      }
 
     // Get Interpolator
     switch ( GetParameterInt("interpolator") )
@@ -433,8 +635,8 @@ private:
     SetParameterOutputImage("io.out", m_ResampleFilter->GetOutput());
     }
 
-  ResampleFilterType::Pointer  m_ResampleFilter;
-  std::string                  m_OutputProjectionRef;
+  ResampleFilterType::Pointer     m_ResampleFilter;
+  std::string                     m_OutputProjectionRef;
   };
 
   } // namespace Wrapper
