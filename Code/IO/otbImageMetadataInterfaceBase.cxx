@@ -366,14 +366,23 @@ ImageMetadataInterfaceBase::GetBandName() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
+  /* band_name attribut is only used by OSSIM metadata reader otherwise it is band_name_list */
   std::vector<std::string> outputValues;
   if (!imageKeywordlist.HasKey("support_data.band_name"))
     {
-    return outputValues;
+	  if (imageKeywordlist.HasKey("support_data.band_name_list"))
+	  {
+		  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
+		  itksys::SystemTools::Split(valueString.c_str(), outputValues, ' ');
+	  }
+	  else
+		  return outputValues;
     }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.band_name");
-  itksys::SystemTools::Split(valueString.c_str(), outputValues, '/');
+  else
+    {
+	  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.band_name");
+	  itksys::SystemTools::Split(valueString.c_str(), outputValues, '/');
+    }
 
   return outputValues;
 }
@@ -546,7 +555,22 @@ ImageMetadataInterfaceBase
     //os << indent << "ImageKeywordlist:" << this->GetImageKeywordlist( ) << std::endl;
     os << indent << "SensorID:        " << this->GetSensorID( ) << std::endl;
     os << indent << "NumberOfBands:   " << this->GetNumberOfBands( ) << std::endl;
-    //os << indent << "BandName:        " << this->GetBandName( ) << std::endl;
+
+    std::vector<std::string> bandNameList = this->GetBandName();
+    if (bandNameList.size() == 1)
+      {
+      os << indent << "BandName:        " << bandNameList[0] << std::endl;
+      }
+    else
+      if (bandNameList.size() > 1)
+        {
+        os << indent << "BandNameList:        ";
+        for (std::vector<std::string>::iterator it = bandNameList.begin(); it != bandNameList.end(); ++it)
+          {
+          os << *it << ", ";
+          }
+        os << std::endl;
+        }
     os << indent << "XPixelSpacing:   " << this->GetXPixelSpacing( ) << std::endl;
     os << indent << "YPixelSpacing:   " << this->GetYPixelSpacing( ) << std::endl;
     os << indent << "Day:             " << this->GetDay( ) << std::endl;

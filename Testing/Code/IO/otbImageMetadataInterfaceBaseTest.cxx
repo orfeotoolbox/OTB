@@ -72,6 +72,20 @@ int otbImageMetadataInterfaceBaseTest(int argc, char* argv[])
   file << "ProductionMonth: " << lImageMetadata->GetProductionMonth( ) << std::endl;
   file << "ProductionYear:  " << lImageMetadata->GetProductionYear( ) << std::endl;
 
+  std::vector<std::string> bandNameList = lImageMetadata->GetBandName();
+  if (bandNameList.size() == 1)
+    {
+    file << "BandName:        " << bandNameList[0] << std::endl;
+    }
+  else
+    if (bandNameList.size() > 1)
+      {
+      file << "BandNameList: ";
+      for (std::vector<std::string>::iterator it = bandNameList.begin(); it != bandNameList.end(); ++it)
+        file << *it << ", ";
+      file << std::endl;
+      }
+
   file.close();
 
   std::cout << lImageMetadata << std::endl;
