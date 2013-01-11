@@ -104,6 +104,8 @@ void
 VectorImageModel
 ::loadFile( const QString& filename )
 {
+  //
+  // 1. Setup file-reader.
   DefaultImageFileReaderType::Pointer imageFileReader(
     DefaultImageFileReaderType::New()
   );
@@ -113,26 +115,47 @@ VectorImageModel
 
   m_ImageFileReader = imageFileReader;
 
+  // Ensure this only one output.
+  assert( m_ImageFileReader->GetNumberOfOutputs()==1 );
+
+  //
+  // 2. Initialize internal settings.
+  DefaultImageType::ImageMetadataInterfacePointerType metaData(
+    GetMetadataInterface()
+  );
+  DefaultImageType::Pointer output( GetOutput( 0 ) );
+
+  // Ensure default display returns valid band indices (see OTB bug).
+  assert( metaData->GetDefaultDisplay().size()==3 );
+
   /*
-  // initialize the channel list for the rendering needs following the
-  // input image
-  // TODO : See if if needs to be moved somewhere else
-  // TODO : use the default display
-  if (m_ImageFileReader->GetOutput()->GetNumberOfComponentsPerPixel()  < 3)
-    {
-    m_Settings.m_RGBChannels.resize(1);
-    m_Settings.m_RGBChannels[0] = 0;
-    }
-  else
-    {
-    m_Settings.m_RGBChannels.resize(3);
-    m_Settings.m_RGBChannels[0] = 0;
-    m_Settings.m_RGBChannels[1] = 1;
-    m_Settings.m_RGBChannels[2] = 2;
-    }
+  assert( metaData->GetDefaultDisplay()[ 0 ]
+	  < output->GetNumberOfComponentsPerPixel() );
+  assert( metaData->GetDefaultDisplay()[ 1 ] <
+	  < output->GetNumberOfComponentsPerPixel() );
+  assert( metaData->GetDefaultDisplay()[ 2 ]
+	  < output->GetNumberOfComponentsPerPixel() );
   */
 
-  m_Settings.SetRgbChannels( GetMetadataInterface()->GetDefaultDisplay() );
+  // Patch invalid band indices of default-display (see OTB bug).
+  Settings::ChannelVector rgb( metaData->GetDefaultDisplay() );
+
+  if( rgb[ 0 ]>=output->GetNumberOfComponentsPerPixel() )
+    {
+    rgb[ 0 ] = 0;
+    }
+
+  if( rgb[ 1 ]>=output->GetNumberOfComponentsPerPixel() )
+    {
+    rgb[ 1 ] = 0;
+    }
+
+  if( rgb[ 2 ]>=output->GetNumberOfComponentsPerPixel() )
+    {
+    rgb[ 2 ] = 0;
+    }
+
+  m_Settings.SetRgbChannels( rgb );
 }
 
 /*******************************************************************************/
