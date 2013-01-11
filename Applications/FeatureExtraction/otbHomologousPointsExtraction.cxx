@@ -115,8 +115,8 @@ private:
     AddParameter(ParameterType_Choice,"algorithm","Keypoints detection algorithm");
     SetParameterDescription("algorithm","Choice of the detection algorithm to use");
     
-    AddChoice("algorithm.sift","SIFT algorithm");
     AddChoice("algorithm.surf","SURF algorithm");
+    AddChoice("algorithm.sift","SIFT algorithm");
 
     AddParameter(ParameterType_Float,"threshold","Distance threshold for matching");
     SetParameterDescription("threshold","The distance threshold for matching.");
