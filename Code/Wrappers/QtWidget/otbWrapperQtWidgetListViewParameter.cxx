@@ -46,7 +46,7 @@ void QtWidgetListViewParameter::DoUpdateGUI()
   for (unsigned int i = 0; i < m_ListViewParam->GetNbChoices(); ++i)
     {
     // Add listBox items
-    QString key = QString::fromStdString( m_ListViewParam->GetChoiceKey(i) );
+    QString key = m_ListViewParam->GetChoiceKey(i).c_str();
     m_ListView->addItem( key);
     }
 

@@ -58,7 +58,7 @@ void QtWidgetChoiceParameter::DoCreateWidget()
 
   for (unsigned int i = 0; i < m_ChoiceParam->GetNbChoices(); ++i)
     {
-    QString key = QString::fromStdString( m_ChoiceParam->GetChoiceName(i) );
+    QString key = m_ChoiceParam->GetChoiceName(i).c_str();
     m_ComboBox->addItem( key, QVariant(key) );
 
     ParameterGroup::Pointer param = m_ChoiceParam->GetChoiceParameterGroupByIndex(i);

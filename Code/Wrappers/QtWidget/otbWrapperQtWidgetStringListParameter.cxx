@@ -278,7 +278,7 @@ QtWidgetStringListParameter::UpdateStringList( std::map<unsigned int, unsigned i
   this->update();
 
     // notify of value change
-  QString key( QString::fromStdString(m_StringListParam->GetKey()) );
+  QString key( m_StringListParam->GetKey() );
   emit ParameterChanged(key);
 }
 
@@ -287,7 +287,7 @@ void QtWidgetStringListParameter::SetString(const QString& value)
 {
   m_StringListParam->AddString(value.toStdString());
   m_StringListParam->SetUserValue(true);
-  QString key( QString::fromStdString(m_StringListParam->GetKey()) );
+  QString key( m_StringListParam->GetKey() );
   emit ParameterChanged(key);
 }
 
@@ -383,7 +383,7 @@ void QtWidgetStringListParameter::RecreateStringList()
 
     emit Change();
     // notify of value change
-    QString key( QString::fromStdString(m_StringListParam->GetKey()) );
+    QString key( m_StringListParam->GetKey() );
     emit ParameterChanged(key);
     }
 }

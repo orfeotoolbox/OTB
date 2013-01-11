@@ -82,7 +82,7 @@ void QtWidgetOutputVectorDataParameter::SetFileName(const QString& value)
   m_OutputVectorDataParam->SetFileName(m_FileName);
 
   // notify of value change
-  QString key( QString::fromStdString(m_OutputVectorDataParam->GetKey()) );
+  QString key( m_OutputVectorDataParam->GetKey() );
   emit ParameterChanged(key);
 }
 

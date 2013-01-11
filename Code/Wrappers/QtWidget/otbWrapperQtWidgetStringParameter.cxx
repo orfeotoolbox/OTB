@@ -38,7 +38,7 @@ void QtWidgetStringParameter::DoUpdateGUI()
   m_Input->setToolTip(m_StringParam->GetDescription());
 
   // Update the lineEdit
-  QString text( QString::fromStdString(m_StringParam->GetValue() ));
+  QString text( m_StringParam->GetValue().c_str() );
   m_Input->setText(text);
 }
 
@@ -68,7 +68,7 @@ void QtWidgetStringParameter::SetValue(const QString& value)
 {
   m_StringParam->SetValue(value.toStdString());
   m_StringParam->SetUserValue(true);
-  QString key( QString::fromStdString(m_StringParam->GetKey()) );
+  QString key( m_StringParam->GetKey() );
   emit ParameterChanged(key);
 }
 

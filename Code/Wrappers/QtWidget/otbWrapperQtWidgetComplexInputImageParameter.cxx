@@ -81,7 +81,7 @@ void QtWidgetComplexInputImageParameter::SetFileName(const QString& value)
   m_ComplexInputImageParam->SetFromFileName(value.toStdString());
 
   // notify of value change
-  QString key( QString::fromStdString(m_ComplexInputImageParam->GetKey()) );
+  QString key( m_ComplexInputImageParam->GetKey() );
   emit ParameterChanged(key);
 }
 

@@ -263,7 +263,7 @@ QtWidgetInputVectorDataListParameter::UpdateFileList( std::map<unsigned int, uns
   this->update();
 
   // notify of value change
-  QString key(QString::fromStdString(m_InputVectorDataListParam->GetKey()));
+  QString key( m_InputVectorDataListParam->GetKey() );
   emit ParameterChanged(key);
 }
 
@@ -361,7 +361,7 @@ void QtWidgetInputVectorDataListParameter::RecreateVectorDataList()
     
     emit Change();
     // notify of value change
-    QString key(QString::fromStdString(m_InputVectorDataListParam->GetKey()));
+    QString key( m_InputVectorDataListParam->GetKey() );
     emit ParameterChanged(key);
     
     }

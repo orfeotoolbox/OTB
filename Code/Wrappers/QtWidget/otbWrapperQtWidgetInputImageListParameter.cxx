@@ -267,7 +267,7 @@ QtWidgetInputImageListParameter::UpdateFileList( std::map<unsigned int, unsigned
   this->update();
 
     // notify of value change
-  QString key( QString::fromStdString(m_InputImageListParam->GetKey()) );
+  QString key( m_InputImageListParam->GetKey() );
   emit ParameterChanged(key);
 }
 
@@ -366,7 +366,7 @@ void QtWidgetInputImageListParameter::RecreateImageList()
 
     emit Change();
     // notify of value change
-    QString key( QString::fromStdString(m_InputImageListParam->GetKey()) );
+    QString key( m_InputImageListParam->GetKey() );
     emit ParameterChanged(key);
     }
 }

@@ -98,7 +98,7 @@ void QtWidgetOutputImageParameter::SetFileName(const QString& value)
   m_OutputImageParam->SetFileName(m_FileName);
 
   // notify of value change
-  QString key( QString::fromStdString(m_OutputImageParam->GetKey()) );
+  QString key( m_OutputImageParam->GetKey() );
   emit ParameterChanged(key);
 }
 

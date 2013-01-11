@@ -87,7 +87,7 @@ bool QtWidgetInputImageParameter::SetFileName(const QString& value)
   if(m_InputImageParam->SetFromFileName(value.toStdString()) == true )
     {
     // notify of value change
-    QString key( QString::fromStdString(m_InputImageParam->GetKey()) );
+    QString key( m_InputImageParam->GetKey() );
     emit ParameterChanged(key);
     }
   else

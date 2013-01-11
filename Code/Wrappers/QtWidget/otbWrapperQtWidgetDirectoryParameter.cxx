@@ -35,7 +35,7 @@ QtWidgetDirectoryParameter::~QtWidgetDirectoryParameter()
 void QtWidgetDirectoryParameter::DoUpdateGUI()
 {
   // Update the lineEdit
-  QString text( QString::fromStdString(m_DirectoryParam->GetValue() ));
+  QString text( m_DirectoryParam->GetValue().c_str() );
   m_Input->setText(text);
 }
 
@@ -83,7 +83,7 @@ void QtWidgetDirectoryParameter::SetFileName(const QString& value)
   m_DirectoryParam->SetValue(value.toStdString());
 
   // notify of value change
-  QString key( QString::fromStdString(m_DirectoryParam->GetKey()) );
+  QString key( m_DirectoryParam->GetKey() );
   emit ParameterChanged(key);
 }
 

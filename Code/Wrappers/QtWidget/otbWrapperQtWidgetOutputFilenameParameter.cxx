@@ -35,7 +35,7 @@ QtWidgetOutputFilenameParameter::~QtWidgetOutputFilenameParameter()
 void QtWidgetOutputFilenameParameter::DoUpdateGUI()
 {
   // Update the lineEdit
-  QString text( QString::fromStdString(m_FilenameParam->GetValue() ));
+  QString text( m_FilenameParam->GetValue().c_str() );
   m_Input->setText(text);
 }
 
@@ -98,7 +98,7 @@ void QtWidgetOutputFilenameParameter::SetFileName(const QString& value)
   m_FilenameParam->SetValue(value.toStdString());
 
   // notify of value change
-  QString key( QString::fromStdString(m_FilenameParam->GetKey()) );
+  QString key( m_FilenameParam->GetKey() );
   emit ParameterChanged(key);
 }
 
