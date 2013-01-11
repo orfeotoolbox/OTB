@@ -50,7 +50,7 @@ public:
 
   std::string GetFilename()
   {
-    return m_Input->text().toStdString();
+    return static_cast<const char*>(m_Input->text().toAscii());
   }
 
   void ClearFilename()

@@ -95,7 +95,7 @@ void QtWidgetOutputFilenameParameter::SelectFile()
 void QtWidgetOutputFilenameParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FilenameParam->SetValue(value.toStdString());
+  m_FilenameParam->SetValue(static_cast<const char*>(value.toAscii()));
 
   // notify of value change
   QString key( m_FilenameParam->GetKey() );

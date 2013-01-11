@@ -88,7 +88,7 @@ void QtWidgetComplexOutputImageParameter::SelectFile()
 void QtWidgetComplexOutputImageParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FileName = value.toStdString();
+  m_FileName = static_cast<const char*>(value.toAscii());
 
   m_OutputImageParam->SetFileName(m_FileName);
 

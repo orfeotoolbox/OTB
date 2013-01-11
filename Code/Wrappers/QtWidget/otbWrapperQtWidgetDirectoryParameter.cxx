@@ -80,7 +80,7 @@ void QtWidgetDirectoryParameter::SelectFile()
 void QtWidgetDirectoryParameter::SetFileName(const QString& value)
 {
   // save value
-  m_DirectoryParam->SetValue(value.toStdString());
+  m_DirectoryParam->SetValue(static_cast<const char*>(value.toAscii()));
 
   // notify of value change
   QString key( m_DirectoryParam->GetKey() );

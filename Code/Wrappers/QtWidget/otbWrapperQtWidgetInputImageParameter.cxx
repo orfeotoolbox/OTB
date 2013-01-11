@@ -74,7 +74,9 @@ void QtWidgetInputImageParameter::SelectFile()
     else
       {
       std::ostringstream oss;
-      oss << "The given file " << fileDialog.selectedFiles().at(0).toStdString() << " is not valid.";
+      oss << "The given file "
+          << static_cast<const char*>(fileDialog.selectedFiles().at(0).toAscii())
+          << " is not valid.";
       this->GetModel()->SendLogWARNING( oss.str() );
       }
     }
@@ -84,7 +86,7 @@ bool QtWidgetInputImageParameter::SetFileName(const QString& value)
 {
   bool res = true;
   // save value
-  if(m_InputImageParam->SetFromFileName(value.toStdString()) == true )
+  if(m_InputImageParam->SetFromFileName(static_cast<const char*>(value.toAscii())) == true )
     {
     // notify of value change
     QString key( m_InputImageParam->GetKey() );

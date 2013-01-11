@@ -285,7 +285,7 @@ QtWidgetStringListParameter::UpdateStringList( std::map<unsigned int, unsigned i
 
 void QtWidgetStringListParameter::SetString(const QString& value)
 {
-  m_StringListParam->AddString(value.toStdString());
+  m_StringListParam->AddString(static_cast<const char*>(value.toAscii()));
   m_StringListParam->SetUserValue(true);
   QString key( m_StringListParam->GetKey() );
   emit ParameterChanged(key);
