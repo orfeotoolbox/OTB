@@ -1850,7 +1850,7 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBE
 ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioStreamingImageFileWriterWithFilter_1_100.hdr
                             ${TEMP}/ioStreamingImageFileWriterWithFilter_1_100.hdr
-         otbStreamingImageFileWriterWithFilterTest
+         otbImageFileWriterWithFilterTest
          ${INPUTDATA}/poupees_1canal.c1.hdr
          ${TEMP}/ioStreamingImageFileWriterWithFilter_1_100.hdr
          1
