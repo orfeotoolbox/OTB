@@ -233,8 +233,6 @@ protected:
   /** Does the real work. */
   virtual void GenerateData(void);
 
-  virtual void GenerateInputRequestedRegion();
-
 
 private:
   ImageFileWriter(const ImageFileWriter &); //purposely not implemented

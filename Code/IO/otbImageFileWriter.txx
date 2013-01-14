@@ -352,27 +352,6 @@ ImageFileWriter<TInputImage>
     }
 }
 
-template<class TInputImage>
-void
-ImageFileWriter<TInputImage>
-::GenerateInputRequestedRegion()
- {
-  Superclass::GenerateInputRequestedRegion();
-
-  InputImageType * inputPtr = const_cast<InputImageType*>(this->GetInput());
-
-  if(!inputPtr)
-    {
-    return;
-    }
-  typename InputImageType::RegionType lregion = inputPtr->GetLargestPossibleRegion();
-  typename InputImageType::SizeType rsize;
-  rsize.Fill(0);
-  lregion.SetSize(rsize);
-
-  inputPtr->SetRequestedRegion(lregion);
-}
-
 /**
  *
  */
