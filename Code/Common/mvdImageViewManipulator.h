@@ -84,6 +84,7 @@ public:
   void mouseMoveEvent ( QMouseEvent * event );
   void mousePressEvent ( QMouseEvent * event );
   void mouseReleaseEvent ( QMouseEvent * event );
+  void wheelEvent ( QWheelEvent* event);
   void resizeEvent ( QResizeEvent * event );
 
   /** Methods to access to the context */
@@ -98,6 +99,12 @@ public:
     GetViewportImageRegion() const
   {
     return m_NavigationContext.m_ViewportImageRegion;
+  }
+
+  inline 
+    double GetIsotropicZoom() const
+  {
+    return m_IsotropicZoom;
   }
 
   /*
@@ -145,6 +152,10 @@ private:
   {
     ImageRegionType m_ViewportImageRegion;
     ImageRegionType m_ModelImageRegion;
+    // Stored as double to keep precision when dividing 
+    // by scale 
+    double          m_SizeXBeforeConstrain;
+    double          m_SizeYBeforeConstrain;
   };
 
   /** Mouse context */
@@ -173,11 +184,15 @@ private:
 // Private methods.
 private:
 
+  void Zoom(const double scale);
+
 //
 // Private attributes.
 private:
   NavigationContextType  m_NavigationContext;
   MouseContextType       m_MouseContext;
+
+  double                 m_IsotropicZoom;
 
 //
 // SLOTS.

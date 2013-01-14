@@ -50,7 +50,8 @@ ImageViewManipulator
 ::ImageViewManipulator( QObject* parent ) :
   QObject( parent ),
   m_NavigationContext(),
-  m_MouseContext()
+  m_MouseContext(),
+  m_IsotropicZoom(1)
 {
   // TODO: Remove later because initialized in struct's default constructor and resizeEvent().
   this->InitializeContext(1,1);
@@ -103,8 +104,8 @@ ImageViewManipulator
 
   // Apply the offset to the (start) index of the stored region
   ImageRegionType::OffsetType offset;
-  offset[0] = m_MouseContext.dx;
-  offset[1] = m_MouseContext.dy;
+  offset[0] = m_MouseContext.dx/ m_IsotropicZoom;
+  offset[1] = m_MouseContext.dy/m_IsotropicZoom;
  
   // Apply the offset to the (start) index of the stored region
   IndexType    index = currentRegion.GetIndex() + offset;
@@ -139,12 +140,72 @@ void ImageViewManipulator
   ImageRegionType::SizeType size;
   size[0] = event->size().width();
   size[1] = event->size().height();
- 
-  // Update the stored region with the new size
+    
+  // Update the stored region with the new size  
   currentRegion.SetSize(size);
 
+  // Recompute the size before
+  m_NavigationContext.m_SizeXBeforeConstrain = (double)size[0] / this->GetIsotropicZoom();
+  m_NavigationContext.m_SizeYBeforeConstrain = (double)size[1] / this->GetIsotropicZoom();
+  
   // Constraint this region to the LargestPossibleRegion
   this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
+
+  // call the rescale method with the same zoom as before (scale = 1)
+  this->Zoom(1.);
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::wheelEvent(  QWheelEvent * event)
+{
+  // Compute the new scale
+  double scaleRatio = 1.25;
+  int nbsteps = (int)(event->delta()/8./15.);
+  double scale = vcl_pow(scaleRatio, nbsteps);
+
+  // rescale the viewport region
+  this->Zoom(scale);
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::Zoom(const double scale)
+{
+  // compute the new size
+  double sizeX = m_NavigationContext.m_SizeXBeforeConstrain / scale;
+  double sizeY = m_NavigationContext.m_SizeYBeforeConstrain / scale;
+  
+  // check that the new size is greater than 30x30
+  // check that the new isoZoom is not too low and not too large
+  // TODO : compute automatically the minSize and the isoZoom range ???
+  if (sizeX > 30 && sizeY > 30  &&
+      m_IsotropicZoom * scale > 0.2 &&
+      m_IsotropicZoom * scale < 10.)
+    {
+    // Update the the sizeBeforeConstrain
+    m_NavigationContext.m_SizeXBeforeConstrain = sizeX;
+    m_NavigationContext.m_SizeYBeforeConstrain = sizeY;
+
+    // Update the viewort region with the new size
+    ImageRegionType::SizeType size;
+    size[0] = static_cast<unsigned int>(sizeX);
+    size[1] = static_cast<unsigned int>(sizeY);
+
+    // The viewPort Region must be adapted to this zoom ratio
+    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+ 
+    // Update the stored region with the new size
+    currentRegion.SetSize(size);
+    
+    // Constraint this region to the LargestPossibleRegion
+    this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
+
+    // Update the isotropicZoom
+    m_IsotropicZoom *= scale;
+    }
 }
 
 /******************************************************************************/
