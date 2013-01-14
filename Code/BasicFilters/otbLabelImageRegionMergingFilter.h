@@ -110,6 +110,7 @@ public:
   InputSpectralImageType * GetInputSpectralImage();
 
 protected:
+  virtual void EnlargeOutputRequestedRegion( itk::DataObject *output );
 
    virtual void GenerateOutputInformation(void);
 

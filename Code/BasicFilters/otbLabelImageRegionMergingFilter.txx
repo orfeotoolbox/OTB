@@ -150,6 +150,21 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 void
 LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
+::EnlargeOutputRequestedRegion( itk::DataObject *output )
+ {
+  // This filter requires all of the output images in the buffer.
+  for ( unsigned int j = 0; j < this->GetNumberOfOutputs(); j++ )
+    {
+    if ( this->itk::ProcessObject::GetOutput(j) )
+      {
+      this->itk::ProcessObject::GetOutput(j)->SetRequestedRegionToLargestPossibleRegion();
+      }
+    }
+  }
+
+template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
+void
+LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::GenerateData()
 {
   typename InputSpectralImageType::Pointer spectralImage = this->GetInputSpectralImage();
