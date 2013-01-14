@@ -754,7 +754,7 @@ ImageFileWriter<TInputImage>
 
   m_ImageIO->Write(dataPtr);
 
-  if (m_WriteGeomFile  && m_FilenameHelper->GetWriteGEOMFile())
+  if (m_WriteGeomFile  || m_FilenameHelper->GetWriteGEOMFile())
     {
     ImageKeywordlist otb_kwl;
     itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
