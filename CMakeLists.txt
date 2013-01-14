@@ -36,8 +36,13 @@ endif(WIN32)
 
 #----------------------------------------------------------------------------
 # Link to the Orfeo ToolBox
-find_package(OTB PATHS /usr/lib/otb)
+find_package(OTB
+  REQUIRED
+  #No need to specify default (system) path.
+  #PATHS /usr/lib/otb
+)
 if(OTB_FOUND)
+  #message( "OTB_USE_FILE='${OTB_USE_FILE}'" )
   include(${OTB_USE_FILE})
 else(OTB_FOUND)
   message(
