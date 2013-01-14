@@ -330,6 +330,33 @@ ADD_TEST(bfTvVectorImageToImageListFilter ${BASICFILTERS_TESTS3}
                     ${TEMP}/bfTvVectorImageToImageListFilterBand3.png
 )
 
+ADD_TEST(bfTvVectorImageToImageListFilterIt ${BASICFILTERS_TESTS3}
+                --compare-n-images ${EPSILON_7} 3
+                    ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterBand1.png
+                    ${BASELINE}/bfTvVectorImageToImageListFilterBand2.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterBand2.png
+                    ${BASELINE}/bfTvVectorImageToImageListFilterBand3.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterBand3.png
+                    otbVectorImageToImageListFilterIterator
+                    ${INPUTDATA}/poupees.png
+                    ${TEMP}/bfTvVectorImageToImageListFilter
+                    png
+)
+ADD_TEST(bfTvVectorImageToImageListFilterIt2 ${BASICFILTERS_TESTS3}
+                --compare-n-images ${EPSILON_7} 3
+                    ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterBand1.png
+                    ${BASELINE}/bfTvVectorImageToImageListFilterBand2.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterBand2.png
+                    ${BASELINE}/bfTvVectorImageToImageListFilterBand3.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterBand3.png
+                    otbVectorImageToImageListFilterIterator
+                    ${INPUTDATA}/poupees.png
+                    ${TEMP}/bfTvVectorImageToImageListFilter
+                    png
+)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~

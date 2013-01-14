@@ -33,6 +33,8 @@ void RegisterTests()
   REGISTER_TEST(otbVectorRescaleIntensityImageFilter);
   REGISTER_TEST(otbVectorImageToImageListFilterNew);
   REGISTER_TEST(otbVectorImageToImageListFilter);
+  REGISTER_TEST(otbVectorImageToImageListFilterIterator);
+  REGISTER_TEST(otbVectorImageToImageListFilterIterator2);
   REGISTER_TEST(otbShiftScaleVectorImageFilterNew);
   REGISTER_TEST(otbShiftScaleVectorImageFilterTest);
 }

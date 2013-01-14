@@ -70,3 +70,107 @@ int otbVectorImageToImageListFilter(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
+
+int otbVectorImageToImageListFilterIterator(int argc, char * argv[])
+{
+  const unsigned int Dimension = 2;
+  const char *       infname   = argv[1];
+  const char *       outputFilenamePrefix = argv[2];
+  const char *       outputFilenameSuffix = argv[3];
+
+  typedef unsigned char                          PixelType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
+  typedef otb::ImageList<ImageType>              ImageListType;
+
+  // IO
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
+
+  typedef otb::VectorImageToImageListFilter<VectorImageType, ImageListType> VectorImageToImageListFilterType;
+
+  typedef VectorImageToImageListFilterType::OutputImageListType::Iterator ImageListIterator;
+
+  // Instantiating object
+
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(infname);
+
+  VectorImageToImageListFilterType::Pointer filter = VectorImageToImageListFilterType::New();
+  filter->SetInput(reader->GetOutput());
+
+  ImageListIterator itOutput = filter->GetOutput()->Begin();
+
+  WriterType::Pointer writer = WriterType::New();
+
+  int i = 1;
+  std::stringstream oss;
+
+  while ((itOutput != filter->GetOutput()->End()) )
+    {
+    oss << outputFilenamePrefix << "Band" << i << "." << outputFilenameSuffix;
+
+    writer->SetInput(itOutput.Get());
+
+    writer->SetFileName(oss.str().c_str());
+
+    writer->Update();
+
+    ++itOutput;
+    ++i;
+    }
+
+  return EXIT_SUCCESS;
+}
+
+int otbVectorImageToImageListFilterIterator2(int argc, char * argv[])
+{
+  const unsigned int Dimension = 2;
+  const char *       infname   = argv[1];
+  const char *       outputFilenamePrefix = argv[2];
+  const char *       outputFilenameSuffix = argv[3];
+
+  typedef unsigned char                          PixelType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
+  typedef otb::ImageList<ImageType>              ImageListType;
+
+  // IO
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
+
+  typedef otb::VectorImageToImageListFilter<VectorImageType, ImageListType> VectorImageToImageListFilterType;
+
+  typedef VectorImageToImageListFilterType::OutputImageListType::Iterator ImageListIterator;
+
+  // Instantiating objects
+
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(infname);
+
+  VectorImageToImageListFilterType::Pointer filter = VectorImageToImageListFilterType::New();
+  filter->SetInput(reader->GetOutput());
+
+  ImageListIterator itOutput = filter->GetOutput()->Begin();
+
+  int i = 1;
+  std::stringstream oss;
+
+  while ((itOutput != filter->GetOutput()->End()) )
+    {
+    WriterType::Pointer writer = WriterType::New();
+
+    oss << outputFilenamePrefix << "Band" << i << "." << outputFilenameSuffix;
+
+    writer->SetInput(itOutput.Get());
+
+    writer->SetFileName(oss.str().c_str());
+
+    writer->Update();
+
+    ++itOutput;
+    ++i;
+    }
+
+  return EXIT_SUCCESS;
+}
