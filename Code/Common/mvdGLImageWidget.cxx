@@ -196,6 +196,9 @@ GLImageWidget
   const ImageRegionType region(
     m_ImageViewManipulator->GetViewportImageRegion() );
 
+  // Get the zoom 
+  const double isotropicZoom = m_ImageViewManipulator->GetIsotropicZoom();
+
   // Set the new rendering context to be known in the ModelRendere
   const AbstractImageModel* aiModel=  qobject_cast< const AbstractImageModel* >(
     qobject_cast< Application* >( qApp )->GetModel() );
@@ -203,7 +206,8 @@ GLImageWidget
   // setup the rendering context
   if (aiModel)
     {
-    ImageModelRenderer::RenderingContext context(aiModel, region, this->width(), this->height());
+    ImageModelRenderer::RenderingContext context(aiModel, region, isotropicZoom, 
+                                                 this->width(), this->height());
 
     // use the model renderer to paint the requested region of the image
     m_ImageModelRenderer->paintGL( context );
@@ -242,6 +246,17 @@ GLImageWidget
   QCursor stdCursor;
   stdCursor.setShape(Qt::ArrowCursor) ;
   this->setCursor(stdCursor);
+}
+
+/*******************************************************************************/
+void
+GLImageWidget
+::wheelEvent( QWheelEvent *event)
+{
+  m_ImageViewManipulator->wheelEvent(event);
+
+  // repaint the buffer
+  this->update();
 }
 
 /*******************************************************************************/

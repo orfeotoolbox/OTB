@@ -123,6 +123,7 @@ protected:
   void mouseMoveEvent ( QMouseEvent * event );
   void mouseReleaseEvent ( QMouseEvent * event );
   void mousePressEvent ( QMouseEvent * event );
+  void wheelEvent( QWheelEvent *event);
   void resizeEvent(QResizeEvent* event);
 
   /** Update the image to screen transform */
@@ -149,7 +150,7 @@ private:
   ImageViewManipulator* m_ImageViewManipulator;
 
   /** Model Renderer pointer */
-  ImageModelRenderer* m_ImageModelRenderer;
+  ImageModelRenderer*   m_ImageModelRenderer;
 };
 
 }
