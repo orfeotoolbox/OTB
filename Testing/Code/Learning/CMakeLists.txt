@@ -322,6 +322,7 @@ ADD_TEST(leTvSVMImageClassificationFilterWithNeighborhoodMajorityVoting ${LEARNI
 otbNeighborhoodMajorityVotingImageFilterTest
  ${TEMP}/leSVMImageClassificationFilterOutput.tif
  ${TEMP}/leSVMImageClassificationWithNMVFilterOutput.tif
+ false
  )
  
 SET_TESTS_PROPERTIES(leTvSVMImageClassificationFilterWithNeighborhoodMajorityVoting PROPERTIES DEPENDS leTvSVMImageClassificationFilter)
@@ -648,15 +649,16 @@ otbNeighborhoodMajorityVotingImageFilterNew)
 
 ADD_TEST(leTvNeighborhoodMajorityVotingImageFilterTest ${LEARNING_TESTS5}
  --compare-image ${NOTOL}
- ${BASELINE}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5.tif
- ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5.tif
+ ${BASELINE}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
+ ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
 otbNeighborhoodMajorityVotingImageFilterTest
  ${INPUTDATA}/Classification/QB_1_ortho_4Cls_N_Classified_OTB.tif
- ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5.tif
+ ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
+ false #KeepOriginalLabelBool
  2 #xRadius
  5 #yRadius
- 128 #NoDataValue
- 10 #UndefinedValue
+ 10 #NoDataValue
+ 7 #UndefinedValue
  )
 
 

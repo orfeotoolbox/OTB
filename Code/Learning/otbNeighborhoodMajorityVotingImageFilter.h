@@ -24,7 +24,6 @@
 #include "itkConfigure.h"
 
 #include "itkMorphologyImageFilter.h"
-#include "itkBinaryBallStructuringElement.h"
 
 namespace otb {
 
@@ -49,47 +48,30 @@ namespace otb {
  * \sa MorphologyImageFilter, GrayscaleFunctionDilateImageFilter, BinaryDilateImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
-
-
-/*
-template<class TInputImage, class TOutputImage, class TKernel>
+ 
+     
+template<class TInputImage, class TOutputImage=TInputImage, class TKernel=typename itk::Neighborhood<typename TInputImage::PixelType, TInputImage::ImageDimension> >
 class ITK_EXPORT NeighborhoodMajorityVotingImageFilter :
     public itk::MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
-{*/
-
-template<class TInputImage>
-class ITK_EXPORT NeighborhoodMajorityVotingImageFilter :
-    public itk::MorphologyImageFilter<
-    TInputImage,
-    TInputImage,
-    itk::BinaryBallStructuringElement< typename TInputImage::PixelType, TInputImage::ImageDimension >
-    >
 {
 public:
   /** Standard class typedefs. */
   typedef NeighborhoodMajorityVotingImageFilter Self;
-  //typedef itk::MorphologyImageFilter<TInputImage, TOutputImage, TKernel> Superclass;
-  typedef itk::MorphologyImageFilter<
-                  TInputImage,
-                  TInputImage,
-                  itk::BinaryBallStructuringElement< typename TInputImage::PixelType, TInputImage::ImageDimension >
-                  > Superclass;
-
+  typedef itk::MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
+                                     Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
   typedef itk::SmartPointer<const Self>   ConstPointer;
-
+  
   /** Standard New method. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
   itkTypeMacro(NeighborhoodMajorityVotingImageFilter,
-                itk::MorphologyImageFilter);
-
+		  itk::MorphologyImageFilter);
+  
   /** Declaration of pixel type. */
   typedef typename Superclass::PixelType PixelType;
 
-  /** Kernel (structuring element) definition. */
-  typedef typename itk::BinaryBallStructuringElement< typename TInputImage::PixelType, TInputImage::ImageDimension > BallStructuringType;
 
   /** Kernel (structuring element) iterator. */
   typedef typename Superclass::KernelIteratorType  KernelIteratorType;
@@ -100,28 +82,30 @@ public:
   /** Kernel typedef. */
   typedef typename Superclass::KernelType KernelType;
 
-  /** Radius typedef. */
-  typedef typename Superclass::RadiusType RadiusType;
 
   /** Default boundary condition type */
   typedef typename Superclass::DefaultBoundaryConditionType DefaultBoundaryConditionType;
 
-  /** ImageDimension constant */
+  /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
-
-  /** NeighborhoodDimension constant */
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension);
   itkStaticConstMacro(KernelDimension, unsigned int,
-                                           BallStructuringType::NeighborhoodDimension);
+                      TKernel::NeighborhoodDimension);      
+
   
 
   /** Type of the pixels in the Kernel. */
-  typedef typename BallStructuringType::PixelType            KernelPixelType;
-
+  typedef typename TKernel::PixelType            KernelPixelType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
-  itkConceptMacro(SameDimensionCheck,
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (itk::Concept::Convertible<PixelType, typename TOutputImage::PixelType>));
+  itkConceptMacro(SameDimensionCheck1,
+     (itk::Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(SameDimensionCheck2,
     (itk::Concept::SameDimension<InputImageDimension, KernelDimension>));
   itkConceptMacro(InputGreaterThanComparableCheck,
     (itk::Concept::GreaterThanComparable<PixelType>));
@@ -129,6 +113,8 @@ public:
     (itk::Concept::GreaterThanComparable<KernelPixelType>));
   /** End concept checking */
 #endif
+
+
 
 
   //Creates a SetNoDataValue method
@@ -148,25 +134,10 @@ public:
 
   //Creates a SetUndefinedValue method
   itkSetMacro(UndefinedValue, PixelType);
+  
+  //Creates a SetKeepOriginalLabelBool method
+  itkSetMacro(KeepOriginalLabelBool, bool);
 
-  //Creates a SetRadiusNeighborhood method
-  /** Set kernel (structuring element). */
-  virtual void SetRadiusNeighborhood(const RadiusType _arg)
-  {
-         itkDebugMacro("setting RadiusNeighborhood to " << _arg);
-         if (this->m_RadiusNeighborhood != _arg)
-              {
-              this->m_RadiusNeighborhood = _arg;
-
-              //Kernel Setting
-              BallStructuringType seBall;
-              seBall.SetRadius(m_RadiusNeighborhood);
-              seBall.CreateStructuringElement();
-              this->SetKernel(seBall);
-
-              this->Modified();
-              }
-  }
 
 
 protected:
@@ -183,7 +154,8 @@ protected:
                      const KernelIteratorType kernelBegin,
                      const KernelIteratorType kernelEnd);
 
-
+  
+  
 private:
   NeighborhoodMajorityVotingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -193,7 +165,7 @@ private:
 
   PixelType m_NoDataValue;
   PixelType m_UndefinedValue;
-  RadiusType m_RadiusNeighborhood;
+  bool m_KeepOriginalLabelBool;
 
 }; // end of class
 

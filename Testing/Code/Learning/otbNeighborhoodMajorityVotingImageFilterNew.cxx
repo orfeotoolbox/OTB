@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-
-
 #include "itkMacro.h"
 #include "otbImage.h"
 #include <iostream>
@@ -26,16 +23,32 @@
 
 int otbNeighborhoodMajorityVotingImageFilterNew(int argc, char* argv[])
 {
-  typedef unsigned char LabelPixelType;
+  typedef unsigned char InputLabelPixelType; //8 bits
+  typedef unsigned short OutputLabelPixelType; //16 bits
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<LabelPixelType, Dimension> LabelImageType;
+  typedef otb::Image<InputLabelPixelType, Dimension> InputLabelImageType;
+  typedef otb::Image<OutputLabelPixelType, Dimension> OutputLabelImageType;
+   
+  //SE TYPE
+  typedef itk::Neighborhood<InputLabelPixelType, Dimension> StructuringType;
+
+  //NEIGHBORHOOD MAJORITY FILTER TYPES
+  typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType, OutputLabelImageType, StructuringType> NeighborhoodMajorityVotingFilter3ArgsType;
+  typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType, OutputLabelImageType> NeighborhoodMajorityVotingFilter2ArgsType;
+  typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType> NeighborhoodMajorityVotingFilter1ArgType;
       
-  typedef otb::NeighborhoodMajorityVotingImageFilter<LabelImageType> NeighborhoodMajorityVotingFilterType;
+  //NEIGHBORHOOD MAJORITY FILTERS
+  NeighborhoodMajorityVotingFilter3ArgsType::Pointer NeighMajVotingFilter3Args = NeighborhoodMajorityVotingFilter3ArgsType::New();
+  NeighborhoodMajorityVotingFilter2ArgsType::Pointer NeighMajVotingFilter2Args = NeighborhoodMajorityVotingFilter2ArgsType::New();
+  NeighborhoodMajorityVotingFilter1ArgType::Pointer NeighMajVotingFilter1Arg = NeighborhoodMajorityVotingFilter1ArgType::New();
   
-  NeighborhoodMajorityVotingFilterType::Pointer NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();
-  
-  std::cout << NeighMajVotingFilter << std::endl;
+    
+  std::cout << NeighMajVotingFilter3Args << std::endl;
+  std::cout << std::endl;
+  std::cout << NeighMajVotingFilter2Args << std::endl;
+  std::cout << std::endl;
+  std::cout << NeighMajVotingFilter1Arg << std::endl;
 
   return EXIT_SUCCESS;
 }

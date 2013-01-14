@@ -23,28 +23,26 @@
 // gets integrated into the main directories.
 #include "itkConfigure.h"
 
-
 #include "otbNeighborhoodMajorityVotingImageFilter.h"
 
 namespace otb {
 
-template<class TInputImage>
-NeighborhoodMajorityVotingImageFilter<TInputImage>::NeighborhoodMajorityVotingImageFilter()
-{
+template<class TInputImage, class TOutputImage, class TKernel>
+NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage, TKernel>::NeighborhoodMajorityVotingImageFilter() {
+
        this->SetNoDataValue(itk::NumericTraits<PixelType>::NonpositiveMin());
        this->SetUndefinedValue(itk::NumericTraits<PixelType>::NonpositiveMin());
-
-       RadiusType radInit;
-       radInit[0] = 1;
-       radInit[1] = 1;
-       this->SetRadiusNeighborhood(radInit);
+       m_KeepOriginalLabelBool = true;
 }
 
-template<class TInputImage>
-typename NeighborhoodMajorityVotingImageFilter<TInputImage>::PixelType
-              NeighborhoodMajorityVotingImageFilter<TInputImage>::Evaluate(const NeighborhoodIteratorType &nit,
-              const KernelIteratorType kernelBegin,
-              const KernelIteratorType kernelEnd) {
+
+
+template<class TInputImage, class TOutputImage, class TKernel>
+typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
+		TKernel>::PixelType NeighborhoodMajorityVotingImageFilter<TInputImage,
+		TOutputImage, TKernel>::Evaluate(const NeighborhoodIteratorType &nit,
+		const KernelIteratorType kernelBegin,
+		const KernelIteratorType kernelEnd) {
 
        /*
        KernelIteratorType kernelBegin_ = this->GetKernel().Begin();
@@ -93,16 +91,21 @@ typename NeighborhoodMajorityVotingImageFilter<TInputImage>::PixelType
               //If the majorityLabel is NOT unique in the neighborhood
               for (histoIt = histoNeigh.begin(); histoIt != histoNeigh.end();       ++histoIt) {
                      if ( (histoIt->second == majorityFreq) && (histoIt->first != majorityLabel) ) {
-                            majorityLabel = m_UndefinedValue;
-                            break;
+						 if(m_KeepOriginalLabelBool == true) {
+                             majorityLabel = centerPixel;
+						}
+						 else {
+							 majorityLabel = m_UndefinedValue;
+						}
+                        break;
                      }
               }
               
-       }
+       }//END if (centerPixel != m_NoDataValue)
 
-       //If centerPixel == m_NoDataValue
+       //If (centerPixel == m_NoDataValue)
        else{
-              majorityLabel = m_UndefinedValue;
+              majorityLabel = m_NoDataValue;
        }
 
        return majorityLabel;

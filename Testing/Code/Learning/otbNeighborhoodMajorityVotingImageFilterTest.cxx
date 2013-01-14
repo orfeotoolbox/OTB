@@ -23,59 +23,86 @@
 #include <otbImageFileReader.h>
 #include "otbImageFileWriter.h"
 
+#include "itkBinaryBallStructuringElement.h"
+
 #include "otbNeighborhoodMajorityVotingImageFilter.h"
 
 #include "itkTimeProbe.h"
 
 
-int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[]) {
-       typedef unsigned char LabelPixelType;
-       const unsigned int Dimension = 2;
+int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
+{
+  typedef unsigned char InputLabelPixelType; //8 bits
+  typedef unsigned char OutputLabelPixelType; //8 bits
+  const unsigned int Dimension = 2;
 
-       typedef otb::Image<LabelPixelType, Dimension> LabelImageType;
+  typedef otb::Image<InputLabelPixelType, Dimension> InputLabelImageType;
+  typedef otb::Image<OutputLabelPixelType, Dimension> OutputLabelImageType;
 
-       typedef otb::ImageFileReader<LabelImageType> ReaderType;
-       typedef otb::ImageFileWriter<LabelImageType> WriterType;
+  typedef otb::ImageFileReader<InputLabelImageType> ReaderType;
+  typedef otb::ImageFileWriter<OutputLabelImageType> WriterType;
+  
+  //SE TYPE
+  typedef itk::Neighborhood<InputLabelPixelType, Dimension> StructuringType;
+  typedef StructuringType::RadiusType RadiusType;
+   
+  //BINARY BALL SE TYPE
+  typedef itk::BinaryBallStructuringElement<InputLabelPixelType, Dimension> BallStructuringType;
 
-       typedef otb::NeighborhoodMajorityVotingImageFilter<LabelImageType> NeighborhoodMajorityVotingFilterType;
-       typedef NeighborhoodMajorityVotingFilterType::RadiusType RadiusType;
+  //NEIGHBORHOOD MAJORITY FILTER TYPE
+  typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType, OutputLabelImageType, StructuringType> NeighborhoodMajorityVotingFilterType;
 
 
-       const char * inputFileName = argv[1];
-       const char * outputFileName = argv[2];
+  const char * inputFileName = argv[1];
+  const char * outputFileName = argv[2];
 
-       ReaderType::Pointer reader = ReaderType::New();
-       reader->SetFileName(inputFileName);
-       
-       //NEIGHBORHOOD MAJORITY FILTER
-       NeighborhoodMajorityVotingFilterType::Pointer NeighMajVotingFilter;
-       NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();
-       
-       NeighMajVotingFilter->SetInput(reader->GetOutput());
-       
-       if(argc >= 4)
-       {
-              RadiusType rad;
-              rad[0] = atoi(argv[3]);
-              rad[1] = atoi(argv[4]);
-              NeighMajVotingFilter->SetRadiusNeighborhood(rad);
-              
-              if(argc >= 5)
-              {
-                     NeighMajVotingFilter->SetNoDataValue(atoi(argv[5]));
-                     
-                     if(argc >= 6)
-                     {
-                            NeighMajVotingFilter->SetUndefinedValue(atoi(argv[6]));
-                     }
-              }
-       }
-       
-
-       WriterType::Pointer writer = WriterType::New();
-       writer->SetFileName(outputFileName);
-       writer->SetInput(NeighMajVotingFilter->GetOutput());
-       writer->Update();
-
-       return EXIT_SUCCESS;
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputFileName);
+   
+  //NEIGHBORHOOD MAJORITY FILTER
+  NeighborhoodMajorityVotingFilterType::Pointer NeighMajVotingFilter;
+  NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();
+   
+  NeighMajVotingFilter->SetInput(reader->GetOutput());
+   
+  BallStructuringType seBall;
+  RadiusType rad;
+  
+  if (argc >= 3) {
+	  std::string KeepOriginalLabelBoolStr = argv[3];
+	  if (KeepOriginalLabelBoolStr.compare("true") == 0) {
+		  NeighMajVotingFilter->SetKeepOriginalLabelBool(true);
+	  }
+	  else {
+		  NeighMajVotingFilter->SetKeepOriginalLabelBool(false);
+	  }
+   
+	  if (argc >= 5) {
+		rad[0] = atoi(argv[4]);
+		rad[1] = atoi(argv[5]);
+	
+		if (argc >= 6) {
+		  NeighMajVotingFilter->SetNoDataValue(atoi(argv[6]));
+					 
+		  if (argc >= 7) {
+		    NeighMajVotingFilter->SetUndefinedValue(atoi(argv[7]));
+		  }
+		}
+	  }
+	  else {
+		rad[0] = 1;
+		rad[1] = 1;
+	  }
+  }
+   
+  seBall.SetRadius(rad);
+  seBall.CreateStructuringElement();
+  NeighMajVotingFilter->SetKernel(seBall);
+   
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outputFileName);
+  writer->SetInput(NeighMajVotingFilter->GetOutput());
+  writer->Update();
+  
+  return EXIT_SUCCESS;
 }
