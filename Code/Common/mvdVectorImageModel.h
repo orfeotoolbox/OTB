@@ -324,12 +324,12 @@ private:
     imageIndex[0] =  ( index % region.GetSize(0) ) + region.GetIndex()[0];
 
     imageIndex[1] =  region.GetSize()[1] - 1 + region.GetIndex()[1]
-      - vcl_floor( index / region.GetSize(0) );
+      - static_cast<unsigned int>(vcl_floor( static_cast<double>(index) / static_cast<double>(region.GetSize(0) )));
 
     return imageIndex;
   }
 
-  /** Dump pixel within the region in argument of the method into the
+  /** Dump pixels within the region in argument of the method into the
   * m_RasterizedBuffer (used for OpenGl rendering)
   * \param region 2D region
   */
