@@ -232,6 +232,10 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
       {
       app->EnableParameter(hemKey.str());
       }
+    else
+      {
+      app->DisableParameter(hemKey.str());
+      }
 
     app->AutomaticValueOn(zoneKey.str());
     app->AutomaticValueOn(hemKey.str());
