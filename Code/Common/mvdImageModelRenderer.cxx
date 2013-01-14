@@ -75,13 +75,23 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
   // if buffer not null do the rendering
   if (buffer != NULL)
     {
-    unsigned int nb_displayed_cols = region.GetSize()[ 0 ];
-    unsigned int nb_displayed_rows = region.GetSize()[ 1 ];
-    unsigned int first_displayed_col = (context.m_WidgetWidth  - region.GetSize()[0]) /2;
-    unsigned int first_displayed_row = (context.m_WidgetHeight - region.GetSize()[1]) /2;
+    unsigned int nb_displayed_cols = region.GetSize()[ 0 ] ;
+    unsigned int nb_displayed_rows = region.GetSize()[ 1 ] ;
+    
+    unsigned int first_displayed_col = 0;
+    if ( context.m_WidgetWidth  > region.GetSize()[0] * context.m_IsotropicZoom)
+      {
+      first_displayed_col = (context.m_WidgetWidth  - region.GetSize()[0] * context.m_IsotropicZoom) /2;
+      }
+
+    unsigned int first_displayed_row = 0;
+    if (context.m_WidgetHeight - region.GetSize()[1] * context.m_IsotropicZoom)
+      {
+      first_displayed_row = (context.m_WidgetHeight - region.GetSize()[1] * context.m_IsotropicZoom)/2;
+      }
 
     // TODO : need an accessor to isotropic zoom
-    glPixelZoom(1.0/*m_IsotropicZoom,m_IsotropicZoom*/,1.0);
+    glPixelZoom(context.m_IsotropicZoom, context.m_IsotropicZoom);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glRasterPos2f(first_displayed_col, first_displayed_row);
     glDrawPixels(nb_displayed_cols,
