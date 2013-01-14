@@ -48,8 +48,6 @@ namespace otb {
  * \sa MorphologyImageFilter, GrayscaleFunctionDilateImageFilter, BinaryDilateImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
- 
-     
 template<class TInputImage, class TOutputImage=TInputImage, class TKernel=typename itk::Neighborhood<typename TInputImage::PixelType, TInputImage::ImageDimension> >
 class ITK_EXPORT NeighborhoodMajorityVotingImageFilter :
     public itk::MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
@@ -67,7 +65,7 @@ public:
 
   /** Runtime information support. */
   itkTypeMacro(NeighborhoodMajorityVotingImageFilter,
-		  itk::MorphologyImageFilter);
+      itk::MorphologyImageFilter);
   
   /** Declaration of pixel type. */
   typedef typename Superclass::PixelType PixelType;
