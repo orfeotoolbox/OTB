@@ -333,27 +333,27 @@ ADD_TEST(bfTvVectorImageToImageListFilter ${BASICFILTERS_TESTS3}
 ADD_TEST(bfTvVectorImageToImageListFilterIt ${BASICFILTERS_TESTS3}
                 --compare-n-images ${EPSILON_7} 3
                     ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
-                    ${TEMP}/bfTvVectorImageToImageListFilterBand1.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterItBand1.png
                     ${BASELINE}/bfTvVectorImageToImageListFilterBand2.png
-                    ${TEMP}/bfTvVectorImageToImageListFilterBand2.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterItBand2.png
                     ${BASELINE}/bfTvVectorImageToImageListFilterBand3.png
-                    ${TEMP}/bfTvVectorImageToImageListFilterBand3.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterItBand3.png
                     otbVectorImageToImageListFilterIterator
                     ${INPUTDATA}/poupees.png
-                    ${TEMP}/bfTvVectorImageToImageListFilter
+                    ${TEMP}/bfTvVectorImageToImageListFilterIt
                     png
 )
 ADD_TEST(bfTvVectorImageToImageListFilterIt2 ${BASICFILTERS_TESTS3}
                 --compare-n-images ${EPSILON_7} 3
                     ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
-                    ${TEMP}/bfTvVectorImageToImageListFilterBand1.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterIt2Band1.png
                     ${BASELINE}/bfTvVectorImageToImageListFilterBand2.png
-                    ${TEMP}/bfTvVectorImageToImageListFilterBand2.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterIt2Band2.png
                     ${BASELINE}/bfTvVectorImageToImageListFilterBand3.png
-                    ${TEMP}/bfTvVectorImageToImageListFilterBand3.png
-                    otbVectorImageToImageListFilterIterator
+                    ${TEMP}/bfTvVectorImageToImageListFilterIt2Band3.png
+                    otbVectorImageToImageListFilterIterator2
                     ${INPUTDATA}/poupees.png
-                    ${TEMP}/bfTvVectorImageToImageListFilter
+                    ${TEMP}/bfTvVectorImageToImageListFilterIt2
                     png
 )
 
