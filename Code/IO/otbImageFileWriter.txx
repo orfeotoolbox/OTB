@@ -684,8 +684,12 @@ ImageFileWriter<TInputImage>
   // check that the image's buffered region is the same as
   // ImageIO is expecting and we requested
   InputImageRegionType ioRegion;
+  
+  // No shift of the ioRegion from the buffered region is expected
+  typename InputImageRegionType::IndexType tmpIndex;
+  tmpIndex.Fill(0);
   itk::ImageIORegionAdaptor<TInputImage::ImageDimension>::
-    Convert(m_ImageIO->GetIORegion(), ioRegion, largestRegion.GetIndex());
+    Convert(m_ImageIO->GetIORegion(), ioRegion, tmpIndex);
   InputImageRegionType bufferedRegion = input->GetBufferedRegion();
   
   // before this test, bad stuff would happend when they don't match
