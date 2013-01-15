@@ -98,6 +98,7 @@ int otbVectorImageToImageListFilterIterator(int argc, char * argv[])
 
   VectorImageToImageListFilterType::Pointer filter = VectorImageToImageListFilterType::New();
   filter->SetInput(reader->GetOutput());
+  //filter->Update(); // Why it is needed ?
 
   ImageListIterator itOutput = filter->GetOutput()->Begin();
 
@@ -150,6 +151,7 @@ int otbVectorImageToImageListFilterIterator2(int argc, char * argv[])
 
   VectorImageToImageListFilterType::Pointer filter = VectorImageToImageListFilterType::New();
   filter->SetInput(reader->GetOutput());
+  filter->Update(); // Why it is needed ?
 
   ImageListIterator itOutput = filter->GetOutput()->Begin();
 
