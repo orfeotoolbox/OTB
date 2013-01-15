@@ -159,7 +159,7 @@ private:
 
 
   NeighborhoodMajorityVotingFilterType::Pointer m_NeighMajVotingFilter;
-};//END class ClassificationRegularisationMajorityVoting
+}; //END class ClassificationRegularisationMajorityVoting
 
 
 }//END namespace wrapper

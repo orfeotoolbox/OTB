@@ -90,7 +90,7 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
   itkStaticConstMacro(KernelDimension, unsigned int,
-                      TKernel::NeighborhoodDimension);      
+                      TKernel::NeighborhoodDimension);
 
   
 
@@ -114,7 +114,6 @@ public:
 
 
 
-
   //Creates a SetNoDataValue method
   virtual void SetNoDataValue(const PixelType _arg)
   {
@@ -135,7 +134,6 @@ public:
   
   //Creates a SetKeepOriginalLabelBool method
   itkSetMacro(KeepOriginalLabelBool, bool);
-
 
 
 protected:
