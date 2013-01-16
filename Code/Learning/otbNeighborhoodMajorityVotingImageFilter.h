@@ -113,7 +113,6 @@ public:
 #endif
 
 
-
   //Creates a SetNoDataValue method
   virtual void SetNoDataValue(const PixelType _arg)
   {

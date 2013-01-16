@@ -153,7 +153,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // stereo-rectified images, as well as the position of the origin in
   // the left image
 
-  // First, spacing : choose a square spacing, 
+  // First, spacing : choose a square spacing,
   SpacingType outputSpacing;
   outputSpacing.Fill(m_Scale * m_GridStep);
   double mean_spacing=0.5*(vcl_abs(m_LeftImage->GetSpacing()[0])+vcl_abs(m_LeftImage->GetSpacing()[1]));
@@ -493,7 +493,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
     // We want to move m_Scale pixels away in the epipolar line of the
     // first image
-    // Take into account height direction 
+    // Take into account height direction
     //double alpha1 = otb::CONST_PI - vcl_atan(a1);
     double deltax1 =  m_Scale * m_GridStep * mean_spacing * vcl_cos(alpha1);
     double deltay1 =  m_Scale * m_GridStep * mean_spacing * vcl_sin(alpha1);
@@ -501,7 +501,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 //     // Before moving currentPoint1, we will store its image by the
 //     // left to right transform at the m_AverageElevation, to compute
 //     // the equivalent displacement in right image
-// 
+//
 //     currentPoint1[2] = localElevation;
 //     startLine2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
 
@@ -524,14 +524,14 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 //     double iscale = vcl_sqrt((endLine2[0]-startLine2[0])*(endLine2[0]-startLine2[0])
 //                              +
 //                              (endLine2[1]-startLine2[1])*(endLine2[1]-startLine2[1]));
-// 
+//
 //     // Now, we compute the displacement in right image. The iscale
 //     // factor already account for m_GridStep and scale, no need to use
 //     // them again
 //     //double alpha2 = otb::CONST_PI - vcl_atan(a2);
 //     double deltax2 = iscale * vcl_cos(alpha2);
 //     double deltay2 = iscale * vcl_sin(alpha2);
-// 
+//
 //     // We can now move currentPoint2
 //     currentPoint2[0] += deltax2;
 //     currentPoint2[1] += deltay2;
