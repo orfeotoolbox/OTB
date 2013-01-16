@@ -166,8 +166,8 @@ private:
     DisableParameter("outvector");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("io.in1", "sensor_stereo_left.tif");
-    SetDocExampleParameterValue("io.in2","sensor_stereo_right.tif");
+    SetDocExampleParameterValue("in1", "sensor_stereo_left.tif");
+    SetDocExampleParameterValue("in2","sensor_stereo_right.tif");
     SetDocExampleParameterValue("mode","full");
     SetDocExampleParameterValue("out","homologous.txt");
   }
