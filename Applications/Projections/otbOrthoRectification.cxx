@@ -74,7 +74,7 @@ public:
   /** Generic Remote Sensor Resampler */
   typedef otb::GenericRSResampleImageFilter<FloatVectorImageType,
                                             FloatVectorImageType>       ResampleFilterType;
-  
+
   /** Interpolators typedefs*/
   typedef itk::LinearInterpolateImageFunction<FloatVectorImageType,
                                               double>              LinearInterpolationType;
@@ -100,7 +100,7 @@ private:
     SetDocLimitations("Supported sensors are Pleiades, SPOT5 (TIF format), Ikonos, Quickbird, Worldview2, GeoEye.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Ortho-rectification chapter from the OTB Software Guide");
-  
+
     AddDocTag(Tags::Geometry);
 
     // Set the parameters
@@ -113,7 +113,7 @@ private:
 
     // Build the Output Map Projection
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
-    
+
     // Add the output paramters in a group
     AddParameter(ParameterType_Group, "outputs", "Output Image Grid");
     SetParameterDescription("outputs","This group of parameters allows to define the grid on which the input image will be resampled.");
@@ -130,7 +130,7 @@ private:
     SetParameterDescription("outputs.mode.outputroi","This mode allows you to automatically compute the optimal image size from spacing (pixel size) and output corners");
     AddChoice("outputs.mode.orthofit", "Fit to ortho");
     SetParameterDescription("outputs.mode.orthofit", "Fit the size, origin and spacing to an existing ortho image (uses the value of outputs.ortho)");
-    
+
     // Upper left point coordinates
     AddParameter(ParameterType_Float, "outputs.ulx", "Upper Left X");
     SetParameterDescription("outputs.ulx","Cartographic X coordinate of upper-left corner (meters for cartographic projections, degrees for geographic ones)");
@@ -144,7 +144,7 @@ private:
 
     AddParameter(ParameterType_Int, "outputs.sizey", "Size Y");
     SetParameterDescription("outputs.sizey","Size of projected image along Y (in pixels)");
-    
+
     // Spacing of the output image
     AddParameter(ParameterType_Float, "outputs.spacingx", "Pixel Size X");
     SetParameterDescription("outputs.spacingx","Size of each pixel along X axis (meters for cartographic projections, degrees for geographic ones)");
@@ -159,11 +159,11 @@ private:
 
     AddParameter(ParameterType_Float, "outputs.lry", "Lower right Y");
     SetParameterDescription("outputs.lry","Cartographic Y coordinate of the lower-right corner (meters for cartographic projections, degrees for geographic ones)");
-    
+
     // Existing ortho image that can be used to compute size, origin and spacing of the output
-    AddParameter(ParameterType_InputImage, "outputs.ortho", "Model ortho-mage");
+    AddParameter(ParameterType_InputImage, "outputs.ortho", "Model ortho-image");
     SetParameterDescription("outputs.ortho","A model ortho-image that can be used to compute size, origin and spacing of the output");
-    
+
     // Setup parameters for initial UserDefined mode
     DisableParameter("outputs.lrx");
     DisableParameter("outputs.lry");
@@ -171,7 +171,7 @@ private:
     MandatoryOff("outputs.lrx");
     MandatoryOff("outputs.lry");
     MandatoryOff("outputs.ortho");
-    
+
     AddParameter(ParameterType_Empty,"outputs.isotropic","Force isotropic spacing by default");
     std::ostringstream isotropOss;
     isotropOss << "Default spacing (pixel size) values are estimated from the sensor modeling of the image. It can therefore result in a non-isotropic spacing. ";
@@ -179,7 +179,7 @@ private:
     isotropOss << "Values overriden by user are not affected by this option.";
     SetParameterDescription("outputs.isotropic", isotropOss.str());
     EnableParameter("outputs.isotropic");
-    
+
     AddParameter(ParameterType_Float, "outputs.default", "Default pixel value");
     SetParameterDescription("outputs.default","Default value to write when outside of input image.");
     SetDefaultParameterFloat("outputs.default",0.);
@@ -241,7 +241,7 @@ private:
       // Compute the output image spacing and size
       typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
       OutputParametersEstimatorType::Pointer genericRSEstimator = OutputParametersEstimatorType::New();
-      
+
       if(IsParameterEnabled("outputs.isotropic"))
         {
         genericRSEstimator->EstimateIsotropicSpacingOn();
@@ -250,17 +250,17 @@ private:
         {
         genericRSEstimator->EstimateIsotropicSpacingOff();
         }
-      
+
       genericRSEstimator->SetInput(inImage);
       genericRSEstimator->SetOutputProjectionRef(m_OutputProjectionRef);
       genericRSEstimator->Compute();
-      
+
       // Fill the Gui with the computed parameters
       if (!HasUserValue("outputs.ulx"))
         {
         SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0]);
         }
-      
+
       if (!HasUserValue("outputs.uly"))
         SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1]);
 
@@ -281,7 +281,7 @@ private:
 
       if (!HasUserValue("outputs.lry"))
        SetParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
-      
+
       // Handle the spacing and size field following the mode
       // choosed by the user
       switch (GetParameterInt("outputs.mode") )
@@ -319,7 +319,7 @@ private:
         MandatoryOff("outputs.lrx");
         MandatoryOff("outputs.lry");
         MandatoryOff("outputs.ortho");
-        
+
         // Update lower right
         SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
         SetParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
@@ -362,18 +362,18 @@ private:
         ResampleFilterType::SpacingType spacing;
         spacing[0] = GetParameterFloat("outputs.spacingx");
         spacing[1] = GetParameterFloat("outputs.spacingy");
-        
+
         genericRSEstimator->ForceSpacingTo(spacing);
         genericRSEstimator->Compute();
-        
+
         // Set the  processed size relative to this forced spacing
         SetParameterInt("outputs.sizex", genericRSEstimator->GetOutputSize()[0]);
         SetParameterInt("outputs.sizey", genericRSEstimator->GetOutputSize()[1]);
-        
+
         // Reset Origin to default
         SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0]);
         SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1]);
-        
+
         // Update lower right
         SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
         SetParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
@@ -419,19 +419,19 @@ private:
 
         genericRSEstimator->ForceSizeTo(size);
         genericRSEstimator->Compute();
-        
+
         // Set the  processed spacing relative to this forced size
         SetParameterFloat("outputs.spacingx", genericRSEstimator->GetOutputSpacing()[0]);
         SetParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
-        
+
         // Reset Origin to default
         SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0]);
         SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1]);
-        
+
         // Update lower right
         SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
         SetParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
-        
+
         }
         break;
         case Mode_OutputROI:
@@ -471,7 +471,7 @@ private:
           ResampleFilterType::SpacingType spacing;
           spacing[0] = GetParameterFloat("outputs.spacingx");
           spacing[1] = GetParameterFloat("outputs.spacingy");
-          
+
           // Set the  processed size relative to this forced spacing
           if (vcl_abs(spacing[0]) > 0.0)
             SetParameterInt("outputs.sizex", static_cast<int>(vcl_ceil((GetParameterFloat("outputs.lrx")-GetParameterFloat("outputs.ulx"))/spacing[0])));
@@ -491,7 +491,7 @@ private:
           MandatoryOff("outputs.lrx");
           MandatoryOff("outputs.lry");
           MandatoryOn("outputs.ortho");
-          
+
           // Disable the parameters
           DisableParameter("outputs.ulx");
           DisableParameter("outputs.uly");
@@ -502,7 +502,7 @@ private:
           DisableParameter("outputs.lrx");
           DisableParameter("outputs.lry");
           EnableParameter("outputs.ortho");
-          
+
           if (HasValue("outputs.ortho"))
           {
             // Automatic set to on
@@ -514,14 +514,14 @@ private:
             AutomaticValueOn("outputs.spacingy");
             AutomaticValueOn("outputs.lrx");
             AutomaticValueOn("outputs.lry");
-            
+
             // input image
             FloatVectorImageType::Pointer inOrtho = GetParameterImage("outputs.ortho");
-            
+
             ResampleFilterType::OriginType orig = inOrtho->GetOrigin();
             ResampleFilterType::SpacingType spacing = inOrtho->GetSpacing();
             ResampleFilterType::SizeType size = inOrtho->GetLargestPossibleRegion().GetSize();
-            
+
             SetParameterInt("outputs.sizex",size[0]);
             SetParameterInt("outputs.sizey",size[1]);
             SetParameterFloat("outputs.spacingx",spacing[0]);
@@ -541,7 +541,7 @@ private:
   void DoExecute()
     {
     GetLogger()->Debug("Entering DoExecute");
-    
+
     // Get the input image
     FloatVectorImageType* inImage = GetParameterImage("io.in");
 
@@ -553,7 +553,7 @@ private:
     m_ResampleFilter->SetInputProjectionRef(inImage->GetProjectionRef());
     m_ResampleFilter->SetInputKeywordList(inImage->GetImageKeywordlist());
     m_ResampleFilter->SetOutputProjectionRef(m_OutputProjectionRef);
-    
+
     // Check size
     if (GetParameterInt("outputs.sizex") <= 0 || GetParameterInt("outputs.sizey") <= 0)
       {
@@ -598,7 +598,7 @@ private:
       m_ResampleFilter->EstimateInputRpcModelOn();
       m_ResampleFilter->SetInputRpcGridSize( GetParameterInt("opt.rpc"));
       }
-    
+
     // Set Output information
     ResampleFilterType::SizeType size;
     size[0] = GetParameterInt("outputs.sizex");
@@ -609,7 +609,7 @@ private:
     spacing[0] = GetParameterFloat("outputs.spacingx");
     spacing[1] = GetParameterFloat("outputs.spacingy");
     m_ResampleFilter->SetOutputSpacing(spacing);
-    
+
     ResampleFilterType::OriginType ul;
     ul[0] = GetParameterFloat("outputs.ulx");
     ul[1] = GetParameterFloat("outputs.uly");
