@@ -142,10 +142,12 @@ MainWindow
   dockWidget->setObjectName( dockName );
   dockWidget->setWidget( widget );
 
+  /*
   qDebug() << dockWidget;
   qDebug() << widget;
   qDebug() << widget->parent();
   qDebug();
+  */
 
   // Features.
   dockWidget->setFloating( true );
@@ -233,7 +235,7 @@ MainWindow
   );
 
 
-  QWidget* widget = GetVideoColorSetupDock()->widget();
+  QWidget* widget = GetColorSetupDock()->widget();
 
   if( widget==NULL )
     {
@@ -242,7 +244,7 @@ MainWindow
 
   // Disconnect previously selected model from UI controller.
   QObject::disconnect(
-    GetVideoColorSetupDock()->widget(),
+    GetColorSetupDock()->widget(),
     SIGNAL( currentIndexChanged( ColorSetupWidget::Channel, int ) ),
     // from:
     vectorImageModel,
@@ -256,7 +258,7 @@ MainWindow
 ::onSelectedModelChanged( const AbstractModel* model )
 {
   ColorSetupWidget* colorSetupWidget =
-    qobject_cast< ColorSetupWidget*  >( GetVideoColorSetupDock()->widget() );
+    qobject_cast< ColorSetupWidget*  >( GetColorSetupDock()->widget() );
 
   const VectorImageModel* vectorImageModel =
     qobject_cast< const VectorImageModel* >( model );

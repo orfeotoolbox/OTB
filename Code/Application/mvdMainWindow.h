@@ -25,6 +25,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -43,16 +47,14 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
 
-//
-// Some constants.
-#define VIDEO_COLOR_DYNAMICS_DOCK "videoColorDynamicsDock"
-#define VIDEO_COLOR_SETUP_DOCK "videoColorSetupDock"
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
 
 //
 // External class pre-declaration.
 namespace
 {
-
 }
 
 namespace mvd
@@ -66,16 +68,23 @@ namespace Ui
 class MainWindow;
 }
 
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
 /** \class MainWindow
  *
  */
 class Monteverdi2_EXPORT MainWindow
   : public QMainWindow
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
 
-/*****************************************************************************/
-
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+    
 //
 // Public types.
 public:
@@ -89,14 +98,14 @@ public:
   /** Destructor */
   virtual ~MainWindow();
 
-/*****************************************************************************/
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // SIGNALS.
 signals:
   void largestPossibleRegionChanged(const ImageRegionType& largestRegion);
 
-/*****************************************************************************/
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
@@ -106,10 +115,10 @@ protected:
 // Protected attributes.
 protected:
 
-/*****************************************************************************/
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
-// Private SLOTS.
+// Private methods.
 private:
   /** */
   void Initialize();
@@ -124,29 +133,26 @@ private:
 			Qt::DockWidgetArea dockArea );
 
   /** */
-  inline
-    const QDockWidget*
-    GetVideoColorSetupDock() const
-  {
-    return findChild< QDockWidget* >( VIDEO_COLOR_SETUP_DOCK );
-  }
+  inline const QDockWidget*  GetColorSetupDock() const;
 
   /** */
-  inline
-    QDockWidget*
-    GetVideoColorSetupDock()
-  {
-    return findChild< QDockWidget* >( VIDEO_COLOR_SETUP_DOCK );
-  }
+  inline QDockWidget* GetColorSetupDock();
 
-/*****************************************************************************/
+  /** */
+  inline const QDockWidget* GetColorDynamicsDock() const;
+
+  /** */
+  inline QDockWidget* GetColorDynamicsDock();
+
 
 //
-// Private methods.
+// Private attributes.
 private:
   /**
    */
   Ui::MainWindow* m_UI;
+
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Private attributes.
@@ -157,6 +163,52 @@ private slots:
   void onAboutToChangeSelectedModel( const AbstractModel* );
   void onSelectedModelChanged( const AbstractModel* );
 };
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+//
+// Some constants.
+#define VIDEO_COLOR_DYNAMICS_DOCK "videoColorDynamicsDock"
+#define VIDEO_COLOR_SETUP_DOCK "videoColorSetupDock"
+
+/*****************************************************************************/
+inline
+const QDockWidget*
+MainWindow
+::GetColorSetupDock() const
+{
+  return findChild< QDockWidget* >( VIDEO_COLOR_SETUP_DOCK );
+}
+
+/*****************************************************************************/
+inline
+QDockWidget*
+MainWindow
+::GetColorSetupDock()
+{
+  return findChild< QDockWidget* >( VIDEO_COLOR_SETUP_DOCK );
+}
+
+/*****************************************************************************/
+inline
+const QDockWidget*
+MainWindow
+::GetColorDynamicsDock() const
+{
+  return findChild< QDockWidget* >( VIDEO_COLOR_DYNAMICS_DOCK );
+}
+
+/*****************************************************************************/
+inline
+QDockWidget*
+MainWindow
+::GetColorDynamicsDock()
+{
+  return findChild< QDockWidget* >( VIDEO_COLOR_DYNAMICS_DOCK );
+}
+
+/*****************************************************************************/
 
 } // end namespace 'mvd'
 
