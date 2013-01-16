@@ -89,10 +89,18 @@ VectorImageModel
 
   StringVector stdBandNames( GetMetadataInterface()->GetBandName() );
 
+  /*
+  qDebug() << "stdBandNames.size(): " <<  stdBandNames.size();
+  for( unsigned int i=0; i<stdBandNames.size(); ++i )
+    {
+    qDebug() << i << ": " << QString::fromStdString( stdBandNames[ i ] );
+    }
+  */
+
   assert( stdBandNames.empty() ||
 	  stdBandNames.size()==output->GetNumberOfComponentsPerPixel() );
 
-  if( stdBandNames.empty() )
+  if( stdBandNames.size()!=output->GetNumberOfComponentsPerPixel() )
     {
     stdBandNames.resize( output->GetNumberOfComponentsPerPixel() );
     }
@@ -128,11 +136,10 @@ VectorImageModel
 
   // Ensure default display returns valid band indices (see OTB bug).
   assert( metaData->GetDefaultDisplay().size()==3 );
-
   /*
   assert( metaData->GetDefaultDisplay()[ 0 ]
 	  < output->GetNumberOfComponentsPerPixel() );
-  assert( metaData->GetDefaultDisplay()[ 1 ] <
+  assert( metaData->GetDefaultDisplay()[ 1 ]
 	  < output->GetNumberOfComponentsPerPixel() );
   assert( metaData->GetDefaultDisplay()[ 2 ]
 	  < output->GetNumberOfComponentsPerPixel() );

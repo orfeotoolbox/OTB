@@ -266,6 +266,8 @@ MainWindow
   // Setup color-setup controller.
   colorSetupWidget->blockSignals( true );
   {
+  // qDebug() << vectorImageModel->GetBandNames();
+
   colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
 
   for( int i=0; i<ColorSetupWidget::CHANNEL_COUNT; ++i )
