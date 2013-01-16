@@ -212,6 +212,12 @@ private:
 
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"epi.elevation");
+    
+    if (otb::Wrapper::ElevationParametersHandler::IsGeoidUsed(this,"epi.elevation") &&
+        otb::Wrapper::ElevationParametersHandler::IsDEMUsed(this,"epi.elevation"))
+      {
+      m_DeformationFieldSource->SetUseDEM(true);
+      }
 
     if(IsParameterEnabled("epi.elevation.avgdem"))
       {

@@ -153,11 +153,15 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // stereo-rectified images, as well as the position of the origin in
   // the left image
 
-  // First, spacing
+  // First, spacing : choose a square spacing, 
   SpacingType outputSpacing;
   outputSpacing.Fill(m_Scale * m_GridStep);
-  outputSpacing[0]*=m_LeftImage->GetSpacing()[0];
-  outputSpacing[1]*=m_LeftImage->GetSpacing()[1];
+  double mean_spacing=0.5*(vcl_abs(m_LeftImage->GetSpacing()[0])+vcl_abs(m_LeftImage->GetSpacing()[1]));
+  //double ratio_x = mean_spacing / vcl_abs(m_LeftImage->GetSpacing()[0]);
+  //double ratio_y = mean_spacing / vcl_abs(m_LeftImage->GetSpacing()[1]);
+  
+  outputSpacing[0]*=mean_spacing;
+  outputSpacing[1]*=mean_spacing;
 
   // Then, we retrieve the origin of the left input image
   double localElevation = otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid();
@@ -192,23 +196,41 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   leftEpiLineEnd = m_RightToLeftTransform->TransformPoint(rightEpiPoint);
 
   // Now, we can compute the equation of the epipolar line y = a*x+b
-  // (do not forget that the y axis is flip in our case)
-  // TODO: Add some division by zero check here (but this would only
-  // happen in case the images are almost epipolar already)
-  double a = (leftEpiLineEnd[1] - leftEpiLineStart[1])
-           / (leftEpiLineEnd[0] - leftEpiLineStart[0]);
-  double b = leftEpiLineStart[1] - a * leftEpiLineStart[0];
-
-  // Now, we will change coordinate so that the epipolar line is
-  // horizontal
-  double alpha = otb::CONST_PI - vcl_atan(a);
+  // epipolar angle is computed in left image physical space
+  double alpha = 0;
+  if (leftEpiLineEnd[0] == leftEpiLineStart[0])
+    {
+    if (leftEpiLineEnd[1] > leftEpiLineStart[1])
+      {
+      alpha = 0.5*otb::CONST_PI;
+      }
+    else
+      {
+      alpha = -0.5*otb::CONST_PI;
+      }
+    }
+  else
+    {
+    double a = (leftEpiLineEnd[1] - leftEpiLineStart[1])
+             / (leftEpiLineEnd[0] - leftEpiLineStart[0]);
+    double b = leftEpiLineStart[1] - a * leftEpiLineStart[0];
+    if (leftEpiLineEnd[0] > leftEpiLineStart[0])
+      {
+      alpha = vcl_atan(a);
+      }
+    else
+      {
+      alpha = otb::CONST_PI + vcl_atan(a);
+      }
+    
+    }
 
   // And compute the unitary vectors of the new axis (equivalent to
   // the column of the rotation matrix)
   // TODO: Check if we need to use the input image spacing here
   double ux =   vcl_cos(alpha);
-  double uy = - vcl_sin(alpha);
-  double vx =   vcl_sin(alpha);
+  double uy =   vcl_sin(alpha);
+  double vx = - vcl_sin(alpha);
   double vy =   vcl_cos(alpha);
 
   // Now, we will compute the bounding box of the left input image in
@@ -216,14 +238,14 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // First we compute coordinates of the 4 corners (we omit ulx which
   // coordinates are {0,0})
-  double urx = ux * m_LeftImage->GetLargestPossibleRegion().GetSize()[0];
-  double ury = vx * m_LeftImage->GetLargestPossibleRegion().GetSize()[0];
-  double llx = uy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1];
-  double lly = vy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1];
-  double lrx = ux * m_LeftImage->GetLargestPossibleRegion().GetSize()[0]
-             + uy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1];
-  double lry = vx * m_LeftImage->GetLargestPossibleRegion().GetSize()[0]
-             + vy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1];
+  double urx = ux * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSpacing()[0];
+  double ury = vx * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSpacing()[0];
+  double llx = uy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSpacing()[1];
+  double lly = vy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSpacing()[1];
+  double lrx = ux * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSpacing()[0]
+             + uy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSpacing()[1];
+  double lry = vx * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSpacing()[0]
+             + vy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSpacing()[1];
 
   // Bounding box (this time we do not omit ulx)
   double minx = std::min(std::min(std::min(urx,llx),lrx),0.);
@@ -233,13 +255,13 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
   // We can now estimate the output image size, taking into account
   // the scale parameter
-  m_RectifiedImageSize[0] = static_cast<unsigned int>((maxx-minx)/m_Scale);
-  m_RectifiedImageSize[1] = static_cast<unsigned int>((maxy-miny)/m_Scale);
+  m_RectifiedImageSize[0] = static_cast<unsigned int>((maxx-minx)/(mean_spacing*m_Scale));
+  m_RectifiedImageSize[1] = static_cast<unsigned int>((maxy-miny)/(mean_spacing*m_Scale));
 
   // Now, we can compute the origin of the epipolar images in the left
   // input image geometry (we rotate back)
-  m_OutputOriginInLeftImage[0] = leftInputOrigin[0] + m_LeftImage->GetSpacing()[0] * (ux * minx + vx * miny);
-  m_OutputOriginInLeftImage[1] = leftInputOrigin[1] + m_LeftImage->GetSpacing()[0] * (uy * minx + vy * miny);
+  m_OutputOriginInLeftImage[0] = leftInputOrigin[0] + (ux * minx + vx * miny);
+  m_OutputOriginInLeftImage[1] = leftInputOrigin[1] + (uy * minx + vy * miny);
   m_OutputOriginInLeftImage[2] = localElevation;
 
   // And also the size of the deformation field
@@ -308,8 +330,19 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
   // Then, we retrieve the origin of the left input image
   double localElevation = otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid();
 
+  // Use the mean spacing as before
+  double mean_spacing=0.5*(vcl_abs(m_LeftImage->GetSpacing()[0])+vcl_abs(m_LeftImage->GetSpacing()[1]));
+  
   // Initialize
   currentPoint1 = m_OutputOriginInLeftImage;
+  if(m_UseDEM)
+    {
+    RSTransform2DType::InputPointType tmpPoint;
+    tmpPoint[0] = currentPoint1[0];
+    tmpPoint[1] = currentPoint1[1];
+    localElevation = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
+    }
+  currentPoint1[2] = localElevation;
   currentPoint2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
   currentPoint2[2] = currentPoint1[2];
 
@@ -372,14 +405,6 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
     // This point is the image of the left input image origin at the
     // average elevation
-    if(m_UseDEM)
-      {
-      RSTransform2DType::InputPointType tmpPoint;
-      tmpPoint[0] = currentPoint1[0];
-      tmpPoint[1] = currentPoint1[1];
-      localElevation = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
-      }
-    currentPoint1[2] = localElevation;
     epiPoint2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
 
     // The begining of the epipolar line in the left image is the image
@@ -402,10 +427,31 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     m_MeanBaselineRatio+=localBaselineRatio;
 
     // Now, we can compute the equation of the epipolar line y = a*x+b
-    // (do not forget that the y axis is flip in our case)
-    // TODO: Add some division by zero check here (but this would only
-    // happen in case the images are almost epipolar already)
-    a1 = (endLine1[1] - startLine1[1]) / (endLine1[0] - startLine1[0]);
+    // (compute angle in physical space)
+    double alpha1 = 0;
+    if (endLine1[0] == startLine1[0])
+      {
+      if (endLine1[1] > startLine1[1])
+        {
+        alpha1 = 0.5*otb::CONST_PI;
+        }
+      else
+        {
+        alpha1 = -0.5*otb::CONST_PI;
+        }
+      }
+    else
+      {
+      a1 = (endLine1[1] - startLine1[1]) / (endLine1[0] - startLine1[0]);
+      if (endLine1[0] > startLine1[0])
+        {
+        alpha1 = vcl_atan(a1);
+        }
+      else
+        {
+        alpha1 = otb::CONST_PI + vcl_atan(a1);
+        }
+      }
 
     // We do the same for image 2
     currentPoint2[2] = localElevation;
@@ -417,47 +463,79 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     epiPoint1[2] = localElevation + m_ElevationOffset;
     endLine2 = m_LeftToRightTransform->TransformPoint(epiPoint1);
 
-    a2 = (endLine2[1] - startLine2[1]) / (endLine2[0] - startLine2[0]);
+    // Compute angle in right image
+    double alpha2 = 0;
+    if (endLine2[0] == startLine2[0])
+      {
+      if (endLine2[1] > startLine2[1])
+        {
+        alpha2 = 0.5*otb::CONST_PI;
+        }
+      else
+        {
+        alpha2 = -0.5*otb::CONST_PI;
+        }
+      }
+    else
+      {
+      a2 = (endLine2[1] - startLine2[1]) / (endLine2[0] - startLine2[0]);
+      if (endLine2[0] > startLine2[0])
+        {
+        alpha2 = vcl_atan(a1);
+        }
+      else
+        {
+        alpha2 = otb::CONST_PI + vcl_atan(a1);
+        }
+      }
 
     // 4 - Determine position of next points
 
     // We want to move m_Scale pixels away in the epipolar line of the
     // first image
-    // TODO: Take into account height direction ?
-    double alpha1 = otb::CONST_PI - vcl_atan(a1);
-    double deltax1 =  m_Scale * m_GridStep * m_LeftImage->GetSpacing()[0] * vcl_cos(alpha1);
-    double deltay1 = -m_Scale * m_GridStep * m_LeftImage->GetSpacing()[1] * vcl_sin(alpha1);
+    // Take into account height direction 
+    //double alpha1 = otb::CONST_PI - vcl_atan(a1);
+    double deltax1 =  m_Scale * m_GridStep * mean_spacing * vcl_cos(alpha1);
+    double deltay1 =  m_Scale * m_GridStep * mean_spacing * vcl_sin(alpha1);
 
-    // Before moving currentPoint1, we will store its image by the
-    // left to right transform at the m_AverageElevation, to compute
-    // the equivalent displacement in right image
-
-    currentPoint1[2] = localElevation;
-    startLine2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
+//     // Before moving currentPoint1, we will store its image by the
+//     // left to right transform at the m_AverageElevation, to compute
+//     // the equivalent displacement in right image
+// 
+//     currentPoint1[2] = localElevation;
+//     startLine2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
 
     // Now we move currentPoint1
     currentPoint1[0]+=deltax1;
     currentPoint1[1]+=deltay1;
+    if(m_UseDEM)
+      {
+      RSTransform2DType::InputPointType tmpPoint;
+      tmpPoint[0] = currentPoint1[0];
+      tmpPoint[1] = currentPoint1[1];
+      localElevation = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
+      }
     currentPoint1[2] = localElevation;
 
     // And we compute the equivalent displacement in right image
-    endLine2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
+    currentPoint2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
+    
 
-    double iscale = vcl_sqrt((endLine2[0]-startLine2[0])*(endLine2[0]-startLine2[0])
-                             +
-                             (endLine2[1]-startLine2[1])*(endLine2[1]-startLine2[1]));
-
-    // Now, we compute the displacement in right image. The iscale
-    // factor already account for m_GridStep and scale, no need to use
-    // them again
-    double alpha2 = otb::CONST_PI - vcl_atan(a2);
-    double deltax2 =   iscale * vcl_cos(alpha2);
-    double deltay2 = - iscale * vcl_sin(alpha2);
-
-    // We can now move currentPoint2
-    currentPoint2[0] += deltax2;
-    currentPoint2[1] += deltay2;
-    currentPoint2[2] =  localElevation;
+//     double iscale = vcl_sqrt((endLine2[0]-startLine2[0])*(endLine2[0]-startLine2[0])
+//                              +
+//                              (endLine2[1]-startLine2[1])*(endLine2[1]-startLine2[1]));
+// 
+//     // Now, we compute the displacement in right image. The iscale
+//     // factor already account for m_GridStep and scale, no need to use
+//     // them again
+//     //double alpha2 = otb::CONST_PI - vcl_atan(a2);
+//     double deltax2 = iscale * vcl_cos(alpha2);
+//     double deltay2 = iscale * vcl_sin(alpha2);
+// 
+//     // We can now move currentPoint2
+//     currentPoint2[0] += deltax2;
+//     currentPoint2[1] += deltay2;
+//     currentPoint2[2] =  localElevation;
 
     // 5 - Finally, we have to handle a special case for beginning of
     // line, since at this position we are able to compute the
@@ -466,13 +544,21 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
       {
       // We want to move 1 pixel away in the direction orthogonal to
       // epipolar line
-      double nextdeltax1 = m_Scale * m_LeftImage->GetSpacing()[0] * m_GridStep * vcl_sin(alpha1);
-      double nextdeltay1 = m_Scale * m_LeftImage->GetSpacing()[1] *m_GridStep * vcl_cos(alpha1);
+      double nextdeltax1 = -m_Scale * mean_spacing * m_GridStep * vcl_sin(alpha1);
+      double nextdeltay1 = m_Scale * mean_spacing * m_GridStep * vcl_cos(alpha1);
 
       // We can then update nextLineStart1
       nextLineStart1[0] = currentPoint1[0] - deltax1 + nextdeltax1;
       nextLineStart1[1] = currentPoint1[1] - deltay1 + nextdeltay1;
       nextLineStart1[2] = localElevation;
+      if(m_UseDEM)
+        {
+        RSTransform2DType::InputPointType tmpPoint;
+        tmpPoint[0] = nextLineStart1[0];
+        tmpPoint[1] = nextLineStart1[1];
+        nextLineStart1[2] = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
+        }
+      
 
       // By construction, nextLineStart2 is always the image of
       // nextLineStart1 by the left to right transform at the m_AverageElevation
