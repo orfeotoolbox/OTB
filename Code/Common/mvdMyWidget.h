@@ -24,6 +24,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -41,6 +45,10 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
 //
 // External classes pre-declaration.
 namespace
@@ -56,13 +64,22 @@ namespace Ui
 class MyWidget;
 };
 
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
 /**
  * \class MyWidget
  */
 class Monteverdi2_EXPORT MyWidget :
     public QWidget
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public methods.
@@ -74,9 +91,13 @@ public:
   /** Destructor */
   virtual ~MyWidget();
 
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
 //
-// SIGNALS.
+// Signals.
 signals:
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
@@ -90,6 +111,8 @@ protected:
 // Private methods.
 private:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
 //
 // Private attributes.
 private:
@@ -98,8 +121,10 @@ private:
    */
   Ui::MyWidget* m_UI;
 
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+
 //
-// SLOTS.
+// Slots.
 private slots:
 };
 

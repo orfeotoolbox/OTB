@@ -24,6 +24,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -41,6 +45,10 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
 //
 // External classes pre-declaration.
 namespace
@@ -52,12 +60,19 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
 /**
  * \class MyClass
  */
 class Monteverdi2_EXPORT MyClass :
     public QObject
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
 
 //
@@ -70,9 +85,13 @@ public:
   /** Destructor */
   virtual ~MyClass();
 
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
 //
-// SIGNALS.
+// Signals.
 signals:
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
@@ -81,6 +100,8 @@ protected:
 //
 // Protected attributes.
 protected:
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private methods.
@@ -91,8 +112,10 @@ private:
 // Private attributes.
 private:
 
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+
 //
-// SLOTS.
+// Slots.
 private slots:
 };
 
