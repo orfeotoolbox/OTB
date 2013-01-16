@@ -37,6 +37,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAboutDialog.h"
 #include "mvdApplication.h"
+#include "mvdColorDynamicsWidget.h"
 #include "mvdColorSetupWidget.h"
 #include "mvdGLImageWidget.h"
 #include "mvdVectorImageModel.h"
@@ -111,35 +112,50 @@ MainWindow
 void
 MainWindow::InitializeDockWidgets()
 {
-  // New dock.
-  QDockWidget* videoColorSetupDock =
-    new QDockWidget( tr( "Video color setup" ), this );
-
-  // Setup dock.
-  // You can use findChild( "videoColorSetupDock" ) to get dock-widget.
-  videoColorSetupDock->setObjectName( VIDEO_COLOR_SETUP_DOCK );
-  videoColorSetupDock->setWidget(
-    new ColorSetupWidget( videoColorSetupDock )
+  AddWidgetToDock( 
+    new ColorSetupWidget( this ),
+    VIDEO_COLOR_SETUP_DOCK,
+    tr( "Video color setup" ),
+    Qt::LeftDockWidgetArea
   );
-  videoColorSetupDock->setFloating( true );
-  videoColorSetupDock->setFeatures(
+
+  AddWidgetToDock( 
+    new ColorDynamicsWidget( this ),
+    VIDEO_COLOR_DYNAMICS_DOCK,
+    tr( "Video color dynamics" ),
+    Qt::LeftDockWidgetArea
+  );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::AddWidgetToDock( QWidget* widget,
+		   const QString& dockName,
+		   const QString& dockTitle,
+		   Qt::DockWidgetArea dockArea )
+{
+  // New dock.
+  QDockWidget* dockWidget = new QDockWidget( dockTitle, this );
+
+  // You can use findChild( dockName ) to get dock-widget.
+  dockWidget->setObjectName( dockName );
+  dockWidget->setWidget( widget );
+
+  qDebug() << dockWidget;
+  qDebug() << widget;
+  qDebug() << widget->parent();
+  qDebug();
+
+  // Features.
+  dockWidget->setFloating( true );
+  dockWidget->setFeatures(
     QDockWidget::DockWidgetMovable |
     QDockWidget::DockWidgetFloatable
   );
 
-  /*
-  // Update OpenGL view when color-setup has changed.
-  QObject::connect(
-    videoColorSetupDock->widget(),
-    SIGNAL( currentIndexChanged( ColorSetupWidget::Channel, int  ) ),
-    // to:
-    centralWidget(),
-    SLOT( updateGL()  )
-  );
-  */
-
   // Add dock.
-  addDockWidget( Qt::LeftDockWidgetArea, videoColorSetupDock );
+  addDockWidget( dockArea, dockWidget );
 }
 
 /*****************************************************************************/

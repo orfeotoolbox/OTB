@@ -45,12 +45,14 @@
 
 //
 // Some constants.
+#define VIDEO_COLOR_DYNAMICS_DOCK "videoColorDynamicsDock"
 #define VIDEO_COLOR_SETUP_DOCK "videoColorSetupDock"
 
 //
 // External class pre-declaration.
 namespace
 {
+
 }
 
 namespace mvd
@@ -72,6 +74,8 @@ class Monteverdi2_EXPORT MainWindow
 {
   Q_OBJECT;
 
+/*****************************************************************************/
+
 //
 // Public types.
 public:
@@ -85,10 +89,14 @@ public:
   /** Destructor */
   virtual ~MainWindow();
 
+/*****************************************************************************/
+
 //
 // SIGNALS.
 signals:
   void largestPossibleRegionChanged(const ImageRegionType& largestRegion);
+
+/*****************************************************************************/
 
 //
 // Protected methods.
@@ -98,6 +106,8 @@ protected:
 // Protected attributes.
 protected:
 
+/*****************************************************************************/
+
 //
 // Private SLOTS.
 private:
@@ -106,6 +116,12 @@ private:
 
   /** */
   void InitializeDockWidgets();
+
+  /** */
+  void AddWidgetToDock( QWidget* widget,
+			const QString& dockName,
+			const QString& dockTitle,
+			Qt::DockWidgetArea dockArea );
 
   /** */
   inline
@@ -122,6 +138,8 @@ private:
   {
     return findChild< QDockWidget* >( VIDEO_COLOR_SETUP_DOCK );
   }
+
+/*****************************************************************************/
 
 //
 // Private methods.
