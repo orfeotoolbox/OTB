@@ -88,8 +88,7 @@ SetParameterDescription("out", "Output image containing the local statistic feat
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
 SetDocExampleParameterValue("channel", "1");
-SetDocExampleParameterValue("parameters.spethre", "50.0");
-SetDocExampleParameterValue("parameters.spathre", "100");
+SetDocExampleParameterValue("radius", "3");
 SetDocExampleParameterValue("out", "Statistics.tif");
 }
 

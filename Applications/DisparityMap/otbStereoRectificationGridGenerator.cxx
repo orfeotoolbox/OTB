@@ -195,7 +195,7 @@ private:
     SetDocExampleParameterValue("io.inright","wv2_xs_left.tif");
     SetDocExampleParameterValue("io.outleft","wv2_xs_left_epi_field.tif");
     SetDocExampleParameterValue("io.outright","wv2_xs_right_epi_field.tif");
-    SetDocExampleParameterValue("epi.elevation.avg.value","400");
+    SetDocExampleParameterValue("epi.elevation.avgdem.value","400");
   }
 
   void DoUpdateParameters()

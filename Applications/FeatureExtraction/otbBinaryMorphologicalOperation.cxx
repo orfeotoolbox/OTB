@@ -151,7 +151,8 @@ SetDefaultParameterFloat("filter.closing.foreval", 1.0);
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
 SetDocExampleParameterValue("out", "opened.tif");
 SetDocExampleParameterValue("channel", "1");
-SetDocExampleParameterValue("radius", "5");
+SetDocExampleParameterValue("structype.ball.xradius", "5");
+SetDocExampleParameterValue("structype.ball.yradius", "5");
 SetDocExampleParameterValue("filter", "erode");
 }
 
