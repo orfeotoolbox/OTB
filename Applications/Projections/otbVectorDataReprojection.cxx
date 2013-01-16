@@ -102,7 +102,7 @@ private:
     SetParameterDescription("out.proj.image.in", "Projection map will be found using image metadata");
     AddChoice("out.proj.user", "User defined projection");
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "out.proj.user.map");
-    
+
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
@@ -120,8 +120,8 @@ private:
 
   void DoExecute()
   {
-    GetLogger()->Debug("Entering DoExecute");
-    
+    GetLogger()->Debug("Entering DoExecute\n");
+
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 

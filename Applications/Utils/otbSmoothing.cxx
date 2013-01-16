@@ -75,27 +75,27 @@ private:
 
     AddParameter(ParameterType_Choice,      "type", "Smoothing Type");
     SetParameterDescription("type", "Smoothing kernel to apply");
-    
+
     AddChoice("type.mean",     "Mean");
-    
+
     AddParameter(ParameterType_Radius, "type.mean.radius", "Radius");
     SetParameterDescription("type.mean.radius", "Mean radius (in pixels)");
     SetDefaultParameterInt("type.mean.radius", 2);
 
     AddChoice("type.gaussian", "Gaussian");
-    
+
     AddParameter(ParameterType_Radius, "type.gaussian.radius", "Radius");
     SetParameterDescription("type.gaussian.radius", "Gaussian radius (in pixels)");
     SetDefaultParameterInt("type.gaussian.radius", 2);
 
     AddChoice("type.anidif",   "Anisotropic Diffusion");
-    
+
     AddParameter(ParameterType_Float,  "type.anidif.timestep", "Time Step");
     SetParameterDescription("type.anidif.timestep", "Diffusion equation time step");
-    
+
     AddParameter(ParameterType_Int,  "type.anidif.nbiter", "Nb Iterations");
     SetParameterDescription("type.anidif.nbiter", "Number of iterations");
-    
+
     SetDefaultParameterFloat("type.anidif.timestep",   0.125);
     SetDefaultParameterInt("type.anidif.nbiter",     10);
 
@@ -122,7 +122,7 @@ private:
 
   void DoExecute()
   {
-    GetLogger()->Debug("Entering DoExecute");
+    GetLogger()->Debug("Entering DoExecute\n");
 
 
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

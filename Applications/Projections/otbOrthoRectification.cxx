@@ -540,7 +540,7 @@ private:
 
   void DoExecute()
     {
-    GetLogger()->Debug("Entering DoExecute");
+    GetLogger()->Debug("Entering DoExecute\n");
 
     // Get the input image
     FloatVectorImageType* inImage = GetParameterImage("io.in");
