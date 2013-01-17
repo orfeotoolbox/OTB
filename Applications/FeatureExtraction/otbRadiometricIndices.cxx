@@ -189,8 +189,8 @@ private:
         Water:NDWI - Normalized difference water index (Gao 1996)\
         Water:NDWI2 - Normalized difference water index (Mc Feeters 1996)\
         Water:MNDWI - Modified normalized difference water index (Xu 2006)\
-        Water:NDPI - Normalized difference pond index (Lacaux & al)\
-        Water:NDTI - Normalized difference turbidity index (Lacaux & al)\
+        Water:NDPI - Normalized difference pond index (Lacaux et al.)\
+        Water:NDTI - Normalized difference turbidity index (Lacaux et al.)\
         Water:SRWI - Simple ratio water index\
         Soil:RI - Redness index\
         Soil:CI - Color index\
