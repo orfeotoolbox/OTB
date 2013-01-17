@@ -110,7 +110,8 @@ MainWindow
 
 /*****************************************************************************/
 void
-MainWindow::InitializeDockWidgets()
+MainWindow
+::InitializeDockWidgets()
 {
   AddWidgetToDock( 
     new ColorSetupWidget( this ),
@@ -125,6 +126,23 @@ MainWindow::InitializeDockWidgets()
     tr( "Video color dynamics" ),
     Qt::LeftDockWidgetArea
   );
+
+#if 0
+
+  QToolBox* toolBox = new QToolBox( this );
+
+  toolBox->setObjectName( "mvd::VideoColorToolBox" );
+
+  toolBox->addItem( new ColorSetupWidget( toolBox ), tr( "Video color setup" ) );
+  toolBox->addItem( new ColorDynamicsWidget( toolBox ), tr( "Video color dynamics" ) );
+
+  AddWidgetToDock( 
+    toolBox,
+    "videoColorSettingsDock",
+    tr( "Video color dynamics" ),
+    Qt::LeftDockWidgetArea
+  );
+#endif
 }
 
 /*****************************************************************************/
