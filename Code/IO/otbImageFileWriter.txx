@@ -369,6 +369,115 @@ ImageFileWriter<TInputImage>
     return;
     }
 
+  /** Parse streaming modes */
+  if(m_FilenameHelper->StreamingTypeIsSet())
+    {
+    itkWarningMacro(<<"Streaming configuration through extented filename is used. Any previous streaming configuration (ram value, streaming mode ...) will be ignored.");
+
+    std::string type = m_FilenameHelper->GetStreamingType();
+
+    std::string sizemode = "auto";
+
+    if(m_FilenameHelper->StreamingSizeModeIsSet())
+      {
+      sizemode = m_FilenameHelper->GetStreamingSizeMode();
+      }
+
+    double sizevalue = 0.;
+
+    if(m_FilenameHelper->StreamingSizeValueIsSet())
+      {
+      sizevalue = m_FilenameHelper->GetStreamingSizeValue();
+      }
+
+    if(type == "auto")
+      {
+      if(sizemode != "auto")
+        {
+        itkWarningMacro(<<"In auto streaming type, the sizemode option will be ignored.");
+        }
+      if(sizevalue == 0.)
+        {
+        itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
+        }
+      this->SetAutomaticAdaptativeStreaming(sizevalue);
+      }
+    else if(type == "tiled")
+      {
+      if(sizemode == "auto")
+        {
+        if(sizevalue == 0.)
+          {
+          itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
+          }
+        this->SetAutomaticTiledStreaming(sizevalue);
+        }
+      else if(sizemode == "nbsplits")
+        {
+        if(sizevalue == 0.)
+          {
+          itkWarningMacro("Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
+          }
+        this->SetNumberOfDivisionsTiledStreaming(static_cast<unsigned int>(sizevalue));
+        }
+      else if(sizemode == "height")
+        {
+        if(sizevalue == 0.)
+          {
+          itkWarningMacro("Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
+          }
+        
+        this->SetTileDimensionTiledStreaming(static_cast<unsigned int>(sizevalue));
+        }
+      }
+    else if(type == "stripped")
+      {
+      if(sizemode == "auto")
+        {
+        if(sizevalue == 0.)
+          {
+          itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
+          }
+
+        this->SetAutomaticStrippedStreaming(sizevalue);
+        }
+      else if(sizemode == "nbsplits")
+        {
+        if(sizevalue == 0.)
+          {
+          itkWarningMacro("Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
+          }
+        this->SetNumberOfDivisionsStrippedStreaming(static_cast<unsigned int>(sizevalue));
+        }
+      else if(sizemode == "height")
+        {
+        if(sizevalue == 0.)
+          {
+          itkWarningMacro("Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
+          }
+        this->SetNumberOfLinesStrippedStreaming(static_cast<unsigned int>(sizevalue));
+        }
+
+      }
+    else if (type == "none")
+      {
+      if(sizemode!="" || sizevalue!=0.)
+        {
+        itkWarningMacro("Streaming is explicitly disabled, sizemode and sizevalue will be ignored.");
+        }
+      this->SetNumberOfDivisionsTiledStreaming(0);
+      }
+    }
+  else
+    {
+    if(m_FilenameHelper->StreamingSizeValueIsSet() || m_FilenameHelper->StreamingSizeModeIsSet())
+      {
+      itkWarningMacro(<<"No streaming type is set, streaming sizemode and sizevalue will be ignored.");
+      }
+    }
+
+
+
   /**
    * Prepare all the outputs. This may deallocate previous bulk data.
    */
