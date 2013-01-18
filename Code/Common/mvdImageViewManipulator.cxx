@@ -161,9 +161,11 @@ ImageViewManipulator
 ::wheelEvent(  QWheelEvent * event)
 {
   // Compute the new scale
-  double scaleRatio = 1.25;
-  int nbsteps = (int)(event->delta()/8./15.);
-  double scale = vcl_pow(scaleRatio, nbsteps);
+  double scaleRatio = 2;
+  double numDegrees = event->delta() / 8.;
+  int    nbSteps    = static_cast<int>(numDegrees / 15.);
+
+  double scale = vcl_pow(scaleRatio, nbSteps);
 
   // rescale the viewport region
   this->Zoom(scale);
