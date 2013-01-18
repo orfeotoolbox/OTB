@@ -236,7 +236,7 @@ ImageRegionAdaptativeSplitter<VImageDimension>
   os<<indent<<"ImageRegion: "<<m_ImageRegion<<std::endl;
   os<<indent<<"Tile hint: "<<m_TileHint<<std::endl;
   os<<indent<<"Requested number of splits: "<<m_RequestedNumberOfSplits<<std::endl;
-  os<<indent<<"Acutal number of splits: "<<m_StreamVector.size()<<std::endl;
+  os<<indent<<"Actual number of splits: "<<m_StreamVector.size()<<std::endl;
 }
 
 } // end namespace itk
