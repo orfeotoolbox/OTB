@@ -53,11 +53,16 @@ public:
 
   /** The writer option structure. */
   typedef GDALImageIO::GDALCreationOptionsType      GDALCOType;
+
+
   struct OptionType
   {
     std::pair< bool, std::string  >              simpleFileName;
     std::pair< bool, bool  >                     writeGEOMFile;
     std::pair< bool, GDALCOType >                gdalCreationOptions;
+    std::pair<bool,  std::string>                streamingType;
+    std::pair<bool,  std::string>                streamingSizeMode;
+    std::pair<bool,  double>                     streamingSizeValue;
     std::vector<std::string>                     optionList;
   };
 
@@ -70,6 +75,12 @@ public:
   bool GetWriteGEOMFile () const;
   bool gdalCreationOptionsIsSet () const;
   GDALCOType GetgdalCreationOptions () const;
+  bool StreamingTypeIsSet () const;
+  std::string GetStreamingType() const;
+  bool StreamingSizeModeIsSet() const;
+  std::string GetStreamingSizeMode() const;
+  bool StreamingSizeValueIsSet() const;
+  double GetStreamingSizeValue() const;
 
 protected:
   ExtendedFilenameToWriterOptions();

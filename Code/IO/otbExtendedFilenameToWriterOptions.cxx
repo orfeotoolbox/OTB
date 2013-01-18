@@ -32,9 +32,15 @@ ExtendedFilenameToWriterOptions
   m_Options.writeGEOMFile.first  = false;
   m_Options.writeGEOMFile.second = true;
 
-  m_Options.gdalCreationOptions.first  = false;
+  m_Options.gdalCreationOptions.first = false;
+  m_Options.streamingType.first       = false;
+  m_Options.streamingSizeMode.first   = false;
+  m_Options.streamingSizeValue.first  = false;
 
   m_Options.optionList.push_back("writegeom");
+  m_Options.optionList.push_back("streaming:type");
+  m_Options.optionList.push_back("streaming:sizemode");
+  m_Options.optionList.push_back("streaming:sizevalue");
 }
 
 void
@@ -42,6 +48,7 @@ ExtendedFilenameToWriterOptions
 ::SetExtendedFileName(const char *extFname)
 {
   this->m_FilenameHelper->SetExtendedFileName(extFname);
+  // TODO: Rename map to a less confusing (with std::map) name
   MapType map = this->m_FilenameHelper->GetOptionMap();
 
   m_Options.simpleFileName.first  = true;
@@ -52,6 +59,7 @@ ExtendedFilenameToWriterOptions
     {
     std::vector<std::string> tmp;
     boost::split(tmp, it->first, boost::is_any_of(":"), boost::token_compress_on);
+
     if (tmp.size()>2)
       if ((tmp[0]=="gdal") && (tmp[1]=="co"))
         {
@@ -73,6 +81,43 @@ ExtendedFilenameToWriterOptions
        m_Options.writeGEOMFile.second = false;
        }
      }
+  
+  if(!map["streaming:type"].empty())
+    {
+    if(map["streaming:type"] == "auto"
+       || map["streaming:type"] == "tiled"
+       || map["streaming:type"] == "stripped"
+       || map["streaming:type"] == "none")
+      {
+      m_Options.streamingType.first=true;
+      m_Options.streamingType.second = map["streaming:type"];
+      }
+    else
+      {
+      itkWarningMacro("Unkwown value "<<map["streaming:type"]<<" for streaming:type option. Available values are auto,tiled,stripped.");
+      }
+    }
+
+  if(!map["streaming:sizemode"].empty())
+    {
+    if(map["streaming:sizemode"] == "auto"
+       || map["streaming:sizemode"] == "nbsplits"
+       || map["streaming:sizemode"] == "height")
+      {
+      m_Options.streamingSizeMode.first=true;
+      m_Options.streamingSizeMode.second = map["streaming:sizemode"];
+      }
+    else
+      {
+      itkWarningMacro("Unkwown value "<<map["streaming:sizemode"]<<" for streaming:sizemode option. Available values are auto,nbsplits,height.");
+      }
+    }
+
+  if(!map["streaming:sizevalue"].empty())
+    {
+    m_Options.streamingSizeValue.first=true;
+    m_Options.streamingSizeValue.second = atof(map["streaming:sizevalue"].c_str());
+    }
 
   //Option Checking
   for ( it=map.begin(); it != map.end(); it++ )
@@ -139,5 +184,50 @@ ExtendedFilenameToWriterOptions
 {
   return m_Options.gdalCreationOptions.second;
 }
+
+bool
+ExtendedFilenameToWriterOptions
+::StreamingTypeIsSet() const
+{
+  return m_Options.streamingType.first;
+}
+
+bool
+ExtendedFilenameToWriterOptions
+::StreamingSizeModeIsSet() const
+{
+  return m_Options.streamingSizeMode.first;
+}
+
+bool
+ExtendedFilenameToWriterOptions
+::StreamingSizeValueIsSet() const
+{
+  return m_Options.streamingSizeValue.first;
+}
+
+std::string
+ExtendedFilenameToWriterOptions
+::GetStreamingType() const
+{
+  return m_Options.streamingType.second;
+}
+
+std::string
+ExtendedFilenameToWriterOptions
+::GetStreamingSizeMode() const
+{
+  return m_Options.streamingSizeMode.second;
+}
+
+double
+ExtendedFilenameToWriterOptions
+::GetStreamingSizeValue() const
+{
+  return m_Options.streamingSizeValue.second;
+}
+
+
+
 
 } // end namespace otb
