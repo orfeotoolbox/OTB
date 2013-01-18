@@ -42,9 +42,9 @@ namespace
 {
 
 const char* QCOMBOBOX_NAMES[ /* ColorSetupWidget::CHANNEL_COUNT */ ] = {
-  "m_RedComboBox",
-  "m_GreenComboBox",
-  "m_BlueComboBox"
+  "redComboBox",
+  "greenComboBox",
+  "blueComboBox"
 };
 
 }
@@ -64,21 +64,6 @@ ColorSetupWidget
   m_UI( new mvd::Ui::ColorSetupWidget() )
 {
   m_UI->setupUi( this );
-
-  QObject::connect(
-    m_UI->m_RedComboBox, SIGNAL( currentIndexChanged( int ) ),
-    this, SLOT( onRedIndexChanged( int ) )
-  );
-
-  QObject::connect(
-    m_UI->m_GreenComboBox, SIGNAL( currentIndexChanged( int ) ),
-    this, SLOT( onGreenIndexChanged( int ) )
-  );
-
-  QObject::connect(
-    m_UI->m_BlueComboBox, SIGNAL( currentIndexChanged( int ) ),
-    this, SLOT( onBlueIndexChanged( int ) )
-  );
 }
 
 /*******************************************************************************/
@@ -94,9 +79,9 @@ ColorSetupWidget
 {
   m_Components = components;
 
-  m_UI->m_RedComboBox->clear();
-  m_UI->m_GreenComboBox->clear();
-  m_UI->m_BlueComboBox->clear();
+  m_UI->redComboBox->clear();
+  m_UI->greenComboBox->clear();
+  m_UI->blueComboBox->clear();
 
   QStringList itemTexts( components );
 
@@ -114,41 +99,14 @@ ColorSetupWidget
       }
     }
 
-  m_UI->m_RedComboBox->addItems( itemTexts );
-  m_UI->m_GreenComboBox->addItems( itemTexts );
-  m_UI->m_BlueComboBox->addItems( itemTexts );
-
-  /*
-  switch( components.size() )
-    {
-    case 0:
-      // No components should not be met but in case...
-      // ...disable all (RGB) video channels.
-      m_UI->m_RedComboBox->setCurrentIndex( 0 );
-      m_UI->m_GreenComboBox->setCurrentIndex( 0 );
-      m_UI->m_BlueComboBox->setCurrentIndex( 0 );
-      break;
-
-    case 1:
-    case 2:
-      m_UI->m_RedComboBox->setCurrentIndex( 1 );
-      m_UI->m_GreenComboBox->setCurrentIndex( 1 );
-      m_UI->m_BlueComboBox->setCurrentIndex( 1 );
-      break;
-
-    default:
-      // TODO: Choose indices depending on component name.
-      m_UI->m_RedComboBox->setCurrentIndex( 1 );
-      m_UI->m_GreenComboBox->setCurrentIndex( 2 );
-      m_UI->m_BlueComboBox->setCurrentIndex( 3 );
-      break;
-    }
-  */
+  m_UI->redComboBox->addItems( itemTexts );
+  m_UI->greenComboBox->addItems( itemTexts );
+  m_UI->blueComboBox->addItems( itemTexts );
 
   // Black screen.
-  m_UI->m_RedComboBox->setCurrentIndex( 0 );
-  m_UI->m_GreenComboBox->setCurrentIndex( 0 );
-  m_UI->m_BlueComboBox->setCurrentIndex( 0 );
+  m_UI->redComboBox->setCurrentIndex( 0 );
+  m_UI->greenComboBox->setCurrentIndex( 0 );
+  m_UI->blueComboBox->setCurrentIndex( 0 );
 }
 
 /*******************************************************************************/

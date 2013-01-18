@@ -128,6 +128,9 @@ private:
 private slots:
 };
 
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
 } // end namespace 'mvd'
 
 #endif // __mvdMyWidget_h

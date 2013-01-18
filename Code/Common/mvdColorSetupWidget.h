@@ -67,7 +67,7 @@ class Monteverdi2_EXPORT ColorSetupWidget :
   /**
    * The (user) component-name list.
    */
-  Q_PROPERTY( QStringList m_Components
+  Q_PROPERTY( QStringList components
 	      READ GetComponents
 	      WRITE SetComponents );
 
@@ -202,7 +202,7 @@ private slots:
    */
   inline
     void
-    onRedIndexChanged( int index )
+    on_redComboBox_currentIndexChanged( int index )
   {
     emit currentIndexChanged( CHANNEL_RED, index );
   }
@@ -213,11 +213,10 @@ private slots:
    */
   inline
     void
-    onGreenIndexChanged( int index )
+    on_greenComboBox_currentIndexChanged( int index )
   {
     emit currentIndexChanged( CHANNEL_GREEN, index );
   }
-
 
   /**
    * Slot called when the curernt-index of the blue video-channel has
@@ -225,7 +224,7 @@ private slots:
    */
   inline
     void
-    onBlueIndexChanged( int index )
+    on_blueComboBox_currentIndexChanged( int index )
   {
     emit currentIndexChanged( CHANNEL_BLUE, index );
   }

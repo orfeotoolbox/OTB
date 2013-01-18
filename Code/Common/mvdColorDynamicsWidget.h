@@ -24,6 +24,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -41,6 +45,10 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
 //
 // External classes pre-declaration.
 namespace
@@ -56,13 +64,64 @@ namespace Ui
 class ColorDynamicsWidget;
 };
 
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
 /**
  * \class ColorDynamicsWidget
  */
 class Monteverdi2_EXPORT ColorDynamicsWidget :
     public QWidget
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+#if 0
+  /** */
+  Q_PROPERTY( double lowIntensity
+	      READ GetLowIntensity
+	      WRITE SetLowIntensity );
+
+  /** */
+  Q_PROPERTY( double highIntensity
+	      READ GetHighIntensity
+	      WRITE SetHighIntensity );
+
+  /** */
+  Q_PROPERTY( double minIntensity
+	      READ GetMinIntensity
+	      WRITE SetMinIntensity );
+
+  /** */
+  Q_PROPERTY( double maxIntensity
+	      READ GetMinIntensity
+	      WRITE SetMinIntensity );
+
+  /** */
+  Q_PROPERTY( double lowQuantile
+	      READ GetLowQuantile
+	      WRITE SetLowQuantile );
+
+  /** */
+  Q_PROPERTY( double highQuantile
+	      READ GetHighQuantile
+	      WRITE SetHighQuantile );
+
+  /** */
+  Q_PROPERTY( double minQuantile
+	      READ GetMinQuantile
+	      WRITE SetMinQuantile );
+
+  /** */
+  Q_PROPERTY( double maxQuantile
+	      READ GetMinQuantile
+	      WRITE SetMinQuantile );
+#endif
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public methods.
@@ -74,9 +133,13 @@ public:
   /** Destructor */
   virtual ~ColorDynamicsWidget();
 
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
 //
-// SIGNALS.
+// Signals.
 signals:
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
@@ -85,6 +148,8 @@ protected:
 //
 // Protected attributes.
 protected:
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private methods.
@@ -98,10 +163,55 @@ private:
    */
   Ui::ColorDynamicsWidget* m_UI;
 
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+
 //
-// SLOTS.
+// Slots.
 private slots:
+  inline void on_lowIntensitySpinBox_valueChanged( double );
+  inline void on_highIntensitySpinBox_valueChanged( double );
+
+  void on_lowQuantileSpinBox_valueChanged( double );
+  void on_highQuantileSpinBox_valueChanged( double );
+
+  void on_minMaxButton_clicked();
+  void on_defaultsButton_clicked();
 };
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+/*****************************************************************************/
+inline
+void
+ColorDynamicsWidget
+::on_lowIntensitySpinBox_valueChanged( double value )
+{
+}
+
+/*****************************************************************************/
+inline
+void
+ColorDynamicsWidget
+::on_highIntensitySpinBox_valueChanged( double value )
+{
+}
+
+/*****************************************************************************/
+inline
+void
+ColorDynamicsWidget
+::on_minMaxButton_clicked()
+{
+}
+
+/*****************************************************************************/
+inline
+void
+ColorDynamicsWidget
+::on_defaultsButton_clicked()
+{
+}
 
 } // end namespace 'mvd'
 

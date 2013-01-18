@@ -25,6 +25,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdColorSetupWidget.h"
@@ -46,6 +50,10 @@
 // OTB includes (sorted by alphabetic order)
 #include "otbRenderingImageFilter.h"
 
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
 //
 // External classes pre-declaration.
 namespace
@@ -57,13 +65,22 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
 /** \class VectorImageModel
  *
  */
 class Monteverdi2_EXPORT VectorImageModel :
     public AbstractImageModel
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public types.
@@ -175,28 +192,16 @@ public:
   virtual ~VectorImageModel();
 
   /**
-   * TEMPORARY!
+   * TEMPORARY?
    */
   // TODO: Remove getter onto internal type when interface is designed.
-  inline
-    DefaultImageType*
-    GetOutput( int index )
-  {
-    return m_ImageFileReader->GetOutput( index );
-  }
+  inline DefaultImageType* GetOutput( int index );
 
   /**
-   * TEMPORARY!
+   * TEMPORARY?
    */
   // TODO: Remove getter onto internal type when interface is designed.
-  inline
-    const DefaultImageType*
-    GetOutput( int index ) const
-  {
-    //return const_cast< VectorImageModel* >( this )->GetOutput( index
-    //);
-    return m_ImageFileReader->GetOutput( index );
-  }
+  inline const DefaultImageType* GetOutput( int index ) const;
 
   /**
    */
@@ -204,12 +209,7 @@ public:
 
   /**
    */
-  inline
-    const Settings&
-    GetSettings() const
-  {
-    return m_Settings;
-  }
+  inline const Settings& GetSettings() const;
 
   /**
    */
@@ -218,8 +218,10 @@ public:
   /** Rasterize the buffered region in a buffer */
   unsigned char * RasterizeRegion(const ImageRegionType& region);
 
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+
 //
-// Public SLOTS.
+// Public slots.
 public slots:
   /**
    */
@@ -227,12 +229,16 @@ public slots:
   // VectorImageModel and move slot.
   void onCurrentIndexChanged( ColorSetupWidget::Channel channel, int index );
 
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
 //
-// SIGNALS.
+// Signals.
 signals:
   /**
    */
   void settingsUpdated();
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
@@ -244,6 +250,8 @@ protected:
 //
 // Protected attributes.
 protected:
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private types.
@@ -279,26 +287,17 @@ private:
   /** */
   inline
     DefaultImageType::ImageMetadataInterfacePointerType
-    GetMetadataInterface() const
-  {
-    assert( m_ImageFileReader->GetNumberOfOutputs()==1 );
-
-    itk::MetaDataDictionary dictionary(
-      m_ImageFileReader->GetOutput( 0 )->GetMetaDataDictionary()
-    );
-
-    return otb::ImageMetadataInterfaceFactory::CreateIMI( dictionary );
-  }
+    GetMetadataInterface() const;
 
   /** Compute the linear buffer index according to the 2D region and
   * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
   * \param index 2D index
   * \param region 2D region
   */
-  static inline unsigned int ComputeBufferIndex(const IndexType& index, const ImageRegionType& region)
-  {
-    return (index[1] - region.GetIndex()[1]) * 3 * region.GetSize()[0] + 3 * (index[0] - region.GetIndex()[0]);
-  }
+  static inline
+    unsigned int
+    ComputeBufferIndex(const IndexType& index,
+		       const ImageRegionType& region);
 
   /** Compute the linear buffer index according to the 2D region and
    * its 2D index.This method is used when OTB_GL_USE_ACCEL is OFF.
@@ -306,28 +305,20 @@ private:
    * \param index 2D index
    * \param region 2D region
    */
-  static inline unsigned int ComputeXAxisFlippedBufferIndex(const IndexType& index, const ImageRegionType& region)
-  {
-    return (region.GetSize()[1] - 1 + region.GetIndex()[1] -
-            index[1]) * 3 * region.GetSize()[0] + 3 * (index[0] - region.GetIndex()[0]);
-  }
+  static inline
+    unsigned int
+    ComputeXAxisFlippedBufferIndex(const IndexType& index,
+				   const ImageRegionType& region);
 
   /** Compute the image index according to a linear buffer index and its
    * 2D region
    * \param index 2D index
    * \param region 2D region
    */
-  static inline IndexType
-    ComputeImageIndexFromFlippedBuffer(const unsigned int & index, const ImageRegionType& region)
-  {
-    IndexType imageIndex;
-    imageIndex[0] =  ( index % region.GetSize(0) ) + region.GetIndex()[0];
-
-    imageIndex[1] =  region.GetSize()[1] - 1 + region.GetIndex()[1]
-      - static_cast<unsigned int>(vcl_floor( static_cast<double>(index) / static_cast<double>(region.GetSize(0) )));
-
-    return imageIndex;
-  }
+  static inline
+    IndexType
+    ComputeImageIndexFromFlippedBuffer(const unsigned int & index,
+				       const ImageRegionType& region);
 
   /** Dump pixels within the region in argument of the method into the
   * m_RasterizedBuffer (used for OpenGl rendering)
@@ -373,10 +364,98 @@ private:
   // Vector storing the region to load
   std::vector< ImageRegionType >       m_RegionsToLoadVector;
 
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+
 //
-// SLOTS.
+// Slots.
 private slots:
 };
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+/*****************************************************************************/
+inline
+DefaultImageType*
+VectorImageModel
+::GetOutput( int index )
+{
+  return m_ImageFileReader->GetOutput( index );
+}
+
+/*****************************************************************************/
+inline
+const DefaultImageType*
+VectorImageModel
+::GetOutput( int index ) const
+{
+  //return const_cast< VectorImageModel* >( this )->GetOutput( index
+  //);
+  return m_ImageFileReader->GetOutput( index );
+}
+
+/*****************************************************************************/
+inline
+const VectorImageModel::Settings&
+VectorImageModel
+::GetSettings() const
+{
+  return m_Settings;
+}
+
+/*****************************************************************************/
+inline
+DefaultImageType::ImageMetadataInterfacePointerType
+VectorImageModel
+::GetMetadataInterface() const
+{
+  assert( m_ImageFileReader->GetNumberOfOutputs()==1 );
+
+  itk::MetaDataDictionary dictionary(
+    m_ImageFileReader->GetOutput( 0 )->GetMetaDataDictionary()
+  );
+
+  return otb::ImageMetadataInterfaceFactory::CreateIMI( dictionary );
+}
+
+/*****************************************************************************/
+inline
+unsigned int
+VectorImageModel
+::ComputeBufferIndex(const IndexType& index,
+		     const ImageRegionType& region)
+{
+  return (index[1] - region.GetIndex()[1]) * 3 * region.GetSize()[0] + 3 * (index[0] - region.GetIndex()[0]);
+}
+
+/*****************************************************************************/
+inline
+unsigned int
+VectorImageModel
+::ComputeXAxisFlippedBufferIndex(const IndexType& index,
+				 const ImageRegionType& region)
+{
+  return (region.GetSize()[1] - 1 + region.GetIndex()[1] -
+	  index[1]) * 3 * region.GetSize()[0] + 3 * (index[0] - region.GetIndex()[0]);
+}
+
+/*****************************************************************************/
+inline
+IndexType
+VectorImageModel
+::ComputeImageIndexFromFlippedBuffer(const unsigned int & index,
+				     const ImageRegionType& region)
+{
+  IndexType imageIndex;
+  imageIndex[0] =  ( index % region.GetSize(0) ) + region.GetIndex()[0];
+
+  imageIndex[1] =  region.GetSize()[1] - 1 + region.GetIndex()[1]
+    - static_cast<unsigned int>(vcl_floor( static_cast<double>(index) / static_cast<double>(region.GetSize(0) )));
+
+  return imageIndex;
+}
+
+/*****************************************************************************/
 
 } // end namespace 'mvd'
 

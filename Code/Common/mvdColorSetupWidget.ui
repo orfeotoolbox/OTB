@@ -20,7 +20,7 @@
    <item row="0" column="1">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="1">
-      <widget class="QLabel" name="m_FileComponentLabel">
+      <widget class="QLabel" name="fileComponentLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -38,7 +38,7 @@
         <enum>QLayout::SetMinimumSize</enum>
        </property>
        <item>
-        <widget class="QLabel" name="m_RedLabel">
+        <widget class="QLabel" name="redLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -54,7 +54,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="m_RLabel">
+        <widget class="QLabel" name="rLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -67,7 +67,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_5">
+        <widget class="QLabel" name="rLeftArrow">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -82,7 +82,7 @@
       </layout>
      </item>
      <item row="1" column="1">
-      <widget class="QComboBox" name="m_RedComboBox">
+      <widget class="QComboBox" name="redComboBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -112,7 +112,7 @@
         <enum>QLayout::SetMinimumSize</enum>
        </property>
        <item>
-        <widget class="QLabel" name="m_GreenLabel">
+        <widget class="QLabel" name="greenLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -128,7 +128,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="m_GLabel">
+        <widget class="QLabel" name="gLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -141,7 +141,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_6">
+        <widget class="QLabel" name="greenLeftArrow">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -156,7 +156,7 @@
       </layout>
      </item>
      <item row="2" column="1">
-      <widget class="QComboBox" name="m_GreenComboBox">
+      <widget class="QComboBox" name="greenComboBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -186,7 +186,7 @@
         <enum>QLayout::SetMinimumSize</enum>
        </property>
        <item>
-        <widget class="QLabel" name="m_BlueLabel">
+        <widget class="QLabel" name="blueLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -202,7 +202,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="m_BLabel">
+        <widget class="QLabel" name="bLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -215,7 +215,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_7">
+        <widget class="QLabel" name="rLeftArrow_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -230,7 +230,7 @@
       </layout>
      </item>
      <item row="3" column="1">
-      <widget class="QComboBox" name="m_BlueComboBox">
+      <widget class="QComboBox" name="blueComboBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
          <horstretch>0</horstretch>

@@ -75,6 +75,8 @@ class Monteverdi2_EXPORT MyClass :
 
   Q_OBJECT;
 
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+
 //
 // Public methods.
 public:
@@ -118,6 +120,9 @@ private:
 // Slots.
 private slots:
 };
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
 
 } // end namespace 'mvd'
 
