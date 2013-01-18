@@ -62,12 +62,11 @@ void OutputImageParameter::InitializeWriters()
 #define otbClampAndWriteImageMacro(InputImageType, OutputImageType, writer)         \
   {                                                                                 \
     typedef otb::ClampImageFilter<InputImageType, OutputImageType> ClampFilterType; \
-    typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();          \
+    typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         \
     clampFilter->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) );   \
     writer->SetFileName( this->GetFileName() );                                     \
     writer->SetInput(clampFilter->GetOutput());                                     \
-    writer->WriteGeomFileOn();                                                      \
-    writer->SetAutomaticTiledStreaming(m_RAMValue);                                 \
+    writer->SetAutomaticAdaptativeStreaming(m_RAMValue);                            \
     writer->Update();                                                               \
   }
 
@@ -78,8 +77,7 @@ void OutputImageParameter::InitializeWriters()
     clampFilter->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) );         \
     writer->SetFileName(this->GetFileName() );                                            \
     writer->SetInput(clampFilter->GetOutput());                                           \
-    writer->WriteGeomFileOn();                                                            \
-    writer->SetAutomaticTiledStreaming(m_RAMValue);                                       \
+    writer->SetAutomaticAdaptativeStreaming(m_RAMValue);                                  \
     writer->Update();                                                                     \
   }
 
@@ -183,7 +181,7 @@ OutputImageParameter::SwitchRGBAImageWrite()
     m_RGBAUInt8Writer->SetFileName( this->GetFileName() );
     m_RGBAUInt8Writer->SetInput(dynamic_cast<UInt8RGBAImageType*>(m_Image.GetPointer()) );
     m_RGBAUInt8Writer->WriteGeomFileOn();
-    m_RGBAUInt8Writer->SetAutomaticTiledStreaming(m_RAMValue);
+    m_RGBAUInt8Writer->SetAutomaticAdaptativeStreaming(m_RAMValue);
     m_RGBAUInt8Writer->Update();
     }
    else
@@ -199,7 +197,7 @@ OutputImageParameter::SwitchRGBImageWrite()
     m_RGBUInt8Writer->SetFileName( this->GetFileName() );
     m_RGBUInt8Writer->SetInput(dynamic_cast<UInt8RGBImageType*>(m_Image.GetPointer()) );
     m_RGBUInt8Writer->WriteGeomFileOn();
-    m_RGBUInt8Writer->SetAutomaticTiledStreaming(m_RAMValue);
+    m_RGBUInt8Writer->SetAutomaticAdaptativeStreaming(m_RAMValue);
     m_RGBUInt8Writer->Update();
     }
    else
