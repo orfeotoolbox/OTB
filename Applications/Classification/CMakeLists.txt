@@ -30,6 +30,6 @@ OTB_CREATE_APPLICATION(NAME           ComputeConfusionMatrix
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
 
 
-OTB_CREATE_APPLICATION(NAME           ClassificationRegularisationMajorityVoting
-                       SOURCES        otbClassificationRegularisationMajorityVoting.cxx
+OTB_CREATE_APPLICATION(NAME           ClassificationMapRegularization
+                       SOURCES        otbClassificationMapRegularization.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)

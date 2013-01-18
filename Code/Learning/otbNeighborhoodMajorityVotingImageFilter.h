@@ -25,7 +25,8 @@
 
 #include "itkMorphologyImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
  * \class NeighborhoodMajorityVotingImageFilter
@@ -34,6 +35,13 @@ namespace otb {
  * Filters a labeled image using Majority Voting in a specified neighbordhood. Majority Voting takes the
  * more representative value of all the pixels identified by the structuring element and then sets the
  * center pixel to this label value.
+ * 
+ * If the maximum number of votes is not unique, i.e., if more than one label have a maximum number of
+ * votes, AND if the Boolean m_KeepOriginalLabelBool == false, then an "Undecided" label is assigned to that output pixel.
+ * Otherwise, if m_KeepOriginalLabelBool == true, this output pixel keeps its Original value.
+ * 
+ * NOT classified input pixels are assumed to belong to the m_LabelForNoDataPixels labeled class.
+ * Those pixels keep their Original m_LabelForNoDataPixels label in the output image.
  *
  * The structuring element is assumed to be composed of binary
  * values (zero or one). Only elements of the structuring element
@@ -113,23 +121,23 @@ public:
 #endif
 
 
-  //Creates a SetNoDataValue method
-  virtual void SetNoDataValue(const PixelType _arg)
+  //Creates a SetLabelForNoDataPixels method
+  virtual void SetLabelForNoDataPixels(const PixelType _arg)
   {
-         itkDebugMacro("setting NoDataValue to " << _arg);
-         if (this->m_NoDataValue != _arg)
-              {
-              this->m_NoDataValue = _arg;
+   itkDebugMacro("setting LabelForNoDataPixels to " << _arg);
+   if (this->m_LabelForNoDataPixels != _arg)
+   {
+     this->m_LabelForNoDataPixels = _arg;
 
-              m_MajorityVotingBoundaryCondition.SetConstant(m_NoDataValue);
-              this->OverrideBoundaryCondition(&m_MajorityVotingBoundaryCondition);
+     m_MajorityVotingBoundaryCondition.SetConstant(m_LabelForNoDataPixels);
+     this->OverrideBoundaryCondition(&m_MajorityVotingBoundaryCondition);
 
-              this->Modified();
-              }
+     this->Modified();
+   }
   }
 
-  //Creates a SetUndefinedValue method
-  itkSetMacro(UndefinedValue, PixelType);
+  //Creates a SetLabelForUndecidedPixels method
+  itkSetMacro(LabelForUndecidedPixels, PixelType);
   
   //Creates a SetKeepOriginalLabelBool method
   itkSetMacro(KeepOriginalLabelBool, bool);
@@ -158,8 +166,8 @@ private:
   // Default boundary condition for majority voting filter, defaults to
   DefaultBoundaryConditionType m_MajorityVotingBoundaryCondition;
 
-  PixelType m_NoDataValue;
-  PixelType m_UndefinedValue;
+  PixelType m_LabelForNoDataPixels;
+  PixelType m_LabelForUndecidedPixels;
   bool m_KeepOriginalLabelBool;
 
 }; // end of class

@@ -28,11 +28,11 @@ namespace otb
 namespace Wrapper
 {
 
-class ClassificationRegularisationMajorityVoting : public Application
+class ClassificationMapRegularization : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef ClassificationRegularisationMajorityVoting            Self;
+  typedef ClassificationMapRegularization            Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -40,7 +40,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(ClassificationRegularisationMajorityVoting, otb::Application);
+  itkTypeMacro(ClassificationMapRegularization, otb::Application);
 
   /** Filters typedef */
   typedef unsigned char InputLabelPixelType;
@@ -61,13 +61,15 @@ public:
 private:
   void DoInit()
   {
-    SetName("ClassificationRegularisationMajorityVoting");
+    SetName("ClassificationMapRegularization");
     SetDescription("Filters the input labeled image using Majority Voting in a Ball shaped neighbordhood.");
-    SetDocName("Regularisation of a labeled image by Majority Voting");
-    SetDocLongDescription("This application filters the input labeled image using Majority Voting in a Ball shaped neighbordhood. Majority Voting takes the more representative value of all the pixels identified by the Ball shaped structuring element and then sets the center pixel to this majority label value.\n-'NoDataValue' is the label of the NOT classified pixels of the input image. These input pixels keep their 'NoDataValue' label in the output image.\n-If the 'UnDefinedValue if multiple majority labels' option is chosen, then 'UnDefinedValue' is the label of the output pixels, for which there are NOT unique majority labels. Otherwise, these output label pixels keep their Original values in the input image.");
-    SetDocLimitations("The input image must be a single band labeled image. Both radii along Ox and Oy must have a minimum value equal to 1.");
+    SetDocName("Classification Map Regularization");
+    SetDocLongDescription("This application filters the input labeled image using Majority Voting in a Ball shaped neighbordhood. Majority Voting takes the more representative value of all the pixels identified by the Ball shaped structuring element and then sets the center pixel to this majority label value.\n\
+    -NoData is the label of the NOT classified pixels in the input image. These input pixels keep their NoData label in the output image.\n\
+    -Pixels with more than 1 majority class are marked as Undecided if the parameter 'ip.suvbool == true', or keep their Original labels otherwise.");
+    SetDocLimitations("The input image must be a single band labeled image. Both structuring element X and Y radii must have a minimum value equal to 1. Please note that the Undecided value must be different from existing labels in the input labeled image.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Documentation of the ClassificationRegularisationMajorityVoting application.");
+    SetDocSeeAlso("Documentation of the ClassificationMapRegularization application.");
 
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Analysis);
@@ -75,32 +77,38 @@ private:
 
     /** GROUP IO CLASSIFICATION */
     AddParameter(ParameterType_Group,"io","Input and output images");
-    SetParameterDescription("io","This group of parameters allows to set input and output images for Majority Voting regularisation.");
+    SetParameterDescription("io","This group of parameters allows to set input and output images for classification map regularization by Majority Voting.");
 
-    AddParameter(ParameterType_InputImage, "io.in",  "Input Image to REGULARIZE");
+    AddParameter(ParameterType_InputImage, "io.in",  "Input classification image");
     SetParameterDescription( "io.in", "The input labeled image to regularize.");
 
-    AddParameter(ParameterType_OutputImage, "io.out",  "Output REGULARIZED Image");
-    SetParameterDescription( "io.out", "Output regularized labeled image.");
+    AddParameter(ParameterType_OutputImage, "io.out",  "Output regularized image");
+    SetParameterDescription( "io.out", "The output regularized labeled image.");
     SetParameterOutputImagePixelType( "io.out", ImagePixelType_uint8);
 
 
-    AddParameter(ParameterType_Group,"ip","Input parameters");
-    SetParameterDescription("ip","This group of parameters allows to set input parameters for Majority Voting regularisation.");
+    AddParameter(ParameterType_Group,"ip","Regularization parameters");
+    SetParameterDescription("ip","This group allows to set parameters for classification map regularization by Majority Voting.");
 
-    AddParameter(ParameterType_Int, "ip.radiusx", "Radius along Ox");
+    AddParameter(ParameterType_Int, "ip.radiusx", "Structuring Element X Radius");
+    SetParameterDescription("ip.radiusx", "The Structuring Element X Radius.");
     SetDefaultParameterInt("ip.radiusx", 1.0);
 
-    AddParameter(ParameterType_Int, "ip.radiusy", "Radius along Oy");
+    AddParameter(ParameterType_Int, "ip.radiusy", "Structuring Element Y Radius");
+    SetParameterDescription("ip.radiusy", "The Structuring Element Y Radius.");
     SetDefaultParameterInt("ip.radiusy", 1.0);
 
-    AddParameter(ParameterType_Empty, "ip.suvbool", "UnDefinedValue if multiple majority labels");
+    AddParameter(ParameterType_Empty, "ip.suvbool", "Multiple majority: Undecided(X)/Original");
+    SetParameterDescription("ip.suvbool", "Pixels with more than 1 majority class are marked as Undecided if parameter is checked (true), or keep their Original labels otherwise (false). Please note that the Undecided value must be different from existing labels in the input labeled image.");
 
-    AddParameter(ParameterType_Int, "ip.nodatavalue", "Value of the NoDataValue input label");
-    SetDefaultParameterInt("ip.nodatavalue", 0.0);
+    AddParameter(ParameterType_Int, "ip.nodatalabel", "Label for the NoData class");
+    SetParameterDescription("ip.nodatalabel", "Label for the NoData class. Such input pixels keep their NoData label in the output image.");
+    SetDefaultParameterInt("ip.nodatalabel", 0.0);
 
-    AddParameter(ParameterType_Int, "ip.undefinedvalue", "Value of the UnDefinedValue output label");
-    SetDefaultParameterInt("ip.undefinedvalue", 0.0);
+    AddParameter(ParameterType_Int, "ip.undecidedlabel", "Label for the Undecided class");
+    SetParameterDescription("ip.undecidedlabel", "Label for the Undecided class.");
+    SetDefaultParameterInt("ip.undecidedlabel", 0.0);
+    
 
     AddRAMParameter();
 
@@ -110,8 +118,8 @@ private:
     SetDocExampleParameterValue("ip.radiusx", "2");
     SetDocExampleParameterValue("ip.radiusy", "5");
     SetDocExampleParameterValue("ip.suvbool", "true");
-    SetDocExampleParameterValue("ip.nodatavalue", "10");
-    SetDocExampleParameterValue("ip.undefinedvalue", "7");
+    SetDocExampleParameterValue("ip.nodatalabel", "10");
+    SetDocExampleParameterValue("ip.undecidedlabel", "7");
   }
 
   void DoUpdateParameters()
@@ -138,15 +146,15 @@ private:
     m_NeighMajVotingFilter->SetKernel(seBall);
     
     m_NeighMajVotingFilter->SetInput(inImage);
-    m_NeighMajVotingFilter->SetNoDataValue(GetParameterInt("ip.nodatavalue"));
-    m_NeighMajVotingFilter->SetUndefinedValue(GetParameterInt("ip.undefinedvalue"));
+    m_NeighMajVotingFilter->SetLabelForNoDataPixels(GetParameterInt("ip.nodatalabel"));
+    m_NeighMajVotingFilter->SetLabelForUndecidedPixels(GetParameterInt("ip.undecidedlabel"));
     
-    // Set to UnDefinedValue if NOT unique Majority Voting
+    // Set to Undecided label if NOT unique Majority Voting
     if (IsParameterEnabled("ip.suvbool"))
       {
       m_NeighMajVotingFilter->SetKeepOriginalLabelBool(false);
       }
-    // Keep original label value if NOT unique Majority Voting
+    // Keep Original label value if NOT unique Majority Voting
     else
       {
       m_NeighMajVotingFilter->SetKeepOriginalLabelBool(true);
@@ -159,10 +167,10 @@ private:
 
 
   NeighborhoodMajorityVotingFilterType::Pointer m_NeighMajVotingFilter;
-}; //END class ClassificationRegularisationMajorityVoting
+}; //END class ClassificationMapRegularization
 
 
 }//END namespace wrapper
 }//END namespace otb
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::ClassificationRegularisationMajorityVoting)
+OTB_APPLICATION_EXPORT(otb::Wrapper::ClassificationMapRegularization)

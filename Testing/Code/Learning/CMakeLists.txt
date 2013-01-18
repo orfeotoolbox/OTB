@@ -657,8 +657,8 @@ otbNeighborhoodMajorityVotingImageFilterTest
  false #KeepOriginalLabelBool
  2 #xRadius
  5 #yRadius
- 10 #NoDataValue
- 7 #UndefinedValue
+ 10 #LabelForNoDataPixels
+ 7 #LabelForUndecidedPixels
  )
 
 

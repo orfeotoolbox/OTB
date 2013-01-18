@@ -33,8 +33,8 @@ namespace otb
 template<class TInputImage, class TOutputImage, class TKernel>
 NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage, TKernel>::NeighborhoodMajorityVotingImageFilter()
 {
-  this->SetNoDataValue(itk::NumericTraits<PixelType>::NonpositiveMin()); //m_NoDataValue = 0
-  this->SetUndefinedValue(itk::NumericTraits<PixelType>::NonpositiveMin()); //m_UndefinedValue = 0
+  this->SetLabelForNoDataPixels(itk::NumericTraits<PixelType>::NonpositiveMin()); //m_LabelForNoDataPixels = 0
+  this->SetLabelForUndecidedPixels(itk::NumericTraits<PixelType>::NonpositiveMin()); //m_LabelForUndecidedPixels = 0
   this->SetKeepOriginalLabelBool(true); //m_KeepOriginalLabelBool = true
 }
 
@@ -56,7 +56,7 @@ const KernelIteratorType kernelEnd)
 
   PixelType centerPixel = nit.GetCenterPixel();
 
-  if (centerPixel != m_NoDataValue)
+  if (centerPixel != m_LabelForNoDataPixels)
   {
     for (i = 0, kernel_it = kernelBegin; kernel_it < kernelEnd; ++kernel_it, ++i)
     {
@@ -64,13 +64,13 @@ const KernelIteratorType kernelEnd)
       // in the image
 
       PixelType label = nit.GetPixel(i);
-      if ((*kernel_it > itk::NumericTraits<KernelPixelType>::Zero) && (label != m_NoDataValue))
+      if ((*kernel_it > itk::NumericTraits<KernelPixelType>::Zero) && (label != m_LabelForNoDataPixels))
       {
         // note we use GetPixel() on the SmartNeighborhoodIterator to
         // respect boundary conditions
 
         //If the current label has already been added to the histogram histoNeigh
-        if(histoNeigh.count(label) > 0)
+        if (histoNeigh.count(label) > 0)
         {
           histoNeigh[label]++;
         }
@@ -97,23 +97,23 @@ const KernelIteratorType kernelEnd)
     {
       if ( (histoIt->second == majorityFreq) && (histoIt->first != majorityLabel) )
       {
-         if(m_KeepOriginalLabelBool == true)
+         if (m_KeepOriginalLabelBool == true)
          {
            majorityLabel = centerPixel;
          }
          else
          {
-           majorityLabel = m_UndefinedValue;
+           majorityLabel = m_LabelForUndecidedPixels;
          }
          break;
       }
     }
-  }//END if (centerPixel != m_NoDataValue)
+  }//END if (centerPixel != m_LabelForNoDataPixels)
 
-  //If (centerPixel == m_NoDataValue)
+  //If (centerPixel == m_LabelForNoDataPixels)
   else
   {
-    majorityLabel = m_NoDataValue;
+    majorityLabel = m_LabelForNoDataPixels;
   }
 
   return majorityLabel;

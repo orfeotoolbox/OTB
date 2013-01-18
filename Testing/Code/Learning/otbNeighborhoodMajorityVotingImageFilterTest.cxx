@@ -68,39 +68,39 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
   BallStructuringType seBall;
   RadiusType rad;
   
-  if (argc >= 3)
+
+  std::string KeepOriginalLabelBoolStr = argv[3];
+  if (KeepOriginalLabelBoolStr.compare("true") == 0)
   {
-    std::string KeepOriginalLabelBoolStr = argv[3];
-    if (KeepOriginalLabelBoolStr.compare("true") == 0)
-    {
-      NeighMajVotingFilter->SetKeepOriginalLabelBool(true);
-    }
-    else
-    {
-      NeighMajVotingFilter->SetKeepOriginalLabelBool(false);
-    }
+    NeighMajVotingFilter->SetKeepOriginalLabelBool(true);
+  }
+  else
+  {
+    NeighMajVotingFilter->SetKeepOriginalLabelBool(false);
+  }
+  
+  
+  if (argc >= 5)
+  {
+    rad[0] = atoi(argv[4]);
+    rad[1] = atoi(argv[5]);
     
-    if (argc >= 5)
+    if (argc >= 6)
     {
-      rad[0] = atoi(argv[4]);
-      rad[1] = atoi(argv[5]);
+      NeighMajVotingFilter->SetLabelForNoDataPixels(atoi(argv[6]));
       
-      if (argc >= 6)
+      if (argc >= 7)
       {
-        NeighMajVotingFilter->SetNoDataValue(atoi(argv[6]));
-        
-        if (argc >= 7)
-        {
-          NeighMajVotingFilter->SetUndefinedValue(atoi(argv[7]));
-        }
+        NeighMajVotingFilter->SetLabelForUndecidedPixels(atoi(argv[7]));
       }
     }
-    else
-    {
-      rad[0] = 1;
-      rad[1] = 1;
-    }
   }
+  else
+  {
+    rad[0] = 1;
+    rad[1] = 1;
+  }
+
   
   seBall.SetRadius(rad);
   seBall.CreateStructuringElement();
