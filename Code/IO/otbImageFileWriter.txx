@@ -477,7 +477,6 @@ ImageFileWriter<TInputImage>
     }
 
 
-
   /**
    * Prepare all the outputs. This may deallocate previous bulk data.
    */
