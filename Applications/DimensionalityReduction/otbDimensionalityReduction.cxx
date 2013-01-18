@@ -92,7 +92,7 @@ private:
   {
     SetName("DimensionalityReduction");
     SetDescription("Perform Dimension reduction of the input image.");
-    SetDocName("Dimensionality reduction application");
+    SetDocName("Dimensionality reduction");
     SetDocLongDescription("Performs dimensionality reduction on input image. PCA,NA-PCA,MAF,ICA methods are available.");
     SetDocLimitations(
                       "Though the inverse transform can be computed, this application only provides the forward transform for now.");

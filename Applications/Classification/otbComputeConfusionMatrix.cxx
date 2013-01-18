@@ -63,7 +63,7 @@ private:
   SetDescription("Computes the confusion matrix of a classification");
 
   // Documentation
-  SetDocName("Compute Confusion Matrix Application");
+  SetDocName("Confusion matrix Computation");
   SetDocLongDescription("This application computes the confusion matrix of a classification  relatively to a ground truth. This ground truth can be given as a raster or a vector data.");
   SetDocLimitations("None");
   SetDocAuthors("OTB-Team");
