@@ -216,7 +216,7 @@ public:
   void LoadFile( const QString& filename );
 
   /** Rasterize the buffered region in a buffer */
-  unsigned char * RasterizeRegion(const ImageRegionType& region);
+  unsigned char * RasterizeRegion(const ImageRegionType& region, const double zoomFactor);
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -337,6 +337,23 @@ private:
   */
   void ComputeRegionsToLoad(const ImageRegionType& region);
 
+  /**
+   * Check wether this file is a valid jpeg2000 with overviews
+   */
+  bool IsJPEG2000File(std::string filepath);
+
+  // /**
+  //  * Following the zoom factor, get the current overview where to get
+  //  * the pixels to render
+  //  */
+  // unsigned int GetCurrentOverview();
+  
+  /**
+   * Following the zoom factor, get the best level of detail knowing
+   * the overviews size
+   */
+  bool GetBestLevelOfDetail(const ImageRegionType & region, const double ZoomFactor, int& lod);
+
 //
 // Private attributes.
 private:
@@ -366,6 +383,9 @@ private:
 
   // Vector storing the region to load
   std::vector< ImageRegionType >       m_RegionsToLoadVector;
+
+  // store the input image filename
+  std::string                          m_InputFilename;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

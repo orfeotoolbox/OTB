@@ -70,7 +70,7 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
 
   // the region of the image to render
   const ImageRegionType&    region = context.m_ImageRegion;
-  unsigned char* buffer = viModel->RasterizeRegion(region);
+  unsigned char* buffer = viModel->RasterizeRegion(region, context.m_IsotropicZoom);
   
   // if buffer not null do the rendering
   if (buffer != NULL)

@@ -27,9 +27,14 @@
 //
 // ITK includes (sorted by alphabetic order)
 #include "itkImageRegionConstIteratorWithIndex.h"
+#include "itksys/SystemTools.hxx"
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbConfigure.h"
+#if defined(OTB_USE_JPEG2000)
+# include "otbJPEG2000ImageIO.h"
+#endif
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -113,6 +118,9 @@ void
 VectorImageModel
 ::LoadFile( const QString& filename )
 {
+  // test if valid jpeg2k file
+  //if (!this->IsJPEG2000File( filename.toLatin1().data() ))
+
   //
   // 1. Setup file-reader.
   DefaultImageFileReaderType::Pointer imageFileReader(
@@ -164,6 +172,9 @@ VectorImageModel
     }
 
   m_Settings.SetRgbChannels( rgb );
+
+  // store the input filename
+  m_InputFilename = filename.toLatin1().data();
 }
 
 /*******************************************************************************/
@@ -179,9 +190,23 @@ VectorImageModel
 /*******************************************************************************/
 unsigned char *
 VectorImageModel
-::RasterizeRegion( const ImageRegionType& region)
+::RasterizeRegion( const ImageRegionType& region, const double zoomFactor)
 {
   m_Region = region;
+
+  // Get the best level of detail
+  int best_lod = 0;
+  if ( this->GetBestLevelOfDetail(region, zoomFactor, best_lod) )
+    {
+    std::ostringstream oss;
+    oss<<m_InputFilename<<"?&resol="<<best_lod;
+    m_ImageFileReader = DefaultImageFileReaderType::New();
+    m_ImageFileReader->SetFileName( oss.str() );
+    m_ImageFileReader->UpdateOutputInformation();
+    
+    std::cout <<"Requesting the file "<< oss.str() << std::endl;
+    }
+
   // Don't do anything if the region did not changed
   if ( m_PreviousRegion!=region ||
        m_Settings.IsDirty() )
@@ -191,13 +216,13 @@ VectorImageModel
     ImageRegionType  tempPreviousRegionRegion = m_PreviousRegion;
     bool res =  tempPreviousRegionRegion.Crop(region);
 
-    // if the first time or no pixels in common , reload all the
+    // if the first time or no pixels in common , reload all
     if ( res &&
 	 m_PreviousRegion!=ImageRegionType() &&
 	 !m_Settings.IsDirty() )
       {
       // Compute loaded region, and the four regions not
-      // Compute loaeded region, and region not loaded yet within the
+      // Compute loaded region, and region not loaded yet within the
       // new requested region
       this->ComputeRegionsToLoad(m_Region);
 
@@ -208,7 +233,7 @@ VectorImageModel
 
       std::memcpy(previousRasterizedBuffer, m_RasterizedBuffer, 3 * m_PreviousRegion.GetNumberOfPixels());
 
-      // Clear the previous buffer
+      // Clear the previous buffer 
       this->ClearBuffer();
 
       // Allocate new memory
@@ -402,6 +427,151 @@ size[0] = vcl_abs(static_cast<int>(region.GetSize()[0] + region.GetIndex()[0]
   // add the right region if any pixel
   if ( rightRegion.GetNumberOfPixels() > 0 )
     m_RegionsToLoadVector.push_back(rightRegion);
+}
+
+/*******************************************************************************/
+bool VectorImageModel::IsJPEG2000File(std::string filepath)
+{
+#if defined(OTB_USE_JPEG2000)
+  otb::JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
+
+  std::vector<unsigned int> res;
+
+  readerJPEG2000->SetFileName(filepath);
+  if (readerJPEG2000->CanReadFile(filepath.c_str()))
+    {
+    if ( readerJPEG2000->GetResolutionsCount() == 0 )
+      {
+      return false; // There are no resolution in this file
+      }
+    else
+      {
+      // print the resolutions count
+      std::cout <<"Resolution count : "<< readerJPEG2000->GetResolutionsCount() << std::endl;
+      
+      // print the size of each resolution
+      otb::JPEG2000ImageIO::SizeVectorType  resSizes;
+      if (readerJPEG2000->GetResolutionsSize(resSizes))
+        {
+        for (unsigned int idx = 0; idx < resSizes.size(); idx++)
+          {
+          std::cout <<"Resolution  : "<< resSizes[idx] << std::endl;
+          }
+        }
+      }
+    }
+  else
+    {
+    return false; // JPEG2000ImageIO cannot read this file
+    }
+
+  // for (std::vector<unsigned int>::iterator itRes = res.begin(); itRes < res.end(); itRes++)
+  //   {
+  //   std::string fname = itksys::SystemTools::GetFilenameWithoutExtension(filepath);
+  //   std::ostringstream oss;
+  //   oss << fname.c_str()  << "_res_"<< *itRes;
+  //   m_Names.push_back(oss.str());
+  //   }
+
+  return true;
+#else
+  return false;
+#endif
+}
+
+/*******************************************************************************/
+// //const DefaultImageType*
+// unsigned int
+// VectorImageModel::GetCurrentOverview()
+// {
+
+// }
+
+/*******************************************************************************/
+bool
+VectorImageModel::GetBestLevelOfDetail(const ImageRegionType & region, const double zoomFactor, int& lod)
+{
+  // Note : index 0 is the full resolution image
+  unsigned int  best_lod = 0;
+  unsigned int best_factor = 1;
+  int inverseZoomFactor =  static_cast<int>((1/zoomFactor + 0.5));
+    
+#if defined(OTB_USE_JPEG2000)
+  otb::JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
+
+  std::vector<unsigned int> res;
+
+  readerJPEG2000->SetFileName(m_InputFilename);
+  if (readerJPEG2000->CanReadFile(m_InputFilename.c_str()))
+    {
+    if ( readerJPEG2000->GetResolutionsCount() > 0 )
+      {
+      // print the size of each resolution
+      otb::JPEG2000ImageIO::SizeVectorType  resSizes;
+      if (readerJPEG2000->GetResolutionsSize(resSizes))
+        {
+        for (unsigned int idx = 0; idx < resSizes.size(); idx++)
+          {
+          double desired_factor  = 1 << idx;
+          if ( desired_factor == inverseZoomFactor )
+            {
+            lod = idx;
+            std::cout <<"invZoomFActor : " << inverseZoomFactor << std::endl;
+            std::cout <<"Region size  : "<< region.GetSize() << " -> resolution : "<< idx 
+                      << " with Size " << resSizes[idx]<< std::endl;//" factor "<< factor << std::endl;
+            
+            break;
+            }
+        }
+      return true;
+      }
+    }
+    }
+  else
+    {
+    return false;
+    }
+#endif
+
+    //std::cout <<"Best Level of Detail : "<< best_lod << std::endl;
+  
+  return false;
+
+
+  // // Get the resolution vector
+
+  
+  // int  ov_index;
+  // double best_factor = 1.0;
+  // double desired_factor = (1 << desired_lod);
+
+  // if( GDALHasArbitraryOverviews( band ) )
+  //   return desired_lod;
+
+  // for( ov_index = 0; ov_index < GDALGetOverviewCount( band ); ov_index++ )
+  //   {
+  //   GDALRasterBandH  oband = GDALGetOverview( band, ov_index );
+  //   double           ofactor;
+
+  //   ofactor = GDALGetRasterBandXSize( band ) / 
+  //     (double) GDALGetRasterBandXSize( oband );
+
+  //   /* We already found something better */
+  //   if( ofactor < best_factor )
+  //     continue;
+
+  //   /* We don't want to upsample by much! */
+  //   if( ofactor > desired_factor * 1.2 )
+  //     continue;
+
+  //   best_factor = ofactor;
+  //   }
+
+  // best_lod = 0;
+  // while( best_factor*0.8 > (1 << best_lod) )
+  //   best_lod++;
+
+  // return best_lod;
 }
 
 /*******************************************************************************/
