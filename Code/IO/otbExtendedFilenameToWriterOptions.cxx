@@ -228,5 +228,4 @@ ExtendedFilenameToWriterOptions
 }
 
 
-
 } // end namespace otb

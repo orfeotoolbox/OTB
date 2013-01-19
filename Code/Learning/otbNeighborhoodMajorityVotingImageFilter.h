@@ -35,11 +35,11 @@ namespace otb
  * Filters a labeled image using Majority Voting in a specified neighbordhood. Majority Voting takes the
  * more representative value of all the pixels identified by the structuring element and then sets the
  * center pixel to this label value.
- * 
+ *
  * If the maximum number of votes is not unique, i.e., if more than one label have a maximum number of
  * votes, AND if the Boolean m_KeepOriginalLabelBool == false, then an "Undecided" label is assigned to that output pixel.
  * Otherwise, if m_KeepOriginalLabelBool == true, this output pixel keeps its Original value.
- * 
+ *
  * NOT classified input pixels are assumed to belong to the m_LabelForNoDataPixels labeled class.
  * Those pixels keep their Original m_LabelForNoDataPixels label in the output image.
  *
