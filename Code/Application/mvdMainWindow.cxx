@@ -206,7 +206,8 @@ MainWindow
     {
     model->loadFile( filename );
 
-    qobject_cast< Application* >( qApp )->SetModel( model );
+    // qobject_cast< Application* >( qApp )->SetModel( model );
+    Application::Instance()->SetModel( model );
     }
   catch( std::exception& exc )
     {
@@ -233,7 +234,8 @@ void
 MainWindow
 ::onAboutToChangeSelectedModel( const AbstractModel* )
 {
-  Application* app = qobject_cast< Application* >( qApp );
+  // Application* app = qobject_cast< Application* >( qApp );
+  const Application* app = Application::ConstInstance();
 
   const VectorImageModel* vectorImageModel =
     qobject_cast< const VectorImageModel* >( app->GetModel() );

@@ -200,8 +200,10 @@ GLImageWidget
   const double isotropicZoom = m_ImageViewManipulator->GetIsotropicZoom();
 
   // Set the new rendering context to be known in the ModelRendere
-  const AbstractImageModel* aiModel=  qobject_cast< const AbstractImageModel* >(
-    qobject_cast< Application* >( qApp )->GetModel() );
+  const AbstractImageModel* aiModel =
+    qobject_cast< const AbstractImageModel* >(
+      // qobject_cast< Application* >( qApp )->GetModel() );
+      Application::ConstInstance()->GetModel() );
 
   // setup the rendering context
   if (aiModel)
