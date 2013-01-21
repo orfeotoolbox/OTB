@@ -881,6 +881,19 @@ ImageFileWriter<TInputImage>
 return this->m_FilenameHelper->GetSimpleFileName();
 }
 
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::GenerateOutputRequestedRegion(itk::DataObject *output)
+{
+  Superclass::GenerateOutputRequestedRegion(output);
+  
+  // Here we set the output requested region to the largest possible region
+  // This is a default behaviour that should work with most upstream filters
+  // This requested region will be modified anyway and repropagated during UpdateOutputData.
+  OutputImageType* imgOutput = dynamic_cast<OutputImageType*>(output);
+  imgOutput->SetRequestedRegionToLargestPossibleRegion();
+}
 
 } // end namespace otb
 

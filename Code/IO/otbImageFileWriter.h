@@ -233,6 +233,8 @@ protected:
   /** Does the real work. */
   virtual void GenerateData(void);
 
+  virtual void GenerateOutputRequestedRegion(itk::DataObject *output);
+
 
 private:
   ImageFileWriter(const ImageFileWriter &); //purposely not implemented
