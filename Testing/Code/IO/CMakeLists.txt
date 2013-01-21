@@ -3776,6 +3776,62 @@ ADD_TEST(ioTvImageFileWriterExtendedFileName_gdalco ${IO_TESTS24}
         ${INPUTDATA}/maur_rgb_24bpp.tif
         ${TEMP}/ioImageFileWriterExtendedFileName_gdalco.jpg?&gdal:co:QUALITY=20
         )
+
+ADD_TEST(ioTvImageFileWriterExtendedFileName_streamingNone ${IO_TESTS24}
+--compare-image ${NOTOL}
+         ${INPUTDATA}/maur_rgb_24bpp.tif
+         ${TEMP}/ioImageFileWriterExtendedFileName_streamingNone.tif
+  otbImageFileWriterWithExtendedFilename
+        ${INPUTDATA}/maur_rgb_24bpp.tif
+        ${TEMP}/ioImageFileWriterExtendedFileName_streamingNone.tif?&streaming:type=None)
+
+# Streaming extended options tests
+
+SET(streaming_sizevalue_auto "8")
+SET(streaming_sizevalue_nbsplits "10")
+SET(streaming_sizevalue_height "100")
+
+ADD_TEST(ioTvImageFileWriterExtendedFileName_StreamingNone ${IO_TESTS24}
+--compare-image ${NOTOL}
+         ${INPUTDATA}/maur_rgb_24bpp.tif
+         ${TEMP}/ioImageFileWriterExtendedFileName_streamingNone.tif
+  otbImageFileWriterWithExtendedFilename
+        ${INPUTDATA}/maur_rgb_24bpp.tif
+        ${TEMP}/ioImageFileWriterExtendedFileName_streamingNone.tif?&streaming:type=none)
+
+ADD_TEST(ioTvImageFileWriterExtendedFileName_StreamingAuto ${IO_TESTS24}
+--compare-image ${NOTOL}
+         ${INPUTDATA}/maur_rgb_24bpp.tif
+         ${TEMP}/ioImageFileWriterExtendedFileName_streamingAuto.tif
+  otbImageFileWriterWithExtendedFilename
+        ${INPUTDATA}/maur_rgb_24bpp.tif
+        ${TEMP}/ioImageFileWriterExtendedFileName_streamingAuto.tif?&streaming:type=auto&streaming:sizevalue=${streaming_sizevalue_auto})
+
+
+FOREACH(streaming_type "Tiled" "Stripped")
+
+FOREACH(streaming_sizemode "Auto" "Nbsplits" "Height")
+
+STRING(TOLOWER ${streaming_type} type)
+STRING(TOLOWER ${streaming_sizemode} sizemode)
+
+SET(test_name "ioTvImageFileWriterExtendedFileName_Streaming${streaming_type}${streaming_sizemode}")
+
+
+ADD_TEST(${test_name} ${IO_TESTS24}
+--compare-image ${NOTOL}
+         ${INPUTDATA}/maur_rgb_24bpp.tif
+         ${TEMP}/${test_name}.tif
+  otbImageFileWriterWithExtendedFilename
+        ${INPUTDATA}/maur_rgb_24bpp.tif
+        ${TEMP}/${test_name}.tif?&streaming:type=${type}&streaming:sizemode=${sizemode}&streaming:sizevalue=${streaming_sizevalue_${sizemode}})
+
+ENDFOREACH(streaming_sizemode)
+
+ENDFOREACH(streaming_type)
+
+
+
         
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
