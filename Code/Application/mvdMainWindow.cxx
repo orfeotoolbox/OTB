@@ -92,21 +92,21 @@ MainWindow
 
   // Connect the setLargestPossibleregion
   QObject::connect(
-    this, SIGNAL(largestPossibleRegionChanged(const ImageRegionType&)),
-    centralWidget(), SLOT( onLargestPossibleRegionChanged(const ImageRegionType&)) );
+    this, SIGNAL( LargestPossibleRegionChanged(const ImageRegionType&) ),
+    centralWidget(), SLOT( OnLargestPossibleRegionChanged(const ImageRegionType&)) );
 
   // Connect Appllication and MainWindow when selected model is about
   // to change.
   QObject::connect(
-    qApp, SIGNAL( aboutToChangeSelectedModel( const AbstractModel* ) ),
-    this, SLOT( onAboutToChangeSelectedModel( const AbstractModel* ) )
+    qApp, SIGNAL( AboutToChangeSelectedModel( const AbstractModel* ) ),
+    this, SLOT( OnAboutToChangeSelectedModel( const AbstractModel* ) )
   );
 
   // Connect Appllication and MainWindow when selected model has been
   // changed.
   QObject::connect(
-    qApp, SIGNAL( selectedModelChanged( const AbstractModel* ) ),
-    this, SLOT( onSelectedModelChanged( const AbstractModel* ) )
+    qApp, SIGNAL( SelectedModelChanged( const AbstractModel* ) ),
+    this, SLOT( OnSelectedModelChanged( const AbstractModel* ) )
   );
 }
 
@@ -251,7 +251,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::onAboutToChangeSelectedModel( const AbstractModel* )
+::OnAboutToChangeSelectedModel( const AbstractModel* )
 {
   const Application* app = Application::ConstInstance();
   assert( app!=NULL );
@@ -301,7 +301,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::onSelectedModelChanged( const AbstractModel* model )
+::OnSelectedModelChanged( const AbstractModel* model )
 {
   ColorSetupWidget* colorSetupWidget =
     qobject_cast< ColorSetupWidget*  >( GetColorSetupDock()->widget() );
@@ -358,7 +358,7 @@ MainWindow
   // TODO:  rename signal name when handling DataSets collections
   // TODO: move signal into mvdApplication and link it to DockWidget
   // and ImageView.
-  emit largestPossibleRegionChanged(
+  emit LargestPossibleRegionChanged(
     vectorImageModel->GetOutput( 0 )->GetLargestPossibleRegion()
   );
 }

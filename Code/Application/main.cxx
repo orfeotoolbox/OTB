@@ -43,9 +43,9 @@ int
 main( int argc, char* argv[] )
 {
   mvd::Application application( argc, argv );
-  mvd::MainWindow main_window;
+  mvd::MainWindow mainWindow;
 
-  main_window.show();
+  mainWindow.show();
   
   return application.exec();
 }

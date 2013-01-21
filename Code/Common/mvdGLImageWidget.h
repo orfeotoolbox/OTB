@@ -108,7 +108,7 @@ public:
 //
 // Public SLOTS.
 public slots:
-  void onLargestPossibleRegionChanged(const ImageRegionType& largestRegion);
+  void OnLargestPossibleRegionChanged(const ImageRegionType& largestRegion);
 
 //
 // SIGNALS.

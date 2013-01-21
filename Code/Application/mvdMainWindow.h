@@ -103,7 +103,7 @@ public:
 //
 // SIGNALS.
 signals:
-  void largestPossibleRegionChanged(const ImageRegionType& largestRegion);
+  void LargestPossibleRegionChanged(const ImageRegionType& largestRegion);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -157,12 +157,20 @@ private:
 //
 // Private attributes.
 private slots:
+  /** */
   void on_action_Open_activated();
+
+  /** */
   void on_action_About_activated();
 
-  void onAboutToChangeSelectedModel( const AbstractModel* );
-  void onSelectedModelChanged( const AbstractModel* );
+  /** */
+  void OnAboutToChangeSelectedModel( const AbstractModel* );
+
+  /** */
+  void OnSelectedModelChanged( const AbstractModel* );
 };
+
+} // end namespace 'mvd'
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
@@ -171,6 +179,9 @@ private slots:
 // Some constants.
 #define VIDEO_COLOR_DYNAMICS_DOCK "videoColorDynamicsDock"
 #define VIDEO_COLOR_SETUP_DOCK "videoColorSetupDock"
+
+namespace mvd
+{
 
 /*****************************************************************************/
 inline

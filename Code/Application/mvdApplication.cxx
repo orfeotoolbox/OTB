@@ -73,14 +73,14 @@ void
 Application
 ::SetModel( AbstractModel* model )
 {
-  emit aboutToChangeSelectedModel( model );
+  emit AboutToChangeSelectedModel( model );
 
   delete m_Model;
 
   m_Model = model;
   m_Model->setParent( this );
 
-  emit selectedModelChanged( m_Model );
+  emit SelectedModelChanged( m_Model );
 }
 
 /*******************************************************************************/
@@ -88,6 +88,8 @@ void
 Application
 ::InitializeCore()
 {
+  setObjectName( "Application" );
+
   //
   // Setup application tags.
   QCoreApplication::setApplicationName(

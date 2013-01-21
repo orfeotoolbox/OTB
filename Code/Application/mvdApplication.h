@@ -117,10 +117,11 @@ public:
 signals:
   /**
    */
-  void aboutToChangeSelectedModel( const AbstractModel* );
+  void AboutToChangeSelectedModel( const AbstractModel* );
+
   /**
    */
-  void selectedModelChanged( const AbstractModel* );
+  void SelectedModelChanged( const AbstractModel* );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -155,8 +156,8 @@ private:
 //
 // Slots
 private slots:
-  /**
-   */
+
+  /** */
   void OnAboutToQuit();
 };
 
