@@ -198,25 +198,6 @@ MainWindow
  
   // TODO: Replace with complex model (list of DatasetModel) when
   // implemented.
-#if 0
-  VectorImageModel* model = new VectorImageModel();
-
-  model->setObjectName( "mvd::VectorImageModel('" + filename + "')" );
-
-  // load file
-  try
-    {
-    model->loadFile( filename );
-    }
-  catch( std::exception& exc )
-    {
-    delete model;
-    model = NULL;
-
-    QMessageBox::warning( this, tr("Exception!"), exc.what() );
-    return;
-    }
-#else
   DatasetModel* model = new DatasetModel();
 
   model->setObjectName( "mvd::DatasetModel('" + filename + "'" );
@@ -233,7 +214,6 @@ MainWindow
     QMessageBox::warning( this, tr("Exception!"), exc.what() );
     return;
     }
-#endif
 
   Application::Instance()->SetModel( model );
 }
