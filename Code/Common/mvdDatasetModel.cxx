@@ -34,6 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdVectorImageModel.h"
 
 namespace mvd
 {
@@ -56,6 +57,41 @@ DatasetModel
 DatasetModel
 ::~DatasetModel()
 {
+}
+
+/*******************************************************************************/
+void
+DatasetModel
+::ImportImage( const QString& filename )
+{
+  // 1. Instanciate local image model.
+  VectorImageModel* vectorImageModel = new VectorImageModel();
+
+  vectorImageModel->setObjectName(
+    "mvd::VectorImageModel('" + filename + "')"
+  );
+
+  // 2. Safely load data from file.
+  try
+    {
+    // 2.1. Information.
+    vectorImageModel->loadFile( filename );
+
+    // 2.2. Generate cached data.
+    // TODO: generate image-model cached data (quicklook, histogram-list etc.)
+    }
+  catch( std::exception& exc )
+    {
+    // Release local memory allocation.
+    delete vectorImageModel;
+    vectorImageModel = NULL;
+
+    // Forward exception to upper level (GUI).
+    throw;
+    }
+
+  // If everything has gone well, parent image model to dataset model.
+  vectorImageModel->setParent( this );
 }
 
 /*******************************************************************************/

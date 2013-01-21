@@ -25,6 +25,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -43,6 +47,10 @@
 #include "mvdAbstractModel.h"
 #include "mvdTypes.h"
 
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
 //
 // External classes pre-declaration.
 namespace
@@ -53,6 +61,10 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class AbstractImageModel;
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
 
 /** \class DatasetModel
  *
@@ -60,7 +72,12 @@ namespace mvd
 class Monteverdi2_EXPORT DatasetModel :
     public AbstractModel
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public methods.
@@ -72,9 +89,25 @@ public:
   /** Destructor */
   virtual ~DatasetModel();
 
+  /** */
+  void ImportImage( const QString& filename );
+
+  /** */
+  inline bool HasSelectedImageModel() const;
+
+  /** */
+  inline const AbstractImageModel* GetSelectedImageModel() const;
+
+  /** */
+  inline AbstractImageModel* GetSelectedImageModel();
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
 //
-// SIGNALS.
+// Signals.
 signals:
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
@@ -84,19 +117,63 @@ protected:
 // Protected attributes.
 protected:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
 //
 // Private methods.
 private:
-
 
 //
 // Private attributes.
 private:
 
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+
 //
-// SLOTS.
+// Slots.
 private slots:
 };
+
+} // end namespace 'mvd'
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+//
+// Monteverdi deferred includes (sorted by alphabetic order)
+#include "mvdAbstractImageModel.h"
+
+namespace mvd
+{
+
+/*****************************************************************************/
+inline
+bool
+DatasetModel
+::HasSelectedImageModel() const
+{
+  return !findChildren< const AbstractImageModel* >().empty();
+}
+
+/*****************************************************************************/
+inline
+const AbstractImageModel*
+DatasetModel
+::GetSelectedImageModel() const
+{
+  return findChildren< const AbstractImageModel* >().first();
+}
+
+/*****************************************************************************/
+inline
+AbstractImageModel*
+DatasetModel
+::GetSelectedImageModel()
+{
+  return findChildren< AbstractImageModel* >().first();
+}
+
+/*****************************************************************************/
 
 } // end namespace 'mvd'
 

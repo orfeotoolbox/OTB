@@ -37,6 +37,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractImageModel.h"
 #include "mvdApplication.h"
+#include "mvdDatasetModel.h"
 #include "mvdImageModelRenderer.h"
 #include "mvdImageViewManipulator.h"
 
@@ -192,27 +193,33 @@ GLImageWidget
   glClear( GL_COLOR_BUFFER_BIT );
 
   // Get the region to draw from the ImageViewManipulator navigation
-  // context 
+  // context.
   const ImageRegionType region(
     m_ImageViewManipulator->GetViewportImageRegion() );
 
   // Get the zoom 
   const double isotropicZoom = m_ImageViewManipulator->GetIsotropicZoom();
 
-  // Set the new rendering context to be known in the ModelRendere
-  const AbstractImageModel* aiModel =
-    qobject_cast< const AbstractImageModel* >(
-      Application::ConstInstance()->GetModel() );
+  // Do not render if there is no model to render.
+  if( Application::ConstInstance()->GetModel()==NULL )
+    return;
 
-  // setup the rendering context
-  if (aiModel)
-    {
-    ImageModelRenderer::RenderingContext context(aiModel, region, isotropicZoom, 
-                                                 this->width(), this->height());
+  // Access dataset-model.
+  // TODO: Design better way to access model from GLImageWidget.
+  const DatasetModel* datasetModel =
+    qobject_cast< const DatasetModel* >(
+      Application::ConstInstance()->GetModel()
+    );
 
-    // use the model renderer to paint the requested region of the image
-    m_ImageModelRenderer->paintGL( context );
-    }
+  // Setup rendering context with image-model and redering information.
+  ImageModelRenderer::RenderingContext context(
+    datasetModel->GetSelectedImageModel(),
+    region, isotropicZoom, 
+    width(), height()
+  );
+
+    // use the model renderer to paint the requested region of the image.
+  m_ImageModelRenderer->paintGL( context );
 }
 
 /*******************************************************************************/

@@ -39,8 +39,10 @@
 #include "mvdApplication.h"
 #include "mvdColorDynamicsWidget.h"
 #include "mvdColorSetupWidget.h"
+#include "mvdDatasetModel.h"
 #include "mvdGLImageWidget.h"
 #include "mvdVectorImageModel.h"
+
 
 namespace mvd
 {
@@ -194,19 +196,17 @@ MainWindow
     return;
     }
  
-  // TODO: Replace with complex model (list of DatasetModel) when implemented.
+  // TODO: Replace with complex model (list of DatasetModel) when
+  // implemented.
+#if 0
   VectorImageModel* model = new VectorImageModel();
 
-  model->setObjectName(
-    "mvd::VectorImageModel('" + filename + "')"
-  );
+  model->setObjectName( "mvd::VectorImageModel('" + filename + "')" );
 
   // load file
   try
     {
     model->loadFile( filename );
-
-    Application::Instance()->SetModel( model );
     }
   catch( std::exception& exc )
     {
@@ -216,6 +216,26 @@ MainWindow
     QMessageBox::warning( this, tr("Exception!"), exc.what() );
     return;
     }
+#else
+  DatasetModel* model = new DatasetModel();
+
+  model->setObjectName( "mvd::DatasetModel('" + filename + "'" );
+
+  try
+    {
+    model->ImportImage( filename );
+    }
+  catch( std::exception& exc )
+    {
+    delete model;
+    model = NULL;
+
+    QMessageBox::warning( this, tr("Exception!"), exc.what() );
+    return;
+    }
+#endif
+
+  Application::Instance()->SetModel( model );
 }
 
 /*****************************************************************************/
@@ -234,14 +254,25 @@ MainWindow
 ::onAboutToChangeSelectedModel( const AbstractModel* )
 {
   const Application* app = Application::ConstInstance();
+  assert( app!=NULL );
 
-  const VectorImageModel* vectorImageModel =
-    qobject_cast< const VectorImageModel* >( app->GetModel() );
+  const DatasetModel* datasetModel = 
+    qobject_cast< const DatasetModel* >( app->GetModel() );
 
-  if( vectorImageModel==NULL )
+  if( datasetModel==NULL )
     {
     return;
     }
+
+  assert( datasetModel->HasSelectedImageModel() );
+
+  const VectorImageModel* vectorImageModel =
+    qobject_cast< const VectorImageModel* >(
+      datasetModel->GetSelectedImageModel()
+    );
+
+  assert( vectorImageModel!=NULL );
+
 
   // Disconnect previously selected model from view.
   QObject::disconnect(
@@ -254,11 +285,8 @@ MainWindow
 
 
   QWidget* widget = GetColorSetupDock()->widget();
+  assert( widget!=NULL );
 
-  if( widget==NULL )
-    {
-    return;
-    }
 
   // Disconnect previously selected model from UI controller.
   QObject::disconnect(
@@ -277,9 +305,21 @@ MainWindow
 {
   ColorSetupWidget* colorSetupWidget =
     qobject_cast< ColorSetupWidget*  >( GetColorSetupDock()->widget() );
+  assert( colorSetupWidget!=NULL );
+
+
+  const DatasetModel* datasetModel =
+    qobject_cast< const DatasetModel* >( model );
+
+  assert( datasetModel!=NULL );
+  assert( datasetModel->HasSelectedImageModel() );
 
   const VectorImageModel* vectorImageModel =
-    qobject_cast< const VectorImageModel* >( model );
+    qobject_cast< const VectorImageModel* >(
+      datasetModel->GetSelectedImageModel()
+    );
+
+  assert( vectorImageModel!=NULL );
 
   // Connect newly selected model to UI controller.
   QObject::connect(
@@ -302,8 +342,6 @@ MainWindow
   // Setup color-setup controller.
   colorSetupWidget->blockSignals( true );
   {
-  // qDebug() << vectorImageModel->GetBandNames();
-
   colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
 
   for( int i=0; i<ColorSetupWidget::CHANNEL_COUNT; ++i )
