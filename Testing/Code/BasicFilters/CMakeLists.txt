@@ -357,6 +357,20 @@ ADD_TEST(bfTvVectorImageToImageListFilterIt2 ${BASICFILTERS_TESTS3}
                     png
 )
 
+ADD_TEST(bfTuImageListToSingleImageFilterNew ${BASICFILTERS_TESTS3}
+         otbImageListToSingleImageFilterNew)
+
+ADD_TEST(bfTvImageListToSingleImageFilter ${BASICFILTERS_TESTS3}
+                    otbImageListToSingleImageFilter
+                    ${INPUTDATA}/poupees.png
+                    ${TEMP}/bfTvImageListToSingleImageFilter.tif
+)
+
+ADD_TEST(bfTvImageListToSingleImageFilterBig ${BASICFILTERS_TESTS3}
+                    otbImageListToSingleImageFilter
+                    ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+                    ${TEMP}/bfTvImageListToSingleImageFilter.tif
+)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2849,6 +2863,7 @@ otbVectorRescaleIntensityImageFilterNew.cxx
 otbVectorRescaleIntensityImageFilter.cxx
 otbVectorImageToImageListFilterNew.cxx
 otbVectorImageToImageListFilter.cxx
+otbImageListToSingleImageFilterTest.cxx
 otbShiftScaleVectorImageFilterNew.cxx
 otbShiftScaleVectorImageFilterTest.cxx
 )
