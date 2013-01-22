@@ -62,12 +62,12 @@ private:
   void DoInit()
   {
     SetName("ClassificationMapRegularization");
-    SetDescription("Filters the input labeled image using Majority Voting in a Ball shaped neighbordhood.");
+    SetDescription("Filters the input labeled image using Majority Voting in a ball shaped neighbordhood.");
     SetDocName("Classification Map Regularization");
-    SetDocLongDescription("This application filters the input labeled image using Majority Voting in a Ball shaped neighbordhood. Majority Voting takes the more representative value of all the pixels identified by the Ball shaped structuring element and then sets the center pixel to this majority label value.\n\
+    SetDocLongDescription("This application filters the input labeled image using Majority Voting in a ball shaped neighbordhood. Majority Voting takes the more representative value of all the pixels identified by the ball shaped structuring element and then sets the center pixel to this majority label value.\n\
     -NoData is the label of the NOT classified pixels in the input image. These input pixels keep their NoData label in the output image.\n\
     -Pixels with more than 1 majority class are marked as Undecided if the parameter 'ip.suvbool == true', or keep their Original labels otherwise.");
-    SetDocLimitations("The input image must be a single band labeled image. Both structuring element X and Y radii must have a minimum value equal to 1. Please note that the Undecided value must be different from existing labels in the input labeled image.");
+    SetDocLimitations("The input image must be a single band labeled image. The structuring element radius must have a minimum value equal to 1 pixel. Please note that the Undecided value must be different from existing labels in the input labeled image.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Documentation of the ClassificationMapRegularization application.");
 
@@ -90,33 +90,28 @@ private:
     AddParameter(ParameterType_Group,"ip","Regularization parameters");
     SetParameterDescription("ip","This group allows to set parameters for classification map regularization by Majority Voting.");
 
-    AddParameter(ParameterType_Int, "ip.radiusx", "Structuring Element X Radius");
-    SetParameterDescription("ip.radiusx", "The Structuring Element X Radius.");
-    SetDefaultParameterInt("ip.radiusx", 1.0);
-
-    AddParameter(ParameterType_Int, "ip.radiusy", "Structuring Element Y Radius");
-    SetParameterDescription("ip.radiusy", "The Structuring Element Y Radius.");
-    SetDefaultParameterInt("ip.radiusy", 1.0);
+    AddParameter(ParameterType_Int, "ip.radius", "Structuring element radius (in pixels)");
+    SetParameterDescription("ip.radius", "The radius of the ball shaped structuring element (expressed in pixels). By default, 'ip.radius = 1 pixel'.");
+    SetDefaultParameterInt("ip.radius", 1.0);
 
     AddParameter(ParameterType_Empty, "ip.suvbool", "Multiple majority: Undecided(X)/Original");
-    SetParameterDescription("ip.suvbool", "Pixels with more than 1 majority class are marked as Undecided if parameter is checked (true), or keep their Original labels otherwise (false). Please note that the Undecided value must be different from existing labels in the input labeled image.");
+    SetParameterDescription("ip.suvbool", "Pixels with more than 1 majority class are marked as Undecided if this parameter is checked (true), or keep their Original labels otherwise (false). Please note that the Undecided value must be different from existing labels in the input labeled image. By default, 'ip.suvbool = false'.");
 
     AddParameter(ParameterType_Int, "ip.nodatalabel", "Label for the NoData class");
-    SetParameterDescription("ip.nodatalabel", "Label for the NoData class. Such input pixels keep their NoData label in the output image.");
+    SetParameterDescription("ip.nodatalabel", "Label for the NoData class. Such input pixels keep their NoData label in the output image. By default, 'ip.nodatalabel = 0'.");
     SetDefaultParameterInt("ip.nodatalabel", 0.0);
 
     AddParameter(ParameterType_Int, "ip.undecidedlabel", "Label for the Undecided class");
-    SetParameterDescription("ip.undecidedlabel", "Label for the Undecided class.");
+    SetParameterDescription("ip.undecidedlabel", "Label for the Undecided class. By default, 'ip.undecidedlabel = 0'.");
     SetDefaultParameterInt("ip.undecidedlabel", 0.0);
     
 
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("io.in", "QB_1_ortho_4Cls_N_Classified_OTB.tif");
-    SetDocExampleParameterValue("io.out", "QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif");
-    SetDocExampleParameterValue("ip.radiusx", "2");
-    SetDocExampleParameterValue("ip.radiusy", "5");
+    SetDocExampleParameterValue("io.in", "clLabeledImageQB123_1.tif");
+    SetDocExampleParameterValue("io.out", "clLabeledImageQB123_1_CMR_r2_nodl_10_undl_7.tif");
+    SetDocExampleParameterValue("ip.radius", "2");
     SetDocExampleParameterValue("ip.suvbool", "true");
     SetDocExampleParameterValue("ip.nodatalabel", "10");
     SetDocExampleParameterValue("ip.undecidedlabel", "7");
@@ -137,8 +132,8 @@ private:
     
     // NEIGHBORHOOD MAJORITY FILTER SETTINGS
     RadiusType rad;
-    rad[0] = GetParameterInt("ip.radiusx");
-    rad[1] = GetParameterInt("ip.radiusy");
+    rad[0] = GetParameterInt("ip.radius");
+    rad[1] = GetParameterInt("ip.radius");
     
     BallStructuringType seBall;
     seBall.SetRadius(rad);

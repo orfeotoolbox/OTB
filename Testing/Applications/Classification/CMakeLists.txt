@@ -422,14 +422,13 @@ OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixR
 
 OTB_TEST_APPLICATION(NAME   apTvClassificationMapRegularization
                      APP    ClassificationMapRegularization
-                     OPTIONS -io.in  ${INPUTDATA}/Classification/QB_1_ortho_4Cls_N_Classified_OTB.tif
-                             -io.out ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7_APP.tif
-                             -ip.radiusx 2
-                             -ip.radiusy 5
+                     OPTIONS -io.in  ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
+                             -io.out ${TEMP}/clLabeledImageQB123_1_CMR_r2_nodl_10_undl_7.tif
+                             -ip.radius 2
                              -ip.suvbool true
                              -ip.nodatalabel 10
                              -ip.undecidedlabel 7
                      VALID   --compare-image ${NOTOL}
-                             ${BASELINE}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
-                             ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7_APP.tif
+                             ${OTBAPP_BASELINE}/clLabeledImageQB123_1_CMR_r2_nodl_10_undl_7.tif
+                             ${TEMP}/clLabeledImageQB123_1_CMR_r2_nodl_10_undl_7.tif
 )
