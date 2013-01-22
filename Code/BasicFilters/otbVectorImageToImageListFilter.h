@@ -30,6 +30,9 @@ namespace otb
  *
  * Casting is done through standard cast operation.
  *
+ * The output of this filter didn't support the use of iterator on it, use a selector filter
+ * to avoid break the output
+ *
  * \ingroup Streamed
  */
 template <class TVectorImageType, class TImageList>
