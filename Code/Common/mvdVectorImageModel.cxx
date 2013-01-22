@@ -325,19 +325,19 @@ VectorImageModel
   // Use the rendering filter to get 
   m_RenderingFilter = RenderingFilterType::New();
   m_RenderingFilter->SetInput(m_ExtractFilter->GetOutput());
-  //m_RenderingFilter->GetRenderingFunction()->SetAutoMinMax(false);
+  m_RenderingFilter->GetRenderingFunction()->SetAutoMinMax(false);
 
 // ----------------------------------
-  RenderingFilterType::RenderingFunctionType::ParametersType  paramsMinMax;
-  paramsMinMax.SetSize(6);
+  // RenderingFilterType::RenderingFunctionType::ParametersType  paramsMinMax;
+  // paramsMinMax.SetSize(6);
     
-  // Update the parameters
-  for (unsigned int i = 0; i < paramsMinMax.Size(); i = i + 2)
-    {
-    paramsMinMax.SetElement(i, 30);
-    paramsMinMax.SetElement(i + 1, 2048/*256*/);
-    }
-  m_RenderingFilter->GetRenderingFunction()->SetParameters(paramsMinMax);
+  // // Update the parameters
+  // for (unsigned int i = 0; i < paramsMinMax.Size(); i = i + 2)
+  //   {
+  //   paramsMinMax.SetElement(i, 30);
+  //   paramsMinMax.SetElement(i + 1, 2048/*256*/);
+  //   }
+  //m_RenderingFilter->GetRenderingFunction()->SetParameters(paramsMinMax);
 // ---------------------------- 
 
   // TODO: Remove local variable.
