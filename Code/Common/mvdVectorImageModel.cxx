@@ -111,7 +111,7 @@ VectorImageModel
 /*******************************************************************************/
 void
 VectorImageModel
-::loadFile( const QString& filename )
+::LoadFile( const QString& filename )
 {
   //
   // 1. Setup file-reader.
@@ -405,11 +405,18 @@ size[0] = vcl_abs(static_cast<int>(region.GetSize()[0] + region.GetIndex()[0]
 }
 
 /*******************************************************************************/
+void
+VectorImageModel
+::virtual_GenerateCachedData()
+{
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
 VectorImageModel
-::onCurrentIndexChanged( ColorSetupWidget::Channel channel, int index )
+::OnCurrentIndexChanged( ColorSetupWidget::Channel channel, int index )
 {
   m_Settings.RgbChannel( channel ) = index;
 
@@ -420,7 +427,7 @@ VectorImageModel
   Settings::ChannelVector rgb( m_Settings.GetRgbChannels() );
   m_RenderingFilter->GetRenderingFunction()->SetChannelList( rgb );
 
-  emit settingsUpdated();
+  emit SettingsUpdated();
 }
 
 /*******************************************************************************/

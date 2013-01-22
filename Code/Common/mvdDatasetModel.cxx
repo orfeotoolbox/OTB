@@ -75,10 +75,12 @@ DatasetModel
   try
     {
     // 2.1. Information.
-    vectorImageModel->loadFile( filename );
+    vectorImageModel->LoadFile( filename );
 
     // 2.2. Generate cached data.
-    // TODO: generate image-model cached data (quicklook, histogram-list etc.)
+    // TODO: generate image-model cached data (quicklook,
+    // histogram-list etc.)
+    vectorImageModel->GenerateCachedData();
     }
   catch( std::exception& exc )
     {

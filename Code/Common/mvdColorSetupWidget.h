@@ -108,7 +108,7 @@ public:
    *
    * Calling SetComponents() resets the current-index of each
    * combo-box to the first entry of the list, which causes the
-   * currentIndexChanged() signal to be emitted for each component.
+   * CurrentIndexChanged() signal to be emitted for each component.
    *
    * Example: The user { "Red", "Green", "Blue", "" } component-name
    * list will be displayed as the { "0: Red", "1: Green", "2: Blue",
@@ -137,7 +137,7 @@ public:
   /**
    * Set the current (selected) index of a video channel.
    *
-   * Calling SetCurrentIndex() let the currentIndexChanged()
+   * Calling SetCurrentIndex() let the CurrentIndexChanged()
    * signal to be emitted.
    *
    * \param channel The video channel for which to set the current
@@ -166,7 +166,7 @@ signals:
    * \param channel The video-channel which has been modified.
    * \param index The curren-index in the component-list.
    */
-  void currentIndexChanged( ColorSetupWidget::Channel channel, int index );
+  void CurrentIndexChanged( ColorSetupWidget::Channel channel, int index );
 
 //
 // Protected methods.
@@ -204,7 +204,7 @@ private slots:
     void
     on_redComboBox_currentIndexChanged( int index )
   {
-    emit currentIndexChanged( CHANNEL_RED, index );
+    emit CurrentIndexChanged( CHANNEL_RED, index );
   }
 
   /**
@@ -215,7 +215,7 @@ private slots:
     void
     on_greenComboBox_currentIndexChanged( int index )
   {
-    emit currentIndexChanged( CHANNEL_GREEN, index );
+    emit CurrentIndexChanged( CHANNEL_GREEN, index );
   }
 
   /**
@@ -226,7 +226,7 @@ private slots:
     void
     on_blueComboBox_currentIndexChanged( int index )
   {
-    emit currentIndexChanged( CHANNEL_BLUE, index );
+    emit CurrentIndexChanged( CHANNEL_BLUE, index );
   }
 };
 

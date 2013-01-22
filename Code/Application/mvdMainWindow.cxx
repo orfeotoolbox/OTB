@@ -271,10 +271,10 @@ MainWindow
   // Disconnect previously selected model from UI controller.
   QObject::disconnect(
     GetColorSetupDock()->widget(),
-    SIGNAL( currentIndexChanged( ColorSetupWidget::Channel, int ) ),
+    SIGNAL( CurrentIndexChanged( ColorSetupWidget::Channel, int ) ),
     // from:
     vectorImageModel,
-    SLOT( onCurrentIndexChanged( ColorSetupWidget::Channel, int ) )
+    SLOT( OnCurrentIndexChanged( ColorSetupWidget::Channel, int ) )
   );
 }
 
@@ -304,16 +304,16 @@ MainWindow
   // Connect newly selected model to UI controller.
   QObject::connect(
     colorSetupWidget,
-    SIGNAL( currentIndexChanged( ColorSetupWidget::Channel, int ) ),
+    SIGNAL( CurrentIndexChanged( ColorSetupWidget::Channel, int ) ),
     // to:
     vectorImageModel,
-    SLOT( onCurrentIndexChanged( ColorSetupWidget::Channel, int ) )
+    SLOT( OnCurrentIndexChanged( ColorSetupWidget::Channel, int ) )
   );
 
   // Connect newly selected model to view.
   QObject::connect(
     vectorImageModel,
-    SIGNAL( settingsUpdated() ),
+    SIGNAL( SettingsUpdated() ),
     // to:
     centralWidget(),
     SLOT( updateGL()  )

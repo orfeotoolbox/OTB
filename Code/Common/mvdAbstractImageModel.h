@@ -25,6 +25,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -43,6 +47,10 @@
 #include "mvdAbstractModel.h"
 #include "mvdTypes.h"
 
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
 //
 // External classes pre-declaration.
 namespace
@@ -54,13 +62,22 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
 /** \class AbstractImageModel
  *
  */
 class Monteverdi2_EXPORT AbstractImageModel :
     public AbstractModel
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public methods.
@@ -69,9 +86,16 @@ public:
   /** Destructor */
   virtual ~AbstractImageModel();
 
+  /** */
+  inline void GenerateCachedData();
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
 //
-// SIGNALS.
+// Signals.
 signals:
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
@@ -80,9 +104,14 @@ protected:
   /** Constructor */
   AbstractImageModel( QObject* parent =NULL );
 
+  /** */
+  virtual void virtual_GenerateCachedData() =0;
+
 //
 // Protected attributes.
 protected:
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private methods.
@@ -93,10 +122,29 @@ private:
 // Private attributes.
 private:
 
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+
 //
-// SLOTS.
+// Slots.
 private slots:
 };
+
+} // end namespace 'mvd'
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
+
+/*****************************************************************************/
+inline
+void
+AbstractImageModel
+::GenerateCachedData()
+{
+  virtual_GenerateCachedData();
+}
 
 } // end namespace 'mvd'
 

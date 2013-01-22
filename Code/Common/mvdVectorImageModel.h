@@ -213,7 +213,7 @@ public:
 
   /**
    */
-  void loadFile( const QString& filename );
+  void LoadFile( const QString& filename );
 
   /** Rasterize the buffered region in a buffer */
   unsigned char * RasterizeRegion(const ImageRegionType& region);
@@ -227,7 +227,7 @@ public slots:
    */
   // TODO: Separate RenderingFilter and Settings (QObject) from
   // VectorImageModel and move slot.
-  void onCurrentIndexChanged( ColorSetupWidget::Channel channel, int index );
+  void OnCurrentIndexChanged( ColorSetupWidget::Channel channel, int index );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -236,13 +236,16 @@ public slots:
 signals:
   /**
    */
-  void settingsUpdated();
+  void SettingsUpdated();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
+
+  /** */
+  virtual void virtual_GenerateCachedData();
 
   /** Clear buffer */
   void ClearBuffer();

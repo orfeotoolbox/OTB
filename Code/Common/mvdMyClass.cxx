@@ -18,6 +18,10 @@
 =========================================================================*/
 #include "mvdMyClass.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -43,6 +47,10 @@ namespace mvd
 
   Context comment for translator.
 */
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
 MyClass
