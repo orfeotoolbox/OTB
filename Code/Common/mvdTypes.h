@@ -74,13 +74,16 @@ typedef std::list< std::string > StringList;
 
 /**
  */
+typedef itk::Array< double > ParametersType;
+
+/*******************************************************************************/
+
+/**
+ */
 typedef itk::ImageRegion< Monteverdi2_DIMENSION > ImageRegionType;
 /**
  */
 typedef itk::Index< Monteverdi2_DIMENSION > IndexType;
-/**
- */
-typedef itk::Array< double > ParametersType;
 
 /*******************************************************************************/
 
