@@ -399,7 +399,7 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
 
     // 3 - Next, we will compute epipolar lines direction in both
     // images
-    double a1,a2;
+    double a1;
 
     // First, for image 1
 
@@ -463,32 +463,6 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     epiPoint1[2] = localElevation + m_ElevationOffset;
     endLine2 = m_LeftToRightTransform->TransformPoint(epiPoint1);
 
-    // Compute angle in right image
-    double alpha2 = 0;
-    if (endLine2[0] == startLine2[0])
-      {
-      if (endLine2[1] > startLine2[1])
-        {
-        alpha2 = 0.5*otb::CONST_PI;
-        }
-      else
-        {
-        alpha2 = -0.5*otb::CONST_PI;
-        }
-      }
-    else
-      {
-      a2 = (endLine2[1] - startLine2[1]) / (endLine2[0] - startLine2[0]);
-      if (endLine2[0] > startLine2[0])
-        {
-        alpha2 = vcl_atan(a1);
-        }
-      else
-        {
-        alpha2 = otb::CONST_PI + vcl_atan(a1);
-        }
-      }
-
     // 4 - Determine position of next points
 
     // We want to move m_Scale pixels away in the epipolar line of the
@@ -497,13 +471,6 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     //double alpha1 = otb::CONST_PI - vcl_atan(a1);
     double deltax1 =  m_Scale * m_GridStep * mean_spacing * vcl_cos(alpha1);
     double deltay1 =  m_Scale * m_GridStep * mean_spacing * vcl_sin(alpha1);
-
-//     // Before moving currentPoint1, we will store its image by the
-//     // left to right transform at the m_AverageElevation, to compute
-//     // the equivalent displacement in right image
-//
-//     currentPoint1[2] = localElevation;
-//     startLine2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
 
     // Now we move currentPoint1
     currentPoint1[0]+=deltax1;
@@ -520,23 +487,6 @@ StereorectificationDeformationFieldSource<TInputImage, TOutputImage>
     // And we compute the equivalent displacement in right image
     currentPoint2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
     
-
-//     double iscale = vcl_sqrt((endLine2[0]-startLine2[0])*(endLine2[0]-startLine2[0])
-//                              +
-//                              (endLine2[1]-startLine2[1])*(endLine2[1]-startLine2[1]));
-//
-//     // Now, we compute the displacement in right image. The iscale
-//     // factor already account for m_GridStep and scale, no need to use
-//     // them again
-//     //double alpha2 = otb::CONST_PI - vcl_atan(a2);
-//     double deltax2 = iscale * vcl_cos(alpha2);
-//     double deltay2 = iscale * vcl_sin(alpha2);
-//
-//     // We can now move currentPoint2
-//     currentPoint2[0] += deltax2;
-//     currentPoint2[1] += deltay2;
-//     currentPoint2[2] =  localElevation;
-
     // 5 - Finally, we have to handle a special case for beginning of
     // line, since at this position we are able to compute the
     // position of the beginning of next line
