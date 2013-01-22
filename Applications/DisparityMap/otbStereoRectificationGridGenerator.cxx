@@ -214,7 +214,8 @@ private:
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"epi.elevation");
     
     if (otb::Wrapper::ElevationParametersHandler::IsGeoidUsed(this,"epi.elevation") &&
-        otb::Wrapper::ElevationParametersHandler::IsDEMUsed(this,"epi.elevation"))
+        otb::Wrapper::ElevationParametersHandler::IsDEMUsed(this,"epi.elevation") && 
+        !IsParameterEnabled("epi.elevation.avgdem.step"))
       {
       m_DeformationFieldSource->SetUseDEM(true);
       }
@@ -259,7 +260,7 @@ private:
     SetParameterInt("epi.rectsizey",m_DeformationFieldSource->GetRectifiedImageSize()[1]);
     SetParameterFloat("epi.baseline",m_DeformationFieldSource->GetMeanBaselineRatio());
 
-    if(IsParameterEnabled("epi.elevation.avgdem"))
+    if(IsParameterEnabled("epi.elevation.avgdem.step"))
       {
       EnableParameter("epi.elevation.avgdem.mindisp");
       SetParameterFloat("epi.elevation.avgdem.mindisp",(m_StatisticsFilter->GetMinimum()-m_StatisticsFilter->GetMean())
