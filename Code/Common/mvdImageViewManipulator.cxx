@@ -161,7 +161,7 @@ ImageViewManipulator
 ::wheelEvent(  QWheelEvent * event)
 {
   // Compute the new scale
-  double scaleRatio = 2;
+  double scaleRatio = 1.25;
   double numDegrees = event->delta() / 8.;
   int    nbSteps    = static_cast<int>(numDegrees / 15.);
 
@@ -184,7 +184,7 @@ ImageViewManipulator
   // check that the new isoZoom is not too low and not too large
   // TODO : compute automatically the minSize and the isoZoom range ???
   if (sizeX > 30 && sizeY > 30  &&
-      m_IsotropicZoom * scale > 0.2 &&
+      m_IsotropicZoom * scale > 0.01 &&
       m_IsotropicZoom * scale < 10.)
     {
     // Update the the sizeBeforeConstrain
