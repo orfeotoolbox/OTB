@@ -65,6 +65,8 @@ public:
   /** Region typedef support.   */
   typedef itk::ImageRegion<ImageDimension> RegionType;
 
+  typedef std::vector<RegionType> StreamVectorType;
+
   /** How many pieces can the specified region be split? A given region
    *  cannot always be divided into the requested number of pieces.  For
    *  instance, if the numberOfPieces exceeds the number of pixels along
@@ -87,12 +89,42 @@ public:
   itkSetMacro(ShrinkFactor, unsigned int);
   itkGetMacro(ShrinkFactor, unsigned int);
 
+  /** Set the TileHint parameter */
+  itkSetMacro(TileHint, SizeType);
+
+  /** Get the TileHint parameter */
+  itkGetConstReferenceMacro(TileHint, SizeType);
+
+  /** Set the ImageRegion parameter */
+  itkSetMacro(ImageRegion, RegionType);
+
+  /** Get the ImageRegion parameter */
+  itkGetConstReferenceMacro(ImageRegion, RegionType);
+
+  /** Set the requested number of splits parameter */
+  itkSetMacro(RequestedNumberOfSplits, unsigned int);
+
+  /** Get the requested number of splits parameter */
+  itkGetConstReferenceMacro(RequestedNumberOfSplits, unsigned int);
+
 protected:
-  StreamingShrinkImageRegionSplitter() : m_SplitsPerDimension(0U), m_ShrinkFactor(10) {}
+  StreamingShrinkImageRegionSplitter() : m_SplitsPerDimension(0U),
+                                         m_ShrinkFactor(10),
+                                         m_TileHint(),
+                                         m_ImageRegion(),
+                                         m_RequestedNumberOfSplits(0),
+                                         m_StreamVector(),
+                                         m_IsUpToDate(false)
+                                           {}
   virtual ~StreamingShrinkImageRegionSplitter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
+  /** This methods actually estimate the split map using the
+  ImageRegionAdaptativeSplitter and stores it in a
+  vector */
+  void EstimateSplitMap(unsigned int numberOfPieces);
+
   StreamingShrinkImageRegionSplitter(const StreamingShrinkImageRegionSplitter &); //purposely not implemented
   void operator =(const StreamingShrinkImageRegionSplitter&); //purposely not implemented
 
@@ -100,6 +132,24 @@ private:
   unsigned int m_TileDimension;
   unsigned int m_TileSizeAlignment;
   unsigned int m_ShrinkFactor;
+
+  // This reflects the input image tiling
+  SizeType   m_TileHint;
+
+  // This contains the ImageRegion that is currently beeing split
+  RegionType m_ImageRegion;
+
+  // This contains the requested number of splits
+  unsigned int m_RequestedNumberOfSplits;
+
+  // This is a vector of all regions which will be split
+  StreamVectorType m_StreamVector;
+
+  // Is the splitter up-to-date ?
+  mutable bool m_IsUpToDate;
+
+  // Lock to ensure thread-safety
+  itk::SimpleFastMutexLock m_Lock;
 };
 
 
