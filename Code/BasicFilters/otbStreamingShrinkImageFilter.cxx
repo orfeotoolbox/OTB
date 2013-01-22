@@ -81,7 +81,7 @@ StreamingShrinkImageRegionSplitter
   unsigned int nbSplits = internalSplitter->GetNumberOfSplits(m_ImageRegion,numberOfPieces);
 
   //Iterate over streams computed by the adaptative splitter
-  for (unsigned int i = 0 ; i < nbSplits ; ++i)
+  for (unsigned int i = 0; i < nbSplits; ++i)
     {
     RegionType region;
     IndexType  index;
@@ -91,7 +91,7 @@ StreamingShrinkImageRegionSplitter
 
     const unsigned int sizeY = region.GetSize()[1] - 1;
 
-    for (unsigned int j = 0 ; j < sizeY ; ++j)
+    for (unsigned int j = 0; j < sizeY; ++j)
       {
       //Add region aligned with the shrink factor
       if (((index[1]+j) % m_TileSizeAlignment) == 0)

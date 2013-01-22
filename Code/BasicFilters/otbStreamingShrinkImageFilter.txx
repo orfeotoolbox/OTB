@@ -43,7 +43,6 @@ StreamingShrinkStreamingManager<TImage>::PrepareStreaming( itk::DataObject * inp
 
 
 
-
   typedef otb::StreamingShrinkImageRegionSplitter TileSplitterType;
   TileSplitterType::Pointer splitter = TileSplitterType::New();
   splitter->SetTileSizeAlignment(m_ShrinkFactor);

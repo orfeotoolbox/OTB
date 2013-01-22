@@ -64,7 +64,7 @@ int otbImageListToSingleImageFilter(int argc, char * argv[])
   // Filter Typedef
   typedef otb::VectorImageToImageListFilter<VectorImageType, ImageListType> VectorImageToImageListFilterType;
   typedef otb::ImageListToSingleImageFilter<ImageListType::ImageType> ImageListToSingleImageFilter;
-  typedef otb::BandMathImageFilter<ImageType> BandMathImageFilterType ;
+  typedef otb::BandMathImageFilter<ImageType> BandMathImageFilterType;
 
   // Instantiating objects
   VectorImageToImageListFilterType::Pointer filter1 = VectorImageToImageListFilterType::New();
