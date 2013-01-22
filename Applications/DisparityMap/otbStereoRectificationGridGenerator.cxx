@@ -263,11 +263,11 @@ private:
     if(IsParameterEnabled("epi.elevation.avgdem.step"))
       {
       EnableParameter("epi.elevation.avgdem.mindisp");
-      SetParameterFloat("epi.elevation.avgdem.mindisp",(m_StatisticsFilter->GetMinimum()-m_StatisticsFilter->GetMean())
-                        /m_DeformationFieldSource->GetMeanBaselineRatio());
+      std::cout<<m_StatisticsFilter->GetMinimum()<<std::endl;
+      SetParameterFloat("epi.elevation.avgdem.mindisp",(m_StatisticsFilter->GetMinimum()-m_StatisticsFilter->GetMean())*m_DeformationFieldSource->GetMeanBaselineRatio());
       EnableParameter("epi.elevation.avgdem.maxdisp");
-      SetParameterFloat("epi.elevation.avgdem.maxdisp",(m_StatisticsFilter->GetMaximum()-m_StatisticsFilter->GetMean())
-                        /m_DeformationFieldSource->GetMeanBaselineRatio());
+      SetParameterFloat("epi.elevation.avgdem.maxdisp",(m_StatisticsFilter->GetMaximum()-m_StatisticsFilter->GetMean())*m_DeformationFieldSource->GetMeanBaselineRatio());
+      std::cout<<m_StatisticsFilter->GetMaximum()<<std::endl;
       }
 
 
