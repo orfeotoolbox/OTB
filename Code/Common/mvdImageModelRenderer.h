@@ -121,6 +121,8 @@ private:
 // Private attributes.
 private:
 
+  unsigned char *   m_Buffer;
+
 //
 // SLOTS.
 private slots:
