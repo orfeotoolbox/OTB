@@ -93,6 +93,8 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       scaledRegion.SetIndex(scaledOrigin);
       }
     }
+  // TODO : remove verbosity 
+  std::cout <<"J2k resolution requested :" << lod<< std::endl;
   
   // request the data for the current region
   m_Buffer = viModel->RasterizeRegion(scaledRegion, context.m_IsotropicZoom);
