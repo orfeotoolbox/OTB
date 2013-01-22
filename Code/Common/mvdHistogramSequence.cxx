@@ -55,7 +55,8 @@ namespace mvd
 /*******************************************************************************/
 HistogramSequence
 ::HistogramSequence( QObject* parent ) :
-  AbstractModel( parent )
+  AbstractModel( parent ),
+  m_Histograms()
 {
 }
 

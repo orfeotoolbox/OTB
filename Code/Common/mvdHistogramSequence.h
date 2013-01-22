@@ -37,9 +37,11 @@
 
 //
 // ITK includes (sorted by alphabetic order)
+#include "itkHistogram.h"
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbObjectList.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -106,6 +108,15 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
+// Private types.
+private:
+  /** */
+  typedef itk::Statistics::Histogram< Monteverdi2_FLOAT_TYPE, 1 > Histogram;
+
+  /** */
+  typedef otb::ObjectList< Histogram > HistogramList;
+
+//
 // Private methods.
 private:
 
@@ -113,6 +124,8 @@ private:
 //
 // Private attributes.
 private:
+  /** */
+  HistogramList m_Histograms;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
