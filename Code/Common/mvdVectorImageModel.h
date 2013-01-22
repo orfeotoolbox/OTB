@@ -218,6 +218,12 @@ public:
   /** Rasterize the buffered region in a buffer */
   unsigned char * RasterizeRegion(const ImageRegionType& region, const double zoomFactor);
 
+  /**
+   * Following the zoom factor, get the best level of detail knowing
+   * the overviews size
+   */
+  bool GetBestLevelOfDetail(const double ZoomFactor, int& lod);
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -338,22 +344,11 @@ private:
   void ComputeRegionsToLoad(const ImageRegionType& region);
 
   /**
-   * Check wether this file is a valid jpeg2000 with overviews
-   */
-  bool IsJPEG2000File(std::string filepath);
-
-  // /**
-  //  * Following the zoom factor, get the current overview where to get
-  //  * the pixels to render
-  //  */
-  // unsigned int GetCurrentOverview();
+    * Helper method to get the best closest Jpeg2K level of detail
+    * 
+    */
+  unsigned int Closest(double invZoomfactor, const std::vector<unsigned int> & res);
   
-  /**
-   * Following the zoom factor, get the best level of detail knowing
-   * the overviews size
-   */
-  bool GetBestLevelOfDetail(const ImageRegionType & region, const double ZoomFactor, int& lod);
-
 //
 // Private attributes.
 private:
@@ -386,6 +381,9 @@ private:
 
   // store the input image filename
   std::string                          m_InputFilename;
+
+  // store the previous levelofDetail found
+  unsigned int   m_PreviousBestLevelOfDetail;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

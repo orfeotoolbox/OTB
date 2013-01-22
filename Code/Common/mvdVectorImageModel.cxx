@@ -64,7 +64,8 @@ VectorImageModel
   m_PreviousRegion(),
   m_AlreadyLoadedRegion(),
   m_Region(),
-  m_RegionsToLoadVector()
+  m_RegionsToLoadVector(),
+  m_PreviousBestLevelOfDetail(0)
 {
 }
 
@@ -195,16 +196,19 @@ VectorImageModel
   m_Region = region;
 
   // Get the best level of detail
+  // don't reinstanciate the reader if the lod requested has not
+  // changed 
   int best_lod = 0;
-  if ( this->GetBestLevelOfDetail(region, zoomFactor, best_lod) )
+  if ( this->GetBestLevelOfDetail(zoomFactor, best_lod) && 
+       best_lod != m_PreviousBestLevelOfDetail)
     {
     std::ostringstream oss;
     oss<<m_InputFilename<<"?&resol="<<best_lod;
     m_ImageFileReader = DefaultImageFileReaderType::New();
     m_ImageFileReader->SetFileName( oss.str() );
     m_ImageFileReader->UpdateOutputInformation();
-    
-    std::cout <<"Requesting the file "<< oss.str() << std::endl;
+
+    m_PreviousBestLevelOfDetail = best_lod;
     }
 
   // Don't do anything if the region did not changed
@@ -221,9 +225,8 @@ VectorImageModel
 	 m_PreviousRegion!=ImageRegionType() &&
 	 !m_Settings.IsDirty() )
       {
-      // Compute loaded region, and the four regions not
-      // Compute loaded region, and region not loaded yet within the
-      // new requested region
+      // Compute loaded region, and the four regions not loaded yet
+      // within the new requested region
       this->ComputeRegionsToLoad(m_Region);
 
       // Copy the previous buffer into a temporary buf to access the
@@ -322,7 +325,21 @@ VectorImageModel
   // Use the rendering filter to get 
   m_RenderingFilter = RenderingFilterType::New();
   m_RenderingFilter->SetInput(m_ExtractFilter->GetOutput());
-  m_RenderingFilter->GetRenderingFunction()->SetAutoMinMax(false);
+  //m_RenderingFilter->GetRenderingFunction()->SetAutoMinMax(false);
+
+// ----------------------------------
+  RenderingFilterType::RenderingFunctionType::ParametersType  paramsMinMax;
+  paramsMinMax.SetSize(6);
+    
+  // Update the parameters
+  for (unsigned int i = 0; i < paramsMinMax.Size(); i = i + 2)
+    {
+    paramsMinMax.SetElement(i, 30);
+    paramsMinMax.SetElement(i + 1, 2048/*256*/);
+    }
+  m_RenderingFilter->GetRenderingFunction()->SetParameters(paramsMinMax);
+// ---------------------------- 
+
   // TODO: Remove local variable.
   // Local variable because RenderingFunction::SetChannels() gets a
   // non-const std::vector< unsigned int >& as argument instead of a
@@ -430,66 +447,8 @@ size[0] = vcl_abs(static_cast<int>(region.GetSize()[0] + region.GetIndex()[0]
 }
 
 /*******************************************************************************/
-bool VectorImageModel::IsJPEG2000File(std::string filepath)
-{
-#if defined(OTB_USE_JPEG2000)
-  otb::JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
-
-  std::vector<unsigned int> res;
-
-  readerJPEG2000->SetFileName(filepath);
-  if (readerJPEG2000->CanReadFile(filepath.c_str()))
-    {
-    if ( readerJPEG2000->GetResolutionsCount() == 0 )
-      {
-      return false; // There are no resolution in this file
-      }
-    else
-      {
-      // print the resolutions count
-      std::cout <<"Resolution count : "<< readerJPEG2000->GetResolutionsCount() << std::endl;
-      
-      // print the size of each resolution
-      otb::JPEG2000ImageIO::SizeVectorType  resSizes;
-      if (readerJPEG2000->GetResolutionsSize(resSizes))
-        {
-        for (unsigned int idx = 0; idx < resSizes.size(); idx++)
-          {
-          std::cout <<"Resolution  : "<< resSizes[idx] << std::endl;
-          }
-        }
-      }
-    }
-  else
-    {
-    return false; // JPEG2000ImageIO cannot read this file
-    }
-
-  // for (std::vector<unsigned int>::iterator itRes = res.begin(); itRes < res.end(); itRes++)
-  //   {
-  //   std::string fname = itksys::SystemTools::GetFilenameWithoutExtension(filepath);
-  //   std::ostringstream oss;
-  //   oss << fname.c_str()  << "_res_"<< *itRes;
-  //   m_Names.push_back(oss.str());
-  //   }
-
-  return true;
-#else
-  return false;
-#endif
-}
-
-/*******************************************************************************/
-// //const DefaultImageType*
-// unsigned int
-// VectorImageModel::GetCurrentOverview()
-// {
-
-// }
-
-/*******************************************************************************/
 bool
-VectorImageModel::GetBestLevelOfDetail(const ImageRegionType & region, const double zoomFactor, int& lod)
+VectorImageModel::GetBestLevelOfDetail(const double zoomFactor, int& lod)
 {
   // Note : index 0 is the full resolution image
   unsigned int  best_lod = 0;
@@ -499,33 +458,17 @@ VectorImageModel::GetBestLevelOfDetail(const ImageRegionType & region, const dou
 #if defined(OTB_USE_JPEG2000)
   otb::JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
 
-  std::vector<unsigned int> res;
-
   readerJPEG2000->SetFileName(m_InputFilename);
   if (readerJPEG2000->CanReadFile(m_InputFilename.c_str()))
     {
-    if ( readerJPEG2000->GetResolutionsCount() > 0 )
+    // fill the resolution vector, to be able to find the closest
+    // j2k res to the inverse zoom factor
+    std::vector<unsigned int> res;
+    if (readerJPEG2000->GetAvailableResolutions(res))
       {
-      // print the size of each resolution
-      otb::JPEG2000ImageIO::SizeVectorType  resSizes;
-      if (readerJPEG2000->GetResolutionsSize(resSizes))
-        {
-        for (unsigned int idx = 0; idx < resSizes.size(); idx++)
-          {
-          double desired_factor  = 1 << idx;
-          if ( desired_factor == inverseZoomFactor )
-            {
-            lod = idx;
-            std::cout <<"invZoomFActor : " << inverseZoomFactor << std::endl;
-            std::cout <<"Region size  : "<< region.GetSize() << " -> resolution : "<< idx 
-                      << " with Size " << resSizes[idx]<< std::endl;//" factor "<< factor << std::endl;
-            
-            break;
-            }
-        }
+      lod = this->Closest(inverseZoomFactor, res);
       return true;
       }
-    }
     }
   else
     {
@@ -533,45 +476,29 @@ VectorImageModel::GetBestLevelOfDetail(const ImageRegionType & region, const dou
     }
 #endif
 
-    //std::cout <<"Best Level of Detail : "<< best_lod << std::endl;
-  
   return false;
+}
 
+/*******************************************************************************/
+unsigned int 
+VectorImageModel::Closest(double invZoomfactor, const std::vector<unsigned int> & res) 
+{
+  double minDist       = 50000.;
+  unsigned int closest = 0;
 
-  // // Get the resolution vector
+  // Compute the diff and keep the index that minimize the distance
+  for (unsigned int idx = 0; idx < res.size(); idx++)
+    {
+    double diff = vcl_abs((double)(1<<idx) - invZoomfactor);
 
-  
-  // int  ov_index;
-  // double best_factor = 1.0;
-  // double desired_factor = (1 << desired_lod);
+    if (diff < minDist)
+      {
+      minDist = diff;
+      closest = idx;
+      }
+    }
 
-  // if( GDALHasArbitraryOverviews( band ) )
-  //   return desired_lod;
-
-  // for( ov_index = 0; ov_index < GDALGetOverviewCount( band ); ov_index++ )
-  //   {
-  //   GDALRasterBandH  oband = GDALGetOverview( band, ov_index );
-  //   double           ofactor;
-
-  //   ofactor = GDALGetRasterBandXSize( band ) / 
-  //     (double) GDALGetRasterBandXSize( oband );
-
-  //   /* We already found something better */
-  //   if( ofactor < best_factor )
-  //     continue;
-
-  //   /* We don't want to upsample by much! */
-  //   if( ofactor > desired_factor * 1.2 )
-  //     continue;
-
-  //   best_factor = ofactor;
-  //   }
-
-  // best_lod = 0;
-  // while( best_factor*0.8 > (1 << best_lod) )
-  //   best_lod++;
-
-  // return best_lod;
+  return closest;
 }
 
 /*******************************************************************************/
