@@ -599,6 +599,11 @@ public:
       }
   };
 
+  unsigned int GetCurrentNumberOfTileInCache()
+  {
+    return static_cast<unsigned int>(m_Cache.size());
+  };
+
 private:
   TileCacheType m_Cache;
   unsigned int m_CacheSizeInTiles;
@@ -935,8 +940,14 @@ void JPEG2000ImageIO::Read(void* buffer)
     this->LoadTileData(buffer, itTile->second);
     }
 
+
+  int nbTileToRemove = static_cast<int>(toReadTiles.size())
+      - static_cast<int>(m_TileCache->GetCacheSizeInTiles() - m_TileCache->GetCurrentNumberOfTileInCache());
+  if ( nbTileToRemove <= 0 )
+    nbTileToRemove = 0;
+
   // Remove from cache as many tiles that will be read in this step
-   for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
+   for (int itTileR = 0; itTileR < nbTileToRemove; ++itTileR)
     {
     m_TileCache->RemoveOneTile();
     }
