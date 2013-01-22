@@ -51,9 +51,6 @@ ImageListToSingleImageFilter<TImageType>
        this->GetInput()->GetNthElement(m_ExtractedImagePosition));
 }
 
-
-
-
 /**
  * Main computation method
  */
@@ -62,8 +59,6 @@ void
 ImageListToSingleImageFilter<TImageType>
 ::GenerateData(void)
 {
-  std::cout << "ImageListToSingleImageFilter::GenerateData" << std::endl;
-
   OutputImagePointerType  outputPtr = this->GetOutput();
   InputImagePointerType inputPtr = this->GetInput()->GetNthElement(m_ExtractedImagePosition);
 
@@ -94,9 +89,6 @@ ImageListToSingleImageFilter<TImageType>
       }
     ++inputIt;
     }
-
-
-  std::cout << "VectorImageToImagesFilter::GenerateData END" << std::endl;
 }
 
 /**
