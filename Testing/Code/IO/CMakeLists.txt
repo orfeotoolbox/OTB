@@ -3777,14 +3777,6 @@ ADD_TEST(ioTvImageFileWriterExtendedFileName_gdalco ${IO_TESTS24}
         ${TEMP}/ioImageFileWriterExtendedFileName_gdalco.jpg?&gdal:co:QUALITY=20
         )
 
-ADD_TEST(ioTvImageFileWriterExtendedFileName_streamingNone ${IO_TESTS24}
---compare-image ${NOTOL}
-         ${INPUTDATA}/maur_rgb_24bpp.tif
-         ${TEMP}/ioImageFileWriterExtendedFileName_streamingNone.tif
-  otbImageFileWriterWithExtendedFilename
-        ${INPUTDATA}/maur_rgb_24bpp.tif
-        ${TEMP}/ioImageFileWriterExtendedFileName_streamingNone.tif?&streaming:type=None)
-
 # Streaming extended options tests
 
 SET(streaming_sizevalue_auto "8")
