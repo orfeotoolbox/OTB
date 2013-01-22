@@ -132,12 +132,12 @@ private:
 
     AddParameter(ParameterType_Group,"epi.elevation.avgdem","Average elevation computed from DEM");
     SetParameterDescription("epi.elevation.avgdem","Average elevation computed from the provided DEM");
-    MandatoryOff("epi.elevation.avgdem");
 
     AddParameter(ParameterType_Int,"epi.elevation.avgdem.step","Sub-sampling step");
     SetParameterDescription("epi.elevation.avgdem.step","Step of sub-sampling for average elevation estimation");
     SetDefaultParameterInt("epi.elevation.avgdem.step",1);
     SetMinimumParameterIntValue("epi.elevation.avgdem.step",1);
+    MandatoryOff("epi.elevation.avgdem.step");
 
     AddParameter(ParameterType_Float,"epi.elevation.avgdem.value","Average elevation value");
     SetParameterDescription("epi.elevation.avgdem.value","Average elevation value estimated from DEM");
@@ -195,7 +195,7 @@ private:
     SetDocExampleParameterValue("io.inright","wv2_xs_left.tif");
     SetDocExampleParameterValue("io.outleft","wv2_xs_left_epi_field.tif");
     SetDocExampleParameterValue("io.outright","wv2_xs_right_epi_field.tif");
-    SetDocExampleParameterValue("epi.elevation.avgdem.value","400");
+    SetDocExampleParameterValue("epi.elevation.default","400");
   }
 
   void DoUpdateParameters()
@@ -219,9 +219,8 @@ private:
       m_DeformationFieldSource->SetUseDEM(true);
       }
 
-    if(IsParameterEnabled("epi.elevation.avgdem"))
+    if(IsParameterEnabled("epi.elevation.avgdem.step"))
       {
-      // TODO: Implement me
       FloatImageType::PointType   origin  = GetParameterImage("io.inleft")->GetOrigin();
       FloatImageType::SizeType    size    = GetParameterImage("io.inleft")->GetLargestPossibleRegion().GetSize();
       FloatImageType::SpacingType spacing = GetParameterImage("io.inleft")->GetSpacing();
