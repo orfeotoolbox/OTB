@@ -129,7 +129,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
   bool clipBins = true;
   
   // if histogram Min and Max have the wrong size : set to default [0, 255]
-  if (m_HistogramMin.Size() != numberOfComponent || 
+  if (m_HistogramMin.Size() != numberOfComponent ||
       m_HistogramMax.Size() != numberOfComponent)
     {
     m_HistogramMin.SetSize(numberOfComponent);
@@ -142,7 +142,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
   // Setup output histogram
   HistogramListType* outputHisto = this->GetHistogramListOutput();
   outputHisto->Clear();
-  for (unsigned int k=0 ; k<numberOfComponent ; ++k)
+  for (unsigned int k=0; k<numberOfComponent; ++k)
     {
     typename HistogramType::MeasurementVectorType bandMin, bandMax;
     bandMin[0] = m_HistogramMin[k];
@@ -155,13 +155,13 @@ PersistentHistogramVectorImageFilter<TInputImage>
     }
   
   
-  // Setup HistogramLists for each thread 
+  // Setup HistogramLists for each thread
   m_ThreadHistogramList.clear();
-  for (unsigned int i=0 ; i<numberOfThreads ; ++i)
+  for (unsigned int i=0; i<numberOfThreads; ++i)
     {
     HistogramListPointerType histoList = HistogramListType::New();
     histoList->Clear();
-    for (unsigned int k=0 ; k<numberOfComponent ; ++k)
+    for (unsigned int k=0; k<numberOfComponent; ++k)
       {
       typename HistogramType::MeasurementVectorType bandMin, bandMax;
       bandMin[0] = m_HistogramMin[k];
@@ -234,7 +234,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
     if (m_SubSamplingRate > 1)
       {
       skipSample = false;
-      for (unsigned int i=0 ; i<InputImageDimension ; ++i)
+      for (unsigned int i=0; i<InputImageDimension; ++i)
         {
         if (it.GetIndex()[i] % m_SubSamplingRate != 0)
           {

@@ -377,7 +377,7 @@ private:
     rightFormula << ",255,0)";
     m_RBandMathFilter->SetExpression(rightFormula.str());
 
-    // Compute disparities 
+    // Compute disparities
     m_BlockMatcher->SetLeftInput(m_LeftResampleFilter->GetOutput());
     m_BlockMatcher->SetRightInput(m_RightResampleFilter->GetOutput());
     m_BlockMatcher->SetLeftMaskInput(m_LBandMathFilter->GetOutput());
