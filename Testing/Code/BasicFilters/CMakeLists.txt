@@ -346,15 +346,15 @@ ADD_TEST(bfTvVectorImageToImageListFilterIt ${BASICFILTERS_TESTS3}
 ADD_TEST(bfTvVectorImageToImageListFilterIt2 ${BASICFILTERS_TESTS3}
                 --compare-n-images ${EPSILON_7} 3
                     ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
-                    ${TEMP}/bfTvVectorImageToImageListFilterIt2Band1.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterIt2Band1.tif
                     ${BASELINE}/bfTvVectorImageToImageListFilterBand2.png
-                    ${TEMP}/bfTvVectorImageToImageListFilterIt2Band2.png
+                    ${TEMP}/bfTvVectorImageToImageListFilterIt2Band2.tif
                     ${BASELINE}/bfTvVectorImageToImageListFilterBand3.png
-                    ${TEMP}/bfTvVectorImageToImageListFilterIt2Band3.png
-                    otbVectorImageToImageListFilterIterator2
+                    ${TEMP}/bfTvVectorImageToImageListFilterIt2Band3.tif
+                    otbVectorImageToImageListFilterIterator
                     ${INPUTDATA}/poupees.png
                     ${TEMP}/bfTvVectorImageToImageListFilterIt2
-                    png
+                    tif
 )
 
 ADD_TEST(bfTuImageListToSingleImageFilterNew ${BASICFILTERS_TESTS3}

@@ -98,68 +98,34 @@ int otbVectorImageToImageListFilterIterator(int argc, char * argv[])
 
   VectorImageToImageListFilterType::Pointer filter = VectorImageToImageListFilterType::New();
   filter->SetInput(reader->GetOutput());
-  //filter->Update(); // Why it is needed ?
+  // We need to do that to fill the Imagelist before update and use it as input of other filter
+  filter->UpdateOutputInformation();
 
   ImageListIterator itOutput = filter->GetOutput()->Begin();
 
   WriterType::Pointer writer = WriterType::New();
 
   int i = 1;
-  std::stringstream oss;
 
   while ((itOutput != filter->GetOutput()->End()) )
     {
+    std::stringstream oss;
     oss << outputFilenamePrefix << "Band" << i << "." << outputFilenameSuffix;
 
     writer->SetInput(itOutput.Get());
 
     writer->SetFileName(oss.str().c_str());
-
+    writer->SetNumberOfDivisionsTiledStreaming(8);
     writer->Update();
 
     ++itOutput;
     ++i;
     }
 
-  return EXIT_SUCCESS;
-}
-
-int otbVectorImageToImageListFilterIterator2(int argc, char * argv[])
-{
-  const unsigned int Dimension = 2;
-  const char *       infname   = argv[1];
-  const char *       outputFilenamePrefix = argv[2];
-  const char *       outputFilenameSuffix = argv[3];
-
-  typedef unsigned char                          PixelType;
-  typedef otb::Image<PixelType, Dimension>       ImageType;
-  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
-  typedef otb::ImageList<ImageType>              ImageListType;
-
-  // IO
-  typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType>       WriterType;
-
-  typedef otb::VectorImageToImageListFilter<VectorImageType, ImageListType> VectorImageToImageListFilterType;
-
-  typedef VectorImageToImageListFilterType::OutputImageListType::Iterator ImageListIterator;
-
-  // Instantiating objects
-
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(infname);
-
-  VectorImageToImageListFilterType::Pointer filter = VectorImageToImageListFilterType::New();
-  filter->SetInput(reader->GetOutput());
-  filter->Update(); // Why it is needed ?
-
-  ImageListIterator itOutput = filter->GetOutput()->Begin();
-
-  int i = 1;
-  std::stringstream oss;
-
+  /*
   while ((itOutput != filter->GetOutput()->End()) )
     {
+    std::stringstream oss;
     WriterType::Pointer writer = WriterType::New();
 
     oss << outputFilenamePrefix << "Band" << i << "." << outputFilenameSuffix;
@@ -173,6 +139,8 @@ int otbVectorImageToImageListFilterIterator2(int argc, char * argv[])
     ++itOutput;
     ++i;
     }
+    */
+
 
   return EXIT_SUCCESS;
 }
