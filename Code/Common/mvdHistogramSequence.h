@@ -111,7 +111,7 @@ protected:
 // Private types.
 private:
   /** */
-  typedef itk::Statistics::Histogram< Monteverdi2_FLOAT_TYPE, 1 > Histogram;
+  typedef itk::Statistics::Histogram< Monteverdi2_FLOATING_TYPE, 1 > Histogram;
 
   /** */
   typedef otb::ObjectList< Histogram > HistogramList;
@@ -125,7 +125,7 @@ private:
 // Private attributes.
 private:
   /** */
-  HistogramList m_Histograms;
+  HistogramList::Pointer m_Histograms;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
