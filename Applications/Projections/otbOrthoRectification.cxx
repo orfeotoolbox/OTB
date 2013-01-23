@@ -40,9 +40,9 @@ namespace otb
 
 enum
 {
-  Interpolator_Linear,
+  Interpolator_BCO,
   Interpolator_NNeighbor,
-  Interpolator_BCO
+  Interpolator_Linear
 };
 
 enum
