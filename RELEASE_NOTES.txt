@@ -1,3 +1,96 @@
+OTB-v.3.16 - Changes since version 3.14.1 (2013/01/xx)
+--------------------------------------------------------
+* Library
+
+  * Core and Third Parties
+    * Various enhancement of PleiadesImageMetadataInterface
+    * Adding read and write geom file support in OssimSensorModelAdapter
+    * Refactoring of DEMHandler:
+      * Turned the class into singleton
+      * Made the DEMHandler the single configuration point for all elevation setup
+      * Deprecated all methods from other classes allowing to configure elevation source
+      * Added Exhaustive testing of all configuration cases (DEM, geoid, default)
+      * Improved documentation
+    * Refactoring of SensorModelAdapter:
+      * Decreased size of the code
+      * Made methods stick to what OSSIM does
+    * Refactored RpcProjectionAdapter into RpcSolverAdapter
+    * Updated ossim to r21971
+   
+  * IO
+    * Added support for GDAL driver creation options in GDALImageIO
+    * Added support for external geom files in ImageFileReader
+    * Extended filenames
+      * Added framework for extended filenames (see http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName)
+      * Added support for extended filenames in ImageFileReader
+      * Added support for extended filenames in ImageFileWriter
+    * Refactored StreamingImageFileWriter and ImageFileWriter
+      * ImageFileWriter is now the only class to use 
+      * StreamingImageFileWriter is a deprecated subclass provided for backward compatibility
+       
+  * Projections
+    * Refactored the GCPsToSensorModel filter 
+
+  * BasicFilters
+    * Simplified computation of coefficients in Frost and Lee filters
+      
+  * Fusion
+    * Added the LMVM fusion algorithm (kindly contributed by A. Tzotsos)
+
+  * Radiometry
+    * Updated solar irradiance for WV2 (kindly contributed by D. Duros)
+    * Enhanced the TOA radiance computation for WB2 by integrating the effective bandwidth
+
+  * Learning
+    * Improved ListSample generation
+      * Added support for interior rings
+      * Fixed support for class mininum size
+    * Added a filter for classification map regularization by majority voting
+
+  * Segmentation
+    * Added segmentation algorithm based on multiscale morphological structures classification
+
+  * OBIA
+    * Added a filter to compute mean radiometric values for each segment of a labeled image 
+
+  * Visualization
+    * Added a method to change RegionGlComponent color in ImageView
+    * Moved layer description in a single place
+    
+  * Applications
+    * Framework
+      * Modified the elevation parameters handling to be consistent with refactoring
+
+    * New Applications
+      * Added new radiometric indices application (RadiometricIndices)
+      * Added new haralick and structural feature set texture extraction application (HaralickTextureExtraction, SFSTextureExtraction)
+      * Added new morphological operation applications (BinaryMorphologicalOperation,GrayScaleMorphologicalOperation)
+      * Added new local statistics extraction applications (LocalStatisticsExtraction)
+      * Added new edge extraction application (EdgeExtraction)
+      * Added new homlogous points extraction application, including large scale extraction of tie points  (HomologousPointsExtraction)
+      * Added new application to refine a sensor model from a geom file and a set of tie points (RefineSensorModel)
+      * Added new pan-sharpening application with 3 different algorithms (PanSharpening)
+      * Added new classification maps fusion application (FusionOfClassifications)
+      * Added new classification map regularization application (ClassificationMapRegularization)
+      * Added new confusion matrix computation application (ComputeConfusionMatrix)
+      * Added new tile fusion application (TileFusion)
+      * Added new end-to-end stereo pair to DSM application (StereoFramework)
+
+    * Miscellanous
+      * Added an optional clamp in OpticalCalibration application output
+      * Added segmentation algorithm based on multiscale morphological structures classification in Segmentation application
+      * Added an optional output to the ReadImageInfo application to write the keyword list to a geom file
+      * Added support for large image in image mode of ColorMapping application
+      * Added support for histogram clamping settings and mask input in Convert application
+      * Added support for UTM zone and hemisphere estimation by default in OrthoRectification application
+      
+* Monteverdi
+  * Refactored to fit the new elevation configuration method
+  * Added Support for extended filenames
+
+* Bug fixes
+
+
 OTB-v.3.14.1 - Changes since version 3.14.0 (2012/10/02)
 --------------------------------------------------------
 
