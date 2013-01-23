@@ -165,6 +165,32 @@ OTB_TEST_APPLICATION(NAME  apTuPrVectorDataReprojectionFromGeoToMap
 
 
 
+OTB_TEST_APPLICATION(NAME  apTvPrRefineSensorModel
+                     APP  RefineSensorModel
+                     OPTIONS -ingeom    ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.geom
+                             -inpoints  ${BASELINE_FILES}/apTvHomologousPointsExtractionGeoBins.txt
+                 	     -outgeom   ${TEMP}/apTvPrRefineSensorModelGeomOutput.geom
+                             -outstat   ${TEMP}/apTvPrRefineSensorModelStatsOutput.txt
+                             -outvector ${TEMP}/apTvPrRefineSensorModelVectorOutput.shp
+                             -map utm -map.utm.zone 31 -map.utm.northhem 1
+                             -elev.dem ${INPUTDATA}/DEM/srtm_directory
+                             -elev.geoid ${INPUTDATA}/DEM/egm96.grd
+                     VALID   --compare-ascii ${EPSILON_9}
+                             ${BASELINE_FILES}/apTvPrRefineSensorModelGeomOutput.geom
+                             ${TEMP}/apTvPrRefineSensorModelGeomOutput.geom)
+
+OTB_TEST_APPLICATION(NAME  apTvPrGenerateRPCSensorModel
+                     APP  GenerateRPCSensorModel
+                     OPTIONS -inpoints  ${BASELINE_FILES}/apTvHomologousPointsExtractionGeoBins.txt
+                 	     -outgeom   ${TEMP}/apTvPrGenerateRPCSensorModelGeomOutput.geom
+                             -outstat   ${TEMP}/apTvPrGenerateRPCSensorModelStatsOutput.txt
+                             -outvector ${TEMP}/apTvPrGenerateRPCSensorModelVectorOutput.shp
+                             -map utm -map.utm.zone 31 -map.utm.northhem 1
+                             -elev.dem ${INPUTDATA}/DEM/srtm_directory
+                             -elev.geoid ${INPUTDATA}/DEM/egm96.grd
+                     VALID   --compare-ascii ${EPSILON_9}
+                             ${BASELINE_FILES}/apTvPrGenerateRPCSensorModelGeomOutput.geom
+                             ${TEMP}/apTvPrGenerateRPCSensorModelGeomOutput.geom)
 
 
 
