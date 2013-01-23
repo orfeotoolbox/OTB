@@ -130,39 +130,42 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       //   context.m_IsotropicZoom*currentResolutionFactor << std::endl;
 
       // Render the buffer
-      glPixelZoom(context.m_IsotropicZoom*currentResolutionFactor, 
-                  context.m_IsotropicZoom*currentResolutionFactor);
-      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-      glRasterPos2f(first_displayed_col, first_displayed_row);
-      glDrawPixels(nb_displayed_cols,
-                   nb_displayed_rows,
-                   GL_RGB,
-                   GL_UNSIGNED_BYTE,
-                   m_Buffer);
+      // glPixelZoom(context.m_IsotropicZoom*currentResolutionFactor, 
+      //             context.m_IsotropicZoom*currentResolutionFactor);
+      // glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+      // glRasterPos2f(first_displayed_col, first_displayed_row);
+      // glDrawPixels(nb_displayed_cols,
+      //              nb_displayed_rows,
+      //              GL_RGB,
+      //              GL_UNSIGNED_BYTE,
+      //              m_Buffer);
 
 
-      // glEnable(GL_TEXTURE_2D);
-      // //glColor4f(1.0, 1.0, 1.0, 0.0);
-      // GLuint texture;
-      // glGenTextures(1, &texture);
-      // glBindTexture(GL_TEXTURE_2D, texture);
-      // glTexImage2D(GL_TEXTURE_2D, 0, 3, nb_displayed_cols,
-      //              nb_displayed_rows, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
-      // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      // glBindTexture (GL_TEXTURE_2D, texture);
-      // glBegin (GL_QUADS);
-      // glTexCoord2f (0.0, 1.0);
-      // glVertex3f (first_displayed_col, first_displayed_row, 0.0);
-      // glTexCoord2f (1.0, 1.0);
-      // glVertex3f (first_displayed_col + scaledRegion.GetSize()[0], first_displayed_row, 0.0);
-      // glTexCoord2f (1.0, 0.0);
-      // glVertex3f (first_displayed_col + scaledRegion.GetSize()[0], first_displayed_row + scaledRegion.GetSize()[1], 0.0);
-      // glTexCoord2f (0.0, 0.0);
-      // glVertex3f (first_displayed_col, first_displayed_row + scaledRegion.GetSize()[1], 0.0);
-      // glEnd ();
-      // glDeleteTextures(1, &texture);
-      // glDisable(GL_TEXTURE_2D);
+      glEnable(GL_TEXTURE_2D);
+      //glColor4f(1.0, 1.0, 1.0, 0.0);
+      GLuint texture;
+      glGenTextures(1, &texture);
+      glBindTexture(GL_TEXTURE_2D, texture);
+      glTexImage2D(GL_TEXTURE_2D, 0, 3,
+                   scaledRegion.GetSize()[0],
+                   scaledRegion.GetSize()[1], 
+                   0, GL_RGB, GL_UNSIGNED_BYTE, m_Buffer);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glBindTexture (GL_TEXTURE_2D, texture);
+
+      glBegin (GL_QUADS);
+      glTexCoord2f (0.0, 1.0);
+      glVertex3f (first_displayed_col, first_displayed_row, 0.0);
+      glTexCoord2f (1.0, 1.0);
+      glVertex3f (first_displayed_col + scaledRegion.GetSize()[0], first_displayed_row, 0.0);
+      glTexCoord2f (1.0, 0.0);
+      glVertex3f (first_displayed_col + scaledRegion.GetSize()[0], first_displayed_row + scaledRegion.GetSize()[1], 0.0);
+      glTexCoord2f (0.0, 0.0);
+      glVertex3f (first_displayed_col, first_displayed_row + scaledRegion.GetSize()[1], 0.0);
+      glEnd ();
+      glDeleteTextures(1, &texture);
+      glDisable(GL_TEXTURE_2D);
 
       //glFlush();
     }
