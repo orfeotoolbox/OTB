@@ -19,13 +19,23 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbGenericRSResampleImageFilter.h"
+
+#include "itkLinearInterpolateImageFunction.h"
 #include "otbBCOInterpolateImageFunction.h"
+#include "itkNearestNeighborInterpolateImageFunction.h"
 
 // Elevation handler
 #include "otbWrapperElevationParametersHandler.h"
 
 namespace otb
 {
+
+enum
+{
+  Interpolator_BCO,
+  Interpolator_NNeighbor,
+  Interpolator_Linear
+};
 
 namespace Wrapper
 {
@@ -46,7 +56,15 @@ public:
 
   typedef unsigned short int PixelType;
 
-  typedef otb::BCOInterpolateImageFunction<FloatVectorImageType>   InterpolatorType;
+  typedef itk::LinearInterpolateImageFunction
+    <FloatVectorImageType,
+     double>                                                      LinInterpolatorType;
+  typedef itk::NearestNeighborInterpolateImageFunction
+    <FloatVectorImageType,
+     double>                                                      NNInterpolatorType;
+  typedef otb::BCOInterpolateImageFunction
+    <FloatVectorImageType>                                        BCOInterpolatorType;
+  
   typedef otb::GenericRSResampleImageFilter<FloatVectorImageType,
                                             FloatVectorImageType>  ResamplerType;
 
@@ -77,12 +95,30 @@ private:
     AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
     SetParameterDescription("lms","Generate a coarser deformation field with the given spacing");
     SetDefaultParameterFloat("lms", 4.);
+    MandatoryOff("lms");
 
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
     SetParameterDescription("out","Output reprojected image.");
+    
+    // Interpolators
+    AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
+    SetParameterDescription("interpolator","This group of parameters allows to define how the input image will be interpolated during resampling.");
+    
+    AddChoice("interpolator.bco",    "Bicubic interpolation");
+    SetParameterDescription("interpolator.bco", "Bicubic interpolation leads to very good image quality but is slow.");
+    
+    AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
+    SetParameterDescription("interpolator.bco.radius","This parameter allows to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
+    SetDefaultParameterInt("interpolator.bco.radius", 2);
+    
+    AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");
+    SetParameterDescription("interpolator.nn","Nearest neighbor interpolation leads to poor image quality, but it is very fast.");
+    
+    AddChoice("interpolator.linear", "Linear interpolation");
+    SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
+    
+    
     AddRAMParameter();
-
-    MandatoryOff("lms");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("inr", "QB_Toulouse_Ortho_PAN.tif");
@@ -103,10 +139,32 @@ private:
     FloatVectorImageType* movingImage = GetParameterImage("inm");
     
     // Resample filter
-    m_Resampler    = ResamplerType::New();
-    m_Interpolator = InterpolatorType::New();
-    m_Interpolator->SetRadius(2);
-    m_Resampler->SetInterpolator(m_Interpolator);
+    m_Resampler = ResamplerType::New();
+    
+    // Get Interpolator
+    switch ( GetParameterInt("interpolator") )
+      {
+      case Interpolator_Linear:
+      {
+      LinInterpolatorType::Pointer interpolator = LinInterpolatorType::New();
+      m_Resampler->SetInterpolator(interpolator);
+      }
+      break;
+      case Interpolator_NNeighbor:
+      {
+      NNInterpolatorType::Pointer interpolator = NNInterpolatorType::New();
+      m_Resampler->SetInterpolator(interpolator);
+      }
+      break;
+      case Interpolator_BCO:
+      {
+      BCOInterpolatorType::Pointer interpolator = BCOInterpolatorType::New();
+      interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
+      m_Resampler->SetInterpolator(interpolator);
+      }
+      break;
+      }
+    
     
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
@@ -152,7 +210,6 @@ private:
   }
 
   ResamplerType::Pointer           m_Resampler;
-  InterpolatorType::Pointer        m_Interpolator;
 };
 
 } // end namespace Wrapper
