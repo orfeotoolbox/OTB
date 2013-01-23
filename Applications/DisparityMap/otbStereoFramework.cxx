@@ -185,8 +185,9 @@ private:
 
     SetDocName("Stereo Framework");
     SetDocLongDescription("Compute the ground elevation with a stereo block matching algorithm between a stereo pair in sensor geometry. The output is projected in WGS84");
-    SetDocLimitations("");
-    SetDocAuthors("");
+    SetDocLimitations(" ");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Geometry);
     
@@ -234,6 +235,12 @@ private:
     DisableParameter("disp");
     
     AddRAMParameter();
+    
+    SetDocExampleParameterValue("inleft","sensor_stereo_left.tif");
+    SetDocExampleParameterValue("inright","sensor_stereo_right.tif");
+    SetDocExampleParameterValue("res","2.5");
+    SetDocExampleParameterValue("out","dem.tif");
+    
   }
   
   void DoUpdateParameters()
