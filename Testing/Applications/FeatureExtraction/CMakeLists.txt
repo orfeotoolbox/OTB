@@ -111,3 +111,29 @@ OTB_TEST_APPLICATION(NAME  apTvFEEdgeExtraction
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFEEdgeExtraction.tif
                  		     ${TEMP}/apTvFEEdgeExtraction.tif)  
+
+OTB_TEST_APPLICATION(NAME apTvHomologousPointsExtractionFull
+                     APP  HomologousPointsExtraction
+                     OPTIONS -in1 ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -in2 ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -algorithm surf
+                             -out ${TEMP}/apTvHomologousPointsExtractionFull.txt
+                     VALID   --compare-ascii ${EPSILON_9}
+                             ${BASELINE_FILES}/apTvHomologousPointsExtractionFull.txt
+                             ${TEMP}/apTvHomologousPointsExtractionFull.txt)
+
+OTB_TEST_APPLICATION(NAME apTvHomologousPointsExtractionGeoBins
+                     APP  HomologousPointsExtraction
+                     OPTIONS -in1 ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -in2 ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -algorithm surf
+                             -mode geobins
+                             -mode.geobins.binsize 64
+                             -mode.geobins.binstep 64
+                             -mfilter 1
+                             -precision 10
+                             -2wgs84 1
+                             -out ${TEMP}/apTvHomologousPointsExtractionGeoBins.txt
+                     VALID   --compare-ascii ${EPSILON_9}
+                             ${BASELINE_FILES}/apTvHomologousPointsExtractionGeoBins.txt
+                             ${TEMP}/apTvHomologousPointsExtractionGeoBins.txt)
