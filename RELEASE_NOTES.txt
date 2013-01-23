@@ -1,7 +1,6 @@
 OTB-v.3.16 - Changes since version 3.14.1 (2013/01/xx)
 --------------------------------------------------------
 * Library
-
   * Core and Third Parties
     * Various enhancement of PleiadesImageMetadataInterface
     * Adding read and write geom file support in OssimSensorModelAdapter
@@ -89,6 +88,22 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/01/xx)
   * Added Support for extended filenames
 
 * Bug fixes
+ * OTB-Packaging
+    * 0000591: Remove "homemade" gdal from OTB PPAs
+
+  * Orfeo Toolbox (OTB)
+    * 0000608: Annoying GDAL warning about GCP in OTB writer
+    * 0000619: Superimpose application can't deal with 2 ortho images
+    * 0000622: Extended filename does not seem to be compatible with OTB applicatiosn (command line)
+    * 0000599: Optical calibration of DIMAPv1 PHR products
+    * 0000601: PHR optical calibration : Band_Solar_Irradiance at 999 on some files
+    * 0000618: MultiResolutionPyramid application can not handle relative output path
+    * 0000617: Crash with StreamingStatisticsVectorImageFilter
+    * 0000602: Geom file of extract of ortho PHR data are not loaded in the otbKeywordList
+    * 0000600: Wrong band ordering in 3 Pleiades metadata (gain, bias, solar irradiance)
+
+  * OTB-applications
+    * 0000616: otbcli_OpticalCalibration fails to read Worldview-2 metadata
 
 
 OTB-v.3.14.1 - Changes since version 3.14.0 (2012/10/02)
