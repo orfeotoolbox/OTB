@@ -190,16 +190,15 @@ private:
 
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
+    AddChoice("interpolator.bco",    "Bicubic interpolation");
+    AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
+    SetParameterDescription("interpolator.bco.radius","This parameter allows to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
     SetParameterDescription("interpolator","This group of parameters allows to define how the input image will be interpolated during resampling.");
     AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");
     SetParameterDescription("interpolator.nn","Nearest neighbor interpolation leads to poor image quality, but it is very fast.");
     AddChoice("interpolator.linear", "Linear interpolation");
     SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
-    AddChoice("interpolator.bco",    "Bicubic interpolation");
-    AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
-    SetParameterDescription("interpolator.bco.radius","This parameter allows to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
-
     AddParameter(ParameterType_Group,"opt","Speed optimization parameters");
     SetParameterDescription("opt","This group of parameters allows to optimize processing time.");
 
