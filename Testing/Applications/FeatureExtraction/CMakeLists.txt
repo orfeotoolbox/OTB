@@ -114,8 +114,8 @@ OTB_TEST_APPLICATION(NAME  apTvFEEdgeExtraction
 
 OTB_TEST_APPLICATION(NAME apTvHomologousPointsExtractionFull
                      APP  HomologousPointsExtraction
-                     OPTIONS -in1 ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-                             -in2 ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                     OPTIONS -in1 ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+                             -in2 ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
                              -algorithm surf
                              -out ${TEMP}/apTvHomologousPointsExtractionFull.txt
                      VALID   --compare-ascii ${EPSILON_9}
@@ -124,15 +124,17 @@ OTB_TEST_APPLICATION(NAME apTvHomologousPointsExtractionFull
 
 OTB_TEST_APPLICATION(NAME apTvHomologousPointsExtractionGeoBins
                      APP  HomologousPointsExtraction
-                     OPTIONS -in1 ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-                             -in2 ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                     OPTIONS -in1 ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+                             -in2 ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
                              -algorithm surf
                              -mode geobins
-                             -mode.geobins.binsize 64
-                             -mode.geobins.binstep 64
+                             -mode.geobins.binsize 100
+                             -mode.geobins.binstep 25
                              -mfilter 1
                              -precision 10
                              -2wgs84 1
+                             -elev.dem ${INPUTDATA}/DEM/srtm_directory
+                             -elev.geoid ${INPUTDATA}/DEM/egm96.grd
                              -out ${TEMP}/apTvHomologousPointsExtractionGeoBins.txt
                      VALID   --compare-ascii ${EPSILON_9}
                              ${BASELINE_FILES}/apTvHomologousPointsExtractionGeoBins.txt
