@@ -40,32 +40,9 @@ template <class TImage>
 void
 StreamingShrinkStreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const RegionType &region )
 {
-
-
-
   typedef otb::StreamingShrinkImageRegionSplitter TileSplitterType;
   TileSplitterType::Pointer splitter = TileSplitterType::New();
   splitter->SetTileSizeAlignment(m_ShrinkFactor);
-
-  //Uses the TileHint from the MetaDataDictionnary to find out
-  //the tiling sheme of the input file if available.
-  typename otb::StreamingShrinkStreamingManager<TImage>::SizeType tileHint;
-
-  unsigned int tileHintX(0), tileHintY(0);
-
-  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(),
-                                    MetaDataKey::TileHintX,
-                                    tileHintX);
-
-  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(),
-                                    MetaDataKey::TileHintY,
-                                    tileHintY);
-
-  tileHint[0] = tileHintX;
-  tileHint[1] = tileHintY;
-
-  splitter->SetTileHint(tileHint);
-
   this->m_Splitter = splitter;
 
   unsigned long nbDivisions = this->EstimateOptimalNumberOfDivisions(input, region, 0);

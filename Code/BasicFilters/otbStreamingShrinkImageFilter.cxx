@@ -17,8 +17,6 @@
 =========================================================================*/
 #include "otbStreamingShrinkImageFilter.h"
 
-//encapsulate  adaptative splitter
-#include "otbImageRegionAdaptativeSplitter.h"
 namespace otb
 {
 
@@ -26,96 +24,73 @@ unsigned int
 StreamingShrinkImageRegionSplitter
 ::GetNumberOfSplits(const RegionType& region, unsigned int requestedNumber)
 {
-  //New method
-  // Set parameters
-  this->SetImageRegion(region);
-  this->SetRequestedNumberOfSplits(requestedNumber);
+  unsigned int theoricalNbPixelPerTile = region.GetNumberOfPixels() / requestedNumber;
+  unsigned int theoricalTileDimension = static_cast<unsigned int> (vcl_sqrt(static_cast<double>(theoricalNbPixelPerTile)) );
 
-  // Check if we need to compute split map again
-  m_Lock.Lock();
-  if(!m_IsUpToDate)
+  // Take the previous multiple of m_TileSizeAlignment (eventually generate more splits than requested)
+  m_TileDimension = theoricalTileDimension / m_TileSizeAlignment * m_TileSizeAlignment;
+
+  // Minimal tile size is m_TileSizeAlignment * m_TileSizeAlignment
+  if (m_TileDimension < m_TileSizeAlignment)
     {
-    // Do so if we need to
-    this->EstimateSplitMap(requestedNumber);
+    otbMsgDevMacro(<< "Using the minimal tile size : " << m_TileSizeAlignment << " * " << m_TileSizeAlignment);
+    m_TileDimension = m_TileSizeAlignment;
     }
-  m_Lock.Unlock();
-  otbMsgDevMacro(<<"Stream vector size " << m_StreamVector.size() << std::endl);
-  // Return the size of the split map
-  return m_StreamVector.size();
-}
 
+  // Use the computed tile size, and generate (m_TileDimension * 1) tiles
+  const SizeType&  regionSize = region.GetSize();
+  m_SplitsPerDimension[0] = (regionSize[0] + m_TileDimension - 1) / m_TileDimension;
+  m_SplitsPerDimension[1] = regionSize[1] / m_TileSizeAlignment;
+
+  if (m_SplitsPerDimension[1] == 0)
+    m_SplitsPerDimension[1] = 1;
+
+  unsigned int numPieces = 1;
+  for (unsigned int j = 0; j < ImageDimension; ++j)
+    {
+    numPieces *= m_SplitsPerDimension[j];
+    }
+
+  otbMsgDevMacro(<< "Tile dimension : " << m_TileDimension)
+  otbMsgDevMacro(<< "Number of splits per dimension : " << m_SplitsPerDimension[0] << " " <<  m_SplitsPerDimension[1])
+
+  return numPieces;
+}
 
 StreamingShrinkImageRegionSplitter::RegionType
 StreamingShrinkImageRegionSplitter
 ::GetSplit(unsigned int i, unsigned int numberOfPieces, const RegionType& region)
 {
-  // Set parameters
-  this->SetImageRegion(region);
+  RegionType splitRegion;
+  IndexType  splitIndex;
 
-  // Check if we need to compute split map agagin
-  m_Lock.Lock();
-  if(!m_IsUpToDate)
+  // Compute the actual number of splits
+  unsigned int numPieces = 1;
+  for (unsigned int j = 0; j < ImageDimension; ++j)
     {
-    // Do so if we need to
-    this->EstimateSplitMap(numberOfPieces);
+    numPieces *= m_SplitsPerDimension[j];
     }
-  m_Lock.Unlock();
 
-  // Return the requested split
-  return m_StreamVector.at(i);
-}
-
-void
-StreamingShrinkImageRegionSplitter
-::EstimateSplitMap(unsigned int numberOfPieces)
-{
-  // Clear previous split map
-  m_StreamVector.clear();
-
-  //Encapsulate adpatative splitter to get a list of streams
-  //adapted to the tiling scheme
-  typedef ImageRegionAdaptativeSplitter<2> AdaptativeSplitterType;
-  AdaptativeSplitterType::Pointer internalSplitter = AdaptativeSplitterType::New();
-
-  internalSplitter->SetTileHint(m_TileHint);
-  unsigned int nbSplits = internalSplitter->GetNumberOfSplits(m_ImageRegion,numberOfPieces);
-
-  //Iterate over streams computed by the adaptative splitter
-  for (unsigned int i = 0; i < nbSplits; ++i)
+  if (i >= numPieces)
     {
-    RegionType region;
-    IndexType  index;
-
-    region = internalSplitter->GetSplit(i,numberOfPieces,m_ImageRegion);
-    index = region.GetIndex();
-
-    const unsigned int sizeY = region.GetSize()[1] - 1;
-
-    for (unsigned int j = 0; j < sizeY; ++j)
-      {
-      //Add region aligned with the shrink factor
-      if (((index[1]+j) % m_TileSizeAlignment) == 0)
-        {
-        RegionType splitRegion;
-
-        splitRegion.SetIndex(0, index[0]);
-        splitRegion.SetIndex(1, index[1]+j);
-
-        splitRegion.SetSize(0, region.GetSize()[0]);
-        splitRegion.SetSize(1, 1);
-
-        // Handle the borders
-        splitRegion.Crop(region);
-
-        //Add this split to the vector (we keep the order given by
-        //the adaptative splitter)
-        m_StreamVector.push_back(splitRegion);
-        }
-
-      }
+    itkExceptionMacro("Requested split number " << i << " but region contains only " << numPieces << " splits");
     }
-  m_IsUpToDate = true;
-  return;
+
+  // Compute the split index in the streaming grid
+  splitIndex[1] = i / m_SplitsPerDimension[0];
+  splitIndex[0] = i % m_SplitsPerDimension[0];
+
+  // Transform the split index to the actual coordinates
+  splitRegion.SetIndex(0, region.GetIndex(0) + m_TileDimension * splitIndex[0]);
+  splitRegion.SetIndex(1, region.GetIndex(1) + m_TileSizeAlignment * splitIndex[1]);
+
+  splitRegion.SetSize(0, m_TileDimension);
+  splitRegion.SetSize(1, 1);
+
+  // Handle the borders
+  splitRegion.Crop(region);
+
+  return splitRegion;
 }
 
 void
