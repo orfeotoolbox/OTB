@@ -27,11 +27,10 @@ OTB_TEST_APPLICATION(NAME  apTvFuPansharpening_LMVM
 OTB_TEST_APPLICATION(NAME  apTvFuPansharpening_Bayes
                      APP  Pansharpening
                      OPTIONS -inp ${INPUTDATA}/panchro.tif
-                             -inxs ${INPUTDATA}/multiSpect.tif
+                             -inxs ${INPUTDATA}/multiSpectInterp.tif
                        -out ${TEMP}/apTvFuPanSharpeningBayes.tif double
                        -method bayes
-                       -method.bayes.interpxs ${INPUTDATA}/multiSpectInterp.tif
                      VALID   --compare-image ${EPSILON_6}
-                             ${BASELINE}/fuTvBayesianFusion.tif
+                             ${BASELINE}/apTvFuPanSharpeningBayes.tif
                             ${TEMP}/apTvFuPanSharpeningBayes.tif
                      )

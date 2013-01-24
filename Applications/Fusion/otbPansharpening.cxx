@@ -116,9 +116,6 @@ private:
     AddChoice("method.bayes", "Bayesian");
     SetParameterDescription("method.bayes", "Bayesian fusion.");
 
-    AddParameter(ParameterType_InputImage, "method.bayes.interpxs", "Input interpolated XS Image");
-    SetParameterDescription("method.bayes.interpxs"," Input interpolated XS image.");
-
     AddParameter(ParameterType_Float, "method.bayes.lambda", "Weight");
     SetParameterDescription("method.bayes.lambda", "Set the weighting value.");
     SetMinimumParameterFloatValue("method.bayes.lambda", 0);
@@ -219,9 +216,7 @@ private:
 
       filter->SetMultiSpect(xs);
 
-      FloatVectorImageType* interpXS = GetParameterImage("method.bayes.interpxs");
-
-      filter->SetMultiSpectInterp(interpXS);
+      filter->SetMultiSpectInterp(xs);
       filter->SetPanchro(panchro);
 
       filter->UpdateOutputInformation();
