@@ -38,7 +38,7 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/01/xx)
 
   * Radiometry
     * Updated solar irradiance for WV2 (kindly contributed by D. Duros)
-    * Enhanced the TOA radiance computation for WB2 by integrating the effective bandwidth
+    * Enhanced the TOA radiance computation for WV2 by integrating the effective bandwidth
 
   * Learning
     * Improved ListSample generation
@@ -66,14 +66,14 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/01/xx)
       * Added new morphological operation applications (BinaryMorphologicalOperation,GrayScaleMorphologicalOperation)
       * Added new local statistics extraction applications (LocalStatisticsExtraction)
       * Added new edge extraction application (EdgeExtraction)
-      * Added new homlogous points extraction application, including large scale extraction of tie points  (HomologousPointsExtraction)
+      * Added new homologous points extraction application, including large scale extraction of tie points  (HomologousPointsExtraction)
       * Added new application to refine a sensor model from a geom file and a set of tie points (RefineSensorModel)
       * Added new pan-sharpening application with 3 different algorithms (PanSharpening)
       * Added new classification maps fusion application (FusionOfClassifications)
       * Added new classification map regularization application (ClassificationMapRegularization)
       * Added new confusion matrix computation application (ComputeConfusionMatrix)
       * Added new tile fusion application (TileFusion)
-      * Added new end-to-end stereo pair to DSM application (StereoFramework)
+      * Added new end-to-end stereo pair to Digital Surface Model application (StereoFramework)
 
     * Miscellanous
       * Added an optional clamp in OpticalCalibration application output
