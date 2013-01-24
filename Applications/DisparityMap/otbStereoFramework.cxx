@@ -458,7 +458,7 @@ private:
     m_DispMaskFilter->SetNthInput(0,m_HMedianFilter->GetOutput(),"hdisp");
     m_DispMaskFilter->SetNthInput(1,m_SubPixFilter->GetMetricOutput(),"metric");
     std::ostringstream maskFormula;
-    maskFormula << "if((hdisp > "<<minDisp<<") and (metric > 0.6),255,0)";
+    maskFormula << "if((hdisp > "<<minDisp<<") and (hdisp < "<<maxDisp<<") and (metric > 0.6),255,0)";
     m_DispMaskFilter->SetExpression(maskFormula.str());
     m_ElevationFilter->SetDisparityMaskInput(m_DispMaskFilter->GetOutput());
     
