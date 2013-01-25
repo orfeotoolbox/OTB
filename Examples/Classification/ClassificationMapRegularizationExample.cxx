@@ -56,7 +56,7 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   typedef unsigned char InputLabelPixelType;
   typedef unsigned char OutputLabelPixelType;
   const unsigned int Dimension = 2;
@@ -70,7 +70,7 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
   
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   typedef otb::Image<InputLabelPixelType, Dimension> InputLabelImageType;
   typedef otb::Image<OutputLabelPixelType, Dimension> OutputLabelImageType;
 // Software Guide : EndCodeSnippet
@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
   
-// Software Guide : BeginCodeSnippet   
+// Software Guide : BeginCodeSnippet
   // Neighborhood majority voting filter type
   typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType,
    OutputLabelImageType> NeighborhoodMajorityVotingFilterType;
@@ -111,7 +111,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 
 
-
 // Software Guide : BeginLatex
 //
 // Finally, we define the reader and the writer.
@@ -130,7 +129,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginLatex
 //
-// We instantiate the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter} and the 
+// We instantiate the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter} and the
 // reader objects.
 //
 // Software Guide : EndLatex
