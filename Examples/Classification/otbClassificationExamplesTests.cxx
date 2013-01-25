@@ -26,6 +26,7 @@ void RegisterTests()
 {
   REGISTER_TEST(ScalarImageMarkovRandomField1Test);
   REGISTER_TEST(ScalarImageKmeansClassifierTest);
+  REGISTER_TEST(ClassificationMapRegularizationExampleTest);
 }
 
 #undef main
@@ -35,3 +36,7 @@ void RegisterTests()
 #undef main
 #define main ScalarImageKmeansClassifierTest
 #include "ScalarImageKmeansClassifier.cxx"
+
+#undef main
+#define main ClassificationMapRegularizationExampleTest
+#include "ClassificationMapRegularizationExample.cxx"

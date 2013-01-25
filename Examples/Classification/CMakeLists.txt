@@ -28,6 +28,9 @@ TARGET_LINK_LIBRARIES(SOMImageClassificationExample OTBIO OTBLearning)
 ADD_EXECUTABLE(SVMImageClassificationExample2 SVMImageClassifierExample.cxx )
 TARGET_LINK_LIBRARIES(SVMImageClassificationExample2 OTBIO OTBLearning)
 
+ADD_EXECUTABLE(ClassificationMapRegularizationExample ClassificationMapRegularizationExample.cxx )
+TARGET_LINK_LIBRARIES(ClassificationMapRegularizationExample OTBIO OTBCommon)
+
 #ADD_EXECUTABLE( BayesianClassifierInitializer BayesianClassifierInitializer.cxx )
 #TARGET_LINK_LIBRARIES(BayesianClassifierInitializer ITKStatistics)
 
@@ -152,6 +155,20 @@ ADD_TEST(clTeScalarImageKmeansClassifierTest ${EXE_TESTS}
         ${TEMP}/QB_Suburb_labelled.png
     0 4 79.5097 138.136 213.846 25.9395
 )
+
+ADD_TEST(clTeNeighborhoodMajorityVotingImageFilterTest ${EXE_TESTS}
+       --compare-n-images ${NOTOL}
+       ${OTB_DATA_ROOT}/Baseline/OTB/Images/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
+       ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7_EX.tif
+      ClassificationMapRegularizationExampleTest
+       ${OTB_DATA_ROOT}/Input/Classification/QB_1_ortho_4Cls_N_Classified_OTB.tif
+       ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7_EX.tif
+       false #KeepOriginalLabelBool
+       2 #xRadius
+       5 #yRadius
+       10 #LabelForNoDataPixels
+       7 #LabelForUndecidedPixels
+ )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbClassificationExamplesTests otbClassificationExamplesTests.cxx)

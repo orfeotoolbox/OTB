@@ -24,13 +24,14 @@
 #include "itkConfigure.h"
 
 #include "itkMorphologyImageFilter.h"
+#include "itkBinaryBallStructuringElement.h"
 
 namespace otb
 {
 
 /**
  * \class NeighborhoodMajorityVotingImageFilter
- * \Majority Voting of an image
+ * Neighborhood Majority Voting of an image
  *
  * Filters a labeled image using Majority Voting in a specified neighbordhood. Majority Voting takes the
  * more representative value of all the pixels identified by the structuring element and then sets the
@@ -56,7 +57,11 @@ namespace otb
  * \sa MorphologyImageFilter, GrayscaleFunctionDilateImageFilter, BinaryDilateImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
-template<class TInputImage, class TOutputImage=TInputImage, class TKernel=typename itk::Neighborhood<typename TInputImage::PixelType, TInputImage::ImageDimension> >
+template<
+         class TInputImage,
+         class TOutputImage=TInputImage,
+         class TKernel=typename itk::BinaryBallStructuringElement<typename TInputImage::PixelType, TInputImage::ImageDimension>
+         >
 class ITK_EXPORT NeighborhoodMajorityVotingImageFilter :
     public itk::MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
 {

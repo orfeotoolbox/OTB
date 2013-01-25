@@ -23,8 +23,6 @@
 #include <otbImageFileReader.h>
 #include "otbImageFileWriter.h"
 
-#include "itkBinaryBallStructuringElement.h"
-
 #include "otbNeighborhoodMajorityVotingImageFilter.h"
 
 #include "itkTimeProbe.h"
@@ -32,8 +30,8 @@
 
 int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
 {
-  typedef unsigned char InputLabelPixelType; //8 bits
-  typedef unsigned char OutputLabelPixelType; //8 bits
+  typedef unsigned char InputLabelPixelType; // 8 bits
+  typedef unsigned char OutputLabelPixelType; // 8 bits
   const unsigned int Dimension = 2;
   
   typedef otb::Image<InputLabelPixelType, Dimension> InputLabelImageType;
@@ -42,15 +40,13 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
   typedef otb::ImageFileReader<InputLabelImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputLabelImageType> WriterType;
   
-  //SE TYPE
-  typedef itk::Neighborhood<InputLabelPixelType, Dimension> StructuringType;
+  
+  // Neighborhood majority voting filter type
+  typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType, OutputLabelImageType> NeighborhoodMajorityVotingFilterType;
+  
+  // Binary ball Structuring Element type
+  typedef NeighborhoodMajorityVotingFilterType::KernelType StructuringType;
   typedef StructuringType::RadiusType RadiusType;
-  
-  //BINARY BALL SE TYPE
-  typedef itk::BinaryBallStructuringElement<InputLabelPixelType, Dimension> BallStructuringType;
-  
-  //NEIGHBORHOOD MAJORITY FILTER TYPE
-  typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType, OutputLabelImageType, StructuringType> NeighborhoodMajorityVotingFilterType;
   
   
   const char * inputFileName = argv[1];
@@ -59,13 +55,13 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
   
-  //NEIGHBORHOOD MAJORITY FILTER
+  // Neighborhood majority voting filter
   NeighborhoodMajorityVotingFilterType::Pointer NeighMajVotingFilter;
   NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();
   
   NeighMajVotingFilter->SetInput(reader->GetOutput());
   
-  BallStructuringType seBall;
+  StructuringType seBall;
   RadiusType rad;
   
 

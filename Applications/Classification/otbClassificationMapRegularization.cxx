@@ -20,7 +20,6 @@
 #include "otbWrapperApplicationFactory.h"
 
 // Majority Voting filter includes
-#include "itkBinaryBallStructuringElement.h"
 #include "otbNeighborhoodMajorityVotingImageFilter.h"
 
 namespace otb
@@ -47,16 +46,14 @@ public:
   
   typedef UInt8ImageType InputLabelImageType;
   typedef UInt8ImageType OutputLabelImageType;
-
-  //SE TYPE
-  typedef itk::Neighborhood<InputLabelPixelType, 2> StructuringType;
-  typedef StructuringType::RadiusType RadiusType;
   
-  //BINARY BALL SE TYPE
-  typedef itk::BinaryBallStructuringElement<InputLabelPixelType, 2> BallStructuringType;
+  // Neighborhood majority voting filter type
+  typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType, OutputLabelImageType> NeighborhoodMajorityVotingFilterType;
 
-  //NEIGHBORHOOD MAJORITY FILTER TYPE
-  typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType, OutputLabelImageType, StructuringType> NeighborhoodMajorityVotingFilterType;
+  // Binary ball Structuring Element type
+  typedef NeighborhoodMajorityVotingFilterType::KernelType StructuringType;
+  typedef StructuringType::RadiusType RadiusType;
+
 
 private:
   void DoInit()
@@ -127,15 +124,15 @@ private:
     // Majority Voting
     m_NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();
     
-    // Load input image to CLASSIFY
+    // Load input labeled image to regularize
     UInt8ImageType::Pointer inImage = GetParameterUInt8Image("io.in");
     
-    // NEIGHBORHOOD MAJORITY FILTER SETTINGS
+    // Neighborhood majority voting filter settings
     RadiusType rad;
     rad[0] = GetParameterInt("ip.radius");
     rad[1] = GetParameterInt("ip.radius");
     
-    BallStructuringType seBall;
+    StructuringType seBall;
     seBall.SetRadius(rad);
     seBall.CreateStructuringElement();
     m_NeighMajVotingFilter->SetKernel(seBall);
@@ -158,14 +155,14 @@ private:
     /** REGULARIZATION OF CLASSIFICATION */
     SetParameterOutputImage<OutputLabelImageType>("io.out", m_NeighMajVotingFilter->GetOutput());
   
-  }//END DoExecute()
+  }// END DoExecute()
 
 
   NeighborhoodMajorityVotingFilterType::Pointer m_NeighMajVotingFilter;
-}; //END class ClassificationMapRegularization
+}; // END class ClassificationMapRegularization
 
 
-}//END namespace wrapper
-}//END namespace otb
+}// END namespace wrapper
+}// END namespace otb
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::ClassificationMapRegularization)
