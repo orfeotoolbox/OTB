@@ -121,9 +121,13 @@ private:
 private slots:
 };
 
+} // end namespace 'mvd'.
+
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
+namespace mvd
+{
 } // end namespace 'mvd'
 
 #endif // __mvdMyClass_h

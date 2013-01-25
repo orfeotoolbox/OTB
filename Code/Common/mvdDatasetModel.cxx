@@ -80,7 +80,7 @@ DatasetModel
     // 2.2. Generate cached data.
     // TODO: generate image-model cached data (quicklook,
     // histogram-list etc.)
-    vectorImageModel->GenerateCachedData();
+    vectorImageModel->BuildModel();
     }
   catch( std::exception& exc )
     {
@@ -94,6 +94,13 @@ DatasetModel
 
   // If everything has gone well, parent image model to dataset model.
   vectorImageModel->setParent( this );
+}
+
+/*******************************************************************************/
+void
+DatasetModel
+::virtual_BuildModel()
+{
 }
 
 /*******************************************************************************/

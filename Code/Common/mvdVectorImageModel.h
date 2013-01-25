@@ -85,6 +85,13 @@ class Monteverdi2_EXPORT VectorImageModel :
 //
 // Public types.
 public:
+  /**
+   * In-memory storage type of source image (from file).
+   */
+  typedef DefaultImageType SourceImageType;
+
+  /**
+   */
   class Settings
   {
     //
@@ -191,6 +198,14 @@ public:
   /** Destructor */
   virtual ~VectorImageModel();
 
+  /** */
+  // TODO: Move into template wrapper base-class.
+  SourceImageType::ConstPointer ToImage() const;
+
+  /** */
+  // TODO: Move into template wrapper base-class.
+  const SourceImageType::Pointer& ToImage();
+
   /**
    * TEMPORARY?
    */
@@ -250,11 +265,17 @@ signals:
 // Protected methods.
 protected:
 
-  /** */
-  virtual void virtual_GenerateCachedData();
-
   /** Clear buffer */
   void ClearBuffer();
+
+  //
+  // AbstractImageModel overrides.
+
+  /** */
+  virtual ImageBaseType::ConstPointer virtual_ToImageBase() const;
+
+  /** */
+  virtual ImageBaseType::Pointer virtual_ToImageBase();
 
 //
 // Protected attributes.
@@ -265,10 +286,6 @@ protected:
 //
 // Private types.
 private:
-  /**
-   * In-memory storage type of source image (from file).
-   */
-  typedef DefaultImageType SourceImageType;
   /**
    * Display type of source image (to OpenGL).
    */
@@ -355,6 +372,9 @@ private:
   // Default image reader
   DefaultImageFileReaderType::Pointer m_ImageFileReader;
 
+  /** */
+  SourceImageType::Pointer m_Image;
+
   // Buffer where to store the image pixels needed by the renderer
   unsigned char *                     m_RasterizedBuffer;
 
@@ -394,6 +414,24 @@ private slots:
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
+
+/*****************************************************************************/
+inline
+VectorImageModel::SourceImageType::ConstPointer
+VectorImageModel
+::ToImage() const
+{
+  return m_Image.GetPointer();
+}
+
+/*****************************************************************************/
+inline
+const VectorImageModel::SourceImageType::Pointer&
+VectorImageModel
+::ToImage()
+{
+  return m_Image;
+}
 
 /*****************************************************************************/
 inline

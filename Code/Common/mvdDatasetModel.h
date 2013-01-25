@@ -113,6 +113,12 @@ signals:
 // Protected methods.
 protected:
 
+  //
+  // AbstractModel overrides.
+
+  /** */
+  virtual void virtual_BuildModel();
+
 //
 // Protected attributes.
 protected:

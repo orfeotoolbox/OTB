@@ -34,6 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdHistogramSequence.h"
 
 namespace mvd
 {
@@ -59,10 +60,15 @@ AbstractImageModel
 }
 
 /*******************************************************************************/
+void
+AbstractImageModel
+::virtual_BuildModel()
+{
+  /* HistogramSequence* histogramModel = */ newChildModel< HistogramSequence >();
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-
-/*******************************************************************************/
-
 
 } // end namespace 'mvd'

@@ -20,12 +20,14 @@
 #ifndef __mvdAbstractModel_h
 #define __mvdAbstractModel_h
 
-#include "ConfigureMonteverdi2.h"
-
 //
 // Configuration include.
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
+
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -34,6 +36,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -44,7 +47,9 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
-//#include "mvdTypes.h"
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
 
 //
 // External classes pre-declaration.
@@ -57,13 +62,22 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
 /** \class AbstractModel
  *
  */
 class Monteverdi2_EXPORT AbstractModel :
     public QObject
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public methods.
@@ -72,9 +86,23 @@ public:
   /** Destructor */
   virtual ~AbstractModel();
 
+  /** */
+  template< typename T >
+    T* newChildModel();
+
+  /** */
+  inline void parentChildModel( AbstractModel* );
+
+  /** */
+  inline void BuildModel();
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
 //
-// SIGNALS.
+// Signals.
 signals:
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
@@ -82,23 +110,83 @@ protected:
   /** Constructor */
   AbstractModel( QObject* parent =NULL );
 
+  /** */
+  // TODO: Provide default empty virtual method body and clean-up
+  // derived-classes.
+  virtual void virtual_BuildModel() =0;
+
 //
 // Protected attributes.
 protected:
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private methods.
 private:
 
-
 //
 // Private attributes.
 private:
 
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+
 //
-// SLOTS.
+// Slots.
 private slots:
 };
+
+} // end namespace 'mvd'.
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
+/*****************************************************************************/
+template< typename T >
+T*
+AbstractModel
+::newChildModel()
+{
+  T* model = new T( this );
+
+  try
+    {
+    parentChildModel( model );
+    }
+  catch( std::exception& exc )
+    {
+    delete model;
+    model = NULL;
+
+    throw;
+    }
+
+  return model;
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractModel
+::parentChildModel( AbstractModel* model )
+{
+  assert( model!=NULL );
+
+  model->BuildModel();
+
+  model->setParent( this );
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractModel
+::BuildModel()
+{
+  virtual_BuildModel();
+}
 
 } // end namespace 'mvd'
 

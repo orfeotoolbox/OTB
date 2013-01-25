@@ -87,7 +87,16 @@ public:
   virtual ~AbstractImageModel();
 
   /** */
-  inline void GenerateCachedData();
+  inline ImageRegionType GetLargestRegion() const;
+
+  /** */
+  inline CountType GetNbComponents() const;
+
+  /** */
+  virtual ImageBaseType::ConstPointer ToImageBase() const;
+
+  /** */
+  virtual ImageBaseType::Pointer ToImageBase();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -105,7 +114,16 @@ protected:
   AbstractImageModel( QObject* parent =NULL );
 
   /** */
-  virtual void virtual_GenerateCachedData() =0;
+  virtual ImageBaseType::ConstPointer virtual_ToImageBase() const =0;
+
+  /** */
+  virtual ImageBaseType::Pointer virtual_ToImageBase() =0;
+
+  //
+  // AbstractModel overrides.
+
+  /** */
+  virtual void virtual_BuildModel();
 
 //
 // Protected attributes.
@@ -139,11 +157,38 @@ namespace mvd
 
 /*****************************************************************************/
 inline
-void
+ImageRegionType
 AbstractImageModel
-::GenerateCachedData()
+::GetLargestRegion() const
 {
-  virtual_GenerateCachedData();
+  return ToImageBase()->GetLargestPossibleRegion();
+}
+
+/*****************************************************************************/
+inline
+CountType
+AbstractImageModel
+::GetNbComponents() const
+{
+  return ToImageBase()->GetNumberOfComponentsPerPixel();
+}
+
+/*****************************************************************************/
+inline
+ImageBaseType::ConstPointer
+AbstractImageModel
+::ToImageBase() const
+{
+  return virtual_ToImageBase();
+}
+
+/*****************************************************************************/
+inline
+ImageBaseType::Pointer
+AbstractImageModel
+::ToImageBase()
+{
+  return virtual_ToImageBase();
 }
 
 } // end namespace 'mvd'

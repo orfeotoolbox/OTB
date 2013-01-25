@@ -57,6 +57,7 @@ VectorImageModel
 ::VectorImageModel( QObject* parent ) :
   AbstractImageModel( parent ),
   m_ImageFileReader(),
+  m_Image(),
   m_RasterizedBuffer( NULL ),
   m_ExtractFilter(),
   m_RenderingFilter(),
@@ -135,39 +136,40 @@ VectorImageModel
 
   // Ensure this only one output.
   assert( m_ImageFileReader->GetNumberOfOutputs()==1 );
+  // Wrap output image.
+  m_Image = m_ImageFileReader->GetOutput( 0 );
 
   //
   // 2. Initialize internal settings.
   DefaultImageType::ImageMetadataInterfacePointerType metaData(
     GetMetadataInterface()
   );
-  DefaultImageType::Pointer output( GetOutput( 0 ) );
 
   // Ensure default display returns valid band indices (see OTB bug).
   assert( metaData->GetDefaultDisplay().size()==3 );
-  /*
+#if 0
   assert( metaData->GetDefaultDisplay()[ 0 ]
-	  < output->GetNumberOfComponentsPerPixel() );
+	  < m_Image->GetNumberOfComponentsPerPixel() );
   assert( metaData->GetDefaultDisplay()[ 1 ]
-	  < output->GetNumberOfComponentsPerPixel() );
+	  < m_Image->GetNumberOfComponentsPerPixel() );
   assert( metaData->GetDefaultDisplay()[ 2 ]
-	  < output->GetNumberOfComponentsPerPixel() );
-  */
+	  < m_Image->GetNumberOfComponentsPerPixel() );
+#endif
 
   // Patch invalid band indices of default-display (see OTB bug).
   Settings::ChannelVector rgb( metaData->GetDefaultDisplay() );
 
-  if( rgb[ 0 ]>=output->GetNumberOfComponentsPerPixel() )
+  if( rgb[ 0 ]>=m_Image->GetNumberOfComponentsPerPixel() )
     {
     rgb[ 0 ] = 0;
     }
 
-  if( rgb[ 1 ]>=output->GetNumberOfComponentsPerPixel() )
+  if( rgb[ 1 ]>=m_Image->GetNumberOfComponentsPerPixel() )
     {
     rgb[ 1 ] = 0;
     }
 
-  if( rgb[ 2 ]>=output->GetNumberOfComponentsPerPixel() )
+  if( rgb[ 2 ]>=m_Image->GetNumberOfComponentsPerPixel() )
     {
     rgb[ 2 ] = 0;
     }
@@ -502,10 +504,19 @@ VectorImageModel::Closest(double invZoomfactor, const std::vector<unsigned int> 
 }
 
 /*******************************************************************************/
-void
+ImageBaseType::ConstPointer
 VectorImageModel
-::virtual_GenerateCachedData()
+::virtual_ToImageBase() const
 {
+  return m_Image.GetPointer();
+}
+
+/*******************************************************************************/
+ImageBaseType::Pointer
+VectorImageModel
+::virtual_ToImageBase()
+{
+  return m_Image.GetPointer();
 }
 
 /*******************************************************************************/
