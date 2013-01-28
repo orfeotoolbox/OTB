@@ -163,7 +163,7 @@ MainWindow
   dockWidget->setWidget( widget );
 
   // Features.
-  dockWidget->setFloating( true );
+  dockWidget->setFloating( false );
   dockWidget->setFeatures(
     QDockWidget::DockWidgetMovable |
     QDockWidget::DockWidgetFloatable
