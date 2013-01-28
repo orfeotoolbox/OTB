@@ -352,6 +352,44 @@ ImageFileWriter<TInputImage>
     }
 }
 
+template<class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetInput(const InputImageType* input)
+{
+  this->ProcessObject::SetNthInput(0,const_cast<InputImageType*>(input));
+}
+
+template<class TInputImage>
+const TInputImage*
+ImageFileWriter<TInputImage>
+::GetInput()
+{
+  if (this->GetNumberOfInputs() < 1)
+    {
+    return 0;
+    }
+  
+  return static_cast<const InputImageType*>(this->ProcessObject::GetInput(0));
+}
+
+/**
+ * Update method : update output information of input and write to file
+ */
+template<class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::Update()
+{
+  // Update output information on input image
+  InputImagePointer inputPtr =
+    const_cast<InputImageType *>(this->GetInput());
+  inputPtr->UpdateOutputInformation();
+  
+  itk::DataObject *dummyObject;
+  this->UpdateOutputData(dummyObject);
+}
+
 /**
  *
  */
@@ -476,12 +514,6 @@ ImageFileWriter<TInputImage>
       }
     }
 
-
-  /**
-   * Prepare all the outputs. This may deallocate previous bulk data.
-   */
-  this->PrepareOutputs();
-
   /**
    * Make sure we have the necessary inputs
    */
@@ -500,12 +532,6 @@ ImageFileWriter<TInputImage>
    * Tell all Observers that the filter is starting
    */
   this->InvokeEvent(itk::StartEvent());
-
-  /**
-   * Allocate the output buffer.
-   */
-  OutputImagePointer    outputPtr = this->GetOutput(0);
-  OutputImageRegionType outputRegion = outputPtr->GetLargestPossibleRegion();
 
   /** Prepare ImageIO  : create ImageFactory */
 
@@ -586,9 +612,9 @@ ImageFileWriter<TInputImage>
   /**
    * Grab the input
    */
-  InputImagePointer inputPtr =
-    const_cast<InputImageType *>(this->GetInput(0));
-
+  InputImagePointer inputPtr = const_cast<InputImageType *>(this->GetInput());
+  InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
+  
   /**
    * Determine of number of pieces to divide the input.  This will be the
    * minimum of what the user specified via SetNumberOfDivisionsStrippedStreaming()
@@ -608,7 +634,7 @@ ImageFileWriter<TInputImage>
     otbMsgDevMacro(<< "Buffered region is the largest possible region, there is no need for streaming.");
     this->SetNumberOfDivisionsStrippedStreaming(1);
     }
-  m_StreamingManager->PrepareStreaming(inputPtr, outputRegion);
+  m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
   m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
   otbMsgDebugMacro(<< "Number Of Stream Divisions : " << m_NumberOfDivisions);
 
@@ -619,17 +645,17 @@ ImageFileWriter<TInputImage>
   InputImageRegionType streamRegion;
 
   //
-  // Setup the ImageIO with information from outputPtr
+  // Setup the ImageIO with information from inputPtr
   //
   m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);
-  const typename TInputImage::SpacingType&   spacing = outputPtr->GetSpacing();
-  const typename TInputImage::PointType&     origin = outputPtr->GetOrigin();
-  const typename TInputImage::DirectionType& direction = outputPtr->GetDirection();
+  const typename TInputImage::SpacingType&   spacing = inputPtr->GetSpacing();
+  const typename TInputImage::PointType&     origin = inputPtr->GetOrigin();
+  const typename TInputImage::DirectionType& direction = inputPtr->GetDirection();
 
   for (unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
     {
     // Final image size
-    m_ImageIO->SetDimensions(i, outputRegion.GetSize(i));
+    m_ImageIO->SetDimensions(i, inputRegion.GetSize(i));
     m_ImageIO->SetSpacing(i, spacing[i]);
     m_ImageIO->SetOrigin(i, origin[i]);
 
@@ -721,17 +747,6 @@ ImageFileWriter<TInputImage>
     source->RemoveObserver(m_ObserverID);
     }
 
-  /**
-   * Now we have to mark the data as up to data.
-   */
-  for (idx = 0; idx < this->GetNumberOfOutputs(); ++idx)
-    {
-    if (this->GetOutput(idx))
-      {
-      this->GetOutput(idx)->DataHasBeenGenerated();
-      }
-    }
-
   // Write the image keyword list if any
   // ossimKeywordlist geom_kwl;
   // ImageKeywordlist otb_kwl;
@@ -764,7 +779,6 @@ ImageFileWriter<TInputImage>
 {
   const InputImageType * input = this->GetInput();
   InputImagePointer cacheImage;
-  InputImageRegionType largestRegion = input->GetLargestPossibleRegion();
 
   // Make sure that the image is the right type and no more than
   // four components.
@@ -879,20 +893,6 @@ ImageFileWriter<TInputImage>
 ::GetFileName () const
 {
 return this->m_FilenameHelper->GetSimpleFileName();
-}
-
-template <class TInputImage>
-void
-ImageFileWriter<TInputImage>
-::GenerateOutputRequestedRegion(itk::DataObject *output)
-{
-  Superclass::GenerateOutputRequestedRegion(output);
-  
-  // Here we set the output requested region to the largest possible region
-  // This is a default behaviour that should work with most upstream filters
-  // This requested region will be modified anyway and repropagated during UpdateOutputData.
-  OutputImageType* imgOutput = dynamic_cast<OutputImageType*>(output);
-  imgOutput->SetRequestedRegionToLargestPossibleRegion();
 }
 
 } // end namespace otb

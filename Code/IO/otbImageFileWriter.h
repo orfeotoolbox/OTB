@@ -20,7 +20,7 @@
 
 #include "otbMacro.h"
 #include "itkImageIOBase.h"
-#include "itkImageToImageFilter.h"
+#include "itkProcessObject.h"
 #include "otbStreamingManager.h"
 #include "otbExtendedFilenameToWriterOptions.h"
 
@@ -55,12 +55,12 @@ namespace otb
  * \sa ExtendedFilenameToReaderOptions
  */
 template <class TInputImage>
-class ITK_EXPORT ImageFileWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
+class ITK_EXPORT ImageFileWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageFileWriter                          Self;
-  typedef itk::ImageToImageFilter<TInputImage, TInputImage> Superclass;
+  typedef ImageFileWriter                                   Self;
+  typedef itk::ProcessObject                                Superclass;
   typedef itk::SmartPointer<Self>                           Pointer;
   typedef itk::SmartPointer<const Self>                     ConstPointer;
 
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageFileWriter, itk::ImageToImageFilter);
+  itkTypeMacro(ImageFileWriter, itk::ProcessObject);
 
   /** Some typedefs for the input and output. */
   typedef TInputImage                            InputImageType;
@@ -181,12 +181,21 @@ public:
   /** Get the number of pieces to divide the input. The upstream pipeline
    * will be executed this many times. */
   itkLegacyMacro( unsigned long GetNumberOfStreamDivisions(void) );
-
-  /** Override UpdateOutputData() from ProcessObject to divide upstream
-   * updates into pieces. This filter does not have a GenerateData()
-   * or ThreadedGenerateData() method.  Instead, all the work is done
-   * in UpdateOutputData() since it must update a little, execute a little,
-   * update some more, execute some more, etc. */
+  
+  /** Set the only input of the writer */
+  virtual void SetInput(const InputImageType *input);
+  
+  /** Get writer only input */
+  const InputImageType* GetInput();
+  
+  /** Override Update() from ProcessObject because this filter 
+   *  has no output. */
+  virtual void Update();
+  
+  /** Override UpdateOutputData() from ProcessObject to divide the 
+   * largest possible region into pieces. Each piece is processed 
+   * by GenerateData(). The setting and propagation of the requested
+   * regions are done in UpdateOutputData(). */
   virtual void UpdateOutputData(itk::DataObject * itkNotUsed(output));
 
   /** ImageFileWriter Methods */
@@ -232,9 +241,6 @@ protected:
 
   /** Does the real work. */
   virtual void GenerateData(void);
-
-  virtual void GenerateOutputRequestedRegion(itk::DataObject *output);
-
 
 private:
   ImageFileWriter(const ImageFileWriter &); //purposely not implemented
