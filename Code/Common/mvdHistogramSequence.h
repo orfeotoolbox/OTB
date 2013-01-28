@@ -181,7 +181,15 @@ void
 HistogramSequence
 ::template_BuildModel_I()
 {
-  qDebug() << "Generating histogram (I)...";
+  QTime lMain;
+  QTime lPass1;
+  QTime lPass2;
+
+  lMain.start();
+
+  qDebug() << tr( "%1: Generating histogram (I)..." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+
 
   AbstractImageModel* imageModel =
     qobject_cast< AbstractImageModel* >( parent() );
@@ -190,6 +198,11 @@ HistogramSequence
 
   //
   // 1st pass: process min/MAX for each band.
+
+  qDebug() << tr( "%1: Pass #1 - finding pixel min/maxes..." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+
+  lPass1.start();
 
   // Connect min/MAX pipe-section.
   typedef
@@ -208,8 +221,19 @@ HistogramSequence
   typename MinMaxFilter::PixelType lSrcMin( filterMinMax->GetMinimum() );
   typename MinMaxFilter::PixelType lSrcMax( filterMinMax->GetMaximum() );
 
+  qDebug() << tr( "%1: Pass #1 - done (%2 ms)." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+    .arg( lPass1.elapsed() );
+
   //
   // 2nd pass: compute histogram.
+
+  qDebug() << tr( "%1: Pass #2 - computing histogram..." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+
+  lPass2.start();
+
+  // Connect histogram-generator pipe-section.
   typedef
     otb::StreamingHistogramVectorImageFilter< TImage >
     HistogramFilter;
@@ -220,17 +244,25 @@ HistogramSequence
     otb::DynamicCast< TImage >( imageModel->ToImageBase() )
   );
 
+  // Setup histogram filter.
   histogramFilter->GetFilter()->SetHistogramMin( lSrcMin );
   histogramFilter->GetFilter()->SetHistogramMax( lSrcMax );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
 
+  // Go.
   histogramFilter->Update();
+
+  qDebug() << tr( "%1: Pass #2 - done (%2 ms)." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+    .arg( lPass2.elapsed()  );
 
   //
   // Reference result.
   m_Histograms = histogramFilter->GetHistogramList();
 
-  qDebug() << "Histogram (I) generated.";
+  qDebug() << tr( "%1: Histogram (I) generated (%2 ms)." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+    .arg( lMain.elapsed() );
 }
 
 /*******************************************************************************/
@@ -240,7 +272,14 @@ void
 HistogramSequence
 ::template_BuildModel_M()
 {
-  qDebug() << "Generate histogram (M)...";
+  QTime lMain;
+  QTime lPass1;
+  QTime lPass2;
+
+  lMain.start();
+
+  qDebug() << tr( "%1: Generating histogram (M)..." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
 
   TImageModel* imageModel =
     qobject_cast< TImageModel* >( parent() );
@@ -249,6 +288,11 @@ HistogramSequence
 
   //
   // 1st pass: process min/MAX for each band.
+
+  qDebug() << tr( "%1: Pass #1 - finding pixel min/maxes..." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+
+  lPass1.start();
 
   // Connect min/MAX pipe-section.
   typedef
@@ -266,9 +310,19 @@ HistogramSequence
   typename MinMaxFilter::PixelType lSrcMin( filterMinMax->GetMinimum() );
   typename MinMaxFilter::PixelType lSrcMax( filterMinMax->GetMaximum() );
 
+  qDebug() << tr( "%1: Pass #1 - done (%2 ms)." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+    .arg( lPass1.elapsed() );
 
   //
   // 2nd pass: compute histogram.
+
+  qDebug() << tr( "%1: Pass #2 - computing histogram..." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+
+  lPass2.start();
+
+  // Connect histogram-generator pipe-section.
   typedef
     otb::StreamingHistogramVectorImageFilter<
       typename TImageModel::SourceImageType >
@@ -278,17 +332,25 @@ HistogramSequence
 
   histogramFilter->SetInput( imageModel->ToImage() );
 
+  // Setup histogram filter.
   histogramFilter->GetFilter()->SetHistogramMin( lSrcMin );
   histogramFilter->GetFilter()->SetHistogramMax( lSrcMax );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
 
+  // Go.
   histogramFilter->Update();
+
+  qDebug() << tr( "%1: Pass #2 - done (%2 ms)." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+    .arg( lPass2.elapsed()  );
 
   //
   // Reference result.
   m_Histograms = histogramFilter->GetHistogramList();
 
-  qDebug() << "Histogram (M) generated.";
+  qDebug() << tr( "%1: Histogram (M) generated (%2 ms)." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+    .arg( lMain.elapsed() );
 }
 
 } // end namespace 'mvd'

@@ -162,13 +162,6 @@ MainWindow
   dockWidget->setObjectName( dockName );
   dockWidget->setWidget( widget );
 
-  /*
-  qDebug() << dockWidget;
-  qDebug() << widget;
-  qDebug() << widget->parent();
-  qDebug();
-  */
-
   // Features.
   dockWidget->setFloating( true );
   dockWidget->setFeatures(

@@ -72,7 +72,7 @@ void
 HistogramSequence
 ::virtual_BuildModel()
 {
-  // template_BuildModel_I< VectorImageModel::SourceImageType >();
+  template_BuildModel_I< VectorImageModel::SourceImageType >();
   template_BuildModel_M< VectorImageModel >();
 
   // template_BuildModel< otb::Image< FixedArray< double, 4 >, 2 > >();
