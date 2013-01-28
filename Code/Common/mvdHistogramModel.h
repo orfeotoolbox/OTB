@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdHistogramSequence_h
-#define __mvdHistogramSequence_h
+#ifndef __mvdHistogramModel_h
+#define __mvdHistogramModel_h
 
 //
 // Configuration include.
@@ -68,9 +68,9 @@ namespace mvd
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class HistogramSequence
+ * \class HistogramModel
  */
-class Monteverdi2_EXPORT HistogramSequence :
+class Monteverdi2_EXPORT HistogramModel :
     public AbstractModel
 {
 
@@ -85,10 +85,10 @@ class Monteverdi2_EXPORT HistogramSequence :
 public:
 
   /** Constructor */
-  HistogramSequence( QObject* parent =NULL );
+  HistogramModel( QObject* parent =NULL );
 
   /** Destructor */
-  virtual ~HistogramSequence();
+  virtual ~HistogramModel();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -178,7 +178,7 @@ namespace mvd
 template< typename TImage >
 inline
 void
-HistogramSequence
+HistogramModel
 ::template_BuildModel_I()
 {
   QTime lMain;
@@ -269,7 +269,7 @@ HistogramSequence
 template< typename TImageModel >
 inline
 void
-HistogramSequence
+HistogramModel
 ::template_BuildModel_M()
 {
   QTime lMain;
@@ -355,4 +355,4 @@ HistogramSequence
 
 } // end namespace 'mvd'
 
-#endif // __mvdHistogramSequence_h
+#endif // __mvdHistogramModel_h

@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdHistogramSequence.h"
+#include "mvdHistogramModel.h"
 
 
 /*****************************************************************************/
@@ -42,7 +42,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::HistogramSequence
+  TRANSLATOR mvd::HistogramModel
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -54,25 +54,25 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-HistogramSequence
-::HistogramSequence( QObject* parent ) :
+HistogramModel
+::HistogramModel( QObject* parent ) :
   AbstractModel( parent ),
   m_Histograms()
 {
 }
 
 /*******************************************************************************/
-HistogramSequence
-::~HistogramSequence()
+HistogramModel
+::~HistogramModel()
 {
 }
 
 /*******************************************************************************/
 void
-HistogramSequence
+HistogramModel
 ::virtual_BuildModel()
 {
-  template_BuildModel_I< VectorImageModel::SourceImageType >();
+  // template_BuildModel_I< VectorImageModel::SourceImageType >();
   template_BuildModel_M< VectorImageModel >();
 
   // template_BuildModel< otb::Image< FixedArray< double, 4 >, 2 > >();

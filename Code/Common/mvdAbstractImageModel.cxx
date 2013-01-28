@@ -34,7 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdHistogramSequence.h"
+#include "mvdHistogramModel.h"
 
 namespace mvd
 {
@@ -64,7 +64,7 @@ void
 AbstractImageModel
 ::virtual_BuildModel()
 {
-  /* HistogramSequence* histogramModel = */ newChildModel< HistogramSequence >();
+  newChildModel< HistogramModel >();
 }
 
 /*******************************************************************************/
