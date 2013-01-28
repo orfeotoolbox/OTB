@@ -250,7 +250,7 @@ MainWindow
   // Disconnect previously selected model from view.
   QObject::disconnect(
     vectorImageModel,
-    SIGNAL( settingsUpdated() ),
+    SIGNAL( SettingsUpdated() ),
     // to:
     centralWidget(),
     SLOT( updateGL() )

@@ -25,7 +25,7 @@ set(Monteverdi2_VERSION_PATCH "0")
 set(Monteverdi2_VERSION_STRING "${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}.${Monteverdi2_VERSION_PATCH}")
 
 #----------------------------------------------------------------------------
-set(Monteverdi2_FLOATING_TYPE "double" CACHE STRING "The type of data in which input images are read (double/float)." )
+set(Monteverdi2_FLOATING_TYPE "float" CACHE STRING "The type of data in which input images are read (double/float)." )
 
 #----------------------------------------------------------------------------
 #Prevents conflicts with visual min/max function
