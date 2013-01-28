@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdColorDynamicsWidget.h"
-#include "ui_mvdColorDynamicsWidget.h"
+#include "mvdColorBandDynamicsWidget.h"
+#include "ui_mvdColorBandDynamicsWidget.h"
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -38,7 +38,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::ColorDynamicsWidget
+  TRANSLATOR mvd::ColorBandDynamicsWidget
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -46,22 +46,36 @@ namespace mvd
 */
 
 /*******************************************************************************/
-ColorDynamicsWidget
-::ColorDynamicsWidget( QWidget* parent, Qt::WindowFlags flags  ):
+ColorBandDynamicsWidget
+::ColorBandDynamicsWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
-  m_UI( new mvd::Ui::ColorDynamicsWidget() )
+  m_UI( new mvd::Ui::ColorBandDynamicsWidget() )
 {
   m_UI->setupUi( this );
 }
 
 /*******************************************************************************/
-ColorDynamicsWidget
-::~ColorDynamicsWidget()
+ColorBandDynamicsWidget
+::~ColorBandDynamicsWidget()
 {
 }
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*****************************************************************************/
+void
+ColorBandDynamicsWidget
+::on_lowQuantileSpinBox_valueChanged( double value )
+{
+}
+
+/*****************************************************************************/
+void
+ColorBandDynamicsWidget
+::on_highQuantileSpinBox_valueChanged( double value )
+{
+}
+
+/*******************************************************************************/
 
 } // end namespace 'mvd'

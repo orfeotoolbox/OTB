@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdColorDynamicsWidget_h
-#define __mvdColorDynamicsWidget_h
+#ifndef __mvdColorBandDynamicsWidget_h
+#define __mvdColorBandDynamicsWidget_h
 
 //
 // Configuration include.
@@ -61,7 +61,7 @@ namespace mvd
 // Internal classes pre-declaration.
 namespace Ui
 {
-class ColorDynamicsWidget;
+class ColorBandDynamicsWidget;
 };
 
 
@@ -69,15 +69,57 @@ class ColorDynamicsWidget;
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class ColorDynamicsWidget
+ * \class ColorBandDynamicsWidget
  */
-class Monteverdi2_EXPORT ColorDynamicsWidget :
+class Monteverdi2_EXPORT ColorBandDynamicsWidget :
     public QWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
   Q_OBJECT;
+
+#if 0
+  /** */
+  Q_PROPERTY( double lowIntensity
+	      READ GetLowIntensity
+	      WRITE SetLowIntensity );
+
+  /** */
+  Q_PROPERTY( double highIntensity
+	      READ GetHighIntensity
+	      WRITE SetHighIntensity );
+
+  /** */
+  Q_PROPERTY( double minIntensity
+	      READ GetMinIntensity
+	      WRITE SetMinIntensity );
+
+  /** */
+  Q_PROPERTY( double maxIntensity
+	      READ GetMinIntensity
+	      WRITE SetMinIntensity );
+
+  /** */
+  Q_PROPERTY( double lowQuantile
+	      READ GetLowQuantile
+	      WRITE SetLowQuantile );
+
+  /** */
+  Q_PROPERTY( double highQuantile
+	      READ GetHighQuantile
+	      WRITE SetHighQuantile );
+
+  /** */
+  Q_PROPERTY( double minQuantile
+	      READ GetMinQuantile
+	      WRITE SetMinQuantile );
+
+  /** */
+  Q_PROPERTY( double maxQuantile
+	      READ GetMinQuantile
+	      WRITE SetMinQuantile );
+#endif
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -86,10 +128,10 @@ class Monteverdi2_EXPORT ColorDynamicsWidget :
 public:
 
   /** Constructor */
-  ColorDynamicsWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  ColorBandDynamicsWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor */
-  virtual ~ColorDynamicsWidget();
+  virtual ~ColorBandDynamicsWidget();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -119,20 +161,58 @@ private:
   /**
    * uic generated.
    */
-  Ui::ColorDynamicsWidget* m_UI;
+  Ui::ColorBandDynamicsWidget* m_UI;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
+  inline void on_lowIntensitySpinBox_valueChanged( double );
+  inline void on_highIntensitySpinBox_valueChanged( double );
+
+  void on_lowQuantileSpinBox_valueChanged( double );
+  void on_highQuantileSpinBox_valueChanged( double );
+
+  void on_minMaxButton_clicked();
+  void on_defaultsButton_clicked();
 };
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
 /*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::on_lowIntensitySpinBox_valueChanged( double value )
+{
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::on_highIntensitySpinBox_valueChanged( double value )
+{
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::on_minMaxButton_clicked()
+{
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::on_defaultsButton_clicked()
+{
+}
 
 } // end namespace 'mvd'
 
-#endif // __mvdColorDynamicsWidget_h
+#endif // __mvdColorBandDynamicsWidget_h
