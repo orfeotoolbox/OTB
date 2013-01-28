@@ -57,8 +57,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef unsigned char InputLabelPixelType;
-  typedef unsigned char OutputLabelPixelType;
+  typedef unsigned char IOLabelPixelType; // 8 bits
   const unsigned int Dimension = 2;
 // Software Guide : EndCodeSnippet
   
@@ -71,8 +70,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
   
 // Software Guide : BeginCodeSnippet
-  typedef otb::Image<InputLabelPixelType, Dimension> InputLabelImageType;
-  typedef otb::Image<OutputLabelPixelType, Dimension> OutputLabelImageType;
+  typedef otb::Image<IOLabelPixelType, Dimension> IOLabelImageType;
 // Software Guide : EndCodeSnippet
 
 
@@ -80,14 +78,17 @@ int main(int argc, char * argv[])
 //
 // We can now define the type for the neighborhood majority voting filter,
 // which is templated over its input and output images types and over its
-// structuring element type.
+// structuring element type. Choosing only the input image type in the template
+// of this filter induces that, both input and output images types are the same
+// and that the structuring element is a ball
+// (\doxygen{itk}{BinaryBallStructuringElement}).
 //
 // Software Guide : EndLatex
   
 // Software Guide : BeginCodeSnippet
   // Neighborhood majority voting filter type
-  typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType,
-   OutputLabelImageType> NeighborhoodMajorityVotingFilterType;
+  typedef otb::NeighborhoodMajorityVotingImageFilter<IOLabelImageType>
+   NeighborhoodMajorityVotingFilterType;
 // Software Guide : EndCodeSnippet
 
 
@@ -118,8 +119,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader<InputLabelImageType> ReaderType;
-  typedef otb::ImageFileWriter<OutputLabelImageType> WriterType;
+  typedef otb::ImageFileReader<IOLabelImageType> ReaderType;
+  typedef otb::ImageFileWriter<IOLabelImageType> WriterType;
 // Software Guide : EndCodeSnippet
   
   
@@ -147,8 +148,8 @@ int main(int argc, char * argv[])
   std::string KeepOriginalLabelBoolStr = argv[3];
   unsigned int radiusX = atoi(argv[4]);
   unsigned int radiusY = atoi(argv[5]);
-  OutputLabelPixelType noDataValue = atoi(argv[6]);
-  OutputLabelPixelType undecidedValue = atoi(argv[7]);
+  IOLabelPixelType noDataValue = atoi(argv[6]);
+  IOLabelPixelType undecidedValue = atoi(argv[7]);
   
   
 // Software Guide : BeginLatex

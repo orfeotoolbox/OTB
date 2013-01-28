@@ -30,19 +30,17 @@
 
 int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
 {
-  typedef unsigned char InputLabelPixelType; // 8 bits
-  typedef unsigned char OutputLabelPixelType; // 8 bits
+  typedef unsigned char IOLabelPixelType; // 8 bits
   const unsigned int Dimension = 2;
   
-  typedef otb::Image<InputLabelPixelType, Dimension> InputLabelImageType;
-  typedef otb::Image<OutputLabelPixelType, Dimension> OutputLabelImageType;
+  typedef otb::Image<IOLabelPixelType, Dimension> IOLabelImageType;
   
-  typedef otb::ImageFileReader<InputLabelImageType> ReaderType;
-  typedef otb::ImageFileWriter<OutputLabelImageType> WriterType;
+  typedef otb::ImageFileReader<IOLabelImageType> ReaderType;
+  typedef otb::ImageFileWriter<IOLabelImageType> WriterType;
   
   
   // Neighborhood majority voting filter type
-  typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType, OutputLabelImageType> NeighborhoodMajorityVotingFilterType;
+  typedef otb::NeighborhoodMajorityVotingImageFilter<IOLabelImageType> NeighborhoodMajorityVotingFilterType;
   
   // Binary ball Structuring Element type
   typedef NeighborhoodMajorityVotingFilterType::KernelType StructuringType;

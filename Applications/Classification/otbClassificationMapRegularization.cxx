@@ -41,14 +41,11 @@ public:
 
   itkTypeMacro(ClassificationMapRegularization, otb::Application);
 
-  /** Filters typedef */
-  typedef unsigned char InputLabelPixelType;
-  
-  typedef UInt8ImageType InputLabelImageType;
-  typedef UInt8ImageType OutputLabelImageType;
+  /** Filters typedef */  
+  typedef UInt8ImageType IOLabelImageType;
   
   // Neighborhood majority voting filter type
-  typedef otb::NeighborhoodMajorityVotingImageFilter<InputLabelImageType, OutputLabelImageType> NeighborhoodMajorityVotingFilterType;
+  typedef otb::NeighborhoodMajorityVotingImageFilter<IOLabelImageType> NeighborhoodMajorityVotingFilterType;
 
   // Binary ball Structuring Element type
   typedef NeighborhoodMajorityVotingFilterType::KernelType StructuringType;
@@ -153,7 +150,7 @@ private:
       }
     
     /** REGULARIZATION OF CLASSIFICATION */
-    SetParameterOutputImage<OutputLabelImageType>("io.out", m_NeighMajVotingFilter->GetOutput());
+    SetParameterOutputImage<IOLabelImageType>("io.out", m_NeighMajVotingFilter->GetOutput());
   
   }// END DoExecute()
 
