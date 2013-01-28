@@ -41,7 +41,7 @@ public:
 
   itkTypeMacro(ClassificationMapRegularization, otb::Application);
 
-  /** Filters typedef */  
+  /** Filters typedef */
   typedef UInt8ImageType IOLabelImageType;
   
   // Neighborhood majority voting filter type

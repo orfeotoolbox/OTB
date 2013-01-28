@@ -188,12 +188,12 @@ public:
   /** Get writer only input */
   const InputImageType* GetInput();
   
-  /** Override Update() from ProcessObject because this filter 
+  /** Override Update() from ProcessObject because this filter
    *  has no output. */
   virtual void Update();
   
-  /** Override UpdateOutputData() from ProcessObject to divide the 
-   * largest possible region into pieces. Each piece is processed 
+  /** Override UpdateOutputData() from ProcessObject to divide the
+   * largest possible region into pieces. Each piece is processed
    * by GenerateData(). The setting and propagation of the requested
    * regions are done in UpdateOutputData(). */
   virtual void UpdateOutputData(itk::DataObject * itkNotUsed(output));
