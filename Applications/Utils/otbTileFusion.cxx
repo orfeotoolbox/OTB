@@ -48,7 +48,7 @@ private:
     SetDescription("Fusion of an image made of several tile files.");
 
     // Documentation
-    SetDocName("Image TileFusion");
+    SetDocName("Image Tile Fusion");
     SetDocLongDescription("Concatenate several tile files into a single image file.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
