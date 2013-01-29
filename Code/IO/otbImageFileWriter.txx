@@ -391,8 +391,6 @@ ImageFileWriter<TInputImage>
     itkExceptionMacro(<< "No input to writer");
     }
 
-  unsigned int idx;
-  
   /**
    * prevent chasing our tail
    */
