@@ -402,7 +402,7 @@ ImageFileWriter<TInputImage>
   /** Parse streaming modes */
   if(m_FilenameHelper->StreamingTypeIsSet())
     {
-    itkWarningMacro(<<"Streaming configuration through extented filename is used. Any previous streaming configuration (ram value, streaming mode ...) will be ignored.");
+    itkWarningMacro(<<"Streaming configuration through extended filename is used. Any previous streaming configuration (ram value, streaming mode ...) will be ignored.");
 
     std::string type = m_FilenameHelper->GetStreamingType();
 
