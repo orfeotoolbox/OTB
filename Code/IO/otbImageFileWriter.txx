@@ -391,14 +391,6 @@ ImageFileWriter<TInputImage>
     itkExceptionMacro(<< "No input to writer");
     }
 
-  /**
-   * prevent chasing our tail
-   */
-  if (this->m_Updating)
-    {
-    return;
-    }
-
   /** Parse streaming modes */
   if(m_FilenameHelper->StreamingTypeIsSet())
     {
@@ -508,7 +500,7 @@ ImageFileWriter<TInputImage>
 
   this->SetAbortGenerateData(0);
   this->SetProgress(0.0);
-  this->m_Updating = true;
+
   /**
    * Tell all Observers that the filter is starting
    */
@@ -744,10 +736,6 @@ ImageFileWriter<TInputImage>
    * Release any inputs if marked for release
    */
   this->ReleaseInputs();
-
-  // Mark that we are no longer updating the data in this filter
-  this->m_Updating = false;
-
 }
 
 //---------------------------------------------------------
