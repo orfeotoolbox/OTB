@@ -15,6 +15,7 @@ OTB_TEST_APPLICATION(NAME   apTvFeLineSegmentDetectionNoRescale
                      APP  LineSegmentDetection
                      OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
                              -out ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp
+                             -norescale true
                      VALID   --compare-ogr ${EPSILON_9}
                              ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI_NoRescale.shp
                              ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp)
