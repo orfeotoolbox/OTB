@@ -385,6 +385,12 @@ ImageFileWriter<TInputImage>
   InputImagePointer inputPtr =
     const_cast<InputImageType *>(this->GetInput());
   
+  // Make sure input is available
+  if ( inputPtr.IsNull() )
+    {
+    itkExceptionMacro(<< "No input to writer");
+    }
+
   unsigned int idx;
   
   /**
