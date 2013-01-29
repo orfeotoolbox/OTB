@@ -585,8 +585,6 @@ ImageFileWriter<TInputImage>
   /**
    * Grab the input
    */
-  InputImagePointer inputPtr = const_cast<InputImageType *>(this->GetInput());
-  
   inputPtr->UpdateOutputInformation();
   InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
   
