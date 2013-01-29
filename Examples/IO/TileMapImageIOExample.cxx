@@ -29,18 +29,6 @@
 //    ${GeneratedFolder} 103.780646 1.297643 13
 //  Software Guide : EndCommandLineArgs
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {nearmapfile.otb}
-//    OUTPUTS: {nearMap-Toulouse.png}
-//    ${GeneratedFolder} 1.4835345 43.55968261 8
-//  Software Guide : EndCommandLineArgs
-
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {nearmapfile.otb}
-//    OUTPUTS: {nearMap-Singapore.png}
-//    ${GeneratedFolder} 103.780646 1.297643 8
-//  Software Guide : EndCommandLineArgs
-
 // Software Guide : BeginLatex
 //
 // First, we need to include several headers. There will be a bit of
@@ -255,15 +243,8 @@ int main(int argc, char* argv[])
   //
   // If your street is missing, go and improve the map by adding it yourself.
   //
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.45\textwidth]{nearMap-Toulouse.eps}
-  // \includegraphics[width=0.45\textwidth]{nearMap-Singapore.eps}
-  // \itkcaption[NearMap image]{Map created from NearMap showing the OTB headquaters}
-  // \label{fig:TILEMAPIMAGEIOEXAMPLE2}
-  // \end{figure}
-  //
   // Software Guide : EndLatex
+
 
   return EXIT_SUCCESS;
 
