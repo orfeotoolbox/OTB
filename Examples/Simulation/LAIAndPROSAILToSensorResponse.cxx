@@ -27,7 +27,7 @@
 // Software Guide : BeginLatex
 //
 // The following code is an example of Sensor spectral response image generated using image of labeled objects image, objects properties (vegetation classes are handled using PROSAIL model, non-vegetation classes
-// are characterized using \href{http://speclib.jpl.nasa.gov/}{Aster database} characteristics provided by a text file), acquisition parameters, sensor characteristics, and LAI (Leaf Area Index) image. LAI image may be generated using \code{LAIFromNDVIImageTransform} OTB-Application.
+// are characterized using \href{http://speclib.jpl.nasa.gov/}{Aster database} characteristics provided by a text file), acquisition parameters, sensor characteristics, and LAI (Leaf Area Index) image.
 //
 // Sensor RSR is modeled by 6S (Second Simulation of a Satellite Signal in the Solar Spectrum) model \cite{Vermote1997}. Detailed information about 6S can be found \href{http://6s.ltdri.org/6S_code2_thiner_stuff/6S_Manual_Part_1.pdf}{here}.
 //
