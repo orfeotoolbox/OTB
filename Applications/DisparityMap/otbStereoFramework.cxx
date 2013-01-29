@@ -184,12 +184,25 @@ private:
     SetDescription("Compute the ground elevation based on a stereo pair");
 
     SetDocName("Stereo Framework");
-    SetDocLongDescription("Compute the ground elevation with a stereo block matching algorithm between a stereo pair in sensor geometry. The output is projected in WGS84");
+    SetDocLongDescription("Compute the ground elevation with a stereo block matching algorithm "
+                          "between a stereo pair in sensor geometry. The output is projected in "
+                          "WGS84. The pipeline is made of the following steps:\n"
+                          "\t- compute the epipolar deformation grids from the stereo pair\n"
+                          "\t- resample the stereo pair into epipolar images using BCO interpolation\n"
+                          "\t- create masks for each epipolar image : remove black borders and resample"
+                          " input masks\n"
+                          "\t- compute horizontal disparities with a NCC block matching algorithm\n"
+                          "\t- refine disparities to sub-pixel precision with a dichotomy algorithm\n"
+                          "\t- apply a median filter\n"
+                          "\t- filter disparites based on the correlation score (must be greater than "
+                          "0.6) and exploration bounds\n"
+                          "\t- project disparities on a regular grid in WGS84, for each cell the "
+                          "maximum elevation is kept\n");
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::Geometry);
+    AddDocTag(Tags::Stereo);
     
     AddParameter(ParameterType_InputImage,"inleft","Left input image");
     SetParameterDescription("inleft", "Left sensor image of the stereo pair");
@@ -262,7 +275,12 @@ private:
     epipolarGridSource->SetRightImage(inright);
     epipolarGridSource->SetGridStep(16);
     epipolarGridSource->SetScale(1.0);
-    epipolarGridSource->SetUseDEM(true);
+    
+    if (otb::Wrapper::ElevationParametersHandler::IsDEMUsed(this,"elev") &&
+        otb::Wrapper::ElevationParametersHandler::IsGeoidUsed(this,"elev"))
+      {
+      epipolarGridSource->SetUseDEM(true);
+      }
     
     epipolarGridSource->UpdateOutputInformation();
     // check that deformation grids fit in 1/4 of available RAM
