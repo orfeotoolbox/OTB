@@ -506,17 +506,6 @@ ImageFileWriter<TInputImage>
       }
     }
 
-  /**
-   * Make sure we have the necessary inputs
-   */
-  unsigned int ninputs = this->GetNumberOfValidRequiredInputs();
-  if (ninputs < this->GetNumberOfRequiredInputs())
-    {
-    itkExceptionMacro(<< "At least " << static_cast<unsigned int>(
-                        this->GetNumberOfRequiredInputs()) << " inputs are required but only " << ninputs <<
-                      " are specified.");
-    return;
-    }
   this->SetAbortGenerateData(0);
   this->SetProgress(0.0);
   this->m_Updating = true;
