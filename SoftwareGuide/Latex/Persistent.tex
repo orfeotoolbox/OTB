@@ -69,7 +69,7 @@ plugging the templated subclass of the
 \doxygen{otb}{PersistentImageFilter} to an instance of
 \doxygen{otb}{StreamingImageVirtualWriter} is created. The latter is
 then updated, and acts like a regular
-\doxygen{otb}{StreamingImageFileWriter} but it does not actually write
+\doxygen{otb}{ImageFileWriter} but it does not actually write
 anything to the disk : streaming pieces are requested and immediately
 discarded. The \doxygen{otb}{PersistentImageFilterStreamingDecorator}
 also calls the \verb?Reset()? method at the beginning and the

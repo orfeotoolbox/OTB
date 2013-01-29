@@ -397,7 +397,7 @@ of bands.
 
 Fortunately, thanks to the streaming mechanism implemented within
 OTB's pipeline (actually ITK's), this limitation can be bypassed. The
-use of the \doxygen{otb}{StreamingImageFileWriter} at the end of the pipeline,
+use of the \doxygen{otb}{ImageFileWriter} at the end of the pipeline,
 or the \doxygen{itk}{StreamingImageFilter} at any point of the pipeline will
 seamlessly break the large, problematic data into small pieces whose
 allocation is possible. These pieces are processed one afther the
@@ -416,9 +416,7 @@ second, OTB\_STREAM\_MAX\_SIZE\_BUFFER\_FOR\_STREAMING, specifies the
 maximum size in bytes a streaming piece should have. It can be used to
 compute the optimal number of pieces to break the input data into.
 
-These two parameters have been used in the OTB-Applications/Utils/
-applications. Take this as an example of how they can be used. They
-can also be tuned by the user to match her specific needs.
+These two parameters can also be tuned by the user to match his specific needs.
 
 
 \section{Getting help}
@@ -498,7 +496,7 @@ All functionalities which are useful for remote sensing data are of interest. As
 OTB is a library, it should be generic algorithms: change, detection, fusion,
 object detection, segmentation, interpolation, etc.
 
-More specific applications can be contributed to the new framework of application
+More specific applications can be contributed using the framework
 directly in the Applications directory of OTB.
 
 \section{Running the tests}\label{sec:runningTheTests}
