@@ -384,21 +384,9 @@ ImageFileWriter<TInputImage>
   // Update output information on input image
   InputImagePointer inputPtr =
     const_cast<InputImageType *>(this->GetInput());
-  inputPtr->UpdateOutputInformation();
   
-  itk::DataObject *dummyObject;
-  this->UpdateOutputData(dummyObject);
-}
-
-/**
- *
- */
-template<class TInputImage>
-void
-ImageFileWriter<TInputImage>
-::UpdateOutputData(itk::DataObject *itkNotUsed(output))
-{
   unsigned int idx;
+  
   /**
    * prevent chasing our tail
    */
@@ -613,6 +601,8 @@ ImageFileWriter<TInputImage>
    * Grab the input
    */
   InputImagePointer inputPtr = const_cast<InputImageType *>(this->GetInput());
+  
+  inputPtr->UpdateOutputInformation();
   InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
   
   /**

@@ -192,12 +192,6 @@ public:
    *  has no output. */
   virtual void Update();
   
-  /** Override UpdateOutputData() from ProcessObject to divide the
-   * largest possible region into pieces. Each piece is processed
-   * by GenerateData(). The setting and propagation of the requested
-   * regions are done in UpdateOutputData(). */
-  virtual void UpdateOutputData(itk::DataObject * itkNotUsed(output));
-
   /** ImageFileWriter Methods */
   virtual void SetFileName(const char* extendedFileName);
   virtual void SetFileName(std::string extendedFileName);
