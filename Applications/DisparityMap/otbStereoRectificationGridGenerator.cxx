@@ -107,7 +107,7 @@ private:
     SetDocLimitations("Generation of the deformation grid is not streamable, pay attention to this fact when setting the grid step.");
     SetDocAuthors("OTB-Team");
 
-    AddDocTag(Tags::Geometry);
+    AddDocTag(Tags::Stereo);
 
     SetDocSeeAlso("otbGridBasedImageResampling");
 

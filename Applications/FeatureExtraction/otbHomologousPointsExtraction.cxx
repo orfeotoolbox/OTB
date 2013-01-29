@@ -93,8 +93,8 @@ private:
     SetDocSeeAlso("RefineSensorModel");
     SetDocAuthors("OTB-Team");
 
-    AddDocTag(Tags::FeatureExtraction);
     AddDocTag(Tags::Geometry);
+    AddDocTag(Tags::FeatureExtraction);
 
     AddParameter(ParameterType_InputImage, "in1", "Input Image 1");
     SetParameterDescription("in1"," First input image");
