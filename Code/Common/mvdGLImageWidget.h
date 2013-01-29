@@ -113,6 +113,8 @@ public slots:
 //
 // SIGNALS.
 signals:
+  void movingMouse();
+  void releasingMouse();
 
 //
 // Protected methods.

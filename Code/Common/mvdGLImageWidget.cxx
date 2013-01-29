@@ -106,6 +106,9 @@ GLImageWidget
 {
   m_ImageViewManipulator = new ImageViewManipulator( this );
   m_ImageModelRenderer = new ImageModelRenderer( this );
+
+  connect(this, SIGNAL(movingMouse()), m_ImageModelRenderer, SLOT(onMovingEvent()));
+  connect(this, SIGNAL(releasingMouse()), m_ImageModelRenderer, SLOT(onReleasedMouse()));
 }
 
 /*******************************************************************************/
@@ -240,6 +243,10 @@ GLImageWidget
   dragCursor.setShape(Qt::ClosedHandCursor) ;
   this->setCursor(dragCursor);
 
+  // emit a signal
+  emit movingMouse();
+
+  // handle this event
   m_ImageViewManipulator->mouseMoveEvent(event);
 
   // repaint the buffer
@@ -254,6 +261,12 @@ GLImageWidget
   QCursor stdCursor;
   stdCursor.setShape(Qt::ArrowCursor) ;
   this->setCursor(stdCursor);
+
+  // emit a signal
+  emit releasingMouse();
+
+  // call paintGL
+  this->update();
 }
 
 /*******************************************************************************/
@@ -261,6 +274,9 @@ void
 GLImageWidget
 ::wheelEvent( QWheelEvent *event)
 {
+  // emit a signal
+  emit releasingMouse();
+
   m_ImageViewManipulator->wheelEvent(event);
 
   // repaint the buffer
@@ -273,6 +289,12 @@ GLImageWidget
 ::resizeEvent( QResizeEvent  * event)
 {
   m_ImageViewManipulator->resizeEvent(event);
+
+  // emit a signal
+  emit releasingMouse();
+
+  this->resizeGL(event->size().width(), event->size().height());
+  this->update();
 }
 
 void GLImageWidget::OnLargestPossibleRegionChanged(const ImageRegionType& largestRegion)
