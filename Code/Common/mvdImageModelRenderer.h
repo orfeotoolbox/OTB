@@ -73,7 +73,9 @@ public:
                        const ImageRegionType& region =ImageRegionType(),
                        double zoom = 1.,
                        unsigned int width = 0,
-                       unsigned int height = 0) :
+                       unsigned int height = 0,
+                       int dx = 0,
+                       int dy = 0) :
        m_AbstractImageModel( model ),
        m_ImageRegion( region ),
        m_IsotropicZoom( zoom ),
@@ -101,6 +103,18 @@ public:
   /** */
   virtual void paintGL( const RenderingContext& context );
 
+// public slots
+public slots:
+  void onMovingEvent()
+  {
+    m_IsMoving = true;
+  }
+
+  void onReleasedMouse()
+  {
+    m_IsMoving = false;
+  }
+
 //
 // SIGNALS.
 signals:
@@ -122,6 +136,11 @@ private:
 private:
 
   unsigned char *   m_Buffer;
+  bool              m_IsMoving;
+
+  ImageRegionType::IndexType   m_PreviousOrigin;
+  double                       m_MovingOriginX;
+  double                       m_MovingOriginY;
 
 //
 // SLOTS.

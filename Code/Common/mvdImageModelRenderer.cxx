@@ -50,8 +50,9 @@ namespace mvd
 /*****************************************************************************/
 ImageModelRenderer
 ::ImageModelRenderer( QObject* parent ) :
-  QObject( parent )
+  QObject( parent ),m_IsMoving(false)
 {
+  m_PreviousOrigin.Fill(0);
 }
 
 /*****************************************************************************/
@@ -92,83 +93,104 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       scaledRegion.SetSize(scaledSize) ;
       scaledRegion.SetIndex(scaledOrigin);
       }
+    // TODO : remove verbosity 
+    std::cout <<"J2k resolution requested :" << lod<< std::endl;
     }
-  // TODO : remove verbosity 
-  std::cout <<"J2k resolution requested :" << lod<< std::endl;
-  
-  // request the data for the current region
-  m_Buffer = viModel->RasterizeRegion(scaledRegion, context.m_IsotropicZoom);
 
-  // Current resolution
+  if (!m_IsMoving)
+    {
+    // request the data for the current region
+    m_Buffer = viModel->RasterizeRegion(scaledRegion, context.m_IsotropicZoom);
+    }
+
+  // current resolution
   double currentResolutionFactor = 1 << lod;
-  
+
+  // final zoom factor : take into account the current resolution of
+  // the file and the wheel zoom
+  double finalZoomFactor = context.m_IsotropicZoom * currentResolutionFactor; 
+
   // if buffer not null do the rendering
   if (m_Buffer != NULL)
     {
-      unsigned int nb_displayed_cols = scaledRegion.GetSize()[ 0 ] ;
-      unsigned int nb_displayed_rows = scaledRegion.GetSize()[ 1 ] ;
-      
-      unsigned int first_displayed_col = 0;
+    
+    //unsigned int first_displayed_col = 0;
+    double originX = 0.;
+    double originY = 0.;
+
+    if (!m_IsMoving) // center
+      {
+      // originX
       if ( context.m_WidgetWidth  > 
-           scaledRegion.GetSize()[0] * context.m_IsotropicZoom*currentResolutionFactor  )
+           scaledRegion.GetSize()[0] * finalZoomFactor  )
         {
-        first_displayed_col = (context.m_WidgetWidth  
-                               - scaledRegion.GetSize()[0] * context.m_IsotropicZoom*currentResolutionFactor) /2;
+        originX = (context.m_WidgetWidth - scaledRegion.GetSize()[0] * finalZoomFactor)/2;
         }
-
-      unsigned int first_displayed_row = 0;
+      // originY
       if (context.m_WidgetHeight >
-          scaledRegion.GetSize()[1] * context.m_IsotropicZoom*currentResolutionFactor)
+          scaledRegion.GetSize()[1] * finalZoomFactor)
         {
-        first_displayed_row = (context.m_WidgetHeight 
-                               - scaledRegion.GetSize()[1] * context.m_IsotropicZoom*currentResolutionFactor)/2;
+        originY = (context.m_WidgetHeight - scaledRegion.GetSize()[1] * finalZoomFactor)/2;
         }
 
-      // std::cout <<"\tImageModeRenderer : contex.Zoom  "<<   context.m_IsotropicZoom 
-      //           << " currentResolutFactor "<< currentResolutionFactor << std::endl;
-      // std::cout <<"\tImageModeRenderer : finalZoom to apply:  "<<   
-      //   context.m_IsotropicZoom*currentResolutionFactor << std::endl;
-
-      // Render the buffer
-      // glPixelZoom(context.m_IsotropicZoom*currentResolutionFactor, 
-      //             context.m_IsotropicZoom*currentResolutionFactor);
-      // glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-      // glRasterPos2f(first_displayed_col, first_displayed_row);
-      // glDrawPixels(nb_displayed_cols,
-      //              nb_displayed_rows,
-      //              GL_RGB,
-      //              GL_UNSIGNED_BYTE,
-      //              m_Buffer);
-
-
-      glEnable(GL_TEXTURE_2D);
-      //glColor4f(1.0, 1.0, 1.0, 0.0);
-      GLuint texture;
-      glGenTextures(1, &texture);
-      glBindTexture(GL_TEXTURE_2D, texture);
-      glTexImage2D(GL_TEXTURE_2D, 0, 3,
-                   scaledRegion.GetSize()[0],
-                   scaledRegion.GetSize()[1], 
-                   0, GL_RGB, GL_UNSIGNED_BYTE, m_Buffer);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glBindTexture (GL_TEXTURE_2D, texture);
-
-      glBegin (GL_QUADS);
-      glTexCoord2f (0.0, 1.0);
-      glVertex3f (first_displayed_col, first_displayed_row, 0.0);
-      glTexCoord2f (1.0, 1.0);
-      glVertex3f (first_displayed_col + scaledRegion.GetSize()[0], first_displayed_row, 0.0);
-      glTexCoord2f (1.0, 0.0);
-      glVertex3f (first_displayed_col + scaledRegion.GetSize()[0], first_displayed_row + scaledRegion.GetSize()[1], 0.0);
-      glTexCoord2f (0.0, 0.0);
-      glVertex3f (first_displayed_col, first_displayed_row + scaledRegion.GetSize()[1], 0.0);
-      glEnd ();
-      glDeleteTextures(1, &texture);
-      glDisable(GL_TEXTURE_2D);
-
-      //glFlush();
+      // when mouse is released, initialize the moving origin with the
+      // values computed below. This is needed when the widget is
+      // resized and the first displayed column is not at index 0
+      // anymore. 
+      m_MovingOriginX = originX;
+      m_MovingOriginY = originY;
     }
+
+    if (m_IsMoving)// if moving, only displace the rectangle (Gl_QUADS) origin
+      {
+      double dx =  m_PreviousOrigin[0] - scaledRegion.GetIndex()[0] * finalZoomFactor;
+      double dy =  m_PreviousOrigin[1] - scaledRegion.GetIndex()[1] * finalZoomFactor;
+      
+      // incremenet the moving origin with the computed delta
+      m_MovingOriginX += dx;
+      m_MovingOriginY -= dy;
+      
+      // set the quads origin to the moving origin
+      originX =  m_MovingOriginX;
+      originY =  m_MovingOriginY;
+      }
+
+    // real size of the region to be rendered
+    unsigned int sizeX  = scaledRegion.GetSize()[0] * finalZoomFactor;
+    unsigned int sizeY  = scaledRegion.GetSize()[1] * finalZoomFactor;
+
+    // needed cause RGB not RGBA rendering. 
+    glPixelStorei(GL_UNPACK_ALIGNMENT,1); 
+                                
+    // texture 
+    glEnable(GL_TEXTURE_2D);
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3,
+                 scaledRegion.GetSize()[0],
+                 scaledRegion.GetSize()[1], 
+                 0, GL_RGB, GL_UNSIGNED_BYTE, m_Buffer);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture (GL_TEXTURE_2D, texture);
+
+    // rectangle where to draw
+    glBegin (GL_QUADS);
+      glTexCoord2f (0.0, 1.0); glVertex2f(originX, originY + sizeY);
+      glTexCoord2f (1.0, 1.0); glVertex2f(originX + sizeX, originY + sizeY);
+      glTexCoord2f (1.0, 0.0); glVertex2f(originX + sizeX, originY);
+      glTexCoord2f (0.0, 0.0); glVertex2f(originX, originY);
+    glEnd ();
+    
+    // free texture
+    glDeleteTextures(1, &texture);
+    glDisable(GL_TEXTURE_2D);
+    }
+
+  // save the previous scaled region origin
+  m_PreviousOrigin[0] = scaledRegion.GetIndex(0) * finalZoomFactor ;
+  m_PreviousOrigin[1] = scaledRegion.GetIndex(1) * finalZoomFactor ;
 }
 
 /*****************************************************************************/
