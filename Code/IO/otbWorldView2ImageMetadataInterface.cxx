@@ -825,7 +825,7 @@ WorldView2ImageMetadataInterface
 
   if(rawBandNames.size())
     {
-    for (std::vector<std::string>::iterator it = rawBandNames.begin() ; it != rawBandNames.end(); ++it)
+    for (std::vector<std::string>::iterator it = rawBandNames.begin(); it != rawBandNames.end(); ++it)
       {
       // Manage Panchro case
       if ( (rawBandNames.size() == 1) && !(*it).compare("P") )

@@ -707,7 +707,7 @@ QuickBirdImageMetadataInterface
   std::cout << rawBandNames.size() << std::endl;
   if(rawBandNames.size())
     {
-    for (std::vector<std::string>::iterator it = rawBandNames.begin() ; it != rawBandNames.end(); ++it)
+    for (std::vector<std::string>::iterator it = rawBandNames.begin(); it != rawBandNames.end(); ++it)
       {
       std::cout << *it << std::endl;
 
