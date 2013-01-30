@@ -73,7 +73,7 @@ SetDescription("Computes textures on every pixel of the input image selected cha
 
 // Documentation
 SetDocName("Haralick Texture Extraction");
-SetDocLongDescription("This application computes Haralick, advanced an higher order textures on a mono band image");
+SetDocLongDescription("This application computes Haralick, advanced and higher order textures on a mono band image");
 SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otbScalarImageToTexturesFilter, otbScalarImageToAdvancedTexturesFilter and otbScalarImageToHigherOrderTexturesFilter classes");

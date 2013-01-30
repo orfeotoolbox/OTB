@@ -67,7 +67,7 @@ private:
     AddDocTag(Tags::FeatureExtraction);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-    SetParameterDescription("in"," Input image on which lines while be detected.");
+    SetParameterDescription("in"," Input image on which lines will be detected.");
 
     AddParameter(ParameterType_OutputVectorData, "out", "Output Detected lines");
     SetParameterDescription("out"," Output detected line segments (vector data).");

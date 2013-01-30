@@ -80,7 +80,7 @@ SetDescription("Performs morphological operations on an input image channel");
 
 // Documentation
 SetDocName("Binary Morphological Operation");
-SetDocLongDescription("his application performs binary morphological operations on a mono band image");
+SetDocLongDescription("This application performs binary morphological operations on a mono band image");
 SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("itkBinaryDilateImageFilter, itkBinaryErodeImageFilter, itkBinaryMorphologicalOpeningImageFilter and itkBinaryMorphologicalClosingImageFilter classes");

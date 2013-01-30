@@ -113,7 +113,7 @@ SetDefaultParameterFloat("filter.canny.lowerthreshold", 3.0);
 */
 
 AddParameter(ParameterType_OutputImage, "out", "Feature Output Image");
-SetParameterDescription("out", "Output image containing the local statistic features.");
+SetParameterDescription("out", "Output image containing the edge features.");
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
