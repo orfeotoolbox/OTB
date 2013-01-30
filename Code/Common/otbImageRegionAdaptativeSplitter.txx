@@ -163,9 +163,13 @@ ImageRegionAdaptativeSplitter<VImageDimension>
         newSplit.SetIndex(newSplitIndex);
         newSplit.SetSize(newSplitSize);
 
-        newSplit.Crop(m_ImageRegion);
-
-        m_StreamVector.push_back(newSplit);
+        bool cropped = newSplit.Crop(m_ImageRegion);
+        // If newSplit could not be cropped, it means that it is
+        // outside m_ImageRegion. In this case we ignore it.
+        if(cropped)
+          {
+          m_StreamVector.push_back(newSplit);
+          }
         }
       }
     }
@@ -210,9 +214,14 @@ ImageRegionAdaptativeSplitter<VImageDimension>
             newSplit.SetIndex(newSplitIndex);
             newSplit.SetSize(splitSize);
 
-            newSplit.Crop(m_ImageRegion);
+            bool cropped = newSplit.Crop(m_ImageRegion);
 
-            m_StreamVector.push_back(newSplit);
+            // If newSplit could not be cropped, it means that it is
+            // outside m_ImageRegion. In this case we ignore it.
+            if(cropped)
+              {
+              m_StreamVector.push_back(newSplit);
+              }
             }
           }
         }
