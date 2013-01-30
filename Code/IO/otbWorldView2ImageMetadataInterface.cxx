@@ -816,6 +816,73 @@ WorldView2ImageMetadataInterface::GetDefaultDisplay() const
   return rgb;
 }
 
+std::vector<std::string>
+WorldView2ImageMetadataInterface
+::GetEnhancedBandNames() const
+{
+  std::vector<std::string> enhBandNames;
+  std::vector<std::string> rawBandNames = this->Superclass::GetBandName();
+
+  if(rawBandNames.size())
+    {
+    for (std::vector<std::string>::iterator it = rawBandNames.begin() ; it != rawBandNames.end(); ++it)
+      {
+      // Manage Panchro case
+      if ( (rawBandNames.size() == 1) && !(*it).compare("P") )
+        {
+        enhBandNames.push_back("PAN");
+       break;
+        }
+      else if ((rawBandNames.size() != 1) && !(*it).compare("P"))
+        {
+        /* Launch exception situation not valid*/
+        itkExceptionMacro(<< "Invalid Metadata, we cannot provide an consistent name to the band");
+        }
+
+      // Manage MS case
+      if ( !(*it).compare("C") )
+        {
+        enhBandNames.push_back("Costal");
+        }
+      else if ( !(*it).compare("B") )
+        {
+        enhBandNames.push_back("Blue");
+        }
+      else if ( !(*it).compare("G") )
+        {
+        enhBandNames.push_back("Green");
+        }
+      else if ( !(*it).compare("Y") )
+        {
+        enhBandNames.push_back("Yellow");
+        }
+      else if ( !(*it).compare("R") )
+        {
+        enhBandNames.push_back("Red");
+        }
+      else if ( !(*it).compare("RE") )
+        {
+        enhBandNames.push_back("RedEdge");
+        }
+      else if ( !(*it).compare("N") )
+        {
+        enhBandNames.push_back("NIR1");
+        }
+      else if ( !(*it).compare("N2") )
+        {
+        enhBandNames.push_back("NIR2");
+        }
+      else
+        {
+        enhBandNames.push_back("Unknown");
+        }
+      }
+    }
+
+  return enhBandNames;
+
+}
+
 WorldView2ImageMetadataInterface::WavelengthSpectralBandVectorType
 WorldView2ImageMetadataInterface
 ::GetSpectralSensitivity()  const

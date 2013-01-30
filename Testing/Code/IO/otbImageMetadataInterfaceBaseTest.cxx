@@ -86,6 +86,19 @@ int otbImageMetadataInterfaceBaseTest(int argc, char* argv[])
       file << std::endl;
       }
 
+  std::vector<std::string> bandNameList2 = lImageMetadata->GetEnhancedBandNames();
+  if (bandNameList2.size() == 1)
+    {
+    file << "ENH BandName:        " << bandNameList2[0] << std::endl;
+    }
+  else
+    if (bandNameList2.size() > 1)
+      {
+      file << "ENH BandNameList: ";
+      for (std::vector<std::string>::iterator it = bandNameList2.begin(); it != bandNameList2.end(); ++it)
+        file << *it << ", ";
+      file << std::endl;
+      }
   file.close();
 
   std::cout << lImageMetadata << std::endl;

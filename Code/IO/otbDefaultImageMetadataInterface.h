@@ -141,6 +141,13 @@ public:
     itkExceptionMacro("GetLastWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
+  /** Get the enhanced band names */
+  std::vector<std::string> GetEnhancedBandNames() const
+  {
+    itkExceptionMacro("GetEnhancedBandNames not implemented in DefaultImageMetadataInterface, no captor type found");
+  }
+
+
   bool CanRead() const
   {
     // This clas is the default one, it has to be able to call every metadata

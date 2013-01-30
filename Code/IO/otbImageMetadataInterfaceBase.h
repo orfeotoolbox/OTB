@@ -183,6 +183,9 @@ public:
   virtual int GetProductionYear() const = 0;
   //otbMetadataGetMacro(ProductionYear, int);
 
+  /** Convert the band names provided by ossim to the official band names  */
+  virtual std::vector<std::string> GetEnhancedBandNames () const = 0;
+
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
   virtual std::vector<unsigned int> GetDefaultDisplay() const = 0;

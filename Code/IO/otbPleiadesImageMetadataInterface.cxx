@@ -722,6 +722,57 @@ PleiadesImageMetadataInterface
   return i;
 }
 
+std::vector<std::string>
+PleiadesImageMetadataInterface
+::GetEnhancedBandNames() const
+{
+  std::vector<std::string> enhBandNames;
+  std::vector<std::string> rawBandNames = this->Superclass::GetBandName();
+
+  if(rawBandNames.size())
+    {
+    for (std::vector<std::string>::iterator it = rawBandNames.begin() ; it != rawBandNames.end(); ++it)
+      {
+      // Manage Panchro case
+      if ( (rawBandNames.size() == 1) && !(*it).compare("P") )
+        {
+        enhBandNames.push_back("PAN");
+       break;
+        }
+      else if ((rawBandNames.size() != 1) && !(*it).compare("P"))
+        {
+        /* Launch exception situation not valid*/
+        itkExceptionMacro(<< "Invalid Metadata, we cannot provide an consistent name to the band");
+        }
+
+      // Manage MS case
+      if ( !(*it).compare("B0") )
+        {
+        enhBandNames.push_back("Blue");
+        }
+      else if ( !(*it).compare("B1") )
+        {
+        enhBandNames.push_back("Green");
+        }
+      else if ( !(*it).compare("B2") )
+        {
+        enhBandNames.push_back("Red");
+        }
+      else if ( !(*it).compare("B3") )
+        {
+        enhBandNames.push_back("NIR");
+        }
+      else
+        {
+        enhBandNames.push_back("Unknown");
+        }
+      }
+    }
+
+  return enhBandNames;
+
+}
+
 std::vector<unsigned int>
 PleiadesImageMetadataInterface
 ::GetDefaultDisplay() const

@@ -93,6 +93,12 @@ public:
   /** Get the last wavelength for the spectral band definition */
   VariableLengthVectorType GetLastWavelengths() const;
 
+  /** Get the enhanced band names (here nothing because the metadata did not provide band names) */
+  std::vector<std::string> GetEnhancedBandNames() const
+  {
+    return this->Superclass::GetBandName();
+  }
+
   /** Get Instrument */
   std::string GetInstrument() const;
 

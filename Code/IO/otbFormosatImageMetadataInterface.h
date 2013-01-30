@@ -96,6 +96,12 @@ public:
   /** Get Instrument */
   std::string GetInstrument() const;
 
+  /** Get the enhanced band names (here nothing because the metadata did not provide band names) */
+  std::vector<std::string> GetEnhancedBandNames() const
+  {
+    return this->Superclass::GetBandName();
+  }
+
   /** Get Instrument Index */
   unsigned int GetInstrumentIndex() const;
 

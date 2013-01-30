@@ -569,6 +569,14 @@ IkonosImageMetadataInterface::GetDefaultDisplay() const
   return rgb;
 }
 
+std::vector<std::string>
+IkonosImageMetadataInterface
+::GetEnhancedBandNames() const
+{
+  // Already done for the current file
+   return this->Superclass::GetBandName();
+}
+
 IkonosImageMetadataInterface::WavelengthSpectralBandVectorType
 IkonosImageMetadataInterface
 ::GetSpectralSensitivity()  const

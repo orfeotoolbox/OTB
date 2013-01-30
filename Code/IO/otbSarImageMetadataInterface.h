@@ -74,7 +74,14 @@ public:
   virtual double GetRSF() const = 0;
   virtual double GetRadarFrequency () const = 0;
   virtual double GetCenterIncidenceAngle() const = 0;
-  
+
+  /** Get the enhanced band names (No enhanced band name support for SAR) */
+  std::vector<std::string> GetEnhancedBandNames() const
+  {
+    std::vector<std::string> nothing;
+    return nothing;
+  }
+
 protected:
   SarImageMetadataInterface();
   virtual ~SarImageMetadataInterface() {}

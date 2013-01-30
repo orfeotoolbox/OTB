@@ -103,6 +103,9 @@ public:
    * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity()  const;
 
+  /** Get the enhanced band names from band names collected by ossim */
+  std::vector<std::string> GetEnhancedBandNames() const;
+
 protected:
   WorldView2ImageMetadataInterface();
   virtual ~WorldView2ImageMetadataInterface() {}

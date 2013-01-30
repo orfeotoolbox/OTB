@@ -697,6 +697,60 @@ QuickBirdImageMetadataInterface
   return rgb;
 }
 
+std::vector<std::string>
+QuickBirdImageMetadataInterface
+::GetEnhancedBandNames() const
+{
+  std::vector<std::string> enhBandNames;
+  std::vector<std::string> rawBandNames = this->Superclass::GetBandName();
+
+  std::cout << rawBandNames.size() << std::endl;
+  if(rawBandNames.size())
+    {
+    for (std::vector<std::string>::iterator it = rawBandNames.begin() ; it != rawBandNames.end(); ++it)
+      {
+      std::cout << *it << std::endl;
+
+      // Manage Panchro case
+      if ( (rawBandNames.size() == 1) && !(*it).compare("P") )
+        {
+        enhBandNames.push_back("PAN");
+       break;
+        }
+      else if ((rawBandNames.size() != 1) && !(*it).compare("P"))
+        {
+        /* Launch exception situation not valid*/
+        itkExceptionMacro(<< "Invalid Metadata, we cannot provide an consistent name to the band");
+        }
+
+      // Manage MS case
+      if ( !(*it).compare("R") )
+        {
+        enhBandNames.push_back("Red");
+        }
+      else if ( !(*it).compare("G") )
+        {
+        enhBandNames.push_back("Green");
+        }
+      else if ( !(*it).compare("B") )
+        {
+        enhBandNames.push_back("Blue");
+        }
+      else if ( !(*it).compare("N") )
+        {
+        enhBandNames.push_back("NIR");
+        }
+      else
+        {
+        enhBandNames.push_back("Unknown");
+        }
+      }
+    }
+
+  return enhBandNames;
+
+}
+
 QuickBirdImageMetadataInterface::WavelengthSpectralBandVectorType
 QuickBirdImageMetadataInterface
 ::GetSpectralSensitivity()  const

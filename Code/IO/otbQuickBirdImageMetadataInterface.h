@@ -93,6 +93,9 @@ public:
   /** Get the last wavelength for the spectral band definition */
   VariableLengthVectorType GetLastWavelengths() const;
 
+  /** Get the enhanced band names of QuickBird data */
+  std::vector<std::string> GetEnhancedBandNames() const;
+
   bool CanRead() const;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
