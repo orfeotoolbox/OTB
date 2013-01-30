@@ -504,9 +504,26 @@ VectorImageModel::Closest(double invZoomfactor, const std::vector<unsigned int> 
 }
 
 /*******************************************************************************/
+CountType
+VectorImageModel
+::GetNbLod() const
+{
+  // TODO: Implement method.
+  return 0;
+}
+
+/*******************************************************************************/
+void
+VectorImageModel
+::virtual_SetCurrentLod( unsigned int lod )
+{
+  // TODO: Update current m_ImageFileReader and/or m_Image.
+}
+
+/*******************************************************************************/
 ImageBaseType::ConstPointer
 VectorImageModel
-::virtual_ToImageBase() const
+::ToImageBase() const
 {
   return m_Image.GetPointer();
 }
@@ -514,7 +531,7 @@ VectorImageModel
 /*******************************************************************************/
 ImageBaseType::Pointer
 VectorImageModel
-::virtual_ToImageBase()
+::ToImageBase()
 {
   return m_Image.GetPointer();
 }

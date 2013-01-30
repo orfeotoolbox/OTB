@@ -239,6 +239,24 @@ public:
    */
   bool GetBestLevelOfDetail(const double ZoomFactor, int& lod);
 
+  //
+  // AbstractImageModel overrides.
+
+  /** 
+   * Get the number of available LOD.
+   */
+  virtual CountType GetNbLod() const;
+
+  /**
+   * Get a smart-pointer to the current LOD image-base.
+   */
+  virtual ImageBaseType::ConstPointer ToImageBase() const;
+
+  /**
+   * Get a smart-pointer to the current LOD image-base.
+   */
+  virtual ImageBaseType::Pointer ToImageBase();
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -269,13 +287,10 @@ protected:
   void ClearBuffer();
 
   //
-  // AbstractImageModel overrides.
+  // AbstractImageModel
 
   /** */
-  virtual ImageBaseType::ConstPointer virtual_ToImageBase() const;
-
-  /** */
-  virtual ImageBaseType::Pointer virtual_ToImageBase();
+  virtual void virtual_SetCurrentLod( unsigned int lod );
 
 //
 // Protected attributes.

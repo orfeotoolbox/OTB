@@ -92,11 +92,31 @@ public:
   /** */
   inline CountType GetNbComponents() const;
 
-  /** */
-  inline ImageBaseType::ConstPointer ToImageBase() const;
+  /** 
+   * Get the number of available LOD.
+   */
+  virtual CountType GetNbLod() const =0;
 
-  /** */
-  inline ImageBaseType::Pointer ToImageBase();
+  /**
+   * Set the current LOD index (which may causes disk IOs,
+   * decompressing and buffering etc.)
+   */
+  inline void SetCurrentLod( unsigned int lod );
+
+  /**
+   * Get the current LOD index.
+   */
+  inline unsigned int GetCurrentLod() const;
+
+  /**
+   * Get a smart-pointer to the current LOD image-base.
+   */
+  virtual ImageBaseType::ConstPointer ToImageBase() const =0;
+
+  /**
+   * Get a smart-pointer to the current LOD image-base.
+   */
+  virtual ImageBaseType::Pointer ToImageBase() =0;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -114,10 +134,7 @@ protected:
   AbstractImageModel( QObject* parent =NULL );
 
   /** */
-  virtual ImageBaseType::ConstPointer virtual_ToImageBase() const =0;
-
-  /** */
-  virtual ImageBaseType::Pointer virtual_ToImageBase() =0;
+  virtual void virtual_SetCurrentLod( unsigned int lod ) =0;
 
   //
   // AbstractModel overrides.
@@ -139,6 +156,7 @@ private:
 //
 // Private attributes.
 private:
+  unsigned int m_CurrentLod;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -156,6 +174,27 @@ namespace mvd
 {
 
 /*****************************************************************************/
+unsigned int
+AbstractImageModel
+::GetCurrentLod() const
+{
+  return m_CurrentLod;
+}
+
+/*****************************************************************************/
+void
+AbstractImageModel
+::SetCurrentLod( unsigned int lod )
+{
+  if( GetCurrentLod()==lod )
+    return;
+
+  virtual_SetCurrentLod( lod );
+
+  m_CurrentLod = lod;
+}
+
+/*****************************************************************************/
 inline
 ImageRegionType
 AbstractImageModel
@@ -171,24 +210,6 @@ AbstractImageModel
 ::GetNbComponents() const
 {
   return ToImageBase()->GetNumberOfComponentsPerPixel();
-}
-
-/*****************************************************************************/
-inline
-ImageBaseType::ConstPointer
-AbstractImageModel
-::ToImageBase() const
-{
-  return virtual_ToImageBase();
-}
-
-/*****************************************************************************/
-inline
-ImageBaseType::Pointer
-AbstractImageModel
-::ToImageBase()
-{
-  return virtual_ToImageBase();
 }
 
 } // end namespace 'mvd'

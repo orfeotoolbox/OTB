@@ -23,6 +23,10 @@
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // System includes (sorted by alphabetic order)
 
@@ -46,10 +50,15 @@ namespace mvd
   Context comment for translator.
 */
 
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
+
 /*******************************************************************************/
 AbstractImageModel
 ::AbstractImageModel( QObject* parent ) :
-  AbstractModel( parent )
+  AbstractModel( parent ),
+  m_CurrentLod( 0 )
 {
 }
 
