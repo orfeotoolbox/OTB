@@ -437,7 +437,7 @@ VectorImageModel
 ::ToImage() const
 {
   // TODO: Fix unsafe weak-pointer dereferencing.
-  return m_Image.GetPointer();
+  return otb::ConstCast< VectorImageModel::SourceImageType >( m_Image );
 }
 
 /*****************************************************************************/

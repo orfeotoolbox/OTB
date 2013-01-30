@@ -71,7 +71,7 @@ ConstCast( const itk::SmartPointer< T1 >& p1 )
 {
   return
     typename itk::SmartPointer< const T2 >(
-      const_cast< const typename itk::SmartPointer< T2 >::ObjectType* >(
+      const_cast< typename itk::SmartPointer< const T2 >::ObjectType* >(
 	p1.GetPointer()
       )
     );
