@@ -19,18 +19,8 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="4" column="0">
-      <widget class="ColorBandDynamicsWidget" name="m_GreenWidget" native="true">
-       <property name="minimumSize">
-        <size>
-         <width>300</width>
-         <height>97</height>
-        </size>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="0">
-      <widget class="ColorBandDynamicsWidget" name="m_BlueWidget" native="true">
+      <widget class="ColorBandDynamicsWidget" name="greenWidget" native="true">
        <property name="minimumSize">
         <size>
          <width>300</width>
@@ -40,7 +30,7 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="ColorBandDynamicsWidget" name="m_RedWidget" native="true">
+      <widget class="ColorBandDynamicsWidget" name="redWidget" native="true">
        <property name="minimumSize">
         <size>
          <width>300</width>
@@ -66,6 +56,16 @@
       <widget class="Line" name="line2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="ColorBandDynamicsWidget" name="blueWidget" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>300</width>
+         <height>97</height>
+        </size>
        </property>
       </widget>
      </item>

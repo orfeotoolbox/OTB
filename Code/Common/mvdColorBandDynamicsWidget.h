@@ -44,6 +44,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdGui.h"
+#include "ui_mvdColorBandDynamicsWidget.h"
 
 
 /*****************************************************************************/
@@ -78,6 +80,10 @@ class Monteverdi2_EXPORT ColorBandDynamicsWidget :
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
   Q_OBJECT;
+
+  Q_PROPERTY( RgbaChannel channel
+	      READ GetChannel
+	      WRITE SetChannel );
 
 #if 0
   /** */
@@ -133,6 +139,12 @@ public:
   /** Destructor */
   virtual ~ColorBandDynamicsWidget();
 
+  /** */
+  inline void SetChannel( RgbaChannel );
+
+  /** */
+  inline RgbaChannel GetChannel() const;
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -163,6 +175,9 @@ private:
    */
   Ui::ColorBandDynamicsWidget* m_UI;
 
+  /** */
+  RgbaChannel m_Channel;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -180,6 +195,31 @@ private slots:
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
+
+/*****************************************************************************/
+void
+ColorBandDynamicsWidget
+::SetChannel( RgbaChannel channel )
+{
+  m_Channel = channel;
+
+  m_UI->rLabel->setVisible(
+    channel==RGBA_CHANNEL_RED || channel==RGBA_CHANNEL_ALL );
+
+  m_UI->gLabel->setVisible(
+    channel==RGBA_CHANNEL_GREEN || channel==RGBA_CHANNEL_ALL );
+
+  m_UI->bLabel->setVisible(
+    channel==RGBA_CHANNEL_BLUE || channel==RGBA_CHANNEL_ALL );
+}
+
+/*****************************************************************************/
+RgbaChannel
+ColorBandDynamicsWidget
+::GetChannel() const
+{
+  return m_Channel;
+}
 
 /*****************************************************************************/
 inline

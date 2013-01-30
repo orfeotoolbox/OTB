@@ -17,7 +17,6 @@
 
 =========================================================================*/
 #include "mvdColorBandDynamicsWidget.h"
-#include "ui_mvdColorBandDynamicsWidget.h"
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -49,7 +48,8 @@ namespace mvd
 ColorBandDynamicsWidget
 ::ColorBandDynamicsWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
-  m_UI( new mvd::Ui::ColorBandDynamicsWidget() )
+  m_UI( new mvd::Ui::ColorBandDynamicsWidget() ),
+  m_Channel( RGBA_CHANNEL_ALL )
 {
   m_UI->setupUi( this );
 }

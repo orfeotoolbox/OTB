@@ -52,6 +52,10 @@ ColorDynamicsWidget
   m_UI( new mvd::Ui::ColorDynamicsWidget() )
 {
   m_UI->setupUi( this );
+
+  m_UI->redWidget->SetChannel( RGBA_CHANNEL_RED );
+  m_UI->greenWidget->SetChannel( RGBA_CHANNEL_GREEN );
+  m_UI->blueWidget->SetChannel( RGBA_CHANNEL_BLUE );
 }
 
 /*******************************************************************************/
