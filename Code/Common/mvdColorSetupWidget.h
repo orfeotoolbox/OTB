@@ -40,6 +40,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdGui.h"
 
 //
 // External classes pre-declaration.
@@ -74,19 +75,6 @@ class Monteverdi2_EXPORT ColorSetupWidget :
 //
 // Public types.
 public:
-  /**
-   * Constants identifying the video-channels.
-   */
-  enum Channel
-  {
-    CHANNEL_NONE = -1,
-
-    CHANNEL_RED = 0,
-    CHANNEL_GREEN = 1,
-    CHANNEL_BLUE = 2,
-
-    CHANNEL_COUNT
-  };
 
 //
 // Public methods.
@@ -148,13 +136,13 @@ public:
    * list has been set, index 1 set "1: Green" as the current select
    * combo-box item.
    */
-  void SetCurrentIndex( Channel channel, int index );
+  void SetCurrentIndex( RgbaChannel channel, int index );
 
   /**
    * \return the current (selected) index of a video-channel in the
    * component-name list.
    */
-  int GetCurrentIndex( Channel channel );
+  int GetCurrentIndex( RgbaChannel channel );
 
 //
 // SIGNALS.
@@ -166,7 +154,7 @@ signals:
    * \param channel The video-channel which has been modified.
    * \param index The curren-index in the component-list.
    */
-  void CurrentIndexChanged( ColorSetupWidget::Channel channel, int index );
+  void CurrentIndexChanged( RgbaChannel channel, int index );
 
 //
 // Protected methods.
@@ -204,7 +192,7 @@ private slots:
     void
     on_redComboBox_currentIndexChanged( int index )
   {
-    emit CurrentIndexChanged( CHANNEL_RED, index );
+    emit CurrentIndexChanged( RGBA_CHANNEL_RED, index );
   }
 
   /**
@@ -215,7 +203,7 @@ private slots:
     void
     on_greenComboBox_currentIndexChanged( int index )
   {
-    emit CurrentIndexChanged( CHANNEL_GREEN, index );
+    emit CurrentIndexChanged( RGBA_CHANNEL_GREEN, index );
   }
 
   /**
@@ -226,7 +214,7 @@ private slots:
     void
     on_blueComboBox_currentIndexChanged( int index )
   {
-    emit CurrentIndexChanged( CHANNEL_BLUE, index );
+    emit CurrentIndexChanged( RGBA_CHANNEL_BLUE, index );
   }
 };
 

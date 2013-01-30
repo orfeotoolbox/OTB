@@ -25,6 +25,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -59,6 +63,33 @@ DynamicCast( const itk::SmartPointer< T1 >& p1 )
       )
     );
 }
+
+template< typename T2, typename T1 >
+inline
+itk::SmartPointer< const T2 >
+ConstCast( const itk::SmartPointer< T1 >& p1 )
+{
+  return
+    typename itk::SmartPointer< const T2 >(
+      const_cast< const typename itk::SmartPointer< T2 >::ObjectType* >(
+	p1.GetPointer()
+      )
+    );
+}
+
+template< typename T2, typename T1 >
+inline
+itk::SmartPointer< T2 >
+ConstCast( const itk::SmartPointer< const T1 >& p1 )
+{
+  return
+    typename itk::SmartPointer< T2 >(
+      const_cast< typename itk::SmartPointer< T2 >::ObjectType* >(
+	p1.GetPointer()
+      )
+    );
+}
+
 } // end of namespace otb.
 
 //

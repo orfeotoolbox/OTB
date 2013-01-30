@@ -20,6 +20,15 @@
 #include "mvdGui.h"
 
 //
+// Configuration include.
+//// Included at first position before any other ones.
+#include "ConfigureMonteverdi2.h"
+
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
+//
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
 

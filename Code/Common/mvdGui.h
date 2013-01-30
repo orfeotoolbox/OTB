@@ -25,6 +25,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -41,6 +45,10 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
 //
 // External classes pre-declaration.
 namespace
@@ -48,12 +56,36 @@ namespace
 }
 
 //
-// Type definitions.
+// Internal classes pre-declaration.
+namespace mvd
+{
+} // end namespace 'mvd'
+
+
+/*****************************************************************************/
+/* COMMON DECLARATION SECTION                                                */
+
 namespace mvd
 {
 
-/*******************************************************************************/
+  /**
+   * Constants identifying the video-channels.
+   */
+  enum RgbaChannel
+  {
+    RGBA_CHANNEL_NONE = -1,
 
-} // end namespace 'mvd'
+    RGBA_CHANNEL_RED = 0,
+    RGBA_CHANNEL_GREEN = 1,
+    RGBA_CHANNEL_BLUE = 2,
+    RGBA_CHANNEL_ALPHA = 3,
+
+    RGBA_CHANNEL_COUNT,
+
+    RGBA_CHANNEL_ALL = RGBA_CHANNEL_COUNT
+  };
+
+
+} // end namespace 'mvd'.
 
 #endif // __mvdGui_h

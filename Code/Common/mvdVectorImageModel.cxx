@@ -541,7 +541,7 @@ VectorImageModel
 /*******************************************************************************/
 void
 VectorImageModel
-::OnCurrentIndexChanged( ColorSetupWidget::Channel channel, int index )
+::OnCurrentIndexChanged( RgbaChannel channel, int index )
 {
   m_Settings.RgbChannel( channel ) = index;
 

@@ -297,10 +297,10 @@ MainWindow
   // Connect newly selected model to UI controller.
   QObject::connect(
     colorSetupWidget,
-    SIGNAL( CurrentIndexChanged( ColorSetupWidget::Channel, int ) ),
+    SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
     // to:
     vectorImageModel,
-    SLOT( OnCurrentIndexChanged( ColorSetupWidget::Channel, int ) )
+    SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
   );
 
   // Connect newly selected model to view.
@@ -317,10 +317,10 @@ MainWindow
   {
   colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
 
-  for( int i=0; i<ColorSetupWidget::CHANNEL_COUNT; ++i )
+  for( int i=0; i<RGBA_CHANNEL_COUNT; ++i )
     {
     colorSetupWidget->SetCurrentIndex(
-      ColorSetupWidget::Channel( i ),
+      static_cast< RgbaChannel >( i ),
       vectorImageModel->GetSettings().RgbChannel( i )
     );
     }

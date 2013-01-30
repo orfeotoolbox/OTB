@@ -266,7 +266,7 @@ public slots:
    */
   // TODO: Separate RenderingFilter and Settings (QObject) from
   // VectorImageModel and move slot.
-  void OnCurrentIndexChanged( ColorSetupWidget::Channel channel, int index );
+  void OnCurrentIndexChanged( RgbaChannel channel, int index );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

@@ -112,7 +112,7 @@ ColorSetupWidget
 /*******************************************************************************/
 void
 ColorSetupWidget
-::SetCurrentIndex( Channel channel, int index )
+::SetCurrentIndex( RgbaChannel channel, int index )
 {
   QComboBox* comboBox = findChild< QComboBox* >( QCOMBOBOX_NAMES[ channel ] );
 
@@ -122,7 +122,7 @@ ColorSetupWidget
 /*******************************************************************************/
 int
 ColorSetupWidget
-::GetCurrentIndex( Channel channel )
+::GetCurrentIndex( RgbaChannel channel )
 {
   QComboBox* comboBox = findChild< QComboBox* >( QCOMBOBOX_NAMES[ channel ] );
 
