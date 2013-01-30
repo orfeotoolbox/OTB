@@ -24,6 +24,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -34,6 +38,9 @@
 
 //
 // ITK includes (sorted by alphabetic order)
+#include "itkFixedArray.h"
+#include "itkExceptionObject.h"
+#include "itkVariableLengthVector.h"
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -41,6 +48,10 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
+
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
 
 //
 // External classes pre-declaration.
@@ -52,10 +63,81 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+} // end of namespace 'mvd'.
 
-//
-// Functions declaration.
 
+/*****************************************************************************/
+/* FUNCTIONS DECLARATION.                                                    */
+
+namespace otb
+{
+/**
+ * Convert an itk::VariableLengthVector< T2 > into a
+ * itk::FixedArray< T1, N >.
+ *
+ * Elements of type T1 are (safely) statically casted into T2.
+ *
+ * An itk::RangeError exception instance is thrown if lengths/sizes of
+ * both the containers are not equal.
+ *
+ * N.B.: Caller must ensure to that size N of itk::FixedArray< T1, N >
+ * to match the variable size of the itk::VariableLengthVector< T1 >.
+ */
+template< typename T2, unsigned int N, typename T1 >
+inline
+itk::FixedArray< T2, N >
+ToFixedArray( const itk::VariableLengthVector< T1 >& v );
+
+/**
+ * Convert an itk::VariableLengthVector< T2 > into a
+ * itk::FixedArray< T1, N >.
+ *
+ * Elements of type T1 are (safely) statically casted into T2.
+ *
+ * An itk::RangeError exception instance is thrown if lengths/sizes of
+ * both the containers are not equal.
+ *
+ * N.B.: Caller must ensure to that size N of itk::FixedArray< T1, N >
+ * to match the variable size of the itk::VariableLengthVector< T1 >.
+ */
+template< typename T2, unsigned int N, typename T1 >
+inline
+itk::FixedArray< T2, N >&
+ToFixedArray( itk::FixedArray< T2, N >& a,
+	      const itk::VariableLengthVector< T1 >& v );
+
+/**
+ * Convert an itk::FixedArray< T2, N > into a
+ * itk::VariableLengthVector< T1 >.
+ *
+ * Elements of type T1 are (safely) statically casted into T2.
+ *
+ * An itk::RangeError exception instance is thrown if lengths/sizes of
+ * both the containers are not equal.
+ */
+template< typename T2, typename T1, unsigned int N >
+inline
+itk::VariableLengthVector< T2 >
+ToVariableLengthVector( const itk::FixedArray< T1, N >& a );
+
+/**
+ * Convert an itk::FixedArray< T2, N > into a
+ * itk::VariableLengthVector< T1 >.
+ *
+ * Elements of type T1 are (safely) statically casted into T2.
+ *
+ * An itk::RangeError exception instance is thrown if lengths/sizes of
+ * both the containers are not equal.
+ */
+template< typename T2, typename T1, unsigned int N >
+inline
+itk::VariableLengthVector< T2 >&
+ToVariableLengthVector( itk::FixedArray< T1, N >& a,
+			const itk::VariableLengthVector< T1 >& v );
+} // end namespace 'otb'
+
+namespace mvd
+{
 /**
  * Convert a StringVector object to a QStringList object.
  *
@@ -63,7 +145,8 @@ namespace mvd
  * QStringList is shallow-copied.
  */
 inline
-QStringList ToQStringList( const StringVector& sv );
+QStringList
+ToQStringList( const StringVector& sv );
 
 /**
  * Append the content of a StringVector object to the content of a
@@ -73,13 +156,95 @@ QStringList ToQStringList( const StringVector& sv );
  * QStringList is shallow-copied.
  */
 inline
-QStringList AppendToQStringList( QStringList& qsl,
-				 const StringVector& sv );
+QStringList&
+AppendToQStringList( QStringList& qsl,
+		     const StringVector& sv );
 
-//
-// Inlined-functions implementations.
-//
+} // end namespace 'mvd'.
 
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace otb
+{
+/*******************************************************************************/
+template< typename T2, unsigned int N, typename T1 >
+inline
+itk::FixedArray< T2, N >
+ToFixedArray( const itk::VariableLengthVector< T1 >& v )
+{
+  assert( v.Size()==N );
+
+  throw itk::RangeError( __FILE__, __LINE__ );
+
+  itk::FixedArray< T2, N > a;
+
+  for( unsigned int i=0; i<N; ++i )
+    a[ i ] = static_cast< T2 >( v[ i ] );
+
+  return a;
+}
+
+/*******************************************************************************/
+template< typename T2, unsigned int N, typename T1 >
+inline
+itk::FixedArray< T2, N >&
+ToFixedArray( itk::FixedArray< T2, N >& a,
+	      const itk::VariableLengthVector< T1 >& v )
+{
+  assert( v.Size()==N && v.Size()==a.Size() );
+
+  throw itk::RangeError( __FILE__, __LINE__ );
+
+  for( unsigned int i=0; i<N; ++i )
+    a[ i ] = static_cast< T2>( v[ i ] );
+
+  return a;
+}
+
+/*******************************************************************************/
+template< typename T2, typename T1, unsigned int N >
+inline
+itk::VariableLengthVector< T2 >
+ToVariableLengthVector( const itk::FixedArray< T1, N >& a )
+{
+  assert( a.Size()==N );
+
+  throw itk::RangeError( __FILE__, __LINE__ );
+
+  itk::VariableLengthVector< T2 > v;
+
+  v.Reserve( N );
+
+  for( unsigned int i=0; i<N; ++i )
+    v[ i ] = static_cast< T2 >( a[ i ] );
+
+  return v;
+}
+
+/*******************************************************************************/
+template< typename T2, typename T1, unsigned int N >
+inline
+itk::VariableLengthVector< T2 >&
+ToVariableLengthVector( itk::VariableLengthVector< T2 >& v,
+			const itk::FixedArray< T1, N >& a )
+{
+  assert( a.Size()==N );
+
+  throw itk::RangeError( __FILE__, __LINE__ );
+
+  v.Reserve( N );
+
+  for( unsigned int i=0; i<N; ++i )
+    v[ i ] = static_cast< T2 >( a[ i ] );
+
+  return v;
+}
+
+} // end namespace 'otb'.
+
+namespace mvd
+{
 /*******************************************************************************/
 inline
 QStringList
@@ -91,7 +256,7 @@ ToQStringList( const StringVector& sv )
 
 /*******************************************************************************/
 inline
-QStringList
+QStringList&
 AppendToQStringList( QStringList& qsl, const StringVector& sv )
 {
   for( StringVector::const_iterator it( sv.begin() );

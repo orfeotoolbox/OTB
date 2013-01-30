@@ -93,10 +93,10 @@ public:
   inline CountType GetNbComponents() const;
 
   /** */
-  virtual ImageBaseType::ConstPointer ToImageBase() const;
+  inline ImageBaseType::ConstPointer ToImageBase() const;
 
   /** */
-  virtual ImageBaseType::Pointer ToImageBase();
+  inline ImageBaseType::Pointer ToImageBase();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

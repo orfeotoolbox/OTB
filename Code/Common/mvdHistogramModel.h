@@ -46,6 +46,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModel.h"
+#include "mvdAlgorithm.h"
 #include "mvdTypes.h"
 
 
@@ -83,14 +84,6 @@ class Monteverdi2_EXPORT HistogramModel :
 //
 // Public types.
 public:
-  /** */
-  typedef
-    // itk::NumericTraits< T >::FloatType and
-    // itk::NumericTraits< T >::RealType do not depend on template
-    // parameter T. They are always typedef, respectively, as float
-    // and double.
-    itk::NumericTraits< DefaultImageType::InternalPixelType >::RealType
-    MeasurementType;
 
 //
 // Public methods.
@@ -106,10 +99,10 @@ public:
   inline double GetQuantile( unsigned int band, double p  ) const;
 
   /** */
-  inline MeasurementType GetMinIntensity( unsigned int band ) const;
+  inline DefaultImageType::PixelType GetMinPixel() const;
 
   /** */
-  inline MeasurementType GetMaxIntensity( unsigned int band ) const;
+  inline DefaultImageType::PixelType GetMaxPixel() const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -138,6 +131,21 @@ protected:
 //
 // Private types.
 private:
+  /** */
+  typedef
+    // itk::NumericTraits< T >::FloatType and
+    // itk::NumericTraits< T >::RealType do not depend on template
+    // parameter T. They are always typedef, respectively, as float
+    // and double.
+    //
+    // So, itk::NumericTraits< DefaultImageType::InternalPixelType
+    // >::RealType is equivalent to itk::NumericTraits< float
+    // >::RealType which is always an alias of double.
+    //
+    // This typedef is used for compatibility with
+    // itk::Histogram<>::MeasurementType.
+    itk::NumericTraits< DefaultImageType::InternalPixelType >::RealType
+    MeasurementType;
 
   /** */
   typedef itk::Statistics::Histogram< MeasurementType, 1 > Histogram;
@@ -159,9 +167,9 @@ private:
   /** */
   HistogramList::Pointer m_Histograms;
   /** */
-  Histogram::MeasurementVectorType m_MinIntensities;
+  DefaultImageType::PixelType m_MinPixel;
   /** */
-  Histogram::MeasurementVectorType m_MaxIntensities;
+  DefaultImageType::PixelType m_MaxPixel;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -193,24 +201,20 @@ namespace mvd
 
 /*******************************************************************************/
 inline
-HistogramModel::MeasurementType
+DefaultImageType::PixelType
 HistogramModel
-::GetMinIntensity( unsigned int band ) const
+::GetMinPixel() const
 {
-  assert( band<m_MinIntensities.Size() );
-
-  return m_MinIntensities[ band ];
+  return m_MinPixel;
 }
 
 /*******************************************************************************/
 inline
-HistogramModel::MeasurementType
+DefaultImageType::PixelType
 HistogramModel
-::GetMaxIntensity( unsigned int band ) const
+::GetMaxPixel() const
 {
-  assert( band<m_MaxIntensities.Size() );
-
-  return m_MaxIntensities[ band ];
+  return m_MaxPixel;
 }
 
 /*******************************************************************************/
@@ -270,14 +274,14 @@ HistogramModel
 
   /*
   // Extract min/MAX intensities for each band.
-  typename MinMaxFilter::PixelType lSrcMin( filterMinMax->GetMinimum() );
-  typename MinMaxFilter::PixelType lSrcMax( filterMinMax->GetMaximum()
-  );
+  // itk::VariableLengthVector< FLOAT_TYPE >
+  typename MinMaxFilter::PixelType lSrcMin( f );
+  typename MinMaxFilter::PixelType lSrcMax( filterMinMax->GetMaximum() );
   */
 
   // Extract-convert-remember min/MAX intensities for each band.
-  m_MinIntensities = filterMinMax->GetMinimum();
-  m_MaxIntensities = filterMinMax->GetMaximum();
+  m_MinPixel = filterMinMax->GetMinimum();
+  m_MaxPixel = filterMinMax->GetMaximum();
 
   qDebug() << tr( "%1: Pass #1 - done (%2 ms)." )
     .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
@@ -303,8 +307,8 @@ HistogramModel
   );
 
   // Setup histogram filter.
-  histogramFilter->GetFilter()->SetHistogramMin( m_MinIntensities );
-  histogramFilter->GetFilter()->SetHistogramMax( m_MaxIntensities );
+  histogramFilter->GetFilter()->SetHistogramMin( m_MinPixel );
+  histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
 
   // Go.
@@ -364,9 +368,15 @@ HistogramModel
 
   filterMinMax->Update();
 
+  /*
   // Extract min/MAX intensities for each bands.
   typename MinMaxFilter::PixelType lSrcMin( filterMinMax->GetMinimum() );
   typename MinMaxFilter::PixelType lSrcMax( filterMinMax->GetMaximum() );
+  */
+
+  // Extract-convert-remember min/MAX intensities for each band.
+  m_MinPixel = filterMinMax->GetMinimum();
+  m_MaxPixel = filterMinMax->GetMaximum();
 
   qDebug() << tr( "%1: Pass #1 - done (%2 ms)." )
     .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
@@ -391,8 +401,8 @@ HistogramModel
   histogramFilter->SetInput( imageModel->ToImage() );
 
   // Setup histogram filter.
-  histogramFilter->GetFilter()->SetHistogramMin( lSrcMin );
-  histogramFilter->GetFilter()->SetHistogramMax( lSrcMax );
+  histogramFilter->GetFilter()->SetHistogramMin( m_MinPixel );
+  histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
 
   // Go.

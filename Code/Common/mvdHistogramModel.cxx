@@ -57,7 +57,9 @@ namespace mvd
 HistogramModel
 ::HistogramModel( QObject* parent ) :
   AbstractModel( parent ),
-  m_Histograms()
+  m_Histograms(),
+  m_MinPixel(),
+  m_MaxPixel()
 {
 }
 

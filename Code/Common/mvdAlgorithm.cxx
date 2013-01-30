@@ -18,6 +18,10 @@
 =========================================================================*/
 #include "mvdAlgorithm.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
