@@ -322,7 +322,7 @@ MainWindow
   {
   colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
 
-  for( int i=0; i<RGBA_CHANNEL_ALL; ++i )
+  for( int i=0; i<RGBA_CHANNEL_ALPHA; ++i )
     {
     colorSetupWidget->SetCurrentIndex(
       static_cast< RgbaChannel >( i ),
