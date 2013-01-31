@@ -52,13 +52,13 @@ or compiling from sources (Table~\ref{tab:installation}). What you need depends 
 \hline
 \textbf{Windows 2000/XP/Vista/Seven} & OSGeo4W installer for internal applications & Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries})& OSGeo4W installer (see section~\ref{ssec:windows_binaries}) \\
 \hline
-\textbf{MacOS X 10.5 and higher} &  & app's DMG file (see section~\ref{ssec:mac_binaries}) &  & \\
+\textbf{MacOS X 10.6 and higher} &  & app's DMG file (see section~\ref{ssec:mac_binaries}) & \\
 \hline
-\textbf{Ubuntu Linux 12.04, 11.10, and 10.04 (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) &  \\
+\textbf{Ubuntu Linux 10.04 and higher (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) &  \\
 \hline
 \textbf{OpenSuse 11.X and higher (32/64 bits)} & RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) & \\
 \hline
-\textbf{CentOS 5.5 and higher (32/64 bits)} & RPM package (see section~\ref{ssec:centos_binaries}) &  RPM package (see section~\ref{ssec:centos_binaries}) & RPM package (see section~\ref{ssec:centos_binaries})\\
+\textbf{CentOS 6.X and higher (32/64 bits)} & RPM package (see section~\ref{ssec:centos_binaries}) &  RPM package (see section~\ref{ssec:centos_binaries}) & RPM package (see section~\ref{ssec:centos_binaries})\\
 \hline
 \end{tabular}
 \caption{Available installation procedures with respect to system configuration and target usage}
@@ -103,17 +103,16 @@ For more information you can read the OTB Cookbook which provides useful informa
 \subsection{MacOS X}
 \label{ssec:mac_binaries}
 
-For MacOS X, a .dmg file is available for Monteverdi for MacOS X 10.5 and higher.
+For MacOS X, a .dmg file is available for Monteverdi for MacOS X 10.6 and higher.
 Please go the the \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}.
 Click on the file to launch Monteverdi.
 
 \subsection{Linux}
 
-\subsubsection{Ubuntu 10.04, 10.10, 11.10 and 12.04}
+\subsubsection{Ubuntu 10.04 and higher}
 \label{ssec:ubuntu_binaries}
-For Ubuntu 10.04 (Lucid Lynx), 10.10 (Maverick Meerkat), 11.10 (Oneiric Ocelot)
-and 12.04 (Precise Pangolin), OTB, OTB applications, Monteverdi and OTB-Wrapping
-packages are available as Debian packages through APT repositories.
+For Ubuntu 10.04 and higher, OTB, OTB applications, Monteverdi and OTB-Wrapping
+packages may be available as Debian packages through APT repositories.
 
 Since release 3.14.1, OTB packages are available in the
 \href{https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable}{ubuntugis-unstable} repository.
@@ -184,9 +183,7 @@ launchpad page and click on \textbf{Read about installing}.
 %% sudo add-apt-repository ppa:otb/orfeotoolbox-stable
 %% \end{verbatim}
 
-Moreover, \textbf{nightly} builds for all OTB projects are also available
-through APT repositories.  If you are using apt command-line tools, use these
-command-lines to add the otb repository to apt sources:
+Moreover, \textbf{nightly} builds for all OTB projects are also available through APT repositories. However you should use it carefully. If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
 
 \begin{verbatim}
 sudo aptitude install add-apt-repository
@@ -298,12 +295,12 @@ We can now get and install (replace version number by the current):
 \label{sec:source}
 OTB has been developed and tested across different combinations of
 operating systems, compilers, and hardware platforms including
-MS-Windows, Linux on Intel-compatible hardware, Solaris and Mac
+MS-Windows, Linux on Intel-compatible hardware and Mac
 OSX.  It is known to work with the following compilers:
 \begin{itemize}
 \item Visual Studio C++ 9.0 .NET 2008, Visual Studio Express 2008 and 2010 on MS-Windows
 \item GCC (4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7) on Unix/Linux systems
-\item GCC on Mac (OSX 10.5, OSX 10.6) systems
+\item GCC on MacOSX (10.6 and higher) systems
 \end{itemize}
 
 Given the advanced usage of C++ features in the toolbox, some
@@ -328,9 +325,9 @@ These last two options need a proper \href{http://mercurial.selenic.com}{Mercuri
 hg clone http://hg.orfeo-toolbox.org/OTB
 \end{verbatim}
 
-Using Mercurial, you can easily navigate through the different version. For instance, this brings you to the 3.12.0 source code version:
+Using Mercurial, you can easily navigate through the different version. For instance, this brings you to the 3.16.0 source code version:
 \begin{verbatim}
-hg update -r 3.14.0
+hg update -r 3.16.0
 \end{verbatim}
 
 And this brings you to the latest development version:
