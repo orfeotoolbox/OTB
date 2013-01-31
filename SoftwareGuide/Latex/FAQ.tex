@@ -156,12 +156,11 @@ A simple \texttt{make} in your OTB binary directory will be enough to update the
 OTB is a multi-platform library. It has successfully been  compiled and installed from source on
 the following platforms:
 \begin{itemize}
-  \item Linux/Unix with GCC (4.1.X, 4.2.X, 4.3.X, 4.4.X, 4.5.X, 4.6.X)
+  \item Linux/Unix with GCC (4.1.X, 4.2.X, 4.3.X, 4.4.X, 4.5.X, 4.6.X, 4.7.X)
   \item Windows with Microsoft Visual Studio C++ 9.0 .NET 2008
   \item Windows with Microsoft Visual Express 2008
   \item Windows with Microsoft Visual Express 2010
-  \item MacOS (OSX 10.5, OSX 10.6)
-  \item Open Solaris
+  \item MacOSX 10.6 and higher
 \end{itemize}
 
 \subsection{Which libraries/packages are needed before compiling and installing
@@ -265,9 +264,9 @@ packages, you can skip to step 4.
 \item Install GDAL from source (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip gdal.1.9.0.tar.gz
-      tar xvf gdal.1.9.0.tar
-      cd gdal.1.9.0
+      gunzip gdal.1.9.2.tar.gz
+      tar xvf gdal.1.9.2.tar
+      cd gdal.1.9.2
       ./configure --prefix=INSTALL_DIR --with-libtiff=internal \
                   --with-geotiff=internal \
                   --with-rename-internal-libtiff-symbols=yes \
@@ -342,15 +341,15 @@ That should be all! Otherwise, subscribe to
    otb-users@googlegroups.com and you will get some help.
 
 \subsection{Specific platform issues}
-\subsubsection{SunOS/HP UX}
-Due to a bug in the tar command shipped with some versions of SunOS,
-problems may appear when configuring, compiling or installing OTB.
+%\subsubsection{SunOS/HP UX}
+%Due to a bug in the tar command shipped with some versions of SunOS,
+%problems may appear when configuring, compiling or installing OTB.
+%
+%See \url{http://www.gnu.org/software/tar/manual/tar.html#Checksumming} for
+%details on the bug characterization.
 
-See \url{http://www.gnu.org/software/tar/manual/tar.html#Checksumming} for
-details on the bug characterization.
-
-The solution is to use the GNU tar command if it is available on your
-system (gtar).
+%The solution is to use the GNU tar command if it is available on your
+%system (gtar).
 
 \subsubsection{Visual Studio 2010/Express 2010}
 Since Visual Studio 2010, OTB can't compile while using the internal libLAS library : disable the use of the library by setting
@@ -360,12 +359,12 @@ Then you will be able to configure and build the project as usual.
 \subsubsection{MacOSX 10.6 Snow Leopard}
 Since 10.6 (Snow Leopard), OS X does not support Carbon calls from 64bit code anymore. OTB should be compiled with FLTK 1.3 from the macport fltk-devel and \texttt{OTB\_USE\_EXTERNAL\_FLTK = ON}\\. Moreover, there is a compilation issue with liblas, so liblas must be disabled with \texttt{OTB\_USE\_LIBLAS = OFF}\\.
 
-\subsubsection{Open Solaris}
-There are some issues on Open Solaris 2009.06 and before with libLAS (library included
-in OTB to process LIDAR data). You will need to deactivate it: set the
-OTB\_USE\_LIBLAS option to OFF.
-
-It seems to be fine with the more recent release of Open Solaris.
+%\subsubsection{Open Solaris}
+%There are some issues on Open Solaris 2009.06 and before with libLAS (library included
+%in OTB to process LIDAR data). You will need to deactivate it: set the
+%OTB\_USE\_LIBLAS option to OFF.
+%
+%It seems to be fine with the more recent release of Open Solaris.
 
 \subsubsection{Debian Linux / Ubuntu}
 
@@ -568,9 +567,9 @@ bugfixes.
 The first version was 1.0.0 in July 2006. Version 1.2.0, 1.4.0 and 1.6.0 were
 released in between. The 2.0.0 major version  was released in December 2007.
 The 2.2.0, 2.4.0 and 2.6.0 ({\em Halloween}) in June, July and November 2008 respectively. The
-2.8.0 ({\em Gong Xi Fa Cai}) came out in January 2009, the 3.0.0 ({\em Manh\~{a} de Carnaval}) in May 2009, the 3.2.0 ({\em 62$^\circ$38${'}$35${''}$S 60$^\circ$14${'}$31${''}$W}) in January 2010, the 3.4.0 ({\em Perl A Rebours}) in July 2010, the 3.6.0 ({\em California Dreamin'}) in October 2010, the 3.8.0 ({\em Pack Ice}) in December 2010, the 3.10.0 ({\em Feli\c{c} aniversari}) in June 2011, the 3.12.0 ({\em $\Pi \lambda \epsilon l \alpha \epsilon \zeta$}) in February 2012.
+2.8.0 ({\em Gong Xi Fa Cai}) came out in January 2009, the 3.0.0 ({\em Manh\~{a} de Carnaval}) in May 2009, the 3.2.0 ({\em 62$^\circ$38${'}$35${''}$S 60$^\circ$14${'}$31${''}$W}) in January 2010, the 3.4.0 ({\em Perl A Rebours}) in July 2010, the 3.6.0 ({\em California Dreamin'}) in October 2010, the 3.8.0 ({\em Pack Ice}) in December 2010, the 3.10.0 ({\em Feli\c{c} aniversari}) in June 2011, the 3.12.0 ({\em $\Pi \lambda \epsilon l \alpha \epsilon \zeta$}) in February 2012, the 3.14.0 ({\em Happy}) in July 2012 and 3.14.1 in October 2012. 
 
-The current one is 3.14.0.
+The current one is 3.16.0.
 
 \subsubsection{What is a major version?}
 A major version of the library implies the addition of high-level
@@ -585,9 +584,7 @@ change detector, a new feature extractor, etc.
 A bugfix version is released when significant bugs are identified and fixed.
 
 \subsection{When will the next version of OTB be available?}
-We plan to release major new OTB version once a year, that is, version
-2.0.0 was available at the end of 2007, version 3.0.0 was released
-in May 2009, and so on.
+We plan to release two major new OTB version once a year. You can find some information into the roadmap section of the \href{http://wiki.orfeo-toolbox.org/index.php/Main_Page}{wiki} 
 
 \subsection{What features will the OTB include and when?}
 There is no detailed plan about the availability of OTB new features,
