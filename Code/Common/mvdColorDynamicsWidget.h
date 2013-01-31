@@ -44,6 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdColorBandDynamicsWidget.h"
 
 
 /*****************************************************************************/
@@ -91,6 +92,11 @@ public:
   /** Destructor */
   virtual ~ColorDynamicsWidget();
 
+  /** */
+  inline const ColorBandDynamicsWidget* GetChannel( RgbaChannel ) const;
+  /** */
+  inline ColorBandDynamicsWidget* GetChannel( RgbaChannel );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -116,6 +122,9 @@ private:
 //
 // Private attributes.
 private:
+  /** */
+  static const char* COLOR_BAND_DYNAMICS_WIDGET_NAMES[];
+
   /**
    * uic generated.
    */
@@ -128,10 +137,35 @@ private:
 private slots:
 };
 
+} // end namespace 'mvd'.
+
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
+namespace mvd
+{
+
 /*****************************************************************************/
+inline
+const ColorBandDynamicsWidget*
+ColorDynamicsWidget
+::GetChannel( RgbaChannel channel ) const
+{
+  return findChild< const ColorBandDynamicsWidget* >(
+    ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[ channel ]
+  );
+}
+
+/*****************************************************************************/
+inline
+ColorBandDynamicsWidget*
+ColorDynamicsWidget
+::GetChannel( RgbaChannel channel )
+{
+  return findChild< ColorBandDynamicsWidget* >(
+    ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[ channel ]
+  );
+}
 
 } // end namespace 'mvd'
 

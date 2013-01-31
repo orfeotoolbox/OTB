@@ -45,6 +45,13 @@ namespace mvd
   Context comment for translator.
 */
 
+const char*
+ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[] = {
+  "redWidget",
+  "greenWidget",
+  "blueWidget"
+};
+
 /*******************************************************************************/
 ColorDynamicsWidget
 ::ColorDynamicsWidget( QWidget* parent, Qt::WindowFlags flags  ):
@@ -53,9 +60,11 @@ ColorDynamicsWidget
 {
   m_UI->setupUi( this );
 
-  m_UI->redWidget->SetChannel( RGBA_CHANNEL_RED );
-  m_UI->greenWidget->SetChannel( RGBA_CHANNEL_GREEN );
-  m_UI->blueWidget->SetChannel( RGBA_CHANNEL_BLUE );
+  for( int i=0; i<RGBA_CHANNEL_ALL; ++i )
+    {
+    RgbaChannel channel( static_cast< RgbaChannel >( i ) );
+    GetChannel( channel )->SetChannelLabel( channel );
+    }
 }
 
 /*******************************************************************************/

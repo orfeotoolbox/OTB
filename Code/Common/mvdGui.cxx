@@ -54,6 +54,14 @@ namespace mvd
   Context comment for translator.
 */
 
+const char*
+RGBA_CHANNEL_NAMES[ RGBA_CHANNEL_COUNT ] = {
+  "RGBA_CHANNEL_RED",
+  "RGBA_CHANNEL_GREEN",
+  "RGBA_CHANNEL_BLUE",
+  "RGBA_CHANNEL_ALL"
+};
+
 /*******************************************************************************/
 
 } // end namespace 'mvd'

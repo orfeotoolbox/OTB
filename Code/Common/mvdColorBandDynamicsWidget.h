@@ -81,9 +81,9 @@ class Monteverdi2_EXPORT ColorBandDynamicsWidget :
 
   Q_OBJECT;
 
-  Q_PROPERTY( RgbaChannel channel
-	      READ GetChannel
-	      WRITE SetChannel );
+  Q_PROPERTY( RgbaChannel channelLabel
+	      READ GetChannelLabel
+	      WRITE SetChannelLabel );
 
 #if 0
   /** */
@@ -140,10 +140,10 @@ public:
   virtual ~ColorBandDynamicsWidget();
 
   /** */
-  inline void SetChannel( RgbaChannel );
+  inline void SetChannelLabel( RgbaChannel );
 
   /** */
-  inline RgbaChannel GetChannel() const;
+  inline RgbaChannel GetChannelLabel() const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -199,7 +199,7 @@ private slots:
 /*****************************************************************************/
 void
 ColorBandDynamicsWidget
-::SetChannel( RgbaChannel channel )
+::SetChannelLabel( RgbaChannel channel )
 {
   m_Channel = channel;
 
@@ -216,7 +216,7 @@ ColorBandDynamicsWidget
 /*****************************************************************************/
 RgbaChannel
 ColorBandDynamicsWidget
-::GetChannel() const
+::GetChannelLabel() const
 {
   return m_Channel;
 }

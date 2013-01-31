@@ -317,7 +317,7 @@ MainWindow
   {
   colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
 
-  for( int i=0; i<RGBA_CHANNEL_COUNT; ++i )
+  for( int i=0; i<RGBA_CHANNEL_ALL; ++i )
     {
     colorSetupWidget->SetCurrentIndex(
       static_cast< RgbaChannel >( i ),
@@ -327,12 +327,14 @@ MainWindow
   }
   colorSetupWidget->blockSignals( false );
 
+  // Setup color-dynamics controller.
+
   // set the largest possible region of the image
   // TODO:  rename signal name when handling DataSets collections
   // TODO: move signal into mvdApplication and link it to DockWidget
   // and ImageView.
   emit LargestPossibleRegionChanged(
-    vectorImageModel->GetOutput( 0 )->GetLargestPossibleRegion()
+    vectorImageModel->ToImageBase()->GetLargestPossibleRegion()
   );
 }
 

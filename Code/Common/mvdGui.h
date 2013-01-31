@@ -68,23 +68,25 @@ namespace mvd
 namespace mvd
 {
 
-  /**
-   * Constants identifying the video-channels.
-   */
-  enum RgbaChannel
-  {
-    RGBA_CHANNEL_NONE = -1,
+/**
+ * Constants identifying the video-channels.
+ */
+enum RgbaChannel
+{
+  RGBA_CHANNEL_NONE = -1,
 
-    RGBA_CHANNEL_RED = 0,
-    RGBA_CHANNEL_GREEN = 1,
-    RGBA_CHANNEL_BLUE = 2,
-    RGBA_CHANNEL_ALPHA = 3,
+  RGBA_CHANNEL_RED = 0,
+  RGBA_CHANNEL_GREEN = 1,
+  RGBA_CHANNEL_BLUE = 2,
 
-    RGBA_CHANNEL_COUNT,
+  RGBA_CHANNEL_ALL = 3,
 
-    RGBA_CHANNEL_ALL = RGBA_CHANNEL_COUNT
-  };
+  RGBA_CHANNEL_COUNT = 4,
+};
 
+extern
+const char*
+RGBA_CHANNEL_NAMES[ RGBA_CHANNEL_COUNT ];
 
 } // end namespace 'mvd'.
 

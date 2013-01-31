@@ -41,7 +41,7 @@ namespace mvd
 namespace
 {
 
-const char* QCOMBOBOX_NAMES[ /* ColorSetupWidget::CHANNEL_COUNT */ ] = {
+const char* QCOMBOBOX_NAMES[] = {
   "redComboBox",
   "greenComboBox",
   "blueComboBox"
