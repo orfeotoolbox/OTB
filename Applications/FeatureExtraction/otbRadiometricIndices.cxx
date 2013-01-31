@@ -114,8 +114,8 @@ public:
   typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, IBFunctor>                  BIFilterType;
   typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, IB2Functor>                 BI2FilterType;
 
-struct indiceSpec
-{
+  struct indiceSpec
+  {
     std::string key;
     std::string item;
     std::string description;
@@ -123,7 +123,7 @@ struct indiceSpec
     std::string chan1;
     std::string chan2;
     std::string chan3;
-};
+  };
 
 
 private:
@@ -134,7 +134,7 @@ private:
 
     // Documentation
     SetDocName("Radiometric Indices");
-    SetDocLongDescription("This application computes radiometric indices using input image channels of the input image. The output image is a multi channel one which each channel is one of the selected index.");
+    SetDocLongDescription("This application computes radiometric indices using the relevant channels of the input image. The output is a multi band image into which each channel is one of the selected indices.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbVegetationIndicesFunctor, otbWaterIndicesFunctor and otbSoilIndicesFunctor classes");
@@ -176,33 +176,37 @@ private:
     //SetDefaultParameterInt("channels.rho1240", 1);
 
     AddParameter(ParameterType_ListView,  "list", "Available Radiometric Indices");
-    SetParameterDescription("list","List of available radiometric indices.\
-        Vegetation:NDVI - Normalized difference vegetation index\
-        Vegetation:TNDVI - Transformed normalized difference vegetation index\
-        Vegetation:RVI - Ratio vegetation index\
-        Vegetation:SAVI - Soil adjusted vegetation index\
-        Vegetation:TSAVI - Transformed soil adjusted vegetation index\
-        Vegetation:MSAVI - Modified soil adjusted vegetation index\
-        Vegetation:MSAVI2 - Modified soil adjusted vegetation index 2\
-        Vegetation:GEMI - Global environment monitoring index\
-        Vegetation:IPVI - Infrared percentage vegetation index\
-        Water:NDWI - Normalized difference water index (Gao 1996)\
-        Water:NDWI2 - Normalized difference water index (Mc Feeters 1996)\
-        Water:MNDWI - Modified normalized difference water index (Xu 2006)\
-        Water:NDPI - Normalized difference pond index (Lacaux et al.)\
-        Water:NDTI - Normalized difference turbidity index (Lacaux et al.)\
-        Water:SRWI - Simple ratio water index\
-        Soil:RI - Redness index\
-        Soil:CI - Color index\
-        Soil:BI - Brightness index\
-        Soil:BI2 - Brightness index 2");
+    SetParameterDescription("list","List of available radiometric indices with their relevant channels in brackets:\n\
+        Vegetation:NDVI - Normalized difference vegetation index (Red, NIR)\n\
+        Vegetation:TNDVI - Transformed normalized difference vegetation index (Red, NIR)\n\
+        Vegetation:RVI - Ratio vegetation index (Red, NIR)\n\
+        Vegetation:SAVI - Soil adjusted vegetation index (Red, NIR)\n\
+        Vegetation:TSAVI - Transformed soil adjusted vegetation index (Red, NIR)\n\
+        Vegetation:MSAVI - Modified soil adjusted vegetation index (Red, NIR)\n\
+        Vegetation:MSAVI2 - Modified soil adjusted vegetation index 2 (Red, NIR)\n\
+        Vegetation:GEMI - Global environment monitoring index (Red, NIR)\n\
+        Vegetation:IPVI - Infrared percentage vegetation index (Red, NIR)\n\
+        \n\
+        Water:NDWI - Normalized difference water index (Gao 1996) (NIR, MIR)\n\
+        Water:NDWI2 - Normalized difference water index (Mc Feeters 1996) (Green, NIR)\n\
+        Water:MNDWI - Modified normalized difference water index (Xu 2006) (Green, MIR)\n\
+        Water:NDPI - Normalized difference pond index (Lacaux et al.) (MIR, Green)\n\
+        Water:NDTI - Normalized difference turbidity index (Lacaux et al.) (Red, Green)\n\
+        \n\
+        Soil:RI - Redness index (Red, Green)\n\
+        Soil:CI - Color index (Red, Green)\n\
+        Soil:BI - Brightness index (Red, Green)\n\
+        Soil:BI2 - Brightness index 2 (NIR, Red, Green)");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
-    SetDocExampleParameterValue("out", "RadiometricIndicesImages.tif");
+    SetDocExampleParameterValue("list", "Vegetation:NDVI Vegetation:RVI Vegetation:IPVI");
+    SetDocExampleParameterValue("out", "RadiometricIndicesImage.tif");
 
+    m_Map.clear();
+    
     // Add Available choices
-    struct indiceSpec s_NDVI;
+    indiceSpec s_NDVI;
     s_NDVI.key   = "list.ndvi";
     s_NDVI.item  = "Vegetation:NDVI";
     s_NDVI.description = "";
@@ -212,7 +216,7 @@ private:
     s_NDVI.chan3 = "";
     m_Map.push_back(s_NDVI);
 
-    struct indiceSpec s_TNDVI;
+    indiceSpec s_TNDVI;
     s_TNDVI.key   = "list.tndvi";
     s_TNDVI.item  = "Vegetation:TNDVI";
     s_TNDVI.description = "";
@@ -222,7 +226,7 @@ private:
     s_TNDVI.chan3 = "";
     m_Map.push_back(s_TNDVI);
 
-    struct indiceSpec s_RVI;
+    indiceSpec s_RVI;
     s_RVI.key   = "list.rvi";
     s_RVI.item  = "Vegetation:RVI";
     s_RVI.description = "";
@@ -232,7 +236,7 @@ private:
     s_RVI.chan3 = "";
     m_Map.push_back(s_RVI);
 
-    struct indiceSpec s_SAVI;
+    indiceSpec s_SAVI;
     s_SAVI.key   = "list.savi";
     s_SAVI.item  = "Vegetation:SAVI";
     s_SAVI.description = "";
@@ -242,7 +246,7 @@ private:
     s_SAVI.chan3 = "";
     m_Map.push_back(s_SAVI);
 
-    struct indiceSpec s_TSAVI;
+    indiceSpec s_TSAVI;
     s_TSAVI.key   = "list.tsavi";
     s_TSAVI.item  = "Vegetation:TSAVI";
     s_TSAVI.description = "";
@@ -252,7 +256,7 @@ private:
     s_TSAVI.chan3 = "";
     m_Map.push_back(s_TSAVI);
 
-    struct indiceSpec s_MSAVI;
+    indiceSpec s_MSAVI;
     s_MSAVI.key   = "list.msavi";
     s_MSAVI.item  = "Vegetation:MSAVI";
     s_MSAVI.description = "";
@@ -262,7 +266,7 @@ private:
     s_MSAVI.chan3 = "";
     m_Map.push_back(s_MSAVI);
 
-    struct indiceSpec s_MSAVI2;
+    indiceSpec s_MSAVI2;
     s_MSAVI2.key   = "list.msavi2";
     s_MSAVI2.item  = "Vegetation:MSAVI2";
     s_MSAVI2.description = "";
@@ -272,7 +276,7 @@ private:
     s_MSAVI2.chan3 = "";
     m_Map.push_back(s_MSAVI2);
 
-    struct indiceSpec s_GEMI;
+    indiceSpec s_GEMI;
     s_GEMI.key   = "list.gemi";
     s_GEMI.item  = "Vegetation:GEMI";
     s_GEMI.description = "";
@@ -282,7 +286,7 @@ private:
     s_GEMI.chan3 = "";
     m_Map.push_back(s_GEMI);
 
-    struct indiceSpec s_IPVI;
+    indiceSpec s_IPVI;
     s_IPVI.key   = "list.ipvi";
     s_IPVI.item  = "Vegetation:IPVI";
     s_IPVI.description = "";
@@ -292,7 +296,7 @@ private:
     s_IPVI.chan3 = "";
     m_Map.push_back(s_IPVI);
 
-    struct indiceSpec s_LAIFromNDVILog;
+    indiceSpec s_LAIFromNDVILog;
     s_LAIFromNDVILog.key   = "list.laindvilog";
     s_LAIFromNDVILog.item  = "Vegetation:LAIFromNDVILog";
     s_LAIFromNDVILog.description = "";
@@ -302,7 +306,7 @@ private:
     s_LAIFromNDVILog.chan3 = "";
     m_Map.push_back(s_LAIFromNDVILog);
 
-    struct indiceSpec s_LAIFromReflLinear;
+    indiceSpec s_LAIFromReflLinear;
     s_LAIFromReflLinear.key   = "list.lairefl";
     s_LAIFromReflLinear.item  = "Vegetation:LAIFromReflLinear";
     s_LAIFromReflLinear.description = "";
@@ -312,7 +316,7 @@ private:
     s_LAIFromReflLinear.chan3 = "";
     m_Map.push_back(s_LAIFromReflLinear);
 
-    struct indiceSpec s_LAIFromNDVIFormo;
+    indiceSpec s_LAIFromNDVIFormo;
     s_LAIFromNDVIFormo.key   = "list.laindviformo";
     s_LAIFromNDVIFormo.item  = "Vegetation:LAIFromNDVIFormo";
     s_LAIFromNDVIFormo.description = "";
@@ -322,7 +326,7 @@ private:
     s_LAIFromNDVIFormo.chan3 = "";
     m_Map.push_back(s_LAIFromNDVIFormo);
 
-    struct indiceSpec s_NDWI;
+    indiceSpec s_NDWI;
     s_NDWI.key   = "list.ndwi";
     s_NDWI.item  = "Water:NDWI";
     s_NDWI.description = "";
@@ -332,7 +336,7 @@ private:
     s_NDWI.chan3 = "";
     m_Map.push_back(s_NDWI);
 
-    struct indiceSpec s_NDWI2;
+    indiceSpec s_NDWI2;
     s_NDWI2.key   = "list.ndwi2";
     s_NDWI2.item  = "Water:NDWI2";
     s_NDWI2.description = "";
@@ -342,7 +346,7 @@ private:
     s_NDWI2.chan3 = "";
     m_Map.push_back(s_NDWI2);
 
-    struct indiceSpec s_MNDWI;
+    indiceSpec s_MNDWI;
     s_MNDWI.key   = "list.mndwi";
     s_MNDWI.item  = "Water:MNDWI";
     s_MNDWI.description = "";
@@ -352,7 +356,7 @@ private:
     s_MNDWI.chan3 = "";
     m_Map.push_back(s_MNDWI);
 
-    struct indiceSpec s_NDPI;
+    indiceSpec s_NDPI;
     s_NDPI.key   = "list.ndpi";
     s_NDPI.item  = "Water:NDPI";
     s_NDPI.description = "";
@@ -362,7 +366,7 @@ private:
     s_NDPI.chan3 = "";
     m_Map.push_back(s_NDPI);
 
-    struct indiceSpec s_NDTI;
+    indiceSpec s_NDTI;
     s_NDTI.key   = "list.ndti";
     s_NDTI.item  = "Water:NDTI";
     s_NDTI.description = "";
@@ -372,7 +376,7 @@ private:
     s_NDTI.chan3 = "";
     m_Map.push_back(s_NDTI);
 
-    struct indiceSpec s_SRWI;
+    indiceSpec s_SRWI;
     s_SRWI.key   = "list.srwi";
     s_SRWI.item  = "Water:SRWI";
     s_SRWI.description = "";
@@ -382,7 +386,7 @@ private:
     s_SRWI.chan3 = "";
     //m_Map.push_back(s_SRWI);
 
-    struct indiceSpec s_RI;
+    indiceSpec s_RI;
     s_RI.key   = "list.ri";
     s_RI.item  = "Soil:RI";
     s_RI.description = "";
@@ -392,7 +396,7 @@ private:
     s_RI.chan3 = "";
     m_Map.push_back(s_RI);
 
-    struct indiceSpec s_CI;
+    indiceSpec s_CI;
     s_CI.key   = "list.ci";
     s_CI.item  = "Soil:CI";
     s_CI.description = "";
@@ -402,7 +406,7 @@ private:
     s_CI.chan3 = "";
     m_Map.push_back(s_CI);
 
-    struct indiceSpec s_BI;
+    indiceSpec s_BI;
     s_BI.key   = "list.bi";
     s_BI.item  = "Soil:BI";
     s_BI.description = "";
@@ -412,7 +416,7 @@ private:
     s_BI.chan3 = "";
     m_Map.push_back(s_BI);
 
-    struct indiceSpec s_BI2;
+    indiceSpec s_BI2;
     s_BI2.key   = "list.bi2";
     s_BI2.item  = "Soil:BI2";
     s_BI2.description = "";
@@ -586,7 +590,7 @@ private:
   FilterListType::Pointer                   m_FilterList;
   ImageListType::Pointer                    m_ImageList;
   ImageListToVectorImageFilterType::Pointer m_Concatener;
-  std::vector<struct indiceSpec>            m_Map;
+  std::vector<indiceSpec>                   m_Map;
 
 };
 
