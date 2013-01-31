@@ -60,10 +60,64 @@ ColorDynamicsWidget
 {
   m_UI->setupUi( this );
 
-  for( int i=0; i<RGBA_CHANNEL_ALL; ++i )
+  for( int i=0; i<RGBA_CHANNEL_ALPHA; ++i )
     {
     RgbaChannel channel( static_cast< RgbaChannel >( i ) );
-    GetChannel( channel )->SetChannelLabel( channel );
+
+    ColorBandDynamicsWidget* widget = GetChannel( channel );
+
+    widget->SetChannelLabel( channel );
+
+    //
+    // Concentrate and forward signals of each channels.
+
+    QObject::connect(
+      widget,
+      SIGNAL( LowQuantileChanged( RgbaChannel, double ) ),
+      // TO:
+      this,
+      SIGNAL( LowQuantileChanged( RgbaChannel, double ) )
+    );
+
+    QObject::connect(
+      widget,
+      SIGNAL( HighQuantileChanged( RgbaChannel, double ) ),
+      // TO:
+      this,
+      SIGNAL( HighQuantileChanged( RgbaChannel, double ) )
+    );
+
+    QObject::connect(
+      widget,
+      SIGNAL( LowIntensityChanged( RgbaChannel, double ) ),
+      // TO:
+      this,
+      SIGNAL( LowIntensityChanged( RgbaChannel, double ) )
+    );
+
+    QObject::connect(
+      widget,
+      SIGNAL( HighIntensityChanged( RgbaChannel, double ) ),
+      // TO:
+      this,
+      SIGNAL( HighIntensityChanged( RgbaChannel, double ) )
+    );
+
+    QObject::connect(
+      widget,
+      SIGNAL( ResetQuantileClicked( RgbaChannel ) ),
+      // TO:
+      this,
+      SIGNAL( ResetQuantileClicked( RgbaChannel ) )
+    );
+
+    QObject::connect(
+      widget,
+      SIGNAL( ResetIntensityClicked( RgbaChannel ) ),
+      // TO:
+      this,
+      SIGNAL( ResetIntensityClicked( RgbaChannel  ) )
+    );
     }
 }
 

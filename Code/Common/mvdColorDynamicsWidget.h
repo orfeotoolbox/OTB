@@ -92,16 +92,23 @@ public:
   /** Destructor */
   virtual ~ColorDynamicsWidget();
 
-  /** */
-  inline const ColorBandDynamicsWidget* GetChannel( RgbaChannel ) const;
-  /** */
-  inline ColorBandDynamicsWidget* GetChannel( RgbaChannel );
-
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
+  /** */
+  void LowQuantileChanged( RgbaChannel, double );
+  /** */
+  void HighQuantileChanged( RgbaChannel, double );
+  /** */
+  void LowIntensityChanged( RgbaChannel, double );
+  /** */
+  void HighIntensityChanged( RgbaChannel, double );
+  /** */
+  void ResetIntensityClicked( RgbaChannel );
+  /** */
+  void ResetQuantileClicked( RgbaChannel );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -119,6 +126,11 @@ protected:
 // Private methods.
 private:
 
+  /** */
+  inline const ColorBandDynamicsWidget* GetChannel( RgbaChannel ) const;
+  /** */
+  inline ColorBandDynamicsWidget* GetChannel( RgbaChannel );
+
 //
 // Private attributes.
 private:
@@ -135,6 +147,7 @@ private:
 //
 // Slots.
 private slots:
+
 };
 
 } // end namespace 'mvd'.
@@ -166,6 +179,8 @@ ColorDynamicsWidget
     ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[ channel ]
   );
 }
+/*****************************************************************************/
+/* SLOTS                                                                     */
 
 } // end namespace 'mvd'
 

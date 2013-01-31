@@ -155,7 +155,7 @@ private:
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
-// Private attributes.
+// Private slots.
 private slots:
   /** */
   void on_action_Open_activated();

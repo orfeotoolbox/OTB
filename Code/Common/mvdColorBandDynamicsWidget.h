@@ -150,6 +150,19 @@ public:
 //
 // Signals.
 signals:
+  /** */
+  void LowQuantileChanged( RgbaChannel, double );
+  /** */
+  void HighQuantileChanged( RgbaChannel, double );
+  /** */
+  void LowIntensityChanged( RgbaChannel, double );
+  /** */
+  void HighIntensityChanged( RgbaChannel, double );
+
+  /** */
+  void ResetIntensityClicked( RgbaChannel );
+  /** */
+  void ResetQuantileClicked( RgbaChannel );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -186,11 +199,11 @@ private slots:
   inline void on_lowIntensitySpinBox_valueChanged( double );
   inline void on_highIntensitySpinBox_valueChanged( double );
 
-  void on_lowQuantileSpinBox_valueChanged( double );
-  void on_highQuantileSpinBox_valueChanged( double );
+  inline void on_lowQuantileSpinBox_valueChanged( double );
+  inline void on_highQuantileSpinBox_valueChanged( double );
 
-  void on_minMaxButton_clicked();
-  void on_defaultsButton_clicked();
+  inline void on_minMaxButton_clicked();
+  inline void on_defaultsButton_clicked();
 };
 
 /*****************************************************************************/
@@ -227,6 +240,7 @@ void
 ColorBandDynamicsWidget
 ::on_lowIntensitySpinBox_valueChanged( double value )
 {
+  emit LowIntensityChanged( m_Channel, value );
 }
 
 /*****************************************************************************/
@@ -235,6 +249,25 @@ void
 ColorBandDynamicsWidget
 ::on_highIntensitySpinBox_valueChanged( double value )
 {
+  emit HighIntensityChanged( m_Channel, value );
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::on_lowQuantileSpinBox_valueChanged( double value )
+{
+  emit LowQuantileChanged( m_Channel, value );
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::on_highQuantileSpinBox_valueChanged( double value )
+{
+  emit HighQuantileChanged( m_Channel, value );
 }
 
 /*****************************************************************************/
@@ -243,6 +276,7 @@ void
 ColorBandDynamicsWidget
 ::on_minMaxButton_clicked()
 {
+  emit ResetIntensityClicked( m_Channel );
 }
 
 /*****************************************************************************/
@@ -251,6 +285,7 @@ void
 ColorBandDynamicsWidget
 ::on_defaultsButton_clicked()
 {
+  emit ResetQuantileClicked( m_Channel );
 }
 
 } // end namespace 'mvd'

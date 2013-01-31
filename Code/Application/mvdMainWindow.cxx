@@ -276,11 +276,6 @@ void
 MainWindow
 ::OnSelectedModelChanged( const AbstractModel* model )
 {
-  ColorSetupWidget* colorSetupWidget =
-    qobject_cast< ColorSetupWidget*  >( GetColorSetupDock()->widget() );
-  assert( colorSetupWidget!=NULL );
-
-
   const DatasetModel* datasetModel =
     qobject_cast< const DatasetModel* >( model );
 
@@ -294,14 +289,8 @@ MainWindow
 
   assert( vectorImageModel!=NULL );
 
-  // Connect newly selected model to UI controller.
-  QObject::connect(
-    colorSetupWidget,
-    SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
-    // to:
-    vectorImageModel,
-    SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
-  );
+  //
+  // MAIN VIEW.
 
   // Connect newly selected model to view.
   QObject::connect(
@@ -310,6 +299,22 @@ MainWindow
     // to:
     centralWidget(),
     SLOT( updateGL()  )
+  );
+
+  //
+  // COLOR SETUP.
+
+  ColorSetupWidget* colorSetupWidget =
+    qobject_cast< ColorSetupWidget*  >( GetColorSetupDock()->widget() );
+  assert( colorSetupWidget!=NULL );
+
+  // Connect newly selected model to UI controller.
+  QObject::connect(
+    colorSetupWidget,
+    SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
+    // to:
+    vectorImageModel,
+    SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
   );
 
   // Setup color-setup controller.
@@ -327,7 +332,30 @@ MainWindow
   }
   colorSetupWidget->blockSignals( false );
 
+  //
+  // COLOR DYNAMICS.
+
+  ColorDynamicsWidget* colorDynamicsWidget =
+    qobject_cast< ColorDynamicsWidget*  >( GetColorDynamicsDock()->widget() );
+  assert( colorDynamicsWidget!=NULL );
+
+  /*
+  // Connect newly selected model to UI controller.
+  QObject::connect(
+    colorDynamicsWidget->GetChannel( ),
+    SIGNAL(  ),
+    // to:
+    vectorImageModel,
+    SLOT(  )
+  );
+  */
+
   // Setup color-dynamics controller.
+  colorDynamicsWidget->blockSignals( true );
+  colorDynamicsWidget->blockSignals( false );
+
+  //
+  // REFRESH DISPLAY.
 
   // set the largest possible region of the image
   // TODO:  rename signal name when handling DataSets collections
