@@ -55,11 +55,11 @@ private:
 void DoInit()
 {
 SetName("LocalStatisticExtraction");
-SetDescription("Computes local statistics on every pixel of the input image selected channel");
+SetDescription("Computes local statistical moments on every pixel in the selected channel of the input image");
 
 // Documentation
 SetDocName("Local Statistic Extraction");
-SetDocLongDescription("This application computes local Statistics on a mono band image");
+SetDocLongDescription("This application computes the 4 local statistical moments on every pixel in the selected channel of the input image, over a specified neighborhood. The output image is multi band with one statistical moment (feature) per band. Thus, the 4 output features are the Mean, the Variance, the Skewness and the Kurtosis. They are provided in this exact order in the output image.");
 SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otbRadiometricMomentsImageFunction class");
@@ -83,7 +83,7 @@ SetMinimumParameterIntValue("radius",1);
 SetDefaultParameterInt("radius",3);
 
 AddParameter(ParameterType_OutputImage, "out", "Feature Output Image");
-SetParameterDescription("out", "Output image containing the local statistic features.");
+SetParameterDescription("out", "Output image containing the local statistical moments.");
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
