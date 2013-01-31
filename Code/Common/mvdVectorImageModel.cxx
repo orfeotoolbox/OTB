@@ -556,5 +556,45 @@ VectorImageModel
 }
 
 /*******************************************************************************/
+void
+VectorImageModel
+::OnLowQuantileChanged( RgbaChannel, double )
+{
+}
+
+/*******************************************************************************/
+void
+VectorImageModel
+::OnHighQuantileChanged( RgbaChannel, double )
+{
+}
+
+/*******************************************************************************/
+void
+VectorImageModel
+::OnLowIntensityChanged( RgbaChannel, double )
+{
+}
+
+/*******************************************************************************/
+void
+VectorImageModel
+::OnHighIntensityChanged( RgbaChannel, double )
+{
+}
+
+/*******************************************************************************/
+void
+VectorImageModel
+::OnResetIntensityClicked( RgbaChannel )
+{
+}
+
+/*******************************************************************************/
+void
+VectorImageModel
+::OnResetQuantileClicked( RgbaChannel )
+{
+}
 
 } // end namespace 'mvd'

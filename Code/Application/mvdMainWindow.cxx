@@ -232,6 +232,8 @@ MainWindow
   const DatasetModel* datasetModel = 
     qobject_cast< const DatasetModel* >( app->GetModel() );
 
+  // It is Ok there is no previously selected model (e.g. at
+  // application startup.
   if( datasetModel==NULL )
     {
     return;
@@ -246,6 +248,8 @@ MainWindow
 
   assert( vectorImageModel!=NULL );
 
+  //
+  // MAIN VIEW.
 
   // Disconnect previously selected model from view.
   QObject::disconnect(
@@ -256,18 +260,71 @@ MainWindow
     SLOT( updateGL() )
   );
 
-
-  QWidget* widget = GetColorSetupDock()->widget();
-  assert( widget!=NULL );
-
+  //
+  // COLOR SETUP.
 
   // Disconnect previously selected model from UI controller.
   QObject::disconnect(
     GetColorSetupDock()->widget(),
-    SIGNAL( CurrentIndexChanged( ColorSetupWidget::Channel, int ) ),
+    SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
     // from:
     vectorImageModel,
-    SLOT( OnCurrentIndexChanged( ColorSetupWidget::Channel, int ) )
+    SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
+  );
+
+  //
+  // COLOR DYNAMICS.
+
+  QWidget* colorDynamicsWidget = GetColorDynamicsDock()->widget();
+  assert( colorDynamicsWidget!=NULL );
+
+  // Disconnect previously selected model to UI controller.
+  QObject::disconnect(
+    colorDynamicsWidget,
+    SIGNAL( LowQuantileChanged( RgbaChannel, double ) ),
+    // from:
+    vectorImageModel,
+    SLOT( OnLowQuantileChanged( RgbaChannel, double ) )
+  );
+
+  QObject::disconnect(
+    colorDynamicsWidget,
+    SIGNAL( HighQuantileChanged( RgbaChannel, double ) ),
+    // from:
+    vectorImageModel,
+    SLOT( OnHighQuantileChanged( RgbaChannel, double ) )
+  );
+
+  QObject::disconnect(
+    colorDynamicsWidget,
+    SIGNAL( LowIntensityChanged( RgbaChannel, double ) ),
+    // from:
+    vectorImageModel,
+    SLOT( OnLowIntensityChanged( RgbaChannel, double ) )
+  );
+
+  QObject::disconnect(
+    colorDynamicsWidget,
+    SIGNAL( HighIntensityChanged( RgbaChannel, double ) ),
+    // from:
+    vectorImageModel,
+    SLOT( OnHighIntensityChanged( RgbaChannel, double ) )
+  );
+
+  QObject::disconnect(
+    colorDynamicsWidget,
+    SIGNAL( ResetQuantileClicked( RgbaChannel ) ),
+    // from:
+    vectorImageModel,
+    SLOT( OnResetQuantileClicked( RgbaChannel ) )
+  );
+
+  QObject::disconnect(
+    colorDynamicsWidget,
+    SIGNAL( ResetIntensityClicked( RgbaChannel ) ),
+    // from:
+    vectorImageModel,
+    SLOT( OnResetIntensityClicked( RgbaChannel  ) )
   );
 }
 
@@ -339,16 +396,54 @@ MainWindow
     qobject_cast< ColorDynamicsWidget*  >( GetColorDynamicsDock()->widget() );
   assert( colorDynamicsWidget!=NULL );
 
-  /*
   // Connect newly selected model to UI controller.
   QObject::connect(
-    colorDynamicsWidget->GetChannel( ),
-    SIGNAL(  ),
+    colorDynamicsWidget,
+    SIGNAL( LowQuantileChanged( RgbaChannel, double ) ),
     // to:
     vectorImageModel,
-    SLOT(  )
+    SLOT( OnLowQuantileChanged( RgbaChannel, double ) )
   );
-  */
+
+  QObject::connect(
+    colorDynamicsWidget,
+    SIGNAL( HighQuantileChanged( RgbaChannel, double ) ),
+    // to:
+    vectorImageModel,
+    SLOT( OnHighQuantileChanged( RgbaChannel, double ) )
+  );
+
+  QObject::connect(
+    colorDynamicsWidget,
+    SIGNAL( LowIntensityChanged( RgbaChannel, double ) ),
+    // to:
+    vectorImageModel,
+    SLOT( OnLowIntensityChanged( RgbaChannel, double ) )
+  );
+
+  QObject::connect(
+    colorDynamicsWidget,
+    SIGNAL( HighIntensityChanged( RgbaChannel, double ) ),
+    // to:
+    vectorImageModel,
+    SLOT( OnHighIntensityChanged( RgbaChannel, double ) )
+  );
+
+  QObject::connect(
+    colorDynamicsWidget,
+    SIGNAL( ResetQuantileClicked( RgbaChannel ) ),
+    // to:
+    vectorImageModel,
+    SLOT( OnResetQuantileClicked( RgbaChannel ) )
+  );
+
+  QObject::connect(
+    colorDynamicsWidget,
+    SIGNAL( ResetIntensityClicked( RgbaChannel ) ),
+    // to:
+    vectorImageModel,
+    SLOT( OnResetIntensityClicked( RgbaChannel  ) )
+  );
 
   // Setup color-dynamics controller.
   colorDynamicsWidget->blockSignals( true );

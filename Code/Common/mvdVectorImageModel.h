@@ -268,6 +268,19 @@ public slots:
   // VectorImageModel and move slot.
   void OnCurrentIndexChanged( RgbaChannel channel, int index );
 
+  /** */
+  void OnLowQuantileChanged( RgbaChannel, double );
+  /** */
+  void OnHighQuantileChanged( RgbaChannel, double );
+  /** */
+  void OnLowIntensityChanged( RgbaChannel, double );
+  /** */
+  void OnHighIntensityChanged( RgbaChannel, double );
+  /** */
+  void OnResetIntensityClicked( RgbaChannel );
+  /** */
+  void OnResetQuantileClicked( RgbaChannel );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
