@@ -558,43 +558,49 @@ VectorImageModel
 /*******************************************************************************/
 void
 VectorImageModel
-::OnLowQuantileChanged( RgbaChannel, double )
+::OnLowQuantileChanged( RgbaChannel channel, double value )
 {
+  qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 }
 
 /*******************************************************************************/
 void
 VectorImageModel
-::OnHighQuantileChanged( RgbaChannel, double )
+::OnHighQuantileChanged( RgbaChannel channel, double value )
 {
+  qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 }
 
 /*******************************************************************************/
 void
 VectorImageModel
-::OnLowIntensityChanged( RgbaChannel, double )
+::OnLowIntensityChanged( RgbaChannel channel, double value )
 {
+  qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 }
 
 /*******************************************************************************/
 void
 VectorImageModel
-::OnHighIntensityChanged( RgbaChannel, double )
+::OnHighIntensityChanged( RgbaChannel channel, double value )
 {
+  qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 }
 
 /*******************************************************************************/
 void
 VectorImageModel
-::OnResetIntensityClicked( RgbaChannel )
+::OnResetIntensityClicked( RgbaChannel channel )
 {
+  qDebug() << QString( "%1" ).arg( RGBA_CHANNEL_NAMES[ channel ] );
 }
 
 /*******************************************************************************/
 void
 VectorImageModel
-::OnResetQuantileClicked( RgbaChannel )
+::OnResetQuantileClicked( RgbaChannel channel )
 {
+  qDebug() << QString( "%1" ).arg( RGBA_CHANNEL_NAMES[ channel ] );
 }
 
 } // end namespace 'mvd'
