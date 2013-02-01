@@ -3,7 +3,8 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/01/xx)
 * Library
   * Core and Third Parties
     * Various enhancement of PleiadesImageMetadataInterface
-    * Adding read and write geom file support in OssimSensorModelAdapter
+    * Added GetEnhancedBandNames method in ImageMetadataInterface
+    * Added read and write geom file support in OssimSensorModelAdapter
     * Refactoring of DEMHandler:
       * Turned the class into singleton
       * Made the DEMHandler the single configuration point for all elevation setup
@@ -26,6 +27,7 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/01/xx)
     * Refactored StreamingImageFileWriter and ImageFileWriter
       * ImageFileWriter is now the only class to use 
       * StreamingImageFileWriter is a deprecated subclass provided for backward compatibility
+      * Fixed a bug when the largest possible region could be asked in some cases
        
   * Projections
     * Refactored the GCPsToSensorModel filter 
@@ -101,6 +103,7 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/01/xx)
     * 0000617: Crash with StreamingStatisticsVectorImageFilter
     * 0000602: Geom file of extract of ortho PHR data are not loaded in the otbKeywordList
     * 0000600: Wrong band ordering in 3 Pleiades metadata (gain, bias, solar irradiance)
+    * 0000629: Exception raised in otbcli_MaximumAutocorrelationFactor
 
   * OTB-applications
     * 0000616: otbcli_OpticalCalibration fails to read Worldview-2 metadata
