@@ -59,10 +59,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-namespace Ui
-{
-};
-
+class AbstractModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -70,9 +67,8 @@ namespace Ui
 /**
  * \class ModelController
  */
-template< typename TWidget, typename TModel >
 class Monteverdi2_EXPORT ModelController :
-    public TWidget
+    public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -84,31 +80,25 @@ class Monteverdi2_EXPORT ModelController :
 //
 // Public types.
 public:
-  /** */
-  typedef TWidget SuperClass;
-  /** */
-  typedef TWidget Widget;
-  /** */
-  typedef TModel Model;
 
 //
 // Public methods.
 public:
 
   /** Constructor */
-  ModelController( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  ModelController( QWidget* parent =NULL );
 
   /** Destructor */
   virtual ~ModelController();
 
   /** */
-  inline void SetModel( Model* );
+  inline void SetModel( AbstractModel* );
 
   /** */
-  inline const Model* GetModel() const;
+  inline const AbstractModel* GetModel() const;
 
   /** */
-  inline Model* GetModel();
+  inline AbstractModel* GetModel();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -116,13 +106,13 @@ public:
 // Signals.
 signals:
   /** */
-  void AboutToDisconnectModel( Model* );
+  void AboutToDisconnectModel( AbstractModel* );
   /** */
-  void ModelDisconnected( Model* );
+  void ModelDisconnected( AbstractModel* );
   /** */
-  void AboutToConnectModel( Model* );
+  void AboutToConnectModel( AbstractModel* );
   /** */
-  void ModelConnected( Model* );
+  void ModelConnected( AbstractModel* );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -131,10 +121,10 @@ signals:
 protected:
 
   /** */
-  virtual void Connect( Model* ) =0;
+  virtual void Connect( AbstractModel* ) =0;
 
   /** */
-  virtual void Disconnect( Model* ) =0;
+  virtual void Disconnect( AbstractModel* ) =0;
 
 //
 // Protected attributes.
@@ -151,7 +141,7 @@ private:
 private:
 
   /** */
-  Model* m_Model;
+  AbstractModel* m_Model;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -168,11 +158,10 @@ namespace mvd
 {
 
 /*****************************************************************************/
-template< typename TWidget, typename TModel >
 inline
 void
-ModelController< TWidget, TModel >
-::SetModel( Model* model )
+ModelController
+::SetModel( AbstractModel* model )
 {
   // Disconnect previously connected model and signal listeners.
   emit AboutToDisconnectModel( m_Model );
@@ -194,30 +183,23 @@ ModelController< TWidget, TModel >
 }
 
 /*****************************************************************************/
-template< typename TWidget, typename TModel >
 inline
-const TModel*
-ModelController< TWidget, TModel >
+const AbstractModel*
+ModelController
 ::GetModel() const
 {
   return m_Model;
 }
 
 /*****************************************************************************/
-template< typename TWidget, typename TModel >
 inline
-TModel*
-ModelController< TWidget, TModel >
+AbstractModel*
+ModelController
 ::GetModel()
 {
   return m_Model;
 }
 
 } // end namespace 'mvd'
-
-/*****************************************************************************/
-/* TEMPLATE SECTION                                                          */
-
-#include "mvdModelController.txx"
 
 #endif // __mvdModelController_h
