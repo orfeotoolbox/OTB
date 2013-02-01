@@ -16,9 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-#ifndef __mvdMainWindow_h
-#define __mvdMainWindow_h
+#ifndef __mvdAbstractModelController_h
+#define __mvdAbstractModelController_h
 
 //
 // Configuration include.
@@ -45,14 +44,13 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
 
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
 //
-// External class pre-declaration.
+// External classes pre-declaration.
 namespace
 {
 }
@@ -60,23 +58,17 @@ namespace
 namespace mvd
 {
 //
-// Internal class pre-declaration.
+// Internal classes pre-declaration.
 class AbstractModel;
-
-namespace Ui
-{
-class MainWindow;
-}
-
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class MainWindow
- *
+/**
+ * \class AbstractModelController
  */
-class Monteverdi2_EXPORT MainWindow
-  : public QMainWindow
+class Monteverdi2_EXPORT AbstractModelController :
+    public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -84,7 +76,7 @@ class Monteverdi2_EXPORT MainWindow
   Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-    
+
 //
 // Public types.
 public:
@@ -92,24 +84,57 @@ public:
 //
 // Public methods.
 public:
+
   /** Constructor */
-  MainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
+  AbstractModelController( QWidget* widget, QObject* parent =NULL );
 
   /** Destructor */
-  virtual ~MainWindow();
+  virtual ~AbstractModelController();
+
+  /** */
+  inline void SetModel( AbstractModel* );
+
+  /** */
+  template< typename TModel >
+  inline const TModel* GetModel() const;
+
+  /** */
+  template< typename TModel >
+  inline TModel* GetModel();
+
+  /** */
+  template< typename TWidget >
+  inline const TWidget* GetWidget() const;
+
+  /** */
+  template< typename TWidget >
+  inline TWidget* GetWidget();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
-// SIGNALS.
+// Signals.
 signals:
-  void LargestPossibleRegionChanged(const ImageRegionType& largestRegion);
+  /** */
+  void AboutToDisconnectModel( AbstractModel* );
+  /** */
+  void ModelDisconnected( AbstractModel* );
+  /** */
+  void AboutToConnectModel( AbstractModel* );
+  /** */
+  void ModelConnected( AbstractModel* );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
+
+  /** */
+  virtual void Connect( AbstractModel* ) =0;
+
+  /** */
+  virtual void Disconnect( AbstractModel* ) =0;
 
 //
 // Protected attributes.
@@ -121,107 +146,105 @@ protected:
 // Private methods.
 private:
   /** */
-  void Initialize();
-
-  /** */
-  void InitializeDockWidgets();
-
-  /** */
-  QDockWidget*
-    AddWidgetToDock( QWidget* widget,
-		     const QString& dockName,
-		     const QString& dockTitle,
-		     Qt::DockWidgetArea dockArea );
-
-  /** */
-  inline const QDockWidget*  GetColorSetupDock() const;
-
-  /** */
-  inline QDockWidget* GetColorSetupDock();
-
-  /** */
-  inline const QDockWidget* GetColorDynamicsDock() const;
-
-  /** */
-  inline QDockWidget* GetColorDynamicsDock();
-
+  inline void DisconnectOnDestroy();
 
 //
 // Private attributes.
 private:
-  /**
-   */
-  Ui::MainWindow* m_UI;
+  /** */
+  QWidget* m_Widget;
+
+  /** */
+  AbstractModel* m_Model;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
-// Private slots.
+// Slots.
 private slots:
-  /** */
-  void on_action_Open_activated();
-
-  /** */
-  void on_action_About_activated();
-
-  /** */
-  void OnAboutToChangeSelectedModel( const AbstractModel* );
-
-  /** */
-  void OnSelectedModelChanged( AbstractModel* );
 };
 
-} // end namespace 'mvd'
+} // end namespace 'mvd'.
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
-
-//
-// Some constants.
-#define VIDEO_COLOR_DYNAMICS_DOCK "videoColorDynamicsDock"
-#define VIDEO_COLOR_SETUP_DOCK "videoColorSetupDock"
-
 namespace mvd
 {
 
 /*****************************************************************************/
 inline
-const QDockWidget*
-MainWindow
-::GetColorSetupDock() const
+void
+AbstractModelController
+::SetModel( AbstractModel* model )
 {
-  return findChild< QDockWidget* >( VIDEO_COLOR_SETUP_DOCK );
+  // Disconnect previously connected model and signal listeners.
+  emit AboutToDisconnectModel( m_Model );
+  Disconnect( m_Model );
+  emit ModelDisconnected( m_Model );
+
+  // Forget previously disconnected model before new model is
+  // connected. This is done in order to stay in a consistent internal
+  // state whenever the connection is aborted (e.g. by an exception).
+  m_Model = NULL;
+
+  // Connect new model and signal listeners.
+  emit AboutToConnectModel( model );
+  Connect( model );
+  emit ModelDisconnected( model );
+
+  // Remember newly connected model.
+  m_Model = model;
+}
+
+/*****************************************************************************/
+template< typename TModel >
+inline
+const TModel*
+AbstractModelController
+::GetModel() const
+{
+  return qobject_cast< const TModel* >( m_Model );
+}
+
+/*****************************************************************************/
+template< typename TModel >
+inline
+TModel*
+AbstractModelController
+::GetModel()
+{
+  return qobject_cast< TModel* >( m_Model );
+}
+
+/*****************************************************************************/
+template< typename TWidget >
+inline
+const TWidget*
+AbstractModelController
+::GetWidget() const
+{
+  return qobject_cast< const TWidget* >( m_Widget );
+}
+
+/*****************************************************************************/
+template< typename TWidget >
+inline
+TWidget*
+AbstractModelController
+::GetWidget()
+{
+  return qobject_cast< TWidget* >( m_Widget );
 }
 
 /*****************************************************************************/
 inline
-QDockWidget*
-MainWindow
-::GetColorSetupDock()
+void
+AbstractModelController
+::DisconnectOnDestroy()
 {
-  return findChild< QDockWidget* >( VIDEO_COLOR_SETUP_DOCK );
+  Disconnect( m_Model );
 }
-
-/*****************************************************************************/
-inline
-const QDockWidget*
-MainWindow
-::GetColorDynamicsDock() const
-{
-  return findChild< QDockWidget* >( VIDEO_COLOR_DYNAMICS_DOCK );
-}
-
-/*****************************************************************************/
-inline
-QDockWidget*
-MainWindow
-::GetColorDynamicsDock()
-{
-  return findChild< QDockWidget* >( VIDEO_COLOR_DYNAMICS_DOCK );
-}
-
-/*****************************************************************************/
 
 } // end namespace 'mvd'
 
-#endif // __MainWindow_h
+#endif // __mvdAbstractModelController_h

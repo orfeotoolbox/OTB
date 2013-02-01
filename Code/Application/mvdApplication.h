@@ -121,7 +121,7 @@ signals:
 
   /**
    */
-  void SelectedModelChanged( const AbstractModel* );
+  void SelectedModelChanged( AbstractModel* );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

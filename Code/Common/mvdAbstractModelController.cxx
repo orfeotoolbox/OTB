@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdModelController.h"
+#include "mvdAbstractModelController.h"
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -24,6 +24,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -37,7 +38,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::ModelController
+  TRANSLATOR mvd::AbstractModelController
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -45,17 +46,20 @@ namespace mvd
 */
 
 /*******************************************************************************/
-ModelController
-::ModelController( QWidget* parent ):
+AbstractModelController
+::AbstractModelController( QWidget* widget, QObject* parent ):
   QObject( parent ),
+  m_Widget( widget ),
   m_Model( NULL )
 {
+  assert( widget!=NULL );
 }
 
 /*******************************************************************************/
-ModelController
-::~ModelController()
+AbstractModelController
+::~AbstractModelController()
 {
+  DisconnectOnDestroy();
 }
 
 /*******************************************************************************/

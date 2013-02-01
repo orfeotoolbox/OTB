@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdModelController_h
-#define __mvdModelController_h
+#ifndef __mvdColorDynamicsController_h
+#define __mvdColorDynamicsController_h
 
 //
 // Configuration include.
@@ -31,7 +31,6 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -44,6 +43,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdAbstractModelController.h"
+#include "mvdGui.h"
 
 
 /*****************************************************************************/
@@ -59,16 +60,16 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-class AbstractModel;
+class ColorDynamicsWidget;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class ModelController
+ * \class ColorDynamicsController
  */
-class Monteverdi2_EXPORT ModelController :
-    public QObject
+class Monteverdi2_EXPORT ColorDynamicsController :
+    public AbstractModelController
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -78,41 +79,20 @@ class Monteverdi2_EXPORT ModelController :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
-// Public types.
-public:
-
-//
 // Public methods.
 public:
 
   /** Constructor */
-  ModelController( QWidget* parent =NULL );
+  ColorDynamicsController( ColorDynamicsWidget* widget, QObject* parent =NULL );
 
   /** Destructor */
-  virtual ~ModelController();
-
-  /** */
-  inline void SetModel( AbstractModel* );
-
-  /** */
-  inline const AbstractModel* GetModel() const;
-
-  /** */
-  inline AbstractModel* GetModel();
+  virtual ~ColorDynamicsController();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  /** */
-  void AboutToDisconnectModel( AbstractModel* );
-  /** */
-  void ModelDisconnected( AbstractModel* );
-  /** */
-  void AboutToConnectModel( AbstractModel* );
-  /** */
-  void ModelConnected( AbstractModel* );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -120,86 +100,56 @@ signals:
 // Protected methods.
 protected:
 
-  /** */
-  virtual void Connect( AbstractModel* ) =0;
+  //
+  // AbstractModelController overrides.
 
   /** */
-  virtual void Disconnect( AbstractModel* ) =0;
+  virtual void Connect( AbstractModel* );
+
+  /** */
+  virtual void Disconnect( AbstractModel* );
 
 //
 // Protected attributes.
 protected:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
 //
 // Private methods.
 private:
 
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private attributes.
 private:
-
-  /** */
-  AbstractModel* m_Model;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
+  /** */
+  void OnLowQuantileChanged( RgbaChannel, double );
+  /** */
+  void OnHighQuantileChanged( RgbaChannel, double );
+  /** */
+  void OnLowIntensityChanged( RgbaChannel, double );
+  /** */
+  void OnHighIntensityChanged( RgbaChannel, double );
+  /** */
+  void OnResetIntensityClicked( RgbaChannel );
+  /** */
+  void OnResetQuantileClicked( RgbaChannel );
 };
 
 } // end namespace 'mvd'.
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
+
 namespace mvd
 {
-
-/*****************************************************************************/
-inline
-void
-ModelController
-::SetModel( AbstractModel* model )
-{
-  // Disconnect previously connected model and signal listeners.
-  emit AboutToDisconnectModel( m_Model );
-  Disconnect( m_Model );
-  emit ModelDisconnected( m_Model );
-
-  // Forget previously disconnected model before new model is
-  // connected. This is done in order to stay in a consistent internal
-  // state whenever the connection is aborted (e.g. by an exception).
-  m_Model = NULL;
-
-  // Connect new model and signal listeners.
-  emit AboutToConnectModel( model );
-  Connect( model );
-  emit ModelDisconnected( model );
-
-  // Remember newly connected model.
-  m_Model = model;
-}
-
-/*****************************************************************************/
-inline
-const AbstractModel*
-ModelController
-::GetModel() const
-{
-  return m_Model;
-}
-
-/*****************************************************************************/
-inline
-AbstractModel*
-ModelController
-::GetModel()
-{
-  return m_Model;
-}
-
 } // end namespace 'mvd'
 
-#endif // __mvdModelController_h
+#endif // __mvdColorDynamicsController_h

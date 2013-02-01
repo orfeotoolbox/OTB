@@ -37,6 +37,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAboutDialog.h"
 #include "mvdApplication.h"
+#include "mvdColorDynamicsController.h"
 #include "mvdColorDynamicsWidget.h"
 #include "mvdColorSetupWidget.h"
 #include "mvdDatasetModel.h"
@@ -105,8 +106,8 @@ MainWindow
   // Connect Appllication and MainWindow when selected model has been
   // changed.
   QObject::connect(
-    qApp, SIGNAL( SelectedModelChanged( const AbstractModel* ) ),
-    this, SLOT( OnSelectedModelChanged( const AbstractModel* ) )
+    qApp, SIGNAL( SelectedModelChanged( AbstractModel* ) ),
+    this, SLOT( OnSelectedModelChanged( AbstractModel* ) )
   );
 }
 
@@ -115,6 +116,9 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
+  //
+  // COLOR SETUP.
+
   AddWidgetToDock( 
     new ColorSetupWidget( this ),
     VIDEO_COLOR_SETUP_DOCK,
@@ -122,12 +126,25 @@ MainWindow
     Qt::LeftDockWidgetArea
   );
 
-  AddWidgetToDock( 
-    new ColorDynamicsWidget( this ),
-    VIDEO_COLOR_DYNAMICS_DOCK,
-    tr( "Video color dynamics" ),
-    Qt::LeftDockWidgetArea
+  //
+  // COLOR DYNAMICS.
+
+  ColorDynamicsWidget* colorDynWgt = new ColorDynamicsWidget( this );
+
+  new ColorDynamicsController(
+    // wraps:
+    colorDynWgt,
+    // parents to:
+    AddWidgetToDock( 
+      colorDynWgt,
+      VIDEO_COLOR_DYNAMICS_DOCK,
+      tr( "Video color dynamics" ),
+      Qt::LeftDockWidgetArea
+    )
   );
+
+  //
+  // EXPERIMENTAL TOOLBOX.
 
 #if 0
 
@@ -148,7 +165,7 @@ MainWindow
 }
 
 /*****************************************************************************/
-void
+QDockWidget*
 MainWindow
 ::AddWidgetToDock( QWidget* widget,
 		   const QString& dockName,
@@ -171,6 +188,8 @@ MainWindow
 
   // Add dock.
   addDockWidget( dockArea, dockWidget );
+
+  return dockWidget;
 }
 
 /*****************************************************************************/
@@ -275,72 +294,26 @@ MainWindow
   //
   // COLOR DYNAMICS.
 
-  QWidget* colorDynamicsWidget = GetColorDynamicsDock()->widget();
-  assert( colorDynamicsWidget!=NULL );
+  ColorDynamicsController* colorDynCtrl =
+    GetColorDynamicsDock()->findChild< ColorDynamicsController* >();
 
-  // Disconnect previously selected model to UI controller.
-  QObject::disconnect(
-    colorDynamicsWidget,
-    SIGNAL( LowQuantileChanged( RgbaChannel, double ) ),
-    // from:
-    vectorImageModel,
-    SLOT( OnLowQuantileChanged( RgbaChannel, double ) )
-  );
+  assert( colorDynCtrl!=NULL );
 
-  QObject::disconnect(
-    colorDynamicsWidget,
-    SIGNAL( HighQuantileChanged( RgbaChannel, double ) ),
-    // from:
-    vectorImageModel,
-    SLOT( OnHighQuantileChanged( RgbaChannel, double ) )
-  );
-
-  QObject::disconnect(
-    colorDynamicsWidget,
-    SIGNAL( LowIntensityChanged( RgbaChannel, double ) ),
-    // from:
-    vectorImageModel,
-    SLOT( OnLowIntensityChanged( RgbaChannel, double ) )
-  );
-
-  QObject::disconnect(
-    colorDynamicsWidget,
-    SIGNAL( HighIntensityChanged( RgbaChannel, double ) ),
-    // from:
-    vectorImageModel,
-    SLOT( OnHighIntensityChanged( RgbaChannel, double ) )
-  );
-
-  QObject::disconnect(
-    colorDynamicsWidget,
-    SIGNAL( ResetQuantileClicked( RgbaChannel ) ),
-    // from:
-    vectorImageModel,
-    SLOT( OnResetQuantileClicked( RgbaChannel ) )
-  );
-
-  QObject::disconnect(
-    colorDynamicsWidget,
-    SIGNAL( ResetIntensityClicked( RgbaChannel ) ),
-    // from:
-    vectorImageModel,
-    SLOT( OnResetIntensityClicked( RgbaChannel  ) )
-  );
+  colorDynCtrl->SetModel( NULL );
 }
 
 /*****************************************************************************/
 void
 MainWindow
-::OnSelectedModelChanged( const AbstractModel* model )
+::OnSelectedModelChanged( AbstractModel* model )
 {
-  const DatasetModel* datasetModel =
-    qobject_cast< const DatasetModel* >( model );
+  DatasetModel* datasetModel = qobject_cast< DatasetModel* >( model );
 
   assert( datasetModel!=NULL );
   assert( datasetModel->HasSelectedImageModel() );
 
-  const VectorImageModel* vectorImageModel =
-    qobject_cast< const VectorImageModel* >(
+  VectorImageModel* vectorImageModel =
+    qobject_cast< VectorImageModel* >(
       datasetModel->GetSelectedImageModel()
     );
 
@@ -392,62 +365,12 @@ MainWindow
   //
   // COLOR DYNAMICS.
 
-  ColorDynamicsWidget* colorDynamicsWidget =
-    qobject_cast< ColorDynamicsWidget*  >( GetColorDynamicsDock()->widget() );
-  assert( colorDynamicsWidget!=NULL );
+  ColorDynamicsController* colorDynCtrl =
+    GetColorDynamicsDock()->findChild< ColorDynamicsController* >();
 
-  // Connect newly selected model to UI controller.
-  QObject::connect(
-    colorDynamicsWidget,
-    SIGNAL( LowQuantileChanged( RgbaChannel, double ) ),
-    // to:
-    vectorImageModel,
-    SLOT( OnLowQuantileChanged( RgbaChannel, double ) )
-  );
+  assert( colorDynCtrl!=NULL );
 
-  QObject::connect(
-    colorDynamicsWidget,
-    SIGNAL( HighQuantileChanged( RgbaChannel, double ) ),
-    // to:
-    vectorImageModel,
-    SLOT( OnHighQuantileChanged( RgbaChannel, double ) )
-  );
-
-  QObject::connect(
-    colorDynamicsWidget,
-    SIGNAL( LowIntensityChanged( RgbaChannel, double ) ),
-    // to:
-    vectorImageModel,
-    SLOT( OnLowIntensityChanged( RgbaChannel, double ) )
-  );
-
-  QObject::connect(
-    colorDynamicsWidget,
-    SIGNAL( HighIntensityChanged( RgbaChannel, double ) ),
-    // to:
-    vectorImageModel,
-    SLOT( OnHighIntensityChanged( RgbaChannel, double ) )
-  );
-
-  QObject::connect(
-    colorDynamicsWidget,
-    SIGNAL( ResetQuantileClicked( RgbaChannel ) ),
-    // to:
-    vectorImageModel,
-    SLOT( OnResetQuantileClicked( RgbaChannel ) )
-  );
-
-  QObject::connect(
-    colorDynamicsWidget,
-    SIGNAL( ResetIntensityClicked( RgbaChannel ) ),
-    // to:
-    vectorImageModel,
-    SLOT( OnResetIntensityClicked( RgbaChannel  ) )
-  );
-
-  // Setup color-dynamics controller.
-  colorDynamicsWidget->blockSignals( true );
-  colorDynamicsWidget->blockSignals( false );
+  colorDynCtrl->SetModel( vectorImageModel );
 
   //
   // REFRESH DISPLAY.
