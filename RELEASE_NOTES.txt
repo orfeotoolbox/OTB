@@ -1,4 +1,4 @@
-OTB-v.3.16 - Changes since version 3.14.1 (2013/01/xx)
+OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
 --------------------------------------------------------
 * Library
   * Core and Third Parties
