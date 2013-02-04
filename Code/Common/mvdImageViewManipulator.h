@@ -86,6 +86,7 @@ public:
   void mouseReleaseEvent ( QMouseEvent * event );
   void wheelEvent ( QWheelEvent* event);
   void resizeEvent ( QResizeEvent * event );
+  void keyPressEvent( QKeyEvent * event );
 
   /** Methods to access to the context */
   /**
@@ -195,6 +196,7 @@ private:
 private:
 
   void Zoom(const double scale);
+  void moveRegion(double dx, double dy);
 
 //
 // Private attributes.

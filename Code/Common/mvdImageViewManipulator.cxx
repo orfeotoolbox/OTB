@@ -99,13 +99,27 @@ ImageViewManipulator
   m_MouseContext.dx = -event->x() + m_MouseContext.xMove;
   m_MouseContext.dy = -event->y() + m_MouseContext.yMove;
 
+  // moveRegion 
+  this->moveRegion( m_MouseContext.dx,  m_MouseContext.dy);
+
+  // Update the position of the first press to take into account the
+  // last drag
+  m_MouseContext.xMove -=  m_MouseContext.dx;
+  m_MouseContext.yMove -=  m_MouseContext.dy;
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::moveRegion(double dx, double dy)
+{
   // Update the navigation context
   ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
   // Apply the offset to the (start) index of the stored region
   ImageRegionType::OffsetType offset;
-  offset[0] = m_MouseContext.dx/ m_IsotropicZoom;
-  offset[1] = m_MouseContext.dy/m_IsotropicZoom;
+  offset[0] = dx/ m_IsotropicZoom;
+  offset[1] = dy/m_IsotropicZoom;
  
   // Apply the offset to the (start) index of the stored region
   IndexType    index = currentRegion.GetIndex() + offset;
@@ -113,11 +127,6 @@ ImageViewManipulator
 
   // Constraint the region to the largestPossibleRegion
   this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
-
-  // Update the position of the first press to take into account the
-  // last drag
-  m_MouseContext.xMove -=  m_MouseContext.dx;
-  m_MouseContext.yMove -=  m_MouseContext.dy;
 }
 
 /******************************************************************************/
@@ -167,9 +176,41 @@ ImageViewManipulator
 
   double scale = vcl_pow(scaleRatio, nbSteps);
 
+  // store the position under the mouse cursor
+  m_MouseContext.x = event->x();
+  m_MouseContext.y = event->y();
+
+  // The viewPort Region must be adapted to this zoom ratio
+  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+
+  // center the region on the position under the cursor
+  IndexType        origin = currentRegion.GetIndex();
+  double centerX = origin[0] + currentRegion.GetSize()[0]/2;
+  double centerY = origin[1] + currentRegion.GetSize()[1]/2;
+
+  // new center
+  double newCenterX = m_MouseContext.x * scale + ( ( centerX - m_MouseContext.x ) );
+  double newCenterY = m_MouseContext.y * scale + ( ( centerY - m_MouseContext.y ) );
+
+  // new index
+  IndexType  newIndex;
+  newIndex[0] = newCenterX - (m_NavigationContext.m_ViewportImageRegion.GetSize()[0] /2) ;
+  newIndex[1] = newCenterY - (m_NavigationContext.m_ViewportImageRegion.GetSize()[1] /2) ;
+  currentRegion.SetIndex(newIndex);
+
+  // Constraint this region to the LargestPossibleRegion
+  this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
+ 
   // rescale the viewport region
   this->Zoom(scale);
 }
+
+// void
+// ImageViewManipulator
+// ::CenterRegion()
+// {
+
+// }
 
 /******************************************************************************/
 void
@@ -251,6 +292,37 @@ ImageViewManipulator
       }
     region.SetSize(size);
     region.SetIndex(index);
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::keyPressEvent( QKeyEvent * event )
+{
+
+  switch(event->key())
+    {
+    case Qt::Key_Minus: 
+      Zoom(0.8);
+      break;
+    case Qt::Key_Plus: 
+      Zoom(1.25);
+      break;
+    case Qt::Key_Left:
+      moveRegion(-10,0);
+      break;
+    case Qt::Key_Right:
+      moveRegion(10,0);
+      break;
+    case Qt::Key_Up:
+      moveRegion(0,10);
+      break;
+    case Qt::Key_Down:
+      moveRegion(0,-10);
+      break;
+    default:
+      break;
     }
 }
 
