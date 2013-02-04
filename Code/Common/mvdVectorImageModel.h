@@ -432,7 +432,7 @@ private:
 
   // store the previous levelofDetail found
   unsigned int   m_PreviousBestLevelOfDetail;
-  unsigned int   m_NbLod;
+  CountType      m_NbLod;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
