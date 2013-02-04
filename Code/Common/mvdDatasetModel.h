@@ -90,7 +90,7 @@ public:
   virtual ~DatasetModel();
 
   /** */
-  void ImportImage( const QString& filename );
+  void ImportImage( const QString& filename, int w, int h );
 
   /** */
   inline bool HasSelectedImageModel() const;

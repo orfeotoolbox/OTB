@@ -216,7 +216,10 @@ MainWindow
 
   try
     {
-    model->ImportImage( filename );
+    // Init parameters :
+    // - filename
+    // - widget size (-> compute the best lod fitting the widget size )
+    model->ImportImage( filename, centralWidget()->width(), centralWidget()->height() );
     }
   catch( std::exception& exc )
     {
@@ -380,8 +383,10 @@ MainWindow
   // TODO: move signal into mvdApplication and link it to DockWidget
   // and ImageView.
   emit LargestPossibleRegionChanged(
-    vectorImageModel->ToImageBase()->GetLargestPossibleRegion()
+    vectorImageModel->GetImageLargestPossibleRegion()
   );
+  // TODO: new ToImageBase method : look into it if it does the job
+  //vectorImageModel->ToImageBase()->GetLargestPossibleRegion()
 }
 
 /*****************************************************************************/

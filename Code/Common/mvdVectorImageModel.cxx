@@ -118,18 +118,21 @@ VectorImageModel
 /*******************************************************************************/
 void
 VectorImageModel
-::LoadFile( const QString& filename )
+::LoadFile( const QString& filename , int w, int h)
 {
-  // test if valid jpeg2k file
-  //if (!this->IsJPEG2000File( filename.toLatin1().data() ))
+  // 1.0 store the input filename
+  m_InputFilename = filename.toLatin1().data();
 
   //
-  // 1. Setup file-reader.
+  // 1.1 Setup file-reader.
   DefaultImageFileReaderType::Pointer imageFileReader(
     DefaultImageFileReaderType::New()
   );
 
-  imageFileReader->SetFileName( filename.toLatin1().data() );
+  // 1.2 Initialize the filename (following if jpeg2K or not )
+  std::string fname = this->FilenameHelper(w, h);
+
+  imageFileReader->SetFileName( fname );
   imageFileReader->UpdateOutputInformation();
 
   m_ImageFileReader = imageFileReader;
@@ -175,9 +178,6 @@ VectorImageModel
     }
 
   m_Settings.SetRgbChannels( rgb );
-
-  // store the input filename
-  m_InputFilename = filename.toLatin1().data();
 }
 
 /*******************************************************************************/
@@ -501,6 +501,43 @@ VectorImageModel::Closest(double invZoomfactor, const std::vector<unsigned int> 
     }
 
   return closest;
+}
+
+/*******************************************************************************/
+const std::string 
+VectorImageModel::FilenameHelper(int w, int h) 
+{
+  // Get the largest possible region of the image
+  DefaultImageFileReaderType::Pointer tmpReader = DefaultImageFileReaderType::New();
+  tmpReader->SetFileName(m_InputFilename);
+  tmpReader->UpdateOutputInformation();
+
+  ImageRegionType  largestregion = tmpReader->GetOutput()->GetLargestPossibleRegion();
+  double factorX = (double)w/(double)(largestregion.GetSize()[0]);
+  double factorY = (double)h/(double)(largestregion.GetSize()[1]);
+
+  double intialZoomFactor = std::min(factorX, factorY);
+
+  return this->FilenameHelper(intialZoomFactor);
+}
+
+/*******************************************************************************/
+const std::string 
+VectorImageModel::FilenameHelper(double zoomFactor) 
+{
+  int best_lod = 0;
+  if ( this->GetBestLevelOfDetail(zoomFactor, best_lod) && 
+       best_lod != m_PreviousBestLevelOfDetail)
+    {
+    std::ostringstream oss;
+    oss<<m_InputFilename<<"?&resol="<<best_lod;
+    m_PreviousBestLevelOfDetail = best_lod;
+
+    return oss.str();
+    }
+
+  // if not a j2k file return the initial
+  return m_InputFilename;
 }
 
 /*******************************************************************************/

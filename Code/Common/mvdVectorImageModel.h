@@ -219,6 +219,11 @@ public:
   inline const DefaultImageType* GetOutput( int index ) const;
 
   /**
+   * Get the largest possible region of the input image
+   */
+  inline const ImageRegionType GetImageLargestPossibleRegion() const;
+
+  /**
    */
   QStringList GetBandNames() const;
 
@@ -227,8 +232,10 @@ public:
   inline const Settings& GetSettings() const;
 
   /**
+   * w and h are added to compute the best level of detail to load
+   * from the image if multi-resolution image
    */
-  void LoadFile( const QString& filename );
+  void LoadFile( const QString& filename, int w, int h );
 
   /** Rasterize the buffered region in a buffer */
   unsigned char * RasterizeRegion(const ImageRegionType& region, const double zoomFactor);
@@ -238,7 +245,7 @@ public:
    * the overviews size
    */
   bool GetBestLevelOfDetail(const double ZoomFactor, int& lod);
-
+    
   //
   // AbstractImageModel overrides.
 
@@ -291,6 +298,12 @@ protected:
 
   /** */
   virtual void virtual_SetCurrentLod( unsigned int lod );
+
+  /** helper to compose the filename used for j2k to load different
+    * resolution 
+    */
+  const std::string FilenameHelper(double zoomFactor);
+  const std::string FilenameHelper(int w, int h);
 
 //
 // Protected attributes.
@@ -468,6 +481,21 @@ VectorImageModel
   //);
   return m_ImageFileReader->GetOutput( index );
 }
+
+/*****************************************************************************/
+inline
+const ImageRegionType
+VectorImageModel
+::GetImageLargestPossibleRegion() const
+{
+  // make sure to return the largest region of the resolution 0 (if j2k)
+  DefaultImageFileReaderType::Pointer reader = DefaultImageFileReaderType::New();
+  reader->SetFileName(m_InputFilename);
+  reader->UpdateOutputInformation();
+  
+  return reader->GetOutput()->GetLargestPossibleRegion();
+}
+
 
 /*****************************************************************************/
 inline

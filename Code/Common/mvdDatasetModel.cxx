@@ -62,7 +62,7 @@ DatasetModel
 /*******************************************************************************/
 void
 DatasetModel
-::ImportImage( const QString& filename )
+::ImportImage( const QString& filename , int w, int h )
 {
   // 1. Instanciate local image model.
   VectorImageModel* vectorImageModel = new VectorImageModel();
@@ -75,7 +75,7 @@ DatasetModel
   try
     {
     // 2.1. Information.
-    vectorImageModel->LoadFile( filename );
+    vectorImageModel->LoadFile( filename, w, h);
 
     // 2.2. Generate cached data.
     // TODO: generate image-model cached data (quicklook,
