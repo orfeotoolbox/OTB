@@ -264,6 +264,13 @@ ColorDynamicsController
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+  assert( imageModel->GetHistogramModel()!=NULL );
+
+  imageModel->GetSettings().DynamicsParam( 2 * channel ) =
+    imageModel->GetHistogramModel()->GetQuantile( channel, 0.01 * value );
+
   emit ModelUpdated();
 }
 
@@ -273,6 +280,13 @@ ColorDynamicsController
 ::OnHighQuantileChanged( RgbaChannel channel, double value )
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
+
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+  assert( imageModel->GetHistogramModel()!=NULL );
+
+  imageModel->GetSettings().DynamicsParam( 2 * channel + 1 ) =
+    imageModel->GetHistogramModel()->GetQuantile( channel, 0.01 * value );
 
   emit ModelUpdated();
 }
@@ -284,6 +298,11 @@ ColorDynamicsController
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 
+  assert( GetModel< VectorImageModel >()!=NULL );
+
+  GetModel< VectorImageModel >()->GetSettings().DynamicsParam( 2 * channel )
+    = value;
+
   emit ModelUpdated();
 }
 
@@ -293,6 +312,11 @@ ColorDynamicsController
 ::OnHighIntensityChanged( RgbaChannel channel, double value )
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
+
+  assert( GetModel< VectorImageModel >()!=NULL );
+
+  GetModel< VectorImageModel >()->GetSettings().DynamicsParam( 2 * channel + 1 )
+    = value;
 
   emit ModelUpdated();
 }

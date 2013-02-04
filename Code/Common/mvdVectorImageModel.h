@@ -106,7 +106,7 @@ public:
     Settings() :
       m_IsDirty( false ),
       m_RgbChannels(),
-      m_DynamicsParams()
+      m_DynamicsParams( 6 )
     {
     }
 
@@ -210,6 +210,7 @@ public:
       return m_DynamicsParams[ i ];
     }
 
+#if 0
     /**
      */
     inline
@@ -227,6 +228,7 @@ public:
     {
       return m_DynamicsParams[ m_RgbChannels[ channel ] ];
     }
+#endif
 
     //
     // Private attributes.
@@ -286,6 +288,9 @@ public:
   /**
    */
   inline const Settings& GetSettings() const;
+
+  /** */
+  inline Settings& GetSettings();
 
   /**
    * w and h are added to compute the best level of detail to load
@@ -561,6 +566,15 @@ inline
 const VectorImageModel::Settings&
 VectorImageModel
 ::GetSettings() const
+{
+  return m_Settings;
+}
+
+/*****************************************************************************/
+inline
+VectorImageModel::Settings&
+VectorImageModel
+::GetSettings()
 {
   return m_Settings;
 }
