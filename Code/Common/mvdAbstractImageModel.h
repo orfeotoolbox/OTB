@@ -61,7 +61,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-
+class HistogramModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -91,6 +91,12 @@ public:
 
   /** */
   inline CountType GetNbComponents() const;
+
+  /** */
+  inline const HistogramModel* GetHistogramModel() const;
+
+  /** */
+  inline HistogramModel* GetHistogramModel();
 
   /** 
    * Get the number of available LOD.
@@ -170,8 +176,34 @@ private slots:
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+
+//
+// Monteverdi includes (sorted by alphabetic order)
+#include "mvdHistogramModel.h"
+
 namespace mvd
 {
+
+/*****************************************************************************/
+const HistogramModel*
+AbstractImageModel
+::GetHistogramModel() const
+{
+  return findChild< const HistogramModel* >();
+}
+
+/*****************************************************************************/
+HistogramModel*
+AbstractImageModel
+::GetHistogramModel()
+{
+  return findChild< HistogramModel* >();
+}
 
 /*****************************************************************************/
 unsigned int

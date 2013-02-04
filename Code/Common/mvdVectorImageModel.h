@@ -106,7 +106,7 @@ public:
     Settings() :
       m_IsDirty( false ),
       m_RgbChannels(),
-      m_RenderingFuncParams()
+      m_DynamicsParams()
     {
     }
 
@@ -157,7 +157,7 @@ public:
      */
     inline
     ChannelVector::value_type&
-    RgbChannel( int i )
+    RgbChannel( ChannelVector::size_type i )
     {
       SetDirty();
       return m_RgbChannels[ i ];
@@ -167,9 +167,65 @@ public:
      */
     inline
     const ChannelVector::value_type&
-    RgbChannel( int i ) const
+    RgbChannel( ChannelVector::size_type i ) const
     {
       return m_RgbChannels[ i ];
+    }
+
+    /**
+     */
+    inline
+    void
+    SetDynamicsParams( const ParametersType& params )
+    {
+      m_DynamicsParams = params;
+      SetDirty();
+    }
+
+    /**
+     */
+    inline
+    const ParametersType&
+    GetDynamicsParams() const
+    {
+      return m_DynamicsParams;
+    }
+
+    /**
+     */
+    inline
+    const ParametersType::ValueType&
+    DynamicsParam( CountType i ) const
+    {
+      return m_DynamicsParams[ i ];
+    }
+
+    /**
+     */
+    inline
+    ParametersType::ValueType&
+    DynamicsParam( CountType i )
+    {
+      SetDirty();
+      return m_DynamicsParams[ i ];
+    }
+
+    /**
+     */
+    inline
+    const ParametersType::ValueType&
+    DynamicsParam( RgbaChannel channel ) const
+    {
+      return m_DynamicsParams[ m_RgbChannels[ channel ] ];
+    }
+
+    /**
+     */
+    inline
+    ParametersType::ValueType&
+    DynamicsParam( RgbaChannel channel )
+    {
+      return m_DynamicsParams[ m_RgbChannels[ channel ] ];
     }
 
     //
@@ -185,7 +241,7 @@ public:
     ChannelVector m_RgbChannels;
     /**
      */
-    ParametersType m_RenderingFuncParams;
+    ParametersType m_DynamicsParams;
   };
 
 //
@@ -439,6 +495,8 @@ private:
 //
 // Slots.
 private slots:
+  /** */
+  void OnModelUpdated();
 };
 
 /*****************************************************************************/

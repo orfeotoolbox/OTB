@@ -85,7 +85,14 @@ class Monteverdi2_EXPORT ColorBandDynamicsWidget :
 	      READ GetChannelLabel
 	      WRITE SetChannelLabel );
 
-#if 0
+  Q_PROPERTY( double minIntensity
+	      READ GetMinIntensity
+	      WRITE SetMinIntensity );
+
+  Q_PROPERTY( double maxIntensity
+	      READ GetMaxIntensity
+	      WRITE SetMaxIntensity );
+
   /** */
   Q_PROPERTY( double lowIntensity
 	      READ GetLowIntensity
@@ -96,15 +103,7 @@ class Monteverdi2_EXPORT ColorBandDynamicsWidget :
 	      READ GetHighIntensity
 	      WRITE SetHighIntensity );
 
-  /** */
-  Q_PROPERTY( double minIntensity
-	      READ GetMinIntensity
-	      WRITE SetMinIntensity );
-
-  /** */
-  Q_PROPERTY( double maxIntensity
-	      READ GetMinIntensity
-	      WRITE SetMinIntensity );
+#if 0
 
   /** */
   Q_PROPERTY( double lowQuantile
@@ -140,10 +139,29 @@ public:
   virtual ~ColorBandDynamicsWidget();
 
   /** */
+  inline RgbaChannel GetChannelLabel() const;
+  /** */
   inline void SetChannelLabel( RgbaChannel );
 
   /** */
-  inline RgbaChannel GetChannelLabel() const;
+  inline double GetMinIntensity() const;
+  /** */
+  inline void SetMinIntensity( double );
+
+  /** */
+  inline double GetMaxIntensity() const;
+  /** */
+  inline void SetMaxIntensity( double );
+
+  /** */
+  inline double GetLowIntensity() const;
+  /** */
+  inline void SetLowIntensity( double );
+
+  /** */
+  inline double GetHighIntensity() const;
+  /** */
+  inline void SetHighIntensity( double );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -206,8 +224,87 @@ private slots:
   inline void on_defaultsButton_clicked();
 };
 
+} // end namespace 'mvd'.
+
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
+
+namespace mvd
+{
+
+/*****************************************************************************/
+inline
+double
+ColorBandDynamicsWidget
+::GetMinIntensity() const
+{
+  return m_UI->lowIntensitySpinBox->minimum();
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::SetMinIntensity( double value )
+{
+  m_UI->lowIntensitySpinBox->setMinimum( value );
+  m_UI->highIntensitySpinBox->setMinimum( value );
+}
+
+/*****************************************************************************/
+inline
+double
+ColorBandDynamicsWidget
+::GetMaxIntensity() const
+{
+  return m_UI->highIntensitySpinBox->maximum();
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::SetMaxIntensity( double value )
+{
+  m_UI->lowIntensitySpinBox->setMaximum( value );
+  m_UI->highIntensitySpinBox->setMaximum( value );
+}
+
+/*****************************************************************************/
+inline
+double
+ColorBandDynamicsWidget
+::GetLowIntensity() const
+{
+  return m_UI->lowIntensitySpinBox->value();
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::SetLowIntensity( double value )
+{
+  m_UI->lowIntensitySpinBox->setValue( value );
+}
+
+/*****************************************************************************/
+inline
+double
+ColorBandDynamicsWidget
+::GetHighIntensity() const
+{
+  return m_UI->highIntensitySpinBox->value();
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::SetHighIntensity( double value )
+{
+  m_UI->highIntensitySpinBox->setValue( value );
+}
 
 /*****************************************************************************/
 void

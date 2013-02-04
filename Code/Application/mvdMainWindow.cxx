@@ -131,11 +131,12 @@ MainWindow
 
   ColorDynamicsWidget* colorDynWgt = new ColorDynamicsWidget( this );
 
+  // Controller is childed to dock.
   new ColorDynamicsController(
     // wraps:
     colorDynWgt,
-    // parents to:
-    AddWidgetToDock( 
+    // as child of:
+    AddWidgetToDock(
       colorDynWgt,
       VIDEO_COLOR_DYNAMICS_DOCK,
       tr( "Video color dynamics" ),

@@ -88,6 +88,7 @@ public:
   /** Destructor */
   virtual ~ColorDynamicsController();
 
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -123,6 +124,9 @@ private:
 //
 // Private attributes.
 private:
+
+  /** */
+  void ResetIntensityRange( AbstractModel* );
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

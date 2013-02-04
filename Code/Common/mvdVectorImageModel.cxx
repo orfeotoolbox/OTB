@@ -587,4 +587,24 @@ VectorImageModel
   emit SettingsUpdated();
 }
 
+/*******************************************************************************/
+void
+VectorImageModel
+::OnModelUpdated()
+{
+  RenderingFilterType::RenderingFunctionType* renderingFunc =
+    m_RenderingFilter->GetRenderingFunction();
+
+  // TODO: Remove local variable.
+  // Local variable because RenderingFunction::SetChannels() gets a
+  // non-const std::vector< unsigned int >& as argument instead of a
+  // const one.
+  Settings::ChannelVector rgb( m_Settings.GetRgbChannels() );
+
+  renderingFunc->SetChannelList( rgb );
+  renderingFunc->SetParameters( m_Settings.GetDynamicsParams() );
+
+  emit SettingsUpdated();
+}
+
 } // end namespace 'mvd'

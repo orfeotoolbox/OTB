@@ -75,10 +75,15 @@ ColorDynamicsController
   ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
 
   /*
-  VectorImageModel* vectorImageModel =
-    qobject_cast< VectorImageModel* >( model );
+  //
+  // Connect 
+  QObject::connect(
+    this, SIGNAL( ModelUpdated() ),
+    // to:
+    model, SLOT( OnModelUpdated() ) );
   */
 
+  //
   // Connect newly selected model to UI controller.
   QObject::connect(
     colorDynamicsWidget,
@@ -128,8 +133,12 @@ ColorDynamicsController
     SLOT( OnResetIntensityClicked( RgbaChannel  ) )
   );
 
+  //
   // Setup color-dynamics controller.
   colorDynamicsWidget->blockSignals( true );
+  {
+  ResetIntensityRange( model );
+  }
   colorDynamicsWidget->blockSignals( false );
 }
 
@@ -196,6 +205,57 @@ ColorDynamicsController
 }
 
 /*******************************************************************************/
+void
+ColorDynamicsController
+::ResetIntensityRange( AbstractModel* model )
+{
+  //
+  // Access color-dynamics widget.
+  ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
+
+  //
+  // Access image-model.
+  VectorImageModel* imageModel =
+    qobject_cast< VectorImageModel* >( model );
+  assert( imageModel!=NULL );
+
+  //
+  // Access histogram from generic image-model.
+  const HistogramModel* histogramModel = imageModel->GetHistogramModel();
+  assert( histogramModel!=NULL );
+
+  // Get min/max pixels.
+  DefaultImageType::PixelType minPx( histogramModel->GetMinPixel() );
+  DefaultImageType::PixelType maxPx( histogramModel->GetMaxPixel() );
+
+  // Get image rengering settings.
+  const VectorImageModel::Settings& settings = imageModel->GetSettings();
+
+  // Assign values to controlled widget.
+  for( CountType i=0; i<RGBA_CHANNEL_ALPHA; ++i )
+    {
+    RgbaChannel channel = static_cast< RgbaChannel >( i );
+
+    ColorBandDynamicsWidget* colorBandDynWgt =
+      colorDynamicsWidget->GetChannel( channel );
+
+    DefaultImageType::PixelType::ValueType min(
+      minPx[ settings.RgbChannel( channel ) ]
+    );
+
+    DefaultImageType::PixelType::ValueType max(
+      maxPx[ settings.RgbChannel( channel ) ]
+    );
+
+    colorBandDynWgt->SetMinIntensity( min );
+    colorBandDynWgt->SetMaxIntensity( max );
+
+    colorBandDynWgt->SetLowIntensity( min );
+    colorBandDynWgt->SetHighIntensity( max );
+    }
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
@@ -203,6 +263,8 @@ ColorDynamicsController
 ::OnLowQuantileChanged( RgbaChannel channel, double value )
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
+
+  emit ModelUpdated();
 }
 
 /*******************************************************************************/
@@ -211,6 +273,8 @@ ColorDynamicsController
 ::OnHighQuantileChanged( RgbaChannel channel, double value )
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
+
+  emit ModelUpdated();
 }
 
 /*******************************************************************************/
@@ -219,6 +283,8 @@ ColorDynamicsController
 ::OnLowIntensityChanged( RgbaChannel channel, double value )
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
+
+  emit ModelUpdated();
 }
 
 /*******************************************************************************/
@@ -227,6 +293,8 @@ ColorDynamicsController
 ::OnHighIntensityChanged( RgbaChannel channel, double value )
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
+
+  emit ModelUpdated();
 }
 
 /*******************************************************************************/
@@ -235,6 +303,10 @@ ColorDynamicsController
 ::OnResetIntensityClicked( RgbaChannel channel )
 {
   qDebug() << QString( "%1" ).arg( RGBA_CHANNEL_NAMES[ channel ] );
+
+  ResetIntensityRange( GetModel() );
+
+  emit ModelUpdated();
 }
 
 /*******************************************************************************/
@@ -243,6 +315,8 @@ ColorDynamicsController
 ::OnResetQuantileClicked( RgbaChannel channel )
 {
   qDebug() << QString( "%1" ).arg( RGBA_CHANNEL_NAMES[ channel ] );
+
+  emit ModelUpdated();
 }
 
 /*******************************************************************************/

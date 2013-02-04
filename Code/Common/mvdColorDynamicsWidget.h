@@ -92,6 +92,11 @@ public:
   /** Destructor */
   virtual ~ColorDynamicsWidget();
 
+  /** */
+  inline const ColorBandDynamicsWidget* GetChannel( RgbaChannel ) const;
+  /** */
+  inline ColorBandDynamicsWidget* GetChannel( RgbaChannel );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -125,11 +130,6 @@ protected:
 //
 // Private methods.
 private:
-
-  /** */
-  inline const ColorBandDynamicsWidget* GetChannel( RgbaChannel ) const;
-  /** */
-  inline ColorBandDynamicsWidget* GetChannel( RgbaChannel );
 
 //
 // Private attributes.
@@ -179,6 +179,7 @@ ColorDynamicsWidget
     ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[ channel ]
   );
 }
+
 /*****************************************************************************/
 /* SLOTS                                                                     */
 

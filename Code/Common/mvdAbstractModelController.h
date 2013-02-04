@@ -92,7 +92,13 @@ public:
   virtual ~AbstractModelController();
 
   /** */
-  inline void SetModel( AbstractModel* );
+  void SetModel( AbstractModel* );
+
+  /** */
+  inline const AbstractModel* GetModel() const;
+
+  /** */
+  inline AbstractModel* GetModel();
 
   /** */
   template< typename TModel >
@@ -123,6 +129,8 @@ signals:
   void AboutToConnectModel( AbstractModel* );
   /** */
   void ModelConnected( AbstractModel* );
+  /** */
+  void ModelUpdated();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -146,7 +154,9 @@ protected:
 // Private methods.
 private:
   /** */
-  inline void DisconnectOnDestroy();
+  void private_Connect( AbstractModel* );
+  /** */
+  void private_Disconnect( AbstractModel* );
 
 //
 // Private attributes.
@@ -162,6 +172,13 @@ private:
 //
 // Slots.
 private slots:
+  /**
+   * Slot called before object is destroyed.
+   * It is used to disconnect model from controller when controller is
+   * destroyed. This prevents the indirect call the virtual
+   * Disconnect() method (which is dangerous in destructor).
+   */
+  void OnDestroyed( QObject* =0 );
 };
 
 } // end namespace 'mvd'.
@@ -173,27 +190,20 @@ namespace mvd
 
 /*****************************************************************************/
 inline
-void
+const AbstractModel*
 AbstractModelController
-::SetModel( AbstractModel* model )
+::GetModel() const
 {
-  // Disconnect previously connected model and signal listeners.
-  emit AboutToDisconnectModel( m_Model );
-  Disconnect( m_Model );
-  emit ModelDisconnected( m_Model );
+  return m_Model;
+}
 
-  // Forget previously disconnected model before new model is
-  // connected. This is done in order to stay in a consistent internal
-  // state whenever the connection is aborted (e.g. by an exception).
-  m_Model = NULL;
-
-  // Connect new model and signal listeners.
-  emit AboutToConnectModel( model );
-  Connect( model );
-  emit ModelDisconnected( model );
-
-  // Remember newly connected model.
-  m_Model = model;
+/*****************************************************************************/
+inline
+AbstractModel*
+AbstractModelController
+::GetModel()
+{
+  return m_Model;
 }
 
 /*****************************************************************************/
@@ -234,15 +244,6 @@ AbstractModelController
 ::GetWidget()
 {
   return qobject_cast< TWidget* >( m_Widget );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractModelController
-::DisconnectOnDestroy()
-{
-  Disconnect( m_Model );
 }
 
 } // end namespace 'mvd'

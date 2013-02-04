@@ -119,6 +119,9 @@
    </item>
    <item row="1" column="1">
     <widget class="QDoubleSpinBox" name="lowIntensitySpinBox">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
        <horstretch>0</horstretch>
@@ -141,6 +144,9 @@
    </item>
    <item row="1" column="2">
     <widget class="QDoubleSpinBox" name="highIntensitySpinBox">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
        <horstretch>0</horstretch>
