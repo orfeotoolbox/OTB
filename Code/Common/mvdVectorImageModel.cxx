@@ -66,7 +66,8 @@ VectorImageModel
   m_AlreadyLoadedRegion(),
   m_Region(),
   m_RegionsToLoadVector(),
-  m_PreviousBestLevelOfDetail(0)
+  m_PreviousBestLevelOfDetail(0),
+  m_NbLod(0)
 {
 }
 
@@ -90,7 +91,7 @@ VectorImageModel
   itk::MetaDataDictionary dictionary( output->GetMetaDataDictionary() );
 
   DefaultImageType::ImageMetadataInterfacePointerType metaData(
-    GetMetadataInferface()
+    
   );
   */
 
@@ -125,22 +126,7 @@ VectorImageModel
 
   //
   // 1.1 Setup file-reader.
-  DefaultImageFileReaderType::Pointer imageFileReader(
-    DefaultImageFileReaderType::New()
-  );
-
-  // 1.2 Initialize the filename (following if jpeg2K or not )
-  std::string fname = this->FilenameHelper(w, h);
-
-  imageFileReader->SetFileName( fname );
-  imageFileReader->UpdateOutputInformation();
-
-  m_ImageFileReader = imageFileReader;
-
-  // Ensure this only one output.
-  assert( m_ImageFileReader->GetNumberOfOutputs()==1 );
-  // Wrap output image.
-  m_Image = m_ImageFileReader->GetOutput( 0 );
+  this->SetupCurrentLodImage(w, h);
 
   //
   // 2. Initialize internal settings.
@@ -197,20 +183,11 @@ VectorImageModel
 {
   m_Region = region;
 
-  // Get the best level of detail
-  // don't reinstanciate the reader if the lod requested has not
-  // changed 
+  // Set the best level of detail
   int best_lod = 0;
-  if ( this->GetBestLevelOfDetail(zoomFactor, best_lod) && 
-       best_lod != m_PreviousBestLevelOfDetail)
+  if ( this->GetBestLevelOfDetail(zoomFactor, best_lod) )
     {
-    std::ostringstream oss;
-    oss<<m_InputFilename<<"?&resol="<<best_lod;
-    m_ImageFileReader = DefaultImageFileReaderType::New();
-    m_ImageFileReader->SetFileName( oss.str() );
-    m_ImageFileReader->UpdateOutputInformation();
-
-    m_PreviousBestLevelOfDetail = best_lod;
+    this->SetCurrentLod(best_lod);
     }
 
   // Don't do anything if the region did not changed
@@ -469,6 +446,10 @@ VectorImageModel::GetBestLevelOfDetail(const double zoomFactor, int& lod)
     if (readerJPEG2000->GetAvailableResolutions(res))
       {
       lod = this->Closest(inverseZoomFactor, res);
+      
+      // store the nbLod 
+      m_NbLod = res.size();
+
       return true;
       }
     }
@@ -504,8 +485,8 @@ VectorImageModel::Closest(double invZoomfactor, const std::vector<unsigned int> 
 }
 
 /*******************************************************************************/
-const std::string 
-VectorImageModel::FilenameHelper(int w, int h) 
+void
+VectorImageModel::SetupCurrentLodImage(int w, int h)
 {
   // Get the largest possible region of the image
   DefaultImageFileReaderType::Pointer tmpReader = DefaultImageFileReaderType::New();
@@ -518,26 +499,30 @@ VectorImageModel::FilenameHelper(int w, int h)
 
   double intialZoomFactor = std::min(factorX, factorY);
 
-  return this->FilenameHelper(intialZoomFactor);
+  this->SetupCurrentLodImage(intialZoomFactor);
 }
 
 /*******************************************************************************/
-const std::string 
-VectorImageModel::FilenameHelper(double zoomFactor) 
+void 
+VectorImageModel::SetupCurrentLodImage(double zoomFactor)
 {
   int best_lod = 0;
-  if ( this->GetBestLevelOfDetail(zoomFactor, best_lod) && 
-       best_lod != m_PreviousBestLevelOfDetail)
+
+  // if mutli-resolution file
+  if ( this->GetBestLevelOfDetail(zoomFactor, best_lod) )
     {
-    std::ostringstream oss;
-    oss<<m_InputFilename<<"?&resol="<<best_lod;
-    m_PreviousBestLevelOfDetail = best_lod;
-
-    return oss.str();
+    this->SetCurrentLod(best_lod);
     }
-
-  // if not a j2k file return the initial
-  return m_InputFilename;
+  else // if not jpeg2k image
+    {
+    // Update m_ImageFileReader
+    m_ImageFileReader = DefaultImageFileReaderType::New();
+    m_ImageFileReader->SetFileName( m_InputFilename );
+    m_ImageFileReader->UpdateOutputInformation();
+    
+    // Update m_Image
+    m_Image = m_ImageFileReader->GetOutput();
+    }
 }
 
 /*******************************************************************************/
@@ -546,7 +531,7 @@ VectorImageModel
 ::GetNbLod() const
 {
   // TODO: Implement method.
-  return 0;
+  return m_NbLod;
 }
 
 /*******************************************************************************/
@@ -554,7 +539,17 @@ void
 VectorImageModel
 ::virtual_SetCurrentLod( unsigned int lod )
 {
-  // TODO: Update current m_ImageFileReader and/or m_Image.
+  // new filename if lod is not 0
+  std::ostringstream oss;
+  oss << m_InputFilename<<"?&resol="<<lod;;
+  
+  // Update m_ImageFileReader
+  m_ImageFileReader = DefaultImageFileReaderType::New();
+  m_ImageFileReader->SetFileName( oss.str() );
+  m_ImageFileReader->UpdateOutputInformation();
+    
+  // Update m_Image
+  m_Image = m_ImageFileReader->GetOutput();
 }
 
 /*******************************************************************************/

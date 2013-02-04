@@ -299,11 +299,11 @@ protected:
   /** */
   virtual void virtual_SetCurrentLod( unsigned int lod );
 
-  /** helper to compose the filename used for j2k to load different
-    * resolution 
+  /** 
+    * helper to setup the lod image using a width/height or a zoom factor
     */
-  const std::string FilenameHelper(double zoomFactor);
-  const std::string FilenameHelper(int w, int h);
+  void SetupCurrentLodImage(double zoomFactor);
+  void SetupCurrentLodImage(int w, int h);
 
 //
 // Protected attributes.
@@ -432,6 +432,7 @@ private:
 
   // store the previous levelofDetail found
   unsigned int   m_PreviousBestLevelOfDetail;
+  unsigned int   m_NbLod;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
