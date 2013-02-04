@@ -22,7 +22,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-
+#include <QKeyEvent>
 //
 // System includes (sorted by alphabetic order)
 
@@ -106,6 +106,8 @@ GLImageWidget
 {
   m_ImageViewManipulator = new ImageViewManipulator( this );
   m_ImageModelRenderer = new ImageModelRenderer( this );
+
+  this->grabKeyboard();
 
   connect(this, SIGNAL(movingMouse()), m_ImageModelRenderer, SLOT(onMovingEvent()));
   connect(this, SIGNAL(releasingMouse()), m_ImageModelRenderer, SLOT(onReleasedMouse()));
@@ -297,12 +299,22 @@ GLImageWidget
   this->update();
 }
 
+/*******************************************************************************/
+void
+GLImageWidget
+::keyPressEvent( QKeyEvent * event )
+{
+  m_ImageViewManipulator->keyPressEvent(event);
+  this->update();
+}
+
+/*******************************************************************************/
 void GLImageWidget::OnLargestPossibleRegionChanged(const ImageRegionType& largestRegion)
 {
   m_ImageViewManipulator->SetImageLargestRegion(largestRegion);
 }
 
-/*******************************************************************************/
+//*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 
