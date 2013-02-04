@@ -116,14 +116,24 @@ public:
 
   void SetImageLargestRegion(const ImageRegionType & largestRegion)
   {
-    m_NavigationContext.m_ModelImageRegion = largestRegion;
+    // Compute the intial scale factor 
+    double factorX = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[0]
+      /(double)(largestRegion.GetSize()[0]);
+    double factorY = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[1]
+      /(double)(largestRegion.GetSize()[1]);
 
+    double scale = std::min(factorX, factorY);
+    this->Zoom(scale);
+
+    // store the image region
+    m_NavigationContext.m_ModelImageRegion = largestRegion;
+    
     // Need to call ConstrainRegion here cause not called when the input image
     // is opened
     this->ConstrainRegion(
       m_NavigationContext.m_ViewportImageRegion,
       m_NavigationContext.m_ModelImageRegion
-    );
+      );
   }
 
 //
