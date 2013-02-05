@@ -557,7 +557,7 @@ ImageBaseType::ConstPointer
 VectorImageModel
 ::ToImageBase() const
 {
-  return m_Image.GetPointer();
+  return ImageBaseType::ConstPointer( m_Image );
 }
 
 /*******************************************************************************/
@@ -565,7 +565,7 @@ ImageBaseType::Pointer
 VectorImageModel
 ::ToImageBase()
 {
-  return m_Image.GetPointer();
+  return ImageBaseType::Pointer( m_Image );
 }
 
 /*******************************************************************************/
