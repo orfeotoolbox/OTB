@@ -265,18 +265,6 @@ public:
   const SourceImageType::Pointer& ToImage();
 
   /**
-   * TEMPORARY?
-   */
-  // TODO: Remove getter onto internal type when interface is designed.
-  inline DefaultImageType* GetOutput( int index );
-
-  /**
-   * TEMPORARY?
-   */
-  // TODO: Remove getter onto internal type when interface is designed.
-  inline const DefaultImageType* GetOutput( int index ) const;
-
-  /**
    * Get the largest possible region of the input image
    */
   inline const ImageRegionType GetImageLargestPossibleRegion() const;
@@ -524,26 +512,6 @@ VectorImageModel
 ::ToImage()
 {
   return m_Image;
-}
-
-/*****************************************************************************/
-inline
-DefaultImageType*
-VectorImageModel
-::GetOutput( int index )
-{
-  return m_ImageFileReader->GetOutput( index );
-}
-
-/*****************************************************************************/
-inline
-const DefaultImageType*
-VectorImageModel
-::GetOutput( int index ) const
-{
-  //return const_cast< VectorImageModel* >( this )->GetOutput( index
-  //);
-  return m_ImageFileReader->GetOutput( index );
 }
 
 /*****************************************************************************/

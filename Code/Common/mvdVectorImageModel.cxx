@@ -285,20 +285,18 @@ VectorImageModel
 {
   // Before doing anything, check if region is inside the buffered
   // region of image
-  unsigned int currentIndex = 0;
 
   // TODO : add some checking
-  const DefaultImageType* image =  this->GetOutput(currentIndex);
 
   // some checking
-  if (!image->GetBufferedRegion().IsInside(region))
+  if (!m_Image->GetBufferedRegion().IsInside(region))
     {
     //itkExceptionMacro(<< "Region to read is oustside of the buffered region.");
     }
   
-  // Extract the region of interest in the image
+  // Extract the region of interest in the m_Image
   m_ExtractFilter = ExtractFilterType::New();
-  m_ExtractFilter->SetInput(image);
+  m_ExtractFilter->SetInput(m_Image);
   m_ExtractFilter->SetExtractionRegion(region);
 
   // Use the rendering filter to get 
@@ -430,8 +428,12 @@ bool
 VectorImageModel::GetBestLevelOfDetail(const double zoomFactor, int& lod)
 {
   // Note : index 0 is the full resolution image
+#if 0
+  // Monteverdi2/Code/Common/mvdVectorImageModel.cxx:431:17: warning: unused variable ‘best_lod’ [-Wunused-variable]
   unsigned int  best_lod = 0;
+  // mvdVectorImageModel.cxx:432:16: warning: unused variable ‘best_factor’ [-Wunused-variable]
   unsigned int best_factor = 1;
+#endif
   int inverseZoomFactor =  static_cast<int>((1/zoomFactor + 0.5));
     
 #if defined(OTB_USE_JPEG2000)
