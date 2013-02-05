@@ -195,13 +195,18 @@ ImageViewManipulator
   
     // center the region on the position under the cursor
     IndexType        origin = currentRegion.GetIndex();
-    double centerX = origin[0] + currentRegion.GetSize()[0]/2.;
-    double centerY = origin[1] + currentRegion.GetSize()[1]/2.;
+    double centerX = (double)(origin[0]) + (double)(currentRegion.GetSize()[0])/2.;
+    double centerY = (double)(origin[1]) + (double)(currentRegion.GetSize()[1])/2.;
 
-    // new index
+    // new origin
     IndexType  newIndex;
-    newIndex[0] = centerX - currentRegion.GetSize()[0]/scale/2.;
+    newIndex[0] = centerX - currentRegion.GetSize()[0]/scale/2.; 
+    if (newIndex[0] < 0) newIndex[0] = 0;
+
     newIndex[1] = centerY - currentRegion.GetSize()[1]/scale/2.;
+    if (newIndex[1] < 0) newIndex[1] = 0;
+
+    // set the new origin
     currentRegion.SetIndex(newIndex);
 
     // Constraint this region to the LargestPossibleRegion
