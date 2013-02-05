@@ -58,6 +58,7 @@ namespace mvd
 AbstractImageModel
 ::AbstractImageModel( QObject* parent ) :
   AbstractModel( parent ),
+  m_NativeLargestRegion(),
   m_CurrentLod( 0 )
 {
 }

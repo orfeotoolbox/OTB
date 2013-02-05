@@ -74,8 +74,9 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
 
   // If the image is a j2k image
   int lod = 0;
+  CountType lodCount = 0;
   ImageRegionType  scaledRegion = region;
-  if ( viModel->GetBestLevelOfDetail(context.m_IsotropicZoom, lod) )
+  if ( viModel->GetBestLevelOfDetail(context.m_IsotropicZoom, lod, lodCount) )
     {
     // if the level of detail is an overview
     // recompute the region to request

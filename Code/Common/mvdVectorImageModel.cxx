@@ -66,8 +66,7 @@ VectorImageModel
   m_AlreadyLoadedRegion(),
   m_Region(),
   m_RegionsToLoadVector(),
-  m_PreviousBestLevelOfDetail(0),
-  m_NbLod(0)
+  m_NbLod( 0 )
 {
 }
 
@@ -185,7 +184,9 @@ VectorImageModel
 
   // Set the best level of detail
   int best_lod = 0;
-  if ( this->GetBestLevelOfDetail(zoomFactor, best_lod) )
+  CountType nbLod = 0;
+
+  if ( this->GetBestLevelOfDetail(zoomFactor, best_lod, nbLod) )
     {
     this->SetCurrentLod(best_lod);
     }
@@ -425,8 +426,12 @@ size[0] = vcl_abs(static_cast<int>(region.GetSize()[0] + region.GetIndex()[0]
 
 /*******************************************************************************/
 bool
-VectorImageModel::GetBestLevelOfDetail(const double zoomFactor, int& lod)
+VectorImageModel::GetBestLevelOfDetail(const double zoomFactor,
+				       int& lod,
+				       CountType& nbLod)
 {
+  //TODO: Optimize method (minimize JPEG2000 readers; preprocess LOD).
+
   // Note : index 0 is the full resolution image
 #if 0
   // Monteverdi2/Code/Common/mvdVectorImageModel.cxx:431:17: warning: unused variable ‘best_lod’ [-Wunused-variable]
@@ -435,7 +440,10 @@ VectorImageModel::GetBestLevelOfDetail(const double zoomFactor, int& lod)
   unsigned int best_factor = 1;
 #endif
   int inverseZoomFactor =  static_cast<int>((1/zoomFactor + 0.5));
-    
+
+  // By default, there is only one LOD level: the native image (level zero).
+  nbLod = 1;
+
 #if defined(OTB_USE_JPEG2000)
   otb::JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
 
@@ -449,8 +457,8 @@ VectorImageModel::GetBestLevelOfDetail(const double zoomFactor, int& lod)
       {
       lod = this->Closest(inverseZoomFactor, res);
       
-      // store the nbLod 
-      m_NbLod = res.size();
+      // Return the number of LOD levels (if JP2000 image).
+      nbLod = res.size();
 
       return true;
       }
@@ -491,40 +499,48 @@ void
 VectorImageModel::SetupCurrentLodImage(int w, int h)
 {
   // Get the largest possible region of the image
-  DefaultImageFileReaderType::Pointer tmpReader = DefaultImageFileReaderType::New();
+  DefaultImageFileReaderType::Pointer tmpReader(
+    DefaultImageFileReaderType::New() );
+
   tmpReader->SetFileName(m_InputFilename);
   tmpReader->UpdateOutputInformation();
 
-  ImageRegionType  largestregion = tmpReader->GetOutput()->GetLargestPossibleRegion();
-  double factorX = (double)w/(double)(largestregion.GetSize()[0]);
-  double factorY = (double)h/(double)(largestregion.GetSize()[1]);
+  // Get native image largest region, which is LOD level zero.
+  ImageRegionType nativeLargestRegion =
+    tmpReader->GetOutput()->GetLargestPossibleRegion();
 
-  double intialZoomFactor = std::min(factorX, factorY);
+  double factorX = (double)w/(double)(nativeLargestRegion.GetSize()[0]);
+  double factorY = (double)h/(double)(nativeLargestRegion.GetSize()[1]);
 
-  this->SetupCurrentLodImage(intialZoomFactor);
-}
+  double initialZoomFactor = std::min(factorX, factorY);
 
-/*******************************************************************************/
-void 
-VectorImageModel::SetupCurrentLodImage(double zoomFactor)
-{
   int best_lod = 0;
+  CountType nbLod = 1;
 
   // if mutli-resolution file
-  if ( this->GetBestLevelOfDetail(zoomFactor, best_lod) )
+  if ( this->GetBestLevelOfDetail(initialZoomFactor, best_lod, nbLod) )
     {
     this->SetCurrentLod(best_lod);
     }
   else // if not jpeg2k image
     {
     // Update m_ImageFileReader
-    m_ImageFileReader = DefaultImageFileReaderType::New();
-    m_ImageFileReader->SetFileName( m_InputFilename );
-    m_ImageFileReader->UpdateOutputInformation();
+    m_ImageFileReader = tmpReader;
     
     // Update m_Image
     m_Image = m_ImageFileReader->GetOutput();
     }
+
+  // Remember native largest region.
+  m_NativeLargestRegion = nativeLargestRegion;
+  // Remember number of LOD levels.
+  m_NbLod = nbLod;
+}
+
+/*******************************************************************************/
+void 
+VectorImageModel::SetupCurrentLodImage(double zoomFactor)
+{
 }
 
 /*******************************************************************************/
@@ -539,7 +555,7 @@ VectorImageModel
 /*******************************************************************************/
 void
 VectorImageModel
-::virtual_SetCurrentLod( unsigned int lod )
+::virtual_SetCurrentLod( CountType lod )
 {
   // new filename if lod is not 0
   std::ostringstream oss;

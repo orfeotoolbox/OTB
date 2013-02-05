@@ -86,8 +86,16 @@ public:
   /** Destructor */
   virtual ~AbstractImageModel();
 
-  /** */
-  inline ImageRegionType GetLargestRegion() const;
+  /**
+   * \return The largest possible region of the current LOD level.
+   */
+  inline ImageRegionType GetLodLargestRegion() const;
+
+  /**
+   * \return The largest possible region of the native image, which
+   * is, by default, LOD level zero.
+   */
+  inline ImageRegionType GetNativeLargestRegion() const;
 
   /** */
   inline CountType GetNbComponents() const;
@@ -107,12 +115,12 @@ public:
    * Set the current LOD index (which may causes disk IOs,
    * decompressing and buffering etc.)
    */
-  inline void SetCurrentLod( unsigned int lod );
+  inline void SetCurrentLod( CountType lod );
 
   /**
    * Get the current LOD index.
    */
-  inline unsigned int GetCurrentLod() const;
+  inline CountType GetCurrentLod() const;
 
   /**
    * Get a smart-pointer to the current LOD image-base.
@@ -140,7 +148,7 @@ protected:
   AbstractImageModel( QObject* parent =NULL );
 
   /** */
-  virtual void virtual_SetCurrentLod( unsigned int lod ) =0;
+  virtual void virtual_SetCurrentLod( CountType lod ) =0;
 
   //
   // AbstractModel overrides.
@@ -152,6 +160,12 @@ protected:
 // Protected attributes.
 protected:
 
+  /**
+   * The largest possible region of the native image, which is, by
+   * default, LOD level zero.
+   */
+  ImageRegionType m_NativeLargestRegion;
+
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
@@ -162,7 +176,7 @@ private:
 //
 // Private attributes.
 private:
-  unsigned int m_CurrentLod;
+  CountType m_CurrentLod;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -206,7 +220,7 @@ AbstractImageModel
 }
 
 /*****************************************************************************/
-unsigned int
+CountType
 AbstractImageModel
 ::GetCurrentLod() const
 {
@@ -216,7 +230,7 @@ AbstractImageModel
 /*****************************************************************************/
 void
 AbstractImageModel
-::SetCurrentLod( unsigned int lod )
+::SetCurrentLod( CountType lod )
 {
   if( GetCurrentLod()==lod )
     return;
@@ -230,9 +244,18 @@ AbstractImageModel
 inline
 ImageRegionType
 AbstractImageModel
-::GetLargestRegion() const
+::GetLodLargestRegion() const
 {
   return ToImageBase()->GetLargestPossibleRegion();
+}
+
+/*****************************************************************************/
+inline
+ImageRegionType
+AbstractImageModel
+::GetNativeLargestRegion() const
+{
+  return m_NativeLargestRegion;
 }
 
 /*****************************************************************************/

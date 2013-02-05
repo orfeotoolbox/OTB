@@ -293,8 +293,10 @@ public:
    * Following the zoom factor, get the best level of detail knowing
    * the overviews size
    */
-  bool GetBestLevelOfDetail(const double ZoomFactor, int& lod);
-    
+  bool GetBestLevelOfDetail(const double ZoomFactor,
+			    int& lod,
+			    CountType& lodCount );
+
   //
   // AbstractImageModel overrides.
 
@@ -346,13 +348,7 @@ protected:
   // AbstractImageModel
 
   /** */
-  virtual void virtual_SetCurrentLod( unsigned int lod );
-
-  /** 
-    * helper to setup the lod image using a width/height or a zoom factor
-    */
-  void SetupCurrentLodImage(double zoomFactor);
-  void SetupCurrentLodImage(int w, int h);
+  virtual void virtual_SetCurrentLod( CountType lod );
 
 //
 // Protected attributes.
@@ -441,8 +437,17 @@ private:
     * Helper method to get the best closest Jpeg2K level of detail
     * 
     */
-  unsigned int Closest(double invZoomfactor, const std::vector<unsigned int> & res);
-  
+  static
+    unsigned int
+    Closest(double invZoomfactor,
+	    const std::vector<unsigned int> & res);
+
+  /** 
+    * helper to setup the lod image using a width/height or a zoom factor
+    */
+  void SetupCurrentLodImage(double zoomFactor);
+  void SetupCurrentLodImage(int w, int h);
+
 //
 // Private attributes.
 private:
@@ -479,9 +484,8 @@ private:
   // store the input image filename
   std::string                          m_InputFilename;
 
-  // store the previous levelofDetail found
-  unsigned int   m_PreviousBestLevelOfDetail;
-  CountType      m_NbLod;
+  /** */
+  CountType m_NbLod;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
