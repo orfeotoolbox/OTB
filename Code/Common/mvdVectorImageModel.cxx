@@ -66,6 +66,7 @@ VectorImageModel
   m_AlreadyLoadedRegion(),
   m_Region(),
   m_RegionsToLoadVector(),
+  m_InputFilename(),
   m_NbLod( 0 )
 {
 }
@@ -121,7 +122,7 @@ VectorImageModel
 ::LoadFile( const QString& filename , int w, int h)
 {
   // 1.0 store the input filename
-  m_InputFilename = filename.toLatin1().data();
+  m_InputFilename = filename;
 
   //
   // 1.1 Setup file-reader.
@@ -447,8 +448,10 @@ VectorImageModel::GetBestLevelOfDetail(const double zoomFactor,
 #if defined(OTB_USE_JPEG2000)
   otb::JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
 
-  readerJPEG2000->SetFileName(m_InputFilename);
-  if (readerJPEG2000->CanReadFile(m_InputFilename.c_str()))
+  std::string filename( m_InputFilename.toStdString() );
+
+  readerJPEG2000->SetFileName( filename.c_str() );
+  if(readerJPEG2000->CanReadFile( filename.c_str() ) )
     {
     // fill the resolution vector, to be able to find the closest
     // j2k res to the inverse zoom factor
@@ -502,7 +505,7 @@ VectorImageModel::SetupCurrentLodImage(int w, int h)
   DefaultImageFileReaderType::Pointer tmpReader(
     DefaultImageFileReaderType::New() );
 
-  tmpReader->SetFileName(m_InputFilename);
+  tmpReader->SetFileName( m_InputFilename.toStdString() );
   tmpReader->UpdateOutputInformation();
 
   // Get native image largest region, which is LOD level zero.
@@ -558,12 +561,12 @@ VectorImageModel
 ::virtual_SetCurrentLod( CountType lod )
 {
   // new filename if lod is not 0
-  std::ostringstream oss;
-  oss << m_InputFilename<<"?&resol="<<lod;;
-  
+  QString lodFilename( m_InputFilename );
+  lodFilename.append( QString( "?&resol=%1" ).arg( lod ) );
+
   // Update m_ImageFileReader
   m_ImageFileReader = DefaultImageFileReaderType::New();
-  m_ImageFileReader->SetFileName( oss.str() );
+  m_ImageFileReader->SetFileName( lodFilename.toStdString() );
   m_ImageFileReader->UpdateOutputInformation();
     
   // Update m_Image

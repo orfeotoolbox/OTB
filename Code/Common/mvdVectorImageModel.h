@@ -482,7 +482,7 @@ private:
   std::vector< ImageRegionType >       m_RegionsToLoadVector;
 
   // store the input image filename
-  std::string                          m_InputFilename;
+  QString m_InputFilename;
 
   /** */
   CountType m_NbLod;
@@ -526,7 +526,7 @@ VectorImageModel
 {
   // make sure to return the largest region of the resolution 0 (if j2k)
   DefaultImageFileReaderType::Pointer reader = DefaultImageFileReaderType::New();
-  reader->SetFileName(m_InputFilename);
+  reader->SetFileName( m_InputFilename.toStdString() );
   reader->UpdateOutputInformation();
   
   return reader->GetOutput()->GetLargestPossibleRegion();
