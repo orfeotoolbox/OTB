@@ -384,7 +384,7 @@ MainWindow
   // TODO: move signal into mvdApplication and link it to DockWidget
   // and ImageView.
   emit LargestPossibleRegionChanged(
-    vectorImageModel->GetImageLargestPossibleRegion()
+    vectorImageModel->GetNativeLargestRegion()
   );
   // TODO: new ToImageBase method : look into it if it does the job
   //vectorImageModel->ToImageBase()->GetLargestPossibleRegion()

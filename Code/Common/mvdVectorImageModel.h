@@ -265,11 +265,6 @@ public:
   const SourceImageType::Pointer& ToImage();
 
   /**
-   * Get the largest possible region of the input image
-   */
-  inline const ImageRegionType GetImageLargestPossibleRegion() const;
-
-  /**
    */
   QStringList GetBandNames() const;
 
@@ -517,21 +512,6 @@ VectorImageModel
 {
   return m_Image;
 }
-
-/*****************************************************************************/
-inline
-const ImageRegionType
-VectorImageModel
-::GetImageLargestPossibleRegion() const
-{
-  // make sure to return the largest region of the resolution 0 (if j2k)
-  DefaultImageFileReaderType::Pointer reader = DefaultImageFileReaderType::New();
-  reader->SetFileName( m_InputFilename.toStdString() );
-  reader->UpdateOutputInformation();
-  
-  return reader->GetOutput()->GetLargestPossibleRegion();
-}
-
 
 /*****************************************************************************/
 inline
