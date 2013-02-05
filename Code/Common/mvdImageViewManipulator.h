@@ -150,6 +150,8 @@ public slots:
 // Protected methods.
 protected:
   void ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest);
+
+  void CenterRegion(double scale);
   
 //
 // Protected attributes.
