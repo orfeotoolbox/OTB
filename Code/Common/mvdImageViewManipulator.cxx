@@ -118,11 +118,13 @@ ImageViewManipulator
 
   // Apply the offset to the (start) index of the stored region
   ImageRegionType::OffsetType offset;
-  offset[0] = dx/ m_IsotropicZoom;
-  offset[1] = dy/m_IsotropicZoom;
+  double scaledOffsetX = dx/m_IsotropicZoom;
+  double scaledOffsetY = dy/m_IsotropicZoom;
  
   // Apply the offset to the (start) index of the stored region
-  IndexType    index = currentRegion.GetIndex() + offset;
+  IndexType    index = currentRegion.GetIndex();
+  index[0] = static_cast<unsigned int>( (double)index[0] + scaledOffsetX + 0.5 );
+  index[1] = static_cast<unsigned int>( (double)index[1] + scaledOffsetY + 0.5 );
   currentRegion.SetIndex(index);
 
   // Constraint the region to the largestPossibleRegion
