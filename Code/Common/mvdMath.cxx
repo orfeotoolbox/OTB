@@ -16,8 +16,11 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "mvdMath.h"
 
-#include "mvdTypes.h"
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -38,7 +41,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::Types
+  TRANSLATOR mvd::Math
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -46,10 +49,5 @@ namespace mvd
 */
 
 /*******************************************************************************/
-const char*
-BOUND_NAMES[ BOUND_COUNT ] = {
-  "BOUND_LOWER",
-  "BOUND_UPPER"
-};
 
 } // end namespace 'mvd'

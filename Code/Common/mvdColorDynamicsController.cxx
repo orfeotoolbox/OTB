@@ -269,7 +269,7 @@ ColorDynamicsController
   assert( imageModel->GetHistogramModel()!=NULL );
 
   imageModel->GetSettings().DynamicsParam( 2 * channel ) =
-    imageModel->GetHistogramModel()->GetQuantile( channel, 0.01 * value );
+    imageModel->GetHistogramModel()->Quantile( channel, 0.01 * value );
 
   emit ModelUpdated();
 }
@@ -286,7 +286,7 @@ ColorDynamicsController
   assert( imageModel->GetHistogramModel()!=NULL );
 
   imageModel->GetSettings().DynamicsParam( 2 * channel + 1 ) =
-    imageModel->GetHistogramModel()->GetQuantile( channel, 0.01 * value );
+    imageModel->GetHistogramModel()->Quantile( channel, 0.01 * value );
 
   emit ModelUpdated();
 }

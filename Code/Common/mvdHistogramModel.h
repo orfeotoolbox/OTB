@@ -53,6 +53,8 @@
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
+#define BINS_OVERSAMPLING_RATE 5
+
 //
 // External classes pre-declaration.
 namespace
@@ -84,6 +86,21 @@ class Monteverdi2_EXPORT HistogramModel :
 //
 // Public types.
 public:
+  /** */
+  typedef
+    // itk::NumericTraits< T >::FloatType and
+    // itk::NumericTraits< T >::RealType do not depend on template
+    // parameter T. They are always typedef, respectively, as float
+    // and double.
+    //
+    // So, itk::NumericTraits< DefaultImageType::InternalPixelType
+    // >::RealType is equivalent to itk::NumericTraits< float
+    // >::RealType which is always an alias of double.
+    //
+    // This typedef is used for compatibility with
+    // itk::Histogram<>::MeasurementType.
+    itk::NumericTraits< DefaultImageType::InternalPixelType >::RealType
+    MeasurementType;
 
 //
 // Public methods.
@@ -96,7 +113,13 @@ public:
   virtual ~HistogramModel();
 
   /** */
-  inline double GetQuantile( unsigned int band, double p  ) const;
+  inline MeasurementType Quantile( CountType band, double p ) const;
+
+  /** */
+  double
+    Percentile( CountType band,
+		MeasurementType intensity,
+		Bound bound ) const;
 
   /** */
   inline DefaultImageType::PixelType GetMinPixel() const;
@@ -131,21 +154,6 @@ protected:
 //
 // Private types.
 private:
-  /** */
-  typedef
-    // itk::NumericTraits< T >::FloatType and
-    // itk::NumericTraits< T >::RealType do not depend on template
-    // parameter T. They are always typedef, respectively, as float
-    // and double.
-    //
-    // So, itk::NumericTraits< DefaultImageType::InternalPixelType
-    // >::RealType is equivalent to itk::NumericTraits< float
-    // >::RealType which is always an alias of double.
-    //
-    // This typedef is used for compatibility with
-    // itk::Histogram<>::MeasurementType.
-    itk::NumericTraits< DefaultImageType::InternalPixelType >::RealType
-    MeasurementType;
 
   /** */
   typedef itk::Statistics::Histogram< MeasurementType, 1 > Histogram;
@@ -161,6 +169,7 @@ private:
 
   template< typename TImageModel >
     void template_BuildModel_M();
+
 //
 // Private attributes.
 private:
@@ -219,10 +228,10 @@ HistogramModel
 
 /*******************************************************************************/
 inline
-double
+HistogramModel::MeasurementType
 HistogramModel
-::GetQuantile( unsigned int band,
-	       double p ) const
+::Quantile( unsigned int band,
+	    double p ) const
 {
   assert( band<m_Histograms->Size() );
 
@@ -231,7 +240,6 @@ HistogramModel
 
 /*******************************************************************************/
 template< typename TImage >
-inline
 void
 HistogramModel
 ::template_BuildModel_I()
@@ -309,6 +317,7 @@ HistogramModel
   // Setup histogram filter.
   histogramFilter->GetFilter()->SetHistogramMin( m_MinPixel );
   histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
+  histogramFilter->SetNumberOfBins( BINS_OVERSAMPLING_RATE * 256 );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
 
   // Go.
@@ -329,7 +338,6 @@ HistogramModel
 
 /*******************************************************************************/
 template< typename TImageModel >
-inline
 void
 HistogramModel
 ::template_BuildModel_M()
@@ -403,6 +411,7 @@ HistogramModel
   // Setup histogram filter.
   histogramFilter->GetFilter()->SetHistogramMin( m_MinPixel );
   histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
+  histogramFilter->GetFilter()->SetNumberOfBins( BINS_OVERSAMPLING_RATE * 256 );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
 
   // Go.

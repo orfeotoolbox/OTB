@@ -171,6 +171,25 @@ namespace mvd
 {
 
 /*******************************************************************************/
+/* Enumerations                                                                */
+
+/**
+ */
+enum Bound
+{
+  BOUND_LOWER = 0,
+  BOUND_UPPER,
+  BOUND_COUNT
+};
+
+/**
+ * Constant naming bound values.
+ */
+extern
+const char*
+BOUND_NAMES[ BOUND_COUNT ];
+
+/*******************************************************************************/
 /* Type definitions of scalar values.                                          */
 /**
  */

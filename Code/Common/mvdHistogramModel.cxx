@@ -70,6 +70,74 @@ HistogramModel
 }
 
 /*******************************************************************************/
+double
+HistogramModel
+::Percentile( CountType band, MeasurementType intensity, Bound bound ) const
+{
+  // Get histogram of band.
+  Histogram::Pointer histogram( m_Histograms->GetNthElement( band ) );
+
+  // Contruct 1D measurement vector.
+  Histogram::MeasurementVectorType measurement( 1 );
+  measurement[ 0 ] = intensity;
+
+  // Get the index of measurement in 1D-histogram.
+  Histogram::IndexType index;
+  if( !histogram->GetIndex( measurement, index ) )
+    throw itk::RangeError( __FILE__, __LINE__ );
+
+  assert( Histogram::IndexType::GetIndexDimension()==1 );
+
+  // Min/max intensities of bin.
+  MeasurementType minI = histogram->GetBinMin( 0, index[ 0 ] );
+  MeasurementType maxI = histogram->GetBinMax( 0, index[ 0 ] );
+
+  // Min/max frequencies of 
+  Histogram::FrequencyType frequency( histogram->GetFrequency( index ) );
+
+  // Initialize result.
+  double percent = frequency * ( intensity - minI ) / ( maxI - minI );
+
+  // Number of bins of histogram.
+  Histogram::SizeType::SizeValueType binCount = histogram->Size();
+
+  // Initialize bound indices.
+  assert( index[ 0 ]>=0 );
+  Histogram::SizeType::SizeValueType index0 = index[ 0 ];
+  Histogram::SizeType::SizeValueType i0 = 0;
+  Histogram::SizeType::SizeValueType iN = binCount;
+
+  switch( bound )
+    {
+    case BOUND_LOWER:
+      i0 = 0;
+      iN = index[ 0 ];
+      break;
+
+    case BOUND_UPPER:
+      i0 = index0 < binCount ? index0 + 1 : binCount;
+      iN = binCount;
+      break;
+
+    default:
+      assert( false && "Implement case statement of switch instruction." );
+      break;
+    };
+
+  // Traverse lower/upper bound.
+  Histogram::SizeType::SizeValueType i;
+
+  for( i=i0; i<iN; ++i )
+    percent += histogram->GetFrequency( i, 0 );
+
+  // Calculate frequency rate.
+  percent /= histogram->GetTotalFrequency();
+
+  // Return frequency rate.
+  return percent;
+}
+
+/*******************************************************************************/
 void
 HistogramModel
 ::virtual_BuildModel()
