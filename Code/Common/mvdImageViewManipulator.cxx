@@ -142,15 +142,23 @@ ImageViewManipulator
 void ImageViewManipulator
 ::resizeEvent( QResizeEvent * event )
 {
+  this->ResizeRegion( event->size().width(),
+                      event->size().height());
+}
+
+/******************************************************************************/
+void ImageViewManipulator
+::ResizeRegion(unsigned int w, unsigned int h)
+{
   // Update the navigation context
   ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
   // Get the new widget size
   ImageRegionType::SizeType size;
-  size[0] = event->size().width();
-  size[1] = event->size().height();
+  size[0] = w;
+  size[1] = h;
     
-  // Update the stored region with the new size  
+  // Update the stored region with the new size
   currentRegion.SetSize(size);
 
   // Recompute the size before
@@ -181,37 +189,6 @@ ImageViewManipulator
 
   // rescale the viewport region
   this->Zoom(scale);
-}
-
-/******************************************************************************/
-void
-ImageViewManipulator
-::CenterRegion(double scale)
-{
-  if( m_IsotropicZoom * scale > 0.01 && m_IsotropicZoom * scale < 10.)
-    {
-    // The viewPort Region must be adapted to this zoom ratio
-    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
-  
-    // center the region on the position under the cursor
-    IndexType        origin = currentRegion.GetIndex();
-    double centerX = (double)(origin[0]) + (double)(currentRegion.GetSize()[0])/2.;
-    double centerY = (double)(origin[1]) + (double)(currentRegion.GetSize()[1])/2.;
-
-    // new origin
-    IndexType  newIndex;
-    newIndex[0] = centerX - currentRegion.GetSize()[0]/scale/2.; 
-    if (newIndex[0] < 0) newIndex[0] = 0;
-
-    newIndex[1] = centerY - currentRegion.GetSize()[1]/scale/2.;
-    if (newIndex[1] < 0) newIndex[1] = 0;
-
-    // set the new origin
-    currentRegion.SetIndex(newIndex);
-
-    // Constraint this region to the LargestPossibleRegion
-    this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
-    }
 }
 
 /******************************************************************************/
@@ -250,6 +227,37 @@ ImageViewManipulator
 
     // Update the isotropicZoom
     m_IsotropicZoom *= scale;
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::CenterRegion(double scale)
+{
+  if( m_IsotropicZoom * scale > 0.01 && m_IsotropicZoom * scale < 10.)
+    {
+    // The viewPort Region must be adapted to this zoom ratio
+    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+  
+    // center the region on the position under the cursor
+    IndexType        origin = currentRegion.GetIndex();
+    double centerX = (double)(origin[0]) + (double)(currentRegion.GetSize()[0])/2.;
+    double centerY = (double)(origin[1]) + (double)(currentRegion.GetSize()[1])/2.;
+
+    // new origin
+    IndexType  newIndex;
+    newIndex[0] = centerX - currentRegion.GetSize()[0]/scale/2.; 
+    if (newIndex[0] < 0) newIndex[0] = 0;
+
+    newIndex[1] = centerY - currentRegion.GetSize()[1]/scale/2.;
+    if (newIndex[1] < 0) newIndex[1] = 0;
+
+    // set the new origin
+    currentRegion.SetIndex(newIndex);
+
+    // Constraint this region to the LargestPossibleRegion
+    this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
     }
 }
 

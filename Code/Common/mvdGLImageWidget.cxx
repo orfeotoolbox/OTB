@@ -312,6 +312,7 @@ GLImageWidget
 void GLImageWidget::OnLargestPossibleRegionChanged(const ImageRegionType& largestRegion)
 {
   m_ImageViewManipulator->SetImageLargestRegion(largestRegion);
+  this->update();
 }
 
 //*******************************************************************************/

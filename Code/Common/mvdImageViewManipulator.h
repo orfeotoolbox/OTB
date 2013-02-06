@@ -114,10 +114,30 @@ public:
     return m_MouseContext;
   }
   */
-
+  
+  /** set largest region/ViewportImageRegion/isotropicZoom factor */
   void SetImageLargestRegion(const ImageRegionType & largestRegion)
   {
-    // Compute the intial scale factor 
+    // set back the zoom to 1
+    m_IsotropicZoom = 1.;
+
+    // store the image largest region
+    m_NavigationContext.m_ModelImageRegion = largestRegion;
+
+    // set back the origin to O
+    IndexType nullIndex;
+    nullIndex.Fill(0);
+    m_NavigationContext.m_ViewportImageRegion.SetIndex(nullIndex);
+
+    // get the widget size and use it to resize the Viewport region
+    QWidget* parent_widget = qobject_cast< QWidget* >( parent() );
+
+    if (parent_widget)
+      {
+      this->ResizeRegion(parent_widget->width(), parent_widget->height());
+      }
+
+    // compute the intial scale factor to fit to screen
     double factorX = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[0]
       /(double)(largestRegion.GetSize()[0]);
     double factorY = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[1]
@@ -125,16 +145,6 @@ public:
 
     double scale = std::min(factorX, factorY);
     this->Zoom(scale);
-
-    // store the image region
-    m_NavigationContext.m_ModelImageRegion = largestRegion;
-    
-    // Need to call ConstrainRegion here cause not called when the input image
-    // is opened
-    this->ConstrainRegion(
-      m_NavigationContext.m_ViewportImageRegion,
-      m_NavigationContext.m_ModelImageRegion
-      );
   }
 
 //
@@ -150,8 +160,8 @@ public slots:
 // Protected methods.
 protected:
   void ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest);
-
   void CenterRegion(double scale);
+  void ResizeRegion(unsigned int w, unsigned int h);
   
 //
 // Protected attributes.
