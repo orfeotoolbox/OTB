@@ -118,8 +118,8 @@ ImageViewManipulator
 
   // Apply the offset to the (start) index of the stored region
   ImageRegionType::OffsetType offset;
-  offset[0] = dx/ m_IsotropicZoom;
-  offset[1] = dy/m_IsotropicZoom;
+  offset[0] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dx/m_IsotropicZoom + 0.5);
+  offset[1] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dy/m_IsotropicZoom + 0.5);
  
   // Apply the offset to the (start) index of the stored region
   IndexType    index = currentRegion.GetIndex() + offset;
