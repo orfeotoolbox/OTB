@@ -109,6 +109,11 @@ MainWindow
     qApp, SIGNAL( SelectedModelChanged( AbstractModel* ) ),
     this, SLOT( OnSelectedModelChanged( AbstractModel* ) )
   );
+
+  // Change to NULL model to force emitting GUI signals when GUI is
+  // instanciated. So, GUI will be initialized and controller-widgets
+  // disabled.
+  Application::Instance()->SetModel( NULL );
 }
 
 /*****************************************************************************/
@@ -249,6 +254,19 @@ void
 MainWindow
 ::OnAboutToChangeSelectedModel( const AbstractModel* )
 {
+  //
+  // COLOR DYNAMICS.
+
+  ColorDynamicsController* colorDynCtrl =
+    GetColorDynamicsDock()->findChild< ColorDynamicsController* >();
+
+  assert( colorDynCtrl!=NULL );
+
+  colorDynCtrl->SetModel( NULL );
+
+  //
+  //
+
   const Application* app = Application::ConstInstance();
   assert( app!=NULL );
 
@@ -294,16 +312,6 @@ MainWindow
     vectorImageModel,
     SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
   );
-
-  //
-  // COLOR DYNAMICS.
-
-  ColorDynamicsController* colorDynCtrl =
-    GetColorDynamicsDock()->findChild< ColorDynamicsController* >();
-
-  assert( colorDynCtrl!=NULL );
-
-  colorDynCtrl->SetModel( NULL );
 }
 
 /*****************************************************************************/
@@ -311,6 +319,9 @@ void
 MainWindow
 ::OnSelectedModelChanged( AbstractModel* model )
 {
+  if( model==NULL )
+    return;
+
   DatasetModel* datasetModel = qobject_cast< DatasetModel* >( model );
 
   assert( datasetModel!=NULL );

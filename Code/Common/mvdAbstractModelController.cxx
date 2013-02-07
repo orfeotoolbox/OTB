@@ -84,19 +84,20 @@ AbstractModelController
   // Disconnect previously connected model and signal listeners.
   private_Disconnect( m_Model );
 
+  // Disable GUI widget while there is no model.
+  GetWidget()->setEnabled( false );
+
   // Forget previously disconnected model before new model is
   // connected. This is done in order to stay in a consistent internal
   // state whenever the connection is aborted (e.g. by an exception).
   m_Model = NULL;
 
-  /*
-  // Do not proceed to connect NULL-model.
-  if( model==NULL )
-    return;
-  */
-
   // Connect new model and signal listeners.
   private_Connect( model );
+
+  // Enable GUI widget when there is a model.
+  if( model!=NULL )
+    GetWidget()->setEnabled( true );
 
   // Remember newly connected model.
   m_Model = model;

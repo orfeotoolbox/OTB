@@ -109,6 +109,12 @@ public:
   inline TModel* GetModel();
 
   /** */
+  inline const QWidget* GetWidget() const;
+
+  /** */
+  inline QWidget* GetWidget();
+
+  /** */
   template< typename TWidget >
   inline const TWidget* GetWidget() const;
 
@@ -224,6 +230,24 @@ AbstractModelController
 ::GetModel()
 {
   return qobject_cast< TModel* >( m_Model );
+}
+
+/*****************************************************************************/
+inline
+const QWidget*
+AbstractModelController
+::GetWidget() const
+{
+  return m_Widget;
+}
+
+/*****************************************************************************/
+inline
+QWidget*
+AbstractModelController
+::GetWidget()
+{
+  return m_Widget;
 }
 
 /*****************************************************************************/

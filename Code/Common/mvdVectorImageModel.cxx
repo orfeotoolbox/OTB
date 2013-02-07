@@ -271,6 +271,8 @@ VectorImageModel
       // rasterize the region
       this->DumpImagePixelsWithinRegionIntoBuffer(region);
       }
+
+    m_Settings.ClearDirty();
     }
 
   // Store the region

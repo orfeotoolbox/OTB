@@ -78,7 +78,9 @@ Application
   delete m_Model;
 
   m_Model = model;
-  m_Model->setParent( this );
+
+  if( model!=NULL )
+    m_Model->setParent( this );
 
   emit SelectedModelChanged( m_Model );
 }
