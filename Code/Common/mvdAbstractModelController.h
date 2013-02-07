@@ -85,9 +85,6 @@ public:
 // Public methods.
 public:
 
-  /** Constructor */
-  AbstractModelController( QWidget* widget, QObject* parent =NULL );
-
   /** Destructor */
   virtual ~AbstractModelController();
 
@@ -143,6 +140,9 @@ signals:
 //
 // Protected methods.
 protected:
+
+  /** Constructor */
+  AbstractModelController( QWidget* widget, QObject* parent =NULL );
 
   /** */
   virtual void Connect( AbstractModel* ) =0;

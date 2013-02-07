@@ -340,7 +340,13 @@ protected:
   void ClearBuffer();
 
   //
-  // AbstractImageModel
+  // AbstractModel overrides.
+
+  /** */
+  virtual void virtual_BuildModel();
+
+  //
+  // AbstractImageModel overrides.
 
   /** */
   virtual void virtual_SetCurrentLod( CountType lod );
