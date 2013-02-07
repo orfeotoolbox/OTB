@@ -613,6 +613,8 @@ void
 VectorImageModel
 ::OnModelUpdated()
 {
+  qDebug() << "Model updated.";
+
   RenderingFilterType::RenderingFunctionType* renderingFunc =
     m_RenderingFilter->GetRenderingFunction();
 

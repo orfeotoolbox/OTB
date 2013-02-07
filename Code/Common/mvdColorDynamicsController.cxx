@@ -74,17 +74,17 @@ ColorDynamicsController
 {
   ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
 
-  /*
   //
-  // Connect 
+  // Connect controller to model.
   QObject::connect(
     this, SIGNAL( ModelUpdated() ),
     // to:
     model, SLOT( OnModelUpdated() ) );
-  */
+
 
   //
   // Connect newly selected model to UI controller.
+
   QObject::connect(
     colorDynamicsWidget,
     SIGNAL( LowQuantileChanged( RgbaChannel, double ) ),
@@ -149,12 +149,17 @@ ColorDynamicsController
 {
   ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
 
-  /*
-  VectorImageModel* vectorImageModel =
-    qobject_cast< VectorImageModel* >( model );
-  */
+  //
+  // Disconnect controller to model.
+  QObject::connect(
+    this, SIGNAL( ModelUpdated() ),
+    // to:
+    model, SLOT( OnModelUpdated() ) );
 
+
+  //
   // Disconnect previously selected model to UI controller.
+
   QObject::disconnect(
     colorDynamicsWidget,
     SIGNAL( LowQuantileChanged( RgbaChannel, double ) ),
