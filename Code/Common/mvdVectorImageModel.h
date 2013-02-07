@@ -440,7 +440,6 @@ private:
   /** 
     * helper to setup the lod image using a width/height or a zoom factor
     */
-  void SetupCurrentLodImage(double zoomFactor);
   void SetupCurrentLodImage(int w, int h);
 
 //

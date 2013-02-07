@@ -386,8 +386,6 @@ MainWindow
   emit LargestPossibleRegionChanged(
     vectorImageModel->GetNativeLargestRegion()
   );
-  // TODO: new ToImageBase method : look into it if it does the job
-  //vectorImageModel->ToImageBase()->GetLargestPossibleRegion()
 }
 
 /*****************************************************************************/

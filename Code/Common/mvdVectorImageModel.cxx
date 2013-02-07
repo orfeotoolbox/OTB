@@ -541,12 +541,6 @@ VectorImageModel::SetupCurrentLodImage(int w, int h)
 }
 
 /*******************************************************************************/
-void 
-VectorImageModel::SetupCurrentLodImage(double zoomFactor)
-{
-}
-
-/*******************************************************************************/
 CountType
 VectorImageModel
 ::GetNbLod() const
