@@ -103,8 +103,6 @@ class Monteverdi2_EXPORT ColorBandDynamicsWidget :
 	      READ GetHighIntensity
 	      WRITE SetHighIntensity );
 
-#if 0
-
   /** */
   Q_PROPERTY( double lowQuantile
 	      READ GetLowQuantile
@@ -114,17 +112,6 @@ class Monteverdi2_EXPORT ColorBandDynamicsWidget :
   Q_PROPERTY( double highQuantile
 	      READ GetHighQuantile
 	      WRITE SetHighQuantile );
-
-  /** */
-  Q_PROPERTY( double minQuantile
-	      READ GetMinQuantile
-	      WRITE SetMinQuantile );
-
-  /** */
-  Q_PROPERTY( double maxQuantile
-	      READ GetMinQuantile
-	      WRITE SetMinQuantile );
-#endif
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -162,6 +149,16 @@ public:
   inline double GetHighIntensity() const;
   /** */
   inline void SetHighIntensity( double );
+
+  /** */
+  inline double GetLowQuantile() const;
+  /** */
+  inline void SetLowQuantile( double );
+
+  /** */
+  inline double GetHighQuantile() const;
+  /** */
+  inline void SetHighQuantile( double );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -304,6 +301,42 @@ ColorBandDynamicsWidget
 ::SetHighIntensity( double value )
 {
   m_UI->highIntensitySpinBox->setValue( value );
+}
+
+/*****************************************************************************/
+inline
+double
+ColorBandDynamicsWidget
+::GetLowQuantile() const
+{
+  return m_UI->lowQuantileSpinBox->value();
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::SetLowQuantile( double value )
+{
+  m_UI->lowQuantileSpinBox->setValue( value );
+}
+
+/*****************************************************************************/
+inline
+double
+ColorBandDynamicsWidget
+::GetHighQuantile() const
+{
+  return m_UI->highQuantileSpinBox->value();
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::SetHighQuantile( double value )
+{
+  m_UI->highQuantileSpinBox->setValue( value );
 }
 
 /*****************************************************************************/

@@ -116,6 +116,9 @@ public:
   inline MeasurementType Quantile( CountType band, double p ) const;
 
   /** */
+  inline MeasurementType Quantile( CountType band, double p, Bound bound ) const;
+
+  /** */
   double
     Percentile( CountType band,
 		MeasurementType intensity,
@@ -236,6 +239,22 @@ HistogramModel
   assert( band<m_Histograms->Size() );
 
   return m_Histograms->GetNthElement( band )->Quantile( 0, p );
+}
+
+/*******************************************************************************/
+inline
+HistogramModel::MeasurementType
+HistogramModel
+::Quantile( unsigned int band,
+	    double p,
+	    Bound bound ) const
+{
+  assert( band<m_Histograms->Size() );
+
+  return m_Histograms->GetNthElement( band )->Quantile(
+    0,
+    bound==BOUND_UPPER ? 1.0 - p : p
+  );
 }
 
 /*******************************************************************************/

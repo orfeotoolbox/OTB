@@ -264,13 +264,37 @@ ColorDynamicsController
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 
+  // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
   assert( imageModel->GetHistogramModel()!=NULL );
 
-  imageModel->GetSettings().DynamicsParam( 2 * channel ) =
-    imageModel->GetHistogramModel()->Quantile( channel, 0.01 * value );
+  // Calculate quantile intensity.
+  HistogramModel::MeasurementType intensity =
+    imageModel->GetHistogramModel()->Quantile(
+      channel,
+      0.01 * value,
+      BOUND_LOWER
+    );
 
+  // Update quantile intensity in model.
+  imageModel->GetSettings().DynamicsParam( 2 * channel ) = intensity;
+
+  // Get color-dynamics widgets.
+  ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
+  assert( colorDynWgt!=NULL );
+
+  ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel( channel );
+  assert( colorBandDynWgt!=NULL );
+
+  // Refresh low-intensity display.
+  colorBandDynWgt->blockSignals( true );
+  {
+  colorBandDynWgt->SetLowIntensity( intensity );
+  }
+  colorBandDynWgt->blockSignals( false );
+
+  // Signal model has changed.
   emit ModelUpdated();
 }
 
@@ -281,13 +305,37 @@ ColorDynamicsController
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 
+  // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
   assert( imageModel->GetHistogramModel()!=NULL );
 
-  imageModel->GetSettings().DynamicsParam( 2 * channel + 1 ) =
-    imageModel->GetHistogramModel()->Quantile( channel, 0.01 * value );
+  // Calculate quantile intensity.
+  HistogramModel::MeasurementType intensity =
+    imageModel->GetHistogramModel()->Quantile(
+      channel,
+      0.01 * value,
+      BOUND_UPPER
+    );
 
+  // Update quantile intensity in model.
+  imageModel->GetSettings().DynamicsParam( 2 * channel ) = intensity;
+
+  // Get color-dynamics widgets.
+  ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
+  assert( colorDynWgt!=NULL );
+
+  ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel( channel );
+  assert( colorBandDynWgt!=NULL );
+
+  // Refresh low-intensity display.
+  colorBandDynWgt->blockSignals( true );
+  {
+  colorBandDynWgt->SetHighIntensity( intensity );
+  }
+  colorBandDynWgt->blockSignals( false );
+
+  // Signal model has changed.
   emit ModelUpdated();
 }
 
@@ -298,11 +346,33 @@ ColorDynamicsController
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 
-  assert( GetModel< VectorImageModel >()!=NULL );
+  // Get image-model.
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+  assert( imageModel->GetHistogramModel()!=NULL );
 
-  GetModel< VectorImageModel >()->GetSettings().DynamicsParam( 2 * channel )
-    = value;
+  // Update parameter value.
+  imageModel->GetSettings().DynamicsParam( 2 * channel ) = value;
 
+  // Get color-dynamics widgets.
+  ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
+  assert( colorDynWgt );
+
+  ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel( channel );
+
+  // Refresh quantile display.
+  colorBandDynWgt->blockSignals( true );
+  {
+  colorBandDynWgt->SetLowQuantile(
+    imageModel->GetHistogramModel()->Percentile(
+      imageModel->GetSettings().RgbChannel( channel ),
+      value,
+      BOUND_LOWER )
+  );
+  }
+  colorBandDynWgt->blockSignals( false );
+
+  // Signal model has changed.
   emit ModelUpdated();
 }
 
@@ -313,11 +383,33 @@ ColorDynamicsController
 {
   qDebug() << QString( "%1; %2" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 
-  assert( GetModel< VectorImageModel >()!=NULL );
+  // Get image-model.
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+  assert( imageModel->GetHistogramModel()!=NULL );
 
-  GetModel< VectorImageModel >()->GetSettings().DynamicsParam( 2 * channel + 1 )
-    = value;
+  // Update parameter value in model.
+  imageModel->GetSettings().DynamicsParam( 2 * channel + 1 ) = value;
 
+  // Get color-dynamics widgets.
+  ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
+  assert( colorDynWgt );
+
+  ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel( channel );
+
+  // Refresh quantile display.
+  colorBandDynWgt->blockSignals( true );
+  {
+  colorBandDynWgt->SetHighQuantile(
+    imageModel->GetHistogramModel()->Percentile(
+      imageModel->GetSettings().RgbChannel( channel ),
+      value,
+      BOUND_LOWER )
+  );
+  }
+  colorBandDynWgt->blockSignals( false );
+
+  // Signal model has changed.
   emit ModelUpdated();
 }
 
