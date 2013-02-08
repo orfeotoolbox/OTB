@@ -448,6 +448,18 @@ private:
     */
   void SetupCurrentLodImage(int w, int h);
 
+  /**
+   */
+  void InitializeColorSetupSettings();
+
+  /** 
+   */
+  void InitializeColorDynamicsSettings();
+
+  /**
+   */
+  void InitializeRgbaPipeline();
+
 //
 // Private attributes.
 private:
