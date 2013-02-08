@@ -82,3 +82,8 @@ OTB_CREATE_APPLICATION(NAME           PixelValue
 OTB_CREATE_APPLICATION(NAME           TileFusion
                        SOURCES        otbTileFusion.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon)
+
+
+OTB_CREATE_APPLICATION(NAME           DownloadSRTMTiles
+                       SOURCES        otbDownloadSRTMTiles.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBProjections)
