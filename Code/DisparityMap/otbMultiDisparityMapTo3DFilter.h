@@ -31,10 +31,10 @@ namespace otb
  *  \brief Project a group of disparity map into 3D points
  *
  *  This filter uses a group of N horizontal disparity map (and vertical if any) to project 3D points.
- *  The output image contains the 3D points coordinates for each location of input disparity. The 
+ *  The output image contains the 3D points coordinates for each location of input disparity. The
  *  3D positions are compute by a least square optimisation between the N lines of sight.
  *  The 3D coordinates (sorted by band) are : longitude , latitude (in degree, wrt WGS84) and altitude (in meters)
- *  BEWARE : this filter is not fully compatible with the filters using the epipolar geometry. The N disparity 
+ *  BEWARE : this filter is not fully compatible with the filters using the epipolar geometry. The N disparity
  *  maps shall come from the matching of a single 'reference' sensor image versus N 'moving' sensor images.
  *  N disparity masks can be provided for each disparity map.
  *
@@ -96,7 +96,7 @@ public:
   /** Set vertical disparity map input corresponding to the moving image 'index'*/
   void SetVerticalDisparityMapInput(unsigned int index, const TDisparityImage * vmap);
   
-  /** Set mask associated to disparity maps corresponding to the moving image 'index' 
+  /** Set mask associated to disparity maps corresponding to the moving image 'index'
    * (optional, pixels with a null mask value are ignored)
    */
   void SetDisparityMaskInput(unsigned int index, const TMaskImage * mask);

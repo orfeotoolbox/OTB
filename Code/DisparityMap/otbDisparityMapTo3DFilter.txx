@@ -197,7 +197,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
   TMaskImage * maskDisp = const_cast<TMaskImage*>(this->GetDisparityMaskInput());
   
   // We impose that both disparity map inputs have the same size
-  if(vertiDisp && 
+  if(vertiDisp &&
      horizDisp->GetLargestPossibleRegion() != vertiDisp->GetLargestPossibleRegion())
     {
     itkExceptionMacro(<<"Horizontal and vertical disparity maps do not have the same size ! Horizontal largest region: "
@@ -323,7 +323,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
       {
       if (!(maskIt.Get() > 0))
         {
-        // TODO : what to do when masked ? put a no-data value ?  
+        // TODO : what to do when masked ? put a no-data value ?
         
         ++demIt;
         ++horizIt;

@@ -78,7 +78,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
   if ((3 * (index + 1)) > this->GetNumberOfInputs())
     {
     itkExceptionMacro(<<"Index is greater than the number of moving images");
-    } 
+    }
   // Process object is not const-correct so the const casting is required.
   this->SetNthInput(3 * index, const_cast<TDisparityImage *>( hmap ));
 }
@@ -224,7 +224,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
   RegionType requested = this->GetOutput()->GetRequestedRegion();
   RegionType largest = this->GetHorizontalDisparityMapInput(0)->GetLargestPossibleRegion();
   
-  for (unsigned int i=0 ; i<this->GetNumberOfInputs() ; ++i)
+  for (unsigned int i=0; i<this->GetNumberOfInputs(); ++i)
     {
     unsigned int index  = i % 3;
     unsigned int pos    = i / 3;
@@ -278,11 +278,11 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
       break;
       default:
         itkExceptionMacro(<< "Unexpected value for (i%3) ");
-      } 
+      }
     }
   
   // Check moving keywordlist
-  for (unsigned int k=0 ; k<this->m_MovingKeywordLists.size() ; ++k)
+  for (unsigned int k=0; k<this->m_MovingKeywordLists.size(); ++k)
   {
     if (this->m_MovingKeywordLists[k].GetSize() == 0)
       {
@@ -304,7 +304,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
   this->m_ReferenceToGroundTransform->InstanciateTransform();
   
   this->m_MovingToGroundTransform.clear();
-  for (unsigned int k=0 ; k<this->m_MovingKeywordLists.size() ; ++k)
+  for (unsigned int k=0; k<this->m_MovingKeywordLists.size(); ++k)
     {
     RSTransformType::Pointer transfo = RSTransformType::New();
     transfo->SetInputKeywordList(this->m_MovingKeywordLists[k]);
