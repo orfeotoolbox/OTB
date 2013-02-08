@@ -83,12 +83,12 @@ public:
     itkExceptionMacro(<< "GetSingleValue() has to be declared in child classes.");
   }
 
-  double GetValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2)
+  virtual double GetValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2)
   {
     return GetSingleValue(value1, value2);
   }
 
-  double GetValue(const LabelledNeighborhoodIterator& it, const LabelledImagePixelType& value2)
+  virtual double GetValue(const LabelledNeighborhoodIterator& it, const LabelledImagePixelType& value2)
   {
     double              result = 0.0;
     unsigned int        centerIndex = it.GetCenterNeighborhoodIndex();
@@ -110,7 +110,7 @@ public:
     return result / insideNeighbors;
   }
 
-  double GetValue(const InputNeighborhoodIterator& it, const LabelledImagePixelType& value2)
+  virtual double GetValue(const InputNeighborhoodIterator& it, const LabelledImagePixelType& value2)
   {
     double              result = 0.0;
     unsigned int        centerIndex = it.GetCenterNeighborhoodIndex();
@@ -186,12 +186,12 @@ public:
     itkExceptionMacro(<< "GetSingleValue() has to be declared in child classes.");
   }
 
-  double GetValue(const LabelledImagePixelType& value1, const LabelledImagePixelType& value2)
+  virtual double GetValue(const LabelledImagePixelType& value1, const LabelledImagePixelType& value2)
   {
     return GetSingleValue(value1, value2);
   }
 
-  double GetValue(const LabelledNeighborhoodIterator& it, const LabelledImagePixelType& value2)
+  virtual double GetValue(const LabelledNeighborhoodIterator& it, const LabelledImagePixelType& value2)
   {
     double                 result = 0.0;
     unsigned int           centerIndex = it.GetCenterNeighborhoodIndex();
