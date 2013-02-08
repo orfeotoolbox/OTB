@@ -53,10 +53,14 @@ public:
   int RetrieveFileMulti(const std::vector<std::string>& listURLs,
                         const std::vector<std::string>& listFiles,
                         int maxConnect) const;
+
+  itkGetMacro(Timeout,long int);
+  itkSetMacro(Timeout,long int);
+
 protected:
   CurlHelper() :
     m_Browser("Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) "
-              "Gecko/20071127 Firefox/2.0.0.11") {}
+              "Gecko/20071127 Firefox/2.0.0.11"), m_Timeout(10) {}
   virtual ~CurlHelper() {}
 
 private:
@@ -74,6 +78,7 @@ private:
 
   // Browser Agent used
   std::string m_Browser;
+  long int m_Timeout;
 };
 }
 #endif
