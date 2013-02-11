@@ -60,7 +60,8 @@ public:
 protected:
   CurlHelper() :
     m_Browser("Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) "
-              "Gecko/20071127 Firefox/2.0.0.11"), m_Timeout(10) {}
+              "Gecko/20071127 Firefox/2.0.0.11"),
+    m_Timeout(10) {}
   virtual ~CurlHelper() {}
 
 private:
