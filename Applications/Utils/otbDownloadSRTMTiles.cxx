@@ -35,7 +35,7 @@ class DownloadSRTMTiles : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef DownloadSRTMTiles                 Self;
+  typedef DownloadSRTMTiles             Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -160,7 +160,7 @@ private:
 
       std::vector<double>::iterator AbsLongit=absVecLong.begin();
 
-      for (std::vector<double>::const_iterator it=vecLong.begin() ; it!=vecLong.end(); ++it)
+      for (std::vector<double>::const_iterator it=vecLong.begin();it!=vecLong.end();++it)
         {
         *AbsLongit = vcl_abs(*it);
         ++AbsLongit;
@@ -168,17 +168,21 @@ private:
 
       std::vector<double>::iterator AbsLatit=absVecLat.begin();
 
-      for (std::vector<double>::const_iterator it=vecLat.begin() ; it!=vecLat.end(); ++it)
+      for (std::vector<double>::const_iterator it=vecLat.begin();it!=vecLat.end();++it)
         {
         *AbsLatit = vcl_abs(*it);
         ++AbsLatit;
         }
 
-      const unsigned int distMinLong = std::distance(absVecLong.begin(), min_element (absVecLong.begin(),absVecLong.end())) ;
-      const unsigned int distMaxLong = std::distance(absVecLong.begin(), max_element (absVecLong.begin(),absVecLong.end())) ;
+      const unsigned int distMinLong =
+                         std::distance(absVecLong.begin(), min_element (absVecLong.begin(),absVecLong.end()));
+      const unsigned int distMaxLong =
+                         std::distance(absVecLong.begin(), max_element (absVecLong.begin(),absVecLong.end()));
 
-      const unsigned int distMinLat = std::distance(absVecLat.begin(), min_element (absVecLat.begin(),absVecLat.end())) ;
-      const unsigned int distMaxLat = std::distance(absVecLat.begin(), max_element (absVecLat.begin(),absVecLat.end())) ;
+      const unsigned int distMinLat =
+                         std::distance(absVecLat.begin(), min_element (absVecLat.begin(),absVecLat.end()));
+      const unsigned int distMaxLat =
+                         std::distance(absVecLat.begin(), max_element (absVecLat.begin(),absVecLat.end()));
 
       //find corresponding tiled  for initialization
       //FIXME recode this properly
