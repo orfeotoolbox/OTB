@@ -105,7 +105,7 @@ public:
    */
   QStringList GetBandNames( bool enhanced =false ) const;
 
-  /** 
+  /**
    * Get the number of available LOD.
    */
   virtual CountType GetNbLod() const =0;

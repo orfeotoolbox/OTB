@@ -91,7 +91,7 @@ public:
     T* newChildModel();
 
   /** */
-  inline void parentChildModel( AbstractModel* );
+  inline void attachChildModel( AbstractModel* );
 
   /** */
   inline void BuildModel();
@@ -153,7 +153,7 @@ AbstractModel
 
   try
     {
-    parentChildModel( model );
+    attachChildModel( model );
     }
   catch( std::exception& exc )
     {
@@ -170,13 +170,12 @@ AbstractModel
 inline
 void
 AbstractModel
-::parentChildModel( AbstractModel* model )
+::attachChildModel( AbstractModel* model )
 {
   assert( model!=NULL );
 
-  model->BuildModel();
-
   model->setParent( this );
+  model->BuildModel();
 }
 
 /*****************************************************************************/
