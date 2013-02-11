@@ -41,6 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbImageMetadataInterfaceBase.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -148,6 +149,11 @@ protected:
   AbstractImageModel( QObject* parent =NULL );
 
   /** */
+  inline
+    otb::ImageMetadataInterfaceBase::ConstPointer
+    GetMetadataInterface() const;
+
+  /** */
   virtual void virtual_SetCurrentLod( CountType lod ) =0;
 
   //
@@ -171,7 +177,6 @@ protected:
 //
 // Private methods.
 private:
-
 
 //
 // Private attributes.
@@ -265,6 +270,19 @@ AbstractImageModel
 ::GetNbComponents() const
 {
   return ToImageBase()->GetNumberOfComponentsPerPixel();
+}
+
+/*****************************************************************************/
+inline
+otb::ImageMetadataInterfaceBase::ConstPointer
+AbstractImageModel
+::GetMetadataInterface() const
+{
+  return otb::ConstCast< const otb::ImageMetadataInterfaceBase >(
+    otb::ImageMetadataInterfaceFactory::CreateIMI(
+      ToImageBase()->GetMetaDataDictionary()
+    )
+  );
 }
 
 } // end namespace 'mvd'

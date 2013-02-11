@@ -83,37 +83,70 @@ QStringList
 VectorImageModel
 ::GetBandNames() const
 {
-  assert( m_ImageFileReader->GetNumberOfOutputs()==1 );
+  SourceImageType::ConstPointer output( ToImage() );
 
-  DefaultImageType::Pointer output( m_ImageFileReader->GetOutput( 0 ) );
-
-  /*
-  itk::MetaDataDictionary dictionary( output->GetMetaDataDictionary() );
-
-  DefaultImageType::ImageMetadataInterfacePointerType metaData(
-    
+  otb::ImageMetadataInterfaceBase::ConstPointer metaDataInterface(
+    GetMetadataInterface()
   );
-  */
 
-  StringVector stdBandNames( GetMetadataInterface()->GetBandName() );
+  //
+  // Basic band names.
+  StringVector stdBandNames1( metaDataInterface->GetBandName() );
 
   /*
-  qDebug() << "stdBandNames.size(): " <<  stdBandNames.size();
-  for( unsigned int i=0; i<stdBandNames.size(); ++i )
-    {
-    qDebug() << i << ": " << QString::fromStdString( stdBandNames[ i ] );
-    }
+  qDebug() << "stdBandNames1.size(): " <<  stdBandNames1.size();
+  for( unsigned int i=0; i<stdBandNames1.size(); ++i )
+    qDebug() << i << ": " << QString::fromStdString( stdBandNames1[ i ] );
   */
 
-  assert( stdBandNames.empty() ||
-	  stdBandNames.size()==output->GetNumberOfComponentsPerPixel() );
+  assert( stdBandNames1.empty() ||
+	  stdBandNames1.size()==output->GetNumberOfComponentsPerPixel() );
 
-  if( stdBandNames.size()!=output->GetNumberOfComponentsPerPixel() )
+  if( stdBandNames1.size()!=output->GetNumberOfComponentsPerPixel() )
     {
-    stdBandNames.resize( output->GetNumberOfComponentsPerPixel() );
+    stdBandNames1.resize( output->GetNumberOfComponentsPerPixel() );
     }
 
-  return ToQStringList( stdBandNames );
+  //
+  // Enhanced band names.
+#if 0
+  StringVector stdBandNames2( metaDataInterface->GetEnhancedBandNames() );
+#else
+  StringVector stdBandNames2;
+#endif
+
+  /*
+  qDebug() << "stdBandNames2.size(): " <<  stdBandNames2.size();
+  for( unsigned int i=0; i<stdBandNames2.size(); ++i )
+    qDebug() << i << ": " << QString::fromStdString( stdBandNames2[ i ] );
+  */
+
+  assert( stdBandNames2.empty() ||
+	  stdBandNames2.size()==output->GetNumberOfComponentsPerPixel() );
+
+  if( stdBandNames2.size()!=output->GetNumberOfComponentsPerPixel() )
+    {
+    stdBandNames2.resize( output->GetNumberOfComponentsPerPixel() );
+    }
+
+  //
+  // Join basic and enhanced band-name lists.
+  assert( stdBandNames1.size()==stdBandNames2.size() );
+
+  QStringList qBandNames1( ToQStringList( stdBandNames1 ) );
+  QStringList qBandNames2( ToQStringList( stdBandNames2 ) );
+
+  QStringList::iterator it1( qBandNames1.begin() );
+  QStringList::const_iterator it2( qBandNames2.begin() );
+  for( ; it1!=qBandNames1.end(); ++it1, ++it2 )
+    {
+    if( !it2->isEmpty() )
+      it1->append( " (" + *it2 + ")" );
+    }
+
+  //
+  // Return joined band-name list.
+  return qBandNames1;
 }
 
 /*******************************************************************************/
@@ -173,7 +206,7 @@ VectorImageModel
 ::InitializeColorSetupSettings()
 {
   // Remember meta-data interface.
-  DefaultImageType::ImageMetadataInterfacePointerType metaData(
+  otb::ImageMetadataInterfaceBase::ConstPointer metaData(
     GetMetadataInterface()
   );
 

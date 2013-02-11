@@ -386,11 +386,6 @@ private:
 // Private methods.
 private:
 
-  /** */
-  inline
-    DefaultImageType::ImageMetadataInterfacePointerType
-    GetMetadataInterface() const;
-
   /** Compute the linear buffer index according to the 2D region and
   * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
   * \param index 2D index
@@ -510,8 +505,13 @@ private slots:
   void OnModelUpdated();
 };
 
+} // end namespace 'mvd'.
+
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
+
+namespace mvd
+{
 
 /*****************************************************************************/
 inline
@@ -548,21 +548,6 @@ VectorImageModel
 ::GetSettings()
 {
   return m_Settings;
-}
-
-/*****************************************************************************/
-inline
-DefaultImageType::ImageMetadataInterfacePointerType
-VectorImageModel
-::GetMetadataInterface() const
-{
-  assert( m_ImageFileReader->GetNumberOfOutputs()==1 );
-
-  itk::MetaDataDictionary dictionary(
-    m_ImageFileReader->GetOutput( 0 )->GetMetaDataDictionary()
-  );
-
-  return otb::ImageMetadataInterfaceFactory::CreateIMI( dictionary );
 }
 
 /*****************************************************************************/

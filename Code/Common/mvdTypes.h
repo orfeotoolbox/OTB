@@ -51,6 +51,8 @@
 // TODO: Contribute to OTB!
 namespace otb
 {
+/**
+ */
 template< typename T2, typename T1 >
 inline
 itk::SmartPointer< T2 >
@@ -64,6 +66,8 @@ DynamicCast( const itk::SmartPointer< T1 >& p1 )
     );
 }
 
+/**
+ */
 template< typename T2, typename T1 >
 inline
 itk::SmartPointer< const T2 >
@@ -77,6 +81,8 @@ ConstCast( const itk::SmartPointer< T1 >& p1 )
     );
 }
 
+/**
+ */
 template< typename T2, typename T1 >
 inline
 itk::SmartPointer< T2 >
