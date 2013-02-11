@@ -79,7 +79,7 @@ private:
 
   // Browser Agent used
   std::string m_Browser;
-  int         m_Timeout;
+  long int         m_Timeout;
 };
 }
 #endif
