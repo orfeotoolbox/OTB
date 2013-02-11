@@ -275,9 +275,8 @@ int CurlHelper::RetrieveUrlInMemory(const std::string& url, std::string& output)
 
   CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url.c_str()));
 
-  // Set 5s timeout
-  //m_Timeout = 5;
-  CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_TIMEOUT, 5));
+  // Settimeout
+  CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_TIMEOUT, m_Timeout));
 
   // Use our writing static function to avoid file descriptor
   // pointer crash on windows
