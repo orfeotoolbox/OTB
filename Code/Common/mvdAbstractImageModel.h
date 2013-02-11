@@ -103,7 +103,7 @@ public:
 
   /**
    */
-  QStringList GetBandNames() const;
+  QStringList GetBandNames( bool enhanced =false ) const;
 
   /** 
    * Get the number of available LOD.

@@ -72,7 +72,7 @@ AbstractImageModel
 /*******************************************************************************/
 QStringList
 AbstractImageModel
-::GetBandNames() const
+::GetBandNames( bool enhanced ) const
 {
   ImageBaseType::ConstPointer output( ToImageBase() );
 
@@ -100,11 +100,10 @@ AbstractImageModel
 
   //
   // Enhanced band names.
-#if 0
-  StringVector stdBandNames2( metaDataInterface->GetEnhancedBandNames() );
-#else
   StringVector stdBandNames2;
-#endif
+  if( enhanced )
+    stdBandNames2 = metaDataInterface->GetEnhancedBandNames();
+
 
   /*
   qDebug() << "stdBandNames2.size(): " <<  stdBandNames2.size();
