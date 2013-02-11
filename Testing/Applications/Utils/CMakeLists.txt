@@ -23,7 +23,7 @@ OTB_TEST_APPLICATION(NAME  apTvUtSmoothingTest
 
 OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoTest
                      APP  ReadImageInfo
-                     OPTIONS -in ${INPUTDATA}/poupees.tif  
+                     OPTIONS -in ${INPUTDATA}/poupees.tif
                      TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoTest.txt
                      VALID   --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvUtReadImageInfoTest.txt
@@ -33,15 +33,15 @@ IF(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoSpot5
                      APP  ReadImageInfo
-                     OPTIONS -in ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF  
+                     OPTIONS -in ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
                      TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoSpot5.txt
                      VALID   --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvUtReadImageInfoSpot5.txt
                 	     ${TEMP}/apTvUtReadImageInfoSpot5.txt)
-                     
+
 OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoERS
                      APP  ReadImageInfo
-                     OPTIONS -in ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001  
+                     OPTIONS -in ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
                      TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoERS.txt
                      VALID   --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvUtReadImageInfoERS.txt
@@ -49,7 +49,7 @@ OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoERS
 
 OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoRADARSAT1
                      APP  ReadImageInfo
-                     OPTIONS -in ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001  
+                     OPTIONS -in ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001
                      TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoRADARSAT1.txt
                      VALID   --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvUtReadImageInfoRADARSAT1.txt
@@ -75,12 +75,12 @@ OTB_TEST_APPLICATION(NAME apTvUtExtractROISizeNULL
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/couleurs_extrait.png
                              ${TEMP}/apTvUtExtractROISizeNULL.tif)
-                             
+
 OTB_TEST_APPLICATION(NAME apTvUtExtractROISizeTooBig
                      APP  ExtractROI
                      OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
                  			 -out ${TEMP}/apTvUtExtractROISizeTooBig.tif
-                 			 -sizex 1000000 
+                 			 -sizex 1000000
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/couleurs_extrait.png
                              ${TEMP}/apTvUtExtractROISizeTooBig.tif)
@@ -97,8 +97,8 @@ OTB_TEST_APPLICATION(NAME apTvUtConcatenateImages_1Image
 
 OTB_TEST_APPLICATION(NAME apTvUtConcatenateImages
                      APP  ConcatenateImages
-                     OPTIONS -il ${INPUTDATA}/poupees_sub_c1.png 
-                                  ${INPUTDATA}/poupees_sub_c2.png 
+                     OPTIONS -il ${INPUTDATA}/poupees_sub_c1.png
+                                  ${INPUTDATA}/poupees_sub_c2.png
                                   ${INPUTDATA}/poupees_sub_c3.png
                  			 -out ${TEMP}/apTvUtConcatenateImages.png
                      VALID   --compare-image ${NOTOL}
@@ -109,8 +109,8 @@ OTB_TEST_APPLICATION(NAME apTvUtConcatenateImages
 
 OTB_TEST_APPLICATION(NAME apTvUtBandMath
                      APP  BandMath
-                     OPTIONS -il ${INPUTDATA}/poupees_sub_c1.png 
-                                  ${INPUTDATA}/poupees_sub_c2.png 
+                     OPTIONS -il ${INPUTDATA}/poupees_sub_c1.png
+                                  ${INPUTDATA}/poupees_sub_c2.png
                                   ${INPUTDATA}/poupees_sub.png
                              -out ${TEMP}/apTvUtBandMathOutput.tif
                              -exp "cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3,im3b4)"
@@ -172,7 +172,7 @@ OTB_TEST_APPLICATION(NAME apTvUtOSMDownloader
                      OPTIONS -support ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
                              -key highway
                              -out ${TEMP}/apTvUtOSMDownloader.shp
-                     VALID   --compare-ogr ${NOTOL}  
+                     VALID   --compare-ogr ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/otbOSMDownloaderOutput.shp
                              ${TEMP}/apTvUtOSMDownloader.shp)
 
@@ -183,7 +183,7 @@ OTB_TEST_APPLICATION(NAME apTvUtVectorDataTransform_Rotation
                              -vd ${INPUTDATA}/ToulouseRoad-examples.shp
                              -out ${TEMP}/apTvUtVectorDataTransform_rotation.shp
                              -transform.ro 15
-                     VALID   --compare-ogr ${NOTOL}  
+                     VALID   --compare-ogr ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Rotation.shp
                              ${TEMP}/apTvUtVectorDataTransform_rotation.shp)
 
@@ -195,7 +195,7 @@ OTB_TEST_APPLICATION(NAME apTvUtVectorDataTransform_Translation_Rotation
                              -transform.ro 15
                              -transform.tx  5
                              -transform.ty  6
-                     VALID   --compare-ogr ${NOTOL}  
+                     VALID   --compare-ogr ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Translation_rotation.shp
                              ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp)
 
@@ -293,17 +293,17 @@ OTB_TEST_APPLICATION(NAME apTvUtPixelValue
 #--- ColorMapping ---
 OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorContinuousLUTJet
                      APP ColorMapping
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif 
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                              -method continuous
                              -method.continuous.lut jet
-                             -method.continuous.min 100 
+                             -method.continuous.min 100
                              -method.continuous.max 500
                              -out ${TEMP}/QB_Toulouse_Ortho_PAN_LUTJet.tif uint8
                      VALID --compare-image ${EPSILON_7}
                              ${BASELINE}/apTvUtColorMappingContinuousLUTJet.tif
                 	         ${TEMP}/QB_Toulouse_Ortho_PAN_LUTJet.tif)
-                	         
-       
+
+
 OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorCustomLUTQB
                      APP ColorMapping
                      OPTIONS -in ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
@@ -347,7 +347,7 @@ OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorOptimalLUTQB
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtColorMappingLabelToColorOptimalLUTQB.tif
                 	         ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUTQB.tif)
- 
+
 OTB_TEST_APPLICATION(NAME apTvUtColorMappingColorToLabelOptimalLUTQB
                      APP ColorMapping
                      OPTIONS -in ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUTQB.tif
@@ -356,12 +356,12 @@ OTB_TEST_APPLICATION(NAME apTvUtColorMappingColorToLabelOptimalLUTQB
                      		 -op.colortolabel.notfound 0
                              -out ${TEMP}/apTvUtColorMappingColorToLabelOptimalLUTQB.tif uint8
                      VALID   --compare-image ${NOTOL}
-                             ${BASELINE}/apTvUtColorMappingColorToLabelOptimalLUTQB.tif  
-                             ${TEMP}/apTvUtColorMappingColorToLabelOptimalLUTQB.tif) 
-  
+                             ${BASELINE}/apTvUtColorMappingColorToLabelOptimalLUTQB.tif
+                             ${TEMP}/apTvUtColorMappingColorToLabelOptimalLUTQB.tif)
+
 SET_TESTS_PROPERTIES(apTvUtColorMappingColorToLabelOptimalLUTQB PROPERTIES DEPENDS apTvUtColorMappingLabelToColorOptimalLUTQB)
 
-                	         
+
 OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorOptimalLUT
                      APP ColorMapping
                      OPTIONS -in ${INPUTDATA}/labelImage_UnsignedChar.tif
@@ -383,7 +383,7 @@ OTB_TEST_APPLICATION(NAME apTvUtColorMappingColorToLabelOptimalLUT
                              ${TEMP}/apTvUtColorMappingColorToLabelOptimalLUT.tif)
 
 SET_TESTS_PROPERTIES(apTvUtColorMappingColorToLabelOptimalLUT PROPERTIES DEPENDS apTvUtColorMappingLabelToLabelOptimalLUT)
- 
+
 OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorSupportImage
                      APP ColorMapping
                      OPTIONS -in ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
@@ -392,8 +392,8 @@ OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorSupportImage
                              -out ${TEMP}/apTvUtColorMappingLabelToColorSupportImage.tif uint8
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtColorMappingLabelToColorSupportImage.tif
-                	         ${TEMP}/apTvUtColorMappingLabelToColorSupportImage.tif) 
-                	         
+                	         ${TEMP}/apTvUtColorMappingLabelToColorSupportImage.tif)
+
 #--- Testing Extended Filename -----
 
 OTB_TEST_APPLICATION(NAME apTvUtConvertExtendedFilename_readerGEOM
@@ -402,13 +402,13 @@ OTB_TEST_APPLICATION(NAME apTvUtConvertExtendedFilename_readerGEOM
                              -out ${TEMP}/apTvUtGeomExtendedFilename.tif
                      VALID   --compare-ascii ${EPSILON_7}
                              ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
-                             ${TEMP}/apTvUtGeomExtendedFilename.geom)                	         
-                         	                     
+                             ${TEMP}/apTvUtGeomExtendedFilename.geom)
+
 OTB_TEST_APPLICATION(NAME apTuUtReadImageInfoExtendedFilename_reader
                      APP  ReadImageInfo
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipgeom=true&skipcarto=true
                      )
-                     
+
 OTB_TEST_APPLICATION(NAME apTuUtConvertExtendedFilename_writer
                      APP  Convert
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif
@@ -427,3 +427,14 @@ OTB_TEST_APPLICATION(NAME apTvUtTileFusion
                      VALID   --compare-image ${NOTOL}
                              ${EXAMPLEDATA}/Scene.png
                            ${TEMP}/apTvUtTileFusion.png)
+
+#--- Testing Download SRTM tiles application ---
+
+IF(OTB_DATA_USE_LARGEINPUT)
+OTB_TEST_APPLICATION(NAME apTuUtDownloadSRTMTiles
+                     APP  DownloadSRTMTiles
+                     OPTIONS -il ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+                             -mode simulate
+                     )
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
