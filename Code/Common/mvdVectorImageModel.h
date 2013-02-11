@@ -266,10 +266,6 @@ public:
 
   /**
    */
-  QStringList GetBandNames() const;
-
-  /**
-   */
   inline const Settings& GetSettings() const;
 
   /** */

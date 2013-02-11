@@ -79,77 +79,6 @@ VectorImageModel
 }
 
 /*******************************************************************************/
-QStringList
-VectorImageModel
-::GetBandNames() const
-{
-  SourceImageType::ConstPointer output( ToImage() );
-
-  otb::ImageMetadataInterfaceBase::ConstPointer metaDataInterface(
-    GetMetadataInterface()
-  );
-
-  //
-  // Basic band names.
-  StringVector stdBandNames1( metaDataInterface->GetBandName() );
-
-  /*
-  qDebug() << "stdBandNames1.size(): " <<  stdBandNames1.size();
-  for( unsigned int i=0; i<stdBandNames1.size(); ++i )
-    qDebug() << i << ": " << QString::fromStdString( stdBandNames1[ i ] );
-  */
-
-  assert( stdBandNames1.empty() ||
-	  stdBandNames1.size()==output->GetNumberOfComponentsPerPixel() );
-
-  if( stdBandNames1.size()!=output->GetNumberOfComponentsPerPixel() )
-    {
-    stdBandNames1.resize( output->GetNumberOfComponentsPerPixel() );
-    }
-
-  //
-  // Enhanced band names.
-#if 0
-  StringVector stdBandNames2( metaDataInterface->GetEnhancedBandNames() );
-#else
-  StringVector stdBandNames2;
-#endif
-
-  /*
-  qDebug() << "stdBandNames2.size(): " <<  stdBandNames2.size();
-  for( unsigned int i=0; i<stdBandNames2.size(); ++i )
-    qDebug() << i << ": " << QString::fromStdString( stdBandNames2[ i ] );
-  */
-
-  assert( stdBandNames2.empty() ||
-	  stdBandNames2.size()==output->GetNumberOfComponentsPerPixel() );
-
-  if( stdBandNames2.size()!=output->GetNumberOfComponentsPerPixel() )
-    {
-    stdBandNames2.resize( output->GetNumberOfComponentsPerPixel() );
-    }
-
-  //
-  // Join basic and enhanced band-name lists.
-  assert( stdBandNames1.size()==stdBandNames2.size() );
-
-  QStringList qBandNames1( ToQStringList( stdBandNames1 ) );
-  QStringList qBandNames2( ToQStringList( stdBandNames2 ) );
-
-  QStringList::iterator it1( qBandNames1.begin() );
-  QStringList::const_iterator it2( qBandNames2.begin() );
-  for( ; it1!=qBandNames1.end(); ++it1, ++it2 )
-    {
-    if( !it2->isEmpty() )
-      it1->append( " (" + *it2 + ")" );
-    }
-
-  //
-  // Return joined band-name list.
-  return qBandNames1;
-}
-
-/*******************************************************************************/
 void
 VectorImageModel
 ::LoadFile( const QString& filename , int w, int h)
@@ -207,7 +136,7 @@ VectorImageModel
 {
   // Remember meta-data interface.
   otb::ImageMetadataInterfaceBase::ConstPointer metaData(
-    GetMetadataInterface()
+    GetMetaDataInterface()
   );
 
   // Ensure default display returns valid band indices (see OTB bug).

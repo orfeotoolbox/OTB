@@ -101,11 +101,9 @@ public:
   /** */
   inline CountType GetNbComponents() const;
 
-  /** */
-  inline const HistogramModel* GetHistogramModel() const;
-
-  /** */
-  inline HistogramModel* GetHistogramModel();
+  /**
+   */
+  QStringList GetBandNames() const;
 
   /** 
    * Get the number of available LOD.
@@ -122,6 +120,12 @@ public:
    * Get the current LOD index.
    */
   inline CountType GetCurrentLod() const;
+
+  /** */
+  inline const HistogramModel* GetHistogramModel() const;
+
+  /** */
+  inline HistogramModel* GetHistogramModel();
 
   /**
    * Get a smart-pointer to the current LOD image-base.
@@ -151,7 +155,7 @@ protected:
   /** */
   inline
     otb::ImageMetadataInterfaceBase::ConstPointer
-    GetMetadataInterface() const;
+    GetMetaDataInterface() const;
 
   /** */
   virtual void virtual_SetCurrentLod( CountType lod ) =0;
@@ -276,7 +280,7 @@ AbstractImageModel
 inline
 otb::ImageMetadataInterfaceBase::ConstPointer
 AbstractImageModel
-::GetMetadataInterface() const
+::GetMetaDataInterface() const
 {
   return otb::ConstCast< const otb::ImageMetadataInterfaceBase >(
     otb::ImageMetadataInterfaceFactory::CreateIMI(
