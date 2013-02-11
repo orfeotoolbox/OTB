@@ -108,6 +108,19 @@ public:
     return m_IsotropicZoom;
   }
 
+  inline
+    bool HasZoomChanged() const
+  {
+    bool res = false;
+
+    if (vcl_abs(m_IsotropicZoom - m_PreviousIsotropicZoom) > 0.00000001 )
+      {
+      res = true;
+      }
+
+    return res;
+  }
+
   /*
   const MouseContextType&  GetMouseContextType() const
   {
@@ -120,6 +133,8 @@ public:
   {
     // set back the zoom to 1
     m_IsotropicZoom = 1.;
+
+    m_PreviousIsotropicZoom = 1.;
 
     // store the image largest region
     m_NavigationContext.m_ModelImageRegion = largestRegion;
@@ -217,6 +232,7 @@ private:
   MouseContextType       m_MouseContext;
 
   double                 m_IsotropicZoom;
+  double                 m_PreviousIsotropicZoom;
 
 //
 // SLOTS.

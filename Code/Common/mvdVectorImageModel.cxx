@@ -256,7 +256,7 @@ VectorImageModel
 /*******************************************************************************/
 unsigned char *
 VectorImageModel
-::RasterizeRegion( const ImageRegionType& region, const double zoomFactor)
+::RasterizeRegion( const ImageRegionType& region, const double zoomFactor, bool refresh)
 {
   m_Region = region;
 
@@ -271,7 +271,8 @@ VectorImageModel
 
   // Don't do anything if the region did not changed
   if ( m_PreviousRegion!=region ||
-       m_Settings.IsDirty() )
+       m_Settings.IsDirty() ||
+       refresh )
     {
     // check that the current and the previous region have some pixels in
     // common 
@@ -281,7 +282,8 @@ VectorImageModel
     // if the first time or no pixels in common , reload all
     if ( res &&
 	 m_PreviousRegion!=ImageRegionType() &&
-	 !m_Settings.IsDirty() )
+	 !m_Settings.IsDirty() &&
+         !refresh )
       {
       // Compute loaded region, and the four regions not loaded yet
       // within the new requested region
@@ -348,9 +350,10 @@ VectorImageModel
       // rasterize the region
       this->DumpImagePixelsWithinRegionIntoBuffer(region);
       }
-
-    m_Settings.ClearDirty();
     }
+
+  // settings changes have been taken into account, clean the dirty flag
+  m_Settings.ClearDirty();
 
   // Store the region
   m_PreviousRegion = region;

@@ -75,12 +75,14 @@ public:
                        unsigned int width = 0,
                        unsigned int height = 0,
                        int dx = 0,
-                       int dy = 0) :
+                       int dy = 0,
+                       bool refresh = true) :
        m_AbstractImageModel( model ),
        m_ImageRegion( region ),
        m_IsotropicZoom( zoom ),
        m_WidgetWidth(width),
-       m_WidgetHeight(height)
+       m_WidgetHeight(height),
+       m_ForceRefresh(refresh)
     {
     }
 
@@ -89,6 +91,7 @@ public:
     double       m_IsotropicZoom;
     unsigned int m_WidgetWidth;
     unsigned int m_WidgetHeight;
+    bool         m_ForceRefresh;
   };
 
 //

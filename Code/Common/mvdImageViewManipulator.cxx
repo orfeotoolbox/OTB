@@ -51,7 +51,8 @@ ImageViewManipulator
   QObject( parent ),
   m_NavigationContext(),
   m_MouseContext(),
-  m_IsotropicZoom(1)
+  m_IsotropicZoom(1),
+  m_PreviousIsotropicZoom(1.)
 {
   // TODO: Remove later because initialized in struct's default constructor and resizeEvent().
   this->InitializeContext(1,1);
@@ -95,6 +96,8 @@ void
 ImageViewManipulator
 ::mouseMoveEvent( QMouseEvent * event)
 {
+  m_PreviousIsotropicZoom = m_IsotropicZoom;
+
   // Update the mouse context
   m_MouseContext.dx = -event->x() + m_MouseContext.xMove;
   m_MouseContext.dy = -event->y() + m_MouseContext.yMove;
@@ -196,6 +199,8 @@ void
 ImageViewManipulator
 ::Zoom(const double scale)
 {
+  m_PreviousIsotropicZoom = m_IsotropicZoom;
+
   // compute the new size
   double sizeX = m_NavigationContext.m_SizeXBeforeConstrain / scale;
   double sizeY = m_NavigationContext.m_SizeYBeforeConstrain / scale;

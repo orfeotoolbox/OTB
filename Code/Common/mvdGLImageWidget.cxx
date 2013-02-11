@@ -220,7 +220,7 @@ GLImageWidget
   ImageModelRenderer::RenderingContext context(
     datasetModel->GetSelectedImageModel(),
     region, isotropicZoom, 
-    width(), height()
+    width(), height(), m_ImageViewManipulator->HasZoomChanged()
   );
 
     // use the model renderer to paint the requested region of the image.

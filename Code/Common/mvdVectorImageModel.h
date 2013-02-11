@@ -282,7 +282,9 @@ public:
   void LoadFile( const QString& filename, int w, int h );
 
   /** Rasterize the buffered region in a buffer */
-  unsigned char * RasterizeRegion(const ImageRegionType& region, const double zoomFactor);
+  unsigned char * RasterizeRegion(const ImageRegionType& region,
+                                  const double zoomFactor,
+                                  bool refresh);
 
   /**
    * Following the zoom factor, get the best level of detail knowing

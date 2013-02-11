@@ -101,7 +101,9 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
   if (!m_IsMoving)
     {
     // request the data for the current region
-    m_Buffer = viModel->RasterizeRegion(scaledRegion, context.m_IsotropicZoom);
+    m_Buffer = viModel->RasterizeRegion(scaledRegion, 
+                                        context.m_IsotropicZoom, 
+                                        context.m_ForceRefresh);
     }
 
   // current resolution
