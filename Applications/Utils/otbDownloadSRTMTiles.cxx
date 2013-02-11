@@ -160,7 +160,7 @@ private:
 
       std::vector<double>::iterator AbsLongit=absVecLong.begin();
 
-      for (std::vector<double>::const_iterator it=vecLong.begin();it!=vecLong.end();++it)
+      for (std::vector<double>::const_iterator it=vecLong.begin(); it!=vecLong.end(); ++it)
         {
         *AbsLongit = vcl_abs(*it);
         ++AbsLongit;
@@ -168,7 +168,7 @@ private:
 
       std::vector<double>::iterator AbsLatit=absVecLat.begin();
 
-      for (std::vector<double>::const_iterator it=vecLat.begin();it!=vecLat.end();++it)
+      for (std::vector<double>::const_iterator it=vecLat.begin(); it!=vecLat.end(); ++it)
         {
         *AbsLatit = vcl_abs(*it);
         ++AbsLatit;
@@ -217,9 +217,9 @@ private:
       std::vector<std::string> tiles;
 
       //Construct SRTM tile filename based on min/max lat/long
-      for (int i = floorMinLat; i <= floorMaxLat;++i)
+      for (int i = floorMinLat; i <= floorMaxLat; ++i)
         {
-        for (int j = floorMinLong; j <= floorMaxLong;++j)
+        for (int j = floorMinLong; j <= floorMaxLong; ++j)
           {
           std::ostringstream ossOutput;
           if (i < 0)
@@ -275,7 +275,7 @@ private:
       const std::string extensionSimulation = ".hgt";
 
       //iterate over all tiles to build URLs
-      for(std::vector<std::string>::const_iterator it= tiles.begin();it!=tiles.end();++it)
+      for(std::vector<std::string>::const_iterator it= tiles.begin(); it!=tiles.end(); ++it)
         {
         switch ( GetParameterInt("mode") )
           {
@@ -284,7 +284,7 @@ private:
           //Build URL
           bool findURL = false;
           std::string url;
-          for(std::vector<std::string>::const_iterator contIt= continent.begin();contIt!=continent.end();++contIt)
+          for(std::vector<std::string>::const_iterator contIt= continent.begin(); contIt!=continent.end(); ++contIt)
             {
             std::ostringstream urlStream;
             CurlHelper::Pointer curl = CurlHelper::New();
@@ -331,7 +331,7 @@ private:
       {
       std::ostringstream listStream;
       listStream << "Corresponding SRTM tiles: ";
-      for(std::vector<std::string>::const_iterator it= simulateTilesVector.begin();it!=simulateTilesVector.end();++it)
+      for(std::vector<std::string>::const_iterator it= simulateTilesVector.begin(); it!=simulateTilesVector.end(); ++it)
         {
         listStream << *it << " ";
         }
