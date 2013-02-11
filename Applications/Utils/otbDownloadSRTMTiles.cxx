@@ -190,24 +190,24 @@ private:
 
       if (vecLong.at(distMinLong) <= vecLong.at(distMaxLong))
         {
-          floorMinLong = std::floor(vecLong.at(distMinLong));
-          floorMaxLong = std::floor(vecLong.at(distMaxLong));
+        floorMinLong = std::floor(vecLong.at(distMinLong));
+        floorMaxLong = std::floor(vecLong.at(distMaxLong));
         }
       else
         {
-          floorMinLong = std::floor(vecLong.at(distMaxLong));
-          floorMaxLong = std::floor(vecLong.at(distMinLong));
+        floorMinLong = std::floor(vecLong.at(distMaxLong));
+        floorMaxLong = std::floor(vecLong.at(distMinLong));
         }
 
       if (vecLat.at(distMinLat) <= vecLat.at(distMaxLat))
         {
-          floorMinLat = std::floor(vecLat.at(distMinLat));
-          floorMaxLat = std::floor(vecLat.at(distMaxLat));
+        floorMinLat = std::floor(vecLat.at(distMinLat));
+        floorMaxLat = std::floor(vecLat.at(distMaxLat));
         }
       else
         {
-          floorMinLat = std::floor(vecLat.at(distMaxLat));
-          floorMaxLat = std::floor(vecLat.at(distMinLat));
+        floorMinLat = std::floor(vecLat.at(distMaxLat));
+        floorMaxLat = std::floor(vecLat.at(distMinLat));
         }
 
       std::vector<std::string> tiles;
@@ -273,40 +273,39 @@ private:
       //iterate over all tiles to build URLs
       for(std::vector<std::string>::const_iterator it= tiles.begin();it!=tiles.end();++it)
         {
-        //Build URL
-        bool findURL = false;
-        std::string url;
-        for(std::vector<std::string>::const_iterator contIt= continent.begin();contIt!=continent.end();++contIt)
-          {
-          std::ostringstream urlStream;
-          CurlHelper::Pointer curl = CurlHelper::New();
-          curl->SetTimeout(0);
-          urlStream << SRTMServerPath;
-          urlStream << *contIt;
-          urlStream << "/";
-          urlStream << *it;
-          urlStream << extension;
-
-          url = urlStream.str();
-
-          if (!curl->IsCurlReturnHttpError( urlStream.str()))
-            {
-            findURL = true;
-            break;
-            }
-          }
-
-        if (!findURL)
-          {
-          itkExceptionMacro(<< url  <<" not found!");
-          }
-
-        otbAppLogINFO(<< "Found Tile on USGS server at URL: " << url);
-
         switch ( GetParameterInt("mode") )
           {
           case Mode_Download:
           {
+          //Build URL
+          bool findURL = false;
+          std::string url;
+          for(std::vector<std::string>::const_iterator contIt= continent.begin();contIt!=continent.end();++contIt)
+            {
+            std::ostringstream urlStream;
+            CurlHelper::Pointer curl = CurlHelper::New();
+            curl->SetTimeout(0);
+            urlStream << SRTMServerPath;
+            urlStream << *contIt;
+            urlStream << "/";
+            urlStream << *it;
+            urlStream << extension;
+
+            url = urlStream.str();
+
+            if (!curl->IsCurlReturnHttpError( urlStream.str()))
+              {
+              findURL = true;
+              break;
+              }
+            }
+
+          if (!findURL)
+            {
+            itkExceptionMacro(<< url  <<" not found!");
+            }
+
+          otbAppLogINFO(<< "Found Tile on USGS server at URL: " << url);
           // TODO use the RetrieveUrlInMemory? In this case need to adapt the timeout
           CurlHelper::Pointer curlReq = CurlHelper::New();
           curlReq->SetTimeout(0);
