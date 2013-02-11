@@ -113,7 +113,6 @@ private:
       FloatVectorImageType::Pointer inImage = inList->GetNthElement(i);
       inImage->UpdateOutputInformation();
 
-
       RSTransformType::Pointer rsTransformToWGS84 = RSTransformType::New();
       rsTransformToWGS84->SetInputKeywordList(inImage->GetImageKeywordlist());
       rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
@@ -159,20 +158,20 @@ private:
       std::vector<double> absVecLat;
       absVecLat.resize(vecLat.size());                         // allocate space
 
-      unsigned int counter = 0;
+      std::vector<double>::iterator AbsLongit=absVecLong.begin();
 
-      for (std::vector<double>::iterator it=vecLong.begin(); it!=vecLong.end(); ++it)
+      for (std::vector<double>::const_iterator it=vecLong.begin() ; it!=vecLong.end(); ++it)
         {
-        absVecLong[counter] = vcl_abs(*it);
-        ++counter;
+        *AbsLongit = vcl_abs(*it);
+        ++AbsLongit;
         }
 
-      counter = 0;
+      std::vector<double>::iterator AbsLatit=absVecLat.begin();
 
-      for (std::vector<double>::iterator it=vecLat.begin(); it!=vecLat.end(); ++it)
+      for (std::vector<double>::const_iterator it=vecLat.begin() ; it!=vecLat.end(); ++it)
         {
-        absVecLat[counter] = vcl_abs(*it);
-        ++counter;
+        *AbsLatit = vcl_abs(*it);
+        ++AbsLatit;
         }
 
       const unsigned int distMinLong = std::distance(absVecLong.begin(), min_element (absVecLong.begin(),absVecLong.end())) ;
@@ -184,101 +183,39 @@ private:
       //find corresponding tiled  for initialization
       //FIXME recode this properly
 
-      int ceilMinLong ;
-      int ceilMaxLong ;
-      int ceilMinLat ;
-      int ceilMaxLat ;
+      int floorMinLong = 0;
+      int floorMaxLong = 0;
+      int floorMinLat = 0;
+      int floorMaxLat = 0;
 
       if (vecLong.at(distMinLong) <= vecLong.at(distMaxLong))
         {
-        if (vecLong.at(distMinLong) < 0)
-          {
-          ceilMinLong = std::ceil(vecLong.at(distMinLong));
-          }
-        else
-          {
-          ceilMinLong = std::floor(vecLong.at(distMinLong));
-          }
-
-        if (vecLong.at(distMaxLong) < 0)
-          {
-          ceilMaxLong = std::ceil(vecLong.at(distMaxLong));
-          }
-        else
-          {
-          ceilMaxLong = std::floor(vecLong.at(distMaxLong));
-          }
+          floorMinLong = std::floor(vecLong.at(distMinLong));
+          floorMaxLong = std::floor(vecLong.at(distMaxLong));
         }
       else
         {
-
-        if (vecLong.at(distMaxLong) < 0)
-          {
-          ceilMinLong = std::ceil(vecLong.at(distMaxLong));
-          }
-        else
-          {
-          ceilMinLong = std::floor(vecLong.at(distMaxLong));
-          }
-
-        if (vecLong.at(distMinLong) < 0)
-          {
-          ceilMaxLong = std::ceil(vecLong.at(distMinLong));
-          }
-        else
-          {
-          ceilMaxLong = std::floor(vecLong.at(distMinLong));
-          }
+          floorMinLong = std::floor(vecLong.at(distMaxLong));
+          floorMaxLong = std::floor(vecLong.at(distMinLong));
         }
 
       if (vecLat.at(distMinLat) <= vecLat.at(distMaxLat))
         {
-        if (vecLat.at(distMinLat) < 0)
-          {
-          ceilMinLat = std::ceil(vecLat.at(distMinLat));
-          }
-        else
-          {
-          ceilMinLat = std::floor(vecLat.at(distMinLat));
-          }
-
-        if (vecLat.at(distMaxLat) < 0)
-          {
-          ceilMaxLat = std::ceil(vecLat.at(distMaxLat));
-          }
-        else
-          {
-          ceilMaxLat = std::floor(vecLat.at(distMaxLat));
-          }
+          floorMinLat = std::floor(vecLat.at(distMinLat));
+          floorMaxLat = std::floor(vecLat.at(distMaxLat));
         }
       else
         {
-
-        if (vecLat.at(distMaxLat) < 0)
-          {
-          ceilMinLat = std::ceil(vecLat.at(distMaxLat));
-          }
-        else
-          {
-          ceilMinLat = std::floor(vecLat.at(distMaxLat));
-          }
-
-        if (vecLat.at(distMinLat) < 0)
-          {
-          ceilMaxLat = std::ceil(vecLat.at(distMinLat));
-          }
-        else
-          {
-          ceilMaxLat = std::floor(vecLat.at(distMinLat));
-          }
+          floorMinLat = std::floor(vecLat.at(distMaxLat));
+          floorMaxLat = std::floor(vecLat.at(distMinLat));
         }
 
       std::vector<std::string> tiles;
 
       //Construct SRTM tile filename based on min/max lat/long
-      for (int i = ceilMinLat; i <= ceilMaxLat;++i)
+      for (int i = floorMinLat; i <= floorMaxLat;++i)
         {
-        for (int j = ceilMinLong; j <= ceilMaxLong;++j)
+        for (int j = floorMinLong; j <= floorMaxLong;++j)
           {
           std::ostringstream ossOutput;
           if (i < 0)
@@ -312,7 +249,9 @@ private:
             {
             ossOutput << "00";
             }
+
           ossOutput << vcl_abs(j);
+
           tiles.push_back(ossOutput.str());
           }
         }
@@ -335,7 +274,6 @@ private:
       for(std::vector<std::string>::const_iterator it= tiles.begin();it!=tiles.end();++it)
         {
         //Build URL
-        ;
         bool findURL = false;
         std::string url;
         for(std::vector<std::string>::const_iterator contIt= continent.begin();contIt!=continent.end();++contIt)
@@ -369,11 +307,11 @@ private:
           {
           case Mode_Download:
           {
-          // TODO use the RetrieveUrlInMemory
+          // TODO use the RetrieveUrlInMemory? In this case need to adapt the timeout
           CurlHelper::Pointer curlReq = CurlHelper::New();
           curlReq->SetTimeout(0);
           curlReq->RetrieveFile(url, GetParameterString("mode.download.outdir") + "/" + *it + extension);
-          //TODO unzip
+          //TODO unzip here (can do this in memory?)
           }
           break;
           case Mode_Simulate:
