@@ -392,6 +392,7 @@ HistogramModel
   typename MinMaxFilter::Pointer filterMinMax( MinMaxFilter::New() );
 
   filterMinMax->SetInput( imageModel->ToImage() );
+  filterMinMax->GetFilter()->SetNoDataFlag(true);
 
   filterMinMax->Update();
 
@@ -432,6 +433,7 @@ HistogramModel
   histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
   histogramFilter->GetFilter()->SetNumberOfBins( BINS_OVERSAMPLING_RATE * 256 );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
+  histogramFilter->GetFilter()->SetNoDataFlag(true);
 
   // Go.
   histogramFilter->Update();
