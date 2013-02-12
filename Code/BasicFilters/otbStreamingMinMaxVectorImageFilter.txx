@@ -34,6 +34,8 @@ namespace otb
 template<class TInputImage>
 PersistentMinMaxVectorImageFilter<TInputImage>
 ::PersistentMinMaxVectorImageFilter()
+  : m_NoDataFlag(false),
+    m_NoDataValue(itk::NumericTraits<InternalPixelType>::Zero)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
@@ -224,13 +226,17 @@ PersistentMinMaxVectorImageFilter<TInputImage>
     for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
       {
       InternalPixelType value = vectorValue[j];
-      if (value < m_ThreadMin[threadId][j])
+
+      if( (!m_NoDataFlag) || value!=m_NoDataValue )
         {
-        m_ThreadMin[threadId][j] = value;
-        }
-      if (value > m_ThreadMax[threadId][j])
-        {
-        m_ThreadMax[threadId][j] = value;
+        if (value < m_ThreadMin[threadId][j])
+          {
+          m_ThreadMin[threadId][j] = value;
+          }
+        if (value > m_ThreadMax[threadId][j])
+          {
+          m_ThreadMax[threadId][j] = value;
+          }
         }
       }
     ++it;

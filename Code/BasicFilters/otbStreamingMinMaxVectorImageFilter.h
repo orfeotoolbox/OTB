@@ -97,6 +97,32 @@ public:
   typedef itk::SimpleDataObjectDecorator<PixelType>     PixelObjectType;
   typedef itk::SimpleDataObjectDecorator<MatrixType>    MatrixObjectType;
 
+  /** Set the no data value. These value are ignored in histogram
+   *  computation if NoDataFlag is On
+   */
+  itkSetMacro(NoDataValue, InternalPixelType);
+
+  /** Set the no data value. These value are ignored in histogram
+   *  computation if NoDataFlag is On
+   */
+  itkGetConstReferenceMacro(NoDataValue, InternalPixelType);
+
+  /** Set the NoDataFlag. If set to true, samples with values equal to
+   *  m_NoDataValue are ignored.
+   */
+  itkSetMacro(NoDataFlag, bool);
+ 
+  /** Get the NoDataFlag. If set to true, samples with values equal to
+   *  m_NoDataValue are ignored.
+   */
+  itkGetMacro(NoDataFlag, bool);
+
+  /** Toggle the NoDataFlag. If set to true, samples with values equal to
+   *  m_NoDataValue are ignored.
+   */
+  itkBooleanMacro(NoDataFlag);
+
+
   /** Return the computed Minimum. */
   PixelType GetMinimum() const
   {
@@ -139,6 +165,9 @@ private:
 
   ArrayPixelType     m_ThreadMin;
   ArrayPixelType     m_ThreadMax;
+  bool               m_NoDataFlag;
+  InternalPixelType  m_NoDataValue;
+
 }; // end of class PersistentStatisticsVectorImageFilter
 
 /**===========================================================================*/
