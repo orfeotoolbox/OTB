@@ -106,7 +106,7 @@ private:
 
     inList->GetNthElement(0)->UpdateOutputInformation();
 
-    std::vector<std::string> simulateTilesVector;
+    std::set<std::string> simulateTilesVector;
 
     for( unsigned int i=0; i<inList->Size(); i++ )
       {
@@ -214,7 +214,7 @@ private:
         floorMaxLat = std::floor(vecLat.at(distMinLat));
         }
 
-      std::vector<std::string> tiles;
+      std::set<std::string> tiles;
 
       //Construct SRTM tile filename based on min/max lat/long
       for (int i = floorMinLat; i <= floorMaxLat; ++i)
@@ -256,7 +256,7 @@ private:
 
           ossOutput << vcl_abs(j);
 
-          tiles.push_back(ossOutput.str());
+          tiles.insert(ossOutput.str());
           }
         }
 
@@ -275,7 +275,7 @@ private:
       const std::string extensionSimulation = ".hgt";
 
       //iterate over all tiles to build URLs
-      for(std::vector<std::string>::const_iterator it= tiles.begin(); it!=tiles.end(); ++it)
+      for(std::set<std::string>::const_iterator it= tiles.begin();it!=tiles.end();++it)
         {
         switch ( GetParameterInt("mode") )
           {
@@ -302,6 +302,50 @@ private:
               findURL = true;
               break;
               }
+            else
+            {
+            //try down casing the url
+            std::string lowerIt = *it;
+            std::transform(it->begin(), it->end(), lowerIt.begin(), ::tolower);
+
+            urlStream.clear();
+            urlStream << SRTMServerPath;
+            urlStream << *contIt;
+            urlStream << "/";
+            urlStream << lowerIt;
+            urlStream << extension;
+            if (!curl->IsCurlReturnHttpError( urlStream.str()))
+              {
+              tiles.erase(*it);
+              tiles.insert(lowerIt);
+              //urls.insert(urlStream.str());
+              findURL = true;
+              break;
+              }
+            else
+              {
+              //upcase all
+              std::string upperIt = *it;
+              std::transform(it->begin(), it->end(), upperIt.begin(), ::toupper);
+
+              urlStream.clear();
+              urlStream << SRTMServerPath;
+              urlStream << *contIt;
+              urlStream << "/";
+              urlStream << upperIt;
+              urlStream << extension;
+
+              if (!curl->IsCurlReturnHttpError( urlStream.str()))
+                {
+                tiles.erase(*it);
+                tiles.insert(upperIt);
+                //urls.insert(urlStream.str());
+                findURL = true;
+                break;
+                }
+              }
+            }
+
             }
 
           if (!findURL)
@@ -319,7 +363,7 @@ private:
           break;
           case Mode_Simulate:
           {
-          simulateTilesVector.push_back(*it + extensionSimulation);
+          simulateTilesVector.insert(*it + extensionSimulation);
           }
           break;
           }
@@ -331,7 +375,7 @@ private:
       {
       std::ostringstream listStream;
       listStream << "Corresponding SRTM tiles: ";
-      for(std::vector<std::string>::const_iterator it= simulateTilesVector.begin(); it!=simulateTilesVector.end(); ++it)
+      for(std::set<std::string>::const_iterator it= simulateTilesVector.begin();it!=simulateTilesVector.end();++it)
         {
         listStream << *it << " ";
         }
