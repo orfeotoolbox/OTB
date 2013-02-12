@@ -275,7 +275,7 @@ private:
       const std::string extensionSimulation = ".hgt";
 
       //iterate over all tiles to build URLs
-      for(std::set<std::string>::const_iterator it= tiles.begin();it!=tiles.end();++it)
+      for(std::set<std::string>::const_iterator it= tiles.begin(); it!=tiles.end(); ++it)
         {
         switch ( GetParameterInt("mode") )
           {
@@ -375,7 +375,7 @@ private:
       {
       std::ostringstream listStream;
       listStream << "Corresponding SRTM tiles: ";
-      for(std::set<std::string>::const_iterator it= simulateTilesVector.begin();it!=simulateTilesVector.end();++it)
+      for(std::set<std::string>::const_iterator it= simulateTilesVector.begin(); it!=simulateTilesVector.end(); ++it)
         {
         listStream << *it << " ";
         }
