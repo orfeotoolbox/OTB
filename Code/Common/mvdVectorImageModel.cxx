@@ -203,6 +203,11 @@ void
 VectorImageModel
 ::InitializeRgbaPipeline()
 {
+  m_ExtractFilter = ExtractFilterType::New();
+  m_ExtractFilter->SetInput( m_Image );
+
+  m_RenderingFilter = RenderingFilterType::New();
+  m_RenderingFilter->SetInput( m_ExtractFilter->GetOutput() );
 }
 
 /*******************************************************************************/
@@ -341,13 +346,9 @@ VectorImageModel
     }
   
   // Extract the region of interest in the m_Image
-  m_ExtractFilter = ExtractFilterType::New();
-  m_ExtractFilter->SetInput(m_Image);
   m_ExtractFilter->SetExtractionRegion(region);
 
   // Use the rendering filter to get 
-  m_RenderingFilter = RenderingFilterType::New();
-  m_RenderingFilter->SetInput(m_ExtractFilter->GetOutput());
   m_RenderingFilter->GetRenderingFunction()->SetAutoMinMax(false);
 
 // ----------------------------------
@@ -367,10 +368,13 @@ VectorImageModel
   // Local variable because RenderingFunction::SetChannels() gets a
   // non-const std::vector< unsigned int >& as argument instead of a
   // const one.
+  /*
+    // Done in VectorImageModel::OnModelUpdated() slot.
   Settings::ChannelVector rgb( m_Settings.GetRgbChannels() );
   m_RenderingFilter->GetRenderingFunction()->SetChannelList(
     rgb
   );
+  */
   m_RenderingFilter->GetOutput()->SetRequestedRegion(region);
   m_RenderingFilter->Update();
 

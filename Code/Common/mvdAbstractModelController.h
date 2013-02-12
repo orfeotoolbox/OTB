@@ -148,6 +148,9 @@ protected:
   virtual void Connect( AbstractModel* ) =0;
 
   /** */
+  virtual void ResetWidget() =0;
+
+  /** */
   virtual void Disconnect( AbstractModel* ) =0;
 
 //

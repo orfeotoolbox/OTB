@@ -95,12 +95,16 @@ AbstractModelController
   // Connect new model and signal listeners.
   private_Connect( model );
 
-  // Enable GUI widget when there is a model.
-  if( model!=NULL )
-    GetWidget()->setEnabled( true );
-
   // Remember newly connected model.
   m_Model = model;
+
+  // Enable GUI widget when there is a model.
+  if( m_Model!=NULL )
+    {
+    ResetWidget();
+
+    GetWidget()->setEnabled( true );
+    }
 }
 
 /*****************************************************************************/

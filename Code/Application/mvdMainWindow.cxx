@@ -335,18 +335,6 @@ MainWindow
   assert( vectorImageModel!=NULL );
 
   //
-  // MAIN VIEW.
-
-  // Connect newly selected model to view.
-  QObject::connect(
-    vectorImageModel,
-    SIGNAL( SettingsUpdated() ),
-    // to:
-    centralWidget(),
-    SLOT( updateGL()  )
-  );
-
-  //
   // COLOR SETUP.
 
   ColorSetupWidget* colorSetupWidget =
@@ -386,6 +374,20 @@ MainWindow
   assert( colorDynCtrl!=NULL );
 
   colorDynCtrl->SetModel( vectorImageModel );
+
+  //
+  // MAIN VIEW.
+
+  // Connect newly selected model to view (after all other widgets are
+  // connected to prevent signals/slots to produce multiple view
+  // refreshes).
+  QObject::connect(
+    vectorImageModel,
+    SIGNAL( SettingsUpdated() ),
+    // to:
+    centralWidget(),
+    SLOT( updateGL()  )
+  );
 
   //
   // REFRESH DISPLAY.

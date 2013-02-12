@@ -108,6 +108,9 @@ protected:
   virtual void Connect( AbstractModel* );
 
   /** */
+  virtual void ResetWidget();
+
+  /** */
   virtual void Disconnect( AbstractModel* );
 
 //
@@ -126,7 +129,10 @@ private:
 private:
 
   /** */
-  void ResetIntensityRange( AbstractModel* );
+  void ResetIntensityRanges();
+
+  /** */
+  void ResetQuantiles();
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
