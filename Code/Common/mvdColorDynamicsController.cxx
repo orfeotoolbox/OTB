@@ -415,7 +415,7 @@ ColorDynamicsController
   {
   // Refresh quantile display.
   colorBandDynWgt->SetLowQuantile(
-    imageModel->GetHistogramModel()->Percentile(
+    100.0 * imageModel->GetHistogramModel()->Percentile(
       imageModel->GetSettings().RgbChannel( channel ),
       value,
       BOUND_LOWER )
@@ -453,7 +453,7 @@ ColorDynamicsController
   {
   // Refresh quantile display.
   colorBandDynWgt->SetHighQuantile(
-    imageModel->GetHistogramModel()->Percentile(
+    100.0 * imageModel->GetHistogramModel()->Percentile(
       imageModel->GetSettings().RgbChannel( channel ),
       value,
       BOUND_LOWER )
