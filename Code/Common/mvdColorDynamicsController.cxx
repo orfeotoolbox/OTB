@@ -140,8 +140,8 @@ ColorDynamicsController
 {
   //
   // Setup color-dynamics controller.
-  ResetIntensityRanges();
-  ResetQuantiles();
+  ResetIntensityRanges( RGBA_CHANNEL_RGB );
+  ResetQuantiles( RGBA_CHANNEL_RGB );
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -215,8 +215,16 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::ResetIntensityRanges()
+::ResetIntensityRanges( RgbaChannel channels )
 {
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = -1;
+  CountType end = -1;
+
+  if( !ColorDynamicsController::RgbBounds( begin, end, channels ) )
+    return;
+
   //
   // Access color-dynamics widget.
   ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
@@ -239,7 +247,7 @@ ColorDynamicsController
   const VectorImageModel::Settings& settings = imageModel->GetSettings();
 
   // Assign values to controlled widget.
-  for( CountType i=0; i<RGBA_CHANNEL_ALPHA; ++i )
+  for( CountType i=begin; i<end; ++i )
     {
     RgbaChannel channel = static_cast< RgbaChannel >( i );
 
@@ -262,14 +270,93 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::ResetQuantiles()
+::ResetIntensities( RgbaChannel channels )
 {
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = -1;
+  CountType end = -1;
+
+  if( !ColorDynamicsController::RgbBounds( begin, end, channels ) )
+    return;
+
+  //
+  // Access color-dynamics widget.
+  ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
+
+  //
+  // Access image-model.
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  //
+  // Access histogram from generic image-model.
+  const HistogramModel* histogramModel = imageModel->GetHistogramModel();
+  assert( histogramModel!=NULL );
+
+  // Get min/max pixels.
+  DefaultImageType::PixelType minPx( histogramModel->GetMinPixel() );
+  DefaultImageType::PixelType maxPx( histogramModel->GetMaxPixel() );
+
+  // Get image rengering settings.
+  const VectorImageModel::Settings& settings = imageModel->GetSettings();
+
+  // Assign values to controlled widget.
+  for( CountType i=begin; i<end; ++i )
+    {
+    RgbaChannel channel = static_cast< RgbaChannel >( i );
+
+    ColorBandDynamicsWidget* colorBandDynWgt =
+      colorDynamicsWidget->GetChannel( channel );
+
+    DefaultImageType::PixelType::ValueType min(
+      minPx[ settings.RgbChannel( channel ) ]
+    );
+
+    DefaultImageType::PixelType::ValueType max(
+      maxPx[ settings.RgbChannel( channel ) ]
+    );
+
+    // Block this controller's signals to prevent display refreshes
+    // but let let widget(s) signal their changes so linked values
+    // will be correctly updated.
+    this->blockSignals( true );
+    {
+    // Block widget's signals...
+    //...but force call to valueChanged() slot to force refresh.
+    colorBandDynWgt->blockSignals( true );
+    {
+    // Set low & high intensities.
+    colorBandDynWgt->SetLowIntensity( min );
+    OnLowIntensityChanged( channel, min );
+
+    colorBandDynWgt->SetHighIntensity( max );
+    OnHighIntensityChanged( channel, max );
+    }
+    }
+    this->blockSignals( false );
+    }
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsController
+::ResetQuantiles( RgbaChannel channels )
+{
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = 0;
+  CountType end = 0;
+
+  if( !ColorDynamicsController::RgbBounds( begin, end, channels ) )
+    return;
+
   //
   // Access color-dynamics widget.
   ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
 
   // Assign values to controlled widget.
-  for( CountType i=0; i<RGBA_CHANNEL_ALPHA; ++i )
+  for( CountType i=begin; i<end; ++i )
     {
     RgbaChannel channel = static_cast< RgbaChannel >( i );
 
@@ -471,62 +558,8 @@ ColorDynamicsController
 ::OnResetIntensityClicked( RgbaChannel channel )
 {
   qDebug() << QString( "OnResetIntensityClicked(%1)" ).arg( RGBA_CHANNEL_NAMES[ channel ] );
-  //
-  // Access color-dynamics widget.
-  ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
 
-  //
-  // Access image-model.
-  VectorImageModel* imageModel = GetModel< VectorImageModel >();
-  assert( imageModel!=NULL );
-
-  //
-  // Access histogram from generic image-model.
-  const HistogramModel* histogramModel = imageModel->GetHistogramModel();
-  assert( histogramModel!=NULL );
-
-  // Get min/max pixels.
-  DefaultImageType::PixelType minPx( histogramModel->GetMinPixel() );
-  DefaultImageType::PixelType maxPx( histogramModel->GetMaxPixel() );
-
-  // Get image rengering settings.
-  const VectorImageModel::Settings& settings = imageModel->GetSettings();
-
-  // Assign values to controlled widget.
-  for( CountType i=0; i<RGBA_CHANNEL_ALPHA; ++i )
-    {
-    RgbaChannel channel = static_cast< RgbaChannel >( i );
-
-    ColorBandDynamicsWidget* colorBandDynWgt =
-      colorDynamicsWidget->GetChannel( channel );
-
-    DefaultImageType::PixelType::ValueType min(
-      minPx[ settings.RgbChannel( channel ) ]
-    );
-
-    DefaultImageType::PixelType::ValueType max(
-      maxPx[ settings.RgbChannel( channel ) ]
-    );
-
-    // Block this controller's signals to prevent display refreshes
-    // but let let widget(s) signal their changes so linked values
-    // will be correctly updated.
-    this->blockSignals( true );
-    {
-    // Block widget's signals...
-    //...but force call to valueChanged() slot to force refresh.
-    colorBandDynWgt->blockSignals( true );
-    {
-    // Set low & high intensities.
-    colorBandDynWgt->SetLowIntensity( min );
-    OnLowIntensityChanged( channel, min );
-
-    colorBandDynWgt->SetHighIntensity( max );
-    OnHighIntensityChanged( channel, max );
-    }
-    }
-    this->blockSignals( false );
-    }
+  ResetIntensities( channel );
 
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();
@@ -539,7 +572,7 @@ ColorDynamicsController
 {
   qDebug() << QString( "OnResetQuantileChanged(%1)" ).arg( RGBA_CHANNEL_NAMES[ channel ] );
 
-  ResetQuantiles();
+  ResetQuantiles( channel );
 
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();
