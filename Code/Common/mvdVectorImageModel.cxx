@@ -346,6 +346,7 @@ VectorImageModel
     }
   
   // Extract the region of interest in the m_Image
+  m_ExtractFilter->SetInput( m_Image );
   m_ExtractFilter->SetExtractionRegion(region);
 
   // Use the rendering filter to get 
