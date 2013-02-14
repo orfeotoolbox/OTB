@@ -319,7 +319,131 @@ void
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
 ::ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId)
 {
-  // TODO
+  TOutputImage * outputPtr = this->GetOutput();
+  TResidueImage * residuePtr = this->GetResidueOutput();
+  
+  itk::ImageRegionIteratorWithIndex<OutputImageType>   outIt(outputPtr,outputRegionForThread);
+  itk::ImageRegionIterator<ResidueImageType>  resIt(residuePtr,outputRegionForThread);
+  
+  typename OptimizerType::Pointer optimizer = OptimizerType::New();
+  
+  DispMapIteratorList hDispIts;
+  DispMapIteratorList vDispIts;
+  MaskIteratorList maskIts;
+  
+  for (unsigned int k=0 ; k<this->m_MovingKeywordLists.size() ; ++k)
+    {
+    // Iterators over horizontal disparity maps
+    hDispIts[k] = itk::ImageRegionConstIterator<DisparityMapType>(this->GetHorizontalDisparityMapInput(k),outputRegionForThread);
+    hDispIts[k].GoToBegin();
+    // Iterators over vertical disparity maps
+    if (this->GetVerticalDisparityMapInput(k))
+      {
+      vDispIts[k] = itk::ImageRegionConstIterator<DisparityMapType>(this->GetVerticalDisparityMapInput(k),outputRegionForThread);
+      vDispIts[k].GoToBegin();
+      }
+    // Iterators over disparity masks
+    if (this->GetDisparityMaskInput(k))
+      {
+      maskIts[k] = itk::ImageRegionConstIterator<MaskImageType>(this->GetDisparityMaskInput(k),outputRegionForThread);
+      maskIts[k].GoToBegin();
+      }
+    }
+  
+  outIt.GoToBegin();
+  resIt.GoToBegin();
+  
+  PrecisionType altiMin = 0;
+  PrecisionType altiMax = 500;
+  
+  typename OutputImageType::PointType pointRef;
+  TDPointType currentPoint;
+
+  typename PointSetType::Pointer pointSetA = PointSetType::New();
+  typename PointSetType::Pointer pointSetB = PointSetType::New();
+  
+  while (!outIt.IsAtEnd())
+    {
+    pointSetA->Initialize();
+    pointSetB->Initialize();
+    
+    // Compute reference line of sight
+    TDPointType pointA, pointB;
+    
+    outputPtr->TransformIndexToPhysicalPoint(outIt.GetIndex(), pointRef);
+    
+    currentPoint[0] = pointRef[0];
+    currentPoint[1] = pointRef[1];
+    currentPoint[2] = altiMax;
+    pointA = this->m_ReferenceToGroundTransform->TransformPoint(currentPoint);
+    
+    currentPoint[2] = altiMin;
+    pointB = this->m_ReferenceToGroundTransform->TransformPoint(currentPoint);
+    
+    pointSetA->SetPoint(0, pointA);
+    pointSetB->SetPoint(0, pointB);
+    pointSetA->SetPointData(0,0);
+    pointSetB->SetPointData(0,0);
+    
+    for (unsigned int k=0 ; k<this->m_MovingKeywordLists.size() ; ++k)
+      {
+      // Compute the N moving lines of sight
+      TDPointType pointAi, pointBi;
+    
+      if (maskIts.count(k) && !(maskIts[k].Get() > 0))
+        {
+        continue;
+        }
+      
+      currentPoint[0] = pointRef[0] + hDispIts[k].Get();
+      currentPoint[1] = pointRef[1];
+      if (vDispIts.count(k))
+        {
+        currentPoint[1] += vDispIts[k].Get();
+        }
+      
+      currentPoint[2] = altiMax;
+      pointAi = this->m_MovingToGroundTransform[k]->TransformPoint(currentPoint);
+      
+      currentPoint[2] = altiMin;
+      pointBi = this->m_MovingToGroundTransform[k]->TransformPoint(currentPoint);
+      
+      pointSetA->SetPoint(k+1, pointAi);
+      pointSetB->SetPoint(k+1, pointBi);
+      pointSetA->SetPointData(k+1,k+1);
+      pointSetB->SetPointData(k+1,k+1);
+      }
+    
+    // Check if there is at least 2 lines of sight, then compute intersection
+    if (pointSetA->GetNumberOfPoints() >= 2)
+      {
+      TDPointType intersection = optimizer->Compute(pointSetA,pointSetB);
+      typename OutputImageType::PixelType outPixel(3);
+      outPixel[0] = intersection[0];
+      outPixel[1] = intersection[1];
+      outPixel[2] = intersection[2];
+      outIt.Set(outPixel);
+      
+      resIt.Set(optimizer->GetGlobalResidue());
+      } 
+    
+    // Increment all iterators
+    for (typename DispMapIteratorList::iterator hIt = hDispIts.begin() ; hIt != hDispIts.end() ; ++hIt)
+      {
+      ++hIt->second;
+      }
+    for (typename DispMapIteratorList::iterator vIt = vDispIts.begin() ; vIt != vDispIts.end() ; ++vIt)
+      {
+      ++vIt->second;
+      }
+    for (typename MaskIteratorList::iterator mIt = maskIts.begin() ; mIt != maskIts.end() ; ++mIt)
+      {
+      ++mIt->second;
+      }
+    
+    ++outIt;
+    ++resIt;
+    }
    
 }
 
