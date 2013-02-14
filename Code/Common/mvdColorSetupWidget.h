@@ -66,7 +66,8 @@ class Monteverdi2_EXPORT ColorSetupWidget :
   Q_OBJECT;
 
   /**
-   * The (user) component-name list.
+   * \brief The list of (user) component names.
+   * \sa ColorSetupWidget::m_Components member.
    */
   Q_PROPERTY( QStringList components
 	      READ GetComponents
@@ -80,14 +81,14 @@ public:
 // Public methods.
 public:
 
-  /** Constructor */
+  /** \brief Constructor. */
   ColorSetupWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~ColorSetupWidget();
 
   /**
-   * Set the component-name list.
+   * \brief Set the component-name list.
    *
    * This sets up the content of the red, green and blue combo
    * boxes. Each component name is prepended with its index
@@ -107,7 +108,7 @@ public:
   void SetComponents( const QStringList& component );
 
   /**
-   * Get the component-name list.
+   * \brief Get the component-name list.
    *
    * Example: The user { "Red", "Green", "Blue", "" } list as it were
    * set and not the displayed { "0: Red", "1: Green", "2: Blue",
@@ -123,7 +124,7 @@ public:
   }
 
   /**
-   * Set the current (selected) index of a video channel.
+   * \brief Set the current (selected) index of a video channel.
    *
    * Calling SetCurrentIndex() let the CurrentIndexChanged()
    * signal to be emitted.
@@ -148,8 +149,8 @@ public:
 // SIGNALS.
 signals:
   /**
-   * Signal emitted when the current-index of a video-channel has been
-   * modified.
+   * \brief Signal emitted when the current-index of a video-channel
+   * has been modified.
    *
    * \param channel The video-channel which has been modified.
    * \param index The curren-index in the component-list.
@@ -172,12 +173,13 @@ private:
 // Private attributes.
 private:
   /**
-   * uic generated.
+   * \brief uic generated.
    */
   Ui::ColorSetupWidget* m_UI;
 
   /** 
-   * The (user) component-name list.
+   * \brief The list of (user) component names.
+   * \sa ColorSetupWidget::component Q_PROPERTY.
    */
   QStringList m_Components;
 
@@ -185,8 +187,10 @@ private:
 // SLOTS.
 private slots:
   /**
-   * Slot called when the curernt-index of the red video-channel has
-   * been modified.
+   * \brief Slot called when the curernt-index of the red
+   * video-channel has been modified.
+   *
+   * \param index The new current-index of the red combo-box.
    */
   inline
     void
@@ -196,8 +200,10 @@ private slots:
   }
 
   /**
-   * Slot called when the curernt-index of the green video-channel has
-   * been modified.
+   * \brief Slot called when the curernt-index of the green
+   * video-channel has been modified.
+   *
+   * \param index The new current-index of the green combo-box.
    */
   inline
     void
@@ -207,8 +213,10 @@ private slots:
   }
 
   /**
-   * Slot called when the curernt-index of the blue video-channel has
-   * been modified.
+   * \brief Slot called when the curernt-index of the blue
+   * video-channel has been modified.
+   *
+   * \param index The new current-index of the blue combo-box.
    */
   inline
     void

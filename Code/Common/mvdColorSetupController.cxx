@@ -98,25 +98,8 @@ void
 ColorSetupController
 ::ResetWidget()
 {
-  //
-  // Access color-dynamics widget.
-  ColorSetupWidget* colorSetupWidget = GetWidget< ColorSetupWidget >();
-
-  //
-  // Access image-model.
-  VectorImageModel* imageModel = GetModel< VectorImageModel >();
-  assert( imageModel!=NULL );
-
-  // Setup color-setup controller.
-  colorSetupWidget->SetComponents( imageModel->GetBandNames() );
-
-  for( int i=0; i<RGBA_CHANNEL_ALPHA; ++i )
-    {
-    colorSetupWidget->SetCurrentIndex(
-      static_cast< RgbaChannel >( i ),
-      imageModel->GetSettings().RgbChannel( i )
-    );
-    }
+  // Reset color-setup widget.
+  ResetIndices( RGBA_CHANNEL_RGB );
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -149,6 +132,38 @@ ColorSetupController
 }
 
 /*******************************************************************************/
+void
+ColorSetupController
+::ResetIndices( RgbaChannel channels )
+{
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = 0;
+  CountType end = 0;
+
+  if( !mvd::RgbBounds( begin, end, channels ) )
+    return;
+
+  //
+  // Access color-dynamics widget.
+  ColorSetupWidget* colorSetupWidget = GetWidget< ColorSetupWidget >();
+
+  //
+  // Access image-model.
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  // Setup color-setup controller.
+  colorSetupWidget->SetComponents( imageModel->GetBandNames() );
+
+  for( CountType i=begin; i<end; ++i )
+    {
+    colorSetupWidget->SetCurrentIndex(
+      static_cast< RgbaChannel >( i ),
+      imageModel->GetSettings().RgbChannel( i )
+    );
+    }
+}
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

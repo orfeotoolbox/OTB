@@ -45,7 +45,6 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModelController.h"
 #include "mvdGui.h"
-#include "mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -138,13 +137,6 @@ private:
   /** */
   void ResetQuantiles( RgbaChannel );
 
-  /** */
-  inline static
-    bool
-    RgbBounds( CountType& begin,
-	       CountType& end,
-	       RgbaChannel channel );
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -171,48 +163,6 @@ private slots:
 
 namespace mvd
 {
-/*****************************************************************************/
-inline
-bool
-ColorDynamicsController
-::RgbBounds( CountType& begin, CountType& end, RgbaChannel channel )
-{
-  assert(
-    channel==RGBA_CHANNEL_NONE ||
-    channel==RGBA_CHANNEL_RED ||
-    channel==RGBA_CHANNEL_GREEN ||
-    channel==RGBA_CHANNEL_BLUE ||
-    channel==RGBA_CHANNEL_RGB
-  );
-
-  switch( channel )
-    {
-    case RGBA_CHANNEL_NONE:
-    case RGBA_CHANNEL_ALPHA:
-      begin = RGBA_CHANNEL_NONE;
-      end = RGBA_CHANNEL_NONE;
-      break;
-
-    case RGBA_CHANNEL_RED:
-    case RGBA_CHANNEL_GREEN:
-    case RGBA_CHANNEL_BLUE:
-      begin = channel;
-      end = channel + 1;
-      break;
-
-    case RGBA_CHANNEL_RGB:
-      begin = RGBA_CHANNEL_RED;
-      end = RGBA_CHANNEL_ALPHA;
-      break;
-
-    default:
-      return false;
-      break;
-    }
-
-  return true;
-}
-
 } // end namespace 'mvd'
 
 #endif // __mvdColorDynamicsController_h

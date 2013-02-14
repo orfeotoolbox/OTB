@@ -139,7 +139,7 @@ ColorDynamicsController
 ::ResetWidget()
 {
   //
-  // Setup color-dynamics controller.
+  // Reset color-dynamics widget.
   ResetIntensityRanges( RGBA_CHANNEL_RGB );
   ResetQuantiles( RGBA_CHANNEL_RGB );
 
@@ -223,7 +223,7 @@ ColorDynamicsController
   CountType begin = -1;
   CountType end = -1;
 
-  if( !ColorDynamicsController::RgbBounds( begin, end, channels ) )
+  if( !mvd::RgbBounds( begin, end, channels ) )
     return;
 
   //
@@ -278,7 +278,7 @@ ColorDynamicsController
   CountType begin = -1;
   CountType end = -1;
 
-  if( !ColorDynamicsController::RgbBounds( begin, end, channels ) )
+  if( !mvd::RgbBounds( begin, end, channels ) )
     return;
 
   //
@@ -349,7 +349,7 @@ ColorDynamicsController
   CountType begin = 0;
   CountType end = 0;
 
-  if( !ColorDynamicsController::RgbBounds( begin, end, channels ) )
+  if( !mvd::RgbBounds( begin, end, channels ) )
     return;
 
   //

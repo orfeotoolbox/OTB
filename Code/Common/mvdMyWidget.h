@@ -70,6 +70,9 @@ class MyWidget;
 
 /**
  * \class MyWidget
+ *
+ * \brief Widget template skeleton to copy-paste when adding a new
+ * widget class.
  */
 class Monteverdi2_EXPORT MyWidget :
     public QWidget
@@ -85,10 +88,10 @@ class Monteverdi2_EXPORT MyWidget :
 // Public methods.
 public:
 
-  /** Constructor */
+  /** \brief Constructor. */
   MyWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~MyWidget();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
@@ -117,7 +120,7 @@ private:
 // Private attributes.
 private:
   /**
-   * uic generated.
+   * \brief uic generated.
    */
   Ui::MyWidget* m_UI;
 

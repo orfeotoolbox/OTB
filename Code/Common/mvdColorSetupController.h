@@ -45,7 +45,6 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModelController.h"
 #include "mvdGui.h"
-#include "mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -68,6 +67,8 @@ class ColorSetupWidget;
 
 /**
  * \class ColorSetupController
+ *
+ * \brief Color-setup widget controller forVectorImageModel objects.
  */
 class Monteverdi2_EXPORT ColorSetupController :
     public AbstractModelController
@@ -83,10 +84,17 @@ class Monteverdi2_EXPORT ColorSetupController :
 // Public methods.
 public:
 
-  /** Constructor */
+  /**
+   * \brief Constructor.
+   *
+   * \param widget Controlled widget.
+   * \param parent Parent QObject of this QObject.
+   */
   ColorSetupController( ColorSetupWidget* widget, QObject* parent =NULL );
 
-  /** Destructor */
+  /**
+   * \brief Destructor.
+   */
   virtual ~ColorSetupController();
 
 
@@ -105,13 +113,10 @@ protected:
   //
   // AbstractModelController overrides.
 
-  /** */
   virtual void Connect( AbstractModel* );
 
-  /** */
   virtual void ResetWidget();
 
-  /** */
   virtual void Disconnect( AbstractModel* );
 
 //
@@ -124,6 +129,15 @@ protected:
 // Private methods.
 private:
 
+  /**
+   * \brief Convenience method which resets current band-index to
+   * default values for given RGB channels.
+   *
+   * \param channels Given channels for which to reset current-band
+   * index. \see RgbBound() for valid values.
+   */
+  void ResetIndices( RgbaChannel channels );
+
 //
 // Private attributes.
 private:
@@ -134,9 +148,14 @@ private:
 // Slots.
 private slots:
   /**
+   * \brief Slot called when the current index of a RGB channel of the
+   * controlled widget has changed.
+   *
+   * \param channel The RGB video-channel for which the current
+   * band-index has changed.
+   *
+   * \param index The new band-index of the RGB video-channel.
    */
-  // TODO: Separate RenderingFilter and Settings (QObject) from
-  // VectorImageModel and move slot.
   void OnCurrentIndexChanged( RgbaChannel channel, int index );
 
 };

@@ -44,6 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -93,6 +94,134 @@ enum RgbaChannel
 extern
 const char*
 RGBA_CHANNEL_NAMES[ RGBA_CHANNEL_COUNT ];
+
+/**
+ * \brief Convenience method used to compute integer indices in order
+ * to iterate through RGB channels such as, for example:
+ * \code
+ * for( i=begin; i<end; ++i ) {}
+ * \endcode
+ *
+ * \param begin    The resulting first index where to begin iteration.
+ * \param end      The resulting upper-boundary index of the iteration.
+ * \param channels The channels to be iterated. Valid values are:
+ * _ RGBA_CHANNEL_NONE to select no video-channel at all;
+ * - RGBA_CHANNEL_RED to select red video-channel;
+ * - RGBA_CHANNEL_GREEN to select green video-channel;
+ * - RGBA_CHANNEL_BLUE to select blue video-channel;
+ * - RGBA_CHANNEL_ALPHA is equivalent to RGBA_CHANNEL_NONE;
+ * - RGBA_CHANNEL_RGB to select all RGB video-channels;
+ * - RGBA_CHANNEL_ALL to select all RGB (without the alpha) video-channels.
+ *
+ * \return true if iteration indices have been set and loop can be
+ * processed.
+ */
+bool RgbBounds( CountType& begin, CountType& end, RgbaChannel channels );
+
+/**
+ * \brief Convenience method used to compute integer indices in order
+ * to iterate through RGBA channels such as, for example:
+ * \code
+ * for( i=begin; i<end; ++i ) {}
+ * \endcode
+ *
+ * \param begin    The first index where to begin iteration.
+ * \param end      The upper-boundary index of the iteration.
+ * \param channels The channels to be iterated. Valid values are:
+ * _ RGBA_CHANNEL_NONE to select no video-channel at all;
+ * - RGBA_CHANNEL_RED to select red video-channel;
+ * - RGBA_CHANNEL_GREEN to select green video-channel;
+ * - RGBA_CHANNEL_BLUE to select blue video-channel;
+ * - RGBA_CHANNEL_ALPHA to select the alpha video-channel;
+ * - RGBA_CHANNEL_RGB to select all RGB (without the alpha) video-channels;
+ * - RGBA_CHANNEL_ALL to select all RGBA video-channels.
+ *
+ * \return true if iteration indices have been set and loop can be
+ * processed.
+ */
+bool RgbaBounds( CountType& begin, CountType& end, RgbaChannel channels );
+
+} // end namespace 'mvd'.
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
+/*****************************************************************************/
+inline
+bool
+RgbBounds( CountType& begin, CountType& end, RgbaChannel channels )
+{
+  assert( channels!=RGBA_CHANNEL_COUNT );
+
+  switch( channels )
+    {
+    case RGBA_CHANNEL_NONE:
+    case RGBA_CHANNEL_ALPHA:
+      begin = RGBA_CHANNEL_NONE;
+      end = RGBA_CHANNEL_NONE;
+      break;
+
+    case RGBA_CHANNEL_RED:
+    case RGBA_CHANNEL_GREEN:
+    case RGBA_CHANNEL_BLUE:
+      begin = channels;
+      end = channels + 1;
+      break;
+
+    case RGBA_CHANNEL_RGB:
+    case RGBA_CHANNEL_ALL:
+      begin = RGBA_CHANNEL_RED;
+      end = RGBA_CHANNEL_ALPHA;
+      break;
+
+    default:
+      return false;
+      break;
+    }
+
+  return true;
+}
+/*****************************************************************************/
+inline
+bool
+RgbaBounds( CountType& begin, CountType& end, RgbaChannel channels )
+{
+  assert( channels!=RGBA_CHANNEL_COUNT );
+
+  switch( channels )
+    {
+    case RGBA_CHANNEL_NONE:
+      begin = RGBA_CHANNEL_NONE;
+      end = RGBA_CHANNEL_NONE;
+      break;
+
+    case RGBA_CHANNEL_RED:
+    case RGBA_CHANNEL_GREEN:
+    case RGBA_CHANNEL_BLUE:
+    case RGBA_CHANNEL_ALPHA:
+      begin = channels;
+      end = channels + 1;
+      break;
+
+    case RGBA_CHANNEL_RGB:
+      begin = RGBA_CHANNEL_RED;
+      end = RGBA_CHANNEL_ALPHA;
+      break;
+
+    case RGBA_CHANNEL_ALL:
+      begin = RGBA_CHANNEL_RED;
+      end = RGBA_CHANNEL_RGB;
+      break;
+
+    default:
+      return false;
+      break;
+    }
+
+  return true;
+}
 
 } // end namespace 'mvd'.
 
