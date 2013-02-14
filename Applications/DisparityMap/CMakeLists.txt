@@ -22,3 +22,7 @@ OTB_CREATE_APPLICATION(NAME           DisparityMapToElevationMap
 OTB_CREATE_APPLICATION(NAME           StereoFramework
                        SOURCES        otbStereoFramework.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           GeneratePlyFile
+                       SOURCES        otbGeneratePlyFile.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
