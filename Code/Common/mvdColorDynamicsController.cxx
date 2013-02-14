@@ -156,10 +156,11 @@ ColorDynamicsController
 
   //
   // Disconnect controller to model.
-  QObject::connect(
+  QObject::disconnect(
     this, SIGNAL( ModelUpdated() ),
     // to:
-    model, SLOT( OnModelUpdated() ) );
+    model, SLOT( OnModelUpdated() )
+  );
 
   //
   // Disconnect GUI from controller.

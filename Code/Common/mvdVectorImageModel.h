@@ -313,11 +313,6 @@ public:
 //
 // Public slots.
 public slots:
-  /**
-   */
-  // TODO: Separate RenderingFilter and Settings (QObject) from
-  // VectorImageModel and move slot.
-  void OnCurrentIndexChanged( RgbaChannel channel, int index );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

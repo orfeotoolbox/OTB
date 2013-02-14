@@ -81,14 +81,17 @@ class Monteverdi2_EXPORT ColorBandDynamicsWidget :
 
   Q_OBJECT;
 
+  /** */
   Q_PROPERTY( RgbaChannel channelLabel
 	      READ GetChannelLabel
 	      WRITE SetChannelLabel );
 
+  /** */
   Q_PROPERTY( double minIntensity
 	      READ GetMinIntensity
 	      WRITE SetMinIntensity );
 
+  /** */
   Q_PROPERTY( double maxIntensity
 	      READ GetMaxIntensity
 	      WRITE SetMaxIntensity );

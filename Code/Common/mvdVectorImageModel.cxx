@@ -635,21 +635,6 @@ VectorImageModel
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void
-VectorImageModel
-::OnCurrentIndexChanged( RgbaChannel channel, int index )
-{
-  m_Settings.RgbChannel( channel ) = index;
-
-  // TODO: Remove local variable.
-  // Local variable because RenderingFunction::SetChannels() gets a
-  // non-const std::vector< unsigned int >& as argument instead of a
-  // const one.
-  Settings::ChannelVector rgb( m_Settings.GetRgbChannels() );
-  m_RenderingFilter->GetRenderingFunction()->SetChannelList( rgb );
-
-  emit SettingsUpdated();
-}
 
 /*******************************************************************************/
 void
