@@ -62,6 +62,7 @@ namespace mvd
 //
 // Internal class pre-declaration.
 class AbstractModel;
+class AbstractModelController;
 
 namespace Ui
 {
@@ -72,8 +73,10 @@ class MainWindow;
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class MainWindow
+/**
+ * \class MainWindow
  *
+ * \brief The application main-widow widget.
  */
 class Monteverdi2_EXPORT MainWindow
   : public QMainWindow
@@ -92,10 +95,10 @@ public:
 //
 // Public methods.
 public:
-  /** Constructor */
+  /** \brief Constructor. */
   MainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~MainWindow();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
@@ -145,11 +148,23 @@ private:
   /** */
   inline QDockWidget* GetColorDynamicsDock();
 
+  /**
+   * \brief Assign model to the controller which is child of given
+   * dock-widget.
+   *
+   * \param dock The dock-widget which is parent of the controller to
+   * assign model to.
+   *
+   * \param model The model to assign to the controller.
+   */
+  inline void SetControllerModel( QDockWidget* dock, AbstractModel* model );
+
 
 //
 // Private attributes.
 private:
   /**
+   * \brief uic generated.
    */
   Ui::MainWindow* m_UI;
 
@@ -158,10 +173,16 @@ private:
 //
 // Private slots.
 private slots:
-  /** */
+  /**
+   * \brief Qt auto-connected slot which is called when File/Load menu
+   * action is activated.
+   */
   void on_action_Open_activated();
 
-  /** */
+  /**
+   * \brief Qt auto-connected slot which is called when Help/About
+   * menu action is activated.
+   */
   void on_action_About_activated();
 
   /** */
@@ -175,6 +196,19 @@ private slots:
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
+
+//
+// System includes (sorted by alphabetic order)
+
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+
+//
+// Monteverdi includes (sorted by alphabetic order)
+#include "mvdAbstractModelController.h"
 
 //
 // Some constants.
@@ -221,6 +255,20 @@ MainWindow
 }
 
 /*****************************************************************************/
+inline
+void
+MainWindow
+::SetControllerModel( QDockWidget* dock, AbstractModel* model )
+{
+  assert( dock );
+
+  AbstractModelController* controller =
+    dock->findChild< AbstractModelController* >();
+
+  assert( controller!=NULL );
+
+  controller->SetModel( model );
+}
 
 } // end namespace 'mvd'
 

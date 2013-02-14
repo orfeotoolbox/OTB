@@ -247,7 +247,11 @@ ColorDynamicsController
   // Get image rengering settings.
   const VectorImageModel::Settings& settings = imageModel->GetSettings();
 
-  // Assign values to controlled widget.
+  // Block this controller's signals to prevent display refreshes
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  this->blockSignals( true );
+  {
   for( CountType i=begin; i<end; ++i )
     {
     RgbaChannel channel = static_cast< RgbaChannel >( i );
@@ -263,9 +267,18 @@ ColorDynamicsController
       maxPx[ settings.RgbChannel( channel ) ]
     );
 
+    // Block widget's signals...
+    //...but force call to valueChanged() slot to force refresh.
+    colorBandDynWgt->blockSignals( true );
+    {
+    // Set min/max intensity bounds.
     colorBandDynWgt->SetMinIntensity( min );
     colorBandDynWgt->SetMaxIntensity( max );
     }
+    colorBandDynWgt->blockSignals( false );
+    }
+  }
+  this->blockSignals( true );
 }
 
 /*******************************************************************************/
@@ -302,6 +315,12 @@ ColorDynamicsController
   // Get image rengering settings.
   const VectorImageModel::Settings& settings = imageModel->GetSettings();
 
+
+  // Block this controller's signals to prevent display refreshes
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  this->blockSignals( true );
+  {
   // Assign values to controlled widget.
   for( CountType i=begin; i<end; ++i )
     {
@@ -317,12 +336,6 @@ ColorDynamicsController
     DefaultImageType::PixelType::ValueType max(
       maxPx[ settings.RgbChannel( channel ) ]
     );
-
-    // Block this controller's signals to prevent display refreshes
-    // but let let widget(s) signal their changes so linked values
-    // will be correctly updated.
-    this->blockSignals( true );
-    {
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
     colorBandDynWgt->blockSignals( true );
@@ -334,9 +347,10 @@ ColorDynamicsController
     colorBandDynWgt->SetHighIntensity( max );
     OnHighIntensityChanged( channel, max );
     }
+    colorBandDynWgt->blockSignals( false );
     }
-    this->blockSignals( false );
-    }
+  }
+  this->blockSignals( false );
 }
 
 /*******************************************************************************/
@@ -356,6 +370,12 @@ ColorDynamicsController
   // Access color-dynamics widget.
   ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
 
+
+  // Block this controller's signals to prevent display refreshed
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  this->blockSignals( true );
+  {
   // Assign values to controlled widget.
   for( CountType i=begin; i<end; ++i )
     {
@@ -363,12 +383,6 @@ ColorDynamicsController
 
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
-
-    // Block this controller's signals to prevent display refreshed
-    // but let let widget(s) signal their changes so linked values
-    // will be correctly updated.
-    this->blockSignals( true );
-    {
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
     colorBandDynWgt->blockSignals( true );
@@ -381,8 +395,8 @@ ColorDynamicsController
     }
     colorBandDynWgt->blockSignals( false );
     }
-    this->blockSignals( false );
-    }
+  }
+  this->blockSignals( false );
 }
 
 /*******************************************************************************/

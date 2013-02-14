@@ -39,11 +39,10 @@
 #include "mvdApplication.h"
 #include "mvdColorDynamicsController.h"
 #include "mvdColorDynamicsWidget.h"
-#include "mvdColorSetupWidget.h"
+#include "mvdColorSetupController.h"
 #include "mvdDatasetModel.h"
 #include "mvdGLImageWidget.h"
 #include "mvdVectorImageModel.h"
-
 
 namespace mvd
 {
@@ -123,17 +122,22 @@ MainWindow
 {
   //
   // COLOR SETUP.
+  ColorSetupWidget* colorSetupWgt = new ColorSetupWidget( this );
 
-  AddWidgetToDock( 
-    new ColorSetupWidget( this ),
-    VIDEO_COLOR_SETUP_DOCK,
-    tr( "Video color setup" ),
-    Qt::LeftDockWidgetArea
+  new ColorSetupController(
+    // wraps:
+    colorSetupWgt,
+    // as child of:
+    AddWidgetToDock(
+      colorSetupWgt,
+      VIDEO_COLOR_SETUP_DOCK,
+      tr( "Video color setup" ),
+      Qt::LeftDockWidgetArea
+    )
   );
 
   //
   // COLOR DYNAMICS.
-
   ColorDynamicsWidget* colorDynWgt = new ColorDynamicsWidget( this );
 
   // Controller is childed to dock.
@@ -255,18 +259,15 @@ MainWindow
 ::OnAboutToChangeSelectedModel( const AbstractModel* )
 {
   //
+  // COLOR SETUP.
+  SetControllerModel( GetColorSetupDock(), NULL );
+
+  //
   // COLOR DYNAMICS.
-
-  ColorDynamicsController* colorDynCtrl =
-    GetColorDynamicsDock()->findChild< ColorDynamicsController* >();
-
-  assert( colorDynCtrl!=NULL );
-
-  colorDynCtrl->SetModel( NULL );
+  SetControllerModel( GetColorDynamicsDock(), NULL );
 
   //
   //
-
   const Application* app = Application::ConstInstance();
   assert( app!=NULL );
 
@@ -300,18 +301,6 @@ MainWindow
     centralWidget(),
     SLOT( updateGL() )
   );
-
-  //
-  // COLOR SETUP.
-
-  // Disconnect previously selected model from UI controller.
-  QObject::disconnect(
-    GetColorSetupDock()->widget(),
-    SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
-    // from:
-    vectorImageModel,
-    SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
-  );
 }
 
 /*****************************************************************************/
@@ -336,44 +325,11 @@ MainWindow
 
   //
   // COLOR SETUP.
-
-  ColorSetupWidget* colorSetupWidget =
-    qobject_cast< ColorSetupWidget*  >( GetColorSetupDock()->widget() );
-  assert( colorSetupWidget!=NULL );
-
-  // Connect newly selected model to UI controller.
-  QObject::connect(
-    colorSetupWidget,
-    SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
-    // to:
-    vectorImageModel,
-    SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
-  );
-
-  // Setup color-setup controller.
-  colorSetupWidget->blockSignals( true );
-  {
-  colorSetupWidget->SetComponents( vectorImageModel->GetBandNames() );
-
-  for( int i=0; i<RGBA_CHANNEL_ALPHA; ++i )
-    {
-    colorSetupWidget->SetCurrentIndex(
-      static_cast< RgbaChannel >( i ),
-      vectorImageModel->GetSettings().RgbChannel( i )
-    );
-    }
-  }
-  colorSetupWidget->blockSignals( false );
+  SetControllerModel( GetColorSetupDock(), vectorImageModel );
 
   //
   // COLOR DYNAMICS.
-
-  ColorDynamicsController* colorDynCtrl =
-    GetColorDynamicsDock()->findChild< ColorDynamicsController* >();
-
-  assert( colorDynCtrl!=NULL );
-
-  colorDynCtrl->SetModel( vectorImageModel );
+  SetControllerModel( GetColorDynamicsDock(), vectorImageModel );
 
   //
   // MAIN VIEW.

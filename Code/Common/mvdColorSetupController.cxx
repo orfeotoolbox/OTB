@@ -153,16 +153,34 @@ ColorSetupController
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
 
-  // Setup color-setup controller.
+  // Block this controller's signals to prevent display refreshes
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  this->blockSignals( true );
+  {
+    // Block widget's signals...
+    //...but force call to valueChanged() slot to force refresh.
+  colorSetupWidget->blockSignals( true );
+  {
+  // Reset list of component names.
   colorSetupWidget->SetComponents( imageModel->GetBandNames() );
 
+  // Reset current-indices of RGB channels widgets.
   for( CountType i=begin; i<end; ++i )
     {
-    colorSetupWidget->SetCurrentIndex(
-      static_cast< RgbaChannel >( i ),
-      imageModel->GetSettings().RgbChannel( i )
-    );
+    RgbaChannel channel = static_cast< RgbaChannel >( i );
+    
+    VectorImageModel::Settings::ChannelVector::value_type band =
+      imageModel->GetSettings().RgbChannel( i );
+
+    // Set current-index of channel.
+    colorSetupWidget->SetCurrentIndex( channel, band );
+    OnCurrentIndexChanged( channel, band );
     }
+  }
+  colorSetupWidget->blockSignals( false );
+  }
+  this->blockSignals( false );
 }
 
 /*******************************************************************************/
