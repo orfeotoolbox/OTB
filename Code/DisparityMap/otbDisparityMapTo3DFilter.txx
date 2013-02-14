@@ -295,6 +295,8 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
   double elevationMin = 0.0;
   double elevationMax = 300.0;
   
+  typename OptimizerType::Pointer optimizer = OptimizerType::New();
+  
   typename TDisparityImage::PointType epiPoint;
   itk::ContinuousIndex<double,2> gridIndexConti;
   double subPixIndex[2];
@@ -438,34 +440,21 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
     sensorPoint[2] = elevationMax;
     rightGroundHmax = m_RightToGroundTransform->TransformPoint(sensorPoint);
     
-    // Compute ray intersection (mid-point method), TODO : implement non-iterative method from Hartley & Sturm
-    double a = (leftGroundHmax[0] - leftGroundHmin[0]) * (leftGroundHmax[0] - leftGroundHmin[0]) +
-               (leftGroundHmax[1] - leftGroundHmin[1]) * (leftGroundHmax[1] - leftGroundHmin[1]) +
-               (leftGroundHmax[2] - leftGroundHmin[2]) * (leftGroundHmax[2] - leftGroundHmin[2]);
-    double b = (rightGroundHmax[0] - rightGroundHmin[0]) * (rightGroundHmax[0] - rightGroundHmin[0]) +
-               (rightGroundHmax[1] - rightGroundHmin[1]) * (rightGroundHmax[1] - rightGroundHmin[1]) +
-               (rightGroundHmax[2] - rightGroundHmin[2]) * (rightGroundHmax[2] - rightGroundHmin[2]);
-    double c = -(leftGroundHmax[0] - leftGroundHmin[0]) * (rightGroundHmax[0] - rightGroundHmin[0])
-               -(leftGroundHmax[1] - leftGroundHmin[1]) * (rightGroundHmax[1] - rightGroundHmin[1])
-               -(leftGroundHmax[2] - leftGroundHmin[2]) * (rightGroundHmax[2] - rightGroundHmin[2]);
-    double g = (leftGroundHmax[0] - leftGroundHmin[0]) * (rightGroundHmin[0] - leftGroundHmin[0]) +
-               (leftGroundHmax[1] - leftGroundHmin[1]) * (rightGroundHmin[1] - leftGroundHmin[1]) +
-               (leftGroundHmax[2] - leftGroundHmin[2]) * (rightGroundHmin[2] - leftGroundHmin[2]);
-    double h = -(rightGroundHmax[0] - rightGroundHmin[0]) * (rightGroundHmin[0] - leftGroundHmin[0])
-               -(rightGroundHmax[1] - rightGroundHmin[1]) * (rightGroundHmin[1] - leftGroundHmin[1])
-               -(rightGroundHmax[2] - rightGroundHmin[2]) * (rightGroundHmin[2] - leftGroundHmin[2]);
+    // Compute ray intersection with the generic line of sight optimizer
+    typename PointSetType::Pointer pointSetA = PointSetType::New();
+    typename PointSetType::Pointer pointSetB = PointSetType::New();
     
-    double rLeft = (b * g - c * h) / (a * b - c * c);
-    double rRight = (a * h - c * g) / (a * b - c * c);
+    pointSetA->SetPoint(0,leftGroundHmax);
+    pointSetA->SetPoint(1,rightGroundHmax);
+    pointSetA->SetPointData(0,0);
+    pointSetA->SetPointData(1,1);
     
-    TDPointType leftFoot;
-    leftFoot.SetToBarycentricCombination(leftGroundHmax,leftGroundHmin,rLeft );
+    pointSetB->SetPoint(0,leftGroundHmin);
+    pointSetB->SetPoint(1,rightGroundHmin);
+    pointSetB->SetPointData(0,0);
+    pointSetB->SetPointData(1,1);
     
-    TDPointType rightFoot;
-    rightFoot.SetToBarycentricCombination(rightGroundHmax,rightGroundHmin,rRight);
-    
-    TDPointType midPoint3D;
-    midPoint3D.SetToMidPoint(leftFoot,rightFoot);
+    TDPointType midPoint3D = optimizer->Compute(pointSetA,pointSetB);
     
     // record 3D point
     typename OutputImageType::PixelType pixel3D(3);

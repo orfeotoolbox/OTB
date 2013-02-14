@@ -20,7 +20,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbGenericRSTransform.h"
-#include "itkImageRegionSplitter.h"
+#include "otbLineOfSightOptimizer.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
@@ -73,10 +73,16 @@ public:
   
   // 3D RS transform
   // TODO: Allow to tune precision (i.e. double or float)
-  typedef otb::GenericRSTransform<double,3,3>       RSTransformType;
-
+  typedef double                                      PrecisionType;
+  typedef otb::GenericRSTransform<PrecisionType,3,3>  RSTransformType;
+  
   // 3D points
   typedef typename RSTransformType::InputPointType  TDPointType;
+  
+  typedef otb::LineOfSightOptimizer<PrecisionType>  OptimizerType;
+  typedef typename OptimizerType::PointSetType      PointSetType;
+  typedef typename PointSetType::PointsContainer    PointsContainer;
+  typedef typename PointSetType::PointDataContainer LabelContainer;
   
   typedef otb::ImageKeywordlist                     ImageKeywordListType;
   
@@ -101,10 +107,6 @@ public:
   const TEpipolarGridImage * GetLeftEpipolarGridInput() const;
   const TEpipolarGridImage * GetRightEpipolarGridInput() const;
   const TMaskImage  * GetDisparityMaskInput() const;
-
-  /** Get 3D output*/
-//   const TOutputImage * GetDEMOutput() const;
-//   TOutputImage * GetDEMOutput();
 
   /** Set left keywordlist */
   void SetLeftKeywordList(const ImageKeywordListType kwl)
@@ -133,7 +135,7 @@ public:
     }
   
   // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
+//   otbLegacyElevationMacro();
 
 protected:
   /** Constructor */
