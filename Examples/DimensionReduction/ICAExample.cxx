@@ -1,3 +1,4 @@
+
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -63,8 +64,8 @@ int main(int argc, char* argv[])
   const char *       inpretty = argv[4];
   const char *       outpretty = argv[5];
   const char *       invoutpretty = argv[6];
-  unsigned int numIterations = atoi(argv[7]);
-  double mu = atof(argv[8]);
+  unsigned int numIterations = atoi(argv[8]);
+  double mu = atof(argv[9]);
 
   // Software Guide : BeginLatex
   //
@@ -105,7 +106,7 @@ int main(int argc, char* argv[])
                                 otb::Transform::FORWARD> FastICAFilterType;
   FastICAFilterType::Pointer FastICAfilter     = FastICAFilterType::New();
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We then set the number of independent
@@ -138,7 +139,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
   FastICAfilter->SetMu( mu );
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We now instantiate the writer and set the file name for the
@@ -172,26 +173,26 @@ int main(int argc, char* argv[])
   // (which may not be square) has to be given.
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   typedef otb::FastICAImageFilter< ImageType, ImageType,
                                  otb::Transform::INVERSE > InvFastICAFilterType;
   InvFastICAFilterType::Pointer invFilter = InvFastICAFilterType::New();
-  
+
   invFilter->SetMeanValues( FastICAfilter->GetMeanValues() );
   invFilter->SetStdDevValues( FastICAfilter->GetStdDevValues() );
   invFilter->SetTransformationMatrix( FastICAfilter->GetTransformationMatrix() );
   invFilter->SetPCATransformationMatrix(
                             FastICAfilter->GetPCATransformationMatrix() );
   invFilter->SetInput(FastICAfilter->GetOutput());
-    
+
   WriterType::Pointer invWriter = WriterType::New();
   invWriter->SetFileName(outputInverseFilename );
   invWriter->SetInput(invFilter->GetOutput() );
 
   invWriter->Update();
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:FastICA_FILTER} shows the result of applying forward
   // and reverse FastICA transformation to a 8 bands Worldview2 image.

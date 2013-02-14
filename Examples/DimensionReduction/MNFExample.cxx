@@ -76,8 +76,8 @@ int main(int argc, char* argv[])
   const char *       inpretty = argv[4];
   const char *       outpretty = argv[5];
   const char *       invoutpretty = argv[6];
-  unsigned int vradius = atoi(argv[7]);
-  bool normalization = atoi(argv[8]);
+  unsigned int vradius = atoi(argv[8]);
+  bool normalization = atoi(argv[9]);
 
   // Software Guide : BeginLatex
   //
@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
                                 otb::Transform::FORWARD> MNFFilterType;
   MNFFilterType::Pointer MNFfilter     = MNFFilterType::New();
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We then set the number of principal
@@ -175,7 +175,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
   MNFfilter->SetUseNormalization( normalization );
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We now instantiate the writer and set the file name for the
@@ -209,26 +209,26 @@ int main(int argc, char* argv[])
   // (which may not be square) has to be given.
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   typedef otb::MNFImageFilter< ImageType, ImageType,
                                  NoiseFilterType,
                                  otb::Transform::INVERSE > InvMNFFilterType;
   InvMNFFilterType::Pointer invFilter = InvMNFFilterType::New();
-  
+
   invFilter->SetMeanValues( MNFfilter->GetMeanValues() );
   if ( normalization )
     invFilter->SetStdDevValues( MNFfilter->GetStdDevValues() );
   invFilter->SetTransformationMatrix( MNFfilter->GetTransformationMatrix() );
   invFilter->SetInput(MNFfilter->GetOutput());
-    
+
   WriterType::Pointer invWriter = WriterType::New();
   invWriter->SetFileName(outputInverseFilename );
   invWriter->SetInput(invFilter->GetOutput() );
 
   invWriter->Update();
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:MNF_FILTER} shows the result of applying forward
   // and reverse MNF transformation to a 8 bands Worldview2 image.

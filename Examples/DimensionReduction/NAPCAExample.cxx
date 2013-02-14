@@ -77,8 +77,8 @@ int main(int argc, char* argv[])
   const char *       inpretty = argv[4];
   const char *       outpretty = argv[5];
   const char *       invoutpretty = argv[6];
-  unsigned int vradius = atoi(argv[7]);
-  bool normalization = atoi(argv[8]);
+  unsigned int vradius = atoi(argv[8]);
+  bool normalization = atoi(argv[9]);
 
   // Software Guide : BeginLatex
   //
@@ -143,7 +143,7 @@ int main(int argc, char* argv[])
                                 otb::Transform::FORWARD> NAPCAFilterType;
   NAPCAFilterType::Pointer napcafilter     = NAPCAFilterType::New();
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We then set the number of principal
@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
   napcafilter->SetUseNormalization( normalization );
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We now instantiate the writer and set the file name for the
@@ -211,26 +211,26 @@ int main(int argc, char* argv[])
   // (which may not be square) has to be given.
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   typedef otb::NAPCAImageFilter< ImageType, ImageType,
                                  NoiseFilterType,
                                  otb::Transform::INVERSE > InvNAPCAFilterType;
   InvNAPCAFilterType::Pointer invFilter = InvNAPCAFilterType::New();
-  
+
   invFilter->SetMeanValues( napcafilter->GetMeanValues() );
   if ( normalization )
     invFilter->SetStdDevValues( napcafilter->GetStdDevValues() );
   invFilter->SetTransformationMatrix( napcafilter->GetTransformationMatrix() );
   invFilter->SetInput(napcafilter->GetOutput());
-    
+
   WriterType::Pointer invWriter = WriterType::New();
   invWriter->SetFileName(outputInverseFilename );
   invWriter->SetInput(invFilter->GetOutput() );
 
   invWriter->Update();
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:NAPCA_FILTER} shows the result of applying forward
   // and reverse NA-PCA transformation to a 8 bands Worldview2 image.
