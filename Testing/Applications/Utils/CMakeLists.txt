@@ -434,7 +434,8 @@ IF(OTB_DATA_USE_LARGEINPUT)
 OTB_TEST_APPLICATION(NAME apTuUtDownloadSRTMTiles
                      APP  DownloadSRTMTiles
                      OPTIONS -il ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
-                             -mode simulate
+                             -mode list
+                             -mode.list.indir ${INPUTDATA}/DEM/srtm_directory
                      )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)

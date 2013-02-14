@@ -25,9 +25,22 @@ namespace otb
 enum
 {
   Mode_Download,
-  Mode_Simulate
+  Mode_List
 };
 
+const std::string SRTMServerPath = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
+
+const char* args[] = {"Africa",
+                      "Australia",
+                      "Eurasia",
+                      "Islands",
+                      "North_America",
+                      "South_America"};
+
+const std::vector<std::string> continent(args, args + sizeof(args)/sizeof(args[0]));
+
+const std::string extension = ".hgt.zip";
+const std::string extensionSimulation = ".hgt";
 namespace Wrapper
 {
 
@@ -52,6 +65,26 @@ public:
 
 private:
 
+  bool m_Mode;
+
+  bool SRTMTileExists(const std::string & url)
+  {
+    switch ( m_Mode )
+      {
+      case Mode_Download:
+      {
+      CurlHelper::Pointer curl = CurlHelper::New();
+      curl->SetTimeout(0);
+      return !curl->IsCurlReturnHttpError(url);
+      }
+      break;
+      case Mode_List:
+      {
+      return itksys::SystemTools::FileExists(url.c_str());
+      }
+      break;
+      }
+  }
   void DoInit()
   {
     SetName("DownloadSRTMTiles");
@@ -71,7 +104,7 @@ private:
     SetParameterDescription("il", "The list of images on which you want to determine corresponding SRTM tiles.");
 
     // UserDefined values
-    AddParameter(ParameterType_Choice, "mode", "download or simulate");
+    AddParameter(ParameterType_Choice, "mode", "download or list");
     MandatoryOn("mode");
 
     AddChoice("mode.download", "Download");
@@ -80,12 +113,15 @@ private:
     AddParameter(ParameterType_OutputFilename, "mode.download.outdir", "ouput dir");
     SetParameterDescription("mode.download.outdir", "out dir");
 
-    AddChoice("mode.simulate", "List tiles");
-    SetParameterDescription("mode.simulate","List tiles");
+    AddChoice("mode.list", "List tiles");
+    SetParameterDescription("mode.list","List tiles");
+
+    AddParameter(ParameterType_OutputFilename, "mode.list.indir", "input dir");
+    SetParameterDescription("mode.list.indir", "in dir");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "QB_Toulouse_Ortho_XS.tif");
-    SetDocExampleParameterValue("mode", "simulate");
+    SetDocExampleParameterValue("mode", "list");
   }
 
   void DoUpdateParameters()
@@ -96,6 +132,10 @@ private:
 
   void DoExecute()
   {
+
+    //Get the mode
+    m_Mode = GetParameterInt("mode");
+
     // Get the input image list
     FloatVectorImageListType::Pointer inList = this->GetParameterImageList("il");
 
@@ -106,7 +146,8 @@ private:
 
     inList->GetNthElement(0)->UpdateOutputInformation();
 
-    std::set<std::string> simulateTilesVector;
+    std::set<std::string> listTilesVector;
+    std::set<std::string> tiles;
 
     for( unsigned int i=0; i<inList->Size(); i++ )
       {
@@ -214,8 +255,6 @@ private:
         floorMaxLat = std::floor(vecLat.at(distMinLat));
         }
 
-      std::set<std::string> tiles;
-
       //Construct SRTM tile filename based on min/max lat/long
       for (int i = floorMinLat; i <= floorMaxLat; ++i)
         {
@@ -260,24 +299,12 @@ private:
           }
         }
 
-      const std::string SRTMServerPath = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
-
-      const char* args[] = {"Africa",
-                            "Australia",
-                            "Eurasia",
-                            "Islands",
-                            "North_America",
-                            "South_America"};
-
-      const std::vector<std::string> continent(args, args + sizeof(args)/sizeof(args[0]));
-
-      const std::string extension = ".hgt.zip";
-      const std::string extensionSimulation = ".hgt";
+      }
 
       //iterate over all tiles to build URLs
       for(std::set<std::string>::const_iterator it= tiles.begin(); it!=tiles.end(); ++it)
         {
-        switch ( GetParameterInt("mode") )
+        switch ( m_Mode )
           {
           case Mode_Download:
           {
@@ -361,21 +388,29 @@ private:
           //TODO unzip here (can do this in memory?)
           }
           break;
-          case Mode_Simulate:
+          case Mode_List:
           {
-          simulateTilesVector.insert(*it + extensionSimulation);
+          if ( this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + *it + extensionSimulation) )
+            {
+            listTilesVector.insert(*it + extensionSimulation);
+            }
+          else
+            {
+            itkExceptionMacro(<< GetParameterString("mode.list.indir") + "/" + *it + extensionSimulation  <<" not found!");
+            }
+
           }
           break;
           }
         }
-      }
-    switch ( GetParameterInt("mode") )
+
+    switch ( m_Mode )
       {
-      case Mode_Simulate:
+      case Mode_List:
       {
       std::ostringstream listStream;
       listStream << "Corresponding SRTM tiles: ";
-      for(std::set<std::string>::const_iterator it= simulateTilesVector.begin(); it!=simulateTilesVector.end(); ++it)
+      for(std::set<std::string>::const_iterator it= listTilesVector.begin(); it!=listTilesVector.end(); ++it)
         {
         listStream << *it << " ";
         }
