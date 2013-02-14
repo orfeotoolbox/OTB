@@ -37,7 +37,7 @@ namespace otb
  *  3D positions are compute by a least square optimisation between the N lines of sight.
  *  The 3D coordinates (sorted by band) are : longitude , latitude (in degree, wrt WGS84) and altitude (in meters)
  *  BEWARE : this filter is not fully compatible with the filters using the epipolar geometry. The N disparity
- *  maps shall come from the matching of a single 'reference' sensor image versus N 'moving' sensor images. In 
+ *  maps shall come from the matching of a single 'reference' sensor image versus N 'moving' sensor images. In
  *  addition, the disparities shall be computed in physical space (not in index space)
  *  N disparity masks can be provided for each disparity map.
  *

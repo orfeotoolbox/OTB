@@ -331,7 +331,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
   DispMapIteratorList vDispIts;
   MaskIteratorList maskIts;
   
-  for (unsigned int k=0 ; k<this->m_MovingKeywordLists.size() ; ++k)
+  for (unsigned int k=0; k<this->m_MovingKeywordLists.size(); ++k)
     {
     // Iterators over horizontal disparity maps
     hDispIts[k] = itk::ImageRegionConstIterator<DisparityMapType>(this->GetHorizontalDisparityMapInput(k),outputRegionForThread);
@@ -385,7 +385,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
     pointSetA->SetPointData(0,0);
     pointSetB->SetPointData(0,0);
     
-    for (unsigned int k=0 ; k<this->m_MovingKeywordLists.size() ; ++k)
+    for (unsigned int k=0; k<this->m_MovingKeywordLists.size(); ++k)
       {
       // Compute the N moving lines of sight
       TDPointType pointAi, pointBi;
@@ -425,18 +425,18 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
       outIt.Set(outPixel);
       
       resIt.Set(optimizer->GetGlobalResidue());
-      } 
+      }
     
     // Increment all iterators
-    for (typename DispMapIteratorList::iterator hIt = hDispIts.begin() ; hIt != hDispIts.end() ; ++hIt)
+    for (typename DispMapIteratorList::iterator hIt = hDispIts.begin(); hIt != hDispIts.end(); ++hIt)
       {
       ++hIt->second;
       }
-    for (typename DispMapIteratorList::iterator vIt = vDispIts.begin() ; vIt != vDispIts.end() ; ++vIt)
+    for (typename DispMapIteratorList::iterator vIt = vDispIts.begin(); vIt != vDispIts.end(); ++vIt)
       {
       ++vIt->second;
       }
-    for (typename MaskIteratorList::iterator mIt = maskIts.begin() ; mIt != maskIts.end() ; ++mIt)
+    for (typename MaskIteratorList::iterator mIt = maskIts.begin(); mIt != maskIts.end(); ++mIt)
       {
       ++mIt->second;
       }

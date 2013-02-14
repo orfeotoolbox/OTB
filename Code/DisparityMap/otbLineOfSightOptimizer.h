@@ -29,13 +29,13 @@ namespace otb
 /** \class LineOfSightOptimizer
  *  \brief Compute the position of a 3D point from a set of N lines of sight
  *
- *  This filter can use at least 2 lines of sight to estimate the position of 
+ *  This filter can use at least 2 lines of sight to estimate the position of
  *  the intersection using a Mean Square optimization method.
  *  This filter is templated over the precision of 3 points coordinates
  *
  */
 template <class TPrecision = float, class TLabel = int>
-class ITK_EXPORT LineOfSightOptimizer : 
+class ITK_EXPORT LineOfSightOptimizer :
   public itk::Object
 {
 public:
