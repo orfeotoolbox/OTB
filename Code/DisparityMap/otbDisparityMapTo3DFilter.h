@@ -133,9 +133,6 @@ public:
     {
     return this->m_RightKeywordList;
     }
-  
-  // Deprecated calls to elevation setters
-//   otbLegacyElevationMacro();
 
 protected:
   /** Constructor */

@@ -42,7 +42,7 @@ namespace otb
  *  N disparity masks can be provided for each disparity map.
  *
  *  \sa FineRegistrationImageFilter
- *  \sa StereorectificationDeformationFieldSource
+ *  \sa LineOfSightOptimizer
  *  \sa SubPixelDisparityImageFilter
  *  \sa PixelWiseBlockMatchingImageFilter
  *
@@ -146,9 +146,6 @@ public:
   
   /** Get keywordlist of the moving image 'index' */
   const ImageKeywordListType & GetMovingKeywordList(unsigned int index) const;
-
-  // Deprecated calls to elevation setters
-//   otbLegacyElevationMacro();
 
 protected:
   /** Constructor */
