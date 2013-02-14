@@ -571,6 +571,25 @@ ADD_TEST(dmTvDisparityMapToDEMFilter ${DISPARITYMAP_TESTS4}
          ${INPUTDATA}/sensor_stereo_dmap_mask.tif
          )                              
 
+# -------            otb::DisparityMapTo3DFilter   ----------
+
+ADD_TEST(dmTuDisparityMapTo3DFilterNew ${DISPARITYMAP_TESTS4}
+         otbDisparityMapTo3DFilterNew)
+         
+ADD_TEST(dmTvDisparityMapTo3DFilter ${DISPARITYMAP_TESTS4}
+--compare-image ${EPSILON_6}
+     ${BASELINE}/dmTvDisparityMapTo3DFilterOutput.tif
+     ${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
+         otbDisparityMapTo3DFilter
+         ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
+         ${INPUTDATA}/sensor_stereo_left.tif
+         ${INPUTDATA}/sensor_stereo_right.tif
+         ${INPUTDATA}/sensor_stereo_rectif_left.tif
+         ${INPUTDATA}/sensor_stereo_rectif_right.tif
+         ${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
+         ${INPUTDATA}/sensor_stereo_dmap_mask.tif
+         )                              
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS1
 otbDisparityMapTests1.cxx
@@ -616,7 +635,7 @@ otbDisparityMapMedianFilter.cxx
 otbDisparityMapToDEMFilter.cxx
 otbPixelWiseBlockMatchingImageFilter.cxx
 otbSubPixelDisparityImageFilter.cxx
-
+otbDisparityMapTo3DFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbDisparityMapTests1 "${BasicDisparityMap_SRCS1}" "OTBDisparityMap;OTBIO;OTBTesting")
