@@ -38,7 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdHistogramModel.h"
+#include "mvdQuicklookModel.h"
 
 namespace mvd
 {
@@ -67,6 +67,23 @@ AbstractImageModel
 AbstractImageModel
 ::~AbstractImageModel()
 {
+}
+
+
+/*****************************************************************************/
+const QuicklookModel*
+AbstractImageModel
+::GetQuicklookModel() const
+{
+  return findChild< const QuicklookModel* >();
+}
+
+/*****************************************************************************/
+QuicklookModel*
+AbstractImageModel
+::GetQuicklookModel()
+{
+  return findChild< QuicklookModel* >();
 }
 
 /*******************************************************************************/
@@ -145,6 +162,7 @@ AbstractImageModel
 ::virtual_BuildModel()
 {
   newChildModel< HistogramModel >();
+  newChildModel< QuicklookModel >();
 }
 
 /*******************************************************************************/

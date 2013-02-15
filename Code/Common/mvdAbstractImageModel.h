@@ -63,6 +63,7 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 class HistogramModel;
+class QuicklookModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -104,6 +105,12 @@ public:
   /**
    */
   QStringList GetBandNames( bool enhanced =false ) const;
+
+  /** */
+  const QuicklookModel* GetQuicklookModel() const;
+
+  /** */
+  QuicklookModel* GetQuicklookModel();
 
   /**
    * Get the number of available LOD.
