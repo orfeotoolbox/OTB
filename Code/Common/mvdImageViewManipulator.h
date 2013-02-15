@@ -28,7 +28,6 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -42,7 +41,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
-
+#include "mvdAbstractViewManipulator.h"
 
 //
 // External classes pre-declaration.
@@ -66,7 +65,7 @@ namespace mvd
  *   WIP
  */
 class Monteverdi2_EXPORT ImageViewManipulator :
-    public QObject
+    public AbstractViewManipulator
 {
   Q_OBJECT;
 
@@ -88,26 +87,6 @@ public:
   void resizeEvent ( QResizeEvent * event );
   void keyPressEvent( QKeyEvent * event );
 
-  /** Methods to access to the context */
-  /**
-  const NavigationContextType& GetNavigationContext() const
-  {
-    return m_NavigationContext;
-  }
-  */
-  inline
-    const ImageRegionType&
-    GetViewportImageRegion() const
-  {
-    return m_NavigationContext.m_ViewportImageRegion;
-  }
-
-  inline 
-    double GetIsotropicZoom() const
-  {
-    return m_IsotropicZoom;
-  }
-
   inline
     bool HasZoomChanged() const
   {
@@ -121,47 +100,6 @@ public:
     return res;
   }
 
-  /*
-  const MouseContextType&  GetMouseContextType() const
-  {
-    return m_MouseContext;
-  }
-  */
-  
-  /** set largest region/ViewportImageRegion/isotropicZoom factor */
-  void SetImageLargestRegion(const ImageRegionType & largestRegion)
-  {
-    // set back the zoom to 1
-    m_IsotropicZoom = 1.;
-
-    m_PreviousIsotropicZoom = 1.;
-
-    // store the image largest region
-    m_NavigationContext.m_ModelImageRegion = largestRegion;
-
-    // set back the origin to O
-    IndexType nullIndex;
-    nullIndex.Fill(0);
-    m_NavigationContext.m_ViewportImageRegion.SetIndex(nullIndex);
-
-    // get the widget size and use it to resize the Viewport region
-    QWidget* parent_widget = qobject_cast< QWidget* >( parent() );
-
-    if (parent_widget)
-      {
-      this->ResizeRegion(parent_widget->width(), parent_widget->height());
-      }
-
-    // compute the intial scale factor to fit to screen
-    double factorX = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[0]
-      /(double)(largestRegion.GetSize()[0]);
-    double factorY = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[1]
-      /(double)(largestRegion.GetSize()[1]);
-
-    double scale = std::min(factorX, factorY);
-    this->Zoom(scale);
-  }
-
 //
 // SIGNALS.
 signals:
@@ -170,7 +108,8 @@ signals:
 // Public SLOTS.
 public slots:
   void InitializeContext(int width, int height);
-
+  void OnModelImageRegionChanged(const ImageRegionType & largestRegion);
+  
 //
 // Protected methods.
 protected:
@@ -185,38 +124,6 @@ protected:
 //
 // Private types.
 private:
-  /** Navigation context  */
-  struct NavigationContextType
-  {
-    ImageRegionType m_ViewportImageRegion;
-    ImageRegionType m_ModelImageRegion;
-    // Stored as double to keep precision when dividing 
-    // by scale 
-    double          m_SizeXBeforeConstrain;
-    double          m_SizeYBeforeConstrain;
-  };
-
-  /** Mouse context */
-  struct MouseContextType
-  {
-    /** Default constructor */
-    MouseContextType() :
-      x( 0 ),
-      y( 0 ),
-      xMove( 0 ),
-      yMove( 0 ),
-      dx( 0 ),
-      dy( 0 )
-    {
-    }
-
-    int x;  // mousePress x
-    int y;  // mousePress y
-    int xMove;  // for mouseMove x
-    int yMove;  // for mouseMove y
-    int dx; // mouseMove in x (Drag)
-    int dy; // mouseMove in y (Drag)
-  };
 
 //
 // Private methods.
@@ -228,10 +135,6 @@ private:
 //
 // Private attributes.
 private:
-  NavigationContextType  m_NavigationContext;
-  MouseContextType       m_MouseContext;
-
-  double                 m_IsotropicZoom;
   double                 m_PreviousIsotropicZoom;
 
 //

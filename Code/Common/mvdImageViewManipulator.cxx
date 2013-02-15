@@ -48,10 +48,7 @@ namespace mvd
 /*****************************************************************************/
 ImageViewManipulator
 ::ImageViewManipulator( QObject* parent ) :
-  QObject( parent ),
-  m_NavigationContext(),
-  m_MouseContext(),
-  m_IsotropicZoom(1),
+  AbstractViewManipulator( parent ),
   m_PreviousIsotropicZoom(1.)
 {
   // TODO: Remove later because initialized in struct's default constructor and resizeEvent().
@@ -327,16 +324,16 @@ ImageViewManipulator
       Zoom(1.25);
       break;
     case Qt::Key_Left:
-      moveRegion(10,0);
+      moveRegion(m_NavigationContext.m_ViewportImageRegion.GetSize(0)/4 ,0);
       break;
     case Qt::Key_Right:
-      moveRegion(-10,0);
+      moveRegion(-m_NavigationContext.m_ViewportImageRegion.GetSize(0)/4 ,0);
       break;
     case Qt::Key_Up:
-      moveRegion(0,10);
+      moveRegion(0,m_NavigationContext.m_ViewportImageRegion.GetSize(1)/4 );
       break;
     case Qt::Key_Down:
-      moveRegion(0,-10);
+      moveRegion(0,-m_NavigationContext.m_ViewportImageRegion.GetSize(1)/4 );
       break;
     default:
       break;
@@ -348,5 +345,38 @@ ImageViewManipulator
 /*****************************************************************************/
 
 /*****************************************************************************/
+void ImageViewManipulator
+::OnModelImageRegionChanged(const ImageRegionType & largestRegion)
+{
+  // set back the zoom to 1
+  m_IsotropicZoom = 1.;
+
+  m_PreviousIsotropicZoom = 1.;
+  
+  // store the image largest region
+  m_NavigationContext.m_ModelImageRegion = largestRegion;
+  
+  // set back the origin to O
+  IndexType nullIndex;
+  nullIndex.Fill(0);
+  m_NavigationContext.m_ViewportImageRegion.SetIndex(nullIndex);
+
+  // get the widget size and use it to resize the Viewport region
+  QWidget* parent_widget = qobject_cast< QWidget* >( parent() );
+  
+  if (parent_widget)
+    {
+    this->ResizeRegion(parent_widget->width(), parent_widget->height());
+    }
+  
+  // compute the intial scale factor to fit to screen
+  double factorX = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[0]
+    /(double)(largestRegion.GetSize()[0]);
+  double factorY = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[1]
+    /(double)(largestRegion.GetSize()[1]);
+    
+  double scale = std::min(factorX, factorY);
+  this->Zoom(scale);
+}
 
 } // end namespace 'mvd'
