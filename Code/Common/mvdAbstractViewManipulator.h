@@ -86,7 +86,6 @@ public:
   virtual void keyPressEvent( QKeyEvent * event )  = 0;
 
   virtual bool HasZoomChanged() const = 0;
-  virtual void SetImageLargestRegion(const ImageRegionType & largestRegion) = 0;
 
   /** */
   inline
@@ -109,8 +108,7 @@ signals:
 //
 // Public SLOTS.
 public slots:
-  //virtual void InitializeContext(int width, int height) = 0;
-
+  
 //
 // Protected methods.
 protected:
