@@ -169,7 +169,7 @@ VectorImageModel
     }
 
   // Store default display settings.
-  m_Settings.SetRgbChannels( rgb );
+  GetSettings().SetRgbChannels( rgb );
 }
 
 /*******************************************************************************/
@@ -189,12 +189,12 @@ VectorImageModel
   for( CountType i=0; i<RGBA_CHANNEL_ALPHA; ++i )
     {
     Settings::ChannelVector::value_type band =
-      m_Settings.RgbChannel( static_cast< RgbaChannel >( i ) );
+      GetSettings().RgbChannel( static_cast< RgbaChannel >( i ) );
 
     ParametersType::ValueType index = 2 * i;
 
-    m_Settings.DynamicsParam( index ) = min[ band ];
-    m_Settings.DynamicsParam( index + 1 ) = max[ band ];
+    GetSettings().DynamicsParam( index ) = min[ band ];
+    GetSettings().DynamicsParam( index + 1 ) = max[ band ];
     }
 }
 
@@ -238,7 +238,7 @@ VectorImageModel
 
   // Don't do anything if the region did not changed
   if ( m_PreviousRegion!=region ||
-       m_Settings.IsDirty() ||
+       GetSettings().IsDirty() ||
        refresh )
     {
     // check that the current and the previous region have some pixels in
@@ -249,7 +249,7 @@ VectorImageModel
     // if the first time or no pixels in common , reload all
     if ( res &&
 	 m_PreviousRegion!=ImageRegionType() &&
-	 !m_Settings.IsDirty() &&
+	 !GetSettings().IsDirty() &&
          !refresh )
       {
       // Compute loaded region, and the four regions not loaded yet
@@ -320,7 +320,7 @@ VectorImageModel
     }
 
   // settings changes have been taken into account, clean the dirty flag
-  m_Settings.ClearDirty();
+  GetSettings().ClearDirty();
 
   // Store the region
   m_PreviousRegion = region;
@@ -632,6 +632,23 @@ VectorImageModel
   return ImageBaseType::Pointer( m_Image );
 }
 
+
+/*****************************************************************************/
+const VectorImageModel::Settings&
+VectorImageModel
+::GetSettings() const
+{
+  return m_Settings;
+}
+
+/*****************************************************************************/
+VectorImageModel::Settings&
+VectorImageModel
+::GetSettings()
+{
+  return m_Settings;
+}
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
@@ -650,10 +667,10 @@ VectorImageModel
   // Local variable because RenderingFunction::SetChannels() gets a
   // non-const std::vector< unsigned int >& as argument instead of a
   // const one.
-  Settings::ChannelVector rgb( m_Settings.GetRgbChannels() );
+  Settings::ChannelVector rgb( GetSettings().GetRgbChannels() );
 
   renderingFunc->SetChannelList( rgb );
-  renderingFunc->SetParameters( m_Settings.GetDynamicsParams() );
+  renderingFunc->SetParameters( GetSettings().GetDynamicsParams() );
 
   emit SettingsUpdated();
 }

@@ -266,10 +266,13 @@ public:
 
   /**
    */
-  inline const Settings& GetSettings() const;
+  virtual const Settings& GetSettings() const;
 
   /** */
-  inline Settings& GetSettings();
+  virtual Settings& GetSettings();
+
+  /** */
+  inline void SetSettings( Settings settings);    
 
   /**
    * w and h are added to compute the best level of detail to load
@@ -308,6 +311,12 @@ public:
    */
   virtual ImageBaseType::Pointer ToImageBase();
 
+  /** Get input filename */
+  QString GetInputFilename()
+  {
+    return m_InputFilename;
+  }
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -343,6 +352,18 @@ protected:
 
   /** */
   virtual void virtual_SetCurrentLod( CountType lod );
+
+  /**
+   */
+  void InitializeColorSetupSettings();
+
+  /** 
+   */
+  void InitializeColorDynamicsSettings();
+
+  /**
+   */
+  void InitializeRgbaPipeline();
 
 //
 // Protected attributes.
@@ -436,17 +457,6 @@ private:
     */
   void SetupCurrentLodImage(int w, int h);
 
-  /**
-   */
-  void InitializeColorSetupSettings();
-
-  /** 
-   */
-  void InitializeColorDynamicsSettings();
-
-  /**
-   */
-  void InitializeRgbaPipeline();
 
 //
 // Private attributes.
@@ -482,7 +492,7 @@ private:
   std::vector< ImageRegionType >       m_RegionsToLoadVector;
 
   // store the input image filename
-  QString m_InputFilename;
+  QString                              m_InputFilename;
 
   /** */
   CountType m_NbLod;
@@ -525,20 +535,15 @@ VectorImageModel
 
 /*****************************************************************************/
 inline
-const VectorImageModel::Settings&
+void
 VectorImageModel
-::GetSettings() const
+::SetSettings(Settings settings)
 {
-  return m_Settings;
+  m_Settings = settings;
 }
 
 /*****************************************************************************/
 inline
-VectorImageModel::Settings&
-VectorImageModel
-::GetSettings()
-{
-  return m_Settings;
 }
 
 /*****************************************************************************/
