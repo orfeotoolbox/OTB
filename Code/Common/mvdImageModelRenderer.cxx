@@ -50,7 +50,8 @@ namespace mvd
 /*****************************************************************************/
 ImageModelRenderer
 ::ImageModelRenderer( QObject* parent ) :
-  QObject( parent ),m_IsMoving(false)
+  AbstractModelRenderer( parent ),
+  m_IsMoving(false)
 {
   m_PreviousOrigin.Fill(0);
 }

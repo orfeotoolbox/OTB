@@ -42,6 +42,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
+#include "mvdAbstractModelRenderer.h"
 
 //
 // External classes pre-declaration.
@@ -59,41 +60,13 @@ class Monteverdi2_EXPORT AbstractImageModel;
  *
  */
 class ImageModelRenderer :
-    public QObject
+    public AbstractModelRenderer
 {
   Q_OBJECT;
 
 //
 // Public types.
 public:
-  struct RenderingContext
-  {
-     inline
-     RenderingContext( const AbstractImageModel* model =NULL,
-                       const ImageRegionType& region =ImageRegionType(),
-                       double zoom = 1.,
-                       unsigned int width = 0,
-                       unsigned int height = 0,
-                       int dx = 0,
-                       int dy = 0,
-                       bool refresh = true) :
-       m_AbstractImageModel( model ),
-       m_ImageRegion( region ),
-       m_IsotropicZoom( zoom ),
-       m_WidgetWidth(width),
-       m_WidgetHeight(height),
-       m_ForceRefresh(refresh)
-    {
-    }
-
-    const AbstractImageModel* m_AbstractImageModel;
-    ImageRegionType m_ImageRegion;
-    double       m_IsotropicZoom;
-    unsigned int m_WidgetWidth;
-    unsigned int m_WidgetHeight;
-    bool         m_ForceRefresh;
-  };
-
 //
 // Public methods.
 public:
@@ -137,7 +110,6 @@ private:
 //
 // Private attributes.
 private:
-
   unsigned char *   m_Buffer;
   bool              m_IsMoving;
 
