@@ -88,11 +88,11 @@ private:
   void DoInit()
   {
     SetName("DownloadSRTMTiles");
-    SetDescription("Download or list SRTM tiles related to images");
+    SetDescription("Download or list SRTM tiles related to a set of images");
 
     // Documentation
-    SetDocName("Download or list SRTM tiles related to images");
-    SetDocLongDescription("Download or list SRTM tiles related to images...");
+    SetDocName("Download or list SRTM tiles related to a set of images");
+    SetDocLongDescription("This application allows to select the appropriate SRTM tiles that covers a list of images. It builds a list of the required tiles. Two modes are available: the first one download those tiles from the USGS SRTM3 website (http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/), the second one list those tiles in a local directory. In both cases, you need to indicate the directory in which directory  tiles will be download or the location of local SRTM files.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -104,24 +104,26 @@ private:
     SetParameterDescription("il", "The list of images on which you want to determine corresponding SRTM tiles.");
 
     // UserDefined values
-    AddParameter(ParameterType_Choice, "mode", "download or list");
-    MandatoryOn("mode");
+    AddParameter(ParameterType_Choice, "mode", "download or list corresponding SRTM tiles.");
+    //MandatoryOn("mode");
 
     AddChoice("mode.download", "Download");
-    SetParameterDescription("mode.download","Download.");
+    SetParameterDescription("mode.download","Download corresponding tiles on USGE server.");
 
-    AddParameter(ParameterType_OutputFilename, "mode.download.outdir", "ouput dir");
-    SetParameterDescription("mode.download.outdir", "out dir");
+    AddParameter(ParameterType_OutputFilename, "mode.download.outdir", "ouput directory");
+    SetParameterDescription("mode.download.outdir", "Directory where tiles will be save.");
 
     AddChoice("mode.list", "List tiles");
-    SetParameterDescription("mode.list","List tiles");
+    SetParameterDescription("mode.list","List tiles in an existing local directory.");
 
-    AddParameter(ParameterType_OutputFilename, "mode.list.indir", "input dir");
-    SetParameterDescription("mode.list.indir", "in dir");
+    AddParameter(ParameterType_OutputFilename, "mode.list.indir", "input directory");
+    SetParameterDescription("mode.list.indir", "Input directory where SRTM tiles can are located.");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "QB_Toulouse_Ortho_XS.tif");
     SetDocExampleParameterValue("mode", "list");
+    SetDocExampleParameterValue("mode.list.indir", "/home/user/srtm_dir/");
+
   }
 
   void DoUpdateParameters()
@@ -166,25 +168,25 @@ private:
       upperLeft[0] = 0;
       upperLeft[1] = 0;
       PointType upperLeftWGS84 = rsTransformToWGS84->TransformPoint(upperLeft);
-      otbAppLogINFO(<< "upperLeftWGS84 " << upperLeftWGS84);
+      otbAppLogDEBUG(<< "upperLeftWGS84 " << upperLeftWGS84);
 
       PointType upperRight;
       upperRight[0] = size[0] - 1;
       upperRight[1] = 0;
       PointType upperRightWGS84 = rsTransformToWGS84->TransformPoint(upperRight);
-      otbAppLogINFO(<< "upperRightWGS84 " << upperRightWGS84);
+      otbAppLogDEBUG(<< "upperRightWGS84 " << upperRightWGS84);
 
       PointType lowerLeft;
       lowerLeft[0] = 0;
       lowerLeft[1] = size[1] - 1;
       PointType lowerLeftWGS84 = rsTransformToWGS84->TransformPoint(lowerLeft);
-      otbAppLogINFO(<< "lowerLeftWGS84 " << lowerLeftWGS84);
+      otbAppLogDEBUG(<< "lowerLeftWGS84 " << lowerLeftWGS84);
 
       PointType lowerRight;
       lowerRight[0] = size[0] - 1;
       lowerRight[1] = size[1] - 1;
       PointType lowerRightWGS84 = rsTransformToWGS84->TransformPoint(lowerRight);
-      otbAppLogINFO(<< "lowerRightWGS84 " << lowerRightWGS84);
+      otbAppLogDEBUG(<< "lowerRightWGS84 " << lowerRightWGS84);
 
       // the iterator constructor can also be used to construct from arrays:
       const double Longitude[] = {upperLeftWGS84[0],upperRightWGS84[0],lowerLeftWGS84[0],lowerRightWGS84[0]};
@@ -406,34 +408,52 @@ private:
           break;
           case Mode_List:
           {
+          bool findURL = false;
+          std::ostringstream listStream;
+          listStream << "Corresponding SRTM tiles: ";
+          listStream << GetParameterString("mode.list.indir") + "/";
           if ( this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + *it + extensionSimulation) )
             {
-            listTilesVector.insert(*it + extensionSimulation);
+            listStream << *it + extensionSimulation << " ";
+            findURL = true;
             }
           else
             {
-            itkExceptionMacro(<< GetParameterString("mode.list.indir") + "/" + *it + extensionSimulation  <<" not found!");
+            //try downcasing
+            //try down casing the url
+            std::string lowerIt = *it;
+            std::transform(it->begin(), it->end(), lowerIt.begin(), ::tolower);
+
+            if ( this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + lowerIt + extensionSimulation) )
+              {
+              tiles.erase(*it);
+              tiles.insert(lowerIt);
+              findURL = true;
+              }
+            else
+              {
+              //upcase all
+              std::string upperIt = *it;
+              std::transform(it->begin(), it->end(), upperIt.begin(), ::toupper);
+
+              if (this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + lowerIt + extensionSimulation) )
+                {
+                tiles.erase(*it);
+                tiles.insert(upperIt);
+                findURL = true;
+                }
+              }
             }
 
+          if (!findURL)
+            {
+            itkExceptionMacro(<< "Tile " <<  *it + extensionSimulation  <<" not found in " << GetParameterString("mode.list.indir") << " !");
+            }
+          otbAppLogINFO( << listStream.str());
           }
           break;
           }
         }
-
-    switch ( m_Mode )
-      {
-      case Mode_List:
-      {
-      std::ostringstream listStream;
-      listStream << "Corresponding SRTM tiles: ";
-      for(std::set<std::string>::const_iterator it= listTilesVector.begin(); it!=listTilesVector.end(); ++it)
-        {
-        listStream << *it << " ";
-        }
-      otbAppLogINFO( << listStream.str());
-      }
-      break;
-      }
   }
 };
 
