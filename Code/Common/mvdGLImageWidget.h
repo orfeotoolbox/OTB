@@ -40,6 +40,8 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
+#include "mvdAbstractModelRenderer.h"
+#include "mvdAbstractViewManipulator.h"
 
 //
 // External classes pre-declaration.
@@ -66,18 +68,24 @@ class Monteverdi2_EXPORT GLImageWidget :
 // Public methods.
 public:
   /** Constructor */
-  GLImageWidget( QWidget* parent =NULL,
+  GLImageWidget( AbstractViewManipulator * manipulator,
+                 AbstractModelRenderer * renderer,
+                 QWidget* parent =NULL,
 		 const QGLWidget* shareWidget =NULL,
 		 Qt::WindowFlags f =0 );
 
   /** Constructor */
-  GLImageWidget( QGLContext* context,
+  GLImageWidget( AbstractViewManipulator * manipulator,
+                 AbstractModelRenderer * renderer,
+                 QGLContext* context,
 		 QWidget* parent =NULL,
 		 const QGLWidget* shareWidget =NULL,
 		 Qt::WindowFlags f =0 );
   
   /** Constructor */
-  GLImageWidget( const QGLFormat& format,
+  GLImageWidget( AbstractViewManipulator * manipulator,
+                 AbstractModelRenderer * renderer,
+                 const QGLFormat& format,
 		 QWidget* parent =NULL,
 		 const QGLWidget *shareWidget =NULL,
 		 Qt::WindowFlags f =0 );
@@ -105,16 +113,19 @@ public:
     return 1.0;
   }
 
+  /** Set image model */
+  inline void SetImageModel(AbstractImageModel* model);
+
 //
 // Public SLOTS.
 public slots:
-  void OnLargestPossibleRegionChanged(const ImageRegionType& largestRegion);
 
 //
 // SIGNALS.
 signals:
   void movingMouse();
   void releasingMouse();
+  void ModelImageRegionChanged(const ImageRegionType & );
 
 //
 // Protected methods.
@@ -140,7 +151,8 @@ protected:
 // Private methods.
 private:
   /** Construction code (factorizes constructors initializations). */
-  void Initialize();
+  void Initialize(AbstractViewManipulator * manipulator,
+                  AbstractModelRenderer * renderer);
 
 //
 // Private attributes.
@@ -150,12 +162,48 @@ private:
   //AffineTransformType::Pointer m_ScreenToImageTransform;
 
   /** Event handler pointer */
-  ImageViewManipulator* m_ImageViewManipulator;
+  AbstractViewManipulator* m_ImageViewManipulator;
 
   /** Model Renderer pointer */
-  ImageModelRenderer*   m_ImageModelRenderer;
+  AbstractModelRenderer*   m_ImageModelRenderer;
+
+  AbstractImageModel*      m_ImageModel;
 };
+
+}// end namespace 'mvd'
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+
+//
+// Monteverdi includes (sorted by alphabetic order)
+#include "mvdHistogramModel.h"
+
+namespace mvd
+{
+void 
+GLImageWidget::SetImageModel(AbstractImageModel* model)
+{
+  m_ImageModel = model;
+
+  //
+  // REFRESH DISPLAY.
+
+  // set the largest possible region of the image
+  // TODO:  rename signal name when handling DataSets collections
+  // TODO: move signal into mvdApplication and link it to DockWidget
+  // and ImageView.
+  emit ModelImageRegionChanged(
+    model->GetNativeLargestRegion()
+  );
+}
 
 }
 
-#endif
+#endif // __mvdGLImageWidget_h

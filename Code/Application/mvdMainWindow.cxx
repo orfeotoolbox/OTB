@@ -44,6 +44,9 @@
 #include "mvdGLImageWidget.h"
 #include "mvdVectorImageModel.h"
 
+#include "mvdImageModelRenderer.h"
+#include "mvdImageViewManipulator.h"
+#include "mvdQuicklookViewManipulator.h"
 namespace mvd
 {
 /*
@@ -79,9 +82,19 @@ MainWindow
   setObjectName( "mvd::MainWindow" );
   setWindowTitle( PROJECT_NAME );
 
-  // Set the GLImageWidget as the centralWidget in MainWindow.
-  setCentralWidget( new GLImageWidget( this ) );
+  // instanciate the manipulator and the renderer relative to this widget
+  ImageViewManipulator * imageViewManipulator = new ImageViewManipulator();
+  ImageModelRenderer *   imageModelRenderer   = new ImageModelRenderer();
 
+  // set the GLImageWidget as the centralWidget in MainWindow.
+  setCentralWidget( new GLImageWidget( imageViewManipulator, 
+                                       imageModelRenderer, 
+                                       this ) );
+  
+  // grab the keyboard notifications in this widget
+  centralWidget()->grabKeyboard();
+
+  // add the needed docks 
   InitializeDockWidgets();
 
   // Connect Quit action of main menu to QApplication's quit() slot.
@@ -92,8 +105,8 @@ MainWindow
 
   // Connect the setLargestPossibleregion
   QObject::connect(
-    this, SIGNAL( LargestPossibleRegionChanged(const ImageRegionType&) ),
-    centralWidget(), SLOT( OnLargestPossibleRegionChanged(const ImageRegionType&)) );
+    centralWidget(), SIGNAL( ModelImageRegionChanged(const ImageRegionType&) ),
+    imageViewManipulator, SLOT( OnModelImageRegionChanged(const ImageRegionType&)) );
 
   // Connect Appllication and MainWindow when selected model is about
   // to change.
@@ -120,6 +133,28 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
+  // instanciate the manipulator and the renderer relative to this widget
+  QuicklookViewManipulator * qlViewManipulator = new QuicklookViewManipulator();
+  ImageModelRenderer *   qlModelRenderer   = new ImageModelRenderer();
+
+  //
+  // EXPERIMENTAL QUICKLOOK Widget.
+  GLImageWidget * qlWidget = new GLImageWidget( qlViewManipulator, qlModelRenderer, this );
+  qlWidget->setMinimumSize(100,100); // TODO : temporary
+  
+  AddWidgetToDock( 
+    qlWidget,
+    QUICKLOOK_DOCK,
+    tr( "Quicklook" ),
+    Qt::LeftDockWidgetArea
+    );
+  
+  // Connect the setLargestPossibleregion
+  QObject::connect(
+    qlWidget, SIGNAL( ModelImageRegionChanged(const ImageRegionType&) ),
+    qlViewManipulator, SLOT( OnModelImageRegionChanged(const ImageRegionType&)) );
+
+
   //
   // COLOR SETUP.
   ColorSetupWidget* colorSetupWgt = new ColorSetupWidget( this );
@@ -312,6 +347,16 @@ MainWindow
     centralWidget(),
     SLOT( updateGL() )
   );
+
+  // TODO : where to do this
+    QObject::disconnect(
+    vectorImageModel->GetQuicklookModel(),
+    SIGNAL( SettingsUpdated() ),
+    // to:
+    qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget()),
+    SLOT( updateGL()  )
+  );
+
 }
 
 /*****************************************************************************/
@@ -356,16 +401,29 @@ MainWindow
     SLOT( updateGL()  )
   );
 
-  //
-  // REFRESH DISPLAY.
 
-  // set the largest possible region of the image
-  // TODO:  rename signal name when handling DataSets collections
-  // TODO: move signal into mvdApplication and link it to DockWidget
-  // and ImageView.
-  emit LargestPossibleRegionChanged(
-    vectorImageModel->GetNativeLargestRegion()
+  // TODO : where to do this
+    QObject::connect(
+    vectorImageModel->GetQuicklookModel(),
+    SIGNAL( SettingsUpdated() ),
+    // to:
+    qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget()),
+    SLOT( updateGL()  )
   );
+
+  // Connect newly selected model to UI controller.
+  QObject::connect(
+    colorSetupWidget,
+    SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
+    // to:
+    vectorImageModel->GetQuicklookModel(),
+    SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
+  );
+
+
+  // 
+  qobject_cast<GLImageWidget *>(centralWidget())->SetImageModel(vectorImageModel);
+  qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget())->SetImageModel(vectorImageModel->GetQuicklookModel());
 }
 
 /*****************************************************************************/

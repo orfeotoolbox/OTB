@@ -106,7 +106,6 @@ public:
 //
 // SIGNALS.
 signals:
-  void LargestPossibleRegionChanged(const ImageRegionType& largestRegion);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -147,6 +146,9 @@ private:
 
   /** */
   inline QDockWidget* GetColorDynamicsDock();
+
+  /** */
+  inline const QDockWidget* GetQuicklookDock() const;
 
   /**
    * \brief Assign model to the controller which is child of given
@@ -214,6 +216,7 @@ private slots:
 // Some constants.
 #define VIDEO_COLOR_DYNAMICS_DOCK "videoColorDynamicsDock"
 #define VIDEO_COLOR_SETUP_DOCK "videoColorSetupDock"
+#define QUICKLOOK_DOCK "quicklookDock"
 
 namespace mvd
 {
@@ -252,6 +255,15 @@ MainWindow
 ::GetColorDynamicsDock()
 {
   return findChild< QDockWidget* >( VIDEO_COLOR_DYNAMICS_DOCK );
+}
+
+/*****************************************************************************/
+inline
+const QDockWidget*
+MainWindow
+::GetQuicklookDock() const
+{
+  return findChild< QDockWidget* >( QUICKLOOK_DOCK  );
 }
 
 /*****************************************************************************/

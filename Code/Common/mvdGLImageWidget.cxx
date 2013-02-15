@@ -22,7 +22,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QKeyEvent>
+//#include <QKeyEvent>
 //
 // System includes (sorted by alphabetic order)
 
@@ -38,8 +38,6 @@
 #include "mvdAbstractImageModel.h"
 #include "mvdApplication.h"
 #include "mvdDatasetModel.h"
-#include "mvdImageModelRenderer.h"
-#include "mvdImageViewManipulator.h"
 
 namespace mvd
 {
@@ -53,42 +51,49 @@ namespace mvd
 
 /*******************************************************************************/
 GLImageWidget
-::GLImageWidget( QWidget* parent,
+::GLImageWidget( AbstractViewManipulator * manipulator,
+                 AbstractModelRenderer * renderer,
+                 QWidget* parent,
 		 const QGLWidget* shareWidget,
 		 Qt::WindowFlags flags ) :
   QGLWidget( parent, shareWidget, flags ),
   m_ImageViewManipulator( NULL ),
-  m_ImageModelRenderer( NULL )
+  m_ImageModelRenderer( NULL ),
+  m_ImageModel( NULL )
 {
-  Initialize();
+  Initialize(manipulator, renderer);
 }
 
 /*******************************************************************************/
 GLImageWidget
-::GLImageWidget( QGLContext* context,
+::GLImageWidget( AbstractViewManipulator * manipulator,
+                 AbstractModelRenderer * renderer,
+                 QGLContext* context,
 		 QWidget* parent,
 		 const QGLWidget* shareWidget,
 		 Qt::WindowFlags flags ) :
   QGLWidget( context, parent, shareWidget, flags ),
   m_ImageViewManipulator( NULL ),
-  m_ImageModelRenderer( NULL )
+  m_ImageModelRenderer( NULL ),
+  m_ImageModel( NULL )
 {
-  Initialize();
+  Initialize(manipulator, renderer);
 }
 
 /*******************************************************************************/
 GLImageWidget
-::GLImageWidget( const QGLFormat& format,
-		 QWidget* parent,
-		 const QGLWidget* shareWidget,
-		 Qt::WindowFlags flags ) :
+::GLImageWidget( AbstractViewManipulator * manipulator,
+                 AbstractModelRenderer * renderer,
+                 const QGLFormat& format,
+                 QWidget* parent,
+                 const QGLWidget* shareWidget,
+                 Qt::WindowFlags flags ) :
   QGLWidget( format, parent, shareWidget, flags ),
   m_ImageViewManipulator( NULL ),
-  m_ImageModelRenderer( NULL )
-/*,  m_ImageToScreenTransform(AffineTransformType::New()),
-  m_ScreenToImageTransform(AffineTransformType::New()) */
+  m_ImageModelRenderer( NULL ),
+  m_ImageModel( NULL )
 {
-  Initialize();
+  Initialize(manipulator, renderer);
 }
 
 /*******************************************************************************/
@@ -102,12 +107,14 @@ GLImageWidget
 /*******************************************************************************/
 void
 GLImageWidget
-::Initialize()
+::Initialize(AbstractViewManipulator * manipulator,
+             AbstractModelRenderer * renderer)
 {
-  m_ImageViewManipulator = new ImageViewManipulator( this );
-  m_ImageModelRenderer = new ImageModelRenderer( this );
+  m_ImageViewManipulator = manipulator;
+  m_ImageViewManipulator->setParent(this);
 
-  this->grabKeyboard();
+  m_ImageModelRenderer =  renderer;
+  m_ImageModelRenderer->setParent(this);
 
   connect(this, SIGNAL(movingMouse()), m_ImageModelRenderer, SLOT(onMovingEvent()));
   connect(this, SIGNAL(releasingMouse()), m_ImageModelRenderer, SLOT(onReleasedMouse()));
@@ -209,16 +216,9 @@ GLImageWidget
   if( Application::ConstInstance()->GetModel()==NULL )
     return;
 
-  // Access dataset-model.
-  // TODO: Design better way to access model from GLImageWidget.
-  const DatasetModel* datasetModel =
-    qobject_cast< const DatasetModel* >(
-      Application::ConstInstance()->GetModel()
-    );
-
   // Setup rendering context with image-model and redering information.
-  ImageModelRenderer::RenderingContext context(
-    datasetModel->GetSelectedImageModel(),
+  AbstractModelRenderer::RenderingContext context(
+    m_ImageModel,
     region, isotropicZoom, 
     width(), height(), m_ImageViewManipulator->HasZoomChanged()
   );
@@ -282,7 +282,7 @@ GLImageWidget
   m_ImageViewManipulator->wheelEvent(event);
 
   // repaint the buffer
-  this->update();
+  //this->update();
 }
 
 /*******************************************************************************/
@@ -305,13 +305,6 @@ GLImageWidget
 ::keyPressEvent( QKeyEvent * event )
 {
   m_ImageViewManipulator->keyPressEvent(event);
-  this->update();
-}
-
-/*******************************************************************************/
-void GLImageWidget::OnLargestPossibleRegionChanged(const ImageRegionType& largestRegion)
-{
-  m_ImageViewManipulator->SetImageLargestRegion(largestRegion);
   this->update();
 }
 
