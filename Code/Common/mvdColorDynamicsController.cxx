@@ -404,6 +404,22 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
+::OnRgbChannelIndexChanged( RgbaChannel channel, int band )
+{
+  qDebug() << QString( "OnRgbChannelIndexChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( band );
+
+  //
+  // Reset color-dynamics widget.
+  ResetIntensityRanges( channel );
+  ResetQuantiles( channel );
+
+  // Signal model has been updated.
+  emit ModelUpdated();
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsController
 ::OnLowQuantileChanged( RgbaChannel channel, double value )
 {
   qDebug() << QString( "OnLowQuantileChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );

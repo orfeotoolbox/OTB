@@ -67,6 +67,8 @@ class ColorDynamicsWidget;
 
 /**
  * \class ColorDynamicsController
+ *
+ * \brief Color-dynamics widget controller for VectorImageModel objects.
  */
 class Monteverdi2_EXPORT ColorDynamicsController :
     public AbstractModelController
@@ -82,12 +84,30 @@ class Monteverdi2_EXPORT ColorDynamicsController :
 // Public methods.
 public:
 
-  /** Constructor */
+  /**
+   * \brief Constructor.
+   *
+   * \param widget Controlled widget.
+   * \param parent Parent QObject of this QObject.
+   */
   ColorDynamicsController( ColorDynamicsWidget* widget, QObject* parent =NULL );
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~ColorDynamicsController();
 
+  /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
+
+//
+// Slots.
+public slots:
+  /**
+   * \brief Slot called when the band-index of a RGB channel has
+   * changed.
+   *
+   * \param channel The RGB channel for which the band-index has changed.
+   * \param index The new band-index of the RGB channel.
+   */
+  void OnRgbChannelIndexChanged( RgbaChannel channel, int band );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -104,13 +124,10 @@ protected:
   //
   // AbstractModelController overrides.
 
-  /** */
   virtual void Connect( AbstractModel* );
 
-  /** */
   virtual void ResetWidget();
 
-  /** */
   virtual void Disconnect( AbstractModel* );
 
 //
@@ -128,13 +145,31 @@ private:
 // Private attributes.
 private:
 
-  /** */
+  /**
+   * \brief Reset intensity ranges to default values for given RGB
+   * channels.
+   *
+   * \param channels Given channels for which to reset current-band
+   * index. \see RgbBound() for valid values.
+   */
   void ResetIntensityRanges( RgbaChannel );
 
-  /** */
+  /**
+   * \brief Reset low and high intensities to default values for given
+   * RGB channels.
+   *
+   * \param channels Given channels for which to reset current-band
+   * index. \see RgbBound() for valid values.
+   */
   void ResetIntensities( RgbaChannel );
 
-  /** */
+  /**
+   * \brief Reset low and high quantiles to default values for given
+   * RGB channels.
+   *
+   * \param channels Given channels for which to reset current-band
+   * index. \see RgbBound() for valid values.
+   */
   void ResetQuantiles( RgbaChannel );
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -142,18 +177,63 @@ private:
 //
 // Slots.
 private slots:
-  /** */
-  void OnLowQuantileChanged( RgbaChannel, double );
-  /** */
-  void OnHighQuantileChanged( RgbaChannel, double );
-  /** */
-  void OnLowIntensityChanged( RgbaChannel, double );
-  /** */
-  void OnHighIntensityChanged( RgbaChannel, double );
-  /** */
-  void OnResetIntensityClicked( RgbaChannel );
-  /** */
-  void OnResetQuantileClicked( RgbaChannel );
+  /**
+   * \brief Slot called when low quantile value of a RGB channel has
+   * been edited.
+   *
+   * \param channel RGB channel for which the quantile value has
+   * changed.
+   * \param quantile The new quantile value.
+   */
+  void OnLowQuantileChanged( RgbaChannel channel, double quantile );
+
+  /**
+   * \brief Slot called when high quantile value of a RGB channel has
+   * been edited.
+   *
+   * \param channel RGB channel for which the quantile value has
+   * changed.
+   * \param quantile The new quantile value.
+   */
+  void OnHighQuantileChanged( RgbaChannel channel, double quantile );
+
+  /**
+   * \brief Slot called when low intensity value of a RGB channel has
+   * been edited.
+   *
+   * \param channel RGB channel for which the intensity value has
+   * changed.
+   * \param intensity The new intensity value.
+   */
+  void OnLowIntensityChanged( RgbaChannel channel, double intensity );
+
+  /**
+   * \brief Slot called when high intensity value of a RGB channel has
+   * been edited.
+   *
+   * \param channel RGB channel for which the intensity value has
+   * changed.
+   * \param intensity The new intensity value.
+   */
+  void OnHighIntensityChanged( RgbaChannel channel, double quantile );
+
+  /**
+   * \brief Slot called when the reset intensities button has been
+   * clicked.
+   *
+   * \param channel RGB channel for which to reset low and high
+   * intensities.
+   */
+  void OnResetIntensityClicked( RgbaChannel channel );
+
+  /**
+   * \brief Slot called when the reset quantiles button has been
+   * clicked.
+   *
+   * \param channel RGB channel for which to reset low and high
+   * quantiles.
+   */
+  void OnResetQuantileClicked( RgbaChannel channel );
 };
 
 } // end namespace 'mvd'.

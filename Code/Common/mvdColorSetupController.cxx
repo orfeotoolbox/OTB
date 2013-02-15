@@ -199,6 +199,10 @@ ColorSetupController
   // Update channel index.
   imageModel->GetSettings().RgbChannel( channel ) = index;
 
+  // Signal band-index of RGB channel has changed to other
+  // controllers.
+  emit RgbChannelIndexChanged( channel, index );
+
   // Signal model has been updated.
   emit ModelUpdated();
 }

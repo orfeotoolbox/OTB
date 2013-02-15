@@ -68,7 +68,7 @@ class ColorSetupWidget;
 /**
  * \class ColorSetupController
  *
- * \brief Color-setup widget controller forVectorImageModel objects.
+ * \brief Color-setup widget controller for VectorImageModel objects.
  */
 class Monteverdi2_EXPORT ColorSetupController :
     public AbstractModelController
@@ -103,6 +103,15 @@ public:
 //
 // Signals.
 signals:
+  /**
+   * \brief Signal emitted when the band-index of a RGB channel has
+   * been changed. This signal is used to forward events to other
+   * controllers such as ColorDynamicsController.
+   *
+   * \param channel The RGB channel for which the band-index has changed.
+   * \param index The new band-index of the RGB channel.
+   */
+  void RgbChannelIndexChanged( RgbaChannel channel, int band );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -130,8 +139,8 @@ protected:
 private:
 
   /**
-   * \brief Convenience method which resets current band-index to
-   * default values for given RGB channels.
+   * \brief Reset current band-index to default values for given RGB
+   * channels.
    *
    * \param channels Given channels for which to reset current-band
    * index. \see RgbBound() for valid values.

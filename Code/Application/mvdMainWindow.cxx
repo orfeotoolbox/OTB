@@ -124,7 +124,7 @@ MainWindow
   // COLOR SETUP.
   ColorSetupWidget* colorSetupWgt = new ColorSetupWidget( this );
 
-  new ColorSetupController(
+  ColorSetupController* colorSetupCtrl = new ColorSetupController(
     // wraps:
     colorSetupWgt,
     // as child of:
@@ -141,7 +141,7 @@ MainWindow
   ColorDynamicsWidget* colorDynWgt = new ColorDynamicsWidget( this );
 
   // Controller is childed to dock.
-  new ColorDynamicsController(
+  ColorDynamicsController* colorDynamicsCtrl = new ColorDynamicsController(
     // wraps:
     colorDynWgt,
     // as child of:
@@ -151,6 +151,17 @@ MainWindow
       tr( "Video color dynamics" ),
       Qt::LeftDockWidgetArea
     )
+  );
+
+  //
+  // CHAIN CONTROLLERS.
+  // Forward model update signals of color-setup controller...
+  QObject::connect(
+    colorSetupCtrl,
+    SIGNAL( RgbChannelIndexChanged( RgbaChannel, int ) ),
+    // to: ...color-dynamics controller model update signal.
+    colorDynamicsCtrl,
+    SLOT( OnRgbChannelIndexChanged( RgbaChannel, int ) )
   );
 
   //
