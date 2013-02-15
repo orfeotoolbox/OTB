@@ -30,17 +30,17 @@ enum
 
 const std::string SRTMServerPath = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
 
-const char* args[] = {"Africa",
-                      "Australia",
-                      "Eurasia",
-                      "Islands",
-                      "North_America",
-                      "South_America"};
+const char* USGSContinentDir[] = {"Africa",
+                                  "Australia",
+                                  "Eurasia",
+                                  "Islands",
+                                  "North_America",
+                                  "South_America"};
 
-const std::vector<std::string> continent(args, args + sizeof(args)/sizeof(args[0]));
+const std::vector<std::string> USGSContinentList(USGSContinentDir, USGSContinentDir + sizeof(USGSContinentDir)/sizeof(USGSContinentDir[0]));
 
-const std::string extension = ".hgt.zip";
-const std::string extensionSimulation = ".hgt";
+const std::string HGTExtension = ".hgt.zip";
+const std::string HGTExtensionSimulation = ".hgt";
 namespace Wrapper
 {
 
@@ -218,14 +218,14 @@ private:
         }
 
       const unsigned int distMinLong =
-                         std::distance(absVecLong.begin(), min_element (absVecLong.begin(),absVecLong.end()));
+        std::distance(absVecLong.begin(), min_element (absVecLong.begin(),absVecLong.end()));
       const unsigned int distMaxLong =
-                         std::distance(absVecLong.begin(), max_element (absVecLong.begin(),absVecLong.end()));
+        std::distance(absVecLong.begin(), max_element (absVecLong.begin(),absVecLong.end()));
 
       const unsigned int distMinLat =
-                         std::distance(absVecLat.begin(), min_element (absVecLat.begin(),absVecLat.end()));
+        std::distance(absVecLat.begin(), min_element (absVecLat.begin(),absVecLat.end()));
       const unsigned int distMaxLat =
-                         std::distance(absVecLat.begin(), max_element (absVecLat.begin(),absVecLat.end()));
+        std::distance(absVecLat.begin(), max_element (absVecLat.begin(),absVecLat.end()));
 
       //find corresponding tiled  for initialization
       //FIXME recode this properly
@@ -303,35 +303,35 @@ private:
 
       }
 
-      //iterate over all tiles to build URLs
-      for(std::set<std::string>::const_iterator it= tiles.begin(); it!=tiles.end(); ++it)
+    //iterate over all tiles to build URLs
+    for(std::set<std::string>::const_iterator it= tiles.begin(); it!=tiles.end(); ++it)
+      {
+      switch ( m_Mode )
         {
-        switch ( m_Mode )
+        case Mode_Download:
+        {
+        //Build URL
+        bool findURL = false;
+        std::string url;
+        for(std::vector<std::string>::const_iterator contIt= USGSContinentList.begin(); contIt!=USGSContinentList.end(); ++contIt)
           {
-          case Mode_Download:
-          {
-          //Build URL
-          bool findURL = false;
-          std::string url;
-          for(std::vector<std::string>::const_iterator contIt= continent.begin(); contIt!=continent.end(); ++contIt)
+          std::ostringstream urlStream;
+          CurlHelper::Pointer curl = CurlHelper::New();
+          curl->SetTimeout(0);
+          urlStream << SRTMServerPath;
+          urlStream << *contIt;
+          urlStream << "/";
+          urlStream << *it;
+          urlStream << HGTExtension;
+
+          url = urlStream.str();
+
+          if (!curl->IsCurlReturnHttpError( urlStream.str()))
             {
-            std::ostringstream urlStream;
-            CurlHelper::Pointer curl = CurlHelper::New();
-            curl->SetTimeout(0);
-            urlStream << SRTMServerPath;
-            urlStream << *contIt;
-            urlStream << "/";
-            urlStream << *it;
-            urlStream << extension;
-
-            url = urlStream.str();
-
-            if (!curl->IsCurlReturnHttpError( urlStream.str()))
-              {
-              findURL = true;
-              break;
-              }
-            else
+            findURL = true;
+            break;
+            }
+          else
             {
             //try down casing the url
             std::string lowerIt = *it;
@@ -342,7 +342,7 @@ private:
             urlStream << *contIt;
             urlStream << "/";
             urlStream << lowerIt;
-            urlStream << extension;
+            urlStream << HGTExtension;
             if (!curl->IsCurlReturnHttpError( urlStream.str()))
               {
               tiles.erase(*it);
@@ -362,7 +362,7 @@ private:
               urlStream << *contIt;
               urlStream << "/";
               urlStream << upperIt;
-              urlStream << extension;
+              urlStream << HGTExtension;
 
               if (!curl->IsCurlReturnHttpError( urlStream.str()))
                 {
@@ -375,85 +375,84 @@ private:
               }
             }
 
-            }
-
-          if (!findURL)
-            {
-            itkExceptionMacro(<< url  <<" not found!");
-            }
-
-          otbAppLogINFO(<< "Found Tile on USGS server at URL: " << url);
-          // TODO use the RetrieveUrlInMemory? In this case need to adapt the
-          // timeout
-
-          const std::string outDir = GetParameterString("mode.download.outdir");
-
-          std::ostringstream oss;
-          oss<<outDir<<"/foo";
-
-          if( itksys::SystemTools::Touch( oss.str().c_str(), true ) == false )
-            {
-            itkExceptionMacro( "Error, no write permission in given output directory "<< outDir <<".");
-            }
-          else
-            {
-            itksys::SystemTools::RemoveFile( oss.str().c_str() );
-            }
-
-          CurlHelper::Pointer curlReq = CurlHelper::New();
-          curlReq->SetTimeout(0);
-          curlReq->RetrieveFile(url, GetParameterString("mode.download.outdir") + "/" + *it + extension);
-          //TODO unzip here (can do this in memory?)
           }
-          break;
-          case Mode_List:
+
+        if (!findURL)
           {
-          bool findURL = false;
-          std::ostringstream listStream;
-          listStream << "Corresponding SRTM tiles: ";
-          listStream << GetParameterString("mode.list.indir") + "/";
-          if ( this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + *it + extensionSimulation) )
+          itkExceptionMacro(<< url  <<" not found!");
+          }
+
+        otbAppLogINFO(<< "Found Tile on USGS server at URL: " << url);
+        // TODO use the RetrieveUrlInMemory? In this case need to adapt the
+        // timeout
+
+        const std::string outDir = GetParameterString("mode.download.outdir");
+
+        std::ostringstream oss;
+        oss<<outDir<<"/foo";
+
+        if( itksys::SystemTools::Touch( oss.str().c_str(), true ) == false )
+          {
+          itkExceptionMacro( "Error, no write permission in given output directory "<< outDir <<".");
+          }
+        else
+          {
+          itksys::SystemTools::RemoveFile( oss.str().c_str() );
+          }
+
+        CurlHelper::Pointer curlReq = CurlHelper::New();
+        curlReq->SetTimeout(0);
+        curlReq->RetrieveFile(url, GetParameterString("mode.download.outdir") + "/" + *it + HGTExtension);
+        //TODO unzip here (can do this in memory?)
+        }
+        break;
+        case Mode_List:
+        {
+        bool findURL = false;
+        std::ostringstream listStream;
+        listStream << "Corresponding SRTM tiles: ";
+        listStream << GetParameterString("mode.list.indir") + "/";
+        if ( this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + *it + HGTExtensionSimulation) )
+          {
+          listStream << *it + HGTExtensionSimulation << " ";
+          findURL = true;
+          }
+        else
+          {
+          //try down casing the url
+          std::string lowerIt = *it;
+          std::transform(it->begin(), it->end(), lowerIt.begin(), ::tolower);
+
+          if ( this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + lowerIt + HGTExtensionSimulation) )
             {
-            listStream << *it + extensionSimulation << " ";
+            tiles.erase(*it);
+            tiles.insert(lowerIt);
             findURL = true;
             }
           else
             {
-            //try downcasing
-            //try down casing the url
-            std::string lowerIt = *it;
-            std::transform(it->begin(), it->end(), lowerIt.begin(), ::tolower);
+            //upcase all
+            std::string upperIt = *it;
+            std::transform(it->begin(), it->end(), upperIt.begin(), ::toupper);
 
-            if ( this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + lowerIt + extensionSimulation) )
+            if (this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + lowerIt + HGTExtensionSimulation) )
               {
               tiles.erase(*it);
-              tiles.insert(lowerIt);
+              tiles.insert(upperIt);
               findURL = true;
               }
-            else
-              {
-              //upcase all
-              std::string upperIt = *it;
-              std::transform(it->begin(), it->end(), upperIt.begin(), ::toupper);
-
-              if (this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + lowerIt + extensionSimulation) )
-                {
-                tiles.erase(*it);
-                tiles.insert(upperIt);
-                findURL = true;
-                }
-              }
             }
+          }
 
-          if (!findURL)
-            {
-            itkExceptionMacro(<< "Tile " <<  *it + extensionSimulation  <<" not found in " << GetParameterString("mode.list.indir") << " !");
-            }
-          otbAppLogINFO( << listStream.str());
+        if (!findURL)
+          {
+          itkExceptionMacro(<< "Tile " <<  *it + HGTExtensionSimulation  <<" not found in " << GetParameterString("mode.list.indir") << " !");
           }
-          break;
-          }
+        otbAppLogINFO( << listStream.str());
         }
+        break;
+        }
+      }
   }
 };
 
