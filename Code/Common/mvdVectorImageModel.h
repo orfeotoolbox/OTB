@@ -544,10 +544,6 @@ VectorImageModel
 
 /*****************************************************************************/
 inline
-}
-
-/*****************************************************************************/
-inline
 unsigned int
 VectorImageModel
 ::ComputeBufferIndex(const IndexType& index,

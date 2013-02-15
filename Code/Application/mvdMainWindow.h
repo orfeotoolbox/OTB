@@ -150,6 +150,9 @@ private:
   /** */
   inline const QDockWidget* GetQuicklookDock() const;
 
+  /** */
+  inline  QDockWidget* GetQuicklookDock();
+
   /**
    * \brief Assign model to the controller which is child of given
    * dock-widget.
@@ -262,6 +265,15 @@ inline
 const QDockWidget*
 MainWindow
 ::GetQuicklookDock() const
+{
+  return findChild< QDockWidget* >( QUICKLOOK_DOCK  );
+}
+
+/*****************************************************************************/
+inline
+QDockWidget*
+MainWindow
+::GetQuicklookDock()
 {
   return findChild< QDockWidget* >( QUICKLOOK_DOCK  );
 }
