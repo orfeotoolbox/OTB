@@ -381,7 +381,23 @@ private:
             }
 
           otbAppLogINFO(<< "Found Tile on USGS server at URL: " << url);
-          // TODO use the RetrieveUrlInMemory? In this case need to adapt the timeout
+          // TODO use the RetrieveUrlInMemory? In this case need to adapt the
+          // timeout
+
+          const std::string outDir = GetParameterString("mode.download.outdir");
+
+          std::ostringstream oss;
+          oss<<outDir<<"/foo";
+
+          if( itksys::SystemTools::Touch( oss.str().c_str(), true ) == false )
+            {
+            itkExceptionMacro( "Error, no write permission in given output directory "<< outDir <<".");
+            }
+          else
+            {
+            itksys::SystemTools::RemoveFile( oss.str().c_str() );
+            }
+
           CurlHelper::Pointer curlReq = CurlHelper::New();
           curlReq->SetTimeout(0);
           curlReq->RetrieveFile(url, GetParameterString("mode.download.outdir") + "/" + *it + extension);
