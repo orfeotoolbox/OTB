@@ -204,7 +204,7 @@ private:
     region.SetIndex(ul);
     FloatVectorImageType::SizeType size;
     size[0] = static_cast<unsigned int>(lr[0]-ul[0]);
-    size[1] = static_cast<unsigned int>(lr[1]-ul[1]);    
+    size[1] = static_cast<unsigned int>(lr[1]-ul[1]);
     region.SetSize(size);
 
     otbAppLogINFO(<<"Number of valid points: "<<nbValidPoints);

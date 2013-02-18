@@ -231,7 +231,7 @@ private:
       rsTransform->SetInputKeywordList(referencePtr->GetImageKeywordlist());
       rsTransform->SetInputProjectionRef(referencePtr->GetProjectionRef());
       rsTransform->SetOutputKeywordList(inImage->GetImageKeywordlist());
-      rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());      
+      rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
       rsTransform->InstanciateTransform();
 
       FloatVectorImageType::IndexType uli_ref,uri_ref,lli_ref,lri_ref;
@@ -280,7 +280,6 @@ private:
 
       this->CropRegionOfInterest();
       }
-
 
 
     m_ExtractROIFilter = ExtractROIFilterType::New();
