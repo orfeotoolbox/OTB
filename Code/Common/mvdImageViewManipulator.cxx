@@ -51,8 +51,6 @@ ImageViewManipulator
   AbstractViewManipulator( parent ),
   m_PreviousIsotropicZoom(1.)
 {
-  // TODO: Remove later because initialized in struct's default constructor and resizeEvent().
-  this->InitializeContext(1,1);
 }
 
 /*****************************************************************************/
@@ -61,17 +59,19 @@ ImageViewManipulator
 {
 }
 
-/*******************************************************************************/
-void
+/*****************************************************************************/
+bool
 ImageViewManipulator
-::InitializeContext(int width, int height)
+::HasZoomChanged() const
 {
-  ImageRegionType::SizeType  initialSize;
-  initialSize[0] = width;
-  initialSize[1] = height;
+  bool res = false;
 
-  // initialize with the given size
-  m_NavigationContext.m_ViewportImageRegion.SetSize(initialSize);
+  if (vcl_abs(m_IsotropicZoom - m_PreviousIsotropicZoom) > 0.00000001 )
+    {
+    res = true;
+    }
+
+  return res;
 }
 
 /******************************************************************************/

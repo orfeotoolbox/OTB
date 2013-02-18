@@ -66,6 +66,8 @@ namespace mvd
 
 /**
  * \class MyClass
+ *
+ * \brief WIP.
  */
 class Monteverdi2_EXPORT MyClass :
     public QObject
@@ -81,11 +83,17 @@ class Monteverdi2_EXPORT MyClass :
 // Public methods.
 public:
 
-  /** Constructor */
+  /** \brief Constructor. */
   MyClass( QObject* parent =NULL );
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~MyClass();
+
+  /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
+
+//
+// Public SLOTS.
+public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

@@ -108,10 +108,12 @@ MainWindow
     qApp, SLOT( quit() )
   );
 
+  /*
   // Connect the setLargestPossibleregion
   QObject::connect(
     centralWidget(), SIGNAL( ModelImageRegionChanged(const ImageRegionType&) ),
     imageViewManipulator, SLOT( OnModelImageRegionChanged(const ImageRegionType&)) );
+  */
 
   // Connect Appllication and MainWindow when selected model is about
   // to change.
@@ -159,10 +161,12 @@ MainWindow
     Qt::LeftDockWidgetArea
     );
   
+  /*
   // Connect the setLargestPossibleregion
   QObject::connect(
     qlWidget, SIGNAL( ModelImageRegionChanged(const ImageRegionType&) ),
     qlViewManipulator, SLOT( OnModelImageRegionChanged(const ImageRegionType&)) );
+  */
 
   //
   // COLOR SETUP.
@@ -428,7 +432,7 @@ MainWindow
   // QUICKLOOK VIEW.
 
   // Assign newly selected model to view.
-#if 0
+#if 1
   qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->SetImageModel(
     vectorImageModel->GetQuicklookModel()
   );

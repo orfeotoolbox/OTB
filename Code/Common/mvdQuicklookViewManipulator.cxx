@@ -51,8 +51,6 @@ QuicklookViewManipulator
   AbstractViewManipulator( parent ),
   m_PreviousIsotropicZoom(1.)
 {
-  // TODO: Remove later because initialized in struct's default constructor and resizeEvent().
-  this->InitializeContext(1,1);
 }
 
 /*****************************************************************************/
@@ -61,17 +59,12 @@ QuicklookViewManipulator
 {
 }
 
-/*******************************************************************************/
-void
+/*****************************************************************************/
+bool
 QuicklookViewManipulator
-::InitializeContext(int width, int height)
+::HasZoomChanged() const
 {
-  ImageRegionType::SizeType  initialSize;
-  initialSize[0] = width;
-  initialSize[1] = height;
-
-  // initialize with the given size
-  m_NavigationContext.m_ViewportImageRegion.SetSize(initialSize);
+  return false;
 }
 
 /******************************************************************************/
@@ -329,14 +322,14 @@ QuicklookViewManipulator
 void
 QuicklookViewManipulator
 ::keyPressEvent( QKeyEvent * event )
-{
-  
+{ 
 }
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
-void QuicklookViewManipulator
+void
+QuicklookViewManipulator
 ::OnModelImageRegionChanged(const ImageRegionType & largestRegion)
 {
   // set back the zoom to 1

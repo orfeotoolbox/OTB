@@ -67,7 +67,8 @@ namespace mvd
 /* CLASS DEFINITION SECTION                                                  */
 
 /** \class AbstractViewManipulator
- *  Base class for QWidget manipulation
+ *
+ *  \brief Base class for QWidget manipulation
  */
 class Monteverdi2_EXPORT AbstractViewManipulator :
     public QObject
@@ -97,6 +98,7 @@ public:
   virtual void resizeEvent ( QResizeEvent * event ) = 0;
   virtual void keyPressEvent( QKeyEvent * event )  = 0;
 
+  // TODO: See if HasZoomChanged() pure virtual method can be transformed into Qt signal.
   virtual bool HasZoomChanged() const = 0;
 
   /** */
@@ -122,25 +124,44 @@ signals:
 // Protected types.
 protected:
   /** Navigation context  */
-  struct NavigationContextType
+  struct NavigationContext
   {
-    // TODO: Implement default construtor (to safely initialize POD).
-    // TODO: Rename NavigationContextType struct into NagivationContext (this is not a typedef).
+    /**
+     * \brief Constructor.
+     *
+     * Default constructor (safely) initializes POD (Plain Old Data)
+     * structure.
+     */
+    NavigationContext() :
+      m_ViewportImageRegion(),
+      m_ModelImageRegion(),
+      m_SizeXBeforeConstrain(),
+      m_SizeYBeforeConstrain()
+    {
+      // TODO: Initialize default viewport region to (0, 0) i.e. no
+      // viewed image.
+
+      ImageRegionType::SizeType region;
+
+      region[ 0 ] = 1;
+      region[ 1 ] = 1;
+
+      m_ViewportImageRegion.SetSize( region );
+    }
+
     ImageRegionType m_ViewportImageRegion;
     ImageRegionType m_ModelImageRegion;
     // Stored as double to keep precision when dividing 
     // by scale 
-    double          m_SizeXBeforeConstrain;
-    double          m_SizeYBeforeConstrain;
+    double m_SizeXBeforeConstrain;
+    double m_SizeYBeforeConstrain;
   };
 
   /** Mouse context */
-  struct MouseContextType
+  struct MouseContext
   {
-    // TODO: Rename MouseContextType struct into NagivationContext (this is not a typedef).
-
-    /** Default constructor */
-    MouseContextType() :
+    /** \brief Default constructor. */
+    MouseContext() :
       x( 0 ),
       y( 0 ),
       xMove( 0 ),
@@ -167,10 +188,10 @@ protected:
 protected:
 
   /** */
-  NavigationContextType m_NavigationContext;
+  NavigationContext m_NavigationContext;
 
   /** */
-  MouseContextType m_MouseContext;
+  MouseContext m_MouseContext;
 
   /** */
   double m_IsotropicZoom;

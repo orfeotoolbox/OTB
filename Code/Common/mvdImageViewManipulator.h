@@ -25,6 +25,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -43,6 +47,10 @@
 #include "mvdTypes.h"
 #include "mvdAbstractViewManipulator.h"
 
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
 //
 // External classes pre-declaration.
 namespace
@@ -54,8 +62,14 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
-/** \class ImageViewManipulator
- *  Brief this class handles the event related to a QGLWidget. It also
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
+/**
+ * \class ImageViewManipulator
+ *
+ *  \brief This class handles the event related to a QGLWidget. It also
  *  handles :
  *    - NavigationContext : to store the region of the image to be
  *      rendered.
@@ -67,59 +81,71 @@ namespace mvd
 class Monteverdi2_EXPORT ImageViewManipulator :
     public AbstractViewManipulator
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public methods.
 public:
 
-  /** Constructor */
+  /** \brief Constructor. */
   ImageViewManipulator( QObject* parent =NULL );
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~ImageViewManipulator();
 
   /** */
   void mouseMoveEvent ( QMouseEvent * event );
+  /** */
   void mousePressEvent ( QMouseEvent * event );
+  /** */
   void mouseReleaseEvent ( QMouseEvent * event );
+  /** */
   void wheelEvent ( QWheelEvent* event);
+  /** */
   void resizeEvent ( QResizeEvent * event );
+  /** */
   void keyPressEvent( QKeyEvent * event );
 
-  inline
-    bool HasZoomChanged() const
-  {
-    bool res = false;
+  /** */
+  bool HasZoomChanged() const;
 
-    if (vcl_abs(m_IsotropicZoom - m_PreviousIsotropicZoom) > 0.00000001 )
-      {
-      res = true;
-      }
-
-    return res;
-  }
-
-//
-// SIGNALS.
-signals:
+  /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
 //
 // Public SLOTS.
 public slots:
-  void InitializeContext(int width, int height);
   void OnModelImageRegionChanged(const ImageRegionType & largestRegion);
-  
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
+//
+// Signals.
+signals:
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
+
 //
 // Protected methods.
 protected:
+  /** */
   void ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest);
+
+  /** */
   void CenterRegion(double scale);
+
+  /** */
   void ResizeRegion(unsigned int w, unsigned int h);
   
 //
 // Protected attributes.
 protected:
+
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Private types.
@@ -128,20 +154,32 @@ private:
 //
 // Private methods.
 private:
-
+  /** */
   void Zoom(const double scale);
+
+  /** */
   void moveRegion(double dx, double dy);
 
 //
 // Private attributes.
 private:
-  double                 m_PreviousIsotropicZoom;
+  /** */
+  double m_PreviousIsotropicZoom;
+
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
-// SLOTS.
+// Slots.
 private slots:
 };
 
+} // end namespace 'mvd'
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
 } // end namespace 'mvd'
 
 #endif // __mvdImageViewManipulator_h

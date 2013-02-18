@@ -128,6 +128,15 @@ GLImageWidget
     this, SIGNAL( releasingMouse() ),
     m_ImageModelRenderer, SLOT(onReleasedMouse())
   );
+
+  // Connect this model region changed.
+  QObject::connect(
+    this,
+    SIGNAL( ModelImageRegionChanged( const ImageRegionType& ) ),
+    // to:
+    m_ImageViewManipulator,
+    SLOT( OnModelImageRegionChanged( const ImageRegionType& ) )
+  );
 }
 
 /*******************************************************************************/
