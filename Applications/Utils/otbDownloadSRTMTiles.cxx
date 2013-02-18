@@ -104,19 +104,19 @@ private:
     SetParameterDescription("il", "The list of images on which you want to determine corresponding SRTM tiles.");
 
     // UserDefined values
-    AddParameter(ParameterType_Choice, "mode", "download or list corresponding SRTM tiles.");
+    AddParameter(ParameterType_Choice, "mode", "Download/List corresponding SRTM tiles.");
     //MandatoryOn("mode");
 
     AddChoice("mode.download", "Download");
     SetParameterDescription("mode.download","Download corresponding tiles on USGE server.");
 
-    AddParameter(ParameterType_OutputFilename, "mode.download.outdir", "ouput directory");
+    AddParameter(ParameterType_OutputFilename, "mode.download.outdir", "Ouput directory");
     SetParameterDescription("mode.download.outdir", "Directory where tiles will be save.");
 
     AddChoice("mode.list", "List tiles");
     SetParameterDescription("mode.list","List tiles in an existing local directory.");
 
-    AddParameter(ParameterType_OutputFilename, "mode.list.indir", "input directory");
+    AddParameter(ParameterType_OutputFilename, "mode.list.indir", "Input directory");
     SetParameterDescription("mode.list.indir", "Input directory where SRTM tiles can are located.");
 
     // Doc example parameter settings
