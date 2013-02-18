@@ -75,14 +75,10 @@ QuicklookModel
   //
   // Step #3: Post-process of the BuildModel() pattern.
 
-  /*
-  //
-  // Step #2: get the image used as quicklook
-  VectorImageModel* imageModel = qobject_cast< VectorImageModel* >( parent() );
-
-  // TODO : remove size
-  this->LoadFile(imageModel->GetInputFilename(), 500, 500);
-  */
+  SetFilename(
+    qobject_cast< VectorImageModel* >( parent() )->GetFilename(),
+    512, 512
+  );
 
   // Initialize RgbaImageModel.
   InitializeRgbaPipeline();

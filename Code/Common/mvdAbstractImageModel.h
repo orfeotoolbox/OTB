@@ -251,9 +251,16 @@ AbstractImageModel
   if( GetCurrentLod()==lod )
     return;
 
-  virtual_SetCurrentLod( lod );
+  try
+    {
+    virtual_SetCurrentLod( lod );
 
-  m_CurrentLod = lod;
+    m_CurrentLod = lod;
+    }
+  catch( std::exception& exc )
+    {
+    throw;
+    }
 }
 
 /*****************************************************************************/

@@ -75,7 +75,7 @@ DatasetModel
   try
     {
     // 2.1. Information.
-    vectorImageModel->LoadFile( filename, w, h);
+    vectorImageModel->SetFilename( filename, w, h);
 
     // 2.2. Generate cached data.
     // TODO: generate image-model cached data (quicklook,

@@ -66,7 +66,7 @@ VectorImageModel
   m_AlreadyLoadedRegion(),
   m_Region(),
   m_RegionsToLoadVector(),
-  m_InputFilename(),
+  m_Filename(),
   m_NbLod( 0 )
 {
 }
@@ -81,10 +81,10 @@ VectorImageModel
 /*******************************************************************************/
 void
 VectorImageModel
-::LoadFile( const QString& filename , int w, int h)
+::SetFilename( const QString& filename , int w, int h)
 {
   // 1. store the input filename
-  m_InputFilename = filename;
+  m_Filename = filename;
 
   //
   // 2. Setup file-reader.
@@ -496,7 +496,7 @@ VectorImageModel::GetBestLevelOfDetail(const double zoomFactor,
 #if defined(OTB_USE_JPEG2000)
   otb::JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
 
-  std::string filename( m_InputFilename.toStdString() );
+  std::string filename( m_Filename.toStdString() );
 
   readerJPEG2000->SetFileName( filename.c_str() );
   if(readerJPEG2000->CanReadFile( filename.c_str() ) )
@@ -547,34 +547,52 @@ VectorImageModel::Closest(double invZoomfactor, const std::vector<unsigned int> 
 
 /*******************************************************************************/
 void
-VectorImageModel::SetupCurrentLodImage(int w, int h)
+VectorImageModel
+::SetupCurrentLodImage( int width, int height )
 {
   // Get the largest possible region of the image
   DefaultImageFileReaderType::Pointer tmpReader(
     DefaultImageFileReaderType::New() );
 
-  tmpReader->SetFileName( m_InputFilename.toStdString() );
+  tmpReader->SetFileName( m_Filename.toStdString() );
   tmpReader->UpdateOutputInformation();
 
   // Get native image largest region, which is LOD level zero.
   ImageRegionType nativeLargestRegion =
     tmpReader->GetOutput()->GetLargestPossibleRegion();
 
-  double factorX = (double)w/(double)(nativeLargestRegion.GetSize()[0]);
-  double factorY = (double)h/(double)(nativeLargestRegion.GetSize()[1]);
+  // Initialize lod count.
+  CountType nbLod = 1;
+  bool hasBestLod = false;
+  int bestLod = 0;
+
+  // Try to compute best LOD.
+  if( width>0 && height>0 )
+    {
+    double factorX =
+      double( width ) / double( nativeLargestRegion.GetSize()[ 0 ] );
+
+    double factorY =
+      double( height ) / double( nativeLargestRegion.GetSize()[ 1 ] );
 
   double initialZoomFactor = std::min(factorX, factorY);
 
-  int best_lod = 0;
-  CountType nbLod = 1;
-
   // if mutli-resolution file
-  if ( this->GetBestLevelOfDetail(initialZoomFactor, best_lod, nbLod) )
-    {
-    this->SetCurrentLod(best_lod);
+  hasBestLod = GetBestLevelOfDetail(initialZoomFactor, bestLod, nbLod);
     }
-  else // if not jpeg2k image
+
+  // If best-lod is available for multi-resolution image.
+  if( hasBestLod )
     {
+    // Change current-lod: update m_ImageFileReader, m_Image and
+    // current LOD index.
+    this->SetCurrentLod( bestLod );
+    }
+
+  else // Otherwise
+    {
+    // Leave current LOD index to 0.
+
     // Update m_ImageFileReader
     m_ImageFileReader = tmpReader;
     
@@ -584,6 +602,7 @@ VectorImageModel::SetupCurrentLodImage(int w, int h)
 
   // Remember native largest region.
   m_NativeLargestRegion = nativeLargestRegion;
+
   // Remember number of LOD levels.
   m_NbLod = nbLod;
 }
@@ -602,16 +621,35 @@ void
 VectorImageModel
 ::virtual_SetCurrentLod( CountType lod )
 {
-  // new filename if lod is not 0
-  QString lodFilename( m_InputFilename );
-  lodFilename.append( QString( "?&resol=%1" ).arg( lod ) );
+  assert( lod<GetNbLod() );
 
-  // Update m_ImageFileReader
-  m_ImageFileReader = DefaultImageFileReaderType::New();
-  m_ImageFileReader->SetFileName( lodFilename.toStdString() );
-  m_ImageFileReader->UpdateOutputInformation();
-    
-  // Update m_Image
+  // new filename if lod is not 0
+  QString lodFilename( m_Filename );
+
+  // If model is a multi-resolution image.
+  if( lod>1 )
+    {
+    lodFilename.append( QString( "?&resol=%1" ).arg( lod ) );
+
+    // Update m_ImageFileReader
+    DefaultImageFileReaderType::Pointer fileReader(
+      DefaultImageFileReaderType::New()
+    );
+
+    try
+      {
+      fileReader->SetFileName( lodFilename.toStdString() );
+      fileReader->UpdateOutputInformation();
+
+      m_ImageFileReader = fileReader;
+      }
+    catch( std::exception& exc )
+      {
+      throw;
+      }
+    }
+
+  // (Always) Update m_Image reference.
   m_Image = m_ImageFileReader->GetOutput();
 }
 

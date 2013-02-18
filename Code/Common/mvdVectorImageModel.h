@@ -275,10 +275,13 @@ public:
   inline void SetSettings( Settings settings);    
 
   /**
-   * w and h are added to compute the best level of detail to load
-   * from the image if multi-resolution image
+   * Width and height are added to compute the best level of detail to
+   * load from the image if multi-resolution image.
    */
-  void LoadFile( const QString& filename, int w, int h );
+  void SetFilename( const QString& filename, int width, int height );
+
+  /** Get input filename */
+  inline QString GetFilename() const;
 
   /** Rasterize the buffered region in a buffer */
   unsigned char * RasterizeRegion(const ImageRegionType& region,
@@ -310,12 +313,6 @@ public:
    * Get a smart-pointer to the current LOD image-base.
    */
   virtual ImageBaseType::Pointer ToImageBase();
-
-  /** Get input filename */
-  QString GetInputFilename()
-  {
-    return m_InputFilename;
-  }
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -492,7 +489,7 @@ private:
   std::vector< ImageRegionType >       m_RegionsToLoadVector;
 
   // store the input image filename
-  QString                              m_InputFilename;
+  QString m_Filename;
 
   /** */
   CountType m_NbLod;
@@ -540,6 +537,15 @@ VectorImageModel
 ::SetSettings(Settings settings)
 {
   m_Settings = settings;
+}
+
+/*****************************************************************************/
+inline
+QString
+VectorImageModel
+::GetFilename() const
+{
+  return m_Filename;
 }
 
 /*****************************************************************************/
