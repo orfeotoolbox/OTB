@@ -396,17 +396,6 @@ MainWindow
 
   assert( vectorImageModel!=NULL );
 
-  // Assign models to view before controllers (because controllers
-  // will setup rendering settings and emit a signals which causes
-  // display refresh)!
-  qobject_cast< GLImageWidget *>( centralWidget() )->SetImageModel(
-    vectorImageModel
-  );
-  /*
-  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->SetImageModel(
-    vectorImageModel->GetQuicklookModel()
-  );
-  */
 
   //
   // COLOR SETUP.
@@ -419,6 +408,11 @@ MainWindow
   //
   // MAIN VIEW.
 
+  // Assign newly selected model to view.
+  qobject_cast< GLImageWidget *>( centralWidget() )->SetImageModel(
+    vectorImageModel
+  );
+
   // Connect newly selected model to view (after all other widgets are
   // connected to prevent signals/slots to produce multiple view
   // refreshes).
@@ -430,7 +424,20 @@ MainWindow
     SLOT( updateGL()  )
   );
 
-  // TODO : where to do this
+  //
+  // QUICKLOOK VIEW.
+
+  // Assign newly selected model to view.
+#if 0
+  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->SetImageModel(
+    vectorImageModel->GetQuicklookModel()
+  );
+#endif
+
+  // Connect newly selected model to view (after all other widgets are
+  // connected to prevent signals/slots to produce multiple view
+  // refreshes).
+  // TODO : find where to do this
   QObject::connect(
     vectorImageModel->GetQuicklookModel(),
     SIGNAL( SettingsUpdated() ),

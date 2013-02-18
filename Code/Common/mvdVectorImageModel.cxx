@@ -125,7 +125,6 @@ VectorImageModel
   InitializeColorDynamicsSettings();
 
   // Initialize RgbaImageModel.
-  //assert( false && "Implement initialize RGBA pipeline here!" );
   InitializeRgbaPipeline();
 }
 

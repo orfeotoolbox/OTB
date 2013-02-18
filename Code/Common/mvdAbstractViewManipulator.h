@@ -25,6 +25,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -44,6 +48,9 @@
 #include "mvdTypes.h"
 
 
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
 //
 // External classes pre-declaration.
 namespace
@@ -55,29 +62,32 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
 /** \class AbstractViewManipulator
  *  Base class for QWidget manipulation
  */
 class Monteverdi2_EXPORT AbstractViewManipulator :
     public QObject
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public methods.
 public:
 
-  /** Constructor */
-  AbstractViewManipulator( QObject* parent =NULL ):
-    QObject(parent),
-    m_NavigationContext(),
-    m_MouseContext(),
-    m_IsotropicZoom(1.)
-      {
-      }
+  /** \rrief Constructor. */
+  AbstractViewManipulator( QObject* parent =NULL );
 
-  /** Destructor */
-  virtual ~AbstractViewManipulator(){};
+  /** \brief Destructor. */
+  virtual ~AbstractViewManipulator();
 
   /** */
   virtual void mouseMoveEvent ( QMouseEvent * event ) = 0;
@@ -90,38 +100,32 @@ public:
   virtual bool HasZoomChanged() const = 0;
 
   /** */
-  inline
-    const ImageRegionType&
-    GetViewportImageRegion() const
-  {
-    return m_NavigationContext.m_ViewportImageRegion;
-  }
+  inline const ImageRegionType& GetViewportImageRegion() const;
 
-  inline 
-    double GetIsotropicZoom() const
-  {
-    return m_IsotropicZoom;
-  }
+  /** */
+  inline double GetIsotropicZoom() const;
+
+
+//
+// Public SLOTS.
+public slots:
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // SIGNALS.
 signals:
 
-//
-// Public SLOTS.
-public slots:
-  
-//
-// Protected methods.
-protected:
-  
-//
-// Protected attributes.
-protected:
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
+//
+// Protected types.
+protected:
   /** Navigation context  */
   struct NavigationContextType
   {
+    // TODO: Implement default construtor (to safely initialize POD).
+    // TODO: Rename NavigationContextType struct into NagivationContext (this is not a typedef).
     ImageRegionType m_ViewportImageRegion;
     ImageRegionType m_ModelImageRegion;
     // Stored as double to keep precision when dividing 
@@ -133,6 +137,8 @@ protected:
   /** Mouse context */
   struct MouseContextType
   {
+    // TODO: Rename MouseContextType struct into NagivationContext (this is not a typedef).
+
     /** Default constructor */
     MouseContextType() :
       x( 0 ),
@@ -152,10 +158,24 @@ protected:
     int dy; // mouseMove in y (Drag)
   };
 
-  NavigationContextType  m_NavigationContext;
-  MouseContextType       m_MouseContext;
+//
+// Protected methods.
+protected:
+  
+//
+// Protected attributes.
+protected:
 
-  double                 m_IsotropicZoom;
+  /** */
+  NavigationContextType m_NavigationContext;
+
+  /** */
+  MouseContextType m_MouseContext;
+
+  /** */
+  double m_IsotropicZoom;
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private types.
@@ -169,10 +189,37 @@ private:
 // Private attributes.
 private:
 
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+
 //
 // SLOTS.
 private slots:
 };
+
+} // end namespace 'mvd'
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
+/*****************************************************************************/
+inline
+const ImageRegionType&
+AbstractViewManipulator
+::GetViewportImageRegion() const
+{
+  return m_NavigationContext.m_ViewportImageRegion;
+}
+
+/*****************************************************************************/
+inline 
+double
+AbstractViewManipulator
+::GetIsotropicZoom() const
+{
+  return m_IsotropicZoom;
+}
 
 } // end namespace 'mvd'
 

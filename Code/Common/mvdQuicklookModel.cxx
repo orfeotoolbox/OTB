@@ -62,15 +62,30 @@ void
 QuicklookModel
 ::virtual_BuildModel()
 {
-  //
-  // Step #1: Check if it is a multi-resolution file
+ //
+  // Step #1: Perform pre-process of AbstractModel::BuildModel()
+  // pattern.
 
+  //
+  // Step #2: Perform standard AbstractModel::BuildModel()
+  // pattern. Call parent virtual method.
+
+  // Empty step #2 in case of Quicklook model.
+
+  //
+  // Step #3: Post-process of the BuildModel() pattern.
+
+  /*
   //
   // Step #2: get the image used as quicklook
   VectorImageModel* imageModel = qobject_cast< VectorImageModel* >( parent() );
 
   // TODO : remove size
   this->LoadFile(imageModel->GetInputFilename(), 500, 500);
+  */
+
+  // Initialize RgbaImageModel.
+  InitializeRgbaPipeline();
 }
 
 /*******************************************************************************/
