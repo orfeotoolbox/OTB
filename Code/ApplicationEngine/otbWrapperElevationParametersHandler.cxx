@@ -39,7 +39,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   app->MandatoryOff(oss.str());
 
   std::string demDirFromConfig = otb::ConfigurationFile::GetInstance()->GetDEMDirectory();
-  
+
   if(demDirFromConfig!="")
     {
     app->SetParameterString(oss.str(), otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
@@ -54,9 +54,9 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   oss.str("");
   oss << key<<".geoid";
   app->AddParameter(ParameterType_InputFilename, oss.str(), "Geoid File");
-  app->SetParameterDescription(oss.str(),"Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles.");
+  app->SetParameterDescription(oss.str(),"Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website (http://hg.orfeo-toolbox.org/OTB-Data/raw-file/404aa6e4b3e0/Input/DEM/egm96.grd).");
   app->MandatoryOff(oss.str());
-  
+
   std::string geoidFromConfig = otb::ConfigurationFile::GetInstance()->GetGeoidFile();
 
   if(geoidFromConfig!="")
@@ -138,7 +138,7 @@ ElevationParametersHandler::GetGeoidFile(const Application::Pointer app, const s
     {
     return app->GetParameterString(oss.str());
     }
-  
+
   return "";
 }
 
@@ -150,7 +150,7 @@ ElevationParametersHandler::IsGeoidUsed(const Application::Pointer app, const st
 {
   std::ostringstream geoidKey;
   geoidKey<< key<<".geoid";
-  
+
   return app->IsParameterEnabled(geoidKey.str()) && app->HasValue(geoidKey.str());
 }
 
@@ -163,7 +163,7 @@ ElevationParametersHandler::IsDEMUsed(const Application::Pointer app, const std:
 {
   std::ostringstream geoidKey;
   geoidKey<< key<<".dem";
-  
+
   return app->IsParameterEnabled(geoidKey.str()) && app->HasValue(geoidKey.str());
 }
 
@@ -177,7 +177,7 @@ ElevationParametersHandler::GetDEMDirectory(const Application::Pointer app, cons
     {
     return app->GetParameterString(oss.str());
     }
-  
+
   return "";
 }
 
