@@ -96,18 +96,6 @@ ColorSetupController
 /*******************************************************************************/
 void
 ColorSetupController
-::ResetWidget()
-{
-  // Reset color-setup widget.
-  ResetIndices( RGBA_CHANNEL_RGB );
-
-  // Signal model has been updated.
-  emit ModelUpdated();
-}
-
-/*******************************************************************************/
-void
-ColorSetupController
 ::Disconnect( AbstractModel* model )
 {
   ColorSetupWidget* colorSetupWidget = GetWidget< ColorSetupWidget >();
@@ -129,6 +117,18 @@ ColorSetupController
     this,
     SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
   );
+}
+
+/*******************************************************************************/
+void
+ColorSetupController
+::ResetWidget()
+{
+  // Reset color-setup widget.
+  ResetIndices( RGBA_CHANNEL_RGB );
+
+  // Signal model has been updated.
+  emit ModelUpdated();
 }
 
 /*******************************************************************************/

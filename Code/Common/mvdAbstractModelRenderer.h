@@ -66,6 +66,8 @@ class AbstractModelRenderer :
 //
 // Public types.
 public:
+  /**
+   */
   struct RenderingContext
   {
      inline
@@ -77,7 +79,7 @@ public:
                        int dx = 0,
                        int dy = 0,
                        bool refresh = true) :
-       m_AbstractImageModel( model ),
+       m_ImageModel( model ),
        m_ImageRegion( region ),
        m_IsotropicZoom( zoom ),
        m_WidgetWidth(width),
@@ -86,12 +88,14 @@ public:
     {
     }
 
-    const AbstractImageModel* m_AbstractImageModel;
+    const AbstractImageModel* m_ImageModel;
     ImageRegionType m_ImageRegion;
-    double       m_IsotropicZoom;
+    double m_IsotropicZoom;
+    // TODO: remove unsigned before int (because Qt uses signed int).
     unsigned int m_WidgetWidth;
+    // TODO: remove unsigned before int (becayse Qt uses signed int).
     unsigned int m_WidgetHeight;
-    bool         m_ForceRefresh;
+    bool m_ForceRefresh;
   };
 
 //

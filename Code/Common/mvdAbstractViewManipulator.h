@@ -72,7 +72,9 @@ public:
     QObject(parent),
     m_NavigationContext(),
     m_MouseContext(),
-    m_IsotropicZoom(1.){}
+    m_IsotropicZoom(1.)
+      {
+      }
 
   /** Destructor */
   virtual ~AbstractViewManipulator(){};

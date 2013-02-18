@@ -187,11 +187,14 @@ private:
 
 namespace mvd
 {
+/*****************************************************************************/
 void 
-GLImageWidget::SetImageModel(AbstractImageModel* model)
+GLImageWidget
+::SetImageModel(AbstractImageModel* model)
 {
   m_ImageModel = model;
 
+#if 0
   //
   // REFRESH DISPLAY.
 
@@ -202,6 +205,7 @@ GLImageWidget::SetImageModel(AbstractImageModel* model)
   emit ModelImageRegionChanged(
     model->GetNativeLargestRegion()
   );
+#endif
 }
 
 }

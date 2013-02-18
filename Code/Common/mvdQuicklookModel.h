@@ -83,10 +83,6 @@ class Monteverdi2_EXPORT QuicklookModel :
 //
 // Public types.
 public:
-  /**
-   * In-memory storage type of source image (from file).
-   */
-  typedef DefaultImageType SourceImageType;
 
 //
 // Public methods.
@@ -103,7 +99,7 @@ public:
   const Settings& GetSettings() const;
 
   /** */
-   Settings& GetSettings();
+  Settings& GetSettings();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

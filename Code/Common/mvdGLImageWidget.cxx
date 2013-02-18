@@ -107,17 +107,27 @@ GLImageWidget
 /*******************************************************************************/
 void
 GLImageWidget
-::Initialize(AbstractViewManipulator * manipulator,
-             AbstractModelRenderer * renderer)
+::Initialize( AbstractViewManipulator* manipulator,
+	      AbstractModelRenderer* renderer )
 {
+  assert( manipulator!=NULL );
+  assert( renderer!=NULL );
+
   m_ImageViewManipulator = manipulator;
   m_ImageViewManipulator->setParent(this);
 
-  m_ImageModelRenderer =  renderer;
+  m_ImageModelRenderer = renderer;
   m_ImageModelRenderer->setParent(this);
 
-  connect(this, SIGNAL(movingMouse()), m_ImageModelRenderer, SLOT(onMovingEvent()));
-  connect(this, SIGNAL(releasingMouse()), m_ImageModelRenderer, SLOT(onReleasedMouse()));
+  QObject::connect(
+    this, SIGNAL( movingMouse() ),
+    m_ImageModelRenderer, SLOT( onMovingEvent() )
+  );
+
+  QObject::connect(
+    this, SIGNAL( releasingMouse() ),
+    m_ImageModelRenderer, SLOT(onReleasedMouse())
+  );
 }
 
 /*******************************************************************************/
@@ -212,15 +222,12 @@ GLImageWidget
   // Get the zoom 
   const double isotropicZoom = m_ImageViewManipulator->GetIsotropicZoom();
 
-  // Do not render if there is no model to render.
-  if( Application::ConstInstance()->GetModel()==NULL )
-    return;
-
   // Setup rendering context with image-model and redering information.
   AbstractModelRenderer::RenderingContext context(
     m_ImageModel,
     region, isotropicZoom, 
-    width(), height(), m_ImageViewManipulator->HasZoomChanged()
+    width(), height(),
+    m_ImageViewManipulator->HasZoomChanged()
   );
 
     // use the model renderer to paint the requested region of the image.
@@ -231,7 +238,7 @@ GLImageWidget
 // Delegate the event to the ImageViewManipulator
 void
 GLImageWidget
-::mousePressEvent(  QMouseEvent * event)
+::mousePressEvent( QMouseEvent* event )
 {
   QCursor dragCursor;
   dragCursor.setShape(Qt::ClosedHandCursor) ;
@@ -243,7 +250,7 @@ GLImageWidget
 /*******************************************************************************/
 void
 GLImageWidget
-::mouseMoveEvent(  QMouseEvent * event)
+::mouseMoveEvent( QMouseEvent* event )
 {
   // emit a signal
   emit movingMouse();
@@ -258,7 +265,7 @@ GLImageWidget
 /*******************************************************************************/
 void
 GLImageWidget
-::mouseReleaseEvent(  QMouseEvent * event)
+::mouseReleaseEvent( QMouseEvent* event )
 {
   QCursor stdCursor;
   stdCursor.setShape(Qt::ArrowCursor) ;
@@ -274,7 +281,7 @@ GLImageWidget
 /*******************************************************************************/
 void
 GLImageWidget
-::wheelEvent( QWheelEvent *event)
+::wheelEvent( QWheelEvent* event )
 {
   // emit a signal
   emit releasingMouse();
@@ -288,7 +295,7 @@ GLImageWidget
 /*******************************************************************************/
 void
 GLImageWidget
-::resizeEvent( QResizeEvent  * event)
+::resizeEvent( QResizeEvent* event )
 {
   m_ImageViewManipulator->resizeEvent(event);
 
@@ -302,7 +309,7 @@ GLImageWidget
 /*******************************************************************************/
 void
 GLImageWidget
-::keyPressEvent( QKeyEvent * event )
+::keyPressEvent( QKeyEvent* event )
 {
   m_ImageViewManipulator->keyPressEvent(event);
   this->update();

@@ -42,11 +42,12 @@
 #include "mvdColorSetupController.h"
 #include "mvdDatasetModel.h"
 #include "mvdGLImageWidget.h"
-#include "mvdVectorImageModel.h"
-
 #include "mvdImageModelRenderer.h"
 #include "mvdImageViewManipulator.h"
+#include "mvdQuicklookModel.h"
 #include "mvdQuicklookViewManipulator.h"
+#include "mvdVectorImageModel.h"
+
 namespace mvd
 {
 /*
@@ -83,14 +84,18 @@ MainWindow
   setWindowTitle( PROJECT_NAME );
 
   // instanciate the manipulator and the renderer relative to this widget
-  ImageViewManipulator * imageViewManipulator = new ImageViewManipulator();
-  ImageModelRenderer *   imageModelRenderer   = new ImageModelRenderer();
+  ImageViewManipulator* imageViewManipulator = new ImageViewManipulator();
+  ImageModelRenderer* imageModelRenderer = new ImageModelRenderer();
 
   // set the GLImageWidget as the centralWidget in MainWindow.
-  setCentralWidget( new GLImageWidget( imageViewManipulator, 
-                                       imageModelRenderer, 
-                                       this ) );
-  
+  setCentralWidget(
+    new GLImageWidget(
+      imageViewManipulator,
+      imageModelRenderer,
+      this
+    )
+  );
+
   // grab the keyboard notifications in this widget
   centralWidget()->grabKeyboard();
 
@@ -134,14 +139,19 @@ MainWindow
 ::InitializeDockWidgets()
 {
   // instanciate the manipulator and the renderer relative to this widget
-  QuicklookViewManipulator * qlViewManipulator = new QuicklookViewManipulator();
-  ImageModelRenderer *   qlModelRenderer   = new ImageModelRenderer();
+  QuicklookViewManipulator* qlViewManipulator = new QuicklookViewManipulator();
+  ImageModelRenderer* qlModelRenderer = new ImageModelRenderer();
 
   //
   // EXPERIMENTAL QUICKLOOK Widget.
-  GLImageWidget * qlWidget = new GLImageWidget( qlViewManipulator, qlModelRenderer, this );
-  qlWidget->setMinimumSize(100,100); // TODO : temporary
-  
+  GLImageWidget* qlWidget = new GLImageWidget(
+    qlViewManipulator,
+    qlModelRenderer,
+    this
+  );
+  // TODO: Set better minimum size for quicklook GL widget.
+  qlWidget->setMinimumSize(100,100);
+
   AddWidgetToDock( 
     qlWidget,
     QUICKLOOK_DOCK,
@@ -153,7 +163,6 @@ MainWindow
   QObject::connect(
     qlWidget, SIGNAL( ModelImageRegionChanged(const ImageRegionType&) ),
     qlViewManipulator, SLOT( OnModelImageRegionChanged(const ImageRegionType&)) );
-
 
   //
   // COLOR SETUP.
@@ -275,7 +284,10 @@ MainWindow
     // Init parameters :
     // - filename
     // - widget size (-> compute the best lod fitting the widget size )
-    model->ImportImage( filename, centralWidget()->width(), centralWidget()->height() );
+    model->ImportImage(
+      filename,
+      centralWidget()->width(), centralWidget()->height()
+    );
     }
   catch( std::exception& exc )
     {
@@ -311,6 +323,12 @@ MainWindow
   //
   // COLOR DYNAMICS.
   SetControllerModel( GetColorDynamicsDock(), NULL );
+
+  // De-assign models to view after controllers (LIFO disconnect).
+  qobject_cast< GLImageWidget *>( centralWidget() )->SetImageModel( NULL );
+  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->SetImageModel(
+    NULL
+  );
 
   //
   //
@@ -349,14 +367,13 @@ MainWindow
   );
 
   // TODO : where to do this
-    QObject::disconnect(
+  QObject::disconnect(
     vectorImageModel->GetQuicklookModel(),
     SIGNAL( SettingsUpdated() ),
     // to:
-    qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget()),
+    GetQuicklookDock()->widget(),
     SLOT( updateGL()  )
   );
-
 }
 
 /*****************************************************************************/
@@ -378,6 +395,18 @@ MainWindow
     );
 
   assert( vectorImageModel!=NULL );
+
+  // Assign models to view before controllers (because controllers
+  // will setup rendering settings and emit a signals which causes
+  // display refresh)!
+  qobject_cast< GLImageWidget *>( centralWidget() )->SetImageModel(
+    vectorImageModel
+  );
+  /*
+  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->SetImageModel(
+    vectorImageModel->GetQuicklookModel()
+  );
+  */
 
   //
   // COLOR SETUP.
@@ -401,29 +430,25 @@ MainWindow
     SLOT( updateGL()  )
   );
 
-
   // TODO : where to do this
-    QObject::connect(
+  QObject::connect(
     vectorImageModel->GetQuicklookModel(),
     SIGNAL( SettingsUpdated() ),
     // to:
-    qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget()),
+    GetQuicklookDock()->widget(),
     SLOT( updateGL()  )
   );
 
+  /*
   // Connect newly selected model to UI controller.
   QObject::connect(
-    colorSetupWidget,
+    GetColorSetupDock()->widget(),
     SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
     // to:
     vectorImageModel->GetQuicklookModel(),
     SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
   );
-
-
-  // 
-  qobject_cast<GLImageWidget *>(centralWidget())->SetImageModel(vectorImageModel);
-  qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget())->SetImageModel(vectorImageModel->GetQuicklookModel());
+  */
 }
 
 /*****************************************************************************/

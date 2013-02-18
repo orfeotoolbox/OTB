@@ -64,8 +64,7 @@ QuicklookModel
 {
   //
   // Step #1: Check if it is a multi-resolution file
-  
-    
+
   //
   // Step #2: get the image used as quicklook
   VectorImageModel* imageModel = qobject_cast< VectorImageModel* >( parent() );
