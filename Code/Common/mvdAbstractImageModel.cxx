@@ -162,8 +162,7 @@ AbstractImageModel
 ::virtual_BuildModel()
 {
   newChildModel< HistogramModel >();
-  // TODO : salbert uncomment and apply new modifications
-  //newChildModel< QuicklookModel >();
+  newChildModel< QuicklookModel >();
 }
 
 /*******************************************************************************/

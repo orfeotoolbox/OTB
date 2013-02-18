@@ -133,8 +133,6 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
-  // TODO : salbert uncomment and use new methods
-/*
   // instanciate the manipulator and the renderer relative to this widget
   QuicklookViewManipulator * qlViewManipulator = new QuicklookViewManipulator();
   ImageModelRenderer *   qlModelRenderer   = new ImageModelRenderer();
@@ -144,21 +142,17 @@ MainWindow
   GLImageWidget * qlWidget = new GLImageWidget( qlViewManipulator, qlModelRenderer, this );
   qlWidget->setMinimumSize(100,100); // TODO : temporary
   
-  // TODO : salbert uncomment and apply new modifications
   AddWidgetToDock( 
     qlWidget,
     QUICKLOOK_DOCK,
     tr( "Quicklook" ),
     Qt::LeftDockWidgetArea
     );
- 
+  
   // Connect the setLargestPossibleregion
   QObject::connect(
     qlWidget, SIGNAL( ModelImageRegionChanged(const ImageRegionType&) ),
-    qlViewManipulator, SLOT( OnModelImageRegionChanged(const
-  ImageRegionType&)) );
-
-*/
+    qlViewManipulator, SLOT( OnModelImageRegionChanged(const ImageRegionType&)) );
 
 
   //
@@ -354,15 +348,14 @@ MainWindow
     SLOT( updateGL() )
   );
 
-  // TODO : uncomment and apply new corrections
-  // // TODO : where to do this
-  //   QObject::disconnect(
-  //   vectorImageModel->GetQuicklookModel(),
-  //   SIGNAL( SettingsUpdated() ),
-  //   // to:
-  //   qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget()),
-  //   SLOT( updateGL()  )
-  // );
+  // TODO : where to do this
+    QObject::disconnect(
+    vectorImageModel->GetQuicklookModel(),
+    SIGNAL( SettingsUpdated() ),
+    // to:
+    qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget()),
+    SLOT( updateGL()  )
+  );
 
 }
 
@@ -408,33 +401,29 @@ MainWindow
     SLOT( updateGL()  )
   );
 
-  
-  // TODO : salbert uncomment and use new methods
-  // // TODO : where to do this
-  //   QObject::connect(
-  //   vectorImageModel->GetQuicklookModel(),
-  //   SIGNAL( SettingsUpdated() ),
-  //   // to:
-  //   qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget()),
-  //   SLOT( updateGL()  )
-  // );
 
-  // TODO : salbert uncomment and use new methods 
-  // // Connect newly selected model to UI controller.
-  // QObject::connect(
-  //   colorSetupWidget,
-  //   SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
-  //   // to:
-  //   vectorImageModel->GetQuicklookModel(),
-  //   SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
-  // );
+  // TODO : where to do this
+    QObject::connect(
+    vectorImageModel->GetQuicklookModel(),
+    SIGNAL( SettingsUpdated() ),
+    // to:
+    qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget()),
+    SLOT( updateGL()  )
+  );
+
+  // Connect newly selected model to UI controller.
+  QObject::connect(
+    colorSetupWidget,
+    SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
+    // to:
+    vectorImageModel->GetQuicklookModel(),
+    SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
+  );
 
 
   // 
   qobject_cast<GLImageWidget *>(centralWidget())->SetImageModel(vectorImageModel);
-
-  // TODO : salbert uncomment and use new methods
-  //qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget())->SetImageModel(vectorImageModel->GetQuicklookModel());
+  qobject_cast<GLImageWidget *>(GetQuicklookDock()->widget())->SetImageModel(vectorImageModel->GetQuicklookModel());
 }
 
 /*****************************************************************************/
