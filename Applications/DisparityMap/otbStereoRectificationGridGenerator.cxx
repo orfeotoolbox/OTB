@@ -138,6 +138,7 @@ private:
     SetDefaultParameterInt("epi.elevation.avgdem.step",1);
     SetMinimumParameterIntValue("epi.elevation.avgdem.step",1);
     MandatoryOff("epi.elevation.avgdem.step");
+    DisableParameter("epi.elevation.avgdem.step");
 
     AddParameter(ParameterType_Float,"epi.elevation.avgdem.value","Average elevation value");
     SetParameterDescription("epi.elevation.avgdem.value","Average elevation value estimated from DEM");
