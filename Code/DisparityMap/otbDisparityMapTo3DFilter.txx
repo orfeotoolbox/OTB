@@ -326,6 +326,9 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
       if (!(maskIt.Get() > 0))
         {
         // TODO : what to do when masked ? put a no-data value ?
+         typename OutputImageType::PixelType pixel3D(3);
+         pixel3D.Fill(0);
+         demIt.Set(pixel3D);
         
         ++demIt;
         ++horizIt;
