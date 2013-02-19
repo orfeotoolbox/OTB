@@ -275,13 +275,13 @@ private:
 
         if(color.Size() == 4)
           {
-          red = color[0] / 8;
-          green = (0.9 * color[1] + 0.1 * color[3]) / 8;
-          blue  = color[2] / 8;
+          red = color[0];
+          green = (0.9 * color[1] + 0.1 * color[3]);
+          blue  = color[2];
           }
         else
           {
-          red = color[0]/8;
+          red = color[0];
           green = red;
           blue = red;
           }
