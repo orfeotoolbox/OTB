@@ -146,10 +146,12 @@ MainWindow
 
   //
   // EXPERIMENTAL QUICKLOOK Widget.
+  assert( qobject_cast< GLImageWidget* >( centralWidget() )!=NULL );
   GLImageWidget* qlWidget = new GLImageWidget(
     qlViewManipulator,
     qlModelRenderer,
-    this
+    this,
+    qobject_cast< GLImageWidget* >( centralWidget() )
   );
   // TODO: Set better minimum size for quicklook GL widget.
   qlWidget->setMinimumSize(100,100);
