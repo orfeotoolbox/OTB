@@ -338,15 +338,21 @@ VectorImageModel
 
   // TODO : add some checking
 
+  assert( !m_Image.IsNull() );
+
   // some checking
   if (!m_Image->GetBufferedRegion().IsInside(region))
     {
     //itkExceptionMacro(<< "Region to read is oustside of the buffered region.");
     }
-  
+
+  assert( !m_ExtractFilter.IsNull() );
+
   // Extract the region of interest in the m_Image
   m_ExtractFilter->SetInput( m_Image );
   m_ExtractFilter->SetExtractionRegion(region);
+
+  assert( !m_RenderingFilter.IsNull() );
 
   // Use the rendering filter to get 
   m_RenderingFilter->GetRenderingFunction()->SetAutoMinMax(false);
