@@ -33,7 +33,7 @@ std::ostream& operator <<(std::ostream& os, const MassOfBeliefFunctionType::Labe
 // OPTIMIZED DS FUSION
 int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 {
-  typedef MassOfBeliefFunctionType::MassType MassValueType;//double by default
+  typedef MassOfBeliefFunctionType::MassType MassValueType; //double by default
 
   std::vector<LabelPixelType> vectorAllLabels;
 
@@ -160,7 +160,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
     // Allocation of a new MassOfBeliefFunctionType::Pointer object pointing at a new memory address
     mOBFClk = MassOfBeliefFunctionType::New();
 
-    labelSetClk = classifiedPixelX[itk];// Label of the classified pixel X: {a}, {b} or {c} here
+    labelSetClk = classifiedPixelX[itk]; // Label of the classified pixel X: {a}, {b} or {c} here
     // Defining the complementary singleton set {Ai_}
     labelSetClk_ = universe;
     labelSetClk_.erase(*labelSetClk.begin());
@@ -341,7 +341,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 // NOT OPTIMIZED DS FUSION
 int otbDempsterShaferFusionTest(int argc, char * argv[])
 {
-  typedef MassOfBeliefFunctionType::MassType MassValueType;//double by default
+  typedef MassOfBeliefFunctionType::MassType MassValueType; //double by default
 
   std::vector<LabelPixelType> vectorAllLabels;
 
@@ -461,7 +461,7 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
     // Allocation of a new MassOfBeliefFunctionType::Pointer object pointing at a new memory address
     mOBFClk = MassOfBeliefFunctionType::New();
 
-    labelSetClk = classifiedPixelX[itk];// Label of the classified pixel X: {a}, {b} or {c} here
+    labelSetClk = classifiedPixelX[itk]; // Label of the classified pixel X: {a}, {b} or {c} here
     // Defining the complementary singleton set {Ai_}
     labelSetClk_ = universe;
     labelSetClk_.erase(*labelSetClk.begin());
