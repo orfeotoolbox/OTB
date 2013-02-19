@@ -491,6 +491,12 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels()*(m_MaximumHorizontalDisparity - m_MinimumHorizontalDisparity + 1)*(m_MaximumVerticalDisparity - m_MinimumVerticalDisparity + 1),100);
 
   
+  // Handle initialisation properly
+  typename InputMaskImageType::Pointer initMaskPtr = InputMaskImageType::New();
+  initMaskPtr->SetRegions(outputRegionForThread);
+  initMaskPtr->Allocate();
+  initMaskPtr->FillBuffer(0);
+
   // Check if we use initial disparities and exploration radius
   bool useExplorationRadius = false;
   bool useInitDispMaps = false;
@@ -527,10 +533,6 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     inputLeftRegion.SetIndex(leftRequestedRegionIndex);
     inputLeftRegion.SetSize(inputRightRegion.GetSize());
 
-    // std::cout<<"Disparity: "<<disparity<<std::endl;
-    // std::cout<<"Left  region: "<<inputLeftRegion<<std::endl;
-    // std::cout<<"Right region: "<<inputRightRegion<<std::endl;
-
     // Define iterators
     itk::ConstNeighborhoodIterator<TInputImage>     leftIt(m_Radius,inLeftPtr,inputLeftRegion);
     itk::ConstNeighborhoodIterator<TInputImage>     rightIt(m_Radius,inRightPtr,inputRightRegion);
@@ -541,6 +543,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     itk::ImageRegionConstIterator<TMaskImage>       inRightMaskIt;
     itk::ImageRegionConstIterator<TOutputDisparityImage>       inHDispIt;
     itk::ImageRegionConstIterator<TOutputDisparityImage>       inVDispIt;
+    itk::ImageRegionIterator<TMaskImage>            initIt(initMaskPtr,inputLeftRegion);
 
     itk::ConstantBoundaryCondition<TInputImage> nbc1;
     itk::ConstantBoundaryCondition<TInputImage> nbc2;
@@ -575,13 +578,15 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     outMetricIt.GoToBegin();
     outHDispIt.GoToBegin();
     outVDispIt.GoToBegin();
+    initIt.GoToBegin();
 
     // Loop on pixels
     while(!leftIt.IsAtEnd()
           || !rightIt.IsAtEnd()
           || !outMetricIt.IsAtEnd()
           || !outHDispIt.IsAtEnd()
-          || !outVDispIt.IsAtEnd())
+          || !outVDispIt.IsAtEnd()
+          || !initIt.IsAtEnd())
       {
       
       // If the mask is present and valid
@@ -628,11 +633,12 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
           double metric = m_Functor(leftIt,rightIt);
     
             // If we are at first loop, fill both outputs
-            if(vdisparity == estimatedMinVDisp && hdisparity == estimatedMinHDisp)
+          if(initIt.Get()==0)
               {
               outHDispIt.Set(hdisparity);
               outVDispIt.Set(vdisparity);
               outMetricIt.Set(metric);
+              initIt.Set(1);
               }
             else if(m_Minimize && metric < outMetricIt.Get())
               {
@@ -654,6 +660,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       ++outMetricIt;
       ++outHDispIt;
       ++outVDispIt;
+      ++initIt;
 
       if(inLeftMaskPtr)
         {
