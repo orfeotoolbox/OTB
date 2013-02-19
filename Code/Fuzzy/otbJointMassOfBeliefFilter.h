@@ -48,7 +48,7 @@ public:
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(JointMassOfBeliefFilter, ProjcessObject);
+  itkTypeMacro(JointMassOfBeliefFilter, ProcessObject);
   
   /** Standard class typedefs */
   typedef TMassFunction                                MassFunctionType;

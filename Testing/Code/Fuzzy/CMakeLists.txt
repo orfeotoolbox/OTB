@@ -5,6 +5,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(Fuzzy_TESTS1 ${CXX_TEST_PATH}/otbFuzzyTests1)
 # Advanced tests
 SET(Fuzzy_TESTS2 ${CXX_TEST_PATH}/otbFuzzyTests2)
+SET(Fuzzy_TESTS3 ${CXX_TEST_PATH}/otbFuzzyTests3)
 
 # FuzzyTests1
 ADD_TEST(fzTuFuzzyVariableNew ${Fuzzy_TESTS1}
@@ -107,6 +108,22 @@ ${TEMP}/fzTvFuzzyDescriptorsModelManager.xml
 
 ADD_TEST(fzTuStandardDSCostFunctionNew ${Fuzzy_TESTS2}
   otbStandardDSCostFunctionNew)
+  
+ADD_TEST(fzDempsterShaferFusionTest ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionTest
+ a
+ b
+ c
+ d
+ )
+  
+ADD_TEST(fzDempsterShaferFusionOptTest ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptTest
+ a
+ b
+ c
+ d
+ )
 
 
 SET(BasicFuzzy_SRCS1
@@ -130,10 +147,18 @@ otbFuzzyDescriptorsModelManager.cxx
 otbStandardDSCostFunction.cxx
 )
 
+SET(BasicFuzzy_SRCS3
+otbFuzzyTests3.cxx
+otbDempsterShaferFusionTests.cxx
+)
+
 ADD_EXECUTABLE(otbFuzzyTests1 otbFuzzyTests1.cxx ${BasicFuzzy_SRCS1})
 TARGET_LINK_LIBRARIES(otbFuzzyTests1 OTBIO OTBFuzzy  OTBTesting)
 
 ADD_EXECUTABLE(otbFuzzyTests2 otbFuzzyTests2.cxx ${BasicFuzzy_SRCS2})
 TARGET_LINK_LIBRARIES(otbFuzzyTests2 OTBIO OTBFuzzy OTBTesting)
+
+ADD_EXECUTABLE(otbFuzzyTests3 otbFuzzyTests3.cxx ${BasicFuzzy_SRCS3})
+TARGET_LINK_LIBRARIES(otbFuzzyTests3 OTBIO OTBFuzzy OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
