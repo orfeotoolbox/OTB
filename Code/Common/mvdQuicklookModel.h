@@ -94,13 +94,6 @@ public:
   /** Destructor */
   virtual ~QuicklookModel();
 
-  /**
-   */
-  const Settings& GetSettings() const;
-
-  /** */
-  Settings& GetSettings();
-
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

@@ -684,23 +684,6 @@ VectorImageModel
   return ImageBaseType::Pointer( m_Image );
 }
 
-
-/*****************************************************************************/
-const VectorImageModel::Settings&
-VectorImageModel
-::GetSettings() const
-{
-  return m_Settings;
-}
-
-/*****************************************************************************/
-VectorImageModel::Settings&
-VectorImageModel
-::GetSettings()
-{
-  return m_Settings;
-}
-
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
@@ -725,7 +708,10 @@ VectorImageModel
   // TODO: Remove temporary hack (rendering settings).
   QuicklookModel* quicklookModel = GetQuicklookModel();
   if( quicklookModel!=NULL )
+    {
+    quicklookModel->SetSettings( GetSettings() );
     quicklookModel->OnModelUpdated();
+    }
 
   emit SettingsUpdated();
 }

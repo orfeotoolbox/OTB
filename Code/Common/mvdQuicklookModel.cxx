@@ -16,6 +16,11 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "mvdQuicklookModel.h"
+
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -30,7 +35,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdQuicklookModel.h"
 #include "mvdAlgorithm.h"
 
 
@@ -43,6 +47,10 @@ namespace mvd
 
   Context comment for translator.
 */
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
 QuicklookModel
@@ -77,7 +85,7 @@ QuicklookModel
 
   SetFilename(
     qobject_cast< VectorImageModel* >( parent() )->GetFilename(),
-    100, 100
+    50, 50
   );
 
   // Initialize RgbaImageModel.
@@ -85,29 +93,7 @@ QuicklookModel
 }
 
 /*******************************************************************************/
-const VectorImageModel::Settings&
-QuicklookModel
-::GetSettings() const
-{
-  // Get the parent Abstract model
-  VectorImageModel * viModel = 
-    qobject_cast< VectorImageModel* >( parent() );
-
-  // use the same settings than the vector model
-  return viModel->GetSettings();
-}
-
+/* SLOTS                                                                       */
 /*******************************************************************************/
-VectorImageModel::Settings&
-QuicklookModel
-::GetSettings()
-{
-  // Get the parent Abstract model
-  VectorImageModel * viModel = 
-    qobject_cast< VectorImageModel* >( parent() );
-
-  // use the same settings than the vector model
-  return viModel->GetSettings();
-}
 
 } // end namespace 'mvd'

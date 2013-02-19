@@ -266,13 +266,10 @@ public:
 
   /**
    */
-  virtual const Settings& GetSettings() const;
+  inline const Settings& GetSettings() const;
 
   /** */
-  virtual Settings& GetSettings();
-
-  /** */
-  inline void SetSettings( Settings settings);    
+  inline Settings& GetSettings();
 
   /**
    * Width and height are added to compute the best level of detail to
@@ -334,6 +331,9 @@ signals:
 //
 // Protected methods.
 protected:
+
+  /** */
+  inline void SetSettings( const Settings& settings );
 
   /** Clear buffer */
   void ClearBuffer();
@@ -534,9 +534,27 @@ VectorImageModel
 inline
 void
 VectorImageModel
-::SetSettings(Settings settings)
+::SetSettings(const Settings& settings)
 {
   m_Settings = settings;
+}
+
+/*****************************************************************************/
+inline
+const VectorImageModel::Settings&
+VectorImageModel
+::GetSettings() const
+{
+  return m_Settings;
+}
+
+/*****************************************************************************/
+inline
+VectorImageModel::Settings&
+VectorImageModel
+::GetSettings()
+{
+  return m_Settings;
 }
 
 /*****************************************************************************/
