@@ -636,8 +636,6 @@ void
 VectorImageModel
 ::virtual_SetCurrentLod( CountType lod )
 {
-  assert( lod<GetNbLod() );
-
   // new filename if lod is not 0
   QString lodFilename( m_Filename );
 
