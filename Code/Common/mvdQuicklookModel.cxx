@@ -77,7 +77,7 @@ QuicklookModel
 
   SetFilename(
     qobject_cast< VectorImageModel* >( parent() )->GetFilename(),
-    512, 512
+    100, 100
   );
 
   // Initialize RgbaImageModel.

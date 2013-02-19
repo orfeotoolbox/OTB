@@ -372,7 +372,9 @@ MainWindow
 
   // TODO : where to do this
   QObject::disconnect(
-    vectorImageModel->GetQuicklookModel(),
+    // vectorImageModel->GetQuicklookModel(),
+    // TODO: Remove temporary hack by better design.
+    vectorImageModel,
     SIGNAL( SettingsUpdated() ),
     // to:
     GetQuicklookDock()->widget(),
@@ -432,18 +434,18 @@ MainWindow
   // QUICKLOOK VIEW.
 
   // Assign newly selected model to view.
-#if 1
   qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->SetImageModel(
     vectorImageModel->GetQuicklookModel()
   );
-#endif
 
   // Connect newly selected model to view (after all other widgets are
   // connected to prevent signals/slots to produce multiple view
   // refreshes).
   // TODO : find where to do this
   QObject::connect(
-    vectorImageModel->GetQuicklookModel(),
+    // vectorImageModel->GetQuicklookModel(),
+    // TODO: Remove temporary hack by better design.
+    vectorImageModel,
     SIGNAL( SettingsUpdated() ),
     // to:
     GetQuicklookDock()->widget(),

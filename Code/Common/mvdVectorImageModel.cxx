@@ -16,6 +16,11 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "mvdVectorImageModel.h"
+
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -38,8 +43,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdVectorImageModel.h"
 #include "mvdAlgorithm.h"
+#include "mvdQuicklookModel.h"
 
 
 namespace mvd
@@ -51,6 +56,10 @@ namespace mvd
 
   Context comment for translator.
 */
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
 VectorImageModel
@@ -695,8 +704,6 @@ VectorImageModel
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-
-/*******************************************************************************/
 void
 VectorImageModel
 ::OnModelUpdated()
@@ -714,6 +721,11 @@ VectorImageModel
 
   renderingFunc->SetChannelList( rgb );
   renderingFunc->SetParameters( GetSettings().GetDynamicsParams() );
+
+  // TODO: Remove temporary hack (rendering settings).
+  QuicklookModel* quicklookModel = GetQuicklookModel();
+  if( quicklookModel!=NULL )
+    quicklookModel->OnModelUpdated();
 
   emit SettingsUpdated();
 }
