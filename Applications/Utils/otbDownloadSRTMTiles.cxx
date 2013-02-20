@@ -67,7 +67,7 @@ private:
 
   bool m_Mode;
 
-  bool SRTMTileExists(const std::string & url)
+  bool SRTMTileExists(const std::string & url) const
   {
     switch ( m_Mode )
       {
@@ -111,7 +111,7 @@ private:
     SetParameterDescription("mode.download","Download corresponding tiles on USGE server.");
 
     AddParameter(ParameterType_OutputFilename, "mode.download.outdir", "Ouput directory");
-    SetParameterDescription("mode.download.outdir", "Directory where tiles will be save.");
+    SetParameterDescription("mode.download.outdir", "Directory where zipped tiles will be save. You'll need to unzip all tile files before using them in your application.");
 
     AddChoice("mode.list", "List tiles");
     SetParameterDescription("mode.list","List tiles in an existing local directory.");
