@@ -109,20 +109,40 @@ ${TEMP}/fzTvFuzzyDescriptorsModelManager.xml
 ADD_TEST(fzTuStandardDSCostFunctionNew ${Fuzzy_TESTS2}
   otbStandardDSCostFunctionNew)
   
-ADD_TEST(fzDempsterShaferFusionTest ${Fuzzy_TESTS3}
+ADD_TEST(fzDSFusionTestSimple ${Fuzzy_TESTS3}
   otbDempsterShaferFusionTest
- a
- b
- c
- d
+ a b c
+ )
+ 
+ ADD_TEST(fzDSFusionTestWithExtraLabels ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionTest
+ a b c d e
+ )
+ 
+ ADD_TEST(fzDSFusionOptTestSimple ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptTest
+ a b c
+ )
+ 
+ADD_TEST(fzDSFusionOptTestWithExtraLabels ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptTest
+ a b c d e
+ )
+ 
+ ADD_TEST(fzDSFusionOptRecTestSimple ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptRecTest
+ a b c
+ )
+ 
+ADD_TEST(fzDSFusionOptRecTestWithExtraLabelsSmall ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptRecTest
+ a b c d e
  )
   
-ADD_TEST(fzDempsterShaferFusionOptTest ${Fuzzy_TESTS3}
-  otbDempsterShaferFusionOptTest
- a
- b
- c
- d
+ADD_TEST(fzDSFusionOptRecTestWithExtraLabelsBig ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptRecTest
+ a b c d e f g h i j k l m
+ n o p q r s t u v w x y z
  )
 
 
