@@ -38,7 +38,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   unsigned int nbClassesMax = 6;
   //*****************************
 
-  typedef MassOfBeliefFunctionType::MassType MassType;//double by default
+  typedef MassOfBeliefFunctionType::MassType MassType; //double by default
 
   std::vector<LabelPixelType> vectorAllLabels;
 
@@ -203,9 +203,9 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
     mCl25[mapLabelSets[vectorAllLabels[22]]] = 0.6;
     mCl26[mapLabelSets[vectorAllLabels[0]]] = 0.65;
     mCl27[mapLabelSets[vectorAllLabels[2]]] = 0.65;
-    mCl28[mapLabelSets[vectorAllLabels[23]]] = 0.6;// NOT used here
-    mCl29[mapLabelSets[vectorAllLabels[24]]] = 0.6;// NOT used here
-    mCl30[mapLabelSets[vectorAllLabels[25]]] = 0.6;// NOT used here
+    mCl28[mapLabelSets[vectorAllLabels[23]]] = 0.6; // NOT used here
+    mCl29[mapLabelSets[vectorAllLabels[24]]] = 0.6; // NOT used here
+    mCl30[mapLabelSets[vectorAllLabels[25]]] = 0.6; // NOT used here
 
     mClVector.push_back(mCl6);
     mClVector.push_back(mCl7);
@@ -229,9 +229,9 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
     mClVector.push_back(mCl25);
     mClVector.push_back(mCl26);
     mClVector.push_back(mCl27);
-    mClVector.push_back(mCl28);// NOT used here
-    mClVector.push_back(mCl29);// NOT used here
-    mClVector.push_back(mCl30);// NOT used here
+    mClVector.push_back(mCl28); // NOT used here
+    mClVector.push_back(mCl29); // NOT used here
+    mClVector.push_back(mCl30); // NOT used here
     }
   //**********************************************************************
 
@@ -251,7 +251,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   // (ex: mg(A), mg(B), mg(C),..., with mg(Ai) the joint mass of the masses of classifiers with result Ai for pixel X)
   for (unsigned int itk = 0; itk < classifiedPixelX.size(); ++itk)
     {
-    labelSetClk = classifiedPixelX[itk];// Label of the classified pixel X: {a}, {b} or {c} here
+    labelSetClk = classifiedPixelX[itk]; // Label of the classified pixel X: {a}, {b} or {c} here
 
     // Setting the masses of the three focal elements {Ai}, {Ai_} and OMEGA = {Ai U Ai_}
     // Extraction of mk({Ai}) = mLabelClk of the classifier k for the labelSetClk = {Ai}
@@ -398,7 +398,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
       }
 
     // For labels {Ai} of the universe which are NOT present in classifiedPixelX
-    // the Bel({Ai_}) = SUM(Bel({Aj})) ; with {Aj} ALL labels present in classifiedPixelX
+    // the Bel({Ai_}) = SUM(Bel({Aj})); with {Aj} ALL labels present in classifiedPixelX
     if (mapBelStepII[labelSetClk] == 0)
       {
       mapBelStepII_[labelSetClk] = addBelLabelSetClk;
@@ -435,7 +435,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
 // OPTIMIZED DS FUSION
 int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 {
-  typedef MassOfBeliefFunctionType::MassType MassType;//double by default
+  typedef MassOfBeliefFunctionType::MassType MassType; //double by default
 
   std::vector<LabelPixelType> vectorAllLabels;
 
@@ -716,7 +716,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
       }
 
     // For labels {Ai} of the universe which are NOT present in classifiedPixelX
-    // the Bel({Ai_}) = SUM(Bel({Aj})) ; with {Aj} ALL labels present in classifiedPixelX
+    // the Bel({Ai_}) = SUM(Bel({Aj})); with {Aj} ALL labels present in classifiedPixelX
     if (mapBelStepII[labelSetClk] == 0)
       {
       mapBelStepII[labelSetClk_] = addBelLabelSetClk;
@@ -753,7 +753,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 // NOT OPTIMIZED DS FUSION
 int otbDempsterShaferFusionTest(int argc, char * argv[])
 {
-  typedef MassOfBeliefFunctionType::MassType MassType;//double by default
+  typedef MassOfBeliefFunctionType::MassType MassType; //double by default
 
   std::vector<LabelPixelType> vectorAllLabels;
 
