@@ -590,6 +590,30 @@ ADD_TEST(dmTvDisparityMapTo3DFilter ${DISPARITYMAP_TESTS4}
          ${INPUTDATA}/sensor_stereo_dmap_mask.tif
          )                              
 
+# -------            otb::MultiDisparityMapTo3DFilter   ----------
+ADD_TEST(dmTuMultiDisparityMapTo3DFilterNew ${DISPARITYMAP_TESTS4}
+         otbMultiDisparityMapTo3DFilterNew)
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(dmTvMultiDisparityMapTo3DFilter ${DISPARITYMAP_TESTS4}
+--compare-n-images ${EPSILON_6} 2
+     ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
+     ${TEMP}/dmTvMultiDisparityMapTo3DFilterOutput.tif
+     ${BASELINE}/dmTvMultiDisparityMapTo3DFilterResidue.tif
+     ${TEMP}/dmTvMultiDisparityMapTo3DFilterResidue.tif
+         otbMultiDisparityMapTo3DFilter
+         ${LARGEINPUT}/PLEIADES/tristereo_sample/master_pan.tif
+         ${LARGEINPUT}/PLEIADES/tristereo_sample/slave_pan_1.tif
+         ${LARGEINPUT}/PLEIADES/tristereo_sample/slave_pan_2.tif
+         ${LARGEINPUT}/PLEIADES/tristereo_sample/phys_disp_1.tif
+         ${LARGEINPUT}/PLEIADES/tristereo_sample/phys_disp_2.tif
+         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
+         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_2.tif
+         ${TEMP}/dmTvMultiDisparityMapTo3DFilterOutput.tif
+         ${TEMP}/dmTvMultiDisparityMapTo3DFilterResidue.tif
+         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS1
 otbDisparityMapTests1.cxx
@@ -636,6 +660,7 @@ otbDisparityMapToDEMFilter.cxx
 otbPixelWiseBlockMatchingImageFilter.cxx
 otbSubPixelDisparityImageFilter.cxx
 otbDisparityMapTo3DFilter.cxx
+otbMultiDisparityMapTo3DFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbDisparityMapTests1 "${BasicDisparityMap_SRCS1}" "OTBDisparityMap;OTBIO;OTBTesting")

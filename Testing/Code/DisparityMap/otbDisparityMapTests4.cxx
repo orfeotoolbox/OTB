@@ -37,4 +37,6 @@ void RegisterTests()
   REGISTER_TEST(otbSubPixelDisparityImageFilterNew);
   REGISTER_TEST(otbDisparityMapTo3DFilter);
   REGISTER_TEST(otbDisparityMapTo3DFilterNew);
+  REGISTER_TEST(otbMultiDisparityMapTo3DFilter);
+  REGISTER_TEST(otbMultiDisparityMapTo3DFilterNew);
 }
