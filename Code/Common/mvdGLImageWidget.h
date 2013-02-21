@@ -197,15 +197,14 @@ GLImageWidget
   //
   // REFRESH DISPLAY.
 
-#if 0
   // set the largest possible region of the image
   // TODO:  rename signal name when handling DataSets collections
   // TODO: move signal into mvdApplication and link it to DockWidget
   // and ImageView.
-  emit ModelImageRegionChanged(
-    model->GetNativeLargestRegion()
-  );
-#endif
+  if( model!=NULL )
+    emit ModelImageRegionChanged(
+      model->GetNativeLargestRegion()
+    );
 }
 
 }
