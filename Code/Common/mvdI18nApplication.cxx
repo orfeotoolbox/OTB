@@ -82,9 +82,18 @@ I18nApplication
   QDir bin_dir( QDir::cleanPath( QCoreApplication::applicationDirPath() ) );
   QDir build_i18n_dir( bin_dir );
 
+  qDebug() << "build_i18n_dir.exists( ../i18n )" << build_i18n_dir.exists( "../i18n" );
+  qDebug() << "build_i18n_dir.exists( ../../i18n )" << build_i18n_dir.exists( "../../i18n" );
+  qDebug() << "build_i18n_dir.exists( ../../i18n )" << build_i18n_dir.exists( "../../" Monteverdi2_CONFIGURE_FILE );
+
+
   // If build dir is identified...
-  if( build_i18n_dir.cd( "../i18n" ) &&
-      build_i18n_dir.exists( "../" Monteverdi2_CONFIGURE_FILE ) )
+  if( build_i18n_dir.exists( "../i18n" )
+         && build_i18n_dir.cd( "../i18n" )
+         && build_i18n_dir.exists( "../" Monteverdi2_CONFIGURE_FILE )
+       || build_i18n_dir.exists( "../../i18n" )
+         && build_i18n_dir.cd( "../../i18n" )
+         && build_i18n_dir.exists( "../" Monteverdi2_CONFIGURE_FILE ) )
     {
     m_IsRunningFromBuildDir = true;
 
@@ -109,14 +118,14 @@ I18nApplication
 
       // TODO: Use log system to trace message.
       qDebug()
-	<< tr( "Running from install directory '%1'." ).arg( Monteverdi2_INSTALL_BIN_DIR );
+        << tr( "Running from install directory '%1'." ).arg( Monteverdi2_INSTALL_BIN_DIR );
       }
     // Otherwise
     else
       {
       QString message(
-	tr( "Failed to access translation-files directory '%1'." )
-	.arg( install_i18n_dir.path() )
+        tr( "Failed to access translation-files directory '%1'." )
+        .arg( install_i18n_dir.path() )
       );
 
       // TODO: Use log system to trace error while loading locale translation file.
