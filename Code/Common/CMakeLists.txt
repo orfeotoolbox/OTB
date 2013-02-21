@@ -34,6 +34,7 @@ add_library(Monteverdi2_Common
 #############################################################################
 target_link_libraries(Monteverdi2_Common
   OTBIO
+  ${OPENGL_LIBRARIES}
   ${QT_LIBRARIES}
 )
 

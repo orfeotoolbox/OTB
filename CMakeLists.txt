@@ -61,6 +61,8 @@ set( QT_USE_QTOPENGL TRUE)
 
 include( ${QT_USE_FILE} )
 
+find_package(OpenGL REQUIRED)
+
 #----------------------------------------------------------------------------
 # Include OTB CMake modules path.
 # set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${OTB_SOURCE_DIR}/CMake")
