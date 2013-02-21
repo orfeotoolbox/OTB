@@ -31,5 +31,7 @@ add_custom_target( i18n ALL DEPENDS ${Monteverdi2_QM_TRANSLATIONS} )
 #----------------------------------------------------------------------------
 # Locale human-readable translation files.
 install(
-  FILES ${Monteverdi2_QM_TRANSLATIONS} DESTINATION ${Monteverdi2_INSTALL_DATA_DIR}/i18n
+  FILES ${Monteverdi2_QM_TRANSLATIONS}
+  DESTINATION ${Monteverdi2_INSTALL_DATA_DIR}/i18n
+  COMPONENT Resources
   )
