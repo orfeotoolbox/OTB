@@ -12,4 +12,4 @@
 @cd %HOMEDRIVE%%HOMEPATH%
 
 :: Start Monteverdi
-@"%CURRENT_SCRIPT_DIR%monteverdi.exe"
+@"%CURRENT_SCRIPT_DIR%monteverdi2.exe"
