@@ -120,46 +120,49 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   //**********************************************************************
   //**********************************************************************
 
-  // Masses of the singleton sets. Expected to be automatically filled with the CONFUSION MATRICES
+  // Masses of the singleton sets {Ai} for each classifier. Expected to be automatically filled with the
+  // CONFUSION MATRICES (ex: with the recognition rates of each class {Ai}).
+  // These masses represent the degree of belief of each classifier that the output class of the pixel X
+  // is {Ai} when the input pixel X actually belongs to the class {Ai}
 
   typedef MassOfBeliefFunctionType::MassMapType MassMapType;
   MassMapType::iterator itMapMasses;
   MassMapType mCl0, mCl1, mCl2, mCl3, mCl4, mCl5;
 
-  mCl0[mapLabelSets[vectorAllLabels[0]]] = 0.25;
-  mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.6;
-  mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.1;
+  mCl0[mapLabelSets[vectorAllLabels[0]]] = 0.9;
+  mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.7;
+  mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.8;
   //mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
   mCl0[universe] = 0.2;
 
   mCl1[mapLabelSets[vectorAllLabels[0]]] = 0.8;
   mCl1[mapLabelSets[vectorAllLabels[1]]] = 0;
-  mCl1[mapLabelSets[vectorAllLabels[2]]] = 0.05;
+  mCl1[mapLabelSets[vectorAllLabels[2]]] = 0.5;
   //mCl1[mapLabelSets[vectorAllLabels[3]]] = 0.15;
   //mCl1[universe] = 0;
 
-  mCl2[mapLabelSets[vectorAllLabels[0]]] = 0.2;
+  mCl2[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl2[mapLabelSets[vectorAllLabels[1]]] = 0.65;
-  mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.1;
-  //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.05;
+  mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.3;
+  //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
   mCl2[universe] = 0.1;
 
-  mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.45;
-  mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.22;
-  mCl3[mapLabelSets[vectorAllLabels[2]]] = 0.15;
-  //mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.18;
+  mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.5;
+  mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.25;
+  mCl3[mapLabelSets[vectorAllLabels[2]]] = 0.6;
+  //mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.2;
   //mCl3[universe] = 0;
 
-  mCl4[mapLabelSets[vectorAllLabels[0]]] = 0.15;
-  mCl4[mapLabelSets[vectorAllLabels[1]]] = 0.1;
-  mCl4[mapLabelSets[vectorAllLabels[2]]] = 0.75;
-  //mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.03;
+  mCl4[mapLabelSets[vectorAllLabels[0]]] = 0.75;
+  mCl4[mapLabelSets[vectorAllLabels[1]]] = 0.3;
+  mCl4[mapLabelSets[vectorAllLabels[2]]] = 0.6;
+  //mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.5;
   //mCl4[universe] = 0;
 
   mCl5[mapLabelSets[vectorAllLabels[0]]] = 0.9;
-  mCl5[mapLabelSets[vectorAllLabels[1]]] = 0.05;
-  mCl5[mapLabelSets[vectorAllLabels[2]]] = 0.03;
-  //mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.02;
+  mCl5[mapLabelSets[vectorAllLabels[1]]] = 0.5;
+  mCl5[mapLabelSets[vectorAllLabels[2]]] = 0.3;
+  //mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.2;
   //mCl5[universe] = 0;
 
 
@@ -347,7 +350,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
       }
     else
       {
-      belLabelSetClk = K * ((mLabelSetClk / (1 - mLabelSetClk)) * B);
+      belLabelSetClk = K * (mLabelSetClk / (1 - mLabelSetClk)) * B;
       }
 
     // Bel(Ai_)
@@ -484,45 +487,49 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
   //**********************************************************************
   //**********************************************************************
 
-  // Masses of the singleton sets. Expected to be automatically filled with the CONFUSION MATRICES
+  // Masses of the singleton sets {Ai} for each classifier. Expected to be automatically filled with the
+  // CONFUSION MATRICES (ex: with the recognition rates of each class {Ai}).
+  // These masses represent the degree of belief of each classifier that the output class of the pixel X
+  // is {Ai} when the input pixel X actually belongs to the class {Ai}
 
   typedef MassOfBeliefFunctionType::MassMapType MassMapType;
+  MassMapType::iterator itMapMasses;
   MassMapType mCl0, mCl1, mCl2, mCl3, mCl4, mCl5;
 
-  mCl0[mapLabelSets[vectorAllLabels[0]]] = 0.25;
-  mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.6;
-  mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.1;
+  mCl0[mapLabelSets[vectorAllLabels[0]]] = 0.9;
+  mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.7;
+  mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.8;
   //mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
   mCl0[universe] = 0.2;
 
   mCl1[mapLabelSets[vectorAllLabels[0]]] = 0.8;
   mCl1[mapLabelSets[vectorAllLabels[1]]] = 0;
-  mCl1[mapLabelSets[vectorAllLabels[2]]] = 0.05;
+  mCl1[mapLabelSets[vectorAllLabels[2]]] = 0.5;
   //mCl1[mapLabelSets[vectorAllLabels[3]]] = 0.15;
   //mCl1[universe] = 0;
 
-  mCl2[mapLabelSets[vectorAllLabels[0]]] = 0.2;
+  mCl2[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl2[mapLabelSets[vectorAllLabels[1]]] = 0.65;
-  mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.1;
-  //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.05;
+  mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.3;
+  //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
   mCl2[universe] = 0.1;
 
-  mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.45;
-  mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.22;
-  mCl3[mapLabelSets[vectorAllLabels[2]]] = 0.15;
-  //mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.18;
+  mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.5;
+  mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.25;
+  mCl3[mapLabelSets[vectorAllLabels[2]]] = 0.6;
+  //mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.2;
   //mCl3[universe] = 0;
 
-  mCl4[mapLabelSets[vectorAllLabels[0]]] = 0.15;
-  mCl4[mapLabelSets[vectorAllLabels[1]]] = 0.1;
-  mCl4[mapLabelSets[vectorAllLabels[2]]] = 0.75;
-  //mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.03;
+  mCl4[mapLabelSets[vectorAllLabels[0]]] = 0.75;
+  mCl4[mapLabelSets[vectorAllLabels[1]]] = 0.3;
+  mCl4[mapLabelSets[vectorAllLabels[2]]] = 0.6;
+  //mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.5;
   //mCl4[universe] = 0;
 
   mCl5[mapLabelSets[vectorAllLabels[0]]] = 0.9;
-  mCl5[mapLabelSets[vectorAllLabels[1]]] = 0.05;
-  mCl5[mapLabelSets[vectorAllLabels[2]]] = 0.03;
-  //mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.02;
+  mCl5[mapLabelSets[vectorAllLabels[1]]] = 0.5;
+  mCl5[mapLabelSets[vectorAllLabels[2]]] = 0.3;
+  //mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.2;
   //mCl5[universe] = 0;
 
 
@@ -662,7 +669,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
       }
     else
       {
-      belLabelSetClk = K * ((mLabelSetClk / (1 - mLabelSetClk)) * B);
+      belLabelSetClk = K * (mLabelSetClk / (1 - mLabelSetClk)) * B;
       }
 
     // Bel(Ai_)
@@ -802,45 +809,49 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
   //**********************************************************************
   //**********************************************************************
 
-  // Masses of the singleton sets. Expected to be automatically filled with the CONFUSION MATRICES
+  // Masses of the singleton sets {Ai} for each classifier. Expected to be automatically filled with the
+  // CONFUSION MATRICES (ex: with the recognition rates of each class {Ai}).
+  // These masses represent the degree of belief of each classifier that the output class of the pixel X
+  // is {Ai} when the input pixel X actually belongs to the class {Ai}
 
   typedef MassOfBeliefFunctionType::MassMapType MassMapType;
+  MassMapType::iterator itMapMasses;
   MassMapType mCl0, mCl1, mCl2, mCl3, mCl4, mCl5;
 
-  mCl0[mapLabelSets[vectorAllLabels[0]]] = 0.25;
-  mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.6;
-  mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.1;
+  mCl0[mapLabelSets[vectorAllLabels[0]]] = 0.9;
+  mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.7;
+  mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.8;
   //mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
   mCl0[universe] = 0.2;
 
   mCl1[mapLabelSets[vectorAllLabels[0]]] = 0.8;
   mCl1[mapLabelSets[vectorAllLabels[1]]] = 0;
-  mCl1[mapLabelSets[vectorAllLabels[2]]] = 0.05;
+  mCl1[mapLabelSets[vectorAllLabels[2]]] = 0.5;
   //mCl1[mapLabelSets[vectorAllLabels[3]]] = 0.15;
   //mCl1[universe] = 0;
 
-  mCl2[mapLabelSets[vectorAllLabels[0]]] = 0.2;
+  mCl2[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl2[mapLabelSets[vectorAllLabels[1]]] = 0.65;
-  mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.1;
-  //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.05;
+  mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.3;
+  //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
   mCl2[universe] = 0.1;
 
-  mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.45;
-  mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.22;
-  mCl3[mapLabelSets[vectorAllLabels[2]]] = 0.15;
-  //mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.18;
+  mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.5;
+  mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.25;
+  mCl3[mapLabelSets[vectorAllLabels[2]]] = 0.6;
+  //mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.2;
   //mCl3[universe] = 0;
 
-  mCl4[mapLabelSets[vectorAllLabels[0]]] = 0.15;
-  mCl4[mapLabelSets[vectorAllLabels[1]]] = 0.1;
-  mCl4[mapLabelSets[vectorAllLabels[2]]] = 0.75;
-  //mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.03;
+  mCl4[mapLabelSets[vectorAllLabels[0]]] = 0.75;
+  mCl4[mapLabelSets[vectorAllLabels[1]]] = 0.3;
+  mCl4[mapLabelSets[vectorAllLabels[2]]] = 0.6;
+  //mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.5;
   //mCl4[universe] = 0;
 
   mCl5[mapLabelSets[vectorAllLabels[0]]] = 0.9;
-  mCl5[mapLabelSets[vectorAllLabels[1]]] = 0.05;
-  mCl5[mapLabelSets[vectorAllLabels[2]]] = 0.03;
-  //mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.02;
+  mCl5[mapLabelSets[vectorAllLabels[1]]] = 0.5;
+  mCl5[mapLabelSets[vectorAllLabels[2]]] = 0.3;
+  //mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.2;
   //mCl5[universe] = 0;
 
 
