@@ -82,11 +82,6 @@ I18nApplication
   QDir bin_dir( QDir::cleanPath( QCoreApplication::applicationDirPath() ) );
   QDir build_i18n_dir( bin_dir );
 
-  qDebug() << "build_i18n_dir.exists( ../i18n )" << build_i18n_dir.exists( "../i18n" );
-  qDebug() << "build_i18n_dir.exists( ../../i18n )" << build_i18n_dir.exists( "../../i18n" );
-  qDebug() << "build_i18n_dir.exists( ../../i18n )" << build_i18n_dir.exists( "../../" Monteverdi2_CONFIGURE_FILE );
-
-
   // If build dir is identified...
   if( build_i18n_dir.exists( "../i18n" )
          && build_i18n_dir.cd( "../i18n" )
