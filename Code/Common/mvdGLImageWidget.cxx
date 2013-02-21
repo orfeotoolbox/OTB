@@ -298,7 +298,7 @@ GLImageWidget
   m_ImageViewManipulator->wheelEvent(event);
 
   // repaint the buffer
-  //this->update();
+  this->update();
 }
 
 /*******************************************************************************/
