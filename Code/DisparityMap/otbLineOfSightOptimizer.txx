@@ -120,7 +120,7 @@ LineOfSightOptimizer<TPrecision,TLabel>
     AC[1] = intersection[1]   - itPointA.Value()[1];
     AC[2] = intersection[2]   - itPointA.Value()[2];
     
-    res2 = dot_product(AC,AC) - dot_product(AB,AC) / (dot_product(AB,AB));
+    res2 = std::max(0.0,dot_product(AC,AC) - (dot_product(AB,AC) * dot_product(AB,AC)) / (dot_product(AB,AB)));
     
     m_Residues.push_back( vcl_sqrt( res2 ) );
     m_GlobalResidue += res2;
