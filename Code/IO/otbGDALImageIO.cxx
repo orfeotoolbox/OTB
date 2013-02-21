@@ -148,6 +148,7 @@ GDALImageIO::GDALImageIO()
   m_PxType = new GDALDataTypeWrapper;
 
   m_NumberOfOverviews = 0;
+
 }
 
 GDALImageIO::~GDALImageIO()
@@ -506,6 +507,25 @@ void GDALImageIO::InternalReadImageInformation()
   m_NumberOfOverviews = GDALGetOverviewCount(dataset->GetRasterBand(1));
 
   std::cout << "Number of Overviews inside input file" << m_FileName << ": " << m_NumberOfOverviews << std::endl;
+
+  for( unsigned int iOverview = 0; iOverview < m_NumberOfOverviews; iOverview++ )
+  {
+      GDALRasterBandH hSrcOver = GDALGetOverview( dataset->GetRasterBand(1), iOverview );
+      int nXSize = GDALGetRasterBandXSize( hSrcOver );
+      int nYSize = GDALGetRasterBandYSize( hSrcOver );
+
+      //std::cout << "Overviews size of input file" << m_FileName << ": " << nXSize << " x " << nYSize <<   std::endl;
+
+      std::pair <unsigned int, unsigned int> temp;
+      temp.first = nXSize;
+      temp.second = nYSize;
+      m_OverviewsSize.push_back(temp);
+
+      std::cout << "Overviews size of input file" << m_FileName << ": " << m_OverviewsSize.back().first << " x " << m_OverviewsSize.back().second <<   std::endl;
+
+  }
+
+
 
   otbMsgDevMacro(<< "Number of Overviews inside input file: " << m_NumberOfOverviews);
   otbMsgDevMacro(<< "Input file dimension: " << m_Dimensions[0] << ", " << m_Dimensions[1]);

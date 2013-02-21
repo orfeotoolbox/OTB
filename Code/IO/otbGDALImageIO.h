@@ -198,6 +198,8 @@ private:
 
   unsigned int m_NumberOfOverviews;
 
+  std::vector<std::pair<unsigned int, unsigned int> > m_OverviewsSize;
+
 };
 
 } // end namespace otb
