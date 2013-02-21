@@ -640,26 +640,23 @@ VectorImageModel
   QString lodFilename( m_Filename );
 
   // If model is a multi-resolution image.
-  if( lod>1 )
+  lodFilename.append( QString( "?&resol=%1" ).arg( lod ) );
+
+  // Update m_ImageFileReader
+  DefaultImageFileReaderType::Pointer fileReader(
+    DefaultImageFileReaderType::New()
+  );
+
+  try
     {
-    lodFilename.append( QString( "?&resol=%1" ).arg( lod ) );
+    fileReader->SetFileName( lodFilename.toStdString() );
+    fileReader->UpdateOutputInformation();
 
-    // Update m_ImageFileReader
-    DefaultImageFileReaderType::Pointer fileReader(
-      DefaultImageFileReaderType::New()
-    );
-
-    try
-      {
-      fileReader->SetFileName( lodFilename.toStdString() );
-      fileReader->UpdateOutputInformation();
-
-      m_ImageFileReader = fileReader;
-      }
-    catch( std::exception& exc )
-      {
-      throw;
-      }
+    m_ImageFileReader = fileReader;
+    }
+  catch( std::exception& exc )
+    {
+    throw;
     }
 
   // (Always) Update m_Image reference.
