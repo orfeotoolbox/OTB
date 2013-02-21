@@ -28,11 +28,11 @@ namespace otb
 /** \class BijectionCoherencyFilter
  *  \brief Left-right coherency filter for disparity maps
  *
- *  This filter checks that left-to-right and right-to-left disparities (computed 
- *  for a given stereo pair) are compatible, within a given tolerance radius. 
- *  Disparities are expected to be given in index coordinates between a pair of 
+ *  This filter checks that left-to-right and right-to-left disparities (computed
+ *  for a given stereo pair) are compatible, within a given tolerance radius.
+ *  Disparities are expected to be given in index coordinates between a pair of
  *  epipolar images of equal size. 1D or 2D disparities may be supplied.
- *  Left-to-right disparities will be referred as direct, right-to-left as 
+ *  Left-to-right disparities will be referred as direct, right-to-left as
  *  reverse.
  *  The output is a mask for coherent direct disparities.
  *
