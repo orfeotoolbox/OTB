@@ -33,6 +33,10 @@
 // ITK includes (sorted by alphabetic order)
 
 //
+// OTB includes (sorted by alphabetic order)
+#include "otbStreamingShrinkImageFilter.h"
+
+//
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAlgorithm.h"
 
@@ -69,26 +73,15 @@ void
 QuicklookModel
 ::virtual_BuildModel()
 {
-
-  std::cout << "QuicklookModel::virtual_BuildModel "<< std::endl;
- //
-  // Step #1: Perform pre-process of AbstractModel::BuildModel()
-  // pattern.
-
   //
-  // Step #2: Perform standard AbstractModel::BuildModel()
-  // pattern. Call parent virtual method.
-
-  // Empty step #2 in case of Quicklook model.
-
-  //
-  // Step #3: Post-process of the BuildModel() pattern.
+  // get the parent vector image model
   VectorImageModel * viModel = qobject_cast< VectorImageModel* >( parent() );
   
-  // if multi-resolution file
+  // 
+  // if multi-resolution file : write the decompressed resolution to
+  // the disk and reload it via VectorImage::SetFilename(....)
   if ( viModel->GetNbLod() > 1 )
     {
-    std::cout <<"QuicklookModel::virtual_BuildModel -> multi-res file " << std::endl;
     // get the filename and use it to compose the quicklook filename
     std::string fnameNoExt = itksys::SystemTools::GetFilenameWithoutExtension( 
       viModel->GetFilename().toStdString() );
@@ -108,20 +101,46 @@ QuicklookModel
       writer->SetInput(viModel->ToImage());
       writer->Update();
       }
-    else
-      {
-      std::cout <<"file "<< qlfname.str() << " exists on disk" << std::endl;
-      }
     
     // reload the quicklook
     QString  qlname(qlfname.str().c_str());
     SetFilename(qlname, 512, 512);
     }
-  else
+  else // if not multi-res, shrink the native image
     {
-    std::cout <<"QuicklookModel::virtual_BuildModel -> NO multires file " << std::endl;
-    //TODO:  shrink to get a quicklook
-    SetFilename( viModel->GetFilename(), 512, 512 );
+    double factorX = 1.;
+    double factorY = 1.;
+
+    // Compute the shrink factor to have 512,512 quicklook size
+    SizeType  largestSize =  GetNativeLargestRegion().GetSize();
+
+    if (largestSize[0] > 512) factorX = largestSize[0]/512;
+    if (largestSize[1] > 512) factorY = largestSize[1]/512;
+
+    double factor = std::max(factorX, factorY);
+
+    // if the image dimensions are lower than 512 in each dimension, 
+    // no need to shrink
+    if (factor - 1.0 < 0.000000001)
+      {
+      m_Image = viModel->ToImage();
+      }
+    else
+      {
+      // shrink to get a quicklook
+      typedef otb::StreamingShrinkImageFilter<SourceImageType, 
+                                              SourceImageType>      ShrinkFilterType;
+
+      ShrinkFilterType::Pointer shrinker = ShrinkFilterType::New();
+      shrinker->SetInput(viModel->ToImage());
+      shrinker->SetShrinkFactor(factor);
+      shrinker->Update();
+    
+      m_Image = shrinker->GetOutput();
+      }
+
+    // Remember native largest region.
+    m_NativeLargestRegion = m_Image->GetLargestPossibleRegion();
     }
 
   // Initialize RgbaImageModel.
