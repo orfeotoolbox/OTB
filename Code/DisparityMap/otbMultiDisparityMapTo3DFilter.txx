@@ -172,6 +172,31 @@ template <class TDisparityImage, class TOutputImage,
 class TMaskImage, class TResidueImage>
 void
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
+::SetMovingKeywordList(unsigned int index, const ImageKeywordListType kwl)
+{
+  if (this->m_MovingKeywordLists.size() > index)
+    {
+    this->m_MovingKeywordLists[index] = kwl;
+    }
+}
+
+template <class TDisparityImage, class TOutputImage,
+class TMaskImage, class TResidueImage>
+const typename MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>::ImageKeywordListType &
+MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
+::GetMovingKeywordList(unsigned int index) const
+{
+  if (this->m_MovingKeywordLists.size() <= index)
+  {
+    itkExceptionMacro(<<"Keywordlist index is outside the container");
+  }
+  return this->m_MovingKeywordLists[index];
+}
+
+template <class TDisparityImage, class TOutputImage,
+class TMaskImage, class TResidueImage>
+void
+MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
 ::GenerateOutputInformation()
 {
   const TDisparityImage * horizDisp = this->GetHorizontalDisparityMapInput(0);
