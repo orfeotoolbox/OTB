@@ -46,6 +46,7 @@
 // OTB includes (sorted by alphabetic order)
 #include <otbImage.h>
 #include <otbImageFileReader.h>
+#include <otbImageFileWriter.h>
 #include <otbVectorImage.h>
 
 // TODO: Contribute to OTB!
@@ -245,6 +246,10 @@ ScalarImageType;
  */
 typedef
 otb::ImageFileReader< ScalarImageType > ScalarImageFileReaderType;
+/**
+ */
+typedef
+otb::ImageFileWriter< ScalarImageType > ScalarImageFileWriterType;
 
 /*******************************************************************************/
 /* Type definitions for vector/multi-band images (generic internal data).      */
@@ -256,6 +261,9 @@ VectorImageType;
 /**
  */
 typedef otb::ImageFileReader< VectorImageType > VectorImageFileReaderType;
+/**
+ */
+typedef otb::ImageFileWriter< VectorImageType > VectorImageFileWriterType;
 
 /*******************************************************************************/
 /* Type definitions for RGBA images (display).                                 */
