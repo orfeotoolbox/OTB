@@ -111,6 +111,9 @@ public:
 //
 // Public SLOTS.
 public slots:
+  /** */
+  virtual
+    void OnModelImageRegionChanged( const ImageRegionType& largestRegion ) =0;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
