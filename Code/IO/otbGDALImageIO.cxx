@@ -146,6 +146,8 @@ GDALImageIO::GDALImageIO()
   m_IsVectorImage = false;
 
   m_PxType = new GDALDataTypeWrapper;
+
+  m_NumberOfOverviews = 0;
 }
 
 GDALImageIO::~GDALImageIO()
@@ -500,6 +502,12 @@ void GDALImageIO::InternalReadImageInformation()
   // Get Number of Bands
   m_NbBands = dataset->GetRasterCount();
 
+  // Get the number of overviews of the file (based on the first band)
+  m_NumberOfOverviews = GDALGetOverviewCount(dataset->GetRasterBand(1));
+
+  std::cout << "Number of Overviews inside input file" << m_FileName << ": " << m_NumberOfOverviews << std::endl;
+
+  otbMsgDevMacro(<< "Number of Overviews inside input file: " << m_NumberOfOverviews);
   otbMsgDevMacro(<< "Input file dimension: " << m_Dimensions[0] << ", " << m_Dimensions[1]);
   otbMsgDevMacro(<< "Number of bands inside input file: " << m_NbBands);
 

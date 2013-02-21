@@ -196,6 +196,8 @@ private:
    *  Creation Options */
   GDALCreationOptionsType m_CreationOptions;
 
+  unsigned int m_NumberOfOverviews;
+
 };
 
 } // end namespace otb
