@@ -177,6 +177,8 @@ add_subdirectory( Code )
 # i18n directory must be added after all source files (see add_qt1_i18n_sources).
 add_subdirectory( i18n )
 
+add_subdirectory( Packaging )
+
 #----------------------------------------------------------------------------
 # Enable / Disable testing
 option(BUILD_TESTING  "Build testing." OFF)

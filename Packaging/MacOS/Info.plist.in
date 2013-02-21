@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>CFBundleExecutable</key>
+		<string>Monteverdi2-@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@</string>
+		<key>CFBundleIconFile</key>
+		<string>Monteverdi2-@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@.icns</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6.0</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+	</dict>
+</plist>

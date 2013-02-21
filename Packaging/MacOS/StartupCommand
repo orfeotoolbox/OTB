@@ -1,0 +1,14 @@
+#!/bin/sh
+
+BUNDLE="`echo "$0" | sed -e 's/\/Contents\/MacOS\/.*//'`"
+RESOURCES="$BUNDLE/Contents/Resources"
+
+#echo "BUNDLE: $BUNDLE"
+#echo "RESOURCES: $RESOURCES"
+
+export GDAL_DATA=$RESOURCES/share/gdal
+
+# Need to have write access to the monteverdi current dir for Caching
+cd $HOME
+
+exec "$RESOURCES/bin/monteverdi2"
