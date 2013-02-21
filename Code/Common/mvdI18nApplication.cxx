@@ -69,9 +69,9 @@ I18nApplication
   //
   // 1. default UI language is english (no translation).
   QLocale sys_lc( QLocale::system() );
-  if( sys_lc.language()==QLocale::C ||
-      ( sys_lc.language()==QLocale::English &&
-	sys_lc.country()==QLocale::UnitedStates ) )
+  if( sys_lc.language() == QLocale::C ||
+      ( sys_lc.language() == QLocale::English &&
+        sys_lc.country() == QLocale::UnitedStates ) )
     {
     return;
     }
@@ -153,15 +153,15 @@ I18nApplication
 bool
 I18nApplication
 ::LoadAndInstallTranslator(const QString& filename,
-			   const QString& directory,
-			   const QString& searchDelimiters,
-			   const QString& suffix )
+                           const QString& directory,
+                           const QString& searchDelimiters,
+                           const QString& suffix )
 {
   QString filename_ext(
     filename +
     ( suffix.isNull()
-	? ".qm"
-	: suffix )
+      ? ".qm"
+      : suffix )
   );
 
   // (a) Do need to new QTranslator() here!
