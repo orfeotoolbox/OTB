@@ -31,7 +31,6 @@
 
 //
 // ITK includes (sorted by alphabetic order)
-#include "itksys/SystemTools.hxx"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -70,6 +69,8 @@ void
 QuicklookModel
 ::virtual_BuildModel()
 {
+
+  std::cout << "QuicklookModel::virtual_BuildModel "<< std::endl;
  //
   // Step #1: Perform pre-process of AbstractModel::BuildModel()
   // pattern.
@@ -82,11 +83,46 @@ QuicklookModel
 
   //
   // Step #3: Post-process of the BuildModel() pattern.
+  VectorImageModel * viModel = qobject_cast< VectorImageModel* >( parent() );
+  
+  // if multi-resolution file
+  if ( viModel->GetNbLod() > 1 )
+    {
+    std::cout <<"QuicklookModel::virtual_BuildModel -> multi-res file " << std::endl;
+    // get the filename and use it to compose the quicklook filename
+    std::string fnameNoExt = itksys::SystemTools::GetFilenameWithoutExtension( 
+      viModel->GetFilename().toStdString() );
+    
+    std::string path  = itksys::SystemTools::GetFilenamePath( viModel->GetFilename().toStdString());
+    std::string ext   = itksys::SystemTools::GetFilenameExtension( viModel->GetFilename().toStdString());
 
-  SetFilename(
-    qobject_cast< VectorImageModel* >( parent() )->GetFilename(),
-    50, 50
-  );
+    std::ostringstream qlfname;
+    qlfname << path<<"/"<<fnameNoExt<<"_quicklook.tif";
+
+    // check if the file exists
+    if (!itksys::SystemTools::FileExists(qlfname.str().c_str()))
+      {
+      // write the file on the disk
+      VectorImageFileWriterType::Pointer writer = VectorImageFileWriterType::New();
+      writer->SetFileName(qlfname.str());
+      writer->SetInput(viModel->ToImage());
+      writer->Update();
+      }
+    else
+      {
+      std::cout <<"file "<< qlfname.str() << " exists on disk" << std::endl;
+      }
+    
+    // reload the quicklook
+    QString  qlname(qlfname.str().c_str());
+    SetFilename(qlname, 512, 512);
+    }
+  else
+    {
+    std::cout <<"QuicklookModel::virtual_BuildModel -> NO multires file " << std::endl;
+    //TODO:  shrink to get a quicklook
+    SetFilename( viModel->GetFilename(), 512, 512 );
+    }
 
   // Initialize RgbaImageModel.
   InitializeRgbaPipeline();
