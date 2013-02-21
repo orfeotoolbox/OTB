@@ -35,6 +35,7 @@ Upstream Author(s):
     Otmane LAHLOU (CS) <otmane.lahlou@c-s.fr>
     Julien MICHEL (CNES) <julien.michel@orfeo-toolbox.org>
     Mickael SAVINAUD (CS) <mickael.savinaud@c-s.fr>
+    Julien MALIK (CS)  <julien.malik@orfeo-toolbox.org>
 
 
 Copyright:
