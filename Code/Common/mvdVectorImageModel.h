@@ -366,6 +366,9 @@ protected:
 // Protected attributes.
 protected:
 
+  /** */
+  SourceImageType::Pointer m_Image;
+
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
@@ -460,9 +463,6 @@ private:
 private:
   // Default image reader
   DefaultImageFileReaderType::Pointer m_ImageFileReader;
-
-  /** */
-  SourceImageType::Pointer m_Image;
 
   // Buffer where to store the image pixels needed by the renderer
   unsigned char *                     m_RasterizedBuffer;
