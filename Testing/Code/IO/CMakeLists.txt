@@ -1652,6 +1652,23 @@ ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS9}
         ${TEMP}/ioTvVectorImageFileReaderWriterTest.hdr
 )
 
+ADD_TEST(ioTvVImageFileReader_RESOLUTION_0 ${IO_TESTS9}
+        otbVectorImageFileReaderWriterTest
+        ${INPUTDATA}/maur_rgb.tif?&resol=0
+        ${TEMP}/ioImageFileReader_RESOLUTION_0.tif )
+
+ADD_TEST(ioTvVImageFileReader_RESOLUTION_3 ${IO_TESTS9}
+        otbVectorImageFileReaderWriterTest
+        ${INPUTDATA}/maur_rgb.tif?&resol=3
+        ${TEMP}/ioImageFileReader_RESOLUTION_3.tif )
+
+IF(OTB_DATA_USE_LARGEINPUT)
+    ADD_TEST(ioTvVImageFileReader_RESOLUTION_4 ${IO_TESTS9}
+        otbVectorImageFileReaderWriterTest
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF?&resol=4
+        ${TEMP}/ioImageFileReader_RESOLUTION_4.tif )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 # ---  otb::StreamingShortImageFileWriterTest  ---
 ADD_TEST(ioTvStreamingShortImageFileWriterTest ${IO_TESTS9}
    --compare-image ${EPSILON_9}
