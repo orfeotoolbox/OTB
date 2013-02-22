@@ -185,15 +185,15 @@ add_subdirectory( Packaging )
 # Enable / Disable testing
 option(BUILD_TESTING  "Build testing." OFF)
 
-INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
-CONFIGURE_FILE(CMake/CTestCustom.cmake.in CTestCustom.cmake)
-MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
-IF(BUILD_TESTING)
-  ENABLE_TESTING()
-  SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard.")
-  MARK_AS_ADVANCED(BUILDNAME)
-  ADD_SUBDIRECTORY(Testing)
-ENDIF(BUILD_TESTING)
+include(${CMAKE_ROOT}/Modules/Dart.cmake)
+configure_file(CMake/CTestCustom.cmake.in CTestCustom.cmake)
+mark_as_advanced(TCL_TCLSH DART_ROOT)
+if(BUILD_TESTING)
+  enable_testing()
+  set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard.")
+  mark_as_advanced(BUILDNAME)
+  add_subdirectory(Testing)
+endif()
 
 #----------------------------------------------------------------------------
 # Generate Monteverdi2Config.cmake
