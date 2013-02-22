@@ -511,7 +511,7 @@ VectorImageModel::GetBestLevelOfDetail(const double zoomFactor,
 #if defined(OTB_USE_JPEG2000)
   otb::JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
 
-  std::string filename( m_Filename.toStdString() );
+  std::string filename( static_cast<const char*>(m_Filename.toAscii()) );
 
   readerJPEG2000->SetFileName( filename.c_str() );
   if(readerJPEG2000->CanReadFile( filename.c_str() ) )
@@ -569,7 +569,7 @@ VectorImageModel
   DefaultImageFileReaderType::Pointer tmpReader(
     DefaultImageFileReaderType::New() );
 
-  tmpReader->SetFileName( m_Filename.toStdString() );
+  tmpReader->SetFileName( static_cast<const char*>(m_Filename.toAscii()) );
   tmpReader->UpdateOutputInformation();
 
   // Get native image largest region, which is LOD level zero.
@@ -649,7 +649,7 @@ VectorImageModel
 
   try
     {
-    fileReader->SetFileName( lodFilename.toStdString() );
+    fileReader->SetFileName( static_cast<const char*>(lodFilename.toAscii()) );
     fileReader->UpdateOutputInformation();
 
     m_ImageFileReader = fileReader;

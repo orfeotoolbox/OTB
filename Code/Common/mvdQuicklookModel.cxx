@@ -83,11 +83,11 @@ QuicklookModel
   if ( viModel->GetNbLod() > 1 )
     {
     // get the filename and use it to compose the quicklook filename
-    std::string fnameNoExt = itksys::SystemTools::GetFilenameWithoutExtension( 
-      viModel->GetFilename().toStdString() );
+    const char* filename = static_cast<const char*>(viModel->GetFilename().toAscii());
     
-    std::string path  = itksys::SystemTools::GetFilenamePath( viModel->GetFilename().toStdString());
-    std::string ext   = itksys::SystemTools::GetFilenameExtension( viModel->GetFilename().toStdString());
+    std::string fnameNoExt = itksys::SystemTools::GetFilenameWithoutExtension( filename );    
+    std::string path  = itksys::SystemTools::GetFilenamePath( filename );
+    std::string ext   = itksys::SystemTools::GetFilenameExtension( filename );
 
     std::ostringstream qlfname;
     qlfname << path<<"/"<<fnameNoExt<<"_quicklook.tif";
