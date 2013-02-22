@@ -83,12 +83,12 @@ I18nApplication
   QDir build_i18n_dir( bin_dir );
 
   // If build dir is identified...
-  if( build_i18n_dir.exists( "../i18n" )
+  if( (build_i18n_dir.exists( "../i18n" )
          && build_i18n_dir.cd( "../i18n" )
-         && build_i18n_dir.exists( "../" Monteverdi2_CONFIGURE_FILE )
-       || build_i18n_dir.exists( "../../i18n" )
+         && build_i18n_dir.exists( "../" Monteverdi2_CONFIGURE_FILE ))
+       || (build_i18n_dir.exists( "../../i18n" )
          && build_i18n_dir.cd( "../../i18n" )
-         && build_i18n_dir.exists( "../" Monteverdi2_CONFIGURE_FILE ) )
+         && build_i18n_dir.exists( "../" Monteverdi2_CONFIGURE_FILE )) )
     {
     m_IsRunningFromBuildDir = true;
 
