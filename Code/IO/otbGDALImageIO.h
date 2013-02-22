@@ -196,9 +196,22 @@ private:
    *  Creation Options */
   GDALCreationOptionsType m_CreationOptions;
 
+  /**
+   * Number of Overviews in the file */
   unsigned int m_NumberOfOverviews;
 
+  /**
+   * Size of the different overviews of the file */
   std::vector<std::pair<unsigned int, unsigned int> > m_OverviewsSize;
+
+  /** Resolution factor
+   */
+  unsigned int m_ResolutionFactor;
+
+  /**
+   * Original dimension of the input image
+   */
+  std::vector<unsigned int> m_OriginalDimensions;
 
 };
 

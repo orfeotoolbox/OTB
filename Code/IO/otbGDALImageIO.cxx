@@ -41,6 +41,10 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include "otbOGRHelpers.h"
 
+inline unsigned int uint_ceildivpow2(unsigned int a, unsigned int b) {
+  return (a + (1 << b) - 1) >> b;
+}
+
 namespace otb
 {
 
@@ -60,6 +64,7 @@ public:
   }
   GDALDataType pixType;
 }; // end of GDALDataTypeWrapper
+
 
 /*
 template<class InputType>
@@ -148,6 +153,7 @@ GDALImageIO::GDALImageIO()
   m_PxType = new GDALDataTypeWrapper;
 
   m_NumberOfOverviews = 0;
+  m_ResolutionFactor = 0;
 
 }
 
@@ -196,11 +202,35 @@ void GDALImageIO::Read(void* buffer)
     return;
     }
 
+  // Get the origin of the region to read
+  int lFirstLineRegion   = this->GetIORegion().GetIndex()[1];
+  int lFirstColumnRegion = this->GetIORegion().GetIndex()[0];
+
   // Get nb. of lines and columns of the region to read
-  int lNbLines     = this->GetIORegion().GetSize()[1];
-  int lNbColumns   = this->GetIORegion().GetSize()[0];
-  int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
-  int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
+  int lNbLinesRegion   = this->GetIORegion().GetSize()[1];
+  int lNbColumnsRegion = this->GetIORegion().GetSize()[0];
+
+  //std::cout << "OriginBuffer= " <<  lFirstLineRegion << " x " << lFirstColumnRegion << std::endl;
+  //std::cout << "SizeBuffer= " <<  lNbLinesRegion << " x " << lNbColumnsRegion << std::endl;
+
+  // Compute the origin of the image region to read at the initial resolution
+  int lFirstLine   = lFirstLineRegion * vcl_pow(2,m_ResolutionFactor) ;
+  int lFirstColumn = lFirstColumnRegion * vcl_pow(2,m_ResolutionFactor) ;
+
+  //std::cout << "OriginImage= " <<  lFirstLine << " x " << lFirstColumn << std::endl;
+
+  // Compute the size of the image region to read at the initial resolution
+  int lNbLines     = lNbLinesRegion * vcl_pow(2,m_ResolutionFactor) ;
+  int lNbColumns   = lNbColumnsRegion * vcl_pow(2,m_ResolutionFactor) ;
+
+  // Check if the image region is correct
+  if (lFirstLine + lNbLines > m_OriginalDimensions[1])
+    lNbLines = m_OriginalDimensions[1]-lFirstLine;
+  if (lFirstColumn + lNbColumns > m_OriginalDimensions[0])
+    lNbColumns = m_OriginalDimensions[0]-lFirstColumn;
+
+  //std::cout << "SizeImage= " <<  lNbLines << " x " << lNbColumns << std::endl;
+
 
   GDALDataset* dataset = m_Dataset->GetDataSet();
 
@@ -314,8 +344,8 @@ void GDALImageIO::Read(void* buffer)
                                      lNbColumns,
                                      lNbLines,
                                      const_cast<unsigned char*>(value.GetDataPointer()),
-                                     lNbColumns,
-                                     lNbLines,
+                                     lNbColumnsRegion,
+                                     lNbLinesRegion,
                                      m_PxType->pixType,
                                      0,
                                      0);
@@ -341,7 +371,7 @@ void GDALImageIO::Read(void* buffer)
     {
     /********  Nominal case ***********/
     int pixelOffset = m_BytePerPixel * m_NbBands;
-    int lineOffset  = m_BytePerPixel * m_NbBands * lNbColumns;
+    int lineOffset  = m_BytePerPixel * m_NbBands * lNbColumnsRegion;
     int bandOffset  = m_BytePerPixel;
     int nbBands     = m_NbBands;
 
@@ -349,7 +379,7 @@ void GDALImageIO::Read(void* buffer)
     if(!GDALDataTypeIsComplex(m_PxType->pixType) && m_IsComplex && m_IsVectorImage && (m_NbBands > 1))
       {
       pixelOffset = m_BytePerPixel * 2;
-      lineOffset  = pixelOffset * lNbColumns;
+      lineOffset  = pixelOffset * lNbColumnsRegion;
       bandOffset  = m_BytePerPixel;
       }
 
@@ -360,10 +390,13 @@ void GDALImageIO::Read(void* buffer)
                    << " indY = " << lFirstLine << "\n"
                    << " sizeX = " << lNbColumns << "\n"
                    << " sizeY = " << lNbLines << "\n"
+                   << " Buffer Size X = " << lNbColumnsRegion << "\n"
+                   << " Buffer Size Y = " << lNbLinesRegion << "\n"
                    << " GDAL Data Type = " << GDALGetDataTypeName(m_PxType->pixType) << "\n"
+                   << " nbBands = " << nbBands << "\n"
                    << " pixelOffset = " << pixelOffset << "\n"
                    << " lineOffset = " << lineOffset << "\n"
-                   << " bandOffset = " << bandOffset);
+                   << " bandOffset = " << bandOffset );
 
     itk::TimeProbe chrono;
     chrono.Start();
@@ -373,8 +406,8 @@ void GDALImageIO::Read(void* buffer)
                                                        lNbColumns,
                                                        lNbLines,
                                                        p,
-                                                       lNbColumns,
-                                                       lNbLines,
+                                                       lNbColumnsRegion,
+                                                       lNbLinesRegion,
                                                        m_PxType->pixType,
                                                        nbBands,
                                                        // We want to read all bands
@@ -391,7 +424,7 @@ void GDALImageIO::Read(void* buffer)
       itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
       return;
       }
-    //printDataBuffer(p, m_PxType->pixType, m_NbBands, lNbColumns*lNbLines);
+    //printDataBuffer(p, m_PxType->pixType, m_NbBands, lNbColumnsRegion*lNbLinesRegion);
     }
 }
 
@@ -449,6 +482,10 @@ void GDALImageIO::ReadImageInformation()
 
 void GDALImageIO::InternalReadImageInformation()
 {
+  itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
+                                    MetaDataKey::ResolutionFactor,
+                                    m_ResolutionFactor);
+
   // Detecting if we are in the case of an image with subdatasets
   // example: hdf Modis data
   // in this situation, we are going to change the filename to the
@@ -497,35 +534,34 @@ void GDALImageIO::InternalReadImageInformation()
     }
 
   // Set image dimensions into IO
-  m_Dimensions[0] = dataset->GetRasterXSize();
-  m_Dimensions[1] = dataset->GetRasterYSize();
+  m_Dimensions[0] = uint_ceildivpow2(dataset->GetRasterXSize(),m_ResolutionFactor);
+  m_Dimensions[1] = uint_ceildivpow2(dataset->GetRasterYSize(),m_ResolutionFactor);
+
+  // Keep the original dimension of the image
+  m_OriginalDimensions.push_back(dataset->GetRasterXSize());
+  m_OriginalDimensions.push_back(dataset->GetRasterYSize());
+
+  otbMsgDevMacro(<< "Original Dimensions of the input file: " << m_OriginalDimensions[0] << " x " << m_OriginalDimensions[1]);
 
   // Get Number of Bands
   m_NbBands = dataset->GetRasterCount();
 
   // Get the number of overviews of the file (based on the first band)
-  m_NumberOfOverviews = GDALGetOverviewCount(dataset->GetRasterBand(1));
+  m_NumberOfOverviews = dataset->GetRasterBand(1)->GetOverviewCount();
 
-  std::cout << "Number of Overviews inside input file" << m_FileName << ": " << m_NumberOfOverviews << std::endl;
-
+  // Get the overview sizes
   for( unsigned int iOverview = 0; iOverview < m_NumberOfOverviews; iOverview++ )
   {
-      GDALRasterBandH hSrcOver = GDALGetOverview( dataset->GetRasterBand(1), iOverview );
-      int nXSize = GDALGetRasterBandXSize( hSrcOver );
-      int nYSize = GDALGetRasterBandYSize( hSrcOver );
+      std::pair <unsigned int, unsigned int> tempSize;
+      tempSize.first  = GDALGetRasterBandXSize( dataset->GetRasterBand(1)->GetOverview(iOverview) );
+      tempSize.second = GDALGetRasterBandYSize( dataset->GetRasterBand(1)->GetOverview(iOverview) );
+      m_OverviewsSize.push_back(tempSize);
 
-      //std::cout << "Overviews size of input file" << m_FileName << ": " << nXSize << " x " << nYSize <<   std::endl;
-
-      std::pair <unsigned int, unsigned int> temp;
-      temp.first = nXSize;
-      temp.second = nYSize;
-      m_OverviewsSize.push_back(temp);
-
-      std::cout << "Overviews size of input file" << m_FileName << ": " << m_OverviewsSize.back().first << " x " << m_OverviewsSize.back().second <<   std::endl;
-
+      /*std::cout << "Overviews size of input file" << m_FileName << ": "
+                <<  m_OverviewsSize.back().first << " x " << m_OverviewsSize.back().second <<   std::endl;*/
+      otbMsgDevMacro( << "Overviews size of input file" << m_FileName << ": "
+                      <<  m_OverviewsSize.back().first << " x " << m_OverviewsSize.back().second);
   }
-
-
 
   otbMsgDevMacro(<< "Number of Overviews inside input file: " << m_NumberOfOverviews);
   otbMsgDevMacro(<< "Input file dimension: " << m_Dimensions[0] << ", " << m_Dimensions[1]);
@@ -716,6 +752,13 @@ void GDALImageIO::InternalReadImageInformation()
 
     if(blockSizeX > 0 && blockSizeY > 0)
       {
+      otbMsgDevMacro(<< "Original blockSize: "<< blockSizeX << " x " << blockSizeY );
+
+      blockSizeX = uint_ceildivpow2(blockSizeX,m_ResolutionFactor);
+      blockSizeY = uint_ceildivpow2(blockSizeY,m_ResolutionFactor);
+
+      otbMsgDevMacro(<< "Decimated blockSize: "<< blockSizeX << " x " << blockSizeY );
+
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, blockSizeX);
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, blockSizeY);
       }
@@ -729,6 +772,7 @@ void GDALImageIO::InternalReadImageInformation()
   // Default Spacing
   m_Spacing[0] = 1;
   m_Spacing[1] = 1;
+
   if (m_NumberOfDimensions == 3) m_Spacing[2] = 1;
 
   char** papszMetadata;
@@ -990,6 +1034,10 @@ void GDALImageIO::InternalReadImageInformation()
     this->SetNumberOfComponents(m_NbBands);
     this->SetPixelType(VECTOR);
     }
+
+  // Adapt the spacing to the resolution read
+  m_Spacing[0] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
+  m_Spacing[1] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
 }
 
 bool GDALImageIO::CanWriteFile(const char* name)

@@ -313,21 +313,20 @@ ImageFileReader<TOutputImage>
       }
     }
 
-  // Special actions for the JPEG2000ImageIO
-  if( strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0 )
+
+  if (m_FilenameHelper->ResolutionFactorIsSet())
     {
-    if (m_FilenameHelper->ResolutionFactorIsSet())
-      {
-      itk::EncapsulateMetaData<unsigned int>(dict,
-                                             MetaDataKey::ResolutionFactor, m_FilenameHelper->GetResolutionFactor());
-      }
-    else
-      {
-      itk::EncapsulateMetaData<unsigned int>(dict,
-                                             MetaDataKey::ResolutionFactor, m_AdditionalNumber);
-      }
-    itk::EncapsulateMetaData<unsigned int>(dict,
-                                           MetaDataKey::CacheSizeInBytes, 135000000);
+    itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::ResolutionFactor, m_FilenameHelper->GetResolutionFactor());
+    }
+  else
+    {
+    itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::ResolutionFactor, m_AdditionalNumber);
+    }
+
+    // Special actions for the JPEG2000ImageIO
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
+    {
+    itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::CacheSizeInBytes, 135000000);
     }
 
   // Got to allocate space for the image. Determine the characteristics of
