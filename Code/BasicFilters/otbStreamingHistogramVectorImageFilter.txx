@@ -33,11 +33,11 @@ namespace otb
 
 template<class TInputImage>
 PersistentHistogramVectorImageFilter<TInputImage>
-::PersistentHistogramVectorImageFilter() : m_NoDataFlag(false),
-                                           m_HistogramMin(),
+::PersistentHistogramVectorImageFilter() : m_HistogramMin(),
                                            m_HistogramMax(),
-                                           m_SubSamplingRate(1),
-                                           m_NoDataValue(itk::NumericTraits<InternalPixelType>::Zero)
+                                           m_NoDataFlag(false),
+                                           m_NoDataValue(itk::NumericTraits<InternalPixelType>::Zero),
+                                           m_SubSamplingRate(1)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
