@@ -31,37 +31,23 @@ set(Monteverdi2_FLOATING_TYPE "float" CACHE STRING "The type of data in which in
 #Prevents conflicts with visual min/max function
 #Add the OSSIMSTATIC flag to prevent from including dclspec(dllimport) from ossim
 if(WIN32)
-add_definitions(-DNOMINMAX -DOSSIM_STATIC)
+  add_definitions(-DNOMINMAX -DOSSIM_STATIC)
 endif(WIN32)
 
 #----------------------------------------------------------------------------
-# Link to the Orfeo ToolBox
-find_package(OTB
-  REQUIRED
-  #No need to specify default (system) path.
-  #PATHS /usr/lib/otb
-)
+# Orfeo ToolBox
+find_package(OTB REQUIRED)
 if(OTB_FOUND)
-  #message( "OTB_USE_FILE='${OTB_USE_FILE}'" )
   include(${OTB_USE_FILE})
 else(OTB_FOUND)
-  message(
-    FATAL_ERROR
-    "OTB not found. Please set OTB_DIR")
+  message(FATAL_ERROR "OTB not found. Please set OTB_DIR")
 endif(OTB_FOUND)
 
 #----------------------------------------------------------------------------
-# Qt4 settings
-find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL)
-
-# setup Qt environement
-set( QT_USE_QTCORE TRUE )
-set( QT_USE_QTGUI TRUE )
-set( QT_USE_QTOPENGL TRUE)
-
+# Qt4
+find_package( OpenGL REQUIRED )
+find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain )
 include( ${QT_USE_FILE} )
-
-find_package(OpenGL REQUIRED)
 
 #----------------------------------------------------------------------------
 # Include OTB CMake modules path.
