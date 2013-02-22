@@ -65,8 +65,8 @@ namespace mvd
 VectorImageModel
 ::VectorImageModel( QObject* parent ) :
   AbstractImageModel( parent ),
-  m_ImageFileReader(),
   m_Image(),
+  m_ImageFileReader(),
   m_RasterizedBuffer( NULL ),
   m_ExtractFilter(),
   m_RenderingFilter(),
