@@ -52,6 +52,7 @@ target_link_libraries(Monteverdi2_Application
 #############################################################################
 # monteverdi2 executable
 add_executable(monteverdi2
+  WIN32
   main.cxx
 )
 target_link_libraries(monteverdi2
