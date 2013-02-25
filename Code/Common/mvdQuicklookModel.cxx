@@ -108,15 +108,11 @@ QuicklookModel
     }
   else // if not multi-res, shrink the native image
     {
-    double factorX = 1.;
-    double factorY = 1.;
-
     // Compute the shrink factor to have 512,512 quicklook size
-    SizeType  largestSize =  GetNativeLargestRegion().GetSize();
+    SizeType  largestSize =  viModel->GetNativeLargestRegion().GetSize();
 
-    if (largestSize[0] > 512) factorX = largestSize[0]/512;
-    if (largestSize[1] > 512) factorY = largestSize[1]/512;
-
+    double factorX = (double)(largestSize[0])/512.;
+    double factorY = (double)(largestSize[1])/512.;
     double factor = std::max(factorX, factorY);
 
     // if the image dimensions are lower than 512 in each dimension, 
@@ -133,7 +129,7 @@ QuicklookModel
 
       ShrinkFilterType::Pointer shrinker = ShrinkFilterType::New();
       shrinker->SetInput(viModel->ToImage());
-      shrinker->SetShrinkFactor(factor);
+      shrinker->SetShrinkFactor((unsigned int)(factor + 0.5));
       shrinker->Update();
     
       m_Image = shrinker->GetOutput();
