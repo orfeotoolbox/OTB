@@ -107,4 +107,13 @@ private :
 }; // end of GDALDriverManagerWrapper
 
 
-}
+namespace gdal {
+bool GDALBuildOverviewsFromResolution(std::string filename,
+                                      unsigned int nbResolution,
+                                      const char* resamplingMMethod = "NEAREST",
+                                      GDALProgressFunc pfnProgress = GDALDummyProgress,
+                                      void* pProgressData = NULL);
+} // end namespace gdal
+
+} // end namespace otb
+
