@@ -78,62 +78,76 @@ I18nApplication
 
   //
   // 2. Choose i18n path between build dir and install dir.
-  QDir i18n_dir;
-  QDir bin_dir( QDir::cleanPath( QCoreApplication::applicationDirPath() ) );
-  QDir build_i18n_dir( bin_dir );
 
-  // If build dir is identified...
-  if( (build_i18n_dir.exists( "../i18n" )
-         && build_i18n_dir.cd( "../i18n" )
-         && build_i18n_dir.exists( "../" Monteverdi2_CONFIGURE_FILE ))
-       || (build_i18n_dir.exists( "../../i18n" )
-         && build_i18n_dir.cd( "../../i18n" )
-         && build_i18n_dir.exists( "../" Monteverdi2_CONFIGURE_FILE )) )
+  // Begin from the executable path
+  QDir bin_dir( QDir::cleanPath(QCoreApplication::applicationDirPath()) );
+  qDebug() << "Executable dir : " << bin_dir;
+  
+  // Go up in the directory hierarchy until we have a candidate install prefix
+  bool prefixFound = false;
+  QDir prefix( bin_dir );
+  while ( prefix.cdUp() )
+    {
+    if ( QDir(prefix).cd(Monteverdi2_INSTALL_BIN_DIR) )
+      {
+      prefixFound = true;
+      break;
+      }
+    }
+  
+  if (prefixFound)
+    {
+    qDebug() << "Candidate install prefix found : " << prefix;
+    }
+  else
+    {
+    QString message( tr( "Unable to locate translation files" ) );
+    qDebug() << message;
+    QMessageBox::critical( NULL, tr( "Critical error" ), message );
+    return;
+    }
+  
+  QDir i18n_dir;
+
+  // At this point the candidate install prefix can also be the build dir root
+  if ( prefix.exists( Monteverdi2_CONFIGURE_FILE )
+       && prefix.exists("i18n") )
     {
     m_IsRunningFromBuildDir = true;
-
-    // ...use build dir as prioritary load path for translation.
-    i18n_dir = build_i18n_dir;
-
-    // TODO: Use log system to trace message.
-    qDebug()
-      << tr( "Running from build directory '%1'." ).arg( bin_dir.path() );
+    
+    // Report found build dir root
+    qDebug() << tr( "Running from build directory '%1'." ).arg( prefix.path() );
+    
+    // Go into the i18n dir (it exists we just checked for it)
+    i18n_dir = prefix;
+    i18n_dir.cd("i18n");
+    
+    qDebug() << tr( "Using translation dir '%1'." ).arg( i18n_dir.path() );
     }
-  // Otherwise...
   else
     {
     m_IsRunningFromBuildDir = false;
+    
+    // Report found install prefix
+    qDebug() << tr( "Running from install directory '%1'." ).arg( prefix.path() );
 
-    QDir install_i18n_dir( QDir::cleanPath( Monteverdi2_INSTALL_DATA_I18N_DIR ) );
-    // ...if install data dir is identified
-    if( install_i18n_dir.exists() )
+    // Go into the i18n dir configured at cmake-time
+    i18n_dir = prefix;
+    
+    if (i18n_dir.cd(Monteverdi2_INSTALL_DATA_I18N_DIR))
       {
-      // ...use install data dir as load path for translation.
-      i18n_dir = install_i18n_dir;
-
-      // TODO: Use log system to trace message.
-      qDebug()
-        << tr( "Running from install directory '%1'." ).arg( Monteverdi2_INSTALL_BIN_DIR );
+      qDebug() << tr( "Using translation dir '%1'." ).arg( i18n_dir.path() );
       }
-    // Otherwise
     else
       {
-      QString message(
-        tr( "Failed to access translation-files directory '%1'." )
-        .arg( install_i18n_dir.path() )
-      );
-
-      // TODO: Use log system to trace error while loading locale translation file.
-
+      QString message( tr( "Failed to access translation-files directory '%1'" )
+                       .arg(QDir::cleanPath(prefix.path() + Monteverdi2_INSTALL_DATA_I18N_DIR)) );
       qDebug() << message;
-
-      // TODO: morph into better HMI design.
-      QMessageBox::critical( NULL, tr( "Critical error!" ), message );
-
+      QMessageBox::critical( NULL, tr( "Critical error" ), message );
       return;
       }
     }
-
+  
   //
   // 3.1 Stack Qt translator.
   LoadAndInstallTranslator(
