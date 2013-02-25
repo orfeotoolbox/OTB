@@ -439,9 +439,13 @@ private:
 
             Match(extractChannel1->GetOutput(),extractChannel2->GetOutput(),rsTransform,rsTransform1ToWGS84,rsTransform2ToWGS84,file,&mls);
             }
+          else
+            {
+            otbAppLogINFO("Corresponding region2 is out of range: "<<region2.GetIndex()<<", "<<region2.GetSize());
+            }
           }
-        
-        }
+        } 
+      }
       file.close();
 
       if(IsParameterEnabled("outvector"))
@@ -462,7 +466,6 @@ private:
         feature.SetGeometry(&mls);
         layer.CreateFeature(feature);
         }
-      }
   }
 };
 }
