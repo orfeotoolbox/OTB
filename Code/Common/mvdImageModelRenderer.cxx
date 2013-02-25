@@ -127,13 +127,13 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       if ( context.m_WidgetWidth  > 
            scaledRegion.GetSize()[0] * finalZoomFactor  )
         {
-        originX = (context.m_WidgetWidth - scaledRegion.GetSize()[0] * finalZoomFactor)/2;
+        originX = (static_cast<double>(context.m_WidgetWidth) - static_cast<double>(scaledRegion.GetSize()[0]) * finalZoomFactor)/2;
         }
       // originY
       if (context.m_WidgetHeight >
           scaledRegion.GetSize()[1] * finalZoomFactor)
         {
-        originY = (context.m_WidgetHeight - scaledRegion.GetSize()[1] * finalZoomFactor)/2;
+        originY = (static_cast<double>(context.m_WidgetHeight) - static_cast<double>(scaledRegion.GetSize()[1]) * finalZoomFactor)/2;
         }
 
       // when mouse is released, initialize the moving origin with the
@@ -146,8 +146,8 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
 
     if (m_IsMoving)// if moving, only displace the rectangle (Gl_QUADS) origin
       {
-      double dx =  m_PreviousOrigin[0] - scaledRegion.GetIndex()[0] * finalZoomFactor;
-      double dy =  m_PreviousOrigin[1] - scaledRegion.GetIndex()[1] * finalZoomFactor;
+      double dx = static_cast<double>(m_PreviousOrigin[0]) - static_cast<double>(scaledRegion.GetIndex()[0]) * finalZoomFactor;
+      double dy =  static_cast<double>(m_PreviousOrigin[1]) - static_cast<double>(scaledRegion.GetIndex()[1]) * finalZoomFactor;
       
       // incremenet the moving origin with the computed delta
       m_MovingOriginX += dx;
@@ -159,8 +159,8 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       }
 
     // real size of the region to be rendered
-    unsigned int sizeX  = scaledRegion.GetSize()[0] * finalZoomFactor;
-    unsigned int sizeY  = scaledRegion.GetSize()[1] * finalZoomFactor;
+    double sizeX  = static_cast<double>(scaledRegion.GetSize()[0]) * finalZoomFactor;
+    double sizeY  = static_cast<double>(scaledRegion.GetSize()[1]) * finalZoomFactor;
 
     // needed cause RGB not RGBA rendering. 
     glPixelStorei(GL_UNPACK_ALIGNMENT,1); 
