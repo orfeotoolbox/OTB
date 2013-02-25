@@ -132,6 +132,9 @@ ImageViewManipulator
 
   // Constraint the region to the largestPossibleRegion
   this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
+
+  // tell the quicklook renderer to update the red square rendering
+  emit ViewportRegionRepresentationChanged(RegionToPhysicalRegion(currentRegion));  
 }
 
 /******************************************************************************/
@@ -234,6 +237,9 @@ ImageViewManipulator
 
     // Update the isotropicZoom
     m_IsotropicZoom *= scale;
+
+    // tell the quicklook renderer to update the red square rendering
+    emit ViewportRegionRepresentationChanged(RegionToPhysicalRegion(currentRegion)); 
     }
 }
 
@@ -387,6 +393,32 @@ void ImageViewManipulator
 }
 
 /*****************************************************************************/
+ImageRegionType
+ImageViewManipulator
+::RegionToPhysicalRegion(const ImageRegionType& region)
+{
+  ImageRegionType   physicalRegion;
+  ImageRegionType::SizeType  size;
+  ImageRegionType::IndexType origin, lr;
+
+  //std::cout <<"---- RegionToPhysicalRegion -- GetSpacing "<< GetSpacing() << std::endl;
+  
+  origin[0] = region.GetIndex()[0] * vcl_abs(GetSpacing()[0]);
+  origin[1] = region.GetIndex()[1] * vcl_abs(GetSpacing()[1]);
+
+  lr[0] = (region.GetIndex()[0] + region.GetSize()[0] - 1) * vcl_abs(GetSpacing()[0]);
+  lr[1] = (region.GetIndex()[1] + region.GetSize()[1] - 1) * vcl_abs(GetSpacing()[1]);
+
+  size[0]   = vcl_abs(lr[0] - origin[0]);
+  size[1]   = vcl_abs(lr[1] - origin[1]);
+
+  physicalRegion.SetIndex(origin);
+  physicalRegion.SetSize(size);
+
+  return physicalRegion;
+}
+
+/*****************************************************************************/
 void ImageViewManipulator
 ::OnViewportRegionChanged(double Xpc, double Ypc)
 {
@@ -395,12 +427,15 @@ void ImageViewManipulator
 
   // center the region on the position under the cursor  
   IndexType   origin;
-  origin[0] = ( Xpc / vcl_abs(GetSpacing()[0]) - currentRegion.GetSize()[0] / 2 );
-  origin[1] = ( Ypc / vcl_abs(GetSpacing()[1]) - currentRegion.GetSize()[1] / 2 );
+  origin[0] = ( Xpc / vcl_abs(GetSpacing()[0]) ) - currentRegion.GetSize()[0] / 2 ;
+  origin[1] = ( Ypc / vcl_abs(GetSpacing()[1]) ) - currentRegion.GetSize()[1] / 2 ;
   currentRegion.SetIndex(origin);
   
   // Constraint this region to the LargestPossibleRegion
   this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
+
+  // tell the quicklook renderer to update the red square rendering
+  emit ViewportRegionRepresentationChanged(RegionToPhysicalRegion(currentRegion));  
   
   // force repaintGL
   qobject_cast< QWidget* >( parent() )->update();
