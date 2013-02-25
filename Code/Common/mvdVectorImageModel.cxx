@@ -103,7 +103,7 @@ VectorImageModel
 /*******************************************************************************/
 void
 VectorImageModel
-::virtual_BuildModel()
+::virtual_BuildModel( void* context )
 {
   //
   // Step #1: Perform pre-process of AbstractModel::BuildModel()
@@ -120,7 +120,7 @@ VectorImageModel
 
   // The call to the parent BuildModel() method will, for example,
   // generate the histogram.
-  AbstractImageModel::virtual_BuildModel();
+  AbstractImageModel::virtual_BuildModel( context );
 
   //
   // Step #3: Post-process of the BuildModel() pattern.

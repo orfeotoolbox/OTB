@@ -140,7 +140,7 @@ HistogramModel
 /*******************************************************************************/
 void
 HistogramModel
-::virtual_BuildModel()
+::virtual_BuildModel( void* context )
 {
   // template_BuildModel_I< VectorImageModel::SourceImageType >();
   template_BuildModel_M< VectorImageModel >();

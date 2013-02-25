@@ -88,13 +88,13 @@ public:
 
   /** */
   template< typename T >
-    T* newChildModel();
+    T* newChildModel( void* context =NULL );
 
   /** */
-  inline void attachChildModel( AbstractModel* );
+  inline void attachChildModel( AbstractModel* model, void* context =NULL );
 
   /** */
-  inline void BuildModel();
+  inline void BuildModel( void* context =NULL );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -113,7 +113,7 @@ protected:
   /** */
   // TODO: Provide default empty virtual method body and clean-up
   // derived-classes.
-  virtual void virtual_BuildModel() =0;
+  virtual void virtual_BuildModel( void* context =NULL ) =0;
 
 //
 // Protected attributes.
@@ -147,13 +147,13 @@ namespace mvd
 template< typename T >
 T*
 AbstractModel
-::newChildModel()
+::newChildModel( void* context )
 {
   T* model = new T( this );
 
   try
     {
-    attachChildModel( model );
+    attachChildModel( model, context );
     }
   catch( std::exception& exc )
     {
@@ -170,21 +170,21 @@ AbstractModel
 inline
 void
 AbstractModel
-::attachChildModel( AbstractModel* model )
+::attachChildModel( AbstractModel* model, void* context )
 {
   assert( model!=NULL );
 
   model->setParent( this );
-  model->BuildModel();
+  model->BuildModel( context );
 }
 
 /*****************************************************************************/
 inline
 void
 AbstractModel
-::BuildModel()
+::BuildModel( void* context )
 {
-  virtual_BuildModel();
+  virtual_BuildModel( context );
 }
 
 } // end namespace 'mvd'

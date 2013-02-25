@@ -165,7 +165,7 @@ AbstractImageModel
 /*******************************************************************************/
 void
 AbstractImageModel
-::virtual_BuildModel()
+::virtual_BuildModel( void* context )
 {
   newChildModel< HistogramModel >();
   newChildModel< QuicklookModel >();

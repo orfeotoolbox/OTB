@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdQuicklookModel_h
-#define __mvdQuicklookModel_h
+#ifndef __mvdDatasetDescriptor_h
+#define __mvdDatasetDescriptor_h
 
 //
 // Configuration include.
@@ -28,11 +28,6 @@
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
-#include "mvdVectorImageModel.h"
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -47,6 +42,10 @@
 //
 // OTB includes (sorted by alphabetic order)
 
+//
+// Monteverdi includes (sorted by alphabetic order)
+#include "mvdAbstractModel.h"
+#include "mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -62,16 +61,16 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-
+class AbstractImageModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class QuicklookModel
+/** \class DatasetDescriptor
  *
  */
-class Monteverdi2_EXPORT QuicklookModel :
-    public VectorImageModel
+class Monteverdi2_EXPORT DatasetDescriptor :
+    public AbstractModel
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -81,39 +80,29 @@ class Monteverdi2_EXPORT QuicklookModel :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
-// Public types.
-public:
-
-//
 // Public methods.
 public:
 
   /** Constructor */
-  QuicklookModel( QObject * parent =NULL );
+  DatasetDescriptor( QObject* parent =NULL );
 
   /** Destructor */
-  virtual ~QuicklookModel();
-
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Public slots.
-public slots:
+  virtual ~DatasetDescriptor();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  /**
-   */
-  void SettingsUpdated();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
+
+  //
+  // AbstractModel overrides.
 
   /** */
   virtual void virtual_BuildModel( void* context =NULL );
@@ -125,23 +114,9 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
-// Private types.
-private:
-  /**
-   * Display type of source image (to OpenGL).
-   */
-  typedef RGBAImageType DisplayImageType;
-
-  // /**
-  //  * Extract filter.
-  //  */
-  // typedef
-  //   itk::ExtractImageFilter< SourceImageType, SourceImageType >
-  //   ExtractFilterType;
-
-//
 // Private methods.
 private:
+
 
 //
 // Private attributes.
@@ -152,12 +127,19 @@ private:
 //
 // Slots.
 private slots:
-  /** */
 };
-
-
-/*****************************************************************************/
 
 } // end namespace 'mvd'
 
-#endif // __mvdQuicklookModel_h
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+//
+// Monteverdi deferred includes (sorted by alphabetic order)
+
+namespace mvd
+{
+
+} // end namespace 'mvd'
+
+#endif // __mvdDatasetDescriptor_h

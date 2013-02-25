@@ -61,6 +61,7 @@ namespace mvd
 //
 // Class declaration.
 class AbstractModel;
+class DatasetModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -79,6 +80,11 @@ class Monteverdi2_EXPORT Application
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Public constants.
+public:
+  static const char* DATASET_EXT;
+
+//
 // Public methods.
 public:
 
@@ -87,14 +93,6 @@ public:
 
   /** Destructor */
   virtual ~Application();
-
-  /**
-   */
-  inline static Application* Instance();
-
-  /**
-   */
-  inline static const Application* ConstInstance();
 
   /**
    */
@@ -109,6 +107,31 @@ public:
   /**
    */
   inline AbstractModel* GetModel();
+
+  //
+  // STATIC METHODS.
+
+  /**
+   */
+  inline static Application* Instance();
+
+  /**
+   */
+  inline static const Application* ConstInstance();
+
+  /**
+   */
+  inline static
+    void DatasetPathName( QString& path,
+			  QString& name,
+			  const QString& imageFilename );
+
+  /**
+   */
+  static
+    DatasetModel* LoadDatasetModel( const QString& imageFilename,
+				     int width,
+				     int height );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -180,6 +203,27 @@ Application
 ::ConstInstance()
 {
   return qobject_cast< const Application* >( qApp );
+}
+
+/*****************************************************************************/
+inline
+void
+Application
+::DatasetPathName( QString& path,
+		   QString& name,
+		   const QString& imageFilename )
+{
+  // '/tmp/archive.tar.gz'
+  QFileInfo fileInfo( imageFilename );
+
+  // '/tmp/'
+  path = fileInfo.path();
+
+  // 'archive_tar_gz.<SUFFIX>'
+  name =
+    fileInfo.baseName() +
+    "_" + fileInfo.completeSuffix().replace( ".", "_" ) +
+    Application::DATASET_EXT;
 }
 
 /*****************************************************************************/

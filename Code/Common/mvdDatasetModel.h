@@ -90,6 +90,9 @@ public:
   virtual ~DatasetModel();
 
   /** */
+  bool SetContent( const QString& path, const QString& name );
+
+  /** */
   void ImportImage( const QString& filename, int w, int h );
 
   /** */
@@ -117,7 +120,7 @@ protected:
   // AbstractModel overrides.
 
   /** */
-  virtual void virtual_BuildModel();
+  virtual void virtual_BuildModel( void* context =NULL );
 
 //
 // Protected attributes.
@@ -128,6 +131,9 @@ protected:
 //
 // Private methods.
 private:
+
+  /** */
+  void Load( const QString& path, const QString& name );
 
 //
 // Private attributes.

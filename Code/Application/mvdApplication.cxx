@@ -16,8 +16,11 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #include "mvdApplication.h"
+
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -31,8 +34,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ConfigureMonteverdi2.h"
 #include "mvdAbstractModel.h"
+#include "mvdDatasetModel.h"
 
 //
 // Class implementation.
@@ -45,6 +48,55 @@ namespace mvd
 
   Context comment for translator.
 */
+
+/*****************************************************************************/
+/* CONSTANTS                                                                 */
+
+const char* Application::DATASET_EXT = ".ds";
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+/*****************************************************************************/
+DatasetModel*
+Application::LoadDatasetModel( const QString& imageFilename,
+			       int width,
+			       int height )
+{
+  DatasetModel* model = new DatasetModel();
+
+  model->setObjectName( "mvd::DatasetModel('" + imageFilename + "'" );
+
+  QString path;
+  QString name;
+
+  Application::DatasetPathName( path, name, imageFilename );
+  qDebug() << "Dataset path: " << path;
+  qDebug() << "Dataset name: " << name;
+
+  try
+    {
+    if( !model->SetContent( path, name ) )
+      {
+      // Import image from filename given (w; h) size to choose
+      // best-fit resolution.
+      model->ImportImage( imageFilename, width, height );
+      }
+    }
+
+  catch( std::exception& exc )
+    {
+    delete model;
+    model = NULL;
+
+    throw;
+    }
+
+  return model;
+}
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
 Application

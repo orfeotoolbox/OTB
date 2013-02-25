@@ -271,32 +271,22 @@ MainWindow
     return;
     }
  
-  // TODO: Replace with complex model (list of DatasetModel) when
-  // implemented.
-  DatasetModel* model = new DatasetModel();
-
-  model->setObjectName( "mvd::DatasetModel('" + filename + "'" );
-
   try
     {
-    // Init parameters :
-    // - filename
-    // - widget size (-> compute the best lod fitting the widget size )
-    model->ImportImage(
+    // TODO: Replace with complex model (list of DatasetModel) when implemented.
+    DatasetModel* model = Application::LoadDatasetModel(
       filename,
+      // TODO: Remove width and height from dataset model loading.
       centralWidget()->width(), centralWidget()->height()
     );
+
+    Application::Instance()->SetModel( model );
     }
   catch( std::exception& exc )
     {
-    delete model;
-    model = NULL;
-
     QMessageBox::warning( this, tr("Exception!"), exc.what() );
     return;
     }
-
-  Application::Instance()->SetModel( model );
 }
 
 /*****************************************************************************/

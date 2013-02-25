@@ -17,7 +17,7 @@
 
 =========================================================================*/
 
-#include "mvdDatasetModel.h"
+#include "mvdDatasetDescriptor.h"
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -39,7 +39,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::DatasetModel
+  TRANSLATOR mvd::DatasetDescriptor
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -47,102 +47,22 @@ namespace mvd
 */
 
 /*******************************************************************************/
-DatasetModel
-::DatasetModel( QObject* parent ) :
+DatasetDescriptor
+::DatasetDescriptor( QObject* parent ) :
   AbstractModel( parent )
 {
 }
 
 /*******************************************************************************/
-DatasetModel
-::~DatasetModel()
+DatasetDescriptor
+::~DatasetDescriptor()
 {
-}
-
-/*******************************************************************************/
-bool
-DatasetModel
-::SetContent( const QString& path, const QString& name )
-{
-  bool isEmpty = false;
-
-  QDir pathDir( path );
-
-  if( !pathDir.exists() )
-    {
-    throw;
-    }
-
-  if( !pathDir.exists( name ) )
-    {
-    isEmpty = true;
-
-    if( !pathDir.mkpath( name ) )
-      throw;
-
-    // TODO: write empty descriptor.xml
-    }
-
-  try
-    {
-    Load( path, name );
-    }
-  catch( std::exception& exc )
-    {
-    throw;
-    }
-
-  return !isEmpty;
 }
 
 /*******************************************************************************/
 void
-DatasetModel
-::ImportImage( const QString& filename , int w, int h )
-{
-  // 1. Instanciate local image model.
-  VectorImageModel* vectorImageModel = new VectorImageModel();
-
-  vectorImageModel->setObjectName(
-    "mvd::VectorImageModel('" + filename + "')"
-  );
-
-  // 2. Safely load data from file.
-  try
-    {
-    // 2.1. Information.
-    vectorImageModel->SetFilename( filename, w, h);
-
-    // 2.2. Generate cached data.
-    // TODO: generate image-model cached data (quicklook,
-    // histogram-list etc.)
-    vectorImageModel->BuildModel();
-    }
-  catch( std::exception& exc )
-    {
-    // Release local memory allocation.
-    delete vectorImageModel;
-    vectorImageModel = NULL;
-
-    // Forward exception to upper level (GUI).
-    throw;
-    }
-
-  // If everything has gone well, parent image model to dataset model.
-  vectorImageModel->setParent( this );
-}
-
-/*******************************************************************************/
-void
-DatasetModel
+DatasetDescriptor
 ::virtual_BuildModel( void* context )
-{
-}
-
-/*******************************************************************************/
-void
-DatasetModel
-::Load( const QString& path, const QString& name )
 {
 }
 

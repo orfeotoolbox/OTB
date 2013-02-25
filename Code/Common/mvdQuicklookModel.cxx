@@ -71,7 +71,7 @@ QuicklookModel
 /*******************************************************************************/
 void
 QuicklookModel
-::virtual_BuildModel()
+::virtual_BuildModel( void* context )
 {
   //
   // get the parent vector image model
