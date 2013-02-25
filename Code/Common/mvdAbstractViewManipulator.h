@@ -116,6 +116,9 @@ public:
   /** */
   inline SpacingType GetSpacing() const;
 
+  /** */
+  inline PointType ScreenIndexToPhysicalPoint(const IndexType & index);
+
 //
 // Public SLOTS.
 public slots:
@@ -281,7 +284,23 @@ AbstractViewManipulator
   return m_Spacing;
 }
 
+/*****************************************************************************/
+inline 
+PointType
+AbstractViewManipulator
+::ScreenIndexToPhysicalPoint(const IndexType & index)
+{
+  PointType pt;
+  
+  //
+  // compute the physcial coordinates
+  // computation takes into account the origin of the viewport in the widget,
+  // the spacing of the rendered image and the isotropicZoom
+  pt[0] = ( index[0] - GetViewportOrigin()[0] ) * vcl_abs(GetSpacing()[0]) / GetIsotropicZoom();
+  pt[1] = ( index[1] - GetViewportOrigin()[1] ) * vcl_abs(GetSpacing()[1]) / GetIsotropicZoom();
 
+  return pt;
+}
 
 } // end namespace 'mvd'
 
