@@ -444,7 +444,7 @@ private:
             otbAppLogINFO("Corresponding region2 is out of range: "<<region2.GetIndex()<<", "<<region2.GetSize());
             }
           }
-        } 
+        }
       }
       file.close();
 
