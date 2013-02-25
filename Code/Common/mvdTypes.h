@@ -264,6 +264,9 @@ typedef otb::ImageFileReader< VectorImageType > VectorImageFileReaderType;
 /**
  */
 typedef otb::ImageFileWriter< VectorImageType > VectorImageFileWriterType;
+/**
+ */
+typedef VectorImageType::SpacingType  SpacingType;
 
 /*******************************************************************************/
 /* Type definitions for RGBA images (display).                                 */
