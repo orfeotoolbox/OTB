@@ -32,7 +32,9 @@
 #include "otbMetaDataKey.h"
 
 #include "otbGDALImageIO.h" //FIXME avoid requiring GDALImageIO here
+#if defined(OTB_USE_JPEG2000)
 #include "otbJPEG2000ImageIO.h" //FIXME avoid requiring JPEG2000ImageIO here
+#endif
 #include "otbTileMapImageIO.h" //FIXME avoid requiring TileMapImageIO here
 #include "otbCurlHelper.h"
 
@@ -670,6 +672,7 @@ ImageFileReader<TOutputImage>
     return true;
     }
 
+#if defined(OTB_USE_JPEG2000)
   // JPEG2000 image IO
   if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
     {
@@ -677,6 +680,7 @@ ImageFileReader<TOutputImage>
     imageIO->GetAvailableResolutions(res);
     return true;
     }
+#endif
 
   // other imageIO
   res.clear();
@@ -699,6 +703,7 @@ ImageFileReader<TOutputImage>
     return true;
     }
 
+#if defined(OTB_USE_JPEG2000)
   // JPEG2000 image IO
   if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
     {
@@ -706,6 +711,8 @@ ImageFileReader<TOutputImage>
     imageIO->GetResolutionInfo(res,desc);
     return true;
     }
+#endif
+
   // other imageIO
   res.clear();
   desc.clear();
