@@ -37,9 +37,6 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbConfigure.h"
-#if defined(OTB_USE_JPEG2000)
-# include "otbJPEG2000ImageIO.h"
-#endif
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -500,45 +497,38 @@ VectorImageModel::GetBestLevelOfDetail(const double zoomFactor,
   //TODO: Optimize method (minimize JPEG2000 readers; preprocess LOD).
 
   // Note : index 0 is the full resolution image
-#if 0
-  // Monteverdi2/Code/Common/mvdVectorImageModel.cxx:431:17: warning: unused variable ‘best_lod’ [-Wunused-variable]
-  unsigned int  best_lod = 0;
-  // mvdVectorImageModel.cxx:432:16: warning: unused variable ‘best_factor’ [-Wunused-variable]
-  unsigned int best_factor = 1;
-#endif
+
   int inverseZoomFactor =  static_cast<int>((1/zoomFactor + 0.5));
 
   // By default, there is only one LOD level: the native image (level zero).
   nbLod = 1;
 
-#if defined(OTB_USE_JPEG2000)
-  otb::JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
+  typedef otb::VectorImage<unsigned int , 2> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(m_Filename.toLatin1().constData());
+  reader->UpdateOutputInformation();
 
-  std::string filename( static_cast<const char*>(m_Filename.toAscii()) );
 
-  readerJPEG2000->SetFileName( filename.c_str() );
-  if(readerJPEG2000->CanReadFile( filename.c_str() ) )
+
+  std::vector<unsigned int> res;
+  if (reader->GetAvailableResolutions(res) )
     {
-    // fill the resolution vector, to be able to find the closest
-    // j2k res to the inverse zoom factor
-    std::vector<unsigned int> res;
-    if (readerJPEG2000->GetAvailableResolutions(res))
-      {
-      lod = this->Closest(inverseZoomFactor, res);
-      
-      // Return the number of LOD levels (if JP2000 image).
-      nbLod = res.size();
+    // Compute the best lod from inverseZoomFactor and resolution of the file
+    lod = this->Closest(inverseZoomFactor, res);
+    std::cout << "LOD = " << lod <<std::endl;
 
-      return true;
-      }
+    // Return the number of LOD levels
+    nbLod = res.size();
+    std::cout << "nbLOD = " << nbLod <<std::endl;
+
+    return true;
     }
   else
     {
     return false;
     }
-#endif
 
-  return false;
 }
 
 /*******************************************************************************/
