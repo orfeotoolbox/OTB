@@ -95,17 +95,21 @@ ImageViewManipulator
 {
   m_PreviousIsotropicZoom = m_IsotropicZoom;
 
+  // Update the context with the pressed position
+  m_MouseContext.x = event->x();
+  m_MouseContext.y = event->y();
+  
   // Update the mouse context
-  m_MouseContext.dx = -event->x() + m_MouseContext.xMove;
-  m_MouseContext.dy = -event->y() + m_MouseContext.yMove;
+  m_MouseContext.dx =  m_MouseContext.xMove - m_MouseContext.x;
+  m_MouseContext.dy =  m_MouseContext.yMove - m_MouseContext.y;
 
   // moveRegion 
   this->moveRegion( m_MouseContext.dx,  m_MouseContext.dy);
 
   // Update the position of the first press to take into account the
   // last drag
-  m_MouseContext.xMove -=  m_MouseContext.dx;
-  m_MouseContext.yMove -=  m_MouseContext.dy;
+  m_MouseContext.xMove = m_MouseContext.x;
+  m_MouseContext.yMove = m_MouseContext.y;
 }
 
 /******************************************************************************/
@@ -121,7 +125,7 @@ ImageViewManipulator
 
   offset[0] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dx/m_IsotropicZoom + 0.5);
   offset[1] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dy/m_IsotropicZoom + 0.5);
- 
+
   // Apply the offset to the (start) index of the stored region
   IndexType    index = currentRegion.GetIndex() + offset;
   currentRegion.SetIndex(index);
