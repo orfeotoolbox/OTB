@@ -2128,6 +2128,7 @@ ADD_TEST(ioTvMultiResolutionReading0 ${IO_TESTS13}
       ${INPUTDATA}/bretagne.j2k?&resol=0
       ${TEMP}/ioTvMultiResolutionReading0.txt
       )
+     
 ADD_TEST(ioTvMultiResolutionReading3 ${IO_TESTS13}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
                              ${TEMP}/ioTvMultiResolutionReading3.txt
@@ -2145,6 +2146,24 @@ ADD_TEST(ioTvMultiResolutionReadingInfo ${IO_TESTS13}
       ${INPUTDATA}/bretagne.j2k
       ${TEMP}/ioTvMultiResolutionReadingInfoOut.txt
       )
+      
+ADD_TEST(ioTvMultiResolutionReadingInfo_TIFF ${IO_TESTS13}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingInfoOut_tiff.txt
+                            ${TEMP}/ioTvMultiResolutionReadingInfoOut_tiff.txt
+      otbMultiResolutionReadingInfo
+      ${INPUTDATA}/maur_rgb.tif
+      ${TEMP}/ioTvMultiResolutionReadingInfoOut_tiff.txt
+      )   
+
+IF(OTB_DATA_USE_LARGEINPUT)
+    ADD_TEST(ioTvMultiResolutionReadingInfo_TIFF2 ${IO_TESTS13}
+      --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvMultiResolutionReadingInfoOut_tiff2.txt
+                               ${TEMP}/ioTvMultiResolutionReadingInfoOut_tiff2.txt
+          otbMultiResolutionReadingInfo
+          ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+          ${TEMP}/ioTvMultiResolutionReadingInfoOut_tiff2.txt
+          ) 
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # Tests which read data in JPEG2000 files.
 # Generate a too big output image to be used in baseline repository (useful only for dev)

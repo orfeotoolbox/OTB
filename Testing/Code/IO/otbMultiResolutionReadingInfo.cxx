@@ -21,33 +21,34 @@
 
 #include "itkMacro.h"
 #include "itksys/SystemTools.hxx"
-#include "otbJPEG2000ImageIO.h"
+#include "otbImageFileReader.h"
+#include "otbVectorImage.h"
+
 
 int otbMultiResolutionReadingInfo(int argc, char* argv[])
 {
   if (argc != 3)
     {
-    std::cout << argv[0] << "<image JPEG2000> <ouput filename>" << std::endl;
+    std::cout << argv[0] << "<input filename> <ouput filename>" << std::endl;
     return EXIT_FAILURE;
     }
   const char * inputFilename  = argv[1];
   const char * outputAsciiFilename  = argv[2];
 
-  otb::JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
+  typedef double PixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
-  readerJPEG2000->SetFileName(inputFilename);
-  if (readerJPEG2000->CanReadFile(inputFilename))
-    std::cout << "can read file OK" << std::endl;
-  else
-    {
-    std::cout << "can read file K0" << std::endl;
-    return EXIT_FAILURE;
-    }
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
+
+  reader->SetFileName(inputFilename);
+  reader->UpdateOutputInformation();
 
   std::vector<unsigned int> res;
   std::vector<std::string> desc;
 
-  bool readingResolutionInfo = readerJPEG2000->GetResolutionInfo(res, desc);
+  bool readingResolutionInfo = reader->GetResolutionsInfo(res,desc);
   if (readingResolutionInfo == false )
     return EXIT_FAILURE;
 
