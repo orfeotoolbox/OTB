@@ -94,6 +94,7 @@ Application
 
   //
   // Setup application tags.
+  //
   QCoreApplication::setApplicationName(
     PROJECT_NAME
   );
@@ -103,12 +104,22 @@ Application
 
   //
   // Setup organization tags.
+  //
   QCoreApplication::setOrganizationName(
     tr( "Centre National d'Etudes Spatiales (CNES)" )
   );
   QCoreApplication::setOrganizationDomain(
     "orfeo-toolbox.org"
   );
+
+  //
+  // Force numeric options of locale to "C"
+  // See issue #635
+  //
+  QLocale loc = QLocale::system();
+  // borrow number options from the "C" locale
+  loc.setNumberOptions(QLocale::c().numberOptions());
+  QLocale::setDefault(loc);
 }
 
 /*******************************************************************************/
