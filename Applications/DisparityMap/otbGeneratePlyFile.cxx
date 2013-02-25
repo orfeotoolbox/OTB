@@ -184,8 +184,6 @@ private:
             lr = color2dIndex;
             ul = color2dIndex;
             
-            std::cout<<"lr="<<lr<<std::endl;
-            
             firstLoop = false;
             }
           else
