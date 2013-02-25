@@ -624,6 +624,16 @@ ADD_TEST(ioTvGDALImageIO_JPEG_99 ${IO_TESTS2}
          ${TEMP}/ioTvGDALImageIO_JPEG_99.jpg
          "QUALITY=99"
          )
+         
+ADD_TEST(ioTvGDALBuildOverviews_TIFF ${IO_TESTS2}
+         otbGDALBuildOverviews
+         ${TEMP}/ioTvGDALImageIO_Tiff_NoOption.tif
+         4
+         )
+SET_TESTS_PROPERTIES(ioTvGDALBuildOverviews_TIFF PROPERTIES DEPENDS ioTvGDALImageIO_Tiff_NoOption)
+         
+                  
+         
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3885,6 +3895,7 @@ otbStreamingImageFilterTest.cxx
 otbStreamingImageFileWriterTest.cxx
 otbPipeline.cxx
 otbGDALImageIOTest.cxx
+otbGDALBuildOverviews.cxx
 )
 SET(BasicIO_SRCS3
 otbIOTests3.cxx

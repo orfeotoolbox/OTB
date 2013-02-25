@@ -126,12 +126,12 @@ bool GDALBuildOverviewsFromResolution(  std::string inputFilename,
     ovwlist.push_back(1<<i);
     }
 
-  std::cout << "list of overviews level= ";
+  /*std::cout << "list of overviews level= ";
   for (unsigned int i = 0; i < ovwlist.size(); i++)
       {
       std::cout << ovwlist[i] << ",";
       }
-  std::cout << std::endl;
+  std::cout << std::endl;*/
 
   CPLErr lCrGdal = wrappedDataset->GetDataSet()->
         BuildOverviews( resamplingMethod,

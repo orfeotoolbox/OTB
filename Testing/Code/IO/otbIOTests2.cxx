@@ -33,4 +33,5 @@ void RegisterTests()
   REGISTER_TEST(otbPipeline);
   REGISTER_TEST(otbGDALImageIOTest_uint8);
   REGISTER_TEST(otbGDALImageIOTest_uint16);
+  REGISTER_TEST(otbGDALBuildOverviews);
 }
