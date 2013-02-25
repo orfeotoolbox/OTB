@@ -83,12 +83,14 @@ QuicklookViewManipulator
   //
   // compute the physcial coordinates
   // computation takes into the origin of the viewport in the widget,
-  // the spacing of the ql and the isotropicZoom of the rendered quicklook
-  double Xpc = ( event->x() - GetViewportOrigin()[0] ) * vcl_abs(GetSpacing()[0]) / GetIsotropicZoom();
-  double Ypc = ( event->y() - GetViewportOrigin()[1] ) * vcl_abs(GetSpacing()[1]) / GetIsotropicZoom();
+  // the spacing of the rendered image and the isotropicZoom
+  IndexType index;
+  index[0] = event->x();
+  index[1] = event->y();
+  PointType physicalPt = ScreenIndexToPhysicalPoint(index);
 
   // emit the new viewport center on physical coordinates
-  emit ViewportRegionChanged(Xpc, Ypc);
+  emit ViewportRegionChanged(physicalPt[0], physicalPt[1]);
 }
 
 /******************************************************************************/
@@ -146,7 +148,6 @@ QuicklookViewManipulator
 void QuicklookViewManipulator
 ::resizeEvent( QResizeEvent * event )
 {
-
   // set back the zoom to 1
   m_IsotropicZoom = 1.;
   
