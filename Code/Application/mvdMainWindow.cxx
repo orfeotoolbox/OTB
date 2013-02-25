@@ -99,6 +99,16 @@ MainWindow
   // grab the keyboard notifications in this widget
   centralWidget()->grabKeyboard();
 
+  // instanciate the Ql manipulator here to be able to connect
+  // its signals to the centralWidget manipulator slots
+  m_QLViewManipulator = new QuicklookViewManipulator();
+
+  // Connect ql mousePressEventpressed to centralWidget manipulator
+  QObject::connect(
+    m_QLViewManipulator, SIGNAL( ViewportRegionChanged(double, double) ), 
+    imageViewManipulator, SLOT( OnViewportRegionChanged(double, double) )
+  );
+
   // add the needed docks 
   InitializeDockWidgets();
 
@@ -133,15 +143,14 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
-  // instanciate the manipulator and the renderer relative to this widget
-  QuicklookViewManipulator* qlViewManipulator = new QuicklookViewManipulator();
+  // instanciate the renderer relative to this widget
   ImageModelRenderer* qlModelRenderer = new ImageModelRenderer();
 
   //
   // EXPERIMENTAL QUICKLOOK Widget.
   assert( qobject_cast< GLImageWidget* >( centralWidget() )!=NULL );
   GLImageWidget* qlWidget = new GLImageWidget(
-    qlViewManipulator,
+    m_QLViewManipulator,
     qlModelRenderer,
     this,
     qobject_cast< GLImageWidget* >( centralWidget() )
@@ -439,6 +448,17 @@ MainWindow
     GetQuicklookDock()->widget(),
     SLOT( updateGL()  )
   );
+
+  //
+  // connect the vectorimage model spacing change (when zooming)
+  QObject::connect(
+    vectorImageModel,
+    SIGNAL( SpacingChanged(const SpacingType&) ),
+    // to:
+    centralWidget(),
+    SLOT( OnSpacingChanged(const SpacingType&)  )
+  );
+
 
   /*
   // Connect newly selected model to UI controller.

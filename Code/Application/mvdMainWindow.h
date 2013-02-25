@@ -63,6 +63,7 @@ namespace mvd
 // Internal class pre-declaration.
 class AbstractModel;
 class AbstractModelController;
+class QuicklookViewManipulator;
 
 namespace Ui
 {
@@ -172,6 +173,12 @@ private:
    * \brief uic generated.
    */
   Ui::MainWindow* m_UI;
+
+  /**
+   * \brief ql manipulator.
+   */
+  QuicklookViewManipulator* m_QLViewManipulator;
+
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
