@@ -51,7 +51,8 @@ namespace mvd
 ImageModelRenderer
 ::ImageModelRenderer( QObject* parent ) :
   AbstractModelRenderer( parent ),
-  m_IsMoving(false)
+  m_IsMoving(false),
+  m_CentralViewRegion(ImageRegionType())
 {
   m_PreviousOriginX = 0.;
   m_PreviousOriginY = 0.;
@@ -121,7 +122,6 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
   // if buffer not null do the rendering
   if (m_Buffer != NULL)
     {
-    
     //unsigned int first_displayed_col = 0;
     double originX = 0.;
     double originY = 0.;
@@ -195,10 +195,52 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     glDeleteTextures(1, &texture);
     glDisable(GL_TEXTURE_2D);
 
+    // 
+    // render the central viewport representation in the quicklook as a red
+    // square
+    if (m_CentralViewRegion != ImageRegionType())
+      {
+      // Get the input region points
+      //std::cout <<"m_CentralView "<< m_CentralViewRegion << std::endl;
+      IndexType ip1, ip2;
+      ip1[0] = m_CentralViewRegion.GetIndex()[0] + 1;
+      ip1[1] = m_CentralViewRegion.GetIndex()[1] + 1;
+      ip2[0] = m_CentralViewRegion.GetIndex()[0] + m_CentralViewRegion.GetSize()[0] - 1;
+      ip2[1] = m_CentralViewRegion.GetIndex()[1] + m_CentralViewRegion.GetSize()[1] - 1;
+      
+      // //
+      // Physical point in ql system 
+      PointType sp1,sp2;
+      sp1[0] = ip1[0] * finalZoomFactor / vcl_abs(viModel->GetSpacing()[0]) + originX;
+      sp1[1] = ip1[1] * finalZoomFactor / vcl_abs(viModel->GetSpacing()[1]) + originY;
+      sp1[1] = context.m_WidgetHeight - sp1[1]; // y axis is flipped
+
+      sp2[0] = ip2[0] * finalZoomFactor / vcl_abs(viModel->GetSpacing()[0]) + originX; 
+      sp2[1] = ip2[1] * finalZoomFactor / vcl_abs(viModel->GetSpacing()[1]) + originY; 
+      sp2[1] = context.m_WidgetHeight - sp2[1]; // y axis is flipped
+
+      //std::cout <<"sp1 "<< sp1 << "  && sp2 " << sp2<< std::endl;
+      
+      // draw the red square
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glColor3d(1.,0.,0.);
+
+      glBegin(GL_LINE_LOOP);
+       glVertex2d(sp1[0], sp2[1]);
+       glVertex2d(sp2[0], sp2[1]);
+       glVertex2d(sp2[0], sp1[1]);
+       glVertex2d(sp1[0], sp1[1]);
+      glEnd();
+
+      glDisable(GL_BLEND);
+      }
+
     // emit the new origin of the extent
     IndexType origin;
     origin[0]  = originX;
     origin[1]  = originY;
+    std::cout <<"ImageModelRenderer : "<< origin<< std::endl;
     emit ViewportOriginChanged(origin);
     }
 
@@ -210,7 +252,11 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
-
+void ImageModelRenderer
+::OnViewportRegionRepresentationChanged(const ImageRegionType& region)
+{
+  m_CentralViewRegion = region;
+}
 /*****************************************************************************/
 
 } // end namespace 'mvd'

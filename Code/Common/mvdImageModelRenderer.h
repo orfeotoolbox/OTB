@@ -91,6 +91,8 @@ public slots:
     m_IsMoving = false;
   }
 
+  void OnViewportRegionRepresentationChanged(const ImageRegionType& region);
+
 //
 // SIGNALS.
 signals:
@@ -117,6 +119,10 @@ private:
   double                       m_PreviousOriginY;
   double                       m_MovingOriginX;
   double                       m_MovingOriginY;
+
+  // 
+  // used for quicklook renderer
+  ImageRegionType              m_CentralViewRegion;
 
 //
 // SLOTS.
