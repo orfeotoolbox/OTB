@@ -119,8 +119,14 @@ AbstractImageModel
   // Enhanced band names.
   StringVector stdBandNames2;
   if( enhanced )
-    stdBandNames2 = metaDataInterface->GetEnhancedBandNames();
-
+    {
+    try
+      {
+      stdBandNames2 = metaDataInterface->GetEnhancedBandNames();
+      }
+    catch(itk::ExceptionObject &)
+      {}
+    }
 
   /*
   qDebug() << "stdBandNames2.size(): " <<  stdBandNames2.size();

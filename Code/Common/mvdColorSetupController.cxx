@@ -163,7 +163,7 @@ ColorSetupController
   colorSetupWidget->blockSignals( true );
   {
   // Reset list of component names.
-  colorSetupWidget->SetComponents( imageModel->GetBandNames() );
+  colorSetupWidget->SetComponents( imageModel->GetBandNames(true) );
 
   // Reset current-indices of RGB channels widgets.
   for( CountType i=begin; i<end; ++i )
