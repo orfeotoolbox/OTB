@@ -249,9 +249,6 @@ void
 AbstractImageModel
 ::SetCurrentLod( CountType lod )
 {
-  if( GetCurrentLod()==lod )
-    return;
-
   try
     {
     virtual_SetCurrentLod( lod );

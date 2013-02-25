@@ -241,7 +241,10 @@ VectorImageModel
 
   if ( this->GetBestLevelOfDetail(zoomFactor, best_lod, nbLod) )
     {
-    this->SetCurrentLod(best_lod);
+    if( GetCurrentLod()!=best_lod )
+      {
+      this->SetCurrentLod(best_lod);
+      }
     }
 
   // Don't do anything if the region did not changed
