@@ -112,14 +112,7 @@ Application
     "orfeo-toolbox.org"
   );
 
-  //
-  // Force numeric options of locale to "C"
-  // See issue #635
-  //
-  QLocale loc = QLocale::system();
-  // borrow number options from the "C" locale
-  loc.setNumberOptions(QLocale::c().numberOptions());
-  QLocale::setDefault(loc);
+
 }
 
 /*******************************************************************************/
