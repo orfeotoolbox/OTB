@@ -133,7 +133,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.7;
   mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.8;
   //mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
-  mCl0[universe] = 0.2;
+  //mCl0[universe] = 0.2;
 
   mCl1[mapLabelSets[vectorAllLabels[0]]] = 0.8;
   mCl1[mapLabelSets[vectorAllLabels[1]]] = 0;
@@ -145,7 +145,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   mCl2[mapLabelSets[vectorAllLabels[1]]] = 0.65;
   mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.3;
   //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
-  mCl2[universe] = 0.1;
+  //mCl2[universe] = 0.1;
 
   mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.25;
@@ -249,7 +249,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
 
   MassMapType mapJointMassesStepI, mapJointMassesStepI_, mapJointMassesUniverseStepI;
 
-  // Extracting the masses m(Ai), m(Ai_) and m(OMEGA) for each of the M = 6 classifiers
+  // Extracting the masses m(Ai), m(Ai_) and m(OMEGA) for each of the K = 6 classifiers
   // and grouping them according to the {Ai} singletons
   // (ex: mg(A), mg(B), mg(C),..., with mg(Ai) the joint mass of the masses of classifiers with result Ai for pixel X)
   for (unsigned int itk = 0; itk < classifiedPixelX.size(); ++itk)
@@ -386,6 +386,10 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
     {
     labelSetClk = itMapLabelSets->second;
 
+    // In order to handle the other sets {Aj} of the universe which are NOT present in classifiedPixelX
+    // ONLY correct if ALL the K classifiers have m(universe) = mUniverseClk = 0
+    mapBelStepII_[labelSetClk] = mapBelStepII_[labelSetClk] + (1 - addBelLabelSetClk);
+
     if (itMapLabelSets == mapLabelSets.begin())
       {
       fusedDSLabelSet = labelSetClk;
@@ -400,8 +404,8 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
         }
       }
 
-    // For labels {Ai} of the universe which are NOT present in classifiedPixelX
-    // the Bel({Ai_}) = SUM(Bel({Aj})); with {Aj} ALL labels present in classifiedPixelX
+    // For labels {Ai} of the universe which are NOT present in classifiedPixelX,
+    // the Bel({Ai_}) = SUM(m_stepII({Aj})) = SUM(Bel({Aj})) here; with {Aj} ALL labels present in classifiedPixelX
     if (mapBelStepII[labelSetClk] == 0)
       {
       mapBelStepII_[labelSetClk] = addBelLabelSetClk;
@@ -500,7 +504,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
   mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.7;
   mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.8;
   //mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
-  mCl0[universe] = 0.2;
+  //mCl0[universe] = 0.2;
 
   mCl1[mapLabelSets[vectorAllLabels[0]]] = 0.8;
   mCl1[mapLabelSets[vectorAllLabels[1]]] = 0;
@@ -512,7 +516,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
   mCl2[mapLabelSets[vectorAllLabels[1]]] = 0.65;
   mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.3;
   //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
-  mCl2[universe] = 0.1;
+  //mCl2[universe] = 0.1;
 
   mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.25;
@@ -556,7 +560,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
   mapJointMassOfBeliefFilterType mapJointMassFilters;
   mapJointMassOfBeliefFilterType::iterator itMapJMOBFilters;
 
-  // Extracting the masses m(Ai), m(Ai_) and m(OMEGA) for each of the M = 6 classifiers
+  // Extracting the masses m(Ai), m(Ai_) and m(OMEGA) for each of the K = 6 classifiers
   // and grouping them according to the {Ai} singletons
   // (ex: mg(A), mg(B), mg(C),..., with mg(Ai) the joint mass of the masses of classifiers with result Ai for pixel X)
   for (unsigned int itk = 0; itk < classifiedPixelX.size(); ++itk)
@@ -708,6 +712,10 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
     labelSetClk_ = universe;
     labelSetClk_.erase(*labelSetClk.begin());
 
+    // In order to handle the other sets {Aj} of the universe which are NOT present in classifiedPixelX
+    // ONLY correct if ALL the K classifiers have m(universe) = mUniverseClk = 0
+    mapBelStepII[labelSetClk_] = mapBelStepII[labelSetClk_] + (1 - addBelLabelSetClk);
+
     if (itMapLabelSets == mapLabelSets.begin())
       {
       fusedDSLabelSet = labelSetClk;
@@ -722,8 +730,8 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
         }
       }
 
-    // For labels {Ai} of the universe which are NOT present in classifiedPixelX
-    // the Bel({Ai_}) = SUM(Bel({Aj})); with {Aj} ALL labels present in classifiedPixelX
+    // For labels {Ai} of the universe which are NOT present in classifiedPixelX,
+    // the Bel({Ai_}) = SUM(m_stepII({Aj})) = SUM(Bel({Aj})) here; with {Aj} ALL labels present in classifiedPixelX
     if (mapBelStepII[labelSetClk] == 0)
       {
       mapBelStepII[labelSetClk_] = addBelLabelSetClk;
@@ -822,7 +830,7 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
   mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.7;
   mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.8;
   //mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
-  mCl0[universe] = 0.2;
+  //mCl0[universe] = 0.2;
 
   mCl1[mapLabelSets[vectorAllLabels[0]]] = 0.8;
   mCl1[mapLabelSets[vectorAllLabels[1]]] = 0;
@@ -834,7 +842,7 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
   mCl2[mapLabelSets[vectorAllLabels[1]]] = 0.65;
   mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.3;
   //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
-  mCl2[universe] = 0.1;
+  //mCl2[universe] = 0.1;
 
   mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.25;
