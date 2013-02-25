@@ -232,7 +232,7 @@ VectorImageModel
   m_Region = region;
 
   // Compute the best level of detail
-  int bestLod = this->ComputeBestLevelOfDetail(zoomFactor);
+  CountType bestLod = this->ComputeBestLevelOfDetail(zoomFactor);
 
   // Set the corresponding Level of Detail
   if( GetCurrentLod()!=bestLod )
