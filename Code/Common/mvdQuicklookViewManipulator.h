@@ -128,7 +128,7 @@ public slots:
 //
 // Signals.
 signals:
-  void ViewportRegionChanged(double Xpc, double Xpc);
+  void ViewportRegionChanged(double Xpc, double Ypc);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
