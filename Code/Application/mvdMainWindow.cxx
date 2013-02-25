@@ -96,9 +96,6 @@ MainWindow
     )
   );
 
-  // grab the keyboard notifications in this widget
-  centralWidget()->grabKeyboard();
-
   // instanciate the Ql manipulator here to be able to connect
   // its signals to the centralWidget manipulator slots
   m_QLViewManipulator = new QuicklookViewManipulator();

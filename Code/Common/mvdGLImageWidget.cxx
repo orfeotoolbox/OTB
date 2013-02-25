@@ -61,6 +61,8 @@ GLImageWidget
   m_ImageModelRenderer( NULL ),
   m_ImageModel( NULL )
 {
+  // Set focus policy so that the widget gets the focus if it is clicked
+  setFocusPolicy(Qt::StrongFocus);
   Initialize(manipulator, renderer);
 }
 
@@ -77,6 +79,9 @@ GLImageWidget
   m_ImageModelRenderer( NULL ),
   m_ImageModel( NULL )
 {
+  // Set focus policy so that the widget gets the focus if it is clicked
+  setFocusPolicy(Qt::StrongFocus);
+
   Initialize(manipulator, renderer);
 }
 
@@ -93,6 +98,9 @@ GLImageWidget
   m_ImageModelRenderer( NULL ),
   m_ImageModel( NULL )
 {
+  // Set focus policy so that the widget gets the focus if it is clicked
+  setFocusPolicy(Qt::StrongFocus);
+
   Initialize(manipulator, renderer);
 }
 
