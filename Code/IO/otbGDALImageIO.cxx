@@ -214,14 +214,14 @@ void GDALImageIO::Read(void* buffer)
   //std::cout << "SizeBuffer= " <<  lNbLinesRegion << " x " << lNbColumnsRegion << std::endl;
 
   // Compute the origin of the image region to read at the initial resolution
-  int lFirstLine   = lFirstLineRegion * vcl_pow(2,m_ResolutionFactor);
-  int lFirstColumn = lFirstColumnRegion * vcl_pow(2,m_ResolutionFactor);
+  int lFirstLine   = lFirstLineRegion * (1 << m_ResolutionFactor);
+  int lFirstColumn = lFirstColumnRegion * (1 << m_ResolutionFactor);
 
   //std::cout << "OriginImage= " <<  lFirstLine << " x " << lFirstColumn << std::endl;
 
   // Compute the size of the image region to read at the initial resolution
-  int lNbLines     = lNbLinesRegion * vcl_pow(2,m_ResolutionFactor);
-  int lNbColumns   = lNbColumnsRegion * vcl_pow(2,m_ResolutionFactor);
+  int lNbLines     = lNbLinesRegion * (1 << m_ResolutionFactor);
+  int lNbColumns   = lNbColumnsRegion * (1 << m_ResolutionFactor);
 
   // Check if the image region is correct
   if (lFirstLine + lNbLines > m_OriginalDimensions[1])
