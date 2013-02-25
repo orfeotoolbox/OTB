@@ -34,25 +34,6 @@ install(DIRECTORY ${GDAL_DATA}
         DESTINATION share
         COMPONENT Resources)
 
-
-# Get the translation files coming with qt, and install them in the bundle
-# They are loaded by Monteverdi2.
-function(get_qt_translation_files RESULT)
-    # These files are the "qt_<localename>.qm" files
-    # They are located in QT_TRANSLATIONS_DIR, which comes from FindQt4
-    file(GLOB translation_files ${QT_TRANSLATIONS_DIR}/qt_*)
-
-    # We need to remove the "qt_help_<localename>.qm" files from this list
-    foreach(translation_item ${translation_files})
-      if(${translation_item} MATCHES "qt_help")
-        list(REMOVE_ITEM translation_files ${translation_item})
-      endif()
-    endforeach()
-    
-    set(${RESULT} ${translation_files} PARENT_SCOPE)
-endfunction()
-
-get_qt_translation_files(QT_TRANSLATIONS_FILES)
 install(FILES ${QT_TRANSLATIONS_FILES}
         DESTINATION  share/qt4/translations
         COMPONENT Resources)

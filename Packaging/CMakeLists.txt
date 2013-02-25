@@ -3,6 +3,25 @@ mark_as_advanced(Monteverdi2_USE_CPACK)
 
 if( Monteverdi2_USE_CPACK )
 
+# Get the translation files coming with Qt, and install them in the bundle
+# They are loaded by Monteverdi2.
+function(get_qt_translation_files RESULT)
+    # These files are the "qt_<localename>.qm" files
+    # They are located in QT_TRANSLATIONS_DIR, which comes from FindQt4
+    file(GLOB translation_files ${QT_TRANSLATIONS_DIR}/qt_*)
+
+    # We need to remove the "qt_help_<localename>.qm" files from this list
+    foreach(translation_item ${translation_files})
+      if(${translation_item} MATCHES "qt_help")
+        list(REMOVE_ITEM translation_files ${translation_item})
+      endif()
+    endforeach()
+    
+    set(${RESULT} ${translation_files} PARENT_SCOPE)
+endfunction()
+
+get_qt_translation_files(QT_TRANSLATIONS_FILES)
+
 set(CPACK_PACKAGE_NAME "Monteverdi2")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Monteverdi2")
 
