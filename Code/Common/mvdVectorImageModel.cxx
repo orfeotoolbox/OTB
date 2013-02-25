@@ -72,8 +72,7 @@ VectorImageModel
   m_AlreadyLoadedRegion(),
   m_Region(),
   m_RegionsToLoadVector(),
-  m_Filename(),
-  m_NbLod( 0 )
+  m_Filename()
 {
 }
 
@@ -232,16 +231,13 @@ VectorImageModel
 {
   m_Region = region;
 
-  // Set the best level of detail
-  int best_lod = 0;
-  CountType nbLod = 0;
+  // Compute the best level of detail
+  int bestLod = this->ComputeBestLevelOfDetail(zoomFactor);
 
-  if ( this->GetBestLevelOfDetail(zoomFactor, best_lod, nbLod) )
+  // Set the corresponding Level of Detail
+  if( GetCurrentLod()!=bestLod )
     {
-    if( GetCurrentLod()!=best_lod )
-      {
-      this->SetCurrentLod(best_lod);
-      }
+    this->SetCurrentLod(bestLod);
     }
 
   // Don't do anything if the region did not changed
@@ -489,46 +485,12 @@ size[0] = vcl_abs(static_cast<int>(region.GetSize()[0] + region.GetIndex()[0]
 }
 
 /*******************************************************************************/
-bool
-VectorImageModel::GetBestLevelOfDetail(const double zoomFactor,
-				       int& lod,
-				       CountType& nbLod)
+CountType
+VectorImageModel::ComputeBestLevelOfDetail(const double zoomFactor)
 {
-  //TODO: Optimize method (minimize JPEG2000 readers; preprocess LOD).
-
-  // Note : index 0 is the full resolution image
-
   int inverseZoomFactor =  static_cast<int>((1/zoomFactor + 0.5));
-
-  // By default, there is only one LOD level: the native image (level zero).
-  nbLod = 1;
-
-  typedef otb::VectorImage<unsigned int , 2> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(m_Filename.toLatin1().constData());
-  reader->UpdateOutputInformation();
-
-
-
-  std::vector<unsigned int> res;
-  if (reader->GetAvailableResolutions(res) )
-    {
-    // Compute the best lod from inverseZoomFactor and resolution of the file
-    lod = this->Closest(inverseZoomFactor, res);
-    std::cout << "LOD = " << lod <<std::endl;
-
-    // Return the number of LOD levels
-    nbLod = res.size();
-    std::cout << "nbLOD = " << nbLod <<std::endl;
-
-    return true;
-    }
-  else
-    {
-    return false;
-    }
-
+  CountType bestLod = this->Closest(inverseZoomFactor, m_AvailableLod);
+  return bestLod;
 }
 
 /*******************************************************************************/
@@ -559,22 +521,19 @@ VectorImageModel
 ::SetupCurrentLodImage( int width, int height )
 {
   // Get the largest possible region of the image
-  DefaultImageFileReaderType::Pointer tmpReader(
-    DefaultImageFileReaderType::New() );
+  m_ImageFileReader = DefaultImageFileReaderType::New() ;
 
-  tmpReader->SetFileName( static_cast<const char*>(m_Filename.toAscii()) );
-  tmpReader->UpdateOutputInformation();
+  m_ImageFileReader->SetFileName( static_cast<const char*>(m_Filename.toAscii()) );
+  m_ImageFileReader->UpdateOutputInformation();
+  // Retrieve the list of Lod from file
+  m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
 
   // Get native image largest region, which is LOD level zero.
   ImageRegionType nativeLargestRegion =
-    tmpReader->GetOutput()->GetLargestPossibleRegion();
+      m_ImageFileReader->GetOutput()->GetLargestPossibleRegion();
 
-  // Initialize lod count.
-  CountType nbLod = 1;
-  bool hasBestLod = false;
-  int bestLod = 0;
-
-  // Try to compute best LOD.
+  CountType bestInitialLod = 0;
+  // Compute the initial zoom factor and the best LOD.
   if( width>0 && height>0 )
     {
     double factorX =
@@ -583,36 +542,16 @@ VectorImageModel
     double factorY =
       double( height ) / double( nativeLargestRegion.GetSize()[ 1 ] );
 
-  double initialZoomFactor = std::min(factorX, factorY);
+    double initialZoomFactor = std::min(factorX, factorY);
 
-  // if mutli-resolution file
-  hasBestLod = GetBestLevelOfDetail(initialZoomFactor, bestLod, nbLod);
+    // Compute the best lod from the initialZoomFactor
+    bestInitialLod = ComputeBestLevelOfDetail(initialZoomFactor);
     }
 
-  // If best-lod is available for multi-resolution image.
-  if( hasBestLod )
-    {
-    // Change current-lod: update m_ImageFileReader, m_Image and
-    // current LOD index.
-    this->SetCurrentLod( bestLod );
-    }
-
-  else // Otherwise
-    {
-    // Leave current LOD index to 0.
-
-    // Update m_ImageFileReader
-    m_ImageFileReader = tmpReader;
-    
-    // Update m_Image
-    m_Image = m_ImageFileReader->GetOutput();
-    }
+    this->SetCurrentLod( bestInitialLod );
 
   // Remember native largest region.
   m_NativeLargestRegion = nativeLargestRegion;
-
-  // Remember number of LOD levels.
-  m_NbLod = nbLod;
 }
 
 /*******************************************************************************/
@@ -620,8 +559,7 @@ CountType
 VectorImageModel
 ::GetNbLod() const
 {
-  // TODO: Implement method.
-  return m_NbLod;
+  return m_AvailableLod.size();
 }
 
 /*******************************************************************************/

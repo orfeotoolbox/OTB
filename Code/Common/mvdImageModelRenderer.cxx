@@ -77,31 +77,26 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
   // the region of the image to be rendered
   const ImageRegionType&  region = context.m_ImageRegion;
 
-  // If the image is a j2k image
-  int lod = 0;
-  CountType lodCount = 0;
   ImageRegionType  scaledRegion = region;
-  if ( viModel->GetBestLevelOfDetail(context.m_IsotropicZoom, lod, lodCount) )
+  CountType bestLod = viModel->ComputeBestLevelOfDetail(context.m_IsotropicZoom);
+
+  // If it is not the original level of detail recompute the region to request
+  if (bestLod != 0)
     {
-    // if the level of detail is an overview
-    // recompute the region to request
-    if (lod != 0)
-      {
-      ImageRegionType::SizeType  scaledSize;
-      ImageRegionType::IndexType scaledOrigin;
-      
-      scaledSize[0] = region.GetSize()[0]/(1<<lod);
-      scaledSize[1] = region.GetSize()[1]/(1<<lod);
-      
-      scaledOrigin[0] = region.GetIndex()[0]/(1<<lod);
-      scaledOrigin[1] = region.GetIndex()[1]/(1<<lod);
-      
-      scaledRegion.SetSize(scaledSize) ;
-      scaledRegion.SetIndex(scaledOrigin);
-      }
-    // TODO : remove verbosity 
-    std::cout <<"J2k resolution requested :" << lod<< std::endl;
+    ImageRegionType::SizeType  scaledSize;
+    ImageRegionType::IndexType scaledOrigin;
+
+    scaledSize[0] = region.GetSize()[0]/(1<<bestLod);
+    scaledSize[1] = region.GetSize()[1]/(1<<bestLod);
+
+    scaledOrigin[0] = region.GetIndex()[0]/(1<<bestLod);
+    scaledOrigin[1] = region.GetIndex()[1]/(1<<bestLod);
+
+    scaledRegion.SetSize(scaledSize) ;
+    scaledRegion.SetIndex(scaledOrigin);
     }
+  // TODO : remove verbosity
+  std::cout <<"Level of detail requested:" << bestLod << std::endl;
 
   if (!m_IsMoving)
     {
@@ -112,7 +107,7 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     }
 
   // current resolution
-  double currentResolutionFactor = 1 << lod;
+  double currentResolutionFactor = 1 << bestLod;
 
   // final zoom factor : take into account the current resolution of
   // the file and the wheel zoom

@@ -286,12 +286,9 @@ public:
                                   bool refresh);
 
   /**
-   * Following the zoom factor, get the best level of detail knowing
-   * the overviews size
+   * Following the zoom factor, get the best level of detail
    */
-  bool GetBestLevelOfDetail(const double ZoomFactor,
-			    int& lod,
-			    CountType& lodCount );
+  CountType ComputeBestLevelOfDetail(const double ZoomFactor);
 
   //
   // AbstractImageModel overrides.
@@ -491,8 +488,9 @@ private:
   // store the input image filename
   QString m_Filename;
 
-  /** */
-  CountType m_NbLod;
+  /** List of all Level of detail (Resolution) available from the file */
+  UIntVector m_AvailableLod;
+
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
