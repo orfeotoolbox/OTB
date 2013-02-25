@@ -96,9 +96,16 @@ MainWindow
     )
   );
 
-  // instanciate the Ql manipulator here to be able to connect
+  // instanciate the Ql manipulator/renderer here to be able to connect
   // its signals to the centralWidget manipulator slots
+  m_QLModelRenderer   = new ImageModelRenderer();
   m_QLViewManipulator = new QuicklookViewManipulator();
+
+  // Connect centralWidget manipulator to Ql renderer when viewportRegionChanged
+  QObject::connect(
+    imageViewManipulator, SIGNAL( ViewportRegionRepresentationChanged(const ImageRegionType&) ), 
+    m_QLModelRenderer, SLOT( OnViewportRegionRepresentationChanged(const ImageRegionType&) )
+    );
 
   // Connect ql mousePressEventpressed to centralWidget manipulator
   QObject::connect(
@@ -140,15 +147,12 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
-  // instanciate the renderer relative to this widget
-  ImageModelRenderer* qlModelRenderer = new ImageModelRenderer();
-
   //
   // EXPERIMENTAL QUICKLOOK Widget.
   assert( qobject_cast< GLImageWidget* >( centralWidget() )!=NULL );
   GLImageWidget* qlWidget = new GLImageWidget(
     m_QLViewManipulator,
-    qlModelRenderer,
+    m_QLModelRenderer,
     this,
     qobject_cast< GLImageWidget* >( centralWidget() )
   );
@@ -446,6 +450,29 @@ MainWindow
     SLOT( OnSpacingChanged(const SpacingType&)  )
   );
 
+  // TODO : OLU uncomment those connects when ql and central view 
+  //        are well connected
+  // // TODO : where to do this
+  // QObject::connect(
+  //   // vectorImageModel->GetQuicklookModel(),
+  //   // TODO: Remove temporary hack by better design.
+  //   centralWidget(),
+  //   SIGNAL( movingMouse() ),
+  //   // to:
+  //   GetQuicklookDock()->widget(),
+  //   SLOT( updateGL()  )
+  // );
+  
+  // // TODO : where to do this
+  // QObject::connect(
+  //   // vectorImageModel->GetQuicklookModel(),
+  //   // TODO: Remove temporary hack by better design.
+  //   centralWidget(),
+  //   SIGNAL( releasingMouse() ),
+  //   // to:
+  //   GetQuicklookDock()->widget(),
+  //   SLOT( updateGL()  )
+  // );
 
   /*
   // Connect newly selected model to UI controller.

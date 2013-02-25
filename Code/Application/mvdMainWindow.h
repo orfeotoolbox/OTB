@@ -64,6 +64,7 @@ namespace mvd
 class AbstractModel;
 class AbstractModelController;
 class QuicklookViewManipulator;
+class ImageModelRenderer;
 
 namespace Ui
 {
@@ -178,7 +179,11 @@ private:
    * \brief ql manipulator.
    */
   QuicklookViewManipulator* m_QLViewManipulator;
-
+  
+  /**
+   * \brief ql manipulator.
+   */
+  ImageModelRenderer*       m_QLModelRenderer;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
