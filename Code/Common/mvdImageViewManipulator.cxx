@@ -118,6 +118,7 @@ ImageViewManipulator
 
   // Apply the offset to the (start) index of the stored region
   ImageRegionType::OffsetType offset;
+
   offset[0] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dx/m_IsotropicZoom + 0.5);
   offset[1] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dy/m_IsotropicZoom + 0.5);
  
@@ -312,7 +313,6 @@ void
 ImageViewManipulator
 ::keyPressEvent( QKeyEvent * event )
 {
-
   switch(event->key())
     {
     case Qt::Key_Minus:
@@ -324,16 +324,16 @@ ImageViewManipulator
       Zoom(1.25);
       break;
     case Qt::Key_Left:
-      moveRegion(m_NavigationContext.m_ViewportImageRegion.GetSize(0)/4 ,0);
+      moveRegion(-static_cast<double>(m_NavigationContext.m_ViewportImageRegion.GetSize(0))*m_IsotropicZoom/4 ,0);
       break;
     case Qt::Key_Right:
-      moveRegion(-m_NavigationContext.m_ViewportImageRegion.GetSize(0)/4 ,0);
+      moveRegion(static_cast<double>(m_NavigationContext.m_ViewportImageRegion.GetSize(0))*m_IsotropicZoom/4 ,0);
       break;
     case Qt::Key_Up:
-      moveRegion(0,m_NavigationContext.m_ViewportImageRegion.GetSize(1)/4 );
+      moveRegion(0,-static_cast<double>(m_NavigationContext.m_ViewportImageRegion.GetSize(1))*m_IsotropicZoom/4 );
       break;
     case Qt::Key_Down:
-      moveRegion(0,-m_NavigationContext.m_ViewportImageRegion.GetSize(1)/4 );
+      moveRegion(0,static_cast<double>(m_NavigationContext.m_ViewportImageRegion.GetSize(1))*m_IsotropicZoom/4 );
       break;
     default:
       break;
