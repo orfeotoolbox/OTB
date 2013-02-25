@@ -94,7 +94,7 @@ public slots:
 //
 // SIGNALS.
 signals:
-
+  void ViewportOriginChanged(const IndexType origin);
 //
 // Protected methods.
 protected:

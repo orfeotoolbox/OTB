@@ -194,6 +194,12 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     // free texture
     glDeleteTextures(1, &texture);
     glDisable(GL_TEXTURE_2D);
+
+    // emit the new origin of the extent
+    IndexType origin;
+    origin[0]  = originX;
+    origin[1]  = originY;
+    emit ViewportOriginChanged(origin);
     }
 
   // save the previous scaled region origin
