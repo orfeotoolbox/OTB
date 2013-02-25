@@ -107,13 +107,24 @@ public:
   /** */
   inline double GetIsotropicZoom() const;
 
+  /** */
+  inline IndexType GetViewportOrigin() const;
+
+  /** */
+  void SetSpacing(const SpacingType& spacing);
+
+  /** */
+  inline SpacingType GetSpacing() const;
 
 //
 // Public SLOTS.
 public slots:
   /** */
   virtual
-    void OnModelImageRegionChanged( const ImageRegionType& largestRegion ) =0;
+    void OnModelImageRegionChanged( const ImageRegionType& largestRegion, 
+      const SpacingType & spacing) =0;
+  /** */
+  void OnViewportOriginChanged(const IndexType& origin);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -197,7 +208,13 @@ protected:
   MouseContext m_MouseContext;
 
   /** */
-  double m_IsotropicZoom;
+  double       m_IsotropicZoom;
+
+  /** */
+  IndexType    m_ViewportOrigin;
+
+  /** */
+  SpacingType  m_Spacing;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -212,6 +229,7 @@ private:
 //
 // Private attributes.
 private:
+
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -244,6 +262,26 @@ AbstractViewManipulator
 {
   return m_IsotropicZoom;
 }
+
+/*****************************************************************************/
+inline 
+IndexType
+AbstractViewManipulator
+::GetViewportOrigin() const
+{
+  return m_ViewportOrigin;
+}
+
+/*****************************************************************************/
+inline 
+SpacingType
+AbstractViewManipulator
+::GetSpacing() const
+{
+  return m_Spacing;
+}
+
+
 
 } // end namespace 'mvd'
 

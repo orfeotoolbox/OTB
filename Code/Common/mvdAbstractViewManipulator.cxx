@@ -73,5 +73,19 @@ AbstractViewManipulator
 /*******************************************************************************/
 
 /*******************************************************************************/
+void
+AbstractViewManipulator
+::OnViewportOriginChanged(const IndexType& origin)
+{
+  m_ViewportOrigin = origin;
+}
+
+/*******************************************************************************/
+void
+AbstractViewManipulator
+::SetSpacing(const SpacingType& spacing)
+{
+  m_Spacing = spacing;
+}
 
 } // end namespace 'mvd'

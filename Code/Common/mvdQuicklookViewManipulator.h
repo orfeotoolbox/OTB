@@ -120,13 +120,15 @@ public:
 //
 // Public SLOTS.
 public slots:
-  void OnModelImageRegionChanged(const ImageRegionType & largestRegion);
+  void OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
+                                 const SpacingType & spacing);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
+  void ViewportRegionChanged(double Xpc, double Xpc);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

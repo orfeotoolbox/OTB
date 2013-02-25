@@ -79,6 +79,16 @@ QuicklookViewManipulator
   // Update the context with the pressed position for the mouseMoveEvent
   m_MouseContext.xMove = event->x();
   m_MouseContext.yMove = event->y();
+
+  //
+  // compute the physcial coordinates
+  // computation takes into the origin of the viewport in the widget,
+  // the spacing of the ql and the isotropicZoom of the rendered quicklook
+  double Xpc = ( event->x() - GetViewportOrigin()[0] ) * vcl_abs(GetSpacing()[0]) / GetIsotropicZoom();
+  double Ypc = ( event->y() - GetViewportOrigin()[1] ) * vcl_abs(GetSpacing()[1]) / GetIsotropicZoom();
+
+  // emit the new viewport center on physical coordinates
+  emit ViewportRegionChanged(Xpc, Ypc);
 }
 
 /******************************************************************************/
@@ -330,8 +340,12 @@ QuicklookViewManipulator
 /*****************************************************************************/
 void
 QuicklookViewManipulator
-::OnModelImageRegionChanged(const ImageRegionType & largestRegion)
+::OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
+  const SpacingType & spacing)
 {
+  // update spacing
+  SetSpacing(spacing);
+
   // set back the zoom to 1
   m_IsotropicZoom = 1.;
 

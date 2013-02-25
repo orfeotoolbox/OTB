@@ -346,8 +346,11 @@ ImageViewManipulator
 
 /*****************************************************************************/
 void ImageViewManipulator
-::OnModelImageRegionChanged(const ImageRegionType & largestRegion)
+::OnModelImageRegionChanged(const ImageRegionType & largestRegion, const SpacingType& spacing)
 {
+  // update the spacing
+  SetSpacing(spacing);
+
   // set back the zoom to 1
   m_IsotropicZoom = 1.;
 
@@ -377,6 +380,26 @@ void ImageViewManipulator
     
   double scale = std::min(factorX, factorY);
   this->Zoom(scale);
+}
+
+/*****************************************************************************/
+void ImageViewManipulator
+::OnViewportRegionChanged(double Xpc, double Ypc)
+{
+  // Update the navigation context
+  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+
+  // center the region on the position under the cursor  
+  IndexType   origin;
+  origin[0] = ( Xpc / vcl_abs(GetSpacing()[0]) - currentRegion.GetSize()[0] / 2 );
+  origin[1] = ( Ypc / vcl_abs(GetSpacing()[1]) - currentRegion.GetSize()[1] / 2 );
+  currentRegion.SetIndex(origin);
+  
+  // Constraint this region to the LargestPossibleRegion
+  this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
+  
+  // force repaintGL
+  qobject_cast< QWidget* >( parent() )->update();
 }
 
 } // end namespace 'mvd'

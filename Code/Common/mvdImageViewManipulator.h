@@ -119,7 +119,9 @@ public:
 //
 // Public SLOTS.
 public slots:
-  void OnModelImageRegionChanged(const ImageRegionType & largestRegion);
+  void OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
+                                 const SpacingType& spacing);
+  void OnViewportRegionChanged(double Xpc, double Ypc);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -140,6 +142,9 @@ protected:
 
   /** */
   void ResizeRegion(unsigned int w, unsigned int h);
+
+  /** */
+  void moveRegion(double dx, double dy);
   
 //
 // Protected attributes.
@@ -158,7 +163,7 @@ private:
   void Zoom(const double scale);
 
   /** */
-  void moveRegion(double dx, double dy);
+  
 
 //
 // Private attributes.
