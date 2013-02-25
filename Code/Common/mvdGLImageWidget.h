@@ -119,13 +119,14 @@ public:
 //
 // Public SLOTS.
 public slots:
+  void OnSpacingChanged(const SpacingType& spacing);
 
 //
 // SIGNALS.
 signals:
   void movingMouse();
   void releasingMouse();
-  void ModelImageRegionChanged(const ImageRegionType & );
+  void ModelImageRegionChanged(const ImageRegionType &, const SpacingType&);
 
 //
 // Protected methods.
@@ -197,14 +198,18 @@ GLImageWidget
   //
   // REFRESH DISPLAY.
 
-  // set the largest possible region of the image
+  // set the largest possible region of the image and the initial
+  // spacing (may change when zooming)
   // TODO:  rename signal name when handling DataSets collections
   // TODO: move signal into mvdApplication and link it to DockWidget
   // and ImageView.
   if( model!=NULL )
+    {
     emit ModelImageRegionChanged(
-      model->GetNativeLargestRegion()
-    );
+      model->GetNativeLargestRegion(),
+      model->ToImageBase()->GetSpacing()
+      );
+    }
 }
 
 }

@@ -132,11 +132,21 @@ GLImageWidget
   // Connect this model region changed.
   QObject::connect(
     this,
-    SIGNAL( ModelImageRegionChanged( const ImageRegionType& ) ),
+    SIGNAL( ModelImageRegionChanged( const ImageRegionType& , const SpacingType&) ),
     // to:
     m_ImageViewManipulator,
-    SLOT( OnModelImageRegionChanged( const ImageRegionType& ) )
+    SLOT( OnModelImageRegionChanged( const ImageRegionType&, const SpacingType& ) )
   );
+
+  // Connect the renderer origin (of extent) changed to the manipulator
+  QObject::connect(
+    m_ImageModelRenderer,
+    SIGNAL( ViewportOriginChanged( const IndexType& ) ),
+    // to:
+    m_ImageViewManipulator,
+    SLOT( OnViewportOriginChanged( const IndexType&) )
+  );
+
 }
 
 /*******************************************************************************/
@@ -254,6 +264,7 @@ GLImageWidget
   this->setCursor(dragCursor);
 
   m_ImageViewManipulator->mousePressEvent(event);
+  this->update();
 }
 
 /*******************************************************************************/
@@ -326,8 +337,13 @@ GLImageWidget
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
-/*******************************************************************************/
-
+/******************************************************************************/
+void
+GLImageWidget
+::OnSpacingChanged(const SpacingType& spacing)
+{
+  m_ImageViewManipulator->SetSpacing(spacing);
+}
 /*******************************************************************************/
 
 }
