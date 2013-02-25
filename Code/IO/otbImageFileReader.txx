@@ -32,6 +32,7 @@
 #include "otbMetaDataKey.h"
 
 #include "otbGDALImageIO.h" //FIXME avoid requiring GDALImageIO here
+#include "otbJPEG2000ImageIO.h" //FIXME avoid requiring JPEG2000ImageIO here
 #include "otbTileMapImageIO.h" //FIXME avoid requiring TileMapImageIO here
 #include "otbCurlHelper.h"
 
@@ -653,6 +654,73 @@ ImageFileReader<TOutputImage>
 {
 return this->m_FilenameHelper->GetSimpleFileName();
 }
+
+template <class TOutputImage>
+bool
+ImageFileReader<TOutputImage>
+::GetAvailableResolutions(std::vector<unsigned int>& res)
+ {
+  this->UpdateOutputInformation();
+
+  // GDAL image IO
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
+    {
+    typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
+    imageIO->GetAvailableResolutions(res);
+    return true;
+    }
+
+  // JPEG2000 image IO
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
+    {
+    typename JPEG2000ImageIO::Pointer imageIO = dynamic_cast<JPEG2000ImageIO*>(this->GetImageIO());
+    imageIO->GetAvailableResolutions(res);
+    return true;
+    }
+
+  // other imageIO
+  res.clear();
+  res.push_back(0);
+  return true;
+ }
+
+template <class TOutputImage>
+bool
+ImageFileReader<TOutputImage>
+::GetResolutionsInfo( std::vector<unsigned int>& res, std::vector<std::string>& desc)
+ {
+  this->UpdateOutputInformation();
+
+  // GDAL image IO
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
+    {
+    typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
+    imageIO->GetResolutionInfo(res,desc);
+    return true;
+    }
+
+  // JPEG2000 image IO
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
+    {
+    typename JPEG2000ImageIO::Pointer imageIO = dynamic_cast<JPEG2000ImageIO*>(this->GetImageIO());
+    imageIO->GetResolutionInfo(res,desc);
+    return true;
+    }
+  // other imageIO
+  res.clear();
+  desc.clear();
+
+  res.push_back(0);
+
+  // TODO MSD : manage the tile information or not ?
+  std::ostringstream oss;
+  oss << "Resolution: " << 0 << " (Image [w x h]: "
+      << this->m_ImageIO->GetDimensions(0) << "x" << this->m_ImageIO->GetDimensions(1)
+      << ", Tile [w x h]: " <<  "not defined x not defined" << ")";
+  desc.push_back(oss.str());
+
+  return true;
+ }
 
 } //namespace otb
 

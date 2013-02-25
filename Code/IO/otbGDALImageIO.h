@@ -130,6 +130,13 @@ public:
    * that the IORegion has been set properly. */
   virtual void Write(const void* buffer);
 
+  /** Get all resolutions possible from the file dimensions */
+  bool GetAvailableResolutions(std::vector<unsigned int>& res);
+
+  /** Get Info about all resolution possible from the file dimensions  */
+  bool GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc);
+
+
 protected:
   /** Constructor.*/
   GDALImageIO();
@@ -154,7 +161,6 @@ protected:
 
   /** Dataset index to extract (starting at 0)*/
   unsigned int m_DatasetNumber;
-
 
 private:
   GDALImageIO(const Self &); //purposely not implemented

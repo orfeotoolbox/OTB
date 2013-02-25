@@ -98,6 +98,11 @@ public:
   itkLegacyMacro( itkGetMacro(AdditionalNumber, unsigned int) );
   unsigned int m_AdditionalNumber;
 
+  bool GetResolutionsInfo( std::vector<unsigned int>& res,
+                          std::vector<std::string>& desc);
+
+  bool GetAvailableResolutions( std::vector<unsigned int>& res);
+
 protected:
   ImageFileReader();
   virtual ~ImageFileReader();

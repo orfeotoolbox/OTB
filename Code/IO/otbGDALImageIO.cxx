@@ -480,6 +480,56 @@ void GDALImageIO::ReadImageInformation()
   this->InternalReadImageInformation();
 }
 
+bool GDALImageIO::GetAvailableResolutions(std::vector<unsigned int>& res)
+{
+  GDALDataset* dataset = m_Dataset->GetDataSet();
+
+  bool flagStop = false;
+  unsigned int resFactor = 0;
+  while (!flagStop)
+    {
+    res.push_back(resFactor);
+
+    unsigned int tDimX = uint_ceildivpow2(dataset->GetRasterXSize(),resFactor);
+    unsigned int tDimY = uint_ceildivpow2(dataset->GetRasterYSize(),resFactor);
+
+    resFactor++;
+
+    if ( (tDimX == 1) || (tDimY == 1) )
+      {
+      flagStop = true;
+      }
+    }
+
+  return true;
+}
+
+bool GDALImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc)
+{
+  this->GetAvailableResolutions(res);
+
+  if (res.empty())
+    return false;
+
+  unsigned int originalWidth = m_OriginalDimensions[0];
+  unsigned int originalHeight = m_OriginalDimensions[1];
+
+  for (std::vector<unsigned int>::iterator itRes = res.begin(); itRes < res.end(); itRes++)
+    {
+    // For each resolution we will compute the tile dim and image dim
+    std::ostringstream oss;
+
+    unsigned int w = uint_ceildivpow2( originalWidth, *itRes);
+    unsigned int h = uint_ceildivpow2( originalHeight, *itRes);
+
+    oss << "Resolution: " << *itRes << " (Image [w x h]: " << w << "x" << h << ", Tile [w x h]: " <<  "not defined x not defined" << ")";
+
+    desc.push_back(oss.str());
+    }
+
+  return false;
+}
+
 void GDALImageIO::InternalReadImageInformation()
 {
   itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
@@ -754,8 +804,9 @@ void GDALImageIO::InternalReadImageInformation()
       {
       otbMsgDevMacro(<< "Original blockSize: "<< blockSizeX << " x " << blockSizeY );
 
+      // Try to keep the GDAL block memory constant
       blockSizeX = uint_ceildivpow2(blockSizeX,m_ResolutionFactor);
-      blockSizeY = uint_ceildivpow2(blockSizeY,m_ResolutionFactor);
+      blockSizeY = blockSizeY * (1 << m_ResolutionFactor);
 
       otbMsgDevMacro(<< "Decimated blockSize: "<< blockSizeX << " x " << blockSizeY );
 
