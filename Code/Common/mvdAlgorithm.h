@@ -263,7 +263,7 @@ AppendToQStringList( QStringList& qsl, const StringVector& sv )
        it!=sv.end();
        ++ it )
     {
-    qsl.append( QString::fromStdString( *it  ) );
+    qsl.append( QString(it->c_str()) );
     }
 
   return qsl;
