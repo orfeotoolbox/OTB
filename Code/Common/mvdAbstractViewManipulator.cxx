@@ -60,6 +60,8 @@ AbstractViewManipulator
   m_MouseContext(),
   m_IsotropicZoom( 1.0 )
 {
+  m_ViewportOrigin.Fill(0);
+  m_Spacing.Fill(1.);
 }
 
 /*******************************************************************************/
