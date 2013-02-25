@@ -75,6 +75,10 @@ public:
   itkSetMacro(DatasetNumber, unsigned int);
   itkGetMacro(DatasetNumber, unsigned int);
 
+
+  /** Set/Get the overview count of the file (0 = one full resolution)*/
+  itkGetMacro(NumberOfOverviews, unsigned int);
+
   /** Set/Get the options */
   void SetOptions(const GDALCreationOptionsType& opts)
   {
