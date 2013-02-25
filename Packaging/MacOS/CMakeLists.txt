@@ -10,5 +10,13 @@ install(DIRECTORY $ENV{GDAL_DATA}
         DESTINATION share
         COMPONENT Resources)
 
+install(FILES ${QT_TRANSLATIONS_FILES}
+        DESTINATION  share/qt4/translations
+        COMPONENT Resources)
+
+install(FILES qt.conf
+        DESTINATION  bin
+        COMPONENT Resources)
+
 install(SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake
         COMPONENT Runtime)
