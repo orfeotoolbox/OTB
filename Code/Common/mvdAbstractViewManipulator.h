@@ -84,7 +84,7 @@ class Monteverdi2_EXPORT AbstractViewManipulator :
 // Public methods.
 public:
 
-  /** \rrief Constructor. */
+  /** \brief Constructor. */
   AbstractViewManipulator( QObject* parent =NULL );
 
   /** \brief Destructor. */

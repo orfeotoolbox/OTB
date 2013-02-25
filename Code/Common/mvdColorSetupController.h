@@ -109,7 +109,7 @@ signals:
    * controllers such as ColorDynamicsController.
    *
    * \param channel The RGB channel for which the band-index has changed.
-   * \param index The new band-index of the RGB channel.
+   * \param band The new band-index of the RGB channel.
    */
   void RgbChannelIndexChanged( RgbaChannel channel, int band );
 
@@ -157,8 +157,7 @@ private:
 // Slots.
 private slots:
   /**
-   * \brief Slot called when the current index of a RGB channel of the
-   * controlled widget has changed.
+   * \brief Slot called when the current index of a RGB channel of the controlled widget has changed.
    *
    * \param channel The RGB video-channel for which the current
    * band-index has changed.

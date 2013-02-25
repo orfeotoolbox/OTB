@@ -105,7 +105,7 @@ public slots:
    * changed.
    *
    * \param channel The RGB channel for which the band-index has changed.
-   * \param index The new band-index of the RGB channel.
+   * \param band The new band-index of the RGB channel.
    */
   void OnRgbChannelIndexChanged( RgbaChannel channel, int band );
 
@@ -215,7 +215,7 @@ private slots:
    * changed.
    * \param intensity The new intensity value.
    */
-  void OnHighIntensityChanged( RgbaChannel channel, double quantile );
+  void OnHighIntensityChanged( RgbaChannel channel, double intensity );
 
   /**
    * \brief Slot called when the reset intensities button has been
