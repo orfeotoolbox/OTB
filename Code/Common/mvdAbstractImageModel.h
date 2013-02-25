@@ -149,6 +149,7 @@ public:
 //
 // Signals.
 signals:
+  void SpacingChanged( const SpacingType& );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -261,6 +262,9 @@ AbstractImageModel
     {
     throw;
     }
+
+  // if everything ok emit the new spacing of the current lod
+  emit SpacingChanged(ToImageBase()->GetSpacing());
 }
 
 /*****************************************************************************/
