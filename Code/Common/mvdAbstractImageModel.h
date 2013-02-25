@@ -134,6 +134,9 @@ public:
   /** */
   inline HistogramModel* GetHistogramModel();
 
+  /** */
+  inline SpacingType GetSpacing();
+
   /**
    * Get a smart-pointer to the current LOD image-base.
    */
@@ -304,6 +307,15 @@ AbstractImageModel
       ToImageBase()->GetMetaDataDictionary()
     )
   );
+}
+
+/*****************************************************************************/
+inline
+SpacingType 
+AbstractImageModel
+::GetSpacing()
+{
+  return ToImageBase()->GetSpacing();
 }
 
 } // end namespace 'mvd'
