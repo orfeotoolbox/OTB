@@ -1,0 +1,12 @@
+
+[Desktop Entry]
+Type=Application
+Name=Monteverdi
+GenericName=Image processing workshop
+Comment=Monteverdi, an image processing workshop based on OTB
+TryExec=/usr/bin/monteverdi
+Exec=/usr/bin/monteverdi
+Terminal=false
+Icon=monteverdi
+Categories=Education;Science;ImageProcessing;
+Name[fr_FR]=monteverdi2.desktop
