@@ -181,7 +181,7 @@ void GDALOverviewsBuilder::Update()
         {
         std::cout << ovwlist[i] << ",";
         }
-    std::cout << std::endl;*/
+    std::cout << std::endl; */
 
     std::string resampMethod;
     this->GetGDALResamplingMethod(resampMethod);
@@ -204,7 +204,7 @@ int GDALOverviewsBuilder::UpdateGDALProgress(double dfComplete, const char *pszM
                                                void * pProgressArg)
 {
   GDALOverviewsBuilder* _this = (GDALOverviewsBuilder*)pProgressArg;
-  _this->UpdateProgress(dfComplete) ;
+  _this->UpdateProgress(dfComplete);
   return 1;
 }
 
