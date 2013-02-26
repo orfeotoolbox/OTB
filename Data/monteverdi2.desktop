@@ -1,12 +1,13 @@
-
 [Desktop Entry]
 Type=Application
 Name=Monteverdi
-GenericName=Image processing workshop
-Comment=Monteverdi, an image processing workshop based on OTB
-TryExec=/usr/bin/monteverdi
-Exec=/usr/bin/monteverdi
+GenericName=Image processing
+GenericName[fr]=
+Comment=Monteverdi, an image processing based on OTB
+TryExec=/usr/bin/monteverdi2
+Exec=/usr/bin/monteverdi2 %F
 Terminal=false
+StartupNotify=false
 Icon=monteverdi
-Categories=Education;Science;ImageProcessing;
-Name[fr_FR]=monteverdi2.desktop
+Categories=Education;Science;ImageProcessing;Geography;Qt;
+MimeType=image/tiff;image/jpeg;image/jp2;application/x-esri-shape;
