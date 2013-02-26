@@ -103,8 +103,8 @@ MainWindow
 
   // Connect centralWidget manipulator to Ql renderer when viewportRegionChanged
   QObject::connect(
-    imageViewManipulator, SIGNAL( ViewportRegionRepresentationChanged(const ImageRegionType&) ), 
-    m_QLModelRenderer, SLOT( OnViewportRegionRepresentationChanged(const ImageRegionType&) )
+    imageViewManipulator, SIGNAL( ViewportRegionRepresentationChanged(const PointType&, const PointType&) ), 
+    m_QLModelRenderer, SLOT( OnViewportRegionRepresentationChanged(const PointType&, const PointType&) )
     );
 
   // Connect ql mousePressEventpressed to centralWidget manipulator

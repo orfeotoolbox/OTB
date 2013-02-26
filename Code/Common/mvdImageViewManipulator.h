@@ -128,7 +128,7 @@ public slots:
 //
 // Signals.
 signals:
-  void ViewportRegionRepresentationChanged(const ImageRegionType&);
+  void ViewportRegionRepresentationChanged(const PointType&, const PointType&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -164,7 +164,7 @@ private:
   void Zoom(const double scale);
 
   /** */
-  ImageRegionType RegionToPhysicalRegion(const ImageRegionType& region);
+  void PropagateViewportRegionChanged(const ImageRegionType& region);
 
 //
 // Private attributes.

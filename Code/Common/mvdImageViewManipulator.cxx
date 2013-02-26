@@ -134,7 +134,7 @@ ImageViewManipulator
   this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
 
   // tell the quicklook renderer to update the red square rendering
-  emit ViewportRegionRepresentationChanged(RegionToPhysicalRegion(currentRegion));  
+  this->PropagateViewportRegionChanged(currentRegion);  
 }
 
 /******************************************************************************/
@@ -239,7 +239,7 @@ ImageViewManipulator
     m_IsotropicZoom *= scale;
 
     // tell the quicklook renderer to update the red square rendering
-    emit ViewportRegionRepresentationChanged(RegionToPhysicalRegion(currentRegion)); 
+    this->PropagateViewportRegionChanged(currentRegion); 
     }
 }
 
@@ -351,6 +351,25 @@ ImageViewManipulator
 }
 
 /*****************************************************************************/
+void
+ImageViewManipulator
+::PropagateViewportRegionChanged(const ImageRegionType& region)
+{
+  // the region computed in this class are relative to the lod 0 of
+  // the input image. We need then, to transform the indicies to
+  // physical points, the native spacing (lod 0) 
+  // of the method
+  PointType ul, lr;
+  ul[0] = (double)(region.GetIndex()[0]) * m_NativeSpacing[0];
+  ul[1] = (double)(region.GetIndex()[1]) * vcl_abs(m_NativeSpacing[1]);
+
+  lr[0] = (double)( region.GetIndex()[0] + region.GetSize()[0] ) * m_NativeSpacing[0];
+  lr[1] = (double)( region.GetIndex()[1] + region.GetSize()[1] ) * vcl_abs(m_NativeSpacing[1]);
+
+  emit ViewportRegionRepresentationChanged(ul, lr);
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 
@@ -360,6 +379,10 @@ void ImageViewManipulator
 {
   // update the spacing
   SetSpacing(spacing);
+
+  // store the native spacing too (for physical coordinate
+  // computations) 
+  m_NativeSpacing = spacing;
 
   // set back the zoom to 1
   m_IsotropicZoom = 1.;
@@ -393,32 +416,6 @@ void ImageViewManipulator
 }
 
 /*****************************************************************************/
-ImageRegionType
-ImageViewManipulator
-::RegionToPhysicalRegion(const ImageRegionType& region)
-{
-  ImageRegionType   physicalRegion;
-  ImageRegionType::SizeType  size;
-  ImageRegionType::IndexType origin, lr;
-
-  //std::cout <<"---- RegionToPhysicalRegion -- GetSpacing "<< GetSpacing() << std::endl;
-  
-  origin[0] = region.GetIndex()[0] * vcl_abs(GetSpacing()[0]);
-  origin[1] = region.GetIndex()[1] * vcl_abs(GetSpacing()[1]);
-
-  lr[0] = (region.GetIndex()[0] + region.GetSize()[0] - 1) * vcl_abs(GetSpacing()[0]);
-  lr[1] = (region.GetIndex()[1] + region.GetSize()[1] - 1) * vcl_abs(GetSpacing()[1]);
-
-  size[0]   = vcl_abs(lr[0] - origin[0]);
-  size[1]   = vcl_abs(lr[1] - origin[1]);
-
-  physicalRegion.SetIndex(origin);
-  physicalRegion.SetSize(size);
-
-  return physicalRegion;
-}
-
-/*****************************************************************************/
 void ImageViewManipulator
 ::OnViewportRegionChanged(double Xpc, double Ypc)
 {
@@ -435,7 +432,7 @@ void ImageViewManipulator
   this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
 
   // tell the quicklook renderer to update the red square rendering
-  emit ViewportRegionRepresentationChanged(RegionToPhysicalRegion(currentRegion));  
+  this->PropagateViewportRegionChanged(currentRegion);  
   
   // force repaintGL
   qobject_cast< QWidget* >( parent() )->update();
