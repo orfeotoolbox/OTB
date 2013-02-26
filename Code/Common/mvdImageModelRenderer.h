@@ -113,7 +113,8 @@ private:
   unsigned char *   m_Buffer;
   bool              m_IsMoving;
 
-  ImageRegionType::IndexType   m_PreviousOrigin;
+  double                       m_PreviousOriginX;
+  double                       m_PreviousOriginY;
   double                       m_MovingOriginX;
   double                       m_MovingOriginY;
 

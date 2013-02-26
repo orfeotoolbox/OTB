@@ -53,7 +53,8 @@ ImageModelRenderer
   AbstractModelRenderer( parent ),
   m_IsMoving(false)
 {
-  m_PreviousOrigin.Fill(0);
+  m_PreviousOriginX = 0.;
+  m_PreviousOriginY = 0.;
 }
 
 /*****************************************************************************/
@@ -81,6 +82,9 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
   CountType bestLod = viModel->ComputeBestLevelOfDetail(context.m_IsotropicZoom);
 
   // If it is not the original level of detail recompute the region to request
+  double currentResolutionFactorX = 1.;
+  double currentResolutionFactorY = 1.;
+
   if (bestLod != 0)
     {
     ImageRegionType::SizeType  scaledSize;
@@ -88,6 +92,9 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
 
     scaledSize[0] = region.GetSize()[0]/(1<<bestLod);
     scaledSize[1] = region.GetSize()[1]/(1<<bestLod);
+
+    currentResolutionFactorX = static_cast<double>(region.GetSize()[0])/static_cast<double>(scaledSize[0]);
+    currentResolutionFactorY = static_cast<double>(region.GetSize()[1])/static_cast<double>(scaledSize[1]);
 
     scaledOrigin[0] = region.GetIndex()[0]/(1<<bestLod);
     scaledOrigin[1] = region.GetIndex()[1]/(1<<bestLod);
@@ -106,12 +113,10 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
                                         context.m_ForceRefresh);
     }
 
-  // current resolution
-  double currentResolutionFactor = 1 << bestLod;
-
   // final zoom factor : take into account the current resolution of
   // the file and the wheel zoom
-  double finalZoomFactor = context.m_IsotropicZoom * currentResolutionFactor; 
+  double finalZoomFactorX = context.m_IsotropicZoom * currentResolutionFactorX; 
+  double finalZoomFactorY = context.m_IsotropicZoom * currentResolutionFactorY;
 
   // if buffer not null do the rendering
   if (m_Buffer != NULL)
@@ -125,15 +130,15 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       {
       // originX
       if ( context.m_WidgetWidth  > 
-           scaledRegion.GetSize()[0] * finalZoomFactor  )
+           scaledRegion.GetSize()[0] * finalZoomFactorX  )
         {
-        originX = (static_cast<double>(context.m_WidgetWidth) - static_cast<double>(scaledRegion.GetSize()[0]) * finalZoomFactor)/2;
+        originX = (static_cast<double>(context.m_WidgetWidth) - static_cast<double>(scaledRegion.GetSize()[0]) * finalZoomFactorX)/2;
         }
       // originY
       if (context.m_WidgetHeight >
-          scaledRegion.GetSize()[1] * finalZoomFactor)
+          scaledRegion.GetSize()[1] * finalZoomFactorY)
         {
-        originY = (static_cast<double>(context.m_WidgetHeight) - static_cast<double>(scaledRegion.GetSize()[1]) * finalZoomFactor)/2;
+        originY = (static_cast<double>(context.m_WidgetHeight) - static_cast<double>(scaledRegion.GetSize()[1]) * finalZoomFactorY)/2;
         }
 
       // when mouse is released, initialize the moving origin with the
@@ -146,12 +151,12 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
 
     if (m_IsMoving)// if moving, only displace the rectangle (Gl_QUADS) origin
       {
-      double dx = static_cast<double>(m_PreviousOrigin[0]) - static_cast<double>(scaledRegion.GetIndex()[0]) * finalZoomFactor;
-      double dy =  static_cast<double>(m_PreviousOrigin[1]) - static_cast<double>(scaledRegion.GetIndex()[1]) * finalZoomFactor;
-      
+      double dx = m_PreviousOriginX - static_cast<double>(scaledRegion.GetIndex()[0]) * finalZoomFactorX;
+      double dy = m_PreviousOriginY - static_cast<double>(scaledRegion.GetIndex()[1]) * finalZoomFactorY;
+
       // incremenet the moving origin with the computed delta
-      m_MovingOriginX += dx;
-      m_MovingOriginY -= dy;
+      m_MovingOriginX+=dx;
+      m_MovingOriginY-=dy;
       
       // set the quads origin to the moving origin
       originX =  m_MovingOriginX;
@@ -159,8 +164,8 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       }
 
     // real size of the region to be rendered
-    double sizeX  = static_cast<double>(scaledRegion.GetSize()[0]) * finalZoomFactor;
-    double sizeY  = static_cast<double>(scaledRegion.GetSize()[1]) * finalZoomFactor;
+    double sizeX  = static_cast<double>(scaledRegion.GetSize()[0]) * finalZoomFactorX;
+    double sizeY  = static_cast<double>(scaledRegion.GetSize()[1]) * finalZoomFactorY;
 
     // needed cause RGB not RGBA rendering. 
     glPixelStorei(GL_UNPACK_ALIGNMENT,1); 
@@ -198,8 +203,8 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     }
 
   // save the previous scaled region origin
-  m_PreviousOrigin[0] = scaledRegion.GetIndex(0) * finalZoomFactor ;
-  m_PreviousOrigin[1] = scaledRegion.GetIndex(1) * finalZoomFactor ;
+  m_PreviousOriginX = static_cast<double>(scaledRegion.GetIndex()[0]) * finalZoomFactorX;
+  m_PreviousOriginY = static_cast<double>(scaledRegion.GetIndex()[1]) * finalZoomFactorY;
 }
 
 /*****************************************************************************/
