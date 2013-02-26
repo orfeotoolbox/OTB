@@ -76,68 +76,30 @@ QuicklookModel
   //
   // get the parent vector image model
   VectorImageModel * viModel = qobject_cast< VectorImageModel* >( parent() );
-  
-  // 
-  // if multi-resolution file : write the decompressed resolution to
-  // the disk and reload it via VectorImage::SetFilename(....)
-  if ( viModel->GetNbLod() > 1 )
+
+  // get the filename and use it to compose the quicklook filename
+  const char* filename = static_cast<const char*>(viModel->GetFilename().toAscii());
+    
+  std::string fnameNoExt = itksys::SystemTools::GetFilenameWithoutExtension( filename );    
+  std::string path  = itksys::SystemTools::GetFilenamePath( filename );
+  std::string ext   = itksys::SystemTools::GetFilenameExtension( filename );
+
+  std::ostringstream qlfname;
+  qlfname << path<<"/"<<fnameNoExt<<"_quicklook.tif";
+
+  // check if the file exists
+  if (!itksys::SystemTools::FileExists(qlfname.str().c_str()))
     {
-    // get the filename and use it to compose the quicklook filename
-    const char* filename = static_cast<const char*>(viModel->GetFilename().toAscii());
-    
-    std::string fnameNoExt = itksys::SystemTools::GetFilenameWithoutExtension( filename );    
-    std::string path  = itksys::SystemTools::GetFilenamePath( filename );
-    std::string ext   = itksys::SystemTools::GetFilenameExtension( filename );
-
-    std::ostringstream qlfname;
-    qlfname << path<<"/"<<fnameNoExt<<"_quicklook.tif";
-
-    // check if the file exists
-    if (!itksys::SystemTools::FileExists(qlfname.str().c_str()))
-      {
-      // write the file on the disk
-      VectorImageFileWriterType::Pointer writer = VectorImageFileWriterType::New();
-      writer->SetFileName(qlfname.str());
-      writer->SetInput(viModel->ToImage());
-      writer->Update();
-      }
-    
-    // reload the quicklook
-    QString  qlname(qlfname.str().c_str());
-    SetFilename(qlname, 512, 512);
+    // write the file on the disk
+    VectorImageFileWriterType::Pointer writer = VectorImageFileWriterType::New();
+    writer->SetFileName(qlfname.str());
+    writer->SetInput(viModel->ToImage());
+    writer->Update();
     }
-  else // if not multi-res, shrink the native image
-    {
-    // Compute the shrink factor to have 512,512 quicklook size
-    SizeType  largestSize =  viModel->GetNativeLargestRegion().GetSize();
-
-    double factorX = (double)(largestSize[0])/512.;
-    double factorY = (double)(largestSize[1])/512.;
-    double factor = std::max(factorX, factorY);
-
-    // if the image dimensions are lower than 512 in each dimension, 
-    // no need to shrink
-    if (factor - 1.0 < 0.000000001)
-      {
-      m_Image = viModel->ToImage();
-      }
-    else
-      {
-      // shrink to get a quicklook
-      typedef otb::StreamingShrinkImageFilter<SourceImageType, 
-                                              SourceImageType>      ShrinkFilterType;
-
-      ShrinkFilterType::Pointer shrinker = ShrinkFilterType::New();
-      shrinker->SetInput(viModel->ToImage());
-      shrinker->SetShrinkFactor((unsigned int)(factor + 0.5));
-      shrinker->Update();
     
-      m_Image = shrinker->GetOutput();
-      }
-
-    // Remember native largest region.
-    m_NativeLargestRegion = m_Image->GetLargestPossibleRegion();
-    }
+  // reload the quicklook
+  QString  qlname(qlfname.str().c_str());
+  SetFilename(qlname, 512, 512);
 
   // Initialize RgbaImageModel.
   InitializeRgbaPipeline();
