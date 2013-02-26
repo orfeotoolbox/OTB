@@ -51,11 +51,12 @@ namespace mvd
 ImageModelRenderer
 ::ImageModelRenderer( QObject* parent ) :
   AbstractModelRenderer( parent ),
-  m_IsMoving(false),
-  m_CentralViewRegion(ImageRegionType())
+  m_IsMoving(false)
 {
   m_PreviousOriginX = 0.;
   m_PreviousOriginY = 0.;
+  m_SquarePointUL.Fill(0.);
+  m_SquarePointLR.Fill(0.);
 }
 
 /*****************************************************************************/
@@ -73,7 +74,7 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
   // the VectorImageModel used for the rendering
   VectorImageModel* viModel = qobject_cast< VectorImageModel * >(
     const_cast< AbstractImageModel* >( context.m_ImageModel )
-  );
+    );
   assert( viModel );
 
   // the region of the image to be rendered
@@ -132,13 +133,15 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       if ( context.m_WidgetWidth  > 
            scaledRegion.GetSize()[0] * finalZoomFactorX  )
         {
-        originX = (static_cast<double>(context.m_WidgetWidth) - static_cast<double>(scaledRegion.GetSize()[0]) * finalZoomFactorX)/2;
+        originX = (static_cast<double>(context.m_WidgetWidth) - 
+                   static_cast<double>(scaledRegion.GetSize()[0]) * finalZoomFactorX)/2;
         }
       // originY
       if (context.m_WidgetHeight >
           scaledRegion.GetSize()[1] * finalZoomFactorY)
         {
-        originY = (static_cast<double>(context.m_WidgetHeight) - static_cast<double>(scaledRegion.GetSize()[1]) * finalZoomFactorY)/2;
+        originY = (static_cast<double>(context.m_WidgetHeight) - 
+                   static_cast<double>(scaledRegion.GetSize()[1]) * finalZoomFactorY)/2;
         }
 
       // when mouse is released, initialize the moving origin with the
@@ -147,7 +150,7 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       // anymore. 
       m_MovingOriginX = originX;
       m_MovingOriginY = originY;
-    }
+      }
 
     if (m_IsMoving)// if moving, only displace the rectangle (Gl_QUADS) origin
       {
@@ -190,37 +193,29 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       glTexCoord2f (1.0, 0.0); glVertex2f(originX + sizeX, originY);
       glTexCoord2f (0.0, 0.0); glVertex2f(originX, originY);
     glEnd ();
-    
+
     // free texture
     glDeleteTextures(1, &texture);
     glDisable(GL_TEXTURE_2D);
 
     // 
-    // render the central viewport representation in the quicklook as a red
-    // square
-    if (m_CentralViewRegion != ImageRegionType())
+    // translate the corner of the red square in the ql widget
+    // coordinates 
+    PointType nullPoint;
+    nullPoint.Fill(0.);
+    if ( m_SquarePointUL != nullPoint || m_SquarePointLR != nullPoint )
       {
-      // Get the input region points
-      //std::cout <<"m_CentralView "<< m_CentralViewRegion << std::endl;
-      IndexType ip1, ip2;
-      ip1[0] = m_CentralViewRegion.GetIndex()[0] + 1;
-      ip1[1] = m_CentralViewRegion.GetIndex()[1] + 1;
-      ip2[0] = m_CentralViewRegion.GetIndex()[0] + m_CentralViewRegion.GetSize()[0] - 1;
-      ip2[1] = m_CentralViewRegion.GetIndex()[1] + m_CentralViewRegion.GetSize()[1] - 1;
-      
-      // //
-      // Physical point in ql system 
-      PointType sp1,sp2;
-      sp1[0] = ip1[0] * finalZoomFactor / vcl_abs(viModel->GetSpacing()[0]) + originX;
-      sp1[1] = ip1[1] * finalZoomFactor / vcl_abs(viModel->GetSpacing()[1]) + originY;
+      //
+      // physical point to index (in ql)
+      PointType sp1, sp2;
+      sp1[0] = m_SquarePointUL[0] * finalZoomFactorX / vcl_abs(viModel->GetSpacing()[0]) + originX;
+      sp1[1] = m_SquarePointUL[1] * finalZoomFactorY / vcl_abs(viModel->GetSpacing()[1]) + originY;
       sp1[1] = context.m_WidgetHeight - sp1[1]; // y axis is flipped
 
-      sp2[0] = ip2[0] * finalZoomFactor / vcl_abs(viModel->GetSpacing()[0]) + originX; 
-      sp2[1] = ip2[1] * finalZoomFactor / vcl_abs(viModel->GetSpacing()[1]) + originY; 
+      sp2[0] = m_SquarePointLR[0] * finalZoomFactorX / vcl_abs(viModel->GetSpacing()[0]) + originX; 
+      sp2[1] = m_SquarePointLR[1] * finalZoomFactorY / vcl_abs(viModel->GetSpacing()[1]) + originY; 
       sp2[1] = context.m_WidgetHeight - sp2[1]; // y axis is flipped
 
-      //std::cout <<"sp1 "<< sp1 << "  && sp2 " << sp2<< std::endl;
-      
       // draw the red square
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -240,7 +235,6 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     IndexType origin;
     origin[0]  = originX;
     origin[1]  = originY;
-    std::cout <<"ImageModelRenderer : "<< origin<< std::endl;
     emit ViewportOriginChanged(origin);
     }
 
@@ -253,9 +247,10 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void ImageModelRenderer
-::OnViewportRegionRepresentationChanged(const ImageRegionType& region)
+::OnViewportRegionRepresentationChanged(const PointType& ul, const PointType& lr)
 {
-  m_CentralViewRegion = region;
+  m_SquarePointUL = ul;
+  m_SquarePointLR = lr;
 }
 /*****************************************************************************/
 

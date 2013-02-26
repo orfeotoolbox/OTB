@@ -91,7 +91,7 @@ public slots:
     m_IsMoving = false;
   }
 
-  void OnViewportRegionRepresentationChanged(const ImageRegionType& region);
+  void OnViewportRegionRepresentationChanged(const PointType& ul, const PointType& lr);
 
 //
 // SIGNALS.
@@ -122,7 +122,8 @@ private:
 
   // 
   // used for quicklook renderer
-  ImageRegionType              m_CentralViewRegion;
+  PointType                    m_SquarePointUL;
+  PointType                    m_SquarePointLR;
 
 //
 // SLOTS.
