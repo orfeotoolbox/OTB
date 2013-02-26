@@ -91,13 +91,22 @@ VectorImageModel
   // 1. store the input filename
   m_Filename = filename;
 
-  //
-  // 2. Setup file-reader.
-  this->SetupCurrentLodImage(w, h);
+  // Get the largest possible region of the image
+  m_ImageFileReader = DefaultImageFileReaderType::New();
+
+  m_ImageFileReader->SetFileName( m_Filename.toAscii().constData() );
+  m_ImageFileReader->UpdateOutputInformation();
+
+  // Retrieve the list of Lod from file
+  m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
+
+  // Remember native largest region.
+  m_NativeLargestRegion =
+      m_ImageFileReader->GetOutput()->GetLargestPossibleRegion();
 
   //
-  // 3. Settings initialization will be done in the BuildModel()
-  // process of the AbstractModel.
+  // 2. Setup file-reader.
+  SetupCurrentLodImage(w, h);
 }
 
 /*******************************************************************************/
@@ -520,22 +529,12 @@ void
 VectorImageModel
 ::SetupCurrentLodImage( int width, int height )
 {
-  // Get the largest possible region of the image
-  m_ImageFileReader = DefaultImageFileReaderType::New() ;
-
-  m_ImageFileReader->SetFileName( static_cast<const char*>(m_Filename.toAscii()) );
-  m_ImageFileReader->UpdateOutputInformation();
-  // Retrieve the list of Lod from file
-  m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
-
-  // Get native image largest region, which is LOD level zero.
-  ImageRegionType nativeLargestRegion =
-      m_ImageFileReader->GetOutput()->GetLargestPossibleRegion();
-
   CountType bestInitialLod = 0;
   // Compute the initial zoom factor and the best LOD.
   if( width>0 && height>0 )
     {
+    ImageRegionType nativeLargestRegion( GetNativeLargestRegion() );
+
     double factorX =
       double( width ) / double( nativeLargestRegion.GetSize()[ 0 ] );
 
@@ -549,9 +548,6 @@ VectorImageModel
     }
 
     this->SetCurrentLod( bestInitialLod );
-
-  // Remember native largest region.
-  m_NativeLargestRegion = nativeLargestRegion;
 }
 
 /*******************************************************************************/

@@ -76,7 +76,7 @@ Application::LoadDatasetModel( const QString& imageFilename,
 
   try
     {
-    if( !model->SetContent( path, name ) )
+    if( !model->SetContent( path, name ) || true )
       {
       // Import image from filename given (w; h) size to choose
       // best-fit resolution.
