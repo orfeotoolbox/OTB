@@ -219,6 +219,9 @@ protected:
   /** */
   SpacingType  m_Spacing;
 
+  /** */
+  SpacingType  m_NativeSpacing;
+
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //

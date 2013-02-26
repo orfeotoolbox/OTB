@@ -206,8 +206,8 @@ GLImageWidget
   if( model!=NULL )
     {
     emit ModelImageRegionChanged(
-      model->GetNativeLargestRegion(),
-      model->ToImageBase()->GetSpacing()
+      model->GetNativeLargestRegion(),      
+      model->GetNativeSpacing()
       );
     }
 }
