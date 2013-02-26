@@ -18,16 +18,39 @@
 
 #include "otbGDALDriverManagerWrapper.h"
 #include "otbGDALImageIO.h"
-using namespace otb::gdal;
+#include "otbStandardOneLineFilterWatcher.h"
 
-int otbGDALBuildOverviews(int argc, char* argv[])
+using namespace otb;
+
+int otbGDALOverviewsBuilderNew(int argc, char* argv[])
+{
+  typedef otb::GDALOverviewsBuilder GDALOverviewsBuilderType;
+  GDALOverviewsBuilderType::Pointer object = GDALOverviewsBuilderType::New();
+
+  std::cout << object << std::endl;
+
+  return EXIT_SUCCESS;
+}
+
+int otbGDALOverviewsBuilder(int argc, char* argv[])
 {
   const char * inputFilename  = argv[1];
   int nbResolution = atoi(argv[2]);
   std::string filename(inputFilename);
 
-  if (! GDALBuildOverviewsFromResolution(filename,static_cast<unsigned int>(nbResolution)) )
-    return EXIT_FAILURE;
+  typedef otb::GDALOverviewsBuilder FilterType;
+  FilterType::Pointer filter = FilterType::New();
+
+  otb::GDALResamplingType resamp = AVERAGE;
+
+  filter->SetInputFileName(filename);
+  filter->SetNbOfResolutions(nbResolution);
+  filter->SetResamplingMethod(resamp);
+
+  {
+    StandardOneLineFilterWatcher watcher(filter,"Overviews creation");
+    filter->Update();
+  }
 
   otb::GDALImageIO::Pointer io = otb::GDALImageIO::New();
   io->SetFileName(inputFilename);

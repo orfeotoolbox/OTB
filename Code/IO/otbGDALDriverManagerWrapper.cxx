@@ -17,6 +17,9 @@
 =========================================================================*/
 #include "otbGDALDriverManagerWrapper.h"
 #include <vector>
+#include "otbMacro.h"
+#include "otbSystem.h"
+#include "itkMacro.h"
 
 namespace otb
 {
@@ -106,45 +109,103 @@ GDALDriverManagerWrapper::GetDriverByName( std::string driverShortName ) const
   return GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());
 }
 
-namespace gdal {
-bool GDALBuildOverviewsFromResolution(  std::string inputFilename,
-                                        unsigned int nbResolution,
-                                        const char* resamplingMethod,
-                                        GDALProgressFunc pfnProgress,
-                                        void* pProgressData)
+GDALOverviewsBuilder::GDALOverviewsBuilder()
+{
+  m_NbOfResolutions = 1;
+  m_ResamplingMethod = NEAREST;
+  Superclass::SetNumberOfRequiredInputs(0);
+  Superclass::SetNumberOfRequiredOutputs(0);
+}
+
+void GDALOverviewsBuilder::
+PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os,indent);
+
+  os << indent << "Input Filename: " << m_InputFileName << std::endl;
+  os << indent << "Number of Resolution requested: " << m_NbOfResolutions << std::endl;
+  os << indent << "Resampling method: " << m_ResamplingMethod << std::endl;
+}
+
+void GDALOverviewsBuilder::GetGDALResamplingMethod(std::string &resamplingMethod)
+{
+  resamplingMethod.clear();
+  switch(m_ResamplingMethod)
+  {
+    case NONE:
+      resamplingMethod = "NONE";
+      break;
+    case NEAREST:
+      resamplingMethod = "NEAREST";
+      break;
+    case GAUSS:
+      resamplingMethod = "GAUSS";
+      break;
+    case CUBIC:
+      resamplingMethod = "CUBIC";
+      break;
+    case AVERAGE:
+      resamplingMethod = "AVERAGE";
+      break;
+    case MODE:
+      resamplingMethod = "MODE";
+      break;
+    case AVERAGE_MAGPHASE:
+      resamplingMethod = "AVERAGE_MAGPHASE";
+      break;
+    default:
+      resamplingMethod = "NONE";
+      break;
+  }
+}
+
+void GDALOverviewsBuilder::Update()
 {
   typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;
-  GDALDatasetWrapperPointer wrappedDataset =
-      GDALDriverManagerWrapper::GetInstance().Open(inputFilename);
-  if (wrappedDataset.IsNull())
-    return false;
-
-  // Build the overviews list from nb of resolution desired
-  std::vector<int> ovwlist;
-  for (unsigned int i = 1; i < nbResolution; i++)
-    {
-    ovwlist.push_back(1<<i);
-    }
-
-  /*std::cout << "list of overviews level= ";
-  for (unsigned int i = 0; i < ovwlist.size(); i++)
+    GDALDatasetWrapperPointer wrappedDataset =
+        GDALDriverManagerWrapper::GetInstance().Open(m_InputFileName);
+    if (wrappedDataset.IsNull())
       {
-      std::cout << ovwlist[i] << ",";
+      itkExceptionMacro(<< "Error while opening the file "<< m_InputFileName.c_str() << ".");
       }
-  std::cout << std::endl; */
 
-  CPLErr lCrGdal = wrappedDataset->GetDataSet()->
-        BuildOverviews( resamplingMethod,
-                        static_cast<int>(nbResolution-1),
-                        ovwlist.data(),
-                        0, // All bands
-                        NULL, // All bands
-                        pfnProgress,
-                        pProgressData);
-  if (lCrGdal == CE_Failure)
-    return false;
+    // Build the overviews list from nb of resolution desired
+    std::vector<int> ovwlist;
+    for (unsigned int i = 1; i < m_NbOfResolutions; i++)
+      {
+      ovwlist.push_back(1<<i);
+      }
 
-  return true;
+    /*std::cout << "list of overviews level= ";
+    for (unsigned int i = 0; i < ovwlist.size(); i++)
+        {
+        std::cout << ovwlist[i] << ",";
+        }
+    std::cout << std::endl;*/
+
+    std::string resampMethod;
+    this->GetGDALResamplingMethod(resampMethod);
+
+    CPLErr lCrGdal = wrappedDataset->GetDataSet()->
+          BuildOverviews( resampMethod.c_str(),
+                          static_cast<int>(m_NbOfResolutions-1),
+                          &ovwlist.front(),
+                          0, // All bands
+                          NULL, // All bands
+                          (GDALProgressFunc)UpdateGDALProgress,
+                          this);
+    if (lCrGdal == CE_Failure)
+      {
+      itkExceptionMacro(<< "Error while building the GDAL overviews from " << m_InputFileName.c_str() << ".");
+      }
 }
-} // end namespace gdal
+
+int GDALOverviewsBuilder::UpdateGDALProgress(double dfComplete, const char *pszMessage,
+                                               void * pProgressArg)
+{
+  GDALOverviewsBuilder* _this = (GDALOverviewsBuilder*)pProgressArg;
+  _this->UpdateProgress(dfComplete) ;
+  return 1;
+}
+
 } // end namespace otb
