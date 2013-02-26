@@ -99,6 +99,12 @@ public:
    */
   inline ImageRegionType GetNativeLargestRegion() const;
 
+  /**
+   * \return The spacing of the native image, which
+   * is, by default, LOD level zero.
+   */
+  inline SpacingType GetNativeSpacing() const;
+
   /** */
   inline CountType GetNbComponents() const;
 
@@ -186,6 +192,11 @@ protected:
    * default, LOD level zero.
    */
   ImageRegionType m_NativeLargestRegion;
+  /**
+   * The spacing of the native image, which is, by
+   * default, LOD level zero.
+   */
+  SpacingType     m_NativeSpacing;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -285,6 +296,15 @@ AbstractImageModel
 ::GetNativeLargestRegion() const
 {
   return m_NativeLargestRegion;
+}
+
+/*****************************************************************************/
+inline
+SpacingType
+AbstractImageModel
+::GetNativeSpacing() const
+{
+  return m_NativeSpacing;
 }
 
 /*****************************************************************************/

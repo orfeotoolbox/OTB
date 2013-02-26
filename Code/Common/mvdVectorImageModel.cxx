@@ -104,6 +104,9 @@ VectorImageModel
   m_NativeLargestRegion =
       m_ImageFileReader->GetOutput()->GetLargestPossibleRegion();
 
+  // Remember native spacing
+  m_NativeSpacing = m_ImageFileReader->GetOutput()->GetSpacing();
+
   //
   // 2. Setup file-reader.
   SetupCurrentLodImage(w, h);
