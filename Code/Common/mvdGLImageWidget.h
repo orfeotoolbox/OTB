@@ -127,6 +127,7 @@ signals:
   void movingMouse();
   void releasingMouse();
   void ModelImageRegionChanged(const ImageRegionType &, const SpacingType&);
+  void CentralWidgetUpdated();
 
 //
 // Protected methods.

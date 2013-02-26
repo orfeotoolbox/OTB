@@ -273,6 +273,9 @@ GLImageWidget
 
   m_ImageViewManipulator->mousePressEvent(event);
   this->update();
+
+  // emited to update to force the ql widget (if any) to update
+  //emit CentralWidgetUpdated();
 }
 
 /*******************************************************************************/
@@ -280,7 +283,7 @@ void
 GLImageWidget
 ::mouseMoveEvent( QMouseEvent* event )
 {
-  // emit a signal
+  // emit a signal movingMouse to update the renderer status
   emit movingMouse();
 
   // handle this event
@@ -288,6 +291,9 @@ GLImageWidget
 
   // repaint the buffer
   this->update();
+
+  // emited to update to force the ql widget (if any) to update
+  emit CentralWidgetUpdated();
 }
 
 /*******************************************************************************/
@@ -299,11 +305,14 @@ GLImageWidget
   stdCursor.setShape(Qt::ArrowCursor) ;
   this->setCursor(stdCursor);
 
-  // emit a signal
+  // emit a signal releasingMouse to update the renderer status
   emit releasingMouse();
 
   // call paintGL
   this->update();
+
+  // emited to update to force the ql widget (if any) to update
+  emit CentralWidgetUpdated();
 }
 
 /*******************************************************************************/
@@ -311,13 +320,16 @@ void
 GLImageWidget
 ::wheelEvent( QWheelEvent* event )
 {
-  // emit a signal
+  // emit a signal releasingMouse to update the renderer status
   emit releasingMouse();
 
   m_ImageViewManipulator->wheelEvent(event);
 
   // repaint the buffer
   this->update();
+
+  // emited to update to force the ql widget (if any) to update
+  emit CentralWidgetUpdated();
 }
 
 /*******************************************************************************/
@@ -327,11 +339,14 @@ GLImageWidget
 {
   m_ImageViewManipulator->resizeEvent(event);
 
-  // emit a signal
+  // emit a signal releasingMouse to update the renderer status
   emit releasingMouse();
 
   this->resizeGL(event->size().width(), event->size().height());
   this->update();
+
+  // emited to update to force the ql widget (if any) to update
+  emit CentralWidgetUpdated();
 }
 
 /*******************************************************************************/
@@ -341,6 +356,9 @@ GLImageWidget
 {
   m_ImageViewManipulator->keyPressEvent(event);
   this->update();
+  
+  // emited to update to force the ql widget (if any) to update
+  emit CentralWidgetUpdated();
 }
 
 /*******************************************************************************/

@@ -450,29 +450,14 @@ MainWindow
     SLOT( OnSpacingChanged(const SpacingType&)  )
   );
 
-  // TODO : OLU uncomment those connects when ql and central view 
-  //        are well connected
-  // // TODO : where to do this
-  // QObject::connect(
-  //   // vectorImageModel->GetQuicklookModel(),
-  //   // TODO: Remove temporary hack by better design.
-  //   centralWidget(),
-  //   SIGNAL( movingMouse() ),
-  //   // to:
-  //   GetQuicklookDock()->widget(),
-  //   SLOT( updateGL()  )
-  // );
-  
-  // // TODO : where to do this
-  // QObject::connect(
-  //   // vectorImageModel->GetQuicklookModel(),
-  //   // TODO: Remove temporary hack by better design.
-  //   centralWidget(),
-  //   SIGNAL( releasingMouse() ),
-  //   // to:
-  //   GetQuicklookDock()->widget(),
-  //   SLOT( updateGL()  )
-  // );
+  // signal used to update the ql widget
+  QObject::connect(
+    centralWidget(),
+    SIGNAL( CentralWidgetUpdated() ),
+    // to:
+    GetQuicklookDock()->widget(),
+    SLOT( updateGL()  )
+  );
 
   /*
   // Connect newly selected model to UI controller.
