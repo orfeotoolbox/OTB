@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>211</width>
+    <width>244</width>
     <height>196</height>
    </rect>
   </property>
@@ -28,7 +28,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>&lt;p align=&quot;center&quot;&gt;File&lt;br/&gt;component&lt;br/&gt;&amp;darr;&lt;/p&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Image&lt;br/&gt;bands&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -46,7 +46,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Video RED</string>
+          <string> </string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -120,7 +120,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Video GREEN</string>
+          <string/>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -194,7 +194,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Video BLUE</string>
+          <string/>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
