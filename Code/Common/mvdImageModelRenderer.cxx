@@ -187,6 +187,10 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     glBindTexture (GL_TEXTURE_2D, texture);
 
     // rectangle where to draw
+
+    // Reset color before rendering
+    glColor3d(1.0f,1.0f,1.0f);
+
     glBegin (GL_QUADS);
       glTexCoord2f (0.0, 1.0); glVertex2f(originX, originY + sizeY);
       glTexCoord2f (1.0, 1.0); glVertex2f(originX + sizeX, originY + sizeY);
