@@ -85,7 +85,13 @@ QuicklookModel
   std::string ext   = itksys::SystemTools::GetFilenameExtension( filename );
 
   std::ostringstream qlfname;
-  qlfname << path<<"/"<<fnameNoExt<<"_quicklook.tif";
+
+  if(path!="")
+    {
+    qlfname << path<<"/";
+    }
+
+    qlfname<<fnameNoExt<<"_quicklook.tif";
 
   // check if the file exists
   if (!itksys::SystemTools::FileExists(qlfname.str().c_str()))
