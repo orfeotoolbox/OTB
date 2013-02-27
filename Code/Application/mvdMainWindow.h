@@ -63,6 +63,7 @@ namespace mvd
 // Internal class pre-declaration.
 class AbstractModel;
 class AbstractModelController;
+class ImageViewManipulator;
 class QuicklookViewManipulator;
 class ImageModelRenderer;
 
@@ -131,6 +132,9 @@ private:
   void InitializeDockWidgets();
 
   /** */
+  void InitializeStatusBarWidgets();
+
+  /** */
   QDockWidget*
     AddWidgetToDock( QWidget* widget,
 		     const QString& dockName,
@@ -174,6 +178,16 @@ private:
    * \brief uic generated.
    */
   Ui::MainWindow* m_UI;
+
+  /**
+   * \brief centralView manipulator.
+   */
+  ImageViewManipulator*   m_ImageViewManipulator;
+  
+  /**
+   * \brief centralView manipulator.
+   */
+  ImageModelRenderer*     m_ImageModelRenderer;
 
   /**
    * \brief ql manipulator.

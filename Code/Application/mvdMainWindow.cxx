@@ -84,37 +84,39 @@ MainWindow
   setWindowTitle( PROJECT_NAME );
 
   // instanciate the manipulator and the renderer relative to this widget
-  ImageViewManipulator* imageViewManipulator = new ImageViewManipulator();
-  ImageModelRenderer* imageModelRenderer = new ImageModelRenderer();
+  m_ImageViewManipulator = new ImageViewManipulator();
+  m_ImageModelRenderer   = new ImageModelRenderer();
 
   // set the GLImageWidget as the centralWidget in MainWindow.
   setCentralWidget(
     new GLImageWidget(
-      imageViewManipulator,
-      imageModelRenderer,
+      m_ImageViewManipulator,
+      m_ImageModelRenderer,
       this
     )
   );
-
-  // instanciate the Ql manipulator/renderer here to be able to connect
-  // its signals to the centralWidget manipulator slots
+  
+  // instanciate the Ql manipulator/renderer 
   m_QLModelRenderer   = new ImageModelRenderer();
   m_QLViewManipulator = new QuicklookViewManipulator();
 
   // Connect centralWidget manipulator to Ql renderer when viewportRegionChanged
   QObject::connect(
-    imageViewManipulator, SIGNAL( ViewportRegionRepresentationChanged(const PointType&, const PointType&) ), 
+    m_ImageViewManipulator, SIGNAL( ViewportRegionRepresentationChanged(const PointType&, const PointType&) ), 
     m_QLModelRenderer, SLOT( OnViewportRegionRepresentationChanged(const PointType&, const PointType&) )
     );
 
   // Connect ql mousePressEventpressed to centralWidget manipulator
   QObject::connect(
     m_QLViewManipulator, SIGNAL( ViewportRegionChanged(double, double) ), 
-    imageViewManipulator, SLOT( OnViewportRegionChanged(double, double) )
+    m_ImageViewManipulator, SLOT( OnViewportRegionChanged(double, double) )
   );
 
   // add the needed docks 
   InitializeDockWidgets();
+
+  // add needed widget to the status bar
+  InitializeStatusBarWidgets();
 
   // Connect Quit action of main menu to QApplication's quit() slot.
   QObject::connect(
@@ -145,11 +147,33 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
+::InitializeStatusBarWidgets()
+{
+  // Add a QLabel to the status bar to show pixel coordinates
+  QLabel * currentPixelLabel = new QLabel(statusBar());
+  currentPixelLabel->setAlignment(Qt::AlignCenter);
+  
+  // connect this widget to receive notification from 
+  // ImageViewManipulator
+  QObject::connect(
+    m_ImageViewManipulator, 
+    SIGNAL( CurrentCoordinatesUpdated(const QString& ) ),
+    currentPixelLabel,
+    SLOT( setText(const QString &) )
+  );
+  
+  statusBar()->addWidget(currentPixelLabel);
+}
+
+/*****************************************************************************/
+void
+MainWindow
 ::InitializeDockWidgets()
 {
   //
   // EXPERIMENTAL QUICKLOOK Widget.
   assert( qobject_cast< GLImageWidget* >( centralWidget() )!=NULL );
+
   GLImageWidget* qlWidget = new GLImageWidget(
     m_QLViewManipulator,
     m_QLModelRenderer,
