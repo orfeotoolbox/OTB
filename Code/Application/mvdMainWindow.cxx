@@ -368,6 +368,26 @@ MainWindow
     GetQuicklookDock()->widget(),
     SLOT( updateGL()  )
   );
+
+  //
+  // disconnect the vectorimage model spacing change (when zooming)
+  QObject::disconnect(
+    vectorImageModel,
+    SIGNAL( SpacingChanged(const SpacingType&) ),
+    // to:
+    centralWidget(),
+    SLOT( OnSpacingChanged(const SpacingType&)  )
+  );
+
+  // disconnect signal used to update the ql widget
+  QObject::disconnect(
+    centralWidget(),
+    SIGNAL( CentralWidgetUpdated() ),
+    // to:
+    GetQuicklookDock()->widget(),
+    SLOT( updateGL()  )
+  );
+
 }
 
 /*****************************************************************************/
@@ -458,17 +478,6 @@ MainWindow
     GetQuicklookDock()->widget(),
     SLOT( updateGL()  )
   );
-
-  /*
-  // Connect newly selected model to UI controller.
-  QObject::connect(
-    GetColorSetupDock()->widget(),
-    SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
-    // to:
-    vectorImageModel->GetQuicklookModel(),
-    SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
-  );
-  */
 }
 
 /*****************************************************************************/
