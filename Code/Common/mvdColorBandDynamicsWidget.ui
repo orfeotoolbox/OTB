@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>343</width>
+    <width>358</width>
     <height>103</height>
    </rect>
   </property>
@@ -128,6 +128,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Set the lower intensity threshold. Values bellow this threshold will be clamped to 0.</string>
+     </property>
      <property name="frame">
       <bool>true</bool>
      </property>
@@ -153,6 +156,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Set the higher intensity threshold. Values bellow this threshold will be clamped to 255.</string>
+     </property>
      <property name="frame">
       <bool>true</bool>
      </property>
@@ -177,6 +183,9 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Set the intensity low and high thresholds to the minimum and maximum values of the current band.</string>
      </property>
      <property name="text">
       <string>Min/Max</string>
@@ -210,6 +219,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Percentage of the band histogram beginning clipped to obtain lower intensity threshold.</string>
+     </property>
      <property name="frame">
       <bool>true</bool>
      </property>
@@ -238,6 +250,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Percentage of the band histogram ending clipped to obtain higher intensity threshold.</string>
+     </property>
      <property name="frame">
       <bool>true</bool>
      </property>
@@ -265,6 +280,9 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Reset to default quantiles.</string>
      </property>
      <property name="text">
       <string>Defaults</string>
