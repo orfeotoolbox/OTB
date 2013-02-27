@@ -1,5 +1,18 @@
 set(CPACK_NSIS_MODIFY_PATH ON PARENT_SCOPE)
 
+# Override the monteverdi2.exe
+# with the monteverdi2.bat shortcut
+set(CPACK_NSIS_MENU_LINKS
+    "bin/monteverdi2.bat" "Monteverdi2" PARENT_SCOPE)
+
+set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\monteverdi2.exe" PARENT_SCOPE)
+
+# set the install/unistall icon used for the installer itself
+# There is a bug in NSI that does not handle full unix paths properly.
+set(CPACK_NSIS_MUI_ICON    "${Monteverdi2_SOURCE_DIR}/Data/Icons/monteverdi2.ico" PARENT_SCOPE)
+set(CPACK_NSIS_MUI_UNIICON "${Monteverdi2_SOURCE_DIR}/Data/Icons/monteverdi2.ico" PARENT_SCOPE)
+
+
 file(TO_CMAKE_PATH "$ENV{OSGEO4W_ROOT}" OSGEO4W_ROOT)
 if(NOT OSGEO4W_ROOT)
   message(FATAL_ERROR "Cannot generate installer without OSGeo4W environment : OSGEO4W_ROOT")
@@ -46,7 +59,3 @@ install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/monteverdi2.bat
         DESTINATION bin
         COMPONENT Runtime)
 
-# Override the monteverdi2.exe
-# with the monteverdi2.bat shortcut
-set(CPACK_NSIS_MENU_LINKS
-    "bin/monteverdi2.bat" "Monteverdi2" PARENT_SCOPE)
