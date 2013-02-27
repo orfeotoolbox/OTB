@@ -424,8 +424,8 @@ void ImageViewManipulator
 
   // center the region on the position under the cursor  
   IndexType   origin;
-  origin[0] = static_cast<unsigned int>( Xpc  - currentRegion.GetSize()[0]/ 2);
-  origin[1] = static_cast<unsigned int>( Ypc  - currentRegion.GetSize()[1]/ 2);
+  origin[0] = ( Xpc / vcl_abs(m_NativeSpacing[0]) ) - currentRegion.GetSize()[0] / 2 ;
+  origin[1] = ( Ypc / vcl_abs(m_NativeSpacing[1]) ) - currentRegion.GetSize()[1] / 2 ;
   currentRegion.SetIndex(origin);
   
   // Constraint this region to the LargestPossibleRegion
