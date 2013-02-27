@@ -81,7 +81,7 @@ I18nApplication
 
   // Begin from the executable path
   QDir bin_dir( QDir::cleanPath(QCoreApplication::applicationDirPath()) );
-  qDebug() << "Executable dir : " << bin_dir;
+  qDebug() << tr( "Executable dir : %1" ).arg( bin_dir.path() );
   
   // Go up in the directory hierarchy until we have a candidate install prefix
   bool prefixFound = false;
@@ -97,7 +97,7 @@ I18nApplication
   
   if (prefixFound)
     {
-    qDebug() << "Candidate install prefix found : " << prefix;
+    qDebug() << tr( "Candidate install prefix found : %1" ).arg( prefix.path() );
     }
   else
     {
