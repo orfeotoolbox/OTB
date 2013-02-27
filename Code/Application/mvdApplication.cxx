@@ -96,7 +96,7 @@ Application::LoadDatasetModel( const QString& imageFilename,
 
     throw;
     }
-
+ 
   return model;
 }
 

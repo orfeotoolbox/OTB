@@ -25,6 +25,8 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cerrno>
+#include <exception>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -34,6 +36,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
 
 namespace mvd
@@ -70,7 +73,22 @@ DatasetModel
 
   if( !pathDir.exists() )
     {
-    throw;
+    /*
+    qDebug() << "System error: " << errno << " -- '" << strerror( errno ) << "'";
+
+    QString message(
+      QString( "'%1': %2 '%3'" )
+      .arg( path )
+      .arg( errno )
+      .arg( strerror( errno ) )
+    );
+
+    qDebug() << "std::invalid_argument(" << message << ")";
+
+    throw std::invalid_argument( message.toAscii().constData() );
+    */
+
+    throw SystemError( QString( "('%1')" ).arg( path ).toAscii().constData() );
     }
 
   if( !pathDir.exists( name ) )
@@ -78,7 +96,9 @@ DatasetModel
     isEmpty = true;
 
     if( !pathDir.mkpath( name ) )
-      throw;
+      {
+      throw SystemError( QString( "('%1')" ).arg( name ).toAscii().constData() );
+      }
 
     // TODO: write empty descriptor.xml
     }
