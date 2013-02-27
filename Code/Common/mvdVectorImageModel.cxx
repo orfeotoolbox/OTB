@@ -37,6 +37,8 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbConfigure.h"
+#include "otbGDALDriverManagerWrapper.h"
+#include "otbStandardOneLineFilterWatcher.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -97,8 +99,55 @@ VectorImageModel
   m_ImageFileReader->SetFileName( m_Filename.toAscii().constData() );
   m_ImageFileReader->UpdateOutputInformation();
 
+  // Build overviews if necessary
+  bool hasOverviewsSupport = m_ImageFileReader->HasOverviewsSupport();
+  int nbOfAvailableOvw = m_ImageFileReader->GetNbOfAvailableOverviews();
+  bool forceToCacheOvw = true;
+
+  if (!hasOverviewsSupport)
+    { // the current file don't have overviews available and the ImageIO don't support overviews
+    throw std::runtime_error("The ImageIO use to read this file don't support Overviews !");
+    }
+  else
+    {
+    std::cout << "The ImageIO use to read this file support Overviews !" << std::endl;
+
+    // TODO MSD: how to manage case of JPEG2000 with no overviews ? : wait GDAL support OpenJPEG ...
+    if (nbOfAvailableOvw == 0)
+      { // The current file don't have overviews available
+      std::cout << "The file don't have overviews !" << std::endl;
+      if (forceToCacheOvw)
+        { // the user want to cache the overviews
+        std::cout << "Caching of overviews !" << std::endl;
+        typedef otb::GDALOverviewsBuilder FilterType;
+        FilterType::Pointer filter = FilterType::New();
+
+        //m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
+
+        std::string tempfilename(m_Filename.toAscii().constData());
+
+        filter->SetInputFileName(tempfilename);
+        filter->SetNbOfResolutions(m_ImageFileReader->GetAvailableResolutions().size());
+          {
+          otb::StandardOneLineFilterWatcher watcher(filter, "Overviews creation");
+          filter->Update();
+          }
+
+        }
+      else
+        { // the user don't want to cache the overviews, GDAL will virtually compute the ovw on demand
+        std::cout << "Keep GDAL decimate the file on demand !" << std::endl;
+        }
+      }
+    else
+      {
+      std::cout << "The file have already overviews !" << std::endl;
+      }
+    }
+
+
   // Retrieve the list of Lod from file
-  m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
+  m_AvailableLod = m_ImageFileReader->GetAvailableResolutions();
 
   // Remember native largest region.
   m_NativeLargestRegion =
@@ -106,6 +155,7 @@ VectorImageModel
 
   // Remember native spacing
   m_NativeSpacing = m_ImageFileReader->GetOutput()->GetSpacing();
+
 
   //
   // 2. Setup file-reader.
