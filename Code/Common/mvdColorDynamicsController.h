@@ -234,6 +234,15 @@ private slots:
    * quantiles.
    */
   void OnResetQuantileClicked( RgbaChannel channel );
+
+  /**
+   * \brief Slot called when the apply all button has been clicked.
+   *
+   * \param channel RGB channel for which to reset low and high
+   * quantiles.
+   */
+  void OnApplyAllClicked( RgbaChannel channel, double low, double high );
+
 };
 
 } // end namespace 'mvd'.

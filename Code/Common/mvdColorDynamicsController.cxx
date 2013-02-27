@@ -124,6 +124,15 @@ ColorDynamicsController
     SLOT( OnResetIntensityClicked( RgbaChannel  ) )
   );
 
+  QObject::connect(
+    colorDynamicsWidget,
+    SIGNAL( ApplyAllClicked( RgbaChannel, double, double ) ),
+    // to:
+    this,
+    SLOT( OnApplyAllClicked( RgbaChannel, double, double  ) )
+  );
+
+
   //
   // Connect controller to model.
   QObject::connect(
@@ -211,6 +220,15 @@ ColorDynamicsController
     this,
     SLOT( OnResetIntensityClicked( RgbaChannel  ) )
   );
+
+  QObject::disconnect(
+    colorDynamicsWidget,
+    SIGNAL( ApplyAllClicked( RgbaChannel, double, double ) ),
+    // from:
+    this,
+    SLOT( OnApplyAllClicked( RgbaChannel, double, double  ) )
+  );
+
 }
 
 /*******************************************************************************/
@@ -608,6 +626,67 @@ ColorDynamicsController
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();
 }
+
+void
+ColorDynamicsController
+::OnApplyAllClicked( RgbaChannel channel, double low, double high )
+{
+  qDebug() << QString( "OnApplyAllChanged(%1)" ).arg( RGBA_CHANNEL_NAMES[ channel ] );
+
+  // Get image-model.
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+  assert( imageModel->GetHistogramModel()!=NULL );
+
+  // Reference settings.
+  VectorImageModel::Settings& settings = imageModel->GetSettings();
+
+  for( int i=0; i<RGBA_CHANNEL_ALPHA; ++i )
+    {
+
+    HistogramModel::MeasurementType lintensity =
+      imageModel->GetHistogramModel()->Quantile(
+        settings.RgbChannel( i ),
+        0.01 * low,
+        BOUND_LOWER
+    );
+
+    // Calculate quantile intensity.
+    HistogramModel::MeasurementType uintensity =
+      imageModel->GetHistogramModel()->Quantile(
+        settings.RgbChannel( i ),
+        0.01 * high,
+        BOUND_UPPER
+    );
+
+    // Update quantile intensity in model.
+    settings.DynamicsParam( 2 * i ) = lintensity;
+    settings.DynamicsParam( 2 * i + 1 ) = uintensity;
+
+    // Get color-dynamics widgets.
+    ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
+    assert( colorDynWgt!=NULL );
+    
+    ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel(  static_cast< RgbaChannel >(i) );
+    assert( colorBandDynWgt!=NULL );
+    
+    // Block widget signals to prevent recursive signal/slot loops.
+    colorBandDynWgt->blockSignals( true );
+
+    // Refresh low-intensity display.
+    colorBandDynWgt->SetHighIntensity( uintensity );
+    colorBandDynWgt->SetLowIntensity( lintensity );
+    colorBandDynWgt->SetLowQuantile( low );
+    colorBandDynWgt->SetHighQuantile( high );
+
+    colorBandDynWgt->blockSignals( false );
+    }
+
+  // Now, emit this controller's signal to cause display refresh.
+  emit ModelUpdated();
+}
+
+
 
 /*******************************************************************************/
 

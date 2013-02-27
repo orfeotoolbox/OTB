@@ -118,6 +118,15 @@ ColorDynamicsWidget
       this,
       SIGNAL( ResetIntensityClicked( RgbaChannel  ) )
     );
+
+    QObject::connect(
+      widget,
+      SIGNAL( ApplyAllClicked( RgbaChannel, double, double ) ),
+      // TO:
+      this,
+      SIGNAL( ApplyAllClicked( RgbaChannel, double, double ) )
+    );
+
     }
 }
 

@@ -114,6 +114,9 @@ signals:
   void ResetIntensityClicked( RgbaChannel );
   /** */
   void ResetQuantileClicked( RgbaChannel );
+  /** */
+  void ApplyAllClicked( RgbaChannel, double, double );
+
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

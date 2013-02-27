@@ -19,7 +19,6 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-    
      <item row="0" column="0">
       <widget class="ColorBandDynamicsWidget" name="redWidget" native="true">
        <property name="minimumSize">
@@ -36,6 +35,13 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0">
+      <widget class="Line" name="line1">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="0">
       <widget class="ColorBandDynamicsWidget" name="greenWidget" native="true">
        <property name="minimumSize">
@@ -43,6 +49,13 @@
          <width>300</width>
          <height>90</height>
         </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="Line" name="line2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
@@ -58,21 +71,7 @@
      </item>
     </layout>
    </item>
-     <item row="1" column="0">
-      <widget class="Line" name="line1">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="Line" name="line2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
+   <item row="1" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

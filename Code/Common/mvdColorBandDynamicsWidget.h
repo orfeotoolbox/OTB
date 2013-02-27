@@ -181,6 +181,9 @@ signals:
   void ResetIntensityClicked( RgbaChannel );
   /** */
   void ResetQuantileClicked( RgbaChannel );
+  /** */
+  void ApplyAllClicked( RgbaChannel, double, double);
+
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -222,6 +225,7 @@ private slots:
 
   inline void on_minMaxButton_clicked();
   inline void on_defaultsButton_clicked();
+  inline void on_applyAllButton_clicked();
 };
 
 } // end namespace 'mvd'.
@@ -419,6 +423,17 @@ ColorBandDynamicsWidget
 ::on_defaultsButton_clicked()
 {
   emit ResetQuantileClicked( m_Channel );
+}
+
+/*****************************************************************************/
+inline
+void
+ColorBandDynamicsWidget
+::on_applyAllButton_clicked()
+{
+  emit ApplyAllClicked( m_Channel,
+                        m_UI->lowQuantileSpinBox->value(),
+                        m_UI->highQuantileSpinBox->value());
 }
 
 } // end namespace 'mvd'
