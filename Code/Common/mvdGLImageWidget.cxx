@@ -117,7 +117,7 @@ void
 GLImageWidget
 ::Initialize( AbstractViewManipulator* manipulator,
 	      AbstractModelRenderer* renderer )
-{
+{   
   assert( manipulator!=NULL );
   assert( renderer!=NULL );
 
@@ -220,11 +220,9 @@ GLImageWidget
   dragCursor.setShape(Qt::ClosedHandCursor) ;
   this->setCursor(dragCursor);
 
+  //
   m_ImageViewManipulator->mousePressEvent(event);
   this->update();
-
-  // emited to update to force the ql widget (if any) to update
-  //emit CentralWidgetUpdated();
 }
 
 /*******************************************************************************/
@@ -232,17 +230,30 @@ void
 GLImageWidget
 ::mouseMoveEvent( QMouseEvent* event )
 {
-  // emit a signal movingMouse to update the renderer status
-  emit movingMouse();
+  // if a button is clicked == drag
+  if ( event->buttons() & Qt::LeftButton  || 
+       event->buttons() & Qt::RightButton ||
+       event->buttons() & Qt::MidButton   ||
+       event->buttons() & Qt::XButton1    ||
+       event->buttons() & Qt::XButton2 )
+    {
+    // emit a signal movingMouse to update the renderer status
+    emit movingMouse();
 
-  // handle this event
-  m_ImageViewManipulator->mouseMoveEvent(event);
+    // drag detected
+    m_ImageViewManipulator->mouseMoveEvent(event);
 
-  // repaint the buffer
-  this->update();
-
-  // emited to update to force the ql widget (if any) to update
-  emit CentralWidgetUpdated();
+    // repaint the buffer
+    this->update();
+    
+    // emited to update to force the ql widget (if any) to update
+    emit CentralWidgetUpdated();
+    }
+  else // just mouse cursor moving
+    {
+    // no mouse button is grabbed here -> no drag detected
+    m_ImageViewManipulator->PropagatePointUnderCursorCoordinates(event->pos());
+    }
 }
 
 /*******************************************************************************/
