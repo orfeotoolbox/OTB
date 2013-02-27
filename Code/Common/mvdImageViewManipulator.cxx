@@ -110,6 +110,9 @@ ImageViewManipulator
   // last drag
   m_MouseContext.xMove = m_MouseContext.x;
   m_MouseContext.yMove = m_MouseContext.y;
+
+  // update the mouse position in the widget
+  this->PropagatePointUnderCursorCoordinates(event->pos());
 }
 
 /******************************************************************************/
@@ -367,6 +370,20 @@ ImageViewManipulator
   lr[1] = (double)( region.GetIndex()[1] + region.GetSize()[1] ) * vcl_abs(m_NativeSpacing[1]);
 
   emit ViewportRegionRepresentationChanged(ul, lr);
+}
+
+/*****************************************************************************/
+void
+ImageViewManipulator
+::PropagatePointUnderCursorCoordinates(const QPoint & point )
+{
+  // WIP
+  std::ostringstream oss;
+  oss<< point.x()<<","<<point.y();
+  QString coordinates(oss.str().c_str());
+
+  //
+  emit CurrentCoordinatesUpdated(coordinates);
 }
 
 /*****************************************************************************/

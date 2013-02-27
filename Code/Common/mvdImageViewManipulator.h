@@ -114,6 +114,9 @@ public:
   /** */
   bool HasZoomChanged() const;
 
+  /** */
+  void PropagatePointUnderCursorCoordinates(const QPoint& point);
+
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
 //
@@ -165,7 +168,7 @@ private:
 
   /** */
   void PropagateViewportRegionChanged(const ImageRegionType& region);
-
+ 
 //
 // Private attributes.
 private:

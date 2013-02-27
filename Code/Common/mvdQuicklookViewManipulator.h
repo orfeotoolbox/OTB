@@ -115,6 +115,9 @@ public:
   /** */
   bool HasZoomChanged() const;
 
+  /** */
+  void PropagatePointUnderCursorCoordinates(const QPoint& point){}
+
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
 //

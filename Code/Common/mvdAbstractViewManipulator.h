@@ -102,6 +102,9 @@ public:
   virtual bool HasZoomChanged() const = 0;
 
   /** */
+  virtual void PropagatePointUnderCursorCoordinates(const QPoint& point) = 0;
+
+  /** */
   inline const ImageRegionType& GetViewportImageRegion() const;
 
   /** */
@@ -118,6 +121,9 @@ public:
 
   /** */
   inline PointType ScreenIndexToPhysicalPoint(const IndexType & index);
+  
+  /** */
+  inline PointType ScreenIndexToPhysicalPoint(int x, int y);
 
 //
 // Public SLOTS.
@@ -134,6 +140,7 @@ public slots:
 //
 // SIGNALS.
 signals:
+  void CurrentCoordinatesUpdated(const QString&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -303,6 +310,19 @@ AbstractViewManipulator
   pt[1] = ( index[1] - GetViewportOrigin()[1] ) * vcl_abs(GetSpacing()[1]) / GetIsotropicZoom();
 
   return pt;
+}
+
+/*****************************************************************************/
+inline 
+PointType
+AbstractViewManipulator
+::ScreenIndexToPhysicalPoint(int x, int y)
+{
+  IndexType index;
+  index[0] = (unsigned int)x;
+  index[1] = (unsigned int)y;
+  
+  return ScreenIndexToPhysicalPoint(index);
 }
 
 } // end namespace 'mvd'
