@@ -54,6 +54,11 @@ main( int argc, char* argv[] )
   mvd::MainWindow mainWindow;
   mainWindow.showMaximized();
 
+  // This code is here to propagate events from maximization to child
+  // widgets, so that an image loaded from command-line will get the
+  // appropriate widget size and occupy as much space as possible on screen.
+  application.processEvents();
+
   // Handle passing image filename from command-line
   if(argc>1)
     {
@@ -65,7 +70,7 @@ main( int argc, char* argv[] )
         // TODO: Remove width and height from dataset model loading.
         mainWindow.centralWidget()->width(),
         mainWindow.centralWidget()->height());
-      
+
       mvd::Application::Instance()->SetModel( model );
       }
     catch( std::exception& exc )
