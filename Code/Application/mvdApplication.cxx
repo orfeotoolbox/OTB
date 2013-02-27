@@ -36,7 +36,11 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModel.h"
 #include "mvdDatasetModel.h"
-#include "monteverdi2.xpm"
+
+// Application icon on Linux platform
+#if ! defined(Q_WS_WIN) && ! defined(Q_WS_MAC)
+#  include "monteverdi2-48x48.xpm"
+#endif
 
 //
 // Class implementation.
