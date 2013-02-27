@@ -32,6 +32,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdApplication.h"
 #include "mvdMainWindow.h"
+#include "mvdDatasetModel.h"
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -53,6 +54,26 @@ main( int argc, char* argv[] )
   mvd::MainWindow mainWindow;
 
   mainWindow.show();
+
+  // Handle passing image filename from command-line
+  if(argc>1)
+    {
+    try
+      {
+      // TODO: Replace with complex model (list of DatasetModel) when implemented.
+      mvd::DatasetModel* model = mvd::Application::LoadDatasetModel(
+        argv[1],
+        // TODO: Remove width and height from dataset model loading.
+        mainWindow.centralWidget()->width(),
+        mainWindow.centralWidget()->height());
+      
+      mvd::Application::Instance()->SetModel( model );
+      }
+    catch( std::exception& exc )
+      {
+      // TODO: Report something usefull here
+      }
+    }
   
   return application.exec();
 }
