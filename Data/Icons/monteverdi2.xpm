@@ -1,5 +1,5 @@
 /* XPM */
-static char * monteverdi2_xpm[] = {
+static const char * monteverdi2_xpm[] = {
 "32 32 456 2",
 "  	c None",
 ". 	c #212121",
