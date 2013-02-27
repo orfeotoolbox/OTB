@@ -61,6 +61,19 @@ target_link_libraries(monteverdi2
   ${QT_LIBRARIES}
 )
 
+# deploy a qt.conf file in the monteverdi2 target build dir
+# to avoid warning on translation discovery
+add_custom_command( 
+    TARGET monteverdi2
+    PRE_BUILD 
+    COMMAND ${CMAKE_COMMAND}
+      ARGS -D QT_TRANSLATIONS_DIR:PATH=${QT_TRANSLATIONS_DIR}
+           -D SOURCE_DIR:PATH=${CMAKE_CURRENT_SOURCE_DIR}
+           -D TARGET_DIR:PATH=$<TARGET_FILE_DIR:monteverdi2>
+           -P ${CMAKE_CURRENT_SOURCE_DIR}/DeployQtConf.cmake
+    COMMENT "Deploying qt.conf in build dir"
+    VERBATIM
+)
 
 #############################################################################
 install(
