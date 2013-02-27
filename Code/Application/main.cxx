@@ -52,8 +52,7 @@ main( int argc, char* argv[] )
   setlocale( LC_NUMERIC, "C" );
     
   mvd::MainWindow mainWindow;
-
-  mainWindow.show();
+  mainWindow.showMaximized();
 
   // Handle passing image filename from command-line
   if(argc>1)
