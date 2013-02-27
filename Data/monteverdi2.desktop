@@ -2,8 +2,8 @@
 Type=Application
 Name=Monteverdi
 GenericName=Image processing
-GenericName[fr]=
-Comment=Monteverdi, an image processing based on OTB
+GenericName[fr]=Traitement d'images d'Observation de la Terre
+Comment=Monteverdi, an image processing application based on OTB
 TryExec=/usr/bin/monteverdi2
 Exec=/usr/bin/monteverdi2 %F
 Terminal=false
