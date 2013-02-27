@@ -142,9 +142,6 @@ protected:
   void resizeEvent(QResizeEvent* event);
   void keyPressEvent( QKeyEvent * event );
 
-  /** Update the image to screen transform */
-  //void UpdateTransforms(int w, int h);
-
 //
 // Protected attributes.
 protected:

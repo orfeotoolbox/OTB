@@ -158,57 +158,6 @@ GLImageWidget
 }
 
 /*******************************************************************************/
-/*
-void GLImageWidget::UpdateTransforms(int w, int h)
-{
-
-  if (m_IsotropicZoom <= 0)
-    {
-    itkExceptionMacro(<< "Internal error: Isotropic zoom should be non null positive.");
-    }
-
-  RegionType::IndexType index;
-  RegionType::SizeType  size;
-  // Update image extent
-  std::cout << " size1 " << size[1] << std::endl;
-  size[0] = static_cast<unsigned int>(m_IsotropicZoom * static_cast<double>(m_OpenGlBufferedRegion.GetSize()[0]));
-  size[1] = static_cast<unsigned int>(m_IsotropicZoom * static_cast<double>(m_OpenGlBufferedRegion.GetSize()[1]));
-  index[0] = m_OpenGlBufferedRegion.GetIndex()[0];
-  index[1] = m_OpenGlBufferedRegion.GetIndex()[1];
-  std::cout <<"GLWidget x "<< this->x() << " y "<< this->y() << std::endl;
-  m_Extent.SetIndex(index) ;
-  m_Extent.SetSize(size);
-
-  std::cout <<"m_Extent : "<< m_Extent << std::endl;
-
-  // Image to screen matrix
-  AffineTransformType::MatrixType s2iMatrix;
-  s2iMatrix.Fill(0);
-  const double s2iSpacing = (m_SubsamplingRate) / m_IsotropicZoom;
-  s2iMatrix(0, 0) = s2iSpacing;
-  s2iMatrix(1, 1) = -s2iSpacing;
-  m_ScreenToImageTransform->SetMatrix(s2iMatrix);
-
-  // Image to screen translation
-  AffineTransformType::OutputVectorType translation;
-  translation[0] = m_SubsamplingRate *
-    (m_OpenGlBufferedRegion.GetIndex()[0] - 
-     m_Extent.GetIndex()[0] / m_IsotropicZoom);
-  translation[1] = m_SubsamplingRate *
-    (((m_Extent.GetIndex()[1] +
-       m_Extent.GetSize()[1]) / m_IsotropicZoom) + m_OpenGlBufferedRegion.GetIndex()[1]);
-  m_ScreenToImageTransform->SetTranslation(translation) ;
-
-  // Compute the inverse transform
-  bool couldInvert = m_ScreenToImageTransform->GetInverse(m_ImageToScreenTransform);
-  if (couldInvert == false)
-    {
-    itkExceptionMacro(<< "Internal error: Could not invert ScreenToImageTransform.");
-    }
-}
-*/
-
-/*******************************************************************************/
 void
 GLImageWidget
 ::initializeGL()
