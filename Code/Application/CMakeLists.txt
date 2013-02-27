@@ -30,16 +30,30 @@ add_to_qt4_i18n_sources(
   ${Application_FORMS}
 )
 
+if (WIN32)
+    # Windows Resource file need to have the full path to icon
+    # if the .ico is not in the current dir
+    set( Monteverdi2_WIN32_ICON ${Monteverdi2_SOURCE_DIR}/Data/Icons/monteverdi2.ico)
+    configure_file(
+      ${CMAKE_CURRENT_SOURCE_DIR}/mvdWin32.rc.in
+      ${CMAKE_CURRENT_BINARY_DIR}/mvdWin32.rc
+      @ONLY
+    )
+    
+    # The RC file to be added to source list
+    set( Monteverdi2_WIN32_RC_FILE ${CMAKE_CURRENT_BINARY_DIR}/mvdWin32.rc )
+endif()
+
+
 #############################################################################
 # Monteverdi2_Application library
 # STATIC so that the monteverdi2 executable does not depend on another shared lib
 # The library is also used in tests, waiting for a better test strategy
 # The library is not installed
 
-set(Monteverdi2_Application_SOURCES ${Application_SOURCES})
 add_library(Monteverdi2_Application
   STATIC
-  ${Monteverdi2_Application_SOURCES}
+  ${Application_SOURCES}
   ${Application_FORMS_HEADERS}
   ${Application_HEADERS_MOC}
   ${Application_RESOURCES_RCC}
@@ -54,6 +68,7 @@ target_link_libraries(Monteverdi2_Application
 add_executable(monteverdi2
   WIN32
   main.cxx
+  ${Monteverdi2_WIN32_RC_FILE}
 )
 target_link_libraries(monteverdi2
   Monteverdi2_Application
