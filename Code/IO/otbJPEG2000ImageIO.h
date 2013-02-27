@@ -70,8 +70,14 @@ public:
   /** Get Info about all resolution in jpeg2000 file */
   bool GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc);
 
-  /** Get all resolutions in jpeg2000 file */
+  /** Get all resolution in jpeg2000 file from res = 0 which is the full resolution
+   *   to nbReslution-1 which is most degraded*/
   bool GetAvailableResolutions(std::vector<unsigned int>& res);
+
+  /** Get number of available overviews in the jpeg2000 file
+   *  ( if return = 0 => no overviews available because only one resolution
+   *  is encoded in the file) */
+  unsigned int GetNumberOfOverviews();
 
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(void* buffer);
@@ -135,6 +141,9 @@ private:
 
   /** Resolution factor*/
   unsigned int m_ResolutionFactor;
+
+  /** */
+  unsigned int m_NumberOfOverviews;
 
   /** Size of the cache used to reduce number of decoding operations*/
   unsigned int m_CacheSizeInByte;

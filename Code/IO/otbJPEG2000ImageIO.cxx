@@ -853,7 +853,6 @@ bool JPEG2000ImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vec
   return true;
 }
 
-/** Get all resolution in jpeg2000 file */
 bool JPEG2000ImageIO::GetAvailableResolutions(std::vector<unsigned int>& res)
 {
   res = this->m_InternalReaders[0]->GetAvailableResolutions();
@@ -862,6 +861,18 @@ bool JPEG2000ImageIO::GetAvailableResolutions(std::vector<unsigned int>& res)
     return false;
 
   return true;
+}
+
+unsigned int JPEG2000ImageIO::GetNumberOfOverviews()
+{
+  std::vector<unsigned int> tempResList = this->m_InternalReaders[0]->GetAvailableResolutions();
+
+  if (tempResList.empty())
+    {
+    itkExceptionMacro(<< "Available resolutions in JPEG2000 is empty");
+    }
+
+  return tempResList.size() - 1;
 }
 
 
