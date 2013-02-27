@@ -337,13 +337,13 @@ void
 GLImageWidget
 ::resizeEvent( QResizeEvent* event )
 {
+  // First, call superclass implementation
+  QGLWidget::resizeEvent(event);
+
   m_ImageViewManipulator->resizeEvent(event);
 
   // emit a signal releasingMouse to update the renderer status
   emit releasingMouse();
-
-  this->resizeGL(event->size().width(), event->size().height());
-  this->update();
 
   // emited to update to force the ql widget (if any) to update
   emit CentralWidgetUpdated();
