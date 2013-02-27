@@ -5,6 +5,7 @@ set(CPACK_NSIS_MODIFY_PATH ON PARENT_SCOPE)
 set(CPACK_NSIS_MENU_LINKS
     "bin/monteverdi2.bat" "Monteverdi2" PARENT_SCOPE)
 
+# Icon for the add-remove program
 set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\monteverdi2.exe" PARENT_SCOPE)
 
 # set the install/unistall icon used for the installer itself
