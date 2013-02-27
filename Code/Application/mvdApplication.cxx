@@ -36,6 +36,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModel.h"
 #include "mvdDatasetModel.h"
+#include "monteverdi2.xpm"
 
 //
 // Class implementation.
@@ -164,6 +165,9 @@ Application
     "orfeo-toolbox.org"
   );
 
+#if ! defined(Q_WS_WIN) && ! defined(Q_WS_MAC)
+  setWindowIcon( QPixmap( monteverdi2_xpm ) );
+#endif
 
 }
 

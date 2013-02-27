@@ -43,7 +43,7 @@ int
 main( int argc, char* argv[] )
 {
   mvd::Application application( argc, argv );
-
+  
   //
   // Force numeric options of locale to "C"
   // See issue #635

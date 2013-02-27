@@ -100,12 +100,17 @@ set(Monteverdi2_INCLUDE_DIRS
   # ${Monteverdi2_SOURCE_DIR}/Code/
   ${Monteverdi2_SOURCE_DIR}/Code/Common
   ${Monteverdi2_SOURCE_DIR}/Code/Application
-  #
+  ${Monteverdi2_SOURCE_DIR}/Data/Icons
+
+  # For moc files
   ${Monteverdi2_BINARY_DIR}/Code/Common
   ${Monteverdi2_BINARY_DIR}/Code/Application
+
+  # For ConfigureMonteverdi2.h
+  ${Monteverdi2_BINARY_DIR}
   )
 
-include_directories(${Monteverdi2_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${Monteverdi2_INCLUDE_DIRS})
 
 #----------------------------------------------------------------------------
 # Installation directories:
