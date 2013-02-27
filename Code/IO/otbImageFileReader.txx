@@ -658,18 +658,19 @@ return this->m_FilenameHelper->GetSimpleFileName();
 }
 
 template <class TOutputImage>
-bool
+std::vector<unsigned int>
 ImageFileReader<TOutputImage>
-::GetAvailableResolutions(std::vector<unsigned int>& res)
+::GetAvailableResolutions()
  {
   this->UpdateOutputInformation();
 
+  std::vector<unsigned int> res;
   // GDAL image IO
   if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
     {
     typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
     imageIO->GetAvailableResolutions(res);
-    return true;
+    return res;
     }
 
 #if defined(OTB_USE_JPEG2000)
@@ -678,14 +679,14 @@ ImageFileReader<TOutputImage>
     {
     typename JPEG2000ImageIO::Pointer imageIO = dynamic_cast<JPEG2000ImageIO*>(this->GetImageIO());
     imageIO->GetAvailableResolutions(res);
-    return true;
+    return res;
     }
 #endif
 
   // other imageIO
   res.clear();
   res.push_back(0);
-  return true;
+  return res;
  }
 
 template <class TOutputImage>
@@ -728,6 +729,59 @@ ImageFileReader<TOutputImage>
 
   return true;
  }
+
+template <class TOutputImage>
+unsigned int
+ImageFileReader<TOutputImage>
+::GetNbOfAvailableOverviews()
+ {
+  this->UpdateOutputInformation();
+
+  // GDAL image IO
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
+    {
+    typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
+    return imageIO->GetNumberOfOverviews();
+    }
+
+#if defined(OTB_USE_JPEG2000)
+  // JPEG2000 image IO
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
+    {
+    typename JPEG2000ImageIO::Pointer imageIO = dynamic_cast<JPEG2000ImageIO*>(this->GetImageIO());
+    return imageIO->GetNumberOfOverviews();
+    }
+#endif
+
+  // other imageIO whi
+  return 0;
+ }
+
+template <class TOutputImage>
+bool
+ImageFileReader<TOutputImage>
+::HasOverviewsSupport()
+ {
+  this->UpdateOutputInformation();
+
+  // GDAL image IO
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
+    {
+    return true;
+    }
+
+#if defined(OTB_USE_JPEG2000)
+  // JPEG2000 image IO
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
+    {
+    return true;
+    }
+#endif
+
+  // Other imageIO
+  return false;
+ }
+
 
 } //namespace otb
 

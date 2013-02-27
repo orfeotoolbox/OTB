@@ -98,10 +98,18 @@ public:
   itkLegacyMacro( itkGetMacro(AdditionalNumber, unsigned int) );
   unsigned int m_AdditionalNumber;
 
+  /** Get the resolution information from the file */
   bool GetResolutionsInfo( std::vector<unsigned int>& res,
                           std::vector<std::string>& desc);
 
-  bool GetAvailableResolutions( std::vector<unsigned int>& res);
+  /** Get the list of available resolutions from the file */
+  std::vector<unsigned int> GetAvailableResolutions();
+
+  /** Get the number of available overviews into the file */
+  unsigned int GetNbOfAvailableOverviews();
+
+  /** Indicate if the ImageIO support overviews*/
+  bool HasOverviewsSupport();
 
 protected:
   ImageFileReader();
