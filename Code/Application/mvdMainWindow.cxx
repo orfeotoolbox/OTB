@@ -45,6 +45,7 @@
 #include "mvdGLImageWidget.h"
 #include "mvdImageModelRenderer.h"
 #include "mvdImageViewManipulator.h"
+#include "mvdPreferencesDialog.h"
 #include "mvdQuicklookModel.h"
 #include "mvdQuicklookViewManipulator.h"
 #include "mvdVectorImageModel.h"
@@ -336,6 +337,17 @@ MainWindow
   AboutDialog aboutDialog( this );
 
   aboutDialog.exec();
+}
+
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_Preferences_activated()
+{
+  PreferencesDialog prefDialog( this );
+
+  prefDialog.exec();
 }
 
 /*****************************************************************************/

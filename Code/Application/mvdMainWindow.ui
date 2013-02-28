@@ -31,6 +31,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_Open"/>
+    <addaction name="action_Preferences"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -89,6 +90,11 @@
    </property>
    <property name="toolTip">
     <string>About...</string>
+   </property>
+  </action>
+  <action name="action_Preferences">
+   <property name="text">
+    <string>Preferences</string>
    </property>
   </action>
  </widget>
