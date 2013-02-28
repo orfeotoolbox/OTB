@@ -447,9 +447,9 @@ MainWindow
 
   itk::OStringStream oss;
   oss<<PROJECT_NAME<<" - "<<otb::System::GetShortFileName(ToStdString(vectorImageModel->GetFilename()));
-  oss<<" ("<<vectorImageModel->ToImage()->GetNumberOfComponentsPerPixel()<<" bands, ";
-  oss<<vectorImageModel->ToImage()->GetLargestPossibleRegion().GetSize()[0];
-  oss<<"x"<<vectorImageModel->ToImage()->GetLargestPossibleRegion().GetSize()[1]<<" pixels)";
+  oss<<" ("<<vectorImageModel->GetNbComponents()<<" bands, ";
+  oss<<vectorImageModel->GetNativeLargestRegion().GetSize()[0];
+  oss<<"x"<<vectorImageModel->GetNativeLargestRegion().GetSize()[1]<<" pixels)";
   
   setWindowTitle( FromStdString(oss.str()) );
 
