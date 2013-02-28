@@ -52,13 +52,20 @@ main( int argc, char* argv[] )
   setlocale( LC_NUMERIC, "C" );
     
   mvd::MainWindow mainWindow;
+#if 1
+  // TODO: Correctly manage main-window state via application settings.
   mainWindow.showMaximized();
+#else
+  // Usefull when developping/debugging.
+  mainWindow.show();
+#endif
 
   // This code is here to propagate events from maximization to child
   // widgets, so that an image loaded from command-line will get the
   // appropriate widget size and occupy as much space as possible on screen.
   application.processEvents();
 
+  // TODO: Move into mvd::Application.
   // Handle passing image filename from command-line
   if(argc>1)
     {
