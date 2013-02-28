@@ -104,8 +104,6 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     scaledRegion.SetSize(scaledSize) ;
     scaledRegion.SetIndex(scaledOrigin);
     }
-  // TODO : remove verbosity
-  std::cout <<"Level of detail requested:" << bestLod << std::endl;
 
   if (!m_IsMoving)
     {
