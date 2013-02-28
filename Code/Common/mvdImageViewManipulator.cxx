@@ -106,13 +106,10 @@ ImageViewManipulator
   // moveRegion 
   this->moveRegion( m_MouseContext.dx,  m_MouseContext.dy);
 
-  // Update the position of the first press to take into account the
+  // update the position of the first press to take into account the
   // last drag
   m_MouseContext.xMove = m_MouseContext.x;
   m_MouseContext.yMove = m_MouseContext.y;
-
-  // update the mouse position in the widget
-  this->PropagatePointUnderCursorCoordinates(event->pos());
 }
 
 /******************************************************************************/
@@ -377,12 +374,18 @@ void
 ImageViewManipulator
 ::PropagatePointUnderCursorCoordinates(const QPoint & point )
 {
-  // WIP
+  // screen index to image (at resol 0) coordinates
+  double px  = (point.x() - GetViewportOrigin()[0] ) / GetIsotropicZoom() 
+    + m_NavigationContext.m_ViewportImageRegion.GetIndex()[0];
+  double py  = (point.y() - GetViewportOrigin()[1] ) / GetIsotropicZoom()
+    + m_NavigationContext.m_ViewportImageRegion.GetIndex()[1];
+  
+  //  // compose the label to send to the status bar
   std::ostringstream oss;
-  oss<< point.x()<<","<<point.y();
+  oss<<" Index : " << px <<" , "<< py;
   QString coordinates(oss.str().c_str());
 
-  //
+  // update the status bar
   emit CurrentCoordinatesUpdated(coordinates);
 }
 
@@ -453,6 +456,24 @@ void ImageViewManipulator
   
   // force repaintGL
   qobject_cast< QWidget* >( parent() )->update();
+}
+
+/*****************************************************************************/
+void 
+ImageViewManipulator
+::OnPhysicalCursorPositionChanged(double Xpc, double Ypc)
+{
+  // From physcial point to original image at res 0 index
+  unsigned int idx = static_cast<unsigned int>(( Xpc / vcl_abs(m_NativeSpacing[0]) )); 
+  unsigned int idy = static_cast<unsigned int>(( Ypc / vcl_abs(m_NativeSpacing[1]) )); 
+
+  // compose the label to send to the status bar
+  std::ostringstream oss;
+  oss<<" Index : " << idx <<" , "<< idy;
+  QString coordinates(oss.str().c_str());
+
+  // update the status bar
+  emit CurrentCoordinatesUpdated(coordinates);
 }
 
 } // end namespace 'mvd'

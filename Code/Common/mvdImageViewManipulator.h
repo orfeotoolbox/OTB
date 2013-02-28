@@ -126,6 +126,8 @@ public slots:
                                  const SpacingType& spacing);
   void OnViewportRegionChanged(double Xpc, double Ypc);
 
+  void OnPhysicalCursorPositionChanged(double Xpc, double Ypc);
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
