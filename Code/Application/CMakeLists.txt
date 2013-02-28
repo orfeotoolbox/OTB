@@ -1,17 +1,17 @@
 #############################################################################
 # Input files.
 set( Application_SOURCES
-       mvdApplication.cxx
-       mvdImageModel.cxx
-       mvdMainWindow.cxx
+       ${CMAKE_CURRENT_SOURCE_DIR}/mvdApplication.cxx
+       ${CMAKE_CURRENT_SOURCE_DIR}/mvdImageModel.cxx
+       ${CMAKE_CURRENT_SOURCE_DIR}/mvdMainWindow.cxx
 )
 set( Application_HEADERS
-       mvdApplication.h
-       mvdImageModel.h
-       mvdMainWindow.h
+       ${CMAKE_CURRENT_SOURCE_DIR}/mvdApplication.h
+       ${CMAKE_CURRENT_SOURCE_DIR}/mvdImageModel.h
+       ${CMAKE_CURRENT_SOURCE_DIR}/mvdMainWindow.h
 )
 set( Application_FORMS
-       mvdMainWindow.ui
+       ${CMAKE_CURRENT_SOURCE_DIR}/mvdMainWindow.ui
 )
 set( Application_RESOURCES
 )
