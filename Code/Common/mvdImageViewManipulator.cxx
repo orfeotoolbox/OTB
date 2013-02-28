@@ -356,15 +356,15 @@ ImageViewManipulator
 ::PropagateViewportRegionChanged(const ImageRegionType& region)
 {
   // the region computed in this class are relative to the lod 0 of
-  // the input image. We need then, to transform the indicies to
-  // physical points, the native spacing (lod 0) 
+  // the input image. We need then in order to transform the indicies to
+  // physical points, the native spacing (lod 0) and origin
   // of the method
   PointType ul, lr;
-  ul[0] = (double)(region.GetIndex()[0]) * m_NativeSpacing[0];
-  ul[1] = (double)(region.GetIndex()[1]) * vcl_abs(m_NativeSpacing[1]);
+  ul[0] = (double)(region.GetIndex()[0]) * m_NativeSpacing[0] + GetOrigin()[0];
+  ul[1] = (double)(region.GetIndex()[1]) * vcl_abs(m_NativeSpacing[1]) + GetOrigin()[1];
 
-  lr[0] = (double)( region.GetIndex()[0] + region.GetSize()[0] ) * m_NativeSpacing[0];
-  lr[1] = (double)( region.GetIndex()[1] + region.GetSize()[1] ) * vcl_abs(m_NativeSpacing[1]);
+  lr[0] = (double)( region.GetIndex()[0] + region.GetSize()[0] ) * m_NativeSpacing[0] + GetOrigin()[0];
+  lr[1] = (double)( region.GetIndex()[1] + region.GetSize()[1] ) * vcl_abs(m_NativeSpacing[1]) + GetOrigin()[1];
 
   emit ViewportRegionRepresentationChanged(ul, lr);
 }
@@ -449,8 +449,10 @@ void ImageViewManipulator
 
   // center the region on the position under the cursor  
   IndexType   origin;
-  origin[0] = static_cast<unsigned int>(( Xpc / vcl_abs(m_NativeSpacing[0]) )) - currentRegion.GetSize()[0] / 2 ;
-  origin[1] = static_cast<unsigned int>(( Ypc / vcl_abs(m_NativeSpacing[1]) )) - currentRegion.GetSize()[1] / 2 ;
+  origin[0] = static_cast<unsigned int>( (Xpc - GetOrigin()[0] ) / vcl_abs(m_NativeSpacing[0]) ) 
+    - currentRegion.GetSize()[0] / 2 ;
+  origin[1] = static_cast<unsigned int>( (Ypc - GetOrigin()[1] ) / vcl_abs(m_NativeSpacing[1]) ) 
+    - currentRegion.GetSize()[1] / 2 ;
   currentRegion.SetIndex(origin);
   
   // Constraint this region to the LargestPossibleRegion
@@ -469,8 +471,8 @@ ImageViewManipulator
 ::OnPhysicalCursorPositionChanged(double Xpc, double Ypc)
 {
   // From physcial point to original image at res 0 index
-  int idx = static_cast<unsigned int>(( Xpc / vcl_abs(m_NativeSpacing[0]) )); 
-  int idy = static_cast<unsigned int>(( Ypc / vcl_abs(m_NativeSpacing[1]) )); 
+  int idx = static_cast<unsigned int>( ( Xpc - GetOrigin()[0] ) / vcl_abs(m_NativeSpacing[0]) ); 
+  int idy = static_cast<unsigned int>( ( Ypc - GetOrigin()[1] ) / vcl_abs(m_NativeSpacing[1]) ); 
 
   // compose the label to send to the status bar
   std::ostringstream oss;

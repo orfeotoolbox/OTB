@@ -120,6 +120,9 @@ public:
   inline SpacingType GetSpacing() const;
 
   /** */
+  inline SpacingType GetNativeSpacing() const;
+
+  /** */
   void SetOrigin(const PointType& spacing);
 
   /** */
@@ -306,6 +309,15 @@ AbstractViewManipulator
 
 /*****************************************************************************/
 inline 
+SpacingType
+AbstractViewManipulator
+::GetNativeSpacing() const
+{
+  return m_NativeSpacing;
+}
+
+/*****************************************************************************/
+inline 
 PointType
 AbstractViewManipulator
 ::GetOrigin() const
@@ -320,13 +332,20 @@ AbstractViewManipulator
 ::ScreenIndexToPhysicalPoint(const IndexType & index)
 {
   PointType pt;
+  // 
+  // step #1: screen coordinates -> viewport coordinates
+  pt[0] = (double)( index[0] - GetViewportOrigin()[0] ) / GetIsotropicZoom();
+  pt[1] = (double)( index[1] - GetViewportOrigin()[1] ) / GetIsotropicZoom();
+
+  //
+  // step #2: viewport coordinates -> index
+  pt[0] +=  (double)m_NavigationContext.m_ViewportImageRegion.GetIndex()[0];
+  pt[1] +=  (double)m_NavigationContext.m_ViewportImageRegion.GetIndex()[1];
   
   //
-  // compute the physcial coordinates
-  // computation takes into account the origin of the viewport in the widget,
-  // the spacing of the rendered image and the isotropicZoom
-  pt[0] = ( index[0] - GetViewportOrigin()[0] ) * vcl_abs(GetSpacing()[0]) / GetIsotropicZoom();
-  pt[1] = ( index[1] - GetViewportOrigin()[1] ) * vcl_abs(GetSpacing()[1]) / GetIsotropicZoom();
+  // step #3: index -> physical point
+  pt[0] = pt[0] * vcl_abs(GetNativeSpacing()[0])  + GetOrigin()[0];
+  pt[1] = pt[1] * vcl_abs(GetNativeSpacing()[1])  + GetOrigin()[1];
 
   return pt;
 }

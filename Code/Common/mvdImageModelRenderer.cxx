@@ -212,12 +212,12 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       //
       // physical point to index (in ql)
       PointType sp1, sp2;
-      sp1[0] = m_SquarePointUL[0] * finalZoomFactorX / vcl_abs(viModel->GetSpacing()[0]) + originX;
-      sp1[1] = m_SquarePointUL[1] * finalZoomFactorY / vcl_abs(viModel->GetSpacing()[1]) + originY;
+      sp1[0] = (m_SquarePointUL[0] - viModel->GetOrigin()[0] ) * finalZoomFactorX / vcl_abs(viModel->GetSpacing()[0]) + originX;
+      sp1[1] = (m_SquarePointUL[1] - viModel->GetOrigin()[1] ) * finalZoomFactorY / vcl_abs(viModel->GetSpacing()[1]) + originY;
       sp1[1] = context.m_WidgetHeight - sp1[1]; // y axis is flipped
 
-      sp2[0] = m_SquarePointLR[0] * finalZoomFactorX / vcl_abs(viModel->GetSpacing()[0]) + originX; 
-      sp2[1] = m_SquarePointLR[1] * finalZoomFactorY / vcl_abs(viModel->GetSpacing()[1]) + originY; 
+      sp2[0] = (m_SquarePointLR[0] - viModel->GetOrigin()[0] ) * finalZoomFactorX / vcl_abs(viModel->GetSpacing()[0]) + originX; 
+      sp2[1] = (m_SquarePointLR[1] - viModel->GetOrigin()[1] ) * finalZoomFactorY / vcl_abs(viModel->GetSpacing()[1]) + originY; 
       sp2[1] = context.m_WidgetHeight - sp2[1]; // y axis is flipped
 
       // draw the red square
