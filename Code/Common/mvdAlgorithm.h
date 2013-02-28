@@ -35,6 +35,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <string>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -160,6 +161,34 @@ QStringList&
 AppendToQStringList( QStringList& qsl,
 		     const StringVector& sv );
 
+/**
+ * \brief Convert and copy an STL std::string to a QString.
+ *
+ * The 8-bit data is converted to Unicode using the
+ * QString::fromAscii() method.
+ *
+ * \param str The 8-bit STL string to convert.
+ *
+ * \return The Unicode converted QString.
+ */
+inline
+QString
+FromStdString( const std::string& str );
+
+/**
+ * \brief Convert and copy a QString to a STL std::string.
+ *
+ * The Unicode data is converted to 8-bit using the QString::toAscii()
+ * method.
+ *
+ * \param str The Unicode string to convert.
+ *
+ * \return The 8-bit converted STL std::string.
+ */
+inline
+std::string
+ToStdString( const QString& str );
+
 } // end namespace 'mvd'.
 
 /*****************************************************************************/
@@ -267,6 +296,22 @@ AppendToQStringList( QStringList& qsl, const StringVector& sv )
     }
 
   return qsl;
+}
+
+/*******************************************************************************/
+inline
+QString
+FromStdString( const std::string& str )
+{
+  return QString( str.c_str() );
+}
+
+/*******************************************************************************/
+inline
+std::string
+ToStdString( const QString& str )
+{
+  return std::string( str.toAscii().constData() );
 }
 
 /*******************************************************************************/

@@ -96,7 +96,7 @@ VectorImageModel
   // Get the largest possible region of the image
   m_ImageFileReader = DefaultImageFileReaderType::New();
 
-  m_ImageFileReader->SetFileName( m_Filename.toAscii().constData() );
+  m_ImageFileReader->SetFileName( ToStdString( m_Filename ) );
   m_ImageFileReader->UpdateOutputInformation();
 
   // Build overviews if necessary
@@ -124,7 +124,7 @@ VectorImageModel
 
         //m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
 
-        std::string tempfilename(m_Filename.toAscii().constData());
+        std::string tempfilename( ToStdString( m_Filename ) );
 
         filter->SetInputFileName(tempfilename);
         filter->SetNbOfResolutions(m_ImageFileReader->GetAvailableResolutions().size());
@@ -629,7 +629,7 @@ VectorImageModel
 
   try
     {
-    fileReader->SetFileName( static_cast<const char*>(lodFilename.toAscii()) );
+    fileReader->SetFileName( ToStdString( lodFilename ) );
     fileReader->UpdateOutputInformation();
 
     m_ImageFileReader = fileReader;

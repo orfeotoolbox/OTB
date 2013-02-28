@@ -78,7 +78,7 @@ QuicklookModel
   VectorImageModel * viModel = qobject_cast< VectorImageModel* >( parent() );
 
   // get the filename and use it to compose the quicklook filename
-  const char* filename = static_cast<const char*>(viModel->GetFilename().toAscii());
+  const char* filename = viModel->GetFilename().toAscii().constData();
     
   std::string fnameNoExt = itksys::SystemTools::GetFilenameWithoutExtension( filename );    
   std::string path  = itksys::SystemTools::GetFilenamePath( filename );

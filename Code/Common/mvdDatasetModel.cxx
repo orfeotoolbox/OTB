@@ -25,8 +25,6 @@
 
 //
 // System includes (sorted by alphabetic order)
-#include <cerrno>
-#include <exception>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -73,22 +71,7 @@ DatasetModel
 
   if( !pathDir.exists() )
     {
-    /*
-    qDebug() << "System error: " << errno << " -- '" << strerror( errno ) << "'";
-
-    QString message(
-      QString( "'%1': %2 '%3'" )
-      .arg( path )
-      .arg( errno )
-      .arg( strerror( errno ) )
-    );
-
-    qDebug() << "std::invalid_argument(" << message << ")";
-
-    throw std::invalid_argument( message.toAscii().constData() );
-    */
-
-    throw SystemError( QString( "('%1')" ).arg( path ).toAscii().constData() );
+    throw SystemError( ToStdString( QString( "('%1')" ).arg( path ) ) );
     }
 
   if( !pathDir.exists( name ) )
@@ -97,7 +80,7 @@ DatasetModel
 
     if( !pathDir.mkpath( name ) )
       {
-      throw SystemError( QString( "('%1')" ).arg( name ).toAscii().constData() );
+      throw SystemError( ToStdString( QString( "('%1')" ).arg( name ) ) );
       }
 
     // TODO: write empty descriptor.xml

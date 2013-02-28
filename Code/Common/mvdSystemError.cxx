@@ -63,8 +63,8 @@ SystemError::whatString( int err, const std::string& msg )
 #if 0
   // Use Qt's tr() in order for the text string to be translated.
   // N.B.: strerror() string may use system locales.
-  return
-    ( msg.empty()
+  return ToStdString(
+    msg.empty()
       ? tr( "System error %1: '%2'." )
       .arg( err )
       .arg( strerror( err ) )
@@ -74,7 +74,7 @@ SystemError::whatString( int err, const std::string& msg )
       .arg( strerror( err ) )
       .arg( msg )
 
-    ).toAscii().constData();
+  );
 
 #else
   std::stringstream sstream( std::ios_base::out );
