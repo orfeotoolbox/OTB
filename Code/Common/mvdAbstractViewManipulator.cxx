@@ -70,6 +70,24 @@ AbstractViewManipulator
 {
 }
 
+/*****************************************************************************/
+void
+AbstractViewManipulator
+::PropagatePointUnderCursorCoordinates(const QPoint & point )
+{
+  // Compute the physical coordinates of the point under the cursor
+  // and send them to the image manipulator. 
+  IndexType index;
+  index[0] = (unsigned int)( point.x() );
+  index[1] = (unsigned int)( point.y() );
+  PointType physicalPt = ScreenIndexToPhysicalPoint(index);
+  
+  // emit the physical coordinate to be catched by
+  // ImageViewManipulator. Index (for resol 0 of the image)
+  // computation will be done there.
+  emit PhysicalCursorPositionChanged(physicalPt[0], physicalPt[1]);
+}
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/

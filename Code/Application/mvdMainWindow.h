@@ -199,6 +199,8 @@ private:
    */
   ImageModelRenderer*       m_QLModelRenderer;
 
+  QLabel *                   m_CurrentPixelLabel;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //

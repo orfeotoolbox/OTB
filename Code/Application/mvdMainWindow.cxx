@@ -114,16 +114,6 @@ MainWindow
     m_ImageViewManipulator, SLOT( OnViewportRegionChanged(double, double) )
   );
 
-  // in ql, send the physical coordinate of the point under the cursor 
-  // to the centralWidget. transforming them to original image index
-  // will be done in original manipulator (avoid having a ql sampling
-  // rate)
-  // 
-  QObject::connect(
-    m_QLViewManipulator, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
-    m_ImageViewManipulator, SLOT( OnPhysicalCursorPositionChanged(double, double) )
-    );
-
   // add the needed docks 
   InitializeDockWidgets();
 
@@ -162,19 +152,10 @@ MainWindow
 ::InitializeStatusBarWidgets()
 {
   // Add a QLabel to the status bar to show pixel coordinates
-  QLabel * currentPixelLabel = new QLabel(statusBar());
-  currentPixelLabel->setAlignment(Qt::AlignCenter);
-  
-  // connect this widget to receive notification from 
-  // ImageViewManipulator
-  QObject::connect(
-    m_ImageViewManipulator, 
-    SIGNAL( CurrentCoordinatesUpdated(const QString& ) ),
-    currentPixelLabel,
-    SLOT( setText(const QString &) )
-  );
-  
-  statusBar()->addWidget(currentPixelLabel);
+  m_CurrentPixelLabel = new QLabel(statusBar());
+  m_CurrentPixelLabel->setAlignment(Qt::AlignCenter);
+    
+  statusBar()->addWidget(m_CurrentPixelLabel);
 }
 
 /*****************************************************************************/
@@ -435,6 +416,28 @@ MainWindow
     SLOT( updateGL()  )
   );
 
+  // 
+  // send the physical point of the clicked point in screen 
+  // vectorImageModel is in charge of pixel information computation
+    QObject::disconnect(
+    m_QLViewManipulator, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    vectorImageModel, SLOT( OnPhysicalCursorPositionChanged(double, double) )
+    );
+  
+  QObject::disconnect(
+    m_ImageViewManipulator, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    vectorImageModel, SLOT( OnPhysicalCursorPositionChanged(double, double) )
+    );
+
+  // disconnect this Qlabel Widget to receive notification from 
+  // vectorImageModel
+  QObject::disconnect(
+    vectorImageModel, 
+    SIGNAL( CurrentCoordinatesUpdated(const QString& ) ),
+    m_CurrentPixelLabel,
+    SLOT( setText(const QString &) )
+  );
+
 }
 
 /*****************************************************************************/
@@ -531,6 +534,28 @@ MainWindow
     // to:
     GetQuicklookDock()->widget(),
     SLOT( updateGL()  )
+  );
+
+  // 
+  // send the physical point of the clicked point in screen 
+  // vectorImageModel is in charge of pixel information computation
+    QObject::connect(
+    m_QLViewManipulator, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    vectorImageModel, SLOT( OnPhysicalCursorPositionChanged(double, double) )
+    );
+  
+  QObject::connect(
+    m_ImageViewManipulator, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    vectorImageModel, SLOT( OnPhysicalCursorPositionChanged(double, double) )
+    );
+
+  // connect this Qlabel Widget to receive notification from 
+  // vectorImageModel
+  QObject::connect(
+    vectorImageModel, 
+    SIGNAL( CurrentCoordinatesUpdated(const QString& ) ),
+    m_CurrentPixelLabel,
+    SLOT( setText(const QString &) )
   );
 }
 

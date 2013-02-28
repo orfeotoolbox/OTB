@@ -115,9 +115,6 @@ public:
   /** */
   bool HasZoomChanged() const;
 
-  /** */
-  void PropagatePointUnderCursorCoordinates(const QPoint& point);
-
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
 //
@@ -133,7 +130,6 @@ public slots:
 // Signals.
 signals:
   void ViewportRegionChanged(double Xpc, double Ypc);
-  void PhysicalCursorPositionChanged(double Xpc, double Ypc);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

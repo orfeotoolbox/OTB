@@ -370,26 +370,6 @@ ImageViewManipulator
 }
 
 /*****************************************************************************/
-void
-ImageViewManipulator
-::PropagatePointUnderCursorCoordinates(const QPoint & point )
-{
-  // screen index to image (at resol 0) coordinates
-  double px  = (point.x() - GetViewportOrigin()[0] ) / GetIsotropicZoom() 
-    + m_NavigationContext.m_ViewportImageRegion.GetIndex()[0];
-  double py  = (point.y() - GetViewportOrigin()[1] ) / GetIsotropicZoom()
-    + m_NavigationContext.m_ViewportImageRegion.GetIndex()[1];
-  
-  //  // compose the label to send to the status bar
-  std::ostringstream oss;
-  oss<<" Index : " << static_cast<int>(px) <<" , "<< static_cast<int>(py);
-  QString coordinates(oss.str().c_str());
-
-  // update the status bar
-  emit CurrentCoordinatesUpdated(coordinates);
-}
-
-/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 
@@ -466,21 +446,4 @@ void ImageViewManipulator
 }
 
 /*****************************************************************************/
-void 
-ImageViewManipulator
-::OnPhysicalCursorPositionChanged(double Xpc, double Ypc)
-{
-  // From physcial point to original image at res 0 index
-  int idx = static_cast<unsigned int>( ( Xpc - GetOrigin()[0] ) / vcl_abs(m_NativeSpacing[0]) ); 
-  int idy = static_cast<unsigned int>( ( Ypc - GetOrigin()[1] ) / vcl_abs(m_NativeSpacing[1]) ); 
-
-  // compose the label to send to the status bar
-  std::ostringstream oss;
-  oss<<" Index : " << idx <<" , "<< idy;
-  QString coordinates(oss.str().c_str());
-
-  // update the status bar
-  emit CurrentCoordinatesUpdated(coordinates);
-}
-
 } // end namespace 'mvd'

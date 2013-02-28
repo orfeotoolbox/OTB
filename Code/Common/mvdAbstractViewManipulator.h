@@ -102,7 +102,7 @@ public:
   virtual bool HasZoomChanged() const = 0;
 
   /** */
-  virtual void PropagatePointUnderCursorCoordinates(const QPoint& point) = 0;
+  virtual void PropagatePointUnderCursorCoordinates(const QPoint& point);
 
   /** */
   inline const ImageRegionType& GetViewportImageRegion() const;
@@ -150,7 +150,8 @@ public slots:
 //
 // SIGNALS.
 signals:
-  void CurrentCoordinatesUpdated(const QString&);
+  /** */
+  void PhysicalCursorPositionChanged(double Xpc, double Ypc);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

@@ -156,12 +156,20 @@ public:
    */
   virtual ImageBaseType::Pointer ToImageBase() =0;
 
+//
+// Public SLOTS.
+public slots:
+  virtual void OnPhysicalCursorPositionChanged(double Xpc, double Ypc);
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
+  /** */
   void SpacingChanged( const SpacingType& );
+  /** */
+  void CurrentCoordinatesUpdated(const QString&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
