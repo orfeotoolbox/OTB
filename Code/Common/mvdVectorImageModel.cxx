@@ -106,7 +106,7 @@ VectorImageModel
 
   if (!hasOverviewsSupport)
     { // the current file don't have overviews available and the ImageIO don't support overviews
-    throw std::runtime_error("The ImageIO use to read this file don't support Overviews !");
+    throw std::runtime_error(tr( "The ImageIO use to read this file don't support Overviews !" ).toLatin1().constData());
     }
   else
     {
@@ -129,7 +129,7 @@ VectorImageModel
         filter->SetInputFileName(tempfilename);
         filter->SetNbOfResolutions(m_ImageFileReader->GetAvailableResolutions().size());
           {
-          otb::StandardOneLineFilterWatcher watcher(filter, "Overviews creation");
+          otb::StandardOneLineFilterWatcher watcher(filter,  tr("Overviews creation: " ).toLatin1().constData());
           filter->Update();
           }
 
