@@ -276,6 +276,46 @@
         <source>BAND %1</source>
         <translation>BANDE %1</translation>
     </message>
+    <message>
+        <source>Red</source>
+        <translation>Rouge</translation>
+    </message>
+    <message>
+        <source>Green</source>
+        <translation>Vert</translation>
+    </message>
+    <message>
+        <source>Blue</source>
+        <translation>Bleu</translation>
+    </message>
+    <message>
+        <source>Yellow</source>
+        <translation>Jaune</translation>
+    </message>
+    <message>
+        <source>RedEdge</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Coastal</source>
+        <translation>Côtier</translation>
+    </message>
+    <message>
+        <source>NIR</source>
+        <translation>PIR</translation>
+    </message>
+    <message>
+        <source>NIR1</source>
+        <translation>PIR1</translation>
+    </message>
+    <message>
+        <source>NIR2</source>
+        <translation>PIR2</translation>
+    </message>
+    <message>
+        <source>PAN</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>mvd::DatasetDescriptor</name>
@@ -516,6 +556,14 @@
         <source>Video color dynamics</source>
         <translation>Réglage de la dynamique d&apos;affichage</translation>
     </message>
+    <message>
+        <source> bands, </source>
+        <translation> bandes, </translation>
+    </message>
+    <message>
+        <source> pixels)</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>mvd::Math</name>
@@ -599,6 +647,26 @@
     <message>
         <source>Overviews creation: </source>
         <translation>Création de la pyramide multi-résolution : </translation>
+    </message>
+    <message>
+        <source>The ImageIO use to read this file support Overviews !</source>
+        <translation>Ce format de fichier permet d&apos;utiliser les pyramides multi-résolution !</translation>
+    </message>
+    <message>
+        <source>The file don&apos;t have overviews !</source>
+        <translation>Le fichier n&apos;a pas de pyramide multi-résolution !</translation>
+    </message>
+    <message>
+        <source>Caching of overviews !</source>
+        <translation>Mise en cache de la pyramide multi-résolution !</translation>
+    </message>
+    <message>
+        <source>Keep GDAL decimate the file on demand !</source>
+        <translation>Activation de la décimation à la volée par GDAL !</translation>
+    </message>
+    <message>
+        <source>The file have already overviews !</source>
+        <translation>Le fichier a déjà une pyramide multi-résolution !</translation>
     </message>
 </context>
 <context>
