@@ -34,6 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdI18nApplication.h"
 #include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
 
@@ -65,30 +66,10 @@ bool
 DatasetModel
 ::SetContent( const QString& path, const QString& name )
 {
-  bool isEmpty = false;
+  bool isEmpty = I18nApplication::MakeDirTree( path, name );
 
-  QDir pathDir( path );
-
-  /*
-  qDebug() << path;
-  qDebug() << pathDir.currentPath();
-  qDebug() << pathDir.path();
-  */
-
-  if( !pathDir.exists() )
-    throw SystemError( ToStdString( QString( "('%1')" ).arg( path ) ) );
-
-  if( !pathDir.exists( name ) )
+  if( isEmpty )
     {
-    isEmpty = true;
-
-    if( !pathDir.mkpath( name ) )
-      throw SystemError(
-	ToStdString(
-	  QString( "('%1')" ).arg( pathDir.filePath( name ) )
-	)
-      );
-
     // TODO: write empty descriptor.xml
     }
 

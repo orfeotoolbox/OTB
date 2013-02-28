@@ -16,8 +16,11 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #include "mvdI18nApplication.h"
+
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -31,9 +34,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdAlgorithm.h"
+#include "mvdSystemError.h"
 
-//
-// Class implementation.
 namespace mvd
 {
 /*
@@ -43,6 +46,39 @@ namespace mvd
 
   Context comment for translator.
 */
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
+
+/*******************************************************************************/
+bool
+I18nApplication
+::MakeDirTree( const QString& path, const QString& tree )
+{
+  QDir pathDir( path );
+
+  /*
+  qDebug() << path;
+  qDebug() << pathDir.currentPath();
+  qDebug() << pathDir.path();
+  */
+
+  if( !pathDir.exists() )
+    throw SystemError( ToStdString( QString( "('%1')" ).arg( path ) ) );
+
+  if( pathDir.exists( tree ) )
+    return false;
+
+  if( !pathDir.mkpath( tree ) )
+    throw SystemError(
+      ToStdString(
+	QString( "('%1')" ).arg( pathDir.filePath( tree ) )
+      )
+    );
+
+  return true;
+}
 
 /*******************************************************************************/
 I18nApplication

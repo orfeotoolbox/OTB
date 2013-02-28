@@ -25,6 +25,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -44,6 +48,10 @@
 // Macros.
 
 
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
+
 //
 // Classes pre-declaration.
 namespace
@@ -53,15 +61,26 @@ namespace
 namespace mvd
 {
 //
-// Class declaration.
+// Internal classes pre-declaration.
+
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
 
 /** \class I18nApplication
+ *
+ * \brief WIP.
  *
  */
 class Monteverdi2_EXPORT I18nApplication
   : public QApplication
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public methods.
@@ -73,13 +92,43 @@ public:
   /** Destructor */
   virtual ~I18nApplication();
 
+  //
+  // STATIC methods.
+
+  /**
+   * \brief Make directory tree in given path.
+   *
+   * Throws mvd::SystemError exception if sub-directory tree could not
+   * have been created.
+   *
+   * \param path Location where to create sub-directory tree.
+   * \param tree Sub-directory tree path. E.g.: 'level_1/level_2'.
+   *
+   * \return true if sub-directory tree is newly created or false if
+   * it was already existing.
+   */
+  static bool MakeDirTree( const QString& path, const QString& tree );
+
+  /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
+public slots:
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
 //
 // SIGNALS.
 signals:
 
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
+
 //
 // Protected methods.
 protected:
+
+//
+// Protected attributes.
+protected:
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private methods.
@@ -101,6 +150,8 @@ private:
   /**
    */
   bool m_IsRunningFromBuildDir;
+
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // SLOTS

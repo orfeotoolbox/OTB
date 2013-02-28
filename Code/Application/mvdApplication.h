@@ -172,6 +172,8 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
   AbstractModel* m_Model;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
