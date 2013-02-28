@@ -173,20 +173,23 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     // needed cause RGB not RGBA rendering. 
     glPixelStorei(GL_UNPACK_ALIGNMENT,1); 
                                 
-    // texture 
-    glEnable(GL_TEXTURE_2D);
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3,
-                 scaledRegion.GetSize()[0],
-                 scaledRegion.GetSize()[1], 
-                 0, GL_RGB, GL_UNSIGNED_BYTE, m_Buffer);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glBindTexture (GL_TEXTURE_2D, texture);
-
+    // Load texture 
+    if(!m_IsMoving)
+      {
+      glDeleteTextures(1,&m_Texture);
+      glGenTextures(1, &m_Texture);
+      glBindTexture(GL_TEXTURE_2D, m_Texture);
+      glTexImage2D(GL_TEXTURE_2D, 0, 3,
+                   scaledRegion.GetSize()[0],
+                   scaledRegion.GetSize()[1], 
+                   0, GL_RGB, GL_UNSIGNED_BYTE, m_Buffer);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glBindTexture (GL_TEXTURE_2D, m_Texture);
+      }
+  
     // rectangle where to draw
+    glEnable(GL_TEXTURE_2D);
 
     // Reset color before rendering
     glColor3d(1.0f,1.0f,1.0f);
@@ -199,7 +202,6 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     glEnd ();
 
     // free texture
-    glDeleteTextures(1, &texture);
     glDisable(GL_TEXTURE_2D);
 
     // 
