@@ -52,7 +52,7 @@ main( int argc, char* argv[] )
   setlocale( LC_NUMERIC, "C" );
     
   mvd::MainWindow mainWindow;
-#if 1
+#if 0
   // TODO: Correctly manage main-window state via application settings.
   mainWindow.showMaximized();
 #else

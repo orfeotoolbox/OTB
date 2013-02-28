@@ -69,19 +69,25 @@ DatasetModel
 
   QDir pathDir( path );
 
+  /*
+  qDebug() << path;
+  qDebug() << pathDir.currentPath();
+  qDebug() << pathDir.path();
+  */
+
   if( !pathDir.exists() )
-    {
     throw SystemError( ToStdString( QString( "('%1')" ).arg( path ) ) );
-    }
 
   if( !pathDir.exists( name ) )
     {
     isEmpty = true;
 
     if( !pathDir.mkpath( name ) )
-      {
-      throw SystemError( ToStdString( QString( "('%1')" ).arg( name ) ) );
-      }
+      throw SystemError(
+	ToStdString(
+	  QString( "('%1')" ).arg( pathDir.filePath( name ) )
+	)
+      );
 
     // TODO: write empty descriptor.xml
     }

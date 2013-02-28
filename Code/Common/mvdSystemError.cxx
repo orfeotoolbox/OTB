@@ -88,8 +88,6 @@ SystemError::whatString( int err, const std::string& msg )
 	 ? "."
 	 : " " + msg + "." );
 
-  qDebug() << sstream.str().c_str();
-
   return sstream.str();
 
 #endif
