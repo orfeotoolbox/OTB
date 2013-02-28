@@ -382,7 +382,7 @@ ImageViewManipulator
   
   //  // compose the label to send to the status bar
   std::ostringstream oss;
-  oss<<" Index : " << px <<" , "<< py;
+  oss<<" Index : " << static_cast<int>(px) <<" , "<< static_cast<int>(py);
   QString coordinates(oss.str().c_str());
 
   // update the status bar
@@ -464,8 +464,8 @@ ImageViewManipulator
 ::OnPhysicalCursorPositionChanged(double Xpc, double Ypc)
 {
   // From physcial point to original image at res 0 index
-  unsigned int idx = static_cast<unsigned int>(( Xpc / vcl_abs(m_NativeSpacing[0]) )); 
-  unsigned int idy = static_cast<unsigned int>(( Ypc / vcl_abs(m_NativeSpacing[1]) )); 
+  int idx = static_cast<unsigned int>(( Xpc / vcl_abs(m_NativeSpacing[0]) )); 
+  int idy = static_cast<unsigned int>(( Ypc / vcl_abs(m_NativeSpacing[1]) )); 
 
   // compose the label to send to the status bar
   std::ostringstream oss;
