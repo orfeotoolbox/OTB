@@ -32,6 +32,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbSystem.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -445,7 +446,10 @@ MainWindow
   assert( vectorImageModel!=NULL );
 
   itk::OStringStream oss;
-  oss<<PROJECT_NAME<<" - "<<ToStdString(vectorImageModel->GetFilename())<<" ("<<vectorImageModel->ToImage()->GetNumberOfComponentsPerPixel()<<" bands, "<<vectorImageModel->ToImage()->GetLargestPossibleRegion().GetSize()[0]<<"x"<<vectorImageModel->ToImage()->GetLargestPossibleRegion().GetSize()[1]<<" pixels)";
+  oss<<PROJECT_NAME<<" - "<<otb::System::GetShortFileName(ToStdString(vectorImageModel->GetFilename()));
+  oss<<" ("<<vectorImageModel->ToImage()->GetNumberOfComponentsPerPixel()<<" bands, ";
+  oss<<vectorImageModel->ToImage()->GetLargestPossibleRegion().GetSize()[0];
+  oss<<"x"<<vectorImageModel->ToImage()->GetLargestPossibleRegion().GetSize()[1]<<" pixels)";
   
   setWindowTitle( FromStdString(oss.str()) );
 
