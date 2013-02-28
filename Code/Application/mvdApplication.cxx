@@ -85,7 +85,7 @@ Application
   // '[_tmp_]archive.tar.gz.<SUFFIX>'
   name =
 #if 1
-    fileInfo.canonicalPath().replace( QRegExp( "[/\\\\:]+", "_"), "_" ) +
+    fileInfo.canonicalPath().replace( QRegExp( "[/\\\\:]+" ), "_") +
     "_" +
 #endif
     fileInfo.fileName() +
