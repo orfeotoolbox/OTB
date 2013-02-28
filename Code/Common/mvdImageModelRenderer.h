@@ -125,6 +125,8 @@ private:
   PointType                    m_SquarePointUL;
   PointType                    m_SquarePointLR;
 
+  unsigned int                 m_Texture;
+
 //
 // SLOTS.
 private slots:
