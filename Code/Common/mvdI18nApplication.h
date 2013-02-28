@@ -86,11 +86,31 @@ class Monteverdi2_EXPORT I18nApplication
 // Public methods.
 public:
 
-  /** Constructor */
+  /**
+   * \brief Constructor.
+   *
+   * \param argc Command-line argument count in the argv array.
+   * \param argv Array of command-argument (whitespace-separated) strings.
+   */
   I18nApplication( int& argc, char** argv );
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~I18nApplication();
+
+  /**
+   * \brief Create cache directory if not already existing.
+   *
+   * \return true if cache directory has just been created or false if
+   * it was already existing.
+   */
+  bool MakeCacheDir();
+
+  /**
+   * \brief Get the cache directory.
+   *
+   * \return Return the cache directory.
+   */
+  inline const QDir& GetCacheDir() const;
 
   //
   // STATIC methods.
@@ -149,6 +169,14 @@ private:
 private:
   /**
    */
+  static const char* CACHE_DIR;
+
+  /**
+   */
+  QDir m_CacheDir;
+
+  /**
+   */
   bool m_IsRunningFromBuildDir;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -157,6 +185,22 @@ private:
 // SLOTS
 private slots:
 };
+
+} // end namespace 'mvd'
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
+
+/*****************************************************************************/
+const QDir&
+I18nApplication
+::GetCacheDir() const
+{
+  return m_CacheDir;
+}
 
 } // end namespace 'mvd'
 

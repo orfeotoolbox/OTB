@@ -88,10 +88,15 @@ public:
 // Public methods.
 public:
 
-  /** Constructor */
+  /**
+   * \brief Constructor.
+   *
+   * \param argc Command-line argument count in the argv array.
+   * \param argv Array of command-argument (whitespace-separated) strings.
+   */
   Application( int& argc, char** argv );
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~Application();
 
   /**
@@ -172,6 +177,7 @@ private:
 //
 // Private attributes.
 private:
+
   /**
    */
   AbstractModel* m_Model;

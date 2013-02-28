@@ -47,6 +47,7 @@ namespace mvd
   Context comment for translator.
 */
 
+const char* I18nApplication::CACHE_DIR = "mvd2";
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
@@ -84,6 +85,7 @@ I18nApplication
 I18nApplication
 ::I18nApplication( int& argc, char** argv ) :
   QApplication( argc, argv ),
+  m_CacheDir(),
   m_IsRunningFromBuildDir( false )
 {
   InitializeLocale();
@@ -250,6 +252,32 @@ I18nApplication
   qDebug() << message;
 
   return true;
+}
+
+/*******************************************************************************/
+bool
+I18nApplication
+::MakeCacheDir()
+{
+  QDir homeDir( QDir::home() );
+  assert( homeDir.exists() );
+
+  bool isNew = I18nApplication::MakeDirTree(
+    homeDir.path(), I18nApplication::CACHE_DIR
+  );
+
+  QDir cacheDir( homeDir );
+
+  if( !cacheDir.cd( "mvd2" ) )
+    throw SystemError(
+      ToStdString(
+	QString( "('%1')" ).arg( homeDir.filePath( I18nApplication::CACHE_DIR ) )
+      )
+    );
+
+  m_CacheDir = cacheDir;
+
+  return isNew;
 }
 
 /*******************************************************************************/

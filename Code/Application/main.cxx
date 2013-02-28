@@ -44,19 +44,25 @@ int
 main( int argc, char* argv[] )
 {
   mvd::Application application( argc, argv );
-  
+
+  // TODO: Move in correct place when UI is displayed.
+  application.MakeCacheDir();
+
   //
   // Force numeric options of locale to "C"
   // See issue #635
   //
+  // TODO: Move into I18nApplication.
   setlocale( LC_NUMERIC, "C" );
     
   mvd::MainWindow mainWindow;
+
+
 #if 0
   // TODO: Correctly manage main-window state via application settings.
   mainWindow.showMaximized();
 #else
-  // Usefull when developping/debugging.
+  // Usefull when developping/debugging to avoid overlapping other windows.
   mainWindow.show();
 #endif
 
