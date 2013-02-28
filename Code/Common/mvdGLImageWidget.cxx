@@ -252,11 +252,9 @@ GLImageWidget
     // emited to update to force the ql widget (if any) to update
     emit CentralWidgetUpdated();
     }
-  else // just mouse cursor moving
-    {
-    // no mouse button is grabbed here -> no drag detected
-    m_ImageViewManipulator->PropagatePointUnderCursorCoordinates(event->pos());
-    }
+
+  // update the mouse cursor position
+  m_ImageViewManipulator->PropagatePointUnderCursorCoordinates(event->pos());
 }
 
 /*******************************************************************************/
@@ -303,10 +301,10 @@ GLImageWidget
   // First, call superclass implementation
   QGLWidget::resizeEvent(event);
 
-  m_ImageViewManipulator->resizeEvent(event);
-
   // emit a signal releasingMouse to update the renderer status
   emit releasingMouse();
+
+  m_ImageViewManipulator->resizeEvent(event);
 
   // emited to update to force the ql widget (if any) to update
   emit CentralWidgetUpdated();
