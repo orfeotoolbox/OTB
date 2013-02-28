@@ -352,6 +352,9 @@ QuicklookViewManipulator
   // update spacing
   SetSpacing(spacing);
 
+  // native spacing
+  m_NativeSpacing = spacing;
+
   // update origin
   SetOrigin(origin);
 
