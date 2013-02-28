@@ -112,6 +112,16 @@ MainWindow
     m_ImageViewManipulator, SLOT( OnViewportRegionChanged(double, double) )
   );
 
+  // in ql, send the physical coordinate of the point under the cursor 
+  // to the centralWidget. transforming them to original image index
+  // will be done in original manipulator (avoid having a ql sampling
+  // rate)
+  // 
+  QObject::connect(
+    m_QLViewManipulator, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    m_ImageViewManipulator, SLOT( OnPhysicalCursorPositionChanged(double, double) )
+    );
+
   // add the needed docks 
   InitializeDockWidgets();
 
