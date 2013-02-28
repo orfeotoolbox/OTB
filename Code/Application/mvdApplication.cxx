@@ -193,8 +193,7 @@ Application
   // Setup organization tags.
   //
   QCoreApplication::setOrganizationName(
-    tr( "Centre National d'Etudes Spatiales (CNES)" )
-  );
+    "OrfeoToolBox");
   QCoreApplication::setOrganizationDomain(
     "orfeo-toolbox.org"
   );

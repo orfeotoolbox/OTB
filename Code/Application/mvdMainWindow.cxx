@@ -80,6 +80,39 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
+::WriteSettings()
+{
+  QSettings settings;
+  settings.setValue("dsRepositoryPath","test");
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::ReadSettings()
+{
+  QSettings settings;
+
+  if (!settings.contains("dsRepositoryPath"))
+    {
+      qDebug()<<tr("No settings file detected !");
+      WriteSettings();
+      qDebug()<<tr("Writing settings file at ") << settings.fileName().toLatin1().constData() ;
+      //std::cout << "write settings file " << settings.fileName().toLatin1().constData()<< std::endl;
+    }
+  else
+    {
+    QString test = settings.value("dsRepositoryPath").value<QString>();
+
+    std::cout << "test value = " << test.toLatin1().constData() << std::endl;
+    }
+
+}
+
+
+/*****************************************************************************/
+void
+MainWindow
 ::Initialize()
 {
   setObjectName( "mvd::MainWindow" );
@@ -139,6 +172,8 @@ MainWindow
     qApp, SIGNAL( SelectedModelChanged( AbstractModel* ) ),
     this, SLOT( OnSelectedModelChanged( AbstractModel* ) )
   );
+
+  ReadSettings();
 
   // Change to NULL model to force emitting GUI signals when GUI is
   // instanciated. So, GUI will be initialized and controller-widgets

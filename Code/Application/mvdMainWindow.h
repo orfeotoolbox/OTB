@@ -170,6 +170,11 @@ private:
    */
   inline void SetControllerModel( QDockWidget* dock, AbstractModel* model );
 
+  /** Write settings into a settings file*/
+  void WriteSettings();
+
+  /** Read settings from a settings file*/
+  void ReadSettings();
 
 //
 // Private attributes.
