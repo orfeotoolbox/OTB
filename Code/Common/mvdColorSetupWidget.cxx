@@ -63,6 +63,22 @@ ColorSetupWidget
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::ColorSetupWidget() )
 {
+  // This array is here to statically expose the main enhanced band
+  // names that OTB can returns for translation purposes.
+  const char*
+    ENHANCED_BAND_NAME[ 10 ] = {
+    tr("Red").toLatin1().constData(),
+    tr("Green").toLatin1().constData(),
+    tr("Blue").toLatin1().constData(),
+    tr("Yellow").toLatin1().constData(),
+    tr("RedEdge").toLatin1().constData(),
+    tr("Coastal").toLatin1().constData(),
+    tr("NIR").toLatin1().constData(),
+    tr("NIR1").toLatin1().constData(),
+    tr("NIR2").toLatin1().constData(),
+    tr("PAN").toLatin1().constData(),
+  };
+
   m_UI->setupUi( this );
 }
 
