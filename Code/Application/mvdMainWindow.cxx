@@ -434,6 +434,11 @@ MainWindow
 
   assert( vectorImageModel!=NULL );
 
+  itk::OStringStream oss;
+  oss<<PROJECT_NAME<<" - "<<ToStdString(vectorImageModel->GetFilename());
+  //<<" ("<<vectorImageModel->ToImageBase()->GetNumberOfComponentsPerPixel()<<tr(" bands, ")<<vectorImageModel->ToImageBase()->GetLargestPossibleRegion().GetSize()[0]<<"x"<<vectorImageModel->ToImageBase()->GetLargestPossibleRegion().GetSize()[1]<<tr(" pixels)");
+  
+  setWindowTitle( FromStdString(oss.str()) );
 
   //
   // COLOR SETUP.
