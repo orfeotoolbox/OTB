@@ -46,6 +46,30 @@
     </message>
 </context>
 <context>
+    <name>mvd::AbstractModelController</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::AbstractViewManipulator</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::Algorithm</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>mvd::Application</name>
     <message>
         <source>Running from build directory &apos;%1&apos;.</source>
@@ -90,6 +114,178 @@
     </message>
 </context>
 <context>
+    <name>mvd::ColorBandDynamicsWidget</name>
+    <message>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot;color:#000000;background-color:#FF4444&quot;&gt;&amp;nbsp;&lt;b&gt;R&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot;color:#000000;background-color:#44FF44&quot;&gt;&amp;nbsp;&lt;b&gt;G&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
+        <translation>&lt;span style=&quot;color:#000000;background-color:#44FF44&quot;&gt;&amp;nbsp;&lt;b&gt;V&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot;color:#CCCCCC;background-color:#4444FF&quot;&gt;&amp;nbsp;&lt;b&gt;B&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Low</source>
+        <translation>Bas</translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation>Haut</translation>
+    </message>
+    <message>
+        <source>Apply quantiles to all channels.</source>
+        <translation>Applique les quantiles à tout les canaux.</translation>
+    </message>
+    <message>
+        <source>Apply to all</source>
+        <translation>Appliquer à tous</translation>
+    </message>
+    <message>
+        <source>Intensity</source>
+        <translation>Intensité</translation>
+    </message>
+    <message>
+        <source>Set the lower intensity threshold. Values bellow this threshold will be clamped to 0.</source>
+        <translation>Règle le seuil bas pour l&apos;intensité. Les valeurs en dessous de ce seuil seront clampées à 0.</translation>
+    </message>
+    <message>
+        <source>Set the higher intensity threshold. Values bellow this threshold will be clamped to 255.</source>
+        <translation>Règle le seuil haut pour l&apos;intensité. Les valeurs au dessus de ce seuil seront clampées à 255.</translation>
+    </message>
+    <message>
+        <source>Set the intensity low and high thresholds to the minimum and maximum values of the current band.</source>
+        <translation>Règle les seuils bas et haut de l&apos;intensité aux valeurs minimum et maximum pour la bande courante.</translation>
+    </message>
+    <message>
+        <source>Min/Max</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Quantile</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Percentage of the band histogram beginning clipped to obtain lower intensity threshold.</source>
+        <translation>Pourcentage du début de l&apos;histogramme de la bande qui sera ignoré pour calculer le seuil bas de l&apos;intensité.</translation>
+    </message>
+    <message>
+        <source>%</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Percentage of the band histogram ending clipped to obtain higher intensity threshold.</source>
+        <translation>Pourcentage de la fin de l&apos;histogramme de la bande qui sera ignoré pour calculer le seuil haut de l&apos;intensité.</translation>
+    </message>
+    <message>
+        <source>Reset to default quantiles.</source>
+        <translation>Restaure les valeurs par défaut des quantiles.</translation>
+    </message>
+    <message>
+        <source>Defaults</source>
+        <translation>Défaut</translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ColorDynamicsController</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ColorDynamicsWidget</name>
+    <message>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ColorSetupController</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ColorSetupWidget</name>
+    <message>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message utf8="true">
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Image bands&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Bandes de l&apos;image&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot;color:#000000;background-color:#FF4444&quot;&gt;&amp;nbsp;&lt;b&gt;R&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&lt;span&gt;&lt;b&gt;&amp;larr;&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>BAND 0</source>
+        <translation>BANDE 0</translation>
+    </message>
+    <message>
+        <source>BAND 1</source>
+        <translation>BANDE 1</translation>
+    </message>
+    <message>
+        <source>BAND 2</source>
+        <translation>BANDE 2</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot;color:#000000;background-color:#44FF44&quot;&gt;&amp;nbsp;&lt;b&gt;G&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
+        <translation>&lt;span style=&quot;color:#000000;background-color:#44FF44&quot;&gt;&amp;nbsp;&lt;b&gt;V&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>BNAD 2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot;color:#CCCCCC;background-color:#4444FF&quot;&gt;&amp;nbsp;&lt;b&gt;B&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>BAND %1</source>
+        <translation>BANDE %1</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatasetDescriptor</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>mvd::DatasetModel</name>
     <message>
         <source></source>
@@ -103,6 +299,54 @@
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::Gui</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::HistogramModel</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>%1: Generating histogram (I)...</source>
+        <translation>%1: Génération de l&apos;histogramme (I)...</translation>
+    </message>
+    <message>
+        <source>%1: Pass #1 - finding pixel min/maxes...</source>
+        <translation>%1: Passe #1 - Recherche des min/max des pixels...</translation>
+    </message>
+    <message>
+        <source>%1: Pass #1 - done (%2 ms).</source>
+        <translation>%1: Pass #1 - terminé (%2 ms).</translation>
+    </message>
+    <message>
+        <source>%1: Pass #2 - computing histogram...</source>
+        <translation>%1: Pass #2 - calcul de l&apos;histogramme...</translation>
+    </message>
+    <message>
+        <source>%1: Pass #2 - done (%2 ms).</source>
+        <translation>%1: Pass #2 - terminé (%2 ms).</translation>
+    </message>
+    <message>
+        <source>%1: Histogram (I) generated (%2 ms).</source>
+        <translation>%1: Histogramme (I) généré (%2 ms).</translation>
+    </message>
+    <message>
+        <source>%1: Generating histogram (M)...</source>
+        <translation>%1: Generation de l&apos;histogramme (M)...</translation>
+    </message>
+    <message>
+        <source>%1: Histogram (M) generated (%2 ms).</source>
+        <translation>%1: Histogramme (M) généré (%2 ms).</translation>
     </message>
 </context>
 <context>
@@ -122,11 +366,11 @@
     </message>
     <message>
         <source>Failed to access translation-files directory &apos;%1&apos;.</source>
-        <translation>Échec d&apos;accès au répertoire &apos;%1&apos; contenant les fichiers de traduction.</translation>
+        <translation type="obsolete">Échec d&apos;accès au répertoire &apos;%1&apos; contenant les fichiers de traduction.</translation>
     </message>
     <message>
         <source>Critical error!</source>
-        <translation>Erreur critique !</translation>
+        <translation type="obsolete">Erreur critique !</translation>
     </message>
     <message>
         <source>Failed to load &apos;%1&apos; translation file from &apos;%2&apos;.</source>
@@ -139,6 +383,30 @@
     <message>
         <source>Successfully loaded &apos;%1&apos; translation file from &apos;%2&apos;.</source>
         <translation>Chargement réussi du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
+    </message>
+    <message>
+        <source>Executable dir : %1</source>
+        <translation>Répertoire de l&apos;exécutable : %1</translation>
+    </message>
+    <message>
+        <source>Candidate install prefix found : %1</source>
+        <translation>Répertoire d&apos;installation pontentiel trouvé : %1</translation>
+    </message>
+    <message>
+        <source>Unable to locate translation files</source>
+        <translation>Impossible de trouver les fichiers de traductions</translation>
+    </message>
+    <message>
+        <source>Critical error</source>
+        <translation>Erreur critique</translation>
+    </message>
+    <message>
+        <source>Using translation dir &apos;%1&apos;.</source>
+        <translation>Utilisation du répertoire de traduction :%1&apos;.</translation>
+    </message>
+    <message>
+        <source>Failed to access translation-files directory &apos;%1&apos;</source>
+        <translation>Echec de l&apos;accès au répertoire de fichiers de traduction : &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -236,6 +504,26 @@
         <source>&amp;About...</source>
         <translation>&amp;À propos de...</translation>
     </message>
+    <message>
+        <source>Quicklook</source>
+        <translation>Aperçu</translation>
+    </message>
+    <message>
+        <source>Video color setup</source>
+        <translation>Choix des canaux couleurs</translation>
+    </message>
+    <message>
+        <source>Video color dynamics</source>
+        <translation>Réglage de la dynamique d&apos;affichage</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::Math</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>mvd::MyClass</name>
@@ -243,6 +531,50 @@
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::MyWidget</name>
+    <message>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::QuicklookModel</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::QuicklookViewManipulator</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::SystemError</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>System error %1: &apos;%2&apos;.</source>
+        <translation>Erreur système %1: &apos;%2.</translation>
+    </message>
+    <message>
+        <source>System error %1: &apos;%2&apos; %3.</source>
+        <translation>Erruur système %1: &apos;%2&apos; %3.</translation>
     </message>
 </context>
 <context>
@@ -259,6 +591,29 @@
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>The ImageIO use to read this file don&apos;t support Overviews !</source>
+        <translation>Ce format de fichier ne permet pas d&apos;utiliser les pyramides multi-résolution !</translation>
+    </message>
+    <message>
+        <source>Overviews creation: </source>
+        <translation>Création de la pyramide multi-résolution : </translation>
+    </message>
+</context>
+<context>
+    <name>mvd::VideoColorToolBox</name>
+    <message>
+        <source>Video color</source>
+        <translation>Réglage de la couleur</translation>
+    </message>
+    <message>
+        <source>Video color setup</source>
+        <translation>Choix des canaux couleurs</translation>
+    </message>
+    <message>
+        <source>Video color dynamics</source>
+        <translation>Réglage de la dynamique d&apos;affichage</translation>
     </message>
 </context>
 </TS>
