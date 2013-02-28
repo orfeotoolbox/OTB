@@ -19,7 +19,7 @@ add_to_qt4_i18n_sources(
   ${Common_SOURCES}
   ${Common_HEADERS}
   ${Common_FORMS}
-  #${Common_HEADERS_MOC}
+  ${Common_HEADERS_MOC}
   #${Common_FORMS_HEADERS}
 )
 
