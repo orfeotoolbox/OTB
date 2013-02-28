@@ -174,21 +174,5 @@ AbstractImageModel
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void 
-AbstractImageModel
-::OnPhysicalCursorPositionChanged(double Xpc, double Ypc)
-{
-  // screen index to image (at resol 0) coordinates
-  double px =  ( Xpc - GetOrigin()[0] ) / vcl_abs(GetNativeSpacing()[0]);
-  double py =  ( Ypc - GetOrigin()[1] ) / vcl_abs(GetNativeSpacing()[1]);
-  
-  // compose the label to send to the status bar
-  std::ostringstream oss;
-  oss<<" Index : " << static_cast<int>(px) <<" , "<< static_cast<int>(py);
-  QString coordinates(oss.str().c_str());
-
-  // update the status bar
-  emit CurrentCoordinatesUpdated(coordinates);
-}
 
 } // end namespace 'mvd'

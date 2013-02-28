@@ -65,6 +65,7 @@ namespace mvd
 class HistogramModel;
 class QuicklookModel;
 
+
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
@@ -159,7 +160,6 @@ public:
 //
 // Public SLOTS.
 public slots:
-  virtual void OnPhysicalCursorPositionChanged(double Xpc, double Ypc);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

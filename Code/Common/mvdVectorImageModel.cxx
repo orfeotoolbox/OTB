@@ -39,7 +39,7 @@
 #include "otbConfigure.h"
 #include "otbGDALDriverManagerWrapper.h"
 #include "otbStandardOneLineFilterWatcher.h"
-
+#include "otbGeoInformationConversion.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAlgorithm.h"
@@ -156,6 +156,12 @@ VectorImageModel
   // Remember native spacing
   m_NativeSpacing = m_ImageFileReader->GetOutput()->GetSpacing();
 
+  // Setup GenericRSTransform
+  m_GenericRSTransform = otb::GenericRSTransform<>::New();
+  m_GenericRSTransform->SetInputProjectionRef(m_ImageFileReader->GetOutput()->GetProjectionRef());
+  m_GenericRSTransform->SetInputKeywordList(m_ImageFileReader->GetOutput()->GetImageKeywordlist());
+  m_GenericRSTransform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+  m_GenericRSTransform->InstanciateTransform();
 
   //
   // 2. Setup file-reader.
@@ -689,6 +695,61 @@ VectorImageModel
     }
 
   emit SettingsUpdated();
+}
+
+/*******************************************************************************/
+void 
+VectorImageModel
+::OnPhysicalCursorPositionChanged(double Xpc, double Ypc)
+{
+  // the current physcial point
+  PointType point;
+  point[0] = Xpc;
+  point[1] = Ypc;
+
+  // index in current Lod image
+  IndexType currentLodIndex;
+  currentLodIndex[0] = (Xpc - ToImage()->GetOrigin()[0]) / vcl_abs(ToImage()->GetSpacing()[0]);
+  currentLodIndex[1] = (Ypc - ToImage()->GetOrigin()[1]) / vcl_abs(ToImage()->GetSpacing()[1]);
+
+  // stream to fill
+  std::ostringstream oss;
+
+  if ( ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
+    {
+    // screen index to image (at resol 0) coordinates
+    IndexType currentIndex;
+    currentIndex[0] = static_cast<unsigned int>( ( Xpc - GetOrigin()[0] ) / vcl_abs(GetNativeSpacing()[0]) );
+    currentIndex[1] = static_cast<unsigned int>( ( Ypc - GetOrigin()[1] ) / vcl_abs(GetNativeSpacing()[1]) );
+    
+    // get index stream
+    oss<<" Index : [" << currentIndex[0] <<" , "<< currentIndex[1] << "]";
+    
+    // get the physical coordinates
+    oss<<"   -  Physical : [" << Xpc <<" , "<< Ypc << "]";
+
+    // get the LatLong
+    PointType wgs84;
+    wgs84 = m_GenericRSTransform->TransformPoint(point);
+    oss <<"  -  WGS84 : ["<<wgs84[0] << " , " << wgs84[1]<<"]";
+  
+    // get the radiometry
+    VectorImageType::PixelType currentPixel = ToImage()->GetPixel(currentLodIndex);
+    oss <<"  -  Radio : [ ";
+    for (unsigned int idx = 0; idx < currentPixel.GetSize(); idx++)
+      oss <<currentPixel.GetElement(idx) << " ";
+    oss <<"]";
+
+    // get the Placename
+    // WIP
+
+    // get the scale
+    }
+
+  QString coordinates(oss.str().c_str());
+
+  // update the status bar
+  emit CurrentCoordinatesUpdated(coordinates);
 }
 
 } // end namespace 'mvd'

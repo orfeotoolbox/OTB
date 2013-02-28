@@ -49,7 +49,7 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbRenderingImageFilter.h"
-
+#include "otbGenericRSTransform.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -313,6 +313,7 @@ public:
 //
 // Public slots.
 public slots:
+  void OnPhysicalCursorPositionChanged(double Xpc, double Ypc);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -490,7 +491,9 @@ private:
 
   /** List of all Level of detail (Resolution) available from the file */
   UIntVector m_AvailableLod;
-
+  
+  //  Generic RS Transform to get lat/long coordinates 
+  otb::GenericRSTransform<>::Pointer m_GenericRSTransform;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
