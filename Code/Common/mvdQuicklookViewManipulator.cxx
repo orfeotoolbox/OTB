@@ -346,10 +346,14 @@ QuicklookViewManipulator
 void
 QuicklookViewManipulator
 ::OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
-  const SpacingType & spacing)
+                            const SpacingType & spacing,
+                            const PointType& origin )
 {
   // update spacing
   SetSpacing(spacing);
+
+  // update origin
+  SetOrigin(origin);
 
   // set back the zoom to 1
   m_IsotropicZoom = 1.;

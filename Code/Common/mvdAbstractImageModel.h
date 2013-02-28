@@ -143,6 +143,9 @@ public:
   /** */
   inline SpacingType GetSpacing();
 
+  /** */
+  inline PointType   GetOrigin();
+
   /**
    * Get a smart-pointer to the current LOD image-base.
    */
@@ -336,6 +339,15 @@ AbstractImageModel
 ::GetSpacing()
 {
   return ToImageBase()->GetSpacing();
+}
+
+/*****************************************************************************/
+inline
+PointType
+AbstractImageModel
+::GetOrigin()
+{
+  return ToImageBase()->GetOrigin();
 }
 
 } // end namespace 'mvd'

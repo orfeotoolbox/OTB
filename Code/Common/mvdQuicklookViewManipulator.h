@@ -124,7 +124,8 @@ public:
 // Public SLOTS.
 public slots:
   void OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
-                                 const SpacingType & spacing);
+                                 const SpacingType & spacing,
+                                 const PointType& origin);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

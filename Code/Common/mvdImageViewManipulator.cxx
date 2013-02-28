@@ -395,10 +395,15 @@ ImageViewManipulator
 
 /*****************************************************************************/
 void ImageViewManipulator
-::OnModelImageRegionChanged(const ImageRegionType & largestRegion, const SpacingType& spacing)
+::OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
+                            const SpacingType& spacing,
+  const PointType& origin)
 {
   // update the spacing
   SetSpacing(spacing);
+
+  // update the origin
+  SetOrigin(origin);
 
   // store the native spacing too (for physical coordinate
   // computations) 

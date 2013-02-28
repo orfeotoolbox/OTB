@@ -123,7 +123,9 @@ public:
 // Public SLOTS.
 public slots:
   void OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
-                                 const SpacingType& spacing);
+                                 const SpacingType& spacing, 
+                                 const PointType& origin );
+
   void OnViewportRegionChanged(double Xpc, double Ypc);
 
   void OnPhysicalCursorPositionChanged(double Xpc, double Ypc);

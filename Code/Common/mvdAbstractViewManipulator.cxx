@@ -90,4 +90,11 @@ AbstractViewManipulator
   m_Spacing = spacing;
 }
 
+/*******************************************************************************/
+void
+AbstractViewManipulator
+::SetOrigin(const PointType& origin)
+{
+  m_Origin = origin;
+}
 } // end namespace 'mvd'

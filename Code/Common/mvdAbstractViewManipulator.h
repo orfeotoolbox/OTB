@@ -120,6 +120,12 @@ public:
   inline SpacingType GetSpacing() const;
 
   /** */
+  void SetOrigin(const PointType& spacing);
+
+  /** */
+  inline PointType GetOrigin() const;
+
+  /** */
   inline PointType ScreenIndexToPhysicalPoint(const IndexType & index);
   
   /** */
@@ -131,7 +137,8 @@ public slots:
   /** */
   virtual
     void OnModelImageRegionChanged( const ImageRegionType& largestRegion, 
-      const SpacingType & spacing) =0;
+                                    const SpacingType & spacing,
+                                    const PointType& )  = 0;
   /** */
   void OnViewportOriginChanged(const IndexType& origin);
 
@@ -228,6 +235,9 @@ protected:
 
   /** */
   SpacingType  m_NativeSpacing;
+  
+  /** */
+  PointType    m_Origin;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -292,6 +302,15 @@ AbstractViewManipulator
 ::GetSpacing() const
 {
   return m_Spacing;
+}
+
+/*****************************************************************************/
+inline 
+PointType
+AbstractViewManipulator
+::GetOrigin() const
+{
+  return m_Origin;
 }
 
 /*****************************************************************************/

@@ -126,7 +126,7 @@ public slots:
 signals:
   void movingMouse();
   void releasingMouse();
-  void ModelImageRegionChanged(const ImageRegionType &, const SpacingType&);
+  void ModelImageRegionChanged(const ImageRegionType &, const SpacingType&, const PointType&);
   void CentralWidgetUpdated();
 
 //
@@ -205,7 +205,8 @@ GLImageWidget
     {
     emit ModelImageRegionChanged(
       model->GetNativeLargestRegion(),      
-      model->GetNativeSpacing()
+      model->GetNativeSpacing(), 
+      model->GetOrigin() // origin is the same for ql and central image
       );
     }
 }

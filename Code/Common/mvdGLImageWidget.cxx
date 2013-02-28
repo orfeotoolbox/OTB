@@ -143,10 +143,14 @@ GLImageWidget
   // Connect this model region changed.
   QObject::connect(
     this,
-    SIGNAL( ModelImageRegionChanged( const ImageRegionType& , const SpacingType&) ),
+    SIGNAL( ModelImageRegionChanged( const ImageRegionType& , 
+                                     const SpacingType&,
+                                     const PointType&) ),
     // to:
     m_ImageViewManipulator,
-    SLOT( OnModelImageRegionChanged( const ImageRegionType&, const SpacingType& ) )
+    SLOT( OnModelImageRegionChanged( const ImageRegionType&, 
+                                     const SpacingType&,
+                                     const PointType&) )
   );
 
   // Connect the renderer origin (of extent) changed to the manipulator
