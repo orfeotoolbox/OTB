@@ -98,19 +98,7 @@ void
 QuicklookViewManipulator
 ::mouseMoveEvent( QMouseEvent * event)
 {
-  // m_PreviousIsotropicZoom = m_IsotropicZoom;
-
-  // // Update the mouse context
-  // m_MouseContext.dx = -event->x() + m_MouseContext.xMove;
-  // m_MouseContext.dy = -event->y() + m_MouseContext.yMove;
-
-  // // moveRegion 
-  // this->moveRegion( m_MouseContext.dx,  m_MouseContext.dy);
-
-  // // Update the position of the first press to take into account the
-  // // last drag
-  // m_MouseContext.xMove -=  m_MouseContext.dx;
-  // m_MouseContext.yMove -=  m_MouseContext.dy;
+  // nothing to do
 }
 
 /******************************************************************************/
@@ -331,7 +319,25 @@ QuicklookViewManipulator
 void
 QuicklookViewManipulator
 ::keyPressEvent( QKeyEvent * event )
-{ 
+{
+}
+
+/*****************************************************************************/
+void
+QuicklookViewManipulator
+::PropagatePointUnderCursorCoordinates(const QPoint & point )
+{
+  // Compute the physical coordinates of the point under the cursor
+  // and send them to the image manipulator. 
+  IndexType index;
+  index[0] = (unsigned int)( point.x() );
+  index[1] = (unsigned int)( point.y() );
+  PointType physicalPt = ScreenIndexToPhysicalPoint(index);
+  
+  // emit the physical coordinate to be catched by
+  // ImageViewManipulator. Index (for resol 0 of the image)
+  // computation will be done there.
+  emit PhysicalCursorPositionChanged(physicalPt[0], physicalPt[1]);
 }
 
 /*****************************************************************************/
