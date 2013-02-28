@@ -110,15 +110,15 @@ VectorImageModel
     }
   else
     {
-    std::cout << "The ImageIO use to read this file support Overviews !" << std::endl;
+    std::cout << tr("The ImageIO use to read this file support Overviews !").toLatin1().constData() << std::endl;
 
     // TODO MSD: how to manage case of JPEG2000 with no overviews ? : wait GDAL support OpenJPEG ...
     if (nbOfAvailableOvw == 0)
       { // The current file don't have overviews available
-      std::cout << "The file don't have overviews !" << std::endl;
+      std::cout << tr("The file don't have overviews !").toLatin1().constData() << std::endl;
       if (forceToCacheOvw)
         { // the user want to cache the overviews
-        std::cout << "Caching of overviews !" << std::endl;
+        std::cout << tr("Caching of overviews !").toLatin1().constData() << std::endl;
         typedef otb::GDALOverviewsBuilder FilterType;
         FilterType::Pointer filter = FilterType::New();
 
@@ -136,12 +136,12 @@ VectorImageModel
         }
       else
         { // the user don't want to cache the overviews, GDAL will virtually compute the ovw on demand
-        std::cout << "Keep GDAL decimate the file on demand !" << std::endl;
+        std::cout << tr("Keep GDAL decimate the file on demand !").toLatin1().constData() << std::endl;
         }
       }
     else
       {
-      std::cout << "The file have already overviews !" << std::endl;
+      std::cout << tr("The file have already overviews !").toLatin1().constData() << std::endl;
       }
     }
 
