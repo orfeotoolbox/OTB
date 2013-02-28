@@ -94,6 +94,12 @@ public:
   /** \brief Destructor. */
   virtual ~MyWidget();
 
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+
+//
+// Public SLOTS.
+public slots:
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -106,6 +112,8 @@ signals:
 // Protected methods.
 protected:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
 //
 // Protected attributes.
 protected:
@@ -113,8 +121,6 @@ protected:
 //
 // Private methods.
 private:
-
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private attributes.

@@ -63,6 +63,36 @@ const char* Application::DATASET_EXT = ".ds";
 /* STATIC IMPLEMENTATION SECTION                                             */
 
 /*****************************************************************************/
+void
+Application
+::DatasetPathName( QString& path,
+		   QString& name,
+		   const QString& imageFilename )
+{
+  // '/tmp/archive.tar.gz'
+  QFileInfo fileInfo( imageFilename );
+
+#if 0
+  // Dataset is stored into image-file path.
+  // E.g. '/tmp'
+  path = fileInfo.path();
+#else
+  // Dataset is stored into application cache-directory.
+  // E.g. '$HOME/<CACHE_DIR>'
+  path = Application::Instance()->GetCacheDir().path();
+#endif
+
+  // '[_tmp_]archive.tar.gz.<SUFFIX>'
+  name =
+#if 1
+    fileInfo.canonicalPath().replace( QRegExp( "[/\\\\:]+", "_"), "_" ) +
+    "_" +
+#endif
+    fileInfo.fileName() +
+    Application::DATASET_EXT;
+}
+
+/*****************************************************************************/
 DatasetModel*
 Application::LoadDatasetModel( const QString& imageFilename,
 			       int width,

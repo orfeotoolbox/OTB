@@ -98,6 +98,42 @@ public:
   virtual ~I18nApplication();
 
   /**
+   * \brief Get the singleton instance of application as a
+   * I18Application pointer.
+   *
+   * \return The singleton instance of I18nApplication.
+   */
+  inline static I18nApplication* Instance();
+
+  /**
+   * \brief Get the singleton constant instance of application as a
+   * I18Application pointer.
+   *
+   * \return The singleton constant instance of I18nApplication.
+   */
+  inline static const I18nApplication* ConstInstance();
+
+  /**
+   * \brief Get the singleton instance of application (safe) casted
+   * into the TApplication type.
+   *
+   * \return The singleton instance of application (safely) casted
+   * into TApplication type.
+   */
+  template< typename TApplication >
+    inline static TApplication* Instance();
+
+  /**
+   * \brief Get the constant singleton instance of application (safe)
+   * casted  into the TApplication type.
+   *
+   * \return The constant singleton instance of application (safely)
+   * casted into TApplication type.
+   */
+  template< typename TApplication >
+    inline static const TApplication* ConstInstance();
+
+  /**
    * \brief Create cache directory if not already existing.
    *
    * \return true if cache directory has just been created or false if
@@ -193,6 +229,42 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+I18nApplication*
+I18nApplication
+::Instance()
+{
+  return I18nApplication::Instance< I18nApplication >();
+}
+
+/*****************************************************************************/
+const I18nApplication*
+I18nApplication
+::ConstInstance()
+{
+  return I18nApplication::ConstInstance< I18nApplication >();
+}
+
+/*****************************************************************************/
+template< typename TApplication >
+inline
+TApplication*
+I18nApplication
+::Instance()
+{
+  return qobject_cast< TApplication* >( qApp );
+}
+
+/*****************************************************************************/
+template< typename TApplication >
+inline
+const TApplication*
+I18nApplication
+::ConstInstance()
+{
+  return qobject_cast< const TApplication* >( qApp );
+}
 
 /*****************************************************************************/
 const QDir&

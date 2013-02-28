@@ -47,7 +47,13 @@ namespace mvd
   Context comment for translator.
 */
 
+/*****************************************************************************/
+/* CONSTANTS                                                                 */
+
 const char* I18nApplication::CACHE_DIR = "mvd2";
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */

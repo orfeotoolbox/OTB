@@ -58,12 +58,12 @@ main( int argc, char* argv[] )
   mvd::MainWindow mainWindow;
 
 
-#if 0
-  // TODO: Correctly manage main-window state via application settings.
-  mainWindow.showMaximized();
-#else
+#if defined( _DEBUG )
   // Usefull when developping/debugging to avoid overlapping other windows.
   mainWindow.show();
+#else
+  // TODO: Correctly manage main-window state via application settings.
+  mainWindow.showMaximized();
 #endif
 
   // This code is here to propagate events from maximization to child

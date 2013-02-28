@@ -117,10 +117,18 @@ public:
   // STATIC METHODS.
 
   /**
+   * \brief Get the singleton instance of application as an
+   * Application pointer.
+   *
+   * \return The singleton instance of Application.
    */
   inline static Application* Instance();
 
   /**
+   * \brief Get the singleton constant instance of application as an
+   * Application pointer.
+   *
+   * \return The singleton constant instance of I18nApplication.
    */
   inline static const Application* ConstInstance();
 
@@ -201,7 +209,7 @@ Application*
 Application
 ::Instance()
 {
-  return qobject_cast< Application* >( qApp );
+  return I18nApplication::Instance< Application >();
 }
 
 /*****************************************************************************/
@@ -210,28 +218,7 @@ const Application*
 Application
 ::ConstInstance()
 {
-  return qobject_cast< const Application* >( qApp );
-}
-
-/*****************************************************************************/
-inline
-void
-Application
-::DatasetPathName( QString& path,
-		   QString& name,
-		   const QString& imageFilename )
-{
-  // '/tmp/archive.tar.gz'
-  QFileInfo fileInfo( imageFilename );
-
-  // '/tmp/'
-  path = fileInfo.path();
-
-  // 'archive_tar_gz.<SUFFIX>'
-  name =
-    fileInfo.baseName() +
-    "_" + fileInfo.completeSuffix().replace( ".", "_" ) +
-    Application::DATASET_EXT;
+  return I18nApplication::ConstInstance< Application >();
 }
 
 /*****************************************************************************/

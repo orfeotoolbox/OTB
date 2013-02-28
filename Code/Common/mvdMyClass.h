@@ -89,7 +89,7 @@ public:
   /** \brief Destructor. */
   virtual ~MyClass();
 
-  /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
 // Public SLOTS.
