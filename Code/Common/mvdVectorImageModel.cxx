@@ -158,8 +158,9 @@ VectorImageModel
 
   // Setup GenericRSTransform
   m_GenericRSTransform = otb::GenericRSTransform<>::New();
-  m_GenericRSTransform->SetInputProjectionRef(m_ImageFileReader->GetOutput()->GetProjectionRef());
-  m_GenericRSTransform->SetInputKeywordList(m_ImageFileReader->GetOutput()->GetImageKeywordlist());
+  m_GenericRSTransform->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
+  m_GenericRSTransform->SetInputOrigin(m_ImageFileReader->GetOutput()->GetOrigin());
+  m_GenericRSTransform->SetInputSpacing(m_ImageFileReader->GetOutput()->GetSpacing());
   m_GenericRSTransform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
   m_GenericRSTransform->InstanciateTransform();
 
@@ -707,43 +708,82 @@ VectorImageModel
   point[0] = Xpc;
   point[1] = Ypc;
 
+  // stream to fill
+  std::ostringstream oss;
+
+  // screen index to image (at resol 0) coordinates
+  IndexType currentIndex;
+  currentIndex[0] = static_cast<unsigned int>( ( Xpc - GetOrigin()[0] ) / vcl_abs(GetNativeSpacing()[0]) );
+  currentIndex[1] = static_cast<unsigned int>( ( Ypc - GetOrigin()[1] ) / vcl_abs(GetNativeSpacing()[1]) );
+  
+  // get index stream
+  oss<<" Index : [" << currentIndex[0] <<" , "<< currentIndex[1] << "]";
+    
+  // get the physical coordinates
+  oss<<"   -  Physical : [" << Xpc <<" , "<< Ypc << "]";
+  
+  // get the scale
+
+  // get the radiometry
+  
   // index in current Lod image
   IndexType currentLodIndex;
   currentLodIndex[0] = (Xpc - ToImage()->GetOrigin()[0]) / vcl_abs(ToImage()->GetSpacing()[0]);
   currentLodIndex[1] = (Ypc - ToImage()->GetOrigin()[1]) / vcl_abs(ToImage()->GetSpacing()[1]);
 
-  // stream to fill
-  std::ostringstream oss;
-
   if ( ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
     {
-    // screen index to image (at resol 0) coordinates
-    IndexType currentIndex;
-    currentIndex[0] = static_cast<unsigned int>( ( Xpc - GetOrigin()[0] ) / vcl_abs(GetNativeSpacing()[0]) );
-    currentIndex[1] = static_cast<unsigned int>( ( Ypc - GetOrigin()[1] ) / vcl_abs(GetNativeSpacing()[1]) );
-    
-    // get index stream
-    oss<<" Index : [" << currentIndex[0] <<" , "<< currentIndex[1] << "]";
-    
-    // get the physical coordinates
-    oss<<"   -  Physical : [" << Xpc <<" , "<< Ypc << "]";
-
-    // get the LatLong
-    PointType wgs84;
-    wgs84 = m_GenericRSTransform->TransformPoint(point);
-    oss <<"  -  WGS84 : ["<<wgs84[0] << " , " << wgs84[1]<<"]";
-  
-    // get the radiometry
+    //
+    // get the pixel at current index
     VectorImageType::PixelType currentPixel = ToImage()->GetPixel(currentLodIndex);
     oss <<"  -  Radio : [ ";
     for (unsigned int idx = 0; idx < currentPixel.GetSize(); idx++)
       oss <<currentPixel.GetElement(idx) << " ";
     oss <<"]";
-
+    
+    //
+    // get the LatLong
+    PointType wgs84;
+    wgs84 = GetGenericRSTransform()->TransformPoint(point);
+    oss <<"  -  WGS84 : ["<<wgs84[0] << " , " << wgs84[1]<<"]";
+    
+    //
     // get the Placename
     // WIP
+    // ...
+    }
+  else
+    {
+    //
+    // compute the current ql index
+    currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0]) 
+      / vcl_abs(GetQuicklookModel()->ToImage()->GetSpacing()[0]);
+    currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1]) 
+      / vcl_abs(GetQuicklookModel()->ToImage()->GetSpacing()[1]);
+    
+    //
+    // Get the radiometry form the Ql
+    if ( GetQuicklookModel()->ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
+      {
+      VectorImageType::PixelType currentPixel = 
+        GetQuicklookModel()->ToImage()->GetPixel(currentLodIndex);
+      
+      oss <<"  -  Ql Radio : [ ";
+      for (unsigned int idx = 0; idx < currentPixel.GetSize(); idx++)
+        oss <<currentPixel.GetElement(idx) << " ";
+      oss <<"]";
 
-    // get the scale
+      //
+      // get the LatLong
+      PointType wgs84;
+      wgs84 = GetGenericRSTransform()->TransformPoint(point);
+      oss <<"  -  WGS84 : ["<<wgs84[0] << " , " << wgs84[1]<<"]";
+    
+      //
+      // get the Placename
+      // WIP
+      // ...
+      }
     }
 
   QString coordinates(oss.str().c_str());
@@ -751,5 +791,7 @@ VectorImageModel
   // update the status bar
   emit CurrentCoordinatesUpdated(coordinates);
 }
+
+
 
 } // end namespace 'mvd'

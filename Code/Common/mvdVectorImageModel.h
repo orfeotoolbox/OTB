@@ -271,6 +271,9 @@ public:
   /** */
   inline Settings& GetSettings();
 
+  /** */
+  inline otb::GenericRSTransform<> * GetGenericRSTransform();
+
   /**
    * Width and height are added to compute the best level of detail to
    * load from the image if multi-resolution image.
@@ -556,6 +559,15 @@ VectorImageModel
 ::GetSettings()
 {
   return m_Settings;
+}
+
+/*****************************************************************************/
+inline
+otb::GenericRSTransform<>*
+VectorImageModel
+::GetGenericRSTransform()
+{
+  return m_GenericRSTransform;
 }
 
 /*****************************************************************************/
