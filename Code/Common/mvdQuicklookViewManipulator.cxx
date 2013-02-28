@@ -157,9 +157,9 @@ void QuicklookViewManipulator
                       event->size().height());
 
   // compute the intial scale factor to fit to screen
-  double factorX = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[0]
+  double factorX = (double)event->size().width()
     /(double)(m_NavigationContext.m_ModelImageRegion.GetSize()[0]);
-  double factorY = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[1]
+  double factorY = (double)event->size().height()
     /(double)(m_NavigationContext.m_ModelImageRegion.GetSize()[1]);
 
   double scale = std::min(factorX, factorY);
@@ -227,9 +227,7 @@ QuicklookViewManipulator
   // check that the new size is greater than 30x30
   // check that the new isoZoom is not too low and not too large
   // TODO : compute automatically the minSize and the isoZoom range ???
-  if (sizeX > 30 && sizeY > 30  &&
-      m_IsotropicZoom * scale > 0.01 &&
-      m_IsotropicZoom * scale < 10.)
+  if (sizeX > 30 && sizeY > 30)
     {
     // Update the the sizeBeforeConstrain
     m_NavigationContext.m_SizeXBeforeConstrain = sizeX;
