@@ -169,8 +169,6 @@ VectorImageModel
   // Setup GenericRSTransform
   m_GenericRSTransform = otb::GenericRSTransform<>::New();
   m_GenericRSTransform->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
-  m_GenericRSTransform->SetInputOrigin(m_ImageFileReader->GetOutput()->GetOrigin());
-  m_GenericRSTransform->SetInputSpacing(m_ImageFileReader->GetOutput()->GetSpacing());
   m_GenericRSTransform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
   m_GenericRSTransform->InstanciateTransform();
 
@@ -713,95 +711,150 @@ void
 VectorImageModel
 ::OnPhysicalCursorPositionChanged(double Xpc, double Ypc)
 {
+  // stream to fill
+  std::ostringstream ossIndex;
+  std::ostringstream ossPhysical;
+  std::ostringstream ossGeographic;
+  std::ostringstream ossRadio;
+  
   // the current physcial point
   PointType point;
   point[0] = Xpc;
   point[1] = Ypc;
 
-  // stream to fill
-  std::ostringstream oss;
-
-  // screen index to image (at resol 0) coordinates
+  // physical coordinates to index (at resol 0)
   IndexType currentIndex;
   currentIndex[0] = static_cast<unsigned int>( ( Xpc - GetOrigin()[0] ) / vcl_abs(GetNativeSpacing()[0]) );
   currentIndex[1] = static_cast<unsigned int>( ( Ypc - GetOrigin()[1] ) / vcl_abs(GetNativeSpacing()[1]) );
-  
-  // get index stream
-  oss<<" Index : [" << currentIndex[0] <<" , "<< currentIndex[1] << "]";
-    
-  // get the physical coordinates
-  oss<<"   -  Physical : [" << Xpc <<" , "<< Ypc << "]";
-  
-  // get the scale
 
-  // get the radiometry
-  
-  // index in current Lod image
-  IndexType currentLodIndex;
-  currentLodIndex[0] = (Xpc - ToImage()->GetOrigin()[0]) / vcl_abs(ToImage()->GetSpacing()[0]);
-  currentLodIndex[1] = (Ypc - ToImage()->GetOrigin()[1]) / vcl_abs(ToImage()->GetSpacing()[1]);
-
-  if ( ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
+  // show the current pixel description only if the mouse cursor is
+  // under the image
+  if ( GetNativeLargestRegion().IsInside(currentIndex) )
     {
     //
-    // get the pixel at current index
-    VectorImageType::PixelType currentPixel = ToImage()->GetPixel(currentLodIndex);
-    oss <<"  -  Radio : [ ";
-    for (unsigned int idx = 0; idx < currentPixel.GetSize(); idx++)
-      oss <<currentPixel.GetElement(idx) << " ";
-    oss <<"]";
+    // get index stream
+    ossIndex<< currentIndex[0] <<","<< currentIndex[1];
     
+    //
+    // get the physical coordinates
+    if (!ToImage()->GetProjectionRef().empty())
+      {
+      ossPhysical<<"Physical : [" << Xpc <<","<< Ypc << "]";
+      }
+
     //
     // get the LatLong
-    PointType wgs84;
-    wgs84 = GetGenericRSTransform()->TransformPoint(point);
-    oss <<"  -  WGS84 : ["<<wgs84[0] << " , " << wgs84[1]<<"]";
-    
-    //
-    // get the Placename
-    // WIP
-    // ...
-    }
-  else
-    {
-    //
-    // compute the current ql index
-    currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0]) 
-      / vcl_abs(GetQuicklookModel()->ToImage()->GetSpacing()[0]);
-    currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1]) 
-      / vcl_abs(GetQuicklookModel()->ToImage()->GetSpacing()[1]);
-    
-    //
-    // Get the radiometry form the Ql
-    if ( GetQuicklookModel()->ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
+    // TODO : Is there a better method to detect no geoinfo available ?
+    if ( !ToImage()->GetProjectionRef().empty() || 
+         ToImage()->GetImageKeywordlist().GetSize() != 0 )
       {
-      VectorImageType::PixelType currentPixel = 
-        GetQuicklookModel()->ToImage()->GetPixel(currentLodIndex);
-      
-      oss <<"  -  Ql Radio : [ ";
-      for (unsigned int idx = 0; idx < currentPixel.GetSize(); idx++)
-        oss <<currentPixel.GetElement(idx) << " ";
-      oss <<"]";
-
-      //
-      // get the LatLong
       PointType wgs84;
       wgs84 = GetGenericRSTransform()->TransformPoint(point);
-      oss <<"  -  WGS84 : ["<<wgs84[0] << " , " << wgs84[1]<<"]";
+      ossGeographic <<"WGS84 : [long : "<<wgs84[0] << " , lat : " << wgs84[1]<<"]";
+      }
+      
+    //
+    // index in current Lod image
+    IndexType currentLodIndex;
+    currentLodIndex[0] = (Xpc - ToImage()->GetOrigin()[0]) / vcl_abs(ToImage()->GetSpacing()[0]);
+    currentLodIndex[1] = (Ypc - ToImage()->GetOrigin()[1]) / vcl_abs(ToImage()->GetSpacing()[1]);
+
+    //
+    // Display the radiometry of the displayed channels
+    Settings::ChannelVector rgb( GetSettings().GetRgbChannels() );
+
+    if ( ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
+      {
+      //
+      // get the pixel at current index
+      VectorImageType::PixelType currentPixel = ToImage()->GetPixel(currentLodIndex);
+      ossRadio <<"Radio : [ ";
+      for (unsigned int idx = 0; idx < rgb.size(); idx++)
+        {
+        ossRadio <<currentPixel.GetElement(rgb[idx]) << " ";
+        }
+      ossRadio <<"]";
     
       //
       // get the Placename
       // WIP
       // ...
       }
+    else
+      {
+      //
+      // compute the current ql index
+      currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0]) 
+        / vcl_abs(GetQuicklookModel()->ToImage()->GetSpacing()[0]);
+      currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1]) 
+        / vcl_abs(GetQuicklookModel()->ToImage()->GetSpacing()[1]);
+    
+      //
+      // Get the radiometry form the Ql
+      if ( GetQuicklookModel()->ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
+        {
+        VectorImageType::PixelType currentPixel = 
+          GetQuicklookModel()->ToImage()->GetPixel(currentLodIndex);
+      
+        ossRadio <<"Ql Radio : [ ";
+        for (unsigned int idx = 0; idx < rgb.size(); idx++)
+          {
+          ossRadio <<currentPixel.GetElement(rgb[idx]) << " ";
+          }
+        ossRadio <<"]";
+
+        //
+        // get the Placename
+        // WIP
+        // ...
+        }
+      }
+
+    //
+    // get the scale
+    // WIP
     }
-
-  QString coordinates(oss.str().c_str());
-
+  
   // update the status bar
-  emit CurrentCoordinatesUpdated(coordinates);
+  emit CurrentIndexUpdated( QString(ossIndex.str().c_str()) );
+  emit CurrentPhysicalUpdated( QString(ossPhysical.str().c_str()) );
+  emit CurrentGeographicUpdated( QString(ossGeographic.str().c_str()) );
+  emit CurrentRadioUpdated( QString(ossRadio.str().c_str()) );
 }
 
+/*******************************************************************************/
+void 
+VectorImageModel
+::OnUserCoordinatesEditingFinished(const QString& coord)
+{
+    QStringList parts = coord.split( ',' );
+    if ( parts.size() != 2 )
+      return;
 
+    bool xOk;
+    double x = parts.at( 0 ).toDouble( &xOk );
+    if ( !xOk )
+      return;
+
+    bool yOk;
+    double y = parts.at( 1 ).toDouble( &yOk );
+    if ( !yOk )
+      return;
+    
+    // Center the viewport on this index if inside the largest
+    // possible region
+    IndexType index;
+    index[0] = static_cast<unsigned int>(x);
+    index[1] = static_cast<unsigned int>(y);
+    
+    if ( GetNativeLargestRegion().IsInside(index) )
+      {
+      // propagate the physical center
+      double Xpc = index[0] * vcl_abs( GetNativeSpacing()[0] ) + GetOrigin()[0];
+      double Ypc = index[1] * vcl_abs( GetNativeSpacing()[1] ) + GetOrigin()[1];
+
+      emit ViewportRegionChanged( Xpc, Ypc );
+      }
+}
 
 } // end namespace 'mvd'

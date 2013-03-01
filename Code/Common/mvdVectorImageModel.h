@@ -316,16 +316,25 @@ public:
 //
 // Public slots.
 public slots:
+  /** */
   void OnPhysicalCursorPositionChanged(double Xpc, double Ypc);
+  /** */
+  void OnUserCoordinatesEditingFinished(const QString& coord);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  /**
-   */
+  /**   */
   void SettingsUpdated();
+  /**   */
+  void ViewportRegionChanged(double, double);
+  /** */
+  void CurrentIndexUpdated(const QString&);
+  void CurrentPhysicalUpdated(const QString&);
+  void CurrentGeographicUpdated(const QString&);
+  void CurrentRadioUpdated(const QString&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
