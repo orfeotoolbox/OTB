@@ -524,8 +524,8 @@
       <translation>Indice:</translation>
     </message>
     <message>
-      <source> Location</source>
-      <translation> Localisation</translation>
+      <source>Location</source>
+      <translation>Localisation</translation>
     </message>
     <message>
         <source></source>

@@ -679,7 +679,7 @@ MainWindow
   std::string placename = vectorImageModel->GetCenterPixelPlaceName();
   if (!placename.empty())
     {
-    oss <<" - " <<ToStdString( tr(" Location") )<< " : ( " << placename<<" )";
+    oss <<" - " <<ToStdString( tr("Location") )<< " : " << placename;
     }
   
   setWindowTitle( FromStdString(oss.str()) );
