@@ -690,7 +690,7 @@ MainWindow
 
   assert( vectorImageModel!=NULL );
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss<<PROJECT_NAME<<" - "<<otb::System::GetShortFileName(ToStdString(vectorImageModel->GetFilename()));
   oss<<" ("<<vectorImageModel->GetNbComponents()<<tr(" bands, ").toLatin1().constData();
   oss<<vectorImageModel->GetNativeLargestRegion().GetSize()[0];
