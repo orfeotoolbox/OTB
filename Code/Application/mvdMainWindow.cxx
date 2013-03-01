@@ -105,25 +105,43 @@ MainWindow
     qDebug() << defaultdsPath;
 
     QMessageBox msgBox;
-    msgBox.setText(tr("No repository for the dataset caching detected for Monteverdi2 !"));
-    msgBox.setInformativeText(tr("Do you want to set the dataset location ? \n (No will set the default location)"));
+    msgBox.setWindowTitle("Welcome new Montevedi2 user !");
+    msgBox.setText(tr("Monteverdi 2 maintains a repository "
+                      "to store additional data related to each image (display settings, histogram, quicklook...).\n\n"
+                      "Warning:\nYou need to have write access to this directory.\n"
+                      "Be aware that this directory can grow and consume a significant disk space."));
+    msgBox.setInformativeText(tr("Do you want to specify a custom location ?\n(No will use the default location: %1)").arg(defaultdsPath));
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No /*| QMessageBox::Help*/);
     msgBox.setDefaultButton(QMessageBox::No);
     int ret = msgBox.exec();
 
     if (ret == QMessageBox::Yes)
       {
-      QString datasetDir = QFileDialog::getExistingDirectory(this, tr("Select the dataset repository for Monteverdi2"),
-                                                             QDir::homePath());
-      if (datasetDir.isEmpty())
-        { // User push default button => set the value to the default place
-        WriteDsPathSettings(defaultdsPath);
-        }
-      else
-        { // User select something
-        // TODO MSD: check if the user have the right to write into the repository
-        // TODO MSD: share the code with the choice of the settings into the preference menu
-        WriteDsPathSettings(datasetDir);
+      // TODO MSD: share the code with the choice of the settings into the preference menu
+      while( true )
+        {
+        QString datasetDir = QFileDialog::getExistingDirectory(this, tr("Select the dataset repository for Monteverdi2"),
+                                                               QDir::homePath());
+        if (datasetDir.isEmpty())
+          { // User push default button => set the value to the default place
+          WriteDsPathSettings(defaultdsPath);
+          break;
+          }
+        else
+          { // User select something
+          QDir testWriteAccess(datasetDir);
+          if (testWriteAccess.mkdir("testWriteAccess"))
+            { // ok this repository is correct
+            testWriteAccess.rmdir("testWriteAccess");
+            WriteDsPathSettings(datasetDir);
+            break;
+            }
+          else
+            { // Retry
+            QMessageBox::warning( this,tr("Warning"),tr("You don't have write access to this directory."
+                                                        "\nPlease choose another one.") );
+            }
+          }
         }
       }
     else
