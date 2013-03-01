@@ -54,30 +54,21 @@ main( int argc, char* argv[] )
 
   // Check if the application have a settings file already available
   bool appHasSettingsFile = application.HasSettingsFile();
-  if (appHasSettingsFile)
-    std::cout << "has setting file" << std::endl;
-  else
-    std::cout << "has not setting file" << std::endl;
-
   bool appHasIncorrectCacheDir(false);
   if (appHasSettingsFile)
     {
-    std::cout << "Application has a settings file";
     // Read cache dir from settings
     application.ReadCacheDirFromSettings();
     // Check the cache dir
-    try
+    if (!application.CheckCacheDirIsCorrect() )
       {
-      application.MakeCacheDir();
-      }
-    catch (...)
-      {
-      std::cout << "cacheDir is incorrect" << std::endl;
       appHasIncorrectCacheDir = true;
       }
     }
   else // TODO MSD: should be removed
+    {
     std::cout << "Application has no settings file";
+    }
 
   mvd::MainWindow mainWindow;
 
@@ -99,9 +90,11 @@ main( int argc, char* argv[] )
         appHasIncorrectCacheDir = true;
         }
       }
+    // Save the cache directory into the settings file
+    application.WriteCacheDirIntoSettings();
     }
-  // Save the cache directory into the settings file
-  application.WriteCacheDirIntoSettings();
+
+
 
 #if defined( _DEBUG )
   // Usefull when developping/debugging to avoid overlapping other windows.

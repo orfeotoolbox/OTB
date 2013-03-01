@@ -141,6 +141,8 @@ public:
    */
   bool MakeCacheDir();
 
+  bool CheckCacheDirIsCorrect();
+
   /**
    *
    */

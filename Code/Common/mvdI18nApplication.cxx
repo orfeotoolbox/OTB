@@ -266,14 +266,18 @@ bool
 I18nApplication
 ::MakeCacheDir()
 {
+  std::cout << ToStdString(m_CacheDirSetting) << std::endl;
   QDir homeDir( m_CacheDirSetting );
-  assert( homeDir.exists() );
 
-  bool isNew = I18nApplication::MakeDirTree(
+  if (!homeDir.exists())
+    SystemError(ToStdString( QString( "('%1')" ).arg( homeDir.path() ) ));
+
+   bool isNew = I18nApplication::MakeDirTree(
     homeDir.path(), I18nApplication::CACHE_DIR
   );
 
   QDir cacheDir( homeDir );
+  std::cout << ToStdString(homeDir.path()) << std::endl;
 
   if( !cacheDir.cd( "mvd2" ) )
     throw SystemError(
@@ -285,6 +289,40 @@ I18nApplication
   m_CacheDir = cacheDir;
 
   return isNew;
+}
+
+bool
+I18nApplication
+::CheckCacheDirIsCorrect()
+{
+  QDir cacheDir( m_CacheDirSetting );
+
+  // Check if this directory exists
+  if (!cacheDir.exists())
+    {
+    qDebug() << "here1 ";
+    return false;
+    }
+
+  // Check if we can write in this directory
+  if (cacheDir.mkdir("testWriteAccess"))
+    { // ok this repository is correct
+    cacheDir.rmdir("testWriteAccess");
+    }
+  else
+    { // ko this repository is not correct
+    qDebug() << "here2 ";
+    return false;
+    }
+
+  // Check if this directory has the good name
+  if (cacheDir.dirName().compare(QString(I18nApplication::CACHE_DIR)))
+    {
+    qDebug() << "here3 ";
+    return false;
+    }
+
+  return true;
 }
 
 /*******************************************************************************/
