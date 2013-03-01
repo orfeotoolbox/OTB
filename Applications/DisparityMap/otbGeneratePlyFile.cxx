@@ -37,7 +37,7 @@ public:
   typedef Application                         Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
-  
+
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -53,10 +53,10 @@ private:
   void DoInit()
   {
     SetName("GeneratePlyFile");
-    SetDescription("Generate a 3D Plu file from a DEM and a color image.");
-    
+    SetDescription("Generate a 3D Ply file from a DEM and a color image.");
+
     SetDocName("Ply 3D files generation");
-    SetDocLongDescription("Generate a 3D Plu file from a DEM and a color image.");
+    SetDocLongDescription("Generate a 3D Ply file from a DEM and a color image.");
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -66,21 +66,26 @@ private:
     AddParameter(ParameterType_InputImage,"indem","The input DEM");
     SetParameterDescription("indem", "The input DEM");
 
-     AddParameter(ParameterType_Choice,"mode", "Conversion Mode");
+    AddParameter(ParameterType_Choice,"mode", "Conversion Mode");
     AddChoice("mode.dem","DEM");
     SetParameterDescription("mode.dem","DEM conversion mode");
 
     AddChoice("mode.3dgrid","3D grid");
     SetParameterDescription("mode.3dgrid","3D grid conversion mode");
-    
+
     // Build the Output Map Projection
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
-    
+
     AddParameter(ParameterType_InputImage,"incolor","The input color image");
-    SetParameterDescription("indem", "The input color image");
+    SetParameterDescription("incolor", "The input color image");
 
     AddParameter(ParameterType_OutputFilename,"out","The output Ply file");
     SetParameterDescription("out","The output Ply file");
+
+    // Doc example
+    SetDocExampleParameterValue("indem","image_dem.tif");
+    SetDocExampleParameterValue("out","out.ply");
+    SetDocExampleParameterValue("incolor","image_color.tif");
   }
 
   void DoUpdateParameters()
@@ -88,7 +93,7 @@ private:
     // Update the UTM zone params
     MapProjectionParametersHandler::InitializeUTMParameters(this, "incolor", "map");
   }
-    
+
   void DoExecute()
   {
     std::string outfname = GetParameterString("out");
@@ -99,7 +104,7 @@ private:
     FloatVectorImageType::Pointer colorPtr = this->GetParameterImage<FloatVectorImageType>("incolor");
 
     // First, find the footprint in the color image
-    
+
     IteratorType it(demPtr,demPtr->GetLargestPossibleRegion());
     it.GoToBegin();
 
@@ -124,14 +129,14 @@ private:
     rsTransform->SetOutputKeywordList(colorPtr->GetImageKeywordlist());
     rsTransform->InstanciateTransform();
     toMap->InstanciateTransform();
-    
+
     unsigned long nbValidPoints = 0;
 
     // First pass is to find the color footprint
     while(!it.IsAtEnd())
       {
       RSTransformType::InputPointType dem3dPoint;
-      
+
       bool valid = true;
 
       if(GetParameterString("mode")=="dem")
@@ -147,21 +152,21 @@ private:
         dem3dPoint[0]=it.Get()[0];
         dem3dPoint[1]=it.Get()[1];
         dem3dPoint[2]=it.Get()[2];
-      
+
         if(it.Get()[4] < 1)
           {
           valid = false;
           }
         }
-      
+
       if(valid)
         {
         ++nbValidPoints;
 
         RSTransformType::InputPointType color3dPoint = rsTransform->TransformPoint(dem3dPoint);
 
-         
-        
+
+
         FloatVectorImageType::PointType color2dPoint;
         color2dPoint[0] = color3dPoint[0];
         color2dPoint[1] = color3dPoint[1];
@@ -183,7 +188,7 @@ private:
             {
             lr = color2dIndex;
             ul = color2dIndex;
-            
+
             firstLoop = false;
             }
           else
@@ -220,7 +225,7 @@ private:
     std::ostringstream oss;
     oss<<std::fixed;
     oss.precision(12);
-    
+
     ofs<<"ply"<<std::endl;
     ofs<<"format ascii 1.0"<<std::endl;
     ofs<<"element vertex "<<nbValidPoints<<std::endl;
@@ -231,16 +236,16 @@ private:
     ofs<<"property uchar green"<<std::endl;
     ofs<<"property uchar blue"<<std::endl;
     ofs<<"end_header"<<std::endl;
-    
+
 
     // And loop again to generate the ply file
     it.GoToBegin();
 
      while(!it.IsAtEnd())
       {
-      
+
       RSTransformType::InputPointType dem3dPoint;
-      
+
       bool valid = true;
 
       if(GetParameterString("mode")=="dem")
@@ -258,17 +263,17 @@ private:
         dem3dPoint[2]=it.Get()[2];
         valid = (it.Get()[4]>0);
         }
-      
+
       if(valid)
         {
         RSTransformType::InputPointType color3dPoint = rsTransform->TransformPoint(dem3dPoint);
-        
+
         FloatVectorImageType::PointType color2dPoint;
         color2dPoint[0] = color3dPoint[0];
         color2dPoint[1] = color3dPoint[1];
-        
+
         FloatVectorImageType::PixelType color = interpolator->Evaluate(color2dPoint);
-        
+
         double red,green,blue;
 
         if(color.Size() == 4)
@@ -295,7 +300,7 @@ private:
 
         oss.str("");
         oss<<map3dPoint[0]<<" "<<map3dPoint[1]<<" "<<map3dPoint[2]<<" "<<(int)red<<" "<<(int)green<<" " <<(int)blue<<std::endl;
-        
+
         std::string tmp = oss.str();
         // std::replace(tmp.begin(),tmp.end(),'.',',');
         ofs<<tmp;
