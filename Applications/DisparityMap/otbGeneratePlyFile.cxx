@@ -166,7 +166,6 @@ private:
         RSTransformType::InputPointType color3dPoint = rsTransform->TransformPoint(dem3dPoint);
 
 
-
         FloatVectorImageType::PointType color2dPoint;
         color2dPoint[0] = color3dPoint[0];
         color2dPoint[1] = color3dPoint[1];
