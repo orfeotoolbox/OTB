@@ -524,6 +524,10 @@
       <translation>Indice:</translation>
     </message>
     <message>
+      <source> Location</source>
+      <translation> Localisation</translation>
+    </message>
+    <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>

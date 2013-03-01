@@ -40,6 +40,8 @@
 #include "otbGDALDriverManagerWrapper.h"
 #include "otbStandardOneLineFilterWatcher.h"
 #include "otbGeoInformationConversion.h"
+#include "otbCoordinateToName.h"
+
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAlgorithm.h"
@@ -679,6 +681,46 @@ VectorImageModel
 ::ToImageBase()
 {
   return ImageBaseType::Pointer( m_Image );
+}
+
+/*******************************************************************************/
+std::string
+VectorImageModel
+::GetCenterPixelPlaceName()
+{
+  // center index
+  IndexType centerIndex;
+  centerIndex[0] = GetNativeLargestRegion().GetIndex()[0] + GetNativeLargestRegion().GetSize(0)/2;
+  centerIndex[1] = GetNativeLargestRegion().GetIndex()[1] + GetNativeLargestRegion().GetSize(1)/2;
+  
+  //
+  // Compute the physical coordinates of the center pixel 
+  PointType centerPoint;
+  centerPoint[0] = (centerIndex[0] *  vcl_abs( GetNativeSpacing()[0] ) ) + GetOrigin()[0];
+  centerPoint[1] = (centerIndex[1] *  vcl_abs( GetNativeSpacing()[1] ) ) + GetOrigin()[1];
+  
+  // lat / long
+  PointType wgs84;
+  wgs84 = GetGenericRSTransform()->TransformPoint(centerPoint);
+  
+  // get placename
+  otb::CoordinateToName::Pointer coordinateToName = otb::CoordinateToName::New();
+  coordinateToName->SetLonLat(wgs84);
+  coordinateToName->Evaluate();
+
+  // get the placename - Country (if any)
+  std::ostringstream oss;
+  
+  std::string placeName = coordinateToName->GetPlaceName();
+  std::string countryName = coordinateToName->GetCountryName();
+  
+  if (placeName != "")
+    oss << placeName;
+  
+  if (countryName != "")
+    oss << " - "<< countryName;
+
+  return oss.str();
 }
 
 /*******************************************************************************/

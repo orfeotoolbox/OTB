@@ -311,6 +311,11 @@ public:
    */
   virtual ImageBaseType::Pointer ToImageBase();
 
+  /**
+   * Get the placename from the center pixel
+   */
+  std::string GetCenterPixelPlaceName();
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

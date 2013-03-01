@@ -675,6 +675,13 @@ MainWindow
   oss<<vectorImageModel->GetNativeLargestRegion().GetSize()[0];
   oss<<"x"<<vectorImageModel->GetNativeLargestRegion().GetSize()[1]<<tr(" pixels)").toLatin1().constData();
   
+  // add the placename to the title if any
+  std::string placename = vectorImageModel->GetCenterPixelPlaceName();
+  if (!placename.empty())
+    {
+    oss <<" - " <<ToStdString( tr(" Location") )<< " : ( " << placename<<" )";
+    }
+  
   setWindowTitle( FromStdString(oss.str()) );
 
   //
