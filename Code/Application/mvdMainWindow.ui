@@ -23,7 +23,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -41,7 +41,19 @@
     </property>
     <addaction name="action_About"/>
    </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="locale">
+     <locale language="C" country="AnyCountry"/>
+    </property>
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="action_Quicklook"/>
+    <addaction name="action_ColorSetup"/>
+    <addaction name="action_ColorDynamics"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menu_View"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="m_StatusBar"/>
@@ -95,6 +107,48 @@
   <action name="action_Preferences">
    <property name="text">
     <string>Preferences</string>
+   </property>
+  </action>
+  <action name="action_Quicklook">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Quicklook</string>
+   </property>
+   <property name="toolTip">
+    <string>Quicklook (show/hide).</string>
+   </property>
+  </action>
+  <action name="action_ColorSetup">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Color Setup</string>
+   </property>
+   <property name="toolTip">
+    <string>Color Setup (show/hide).</string>
+   </property>
+  </action>
+  <action name="action_ColorDynamics">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Color Dynamics</string>
+   </property>
+   <property name="toolTip">
+    <string>Color Dynamics (show/hide).</string>
    </property>
   </action>
  </widget>

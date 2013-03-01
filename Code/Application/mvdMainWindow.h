@@ -218,6 +218,14 @@ private slots:
   void on_action_Open_activated();
 
   /**
+   * \brief Qt auto-connected slots which are called when View/Quicklook,
+   * View/Color Setup, View/Color Dynamics check boxes are toggled.
+   */
+  void on_action_Quicklook_toggled();
+  void on_action_ColorSetup_toggled();
+  void on_action_ColorDynamics_toggled();
+
+  /**
    * \brief Qt auto-connected slot which is called when Help/About
    * menu action is activated.
    */
@@ -228,6 +236,11 @@ private slots:
    * menu action is activated.
    */
   void on_action_Preferences_activated();
+
+  /** */
+  void OnQuicklookVisibilityChanged ( bool );
+  void OnColorSetupVisibilityChanged ( bool );
+  void OnColorDynamicsVisibilityChanged ( bool );
 
   /** */
   void OnAboutToChangeSelectedModel( const AbstractModel* );

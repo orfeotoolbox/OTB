@@ -255,11 +255,18 @@ MainWindow
   // TODO: Set better minimum size for quicklook GL widget.
   qlWidget->setMinimumSize(100,100);
 
-  AddWidgetToDock( 
+  QDockWidget* qlDockWgt = AddWidgetToDock(
     qlWidget,
     QUICKLOOK_DOCK,
     tr( "Quicklook" ),
     Qt::LeftDockWidgetArea
+    );
+
+  // Quicklook DockWidget's visibilityChanged signal is connected
+  QObject::connect(
+    qlDockWgt, SIGNAL( visibilityChanged( bool ) ),
+    // to:
+    this, SLOT( OnQuicklookVisibilityChanged( bool ) )
     );
 
   //
@@ -278,6 +285,13 @@ MainWindow
     )
   );
 
+  // Color Setup DockWidget's visibilityChanged signal is connected
+  QObject::connect(
+    colorSetupCtrl->parent(), SIGNAL( visibilityChanged( bool ) ),
+    // to:
+    this, SLOT( OnColorSetupVisibilityChanged( bool ) )
+    );
+
   //
   // COLOR DYNAMICS.
   ColorDynamicsWidget* colorDynWgt = new ColorDynamicsWidget( this );
@@ -294,6 +308,13 @@ MainWindow
       Qt::LeftDockWidgetArea
     )
   );
+
+  // Color Dynamics DockWidget's visibilityChanged signal is connected
+  QObject::connect(
+    colorDynamicsCtrl->parent(), SIGNAL( visibilityChanged( bool ) ),
+    // to:
+    this, SLOT( OnColorDynamicsVisibilityChanged( bool ) )
+    );
 
   //
   // CHAIN CONTROLLERS.
@@ -346,7 +367,8 @@ MainWindow
   dockWidget->setFloating( false );
   dockWidget->setFeatures(
     QDockWidget::DockWidgetMovable |
-    QDockWidget::DockWidgetFloatable
+    QDockWidget::DockWidgetFloatable |
+    QDockWidget::DockWidgetClosable
   );
 
   // Add dock.
@@ -408,6 +430,60 @@ MainWindow
   PreferencesDialog prefDialog( this );
 
   prefDialog.exec();
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_Quicklook_toggled()
+{
+  GetQuicklookDock()->setVisible( m_UI->action_Quicklook->isChecked() );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_ColorSetup_toggled()
+{
+  GetColorSetupDock()->setVisible( m_UI->action_ColorSetup->isChecked() );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_ColorDynamics_toggled()
+{
+  GetColorDynamicsDock()->setVisible( m_UI->action_ColorDynamics->isChecked() );
+}
+
+/*****************************************************************************/
+// The Quicklook DockWidget's visibilityChanged signal is linked to the
+// View/Quicklook show/hide checkbox
+void
+MainWindow
+::OnQuicklookVisibilityChanged ( bool visible )
+{
+  m_UI->action_Quicklook->setChecked( visible );
+}
+
+/*****************************************************************************/
+// The Color Setup DockWidget's visibilityChanged signal is linked to the
+// View/Color Setup show/hide checkbox
+void
+MainWindow
+::OnColorSetupVisibilityChanged ( bool visible )
+{
+  m_UI->action_ColorSetup->setChecked( visible );
+}
+
+/*****************************************************************************/
+// The Color Dynamics DockWidget's visibilityChanged signal is linked to the
+// View/Color Dynamics show/hide checkbox
+void
+MainWindow
+::OnColorDynamicsVisibilityChanged ( bool visible )
+{
+  m_UI->action_ColorDynamics->setChecked( visible );
 }
 
 /*****************************************************************************/
