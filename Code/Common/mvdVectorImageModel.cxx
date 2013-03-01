@@ -102,23 +102,24 @@ VectorImageModel
   // Build overviews if necessary
   bool hasOverviewsSupport = m_ImageFileReader->HasOverviewsSupport();
   int nbOfAvailableOvw = m_ImageFileReader->GetNbOfAvailableOverviews();
+  // TODO: this choice should be done by the user during the import of the file
   bool forceToCacheOvw = true;
 
   if (!hasOverviewsSupport)
     { // the current file don't have overviews available and the ImageIO don't support overviews
-    throw std::runtime_error(tr( "The ImageIO use to read this file don't support Overviews !" ).toLatin1().constData());
+    throw std::runtime_error(ToStdString(tr( "The ImageIO use to read this file don't support Overviews." )).c_str());
     }
   else
     {
-    std::cout << tr("The ImageIO use to read this file support Overviews !").toLatin1().constData() << std::endl;
+    qDebug() << tr("The ImageIO use to read this file support overviews.");
 
     // TODO MSD: how to manage case of JPEG2000 with no overviews ? : wait GDAL support OpenJPEG ...
     if (nbOfAvailableOvw == 0)
       { // The current file don't have overviews available
-      std::cout << tr("The file don't have overviews !").toLatin1().constData() << std::endl;
+      qDebug() << tr("The file don't have overviews.");
       if (forceToCacheOvw)
         { // the user want to cache the overviews
-        std::cout << tr("Caching of overviews !").toLatin1().constData() << std::endl;
+        qDebug() << tr("Caching of overviews.");
         typedef otb::GDALOverviewsBuilder FilterType;
         FilterType::Pointer filter = FilterType::New();
 
@@ -128,20 +129,29 @@ VectorImageModel
 
         filter->SetInputFileName(tempfilename);
         filter->SetNbOfResolutions(m_ImageFileReader->GetAvailableResolutions().size());
+
+        try
           {
-          otb::StandardOneLineFilterWatcher watcher(filter,  tr("Overviews creation: " ).toLatin1().constData());
+          otb::StandardOneLineFilterWatcher watcher(filter, ToStdString(tr("Overviews creation: ")));
           filter->Update();
+          }
+        catch (itk::ExceptionObject &)
+          {
+          // The user can continue to use the file so we return a warning message
+          // TODO MSD return the message to the log widget
+          qDebug() << tr( "The overviews have not been created for internal reason."
+              "\n Navigation in resolution will be slower " );
           }
 
         }
       else
         { // the user don't want to cache the overviews, GDAL will virtually compute the ovw on demand
-        std::cout << tr("Keep GDAL decimate the file on demand !").toLatin1().constData() << std::endl;
+        qDebug() << tr("Keep GDAL decimate the file on demand !");
         }
       }
     else
       {
-      std::cout << tr("The file have already overviews !").toLatin1().constData() << std::endl;
+      qDebug() << tr("The file have already overviews !");
       }
     }
 
