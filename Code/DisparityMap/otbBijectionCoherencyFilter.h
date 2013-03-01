@@ -62,9 +62,10 @@ public:
   typedef TDisparityImage  DispMapType;
   typedef TOutputImage     MaskType;
   
-  typedef TOutputImage::RegionType      OutputRegionType;
-  typedef TDisparityImage::RegionType   InputRegionType;
-  typedef TDisparityImage::SizeType     SizeType;
+  typedef typename MaskType::RegionType      OutputRegionType;
+  typedef typename DispMapType::RegionType   InputRegionType;
+  typedef typename DispMapType::SizeType     SizeType;
+  typedef typename DispMapType::IndexType    IndexType;
   
   /** Set the direct horizontal disparity map */
   void SetDirectHorizontalDisparityMapInput( const TDisparityImage * hmap );
@@ -89,6 +90,19 @@ public:
   
   /** Get the tolerance radius */
   itkGetMacro(Tolerance,double);
+  
+  /** Set/Get macro for exploration area */
+  itkSetMacro(MinHDisp,int);
+  itkGetMacro(MinHDisp,int);
+  
+  itkSetMacro(MaxHDisp,int);
+  itkGetMacro(MaxHDisp,int);
+  
+  itkSetMacro(MinVDisp,int);
+  itkGetMacro(MinVDisp,int);
+  
+  itkSetMacro(MaxVDisp,int);
+  itkGetMacro(MaxVDisp,int);
 
 protected:
   /** Constructor */
@@ -113,6 +127,17 @@ private:
   /** Tolerance radius (in pixels) */
   double m_Tolerance;
   
+  /** Minimum horizontal input disparity  */
+  int m_MinHDisp;
+  
+  /** Maximum horizontal input disparity */
+  int m_MaxHDisp;
+  
+  /** Minimum vertical input disparity */
+  int m_MinVDisp;
+  
+  /** Maximum vertical input disparity */
+  int m_MaxVDisp;
 };
 
 } // end namespace otb
