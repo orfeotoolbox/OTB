@@ -42,9 +42,6 @@
     <addaction name="action_About"/>
    </widget>
    <widget class="QMenu" name="menu_View">
-    <property name="locale">
-     <locale language="C" country="AnyCountry"/>
-    </property>
     <property name="title">
      <string>&amp;View</string>
     </property>
@@ -131,10 +128,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Color Setup</string>
+    <string>Video color setup</string>
    </property>
    <property name="toolTip">
-    <string>Color Setup (show/hide).</string>
+    <string>Video color setup (show/hide).</string>
    </property>
   </action>
   <action name="action_ColorDynamics">
@@ -145,10 +142,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Color Dynamics</string>
+    <string>Video color dynamics</string>
    </property>
    <property name="toolTip">
-    <string>Color Dynamics (show/hide).</string>
+    <string>Video color dynamics (show/hide).</string>
    </property>
   </action>
  </widget>

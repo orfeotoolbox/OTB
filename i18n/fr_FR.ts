@@ -524,6 +524,14 @@
       <translation>Indice:</translation>
     </message>
     <message>
+        <source>View</source>
+        <translation>Voir</translation>
+    </message>
+    <message>
+        <source>&amp;View</source>
+        <translation>&amp;Voir</translation>
+    </message>
+    <message>
       <source>Location</source>
       <translation>Localisation</translation>
     </message>
@@ -557,12 +565,24 @@
         <translation>Aperçu</translation>
     </message>
     <message>
+        <source>Quicklook (show/hide).</source>
+        <translation>Aperçu (voir/masquer).</translation>
+    </message>
+    <message>
         <source>Video color setup</source>
         <translation>Choix des canaux couleurs</translation>
     </message>
     <message>
+        <source>Video color setup (show/hide).</source>
+        <translation>Choix des canaux couleurs (voir/masquer).</translation>
+    </message>
+    <message>
         <source>Video color dynamics</source>
         <translation>Réglage de la dynamique d&apos;affichage</translation>
+    </message>
+    <message>
+        <source>Video color dynamics (show/hide).</source>
+        <translation>Réglage de la dynamique d&apos;affichage (voir/masquer).</translation>
     </message>
     <message>
         <source> bands, </source>
