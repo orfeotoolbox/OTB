@@ -54,6 +54,51 @@
 
 namespace mvd
 {
+
+ImageLoader::ImageLoader()
+{
+}
+
+ImageLoader::~ImageLoader()
+{
+}
+  
+void ImageLoader::OpenImage()
+{
+  // This method is executed in a separate thread
+  /*
+  class Sleeper : public QThread
+  {
+    public:
+    static void sleep(unsigned long secs) {
+      QThread::sleep(secs);
+      }
+  };
+
+  Sleeper::sleep( 5 );
+  */
+  
+  try
+    {
+    DatasetModel* model = Application::LoadDatasetModel(
+      filename, width, height );
+
+    // We can only push to another thread,
+    // so thread affinity must be set here,
+    // and not in the slot that receives the object
+    model->moveToThread(Application::Instance()->thread());
+    
+    emit ModelLoaded(model);
+    }
+  catch( std::exception& exc )
+    {
+    emit Error( exc.what() );
+    return;
+    }
+  emit Finished();
+}
+
+  
 /*
   TRANSLATOR mvd::MainWindow
 
@@ -66,7 +111,8 @@ namespace mvd
 MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
   QMainWindow( parent, flags ), 
-  m_UI( new mvd::Ui::MainWindow() )
+  m_UI( new mvd::Ui::MainWindow() ),
+  m_DatasetCreationProgressDialog( 0 )
 {
   m_UI->setupUi( this );
 
@@ -77,6 +123,13 @@ MainWindow
 MainWindow
 ::~MainWindow()
 {
+}
+
+void
+MainWindow
+::OpenImage( QString filename )
+{
+  emit OpenImageRequest( filename );
 }
 
 /*****************************************************************************/
@@ -191,12 +244,18 @@ MainWindow
     this, SLOT( OnAboutToChangeSelectedModel( const AbstractModel* ) )
   );
 
-  // Connect Appllication and MainWindow when selected model has been
+  // Connect Application and MainWindow when selected model has been
   // changed.
   QObject::connect(
     qApp, SIGNAL( SelectedModelChanged( AbstractModel* ) ),
     this, SLOT( OnSelectedModelChanged( AbstractModel* ) )
   );
+  
+  // 
+  QObject::connect(
+    this, SIGNAL( OpenImageRequest(QString) ), 
+    this, SLOT( OnOpenImageRequest(QString) )
+    );
 
   // Change to NULL model to force emitting GUI signals when GUI is
   // instanciated. So, GUI will be initialized and controller-widgets
@@ -398,7 +457,7 @@ MainWindow
 void
 MainWindow
 ::on_action_Open_activated()
-{
+{  
   QString filename(
     QFileDialog::getOpenFileName( this, tr( "Open file..." ) )
   );
@@ -407,23 +466,8 @@ MainWindow
     {
     return;
     }
- 
-  try
-    {
-    // TODO: Replace with complex model (list of DatasetModel) when implemented.
-    DatasetModel* model = Application::LoadDatasetModel(
-      filename,
-      // TODO: Remove width and height from dataset model loading.
-      centralWidget()->width(), centralWidget()->height()
-    );
 
-    Application::Instance()->SetModel( model );
-    }
-  catch( std::exception& exc )
-    {
-    QMessageBox::warning( this, tr("Exception!"), exc.what() );
-    return;
-    }
+  emit OpenImageRequest( filename );
 }
 
 /*****************************************************************************/
@@ -828,6 +872,68 @@ MainWindow
 
   // update the Quicklook
   qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->update();
+}
+
+void
+MainWindow
+::OnOpenImageRequest( QString filename )
+{
+  delete m_DatasetCreationProgressDialog;
+  m_DatasetCreationProgressDialog = new DatasetCreationProgressDialog(this);
+  
+  m_DatasetCreationProgressDialog->SetImage( filename );
+  
+  QString targetFile;
+  QString targetPath;
+  Application::DatasetPathName( targetPath, targetFile, filename );
+  
+  m_DatasetCreationProgressDialog->SetDataset( targetPath + QDir::separator() + filename  );  
+  m_DatasetCreationProgressDialog->show();
+  
+  // Inspired by :
+  // http://mayaposch.wordpress.com/2011/11/01/how-to-really-truly-use-qthreads-the-full-explanation
+  
+  QThread* thread = new QThread;
+  ImageLoader* loader = new ImageLoader();
+  loader->filename = filename;
+  loader->width = centralWidget()->width();
+  loader->height = centralWidget()->height();
+  loader->moveToThread(thread);
+  
+  connect(loader, SIGNAL(Error(QString)), this, SLOT(OnError(QString)));
+  connect(thread, SIGNAL(started()), loader, SLOT(OpenImage()));
+  connect(loader, SIGNAL(ModelLoaded(AbstractModel*)), this, SLOT(OnModelLoaded(AbstractModel*)));
+  connect(loader, SIGNAL(Finished()), thread, SLOT(quit()));
+  connect(loader, SIGNAL(Finished()), loader, SLOT(deleteLater()));
+  connect(thread, SIGNAL(Finished()), thread, SLOT(deleteLater()));
+  thread->start();
+}
+
+
+void
+MainWindow
+::OnError( QString message )
+{
+  QMessageBox::warning( this, tr("Erreur"), message );
+}
+
+void
+MainWindow
+::OnModelLoaded( AbstractModel* model )
+{
+  try
+    {
+    Application::Instance()->SetModel( model );
+    }
+  catch( std::exception& exc )
+    {
+    OnError( exc.what() );
+    return;
+    }
+  
+  m_DatasetCreationProgressDialog->close();
+  delete m_DatasetCreationProgressDialog;
+  m_DatasetCreationProgressDialog = 0;
 }
 
 /*****************************************************************************/

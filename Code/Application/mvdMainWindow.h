@@ -46,6 +46,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
+#include "mvdDatasetCreationProgressDialog.h"
 
 
 /*****************************************************************************/
@@ -71,6 +72,29 @@ namespace Ui
 {
 class MainWindow;
 }
+
+
+class ImageLoader : public QObject
+{
+    Q_OBJECT
+
+public:
+    ImageLoader();
+    
+    ~ImageLoader();
+    
+    QString filename;
+    int width;
+    int height;
+    
+public slots:
+    void OpenImage();
+
+signals:
+    void ModelLoaded( AbstractModel* );
+    void Finished();
+    void Error(QString err);
+};
 
 
 /*****************************************************************************/
@@ -103,8 +127,10 @@ public:
 
   /** \brief Destructor. */
   virtual ~MainWindow();
-
+  
   QString SelectCacheDir(bool incorrectCacheDir = false);
+  
+  void OpenImage( QString filename );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -112,7 +138,9 @@ public:
 // SIGNALS.
 signals:
   void UserCoordinatesEditingFinished(const QString&);
-
+  
+  void OpenImageRequest( QString filename );
+  
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
@@ -214,6 +242,8 @@ private:
   QLabel *                   m_CurrentPixelPlaceName;
   QLabel *                   m_CurrentPixelRadio;
   QLabel *                   m_CurrentPixelScale;
+  
+  DatasetCreationProgressDialog* m_DatasetCreationProgressDialog;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -255,10 +285,20 @@ private slots:
   void OnAboutToChangeSelectedModel( const AbstractModel* );
 
   /** */
+  void OnModelLoaded( AbstractModel* );
+
+  /** */
   void OnSelectedModelChanged( AbstractModel* );
 
   /** */
   void OnUserCoordinatesEditingFinished();
+  
+  /** */
+  void OnOpenImageRequest( QString filename );
+
+  /** */
+  void OnError( QString filename );
+
 
 };
 

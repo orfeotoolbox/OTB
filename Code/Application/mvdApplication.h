@@ -99,12 +99,6 @@ public:
   /** \brief Destructor. */
   virtual ~Application();
 
-  /**
-   */
-  // Method could be inline but it's better not new/delete in inline
-  // methods (heap and memory-alignment contexts).
-  void SetModel( AbstractModel* model );
-
  /**
   */
   inline const AbstractModel* GetModel() const;
@@ -161,6 +155,14 @@ public:
 				     int width,
 				     int height );
 
+             
+public slots:
+  /**
+   */
+  // Method could be inline but it's better not new/delete in inline
+  // methods (heap and memory-alignment contexts).
+  void SetModel( AbstractModel* model );
+  
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //

@@ -112,21 +112,7 @@ main( int argc, char* argv[] )
   // Handle passing image filename from command-line
   if(argc>1)
     {
-    try
-      {
-      // TODO: Replace with complex model (list of DatasetModel) when implemented.
-      mvd::DatasetModel* model = mvd::Application::LoadDatasetModel(
-        argv[1],
-        // TODO: Remove width and height from dataset model loading.
-        mainWindow.centralWidget()->width(),
-        mainWindow.centralWidget()->height());
-
-      mvd::Application::Instance()->SetModel( model );
-      }
-    catch( std::exception& exc )
-      {
-      // TODO: Report something usefull here
-      }
+    mainWindow.OpenImage( QString(argv[1]) );
     }
   
   return application.exec();
