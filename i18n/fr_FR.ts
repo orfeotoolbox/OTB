@@ -524,16 +524,16 @@
       <translation>Indice:</translation>
     </message>
     <message>
-        <source>View</source>
-        <translation>Voir</translation>
-    </message>
-    <message>
-        <source>&amp;View</source>
-        <translation>&amp;Voir</translation>
-    </message>
-    <message>
       <source>Location</source>
       <translation>Localisation</translation>
+    </message>
+    <message>
+      <source>View</source>
+      <translation>Voir</translation>
+    </message>
+    <message>
+      <source>&amp;View</source>
+      <translation>&amp;Voir</translation>
     </message>
     <message>
         <source></source>
