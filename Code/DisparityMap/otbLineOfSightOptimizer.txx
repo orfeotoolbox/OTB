@@ -20,6 +20,8 @@
 
 #include "otbLineOfSightOptimizer.h"
 
+#include "vnl/vnl_inverse.h"
+
 namespace otb
 {
 
@@ -94,8 +96,7 @@ LineOfSightOptimizer<TPrecision,TLabel>
     ++itPointB;
     }
   
-  vnl_matrix_inverse<PrecisionType> inv(m_InvCumul);
-  vnl_vector<PrecisionType> intersection = inv.inverse() * m_SecCumul;
+  vnl_vector<PrecisionType> intersection = vnl_inverse(m_InvCumul) * m_SecCumul;
   
   result[0] = intersection[0];
   result[1] = intersection[1];
