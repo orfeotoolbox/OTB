@@ -118,7 +118,7 @@ protected:
   virtual void GenerateInputRequestedRegion();
   
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const OutputRegionType & outputRegionForThread, int threadId);
   
 private:
   BijectionCoherencyFilter(const Self&); //purposely not implemented

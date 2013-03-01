@@ -180,24 +180,30 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
   this->Superclass::GenerateInputRequestedRegion();
   
   OutputRegionType requested = this->GetOutput()->GetRequestedRegion();
-  InputRegionType  directLargest = this->GetDirectHorizontalDisparityMap()->GetLargestPossibleRegion();
+  InputRegionType  directLargest = this->GetDirectHorizontalDisparityMapInput()->GetLargestPossibleRegion();
   InputRegionType  directRequested;
-  InputRegionType  reverseLargest = this->GetReverseHorizontalDisparityMap()->GetLargestPossibleRegion();
+  InputRegionType  reverseLargest = this->GetReverseHorizontalDisparityMapInput()->GetLargestPossibleRegion();
   InputRegionType  reverseRequested;
   
-  this->CallCopyOutputRegionToInputRegion(requested,directRequested);
+  this->CallCopyOutputRegionToInputRegion(directRequested,requested);
   
   reverseRequested.SetIndex(0,requested.GetIndex(0) + this->m_MinHDisp);
   reverseRequested.SetIndex(1,requested.GetIndex(1) + this->m_MinVDisp);
   reverseRequested.SetSize(0,requested.GetSize(0) + this->m_MaxHDisp - this->m_MinHDisp);
   reverseRequested.SetSize(1,requested.GetSize(1) + this->m_MaxVDisp - this->m_MinVDisp);
   
-  reverseRequested.Crop(reverseLargest);
+  if (!reverseRequested.Crop(reverseLargest))
+    {
+    reverseRequested.SetIndex(0,reverseLargest.GetIndex(0));
+    reverseRequested.SetIndex(1,reverseLargest.GetIndex(1));
+    reverseRequested.SetSize(0,0);
+    reverseRequested.SetSize(1,0);
+    }
   
   TDisparityImage * directHmap = const_cast<TDisparityImage *>(this->GetDirectHorizontalDisparityMapInput());
   TDisparityImage * directVmap = const_cast<TDisparityImage *>(this->GetDirectVerticalDisparityMapInput());
-  TDisparityImage * reverseHmap = const_cast<TDisparityImage *>(this->GetDirectHorizontalDisparityMapInput());
-  TDisparityImage * reverseVmap = const_cast<TDisparityImage *>(this->GetDirectVerticalDisparityMapInput());
+  TDisparityImage * reverseHmap = const_cast<TDisparityImage *>(this->GetReverseHorizontalDisparityMapInput());
+  TDisparityImage * reverseVmap = const_cast<TDisparityImage *>(this->GetReverseVerticalDisparityMapInput());
   
   directHmap->SetRequestedRegion(directRequested);
   if (directVmap) directVmap->SetRequestedRegion(directRequested);
@@ -209,12 +215,12 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 template <class TDisparityImage, class TOutputImage>
 void
 BijectionCoherencyFilter<TDisparityImage,TOutputImage>
-::ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputRegionType & outputRegionForThread, int threadId)
 {
   const TDisparityImage * directHmap = this->GetDirectHorizontalDisparityMapInput();
   const TDisparityImage * directVmap = this->GetDirectVerticalDisparityMapInput();
-  const TDisparityImage * reverseHmap = this->GetDirectHorizontalDisparityMapInput();
-  const TDisparityImage * reverseVmap = this->GetDirectVerticalDisparityMapInput();
+  const TDisparityImage * reverseHmap = this->GetReverseHorizontalDisparityMapInput();
+  const TDisparityImage * reverseVmap = this->GetReverseVerticalDisparityMapInput();
   
   TOutputImage * output = this->GetOutput();
   
