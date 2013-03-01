@@ -520,6 +520,10 @@
         <translation></translation>
     </message>
     <message>
+      <source>Index:</source>
+      <translation>Indice:</translation>
+    </message>
+    <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
@@ -667,6 +671,10 @@
     <message>
         <source>The file have already overviews !</source>
         <translation>Le fichier a déjà une pyramide multi-résolution !</translation>
+    </message>
+    <message>
+      <source>Physical</source>
+      <translation>Physique</translation>
     </message>
 </context>
 <context>
