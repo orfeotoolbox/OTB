@@ -48,7 +48,9 @@
 #include "mvdPreferencesDialog.h"
 #include "mvdQuicklookModel.h"
 #include "mvdQuicklookViewManipulator.h"
+#include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
+
 
 namespace mvd
 {
@@ -80,31 +82,55 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::WriteSettings()
+::WriteDsPathSettings(QString dsPath)
 {
   QSettings settings;
-  settings.setValue("dsRepositoryPath","test");
+  settings.setValue("dsRepositoryPath",dsPath);
 }
 
 /*****************************************************************************/
 void
 MainWindow
-::ReadSettings()
+::InitializeDsPathSettings()
 {
   QSettings settings;
 
   if (!settings.contains("dsRepositoryPath"))
     {
-      qDebug()<<tr("No settings file detected !");
-      WriteSettings();
-      qDebug()<<tr("Writing settings file at ") << settings.fileName().toLatin1().constData() ;
-      //std::cout << "write settings file " << settings.fileName().toLatin1().constData()<< std::endl;
-    }
-  else
-    {
-    QString test = settings.value("dsRepositoryPath").value<QString>();
+    qDebug() << tr("No dsRepositoryPath settings detected !");
 
-    std::cout << "test value = " << test.toLatin1().constData() << std::endl;
+    QString tree("/mvd2/datasets");
+    QString defaultdsPath = QDir::homePath();
+    defaultdsPath.append(tree);
+    qDebug() << defaultdsPath;
+
+    QMessageBox msgBox;
+    msgBox.setText(tr("No repository for the dataset caching detected for Monteverdi2 !"));
+    msgBox.setInformativeText(tr("Do you want to set the dataset location ? \n (No will set the default location)"));
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No /*| QMessageBox::Help*/);
+    msgBox.setDefaultButton(QMessageBox::No);
+    int ret = msgBox.exec();
+
+    if (ret == QMessageBox::Yes)
+      {
+      QString datasetDir = QFileDialog::getExistingDirectory(this, tr("Select the dataset repository for Monteverdi2"),
+                                                             QDir::homePath());
+      if (datasetDir.isEmpty())
+        { // User push default button => set the value to the default place
+        WriteDsPathSettings(defaultdsPath);
+        }
+      else
+        { // User select something
+        // TODO MSD: check if the user have the right to write into the repository
+        // TODO MSD: share the code with the choice of the settings into the preference menu
+        WriteDsPathSettings(datasetDir);
+        }
+      }
+    else
+      if (ret == QMessageBox::No)
+        { // User push default button => set the value to the default place
+        WriteDsPathSettings(defaultdsPath);
+        }
     }
 
 }
@@ -173,7 +199,7 @@ MainWindow
     this, SLOT( OnSelectedModelChanged( AbstractModel* ) )
   );
 
-  ReadSettings();
+  InitializeDsPathSettings();
 
   // Change to NULL model to force emitting GUI signals when GUI is
   // instanciated. So, GUI will be initialized and controller-widgets
