@@ -76,6 +76,13 @@ VectorImageModel
   m_RegionsToLoadVector(),
   m_Filename()
 {
+
+  QObject::connect(
+    this,
+    SIGNAL( ViewportRegionChanged(double, double) ),
+    this,
+    SLOT( OnPhysicalCursorPositionChanged(double, double))
+    );
 }
 
 /*******************************************************************************/
@@ -853,7 +860,7 @@ VectorImageModel
       double Xpc = index[0] * vcl_abs( GetNativeSpacing()[0] ) + GetOrigin()[0];
       double Ypc = index[1] * vcl_abs( GetNativeSpacing()[1] ) + GetOrigin()[1];
 
-      emit ViewportRegionChanged( Xpc, Ypc );
+      emit ViewportRegionChanged( Xpc, Ypc );      
       }
 }
 
