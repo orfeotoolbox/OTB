@@ -224,7 +224,8 @@ bool Application::HasSettingsFile()
 void Application::ReadCacheDirFromSettings()
 {
   QSettings settings;
-  m_CacheDirSetting = settings.value("cacheDir").toString();
+  QString cacheDirSetting = settings.value("cacheDir").toString();
+  m_CacheDir.setPath(cacheDirSetting);
 }
 
 void Application::WriteCacheDirIntoSettings()

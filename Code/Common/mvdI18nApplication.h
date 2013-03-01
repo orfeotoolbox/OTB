@@ -139,17 +139,9 @@ public:
    * \return true if cache directory has just been created or false if
    * it was already existing.
    */
-  bool MakeCacheDir();
+  bool MakeCacheDir(QString cacheDirStr);
 
   bool CheckCacheDirIsCorrect();
-
-  /**
-   *
-   */
-  void SetCacheDirStr(QString cacheDir)
-  {
-    m_CacheDirSetting = cacheDir;
-  }
 
   /**
    * \brief Get the cache directory.
@@ -193,10 +185,6 @@ protected:
 //
 // Protected attributes.
 protected:
-
-/**
- */
-QString m_CacheDirSetting;
 
 /**
  */

@@ -92,7 +92,6 @@ I18nApplication
 ::I18nApplication( int& argc, char** argv ) :
   QApplication( argc, argv ),
   m_CacheDir(),
-  m_CacheDirSetting(),
   m_IsRunningFromBuildDir( false )
 {
   InitializeLocale();
@@ -264,17 +263,15 @@ I18nApplication
 /*******************************************************************************/
 bool
 I18nApplication
-::MakeCacheDir()
+::MakeCacheDir(QString cacheDirStr)
 {
-  std::cout << ToStdString(m_CacheDirSetting) << std::endl;
-  QDir homeDir( m_CacheDirSetting );
+  QDir homeDir (cacheDirStr);
 
   if (!homeDir.exists())
     SystemError(ToStdString( QString( "('%1')" ).arg( homeDir.path() ) ));
 
    bool isNew = I18nApplication::MakeDirTree(
-    homeDir.path(), I18nApplication::CACHE_DIR
-  );
+    homeDir.path(), I18nApplication::CACHE_DIR );
 
   QDir cacheDir( homeDir );
   std::cout << ToStdString(homeDir.path()) << std::endl;
@@ -295,30 +292,25 @@ bool
 I18nApplication
 ::CheckCacheDirIsCorrect()
 {
-  QDir cacheDir( m_CacheDirSetting );
-
   // Check if this directory exists
-  if (!cacheDir.exists())
+  if (!m_CacheDir.exists())
     {
-    qDebug() << "here1 ";
     return false;
     }
 
   // Check if we can write in this directory
-  if (cacheDir.mkdir("testWriteAccess"))
+  if (m_CacheDir.mkdir("testWriteAccess"))
     { // ok this repository is correct
-    cacheDir.rmdir("testWriteAccess");
+    m_CacheDir.rmdir("testWriteAccess");
     }
   else
     { // ko this repository is not correct
-    qDebug() << "here2 ";
     return false;
     }
 
   // Check if this directory has the good name
-  if (cacheDir.dirName().compare(QString(I18nApplication::CACHE_DIR)))
+  if (m_CacheDir.dirName().compare(QString(I18nApplication::CACHE_DIR)))
     {
-    qDebug() << "here3 ";
     return false;
     }
 

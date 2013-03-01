@@ -77,12 +77,11 @@ main( int argc, char* argv[] )
     // Loop until the directory will be correct
     while (true)
       {
-      // Select a new location for the cache directory
-      application.SetCacheDirStr(mainWindow.SelectCacheDir(appHasIncorrectCacheDir));
+      // Select a new location for the cache director
       try
         {
         // Create the cache directory
-        application.MakeCacheDir();
+        application.MakeCacheDir(mainWindow.SelectCacheDir(appHasIncorrectCacheDir));
         break;
         }
       catch (...)
