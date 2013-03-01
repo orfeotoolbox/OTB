@@ -113,6 +113,21 @@ public:
    */
   inline AbstractModel* GetModel();
 
+  /**
+   *
+   */
+  bool HasSettingsFile();
+
+  /**
+   *
+   */
+  void ReadCacheDirFromSettings();
+
+  /**
+    *
+    */
+  void WriteCacheDirIntoSettings();
+
   //
   // STATIC METHODS.
 

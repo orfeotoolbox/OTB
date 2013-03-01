@@ -142,6 +142,14 @@ public:
   bool MakeCacheDir();
 
   /**
+   *
+   */
+  void SetCacheDirStr(QString cacheDir)
+  {
+    m_CacheDirSetting = cacheDir;
+  }
+
+  /**
    * \brief Get the cache directory.
    *
    * \return Return the cache directory.
@@ -184,6 +192,16 @@ protected:
 // Protected attributes.
 protected:
 
+/**
+ */
+QString m_CacheDirSetting;
+
+/**
+ */
+QDir m_CacheDir;
+
+
+
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
@@ -207,9 +225,7 @@ private:
    */
   static const char* CACHE_DIR;
 
-  /**
-   */
-  QDir m_CacheDir;
+
 
   /**
    */

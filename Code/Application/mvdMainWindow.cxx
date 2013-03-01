@@ -88,6 +88,63 @@ MainWindow
   settings.setValue("dsRepositoryPath",dsPath);
 }
 
+
+QString
+MainWindow
+::SelectCacheDir(bool incorrectCacheDir)
+{
+  QString defaultCacheDirStr (QDir::homePath());
+  int ret;
+
+  if (incorrectCacheDir)
+    {
+    QMessageBox::warning( this,tr("Warning"),
+                          tr("This cache directory seems incorrect."
+                             "\nPlease choose another one.") );
+    ret = QMessageBox::Yes;
+    }
+  else
+    {
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Welcome new Montevedi2 user !");
+    msgBox.setText(tr("Monteverdi 2 maintains a repository "
+      "to store additional data related to each image "
+      "(display settings, histogram, quicklook...).\n\n"
+      "Warning:\nYou need to have write access to this directory.\n"
+      "Be aware that this directory can grow and consume a significant disk space."));
+    msgBox.setInformativeText(tr("Do you want to specify a custom location ?\n"
+        "(No will use the default location: %1)").arg(defaultCacheDirStr));
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+    ret = msgBox.exec();
+    }
+
+  QString cacheDirStr;
+  if (ret == QMessageBox::Yes)
+    {
+    // TODO MSD: share the code with the choice of the settings into the preference menu
+
+    QString datasetDir = QFileDialog::getExistingDirectory(this, tr("Select the cache repository for Monteverdi2"),
+                                                           defaultCacheDirStr);
+    if (datasetDir.isEmpty())
+      { // User push default button => set the value to the default place
+      cacheDirStr = defaultCacheDirStr;
+      }
+    else
+      { // User select something
+      cacheDirStr = datasetDir;
+      }
+    }
+  else
+    if (ret == QMessageBox::No)
+      { // User push default button => set the value to the default place
+      cacheDirStr = defaultCacheDirStr;
+      }
+
+  return cacheDirStr;
+}
+
+
 /*****************************************************************************/
 void
 MainWindow
@@ -217,7 +274,7 @@ MainWindow
     this, SLOT( OnSelectedModelChanged( AbstractModel* ) )
   );
 
-  InitializeDsPathSettings();
+  //InitializeDsPathSettings();
 
   // Change to NULL model to force emitting GUI signals when GUI is
   // instanciated. So, GUI will be initialized and controller-widgets

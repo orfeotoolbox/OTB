@@ -212,6 +212,28 @@ Application
 }
 
 /*******************************************************************************/
+bool Application::HasSettingsFile()
+{
+  QSettings settings;
+  settings.sync();
+  return settings.status();
+}
+
+/*******************************************************************************/
+void Application::ReadCacheDirFromSettings()
+{
+  QSettings settings;
+  m_CacheDirSetting = settings.value("dsRepositoryPath").toString();
+}
+
+void Application::WriteCacheDirIntoSettings()
+{
+  QSettings settings;
+  settings.setValue("dsRepositoryPath", m_CacheDir.path());
+}
+
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void

@@ -104,6 +104,8 @@ public:
   /** \brief Destructor. */
   virtual ~MainWindow();
 
+  QString SelectCacheDir(bool incorrectCacheDir = false);
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //

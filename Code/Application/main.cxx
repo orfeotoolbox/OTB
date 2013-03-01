@@ -45,18 +45,58 @@ main( int argc, char* argv[] )
 {
   mvd::Application application( argc, argv );
 
-  // TODO: Move in correct place when UI is displayed.
-  application.MakeCacheDir();
-
   //
   // Force numeric options of locale to "C"
   // See issue #635
   //
   // TODO: Move into I18nApplication.
   setlocale( LC_NUMERIC, "C" );
-    
+
+  // Check if the application have a settings file already available
+  bool appHasSettingsFile = application.HasSettingsFile();
+  bool appHasIncorrectCacheDir(false);
+  if (appHasSettingsFile)
+    {
+    std::cout << "Application has a settings file";
+    // Read cache dir from settings
+    application.ReadCacheDirFromSettings();
+    // Check the cache dir
+    try
+      {
+      application.MakeCacheDir();
+      }
+    catch (...)
+      {
+      std::cout << "cacheDir is incorrect" << std::endl;
+      appHasIncorrectCacheDir = true;
+      }
+    }
+  else // TODO MSD: should be removed
+    std::cout << "Application has no settings file";
+
   mvd::MainWindow mainWindow;
 
+  if (!appHasSettingsFile || appHasIncorrectCacheDir)
+    {
+    // Loop until the directory will be correct
+    while (true)
+      {
+      // Select a new location for the cache directory
+      application.SetCacheDirStr(mainWindow.SelectCacheDir(appHasIncorrectCacheDir));
+      try
+        {
+        // Create the cache directory
+        application.MakeCacheDir();
+        break;
+        }
+      catch (...)
+        {
+        appHasIncorrectCacheDir = true;
+        }
+      }
+    }
+  // Save the cache directory into the settings file
+  application.WriteCacheDirIntoSettings();
 
 #if defined( _DEBUG )
   // Usefull when developping/debugging to avoid overlapping other windows.

@@ -92,6 +92,7 @@ I18nApplication
 ::I18nApplication( int& argc, char** argv ) :
   QApplication( argc, argv ),
   m_CacheDir(),
+  m_CacheDirSetting(),
   m_IsRunningFromBuildDir( false )
 {
   InitializeLocale();
@@ -265,7 +266,7 @@ bool
 I18nApplication
 ::MakeCacheDir()
 {
-  QDir homeDir( QDir::home() );
+  QDir homeDir( m_CacheDirSetting );
   assert( homeDir.exists() );
 
   bool isNew = I18nApplication::MakeDirTree(
