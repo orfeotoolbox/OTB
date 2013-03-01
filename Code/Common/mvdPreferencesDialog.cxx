@@ -56,7 +56,7 @@ PreferencesDialog
   QSettings settings;
   if ( settings.contains("cacheDir") )
     {
-    m_UI->datasetPathLineEdit->setText( settings.value( "cacheDir" ).toString() );
+    m_UI->cacheDirPathLineEdit->setText( settings.value( "cacheDir" ).toString() );
     }
   
   // Connect centralWidget manipulator to Ql renderer when viewportRegionChanged
@@ -78,7 +78,7 @@ PreferencesDialog
 /*******************************************************************************/
 void
 PreferencesDialog
-::on_datasetPathButton_clicked()
+::on_cacheDirButton_clicked()
 { 
   QFileDialog fileDialog;
   fileDialog.setConfirmOverwrite(true);
@@ -88,7 +88,7 @@ PreferencesDialog
   if (fileDialog.exec())
     {
     QString path = fileDialog.selectedFiles().at(0);
-    m_UI->datasetPathLineEdit->setText( path );
+    m_UI->cacheDirPathLineEdit->setText( path );
     }
 }
 
@@ -98,9 +98,9 @@ PreferencesDialog
 {
   QSettings settings;
   
-  if ( !m_UI->datasetPathLineEdit->text().isEmpty() )
+  if ( !m_UI->cacheDirPathLineEdit->text().isEmpty() )
     {
-    settings.setValue( "cacheDir", m_UI->datasetPathLineEdit->text() );
+    settings.setValue( "cacheDir", m_UI->cacheDirPathLineEdit->text() );
     }
     
   close();

@@ -105,7 +105,7 @@ private slots:
    * \brief Qt auto-connected slot which is called when datasetPathButton menu
    * action is activated.
    */
-  void on_datasetPathButton_clicked();
+  void on_cacheDirButton_clicked();
 
   /**
    * \brief Qt auto-connected slot which is called when datasetPathButton menu
