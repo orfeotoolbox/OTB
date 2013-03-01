@@ -230,11 +230,47 @@ void
 MainWindow
 ::InitializeStatusBarWidgets()
 {
-  // Add a QLabel to the status bar to show pixel coordinates
-  m_CurrentPixelLabel = new QLabel(statusBar());
-  m_CurrentPixelLabel->setAlignment(Qt::AlignCenter);
-    
-  statusBar()->addWidget(m_CurrentPixelLabel);
+  // inspired from Qgis
+  //QFont myFont( "Arial", 9 );
+
+  // label
+  m_CurrentPixelIndexLabel = new QLabel( QString(), statusBar() );
+  //m_CurrentPixelIndexLabel->setFont( myFont );
+  m_CurrentPixelIndexLabel->setMinimumWidth( 10 );
+  m_CurrentPixelIndexLabel->setMaximumHeight( 20 );
+  m_CurrentPixelIndexLabel->setMargin( 3 );
+  m_CurrentPixelIndexLabel->setAlignment( Qt::AlignCenter );
+  m_CurrentPixelIndexLabel->setFrameStyle( QFrame::NoFrame );
+  m_CurrentPixelIndexLabel->setText( tr( "Index:" ) );
+  m_CurrentPixelIndexLabel->setToolTip( tr( "Current map coordinate" ) );
+  statusBar()->addPermanentWidget( m_CurrentPixelIndexLabel, 0 );
+  
+  // Add a QLabel to the status bar to show pixel index
+  m_CurrentPixelIndex = new QLineEdit(QString(), statusBar());
+  //m_CurrentPixelIndex->setFont( myFont );
+  m_CurrentPixelIndex->setMinimumWidth( 10 );
+  m_CurrentPixelIndex->setContentsMargins( 0, 0, 0, 0 );
+  m_CurrentPixelIndex->setAlignment( Qt::AlignCenter );
+  statusBar()->addPermanentWidget( m_CurrentPixelIndex,      0 );
+
+  
+  
+  // Add a QLabel to the status bar to show pixel index
+  m_CurrentPixelPhysical = new QLabel(statusBar());
+  //m_CurrentPixelPhysical->setFont( myFont );
+  m_CurrentPixelPhysical->setAlignment(Qt::AlignCenter);
+  statusBar()->addPermanentWidget( m_CurrentPixelPhysical,   0 );
+
+  // Add a QLabel to the status bar to show pixel index
+  m_CurrentPixelGeographic = new QLabel(statusBar());
+  //m_CurrentPixelGeographic->setFont( myFont );
+  m_CurrentPixelGeographic->setAlignment(Qt::AlignCenter);
+  statusBar()->addPermanentWidget( m_CurrentPixelGeographic, 0 );
+
+  // Add a QLabel to the status bar to show pixel index
+  m_CurrentPixelRadio = new QLabel(statusBar());
+  m_CurrentPixelRadio->setAlignment(Qt::AlignCenter);
+  statusBar()->addPermanentWidget( m_CurrentPixelRadio,      1 );
 }
 
 /*****************************************************************************/
@@ -583,16 +619,55 @@ MainWindow
     m_ImageViewManipulator, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
     vectorImageModel, SLOT( OnPhysicalCursorPositionChanged(double, double) )
     );
-
-  // disconnect this Qlabel Widget to receive notification from 
-  // vectorImageModel
+  //
+  // disconnect the statusBar widget to the vectorImage corresponding
+  // signal 
   QObject::disconnect(
     vectorImageModel, 
-    SIGNAL( CurrentCoordinatesUpdated(const QString& ) ),
-    m_CurrentPixelLabel,
+    SIGNAL( CurrentIndexUpdated(const QString& ) ),
+    m_CurrentPixelIndex,
     SLOT( setText(const QString &) )
   );
 
+  QObject::disconnect(
+    vectorImageModel, 
+    SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
+    m_CurrentPixelPhysical,
+    SLOT( setText(const QString &) )
+  );
+
+  QObject::disconnect(
+    vectorImageModel, 
+    SIGNAL( CurrentGeographicUpdated(const QString& ) ),
+    m_CurrentPixelGeographic,
+    SLOT( setText(const QString &) )
+  );
+
+  QObject::disconnect(
+    vectorImageModel, 
+    SIGNAL( CurrentRadioUpdated(const QString& ) ),
+    m_CurrentPixelRadio,
+    SLOT( setText(const QString &) )
+  );
+
+  // index widget edition
+  QObject::disconnect(m_CurrentPixelIndex,
+                   SIGNAL( editingFinished() ),
+                   this,
+                   SLOT( OnUserCoordinatesEditingFinished() )
+    );
+  
+  QObject::disconnect(this,
+                   SIGNAL( UserCoordinatesEditingFinished(const QString&) ),
+                   vectorImageModel,
+                   SLOT( OnUserCoordinatesEditingFinished(const QString&) )
+    );
+
+  QObject::disconnect(vectorImageModel,
+                   SIGNAL( ViewportRegionChanged(double, double) ),
+                   m_ImageViewManipulator,
+                   SLOT( OnViewportRegionChanged(double, double) )
+    );
 }
 
 /*****************************************************************************/
@@ -704,14 +779,69 @@ MainWindow
     vectorImageModel, SLOT( OnPhysicalCursorPositionChanged(double, double) )
     );
 
-  // connect this Qlabel Widget to receive notification from 
-  // vectorImageModel
+  //
+  // connect the statusBar widget to the vectorImage corresponding
+  // signal 
   QObject::connect(
     vectorImageModel, 
-    SIGNAL( CurrentCoordinatesUpdated(const QString& ) ),
-    m_CurrentPixelLabel,
+    SIGNAL( CurrentIndexUpdated(const QString& ) ),
+    m_CurrentPixelIndex,
     SLOT( setText(const QString &) )
   );
+
+  QObject::connect(
+    vectorImageModel, 
+    SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
+    m_CurrentPixelPhysical,
+    SLOT( setText(const QString &) )
+  );
+
+  QObject::connect(
+    vectorImageModel, 
+    SIGNAL( CurrentGeographicUpdated(const QString& ) ),
+    m_CurrentPixelGeographic,
+    SLOT( setText(const QString &) )
+  );
+
+  QObject::connect(
+    vectorImageModel, 
+    SIGNAL( CurrentRadioUpdated(const QString& ) ),
+    m_CurrentPixelRadio,
+    SLOT( setText(const QString &) )
+  );
+
+  // index widget edition
+  QObject::connect(m_CurrentPixelIndex,
+                   SIGNAL( editingFinished() ),
+                   this,
+                   SLOT( OnUserCoordinatesEditingFinished() )
+    );
+  
+  QObject::connect(this,
+                   SIGNAL( UserCoordinatesEditingFinished(const QString&) ),
+                   vectorImageModel,
+                   SLOT( OnUserCoordinatesEditingFinished(const QString&) )
+    );
+
+  QObject::connect(vectorImageModel,
+                   SIGNAL( ViewportRegionChanged(double, double) ),
+                   m_ImageViewManipulator,
+                   SLOT( OnViewportRegionChanged(double, double) )
+    );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnUserCoordinatesEditingFinished()
+{
+  // get the text and send it to the vector image model to be
+  // processed 
+  QString coord = m_CurrentPixelIndex->text();
+  emit UserCoordinatesEditingFinished(coord);
+
+  // update the Quicklook
+  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->update();
 }
 
 /*****************************************************************************/

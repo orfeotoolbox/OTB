@@ -109,6 +109,7 @@ public:
 //
 // SIGNALS.
 signals:
+  void UserCoordinatesEditingFinished(const QString&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -204,7 +205,13 @@ private:
    */
   ImageModelRenderer*       m_QLModelRenderer;
 
-  QLabel *                   m_CurrentPixelLabel;
+  QLabel *                   m_CurrentPixelIndexLabel;
+  QLineEdit *                m_CurrentPixelIndex;
+  QLabel *                   m_CurrentPixelPhysical;
+  QLabel *                   m_CurrentPixelGeographic;
+  QLabel *                   m_CurrentPixelPlaceName;
+  QLabel *                   m_CurrentPixelRadio;
+  QLabel *                   m_CurrentPixelScale;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -247,6 +254,10 @@ private slots:
 
   /** */
   void OnSelectedModelChanged( AbstractModel* );
+
+  /** */
+  void OnUserCoordinatesEditingFinished();
+
 };
 
 } // end namespace 'mvd'
