@@ -746,7 +746,8 @@ VectorImageModel
     // get the physical coordinates
     if (!ToImage()->GetProjectionRef().empty())
       {
-      ossPhysical<<"Physical : [" << Xpc <<","<< Ypc << "]";
+      
+      ossPhysical<<ToStdString( tr("Physical") )<<" : [" << Xpc <<","<< Ypc << "]";
       }
 
     //
@@ -774,7 +775,7 @@ VectorImageModel
       {
       //
       // get the pixel at current index
-      VectorImageType::PixelType currentPixel = ToImage()->GetPixel(currentLodIndex);
+      VectorImageType::PixelType currentPixel = ToImage()->GetPixel(currentLodIndex);      
       ossRadio <<"Radio : [ ";
       for (unsigned int idx = 0; idx < rgb.size(); idx++)
         {
@@ -834,34 +835,37 @@ void
 VectorImageModel
 ::OnUserCoordinatesEditingFinished(const QString& coord)
 {
-    QStringList parts = coord.split( ',' );
-    if ( parts.size() != 2 )
-      return;
+  //
+  // extract the coordinates from the given text
+  QStringList parts = coord.split( ',' );
+  if ( parts.size() != 2 )
+    return;
 
-    bool xOk;
-    double x = parts.at( 0 ).toDouble( &xOk );
-    if ( !xOk )
-      return;
+  bool xOk;
+  double x = parts.at( 0 ).toDouble( &xOk );
+  if ( !xOk )
+    return;
 
-    bool yOk;
-    double y = parts.at( 1 ).toDouble( &yOk );
-    if ( !yOk )
-      return;
+  bool yOk;
+  double y = parts.at( 1 ).toDouble( &yOk );
+  if ( !yOk )
+    return;
+  
+  //
+  // Center the viewport on this index if inside the largest
+  // possible region
+  IndexType index;
+  index[0] = static_cast<unsigned int>(x);
+  index[1] = static_cast<unsigned int>(y);
     
-    // Center the viewport on this index if inside the largest
-    // possible region
-    IndexType index;
-    index[0] = static_cast<unsigned int>(x);
-    index[1] = static_cast<unsigned int>(y);
-    
-    if ( GetNativeLargestRegion().IsInside(index) )
-      {
-      // propagate the physical center
-      double Xpc = index[0] * vcl_abs( GetNativeSpacing()[0] ) + GetOrigin()[0];
-      double Ypc = index[1] * vcl_abs( GetNativeSpacing()[1] ) + GetOrigin()[1];
+  if ( GetNativeLargestRegion().IsInside(index) )
+    {
+    // propagate the physical center
+    double Xpc = index[0] * vcl_abs( GetNativeSpacing()[0] ) + GetOrigin()[0];
+    double Ypc = index[1] * vcl_abs( GetNativeSpacing()[1] ) + GetOrigin()[1];
 
-      emit ViewportRegionChanged( Xpc, Ypc );      
-      }
+    emit ViewportRegionChanged( Xpc, Ypc );      
+    }
 }
 
 } // end namespace 'mvd'
