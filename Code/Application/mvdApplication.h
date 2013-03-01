@@ -143,7 +143,7 @@ public:
 
   /**
    */
-  inline static
+  static
     void DatasetPathName( QString& path,
 			  QString& name,
 			  const QString& imageFilename );
