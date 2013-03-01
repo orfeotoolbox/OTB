@@ -54,6 +54,11 @@ main( int argc, char* argv[] )
 
   // Check if the application have a settings file already available
   bool appHasSettingsFile = application.HasSettingsFile();
+  if (appHasSettingsFile)
+    std::cout << "has setting file" << std::endl;
+  else
+    std::cout << "has not setting file" << std::endl;
+
   bool appHasIncorrectCacheDir(false);
   if (appHasSettingsFile)
     {

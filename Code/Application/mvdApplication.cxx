@@ -214,22 +214,23 @@ Application
 /*******************************************************************************/
 bool Application::HasSettingsFile()
 {
+  // The settings file should contain the cacheDir key to be valid
   QSettings settings;
   settings.sync();
-  return settings.status();
+  return ( (settings.status()==QSettings::NoError) && settings.contains("cacheDir"));
 }
 
 /*******************************************************************************/
 void Application::ReadCacheDirFromSettings()
 {
   QSettings settings;
-  m_CacheDirSetting = settings.value("dsRepositoryPath").toString();
+  m_CacheDirSetting = settings.value("cacheDir").toString();
 }
 
 void Application::WriteCacheDirIntoSettings()
 {
   QSettings settings;
-  settings.setValue("dsRepositoryPath", m_CacheDir.path());
+  settings.setValue("cacheDir", m_CacheDir.path());
 }
 
 

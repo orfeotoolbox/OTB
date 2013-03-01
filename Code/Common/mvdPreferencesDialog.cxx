@@ -54,9 +54,9 @@ PreferencesDialog
   m_UI->setupUi( this );
   
   QSettings settings;
-  if ( settings.contains("dsRepositoryPath") )
+  if ( settings.contains("cacheDir") )
     {
-    m_UI->datasetPathLineEdit->setText( settings.value( "dsRepositoryPath" ).toString() );
+    m_UI->datasetPathLineEdit->setText( settings.value( "cacheDir" ).toString() );
     }
   
   // Connect centralWidget manipulator to Ql renderer when viewportRegionChanged
@@ -100,7 +100,7 @@ PreferencesDialog
   
   if ( !m_UI->datasetPathLineEdit->text().isEmpty() )
     {
-    settings.setValue( "dsRepositoryPath", m_UI->datasetPathLineEdit->text() );
+    settings.setValue( "cacheDir", m_UI->datasetPathLineEdit->text() );
     }
     
   close();

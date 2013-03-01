@@ -80,15 +80,6 @@ MainWindow
 }
 
 /*****************************************************************************/
-void
-MainWindow
-::WriteDsPathSettings(QString dsPath)
-{
-  QSettings settings;
-  settings.setValue("dsRepositoryPath",dsPath);
-}
-
-
 QString
 MainWindow
 ::SelectCacheDir(bool incorrectCacheDir)
@@ -143,73 +134,6 @@ MainWindow
 
   return cacheDirStr;
 }
-
-
-/*****************************************************************************/
-void
-MainWindow
-::InitializeDsPathSettings()
-{
-  QSettings settings;
-
-  if (!settings.contains("dsRepositoryPath"))
-    {
-    qDebug() << tr("No dsRepositoryPath settings detected !");
-
-    QString tree("/mvd2/datasets");
-    QString defaultdsPath = QDir::homePath();
-    defaultdsPath.append(tree);
-    qDebug() << defaultdsPath;
-
-    QMessageBox msgBox;
-    msgBox.setWindowTitle("Welcome new Montevedi2 user !");
-    msgBox.setText(tr("Monteverdi 2 maintains a repository "
-                      "to store additional data related to each image (display settings, histogram, quicklook...).\n\n"
-                      "Warning:\nYou need to have write access to this directory.\n"
-                      "Be aware that this directory can grow and consume a significant disk space."));
-    msgBox.setInformativeText(tr("Do you want to specify a custom location ?\n(No will use the default location: %1)").arg(defaultdsPath));
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No /*| QMessageBox::Help*/);
-    msgBox.setDefaultButton(QMessageBox::No);
-    int ret = msgBox.exec();
-
-    if (ret == QMessageBox::Yes)
-      {
-      // TODO MSD: share the code with the choice of the settings into the preference menu
-      while( true )
-        {
-        QString datasetDir = QFileDialog::getExistingDirectory(this, tr("Select the dataset repository for Monteverdi2"),
-                                                               QDir::homePath());
-        if (datasetDir.isEmpty())
-          { // User push default button => set the value to the default place
-          WriteDsPathSettings(defaultdsPath);
-          break;
-          }
-        else
-          { // User select something
-          QDir testWriteAccess(datasetDir);
-          if (testWriteAccess.mkdir("testWriteAccess"))
-            { // ok this repository is correct
-            testWriteAccess.rmdir("testWriteAccess");
-            WriteDsPathSettings(datasetDir);
-            break;
-            }
-          else
-            { // Retry
-            QMessageBox::warning( this,tr("Warning"),tr("You don't have write access to this directory."
-                                                        "\nPlease choose another one.") );
-            }
-          }
-        }
-      }
-    else
-      if (ret == QMessageBox::No)
-        { // User push default button => set the value to the default place
-        WriteDsPathSettings(defaultdsPath);
-        }
-    }
-
-}
-
 
 /*****************************************************************************/
 void
@@ -273,8 +197,6 @@ MainWindow
     qApp, SIGNAL( SelectedModelChanged( AbstractModel* ) ),
     this, SLOT( OnSelectedModelChanged( AbstractModel* ) )
   );
-
-  //InitializeDsPathSettings();
 
   // Change to NULL model to force emitting GUI signals when GUI is
   // instanciated. So, GUI will be initialized and controller-widgets
