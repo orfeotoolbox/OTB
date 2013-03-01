@@ -592,7 +592,7 @@ ColorDynamicsController
     100.0 * imageModel->GetHistogramModel()->Percentile(
       imageModel->GetSettings().RgbChannel( channel ),
       value,
-      BOUND_LOWER )
+      BOUND_UPPER )
   );
   }
   colorBandDynWgt->blockSignals( false );
@@ -666,10 +666,10 @@ ColorDynamicsController
     // Get color-dynamics widgets.
     ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
     assert( colorDynWgt!=NULL );
-    
+
     ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel(  static_cast< RgbaChannel >(i) );
     assert( colorBandDynWgt!=NULL );
-    
+
     // Block widget signals to prevent recursive signal/slot loops.
     colorBandDynWgt->blockSignals( true );
 
