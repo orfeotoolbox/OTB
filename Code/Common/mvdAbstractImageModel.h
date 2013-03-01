@@ -168,8 +168,6 @@ public slots:
 signals:
   /** */
   void SpacingChanged( const SpacingType& );
-  /** */
-  void CurrentCoordinatesUpdated(const QString&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
