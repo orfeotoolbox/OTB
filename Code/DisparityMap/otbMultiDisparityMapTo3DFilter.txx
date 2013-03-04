@@ -383,6 +383,9 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
   
   typename OutputImageType::PointType pointRef;
   TDPointType currentPoint;
+  
+  typename OutputImageType::PixelType outPixel(3);
+  PrecisionType globalResidue;
 
   typename PointSetType::Pointer pointSetA = PointSetType::New();
   typename PointSetType::Pointer pointSetB = PointSetType::New();
@@ -410,6 +413,8 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
     pointSetA->SetPointData(0,0);
     pointSetB->SetPointData(0,0);
     
+    unsigned int nbPoints = 1;
+    
     for (unsigned int k=0; k<this->m_MovingKeywordLists.size(); ++k)
       {
       // Compute the N moving lines of sight
@@ -433,24 +438,30 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
       currentPoint[2] = altiMin;
       pointBi = this->m_MovingToGroundTransform[k]->TransformPoint(currentPoint);
       
-      pointSetA->SetPoint(k+1, pointAi);
-      pointSetB->SetPoint(k+1, pointBi);
-      pointSetA->SetPointData(k+1,k+1);
-      pointSetB->SetPointData(k+1,k+1);
+      pointSetA->SetPoint(nbPoints, pointAi);
+      pointSetB->SetPoint(nbPoints, pointBi);
+      pointSetA->SetPointData(nbPoints,k+1);
+      pointSetB->SetPointData(nbPoints,k+1);
+      ++nbPoints;
       }
     
-    // Check if there is at least 2 lines of sight, then compute intersection
-    if (pointSetA->GetNumberOfPoints() >= 2)
+    // Check if there are at least 2 lines of sight, then compute intersection
+    if (nbPoints >= 2)
       {
       TDPointType intersection = optimizer->Compute(pointSetA,pointSetB);
-      typename OutputImageType::PixelType outPixel(3);
       outPixel[0] = intersection[0];
       outPixel[1] = intersection[1];
       outPixel[2] = intersection[2];
-      outIt.Set(outPixel);
-      
-      resIt.Set(optimizer->GetGlobalResidue());
+      globalResidue = optimizer->GetGlobalResidue();
       }
+    else
+      {
+      outPixel.Fill(0);
+      globalResidue = 0;
+      }
+    
+    outIt.Set(outPixel);
+    resIt.Set(globalResidue);
     
     // Increment all iterators
     for (typename DispMapIteratorList::iterator hIt = hDispIts.begin(); hIt != hDispIts.end(); ++hIt)
