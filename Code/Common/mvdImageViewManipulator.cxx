@@ -499,10 +499,10 @@ void ImageViewManipulator
     //
     // apply the zoom
     this->Zoom(scale / GetIsotropicZoom());
-    }
 
-  // force repaintGL
-  qobject_cast< QWidget* >( parent() )->update(); 
+    // force repaintGL
+    qobject_cast< QWidget* >( parent() )->update(); 
+    }
 }
 
 /*****************************************************************************/
