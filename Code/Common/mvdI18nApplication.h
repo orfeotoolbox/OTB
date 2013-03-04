@@ -136,13 +136,25 @@ public:
   /**
    * \brief Create cache directory if not already existing.
    *
+   * \param cacheDirStr path where the function will create the cache directory
    * \return true if cache directory has just been created or false if
    * it was already existing.
    */
   bool MakeCacheDir(QString cacheDirStr);
 
+  /**
+   * \brief Check if the cache directory is valid.
+   *
+   * \return true if the cache directory is correct
+   */
   bool CheckCacheDirIsCorrect();
 
+  /**
+   * \brief Test if the application can write in the directory provided.
+   *
+   * \param dir input directory
+   * \return true if the directory can be used
+   */
   bool TestDirExistenceAndWriteAcess( QDir dir);
 
   /**
@@ -152,8 +164,10 @@ public:
    */
   inline const QDir& GetCacheDir() const;
 
-  /*
+  /**
+   * \brief Get the cache directory name.
    *
+   * \return Return the cache directory name.
    */
   inline const char* GetCacheDirName() const;
 
@@ -194,6 +208,7 @@ protected:
 protected:
 
 /**
+ * Repository where all the elements saved by the application will be cached
  */
 QDir m_CacheDir;
 
@@ -219,6 +234,7 @@ private:
 // Private attributes.
 private:
   /**
+   * Name of the cache directory
    */
   static const char* CACHE_DIR_NAME;
 
