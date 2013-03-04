@@ -824,11 +824,7 @@ VectorImageModel
         ossRadio <<currentPixel.GetElement(rgb[idx]) << " ";
         }
       ossRadio <<"]";
-    
-      //
-      // get the Placename
-      // WIP
-      // ...
+
       }
     else
       {
@@ -852,19 +848,11 @@ VectorImageModel
           ossRadio <<currentPixel.GetElement(rgb[idx]) << " ";
           }
         ossRadio <<"]";
-
-        //
-        // get the Placename
-        // WIP
-        // ...
         }
-      }
 
-    //
-    // get the scale
-    // WIP
+      }
     }
-  
+
   // update the status bar
   emit CurrentIndexUpdated( QString(ossIndex.str().c_str()) );
   emit CurrentPhysicalUpdated( QString(ossPhysical.str().c_str()) );
