@@ -520,20 +520,20 @@
         <translation></translation>
     </message>
     <message>
-      <source>Index:</source>
-      <translation>Indice:</translation>
+        <source>Index:</source>
+        <translation>Indice:</translation>
     </message>
     <message>
-      <source>Location</source>
-      <translation>Localisation</translation>
+        <source>Location</source>
+        <translation>Localisation</translation>
     </message>
     <message>
-      <source>View</source>
-      <translation>Voir</translation>
+        <source>View</source>
+        <translation>Affichage</translation>
     </message>
     <message>
-      <source>&amp;View</source>
-      <translation>&amp;Voir</translation>
+        <source>&amp;View</source>
+        <translation>&amp;Affichage</translation>
     </message>
     <message>
         <source></source>
@@ -697,8 +697,8 @@
         <translation>Le fichier a déjà une pyramide multi-résolution !</translation>
     </message>
     <message>
-      <source>Physical</source>
-      <translation>Physique</translation>
+        <source>Physical</source>
+        <translation>Physique</translation>
     </message>
 </context>
 <context>
