@@ -30,12 +30,6 @@
 /* INCLUDE SECTION                                                           */
 
 //
-// Monteverdi includes (sorted by alphabetic order)
-#include "mvdColorSetupWidget.h"
-#include "mvdAbstractImageModel.h"
-#include "mvdTypes.h"
-
-//
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
 
@@ -51,6 +45,12 @@
 #include "otbRenderingImageFilter.h"
 #include "otbGenericRSTransform.h"
 
+//
+// Monteverdi includes (sorted by alphabetic order)
+#include "mvdColorSetupWidget.h"
+#include "mvdAbstractImageModel.h"
+#include "mvdTypes.h"
+
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
@@ -64,6 +64,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class DatasetModel;
 
 
 /*****************************************************************************/
@@ -255,6 +256,20 @@ public:
 
   /** Destructor */
   virtual ~VectorImageModel();
+
+  /**
+   * \brief Get the parent DatasetModel.
+   *
+   * \return The parent DatasetModel.
+   */
+  inline const DatasetModel* GetDatasetModel() const;
+
+  /**
+   * \brief Get the parent DatasetModel.
+   *
+   * \return The parent DatasetModel.
+   */
+  inline DatasetModel* GetDatasetModel();
 
   /** */
   // TODO: Move into template wrapper base-class.
@@ -526,8 +541,28 @@ private slots:
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
+//
+// Monteverdi includes (sorted by alphabetic order)
+#include "mvdDatasetModel.h"
+
 namespace mvd
 {
+
+/*****************************************************************************/
+const DatasetModel*
+VectorImageModel
+::GetDatasetModel() const
+{
+  return qobject_cast< const DatasetModel* >( parent() );
+}
+
+/*****************************************************************************/
+DatasetModel*
+VectorImageModel
+::GetDatasetModel()
+{
+  return qobject_cast< DatasetModel* >( parent() );
+}
 
 /*****************************************************************************/
 inline

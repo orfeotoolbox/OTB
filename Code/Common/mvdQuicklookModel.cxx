@@ -53,6 +53,15 @@ namespace mvd
 
 
 /*****************************************************************************/
+/* CONSTANTS                                                                 */
+
+const char* QuicklookModel::IMAGE_FILE_EXT = ".ql";
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+
+/*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
@@ -75,37 +84,44 @@ QuicklookModel
 {
   //
   // get the parent vector image model
-  VectorImageModel * viModel = qobject_cast< VectorImageModel* >( parent() );
+  const VectorImageModel* viModel = GetImageModel< VectorImageModel >();
+  assert( viModel!=NULL );
 
-  // get the filename and use it to compose the quicklook filename
-  const char* filename = viModel->GetFilename().toAscii().constData();
-    
-  std::string fnameNoExt = itksys::SystemTools::GetFilenameWithoutExtension( filename );    
-  std::string path  = itksys::SystemTools::GetFilenamePath( filename );
-  std::string ext   = itksys::SystemTools::GetFilenameExtension( filename );
+  const DatasetModel* datasetModel = viModel->GetDatasetModel();
+  assert( datasetModel!=NULL );
 
-  std::ostringstream qlfname;
+  // Source image file information.
+  QFileInfo imageFileInfo( viModel->GetFilename() );
 
-  if(path!="")
+  // Quicklook file information.
+  QFileInfo quicklookFileInfo(
+    datasetModel->GetDirectory().path(),
+    imageFileInfo.completeBaseName()
+    + QuicklookModel::IMAGE_FILE_EXT
+    + "."
+    + imageFileInfo.suffix()
+  );
+
+  // Quicklook filename.
+  QString quicklookFilename( quicklookFileInfo.filePath() );
+
+  // First time?
+  if( !quicklookFileInfo.exists() )
     {
-    qlfname << path<<"/";
+    // Instanciate a quicklook file writer.
+    VectorImageFileWriterType::Pointer fileWriter(
+      VectorImageFileWriterType::New()
+    );
+
+    // Write quicklook file on the disk.
+    fileWriter->SetFileName( ToStdString( quicklookFilename ) + ".toto" );
+    fileWriter->SetInput( viModel->ToImage() );
+    fileWriter->Update();
     }
 
-    qlfname<<fnameNoExt<<"_quicklook.tif";
-
-  // check if the file exists
-  if (!itksys::SystemTools::FileExists(qlfname.str().c_str()))
-    {
-    // write the file on the disk
-    VectorImageFileWriterType::Pointer writer = VectorImageFileWriterType::New();
-    writer->SetFileName(qlfname.str());
-    writer->SetInput(viModel->ToImage());
-    writer->Update();
-    }
-    
-  // reload the quicklook
-  QString  qlname(qlfname.str().c_str());
-  SetFilename(qlname, 512, 512);
+  // Source stored quicklook image-file.
+  // TODO: Remove hard-coded 512x512 px size.
+  SetFilename( quicklookFilename, 512, 512 );
 
   // Initialize RgbaImageModel.
   InitializeRgbaPipeline();

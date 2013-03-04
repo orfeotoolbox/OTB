@@ -130,6 +130,10 @@ public:
   /** */
   inline AbstractImageModel* GetSelectedImageModel();
 
+  /**
+   */
+  inline const QDir& GetDirectory() const;
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -208,6 +212,15 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+const QDir&
+DatasetModel
+::GetDirectory() const
+{
+  return m_Directory;
+}
 
 /*****************************************************************************/
 inline

@@ -134,6 +134,22 @@ private slots:
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
+//
+// Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
+
+//
+// System includes (sorted by alphabetic order)
+
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+
+//
+// Monteverdi includes (sorted by alphabetic order)
+
 namespace mvd
 {
 } // end namespace 'mvd'

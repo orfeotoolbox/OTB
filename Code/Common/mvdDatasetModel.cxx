@@ -97,7 +97,7 @@ DatasetModel
 ::ImportImage( const QString& filename , int w, int h )
 {
   // 1. Instanciate local image model.
-  VectorImageModel* vectorImageModel = new VectorImageModel();
+  VectorImageModel* vectorImageModel = new VectorImageModel( this );
 
   vectorImageModel->setObjectName( filename );
 

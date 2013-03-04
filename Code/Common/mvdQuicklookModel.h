@@ -89,10 +89,44 @@ public:
 public:
 
   /** Constructor */
-  QuicklookModel( QObject * parent =NULL );
+  QuicklookModel( QObject* parent =NULL );
 
   /** Destructor */
   virtual ~QuicklookModel();
+
+  /**
+   * \brief Get the parent image-model of this quicklook image as an
+   * AbstractImageModel.
+   *
+   * \return The parent image-model of this quicklook image.
+   */
+  inline const AbstractImageModel* GetImageModel() const;
+
+  /**
+   * \brief Get the parent image-model of this quicklook image as an
+   * AbstractImageModel.
+   *
+   * \return The parent image-model of this quicklook image.
+   */
+  inline AbstractImageModel* GetImageModel();
+
+  /**
+   * \brief Get the parent image-model of this quicklook image as a
+   * TImageModel.
+   *
+   * \return The parent image-model of this quicklook image.
+   */
+  template< typename TImageModel >
+    inline const TImageModel* GetImageModel() const;
+
+  /**
+   * \brief Get the parent image-model of this quicklook image as a
+   * TImageModel.
+   *
+   * \return The parent image-model of this quicklook image.
+   */
+  template< typename TImageModel >
+    inline TImageModel* GetImageModel();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -127,17 +161,6 @@ protected:
 //
 // Private types.
 private:
-  /**
-   * Display type of source image (to OpenGL).
-   */
-  typedef RGBAImageType DisplayImageType;
-
-  // /**
-  //  * Extract filter.
-  //  */
-  // typedef
-  //   itk::ExtractImageFilter< SourceImageType, SourceImageType >
-  //   ExtractFilterType;
 
 //
 // Private methods.
@@ -146,17 +169,60 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   * \brief The quicklook image-file extension
+   * (e.g. '/tmp/my_source_image.tif.ql'.)
+   */
+  static const char* IMAGE_FILE_EXT;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
-  /** */
 };
 
+} // end namespace 'mvd'
 
 /*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
+
+/*****************************************************************************/
+const AbstractImageModel*
+QuicklookModel
+::GetImageModel() const
+{
+  return GetImageModel< AbstractImageModel >();
+}
+
+/*****************************************************************************/
+AbstractImageModel*
+QuicklookModel
+::GetImageModel()
+{
+  return GetImageModel< AbstractImageModel >();
+}
+
+/*****************************************************************************/
+template< typename TImageModel >
+const TImageModel*
+QuicklookModel
+::GetImageModel() const
+{
+  return qobject_cast< const TImageModel* >( parent() );
+}
+
+/*****************************************************************************/
+template< typename TImageModel >
+TImageModel*
+QuicklookModel
+::GetImageModel()
+{
+  return qobject_cast< TImageModel* >( parent() );
+}
 
 } // end namespace 'mvd'
 

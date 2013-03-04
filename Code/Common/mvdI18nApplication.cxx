@@ -276,7 +276,7 @@ I18nApplication
 
   QDir cacheDir( homeDir );
 
-  if( !cacheDir.cd( I18nApplication::CACHE_DIR ) )
+  if( !cacheDir.cd( I18nApplication::CACHE_DIR_NAME ) )
     throw SystemError(
       ToStdString(
 	QString( "('%1')" ).arg( homeDir.filePath( I18nApplication::CACHE_DIR_NAME ) )
@@ -334,8 +334,6 @@ I18nApplication
 
   return true;
 }
-
-
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
