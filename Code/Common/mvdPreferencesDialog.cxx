@@ -50,9 +50,9 @@ namespace mvd
 PreferencesDialog
 ::PreferencesDialog( QWidget* parent, Qt::WindowFlags flags ) :
   QDialog( parent ),
+  m_UI( new mvd::Ui::PreferencesDialog() ),
   m_CacheDirRoot(),
-  m_CacheDirRootModified(false),
-  m_UI( new mvd::Ui::PreferencesDialog() )
+  m_CacheDirRootModified(false)
 {
   m_UI->setupUi( this );
   
