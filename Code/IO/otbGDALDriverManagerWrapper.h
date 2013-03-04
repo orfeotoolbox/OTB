@@ -149,6 +149,9 @@ private:
   static int UpdateGDALProgress(double dfComplete, const char *pszMessage,
                                                  void * pProgressArg);
 
+  /*static int UpdateGDALProgress2(double dfComplete, const char *pszMessage,
+                                                 void * pProgressArg);*/
+
   GDALOverviewsBuilder(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
