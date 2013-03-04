@@ -292,9 +292,7 @@ MainWindow
   m_CurrentPixelIndex->setContentsMargins( 0, 0, 0, 0 );
   m_CurrentPixelIndex->setAlignment( Qt::AlignCenter );
   statusBar()->addPermanentWidget( m_CurrentPixelIndex,      0 );
-
-  
-  
+    
   // Add a QLabel to the status bar to show pixel index
   m_CurrentPixelPhysical = new QLabel(statusBar());
   //m_CurrentPixelPhysical->setFont( myFont );
@@ -311,6 +309,26 @@ MainWindow
   m_CurrentPixelRadio = new QLabel(statusBar());
   m_CurrentPixelRadio->setAlignment(Qt::AlignCenter);
   statusBar()->addPermanentWidget( m_CurrentPixelRadio,      1 );
+
+  // scale label 
+  m_CurrentScaleLabel = new QLabel( QString(), statusBar() );
+  //m_CurrentScaleLabel->setFont( myFont );
+  m_CurrentScaleLabel->setMinimumWidth( 10 );
+  m_CurrentScaleLabel->setMaximumHeight( 20 );
+  m_CurrentScaleLabel->setMargin( 3 );
+  m_CurrentScaleLabel->setAlignment( Qt::AlignCenter );
+  m_CurrentScaleLabel->setFrameStyle( QFrame::NoFrame );
+  m_CurrentScaleLabel->setText( tr( "Scale:" ) );
+  m_CurrentScaleLabel->setToolTip( tr( "Current map scale" ) );
+  statusBar()->addPermanentWidget( m_CurrentScaleLabel, 2 );
+
+  // Add a comboxbox ?? to the status bar to remember scale
+  m_CurrentScale = new QLineEdit(QString(), statusBar());
+  //m_CurrentPixelIndex->setFont( myFont );
+  m_CurrentScale->setMinimumWidth( 10 );
+  m_CurrentScale->setContentsMargins( 0, 0, 0, 0 );
+  m_CurrentScale->setAlignment( Qt::AlignCenter );
+  statusBar()->addPermanentWidget(m_CurrentScale ,      2 );
 }
 
 /*****************************************************************************/
@@ -738,14 +756,6 @@ MainWindow
   // COLOR DYNAMICS.
   SetControllerModel( GetColorDynamicsDock(), vectorImageModel );
 
-  //
-  // MAIN VIEW.
-
-  // Assign newly selected model to view.
-  qobject_cast< GLImageWidget *>( centralWidget() )->SetImageModel(
-    vectorImageModel
-  );
-
   // Connect newly selected model to view (after all other widgets are
   // connected to prevent signals/slots to produce multiple view
   // refreshes).
@@ -755,14 +765,6 @@ MainWindow
     // to:
     centralWidget(),
     SLOT( updateGL()  )
-  );
-
-  //
-  // QUICKLOOK VIEW.
-
-  // Assign newly selected model to view.
-  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->SetImageModel(
-    vectorImageModel->GetQuicklookModel()
   );
 
   // Connect newly selected model to view (after all other widgets are
@@ -842,6 +844,13 @@ MainWindow
     SLOT( setText(const QString &) )
   );
 
+  QObject::connect(
+    m_ImageViewManipulator, 
+    SIGNAL( CurrentScaleUpdated(const QString& ) ),
+    m_CurrentScale,
+    SLOT( setText(const QString&) )
+  );
+
   // index widget edition
   QObject::connect(m_CurrentPixelIndex,
                    SIGNAL( editingFinished() ),
@@ -860,6 +869,23 @@ MainWindow
                    m_ImageViewManipulator,
                    SLOT( OnViewportRegionChanged(double, double) )
     );
+
+  //
+  // MAIN VIEW.
+
+  // Assign newly selected model to view.
+  qobject_cast< GLImageWidget *>( centralWidget() )->SetImageModel(
+    vectorImageModel
+  );
+
+  //
+  // QUICKLOOK VIEW.
+  
+  // Assign newly selected model to view.
+  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->SetImageModel(
+    vectorImageModel->GetQuicklookModel()
+  );
+
 }
 
 /*****************************************************************************/

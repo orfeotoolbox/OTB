@@ -241,7 +241,9 @@ private:
   QLabel *                   m_CurrentPixelGeographic;
   QLabel *                   m_CurrentPixelPlaceName;
   QLabel *                   m_CurrentPixelRadio;
-  QLabel *                   m_CurrentPixelScale;
+  QLabel *                   m_CurrentScaleLabel;
+  QLineEdit *                m_CurrentScale;
+  
   
   DatasetCreationProgressDialog* m_DatasetCreationProgressDialog;
 
