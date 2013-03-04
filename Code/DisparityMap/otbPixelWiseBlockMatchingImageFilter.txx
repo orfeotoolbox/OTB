@@ -61,7 +61,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   // Default exploration radius : 0 (not used)
   m_ExplorationRadius.Fill(0);
   
-  // Default step 
+  // Default step
   m_Step = 1;
 }
 

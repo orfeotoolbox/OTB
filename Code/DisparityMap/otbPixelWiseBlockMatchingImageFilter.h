@@ -430,8 +430,8 @@ private:
     disparity map is given) */
   int                           m_InitVerticalDisparity;
   
-  /** Computation step : disparities are computed on locations of a subsampled grid 
-   * (the subsampled grid is aligned with the index location [0,0]) 
+  /** Computation step : disparities are computed on locations of a subsampled grid
+   * (the subsampled grid is aligned with the index location [0,0])
    */
   unsigned int                  m_Step;
 };

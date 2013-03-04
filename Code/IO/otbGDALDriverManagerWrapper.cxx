@@ -212,7 +212,7 @@ int GDALOverviewsBuilder::UpdateGDALProgress(double dfComplete, const char *pszM
 /*int GDALOverviewsBuilder::UpdateGDALProgress2(double dfComplete, const char *pszMessage,
                                                void * pProgressArg)
 {*/
-  /*std::cout << dfComplete << std::endl;*/
+  /*std::cout << dfComplete << std::endl; */
   /*static int nLastTick = -1;
   int nThisTick = (int) (dfComplete * 40.0);
 
@@ -220,7 +220,7 @@ int GDALOverviewsBuilder::UpdateGDALProgress(double dfComplete, const char *pszM
 
   nThisTick = MIN(40,MAX(0,nThisTick));
 
-  // Have we started a new progress run?  
+  // Have we started a new progress run?
   if( nThisTick < nLastTick && nLastTick >= 39 )
       nLastTick = -1;
 
