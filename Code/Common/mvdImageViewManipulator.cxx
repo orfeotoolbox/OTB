@@ -488,29 +488,17 @@ void ImageViewManipulator
   // compute scale
   if (x != 0. && y != 0.)
     {
-
+    //
+    // compute the scale
     double scale = x/y;
-    
-    // reset the zoom value
-    m_IsotropicZoom = 1.;
 
-    // reset the navigation context size but keep the origin
-    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
-    currentRegion.SetSize(m_NavigationContext.m_ModelImageRegion.GetSize());
-    
-    // get the widget size and use it to resize the Viewport region
-    QWidget* parent_widget = qobject_cast< QWidget* >( parent() );
-  
-    if (parent_widget)
-      {
-      this->ResizeRegion(parent_widget->width(), parent_widget->height());
-      }
-    
+    //
     // center the viewport
-    this->CenterRegion(scale);
+    this->CenterRegion( scale / GetIsotropicZoom() );
 
+    //
     // apply the zoom
-    this->Zoom(scale);
+    this->Zoom(scale / GetIsotropicZoom());
     }
 
   // force repaintGL
