@@ -934,7 +934,7 @@ MainWindow
   emit UserScaleEditingFinished(scale);
 
   // update the Quicklook
-  //qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->update();
+  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->update();
 }
 
 /*****************************************************************************/
