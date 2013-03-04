@@ -267,6 +267,7 @@ public:
   typedef typename InputImageType::SizeType                 SizeType;
   typedef typename InputImageType::IndexType                IndexType;
   typedef typename InputImageType::RegionType               RegionType;
+  typedef typename InputImageType::SpacingType              SpacingType;
   
   typedef typename TOutputMetricImage::ValueType            MetricValueType;
   
@@ -366,6 +367,9 @@ public:
   /** Get the initial disparity fields */
   const TOutputDisparityImage * GetHorizontalDisparityInput() const;
   const TOutputDisparityImage * GetVerticalDisparityInput() const;
+  
+  itkSetMacro(Step, unsigned int);
+  itkGetMacro(Step, unsigned int);
 
 protected:
   /** Constructor */
@@ -373,6 +377,9 @@ protected:
 
   /** Destructor */
   virtual ~PixelWiseBlockMatchingImageFilter();
+  
+  /** Generate output information */
+  virtual void GenerateOutputInformation();
 
   /** Generate input requrested region */
   virtual void GenerateInputRequestedRegion();
@@ -386,6 +393,10 @@ protected:
 private:
   PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemeFnted
+  
+  RegionType ConvertFullToSubsampledRegion(RegionType full);
+  
+  RegionType ConvertSubsampledToFullRegion(RegionType sub);
  
   /** The radius of the blocks */
   SizeType                      m_Radius;
@@ -418,6 +429,11 @@ private:
   /** Initial vertical disparity (0 by default, used if an exploration radius is set and if no input vertical
     disparity map is given) */
   int                           m_InitVerticalDisparity;
+  
+  /** Computation step : disparities are computed on locations of a subsampled grid 
+   * (the subsampled grid is aligned with the index location [0,0]) 
+   */
+  unsigned int                  m_Step;
 };
 } // end namespace otb
 
