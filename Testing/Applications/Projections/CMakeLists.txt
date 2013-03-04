@@ -48,7 +48,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrConvertCartoToGeoPoint
 
 OTB_TEST_APPLICATION(NAME apTvPrImageEnvelopeTest
                      APP ImageEnvelope
-                     OPTIONS -in ${INPUTDATA}/sensor_stereo_left.tif
+                     OPTIONS -in ${EXAMPLEDATA}/sensor_stereo_left.tif
                              -out ${TEMP}/apTvPrImageEnvelopeTest.shp
                      VALID   --compare-ogr ${NOTOL}
                         ${BASELINE_FILES}/apTvPrImageEnvelopeTest.shp

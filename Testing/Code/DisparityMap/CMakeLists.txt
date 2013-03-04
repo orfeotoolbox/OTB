@@ -407,8 +407,8 @@ ADD_TEST(feTvStereoSensorModelToElevationFilter ${DISPARITYMAP_TESTS3}
   ${BASELINE}/feTvStereoSensorModelToElevationFilterOutput.tif
   ${TEMP}/feTvStereoSensorModelToElevationFilterOutput.tif
 otbStereoSensorModelToElevationMapFilter
-${INPUTDATA}/sensor_stereo_left.tif
-${INPUTDATA}/sensor_stereo_right.tif
+${EXAMPLEDATA}/sensor_stereo_left.tif
+${EXAMPLEDATA}/sensor_stereo_right.tif
 ${TEMP}/feTvStereoSensorModelToElevationFilterOutput.tif
 ${INPUTDATA}/DEM/srtm_directory/
 ${INPUTDATA}/DEM/egm96.grd
@@ -429,8 +429,8 @@ ${TEMP}/feTvStereorectificationDeformationFieldSourceOutput1.tif
 ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput2.tif
 ${TEMP}/feTvStereorectificationDeformationFieldSourceOutput2.tif
 otbStereorectificationDeformationFieldSource
-${INPUTDATA}/sensor_stereo_left.tif
-${INPUTDATA}/sensor_stereo_right.tif
+${EXAMPLEDATA}/sensor_stereo_left.tif
+${EXAMPLEDATA}/sensor_stereo_right.tif
 ${TEMP}/feTvStereorectificationDeformationFieldSourceOutput1.tif
 ${TEMP}/feTvStereorectificationDeformationFieldSourceOutput2.tif
 300
@@ -559,8 +559,8 @@ ADD_TEST(dmTvDisparityMapToDEMFilter ${DISPARITYMAP_TESTS4}
 		 ${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
          otbDisparityMapToDEMFilter
          ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
-         ${INPUTDATA}/sensor_stereo_left.tif
-         ${INPUTDATA}/sensor_stereo_right.tif
+         ${EXAMPLEDATA}/sensor_stereo_left.tif
+         ${EXAMPLEDATA}/sensor_stereo_right.tif
          ${INPUTDATA}/sensor_stereo_rectif_left.tif
          ${INPUTDATA}/sensor_stereo_rectif_right.tif
          ${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
@@ -582,8 +582,8 @@ ADD_TEST(dmTvDisparityMapTo3DFilter ${DISPARITYMAP_TESTS4}
      ${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
          otbDisparityMapTo3DFilter
          ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
-         ${INPUTDATA}/sensor_stereo_left.tif
-         ${INPUTDATA}/sensor_stereo_right.tif
+         ${EXAMPLEDATA}/sensor_stereo_left.tif
+         ${EXAMPLEDATA}/sensor_stereo_right.tif
          ${INPUTDATA}/sensor_stereo_rectif_left.tif
          ${INPUTDATA}/sensor_stereo_rectif_right.tif
          ${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif

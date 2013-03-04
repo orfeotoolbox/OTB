@@ -4,8 +4,8 @@ SET(BASELINE_EXAMPLE ${OTB_DATA_ROOT}/Baseline/Examples/DisparityMap)
 
 OTB_TEST_APPLICATION(NAME  apTvDmStereoSensorModelToElevationMapTest
                      APP  StereoSensorModelToElevationMap
-                     OPTIONS -ref ${INPUTDATA}/sensor_stereo_left.tif
-                             -sec ${INPUTDATA}/sensor_stereo_right.tif
+                     OPTIONS -ref ${EXAMPLEDATA}/sensor_stereo_left.tif
+                             -sec ${EXAMPLEDATA}/sensor_stereo_right.tif
                              -out ${TEMP}/apTvDmStereoSensorModelToElevationMapTest.tif
                              -r 3
                              -ct 0.7
@@ -21,8 +21,8 @@ OTB_TEST_APPLICATION(NAME  apTvDmStereoSensorModelToElevationMapTest
 
 OTB_TEST_APPLICATION(NAME  apTvDmStereoSensorModelToElevationMapWithSmoothing
                      APP  StereoSensorModelToElevationMap
-                     OPTIONS -ref ${INPUTDATA}/sensor_stereo_left.tif
-                             -sec ${INPUTDATA}/sensor_stereo_right.tif
+                     OPTIONS -ref ${EXAMPLEDATA}/sensor_stereo_left.tif
+                             -sec ${EXAMPLEDATA}/sensor_stereo_right.tif
                              -out ${TEMP}/apTvDmStereoSensorModelToElevationMapWithSmoothing.tif
                              -r 3
                              -ct 0.7
@@ -62,8 +62,8 @@ OTB_TEST_APPLICATION(NAME apTvDmFineRegistrationTest
 #--- StereoRectificationGridGenerator ---#
 OTB_TEST_APPLICATION(NAME apTuDmStereoRectificationGridGeneratorTest
                      APP  StereoRectificationGridGenerator
-                     OPTIONS -io.inleft ${INPUTDATA}/sensor_stereo_left.tif
-                             -io.inright ${INPUTDATA}/sensor_stereo_right.tif
+                     OPTIONS -io.inleft ${EXAMPLEDATA}/sensor_stereo_left.tif
+                             -io.inright ${EXAMPLEDATA}/sensor_stereo_right.tif
                              -io.outleft ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
                              -io.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
                              -epi.elevation.default 140
@@ -74,7 +74,7 @@ OTB_TEST_APPLICATION(NAME apTuDmStereoRectificationGridGeneratorTest
 #--- GridBasedImageResampling ---#
 OTB_TEST_APPLICATION(NAME apTuDmGridBasedImageResamplingLeftTest
                      APP  GridBasedImageResampling
-                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_left.tif
+                     OPTIONS -io.in ${EXAMPLEDATA}/sensor_stereo_left.tif
                              -io.out ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
                              -grid.in ${INPUTDATA}/sensor_stereo_rectif_left.tif
                              -out.sizex 158
@@ -84,7 +84,7 @@ OTB_TEST_APPLICATION(NAME apTuDmGridBasedImageResamplingLeftTest
 
 OTB_TEST_APPLICATION(NAME apTuDmGridBasedImageResamplingRightTest
                      APP  GridBasedImageResampling
-                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_right.tif
+                     OPTIONS -io.in ${EXAMPLEDATA}/sensor_stereo_right.tif
                              -io.out ${TEMP}/apTvDmGridBasedImageResamplingRightTest.tif
                              -grid.in ${INPUTDATA}/sensor_stereo_rectif_right.tif
                              -out.sizex 158
@@ -116,8 +116,8 @@ OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
 OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
                      APP  DisparityMapToElevationMap
                      OPTIONS -io.in ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
-                             -io.left ${INPUTDATA}/sensor_stereo_left.tif
-                             -io.right ${INPUTDATA}/sensor_stereo_right.tif
+                             -io.left ${EXAMPLEDATA}/sensor_stereo_left.tif
+                             -io.right ${EXAMPLEDATA}/sensor_stereo_right.tif
                              -io.lgrid ${INPUTDATA}/sensor_stereo_rectif_left.tif
                              -io.rgrid ${INPUTDATA}/sensor_stereo_rectif_right.tif
                              -io.out ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif

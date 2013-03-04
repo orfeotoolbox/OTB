@@ -35,7 +35,7 @@ add_test( NAME pyTvBug440
 add_test( NAME pyTvBug441
           COMMAND ${TEST_DRIVER} Execute
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Bug441.py
-                  ${OTB_DATA_ROOT}/Input/sensor_stereo_left.tif
-                  ${OTB_DATA_ROOT}/Input/sensor_stereo_right.tif
+                  ${OTB_DATA_ROOT}/Examples/sensor_stereo_left.tif
+                  ${OTB_DATA_ROOT}/Examples/sensor_stereo_right.tif
                   ${TEMP}/pyTvBug441Output.tif
                   )
