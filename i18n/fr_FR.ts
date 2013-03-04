@@ -592,6 +592,14 @@
         <source> pixels)</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Current map coordinate</source>
+        <translation>Coordonnées du pixel courant</translation>
+    </message>
+    <message>
+        <source>Current map scale</source>
+        <translation>Echelle courante</translation>
+    </message>
 </context>
 <context>
     <name>mvd::Math</name>
