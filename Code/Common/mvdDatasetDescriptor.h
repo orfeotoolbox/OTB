@@ -32,6 +32,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtXml>
 
 //
 // System includes (sorted by alphabetic order)
@@ -45,7 +46,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModel.h"
-#include "mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -66,8 +66,10 @@ class AbstractImageModel;
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class DatasetDescriptor
+/**
+ * \class DatasetDescriptor.
  *
+ * \brief WIP.
  */
 class Monteverdi2_EXPORT DatasetDescriptor :
     public AbstractModel
@@ -80,14 +82,41 @@ class Monteverdi2_EXPORT DatasetDescriptor :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Public types.
+public:
+  /**
+   * \class BuildContext
+   * \brief WIP.
+   */
+  class BuildContext
+  {
+    //
+    // Public methods.
+  public:
+    BuildContext( const QString& filename ) :
+      m_Filename( filename )
+    {
+    }
+
+    //
+    // Public attributes
+  public:
+    QString m_Filename;
+  };
+
+//
 // Public methods.
 public:
 
-  /** Constructor */
+  /** \brief Constructor. */
   DatasetDescriptor( QObject* parent =NULL );
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~DatasetDescriptor();
+
+  /**
+   */
+  void Write( const QString& filename ) const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -117,10 +146,24 @@ protected:
 // Private methods.
 private:
 
+  /**
+   */
+  void Read( const QString& filename );
+
+  /**
+   */
+  void Read( QIODevice* device );
+
+  /**
+   */
+  void Write( QIODevice& device ) const;
 
 //
 // Private attributes.
 private:
+  /**
+   */
+  QDomDocument m_DomDocument;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

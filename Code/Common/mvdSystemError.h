@@ -88,6 +88,13 @@ public:
   /** \brief Destructor. */
   virtual ~SystemError() throw();
 
+  /**
+   * \brief Get the error code (\sa errno) of this system error.
+   *
+   * \return The error code (\sa errno) of this system error.
+   */
+  inline int GetErrorCode() const;
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
@@ -122,6 +129,14 @@ private:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+int
+SystemError::GetErrorCode() const
+{
+  return m_ErrorCode;
+}
+
 } // end namespace 'mvd'
 
 #endif // __mvdSystemError_h

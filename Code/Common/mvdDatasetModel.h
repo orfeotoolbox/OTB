@@ -62,6 +62,7 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 class AbstractImageModel;
+class DatasetDescriptor;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -78,6 +79,31 @@ class Monteverdi2_EXPORT DatasetModel :
   Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+
+//
+// Public types.
+public:
+  /**
+   * \class BuildContext
+   * \brief WIP.
+   */
+  class BuildContext
+  {
+    //
+    // Public methods.
+  public:
+    BuildContext( const QString& path, const QString& name ) :
+      m_Path( path ),
+      m_Name( name )
+    {
+    }
+
+    //
+    // Public attributes
+  public:
+    QString m_Path;
+    QString m_Name;
+  };
 
 //
 // Public methods.
@@ -129,15 +155,40 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
+// Private attributes.
+private:
+  /**
+   */
+  static const char* DESCRIPTOR_FILENAME;
+
+//
 // Private methods.
 private:
 
   /** */
   void Load( const QString& path, const QString& name );
 
+  /** */
+  void WriteDescriptor() const;
+
 //
 // Private attributes.
 private:
+  /**
+   */
+  DatasetDescriptor* m_Descriptor;
+
+  /**
+   */
+  QString m_Path;
+
+  /**
+   */
+  QString m_Name;
+
+  /**
+   */
+  QDir m_Directory;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

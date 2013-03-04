@@ -19,6 +19,10 @@
 
 #include "mvdDatasetModel.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -34,6 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdDatasetDescriptor.h"
 #include "mvdI18nApplication.h"
 #include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
@@ -48,10 +53,27 @@ namespace mvd
   Context comment for translator.
 */
 
+
+/*****************************************************************************/
+/* CONSTANTS                                                                 */
+
+const char* DatasetModel::DESCRIPTOR_FILENAME = "descriptor.xml";
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
+
 /*******************************************************************************/
 DatasetModel
 ::DatasetModel( QObject* parent ) :
-  AbstractModel( parent )
+  AbstractModel( parent ),
+  m_Descriptor( NULL ),
+  m_Path(),
+  m_Name(),
+  m_Directory()
 {
 }
 
@@ -66,23 +88,7 @@ bool
 DatasetModel
 ::SetContent( const QString& path, const QString& name )
 {
-  bool isEmpty = I18nApplication::MakeDirTree( path, name );
-
-  if( isEmpty )
-    {
-    // TODO: write empty descriptor.xml
-    }
-
-  try
-    {
-    Load( path, name );
-    }
-  catch( std::exception& exc )
-    {
-    throw;
-    }
-
-  return !isEmpty;
+  return true;
 }
 
 /*******************************************************************************/
@@ -93,15 +99,13 @@ DatasetModel
   // 1. Instanciate local image model.
   VectorImageModel* vectorImageModel = new VectorImageModel();
 
-  vectorImageModel->setObjectName(
-    "mvd::VectorImageModel('" + filename + "')"
-  );
+  vectorImageModel->setObjectName( filename );
 
   // 2. Safely load data from file.
   try
     {
     // 2.1. Information.
-    vectorImageModel->SetFilename( filename, w, h);
+    vectorImageModel->SetFilename( filename, w, h );
 
     // 2.2. Generate cached data.
     // TODO: generate image-model cached data (quicklook,
@@ -127,6 +131,39 @@ void
 DatasetModel
 ::virtual_BuildModel( void* context )
 {
+  // Get build-context.
+  assert( context!=NULL );
+  BuildContext* buildContext = static_cast< BuildContext* >( context );
+
+  // Add child-object of model.
+  assert( m_Descriptor==NULL );
+  m_Descriptor = newChildModel< DatasetDescriptor >();
+
+  // Create directory structure, if needed.
+  bool isEmpty = I18nApplication::MakeDirTree(
+    buildContext->m_Path,
+    buildContext->m_Name
+  );
+
+  // Access working directory.
+  QDir workingDir( buildContext->m_Path );
+  if( !workingDir.cd( buildContext->m_Name ) )
+    throw SystemError(
+      ToStdString(
+	QString( "('%1')" ).arg( workingDir.filePath( buildContext->m_Name ) ) )
+    );    
+
+  // Remember access to directory structure.
+  m_Path = buildContext->m_Path;
+  m_Name = buildContext->m_Name;
+  m_Directory = workingDir;
+
+  // Initialize content, if needed.
+  if( true || isEmpty )
+    WriteDescriptor();
+
+  // Load directory content.
+  Load( buildContext->m_Path, buildContext->m_Name );
 }
 
 /*******************************************************************************/
@@ -134,6 +171,18 @@ void
 DatasetModel
 ::Load( const QString& path, const QString& name )
 {
+}
+
+/*******************************************************************************/
+void
+DatasetModel
+::WriteDescriptor() const
+{
+  QFileInfo finfo( m_Directory, DatasetModel::DESCRIPTOR_FILENAME );
+
+  qDebug() << finfo.filePath();
+
+  m_Descriptor->Write( finfo.filePath() );
 }
 
 /*******************************************************************************/

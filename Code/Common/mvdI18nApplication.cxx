@@ -74,7 +74,8 @@ I18nApplication
   if( !pathDir.exists() )
     throw SystemError( ToStdString( QString( "('%1')" ).arg( path ) ) );
 
-  if( pathDir.exists( tree ) )
+  QDir treeDir( pathDir.filePath( tree ) );
+  if( treeDir.exists() )
     return false;
 
   if( !pathDir.mkpath( tree ) )
@@ -275,7 +276,7 @@ I18nApplication
 
   QDir cacheDir( homeDir );
 
-  if( !cacheDir.cd( "mvd2" ) )
+  if( !cacheDir.cd( I18nApplication::CACHE_DIR ) )
     throw SystemError(
       ToStdString(
 	QString( "('%1')" ).arg( homeDir.filePath( I18nApplication::CACHE_DIR_NAME ) )

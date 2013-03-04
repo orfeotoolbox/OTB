@@ -98,10 +98,10 @@ Application::LoadDatasetModel( const QString& imageFilename,
 			       int width,
 			       int height )
 {
+  // New model.
   DatasetModel* model = new DatasetModel();
 
-  model->setObjectName( "mvd::DatasetModel('" + imageFilename + "'" );
-
+  // Retrive path and name.
   QString path;
   QString name;
 
@@ -109,9 +109,17 @@ Application::LoadDatasetModel( const QString& imageFilename,
   qDebug() << "Dataset path: " << path;
   qDebug() << "Dataset name: " << name;
 
+  // Setup QObject
+  model->setObjectName( QDir( path ).filePath( name ) );
+
   try
     {
-    if( !model->SetContent( path, name ) || true )
+    // Build model (relink to cached data).
+    DatasetModel::BuildContext context( path, name );
+    model->BuildModel( &context );
+
+    // Load image if DatasetModel is empty.
+    if( !model->HasSelectedImageModel() )
       {
       // Import image from filename given (w; h) size to choose
       // best-fit resolution.

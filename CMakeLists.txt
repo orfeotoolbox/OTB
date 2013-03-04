@@ -53,7 +53,7 @@ endif(OTB_FOUND)
 #----------------------------------------------------------------------------
 # Qt4
 find_package( OpenGL REQUIRED )
-find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain )
+find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain QtXml )
 include( ${QT_USE_FILE} )
 
 #----------------------------------------------------------------------------

@@ -97,7 +97,6 @@ SystemError::whatString( int err, const std::string& msg )
 SystemError
 ::SystemError( const std::string& message ) :
   std::runtime_error( SystemError::whatString( errno, message ) ),
-  m_Message(),
   m_ErrorCode( errno )
 {
   qDebug() << what();
@@ -107,7 +106,6 @@ SystemError
 SystemError
 ::SystemError( int errorCode, const std::string& message ) :
   std::runtime_error( SystemError::whatString( errorCode, message ) ),
-  m_Message( message ),
   m_ErrorCode( errorCode )
 {
   qDebug() << what();
