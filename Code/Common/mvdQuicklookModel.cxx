@@ -114,7 +114,7 @@ QuicklookModel
     );
 
     // Write quicklook file on the disk.
-    fileWriter->SetFileName( ToStdString( quicklookFilename ) + ".toto" );
+    fileWriter->SetFileName( ToStdString( quicklookFilename ) );
     fileWriter->SetInput( viModel->ToImage() );
     fileWriter->Update();
     }
