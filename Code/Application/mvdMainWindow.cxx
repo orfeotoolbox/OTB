@@ -693,6 +693,13 @@ MainWindow
     SLOT( setText(const QString &) )
   );
 
+  QObject::disconnect(
+    m_ImageViewManipulator, 
+    SIGNAL( CurrentScaleUpdated(const QString& ) ),
+    m_CurrentScale,
+    SLOT( setText(const QString&) )
+  );
+
   // index widget edition
   QObject::disconnect(m_CurrentPixelIndex,
                    SIGNAL( editingFinished() ),
@@ -711,6 +718,7 @@ MainWindow
                    m_ImageViewManipulator,
                    SLOT( OnViewportRegionChanged(double, double) )
     );
+
 }
 
 /*****************************************************************************/
@@ -851,7 +859,7 @@ MainWindow
     SLOT( setText(const QString&) )
   );
 
-  // index widget edition
+  // index widget in status bar edited
   QObject::connect(m_CurrentPixelIndex,
                    SIGNAL( editingFinished() ),
                    this,
@@ -868,6 +876,19 @@ MainWindow
                    SIGNAL( ViewportRegionChanged(double, double) ),
                    m_ImageViewManipulator,
                    SLOT( OnViewportRegionChanged(double, double) )
+    );
+
+  // scale widget in status bar edited
+  QObject::connect(m_CurrentScale,
+                   SIGNAL( editingFinished() ),
+                   this,
+                   SLOT( OnUserScaleEditingFinished() )
+    );
+  
+  QObject::connect(this,
+                   SIGNAL( UserScaleEditingFinished(const QString&) ),
+                   m_ImageViewManipulator,
+                   SLOT( OnUserScaleEditingFinished(const QString&) )
     );
 
   //
@@ -902,6 +923,21 @@ MainWindow
   qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->update();
 }
 
+/*****************************************************************************/
+void
+MainWindow
+::OnUserScaleEditingFinished()
+{
+  // get the text and send it to the view manipulator to be
+  // processed 
+  QString scale = m_CurrentScale->text();
+  emit UserScaleEditingFinished(scale);
+
+  // update the Quicklook
+  //qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->update();
+}
+
+/*****************************************************************************/
 void
 MainWindow
 ::OnOpenImageRequest( QString filename )
@@ -937,7 +973,7 @@ MainWindow
   thread->start();
 }
 
-
+/*****************************************************************************/
 void
 MainWindow
 ::OnError( QString message )
@@ -945,6 +981,7 @@ MainWindow
   QMessageBox::warning( this, tr("Erreur"), message );
 }
 
+/*****************************************************************************/
 void
 MainWindow
 ::OnModelLoaded( AbstractModel* model )

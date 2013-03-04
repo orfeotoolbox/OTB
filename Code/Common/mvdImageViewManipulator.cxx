@@ -192,7 +192,7 @@ ImageViewManipulator
 
   double scale = vcl_pow(scaleRatio, nbSteps);
 
-  // center the region on the center of the previous region
+  // center the viewport on the center of the previous region
   this->CenterRegion(scale);
 
   // rescale the viewport region
@@ -383,7 +383,7 @@ ImageViewManipulator
   if ( GetIsotropicZoom() > 1. )
     oss << GetIsotropicZoom() <<":1";
   else
-    oss <<"1:"<< GetIsotropicZoom();
+    oss <<"1:"<< 1./GetIsotropicZoom();
     
   QString scaleString(oss.str().c_str());
   emit CurrentScaleUpdated(scaleString);
@@ -463,6 +463,58 @@ void ImageViewManipulator
   
   // force repaintGL
   qobject_cast< QWidget* >( parent() )->update();
+}
+
+/*****************************************************************************/
+void ImageViewManipulator
+::OnUserScaleEditingFinished(const QString & scale)
+{
+  //
+  // extract the coordinates from the given text
+  QStringList parts = scale.split( ':' );
+  if ( parts.size() != 2 )
+    return;
+
+  bool xOk;
+  double x = parts.at( 0 ).toDouble( &xOk );
+  if ( !xOk )
+    return;
+
+  bool yOk;
+  double y = parts.at( 1 ).toDouble( &yOk );
+  if ( !yOk )
+    return;
+
+  // compute scale
+  if (x != 0. && y != 0.)
+    {
+
+    double scale = x/y;
+    
+    // reset the zoom value
+    m_IsotropicZoom = 1.;
+
+    // reset the navigation context size but keep the origin
+    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+    currentRegion.SetSize(m_NavigationContext.m_ModelImageRegion.GetSize());
+    
+    // get the widget size and use it to resize the Viewport region
+    QWidget* parent_widget = qobject_cast< QWidget* >( parent() );
+  
+    if (parent_widget)
+      {
+      this->ResizeRegion(parent_widget->width(), parent_widget->height());
+      }
+    
+    // center the viewport
+    this->CenterRegion(scale);
+
+    // apply the zoom
+    this->Zoom(scale);
+    }
+
+  // force repaintGL
+  qobject_cast< QWidget* >( parent() )->update(); 
 }
 
 /*****************************************************************************/

@@ -138,6 +138,8 @@ public:
 // SIGNALS.
 signals:
   void UserCoordinatesEditingFinished(const QString&);
+
+  void UserScaleEditingFinished(const QString &);
   
   void OpenImageRequest( QString filename );
   
@@ -294,6 +296,9 @@ private slots:
 
   /** */
   void OnUserCoordinatesEditingFinished();
+
+  /** */
+  void OnUserScaleEditingFinished();
   
   /** */
   void OnOpenImageRequest( QString filename );

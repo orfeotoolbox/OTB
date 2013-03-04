@@ -125,6 +125,8 @@ public slots:
 
   void OnViewportRegionChanged(double Xpc, double Ypc);
 
+  void OnUserScaleEditingFinished(const QString & scale);
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
