@@ -131,6 +131,7 @@ public slots:
 // Signals.
 signals:
   void ViewportRegionRepresentationChanged(const PointType&, const PointType&);
+  void CurrentScaleUpdated(const QString&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -167,6 +168,9 @@ private:
 
   /** */
   void PropagateViewportRegionChanged(const ImageRegionType& region);
+
+  /** */
+  void UpdateScale();
  
 //
 // Private attributes.

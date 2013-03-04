@@ -240,6 +240,9 @@ ImageViewManipulator
 
     // tell the quicklook renderer to update the red square rendering
     this->PropagateViewportRegionChanged(currentRegion); 
+
+    // emit the scale change
+    this->UpdateScale();
     }
 }
 
@@ -367,6 +370,23 @@ ImageViewManipulator
   lr[1] = (double)( region.GetIndex()[1] + region.GetSize()[1] ) * vcl_abs(m_NativeSpacing[1]) + GetOrigin()[1];
 
   emit ViewportRegionRepresentationChanged(ul, lr);
+}
+
+/*****************************************************************************/
+void
+ImageViewManipulator
+::UpdateScale()
+{
+  // emit the scale change
+  std::ostringstream oss;
+
+  if ( GetIsotropicZoom() > 1. )
+    oss << GetIsotropicZoom() <<":1";
+  else
+    oss <<"1:"<< GetIsotropicZoom();
+    
+  QString scaleString(oss.str().c_str());
+  emit CurrentScaleUpdated(scaleString);
 }
 
 /*****************************************************************************/
