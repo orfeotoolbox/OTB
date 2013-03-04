@@ -64,7 +64,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="cacheDirPathLineEdit"/>
+         <widget class="QLineEdit" name="cacheDirPathLineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="cacheDirButton">

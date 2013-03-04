@@ -143,12 +143,19 @@ public:
 
   bool CheckCacheDirIsCorrect();
 
+  bool TestDirExistenceAndWriteAcess( QDir dir);
+
   /**
    * \brief Get the cache directory.
    *
    * \return Return the cache directory.
    */
   inline const QDir& GetCacheDir() const;
+
+  /*
+   *
+   */
+  inline const char* GetCacheDirName() const;
 
   //
   // STATIC methods.
@@ -213,7 +220,7 @@ private:
 private:
   /**
    */
-  static const char* CACHE_DIR;
+  static const char* CACHE_DIR_NAME;
 
 
 
@@ -279,6 +286,16 @@ I18nApplication
 {
   return m_CacheDir;
 }
+
+/*****************************************************************************/
+const char*
+I18nApplication
+::GetCacheDirName() const
+{
+  return I18nApplication::CACHE_DIR_NAME;
+}
+
+
 
 } // end namespace 'mvd'
 

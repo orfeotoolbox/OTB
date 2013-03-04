@@ -142,9 +142,10 @@ MainWindow
 
   if (incorrectCacheDir)
     {
-    QMessageBox::warning( this,tr("Warning"),
-                          tr("This cache directory seems incorrect."
-                             "\nPlease choose another one.") );
+    QMessageBox::warning( this,
+        tr("Warning"),
+        tr("This repository seems incorrect to store the cache directory."
+           "\nPlease choose another one.") );
     ret = QMessageBox::Yes;
     }
   else
@@ -168,8 +169,9 @@ MainWindow
     {
     // TODO MSD: share the code with the choice of the settings into the preference menu
 
-    QString datasetDir = QFileDialog::getExistingDirectory(this, tr("Select the cache repository for Monteverdi2"),
-                                                           defaultCacheDirStr);
+    QString datasetDir = QFileDialog::getExistingDirectory(this,
+         tr("Select the repository to store the cache repository for Monteverdi2"),
+         defaultCacheDirStr);
     if (datasetDir.isEmpty())
       { // User push default button => set the value to the default place
       cacheDirStr = defaultCacheDirStr;

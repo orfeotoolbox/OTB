@@ -98,6 +98,10 @@ private:
    */
   Ui::PreferencesDialog* m_UI;
 
+  QString m_CacheDirRoot;
+
+  bool m_CacheDirRootModified;
+
 //
 // SLOTS.
 private slots:

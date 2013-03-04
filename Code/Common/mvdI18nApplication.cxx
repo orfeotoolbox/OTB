@@ -50,7 +50,7 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
-const char* I18nApplication::CACHE_DIR = "mvd2";
+const char* I18nApplication::CACHE_DIR_NAME = "mvd2";
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -270,52 +270,71 @@ I18nApplication
   if (!homeDir.exists())
     SystemError(ToStdString( QString( "('%1')" ).arg( homeDir.path() ) ));
 
-   bool isNew = I18nApplication::MakeDirTree(
-    homeDir.path(), I18nApplication::CACHE_DIR );
+  bool isNew = I18nApplication::MakeDirTree(
+    homeDir.path(), I18nApplication::CACHE_DIR_NAME );
 
   QDir cacheDir( homeDir );
-  std::cout << ToStdString(homeDir.path()) << std::endl;
 
   if( !cacheDir.cd( "mvd2" ) )
     throw SystemError(
       ToStdString(
-	QString( "('%1')" ).arg( homeDir.filePath( I18nApplication::CACHE_DIR ) )
+	QString( "('%1')" ).arg( homeDir.filePath( I18nApplication::CACHE_DIR_NAME ) )
       )
     );
 
   m_CacheDir = cacheDir;
+  qDebug() << tr("Cache directory created at %1").arg(m_CacheDir.path());
 
   return isNew;
 }
 
+/*******************************************************************************/
 bool
 I18nApplication
 ::CheckCacheDirIsCorrect()
 {
+  QDir dir = m_CacheDir;
+
+  if (!TestDirExistenceAndWriteAcess(dir))
+    {
+    return false;
+    }
+  else
+    {
+    // Check if this directory has the good name
+    if (m_CacheDir.dirName().compare(QString(I18nApplication::CACHE_DIR_NAME)))
+      {
+      return false;
+      }
+    }
+
+  return true;
+}
+/*******************************************************************************/
+bool
+I18nApplication
+::TestDirExistenceAndWriteAcess( QDir dir)
+{
   // Check if this directory exists
-  if (!m_CacheDir.exists())
+  if (!dir.exists())
     {
     return false;
     }
 
   // Check if we can write in this directory
-  if (m_CacheDir.mkdir("testWriteAccess"))
+  if (dir.mkdir("testWriteAccess"))
     { // ok this repository is correct
-    m_CacheDir.rmdir("testWriteAccess");
+    dir.rmdir("testWriteAccess");
     }
   else
     { // ko this repository is not correct
     return false;
     }
 
-  // Check if this directory has the good name
-  if (m_CacheDir.dirName().compare(QString(I18nApplication::CACHE_DIR)))
-    {
-    return false;
-    }
-
   return true;
 }
+
+
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

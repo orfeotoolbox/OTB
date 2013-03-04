@@ -34,6 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdApplication.h"
 
 namespace mvd
 {
@@ -49,6 +50,8 @@ namespace mvd
 PreferencesDialog
 ::PreferencesDialog( QWidget* parent, Qt::WindowFlags flags ) :
   QDialog( parent ),
+  m_CacheDirRoot(),
+  m_CacheDirRootModified(false),
   m_UI( new mvd::Ui::PreferencesDialog() )
 {
   m_UI->setupUi( this );
@@ -80,15 +83,35 @@ void
 PreferencesDialog
 ::on_cacheDirButton_clicked()
 { 
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::Directory);
-  fileDialog.setNameFilter( tr("Select a Directory") );
-
-  if (fileDialog.exec())
+  while (true)
     {
-    QString path = fileDialog.selectedFiles().at(0);
-    m_UI->cacheDirPathLineEdit->setText( path );
+    QString cacheDirStr = QFileDialog::getExistingDirectory(
+        this,
+        tr("Select the repository to store the cache repository for Monteverdi2"),
+        QDir::homePath());
+    if (cacheDirStr.isEmpty())
+      { // User push default button => don't modify the value
+      break;
+      }
+    else
+      { // User select something, test if it is correct
+      if ( Application::Instance()->TestDirExistenceAndWriteAcess(QDir(cacheDirStr)) )
+        {
+        m_CacheDirRootModified = true;
+        m_CacheDirRoot = cacheDirStr;
+        QString tree (Application::Instance()->GetCacheDirName());
+        tree.prepend("/");
+        m_UI->cacheDirPathLineEdit->setText(cacheDirStr.append(tree));
+        break;
+        }
+      else
+        {
+        QMessageBox::warning( this,
+            tr("Warning"),
+            tr("This repository seems incorrect to store the cache directory."
+               "\nPlease choose another one.") );
+        }
+      }
     }
 }
 
@@ -96,11 +119,14 @@ void
 PreferencesDialog
 ::on_buttonBox_accepted()
 {
-  QSettings settings;
-  
-  if ( !m_UI->cacheDirPathLineEdit->text().isEmpty() )
+
+  if (m_CacheDirRootModified)
     {
-    settings.setValue( "cacheDir", m_UI->cacheDirPathLineEdit->text() );
+    // Create the cache dir
+    Application::Instance()->MakeCacheDir(m_CacheDirRoot);
+
+    // Save the cache directory into the settings file
+    Application::Instance()->WriteCacheDirIntoSettings();
     }
     
   close();
