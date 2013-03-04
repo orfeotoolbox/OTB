@@ -818,7 +818,7 @@ VectorImageModel
       //
       // get the pixel at current index
       VectorImageType::PixelType currentPixel = ToImage()->GetPixel(currentLodIndex);      
-      ossRadio <<"Radio : [ ";
+      ossRadio <<ToStdString( tr("Radiometry") )<<" : [ ";
       for (unsigned int idx = 0; idx < rgb.size(); idx++)
         {
         ossRadio <<currentPixel.GetElement(rgb[idx]) << " ";
@@ -846,7 +846,7 @@ VectorImageModel
         VectorImageType::PixelType currentPixel = 
           GetQuicklookModel()->ToImage()->GetPixel(currentLodIndex);
       
-        ossRadio <<"Ql Radio : [ ";
+        ossRadio <<"Ql "<<ToStdString( tr("Radiometry") )<<" : [ ";
         for (unsigned int idx = 0; idx < rgb.size(); idx++)
           {
           ossRadio <<currentPixel.GetElement(rgb[idx]) << " ";

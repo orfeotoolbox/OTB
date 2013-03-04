@@ -700,6 +700,10 @@
         <source>Physical</source>
         <translation>Physique</translation>
     </message>
+    <message>
+      <source>Radiometry</source>
+      <translation>Radiométrie</translation>
+    </message>
 </context>
 <context>
     <name>mvd::VideoColorToolBox</name>
