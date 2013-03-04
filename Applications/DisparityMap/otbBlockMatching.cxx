@@ -234,6 +234,12 @@ private:
 
     AddChoice("bm.subpixel.dichotomy", "Dichotomy");
     SetParameterDescription("bm.subpixel.dichotomy", "Dichotomic search");
+    
+    AddParameter(ParameterType_Int,"bm.step", "Computation step");
+    SetParameterDescription("bm.step", "Location step between computed disparities");
+    SetDefaultParameterInt("bm.step",1);
+    SetMinimumParameterIntValue("bm.step",1);
+    MandatoryOff("bm.step");
 
     AddParameter(ParameterType_Group,"bm.medianfilter","Median filtering");
     SetParameterDescription("bm.medianfilter","Use a median filter to get a smooth disparity map");
@@ -350,6 +356,7 @@ private:
     int          maxhdisp = GetParameterInt("bm.maxhd");
     int          minvdisp = GetParameterInt("bm.minvd");
     int          maxvdisp = GetParameterInt("bm.maxvd");
+    unsigned int step     = GetParameterInt("bm.step");
 
     std::ostringstream leftBandMathExpression;
     leftBandMathExpression<<"if(";
@@ -484,6 +491,7 @@ private:
       m_SSDBlockMatcher->SetLeftInput(leftImage);
       m_SSDBlockMatcher->SetRightInput(rightImage);
       m_SSDBlockMatcher->SetRadius(radius);
+      m_SSDBlockMatcher->SetStep(step);
       m_SSDBlockMatcher->SetMinimumHorizontalDisparity(minhdisp);
       m_SSDBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
       m_SSDBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
@@ -548,6 +556,7 @@ private:
       m_NCCBlockMatcher->SetLeftInput(leftImage);
       m_NCCBlockMatcher->SetRightInput(rightImage);
       m_NCCBlockMatcher->SetRadius(radius);
+      m_NCCBlockMatcher->SetStep(step);
       m_NCCBlockMatcher->SetMinimumHorizontalDisparity(minhdisp);
       m_NCCBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
       m_NCCBlockMatcher->SetMinimumVerticalDisparity(minvdisp);
@@ -614,6 +623,7 @@ private:
       m_LPBlockMatcher->SetLeftInput(leftImage);
       m_LPBlockMatcher->SetRightInput(rightImage);
       m_LPBlockMatcher->SetRadius(radius);
+      m_LPBlockMatcher->SetStep(step);
       m_LPBlockMatcher->GetFunctor().SetP(static_cast<double>(GetParameterFloat("bm.metric.lp.p")));
       m_LPBlockMatcher->SetMinimumHorizontalDisparity(minhdisp);
       m_LPBlockMatcher->SetMaximumHorizontalDisparity(maxhdisp);
