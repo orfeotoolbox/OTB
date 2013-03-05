@@ -71,7 +71,7 @@ DatasetDescriptor
 ::DatasetDescriptor( QObject* parent ) :
   AbstractModel( parent ),
   m_DomDocument(QString(PROJECT_NAME).append("_Dataset") ),
-  m_ImagesElement()
+  m_DatasetElement()
 {
 }
 
@@ -88,24 +88,22 @@ DatasetDescriptor
 		    void* imageSettings,
 		    const QString& quicklookFilename )
 {
-
   //
-  // Image node.
-  QDomNode imageNode( m_DomDocument.createElement( "image" ) );
-  QDomElement imageElement( imageNode.toElement() );
-  //QDomElement imageElement = m_DomDocument.createElement("image");
+  // Image information node.
+  QDomElement imagesElement = m_DomDocument.createElement("image_information");
+  m_DatasetElement.appendChild(imagesElement);
+  imagesElement.setAttribute("ID", "0");
 
-  imageElement.setAttribute(
-    "filename",
-    imageFilename
-  );
+  // Input image filename
+  QDomElement imgElement = m_DomDocument.createElement("input_image");
+  imagesElement.appendChild(imgElement);
+  imgElement.setAttribute("href",imageFilename);
 
-  imageElement.setAttribute(
-    "quicklook",
-    quicklookFilename
-  );
+  // QL input image filename
+  QDomElement qlElement = m_DomDocument.createElement("ql_input_image");
+  imagesElement.appendChild(qlElement);
+  qlElement.setAttribute("href",quicklookFilename);
 
-  //m_DomDocument.appendChild(imageElement);
 
   //
   // Settings node.
@@ -281,24 +279,15 @@ DatasetDescriptor
   m_DomDocument.appendChild(root);
 
   // Root document element: '<dataset>...</dataset>'.
-  QDomElement docElt( m_DomDocument.documentElement() );
-  docElt.setTagName( "dataset" );
-  docElt.setAttribute(
-    "directory",
+  QDomElement dsElt = m_DomDocument.createElement("dataset_path");
+  dsElt.setAttribute(
+    "href",
     QDir::cleanPath( model->GetDirectory().path() )
   );
+  m_DomDocument.firstChild().appendChild(dsElt);
 
-  QDomNode noeud = m_DomDocument.createProcessingInstruction("xml","version=\"1.0\"");
-  m_DomDocument.insertBefore(noeud, m_DomDocument);
-
-  // Images group element: '<dataset><images>...</images></dataset>'.
-  QDomNode imagesNode(
-    docElt.appendChild(
-      m_DomDocument.createElement( "images" )
-    )
-  );
-
-  m_ImagesElement = imagesNode.toElement();
+  // keep the dataset element
+  m_DatasetElement =  m_DomDocument.firstChild().toElement();
 }
 
 /*******************************************************************************/

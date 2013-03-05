@@ -124,6 +124,7 @@ DatasetModel
       &vectorImageModel->GetSettings(),
       vectorImageModel->GetQuicklookModel()->GetFilename()
     );
+    this->WriteDescriptor();
     }
   catch( std::exception& exc )
     {
@@ -172,8 +173,8 @@ DatasetModel
   m_Descriptor = newChildModel< DatasetDescriptor >();
 
   // Initialize content, if needed.
-  if( true || isEmpty )
-    WriteDescriptor();
+  /*if( true || isEmpty )
+    WriteDescriptor();*/
 
   // Load directory content.
   Load( buildContext->m_Path, buildContext->m_Name );

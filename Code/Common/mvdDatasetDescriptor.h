@@ -197,7 +197,8 @@ private:
 
   /**
    */
-  QDomElement m_ImagesElement;
+  QDomElement m_DatasetElement;
+
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -224,7 +225,7 @@ QDomElement
 DatasetDescriptor
 ::FirstImageElement()
 {
-  return m_ImagesElement.firstChildElement( "image" );
+  return m_DatasetElement.firstChildElement( "image" );
 }
 
 /*****************************************************************************/
