@@ -159,6 +159,19 @@ void GDALOverviewsBuilder::GetGDALResamplingMethod(std::string &resamplingMethod
   }
 }
 
+// Progress reporting functions compatible with GDAL C API
+extern "C" 
+{ 
+  static int CPL_STDCALL otb_UpdateGDALProgress(double dfComplete, 
+                                                const char *pszMessage,
+                                                void * pProgressArg)
+  {
+    otb::GDALOverviewsBuilder* _this = (otb::GDALOverviewsBuilder*)pProgressArg;
+    _this->UpdateProgress(dfComplete);
+    return 1;
+  }
+}
+
 void GDALOverviewsBuilder::Update()
 {
   typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;
@@ -192,56 +205,13 @@ void GDALOverviewsBuilder::Update()
                           &ovwlist.front(),
                           0, // All bands
                           NULL, // All bands
-                          GDALTermProgress/*(GDALProgressFunc)UpdateGDALProgress *//*2*/,
-                          NULL/*this*/);
+                          (GDALProgressFunc)otb_UpdateGDALProgress,
+                          this);
     if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while building the GDAL overviews from " << m_InputFileName.c_str() << ".");
       }
 }
 
-int GDALOverviewsBuilder::UpdateGDALProgress(double dfComplete, const char *pszMessage,
-                                               void * pProgressArg)
-{
-  GDALOverviewsBuilder* _this = (GDALOverviewsBuilder*)pProgressArg;
-  _this->UpdateProgress(dfComplete);
-  return 1;
-}
-
-// NOT WORK WITH WIN ARCH even if it is the same code as GDALTermProgress and its works on Linux
-/*int GDALOverviewsBuilder::UpdateGDALProgress2(double dfComplete, const char *pszMessage,
-                                               void * pProgressArg)
-{*/
-  /*std::cout << dfComplete << std::endl; */
-  /*static int nLastTick = -1;
-  int nThisTick = (int) (dfComplete * 40.0);
-
-  (void) pProgressArg;
-
-  nThisTick = MIN(40,MAX(0,nThisTick));
-
-  // Have we started a new progress run?
-  if( nThisTick < nLastTick && nLastTick >= 39 )
-      nLastTick = -1;
-
-  if( nThisTick <= nLastTick )
-      return TRUE;
-
-  while( nThisTick > nLastTick )
-    {
-    nLastTick++;
-    if( nLastTick % 4 == 0 )
-      fprintf( stdout, "%d", (nLastTick / 4) * 10 );
-    else
-      fprintf( stdout, "." );
-    }
-
-  if( nThisTick == 40 )
-    fprintf( stdout, " - done.\n" );
-  else
-    fflush( stdout );
-
-  return TRUE;
-}*/
-
 } // end namespace otb
+
