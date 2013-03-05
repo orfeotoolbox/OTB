@@ -635,7 +635,7 @@ private:
                                                    , 255.0);
             }
           }
-        otbAppLogINFO("Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
+        otbMsgDevMacro(<<"Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]");
         m_RBGFromImageMapper->SetChange(clabel, color);
         }
 
