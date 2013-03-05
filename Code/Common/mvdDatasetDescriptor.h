@@ -237,27 +237,25 @@ DatasetDescriptor
 }
 
 /*****************************************************************************/
-#if 0
+#if 1
 template< typename T >
 inline
-QDomNode
+QDomElement
 DatasetDescriptor
-::CreateVectorNode( const std::vector< T >& vector )
+::CreateVectorNode( const std::vector< T >& vector, const QString& tagName )
 {
   QStringList stringList;
 
-  for( std::vector< T >::const_iterator it( vector.begin() );
+  for( typename std::vector< T >::const_iterator it( vector.begin() );
        it!=vector.end();
        ++ it )
     {
     stringList.append( QString( "%1" ).arg( *it ) );
     }
 
-  QDomNode node(
-    m_DomDocument.createTextNode(
-      stringList.join( " "  )
-    )
-  );
+  QDomNode node( m_DomDocument.createElement( tagName ) );
+
+  node.setNodeValue( stringList.join( " " ) );
 
   return node.toElement();
 }

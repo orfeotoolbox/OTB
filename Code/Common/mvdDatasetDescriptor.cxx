@@ -113,6 +113,16 @@ DatasetDescriptor
   VectorImageModel::Settings* settings =
     static_cast< VectorImageModel::Settings* >( imageSettings );
 
+  //
+  // RGB node
+  QDomNode rgbNode( m_DomDocument.createElement( "rgb" ) );
+  QDomElement rgbElement( rgbNode.toElement() );
+
+  //
+  // Dynamics node.
+  QDomNode dynamicsNode( m_DomDocument.createElement( "dynamics" ) );
+  QDomElement dynamicsElement( dynamicsNode.toElement() );
+
   // TODO: Create XML elements and set attribute for settings.
   }
 }
@@ -132,9 +142,14 @@ DatasetDescriptor
   VectorImageModel::Settings* settings =
     static_cast< VectorImageModel::Settings* >( imageSettings );
 
+  // Settings
   QDomElement settingsElement( imageSibling.firstChildElement( "settings" ) );
 
-  // TODO: Set settings from XML elements and attributes.
+  // RGB
+  QDomElement rgbElement( settingsElement.firstChildElement( "rgb" ) );
+
+  // Dynamics
+  QDomElement dynamicsElement( settingsElement.firstChildElement( "dynamics" ) );
 
   // Ensure there is only one '<settings>...</settings>' child.
   settingsElement = settingsElement.nextSiblingElement( "settings" );
