@@ -929,7 +929,7 @@ MainWindow
   connect(loader, SIGNAL(ModelLoaded(AbstractModel*)), this, SLOT(OnModelLoaded(AbstractModel*)));
   connect(loader, SIGNAL(Finished()), thread, SLOT(quit()));
   connect(loader, SIGNAL(Finished()), loader, SLOT(deleteLater()));
-  connect(thread, SIGNAL(Finished()), thread, SLOT(deleteLater()));
+  connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
   thread->start();
 }
 
