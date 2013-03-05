@@ -115,17 +115,18 @@ VectorImageModel
   bool forceToCacheOvw = true;
 
   if (!hasOverviewsSupport)
-    { // the current file don't have overviews available and the ImageIO don't support overviews
-    throw std::runtime_error(ToStdString(tr( "The ImageIO use to read this file don't support Overviews." )).c_str());
+    {
+    // the current file doesn't have overviews available and the ImageIO doesn't support overviews
+    throw std::runtime_error(ToStdString(tr( "The ImageIO used to read this file doesn't support Overviews." )).c_str());
     }
   else
     {
-    qDebug() << tr("The ImageIO use to read this file support overviews.");
+    qDebug() << tr("The ImageIO used to read this file supports overviews.");
 
     // TODO MSD: how to manage case of JPEG2000 with no overviews ? : wait GDAL support OpenJPEG ...
     if (nbOfAvailableOvw == 0)
       { // The current file don't have overviews available
-      qDebug() << tr("The file don't have overviews.");
+      qDebug() << tr("The file doesn't have overviews.");
       if (forceToCacheOvw)
         { // the user want to cache the overviews
         qDebug() << tr("Caching of overviews.");
@@ -148,19 +149,20 @@ VectorImageModel
           {
           // The user can continue to use the file so we return a warning message
           // TODO MSD return the message to the log widget
-          qDebug() << tr( "The overviews have not been created for internal reason."
+          qDebug() << tr( "The overviews creation failed."
               "\n Navigation in resolution will be slower " );
           }
 
         }
       else
-        { // the user don't want to cache the overviews, GDAL will virtually compute the ovw on demand
-        qDebug() << tr("Keep GDAL decimate the file on demand !");
+        {
+        // the user doesn't want to cache the overviews, GDAL will virtually compute the ovw on demand
+        qDebug() << tr("Letting GDAL decimate the file on-the-fly !");
         }
       }
     else
       {
-      qDebug() << tr("The file have already overviews !");
+      qDebug() << tr("The file already has overviews !");
       }
     }
 
