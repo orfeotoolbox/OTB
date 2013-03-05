@@ -119,15 +119,12 @@ DatasetDescriptor
 
   //
   // RGB node
-  QDomNode rgbNode( m_DomDocument.createElement( "rgb" ) );
-  QDomElement rgbElement( rgbNode.toElement() );
+  imagesElement.appendChild( CreateContainerNode(settings->GetRgbChannels(), "rgb") );
 
   //
   // Dynamics node.
-  QDomNode dynamicsNode( m_DomDocument.createElement( "dynamics" ) );
-  QDomElement dynamicsElement( dynamicsNode.toElement() );
+  imagesElement.appendChild( CreateContainerNode(settings->GetDynamicsParams(), "dynamics") );
 
-  // TODO: Create XML elements and set attribute for settings.
   }
 
 }

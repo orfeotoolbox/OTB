@@ -171,11 +171,11 @@ private:
 
   /**
    */
-  template< typename T >
-    inline
-    QDomElement CreateVectorNode( const std::vector< T >& vector,
-				  const QString& tagName );
-
+  template< typename Container >
+  inline
+  QDomElement CreateContainerNode( const Container& array,
+                                   const QString& tagName );
+  
   /**
    */
   void Read( const QString& filename );
@@ -238,29 +238,27 @@ DatasetDescriptor
 }
 
 /*****************************************************************************/
-#if 1
-template< typename T >
+template< typename Container >
 inline
 QDomElement
 DatasetDescriptor
-::CreateVectorNode( const std::vector< T >& vector, const QString& tagName )
+::CreateContainerNode( const Container& container, const QString& tagName )
 {
   QStringList stringList;
-
-  for( typename std::vector< T >::const_iterator it( vector.begin() );
-       it!=vector.end();
+  
+  for( typename Container::const_iterator it( container.begin() );
+      it != container.end();
        ++ it )
-    {
-    stringList.append( QString( "%1" ).arg( *it ) );
-    }
-
-  QDomNode node( m_DomDocument.createElement( tagName ) );
-
-  node.setNodeValue( stringList.join( " " ) );
-
-  return node.toElement();
+      {
+        stringList.append( QString( "%1" ).arg( *it ) );
+      }
+  
+  QDomText textNode( m_DomDocument.createTextNode( stringList.join( " " ) ) );  
+  QDomElement vectorElement( m_DomDocument.createElement(tagName) );
+  vectorElement.appendChild( textNode );
+  
+  return vectorElement;
 }
-#endif
 
 } // end namespace 'mvd'
 
