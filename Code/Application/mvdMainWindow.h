@@ -73,30 +73,6 @@ namespace Ui
 class MainWindow;
 }
 
-
-class ImageLoader : public QObject
-{
-    Q_OBJECT
-
-public:
-    ImageLoader();
-    
-    ~ImageLoader();
-    
-    QString filename;
-    int width;
-    int height;
-    
-public slots:
-    void OpenImage();
-
-signals:
-    void ModelLoaded( AbstractModel* );
-    void Finished();
-    void Error(QString err);
-};
-
-
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
@@ -154,6 +130,11 @@ protected:
 protected:
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
+//
+// Private nested classes.
+private:
+
 
 //
 // Private methods.

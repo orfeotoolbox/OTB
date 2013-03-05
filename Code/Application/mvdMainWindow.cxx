@@ -43,6 +43,7 @@
 #include "mvdColorSetupController.h"
 #include "mvdDatasetModel.h"
 #include "mvdGLImageWidget.h"
+#include "mvdImageLoader.h"
 #include "mvdImageModelRenderer.h"
 #include "mvdImageViewManipulator.h"
 #include "mvdPreferencesDialog.h"
@@ -54,50 +55,6 @@
 
 namespace mvd
 {
-
-ImageLoader::ImageLoader()
-{
-}
-
-ImageLoader::~ImageLoader()
-{
-}
-  
-void ImageLoader::OpenImage()
-{
-  // This method is executed in a separate thread
-  /*
-  class Sleeper : public QThread
-  {
-    public:
-    static void sleep(unsigned long secs) {
-      QThread::sleep(secs);
-      }
-  };
-
-  Sleeper::sleep( 5 );
-  */
-
-  try
-    {
-    DatasetModel* model = Application::LoadDatasetModel(
-      filename, width, height );
-
-    // We can only push to another thread,
-    // so thread affinity must be set here,
-    // and not in the slot that receives the object
-    model->moveToThread(Application::Instance()->thread());
-    
-    emit ModelLoaded(model);
-    }
-  catch( std::exception& exc )
-    {
-    emit Error( exc.what() );
-    return;
-    }
-  emit Finished();
-}
-
   
 /*
   TRANSLATOR mvd::MainWindow
@@ -964,10 +921,7 @@ MainWindow
   // http://mayaposch.wordpress.com/2011/11/01/how-to-really-truly-use-qthreads-the-full-explanation
   
   QThread* thread = new QThread;
-  ImageLoader* loader = new ImageLoader();
-  loader->filename = filename;
-  loader->width = centralWidget()->width();
-  loader->height = centralWidget()->height();
+  ImageLoader* loader = new ImageLoader(filename, centralWidget()->width(), centralWidget()->height());
   loader->moveToThread(thread);
   
   connect(loader, SIGNAL(Error(QString)), this, SLOT(OnError(QString)));
