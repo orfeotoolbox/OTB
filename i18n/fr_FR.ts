@@ -600,6 +600,14 @@
         <source>Current map scale</source>
         <translation>Echelle courante</translation>
     </message>
+    <message>
+      <source>Zoom Level:</source>
+      <translation>Niveau de zoom:</translation>
+    </message>
+    <message>
+      <source>x:y stands for "x pixels on screen = y pixels on image"</source>
+      <translation>x:y correspond à "x pixels écran = y pixels sur l'image"</translation>
+    </message>    
 </context>
 <context>
     <name>mvd::Math</name>

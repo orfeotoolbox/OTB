@@ -309,7 +309,7 @@ MainWindow
   m_CurrentPixelRadio = new QLabel(statusBar());
   m_CurrentPixelRadio->setAlignment(Qt::AlignCenter);
   statusBar()->addPermanentWidget( m_CurrentPixelRadio,      1 );
-
+ 
   // scale label 
   m_CurrentScaleLabel = new QLabel( QString(), statusBar() );
   //m_CurrentScaleLabel->setFont( myFont );
@@ -318,8 +318,8 @@ MainWindow
   m_CurrentScaleLabel->setMargin( 3 );
   m_CurrentScaleLabel->setAlignment( Qt::AlignCenter );
   m_CurrentScaleLabel->setFrameStyle( QFrame::NoFrame );
-  m_CurrentScaleLabel->setText( tr( "Scale:" ) );
-  m_CurrentScaleLabel->setToolTip( tr( "Current map scale" ) );
+  m_CurrentScaleLabel->setText( tr( "Zoom Level:" ) );
+  m_CurrentScaleLabel->setToolTip( tr( "Current map scale : " ) );
   statusBar()->addPermanentWidget( m_CurrentScaleLabel, 2 );
 
   // Add a comboxbox ?? to the status bar to remember scale
@@ -328,6 +328,7 @@ MainWindow
   m_CurrentScale->setMinimumWidth( 10 );
   m_CurrentScale->setContentsMargins( 0, 0, 0, 0 );
   m_CurrentScale->setAlignment( Qt::AlignCenter );
+  m_CurrentScale->setToolTip( tr( "x:y stands for \"x pixels on screen = y pixels on image\"" ) );
   statusBar()->addPermanentWidget(m_CurrentScale ,      2 );
 }
 
