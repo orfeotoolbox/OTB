@@ -66,14 +66,6 @@ class Monteverdi2_EXPORT DatasetCreationProgressDialog :
 {
   Q_OBJECT;
 
-  Q_PROPERTY(QString image
-        READ GetImage
-        WRITE SetImage);
-
-  Q_PROPERTY(QString dataset
-        READ GetDataset
-        WRITE SetDataset);
-
 //
 // Public methods.
 public:
