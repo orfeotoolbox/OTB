@@ -265,7 +265,6 @@ MainWindow
 
   //
   // add a vertical separator
-  sep->setParent(m_CurrentPixelIndex);
   statusBar()->addPermanentWidget( sep, 0);
 
   // Add a QLabel to the status bar to show physical coordiantes
