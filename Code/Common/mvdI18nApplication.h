@@ -207,10 +207,10 @@ protected:
 // Protected attributes.
 protected:
 
-/**
- * Repository where all the elements saved by the application will be cached
- */
-QDir m_CacheDir;
+  /**
+  * Repository where all the elements saved by the application will be cached
+  */
+  QDir m_CacheDir;
 
 
 
