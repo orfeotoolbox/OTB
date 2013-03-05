@@ -173,7 +173,7 @@ private:
    */
   template< typename Container >
   inline
-  QDomElement CreateContainerNode( const Container& array,
+  QDomElement CreateContainerNode( const Container& container,
                                    const QString& tagName );
   
   /**
