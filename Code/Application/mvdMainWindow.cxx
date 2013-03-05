@@ -77,7 +77,7 @@ void ImageLoader::OpenImage()
 
   Sleeper::sleep( 5 );
   */
-  
+
   try
     {
     DatasetModel* model = Application::LoadDatasetModel(
@@ -138,6 +138,9 @@ MainWindow
 ::SelectCacheDir(bool incorrectCacheDir)
 {
   QString defaultCacheDirStr (QDir::homePath());
+  defaultCacheDirStr.append(QDir::separator());
+  defaultCacheDirStr.append(Application::ConstInstance()->GetCacheDirName());
+  
   int ret;
 
   if (incorrectCacheDir)
@@ -952,7 +955,7 @@ MainWindow
   QString targetPath;
   Application::DatasetPathName( targetPath, targetFile, filename );
   
-  m_DatasetCreationProgressDialog->SetDataset( targetPath + QDir::separator() + filename  );  
+  m_DatasetCreationProgressDialog->SetDataset( targetPath + QDir::separator() + targetFile  );  
   m_DatasetCreationProgressDialog->show();
   
   // Inspired by :
