@@ -79,7 +79,7 @@ class Monteverdi2_EXPORT DatasetCreationProgressDialog :
 public:
 
   /** Constructor */
-  DatasetCreationProgressDialog( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  DatasetCreationProgressDialog( QWidget* parent = NULL );
 
   /** Destructor */
   virtual ~DatasetCreationProgressDialog();

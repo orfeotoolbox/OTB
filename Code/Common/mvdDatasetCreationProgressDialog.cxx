@@ -47,8 +47,8 @@ namespace mvd
 
 /*******************************************************************************/
 DatasetCreationProgressDialog
-::DatasetCreationProgressDialog( QWidget* parent, Qt::WindowFlags flags ) :
-  QDialog( parent, Qt::Dialog ),
+::DatasetCreationProgressDialog( QWidget* parent ) :
+  QDialog( parent, Qt::CustomizeWindowHint | Qt::WindowTitleHint ),
   m_UI( new mvd::Ui::DatasetCreationProgressDialog() )
 {
   m_UI->setupUi( this );
