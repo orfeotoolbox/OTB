@@ -169,7 +169,7 @@ protected:
 // Private methods.
 private:
 
-  /**
+  /** \brief Serialize an STL-compliant container to a QDomElement
    */
   template< typename Container >
   inline
