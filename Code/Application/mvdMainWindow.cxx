@@ -69,10 +69,9 @@ MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
   QMainWindow( parent, flags ), 
   m_UI( new mvd::Ui::MainWindow() ),
-  m_DatasetCreationProgressDialog( 0 )
+  m_DatasetCreationProgressDialog( new DatasetCreationProgressDialog(this) )
 {
   m_UI->setupUi( this );
-
   Initialize();
 }
 
@@ -213,7 +212,12 @@ MainWindow
     this, SLOT( OnSelectedModelChanged( AbstractModel* ) )
   );
   
-  // 
+  // Show the progress dialog when a new image is loaded
+  QObject::connect(
+    this, SIGNAL( OpenImageRequest(QString) ), 
+    this, SLOT( OnShowProgressDialog(QString) )
+    );
+  // Trigger the actual dataset creation when a new image is loaded
   QObject::connect(
     this, SIGNAL( OpenImageRequest(QString) ), 
     this, SLOT( OnOpenImageRequest(QString) )
@@ -903,33 +907,35 @@ void
 MainWindow
 ::OnOpenImageRequest( QString filename )
 {
-  delete m_DatasetCreationProgressDialog;
-  m_DatasetCreationProgressDialog = new DatasetCreationProgressDialog(this);
-  
-  m_DatasetCreationProgressDialog->SetImage( filename );
-  
-  QString targetFile;
-  QString targetPath;
-  Application::DatasetPathName( targetPath, targetFile, filename );
-  
-  m_DatasetCreationProgressDialog->SetDataset( targetPath + QDir::separator() + targetFile  );  
-  m_DatasetCreationProgressDialog->adjustSize();
-
-  m_DatasetCreationProgressDialog->show();
-  
   // Inspired by :
   // http://mayaposch.wordpress.com/2011/11/01/how-to-really-truly-use-qthreads-the-full-explanation
+  
+  // TODO : move this code to core ?
   
   QThread* thread = new QThread;
   ImageLoader* loader = new ImageLoader(filename, centralWidget()->width(), centralWidget()->height());
   loader->moveToThread(thread);
   
+  // On error, first hide the progress dialog, then notify ourself
+  connect(loader, SIGNAL(Error(QString)), this, SLOT(OnHideProgressDialog()));
   connect(loader, SIGNAL(Error(QString)), this, SLOT(OnError(QString)));
+  
+  // At thread startup, trigger the processing function
   connect(thread, SIGNAL(started()), loader, SLOT(OpenImage()));
+  
+  // On successfull image loading, notify ourself, passing the created AbstractModel instance
   connect(loader, SIGNAL(ModelLoaded(AbstractModel*)), this, SLOT(OnModelLoaded(AbstractModel*)));
+  
+  // Cleanup
+  //  - quit the thread's event loop, exit cleanly
   connect(loader, SIGNAL(Finished()), thread, SLOT(quit()));
+  //  - hide the progress dialog
+  connect(loader, SIGNAL(Finished()), this, SLOT(OnHideProgressDialog()));
+  //  - cleanup heap
   connect(loader, SIGNAL(Finished()), loader, SLOT(deleteLater()));
   connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+  
+  // Everything is set up. Let's go !
   thread->start();
 }
 
@@ -956,9 +962,35 @@ MainWindow
     return;
     }
   
-  m_DatasetCreationProgressDialog->close();
+  
   delete m_DatasetCreationProgressDialog;
   m_DatasetCreationProgressDialog = 0;
+}
+
+
+/*****************************************************************************/
+void
+MainWindow
+::OnShowProgressDialog( QString filename )
+{
+  QString targetFile;
+  QString targetPath;
+  Application::DatasetPathName( targetPath, targetFile, filename );
+
+  m_DatasetCreationProgressDialog->SetImage( filename );
+  m_DatasetCreationProgressDialog->SetDataset( targetPath + QDir::separator() + targetFile  );  
+
+  m_DatasetCreationProgressDialog->adjustSize();
+  m_DatasetCreationProgressDialog->show();
+}
+
+
+/*****************************************************************************/
+void
+MainWindow
+::OnHideProgressDialog( QString message )
+{
+  m_DatasetCreationProgressDialog->hide();
 }
 
 /*****************************************************************************/

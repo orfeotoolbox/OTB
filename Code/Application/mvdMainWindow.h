@@ -287,7 +287,12 @@ private slots:
   /** */
   void OnError( QString filename );
 
-
+  /** */
+  void OnShowProgressDialog( QString filename );
+  
+  /** */
+  void OnHideProgressDialog( QString filename );
+  
 };
 
 } // end namespace 'mvd'
