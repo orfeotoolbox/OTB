@@ -160,9 +160,9 @@ void GDALOverviewsBuilder::GetGDALResamplingMethod(std::string &resamplingMethod
 }
 
 // Progress reporting functions compatible with GDAL C API
-extern "C" 
-{ 
-  static int CPL_STDCALL otb_UpdateGDALProgress(double dfComplete, 
+extern "C"
+{
+  static int CPL_STDCALL otb_UpdateGDALProgress(double dfComplete,
                                                 const char *pszMessage,
                                                 void * pProgressArg)
   {
