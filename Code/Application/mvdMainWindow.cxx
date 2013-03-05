@@ -51,6 +51,7 @@
 #include "mvdQuicklookViewManipulator.h"
 #include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
+#include "mvdStatusBarWidget.h"
 
 
 namespace mvd
@@ -234,90 +235,93 @@ void
 MainWindow
 ::InitializeStatusBarWidgets()
 {
-  // inspired from Qgis
-  //QFont myFont( "Arial", 9 );
+  // // inspired from Qgis
+  // //QFont myFont( "Arial", 9 );
 
-  // separator
-  QFrame * sep = new QFrame(statusBar());
-  sep->setFrameShape(QFrame::VLine);
-  sep->setFrameShadow(QFrame::Sunken);
+  // // separator
+  // QFrame * sep = new QFrame(statusBar());
+  // sep->setFrameShape(QFrame::VLine);
+  // sep->setFrameShadow(QFrame::Sunken);
 
-  // label
-  m_CurrentPixelIndexLabel = new QLabel( QString(), statusBar() );
-  //m_CurrentPixelIndexLabel->setFont( myFont );
-  m_CurrentPixelIndexLabel->setMinimumWidth( 60 );
-  m_CurrentPixelIndexLabel->setMaximumHeight( 20 );
-  //m_CurrentPixelIndexLabel->setMargin( 3 );
-  m_CurrentPixelIndexLabel->setAlignment( Qt::AlignCenter );
-  m_CurrentPixelIndexLabel->setFrameStyle( QFrame::NoFrame );
-  m_CurrentPixelIndexLabel->setText( tr( "Index:" ) );
-  m_CurrentPixelIndexLabel->setToolTip( tr( "Current map coordinate" ) );
-  statusBar()->addPermanentWidget( m_CurrentPixelIndexLabel, 0 );
+  // // label
+  // m_CurrentPixelIndexLabel = new QLabel( QString(), statusBar() );
+  // //m_CurrentPixelIndexLabel->setFont( myFont );
+  // m_CurrentPixelIndexLabel->setMinimumWidth( 60 );
+  // m_CurrentPixelIndexLabel->setMaximumHeight( 20 );
+  // //m_CurrentPixelIndexLabel->setMargin( 3 );
+  // m_CurrentPixelIndexLabel->setAlignment( Qt::AlignCenter );
+  // m_CurrentPixelIndexLabel->setFrameStyle( QFrame::NoFrame );
+  // m_CurrentPixelIndexLabel->setText( tr( "Index:" ) );
+  // m_CurrentPixelIndexLabel->setToolTip( tr( "Current map coordinate" ) );
+  // statusBar()->addPermanentWidget( m_CurrentPixelIndexLabel, 0 );
 
-  // Add a QLabel to the status bar to show pixel index
-  m_CurrentPixelIndex = new QLineEdit(QString(), statusBar());
-  //m_CurrentPixelIndex->setFont( myFont );
-  m_CurrentPixelIndex->setMinimumWidth( 150 );
-  m_CurrentPixelIndex->setMaximumWidth( 150 );
-  m_CurrentPixelIndex->setContentsMargins( 0, 0, 0, 0 );
-  m_CurrentPixelIndex->setAlignment( Qt::AlignCenter );
-  statusBar()->addPermanentWidget( m_CurrentPixelIndex,      0 );
+  // // Add a QLabel to the status bar to show pixel index
+  // m_CurrentPixelIndex = new QLineEdit(QString(), statusBar());
+  // //m_CurrentPixelIndex->setFont( myFont );
+  // m_CurrentPixelIndex->setMinimumWidth( 150 );
+  // m_CurrentPixelIndex->setMaximumWidth( 150 );
+  // m_CurrentPixelIndex->setContentsMargins( 0, 0, 0, 0 );
+  // m_CurrentPixelIndex->setAlignment( Qt::AlignCenter );
+  // statusBar()->addPermanentWidget( m_CurrentPixelIndex,      0 );
 
-  //
-  // add a vertical separator
-  statusBar()->addPermanentWidget( sep, 0);
+  // //
+  // // add a vertical separator
+  // statusBar()->addPermanentWidget( sep, 0);
 
-  // Add a QLabel to the status bar to show physical coordiantes
-  m_CurrentPixelPhysical = new QLabel(statusBar());
-  //m_CurrentPixelPhysical->setFont( myFont );
-  m_CurrentPixelPhysical->setAlignment(Qt::AlignCenter);
-  statusBar()->addPermanentWidget( m_CurrentPixelPhysical,   0 );
+  // // Add a QLabel to the status bar to show physical coordiantes
+  // m_CurrentPixelPhysical = new QLabel(statusBar());
+  // //m_CurrentPixelPhysical->setFont( myFont );
+  // m_CurrentPixelPhysical->setAlignment(Qt::AlignCenter);
+  // statusBar()->addPermanentWidget( m_CurrentPixelPhysical,   0 );
 
-  //
-  // add a vertical separator
-  statusBar()->addPermanentWidget( sep, 0);
+  // //
+  // // add a vertical separator
+  // statusBar()->addPermanentWidget( sep, 0);
 
-  // Add a QLabel to the status bar to show geographical coordinates
-  m_CurrentPixelGeographic = new QLabel(statusBar());
-  //m_CurrentPixelGeographic->setFont( myFont );
-  m_CurrentPixelGeographic->setAlignment(Qt::AlignCenter);
-  statusBar()->addPermanentWidget( m_CurrentPixelGeographic, 0 );
+  // // Add a QLabel to the status bar to show geographical coordinates
+  // m_CurrentPixelGeographic = new QLabel(statusBar());
+  // //m_CurrentPixelGeographic->setFont( myFont );
+  // m_CurrentPixelGeographic->setAlignment(Qt::AlignCenter);
+  // statusBar()->addPermanentWidget( m_CurrentPixelGeographic, 0 );
   
-  //
-  // add a vertical separator
-  statusBar()->addPermanentWidget( sep, 0);
+  // //
+  // // add a vertical separator
+  // statusBar()->addPermanentWidget( sep, 0);
 
-  // Add a QLabel to the status bar to show pixel radiometry
-  m_CurrentPixelRadio = new QLabel(statusBar());
-  //m_CurrentPixelRadio->setFont( myFont );
-  m_CurrentPixelRadio->setAlignment(Qt::AlignCenter);
-  statusBar()->addPermanentWidget( m_CurrentPixelRadio,      1);
+  // // Add a QLabel to the status bar to show pixel radiometry
+  // m_CurrentPixelRadio = new QLabel(statusBar());
+  // //m_CurrentPixelRadio->setFont( myFont );
+  // m_CurrentPixelRadio->setAlignment(Qt::AlignCenter);
+  // statusBar()->addPermanentWidget( m_CurrentPixelRadio,      1);
   
-  //
-  // add a vertical separator
-  statusBar()->addPermanentWidget(sep, 0 );
+  // //
+  // // add a vertical separator
+  // statusBar()->addPermanentWidget(sep, 0 );
  
-  // scale label
-  m_CurrentScaleLabel = new QLabel( QString(), statusBar() );
-  //m_CurrentScaleLabel->setFont( myFont );
-  m_CurrentScaleLabel->setMinimumWidth( 10 );
-  m_CurrentScaleLabel->setMaximumHeight( 20 );  
-  //m_CurrentScaleLabel->setMargin( 3 );
-  m_CurrentScaleLabel->setAlignment( Qt::AlignCenter );
-  m_CurrentScaleLabel->setFrameStyle( QFrame::NoFrame );
-  m_CurrentScaleLabel->setText( tr( "Zoom Level:" ) );
-  m_CurrentScaleLabel->setToolTip( tr( "Current map scale : " ) );
-  statusBar()->addPermanentWidget( m_CurrentScaleLabel, 0 );
+  // // scale label
+  // m_CurrentScaleLabel = new QLabel( QString(), statusBar() );
+  // //m_CurrentScaleLabel->setFont( myFont );
+  // m_CurrentScaleLabel->setMinimumWidth( 10 );
+  // m_CurrentScaleLabel->setMaximumHeight( 20 );  
+  // //m_CurrentScaleLabel->setMargin( 3 );
+  // m_CurrentScaleLabel->setAlignment( Qt::AlignCenter );
+  // m_CurrentScaleLabel->setFrameStyle( QFrame::NoFrame );
+  // m_CurrentScaleLabel->setText( tr( "Zoom Level:" ) );
+  // m_CurrentScaleLabel->setToolTip( tr( "Current map scale : " ) );
+  // statusBar()->addPermanentWidget( m_CurrentScaleLabel, 0 );
 
-  // zoom level 
-  m_CurrentScale = new QLineEdit(QString(), statusBar());
-  //m_CurrentPixelIndex->setFont( myFont );
-  m_CurrentScale->setMinimumWidth( 100 );
-  m_CurrentScale->setMaximumWidth( 100 );
-  m_CurrentPixelIndex->setContentsMargins( 0, 0, 0, 0 );
-  m_CurrentScale->setAlignment( Qt::AlignCenter );
-  m_CurrentScale->setToolTip( tr( "x:y stands for \"x pixels on screen = y pixels on image\"" ) );
-  statusBar()->addPermanentWidget(m_CurrentScale ,      0 );
+  // // zoom level 
+  // m_CurrentScale = new QLineEdit(QString(), statusBar());
+  // //m_CurrentPixelIndex->setFont( myFont );
+  // m_CurrentScale->setMinimumWidth( 100 );
+  // m_CurrentScale->setMaximumWidth( 100 );
+  // m_CurrentPixelIndex->setContentsMargins( 0, 0, 0, 0 );
+  // m_CurrentScale->setAlignment( Qt::AlignCenter );
+  // m_CurrentScale->setToolTip( tr( "x:y stands for \"x pixels on screen = y pixels on image\"" ) );
+  // statusBar()->addPermanentWidget(m_CurrentScale ,      0 );
+
+  m_StatusBarWidget = new StatusBarWidget();
+  statusBar()->addPermanentWidget(m_StatusBarWidget, 1);
 }
 
 /*****************************************************************************/
@@ -657,40 +661,40 @@ MainWindow
   QObject::disconnect(
     vectorImageModel, 
     SIGNAL( CurrentIndexUpdated(const QString& ) ),
-    m_CurrentPixelIndex,
+    m_StatusBarWidget->m_UI->m_CurrentPixelIndex,
     SLOT( setText(const QString &) )
   );
 
   QObject::disconnect(
     vectorImageModel, 
     SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
-    m_CurrentPixelPhysical,
+    m_StatusBarWidget->m_UI->m_CurrentPixelPhysical,
     SLOT( setText(const QString &) )
   );
 
   QObject::disconnect(
     vectorImageModel, 
     SIGNAL( CurrentGeographicUpdated(const QString& ) ),
-    m_CurrentPixelGeographic,
+    m_StatusBarWidget->m_UI->m_CurrentPixelGeographic,
     SLOT( setText(const QString &) )
   );
 
   QObject::disconnect(
     vectorImageModel, 
     SIGNAL( CurrentRadioUpdated(const QString& ) ),
-    m_CurrentPixelRadio,
+    m_StatusBarWidget->m_UI->m_CurrentPixelRadio,
     SLOT( setText(const QString &) )
   );
 
   QObject::disconnect(
     m_ImageViewManipulator, 
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
-    m_CurrentScale,
+    m_StatusBarWidget->m_UI->m_CurrentScale,
     SLOT( setText(const QString&) )
   );
 
   // index widget edition
-  QObject::disconnect(m_CurrentPixelIndex,
+  QObject::disconnect(m_StatusBarWidget->m_UI->m_CurrentPixelIndex,
                    SIGNAL( editingFinished() ),
                    this,
                    SLOT( OnUserCoordinatesEditingFinished() )
@@ -816,40 +820,40 @@ MainWindow
   QObject::connect(
     vectorImageModel, 
     SIGNAL( CurrentIndexUpdated(const QString& ) ),
-    m_CurrentPixelIndex,
+    m_StatusBarWidget->m_UI->m_CurrentPixelIndex,
     SLOT( setText(const QString &) )
   );
 
   QObject::connect(
     vectorImageModel, 
     SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
-    m_CurrentPixelPhysical,
+    m_StatusBarWidget->m_UI->m_CurrentPixelPhysical,
     SLOT( setText(const QString &) )
   );
 
   QObject::connect(
     vectorImageModel, 
     SIGNAL( CurrentGeographicUpdated(const QString& ) ),
-    m_CurrentPixelGeographic,
+    m_StatusBarWidget->m_UI->m_CurrentPixelGeographic,
     SLOT( setText(const QString &) )
   );
 
   QObject::connect(
     vectorImageModel, 
     SIGNAL( CurrentRadioUpdated(const QString& ) ),
-    m_CurrentPixelRadio,
+    m_StatusBarWidget->m_UI->m_CurrentPixelRadio,
     SLOT( setText(const QString &) )
   );
 
   QObject::connect(
     m_ImageViewManipulator, 
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
-    m_CurrentScale,
+    m_StatusBarWidget->m_UI->m_CurrentScale,
     SLOT( setText(const QString&) )
   );
 
   // index widget in status bar edited
-  QObject::connect(m_CurrentPixelIndex,
+  QObject::connect(m_StatusBarWidget->m_UI->m_CurrentPixelIndex,
                    SIGNAL( editingFinished() ),
                    this,
                    SLOT( OnUserCoordinatesEditingFinished() )
@@ -868,7 +872,7 @@ MainWindow
     );
 
   // scale widget in status bar edited
-  QObject::connect(m_CurrentScale,
+  QObject::connect(m_StatusBarWidget->m_UI->m_CurrentScale,
                    SIGNAL( editingFinished() ),
                    this,
                    SLOT( OnUserScaleEditingFinished() )
@@ -905,7 +909,7 @@ MainWindow
 {
   // get the text and send it to the vector image model to be
   // processed 
-  QString coord = m_CurrentPixelIndex->text();
+  QString coord = m_StatusBarWidget->m_UI->m_CurrentPixelIndex->text();
   emit UserCoordinatesEditingFinished(coord);
 
   // update the Quicklook
@@ -919,7 +923,7 @@ MainWindow
 {
   // get the text and send it to the view manipulator to be
   // processed 
-  QString scale = m_CurrentScale->text();
+  QString scale = m_StatusBarWidget->m_UI->m_CurrentScale->text();
   emit UserScaleEditingFinished(scale);
 
   // update the Quicklook
