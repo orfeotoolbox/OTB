@@ -40,6 +40,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdDatasetDescriptor.h"
 #include "mvdI18nApplication.h"
+#include "mvdQuicklookModel.h"
 #include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
 
@@ -104,13 +105,25 @@ DatasetModel
   // 2. Safely load data from file.
   try
     {
+    //
     // 2.1. Information.
     vectorImageModel->SetFilename( filename, w, h );
 
+    //
     // 2.2. Generate cached data.
     // TODO: generate image-model cached data (quicklook,
     // histogram-list etc.)
     vectorImageModel->BuildModel();
+
+    //
+    // 2.3: Add image to Dataset descriptor file.
+    assert( vectorImageModel->GetQuicklookModel()!=NULL );
+
+    m_Descriptor->InsertImageModel(
+      vectorImageModel->GetFilename(),
+      &vectorImageModel->GetSettings(),
+      vectorImageModel->GetQuicklookModel()->GetFilename()
+    );
     }
   catch( std::exception& exc )
     {
@@ -135,10 +148,6 @@ DatasetModel
   assert( context!=NULL );
   BuildContext* buildContext = static_cast< BuildContext* >( context );
 
-  // Add child-object of model.
-  assert( m_Descriptor==NULL );
-  m_Descriptor = newChildModel< DatasetDescriptor >();
-
   // Create directory structure, if needed.
   bool isEmpty = I18nApplication::MakeDirTree(
     buildContext->m_Path,
@@ -157,6 +166,10 @@ DatasetModel
   m_Path = buildContext->m_Path;
   m_Name = buildContext->m_Name;
   m_Directory = workingDir;
+
+  // Add child-object of model.
+  assert( m_Descriptor==NULL );
+  m_Descriptor = newChildModel< DatasetDescriptor >();
 
   // Initialize content, if needed.
   if( true || isEmpty )
@@ -179,8 +192,6 @@ DatasetModel
 ::WriteDescriptor() const
 {
   QFileInfo finfo( m_Directory, DatasetModel::DESCRIPTOR_FILENAME );
-
-  qDebug() << finfo.filePath();
 
   m_Descriptor->Write( finfo.filePath() );
 }

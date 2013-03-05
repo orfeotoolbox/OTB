@@ -87,8 +87,16 @@ public:
   virtual ~AbstractModel();
 
   /** */
-  template< typename T >
-    T* newChildModel( void* context =NULL );
+  template< typename TModel >
+    inline const TModel* GetParentModel() const;
+
+  /** */
+  template< typename TModel >
+    inline TModel* GetParentModel();
+
+  /** */
+  template< typename TModel >
+    TModel* newChildModel( void* context =NULL );
 
   /** */
   inline void attachChildModel( AbstractModel* model, void* context =NULL );
@@ -143,6 +151,25 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+template< typename TModel >
+const TModel*
+AbstractModel
+::GetParentModel() const
+{
+  return qobject_cast< const TModel* >( parent() );
+}
+
+/*****************************************************************************/
+template< typename TModel >
+TModel*
+AbstractModel
+::GetParentModel()
+{
+  return qobject_cast< TModel* >( parent() );
+}
+
 /*****************************************************************************/
 template< typename T >
 T*

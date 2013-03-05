@@ -116,6 +116,29 @@ public:
 
   /**
    */
+  void InsertImageModel( const QString& imageFilename,
+			 void* imageSettings,
+			 const QString& quicklookFilename );
+
+  /**
+   */
+  inline QDomElement FirstImageElement();
+
+  /**
+   */
+  static
+    inline QDomElement NextImageSiblingElement( const QDomElement& sibling );
+
+  /**
+   */
+  static
+    void GetImageModel( const QDomElement& imageSibling,
+			QString& filename,
+			void* settings,
+			QString& quicklookFilename );
+
+  /**
+   */
   void Write( const QString& filename ) const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
@@ -148,6 +171,13 @@ private:
 
   /**
    */
+  template< typename T >
+    inline
+    QDomElement CreateVectorNode( const std::vector< T >& vector,
+				  const QString& tagName );
+
+  /**
+   */
   void Read( const QString& filename );
 
   /**
@@ -165,6 +195,10 @@ private:
    */
   QDomDocument m_DomDocument;
 
+  /**
+   */
+  QDomElement m_ImagesElement;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -179,9 +213,55 @@ private slots:
 
 //
 // Monteverdi deferred includes (sorted by alphabetic order)
+#include "mvdDatasetModel.h"
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+QDomElement
+DatasetDescriptor
+::FirstImageElement()
+{
+  return m_ImagesElement.firstChildElement( "image" );
+}
+
+/*****************************************************************************/
+inline
+QDomElement
+DatasetDescriptor
+::NextImageSiblingElement( const QDomElement& sibling )
+{
+  return sibling.nextSiblingElement( "image" );
+}
+
+/*****************************************************************************/
+#if 0
+template< typename T >
+inline
+QDomNode
+DatasetDescriptor
+::CreateVectorNode( const std::vector< T >& vector )
+{
+  QStringList stringList;
+
+  for( std::vector< T >::const_iterator it( vector.begin() );
+       it!=vector.end();
+       ++ it )
+    {
+    stringList.append( QString( "%1" ).arg( *it ) );
+    }
+
+  QDomNode node(
+    m_DomDocument.createTextNode(
+      stringList.join( " "  )
+    )
+  );
+
+  return node.toElement();
+}
+#endif
 
 } // end namespace 'mvd'
 

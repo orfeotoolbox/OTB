@@ -70,7 +70,8 @@ namespace mvd
 DatasetDescriptor
 ::DatasetDescriptor( QObject* parent ) :
   AbstractModel( parent ),
-  m_DomDocument( QString( "%1 Dataset" ).arg( PROJECT_NAME ) )
+  m_DomDocument( QString( "%1 Dataset" ).arg( PROJECT_NAME ) ),
+  m_ImagesElement()
 {
 }
 
@@ -78,6 +79,69 @@ DatasetDescriptor
 DatasetDescriptor
 ::~DatasetDescriptor()
 {
+}
+
+/*******************************************************************************/
+void
+DatasetDescriptor
+::InsertImageModel( const QString& imageFilename,
+		    void* imageSettings,
+		    const QString& quicklookFilename )
+{
+  //
+  // Image node.
+  QDomNode imageNode( m_DomDocument.createElement( "image" ) );
+  QDomElement imageElement( imageNode.toElement() );
+
+  imageElement.setAttribute(
+    "filename",
+    imageFilename
+  );
+
+  imageElement.setAttribute(
+    "quicklook",
+    quicklookFilename
+  );
+
+  //
+  // Settings node.
+  QDomNode settingsNode( m_DomDocument.createElement( "settings" ) );
+  QDomElement settingsElement( settingsNode.toElement() );
+
+  // TODO: Generalize code section
+  {
+  VectorImageModel::Settings* settings =
+    static_cast< VectorImageModel::Settings* >( imageSettings );
+
+  // TODO: Create XML elements and set attribute for settings.
+  }
+}
+
+/*******************************************************************************/
+void
+DatasetDescriptor
+::GetImageModel( const QDomElement& imageSibling,
+		 QString& imageFilename,
+		 void* imageSettings,
+		 QString& quicklookFilename )
+{
+  imageFilename = imageSibling.attribute( "filename" );
+
+  // TODO: Generalize code section
+  {
+  VectorImageModel::Settings* settings =
+    static_cast< VectorImageModel::Settings* >( imageSettings );
+
+  QDomElement settingsElement( imageSibling.firstChildElement( "settings" ) );
+
+  // TODO: Set settings from XML elements and attributes.
+
+  // Ensure there is only one '<settings>...</settings>' child.
+  settingsElement = settingsElement.nextSiblingElement( "settings" );
+  assert( settingsElement.isNull() );
+  }
+
+  quicklookFilename = imageSibling.attribute( "quicklook" );
 }
 
 /*******************************************************************************/
@@ -168,7 +232,8 @@ void
 DatasetDescriptor
 ::Write( QIODevice& device ) const
 {
-  qDebug() << m_DomDocument.toByteArray( XML_INDENT );
+  qDebug() << "descriptor.xml: " << m_DomDocument.toByteArray( XML_INDENT );
+  qDebug() << "descriptor.xml: " << m_DomDocument.toString( XML_INDENT );
 
   // TODO: Check IO device is formatted to UTF-8 data.
   if( device.write( m_DomDocument.toByteArray( XML_INDENT ) )==-1 )
@@ -180,13 +245,33 @@ void
 DatasetDescriptor
 ::virtual_BuildModel( void* context )
 {
+  qDebug() << "DatasetDescriptor::virtual_BuildModel()";
+
 #if 0
   // Get build-context.
   assert( context!=NULL );
   BuildContext* buildContext = static_cast< BuildContext* >( context );
 #endif
 
-  // TODO: Implement building of descriptor.
+  const DatasetModel* model = GetParentModel< DatasetModel >();
+  assert( model );
+
+  // Root document element: '<dataset>...</dataset>'.
+  QDomElement docElt( m_DomDocument.documentElement() );
+  docElt.setTagName( "dataset" );
+  docElt.setAttribute(
+    "directory",
+    QDir::cleanPath( model->GetDirectory().path() )
+  );
+
+  // Images group element: '<dataset><images>...</images></dataset>'.
+  QDomNode imagesNode(
+    docElt.appendChild(
+      m_DomDocument.createElement( "images" )
+    )
+  );
+
+  m_ImagesElement = imagesNode.toElement();
 }
 
 /*******************************************************************************/
