@@ -210,12 +210,11 @@ ImageViewManipulator
   double sizeX = m_NavigationContext.m_SizeXBeforeConstrain / scale;
   double sizeY = m_NavigationContext.m_SizeYBeforeConstrain / scale;
   
-  // check that the new size is greater than 30x30
-  // check that the new isoZoom is not too low and not too large
-  // TODO : compute automatically the minSize and the isoZoom range ???
-  if (sizeX > 30 && sizeY > 30  &&
-      m_IsotropicZoom * scale > 0.01 &&
-      m_IsotropicZoom * scale < 10.)
+  // check that the new size is greater than 1x1
+  // check that the new isoZoom is not too low: 0.001
+  if ( (unsigned int)(sizeX) > 1  && 
+       (unsigned int)(sizeY) > 1  &&  
+       m_IsotropicZoom * scale > 0.001 )
     {
     // Update the the sizeBeforeConstrain
     m_NavigationContext.m_SizeXBeforeConstrain = sizeX;
@@ -501,8 +500,9 @@ void ImageViewManipulator
     this->Zoom(scale / GetIsotropicZoom());
 
     // force repaintGL
-    qobject_cast< QWidget* >( parent() )->update(); 
+    qobject_cast< QWidget* >( parent() )->update();     
     }
+
 }
 
 /*****************************************************************************/
