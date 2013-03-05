@@ -109,8 +109,8 @@ DatasetDescriptor
 
   //
   // Settings node.
-  QDomNode settingsNode( m_DomDocument.createElement( "settings" ) );
-  QDomElement settingsElement( settingsNode.toElement() );
+  QDomElement settingsElement( m_DomDocument.createElement( "settings" ) );
+  imagesElement.appendChild(settingsElement);
 
   // TODO: Generalize code section
   {
@@ -119,11 +119,11 @@ DatasetDescriptor
 
   //
   // RGB node
-  imagesElement.appendChild( CreateContainerNode(settings->GetRgbChannels(), "rgb") );
+  settingsElement.appendChild( CreateContainerNode(settings->GetRgbChannels(), "rgb") );
 
   //
   // Dynamics node.
-  imagesElement.appendChild( CreateContainerNode(settings->GetDynamicsParams(), "dynamics") );
+  settingsElement.appendChild( CreateContainerNode(settings->GetDynamicsParams(), "dynamics") );
 
   }
 
