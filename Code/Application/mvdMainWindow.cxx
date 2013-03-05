@@ -956,6 +956,8 @@ MainWindow
   Application::DatasetPathName( targetPath, targetFile, filename );
   
   m_DatasetCreationProgressDialog->SetDataset( targetPath + QDir::separator() + targetFile  );  
+  m_DatasetCreationProgressDialog->adjustSize();
+
   m_DatasetCreationProgressDialog->show();
   
   // Inspired by :
