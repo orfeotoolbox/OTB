@@ -64,6 +64,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="action_Open"/>
   </widget>
   <action name="action_Quit">
    <property name="text">
@@ -77,6 +78,10 @@
    </property>
   </action>
   <action name="action_Open">
+   <property name="icon">
+    <iconset resource="../Common/mvdMainWindow.qrc">
+     <normaloff>:/icons/action_Open_Icon</normaloff>:/icons/action_Open_Icon</iconset>
+   </property>
    <property name="text">
     <string>&amp;Open...</string>
    </property>
@@ -149,6 +154,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../Common/mvdMainWindow.qrc"/>
+ </resources>
  <connections/>
 </ui>

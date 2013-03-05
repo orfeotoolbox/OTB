@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC>
+  <qresource prefix="/icons">
+    <file alias="action_Open_Icon">../../Data/Icons/document-open_32x32.png</file>
+  </qresource>
+</RCC>
