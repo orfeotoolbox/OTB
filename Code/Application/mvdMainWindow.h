@@ -285,13 +285,13 @@ private slots:
   void OnOpenImageRequest( QString filename );
 
   /** */
-  void OnError( QString filename );
+  void OnOpenImageError( QString filename );
 
   /** */
   void OnShowProgressDialog( QString filename );
   
   /** */
-  void OnHideProgressDialog( QString filename );
+  void OnHideProgressDialog( );
   
 };
 

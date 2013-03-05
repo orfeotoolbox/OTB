@@ -916,15 +916,13 @@ MainWindow
   ImageLoader* loader = new ImageLoader(filename, centralWidget()->width(), centralWidget()->height());
   loader->moveToThread(thread);
   
-  // On error, first hide the progress dialog, then notify ourself
-  connect(loader, SIGNAL(Error(QString)), this, SLOT(OnHideProgressDialog()));
-  connect(loader, SIGNAL(Error(QString)), this, SLOT(OnError(QString)));
-  
   // At thread startup, trigger the processing function
   connect(thread, SIGNAL(started()), loader, SLOT(OpenImage()));
   
   // On successfull image loading, notify ourself, passing the created AbstractModel instance
   connect(loader, SIGNAL(ModelLoaded(AbstractModel*)), this, SLOT(OnModelLoaded(AbstractModel*)));
+  // On error, notify ourself
+  connect(loader, SIGNAL(Error(QString)), this, SLOT(OnOpenImageError(QString)));
   
   // Cleanup
   //  - quit the thread's event loop, exit cleanly
@@ -942,9 +940,9 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnError( QString message )
+::OnOpenImageError( QString message )
 {
-  QMessageBox::warning( this, tr("Erreur"), message );
+  QMessageBox::warning( this, tr("Error"), message );
 }
 
 /*****************************************************************************/
@@ -958,13 +956,9 @@ MainWindow
     }
   catch( std::exception& exc )
     {
-    OnError( exc.what() );
+    OnOpenImageError( exc.what() );
     return;
     }
-  
-  
-  delete m_DatasetCreationProgressDialog;
-  m_DatasetCreationProgressDialog = 0;
 }
 
 
@@ -988,7 +982,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnHideProgressDialog( QString message )
+::OnHideProgressDialog( )
 {
   m_DatasetCreationProgressDialog->hide();
 }
