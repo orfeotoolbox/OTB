@@ -79,7 +79,6 @@ ImageLoader
   catch( std::exception& exc )
     {
     emit Error( exc.what() );
-    return;
     }
   emit Finished();
 }
