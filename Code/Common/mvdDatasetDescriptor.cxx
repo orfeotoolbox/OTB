@@ -70,7 +70,7 @@ namespace mvd
 DatasetDescriptor
 ::DatasetDescriptor( QObject* parent ) :
   AbstractModel( parent ),
-  m_DomDocument( QString( "%1 Dataset" ).arg( PROJECT_NAME ) ),
+  m_DomDocument(QString(PROJECT_NAME).append("_Dataset") ),
   m_ImagesElement()
 {
 }
@@ -88,10 +88,12 @@ DatasetDescriptor
 		    void* imageSettings,
 		    const QString& quicklookFilename )
 {
+
   //
   // Image node.
   QDomNode imageNode( m_DomDocument.createElement( "image" ) );
   QDomElement imageElement( imageNode.toElement() );
+  //QDomElement imageElement = m_DomDocument.createElement("image");
 
   imageElement.setAttribute(
     "filename",
@@ -102,6 +104,8 @@ DatasetDescriptor
     "quicklook",
     quicklookFilename
   );
+
+  //m_DomDocument.appendChild(imageElement);
 
   //
   // Settings node.
@@ -125,6 +129,7 @@ DatasetDescriptor
 
   // TODO: Create XML elements and set attribute for settings.
   }
+
 }
 
 /*******************************************************************************/
@@ -271,6 +276,10 @@ DatasetDescriptor
   const DatasetModel* model = GetParentModel< DatasetModel >();
   assert( model );
 
+  // Add the root element
+  QDomElement root = m_DomDocument.createElement(QString(PROJECT_NAME).append("_Dataset"));
+  m_DomDocument.appendChild(root);
+
   // Root document element: '<dataset>...</dataset>'.
   QDomElement docElt( m_DomDocument.documentElement() );
   docElt.setTagName( "dataset" );
@@ -278,6 +287,9 @@ DatasetDescriptor
     "directory",
     QDir::cleanPath( model->GetDirectory().path() )
   );
+
+  QDomNode noeud = m_DomDocument.createProcessingInstruction("xml","version=\"1.0\"");
+  m_DomDocument.insertBefore(noeud, m_DomDocument);
 
   // Images group element: '<dataset><images>...</images></dataset>'.
   QDomNode imagesNode(
