@@ -528,6 +528,22 @@
         <translation>Localisation</translation>
     </message>
     <message>
+        <source>Edit</source>
+        <translation>Édition</translation>
+    </message>
+    <message>
+        <source>&amp;Edit</source>
+        <translation>Éditio&amp;n</translation>
+    </message>
+    <message>
+        <source>Preferences</source>
+        <translation>Préférences</translation>
+    </message>
+    <message>
+        <source>Prefere&amp;nces</source>
+        <translation>Préfére&amp;nces</translation>
+    </message>
+    <message>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
@@ -542,7 +558,7 @@
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Aide</translation>
+        <translation>Aid&amp;e</translation>
     </message>
     <message>
         <source>&amp;About</source>

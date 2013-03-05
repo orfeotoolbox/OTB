@@ -31,7 +31,6 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_Open"/>
-    <addaction name="action_Preferences"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -49,7 +48,14 @@
     <addaction name="action_ColorSetup"/>
     <addaction name="action_ColorDynamics"/>
    </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="action_Preferences"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menu_Edit"/>
    <addaction name="menu_View"/>
    <addaction name="menu_Help"/>
   </widget>
@@ -108,7 +114,7 @@
   </action>
   <action name="action_Preferences">
    <property name="text">
-    <string>Preferences</string>
+    <string>Prefere&amp;nces</string>
    </property>
   </action>
   <action name="action_Quicklook">
