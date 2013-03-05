@@ -288,6 +288,10 @@ DatasetDescriptor
 
   // keep the dataset element
   m_DatasetElement =  m_DomDocument.firstChild().toElement();
+
+  // TODO Add the encoding in the processing instruction
+  QDomNode node = m_DomDocument.createProcessingInstruction("xml", "version = \"1.0\"");
+  m_DomDocument.insertBefore(node, m_DomDocument.firstChild());
 }
 
 /*******************************************************************************/
