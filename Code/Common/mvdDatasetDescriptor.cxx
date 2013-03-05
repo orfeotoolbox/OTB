@@ -41,11 +41,13 @@
 #include "mvdVectorImageModel.h"
 #include "mvdSystemError.h"
 
-/** \brief Indent space when writing XML DOM documents. */
-#define XML_INDENT 2
 
 namespace mvd
 {
+
+/** \brief Indent space when writing XML DOM documents. */
+const int XML_INDENT = 2;
+  
 /*
   TRANSLATOR mvd::DatasetDescriptor
 
