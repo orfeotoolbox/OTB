@@ -94,7 +94,7 @@ DatasetDescriptor
   // Image information node.
   QDomElement imagesElement = m_DomDocument.createElement("image_information");
   m_DatasetElement.appendChild(imagesElement);
-  imagesElement.setAttribute("ID", "0");
+  imagesElement.setAttribute("id", "0");
 
   // Input image filename
   QDomElement imgElement = m_DomDocument.createElement("input_image");
