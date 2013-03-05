@@ -767,6 +767,19 @@ VectorImageModel
   std::ostringstream ossPhysical;
   std::ostringstream ossGeographic;
   std::ostringstream ossRadio;
+
+  //
+  // default radio stream
+  ossRadio <<ToStdString( tr("Radiometry") )<<" : [ 0.0 0.0 0.0 ]";
+  
+  // default physical point stream
+  ossPhysical<< ToStdString( tr("Physical") )<<" : [" 
+             << ToStdString( tr("unknown") ) 
+             <<","<< ToStdString( tr("unknown") ) << "]";
+  
+  // default geographical coordinates stream
+  ossGeographic <<"WGS84 : [long : "<< ToStdString( tr("unknown") ) 
+                <<", lat : "<<ToStdString( tr("unknown") )<<"]";
   
   // the current physcial point
   PointType point;
@@ -790,7 +803,7 @@ VectorImageModel
     // get the physical coordinates
     if (!ToImage()->GetProjectionRef().empty())
       {
-      
+      ossPhysical.str("");
       ossPhysical<<ToStdString( tr("Physical") )<<" : [" << Xpc <<","<< Ypc << "]";
       }
 
@@ -802,6 +815,7 @@ VectorImageModel
       {
       PointType wgs84;
       wgs84 = GetGenericRSTransform()->TransformPoint(point);
+      ossGeographic.str("");
       ossGeographic <<"WGS84 : [long : "<<wgs84[0] << " , lat : " << wgs84[1]<<"]";
       }
       
@@ -820,6 +834,7 @@ VectorImageModel
       //
       // get the pixel at current index
       VectorImageType::PixelType currentPixel = ToImage()->GetPixel(currentLodIndex);      
+      ossRadio.str("");
       ossRadio <<ToStdString( tr("Radiometry") )<<" : [ ";
       for (unsigned int idx = 0; idx < rgb.size(); idx++)
         {
@@ -843,7 +858,8 @@ VectorImageModel
         {
         VectorImageType::PixelType currentPixel = 
           GetQuicklookModel()->ToImage()->GetPixel(currentLodIndex);
-      
+
+        ossRadio.str("");
         ossRadio <<"Ql "<<ToStdString( tr("Radiometry") )<<" : [ ";
         for (unsigned int idx = 0; idx < rgb.size(); idx++)
           {

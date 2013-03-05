@@ -606,7 +606,7 @@
     </message>
     <message>
       <source>x:y stands for "x pixels on screen = y pixels on image"</source>
-      <translation>x:y correspond à "x pixels écran = y pixels sur l'image"</translation>
+      <translation>x:y correspond à "x pixels écran = y pixels sur l&apos;image"</translation>
     </message>    
 </context>
 <context>
@@ -719,6 +719,10 @@
     <message>
       <source>Radiometry</source>
       <translation>Radiométrie</translation>
+    </message>
+    <message>
+      <source>unknown</source>
+      <translation>inconnue</translation>
     </message>
 </context>
 <context>
