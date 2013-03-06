@@ -321,23 +321,23 @@
     <name>mvd::DatasetCreationProgressDialog</name>
     <message>
         <source>Please wait while processing...</source>
-        <translation type="unfinished"></translation>
+        <translation>Traitement en cours. Merci d&apos;attendre...</translation>
     </message>
     <message>
         <source>Importing image:</source>
-        <translation type="unfinished"></translation>
+        <translation>Import de l&apos;image:</translation>
     </message>
     <message>
         <source>/home/otbval/LargeInput/mvd2/dataset.ds</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>into dataset:</source>
-        <translation type="unfinished"></translation>
+        <translation>dans le jeu de données :</translation>
     </message>
     <message>
         <source>/home/user/cache/mvd2/dataset.ds</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source></source>
@@ -478,7 +478,7 @@
     </message>
     <message>
         <source>Cache directory created at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire de cache créé dans %1</translation>
     </message>
 </context>
 <context>
@@ -658,12 +658,13 @@
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Attention</translation>
     </message>
     <message>
         <source>This repository seems incorrect to store the cache directory.
 Please choose another one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce répertoire semble incorrect pour stocker le répertoire de cache.
+Merci d&apos;en choisir un autre.</translation>
     </message>
     <message>
         <source>Monteverdi 2 maintains a repository to store additional data related to each image (display settings, histogram, quicklook...).
@@ -671,20 +672,25 @@ Please choose another one.</source>
 Warning:
 You need to have write access to this directory.
 Be aware that this directory can grow and consume a significant disk space.</source>
-        <translation type="unfinished"></translation>
+        <translation>Monteverdi2 maintient un répertoire pour stocker des données additionnelles liées à chaque image (réglage d&apos;affichage, histogrammes, aperçus...).
+
+Attention:
+Vous devez posséder les droits d&apos;écritures sur ce répertoire.
+Soyez conscients que ce répertoire peut grossir and consommer un espace disque significatif.</translation>
     </message>
     <message>
         <source>Do you want to specify a custom location ?
 (No will use the default location: %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous spécifier un emplacement personnalisé ?
+(&apos;Non&apos; utilisera l&apos;emplacement par défaut : %1)</translation>
     </message>
     <message>
         <source>Select the repository to store the cache repository for Monteverdi2</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez le répertoire où stocker le cache de Monteverdi2</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur</translation>
     </message>
 </context>
 <context>
@@ -719,23 +725,23 @@ Be aware that this directory can grow and consume a significant disk space.</sou
     <name>mvd::PreferencesDialog</name>
     <message>
         <source>Preferences</source>
-        <translation type="unfinished">Préférences</translation>
+        <translation>Préférences</translation>
     </message>
     <message>
         <source>General Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Réglages généraux</translation>
     </message>
     <message>
         <source>Cache directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire de cache</translation>
     </message>
     <message>
         <source>/home/user/cache/mvd2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <source></source>
@@ -744,16 +750,17 @@ Be aware that this directory can grow and consume a significant disk space.</sou
     </message>
     <message>
         <source>Select the repository to store the cache repository for Monteverdi2</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez le répertoire où stocker le cache de Monteverdi2</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Attention</translation>
     </message>
     <message>
         <source>This repository &apos;%1&apos; seems incorrect to store the cache directory.
 Please choose another one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le répertoire &apos;%1&apos; semble incorrect pour stocker le cache.
+Merci d&apos;en sélectionner un autre.</translation>
     </message>
 </context>
 <context>
@@ -776,23 +783,23 @@ Please choose another one.</source>
     <name>mvd::StatusBarWidget</name>
     <message>
         <source>Index:</source>
-        <translation type="unfinished">Indice:</translation>
+        <translation>Indice:</translation>
     </message>
     <message>
         <source>Physical: [xxx, yyy]</source>
-        <translation type="unfinished"></translation>
+        <translation>Physique: [xxx, yyy]</translation>
     </message>
     <message>
         <source>WGS84: [lon, lat]</source>
-        <translation type="unfinished"></translation>
+        <translation>WGS84: [lon, lat]</translation>
     </message>
     <message>
         <source>Radiometry: [0 1 2]</source>
-        <translation type="unfinished"></translation>
+        <translation>Radiométrie: [0 1 2]</translation>
     </message>
     <message>
         <source>Zoom Level:</source>
-        <translation type="unfinished">Niveau de zoom:</translation>
+        <translation>Niveau de zoom:</translation>
     </message>
     <message>
         <source></source>
@@ -873,37 +880,39 @@ Please choose another one.</source>
     </message>
     <message>
         <source>The ImageIO used to read this file doesn&apos;t support Overviews.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce format de fichier ne permet pas d&apos;utiliser les pyramides multi-résolution.</translation>
     </message>
     <message>
         <source>The ImageIO used to read this file supports overviews.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce format de fichier permet d&apos;utiliser les pyramides multi-résolution.</translation>
     </message>
     <message>
         <source>The file doesn&apos;t have overviews.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier n&apos;a pas de pyramides multi-résolution.</translation>
     </message>
     <message>
         <source>Caching of overviews.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mise en cache de la pyramide multi-résolution.</translation>
     </message>
     <message>
         <source>The overviews creation failed.
  Navigation in resolution will be slower </source>
-        <translation type="unfinished"></translation>
+        <translation>La création de la pyramide multi-résolution a échoué.
+La navigation en résolution sera plus lente.</translation>
     </message>
     <message>
         <source>Letting GDAL decimate the file on-the-fly !</source>
-        <translation type="unfinished"></translation>
+        <translation>GDAL va décimer le fichier à la volée !</translation>
     </message>
     <message>
         <source>The file already has overviews !</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier a déjà une pyramide multi-résolution !</translation>
     </message>
     <message>
         <source>OTB can not read this file (&apos;%1&apos;).
 Please check.</source>
-        <translation type="unfinished"></translation>
+        <translation>OTB ne peut pas lire le fichier (&apos;%1&apos;).
+Merci de vérifier.</translation>
     </message>
 </context>
 <context>
