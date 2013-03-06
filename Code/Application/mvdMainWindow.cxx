@@ -588,40 +588,40 @@ MainWindow
   QObject::disconnect(
     vectorImageModel, 
     SIGNAL( CurrentIndexUpdated(const QString& ) ),
-    m_StatusBarWidget->m_UI->m_CurrentPixelIndex,
+    m_StatusBarWidget->GetCurrentPixelIndexWidget(),
     SLOT( setText(const QString &) )
   );
 
   QObject::disconnect(
     vectorImageModel, 
     SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
-    m_StatusBarWidget->m_UI->m_CurrentPixelPhysical,
+    m_StatusBarWidget->GetCurrentPixelPhysicalWidget(),
     SLOT( setText(const QString &) )
   );
 
   QObject::disconnect(
     vectorImageModel, 
     SIGNAL( CurrentGeographicUpdated(const QString& ) ),
-    m_StatusBarWidget->m_UI->m_CurrentPixelGeographic,
+    m_StatusBarWidget->GetCurrentPixelGeographicWidget(),
     SLOT( setText(const QString &) )
   );
 
   QObject::disconnect(
     vectorImageModel, 
     SIGNAL( CurrentRadioUpdated(const QString& ) ),
-    m_StatusBarWidget->m_UI->m_CurrentPixelRadio,
+    m_StatusBarWidget->GetCurrentPixelRadioWidget(),
     SLOT( setText(const QString &) )
   );
 
   QObject::disconnect(
     m_ImageViewManipulator, 
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
-    m_StatusBarWidget->m_UI->m_CurrentScale,
+    m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
   );
 
   // index widget edition
-  QObject::disconnect(m_StatusBarWidget->m_UI->m_CurrentPixelIndex,
+  QObject::disconnect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
                    SIGNAL( editingFinished() ),
                    this,
                    SLOT( OnUserCoordinatesEditingFinished() )
@@ -747,40 +747,40 @@ MainWindow
   QObject::connect(
     vectorImageModel, 
     SIGNAL( CurrentIndexUpdated(const QString& ) ),
-    m_StatusBarWidget->m_UI->m_CurrentPixelIndex,
+    m_StatusBarWidget->GetCurrentPixelIndexWidget(),
     SLOT( setText(const QString &) )
   );
 
   QObject::connect(
     vectorImageModel, 
     SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
-    m_StatusBarWidget->m_UI->m_CurrentPixelPhysical,
+    m_StatusBarWidget->GetCurrentPixelPhysicalWidget(),
     SLOT( setText(const QString &) )
   );
 
   QObject::connect(
     vectorImageModel, 
     SIGNAL( CurrentGeographicUpdated(const QString& ) ),
-    m_StatusBarWidget->m_UI->m_CurrentPixelGeographic,
+    m_StatusBarWidget->GetCurrentPixelGeographicWidget(),
     SLOT( setText(const QString &) )
   );
 
   QObject::connect(
     vectorImageModel, 
     SIGNAL( CurrentRadioUpdated(const QString& ) ),
-    m_StatusBarWidget->m_UI->m_CurrentPixelRadio,
+    m_StatusBarWidget->GetCurrentPixelRadioWidget(),
     SLOT( setText(const QString &) )
   );
 
   QObject::connect(
     m_ImageViewManipulator, 
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
-    m_StatusBarWidget->m_UI->m_CurrentScale,
+    m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
   );
 
   // index widget in status bar edited
-  QObject::connect(m_StatusBarWidget->m_UI->m_CurrentPixelIndex,
+  QObject::connect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
                    SIGNAL( editingFinished() ),
                    this,
                    SLOT( OnUserCoordinatesEditingFinished() )
@@ -799,7 +799,7 @@ MainWindow
     );
 
   // scale widget in status bar edited
-  QObject::connect(m_StatusBarWidget->m_UI->m_CurrentScale,
+  QObject::connect(m_StatusBarWidget->GetCurrentScaleWidget(),
                    SIGNAL( editingFinished() ),
                    this,
                    SLOT( OnUserScaleEditingFinished() )
@@ -836,7 +836,7 @@ MainWindow
 {
   // get the text and send it to the vector image model to be
   // processed 
-  QString coord = m_StatusBarWidget->m_UI->m_CurrentPixelIndex->text();
+  QString coord = m_StatusBarWidget->GetCurrentPixelIndexWidget()->text();
   emit UserCoordinatesEditingFinished(coord);
 
   // update the Quicklook
@@ -850,7 +850,7 @@ MainWindow
 {
   // get the text and send it to the view manipulator to be
   // processed 
-  QString scale = m_StatusBarWidget->m_UI->m_CurrentScale->text();
+  QString scale = m_StatusBarWidget->GetCurrentScaleWidget()->text();
   emit UserScaleEditingFinished(scale);
 
   // update the Quicklook

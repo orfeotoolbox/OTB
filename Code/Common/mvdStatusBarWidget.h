@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ui_mvdStatusBarWidget.h"
+
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -57,12 +57,12 @@ namespace
 
 namespace mvd
 {
-// //
-// // Internal classes pre-declaration.
-// namespace Ui
-// {
-// class StatusBarWidget;
-// };
+//
+// Internal classes pre-declaration.
+namespace Ui
+{
+class StatusBarWidget;
+};
 
 
 /*****************************************************************************/
@@ -71,7 +71,7 @@ namespace mvd
 /**
  * \class StatusBarWidget
  *
- * \brief Widget template skeleton to copy-paste when adding a new
+ * \brief Status Bar widget
  * widget class.
  */
 class Monteverdi2_EXPORT StatusBarWidget :
@@ -94,11 +94,14 @@ public:
   /** \brief Destructor. */
   virtual ~StatusBarWidget();
 
-  /**
-   * \brief uic generated.
-   */
-  Ui::StatusBarWidget* m_UI;
-  
+  /** 
+    * accessors to statusBar widgets 
+    */
+  QLineEdit * GetCurrentPixelIndexWidget();
+  QLabel *    GetCurrentPixelPhysicalWidget();
+  QLabel *    GetCurrentPixelGeographicWidget();
+  QLabel *    GetCurrentPixelRadioWidget();
+  QLineEdit * GetCurrentScaleWidget();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -132,6 +135,11 @@ private:
 // Private attributes.
 private:
 
+  /**
+   * \brief uic generated.
+   */
+  Ui::StatusBarWidget* m_UI;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -141,6 +149,7 @@ private slots:
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
+/*****************************************************************************/
 
 } // end namespace 'mvd'
 

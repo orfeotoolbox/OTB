@@ -17,7 +17,7 @@
 
 =========================================================================*/
 #include "mvdStatusBarWidget.h"
-
+#include "ui_mvdStatusBarWidget.h"
 
 
 /*****************************************************************************/
@@ -74,6 +74,46 @@ StatusBarWidget
 StatusBarWidget
 ::~StatusBarWidget()
 {
+}
+
+/*******************************************************************************/
+QLineEdit *
+StatusBarWidget
+::GetCurrentPixelIndexWidget()
+{
+  return m_UI->m_CurrentPixelIndex;
+}
+
+/*******************************************************************************/
+QLabel *    
+StatusBarWidget
+::GetCurrentPixelPhysicalWidget()
+{
+  return m_UI->m_CurrentPixelPhysical;
+}
+  
+/*******************************************************************************/
+QLabel * 
+StatusBarWidget
+::GetCurrentPixelGeographicWidget()
+{
+  return m_UI->m_CurrentPixelGeographic;
+}
+
+/*******************************************************************************/
+QLabel *    
+StatusBarWidget
+::GetCurrentPixelRadioWidget()
+{
+  return m_UI->m_CurrentPixelRadio;
+}
+
+/*******************************************************************************/
+QLineEdit * 
+StatusBarWidget
+::GetCurrentScaleWidget()
+{
+    return m_UI->m_CurrentScale;
 }
 
 /*******************************************************************************/
