@@ -94,7 +94,8 @@ QString
 MainWindow
 ::SelectCacheDir(bool incorrectCacheDir)
 {
-  QString defaultCacheDirStr (QDir::toNativeSeparators(QDir::homePath()));
+  QString defaultCacheDirLocStr (QDir::toNativeSeparators(QDir::homePath()));
+  QString defaultCacheDirStr (defaultCacheDirLocStr);
   defaultCacheDirStr.append(QDir::separator());
   defaultCacheDirStr.append(Application::ConstInstance()->GetCacheDirName());
   
@@ -134,7 +135,7 @@ MainWindow
          defaultCacheDirStr);
     if (datasetDir.isEmpty())
       { // User push default button => set the value to the default place
-      cacheDirStr = defaultCacheDirStr;
+      cacheDirStr = defaultCacheDirLocStr;
       }
     else
       { // User select something
@@ -144,7 +145,7 @@ MainWindow
   else
     if (ret == QMessageBox::No)
       { // User push default button => set the value to the default place
-      cacheDirStr = defaultCacheDirStr;
+      cacheDirStr = defaultCacheDirLocStr;
       }
 
   return cacheDirStr;
