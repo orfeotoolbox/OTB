@@ -129,6 +129,8 @@ DatasetModel
       vectorImageModel->GetQuicklookModel()->GetFilename()
     );
 
+    //
+    // 2.4: Force writing descriptor with newly imported image.
     WriteDescriptor();
     }
   catch( std::exception& exc )

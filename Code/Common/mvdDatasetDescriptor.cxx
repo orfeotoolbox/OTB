@@ -48,14 +48,6 @@
 /** \brief Indent space when writing XML DOM documents. */
 #define XML_INDENT 2
 
-#define TAG_NAME_DOCUMENT_ROOT PROJECT_NAME "_Dataset"
-#define TAG_NAME_IMAGE_GROUP "image_information"
-#define TAG_NAME_IMAGE "input_image"
-#define TAG_NAME_QUICKLOOK "ql_input_image"
-#define TAG_NAME_SETTINGS_GROUP "settings"
-#define TAG_NAME_RGB_SETTINGS "rgb"
-#define TAG_NAME_DYNAMICS_SETTINGS "dynamics"
-
 namespace mvd
 {
 
@@ -71,6 +63,18 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
+const char*
+DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
+{
+  PROJECT_NAME "_Dataset",
+  "image_information",
+  "input_image",
+  "ql_input_image",
+  "settings",
+  "rgb",
+  "dynamics"
+};
+
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
@@ -82,7 +86,7 @@ namespace mvd
 DatasetDescriptor
 ::DatasetDescriptor( QObject* parent ) :
   AbstractModel( parent ),
-  m_DomDocument( TAG_NAME_DOCUMENT_ROOT ),
+  m_DomDocument( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] ),
   m_DatasetElement()
 {
 }
@@ -103,17 +107,23 @@ DatasetDescriptor
 {
   //
   // Image information node.
-  QDomElement imagesElement( m_DomDocument.createElement( TAG_NAME_IMAGE_GROUP ) );
+  QDomElement imagesElement(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_IMAGE_GROUP ] )
+  );
   m_DatasetElement.appendChild(imagesElement);
   imagesElement.setAttribute( "id", QString( "%1" ).arg( id ) );
 
   // Input image filename
-  QDomElement imgElement( m_DomDocument.createElement( TAG_NAME_IMAGE ) );
+  QDomElement imgElement(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_IMAGE ] )
+  );
   imagesElement.appendChild(imgElement);
   imgElement.setAttribute("href",imageFilename);
 
   // QL input image filename
-  QDomElement qlElement( m_DomDocument.createElement( TAG_NAME_QUICKLOOK ) );
+  QDomElement qlElement(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_QUICKLOOK ] )
+  );
   imagesElement.appendChild(qlElement);
   qlElement.setAttribute("href",quicklookFilename);
 
@@ -121,7 +131,7 @@ DatasetDescriptor
   //
   // Settings node.
   QDomElement settingsElement(
-    m_DomDocument.createElement( TAG_NAME_SETTINGS_GROUP )
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_SETTINGS_GROUP ] )
   );
   imagesElement.appendChild(settingsElement);
 
@@ -130,24 +140,23 @@ DatasetDescriptor
   VectorImageModel::Settings* settings =
     static_cast< VectorImageModel::Settings* >( imageSettings );
 
-  //
-  // RGB node
+  // RGB channels.
   QDomElement rgbElement(
     CreateContainerNode(
       settings->GetRgbChannels().begin(),
       settings->GetRgbChannels().end(),
-      TAG_NAME_RGB_SETTINGS
+      TAG_NAMES[ ELEMENT_RGB_CHANNELS ]
     )
   );
   settingsElement.appendChild( rgbElement );
 
   //
-  // Dynamics node.
+  // Dynamics parameters.
   QDomElement dynamicsElement(
     CreateContainerNode(
       settings->GetDynamicsParams().begin(),
       settings->GetDynamicsParams().end(),
-      TAG_NAME_DYNAMICS_SETTINGS
+      TAG_NAMES[ ELEMENT_DYNAMICS_PARAMETERS ]
     )
   );
   settingsElement.appendChild( dynamicsElement );
@@ -158,6 +167,7 @@ DatasetDescriptor
 void
 DatasetDescriptor
 ::GetImageModel( const QDomElement& imageSibling,
+		 int& id,
 		 QString& imageFilename,
 		 void* imageSettings,
 		 QString& quicklookFilename )
@@ -298,8 +308,9 @@ DatasetDescriptor
   assert( model );
 
   // Add the root element
-  QDomElement root( m_DomDocument.createElement( TAG_NAME_DOCUMENT_ROOT ) );
-
+  QDomElement root(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] )
+  );
   m_DomDocument.appendChild(root);
 
   // Root document element: '<dataset>...</dataset>'.

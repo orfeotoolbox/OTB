@@ -134,6 +134,7 @@ public:
    */
   static
     void GetImageModel( const QDomElement& imageSibling,
+			int& id,
 			QString& filename,
 			void* settings,
 			QString& quicklookFilename );
@@ -194,6 +195,25 @@ private:
 //
 // Private attributes.
 private:
+
+  /**
+   */
+  enum Element
+  {
+    ELEMENT_DOCUMENT_ROOT =0,
+    ELEMENT_IMAGE_GROUP,
+    ELEMENT_IMAGE,
+    ELEMENT_QUICKLOOK,
+    ELEMENT_SETTINGS_GROUP,
+    ELEMENT_RGB_CHANNELS,
+    ELEMENT_DYNAMICS_PARAMETERS,
+
+    ELEMENT_COUNT
+  };
+
+  /**
+   */
+  static const char* TAG_NAMES[ ELEMENT_COUNT ];
 
   /**
    */
@@ -264,7 +284,7 @@ DatasetDescriptor
   QDomText textNode( m_DomDocument.createTextNode( stringList.join( " " ) ) );
   assert( !textNode.isNull() );
 
-  QDomElement vectorElement( m_DomDocument.createElement(tagName) );
+  QDomElement vectorElement( m_DomDocument.createElement( tagName ) );
   assert( !vectorElement.isNull() );
 
   vectorElement.appendChild( textNode );
