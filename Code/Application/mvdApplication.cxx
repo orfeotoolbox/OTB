@@ -36,6 +36,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModel.h"
 #include "mvdDatasetModel.h"
+#include "mvdVectorImageModel.h"
 
 // Application icon on Linux platform
 #if ! defined(Q_WS_WIN) && ! defined(Q_WS_MAC)
@@ -114,6 +115,8 @@ Application::LoadDatasetModel( const QString& imageFilename,
 
   try
     {
+    // try if the filename is valid
+    VectorImageModel::EnsureValidImage(imageFilename);
     // Build model (relink to cached data).
     DatasetModel::BuildContext context( path, name );
     model->BuildModel( &context );

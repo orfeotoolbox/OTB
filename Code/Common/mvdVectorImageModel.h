@@ -49,6 +49,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdColorSetupWidget.h"
 #include "mvdAbstractImageModel.h"
+#include "mvdSystemError.h"
 #include "mvdTypes.h"
 
 /*****************************************************************************/
@@ -256,6 +257,21 @@ public:
 
   /** Destructor */
   virtual ~VectorImageModel();
+
+  /** */
+  static void EnsureValidImage(QString filename)
+  {
+    try
+    {
+      DefaultImageFileReaderType::Pointer imageFileReader = DefaultImageFileReaderType::New();
+      imageFileReader->SetFileName( ToStdString( filename ) );
+      imageFileReader->UpdateOutputInformation();
+    }
+    catch(...)
+    {
+     throw SystemError( ToStdString( QString( "Problem with ('%1')" ).arg( filename ) ) );
+    }
+  }
 
   /**
    * \brief Get the parent DatasetModel.
