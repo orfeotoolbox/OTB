@@ -291,8 +291,8 @@ DatasetDescriptor
   QStringList stringList;
 
   for( TInputIterator it( first );
-       it != last;
-       ++ it )
+       it!=last;
+       ++it )
     {
     stringList.append( QString( "%1" ).arg( *it ) );
     }

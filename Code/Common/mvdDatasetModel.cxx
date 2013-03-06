@@ -97,7 +97,15 @@ DatasetModel
 /*******************************************************************************/
 void
 DatasetModel
-::ImportImage( const QString& filename , int w, int h )
+::ImportImage( const QString& filename , int width, int height )
+{
+  LoadImage( filename, true, width, height );
+}
+
+/*******************************************************************************/
+void
+DatasetModel
+::LoadImage( const QString& filename, bool foo, int width, int height )
 {
   // 1. Instanciate local image model.
   VectorImageModel* vectorImageModel = new VectorImageModel( this );
@@ -107,33 +115,31 @@ DatasetModel
     {
     //
     // 2.1. Information.
-    vectorImageModel->SetFilename( filename, w, h );
+    vectorImageModel->SetFilename( filename, width, height );
 
     //
     // 2.2. Generate cached data.
     // TODO: generate image-model cached data (quicklook,
     // histogram-list etc.)
     vectorImageModel->BuildModel();
-
-#if 0
-    AbstractImageModelList aimList( GetImageModels() );
-    qDebug() << aimList;
-#endif
-
-    //
-    // 2.3: Add image to Dataset descriptor file.
     assert( vectorImageModel->GetQuicklookModel()!=NULL );
 
-    m_Descriptor->InsertImageModel(
-      GetImageModels().size(),
-      vectorImageModel->GetFilename(),
-      &vectorImageModel->GetSettings(),
-      vectorImageModel->GetQuicklookModel()->GetFilename()
-    );
+    // If first time, import image into descriptor.
+    if( foo )
+      {
+      //
+      // 2.3: Add image to Dataset descriptor file.
+      m_Descriptor->InsertImageModel(
+	GetImageModels().size(),
+	vectorImageModel->GetFilename(),
+	&vectorImageModel->GetSettings(),
+	vectorImageModel->GetQuicklookModel()->GetFilename()
+      );
 
-    //
-    // 2.4: Force writing descriptor with newly imported image.
-    WriteDescriptor();
+      //
+      // 2.4: Force writing descriptor with newly imported image.
+      WriteDescriptor();
+      }
     }
   catch( std::exception& exc )
     {
@@ -144,9 +150,6 @@ DatasetModel
     // Forward exception to upper level (GUI).
     throw;
     }
-
-  // If everything has gone well, parent image model to dataset model.
-  vectorImageModel->setParent( this );
 }
 
 /*******************************************************************************/
@@ -198,18 +201,41 @@ DatasetModel
     assert( m_Descriptor==NULL );
     m_Descriptor = newChildModel< DatasetDescriptor >( &context );
 
-#if 0
-    // Load directory content.
-    Load( buildContext->m_Path, buildContext->m_Name );
-#endif
+    // Load image-models from descriptor.
+    ParseDescriptor();
     }
 }
 
 /*******************************************************************************/
 void
 DatasetModel
-::Load( const QString& path, const QString& name )
+::ParseDescriptor()
 {
+  for( QDomElement imageElt( m_Descriptor->FirstImageElement() );
+       !imageElt.isNull();
+       imageElt = DatasetDescriptor::NextImageSiblingElement( imageElt ) )
+    {
+    int id = -1;
+    QString filename;
+    QString quicklook;
+    VectorImageModel::Settings settings;
+
+    DatasetDescriptor::GetImageModel(
+      imageElt,
+      id, filename, &settings, quicklook
+    );
+
+    qDebug()
+      << "Input image:"
+      << "\nid: " << id
+      << "\nfilename: " << filename
+      << "\nquicklook: " << quicklook;
+
+    // TODO: 1) Re-use quicklook filename.
+    // TODO: 2) Assign rendering-settings.
+    // TODO: 3) Remove WxH for screen best-fit during loading of model!
+    LoadImage( filename, false, -1, -1 );
+    }
 }
 
 /*******************************************************************************/

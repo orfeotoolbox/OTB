@@ -193,7 +193,10 @@ private:
   inline AbstractImageModelList GetImageModels();
 
   /** */
-  void Load( const QString& path, const QString& name );
+  void LoadImage( const QString& filename, bool foo, int width, int height );
+
+  /** */
+  void ParseDescriptor();
 
   /** */
   void WriteDescriptor() const;

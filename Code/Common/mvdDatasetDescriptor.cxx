@@ -204,6 +204,7 @@ DatasetDescriptor
   quicklookFilename = quicklookElt.attribute( "href" );
 
   // TODO: Generalize code section.
+  if( imageSettings!=NULL )
   {
   VectorImageModel::Settings* settings =
     static_cast< VectorImageModel::Settings* >( imageSettings );
