@@ -110,7 +110,7 @@
     </message>
     <message>
         <source>Centre National d&apos;Etudes Spatiales (CNES)</source>
-        <translation>Centre National d&apos;Études Spatiales (CNES)</translation>
+        <translation type="obsolete">Centre National d&apos;Études Spatiales (CNES)</translation>
     </message>
 </context>
 <context>
@@ -318,6 +318,34 @@
     </message>
 </context>
 <context>
+    <name>mvd::DatasetCreationProgressDialog</name>
+    <message>
+        <source>Please wait while processing...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Importing image:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/home/otbval/LargeInput/mvd2/dataset.ds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>into dataset:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/home/user/cache/mvd2/dataset.ds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>mvd::DatasetDescriptor</name>
     <message>
         <source></source>
@@ -448,6 +476,10 @@
         <source>Failed to access translation-files directory &apos;%1&apos;</source>
         <translation>Echec de l&apos;accès au répertoire de fichiers de traduction : &apos;%1&apos;</translation>
     </message>
+    <message>
+        <source>Cache directory created at %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mvd::ImageModel</name>
@@ -521,7 +553,7 @@
     </message>
     <message>
         <source>Index:</source>
-        <translation>Indice:</translation>
+        <translation type="obsolete">Indice:</translation>
     </message>
     <message>
         <source>Location</source>
@@ -529,7 +561,7 @@
     </message>
     <message>
         <source>Edit</source>
-        <translation>Édition</translation>
+        <translation type="obsolete">Édition</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -537,7 +569,7 @@
     </message>
     <message>
         <source>Preferences</source>
-        <translation>Préférences</translation>
+        <translation type="obsolete">Préférences</translation>
     </message>
     <message>
         <source>Prefere&amp;nces</source>
@@ -545,7 +577,7 @@
     </message>
     <message>
         <source>View</source>
-        <translation>Affichage</translation>
+        <translation type="obsolete">Affichage</translation>
     </message>
     <message>
         <source>&amp;View</source>
@@ -570,7 +602,7 @@
     </message>
     <message>
         <source>Exception!</source>
-        <translation>Exception!</translation>
+        <translation type="obsolete">Exception!</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -610,20 +642,50 @@
     </message>
     <message>
         <source>Current map coordinate</source>
-        <translation>Coordonnées du pixel courant</translation>
+        <translation type="obsolete">Coordonnées du pixel courant</translation>
     </message>
     <message>
         <source>Current map scale</source>
-        <translation>Echelle courante</translation>
+        <translation type="obsolete">Echelle courante</translation>
     </message>
     <message>
-      <source>Zoom Level:</source>
-      <translation>Niveau de zoom:</translation>
+        <source>Zoom Level:</source>
+        <translation type="obsolete">Niveau de zoom:</translation>
     </message>
     <message>
-      <source>x:y stands for "x pixels on screen = y pixels on image"</source>
-      <translation>x:y correspond à "x pixels écran = y pixels sur l&apos;image"</translation>
-    </message>    
+        <source>x:y stands for &quot;x pixels on screen = y pixels on image&quot;</source>
+        <translation type="obsolete">x:y correspond à &quot;x pixels écran = y pixels sur l&apos;image&quot;</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This repository seems incorrect to store the cache directory.
+Please choose another one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Monteverdi 2 maintains a repository to store additional data related to each image (display settings, histogram, quicklook...).
+
+Warning:
+You need to have write access to this directory.
+Be aware that this directory can grow and consume a significant disk space.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to specify a custom location ?
+(No will use the default location: %1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the repository to store the cache repository for Monteverdi2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mvd::Math</name>
@@ -654,6 +716,47 @@
     </message>
 </context>
 <context>
+    <name>mvd::PreferencesDialog</name>
+    <message>
+        <source>Preferences</source>
+        <translation type="unfinished">Préférences</translation>
+    </message>
+    <message>
+        <source>General Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cache directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/home/user/cache/mvd2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Select the repository to store the cache repository for Monteverdi2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This repository &apos;%1&apos; seems incorrect to store the cache directory.
+Please choose another one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>mvd::QuicklookModel</name>
     <message>
         <source></source>
@@ -663,6 +766,34 @@
 </context>
 <context>
     <name>mvd::QuicklookViewManipulator</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::StatusBarWidget</name>
+    <message>
+        <source>Index:</source>
+        <translation type="unfinished">Indice:</translation>
+    </message>
+    <message>
+        <source>Physical: [xxx, yyy]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WGS84: [lon, lat]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Radiometry: [0 1 2]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom Level:</source>
+        <translation type="unfinished">Niveau de zoom:</translation>
+    </message>
     <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
@@ -702,7 +833,7 @@
     </message>
     <message>
         <source>The ImageIO use to read this file don&apos;t support Overviews !</source>
-        <translation>Ce format de fichier ne permet pas d&apos;utiliser les pyramides multi-résolution !</translation>
+        <translation type="obsolete">Ce format de fichier ne permet pas d&apos;utiliser les pyramides multi-résolution !</translation>
     </message>
     <message>
         <source>Overviews creation: </source>
@@ -710,35 +841,69 @@
     </message>
     <message>
         <source>The ImageIO use to read this file support Overviews !</source>
-        <translation>Ce format de fichier permet d&apos;utiliser les pyramides multi-résolution !</translation>
+        <translation type="obsolete">Ce format de fichier permet d&apos;utiliser les pyramides multi-résolution !</translation>
     </message>
     <message>
         <source>The file don&apos;t have overviews !</source>
-        <translation>Le fichier n&apos;a pas de pyramide multi-résolution !</translation>
+        <translation type="obsolete">Le fichier n&apos;a pas de pyramide multi-résolution !</translation>
     </message>
     <message>
         <source>Caching of overviews !</source>
-        <translation>Mise en cache de la pyramide multi-résolution !</translation>
+        <translation type="obsolete">Mise en cache de la pyramide multi-résolution !</translation>
     </message>
     <message>
         <source>Keep GDAL decimate the file on demand !</source>
-        <translation>Activation de la décimation à la volée par GDAL !</translation>
+        <translation type="obsolete">Activation de la décimation à la volée par GDAL !</translation>
     </message>
     <message>
         <source>The file have already overviews !</source>
-        <translation>Le fichier a déjà une pyramide multi-résolution !</translation>
+        <translation type="obsolete">Le fichier a déjà une pyramide multi-résolution !</translation>
     </message>
     <message>
         <source>Physical</source>
         <translation>Physique</translation>
     </message>
     <message>
-      <source>Radiometry</source>
-      <translation>Radiométrie</translation>
+        <source>Radiometry</source>
+        <translation>Radiométrie</translation>
     </message>
     <message>
-      <source>unknown</source>
-      <translation>inconnue</translation>
+        <source>unknown</source>
+        <translation type="obsolete">inconnue</translation>
+    </message>
+    <message>
+        <source>The ImageIO used to read this file doesn&apos;t support Overviews.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ImageIO used to read this file supports overviews.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file doesn&apos;t have overviews.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Caching of overviews.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The overviews creation failed.
+ Navigation in resolution will be slower </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Letting GDAL decimate the file on-the-fly !</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file already has overviews !</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OTB can not read this file (&apos;%1&apos;).
+Please check.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
