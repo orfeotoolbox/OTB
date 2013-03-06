@@ -7,8 +7,14 @@
 #
 # Set locale human-readable translation files.
 macro( add_to_qt4_i18n_sources SOURCE_FILES )
-  set( Monteverdi2_I18N_SOURCE_FILES
-    ${Monteverdi2_I18N_SOURCE_FILES} ${ARGV}
-    CACHE INTERNAL "" FORCE
-    )
+  
+  foreach(SOURCE_FILE ${ARGV})
+    get_filename_component( ABS_SOURCE_FILE ${SOURCE_FILE} ABSOLUTE )
+    message("ABS_SOURCE_FILE ${ABS_SOURCE_FILE}")
+    set( Monteverdi2_I18N_SOURCE_FILES
+      ${Monteverdi2_I18N_SOURCE_FILES} ${ABS_SOURCE_FILE}
+      CACHE INTERNAL "" FORCE
+      )
+  endforeach()
+  
 endmacro()
