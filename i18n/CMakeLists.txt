@@ -18,12 +18,14 @@ if( MERGE_TS )
     ${Monteverdi2_I18N_SOURCE_FILES}
     ${Monteverdi2_TS_TRANSLATIONS}
     )
+else()
+  #
+  # Locale binary translation files.
+  qt4_add_translation( Monteverdi2_QM_TRANSLATIONS
+    ${Monteverdi2_TS_TRANSLATIONS}
+  )
 endif()
-#
-# Locale binary translation files.
-qt4_add_translation( Monteverdi2_QM_TRANSLATIONS
-  ${Monteverdi2_TS_TRANSLATIONS}
-)
+
 #
 # Custom build target.
 add_custom_target( i18n ALL DEPENDS ${Monteverdi2_QM_TRANSLATIONS} )
