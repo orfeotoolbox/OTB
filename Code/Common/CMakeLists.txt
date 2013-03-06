@@ -91,7 +91,6 @@ qt4_add_resources( Common_RESOURCES_RCC ${Common_RESOURCES} )
 add_to_qt4_i18n_sources( 
   ${Common_SOURCES}
   ${Common_HEADERS_MOC}
-  ${Common_SRC_MOC}
   ${Common_FORMS}
 )
 

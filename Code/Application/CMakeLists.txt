@@ -34,7 +34,6 @@ qt4_add_resources( Application_RESOURCES_RCC ${Application_RESOURCES} )
 add_to_qt4_i18n_sources(
   ${Application_SOURCES}
   ${Application_HEADERS_MOC}
-  ${Application_SRC_MOC}
   ${Application_FORMS}
 )
 
