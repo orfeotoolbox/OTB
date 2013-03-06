@@ -635,7 +635,7 @@ VectorImageModel
 ::ComputeBufferIndex(const IndexType& index,
 		     const ImageRegionType& region)
 {
-  return (index[1] - region.GetIndex()[1]) * 3 * region.GetSize()[0] + 3 * (index[0] - region.GetIndex()[0]);
+  return (index[1] - region.GetIndex()[1]) * 4 * region.GetSize()[0] + 4 * (index[0] - region.GetIndex()[0]);
 }
 
 /*****************************************************************************/
@@ -646,7 +646,7 @@ VectorImageModel
 				 const ImageRegionType& region)
 {
   return (region.GetSize()[1] - 1 + region.GetIndex()[1] -
-	  index[1]) * 3 * region.GetSize()[0] + 3 * (index[0] - region.GetIndex()[0]);
+	  index[1]) * 4 * region.GetSize()[0] + 4 * (index[0] - region.GetIndex()[0]);
 }
 
 /*****************************************************************************/

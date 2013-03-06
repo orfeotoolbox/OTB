@@ -351,15 +351,15 @@ VectorImageModel
       // Copy the previous buffer into a temporary buf to access the
       // previously loaded data
       unsigned char * previousRasterizedBuffer =  
-        new unsigned char[3 * m_PreviousRegion.GetNumberOfPixels()];
+        new unsigned char[4 * m_PreviousRegion.GetNumberOfPixels()];
 
-      std::memcpy(previousRasterizedBuffer, m_RasterizedBuffer, 3 * m_PreviousRegion.GetNumberOfPixels());
+      std::memcpy(previousRasterizedBuffer, m_RasterizedBuffer, 4 * m_PreviousRegion.GetNumberOfPixels());
 
       // Clear the previous buffer 
       this->ClearBuffer();
 
       // Allocate new memory
-      unsigned int nbPixels = 3 * region.GetNumberOfPixels();
+      unsigned int nbPixels = 4 * region.GetNumberOfPixels();
       m_RasterizedBuffer = new unsigned char[nbPixels];
     
       // Copy the already loaded pixels into the m_RasterizedBuffer
@@ -379,9 +379,10 @@ VectorImageModel
           newBufferindex = ComputeXAxisFlippedBufferIndex(imageIndex, m_Region);
           
           // Copy the already loaded values into the new buffer
-          m_RasterizedBuffer[newBufferindex]     = previousRasterizedBuffer[3*idx];
-          m_RasterizedBuffer[newBufferindex + 1] = previousRasterizedBuffer[3*idx + 1];
-          m_RasterizedBuffer[newBufferindex + 2] = previousRasterizedBuffer[3*idx + 2];
+          m_RasterizedBuffer[newBufferindex]     = previousRasterizedBuffer[4*idx];
+          m_RasterizedBuffer[newBufferindex + 1] = previousRasterizedBuffer[4*idx + 1];
+          m_RasterizedBuffer[newBufferindex + 2] = previousRasterizedBuffer[4*idx + 2];
+          m_RasterizedBuffer[newBufferindex + 3] = previousRasterizedBuffer[4*idx + 3];
           }
         }
       
@@ -404,7 +405,7 @@ VectorImageModel
       this->ClearBuffer();
  
       // Allocate new memory
-      m_RasterizedBuffer = new unsigned char[3 * region.GetNumberOfPixels()];
+      m_RasterizedBuffer = new unsigned char[4 * region.GetNumberOfPixels()];
 
       // rasterize the region
       this->DumpImagePixelsWithinRegionIntoBuffer(region);
@@ -491,9 +492,12 @@ VectorImageModel
     index = ComputeXAxisFlippedBufferIndex(it.GetIndex(), m_Region);
 
     // Fill the buffer
-    m_RasterizedBuffer[index]  = it.Get()[0];
+    m_RasterizedBuffer[index]  = it.Get()[2];
     m_RasterizedBuffer[index + 1] = it.Get()[1];
-    m_RasterizedBuffer[index + 2] = it.Get()[2];
+    m_RasterizedBuffer[index + 2] = it.Get()[0]; 
+
+    // Could be changed later for real alpha channal
+    m_RasterizedBuffer[index + 3] = 255;
     ++it;
     }
 }

@@ -169,7 +169,7 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     double sizeY  = static_cast<double>(scaledRegion.GetSize()[1]) * finalZoomFactorY;
 
     // needed cause RGB not RGBA rendering. 
-    glPixelStorei(GL_UNPACK_ALIGNMENT,1); 
+    //glPixelStorei(GL_UNPACK_ALIGNMENT,1); 
                                 
     // Load texture 
     if(!m_IsMoving)
@@ -177,10 +177,12 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       glDeleteTextures(1,&m_Texture);
       glGenTextures(1, &m_Texture);
       glBindTexture(GL_TEXTURE_2D, m_Texture);
-      glTexImage2D(GL_TEXTURE_2D, 0, 3,
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
                    scaledRegion.GetSize()[0],
                    scaledRegion.GetSize()[1], 
-                   0, GL_RGB, GL_UNSIGNED_BYTE, m_Buffer);
+                   0, GL_BGRA, GL_UNSIGNED_BYTE, m_Buffer);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       glBindTexture (GL_TEXTURE_2D, m_Texture);
