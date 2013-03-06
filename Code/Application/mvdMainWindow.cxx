@@ -535,7 +535,11 @@ void
 MainWindow
 ::OnQuicklookVisibilityChanged ( bool visible )
 {
-  m_UI->action_Quicklook->setChecked( visible );
+  m_UI->action_Quicklook->blockSignals( true );
+  {
+    m_UI->action_Quicklook->setChecked( visible );
+  }
+  m_UI->action_Quicklook->blockSignals( false );
 }
 
 /*****************************************************************************/
@@ -545,7 +549,11 @@ void
 MainWindow
 ::OnColorSetupVisibilityChanged ( bool visible )
 {
-  m_UI->action_ColorSetup->setChecked( visible );
+  m_UI->action_ColorSetup->blockSignals( true );
+  {
+    m_UI->action_ColorSetup->setChecked( visible );
+  }
+  m_UI->action_ColorSetup->blockSignals( false );
 }
 
 /*****************************************************************************/
@@ -555,7 +563,11 @@ void
 MainWindow
 ::OnColorDynamicsVisibilityChanged ( bool visible )
 {
-  m_UI->action_ColorDynamics->setChecked( visible );
+  m_UI->action_ColorDynamics->blockSignals( true );
+  {
+    m_UI->action_ColorDynamics->setChecked( visible );
+  }
+  m_UI->action_ColorDynamics->blockSignals( false );
 }
 
 /*****************************************************************************/
