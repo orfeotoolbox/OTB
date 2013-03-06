@@ -94,7 +94,7 @@ QString
 MainWindow
 ::SelectCacheDir(bool incorrectCacheDir)
 {
-  QString defaultCacheDirStr (QDir::homePath());
+  QString defaultCacheDirStr (QDir::toNativeSeparators(QDir::homePath()));
   defaultCacheDirStr.append(QDir::separator());
   defaultCacheDirStr.append(Application::ConstInstance()->GetCacheDirName());
   

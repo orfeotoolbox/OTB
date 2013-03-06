@@ -67,10 +67,6 @@ main( int argc, char* argv[] )
       appHasIncorrectCacheDir = true;
       }
     }
-  else // TODO MSD: should be removed
-    {
-    std::cout << "Application has no settings file";
-    }
 
   mvd::MainWindow mainWindow;
 

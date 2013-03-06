@@ -99,17 +99,17 @@ PreferencesDialog
         {
         m_CacheDirRootModified = true;
         m_CacheDirRoot = cacheDirStr;
-        QString tree (Application::Instance()->GetCacheDirName());
-        tree.prepend("/");
-        m_UI->cacheDirPathLineEdit->setText(cacheDirStr.append(tree));
+        QDir displayedDir (cacheDirStr);
+        QDir treeDir( displayedDir.filePath( Application::Instance()->GetCacheDirName() ) );
+        m_UI->cacheDirPathLineEdit->setText(treeDir.absolutePath());
         break;
         }
       else
         {
         QMessageBox::warning( this,
             tr("Warning"),
-            tr("This repository seems incorrect to store the cache directory."
-               "\nPlease choose another one.") );
+            tr("This repository '%1' seems incorrect to store the cache directory."
+               "\nPlease choose another one.").arg(cacheDirStr) );
         }
       }
     }
