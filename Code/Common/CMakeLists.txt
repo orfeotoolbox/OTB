@@ -76,7 +76,6 @@ set( Common_FORMS
 
 # Qt resources
 set( Common_RESOURCES
-        mvdMainWindow.qrc
 )
 
 #############################################################################

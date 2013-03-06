@@ -5,15 +5,22 @@ set( Application_SOURCES
        mvdImageModel.cxx
        mvdMainWindow.cxx
 )
+
+# Headers for classes with Q_OBJECT macro (needs to go to Qt moc)
 set( Application_HEADERS_MOC
        mvdApplication.h
        mvdImageModel.h
        mvdMainWindow.h
 )
+
+# Qt designer UI files
 set( Application_FORMS
        mvdMainWindow.ui
 )
+
+# Qt resources included in executable
 set( Application_RESOURCES
+       mvdMainWindow.qrc
 )
 
 #############################################################################
@@ -57,7 +64,6 @@ add_library(Monteverdi2_Application
   ${Application_SOURCES}
   ${Application_FORMS_HEADERS}
   ${Application_SRC_MOC}
-  ${Application_RESOURCES_RCC}
 )
 target_link_libraries(Monteverdi2_Application
   Monteverdi2_Common
@@ -70,6 +76,7 @@ add_executable(monteverdi2
   WIN32
   main.cxx
   ${Monteverdi2_WIN32_RC_FILE}
+  ${Application_RESOURCES_RCC}
 )
 target_link_libraries(monteverdi2
   Monteverdi2_Application
