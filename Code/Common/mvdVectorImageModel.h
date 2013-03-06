@@ -267,9 +267,14 @@ public:
       imageFileReader->SetFileName( ToStdString( filename ) );
       imageFileReader->UpdateOutputInformation();
     }
-    catch(...)
+    catch(std::exception& exc )
     {
-     throw SystemError( ToStdString( QString( "Problem with ('%1')" ).arg( filename ) ) );
+      // TODO manage the message returned by OTB
+      qDebug() << "Error returned by OTB:" << exc.what();
+      throw std::runtime_error(
+          ToStdString(
+              tr("OTB can not read this file ('%1').\n"
+                  "Please check.").arg( filename ) ) );
     }
   }
 
