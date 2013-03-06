@@ -290,8 +290,8 @@ VectorImageModel
 
     ParametersType::ValueType index = 2 * i;
 
-    GetSettings().DynamicsParam( index ) = min[ band ];
-    GetSettings().DynamicsParam( index + 1 ) = max[ band ];
+    GetSettings().DynamicsParam( index ) = histogramModel->Quantile( band , 0.02 );
+    GetSettings().DynamicsParam( index + 1) = histogramModel->Quantile( band , 0.02, BOUND_UPPER );
     }
 }
 
