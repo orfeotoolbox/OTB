@@ -220,16 +220,6 @@ private:
   ImageModelRenderer*       m_QLModelRenderer;
 
   StatusBarWidget*          m_StatusBarWidget;
-
-  // QLabel *                   m_CurrentPixelIndexLabel;
-  // QLineEdit *                m_CurrentPixelIndex;
-  // QLabel *                   m_CurrentPixelPhysical;
-  // QLabel *                   m_CurrentPixelGeographic;
-  // QLabel *                   m_CurrentPixelPlaceName;
-  // QLabel *                   m_CurrentPixelRadio;
-  // QLabel *                   m_CurrentScaleLabel;
-  // QLineEdit *                m_CurrentScale;
-  
   
   DatasetCreationProgressDialog* m_DatasetCreationProgressDialog;
 
