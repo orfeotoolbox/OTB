@@ -148,6 +148,7 @@ VectorImageModel
           {
           otb::StandardOneLineFilterWatcher watcher(filter, ToStdString(tr("Overviews creation: ")));
           filter->Update();
+	  std::cout << std::endl;
           }
         catch (itk::ExceptionObject &)
           {

@@ -115,8 +115,10 @@ DatasetModel
     // histogram-list etc.)
     vectorImageModel->BuildModel();
 
+#if 0
     AbstractImageModelList aimList( GetImageModels() );
     qDebug() << aimList;
+#endif
 
     //
     // 2.3: Add image to Dataset descriptor file.
@@ -175,21 +177,32 @@ DatasetModel
   m_Name = buildContext->m_Name;
   m_Directory = workingDir;
 
-  // Add child-object of model.
-  assert( m_Descriptor==NULL );
-  m_Descriptor = newChildModel< DatasetDescriptor >();
+  // Initialize content.
+  if( isEmpty )
+    {
+    // Create in-memory descriptor.
+    assert( m_Descriptor==NULL );
+    m_Descriptor = newChildModel< DatasetDescriptor >();
 
-  // Initialize content, if needed.
-  //
-  // Force writing an empty descriptor.xml file to have a consistent
-  // empty dataset directory structure.
-  if( true || isEmpty )
+    // Force writing in-memory descriptor into disk in order to have a
+    // consistent empty dataset directory structure.
     WriteDescriptor();
+    }
+  else
+    {
+    // Create context with filename.
+    QFileInfo finfo( m_Directory, DatasetModel::DESCRIPTOR_FILENAME );
+    DatasetDescriptor::BuildContext context( finfo.filePath() );
+
+    // Relink to on-disk descriptor.
+    assert( m_Descriptor==NULL );
+    m_Descriptor = newChildModel< DatasetDescriptor >( &context );
 
 #if 0
-  // Load directory content.
-  Load( buildContext->m_Path, buildContext->m_Name );
+    // Load directory content.
+    Load( buildContext->m_Path, buildContext->m_Name );
 #endif
+    }
 }
 
 /*******************************************************************************/
@@ -206,6 +219,7 @@ DatasetModel
 {
   QFileInfo finfo( m_Directory, DatasetModel::DESCRIPTOR_FILENAME );
 
+  assert( m_Descriptor!=NULL );
   m_Descriptor->Write( finfo.filePath() );
 }
 

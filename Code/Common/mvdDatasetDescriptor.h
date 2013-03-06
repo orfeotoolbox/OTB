@@ -84,7 +84,7 @@ class Monteverdi2_EXPORT DatasetDescriptor :
 //
 // Public types.
 public:
-#if 0
+
   /**
    * \class BuildContext
    * \brief WIP.
@@ -104,7 +104,7 @@ public:
   public:
     QString m_Filename;
   };
-#endif
+
 
 //
 // Public methods.
@@ -193,6 +193,10 @@ private:
   /**
    */
   void Write( QIODevice& device ) const;
+
+  /**
+   */
+  void BuildDocument();
 
 //
 // Private attributes.

@@ -230,6 +230,8 @@ void
 DatasetDescriptor
 ::Read( QIODevice* device )
 {
+  qDebug() << "Reading  XML descriptor...";
+
   // Temporary DOM document.
   QDomDocument domDoc;
 
@@ -245,6 +247,21 @@ DatasetDescriptor
   // If Ok, remember DOM document data (otherwise, forget temporary
   // DOM document and leave class state unchanged).
   m_DomDocument = domDoc;
+
+  // Relink root element.
+  QDomElement rootElt(
+    m_DomDocument.firstChildElement( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] )
+  );
+  assert( !rootElt.isNull() );
+
+  // Relink image-group element.
+  m_ImagesGroupElement =
+    rootElt.firstChildElement( TAG_NAMES[ ELEMENT_IMAGES_GROUP ] );
+
+  qDebug()
+    << "Read XML descriptor:\n"
+    << m_DomDocument.toByteArray()
+    << "\n.";
 }
 
 /*******************************************************************************/
@@ -252,8 +269,6 @@ void
 DatasetDescriptor
 ::Write( const QString& filename ) const
 {
-  qDebug() << filename;
-
   // File instance.
   QFile file( filename );
 
@@ -292,11 +307,16 @@ void
 DatasetDescriptor
 ::Write( QIODevice& device ) const
 {
-  qDebug() << "descriptor.xml: " << m_DomDocument.toByteArray( XML_INDENT );
+  qDebug()
+    << "Writing  XML descriptor:\n"
+    << m_DomDocument.toByteArray( XML_INDENT )
+    << "\n...";
 
   // TODO: Check IO device is formatted to UTF-8 data.
   if( device.write( m_DomDocument.toByteArray( XML_INDENT ) )==-1 )
     throw SystemError();
+
+  qDebug() << "Written XML descriptor.";
 }
 
 /*******************************************************************************/
@@ -304,12 +324,25 @@ void
 DatasetDescriptor
 ::virtual_BuildModel( void* context )
 {
-#if 0
-  // Get build-context.
-  assert( context!=NULL );
-  BuildContext* buildContext = static_cast< BuildContext* >( context );
-#endif
+  if( context==NULL )
+    {
+    BuildDocument();
+    }
+  else
+    {
+    // Get build-context.
+    BuildContext* buildContext = static_cast< BuildContext* >( context );
 
+    // Read XML DOM document from file.
+    Read( buildContext->m_Filename );
+    }
+}
+
+/*******************************************************************************/
+void
+DatasetDescriptor
+::BuildDocument()
+{
   // Get dataset model.
   const DatasetModel* model = GetParentModel< DatasetModel >();
   assert( model );
