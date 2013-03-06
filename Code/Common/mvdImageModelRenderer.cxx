@@ -187,11 +187,11 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
                    scaledRegion.GetSize()[1], 
                    0, GL_BGRA, GL_UNSIGNED_BYTE, m_Buffer);
 
-      // With MSVC10, GL_TEXTURE_BASE_LEVEL_EXT && GL_TEXTURE_MAX_LEVEL_EXT
+      // With MSVC10, GL_TEXTURE_BASE_LEVEL && GL_TEXTURE_MAX_LEVEL
       // are not defined
-#if defined(GL_TEXTURE_BASE_LEVEL_EXT) && defined(GL_TEXTURE_MAX_LEVEL_EXT)
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL_EXT, 0);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL_EXT, 0);
+#if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 #endif
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
