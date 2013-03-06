@@ -180,11 +180,16 @@ DatasetModel
   m_Descriptor = newChildModel< DatasetDescriptor >();
 
   // Initialize content, if needed.
+  //
+  // Force writing an empty descriptor.xml file to have a consistent
+  // empty dataset directory structure.
   if( true || isEmpty )
     WriteDescriptor();
 
+#if 0
   // Load directory content.
   Load( buildContext->m_Path, buildContext->m_Name );
+#endif
 }
 
 /*******************************************************************************/

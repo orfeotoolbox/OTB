@@ -129,6 +129,14 @@ public:
    */
   inline const QDir& GetDirectory() const;
 
+  /**
+   */
+  inline const QString& GetName() const;
+
+  /**
+   */
+  inline const QString& GetPath() const;
+
   /** */
   void ImportImage( const QString& filename, int w, int h );
 
@@ -235,6 +243,24 @@ DatasetModel
 ::GetDirectory() const
 {
   return m_Directory;
+}
+
+/*****************************************************************************/
+inline
+const QString&
+DatasetModel
+::GetPath() const
+{
+  return m_Path;
+}
+
+/*****************************************************************************/
+inline
+const QString&
+DatasetModel
+::GetName() const
+{
+  return m_Name;
 }
 
 /*****************************************************************************/

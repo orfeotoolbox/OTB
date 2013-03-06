@@ -62,14 +62,22 @@ namespace mvd
 
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
-
+  
 const char*
 DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
 {
   PROJECT_NAME "_Dataset",
+  //
+  "dataset",
+  "name",
+  "path",
+  "directory",
+  //
+  "images",
   "image_information",
   "input_image",
   "ql_input_image",
+  //
   "settings",
   "rgb",
   "dynamics"
@@ -87,7 +95,7 @@ DatasetDescriptor
 ::DatasetDescriptor( QObject* parent ) :
   AbstractModel( parent ),
   m_DomDocument( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] ),
-  m_DatasetElement()
+  m_ImagesGroupElement()
 {
 }
 
@@ -107,25 +115,25 @@ DatasetDescriptor
 {
   //
   // Image information node.
-  QDomElement imagesElement(
-    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_IMAGE_GROUP ] )
+  QDomElement imageInfoElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_IMAGE_INFORMATION ] )
   );
-  m_DatasetElement.appendChild(imagesElement);
-  imagesElement.setAttribute( "id", QString( "%1" ).arg( id ) );
+  imageInfoElt.setAttribute( "id", QString( "%1" ).arg( id ) );
+  m_ImagesGroupElement.appendChild( imageInfoElt );
 
-  // Input image filename
-  QDomElement imgElement(
+  // Input image filename.
+  QDomElement imageElt(
     m_DomDocument.createElement( TAG_NAMES[ ELEMENT_IMAGE ] )
   );
-  imagesElement.appendChild(imgElement);
-  imgElement.setAttribute("href",imageFilename);
+  imageElt.setAttribute( "href", imageFilename );
+  imageInfoElt.appendChild( imageElt );
 
-  // QL input image filename
-  QDomElement qlElement(
+  // Quicklook input image filename.
+  QDomElement quicklookElt(
     m_DomDocument.createElement( TAG_NAMES[ ELEMENT_QUICKLOOK ] )
   );
-  imagesElement.appendChild(qlElement);
-  qlElement.setAttribute("href",quicklookFilename);
+  quicklookElt.setAttribute( "href", quicklookFilename );
+  imageInfoElt.appendChild( quicklookElt );
 
 
   //
@@ -133,7 +141,7 @@ DatasetDescriptor
   QDomElement settingsElement(
     m_DomDocument.createElement( TAG_NAMES[ ELEMENT_SETTINGS_GROUP ] )
   );
-  imagesElement.appendChild(settingsElement);
+  imageInfoElt.appendChild( settingsElement );
 
   // TODO: Generalize code section
   {
@@ -296,38 +304,70 @@ void
 DatasetDescriptor
 ::virtual_BuildModel( void* context )
 {
-  qDebug() << "DatasetDescriptor::virtual_BuildModel()";
-
 #if 0
   // Get build-context.
   assert( context!=NULL );
   BuildContext* buildContext = static_cast< BuildContext* >( context );
 #endif
 
+  // Get dataset model.
   const DatasetModel* model = GetParentModel< DatasetModel >();
   assert( model );
 
-  // Add the root element
+  // Create root element.
   QDomElement rootElt(
     m_DomDocument.createElement( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] )
   );
   rootElt.setAttribute( "version", Monteverdi2_VERSION_STRING );
   m_DomDocument.appendChild( rootElt );
 
-  // Root document element: '<dataset>...</dataset>'.
-  QDomElement dsElt = m_DomDocument.createElement("dataset_path");
-  dsElt.setAttribute(
+  // Dataset element.
+  QDomElement datasetElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_DATASET_GROUP ] )
+  );
+  datasetElt.setAttribute(
+    "name",
+    model->GetName()
+  );
+  rootElt.appendChild( datasetElt );
+
+  // Dataset path element.
+  QDomElement pathElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_DATASET_PATH ] )
+  );
+  pathElt.setAttribute(
+    "href",
+    QDir::cleanPath( model->GetPath() )
+  );
+  datasetElt.appendChild( pathElt );
+
+  // Dataset path element.
+  QDomElement dirElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_DATASET_DIRECTORY ] )
+  );
+  dirElt.setAttribute(
     "href",
     QDir::cleanPath( model->GetDirectory().path() )
   );
-  m_DomDocument.firstChild().appendChild(dsElt);
+  datasetElt.appendChild( dirElt );
 
-  // keep the dataset element
-  m_DatasetElement =  m_DomDocument.firstChild().toElement();
+  // Image-group element.
+  QDomElement imagesElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_IMAGES_GROUP ] )
+  );
+  rootElt.appendChild( imagesElt );
 
-  // TODO Add the encoding in the processing instruction
-  QDomNode node = m_DomDocument.createProcessingInstruction("xml", "version = \"1.0\"");
-  m_DomDocument.insertBefore(node, m_DomDocument.firstChild());
+  // Remember image group element.
+  m_ImagesGroupElement = imagesElt;
+
+  // Add XML processing instruction.
+  QDomNode xmlNode(
+    m_DomDocument.createProcessingInstruction(
+      "xml",
+      "version=\"1.0\" encoding=\"UTF-8\""
+    )
+  );
+  m_DomDocument.insertBefore( xmlNode, m_DomDocument.firstChild() );
 }
 
 /*******************************************************************************/

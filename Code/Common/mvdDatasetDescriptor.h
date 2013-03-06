@@ -84,6 +84,7 @@ class Monteverdi2_EXPORT DatasetDescriptor :
 //
 // Public types.
 public:
+#if 0
   /**
    * \class BuildContext
    * \brief WIP.
@@ -103,6 +104,7 @@ public:
   public:
     QString m_Filename;
   };
+#endif
 
 //
 // Public methods.
@@ -201,13 +203,21 @@ private:
   enum Element
   {
     ELEMENT_DOCUMENT_ROOT =0,
-    ELEMENT_IMAGE_GROUP,
+    //
+    ELEMENT_DATASET_GROUP,
+    ELEMENT_DATASET_NAME,
+    ELEMENT_DATASET_PATH,
+    ELEMENT_DATASET_DIRECTORY,
+    //
+    ELEMENT_IMAGES_GROUP,
+    ELEMENT_IMAGE_INFORMATION,
     ELEMENT_IMAGE,
     ELEMENT_QUICKLOOK,
+    //
     ELEMENT_SETTINGS_GROUP,
     ELEMENT_RGB_CHANNELS,
     ELEMENT_DYNAMICS_PARAMETERS,
-
+    //
     ELEMENT_COUNT
   };
 
@@ -221,7 +231,7 @@ private:
 
   /**
    */
-  QDomElement m_DatasetElement;
+  QDomElement m_ImagesGroupElement;
 
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -251,7 +261,8 @@ QDomElement
 DatasetDescriptor
 ::FirstImageElement()
 {
-  return m_DatasetElement.firstChildElement( "image" );
+  return
+    m_ImagesGroupElement.firstChildElement( TAG_NAMES[ ELEMENT_IMAGES_GROUP ] );
 }
 
 /*****************************************************************************/
@@ -260,7 +271,7 @@ QDomElement
 DatasetDescriptor
 ::NextImageSiblingElement( const QDomElement& sibling )
 {
-  return sibling.nextSiblingElement( "image" );
+  return sibling.nextSiblingElement( TAG_NAMES[ ELEMENT_IMAGE ] );
 }
 
 /*****************************************************************************/
