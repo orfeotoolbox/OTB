@@ -205,33 +205,39 @@ DatasetDescriptor
 
   // TODO: Generalize code section.
   if( imageSettings!=NULL )
-  {
-  VectorImageModel::Settings* settings =
-    static_cast< VectorImageModel::Settings* >( imageSettings );
+    {
+    VectorImageModel::Settings* settings =
+      static_cast< VectorImageModel::Settings* >( imageSettings );
 
-  // Access settings group element.
-  QDomElement settingsElt(
-    imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_SETTINGS_GROUP ] )
-  );
-  // TODO: Manage XML structure errors.
-  assert( !settingsElt.isNull() );
+    // Access settings group element.
+    QDomElement settingsElt(
+      imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_SETTINGS_GROUP ] )
+    );
+    // TODO: Manage XML structure errors.
+    assert( !settingsElt.isNull() );
 
-  // RGB
-  QDomElement rgbElt(
-    settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_RGB_CHANNELS  ] )
-  );
-  // TODO: Manage XML structure errors.
-  assert( !rgbElt.isNull() );
-  // TODO: Get RGB channels from XML element.
+    // RGB
+    QDomElement rgbElt(
+      settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_RGB_CHANNELS  ] )
+    );
+    // TODO: Manage XML structure errors.
+    assert( !rgbElt.isNull() );
+    VectorImageModel::Settings::ChannelVector rgb;
+    ExtractVectorFromNode( rgb, rgbElt );
+    assert( rgb.size() == 3 );
+    settings->SetRgbChannels( rgb );
 
-  // Dynamics
-  QDomElement dynamicsElt(
-    settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_DYNAMICS_PARAMETERS ] )
-  );
-  // TODO: Manage XML structure errors.
-  assert( !dynamicsElt.isNull() );
-  // TODO: Get dynamics parameters from XML element.
-  }
+    // Dynamics
+    QDomElement dynamicsElt(
+      settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_DYNAMICS_PARAMETERS ] )
+    );
+    // TODO: Manage XML structure errors.
+    assert( !dynamicsElt.isNull() );
+    ParametersType dynamics;
+    ExtractArrayFromNode( dynamics, dynamicsElt );
+    assert( dynamics.GetSize() == 6 );
+    settings->SetDynamicsParams( dynamics );
+    }
 }
 
 /*******************************************************************************/

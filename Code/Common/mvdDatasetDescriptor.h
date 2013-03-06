@@ -45,6 +45,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdTypes.h"
 #include "mvdAbstractModel.h"
 
 
@@ -179,9 +180,27 @@ private:
   template< typename TInputIterator >
   inline
   QDomElement CreateContainerNode( const TInputIterator& first,
-				   const TInputIterator& last,
+                                   const TInputIterator& last,
                                    const QString& tagName );
 
+  /**
+   * \brief Deserialize a std::vector from a QDomElement
+   */
+  template< typename T >
+  inline
+  static
+  void ExtractVectorFromNode( std::vector<T>& vector,
+                              QDomElement& tagName );
+  
+  /**
+   * \brief Deserialize a itk::Array from a QDomElement
+   */
+  template< typename T >
+  inline
+  static
+  void ExtractArrayFromNode( itk::Array<T>& array,
+                             QDomElement& tagName );
+  
   /**
    */
   void Read( const QString& filename );
@@ -306,6 +325,58 @@ DatasetDescriptor
   vectorElement.appendChild( textNode );
 
   return vectorElement;
+}
+
+template< typename T >
+inline
+void
+DatasetDescriptor
+::ExtractVectorFromNode( std::vector<T>& vector,
+                         QDomElement& element )
+{
+  QDomNode node = element.firstChild();
+  // TODO: Manage XML structure errors.
+  assert( !node.isNull() );
+  assert( node.isText() );
+  
+  QDomText textNode = node.toText();
+  assert( !textNode.isNull() );
+
+  QString data = textNode.data();
+  QStringList stringList = data.split(" ");
+  
+  vector.resize(stringList.size());
+  for (size_t i = 0; i < stringList.size(); ++i)
+    {
+      QVariant v = stringList[i];
+      vector[i] = v.value<T>();
+    }
+}
+
+template< typename T >
+inline
+void
+DatasetDescriptor
+::ExtractArrayFromNode( itk::Array<T>& array,
+                        QDomElement& element )
+{
+  QDomNode node = element.firstChild();
+  // TODO: Manage XML structure errors.
+  assert( !node.isNull() );
+  assert( node.isText() );
+  
+  QDomText textNode = node.toText();
+  assert( !textNode.isNull() );
+  
+  QString data = textNode.data();
+  QStringList stringList = data.split(" ");
+  
+  array.SetSize(stringList.size());
+  for (size_t i = 0; i < stringList.size(); ++i)
+  {
+    QVariant v = stringList[i];
+    array[i] = v.value<T>();
+  }
 }
 
 } // end namespace 'mvd'
