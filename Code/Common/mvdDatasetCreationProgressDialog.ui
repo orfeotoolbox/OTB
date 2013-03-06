@@ -99,8 +99,6 @@
     </widget>
    </item>
   </layout>
-  <zorder>layoutWidget</zorder>
-  <zorder>label_1</zorder>
  </widget>
  <resources/>
  <connections/>
