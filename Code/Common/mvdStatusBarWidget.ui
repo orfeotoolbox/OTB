@@ -74,13 +74,13 @@
     <widget class="QLabel" name="m_CurrentPixelPhysical">
      <property name="minimumSize">
       <size>
-       <width>200</width>
+       <width>250</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>200</width>
+       <width>250</width>
        <height>20</height>
       </size>
      </property>
@@ -106,13 +106,13 @@
     <widget class="QLabel" name="m_CurrentPixelGeographic">
      <property name="minimumSize">
       <size>
-       <width>200</width>
+       <width>250</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>200</width>
+       <width>250</width>
        <height>20</height>
       </size>
      </property>
