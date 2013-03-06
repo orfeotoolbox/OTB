@@ -42,12 +42,23 @@
 #include "mvdSystemError.h"
 
 
+/*****************************************************************************/
+/* MACROS                                                                    */
+
+/** \brief Indent space when writing XML DOM documents. */
+#define XML_INDENT 2
+
+#define TAG_NAME_DOCUMENT_ROOT PROJECT_NAME "_Dataset"
+#define TAG_NAME_IMAGE_GROUP "image_information"
+#define TAG_NAME_IMAGE "input_image"
+#define TAG_NAME_QUICKLOOK "ql_input_image"
+#define TAG_NAME_SETTINGS_GROUP "settings"
+#define TAG_NAME_RGB_SETTINGS "rgb"
+#define TAG_NAME_DYNAMICS_SETTINGS "dynamics"
+
 namespace mvd
 {
 
-/** \brief Indent space when writing XML DOM documents. */
-const int XML_INDENT = 2;
-  
 /*
   TRANSLATOR mvd::DatasetDescriptor
 
@@ -60,7 +71,6 @@ const int XML_INDENT = 2;
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
-
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
@@ -72,7 +82,7 @@ const int XML_INDENT = 2;
 DatasetDescriptor
 ::DatasetDescriptor( QObject* parent ) :
   AbstractModel( parent ),
-  m_DomDocument(QString(PROJECT_NAME).append("_Dataset") ),
+  m_DomDocument( TAG_NAME_DOCUMENT_ROOT ),
   m_DatasetElement()
 {
 }
@@ -86,30 +96,33 @@ DatasetDescriptor
 /*******************************************************************************/
 void
 DatasetDescriptor
-::InsertImageModel( const QString& imageFilename,
+::InsertImageModel( int id,
+		    const QString& imageFilename,
 		    void* imageSettings,
 		    const QString& quicklookFilename )
 {
   //
   // Image information node.
-  QDomElement imagesElement = m_DomDocument.createElement("image_information");
+  QDomElement imagesElement( m_DomDocument.createElement( TAG_NAME_IMAGE_GROUP ) );
   m_DatasetElement.appendChild(imagesElement);
-  imagesElement.setAttribute("id", "0");
+  imagesElement.setAttribute( "id", QString( "%1" ).arg( id ) );
 
   // Input image filename
-  QDomElement imgElement = m_DomDocument.createElement("input_image");
+  QDomElement imgElement( m_DomDocument.createElement( TAG_NAME_IMAGE ) );
   imagesElement.appendChild(imgElement);
   imgElement.setAttribute("href",imageFilename);
 
   // QL input image filename
-  QDomElement qlElement = m_DomDocument.createElement("ql_input_image");
+  QDomElement qlElement( m_DomDocument.createElement( TAG_NAME_QUICKLOOK ) );
   imagesElement.appendChild(qlElement);
   qlElement.setAttribute("href",quicklookFilename);
 
 
   //
   // Settings node.
-  QDomElement settingsElement( m_DomDocument.createElement( "settings" ) );
+  QDomElement settingsElement(
+    m_DomDocument.createElement( TAG_NAME_SETTINGS_GROUP )
+  );
   imagesElement.appendChild(settingsElement);
 
   // TODO: Generalize code section
@@ -119,14 +132,26 @@ DatasetDescriptor
 
   //
   // RGB node
-  settingsElement.appendChild( CreateContainerNode(settings->GetRgbChannels(), "rgb") );
+  QDomElement rgbElement(
+    CreateContainerNode(
+      settings->GetRgbChannels().begin(),
+      settings->GetRgbChannels().end(),
+      TAG_NAME_RGB_SETTINGS
+    )
+  );
+  settingsElement.appendChild( rgbElement );
 
   //
   // Dynamics node.
-  settingsElement.appendChild( CreateContainerNode(settings->GetDynamicsParams(), "dynamics") );
-
+  QDomElement dynamicsElement(
+    CreateContainerNode(
+      settings->GetDynamicsParams().begin(),
+      settings->GetDynamicsParams().end(),
+      TAG_NAME_DYNAMICS_SETTINGS
+    )
+  );
+  settingsElement.appendChild( dynamicsElement );
   }
-
 }
 
 /*******************************************************************************/
@@ -250,7 +275,6 @@ DatasetDescriptor
 ::Write( QIODevice& device ) const
 {
   qDebug() << "descriptor.xml: " << m_DomDocument.toByteArray( XML_INDENT );
-  qDebug() << "descriptor.xml: " << m_DomDocument.toString( XML_INDENT );
 
   // TODO: Check IO device is formatted to UTF-8 data.
   if( device.write( m_DomDocument.toByteArray( XML_INDENT ) )==-1 )
@@ -274,7 +298,8 @@ DatasetDescriptor
   assert( model );
 
   // Add the root element
-  QDomElement root = m_DomDocument.createElement(QString(PROJECT_NAME).append("_Dataset"));
+  QDomElement root( m_DomDocument.createElement( TAG_NAME_DOCUMENT_ROOT ) );
+
   m_DomDocument.appendChild(root);
 
   // Root document element: '<dataset>...</dataset>'.

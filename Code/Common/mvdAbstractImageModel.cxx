@@ -69,7 +69,6 @@ AbstractImageModel
 {
 }
 
-
 /*****************************************************************************/
 const QuicklookModel*
 AbstractImageModel

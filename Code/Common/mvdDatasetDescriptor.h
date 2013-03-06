@@ -116,7 +116,8 @@ public:
 
   /**
    */
-  void InsertImageModel( const QString& imageFilename,
+  void InsertImageModel( int id,
+			 const QString& imageFilename,
 			 void* imageSettings,
 			 const QString& quicklookFilename );
 
@@ -169,13 +170,15 @@ protected:
 // Private methods.
 private:
 
-  /** \brief Serialize an STL-compliant container to a QDomElement
+  /**
+   * \brief Serialize an STL-compliant container to a QDomElement
    */
-  template< typename Container >
+  template< typename TInputIterator >
   inline
-  QDomElement CreateContainerNode( const Container& container,
+  QDomElement CreateContainerNode( const TInputIterator& first,
+				   const TInputIterator& last,
                                    const QString& tagName );
-  
+
   /**
    */
   void Read( const QString& filename );
@@ -191,6 +194,7 @@ private:
 //
 // Private attributes.
 private:
+
   /**
    */
   QDomDocument m_DomDocument;
@@ -220,6 +224,8 @@ namespace mvd
 {
 
 /*****************************************************************************/
+
+/*****************************************************************************/
 inline
 QDomElement
 DatasetDescriptor
@@ -238,25 +244,31 @@ DatasetDescriptor
 }
 
 /*****************************************************************************/
-template< typename Container >
+template< typename TInputIterator >
 inline
 QDomElement
 DatasetDescriptor
-::CreateContainerNode( const Container& container, const QString& tagName )
+::CreateContainerNode( const TInputIterator& first,
+		       const TInputIterator& last,
+		       const QString& tagName )
 {
   QStringList stringList;
-  
-  for( typename Container::const_iterator it( container.begin() );
-      it != container.end();
+
+  for( TInputIterator it( first );
+       it != last;
        ++ it )
-      {
-        stringList.append( QString( "%1" ).arg( *it ) );
-      }
-  
-  QDomText textNode( m_DomDocument.createTextNode( stringList.join( " " ) ) );  
+    {
+    stringList.append( QString( "%1" ).arg( *it ) );
+    }
+
+  QDomText textNode( m_DomDocument.createTextNode( stringList.join( " " ) ) );
+  assert( !textNode.isNull() );
+
   QDomElement vectorElement( m_DomDocument.createElement(tagName) );
+  assert( !vectorElement.isNull() );
+
   vectorElement.appendChild( textNode );
-  
+
   return vectorElement;
 }
 

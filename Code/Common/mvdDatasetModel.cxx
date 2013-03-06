@@ -85,12 +85,14 @@ DatasetModel
 }
 
 /*******************************************************************************/
+#if 0
 bool
 DatasetModel
 ::SetContent( const QString& path, const QString& name )
 {
   return true;
 }
+#endif
 
 /*******************************************************************************/
 void
@@ -99,8 +101,6 @@ DatasetModel
 {
   // 1. Instanciate local image model.
   VectorImageModel* vectorImageModel = new VectorImageModel( this );
-
-  vectorImageModel->setObjectName( filename );
 
   // 2. Safely load data from file.
   try
@@ -115,16 +115,21 @@ DatasetModel
     // histogram-list etc.)
     vectorImageModel->BuildModel();
 
+    AbstractImageModelList aimList( GetImageModels() );
+    qDebug() << aimList;
+
     //
     // 2.3: Add image to Dataset descriptor file.
     assert( vectorImageModel->GetQuicklookModel()!=NULL );
 
     m_Descriptor->InsertImageModel(
+      GetImageModels().size(),
       vectorImageModel->GetFilename(),
       &vectorImageModel->GetSettings(),
       vectorImageModel->GetQuicklookModel()->GetFilename()
     );
-    this->WriteDescriptor();
+
+    WriteDescriptor();
     }
   catch( std::exception& exc )
     {
@@ -173,8 +178,8 @@ DatasetModel
   m_Descriptor = newChildModel< DatasetDescriptor >();
 
   // Initialize content, if needed.
-  /*if( true || isEmpty )
-    WriteDescriptor();*/
+  if( true || isEmpty )
+    WriteDescriptor();
 
   // Load directory content.
   Load( buildContext->m_Path, buildContext->m_Name );

@@ -84,6 +84,11 @@ class Monteverdi2_EXPORT DatasetModel :
 // Public types.
 public:
   /**
+   */
+  typedef QList< const AbstractImageModel* > ConstAbstractImageModelList;
+  typedef QList< AbstractImageModel* > AbstractImageModelList;
+
+  /**
    * \class BuildContext
    * \brief WIP.
    */
@@ -116,7 +121,13 @@ public:
   virtual ~DatasetModel();
 
   /** */
+#if 0
   bool SetContent( const QString& path, const QString& name );
+#endif
+
+  /**
+   */
+  inline const QDir& GetDirectory() const;
 
   /** */
   void ImportImage( const QString& filename, int w, int h );
@@ -132,7 +143,7 @@ public:
 
   /**
    */
-  inline const QDir& GetDirectory() const;
+  inline ConstAbstractImageModelList GetImageModels() const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -168,6 +179,10 @@ private:
 //
 // Private methods.
 private:
+
+  /**
+   */
+  inline AbstractImageModelList GetImageModels();
 
   /** */
   void Load( const QString& path, const QString& name );
@@ -228,7 +243,7 @@ bool
 DatasetModel
 ::HasSelectedImageModel() const
 {
-  return !findChildren< const AbstractImageModel* >().empty();
+  return !GetImageModels().empty();
 }
 
 /*****************************************************************************/
@@ -237,7 +252,7 @@ const AbstractImageModel*
 DatasetModel
 ::GetSelectedImageModel() const
 {
-  return findChildren< const AbstractImageModel* >().first();
+  return GetImageModels().first();
 }
 
 /*****************************************************************************/
@@ -246,10 +261,26 @@ AbstractImageModel*
 DatasetModel
 ::GetSelectedImageModel()
 {
-  return findChildren< AbstractImageModel* >().first();
+  return GetImageModels().first();
 }
 
 /*****************************************************************************/
+inline
+DatasetModel::ConstAbstractImageModelList
+DatasetModel
+::GetImageModels() const
+{
+  return findChildren< const AbstractImageModel* >();
+}
+
+/*****************************************************************************/
+inline
+DatasetModel::AbstractImageModelList
+DatasetModel
+::GetImageModels()
+{
+  return findChildren< AbstractImageModel* >();
+}
 
 } // end namespace 'mvd'
 

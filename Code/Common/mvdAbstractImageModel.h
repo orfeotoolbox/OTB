@@ -89,6 +89,28 @@ public:
   /** Destructor */
   virtual ~AbstractImageModel();
 
+  /** */
+  const QuicklookModel* GetQuicklookModel() const;
+
+  /** */
+  QuicklookModel* GetQuicklookModel();
+
+  /** */
+  inline const HistogramModel* GetHistogramModel() const;
+
+  /** */
+  inline HistogramModel* GetHistogramModel();
+
+  /**
+   * Get a smart-pointer to the current LOD image-base.
+   */
+  virtual ImageBaseType::ConstPointer ToImageBase() const =0;
+
+  /**
+   * Get a smart-pointer to the current LOD image-base.
+   */
+  virtual ImageBaseType::Pointer ToImageBase() =0;
+
   /**
    * \return The largest possible region of the current LOD level.
    */
@@ -113,12 +135,6 @@ public:
    */
   QStringList GetBandNames( bool enhanced =false ) const;
 
-  /** */
-  const QuicklookModel* GetQuicklookModel() const;
-
-  /** */
-  QuicklookModel* GetQuicklookModel();
-
   /**
    * Get the number of available LOD.
    */
@@ -136,26 +152,10 @@ public:
   inline CountType GetCurrentLod() const;
 
   /** */
-  inline const HistogramModel* GetHistogramModel() const;
-
-  /** */
-  inline HistogramModel* GetHistogramModel();
-
-  /** */
   inline SpacingType GetSpacing();
 
   /** */
-  inline PointType   GetOrigin();
-
-  /**
-   * Get a smart-pointer to the current LOD image-base.
-   */
-  virtual ImageBaseType::ConstPointer ToImageBase() const =0;
-
-  /**
-   * Get a smart-pointer to the current LOD image-base.
-   */
-  virtual ImageBaseType::Pointer ToImageBase() =0;
+  inline PointType GetOrigin();
 
 //
 // Public SLOTS.
@@ -201,11 +201,12 @@ protected:
    * default, LOD level zero.
    */
   ImageRegionType m_NativeLargestRegion;
+
   /**
    * The spacing of the native image, which is, by
    * default, LOD level zero.
    */
-  SpacingType     m_NativeSpacing;
+  SpacingType m_NativeSpacing;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 

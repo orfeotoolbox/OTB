@@ -99,6 +99,8 @@ void
 VectorImageModel
 ::SetFilename( const QString& filename , int w, int h)
 {
+  setObjectName( filename );
+
   // 1. store the input filename
   m_Filename = filename;
 
@@ -107,6 +109,8 @@ VectorImageModel
 
   m_ImageFileReader->SetFileName( ToStdString( m_Filename ) );
   m_ImageFileReader->UpdateOutputInformation();
+
+  // TODO: Move overview processing into private method.
 
   // Build overviews if necessary
   bool hasOverviewsSupport = m_ImageFileReader->HasOverviewsSupport();
