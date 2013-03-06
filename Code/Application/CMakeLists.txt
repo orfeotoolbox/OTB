@@ -1,24 +1,24 @@
 #############################################################################
 # Input files.
 set( Application_SOURCES
-       ${CMAKE_CURRENT_SOURCE_DIR}/mvdApplication.cxx
-       ${CMAKE_CURRENT_SOURCE_DIR}/mvdImageModel.cxx
-       ${CMAKE_CURRENT_SOURCE_DIR}/mvdMainWindow.cxx
+       mvdApplication.cxx
+       mvdImageModel.cxx
+       mvdMainWindow.cxx
 )
-set( Application_HEADERS
-       ${CMAKE_CURRENT_SOURCE_DIR}/mvdApplication.h
-       ${CMAKE_CURRENT_SOURCE_DIR}/mvdImageModel.h
-       ${CMAKE_CURRENT_SOURCE_DIR}/mvdMainWindow.h
+set( Application_HEADERS_MOC
+       mvdApplication.h
+       mvdImageModel.h
+       mvdMainWindow.h
 )
 set( Application_FORMS
-       ${CMAKE_CURRENT_SOURCE_DIR}/mvdMainWindow.ui
+       mvdMainWindow.ui
 )
 set( Application_RESOURCES
 )
 
 #############################################################################
 # Qt4 wrapped files.
-qt4_wrap_cpp( Application_HEADERS_MOC ${Application_HEADERS} )
+qt4_wrap_cpp( Application_SRC_MOC ${Application_HEADERS_MOC} )
 qt4_wrap_ui( Application_FORMS_HEADERS ${Application_FORMS}  )
 qt4_add_resources( Application_RESOURCES_RCC ${Application_RESOURCES} )
 
@@ -26,7 +26,8 @@ qt4_add_resources( Application_RESOURCES_RCC ${Application_RESOURCES} )
 # Sources files to translate.
 add_to_qt4_i18n_sources(
   ${Application_SOURCES}
-  ${Application_HEADERS}
+  ${Application_HEADERS_MOC}
+  ${Application_SRC_MOC}
   ${Application_FORMS}
 )
 
@@ -55,7 +56,7 @@ add_library(Monteverdi2_Application
   STATIC
   ${Application_SOURCES}
   ${Application_FORMS_HEADERS}
-  ${Application_HEADERS_MOC}
+  ${Application_SRC_MOC}
   ${Application_RESOURCES_RCC}
 )
 target_link_libraries(Monteverdi2_Application
