@@ -308,10 +308,11 @@ DatasetDescriptor
   assert( model );
 
   // Add the root element
-  QDomElement root(
+  QDomElement rootElt(
     m_DomDocument.createElement( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] )
   );
-  m_DomDocument.appendChild(root);
+  rootElt.setAttribute( "version", Monteverdi2_VERSION_STRING );
+  m_DomDocument.appendChild( rootElt );
 
   // Root document element: '<dataset>...</dataset>'.
   QDomElement dsElt = m_DomDocument.createElement("dataset_path");
