@@ -265,8 +265,9 @@ QDomElement
 DatasetDescriptor
 ::FirstImageElement()
 {
-  return
-    m_ImagesGroupElement.firstChildElement( TAG_NAMES[ ELEMENT_IMAGES_GROUP ] );
+  return m_ImagesGroupElement.firstChildElement(
+      TAG_NAMES[ ELEMENT_IMAGE_INFORMATION ]
+  );
 }
 
 /*****************************************************************************/
@@ -275,7 +276,7 @@ QDomElement
 DatasetDescriptor
 ::NextImageSiblingElement( const QDomElement& sibling )
 {
-  return sibling.nextSiblingElement( TAG_NAMES[ ELEMENT_IMAGE ] );
+  return sibling.nextSiblingElement( TAG_NAMES[ ELEMENT_IMAGE_INFORMATION ] );
 }
 
 /*****************************************************************************/

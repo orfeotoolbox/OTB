@@ -180,28 +180,57 @@ DatasetDescriptor
 		 void* imageSettings,
 		 QString& quicklookFilename )
 {
-  imageFilename = imageSibling.attribute( "filename" );
+  // TODO: Manager XML structure errors.
+  assert( !imageSibling.isNull() );
 
-  // TODO: Generalize code section
+  // Alias imageSibling into image-information element.
+  QDomElement imageInfoElt( imageSibling );
+  id = imageInfoElt.attribute( "id" ).toInt();
+
+  // Acces input image element.
+  QDomElement imageElt(
+    imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_IMAGE ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !imageElt.isNull() );
+  imageFilename = imageElt.attribute( "href" );
+
+  // Access quicklook image element.
+  QDomElement quicklookElt(
+    imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_QUICKLOOK ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !quicklookElt.isNull() );
+  quicklookFilename = quicklookElt.attribute( "href" );
+
+  // TODO: Generalize code section.
   {
   VectorImageModel::Settings* settings =
     static_cast< VectorImageModel::Settings* >( imageSettings );
 
-  // Settings
-  QDomElement settingsElement( imageSibling.firstChildElement( "settings" ) );
+  // Access settings group element.
+  QDomElement settingsElt(
+    imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_SETTINGS_GROUP ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !settingsElt.isNull() );
 
   // RGB
-  QDomElement rgbElement( settingsElement.firstChildElement( "rgb" ) );
+  QDomElement rgbElt(
+    settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_RGB_CHANNELS  ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !rgbElt.isNull() );
+  // TODO: Get RGB channels from XML element.
 
   // Dynamics
-  QDomElement dynamicsElement( settingsElement.firstChildElement( "dynamics" ) );
-
-  // Ensure there is only one '<settings>...</settings>' child.
-  settingsElement = settingsElement.nextSiblingElement( "settings" );
-  assert( settingsElement.isNull() );
+  QDomElement dynamicsElt(
+    settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_DYNAMICS_PARAMETERS ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !dynamicsElt.isNull() );
+  // TODO: Get dynamics parameters from XML element.
   }
-
-  quicklookFilename = imageSibling.attribute( "quicklook" );
 }
 
 /*******************************************************************************/
