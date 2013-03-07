@@ -23,6 +23,19 @@ set( Application_RESOURCES
        mvdMainWindow.qrc
 )
 
+include_directories(
+  ${Monteverdi2_BINARY_DIR}
+  
+  ${Monteverdi2_SOURCE_DIR}/Code/Common
+  
+  ${Monteverdi2_SOURCE_DIR}/Code/Application
+  ${Monteverdi2_BINARY_DIR}/Code/Application
+  
+  ${Monteverdi2_SOURCE_DIR}/Data/Icons
+  
+  
+)
+
 #############################################################################
 # Qt4 wrapped files.
 qt4_wrap_cpp( Application_SRC_MOC ${Application_HEADERS_MOC} )

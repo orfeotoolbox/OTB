@@ -78,6 +78,12 @@ set( Common_FORMS
 set( Common_RESOURCES
 )
 
+include_directories(
+  ${Monteverdi2_BINARY_DIR}
+  ${Monteverdi2_SOURCE_DIR}/Code/Common
+  ${Monteverdi2_BINARY_DIR}/Code/Common
+)
+
 #############################################################################
 # Qt4 wrapped files.
 qt4_wrap_cpp( Common_SRC_MOC ${Common_HEADERS_MOC} )
