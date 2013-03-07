@@ -141,6 +141,11 @@ configure_file(
   ${Monteverdi2_BINARY_DIR}/${Monteverdi2_CONFIGURE_FILE}
 )
 
+set(Monteverdi2_LIBRARY_PROPERTIES
+    VERSION   "${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}.${Monteverdi2_VERSION_PATCH}"
+    SOVERSION "${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}"
+)
+
 #----------------------------------------------------------------------------
 # Include the Packaging subdir after every other dir
 # since all other install directives must be executed before fixupbundle

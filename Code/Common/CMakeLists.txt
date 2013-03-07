@@ -110,6 +110,10 @@ target_link_libraries(Monteverdi2_Common
   ${QT_LIBRARIES}
 )
 
+set_target_properties(Monteverdi2_Common
+  PROPERTIES ${Monteverdi2_LIBRARY_PROPERTIES}
+)
+
 #############################################################################
 # INSTALL Common application.
 install(
