@@ -92,49 +92,69 @@ public:
   typedef DefaultImageType SourceImageType;
 
   /**
+   * \brief WIP.
    */
   class Settings
   {
     //
     // Public types.
   public:
+    /**
+     */
     typedef UIntVector ChannelVector;
 
     //
     // Public methods.
   public:
-    /** Constructor */
+    /**
+     * \brief Constructor.
+     */
     Settings() :
-      m_IsDirty( false ),
       m_RgbChannels(),
-      m_DynamicsParams( 6 )
+      m_DynamicsParams( 6 ),
+      m_IsModified( false ),
+      m_IsApplied( false )
     {
     }
 
-    /** Destructor */
+    /**
+     * \brief Destructor.
+     */
     ~Settings() 
     {
     }
 
-    /** */
+    /**
+     */
+    inline
     bool
-    IsDirty() const
+    IsApplied() const
     {
-      return m_IsDirty;
+      return m_IsApplied;
+    }
+
+    /**
+     */
+    inline
+    bool
+    IsModified() const
+    {
+      return m_IsModified;
     }
 
     /** */
     inline
     void
-    SetDirty()
+    SetModified()
     {
-      m_IsDirty = true;
+      m_IsModified = true;
+      m_IsApplied = false;
     }
 
     /** */
-    inline void ClearDirty()
+    inline void SetApplied()
     {
-      m_IsDirty = false;
+      m_IsApplied = true;
     }
 
     /** */
@@ -143,7 +163,8 @@ public:
     SetRgbChannels( const ChannelVector& rgb )
     {
       m_RgbChannels = rgb;
-      SetDirty();
+
+      SetModified();
     }
 
     /** */
@@ -160,7 +181,8 @@ public:
     ChannelVector::value_type&
     RgbChannel( ChannelVector::size_type i )
     {
-      SetDirty();
+      SetModified();
+
       return m_RgbChannels[ i ];
     }
 
@@ -180,7 +202,8 @@ public:
     SetDynamicsParams( const ParametersType& params )
     {
       m_DynamicsParams = params;
-      SetDirty();
+
+      SetModified();
     }
 
     /**
@@ -207,44 +230,39 @@ public:
     ParametersType::ValueType&
     DynamicsParam( CountType i )
     {
-      SetDirty();
+      SetModified();
+
       return m_DynamicsParams[ i ];
     }
-
-#if 0
-    /**
-     */
-    inline
-    const ParametersType::ValueType&
-    DynamicsParam( RgbaChannel channel ) const
-    {
-      return m_DynamicsParams[ m_RgbChannels[ channel ] ];
-    }
-
-    /**
-     */
-    inline
-    ParametersType::ValueType&
-    DynamicsParam( RgbaChannel channel )
-    {
-      return m_DynamicsParams[ m_RgbChannels[ channel ] ];
-    }
-#endif
 
     //
     // Private attributes.
   private:
-    /** Flag which notices when display Settings has been modified and
-     * have not yet been rendered.
-     */
-    bool m_IsDirty;
     /**
-     * Color-composition setup (file-component to video RGB-components).
+     * \brief Color-composition setup (file-component to video
+     * RGB-components).
      */
     ChannelVector m_RgbChannels;
+
     /**
+     * \brief Color-dynamics parameters (\sa
+     * HistogramModel::Quantile()).
      */
     ParametersType m_DynamicsParams;
+
+    /**
+     * \brief Flag which notices that rendering settings have been
+     * edited.
+     */
+    // TODO: Optimize using C++ bitset bool foo:1;
+    bool m_IsModified;
+
+    /**
+     * \brief Flag which notices that rendering settings have been
+     * applied to display.
+     */
+    // TODO: Optimize using C++ bitset bool foo:1;
+    bool m_IsApplied;
   };
 
 //

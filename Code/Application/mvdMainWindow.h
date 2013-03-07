@@ -126,6 +126,11 @@ signals:
 // Protected methods.
 protected:
 
+  //
+  // QMainWindow overrides.
+
+  void closeEvent( QCloseEvent* event );
+
 //
 // Protected attributes.
 protected:
@@ -191,6 +196,10 @@ private:
   /** Read settings from a settings file*/
   void InitializeDsPathSettings();
 
+  /**
+   */
+  inline QMessageBox::StandardButton ConfirmSaveQuit( bool canBeCancelled );
+
 //
 // Private attributes.
 private:
@@ -233,6 +242,12 @@ private slots:
    * action is activated.
    */
   void on_action_Open_activated();
+
+  /**
+   * \brief Qt auto-connected slot which is called when File/Quit menu
+   * action is activated.
+   */
+  void on_action_Quit_triggered();
 
   /**
    * \brief Qt auto-connected slots which are called when View/Quicklook,
@@ -383,6 +398,24 @@ MainWindow
   assert( controller!=NULL );
 
   controller->SetModel( model );
+}
+
+/*****************************************************************************/
+inline
+QMessageBox::StandardButton
+MainWindow
+::ConfirmSaveQuit( bool canBeCancelled )
+{
+  return QMessageBox::question(
+    this,
+    tr( PROJECT_NAME ),
+    tr( "Dataset has been modified.\n"
+	"Do you want to save settings before quitting?" ),
+    QMessageBox::Save |
+    QMessageBox::Discard |
+    ( canBeCancelled ? QMessageBox::Cancel : QMessageBox::NoButton ),
+    QMessageBox::Save
+  );
 }
 
 } // end namespace 'mvd'

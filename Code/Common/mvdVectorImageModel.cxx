@@ -290,8 +290,11 @@ VectorImageModel
 
     ParametersType::ValueType index = 2 * i;
 
-    GetSettings().DynamicsParam( index ) = histogramModel->Quantile( band , 0.02 );
-    GetSettings().DynamicsParam( index + 1) = histogramModel->Quantile( band , 0.02, BOUND_UPPER );
+    GetSettings().DynamicsParam( index ) =
+      histogramModel->Quantile( band , 0.02, BOUND_LOWER );
+
+    GetSettings().DynamicsParam( index + 1) =
+      histogramModel->Quantile( band , 0.02, BOUND_UPPER );
     }
 }
 
@@ -335,7 +338,7 @@ VectorImageModel
 
   // Don't do anything if the region did not changed
   if ( m_PreviousRegion!=region ||
-       GetSettings().IsDirty() ||
+       !GetSettings().IsApplied() ||
        refresh )
     {
     // check that the current and the previous region have some pixels in
@@ -346,7 +349,7 @@ VectorImageModel
     // if the first time or no pixels in common , reload all
     if ( res &&
 	 m_PreviousRegion!=ImageRegionType() &&
-	 !GetSettings().IsDirty() &&
+	 GetSettings().IsApplied() &&
          !refresh )
       {
       // Compute loaded region, and the four regions not loaded yet
@@ -418,7 +421,7 @@ VectorImageModel
     }
 
   // settings changes have been taken into account, clean the dirty flag
-  GetSettings().ClearDirty();
+  GetSettings().SetApplied();
 
   // Store the region
   m_PreviousRegion = region;

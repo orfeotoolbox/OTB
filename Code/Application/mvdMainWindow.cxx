@@ -194,12 +194,6 @@ MainWindow
   // add needed widget to the status bar
   InitializeStatusBarWidgets();
 
-  // Connect Quit action of main menu to QApplication's quit() slot.
-  QObject::connect(
-    m_UI->action_Quit, SIGNAL( activated() ),
-    qApp, SLOT( quit() )
-  );
-
   // Connect Appllication and MainWindow when selected model is about
   // to change.
   QObject::connect(
@@ -381,6 +375,41 @@ MainWindow
 }
 
 /*****************************************************************************/
+void
+MainWindow::closeEvent( QCloseEvent* event )
+{
+  qDebug() << "MainWindow::closeEvent(" << event << ")";
+
+  assert( event!=NULL );
+
+  /*
+  if( !GetModel()->IsModified() )
+    return;
+  */
+
+  QMessageBox::StandardButton clickedButton = ConfirmSaveQuit( true );
+
+  switch( clickedButton )
+    {
+    case QMessageBox::Save:
+      break;
+
+    case QMessageBox::Discard:
+      break;
+
+    case QMessageBox::Cancel:
+      // Ignore event: do not close/quit.
+      event->ignore();
+      break;
+
+    default:
+      // should never be reached.
+      assert( false );
+      break;
+    }
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
@@ -397,6 +426,14 @@ MainWindow
     }
 
   emit OpenImageRequest( filename );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_Quit_triggered()
+{
+  close();
 }
 
 /*****************************************************************************/

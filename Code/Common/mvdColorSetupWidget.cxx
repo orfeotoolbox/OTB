@@ -63,6 +63,7 @@ ColorSetupWidget
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::ColorSetupWidget() )
 {
+  // TODO: Change to static constant see Qt I18n documentation.
   // This array is here to statically expose the main enhanced band
   // names that OTB can returns for translation purposes.
   const char*
