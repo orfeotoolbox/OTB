@@ -38,11 +38,6 @@
 #include "mvdDatasetModel.h"
 #include "mvdVectorImageModel.h"
 
-// Application icon on Linux platform
-#if ! defined(Q_WS_WIN) && ! defined(Q_WS_MAC)
-#  include "monteverdi2-48x48.xpm"
-#endif
-
 //
 // Class implementation.
 namespace mvd
