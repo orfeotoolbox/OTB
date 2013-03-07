@@ -2,20 +2,25 @@
 # Input files.
 set( Application_SOURCES
        mvdApplication.cxx
+       mvdImageLoader.cxx
        mvdImageModel.cxx
        mvdMainWindow.cxx
+       mvdPreferencesDialog.cxx
 )
 
 # Headers for classes with Q_OBJECT macro (needs to go to Qt moc)
 set( Application_HEADERS_MOC
        mvdApplication.h
        mvdImageModel.h
+       mvdImageLoader.h
        mvdMainWindow.h
+       mvdPreferencesDialog.h
 )
 
 # Qt designer UI files
 set( Application_FORMS
        mvdMainWindow.ui
+       mvdPreferencesDialog.ui
 )
 
 # Qt resources included in executable
@@ -32,8 +37,6 @@ include_directories(
   ${Monteverdi2_BINARY_DIR}/Code/Application
   
   ${Monteverdi2_SOURCE_DIR}/Data/Icons
-  
-  
 )
 
 #############################################################################

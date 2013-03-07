@@ -19,11 +19,9 @@ set( Common_SOURCES
         mvdGui.cxx
         mvdHistogramModel.cxx
         mvdI18nApplication.cxx
-        mvdImageLoader.cxx
         mvdImageModelRenderer.cxx
         mvdImageViewManipulator.cxx
         mvdMath.cxx
-        mvdPreferencesDialog.cxx
         mvdQuicklookModel.cxx
         mvdQuicklookViewManipulator.cxx
         mvdStatusBarWidget.cxx
@@ -51,10 +49,8 @@ set( Common_HEADERS_MOC
         mvdGLImageWidget.h
         mvdHistogramModel.h
         mvdI18nApplication.h
-        mvdImageLoader.h
         mvdImageModelRenderer.h
         mvdImageViewManipulator.h
-        mvdPreferencesDialog.h
         mvdQuicklookModel.h
         mvdQuicklookViewManipulator.h
         mvdStatusBarWidget.h
@@ -69,7 +65,6 @@ set( Common_FORMS
         mvdColorSetupWidget.ui
         mvdDatasetCreationProgressDialog.ui
         mvdMyWidget.ui
-        mvdPreferencesDialog.ui
         mvdStatusBarWidget.ui
         mvdVideoColorToolBox.ui
 )
