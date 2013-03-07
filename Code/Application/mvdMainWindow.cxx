@@ -400,6 +400,7 @@ MainWindow::closeEvent( QCloseEvent* event )
   switch( clickedButton )
     {
     case QMessageBox::Save:
+      model->Save();
       break;
 
     case QMessageBox::Discard:

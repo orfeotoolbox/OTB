@@ -152,6 +152,10 @@ public:
    */
   inline ConstAbstractImageModelList GetImageModels() const;
 
+  /**
+   */
+  void Save() const;
+
   //
   // AbstractModel overrides.
 
