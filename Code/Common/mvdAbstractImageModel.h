@@ -83,11 +83,44 @@ class Monteverdi2_EXPORT AbstractImageModel :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Public types.
+public:
+  /**
+   * \class BuildContext
+   * \brief WIP.
+   */
+  class BuildContext
+  {
+    //
+    // Public methods.
+  public:
+    /** \brief Constructor. */
+    BuildContext( const QString& filename =QString(),
+		  int id =-1,
+		  const QString& quicklook =QString() ) :
+      m_Id( id ),
+      m_Filename( filename ),
+      m_Quicklook( quicklook )
+    {
+    }
+
+    //
+    // Public attributes
+  public:
+    int m_Id;
+    QString m_Filename;
+    QString m_Quicklook;
+  };
+
+//
 // Public methods.
 public:
 
   /** Destructor */
   virtual ~AbstractImageModel();
+
+  /** */
+  inline int GetId() const;
 
   /** */
   const QuicklookModel* GetQuicklookModel() const;
@@ -217,6 +250,12 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
+  int m_Id;
+
+  /**
+   */
   CountType m_CurrentLod;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -243,6 +282,14 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+int
+AbstractImageModel
+::GetId() const
+{
+  return m_Id;
+}
 
 /*****************************************************************************/
 const HistogramModel*

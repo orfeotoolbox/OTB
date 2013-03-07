@@ -59,6 +59,7 @@ AbstractImageModel
 ::AbstractImageModel( QObject* parent ) :
   AbstractModel( parent ),
   m_NativeLargestRegion(),
+  m_Id( -1 ),
   m_CurrentLod( 0 )
 {
 }
@@ -166,6 +167,12 @@ void
 AbstractImageModel
 ::virtual_BuildModel( void* context )
 {
+  if( context!=NULL )
+    {
+    BuildContext* buildContext = static_cast< BuildContext* >( context );
+    m_Id = buildContext->m_Id;
+    }
+
   newChildModel< HistogramModel >();
   newChildModel< QuicklookModel >();
 }

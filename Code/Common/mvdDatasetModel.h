@@ -97,11 +97,14 @@ public:
     //
     // Public methods.
   public:
-    BuildContext( const QString& path, const QString& name, int width, int height ) :
+    BuildContext( const QString& path,
+		  const QString& name,
+		  int width =-1,
+		  int height =-1 ) :
       m_Path( path ),
       m_Name( name ),
-      m_Width(width),
-      m_Height(height)
+      m_Width( width ),
+      m_Height( height )
     {
     }
 
@@ -201,7 +204,11 @@ private:
   inline AbstractImageModelList GetImageModels();
 
   /** */
-  void LoadImage( const QString& filename, bool foo, int width, int height );
+  void LoadImage( const QString& filename,
+		  int width,
+		  int height,
+		  int id,
+		  const QString& quicklook );
 
   /** */
   void ParseDescriptor(BuildContext* bContext );

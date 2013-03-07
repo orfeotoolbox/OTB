@@ -472,10 +472,10 @@ private:
 private:
 
   /** Compute the linear buffer index according to the 2D region and
-  * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
-  * \param index 2D index
-  * \param region 2D region
-  */
+   * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
+   * \param index 2D index
+   * \param region 2D region
+   */
   static inline
     unsigned int
     ComputeBufferIndex(const IndexType& index,
