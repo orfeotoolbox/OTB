@@ -752,7 +752,7 @@ void
 VectorImageModel
 ::OnModelUpdated()
 {
-  qDebug() << "OnModelUpdated()";
+  qDebug() << "ID " << GetId() << " - OnModelUpdated()";
 
   RenderingFilterType::RenderingFunctionType* renderingFunc =
     m_RenderingFilter->GetRenderingFunction();
@@ -768,19 +768,18 @@ VectorImageModel
 
   // TODO: Remove temporary hack (rendering settings).
   QuicklookModel* quicklookModel = GetQuicklookModel();
+  // If image-model is not quicklook-model.
   if( quicklookModel!=NULL )
     {
+    // Update quicklook rendering-settings.
     quicklookModel->SetSettings( GetSettings() );
     quicklookModel->OnModelUpdated();
-    }
 
-#if 0
-  // Ensure type of parent model.
-  assert( GetDatasetModel()!=NULL );
-  qDebug() << GetDatasetModel();
-  // Get parent dataset model.
-  DatasetModel* datasetModel = GetDatasetModel();
-#endif
+    // Ensure parent model is dataset-model.
+    assert( GetDatasetModel()!=NULL );
+    // Get parent dataset-model.
+    DatasetModel* datasetModel = GetDatasetModel();
+    }
 
   // TODO: Update DatasetDescriptor.
   // datasetModel->Foo();

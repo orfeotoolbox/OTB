@@ -325,6 +325,9 @@ public:
   inline Settings& GetSettings();
 
   /** */
+  inline void SetSettings( const Settings& settings );
+
+  /** */
   inline otb::GenericRSTransform<> * GetGenericRSTransform();
 
   /**
@@ -404,9 +407,6 @@ signals:
 //
 // Protected methods.
 protected:
-
-  /** */
-  inline void SetSettings( const Settings& settings );
 
   /** Clear buffer */
   void ClearBuffer();
@@ -632,7 +632,7 @@ VectorImageModel
 inline
 void
 VectorImageModel
-::SetSettings(const Settings& settings)
+::SetSettings( const Settings& settings )
 {
   m_Settings = settings;
 }

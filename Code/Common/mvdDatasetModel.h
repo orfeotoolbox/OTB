@@ -204,11 +204,11 @@ private:
   inline AbstractImageModelList GetImageModels();
 
   /** */
-  void LoadImage( const QString& filename,
-		  int width,
-		  int height,
-		  int id,
-		  const QString& quicklook );
+  AbstractImageModel* LoadImage( const QString& filename,
+				 int width,
+				 int height,
+				 int id,
+				 const QString& quicklook );
 
   /** */
   void ParseDescriptor(BuildContext* bContext );
