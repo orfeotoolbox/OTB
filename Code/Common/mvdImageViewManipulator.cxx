@@ -250,7 +250,7 @@ void
 ImageViewManipulator
 ::CenterRegion(double scale)
 {
-  if( m_IsotropicZoom * scale > 0.01 && m_IsotropicZoom * scale < 10.)
+  if( m_IsotropicZoom * scale > 0.001 )
     {
     // The viewPort Region must be adapted to this zoom ratio
     ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
