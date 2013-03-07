@@ -345,8 +345,9 @@ DatasetDescriptor
   QString data = textNode.data();
   QStringList stringList = data.split(" ");
   
-  vector.resize(stringList.size());
-  for (size_t i = 0; i < stringList.size(); ++i)
+  size_t size = static_cast<size_t>(stringList.size());
+  vector.resize(size);
+  for (size_t i = 0; i < size; ++i)
     {
       QVariant v = stringList[i];
       vector[i] = v.value<T>();
@@ -371,8 +372,9 @@ DatasetDescriptor
   QString data = textNode.data();
   QStringList stringList = data.split(" ");
   
-  array.SetSize(stringList.size());
-  for (size_t i = 0; i < stringList.size(); ++i)
+  unsigned int size = static_cast<unsigned int>(stringList.size());
+  array.SetSize(size);
+  for (unsigned int i = 0; i < size; ++i)
   {
     QVariant v = stringList[i];
     array[i] = v.value<T>();
