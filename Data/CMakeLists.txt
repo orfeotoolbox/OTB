@@ -17,8 +17,14 @@ endforeach()
 
 # Fallback on "/usr/share/pixmaps"
 # See http://standards.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html#directory_layout
-install(FILES Icons/monteverdi2.png
+install(FILES Icons/monteverdi2-32x32.png
         DESTINATION share/pixmaps
+        RENAME monteverdi2.png
+        COMPONENT Resources)
+
+install(FILES Icons/monteverdi2-32x32.xpm
+        DESTINATION share/pixmaps
+        RENAME monteverdi2.xpm
         COMPONENT Resources)
 
 # -------------------------
