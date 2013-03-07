@@ -85,7 +85,7 @@
   </action>
   <action name="action_Open">
    <property name="icon">
-    <iconset resource="../Common/mvdMainWindow.qrc">
+    <iconset resource="mvdMainWindow.qrc">
      <normaloff>:/icons/action_Open_Icon</normaloff>:/icons/action_Open_Icon</iconset>
    </property>
    <property name="text">
@@ -161,7 +161,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../Common/mvdMainWindow.qrc"/>
+  <include location="mvdMainWindow.qrc"/>
  </resources>
  <connections/>
 </ui>
