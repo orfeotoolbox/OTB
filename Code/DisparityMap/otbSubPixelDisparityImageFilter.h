@@ -87,6 +87,8 @@ public:
   typedef typename InputImageType::SizeType                 SizeType;
   typedef typename InputImageType::IndexType                IndexType;
   typedef typename InputImageType::RegionType               RegionType;
+  typedef typename InputImageType::SpacingType              SpacingType;
+  typedef typename InputImageType::PointType                PointType;
   
   typedef typename TOutputMetricImage::ValueType            MetricValueType;
   
@@ -202,6 +204,9 @@ protected:
 
   /** Destructor */
   virtual ~SubPixelDisparityImageFilter();
+  
+  /** Generate output information */
+  virtual void GenerateOutputInformation();
 
   /** Generate input requrested region */
   virtual void GenerateInputRequestedRegion();
@@ -254,6 +259,13 @@ private:
   
   /** Stores the number of pixels whose refined position has a worse metric than the initial position */
   std::vector<double>           m_WrongExtrema;
+  
+  /** Stores the computed grid step of the disparity map (internal purpose only) */
+  unsigned int                  m_Step;
+  
+  /** Stores the computed grid start index of the disparity map (internal purpose only) */
+  IndexType                     m_GridIndex;
+  
 };
 } // end namespace otb
 
