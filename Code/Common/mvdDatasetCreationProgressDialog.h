@@ -40,8 +40,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdGui.h"
-#include "ui_mvdDatasetCreationProgressDialog.h"
 
 //
 // External classes pre-declaration.
@@ -77,14 +75,14 @@ public:
   virtual ~DatasetCreationProgressDialog();
   
   /** */
-  inline QString GetImage() const;
+  QString GetImage() const;
   /** */
-  inline void SetImage( QString imageName );
+  void SetImage( QString imageName );
 
   /** */
-  inline QString GetDataset() const;
+  QString GetDataset() const;
   /** */
-  inline void SetDataset( QString datasetName );
+  void SetDataset( QString datasetName );
 
 //
 // SIGNALS.
@@ -115,44 +113,6 @@ private:
 private slots:
 
 };
-
-
-/*****************************************************************************/
-inline
-QString
-DatasetCreationProgressDialog
-::GetImage( ) const
-{
-  return m_UI->imageLabel->text();
-}
-
-/*****************************************************************************/
-inline
-void
-DatasetCreationProgressDialog
-::SetImage(QString value)
-{
-  m_UI->imageLabel->setText(value);
-}
-
-
-/*****************************************************************************/
-inline
-QString
-DatasetCreationProgressDialog
-::GetDataset( ) const
-{
-  return m_UI->datasetLabel->text();
-}
-
-/*****************************************************************************/
-inline
-void
-DatasetCreationProgressDialog
-::SetDataset(QString value)
-{
-  m_UI->datasetLabel->setText(value);
-}
 
 } // end namespace 'mvd'
 

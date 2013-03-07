@@ -45,7 +45,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdGui.h"
-#include "ui_mvdColorBandDynamicsWidget.h"
 
 
 /*****************************************************************************/
@@ -129,39 +128,39 @@ public:
   virtual ~ColorBandDynamicsWidget();
 
   /** */
-  inline RgbaChannel GetChannelLabel() const;
+  RgbaChannel GetChannelLabel() const;
   /** */
-  inline void SetChannelLabel( RgbaChannel );
+  void SetChannelLabel( RgbaChannel );
 
   /** */
-  inline double GetMinIntensity() const;
+  double GetMinIntensity() const;
   /** */
-  inline void SetMinIntensity( double );
+  void SetMinIntensity( double );
 
   /** */
-  inline double GetMaxIntensity() const;
+  double GetMaxIntensity() const;
   /** */
-  inline void SetMaxIntensity( double );
+  void SetMaxIntensity( double );
 
   /** */
-  inline double GetLowIntensity() const;
+  double GetLowIntensity() const;
   /** */
-  inline void SetLowIntensity( double );
+  void SetLowIntensity( double );
 
   /** */
-  inline double GetHighIntensity() const;
+  double GetHighIntensity() const;
   /** */
-  inline void SetHighIntensity( double );
+  void SetHighIntensity( double );
 
   /** */
-  inline double GetLowQuantile() const;
+  double GetLowQuantile() const;
   /** */
-  inline void SetLowQuantile( double );
+  void SetLowQuantile( double );
 
   /** */
-  inline double GetHighQuantile() const;
+  double GetHighQuantile() const;
   /** */
-  inline void SetHighQuantile( double );
+  void SetHighQuantile( double );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -217,225 +216,17 @@ private:
 //
 // Slots.
 private slots:
-  inline void on_lowIntensitySpinBox_valueChanged( double );
-  inline void on_highIntensitySpinBox_valueChanged( double );
+  void on_lowIntensitySpinBox_valueChanged( double );
+  void on_highIntensitySpinBox_valueChanged( double );
 
-  inline void on_lowQuantileSpinBox_valueChanged( double );
-  inline void on_highQuantileSpinBox_valueChanged( double );
+  void on_lowQuantileSpinBox_valueChanged( double );
+  void on_highQuantileSpinBox_valueChanged( double );
 
-  inline void on_minMaxButton_clicked();
-  inline void on_defaultsButton_clicked();
-  inline void on_applyAllButton_clicked();
+  void on_minMaxButton_clicked();
+  void on_defaultsButton_clicked();
+  void on_applyAllButton_clicked();
 };
 
 } // end namespace 'mvd'.
-
-/*****************************************************************************/
-/* INLINE SECTION                                                            */
-
-namespace mvd
-{
-
-/*****************************************************************************/
-inline
-double
-ColorBandDynamicsWidget
-::GetMinIntensity() const
-{
-  return m_UI->lowIntensitySpinBox->minimum();
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::SetMinIntensity( double value )
-{
-  m_UI->lowIntensitySpinBox->setMinimum( value );
-  m_UI->highIntensitySpinBox->setMinimum( value );
-}
-
-/*****************************************************************************/
-inline
-double
-ColorBandDynamicsWidget
-::GetMaxIntensity() const
-{
-  return m_UI->highIntensitySpinBox->maximum();
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::SetMaxIntensity( double value )
-{
-  m_UI->lowIntensitySpinBox->setMaximum( value );
-  m_UI->highIntensitySpinBox->setMaximum( value );
-}
-
-/*****************************************************************************/
-inline
-double
-ColorBandDynamicsWidget
-::GetLowIntensity() const
-{
-  return m_UI->lowIntensitySpinBox->value();
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::SetLowIntensity( double value )
-{
-  m_UI->lowIntensitySpinBox->setValue( value );
-}
-
-/*****************************************************************************/
-inline
-double
-ColorBandDynamicsWidget
-::GetHighIntensity() const
-{
-  return m_UI->highIntensitySpinBox->value();
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::SetHighIntensity( double value )
-{
-  m_UI->highIntensitySpinBox->setValue( value );
-}
-
-/*****************************************************************************/
-inline
-double
-ColorBandDynamicsWidget
-::GetLowQuantile() const
-{
-  return m_UI->lowQuantileSpinBox->value();
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::SetLowQuantile( double value )
-{
-  m_UI->lowQuantileSpinBox->setValue( value );
-}
-
-/*****************************************************************************/
-inline
-double
-ColorBandDynamicsWidget
-::GetHighQuantile() const
-{
-  return m_UI->highQuantileSpinBox->value();
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::SetHighQuantile( double value )
-{
-  m_UI->highQuantileSpinBox->setValue( value );
-}
-
-/*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::SetChannelLabel( RgbaChannel channel )
-{
-  m_Channel = channel;
-
-  m_UI->rLabel->setVisible(
-    channel==RGBA_CHANNEL_RED || channel==RGBA_CHANNEL_ALL );
-
-  m_UI->gLabel->setVisible(
-    channel==RGBA_CHANNEL_GREEN || channel==RGBA_CHANNEL_ALL );
-
-  m_UI->bLabel->setVisible(
-    channel==RGBA_CHANNEL_BLUE || channel==RGBA_CHANNEL_ALL );
-}
-
-/*****************************************************************************/
-RgbaChannel
-ColorBandDynamicsWidget
-::GetChannelLabel() const
-{
-  return m_Channel;
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::on_lowIntensitySpinBox_valueChanged( double value )
-{
-  emit LowIntensityChanged( m_Channel, value );
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::on_highIntensitySpinBox_valueChanged( double value )
-{
-  emit HighIntensityChanged( m_Channel, value );
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::on_lowQuantileSpinBox_valueChanged( double value )
-{
-  emit LowQuantileChanged( m_Channel, value );
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::on_highQuantileSpinBox_valueChanged( double value )
-{
-  emit HighQuantileChanged( m_Channel, value );
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::on_minMaxButton_clicked()
-{
-  emit ResetIntensityClicked( m_Channel );
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::on_defaultsButton_clicked()
-{
-  emit ResetQuantileClicked( m_Channel );
-}
-
-/*****************************************************************************/
-inline
-void
-ColorBandDynamicsWidget
-::on_applyAllButton_clicked()
-{
-  emit ApplyAllClicked( m_Channel,
-                        m_UI->lowQuantileSpinBox->value(),
-                        m_UI->highQuantileSpinBox->value());
-}
-
-} // end namespace 'mvd'
 
 #endif // __mvdColorBandDynamicsWidget_h

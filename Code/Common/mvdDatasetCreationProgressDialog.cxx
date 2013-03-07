@@ -61,6 +61,39 @@ DatasetCreationProgressDialog
 }
 
 
+/*****************************************************************************/
+QString
+DatasetCreationProgressDialog
+::GetImage( ) const
+{
+  return m_UI->imageLabel->text();
+}
+
+/*****************************************************************************/
+void
+DatasetCreationProgressDialog
+::SetImage(QString value)
+{
+  m_UI->imageLabel->setText(value);
+}
+
+
+/*****************************************************************************/
+QString
+DatasetCreationProgressDialog
+::GetDataset( ) const
+{
+  return m_UI->datasetLabel->text();
+}
+
+/*****************************************************************************/
+void
+DatasetCreationProgressDialog
+::SetDataset(QString value)
+{
+  m_UI->datasetLabel->setText(value);
+}
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
