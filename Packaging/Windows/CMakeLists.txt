@@ -5,6 +5,22 @@ set(CPACK_NSIS_MODIFY_PATH ON PARENT_SCOPE)
 set(CPACK_NSIS_MENU_LINKS
     "bin/monteverdi2.bat" "Monteverdi2" PARENT_SCOPE)
 
+# Since we put a bat file as MENU_LINKS, it does not get an icon automatically
+# though NSIS can do that.
+# That's why we use the following hack to associate the icon coming from the executable
+# to the bat file :
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
+    "
+    CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2.lnk\\\" \\\"$INSTDIR\\\\bin\\\\monteverdi2.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\monteverdi2.exe\\\"
+    "
+    PARENT_SCOPE)
+
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
+    "
+    Delete \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2.lnk\\\"
+    "
+    PARENT_SCOPE)
+
 # Icon for the add-remove program
 set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\monteverdi2.exe" PARENT_SCOPE)
 
