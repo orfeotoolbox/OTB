@@ -240,6 +240,9 @@ private:
 //
 // Slots.
 private slots:
+  /**
+   */
+  void OnSettingsUpdated( AbstractImageModel* );
 };
 
 } // end namespace 'mvd'

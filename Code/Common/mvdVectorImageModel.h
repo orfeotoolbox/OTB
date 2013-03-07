@@ -392,10 +392,13 @@ public slots:
 //
 // Signals.
 signals:
-  /**   */
-  void SettingsUpdated();
+  /**
+   */
+  void SettingsUpdated( AbstractImageModel* imageModel =NULL );
+
   /**   */
   void ViewportRegionChanged(double, double);
+
   /** */
   void CurrentIndexUpdated(const QString&);
   void CurrentPhysicalUpdated(const QString&);

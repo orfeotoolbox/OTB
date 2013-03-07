@@ -774,11 +774,6 @@ VectorImageModel
     // Update quicklook rendering-settings.
     quicklookModel->SetSettings( GetSettings() );
     quicklookModel->OnModelUpdated();
-
-    // Ensure parent model is dataset-model.
-    assert( GetDatasetModel()!=NULL );
-    // Get parent dataset-model.
-    DatasetModel* datasetModel = GetDatasetModel();
     }
 
   // TODO: Update DatasetDescriptor.
@@ -786,7 +781,7 @@ VectorImageModel
 
   // Emit rendering settings are updated so that display could be
   // refreshed.
-  emit SettingsUpdated();
+  emit SettingsUpdated( this );
 }
 
 /*******************************************************************************/

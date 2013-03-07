@@ -143,7 +143,7 @@ DatasetModel
     if( id<0 )
       {
       //
-      // 2.3: Add image to Dataset descriptor file...
+      // 2.4a: Add image to Dataset descriptor file...
       m_Descriptor->InsertImageModel(
 	// ...providing newly calculated image-model ID.
 	context.m_Id,
@@ -153,9 +153,21 @@ DatasetModel
       );
 
       //
-      // 2.4: Force writing descriptor with newly imported image.
+      // 2.5a: Force writing descriptor with newly imported image.
       WriteDescriptor();
       }
+
+    //
+    // 2.6
+    // Connect rendering-settings updated of image-model to
+    // dataset-model in order to update XML descriptor.
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( SettingsUpdated( AbstractImageModel* ) ),
+      // to:
+      this,
+      SLOT( OnSettingsUpdated( AbstractImageModel* ) )
+    );
     }
   catch( std::exception& exc )
     {
@@ -318,5 +330,23 @@ DatasetModel
 /*******************************************************************************/
 
 /*******************************************************************************/
+void
+DatasetModel
+::OnSettingsUpdated( AbstractImageModel* imageModel )
+{
+  assert( imageModel!=NULL );
+
+  qDebug() << "DatasetModel::OnSettingsUpdated(" << imageModel->GetId() << ")";
+
+  VectorImageModel* vectorImageModel =
+    qobject_cast< VectorImageModel* >( imageModel );
+
+  assert( vectorImageModel!=NULL );
+
+  m_Descriptor->SetImageModel(
+    vectorImageModel->GetId(),
+    &vectorImageModel->GetSettings()
+  );
+}
 
 } // end namespace 'mvd'
