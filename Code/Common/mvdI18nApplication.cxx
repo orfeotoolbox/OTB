@@ -186,7 +186,9 @@ I18nApplication
     else
       {
       QString message( tr( "Failed to access translation-files directory '%1'" )
-                       .arg(QDir::cleanPath(prefix.path() + Monteverdi2_INSTALL_DATA_I18N_DIR)) );
+                       .arg(QDir::cleanPath(prefix.path()
+                             + QDir::separator()
+                             + Monteverdi2_INSTALL_DATA_I18N_DIR)) );
       qDebug() << message;
       QMessageBox::critical( NULL, tr( "Critical error" ), message );
       return;
