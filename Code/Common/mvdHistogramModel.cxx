@@ -80,6 +80,16 @@ HistogramModel
   // Contruct 1D measurement vector.
   Histogram::MeasurementVectorType measurement( 1 );
   measurement[ 0 ] = intensity;
+  
+  // Due to float/double conversion, it can happen
+  // that the minimum or maximum value go slightly outside the histogram
+  // Clamping the value solves the issue and avoid RangeError
+  measurement[0] =
+    itk::NumericTraits<MeasurementType>::Clamp(
+      measurement[0],
+      histogram->GetBinMin(0, 0),
+      histogram->GetBinMax(0, histogram->GetSize(0) - 1)
+      );
 
   // Get the index of measurement in 1D-histogram.
   Histogram::IndexType index;
