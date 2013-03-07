@@ -209,8 +209,8 @@ Application
     "orfeo-toolbox.org"
   );
 
-#if ! defined(Q_WS_WIN) && ! defined(Q_WS_MAC)
-  setWindowIcon( QPixmap( monteverdi2_xpm ) );
+#ifndef Q_WS_MAC
+    setWindowIcon(QIcon(QLatin1String(":/images/application_icon")));
 #endif
 
 }
