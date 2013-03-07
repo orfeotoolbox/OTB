@@ -150,7 +150,11 @@ ColorDynamicsController
   //
   // Reset color-dynamics widget.
   ResetIntensityRanges( RGBA_CHANNEL_RGB );
+#if 1
+  SetIntensities( RGBA_CHANNEL_RGB );
+#else
   ResetQuantiles( RGBA_CHANNEL_RGB );
+#endif
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -364,6 +368,86 @@ ColorDynamicsController
 
     colorBandDynWgt->SetHighIntensity( max );
     OnHighIntensityChanged( channel, max );
+    }
+    colorBandDynWgt->blockSignals( false );
+    }
+  }
+  this->blockSignals( false );
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsController
+::SetIntensities( RgbaChannel channels )
+{
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = -1;
+  CountType end = -1;
+
+  if( !mvd::RgbBounds( begin, end, channels ) )
+    return;
+
+  //
+  // Access color-dynamics widget.
+  ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
+
+  //
+  // Access image-model.
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  /*
+  //
+  // Access histogram from generic image-model.
+  const HistogramModel* histogramModel = imageModel->GetHistogramModel();
+  assert( histogramModel!=NULL );
+
+  // Get min/max pixels.
+  DefaultImageType::PixelType minPx( histogramModel->GetMinPixel() );
+  DefaultImageType::PixelType maxPx( histogramModel->GetMaxPixel() );
+  */
+
+  // Get image rengering settings.
+  const VectorImageModel::Settings& settings = imageModel->GetSettings();
+
+
+  // Block this controller's signals to prevent display refreshes
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  this->blockSignals( true );
+  {
+  // Assign values to controlled widget.
+  for( CountType i=begin; i<end; ++i )
+    {
+    RgbaChannel channel = static_cast< RgbaChannel >( i );
+
+    ColorBandDynamicsWidget* colorBandDynWgt =
+      colorDynamicsWidget->GetChannel( channel );
+
+    /*
+    DefaultImageType::PixelType::ValueType min(
+      minPx[ settings.RgbChannel( channel ) ]
+    );
+
+    DefaultImageType::PixelType::ValueType max(
+      maxPx[ settings.RgbChannel( channel ) ]
+    );
+    */
+
+    ParametersType::ValueType low = settings.DynamicsParam( 2 * channel );
+    ParametersType::ValueType high = settings.DynamicsParam( 2 * channel + 1 );
+
+    // Block widget's signals...
+    //...but force call to valueChanged() slot to force refresh.
+    colorBandDynWgt->blockSignals( true );
+    {
+    // Set low & high intensities.
+    colorBandDynWgt->SetLowIntensity( low );
+    OnLowIntensityChanged( channel, low );
+
+    colorBandDynWgt->SetHighIntensity( high );
+    OnHighIntensityChanged( channel, high );
     }
     colorBandDynWgt->blockSignals( false );
     }

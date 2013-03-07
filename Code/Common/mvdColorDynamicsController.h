@@ -164,6 +164,10 @@ private:
   void ResetIntensities( RgbaChannel );
 
   /**
+   */
+  void SetIntensities( RgbaChannel );
+
+  /**
    * \brief Reset low and high quantiles to default values for given
    * RGB channels.
    *
