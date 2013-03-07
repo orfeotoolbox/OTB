@@ -63,6 +63,10 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   
   // Default step
   m_Step = 1;
+  
+  // Default grid index
+  m_GridIndex[0] = 0;
+  m_GridIndex[1] = 0;
 }
 
 
@@ -321,11 +325,13 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   
   // Sanity check
   if (this->m_Step == 0) this->m_Step = 1;
+  this->m_GridIndex[0] = this->m_GridIndex[0] % this->m_Step;
+  this->m_GridIndex[1] = this->m_GridIndex[1] % this->m_Step;
     
   // Modify output size and index depending on the step
   const TInputImage * inLeftPtr  = this->GetLeftInput();
   
-  RegionType outputLargest = this->ConvertFullToSubsampledRegion(inLeftPtr->GetLargestPossibleRegion());
+  RegionType outputLargest = this->ConvertFullToSubsampledRegion(inLeftPtr->GetLargestPossibleRegion(), this->m_Step, this->m_GridIndex);
   
   TOutputMetricImage    * outMetricPtr = const_cast<TOutputMetricImage * >(this->GetMetricOutput());
   TOutputDisparityImage * outHDispPtr = const_cast<TOutputDisparityImage * >(this->GetHorizontalDisparityOutput());
@@ -343,6 +349,16 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   outMetricPtr->SetSpacing(outSpacing);
   outHDispPtr->SetSpacing(outSpacing);
   outVDispPtr->SetSpacing(outSpacing);
+  
+  // Adapt origin
+  PointType outOrigin = inLeftPtr->GetOrigin();
+  SpacingType inSpacing = inLeftPtr->GetSpacing();
+  outOrigin[0] += inSpacing[0] * static_cast<double>(this->m_GridIndex[0]);
+  outOrigin[1] += inSpacing[1] * static_cast<double>(this->m_GridIndex[1]);
+  
+  outMetricPtr->SetOrigin(outOrigin);
+  outHDispPtr->SetOrigin(outOrigin);
+  outVDispPtr->SetOrigin(outOrigin);
 }
 
 template <class TInputImage, class TOutputMetricImage,
@@ -404,10 +420,12 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   // Sanity check
   if (this->m_Step == 0) this->m_Step = 1;
+  this->m_GridIndex[0] = this->m_GridIndex[0] % this->m_Step;
+  this->m_GridIndex[1] = this->m_GridIndex[1] % this->m_Step;
 
   // Retrieve requested region (TODO: check if we need to handle
   // region for outHDispPtr)
-  RegionType inputLeftRegion = this->ConvertSubsampledToFullRegion(outMetricPtr->GetRequestedRegion());
+  RegionType inputLeftRegion = this->ConvertSubsampledToFullRegion(outMetricPtr->GetRequestedRegion(), this->m_Step, this->m_GridIndex);
   
   // Pad by the appropriate radius
   inputLeftRegion.PadByRadius(m_Radius);
@@ -509,6 +527,8 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   
   // Sanity check
   if (this->m_Step == 0) this->m_Step = 1;
+  this->m_GridIndex[0] = this->m_GridIndex[0] % this->m_Step;
+  this->m_GridIndex[1] = this->m_GridIndex[1] % this->m_Step;
 }
 
 template <class TInputImage, class TOutputMetricImage,
@@ -541,7 +561,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   initMaskPtr->FillBuffer(0);
   
   // Compute region for thread at full resolution
-  RegionType fullRegionForThread = this->ConvertSubsampledToFullRegion(outputRegionForThread);
+  RegionType fullRegionForThread = this->ConvertSubsampledToFullRegion(outputRegionForThread, this->m_Step, this->m_GridIndex);
 
   // Check if we use initial disparities and exploration radius
   bool useExplorationRadius = false;
@@ -580,7 +600,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     inputLeftRegion.SetSize(inputRightRegion.GetSize());
     
     // Compute the equivalent region in subsampled grid
-    RegionType outputRegion = this->ConvertFullToSubsampledRegion(inputLeftRegion);
+    RegionType outputRegion = this->ConvertFullToSubsampledRegion(inputLeftRegion, this->m_Step, this->m_GridIndex);
 
     // Define iterators
     itk::ConstNeighborhoodIterator<TInputImage>     leftIt(m_Radius,inLeftPtr,inputLeftRegion);
@@ -638,8 +658,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
           || !initIt.IsAtEnd())
       {
       // If the pixel location is on the subsampled grid
-      IndexType tmpIndex = leftIt.GetIndex();
-      if ((tmpIndex[0] % this->m_Step == 0) && (tmpIndex[1] % this->m_Step == 0))
+      IndexType tmpIndex = leftIt.GetIndex(leftIt.GetCenterNeighborhoodIndex());
+      if (((tmpIndex[0] - this->m_GridIndex[0]) % this->m_Step == 0) &&
+          ((tmpIndex[1] - this->m_GridIndex[1]) % this->m_Step == 0))
         {
         // If the mask is present and valid
         if(!inLeftMaskPtr || (inLeftMaskPtr && inLeftMaskIt.Get() > 0) )
@@ -743,21 +764,25 @@ typename PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>::RegionType
 PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::ConvertFullToSubsampledRegion(RegionType full)
+::ConvertFullToSubsampledRegion(RegionType full, unsigned int step, IndexType index)
 {
+  IndexType shiftedFull = full.GetIndex();
+  shiftedFull[0] -= index[0];
+  shiftedFull[1] -= index[1];
+  
   IndexType subIndex;
-  subIndex[0] = full.GetIndex(0) / this->m_Step;
-  subIndex[1] = full.GetIndex(1) / this->m_Step;
-  if (full.GetIndex(0) % this->m_Step) ++subIndex[0];
-  if (full.GetIndex(1) % this->m_Step) ++subIndex[1];
+  subIndex[0] = (shiftedFull[0]) / step;
+  subIndex[1] = (shiftedFull[1]) / step;
+  if (shiftedFull[0] % step) ++subIndex[0];
+  if (shiftedFull[1] % step) ++subIndex[1];
   
   SizeType subSize;
-  subSize[0] = (full.GetSize(0) - (subIndex[0] * this->m_Step) + full.GetIndex(0)) / this->m_Step;
-  subSize[1] = (full.GetSize(1) - (subIndex[1] * this->m_Step) + full.GetIndex(1)) / this->m_Step;
+  subSize[0] = (full.GetSize(0) - (subIndex[0] * step) + shiftedFull[0]) / step;
+  subSize[1] = (full.GetSize(1) - (subIndex[1] * step) + shiftedFull[1]) / step;
   
-  if ((full.GetSize(0) - (subIndex[0] * this->m_Step) + full.GetIndex(0)) % this->m_Step)
+  if ((full.GetSize(0) - (subIndex[0] * step) + shiftedFull[0]) % step)
     ++subSize[0];
-  if ((full.GetSize(1) - (subIndex[1] * this->m_Step) + full.GetIndex(1)) % this->m_Step)
+  if ((full.GetSize(1) - (subIndex[1] * step) + shiftedFull[1]) % step)
     ++subSize[1];
   
   RegionType subRegion;
@@ -772,17 +797,17 @@ typename PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>::RegionType
 PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::ConvertSubsampledToFullRegion(RegionType sub)
+::ConvertSubsampledToFullRegion(RegionType sub, unsigned int step, IndexType index)
 {
   IndexType fullIndex;
-  fullIndex[0] = sub.GetIndex(0) * this->m_Step;
-  fullIndex[1] = sub.GetIndex(1) * this->m_Step;
+  fullIndex[0] = sub.GetIndex(0) * step + index[0];
+  fullIndex[1] = sub.GetIndex(1) * step + index[1];
   
   SizeType fullSize;
-  fullSize[0] = sub.GetSize(0) * this->m_Step;
-  fullSize[1] = sub.GetSize(1) * this->m_Step;
-  if (fullSize[0] > 0) fullSize[0] -= (this->m_Step - 1);
-  if (fullSize[1] > 0) fullSize[1] -= (this->m_Step - 1);
+  fullSize[0] = sub.GetSize(0) * step;
+  fullSize[1] = sub.GetSize(1) * step;
+  if (fullSize[0] > 0) fullSize[0] -= (step - 1);
+  if (fullSize[1] > 0) fullSize[1] -= (step - 1);
   
   RegionType fullRegion;
   fullRegion.SetIndex(fullIndex);

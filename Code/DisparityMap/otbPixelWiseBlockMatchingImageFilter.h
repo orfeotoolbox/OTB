@@ -268,6 +268,7 @@ public:
   typedef typename InputImageType::IndexType                IndexType;
   typedef typename InputImageType::RegionType               RegionType;
   typedef typename InputImageType::SpacingType              SpacingType;
+  typedef typename InputImageType::PointType                PointType;
   
   typedef typename TOutputMetricImage::ValueType            MetricValueType;
   
@@ -368,8 +369,19 @@ public:
   const TOutputDisparityImage * GetHorizontalDisparityInput() const;
   const TOutputDisparityImage * GetVerticalDisparityInput() const;
   
+  /** Set/Get macro for the subsampling step */
   itkSetMacro(Step, unsigned int);
   itkGetMacro(Step, unsigned int);
+  
+  /** Set/Get macro for the grid start index */
+  itkSetMacro(GridIndex, IndexType);
+  itkGetConstReferenceMacro(GridIndex, IndexType);
+  
+  /** Conversion function between full and subsampled grid region */
+  static RegionType ConvertFullToSubsampledRegion(RegionType full, unsigned int step, IndexType index);
+  
+  /** Conversion function between subsampled and full grid region */
+  static RegionType ConvertSubsampledToFullRegion(RegionType sub, unsigned int step, IndexType index);
 
 protected:
   /** Constructor */
@@ -393,10 +405,6 @@ protected:
 private:
   PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemeFnted
-  
-  RegionType ConvertFullToSubsampledRegion(RegionType full);
-  
-  RegionType ConvertSubsampledToFullRegion(RegionType sub);
  
   /** The radius of the blocks */
   SizeType                      m_Radius;
@@ -430,10 +438,14 @@ private:
     disparity map is given) */
   int                           m_InitVerticalDisparity;
   
-  /** Computation step : disparities are computed on locations of a subsampled grid
-   * (the subsampled grid is aligned with the index location [0,0])
-   */
+  /** Computation step : disparities are computed on locations of a subsampled grid */
   unsigned int                  m_Step;
+  
+  /** Starting index for the subsampled grid. The index is measured with respect to the input image grid 
+   *  Each coordinate shall lie in [0, m_Step-1]
+   */
+  IndexType                     m_GridIndex;
+  
 };
 } // end namespace otb
 
