@@ -144,6 +144,10 @@ public:
 
   /**
    */
+  void SetImageModel( int id, void* settings );
+
+  /**
+   */
   void Write( const QString& filename ) const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/

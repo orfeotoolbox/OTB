@@ -246,6 +246,13 @@ DatasetDescriptor
 /*******************************************************************************/
 void
 DatasetDescriptor
+::SetImageModel( int id, void* settings )
+{
+}
+
+/*******************************************************************************/
+void
+DatasetDescriptor
 ::Read( const QString& filename )
 {
   // File instance.
