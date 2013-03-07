@@ -175,6 +175,44 @@ DatasetDescriptor
 }
 
 /*******************************************************************************/
+bool
+DatasetDescriptor
+::SetImageModel( int id, void* settings )
+{
+  qDebug() << "DatasetDescriptor::SetImageModel(" << id << ")";
+
+  assert( settings!=NULL );
+
+  // Access image information element.
+  QDomElement imageInfoElt( GetImageElement( id ) );
+  if( imageInfoElt.isNull() )
+    return false;
+
+  // Access settings group element.
+  QDomElement settingsElt(
+    imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_SETTINGS_GROUP ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !settingsElt.isNull() );  
+
+  // RGB
+  QDomElement rgbElt(
+    settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_RGB_CHANNELS  ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !rgbElt.isNull() );
+  // TODO: Set RGB text here.
+
+  // Dynamics
+  QDomElement dynamicsElt(
+    settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_DYNAMICS_PARAMETERS ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !dynamicsElt.isNull() );
+  // TODO: Set dynamics text here.
+}
+
+/*******************************************************************************/
 void
 DatasetDescriptor
 ::GetImageModel( const QDomElement& imageSibling,
@@ -241,13 +279,6 @@ DatasetDescriptor
     assert( dynamics.GetSize() == 6 );
     settings->SetDynamicsParams( dynamics );
     }
-}
-
-/*******************************************************************************/
-void
-DatasetDescriptor
-::SetImageModel( int id, void* settings )
-{
 }
 
 /*******************************************************************************/

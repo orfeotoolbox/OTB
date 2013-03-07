@@ -144,7 +144,7 @@ public:
 
   /**
    */
-  void SetImageModel( int id, void* settings );
+  bool SetImageModel( int id, void* settings );
 
   /**
    */
@@ -204,7 +204,11 @@ private:
   static
   void ExtractArrayFromNode( itk::Array<T>& array,
                              QDomElement& tagName );
-  
+
+  /**
+   */
+  inline QDomElement GetImageElement( int id );
+
   /**
    */
   void Read( const QString& filename );
@@ -281,8 +285,6 @@ namespace mvd
 {
 
 /*****************************************************************************/
-
-/*****************************************************************************/
 inline
 QDomElement
 DatasetDescriptor
@@ -291,6 +293,21 @@ DatasetDescriptor
   return m_ImagesGroupElement.firstChildElement(
       TAG_NAMES[ ELEMENT_IMAGE_INFORMATION ]
   );
+}
+
+/*****************************************************************************/
+inline
+QDomElement
+DatasetDescriptor
+::GetImageElement( int id )
+{
+  QDomElement imageElt;
+
+  for( imageElt = FirstImageElement();
+       !imageElt.isNull() && imageElt.attribute( "id" ).toInt()==id;
+       imageElt = DatasetDescriptor::NextImageSiblingElement( imageElt ) );
+
+  return imageElt;
 }
 
 /*****************************************************************************/
@@ -331,6 +348,7 @@ DatasetDescriptor
   return vectorElement;
 }
 
+/*****************************************************************************/
 template< typename T >
 inline
 void
@@ -358,6 +376,7 @@ DatasetDescriptor
     }
 }
 
+/*****************************************************************************/
 template< typename T >
 inline
 void
