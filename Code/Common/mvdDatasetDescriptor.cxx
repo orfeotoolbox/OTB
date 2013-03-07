@@ -153,9 +153,11 @@ DatasetDescriptor
 
   // RGB channels.
   QDomElement rgbElement(
-    CreateContainerNode(
-      settings->GetRgbChannels().begin(),
-      settings->GetRgbChannels().end(),
+    CreateTextNode(
+      ContainerToString(
+        settings->GetRgbChannels().begin(),
+        settings->GetRgbChannels().end()
+      ),
       TAG_NAMES[ ELEMENT_RGB_CHANNELS ]
     )
   );
@@ -164,9 +166,11 @@ DatasetDescriptor
   //
   // Dynamics parameters.
   QDomElement dynamicsElement(
-    CreateContainerNode(
-      settings->GetDynamicsParams().begin(),
-      settings->GetDynamicsParams().end(),
+    CreateTextNode(
+      ContainerToString(
+        settings->GetDynamicsParams().begin(),
+        settings->GetDynamicsParams().end()
+      ),
       TAG_NAMES[ ELEMENT_DYNAMICS_PARAMETERS ]
     )
   );
@@ -210,6 +214,8 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   assert( !dynamicsElt.isNull() );
   // TODO: Set dynamics text here.
+  
+  
 }
 
 /*******************************************************************************/
@@ -264,7 +270,7 @@ DatasetDescriptor
     // TODO: Manage XML structure errors.
     assert( !rgbElt.isNull() );
     VectorImageModel::Settings::ChannelVector rgb;
-    ExtractVectorFromNode( rgb, rgbElt );
+    ExtractVectorFromElement( rgb, rgbElt );
     assert( rgb.size() == 3 );
     settings->SetRgbChannels( rgb );
 
@@ -275,7 +281,7 @@ DatasetDescriptor
     // TODO: Manage XML structure errors.
     assert( !dynamicsElt.isNull() );
     ParametersType dynamics;
-    ExtractArrayFromNode( dynamics, dynamicsElt );
+    ExtractArrayFromElement( dynamics, dynamicsElt );
     assert( dynamics.GetSize() == 6 );
     settings->SetDynamicsParams( dynamics );
     }

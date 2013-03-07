@@ -177,15 +177,21 @@ protected:
 //
 // Private methods.
 private:
-
+  
   /**
-   * \brief Serialize an STL-compliant container to a QDomElement
+   * \brief Serialize an STL-compliant container to a QString
    */
   template< typename TInputIterator >
   inline
-  QDomElement CreateContainerNode( const TInputIterator& first,
-                                   const TInputIterator& last,
-                                   const QString& tagName );
+  QString ContainerToString( const TInputIterator& first,
+                             const TInputIterator& last );
+  
+  /**
+   * \brief Create a QDomElement containing specified text as child
+   */
+  inline
+  QDomElement CreateTextNode( const QString& text,
+                              const QString& tagName );
 
   /**
    * \brief Deserialize a std::vector from a QDomElement
@@ -193,8 +199,8 @@ private:
   template< typename T >
   inline
   static
-  void ExtractVectorFromNode( std::vector<T>& vector,
-                              QDomElement& tagName );
+  void ExtractVectorFromElement( std::vector<T>& vector,
+                                 QDomElement& tagName );
   
   /**
    * \brief Deserialize a itk::Array from a QDomElement
@@ -202,8 +208,8 @@ private:
   template< typename T >
   inline
   static
-  void ExtractArrayFromNode( itk::Array<T>& array,
-                             QDomElement& tagName );
+  void ExtractArrayFromElement( itk::Array<T>& array,
+                                QDomElement& tagName );
 
   /**
    */
@@ -322,27 +328,33 @@ DatasetDescriptor
 /*****************************************************************************/
 template< typename TInputIterator >
 inline
-QDomElement
+QString
 DatasetDescriptor
-::CreateContainerNode( const TInputIterator& first,
-		       const TInputIterator& last,
-		       const QString& tagName )
+::ContainerToString( const TInputIterator& first,
+                     const TInputIterator& last )
 {
   QStringList stringList;
-
-  for( TInputIterator it( first );
-       it!=last;
-       ++it )
+  
+  for( TInputIterator it( first ); it != last; ++it )
     {
     stringList.append( QString( "%1" ).arg( *it ) );
     }
+  return stringList.join( " " );
+}
 
-  QDomText textNode( m_DomDocument.createTextNode( stringList.join( " " ) ) );
-  assert( !textNode.isNull() );
-
+/*****************************************************************************/
+inline
+QDomElement
+DatasetDescriptor
+::CreateTextNode( const QString& text,
+                  const QString& tagName )
+{
   QDomElement vectorElement( m_DomDocument.createElement( tagName ) );
   assert( !vectorElement.isNull() );
 
+  QDomText textNode( m_DomDocument.createTextNode( text ) );
+  assert( !textNode.isNull() );
+  
   vectorElement.appendChild( textNode );
 
   return vectorElement;
@@ -353,8 +365,8 @@ template< typename T >
 inline
 void
 DatasetDescriptor
-::ExtractVectorFromNode( std::vector<T>& vector,
-                         QDomElement& element )
+::ExtractVectorFromElement( std::vector<T>& vector,
+                            QDomElement& element )
 {
   QDomNode node = element.firstChild();
   // TODO: Manage XML structure errors.
@@ -381,8 +393,8 @@ template< typename T >
 inline
 void
 DatasetDescriptor
-::ExtractArrayFromNode( itk::Array<T>& array,
-                        QDomElement& element )
+::ExtractArrayFromElement( itk::Array<T>& array,
+                           QDomElement& element )
 {
   QDomNode node = element.firstChild();
   // TODO: Manage XML structure errors.
