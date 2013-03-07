@@ -127,10 +127,13 @@ DatasetModel
     // If first time, import image into descriptor.
     if( foo )
       {
+      AbstractImageModelList aimList( GetImageModels() );
+      int id = aimList.indexOf( vectorImageModel );
+
       //
       // 2.3: Add image to Dataset descriptor file.
       m_Descriptor->InsertImageModel(
-	GetImageModels().size(),
+	id,
 	vectorImageModel->GetFilename(),
 	&vectorImageModel->GetSettings(),
 	vectorImageModel->GetQuicklookModel()->GetFilename()

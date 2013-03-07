@@ -275,6 +275,20 @@ public:
   /** Destructor */
   virtual ~VectorImageModel();
 
+  /**
+   * \brief Get the parent DatasetModel.
+   *
+   * \return The parent DatasetModel.
+   */
+  inline const DatasetModel* GetDatasetModel() const;
+
+  /**
+   * \brief Get the parent DatasetModel.
+   *
+   * \return The parent DatasetModel.
+   */
+  inline DatasetModel* GetDatasetModel();
+
   /** */
   static void EnsureValidImage(QString filename)
   {
@@ -294,20 +308,6 @@ public:
                   "Please check.").arg( filename ) ) );
     }
   }
-
-  /**
-   * \brief Get the parent DatasetModel.
-   *
-   * \return The parent DatasetModel.
-   */
-  inline const DatasetModel* GetDatasetModel() const;
-
-  /**
-   * \brief Get the parent DatasetModel.
-   *
-   * \return The parent DatasetModel.
-   */
-  inline DatasetModel* GetDatasetModel();
 
   /** */
   // TODO: Move into template wrapper base-class.
@@ -596,7 +596,8 @@ const DatasetModel*
 VectorImageModel
 ::GetDatasetModel() const
 {
-  return qobject_cast< const DatasetModel* >( parent() );
+  // assert( GetParentModel()==GetParentModel< DatasetModel >() );
+  return GetParentModel< DatasetModel >();
 }
 
 /*****************************************************************************/
@@ -604,7 +605,8 @@ DatasetModel*
 VectorImageModel
 ::GetDatasetModel()
 {
-  return qobject_cast< DatasetModel* >( parent() );
+  // assert( GetParentModel()==GetParentModel< DatasetModel >() );
+  return GetParentModel< DatasetModel >();
 }
 
 /*****************************************************************************/

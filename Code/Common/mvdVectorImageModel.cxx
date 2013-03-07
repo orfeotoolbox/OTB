@@ -774,6 +774,19 @@ VectorImageModel
     quicklookModel->OnModelUpdated();
     }
 
+#if 0
+  // Ensure type of parent model.
+  assert( GetDatasetModel()!=NULL );
+  qDebug() << GetDatasetModel();
+  // Get parent dataset model.
+  DatasetModel* datasetModel = GetDatasetModel();
+#endif
+
+  // TODO: Update DatasetDescriptor.
+  // datasetModel->Foo();
+
+  // Emit rendering settings are updated so that display could be
+  // refreshed.
   emit SettingsUpdated();
 }
 

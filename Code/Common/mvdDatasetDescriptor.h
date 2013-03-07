@@ -338,13 +338,13 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   assert( !node.isNull() );
   assert( node.isText() );
-  
+
   QDomText textNode = node.toText();
   assert( !textNode.isNull() );
 
   QString data = textNode.data();
   QStringList stringList = data.split(" ");
-  
+
   size_t size = static_cast<size_t>(stringList.size());
   vector.resize(size);
   for (size_t i = 0; i < size; ++i)
@@ -365,7 +365,7 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   assert( !node.isNull() );
   assert( node.isText() );
-  
+
   QDomText textNode = node.toText();
   assert( !textNode.isNull() );
   
