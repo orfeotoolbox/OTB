@@ -107,6 +107,16 @@ public:
    */
   inline AbstractModel* GetModel();
 
+ /**
+  */
+  template< typename TModel >
+  inline const TModel* GetModel() const;
+
+  /**
+   */
+  template< typename TModel >
+  inline TModel* GetModel();
+
   /**
    *
    */
@@ -254,6 +264,26 @@ Application
 ::GetModel()
 {
   return m_Model;
+}
+
+/*****************************************************************************/
+template< typename TModel >
+inline
+const TModel*
+Application
+::GetModel() const
+{
+  return qobject_cast< const TModel* >( m_Model );
+}
+
+/*****************************************************************************/
+template< typename TModel >
+inline
+TModel*
+Application
+::GetModel()
+{
+  return qobject_cast< TModel* >( m_Model );
 }
 
 /*****************************************************************************/

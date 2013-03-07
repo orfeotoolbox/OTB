@@ -118,16 +118,11 @@ public:
 // Public methods.
 public:
 
-  /** Constructor */
+  /** \brief Constructor. */
   DatasetModel( QObject* parent =NULL );
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~DatasetModel();
-
-  /** */
-#if 0
-  bool SetContent( const QString& path, const QString& name );
-#endif
 
   /**
    */
@@ -156,6 +151,11 @@ public:
   /**
    */
   inline ConstAbstractImageModelList GetImageModels() const;
+
+  //
+  // AbstractModel overrides.
+
+  virtual bool IsModified() const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

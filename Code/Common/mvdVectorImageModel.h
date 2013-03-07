@@ -369,6 +369,11 @@ public:
    */
   std::string GetCenterPixelPlaceName();
 
+  //
+  // AbstractModel overrides.
+
+  virtual bool IsModified() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

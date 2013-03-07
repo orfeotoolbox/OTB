@@ -253,7 +253,7 @@ void
 Application
 ::OnAboutToQuit()
 {
-  qDebug() << tr( ">DEBUG> mvd::Application::OnAboutToQuit()." );
+  qDebug() << tr( "mvd::Application::OnAboutToQuit()." );
 }
 
 } // end namespace 'mvd'

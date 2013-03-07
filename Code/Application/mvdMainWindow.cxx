@@ -378,14 +378,22 @@ MainWindow
 void
 MainWindow::closeEvent( QCloseEvent* event )
 {
-  qDebug() << "MainWindow::closeEvent(" << event << ")";
-
   assert( event!=NULL );
 
-  /*
-  if( !GetModel()->IsModified() )
+  qDebug() << "MainWindow::closeEvent(" << event << ")";
+
+  // Ensure there is an application instance.
+  assert( Application::ConstInstance()!=NULL );
+  // Ensure that there is no model or that the existing model is a
+  // DatasetModel.
+  assert( Application::ConstInstance()->GetModel()==
+	  Application::ConstInstance()->GetModel< DatasetModel >() );
+  // Get model.
+  const DatasetModel* model =
+    Application::ConstInstance()->GetModel< DatasetModel >();
+
+  if( model==NULL || !model->IsModified() )
     return;
-  */
 
   QMessageBox::StandardButton clickedButton = ConfirmSaveQuit( true );
 

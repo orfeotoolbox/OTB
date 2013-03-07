@@ -250,6 +250,27 @@ DatasetModel
 }
 
 /*******************************************************************************/
+bool
+DatasetModel
+::IsModified() const
+{
+  ConstAbstractImageModelList aimList( GetImageModels() );
+
+  // If, at least one image-model is modified, then this dataset-model
+  // is considered modified.
+  for( ConstAbstractImageModelList::const_iterator it( aimList.begin() );
+       it!=aimList.end();
+       ++it )
+    {
+    if( ( *it )->IsModified() )
+      return true;
+    }
+
+  // Otherwise, this dataset-model is not modified.
+  return false;
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 

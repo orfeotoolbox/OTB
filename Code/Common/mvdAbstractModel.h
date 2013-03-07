@@ -104,6 +104,10 @@ public:
   /** */
   inline void BuildModel( void* context =NULL );
 
+  /**
+   */
+  virtual bool IsModified() const;
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
