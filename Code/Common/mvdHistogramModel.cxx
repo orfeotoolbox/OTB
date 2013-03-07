@@ -102,11 +102,13 @@ HistogramModel
   MeasurementType minI = histogram->GetBinMin( 0, index[ 0 ] );
   MeasurementType maxI = histogram->GetBinMax( 0, index[ 0 ] );
 
-  // Min/max frequencies of 
+  // Frequency of current bin
   Histogram::FrequencyType frequency( histogram->GetFrequency( index ) );
 
-  // Initialize result.
-  double percent = frequency * ( intensity - minI ) / ( maxI - minI );
+  // Initialize result (contribution of current bin)
+  double percent = frequency
+                    * ( intensity - (bound == BOUND_LOWER ? minI : maxI) )
+                    / ( maxI - minI );
 
   // Number of bins of histogram.
   Histogram::SizeType::SizeValueType binCount = histogram->Size();
@@ -134,12 +136,12 @@ HistogramModel
       break;
     };
 
-  // Traverse lower/upper bound.
+  // Traverse lower/upper bound (contribution of other bins)
   Histogram::SizeType::SizeValueType i;
 
   for( i=i0; i<iN; ++i )
     percent += histogram->GetFrequency( i, 0 );
-
+  
   // Calculate frequency rate.
   percent /= histogram->GetTotalFrequency();
 
