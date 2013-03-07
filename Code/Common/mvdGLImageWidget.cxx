@@ -36,7 +36,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractImageModel.h"
-#include "mvdApplication.h"
 #include "mvdDatasetModel.h"
 
 namespace mvd
