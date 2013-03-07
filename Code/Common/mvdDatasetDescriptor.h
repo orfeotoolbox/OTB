@@ -310,7 +310,7 @@ DatasetDescriptor
   QDomElement imageElt;
 
   for( imageElt = FirstImageElement();
-       !imageElt.isNull() && imageElt.attribute( "id" ).toInt()==id;
+       !imageElt.isNull() && imageElt.attribute( "id" ).toInt()!=id;
        imageElt = DatasetDescriptor::NextImageSiblingElement( imageElt ) );
 
   return imageElt;

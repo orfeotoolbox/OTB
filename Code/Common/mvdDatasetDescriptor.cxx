@@ -181,11 +181,11 @@ DatasetDescriptor
 /*******************************************************************************/
 bool
 DatasetDescriptor
-::SetImageModel( int id, void* settings )
+::SetImageModel( int id, void* imageSettings )
 {
   qDebug() << "DatasetDescriptor::SetImageModel(" << id << ")";
 
-  assert( settings!=NULL );
+  assert( imageSettings!=NULL );  
 
   // Access image information element.
   QDomElement imageInfoElt( GetImageElement( id ) );
@@ -199,20 +199,61 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   assert( !settingsElt.isNull() );  
 
-  // RGB
-  QDomElement rgbElt(
-    settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_RGB_CHANNELS  ] )
-  );
-  // TODO: Manage XML structure errors.
-  assert( !rgbElt.isNull() );
-  // TODO: Set RGB text here.
+  VectorImageModel::Settings* settings =
+    static_cast< VectorImageModel::Settings* >( imageSettings );
+  
+  {
+    // RGB
+    QDomElement rgbElt(
+      settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_RGB_CHANNELS  ] )
+    );
+    // TODO: Manage XML structure errors.
+    assert( !rgbElt.isNull() );
+    
+    QDomNode node = rgbElt.firstChild();
+    // TODO: Manage XML structure errors.
+    assert( !node.isNull() );
+    assert( node.isText() );
+    
+    QDomText textNode( node.toText() );
+    // TODO: Manage XML structure errors.
+    assert( !textNode.isNull() );
+    
+    textNode.setData(
+      ContainerToString(
+        settings->GetRgbChannels().begin(),
+        settings->GetRgbChannels().end()
+      )
+    );
+  }
 
+  {
+    // Dynamics
+    QDomElement dynamicsElt(
+      settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_DYNAMICS_PARAMETERS ] )
+    );
+    // TODO: Manage XML structure errors.
+    assert( !dynamicsElt.isNull() );
+    
+    QDomNode node = dynamicsElt.firstChild();
+    // TODO: Manage XML structure errors.
+    assert( !node.isNull() );
+    assert( node.isText() );
+    
+    QDomText textNode( node.toText() );
+    // TODO: Manage XML structure errors.
+    assert( !textNode.isNull() );
+    
+    textNode.setData(
+      ContainerToString(
+        settings->GetDynamicsParams().begin(),
+        settings->GetDynamicsParams().end()
+      )
+    );
+  }
   // Dynamics
-  QDomElement dynamicsElt(
-    settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_DYNAMICS_PARAMETERS ] )
-  );
   // TODO: Manage XML structure errors.
-  assert( !dynamicsElt.isNull() );
+  
   // TODO: Set dynamics text here.
   
   
