@@ -441,7 +441,7 @@ private:
   /** Computation step : disparities are computed on locations of a subsampled grid */
   unsigned int                  m_Step;
   
-  /** Starting index for the subsampled grid. The index is measured with respect to the input image grid 
+  /** Starting index for the subsampled grid. The index is measured with respect to the input image grid
    *  Each coordinate shall lie in [0, m_Step-1]
    */
   IndexType                     m_GridIndex;
