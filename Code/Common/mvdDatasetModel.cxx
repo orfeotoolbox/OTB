@@ -202,14 +202,14 @@ DatasetModel
     m_Descriptor = newChildModel< DatasetDescriptor >( &context );
 
     // Load image-models from descriptor.
-    ParseDescriptor();
+    ParseDescriptor(buildContext);
     }
 }
 
 /*******************************************************************************/
 void
 DatasetModel
-::ParseDescriptor()
+::ParseDescriptor(BuildContext* bContext )
 {
   for( QDomElement imageElt( m_Descriptor->FirstImageElement() );
        !imageElt.isNull();
@@ -234,7 +234,7 @@ DatasetModel
     // TODO: 1) Re-use quicklook filename.
     // TODO: 2) Assign rendering-settings.
     // TODO: 3) Remove WxH for screen best-fit during loading of model!
-    LoadImage( filename, false, -1, -1 );
+    LoadImage( filename, false, bContext->m_Width, bContext->m_Height );
     }
 }
 

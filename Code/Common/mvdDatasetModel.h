@@ -97,9 +97,11 @@ public:
     //
     // Public methods.
   public:
-    BuildContext( const QString& path, const QString& name ) :
+    BuildContext( const QString& path, const QString& name, int width, int height ) :
       m_Path( path ),
-      m_Name( name )
+      m_Name( name ),
+      m_Width(width),
+      m_Height(height)
     {
     }
 
@@ -108,6 +110,8 @@ public:
   public:
     QString m_Path;
     QString m_Name;
+    int m_Width;
+    int m_Height;
   };
 
 //
@@ -196,7 +200,7 @@ private:
   void LoadImage( const QString& filename, bool foo, int width, int height );
 
   /** */
-  void ParseDescriptor();
+  void ParseDescriptor(BuildContext* bContext );
 
   /** */
   void WriteDescriptor() const;

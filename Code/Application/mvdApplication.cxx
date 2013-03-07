@@ -118,7 +118,7 @@ Application::LoadDatasetModel( const QString& imageFilename,
     // try if the filename is valid
     VectorImageModel::EnsureValidImage(imageFilename);
     // Build model (relink to cached data).
-    DatasetModel::BuildContext context( path, name );
+    DatasetModel::BuildContext context( path, name, width, height );
     model->BuildModel( &context );
 
     // Load image if DatasetModel is empty.
