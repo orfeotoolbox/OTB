@@ -842,7 +842,7 @@ WorldView2ImageMetadataInterface
       // Manage MS case
       if ( !(*it).compare("C") )
         {
-        enhBandNames.push_back("Costal");
+        enhBandNames.push_back("Coastal");
         }
       else if ( !(*it).compare("B") )
         {
