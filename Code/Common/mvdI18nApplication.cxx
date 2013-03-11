@@ -241,7 +241,9 @@ I18nApplication
     qWarning() << message;
 
     // TODO: morph into better HMI design.
+#if !defined( _DEBUG )
     QMessageBox::warning( NULL, tr( "Warning!" ), message );
+#endif
 
     return false;
     }
