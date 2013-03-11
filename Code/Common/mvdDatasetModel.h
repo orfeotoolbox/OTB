@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractModel.h"
+#include "mvdAbstractImageModel.h"
 #include "mvdTypes.h"
 
 
@@ -61,7 +61,6 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-class AbstractImageModel;
 class DatasetDescriptor;
 
 /*****************************************************************************/
@@ -206,14 +205,12 @@ private:
   inline AbstractImageModelList GetImageModels();
 
   /** */
-  AbstractImageModel* LoadImage( const QString& filename,
+  AbstractImageModel* LoadImage( AbstractImageModel::BuildContext& context,
 				 int width,
-				 int height,
-				 int id,
-				 const QString& quicklook );
+				 int height );
 
   /** */
-  void ParseDescriptor(BuildContext* bContext );
+  void ParseDescriptor( BuildContext* context );
 
   /** */
   void WriteDescriptor() const;

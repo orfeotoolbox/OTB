@@ -89,53 +89,51 @@ void
 DatasetModel
 ::ImportImage( const QString& filename, int width, int height )
 {
-  LoadImage( filename, width, height, -1, QString() );
+  AbstractImageModel::BuildContext context( filename );
+  LoadImage( context, width, height );
 }
 
 /*******************************************************************************/
 AbstractImageModel*
 DatasetModel
-::LoadImage( const QString& filename,
+::LoadImage( AbstractImageModel::BuildContext& context,
 	     int width,
-	     int height,
-	     int id,
-	     const QString& quicklook )
+	     int height )
 {
   // Check input parameters.
-  assert( (id<0 && quicklook.isEmpty()) ||
-	  (id>=0  && !quicklook.isEmpty()) );
+  assert( (context.m_Id<0 && context.m_Quicklook.isEmpty()) ||
+	  (context.m_Id>=0  && !context.m_Quicklook.isEmpty()) );
 
   // 1. Instanciate local image model.
   VectorImageModel* vectorImageModel = new VectorImageModel( this );
+
+  //
+  // 1.1. Assign new image ID to build-context if first time loading.
+  // Remember provided ID.
+  int id = context.m_Id;
+  // Assign image-model ID to build-context if there is none
+  // provided but keep provided one to test if it's first time
+  // import or next time loading of image-model.
+  if( id<0 )
+    {
+    AbstractImageModelList aimList( GetImageModels() );
+    context.m_Id = aimList.indexOf( vectorImageModel );
+
+    qDebug()
+      << "Generated ID" << context.m_Id
+      << "for image-file " << context.m_Filename << ".";
+    }
 
   // 2. Safely load data from file.
   try
     {
     //
-    // 2.1. Fill-in image-model build-contex with provided id (which
-    // may be -1 if first-time import of image-model.
-    AbstractImageModel::BuildContext context( filename, id, quicklook );
-    // Assign image-model ID to build-context if there is none
-    // provided but keep provided one to test if it's first time
-    // import or next time loading of image-model.
-    if( id<0 )
-      {
-      AbstractImageModelList aimList( GetImageModels() );
-      context.m_Id = aimList.indexOf( vectorImageModel );
-
-      qDebug()
-	<< "Generated ID" << context.m_Id
-	<< "for image-file " << context.m_Filename << ".";
-      }
-
-    //
-    // 2.2. Set image-model content.
+    // 2.1. Set image-model content.
     // TODO: SetFilename() into VectorImageModel::virtual_BuildModel().
     vectorImageModel->SetFilename( context.m_Filename, width, height );
 
-
     //
-    // 2.3. Build image-model structure and generate cached data).
+    // 2.2. Build image-model structure and generate cached data).
     vectorImageModel->BuildModel( &context );
     assert( vectorImageModel->GetQuicklookModel()!=NULL );
 
@@ -143,7 +141,7 @@ DatasetModel
     if( id<0 )
       {
       //
-      // 2.4a: Add image to Dataset descriptor file...
+      // 2.3a: Add image to Dataset descriptor file...
       m_Descriptor->InsertImageModel(
 	// ...providing newly calculated image-model ID.
 	context.m_Id,
@@ -153,13 +151,12 @@ DatasetModel
       );
 
       //
-      // 2.5a: Force writing descriptor with newly imported image.
+      // 2.4a: Force writing descriptor with newly imported image.
       WriteDescriptor();
       }
 
     //
-    // 2.6
-    // Connect rendering-settings updated of image-model to
+    // 2.5. Connect rendering-settings updated of image-model to
     // dataset-model in order to update XML descriptor.
     QObject::connect(
       vectorImageModel,
@@ -249,30 +246,29 @@ DatasetModel
        imageElt = DatasetDescriptor::NextImageSiblingElement( imageElt ) )
     {
     // Locals.
-    int id = -1;
-    QString filename;
-    QString quicklook;
     VectorImageModel::Settings settings;
+    AbstractImageModel::BuildContext imageContext( &settings );
 
     // Read image-model descriptor information.
     DatasetDescriptor::GetImageModel(
       imageElt,
-      id, filename, &settings, quicklook
+      imageContext.m_Id,
+      imageContext.m_Filename,
+      imageContext.m_Settings,
+      imageContext.m_Quicklook
     );
 
     // Traces.
     qDebug()
       << "Input image:"
-      << "\nID:" << id
-      << "\nfilename:" << filename
-      << "\nquicklook:" << quicklook;
+      << "\nID:" << imageContext.m_Id
+      << "\nfilename:" << imageContext.m_Filename
+      << "\nquicklook:" << imageContext.m_Quicklook;
 
     // TODO: 3) Remove WxH for screen best-fit during loading of model!
     AbstractImageModel* imageModel = LoadImage(
-      filename,
-      context->m_Width, context->m_Height,
-      id,
-      quicklook
+      imageContext,
+      context->m_Width, context->m_Height
     );
 
     // Access vector image-model.
