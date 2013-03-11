@@ -106,9 +106,15 @@ HistogramModel
   Histogram::FrequencyType frequency( histogram->GetFrequency( index ) );
 
   // Initialize result (contribution of current bin)
-  double percent = frequency 
-    * (bound == BOUND_LOWER ? (intensity - minI) : (maxI - intensity) ) 
-    / ( maxI - minI );
+  const MeasurementType epsilon = 1.0E-6;
+  double percent = 0.;
+  
+  if ( vcl_abs(maxI - minI) > epsilon )
+    {
+    percent = frequency 
+      * (bound == BOUND_LOWER ? (intensity - minI) : (maxI - intensity) ) 
+      / ( maxI - minI );
+    }
   
   // Number of bins of histogram.
   Histogram::SizeType::SizeValueType binCount = histogram->Size();
