@@ -632,6 +632,23 @@ ADD_TEST(dmTvBijectionCoherencyFilter ${DISPARITYMAP_TESTS4}
          ${TEMP}/dmTvBijectionCoherencyFilterOutput.tif
          )
 
+# -------            otb::DisparityTranslateFilter   ----------
+ADD_TEST(dmTuDisparityTranslateFilterNew ${DISPARITYMAP_TESTS4}
+         otbDisparityTranslateFilterNew)
+
+ADD_TEST(dmTvDisparityTranslateFilter ${DISPARITYMAP_TESTS4}
+--compare-image ${EPSILON_6}
+     ${BASELINE}/dmTvDisparityTranslateFilterOutput.tif
+     ${TEMP}/dmTvDisparityTranslateFilterOutput.tif
+         otbDisparityTranslateFilter
+         ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
+         ${INPUTDATA}/sensor_stereo_rectif_inv_left.tif
+         ${INPUTDATA}/sensor_stereo_rectif_right.tif
+         ${EXAMPLEDATA}/sensor_stereo_left.tif
+         ${TEMP}/dmTvDisparityTranslateFilterOutput.tif
+         )
+
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS1
@@ -681,6 +698,7 @@ otbSubPixelDisparityImageFilter.cxx
 otbDisparityMapTo3DFilter.cxx
 otbMultiDisparityMapTo3DFilter.cxx
 otbBijectionCoherencyFilter.cxx
+otbDisparityTranslateFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbDisparityMapTests1 "${BasicDisparityMap_SRCS1}" "OTBDisparityMap;OTBIO;OTBTesting")
