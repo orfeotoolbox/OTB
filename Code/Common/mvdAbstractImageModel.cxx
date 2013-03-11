@@ -126,7 +126,7 @@ AbstractImageModel
          count++)
       {
       std::ostringstream oss;
-      oss <<"BAND "<< count;
+      oss <<ToStdString( tr("BAND ") )<< count;
       outputBandNames.push_back(oss.str());
       }
     
