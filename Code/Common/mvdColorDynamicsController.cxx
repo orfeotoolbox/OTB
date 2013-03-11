@@ -282,11 +282,11 @@ ColorDynamicsController
       colorDynamicsWidget->GetChannel( channel );
 
     DefaultImageType::PixelType::ValueType min(
-      minPx[ settings.RgbChannel( channel ) ]
+      minPx[ settings.GetRgbChannel( channel ) ]
     );
 
     DefaultImageType::PixelType::ValueType max(
-      maxPx[ settings.RgbChannel( channel ) ]
+      maxPx[ settings.GetRgbChannel( channel ) ]
     );
 
     // Block widget's signals...
@@ -352,11 +352,11 @@ ColorDynamicsController
       colorDynamicsWidget->GetChannel( channel );
 
     DefaultImageType::PixelType::ValueType min(
-      minPx[ settings.RgbChannel( channel ) ]
+      minPx[ settings.GetRgbChannel( channel ) ]
     );
 
     DefaultImageType::PixelType::ValueType max(
-      maxPx[ settings.RgbChannel( channel ) ]
+      maxPx[ settings.GetRgbChannel( channel ) ]
     );
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
@@ -435,8 +435,8 @@ ColorDynamicsController
     );
     */
 
-    ParametersType::ValueType low = settings.DynamicsParam( 2 * channel );
-    ParametersType::ValueType high = settings.DynamicsParam( 2 * channel + 1 );
+    ParametersType::ValueType low = settings.GetDynamicsParam( 2 * channel );
+    ParametersType::ValueType hi = settings.GetDynamicsParam( 2 * channel + 1 );
 
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
@@ -446,8 +446,8 @@ ColorDynamicsController
     colorBandDynWgt->SetLowIntensity( low );
     OnLowIntensityChanged( channel, low );
 
-    colorBandDynWgt->SetHighIntensity( high );
-    OnHighIntensityChanged( channel, high );
+    colorBandDynWgt->SetHighIntensity( hi );
+    OnHighIntensityChanged( channel, hi );
     }
     colorBandDynWgt->blockSignals( false );
     }
@@ -537,13 +537,13 @@ ColorDynamicsController
   // Calculate quantile intensity.
   HistogramModel::MeasurementType intensity =
     imageModel->GetHistogramModel()->Quantile(
-      settings.RgbChannel( channel ),
+      settings.GetRgbChannel( channel ),
       0.01 * value,
       BOUND_LOWER
     );
 
   // Update quantile intensity in model.
-  settings.DynamicsParam( 2 * channel ) = intensity;
+  settings.SetDynamicsParam( 2 * channel, intensity );
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -582,13 +582,13 @@ ColorDynamicsController
   // Calculate quantile intensity.
   HistogramModel::MeasurementType intensity =
     imageModel->GetHistogramModel()->Quantile(
-      settings.RgbChannel( channel ),
+      settings.GetRgbChannel( channel ),
       0.01 * value,
       BOUND_UPPER
     );
 
   // Update quantile intensity in model.
-  settings.DynamicsParam( 2 * channel + 1 ) = intensity;
+  settings.SetDynamicsParam( 2 * channel + 1, intensity );
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -622,7 +622,7 @@ ColorDynamicsController
   assert( imageModel->GetHistogramModel()!=NULL );
 
   // Update parameter value.
-  imageModel->GetSettings().DynamicsParam( 2 * channel ) = value;
+  imageModel->GetSettings().SetDynamicsParam( 2 * channel, value );
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -636,7 +636,7 @@ ColorDynamicsController
   // Refresh quantile display.
   colorBandDynWgt->SetLowQuantile(
     100.0 * imageModel->GetHistogramModel()->Percentile(
-      imageModel->GetSettings().RgbChannel( channel ),
+      imageModel->GetSettings().GetRgbChannel( channel ),
       value,
       BOUND_LOWER )
   );
@@ -660,7 +660,7 @@ ColorDynamicsController
   assert( imageModel->GetHistogramModel()!=NULL );
 
   // Update parameter value in model.
-  imageModel->GetSettings().DynamicsParam( 2 * channel + 1 ) = value;
+  imageModel->GetSettings().SetDynamicsParam( 2 * channel + 1, value );
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -674,7 +674,7 @@ ColorDynamicsController
   // Refresh quantile display.
   colorBandDynWgt->SetHighQuantile(
     100.0 * imageModel->GetHistogramModel()->Percentile(
-      imageModel->GetSettings().RgbChannel( channel ),
+      imageModel->GetSettings().GetRgbChannel( channel ),
       value,
       BOUND_UPPER )
   );
@@ -711,6 +711,7 @@ ColorDynamicsController
   emit ModelUpdated();
 }
 
+/*******************************************************************************/
 void
 ColorDynamicsController
 ::OnApplyAllClicked( RgbaChannel channel, double low, double high )
@@ -730,7 +731,7 @@ ColorDynamicsController
 
     HistogramModel::MeasurementType lintensity =
       imageModel->GetHistogramModel()->Quantile(
-        settings.RgbChannel( i ),
+        settings.GetRgbChannel( i ),
         0.01 * low,
         BOUND_LOWER
     );
@@ -738,14 +739,14 @@ ColorDynamicsController
     // Calculate quantile intensity.
     HistogramModel::MeasurementType uintensity =
       imageModel->GetHistogramModel()->Quantile(
-        settings.RgbChannel( i ),
+        settings.GetRgbChannel( i ),
         0.01 * high,
         BOUND_UPPER
     );
 
     // Update quantile intensity in model.
-    settings.DynamicsParam( 2 * i ) = lintensity;
-    settings.DynamicsParam( 2 * i + 1 ) = uintensity;
+    settings.SetDynamicsParam( 2 * i, lintensity );
+    settings.SetDynamicsParam( 2 * i + 1, uintensity );
 
     // Get color-dynamics widgets.
     ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();

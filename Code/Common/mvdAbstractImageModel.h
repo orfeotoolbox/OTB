@@ -95,12 +95,20 @@ public:
     // Public methods.
   public:
     /** \brief Constructor. */
-    BuildContext( const QString& filename =QString(),
-		  int id =-1,
-		  const QString& quicklook =QString() ) :
-      m_Id( id ),
+    BuildContext( void* const settings ) :
+      m_Id( -1 ),
+      m_Filename(),
+      m_Quicklook(),
+      m_Settings( settings )
+    {
+    }
+
+    /** \brief Constructor. */
+    BuildContext( const QString& filename ) :
+      m_Id( -1 ),
       m_Filename( filename ),
-      m_Quicklook( quicklook )
+      m_Quicklook(),
+      m_Settings( NULL )
     {
     }
 
@@ -110,6 +118,7 @@ public:
     int m_Id;
     QString m_Filename;
     QString m_Quicklook;
+    void * const m_Settings;
   };
 
 //

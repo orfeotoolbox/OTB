@@ -389,8 +389,8 @@ MainWindow::closeEvent( QCloseEvent* event )
   assert( Application::ConstInstance()->GetModel()==
 	  Application::ConstInstance()->GetModel< DatasetModel >() );
   // Get model.
-  const DatasetModel* model =
-    Application::ConstInstance()->GetModel< DatasetModel >();
+  DatasetModel* model =
+    Application::Instance()->GetModel< DatasetModel >();
 
   if( model==NULL || !model->IsModified() )
     return;

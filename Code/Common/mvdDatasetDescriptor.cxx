@@ -243,7 +243,7 @@ DatasetDescriptor
     QDomText textNode( node.toText() );
     // TODO: Manage XML structure errors.
     assert( !textNode.isNull() );
-    
+
     textNode.setData(
       ContainerToString(
         settings->GetDynamicsParams().begin(),
@@ -251,11 +251,6 @@ DatasetDescriptor
       )
     );
   }
-  // Dynamics
-  // TODO: Manage XML structure errors.
-  
-  // TODO: Set dynamics text here.
-  
   // if everything went ok
   return true;
 }
@@ -383,10 +378,14 @@ DatasetDescriptor
   m_ImagesGroupElement =
     rootElt.firstChildElement( TAG_NAMES[ ELEMENT_IMAGES_GROUP ] );
 
+#if 0
   qDebug()
     << "Read XML descriptor:\n"
     << m_DomDocument.toByteArray()
     << "\n.";
+#else
+  qDebug() << "XML descriptor has been read.";
+#endif
 }
 
 /*******************************************************************************/
@@ -432,16 +431,20 @@ void
 DatasetDescriptor
 ::Write( QIODevice& device ) const
 {
+#if 0
   qDebug()
     << "Writing  XML descriptor:\n"
     << m_DomDocument.toByteArray( XML_INDENT )
     << "\n...";
+#else
+  qDebug() << "Writing XML descriptor...";
+#endif
 
   // TODO: Check IO device is formatted to UTF-8 data.
   if( device.write( m_DomDocument.toByteArray( XML_INDENT ) )==-1 )
     throw SystemError();
 
-  qDebug() << "Written XML descriptor.";
+  qDebug() << "XML descriptor has been written.";
 }
 
 /*******************************************************************************/
