@@ -527,9 +527,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   
   // Fill buffers with default values
   outMetricPtr->FillBuffer(0.);
-  outHDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MaximumHorizontalDisparity) / 
+  outHDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MaximumHorizontalDisparity) /
                           static_cast<DisparityPixelType>(m_Step));
-  outVDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MinimumVerticalDisparity) / 
+  outVDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MinimumVerticalDisparity) /
                           static_cast<DisparityPixelType>(m_Step));
 }
 

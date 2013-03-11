@@ -175,7 +175,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
     {
     return 0;
     }
-  return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(0));  
+  return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(0));
 }
 
 template <class TDisparityImage, class TGridImage, class TSensorImage, class TMaskImage>
@@ -187,7 +187,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
     {
     return 0;
     }
-  return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(1));  
+  return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template <class TDisparityImage, class TGridImage, class TSensorImage, class TMaskImage>
@@ -250,7 +250,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
   corners[3] = requested.GetIndex();
   corners[3][0] += requested.GetSize()[0];
   corners[3][1] += requested.GetSize()[1];
-  for (unsigned int k=0 ; k<4 ; ++k)
+  for (unsigned int k=0; k<4; ++k)
     {
     PointType pointSensor;
     horizOut->TransformIndexToPhysicalPoint(corners[k],pointSensor);

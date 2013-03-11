@@ -86,7 +86,7 @@ public:
   /** Set the mask relative to the input disparity map */
   void SetDisparityMaskInput(const TMaskImage * mask);
   
-  /** Set the left input sensor image 
+  /** Set the left input sensor image
    *  (used as a support for the output disparity map)
    */
   void SetLeftSensorImageInput( const TSensorImage * left);
