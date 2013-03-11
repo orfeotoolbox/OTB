@@ -76,41 +76,9 @@
 <context>
     <name>mvd::Application</name>
     <message>
-        <source>Running from build directory &apos;%1&apos;.</source>
-        <translation type="obsolete">Exécution depuis le répertoire de compilation &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>Running from install directory &apos;%1&apos;.</source>
-        <translation type="obsolete">Exécution depuis le répertoire d&apos;installation &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>Failed to access translation-files directory &apos;%1&apos;.</source>
-        <translation type="obsolete">Échec d&apos;accès au répertoire &apos;%1&apos; contenant les fichiers de traduction.</translation>
-    </message>
-    <message>
-        <source>Critical error!</source>
-        <translation type="obsolete">Erreur critique !</translation>
-    </message>
-    <message>
-        <source>Warning!</source>
-        <translation type="obsolete">Avertissement !</translation>
-    </message>
-    <message>
-        <source>Failed to load &apos;%1&apos; translation file from &apos;%2&apos;.</source>
-        <translation type="obsolete">Échec de chargement du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
-    </message>
-    <message>
-        <source>Successfully loaded &apos;%1&apos; translation file from &apos;%2&apos;.</source>
-        <translation type="obsolete">Chargement réussi du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
-    </message>
-    <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
-    </message>
-    <message>
-        <source>Centre National d&apos;Etudes Spatiales (CNES)</source>
-        <translation type="obsolete">Centre National d&apos;Études Spatiales (CNES)</translation>
     </message>
 </context>
 <context>
@@ -433,14 +401,6 @@
         <translation>Exécution depuis le répertoire d&apos;installation &apos;%1&apos;.</translation>
     </message>
     <message>
-        <source>Failed to access translation-files directory &apos;%1&apos;.</source>
-        <translation type="obsolete">Échec d&apos;accès au répertoire &apos;%1&apos; contenant les fichiers de traduction.</translation>
-    </message>
-    <message>
-        <source>Critical error!</source>
-        <translation type="obsolete">Erreur critique !</translation>
-    </message>
-    <message>
         <source>Failed to load &apos;%1&apos; translation file from &apos;%2&apos;.</source>
         <translation>Échec de chargement du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
     </message>
@@ -552,32 +512,16 @@
         <translation></translation>
     </message>
     <message>
-        <source>Index:</source>
-        <translation type="obsolete">Indice:</translation>
-    </message>
-    <message>
         <source>Location</source>
         <translation>Localisation</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Édition</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
         <translation>Éditio&amp;n</translation>
     </message>
     <message>
-        <source>Preferences</source>
-        <translation type="obsolete">Préférences</translation>
-    </message>
-    <message>
         <source>Prefere&amp;nces</source>
         <translation>Préfére&amp;nces</translation>
-    </message>
-    <message>
-        <source>View</source>
-        <translation type="obsolete">Affichage</translation>
     </message>
     <message>
         <source>&amp;View</source>
@@ -593,16 +537,8 @@
         <translation>Aid&amp;e</translation>
     </message>
     <message>
-        <source>&amp;About</source>
-        <translation type="obsolete">&amp;À propos de</translation>
-    </message>
-    <message>
         <source>About...</source>
         <translation>À propos de...</translation>
-    </message>
-    <message>
-        <source>Exception!</source>
-        <translation type="obsolete">Exception!</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -639,22 +575,6 @@
     <message>
         <source> pixels)</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Current map coordinate</source>
-        <translation type="obsolete">Coordonnées du pixel courant</translation>
-    </message>
-    <message>
-        <source>Current map scale</source>
-        <translation type="obsolete">Echelle courante</translation>
-    </message>
-    <message>
-        <source>Zoom Level:</source>
-        <translation type="obsolete">Niveau de zoom:</translation>
-    </message>
-    <message>
-        <source>x:y stands for &quot;x pixels on screen = y pixels on image&quot;</source>
-        <translation type="obsolete">x:y correspond à &quot;x pixels écran = y pixels sur l&apos;image&quot;</translation>
     </message>
     <message>
         <source>Warning</source>
@@ -845,32 +765,8 @@ Merci d&apos;en sélectionner un autre.</translation>
         <translation></translation>
     </message>
     <message>
-        <source>The ImageIO use to read this file don&apos;t support Overviews !</source>
-        <translation type="obsolete">Ce format de fichier ne permet pas d&apos;utiliser les pyramides multi-résolution !</translation>
-    </message>
-    <message>
         <source>Overviews creation: </source>
         <translation>Création de la pyramide multi-résolution : </translation>
-    </message>
-    <message>
-        <source>The ImageIO use to read this file support Overviews !</source>
-        <translation type="obsolete">Ce format de fichier permet d&apos;utiliser les pyramides multi-résolution !</translation>
-    </message>
-    <message>
-        <source>The file don&apos;t have overviews !</source>
-        <translation type="obsolete">Le fichier n&apos;a pas de pyramide multi-résolution !</translation>
-    </message>
-    <message>
-        <source>Caching of overviews !</source>
-        <translation type="obsolete">Mise en cache de la pyramide multi-résolution !</translation>
-    </message>
-    <message>
-        <source>Keep GDAL decimate the file on demand !</source>
-        <translation type="obsolete">Activation de la décimation à la volée par GDAL !</translation>
-    </message>
-    <message>
-        <source>The file have already overviews !</source>
-        <translation type="obsolete">Le fichier a déjà une pyramide multi-résolution !</translation>
     </message>
     <message>
         <source>Physical</source>
@@ -879,10 +775,6 @@ Merci d&apos;en sélectionner un autre.</translation>
     <message>
         <source>Radiometry</source>
         <translation>Radiométrie</translation>
-    </message>
-    <message>
-        <source>unknown</source>
-        <translation type="obsolete">inconnue</translation>
     </message>
     <message>
         <source>The ImageIO used to read this file doesn&apos;t support Overviews.</source>
@@ -899,12 +791,6 @@ Merci d&apos;en sélectionner un autre.</translation>
     <message>
         <source>Caching of overviews.</source>
         <translation>Mise en cache de la pyramide multi-résolution.</translation>
-    </message>
-    <message>
-        <source>The overviews creation failed.
- Navigation in resolution will be slower </source>
-        <translation type="obsolete">La création de la pyramide multi-résolution a échoué.
-La navigation en résolution sera plus lente.</translation>
     </message>
     <message>
         <source>Letting GDAL decimate the file on-the-fly !</source>
