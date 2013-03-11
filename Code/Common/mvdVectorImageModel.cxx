@@ -154,8 +154,8 @@ VectorImageModel
           {
           // The user can continue to use the file so we return a warning message
           // TODO MSD return the message to the log widget
-          qDebug() << tr( "The overviews creation failed."
-              "\n Navigation in resolution will be slower " );
+          qDebug() << tr( "The overviews creation failed.\n"
+                          "Navigation in resolution will be slower." );
           }
 
         }

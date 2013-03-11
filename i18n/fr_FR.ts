@@ -36,6 +36,10 @@
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
     </message>
+    <message>
+        <source>BAND </source>
+        <translation>BANDE </translation>
+    </message>
 </context>
 <context>
     <name>mvd::AbstractModel</name>
@@ -90,10 +94,6 @@
     <message>
         <source>Warning!</source>
         <translation type="obsolete">Avertissement !</translation>
-    </message>
-    <message>
-        <source>&gt;DEBUG&gt; mvd::Application::OnAboutToQuit().</source>
-        <translation></translation>
     </message>
     <message>
         <source>Failed to load &apos;%1&apos; translation file from &apos;%2&apos;.</source>
@@ -692,6 +692,12 @@ Soyez conscients que ce répertoire peut grossir and consommer un espace disque 
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
+    <message>
+        <source>Dataset has been modified.
+Do you want to save settings before quitting?</source>
+        <translation>Jeu de données modifié.
+Voulez-vous sauvegarder avant de quitter ?</translation>
+    </message>
 </context>
 <context>
     <name>mvd::Math</name>
@@ -897,7 +903,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     <message>
         <source>The overviews creation failed.
  Navigation in resolution will be slower </source>
-        <translation>La création de la pyramide multi-résolution a échoué.
+        <translation type="obsolete">La création de la pyramide multi-résolution a échoué.
 La navigation en résolution sera plus lente.</translation>
     </message>
     <message>
@@ -913,6 +919,12 @@ La navigation en résolution sera plus lente.</translation>
 Please check.</source>
         <translation>OTB ne peut pas lire le fichier (&apos;%1&apos;).
 Merci de vérifier.</translation>
+    </message>
+    <message>
+        <source>The overviews creation failed.
+Navigation in resolution will be slower.</source>
+        <translation>La création de la pyramide multi-résolution a échoué.
+La navigation en résolution sera plus lente.</translation>
     </message>
 </context>
 <context>
