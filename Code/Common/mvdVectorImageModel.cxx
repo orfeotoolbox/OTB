@@ -307,7 +307,7 @@ VectorImageModel
     );
 
     GetSettings().SetDynamicsParam(
-      index,
+      index + 1,
       histogramModel->Quantile( band , 0.02, BOUND_UPPER )
     );
     }
