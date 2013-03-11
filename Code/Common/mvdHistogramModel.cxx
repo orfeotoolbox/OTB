@@ -106,10 +106,10 @@ HistogramModel
   Histogram::FrequencyType frequency( histogram->GetFrequency( index ) );
 
   // Initialize result (contribution of current bin)
-  double percent = frequency
-                    * ( intensity - (bound == BOUND_LOWER ? minI : maxI) )
-                    / ( maxI - minI );
-
+  double percent = frequency 
+    * (bound == BOUND_LOWER ? (intensity - minI) : (maxI - intensity) ) 
+    / ( maxI - minI );
+  
   // Number of bins of histogram.
   Histogram::SizeType::SizeValueType binCount = histogram->Size();
 
@@ -144,7 +144,7 @@ HistogramModel
   
   // Calculate frequency rate.
   percent /= histogram->GetTotalFrequency();
-
+  
   // Return frequency rate.
   return percent;
 }
