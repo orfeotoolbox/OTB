@@ -396,10 +396,11 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
     lr[1] += 1;
     
     // check if all corners are valid
-    if (maskIn->GetPixel(ul) > 0 &&
+    if (!maskIn || (maskIn &&
+        maskIn->GetPixel(ul) > 0 &&
         maskIn->GetPixel(ur) > 0 &&
         maskIn->GetPixel(ll) > 0 &&
-        maskIn->GetPixel(lr) > 0)
+        maskIn->GetPixel(lr) > 0))
       {
       rx = indexEpi[0] - static_cast<double>(ul[0]);
       ry = indexEpi[1] - static_cast<double>(ul[1]);
