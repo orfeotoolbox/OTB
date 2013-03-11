@@ -116,7 +116,7 @@ public:
      *
      * \param
      *
-     * Copy settings POD content without modified nor applied flag.
+     * Copy settings POD content without the modified flag.
      */
     Settings( const Settings& other );
 
@@ -150,12 +150,6 @@ public:
 
     /**
      */
-#if 0
-    inline ChannelVector::value_type& RgbChannel( ChannelVector::size_type i );
-#endif
-
-    /**
-     */
     inline
     void SetRgbChannel( ChannelVector::size_type i,
 			const ChannelVector::value_type& channel );
@@ -184,12 +178,6 @@ public:
     inline
     void SetDynamicsParam( CountType i,
 			   const ParametersType::ValueType& param );
-
-    /**
-     */
-#if 0
-    inline ParametersType::ValueType& DynamicsParam( CountType i );
-#endif
 
     //
     // Private attributes.
@@ -571,7 +559,7 @@ VectorImageModel::Settings
   m_RgbChannels( other.m_RgbChannels ),
   m_DynamicsParams( other.m_DynamicsParams ),
   m_IsModified( false ),
-  m_IsApplied( false )
+  m_IsApplied( other.m_IsApplied )
 {
   qDebug() << "Settings( const Settigs& )";
 }
@@ -664,19 +652,6 @@ VectorImageModel::Settings
 }
 
 /*****************************************************************************/
-#if 0
-inline
-const VectorImageModel::Settings::ChannelVector::value_type&
-VectorImageModel::Settings
-::RgbChannel( ChannelVector::size_type i )
-{
-  SetModified();
-
-  return m_RgbChannels[ i ];
-}
-#endif
-
-/*****************************************************************************/
 inline
 void
 VectorImageModel::Settings
@@ -756,19 +731,6 @@ VectorImageModel::Settings
 
   m_DynamicsParams[ i ] = param;
 }
-
-/*****************************************************************************/
-#if 0
-inline
-ParametersType::ValueType&
-VectorImageModel::Settings
-::DynamicsParam( CountType i )
-{
-  SetModified();
-
-  return m_DynamicsParams[ i ];
-}
-#endif
 
 } // end namespace 'mvd'.
 
