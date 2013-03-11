@@ -114,7 +114,7 @@ public:
     /**
      * \brief Copy constructor.
      *
-     * \param
+     * \param other
      *
      * Copy settings POD content without the modified flag.
      */
@@ -123,7 +123,14 @@ public:
     /**
      * \brief Destructor.
      */
-    ~Settings() ;
+    ~Settings();
+
+    /**
+     * \brief Assignment operator.
+     *
+     * \parapm other
+     */
+    Settings& operator=( const Settings& other );
 
     /**
      */
@@ -561,7 +568,23 @@ VectorImageModel::Settings
   m_IsModified( false ),
   m_IsApplied( other.m_IsApplied )
 {
-  qDebug() << "Settings( const Settigs& )";
+  qDebug() << this << "Settings( const Settigs& )";
+}
+
+/*****************************************************************************/
+inline
+VectorImageModel::Settings&
+VectorImageModel::Settings
+::operator=( const Settings& other )
+{
+  if( &other==this )
+    return *this;
+
+  m_RgbChannels = other.m_RgbChannels;
+  m_DynamicsParams = other.m_DynamicsParams;
+  m_IsApplied = other.m_IsApplied;
+
+  return *this;
 }
 
 /*****************************************************************************/
@@ -595,7 +618,7 @@ void
 VectorImageModel::Settings
 ::SetModified()
 {
-  qDebug() << "SetModified()";
+  qDebug() << this << "::SetModified()";
 
   m_IsModified = true;
   m_IsApplied = false;
@@ -607,7 +630,7 @@ void
 VectorImageModel::Settings
 ::ClearModified()
 {
-  qDebug() << "ClearModified()";
+  qDebug() << this << "::ClearModified()";
 
   m_IsModified = false;
 }
@@ -618,7 +641,7 @@ void
 VectorImageModel::Settings
 ::SetApplied()
 {
-  qDebug() << "SetApplied()";
+  qDebug() << this << "::SetApplied()";
 
   m_IsApplied = true;
 }

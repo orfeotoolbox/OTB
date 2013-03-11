@@ -243,7 +243,7 @@ DatasetDescriptor
     QDomText textNode( node.toText() );
     // TODO: Manage XML structure errors.
     assert( !textNode.isNull() );
-    
+
     textNode.setData(
       ContainerToString(
         settings->GetDynamicsParams().begin(),

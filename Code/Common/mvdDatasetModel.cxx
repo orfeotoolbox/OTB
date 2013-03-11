@@ -152,7 +152,7 @@ DatasetModel
 
       //
       // 2.4a: Force writing descriptor with newly imported image.
-      WriteDescriptor();
+      Save();
       }
 
     //
@@ -230,7 +230,7 @@ DatasetModel
 
     // Load image-models from descriptor.
     // TODO: Replace DatasetModel::BuildContext() by (width, height).
-    ParseDescriptor(buildContext);
+    ParseDescriptor( buildContext );
     }
 }
 
@@ -266,11 +266,12 @@ DatasetModel
       << "\nquicklook:" << imageContext.m_Quicklook;
 
     // TODO: 3) Remove WxH for screen best-fit during loading of model!
-    AbstractImageModel* imageModel = LoadImage(
+    /* AbstractImageModel* imageModel = */ LoadImage(
       imageContext,
       context->m_Width, context->m_Height
     );
 
+#if 0
     // Access vector image-model.
     VectorImageModel* vectorImageModel =
       qobject_cast< VectorImageModel* >( imageModel );
@@ -278,6 +279,7 @@ DatasetModel
 
     // Re-assign rendering-settings to image-model.
     vectorImageModel->SetSettings( settings );
+#endif
     }
 }
 
@@ -306,7 +308,13 @@ DatasetModel
        ++it )
     {
     if( ( *it )->IsModified() )
+      {
+      const VectorImageModel* vim =
+	qobject_cast< const VectorImageModel* >( *it );
+      qDebug() << vim->GetFilename() << "is modified.";
+
       return true;
+      }
     }
 
   // Otherwise, this dataset-model is not modified.
