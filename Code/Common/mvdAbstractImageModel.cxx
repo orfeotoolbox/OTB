@@ -95,66 +95,98 @@ AbstractImageModel
 
   otb::ImageMetadataInterfaceBase::ConstPointer metaDataInterface(
     GetMetaDataInterface()
-  );
+    );
 
   //
   // Basic band names.
   StringVector stdBandNames1( metaDataInterface->GetBandName() );
+
+  // output band name list
+  QStringList qBandNames1( QString("") );
 
   /*
   qDebug() << "stdBandNames1.size(): " <<  stdBandNames1.size();
   for( unsigned int i=0; i<stdBandNames1.size(); ++i )
     qDebug() << i << ": " << QString( stdBandNames1[ i ].c_str() );
   */
-
-  assert( stdBandNames1.empty() ||
-	  stdBandNames1.size()==output->GetNumberOfComponentsPerPixel() );
-
-  if( stdBandNames1.size()!=output->GetNumberOfComponentsPerPixel() )
-    {
-    stdBandNames1.resize( output->GetNumberOfComponentsPerPixel() );
-    }
-
+  
   //
-  // Enhanced band names.
-  StringVector stdBandNames2;
-  if( enhanced )
+  // PS: need to handle images with extracted channels and a geom file
+  // storing the original image band names.
+  if (stdBandNames1.empty() ||
+      stdBandNames1.size()!=output->GetNumberOfComponentsPerPixel())
     {
-    try
+    // output stringVector
+    StringVector outputBandNames;
+
+    //
+    // Fill the output std::vector with default values
+    for( unsigned int count = 0;
+         count < output->GetNumberOfComponentsPerPixel(); 
+         count++)
       {
-      stdBandNames2 = metaDataInterface->GetEnhancedBandNames();
+      std::ostringstream oss;
+      oss <<"BAND "<< count;
+      outputBandNames.push_back(oss.str());
       }
-    catch(itk::ExceptionObject &)
-      {}
+    
+    // set the output QStringList
+    qBandNames1 = ToQStringList( outputBandNames );
+
     }
-
-  /*
-  qDebug() << "stdBandNames2.size(): " <<  stdBandNames2.size();
-  for( unsigned int i=0; i<stdBandNames2.size(); ++i )
-    qDebug() << i << ": " << QString( stdBandNames2[ i ].c_str() );
-  */
-
-  assert( stdBandNames2.empty() ||
-	  stdBandNames2.size()==output->GetNumberOfComponentsPerPixel() );
-
-  if( stdBandNames2.size()!=output->GetNumberOfComponentsPerPixel() )
+  else
     {
-    stdBandNames2.resize( output->GetNumberOfComponentsPerPixel() );
-    }
+    // useless
+    assert( stdBandNames1.empty() ||
+            stdBandNames1.size()==output->GetNumberOfComponentsPerPixel() );
 
-  //
-  // Join basic and enhanced band-name lists.
-  assert( stdBandNames1.size()==stdBandNames2.size() );
+    if( stdBandNames1.size()!=output->GetNumberOfComponentsPerPixel() )
+      {
+      stdBandNames1.resize( output->GetNumberOfComponentsPerPixel() );
+      }
 
-  QStringList qBandNames1( ToQStringList( stdBandNames1 ) );
-  QStringList qBandNames2( ToQStringList( stdBandNames2 ) );
+    //
+    // Enhanced band names.
+    StringVector stdBandNames2;
+    if( enhanced )
+      {
+      try
+        {
+        stdBandNames2 = metaDataInterface->GetEnhancedBandNames();
+        }
+      catch(itk::ExceptionObject &)
+        {}
+      }
 
-  QStringList::iterator it1( qBandNames1.begin() );
-  QStringList::const_iterator it2( qBandNames2.begin() );
-  for( ; it1!=qBandNames1.end(); ++it1, ++it2 )
-    {
-    if( !it2->isEmpty() )
-      it1->append( " (" + *it2 + ")" );
+    /*
+     qDebug() << "stdBandNames2.size(): " <<  stdBandNames2.size();
+     for( unsigned int i=0; i<stdBandNames2.size(); ++i )
+      qDebug() << i << ": " << QString( stdBandNames2[ i ].c_str() );
+    */
+
+    assert( stdBandNames2.empty() ||
+            stdBandNames2.size()==output->GetNumberOfComponentsPerPixel() );
+
+    if( stdBandNames2.size()!=output->GetNumberOfComponentsPerPixel() )
+      {
+      stdBandNames2.resize( output->GetNumberOfComponentsPerPixel() );
+      }
+
+    //
+    // Join basic and enhanced band-name lists.
+    assert( stdBandNames1.size()==stdBandNames2.size() );
+
+    qBandNames1 =  ToQStringList( stdBandNames1 );
+    QStringList qBandNames2( ToQStringList( stdBandNames2 ) );
+
+    QStringList::iterator it1( qBandNames1.begin() );
+    QStringList::const_iterator it2( qBandNames2.begin() );
+    for( ; it1!=qBandNames1.end(); ++it1, ++it2 )
+      {
+      if( !it2->isEmpty() )
+        it1->append( " (" + *it2 + ")" );
+      }
+
     }
 
   //
