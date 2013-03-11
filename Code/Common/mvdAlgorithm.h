@@ -72,6 +72,7 @@ namespace mvd
 
 namespace otb
 {
+
 /**
  * Convert an itk::VariableLengthVector< T2 > into a
  * itk::FixedArray< T1, N >.
@@ -137,6 +138,8 @@ ToVariableLengthVector( itk::FixedArray< T1, N >& a,
 			const itk::VariableLengthVector< T1 >& v );
 } // end namespace 'otb'
 
+/*****************************************************************************/
+
 namespace mvd
 {
 /**
@@ -171,6 +174,7 @@ AppendToQStringList( QStringList& qsl,
  *
  * \return The Unicode converted QString.
  */
+
 inline
 QString
 FromStdString( const std::string& str );
@@ -188,6 +192,56 @@ FromStdString( const std::string& str );
 inline
 std::string
 ToStdString( const QString& str );
+
+} // end namespace 'mvd'.
+
+/*****************************************************************************/
+
+namespace mvd
+{
+/**
+ * \brief Test condition on all elements in range.
+ *
+ * \param first First element of range to test.
+ * \param last Upper (external) boundary of range to test.
+ * \param pred Predicate testing element in range.
+ *
+ * \return true if predicate is true on all elements in the range
+ * [first, last[ or if range is empty.
+ */
+template< typename TInputIterator, typename TUnaryPredicate >
+inline
+bool
+AllOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred );
+
+/**
+ * \brief Test if any of element in range fulfills condition.
+ *
+ * \param first First element of range to test.
+ * \param last Upper (external) boundary of range to test.
+ * \param pred Predicate testing element in range.
+ *
+ * \return true if predicated is true for, at least, one element in range
+ * [first, last[. If range is empty, this function returns false.
+ */
+template< typename TInputIterator, typename TUnaryPredicate >
+inline
+bool
+AnyOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred );
+
+/**
+ * \brief Test if no element in range fulfills condition.
+ *
+ * \param first First element of range to test.
+ * \param last Upper (external) boundary of range to test.
+ * \param pred Predicate testing element in range.
+ *
+ * \return true if predicated is false for all elements in range [first, last[. If range is empty, this function returns true.
+ */
+template< typename TInputIterator, typename TUnaryPredicate >
+inline
+bool
+NoneOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred );
 
 } // end namespace 'mvd'.
 
@@ -317,5 +371,62 @@ ToStdString( const QString& str )
 /*******************************************************************************/
 
 } // end namespace 'mvd'
+
+namespace mvd
+{
+
+/*******************************************************************************/
+template< typename TInputIterator, typename TUnaryPredicate >
+inline
+bool
+AllOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred )
+{
+  while( first!=last )
+    {
+    if( !pred( *first ) )
+      return false;
+
+    ++first;
+    }
+
+  return true;
+}
+
+/*******************************************************************************/
+template< typename TInputIterator, typename TUnaryPredicate >
+inline
+bool
+AnyOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred )
+{
+  while( first!=last )
+    {
+    if( pred( *first ) )
+      return true;
+
+    ++first;
+    }
+
+  return false;
+}
+
+/*******************************************************************************/
+template< typename TInputIterator, typename TUnaryPredicate >
+inline
+bool
+NoneOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred )
+{
+  while( first!=last )
+    {
+    if( pred( *first ) )
+      return false;
+
+    ++first;
+    }
+
+  return true;
+}
+
+} // end namespace 'mvd'
+
 
 #endif // __mvdAlgorithm_h

@@ -157,12 +157,14 @@ public:
 
   /**
    */
-  void Save() const;
+  void Save();
 
   //
   // AbstractModel overrides.
 
   virtual bool IsModified() const;
+
+  virtual void ClearModified();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

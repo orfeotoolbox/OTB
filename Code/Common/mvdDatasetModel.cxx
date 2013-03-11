@@ -320,9 +320,26 @@ DatasetModel
 /*******************************************************************************/
 void
 DatasetModel
-::Save() const
+::ClearModified()
+{
+  AbstractImageModelList aimList( GetImageModels() );
+
+  for( AbstractImageModelList::iterator it( aimList.begin() );
+       it!=aimList.end();
+       ++it )
+    {
+    ( *it )->ClearModified();
+    }
+}
+
+/*******************************************************************************/
+void
+DatasetModel
+::Save()
 {
   WriteDescriptor();
+
+  ClearModified();
 }
 
 /*******************************************************************************/

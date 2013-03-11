@@ -109,131 +109,87 @@ public:
     /**
      * \brief Constructor.
      */
-    Settings() :
-      m_RgbChannels(),
-      m_DynamicsParams( 6 ),
-      m_IsModified( false ),
-      m_IsApplied( false )
-    {
-    }
+    Settings();
+
+    /**
+     * \brief Copy constructor.
+     *
+     * \param
+     *
+     * Copy settings POD content without modified nor applied flag.
+     */
+    Settings( const Settings& other );
 
     /**
      * \brief Destructor.
      */
-    ~Settings() 
-    {
-    }
+    ~Settings() ;
+
+    /**
+     */
+    inline bool IsApplied() const;
+
+    /**
+     */
+    inline bool IsModified() const;
+
+    /** */
+    inline void SetModified();
+
+    /** */
+    inline void ClearModified();
+
+    /** */
+    inline void SetApplied();
+
+    /** */
+    inline void SetRgbChannels( const ChannelVector& rgb );
+
+    /** */
+    inline const ChannelVector& GetRgbChannels() const;
+
+    /**
+     */
+#if 0
+    inline ChannelVector::value_type& RgbChannel( ChannelVector::size_type i );
+#endif
 
     /**
      */
     inline
-    bool
-    IsApplied() const
-    {
-      return m_IsApplied;
-    }
-
-    /**
-     */
-    inline
-    bool
-    IsModified() const
-    {
-      return m_IsModified;
-    }
-
-    /** */
-    inline
-    void
-    SetModified()
-    {
-      m_IsModified = true;
-      m_IsApplied = false;
-    }
-
-    /** */
-    inline void SetApplied()
-    {
-      m_IsApplied = true;
-    }
-
-    /** */
-    inline
-    void
-    SetRgbChannels( const ChannelVector& rgb )
-    {
-      m_RgbChannels = rgb;
-
-      SetModified();
-    }
-
-    /** */
-    inline
-    const ChannelVector&
-    GetRgbChannels() const
-    {
-      return m_RgbChannels;
-    }
-
-    /**
-     */
-    inline
-    ChannelVector::value_type&
-    RgbChannel( ChannelVector::size_type i )
-    {
-      SetModified();
-
-      return m_RgbChannels[ i ];
-    }
+    void SetRgbChannel( ChannelVector::size_type i,
+			const ChannelVector::value_type& channel );
 
     /**
      */
     inline
     const ChannelVector::value_type&
-    RgbChannel( ChannelVector::size_type i ) const
-    {
-      return m_RgbChannels[ i ];
-    }
+    GetRgbChannel( ChannelVector::size_type i ) const;
+
+    /**
+     */
+    inline void SetDynamicsParams( const ParametersType& params );
+
+    /**
+     */
+    inline const ParametersType& GetDynamicsParams() const;
 
     /**
      */
     inline
-    void
-    SetDynamicsParams( const ParametersType& params )
-    {
-      m_DynamicsParams = params;
-
-      SetModified();
-    }
+    const ParametersType::ValueType& GetDynamicsParam( CountType i ) const;
 
     /**
      */
     inline
-    const ParametersType&
-    GetDynamicsParams() const
-    {
-      return m_DynamicsParams;
-    }
+    void SetDynamicsParam( CountType i,
+			   const ParametersType::ValueType& param );
 
     /**
      */
-    inline
-    const ParametersType::ValueType&
-    DynamicsParam( CountType i ) const
-    {
-      return m_DynamicsParams[ i ];
-    }
-
-    /**
-     */
-    inline
-    ParametersType::ValueType&
-    DynamicsParam( CountType i )
-    {
-      SetModified();
-
-      return m_DynamicsParams[ i ];
-    }
+#if 0
+    inline ParametersType::ValueType& DynamicsParam( CountType i );
+#endif
 
     //
     // Private attributes.
@@ -376,6 +332,8 @@ public:
   // AbstractModel overrides.
 
   virtual bool IsModified() const;
+
+  virtual void ClearModified();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -590,6 +548,229 @@ private slots:
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdDatasetModel.h"
+
+
+namespace mvd
+{
+
+/*****************************************************************************/
+inline
+VectorImageModel::Settings
+::Settings() :
+  m_RgbChannels(),
+  m_DynamicsParams( 6 ),
+  m_IsModified( false ),
+  m_IsApplied( false )
+{
+}
+
+/*****************************************************************************/
+inline
+VectorImageModel::Settings
+::Settings( const Settings& other ) :
+  m_RgbChannels( other.m_RgbChannels ),
+  m_DynamicsParams( other.m_DynamicsParams ),
+  m_IsModified( false ),
+  m_IsApplied( false )
+{
+  qDebug() << "Settings( const Settigs& )";
+}
+
+/*****************************************************************************/
+inline
+VectorImageModel::Settings
+::~Settings() 
+{
+}
+
+/*****************************************************************************/
+inline
+bool
+VectorImageModel::Settings
+::IsApplied() const
+{
+  return m_IsApplied;
+}
+
+/*****************************************************************************/
+inline
+bool
+VectorImageModel::Settings
+::IsModified() const
+{
+  return m_IsModified;
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::SetModified()
+{
+  qDebug() << "SetModified()";
+
+  m_IsModified = true;
+  m_IsApplied = false;
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::ClearModified()
+{
+  qDebug() << "ClearModified()";
+
+  m_IsModified = false;
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::SetApplied()
+{
+  qDebug() << "SetApplied()";
+
+  m_IsApplied = true;
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::SetRgbChannels( const ChannelVector& rgb )
+{
+  qDebug() << "setRgbChannels()";
+
+  assert( m_RgbChannels.empty() || m_RgbChannels.size()==rgb.size() );
+
+  if( !m_RgbChannels.empty() &&
+      std::equal( m_RgbChannels.begin(), m_RgbChannels.end(), rgb.begin() ) )
+    return;
+
+  m_RgbChannels = rgb;
+
+  SetModified();
+}
+
+/*****************************************************************************/
+inline
+const VectorImageModel::Settings::ChannelVector&
+VectorImageModel::Settings
+::GetRgbChannels() const
+{
+  return m_RgbChannels;
+}
+
+/*****************************************************************************/
+#if 0
+inline
+const VectorImageModel::Settings::ChannelVector::value_type&
+VectorImageModel::Settings
+::RgbChannel( ChannelVector::size_type i )
+{
+  SetModified();
+
+  return m_RgbChannels[ i ];
+}
+#endif
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::SetRgbChannel( ChannelVector::size_type i,
+		 const ChannelVector::value_type& channel )
+{
+  qDebug() << "SetRgbChannel()";
+
+  if( m_RgbChannels[ i ]==channel )
+    return;
+
+  SetModified();
+
+  m_RgbChannels[ i ] = channel;
+}
+
+/*****************************************************************************/
+inline
+const VectorImageModel::Settings::ChannelVector::value_type&
+VectorImageModel::Settings
+::GetRgbChannel( ChannelVector::size_type i ) const
+{
+  return m_RgbChannels[ i ];
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::SetDynamicsParams( const ParametersType& params )
+{
+  qDebug() << "SetDynamicsParams()";
+
+  assert( m_DynamicsParams.size()==params.size() );
+
+  if( std::equal( m_DynamicsParams.begin(),
+		  m_DynamicsParams.end(),
+		  params.begin() ) )
+    return;
+
+  m_DynamicsParams = params;
+
+  SetModified();
+}
+
+/*****************************************************************************/
+inline
+const ParametersType&
+VectorImageModel::Settings
+::GetDynamicsParams() const
+{
+  return m_DynamicsParams;
+}
+
+/*****************************************************************************/
+inline
+const ParametersType::ValueType&
+VectorImageModel::Settings
+::GetDynamicsParam( CountType i ) const
+{
+  return m_DynamicsParams[ i ];
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::SetDynamicsParam( CountType i,
+		    const ParametersType::ValueType& param )
+{
+  qDebug() << "SetDynamicsParam()";
+
+  if( m_DynamicsParams[ i ]==param )
+    return;
+
+  SetModified();
+
+  m_DynamicsParams[ i ] = param;
+}
+
+/*****************************************************************************/
+#if 0
+inline
+ParametersType::ValueType&
+VectorImageModel::Settings
+::DynamicsParam( CountType i )
+{
+  SetModified();
+
+  return m_DynamicsParams[ i ];
+}
+#endif
+
+} // end namespace 'mvd'.
 
 namespace mvd
 {

@@ -108,6 +108,10 @@ public:
    */
   virtual bool IsModified() const;
 
+  /**
+   */
+  virtual void ClearModified();
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //

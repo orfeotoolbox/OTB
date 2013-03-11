@@ -78,7 +78,6 @@ VectorImageModel
   m_RegionsToLoadVector(),
   m_Filename()
 {
-
   QObject::connect(
     this,
     SIGNAL( ViewportRegionChanged(double, double) ),
@@ -286,15 +285,19 @@ VectorImageModel
   for( CountType i=0; i<RGBA_CHANNEL_ALPHA; ++i )
     {
     Settings::ChannelVector::value_type band =
-      GetSettings().RgbChannel( static_cast< RgbaChannel >( i ) );
+      GetSettings().GetRgbChannel( static_cast< RgbaChannel >( i ) );
 
     ParametersType::ValueType index = 2 * i;
 
-    GetSettings().DynamicsParam( index ) =
-      histogramModel->Quantile( band , 0.02, BOUND_LOWER );
+    GetSettings().SetDynamicsParam(
+      index,
+      histogramModel->Quantile( band , 0.02, BOUND_LOWER )
+    );
 
-    GetSettings().DynamicsParam( index + 1) =
-      histogramModel->Quantile( band , 0.02, BOUND_UPPER );
+    GetSettings().SetDynamicsParam(
+      index,
+      histogramModel->Quantile( band , 0.02, BOUND_UPPER )
+    );
     }
 }
 
@@ -746,6 +749,20 @@ VectorImageModel
 }
 
 /*******************************************************************************/
+void
+VectorImageModel
+::ClearModified()
+{
+  GetSettings().ClearModified();
+
+  // TODO: Remove temporary hack (Quicklook modified flag).
+  QuicklookModel* quicklookModel = GetQuicklookModel();
+  // If image-model is not quicklook-model.
+  if( quicklookModel!=NULL )
+    quicklookModel->ClearModified();
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
@@ -766,7 +783,7 @@ VectorImageModel
   renderingFunc->SetChannelList( rgb );
   renderingFunc->SetParameters( GetSettings().GetDynamicsParams() );
 
-  // TODO: Remove temporary hack (rendering settings).
+  // TODO: Remove temporary hack (Quicklook rendering settings).
   QuicklookModel* quicklookModel = GetQuicklookModel();
   // If image-model is not quicklook-model.
   if( quicklookModel!=NULL )

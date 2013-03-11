@@ -251,11 +251,6 @@ DatasetDescriptor
       )
     );
   }
-  // Dynamics
-  // TODO: Manage XML structure errors.
-  
-  // TODO: Set dynamics text here.
-  
   // if everything went ok
   return true;
 }
