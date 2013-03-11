@@ -571,8 +571,10 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   // Fill buffers with default values
   outMetricPtr->FillBuffer(0.);
-  outHDispPtr->FillBuffer(m_MinimumHorizontalDisparity);
-  outVDispPtr->FillBuffer(m_MinimumVerticalDisparity);
+  outHDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MinimumHorizontalDisparity) /
+                          static_cast<DisparityPixelType>(this->m_Step));
+  outVDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MinimumVerticalDisparity) /
+                          static_cast<DisparityPixelType>(this->m_Step));
   
   m_WrongExtrema.resize(this->GetNumberOfThreads());
 }
@@ -688,6 +690,10 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   
   typename ResamplerFilterType::Pointer resampler;
   
+  // step value as disparityType
+  DisparityPixelType stepDisparity = static_cast<DisparityPixelType>(this->m_Step);
+  DisparityPixelType stepDisparityInv = 1. / stepDisparity;
+  
   // metrics for neighbors positions : first index is x, second is y
   double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
   
@@ -698,8 +704,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     {
     // If the pixel location is on the subsampled grid
     curLeftPos = leftIt.GetIndex();
-    if (((curLeftPos[0] - this->m_GridIndex[0]) % this->m_Step == 0) &&
-        ((curLeftPos[1] - this->m_GridIndex[1]) % this->m_Step == 0))
+    if (((curLeftPos[0] - this->m_GridIndex[0] + this->m_Step) % this->m_Step == 0) &&
+        ((curLeftPos[1] - this->m_GridIndex[1] + this->m_Step) % this->m_Step == 0))
       {
       horizontalInterpolation = false;
       verticalInterpolation = false;
@@ -707,7 +713,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       /* compute estimated right position */
       if (useHorizontalDisparity)
         {
-        hDisp_f = static_cast<float>(inHDispIt.Get());
+        hDisp_f = static_cast<float>(inHDispIt.Get()) * stepDisparity;
         hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
         curRightPos[0] = curLeftPos[0] + hDisp_i;
         }
@@ -720,7 +726,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       
       if (useVerticalDisparity)
         {
-        vDisp_f = static_cast<float>(inVDispIt.Get());
+        vDisp_f = static_cast<float>(inVDispIt.Get()) * stepDisparity;
         vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
         curRightPos[1] = curLeftPos[1] + vDisp_i;
         }
@@ -884,7 +890,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           (1.0 + (neighborsMetric[1][0]-neighborsMetric[1][1]) / (neighborsMetric[1][2]-neighborsMetric[1][1])));
         if (deltaV > (-0.5) && deltaV < 0.5)
           {
-          outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
+          outVDispIt.Set( (static_cast<double>(vDisp_i) + deltaV) * stepDisparityInv);
           }
         else
           {
@@ -898,7 +904,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           (1.0 + (neighborsMetric[0][1]-neighborsMetric[1][1]) / (neighborsMetric[2][1]-neighborsMetric[1][1])));
         if (deltaH > (-0.5) && deltaH < 0.5)
           {
-          outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
+          outHDispIt.Set( (static_cast<double>(hDisp_i) + deltaH) * stepDisparityInv);
           }
         else
           {
@@ -925,8 +931,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           double deltaV = ( dx * dxy - dy * dxx )/det;
           if (deltaH > (-1.0) && deltaH < 1.0 && deltaV > (-1.0) && deltaV < 1.0)
             {
-            outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
-            outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
+            outHDispIt.Set( (static_cast<double>(hDisp_i) + deltaH) * stepDisparityInv);
+            outVDispIt.Set( (static_cast<double>(vDisp_i) + deltaV) * stepDisparityInv);
             }
           else
             {
@@ -939,13 +945,13 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       if (!verticalInterpolation)
         {
         // No vertical interpolation done : simply copy the integer vertical disparity
-        outVDispIt.Set( static_cast<double>(vDisp_i));
+        outVDispIt.Set( static_cast<double>(vDisp_i) * stepDisparityInv);
         }
       
       if (!horizontalInterpolation)
         {
         // No horizontal interpolation done : simply copy the integer horizontal disparity
-        outHDispIt.Set( static_cast<double>(hDisp_i));
+        outHDispIt.Set( static_cast<double>(hDisp_i) * stepDisparityInv);
         }
       
       if (!verticalInterpolation && !horizontalInterpolation)
@@ -988,8 +994,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         resampler->SetTransform(transfo);
         resampler->SetOutputStartIndex(upleftCorner);
         
-        offsetTransfo[0] = outHDispIt.Get() - static_cast<double>(hDisp_i);
-        offsetTransfo[1] = outVDispIt.Get() - static_cast<double>(vDisp_i);
+        offsetTransfo[0] = outHDispIt.Get() * stepDisparity - static_cast<double>(hDisp_i);
+        offsetTransfo[1] = outVDispIt.Get() * stepDisparity - static_cast<double>(vDisp_i);
         transfo->SetOffset(offsetTransfo);
         resampler->Modified();
         resampler->Update();
@@ -1116,6 +1122,11 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   
   typename ResamplerFilterType::Pointer resampler;
   
+  // step value as disparityType
+  DisparityPixelType stepDisparity = static_cast<DisparityPixelType>(this->m_Step);
+  DisparityPixelType stepDisparityInv = 1. / stepDisparity;
+  
+  
   // metrics for neighbors positions : first index is x, second is y
   double neighborsMetric[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
   
@@ -1126,8 +1137,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     {
     // If the pixel location is on the subsampled grid
     curLeftPos = leftIt.GetIndex();
-    if (((curLeftPos[0] - this->m_GridIndex[0]) % this->m_Step == 0) &&
-        ((curLeftPos[1] - this->m_GridIndex[1]) % this->m_Step == 0))
+    if (((curLeftPos[0] - this->m_GridIndex[0] + this->m_Step) % this->m_Step == 0) &&
+        ((curLeftPos[1] - this->m_GridIndex[1] + this->m_Step) % this->m_Step == 0))
       {
       horizontalInterpolation = false;
       verticalInterpolation = false;
@@ -1135,7 +1146,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       /* compute estimated right position */
       if (useHorizontalDisparity)
         {
-        hDisp_f = static_cast<float>(inHDispIt.Get());
+        hDisp_f = static_cast<float>(inHDispIt.Get()) * stepDisparity;
         hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
         curRightPos[0] = curLeftPos[0] + hDisp_i;
         }
@@ -1148,7 +1159,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       
       if (useVerticalDisparity)
         {
-        vDisp_f = static_cast<float>(inVDispIt.Get());
+        vDisp_f = static_cast<float>(inVDispIt.Get()) * stepDisparity;
         vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
         curRightPos[1] = curLeftPos[1] + vDisp_i;
         }
@@ -1320,7 +1331,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           }
         if (deltaV > (-0.5) && deltaV < 0.5)
           {
-          outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
+          outVDispIt.Set( (static_cast<double>(vDisp_i) + deltaV) * stepDisparityInv);
           }
         else
           {
@@ -1342,7 +1353,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           }
         if (deltaH > (-0.5) && deltaH < 0.5)
           {
-          outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
+          outHDispIt.Set( (static_cast<double>(hDisp_i) + deltaH) * stepDisparityInv);
           }
         else
           {
@@ -1376,8 +1387,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         
         if (deltaV > (-1.0) && deltaV < 1.0 && deltaH > (-1.0) && deltaH < 1.0)
           {
-          outVDispIt.Set( static_cast<double>(vDisp_i) + deltaV);
-          outHDispIt.Set( static_cast<double>(hDisp_i) + deltaH);
+          outVDispIt.Set( (static_cast<double>(vDisp_i) + deltaV) * stepDisparityInv);
+          outHDispIt.Set( (static_cast<double>(hDisp_i) + deltaH) * stepDisparityInv);
           }
         else
           {
@@ -1389,13 +1400,13 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       if (!verticalInterpolation)
         {
         // No vertical interpolation done : simply copy the integer vertical disparity
-        outVDispIt.Set( static_cast<double>(vDisp_i));
+        outVDispIt.Set( static_cast<double>(vDisp_i) * stepDisparityInv);
         }
       
       if (!horizontalInterpolation)
         {
         // No horizontal interpolation done : simply copy the integer horizontal disparity
-        outHDispIt.Set( static_cast<double>(hDisp_i));
+        outHDispIt.Set( static_cast<double>(hDisp_i) * stepDisparityInv);
         }
       
       if (!verticalInterpolation && !horizontalInterpolation)
@@ -1438,8 +1449,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         resampler->SetTransform(transfo);
         resampler->SetOutputStartIndex(upleftCorner);
         
-        offsetTransfo[0] = outHDispIt.Get() - static_cast<double>(hDisp_i);
-        offsetTransfo[1] = outVDispIt.Get() - static_cast<double>(vDisp_i);
+        offsetTransfo[0] = outHDispIt.Get() * stepDisparity - static_cast<double>(hDisp_i);
+        offsetTransfo[1] = outVDispIt.Get() * stepDisparity - static_cast<double>(vDisp_i);
         transfo->SetOffset(offsetTransfo);
         resampler->Modified();
         resampler->Update();
@@ -1586,6 +1597,10 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   
   typename ResamplerFilterType::Pointer resampler;
   
+  // step value as disparityType
+  DisparityPixelType stepDisparity = static_cast<DisparityPixelType>(this->m_Step);
+  DisparityPixelType stepDisparityInv = 1. / stepDisparity;
+  
   RegionType tinyShiftedRegion;
   tinyShiftedRegion.SetIndex(0, m_Radius[0]);
   tinyShiftedRegion.SetIndex(1, m_Radius[1]);
@@ -1608,8 +1623,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     {
     // If the pixel location is on the subsampled grid
     curLeftPos = leftIt.GetIndex();
-    if (((curLeftPos[0] - this->m_GridIndex[0]) % this->m_Step == 0) &&
-        ((curLeftPos[1] - this->m_GridIndex[1]) % this->m_Step == 0))
+    if (((curLeftPos[0] - this->m_GridIndex[0] + this->m_Step) % this->m_Step == 0) &&
+        ((curLeftPos[1] - this->m_GridIndex[1] + this->m_Step) % this->m_Step == 0))
       {
       horizontalInterpolation = false;
       verticalInterpolation = false;
@@ -1617,7 +1632,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       /* compute estimated right position */
       if (useHorizontalDisparity)
         {
-        hDisp_f = static_cast<float>(inHDispIt.Get());
+        hDisp_f = static_cast<float>(inHDispIt.Get()) * stepDisparity;
         hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
         curRightPos[0] = curLeftPos[0] + hDisp_i;
         }
@@ -1630,7 +1645,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       
       if (useVerticalDisparity)
         {
-        vDisp_f = static_cast<float>(inVDispIt.Get());
+        vDisp_f = static_cast<float>(inVDispIt.Get()) * stepDisparity;
         vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
         curRightPos[1] = curLeftPos[1] + vDisp_i;
         }
@@ -1860,7 +1875,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
             }
           }
         
-        outVDispIt.Set( yb );
+        outVDispIt.Set( yb * stepDisparityInv );
         outMetricIt.Set( s_yb );
         }
       else if (!verticalInterpolation && horizontalInterpolation)
@@ -1923,7 +1938,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
             }
           }
         
-        outHDispIt.Set( xb );
+        outHDispIt.Set( xb * stepDisparityInv );
         outMetricIt.Set( s_xb );
         }
       else if (verticalInterpolation && horizontalInterpolation)
@@ -2090,21 +2105,21 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           
           }
         
-        outHDispIt.Set( xb );
-        outVDispIt.Set( yb );
+        outHDispIt.Set( xb * stepDisparityInv);
+        outVDispIt.Set( yb * stepDisparityInv);
         outMetricIt.Set( s_b );
         }
       
       if (!verticalInterpolation)
         {
         // No vertical interpolation done : simply copy the integer vertical disparity
-        outVDispIt.Set( static_cast<double>(vDisp_i));
+        outVDispIt.Set( static_cast<double>(vDisp_i) * stepDisparityInv);
         }
       
       if (!horizontalInterpolation)
         {
         // No horizontal interpolation done : simply copy the integer horizontal disparity
-        outHDispIt.Set( static_cast<double>(hDisp_i));
+        outHDispIt.Set( static_cast<double>(hDisp_i) * stepDisparityInv);
         }
       
       if (!verticalInterpolation && !horizontalInterpolation)

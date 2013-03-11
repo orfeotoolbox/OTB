@@ -92,6 +92,8 @@ public:
   
   typedef typename TOutputMetricImage::ValueType            MetricValueType;
   
+  typedef typename OutputDisparityImageType::PixelType      DisparityPixelType;
+  
   typedef itk::ConstNeighborhoodIterator<TInputImage>       ConstNeighborhoodIteratorType;
   
   typedef itk::ResampleImageFilter<TInputImage, TInputImage, double>  ResamplerFilterType;

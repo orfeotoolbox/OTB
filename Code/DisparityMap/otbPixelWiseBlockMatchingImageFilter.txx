@@ -520,15 +520,17 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   TOutputDisparityImage * outHDispPtr   = this->GetHorizontalDisparityOutput();
   TOutputDisparityImage * outVDispPtr   = this->GetVerticalDisparityOutput();
 
-  // Fill buffers with default values
-  outMetricPtr->FillBuffer(0.);
-  outHDispPtr->FillBuffer(m_MaximumHorizontalDisparity);
-  outVDispPtr->FillBuffer(m_MinimumVerticalDisparity);
-  
   // Sanity check
   if (this->m_Step == 0) this->m_Step = 1;
   this->m_GridIndex[0] = this->m_GridIndex[0] % this->m_Step;
   this->m_GridIndex[1] = this->m_GridIndex[1] % this->m_Step;
+  
+  // Fill buffers with default values
+  outMetricPtr->FillBuffer(0.);
+  outHDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MaximumHorizontalDisparity) / 
+                          static_cast<DisparityPixelType>(m_Step));
+  outVDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MinimumVerticalDisparity) / 
+                          static_cast<DisparityPixelType>(m_Step));
 }
 
 template <class TInputImage, class TOutputMetricImage,
@@ -574,6 +576,10 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       useInitDispMaps = true;
       }
     }
+  
+  // step value as disparityType
+  DisparityPixelType stepDisparityInv = 1. / static_cast<DisparityPixelType>(this->m_Step);
+  
   // We loop on disparities
   for(int vdisparity = m_MinimumVerticalDisparity; vdisparity <= m_MaximumVerticalDisparity; ++vdisparity)
     {
@@ -659,8 +665,8 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       {
       // If the pixel location is on the subsampled grid
       IndexType tmpIndex = leftIt.GetIndex(leftIt.GetCenterNeighborhoodIndex());
-      if (((tmpIndex[0] - this->m_GridIndex[0]) % this->m_Step == 0) &&
-          ((tmpIndex[1] - this->m_GridIndex[1]) % this->m_Step == 0))
+      if (((tmpIndex[0] - this->m_GridIndex[0] + this->m_Step) % this->m_Step == 0) &&
+          ((tmpIndex[1] - this->m_GridIndex[1] + this->m_Step) % this->m_Step == 0))
         {
         // If the mask is present and valid
         if(!inLeftMaskPtr || (inLeftMaskPtr && inLeftMaskIt.Get() > 0) )
@@ -706,23 +712,24 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
             double metric = m_Functor(leftIt,rightIt);
       
               // If we are at first loop, fill both outputs
+              // We adapt the disparity value to keep consistant with disparity map index space
             if(initIt.Get()==0)
                 {
-                outHDispIt.Set(hdisparity);
-                outVDispIt.Set(vdisparity);
+                outHDispIt.Set(static_cast<DisparityPixelType>(hdisparity) * stepDisparityInv);
+                outVDispIt.Set(static_cast<DisparityPixelType>(vdisparity) * stepDisparityInv);
                 outMetricIt.Set(metric);
                 initIt.Set(1);
                 }
               else if(m_Minimize && metric < outMetricIt.Get())
                 {
-                outHDispIt.Set(hdisparity);
-                outVDispIt.Set(vdisparity);
+                outHDispIt.Set(static_cast<DisparityPixelType>(hdisparity) * stepDisparityInv);
+                outVDispIt.Set(static_cast<DisparityPixelType>(vdisparity) * stepDisparityInv);
                 outMetricIt.Set(metric);
                 }
               else if(!m_Minimize && metric > outMetricIt.Get())
                 {
-                outHDispIt.Set(hdisparity);
-                outVDispIt.Set(vdisparity);
+                outHDispIt.Set(static_cast<DisparityPixelType>(hdisparity) * stepDisparityInv);
+                outVDispIt.Set(static_cast<DisparityPixelType>(vdisparity) * stepDisparityInv);
                 outMetricIt.Set(metric);
                 }
               }
@@ -775,6 +782,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   subIndex[1] = (shiftedFull[1]) / step;
   if (shiftedFull[0] % step) ++subIndex[0];
   if (shiftedFull[1] % step) ++subIndex[1];
+  
+  if (shiftedFull[0]<0) subIndex[0] = 0;
+  if (shiftedFull[1]<0) subIndex[1] = 0;
   
   SizeType subSize;
   subSize[0] = (full.GetSize(0) - (subIndex[0] * step) + shiftedFull[0]) / step;

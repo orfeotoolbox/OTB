@@ -272,6 +272,8 @@ public:
   
   typedef typename TOutputMetricImage::ValueType            MetricValueType;
   
+  typedef typename OutputDisparityImageType::PixelType      DisparityPixelType;
+  
   typedef itk::ConstNeighborhoodIterator<TInputImage>       ConstNeighborhoodIteratorType;
 
   /** Set left input */
