@@ -217,6 +217,79 @@ private:
     // Nothing to do here : all parameters are independent
   }
 
+  void LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
+  {
+    ConfusionMatrixCalculatorType::ConfusionMatrixType matrix = confMatCalc->GetConfusionMatrix();
+
+    // Compute minimal width
+    size_t minwidth = 0;
+
+    for (unsigned int i = 0; i < matrix.Rows(); i++)
+      {
+      for (unsigned int j = 0; j < matrix.Cols(); j++)
+        {
+        std::ostringstream os;
+        os << matrix(i,j);
+        size_t size = os.str().size();
+
+        if (size > minwidth)
+          {
+          minwidth = size;
+          }
+        }
+      }
+
+    typedef std::map<int, ConfusionMatrixCalculatorType::ClassLabelType> MapOfIndicesType;
+    MapOfIndicesType mapOfIndices = confMatCalc->GetMapOfIndices();
+
+    MapOfIndicesType::const_iterator it = mapOfIndices.begin();
+    MapOfIndicesType::const_iterator end = mapOfIndices.end();
+
+    for(; it != end; ++it)
+      {
+      std::ostringstream os;
+      os << "[" << it->second << "]";
+
+      size_t size = os.str().size();
+      if (size > minwidth)
+        {
+        minwidth = size;
+        }
+      }
+
+
+    // Generate matrix string, with 'minwidth' as size specifier
+    std::ostringstream os;
+
+    // Header line
+    for (size_t i = 0; i < minwidth; ++i)
+      os << " ";
+    os << " ";
+
+    it = mapOfIndices.begin();
+    end = mapOfIndices.end();
+    for(; it != end; ++it)
+      {
+      os << "[" << it->second << "]" << " ";
+      }
+
+    os << std::endl;
+
+    // Each line of confusion matrix
+    for (unsigned int i = 0; i < matrix.Rows(); i++)
+      {
+      ConfusionMatrixCalculatorType::ClassLabelType label = mapOfIndices[i];
+      os << "[" << std::setw(minwidth - 2) << label << "]" << " ";
+      for (unsigned int j = 0; j < matrix.Cols(); j++)
+        {
+        os << std::setw(minwidth) << matrix(i,j) << " ";
+        }
+      os << std::endl;
+      }
+
+    otbAppLogINFO("Confusion matrix (columns = reference labels, rows = predicted labels):\n" << os.str());
+  }
+
   void DoExecute()
   {
     GetLogger()->Debug("Entering DoExecute\n");
@@ -441,7 +514,7 @@ private:
     confMatCalc->Update();
 
     otbAppLogINFO("SVM training performances");
-    otbAppLogINFO("Confusion matrix:\n" << confMatCalc->GetConfusionMatrix());
+    LogConfusionMatrix(confMatCalc);
 
     for (unsigned int itClasses = 0; itClasses < svmestimator->GetModel()->GetNumberOfClasses(); itClasses++)
       {
@@ -456,6 +529,7 @@ private:
 
 
   }
+
   VectorDataReprojectionType::Pointer vdreproj;
 };
 
