@@ -77,15 +77,14 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
   int countClasses = 0;
   while (refIterator != m_ReferenceLabels->End())
     {
-
     int currentLabel = refIterator.GetMeasurementVector()[0];
     if (m_MapOfClasses.find(currentLabel) == m_MapOfClasses.end())
       {
       m_MapOfClasses[currentLabel] = countClasses;
+      m_MapOfIndices[countClasses] = currentLabel;
       ++countClasses;
       }
     ++refIterator;
-
     }
 
   m_NumberOfClasses = countClasses;

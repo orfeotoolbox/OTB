@@ -97,9 +97,20 @@ public:
   itkGetMacro(NumberOfSamples, unsigned long);
   itkGetMacro(ConfusionMatrix, ConfusionMatrixType);
 
+  /* Gives the correspondence between a class label
+   * and its index in the confusion matrix
+   */
   std::map<ClassLabelType, int> GetMapOfClasses() const
   {
     return m_MapOfClasses;
+  }
+
+  /* Gives the correspondence between an index in the
+   * confusion matrix and the class label
+   */
+  std::map<int, ClassLabelType> GetMapOfIndices() const
+  {
+    return m_MapOfIndices;
   }
 
 protected:
@@ -136,6 +147,7 @@ private:
   double m_FScore;
 
   std::map<ClassLabelType, int> m_MapOfClasses;
+  std::map<int, ClassLabelType> m_MapOfIndices;
 
   unsigned short m_NumberOfClasses;
   unsigned long  m_NumberOfSamples;
