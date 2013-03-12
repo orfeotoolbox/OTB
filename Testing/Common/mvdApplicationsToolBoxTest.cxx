@@ -30,7 +30,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdApplicationsToolBox.h"
 
-int otbApplicationsToolBoxTest(int argc, char* argv[])
+int mvdApplicationsToolBoxTest(int argc, char* argv[])
 {
   QApplication app(argc, argv);
   mvd::ApplicationsToolBox applToolBox;

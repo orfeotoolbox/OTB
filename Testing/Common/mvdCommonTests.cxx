@@ -26,5 +26,5 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbApplicationsToolBoxTest);
+  REGISTER_TEST(mvdApplicationsToolBoxTest);
 }
