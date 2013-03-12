@@ -1,1 +1,3 @@
 ADD_SUBDIRECTORY(Application)
+ADD_SUBDIRECTORY(Common)
+
