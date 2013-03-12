@@ -97,6 +97,7 @@ add_executable( mvd2-viewer
 target_link_libraries( mvd2-viewer
   Monteverdi2_Application
   Monteverdi2_Common
+  ${QT_QTMAIN_LIBRARY}
 )
 
 deploy_qt_conf( mvd2-viewer )
