@@ -31,7 +31,7 @@
 #include "mvdApplication.h"
 #include "mvdMainWindow.h"
 
-int otbMonteverdi2ApplicationTest(int argc, char* argv[])
+int mvdMonteverdi2ApplicationTest(int argc, char* argv[])
 {
   mvd::Application application( argc, argv );
   mvd::MainWindow main_window;

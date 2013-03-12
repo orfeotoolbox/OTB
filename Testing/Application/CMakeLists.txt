@@ -8,7 +8,7 @@ if(OTB_DATA_USE_LARGEINPUT)
   set(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
 endif(OTB_DATA_USE_LARGEINPUT)
 
-set(Application_TESTS ${CXX_TEST_PATH}/otbApplicationTests)
+set(Application_TESTS ${CXX_TEST_PATH}/mvdApplicationTests)
 
 include_directories(
   ${Monteverdi2_BINARY_DIR}
@@ -20,12 +20,12 @@ include_directories(
   )
 
 #-------------- Monteverdi Application Tests ---------------------------------
-add_test(apTvMonteverdi2Application ${Application_TESTS} otbMonteverdi2ApplicationTest)
+add_test(apTvMonteverdi2Application ${Application_TESTS} mvdMonteverdi2ApplicationTest)
 
 
 set(Application_SRCS
-otbMonteverdi2ApplicationTest.cxx
+mvdMonteverdi2ApplicationTest.cxx
 )
 
-add_executable(otbApplicationTests otbApplicationTests.cxx ${Application_SRCS})
-target_link_libraries(otbApplicationTests Monteverdi2_Application OTBTesting)
+add_executable(mvdApplicationTests mvdApplicationTests.cxx ${Application_SRCS})
+target_link_libraries(mvdApplicationTests Monteverdi2_Application OTBTesting)
