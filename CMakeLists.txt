@@ -132,6 +132,7 @@ endif(NOT Monteverdi2_INSTALL_PACKAGE_DIR)
 #----------------------------------------------------------------------------
 include( PreventInSourceBuilds )
 include( PreventInstallOnBuildTree )
+include( DeployQtConf )
 
 #----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
