@@ -19,13 +19,26 @@ include_directories(
   ${Monteverdi2_BINARY_DIR}/Code/Common
   )
 
+# add source files
+set(Common_SRCS
+  mvdApplicationsToolBoxTest.cxx
+  mvdApplicationsBrowserTest.cxx
+)
+
 #-------------- Monteverdi Common Tests ---------------------------------
+
+# Applications toolBox test 
 add_test(apTvMonteverdi2ApplicationsToolBox ${Common_TESTS} mvdApplicationsToolBoxTest)
 
-
-set(Common_SRCS
-mvdApplicationsToolBoxTest.cxx
-)
+# Applications browser test
+add_test(apTvMonteverdi2ApplicationsBrowser ${Common_TESTS} 
+  mvdApplicationsBrowserTest
+  ${OTB_DIR}/bin
+  )
 
 add_executable(mvdCommonTests mvdCommonTests.cxx ${Common_SRCS})
 target_link_libraries(mvdCommonTests Monteverdi2_Common OTBTesting)
+
+
+
+
