@@ -15,8 +15,8 @@ include_directories(
   
   ${Monteverdi2_SOURCE_DIR}/Code/Common
   
-  ${Monteverdi2_SOURCE_DIR}/Code/Application
-  ${Monteverdi2_BINARY_DIR}/Code/Application
+  ${Monteverdi2_SOURCE_DIR}/Code/Application/Viewer
+  ${Monteverdi2_BINARY_DIR}/Code/Application/Viewer
   )
 
 #-------------- Monteverdi Application Tests ---------------------------------

@@ -13,7 +13,7 @@ set(Common_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 include_directories(
   ${Monteverdi2_BINARY_DIR}
   
-  ${Monteverdi2_SOURCE_DIR}/Code/Common
+  ${Monteverdi2_SOURCE_DIR}/Code/Application/Viewer
   
   ${Monteverdi2_SOURCE_DIR}/Code/Common
   ${Monteverdi2_BINARY_DIR}/Code/Common
