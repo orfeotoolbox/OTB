@@ -75,15 +75,14 @@ endif()
 # The library is also used in tests, waiting for a better test strategy
 # The library is not installed
 
-add_library(Monteverdi2_Application
+add_library( Monteverdi2_Application
   STATIC
   ${Application_SOURCES}
   ${Application_FORMS_HEADERS}
   ${Application_SRC_MOC}
 )
-target_link_libraries(Monteverdi2_Application
+target_link_libraries( Monteverdi2_Application
   Monteverdi2_Common
-  ${QT_LIBRARIES}
 )
 
 #############################################################################
@@ -98,7 +97,6 @@ add_executable( mvd2-viewer
 target_link_libraries( mvd2-viewer
   Monteverdi2_Application
   Monteverdi2_Common
-  ${QT_LIBRARIES}
 )
 
 deploy_qt_conf( mvd2-viewer )

@@ -111,6 +111,10 @@ target_link_libraries(Monteverdi2_Common
   OTBIO
   ${OPENGL_LIBRARIES}
   ${QT_LIBRARIES}
+  Qt4::QtCore
+  Qt4::QtGui
+  Qt4::QtOpenGL
+  Qt4::QtXml
 )
 
 set_target_properties(Monteverdi2_Common

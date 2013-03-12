@@ -51,10 +51,15 @@ else(OTB_FOUND)
 endif(OTB_FOUND)
 
 #----------------------------------------------------------------------------
-# Qt4
+# OpenGL (needed by Qt4)
 find_package( OpenGL REQUIRED )
+
+#----------------------------------------------------------------------------
+# Qt4
+set(QT_USE_IMPORTED_TARGETS ON)
 find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain QtXml )
 include( ${QT_USE_FILE} )
+message( "${QT_QTOPENGL_LIBRARY}" )
 
 #----------------------------------------------------------------------------
 # Include OTB CMake modules path.
