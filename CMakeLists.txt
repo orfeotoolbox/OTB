@@ -59,7 +59,6 @@ find_package( OpenGL REQUIRED )
 set(QT_USE_IMPORTED_TARGETS ON)
 find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain QtXml )
 include( ${QT_USE_FILE} )
-message( "${QT_QTOPENGL_LIBRARY}" )
 
 #----------------------------------------------------------------------------
 # Include OTB CMake modules path.
