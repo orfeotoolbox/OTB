@@ -28,6 +28,7 @@ set( Common_SOURCES
         mvdSystemError.cxx
         mvdTypes.cxx
         mvdVectorImageModel.cxx
+        mvdApplicationsToolBox.cxx
 )
 
 # Headers for classes with Q_OBJECT macro (needs to go to Qt moc)
@@ -55,6 +56,7 @@ set( Common_HEADERS_MOC
         mvdQuicklookViewManipulator.h
         mvdStatusBarWidget.h
         mvdVectorImageModel.h
+        mvdApplicationsToolBox.h
 )
 
 # Qt designer UI files
@@ -67,6 +69,7 @@ set( Common_FORMS
         mvdMyWidget.ui
         mvdStatusBarWidget.ui
         mvdVideoColorToolBox.ui
+        mvdApplicationsToolBox.ui
 )
 
 # Qt resources
