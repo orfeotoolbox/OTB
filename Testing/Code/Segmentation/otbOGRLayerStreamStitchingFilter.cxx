@@ -30,12 +30,12 @@ int otbOGRLayerStreamStitchingFilter(int argc, char * argv[])
       std::cerr << " inputImage inputOGR outputOGR streamingSize" << std::endl;
       return EXIT_FAILURE;
     }
-  
+
   const char * infname      = argv[1];
   const char * inOGRfname   = argv[2];
   const char * tmpOGRfname  = argv[3];
   unsigned int size         = atoi(argv[4]);
-  
+
   /** Typedefs */
   const unsigned int Dimension = 2;
   typedef float PixelType;
@@ -43,13 +43,13 @@ int otbOGRLayerStreamStitchingFilter(int argc, char * argv[])
 
   typedef otb::OGRLayerStreamStitchingFilter<ImageType>   FilterType;
   typedef otb::ImageFileReader<ImageType>       ReaderType;
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   FilterType::Pointer filter = FilterType::New();
-  
+
   //first copy the input OGR file as it will be updated with the fusionned polygons
   itksys::SystemTools::CopyAFile(inOGRfname,tmpOGRfname,true);
-  
+
   //Get the base name of the .shp file
   std::string inPathName = itksys::SystemTools::GetFilenamePath(inOGRfname);
   std::string inBaseName = itksys::SystemTools::GetFilenameWithoutExtension(inOGRfname);
@@ -69,19 +69,24 @@ int otbOGRLayerStreamStitchingFilter(int argc, char * argv[])
   itksys::SystemTools::CopyAFile(in.c_str(),out.c_str(),true);
 
   const std::string layerName = outBaseName;
-  
+
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
-  
+
   ImageType::SizeType streamSize;
   streamSize.Fill(size);
-  
+
   otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(tmpOGRfname, otb::ogr::DataSource::Modes::Update_LayerUpdate);
-  
+
   filter->SetInput(reader->GetOutput());
   filter->SetOGRLayer(ogrDS->GetLayer(layerName));
   filter->SetStreamSize(streamSize);
   filter->GenerateData();
+
+  //REPACK the layer to remove features marked as deleted in the Shapefile.
+  std::string sql("REPACK ");
+  sql = sql + layerName;
+  ogrDS->ExecuteSQL(sql , NULL, NULL);
 
   return EXIT_SUCCESS;
 }
