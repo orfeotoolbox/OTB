@@ -25,6 +25,7 @@
 #include "itkTimeProbe.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
+#include <set>
 
 namespace otb
 {
@@ -118,7 +119,37 @@ OGRLayerStreamStitchingFilter<TInputImage>
       m_OGRLayer.ogr().StartTransaction();
       for(unsigned int y=1; y<=nbRowStream; y++)
       {
-         //First we get all the feature that intersect the streaming line of the Upper/left stream
+
+	 //Compute Stream line
+	 OGRLineString streamLine;
+	 IndexType startIndex;
+	 IndexType endIndex;
+	 if(!line)
+	 {
+	   // Treat Row stream
+	   //Compute the spatial filter of the upper stream
+	   startIndex[0] = x*m_StreamSize[0];
+	   startIndex[1] = m_StreamSize[1]*(y-1);
+	   endIndex[0] = m_StreamSize[0]*x;
+	   endIndex[1] = m_StreamSize[1]*y;
+	 }
+	 else
+	 {  // Treat Column stream
+	   //Compute the spatial filter of the left stream
+	   startIndex[0] = (x-1)*m_StreamSize[0];
+	   startIndex[1] = m_StreamSize[1]*y;
+	   endIndex[0] = m_StreamSize[0]*x;
+	   endIndex[1] = m_StreamSize[1]*y; //-1 to stop just before stream line
+	 }
+	 OriginType  startPoint;
+	 inputImage->TransformIndexToPhysicalPoint(startIndex, startPoint);
+	 OriginType  endPoint;
+	 inputImage->TransformIndexToPhysicalPoint(endIndex, endPoint);
+	 streamLine.addPoint(startPoint[0], startPoint[1]);
+	 streamLine.addPoint(endPoint[0], endPoint[1]);
+
+
+	 //First we get all the feature that intersect the streaming line of the Upper/left stream
          std::vector<FeatureStruct> upperStreamFeatureList;
          upperStreamFeatureList.clear();
          IndexType  UpperLeftCorner;
@@ -151,6 +182,7 @@ OGRLayerStreamStitchingFilter<TInputImage>
 
          m_OGRLayer.SetSpatialFilterRect(ulCorner[0],lrCorner[1],lrCorner[0],ulCorner[1]);
 
+	 std::set<unsigned int> upperFIDs;
          OGRLayerType::const_iterator featIt = m_OGRLayer.begin();
          for(; featIt!=m_OGRLayer.end(); ++featIt)
          {
@@ -158,6 +190,7 @@ OGRLayerStreamStitchingFilter<TInputImage>
             s.feat = *featIt;
             s.fusioned = false;
             upperStreamFeatureList.push_back(s);
+	    upperFIDs.insert((*featIt).GetFID());
          }
 
          //Do the same thing for the lower/right stream
@@ -190,10 +223,13 @@ OGRLayerStreamStitchingFilter<TInputImage>
 
          for(featIt = m_OGRLayer.begin(); featIt!=m_OGRLayer.end(); ++featIt)
          {
-            FeatureStruct s(m_OGRLayer.GetLayerDefn());
-            s.feat = *featIt;
-            s.fusioned = false;
-            lowerStreamFeatureList.push_back(s);
+            if(upperFIDs.find((*featIt).GetFID()) == upperFIDs.end())
+	    {
+	      FeatureStruct s(m_OGRLayer.GetLayerDefn());
+	      s.feat = *featIt;
+	      s.fusioned = false;
+	      lowerStreamFeatureList.push_back(s);
+	    }
          }
 
          unsigned int nbUpperPolygons = upperStreamFeatureList.size();
@@ -206,47 +242,52 @@ OGRLayerStreamStitchingFilter<TInputImage>
             {
                FeatureStruct upper = upperStreamFeatureList[u];
                FeatureStruct lower = lowerStreamFeatureList[l];
-               if (ogr::Intersects(*upper.feat.GetGeometry(), *lower.feat.GetGeometry()))
-               {
-                  ogr::UniqueGeometryPtr intersection = ogr::Intersection(*upper.feat.GetGeometry(),*lower.feat.GetGeometry());
-                  if (intersection)
-                  {
-                     FusionStruct fusion;
-                     fusion.indStream1 = u;
-                     fusion.indStream2 = l;
-                     fusion.overlap = 0.;
+	       if (!(upper.feat == lower.feat))
+	       {
+		  if (ogr::Intersects(*upper.feat.GetGeometry(), *lower.feat.GetGeometry()))
+		  {
+		      ogr::UniqueGeometryPtr intersection2 = ogr::Intersection(*upper.feat.GetGeometry(),*lower.feat.GetGeometry());
+		      ogr::UniqueGeometryPtr intersection = ogr::Intersection(*intersection2, streamLine);
+		      //ogr::UniqueGeometryPtr intersection = ogr::Intersection(*upper.feat.GetGeometry(),*lower.feat.GetGeometry());
+		      if (intersection)
+		      {
+			FusionStruct fusion;
+			fusion.indStream1 = u;
+			fusion.indStream2 = l;
+			fusion.overlap = 0.;
 
-                     if(intersection->getGeometryType() == wkbPolygon)
-                     {
-                        fusion.overlap = dynamic_cast<OGRPolygon *>(intersection.get())->get_Area();
-                     }
-                     else if(intersection->getGeometryType() == wkbMultiPolygon)
-                     {
-                        fusion.overlap = dynamic_cast<OGRMultiPolygon *>(intersection.get())->get_Area();
-                     }
-                     else if(intersection->getGeometryType() == wkbGeometryCollection)
-                     {
-                        fusion.overlap = dynamic_cast<OGRGeometryCollection *>(intersection.get())->get_Area();
-                     }
-                     else if(intersection->getGeometryType() == wkbLineString)
-                     {
-                        fusion.overlap = dynamic_cast<OGRLineString *>(intersection.get())->get_Length();
-                     }
-                     else if (intersection->getGeometryType() == wkbMultiLineString)
-                     {
-                        #if(GDAL_VERSION_NUM < 1800)
-                     fusion.overlap = GetLengthOGRGeometryCollection(dynamic_cast<OGRGeometryCollection *> (intersection.get()));
-                        #else
-                     fusion.overlap = dynamic_cast<OGRMultiLineString *>(intersection.get())->get_Length();
-                        #endif
-                   }
+			if(intersection->getGeometryType() == wkbPolygon)
+			{
+			    fusion.overlap = dynamic_cast<OGRPolygon *>(intersection.get())->get_Area();
+			}
+			else if(intersection->getGeometryType() == wkbMultiPolygon)
+			{
+			    fusion.overlap = dynamic_cast<OGRMultiPolygon *>(intersection.get())->get_Area();
+			}
+			else if(intersection->getGeometryType() == wkbGeometryCollection)
+			{
+			    fusion.overlap = dynamic_cast<OGRGeometryCollection *>(intersection.get())->get_Area();
+			}
+			else if(intersection->getGeometryType() == wkbLineString)
+			{
+			    fusion.overlap = dynamic_cast<OGRLineString *>(intersection.get())->get_Length();
+			}
+			else if (intersection->getGeometryType() == wkbMultiLineString)
+			{
+			    #if(GDAL_VERSION_NUM < 1800)
+			fusion.overlap = GetLengthOGRGeometryCollection(dynamic_cast<OGRGeometryCollection *> (intersection.get()));
+			    #else
+			fusion.overlap = dynamic_cast<OGRMultiLineString *>(intersection.get())->get_Length();
+			    #endif
+		      }
 
 
-                     long upperFID = upper.feat.GetFID();
-                     long lowerFID = lower.feat.GetFID();
-                     fusionList.push_back(fusion);
-                  }
-               }
+			long upperFID = upper.feat.GetFID();
+			long lowerFID = lower.feat.GetFID();
+			fusionList.push_back(fusion);
+		      }
+		  }
+	       }
             }
          }
          unsigned int fusionListSize = fusionList.size();
@@ -255,9 +296,9 @@ OGRLayerStreamStitchingFilter<TInputImage>
          {
             FeatureStruct upper = upperStreamFeatureList.at(fusionList.at(i).indStream1);
             FeatureStruct lower = lowerStreamFeatureList.at(fusionList.at(i).indStream2);
-            if( !upper.fusioned && !lower.fusioned )
+            if( !upper.fusioned && !lower.fusioned)
             {
-               upperStreamFeatureList[fusionList[i].indStream1].fusioned = true;
+	       upperStreamFeatureList[fusionList[i].indStream1].fusioned = true;
                lowerStreamFeatureList[fusionList[i].indStream2].fusioned = true;
                ogr::UniqueGeometryPtr fusionPolygon = ogr::Union(*upper.feat.GetGeometry(),*lower.feat.GetGeometry());
                OGRFeatureType fusionFeature(m_OGRLayer.GetLayerDefn());
