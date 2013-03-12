@@ -1,8 +1,0 @@
-<RCC>
-  <qresource prefix="/icons">
-    <file alias="action_Open_Icon">../../Data/Icons/document-open_32x32.png</file>
-  </qresource>
-  <qresource prefix="/images">
-    <file alias="application_icon">../../Data/Icons/monteverdi2-128x128.png</file>
-  </qresource>
-</RCC>

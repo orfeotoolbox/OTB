@@ -28,14 +28,15 @@ set( Application_RESOURCES
        mvdMainWindow.qrc
 )
 
+# General include directories.
 include_directories(
   ${Monteverdi2_BINARY_DIR}
-  
+
   ${Monteverdi2_SOURCE_DIR}/Code/Common
-  
-  ${Monteverdi2_SOURCE_DIR}/Code/Application
-  ${Monteverdi2_BINARY_DIR}/Code/Application
-  
+
+  ${Monteverdi2_SOURCE_DIR}/Code/Application/Viewer
+  ${Monteverdi2_BINARY_DIR}/Code/Application/Viewer
+
   ${Monteverdi2_SOURCE_DIR}/Data/Icons
 )
 
@@ -87,13 +88,14 @@ target_link_libraries(Monteverdi2_Application
 
 #############################################################################
 # monteverdi2 executable
-add_executable(monteverdi2
+add_executable( mvd2-viewer
   WIN32
   main.cxx
   ${Monteverdi2_WIN32_RC_FILE}
   ${Application_RESOURCES_RCC}
 )
-target_link_libraries(monteverdi2
+
+target_link_libraries( mvd2-viewer
   Monteverdi2_Application
   Monteverdi2_Common
   ${QT_LIBRARIES}
@@ -102,12 +104,12 @@ target_link_libraries(monteverdi2
 # deploy a qt.conf file in the monteverdi2 target build dir
 # to avoid warning on translation discovery
 add_custom_command( 
-    TARGET monteverdi2
+    TARGET mvd2-viewer
     PRE_BUILD 
     COMMAND ${CMAKE_COMMAND}
       ARGS -D QT_TRANSLATIONS_DIR:PATH=${QT_TRANSLATIONS_DIR}
            -D SOURCE_DIR:PATH=${CMAKE_CURRENT_SOURCE_DIR}
-           -D TARGET_DIR:PATH=$<TARGET_FILE_DIR:monteverdi2>
+           -D TARGET_DIR:PATH=$<TARGET_FILE_DIR:mvd2-viewer>
            -P ${CMAKE_CURRENT_SOURCE_DIR}/DeployQtConf.cmake
     COMMENT "Deploying qt.conf in build dir"
     VERBATIM
@@ -115,7 +117,7 @@ add_custom_command(
 
 #############################################################################
 install(
-  TARGETS monteverdi2
+  TARGETS mvd2-viewer
   RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Runtime
   LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Runtime
   ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Development
