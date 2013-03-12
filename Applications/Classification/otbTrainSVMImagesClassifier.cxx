@@ -440,13 +440,16 @@ private:
 
     confMatCalc->Update();
 
-    otbAppLogINFO("*** SVM training performances ***\n" << "Confusion matrix:\n" << confMatCalc->GetConfusionMatrix());
+    otbAppLogINFO("SVM training performances");
+    otbAppLogINFO("Confusion matrix:\n" << confMatCalc->GetConfusionMatrix());
 
     for (unsigned int itClasses = 0; itClasses < svmestimator->GetModel()->GetNumberOfClasses(); itClasses++)
       {
-      otbAppLogINFO("Precision of class [" << itClasses << "] vs all: " << confMatCalc->GetPrecisions()[itClasses]);
-      otbAppLogINFO("Recall of class [" << itClasses << "] vs all: " << confMatCalc->GetRecalls()[itClasses]);
-      otbAppLogINFO("F-score of class [" << itClasses << "] vs all: " << confMatCalc->GetFScores()[itClasses] << "\n");
+      ConfusionMatrixCalculatorType::ClassLabelType classLabel = confMatCalc->GetMapOfIndices()[itClasses];
+
+      otbAppLogINFO("Precision of class [" << classLabel << "] vs all: " << confMatCalc->GetPrecisions()[itClasses]);
+      otbAppLogINFO("Recall of class    [" << classLabel << "] vs all: " << confMatCalc->GetRecalls()[itClasses]);
+      otbAppLogINFO("F-score of class   [" << classLabel << "] vs all: " << confMatCalc->GetFScores()[itClasses] << "\n");
       }
     otbAppLogINFO("Global performance, Kappa index: " << confMatCalc->GetKappaIndex());
     // TODO: implement hyperplan distance classifier and performance validation (cf. object detection) ?
