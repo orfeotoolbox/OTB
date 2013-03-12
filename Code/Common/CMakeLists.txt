@@ -29,6 +29,7 @@ set( Common_SOURCES
         mvdTypes.cxx
         mvdVectorImageModel.cxx
         mvdApplicationsToolBox.cxx
+        mvdApplicationsBrowser.cxx
 )
 
 # Headers for classes with Q_OBJECT macro (needs to go to Qt moc)
@@ -57,6 +58,7 @@ set( Common_HEADERS_MOC
         mvdStatusBarWidget.h
         mvdVectorImageModel.h
         mvdApplicationsToolBox.h
+        mvdApplicationsBrowser.h
 )
 
 # Qt designer UI files
@@ -108,7 +110,7 @@ add_library(Monteverdi2_Common
 
 #############################################################################
 target_link_libraries(Monteverdi2_Common
-  OTBIO
+  OTBIO OTBApplicationEngine
   ${OPENGL_LIBRARIES}
   Qt4::QtCore
   Qt4::QtGui

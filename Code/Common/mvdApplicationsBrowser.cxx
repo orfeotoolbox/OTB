@@ -1,0 +1,131 @@
+/*=========================================================================
+
+  Program:   Monteverdi2
+  Language:  C++
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See Copyright.txt for details.
+
+  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Licence_CeCILL_V2-en.txt or
+  http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
+
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#include "mvdApplicationsBrowser.h"
+
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
+//
+// Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
+
+//
+// System includes (sorted by alphabetic order)
+
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+#include "otbWrapperApplicationRegistry.h"
+#include "otbWrapperApplication.h"
+
+//
+// Monteverdi includes (sorted by alphabetic order)
+
+namespace mvd
+{
+/*
+  TRANSLATOR mvd::ApplicationsBrowser
+
+  Necessary for lupdate to be aware of C++ namespaces.
+
+  Context comment for translator.
+*/
+
+
+/*****************************************************************************/
+/* CONSTANTS                                                                 */
+
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
+
+/*******************************************************************************/
+ApplicationsBrowser
+::ApplicationsBrowser( QObject* parent ) :
+  QObject( parent ),
+  m_AutoLoadPath("")
+{
+}
+
+/*******************************************************************************/
+ApplicationsBrowser
+::~ApplicationsBrowser()
+{
+}
+
+/*******************************************************************************/
+void
+ApplicationsBrowser
+::SetAutoLoadPath(const std::string & itk_auto_load_path)
+{
+  m_AutoLoadPath = itk_auto_load_path;
+
+  //
+  // add the path
+  otb::Wrapper::ApplicationRegistry::AddApplicationPath(m_AutoLoadPath);
+}
+
+/*******************************************************************************/
+StringVector
+ApplicationsBrowser
+::GetAvailableApplications()
+{
+  //
+  // check if search path is not empty
+  // TODO : throw exception to be catched by the catalog manager later
+  if (m_AutoLoadPath.empty())
+    {
+    std::cerr << "ERROR: Search path is empty "<< std::endl;
+    }
+
+  //
+  // Get available application in search path
+  StringVector appList = otb::Wrapper::ApplicationRegistry::GetAvailableApplications();
+
+  // 
+  // some verbosity
+  // TODO : remove this verbosity later
+  if ( appList.size() == 0 )
+    {
+    std::cerr << "ERROR: Available modules : none." << std::endl;
+    }
+  else
+    {
+    std::cout << "--- Available modules :" << std::endl;
+    for (StringVector::const_iterator it = appList.begin(); it != appList.end(); ++it)
+      {
+      std::cout << "\t" << *it << std::endl;
+      }
+    }
+    
+  return appList;
+}
+
+/*******************************************************************************/
+/* SLOTS                                                                       */
+/*******************************************************************************/
+
+} // end namespace 'mvd'
