@@ -1,46 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>mvd::ApplicationsToolBox</class>
- <widget class="QDockWidget" name="mvd::ApplicationsToolBox">
+ <widget class="QWidget" name="mvd::ApplicationsToolBox">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>225</width>
-    <height>444</height>
+    <width>283</width>
+    <height>375</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>OTB Applications</string>
   </property>
-  <widget class="QWidget" name="dockWidgetContents">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <property name="spacing">
-     <number>2</number>
-    </property>
-    <property name="margin">
-     <number>0</number>
-    </property>
-    <item>
-     <widget class="QLineEdit" name="m_SearchLine"/>
-    </item>
-    <item>
-     <widget class="QTreeWidget" name="m_AlgorithmsTree">
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLineEdit" name="m_SearchLine"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QTreeWidget" name="m_AlgorithmsTree">
+     <property name="contextMenuPolicy">
+      <enum>Qt::CustomContextMenu</enum>
+     </property>
+     <property name="headerHidden">
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text">
+       <string notr="true">1</string>
       </property>
-      <property name="headerHidden">
-       <bool>true</bool>
-      </property>
-      <column>
-       <property name="text">
-        <string notr="true">1</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+     </column>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

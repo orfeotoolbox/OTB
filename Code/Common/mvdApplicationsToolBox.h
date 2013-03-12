@@ -75,7 +75,7 @@ class ApplicationsToolBox;
  * widget class.
  */
 class Monteverdi2_EXPORT ApplicationsToolBox :
-    public QDockWidget
+    public QWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/

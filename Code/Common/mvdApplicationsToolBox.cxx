@@ -64,7 +64,7 @@ namespace mvd
 /*******************************************************************************/
 ApplicationsToolBox
 ::ApplicationsToolBox( QWidget* parent, Qt::WindowFlags flags  ):
-  QDockWidget( parent, flags ),
+  QWidget( parent, flags ),
   m_UI( new mvd::Ui::ApplicationsToolBox() )
 {
   m_UI->setupUi( this );
