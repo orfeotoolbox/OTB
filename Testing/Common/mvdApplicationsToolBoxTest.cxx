@@ -35,7 +35,8 @@ int mvdApplicationsToolBoxTest(int argc, char* argv[])
   QApplication app(argc, argv);
   mvd::ApplicationsToolBox applToolBox;
   applToolBox.show();
-  
+
+  QTimer::singleShot(1000, &app, SLOT(quit()));
   return app.exec();
 
 }
