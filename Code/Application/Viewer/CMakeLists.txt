@@ -100,6 +100,8 @@ target_link_libraries( mvd2-viewer
   ${QT_QTMAIN_LIBRARY}
 )
 
+# deploy a qt.conf file in the monteverdi2 target build dir
+# to avoid warning on translation discovery
 deploy_qt_conf( mvd2-viewer )
 
 #############################################################################
