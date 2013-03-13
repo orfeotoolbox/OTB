@@ -14,9 +14,9 @@ include_directories(
   ${Monteverdi2_BINARY_DIR}
   
   ${Monteverdi2_SOURCE_DIR}/Code/Application/Viewer
-  
   ${Monteverdi2_SOURCE_DIR}/Code/Common
-  ${Monteverdi2_BINARY_DIR}/Code/Common
+  ${Monteverdi2_SOURCE_DIR}/Code/Common/Gui
+  ${Monteverdi2_BINARY_DIR}/Code/Common/Core
   )
 
 # add source files
@@ -45,7 +45,7 @@ add_test(apTvMonteverdi2FillToolBoxTree ${Common_TESTS}
 
 
 add_executable(mvdCommonTests mvdCommonTests.cxx ${Common_SRCS})
-target_link_libraries(mvdCommonTests Monteverdi2_Common OTBTesting)
+target_link_libraries(mvdCommonTests Monteverdi2_Gui Monteverdi2_Core OTBTesting)
 
 
 

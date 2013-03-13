@@ -105,6 +105,7 @@ add_library(Monteverdi2_Gui
 #############################################################################
 target_link_libraries(Monteverdi2_Gui
   Monteverdi2_Core
+  OTBApplicationEngine
   ${OPENGL_LIBRARIES}
   #Qt4::QtCore
   Qt4::QtGui

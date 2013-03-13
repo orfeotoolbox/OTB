@@ -28,4 +28,4 @@ mvdMonteverdi2ApplicationTest.cxx
 )
 
 add_executable(mvdApplicationTests mvdApplicationTests.cxx ${Application_SRCS})
-target_link_libraries(mvdApplicationTests Monteverdi2_Application OTBTesting)
+target_link_libraries(mvdApplicationTests Monteverdi2_Viewer OTBTesting)
