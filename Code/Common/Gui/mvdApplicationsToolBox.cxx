@@ -38,6 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdAlgorithm.h"
 
 namespace mvd
 {
@@ -68,6 +69,22 @@ ApplicationsToolBox
   m_UI( new mvd::Ui::ApplicationsToolBox() )
 {
   m_UI->setupUi( this );
+
+  //
+  // connect search box changed
+  QObject::connect(m_UI->m_SearchLine,
+                   SIGNAL( textChanged(const QString &) ),
+                   this,
+                   SLOT( OnSearchBoxChanged(const QString &) )
+    );
+
+  //
+  // connect double click on the tree Widget
+  QObject::connect(GetAlgorithmsTree(),
+                   SIGNAL( itemDoubleClicked(QTreeWidgetItem* ,int) ),
+                   this,
+                   SLOT( OnAlgorithmTreeDoubleClick(QTreeWidgetItem* ,int) )
+    );
 }
 
 /*******************************************************************************/
@@ -112,7 +129,8 @@ ApplicationsToolBox
     cmainItem->setText(0,  qcurrentMainItem );
 
     //
-    // step #2 -> Applications name as secondary items
+    // TODO : add category icon
+    // step #2 -> Applications name are secondary items
     StringVector::const_iterator itApps = (*itTag).second.begin();
     while( itApps != (*itTag).second.end() )
       {
@@ -121,11 +139,23 @@ ApplicationsToolBox
       QTreeWidgetItem * secItem = new QTreeWidgetItem( cmainItem );
       QString  qcurrentSecItem( (*itApps).c_str() );
       secItem->setText(0, qcurrentSecItem);
+
+      //
+      // TODO : add algorithm icon
+
       ++itApps;
       }
 
     ++itTag;
     }
+}
+
+/*******************************************************************************/
+void
+ApplicationsToolBox
+::ExecuteAlgorithm( const QString& appName )
+{
+  std::cout <<"ApplicationsToolBox::ExecuteAlgorithm - "<< ToStdString( appName )<< "- WIP."<< std::endl;
 }
 
 /*******************************************************************************/
@@ -140,6 +170,35 @@ ApplicationsToolBox
   
   // fill the tree with the application
   FillTreeUsingTags();  
+}
+
+/*******************************************************************************/
+void
+ApplicationsToolBox
+::OnSearchBoxChanged(const QString & search)
+{
+  // 
+  // get the search text
+  m_SearchText = search;
+  
+  // fill the tree with the application
+  FillTreeUsingTags();  
+}
+
+/*******************************************************************************/
+void
+ApplicationsToolBox
+::OnAlgorithmTreeDoubleClick( QTreeWidgetItem * item , int column )
+{
+  std::cout <<"Algorithm name "<< ToStdString( item->text( column ) ) << std::endl;
+  QString appName = item->text( column );
+
+  // 
+  // Execute the algorithm
+  if ( !appName.isEmpty() )
+    {
+    ExecuteAlgorithm( appName );
+    }
 }
 
 /*******************************************************************************/

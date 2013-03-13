@@ -102,7 +102,9 @@ public:
 //
 // Public SLOTS.
 public slots:
-  void OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer& appsTags );
+  void OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& appsTags );
+  void OnSearchBoxChanged( const QString & search );
+  void OnAlgorithmTreeDoubleClick( QTreeWidgetItem * item , int column );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -130,6 +132,11 @@ private:
    */
   void FillTreeUsingTags();
 
+  /**
+   * \brief Launch the appName algorithm
+   */
+  void ExecuteAlgorithm( const QString& appName );
+
 //
 // Private attributes.
 private:
@@ -141,8 +148,12 @@ private:
   /**
    * \brief map storing applications and its tags
    */
-  ApplicationsTagContainer  m_AppTags;
+  ApplicationsTagContainer m_AppTags;
 
+  /**
+   * \brief text to search in the widget tree
+   */
+  QString                  m_SearchText;  
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
