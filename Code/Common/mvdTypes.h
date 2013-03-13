@@ -290,6 +290,12 @@ typedef mvd::VectorImageType DefaultImageType;
 typedef mvd::VectorImageFileReaderType DefaultImageFileReaderType;
 
 /*******************************************************************************/
+/** Type definitions for wrapped applications
+ * 
+ */
+typedef std::map< std::string, StringVector >    ApplicationsTagContainer;
+
+/*******************************************************************************/
 
 } // end namespace 'mvd'
 
