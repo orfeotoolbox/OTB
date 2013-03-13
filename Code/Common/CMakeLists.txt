@@ -29,6 +29,7 @@ set( Common_SOURCES
         mvdTypes.cxx
         mvdVectorImageModel.cxx
         mvdApplicationsToolBox.cxx
+        mvdMainWindowTitleLoader.cxx
         mvdApplicationsBrowser.cxx
 )
 
@@ -58,6 +59,7 @@ set( Common_HEADERS_MOC
         mvdStatusBarWidget.h
         mvdVectorImageModel.h
         mvdApplicationsToolBox.h
+        mvdMainWindowTitleLoader.h
         mvdApplicationsBrowser.h
 )
 
