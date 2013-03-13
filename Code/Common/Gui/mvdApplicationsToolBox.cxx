@@ -99,24 +99,25 @@ ApplicationsToolBox
   mainItem->setText(0, "Orfeo Toolbox Algorithms");
 
   //
-  //
+  // Fill the  map as following
+  // - key   -> tag
+  // - value -> list of applications having this tag
   ApplicationsTagContainer::const_iterator itTag = m_AppTags.begin();
   while( itTag != m_AppTags.end() )
     {
-    // Step # 1 -> Tag as a main item
-    // set current tag as a main item
+    //
+    // step # 1 -> Tag as a main item
     QTreeWidgetItem * cmainItem = new QTreeWidgetItem( mainItem );
     QString  qcurrentMainItem( (*itTag).first.c_str() );
     cmainItem->setText(0,  qcurrentMainItem );
-    
+
+    //
     // step #2 -> Applications name as secondary items
-    // iterate over the StringVector containing the apps relative to
-    // this tag
     StringVector::const_iterator itApps = (*itTag).second.begin();
     while( itApps != (*itTag).second.end() )
       {
       // 
-      // set current tag as main item
+      // set current application name as secondary item
       QTreeWidgetItem * secItem = new QTreeWidgetItem( cmainItem );
       QString  qcurrentSecItem( (*itApps).c_str() );
       secItem->setText(0, qcurrentSecItem);

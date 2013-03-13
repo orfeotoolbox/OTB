@@ -58,7 +58,7 @@ int mvdFillToolBoxWidgetTreeTest(int argc, char* argv[])
     }
 
   //
-  // get the algorithms/tags map container in the widget
+  // get the tags/algs map container in the widget
   browser->SearchAvailableApplicationsTags();
 
   //
