@@ -38,7 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAlgorithm.h"
+#include "Core/mvdAlgorithm.h"
 
 namespace mvd
 {
@@ -81,10 +81,6 @@ ApplicationsToolBox
   //
   // connect double click on the tree Widget
   QObject::connect(GetAlgorithmsTree(),
-                   SIGNAL( itemDoubleClicked(QTreeWidgetItem* ,int) ),
-                   this,
-                   SLOT( OnAlgorithmTreeDoubleClick(QTreeWidgetItem* ,int) )
-    );
                    SIGNAL( itemDoubleClicked(QTreeWidgetItem* ,int) ),
                    this,
                    SLOT( OnAlgorithmTreeDoubleClick(QTreeWidgetItem* ,int) )
@@ -204,16 +200,6 @@ ApplicationsToolBox
     }
   
   return res;
-}
-
-/*******************************************************************************/
-void
-ApplicationsToolBox
-::ExecuteAlgorithm( const QString& appName )
-{
-  //
-  // WIP
-  std::cout <<"ApplicationsToolBox::ExecuteAlgorithm - "<< ToStdString( appName )<< "- WIP."<< std::endl;
 }
 
 /*******************************************************************************/
