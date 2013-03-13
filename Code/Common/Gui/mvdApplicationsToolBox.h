@@ -137,6 +137,12 @@ private:
    */
   void ExecuteAlgorithm( const QString& appName );
 
+  /**
+   * \brief Helper method to check if searchText matches any of the
+   * algorithms string contained in the map
+   */
+  bool IsSearchTextMatchAnyAlgorithm( const QString & tagName );
+
 //
 // Private attributes.
 private:
