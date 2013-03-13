@@ -51,7 +51,7 @@ int mvdFillToolBoxWidgetTreeTest(int argc, char* argv[])
     );
 
   //
-  // is search path set 
+  // is search path set
   if (argc > 1)
     {
     browser->SetAutoLoadPath(argv[1]);
@@ -64,6 +64,9 @@ int mvdFillToolBoxWidgetTreeTest(int argc, char* argv[])
   //
   // show the application for a while
   appToolBox->show();
-  QTimer::singleShot(1000, &app, SLOT(quit()));
+  if ( argc <= 2 )
+    {
+    QTimer::singleShot(1000, &app, SLOT(quit()));
+    }
   return app.exec();
 }
