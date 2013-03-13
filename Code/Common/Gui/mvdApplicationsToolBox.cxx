@@ -124,8 +124,6 @@ ApplicationsToolBox
 
     // 
     // iterate on map: key as high-level item / algorithms as lower-level items
-  // - key   -> tag
-  // - value -> list of applications having this tag
     ApplicationsTagContainer::const_iterator itTag = m_AppTags.begin();
     while( itTag != m_AppTags.end() )
       {
