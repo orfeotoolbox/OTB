@@ -255,9 +255,12 @@ GLImageWidget
     // emited to update to force the ql widget (if any) to update
     emit CentralWidgetUpdated();
     }
-
-  // update the mouse cursor position
-  m_ImageViewManipulator->PropagatePointUnderCursorCoordinates(event->pos());
+  else
+    {
+    // update the mouse cursor position if not dragging (just moving
+    // the mouse )
+    m_ImageViewManipulator->PropagatePointUnderCursorCoordinates(event->pos());
+    }
 }
 
 /*******************************************************************************/
