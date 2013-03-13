@@ -52,7 +52,7 @@
 #include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
 #include "mvdStatusBarWidget.h"
-
+#include "mvdMainWindowTitleLoader.h"
 
 namespace mvd
 {
@@ -686,6 +686,15 @@ MainWindow
                    SLOT( OnViewportRegionChanged(double, double) )
     );
 
+  // m_TitleLoader is a QPointer. When destroyed, it is set to 0
+  if (m_TitleLoader)
+    {
+    QObject::disconnect(m_TitleLoader, 
+                        SIGNAL(TitleLoaded(const QString &)), 
+                        this, 
+                        SLOT(setWindowTitle(const QString & ))
+      );
+    }
 }
 
 /*****************************************************************************/
@@ -708,20 +717,34 @@ MainWindow
 
   assert( vectorImageModel!=NULL );
 
-  std::ostringstream oss;
-  oss<<PROJECT_NAME<<" - "<<otb::System::GetShortFileName(ToStdString(vectorImageModel->GetFilename()));
-  oss<<" ("<<vectorImageModel->GetNbComponents()<<tr(" bands, ").toLatin1().constData();
-  oss<<vectorImageModel->GetNativeLargestRegion().GetSize()[0];
-  oss<<"x"<<vectorImageModel->GetNativeLargestRegion().GetSize()[1]<<tr(" pixels)").toLatin1().constData();
+  //
+  // Title  -----------------------------------------------------------------
+  QThread* thread = new QThread;
+  m_TitleLoader = new MainWindowTitleLoader(vectorImageModel);
+  m_TitleLoader->moveToThread(thread);
   
-  // add the placename to the title if any
-  std::string placename = vectorImageModel->GetCenterPixelPlaceName();
-  if (!placename.empty())
-    {
-    oss <<" - " <<ToStdString( tr("Location") )<< " : " << placename;
-    }
-  
-  setWindowTitle( FromStdString(oss.str()) );
+  // At thread startup, trigger the processing function
+  QObject::connect(thread, SIGNAL(started()), m_TitleLoader, SLOT(LoadTitle()));
+
+  // On Successfull title composition, update with the window title
+  QObject::connect(m_TitleLoader, 
+                   SIGNAL(TitleLoaded(const QString &)), 
+                   this, 
+                   SLOT(setWindowTitle(const QString & ))
+    );
+
+  // Cleanup
+  //  - quit the thread's event loop, exit cleanly
+  QObject::connect(m_TitleLoader, SIGNAL(Finished()), thread, SLOT(quit()));
+  //  - cleanup heap
+  QObject::connect(m_TitleLoader, SIGNAL(Finished()), m_TitleLoader, SLOT(deleteLater()));
+  QObject::connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+
+  // GO
+  thread->start();
+
+  //
+  // End title setup ------------------------------------------------------------
 
   //
   // COLOR SETUP.
@@ -873,7 +896,6 @@ MainWindow
   qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->SetImageModel(
     vectorImageModel->GetQuicklookModel()
   );
-
 }
 
 /*****************************************************************************/

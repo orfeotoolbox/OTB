@@ -68,6 +68,7 @@ class ImageViewManipulator;
 class QuicklookViewManipulator;
 class ImageModelRenderer;
 class StatusBarWidget;
+class MainWindowTitleLoader;
 
 namespace Ui
 {
@@ -231,6 +232,17 @@ private:
   StatusBarWidget*          m_StatusBarWidget;
   
   DatasetCreationProgressDialog* m_DatasetCreationProgressDialog;
+  
+  /**
+    * deleteLayer() is called on MainWindowTitleLoader when its jobs
+    * is done. deleteLayer() destory the object but it could be
+    * used after it has been destroyed in Mainwindow leading to a crash.
+    * we need a way to detect its state. 
+    *
+    * QPointer set the object to O when deleted, giving a way to
+    * detect this state. 
+    */
+  QPointer < MainWindowTitleLoader >         m_TitleLoader;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -300,7 +312,6 @@ private slots:
   
   /** */
   void OnHideProgressDialog( );
-  
 };
 
 } // end namespace 'mvd'
