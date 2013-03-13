@@ -550,6 +550,9 @@ SET_TESTS_PROPERTIES(leTvConfusionMatrixCalculatorWrongSize PROPERTIES WILL_FAIL
 ADD_TEST(leTvConfusionMatrixCalculatorUpdate ${LEARNING_TESTS4}
 otbConfusionMatrixCalculatorUpdate 4 3)
 
+ADD_TEST(leTvConfusionMatrixCalculatorUpdateWithBaseline ${LEARNING_TESTS4}
+otbConfusionMatrixCalculatorUpdateWithBaseline)
+
 # ShiftScaleSampleListFilter tests ----------
 ADD_TEST(leTuShiftScaleSampleListFilterNew ${LEARNING_TESTS4}
 otbShiftScaleSampleListFilterNew)

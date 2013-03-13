@@ -85,6 +85,14 @@ public:
   itkGetConstObjectMacro(ReferenceLabels, RefListLabelType);
   itkSetObjectMacro(ProducedLabels, ProdListLabelType);
   itkGetConstObjectMacro(ProducedLabels, ProdListLabelType);
+  itkGetMacro(TruePositiveValues, MeasurementType);
+  itkGetMacro(TrueNegativeValues, MeasurementType);
+  itkGetMacro(FalsePositiveValues, MeasurementType);
+  itkGetMacro(FalseNegativeValues, MeasurementType);
+  itkGetMacro(TruePositiveValue, double);
+  itkGetMacro(TrueNegativeValue, double);
+  itkGetMacro(FalsePositiveValue, double);
+  itkGetMacro(FalseNegativeValue, double);
   itkGetMacro(KappaIndex, double);
   itkGetMacro(OverallAccuracy, double);
   itkGetMacro(Precisions, MeasurementType);
