@@ -23,6 +23,7 @@ include_directories(
 set(Common_SRCS
   mvdApplicationsToolBoxTest.cxx
   mvdApplicationsBrowserTest.cxx
+  mvdFillToolBoxWidgetTreeTest.cxx
 )
 
 #-------------- Monteverdi Common Tests ---------------------------------
@@ -35,6 +36,13 @@ add_test(apTvMonteverdi2ApplicationsBrowser ${Common_TESTS}
   mvdApplicationsBrowserTest
   ${OTB_DIR}/bin
   )
+
+# Fill ToolBox algorithms tree
+add_test(apTvMonteverdi2FillToolBoxTree ${Common_TESTS} 
+  mvdFillToolBoxWidgetTreeTest
+  ${OTB_DIR}/bin
+  )
+
 
 add_executable(mvdCommonTests mvdCommonTests.cxx ${Common_SRCS})
 target_link_libraries(mvdCommonTests Monteverdi2_Common OTBTesting)
