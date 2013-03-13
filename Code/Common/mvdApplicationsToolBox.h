@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "mvdTypes.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -94,11 +94,15 @@ public:
   /** \brief Destructor. */
   virtual ~ApplicationsToolBox();
 
+  /** Get TreeWidget */
+  QTreeWidget * GetAlgorithmsTree();
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
 // Public SLOTS.
 public slots:
+  void OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer& appsTags );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -121,6 +125,10 @@ protected:
 //
 // Private methods.
 private:
+  /**
+   * \brief fill the widget tree using the tags map
+   */
+  void FillTreeUsingTags();
 
 //
 // Private attributes.
@@ -129,6 +137,12 @@ private:
    * \brief uic generated.
    */
   Ui::ApplicationsToolBox* m_UI;
+
+  /**
+   * \brief map storing applications and its tags
+   */
+  ApplicationsTagContainer  m_AppTags;
+
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
