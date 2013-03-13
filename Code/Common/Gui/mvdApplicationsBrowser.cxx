@@ -158,7 +158,9 @@ ApplicationsBrowser
   StringVector vapp = GetAvailableApplications();
 
   //
-  // loop on the applications to get tags
+  // Fill the  map as following
+  // - key   -> tag
+  // - value -> list of applications having this tag
   ApplicationsTagContainer      outputContainer;
   StringVector::const_iterator  it = vapp.begin();
 
@@ -177,7 +179,7 @@ ApplicationsBrowser
       if ( pos != outputContainer.end() )  // key found
         {
         //
-        // add the application name (*it) as value for the current app tag
+        // append the application name (*it)
         (*pos).second.push_back(*it);
         }
       else
