@@ -36,23 +36,25 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAboutDialog.h"
 #include "mvdApplication.h"
-#include "mvdColorDynamicsController.h"
-#include "mvdColorDynamicsWidget.h"
-#include "mvdColorSetupController.h"
-#include "mvdDatasetModel.h"
-#include "mvdGLImageWidget.h"
 #include "mvdImageLoader.h"
-#include "mvdImageModelRenderer.h"
-#include "mvdImageViewManipulator.h"
 #include "mvdPreferencesDialog.h"
-#include "mvdQuicklookModel.h"
-#include "mvdQuicklookViewManipulator.h"
-#include "mvdSystemError.h"
-#include "mvdVectorImageModel.h"
-#include "mvdStatusBarWidget.h"
-#include "mvdMainWindowTitleLoader.h"
+//
+#include "Core/mvdDatasetModel.h"
+#include "Core/mvdQuicklookModel.h"
+#include "Core/mvdSystemError.h"
+#include "Core/mvdVectorImageModel.h"
+//
+#include "Gui/mvdAboutDialog.h"
+#include "Gui/mvdColorDynamicsController.h"
+#include "Gui/mvdColorDynamicsWidget.h"
+#include "Gui/mvdColorSetupController.h"
+#include "Gui/mvdGLImageWidget.h"
+#include "Gui/mvdImageModelRenderer.h"
+#include "Gui/mvdImageViewManipulator.h"
+#include "Gui/mvdMainWindowTitleLoader.h"
+#include "Gui/mvdQuicklookViewManipulator.h"
+#include "Gui/mvdStatusBarWidget.h"
 
 namespace mvd
 {

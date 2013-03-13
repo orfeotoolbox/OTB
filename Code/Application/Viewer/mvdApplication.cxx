@@ -34,9 +34,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractModel.h"
-#include "mvdDatasetModel.h"
-#include "mvdVectorImageModel.h"
+#include "Core/mvdAbstractModel.h"
+#include "Core/mvdDatasetModel.h"
+#include "Core/mvdVectorImageModel.h"
 
 //
 // Class implementation.

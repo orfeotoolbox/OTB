@@ -37,8 +37,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdColorDynamicsWidget.h"
-#include "mvdVectorImageModel.h"
+#include "Core/mvdVectorImageModel.h"
+#include "Gui/mvdColorDynamicsWidget.h"
 
 namespace mvd
 {

@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdColorSetupController.h"
+#include "Gui/mvdColorSetupController.h"
 
 
 /*****************************************************************************/
@@ -37,8 +37,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdColorSetupWidget.h"
-#include "mvdVectorImageModel.h"
+#include "Core/mvdVectorImageModel.h"
+#include "Gui/mvdColorSetupWidget.h"
 
 namespace mvd
 {

@@ -16,9 +16,6 @@
 
 =========================================================================*/
 
-#include "mvdImageLoader.h"
-#include "mvdApplication.h"
-#include "mvdDatasetModel.h"
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -34,6 +31,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdApplication.h"
+#include "mvdImageLoader.h"
+#include "Core/mvdDatasetModel.h"
 
 namespace mvd
 {

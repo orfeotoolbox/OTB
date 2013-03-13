@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdStatusBarWidget.h"
-#include "ui_mvdStatusBarWidget.h"
+#include "Gui/mvdMyWidget.h"
+#include "Gui/ui_mvdMyWidget.h"
 
 
 /*****************************************************************************/
@@ -42,7 +42,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::StatusBarWidget
+  TRANSLATOR mvd::MyWidget
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -62,58 +62,18 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-StatusBarWidget
-::StatusBarWidget( QWidget* parent, Qt::WindowFlags flags  ):
+MyWidget
+::MyWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
-  m_UI( new mvd::Ui::StatusBarWidget() )
+  m_UI( new mvd::Ui::MyWidget() )
 {
   m_UI->setupUi( this );
 }
 
 /*******************************************************************************/
-StatusBarWidget
-::~StatusBarWidget()
+MyWidget
+::~MyWidget()
 {
-}
-
-/*******************************************************************************/
-QLineEdit *
-StatusBarWidget
-::GetCurrentPixelIndexWidget()
-{
-  return m_UI->m_CurrentPixelIndex;
-}
-
-/*******************************************************************************/
-QLabel *    
-StatusBarWidget
-::GetCurrentPixelPhysicalWidget()
-{
-  return m_UI->m_CurrentPixelPhysical;
-}
-  
-/*******************************************************************************/
-QLabel * 
-StatusBarWidget
-::GetCurrentPixelGeographicWidget()
-{
-  return m_UI->m_CurrentPixelGeographic;
-}
-
-/*******************************************************************************/
-QLabel *    
-StatusBarWidget
-::GetCurrentPixelRadioWidget()
-{
-  return m_UI->m_CurrentPixelRadio;
-}
-
-/*******************************************************************************/
-QLineEdit * 
-StatusBarWidget
-::GetCurrentScaleWidget()
-{
-    return m_UI->m_CurrentScale;
 }
 
 /*******************************************************************************/

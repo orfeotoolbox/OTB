@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdDatasetCreationProgressDialog.h"
-#include "ui_mvdDatasetCreationProgressDialog.h"
+#include "Gui/mvdAboutDialog.h"
+#include "Gui/ui_mvdAboutDialog.h"
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -38,7 +38,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::DatasetCreationProgressDialog
+  TRANSLATOR mvd::AboutDialog
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -46,52 +46,21 @@ namespace mvd
 */
 
 /*******************************************************************************/
-DatasetCreationProgressDialog
-::DatasetCreationProgressDialog( QWidget* parent ) :
-  QDialog( parent, Qt::CustomizeWindowHint | Qt::WindowTitleHint ),
-  m_UI( new mvd::Ui::DatasetCreationProgressDialog() )
+AboutDialog
+::AboutDialog( QWidget* parent, Qt::WindowFlags flags ) :
+  QDialog( parent ),
+  m_UI( new mvd::Ui::AboutDialog() )
 {
   m_UI->setupUi( this );
+
+  m_UI->m_ProjectLabel->setText( PROJECT_NAME );
+  m_UI->m_VersionLabel->setText( Monteverdi2_VERSION_STRING );
 }
 
 /*******************************************************************************/
-DatasetCreationProgressDialog
-::~DatasetCreationProgressDialog()
+AboutDialog
+::~AboutDialog()
 {
-}
-
-
-/*****************************************************************************/
-QString
-DatasetCreationProgressDialog
-::GetImage( ) const
-{
-  return m_UI->imageLabel->text();
-}
-
-/*****************************************************************************/
-void
-DatasetCreationProgressDialog
-::SetImage(QString value)
-{
-  m_UI->imageLabel->setText(value);
-}
-
-
-/*****************************************************************************/
-QString
-DatasetCreationProgressDialog
-::GetDataset( ) const
-{
-  return m_UI->datasetLabel->text();
-}
-
-/*****************************************************************************/
-void
-DatasetCreationProgressDialog
-::SetDataset(QString value)
-{
-  m_UI->datasetLabel->setText(value);
 }
 
 /*******************************************************************************/

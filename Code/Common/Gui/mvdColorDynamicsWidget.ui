@@ -103,7 +103,7 @@
   <customwidget>
    <class>ColorBandDynamicsWidget</class>
    <extends>QWidget</extends>
-   <header>mvdColorBandDynamicsWidget.h</header>
+   <header>Gui/mvdColorBandDynamicsWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

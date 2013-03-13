@@ -16,9 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-#ifndef __mvdImageViewManipulator_h
-#define __mvdImageViewManipulator_h
+#ifndef __mvdApplicationsBrowser_h
+#define __mvdApplicationsBrowser_h
 
 //
 // Configuration include.
@@ -32,6 +31,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtCore>
 
 //
 // System includes (sorted by alphabetic order)
@@ -44,9 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
-#include "mvdAbstractViewManipulator.h"
-
+#include "Core/mvdTypes.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -67,19 +65,25 @@ namespace mvd
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class ImageViewManipulator
+ * \class ApplicationsBrowser
  *
- *  \brief This class handles the event related to a QGLWidget. It also
- *  handles :
- *    - NavigationContext : to store the region of the image to be
- *      rendered.
- *    - MouseContext : to remember the user action as a mouse press,
- *                     mouse drag
- *  
- *   WIP
+ * \brief Search for available applications in a directory.
+ * 
+ * This class provides the functionnalities to look for
+ * otbWrapperApplication apps in a given directory. The method used to
+ * set the directory is SetAutoLoadPath(const std::string &).
+ * 
+ * If applications are available in the directory set by the user,
+ * tags of each application are extracted.
+ *
+ * An association application-tags is then setup and stored in a
+ * std::vector to be sent ( via a signal ) to the
+ * mvd::ApplicationsToolBox or any widget or class connected to this
+ * signal.
+ *
  */
-class Monteverdi2_EXPORT ImageViewManipulator :
-    public AbstractViewManipulator
+class Monteverdi2_EXPORT ApplicationsBrowser :
+    public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -92,93 +96,64 @@ class Monteverdi2_EXPORT ImageViewManipulator :
 // Public methods.
 public:
 
+  /** typedef */
+
   /** \brief Constructor. */
-  ImageViewManipulator( QObject* parent =NULL );
+  ApplicationsBrowser( QObject* parent =NULL );
 
   /** \brief Destructor. */
-  virtual ~ImageViewManipulator();
+  virtual ~ApplicationsBrowser();
 
-  /** */
-  void mouseMoveEvent ( QMouseEvent * event );
-  /** */
-  void mousePressEvent ( QMouseEvent * event );
-  /** */
-  void mouseReleaseEvent ( QMouseEvent * event );
-  /** */
-  void wheelEvent ( QWheelEvent* event);
-  /** */
-  void resizeEvent ( QResizeEvent * event );
-  /** */
-  void keyPressEvent( QKeyEvent * event );
+  /** set the path where to look for applications */
+  void SetAutoLoadPath(const std::string & itk_auto_load_path);
 
-  /** */
-  bool HasZoomChanged() const;
+  /** get available applications in the search path */
+  StringVector GetAvailableApplications();
 
-  /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
+  /** return the list applications <->tags */
+  StringVector GetApplicationTags(const std::string& appName);
+
+  /** return std::map storing tag/apps association for all the
+    * applications in the search path 
+    */
+  void SearchAvailableApplicationsTags();
+ 
+
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
 // Public SLOTS.
 public slots:
-  void OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
-                                 const SpacingType& spacing, 
-                                 const PointType& origin );
-
-  void OnViewportRegionChanged(double Xpc, double Ypc);
-
-  void OnUserScaleEditingFinished(const QString & scale);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  void ViewportRegionRepresentationChanged(const PointType&, const PointType&);
-  void CurrentScaleUpdated(const QString&);
+  void AvailableApplicationsTagsChanged(const ApplicationsTagContainer &);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
-  /** */
-  void ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest);
 
-  /** */
-  void CenterRegion(double scale);
-
-  /** */
-  void ResizeRegion(unsigned int w, unsigned int h);
-
-  /** */
-  void moveRegion(double dx, double dy);
-  
 //
 // Protected attributes.
 protected:
 
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Private types.
-private:
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private methods.
 private:
-  /** */
-  void Zoom(const double scale);
 
-  /** */
-  void PropagateViewportRegionChanged(const ImageRegionType& region);
 
-  /** */
-  void UpdateScale();
- 
 //
 // Private attributes.
 private:
-  /** */
-  double m_PreviousIsotropicZoom;
+
+  std::string     m_AutoLoadPath;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -187,13 +162,29 @@ private:
 private slots:
 };
 
-} // end namespace 'mvd'
+} // end namespace 'mvd'.
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
+
+//
+// Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
+
+//
+// System includes (sorted by alphabetic order)
+
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+
+//
+// Monteverdi includes (sorted by alphabetic order)
 
 namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdImageViewManipulator_h
+#endif // __mvdApplicationsBrowser_h

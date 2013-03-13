@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
+#include "Core/mvdTypes.h"
 
 
 /*****************************************************************************/

@@ -32,7 +32,8 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdApplication.h"
 #include "mvdMainWindow.h"
-#include "mvdDatasetModel.h"
+//
+#include "Core/mvdDatasetModel.h"
 
 //
 // OTB includes (sorted by alphabetic order)

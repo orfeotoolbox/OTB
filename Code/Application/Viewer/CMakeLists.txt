@@ -70,19 +70,19 @@ endif()
 
 
 #############################################################################
-# Monteverdi2_Application library
+# Monteverdi2_Viewer library
 # STATIC so that the monteverdi2 executable does not depend on another shared lib
 # The library is also used in tests, waiting for a better test strategy
 # The library is not installed
 
-add_library( Monteverdi2_Application
+add_library( Monteverdi2_Viewer
   STATIC
   ${Application_SOURCES}
   ${Application_FORMS_HEADERS}
   ${Application_SRC_MOC}
 )
-target_link_libraries( Monteverdi2_Application
-  Monteverdi2_Common
+target_link_libraries( Monteverdi2_Viewer
+  Monteverdi2_Gui
 )
 
 #############################################################################
@@ -95,8 +95,8 @@ add_executable( mvd2-viewer
 )
 
 target_link_libraries( mvd2-viewer
-  Monteverdi2_Application
-  Monteverdi2_Common
+  Monteverdi2_Viewer
+  #Monteverdi2_Gui
   ${QT_QTMAIN_LIBRARY}
 )
 

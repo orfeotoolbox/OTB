@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdQuicklookViewManipulator_h
-#define __mvdQuicklookViewManipulator_h
+#ifndef __mvdImageViewManipulator_h
+#define __mvdImageViewManipulator_h
 
 //
 // Configuration include.
@@ -32,7 +32,6 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -45,8 +44,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
-#include "mvdAbstractViewManipulator.h"
+#include "Core/mvdTypes.h"
+#include "Gui/mvdAbstractViewManipulator.h"
 
 
 /*****************************************************************************/
@@ -68,7 +67,7 @@ namespace mvd
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class QuicklookViewManipulator
+ * \class ImageViewManipulator
  *
  *  \brief This class handles the event related to a QGLWidget. It also
  *  handles :
@@ -79,7 +78,7 @@ namespace mvd
  *  
  *   WIP
  */
-class Monteverdi2_EXPORT QuicklookViewManipulator :
+class Monteverdi2_EXPORT ImageViewManipulator :
     public AbstractViewManipulator
 {
 
@@ -94,10 +93,10 @@ class Monteverdi2_EXPORT QuicklookViewManipulator :
 public:
 
   /** \brief Constructor. */
-  QuicklookViewManipulator( QObject* parent =NULL );
+  ImageViewManipulator( QObject* parent =NULL );
 
   /** \brief Destructor. */
-  virtual ~QuicklookViewManipulator();
+  virtual ~ImageViewManipulator();
 
   /** */
   void mouseMoveEvent ( QMouseEvent * event );
@@ -121,15 +120,20 @@ public:
 // Public SLOTS.
 public slots:
   void OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
-                                 const SpacingType & spacing,
-                                 const PointType& origin);
+                                 const SpacingType& spacing, 
+                                 const PointType& origin );
+
+  void OnViewportRegionChanged(double Xpc, double Ypc);
+
+  void OnUserScaleEditingFinished(const QString & scale);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  void ViewportRegionChanged(double Xpc, double Ypc);
+  void ViewportRegionRepresentationChanged(const PointType&, const PointType&);
+  void CurrentScaleUpdated(const QString&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -145,11 +149,14 @@ protected:
   /** */
   void ResizeRegion(unsigned int w, unsigned int h);
 
+  /** */
+  void moveRegion(double dx, double dy);
+  
 //
 // Protected attributes.
 protected:
 
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Private types.
@@ -158,17 +165,19 @@ private:
 //
 // Private methods.
 private:
-
   /** */
   void Zoom(const double scale);
 
   /** */
-  void moveRegion(double dx, double dy);
+  void PropagateViewportRegionChanged(const ImageRegionType& region);
 
+  /** */
+  void UpdateScale();
+ 
 //
 // Private attributes.
 private:
-  // TODO: No zoom for quicklook. Remove when implementation is cleaned.
+  /** */
   double m_PreviousIsotropicZoom;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -187,4 +196,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdQuicklookViewManipulator_h
+#endif // __mvdImageViewManipulator_h

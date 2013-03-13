@@ -39,9 +39,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
-#include "mvdAbstractModelRenderer.h"
-#include "mvdAbstractViewManipulator.h"
+#include "Core/mvdTypes.h"
+#include "Gui/mvdAbstractModelRenderer.h"
+#include "Gui/mvdAbstractViewManipulator.h"
 
 //
 // External classes pre-declaration.
@@ -182,7 +182,7 @@ private:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdHistogramModel.h"
+#include "Core/mvdHistogramModel.h"
 
 namespace mvd
 {

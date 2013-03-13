@@ -56,7 +56,7 @@ if (WIN32)
       ${CMAKE_CURRENT_BINARY_DIR}/mvdWin32.rc
       @ONLY
     )
-    
+
     # The RC file to be added to source list
     set( Monteverdi2_WIN32_RC_FILE ${CMAKE_CURRENT_BINARY_DIR}/mvdWin32.rc )
 endif()
@@ -75,8 +75,7 @@ add_library(Monteverdi2_Catalogue
   ${Catalogue_SRC_MOC}
 )
 target_link_libraries(Monteverdi2_Catalogue
-  Monteverdi2_Common
-  ${QT_LIBRARIES}
+  Monteverdi2_Gui
 )
 
 #############################################################################
@@ -90,8 +89,8 @@ add_executable( mvd2-catalogue
 
 target_link_libraries( mvd2-catalogue
   Monteverdi2_Catalogue
-  Monteverdi2_Common
-  ${QT_LIBRARIES}
+  #Monteverdi2_Gui
+  ${QT_QTMAIN_LIBRARY}
 )
 
 # deploy a qt.conf file in the monteverdi2 target build dir

@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdAbstractModelRenderer_h
-#define __mvdAbstractModelRenderer_h
+#ifndef __mvdImageModelRenderer_h
+#define __mvdImageModelRenderer_h
 
 //
 // Configuration include.
@@ -41,7 +41,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
+#include "Core/mvdTypes.h"
+#include "Gui/mvdAbstractModelRenderer.h"
 
 //
 // External classes pre-declaration.
@@ -55,69 +56,47 @@ namespace mvd
 // Internal classes pre-declaration.
 class Monteverdi2_EXPORT AbstractImageModel;
 
-/** \class AbstractModelRenderer
+/** \class ImageModelRenderer
  *
  */
-class AbstractModelRenderer :
-    public QObject
+class ImageModelRenderer :
+    public AbstractModelRenderer
 {
   Q_OBJECT;
 
 //
 // Public types.
 public:
-  /**
-   */
-  struct RenderingContext
-  {
-     inline
-     RenderingContext( const AbstractImageModel* model =NULL,
-                       const ImageRegionType& region =ImageRegionType(),
-                       double zoom = 1.,
-                       unsigned int width = 0,
-                       unsigned int height = 0,
-                       int dx = 0,
-                       int dy = 0,
-                       bool refresh = true) :
-       m_ImageModel( model ),
-       m_ImageRegion( region ),
-       m_IsotropicZoom( zoom ),
-       m_WidgetWidth(width),
-       m_WidgetHeight(height),
-       m_ForceRefresh(refresh)
-    {
-    }
-
-    const AbstractImageModel* m_ImageModel;
-    ImageRegionType m_ImageRegion;
-    double m_IsotropicZoom;
-    // TODO: remove unsigned before int (because Qt uses signed int).
-    unsigned int m_WidgetWidth;
-    // TODO: remove unsigned before int (becayse Qt uses signed int).
-    unsigned int m_WidgetHeight;
-    bool m_ForceRefresh;
-  };
-
 //
 // Public methods.
 public:
   /** Constructor */
-  AbstractModelRenderer( QObject* parent = NULL ): QObject(parent)
-  {}
+  ImageModelRenderer( QObject* parent = NULL );
 
   /** Destructor */
-  virtual ~AbstractModelRenderer(){}
+  virtual ~ImageModelRenderer();
 
   /** */
-  virtual void paintGL( const RenderingContext& context ) = 0;
+  virtual void paintGL( const RenderingContext& context );
 
 // public slots
 public slots:
+  void onMovingEvent()
+  {
+    m_IsMoving = true;
+  }
+
+  void onReleasedMouse()
+  {
+    m_IsMoving = false;
+  }
+
+  void OnViewportRegionRepresentationChanged(const PointType& ul, const PointType& lr);
 
 //
 // SIGNALS.
 signals:
-
+  void ViewportOriginChanged(const IndexType origin);
 //
 // Protected methods.
 protected:
@@ -133,6 +112,20 @@ private:
 //
 // Private attributes.
 private:
+  unsigned char *   m_Buffer;
+  bool              m_IsMoving;
+
+  double                       m_PreviousOriginX;
+  double                       m_PreviousOriginY;
+  double                       m_MovingOriginX;
+  double                       m_MovingOriginY;
+
+  // 
+  // used for quicklook renderer
+  PointType                    m_SquarePointUL;
+  PointType                    m_SquarePointLR;
+
+  unsigned int                 m_Texture;
 
 //
 // SLOTS.
@@ -141,4 +134,4 @@ private slots:
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractModelRenderer_h
+#endif // __mvdImageModelRenderer_h

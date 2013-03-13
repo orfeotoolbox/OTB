@@ -47,9 +47,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdColorSetupWidget.h"
-#include "mvdAbstractImageModel.h"
-#include "mvdTypes.h"
+#include "Core/mvdAbstractImageModel.h"
+#include "Core/mvdTypes.h"
+#include "Gui/mvdColorSetupWidget.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */

@@ -45,8 +45,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
-#include "mvdDatasetCreationProgressDialog.h"
+#include "Core/mvdTypes.h"
+#include "Gui/mvdDatasetCreationProgressDialog.h"
 
 
 /*****************************************************************************/
@@ -330,7 +330,7 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractModelController.h"
+#include "Gui/mvdAbstractModelController.h"
 
 //
 // Some constants.
