@@ -213,8 +213,6 @@ PersistentMinMaxVectorImageFilter<TInputImage>
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  MatrixType pixelVector, pixelTransposeVector, pixelSumVector, tempMatrix;
-
   itk::ImageRegionConstIteratorWithIndex<TInputImage> it(inputPtr, outputRegionForThread);
   it.GoToBegin();
 
