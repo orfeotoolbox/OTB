@@ -318,7 +318,7 @@ int otbConfusionMatrixCalculatorUpdateWithBaseline(int argc, char* argv[])
   for (itRefLabels = refLabels->Begin(), itProdLabels = prodLabels->Begin();
       itRefLabels != refLabels->End(); ++itRefLabels, ++itProdLabels)
     {
-    std::cout << "refLabels[" << k << "] = " << itRefLabels.GetMeasurementVector()[0] << " ; prodLabels[" << k
+    std::cout << "refLabels[" << k << "] = " << itRefLabels.GetMeasurementVector()[0] << "; prodLabels[" << k
         << "] = " << itProdLabels.GetMeasurementVector()[0] << std::endl;
     ++k;
     }
