@@ -66,6 +66,7 @@ ColorSetupWidget
   // TODO: Change to static constant see Qt I18n documentation.
   // This array is here to statically expose the main enhanced band
   // names that OTB can returns for translation purposes.
+  // TODO: Move const char* ENHANCED_BAND_NAMES[] to common library.
   const char*
     ENHANCED_BAND_NAME[ 10 ] = {
     tr("Red").toLatin1().constData(),

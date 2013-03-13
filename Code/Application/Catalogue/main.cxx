@@ -22,6 +22,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -29,17 +33,24 @@
 //
 // System includes (sorted by alphabetic order)
 
-// Monteverdi includes (sorted by alphabetic order)
-#include "mvdApplication.h"
-#include "mvdMainWindow.h"
-#include "mvdDatasetModel.h"
+//
+// ITK includes (sorted by alphabetic order)
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
-// MAIN
-//
+// Monteverdi includes (sorted by alphabetic order)
+#include "mvdApplication.h"
+#include "mvdMainWindow.h"
+
+/*****************************************************************************/
+/* FUNCTIONS DECLARATION                                                     */
+
+
+/*****************************************************************************/
+/* MAIN                                                                      */
+
 int
 main( int argc, char* argv[] )
 {
@@ -52,6 +63,7 @@ main( int argc, char* argv[] )
   // TODO: Move into I18nApplication.
   setlocale( LC_NUMERIC, "C" );
 
+  /*
 // TODO: 1) MVD2-viewer: Factorize settings loading between Viewer & Catalogue  // Check if the application have a settings file already available
   bool appHasSettingsFile = application.HasSettingsFile();
   bool appHasIncorrectCacheDir(false);
@@ -65,9 +77,11 @@ main( int argc, char* argv[] )
       appHasIncorrectCacheDir = true;
       }
     }
+  */
 
   mvd::MainWindow mainWindow;
 
+  /*
 // TODO: 1) MVD2-viewer: Factorize cache-dir search between Viewer & Catalogue.
   if (!appHasSettingsFile || appHasIncorrectCacheDir)
     {
@@ -89,32 +103,15 @@ main( int argc, char* argv[] )
     // Save the cache directory into the settings file
     application.WriteCacheDirIntoSettings();
     }
+  */
 
-
-
-#if defined( _DEBUG )
-  // Usefull when developping/debugging to avoid overlapping other windows.
+  // Show window.
   mainWindow.show();
-#else
-  // TODO: Correctly manage main-window state via application settings.
-  mainWindow.showMaximized();
-#endif
 
-  // This code is here to propagate events from maximization to child
-  // widgets, so that an image loaded from command-line will get the
-  // appropriate widget size and occupy as much space as possible on screen.
-  application.processEvents();
-
-  // TODO: Move into mvd::Application.
-  // Handle passing image filename from command-line
-  if(argc>1)
-    {
-    mainWindow.OpenImage( QString(argv[1]) );
-    }
-  
+  // Run application and return exit code.
   return application.exec();
 }
 
-//
-// Main functions implementations.
-//
+
+/*****************************************************************************/
+/* FUNCTIONS IMPLEMENTATION                                                  */
