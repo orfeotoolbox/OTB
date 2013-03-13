@@ -96,17 +96,28 @@ class Monteverdi2_EXPORT ApplicationsBrowser :
 // Public methods.
 public:
 
+  /** typedef */
+
   /** \brief Constructor. */
   ApplicationsBrowser( QObject* parent =NULL );
 
   /** \brief Destructor. */
   virtual ~ApplicationsBrowser();
 
-  /** Set the path where to look for applications */
+  /** set the path where to look for applications */
   void SetAutoLoadPath(const std::string & itk_auto_load_path);
 
-  /** Get available applications in the search path */
+  /** get available applications in the search path */
   StringVector GetAvailableApplications();
+
+  /** return the list applications <->tags */
+  StringVector GetApplicationTags(const std::string& appName);
+
+  /** return std::map storing tag/apps association for all the
+    * applications in the search path 
+    */
+  void SearchAvailableApplicationsTags();
+ 
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -119,6 +130,7 @@ public slots:
 //
 // Signals.
 signals:
+  void AvailableApplicationsTagsChanged(const ApplicationsTagContainer &);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

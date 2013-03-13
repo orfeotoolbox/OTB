@@ -102,7 +102,7 @@ ApplicationsBrowser
     }
 
   //
-  // Get available application in search path
+  // get available application in search path
   StringVector appList = otb::Wrapper::ApplicationRegistry::GetAvailableApplications();
 
   // 
@@ -122,6 +122,84 @@ ApplicationsBrowser
     }
     
   return appList;
+}
+
+/*******************************************************************************/
+StringVector
+ApplicationsBrowser
+::GetApplicationTags( const std::string& appName )
+{
+  //
+  // output vector
+  StringVector  vtags;
+  
+  //
+  // instantiate the application using the factory
+  otb::Wrapper::Application::Pointer application 
+    = otb::Wrapper::ApplicationRegistry::CreateApplication(appName);
+
+  //
+  // get tags
+  if ( !application.IsNull() )
+    {
+    vtags = application->GetDocTags();
+    }
+
+  return vtags;
+}
+
+/*******************************************************************************/
+void
+ApplicationsBrowser
+::SearchAvailableApplicationsTags()
+{
+  //
+  // get all the applications in the search path
+  StringVector vapp = GetAvailableApplications();
+
+  //
+  // loop on the applications to get tags
+  ApplicationsTagContainer      outputContainer;
+  StringVector::const_iterator  it = vapp.begin();
+
+  while ( it != vapp.end() )
+    {
+    // get tags of current app
+    StringVector ctags = GetApplicationTags( *it );
+
+    // key will be the tag (easier for tree origanisation in )
+    StringVector::const_iterator  itTag = ctags.begin();
+    while ( itTag != ctags.end() )
+      {
+
+      // search for this tag in the output container
+      ApplicationsTagContainer::iterator  pos = outputContainer.find( *itTag );
+      if ( pos != outputContainer.end() )  // key found
+        {
+        //
+        // add the application name (*it) as value for the current app tag
+        (*pos).second.push_back(*it);
+        }
+      else
+        {
+        //
+        // if tag not found in the container, add it
+        std::pair< std::string, StringVector > currentAppTags;
+        currentAppTags.first  = *itTag;
+        currentAppTags.second.push_back( *it );
+        outputContainer.insert( currentAppTags );
+        }
+
+      ++itTag;
+      }
+
+    ++it;
+    }
+
+  //
+  // emit a signal with the ApplicationsTagContainer as
+  // parameter 
+  emit AvailableApplicationsTagsChanged(outputContainer);
 }
 
 /*******************************************************************************/
