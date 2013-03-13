@@ -123,13 +123,15 @@ ApplicationsToolBox
   while( itTag != m_AppTags.end() )
     {
     //
-    // step # 1 -> Tag as a main item
+    // step #1 ->  DocTag is a main item
     QTreeWidgetItem * cmainItem = new QTreeWidgetItem( mainItem );
     QString  qcurrentMainItem( (*itTag).first.c_str() );
     cmainItem->setText(0,  qcurrentMainItem );
 
     //
     // TODO : add category icon
+
+    //
     // step #2 -> Applications name are secondary items
     StringVector::const_iterator itApps = (*itTag).second.begin();
     while( itApps != (*itTag).second.end() )
@@ -190,14 +192,19 @@ void
 ApplicationsToolBox
 ::OnAlgorithmTreeDoubleClick( QTreeWidgetItem * item , int column )
 {
-  std::cout <<"Algorithm name "<< ToStdString( item->text( column ) ) << std::endl;
-  QString appName = item->text( column );
-
-  // 
-  // Execute the algorithm
-  if ( !appName.isEmpty() )
+  //
+  // Execute algorithm only if a secondary item
+  // lower-level items (algorithms) does not any child
+  if ( item->childCount() == 0 )
     {
-    ExecuteAlgorithm( appName );
+    QString appName = item->text( column );
+  
+    // 
+    // Execute the algorithm
+    if ( !appName.isEmpty() )
+      {
+      ExecuteAlgorithm( appName );
+      }
     }
 }
 
