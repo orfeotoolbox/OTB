@@ -123,7 +123,7 @@ OGRLayerStreamStitchingFilter<TInputImage>
      startReporter = 50;
      stopReporter = 100;
    }
-   itk::ProgressReporter progress(this,0,2*nbRowStream*nbColStream,100,startReporter);*/
+   itk::ProgressReporter progress(this,0,2*nbRowStream*nbColStream,100,startReporter); */
 
    for(unsigned int x=1; x<=nbColStream; x++)
    {
