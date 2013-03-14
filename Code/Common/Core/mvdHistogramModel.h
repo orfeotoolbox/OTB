@@ -206,7 +206,7 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractImageModel.h"
+#include "Core/mvdAbstractImageModel.h"
 
 namespace mvd
 {

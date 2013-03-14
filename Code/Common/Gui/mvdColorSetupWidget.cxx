@@ -19,6 +19,10 @@
 #include "Gui/mvdColorSetupWidget.h"
 #include "Gui/ui_mvdColorSetupWidget.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -38,17 +42,6 @@
 namespace mvd
 {
 
-namespace
-{
-
-const char* QCOMBOBOX_NAMES[] = {
-  "redComboBox",
-  "greenComboBox",
-  "blueComboBox"
-};
-
-}
-
 /*
   TRANSLATOR mvd::ColorSetupWidget
 
@@ -57,30 +50,37 @@ const char* QCOMBOBOX_NAMES[] = {
   Context comment for translator.
 */
 
+
+/*****************************************************************************/
+/* CONSTANTS                                                                 */
+
+namespace
+{
+
+/**
+ */
+const char* QCOMBOBOX_NAMES[] = {
+  "redComboBox",
+  "greenComboBox",
+  "blueComboBox"
+};
+
+} // end of anonymous namespace.
+
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
+
 /*******************************************************************************/
 ColorSetupWidget
 ::ColorSetupWidget( QWidget* parent, Qt::WindowFlags flags ) :
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::ColorSetupWidget() )
 {
-  // TODO: Change to static constant see Qt I18n documentation.
-  // This array is here to statically expose the main enhanced band
-  // names that OTB can returns for translation purposes.
-  // TODO: Move const char* ENHANCED_BAND_NAMES[] to common library.
-  const char*
-    ENHANCED_BAND_NAME[ 10 ] = {
-    tr("Red").toLatin1().constData(),
-    tr("Green").toLatin1().constData(),
-    tr("Blue").toLatin1().constData(),
-    tr("Yellow").toLatin1().constData(),
-    tr("RedEdge").toLatin1().constData(),
-    tr("Coastal").toLatin1().constData(),
-    tr("NIR").toLatin1().constData(),
-    tr("NIR1").toLatin1().constData(),
-    tr("NIR2").toLatin1().constData(),
-    tr("PAN").toLatin1().constData(),
-  };
-
   m_UI->setupUi( this );
 }
 
@@ -103,6 +103,7 @@ ColorSetupWidget
 
   QStringList itemTexts( components );
 
+  // TODO: Move to mvd::core::AbstractImageModel (see ENHANCED_BAND_NAMES[]).
   for( int i=0;
        i<itemTexts.size();
        ++ i )

@@ -37,6 +37,10 @@
 
 namespace mvd
 {
+
+namespace gui
+{
+
 /*
   TRANSLATOR mvd::AboutDialog
 
@@ -49,7 +53,7 @@ namespace mvd
 AboutDialog
 ::AboutDialog( QWidget* parent, Qt::WindowFlags flags ) :
   QDialog( parent ),
-  m_UI( new mvd::Ui::AboutDialog() )
+  m_UI( new mvd::gui::Ui::AboutDialog() )
 {
   m_UI->setupUi( this );
 
@@ -68,5 +72,7 @@ AboutDialog
 /*******************************************************************************/
 
 /*******************************************************************************/
+
+} // end namespace 'gui'
 
 } // end namespace 'mvd'

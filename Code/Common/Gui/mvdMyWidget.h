@@ -57,6 +57,10 @@ namespace
 
 namespace mvd
 {
+
+namespace gui
+{
+
 //
 // Internal classes pre-declaration.
 namespace Ui
@@ -137,8 +141,19 @@ private:
 private slots:
 };
 
+} // end namespace 'gui'
+
+} // end namespace 'mvd'
+
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
+
+namespace mvd
+{
+
+namespace gui
+{
+} // end namespace 'gui'
 
 } // end namespace 'mvd'
 

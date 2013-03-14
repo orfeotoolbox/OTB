@@ -52,6 +52,37 @@ namespace mvd
 
 
 /*****************************************************************************/
+/* CONSTANTS                                                                 */
+
+namespace
+{
+
+/**
+ * \brief Array of enhanced band names that OTB can return.
+ *
+ * It is defined (statically) as a constant for translation purposes.
+ */
+const char*
+ENHANCED_BAND_NAMES[ 10 ] = {
+  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Red" ),
+  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Green" ),
+  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Blue" ),
+  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Yellow" ),
+  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "RedEdge" ),
+  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Coastal" ),
+  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "NIR" ),
+  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "NIR1" ),
+  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "NIR2" ),
+  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "PAN" ),
+};
+
+} // end of anonymous namespace.
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+
+/*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
@@ -154,8 +185,10 @@ AbstractImageModel
         {
         stdBandNames2 = metaDataInterface->GetEnhancedBandNames();
         }
-      catch(itk::ExceptionObject &)
-        {}
+      catch( itk::ExceptionObject& exc )
+        {
+	qDebug() << exc.what();
+	}
       }
 
     /*

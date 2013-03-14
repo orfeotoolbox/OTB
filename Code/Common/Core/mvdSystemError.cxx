@@ -60,7 +60,7 @@ namespace mvd
 std::string
 SystemError::whatString( int err, const std::string& msg )
 {
-#if 0
+  /*
   // Use Qt's tr() in order for the text string to be translated.
   // N.B.: strerror() string may use system locales.
   return ToStdString(
@@ -75,8 +75,8 @@ SystemError::whatString( int err, const std::string& msg )
       .arg( msg )
 
   );
+  */
 
-#else
   std::stringstream sstream( std::ios_base::out );
 
   sstream
@@ -89,8 +89,6 @@ SystemError::whatString( int err, const std::string& msg )
 	 : " " + msg + "." );
 
   return sstream.str();
-
-#endif
 }
 
 /*******************************************************************************/

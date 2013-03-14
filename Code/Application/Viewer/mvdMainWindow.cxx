@@ -452,7 +452,7 @@ void
 MainWindow
 ::on_action_About_activated()
 {
-  AboutDialog aboutDialog( this );
+  gui::AboutDialog aboutDialog( this );
 
   aboutDialog.exec();
 }

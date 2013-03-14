@@ -45,12 +45,6 @@
 /*****************************************************************************/
 /* MACROS                                                                    */
 
-/** \brief Indent space when writing XML DOM documents. */
-namespace
-{
-const int XML_INDENT = 2;
-}
-
 namespace mvd
 {
 
@@ -65,7 +59,13 @@ namespace mvd
 
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
-  
+
+/** \brief Indent space when writing XML DOM documents. */
+namespace
+{
+const int XML_INDENT = 2;
+}
+
 const char*
 DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
 {
