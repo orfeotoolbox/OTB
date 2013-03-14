@@ -112,17 +112,13 @@ namespace
 /*******************************************************************************/
 namespace mvd
 {
-
-namespace core
-{
-
 template< typename TValueType, unsigned int VLength >
 class FixedArray :
     public itk::FixedArray< TValueType, VLength >
 {
 public:
   /** Standard Self typedef */
-  typedef mvd::core::FixedArray< TValueType, VLength > Self;
+  typedef mvd::FixedArray< TValueType, VLength > Self;
   typedef itk::FixedArray< TValueType, VLength > Superclass;
 
   typedef itk::SmartPointer< Self > Pointer;
@@ -141,11 +137,7 @@ public:
   void Fill( const Self& );
   void Fill( const TValueType& );
 };
-
-} // end of namespace 'core'.
-
-} // end of namespace 'mvd'.
-
+}
 /*******************************************************************************/
 /*
 namespace itk
@@ -183,9 +175,6 @@ itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, unsigned long long
 //
 // Type definitions.
 namespace mvd
-{
-
-namespace core
 {
 
 /*******************************************************************************/
@@ -295,10 +284,10 @@ typedef otb::Image< RGBAPixelType, Monteverdi2_DIMENSION > RGBAImageType;
 /* Type definitions for application defaults.                                  */
 /**
  */
-typedef VectorImageType DefaultImageType;
+typedef mvd::VectorImageType DefaultImageType;
 /**
  */
-typedef VectorImageFileReaderType DefaultImageFileReaderType;
+typedef mvd::VectorImageFileReaderType DefaultImageFileReaderType;
 
 /*******************************************************************************/
 /** Type definitions for wrapped applications
@@ -307,8 +296,6 @@ typedef VectorImageFileReaderType DefaultImageFileReaderType;
 typedef std::map< std::string, StringVector >    ApplicationsTagContainer;
 
 /*******************************************************************************/
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'
 

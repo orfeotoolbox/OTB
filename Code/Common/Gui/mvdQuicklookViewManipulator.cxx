@@ -84,10 +84,10 @@ QuicklookViewManipulator
   // compute the physcial coordinates
   // computation takes into the origin of the viewport in the widget,
   // the spacing of the rendered image and the isotropicZoom
-  core::IndexType index;
+  IndexType index;
   index[0] = event->x();
   index[1] = event->y();
-  core::PointType physicalPt = ScreenIndexToPhysicalPoint(index);
+  PointType physicalPt = ScreenIndexToPhysicalPoint(index);
 
   // emit the new viewport center on physical coordinates
   emit ViewportRegionChanged(physicalPt[0], physicalPt[1]);
@@ -107,15 +107,15 @@ QuicklookViewManipulator
 ::moveRegion(double dx, double dy)
 {
   // Update the navigation context
-  core::ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
   // Apply the offset to the (start) index of the stored region
-  core::ImageRegionType::OffsetType offset;
-  offset[0] = static_cast<core::ImageRegionType::OffsetType::OffsetValueType> (dx/m_IsotropicZoom + 0.5);
-  offset[1] = static_cast<core::ImageRegionType::OffsetType::OffsetValueType> (dy/m_IsotropicZoom + 0.5);
+  ImageRegionType::OffsetType offset;
+  offset[0] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dx/m_IsotropicZoom + 0.5);
+  offset[1] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dy/m_IsotropicZoom + 0.5);
  
   // Apply the offset to the (start) index of the stored region
-  core::IndexType    index = currentRegion.GetIndex() + offset;
+  IndexType    index = currentRegion.GetIndex() + offset;
   currentRegion.SetIndex(index);
 
   // Constraint the region to the largestPossibleRegion
@@ -160,10 +160,10 @@ void QuicklookViewManipulator
 ::ResizeRegion(unsigned int w, unsigned int h)
 {
   // Update the navigation context
-  core::ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
   // Get the new widget size
-  core::ImageRegionType::SizeType size;
+  ImageRegionType::SizeType size;
   size[0] = w;
   size[1] = h;
 
@@ -222,12 +222,12 @@ QuicklookViewManipulator
     m_NavigationContext.m_SizeYBeforeConstrain = sizeY;
 
     // Update the viewort region with the new size
-    core::ImageRegionType::SizeType size;
+    ImageRegionType::SizeType size;
     size[0] = static_cast<unsigned int>(sizeX);
     size[1] = static_cast<unsigned int>(sizeY);
 
     // The viewPort Region must be adapted to this zoom ratio
-    core::ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
  
     // Update the stored region with the new size
     currentRegion.SetSize(size);
@@ -248,15 +248,15 @@ QuicklookViewManipulator
   if( m_IsotropicZoom * scale > 0.01 && m_IsotropicZoom * scale < 10.)
     {
     // The viewPort Region must be adapted to this zoom ratio
-    core::ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
   
     // center the region on the position under the cursor
-    core::IndexType        origin = currentRegion.GetIndex();
+    IndexType        origin = currentRegion.GetIndex();
     double centerX = (double)(origin[0]) + (double)(currentRegion.GetSize()[0])/2.;
     double centerY = (double)(origin[1]) + (double)(currentRegion.GetSize()[1])/2.;
 
     // new origin
-    core::IndexType  newIndex;
+    IndexType  newIndex;
     newIndex[0] = centerX - currentRegion.GetSize()[0]/scale/2.; 
     if (newIndex[0] < 0) newIndex[0] = 0;
 
@@ -274,16 +274,16 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::ConstrainRegion( core::ImageRegionType& region, const core::ImageRegionType& largest)
+::ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest)
 {
-  core::ImageRegionType::SizeType zeroSize;
+  ImageRegionType::SizeType zeroSize;
   zeroSize.Fill(0);
   
   if (largest.GetSize() != zeroSize)
     {
     // Else we can constrain it
-    core::IndexType                     index = region.GetIndex();
-    core::ImageRegionType::SizeType size = region.GetSize();
+    IndexType                     index = region.GetIndex();
+    ImageRegionType::SizeType size = region.GetSize();
 
     // If region is larger than big, then crop
     if (region.GetSize()[0] > largest.GetSize()[0])
@@ -297,7 +297,7 @@ QuicklookViewManipulator
 
     // Else we can constrain it
     // For each dimension
-    for (unsigned int dim = 0; dim < core::ImageRegionType::ImageDimension; ++dim)
+    for (unsigned int dim = 0; dim < ImageRegionType::ImageDimension; ++dim)
       {
       // push left if necessary
       if (region.GetIndex()[dim] < largest.GetIndex()[dim])
@@ -327,9 +327,9 @@ QuicklookViewManipulator
 /*****************************************************************************/
 void
 QuicklookViewManipulator
-::OnModelImageRegionChanged(const core::ImageRegionType & largestRegion, 
-                            const core::SpacingType & spacing,
-                            const core::PointType& origin )
+::OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
+                            const SpacingType & spacing,
+                            const PointType& origin )
 {
   // update spacing
   SetSpacing(spacing);
@@ -349,7 +349,7 @@ QuicklookViewManipulator
   m_NavigationContext.m_ModelImageRegion = largestRegion;
 
   // set back the origin to O
-  core::IndexType nullIndex;
+  IndexType nullIndex;
   nullIndex.Fill(0);
   m_NavigationContext.m_ViewportImageRegion.SetIndex(nullIndex);
 

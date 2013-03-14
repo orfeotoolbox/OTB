@@ -45,12 +45,8 @@
 
 namespace mvd
 {
-
-namespace core
-{
-
 /*
-  TRANSLATOR mvd::core::SystemError
+  TRANSLATOR mvd::SystemError
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -119,7 +115,5 @@ SystemError
   throw()
 {
 }
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'

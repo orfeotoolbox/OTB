@@ -59,11 +59,6 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
-namespace core
-{
-//
-// Internal classes pre-declaration.
-
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -127,8 +122,6 @@ private:
 
 };
 
-} // end namespace 'core'.
-
 } // end namespace 'mvd'.
 
 /*****************************************************************************/
@@ -137,17 +130,12 @@ private:
 namespace mvd
 {
 
-namespace core
-{
-
 /*****************************************************************************/
 int
 SystemError::GetErrorCode() const
 {
   return m_ErrorCode;
 }
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'
 

@@ -62,10 +62,6 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
-namespace core
-{
-//
-// Internal classes pre-declaration.
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -156,17 +152,12 @@ private:
 private slots:
 };
 
-} // end namespace 'core'.
-
 } // end namespace 'mvd'.
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
 namespace mvd
-{
-
-namespace core
 {
 
 /*****************************************************************************/
@@ -230,8 +221,6 @@ AbstractModel
 {
   virtual_BuildModel( context );
 }
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'
 

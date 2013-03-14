@@ -43,11 +43,8 @@
 
 namespace mvd
 {
-
-namespace core
-{
 /*
-  TRANSLATOR mvd::core::QuicklookModel
+  TRANSLATOR mvd::QuicklookModel
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -131,7 +128,5 @@ QuicklookModel
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'

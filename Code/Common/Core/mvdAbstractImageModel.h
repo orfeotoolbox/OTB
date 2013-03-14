@@ -62,12 +62,6 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-
-namespace core
-{
-
-//
-// Internal classes pre-declaration.
 class HistogramModel;
 class QuicklookModel;
 
@@ -215,7 +209,7 @@ public slots:
 // Signals.
 signals:
   /** */
-  void SpacingChanged( const core::SpacingType& );
+  void SpacingChanged( const SpacingType& );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -280,8 +274,6 @@ private:
 private slots:
 };
 
-} // end namespace 'core'
-
 } // end namespace 'mvd'
 
 /*****************************************************************************/
@@ -298,9 +290,6 @@ private slots:
 #include "mvdHistogramModel.h"
 
 namespace mvd
-{
-
-namespace core
 {
 
 /*****************************************************************************/
@@ -423,8 +412,6 @@ AbstractImageModel
 {
   return ToImageBase()->GetOrigin();
 }
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'
 

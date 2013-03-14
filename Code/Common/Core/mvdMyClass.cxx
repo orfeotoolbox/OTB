@@ -40,12 +40,8 @@
 
 namespace mvd
 {
-
-namespace core
-{
-
 /*
-  TRANSLATOR mvd::core::MyClass
+  TRANSLATOR mvd::MyClass
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -83,7 +79,5 @@ MyClass
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'

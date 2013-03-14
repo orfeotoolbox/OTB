@@ -62,7 +62,7 @@ namespace mvd
 /*******************************************************************************/
 Application
 ::Application( int& argc, char** argv ) :
-  core::I18nApplication( argc, argv )
+  I18nApplication( argc, argv )
 {
   InitializeCore();
 }

@@ -79,7 +79,7 @@ AbstractModelController
 /*****************************************************************************/
 void
 AbstractModelController
-::SetModel( core::AbstractModel* model )
+::SetModel( AbstractModel* model )
 {
   // Disconnect previously connected model and signal listeners.
   private_Disconnect( m_Model );
@@ -110,7 +110,7 @@ AbstractModelController
 /*****************************************************************************/
 void
 AbstractModelController
-::private_Connect( core::AbstractModel* model )
+::private_Connect( AbstractModel* model )
 {
   if( model==NULL )
     return;
@@ -130,7 +130,7 @@ AbstractModelController
 /*****************************************************************************/
 void
 AbstractModelController
-::private_Disconnect( core::AbstractModel* model )
+::private_Disconnect( AbstractModel* model )
 {
   if( model==NULL )
     return;

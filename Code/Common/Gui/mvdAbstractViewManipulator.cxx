@@ -77,10 +77,10 @@ AbstractViewManipulator
 {
   // Compute the physical coordinates of the point under the cursor
   // and send them to the image manipulator. 
-  core::IndexType index;
+  IndexType index;
   index[0] = (unsigned int)( point.x() );
   index[1] = (unsigned int)( point.y() );
-  core::PointType physicalPt = ScreenIndexToPhysicalPoint(index);
+  PointType physicalPt = ScreenIndexToPhysicalPoint(index);
   
   // emit the physical coordinate to be catched by
   // ImageViewManipulator. Index (for resol 0 of the image)
@@ -95,7 +95,7 @@ AbstractViewManipulator
 /*******************************************************************************/
 void
 AbstractViewManipulator
-::OnViewportOriginChanged(const core::IndexType& origin)
+::OnViewportOriginChanged(const IndexType& origin)
 {
   m_ViewportOrigin = origin;
 }
@@ -103,7 +103,7 @@ AbstractViewManipulator
 /*******************************************************************************/
 void
 AbstractViewManipulator
-::SetSpacing(const core::SpacingType& spacing)
+::SetSpacing(const SpacingType& spacing)
 {
   m_Spacing = spacing;
 }
@@ -111,7 +111,7 @@ AbstractViewManipulator
 /*******************************************************************************/
 void
 AbstractViewManipulator
-::SetOrigin(const core::PointType& origin)
+::SetOrigin(const PointType& origin)
 {
   m_Origin = origin;
 }

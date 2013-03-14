@@ -51,13 +51,9 @@ namespace
 
 namespace mvd
 {
-
-namespace core
-{
 //
 // Internal classes pre-declaration.
 class Monteverdi2_EXPORT AbstractImageModel;
-}
 
 /** \class AbstractModelRenderer
  *
@@ -75,8 +71,8 @@ public:
   struct RenderingContext
   {
      inline
-     RenderingContext( const core::AbstractImageModel* model =NULL,
-                       const core::ImageRegionType& region =core::ImageRegionType(),
+     RenderingContext( const AbstractImageModel* model =NULL,
+                       const ImageRegionType& region =ImageRegionType(),
                        double zoom = 1.,
                        unsigned int width = 0,
                        unsigned int height = 0,
@@ -92,8 +88,8 @@ public:
     {
     }
 
-    const core::AbstractImageModel* m_ImageModel;
-    core::ImageRegionType m_ImageRegion;
+    const AbstractImageModel* m_ImageModel;
+    ImageRegionType m_ImageRegion;
     double m_IsotropicZoom;
     // TODO: remove unsigned before int (because Qt uses signed int).
     unsigned int m_WidgetWidth;

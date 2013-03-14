@@ -62,15 +62,8 @@ namespace
 
 namespace mvd
 {
-
-namespace core
-{
-
 //
 // Internal classes pre-declaration.
-
-} // end of namespace 'core'.
-
 } // end of namespace 'mvd'.
 
 
@@ -83,10 +76,6 @@ namespace otb
 
 namespace mvd
 {
-
-namespace core
-{
-
 /**
  */
 template< typename X, typename Y, typename K >
@@ -125,8 +114,6 @@ Lerp( const T& k,
       const T& y0, const T& y1 );
 #endif // USE_VNL
 
-} // end namespace 'core'.
-
 } // end namespace 'mvd'.
 
 /*****************************************************************************/
@@ -138,10 +125,6 @@ namespace otb
 
 namespace mvd
 {
-
-namespace core
-{
-
 /*******************************************************************************/
 template< typename X, typename Y, typename K >
 void
@@ -191,8 +174,6 @@ Lerp( const T& k,
   return Lerp( k, vnl_vector< T, 2 >( x0, x1 ), vnl_vector< T, 2 >( y0, y1 ) );
 }
 #endif // USE_VNL
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'
 

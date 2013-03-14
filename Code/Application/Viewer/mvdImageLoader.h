@@ -51,12 +51,9 @@ namespace
 namespace mvd
 {
 
-namespace core
-{
 //
 // Internal class pre-declaration.
 class AbstractModel;
-}
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -83,7 +80,7 @@ public slots:
 
 signals:
   /** \brief Triggered after model is ready */
-  void ModelLoaded( core::AbstractModel* );
+  void ModelLoaded( AbstractModel* );
 
   /** \brief Triggered when processing is finished */
   void Finished();

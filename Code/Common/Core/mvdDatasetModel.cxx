@@ -46,12 +46,8 @@
 
 namespace mvd
 {
-
-namespace core
-{
-
 /*
-  TRANSLATOR mvd::core::DatasetModel
+  TRANSLATOR mvd::DatasetModel
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -164,10 +160,10 @@ DatasetModel
     // dataset-model in order to update XML descriptor.
     QObject::connect(
       vectorImageModel,
-      SIGNAL( SettingsUpdated( core::AbstractImageModel* ) ),
+      SIGNAL( SettingsUpdated( AbstractImageModel* ) ),
       // to:
       this,
-      SLOT( OnSettingsUpdated( core::AbstractImageModel* ) )
+      SLOT( OnSettingsUpdated( AbstractImageModel* ) )
     );
     }
   catch( std::exception& exc )
@@ -373,7 +369,5 @@ DatasetModel
     &vectorImageModel->GetSettings()
   );
 }
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'

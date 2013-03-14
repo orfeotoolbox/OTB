@@ -78,16 +78,16 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     return;
 
   // the VectorImageModel used for the rendering
-  core::VectorImageModel* viModel = qobject_cast< core::VectorImageModel * >(
-    const_cast< core::AbstractImageModel* >( context.m_ImageModel )
+  VectorImageModel* viModel = qobject_cast< VectorImageModel * >(
+    const_cast< AbstractImageModel* >( context.m_ImageModel )
     );
   assert( viModel );
 
   // the region of the image to be rendered
-  const core::ImageRegionType&  region = context.m_ImageRegion;
+  const ImageRegionType&  region = context.m_ImageRegion;
 
-  core::ImageRegionType  scaledRegion = region;
-  core::CountType bestLod = viModel->ComputeBestLevelOfDetail(context.m_IsotropicZoom);
+  ImageRegionType  scaledRegion = region;
+  CountType bestLod = viModel->ComputeBestLevelOfDetail(context.m_IsotropicZoom);
 
   // If it is not the original level of detail recompute the region to request
   double currentResolutionFactorX = 1.;
@@ -95,8 +95,8 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
 
   if (bestLod != 0)
     {
-    core::ImageRegionType::SizeType  scaledSize;
-    core::ImageRegionType::IndexType scaledOrigin;
+    ImageRegionType::SizeType  scaledSize;
+    ImageRegionType::IndexType scaledOrigin;
 
     scaledSize[0] = region.GetSize()[0]/(1<<bestLod);
     scaledSize[1] = region.GetSize()[1]/(1<<bestLod);
@@ -218,13 +218,13 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
     // 
     // translate the corner of the red square in the ql widget
     // coordinates 
-    core::PointType nullPoint;
+    PointType nullPoint;
     nullPoint.Fill(0.);
     if ( m_SquarePointUL != nullPoint || m_SquarePointLR != nullPoint )
       {
       //
       // physical point to index (in ql)
-      core::PointType sp1, sp2;
+      PointType sp1, sp2;
       sp1[0] = (m_SquarePointUL[0] - viModel->GetOrigin()[0] ) * finalZoomFactorX / vcl_abs(viModel->GetSpacing()[0]) + originX;
       sp1[1] = (m_SquarePointUL[1] - viModel->GetOrigin()[1] ) * finalZoomFactorY / vcl_abs(viModel->GetSpacing()[1]) + originY;
       sp1[1] = context.m_WidgetHeight - sp1[1]; // y axis is flipped
@@ -249,7 +249,7 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       }
 
     // emit the new origin of the extent
-    core::IndexType origin;
+    IndexType origin;
     origin[0]  = originX;
     origin[1]  = originY;
     emit ViewportOriginChanged(origin);
@@ -264,7 +264,7 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void ImageModelRenderer
-::OnViewportRegionRepresentationChanged(const core::PointType& ul, const core::PointType& lr)
+::OnViewportRegionRepresentationChanged(const PointType& ul, const PointType& lr)
 {
   m_SquarePointUL = ul;
   m_SquarePointLR = lr;

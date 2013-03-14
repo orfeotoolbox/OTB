@@ -70,7 +70,7 @@ ColorSetupController
 /*******************************************************************************/
 void
 ColorSetupController
-::Connect( core::AbstractModel* model )
+::Connect( AbstractModel* model )
 {
   ColorSetupWidget* colorSetupWidget = GetWidget< ColorSetupWidget >();
 
@@ -96,7 +96,7 @@ ColorSetupController
 /*******************************************************************************/
 void
 ColorSetupController
-::Disconnect( core::AbstractModel* model )
+::Disconnect( AbstractModel* model )
 {
   ColorSetupWidget* colorSetupWidget = GetWidget< ColorSetupWidget >();
 
@@ -138,8 +138,8 @@ ColorSetupController
 {
   //
   // Calculate loop bounds. Return if nothing to do.
-  core::CountType begin = 0;
-  core::CountType end = 0;
+  CountType begin = 0;
+  CountType end = 0;
 
   if( !mvd::RgbBounds( begin, end, channels ) )
     return;
@@ -150,7 +150,7 @@ ColorSetupController
 
   //
   // Access image-model.
-  core::VectorImageModel* imageModel = GetModel< core::VectorImageModel >();
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
 
   // Block this controller's signals to prevent display refreshes
@@ -166,11 +166,11 @@ ColorSetupController
   colorSetupWidget->SetComponents( imageModel->GetBandNames(true) );
 
   // Reset current-indices of RGB channels widgets.
-  for( core::CountType i=begin; i<end; ++i )
+  for( CountType i=begin; i<end; ++i )
     {
     RgbaChannel channel = static_cast< RgbaChannel >( i );
     
-    core::VectorImageModel::Settings::ChannelVector::value_type band =
+    VectorImageModel::Settings::ChannelVector::value_type band =
       imageModel->GetSettings().GetRgbChannel( i );
 
     // Set current-index of channel.
@@ -193,7 +193,7 @@ ColorSetupController
   qDebug() << QString( "OnCurrentIndexChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( index );
 
   // Get image-model.
-  core::VectorImageModel* imageModel = GetModel< core::VectorImageModel >();
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
 
   // Update channel index.

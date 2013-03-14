@@ -41,12 +41,8 @@
 
 namespace mvd
 {
-
-namespace core
-{
-
 /*
-  TRANSLATOR mvd::core::HistogramModel
+  TRANSLATOR mvd::HistogramModel
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -189,7 +185,5 @@ HistogramModel
 /*******************************************************************************/
 
 /*******************************************************************************/
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'

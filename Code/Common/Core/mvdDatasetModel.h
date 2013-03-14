@@ -59,10 +59,6 @@ namespace
 
 namespace mvd
 {
-
-namespace core
-{
-
 //
 // Internal classes pre-declaration.
 class DatasetDescriptor;
@@ -245,10 +241,8 @@ private:
 private slots:
   /**
    */
-  void OnSettingsUpdated( core::AbstractImageModel* );
+  void OnSettingsUpdated( AbstractImageModel* );
 };
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'
 
@@ -260,9 +254,6 @@ private slots:
 #include "mvdAbstractImageModel.h"
 
 namespace mvd
-{
-
-namespace core
 {
 
 /*****************************************************************************/
@@ -336,8 +327,6 @@ DatasetModel
 {
   return findChildren< AbstractImageModel* >();
 }
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'
 

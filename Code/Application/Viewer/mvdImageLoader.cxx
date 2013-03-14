@@ -66,7 +66,7 @@ ImageLoader
 
   try
     {
-    core::DatasetModel* model = Application::LoadDatasetModel(
+    DatasetModel* model = Application::LoadDatasetModel(
       m_Filename, m_Width, m_Height );
 
     // We can only push to another thread,

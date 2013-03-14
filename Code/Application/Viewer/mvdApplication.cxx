@@ -89,13 +89,13 @@ Application
 }
 
 /*****************************************************************************/
-core::DatasetModel*
+DatasetModel*
 Application::LoadDatasetModel( const QString& imageFilename,
 			       int width,
 			       int height )
 {
   // New model.
-  core::DatasetModel* model = new core::DatasetModel();
+  DatasetModel* model = new DatasetModel();
 
   // Retrive path and name.
   QString path;
@@ -111,9 +111,9 @@ Application::LoadDatasetModel( const QString& imageFilename,
   try
     {
     // try if the filename is valid
-    core::VectorImageModel::EnsureValidImage(imageFilename);
+    VectorImageModel::EnsureValidImage(imageFilename);
     // Build model (relink to cached data).
-    core::DatasetModel::BuildContext context( path, name, width, height );
+    DatasetModel::BuildContext context( path, name, width, height );
     model->BuildModel( &context );
 
     // Load image if DatasetModel is empty.
@@ -142,7 +142,7 @@ Application::LoadDatasetModel( const QString& imageFilename,
 /*******************************************************************************/
 Application
 ::Application( int& argc, char** argv ) :
-  core::I18nApplication( argc, argv ),
+  I18nApplication( argc, argv ),
   m_Model( NULL )
 {
   InitializeCore();
@@ -164,7 +164,7 @@ Application
 /*******************************************************************************/
 void
 Application
-::SetModel( core::AbstractModel* model )
+::SetModel( AbstractModel* model )
 {
   emit AboutToChangeSelectedModel( model );
 

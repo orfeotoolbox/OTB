@@ -41,12 +41,8 @@
 
 namespace mvd
 {
-
-namespace core
-{
-
 /*
-  TRANSLATOR mvd::core::AbstractModel
+  TRANSLATOR mvd::AbstractModel
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -90,7 +86,5 @@ AbstractModel
 /*******************************************************************************/
 
 /*******************************************************************************/
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'

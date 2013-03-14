@@ -39,12 +39,8 @@
 
 namespace mvd
 {
-
-namespace core
-{
-
 /*
-  TRANSLATOR mvd::core::I18nApplication
+  TRANSLATOR mvd::I18nApplication
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -346,7 +342,5 @@ I18nApplication
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-
-} // end namespace 'core'
 
 } // end namespace 'mvd'

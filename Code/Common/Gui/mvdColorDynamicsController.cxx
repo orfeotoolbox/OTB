@@ -70,7 +70,7 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::Connect( core::AbstractModel* model )
+::Connect( AbstractModel* model )
 {
   ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
 
@@ -163,7 +163,7 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::Disconnect( core::AbstractModel* model )
+::Disconnect( AbstractModel* model )
 {
   ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
 
@@ -242,8 +242,8 @@ ColorDynamicsController
 {
   //
   // Calculate loop bounds. Return if nothing to do.
-  core::CountType begin = -1;
-  core::CountType end = -1;
+  CountType begin = -1;
+  CountType end = -1;
 
   if( !mvd::RgbBounds( begin, end, channels ) )
     return;
@@ -254,38 +254,38 @@ ColorDynamicsController
 
   //
   // Access image-model.
-  core::VectorImageModel* imageModel = GetModel< core::VectorImageModel >();
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
 
   //
   // Access histogram from generic image-model.
-  const core::HistogramModel* histogramModel = imageModel->GetHistogramModel();
+  const HistogramModel* histogramModel = imageModel->GetHistogramModel();
   assert( histogramModel!=NULL );
 
   // Get min/max pixels.
-  core::DefaultImageType::PixelType minPx( histogramModel->GetMinPixel() );
-  core::DefaultImageType::PixelType maxPx( histogramModel->GetMaxPixel() );
+  DefaultImageType::PixelType minPx( histogramModel->GetMinPixel() );
+  DefaultImageType::PixelType maxPx( histogramModel->GetMaxPixel() );
 
   // Get image rengering settings.
-  const core::VectorImageModel::Settings& settings = imageModel->GetSettings();
+  const VectorImageModel::Settings& settings = imageModel->GetSettings();
 
   // Block this controller's signals to prevent display refreshes
   // but let let widget(s) signal their changes so linked values
   // will be correctly updated.
   this->blockSignals( true );
   {
-  for( core::CountType i=begin; i<end; ++i )
+  for( CountType i=begin; i<end; ++i )
     {
     RgbaChannel channel = static_cast< RgbaChannel >( i );
 
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
 
-    core::DefaultImageType::PixelType::ValueType min(
+    DefaultImageType::PixelType::ValueType min(
       minPx[ settings.GetRgbChannel( channel ) ]
     );
 
-    core::DefaultImageType::PixelType::ValueType max(
+    DefaultImageType::PixelType::ValueType max(
       maxPx[ settings.GetRgbChannel( channel ) ]
     );
 
@@ -310,8 +310,8 @@ ColorDynamicsController
 {
   //
   // Calculate loop bounds. Return if nothing to do.
-  core::CountType begin = -1;
-  core::CountType end = -1;
+  CountType begin = -1;
+  CountType end = -1;
 
   if( !mvd::RgbBounds( begin, end, channels ) )
     return;
@@ -322,20 +322,20 @@ ColorDynamicsController
 
   //
   // Access image-model.
-  core::VectorImageModel* imageModel = GetModel< core::VectorImageModel >();
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
 
   //
   // Access histogram from generic image-model.
-  const core::HistogramModel* histogramModel = imageModel->GetHistogramModel();
+  const HistogramModel* histogramModel = imageModel->GetHistogramModel();
   assert( histogramModel!=NULL );
 
   // Get min/max pixels.
-  core::DefaultImageType::PixelType minPx( histogramModel->GetMinPixel() );
-  core::DefaultImageType::PixelType maxPx( histogramModel->GetMaxPixel() );
+  DefaultImageType::PixelType minPx( histogramModel->GetMinPixel() );
+  DefaultImageType::PixelType maxPx( histogramModel->GetMaxPixel() );
 
   // Get image rengering settings.
-  const core::VectorImageModel::Settings& settings = imageModel->GetSettings();
+  const VectorImageModel::Settings& settings = imageModel->GetSettings();
 
 
   // Block this controller's signals to prevent display refreshes
@@ -344,18 +344,18 @@ ColorDynamicsController
   this->blockSignals( true );
   {
   // Assign values to controlled widget.
-  for( core::CountType i=begin; i<end; ++i )
+  for( CountType i=begin; i<end; ++i )
     {
     RgbaChannel channel = static_cast< RgbaChannel >( i );
 
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
 
-    core::DefaultImageType::PixelType::ValueType min(
+    DefaultImageType::PixelType::ValueType min(
       minPx[ settings.GetRgbChannel( channel ) ]
     );
 
-    core::DefaultImageType::PixelType::ValueType max(
+    DefaultImageType::PixelType::ValueType max(
       maxPx[ settings.GetRgbChannel( channel ) ]
     );
     // Block widget's signals...
@@ -382,8 +382,8 @@ ColorDynamicsController
 {
   //
   // Calculate loop bounds. Return if nothing to do.
-  core::CountType begin = -1;
-  core::CountType end = -1;
+  CountType begin = -1;
+  CountType end = -1;
 
   if( !mvd::RgbBounds( begin, end, channels ) )
     return;
@@ -394,7 +394,7 @@ ColorDynamicsController
 
   //
   // Access image-model.
-  core::VectorImageModel* imageModel = GetModel< core::VectorImageModel >();
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
 
   /*
@@ -409,7 +409,7 @@ ColorDynamicsController
   */
 
   // Get image rengering settings.
-  const core::VectorImageModel::Settings& settings = imageModel->GetSettings();
+  const VectorImageModel::Settings& settings = imageModel->GetSettings();
 
 
   // Block this controller's signals to prevent display refreshes
@@ -418,7 +418,7 @@ ColorDynamicsController
   this->blockSignals( true );
   {
   // Assign values to controlled widget.
-  for( core::CountType i=begin; i<end; ++i )
+  for( CountType i=begin; i<end; ++i )
     {
     RgbaChannel channel = static_cast< RgbaChannel >( i );
 
@@ -435,8 +435,8 @@ ColorDynamicsController
     );
     */
 
-    core::ParametersType::ValueType low = settings.GetDynamicsParam( 2 * channel );
-    core::ParametersType::ValueType hi = settings.GetDynamicsParam( 2 * channel + 1 );
+    ParametersType::ValueType low = settings.GetDynamicsParam( 2 * channel );
+    ParametersType::ValueType hi = settings.GetDynamicsParam( 2 * channel + 1 );
 
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
@@ -462,8 +462,8 @@ ColorDynamicsController
 {
   //
   // Calculate loop bounds. Return if nothing to do.
-  core::CountType begin = 0;
-  core::CountType end = 0;
+  CountType begin = 0;
+  CountType end = 0;
 
   if( !mvd::RgbBounds( begin, end, channels ) )
     return;
@@ -479,7 +479,7 @@ ColorDynamicsController
   this->blockSignals( true );
   {
   // Assign values to controlled widget.
-  for( core::CountType i=begin; i<end; ++i )
+  for( CountType i=begin; i<end; ++i )
     {
     RgbaChannel channel = static_cast< RgbaChannel >( i );
 
@@ -527,19 +527,19 @@ ColorDynamicsController
   qDebug() << QString( "OnLowQuantileChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 
   // Get image-model.
-  core::VectorImageModel* imageModel = GetModel< core::VectorImageModel >();
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
   assert( imageModel->GetHistogramModel()!=NULL );
 
   // Reference settings.
-  core::VectorImageModel::Settings& settings = imageModel->GetSettings();
+  VectorImageModel::Settings& settings = imageModel->GetSettings();
 
   // Calculate quantile intensity.
-  core::HistogramModel::MeasurementType intensity =
+  HistogramModel::MeasurementType intensity =
     imageModel->GetHistogramModel()->Quantile(
       settings.GetRgbChannel( channel ),
       0.01 * value,
-      core::BOUND_LOWER
+      BOUND_LOWER
     );
 
   // Update quantile intensity in model.
@@ -572,19 +572,19 @@ ColorDynamicsController
   qDebug() << QString( "OnHighQuantileChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 
   // Get image-model.
-  core::VectorImageModel* imageModel = GetModel< core::VectorImageModel >();
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
   assert( imageModel->GetHistogramModel()!=NULL );
 
   // Reference settings.
-  core::VectorImageModel::Settings& settings = imageModel->GetSettings();
+  VectorImageModel::Settings& settings = imageModel->GetSettings();
 
   // Calculate quantile intensity.
-  core::HistogramModel::MeasurementType intensity =
+  HistogramModel::MeasurementType intensity =
     imageModel->GetHistogramModel()->Quantile(
       settings.GetRgbChannel( channel ),
       0.01 * value,
-      core::BOUND_UPPER
+      BOUND_UPPER
     );
 
   // Update quantile intensity in model.
@@ -617,7 +617,7 @@ ColorDynamicsController
   qDebug() << QString( "OnLowIntensityChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 
   // Get image-model.
-  core::VectorImageModel* imageModel = GetModel< core::VectorImageModel >();
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
   assert( imageModel->GetHistogramModel()!=NULL );
 
@@ -638,7 +638,7 @@ ColorDynamicsController
     100.0 * imageModel->GetHistogramModel()->Percentile(
       imageModel->GetSettings().GetRgbChannel( channel ),
       value,
-      core::BOUND_LOWER )
+      BOUND_LOWER )
   );
   }
   colorBandDynWgt->blockSignals( false );
@@ -655,7 +655,7 @@ ColorDynamicsController
   qDebug() << QString( "OnHighIntensityChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
 
   // Get image-model.
-  core::VectorImageModel* imageModel = GetModel< core::VectorImageModel >();
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
   assert( imageModel->GetHistogramModel()!=NULL );
 
@@ -676,7 +676,7 @@ ColorDynamicsController
     100.0 * imageModel->GetHistogramModel()->Percentile(
       imageModel->GetSettings().GetRgbChannel( channel ),
       value,
-      core::BOUND_UPPER )
+      BOUND_UPPER )
   );
   }
   colorBandDynWgt->blockSignals( false );
@@ -719,29 +719,29 @@ ColorDynamicsController
   qDebug() << QString( "OnApplyAllChanged(%1)" ).arg( RGBA_CHANNEL_NAMES[ channel ] );
 
   // Get image-model.
-  core::VectorImageModel* imageModel = GetModel< core::VectorImageModel >();
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
   assert( imageModel->GetHistogramModel()!=NULL );
 
   // Reference settings.
-  core::VectorImageModel::Settings& settings = imageModel->GetSettings();
+  VectorImageModel::Settings& settings = imageModel->GetSettings();
 
   for( int i=0; i<RGBA_CHANNEL_ALPHA; ++i )
     {
 
-    core::HistogramModel::MeasurementType lintensity =
+    HistogramModel::MeasurementType lintensity =
       imageModel->GetHistogramModel()->Quantile(
         settings.GetRgbChannel( i ),
         0.01 * low,
-        core::BOUND_LOWER
+        BOUND_LOWER
     );
 
     // Calculate quantile intensity.
-    core::HistogramModel::MeasurementType uintensity =
+    HistogramModel::MeasurementType uintensity =
       imageModel->GetHistogramModel()->Quantile(
         settings.GetRgbChannel( i ),
         0.01 * high,
-        core::BOUND_UPPER
+        BOUND_UPPER
     );
 
     // Update quantile intensity in model.
