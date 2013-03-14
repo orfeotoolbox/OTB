@@ -70,11 +70,9 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkNewMacro(Self)
-;
+  itkNewMacro(Self);
 
-  itkTypeMacro(ValidateSVMImagesClassifier, otb::Application)
-;
+  itkTypeMacro(ValidateSVMImagesClassifier, otb::Application);
 
   typedef otb::Image<FloatVectorImageType::InternalPixelType, 2> ImageReaderType;
 
@@ -124,7 +122,7 @@ private:
     SetDescription("Estimate the performance of the SVM model with a set of images and validation samples.");
 
     SetDocName("Validate SVM Images Classifier");
-    SetDocLongDescription("Estimate the performance of the SVM model obtained by the TrainSVMImagesClassifier with a new set of images and validation samples.\n The application asks for images statistics as input (XML file generated with the ComputeImagesStatistics application) and a SVM model (text file) generated with the TrainSVMImagesClassifier application.\n It will compute the global confusion matrix, kappa index and also the precision, recall and F-score of each class.");
+    SetDocLongDescription("Estimate the performance of the SVM model obtained by the TrainSVMImagesClassifier with a new set of images and validation samples.\n The application asks for images statistics as input (XML file generated with the ComputeImagesStatistics application) and a SVM model (text file) generated with the TrainSVMImagesClassifier application.\n It will compute the global confusion matrix, kappa index and also the precision, recall and F-score of each class. In the validation process, the confusion matrix is organized the following way: rows = reference labels, columns = produced labels.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -163,7 +161,7 @@ private:
     // Nothing to do here : all parameters are independent
   }
 
-  std::ostringstream::__string_type LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
+  std::string LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
   {
     ConfusionMatrixCalculatorType::ConfusionMatrixType matrix = confMatCalc->GetConfusionMatrix();
 
@@ -369,7 +367,7 @@ private:
     confMatCalc->Update();
 
     otbAppLogINFO("SVM training performances");
-    std::ostringstream::__string_type confMatString;
+    std::string confMatString;
     confMatString = LogConfusionMatrix(confMatCalc);
 
     for (unsigned int itClasses = 0; itClasses < modelSVM->GetNumberOfClasses(); itClasses++)

@@ -63,7 +63,7 @@ private:
 
   // Documentation
   SetDocName("Confusion matrix Computation");
-  SetDocLongDescription("This application computes the confusion matrix of a classification  relatively to a ground truth. This ground truth can be given as a raster or a vector data.");
+  SetDocLongDescription("This application computes the confusion matrix of a classification relatively to a ground truth. This ground truth can be given as a raster or a vector data. The confusion matrix is organized the following way: rows = reference labels, columns = produced labels.");
   SetDocLimitations("None");
   SetDocAuthors("OTB-Team");
   SetDocSeeAlso(" ");
