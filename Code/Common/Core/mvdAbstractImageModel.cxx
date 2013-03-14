@@ -42,8 +42,12 @@
 
 namespace mvd
 {
+
+namespace core
+{
+
 /*
-  TRANSLATOR mvd::AbstractImageModel
+  TRANSLATOR mvd::core::AbstractImageModel
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -64,16 +68,16 @@ namespace
  */
 const char*
 ENHANCED_BAND_NAMES[ 10 ] = {
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Red" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Green" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Blue" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Yellow" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "RedEdge" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Coastal" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "NIR" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "NIR1" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "NIR2" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "PAN" ),
+  QT_TRANSLATE_NOOP( "mvd::core::AbstractImageModel", "Red" ),
+  QT_TRANSLATE_NOOP( "mvd::core::AbstractImageModel", "Green" ),
+  QT_TRANSLATE_NOOP( "mvd::core::AbstractImageModel", "Blue" ),
+  QT_TRANSLATE_NOOP( "mvd::core::AbstractImageModel", "Yellow" ),
+  QT_TRANSLATE_NOOP( "mvd::core::AbstractImageModel", "RedEdge" ),
+  QT_TRANSLATE_NOOP( "mvd::core::AbstractImageModel", "Coastal" ),
+  QT_TRANSLATE_NOOP( "mvd::core::AbstractImageModel", "NIR" ),
+  QT_TRANSLATE_NOOP( "mvd::core::AbstractImageModel", "NIR1" ),
+  QT_TRANSLATE_NOOP( "mvd::core::AbstractImageModel", "NIR2" ),
+  QT_TRANSLATE_NOOP( "mvd::core::AbstractImageModel", "PAN" ),
 };
 
 } // end of anonymous namespace.
@@ -245,5 +249,7 @@ AbstractImageModel
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+
+} // end namespace 'core'
 
 } // end namespace 'mvd'

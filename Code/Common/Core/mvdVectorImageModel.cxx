@@ -50,8 +50,12 @@
 
 namespace mvd
 {
+
+namespace core
+{
+
 /*
-  TRANSLATOR mvd::VectorImageModel
+  TRANSLATOR mvd::core::VectorImageModel
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -956,5 +960,7 @@ VectorImageModel
     emit ViewportRegionChanged( Xpc, Ypc );      
     }
 }
+
+} // end namespace 'core'
 
 } // end namespace 'mvd'

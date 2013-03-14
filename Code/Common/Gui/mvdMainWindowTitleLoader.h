@@ -51,9 +51,14 @@ namespace
 namespace mvd
 {
 
+namespace core
+{
+
 //
 // Internal class pre-declaration.
 class VectorImageModel;
+
+}
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -72,7 +77,7 @@ class MainWindowTitleLoader : public QObject
 
 public:
   /** \brief Constructor */
-  MainWindowTitleLoader(VectorImageModel* model);
+  MainWindowTitleLoader(core::VectorImageModel* model);
     
 public slots:
   /** \brief Trigger the dataset creation */
@@ -87,7 +92,7 @@ signals:
   
 private:
 
-  VectorImageModel* m_Model;
+  core::VectorImageModel* m_Model;
 };
   
 } // end namespace 'mvd'

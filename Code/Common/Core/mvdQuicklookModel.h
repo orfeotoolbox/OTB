@@ -63,6 +63,11 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
+namespace core
+{
+//
+// Internal classes pre-declaration.
+
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -182,12 +187,17 @@ private:
 private slots:
 };
 
+} // end namespace 'core'
+
 } // end namespace 'mvd'
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
 namespace mvd
+{
+
+namespace core
 {
 
 /*****************************************************************************/
@@ -222,7 +232,10 @@ QuicklookModel
 ::GetImageModel()
 {
   return qobject_cast< TImageModel* >( parent() );
+
 }
+
+} // end namespace 'core'
 
 } // end namespace 'mvd'
 

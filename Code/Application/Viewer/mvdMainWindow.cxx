@@ -180,8 +180,17 @@ MainWindow
 
   // Connect centralWidget manipulator to Ql renderer when viewportRegionChanged
   QObject::connect(
-    m_ImageViewManipulator, SIGNAL( ViewportRegionRepresentationChanged(const PointType&, const PointType&) ), 
-    m_QLModelRenderer, SLOT( OnViewportRegionRepresentationChanged(const PointType&, const PointType&) )
+    m_ImageViewManipulator,
+    SIGNAL(
+      ViewportRegionRepresentationChanged( const core::PointType&,
+					   const core::PointType& )
+    ),
+    // to:
+    m_QLModelRenderer,
+    SLOT(
+      OnViewportRegionRepresentationChanged( const core::PointType&,
+					     const core::PointType& )
+    )
     );
 
   // Connect ql mousePressEventpressed to centralWidget manipulator
@@ -199,15 +208,15 @@ MainWindow
   // Connect Appllication and MainWindow when selected model is about
   // to change.
   QObject::connect(
-    qApp, SIGNAL( AboutToChangeSelectedModel( const AbstractModel* ) ),
-    this, SLOT( OnAboutToChangeSelectedModel( const AbstractModel* ) )
+    qApp, SIGNAL( AboutToChangeSelectedModel( const core::AbstractModel* ) ),
+    this, SLOT( OnAboutToChangeSelectedModel( const core::AbstractModel* ) )
   );
 
   // Connect Application and MainWindow when selected model has been
   // changed.
   QObject::connect(
-    qApp, SIGNAL( SelectedModelChanged( AbstractModel* ) ),
-    this, SLOT( OnSelectedModelChanged( AbstractModel* ) )
+    qApp, SIGNAL( SelectedModelChanged( core::AbstractModel* ) ),
+    this, SLOT( OnSelectedModelChanged( core::AbstractModel* ) )
   );
   
   // Show the progress dialog when a new image is loaded
@@ -389,10 +398,10 @@ MainWindow::closeEvent( QCloseEvent* event )
   // Ensure that there is no model or that the existing model is a
   // DatasetModel.
   assert( Application::ConstInstance()->GetModel()==
-	  Application::ConstInstance()->GetModel< DatasetModel >() );
+	  Application::ConstInstance()->GetModel< core::DatasetModel >() );
   // Get model.
-  DatasetModel* model =
-    Application::Instance()->GetModel< DatasetModel >();
+  core::DatasetModel* model =
+    Application::Instance()->GetModel< core::DatasetModel >();
 
   if( model==NULL || !model->IsModified() )
     return;
@@ -537,7 +546,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeSelectedModel( const AbstractModel* )
+::OnAboutToChangeSelectedModel( const core::AbstractModel* )
 {
   //
   // COLOR SETUP.
@@ -558,8 +567,8 @@ MainWindow
   const Application* app = Application::ConstInstance();
   assert( app!=NULL );
 
-  const DatasetModel* datasetModel = 
-    qobject_cast< const DatasetModel* >( app->GetModel() );
+  const core::DatasetModel* datasetModel = 
+    qobject_cast< const core::DatasetModel* >( app->GetModel() );
 
   // It is Ok there is no previously selected model (e.g. at
   // application startup.
@@ -570,8 +579,8 @@ MainWindow
 
   assert( datasetModel->HasSelectedImageModel() );
 
-  const VectorImageModel* vectorImageModel =
-    qobject_cast< const VectorImageModel* >(
+  const core::VectorImageModel* vectorImageModel =
+    qobject_cast< const core::VectorImageModel* >(
       datasetModel->GetSelectedImageModel()
     );
 
@@ -604,10 +613,10 @@ MainWindow
   // disconnect the vectorimage model spacing change (when zooming)
   QObject::disconnect(
     vectorImageModel,
-    SIGNAL( SpacingChanged(const SpacingType&) ),
+    SIGNAL( SpacingChanged(const core::SpacingType&) ),
     // to:
     centralWidget(),
-    SLOT( OnSpacingChanged(const SpacingType&)  )
+    SLOT( OnSpacingChanged(const core::SpacingType&)  )
   );
 
   // disconnect signal used to update the ql widget
@@ -702,18 +711,18 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnSelectedModelChanged( AbstractModel* model )
+::OnSelectedModelChanged( core::AbstractModel* model )
 {
   if( model==NULL )
     return;
 
-  DatasetModel* datasetModel = qobject_cast< DatasetModel* >( model );
+  core::DatasetModel* datasetModel = qobject_cast< core::DatasetModel* >( model );
 
   assert( datasetModel!=NULL );
   assert( datasetModel->HasSelectedImageModel() );
 
-  VectorImageModel* vectorImageModel =
-    qobject_cast< VectorImageModel* >(
+  core::VectorImageModel* vectorImageModel =
+    qobject_cast< core::VectorImageModel* >(
       datasetModel->GetSelectedImageModel()
     );
 
@@ -726,7 +735,13 @@ MainWindow
   m_TitleLoader->moveToThread(thread);
   
   // At thread startup, trigger the processing function
-  QObject::connect(thread, SIGNAL(started()), m_TitleLoader, SLOT(LoadTitle()));
+  QObject::connect(
+    thread,
+    SIGNAL( started() ),
+    // to:
+    m_TitleLoader,
+    SLOT( LoadTitle() )
+  );
 
   // On Successfull title composition, update with the window title
   QObject::connect(m_TitleLoader, 
@@ -785,10 +800,10 @@ MainWindow
   // connect the vectorimage model spacing change (when zooming)
   QObject::connect(
     vectorImageModel,
-    SIGNAL( SpacingChanged(const SpacingType&) ),
+    SIGNAL( SpacingChanged(const core::SpacingType&) ),
     // to:
     centralWidget(),
-    SLOT( OnSpacingChanged(const SpacingType&)  )
+    SLOT( OnSpacingChanged(const core::SpacingType&)  )
   );
 
   // signal used to update the ql widget
@@ -946,7 +961,7 @@ MainWindow
   connect(thread, SIGNAL(started()), loader, SLOT(OpenImage()));
   
   // On successfull image loading, notify ourself, passing the created AbstractModel instance
-  connect(loader, SIGNAL(ModelLoaded(AbstractModel*)), this, SLOT(OnModelLoaded(AbstractModel*)));
+  connect(loader, SIGNAL(ModelLoaded(core::AbstractModel*)), this, SLOT(OnModelLoaded(core::AbstractModel*)));
   // On error, notify ourself
   connect(loader, SIGNAL(Error(QString)), this, SLOT(OnOpenImageError(QString)));
   
@@ -974,7 +989,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnModelLoaded( AbstractModel* model )
+::OnModelLoaded( core::AbstractModel* model )
 {
   try
     {

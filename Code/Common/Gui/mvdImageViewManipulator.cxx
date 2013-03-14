@@ -118,16 +118,16 @@ ImageViewManipulator
 ::moveRegion(double dx, double dy)
 {
   // Update the navigation context
-  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+  core::ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
   // Apply the offset to the (start) index of the stored region
-  ImageRegionType::OffsetType offset;
+  core::ImageRegionType::OffsetType offset;
 
-  offset[0] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dx/m_IsotropicZoom + 0.5);
-  offset[1] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dy/m_IsotropicZoom + 0.5);
+  offset[0] = static_cast<core::ImageRegionType::OffsetType::OffsetValueType> (dx/m_IsotropicZoom + 0.5);
+  offset[1] = static_cast<core::ImageRegionType::OffsetType::OffsetValueType> (dy/m_IsotropicZoom + 0.5);
 
   // Apply the offset to the (start) index of the stored region
-  IndexType    index = currentRegion.GetIndex() + offset;
+  core::IndexType    index = currentRegion.GetIndex() + offset;
   currentRegion.SetIndex(index);
 
   // Constraint the region to the largestPossibleRegion
@@ -159,10 +159,10 @@ void ImageViewManipulator
 ::ResizeRegion(unsigned int w, unsigned int h)
 {
   // Update the navigation context
-  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+  core::ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
   // Get the new widget size
-  ImageRegionType::SizeType size;
+  core::ImageRegionType::SizeType size;
   size[0] = w;
   size[1] = h;
     
@@ -221,12 +221,12 @@ ImageViewManipulator
     m_NavigationContext.m_SizeYBeforeConstrain = sizeY;
 
     // Update the viewort region with the new size
-    ImageRegionType::SizeType size;
+    core::ImageRegionType::SizeType size;
     size[0] = static_cast<unsigned int>(sizeX);
     size[1] = static_cast<unsigned int>(sizeY);
 
     // The viewPort Region must be adapted to this zoom ratio
-    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+    core::ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
  
     // Update the stored region with the new size
     currentRegion.SetSize(size);
@@ -253,15 +253,15 @@ ImageViewManipulator
   if( m_IsotropicZoom * scale > 0.001 )
     {
     // The viewPort Region must be adapted to this zoom ratio
-    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+    core::ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
   
     // center the region on the position under the cursor
-    IndexType        origin = currentRegion.GetIndex();
+    core::IndexType        origin = currentRegion.GetIndex();
     double centerX = (double)(origin[0]) + (double)(currentRegion.GetSize()[0])/2.;
     double centerY = (double)(origin[1]) + (double)(currentRegion.GetSize()[1])/2.;
 
     // new origin
-    IndexType  newIndex;
+    core::IndexType  newIndex;
     newIndex[0] = centerX - currentRegion.GetSize()[0]/scale/2.; 
     if (newIndex[0] < 0) newIndex[0] = 0;
 
@@ -279,16 +279,16 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest)
+::ConstrainRegion( core::ImageRegionType& region, const core::ImageRegionType& largest)
 {
-  ImageRegionType::SizeType zeroSize;
+  core::ImageRegionType::SizeType zeroSize;
   zeroSize.Fill(0);
   
   if (largest.GetSize() != zeroSize)
     {
     // Else we can constrain it
-    IndexType                     index = region.GetIndex();
-    ImageRegionType::SizeType size = region.GetSize();
+    core::IndexType                     index = region.GetIndex();
+    core::ImageRegionType::SizeType size = region.GetSize();
 
     // If region is larger than big, then crop
     if (region.GetSize()[0] > largest.GetSize()[0])
@@ -302,7 +302,7 @@ ImageViewManipulator
 
     // Else we can constrain it
     // For each dimension
-    for (unsigned int dim = 0; dim < ImageRegionType::ImageDimension; ++dim)
+    for (unsigned int dim = 0; dim < core::ImageRegionType::ImageDimension; ++dim)
       {
       // push left if necessary
       if (region.GetIndex()[dim] < largest.GetIndex()[dim])
@@ -355,13 +355,13 @@ ImageViewManipulator
 /*****************************************************************************/
 void
 ImageViewManipulator
-::PropagateViewportRegionChanged(const ImageRegionType& region)
+::PropagateViewportRegionChanged(const core::ImageRegionType& region)
 {
   // the region computed in this class are relative to the lod 0 of
   // the input image. We need then in order to transform the indicies to
   // physical points, the native spacing (lod 0) and origin
   // of the method
-  PointType ul, lr;
+  core::PointType ul, lr;
   ul[0] = (double)(region.GetIndex()[0]) * m_NativeSpacing[0] + GetOrigin()[0];
   ul[1] = (double)(region.GetIndex()[1]) * vcl_abs(m_NativeSpacing[1]) + GetOrigin()[1];
 
@@ -394,9 +394,9 @@ ImageViewManipulator
 
 /*****************************************************************************/
 void ImageViewManipulator
-::OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
-                            const SpacingType& spacing,
-  const PointType& origin)
+::OnModelImageRegionChanged(const core::ImageRegionType & largestRegion, 
+                            const core::SpacingType& spacing,
+  const core::PointType& origin)
 {
   // update the spacing
   SetSpacing(spacing);
@@ -417,7 +417,7 @@ void ImageViewManipulator
   m_NavigationContext.m_ModelImageRegion = largestRegion;
   
   // set back the origin to O
-  IndexType nullIndex;
+  core::IndexType nullIndex;
   nullIndex.Fill(0);
   m_NavigationContext.m_ViewportImageRegion.SetIndex(nullIndex);
 
@@ -444,10 +444,10 @@ void ImageViewManipulator
 ::OnViewportRegionChanged(double Xpc, double Ypc)
 {
   // Update the navigation context
-  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+  core::ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
   // center the region on the position under the cursor  
-  IndexType   origin;
+  core::IndexType   origin;
   origin[0] = static_cast<unsigned int>( (Xpc - GetOrigin()[0] ) / vcl_abs(m_NativeSpacing[0]) ) 
     - currentRegion.GetSize()[0] / 2 ;
   origin[1] = static_cast<unsigned int>( (Ypc - GetOrigin()[1] ) / vcl_abs(m_NativeSpacing[1]) ) 

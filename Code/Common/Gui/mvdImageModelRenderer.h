@@ -91,12 +91,12 @@ public slots:
     m_IsMoving = false;
   }
 
-  void OnViewportRegionRepresentationChanged(const PointType& ul, const PointType& lr);
+  void OnViewportRegionRepresentationChanged(const core::PointType& ul, const core::PointType& lr);
 
 //
 // SIGNALS.
 signals:
-  void ViewportOriginChanged(const IndexType origin);
+  void ViewportOriginChanged(const core::IndexType origin);
 //
 // Protected methods.
 protected:
@@ -122,8 +122,8 @@ private:
 
   // 
   // used for quicklook renderer
-  PointType                    m_SquarePointUL;
-  PointType                    m_SquarePointLR;
+  core::PointType                    m_SquarePointUL;
+  core::PointType                    m_SquarePointLR;
 
   unsigned int                 m_Texture;
 

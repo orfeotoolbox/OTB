@@ -57,9 +57,13 @@ namespace
 
 namespace mvd
 {
+
+namespace core
+{
 //
 // Internal classes pre-declaration.
 class AbstractModel;
+}
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -89,13 +93,13 @@ public:
   virtual ~AbstractModelController();
 
   /** */
-  void SetModel( AbstractModel* );
+  void SetModel( core::AbstractModel* );
 
   /** */
-  inline const AbstractModel* GetModel() const;
+  inline const core::AbstractModel* GetModel() const;
 
   /** */
-  inline AbstractModel* GetModel();
+  inline core::AbstractModel* GetModel();
 
   /** */
   template< typename TModel >
@@ -125,13 +129,13 @@ public:
 // Signals.
 signals:
   /** */
-  void AboutToDisconnectModel( AbstractModel* );
+  void AboutToDisconnectModel( core::AbstractModel* );
   /** */
-  void ModelDisconnected( AbstractModel* );
+  void ModelDisconnected( core::AbstractModel* );
   /** */
-  void AboutToConnectModel( AbstractModel* );
+  void AboutToConnectModel( core::AbstractModel* );
   /** */
-  void ModelConnected( AbstractModel* );
+  void ModelConnected( core::AbstractModel* );
   /** */
   void ModelUpdated();
 
@@ -145,13 +149,13 @@ protected:
   AbstractModelController( QWidget* widget, QObject* parent =NULL );
 
   /** */
-  virtual void Connect( AbstractModel* ) =0;
+  virtual void Connect( core::AbstractModel* ) =0;
 
   /** */
   virtual void ResetWidget() =0;
 
   /** */
-  virtual void Disconnect( AbstractModel* ) =0;
+  virtual void Disconnect( core::AbstractModel* ) =0;
 
 //
 // Protected attributes.
@@ -163,9 +167,10 @@ protected:
 // Private methods.
 private:
   /** */
-  void private_Connect( AbstractModel* );
+  void private_Connect( core::AbstractModel* );
+
   /** */
-  void private_Disconnect( AbstractModel* );
+  void private_Disconnect( core::AbstractModel* );
 
 //
 // Private attributes.
@@ -174,7 +179,7 @@ private:
   QWidget* m_Widget;
 
   /** */
-  AbstractModel* m_Model;
+  core::AbstractModel* m_Model;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -199,7 +204,7 @@ namespace mvd
 
 /*****************************************************************************/
 inline
-const AbstractModel*
+const core::AbstractModel*
 AbstractModelController
 ::GetModel() const
 {
@@ -208,7 +213,7 @@ AbstractModelController
 
 /*****************************************************************************/
 inline
-AbstractModel*
+core::AbstractModel*
 AbstractModelController
 ::GetModel()
 {

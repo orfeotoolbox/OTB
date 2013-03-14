@@ -105,45 +105,45 @@ public:
   virtual void PropagatePointUnderCursorCoordinates(const QPoint& point);
 
   /** */
-  inline const ImageRegionType& GetViewportImageRegion() const;
+  inline const core::ImageRegionType& GetViewportImageRegion() const;
 
   /** */
   inline double GetIsotropicZoom() const;
 
   /** */
-  inline IndexType GetViewportOrigin() const;
+  inline core::IndexType GetViewportOrigin() const;
 
   /** */
-  void SetSpacing(const SpacingType& spacing);
+  void SetSpacing(const core::SpacingType& spacing);
 
   /** */
-  inline SpacingType GetSpacing() const;
+  inline core::SpacingType GetSpacing() const;
 
   /** */
-  inline SpacingType GetNativeSpacing() const;
+  inline core::SpacingType GetNativeSpacing() const;
 
   /** */
-  void SetOrigin(const PointType& spacing);
+  void SetOrigin(const core::PointType& spacing);
 
   /** */
-  inline PointType GetOrigin() const;
+  inline core::PointType GetOrigin() const;
 
   /** */
-  inline PointType ScreenIndexToPhysicalPoint(const IndexType & index);
+  inline core::PointType ScreenIndexToPhysicalPoint(const core::IndexType & index);
   
   /** */
-  inline PointType ScreenIndexToPhysicalPoint(int x, int y);
+  inline core::PointType ScreenIndexToPhysicalPoint(int x, int y);
 
 //
 // Public SLOTS.
 public slots:
   /** */
   virtual
-    void OnModelImageRegionChanged( const ImageRegionType& largestRegion, 
-                                    const SpacingType & spacing,
-                                    const PointType& )  = 0;
+    void OnModelImageRegionChanged( const core::ImageRegionType& largestRegion, 
+                                    const core::SpacingType & spacing,
+                                    const core::PointType& )  = 0;
   /** */
-  void OnViewportOriginChanged(const IndexType& origin);
+  void OnViewportOriginChanged(const core::IndexType& origin);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -176,7 +176,7 @@ protected:
       // TODO: Initialize default viewport region to (0, 0) i.e. no
       // viewed image.
 
-      ImageRegionType::SizeType region;
+      core::ImageRegionType::SizeType region;
 
       region[ 0 ] = 1;
       region[ 1 ] = 1;
@@ -184,8 +184,8 @@ protected:
       m_ViewportImageRegion.SetSize( region );
     }
 
-    ImageRegionType m_ViewportImageRegion;
-    ImageRegionType m_ModelImageRegion;
+    core::ImageRegionType m_ViewportImageRegion;
+    core::ImageRegionType m_ModelImageRegion;
     // Stored as double to keep precision when dividing 
     // by scale 
     double m_SizeXBeforeConstrain;
@@ -232,16 +232,16 @@ protected:
   double       m_IsotropicZoom;
 
   /** */
-  IndexType    m_ViewportOrigin;
+  core::IndexType    m_ViewportOrigin;
 
   /** */
-  SpacingType  m_Spacing;
+  core::SpacingType  m_Spacing;
 
   /** */
-  SpacingType  m_NativeSpacing;
+  core::SpacingType  m_NativeSpacing;
   
   /** */
-  PointType    m_Origin;
+  core::PointType    m_Origin;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -274,7 +274,7 @@ namespace mvd
 {
 /*****************************************************************************/
 inline
-const ImageRegionType&
+const core::ImageRegionType&
 AbstractViewManipulator
 ::GetViewportImageRegion() const
 {
@@ -292,7 +292,7 @@ AbstractViewManipulator
 
 /*****************************************************************************/
 inline 
-IndexType
+core::IndexType
 AbstractViewManipulator
 ::GetViewportOrigin() const
 {
@@ -301,7 +301,7 @@ AbstractViewManipulator
 
 /*****************************************************************************/
 inline 
-SpacingType
+core::SpacingType
 AbstractViewManipulator
 ::GetSpacing() const
 {
@@ -310,7 +310,7 @@ AbstractViewManipulator
 
 /*****************************************************************************/
 inline 
-SpacingType
+core::SpacingType
 AbstractViewManipulator
 ::GetNativeSpacing() const
 {
@@ -319,7 +319,7 @@ AbstractViewManipulator
 
 /*****************************************************************************/
 inline 
-PointType
+core::PointType
 AbstractViewManipulator
 ::GetOrigin() const
 {
@@ -328,11 +328,11 @@ AbstractViewManipulator
 
 /*****************************************************************************/
 inline 
-PointType
+core::PointType
 AbstractViewManipulator
-::ScreenIndexToPhysicalPoint(const IndexType & index)
+::ScreenIndexToPhysicalPoint(const core::IndexType & index)
 {
-  PointType pt;
+  core::PointType pt;
   // 
   // step #1: screen coordinates -> viewport coordinates
   pt[0] = (double)( index[0] - GetViewportOrigin()[0] ) / GetIsotropicZoom();
@@ -353,11 +353,11 @@ AbstractViewManipulator
 
 /*****************************************************************************/
 inline 
-PointType
+core::PointType
 AbstractViewManipulator
 ::ScreenIndexToPhysicalPoint(int x, int y)
 {
-  IndexType index;
+  core::IndexType index;
   index[0] = (unsigned int)x;
   index[1] = (unsigned int)y;
   

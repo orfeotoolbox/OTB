@@ -122,11 +122,11 @@ protected:
   //
   // AbstractModelController overrides.
 
-  virtual void Connect( AbstractModel* );
+  virtual void Connect( core::AbstractModel* );
 
   virtual void ResetWidget();
 
-  virtual void Disconnect( AbstractModel* );
+  virtual void Disconnect( core::AbstractModel* );
 
 //
 // Protected attributes.

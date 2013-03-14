@@ -60,9 +60,14 @@ namespace
 
 namespace mvd
 {
+
+namespace core
+{
 //
 // Internal class pre-declaration.
 class AbstractModel;
+}
+
 class AbstractModelController;
 class ImageViewManipulator;
 class QuicklookViewManipulator;
@@ -189,7 +194,7 @@ private:
    *
    * \param model The model to assign to the controller.
    */
-  inline void SetControllerModel( QDockWidget* dock, AbstractModel* model );
+  inline void SetControllerModel( QDockWidget* dock, core::AbstractModel* model );
 
   /** Write settings into a settings file*/
   void WriteDsPathSettings(QString dsPath);
@@ -287,13 +292,13 @@ private slots:
   void OnColorDynamicsVisibilityChanged ( bool );
 
   /** */
-  void OnAboutToChangeSelectedModel( const AbstractModel* );
+  void OnAboutToChangeSelectedModel( const core::AbstractModel* );
 
   /** */
-  void OnModelLoaded( AbstractModel* );
+  void OnModelLoaded( core::AbstractModel* );
 
   /** */
-  void OnSelectedModelChanged( AbstractModel* );
+  void OnSelectedModelChanged( core::AbstractModel* );
 
   /** */
   void OnUserCoordinatesEditingFinished();
@@ -399,7 +404,7 @@ MainWindow
 inline
 void
 MainWindow
-::SetControllerModel( QDockWidget* dock, AbstractModel* model )
+::SetControllerModel( QDockWidget* dock, core::AbstractModel* model )
 {
   assert( dock );
 

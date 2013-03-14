@@ -48,8 +48,11 @@
 namespace mvd
 {
 
+namespace core
+{
+
 /*
-  TRANSLATOR mvd::DatasetDescriptor
+  TRANSLATOR mvd::core::DatasetDescriptor
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -536,5 +539,7 @@ DatasetDescriptor
 /*******************************************************************************/
 
 /*******************************************************************************/
+
+} // end namespace 'core'
 
 } // end namespace 'mvd'

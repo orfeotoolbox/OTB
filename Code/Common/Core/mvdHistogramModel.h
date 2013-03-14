@@ -63,6 +63,10 @@ namespace
 
 namespace mvd
 {
+
+namespace core
+{
+
 //
 // Internal classes pre-declaration.
 
@@ -190,6 +194,8 @@ private:
 private slots:
 };
 
+} // end namespace 'core'
+
 } // end namespace 'mvd'
 
 
@@ -209,6 +215,9 @@ private slots:
 #include "Core/mvdAbstractImageModel.h"
 
 namespace mvd
+{
+
+namespace core
 {
 
 /*******************************************************************************/
@@ -450,6 +459,8 @@ HistogramModel
     .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
     .arg( lMain.elapsed() );
 }
+
+} // end namespace 'core'
 
 } // end namespace 'mvd'
 

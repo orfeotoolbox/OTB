@@ -116,7 +116,9 @@ RGBA_CHANNEL_NAMES[ RGBA_CHANNEL_COUNT ];
  * \return true if iteration indices have been set and loop can be
  * processed.
  */
-bool RgbBounds( CountType& begin, CountType& end, RgbaChannel channels );
+bool RgbBounds( core::CountType& begin,
+		core::CountType& end,
+		RgbaChannel channels );
 
 /**
  * \brief Convenience method used to compute integer indices in order
@@ -139,7 +141,9 @@ bool RgbBounds( CountType& begin, CountType& end, RgbaChannel channels );
  * \return true if iteration indices have been set and loop can be
  * processed.
  */
-bool RgbaBounds( CountType& begin, CountType& end, RgbaChannel channels );
+bool RgbaBounds( core::CountType& begin,
+		 core::CountType& end,
+		 RgbaChannel channels );
 
 } // end namespace 'mvd'.
 
@@ -151,7 +155,9 @@ namespace mvd
 /*****************************************************************************/
 inline
 bool
-RgbBounds( CountType& begin, CountType& end, RgbaChannel channels )
+RgbBounds( core::CountType& begin,
+	   core::CountType& end,
+	   RgbaChannel channels )
 {
   assert( channels!=RGBA_CHANNEL_COUNT );
 
@@ -186,7 +192,9 @@ RgbBounds( CountType& begin, CountType& end, RgbaChannel channels )
 /*****************************************************************************/
 inline
 bool
-RgbaBounds( CountType& begin, CountType& end, RgbaChannel channels )
+RgbaBounds( core::CountType& begin,
+	    core::CountType& end,
+	    RgbaChannel channels )
 {
   assert( channels!=RGBA_CHANNEL_COUNT );
 

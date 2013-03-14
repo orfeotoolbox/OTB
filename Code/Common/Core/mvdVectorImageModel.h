@@ -64,6 +64,11 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+
+namespace core
+{
+//
+// Internal classes pre-declaration.
 class DatasetModel;
 
 
@@ -347,7 +352,7 @@ public slots:
 signals:
   /**
    */
-  void SettingsUpdated( AbstractImageModel* imageModel =NULL );
+  void SettingsUpdated( core::AbstractImageModel* imageModel =NULL );
 
   /**   */
   void ViewportRegionChanged(double, double);
@@ -535,6 +540,8 @@ private slots:
   void OnModelUpdated();
 };
 
+} // end namespace 'core'.
+
 } // end namespace 'mvd'.
 
 /*****************************************************************************/
@@ -546,6 +553,9 @@ private slots:
 
 
 namespace mvd
+{
+
+namespace core
 {
 
 /*****************************************************************************/
@@ -755,9 +765,16 @@ VectorImageModel::Settings
   m_DynamicsParams[ i ] = param;
 }
 
+} // end namespace 'core'.
+
 } // end namespace 'mvd'.
 
+/*****************************************************************************/
+
 namespace mvd
+{
+
+namespace core
 {
 
 /*****************************************************************************/
@@ -880,6 +897,8 @@ VectorImageModel
 }
 
 /*****************************************************************************/
+
+} // end namespace 'core'
 
 } // end namespace 'mvd'
 

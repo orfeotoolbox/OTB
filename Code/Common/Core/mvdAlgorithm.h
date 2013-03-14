@@ -64,6 +64,14 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+
+namespace core
+{
+//
+// Internal classes pre-declaration.
+
+} // end of namespace 'core'.
+
 } // end of namespace 'mvd'.
 
 
@@ -142,6 +150,10 @@ ToVariableLengthVector( itk::FixedArray< T1, N >& a,
 
 namespace mvd
 {
+
+namespace core
+{
+
 /**
  * Convert a StringVector object to a QStringList object.
  *
@@ -193,12 +205,18 @@ inline
 std::string
 ToStdString( const QString& str );
 
+} // end namespace 'core'.
+
 } // end namespace 'mvd'.
 
 /*****************************************************************************/
 
 namespace mvd
 {
+
+namespace core
+{
+
 /**
  * \brief Test condition on all elements in range.
  *
@@ -242,6 +260,8 @@ template< typename TInputIterator, typename TUnaryPredicate >
 inline
 bool
 NoneOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred );
+
+} // end namespace 'core'.
 
 } // end namespace 'mvd'.
 
@@ -328,6 +348,10 @@ ToVariableLengthVector( itk::VariableLengthVector< T2 >& v,
 
 namespace mvd
 {
+
+namespace core
+{
+
 /*******************************************************************************/
 inline
 QStringList
@@ -368,11 +392,16 @@ ToStdString( const QString& str )
   return std::string( str.toAscii().constData() );
 }
 
-/*******************************************************************************/
+} // end namespace 'core'
 
 } // end namespace 'mvd'
 
+/*******************************************************************************/
+
 namespace mvd
+{
+
+namespace core
 {
 
 /*******************************************************************************/
@@ -425,6 +454,8 @@ NoneOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred )
 
   return true;
 }
+
+} // end namespace 'core'
 
 } // end namespace 'mvd'
 

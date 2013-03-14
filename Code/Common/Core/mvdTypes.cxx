@@ -37,8 +37,12 @@
 
 namespace mvd
 {
+
+namespace core
+{
+
 /*
-  TRANSLATOR mvd::Types
+  TRANSLATOR mvd::core::Types
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -51,5 +55,7 @@ BOUND_NAMES[ BOUND_COUNT ] = {
   "BOUND_LOWER",
   "BOUND_UPPER"
 };
+
+} // end namespace 'core'
 
 } // end namespace 'mvd'

@@ -216,7 +216,7 @@ ApplicationsToolBox
 /*******************************************************************************/
 void
 ApplicationsToolBox
-::OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer& appsTags )
+::OnAvailableApplicationsTagsChanged(const core::ApplicationsTagContainer& appsTags )
 {
   // rememeber the map
   m_AppTags = appsTags;

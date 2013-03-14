@@ -142,23 +142,23 @@ GLImageWidget
   // Connect this model region changed.
   QObject::connect(
     this,
-    SIGNAL( ModelImageRegionChanged( const ImageRegionType& , 
-                                     const SpacingType&,
-                                     const PointType&) ),
+    SIGNAL( ModelImageRegionChanged( const core::ImageRegionType& , 
+                                     const core::SpacingType&,
+                                     const core::PointType&) ),
     // to:
     m_ImageViewManipulator,
-    SLOT( OnModelImageRegionChanged( const ImageRegionType&, 
-                                     const SpacingType&,
-                                     const PointType&) )
+    SLOT( OnModelImageRegionChanged( const core::ImageRegionType&, 
+                                     const core::SpacingType&,
+                                     const core::PointType&) )
   );
 
   // Connect the renderer origin (of extent) changed to the manipulator
   QObject::connect(
     m_ImageModelRenderer,
-    SIGNAL( ViewportOriginChanged( const IndexType& ) ),
+    SIGNAL( ViewportOriginChanged( const core::IndexType& ) ),
     // to:
     m_ImageViewManipulator,
-    SLOT( OnViewportOriginChanged( const IndexType&) )
+    SLOT( OnViewportOriginChanged( const core::IndexType&) )
   );
 
 }
@@ -198,7 +198,7 @@ GLImageWidget
 
   // Get the region to draw from the ImageViewManipulator navigation
   // context.
-  const ImageRegionType region(
+  const core::ImageRegionType region(
     m_ImageViewManipulator->GetViewportImageRegion() );
 
   // Get the zoom 
@@ -333,7 +333,7 @@ GLImageWidget
 /******************************************************************************/
 void
 GLImageWidget
-::OnSpacingChanged(const SpacingType& spacing)
+::OnSpacingChanged(const core::SpacingType& spacing)
 {
   m_ImageViewManipulator->SetSpacing(spacing);
 }

@@ -60,6 +60,11 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
+namespace core
+{
+//
+// Internal classes pre-declaration.
+
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -129,6 +134,8 @@ private:
 private slots:
 };
 
+} // end namespace 'core'.
+
 } // end namespace 'mvd'.
 
 /*****************************************************************************/
@@ -152,6 +159,11 @@ private slots:
 
 namespace mvd
 {
+
+namespace core
+{
+} // end namespace 'core'
+
 } // end namespace 'mvd'
 
 #endif // __mvdMyClass_h

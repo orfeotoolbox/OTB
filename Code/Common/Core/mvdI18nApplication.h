@@ -60,6 +60,10 @@ namespace
 
 namespace mvd
 {
+
+namespace core
+{
+
 //
 // Internal classes pre-declaration.
 
@@ -251,12 +255,17 @@ private:
 private slots:
 };
 
+} // end namespace 'core'
+
 } // end namespace 'mvd'
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
 namespace mvd
+{
+
+namespace core
 {
 
 /*****************************************************************************/
@@ -311,7 +320,7 @@ I18nApplication
   return I18nApplication::CACHE_DIR_NAME;
 }
 
-
+} // end namespace 'core'
 
 } // end namespace 'mvd'
 

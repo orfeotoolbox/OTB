@@ -114,19 +114,19 @@ public:
   }
 
   /** Set image model */
-  inline void SetImageModel(AbstractImageModel* model);
+  inline void SetImageModel(core::AbstractImageModel* model);
 
 //
 // Public SLOTS.
 public slots:
-  void OnSpacingChanged(const SpacingType& spacing);
+  void OnSpacingChanged(const core::SpacingType& spacing);
 
 //
 // SIGNALS.
 signals:
   void movingMouse();
   void releasingMouse();
-  void ModelImageRegionChanged(const ImageRegionType &, const SpacingType&, const PointType&);
+  void ModelImageRegionChanged(const core::ImageRegionType &, const core::SpacingType&, const core::PointType&);
   void CentralWidgetUpdated();
 
 //
@@ -166,7 +166,7 @@ private:
   /** Model Renderer pointer */
   AbstractModelRenderer*   m_ImageModelRenderer;
 
-  AbstractImageModel*      m_ImageModel;
+  core::AbstractImageModel*      m_ImageModel;
 };
 
 }// end namespace 'mvd'
@@ -189,7 +189,7 @@ namespace mvd
 /*****************************************************************************/
 void 
 GLImageWidget
-::SetImageModel(AbstractImageModel* model)
+::SetImageModel(core::AbstractImageModel* model)
 {
   m_ImageModel = model;
 

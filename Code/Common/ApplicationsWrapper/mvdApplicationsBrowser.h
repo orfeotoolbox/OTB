@@ -108,10 +108,10 @@ public:
   void SetAutoLoadPath(const std::string & itk_auto_load_path);
 
   /** get available applications in the search path */
-  StringVector GetAvailableApplications();
+  core::StringVector GetAvailableApplications();
 
   /** return the list applications <->tags */
-  StringVector GetApplicationTags(const std::string& appName);
+  core::StringVector GetApplicationTags(const std::string& appName);
 
   /** return std::map storing tag/apps association for all the
     * applications in the search path 
@@ -130,7 +130,7 @@ public slots:
 //
 // Signals.
 signals:
-  void AvailableApplicationsTagsChanged(const ApplicationsTagContainer &);
+  void AvailableApplicationsTagsChanged(const core::ApplicationsTagContainer &);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

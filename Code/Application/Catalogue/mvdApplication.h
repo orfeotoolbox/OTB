@@ -68,7 +68,7 @@ namespace mvd
  *
  */
 class Monteverdi2_EXPORT Application
-  : public I18nApplication
+  : public core::I18nApplication
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/

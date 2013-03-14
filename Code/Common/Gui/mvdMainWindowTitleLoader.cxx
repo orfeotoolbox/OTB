@@ -39,7 +39,7 @@ namespace mvd
 {
 
 MainWindowTitleLoader
-::MainWindowTitleLoader(VectorImageModel* model):
+::MainWindowTitleLoader(core::VectorImageModel* model):
   m_Model(model)
 {
 }
@@ -51,19 +51,19 @@ MainWindowTitleLoader
   // This method is executed in a separate thread
 
   std::ostringstream oss;
-  oss<<PROJECT_NAME<<" - "<<otb::System::GetShortFileName(ToStdString(m_Model->GetFilename()));
+  oss<<PROJECT_NAME<<" - "<<otb::System::GetShortFileName(core::ToStdString(m_Model->GetFilename()));
   oss<<" ("<<m_Model->GetNbComponents()<<tr(" bands, ").toLatin1().constData();
   oss<<m_Model->GetNativeLargestRegion().GetSize()[0];
   oss<<"x"<<m_Model->GetNativeLargestRegion().GetSize()[1]<<tr(" pixels)").toLatin1().constData();
   
-  emit TitleLoaded(FromStdString(oss.str()) );
+  emit TitleLoaded(core::FromStdString(oss.str()) );
 
   // add the placename to the title if any
   std::string placename = m_Model->GetCenterPixelPlaceName();
   if (!placename.empty())
     {
-    oss <<" - " <<ToStdString( tr("Location") )<< " : " << placename;
-    emit TitleLoaded(FromStdString(oss.str()) );
+    oss <<" - " <<core::ToStdString( tr("Location") )<< " : " << placename;
+    emit TitleLoaded(core::FromStdString(oss.str()) );
     }
 
   emit Finished();

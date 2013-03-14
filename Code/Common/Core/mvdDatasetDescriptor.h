@@ -60,6 +60,10 @@ namespace
 
 namespace mvd
 {
+
+namespace core
+{
+
 //
 // Internal classes pre-declaration.
 class AbstractImageModel;
@@ -278,6 +282,8 @@ private:
 private slots:
 };
 
+} // end namespace 'core'
+
 } // end namespace 'mvd'
 
 /*****************************************************************************/
@@ -288,6 +294,9 @@ private slots:
 #include "mvdDatasetModel.h"
 
 namespace mvd
+{
+
+namespace core
 {
 
 /*****************************************************************************/
@@ -415,6 +424,8 @@ DatasetDescriptor
     array[i] = v.value<T>();
   }
 }
+
+} // end namespace 'core'
 
 } // end namespace 'mvd'
 

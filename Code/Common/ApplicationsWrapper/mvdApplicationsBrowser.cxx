@@ -89,7 +89,7 @@ ApplicationsBrowser
 }
 
 /*******************************************************************************/
-StringVector
+core::StringVector
 ApplicationsBrowser
 ::GetAvailableApplications()
 {
@@ -103,7 +103,7 @@ ApplicationsBrowser
 
   //
   // get available application in search path
-  StringVector appList = otb::Wrapper::ApplicationRegistry::GetAvailableApplications();
+  core::StringVector appList = otb::Wrapper::ApplicationRegistry::GetAvailableApplications();
 
   // 
   // some verbosity
@@ -115,7 +115,7 @@ ApplicationsBrowser
   else
     {
     std::cout << "--- Available modules :" << std::endl;
-    for (StringVector::const_iterator it = appList.begin(); it != appList.end(); ++it)
+    for (core::StringVector::const_iterator it = appList.begin(); it != appList.end(); ++it)
       {
       std::cout << "\t" << *it << std::endl;
       }
@@ -125,13 +125,13 @@ ApplicationsBrowser
 }
 
 /*******************************************************************************/
-StringVector
+core::StringVector
 ApplicationsBrowser
 ::GetApplicationTags( const std::string& appName )
 {
   //
   // output vector
-  StringVector  vtags;
+  core::StringVector  vtags;
   
   //
   // instantiate the application using the factory
@@ -155,7 +155,7 @@ ApplicationsBrowser
 {
   //
   // get all the applications in the search path
-  StringVector vapp = GetAvailableApplications();
+  core::StringVector vapp = GetAvailableApplications();
 
   //
   // Fill the  map as following
@@ -167,15 +167,15 @@ ApplicationsBrowser
   while ( it != vapp.end() )
     {
     // get tags of current app
-    StringVector ctags = GetApplicationTags( *it );
+    core::StringVector ctags = GetApplicationTags( *it );
 
     // key will be the tag (easier for tree origanisation in )
-    StringVector::const_iterator  itTag = ctags.begin();
+    core::StringVector::const_iterator  itTag = ctags.begin();
     while ( itTag != ctags.end() )
       {
 
       // search for this tag in the output container
-      ApplicationsTagContainer::iterator  pos = outputContainer.find( *itTag );
+      core::ApplicationsTagContainer::iterator  pos = outputContainer.find( *itTag );
       if ( pos != outputContainer.end() )  // key found
         {
         //
@@ -186,7 +186,7 @@ ApplicationsBrowser
         {
         //
         // if tag not found in the container, add it
-        std::pair< std::string, StringVector > currentAppTags;
+        std::pair< std::string, core::StringVector > currentAppTags;
         currentAppTags.first  = *itTag;
         currentAppTags.second.push_back( *it );
         outputContainer.insert( currentAppTags );

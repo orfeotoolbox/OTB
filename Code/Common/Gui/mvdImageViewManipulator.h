@@ -119,9 +119,9 @@ public:
 //
 // Public SLOTS.
 public slots:
-  void OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
-                                 const SpacingType& spacing, 
-                                 const PointType& origin );
+  void OnModelImageRegionChanged(const core::ImageRegionType& largestRegion, 
+                                 const core::SpacingType& spacing, 
+                                 const core::PointType& origin );
 
   void OnViewportRegionChanged(double Xpc, double Ypc);
 
@@ -132,7 +132,9 @@ public slots:
 //
 // Signals.
 signals:
-  void ViewportRegionRepresentationChanged(const PointType&, const PointType&);
+  void ViewportRegionRepresentationChanged( const core::PointType&,
+					    const core::PointType& );
+
   void CurrentScaleUpdated(const QString&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -141,7 +143,7 @@ signals:
 // Protected methods.
 protected:
   /** */
-  void ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest);
+  void ConstrainRegion( core::ImageRegionType& region, const core::ImageRegionType& largest);
 
   /** */
   void CenterRegion(double scale);
@@ -169,7 +171,7 @@ private:
   void Zoom(const double scale);
 
   /** */
-  void PropagateViewportRegionChanged(const ImageRegionType& region);
+  void PropagateViewportRegionChanged(const core::ImageRegionType& region);
 
   /** */
   void UpdateScale();

@@ -58,10 +58,14 @@ namespace
 
 namespace mvd
 {
+
+namespace core
+{
 //
 // Class declaration.
 class AbstractModel;
 class DatasetModel;
+}
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -70,7 +74,7 @@ class DatasetModel;
  *
  */
 class Monteverdi2_EXPORT Application
-  : public I18nApplication
+  : public core::I18nApplication
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -101,11 +105,11 @@ public:
 
  /**
   */
-  inline const AbstractModel* GetModel() const;
+  inline const core::AbstractModel* GetModel() const;
 
   /**
    */
-  inline AbstractModel* GetModel();
+  inline core::AbstractModel* GetModel();
 
  /**
   */
@@ -161,7 +165,7 @@ public:
   /**
    */
   static
-    DatasetModel* LoadDatasetModel( const QString& imageFilename,
+    core::DatasetModel* LoadDatasetModel( const QString& imageFilename,
 				     int width,
 				     int height );
 
@@ -171,7 +175,7 @@ public slots:
    */
   // Method could be inline but it's better not new/delete in inline
   // methods (heap and memory-alignment contexts).
-  void SetModel( AbstractModel* model );
+  void SetModel( core::AbstractModel* model );
   
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -180,11 +184,11 @@ public slots:
 signals:
   /**
    */
-  void AboutToChangeSelectedModel( const AbstractModel* );
+  void AboutToChangeSelectedModel( const core::AbstractModel* );
 
   /**
    */
-  void SelectedModelChanged( AbstractModel* );
+  void SelectedModelChanged( core::AbstractModel* );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -215,7 +219,7 @@ private:
 
   /**
    */
-  AbstractModel* m_Model;
+  core::AbstractModel* m_Model;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -236,7 +240,7 @@ Application*
 Application
 ::Instance()
 {
-  return I18nApplication::Instance< Application >();
+  return core::I18nApplication::Instance< Application >();
 }
 
 /*****************************************************************************/
@@ -245,12 +249,12 @@ const Application*
 Application
 ::ConstInstance()
 {
-  return I18nApplication::ConstInstance< Application >();
+  return core::I18nApplication::ConstInstance< Application >();
 }
 
 /*****************************************************************************/
 inline
-const AbstractModel*
+const core::AbstractModel*
 Application
 ::GetModel() const
 {
@@ -259,7 +263,7 @@ Application
 
 /*****************************************************************************/
 inline
-AbstractModel*
+core::AbstractModel*
 Application
 ::GetModel()
 {
