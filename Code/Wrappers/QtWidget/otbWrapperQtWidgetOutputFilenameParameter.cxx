@@ -36,7 +36,8 @@ void QtWidgetOutputFilenameParameter::DoUpdateGUI()
 {
   // Update the lineEdit
   QString text( m_FilenameParam->GetValue().c_str() );
-  m_Input->setText(text);
+  if (text != m_Input->text())
+    m_Input->setText(text);
 }
 
 void QtWidgetOutputFilenameParameter::DoCreateWidget()
