@@ -287,7 +287,7 @@ private:
       os << std::endl;
       }
 
-    otbAppLogINFO("Confusion matrix (columns = reference labels, rows = predicted labels):\n" << os.str());
+    otbAppLogINFO("Confusion matrix (rows = reference labels, columns = produced labels):\n" << os.str());
   }
 
   void DoExecute()

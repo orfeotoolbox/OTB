@@ -46,15 +46,14 @@ public:
   itkTypeMacro(ComputeConfusionMatrix, otb::Application);
 
   typedef itk::ImageRegionConstIterator<Int32ImageType> ImageIteratorType;
-  
-  typedef otb::OGRDataSourceToLabelImageFilter
-    <Int32ImageType>                                    RasterizeFilterType;
-  
-  typedef otb::StreamingTraits<Int32ImageType>        StreamingTraitsType;
-  
-  typedef itk::ImageRegionSplitter<2>                 SplitterType;
-  
-  typedef Int32ImageType::RegionType                  RegionType;
+
+  typedef otb::OGRDataSourceToLabelImageFilter<Int32ImageType> RasterizeFilterType;
+
+  typedef otb::StreamingTraits<Int32ImageType> StreamingTraitsType;
+
+  typedef itk::ImageRegionSplitter<2> SplitterType;
+
+  typedef Int32ImageType::RegionType RegionType;
 
 private:
   void DoInit()
@@ -126,37 +125,37 @@ private:
 
   void DoExecute()
   {
-    Int32ImageType* input = this->GetParameterImage<Int32ImageType>("in");
-    
+    Int32ImageType* input = this->GetParameterImage<Int32ImageType> ("in");
+
     std::string field;
     int nodata = this->GetParameterInt("nodata");
-    
+
     //Init Conf Matrix
     unsigned int nbClasses = this->GetParameterInt("labels");
     m_Matrix.resize(nbClasses);
-    for(unsigned int i=0; i<nbClasses; i++ )
+    for (unsigned int i = 0; i < nbClasses; i++)
       {
-      m_Matrix[i].assign(nbClasses,0);
+      m_Matrix[i].assign(nbClasses, 0);
       }
-    
+
     Int32ImageType::Pointer reference;
     otb::ogr::DataSource::Pointer ogrRef;
     RasterizeFilterType::Pointer rasterizeReference = RasterizeFilterType::New();
-    
+
     if (GetParameterString("ref") == "raster")
       {
-      reference = this->GetParameterImage<Int32ImageType>("ref.raster.in");
+      reference = this->GetParameterImage<Int32ImageType> ("ref.raster.in");
       }
     else
       {
       ogrRef = otb::ogr::DataSource::New(GetParameterString("ref.vector.in"), otb::ogr::DataSource::Modes::Read);
       field = this->GetParameterString("ref.vector.field");
-      
+
       rasterizeReference->AddOGRDataSource(ogrRef);
       rasterizeReference->SetOutputParametersFromImage(input);
       rasterizeReference->SetBackgroundValue(nodata);
       rasterizeReference->SetBurnAttribute(field.c_str());
-      
+
       reference = rasterizeReference->GetOutput();
       reference->UpdateOutputInformation();
       }
@@ -170,63 +169,63 @@ private:
       otb::SET_BUFFER_MEMORY_SIZE,
       0, 1048576*GetParameterInt("ram"), 0);
     RegionType streamRegion;
-    
+
     otbAppLogINFO("Number of stream divisions : "<<numberOfStreamDivisions);
-    
-    for (unsigned int index=0; index<numberOfStreamDivisions; index++)
+
+    for (unsigned int index = 0; index < numberOfStreamDivisions; index++)
       {
       streamRegion = splitter->GetSplit(index, numberOfStreamDivisions, input->GetLargestPossibleRegion());
-      
+
       input->SetRequestedRegion(streamRegion);
       input->PropagateRequestedRegion();
       input->UpdateOutputData();
-      
+
       reference->SetRequestedRegion(streamRegion);
       reference->PropagateRequestedRegion();
       reference->UpdateOutputData();
-      
+
       ImageIteratorType itInput(input, streamRegion);
       itInput.GoToBegin();
-      
+
       ImageIteratorType itRef(reference, streamRegion);
       itRef.GoToBegin();
-      
+
       while (!itInput.IsAtEnd())
         {
         if (itRef.Get() != nodata)
           {
-          if (itRef.Get()>0 && itRef.Get()<=static_cast<int>(nbClasses) &&
-              itInput.Get()>0 && itInput.Get()<=static_cast<int>(nbClasses))
+          if (itRef.Get() > 0 && itRef.Get() <= static_cast<int> (nbClasses)
+              && itInput.Get() > 0 && itInput.Get() <= static_cast<int> (nbClasses))
             {
-            m_Matrix[itInput.Get()-1][itRef.Get()-1] ++;
+            m_Matrix[itRef.Get() - 1][itInput.Get() - 1]++;
             }
           }
-        ++ itInput;
-        ++ itRef;
+        ++itInput;
+        ++itRef;
         }
       }
-    
+
     std::ofstream outFile;
     outFile.open(this->GetParameterString("out").c_str());
-    outFile<<std::fixed;
+    outFile << std::fixed;
     outFile.precision(10);
-    for(unsigned int j=0; j<nbClasses; j++ )
+    for (unsigned int i = 0; i < nbClasses; i++)
       {
-      for(unsigned int i=0; i<nbClasses; i++ )
+      for (unsigned int j = 0; j < nbClasses; j++)
         {
         outFile << m_Matrix[i][j];
-        if (i<(nbClasses-1))
+        if (j < (nbClasses - 1))
           {
-          outFile<<"\t";
+          outFile << "\t";
           }
         else
           {
-          outFile<<std::endl;
+          outFile << std::endl;
           }
         }
       }
     outFile.close();
-    
+
   }
 
   std::vector<std::vector<unsigned long> > m_Matrix;
