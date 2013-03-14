@@ -23,7 +23,6 @@
 #include <iomanip>
 #include "ogrsf_frmts.h"
 #include "itkTimeProbe.h"
-#include "itkProgressReporter.h"
 #include "otbMacro.h"
 #include <set>
 
@@ -103,7 +102,7 @@ OGRLayerStreamStitchingFilter<TInputImage>
 template<class TInputImage>
 void
 OGRLayerStreamStitchingFilter<TInputImage>
-::ProcessStreamingLine( bool line )
+::ProcessStreamingLine( bool line, itk::ProgressReporter & progress)
 {
    typename InputImageType::ConstPointer inputImage = this->GetInput();
 
@@ -112,7 +111,19 @@ OGRLayerStreamStitchingFilter<TInputImage>
    unsigned int nbRowStream = static_cast<unsigned int>(imageSize[1] / m_StreamSize[1] + 1);
    unsigned int nbColStream = static_cast<unsigned int>(imageSize[0] / m_StreamSize[0] + 1);
 
-   itk::ProgressReporter progress(this,0,nbRowStream*nbColStream);
+   /*unsigned long startReporter;
+   unsigned long stopReporter;
+   if (!line)
+   {
+     startReporter = 0;
+     stopReporter = 50;
+   }
+   else
+   {
+     startReporter = 50;
+     stopReporter = 100;
+   }
+   itk::ProgressReporter progress(this,0,2*nbRowStream*nbColStream,100,startReporter);*/
 
    for(unsigned int x=1; x<=nbColStream; x++)
    {
@@ -318,11 +329,14 @@ OGRLayerStreamStitchingFilter<TInputImage>
                  }
             }
          }
+         
+         // Update progress
+         progress.CompletedPixel();
+         
       } //end for x
       m_OGRLayer.ogr().CommitTransaction();
 
-      // Update progress
-      progress.CompletedPixel();
+      
    } //end for y
    m_OGRLayer.ogr().CommitTransaction();
 
@@ -333,15 +347,27 @@ void
 OGRLayerStreamStitchingFilter<TImage>
 ::GenerateData(void)
 {
-  if(!m_OGRLayer)
-    {
-    itkExceptionMacro(<<"Input OGR layer is null!");
-    }
+   if(!m_OGRLayer)
+   {
+      itkExceptionMacro(<<"Input OGR layer is null!");
+   }
+   
+   this->InvokeEvent(itk::StartEvent());
 
+   typename InputImageType::ConstPointer inputImage = this->GetInput();
+  
+  //compute the number of stream division in row and column
+   SizeType imageSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
+   unsigned int nbRowStream = static_cast<unsigned int>(imageSize[1] / m_StreamSize[1] + 1);
+   unsigned int nbColStream = static_cast<unsigned int>(imageSize[0] / m_StreamSize[0] + 1);
+   
+   itk::ProgressReporter progress(this,0,2*nbRowStream*nbColStream,100,0);
    //Process column
-   this->ProcessStreamingLine(false);
+   this->ProcessStreamingLine(false, progress);
    //Process row
-   this->ProcessStreamingLine(true);
+   this->ProcessStreamingLine(true, progress);
+   
+   this->InvokeEvent(itk::EndEvent());
 }
 
 

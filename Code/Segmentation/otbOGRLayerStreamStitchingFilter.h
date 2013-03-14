@@ -26,6 +26,7 @@
 //#endif
 
 #include "itkProcessObject.h"
+#include "itkProgressReporter.h"
 
 #include <algorithm>
 
@@ -128,7 +129,7 @@ protected:
   /**
    Main computation method. if line is true process row part, else process column part.
    */
-  void ProcessStreamingLine(bool line);
+  void ProcessStreamingLine(bool line, itk::ProgressReporter &progress);
   /** get length in case of  OGRGeometryCollection.
    * This function recodes the get_lenght method available since gdal 1.8.0
    * in the case of OGRGeometryCollection. The aim is allow to access polygon stiching
