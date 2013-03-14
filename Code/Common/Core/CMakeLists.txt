@@ -6,6 +6,7 @@ set( Common_Core_SOURCES
   mvdAbstractImageModel.cxx
   mvdAbstractModel.cxx
   mvdAlgorithm.cxx
+  mvdApplication.cxx
   mvdDatasetDescriptor.cxx
   mvdDatasetModel.cxx
   mvdHistogramModel.cxx
@@ -26,6 +27,7 @@ set( Common_Core_HEADERS_MOC
   mvdAbstractImageModel.h
   mvdAbstractModel.h
   mvdAlgorithm.h
+  mvdApplication.h
   mvdDatasetDescriptor.h
   mvdDatasetModel.h
   mvdHistogramModel.h

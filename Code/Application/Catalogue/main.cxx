@@ -63,7 +63,7 @@ main( int argc, char* argv[] )
   // TODO: Move into I18nApplication.
   setlocale( LC_NUMERIC, "C" );
 
-  /*
+#if 0
 // TODO: 1) MVD2-viewer: Factorize settings loading between Viewer & Catalogue  // Check if the application have a settings file already available
   bool appHasSettingsFile = application.HasSettingsFile();
   bool appHasIncorrectCacheDir(false);
@@ -77,7 +77,7 @@ main( int argc, char* argv[] )
       appHasIncorrectCacheDir = true;
       }
     }
-  */
+#endif
 
   mvd::MainWindow mainWindow;
 
