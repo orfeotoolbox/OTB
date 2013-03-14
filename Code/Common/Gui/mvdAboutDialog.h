@@ -50,9 +50,6 @@ namespace
 namespace mvd
 {
 
-namespace gui
-{
-
 //
 // Internal classes pre-declaration.
 namespace Ui
@@ -106,8 +103,6 @@ private:
 // SLOTS.
 private slots:
 };
-
-} // end namespace 'gui'
 
 } // end namespace 'mvd'
 
