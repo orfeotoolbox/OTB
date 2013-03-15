@@ -183,9 +183,6 @@ public:
   static bool IsNonnegative(char val) {return val >= Zero; }
   static char ZeroValue() { return Zero; }
   static char OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
 };
 
 /** \class NumericTraits<char>
@@ -217,9 +214,6 @@ public:
   static bool IsNonnegative(signed char val) {return val >= Zero; }
   static signed char  ZeroValue() { return Zero; }
   static signed char OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
 };
 
 /** \class NumericTraits<unsigned char>
@@ -249,9 +243,6 @@ public:
   static bool IsNonnegative(unsigned char val) {return val ? true : true; }
   static unsigned char  ZeroValue() { return Zero; }
   static unsigned char OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
 };
 
 /** \class NumericTraits<short>
@@ -279,9 +270,6 @@ public:
   static bool IsNonnegative(short val) {return val >= Zero; }
   static short  ZeroValue() { return Zero; }
   static short OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
 };
 
 /** \class NumericTraits<unsigned short>
@@ -310,9 +298,6 @@ public:
   static bool IsNonnegative(unsigned short val) {return val ? true : true; }
   static unsigned short  ZeroValue() { return Zero; }
   static unsigned short OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
 };
 
 /** \class NumericTraits<int>
@@ -340,9 +325,6 @@ public:
   static bool IsNonnegative(int val) {return val >= Zero; }
   static int  ZeroValue() { return Zero; }
   static int OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
 };
 
 /** \class NumericTraits<unsigned int>
@@ -374,9 +356,6 @@ public:
   static bool IsNonnegative(unsigned int val) {return val ? true : true; }
   static unsigned int  ZeroValue() { return Zero; }
   static unsigned int OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
 };
 
 /** \class NumericTraits<long>
@@ -405,9 +384,6 @@ public:
   static bool IsNonnegative(long val) {return val >= Zero; }
   static long  ZeroValue() { return Zero; }
   static long OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
 };
 
 /** \class NumericTraits<unsigned long>
@@ -436,9 +412,6 @@ public:
   static bool IsNonnegative(unsigned long) {return true; }
   static unsigned long  ZeroValue() { return Zero; }
   static unsigned long  OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
 };
 
 /** \class NumericTraits<float>
@@ -467,9 +440,6 @@ public:
   static bool IsNonnegative(float val) {return val >= Zero; }
   static float  ZeroValue() { return Zero; }
   static float  OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
 };
 
 /** \class NumericTraits<double>
@@ -498,9 +468,6 @@ public:
   static bool IsNonnegative(double val) {return val >= Zero; }
   static double  ZeroValue() { return Zero; }
   static double  OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
 };
 
 /** \class NumericTraits<long double>
@@ -529,95 +496,6 @@ public:
   static bool IsNonnegative(long double val) {return val >= Zero; }
   static long double ZeroValue() { return Zero; }
   static long double OneValue() { return One; }
-  static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
-  {return val<minVal?minVal:(val>maxVal?maxVal:val);}
-
-};
-
-/** \class NumericTraits< std::complex<short> >
- * \brief Define traits for type std::complex<short>.
- * \ingroup DataRepresentation
- */
-template <>
-class NumericTraits< std::complex<short> >  {
-public:
-  typedef std::complex<short>     TheType;
-  typedef short                   ValueType;
-  typedef TheType                 PrintType;
-  typedef double                  AbsType;
-  typedef TheType                 AccumulateType;
-  typedef std::complex<double>    RealType;
-  typedef double                  ScalarRealType;
-  typedef std::complex<float>     FloatType;
-
-  static const TheType ITKCommon_EXPORT Zero;
-  static const TheType ITKCommon_EXPORT One;
-
-  static TheType min() { return TheType(vcl_numeric_limits<ValueType>::min(),
-    vcl_numeric_limits<ValueType>::min());}
-  static TheType max() {return TheType(vcl_numeric_limits<ValueType>::max(),
-    vcl_numeric_limits<ValueType>::max()); }
-  static TheType min( TheType ) { return TheType(vcl_numeric_limits<ValueType>::min(),
-    vcl_numeric_limits<ValueType>::min()); }
-  static TheType max( TheType ) { return TheType(vcl_numeric_limits<ValueType>::max(),
-    vcl_numeric_limits<ValueType>::max()); }
-  static TheType NonpositiveMin() {
-    return TheType(NumericTraits<ValueType>::NonpositiveMin(),NumericTraits<ValueType>::NonpositiveMin()); }
-  static bool IsPositive(TheType val) { return val.real() > 0.0; }
-  static bool IsNonpositive(TheType val) { return val.real() <= 0.0; }
-  static bool IsNegative(TheType val) { return val.real() < 0.0; }
-  static bool IsNonnegative(TheType val) {return val.real() >= 0.0; }
-  static TheType ZeroValue() { return Zero; }
-  static TheType OneValue() { return One; }
-  static TheType Clamp(TheType val,TheType minVal, TheType maxVal)
-  {
-    return TheType(NumericTraits<ValueType>::Clamp(val.real(),minVal.real(),maxVal.real()),
-                   NumericTraits<ValueType>::Clamp(val.imag(),minVal.imag(),maxVal.imag()));
-  }
-
-};
-
-/** \class NumericTraits< std::complex<int> >
- * \brief Define traits for type std::complex<int>.
- * \ingroup DataRepresentation
- */
-template <>
-class NumericTraits< std::complex<int> >  {
-public:
-  typedef std::complex<int>     TheType;
-  typedef int                   ValueType;
-  typedef TheType               PrintType;
-  typedef double                AbsType; // or int ?
-  typedef TheType               AccumulateType;
-  typedef std::complex<double>  RealType;  // or std::complex<int>
-  typedef double                ScalarRealType; // or int
-  typedef std::complex<float>   FloatType;
-
-  static const TheType ITKCommon_EXPORT Zero;
-  static const TheType ITKCommon_EXPORT One;
-
-  static TheType min() { return TheType(vcl_numeric_limits<ValueType>::min(),
-    vcl_numeric_limits<ValueType>::min());}
-  static TheType max() {return TheType(vcl_numeric_limits<ValueType>::max(),
-    vcl_numeric_limits<ValueType>::max()); }
-  static TheType min( TheType ) { return TheType(vcl_numeric_limits<ValueType>::min(),
-    vcl_numeric_limits<ValueType>::min()); }
-  static TheType max( TheType ) { return TheType(vcl_numeric_limits<ValueType>::max(),
-    vcl_numeric_limits<ValueType>::max()); }
-  static TheType NonpositiveMin() {
-    return TheType(NumericTraits<ValueType>::NonpositiveMin(),NumericTraits<ValueType>::NonpositiveMin()); }
-  static bool IsPositive(TheType val) { return val.real() > 0.0; }
-  static bool IsNonpositive(TheType val) { return val.real() <= 0.0; }
-  static bool IsNegative(TheType val) { return val.real() < 0.0; }
-  static bool IsNonnegative(TheType val) {return val.real() >= 0.0; }
-  static TheType ZeroValue() { return Zero; }
-  static TheType OneValue() { return One; }
-  static TheType Clamp(TheType val,TheType minVal, TheType maxVal)
-  {
-    return TheType(NumericTraits<ValueType>::Clamp(val.real(),minVal.real(),maxVal.real()),
-                   NumericTraits<ValueType>::Clamp(val.imag(),minVal.imag(),maxVal.imag()));
-  }
-
 };
 
 /** \class NumericTraits< std::complex<float> >
@@ -639,28 +517,16 @@ public:
   static const TheType ITKCommon_EXPORT Zero;
   static const TheType ITKCommon_EXPORT One;
 
-  static TheType min() { return TheType(vcl_numeric_limits<ValueType>::min(),
-    vcl_numeric_limits<ValueType>::min());}
-  static TheType max() {return TheType(vcl_numeric_limits<ValueType>::max(),
-    vcl_numeric_limits<ValueType>::max()); }
-  static TheType min( TheType ) { return TheType(vcl_numeric_limits<ValueType>::min(),
-    vcl_numeric_limits<ValueType>::min()); }
-  static TheType max( TheType ) { return TheType(vcl_numeric_limits<ValueType>::max(),
-    vcl_numeric_limits<ValueType>::max()); }
+  static TheType min( TheType ) { return vcl_numeric_limits<ValueType>::min(); }
+  static TheType max( TheType ) { return vcl_numeric_limits<ValueType>::max(); }
   static TheType NonpositiveMin() {
-    return TheType(NumericTraits<float>::NonpositiveMin(),NumericTraits<float>::NonpositiveMin()); }
+    return TheType(-NumericTraits<float>::NonpositiveMin(),0.0f); }
   static bool IsPositive(TheType val) { return val.real() > 0.0; }
   static bool IsNonpositive(TheType val) { return val.real() <= 0.0; }
   static bool IsNegative(TheType val) { return val.real() < 0.0; }
   static bool IsNonnegative(TheType val) {return val.real() >= 0.0; }
   static TheType ZeroValue() { return Zero; }
   static TheType OneValue() { return One; }
-  static TheType Clamp(TheType val,TheType minVal, TheType maxVal)
-  {
-    return TheType(NumericTraits<ValueType>::Clamp(val.real(),minVal.real(),maxVal.real()),
-                   NumericTraits<ValueType>::Clamp(val.imag(),minVal.imag(),maxVal.imag()));
-  }
-
 };
 
 
@@ -682,28 +548,17 @@ public:
 
   static const TheType ITKCommon_EXPORT Zero;
   static const TheType ITKCommon_EXPORT One;
-  static TheType min() { return TheType(vcl_numeric_limits<ValueType>::min(),
-    vcl_numeric_limits<ValueType>::min());}
-  static TheType max() {return TheType(vcl_numeric_limits<ValueType>::max(),
-    vcl_numeric_limits<ValueType>::max()); }
-  static TheType min( TheType ) { return TheType(vcl_numeric_limits<ValueType>::min(),
-    vcl_numeric_limits<ValueType>::min()); }
-  static TheType max( TheType ) { return TheType(vcl_numeric_limits<ValueType>::max(),
-    vcl_numeric_limits<ValueType>::max()); }
 
+  static TheType min( TheType ) { return vcl_numeric_limits<ValueType>::min(); }
+  static TheType max( TheType ) { return vcl_numeric_limits<ValueType>::max(); }
   static TheType NonpositiveMin() {
-    return TheType(NumericTraits<double>::NonpositiveMin(),NumericTraits<double>::NonpositiveMin()); }
+    return TheType(-NumericTraits<double>::NonpositiveMin(),0.0); }
   static bool IsPositive(TheType val) { return val.real() > 0.0; }
   static bool IsNonpositive(TheType val) { return val.real() <= 0.0; }
   static bool IsNegative(TheType val) { return val.real() < 0.0; }
   static bool IsNonnegative(TheType val) {return val.real() >= 0.0; }
   static TheType ZeroValue() { return Zero; }
   static TheType OneValue() { return One; }
-  static TheType Clamp(TheType val,TheType minVal, TheType maxVal)
-  {
-    return TheType(NumericTraits<ValueType>::Clamp(val.real(),minVal.real(),maxVal.real()),
-                  NumericTraits<ValueType>::Clamp(val.imag(),minVal.imag(),maxVal.imag()));
-  }
 };
 
 #ifdef ITK_TYPE_USE_LONG_LONG

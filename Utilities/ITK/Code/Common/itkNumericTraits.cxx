@@ -58,12 +58,6 @@ const double NumericTraits<double>::One = 1.0;
 const long double NumericTraits<long double>::Zero = 0.0;
 const long double NumericTraits<long double>::One = 1.0;
 
-const std::complex<short>  NumericTraits< std::complex<short> >::Zero = std::complex<short>(0,0);
-const std::complex<short>  NumericTraits< std::complex<short> >::One  = std::complex<short>(1,0);
-
-const std::complex<int>  NumericTraits< std::complex<int> >::Zero = std::complex<int>(0,0);
-const std::complex<int>  NumericTraits< std::complex<int> >::One  = std::complex<int>(1,0);
-
 const std::complex<float>  NumericTraits< std::complex<float> >::Zero = std::complex<float>(0.0f,0.0f);
 const std::complex<float>  NumericTraits< std::complex<float> >::One  = std::complex<float>(1.0f,0.0f);
 
