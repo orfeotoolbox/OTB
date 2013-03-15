@@ -598,7 +598,7 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
 
 template<typename InputType, typename OutputType>
 OutputType
-SpecialCast(const std::complex<InputType>& in, const OutputType& itkNotUsed(dummy))
+ComplexCast(const std::complex<InputType>& in, const OutputType& itkNotUsed(dummy))
 {
   typedef typename itk::NumericTraits<std::complex<InputType> >::RealType       RealType;
   typedef typename itk::NumericTraits<std::complex<InputType> >::ScalarRealType ScalarRealType;
@@ -610,7 +610,7 @@ SpecialCast(const std::complex<InputType>& in, const OutputType& itkNotUsed(dumm
 
 template<typename InputType, typename OutputType>
 std::complex<OutputType>
-SpecialCast(const std::complex<InputType>& in, const std::complex<OutputType>& itkNotUsed(dummy))
+ComplexCast(const std::complex<InputType>& in, const std::complex<OutputType>& itkNotUsed(dummy))
 {
   typedef typename itk::NumericTraits<std::complex<InputType> >::RealType       RealType;
   typedef typename itk::NumericTraits<std::complex<InputType> >::ScalarRealType ScalarRealType;
@@ -635,7 +635,7 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
   while(inputData != endInput)
     {
     OutputConvertTraits::SetNthComponent(0, *outputData, 
-      static_cast<OutputPixelType> (SpecialCast(*inputData,dummy)));
+      static_cast<OutputPixelType> (ComplexCast(*inputData,dummy)));
     inputData++;
     outputData++;
     }
@@ -777,7 +777,7 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
   for( size_t i=0; i< length; i++ )
     {
     OutputConvertTraits::SetNthComponent( 0, *outputData,
-                                          SpecialCast(*inputData, dummy));
+                                          ComplexCast(*inputData, dummy));
     ++outputData;
     ++inputData;
     }
