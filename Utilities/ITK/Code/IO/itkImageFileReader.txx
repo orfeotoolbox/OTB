@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkImageFileReader.txx,v $
+  Module:    itkImageFileReader.txx
   Language:  C++
-  Date:      $Date: 2010-04-12 13:10:45 $
-  Version:   $Revision: 1.90 $
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -482,7 +482,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   OutputImagePixelType *outputData =
     this->GetOutput()->GetPixelContainer()->GetBufferPointer();
 
-      // TODO:
+
+  // TODO:
   // Pass down the PixelType (RGB, VECTOR, etc.) so that any vector to
   // scalar conversion be type specific. i.e. RGB to scalar would use
   // a formula to convert to luminance, VECTOR to scalar would use
@@ -500,7 +501,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
 #define ITK_CONVERT_BUFFER_IF_BLOCK(type)               \
  else if( m_ImageIO->GetComponentTypeInfo() == typeid(type) )   \
-   {   \
+   {                                                   \
    if( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 ) \
      { \
      ConvertPixelBuffer<                                 \
@@ -509,10 +510,10 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       ConvertPixelTraits                                \
       >                                                 \
       ::ConvertVectorImage(                             \
-       static_cast<type*>(inputData),                  \
-       m_ImageIO->GetNumberOfComponents(),             \
-       outputData,                                     \
-       numberOfPixels);              \
+        static_cast<type*>(inputData),                  \
+        m_ImageIO->GetNumberOfComponents(),             \
+        outputData,                                     \
+        numberOfPixels);              \
      } \
    else \
      { \
@@ -528,59 +529,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         numberOfPixels);              \
       } \
     }
-#define ITK_CONVERT_CBUFFER_IF_BLOCK(type)               \
- else if( m_ImageIO->GetComponentTypeInfo() == typeid(type) )   \
-   {  \
-   if( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 ) \
-     { \
-     if( (typeid(OutputImagePixelType) == typeid(std::complex<double>))     \
-         || (typeid(OutputImagePixelType) == typeid(std::complex<float>))   \
-         || (typeid(OutputImagePixelType) == typeid(std::complex<int>))     \
-         || (typeid(OutputImagePixelType) == typeid(std::complex<short>)) ) \
-       {\
-       /*std::cout << "Complex -> OTB::VectorImage Complex" << std::endl;*/ \
-       ConvertPixelBuffer<                                 \
-        type::value_type,        \
-        OutputImagePixelType,                             \
-        ConvertPixelTraits                                \
-        >                                                 \
-        ::ConvertComplexVectorImageToVectorImageComplex(                             \
-         static_cast<type*>(inputData),                \
-         m_ImageIO->GetNumberOfComponents(),             \
-         outputData,                                     \
-         numberOfPixels); \
-       }\
-     else\
-       {\
-       /*std::cout << "Complex -> OTB::VectorImage Double" << std::endl;*/ \
-       ConvertPixelBuffer<                                 \
-        type::value_type,        \
-        OutputImagePixelType,                             \
-        ConvertPixelTraits                                \
-        >                                                  \
-        ::ConvertComplexVectorImageToVectorImage(                             \
-         static_cast<type*>(inputData),                \
-         m_ImageIO->GetNumberOfComponents(),             \
-         outputData,                                     \
-         numberOfPixels);              \
-       }\
-     } \
-   else \
-     { \
-     /*std::cout << "Complex -> OTB::Image" << std::endl;*/ \
-     ConvertPixelBuffer<                                 \
-      type::value_type,        \
-      OutputImagePixelType,                             \
-      ConvertPixelTraits                                \
-      >                                                 \
-      ::ConvertComplexToGray(                                        \
-       static_cast<type*>(inputData),                  \
-       m_ImageIO->GetNumberOfComponents(),             \
-       outputData,                                     \
-       numberOfPixels);              \
-     } \
-   }
-
   if(0)
     {
     }
@@ -594,10 +542,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   ITK_CONVERT_BUFFER_IF_BLOCK( long)
   ITK_CONVERT_BUFFER_IF_BLOCK(float)
   ITK_CONVERT_BUFFER_IF_BLOCK( double)
-  ITK_CONVERT_CBUFFER_IF_BLOCK(std::complex<short>)
-  ITK_CONVERT_CBUFFER_IF_BLOCK(std::complex<int>)
-  ITK_CONVERT_CBUFFER_IF_BLOCK(std::complex<float>)
-  ITK_CONVERT_CBUFFER_IF_BLOCK(std::complex<double>)
   else
     {
     ImageFileReaderException e(__FILE__, __LINE__);
@@ -623,7 +567,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     return;
     }
 #undef ITK_CONVERT_BUFFER_IF_BLOCK
-#undef ITK_CONVERT_CBUFFER_IF_BLOCK
 }
 
 
