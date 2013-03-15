@@ -20,7 +20,7 @@
 
 #include "otbMacro.h"
 #include "itkCastImageFilter.h"
-#include "itkWatershedImageFilter.h"
+#include "otbWatershedImageFilter.h"
 
 namespace otb {
 
@@ -53,7 +53,7 @@ public:
   typedef TInputImage                                             InputImageType;
   typedef TOutputLabelImage                                       OutputLabelImageType;
   
-  typedef itk::WatershedImageFilter<TInputImage>                  WatershedFilterType;
+  typedef otb::WatershedImageFilter<TInputImage>                  WatershedFilterType;
   typedef typename WatershedFilterType::OutputImageType           InternalOutputImageType;
 
   typedef itk::CastImageFilter<InternalOutputImageType,
