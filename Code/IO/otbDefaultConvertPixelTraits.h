@@ -22,6 +22,7 @@
 #include "itkCovariantVector.h"
 #include "itkVector.h"
 #include "itkPoint.h"
+#include "itkMatrix.h"
 
 namespace otb
 {
@@ -104,10 +105,10 @@ OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(bool)
 
 #define OTB_DEFAULTCONVERTTRAITS_OFFSET_TYPE(dimension)                  \
 template<>                                                               \
-class DefaultConvertPixelTraits< Offset<dimension> >                     \
+class DefaultConvertPixelTraits< itk::Offset<dimension> >                \
 {                                                                        \
 public:                                                                  \
-  typedef Offset<dimension>  TargetType;                                 \
+  typedef itk::Offset<dimension>  TargetType;                            \
   typedef TargetType::OffsetValueType  ComponentType;                    \
   static unsigned int GetNumberOfComponents()                            \
     {                                                                    \
@@ -119,13 +120,13 @@ public:                                                                  \
     }                                                                    \
   static void SetNthComponent(int , TargetType & pixel, const TargetType& v)   \
     {                                                                    \
-      pixel = v;                                                      \
+      pixel = v;                                                         \
     }                                                                    \
   static ComponentType GetScalarValue(const TargetType& pixel)           \
     {                                                                    \
       return pixel[0];                                                   \
     }                                                                    \
-};                                                                       \
+};
 
 
 // Define traits for Offset<> from dimensions 1 to 5
@@ -191,10 +192,10 @@ public:                                                                  \
   OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, float); \
   OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, double);
 
-  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(Vector);
-  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(CovariantVector);
-  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(Point);
-  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(FixedArray);
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(itk::Vector);
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(itk::CovariantVector);
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(itk::Point);
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(itk::FixedArray);
 
 //
 //  End of Traits for the classes deriving from FixedArray.
@@ -262,7 +263,7 @@ public:                                                                  \
 //
 // Add here other classes that derive from Matrix or that have the same API
 //
-  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_TYPES_MACRO(Matrix);
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_TYPES_MACRO(itk::Matrix);
 
 //
 //  End of Traits for the classes deriving from Matrix.
