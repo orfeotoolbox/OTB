@@ -27,7 +27,7 @@
 #include "itkGradientDescentOptimizer.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-#include "itkWarpImageFilter.h"
+#include "otbWarpImageFilter.h"
 #include "otbNearestPointDeformationFieldGenerator.h"
 #include "otbNNearestPointsLinearInterpolateDeformationFieldGenerator.h"
 #include "otbBSplinesInterpolateDeformationFieldGenerator.h"
@@ -125,7 +125,7 @@ int otbTranslationDeformationFieldEstimation(int argc, char* argv[])
   BSplinesTransformGeneratorType;
 
   // Warper
-  typedef itk::WarpImageFilter<ImageType, ImageType, DeformationFieldType> ImageWarperType;
+  typedef otb::WarpImageFilter<ImageType, ImageType, DeformationFieldType> ImageWarperType;
 
   //Input images reading
   ReaderType::Pointer fixedReader = ReaderType::New();
