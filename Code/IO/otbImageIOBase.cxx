@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -63,13 +63,13 @@ ImageIOBase::~ImageIOBase()
 {
 }
 
-const ImageIOBase::ArrayOfExtensionsType & 
+const ImageIOBase::ArrayOfExtensionsType &
 ImageIOBase::GetSupportedWriteExtensions() const
 {
   return this->m_SupportedWriteExtensions;
 }
  
-const ImageIOBase::ArrayOfExtensionsType & 
+const ImageIOBase::ArrayOfExtensionsType &
 ImageIOBase::GetSupportedReadExtensions() const
 {
   return this->m_SupportedReadExtensions;
@@ -101,7 +101,7 @@ void ImageIOBase::Resize(const unsigned int numDimensions,
 
 void ImageIOBase::SetDimensions(unsigned int i, unsigned int dim)
 {
-  if ( i >= m_Dimensions.size() ) 
+  if ( i >= m_Dimensions.size() )
     {
     itkWarningMacro("Index: " << i <<
                       " is out of bounds, expected maximum is " <<
@@ -116,7 +116,7 @@ void ImageIOBase::SetDimensions(unsigned int i, unsigned int dim)
 
 void ImageIOBase::SetOrigin(unsigned int i, double origin)
 {
-  if ( i >= m_Origin.size() ) 
+  if ( i >= m_Origin.size() )
     {
     itkWarningMacro("Index: " << i <<
                       " is out of bounds, expected maximum is " <<
@@ -131,7 +131,7 @@ void ImageIOBase::SetOrigin(unsigned int i, double origin)
 
 void ImageIOBase::SetSpacing(unsigned int i, double spacing)
 {
-  if (i >= m_Spacing.size() ) 
+  if (i >= m_Spacing.size() )
     {
     itkWarningMacro("Index: " << i <<
                       " is out of bounds, expected maximum is " <<
@@ -146,7 +146,7 @@ void ImageIOBase::SetSpacing(unsigned int i, double spacing)
 
 void ImageIOBase::SetDirection(unsigned int i, std::vector<double> &direction)
 {
-  if (i >= m_Direction.size() ) 
+  if (i >= m_Direction.size() )
     {
     itkWarningMacro("Index: " << i <<
                       " is out of bounds, expected maximum is " <<
@@ -161,7 +161,7 @@ void ImageIOBase::SetDirection(unsigned int i, std::vector<double> &direction)
 
 void ImageIOBase::SetDirection(unsigned int i, vnl_vector<double> &direction)
 {
-  if (i >= m_Direction.size() ) 
+  if (i >= m_Direction.size() )
     {
     itkWarningMacro("Index: " << i <<
                       " is out of bounds, expected maximum is " <<
@@ -219,7 +219,7 @@ const std::type_info& ImageIOBase::GetComponentTypeInfo() const
   return typeid(ImageIOBase::UnknownType);
 }
 
-// 
+//
 // This macro enforces pixel type information to be available for all different
 // pixel types.
 //
@@ -227,7 +227,7 @@ template <typename T>
 bool
 itkSetPixelType(ImageIOBase *This,
                 const std::type_info &ptype,
-                ImageIOBase::IOComponentType ntype, 
+                ImageIOBase::IOComponentType ntype,
                 T itkNotUsed( dummy ) )
 {
   if( ptype == typeid(T) )
@@ -535,7 +535,7 @@ void ImageIOBase::ComputeStrides()
 }
 
 // Calculates the image size in PIXELS
-ImageIOBase::SizeType 
+ImageIOBase::SizeType
 ImageIOBase
 ::GetImageSizeInPixels() const
 {
@@ -550,42 +550,42 @@ ImageIOBase
   return numPixels;
 }
 
-ImageIOBase::SizeType 
+ImageIOBase::SizeType
 ImageIOBase
 ::GetImageSizeInComponents() const
 {
   return (this->GetImageSizeInPixels() * m_NumberOfComponents);
 }
 
-ImageIOBase::SizeType 
+ImageIOBase::SizeType
 ImageIOBase
 ::GetImageSizeInBytes () const
 {
   return (this->GetImageSizeInComponents() * this->GetComponentSize());
 }
 
-ImageIOBase::SizeType 
+ImageIOBase::SizeType
 ImageIOBase
 ::GetComponentStride() const
 {
   return m_Strides[0];
 }
 
-ImageIOBase::SizeType 
+ImageIOBase::SizeType
 ImageIOBase
 ::GetPixelStride () const
 {
   return m_Strides[1];
 }
 
-ImageIOBase::SizeType 
+ImageIOBase::SizeType
 ImageIOBase
 ::GetRowStride () const
 {
   return m_Strides[2];
 }
 
-ImageIOBase::SizeType 
+ImageIOBase::SizeType
 ImageIOBase
 ::GetSliceStride () const
 {
@@ -625,7 +625,7 @@ void ImageIOBase::SetNumberOfDimensions(unsigned int dim)
     }
 }
 
-bool 
+bool
 ImageIOBase
 ::ReadBufferAsBinary(std::istream& is, void *buffer, ImageIOBase::SizeType num)
 {
@@ -819,13 +819,13 @@ void WriteBuffer(std::ostream& os, const TComponent *buffer, ImageIOBase::SizeTy
   typedef typename itk::NumericTraits<TComponent>::PrintType PrintType;
   for (ImageIOBase::SizeType i=0; i < num; i++)
     {
-    if ( !(i%6) && i ) 
+    if ( !(i%6) && i )
       os << "\n";
     os << PrintType(*ptr++) << " ";
     }
 }
 }
-void ImageIOBase::WriteBufferAsASCII(std::ostream& os, const void *buffer, 
+void ImageIOBase::WriteBufferAsASCII(std::ostream& os, const void *buffer,
                                      IOComponentType ctype,
                                      ImageIOBase::SizeType numComp)
 {
@@ -963,7 +963,7 @@ void ReadBuffer(std::istream& is, TComponent *buffer, ImageIOBase::SizeType num)
     }
 }
 
-void ImageIOBase::ReadBufferAsASCII(std::istream& is, void *buffer, 
+void ImageIOBase::ReadBufferAsASCII(std::istream& is, void *buffer,
                                     IOComponentType ctype,
                                     ImageIOBase::SizeType numComp)
 {
@@ -1074,10 +1074,10 @@ void ImageIOBase::ReadBufferAsASCII(std::istream& is, void *buffer,
 }
 
 
-unsigned int 
+unsigned int
 ImageIOBase::GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
                                                              const itk::ImageIORegion &pasteRegion) const
-{  
+{
   // Code from ImageRegionSplitter:GetNumberOfSplits
   int splitAxis;
   const itk::ImageIORegion::SizeType &regionSize = pasteRegion.GetSize();
@@ -1103,20 +1103,20 @@ ImageIOBase::GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int number
   return maxPieceUsed+1;
 }
 
-unsigned int 
+unsigned int
 ImageIOBase::GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSplits,
                                                const itk::ImageIORegion &pasteRegion,
                                                const itk::ImageIORegion &largestPossibleRegion)
 {
-  if (this->CanStreamWrite()) 
+  if (this->CanStreamWrite())
     {
       return GetActualNumberOfSplitsForWritingCanStreamWrite(numberOfRequestedSplits, pasteRegion);
     }
-  if (pasteRegion != largestPossibleRegion) 
+  if (pasteRegion != largestPossibleRegion)
     {
       itkExceptionMacro("Pasting is not supported! Can't write:" << this->GetFileName());
     }
-  if (numberOfRequestedSplits != 1) 
+  if (numberOfRequestedSplits != 1)
     {
     itkDebugMacro("Requested more then 1 splits for streaming");
     itkDebugMacro("This IO class does not support streaming!");
@@ -1125,7 +1125,7 @@ ImageIOBase::GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSpl
 }
 
 itk::ImageIORegion
-ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece, 
+ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
                                                                unsigned int numberOfActualSplits,
                                                                const itk::ImageIORegion &pasteRegion) const
 {
@@ -1182,16 +1182,16 @@ ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
 }
 
 itk::ImageIORegion
-ImageIOBase::GetSplitRegionForWriting(unsigned int ithPiece, 
+ImageIOBase::GetSplitRegionForWriting(unsigned int ithPiece,
                                       unsigned int numberOfActualSplits,
                                       const itk::ImageIORegion &pasteRegion,
                                       const itk::ImageIORegion &largestPossibleRegion)
 {
-   if (this->CanStreamWrite()) 
+   if (this->CanStreamWrite())
     {
       return GetSplitRegionForWritingCanStreamWrite(ithPiece, numberOfActualSplits, pasteRegion);
     }
-  return largestPossibleRegion;  
+  return largestPossibleRegion;
 }
 
 /** Given a requested region, determine what could be the region that we can
@@ -1200,7 +1200,7 @@ ImageIOBase::GetSplitRegionForWriting(unsigned int ithPiece,
  * RequestedRegion */
 itk::ImageIORegion
 ImageIOBase
-::GenerateStreamableReadRegionFromRequestedRegion( 
+::GenerateStreamableReadRegionFromRequestedRegion(
     const itk::ImageIORegion & requested ) const
 {
   //
@@ -1216,7 +1216,7 @@ ImageIOBase
   // represent all the pixels. That is we can trim trailing 1s.
   
   unsigned int minIODimension = this->m_NumberOfDimensions;
-  while (minIODimension) 
+  while (minIODimension)
     {
     if (this->m_Dimensions[minIODimension-1] == 1)
       {
@@ -1256,7 +1256,7 @@ ImageIOBase
 /** Return the directions that this particular ImageIO would use by default
  *  in the case the recipient image dimension is smaller than the dimension
  *  of the image in file. */
-std::vector<double> 
+std::vector<double>
 ImageIOBase
 ::GetDefaultDirection( unsigned int k ) const
 {
@@ -1269,7 +1269,7 @@ ImageIOBase
     axis[r] = 0.0;
     }
 
-  axis[k] = 1.0; 
+  axis[k] = 1.0;
 
   return axis;
 }

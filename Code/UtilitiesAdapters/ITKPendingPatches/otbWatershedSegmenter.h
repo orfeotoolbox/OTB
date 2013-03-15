@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ namespace watershed
 {
 /** \class Segmenter
  *
- * This filter implements the first step in the N-d watershed segmentation 
+ * This filter implements the first step in the N-d watershed segmentation
  * algorithm.  It produces a segmented, labeled image from a scalar-valued
  * image input. This filter is used in conjunction with
  * WatershedSegmentTreeGenerator and WatershedRelabeler to produce a final
@@ -47,14 +47,14 @@ namespace watershed
  * \par Input
  * There is one input to this algorithm, a real-valued (scalar) itk::Image of
  * arbitrary dimension.  The input is assumed to represents a height function,
- * such as a gradient magnitude edge image.  The filter can process an image of 
+ * such as a gradient magnitude edge image.  The filter can process an image of
  * any dimension. Note that the terms ``pixel'' and ``voxel'' are
  * interchangeable in this and other watershed component class documentation.
  *
  * \par Outputs
  * There are three potential outputs of this algorithm described below.
  *
- * \par 
+ * \par
  * The first output is a labeled image of unsigned long integers.  This is an
  * initial segmentation and labeling that is fed into successive components of
  * the watershed algorithm.
@@ -64,13 +64,13 @@ namespace watershed
  * itk::watershed::SegmentTable. This table is a record of each segment
  * numbered in the initial segmentation (output number one) with relevant
  * information needed in successive stages of the algorithm.
- * 
+ *
  * \par
  * The third output is a data structure containing boundary pixel information,
  * itk::watershed::Boundary.  This data is only generated if the flag
  * DoBoundaryAnalysis is set to true and is only useful in streaming
  * applications.
- * 
+ *
  * \par Parameters
  * Threshold is specified as a percentage (0.0 - 1.0) of the maximum height of
  * the image. This filter thresholds the input image to remove all values below
@@ -83,7 +83,7 @@ namespace watershed
  * minima in the image and produces an initial segmentation with fewer
  * segments.  The assumption is that the ``shallow'' regions that this
  * thresholding eliminates are generally not of interest.
- * 
+ *
  * \sa WatershedImageFilter
  * \ingroup WatershedSegmentation  */
 template <class TInputImage>
@@ -150,7 +150,7 @@ public:
   { this->itk::ProcessObject::SetNthOutput(0, img);    }
   
   /** Get/Set the segment table.  The segment table is a table of segmentation
-   * information identifying each region produced by the labeling algorithm. */ 
+   * information identifying each region produced by the labeling algorithm. */
   SegmentTableType * GetSegmentTable(void)
     {
     return static_cast<SegmentTableType *>
@@ -210,7 +210,7 @@ public:
    * decreases the number of local minima in the image and produces an initial
    * segmentation with fewer segments.  The assumption is that the ``shallow''
    * regions that this thresholding eliminates are generally not of
-   * interest. */ 
+   * interest. */
   itkSetClampMacro(Threshold, double, 0.0, 1.0);
   itkGetConstMacro(Threshold, double);
 
@@ -255,7 +255,7 @@ protected:
    * generating the segment table,  even though the edge tables
    * are stored as ordered lists.  An ``edge'' in this context
    * is synonymous with a segment ``adjacency''.   */
-  typedef itk::hash_map<unsigned long, InputPixelType, itk::hash<unsigned long> 
+  typedef itk::hash_map<unsigned long, InputPixelType, itk::hash<unsigned long>
   > edge_table_t;
   
   typedef itk::hash_map<unsigned long, edge_table_t, itk::hash<unsigned long>
@@ -307,7 +307,7 @@ protected:
   void GradientDescent(InputImageTypePointer, ImageRegionType);
 
   /** Associates each flat region with a local minimum and relabels
-    accordingly.  */ 
+    accordingly.  */
   void DescendFlatRegions(flat_region_table_t &, ImageRegionType);
 
   /** Adds entries to the output segment table for all labeled segments in the
@@ -336,7 +336,7 @@ protected:
                      InputPixelType &min,
                      InputPixelType &max);
 
-  /** Helper function. Finds the minimum and maximum values in an image.   */ 
+  /** Helper function. Finds the minimum and maximum values in an image.   */
   static void MergeFlatRegions(flat_region_table_t &, itk::EquivalencyTable::Pointer);
     
   /** Helper functions for filling in regions with values   */

@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ namespace watershed
  *
  * \par A note on terminology in itk watershed segmentation code
  * For streamed segmentation of images in the watershed framework, the
- * documentation refers to the complete data set at the ``image volume.''  The 
+ * documentation refers to the complete data set at the ``image volume.''  The
  * image volume is assumed to be partitioned into pieces referred to as image
  * chunks. Each chunk is processed in sequence through the pipeline.  The
  * ``face'' of an image chunk is an N-1 dimensional boundary region of an N
@@ -114,7 +114,7 @@ public:
   void GenerateData();
 
   /** Standard itk::ProcessObject subclass method. */
-  virtual DataObjectPointer MakeOutput(unsigned int idx);  
+  virtual DataObjectPointer MakeOutput(unsigned int idx);
 protected:
   BoundaryResolver() : m_Face(0)
     {

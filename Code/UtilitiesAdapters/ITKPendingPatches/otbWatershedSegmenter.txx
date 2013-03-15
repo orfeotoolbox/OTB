@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,11 +38,11 @@ namespace watershed
 template <class TInputImage>
 Segmenter<TInputImage>::~Segmenter()
 {
-  if (m_Connectivity.index != 0) 
+  if (m_Connectivity.index != 0)
     {
     delete[] m_Connectivity.index;
     }
-  if (m_Connectivity.direction !=0 ) 
+  if (m_Connectivity.direction !=0 )
     {
     delete[] m_Connectivity.direction;
     }
@@ -78,7 +78,7 @@ void Segmenter<TInputImage>::GenerateData()
   // FULLY SUPPORTS STREAMING, THESE WILL NEED TO BE CHANGED ACCORDINGLY.
   //
   // 1) All region sizes are equivalent.  There is no distinction among
-  // regions.  The region size is assumed to be padded one pixel out along each 
+  // regions.  The region size is assumed to be padded one pixel out along each
   // chunk face unless that face touches an actual data set boundary.
   //
   // 2) The ivar m_LargestPossibleRegion represents the actual size of the data
@@ -160,7 +160,7 @@ void Segmenter<TInputImage>::GenerateData()
   thresholdLargestPossibleRegion.SetIndex(tlidx);
 
   // Now create and allocate the threshold image.  We need a single pixel
-  // border around the NxM region we are segmenting.  This means that for faces 
+  // border around the NxM region we are segmenting.  This means that for faces
   // that have no overlap into another chunk, we have to pad the image.
   typename InputImageType::Pointer thresholdImage = InputImageType::New();
 
@@ -188,7 +188,7 @@ void Segmenter<TInputImage>::GenerateData()
     {
     maximum -= itk::NumericTraits<InputPixelType>::One;
     }
-  // threshold the image. 
+  // threshold the image.
   Self::Threshold(thresholdImage, input, regionToProcess, regionToProcess,
                   static_cast<InputPixelType>((m_Threshold * (maximum - minimum)) + minimum));
 
@@ -209,7 +209,7 @@ void Segmenter<TInputImage>::GenerateData()
   regionToProcess.SetSize(irsz);
 
   //
-  // Initialize the connectivity information that will be used by the 
+  // Initialize the connectivity information that will be used by the
   // segmentation algorithm.
   //
   this->GenerateConnectivity();
@@ -268,7 +268,7 @@ void Segmenter<TInputImage>::GenerateData()
   //
   // Analyze the flow at the boundaries.  This method labels all the boundary
   // pixels that flow out of this chunk (either through gradient descent or
-  // flat-region connectivity) and constructs the appropriate Boundary 
+  // flat-region connectivity) and constructs the appropriate Boundary
   // data structures.
   //
   if (m_DoBoundaryAnalysis == true)
@@ -283,10 +283,10 @@ void Segmenter<TInputImage>::GenerateData()
   //
   // Build a ``retaining wall'' around the image so that gradient descent
   // analysis can be done without worrying about boundaries.
-  // 
+  //
   // All overlap boundary information will be overwritten, but is no longer
   // needed now.
-  // 
+  //
   this->BuildRetainingWall( thresholdImage,
                             thresholdImage->GetBufferedRegion(),
                             maximum + itk::NumericTraits<InputPixelType>::One );
@@ -323,7 +323,7 @@ void Segmenter<TInputImage>::GenerateData()
 }
 
 template <class TInputImage>
-void Segmenter<TInputImage>  
+void Segmenter<TInputImage>
 ::CollectBoundaryInformation(flat_region_table_t &flatRegions)
 {
   typename OutputImageType::Pointer output = this->GetOutputImage();
@@ -365,7 +365,7 @@ void Segmenter<TInputImage>
         // Is this a flat region that flows out?
         flrt_it = flatRegions.find(labelIt.Get());
         if ( faceIt.Get().flow != NULL_FLOW
-             && flrt_it != flatRegions.end() ) 
+             && flrt_it != flatRegions.end() )
           {
           // Have we already entered this
           // flat region into the boundary?
@@ -627,13 +627,13 @@ void Segmenter<TInputImage>
   int d;
 
   //
-  // Creates city-block style connectivity.  4-Neighbors in 2D.  6-Neighbors in 
-  // 3D, etc...  Order of creation MUST be lowest index to highest index in the 
+  // Creates city-block style connectivity.  4-Neighbors in 2D.  6-Neighbors in
+  // 3D, etc...  Order of creation MUST be lowest index to highest index in the
   // neighborhood.  I.e. for 4 connectivity,
   //
   //     * 1 *
   //     2 * 3
-  //     * 4 * 
+  //     * 4 *
   //
   // Algorithms assume this order to the connectivity.
   //
@@ -766,7 +766,7 @@ void Segmenter<TInputImage>
       {
       labelIt.SetPixel(nCenter,  m_CurrentLabel);
       m_CurrentLabel = m_CurrentLabel + 1;
-      } 
+      }
     }
 
   // Merge the flat regions that we identified as connected components.
@@ -782,7 +782,7 @@ void Segmenter<TInputImage>
   for (searchIt.GoToBegin(), labelIt.GoToBegin();
        ! searchIt.IsAtEnd(); ++searchIt, ++labelIt)
     {
-    flatPtr = flatRegions.find( labelIt.GetPixel(nCenter) ); 
+    flatPtr = flatRegions.find( labelIt.GetPixel(nCenter) );
     if (  flatPtr != flatRegions.end() ) // If we are in a flat region
       { // Search the connectivity neighborhood
       // for lesser boundary pixels.
@@ -872,7 +872,7 @@ void Segmenter<TInputImage>
         for (unsigned int ii = 1; ii < m_Connectivity.size; ++ii)
           {
           nPos = m_Connectivity.index[ii];
-          if ( valueIt.GetPixel(nPos) < minVal) 
+          if ( valueIt.GetPixel(nPos) < minVal)
             {
             minVal = valueIt.GetPixel(nPos);
             moveIndex = m_Connectivity.direction[ii];
@@ -998,7 +998,7 @@ void Segmenter<TInputImage>
           {     // This edge has not been identified yet.
           typedef typename edge_table_t::value_type ValueType;
           (*edge_table_entry_ptr).second.insert(
-            ValueType(labelIt.GetPixel(nPos), lowest_edge) ); 
+            ValueType(labelIt.GetPixel(nPos), lowest_edge) );
           }
         else if (lowest_edge < (*edge_ptr).second)
           {
@@ -1158,7 +1158,7 @@ void Segmenter<TInputImage>
 template <class TInputImage>
 void Segmenter<TInputImage>
 ::RelabelImage(OutputImageTypePointer img,
-               ImageRegionType region, 
+               ImageRegionType region,
                itk::EquivalencyTable::Pointer eqTable)
 {
   eqTable->Flatten();
@@ -1170,8 +1170,8 @@ void Segmenter<TInputImage>
   while ( !it.IsAtEnd() )
     {
     temp = eqTable->Lookup(it.Get());
-    if (temp != it.Get())  { it.Set(temp);}
-    ++it; 
+    if (temp != it.Get())  { it.Set(temp); }
+    ++it;
     }
 }
 
@@ -1247,17 +1247,17 @@ Segmenter<TInputImage>
 ::MakeOutput(unsigned int idx)
 {
   if (idx == 0)
-    {  return static_cast<itk::DataObject*>(OutputImageType::New().GetPointer());}
+    {  return static_cast<itk::DataObject*>(OutputImageType::New().GetPointer()); }
   else if (idx == 1)
-    { return static_cast<itk::DataObject*>(SegmentTableType::New().GetPointer());}
+    { return static_cast<itk::DataObject*>(SegmentTableType::New().GetPointer()); }
   else if (idx == 2)
-    { return static_cast<itk::DataObject*>(BoundaryType::New().GetPointer());}
+    { return static_cast<itk::DataObject*>(BoundaryType::New().GetPointer()); }
   else return 0;
 }
 
   
 template <class TInputImage>
-void 
+void
 Segmenter<TInputImage>::UpdateOutputInformation()
 {
   unsigned int i;
@@ -1310,7 +1310,7 @@ void Segmenter<TInputImage>::GenerateInputRequestedRegion()
     return;
     }
   
-  // 
+  //
   // FOR NOW WE'LL JUST SET THE INPUT REGION TO THE OUTPUT REGION
   // AND OVERRIDE THIS LATER
   //
@@ -1319,7 +1319,7 @@ void Segmenter<TInputImage>::GenerateInputRequestedRegion()
 }
 
 template <class TInputImage>
-void 
+void
 Segmenter<TInputImage>
 ::GenerateOutputRequestedRegion(itk::DataObject *output)
 {
@@ -1344,7 +1344,7 @@ Segmenter<TInputImage>
         }
       }
     }
-} 
+}
 
 template <class TInputImage>
 Segmenter<TInputImage>
@@ -1368,7 +1368,7 @@ Segmenter<TInputImage>
   this->itk::ProcessObject::SetNthOutput(1, st.GetPointer());
   this->itk::ProcessObject::SetNthOutput(2, bd.GetPointer());
 
-  // Allocate memory for connectivity 
+  // Allocate memory for connectivity
   m_Connectivity.size = 2 * ImageDimension;
   m_Connectivity.index = new unsigned int[m_Connectivity.size];
   m_Connectivity.direction
@@ -1376,7 +1376,7 @@ Segmenter<TInputImage>
 }
 
 template<class TInputImage>
-void 
+void
 Segmenter<TInputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -1385,7 +1385,7 @@ Segmenter<TInputImage>
   os << indent << "DoBoundaryAnalysis: " << m_DoBoundaryAnalysis << std::endl;
   os << indent << "Threshold: " << m_Threshold << std::endl;
   os << indent << "MaximumFloodLevel: " << m_MaximumFloodLevel << std::endl;
-  os << indent << "CurrentLabel: " << m_CurrentLabel << std::endl;  
+  os << indent << "CurrentLabel: " << m_CurrentLabel << std::endl;
 }
 
 }// end namespace watershed

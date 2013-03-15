@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -89,7 +89,7 @@ void Relabeler<TScalarType, TImageDimension>
     {
     eqT->Add((*it).from, (*it).to);
     it++;
-    } 
+    }
 
   SegmenterType::RelabelImage(output, output->GetRequestedRegion(), eqT);
   this->UpdateProgress(1.0);
@@ -111,7 +111,7 @@ void Relabeler<TScalarType, VImageDimension>
     return;
     }
 
-  // 
+  //
   // FOR NOW WE'LL JUST SET THE INPUT REGION TO THE OUTPUT REGION
   //
   inputPtr->SetRequestedRegion( outputPtr->GetRequestedRegion() );

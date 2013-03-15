@@ -37,7 +37,6 @@ namespace itk
 {
 
 
-
 /** \class NumericTraits< std::complex<char> >
  * \brief Define traits for type std::complex<char>.
  * \ingroup DataRepresentation

@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,17 +42,17 @@ namespace otb
  * regions into catchment basins. If a function \f$ f \f$ is a continuous
  * height function defined over an image domain, then a catchment basin is
  * defined as the set of points whose paths of steepest descent terminate at
- * the same local minimum of \f$ f \f$. 
+ * the same local minimum of \f$ f \f$.
  *
  * \par
  * The choice of height function (input) depends on the application, and the
  * basic watershed algorithm operates independently of that choice. For
  * intensity-based image data, you might typically use some sort of gradient
  * magnitude calculation as input. (see itk::GradientMagnitudeImageFilter)
- * 
+ *
  * \par
  * The watershed algorithm proceeds in several steps. First, an initial
- * classification of all points into catchment basin regions is done by tracing 
+ * classification of all points into catchment basin regions is done by tracing
  * each point down its path of steepest descent to a local minima. Next,
  * neighboring regions and the boundaries between them are analyzed according
  * to  some saliency measure (such as minimum boundary height) to produce a
@@ -64,7 +64,7 @@ namespace otb
  * the flood level rises, boundaries between adjacent segments erode and those
  * segments merge.  The minimum value of the flood level is zero and the
  * maximum value is the difference between the highest and lowest values in the
- * input image. 
+ * input image.
  *
  * \par
  * Note that once the initial analysis and segmentation is done to produce
@@ -80,24 +80,24 @@ namespace otb
  * picture of the implementation, refer to the documentation of those components.
  * The component classes were designed to operate in either a data-streaming or
  * a non-data-streaming mode.  The pipeline constructed in this class'
- * GenerateData() method does not support streaming, but is the common use case 
+ * GenerateData() method does not support streaming, but is the common use case
  * for the components.
  *
  * \par Description of the input to this filter
- * The input to this filter is a scalar itk::Image of any dimensionality.  This 
- * input image is assumed to represent some sort of height function or edge map 
+ * The input to this filter is a scalar itk::Image of any dimensionality.  This
+ * input image is assumed to represent some sort of height function or edge map
  * based on the original image that you want to segment (such as would be
- * produced by itk::GradientMagnitudeImageFilter).  This filter does not do any 
+ * produced by itk::GradientMagnitudeImageFilter).  This filter does not do any
  * pre-processing on its input other than a thresholding step. The algorithm
  * does not explicitly require that the input be of any particular data type,
  * but floating point or double precision data is recommended.
  *
- * \par 
+ * \par
  * The recommended pre-processing for scalar image input to this algorithm is
  * to use one of the itk::AnisotropicDiffusionImageFilter subclasses to smooth
- * the original image and then perform some sort of edge calculation based on 
+ * the original image and then perform some sort of edge calculation based on
  * gradients or curvature.
- * 
+ *
  * \par Description of the output of this filter
  * This filter will produce an itk::Image of unsigned long integer type and of
  * the same dimensionality as the input image.  The unsigned long output image
@@ -106,7 +106,7 @@ namespace otb
  * within a connected region.
  *
  * \par Some notes on filter parameters
- * Two parameters control the output of this filter, Threshold and Level.  The 
+ * Two parameters control the output of this filter, Threshold and Level.  The
  * units of both parameters are percentage points of the maximum height value
  * in the input.
  *
@@ -114,7 +114,7 @@ namespace otb
  * Threshold is used to set the absolute minimum height
  * value used during processing. Raising this threshold percentage effectively
  * decreases the number of local minima in the input, resulting in an initial
- * segmentation with fewer regions.  The assumption is that the shallow regions 
+ * segmentation with fewer regions.  The assumption is that the shallow regions
  * that thresholding removes are of of less interest.
  *
  * \par
@@ -132,7 +132,7 @@ namespace otb
  * The Level parameter can be used to create a hierarchy of output images in
  * constant time once an initial segmentation is done.  A typical scenario
  * might go like this: For the initial execution of the filter, set the Level
- * to the maximum saliency value that you anticipate might be of interest. Once 
+ * to the maximum saliency value that you anticipate might be of interest. Once
  * the initial Update() of this process object has finished, the Level can be
  * manipulated anywhere below the initial setting without triggering a full
  * update of the segmentation mini-pipeline.  All that is now be required to
@@ -146,7 +146,7 @@ namespace otb
  *  Coming soon... 12/06/01
  *
  *
- * 
+ *
  * \ingroup WatershedSegmentation  */
 template <class TInputImage>
 class ITK_EXPORT WatershedImageFilter :
@@ -248,14 +248,14 @@ protected:
   void operator=(const Self&) {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** An opportunity to Allocate/Deallocate bulk data. 
+  /** An opportunity to Allocate/Deallocate bulk data.
    */
   virtual void PrepareOutputs();
   
 private:
   /** A Percentage of the maximum depth (max - min pixel value) in the input
    *  image.  This percentage will be used to threshold the minimum values in
-   *  the image. */ 
+   *  the image. */
   double m_Threshold;
 
   /** The percentage of the maximum saliency value among adjacencies in the

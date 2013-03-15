@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,7 +26,7 @@ namespace watershed
 template <class TScalarType, unsigned int TImageDimension>
 void EquivalenceRelabeler<TScalarType, TImageDimension>
 ::GenerateData()
-{ 
+{
   typename ImageType::ConstPointer input  = this->GetInputImage();
   typename ImageType::Pointer output = this->GetOutputImage();
 
@@ -51,7 +51,7 @@ void EquivalenceRelabeler<TScalarType, TImageDimension>
     }
 
   eqT->Flatten();
-  SegmenterType::RelabelImage(output, output->GetRequestedRegion(), eqT); 
+  SegmenterType::RelabelImage(output, output->GetRequestedRegion(), eqT);
 }
 
 template <class TScalarType, unsigned int VImageDimension>
@@ -70,7 +70,7 @@ void EquivalenceRelabeler<TScalarType, VImageDimension>
     return;
     }
 
-  // 
+  //
   // FOR NOW WE'LL JUST SET THE INPUT REGION TO THE OUTPUT REGION
   // FOR STREAMING WITHIN THE PIPELINE NEED TO FIX THIS
   //

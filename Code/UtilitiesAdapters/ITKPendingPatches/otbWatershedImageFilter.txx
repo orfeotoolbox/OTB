@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -181,7 +181,7 @@ WatershedImageFilter<TInputImage>
   // Setup the progress command
   itk::WatershedMiniPipelineProgressCommand::Pointer c =
     dynamic_cast<itk::WatershedMiniPipelineProgressCommand *>(
-      m_TreeGenerator->GetCommand(m_ObserverTag) ); 
+      m_TreeGenerator->GetCommand(m_ObserverTag) );
   c->SetCount(0.0);
   c->SetNumberOfFilters(3);
       
@@ -204,7 +204,7 @@ WatershedImageFilter<TInputImage>
 }
 
 template<class TInputImage>
-void 
+void
 WatershedImageFilter<TInputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

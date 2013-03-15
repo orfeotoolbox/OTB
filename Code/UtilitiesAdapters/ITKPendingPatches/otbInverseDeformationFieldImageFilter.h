@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@ namespace otb
  * computes the deformation field that is its inverse. If the input deformation
  * field was mapping coordinates from a space A into a space B, the output of
  * this filter will map coordinates from the space B into the space A.
- * 
+ *
  * Given that both the input and output deformation field are represented as
  * discrete images with pixel type vector, the inverse will be only an
  * estimation and will probably not correspond to a perfect inverse.  The
@@ -44,7 +44,7 @@ namespace otb
  * target landmarks are the negative of the displacement vectors. The
  * kernel-base spline is then used for regularly sampling the output space and
  * recover vector values for every single pixel.
- * 
+ *
  * The subsampling factor used for the regular grid of the input field will
  * determine the number of landmarks in the KernelBased spline and therefore it
  * will have a dramatic effect on both the precision of output deformation
@@ -79,7 +79,7 @@ public:
   typedef typename OutputImageType::Pointer     OutputImagePointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(InverseDeformationFieldImageFilter, ImageToImageFilter);
@@ -90,7 +90,7 @@ public:
 
   /** Transform typedef.
    *
-   * \todo Check that input and output images have the same number of 
+   * \todo Check that input and output images have the same number of
      * dimensions; this is required for consistency.  */
   typedef itk::KernelTransform<
     double, itkGetStaticConstMacro(ImageDimension)> KernelTransformType;
@@ -116,7 +116,7 @@ public:
   /** Set the coordinate transformation.
    * Set the KernelBase spline used for resampling the deformation grid.
    * */
-  itkSetObjectMacro( KernelTransform, KernelTransformType ); 
+  itkSetObjectMacro( KernelTransform, KernelTransformType );
 
   /** Get a pointer to the coordinate transform. */
   itkGetObjectMacro( KernelTransform, KernelTransformType );
@@ -171,13 +171,13 @@ protected:
   ~InverseDeformationFieldImageFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** 
+  /**
    * GenerateData() computes the internal KernelBase spline and resamples
    * the deformation field.
    */
   void GenerateData();
 
-  /** Subsample the input deformation field and generate the 
+  /** Subsample the input deformation field and generate the
    *  landmarks for the kernel base spline
    */
   void PrepareKernelBaseSpline();

@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -46,15 +46,15 @@ public:
   typedef typename PixelType::ComponentType ComponentType;
 
   /** Return the number of components per pixel. */
-  static unsigned int GetNumberOfComponents() 
-  { return PixelType::GetNumberOfComponents();}
+  static unsigned int GetNumberOfComponents()
+  { return PixelType::GetNumberOfComponents(); }
   
   /** Return the nth component of the pixel. */
-  static ComponentType GetNthComponent(int c, const PixelType& pixel) 
+  static ComponentType GetNthComponent(int c, const PixelType& pixel)
   { return pixel.GetNthComponent(c); }
 
   /** Set the nth component of the pixel. */
-  static void SetNthComponent(int c, PixelType& pixel, const ComponentType& v) 
+  static void SetNthComponent(int c, PixelType& pixel, const ComponentType& v)
   { pixel.SetNthComponent(c, v); }
   static void SetNthComponent(int c, PixelType & pixel, const PixelType& v)
   { pixel = v; }

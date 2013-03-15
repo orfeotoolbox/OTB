@@ -53,7 +53,6 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
