@@ -283,9 +283,20 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
       PixelType pixval;
       const OutputType value
         = m_Interpolator->EvaluateAtContinuousIndex(inputIndex);
-      pixval = static_cast<PixelType>(
-               NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
-                                     );
+
+      if( value < minOutputValue )
+        {
+        pixval = minValue;
+        }
+      else if( value > maxOutputValue )
+        {
+        pixval = maxValue;
+        }
+      else
+        {
+        pixval = static_cast<PixelType>( value );
+        }
+
       outIt.Set( pixval );
       }
     else
@@ -455,9 +466,19 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
         const OutputType value
           = m_Interpolator->EvaluateAtContinuousIndex(inputIndex);
 
-        pixval = static_cast<PixelType>(
-                 NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
-                                        );
+        if( value < minOutputValue )
+          {
+          pixval = minValue;
+          }
+        else if( value > maxOutputValue )
+          {
+          pixval = maxValue;
+          }
+        else
+          {
+          pixval = static_cast<PixelType>( value );
+          }
+
         outIt.Set( pixval );
         }
       else

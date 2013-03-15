@@ -358,9 +358,18 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
         const OutputType value = m_BSplineInterpolator
                                    ->EvaluateAtContinuousIndex(inputIndex,
                                                                       threadId);
-        pixval = static_cast<PixelType>(
-                 NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
-                                       );
+        if( value < minOutputValue )
+          {
+          pixval = minValue;
+          }
+        else if( value > maxOutputValue )
+          {
+          pixval = maxValue;
+          }
+        else
+          {
+          pixval = static_cast<PixelType>( value );
+          }
 
         outIt.Set( pixval );
         }
@@ -415,9 +424,19 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
         const OutputType value = m_LinearInterpolator
                                    ->EvaluateAtContinuousIndex(inputIndex);
 
-        pixval = static_cast<PixelType>(
-                 NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
-                                       );
+        if( value < minOutputValue )
+          {
+          pixval = minValue;
+          }
+        else if( value > maxOutputValue )
+          {
+          pixval = maxValue;
+          }
+        else
+          {
+          pixval = static_cast<PixelType>( value );
+          }
+
         outIt.Set( pixval );
         }
       else
@@ -471,9 +490,19 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
         const OutputType value = m_Interpolator
                                    ->EvaluateAtContinuousIndex(inputIndex);
 
-        pixval = static_cast<PixelType>(
-                 NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
-                                       );
+        if( value < minOutputValue )
+          {
+          pixval = minValue;
+          }
+        else if( value > maxOutputValue )
+          {
+          pixval = maxValue;
+          }
+        else
+          {
+          pixval = static_cast<PixelType>( value );
+          }
+
         outIt.Set( pixval );
         }
       else
@@ -679,9 +708,19 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
         value = m_Interpolator->EvaluateAtContinuousIndex(inputIndex);
         }
 
-      pixval = static_cast<PixelType>(
-               NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
-                                     );
+      if( value < minOutputValue )
+        {
+        pixval = minValue;
+        }
+      else if( value > maxOutputValue )
+        {
+        pixval = maxValue;
+        }
+      else
+        {
+        pixval = static_cast<PixelType>( value );
+        }
+
       outIt.Set( pixval );
 
       progress.CompletedPixel();
@@ -712,9 +751,19 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
           value = m_Interpolator->EvaluateAtContinuousIndex(inputIndex);
           }
 
-        pixval = static_cast<PixelType>(
-                 NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
-                                       );
+        if( value < minOutputValue )
+          {
+          pixval = minValue;
+          }
+        else if( value > maxOutputValue )
+          {
+          pixval = maxValue;
+          }
+        else
+          {
+          pixval = static_cast<PixelType>( value );
+          }
+
         outIt.Set( pixval );
         }
       else
