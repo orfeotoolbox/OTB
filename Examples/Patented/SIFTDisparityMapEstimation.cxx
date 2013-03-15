@@ -54,7 +54,6 @@
 #pragma warning(pop)
 #endif
 
-#include "itkWarpImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
