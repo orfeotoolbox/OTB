@@ -62,13 +62,25 @@ OTB_TEST_APPLICATION(NAME apTvDmFineRegistrationTest
 #--- StereoRectificationGridGenerator ---#
 OTB_TEST_APPLICATION(NAME apTuDmStereoRectificationGridGeneratorTest
                      APP  StereoRectificationGridGenerator
+                     
                      OPTIONS -io.inleft ${EXAMPLEDATA}/sensor_stereo_left.tif
                              -io.inright ${EXAMPLEDATA}/sensor_stereo_right.tif
                              -io.outleft ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
                              -io.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
+                             -inverse.outleft  ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseLeftTest.tif
+                             -inverse.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseRightTest.tif
                              -epi.elevation.default 140
                              -epi.scale 1.0
                              -epi.step 4
+                     VALID   --compare-n-images ${EPSILON_10} 4
+                             ${BASELINE}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
+                             ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
+                             ${BASELINE}/apTvDmStereoRectificationGridGeneratorRightTest.tif
+                             ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
+                             ${BASELINE}/apTvDmStereoRectificationGridGeneratorInverseLeftTest.tif
+                             ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseLeftTest.tif
+                             ${BASELINE}/apTvDmStereoRectificationGridGeneratorInverseRightTest.tif
+                             ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseRightTest.tif
                      )
 
 #--- GridBasedImageResampling ---#
