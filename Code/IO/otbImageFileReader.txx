@@ -20,11 +20,17 @@
 
 #include "otbImageFileReader.h"
 
+#include <itksys/SystemTools.hxx>
 #include <fstream>
 
-#include "itksys/SystemTools.hxx"
+#include "itkObjectFactory.h"
+#include "itkImageIOFactory.h"
+#include "itkImageRegion.h"
+#include "itkPixelTraits.h"
+#include "itkVectorImage.h"
 #include "itkMetaDataObject.h"
 
+#include "otbConvertPixelBuffer.h"
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbImageIOFactory.h"
@@ -52,25 +58,29 @@ bool PixelIsComplex(const T& /*dummy*/)
   return false;
 }
 
-template <class TOutputImage>
-ImageFileReader<TOutputImage>
-::ImageFileReader() : itk::ImageFileReader<TOutputImage>()
+template <class TOutputImage, class ConvertPixelTraits>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
+::ImageFileReader()
+ : m_ImageIO(),
+   m_UserSpecifiedImageIO(false),
+   m_FileName(""),
+   m_UseStreaming(true),
+   m_ExceptionMessage(""),
+   m_ActualIORegion(),
+   m_FilenameHelper(FNameHelperType::New()),
+   m_Curl(CurlHelper::New()),
+   m_AdditionalNumber(0)
 {
-  m_Curl = CurlHelper::New();
-
-  m_FilenameHelper = FNameHelperType::New();
-
-  m_AdditionalNumber = 0;
 }
 
-template <class TOutputImage>
-ImageFileReader<TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::~ImageFileReader()
 {
 }
 
-template <class TOutputImage>
-void ImageFileReader<TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
+void ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -87,11 +97,28 @@ void ImageFileReader<TOutputImage>
 
   os << indent << "UserSpecifiedImageIO flag: " << this->m_UserSpecifiedImageIO << "\n";
   os << indent << "m_FileName: " << this->m_FileName << "\n";
+  os << indent << "m_UseStreaming flag: " << this->m_UseStreaming << "\n";
+  os << indent << "m_ActualIORegion: " << this->m_ActualIORegion << "\n";
+  os << indent << "m_AdditionalNumber: " << this->m_AdditionalNumber << "\n";
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 void
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
+::SetImageIO( itk::ImageIOBase * imageIO)
+{
+  itkDebugMacro("setting ImageIO to " << imageIO );
+  if (this->m_ImageIO != imageIO )
+    {
+    this->m_ImageIO = imageIO;
+    this->Modified();
+    }
+  m_UserSpecifiedImageIO = true;
+}
+
+template <class TOutputImage, class ConvertPixelTraits>
+void
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GenerateData()
 {
 
@@ -152,11 +179,11 @@ ImageFileReader<TOutputImage>
 
   this->m_ImageIO->SetIORegion(ioRegion);
 
-  typedef itk::DefaultConvertPixelTraits<typename TOutputImage::IOPixelType> ConvertIOPixelTraits;
-  typedef itk::DefaultConvertPixelTraits<typename TOutputImage::PixelType> ConvertPixelTraits;
+  typedef otb::DefaultConvertPixelTraits<typename TOutputImage::IOPixelType> ConvertIOPixelTraits;
+  typedef otb::DefaultConvertPixelTraits<typename TOutputImage::PixelType>   ConvertOutputPixelTraits;
 
   if (this->m_ImageIO->GetComponentTypeInfo()
-      == typeid(typename ConvertPixelTraits::ComponentType)
+      == typeid(typename ConvertOutputPixelTraits::ComponentType)
       && (this->m_ImageIO->GetNumberOfComponents()
           == ConvertIOPixelTraits::GetNumberOfComponents()))
     {
@@ -189,9 +216,9 @@ ImageFileReader<TOutputImage>
     }
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 void
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::EnlargeOutputRequestedRegion(itk::DataObject *output)
 {
   typename TOutputImage::Pointer out = dynamic_cast<TOutputImage*>(output);
@@ -206,15 +233,15 @@ ImageFileReader<TOutputImage>
       }
     else
       {
-      throw itk::ImageFileReaderException(__FILE__, __LINE__,
+      throw otb::ImageFileReaderException(__FILE__, __LINE__,
                                           "Invalid output object type");
       }
     }
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 void
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GenerateOutputInformation(void)
 {
 
@@ -226,7 +253,7 @@ ImageFileReader<TOutputImage>
   //
   if (this->m_FileName == "")
     {
-    throw itk::ImageFileReaderException(__FILE__, __LINE__, "FileName must be specified");
+    throw otb::ImageFileReaderException(__FILE__, __LINE__, "FileName must be specified");
     }
 
   // Find real image file name
@@ -265,7 +292,7 @@ ImageFileReader<TOutputImage>
   if (this->m_ImageIO.IsNull())
     {
     this->Print(std::cerr);
-    itk::ImageFileReaderException e(__FILE__, __LINE__);
+    otb::ImageFileReaderException e(__FILE__, __LINE__);
     std::ostringstream msg;
     msg << " Could not create IO object for file "
         << this->m_FileName.c_str() << std::endl;
@@ -510,9 +537,9 @@ ImageFileReader<TOutputImage>
 
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 void
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::TestFileExistanceAndReadability()
 {
   // Test if the file a server name
@@ -524,7 +551,7 @@ ImageFileReader<TOutputImage>
     // If the url is not available
     if (!m_Curl->TestUrlAvailability(this->m_FileName))
       {
-      itk::ImageFileReaderException e(__FILE__, __LINE__);
+      otb::ImageFileReaderException e(__FILE__, __LINE__);
       std::ostringstream msg;
       msg << "File name is an http address, but curl fails to connect to it "
           << std::endl << "Filename = " << this->m_FileName
@@ -538,7 +565,7 @@ ImageFileReader<TOutputImage>
   // Test if the file exists.
   if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
     {
-    itk::ImageFileReaderException e(__FILE__, __LINE__);
+    otb::ImageFileReaderException e(__FILE__, __LINE__);
     std::ostringstream msg;
     msg << "The file doesn't exist. "
         << std::endl << "Filename = " << this->m_FileName
@@ -561,7 +588,7 @@ ImageFileReader<TOutputImage>
       msg << "The file couldn't be opened for reading. "
           << std::endl << "Filename: " << this->m_FileName
           << std::endl;
-      itk::ImageFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+      otb::ImageFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
       throw e;
       return;
 
@@ -570,9 +597,9 @@ ImageFileReader<TOutputImage>
     }
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 bool
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName)
 {
   std::vector<std::string> listFileSearch;
@@ -631,17 +658,17 @@ ImageFileReader<TOutputImage>
   return (fic_trouve);
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 void
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::SetFileName(std::string extendedFileName)
 {
   this->SetFileName(extendedFileName.c_str());
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 void
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::SetFileName(const char* extendedFileName)
 {
   this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
@@ -649,17 +676,17 @@ ImageFileReader<TOutputImage>
   this->Modified();
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 const char*
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GetFileName () const
 {
 return this->m_FilenameHelper->GetSimpleFileName();
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 std::vector<unsigned int>
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GetAvailableResolutions()
  {
   this->UpdateOutputInformation();
@@ -689,9 +716,9 @@ ImageFileReader<TOutputImage>
   return res;
  }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 bool
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GetResolutionsInfo( std::vector<unsigned int>& res, std::vector<std::string>& desc)
  {
   this->UpdateOutputInformation();
@@ -730,9 +757,9 @@ ImageFileReader<TOutputImage>
   return true;
  }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 unsigned int
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GetNbOfAvailableOverviews()
  {
   this->UpdateOutputInformation();
@@ -757,9 +784,9 @@ ImageFileReader<TOutputImage>
   return 0;
  }
 
-template <class TOutputImage>
+template <class TOutputImage, class ConvertPixelTraits>
 bool
-ImageFileReader<TOutputImage>
+ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::HasOverviewsSupport()
  {
   this->UpdateOutputInformation();
@@ -782,6 +809,156 @@ ImageFileReader<TOutputImage>
   return false;
  }
 
+template <class TOutputImage, class ConvertPixelTraits>
+void
+ImageFileReader<TOutputImage, ConvertPixelTraits>
+::DoConvertBuffer(void* inputData,
+                  size_t numberOfPixels)
+{
+  // get the pointer to the destination buffer
+  OutputImagePixelType *outputData =
+    this->GetOutput()->GetPixelContainer()->GetBufferPointer();
+
+  // TODO:
+  // Pass down the PixelType (RGB, VECTOR, etc.) so that any vector to
+  // scalar conversion be type specific. i.e. RGB to scalar would use
+  // a formula to convert to luminance, VECTOR to scalar would use
+  // vector magnitude.
+
+
+  // Create a macro as this code is a bit lengthy and repetitive
+  // if the ImageIO pixel type is typeid(type) then use the ConvertPixelBuffer
+  // class to convert the data block to TOutputImage's pixel type
+  // see DefaultConvertPixelTraits and ConvertPixelBuffer
+
+  // The first else if block applies only to images of type itk::VectorImage
+  // VectorImage needs to copy out the buffer differently.. The buffer is of
+  // type InternalPixelType, but each pixel is really 'k' consecutive pixels.
+
+#define OTB_CONVERT_BUFFER_IF_BLOCK(type)               \
+ else if( m_ImageIO->GetComponentTypeInfo() == typeid(type) )   \
+   {   \
+   if( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 ) \
+     { \
+     ConvertPixelBuffer<                                 \
+      type,                                             \
+      OutputImagePixelType,                             \
+      ConvertPixelTraits                                \
+      >                                                 \
+      ::ConvertVectorImage(                             \
+       static_cast<type*>(inputData),                  \
+       m_ImageIO->GetNumberOfComponents(),             \
+       outputData,                                     \
+       numberOfPixels);              \
+     } \
+   else \
+     { \
+     ConvertPixelBuffer<                                 \
+      type,                                             \
+      OutputImagePixelType,                             \
+      ConvertPixelTraits                                \
+      >                                                 \
+      ::Convert(                                        \
+        static_cast<type*>(inputData),                  \
+        m_ImageIO->GetNumberOfComponents(),             \
+        outputData,                                     \
+        numberOfPixels);              \
+      } \
+    }
+#define OTB_CONVERT_CBUFFER_IF_BLOCK(type)               \
+ else if( m_ImageIO->GetComponentTypeInfo() == typeid(type) )   \
+   {  \
+   if( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 ) \
+     { \
+     if( (typeid(OutputImagePixelType) == typeid(std::complex<double>))     \
+         || (typeid(OutputImagePixelType) == typeid(std::complex<float>))   \
+         || (typeid(OutputImagePixelType) == typeid(std::complex<int>))     \
+         || (typeid(OutputImagePixelType) == typeid(std::complex<short>)) ) \
+       {\
+       ConvertPixelBuffer<                                 \
+        type::value_type,        \
+        OutputImagePixelType,                             \
+        ConvertPixelTraits                                \
+        >                                                 \
+        ::ConvertComplexVectorImageToVectorImageComplex(                             \
+         static_cast<type*>(inputData),                \
+         m_ImageIO->GetNumberOfComponents(),             \
+         outputData,                                     \
+         numberOfPixels); \
+       }\
+     else\
+       {\
+       ConvertPixelBuffer<                                 \
+        type::value_type,        \
+        OutputImagePixelType,                             \
+        ConvertPixelTraits                                \
+        >                                                  \
+        ::ConvertComplexVectorImageToVectorImage(                             \
+         static_cast<type*>(inputData),                \
+         m_ImageIO->GetNumberOfComponents(),             \
+         outputData,                                     \
+         numberOfPixels);              \
+       }\
+     } \
+   else \
+     { \
+     ConvertPixelBuffer<                                 \
+      type::value_type,        \
+      OutputImagePixelType,                             \
+      ConvertPixelTraits                                \
+      >                                                 \
+      ::ConvertComplexToGray(                                        \
+       static_cast<type*>(inputData),                  \
+       m_ImageIO->GetNumberOfComponents(),             \
+       outputData,                                     \
+       numberOfPixels);              \
+     } \
+   }
+
+  if(0)
+    {
+    }
+  OTB_CONVERT_BUFFER_IF_BLOCK(unsigned char)
+  OTB_CONVERT_BUFFER_IF_BLOCK(char)
+  OTB_CONVERT_BUFFER_IF_BLOCK(unsigned short)
+  OTB_CONVERT_BUFFER_IF_BLOCK(short)
+  OTB_CONVERT_BUFFER_IF_BLOCK(unsigned int)
+  OTB_CONVERT_BUFFER_IF_BLOCK(int)
+  OTB_CONVERT_BUFFER_IF_BLOCK(unsigned long)
+  OTB_CONVERT_BUFFER_IF_BLOCK(long)
+  OTB_CONVERT_BUFFER_IF_BLOCK(float)
+  OTB_CONVERT_BUFFER_IF_BLOCK(double)
+  OTB_CONVERT_CBUFFER_IF_BLOCK(std::complex<short>)
+  OTB_CONVERT_CBUFFER_IF_BLOCK(std::complex<int>)
+  OTB_CONVERT_CBUFFER_IF_BLOCK(std::complex<float>)
+  OTB_CONVERT_CBUFFER_IF_BLOCK(std::complex<double>)
+  else
+    {
+    otb::ImageFileReaderException e(__FILE__, __LINE__);
+    std::ostringstream msg;
+    msg <<"Couldn't convert component type: "
+        << std::endl << "    "
+        << m_ImageIO->GetComponentTypeAsString(m_ImageIO->GetComponentType())
+        << std::endl << "to one of: "
+        << std::endl << "    " << typeid(unsigned char).name()
+        << std::endl << "    " << typeid(char).name()
+        << std::endl << "    " << typeid(unsigned short).name()
+        << std::endl << "    " << typeid(short).name()
+        << std::endl << "    " << typeid(unsigned int).name()
+        << std::endl << "    " << typeid(int).name()
+        << std::endl << "    " << typeid(unsigned long).name()
+        << std::endl << "    " << typeid(long).name()
+        << std::endl << "    " << typeid(float).name()
+        << std::endl << "    " << typeid(double).name()
+        << std::endl;
+    e.SetDescription(msg.str().c_str());
+    e.SetLocation(ITK_LOCATION);
+    throw e;
+    return;
+    }
+#undef OTB_CONVERT_BUFFER_IF_BLOCK
+#undef OTB_CONVERT_CBUFFER_IF_BLOCK
+}
 
 } //namespace otb
 
