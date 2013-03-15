@@ -45,7 +45,7 @@
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkGradientDescentOptimizer.h"
 #include "otbBSplinesInterpolateDeformationFieldGenerator.h"
-#include "itkWarpImageFilter.h"
+#include "otbWarpImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
@@ -417,7 +417,7 @@ int main(int argc, char* argv[])
 
   // Software Guide :  BeginCodeSnippet
 
-  typedef itk::WarpImageFilter<ImageType, ImageType,
+  typedef otb::WarpImageFilter<ImageType, ImageType,
       DeformationFieldType> ImageWarperType;
   // Software Guide : EndCodeSnippet
 

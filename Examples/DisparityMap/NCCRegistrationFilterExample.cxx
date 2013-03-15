@@ -40,7 +40,7 @@
 // Software Guide : BeginCodeSnippet
 #include "otbNCCRegistrationFilter.h"
 #include "itkRecursiveGaussianImageFilter.h"
-#include "itkWarpImageFilter.h"
+#include "otbWarpImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbImageOfVectorsToMonoChannelExtractROI.h"
@@ -210,7 +210,7 @@ int main(int argc, char** argv)
   dfWriter->SetFileName(argv[4]);
   dfWriter->Update();
 
-  typedef itk::WarpImageFilter<MovingImageType, MovingImageType,
+  typedef otb::WarpImageFilter<MovingImageType, MovingImageType,
       DeformationFieldType> WarperType;
   WarperType::Pointer warper = WarperType::New();
 
