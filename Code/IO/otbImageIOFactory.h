@@ -27,12 +27,12 @@ namespace otb
 /** \class ImageIOFactory
  * \brief Creation of object instance using object factory.
  */
-class ITK_EXPORT ImageIOFactory : public itk::ImageIOFactory
+class ITK_EXPORT ImageIOFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */
   typedef ImageIOFactory                Self;
-  typedef itk::ImageIOFactory           Superclass;
+  typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -42,10 +42,10 @@ public:
   itkTypeMacro(ImageIOFactory, itk::ImageIOFactory);
 
   /** Convenient typedefs. */
-  typedef::otb::ImageIOBase::Pointer ImageIOBasePointer;
+  typedef ::otb::ImageIOBase::Pointer ImageIOBasePointer;
 
   /** Mode in which the files is intended to be used */
-//  typedef enum { ReadMode, WriteMode } FileModeType;
+  typedef enum { ReadMode, WriteMode } FileModeType;
 
   /** Create the appropriate ImageIO depending on the particulars of the file. */
   static ImageIOBasePointer CreateImageIO(const char* path, FileModeType mode);

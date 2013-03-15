@@ -286,7 +286,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   if (this->m_UserSpecifiedImageIO == false)   //try creating via factory
     {
-    this->m_ImageIO = ImageIOFactory::CreateImageIO(this->m_FileName.c_str(), itk::ImageIOFactory::ReadMode);
+    this->m_ImageIO = ImageIOFactory::CreateImageIO(this->m_FileName.c_str(), otb::ImageIOFactory::ReadMode);
     }
 
   if (this->m_ImageIO.IsNull())

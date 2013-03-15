@@ -48,7 +48,7 @@ int otbVectorImageComplexGenericTest(int argc, char* argv[])
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
   std::cout << reader->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
-  itk::ImageIOBase::Pointer io = reader->GetImageIO();
+  otb::ImageIOBase::Pointer io = reader->GetImageIO();
   std::cout << io << std::endl;
   reader->Update();
   typename ImageType::IndexType index;
@@ -89,7 +89,7 @@ int otbImageComplexGenericTest(int argc, char* argv[])
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
   std::cout << reader->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
-  itk::ImageIOBase::Pointer io = reader->GetImageIO();
+  otb::ImageIOBase::Pointer io = reader->GetImageIO();
   std::cout << io << std::endl;
   reader->Update();
   typename ImageType::IndexType index;
@@ -144,7 +144,7 @@ int otbVectorImageComplexIntoRealGenericTest(int argc, char* argv[])
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
   std::cout << reader->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
-  itk::ImageIOBase::Pointer io = reader->GetImageIO();
+  otb::ImageIOBase::Pointer io = reader->GetImageIO();
   std::cout << io << std::endl;
   reader->Update();
   typename ImageType::IndexType index;
