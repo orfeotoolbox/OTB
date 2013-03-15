@@ -22,7 +22,7 @@
 
 // Elevation handler
 #include "otbWrapperElevationParametersHandler.h"
-#include "itkInverseDeformationFieldImageFilter.h"
+#include "otbInverseDeformationFieldImageFilter.h"
 #include "itkVectorCastImageFilter.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "otbImageList.h"
@@ -54,7 +54,7 @@ public:
   <FloatVectorImageType,
    DeformationFieldType>                      DeformationFieldCastFilterType;
 
-  typedef itk::InverseDeformationFieldImageFilter
+  typedef otb::InverseDeformationFieldImageFilter
   <DeformationFieldType,DeformationFieldType> InverseDeformationFieldFilterType;
 
   typedef itk::VectorIndexSelectionCastImageFilter<DeformationFieldType,
