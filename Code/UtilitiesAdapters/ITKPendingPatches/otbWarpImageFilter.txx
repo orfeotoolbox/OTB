@@ -26,7 +26,7 @@
 #include "vnl/vnl_math.h"
 
 #include "itkVariableLengthVector.h"
-#include "otbPixelBuilder.h"
+#include "itkPixelBuilder.h"
 
 namespace otb
 {
@@ -46,7 +46,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   m_OutputOrigin.Fill( 0.0 );
   m_OutputDirection.SetIdentity();
   m_OutputSize.Fill(0);
-  PixelBuilder<PixelType>::Zero(m_EdgePaddingValue,1);
+  itk::PixelBuilder<PixelType>::Zero(m_EdgePaddingValue,1);
   m_OutputStartIndex.Fill(0);
   // Setup default interpolator
   typename DefaultInterpolatorType::Pointer interp =
