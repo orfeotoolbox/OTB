@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkInverseDeformationFieldImageFilter.txx,v $
+  Module:    itkInverseDeformationFieldImageFilter.txx
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:11 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -189,7 +189,7 @@ InverseDeformationFieldImageFilter<TInputImage,TOutputImage>
 
     for(unsigned int i=0; i < ImageDimension; i++)
       {
-      targetPoint[i] = sourcePoint[i]+value[i];
+      targetPoint[i] = -value[i];
       }
     target->InsertElement( landmarkId, targetPoint );  // revert direction of displacement
 
@@ -199,8 +199,8 @@ InverseDeformationFieldImageFilter<TInputImage,TOutputImage>
 
   itkDebugMacro( << "Number of Landmarks created = " <<  numberOfLandmarks );
 
-  m_KernelTransform->GetTargetLandmarks()->SetPoints( source );
-  m_KernelTransform->GetSourceLandmarks()->SetPoints( target );
+  m_KernelTransform->GetTargetLandmarks()->SetPoints( target );
+  m_KernelTransform->GetSourceLandmarks()->SetPoints( source );
 
   itkDebugMacro( << "Before ComputeWMatrix() ");
   
@@ -269,7 +269,7 @@ InverseDeformationFieldImageFilter<TInputImage,TOutputImage>
 
     for(unsigned int i=0; i < ImageDimension; i++)
       {
-      inverseDisplacement[i] = interpolation[i]-outputPoint[i];
+      inverseDisplacement[i] = interpolation[i];
       }
 
     outIt.Set( inverseDisplacement ); // set inverse displacement.

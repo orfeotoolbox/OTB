@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkInverseDeformationFieldImageFilter.h,v $
+  Module:    itkInverseDeformationFieldImageFilter.h
   Language:  C++
-  Date:      $Date: 2009-04-25 12:27:27 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
