@@ -1181,7 +1181,7 @@ ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
   return splitRegion;
 }
 
-ImageIORegion 
+itk::ImageIORegion
 ImageIOBase::GetSplitRegionForWriting(unsigned int ithPiece, 
                                       unsigned int numberOfActualSplits,
                                       const itk::ImageIORegion &pasteRegion,
