@@ -32,6 +32,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OssimAdapters
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/TinyXMLAdapters
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OGRAdapters
+  ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/ITKPendingPatches
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters
   ${OTB_SOURCE_DIR}/Code/Visu
   ${OTB_SOURCE_DIR}/Code/Visualization
