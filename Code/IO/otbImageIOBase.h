@@ -379,10 +379,10 @@ public:
    *
    * Derieved classes should overload this method to return a compatible region
    */
-  virtual ImageIORegion GetSplitRegionForWriting(unsigned int ithPiece, 
-                                                 unsigned int numberOfActualSplits,
-                                                 const itk::ImageIORegion &pasteRegion,
-                                                 const itk::ImageIORegion &largestPossibleRegion);
+  virtual itk::ImageIORegion GetSplitRegionForWriting(unsigned int ithPiece,
+                                                      unsigned int numberOfActualSplits,
+                                                      const itk::ImageIORegion &pasteRegion,
+                                                      const itk::ImageIORegion &largestPossibleRegion);
 
   /** Type for the list of strings to be used for extensions.  */
   typedef  std::vector< std::string >    ArrayOfExtensionsType;
