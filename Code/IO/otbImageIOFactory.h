@@ -19,7 +19,7 @@
 #define __otbImageIOFactory_h
 
 #include "itkObject.h"
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 #include "itkImageIOFactory.h"
 
 namespace otb
@@ -42,7 +42,7 @@ public:
   itkTypeMacro(ImageIOFactory, itk::ImageIOFactory);
 
   /** Convenient typedefs. */
-  typedef::itk::ImageIOBase::Pointer ImageIOBasePointer;
+  typedef::otb::ImageIOBase::Pointer ImageIOBasePointer;
 
   /** Mode in which the files is intended to be used */
 //  typedef enum { ReadMode, WriteMode } FileModeType;

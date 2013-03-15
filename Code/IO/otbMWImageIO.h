@@ -18,7 +18,7 @@
 #ifndef __otbMWImageIO_h
 #define __otbMWImageIO_h
 
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 #include <fstream>
 #include <string>
 #include <vector>
@@ -35,13 +35,13 @@ namespace otb
  * \ingroup IOFilters
  *
  */
-class ITK_EXPORT MWImageIO : public itk::ImageIOBase
+class ITK_EXPORT MWImageIO : public otb::ImageIOBase
 {
 public:
 
   /** Standard class typedefs. */
   typedef MWImageIO               Self;
-  typedef itk::ImageIOBase        Superclass;
+  typedef otb::ImageIOBase        Superclass;
   typedef itk::SmartPointer<Self> Pointer;
 
   /** Byte order typedef */
@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MWImageIO, itk::ImageIOBase);
+  itkTypeMacro(MWImageIO, otb::ImageIOBase);
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -152,7 +152,7 @@ private:
 
   bool                        m_FlagWriteImageInformation;
   std::string                 m_TypeMW; //used for write
-  itk::ImageIOBase::ByteOrder m_FileByteOrder;
+  otb::ImageIOBase::ByteOrder m_FileByteOrder;
   std::fstream                m_File;
   unsigned int                m_Ncom;
 

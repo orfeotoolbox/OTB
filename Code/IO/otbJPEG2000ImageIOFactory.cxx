@@ -26,7 +26,7 @@ namespace otb
 
 JPEG2000ImageIOFactory::JPEG2000ImageIOFactory()
 {
-  this->RegisterOverride("itkImageIOBase",
+  this->RegisterOverride("otbImageIOBase",
                          "otbJPEG2000ImageIO",
                          "JPEG2000 Image IO",
                          1,

@@ -26,7 +26,7 @@ namespace otb
 
 TileMapImageIOFactory::TileMapImageIOFactory()
 {
-  this->RegisterOverride("itkImageIOBase",
+  this->RegisterOverride("otbImageIOBase",
                          "otbTileMapImageIO",
                          "TileMap Image IO",
                          1,

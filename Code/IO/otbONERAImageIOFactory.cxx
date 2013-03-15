@@ -26,7 +26,7 @@ namespace otb
 
 ONERAImageIOFactory::ONERAImageIOFactory()
 {
-  this->RegisterOverride("itkImageIOBase",
+  this->RegisterOverride("otbImageIOBase",
                          "otbONERAImageIO",
                          "ONERA Image IO",
                          1,

@@ -26,7 +26,7 @@ namespace otb
 
 GDALImageIOFactory::GDALImageIOFactory()
 {
-  this->RegisterOverride("itkImageIOBase",
+  this->RegisterOverride("otbImageIOBase",
                          "otbGDALImageIO",
                          "GDAL Image IO",
                          1,

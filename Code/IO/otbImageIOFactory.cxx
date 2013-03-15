@@ -39,7 +39,7 @@
 namespace otb
 {
 
-itk::ImageIOBase::Pointer
+otb::ImageIOBase::Pointer
 ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
 {
 

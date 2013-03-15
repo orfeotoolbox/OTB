@@ -19,7 +19,7 @@
 #define __otbImageFileReader_h
 
 #include "itkImageSource.h"
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 #include "itkExceptionObject.h"
 #include "itkSize.h"
 #include "itkImageRegion.h"
@@ -129,8 +129,8 @@ public:
    * instance that is created. Or you can directly specify the ImageIO
    * to use to read a particular file in case the factory mechanism will
    * not work properly (e.g., unknown or unusual extension). */
-  void  SetImageIO( itk::ImageIOBase * imageIO );
-  itkGetObjectMacro(ImageIO,itk::ImageIOBase);
+  void  SetImageIO( otb::ImageIOBase * imageIO );
+  itkGetObjectMacro(ImageIO,otb::ImageIOBase);
 
   itkSetObjectMacro(Curl, CurlHelperInterface);
 
@@ -178,7 +178,7 @@ private:
   ImageFileReader(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  itk::ImageIOBase::Pointer m_ImageIO;
+  otb::ImageIOBase::Pointer m_ImageIO;
   bool                 m_UserSpecifiedImageIO; // keep track whether the
                                                // ImageIO is user specified
 

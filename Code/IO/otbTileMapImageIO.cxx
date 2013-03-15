@@ -222,7 +222,7 @@ bool TileMapImageIO::CanReadFromCache(const std::string& filename)
     return false;
     }
 
-  itk::ImageIOBase::Pointer imageIO;
+  otb::ImageIOBase::Pointer imageIO;
   imageIO = otb::GDALImageIO::New();
   return imageIO->CanReadFile(filename.c_str());
 }
@@ -344,7 +344,7 @@ void TileMapImageIO::ReadTile(const std::string& filename, void * buffer)
   otbMsgDevMacro(<< "Retrieving " << filename);
   unsigned char *           bufferCacheFault = NULL;
 
-  itk::ImageIOBase::Pointer imageIO;
+  otb::ImageIOBase::Pointer imageIO;
   imageIO = otb::GDALImageIO::New();
 
   bool lCanRead = imageIO->CanReadFile(filename.c_str());
@@ -642,7 +642,7 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
   std::ostringstream filename;
   BuildFileName(quad, filename);
 
-  itk::ImageIOBase::Pointer imageIO;
+  otb::ImageIOBase::Pointer imageIO;
   imageIO = otb::GDALImageIO::New();
   bool lCanWrite = imageIO->CanWriteFile(filename.str().c_str());
 

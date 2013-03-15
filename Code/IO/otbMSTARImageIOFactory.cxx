@@ -25,7 +25,7 @@ namespace otb
 
 MSTARImageIOFactory::MSTARImageIOFactory()
 {
-  this->RegisterOverride("itkImageIOBase",
+  this->RegisterOverride("otbImageIOBase",
                          "otbMSTARImageIO",
                          "MSTAR Image IO",
                          1,

@@ -19,7 +19,7 @@
 #define __otbMSTARImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 
 namespace otb
 {

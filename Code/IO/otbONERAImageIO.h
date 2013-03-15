@@ -19,7 +19,7 @@
 #define __otbONERAImageIO_h
 
 #include "itkByteSwapper.h"
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 #include <fstream>
 
 namespace otb
@@ -34,7 +34,7 @@ namespace otb
  * \ingroup IOFilters
  *
  */
-class ITK_EXPORT ONERAImageIO : public itk::ImageIOBase
+class ITK_EXPORT ONERAImageIO : public otb::ImageIOBase
 {
 public:
 
@@ -42,14 +42,14 @@ public:
 
   /** Standard class typedefs. */
   typedef ONERAImageIO            Self;
-  typedef itk::ImageIOBase        Superclass;
+  typedef otb::ImageIOBase        Superclass;
   typedef itk::SmartPointer<Self> Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ONERAImageIO, itk::ImageIOBase);
+  itkTypeMacro(ONERAImageIO, otb::ImageIOBase);
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -158,7 +158,7 @@ private:
   int  m_BytePerPixel;
   bool m_FlagWriteImageInformation;
   /** File byte order */
-  itk::ImageIOBase::ByteOrder m_FileByteOrder;
+  otb::ImageIOBase::ByteOrder m_FileByteOrder;
 
 };
 

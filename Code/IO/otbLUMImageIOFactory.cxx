@@ -26,7 +26,7 @@ namespace otb
 
 LUMImageIOFactory::LUMImageIOFactory()
 {
-  this->RegisterOverride("itkImageIOBase",
+  this->RegisterOverride("otbImageIOBase",
                          "otbLUMImageIO",
                          "LUM Image IO",
                          1,

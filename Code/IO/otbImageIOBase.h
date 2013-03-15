@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkImageIOBase.h,v $
+  Module:    $RCSfile: otbImageIOBase.h,v $
   Language:  C++
   Date:      $Date: 2009-11-29 15:51:11 $
   Version:   $Revision: 1.56 $
@@ -532,4 +532,4 @@ private:
 
 } // end namespace itk
 
-#endif // __itkImageIOBase_h
+#endif // __otbImageIOBase_h

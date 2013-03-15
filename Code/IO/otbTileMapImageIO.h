@@ -26,7 +26,7 @@
 
 /* ITK Libraries */
 #include "otbMacro.h"
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 #include "otbImageRegionTileMapSplitter.h"
 
 #include "otbCurlHelperInterface.h"
@@ -45,7 +45,7 @@ enum TileMapAdressingStyle {GM = 0, OSM = 1, NEARMAP = 2, LOCAL = 3};
    *
    *
  */
-class ITK_EXPORT TileMapImageIO : public itk::ImageIOBase
+class ITK_EXPORT TileMapImageIO : public otb::ImageIOBase
 {
 public:
 
@@ -53,14 +53,14 @@ public:
 
   /** Standard class typedefs. */
   typedef TileMapImageIO          Self;
-  typedef itk::ImageIOBase        Superclass;
+  typedef otb::ImageIOBase        Superclass;
   typedef itk::SmartPointer<Self> Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TileMapImageIO, itk::ImageIOBase);
+  itkTypeMacro(TileMapImageIO, otb::ImageIOBase);
 
   typedef itk::ImageIORegion ImageIORegion;
 

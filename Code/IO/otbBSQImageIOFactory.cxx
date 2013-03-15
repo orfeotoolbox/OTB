@@ -26,7 +26,7 @@ namespace otb
 
 BSQImageIOFactory::BSQImageIOFactory()
 {
-  this->RegisterOverride("itkImageIOBase",
+  this->RegisterOverride("otbImageIOBase",
                          "otbBSQImageIO",
                          "BSQ Image IO",
                          1,

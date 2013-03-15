@@ -18,7 +18,7 @@
 #ifndef __otbRADImageIO_h
 #define __otbRADImageIO_h
 
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 #include <fstream>
 #include <string>
 #include <vector>
@@ -35,13 +35,13 @@ namespace otb
  * \ingroup IOFilters
  *
  */
-class ITK_EXPORT RADImageIO : public itk::ImageIOBase
+class ITK_EXPORT RADImageIO : public otb::ImageIOBase
 {
 public:
 
   /** Standard class typedefs. */
   typedef RADImageIO              Self;
-  typedef itk::ImageIOBase        Superclass;
+  typedef otb::ImageIOBase        Superclass;
   typedef itk::SmartPointer<Self> Pointer;
 
   /** Byte order typedef */
@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RADImageIO, itk::ImageIOBase);
+  itkTypeMacro(RADImageIO, otb::ImageIOBase);
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -149,7 +149,7 @@ private:
     }
 
   bool                        m_FlagWriteImageInformation;
-  itk::ImageIOBase::ByteOrder m_FileByteOrder;
+  otb::ImageIOBase::ByteOrder m_FileByteOrder;
   std::fstream                m_HeaderFile;
   std::string                 m_TypeRAD;
   std::vector<std::string>    m_ChannelsFileName;

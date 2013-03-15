@@ -105,7 +105,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
 template <class TOutputImage, class ConvertPixelTraits>
 void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::SetImageIO( itk::ImageIOBase * imageIO)
+::SetImageIO( otb::ImageIOBase * imageIO)
 {
   itkDebugMacro("setting ImageIO to " << imageIO );
   if (this->m_ImageIO != imageIO )
@@ -298,11 +298,11 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         << this->m_FileName.c_str() << std::endl;
     msg << "  Tried to create one of the following:" << std::endl;
     std::list<itk::LightObject::Pointer> allobjects =
-      itk::ObjectFactoryBase::CreateAllInstance("itkImageIOBase");
+      itk::ObjectFactoryBase::CreateAllInstance("otbImageIOBase");
     for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
          i != allobjects.end(); ++i)
       {
-      itk::ImageIOBase* io = dynamic_cast<itk::ImageIOBase*>(i->GetPointer());
+      otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(i->GetPointer());
       msg << "    " << io->GetNameOfClass() << std::endl;
       }
     msg << "  You probably failed to set a file suffix, or" << std::endl;

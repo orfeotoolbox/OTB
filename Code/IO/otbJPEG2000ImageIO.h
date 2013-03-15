@@ -18,7 +18,7 @@
 #ifndef __otbJPEG2000ImageIO_h
 #define __otbJPEG2000ImageIO_h
 
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 #include "itkMultiThreader.h"
 
 
@@ -37,20 +37,20 @@ class JPEG2000TileCache;
  * \ingroup IOFilters
  *
  */
-class ITK_EXPORT JPEG2000ImageIO : public itk::ImageIOBase
+class ITK_EXPORT JPEG2000ImageIO : public otb::ImageIOBase
 {
 public:
 
   /** Standard class typedefs. */
   typedef JPEG2000ImageIO         Self;
-  typedef itk::ImageIOBase        Superclass;
+  typedef otb::ImageIOBase        Superclass;
   typedef itk::SmartPointer<Self> Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(JPEG2000ImageIO, itk::ImageIOBase);
+  itkTypeMacro(JPEG2000ImageIO, otb::ImageIOBase);
 
   /*-------- This part of the interface deals with reading data. ------ */
 

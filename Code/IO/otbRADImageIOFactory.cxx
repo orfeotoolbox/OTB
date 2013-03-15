@@ -26,7 +26,7 @@ namespace otb
 
 RADImageIOFactory::RADImageIOFactory()
 {
-  this->RegisterOverride("itkImageIOBase",
+  this->RegisterOverride("otbImageIOBase",
                          "otbRADImageIO",
                          "RAD Image IO",
                          1,

@@ -19,7 +19,7 @@
 #define __otbImageFileWriter_h
 
 #include "otbMacro.h"
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 #include "itkProcessObject.h"
 #include "otbStreamingManager.h"
 #include "otbExtendedFilenameToWriterOptions.h"
@@ -217,9 +217,9 @@ public:
   itkGetConstReferenceMacro(UseInputMetaDataDictionary, bool);
   itkBooleanMacro(UseInputMetaDataDictionary);
 
-  itkSetObjectMacro(ImageIO, itk::ImageIOBase);
-  itkGetObjectMacro(ImageIO, itk::ImageIOBase);
-  itkGetConstObjectMacro(ImageIO, itk::ImageIOBase);
+  itkSetObjectMacro(ImageIO, otb::ImageIOBase);
+  itkGetObjectMacro(ImageIO, otb::ImageIOBase);
+  itkGetConstObjectMacro(ImageIO, otb::ImageIOBase);
 
   /**
    * Enable/disable writing of a .geom file with the ossim keyword list along with the written image
@@ -268,7 +268,7 @@ private:
   /** ImageFileWriter Parameters */
   std::string m_FileName;
 
-  itk::ImageIOBase::Pointer m_ImageIO;
+  otb::ImageIOBase::Pointer m_ImageIO;
 
   bool m_UserSpecifiedImageIO; //track whether the ImageIO is user specified
 

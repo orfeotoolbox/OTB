@@ -26,7 +26,7 @@ namespace otb
 
 MWImageIOFactory::MWImageIOFactory()
 {
-  this->RegisterOverride("itkImageIOBase",
+  this->RegisterOverride("otbImageIOBase",
                          "otbMWImageIO",
                          "MW Image IO",
                          1,

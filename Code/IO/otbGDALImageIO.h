@@ -23,7 +23,7 @@
 #include <string>
 
 /* ITK Libraries */
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 
 namespace otb
 {
@@ -39,7 +39,7 @@ class GDALDataTypeWrapper;
  * \ingroup IOFilters
  *
  */
-class ITK_EXPORT GDALImageIO : public itk::ImageIOBase
+class ITK_EXPORT GDALImageIO : public otb::ImageIOBase
 {
 public:
 
@@ -47,7 +47,7 @@ public:
 
   /** Standard class typedefs. */
   typedef GDALImageIO             Self;
-  typedef itk::ImageIOBase        Superclass;
+  typedef otb::ImageIOBase        Superclass;
   typedef itk::SmartPointer<Self> Pointer;
 
   typedef std::vector<std::string> GDALCreationOptionsType;
@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GDALImageIO, itk::ImageIOBase);
+  itkTypeMacro(GDALImageIO, otb::ImageIOBase);
 
   /** Set/Get the level of compression for the output images.
    *  0-9; 0 = none, 9 = maximum. */

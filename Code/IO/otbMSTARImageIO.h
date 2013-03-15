@@ -18,7 +18,7 @@
 #ifndef __otbMSTARImageIO_h
 #define __otbMSTARImageIO_h
 
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 
 namespace otb
 {
@@ -32,12 +32,12 @@ namespace otb
  * \ingroup IOFilters
  *
  */
-class ITK_EXPORT MSTARImageIO : public itk::ImageIOBase
+class ITK_EXPORT MSTARImageIO : public otb::ImageIOBase
 {
 public:
   /** Standard class typedefs. */
   typedef MSTARImageIO            Self;
-  typedef itk::ImageIOBase        Superclass;
+  typedef otb::ImageIOBase        Superclass;
   typedef itk::SmartPointer<Self> Pointer;
 
   /** Method for creation through the object factory. */
