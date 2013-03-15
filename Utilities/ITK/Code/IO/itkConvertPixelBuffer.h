@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkConvertPixelBuffer.h,v $
+  Module:    itkConvertPixelBuffer.h
   Language:  C++
-  Date:      $Date: 2009-08-11 12:45:11 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,17 +51,6 @@ public:
   static void ConvertVectorImage(InputPixelType* inputData, 
                       int inputNumberOfComponents, 
                       OutputPixelType* outputData , size_t size);
-  static void ConvertComplexVectorImageToVectorImage(std::complex<InputPixelType>* inputData,
-                      int inputNumberOfComponents, 
-                      OutputPixelType* outputData , size_t size);
-  static void ConvertComplexVectorImageToVectorImageComplex(std::complex<InputPixelType>* inputData,
-                        int inputNumberOfComponents,
-                        OutputPixelType* outputData , size_t size);
-
-  static void ConvertComplexToGray(std::complex<InputPixelType>* inputData, 
-                      int inputNumberOfComponents, 
-                      OutputPixelType* outputData , size_t size);
-
 protected:
   /** Convert to Gray output. */
   /** Input values are cast to output values. */

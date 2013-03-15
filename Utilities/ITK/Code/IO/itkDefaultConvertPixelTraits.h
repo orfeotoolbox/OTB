@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkDefaultConvertPixelTraits.h,v $
+  Module:    itkDefaultConvertPixelTraits.h
   Language:  C++
-  Date:      $Date: 2008-01-21 18:30:58 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,8 +54,6 @@ public:
   /** Set the nth component of the pixel. */
   static void SetNthComponent(int c, PixelType& pixel, const ComponentType& v) 
   { pixel.SetNthComponent(c, v); }
-  static void SetNthComponent(int c, PixelType & pixel, const PixelType& v)
-  { pixel = v; }
 
   /** Return a single scalar value from this pixel. */
   static ComponentType GetScalarValue(const PixelType& pixel)
@@ -117,10 +115,6 @@ public:                                                                  \
     {                                                                    \
       pixel[i] = v;                                                      \
     }                                                                    \
-  static void SetNthComponent(int , TargetType & pixel, const TargetType& v)   \
-    {                                                                    \
-      pixel = v;                                                      \
-    }                                                                    \
   static ComponentType GetScalarValue(const TargetType& pixel)           \
     {                                                                    \
       return pixel[0];                                                   \
@@ -153,10 +147,6 @@ public:                                                                  \
   static void SetNthComponent(int i, TargetType & pixel, const ComponentType& v)   \
     {                                                                    \
       pixel[i] = v;                                                      \
-    }                                                                    \
-  static void SetNthComponent(int , TargetType & pixel, const TargetType& v)   \
-    {                                                                    \
-      pixel = v;                                                      \
     }                                                                    \
   static ComponentType GetScalarValue(const TargetType& pixel)           \
     {                                                                    \
@@ -222,10 +212,6 @@ public:                                                                  \
       const unsigned int row = i / cols;                                 \
       const unsigned int col = i % cols;                                 \
       pixel[row][col] = v;                                               \
-    }                                                                    \
-  static void SetNthComponent(int , TargetType & pixel, const TargetType& v)   \
-    {                                                                    \
-      pixel = v;                                               \
     }                                                                    \
   static ComponentType GetScalarValue(const TargetType& pixel)           \
     {                                                                    \
@@ -296,10 +282,6 @@ public:                                                                  \
       pixel = TargetType( pixel.real(), v );                           \
       }                                                                  \
     }                                                                    \
-  static void SetNthComponent(int , TargetType & pixel, const TargetType& v) \
-    { \
-      pixel = v; \
-    } \
   static ComponentType GetScalarValue(const TargetType& pixel)           \
     {                                                                    \
     return std::norm(pixel);                                             \
@@ -310,7 +292,6 @@ ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(float);
 ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(double);
 ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(signed int);
 ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(unsigned int);
-ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(short int);
 ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(signed char);
 ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(unsigned char);
 ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(signed long);
