@@ -628,11 +628,10 @@ private:
 
             // Convert the radiometric value to [0, 255]
             // using the clamping from histogram cut
-            color[RGB] = NumericTraitsType::Clamp( (meanValue[dispIndex] - minVal[dispIndex])
-                                                      / (maxVal[dispIndex] - minVal[dispIndex])
-                                                      * 255.0
-                                                   , 0.0
-                                                   , 255.0);
+
+            FloatVectorImageType val = 255 * (meanValue[dispIndex] - minVal[dispIndex])
+                                       / (maxVal[dispIndex] - minVal[dispIndex]) ;
+            color[RGB] = val < 0.0 ? 0.0 : ( val > 255.0 ? 255.0 : val );
             }
           }
         otbMsgDevMacro(<<"Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]");
