@@ -18,14 +18,14 @@
 #ifndef __otbStreamingWarpImageFilter_h
 #define __otbStreamingWarpImageFilter_h
 
-#include "itkWarpImageFilter.h"
+#include "otbWarpImageFilter.h"
 #include "otbStreamingTraits.h"
 
 namespace otb
 {
 
 /** \class StreamingWarpImageFilter
- * \brief This class acts like the itk::WarpImageFilter, but it does not request the largest possible region of the image to warp.
+ * \brief This class acts like the otb::WarpImageFilter, but it does not request the largest possible region of the image to warp.
  *
  * Instead, the user should assess the maximum deformation in the deformation field and set it via the SetMaximumDeformation() method.
  *
@@ -45,12 +45,12 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TDeformationField>
 class ITK_EXPORT StreamingWarpImageFilter
-  :  public itk::WarpImageFilter<TInputImage, TOutputImage, TDeformationField>
+  :  public otb::WarpImageFilter<TInputImage, TOutputImage, TDeformationField>
 {
 public:
   /** Standard class typedefs. */
   typedef StreamingWarpImageFilter                                           Self;
-  typedef itk::WarpImageFilter<TInputImage, TOutputImage, TDeformationField> Superclass;
+  typedef otb::WarpImageFilter<TInputImage, TOutputImage, TDeformationField> Superclass;
   typedef itk::SmartPointer<Self>                                            Pointer;
   typedef itk::SmartPointer<const Self>                                      ConstPointer;
 
@@ -90,7 +90,7 @@ protected:
    * produce its output. As such, we need to overload the GenerateInputRequestedRegion() method.
    */
   virtual void GenerateInputRequestedRegion();
-  
+
   /**
    * Re-implement the method ThreadedGenerateData to mask area outside the deformation grid
    */
