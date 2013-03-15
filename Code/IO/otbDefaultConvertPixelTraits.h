@@ -23,6 +23,7 @@
 #include "itkVector.h"
 #include "itkPoint.h"
 #include "itkMatrix.h"
+#include "otbMissingNumericTraits.h"
 
 namespace otb
 {
