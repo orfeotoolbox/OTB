@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkImageIOBase_h
-#define __itkImageIOBase_h
+#ifndef __otbImageIOBase_h
+#define __otbImageIOBase_h
 
 #include "itkLightProcessObject.h"
 #include "itkObjectFactory.h"
@@ -25,7 +25,7 @@
 
 #include <string>
 
-namespace itk
+namespace otb
 {
 
 /** \class ImageIOBase
@@ -55,13 +55,13 @@ namespace itk
  * \ingroup IOFilters
  *
  */
-class ITK_EXPORT ImageIOBase : public LightProcessObject
+class ITK_EXPORT ImageIOBase : public itk::LightProcessObject
 {
 public:
   /** Standard class typedefs. */
   typedef ImageIOBase        Self;
-  typedef LightProcessObject Superclass;
-  typedef SmartPointer<Self> Pointer;
+  typedef itk::LightProcessObject Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageIOBase, Superclass);
@@ -142,8 +142,8 @@ public:
    * vectors define the start (lower-left corner) and length of the
    * region within the image. Make sure that the IORegion lies within
    * the image. */
-  itkSetMacro(IORegion, ImageIORegion);
-  itkGetConstReferenceMacro(IORegion, ImageIORegion);
+  itkSetMacro(IORegion, itk::ImageIORegion);
+  itkGetConstReferenceMacro(IORegion, itk::ImageIORegion);
 
   /** Set/Get the type of the pixel. The PixelTypes provides context
    * to the IO mechanisms for data conversions.  PixelTypes can be
@@ -350,8 +350,8 @@ public:
    * the requested region. For example if the file has a size of [ 10,
    * 10, 10] but the requested region is [10, 10] the return may be 3 dimensions.
    */
-  virtual ImageIORegion 
-  GenerateStreamableReadRegionFromRequestedRegion( const ImageIORegion & requested ) const;
+  virtual itk::ImageIORegion
+  GenerateStreamableReadRegionFromRequestedRegion( const itk::ImageIORegion & requested ) const;
 
   
   
@@ -370,8 +370,8 @@ public:
    * class has more restictive conditions then they should be checked
    */
   virtual unsigned int GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSplits,
-                                                         const ImageIORegion &pasteRegion,
-                                                         const ImageIORegion &largestPossibleRegion);
+                                                         const itk::ImageIORegion &pasteRegion,
+                                                         const itk::ImageIORegion &largestPossibleRegion);
              
   /** returns the ith IORegion 
    * 
@@ -381,8 +381,8 @@ public:
    */
   virtual ImageIORegion GetSplitRegionForWriting(unsigned int ithPiece, 
                                                  unsigned int numberOfActualSplits,
-                                                 const ImageIORegion &pasteRegion,
-                                                 const ImageIORegion &largestPossibleRegion);
+                                                 const itk::ImageIORegion &pasteRegion,
+                                                 const itk::ImageIORegion &largestPossibleRegion);
 
   /** Type for the list of strings to be used for extensions.  */
   typedef  std::vector< std::string >    ArrayOfExtensionsType;
@@ -402,8 +402,8 @@ public:
 
 protected:
   ImageIOBase();
-  ~ImageIOBase();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  virtual ~ImageIOBase();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Used internally to keep track of the type of the pixel. */
   IOPixelType m_PixelType;
@@ -440,7 +440,7 @@ protected:
 
   /** The region to read or write. The region contains information about the
    * data within the region to read or write. */
-  ImageIORegion m_IORegion;
+  itk::ImageIORegion m_IORegion;
 
   /** The array which stores the number of pixels in the x, y, z directions. */
   std::vector< SizeValueType > m_Dimensions;
@@ -513,13 +513,13 @@ protected:
   /** an implementation of ImageRegionSplitter:GetNumberOfSplits 
    */
   virtual unsigned int GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
-                                                                       const ImageIORegion &pasteRegion) const;
+                                                                       const itk::ImageIORegion &pasteRegion) const;
 
   /** an implementation of  ImageRegionSplitter:GetSplit
    */
-  virtual ImageIORegion GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece, 
+  virtual itk::ImageIORegion GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
                                                                unsigned int numberOfActualSplits,
-                                                               const ImageIORegion &pasteRegion) const;
+                                                               const itk::ImageIORegion &pasteRegion) const;
 
 private:
   ImageIOBase(const Self&); //purposely not implemented

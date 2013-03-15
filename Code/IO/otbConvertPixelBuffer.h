@@ -14,12 +14,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkConvertPixelBuffer_h
-#define __itkConvertPixelBuffer_h
+#ifndef __otbConvertPixelBuffer_h
+#define __otbConvertPixelBuffer_h
 
 #include "itkObject.h"
 
-namespace itk
+namespace otb
 {
 /**
  * \class ConvertPixelBuffer
@@ -141,11 +141,11 @@ private:
   ConvertPixelBuffer();
   ~ConvertPixelBuffer();
 };
-} //namespace ITK
+} // end namespace otb
 
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkConvertPixelBuffer.txx"
+#include "otbConvertPixelBuffer.txx"
 #endif
 
-#endif // __itkConvertPixelBuffer_h
+#endif // __otbConvertPixelBuffer_h

@@ -17,7 +17,7 @@
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
-#include "itkImageIOBase.h"
+#include "otbImageIOBase.h"
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
 #include "itkOffset.h"
@@ -29,7 +29,7 @@
 #include "itkFixedArray.h"
 #include "itkImageRegionSplitter.h"
 
-namespace itk
+namespace otb
 {
 
 ImageIOBase::ImageIOBase() :
@@ -237,182 +237,182 @@ itkSetPixelType(ImageIOBase *This,
     This->SetPixelType(ImageIOBase::SCALAR);
     return true;
     }
-  else if ( ptype == typeid(RGBPixel<T>) )
+  else if ( ptype == typeid(itk::RGBPixel<T>) )
     {
     This->SetNumberOfComponents(3);
     This->SetComponentType(ntype);
     This->SetPixelType(ImageIOBase::RGB);
     return true;
     }
-  else if ( ptype == typeid(RGBAPixel<T>) )
+  else if ( ptype == typeid(itk::RGBAPixel<T>) )
     {
     This->SetNumberOfComponents(4);
     This->SetComponentType(ntype);
     This->SetPixelType(ImageIOBase::RGBA);
     return true;
     }
-  else if ( ptype == typeid(Vector<T,2>) )
+  else if ( ptype == typeid(itk::Vector<T,2>) )
     {
     This->SetNumberOfComponents(2);
     This->SetPixelType(ImageIOBase::VECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(Vector<T,3>) )
+  else if ( ptype == typeid(itk::Vector<T,3>) )
     {
     This->SetNumberOfComponents(3);
     This->SetPixelType(ImageIOBase::VECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(Vector<T,4>) )
+  else if ( ptype == typeid(itk::Vector<T,4>) )
     {
     This->SetNumberOfComponents(4);
     This->SetPixelType(ImageIOBase::VECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(Vector<T,5>) )
+  else if ( ptype == typeid(itk::Vector<T,5>) )
     {
     This->SetNumberOfComponents(5);
     This->SetPixelType(ImageIOBase::VECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(Vector<T,6>) )
+  else if ( ptype == typeid(itk::Vector<T,6>) )
     {
     This->SetNumberOfComponents(6);
     This->SetPixelType(ImageIOBase::VECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(Vector<T,7>) )
+  else if ( ptype == typeid(itk::Vector<T,7>) )
     {
     This->SetNumberOfComponents(7);
     This->SetPixelType(ImageIOBase::VECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(CovariantVector<T,2>) )
+  else if ( ptype == typeid(itk::CovariantVector<T,2>) )
     {
     This->SetNumberOfComponents(2);
     This->SetPixelType(ImageIOBase::COVARIANTVECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(CovariantVector<T,3>) )
+  else if ( ptype == typeid(itk::CovariantVector<T,3>) )
     {
     This->SetNumberOfComponents(3);
     This->SetPixelType(ImageIOBase::COVARIANTVECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(CovariantVector<T,4>) )
+  else if ( ptype == typeid(itk::CovariantVector<T,4>) )
     {
     This->SetNumberOfComponents(4);
     This->SetPixelType(ImageIOBase::COVARIANTVECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(CovariantVector<T,5>) )
+  else if ( ptype == typeid(itk::CovariantVector<T,5>) )
     {
     This->SetNumberOfComponents(5);
     This->SetPixelType(ImageIOBase::COVARIANTVECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(CovariantVector<T,6>) )
+  else if ( ptype == typeid(itk::CovariantVector<T,6>) )
     {
     This->SetNumberOfComponents(6);
     This->SetPixelType(ImageIOBase::COVARIANTVECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(CovariantVector<T,7>) )
+  else if ( ptype == typeid(itk::CovariantVector<T,7>) )
     {
     This->SetNumberOfComponents(7);
     This->SetPixelType(ImageIOBase::COVARIANTVECTOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(FixedArray<T,2>) )
+  else if ( ptype == typeid(itk::FixedArray<T,2>) )
     {
     This->SetNumberOfComponents(2);
     This->SetPixelType(ImageIOBase::FIXEDARRAY);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(FixedArray<T,3>) )
+  else if ( ptype == typeid(itk::FixedArray<T,3>) )
     {
     This->SetNumberOfComponents(3);
     This->SetPixelType(ImageIOBase::FIXEDARRAY);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(FixedArray<T,4>) )
+  else if ( ptype == typeid(itk::FixedArray<T,4>) )
     {
     This->SetNumberOfComponents(4);
     This->SetPixelType(ImageIOBase::FIXEDARRAY);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(SymmetricSecondRankTensor<T,2>) )
+  else if ( ptype == typeid(itk::SymmetricSecondRankTensor<T,2>) )
     {
     This->SetNumberOfComponents(3);
     This->SetPixelType(ImageIOBase::SYMMETRICSECONDRANKTENSOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(SymmetricSecondRankTensor<T,3>) )
+  else if ( ptype == typeid(itk::SymmetricSecondRankTensor<T,3>) )
     {
     This->SetNumberOfComponents(6);
     This->SetPixelType(ImageIOBase::SYMMETRICSECONDRANKTENSOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(SymmetricSecondRankTensor<T,4>) )
+  else if ( ptype == typeid(itk::SymmetricSecondRankTensor<T,4>) )
     {
     This->SetNumberOfComponents(10);
     This->SetPixelType(ImageIOBase::SYMMETRICSECONDRANKTENSOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(SymmetricSecondRankTensor<T,5>) )
+  else if ( ptype == typeid(itk::SymmetricSecondRankTensor<T,5>) )
     {
     This->SetNumberOfComponents(15);
     This->SetPixelType(ImageIOBase::SYMMETRICSECONDRANKTENSOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(SymmetricSecondRankTensor<T,6>) )
+  else if ( ptype == typeid(itk::SymmetricSecondRankTensor<T,6>) )
     {
     This->SetNumberOfComponents(21);
     This->SetPixelType(ImageIOBase::SYMMETRICSECONDRANKTENSOR);
     This->SetComponentType(ntype);
     return true;
     }
-  else if ( ptype == typeid(DiffusionTensor3D<T>) )
+  else if ( ptype == typeid(itk::DiffusionTensor3D<T>) )
     {
     This->SetNumberOfComponents(6);
     This->SetComponentType(ntype);
     This->SetPixelType(ImageIOBase::DIFFUSIONTENSOR3D);
     return true;
     }
-  else if ( ptype == typeid(Matrix<T,2,2>) )
+  else if ( ptype == typeid(itk::Matrix<T,2,2>) )
     {
     This->SetNumberOfComponents(4);
     This->SetComponentType(ntype);
     This->SetPixelType(ImageIOBase::MATRIX);
     return true;
     }
-  else if ( ptype == typeid(Matrix<T,3,3>) )
+  else if ( ptype == typeid(itk::Matrix<T,3,3>) )
     {
     This->SetNumberOfComponents(9);
     This->SetComponentType(ntype);
     This->SetPixelType(ImageIOBase::MATRIX);
     return true;
     }
-  else if ( ptype == typeid(Matrix<T,4,4>) )
+  else if ( ptype == typeid(itk::Matrix<T,4,4>) )
     {
     This->SetNumberOfComponents(16);
     This->SetComponentType(ntype);
@@ -433,13 +433,8 @@ itkSetPixelType(ImageIOBase *This,
                 ImageIOBase::IOComponentType ntype,
                 std::complex<T> itkNotUsed( dummy ) )
 {
-  /*std::cout << "itkSetPixelType() specialized way" << std::endl;
-  std::cout << "ptype.name() = " << ptype.name() <<std::endl;
-  std::cout << "ntype = " << ntype <<std::endl;*/
- 
   if (ptype == typeid(std::complex<short>))
     {
-    std::cout << "complex short detected" << std::endl;
     This->SetNumberOfComponents(1);
     This->SetComponentType(ImageIOBase::CSHORT);
     This->SetPixelType(ImageIOBase::COMPLEX);
@@ -447,7 +442,6 @@ itkSetPixelType(ImageIOBase *This,
     }
   if (ptype == typeid(std::complex<int>))
     {
-    //std::cout << "complex int detected" <<std::endl;
     This->SetNumberOfComponents(1);
     This->SetComponentType(ImageIOBase::CINT);
     This->SetPixelType(ImageIOBase::COMPLEX);
@@ -455,7 +449,6 @@ itkSetPixelType(ImageIOBase *This,
     }
   if (ptype == typeid(std::complex<float>))
     {
-    //std::cout << "complex float detected" <<std::endl;
     This->SetNumberOfComponents(1);
     This->SetComponentType(ImageIOBase::CFLOAT);
     This->SetPixelType(ImageIOBase::COMPLEX);
@@ -463,7 +456,6 @@ itkSetPixelType(ImageIOBase *This,
     }
   if (ptype == typeid(std::complex<double>))
     {
-    //std::cout << "complex double detected" <<std::endl;
     This->SetNumberOfComponents(1);
     This->SetComponentType(ImageIOBase::CDOUBLE);
     This->SetPixelType(ImageIOBase::COMPLEX);
@@ -475,11 +467,9 @@ itkSetPixelType(ImageIOBase *This,
 
 bool ImageIOBase::SetPixelTypeInfo(const std::type_info& ptype)
 {
-  //std::cout << " SetPixelTypeInfo -> BEGIN ..." <<std::endl;
   this->SetNumberOfComponents(1);
   this->SetPixelType(ImageIOBase::UNKNOWNPIXELTYPE);
   this->SetComponentType(ImageIOBase::UNKNOWNCOMPONENTTYPE);
-
   
   if (!itkSetPixelType(this,ptype,ImageIOBase::CHAR, char(0) ) &&
       !itkSetPixelType(this,ptype,ImageIOBase::UCHAR, (unsigned char)0) &&
@@ -496,19 +486,19 @@ bool ImageIOBase::SetPixelTypeInfo(const std::type_info& ptype)
       !itkSetPixelType(this,ptype,ImageIOBase::CFLOAT,(std::complex<float>)(0)) &&
       !itkSetPixelType(this,ptype,ImageIOBase::CDOUBLE,(std::complex<double>)(0)) )
     {
-    if ( ptype == typeid(Offset<2>) )
+    if ( ptype == typeid(itk::Offset<2>) )
       {
       this->SetNumberOfComponents(2);
       this->SetPixelType(ImageIOBase::OFFSET);
       this->SetComponentType(ImageIOBase::LONG);
       }
-    else if ( ptype == typeid(Offset<3>) )
+    else if ( ptype == typeid(itk::Offset<3>) )
       {
       this->SetNumberOfComponents(3);
       this->SetPixelType(ImageIOBase::OFFSET);
       this->SetComponentType(ImageIOBase::LONG);
       }
-    else if ( ptype == typeid(Offset<4>) )
+    else if ( ptype == typeid(itk::Offset<4>) )
       {
       this->SetNumberOfComponents(4);
       this->SetPixelType(ImageIOBase::OFFSET);
@@ -529,11 +519,6 @@ bool ImageIOBase::SetPixelTypeInfo(const std::type_info& ptype)
     return false;
     }
 
-  /*std::cout << "ComponentType: " << this->GetComponentTypeInfo().name() <<std::endl;
-  std::cout << "ComponentSize: " <<this->GetComponentSize() <<std::endl;
-  std::cout << "Nb of Component: " <<this->GetNumberOfComponents() <<std::endl;
-  std::cout << "Pixel Type: " <<this->GetPixelTypeAsString(this->GetPixelType()) <<std::endl;
-  std::cout << " SetPixelTypeInfo -> ... END" <<std::endl;*/
   return true;
 }
 
@@ -645,7 +630,7 @@ ImageIOBase
 ::ReadBufferAsBinary(std::istream& is, void *buffer, ImageIOBase::SizeType num)
 {
 
-  const std::streamsize numberOfBytesToBeRead = Math::CastWithRangeCheck< std::streamsize>( num );
+  const std::streamsize numberOfBytesToBeRead = itk::Math::CastWithRangeCheck< std::streamsize>( num );
 
   is.read( static_cast<char *>( buffer ), numberOfBytesToBeRead );
 
@@ -1091,11 +1076,11 @@ void ImageIOBase::ReadBufferAsASCII(std::istream& is, void *buffer,
 
 unsigned int 
 ImageIOBase::GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
-                                                             const ImageIORegion &pasteRegion) const
+                                                             const itk::ImageIORegion &pasteRegion) const
 {  
   // Code from ImageRegionSplitter:GetNumberOfSplits
   int splitAxis;
-  const ImageIORegion::SizeType &regionSize = pasteRegion.GetSize();
+  const itk::ImageIORegion::SizeType &regionSize = pasteRegion.GetSize();
   
   
   // split on the outermost dimension available
@@ -1111,17 +1096,17 @@ ImageIOBase::GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int number
     }
   
   // determine the actual number of pieces that will be generated
-  ImageIORegion::SizeType::value_type range = regionSize[splitAxis];
-  int valuesPerPiece = Math::Ceil<int>(range/double(numberOfRequestedSplits));
-  int maxPieceUsed = Math::Ceil<int>(range/double(valuesPerPiece)) - 1;
+  itk::ImageIORegion::SizeType::value_type range = regionSize[splitAxis];
+  int valuesPerPiece = itk::Math::Ceil<int>(range/double(numberOfRequestedSplits));
+  int maxPieceUsed = itk::Math::Ceil<int>(range/double(valuesPerPiece)) - 1;
   
   return maxPieceUsed+1;
 }
 
 unsigned int 
 ImageIOBase::GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSplits,
-                                               const ImageIORegion &pasteRegion,
-                                               const ImageIORegion &largestPossibleRegion)
+                                               const itk::ImageIORegion &pasteRegion,
+                                               const itk::ImageIORegion &largestPossibleRegion)
 {
   if (this->CanStreamWrite()) 
     {
@@ -1139,16 +1124,16 @@ ImageIOBase::GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSpl
   return 1;
 }
 
-ImageIORegion 
+itk::ImageIORegion
 ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece, 
                                                                unsigned int numberOfActualSplits,
-                                                               const ImageIORegion &pasteRegion) const 
+                                                               const itk::ImageIORegion &pasteRegion) const
 {
     // Code from ImageRegionSplitter:GetSplit
   int splitAxis;
-  ImageIORegion splitRegion;
-  ImageIORegion::IndexType splitIndex;
-  ImageIORegion::SizeType splitSize, regionSize;
+  itk::ImageIORegion splitRegion;
+  itk::ImageIORegion::IndexType splitIndex;
+  itk::ImageIORegion::SizeType splitSize, regionSize;
   
   // Initialize the splitRegion to the requested region
   splitRegion = pasteRegion;
@@ -1170,9 +1155,9 @@ ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
     }
 
   // determine the actual number of pieces that will be generated
-  ImageIORegion::SizeType::value_type range = regionSize[splitAxis];
-  int valuesPerPiece = Math::Ceil<int>(range/(double)numberOfActualSplits);
-  int maxPieceUsed = Math::Ceil<int>(range/(double)valuesPerPiece) - 1;
+  itk::ImageIORegion::SizeType::value_type range = regionSize[splitAxis];
+  int valuesPerPiece = itk::Math::Ceil<int>(range/(double)numberOfActualSplits);
+  int maxPieceUsed = itk::Math::Ceil<int>(range/(double)valuesPerPiece) - 1;
 
   // Split the region
   if ((int) ithPiece < maxPieceUsed)
@@ -1199,8 +1184,8 @@ ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
 ImageIORegion 
 ImageIOBase::GetSplitRegionForWriting(unsigned int ithPiece, 
                                       unsigned int numberOfActualSplits,
-                                      const ImageIORegion &pasteRegion,
-                                      const ImageIORegion &largestPossibleRegion)
+                                      const itk::ImageIORegion &pasteRegion,
+                                      const itk::ImageIORegion &largestPossibleRegion)
 {
    if (this->CanStreamWrite()) 
     {
@@ -1213,10 +1198,10 @@ ImageIOBase::GetSplitRegionForWriting(unsigned int ithPiece,
  * read from the file. This is called the streamable region, which will be
  * smaller than the LargestPossibleRegion and greater or equal to the
  * RequestedRegion */
-ImageIORegion 
+itk::ImageIORegion
 ImageIOBase
 ::GenerateStreamableReadRegionFromRequestedRegion( 
-    const ImageIORegion & requested ) const
+    const itk::ImageIORegion & requested ) const
 {
   //
   // The default implementations determines that the streamable region is
@@ -1248,7 +1233,7 @@ ImageIOBase
     minIODimension > requested.GetImageDimension() ? minIODimension : requested.GetImageDimension();
 
   // First: allocate with the correct dimensions
-  ImageIORegion streamableRegion( maxDimension );
+  itk::ImageIORegion streamableRegion( maxDimension );
 
   // Second: copy only the number of dimension that the file has.
   for( unsigned int i=0; i < minIODimension; i++ )
@@ -1289,7 +1274,7 @@ ImageIOBase
   return axis;
 }
 
-void ImageIOBase::PrintSelf(std::ostream& os, Indent indent) const
+void ImageIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 

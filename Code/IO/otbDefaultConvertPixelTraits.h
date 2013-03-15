@@ -15,25 +15,25 @@
 
 =========================================================================*/
 
-#ifndef __itkDefaultConvertPixelTraits_h
-#define __itkDefaultConvertPixelTraits_h
+#ifndef __otbDefaultConvertPixelTraits_h
+#define __otbDefaultConvertPixelTraits_h
 
 #include "itkOffset.h"
 #include "itkCovariantVector.h"
 #include "itkVector.h"
 #include "itkPoint.h"
 
-namespace itk
+namespace otb
 {
   
 /** \class DefaultConvertPixelTraits
  *  \brief Traits class used to by ConvertPixels to convert blocks of pixels.
  *
- *  TOutputPixelType is the destination type. The input type is infered
+ *  TOutputPixelType is the destination type. The input type is inferred
  *  by the templated static function Convert.
  *
- *  This implementaion, does a simple assignment operator, so if you are
- *  going from from a higher bit representation to a lower bit one (int to
+ *  This implementation does a simple assignment operator, so if you are
+ *  going from a higher bit representation to a lower bit one (int to
  *  char), you may want to specialize and add some sort of transfer function.
  */
 template<typename PixelType>
@@ -63,7 +63,7 @@ public:
 
 };
 
-#define ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(type)                    \
+#define OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(type)                    \
 template<>                                                               \
 class DefaultConvertPixelTraits<type>                                    \
 {                                                                        \
@@ -83,26 +83,26 @@ public:                                                                  \
     }                                                                    \
 };
 
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(float)
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(double)
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(int)
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(char)
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(short)
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned int)
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(signed char)
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned char)
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned short)
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(long)  
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned long)
-ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(bool)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(float)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(double)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(int)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(char)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(short)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned int)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(signed char)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned char)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned short)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(long)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned long)
+OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(bool)
 
-#undef ITK_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL
+#undef OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL
 
 //
 //  Default traits for the Offset<> pixel type
 //
 
-#define ITK_DEFAULTCONVERTTRAITS_OFFSET_TYPE(dimension)                  \
+#define OTB_DEFAULTCONVERTTRAITS_OFFSET_TYPE(dimension)                  \
 template<>                                                               \
 class DefaultConvertPixelTraits< Offset<dimension> >                     \
 {                                                                        \
@@ -129,17 +129,17 @@ public:                                                                  \
 
 
 // Define traits for Offset<> from dimensions 1 to 5
-  ITK_DEFAULTCONVERTTRAITS_OFFSET_TYPE(1)
-  ITK_DEFAULTCONVERTTRAITS_OFFSET_TYPE(2)
-  ITK_DEFAULTCONVERTTRAITS_OFFSET_TYPE(3)
-  ITK_DEFAULTCONVERTTRAITS_OFFSET_TYPE(4)
-  ITK_DEFAULTCONVERTTRAITS_OFFSET_TYPE(5)
+  OTB_DEFAULTCONVERTTRAITS_OFFSET_TYPE(1)
+  OTB_DEFAULTCONVERTTRAITS_OFFSET_TYPE(2)
+  OTB_DEFAULTCONVERTTRAITS_OFFSET_TYPE(3)
+  OTB_DEFAULTCONVERTTRAITS_OFFSET_TYPE(4)
+  OTB_DEFAULTCONVERTTRAITS_OFFSET_TYPE(5)
 
 //
 //  Default traits for the pixel types deriving from FixedArray<>
 //
 
-#define ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(type,componenttype, dimension) \
+#define OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(type,componenttype, dimension) \
 template<>                                                               \
 class DefaultConvertPixelTraits< type< componenttype, dimension> >       \
 {                                                                        \
@@ -170,31 +170,31 @@ public:                                                                  \
 // These classes include: Vector, CovariantVector and Point.
 //
 //
-#define ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, Type) \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,1) \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,2) \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,3) \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,4) \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,5) \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,6)
+#define OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, Type) \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,1) \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,2) \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,3) \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,4) \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,5) \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(ArrayType,Type,6)
 
-#define ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(ArrayType) \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, char); \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, signed char); \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, unsigned char); \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, short); \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, unsigned short); \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, int); \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, unsigned int); \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, long); \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, unsigned long); \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, float); \
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, double);
+#define OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(ArrayType) \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, char); \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, signed char); \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, unsigned char); \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, short); \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, unsigned short); \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, int); \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, unsigned int); \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, long); \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, unsigned long); \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, float); \
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_MACRO(ArrayType, double);
 
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(Vector);
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(CovariantVector);
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(Point);
-  ITK_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(FixedArray);
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(Vector);
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(CovariantVector);
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(Point);
+  OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE_ALL_TYPES_MACRO(FixedArray);
 
 //
 //  End of Traits for the classes deriving from FixedArray.
@@ -206,7 +206,7 @@ public:                                                                  \
 //  Default traits for the pixel types deriving from Matrix<>
 //
 
-#define ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE(type,componenttype,rows,cols) \
+#define OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE(type,componenttype,rows,cols) \
 template<>                                                               \
 class DefaultConvertPixelTraits< type< componenttype, rows, cols > >     \
 {                                                                        \
@@ -238,31 +238,31 @@ public:                                                                  \
 // Define traits for Classed deriving from Matrix from dimensions 1 to 6
 //
 //
-#define ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, Type) \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,1,1) \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,2,2) \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,3,3) \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,4,4) \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,5,5) \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,6,6)
+#define OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, Type) \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,1,1) \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,2,2) \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,3,3) \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,4,4) \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,5,5) \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE(ArrayType,Type,6,6)
 
-#define ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_TYPES_MACRO(ArrayType) \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, char); \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, signed char); \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, unsigned char); \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, short); \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, unsigned short); \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, int); \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, unsigned int); \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, long); \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, unsigned long); \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, float); \
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, double);
+#define OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_TYPES_MACRO(ArrayType) \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, char); \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, signed char); \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, unsigned char); \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, short); \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, unsigned short); \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, int); \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, unsigned int); \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, long); \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, unsigned long); \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, float); \
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_MACRO(ArrayType, double);
 
 //
 // Add here other classes that derive from Matrix or that have the same API
 //
-  ITK_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_TYPES_MACRO(Matrix);
+  OTB_DEFAULTCONVERTTRAITS_MATRIX_TYPE_ALL_TYPES_MACRO(Matrix);
 
 //
 //  End of Traits for the classes deriving from Matrix.
@@ -274,7 +274,7 @@ public:                                                                  \
 //  Default traits for the pixel types deriving from std::complex<>
 //
 
-#define ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE( componenttype ) \
+#define OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE( componenttype ) \
 template<>                                                               \
 class DefaultConvertPixelTraits< ::std::complex< componenttype > >       \
 {                                                                        \
@@ -306,20 +306,20 @@ public:                                                                  \
     }                                                                    \
 };                                                                       \
 
-ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(float);
-ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(double);
-ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(signed int);
-ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(unsigned int);
-ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(short int);
-ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(signed char);
-ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(unsigned char);
-ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(signed long);
-ITK_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(unsigned long);
+OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(float);
+OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(double);
+OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(signed int);
+OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(unsigned int);
+OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(short int);
+OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(signed char);
+OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(unsigned char);
+OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(signed long);
+OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(unsigned long);
 
 //
 //  End of Traits for the classes deriving from std::complex.
 //
 //
   
-} // end namespace itk
+} // end namespace otb
 #endif

@@ -14,13 +14,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkConvertPixelBuffer_txx
-#define __itkConvertPixelBuffer_txx
-#include "itkConvertPixelBuffer.h"
+#ifndef __otbConvertPixelBuffer_txx
+#define __otbConvertPixelBuffer_txx
+#include "otbConvertPixelBuffer.h"
 
 #include "itkRGBPixel.h"
 
-namespace itk
+namespace otb
 {
 template < typename InputPixelType,
            typename OutputPixelType,
@@ -783,6 +783,6 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
     }
 }
 
-}// end namespace itk
+}// end namespace otb
 
 #endif
