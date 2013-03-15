@@ -28,13 +28,6 @@ namespace otb
 {
 namespace watershed
 {
-
-template <class TInputImage>
-unsigned long Segmenter<TInputImage>::NULL_LABEL = 0;
-
-template <class TInputImage>
-short Segmenter<TInputImage>::NULL_FLOW = -1;
-
 /*
   ----------------------------------------------------------------------------
   Algorithm methods
