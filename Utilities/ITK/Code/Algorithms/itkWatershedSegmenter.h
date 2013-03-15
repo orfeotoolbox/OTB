@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkWatershedSegmenter.h,v $
+  Module:    itkWatershedSegmenter.h
   Language:  C++
-  Date:      $Date: 2010-03-02 03:40:36 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -123,12 +123,12 @@ public:
   typedef typename OutputImageType::Pointer  OutputImageTypePointer;
   typedef typename SegmentTableType::Pointer SegmentTableTypePointer;
   typedef typename BoundaryType::Pointer     BoundaryTypePointer;
+    
+  /** A constant used in the labeling algorithm.  */
+  static unsigned long NULL_LABEL;
 
   /** A constant used in the labeling algorithm.  */
-  itkStaticConstMacro(NULL_LABEL, unsigned long, 0);
-
-  /** A constant used in the labeling algorithm.  */
-  itkStaticConstMacro(NULL_FLOW, short, -1);
+  static short NULL_FLOW;
  
   /** Get/Set the input image.   */
   InputImageType * GetInputImage(void)

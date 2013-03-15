@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkWatershedSegmenter.txx,v $
+  Module:    itkWatershedSegmenter.txx
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:19 $
-  Version:   $Revision: 1.37 $
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,6 +28,12 @@ namespace itk
 {
 namespace watershed
 {
+
+template <class TInputImage>
+unsigned long Segmenter<TInputImage>::NULL_LABEL = 0;
+
+template <class TInputImage>
+short Segmenter<TInputImage>::NULL_FLOW = -1;
 
 /*
   ----------------------------------------------------------------------------
