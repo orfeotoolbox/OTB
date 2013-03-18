@@ -2,7 +2,7 @@
 # Source files of Common library
 
 # Package GUI (files ordered by lexicographical order i.e. ease of search).
-set( Common_Gui_SOURCES
+set( Common_ApplicationsWrapper_SOURCES
   mvdApplicationsBrowser.cxx
   mvdApplicationsToolBox.cxx
   mvdApplicationLauncher.cxx  

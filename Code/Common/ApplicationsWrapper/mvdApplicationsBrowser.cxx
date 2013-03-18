@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdApplicationsBrowser.h"
+#include "ApplicationsWrapper/mvdApplicationsBrowser.h"
 
 
 /*****************************************************************************/

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdApplicationsToolBox.h"
-#include "Gui/ui_mvdApplicationsToolBox.h"
+#include "ApplicationsWrapper/mvdApplicationsToolBox.h"
+#include "ApplicationsWrapper/ui_mvdApplicationsToolBox.h"
 
 
 /*****************************************************************************/

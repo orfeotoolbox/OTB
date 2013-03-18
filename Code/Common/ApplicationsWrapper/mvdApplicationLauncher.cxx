@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdApplicationLauncher.h"
+#include "ApplicationsWrapper/mvdApplicationLauncher.h"
 
 
 /*****************************************************************************/
