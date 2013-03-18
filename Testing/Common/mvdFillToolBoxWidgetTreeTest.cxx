@@ -28,7 +28,7 @@
 // System includes (sorted by alphabetic order)
 
 // Monteverdi includes (sorted by alphabetic order)
-#include "ApplicationsWrapper/mvdApplicationsToolBox.h"
+#include "Gui/mvdApplicationsToolBox.h"
 #include "ApplicationsWrapper/mvdApplicationsBrowser.h"
 #include "ApplicationsWrapper/mvdApplicationLauncher.h"
 
