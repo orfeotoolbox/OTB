@@ -18,6 +18,8 @@
 #ifndef __otbRandomForestsMachineLearningModel_txx
 #define __otbRandomForestsMachineLearningModel_txx
 
+#include <fstream>
+
 #include "otbRandomForestsMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
 
@@ -132,7 +134,30 @@ bool
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::CanReadFile(const char * file)
 {
-  return true;
+   std::ifstream ifs;
+   ifs.open(file);
+   
+   if(!ifs)
+   {
+      std::cerr<<"Could not read file "<<file<<std::endl;
+      return false;
+   }
+   
+   
+   while (!ifs.eof())
+   {
+      std::string line;
+      std::getline(ifs, line);
+      
+      //if (line.find(m_RFModel->getName()) != std::string::npos)
+      if (line.find(CV_TYPE_NAME_ML_RTREES) != std::string::npos)
+      {
+         std::cout<<"Reading a "<<CV_TYPE_NAME_ML_RTREES<<" model !!!"<<std::endl;
+         return true;
+      }
+   }
+   ifs.close();
+   return false;
 }
 
 template <class TInputValue, class TOutputValue>

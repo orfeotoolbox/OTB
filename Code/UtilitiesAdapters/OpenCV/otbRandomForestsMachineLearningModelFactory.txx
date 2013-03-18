@@ -58,7 +58,7 @@ const char*
 RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>
 ::GetDescription() const
 {
-  return "KNN machine learning model factory";
+  return "Random Forest machine learning model factory";
 }
 
 } // end namespace otb

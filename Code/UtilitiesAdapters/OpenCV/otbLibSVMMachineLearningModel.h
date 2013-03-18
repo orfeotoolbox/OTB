@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMMachineLearningModel_h
-#define __otbSVMMachineLearningModel_h
+#ifndef __otbLibSVMMachineLearningModel_h
+#define __otbLibSVMMachineLearningModel_h
 
 #include "itkLightObject.h"
 #include "itkVariableLengthVector.h"

@@ -18,6 +18,7 @@
 #ifndef __otbSVMMachineLearningModel_txx
 #define __otbSVMMachineLearningModel_txx
 
+#include <fstream>
 #include "otbSVMMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
 
@@ -108,7 +109,29 @@ bool
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::CanReadFile(const char * file)
 {
-  return false;
+   std::ifstream ifs;
+   ifs.open(file);
+   
+   if(!ifs)
+   {
+      std::cerr<<"Could not read file "<<file<<std::endl;
+      return false;
+   }
+   
+   while (!ifs.eof())
+   {
+      std::string line;
+      std::getline(ifs, line);
+      
+      //if (line.find(m_SVMModel->getName()) != std::string::npos)
+      if (line.find(CV_TYPE_NAME_ML_SVM) != std::string::npos)
+      {
+         std::cout<<"Reading a "<<CV_TYPE_NAME_ML_SVM<<" model !!!"<<std::endl;
+         return true;
+      }
+   }
+   ifs.close();
+   return false;
 }
 
 template <class TInputValue, class TOutputValue>
