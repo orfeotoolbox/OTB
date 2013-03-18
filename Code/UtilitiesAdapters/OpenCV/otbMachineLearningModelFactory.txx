@@ -21,6 +21,9 @@
 
 //#include "otbKNearestNeighborsMachineLearningModelFactory.h"
 #include "otbRandomForestsMachineLearningModelFactory.h"
+#include "otbSVMMachineLearningModelFactory.h"
+#include "otbLibSVMMachineLearningModelFactory.h"
+
 
 namespace otb
 {
@@ -33,7 +36,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
 
   RegisterBuiltInFactories();
 
-  std::list<MachineLearningModelTypePointer> possibleImageIO;
+  std::list<MachineLearningModelTypePointer> possibleMachineLearningModel;
   std::list<LightObject::Pointer> allobjects =
     itk::ObjectFactoryBase::CreateAllInstance("otbMachineLearningModel");
   for(std::list<LightObject::Pointer>::iterator i = allobjects.begin();
@@ -42,19 +45,19 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
     MachineLearningModel<TInputValue,TOutputValue> * io = dynamic_cast<MachineLearningModel<TInputValue,TOutputValue>*>(i->GetPointer());
     if(io)
       {
-      possibleImageIO.push_back(io);
+      possibleMachineLearningModel.push_back(io);
       }
     else
       {
-      std::cerr << "Error ImageIO factory did not return an ImageIOBase: "
+      std::cerr << "Error MachineLearningModel Factory did not return an MachineLearningModel: "
                 << (*i)->GetNameOfClass()
                 << std::endl;
       }
     }
-for(typename std::list<MachineLearningModelTypePointer>::iterator k = possibleImageIO.begin();
-      k != possibleImageIO.end(); ++k)
+for(typename std::list<MachineLearningModelTypePointer>::iterator k = possibleMachineLearningModel.begin();
+      k != possibleMachineLearningModel.end(); ++k)
     {
-    if( mode == ReadMode )
+      if( mode == ReadMode )
       {
       if((*k)->CanReadFile(path))
         {
@@ -88,9 +91,10 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
     if (firstTime)
       {
       // KNN Format for OTB
-//      itk::ObjectFactoryBase::RegisterFactory(KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-
+      //itk::ObjectFactoryBase::RegisterFactory(KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
       itk::ObjectFactoryBase::RegisterFactory(RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+      itk::ObjectFactoryBase::RegisterFactory(LibSVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+      itk::ObjectFactoryBase::RegisterFactory(SVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 
       firstTime = false;
       }
