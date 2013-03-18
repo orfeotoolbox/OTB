@@ -105,9 +105,9 @@ signals:
 //
 // Protected methods.
 protected:
+
   /** \brief Constructor. */
   I18nMainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
-
 
   /**
    */
@@ -116,7 +116,7 @@ protected:
   /**
    */
   virtual void virtual_ConnectUI() =0;
-  
+
   //
   // QMainWindow overrides.
 
@@ -125,6 +125,20 @@ protected:
 //
 // Protected attributes.
 protected:
+
+  /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
+
+//
+// Protected slots. 
+protected slots:
+
+  /**
+   */
+  virtual void OnAboutToChangeModel( const AbstractModel* ) =0;
+
+  /**
+   */
+  virtual void OnModelChanged( AbstractModel* ) =0;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -181,14 +195,6 @@ private slots:
    * menu action is activated.
    */
   void on_action_About_activated();
-
-  /**
-   */
-  virtual void OnAboutToChangeModel( const AbstractModel* ) =0;
-
-  /**
-   */
-  virtual void OnModelChanged( AbstractModel* ) =0;
 
 };
 

@@ -67,12 +67,10 @@ namespace mvd
 /*****************************************************************************/
 MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
-  QMainWindow( parent, flags ), 
+  I18nMainWindow( parent, flags ), 
   m_UI( new mvd::Ui::MainWindow() )
 {
   m_UI->setupUi( this );
-
-  Initialize();
 }
 
 /*****************************************************************************/
@@ -84,22 +82,18 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::Initialize()
+::virtual_SetupUI()
 {
   setObjectName( "mvd::MainWindow" );
   setWindowTitle( PROJECT_NAME );
 
-  // add the needed docks 
   InitializeDockWidgets();
-
-  // add needed widget to the status bar
-  InitializeStatusBar();
 }
 
 /*****************************************************************************/
 void
 MainWindow
-::InitializeStatusBar()
+::virtual_ConnectUI()
 {
 }
 
@@ -111,23 +105,22 @@ MainWindow
 }
 
 /*****************************************************************************/
-void
-MainWindow::closeEvent( QCloseEvent* event )
-{
-  assert( event!=NULL );
-
-  qDebug() << "MainWindow::closeEvent(" << event << ")";
-}
-
-/*****************************************************************************/
 /* SLOTS                                                                     */
 
 /*****************************************************************************/
 void
 MainWindow
-::on_action_Quit_triggered()
+::OnAboutToChangeModel( const AbstractModel* model )
 {
-  close();
+  qDebug() << "MainWindow:" << this << "::OnAboutToChangeModel(" << model << ")";
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnModelChanged( AbstractModel* model )
+{
+  qDebug() << "MainWindow:" << this << "::OnModelChanged(" << model << ")";
 }
 
 } // end namespace 'mvd'

@@ -32,7 +32,6 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -46,6 +45,8 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdTypes.h"
+//
+#include "Gui/mvdI18nMainWindow.h"
 
 
 /*****************************************************************************/
@@ -76,7 +77,7 @@ class MainWindow;
  * \brief The application main-widow widget.
  */
 class Monteverdi2_EXPORT MainWindow
-  : public QMainWindow
+  : public I18nMainWindow
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -111,13 +112,34 @@ signals:
 protected:
 
   //
-  // QMainWindow overrides.
+  // I18nMainWindow overrides.
 
-  void closeEvent( QCloseEvent* event );
+  /**
+   */
+  virtual void virtual_SetupUI();
+
+  /**
+   */
+  virtual void virtual_ConnectUI();
+
 
 //
 // Protected attributes.
 protected:
+
+  /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
+
+//
+// Protected slots.
+protected slots:
+
+  /**
+   */
+  virtual void OnAboutToChangeModel( const AbstractModel* );
+
+  /**
+   */
+  virtual void OnModelChanged( AbstractModel* );
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -129,14 +151,9 @@ private:
 //
 // Private methods.
 private:
-  /** */
-  void Initialize();
 
   /** */
   void InitializeDockWidgets();
-
-  /** */
-  void InitializeStatusBar();
 
 //
 // Private attributes.
@@ -151,12 +168,6 @@ private:
 //
 // Private slots.
 private slots:
-
-  /**
-   * \brief Qt auto-connected slot which is called when File/Quit menu
-   * action is activated.
-   */
-  void on_action_Quit_triggered();
 
 };
 

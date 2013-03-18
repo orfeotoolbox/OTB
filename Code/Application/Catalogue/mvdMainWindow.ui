@@ -23,7 +23,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -84,6 +84,9 @@
    </property>
   </action>
   <action name="action_Open">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="mvdMainWindow.qrc">
      <normaloff>:/icons/action_Open_Icon</normaloff>:/icons/action_Open_Icon</iconset>
@@ -113,6 +116,9 @@
    </property>
   </action>
   <action name="action_Preferences">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Prefere&amp;nces</string>
    </property>
@@ -123,6 +129,9 @@
    </property>
    <property name="checked">
     <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Quicklook</string>
@@ -138,6 +147,9 @@
    <property name="checked">
     <bool>true</bool>
    </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Video color setup</string>
    </property>
@@ -151,6 +163,9 @@
    </property>
    <property name="checked">
     <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Video color dynamics</string>
