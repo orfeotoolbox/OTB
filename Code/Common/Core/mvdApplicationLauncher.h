@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdApplicationsToolBox_h
-#define __mvdApplicationsToolBox_h
+#ifndef __mvdApplicationLauncher_h
+#define __mvdApplicationLauncher_h
 
 //
 // Configuration include.
@@ -31,7 +31,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtCore>
 
 //
 // System includes (sorted by alphabetic order)
@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdTypes.h"
+
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -59,23 +59,18 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-namespace Ui
-{
-class ApplicationsToolBox;
-};
 
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class ApplicationsToolBox
+ * \class ApplicationLauncher
  *
- * \brief Widget template skeleton to copy-paste when adding a new
- * widget class.
+ * \brief WIP.
  */
-class Monteverdi2_EXPORT ApplicationsToolBox :
-    public QWidget
+class Monteverdi2_EXPORT ApplicationLauncher :
+    public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -89,29 +84,23 @@ class Monteverdi2_EXPORT ApplicationsToolBox :
 public:
 
   /** \brief Constructor. */
-  ApplicationsToolBox( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  ApplicationLauncher( QObject* parent =NULL );
 
   /** \brief Destructor. */
-  virtual ~ApplicationsToolBox();
-
-  /** Get TreeWidget */
-  QTreeWidget * GetAlgorithmsTree();
+  virtual ~ApplicationLauncher();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
 // Public SLOTS.
 public slots:
-  void OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& appsTags );
-  void OnSearchBoxChanged( const QString & search );
-  void OnAlgorithmTreeDoubleClick( QTreeWidgetItem * item , int column );
+  void OnApplicationToLaunchSelected(const QString& appname);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  void ApplicationToLaunchSelected(const QString &);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -119,48 +108,20 @@ signals:
 // Protected methods.
 protected:
 
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
 //
 // Protected attributes.
 protected:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
 //
 // Private methods.
 private:
-  /**
-   * \brief fill the widget tree using the tags map
-   */
-  void FillTreeUsingTags();
 
-  /**
-   * \brief Launch the appName algorithm
-   */
-  void ExecuteAlgorithm( const QString& appName );
-
-  /**
-   * \brief Helper method to check if searchText matches any of the
-   * algorithms string contained in the map
-   */
-  bool IsSearchTextMatchAnyAlgorithm( const QString & tagName );
 
 //
 // Private attributes.
 private:
-  /**
-   * \brief uic generated.
-   */
-  Ui::ApplicationsToolBox* m_UI;
-
-  /**
-   * \brief map storing applications and its tags
-   */
-  ApplicationsTagContainer m_AppTags;
-
-  /**
-   * \brief text to search in the widget tree
-   */
-  QString                  m_SearchText;  
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -169,9 +130,29 @@ private:
 private slots:
 };
 
+} // end namespace 'mvd'.
+
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
+//
+// Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
+
+//
+// System includes (sorted by alphabetic order)
+
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+
+//
+// Monteverdi includes (sorted by alphabetic order)
+
+namespace mvd
+{
 } // end namespace 'mvd'
 
-#endif // __mvdApplicationsToolBox_h
+#endif // __mvdApplicationLauncher_h

@@ -159,6 +159,7 @@ ApplicationsToolBox
           
             //
             // TODO : add algorithm icon
+            //secItem->setIcon(0, QIcon( ":" ));
             }
 
           ++itApps;
@@ -207,7 +208,7 @@ void
 ApplicationsToolBox
 ::ExecuteAlgorithm( const QString& appName )
 {
-  std::cout <<"ApplicationsToolBox::ExecuteAlgorithm - "<< ToStdString( appName )<< "- WIP."<< std::endl;
+  emit ApplicationToLaunchSelected(appName);
 }
 
 /*******************************************************************************/

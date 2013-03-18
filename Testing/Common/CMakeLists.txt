@@ -16,6 +16,7 @@ include_directories(
   ${Monteverdi2_SOURCE_DIR}/Code/Application/Viewer
   ${Monteverdi2_SOURCE_DIR}/Code/Common
   ${Monteverdi2_SOURCE_DIR}/Code/Common/Gui
+  ${Monteverdi2_SOURCE_DIR}/Code/Common/Core
   ${Monteverdi2_BINARY_DIR}/Code/Common/Core
   )
 

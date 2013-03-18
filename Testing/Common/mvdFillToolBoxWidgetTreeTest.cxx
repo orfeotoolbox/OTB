@@ -30,6 +30,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdApplicationsToolBox.h"
 #include "mvdApplicationsBrowser.h"
+#include "mvdApplicationLauncher.h"
 
 int mvdFillToolBoxWidgetTreeTest(int argc, char* argv[])
 { 
@@ -60,6 +61,25 @@ int mvdFillToolBoxWidgetTreeTest(int argc, char* argv[])
   //
   // get the tags/algs map container in the widget
   browser->SearchAvailableApplicationsTags();
+
+  //
+  // instanciate Application launcher
+  mvd::ApplicationLauncher * launcher = new mvd::ApplicationLauncher();
+    
+  //
+  // connections
+  QObject::connect(appToolBox, 
+                   SIGNAL( ApplicationToLaunchSelected(const QString& ) ),
+                   launcher,
+                   SLOT( OnApplicationToLaunchSelected(const QString& ) )
+    );
+
+  // add quit
+  // QObject::connect(appToolBox, 
+  //                  SIGNAL( (const QString& ) ),
+  //                  launcher,
+  //                  SLOT( OnQuit() )
+  //   );
 
   //
   // show the application for a while
