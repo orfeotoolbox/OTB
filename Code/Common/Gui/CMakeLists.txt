@@ -15,6 +15,7 @@ set( Common_Gui_SOURCES
   mvdDatasetCreationProgressDialog.cxx
   mvdGLImageWidget.cxx
   mvdGui.cxx
+  mvdI18nMainWindow.cxx
   mvdImageModelRenderer.cxx
   mvdImageViewManipulator.cxx
   mvdMainWindowTitleLoader.cxx
@@ -41,6 +42,7 @@ set( Common_Gui_HEADERS_MOC
   mvdDatasetCreationProgressDialog.h
   mvdGLImageWidget.h
   # mvdGui.h
+  mvdI18nMainWindow.h
   mvdImageModelRenderer.h
   mvdImageViewManipulator.h
   mvdMainWindowTitleLoader.h
