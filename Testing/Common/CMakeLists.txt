@@ -12,12 +12,9 @@ set(Common_TESTS ${CXX_TEST_PATH}/mvdCommonTests)
 
 include_directories(
   ${Monteverdi2_BINARY_DIR}
-  
   ${Monteverdi2_SOURCE_DIR}/Code/Application/Viewer
   ${Monteverdi2_SOURCE_DIR}/Code/Common
-  ${Monteverdi2_SOURCE_DIR}/Code/Common/Gui
-  ${Monteverdi2_SOURCE_DIR}/Code/Common/Core
-  ${Monteverdi2_BINARY_DIR}/Code/Common/Core
+  ${Monteverdi2_BINARY_DIR}/Code/Common/
   )
 
 # add source files

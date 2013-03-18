@@ -28,7 +28,7 @@
 // System includes (sorted by alphabetic order)
 
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdApplicationsToolBox.h"
+#include "ApplicationsWrapper/mvdApplicationsToolBox.h"
 
 int mvdApplicationsToolBoxTest(int argc, char* argv[])
 {

@@ -28,7 +28,7 @@
 // System includes (sorted by alphabetic order)
 
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdApplicationsBrowser.h"
+#include "ApplicationsWrapper/mvdApplicationsBrowser.h"
 
 int mvdApplicationsBrowserTest(int argc, char* argv[])
 { 
