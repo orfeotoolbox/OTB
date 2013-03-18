@@ -84,20 +84,13 @@ HistogramModel
   // Due to float/double conversion, it can happen
   // that the minimum or maximum value go slightly outside the histogram
   // Clamping the value solves the issue and avoid RangeError
-  // measurement[0] =
-  //   itk::NumericTraits<MeasurementType>::Clamp(
-  //     measurement[0],
-  //     histogram->GetBinMin(0, 0),
-  //     histogram->GetBinMax(0, histogram->GetSize(0) - 1)
-  //     );
-
-  // 
-  // itk::NumericsTraits<>::Clamp(...) was removed when .
+ // itk::NumericsTraits<>::Clamp(...) was removed 
   // TODO : when otb::Clamp will be developped, use this function
   measurement[0]  = 
     measurement[0]<histogram->GetBinMin(0, 0)?
     histogram->GetBinMin(0, 0):(measurement[0]>histogram->GetBinMax(0, histogram->GetSize(0) - 1)?
                                 histogram->GetBinMax(0, histogram->GetSize(0) - 1):measurement[0]);
+
     
   // Get the index of measurement in 1D-histogram.
   Histogram::IndexType index;
