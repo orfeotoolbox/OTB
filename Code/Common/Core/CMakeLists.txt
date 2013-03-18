@@ -25,16 +25,16 @@ set( Common_Core_SOURCES
 set( Common_Core_HEADERS_MOC
   mvdAbstractImageModel.h
   mvdAbstractModel.h
-  mvdAlgorithm.h
+  # mvdAlgorithm.h
   mvdDatasetDescriptor.h
   mvdDatasetModel.h
   mvdHistogramModel.h
   mvdI18nApplication.h
-  mvdMath.h
+  # mvdMath.h
   mvdMyClass.h
   mvdQuicklookModel.h
-  mvdSystemError.h
-  mvdTypes.h
+  # mvdSystemError.h
+  # mvdTypes.h
   mvdVectorImageModel.h
 )
 

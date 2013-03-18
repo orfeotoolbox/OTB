@@ -40,7 +40,7 @@ set( Common_Gui_HEADERS_MOC
   mvdColorSetupWidget.h
   mvdDatasetCreationProgressDialog.h
   mvdGLImageWidget.h
-  mvdGui.h
+  # mvdGui.h
   mvdImageModelRenderer.h
   mvdImageViewManipulator.h
   mvdMainWindowTitleLoader.h
