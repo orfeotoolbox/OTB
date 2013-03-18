@@ -4,7 +4,8 @@
 # Package GUI (files ordered by lexicographical order i.e. ease of search).
 set( Common_ApplicationsWrapper_SOURCES
   mvdApplicationsBrowser.cxx
-  mvdApplicationLauncher.cxx  
+  mvdApplicationLauncher.cxx
+  mvdWrapperQtWidgetInputImageParameter.cxx
 )
 
 #############################################################################
@@ -14,6 +15,7 @@ set( Common_ApplicationsWrapper_SOURCES
 set( Common_ApplicationsWrapper_HEADERS_MOC
   mvdApplicationsBrowser.h
   mvdApplicationLauncher.h
+  mvdWrapperQtWidgetInputImageParameter.h
 )
 
 #############################################################################
