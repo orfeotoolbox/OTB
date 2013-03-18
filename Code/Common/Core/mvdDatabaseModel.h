@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdCatalogueApplication_h
-#define __mvdCatalogueApplication_h
+#ifndef __mvdDatabaseModel_h
+#define __mvdDatabaseModel_h
 
 //
 // Configuration include.
@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdI18nApplication.h"
+#include "mvdAbstractModel.h"
 
 
 /*****************************************************************************/
@@ -59,16 +59,16 @@ namespace
 namespace mvd
 {
 //
-// Class declaration.
+// Internal classes pre-declaration.
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class CatalogueApplication
+/** \class DatabaseModel
  *
  */
-class Monteverdi2_EXPORT CatalogueApplication
-  : public I18nApplication
+class Monteverdi2_EXPORT DatabaseModel :
+    public AbstractModel
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -78,28 +78,48 @@ class Monteverdi2_EXPORT CatalogueApplication
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
-// Public constants.
+// Public types.
 public:
+
+  /**
+   * \class BuildContext
+   * \brief WIP.
+   */
+  class BuildContext
+  {
+    //
+    // Public methods.
+  public:
+    BuildContext()
+    {
+    }
+
+    //
+    // Public attributes
+  public:
+  };
 
 //
 // Public methods.
 public:
 
-  /**
-   * \brief Constructor.
-   *
-   * \param argc Command-line argument count in the argv array.
-   * \param argv Array of command-argument (whitespace-separated) strings.
-   */
-  CatalogueApplication( int& argc, char** argv );
+  /** \brief Constructor. */
+  DatabaseModel( QObject* parent =NULL );
 
   /** \brief Destructor. */
-  virtual ~CatalogueApplication();
+  virtual ~DatabaseModel();
 
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+  /**
+   */
+  void Save();
 
-public slots:
-  
+  //
+  // AbstractModel overrides.
+
+  virtual bool IsModified() const;
+
+  virtual void ClearModified();
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -112,33 +132,52 @@ signals:
 // Protected methods.
 protected:
 
+  //
+  // AbstractModel overrides.
+
+  /**
+   */
+  virtual void virtual_BuildModel( void* context =NULL );
+
 //
 // Protected attributes.
 protected:
 
-  virtual void virtual_InitializeCore();
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
-//
-// Private methods.
-private:
 
 //
 // Private attributes.
 private:
 
+
+//
+// Private methods.
+private:
+
+
+//
+// Private attributes.
+private:
+
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
-// Slots
+// Slots.
 private slots:
 };
+
+} // end namespace 'mvd'
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
+//
+// Monteverdi deferred includes (sorted by alphabetic order)
+
+namespace mvd
+{
 
 } // end namespace 'mvd'
 
-#endif // __CatalogueApplication_h
+#endif // __mvdDatabaseModel_h

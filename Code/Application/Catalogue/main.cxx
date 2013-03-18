@@ -54,13 +54,13 @@
 int
 main( int argc, char* argv[] )
 {
+  // Initialize application and sync settings.
   mvd::CatalogueApplication application( argc, argv );
-
   application.Initialize();
 
 
+  // Initialize main-window (UI).
   mvd::MainWindow mainWindow;
-
   mainWindow.Initialize();
 
 #if 0
