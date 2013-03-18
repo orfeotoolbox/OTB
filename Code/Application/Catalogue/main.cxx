@@ -58,23 +58,10 @@ main( int argc, char* argv[] )
 
   application.Initialize();
 
-#if 0
-// TODO: 1) MVD2-viewer: Factorize settings loading between Viewer & Catalogue  // Check if the application have a settings file already available
-  bool appHasSettingsFile = application.HasSettingsFile();
-  bool appHasIncorrectCacheDir(false);
-  if (appHasSettingsFile)
-    {
-    // Read cache dir from settings
-    application.ReadCacheDirFromSettings();
-    // Check the cache dir
-    if (!application.CheckCacheDirIsCorrect() )
-      {
-      appHasIncorrectCacheDir = true;
-      }
-    }
-#endif
 
   mvd::MainWindow mainWindow;
+
+  mainWindow.Initialize();
 
 #if 0
 // TODO: 1) MVD2-viewer: Factorize cache-dir search between Viewer & Catalogue.

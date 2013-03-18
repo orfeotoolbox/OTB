@@ -112,7 +112,7 @@ void
 MainWindow
 ::OnAboutToChangeModel( const AbstractModel* model )
 {
-  qDebug() << "MainWindow:" << this << "::OnAboutToChangeModel(" << model << ")";
+  qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 }
 
 /*****************************************************************************/
@@ -120,7 +120,7 @@ void
 MainWindow
 ::OnModelChanged( AbstractModel* model )
 {
-  qDebug() << "MainWindow:" << this << "::OnModelChanged(" << model << ")";
+  qDebug() << this << "::OnModelChanged(" << model << ")";
 }
 
 } // end namespace 'mvd'
