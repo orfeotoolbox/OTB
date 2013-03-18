@@ -99,7 +99,7 @@ MainWindow
   QString defaultCacheDirLocStr (QDir::toNativeSeparators(QDir::homePath()));
   QString defaultCacheDirStr (defaultCacheDirLocStr);
   defaultCacheDirStr.append(QDir::separator());
-  defaultCacheDirStr.append(Application::ConstInstance()->GetCacheDirName());
+  defaultCacheDirStr.append( I18nApplication::DEFAULT_CACHE_DIR_NAME );
   
   int ret;
 
@@ -199,15 +199,15 @@ MainWindow
   // Connect Appllication and MainWindow when selected model is about
   // to change.
   QObject::connect(
-    qApp, SIGNAL( AboutToChangeSelectedModel( const AbstractModel* ) ),
-    this, SLOT( OnAboutToChangeSelectedModel( const AbstractModel* ) )
+    qApp, SIGNAL( AboutToChangeModel( const AbstractModel* ) ),
+    this, SLOT( OnAboutToChangeModel( const AbstractModel* ) )
   );
 
   // Connect Application and MainWindow when selected model has been
   // changed.
   QObject::connect(
-    qApp, SIGNAL( SelectedModelChanged( AbstractModel* ) ),
-    this, SLOT( OnSelectedModelChanged( AbstractModel* ) )
+    qApp, SIGNAL( ModelChanged( AbstractModel* ) ),
+    this, SLOT( OnModelChanged( AbstractModel* ) )
   );
   
   // Show the progress dialog when a new image is loaded
@@ -537,7 +537,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeSelectedModel( const AbstractModel* )
+::OnAboutToChangeModel( const AbstractModel* )
 {
   //
   // COLOR SETUP.
@@ -702,7 +702,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnSelectedModelChanged( AbstractModel* model )
+::OnModelChanged( AbstractModel* model )
 {
   if( model==NULL )
     return;

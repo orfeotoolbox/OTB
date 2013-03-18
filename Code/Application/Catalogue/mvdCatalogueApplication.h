@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdApplication_h
-#define __mvdApplication_h
+#ifndef __mvdCatalogueApplication_h
+#define __mvdCatalogueApplication_h
 
 //
 // Configuration include.
@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdI18nApplication.h"
+#include "Core/mvdApplication.h"
 
 
 /*****************************************************************************/
@@ -64,10 +64,10 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class Application
+/** \class CatalogueApplication
  *
  */
-class Monteverdi2_EXPORT Application
+class Monteverdi2_EXPORT CatalogueApplication
   : public I18nApplication
 {
 
@@ -91,10 +91,10 @@ public:
    * \param argc Command-line argument count in the argv array.
    * \param argv Array of command-argument (whitespace-separated) strings.
    */
-  Application( int& argc, char** argv );
+  CatalogueApplication( int& argc, char** argv );
 
   /** \brief Destructor. */
-  virtual ~Application();
+  virtual ~CatalogueApplication();
 
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
@@ -117,14 +117,13 @@ protected:
 // Protected attributes.
 protected:
 
+  virtual void virtual_InitializeCore();
+
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private methods.
 private:
-  /**
-   */
-  void InitializeCore();
 
 //
 // Private attributes.
@@ -143,4 +142,4 @@ private slots:
 
 } // end namespace 'mvd'
 
-#endif // __Application_h
+#endif // __CatalogueApplication_h

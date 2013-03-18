@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdApplication.h"
+#include "mvdCatalogueApplication.h"
 
 
 /*****************************************************************************/
@@ -41,7 +41,7 @@ namespace mvd
 {
 
 /*
-  TRANSLATOR mvd::Application
+  TRANSLATOR mvd::CatalogueApplication
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -60,52 +60,30 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-Application
-::Application( int& argc, char** argv ) :
+CatalogueApplication
+::CatalogueApplication( int& argc, char** argv ) :
   I18nApplication( argc, argv )
 {
-  InitializeCore();
 }
 
 /*******************************************************************************/
-Application
-::~Application()
+CatalogueApplication
+::~CatalogueApplication()
 {
 }
 
 /*******************************************************************************/
 void
-Application
-::InitializeCore()
+CatalogueApplication
+::virtual_InitializeCore()
 {
-  setObjectName( "mvd::Application" );
+  setObjectName( "CatalogueApplication" );
 
-  //
-  // Setup application tags.
-  //
-  QCoreApplication::setApplicationName(
-    PROJECT_NAME "-Catalogue"
+  InitializeCore(
+    PROJECT_NAME, Monteverdi2_VERSION_STRING,
+    "OrfeoToolBox", "orfeo-toolbox.org"
   );
-  QCoreApplication::setApplicationVersion(
-    Monteverdi2_VERSION_STRING
-  );
-
-  //
-  // Setup organization tags.
-  //
-  QCoreApplication::setOrganizationName(
-    "OrfeoToolBox"
-  );
-  QCoreApplication::setOrganizationDomain(
-    "orfeo-toolbox.org"
-  );
-
-#ifndef Q_WS_MAC
-    setWindowIcon(QIcon(QLatin1String(":/images/application_icon")));
-#endif
-
 }
-
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

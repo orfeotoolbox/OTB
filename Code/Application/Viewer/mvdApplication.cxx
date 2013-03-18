@@ -58,6 +58,8 @@ const char* Application::DATASET_EXT = ".ds";
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
+#if 0
+
 /*****************************************************************************/
 void
 Application
@@ -136,23 +138,27 @@ Application::LoadDatasetModel( const QString& imageFilename,
   return model;
 }
 
+#endif
+
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
 Application
 ::Application( int& argc, char** argv ) :
-  I18nApplication( argc, argv ),
+  I18nApplication( argc, argv )//,
+#if 0
   m_Model( NULL )
+#endif
 {
+#if 0
   InitializeCore();
+#endif
 
   QObject::connect(
     this, SIGNAL( aboutToQuit() ),
     this, SLOT( OnAboutToQuit() )
     );
-
-  InitializeModel();
 }
 
 /*******************************************************************************/
@@ -162,6 +168,7 @@ Application
 }
 
 /*******************************************************************************/
+#if 0
 void
 Application
 ::SetModel( AbstractModel* model )
@@ -177,15 +184,28 @@ Application
 
   emit SelectedModelChanged( m_Model );
 }
+#endif
 
 /*******************************************************************************/
 void
 Application
+::virtual_InitializeCore()
+{
+  setObjectName( "ViewerApplication" );
+
+  InitializeCore(
+    PROJECT_NAME, Monteverdi2_VERSION_STRING,
+    "OrfeoToolBox", "orfeo-toolbox.org"
+  );
+}
+
+/*******************************************************************************/
+#if 0
+void
+Application
 ::InitializeCore()
 {
-  setObjectName( "Application" );
-
-  //
+   //
   // Setup application tags.
   //
   QCoreApplication::setApplicationName(
@@ -209,16 +229,12 @@ Application
 #endif
 
 }
+#endif
 
 /*******************************************************************************/
-void
+bool
 Application
-::InitializeModel()
-{
-}
-
-/*******************************************************************************/
-bool Application::HasSettingsFile()
+::HasSettingsFile()
 {
   // The settings file should contain the cacheDir key to be valid
   QSettings settings;
@@ -227,19 +243,68 @@ bool Application::HasSettingsFile()
 }
 
 /*******************************************************************************/
-void Application::ReadCacheDirFromSettings()
+void
+Application
+::ReadCacheDirFromSettings()
 {
   QSettings settings;
   QString cacheDirSetting = settings.value("cacheDir").toString();
-  m_CacheDir.setPath(cacheDirSetting);
+  GetCacheDir().setPath(cacheDirSetting);
 }
 
+/*******************************************************************************/
 void Application::WriteCacheDirIntoSettings()
 {
   QSettings settings;
-  settings.setValue("cacheDir", m_CacheDir.path());
+  settings.setValue("cacheDir", GetCacheDir().path());
 }
 
+/*******************************************************************************/
+bool
+Application
+::CheckCacheDirIsCorrect()
+{
+  QDir dir = GetCacheDir();
+
+  if (!TestDirExistenceAndWriteAcess(dir))
+    {
+    return false;
+    }
+  else
+    {
+    // Check if this directory has the good name
+    if (GetCacheDir().dirName().compare(QString(I18nApplication::DEFAULT_CACHE_DIR_NAME)))
+      {
+      return false;
+      }
+    }
+
+  return true;
+}
+
+/*******************************************************************************/
+bool
+Application
+::TestDirExistenceAndWriteAcess( QDir dir)
+{
+  // Check if this directory exists
+  if (!dir.exists())
+    {
+    return false;
+    }
+
+  // Check if we can write in this directory
+  if (dir.mkdir("testWriteAccess"))
+    { // ok this repository is correct
+    dir.rmdir("testWriteAccess");
+    }
+  else
+    { // ko this repository is not correct
+    return false;
+    }
+
+  return true;
+}
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

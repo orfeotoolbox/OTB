@@ -99,6 +99,7 @@ public:
   /** \brief Destructor. */
   virtual ~Application();
 
+#if 0
  /**
   */
   inline const AbstractModel* GetModel() const;
@@ -116,6 +117,7 @@ public:
    */
   template< typename TModel >
   inline TModel* GetModel();
+#endif
 
   /**
    *
@@ -131,6 +133,23 @@ public:
     *
     */
   void WriteCacheDirIntoSettings();
+
+  /**
+   * \brief Check if the cache directory is valid.
+   *
+   * \return true if the cache directory is correct
+   */
+  // TODO: Remove method when class is upgraded to I18nApplication fatorized code.
+  bool CheckCacheDirIsCorrect();
+
+  /**
+   * \brief Test if the application can write in the directory provided.
+   *
+   * \param dir input directory
+   * \return true if the directory can be used
+   */
+  // TODO: Remove method when class is upgraded to I18nApplication fatorized code.
+  bool TestDirExistenceAndWriteAcess( QDir dir);
 
   //
   // STATIC METHODS.
@@ -151,6 +170,7 @@ public:
    */
   inline static const Application* ConstInstance();
 
+#if 0
   /**
    */
   static
@@ -164,20 +184,25 @@ public:
     DatasetModel* LoadDatasetModel( const QString& imageFilename,
 				     int width,
 				     int height );
+#endif
 
-             
+//
+// PUBLIC SLOTS.
 public slots:
+#if 0
   /**
    */
   // Method could be inline but it's better not new/delete in inline
   // methods (heap and memory-alignment contexts).
   void SetModel( AbstractModel* model );
-  
+#endif
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
+#if 0
   /**
    */
   void AboutToChangeSelectedModel( const AbstractModel* );
@@ -185,12 +210,15 @@ signals:
   /**
    */
   void SelectedModelChanged( AbstractModel* );
+#endif
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
+
+  virtual void virtual_InitializeCore();
 
 //
 // Protected attributes.
@@ -201,21 +229,20 @@ protected:
 //
 // Private methods.
 private:
+#if 0
   /**
    */
   void InitializeCore();
-
-  /**
-   */
-  void InitializeModel();
+#endif
 
 //
 // Private attributes.
 private:
-
+#if 0
   /**
    */
   AbstractModel* m_Model;
+#endif
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -248,6 +275,7 @@ Application
   return I18nApplication::ConstInstance< Application >();
 }
 
+#if 0
 /*****************************************************************************/
 inline
 const AbstractModel*
@@ -285,6 +313,7 @@ Application
 {
   return qobject_cast< TModel* >( m_Model );
 }
+#endif
 
 /*****************************************************************************/
 

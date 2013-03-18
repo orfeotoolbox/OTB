@@ -35,7 +35,9 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAlgorithm.h"
+#include "mvdDatasetModel.h"
 #include "mvdSystemError.h"
+#include "mvdVectorImageModel.h"
 
 namespace mvd
 {
@@ -50,13 +52,28 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
-const char* I18nApplication::CACHE_DIR_NAME = "mvd2";
+const char* I18nApplication::DEFAULT_CACHE_DIR_NAME = "mvd2";
+
+const char* I18nApplication::DATASET_EXT = ".ds";
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
-/*****************************************************************************/
-/* CLASS IMPLEMENTATION SECTION                                              */
+/*******************************************************************************/
+bool
+I18nApplication
+::IsValidCacheDir( const QString& path )
+{
+  QDir dir( path );
+  QFileInfo fileInfo( path );
+
+  return
+    fileInfo.exists() &&
+    fileInfo.isDir() &&
+    fileInfo.isReadable() &&
+    fileInfo.isWritable() &&
+    dir.dirName()==I18nApplication::DEFAULT_CACHE_DIR_NAME;
+}
 
 /*******************************************************************************/
 bool
@@ -88,14 +105,108 @@ I18nApplication
   return true;
 }
 
+/*****************************************************************************/
+void
+I18nApplication
+::DatasetPathName( QString& path,
+		   QString& name,
+		   const QString& imageFilename )
+{
+  // '/tmp/archive.tar.gz'
+  QFileInfo fileInfo( imageFilename );
+
+#if 0
+  // Dataset is stored into image-file path.
+  // E.g. '/tmp'
+  path = fileInfo.path();
+#else
+  // Dataset is stored into application cache-directory.
+  // E.g. '$HOME/<CACHE_DIR>'
+  path = I18nApplication::Instance()->GetCacheDir().path();
+#endif
+
+  // '[_tmp_]archive.tar.gz.<SUFFIX>'
+  name =
+#if 1
+    fileInfo.canonicalPath().replace( QRegExp( "[/\\\\:]+" ), "_") +
+    "_" +
+#endif
+    fileInfo.fileName() +
+    I18nApplication::DATASET_EXT;
+}
+
+/*****************************************************************************/
+DatasetModel*
+I18nApplication
+::LoadDatasetModel( const QString& imageFilename,
+		    int width,
+		    int height )
+{
+  // New model.
+  DatasetModel* model = new DatasetModel();
+
+  // Retrive path and name.
+  QString path;
+  QString name;
+
+  I18nApplication::DatasetPathName( path, name, imageFilename );
+  qDebug() << "Dataset path: " << path;
+  qDebug() << "Dataset name: " << name;
+
+  // Setup QObject
+  model->setObjectName( QDir( path ).filePath( name ) );
+
+  try
+    {
+    // try if the filename is valid
+    VectorImageModel::EnsureValidImage(imageFilename);
+    // Build model (relink to cached data).
+    DatasetModel::BuildContext context( path, name, width, height );
+    model->BuildModel( &context );
+
+    // Load image if DatasetModel is empty.
+    if( !model->HasSelectedImageModel() )
+      {
+      // Import image from filename given (w; h) size to choose
+      // best-fit resolution.
+      model->ImportImage( imageFilename, width, height );
+      }
+    }
+
+  catch( std::exception& exc )
+    {
+    delete model;
+    model = NULL;
+
+    throw;
+    }
+ 
+  return model;
+}
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
+
 /*******************************************************************************/
 I18nApplication
 ::I18nApplication( int& argc, char** argv ) :
   QApplication( argc, argv ),
   m_CacheDir(),
+  m_Settings( NULL ),
+  m_Model( NULL ),
   m_IsRunningFromBuildDir( false )
 {
+#if 0
+  // Initialize internationlization.
   InitializeLocale();
+
+  //
+  // Force numeric options of locale to "C"
+  // See issue #635
+  //
+  // TODO: Move into I18nApplication.
+  setlocale( LC_NUMERIC, "C" );
+#endif
 }
 
 /*******************************************************************************/
@@ -103,6 +214,157 @@ I18nApplication
 ::~I18nApplication()
 {
 }
+
+/*******************************************************************************/
+void
+I18nApplication
+::Initialize()
+{
+  // Initialize internationlization.
+  InitializeLocale();
+
+  //
+  // Force numeric options of locale to "C"
+  // See issue #635
+  //
+  // TODO: Move into I18nApplication.
+  setlocale( LC_NUMERIC, "C" );
+
+  // Initialize QCoreApplication.
+  virtual_InitializeCore();
+
+  // Initialize settings.
+  InitializeSettings();
+}
+
+/*******************************************************************************/
+void
+I18nApplication
+::SetModel( AbstractModel* model )
+{
+  emit AboutToChangeModel( model );
+
+  delete m_Model;
+
+  m_Model = model;
+
+  if( model!=NULL )
+    m_Model->setParent( this );
+
+  emit ModelChanged( m_Model );
+}
+
+/*******************************************************************************/
+bool
+I18nApplication
+::MakeCacheDir( const QString& cacheDirStr )
+{
+  QDir homeDir (cacheDirStr);
+
+  if (!homeDir.exists())
+    SystemError(ToStdString( QString( "('%1')" ).arg( homeDir.path() ) ));
+
+  bool isNew = I18nApplication::MakeDirTree(
+    homeDir.path(), I18nApplication::DEFAULT_CACHE_DIR_NAME );
+
+  QDir cacheDir( homeDir );
+
+  if( !cacheDir.cd( I18nApplication::DEFAULT_CACHE_DIR_NAME ) )
+    throw SystemError(
+      ToStdString(
+	QString( "('%1')" ).arg(
+	  homeDir.filePath( I18nApplication::DEFAULT_CACHE_DIR_NAME )
+	)
+      )
+    );
+
+  m_CacheDir = cacheDir;
+  qDebug() << tr("Cache directory created at %1").arg(m_CacheDir.path());
+
+  return isNew;
+}
+
+#if 0
+/*******************************************************************************/
+bool
+I18nApplication
+::CheckCacheDirIsCorrect()
+{
+  QDir dir = m_CacheDir;
+
+  if (!TestDirExistenceAndWriteAcess(dir))
+    {
+    return false;
+    }
+  else
+    {
+    // Check if this directory has the good name
+    if (m_CacheDir.dirName().compare(QString(I18nApplication::DEFAULT_CACHE_DIR_NAME)))
+      {
+      return false;
+      }
+    }
+
+  return true;
+}
+
+/*******************************************************************************/
+bool
+I18nApplication
+::TestDirExistenceAndWriteAcess( QDir dir)
+{
+  // Check if this directory exists
+  if (!dir.exists())
+    {
+    return false;
+    }
+
+  // Check if we can write in this directory
+  if (dir.mkdir("testWriteAccess"))
+    { // ok this repository is correct
+    dir.rmdir("testWriteAccess");
+    }
+  else
+    { // ko this repository is not correct
+    return false;
+    }
+
+  return true;
+}
+#endif
+
+#if 0
+/*******************************************************************************/
+bool
+I18nApplication
+::HasSettingsFile()
+{
+  // The settings file should contain the cacheDir key to be valid
+  QSettings settings;
+  settings.sync();
+  return ( (settings.status()==QSettings::NoError) && settings.contains("cacheDir"));
+}
+
+/*******************************************************************************/
+void
+I18nApplication
+::ReadCacheDirFromSettings()
+{
+  QSettings settings;
+  QString cacheDirSetting = settings.value("cacheDir").toString();
+  m_CacheDir.setPath(cacheDirSetting);
+}
+
+/*******************************************************************************/
+void
+I18nApplication
+::WriteCacheDirIntoSettings()
+{
+  QSettings settings;
+  settings.setValue("cacheDir", m_CacheDir.path());
+}
+
+#endif
 
 /*******************************************************************************/
 void
@@ -159,7 +421,7 @@ I18nApplication
        && prefix.exists("i18n") )
     {
     m_IsRunningFromBuildDir = true;
-    
+
     // Report found build dir root
     qDebug() << tr( "Running from build directory '%1'." ).arg( prefix.path() );
     
@@ -208,6 +470,70 @@ I18nApplication
 
   // TODO: Record locale translation filename(s) used in UI component (e.g.
   // AboutDialog, Settings dialog, Information dialog etc.)
+}
+
+/*******************************************************************************/
+void
+I18nApplication
+::InitializeCore( const QString& appName,
+		  const QString& appVersion,
+		  const QString& orgName,
+		  const QString& orgDomain )
+{
+  setObjectName( "Application" );
+
+  //
+  // Setup application tags.
+  //
+  QCoreApplication::setApplicationName(
+    appName
+  );
+  QCoreApplication::setApplicationVersion(
+    appVersion
+  );
+
+  //
+  // Setup organization tags.
+  //
+  QCoreApplication::setOrganizationName( orgName );
+  QCoreApplication::setOrganizationDomain( orgDomain );
+
+#ifndef Q_WS_MAC
+    setWindowIcon( QIcon( QLatin1String( ":/images/application_icon" ) ) );
+#endif
+}
+
+/*******************************************************************************/
+void
+I18nApplication
+::InitializeSettings()
+{
+  //
+  // Create settings proxy.
+  m_Settings = new QSettings(
+    // TODO: Change QSettings::NativeFormat by QSettings::IniFormat.
+    QSettings::NativeFormat,
+    QSettings::UserScope,
+    QCoreApplication::organizationName(),
+    QCoreApplication::applicationName(),
+    this
+  );
+
+  //
+  // Restore cache directory.
+  QVariant value( RetrieveSettingsKey( "cacheDir" ) );
+
+  if( !value.isNull() )
+    {
+    QString path( value.toString() );
+
+    qDebug() << "Settings/cacheDir:" << path;
+
+    if( I18nApplication::IsValidCacheDir( path ) )
+      {
+      m_CacheDir.setPath( path );
+      }
+    }
 }
 
 /*******************************************************************************/
@@ -261,80 +587,6 @@ I18nApplication
   // TODO: Log locale translation filename used.
 
   qDebug() << message;
-
-  return true;
-}
-
-/*******************************************************************************/
-bool
-I18nApplication
-::MakeCacheDir(QString cacheDirStr)
-{
-  QDir homeDir (cacheDirStr);
-
-  if (!homeDir.exists())
-    SystemError(ToStdString( QString( "('%1')" ).arg( homeDir.path() ) ));
-
-  bool isNew = I18nApplication::MakeDirTree(
-    homeDir.path(), I18nApplication::CACHE_DIR_NAME );
-
-  QDir cacheDir( homeDir );
-
-  if( !cacheDir.cd( I18nApplication::CACHE_DIR_NAME ) )
-    throw SystemError(
-      ToStdString(
-	QString( "('%1')" ).arg( homeDir.filePath( I18nApplication::CACHE_DIR_NAME ) )
-      )
-    );
-
-  m_CacheDir = cacheDir;
-  qDebug() << tr("Cache directory created at %1").arg(m_CacheDir.path());
-
-  return isNew;
-}
-
-/*******************************************************************************/
-bool
-I18nApplication
-::CheckCacheDirIsCorrect()
-{
-  QDir dir = m_CacheDir;
-
-  if (!TestDirExistenceAndWriteAcess(dir))
-    {
-    return false;
-    }
-  else
-    {
-    // Check if this directory has the good name
-    if (m_CacheDir.dirName().compare(QString(I18nApplication::CACHE_DIR_NAME)))
-      {
-      return false;
-      }
-    }
-
-  return true;
-}
-/*******************************************************************************/
-bool
-I18nApplication
-::TestDirExistenceAndWriteAcess( QDir dir)
-{
-  // Check if this directory exists
-  if (!dir.exists())
-    {
-    return false;
-    }
-
-  // Check if we can write in this directory
-  if (dir.mkdir("testWriteAccess"))
-    { // ok this repository is correct
-    dir.rmdir("testWriteAccess");
-    }
-  else
-    { // ko this repository is not correct
-    return false;
-    }
 
   return true;
 }

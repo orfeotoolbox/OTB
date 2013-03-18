@@ -46,12 +46,17 @@ main( int argc, char* argv[] )
 {
   mvd::Application application( argc, argv );
 
+  application.Initialize();
+
+  /*
+  // INFO: Moved (fatorized) into I18nApplcation.
   //
   // Force numeric options of locale to "C"
   // See issue #635
   //
   // TODO: Move into I18nApplication.
   setlocale( LC_NUMERIC, "C" );
+  */
 
 // TODO: 1) MVD2-viewer: Factorize settings loading between Viewer & Catalogue  // Check if the application have a settings file already available
   bool appHasSettingsFile = application.HasSettingsFile();

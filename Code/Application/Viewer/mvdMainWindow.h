@@ -287,13 +287,13 @@ private slots:
   void OnColorDynamicsVisibilityChanged ( bool );
 
   /** */
-  void OnAboutToChangeSelectedModel( const AbstractModel* );
+  void OnAboutToChangeModel( const AbstractModel* );
 
   /** */
   void OnModelLoaded( AbstractModel* );
 
   /** */
-  void OnSelectedModelChanged( AbstractModel* );
+  void OnModelChanged( AbstractModel* );
 
   /** */
   void OnUserCoordinatesEditingFinished();

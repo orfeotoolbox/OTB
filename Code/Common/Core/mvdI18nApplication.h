@@ -42,6 +42,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdAlgorithm.h"
+#include "mvdSystemError.h"
 #include "mvdTypes.h"
 
 //
@@ -62,6 +64,8 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class AbstractModel;
+class DatasetModel;
 
 
 /*****************************************************************************/
@@ -96,6 +100,14 @@ public:
 
   /** \brief Destructor. */
   virtual ~I18nApplication();
+
+  /**
+   */
+  void Initialize();
+
+  //
+  // APPLICATION SINGLETON.
+  //
 
   /**
    * \brief Get the singleton instance of application as a
@@ -133,6 +145,48 @@ public:
   template< typename TApplication >
     inline static const TApplication* ConstInstance();
 
+  //
+  // APPLICATION MODEL.
+  //
+
+ /**
+  * \brief Access the AbstractModel of the MVC which is managed by the
+  * application.
+  *
+  * \return The managed AbstractModel.
+  */
+  inline const AbstractModel* GetModel() const;
+
+  /**
+  * \brief Access the AbstractModel of the MVC which is managed by the
+  * application.
+  *
+  * \return The managed AbstractModel.
+   */
+  inline AbstractModel* GetModel();
+
+ /**
+  * \brief Access the AbstractModel of the MVC which is managed by the
+  * application and cast it into the given dynamic type.
+  *
+  * \return The managed TModel typename instance.
+  */
+  template< typename TModel >
+  inline const TModel* GetModel() const;
+
+  /**
+  * \brief Access the AbstractModel of the MVC which is managed by the
+  * application and cast it into the given dynamic type.
+  *
+  * \return The managed TModel typename instance.
+   */
+  template< typename TModel >
+  inline TModel* GetModel();
+
+  //
+  // APPLICATION CACHE-DIRECTORY.
+  //
+
   /**
    * \brief Create cache directory if not already existing.
    *
@@ -140,8 +194,9 @@ public:
    * \return true if cache directory has just been created or false if
    * it was already existing.
    */
-  bool MakeCacheDir(QString cacheDirStr);
+  bool MakeCacheDir( const QString& cacheDirStr );
 
+#if 0
   /**
    * \brief Check if the cache directory is valid.
    *
@@ -156,6 +211,7 @@ public:
    * \return true if the directory can be used
    */
   bool TestDirExistenceAndWriteAcess( QDir dir);
+#endif
 
   /**
    * \brief Get the cache directory.
@@ -164,15 +220,46 @@ public:
    */
   inline const QDir& GetCacheDir() const;
 
+  //
+  // APPLICATION SETTINGS.
+  //
+
+#if 0
   /**
-   * \brief Get the cache directory name.
-   *
-   * \return Return the cache directory name.
    */
-  inline const char* GetCacheDirName() const;
+  bool HasSettingsFile();
+
+  /**
+   */
+  void ReadCacheDirFromSettings();
+
+  /**
+   */
+  void WriteCacheDirIntoSettings();
+#endif
+
+  /**
+   */
+  // TODO: Move method into ApplicationSettings class.
+  inline bool HasSettingsKey( const QString& key );
+
+  /**
+   */
+  // TODO: Move method into ApplicationSettings class.
+  inline void StoreSettingsKey( const QString& key, const QVariant& value );
+
+  /**
+   */
+  // TODO: Move method into Application class.
+  inline QVariant RetrieveSettingsKey( const QString& key );
 
   //
   // STATIC methods.
+  //
+
+  /**
+   */
+  static bool IsValidCacheDir( const QString& path );
 
   /**
    * \brief Make directory tree in given path.
@@ -188,14 +275,86 @@ public:
    */
   static bool MakeDirTree( const QString& path, const QString& tree );
 
+  /**
+   * \brief Construct a consistent Dataset path-name.
+   *
+   * \param path Resulting path where the Dataset will be stored.
+   * \param name Resulting name of the given Dataset.
+   * \param imageFilename The image filename used to compute the path and name of the Dataset.
+   */
+  static
+    void DatasetPathName( QString& path,
+			  QString& name,
+			  const QString& imageFilename );
+
+  /**
+   * \brief Load a DatasetModel from disk.
+   *
+   * \param imageFilename The input image filename.
+   * \param with The width (in pixels) of the screen best fit.
+   * \param height The height (in pixels) of the screen best fit.
+   *
+   * \return The loaded DatasetModel instance or NULL if the method has failed.
+   */
+  static
+    DatasetModel* LoadDatasetModel( const QString& imageFilename,
+				    int width,
+				    int height );
+
+//
+// Public attributes.
+public:
+  /**
+   * Name of the cache directory
+   */
+  static const char* DEFAULT_CACHE_DIR_NAME;
+
+  /**
+   */
+  static const char* DATASET_EXT;
+
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 public slots:
+  /**
+   * \brief Accessor used to changed model which is managed by the
+   * Application.
+   *
+   * This method emits the AboutToChangeModel() and ModelChanged()
+   * signals respectively, before and after, the model is changed.
+   *
+   * \param model The newly managed model.
+   */
+  // Method could be inline but it's better not new/delete in inline
+  // methods (heap and memory-alignment contexts).
+  void SetModel( AbstractModel* model );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // SIGNALS.
 signals:
+  /**
+   * \brief Signal emitted when the AbstractModel of the MVC is about
+   * to be changed.
+   *
+   * This signal could be slotted in order to disconnect previously
+   * managed model.
+   *
+   * \param model The newly managed model (previous model can still
+   * be accessed using the GetModel() methods).
+   */
+  void AboutToChangeModel( const AbstractModel* model );
+
+  /**
+   * \brief Signal emitted when the AbstractModel of the MVC has been
+   * changed.
+   *
+   * This signal coulb be slotted in order to connect newly managed
+   * model.
+   *
+   * \param model The newly selected model.
+   */
+  void ModelChanged( AbstractModel* model );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -203,14 +362,29 @@ signals:
 // Protected methods.
 protected:
 
+  /**
+   */
+  // TODO: Remove method when Viewer/Application is updated to reuse factorized code of I18nApplication.
+  inline QDir& GetCacheDir();
+
+  /**
+   */
+  virtual void virtual_InitializeCore() =0;
+
+  /**
+   */
+  void InitializeCore( const QString& appName,
+		       const QString& appVersion,
+		       const QString& orgName,
+		       const QString& orgDomain );
+
+  /**
+   */
+  inline void SynchronizeSettings();
+
 //
 // Protected attributes.
 protected:
-
-  /**
-  * Repository where all the elements saved by the application will be cached
-  */
-  QDir m_CacheDir;
 
 
 
@@ -219,9 +393,14 @@ protected:
 //
 // Private methods.
 private:
+
   /**
    */
   void InitializeLocale();
+
+  /**
+   */
+  void InitializeSettings();
 
   /**
    */
@@ -233,12 +412,23 @@ private:
 //
 // Private attributes.
 private:
+
   /**
-   * Name of the cache directory
+  * \brief Directory where all cached files are stored (repository of datasets).
+  */
+  // TODO: Move I18nApplication::m_CacheDir to private section.
+  QDir m_CacheDir;
+
+  /**
+   * \brief Application settings 
    */
-  static const char* CACHE_DIR_NAME;
+  QSettings* m_Settings;
 
-
+  /**
+   * \brief AbstractModel of the Model-View-Controller design pattern
+   * which is managed by the application.
+   */
+  AbstractModel* m_Model;
 
   /**
    */
@@ -296,6 +486,44 @@ I18nApplication
 }
 
 /*****************************************************************************/
+inline
+const AbstractModel*
+I18nApplication
+::GetModel() const
+{
+  return m_Model;
+}
+
+/*****************************************************************************/
+inline
+AbstractModel*
+I18nApplication
+::GetModel()
+{
+  return m_Model;
+}
+
+/*****************************************************************************/
+template< typename TModel >
+inline
+const TModel*
+I18nApplication
+::GetModel() const
+{
+  return qobject_cast< const TModel* >( m_Model );
+}
+
+/*****************************************************************************/
+template< typename TModel >
+inline
+TModel*
+I18nApplication
+::GetModel()
+{
+  return qobject_cast< TModel* >( m_Model );
+}
+
+/*****************************************************************************/
 const QDir&
 I18nApplication
 ::GetCacheDir() const
@@ -304,14 +532,92 @@ I18nApplication
 }
 
 /*****************************************************************************/
+QDir&
+I18nApplication
+::GetCacheDir()
+{
+  return m_CacheDir;
+}
+
+/*****************************************************************************/
+#if 0
 const char*
 I18nApplication
 ::GetCacheDirName() const
 {
   return I18nApplication::CACHE_DIR_NAME;
 }
+#endif
 
+/*****************************************************************************/
+inline
+bool
+I18nApplication
+::HasSettingsKey( const QString& key )
+{
+  assert( m_Settings!=NULL );
 
+  SynchronizeSettings();
+
+  return m_Settings->contains( key );
+}
+
+/*****************************************************************************/
+inline
+void
+I18nApplication
+::StoreSettingsKey( const QString& key, const QVariant& value )
+{
+  assert( m_Settings!=NULL );
+
+  m_Settings->setValue( key, value );
+
+  SynchronizeSettings();
+}
+
+/*****************************************************************************/
+inline
+QVariant
+I18nApplication
+::RetrieveSettingsKey( const QString& key )
+{
+  assert( m_Settings!=NULL );
+
+  SynchronizeSettings();
+
+  return m_Settings->value( key );
+}
+
+/*****************************************************************************/
+inline
+void
+I18nApplication
+::SynchronizeSettings()
+{
+  assert( m_Settings!=NULL );
+
+  m_Settings->sync();
+
+  switch( m_Settings->status() )
+    {
+    case QSettings::NoError:
+      // Ok.
+      break;
+
+    case QSettings::AccessError:
+      throw SystemError( ToStdString( tr( "Settings-file access error." ) ) );
+      break;
+
+    case QSettings::FormatError:
+      throw SystemError( ToStdString( tr( "Settings-file format error." ) ) );
+      break;
+
+    default:
+      // In case when a new enum value if added in the API.
+      assert( false );
+      break;
+    }
+}
 
 } // end namespace 'mvd'
 

@@ -41,7 +41,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdApplication.h"
+#include "mvdCatalogueApplication.h"
 #include "mvdMainWindow.h"
 
 /*****************************************************************************/
@@ -54,14 +54,9 @@
 int
 main( int argc, char* argv[] )
 {
-  mvd::Application application( argc, argv );
+  mvd::CatalogueApplication application( argc, argv );
 
-  //
-  // Force numeric options of locale to "C"
-  // See issue #635
-  //
-  // TODO: Move into I18nApplication.
-  setlocale( LC_NUMERIC, "C" );
+  application.Initialize();
 
 #if 0
 // TODO: 1) MVD2-viewer: Factorize settings loading between Viewer & Catalogue  // Check if the application have a settings file already available
@@ -81,7 +76,7 @@ main( int argc, char* argv[] )
 
   mvd::MainWindow mainWindow;
 
-  /*
+#if 0
 // TODO: 1) MVD2-viewer: Factorize cache-dir search between Viewer & Catalogue.
   if (!appHasSettingsFile || appHasIncorrectCacheDir)
     {
@@ -103,7 +98,7 @@ main( int argc, char* argv[] )
     // Save the cache directory into the settings file
     application.WriteCacheDirIntoSettings();
     }
-  */
+#endif
 
   // Show window.
   mainWindow.show();

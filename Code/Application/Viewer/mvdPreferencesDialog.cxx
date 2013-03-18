@@ -100,7 +100,9 @@ PreferencesDialog
         m_CacheDirRootModified = true;
         m_CacheDirRoot = cacheDirStr;
         QDir displayedDir (cacheDirStr);
-        QDir treeDir( displayedDir.filePath( Application::Instance()->GetCacheDirName() ) );
+        QDir treeDir(
+	  displayedDir.filePath( I18nApplication::DEFAULT_CACHE_DIR_NAME )
+	);
         m_UI->cacheDirPathLineEdit->setText(treeDir.absolutePath());
         break;
         }

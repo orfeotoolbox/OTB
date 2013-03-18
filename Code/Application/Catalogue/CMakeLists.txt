@@ -1,13 +1,13 @@
 #############################################################################
 # Input files.
 set( Catalogue_SOURCES
-       mvdApplication.cxx
+       mvdCatalogueApplication.cxx
        mvdMainWindow.cxx
 )
 
 # Headers for classes with Q_OBJECT macro (needs to go to Qt moc)
 set( Catalogue_HEADERS_MOC
-       mvdApplication.h
+       mvdCatalogueApplication.h
        mvdMainWindow.h
 )
 
