@@ -99,26 +99,6 @@ public:
   /** \brief Destructor. */
   virtual ~Application();
 
-#if 0
- /**
-  */
-  inline const AbstractModel* GetModel() const;
-
-  /**
-   */
-  inline AbstractModel* GetModel();
-
- /**
-  */
-  template< typename TModel >
-  inline const TModel* GetModel() const;
-
-  /**
-   */
-  template< typename TModel >
-  inline TModel* GetModel();
-#endif
-
   /**
    *
    */
@@ -170,47 +150,15 @@ public:
    */
   inline static const Application* ConstInstance();
 
-#if 0
-  /**
-   */
-  static
-    void DatasetPathName( QString& path,
-			  QString& name,
-			  const QString& imageFilename );
-
-  /**
-   */
-  static
-    DatasetModel* LoadDatasetModel( const QString& imageFilename,
-				     int width,
-				     int height );
-#endif
-
 //
 // PUBLIC SLOTS.
 public slots:
-#if 0
-  /**
-   */
-  // Method could be inline but it's better not new/delete in inline
-  // methods (heap and memory-alignment contexts).
-  void SetModel( AbstractModel* model );
-#endif
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-#if 0
-  /**
-   */
-  void AboutToChangeSelectedModel( const AbstractModel* );
-
-  /**
-   */
-  void SelectedModelChanged( AbstractModel* );
-#endif
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -229,20 +177,10 @@ protected:
 //
 // Private methods.
 private:
-#if 0
-  /**
-   */
-  void InitializeCore();
-#endif
 
 //
 // Private attributes.
 private:
-#if 0
-  /**
-   */
-  AbstractModel* m_Model;
-#endif
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -274,46 +212,6 @@ Application
 {
   return I18nApplication::ConstInstance< Application >();
 }
-
-#if 0
-/*****************************************************************************/
-inline
-const AbstractModel*
-Application
-::GetModel() const
-{
-  return m_Model;
-}
-
-/*****************************************************************************/
-inline
-AbstractModel*
-Application
-::GetModel()
-{
-  return m_Model;
-}
-
-/*****************************************************************************/
-template< typename TModel >
-inline
-const TModel*
-Application
-::GetModel() const
-{
-  return qobject_cast< const TModel* >( m_Model );
-}
-
-/*****************************************************************************/
-template< typename TModel >
-inline
-TModel*
-Application
-::GetModel()
-{
-  return qobject_cast< TModel* >( m_Model );
-}
-#endif
 
 /*****************************************************************************/
 

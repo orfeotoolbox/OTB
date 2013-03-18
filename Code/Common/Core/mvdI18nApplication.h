@@ -196,23 +196,6 @@ public:
    */
   bool MakeCacheDir( const QString& cacheDirStr );
 
-#if 0
-  /**
-   * \brief Check if the cache directory is valid.
-   *
-   * \return true if the cache directory is correct
-   */
-  bool CheckCacheDirIsCorrect();
-
-  /**
-   * \brief Test if the application can write in the directory provided.
-   *
-   * \param dir input directory
-   * \return true if the directory can be used
-   */
-  bool TestDirExistenceAndWriteAcess( QDir dir);
-#endif
-
   /**
    * \brief Get the cache directory.
    *
@@ -223,20 +206,6 @@ public:
   //
   // APPLICATION SETTINGS.
   //
-
-#if 0
-  /**
-   */
-  bool HasSettingsFile();
-
-  /**
-   */
-  void ReadCacheDirFromSettings();
-
-  /**
-   */
-  void WriteCacheDirIntoSettings();
-#endif
 
   /**
    */
@@ -538,16 +507,6 @@ I18nApplication
 {
   return m_CacheDir;
 }
-
-/*****************************************************************************/
-#if 0
-const char*
-I18nApplication
-::GetCacheDirName() const
-{
-  return I18nApplication::CACHE_DIR_NAME;
-}
-#endif
 
 /*****************************************************************************/
 inline

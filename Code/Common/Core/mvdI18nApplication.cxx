@@ -196,17 +196,6 @@ I18nApplication
   m_Model( NULL ),
   m_IsRunningFromBuildDir( false )
 {
-#if 0
-  // Initialize internationlization.
-  InitializeLocale();
-
-  //
-  // Force numeric options of locale to "C"
-  // See issue #635
-  //
-  // TODO: Move into I18nApplication.
-  setlocale( LC_NUMERIC, "C" );
-#endif
 }
 
 /*******************************************************************************/
@@ -283,88 +272,6 @@ I18nApplication
 
   return isNew;
 }
-
-#if 0
-/*******************************************************************************/
-bool
-I18nApplication
-::CheckCacheDirIsCorrect()
-{
-  QDir dir = m_CacheDir;
-
-  if (!TestDirExistenceAndWriteAcess(dir))
-    {
-    return false;
-    }
-  else
-    {
-    // Check if this directory has the good name
-    if (m_CacheDir.dirName().compare(QString(I18nApplication::DEFAULT_CACHE_DIR_NAME)))
-      {
-      return false;
-      }
-    }
-
-  return true;
-}
-
-/*******************************************************************************/
-bool
-I18nApplication
-::TestDirExistenceAndWriteAcess( QDir dir)
-{
-  // Check if this directory exists
-  if (!dir.exists())
-    {
-    return false;
-    }
-
-  // Check if we can write in this directory
-  if (dir.mkdir("testWriteAccess"))
-    { // ok this repository is correct
-    dir.rmdir("testWriteAccess");
-    }
-  else
-    { // ko this repository is not correct
-    return false;
-    }
-
-  return true;
-}
-#endif
-
-#if 0
-/*******************************************************************************/
-bool
-I18nApplication
-::HasSettingsFile()
-{
-  // The settings file should contain the cacheDir key to be valid
-  QSettings settings;
-  settings.sync();
-  return ( (settings.status()==QSettings::NoError) && settings.contains("cacheDir"));
-}
-
-/*******************************************************************************/
-void
-I18nApplication
-::ReadCacheDirFromSettings()
-{
-  QSettings settings;
-  QString cacheDirSetting = settings.value("cacheDir").toString();
-  m_CacheDir.setPath(cacheDirSetting);
-}
-
-/*******************************************************************************/
-void
-I18nApplication
-::WriteCacheDirIntoSettings()
-{
-  QSettings settings;
-  settings.setValue("cacheDir", m_CacheDir.path());
-}
-
-#endif
 
 /*******************************************************************************/
 void
