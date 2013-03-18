@@ -46,7 +46,11 @@ add_test(apTvMonteverdi2FillToolBoxTree ${Common_TESTS}
 
 
 add_executable(mvdCommonTests mvdCommonTests.cxx ${Common_SRCS})
-target_link_libraries(mvdCommonTests Monteverdi2_Gui Monteverdi2_Core OTBTesting)
+target_link_libraries(mvdCommonTests 
+  Monteverdi2_Gui 
+  Monteverdi2_Core 
+  Monteverdi2_ApplicationsWrapper 
+  OTBTesting)
 
 
 

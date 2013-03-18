@@ -16,7 +16,6 @@ set( Common_Core_SOURCES
   mvdSystemError.cxx
   mvdTypes.cxx
   mvdVectorImageModel.cxx
-  mvdApplicationLauncher.cxx
 )
 
 #############################################################################
@@ -37,7 +36,6 @@ set( Common_Core_HEADERS_MOC
   mvdSystemError.h
   mvdTypes.h
   mvdVectorImageModel.h
-  mvdApplicationLauncher.h
 )
 
 #############################################################################
@@ -48,8 +46,6 @@ include_directories(
   ${Monteverdi2_SOURCE_DIR}/Code/Common 
   #
   ${Monteverdi2_BINARY_DIR}/Code/Common
-  #
-  ${OTB_SOURCE_DIR}/Code/Wrappers/QtWidget
 )
 
 #############################################################################
@@ -73,8 +69,6 @@ add_library(Monteverdi2_Core
 #############################################################################
 target_link_libraries(Monteverdi2_Core
   OTBIO
-  OTBApplicationEngine
-  OTBWrapperQtWidget
   Qt4::QtCore
   Qt4::QtXml
 )

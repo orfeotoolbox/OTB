@@ -7,8 +7,6 @@ set( Common_Gui_SOURCES
   mvdAbstractModelController.cxx
   #mvdAbstractModelRenderer.cxx
   mvdAbstractViewManipulator.cxx
-  mvdApplicationsBrowser.cxx
-  mvdApplicationsToolBox.cxx
   mvdColorBandDynamicsWidget.cxx
   mvdColorDynamicsController.cxx
   mvdColorDynamicsWidget.cxx
@@ -34,8 +32,6 @@ set( Common_Gui_HEADERS_MOC
   mvdAbstractModelController.h
   mvdAbstractModelRenderer.h
   mvdAbstractViewManipulator.h
-  mvdApplicationsBrowser.h
-  mvdApplicationsToolBox.h
   mvdColorBandDynamicsWidget.h
   mvdColorDynamicsController.h
   mvdColorDynamicsWidget.h
@@ -63,7 +59,6 @@ set( Common_Gui_FORMS
   mvdMyWidget.ui
   mvdStatusBarWidget.ui
   mvdVideoColorToolBox.ui
-  mvdApplicationsToolBox.ui
 )
 
 # Qt resources
@@ -105,7 +100,6 @@ add_library(Monteverdi2_Gui
 #############################################################################
 target_link_libraries(Monteverdi2_Gui
   Monteverdi2_Core
-  OTBApplicationEngine
   ${OPENGL_LIBRARIES}
   #Qt4::QtCore
   Qt4::QtGui
