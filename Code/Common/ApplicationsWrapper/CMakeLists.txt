@@ -4,7 +4,6 @@
 # Package GUI (files ordered by lexicographical order i.e. ease of search).
 set( Common_ApplicationsWrapper_SOURCES
   mvdApplicationsBrowser.cxx
-  mvdApplicationsToolBox.cxx
   mvdApplicationLauncher.cxx  
 )
 
@@ -14,19 +13,10 @@ set( Common_ApplicationsWrapper_SOURCES
 # Package GUI (files ordered by lexicographical order i.e. ease of search).
 set( Common_ApplicationsWrapper_HEADERS_MOC
   mvdApplicationsBrowser.h
-  mvdApplicationsToolBox.h
   mvdApplicationLauncher.h
 )
 
 #############################################################################
-# Qt designer UI files
-set( Common_ApplicationsWrapper_FORMS
-  mvdApplicationsToolBox.ui
-)
-
-# Qt resources
-set( Common_ApplicationsWrapper_RESOURCES
-)
 
 include_directories(
   ${Monteverdi2_BINARY_DIR}
@@ -34,15 +24,11 @@ include_directories(
   ${Monteverdi2_SOURCE_DIR}/Code/Common
   #
   ${Monteverdi2_BINARY_DIR}/Code/Common
-  #
-  ${OTB_SOURCE_DIR}/Code/Wrappers/QtWidget
 )
 
 #############################################################################
 # Qt4 wrapped files.
 qt4_wrap_cpp( Common_ApplicationsWrapper_SRC_MOC ${Common_ApplicationsWrapper_HEADERS_MOC} )
-qt4_wrap_ui( Common_ApplicationsWrapper_FORMS_HEADERS ${Common_ApplicationsWrapper_FORMS}  )
-qt4_add_resources( Common_ApplicationsWrapper_RESOURCES_RCC ${Common_ApplicationsWrapper_RESOURCES} )
 
 ########################################################################
 # Qt4 translations.

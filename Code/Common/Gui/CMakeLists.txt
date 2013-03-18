@@ -21,6 +21,7 @@ set( Common_Gui_SOURCES
   mvdMyWidget.cxx
   mvdQuicklookViewManipulator.cxx
   mvdStatusBarWidget.cxx
+  mvdApplicationsToolBox.cxx
 )
 
 #############################################################################
@@ -46,6 +47,7 @@ set( Common_Gui_HEADERS_MOC
   mvdMyWidget.h
   mvdQuicklookViewManipulator.h
   mvdStatusBarWidget.h
+  mvdApplicationsToolBox.h
 )
 
 #############################################################################
@@ -59,6 +61,7 @@ set( Common_Gui_FORMS
   mvdMyWidget.ui
   mvdStatusBarWidget.ui
   mvdVideoColorToolBox.ui
+  mvdApplicationsToolBox.ui
 )
 
 # Qt resources

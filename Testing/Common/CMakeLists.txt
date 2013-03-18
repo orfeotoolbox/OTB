@@ -53,14 +53,12 @@ endif()
 
 add_executable(mvdCommonTests mvdCommonTests.cxx ${Common_SRCS})
 target_link_libraries(mvdCommonTests 
-  Monteverdi2_Gui 
-  Monteverdi2_Core 
+  Monteverdi2_Gui    
   OTBTesting)
 
 if (OTB_USE_QT)
   add_executable(mvdCommonTests1 mvdCommonTests1.cxx ${Common_SRCS1})
   target_link_libraries(mvdCommonTests1 
-    Monteverdi2_Core
     Monteverdi2_Gui
     Monteverdi2_ApplicationsWrapper
     OTBTesting)
