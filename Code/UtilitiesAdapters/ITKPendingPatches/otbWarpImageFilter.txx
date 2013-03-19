@@ -32,6 +32,15 @@
 namespace otb
 {
 
+template <class PixelType> unsigned int PixelSizeFinder(itk::VariableLengthVector<PixelType> pix)
+{
+  return pix.Size();
+}
+template <class PixelType> unsigned int PixelSizeFinder(PixelType pix)
+{
+  return PixelType::Dimension;
+}
+
 /**
  * Default constructor.
  */
@@ -299,15 +308,6 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 
     }
   return ( output );
-}
-
-template <class PixelType> unsigned int PixelSizeFinder(itk::VariableLengthVector<PixelType> pix)
-{
-  return pix.Size();
-}
-template <class PixelType> unsigned int PixelSizeFinder(PixelType pix)
-{
-  return PixelType::Dimension;
 }
 
 /**
