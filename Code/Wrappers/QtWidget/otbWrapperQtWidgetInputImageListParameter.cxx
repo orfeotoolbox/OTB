@@ -22,7 +22,7 @@ namespace otb
 namespace Wrapper
 {
 
-nQtWidgetInputImageListParameter::QtWidgetInputImageListParameter(InputImageListParameter* param, QtWidgetModel* m)
+QtWidgetInputImageListParameter::QtWidgetInputImageListParameter(InputImageListParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(param, m),
 n  m_InputImageListParam(param)
 {
