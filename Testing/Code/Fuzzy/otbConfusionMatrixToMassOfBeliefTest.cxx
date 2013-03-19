@@ -139,7 +139,7 @@ int otbConfusionMatrixToMassOfBeliefTest(int argc, char* argv[])
     for (itMapMOBBL = mapMOBBLPrecision.begin(), itMapMOB = mapMOB.begin();
         itMapMOBBL != mapMOBBLPrecision.end(); ++itMapMOBBL, ++itMapMOB)
       {
-      std::cout << "mapMOBBLPrecision[" << itMapMOBBL->first << "] = " << itMapMOBBL->second << " ; ";
+      std::cout << "mapMOBBLPrecision[" << itMapMOBBL->first << "] = " << itMapMOBBL->second << "; ";
       std::cout << "mapMOB[" << itMapMOB->first << "] = " << itMapMOB->second << std::endl;
       }
     return EXIT_FAILURE;
@@ -152,7 +152,7 @@ int otbConfusionMatrixToMassOfBeliefTest(int argc, char* argv[])
     for (itMapMOBBL = mapMOBBLRecall.begin(), itMapMOB = mapMOB.begin();
         itMapMOBBL != mapMOBBLRecall.end(); ++itMapMOBBL, ++itMapMOB)
       {
-      std::cout << "mapMOBBLRecall[" << itMapMOBBL->first << "] = " << itMapMOBBL->second << " ; ";
+      std::cout << "mapMOBBLRecall[" << itMapMOBBL->first << "] = " << itMapMOBBL->second << "; ";
       std::cout << "mapMOB[" << itMapMOB->first << "] = " << itMapMOB->second << std::endl;
       }
     return EXIT_FAILURE;
