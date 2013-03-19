@@ -63,6 +63,9 @@ public:
   typedef typename OutputPointSetType::PointsContainer PointsContainerType;
   typedef typename PointsContainerType::Pointer        PointsContainerPointer;
   typedef typename OutputPointSetType::PointType       PointType;
+  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator GeneratorType;
+  typedef GeneratorType::Pointer                                 GeneratorPointerType;
+  typedef GeneratorType::IntegerType                             SeedType;
 
   itkSetMacro(NumberOfPoints, unsigned int)
   itkGetMacro(NumberOfPoints, unsigned int)
@@ -72,7 +75,7 @@ public:
   itkSetMacro(MaxPoint, PointType)
   itkGetMacro(MaxPoint, PointType)
 
-  void SetSeed(ITK_UINT32 seed)
+  void SetSeed(SeedType seed)
   {
     m_Generator->SetSeed(seed);
   }
@@ -89,8 +92,7 @@ private:
 
   unsigned int m_NumberOfPoints;
 
-  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer GeneratorPointer;
-  GeneratorPointer m_Generator;
+  GeneratorPointerType m_Generator;
 
   PointType m_MinPoint;
   PointType m_MaxPoint;

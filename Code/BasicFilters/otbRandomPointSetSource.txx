@@ -29,7 +29,7 @@ RandomPointSetSource<TOutputPointSet>
 ::RandomPointSetSource()
 {
   m_NumberOfPoints = 1;
-  m_Generator = itk::Statistics::MersenneTwisterRandomVariateGenerator::New();
+  m_Generator = GeneratorType::New();
   m_Generator->Initialize();
 
   m_MinPoint.Fill(0.0);
