@@ -24,7 +24,7 @@ namespace Wrapper
 
 QtWidgetInputImageListParameter::QtWidgetInputImageListParameter(InputImageListParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(param, m),
-n  m_InputImageListParam(param)
+  m_InputImageListParam(param)
 {
  connect(this, SIGNAL(Change()), GetModel(), SLOT(NotifyUpdate()));
 }
