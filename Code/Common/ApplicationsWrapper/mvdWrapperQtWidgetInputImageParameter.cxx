@@ -37,7 +37,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
-
 namespace mvd
 {
 namespace Wrapper
@@ -155,7 +154,19 @@ void QtWidgetInputImageParameter::dropEvent(QDropEvent *event)
   //
   // get the text form the mimeData stored in the event : path
   // to the image in the dataset
-  std::cout << "QtWidgetInputImageParameter::dropEvent ACCEPTED ...."<< std::endl;  
+  if ( event->mimeData()->hasText () )
+    {
+    //
+    // text stored in mimeData contains 'file://' at the begining
+    // it has to be removed
+    QString url( event->mimeData()->text() );
+    url.replace(0, 7, "");
+
+    //
+    // TODO : Experimental, check on win32 if that works
+    // this->SetFileName( url );
+    m_Input->setText(url);
+    }
 }
 
 /*******************************************************************************/
