@@ -28,4 +28,6 @@ void RegisterTests()
   REGISTER_TEST(otbDempsterShaferFusionTest);
   REGISTER_TEST(otbDempsterShaferFusionOptTest);
   REGISTER_TEST(otbDempsterShaferFusionOptRecTest);
+  REGISTER_TEST(otbConfusionMatrixToMassOfBeliefNew);
+  REGISTER_TEST(otbConfusionMatrixToMassOfBeliefTest);
 }

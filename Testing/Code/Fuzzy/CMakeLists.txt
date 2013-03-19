@@ -144,6 +144,18 @@ ADD_TEST(fzDSFusionOptRecTestWithExtraLabelsBig ${Fuzzy_TESTS3}
  a b c d e f g h i j k l m
  n o p q r s t u v w x y z
  )
+ 
+ADD_TEST(fzTuConfusionMatrixToMassOfBeliefNew ${Fuzzy_TESTS3}
+  otbConfusionMatrixToMassOfBeliefNew)
+  
+ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestPrecision ${Fuzzy_TESTS3}
+  otbConfusionMatrixToMassOfBeliefTest
+ PRECISION)
+  
+ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestRecall ${Fuzzy_TESTS3}
+  otbConfusionMatrixToMassOfBeliefTest
+ RECALL)
+
 
 
 SET(BasicFuzzy_SRCS1
@@ -170,6 +182,8 @@ otbStandardDSCostFunction.cxx
 SET(BasicFuzzy_SRCS3
 otbFuzzyTests3.cxx
 otbDempsterShaferFusionTests.cxx
+otbConfusionMatrixToMassOfBeliefNew.cxx
+otbConfusionMatrixToMassOfBeliefTest.cxx
 )
 
 ADD_EXECUTABLE(otbFuzzyTests1 otbFuzzyTests1.cxx ${BasicFuzzy_SRCS1})
