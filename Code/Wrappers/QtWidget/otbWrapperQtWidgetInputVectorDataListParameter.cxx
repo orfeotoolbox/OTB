@@ -22,7 +22,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetInputVectorDataListParameter::QtWidgetInputVectorDataListParameter(InputVectorDataListParameter* param, QtWidgetModel* m)
+QtWidgetInputVectorDataListParameter::QtWidgetInputVectorDataListParameter(InputVectorDataListParameter* param,
+                                                                           QtWidgetModel* m)
 : QtWidgetParameterBase(param, m),
   m_InputVectorDataListParam(param)
 {
@@ -356,7 +357,8 @@ void QtWidgetInputVectorDataListParameter::RecreateVectorDataList()
     for(unsigned int j = 0; j < m_FileSelectionList.size(); j++)
       {
       m_InputVectorDataListParam->AddFromFileName(m_FileSelectionList[j]->GetFilename());
-      connect(m_FileSelectionList[j]->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateVectorDataList()));
+      connect(m_FileSelectionList[j]->GetInput(), SIGNAL(textChanged(const QString&)),
+              this, SLOT(UpdateVectorDataList()));
       }
 
     emit Change();
