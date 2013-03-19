@@ -1826,69 +1826,6 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticTile
                                  10
          )
 
-
-
-# Test otb::ImageFileWriter streaming
-# 1.bis WITH IMAGEFILEWRITER : DEFAULT
-ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
-         otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
-         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-         ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
-         DEFAULT
-         )
-# 2.bis WITH IMAGEFILEWRITER : AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
-ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.tif
-         otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
-         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-         ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.tif
-         AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
-         )
-# 3.bis WITH IMAGEFILEWRITER : NUMBER_OF_STREAM_DIVISIONS
-ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS_10.tif
-         otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
-         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-         ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS_10.tif
-         NUMBER_OF_STREAM_DIVISIONS
-         10
-         )
-# 4.bis WITH IMAGEFILEWRITER BUFFER_MEMORY_SIZE
-ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE_8x2000x10.tif
-         otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
-         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-         ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE_8x2000x10.tif
-         BUFFER_MEMORY_SIZE
-         8*2000*10
-         )
-# 5.bis WITH IMAGEFILEWRITER  BUFFER_NUMBER_OF_LINES
-ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES_1000.tif
-         otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
-         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-         ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES_1000.tif
-         BUFFER_NUMBER_OF_LINES
-         1000
-         )
-
-ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioStreamingImageFileWriterWithFilter_1_100.hdr
-                            ${TEMP}/ioStreamingImageFileWriterWithFilter_1_100.hdr
-         otbImageFileWriterWithFilterTest
-         ${INPUTDATA}/poupees_1canal.c1.hdr
-         ${TEMP}/ioStreamingImageFileWriterWithFilter_1_100.hdr
-         1
-         1 # Streaming
-         100
-         )
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS11 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3968,7 +3905,6 @@ SET(BasicIO_SRCS10
 otbIOTests10.cxx
 otbStreamingImageFileWriterTestCalculateNumberOfDivisions.cxx
 otbStreamingImageFileWriterWithFilterTest.cxx
-otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions.cxx
 )
 
 SET(BasicIO_SRCS11
