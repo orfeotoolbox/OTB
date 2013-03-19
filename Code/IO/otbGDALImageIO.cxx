@@ -224,10 +224,10 @@ void GDALImageIO::Read(void* buffer)
   int lNbColumns   = lNbColumnsRegion * (1 << m_ResolutionFactor);
 
   // Check if the image region is correct
-  if (lFirstLine + lNbLines > m_OriginalDimensions[1])
-    lNbLines = m_OriginalDimensions[1]-lFirstLine;
-  if (lFirstColumn + lNbColumns > m_OriginalDimensions[0])
-    lNbColumns = m_OriginalDimensions[0]-lFirstColumn;
+  if (lFirstLine + lNbLines > static_cast<int>(m_OriginalDimensions[1]))
+    lNbLines = static_cast<int>(m_OriginalDimensions[1]-lFirstLine);
+  if (lFirstColumn + lNbColumns > static_cast<int>(m_OriginalDimensions[0]))
+    lNbColumns = static_cast<int>(m_OriginalDimensions[0]-lFirstColumn);
 
   //std::cout << "SizeImage= " <<  lNbLines << " x " << lNbColumns << std::endl;
 
