@@ -16,13 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdWrapperQtWidgetInputImageParameter_h
-#define __mvdWrapperQtWidgetInputImageParameter_h
-
-//
-// Configuration include.
-//// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#ifndef __mvdWrapperQtWidgetChoiceParameter_h
+#define __mvdWrapperQtWidgetChoiceParameter_h
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -40,11 +35,12 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbWrapperChoiceParameter.h"
+#include "otbWrapperParameterGroup.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -60,60 +56,51 @@ namespace mvd
 namespace Wrapper
 {
 
-/*****************************************************************************/
-/* CLASS DEFINITION SECTION                                                  */
-
-/**
- * \class ApplicationLauncher
- *
- * \brief WIP.
+/** \class
+ * \brief
  */
-
-class QtWidgetInputImageParameter : public otb::Wrapper::QtWidgetParameterBase
+class QtWidgetChoiceParameter : public otb::Wrapper::QtWidgetParameterBase
 {
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
-  Q_OBJECT;
-  
+  Q_OBJECT
+
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public methods.
 public:
+   /** \brief Constructor. */
+  QtWidgetChoiceParameter(otb::Wrapper::ChoiceParameter*, otb::Wrapper::QtWidgetModel*);
 
-  /** \brief Constructor. */
-  QtWidgetInputImageParameter(otb::Wrapper::InputImageParameter*, otb::Wrapper::QtWidgetModel*);
-  
   /** \brief Destructor. */
-  virtual ~QtWidgetInputImageParameter();
+  virtual ~QtWidgetChoiceParameter();
 
-  /** \brief drag and drop events reimplementation */
-  void dragEnterEvent( QDragEnterEvent * event );
-  void dropEvent( QDropEvent *event );
-  void dragMoveEvent(QDragMoveEvent *event);
-                                     
 protected slots:
-  bool SetFileName( const QString& value );
-  void SelectFile();
-
-protected:
+  void SetValue( int value );
 
 private:
-  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
+  QtWidgetChoiceParameter(const QtWidgetChoiceParameter&); //purposely not implemented
+  void operator=(const QtWidgetChoiceParameter&); //purposely not implemented
 
   virtual void DoCreateWidget();
 
   virtual void DoUpdateGUI();
 
+  otb::Wrapper::ChoiceParameter::Pointer m_ChoiceParam;
 
-  otb::Wrapper::InputImageParameter::Pointer m_InputImageParam;
+  QHBoxLayout*    m_MainHLayout;
 
-  QHBoxLayout * m_HLayout;
-  QLabel*       m_Input;
-  QPushButton * m_Button;
+  QComboBox*      m_ComboBox;
+  QStackedWidget* m_StackWidget;
+
+  QVBoxLayout*    m_VLayout;
+  QGroupBox*      m_VLayoutGroup;
+
+  typedef std::vector<otb::Wrapper::QtWidgetParameterBase*> WidgetListType;
+  typedef WidgetListType::iterator WidgetListIteratorType;
+  WidgetListType m_WidgetList;
 };
-
 
 }
 }

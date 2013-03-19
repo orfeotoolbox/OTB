@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdWrapperQtWidgetInputImageParameter_h
-#define __mvdWrapperQtWidgetInputImageParameter_h
+#ifndef __mvdWrapperQtWidgetView_h
+#define __mvdWrapperQtWidgetView_h
 
 //
 // Configuration include.
@@ -40,7 +40,8 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbWrapperQtWidgetParameterBase.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperQtWidgetModel.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -69,49 +70,81 @@ namespace Wrapper
  * \brief WIP.
  */
 
-class QtWidgetInputImageParameter : public otb::Wrapper::QtWidgetParameterBase
+class QtWidgetView : public QWidget
 {
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
-  Q_OBJECT;
   
-  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+  Q_OBJECT
 
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+  
 //
 // Public methods.
 public:
 
   /** \brief Constructor. */
-  QtWidgetInputImageParameter(otb::Wrapper::InputImageParameter*, otb::Wrapper::QtWidgetModel*);
-  
+  QtWidgetView(otb::Wrapper::Application* app);
+
   /** \brief Destructor. */
-  virtual ~QtWidgetInputImageParameter();
+  virtual ~QtWidgetView();
 
-  /** \brief drag and drop events reimplementation */
-  void dragEnterEvent( QDragEnterEvent * event );
-  void dropEvent( QDropEvent *event );
-  void dragMoveEvent(QDragMoveEvent *event);
-                                     
-protected slots:
-  bool SetFileName( const QString& value );
-  void SelectFile();
+  /** \brief Gui Creation. */
+  void CreateGui();
 
-protected:
+  /** \brief Model Accessor */
+  otb::Wrapper::QtWidgetModel* GetModel()
+  {
+    return m_Model;
+  }
+
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+
+//
+// Public SLOTS.
+public slots:
+  void CloseSlot();
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
+//
+// Signals.
+signals:
+  void QuitSignal();
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
+//
+// Private methods.
+private:
+
+  QtWidgetView(const QtWidgetView&); //purposely not implemented
+  void operator=(const QtWidgetView&); //purposely not implemented
+
+  QWidget* CreateFooter();
+
+  QWidget* CreateInputWidgets();
+
+  QWidget* CreateDoc();
+
+//
+// Private attributes.
 
 private:
-  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  otb::Wrapper::Application::Pointer m_Application;
+  otb::Wrapper::QtWidgetModel*       m_Model;
 
-  virtual void DoUpdateGUI();
+  QPushButton* m_ExecButton;
+  QPushButton* m_QuitButton;
+  QLabel*      m_Message;
 
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-  otb::Wrapper::InputImageParameter::Pointer m_InputImageParam;
-
-  QHBoxLayout * m_HLayout;
-  QLabel*       m_Input;
-  QPushButton * m_Button;
+//
+// Slots.
+private slots:
+  void UpdateMessageAfterExcuteClicked();
+  void UpdateMessageAfterApplicationReady(bool val);
 };
 
 

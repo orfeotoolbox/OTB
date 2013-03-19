@@ -71,12 +71,12 @@ QtWidgetInputImageParameter::QtWidgetInputImageParameter(otb::Wrapper::InputImag
   // 
   //
   m_HLayout = new QHBoxLayout;
-  m_Button = new QPushButton;
-  m_Input = new QLabel;
+  m_Button = new QPushButton();
+  m_Input = new QLabel(this);
 
   //
-  // set accept drops in QLabel
-  m_Input->setAcceptDrops( true );
+  // set accept drops in the widget
+  setAcceptDrops( true );
 }
 
 /*******************************************************************************/
@@ -92,10 +92,12 @@ void QtWidgetInputImageParameter::DoUpdateGUI()
 /*******************************************************************************/
 void QtWidgetInputImageParameter::DoCreateWidget()
 {
+
   // Set up input QLabel
   m_Input->setToolTip( m_InputImageParam->GetDescription() );
+  m_Input->setFrameShape(QFrame::Box);
 
-  // TODO : QLabel does not have signals
+  // TODO : QLabel does not have signals, remove connections
   //connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
   //connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(),
   //SLOT(NotifyUpdate()) );
@@ -119,13 +121,41 @@ void QtWidgetInputImageParameter::DoCreateWidget()
 void
 QtWidgetInputImageParameter::dragEnterEvent( QDragEnterEvent * event )
 {
-  return;
+  // 
+  // accepts all the proposed actions : checking will be done
+  // dragMoveEvent method
+  event->acceptProposedAction();
 }
+
+/*******************************************************************************/
+void 
+QtWidgetInputImageParameter::dragMoveEvent(QDragMoveEvent *event)
+ {
+   // if (event->mimeData()->hasFormat("text/plain")
+   
+   //
+   // if the mouse is within the QLabel geometry : allow drops
+   if ( event->answerRect().intersects( m_Input->geometry() ) )
+     {
+     event->acceptProposedAction();
+     }
+   else
+    {
+    event->ignore();
+    }
+ }
 
 /*******************************************************************************/
 void QtWidgetInputImageParameter::dropEvent(QDropEvent *event)
 {
-  return ;
+  //
+  // TODO : need to define the mimeData format
+  // TODO : the data to drop will be defined in the DataSet TreeWidget
+  
+  //
+  // get the text form the mimeData stored in the event : path
+  // to the image in the dataset
+  std::cout << "QtWidgetInputImageParameter::dropEvent ACCEPTED ...."<< std::endl;  
 }
 
 /*******************************************************************************/

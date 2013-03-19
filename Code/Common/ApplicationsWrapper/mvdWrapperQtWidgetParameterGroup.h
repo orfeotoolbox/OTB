@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdWrapperQtWidgetInputImageParameter_h
-#define __mvdWrapperQtWidgetInputImageParameter_h
+#ifndef __mvdWrapperQtWidgetParameterGroup_h
+#define __mvdWrapperQtWidgetParameterGroup_h
 
 //
 // Configuration include.
@@ -40,11 +40,14 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbWrapperParameterGroup.h"
+#include "otbWrapperNumericalParameter.h"
+#include "otbWrapperRadiusParameter.h"
+#include "otbWrapperRAMParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -60,6 +63,7 @@ namespace mvd
 namespace Wrapper
 {
 
+
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
@@ -69,12 +73,12 @@ namespace Wrapper
  * \brief WIP.
  */
 
-class QtWidgetInputImageParameter : public otb::Wrapper::QtWidgetParameterBase
+class QtWidgetParameterGroup : public otb::Wrapper::QtWidgetParameterBase
 {
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+    /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
-  Q_OBJECT;
-  
+  Q_OBJECT
+
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
@@ -82,36 +86,30 @@ class QtWidgetInputImageParameter : public otb::Wrapper::QtWidgetParameterBase
 public:
 
   /** \brief Constructor. */
-  QtWidgetInputImageParameter(otb::Wrapper::InputImageParameter*, otb::Wrapper::QtWidgetModel*);
-  
+  QtWidgetParameterGroup(otb::Wrapper::ParameterGroup::Pointer, otb::Wrapper::QtWidgetModel*);
+
   /** \brief Destructor. */
-  virtual ~QtWidgetInputImageParameter();
+  virtual ~QtWidgetParameterGroup();
 
-  /** \brief drag and drop events reimplementation */
-  void dragEnterEvent( QDragEnterEvent * event );
-  void dropEvent( QDropEvent *event );
-  void dragMoveEvent(QDragMoveEvent *event);
-                                     
-protected slots:
-  bool SetFileName( const QString& value );
-  void SelectFile();
-
-protected:
+public slots:
+  virtual void SetActivationState( bool value );
 
 private:
-  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
+  QtWidgetParameterGroup(const QtWidgetParameterGroup&); //purposely not implemented
+  void operator=(const QtWidgetParameterGroup&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget();
 
   virtual void DoUpdateGUI();
 
+  virtual void ProcessChild(otb::Wrapper::Parameter * currentNode, bool status);
 
-  otb::Wrapper::InputImageParameter::Pointer m_InputImageParam;
+  otb::Wrapper::ParameterGroup::Pointer m_ParamList;
 
-  QHBoxLayout * m_HLayout;
-  QLabel*       m_Input;
-  QPushButton * m_Button;
+  typedef std::vector<otb::Wrapper::QtWidgetParameterBase*> WidgetListType;
+  typedef WidgetListType::iterator WidgetListIteratorType;
+  WidgetListType m_WidgetList;
+
 };
 
 

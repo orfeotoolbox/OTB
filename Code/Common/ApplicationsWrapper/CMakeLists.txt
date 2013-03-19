@@ -6,6 +6,10 @@ set( Common_ApplicationsWrapper_SOURCES
   mvdApplicationsBrowser.cxx
   mvdApplicationLauncher.cxx
   mvdWrapperQtWidgetInputImageParameter.cxx
+  mvdWrapperQtWidgetParameterFactory.cxx
+  mvdWrapperQtWidgetView.cxx
+  mvdWrapperQtWidgetParameterGroup.cxx
+  mvdWrapperQtWidgetChoiceParameter.cxx
 )
 
 #############################################################################
@@ -16,6 +20,10 @@ set( Common_ApplicationsWrapper_HEADERS_MOC
   mvdApplicationsBrowser.h
   mvdApplicationLauncher.h
   mvdWrapperQtWidgetInputImageParameter.h
+  mvdWrapperQtWidgetParameterFactory.h
+  mvdWrapperQtWidgetView.h
+  mvdWrapperQtWidgetParameterGroup.h
+  mvdWrapperQtWidgetChoiceParameter.h
 )
 
 #############################################################################
@@ -52,11 +60,9 @@ add_library(Monteverdi2_ApplicationsWrapper
 
 #############################################################################
 target_link_libraries(Monteverdi2_ApplicationsWrapper
-  #Monteverdi2_Core
   OTBApplicationEngine
   OTBWrapperQtWidget
   ${OPENGL_LIBRARIES}
-  #Qt4::QtCore
   Qt4::QtGui
   Qt4::QtOpenGL
 )

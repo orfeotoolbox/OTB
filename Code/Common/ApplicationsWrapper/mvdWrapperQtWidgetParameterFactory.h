@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdWrapperQtWidgetInputImageParameter_h
-#define __mvdWrapperQtWidgetInputImageParameter_h
+#ifndef __mvdWrapperQtWidgetFactory_h
+#define __mvdWrapperQtWidgetFactory_h
 
 //
 // Configuration include.
@@ -37,6 +37,8 @@
 
 //
 // ITK includes (sorted by alphabetic order)
+#include "itkObject.h"
+#include "itkObjectFactory.h"
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -45,18 +47,23 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
-
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
 //
 // External classes pre-declaration.
-namespace
+namespace otb
 {
+namespace Wrapper
+{
+class Parameter;
+class QtWidgetModel;
+}
 }
 
 namespace mvd
 {
+
 namespace Wrapper
 {
 
@@ -69,51 +76,44 @@ namespace Wrapper
  * \brief WIP.
  */
 
-class QtWidgetInputImageParameter : public otb::Wrapper::QtWidgetParameterBase
+/** \class ImageIOFactory
+ * \brief Create instances of ImageIO objects using an object factory.
+ */
+class ITK_EXPORT QtWidgetParameterFactory : public itk::Object
 {
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
-  Q_OBJECT;
-  
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
 public:
+  /** Standard class typedefs. */
+  typedef QtWidgetParameterFactory     Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** \brief Constructor. */
-  QtWidgetInputImageParameter(otb::Wrapper::InputImageParameter*, otb::Wrapper::QtWidgetModel*);
-  
-  /** \brief Destructor. */
-  virtual ~QtWidgetInputImageParameter();
+  /** New() method */
+  itkNewMacro(Self);
 
-  /** \brief drag and drop events reimplementation */
-  void dragEnterEvent( QDragEnterEvent * event );
-  void dropEvent( QDropEvent *event );
-  void dragMoveEvent(QDragMoveEvent *event);
-                                     
-protected slots:
-  bool SetFileName( const QString& value );
-  void SelectFile();
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(QtWidgetParameterFactory, itk::Object);
+
+  /** Create the appropriate ImageIO depending on the particulars of the file. */
+  static otb::Wrapper::QtWidgetParameterBase* CreateQtWidget( otb::Wrapper::Parameter* param, 
+                                                              otb::Wrapper::QtWidgetModel* model );
+
+  /*-[ PROTECTED SECTION ]------------------------------------------------------*/
 
 protected:
+  QtWidgetParameterFactory();
+  virtual ~QtWidgetParameterFactory();
+
+  /*-[ PRIVATE SECTION ]------------------------------------------------------*/
 
 private:
-  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
+  QtWidgetParameterFactory(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
-  virtual void DoCreateWidget();
-
-  virtual void DoUpdateGUI();
-
-
-  otb::Wrapper::InputImageParameter::Pointer m_InputImageParam;
-
-  QHBoxLayout * m_HLayout;
-  QLabel*       m_Input;
-  QPushButton * m_Button;
 };
-
 
 }
 }
