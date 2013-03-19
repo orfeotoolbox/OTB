@@ -160,12 +160,11 @@ void QtWidgetInputImageParameter::dropEvent(QDropEvent *event)
     // text stored in mimeData contains 'file://' at the begining
     // it has to be removed
     QString url( event->mimeData()->text() );
-    url.replace(0, 7, "");
 
     //
     // TODO : Experimental, check on win32 if that works
-    // this->SetFileName( url );
-    m_Input->setText(url);
+    this->SetFileName( url.mid(7) );
+    //m_Input->setText( url.mid(7) );
     }
 }
 
