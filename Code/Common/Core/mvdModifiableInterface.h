@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdMainWindow_h
-#define __mvdMainWindow_h
+#ifndef __mvdModifiableInterface_h
+#define __mvdModifiableInterface_h
 
 //
 // Configuration include.
@@ -44,16 +44,13 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdTypes.h"
-//
-#include "Gui/mvdI18nMainWindow.h"
 
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
 //
-// External class pre-declaration.
+// External classes pre-declaration.
 namespace
 {
 }
@@ -61,139 +58,67 @@ namespace
 namespace mvd
 {
 //
-// Internal class pre-declaration.
+// Internal classes pre-declaration.
 
-namespace Ui
-{
-class MainWindow;
-}
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/**
- * \class MainWindow
+/** \class ModifiableInterface
  *
- * \brief The application main-widow widget.
  */
-class Monteverdi2_EXPORT MainWindow
-  : public I18nMainWindow
+class Monteverdi2_EXPORT ModifiableInterface
 {
-
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
-  Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
-// Public types.
-public:
-
-//
 // Public methods.
 public:
-  /** \brief Constructor. */
-  MainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
 
-  /** \brief Destructor. */
-  virtual ~MainWindow();
+  /** Destructor */
+  virtual ~ModifiableInterface();
 
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+  /**
+   */
+  virtual bool IsModified() const =0;
 
-//
-// SIGNALS.
-signals:
-  
+  /**
+   */
+  virtual void ClearModified() =0;
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
 
-  //
-  // I18nMainWindow overrides.
-
-  /**
-   */
-  virtual void virtual_SetupUI();
-
-  /**
-   */
-  virtual void virtual_ConnectUI();
-
+  /** Constructor */
+  ModifiableInterface();
 
 //
 // Protected attributes.
 protected:
 
-  /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
-
-//
-// Protected slots.
-protected slots:
-
-  /**
-   */
-  void OnAboutToChangeModel( const AbstractModel* );
-
-  /**
-   */
-  void OnModelChanged( AbstractModel* );
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
-//
-// Private nested classes.
-private:
-
 
 //
 // Private methods.
 private:
 
-  /** */
-  void InitializeDockWidgets();
-
 //
 // Private attributes.
 private:
-  /**
-   * \brief uic generated.
-   */
-  Ui::MainWindow* m_UI;
-
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Private slots.
-private slots:
-
 };
 
-} // end namespace 'mvd'
+} // end namespace 'mvd'.
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-
-//
-// Some constants.
 
 namespace mvd
 {
 
 } // end namespace 'mvd'
 
-#endif // __MainWindow_h
+#endif // __mvdModifiableInterface_h

@@ -17,7 +17,7 @@
 
 =========================================================================*/
 
-#include "mvdAbstractModel.h"
+#include "mvdSerializableInterface.h"
 
 
 /*****************************************************************************/
@@ -42,7 +42,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::AbstractModel
+  TRANSLATOR mvd::SerializableInterface
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -54,44 +54,16 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-AbstractModel
-::AbstractModel( QObject* parent ) :
-  QObject( parent )
+SerializableInterface
+::SerializableInterface()
 {
 }
 
 /*******************************************************************************/
-AbstractModel
-::~AbstractModel()
+SerializableInterface
+::~SerializableInterface()
 {
 }
-
-/*******************************************************************************/
-bool
-AbstractModel
-::IsModified() const
-{
-  return false;
-}
-
-/*******************************************************************************/
-void
-AbstractModel
-::ClearModified()
-{
-}
-
-/*******************************************************************************/
-void
-AbstractModel
-::virtual_Save()
-{
-  qDebug() << this << "::Save()";
-}
-
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
 
 /*******************************************************************************/
 

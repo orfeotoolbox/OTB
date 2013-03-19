@@ -12,8 +12,10 @@ set( Common_Core_SOURCES
   mvdHistogramModel.cxx
   mvdI18nApplication.cxx
   mvdMath.cxx
+  mvdModifiableInterface.cxx
   mvdMyClass.cxx
   mvdQuicklookModel.cxx
+  mvdSerializableInterface.cxx
   mvdSystemError.cxx
   mvdTypes.cxx
   mvdVectorImageModel.cxx

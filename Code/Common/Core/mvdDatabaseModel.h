@@ -109,16 +109,14 @@ public:
   /** \brief Destructor. */
   virtual ~DatabaseModel();
 
-  /**
-   */
-  void Save();
-
   //
   // AbstractModel overrides.
 
-  virtual bool IsModified() const;
+  bool IsModified() const;
 
-  virtual void ClearModified();
+#if 0
+  void ClearModified();
+#endif
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -135,9 +133,11 @@ protected:
   //
   // AbstractModel overrides.
 
-  /**
-   */
-  virtual void virtual_BuildModel( void* context =NULL );
+  void virtual_BuildModel( void* context =NULL );
+
+#if 0
+  void virtual_Save();
+#endif
 
 //
 // Protected attributes.

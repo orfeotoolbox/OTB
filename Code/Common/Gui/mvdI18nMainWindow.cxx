@@ -139,13 +139,9 @@ I18nMainWindow
 
   // Ensure there is an application instance.
   assert( I18nApplication::ConstInstance()!=NULL );
-  // Ensure that there is no model or that the existing model is a
-  // DatasetModel.
-  assert( I18nApplication::ConstInstance()->GetModel()==
-	  I18nApplication::ConstInstance()->GetModel< DatasetModel >() );
+
   // Get model.
-  DatasetModel* model =
-    I18nApplication::Instance()->GetModel< DatasetModel >();
+  AbstractModel* model = I18nApplication::Instance()->GetModel();
 
   if( model==NULL || !model->IsModified() )
     return;

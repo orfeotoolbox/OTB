@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdMainWindow_h
-#define __mvdMainWindow_h
+#ifndef __mvdSerializableInterface_h
+#define __mvdSerializableInterface_h
 
 //
 // Configuration include.
@@ -44,16 +44,14 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdTypes.h"
-//
-#include "Gui/mvdI18nMainWindow.h"
+#include "mvdModifiableInterface.h"
 
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
 //
-// External class pre-declaration.
+// External classes pre-declaration.
 namespace
 {
 }
@@ -61,139 +59,79 @@ namespace
 namespace mvd
 {
 //
-// Internal class pre-declaration.
+// Internal classes pre-declaration.
 
-namespace Ui
-{
-class MainWindow;
-}
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/**
- * \class MainWindow
+/** \class SerializableInterface
  *
- * \brief The application main-widow widget.
  */
-class Monteverdi2_EXPORT MainWindow
-  : public I18nMainWindow
+class Monteverdi2_EXPORT SerializableInterface :
+    public ModifiableInterface
 {
-
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
-  Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
-// Public types.
-public:
-
-//
 // Public methods.
 public:
-  /** \brief Constructor. */
-  MainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
 
-  /** \brief Destructor. */
-  virtual ~MainWindow();
+  /** Destructor */
+  virtual ~SerializableInterface();
 
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+  /**
+   */
+  inline void Save();
 
-//
-// SIGNALS.
-signals:
-  
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
-
-  //
-  // I18nMainWindow overrides.
-
-  /**
-   */
-  virtual void virtual_SetupUI();
+  /** Constructor */
+  SerializableInterface();
 
   /**
    */
-  virtual void virtual_ConnectUI();
-
+  virtual void virtual_Save() =0;
 
 //
 // Protected attributes.
 protected:
 
-  /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
-
-//
-// Protected slots.
-protected slots:
-
-  /**
-   */
-  void OnAboutToChangeModel( const AbstractModel* );
-
-  /**
-   */
-  void OnModelChanged( AbstractModel* );
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
-//
-// Private nested classes.
-private:
-
 
 //
 // Private methods.
 private:
 
-  /** */
-  void InitializeDockWidgets();
-
 //
 // Private attributes.
 private:
-  /**
-   * \brief uic generated.
-   */
-  Ui::MainWindow* m_UI;
-
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Private slots.
-private slots:
 
 };
 
-} // end namespace 'mvd'
+} // end namespace 'mvd'.
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-
-//
-// Some constants.
-
 namespace mvd
 {
 
+/*****************************************************************************/
+inline
+void
+SerializableInterface
+::Save()
+{
+  virtual_Save();
+
+  ClearModified();
+}
+
 } // end namespace 'mvd'
 
-#endif // __MainWindow_h
+#endif // __mvdSerializableInterface_h

@@ -194,7 +194,7 @@ private slots:
    * \brief Qt auto-connected slot which is called when Help/About
    * menu action is activated.
    */
-  void on_action_About_activated();
+  virtual void on_action_About_activated();
 
 };
 

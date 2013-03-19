@@ -34,6 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdDatabaseModel.h"
 
 //
 // Class implementation.
@@ -70,6 +71,16 @@ CatalogueApplication
 CatalogueApplication
 ::~CatalogueApplication()
 {
+}
+
+/*******************************************************************************/
+void
+CatalogueApplication
+::OpenDatabase()
+{
+  DatabaseModel* databaseModel = new DatabaseModel( this );
+
+  SetModel( databaseModel );
 }
 
 /*******************************************************************************/

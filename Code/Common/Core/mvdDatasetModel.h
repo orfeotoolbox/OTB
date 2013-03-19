@@ -154,10 +154,6 @@ public:
    */
   inline ConstAbstractImageModelList GetImageModels() const;
 
-  /**
-   */
-  void Save();
-
   //
   // AbstractModel overrides.
 
@@ -180,8 +176,9 @@ protected:
   //
   // AbstractModel overrides.
 
-  /** */
-  virtual void virtual_BuildModel( void* context =NULL );
+  void virtual_BuildModel( void* context =NULL );
+
+  void virtual_Save();
 
 //
 // Protected attributes.

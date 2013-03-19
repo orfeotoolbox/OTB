@@ -112,6 +112,10 @@ public:
    */
   virtual void ClearModified();
 
+  /**
+   */
+  inline void Save();
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -130,6 +134,10 @@ protected:
   // TODO: Provide default empty virtual method body and clean-up
   // derived-classes.
   virtual void virtual_BuildModel( void* context =NULL ) =0;
+
+  /**
+   */
+  virtual void virtual_Save();
 
 //
 // Protected attributes.
@@ -220,6 +228,17 @@ AbstractModel
 ::BuildModel( void* context )
 {
   virtual_BuildModel( context );
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractModel
+::Save()
+{
+  virtual_Save();
+
+  ClearModified();
 }
 
 } // end namespace 'mvd'

@@ -54,15 +54,16 @@
 int
 main( int argc, char* argv[] )
 {
-  // Initialize application and sync settings.
+  // 1. Initialize application and sync settings.
   mvd::CatalogueApplication application( argc, argv );
   application.Initialize();
 
 
-  // Initialize main-window (UI).
+  // 2. Initialize main-window (UI).
   mvd::MainWindow mainWindow;
   mainWindow.Initialize();
 
+  // 3. Initialize cache directory.
 #if 0
 // TODO: 1) MVD2-viewer: Factorize cache-dir search between Viewer & Catalogue.
   if (!appHasSettingsFile || appHasIncorrectCacheDir)
@@ -87,10 +88,13 @@ main( int argc, char* argv[] )
     }
 #endif
 
-  // Show window.
+  // 4. Initialize database.
+  application.OpenDatabase();
+
+  // 5. Show window.
   mainWindow.show();
 
-  // Run application and return exit code.
+  // 6. Let's go: run the application and return exit code.
   return application.exec();
 }
 

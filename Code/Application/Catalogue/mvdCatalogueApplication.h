@@ -96,6 +96,10 @@ public:
   /** \brief Destructor. */
   virtual ~CatalogueApplication();
 
+  /**
+   */
+  void OpenDatabase();
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 public slots:
@@ -116,7 +120,7 @@ protected:
 // Protected attributes.
 protected:
 
-  virtual void virtual_InitializeCore();
+  void virtual_InitializeCore();
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
