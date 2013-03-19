@@ -36,11 +36,11 @@
 // OTB includes (sorted by alphabetic order)
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperApplication.h"
-#include "otbWrapperQtWidgetView.h"
  
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAlgorithm.h"
+#include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
 
 namespace mvd
 {
@@ -102,7 +102,7 @@ ApplicationLauncher
     mainWindow->setWindowTitle(QString(app->GetDocName()).append(" - ").append(OTB_VERSION_STRING));
 
     // Create GUI based on module
-    otb::Wrapper::QtWidgetView* gui = new otb::Wrapper::QtWidgetView(app);
+    Wrapper::QtWidgetView* gui = new Wrapper::QtWidgetView(app);
     gui->CreateGui();
 
     // Connect the View "Quit" signal, to the mainWindow close slot
