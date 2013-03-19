@@ -79,9 +79,6 @@ public:
    * Return false if not model found.
    */
   virtual void SetImageGeometry(const ImageKeywordlist& image_kwl);
-    
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
 
   /** Is sensor model valid method. return false if the sensor model is null */
   bool IsValidSensorModel()

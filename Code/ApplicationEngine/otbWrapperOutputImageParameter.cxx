@@ -180,7 +180,6 @@ OutputImageParameter::SwitchRGBAImageWrite()
     {
     m_RGBAUInt8Writer->SetFileName( this->GetFileName() );
     m_RGBAUInt8Writer->SetInput(dynamic_cast<UInt8RGBAImageType*>(m_Image.GetPointer()) );
-    m_RGBAUInt8Writer->WriteGeomFileOn();
     m_RGBAUInt8Writer->SetAutomaticAdaptativeStreaming(m_RAMValue);
     m_RGBAUInt8Writer->Update();
     }
@@ -196,7 +195,6 @@ OutputImageParameter::SwitchRGBImageWrite()
     {
     m_RGBUInt8Writer->SetFileName( this->GetFileName() );
     m_RGBUInt8Writer->SetInput(dynamic_cast<UInt8RGBImageType*>(m_Image.GetPointer()) );
-    m_RGBUInt8Writer->WriteGeomFileOn();
     m_RGBUInt8Writer->SetAutomaticAdaptativeStreaming(m_RAMValue);
     m_RGBUInt8Writer->Update();
     }

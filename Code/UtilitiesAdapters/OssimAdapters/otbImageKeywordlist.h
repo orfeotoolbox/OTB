@@ -112,7 +112,6 @@ private:
 std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
 
 // Free function to handle the keywordlist <-> files
-itkLegacyMacro(ImageKeywordlist ReadGeometry(const std::string& filename)); //OTB 3.15
 ImageKeywordlist ReadGeometryFromImage(const std::string& filename);
 ImageKeywordlist ReadGeometryFromGEOMFile(const std::string& filename);
 void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);

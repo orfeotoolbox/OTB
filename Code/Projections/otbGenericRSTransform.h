@@ -93,9 +93,6 @@ public:
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
 
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
   /** Set/Get Dictionary*/
   const itk::MetaDataDictionary& GetInputDictionary() const
   {

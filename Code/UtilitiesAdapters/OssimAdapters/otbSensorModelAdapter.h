@@ -63,9 +63,6 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(SensorModelAdapter, itk::Object);
 
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
   /** Create the projection ( m_Model). Called by the SetImageGeometry methods */
   void CreateProjection(const ImageKeywordlist& image_kwl);
   // FIXME check if it should be protected instead

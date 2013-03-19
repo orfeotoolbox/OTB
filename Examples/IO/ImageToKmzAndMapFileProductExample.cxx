@@ -78,6 +78,8 @@ int main(int argc, char* argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
+  
+  otb::DEMHandler::Instance()->OpenDEMDirectory(argv[6]);
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -160,7 +162,6 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
   kmzWriter->SetInput(rpcEstimator->GetOutput());
   kmzWriter->SetPath(argv[2]);
-  kmzWriter->SetDEMDirectory(argv[6]);
   kmzWriter->Update();
 // Software Guide : EndCodeSnippet
 
@@ -201,7 +202,6 @@ int main(int argc, char* argv[])
   mapWriter->SetShapeIndexPath(argv[4]);
   mapWriter->SetCGIPath(argv[5]);
   mapWriter->SetSRID(4326);
-  mapWriter->SetDEMDirectory(argv[6]);
   
   mapWriter->Update();
 // Software Guide : EndCodeSnippet

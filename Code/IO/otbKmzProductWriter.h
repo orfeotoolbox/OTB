@@ -158,9 +158,6 @@ public:
   /** Set the size of the tiles to produce */
   itkSetMacro(TileSize, int);
 
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
 protected:
   KmzProductWriter();
   virtual ~KmzProductWriter();

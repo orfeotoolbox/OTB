@@ -122,25 +122,6 @@ public:
   /** Get the output correlation map */
   TOutputHeight * GetCorrelationOutput();
 
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
-  /** \deprecated Set the use DEM flag. If set to true, the local elevation is
-   *  extracted from a DEM + geoid. If set to false, average elevation
-   *  is used. Default is false. */
-  itkLegacyMacro(itkSetMacro(UseDEM, bool));
-
-  /** \deprecated Get the use DEM flag. If set to true, the local elevation is
-   *  extracted from a DEM + geoid. If set to false, average elevation
-   *  is used. Default is false. */
-  itkLegacyMacro(itkGetMacro(UseDEM, bool));
-
-  /** \deprecated Toggle the use DEM flag. If set to true, the local elevation is
-   *  extracted from a DEM + geoid. If set to false, average elevation
-   *  is used. Default is false.
-   */
-  itkLegacyMacro(itkBooleanMacro(UseDEM));
-
   /** Set the lower offset for the local elevation
    * exploration. Default is -20 meters.
    */

@@ -28,34 +28,6 @@
 
 class ossimElevManager;
 
-// This macro is here to replace deprecated elevation setup in all
-// classes at once
-#define otbLegacyElevationMacro()                                       \
-  itkLegacyMacro(void SetDEMDirectory(const std::string & dem)          \
-  {                                                                     \
-    otb::DEMHandler::Instance()->OpenDEMDirectory(dem);                 \
-  })                                                                    \
-  itkLegacyMacro(std::string GetDEMDirectory() const                    \
-  {                                                                     \
-    return otb::DEMHandler::Instance()->GetDEMDirectory();              \
-  })                                                                    \
-  itkLegacyMacro(void SetGeoidFile(const std::string & geoid)           \
-  {                                                                     \
-    otb::DEMHandler::Instance()->OpenGeoidFile(geoid);                  \
-  })                                                                    \
-  itkLegacyMacro(std::string GetGeoidFile() const                       \
-  {                                                                     \
-    return otb::DEMHandler::Instance()->GetGeoidFile();                 \
-  })                                                                    \
-  itkLegacyMacro(void SetAverageElevation(double elevation)             \
-  {                                                                     \
-  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(elevation);  \
-  })                                                                    \
-  itkLegacyMacro(double GetAverageElevation() const                     \
-  {                                                                     \
-  return otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid(); \
-  })                                                                    \
-
 namespace otb
 {
 /** \class DEMHandler
@@ -119,11 +91,6 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef itk::Point<double, 2> PointType;
-
-  /** Method for creation through the object factory.
-   *  \deprecated DEMHandler is now a singleton class, use Instance method instead.
-   */
-  itkLegacyMacro(static Self * New());
 
   /** Retrieve the singleton instance */
   static Pointer Instance();

@@ -255,10 +255,6 @@ public:
   itkGetStringMacro(OutputProjectionRef);
   //@}
 
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
-  //@}
 private:
   /**\name Functor definition */
   //@{

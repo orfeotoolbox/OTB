@@ -88,7 +88,7 @@ int main(int argc, char * argv[])
   typedef DEMToImageGeneratorType::SpacingType    SpacingType;
   typedef DEMToImageGeneratorType::PointType      PointType;
 
-  demToImage->SetDEMDirectoryPath(argv[8]);
+  otb::DEMHandler::Instance()->OpenDEMDirectory(argv[8]);
 
   PointType origin;
   origin[0] = ::atof(argv[2]);

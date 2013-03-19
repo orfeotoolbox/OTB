@@ -56,7 +56,7 @@ int otbStandardImageViewer(int argc, char * argv[])
   if (argc > 4)
     {
     std::cout << "Reprojecting using DEM " << argv[4] << std::endl;
-    viewer->SetDEMDirectory(argv[4]);
+    otb::DEMHandler::Instance()->OpenDEMDirectory(argv[4]);
     }
 
   viewer->SetLabel("Testing standard viewer");
@@ -110,7 +110,7 @@ int otbStandardImageViewerSplitted(int argc, char * argv[])
   if (argc > 4)
     {
     std::cout << "Reprojecting using DEM " << argv[4] << std::endl;
-    viewer->SetDEMDirectory(argv[4]);
+    otb::DEMHandler::Instance()->OpenDEMDirectory(argv[4]);
     }
 
   viewer->SetLabel("Testing standard viewer");

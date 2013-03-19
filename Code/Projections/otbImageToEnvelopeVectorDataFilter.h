@@ -84,9 +84,6 @@ public:
   /** Set/Get output projection (default is WGS84)  */
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
-
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
   
   itkSetMacro(SamplingRate, unsigned int);
   itkGetMacro(SamplingRate, unsigned int);

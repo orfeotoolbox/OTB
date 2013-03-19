@@ -77,6 +77,8 @@ int otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction(int argc, cha
    {
     imgReader->SetGlobalWarningDisplay(0);
    }
+   
+  otb::DEMHandler::Instance()->OpenDEMDirectory(DEMDir);
 
   vdReader->SetFileName(inputVD);
   vdReader->Update();
@@ -87,7 +89,6 @@ int otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction(int argc, cha
 
   vdReProjFilter->SetInputImage(imgReader->GetOutput());
   vdReProjFilter->SetInputVectorData(vdReader->GetOutput());
-  vdReProjFilter->SetDEMDirectory(DEMDir);
   vdReProjFilter->SetUseOutputSpacingAndOriginFromImage(true);
   vdReProjFilter->Update();
 

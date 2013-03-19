@@ -85,12 +85,5 @@ char UtmMapProjection<TTransform>
   return hemisphere;
 }
 
-template <TransformDirection::TransformationDirection TTransform>
-int UtmMapProjection<TTransform>
-::GetZoneFromGeoPoint(const InputPointType& geoPoint) const
-{
-  return Utils::GetZoneFromGeoPoint(geoPoint[0], geoPoint[1]);
-}
-
 }
 #endif

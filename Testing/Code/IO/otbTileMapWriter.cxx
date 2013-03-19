@@ -64,6 +64,8 @@ int otbTileMapWriter(int argc, char *argv[])
   <ImageType, DoubleImageType, MapProjectionType> OrthoRectifFilterType;
   typedef otb::ImageFileWriter<CharVectorImageType> WriterType;
 
+  otb::DEMHandler::Instance()->OpenDEMDirectory(argv[2]);
+  
   MapProjectionType::Pointer mapProjection = MapProjectionType::New();
   mapProjection->SetLevel(depth);
 
@@ -124,7 +126,6 @@ int otbTileMapWriter(int argc, char *argv[])
   orthoRectifXS->SetOutputSize(size);
   orthoRectifXS->SetOutputSpacing(spacing);
   orthoRectifXS->SetOutputOrigin(pointULexact);
-  orthoRectifXS->SetDEMDirectory(argv[2]);
 
   typedef otb::MultiChannelExtractROI<DoubleVectorImageType::InternalPixelType, DoubleVectorImageType::InternalPixelType> ExtractorType;
   ExtractorType::Pointer extractor = ExtractorType::New();

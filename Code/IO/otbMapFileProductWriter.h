@@ -156,9 +156,6 @@ public:
   /** Macro to set the SRID we want to project Data in*/
   itkSetMacro(SRID, int);
 
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
 protected:
   MapFileProductWriter();
   virtual ~MapFileProductWriter();

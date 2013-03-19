@@ -51,7 +51,6 @@ int main(int argc, char* argv[])
   writer->SetInput(caster->GetOutput());
   writer->SetFileName(argv[2]);
   //writer->SetAutomaticTiledStreaming(1024);
-  writer->WriteGeomFileOn();
   writer->SetTileDimensionTiledStreaming(256);
   writer->Update();
   

@@ -160,10 +160,7 @@ public:
   /** Set/Get the VectorData to render */
   itkSetObjectMacro(VectorData, VectorDataType);
   itkGetObjectMacro(VectorData, VectorDataType);
-  
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-  
+
   /** Set/Get the Label */
   itkSetStringMacro(Label);
   itkGetStringMacro(Label);

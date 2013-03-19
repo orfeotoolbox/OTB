@@ -59,11 +59,11 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
   spacing[0] = ::atof(argv[7]);
   spacing[1] = ::atof(argv[8]);
 
-  object->SetDEMDirectoryPath(folderPath);
+  otb::DEMHandler::Instance()->OpenDEMDirectory(folderPath);
+
   object->SetOutputOrigin(origin);
   object->SetOutputSize(size);
   object->SetOutputSpacing(spacing);
-  object->SetDefaultUnknownValue(0);
 
   std::cout << object << std::endl;
 

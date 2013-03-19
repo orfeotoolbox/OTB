@@ -138,9 +138,6 @@ public:
   /** Set/Get macro for DEM grid step */
   itkSetMacro(DEMGridStep, double);
   itkGetConstReferenceMacro(DEMGridStep, double);
-  
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
 
 protected:
   /** Constructor */

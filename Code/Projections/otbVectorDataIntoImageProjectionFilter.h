@@ -70,9 +70,6 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataIntoImageProjectionFilter, VectorDataToVectorDataFilter);
 
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
   void SetInputVectorData(InputVectorDataPointer input)
   {
     this->SetInput(input);

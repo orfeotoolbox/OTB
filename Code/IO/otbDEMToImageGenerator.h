@@ -95,10 +95,6 @@ public:
   itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
   /** Set/Get the Default Unknown Value. */
-  itkLegacyMacro(itkSetMacro(DefaultUnknownValue, PixelType));
-  itkLegacyMacro(itkGetConstReferenceMacro(DefaultUnknownValue, PixelType));
-
-  /** Set/Get the Default Unknown Value. */
   itkSetObjectMacro(Transform, GenericRSTransformType);
   itkGetConstObjectMacro(Transform, GenericRSTransformType);
 
@@ -109,25 +105,6 @@ public:
   itkBooleanMacro(AboveEllipsoid);
 
   void InstanciateTransform();
-
-  /** Set the DEM directory. */
-
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
-  itkLegacyMacro(
-    virtual void SetDEMDirectoryPath(const char* DEMDirectory)
-    {
-      SetDEMDirectory(DEMDirectory);
-    }
-    )
-
-    itkLegacyMacro(
-      virtual void SetDEMDirectoryPath(const std::string& DEMDirectory)
-      {
-        SetDEMDirectory(DEMDirectory);
-      }
-      )
 
   /**
    * Set/Get input & output projections.

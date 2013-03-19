@@ -103,10 +103,6 @@ public:
   itkSetMacro(NumberOfCrossValidationFolders, unsigned int);
   itkGetMacro(NumberOfCrossValidationFolders, unsigned int);
 
-  /** Set the number of classes. This method is deprecated and is
-   * maintained for backward compatibility only */
-  itkLegacyMacro( void SetNumberOfClasses(unsigned int itkNotUsed(nbClasses) ) ) {}
-
   /** Get the number of classes */
   unsigned int GetNumberOfClasses()
   {

@@ -92,9 +92,6 @@ public:
   itkSetMacro(GridSize, SizeType);
   itkGetConstReferenceMacro(GridSize, SizeType);
 
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
   /** Set Grid size with an unsigned int parmeter*/
   void SetGridSize(unsigned int inSize)
   {

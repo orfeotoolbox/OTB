@@ -425,7 +425,6 @@ KmzProductWriter<TInputImage>
         m_VectorWriter = VectorWriterType::New();
         m_VectorWriter->SetFileName(ossFileName.str().c_str());
         m_VectorWriter->SetInput(m_VectorImageExtractROIFilter->GetOutput());
-        m_VectorWriter->WriteGeomFileOn();
         m_VectorWriter->Update();
 
         /** TODO : Generate KML for this tile */

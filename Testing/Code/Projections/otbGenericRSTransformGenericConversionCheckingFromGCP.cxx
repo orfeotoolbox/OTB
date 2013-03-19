@@ -67,7 +67,7 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
   GeoDistanceType::Pointer geoDistance = GeoDistanceType::New();
 
   otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
-  // demHandler->OpenDEMDirectory(demDir);
+  demHandler->OpenDEMDirectory(demDir);
   // demHandler->OpenGeoidFile(geoidFile); TODO: use geoid
 
   // Instantiate Image->WGS transform
@@ -75,7 +75,6 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
   img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
   img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   img2wgs->SetOutputProjectionRef(wgsRef);
-  img2wgs->SetDEMDirectory(demDir);
   img2wgs->InstanciateTransform();
 
   // Instanciate WGS->Image transform
@@ -83,7 +82,6 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
   wgs2img->SetInputProjectionRef(wgsRef);
   wgs2img->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
   wgs2img->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  wgs2img->SetDEMDirectory(demDir);
   wgs2img->InstanciateTransform();
 
   std::cout << "GCPProjection is : " << reader->GetOutput()->GetGCPProjection() << std::endl;

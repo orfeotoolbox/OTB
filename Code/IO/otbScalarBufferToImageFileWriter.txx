@@ -104,8 +104,7 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData()
           ++it;
         }
     }
-  
-  m_Writer->WriteGeomFileOff();
+
   m_Writer->SetInput( lImage );
   m_Writer->Update();
 }

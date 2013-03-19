@@ -169,9 +169,6 @@ public:
 
   itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
 protected:
   VectorDataProjectionFilter();
   virtual ~VectorDataProjectionFilter() {}

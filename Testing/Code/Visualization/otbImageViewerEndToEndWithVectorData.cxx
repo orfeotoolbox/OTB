@@ -98,12 +98,13 @@ int otbImageViewerEndToEndWithVectorData(int argc, char * argv[])
   vreader->SetFileName(vinfname);
   vreader->UpdateOutputInformation();
 
+  otb::DEMHandler::Instance()->OpenDEMDirectory(demdir);
+  
   VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
   vproj->SetInput(vreader->GetOutput());
   vproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   vproj->SetOutputOrigin(reader->GetOutput()->GetOrigin());
   vproj->SetOutputSpacing(reader->GetOutput()->GetSpacing());
-  vproj->SetDEMDirectory(demdir);
   vproj->Update();
 
   VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();

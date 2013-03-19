@@ -194,9 +194,6 @@ public:
     return m_Transform->GetInputKeywordList();
   }
   
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-  
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
 

@@ -237,9 +237,6 @@ private:
       m_DEMToImageGenerator->SetOutputSpacing(spacing);
       m_DEMToImageGenerator->SetOutputProjectionRef(GetParameterImage("io.inleft")->GetProjectionRef());
       m_DEMToImageGenerator->SetOutputKeywordList(GetParameterImage("io.inleft")->GetImageKeywordlist());
-      // 0 by default
-      m_DEMToImageGenerator->SetDefaultUnknownValue(0);
-
       m_DEMToImageGenerator->AboveEllipsoidOn();
 
       m_StatisticsFilter->SetInput(m_DEMToImageGenerator->GetOutput());

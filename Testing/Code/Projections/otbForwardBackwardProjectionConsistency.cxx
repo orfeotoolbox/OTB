@@ -72,7 +72,7 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
   DistanceType::Pointer distance = DistanceType::New();
 
   otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
-  // demHandler->OpenDEMDirectory(demDir);
+  demHandler->OpenDEMDirectory(demDir);
   // demHandler->OpenGeoidFile(geoidFile); TODO: use geoid
 
   // Instantiate Image->WGS transform
@@ -80,7 +80,6 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
   img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
   img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   img2wgs->SetOutputProjectionRef(wgsRef);
-  img2wgs->SetDEMDirectory(demDir);
   img2wgs->InstanciateTransform();
 
   // Instantiate WGS->Image transform
@@ -88,7 +87,6 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
   wgs2img->SetInputProjectionRef(wgsRef);
   wgs2img->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
   wgs2img->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  wgs2img->SetDEMDirectory(demDir);
   wgs2img->InstanciateTransform();
 
   // Random Point Generator

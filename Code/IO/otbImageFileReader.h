@@ -138,9 +138,6 @@ public:
   virtual void SetFileName(std::string extendedFileName);
   virtual const char* GetFileName () const;
 
-  itkLegacyMacro( itkSetMacro(AdditionalNumber, unsigned int) );
-  itkLegacyMacro( itkGetMacro(AdditionalNumber, unsigned int) );
-
   /** Get the resolution information from the file */
   bool GetResolutionsInfo( std::vector<unsigned int>& res,
                           std::vector<std::string>& desc);

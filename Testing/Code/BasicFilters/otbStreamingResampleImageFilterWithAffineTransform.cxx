@@ -100,7 +100,6 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     typedef otb::ImageFileWriter<ImageType>    WriterType;
     WriterType::Pointer writer= WriterType::New();
     writer->SetNumberOfDivisionsTiledStreaming(4);
-    writer->WriteGeomFileOn();
     writer->SetFileName(outfname);
     writer->SetInput(resampler->GetOutput());
     writer->Update();

@@ -102,8 +102,7 @@ int otbOrthoRectificationFilterWithDEM(int argc, char* argv[])
   gridSpacing[1] = -atof(argv[12]);
   orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
 
-  std::string srtmDirectory(argv[11]);
-  orthoRectifFilter->SetDEMDirectory(srtmDirectory);
+  otb::DEMHandler::Instance()->OpenDEMDirectory(argv[11]);
 
   writer->SetInput(orthoRectifFilter->GetOutput());
 

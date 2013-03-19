@@ -98,9 +98,6 @@ public:
   const RegionType& GetRegion()
   {return m_ROI; }
 
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
 protected:
   VectorDataExtractROI();
   virtual ~VectorDataExtractROI() {}

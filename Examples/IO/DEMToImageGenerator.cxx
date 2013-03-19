@@ -90,7 +90,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  // Input parameter types are defined to set the value in the DEMToImageGenerator.
+  // Input parameter types are defined to set the value in the \doxygen{otb}{DEMToImageGenerator}.
   //
   //  Software Guide : EndLatex
 
@@ -105,12 +105,12 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginLatex
   //
-  // The path to the DEM folder is given to the filter.
+  // The path to the DEM folder is given to the \doxygen{otb}{DEMHandler}.
   //
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  object->SetDEMDirectoryPath(folderPath);
-// Software Guide : EndCodeSnippet
+  otb::DEMHandler::Instance()->OpenDEMDirectory(folderPath);
+  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //

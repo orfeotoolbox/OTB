@@ -63,6 +63,8 @@ int otbKmzProductWriter(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 
+  otb::DEMHandler::Instance()->OpenDEMDirectory(demPath);
+  
   GCPsToSensorModelFilterType::Pointer rpcEstimator = GCPsToSensorModelFilterType::New();
   rpcEstimator->SetInput(reader->GetOutput());
 
@@ -95,7 +97,6 @@ int otbKmzProductWriter(int argc, char* argv[])
 
   kmzWriter->SetInput(rpcEstimator->GetOutput());
   kmzWriter->SetPath(kmzFileName);
-  kmzWriter->SetDEMDirectory(demPath);
   
   kmzWriter->Update();
 
@@ -205,7 +206,7 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
   // Set the DEM Directory if any
   if(parseResult->IsOptionPresent("--DEMDirectory"))
     {
-    kmzWriter->SetDEMDirectory(parseResult->GetParameterString("--DEMDirectory"));
+    otb::DEMHandler::Instance()->OpenDEMDirectory(parseResult->GetParameterString("--DEMDirectory"));
     }
   
   // trigger the writing

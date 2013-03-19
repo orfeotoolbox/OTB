@@ -154,34 +154,6 @@ public:
    *   is set from the CMake configuration option */
   void SetAutomaticAdaptativeStreaming(unsigned int availableRAM = 0, double bias = 1.0);
 
-  /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
-  itkLegacyMacro( void SetBufferMemorySize(unsigned long) );
-
-  /**  Set the buffer number of lines use to calculate the number of stream divisions */
-  itkLegacyMacro( void SetBufferNumberOfLinesDivisions(unsigned long) );
-
-  /**  The number of stream divisions is calculate by using
-   * OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING and
-   * OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING cmake variables.
-   */
-  itkLegacyMacro( void SetAutomaticNumberOfStreamDivisions(void) );
-
-  /** Set the tiling automatic mode for streaming division */
-  itkLegacyMacro( void SetTilingStreamDivisions(void) );
-  /** Choose number of divisions in tiling streaming division */
-  itkLegacyMacro( void SetTilingStreamDivisions(unsigned long) );
-
-  /** Return the string to indicate the method use to calculate number of stream divisions. */
-  itkLegacyMacro( std::string GetMethodUseToCalculateNumberOfStreamDivisions(void) );
-
-  /** Set the number of pieces to divide the input.  The upstream pipeline
-   * will be executed this many times. */
-  itkLegacyMacro( void SetNumberOfStreamDivisions(unsigned long) );
-
-  /** Get the number of pieces to divide the input. The upstream pipeline
-   * will be executed this many times. */
-  itkLegacyMacro( unsigned long GetNumberOfStreamDivisions(void) );
-  
   /** Set the only input of the writer */
   virtual void SetInput(const InputImageType *input);
   
@@ -220,13 +192,6 @@ public:
   itkSetObjectMacro(ImageIO, otb::ImageIOBase);
   itkGetObjectMacro(ImageIO, otb::ImageIOBase);
   itkGetConstObjectMacro(ImageIO, otb::ImageIOBase);
-
-  /**
-   * Enable/disable writing of a .geom file with the ossim keyword list along with the written image
-   */
-  itkLegacyMacro( itkSetMacro(WriteGeomFile, bool) );
-  itkLegacyMacro( itkGetMacro(WriteGeomFile, bool) );
-  itkLegacyMacro( itkBooleanMacro(WriteGeomFile) );
   
 protected:
   ImageFileWriter();

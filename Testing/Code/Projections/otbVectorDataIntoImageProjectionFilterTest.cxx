@@ -54,6 +54,8 @@ int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
   std::string vectorDataInputFilename = argv[2];
   std::string demDirectory = argv[3];
   int expectedFeatures = atoi(argv[4]);
+  
+  otb::DEMHandler::Instance()->OpenDEMDirectory(demDirectory);
 
   // Read the image
   ReaderType::Pointer    reader  = ReaderType::New();
@@ -69,7 +71,6 @@ int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
     = VectorDataIntoImageProjectionFilterType::New();
   vdReProjFilter->SetInputImage(reader->GetOutput());
   vdReProjFilter->SetInputVectorData(vdReader->GetOutput());
-  vdReProjFilter->SetDEMDirectory(demDirectory);
   vdReProjFilter->Update();
 
   int nbElem = 0;
@@ -133,6 +134,11 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int argc, char * argv[
             << vectorDataOutputFilename << "\n"
             << vectorDataOutputFilename2 << std::endl;
 
+  if (!demDirectory.empty())
+    {
+    otb::DEMHandler::Instance()->OpenDEMDirectory(demDirectory);
+    }
+    
   // Read the image
   ReaderType::Pointer    reader  = ReaderType::New();
   reader->SetFileName(imageInputFilename);
@@ -144,12 +150,8 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int argc, char * argv[
   vdReader->Update();
 
   VectorDataReProjFilter::Pointer vdReProjFilter = VectorDataReProjFilter::New();
-
   vdReProjFilter->SetInputImage(reader->GetOutput());
-
   vdReProjFilter->SetInputVectorData(vdReader->GetOutput());
-
-  vdReProjFilter->SetDEMDirectory(demDirectory);
 
   std::string stateOutput ="";
   if (atoi(argv[6]) == 1)
@@ -219,10 +221,6 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int argc, char * argv[
 
   // Set the cartographic region to the extract roi filter
   vdextract->SetRegion(rsRegion);
-  if (!demDirectory.empty())
-    {
-    vdextract->SetDEMDirectory(demDirectory);
-    }
 
   // Reproject VectorData in image projection
   vproj = VectorDataProjectionFilterType::New();
@@ -232,10 +230,6 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int argc, char * argv[
   vproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
   vproj->SetOutputOrigin(reader->GetOutput()->GetOrigin());
   vproj->SetOutputSpacing(reader->GetOutput()->GetSpacing());
-  if (!demDirectory.empty())
-    {
-    vproj->SetDEMDirectory(demDirectory);
-    }
 
   //----------
   // WRITE

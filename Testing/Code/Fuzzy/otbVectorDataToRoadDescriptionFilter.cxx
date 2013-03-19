@@ -86,9 +86,10 @@ int otbVectorDataToRoadDescriptionFilter(int argc, char* argv[])
     VectorDataToRoadDescriptionFilterType::New();
 
   if (!DisplayWarnings)
-   {
+    {
     reader->SetGlobalWarningDisplay(0);
-   }
+    }
+  otb::DEMHandler::Instance()->OpenDEMDirectory(DEMDirectory);
 
   reader->SetFileName(inputImg);
   reader->UpdateOutputInformation();
@@ -101,7 +102,6 @@ int otbVectorDataToRoadDescriptionFilter(int argc, char* argv[])
   
   vdReProjFilter->SetInputImage(reader->GetOutput());
   vdReProjFilter->SetInputVectorData(vdReader->GetOutput());
-  vdReProjFilter->SetDEMDirectory(DEMDirectory);
   vdReProjFilter->SetUseOutputSpacingAndOriginFromImage(true);
   vdReProjFilter->Update();
 

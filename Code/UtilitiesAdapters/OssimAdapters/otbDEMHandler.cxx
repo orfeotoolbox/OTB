@@ -46,11 +46,6 @@ DEMHandler::Pointer DEMHandler::Instance()
   return m_Singleton;
 }
 
-DEMHandler * DEMHandler::New()
-{
-  return Instance();
-}
-
 DEMHandler
 ::DEMHandler() :
   m_ElevManager(ossimElevManager::instance()),

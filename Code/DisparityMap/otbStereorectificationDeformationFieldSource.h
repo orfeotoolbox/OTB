@@ -118,9 +118,6 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro( StereorectificationDeformationFieldSource, ImageSource );
 
-  // Deprecated calls to elevation setters
-  otbLegacyElevationMacro();
-
   /** Get/Set the scale */
   itkSetMacro(Scale,double);
   itkGetConstReferenceMacro(Scale,double);
