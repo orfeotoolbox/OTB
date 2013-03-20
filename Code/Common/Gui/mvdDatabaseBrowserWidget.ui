@@ -18,7 +18,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QTreeWidget" name="treeWidget">
+    <widget class="QTreeWidget" name="databaseTreeWidget">
      <column>
       <property name="text">
        <string>Name</string>
@@ -26,7 +26,16 @@
      </column>
      <item>
       <property name="text">
-       <string>Dataset(s)</string>
+       <string>Datasets</string>
+      </property>
+      <property name="toolTip">
+       <string>List of dataset stored in the cache directory.</string>
+      </property>
+      <property name="statusTip">
+       <string>List of dataset stored in the cache directory.</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
     </widget>

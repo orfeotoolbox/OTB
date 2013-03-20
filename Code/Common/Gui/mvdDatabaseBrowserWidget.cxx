@@ -29,6 +29,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -66,15 +67,30 @@ namespace mvd
 DatabaseBrowserWidget
 ::DatabaseBrowserWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
-  m_UI( new mvd::Ui::DatabaseBrowserWidget() )
+  m_UI( new mvd::Ui::DatabaseBrowserWidget() ),
+  m_DatasetRootItem( NULL )
 {
   m_UI->setupUi( this );
+
+  SetupUI();
 }
 
 /*******************************************************************************/
 DatabaseBrowserWidget
 ::~DatabaseBrowserWidget()
 {
+}
+
+/*******************************************************************************/
+void
+DatabaseBrowserWidget
+::SetupUI()
+{
+  m_DatasetRootItem = m_UI->databaseTreeWidget->topLevelItem( 0 );
+  assert( m_DatasetRootItem!=NULL );
+  assert( m_DatasetRootItem->text( 0 )==tr( "Datasets" ) );
+
+  m_DatasetRootItem->setChildIndicatorPolicy( QTreeWidgetItem::ShowIndicator );
 }
 
 /*******************************************************************************/

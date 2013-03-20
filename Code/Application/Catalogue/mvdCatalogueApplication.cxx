@@ -80,6 +80,8 @@ CatalogueApplication
 {
   DatabaseModel* databaseModel = new DatabaseModel( this );
 
+  databaseModel->BuildModel();
+
   SetModel( databaseModel );
 }
 

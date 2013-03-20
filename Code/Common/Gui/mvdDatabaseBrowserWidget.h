@@ -113,15 +113,25 @@ signals:
 // Protected methods.
 protected:
 
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
 //
 // Protected attributes.
 protected:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
+//
+// Private types.
+private:
+  /**
+   */
+  QList< QTreeWidgetItem* > TreeWidgetItemList;
+
 //
 // Private methods.
 private:
+  /**
+   */
+  void SetupUI();
 
 //
 // Private attributes.
@@ -130,6 +140,10 @@ private:
    * \brief uic generated.
    */
   Ui::DatabaseBrowserWidget* m_UI;
+
+  /**
+   */
+  QTreeWidgetItem* m_DatasetRootItem;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
