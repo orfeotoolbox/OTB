@@ -553,6 +553,15 @@ otbConfusionMatrixCalculatorUpdate 4 3)
 ADD_TEST(leTvConfusionMatrixCalculatorUpdateWithBaseline ${LEARNING_TESTS4}
 otbConfusionMatrixCalculatorUpdateWithBaseline)
 
+# -------            otb::ConfusionMatrixMeasurements   -----------------------------
+ADD_TEST(leTuConfusionMatrixMeasurementsNew ${LEARNING_TESTS4}
+otbConfusionMatrixMeasurementsNew)
+
+ADD_TEST(leTvConfusionMatrixMeasurementsTest ${LEARNING_TESTS4}
+otbConfusionMatrixMeasurementsTest)
+
+
+
 # ShiftScaleSampleListFilter tests ----------
 ADD_TEST(leTuShiftScaleSampleListFilterNew ${LEARNING_TESTS4}
 otbShiftScaleSampleListFilterNew)
@@ -730,6 +739,7 @@ otbExhaustiveExponentialOptimizerNew.cxx
 otbExhaustiveExponentialOptimizerTest.cxx
 otbListSampleGeneratorTest.cxx
 otbConfusionMatrixCalculatorTest.cxx
+otbConfusionMatrixMeasurementsTest.cxx
 otbShiftScaleSampleListFilter.cxx
 otbGaussianAdditiveNoiseSampleListFilter.cxx
 otbConcatenateSampleListFilter.cxx

@@ -36,6 +36,8 @@ void RegisterTests()
   REGISTER_TEST(otbConfusionMatrixCalculatorWrongSize);
   REGISTER_TEST(otbConfusionMatrixCalculatorUpdate);
   REGISTER_TEST(otbConfusionMatrixCalculatorUpdateWithBaseline);
+  REGISTER_TEST(otbConfusionMatrixMeasurementsNew);
+  REGISTER_TEST(otbConfusionMatrixMeasurementsTest);
   REGISTER_TEST(otbShiftScaleSampleListFilterNew);
   REGISTER_TEST(otbShiftScaleSampleListFilter);
   REGISTER_TEST(otbGaussianAdditiveNoiseSampleListFilterNew);
