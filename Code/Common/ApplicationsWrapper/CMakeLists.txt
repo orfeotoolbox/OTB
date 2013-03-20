@@ -9,7 +9,9 @@ set( Common_ApplicationsWrapper_SOURCES
   mvdWrapperQtWidgetParameterFactory.cxx
   mvdWrapperQtWidgetView.cxx
   mvdWrapperQtWidgetParameterGroup.cxx
-  mvdWrapperQtWidgetChoiceParameter.cxx
+  mvdWrapperQtWidgetChoiceParameter.cxx  
+  mvdWrapperQtWidgetInputImageListParameter.cxx
+  mvdWrapperQtWidgetFileSelection.cxx
 )
 
 #############################################################################
@@ -24,6 +26,8 @@ set( Common_ApplicationsWrapper_HEADERS_MOC
   mvdWrapperQtWidgetView.h
   mvdWrapperQtWidgetParameterGroup.h
   mvdWrapperQtWidgetChoiceParameter.h
+  mvdWrapperQtWidgetInputImageListParameter.h
+  mvdWrapperQtWidgetFileSelection.h
 )
 
 #############################################################################
