@@ -79,7 +79,7 @@ bool ReadDataFile(const char * infname, InputListSampleType * samples, TargetLis
             sample[id] = atof(feature.substr(semicolonpos+1,feature.size()-semicolonpos).c_str());
             pos = nextpos;
             }
-          }        
+          }
         samples->PushBack(sample);
         labels->PushBack(label);
         }

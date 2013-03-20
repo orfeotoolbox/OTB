@@ -185,10 +185,10 @@ private:
 
 
     AddParameter(ParameterType_Choice, "classifier", "Classifier to used.");
-	SetParameterDescription("classifier", "Choice of the classifier to used.");
+       SetParameterDescription("classifier", "Choice of the classifier to used.");
 
-	//Group LibSVM
-	AddChoice("classifier.libsvm", "LibSVM classifier");
+       //Group LibSVM
+       AddChoice("classifier.libsvm", "LibSVM classifier");
     //AddParameter(ParameterType_Group,"libsvm","LibSVM classifier parameters");
     SetParameterDescription("classifier.libsvm","This group of parameters allows to set SVM classifier parameters.");
     AddParameter(ParameterType_Choice, "classifier.libsvm.k", "SVM Kernel Type");
@@ -207,41 +207,41 @@ private:
 
     //Group SVM (openCV)
     AddChoice("classifier.svm", "SVM classifier (OpenCV)");
-	//AddParameter(ParameterType_Group,"svm","SVM classifier parameters (OpenCV)");
-	SetParameterDescription("classifier.svm","This group of parameters allows to set SVM classifier parameters.");
-	AddParameter(ParameterType_Choice, "classifier.svm.m", "SVM Model Type");
-	AddChoice("classifier.svm.m.csvc", "C support vector classification");
-	AddChoice("classifier.svm.m.nusvc", "Nu support vector classification");
-	AddChoice("classifier.svm.m.oneclass", "Distribution estimation (One Class SVM)");
-	AddChoice("classifier.svm.m.epssvr", "Epsilon Support Vector Regression");
-	AddChoice("classifier.svm.m.nusvr", "Nu Support Vector Regression");
-	SetParameterString("classifier.svm.m", "csvc");
-	SetParameterDescription("classifier.svm.m", "Type of SVM formulation.");
-	AddParameter(ParameterType_Choice, "classifier.svm.k", "SVM Kernel Type");
-	AddChoice("classifier.svm.k.linear", "Linear");
-	AddChoice("classifier.svm.k.rbf", "Gaussian radial basis function");
-	AddChoice("classifier.svm.k.poly", "Polynomial");
-	AddChoice("classifier.svm.k.sigmoid", "Sigmoid");
-	SetParameterString("classifier.svm.k", "linear");
-	SetParameterDescription("classifier.svm.k", "SVM Kernel Type.");
-	AddParameter(ParameterType_Float, "classifier.svm.c", "Cost parameter C.");
-	SetParameterFloat("classifier.svm.c", 1.0);
-	SetParameterDescription("classifier.svm.c", "SVM models have a cost parameter C (1 by default) to control the trade-off between training errors and forcing rigid margins.");
-	AddParameter(ParameterType_Float, "classifier.svm.nu", "Parameter nu of a SVM optimization problem (NU_SVC / ONE_CLASS / NU_SVR).");
-	SetParameterFloat("classifier.svm.nu", 0.0);
-	SetParameterDescription("classifier.svm.nu", "Parameter nu of a SVM optimization problem.");
-	AddParameter(ParameterType_Float, "classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
-	SetParameterFloat("classifier.svm.p", 0.0);
-	SetParameterDescription("classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
-	AddParameter(ParameterType_Float, "classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID).");
-	SetParameterFloat("classifier.svm.coef0", 0.0);
-	SetParameterDescription("classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID).");
-	AddParameter(ParameterType_Float, "classifier.svm.gamma", "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
-	SetParameterFloat("classifier.svm.gamma", 1.0);
-	SetParameterDescription("classifier.svm.gamma", "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
-	AddParameter(ParameterType_Float, "classifier.svm.degree", "Parameter degree of a kernel function (POLY).");
-	SetParameterFloat("classifier.svm.degree", 0.0);
-	SetParameterDescription("classifier.svm.degree", "Parameter degree of a kernel function (POLY).");
+       //AddParameter(ParameterType_Group,"svm","SVM classifier parameters (OpenCV)");
+       SetParameterDescription("classifier.svm","This group of parameters allows to set SVM classifier parameters.");
+       AddParameter(ParameterType_Choice, "classifier.svm.m", "SVM Model Type");
+       AddChoice("classifier.svm.m.csvc", "C support vector classification");
+       AddChoice("classifier.svm.m.nusvc", "Nu support vector classification");
+       AddChoice("classifier.svm.m.oneclass", "Distribution estimation (One Class SVM)");
+       AddChoice("classifier.svm.m.epssvr", "Epsilon Support Vector Regression");
+       AddChoice("classifier.svm.m.nusvr", "Nu Support Vector Regression");
+       SetParameterString("classifier.svm.m", "csvc");
+       SetParameterDescription("classifier.svm.m", "Type of SVM formulation.");
+       AddParameter(ParameterType_Choice, "classifier.svm.k", "SVM Kernel Type");
+       AddChoice("classifier.svm.k.linear", "Linear");
+       AddChoice("classifier.svm.k.rbf", "Gaussian radial basis function");
+       AddChoice("classifier.svm.k.poly", "Polynomial");
+       AddChoice("classifier.svm.k.sigmoid", "Sigmoid");
+       SetParameterString("classifier.svm.k", "linear");
+       SetParameterDescription("classifier.svm.k", "SVM Kernel Type.");
+       AddParameter(ParameterType_Float, "classifier.svm.c", "Cost parameter C.");
+       SetParameterFloat("classifier.svm.c", 1.0);
+       SetParameterDescription("classifier.svm.c", "SVM models have a cost parameter C (1 by default) to control the trade-off between training errors and forcing rigid margins.");
+       AddParameter(ParameterType_Float, "classifier.svm.nu", "Parameter nu of a SVM optimization problem (NU_SVC / ONE_CLASS / NU_SVR).");
+       SetParameterFloat("classifier.svm.nu", 0.0);
+       SetParameterDescription("classifier.svm.nu", "Parameter nu of a SVM optimization problem.");
+       AddParameter(ParameterType_Float, "classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
+       SetParameterFloat("classifier.svm.p", 0.0);
+       SetParameterDescription("classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
+       AddParameter(ParameterType_Float, "classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID).");
+       SetParameterFloat("classifier.svm.coef0", 0.0);
+       SetParameterDescription("classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID).");
+       AddParameter(ParameterType_Float, "classifier.svm.gamma", "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
+       SetParameterFloat("classifier.svm.gamma", 1.0);
+       SetParameterDescription("classifier.svm.gamma", "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
+       AddParameter(ParameterType_Float, "classifier.svm.degree", "Parameter degree of a kernel function (POLY).");
+       SetParameterFloat("classifier.svm.degree", 0.0);
+       SetParameterDescription("classifier.svm.degree", "Parameter degree of a kernel function (POLY).");
 
     AddRANDParameter();
     // Doc example parameter settings
@@ -336,124 +336,124 @@ private:
 
   void TrainLibSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
   {
-	  LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
-	  libSVMClassifier->SetInputListSample(trainingListSample);
-	  libSVMClassifier->SetTargetListSample(trainingLabeledListSample);
-	  //SVM Option
-	  //TODO : Add other options ?
-	  if (IsParameterEnabled("classifier.libsvm.opt"))
-	  {
-		  libSVMClassifier->SetParameterOptimization(true);
-	  }
-	  libSVMClassifier->SetC(GetParameterFloat("classifier.libsvm.c"));
+         LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
+         libSVMClassifier->SetInputListSample(trainingListSample);
+         libSVMClassifier->SetTargetListSample(trainingLabeledListSample);
+         //SVM Option
+         //TODO : Add other options ?
+         if (IsParameterEnabled("classifier.libsvm.opt"))
+         {
+                libSVMClassifier->SetParameterOptimization(true);
+         }
+         libSVMClassifier->SetC(GetParameterFloat("classifier.libsvm.c"));
 
-	  switch (GetParameterInt("classifier.libsvm.k"))
-	  {
-		  case 0: // LINEAR
-			  libSVMClassifier->SetKernelType(LINEAR);
-			break;
-		  case 1: // RBF
-			  libSVMClassifier->SetKernelType(RBF);
-			break;
-		  case 2: // POLY
-			  libSVMClassifier->SetKernelType(POLY);
-			break;
-		  case 3: // SIGMOID
-			  libSVMClassifier->SetKernelType(SIGMOID);
-			break;
-		  default: // DEFAULT = LINEAR
-			  libSVMClassifier->SetKernelType(LINEAR);
-			break;
-	  }
-	  libSVMClassifier->Train();
-	  libSVMClassifier->Save(GetParameterString("io.out"));
-	  //otbAppLogINFO( "Learning done -> Final SVM accuracy: " << libSVMClassifier->GetFinalCrossValidationAccuracy() << std::endl);
+         switch (GetParameterInt("classifier.libsvm.k"))
+         {
+                case 0: // LINEAR
+                       libSVMClassifier->SetKernelType(LINEAR);
+                     break;
+                case 1: // RBF
+                       libSVMClassifier->SetKernelType(RBF);
+                     break;
+                case 2: // POLY
+                       libSVMClassifier->SetKernelType(POLY);
+                     break;
+                case 3: // SIGMOID
+                       libSVMClassifier->SetKernelType(SIGMOID);
+                     break;
+                default: // DEFAULT = LINEAR
+                       libSVMClassifier->SetKernelType(LINEAR);
+                     break;
+         }
+         libSVMClassifier->Train();
+         libSVMClassifier->Save(GetParameterString("io.out"));
+         //otbAppLogINFO( "Learning done -> Final SVM accuracy: " << libSVMClassifier->GetFinalCrossValidationAccuracy() << std::endl);
   }
 
   void ClassifyLibSVM(ListSampleType::Pointer validationListSample, LabelListSampleType::Pointer predictedList)
   {
-	  //Classification
-	  LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
-	  libSVMClassifier->Load(GetParameterString("io.out"));
-	  libSVMClassifier->SetInputListSample(validationListSample);
-	  libSVMClassifier->SetTargetListSample(predictedList);
-	  libSVMClassifier->PredictAll();
+         //Classification
+         LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
+         libSVMClassifier->Load(GetParameterString("io.out"));
+         libSVMClassifier->SetInputListSample(validationListSample);
+         libSVMClassifier->SetTargetListSample(predictedList);
+         libSVMClassifier->PredictAll();
   }
 
   void TrainSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
   {
-	  std::cout<<"svm open CV"<<std::endl;
-	  SVMType::Pointer SVMClassifier = SVMType::New();
-	  SVMClassifier->SetInputListSample(trainingListSample);
-	  SVMClassifier->SetTargetListSample(trainingLabeledListSample);
-	  switch (GetParameterInt("classifier.svm.k"))
-	  {
-	  	  case 0: // LINEAR
-	  		  SVMClassifier->SetKernelType(CvSVM::LINEAR);
-	  		  std::cout<<"CvSVM::LINEAR = "<<CvSVM::LINEAR<<std::endl;
-	  		break;
-	  	  case 1: // RBF
-			  SVMClassifier->SetKernelType(CvSVM::RBF);
-			  std::cout<<"CvSVM::RBF = "<<CvSVM::RBF<<std::endl;
-			break;
-		  case 2: // POLY
-			  SVMClassifier->SetKernelType(CvSVM::POLY);
-			  std::cout<<"CvSVM::POLY = "<<CvSVM::POLY<<std::endl;
-			break;
-		  case 3: // SIGMOID
-			  SVMClassifier->SetKernelType(CvSVM::SIGMOID);
-			  std::cout<<"CvSVM::SIGMOID = "<<CvSVM::SIGMOID<<std::endl;
-			break;
-		  default: // DEFAULT = LINEAR
-			  SVMClassifier->SetKernelType(CvSVM::LINEAR);
-			  std::cout<<"CvSVM::LINEAR = "<<CvSVM::LINEAR<<std::endl;
-			break;
-	  }
-	  switch (GetParameterInt("classifier.svm.m"))
-	  {
-		  case 0: // C_SVC
-			  SVMClassifier->SetSVMType(CvSVM::C_SVC);
-			  std::cout<<"CvSVM::C_SVC = "<<CvSVM::C_SVC<<std::endl;
-			break;
-		  case 1: // NU_SVC
-			  SVMClassifier->SetSVMType(CvSVM::NU_SVC);
-			  std::cout<<"CvSVM::NU_SVC = "<<CvSVM::NU_SVC<<std::endl;
-			break;
-		  case 2: // ONE_CLASS
-			  SVMClassifier->SetSVMType(CvSVM::ONE_CLASS);
-			  std::cout<<"CvSVM::ONE_CLASS = "<<CvSVM::ONE_CLASS<<std::endl;
-			break;
-		  case 3: // EPS_SVR
-			  SVMClassifier->SetSVMType(CvSVM::EPS_SVR);
-			  std::cout<<"CvSVM::EPS_SVR = "<<CvSVM::EPS_SVR<<std::endl;
-			break;
-		  case 4: // NU_SVR
-			  SVMClassifier->SetSVMType(CvSVM::NU_SVR);
-			  std::cout<<"CvSVM::NU_SVR = "<<CvSVM::NU_SVR<<std::endl;
-			break;
-		  default: // DEFAULT = C_SVC
-			  SVMClassifier->SetSVMType(CvSVM::C_SVC);
-			  std::cout<<"CvSVM::C_SVC = "<<CvSVM::C_SVC<<std::endl;
-			break;
-	  }
-	  SVMClassifier->SetC(GetParameterFloat("classifier.svm.c"));
-	  SVMClassifier->SetNu(GetParameterFloat("classifier.svm.nu"));
-	  SVMClassifier->SetP(GetParameterFloat("classifier.svm.p"));
-	  SVMClassifier->SetCoef0(GetParameterFloat("classifier.svm.coef0"));
-	  SVMClassifier->SetGamma(GetParameterFloat("classifier.svm.gamma"));
-	  SVMClassifier->SetDegree(GetParameterFloat("classifier.svm.degree"));
-	  SVMClassifier->Train();
-	  SVMClassifier->Save(GetParameterString("io.out"));
+         std::cout<<"svm open CV"<<std::endl;
+         SVMType::Pointer SVMClassifier = SVMType::New();
+         SVMClassifier->SetInputListSample(trainingListSample);
+         SVMClassifier->SetTargetListSample(trainingLabeledListSample);
+         switch (GetParameterInt("classifier.svm.k"))
+         {
+                  case 0: // LINEAR
+                         SVMClassifier->SetKernelType(CvSVM::LINEAR);
+                         std::cout<<"CvSVM::LINEAR = "<<CvSVM::LINEAR<<std::endl;
+                       break;
+                  case 1: // RBF
+                       SVMClassifier->SetKernelType(CvSVM::RBF);
+                       std::cout<<"CvSVM::RBF = "<<CvSVM::RBF<<std::endl;
+                     break;
+                case 2: // POLY
+                       SVMClassifier->SetKernelType(CvSVM::POLY);
+                       std::cout<<"CvSVM::POLY = "<<CvSVM::POLY<<std::endl;
+                     break;
+                case 3: // SIGMOID
+                       SVMClassifier->SetKernelType(CvSVM::SIGMOID);
+                       std::cout<<"CvSVM::SIGMOID = "<<CvSVM::SIGMOID<<std::endl;
+                     break;
+                default: // DEFAULT = LINEAR
+                       SVMClassifier->SetKernelType(CvSVM::LINEAR);
+                       std::cout<<"CvSVM::LINEAR = "<<CvSVM::LINEAR<<std::endl;
+                     break;
+         }
+         switch (GetParameterInt("classifier.svm.m"))
+         {
+                case 0: // C_SVC
+                       SVMClassifier->SetSVMType(CvSVM::C_SVC);
+                       std::cout<<"CvSVM::C_SVC = "<<CvSVM::C_SVC<<std::endl;
+                     break;
+                case 1: // NU_SVC
+                       SVMClassifier->SetSVMType(CvSVM::NU_SVC);
+                       std::cout<<"CvSVM::NU_SVC = "<<CvSVM::NU_SVC<<std::endl;
+                     break;
+                case 2: // ONE_CLASS
+                       SVMClassifier->SetSVMType(CvSVM::ONE_CLASS);
+                       std::cout<<"CvSVM::ONE_CLASS = "<<CvSVM::ONE_CLASS<<std::endl;
+                     break;
+                case 3: // EPS_SVR
+                       SVMClassifier->SetSVMType(CvSVM::EPS_SVR);
+                       std::cout<<"CvSVM::EPS_SVR = "<<CvSVM::EPS_SVR<<std::endl;
+                     break;
+                case 4: // NU_SVR
+                       SVMClassifier->SetSVMType(CvSVM::NU_SVR);
+                       std::cout<<"CvSVM::NU_SVR = "<<CvSVM::NU_SVR<<std::endl;
+                     break;
+                default: // DEFAULT = C_SVC
+                       SVMClassifier->SetSVMType(CvSVM::C_SVC);
+                       std::cout<<"CvSVM::C_SVC = "<<CvSVM::C_SVC<<std::endl;
+                     break;
+         }
+         SVMClassifier->SetC(GetParameterFloat("classifier.svm.c"));
+         SVMClassifier->SetNu(GetParameterFloat("classifier.svm.nu"));
+         SVMClassifier->SetP(GetParameterFloat("classifier.svm.p"));
+         SVMClassifier->SetCoef0(GetParameterFloat("classifier.svm.coef0"));
+         SVMClassifier->SetGamma(GetParameterFloat("classifier.svm.gamma"));
+         SVMClassifier->SetDegree(GetParameterFloat("classifier.svm.degree"));
+         SVMClassifier->Train();
+         SVMClassifier->Save(GetParameterString("io.out"));
   }
 
   void ClassifySVM(ListSampleType::Pointer validationListSample, LabelListSampleType::Pointer predictedList)
   {
-	  //Classification
-	  SVMType::Pointer SVMClassifier = SVMType::New();
-	  SVMClassifier->Load(GetParameterString("io.out"));
-	  SVMClassifier->SetInputListSample(validationListSample);
-	  SVMClassifier->SetTargetListSample(predictedList);
-	  SVMClassifier->PredictAll();
+         //Classification
+         SVMType::Pointer SVMClassifier = SVMType::New();
+         SVMClassifier->Load(GetParameterString("io.out"));
+         SVMClassifier->SetInputListSample(validationListSample);
+         SVMClassifier->SetTargetListSample(predictedList);
+         SVMClassifier->PredictAll();
   }
 
   void DoExecute()
@@ -616,13 +616,13 @@ private:
     const std::string classifierType = GetParameterString("classifier");
     if (classifierType == "libsvm")
     {
-    	TrainLibSVM(trainingListSample, trainingLabeledListSample);
-    	ClassifyLibSVM(validationListSample, predictedList);
+           TrainLibSVM(trainingListSample, trainingLabeledListSample);
+           ClassifyLibSVM(validationListSample, predictedList);
     }
     else if (classifierType == "svm")
     {
-    	TrainSVM(trainingListSample, trainingLabeledListSample);
-    	ClassifySVM(validationListSample, predictedList);
+           TrainSVM(trainingListSample, trainingLabeledListSample);
+           ClassifySVM(validationListSample, predictedList);
     }
 
     //--------------------------

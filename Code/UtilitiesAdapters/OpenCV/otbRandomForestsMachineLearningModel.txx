@@ -78,8 +78,8 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
                                        priors, // the array of priors
                                        m_CalculateVariableImportance,  // calculate variable importance
                                        m_MaxNumberOfVariables,       // number of variables randomly selected at node and used to find the best split(s).
-				       m_MaxNumberOfTrees,	 // max number of trees in the forest
-                                       m_ForestAccuracy,				// forrest accuracy
+                                   m_MaxNumberOfTrees,        // max number of trees in the forest
+                                       m_ForestAccuracy,                            // forrest accuracy
                                        m_TerminationCriteria // termination cirteria
                                       );
 
@@ -90,7 +90,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   //train the RT model
   m_RFModel->train(samples, CV_ROW_SAMPLE, labels,
-	       cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
+              cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
 }
 
 template <class TInputValue, class TOutputValue>

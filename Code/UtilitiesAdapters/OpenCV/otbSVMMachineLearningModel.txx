@@ -90,10 +90,10 @@ void
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
-	if (name == "")
-		m_SVMModel->save(filename.c_str(), 0);
-	else
-		m_SVMModel->save(filename.c_str(), name.c_str());
+       if (name == "")
+              m_SVMModel->save(filename.c_str(), 0);
+       else
+              m_SVMModel->save(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
@@ -102,9 +102,9 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
   if (name == "")
-	  m_SVMModel->load(filename.c_str(), 0);
+         m_SVMModel->load(filename.c_str(), 0);
   else
-	  m_SVMModel->load(filename.c_str(), name.c_str());
+         m_SVMModel->load(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>

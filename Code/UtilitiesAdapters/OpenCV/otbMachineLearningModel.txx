@@ -20,7 +20,7 @@
 
 #include "otbMachineLearningModel.h"
 
-namespace otb 
+namespace otb
 {
 
 template <class TInputValue, class TOutputValue>
@@ -43,7 +43,7 @@ MachineLearningModel<TInputValue,TOutputValue>
   targets->Clear();
 
   for(typename InputListSampleType::ConstIterator sIt = this->GetInputListSample()->Begin();
-      sIt!=this->GetInputListSample()->End();++sIt)
+      sIt!=this->GetInputListSample()->End(); ++sIt)
     {
     targets->PushBack(this->Predict(sIt.GetMeasurementVector()));
     }

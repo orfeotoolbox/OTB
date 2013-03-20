@@ -28,7 +28,7 @@ namespace otb
     output.create(1,sample.Size(),CV_32FC1);
 
     // Loop on sample size
-    for(unsigned int i = 0; i < sample.Size();++i)
+    for(unsigned int i = 0; i < sample.Size(); ++i)
       {
       output.at<float>(0,i) = sample[i];
       }
@@ -47,30 +47,30 @@ namespace otb
     // Check for valid listSample
     if(listSample != NULL && listSample->Size() > 0)
       {
-	// Retrieve samples count
-	unsigned int sampleCount = listSample->Size();
+       // Retrieve samples count
+       unsigned int sampleCount = listSample->Size();
     
-	// Build an iterator
-	typename T::ConstIterator sampleIt = listSample->Begin();
+       // Build an iterator
+       typename T::ConstIterator sampleIt = listSample->Begin();
 
-	// Retrieve samples size alike
-	const unsigned int sampleSize = listSample->GetMeasurementVectorSize();
+       // Retrieve samples size alike
+       const unsigned int sampleSize = listSample->GetMeasurementVectorSize();
 
-	// Allocate CvMat
-	output.create(sampleCount,sampleSize,CV_32FC1);
+       // Allocate CvMat
+       output.create(sampleCount,sampleSize,CV_32FC1);
 
-	// Fill the cv matrix
-	for(;sampleIt!=listSample->End();++sampleIt,++sampleIdx)
-	  {
-	    // Retrieve sample
-	    typename T::MeasurementVectorType sample = sampleIt.GetMeasurementVector();
+       // Fill the cv matrix
+       for(; sampleIt!=listSample->End(); ++sampleIt,++sampleIdx)
+         {
+           // Retrieve sample
+           typename T::MeasurementVectorType sample = sampleIt.GetMeasurementVector();
 
-	    // Loop on sample size
-	    for(unsigned int i = 0; i < sampleSize;++i)
-	      {
-		output.at<float>(sampleIdx,i) = sample[i];
-	      }
-	  }
+           // Loop on sample size
+           for(unsigned int i = 0; i < sampleSize; ++i)
+             {
+              output.at<float>(sampleIdx,i) = sample[i];
+             }
+         }
       }
   }
 
@@ -94,22 +94,22 @@ namespace otb
       unsigned int sampleSize = cvmat.cols;
 
       // Loop on samples
-      for(unsigned int i = 0; i < sampleCount;++i)
-	{
-	  typename T::MeasurementVectorType sample;
-	  itk::PixelBuilder<typename T::MeasurementVectorType>::Zero(sample,sampleSize);
+      for(unsigned int i = 0; i < sampleCount; ++i)
+       {
+         typename T::MeasurementVectorType sample;
+         itk::PixelBuilder<typename T::MeasurementVectorType>::Zero(sample,sampleSize);
 
-	  unsigned int realSampleSize = sample.Size();
+         unsigned int realSampleSize = sample.Size();
 
-	  for(unsigned int j = 0; j < realSampleSize;++j)
-	    {
-	      // Don't forget to cast
-	      sample[j] = static_cast<typename T::MeasurementVectorType
-		::ValueType>(cvmat.at<float>(i,j));
-	    }
-	  // PushBack the new sample
-	  output->PushBack(sample);
-	}
+         for(unsigned int j = 0; j < realSampleSize; ++j)
+           {
+             // Don't forget to cast
+             sample[j] = static_cast<typename T::MeasurementVectorType
+              ::ValueType>(cvmat.at<float>(i,j));
+           }
+         // PushBack the new sample
+         output->PushBack(sample);
+       }
       // return the output
       return output;
     }
