@@ -91,6 +91,9 @@ public:
   void dragEnterEvent( QDragEnterEvent * event );
   void dropEvent( QDropEvent *event );
   void dragMoveEvent(QDragMoveEvent *event);
+
+signals:
+  void textChanged(const QString&);
                                      
 protected slots:
   bool SetFileName( const QString& value );
@@ -105,7 +108,8 @@ private:
   virtual void DoCreateWidget();
 
   virtual void DoUpdateGUI();
-
+  
+  std::string ExtractValidFilename(std::string payload);
 
   otb::Wrapper::InputImageParameter::Pointer m_InputImageParam;
 

@@ -36,6 +36,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAlgorithm.h"
 
 namespace mvd
 {
@@ -97,9 +98,9 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   m_Input->setFrameShape(QFrame::Box);
 
   // TODO : QLabel does not have signals, remove connections
-  //connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  //connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(),
-  //SLOT(NotifyUpdate()) );
+  connect( this, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
+  connect( this, SIGNAL(textChanged(const QString&)), 
+           GetModel(),SLOT(NotifyUpdate()) );
 
   // layout the QLabel
   m_HLayout->setSpacing(0);
@@ -157,15 +158,50 @@ void QtWidgetInputImageParameter::dropEvent(QDropEvent *event)
   if ( event->mimeData()->hasText () )
     {
     //
-    // text stored in mimeData contains 'file://' at the begining
-    // it has to be removed
-    QString url( event->mimeData()->text() );
-
+    // text stored in mimeData represents the filename to use
+    // extract valid filename by removing %20 and file:// form the
+    // string if any
+    std::string ofname = ExtractValidFilename( ToStdString(event->mimeData()->text()) );
+    
     //
-    // TODO : Experimental, check on win32 if that works
-    this->SetFileName( url.mid(7) );
-    //m_Input->setText( url.mid(7) );
+    // set the filename
+    m_Input->setText( QString( ofname.data() ) );
+
+    // since QLabel does not emit signal when textChanged, raise a signal
+    // in the code
+    emit textChanged( QString( ofname.data() ) );
     }
+}
+
+/*******************************************************************************/
+std::string 
+QtWidgetInputImageParameter::ExtractValidFilename(std::string payload)
+{
+  // Parse the payload stream to extract all the filename
+  std::stringstream s (payload);
+  std::string token;
+  std::string ofname;
+
+  while ( s >> token )
+    {
+    // filename may contain whitespace coded as %20. Detect
+    // it and replace the 3 characters by a whitespace to be able to
+    // open the file.
+    while( size_t pos = token.find("%") != std::string::npos )
+      {
+      token.replace( pos, 3," ");
+      }
+
+#ifdef WIN32
+    // In Win32 the files name are stored with no file://
+    ofname = token;
+#else
+    // Remove the "file://" form the string : subst(7, end)
+    ofname = token.substr(7, token.size() );
+#endif
+    }
+
+  return ofname;
 }
 
 /*******************************************************************************/
@@ -190,7 +226,6 @@ bool QtWidgetInputImageParameter::SetFileName(const QString& value)
   return res;
 }
 
-
 /*******************************************************************************/
 void QtWidgetInputImageParameter::SelectFile()
 {
@@ -201,7 +236,12 @@ void QtWidgetInputImageParameter::SelectFile()
   if (fileDialog.exec())
     {
     if ( this->SetFileName(fileDialog.selectedFiles().at(0)) == true )
+      {
       m_Input->setText(fileDialog.selectedFiles().at(0));
+      // since QLabel does not emit signal when textChanged, raise a signal
+      // in the code
+      emit textChanged(fileDialog.selectedFiles().at(0));
+      }    
     else
       {
       std::ostringstream oss;
