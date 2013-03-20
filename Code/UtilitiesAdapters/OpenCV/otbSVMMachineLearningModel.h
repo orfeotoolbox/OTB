@@ -63,18 +63,18 @@ public:
   virtual TargetSampleType Predict(const InputSampleType & input) const;
 
   /** Save the model to file */
-  virtual void Save(char * filename, const char * name=0);
+  virtual void Save(const std::string & filename, const std::string & name="");
 
   /** Load the model from file */
-  virtual void Load(char * filename, const char * name=0);
+  virtual void Load(const std::string & filename, const std::string & name="");
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*);
+  virtual bool CanReadFile(const std::string &);
 
   /** Determine the file type. Returns true if this ImageIO can write the
    * file specified. */
-  virtual bool CanWriteFile(const char*);
+  virtual bool CanWriteFile(const std::string &);
 
   //Setters/Getters to SVM model
   itkGetMacro(SVMType, int);
@@ -83,14 +83,39 @@ public:
   itkGetMacro(KernelType, int);
   itkSetMacro(KernelType, int);
 
+  //CV_TERMCRIT_ITER or CV_TERMCRIT_EPS
   itkGetMacro(TermCriteriaType, int);
   itkSetMacro(TermCriteriaType, int);
 
   itkGetMacro(MaxIter, int);
   itkSetMacro(MaxIter, int);
 
-  itkGetMacro(Epsilon, int);
-  itkSetMacro(Epsilon, int);
+  itkGetMacro(Epsilon, double);
+  itkSetMacro(Epsilon, double);
+
+  // for poly
+  itkGetMacro(Degree, double);
+  itkSetMacro(Degree, double);
+
+  // for poly/rbf/sigmoid
+  itkGetMacro(Gamma, double);
+  itkSetMacro(Gamma, double);
+
+  // for poly/sigmoid
+  itkGetMacro(Coef0, double);
+  itkSetMacro(Coef0, double);
+
+  // for CV_SVM_C_SVC, CV_SVM_EPS_SVR and CV_SVM_NU_SVR
+  itkGetMacro(C, double);
+  itkSetMacro(C, double);
+
+  // for CV_SVM_NU_SVC, CV_SVM_ONE_CLASS, and CV_SVM_NU_SVR
+  itkGetMacro(Nu, double);
+  itkSetMacro(Nu, double);
+
+  // for CV_SVM_EPS_SVR
+  itkGetMacro(P, double);
+  itkSetMacro(P, double);
 
 protected:
   /** Constructor */
@@ -111,7 +136,13 @@ private:
   int m_KernelType;
   int m_TermCriteriaType;
   int m_MaxIter;
-  int m_Epsilon;
+  double m_Epsilon;
+  double m_Degree;
+  double m_Gamma;
+  double m_Coef0;
+  double m_C;
+  double m_Nu;
+  double m_P;
 };
 } // end namespace otb
 

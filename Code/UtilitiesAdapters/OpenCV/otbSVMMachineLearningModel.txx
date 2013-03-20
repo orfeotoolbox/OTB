@@ -27,14 +27,12 @@ namespace otb
 
 template <class TInputValue, class TOutputValue>
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::SVMMachineLearningModel()
+::SVMMachineLearningModel() :
+ m_SVMType(CvSVM::C_SVC), m_KernelType(CvSVM::LINEAR), m_TermCriteriaType(CV_TERMCRIT_ITER),
+ m_MaxIter(100), m_Epsilon(1e-6), m_Degree(0), m_Gamma(1),
+ m_Coef0(0), m_C(1), m_Nu(0), m_P(0)
 {
   m_SVMModel = new CvSVM;
-  m_SVMType = CvSVM::C_SVC;
-  m_KernelType = CvSVM::LINEAR;
-  m_TermCriteriaType = CV_TERMCRIT_ITER;
-  m_MaxIter = 100;
-  m_Epsilon = 1e-6;
 }
 
 
@@ -59,10 +57,9 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
   // Set up SVM's parameters
-  CvSVMParams params;
-  params.svm_type    = m_SVMType;
-  params.kernel_type = m_KernelType;
-  params.term_crit   = cvTermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon);
+  CvTermCriteria term_crit   = cvTermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon);
+  CvMat* class_weights;
+  CvSVMParams params( m_SVMType, m_KernelType, m_Degree, m_Gamma, m_Coef0, m_C, m_Nu, m_P, NULL , term_crit );
 
   // Train the SVM
   m_SVMModel->train(samples, labels, cv::Mat(), cv::Mat(), params);
@@ -91,26 +88,32 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::Save(char * filename, const char * name)
+::Save(const std::string & filename, const std::string & name)
 {
-  m_SVMModel->save(filename, name);
+	if (name == "")
+		m_SVMModel->save(filename.c_str(), 0);
+	else
+		m_SVMModel->save(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
 void
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::Load(char * filename, const char * name)
+::Load(const std::string & filename, const std::string & name)
 {
-  m_SVMModel->load(filename, name);
+  if (name == "")
+	  m_SVMModel->load(filename.c_str(), 0);
+  else
+	  m_SVMModel->load(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
 bool
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::CanReadFile(const char * file)
+::CanReadFile(const std::string & file)
 {
    std::ifstream ifs;
-   ifs.open(file);
+   ifs.open(file.c_str());
    
    if(!ifs)
    {
@@ -137,7 +140,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 bool
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::CanWriteFile(const char * file)
+::CanWriteFile(const std::string & file)
 {
   return false;
 }

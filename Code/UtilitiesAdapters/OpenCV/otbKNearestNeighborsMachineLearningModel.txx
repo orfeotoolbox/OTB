@@ -79,23 +79,23 @@ KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
-::Save(char * filename, const char * name)
+::Save(const std::string & filename, const std::string & name)
 {
-  m_KNearestModel->save(filename, name);
+  m_KNearestModel->save(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
 void
 KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
-::Load(char * filename, const char * name)
+::Load(const std::string & filename, const std::string & name)
 {
-  m_KNearestModel->load(filename, name);
+  m_KNearestModel->load(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
 bool
 KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
-::CanReadFile(const char * file)
+::CanReadFile(const std::string & file)
 {
   return false;
 }
@@ -103,7 +103,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 bool
 KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
-::CanWriteFile(const char * file)
+::CanWriteFile(const std::string & file)
 {
   return false;
 }

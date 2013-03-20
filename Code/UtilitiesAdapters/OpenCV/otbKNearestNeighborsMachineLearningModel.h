@@ -62,18 +62,18 @@ public:
   virtual TargetSampleType Predict(const InputSampleType & input) const;
 
   /** Save the model to file */
-  virtual void Save(char * filename, const char * name=0);
+  virtual void Save(const std::string & filename, const std::string & name="");
 
   /** Load the model from file */
-  virtual void Load(char * filename, const char * name=0);
+  virtual void Load(const std::string & filename, const std::string & name="");
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*);
+  virtual bool CanReadFile(const std::string &);
 
   /** Determine the file type. Returns true if this ImageIO can write the
    * file specified. */
-  virtual bool CanWriteFile(const char*);
+  virtual bool CanWriteFile(const std::string &);
 
 protected:
   /** Constructor */

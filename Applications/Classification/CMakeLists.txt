@@ -33,3 +33,7 @@ OTB_CREATE_APPLICATION(NAME           ComputeConfusionMatrix
 OTB_CREATE_APPLICATION(NAME           ClassificationMapRegularization
                        SOURCES        otbClassificationMapRegularization.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           TrainMachineLearningImagesClassifier
+                       SOURCES        otbTrainMachineLearningImagesClassifier.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)                  

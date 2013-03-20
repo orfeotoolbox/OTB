@@ -116,26 +116,26 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::Save(char * filename, const char * name)
+::Save(const std::string & filename, const std::string & name)
 {
-  m_RFModel->save(filename, name);
+  m_RFModel->save(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
 void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::Load(char * filename, const char * name)
+::Load(const std::string & filename, const std::string & name)
 {
-  m_RFModel->load(filename, name);
+  m_RFModel->load(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
 bool
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::CanReadFile(const char * file)
+::CanReadFile(const std::string & file)
 {
    std::ifstream ifs;
-   ifs.open(file);
+   ifs.open(file.c_str());
    
    if(!ifs)
    {
@@ -163,7 +163,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 bool
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::CanWriteFile(const char * file)
+::CanWriteFile(const std::string & file)
 {
   return false;
 }

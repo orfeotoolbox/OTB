@@ -57,18 +57,18 @@ public:
   void PredictAll();
 
   /** Save the model to file */
-  virtual void Save(char * filename, const char * name=0) = 0;
+  virtual void Save(const std::string & filename, const std::string & name="") = 0;
 
   /** Load the model from file */
-  virtual void Load(char * filename, const char * name=0) = 0;
+  virtual void Load(const std::string & filename, const std::string & name="") = 0;
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*) = 0;
+  virtual bool CanReadFile(const std::string &) = 0;
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*)  = 0;
+  virtual bool CanWriteFile(const std::string &)  = 0;
 
   /** Input accessors */
   itkSetObjectMacro(InputListSample,InputListSampleType);
