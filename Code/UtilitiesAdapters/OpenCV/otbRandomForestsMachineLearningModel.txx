@@ -118,7 +118,10 @@ void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
-  m_RFModel->save(filename.c_str(), name.c_str());
+  if (name == "")
+    m_RFModel->save(filename.c_str(), 0);
+  else
+    m_RFModel->save(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
@@ -126,7 +129,10 @@ void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
-  m_RFModel->load(filename.c_str(), name.c_str());
+  if (name == "")
+    m_RFModel->load(filename.c_str(), 0);
+  else
+    m_RFModel->load(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>

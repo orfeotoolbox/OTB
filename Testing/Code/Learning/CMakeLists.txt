@@ -7,6 +7,9 @@ SET(LEARNING_TESTS2 ${CXX_TEST_PATH}/otbLearningTests2)
 SET(LEARNING_TESTS3 ${CXX_TEST_PATH}/otbLearningTests3)
 SET(LEARNING_TESTS4 ${CXX_TEST_PATH}/otbLearningTests4)
 SET(LEARNING_TESTS5 ${CXX_TEST_PATH}/otbLearningTests5)
+IF(OTB_USE_OPENCV)
+	SET(LEARNING_TESTS6 ${CXX_TEST_PATH}/otbLearningTests6)
+ENDIF(OTB_USE_OPENCV)	
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -674,6 +677,55 @@ otbNeighborhoodMajorityVotingImageFilterTest
  )
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+IF(OTB_USE_OPENCV)
+	ADD_TEST(leTuRandomForestsMachineLearningModelNew ${LEARNING_TESTS6}
+           otbRandomForestsMachineLearningModelNew)
+
+
+	ADD_TEST(leTvRandomForestsMachineLearningModel ${LEARNING_TESTS6}
+         #--compare-ascii ${NOTOL}
+         #${BASELINE_FILES}/RandomForestsMachineLearningModel.txt
+         #${TEMP}/RandomForestsMachineLearningModel.txt
+         otbRandomForestsMachineLearningModel
+         ${INPUTDATA}/letter.scale
+         ${TEMP}/RandomForestsMachineLearningModel.txt
+         )
+
+	ADD_TEST(leTuKNearestNeighborsMachineLearningModelNew ${LEARNING_TESTS6}
+           otbKNearestNeighborsMachineLearningModelNew)
+           
+	ADD_TEST(leTvKNearestNeighborsMachineLearningModel ${LEARNING_TESTS6}
+         otbKNearestNeighborsMachineLearningModel
+         ${INPUTDATA}/letter.scale)
+
+	ADD_TEST(leTuSVMMachineLearningModelNew ${LEARNING_TESTS6}
+           otbSVMMachineLearningModelNew)
+
+	ADD_TEST(leTvSVMMachineLearningModel ${LEARNING_TESTS6}
+		 --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/svm_model.txt
+         ${TEMP}/svm_model.txt
+         otbSVMMachineLearningModel
+         ${INPUTDATA}/letter.scale
+         ${TEMP}/svm_model.txt
+         )
+
+	ADD_TEST(leTuLibSVMMachineLearningModelNew ${LEARNING_TESTS6}
+       	 otbLibSVMMachineLearningModelNew)
+           
+	ADD_TEST(leTvLibSVMMachineLearningModel ${LEARNING_TESTS6}
+		 --compare-ascii ${NOTOL}
+	     ${BASELINE_FILES}/libsvm_model.txt
+	     ${TEMP}/libsvm_model.txt
+	     otbLibSVMMachineLearningModel
+	     ${INPUTDATA}/letter.scale
+	     ${TEMP}/libsvm_model.txt
+     )
+ENDIF(OTB_USE_OPENCV)
+
 # Testing srcs
 SET(BasicLearning_SRCS1
 otbLearningTests1.cxx
@@ -755,11 +807,23 @@ otbNeighborhoodMajorityVotingImageFilterNew.cxx
 otbNeighborhoodMajorityVotingImageFilterTest.cxx
 )
 
+IF(OTB_USE_OPENCV)
+	SET(BasicLearning_SRCS6
+	otbLearningTests6.cxx
+	otbTrainMachineLearningModel.cxx
+	)
+ENDIF(OTB_USE_OPENCV)
+
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests2 "${BasicLearning_SRCS2}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests3 "${BasicLearning_SRCS3}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests4 "${BasicLearning_SRCS4}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests5 "${BasicLearning_SRCS5}" "OTBLearning;OTBIO;OTBTesting")
+
+IF(OTB_USE_OPENCV)
+	OTB_ADD_EXECUTABLE(otbLearningTests6 "${BasicLearning_SRCS6}" "OTBMachineLearning;OTBLearning;OTBIO;OTBTesting")
+ENDIF(OTB_USE_OPENCV)
+
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
