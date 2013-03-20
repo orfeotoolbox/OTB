@@ -12,6 +12,8 @@ set( Common_Gui_SOURCES
   mvdColorDynamicsWidget.cxx
   mvdColorSetupController.cxx
   mvdColorSetupWidget.cxx
+  mvdDatabaseBrowserController.cxx
+  mvdDatabaseBrowserWidget.cxx
   mvdDatasetCreationProgressDialog.cxx
   mvdGLImageWidget.cxx
   mvdGui.cxx
@@ -39,6 +41,8 @@ set( Common_Gui_HEADERS_MOC
   mvdColorDynamicsWidget.h
   mvdColorSetupController.h
   mvdColorSetupWidget.h
+  mvdDatabaseBrowserController.h
+  mvdDatabaseBrowserWidget.h
   mvdDatasetCreationProgressDialog.h
   mvdGLImageWidget.h
   # mvdGui.h
@@ -56,14 +60,15 @@ set( Common_Gui_HEADERS_MOC
 # Qt designer UI files
 set( Common_Gui_FORMS
   mvdAboutDialog.ui
+  mvdApplicationsToolBox.ui
   mvdColorBandDynamicsWidget.ui
   mvdColorDynamicsWidget.ui
   mvdColorSetupWidget.ui
+  mvdDatabaseBrowserWidget.ui
   mvdDatasetCreationProgressDialog.ui
   mvdMyWidget.ui
   mvdStatusBarWidget.ui
   mvdVideoColorToolBox.ui
-  mvdApplicationsToolBox.ui
 )
 
 # Qt resources

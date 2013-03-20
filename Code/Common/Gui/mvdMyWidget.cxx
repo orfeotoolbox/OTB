@@ -42,11 +42,8 @@
 namespace mvd
 {
 
-namespace gui
-{
-
 /*
-  TRANSLATOR mvd::gui::MyWidget
+  TRANSLATOR mvd::MyWidget
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -69,7 +66,7 @@ namespace gui
 MyWidget
 ::MyWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
-  m_UI( new mvd::gui::Ui::MyWidget() )
+  m_UI( new mvd::Ui::MyWidget() )
 {
   m_UI->setupUi( this );
 }
@@ -83,7 +80,5 @@ MyWidget
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-
-} // end namespace 'gui'
 
 } // end namespace 'mvd'

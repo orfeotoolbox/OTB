@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-#include "mvdDatabaseModel.h"
+#include "Gui/mvdDatabaseBrowserWidget.h"
+#include "Gui/ui_mvdDatabaseBrowserWidget.h"
 
 
 /*****************************************************************************/
@@ -39,11 +39,11 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
-
 namespace mvd
 {
+
 /*
-  TRANSLATOR mvd::DatabaseModel
+  TRANSLATOR mvd::DatabaseBrowserWidget
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -58,59 +58,24 @@ namespace mvd
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
+
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-DatabaseModel
-::DatabaseModel( QObject* parent ) :
-  AbstractModel( parent )
+DatabaseBrowserWidget
+::DatabaseBrowserWidget( QWidget* parent, Qt::WindowFlags flags  ):
+  QWidget( parent, flags ),
+  m_UI( new mvd::Ui::DatabaseBrowserWidget() )
 {
+  m_UI->setupUi( this );
 }
 
 /*******************************************************************************/
-DatabaseModel
-::~DatabaseModel()
+DatabaseBrowserWidget
+::~DatabaseBrowserWidget()
 {
 }
-
-/*******************************************************************************/
-void
-DatabaseModel
-::virtual_BuildModel( void* context )
-{
-}
-
-#if 0
-
-/*******************************************************************************/
-bool
-DatabaseModel
-::IsModified() const
-{
-  return true;
-}
-
-/*******************************************************************************/
-
-void
-DatabaseModel
-::ClearModified()
-{
-}
-
-#endif
-
-/*******************************************************************************/
-#if 0
-
-void
-DatabaseModel
-::virtual_Save()
-{
-}
-
-#endif
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

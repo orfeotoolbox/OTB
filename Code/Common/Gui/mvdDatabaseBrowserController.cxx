@@ -16,8 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-#include "mvdDatabaseModel.h"
+#include "Gui/mvdDatabaseBrowserController.h"
 
 
 /*****************************************************************************/
@@ -38,12 +37,14 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "Core/mvdDatabaseModel.h"
+//
+#include "Gui/mvdDatabaseBrowserWidget.h"
 
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::DatabaseModel
+  TRANSLATOR mvd::DatabaseBrowserController
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -52,65 +53,78 @@ namespace mvd
 
 
 /*****************************************************************************/
-/* CONSTANTS                                                                 */
-
-
-/*****************************************************************************/
-/* STATIC IMPLEMENTATION SECTION                                             */
-
-/*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-DatabaseModel
-::DatabaseModel( QObject* parent ) :
-  AbstractModel( parent )
+DatabaseBrowserController
+::DatabaseBrowserController( DatabaseBrowserWidget* widget, QObject* parent ) :
+  AbstractModelController( widget, parent )
 {
 }
 
 /*******************************************************************************/
-DatabaseModel
-::~DatabaseModel()
+DatabaseBrowserController
+::~DatabaseBrowserController()
 {
 }
 
 /*******************************************************************************/
 void
-DatabaseModel
-::virtual_BuildModel( void* context )
+DatabaseBrowserController
+::Connect( AbstractModel* model )
 {
-}
-
-#if 0
-
-/*******************************************************************************/
-bool
-DatabaseModel
-::IsModified() const
-{
-  return true;
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
 }
 
 /*******************************************************************************/
-
 void
-DatabaseModel
-::ClearModified()
+DatabaseBrowserController
+::Disconnect( AbstractModel* model )
 {
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
 }
-
-#endif
 
 /*******************************************************************************/
-#if 0
-
 void
-DatabaseModel
-::virtual_Save()
+DatabaseBrowserController
+::ResetWidget()
 {
+  // Reset widget.
+  // ResetFoo();
+
+  // Signal model has been updated.
+  emit ModelUpdated();
 }
 
-#endif
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::ResetFoo()
+{
+  //
+  // Access widget.
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+
+  //
+  // Access model.
+  DatabaseModel* model = GetModel< DatabaseModel >();
+  assert( model!=NULL );
+
+  // Block this controller's signals to prevent display refreshes
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  this->blockSignals( true );
+  {
+  // Block widget's signals...
+  //...but force call to valueChanged() slot to force refresh.
+  widget->blockSignals( true );
+  {
+  // TODO: Fill in widget.
+  }
+  widget->blockSignals( false );
+  }
+  this->blockSignals( false );
+}
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

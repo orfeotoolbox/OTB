@@ -16,9 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-#ifndef __mvdDatabaseModel_h
-#define __mvdDatabaseModel_h
+#ifndef __mvdDatabaseBrowserController_h
+#define __mvdDatabaseBrowserController_h
 
 //
 // Configuration include.
@@ -44,7 +43,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractModel.h"
+#include "mvdAbstractModelController.h"
+#include "mvdGui.h"
 
 
 /*****************************************************************************/
@@ -60,15 +60,18 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class DatabaseBrowserWidget;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class DatabaseModel
+/**
+ * \class DatabaseBrowserController
  *
+ * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class Monteverdi2_EXPORT DatabaseModel :
-    public AbstractModel
+class Monteverdi2_EXPORT DatabaseBrowserController :
+    public AbstractModelController
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -78,45 +81,23 @@ class Monteverdi2_EXPORT DatabaseModel :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
-// Public types.
-public:
-
-  /**
-   * \class BuildContext
-   * \brief WIP.
-   */
-  class BuildContext
-  {
-    //
-    // Public methods.
-  public:
-    BuildContext()
-    {
-    }
-
-    //
-    // Public attributes
-  public:
-  };
-
-//
 // Public methods.
 public:
 
-  /** \brief Constructor. */
-  DatabaseModel( QObject* parent =NULL );
+  /**
+   * \brief Constructor.
+   *
+   * \param widget Controlled widget.
+   * \param parent Parent QObject of this QObject.
+   */
+  DatabaseBrowserController( DatabaseBrowserWidget* widget,
+			     QObject* parent =NULL );
 
-  /** \brief Destructor. */
-  virtual ~DatabaseModel();
+  /**
+   * \brief Destructor.
+   */
+  virtual ~DatabaseBrowserController();
 
-  //
-  // AbstractModel overrides.
-
-#if 0
-  bool IsModified() const;
-
-  void ClearModified();
-#endif
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -131,13 +112,13 @@ signals:
 protected:
 
   //
-  // AbstractModel overrides.
+  // AbstractModelController overrides.
 
-  void virtual_BuildModel( void* context =NULL );
+  virtual void Connect( AbstractModel* );
 
-#if 0
-  void virtual_Save();
-#endif
+  virtual void ResetWidget();
+
+  virtual void Disconnect( AbstractModel* );
 
 //
 // Protected attributes.
@@ -146,38 +127,32 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
-// Private attributes.
-private:
-
-
-//
 // Private methods.
 private:
 
+  /**
+   */
+  void ResetFoo();
 
 //
 // Private attributes.
 private:
-
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
+
 };
 
-} // end namespace 'mvd'
+} // end namespace 'mvd'.
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
-//
-// Monteverdi deferred includes (sorted by alphabetic order)
-
 namespace mvd
 {
-
 } // end namespace 'mvd'
 
-#endif // __mvdDatabaseModel_h
+#endif // __mvdDatabaseBrowserController_h
