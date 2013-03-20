@@ -34,6 +34,8 @@ OTB_CREATE_APPLICATION(NAME           ClassificationMapRegularization
                        SOURCES        otbClassificationMapRegularization.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
 
-OTB_CREATE_APPLICATION(NAME           TrainMachineLearningImagesClassifier
-                       SOURCES        otbTrainMachineLearningImagesClassifier.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)                  
+IF(OTB_USE_OPENCV)
+	OTB_CREATE_APPLICATION(NAME           TrainMachineLearningImagesClassifier
+	                       SOURCES        otbTrainMachineLearningImagesClassifier.cxx
+	                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)
+ENDIF(OTB_USE_OPENCV)	                       
