@@ -115,8 +115,7 @@ IF( USE_FFTWD OR USE_FFTWF )
   SET(msg "${msg} By enabling this option, the binary of the ITK libraries")
   SET(msg "${msg} that you are going to build will be covered by a GPL license,")
   SET(msg "${msg} and so it will be any executable that you link against these libraries.")
-# OTB modification: the GPL warning is not relevant here (already the case for OTB)
-#  MESSAGE("${msg}")
+  MESSAGE("${msg}")
   FIND_PACKAGE( FFTW )
 ENDIF( USE_FFTWD OR USE_FFTWF )
 
@@ -146,7 +145,7 @@ SET(ITK_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 IF(NOT ITK_NO_LIBRARY_VERSION)
   # This setting of SOVERSION assumes that any API change
   # will increment either the minor or major version number of ITK.
-  SET(ITK_LIBRARY_PROPERTIES 
+  SET(ITK_LIBRARY_PROPERTIES
       VERSION   "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}"
       SOVERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}"
      )
@@ -334,7 +333,7 @@ IF(NOT ITK_INSTALL_LIB_DIR)
   ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*" AND CMAKE_SIZEOF_VOID_P EQUAL 8)
 # OTB Modifications
 #  SET(ITK_INSTALL_LIB_DIR "/lib/InsightToolkit${sun64}")
-  SET(ITK_INSTALL_LIB_DIR ${OTB_INSTALL_LIB_DIR}) 
+  SET(ITK_INSTALL_LIB_DIR ${OTB_INSTALL_LIB_DIR})
 ENDIF(NOT ITK_INSTALL_LIB_DIR)
 
 IF(NOT ITK_INSTALL_DATA_DIR)
@@ -478,7 +477,7 @@ ITK_THIRD_PARTY_OPTION(LIBXML2 libxml2)
 
 #-----------------------------------------------------------------------------
 # If choose to build documentation, then search for Doxygen executables.
-# OTB Modifications 
+# OTB Modifications
 #OPTION(BUILD_DOXYGEN "Build Doxygen Documentation" OFF)
 #IF(BUILD_DOXYGEN)
 #  FIND_PACKAGE(Doxygen)
@@ -505,30 +504,30 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -ftemplate-depth-50 -Wall")
   INCLUDE(${ITK_SOURCE_DIR}/CMake/itkCheckCXXAcceptsFlags.cmake)
   itkCHECK_CXX_ACCEPTS_FLAGS("-Wno-deprecated" CXX_HAS_DEPRECATED_FLAG)
-  IF(CXX_HAS_DEPRECATED_FLAG)    
+  IF(CXX_HAS_DEPRECATED_FLAG)
     SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -Wno-deprecated")
-  ENDIF(CXX_HAS_DEPRECATED_FLAG)    
+  ENDIF(CXX_HAS_DEPRECATED_FLAG)
   IF(APPLE)
     # -no-cpp-precomp and -Wno-long-double were compiler flags present
     # only in Apple's gcc and not in the FSF gcc. The flags are obsolete
     # and totally removed in gcc 4.2 and later. I believe they are only
     # needed with gcc 3.3 and earlier.
     itkCHECK_CXX_ACCEPTS_FLAGS("-no-cpp-precomp" CXX_HAS_CPP_PRECOMP_FLAG)
-    IF(CXX_HAS_CPP_PRECOMP_FLAG)    
+    IF(CXX_HAS_CPP_PRECOMP_FLAG)
       SET(ITK_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS} -no-cpp-precomp")
       SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -no-cpp-precomp")
-    ENDIF(CXX_HAS_CPP_PRECOMP_FLAG)    
+    ENDIF(CXX_HAS_CPP_PRECOMP_FLAG)
     itkCHECK_CXX_ACCEPTS_FLAGS("-Wno-long-double" CXX_HAS_LONGDOUBLE_FLAG)
-    IF(CXX_HAS_LONGDOUBLE_FLAG)    
+    IF(CXX_HAS_LONGDOUBLE_FLAG)
       SET(ITK_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS} -Wno-long-double")
       SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -Wno-long-double")
-    ENDIF(CXX_HAS_LONGDOUBLE_FLAG)    
+    ENDIF(CXX_HAS_LONGDOUBLE_FLAG)
 
     OPTION(ITK_USE_64BITS_APPLE_TRUNCATION_WARNING "Turn on warnings on 64bits to 32bits truncations." OFF)
     MARK_AS_ADVANCED(ITK_USE_64BITS_APPLE_TRUNCATION_WARNING)
 
   ENDIF(APPLE)
-  
+
   # gcc must have -msse2 option to enable sse2 support
   IF(VNL_CONFIG_ENABLE_SSE2 OR VNL_CONFIG_ENABLE_SSE2_ROUNDING)
     SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -msse2")
@@ -634,7 +633,7 @@ IF(MINGW)
 ENDIF(MINGW)
 
 #-----------------------------------------------------------------------------
-# Find platform-specific differences in the handling of IEEE floating point 
+# Find platform-specific differences in the handling of IEEE floating point
 # special values.
 INCLUDE(${ITK_SOURCE_DIR}/CMake/CheckBigBitfield.cmake)
 CHECK_BIG_BITFIELD(BIGBITFIELD_VALUE ${ITK_SOURCE_DIR}/CMake)
@@ -731,7 +730,7 @@ MARK_AS_ADVANCED(ITK_DATA_ROOT)
 #-----------------------------------------------------------------------------
 # Configure the default ITK_BRAINWEB_DATA_ROOT for the location of ITK Data.
 # When this data is available, additional 3D tests are enabled.
-FIND_PATH(ITK_BRAINWEB_DATA_ROOT brainweb165a10f17.mha 
+FIND_PATH(ITK_BRAINWEB_DATA_ROOT brainweb165a10f17.mha
   DOC "Directory with data taken from http://public.kitware.com/pub/itk/Data/BrainWeb/")
 MARK_AS_ADVANCED(ITK_BRAINWEB_DATA_ROOT)
 
@@ -762,12 +761,12 @@ MARK_AS_ADVANCED(ITK_VISIBLEHUMAN_DATA_ROOT)
 #-----------------------------------------------------------------------------
 # This flag is used in particular, to enable some tests that require large memory to run.
 # This probably can be discovered at configuration time by CMake. (Check with CMake developers).
-SET(ITK_COMPUTER_MEMORY_SIZE 1 CACHE STRING "Provide here the size of your RAM Memory in GigaBytes") 
+SET(ITK_COMPUTER_MEMORY_SIZE 1 CACHE STRING "Provide here the size of your RAM Memory in GigaBytes")
 MARK_AS_ADVANCED(ITK_COMPUTER_MEMORY_SIZE)
 
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
-CONFIGURE_FILE(${ITK_SOURCE_DIR}/itkConfigure.h.in 
+CONFIGURE_FILE(${ITK_SOURCE_DIR}/itkConfigure.h.in
   ${ITK_BINARY_DIR}/itkConfigure.h)
 IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES ${ITK_BINARY_DIR}/itkConfigure.h
@@ -793,7 +792,7 @@ INCLUDE_DIRECTORIES(
 
 #-----------------------------------------------------------------------------
 # ITK_USE_SYSTEM_GDCM is provided so that you can use an installed or external
-# version of gdcm. If its on, you must specify the variables 
+# version of gdcm. If its on, you must specify the variables
 # Important: INCLUDE(${GDCM_USE_FILE}) *has* to be set after the
 # INCLUDE_DIRECTORIES that sets all the include paths for ITK, otherwise
 # if GDCM was build with VTK support, including it will bring the VTK
