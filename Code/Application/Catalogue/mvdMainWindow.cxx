@@ -39,7 +39,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "Gui/mvdDatabaseBrowserController.h"
+#include "Gui/mvdDatabaseBrowserWidget.h"
 
 namespace mvd
 {
@@ -102,6 +103,12 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
+#if 0
+  QDockWidget* databaseBrowserDock =
+#endif
+    AddDockWidget
+    < DatabaseBrowserWidget, DatabaseBrowserController, QDockWidget >
+    ( "DATABASE_BROWSER", tr( "Database browser" ), Qt::LeftDockWidgetArea );
 }
 
 /*****************************************************************************/

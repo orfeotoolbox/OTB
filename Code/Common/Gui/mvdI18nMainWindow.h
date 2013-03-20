@@ -126,6 +126,14 @@ protected:
 // Protected attributes.
 protected:
 
+  /**
+   */
+  template< typename TWidget, typename TController, typename TDockWidget >
+    TDockWidget*
+    AddDockWidget( const QString& dockName,
+		   const QString& dockTitle,
+		   Qt::DockWidgetArea dockArea );
+
   /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
 
 //
@@ -252,6 +260,37 @@ I18nMainWindow
     ( canBeCancelled ? QMessageBox::Cancel : QMessageBox::NoButton ),
     QMessageBox::Save
   );
+}
+
+/*****************************************************************************/
+template< typename TWidget, typename TController, typename TDockWidget >
+TDockWidget*
+I18nMainWindow
+::AddDockWidget( const QString& dockName,
+		 const QString& dockTitle,
+		 Qt::DockWidgetArea dockArea )
+{
+  TWidget* widget = new TWidget( this );
+
+  TDockWidget* dockWidget =
+    AddWidgetToDock(
+      widget,
+      dockName,
+      dockTitle,
+      dockArea
+    );
+
+#if 0
+  TController* controller =
+#endif
+    new TController(
+      // wraps:
+      widget,
+      // as chid of:
+      dockWidget
+    );
+
+  return dockWidget;
 }
 
 } // end namespace 'mvd'
