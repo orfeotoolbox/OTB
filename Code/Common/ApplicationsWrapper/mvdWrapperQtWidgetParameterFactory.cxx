@@ -45,7 +45,6 @@
 #include "otbWrapperQtWidgetListViewParameter.h"
 #include "otbWrapperQtWidgetComplexInputImageParameter.h"
 #include "otbWrapperQtWidgetComplexOutputImageParameter.h"
-#include "otbWrapperQtWidgetInputImageListParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetInputFilenameParameter.h"
@@ -60,6 +59,7 @@
 #include "mvdWrapperQtWidgetChoiceParameter.h"
 #include "mvdWrapperQtWidgetInputImageParameter.h"
 #include "mvdWrapperQtWidgetParameterGroup.h"
+#include "mvdWrapperQtWidgetInputImageListParameter.h"
 
 namespace mvd
 {
@@ -163,7 +163,7 @@ QtWidgetParameterFactory::CreateQtWidget( otb::Wrapper::Parameter* param,
   CREATEWIDGET(otb::Wrapper::ComplexOutputImageParameter,     
                otb::Wrapper::QtWidgetComplexOutputImageParameter)
   CREATEWIDGET(otb::Wrapper::InputImageListParameter, 
-               otb::Wrapper::QtWidgetInputImageListParameter)
+               mvd::Wrapper::QtWidgetInputImageListParameter)
   CREATEWIDGET(otb::Wrapper::InputVectorDataListParameter, 
                otb::Wrapper::QtWidgetInputVectorDataListParameter)
   CREATEWIDGET(otb::Wrapper::InputVectorDataParameter, 
