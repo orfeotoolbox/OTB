@@ -28,16 +28,20 @@ namespace otb
 /** \class ConfusionMatrixMeasurements
  *  This class computes measurements on the input confusion matrix.
  *
- *  Please note that when accessing the confusion matrix values, the first index is the row index (reference samples),
- *  and the second is the column index (classified samples).
+ *  For a 2 classes problem, the confusion matrix is organized as follows:
+ *  \f[ \left( \begin{array}{cc} True Positives & False Negatives \\ False Positives & True Negatives \end{array} \right) \f]
  *
- *  Some measurement are computed by this class :
- *  If we consider true positive (TP), true negative (TN), false positive (FP) and false negative (FP) rate then in the 2 classes case:
+ *  Please note that when accessing the confusion matrix values, the first index is the row index (reference samples),
+ *  and the second is the column index (produced samples).
+ *
+ *  Some measurements are computed by this class:
+ *  If we consider true positive (TP), true negative (TN), false positive (FP) and false negative (FP) rates, then in the 2 classes case:
  *  \f[ precision = \frac{TP}{\left( TP + FP \right) }  \f]
  *  \f[ recall = \frac{TP}{\left( TP + FN \right) }  \f]
  *  \f[ FScore = \frac{2 * precision * recall}{\left( precision + recall \right) }  \f]
  *
  *  Moreover overall accuracy and \f[ \kappa \f] index are computed.
+ *
  */
 template <class TConfusionMatrix = itk::VariableSizeMatrix<double> >
 class ITK_EXPORT ConfusionMatrixMeasurements :

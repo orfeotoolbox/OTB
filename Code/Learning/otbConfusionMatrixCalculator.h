@@ -21,6 +21,7 @@
 
 #include "itkProcessObject.h"
 #include "itkVariableSizeMatrix.h"
+#include "otbConfusionMatrixMeasurements.h"
 
 namespace otb
 {
@@ -31,13 +32,14 @@ namespace otb
  *  reference/produced labels.
  *
  *  For a 2 classes problem, the confusion matrix is organized as follows:
- *  \f[ \left( \begin{array}{cc} True positives & False negatives \\ False positives & true Negatives \end{array} \right) \f]
+ *  \f[ \left( \begin{array}{cc} True Positives & False Negatives \\ False Positives & True Negatives \end{array} \right) \f]
  *
- *  Please note that when accessing the confusion matrix values, the first index is the row index, and the second is the column index,
- *  so that accessing the false positive rate is done by calling GetConfusionMatrix()[1, 0] for the case of 2 classes problem.
+ *  Please note that when accessing the confusion matrix values, the first index is the row index (reference samples),
+ *  and the second is the column index (produced samples), so that accessing the false positive rate is done by
+ *  calling GetConfusionMatrix()[1, 0] for the case of a 2 classes problem.
  *
- *  Some measurement are computed by this class :
- *  If we consider true positive (TP), true negative (TN), false positive (FP) and false negative (FP) rate then in the 2 classes case:
+ *  Some measurements are computed by this class:
+ *  If we consider true positive (TP), true negative (TN), false positive (FP) and false negative (FP) rates, then in the 2 classes case:
  *  \f[ precision = \frac{TP}{\left( TP + FP \right) }  \f]
  *  \f[ recall = \frac{TP}{\left( TP + FN \right) }  \f]
  *  \f[ FScore = \frac{2 * precision * recall}{\left( precision + recall \right) }  \f]
@@ -70,10 +72,13 @@ public:
   typedef TProdListLabel                            ProdListLabelType;
   typedef typename ProdListLabelType::Pointer       ProdListLabelPointerType;
 
-  typedef int ClassLabelType;
+  typedef int                                       ClassLabelType;
 
   /** Type for the confusion matrix */
   typedef itk::VariableSizeMatrix<double>           ConfusionMatrixType;
+
+  /** Type for the confusion matrix measurements calculator*/
+  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType> ConfusionMatrixMeasurementsType;
 
   /** Type for the measurement */
   typedef itk::VariableLengthVector<double>         MeasurementType;
@@ -161,6 +166,7 @@ private:
   unsigned long  m_NumberOfSamples;
 
   ConfusionMatrixType m_ConfusionMatrix;
+  ConfusionMatrixMeasurementsType::Pointer m_ConfMatMeasurements;
 
   RefListLabelPointerType  m_ReferenceLabels;
   ProdListLabelPointerType m_ProducedLabels;

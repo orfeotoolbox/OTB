@@ -39,6 +39,7 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
   this->SetNumberOfRequiredOutputs(1);
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses, m_NumberOfClasses);
   m_ConfusionMatrix.Fill(0);
+  m_ConfMatMeasurements = ConfusionMatrixMeasurementsType::New();
   m_ReferenceLabels = RefListLabelType::New();
   m_ProducedLabels = ProdListLabelType::New();
 }
@@ -56,15 +57,13 @@ void
 ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
 ::GenerateData()
 {
-
   typename RefListLabelType::ConstIterator  refIterator = m_ReferenceLabels->Begin();
   typename ProdListLabelType::ConstIterator prodIterator = m_ProducedLabels->Begin();
 
   //check that both lists have the same number of samples
-
-  if  ( (m_ReferenceLabels->Size() != m_ProducedLabels->Size()) ||
+  if ( (m_ReferenceLabels->Size() != m_ProducedLabels->Size()) ||
         (m_ReferenceLabels->Size() == 0 ) ||
-        (m_ProducedLabels->Size() == 0 )  )
+        (m_ProducedLabels->Size() == 0 ) )
     {
     otbMsgDebugMacro(<< "refLabels size = " << m_ReferenceLabels->Size() <<
                      " / proLabels size = " << m_ProducedLabels->Size());
@@ -77,7 +76,7 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
   int countClasses = 0;
   while (refIterator != m_ReferenceLabels->End())
     {
-    int currentLabel = refIterator.GetMeasurementVector()[0];
+    ClassLabelType currentLabel = refIterator.GetMeasurementVector()[0];
     if (m_MapOfClasses.find(currentLabel) == m_MapOfClasses.end())
       {
       m_MapOfClasses[currentLabel] = countClasses;
@@ -97,15 +96,6 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses, m_NumberOfClasses);
   m_ConfusionMatrix.Fill(0);
 
-  m_FalseNegativeValues = MeasurementType(m_NumberOfClasses);
-  m_TrueNegativeValues = MeasurementType(m_NumberOfClasses);
-  m_FalsePositiveValues = MeasurementType(m_NumberOfClasses);
-  m_TruePositiveValues = MeasurementType(m_NumberOfClasses);
-  m_FalseNegativeValues.Fill(0);
-  m_FalsePositiveValues.Fill(0);
-  m_TruePositiveValues.Fill(0);
-  m_TrueNegativeValues.Fill(0);
-
   refIterator = m_ReferenceLabels->Begin();
   prodIterator = m_ProducedLabels->Begin();
 
@@ -122,117 +112,34 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
 
     ++refIterator;
     ++prodIterator;
-
     }
 
-  this->m_OverallAccuracy  = 0.;
-  for (unsigned int i = 0; i < m_NumberOfClasses; ++i)
-    {
-    this->m_OverallAccuracy += m_ConfusionMatrix(i, i);
-    this->m_TruePositiveValues[i] = m_ConfusionMatrix(i, i);
-    }
-  if (m_NumberOfClasses == 2)
-    {
-    this->m_TruePositiveValue = this->m_TruePositiveValues[0];
-    }
 
-  this->m_OverallAccuracy /= static_cast<double>(m_NumberOfSamples);
+  m_ConfMatMeasurements->SetConfusionMatrix(m_ConfusionMatrix);
+  m_ConfMatMeasurements->Update();
+
+  this->m_TruePositiveValues = m_ConfMatMeasurements->GetTruePositiveValues();
+  this->m_FalseNegativeValues = m_ConfMatMeasurements->GetFalseNegativeValues();
+  this->m_TrueNegativeValues = m_ConfMatMeasurements->GetTrueNegativeValues();
+  this->m_FalsePositiveValues = m_ConfMatMeasurements->GetFalsePositiveValues();
+
+  this->m_Precisions = m_ConfMatMeasurements->GetPrecisions();
+  this->m_Recalls = m_ConfMatMeasurements->GetRecalls();
+  this->m_FScores = m_ConfMatMeasurements->GetFScores();
 
 
-  double luckyRate = 0.;
-  for (unsigned int i = 0; i < m_NumberOfClasses; ++i)
-    {
-    double sum_ij = 0.;
-    double sum_ji = 0.;
-    for (unsigned int j = 0; j < m_NumberOfClasses; ++j)
-      {
-      sum_ij += m_ConfusionMatrix(i, j);
-      sum_ji += m_ConfusionMatrix(j, i);
-      if (i != j)
-        {
-        this->m_FalseNegativeValues[i] += m_ConfusionMatrix(i, j);
-        this->m_FalsePositiveValues[i] += m_ConfusionMatrix(j, i);
-        }
-      }
-    luckyRate += sum_ij * sum_ji;
-    this->m_TrueNegativeValues[i] = m_NumberOfSamples;
-    }
-  this->m_TrueNegativeValues -= this->m_FalseNegativeValues
-                              + this->m_FalsePositiveValues
-                              + this->m_TruePositiveValues;
+  this->m_TruePositiveValue = m_ConfMatMeasurements->GetTruePositiveValue();
+  this->m_FalseNegativeValue = m_ConfMatMeasurements->GetFalseNegativeValue();
+  this->m_TrueNegativeValue = m_ConfMatMeasurements->GetTrueNegativeValue();
+  this->m_FalsePositiveValue = m_ConfMatMeasurements->GetFalsePositiveValue();
 
-  if (m_NumberOfClasses == 2)
-    {
-    this->m_FalseNegativeValue = m_ConfusionMatrix(0, 1);
-    this->m_FalsePositiveValue = m_ConfusionMatrix(1, 0);
-    this->m_TrueNegativeValue = m_ConfusionMatrix(1, 1);
-    /*std::cout << "TP= " << this->m_TruePositiveValue << std::endl;
-    std::cout << "FN= " << this->m_FalseNegativeValue << std::endl;
-    std::cout << "FP= " << this->m_FalsePositiveValue << std::endl;
-    std::cout << "TN= " << this->m_TrueNegativeValue << std::endl; */
-    }
-  else
-    {
-    /*std::cout << "TP= " << this->m_TruePositiveValues << std::endl;
-    std::cout << "FN= " << this->m_FalseNegativeValues << std::endl;
-    std::cout << "FP= " << this->m_FalsePositiveValues << std::endl;
-    std::cout << "TN= " << this->m_TrueNegativeValues << std::endl; */
-    }
+  this->m_Precision = m_ConfMatMeasurements->GetPrecision();
+  this->m_Recall = m_ConfMatMeasurements->GetRecall();
+  this->m_FScore = m_ConfMatMeasurements->GetFScore();
 
-  m_Precisions = MeasurementType(m_NumberOfClasses);
-  m_Recalls = MeasurementType(m_NumberOfClasses);
-  m_FScores = MeasurementType(m_NumberOfClasses);
-  m_Precisions.Fill(0.);
-  m_Recalls.Fill(0.);
-  m_FScores.Fill(0.);
+  this->m_OverallAccuracy = m_ConfMatMeasurements->GetOverallAccuracy();
+  this->m_KappaIndex = m_ConfMatMeasurements->GetKappaIndex();
 
-  const double epsilon = 0.0000000001;
-
-  if (m_NumberOfClasses != 2)
-    {
-    for (unsigned int i = 0; i < m_NumberOfClasses; ++i)
-      {
-      if (vcl_abs(this->m_TruePositiveValues[i] + this->m_FalsePositiveValues[i]) > epsilon)
-        {
-        this->m_Precisions[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
-            + this->m_FalsePositiveValues[i]);
-        }
-
-      if (vcl_abs(this->m_TruePositiveValues[i] + this->m_FalseNegativeValues[i]) > epsilon)
-        {
-        this->m_Recalls[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
-          + this->m_FalseNegativeValues[i]);
-        }
-
-      if (vcl_abs(this->m_Recalls[i] + this->m_Precisions[i]) > epsilon)
-        {
-        this->m_FScores[i] = 2 * this->m_Recalls[i] * this->m_Precisions[i]
-            / (this->m_Recalls[i] + this->m_Precisions[i]);
-        }
-      }
-    }
-  else
-    {
-    if (vcl_abs(this->m_TruePositiveValue + this->m_FalsePositiveValue) > epsilon)
-      {
-      this->m_Precision = this->m_TruePositiveValue / (this->m_TruePositiveValue + this->m_FalsePositiveValue);
-      }
-    if (vcl_abs(this->m_TruePositiveValue + this->m_FalseNegativeValue) > epsilon)
-      {
-      this->m_Recall = this->m_TruePositiveValue / (this->m_TruePositiveValue + this->m_FalseNegativeValue);
-      }
-    if (vcl_abs(this->m_Recall + this->m_Precision) > epsilon)
-      {
-      this->m_FScore = 2 * this->m_Recall * this->m_Precision / (this->m_Recall + this->m_Precision);
-      }
-    }
-
-  luckyRate /= vcl_pow(m_NumberOfSamples, 2.0);
-
-  if (vcl_abs(luckyRate-1) > epsilon)
-    {
-    m_KappaIndex = (m_OverallAccuracy - luckyRate) / (1 - luckyRate);
-    }
 }
 
 template <class TRefListLabel, class TProdListLabel>
