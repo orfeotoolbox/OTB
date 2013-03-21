@@ -87,7 +87,7 @@
    OpenJPEG interface
  ==========================================================
  */
-#include "openjpeg_mangle_private.h"
+#include "openjpeg_mangle.h"
 #include "openjpeg.h"
 
 /*

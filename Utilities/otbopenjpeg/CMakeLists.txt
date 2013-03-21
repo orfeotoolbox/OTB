@@ -151,10 +151,6 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
                @ONLY IMMEDIATE)
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle_private.h.cmake.in
-               ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle_private.h
-               @ONLY IMMEDIATE)
-
 #-----------------------------------------------------------------------------
 # pkgconfig support
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libopenjpeg1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libopenjpeg1.pc @ONLY)
