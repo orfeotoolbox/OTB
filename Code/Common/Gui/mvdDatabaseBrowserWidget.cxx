@@ -230,6 +230,33 @@ DatabaseBrowserWidget
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
+
 /*******************************************************************************/
+void
+DatabaseBrowserWidget
+::on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,
+					    QTreeWidgetItem* previous )
+{
+  assert( current!=previous );
+
+  /*
+  qDebug()
+    << this
+    << "::on_databaseTreeWidget_currentItemChanged("
+    << current << "," << previous
+    << ")";
+
+  qDebug()
+    << ( previous==NULL ? "" : previous->text( 0 ) )
+    << "->"
+    << ( current==NULL ? "" : current->text( 0 ) );
+  */
+
+  emit CurrentDatasetChanged(
+    current->parent()!=m_DatasetRootItem
+    ? QString()
+    : current->text( 0 )
+  );
+}
 
 } // end namespace 'mvd'

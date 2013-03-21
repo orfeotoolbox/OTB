@@ -99,6 +99,10 @@ public:
    */
   void SetDatasetList( const QStringList& list );
 
+  /**
+   */
+  void SetCurrentDataset( const QString& name );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -110,6 +114,10 @@ public slots:
 //
 // Signals.
 signals:
+
+  /**
+   */
+  void CurrentDatasetChanged( const QString& text );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -154,6 +162,11 @@ private:
 //
 // Slots.
 private slots:
+
+  /**
+   */
+  void on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,
+						 QTreeWidgetItem* previous );
 };
 
 } // end namespace 'mvd'
