@@ -22,8 +22,8 @@
 #include "itkBinaryBallStructuringElement.h"
 #include "itkBinaryCrossStructuringElement.h"
 
-#include "itkBinaryDilateImageFilter.h"
-#include "itkBinaryErodeImageFilter.h"
+#include "otbBinaryDilateImageFilter.h"
+#include "otbBinaryErodeImageFilter.h"
 #include "itkBinaryMorphologicalOpeningImageFilter.h"
 #include "itkBinaryMorphologicalClosingImageFilter.h"
 
