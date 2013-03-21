@@ -27,8 +27,10 @@ template<class TConfusionMatrix>
 ConfusionMatrixToMassOfBelief<TConfusionMatrix>
 ::ConfusionMatrixToMassOfBelief()
 {
-  m_ConfusionMatrixCalculator = ConfusionMatrixCalculatorType::New();
-  m_DefinitionMethod = this->PRECISION;
+  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredOutputs(1);
+  this->m_ConfMatMeasurements = ConfusionMatrixMeasurementsType::New();
+  this->m_DefinitionMethod = this->PRECISION;
 }
 
 template <class TConfusionMatrix>
@@ -44,27 +46,41 @@ void
 ConfusionMatrixToMassOfBelief<TConfusionMatrix>
 ::GenerateData()
 {
-  MapOfIndicesType mapOfIndices = m_ConfusionMatrixCalculator->GetMapOfIndices();
+  this->m_ConfMatMeasurements->SetConfusionMatrix(m_ConfusionMatrix);
+  this->m_ConfMatMeasurements->Update();
+
   typename MapOfIndicesType::iterator itMapOfIndices;
 
-  MassType currentMass = 0;
-  for (itMapOfIndices = mapOfIndices.begin(); itMapOfIndices != mapOfIndices.end(); ++itMapOfIndices)
+  MassType currentMass = 0.;
+  this->m_MapMassOfBelief.clear();
+  for (itMapOfIndices = m_MapOfIndices.begin(); itMapOfIndices != m_MapOfIndices.end(); ++itMapOfIndices)
     {
-    // Masses of Belief = Precision Rate of each label (TP/[TP + FP])
-    if (m_DefinitionMethod == this->PRECISION)
+    switch (m_DefinitionMethod)
       {
-      currentMass = m_ConfusionMatrixCalculator->GetPrecisions()[itMapOfIndices->first];
-      }
-    else
-      {
-      // Masses of Belief = Recall Rate of each label (TP/[TP + FN])
-      if (m_DefinitionMethod == this->RECALL)
-        {
-        currentMass = m_ConfusionMatrixCalculator->GetRecalls()[itMapOfIndices->first];
-        }
-      }
+      case PRECISION:
+        // Masses of Belief = Precision Rate of each label (TP / [TP + FP])
+        currentMass = m_ConfMatMeasurements->GetPrecisions()[itMapOfIndices->first];
+        break;
+      case RECALL:
+        // Masses of Belief = Recall Rate of each label (TP / [TP + FN])
+        currentMass = m_ConfMatMeasurements->GetRecalls()[itMapOfIndices->first];
+        break;
+      case ACCURACY:
+        // Masses of Belief = Overall Accuracy of the confusion matrix (SUM[TP] / nbSamples)
+        currentMass = m_ConfMatMeasurements->GetOverallAccuracy();
+        break;
+      case KAPPA:
+        // Masses of Belief = Kappa Index of the confusion matrix
+        currentMass = m_ConfMatMeasurements->GetKappaIndex();
+        break;
 
-    m_MapMassOfBelief[itMapOfIndices->second] = currentMass;
+      default:
+        // Masses of Belief = Precision Rate of each label (TP / [TP + FP]
+        currentMass = m_ConfMatMeasurements->GetPrecisions()[itMapOfIndices->first];
+        break;
+      }// END switch (m_DefinitionMethod)
+
+    this->m_MapMassOfBelief[itMapOfIndices->second] = currentMass;
     }
 }
 } // end namespace otb

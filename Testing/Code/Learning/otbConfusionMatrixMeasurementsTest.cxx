@@ -28,8 +28,8 @@ int otbConfusionMatrixMeasurementsNew(int argc, char* argv[])
   typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType> ConfusionMatrixMeasurementsType;
 
   // filter
-  ConfusionMatrixMeasurementsType::Pointer ConfMatMeasurements = ConfusionMatrixMeasurementsType::New();
-  std::cout << ConfMatMeasurements << std::endl;
+  ConfusionMatrixMeasurementsType::Pointer confMatMeasurements = ConfusionMatrixMeasurementsType::New();
+  std::cout << confMatMeasurements << std::endl;
 
   return EXIT_SUCCESS;
 }
@@ -54,18 +54,18 @@ int otbConfusionMatrixMeasurementsTest(int argc, char* argv[])
   mapOfClasses[4] = 3;
 
   unsigned int nbClasses = mapOfClasses.size();
-  ConfusionMatrixType ConfMat = ConfusionMatrixType(nbClasses, nbClasses);
-  ConfMat(0, 0) = 1, ConfMat(0, 1) = 0, ConfMat(0, 2) = 0, ConfMat(0, 3) = 2;
-  ConfMat(1, 0) = 0, ConfMat(1, 1) = 1, ConfMat(1, 2) = 1, ConfMat(1, 3) = 1;
-  ConfMat(2, 0) = 0, ConfMat(2, 1) = 0, ConfMat(2, 2) = 2, ConfMat(2, 3) = 1;
-  ConfMat(3, 0) = 0, ConfMat(3, 1) = 0, ConfMat(3, 2) = 1, ConfMat(3, 3) = 2;
-  std::cout << "confusion matrix = " << std::endl << ConfMat << std::endl;
+  ConfusionMatrixType confMat = ConfusionMatrixType(nbClasses, nbClasses);
+  confMat(0, 0) = 1, confMat(0, 1) = 0, confMat(0, 2) = 0, confMat(0, 3) = 2;
+  confMat(1, 0) = 0, confMat(1, 1) = 1, confMat(1, 2) = 1, confMat(1, 3) = 1;
+  confMat(2, 0) = 0, confMat(2, 1) = 0, confMat(2, 2) = 2, confMat(2, 3) = 1;
+  confMat(3, 0) = 0, confMat(3, 1) = 0, confMat(3, 2) = 1, confMat(3, 3) = 2;
+  std::cout << "confusion matrix = " << std::endl << confMat << std::endl;
 
   // filter
   ConfusionMatrixMeasurementsType::Pointer confMatMeasurements = ConfusionMatrixMeasurementsType::New();
 
   confMatMeasurements->SetMapOfClasses(mapOfClasses);
-  confMatMeasurements->SetConfusionMatrix(ConfMat);
+  confMatMeasurements->SetConfusionMatrix(confMat);
   confMatMeasurements->Update();
 
   // mapOfIndices[index] = label associated to the rows/columns of the confusion matrix

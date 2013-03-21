@@ -20,73 +20,48 @@
 
 #include "otbConfusionMatrixToMassOfBelief.h"
 
+int otbConfusionMatrixToMassOfBeliefNew(int argc, char* argv[])
+{
+  typedef itk::VariableSizeMatrix<double> ConfusionMatrixType;
+
+  // filter type
+  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType> ConfusionMatrixToMassOfBeliefType;
+
+  // filter
+  ConfusionMatrixToMassOfBeliefType::Pointer confMatToMOB = ConfusionMatrixToMassOfBeliefType::New();
+  std::cout << confMatToMOB << std::endl;
+
+  return EXIT_SUCCESS;
+}
+
+
 int otbConfusionMatrixToMassOfBeliefTest(int argc, char* argv[])
 {
-  // Filling the Confusion Matrix
-  typedef unsigned int LabelType;
-  typedef itk::FixedArray<LabelType, 1> RLabelType;
-  typedef itk::Statistics::ListSample<RLabelType> RListLabelType;
-  typedef itk::FixedArray<LabelType, 1> PLabelType;
-  typedef itk::Statistics::ListSample<PLabelType> PListLabelType;
-  typedef otb::ConfusionMatrixCalculator<RListLabelType, PListLabelType> ConfusionMatrixCalculatorType;
+  typedef itk::VariableSizeMatrix<double> ConfusionMatrixType;
 
-  //Filling the Confusion Matrix from samples
-  ConfusionMatrixCalculatorType::Pointer confusionMatrixCalculator = ConfusionMatrixCalculatorType::New();
-
-  RListLabelType::Pointer refLabels = RListLabelType::New();
-  PListLabelType::Pointer prodLabels = PListLabelType::New();
-
-  RListLabelType::Iterator itRefLabels;
-  PListLabelType::Iterator itProdLabels;
-
-  int nbSamples = 12;
-  int nbClasses = 4;
-
-  // Reference samples: 1 2 3 4 1 2 3 4 1 2 3 4
-  // Classified reference samples: 1 3 3 4 4 2 3 4 4 4 4 3
-  std::vector<LabelType> labelsClassified;
-  labelsClassified.push_back(1);
-  labelsClassified.push_back(3);
-  labelsClassified.push_back(3);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(2);
-  labelsClassified.push_back(3);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(3);
-
-  for (int i = 0; i < nbSamples; ++i)
-    {
-    int label = (i % nbClasses) + 1;
-    refLabels->PushBack(label);
-    prodLabels->PushBack(labelsClassified[i]);
-    }
-
-  int k = 0;
-  for (itRefLabels = refLabels->Begin(), itProdLabels = prodLabels->Begin(); itRefLabels != refLabels->End(); ++itRefLabels, ++itProdLabels)
-    {
-    std::cout << "refLabels[" << k << "] = " << itRefLabels.GetMeasurementVector()[0] << "; prodLabels[" << k << "] = "
-        << itProdLabels.GetMeasurementVector()[0] << std::endl;
-    ++k;
-    }
-
-  confusionMatrixCalculator->SetReferenceLabels(refLabels);
-  confusionMatrixCalculator->SetProducedLabels(prodLabels);
-  confusionMatrixCalculator->Update();
-
-  ConfusionMatrixCalculatorType::ConfusionMatrixType confusionMatrix = confusionMatrixCalculator->GetConfusionMatrix();
-  std::cout << std::endl;
-  std::cout << "confusion matrix" << std::endl << confusionMatrix << std::endl;
-
-
-  // Converting the Confusion Matrix into a std::map<ClassLabelType, MassType> of Masses of Belief for each label
-  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixCalculatorType> ConfusionMatrixToMassOfBeliefType;
+  // filter type
+  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType> ConfusionMatrixToMassOfBeliefType;
+  typedef ConfusionMatrixToMassOfBeliefType::MapOfClassesType MapOfClassesType;
   typedef ConfusionMatrixToMassOfBeliefType::MassOfBeliefDefinitionMethod MassOfBeliefDefinitionMethod;
   typedef ConfusionMatrixToMassOfBeliefType::SingleClassLabelMassMapType SingleClassLabelMassMapType;
 
+  // mapOfClasses[label] = index in the rows/columns of the confusion matrix
+  MapOfClassesType mapOfClasses;
+  mapOfClasses[1] = 0;
+  mapOfClasses[2] = 1;
+  mapOfClasses[3] = 2;
+  mapOfClasses[4] = 3;
+
+  unsigned int nbClasses = mapOfClasses.size();
+  ConfusionMatrixType confMat = ConfusionMatrixType(nbClasses, nbClasses);
+  confMat(0, 0) = 1, confMat(0, 1) = 0, confMat(0, 2) = 0, confMat(0, 3) = 2;
+  confMat(1, 0) = 0, confMat(1, 1) = 1, confMat(1, 2) = 1, confMat(1, 3) = 1;
+  confMat(2, 0) = 0, confMat(2, 1) = 0, confMat(2, 2) = 2, confMat(2, 3) = 1;
+  confMat(3, 0) = 0, confMat(3, 1) = 0, confMat(3, 2) = 1, confMat(3, 3) = 2;
+  std::cout << "confusion matrix = " << std::endl << confMat << std::endl;
+
+
+  // Converting the Confusion Matrix into a std::map<ClassLabelType, MassType> of Masses of Belief for each label
   ConfusionMatrixToMassOfBeliefType::Pointer confMatToMass = ConfusionMatrixToMassOfBeliefType::New();
   MassOfBeliefDefinitionMethod massOfBeliefDefMethod;
 
@@ -101,9 +76,24 @@ int otbConfusionMatrixToMassOfBeliefTest(int argc, char* argv[])
       {
       massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::RECALL;
       }
+    else
+      {
+      if (massOfBeliefDefMethodStr.compare("ACCURACY") == 0)
+        {
+        massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::ACCURACY;
+        }
+      else
+        {
+        if (massOfBeliefDefMethodStr.compare("KAPPA") == 0)
+          {
+          massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::KAPPA;
+          }
+        }
+      }
     }
 
-  confMatToMass->SetConfusionMatrixCalculator(confusionMatrixCalculator);
+  confMatToMass->SetConfusionMatrix(confMat);
+  confMatToMass->SetMapOfClasses(mapOfClasses);
   confMatToMass->SetDefinitionMethod(massOfBeliefDefMethod);
   confMatToMass->Update();
   SingleClassLabelMassMapType mapMOB = confMatToMass->GetMapMassOfBelief();
@@ -119,7 +109,7 @@ int otbConfusionMatrixToMassOfBeliefTest(int argc, char* argv[])
   // Baselines for the different measurements
   //******************************************
 
-  SingleClassLabelMassMapType mapMOBBLPrecision, mapMOBBLRecall;
+  SingleClassLabelMassMapType mapMOBBLPrecision, mapMOBBLRecall, mapMOBBLAccuracy, mapMOBBLKappa;
   SingleClassLabelMassMapType::iterator itMapMOBBL;
 
   mapMOBBLPrecision[1] = 1;
@@ -131,6 +121,16 @@ int otbConfusionMatrixToMassOfBeliefTest(int argc, char* argv[])
   mapMOBBLRecall[2] = 1.0 / 3.0;
   mapMOBBLRecall[3] = 2.0 / 3.0;
   mapMOBBLRecall[4] = 2.0 / 3.0;
+
+  mapMOBBLAccuracy[1] = 1.0 / 2.0;
+  mapMOBBLAccuracy[2] = 1.0 / 2.0;
+  mapMOBBLAccuracy[3] = 1.0 / 2.0;
+  mapMOBBLAccuracy[4] = 1.0 / 2.0;
+
+  mapMOBBLKappa[1] = 1.0 / 3.0;
+  mapMOBBLKappa[2] = 1.0 / 3.0;
+  mapMOBBLKappa[3] = 1.0 / 3.0;
+  mapMOBBLKappa[4] = 1.0 / 3.0;
 
   if ((mapMOB != mapMOBBLPrecision) && (massOfBeliefDefMethodStr.compare("PRECISION") == 0))
     {
@@ -157,6 +157,32 @@ int otbConfusionMatrixToMassOfBeliefTest(int argc, char* argv[])
       }
     return EXIT_FAILURE;
     }
+
+  if ((mapMOB != mapMOBBLAccuracy) && (massOfBeliefDefMethodStr.compare("ACCURACY") == 0))
+      {
+      std::cout << std::endl;
+      std::cout << "ERROR in Map Mass of Belief Accuracy" << std::endl;
+      for (itMapMOBBL = mapMOBBLAccuracy.begin(), itMapMOB = mapMOB.begin();
+          itMapMOBBL != mapMOBBLAccuracy.end(); ++itMapMOBBL, ++itMapMOB)
+        {
+        std::cout << "mapMOBBLAccuracy[" << itMapMOBBL->first << "] = " << itMapMOBBL->second << "; ";
+        std::cout << "mapMOB[" << itMapMOB->first << "] = " << itMapMOB->second << std::endl;
+        }
+      return EXIT_FAILURE;
+      }
+
+  if ((mapMOB != mapMOBBLKappa) && (massOfBeliefDefMethodStr.compare("KAPPA") == 0))
+      {
+      std::cout << std::endl;
+      std::cout << "ERROR in Map Mass of Belief Kappa" << std::endl;
+      for (itMapMOBBL = mapMOBBLKappa.begin(), itMapMOB = mapMOB.begin();
+          itMapMOBBL != mapMOBBLKappa.end(); ++itMapMOBBL, ++itMapMOB)
+        {
+        std::cout << "mapMOBBLKappa[" << itMapMOBBL->first << "] = " << itMapMOBBL->second << "; ";
+        std::cout << "mapMOB[" << itMapMOB->first << "] = " << itMapMOB->second << std::endl;
+        }
+      return EXIT_FAILURE;
+      }
 
   return EXIT_SUCCESS;
 }

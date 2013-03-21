@@ -155,6 +155,14 @@ ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestPrecision ${Fuzzy_TESTS3}
 ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestRecall ${Fuzzy_TESTS3}
   otbConfusionMatrixToMassOfBeliefTest
  RECALL)
+   
+ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestAccuracy ${Fuzzy_TESTS3}
+  otbConfusionMatrixToMassOfBeliefTest
+ ACCURACY)
+   
+ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestKappa ${Fuzzy_TESTS3}
+  otbConfusionMatrixToMassOfBeliefTest
+ KAPPA)
 
 
 
@@ -182,7 +190,6 @@ otbStandardDSCostFunction.cxx
 SET(BasicFuzzy_SRCS3
 otbFuzzyTests3.cxx
 otbDempsterShaferFusionTests.cxx
-otbConfusionMatrixToMassOfBeliefNew.cxx
 otbConfusionMatrixToMassOfBeliefTest.cxx
 )
 
