@@ -38,6 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdDatasetModel.h"
 #include "mvdI18nApplication.h"
 
 namespace mvd
@@ -64,7 +65,8 @@ namespace mvd
 /*******************************************************************************/
 DatabaseModel
 ::DatabaseModel( QObject* parent ) :
-  AbstractModel( parent )
+  AbstractModel( parent ),
+  m_DatasetModels()
 {
 }
 
@@ -95,6 +97,42 @@ DatabaseModel
     QDir::Dirs | QDir::NoDotAndDotDot,
     QDir::Name
   );
+}
+
+/*******************************************************************************/
+DatasetModel*
+DatabaseModel
+::SelectDatasetModel( const DatasetId& id )
+{
+  DatasetModel* datasetModel = FindDatasetModel( id );
+
+  if( datasetModel!=NULL )
+    return datasetModel;
+
+  return NULL;
+}
+
+/*******************************************************************************/
+void
+DatabaseModel
+::ReleaseDatasetModel( const DatasetId& id )
+{
+}
+
+/*****************************************************************************/
+DatasetModel*
+DatabaseModel
+::FindDatasetModel( const DatasetId& id )
+{
+  // Find (key, value) pair.
+  DatasetModelMap::iterator it( m_DatasetModels.find( id ) );
+
+  // Should be present because it should have been initialized in
+  // InitializeDatasetModels().
+  assert( it!=m_DatasetModels.end() );
+
+  // But, in case of, safe return value.
+  return it==m_DatasetModels.end() ? NULL : it.value();
 }
 
 /*******************************************************************************/
@@ -134,6 +172,39 @@ DatabaseModel
 }
 
 #endif
+
+/*******************************************************************************/
+void
+DatabaseModel
+::InitializeDatasetModels()
+{
+  QStringList datasets( QueryDatasetModels() );
+
+  ClearDatasetModels();
+
+  for( QStringList::const_iterator it( datasets.begin() );
+       it!=datasets.end();
+       ++it )
+    {
+    m_DatasetModels.insert( *it, NULL );
+    }
+}
+
+/*******************************************************************************/
+void
+DatabaseModel
+::ClearDatasetModels()
+{
+  while( !m_DatasetModels.empty() )
+    {
+    DatasetModelMap::iterator it( m_DatasetModels.begin() );
+
+    delete it.value();
+    it.value() = NULL;
+
+    it = m_DatasetModels.erase( it );
+    }
+}
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

@@ -60,6 +60,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class DatasetModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -80,6 +81,10 @@ class Monteverdi2_EXPORT DatabaseModel :
 //
 // Public types.
 public:
+
+  /**
+   */
+  typedef QString DatasetId;
 
   /**
    * \class BuildContext
@@ -112,6 +117,14 @@ public:
   /**
    */
   QStringList QueryDatasetModels() const;
+
+  /**
+   */
+  DatasetModel* SelectDatasetModel( const DatasetId& id );
+
+  /**
+   */
+  void ReleaseDatasetModel( const DatasetId& id );
 
   //
   // AbstractModel overrides.
@@ -150,19 +163,33 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
-// Private attributes.
+// Private types.
 private:
-
+  /**
+   */
+  typedef QMap< DatasetId, DatasetModel* > DatasetModelMap;
 
 //
 // Private methods.
 private:
+  /**
+   */
+  void InitializeDatasetModels();
 
+  /**
+   */
+  void ClearDatasetModels();
+
+  /**
+   */
+  DatasetModel* FindDatasetModel( const DatasetId& id );
 
 //
 // Private attributes.
 private:
-
+  /**
+   */
+  DatasetModelMap m_DatasetModels;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
