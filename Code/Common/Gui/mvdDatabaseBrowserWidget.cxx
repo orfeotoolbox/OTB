@@ -238,7 +238,6 @@ DatabaseBrowserWidget
 {
   assert( current!=previous );
 
-  /*
   qDebug()
     << this
     << "::on_databaseTreeWidget_currentItemChanged("
@@ -249,7 +248,6 @@ DatabaseBrowserWidget
     << ( previous==NULL ? "" : previous->text( 0 ) )
     << "->"
     << ( current==NULL ? "" : current->text( 0 ) );
-  */
 
   emit CurrentDatasetChanged(
     current->parent()!=m_DatasetRootItem

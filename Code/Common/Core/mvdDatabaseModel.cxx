@@ -109,6 +109,28 @@ DatabaseModel
   if( datasetModel!=NULL )
     return datasetModel;
 
+  try
+    {
+    datasetModel = new DatasetModel( this );
+
+    assert( I18nApplication::ConstInstance() );
+
+    DatasetModel::BuildContext context(
+      I18nApplication::ConstInstance()->GetCacheDir().path(),
+      id
+    );
+
+    datasetModel->BuildModel( &context );
+
+    m_DatasetModels[ id ] = datasetModel;
+    }
+  catch( std::exception& exc )
+    {
+    delete datasetModel;
+    datasetModel = NULL;
+    throw exc;
+    }
+
   return NULL;
 }
 
@@ -124,6 +146,10 @@ DatasetModel*
 DatabaseModel
 ::FindDatasetModel( const DatasetId& id )
 {
+  qDebug() << this << "::FindDatasetModel(" << id << ")";
+  
+  qDebug() << m_DatasetModels;
+
   // Find (key, value) pair.
   DatasetModelMap::iterator it( m_DatasetModels.find( id ) );
 
@@ -140,6 +166,7 @@ void
 DatabaseModel
 ::virtual_BuildModel( void* context )
 {
+  InitializeDatasetModels();
 }
 
 #if 0

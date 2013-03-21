@@ -148,6 +148,12 @@ void
 DatabaseBrowserController
 ::OnCurrentDatasetChanged( const QString& name )
 {
+  if( name.isEmpty() )
+    return;
+
+  DatabaseModel* model = GetModel< DatabaseModel >();
+
+  model->SelectDatasetModel( name );
 }
 
 } // end namespace 'mvd'
