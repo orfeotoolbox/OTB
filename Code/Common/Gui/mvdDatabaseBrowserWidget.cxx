@@ -86,7 +86,7 @@ void
 DatabaseBrowserWidget
 ::SetDatasetList( const QStringList& list )
 {
-  qDebug() << this << "::SetDatasetList" << list;
+  // qDebug() << this << "::SetDatasetList" << list;
 
   // A. If there is no previously stored dataset child item:
   if( m_DatasetRootItem->childCount()==0 )
@@ -96,7 +96,7 @@ DatabaseBrowserWidget
 	 it!=list.end();
 	 ++it )
       {
-      qDebug() << "+" << *it;
+      // qDebug() << "+" << *it;
 
       // ...as child items.
       new QTreeWidgetItem( m_DatasetRootItem, QStringList( *it ) );
@@ -109,7 +109,7 @@ DatabaseBrowserWidget
     // Remove all previously stored dataset child items.
     while( m_DatasetRootItem->childCount()>0 )
       {
-      qDebug() << "-" << m_DatasetRootItem->child( 0 )->text( 0 );
+      // qDebug() << "-" << m_DatasetRootItem->child( 0 )->text( 0 );
 
       // Remove dataset child item and reference it.
       QTreeWidgetItem* child = m_DatasetRootItem->takeChild( 0 );
@@ -150,7 +150,7 @@ DatabaseBrowserWidget
       // If it's lower (lexicographically)...
       if( cmp01<0 )
 	{
-	qDebug() << "-" << child0->text( 0 );
+	// qDebug() << "-" << child0->text( 0 );
 
 	// ...then, it means it is not contained in the given list and
 	// must be removed.
@@ -163,7 +163,7 @@ DatabaseBrowserWidget
       // Otherwise, if it's greater (lexicographically)...
       else if( cmp01>0 )
 	{
-	qDebug() << "+" << *it1;
+	// qDebug() << "+" << *it1;
 
 	// ...then, it means the item of the given list is not
 	// contained and must be inserted.
@@ -179,7 +179,7 @@ DatabaseBrowserWidget
       // Finally, if it's equal (lexicographically)...
       else // if( order==0 )
 	{
-	qDebug() << "=" << *it1;
+	// qDebug() << "=" << *it1;
 
 	// ...then, it means both items must be kept contained.
 	++ i0;
@@ -190,7 +190,7 @@ DatabaseBrowserWidget
     // Remove previously stored dataset item in excess.
     while( i0<m_DatasetRootItem->childCount() )
       {
-      qDebug() << "--" << m_DatasetRootItem->child( i0 )->text( 0 );
+      // qDebug() << "--" << m_DatasetRootItem->child( i0 )->text( 0 );
 
       // Remove dataset child item and reference it.
       QTreeWidgetItem* child = m_DatasetRootItem->takeChild( i0 );
@@ -205,7 +205,7 @@ DatabaseBrowserWidget
 	 it1!=sortedList.end();
 	 ++it1 )
       {
-	qDebug() << "++" << *it1;
+	// qDebug() << "++" << *it1;
 
 	new QTreeWidgetItem( m_DatasetRootItem, QStringList( *it1 ) );
       }
@@ -221,7 +221,11 @@ DatabaseBrowserWidget
   assert( m_DatasetRootItem!=NULL );
   assert( m_DatasetRootItem->text( 0 )==tr( "Datasets" ) );
 
+#if 0
   m_DatasetRootItem->setChildIndicatorPolicy( QTreeWidgetItem::ShowIndicator );
+#endif
+
+  m_DatasetRootItem->setExpanded( true );
 }
 
 /*******************************************************************************/

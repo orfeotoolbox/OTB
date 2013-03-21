@@ -81,16 +81,14 @@ DatabaseModel
 {
   QDir cacheDir( I18nApplication::ConstInstance()->GetCacheDir() );
 
-  qDebug() << cacheDir;
-
   QStringList nameFilters;
   nameFilters << QString( "*%1" ).arg( I18nApplication::DATASET_EXT );
 
-  qDebug() << nameFilters;
-
+#if 0
   cacheDir.setNameFilters( nameFilters );
   cacheDir.setFilter( QDir::Dirs | QDir::NoDotAndDotDot );
   cacheDir.setSorting( QDir::Name );
+#endif
 
   return cacheDir.entryList(
     nameFilters,
