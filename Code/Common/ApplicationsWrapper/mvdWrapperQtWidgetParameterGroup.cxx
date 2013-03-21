@@ -37,6 +37,7 @@
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperRAMParameter.h"
+#include "otbWrapperChoiceParameter.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
