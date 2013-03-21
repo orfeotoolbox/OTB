@@ -24,40 +24,6 @@
        <string>Name</string>
       </property>
      </column>
-     <item>
-      <property name="text">
-       <string>Datasets</string>
-      </property>
-      <property name="toolTip">
-       <string>List of dataset stored in the cache directory.</string>
-      </property>
-      <property name="statusTip">
-       <string>List of dataset stored in the cache directory.</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
-      </property>
-      <item>
-       <property name="text">
-        <string>_</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>_home</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>_home_salbert_data_Boats_cann_B010202_05.tif.ds</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>A</string>
-       </property>
-      </item>
-     </item>
     </widget>
    </item>
   </layout>
