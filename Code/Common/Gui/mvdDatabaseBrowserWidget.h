@@ -95,6 +95,10 @@ public:
   /** \brief Destructor. */
   virtual ~DatabaseBrowserWidget();
 
+  /**
+   */
+  void SetDatasetList( const QStringList& list );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

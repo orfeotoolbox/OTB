@@ -117,6 +117,25 @@ protected:
    */
   virtual void virtual_ConnectUI() =0;
 
+  /**
+   */
+  template< typename TWidget, typename TController, typename TDockWidget >
+    TDockWidget*
+    AddDockWidget( const QString& dockName,
+		   const QString& dockTitle,
+		   Qt::DockWidgetArea dockArea );
+
+  /**
+   * \brief Assign model to the controller which is child of given
+   * dock-widget.
+   *
+   * \param dock The dock-widget which is parent of the controller to
+   * assign model to.
+   *
+   * \param model The model to assign to the controller.
+   */
+  inline void SetControllerModel( QDockWidget* dock, AbstractModel* model );
+
   //
   // QMainWindow overrides.
 
@@ -125,14 +144,6 @@ protected:
 //
 // Protected attributes.
 protected:
-
-  /**
-   */
-  template< typename TWidget, typename TController, typename TDockWidget >
-    TDockWidget*
-    AddDockWidget( const QString& dockName,
-		   const QString& dockTitle,
-		   Qt::DockWidgetArea dockArea );
 
   /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
 
@@ -166,17 +177,6 @@ private:
 		     const QString& dockName,
 		     const QString& dockTitle,
 		     Qt::DockWidgetArea dockArea );
-
-  /**
-   * \brief Assign model to the controller which is child of given
-   * dock-widget.
-   *
-   * \param dock The dock-widget which is parent of the controller to
-   * assign model to.
-   *
-   * \param model The model to assign to the controller.
-   */
-  inline void SetControllerModel( QDockWidget* dock, AbstractModel* model );
 
   /**
    */

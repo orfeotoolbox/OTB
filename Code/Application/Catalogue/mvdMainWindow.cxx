@@ -69,7 +69,8 @@ namespace mvd
 MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
   I18nMainWindow( parent, flags ), 
-  m_UI( new mvd::Ui::MainWindow() )
+  m_UI( new mvd::Ui::MainWindow() ),
+  m_DatabaseBrowserDock( NULL )
 {
   m_UI->setupUi( this );
 }
@@ -103,9 +104,8 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
-#if 0
-  QDockWidget* databaseBrowserDock =
-#endif
+  assert( m_DatabaseBrowserDock==NULL );
+  m_DatabaseBrowserDock =
     AddDockWidget
     < DatabaseBrowserWidget, DatabaseBrowserController, QDockWidget >
     ( "DATABASE_BROWSER", tr( "Database browser" ), Qt::LeftDockWidgetArea );
@@ -120,6 +120,8 @@ MainWindow
 ::OnAboutToChangeModel( const AbstractModel* model )
 {
   qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
+
+  SetControllerModel( m_DatabaseBrowserDock, NULL );
 }
 
 /*****************************************************************************/
@@ -128,6 +130,8 @@ MainWindow
 ::OnModelChanged( AbstractModel* model )
 {
   qDebug() << this << "::OnModelChanged(" << model << ")";
+
+  SetControllerModel( m_DatabaseBrowserDock, model );
 }
 
 } // end namespace 'mvd'

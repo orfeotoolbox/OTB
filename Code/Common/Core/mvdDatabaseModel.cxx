@@ -38,7 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "mvdI18nApplication.h"
 
 namespace mvd
 {
@@ -72,6 +72,31 @@ DatabaseModel
 DatabaseModel
 ::~DatabaseModel()
 {
+}
+
+/*******************************************************************************/
+QStringList
+DatabaseModel
+::QueryDatasetModels() const
+{
+  QDir cacheDir( I18nApplication::ConstInstance()->GetCacheDir() );
+
+  qDebug() << cacheDir;
+
+  QStringList nameFilters;
+  nameFilters << QString( "*%1" ).arg( I18nApplication::DATASET_EXT );
+
+  qDebug() << nameFilters;
+
+  cacheDir.setNameFilters( nameFilters );
+  cacheDir.setFilter( QDir::Dirs | QDir::NoDotAndDotDot );
+  cacheDir.setSorting( QDir::Name );
+
+  return cacheDir.entryList(
+    nameFilters,
+    QDir::Dirs | QDir::NoDotAndDotDot,
+    QDir::Name
+  );
 }
 
 /*******************************************************************************/

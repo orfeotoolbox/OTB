@@ -163,6 +163,10 @@ private:
    */
   Ui::MainWindow* m_UI;
 
+  /**
+   */
+  QDockWidget* m_DatabaseBrowserDock;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //

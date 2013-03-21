@@ -109,6 +109,10 @@ public:
   /** \brief Destructor. */
   virtual ~DatabaseModel();
 
+  /**
+   */
+  QStringList QueryDatasetModels() const;
+
   //
   // AbstractModel overrides.
 

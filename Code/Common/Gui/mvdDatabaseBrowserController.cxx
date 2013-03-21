@@ -89,8 +89,10 @@ void
 DatabaseBrowserController
 ::ResetWidget()
 {
+  qDebug() << this << "::ResetWidget()";
+
   // Reset widget.
-  // ResetFoo();
+  ResetFoo();
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -120,6 +122,7 @@ DatabaseBrowserController
   widget->blockSignals( true );
   {
   // TODO: Fill in widget.
+  widget->SetDatasetList( model->QueryDatasetModels() );
   }
   widget->blockSignals( false );
   }
