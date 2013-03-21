@@ -40,11 +40,8 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbWrapperParameterGroup.h"
-#include "otbWrapperNumericalParameter.h"
-#include "otbWrapperRadiusParameter.h"
-#include "otbWrapperRAMParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
+#include "otbWrapperParameterGroup.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
