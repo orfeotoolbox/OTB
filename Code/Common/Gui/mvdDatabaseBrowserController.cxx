@@ -74,6 +74,12 @@ DatabaseBrowserController
 ::Connect( AbstractModel* model )
 {
   DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+
+  QObject::connect(
+    widget, SIGNAL( CurrentDatasetChanged( const QString& )  ),
+    // to:
+    this, SLOT( OnCurrentDatasetChanged( const QString& ) )
+  );
 }
 
 /*******************************************************************************/
@@ -82,6 +88,12 @@ DatabaseBrowserController
 ::Disconnect( AbstractModel* model )
 {
   DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+
+  QObject::disconnect(
+    widget, SIGNAL( CurrentDatasetChanged( const QString& )  ),
+    // from:
+    this, SLOT( OnCurrentDatasetChanged( const QString& ) )
+  );
 }
 
 /*******************************************************************************/
@@ -92,7 +104,7 @@ DatabaseBrowserController
   qDebug() << this << "::ResetWidget()";
 
   // Reset widget.
-  ResetFoo();
+  ResetDatasetTree();
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -101,7 +113,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::ResetFoo()
+::ResetDatasetTree()
 {
   //
   // Access widget.
@@ -132,5 +144,10 @@ DatabaseBrowserController
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+void
+DatabaseBrowserController
+::OnCurrentDatasetChanged( const QString& name )
+{
+}
 
 } // end namespace 'mvd'

@@ -132,7 +132,7 @@ private:
 
   /**
    */
-  void ResetFoo();
+  void ResetDatasetTree();
 
 //
 // Private attributes.
@@ -144,6 +144,9 @@ private:
 // Slots.
 private slots:
 
+  /**
+   */
+  void OnCurrentDatasetChanged( const QString& name );
 };
 
 } // end namespace 'mvd'.
