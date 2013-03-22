@@ -76,7 +76,7 @@ void QtWidgetInputVectorDataParameter::SelectFile()
       {
       std::ostringstream oss;
       oss << "The given file "
-          << static_cast<const char*>(fileDialog.selectedFiles().at(0).toAscii())
+          << fileDialog.selectedFiles().at(0).toAscii().constData()
           << " is not valid.";
       this->GetModel()->SendLogWARNING( oss.str() );
       }
@@ -87,7 +87,7 @@ bool QtWidgetInputVectorDataParameter::SetFileName(const QString& value)
 {
   bool res = true;
   // save value
-  if(m_InputVectorDataParam->SetFromFileName(static_cast<const char*>(value.toAscii())))
+  if(m_InputVectorDataParam->SetFromFileName(value.toAscii().constData()) == true)
     {
     // notify of value change
     QString key( m_InputVectorDataParam->GetKey() );

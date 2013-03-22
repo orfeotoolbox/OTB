@@ -69,7 +69,7 @@ void QtWidgetStringListParameter::DoCreateWidget()
   QHBoxLayout * hLayout = new QHBoxLayout;
   hLayout->setSpacing(sp);
   hLayout->setContentsMargins(sp, sp, sp, sp);
- 
+
   if( m_StringListParam->GetRole() != Role_Output )
     {
     // Button layout
@@ -175,13 +175,13 @@ QtWidgetStringListParameter::UpString()
 
   // Map link between old and new index in the list
   std::map<unsigned int, unsigned int> idMap;
-  
+
   // Init map
   for(unsigned int i=0; i<m_LineEditList.size(); i++ )
     {
     idMap[i] = i;
     }
-  
+
   // If the first item is checked, uncheck it...
   // It won't be moved
   if( m_LineEditList[0]->IsChecked() )
@@ -189,7 +189,7 @@ QtWidgetStringListParameter::UpString()
     m_LineEditList[0]->SetChecked(false);
     }
 
- 
+
   // If other item are checked, up the index
   // Starts at 1 because the first item mustn't move
   for(unsigned int i=1; i<m_LineEditList.size(); i++ )
@@ -203,7 +203,7 @@ QtWidgetStringListParameter::UpString()
     }
 
   this->UpdateStringList( idMap );
- 
+
   this->RecreateStringList();
 }
 
@@ -218,13 +218,13 @@ QtWidgetStringListParameter::DownString()
 
   // Map link between old and new index in the list
   std::map<unsigned int, unsigned int> idMap;
-  
+
   // Init map
   for(unsigned int i=0; i<m_LineEditList.size(); i++ )
     {
     idMap[i] = i;
     }
-  
+
   // If the last item is checked, uncheck it...
   // It won't be moved
   if( m_LineEditList[m_LineEditList.size()-1]->IsChecked() )
@@ -232,7 +232,7 @@ QtWidgetStringListParameter::DownString()
     m_LineEditList[m_LineEditList.size()-1]->SetChecked(false);
     }
 
- 
+
   // If other item are checked, up the index
   // Stops at size-1 because the last item mustn't move
   for(int i=m_LineEditList.size()-2; i>=0; i-- )
@@ -244,7 +244,7 @@ QtWidgetStringListParameter::DownString()
        idMap[idMap[i+1]] = tmp;
       }
     }
-    
+
   this->UpdateStringList( idMap );
 
   this->RecreateStringList();
@@ -261,20 +261,20 @@ QtWidgetStringListParameter::UpdateStringList( std::map<unsigned int, unsigned i
     {
     idMapBis[ idMap[i] ] = i;
     }
-  
+
   // Create the new item list
   for(unsigned int i=0; i<m_LineEditList.size(); i++ )
     {
     m_StringLayout->addWidget( m_LineEditList[ idMapBis[i] ] );
     tmpList.push_back(m_LineEditList[ idMapBis[i] ]);
     }
-  
-  
+
+
   m_LineEditList =  tmpList;
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_StringLayout);
   m_Scroll->setWidget(mainGroup);
-  
+
   this->update();
 
     // notify of value change
@@ -285,7 +285,7 @@ QtWidgetStringListParameter::UpdateStringList( std::map<unsigned int, unsigned i
 
 void QtWidgetStringListParameter::SetString(const QString& value)
 {
-  m_StringListParam->AddString(static_cast<const char*>(value.toAscii()));
+  m_StringListParam->AddString(value.toAscii().constData());
   m_StringListParam->SetUserValue(true);
   QString key( m_StringListParam->GetKey() );
   emit ParameterChanged(key);
@@ -315,7 +315,7 @@ QtWidgetStringListParameter::AddString()
   mainGroup->setLayout(m_StringLayout);
   m_Scroll->setWidget(mainGroup);
 
- 
+
   this->update();
 }
 
@@ -334,7 +334,7 @@ QtWidgetStringListParameter::SupressString()
       tmpList.push_back(m_LineEditList[i]);
       }
     }
-      
+
   m_LineEditList =  tmpList;
 
   QGroupBox *mainGroup = new QGroupBox();
