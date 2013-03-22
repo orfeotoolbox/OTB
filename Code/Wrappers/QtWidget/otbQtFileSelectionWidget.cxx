@@ -49,7 +49,6 @@ void QtFileSelectionWidget::DoCreateWidget()
   m_HLayout->addWidget(m_Checkbox);
 
   m_Input = new QLineEdit;
-
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
@@ -57,7 +56,7 @@ void QtFileSelectionWidget::DoCreateWidget()
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setFixedWidth(30);
- 
+
   connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
   m_HLayout->addWidget(m_Button);
 
@@ -69,7 +68,7 @@ void QtFileSelectionWidget::SelectFile()
   QFileDialog fileDialog;
   fileDialog.setConfirmOverwrite(true);
   fileDialog.setFileMode(QFileDialog::ExistingFile);
-  fileDialog.setNameFilter("Raster files (*)");
+  fileDialog.setNameFilter("All files (*)");
 
   if (fileDialog.exec())
     {
