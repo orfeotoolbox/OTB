@@ -62,13 +62,13 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
         isOk = false;
         break;
         }
-      
+
       // everything went fine, store the object references
       m_ReaderList->PushBack(reader);
       m_ImageList->PushBack(reader->GetOutput());
       }
     }
-  
+
   if( !isOk )
     {
     return false;
@@ -85,8 +85,8 @@ InputImageListParameter::AddNullElement()
 {
   m_ReaderList->PushBack(NULL);
   m_ImageList->PushBack(NULL);
-    SetActive(false);
-    this->Modified();
+  SetActive(false);
+  this->Modified();
 }
 
 bool
@@ -103,12 +103,12 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
       {
       reader->UpdateOutputInformation();
       }
-    catch(itk::ExceptionObject &)
+    catch(itk::ExceptionObject & /*err*/)
       {
       this->ClearValue();
       return false;
       }
-  
+
     // everything went fine, store the object references
     m_ReaderList->PushBack(reader);
     m_ImageList->PushBack(reader->GetOutput());
@@ -116,7 +116,7 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
     this->Modified();
     return true;
     }
-  
+
   return false;
 }
 
@@ -143,8 +143,8 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
       {
       this->ClearValue();
       return false;
-
       }
+
     m_ReaderList->SetNthElement(id, reader);
     m_ImageList->SetNthElement(id, reader->GetOutput());
 
@@ -164,12 +164,13 @@ InputImageListParameter::GetFileNameList() const
     std::vector<std::string> filenames;
     for(unsigned int i=0; i<m_ReaderList->Size(); i++)
       {
-      filenames.push_back( m_ReaderList->GetNthElement(i)->GetFileName() );
+      if( m_ReaderList->GetNthElement(i) )
+        filenames.push_back( m_ReaderList->GetNthElement(i)->GetFileName() );
       }
-    
+
     return filenames;
     }
-  
+
   itkExceptionMacro(<< "No filename value");
 }
 
@@ -183,10 +184,10 @@ InputImageListParameter::GetNthFileName( unsigned int i ) const
       {
       itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ReaderList->Size()<<" images available.");
       }
-    
+
     return m_ReaderList->GetNthElement(i)->GetFileName();
     }
-  
+
   itkExceptionMacro(<< "No filename value");
 }
 
@@ -223,7 +224,7 @@ InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
     {
     return;
     }
-  
+
   m_ImageList = imList;
   m_ReaderList = ImageFileReaderListType::Pointer();
   for(unsigned int i=0; i<m_ImageList->Size(); i++)
@@ -249,7 +250,7 @@ InputImageListParameter::AddImage(FloatVectorImageType* image)
     {
     return;
     }
-  
+
   m_ImageList->PushBack( image );
   m_ReaderList->PushBack( ImageFileReaderType::Pointer() );
 
@@ -263,11 +264,10 @@ InputImageListParameter::HasValue() const
     {
     return false;
     }
-  
 
   bool res(true);
   unsigned int i(0);
-  while(i<m_ImageList->Size() && res==true)
+  while(i < m_ImageList->Size() && res == true)
     {
     res = m_ImageList->GetNthElement(i).IsNotNull();
     i++;
@@ -284,7 +284,7 @@ InputImageListParameter::Erase( unsigned int id )
     {
     itkExceptionMacro(<< "No image "<<id<<". Only "<<m_ImageList->Size()<<" images available.");
     }
-  
+
   m_ImageList->Erase( id );
   m_ReaderList->Erase( id );
 
