@@ -58,19 +58,19 @@ InputVectorDataListParameter::SetListFromFileName(const std::vector<std::string>
         {
         reader->UpdateOutputInformation();
         }
-      catch(itk::ExceptionObject &)
+      catch(itk::ExceptionObject & /*err*/)
         {
         this->ClearValue();
         isOk = false;
         break;
         }
-      
+
       // everything went fine, store the object references
       m_ReaderList->PushBack(reader);
       m_VectorDataList->PushBack(reader->GetOutput());
       }
     }
-  
+
   if( !isOk )
     {
     return false;
@@ -87,8 +87,8 @@ InputVectorDataListParameter::AddNullElement()
 {
   m_ReaderList->PushBack(NULL);
   m_VectorDataList->PushBack(NULL);
-    SetActive(false);
-    this->Modified();
+  SetActive(false);
+  this->Modified();
 }
 
 bool
@@ -101,7 +101,6 @@ InputVectorDataListParameter::AddFromFileName(const std::string & filename)
     {
     VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
     reader->SetFileName(filename);
-
     try
       {
       reader->UpdateOutputInformation();
@@ -110,7 +109,7 @@ InputVectorDataListParameter::AddFromFileName(const std::string & filename)
       {
       return false;
       }
-    
+
     // everything went fine, store the object references
     m_ReaderList->PushBack(reader);
     m_VectorDataList->PushBack(reader->GetOutput());
@@ -137,7 +136,6 @@ InputVectorDataListParameter::SetNthFileName( const unsigned int id, const std::
     {
     VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
     reader->SetFileName(filename);
-
     try
       {
       reader->UpdateOutputInformation();
@@ -150,10 +148,11 @@ InputVectorDataListParameter::SetNthFileName( const unsigned int id, const std::
 
     m_ReaderList->SetNthElement(id, reader);
     m_VectorDataList->SetNthElement(id, reader->GetOutput());
-    
+
     this->Modified();
     return true;
     }
+
   return false;
 }
 
@@ -169,10 +168,9 @@ InputVectorDataListParameter::GetFileNameList() const
       if( m_ReaderList->GetNthElement(i) )
         filenames.push_back( m_ReaderList->GetNthElement(i)->GetFileName() );
       }
-    
+
     return filenames;
     }
-
 
   itkExceptionMacro(<< "No filename value");
 }
@@ -187,10 +185,10 @@ InputVectorDataListParameter::GetNthFileName( unsigned int i ) const
       {
       itkExceptionMacro(<< "No vector data "<<i<<". Only "<<m_ReaderList->Size()<<" vector data available.");
       }
-    
+
     return m_ReaderList->GetNthElement(i)->GetFileName();
     }
- 
+
   itkExceptionMacro(<< "No filename value");
 }
 
@@ -227,7 +225,7 @@ InputVectorDataListParameter::SetVectorDataList(VectorDataListType* vdList)
     {
     return;
     }
-  
+
   m_VectorDataList = vdList;
   m_ReaderList = VectorDataFileReaderListType::Pointer();
   for(unsigned int i=0; i<m_VectorDataList->Size(); i++)
@@ -253,7 +251,7 @@ InputVectorDataListParameter::AddVectorData(VectorDataType* vectorData)
     {
     return;
     }
-  
+
   m_VectorDataList->PushBack( vectorData );
   m_ReaderList->PushBack( VectorDataFileReaderType::Pointer() );
 
@@ -287,7 +285,7 @@ InputVectorDataListParameter::Erase( unsigned int id )
     {
     itkExceptionMacro(<< "No vector data "<<id<<". Only "<<m_VectorDataList->Size()<<" vector data available.");
     }
-  
+
   m_VectorDataList->Erase( id );
   m_ReaderList->Erase( id );
 
