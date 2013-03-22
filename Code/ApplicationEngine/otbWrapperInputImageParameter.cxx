@@ -46,8 +46,6 @@ InputImageParameter::~InputImageParameter()
 bool
 InputImageParameter::SetFromFileName(const std::string& filename)
 {
-  otbMsgDevMacro(<< "SetFromFileName()");
-
   // First clear previous file choosen
   this->ClearValue();
 
@@ -123,7 +121,7 @@ InputImageParameter::GetImage()
   // it without changing the filename, it returns 2 different
   // image pointers
   // Only one image type can be used
-  
+
   // 2 cases : the user set a filename vs. the user set an image
   if (m_UseFilename)
     {
@@ -144,10 +142,10 @@ InputImageParameter::GetImage()
         {
         this->ClearValue();
         }
-      
+
       m_Image = reader->GetOutput();
       m_Reader = reader;
-      
+
       // Pay attention, don't return m_Image because it is a ImageBase...
       return reader->GetOutput();
       }
@@ -251,7 +249,7 @@ InputImageParameter::GetImage()
         }
       }
     }
-    
+
 }
 
 
@@ -260,35 +258,35 @@ TOutputImage*
 InputImageParameter::SimpleCastImage()
 {
   TInputImage* realInputImage = dynamic_cast<TInputImage*>(m_Image.GetPointer());
-  
+
   typedef itk::CastImageFilter<TInputImage, TOutputImage> CasterType;
   typename CasterType::Pointer caster = CasterType::New();
-  
+
   caster->SetInput(realInputImage);
   caster->UpdateOutputInformation();
-  
+
   m_Image = caster->GetOutput();
   m_Caster = caster;
-  
+
   return caster->GetOutput();
 }
-  
-                       
+
+
 template <class TInputImage, class TOutputImage>
 TOutputImage*
 InputImageParameter::CastVectorImageFromImage()
 {
   TInputImage* realInputImage = dynamic_cast<TInputImage*>(m_Image.GetPointer());
-  
+
   typedef ImageToVectorImageCastFilter<TInputImage, TOutputImage> CasterType;
   typename CasterType::Pointer caster = CasterType::New();
-  
+
   caster->SetInput(realInputImage);
   caster->UpdateOutputInformation();
-  
+
   m_Image = caster->GetOutput();
   m_Caster = caster;
-  
+
   return caster->GetOutput();
 }
 
