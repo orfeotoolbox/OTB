@@ -724,6 +724,48 @@ IF(OTB_USE_OPENCV)
 	     ${INPUTDATA}/letter.scale
 	     ${TEMP}/libsvm_model.txt
      )
+     
+     ADD_TEST(leTuImageClassificationFilterNew ${LEARNING_TESTS6}
+       	 otbImageClassificationFilterNew)
+       	 
+     ADD_TEST(leTvImageClassificationFilterLibSVM ${LEARNING_TESTS6}
+     	--compare-image ${NOTOL}
+       	 ${BASELINE}/leSVMImageClassificationFilterOutput.tif
+		 ${TEMP}/leImageClassificationFilterLibSVMOutput.tif
+		 otbImageClassificationFilter
+		 ${INPUTDATA}/ROI_QB_MUL_4.tif
+		 ${INPUTDATA}/svm_model_image
+		 ${TEMP}/leImageClassificationFilterLibSVMOutput.tif
+       	 )
+       	 
+     ADD_TEST(leTvImageClassificationFilterSVM ${LEARNING_TESTS6}
+     	--compare-image ${NOTOL}
+       	 ${BASELINE}/leImageClassificationFilterSVMOutput.tif
+		 ${TEMP}/leImageClassificationFilterSVMOutput.tif
+		 otbImageClassificationFilter
+		 ${INPUTDATA}/ROI_QB_MUL_4.tif
+		 ${INPUTDATA}/ROI_QB_MUL_4_svmModel.txt
+		 ${TEMP}/leImageClassificationFilterSVMOutput.tif
+       	 )
+       	 
+     ADD_TEST(leTuLibSVMMachineLearningModelCanRead ${LEARNING_TESTS6}
+       	 otbLibSVMMachineLearningModelCanRead
+       	 ${INPUTDATA}/svm_model_image
+       	 )
+       	 
+     ADD_TEST(leTuSVMMachineLearningModelCanRead ${LEARNING_TESTS6}
+       	 otbSVMMachineLearningModelCanRead
+       	 ${INPUTDATA}/svm_model_image
+       	 )
+     
+     ADD_TEST(leTuRandomForestsMachineLearningModelCanRead ${LEARNING_TESTS6}
+       	 otbRandomForestsMachineLearningModelCanRead
+       	 ${TEMP}/RandomForestsMachineLearningModel.txt
+       	 )
+     SET_TESTS_PROPERTIES(leTuRandomForestsMachineLearningModelCanRead
+     					PROPERTIES DEPENDS leTvRandomForestsMachineLearningModel)
+
+     
 ENDIF(OTB_USE_OPENCV)
 
 # Testing srcs
@@ -811,6 +853,8 @@ IF(OTB_USE_OPENCV)
 	SET(BasicLearning_SRCS6
 	otbLearningTests6.cxx
 	otbTrainMachineLearningModel.cxx
+	otbImageClassificationFilter.cxx
+	otbMachineLearningModelCanRead.cxx
 	)
 ENDIF(OTB_USE_OPENCV)
 
