@@ -201,8 +201,8 @@ protected:
       y( 0 ),
       xMove( 0 ),
       yMove( 0 ),
-      dx( 0 ),
-      dy( 0 )
+      moveOriginX(0),
+      moveOriginY(0)
     {
     }
 
@@ -210,8 +210,8 @@ protected:
     int y;  // mousePress y
     int xMove;  // for mouseMove x
     int yMove;  // for mouseMove y
-    int dx; // mouseMove in x (Drag)
-    int dy; // mouseMove in y (Drag)
+    int moveOriginX; // mouseMove in x (Drag)
+    int moveOriginY; // mouseMove in y (Drag)
   };
 
 //

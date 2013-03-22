@@ -86,6 +86,9 @@ ImageViewManipulator
   // Update the context with the pressed position for the mouseMoveEvent
   m_MouseContext.xMove = event->x();
   m_MouseContext.yMove = event->y();
+
+  m_MouseContext.moveOriginX = m_NavigationContext.m_ViewportImageRegion.GetIndex()[0];
+  m_MouseContext.moveOriginY = m_NavigationContext.m_ViewportImageRegion.GetIndex()[1];
 }
 
 /******************************************************************************/
@@ -96,20 +99,32 @@ ImageViewManipulator
   m_PreviousIsotropicZoom = m_IsotropicZoom;
 
   // Update the context with the pressed position
-  m_MouseContext.x = event->x();
-  m_MouseContext.y = event->y();
+  m_MouseContext.xMove = event->x();
+  m_MouseContext.yMove = event->y();
+
+  ImageRegionType::OffsetType offset;
+
+  int dx = m_MouseContext.x - m_MouseContext.xMove;
+  int dy = m_MouseContext.y - m_MouseContext.yMove;
+
+  offset[0] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dx/m_IsotropicZoom + 0.5);
+  offset[1] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dy/m_IsotropicZoom + 0.5);
+  IndexType newOrigin;
+  newOrigin[0] = m_MouseContext.moveOriginX;
+  newOrigin[1] = m_MouseContext.moveOriginY;
+
+  newOrigin+=offset;
+
+  // Update the navigation context
+  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
   
-  // Update the mouse context
-  m_MouseContext.dx =  m_MouseContext.xMove - m_MouseContext.x;
-  m_MouseContext.dy =  m_MouseContext.yMove - m_MouseContext.y;
+  currentRegion.SetIndex(newOrigin);
 
-  // moveRegion 
-  this->moveRegion( m_MouseContext.dx,  m_MouseContext.dy);
+  // Constraint the region to the largestPossibleRegion
+  this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
 
-  // update the position of the first press to take into account the
-  // last drag
-  m_MouseContext.xMove = m_MouseContext.x;
-  m_MouseContext.yMove = m_MouseContext.y;
+  // tell the quicklook renderer to update the red square rendering
+  this->PropagateViewportRegionChanged(currentRegion);  
 }
 
 /******************************************************************************/
