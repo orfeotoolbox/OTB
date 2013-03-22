@@ -16,11 +16,12 @@ OTB_CREATE_APPLICATION(NAME           TrainSVMImagesClassifier
 
 OTB_CREATE_APPLICATION(NAME           ValidateSVMImagesClassifier
                        SOURCES        otbValidateSVMImagesClassifier.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)                                            
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
 
 OTB_CREATE_APPLICATION(NAME           SOMClassification
                        SOURCES        otbSOMClassification.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)                                            
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
+
 OTB_CREATE_APPLICATION(NAME           FusionOfClassifications
                        SOURCES        otbFusionOfClassifications.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
@@ -28,7 +29,6 @@ OTB_CREATE_APPLICATION(NAME           FusionOfClassifications
 OTB_CREATE_APPLICATION(NAME           ComputeConfusionMatrix
                        SOURCES        otbComputeConfusionMatrix.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
-
 
 OTB_CREATE_APPLICATION(NAME           ClassificationMapRegularization
                        SOURCES        otbClassificationMapRegularization.cxx
@@ -39,3 +39,7 @@ IF(OTB_USE_OPENCV)
 	                       SOURCES        otbTrainMachineLearningImagesClassifier.cxx
 	                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)
 ENDIF(OTB_USE_OPENCV)	                       
+
+OTB_CREATE_APPLICATION(NAME           WPSSVMClassificationMSCM
+                       SOURCES        WPSSVMClassificationMSCM.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
