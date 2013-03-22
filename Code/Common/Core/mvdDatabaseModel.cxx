@@ -66,7 +66,8 @@ namespace mvd
 DatabaseModel
 ::DatabaseModel( QObject* parent ) :
   AbstractModel( parent ),
-  m_DatasetModels()
+  m_DatasetModels(),
+  m_SelectedDatasetModel( NULL )
 {
 }
 
@@ -104,15 +105,22 @@ DatasetModel*
 DatabaseModel
 ::SelectDatasetModel( const DatasetId& id )
 {
+  qDebug() << this << "::SelectDatasetModel(" << id << ")";
+
+  // Find dataset model or interrupt by exception.
   DatasetModel* datasetModel = FindDatasetModel( id );
 
+  // If dataset model has been found, return it.
   if( datasetModel!=NULL )
     return datasetModel;
 
+  // Otherwise, load it from disk.
   try
     {
+    // Create empty dataset model.
     datasetModel = new DatasetModel( this );
 
+    // Build dataset model.
     assert( I18nApplication::ConstInstance() );
 
     DatasetModel::BuildContext context(
@@ -122,16 +130,26 @@ DatabaseModel
 
     datasetModel->BuildModel( &context );
 
+    // Store dataset model.
+    assert( m_DatasetModels.contains( id ) );
     m_DatasetModels[ id ] = datasetModel;
+
+    // Change selected dataset model.
+    SetSelectedDatasetModel( datasetModel );
     }
+
   catch( std::exception& exc )
     {
+    // If loading was interrupted, delete allocated memory.
     delete datasetModel;
     datasetModel = NULL;
+
+    // And forward interrupting exception.
     throw exc;
     }
 
-  return NULL;
+  // Return loaded and selected dataset model.
+  return datasetModel;
 }
 
 /*******************************************************************************/
@@ -139,26 +157,13 @@ void
 DatabaseModel
 ::ReleaseDatasetModel( const DatasetId& id )
 {
-}
-
-/*****************************************************************************/
-DatasetModel*
-DatabaseModel
-::FindDatasetModel( const DatasetId& id )
-{
-  qDebug() << this << "::FindDatasetModel(" << id << ")";
-  
-  qDebug() << m_DatasetModels;
+  qDebug() << this << "::ReleaseDatasetModel(" << id << ")";
 
   // Find (key, value) pair.
-  DatasetModelMap::iterator it( m_DatasetModels.find( id ) );
+  DatasetModelMap::iterator it( DatasetModelIterator( id ) );
 
-  // Should be present because it should have been initialized in
-  // InitializeDatasetModels().
-  assert( it!=m_DatasetModels.end() );
-
-  // But, in case of, safe return value.
-  return it==m_DatasetModels.end() ? NULL : it.value();
+  delete it.value();
+  it.value() = NULL;
 }
 
 /*******************************************************************************/

@@ -120,6 +120,10 @@ public:
 
   /**
    */
+  inline DatasetModel* GetSelectedDatasetModel();
+
+  /**
+   */
   DatasetModel* SelectDatasetModel( const DatasetId& id );
 
   /**
@@ -140,6 +144,13 @@ public:
 //
 // Signals.
 signals:
+  /**
+   */
+  void AboutToChangeSelectedDatasetModel( DatasetModel*  );
+
+  /**
+   */
+  void SelectedDatasetModelChanged( DatasetModel* );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -184,12 +195,36 @@ private:
    */
   DatasetModel* FindDatasetModel( const DatasetId& id );
 
+  /**
+   */
+  inline
+    DatasetModelMap::const_iterator
+    DatasetModelIterator( const DatasetId& id ) const;
+
+  /**
+   */
+  inline
+    DatasetModelMap::iterator
+    DatasetModelIterator( const DatasetId& id );
+
+  /**
+   */
+  void SetSelectedDatasetModel( const DatasetId& id );
+
+  /**
+   */
+  void SetSelectedDatasetModel( DatasetModel* model );
+
 //
 // Private attributes.
 private:
   /**
    */
   DatasetModelMap m_DatasetModels;
+
+  /**
+   */
+  DatasetModel* m_SelectedDatasetModel;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -204,10 +239,107 @@ private slots:
 /* INLINE SECTION                                                            */
 
 //
+// System includes (sorted by alphabetic order)
+#include <stdexcept>
+
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+
+//
 // Monteverdi deferred includes (sorted by alphabetic order)
+#include "mvdAlgorithm.h"
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+DatasetModel*
+DatabaseModel
+::GetSelectedDatasetModel()
+{
+  return m_SelectedDatasetModel;
+}
+
+/*****************************************************************************/
+inline
+void
+DatabaseModel
+::SetSelectedDatasetModel( const DatasetId& id )
+{
+  SetSelectedDatasetModel( FindDatasetModel( id ) );
+}
+
+/*****************************************************************************/
+inline
+void
+DatabaseModel
+::SetSelectedDatasetModel( DatasetModel* model )
+{
+  emit AboutToChangeSelectedDatasetModel( model );
+
+  m_SelectedDatasetModel = model;
+
+  emit SelectedDatasetModelChanged( model );
+}
+
+/*****************************************************************************/
+inline
+DatasetModel*
+DatabaseModel
+::FindDatasetModel( const DatasetId& id )
+{
+  qDebug() << this << "::FindDatasetModel(" << id << ")";
+
+  // Find (key, value) pair.
+  DatasetModelMap::iterator it( DatasetModelIterator( id ) );
+
+  // Return found element.
+  return it.value();
+}
+
+/*****************************************************************************/
+inline
+DatabaseModel::DatasetModelMap::const_iterator
+DatabaseModel
+::DatasetModelIterator( const QString& id ) const
+{
+  qDebug() << this << "::DatasetModelIterator(" << id << ")";
+
+  // Find (key, value) pair.
+  DatasetModelMap::const_iterator it( m_DatasetModels.find( id ) );
+
+  // Should be present because it should have been initialized in
+  // InitializeDatasetModels().
+  if( it==m_DatasetModels.end() )
+    throw std::out_of_range( ToStdString( id ) );
+
+  // Return found element.
+  return it;
+}
+
+/*****************************************************************************/
+inline
+DatabaseModel::DatasetModelMap::iterator
+DatabaseModel
+::DatasetModelIterator( const QString& id )
+{
+  qDebug() << this << "::DatasetModelIterator(" << id << ")";
+
+  // Find (key, value) pair.
+  DatasetModelMap::iterator it( m_DatasetModels.find( id ) );
+
+  // Should be present because it should have been initialized in
+  // InitializeDatasetModels().
+  if( it==m_DatasetModels.end() )
+    throw std::out_of_range( ToStdString( id ) );
+
+  // Return found element.
+  return it;
+}
 
 } // end namespace 'mvd'
 
