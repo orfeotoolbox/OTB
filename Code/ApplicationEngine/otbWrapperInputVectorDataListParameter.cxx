@@ -49,8 +49,7 @@ InputVectorDataListParameter::SetListFromFileName(const std::vector<std::string>
     const std::string filename = filenames[i];
     // TODO : when the logger will be available, redirect the exception
     // in the logger (like what is done in MsgReporter)
-    if (!filename.empty()
-        && itksys::SystemTools::FileExists(filename.c_str()))
+    if (!filename.empty())
       {
       VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
       reader->SetFileName(filename);
@@ -96,8 +95,7 @@ InputVectorDataListParameter::AddFromFileName(const std::string & filename)
 {
   // TODO : when the logger will be available, redirect the exception
   // in the logger (like what is done in MsgReporter)
-  if (!filename.empty()
-      && itksys::SystemTools::FileExists(filename.c_str()))
+  if (!filename.empty())
     {
     VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
     reader->SetFileName(filename);
@@ -107,6 +105,7 @@ InputVectorDataListParameter::AddFromFileName(const std::string & filename)
       }
     catch(itk::ExceptionObject & /*err*/)
       {
+      this->ClearValue();
       return false;
       }
 
@@ -131,8 +130,7 @@ InputVectorDataListParameter::SetNthFileName( const unsigned int id, const std::
 
   // TODO : when the logger will be available, redirect the exception
   // in the logger (like what is done in MsgReporter)
-  if (!filename.empty()
-      && itksys::SystemTools::FileExists(filename.c_str()))
+  if (!filename.empty())
     {
     VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
     reader->SetFileName(filename);
