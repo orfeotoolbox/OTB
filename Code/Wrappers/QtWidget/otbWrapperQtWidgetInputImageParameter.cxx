@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbWrapperQtWidgetInputImageParameter.h"
+#include <stdexcept>
 
 namespace otb
 {
@@ -65,6 +66,7 @@ void QtWidgetInputImageParameter::SelectFile()
 {
   QFileDialog fileDialog;
   fileDialog.setConfirmOverwrite(true);
+  fileDialog.setFileMode(QFileDialog::ExistingFile);
   fileDialog.setNameFilter("Raster files (*)");
 
   if (fileDialog.exec())
@@ -86,10 +88,11 @@ bool QtWidgetInputImageParameter::SetFileName(const QString& value)
 {
   bool res = true;
   // save value
-  if(m_InputImageParam->SetFromFileName(static_cast<const char*>(value.toAscii())) == true )
+  if(m_InputImageParam->SetFromFileName(value.toAscii().constData()) == true)
     {
     // notify of value change
     QString key( m_InputImageParam->GetKey() );
+
     emit ParameterChanged(key);
     }
   else
