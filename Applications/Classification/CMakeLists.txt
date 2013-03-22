@@ -38,8 +38,4 @@ IF(OTB_USE_OPENCV)
 	OTB_CREATE_APPLICATION(NAME           TrainMachineLearningImagesClassifier
 	                       SOURCES        otbTrainMachineLearningImagesClassifier.cxx
 	                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)
-ENDIF(OTB_USE_OPENCV)	                       
-
-OTB_CREATE_APPLICATION(NAME           WPSSVMClassificationMSCM
-                       SOURCES        WPSSVMClassificationMSCM.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
+ENDIF()
