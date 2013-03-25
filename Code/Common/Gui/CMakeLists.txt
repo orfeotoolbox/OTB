@@ -25,6 +25,7 @@ set( Common_Gui_SOURCES
   mvdQuicklookViewManipulator.cxx
   mvdStatusBarWidget.cxx
   mvdApplicationsToolBox.cxx
+  mvdApplicationsToolBoxController.cxx
 )
 
 #############################################################################
@@ -54,6 +55,7 @@ set( Common_Gui_HEADERS_MOC
   mvdQuicklookViewManipulator.h
   mvdStatusBarWidget.h
   mvdApplicationsToolBox.h
+  mvdApplicationsToolBoxController.h
 )
 
 #############################################################################
@@ -110,6 +112,7 @@ add_library(Monteverdi2_Gui
 #############################################################################
 target_link_libraries(Monteverdi2_Gui
   Monteverdi2_Core
+  Monteverdi2_ApplicationsWrapper
   ${OPENGL_LIBRARIES}
   #Qt4::QtCore
   Qt4::QtGui
