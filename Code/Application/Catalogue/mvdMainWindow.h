@@ -32,6 +32,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtOpenGL>
 
 //
 // System includes (sorted by alphabetic order)
@@ -62,6 +63,10 @@ namespace mvd
 {
 //
 // Internal class pre-declaration.
+// Core
+class DatasetModel;
+// Gui
+class GLImageWidget;
 
 namespace Ui
 {
@@ -141,16 +146,28 @@ protected slots:
    */
   void OnModelChanged( AbstractModel* );
 
+  /**
+   */
+  void OnAboutToChangeSelectedDatasetModel( const DatasetModel* );
+
+  /**
+   */
+  void OnSelectedDatasetModelChanged( DatasetModel* );
+
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
-// Private nested classes.
+// Private types.
 private:
 
 
 //
 // Private methods.
 private:
+
+  /**
+   */
+  GLImageWidget* CreateQuicklookWidget( QGLWidget* sharedGlWidget =NULL );
 
   /** */
   void InitializeDockWidgets();
@@ -166,6 +183,10 @@ private:
   /**
    */
   QDockWidget* m_DatabaseBrowserDock;
+
+  /**
+   */
+  GLImageWidget* m_QuicklookView;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

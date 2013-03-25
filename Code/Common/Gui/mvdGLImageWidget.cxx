@@ -160,7 +160,6 @@ GLImageWidget
     m_ImageViewManipulator,
     SLOT( OnViewportOriginChanged( const IndexType&) )
   );
-
 }
 
 /*******************************************************************************/

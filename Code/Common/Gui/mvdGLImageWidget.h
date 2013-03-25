@@ -67,14 +67,14 @@ class Monteverdi2_EXPORT GLImageWidget :
 //
 // Public methods.
 public:
-  /** Constructor */
+  /** \brief Constructor. */
   GLImageWidget( AbstractViewManipulator * manipulator,
                  AbstractModelRenderer * renderer,
                  QWidget* parent =NULL,
 		 const QGLWidget* shareWidget =NULL,
 		 Qt::WindowFlags f =0 );
 
-  /** Constructor */
+  /** \brief Constructor. */
   GLImageWidget( AbstractViewManipulator * manipulator,
                  AbstractModelRenderer * renderer,
                  QGLContext* context,
@@ -82,7 +82,7 @@ public:
 		 const QGLWidget* shareWidget =NULL,
 		 Qt::WindowFlags f =0 );
   
-  /** Constructor */
+  /** \brief Constructor. */
   GLImageWidget( AbstractViewManipulator * manipulator,
                  AbstractModelRenderer * renderer,
                  const QGLFormat& format,
@@ -90,10 +90,7 @@ public:
 		 const QGLWidget *shareWidget =NULL,
 		 Qt::WindowFlags f =0 );
 
-  /** Constructor */
-  // GLImageWidget( QWidget* parent =NULL, Qt::WindowFlags flags=0);
-
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~GLImageWidget();
 
   /** Set Isotropic-zoom level. */

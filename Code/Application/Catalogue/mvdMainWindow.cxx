@@ -39,8 +39,14 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdDatabaseModel.h"
+#include "Core/mvdI18nApplication.h"
+//
 #include "Gui/mvdDatabaseBrowserController.h"
 #include "Gui/mvdDatabaseBrowserWidget.h"
+#include "Gui/mvdGLImageWidget.h"
+#include "Gui/mvdImageModelRenderer.h"
+#include "Gui/mvdQuicklookViewManipulator.h"
 
 namespace mvd
 {
@@ -70,7 +76,8 @@ MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
   I18nMainWindow( parent, flags ), 
   m_UI( new mvd::Ui::MainWindow() ),
-  m_DatabaseBrowserDock( NULL )
+  m_DatabaseBrowserDock( NULL ),
+  m_QuicklookView( NULL )
 {
   m_UI->setupUi( this );
 }
@@ -90,6 +97,11 @@ MainWindow
   setWindowTitle( PROJECT_NAME );
 
   InitializeDockWidgets();
+
+  assert( m_QuicklookView==NULL );
+  m_QuicklookView = CreateQuicklookWidget();
+
+  setCentralWidget( m_QuicklookView );
 }
 
 /*****************************************************************************/
@@ -112,6 +124,27 @@ MainWindow
 }
 
 /*****************************************************************************/
+GLImageWidget*
+MainWindow
+::CreateQuicklookWidget( QGLWidget* sharedGlWidget )
+{
+  QuicklookViewManipulator* manipulator =
+    new QuicklookViewManipulator( this );
+
+  ImageModelRenderer* renderer =
+    new ImageModelRenderer( this );
+
+  GLImageWidget* quicklookView = new GLImageWidget(
+    manipulator, // (will be reparented.)
+    renderer, // (will be reparented.)
+    this,
+    sharedGlWidget
+  );
+
+  return quicklookView;
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 
 /*****************************************************************************/
@@ -122,6 +155,36 @@ MainWindow
   qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
   SetControllerModel( m_DatabaseBrowserDock, NULL );
+
+  assert( I18nApplication::Instance()!=NULL );
+
+  DatabaseModel* databaseModel =
+    I18nApplication::Instance()->GetModel< DatabaseModel >();
+  // Check that NULL==NULL or (DatabaseModel*)==(AbstractModel*)
+  assert( databaseModel==I18nApplication::Instance()->GetModel() );
+
+  if( databaseModel==NULL )
+    return;
+
+  // Disonnect database-model from main-window when selected
+  // dataset-model is about to change.
+  QObject::disconnect(
+    databaseModel,
+    SIGNAL( AboutToChangeSelectedDatasetModel( const DatasetModel* ) ),
+    // to:
+    this,
+    SLOT( OnAboutToChangeSelectedDatasetModel( const DatasetModel* ) )
+  );
+
+  // Disconnect database-model to main-window when selected
+  // dataset-model has been changed.
+  QObject::disconnect(
+    databaseModel,
+    SIGNAL( SelectedDatasetModelChanged( DatasetModel* ) ),
+    // to:
+    this,
+    SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
+  );
 }
 
 /*****************************************************************************/
@@ -132,6 +195,48 @@ MainWindow
   qDebug() << this << "::OnModelChanged(" << model << ")";
 
   SetControllerModel( m_DatabaseBrowserDock, model );
+
+  DatabaseModel* databaseModel = qobject_cast< DatabaseModel* >( model );
+  assert( databaseModel==model );
+
+  if( databaseModel==NULL )
+    return;
+
+  // Connect database-model to main-window when selected dataset-model
+  // is about to change.
+  QObject::connect(
+    databaseModel,
+    SIGNAL( AboutToChangeSelectedDatasetModel( const DatasetModel* ) ),
+    // to:
+    this,
+    SLOT( OnAboutToChangeSelectedDatasetModel( const DatasetModel* ) )
+  );
+
+  // Connect database-model to main-window when selected dataset-model
+  // has been changed.
+  QObject::connect(
+    databaseModel,
+    SIGNAL( SelectedDatasetModelChanged( DatasetModel* ) ),
+    // to:
+    this,
+    SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
+  );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnAboutToChangeSelectedDatasetModel( const DatasetModel* model )
+{
+  qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnSelectedDatasetModelChanged( DatasetModel* model )
+{
+  qDebug() << this << "::OnSelectedDatasetModelChanged(" << model << ")";
 }
 
 } // end namespace 'mvd'

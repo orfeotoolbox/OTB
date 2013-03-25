@@ -146,7 +146,7 @@ public:
 signals:
   /**
    */
-  void AboutToChangeSelectedDatasetModel( DatasetModel*  );
+  void AboutToChangeSelectedDatasetModel( const DatasetModel*  );
 
   /**
    */

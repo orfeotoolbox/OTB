@@ -174,26 +174,32 @@ MainWindow
     )
   );
   
-  // instanciate the Ql manipulator/renderer 
+  // Instanciate the Ql manipulator/renderer.
   m_QLModelRenderer   = new ImageModelRenderer();
   m_QLViewManipulator = new QuicklookViewManipulator();
 
-  // Connect centralWidget manipulator to Ql renderer when viewportRegionChanged
+  // Connect centralWidget manipulator to Ql renderer when
+  // viewportRegionChanged.
   QObject::connect(
-    m_ImageViewManipulator, SIGNAL( ViewportRegionRepresentationChanged(const PointType&, const PointType&) ), 
-    m_QLModelRenderer, SLOT( OnViewportRegionRepresentationChanged(const PointType&, const PointType&) )
+    m_ImageViewManipulator,
+    SIGNAL( ViewportRegionRepresentationChanged( const PointType&,
+						 const PointType& ) ),
+    // to:
+    m_QLModelRenderer,
+    SLOT( OnViewportRegionRepresentationChanged( const PointType&,
+						 const PointType& ) )
     );
 
-  // Connect ql mousePressEventpressed to centralWidget manipulator
+  // Connect ql mousePressEventpressed to centralWidget manipulator.
   QObject::connect(
-    m_QLViewManipulator, SIGNAL( ViewportRegionChanged(double, double) ), 
-    m_ImageViewManipulator, SLOT( OnViewportRegionChanged(double, double) )
+    m_QLViewManipulator, SIGNAL( ViewportRegionChanged( double, double ) ), 
+    m_ImageViewManipulator, SLOT( OnViewportRegionChanged( double, double ) )
   );
 
-  // add the needed docks 
+  // Add the needed docks.
   InitializeDockWidgets();
 
-  // add needed widget to the status bar
+  // Add needed widget to the status bar.
   InitializeStatusBarWidgets();
 
   // Connect Appllication and MainWindow when selected model is about
