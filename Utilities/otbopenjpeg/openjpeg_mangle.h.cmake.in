@@ -69,6 +69,7 @@
 #define j2k_dump_image_comp_header              @OPJ_MANGLE_PREFIX@_j2k_dump_image_comp_header
 #define j2k_dump_image_header                   @OPJ_MANGLE_PREFIX@_j2k_dump_image_header
 #define j2k_encode                              @OPJ_MANGLE_PREFIX@_j2k_encode
+#define j2k_end_decompress                      @OPJ_MANGLE_PREFIX@_j2k_end_decompress
 #define j2k_get_cstr_index                      @OPJ_MANGLE_PREFIX@_j2k_get_cstr_index
 #define j2k_get_cstr_info                       @OPJ_MANGLE_PREFIX@_j2k_get_cstr_info
 #define j2k_get_tile                            @OPJ_MANGLE_PREFIX@_j2k_get_tile
@@ -154,6 +155,7 @@
 #define jp2_destroy_compress                    @OPJ_MANGLE_PREFIX@_jp2_destroy_compress
 #define jp2_destroy_decompress                  @OPJ_MANGLE_PREFIX@_jp2_destroy_decompress
 #define jp2_dump                                @OPJ_MANGLE_PREFIX@_jp2_dump
+#define jp2_end_decompress                      @OPJ_MANGLE_PREFIX@_jp2_end_decompress
 #define jp2_free_pclr                           @OPJ_MANGLE_PREFIX@_jp2_free_pclr
 #define jp2_get_cstr_index                      @OPJ_MANGLE_PREFIX@_jp2_get_cstr_index
 #define jp2_get_cstr_info                       @OPJ_MANGLE_PREFIX@_jp2_get_cstr_info
@@ -223,6 +225,7 @@
 #define opj_dump_codec                          @OPJ_MANGLE_PREFIX@_opj_dump_codec
 #define opj_encode                              @OPJ_MANGLE_PREFIX@_opj_encode
 #define opj_encode_with_info                    @OPJ_MANGLE_PREFIX@_opj_encode_with_info
+#define opj_end_decompress                      @OPJ_MANGLE_PREFIX@_opj_end_decompress
 #define opj_error_default_callback              @OPJ_MANGLE_PREFIX@_opj_error_default_callback
 #define opj_event_msg                           @OPJ_MANGLE_PREFIX@_opj_event_msg
 #define opj_event_msg_v2                        @OPJ_MANGLE_PREFIX@_opj_event_msg_v2
