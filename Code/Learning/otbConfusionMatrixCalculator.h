@@ -19,7 +19,9 @@
 #ifndef __otbConfusionMatrixCalculator_h
 #define __otbConfusionMatrixCalculator_h
 
-#include "itkProcessObject.h"
+#include "otbMacro.h"
+#include "itkObject.h"
+#include "itkObjectFactory.h"
 #include "itkVariableSizeMatrix.h"
 #include "otbConfusionMatrixMeasurements.h"
 
@@ -50,17 +52,17 @@ namespace otb
  */
 template <class TRefListLabel, class TProdListLabel>
 class ITK_EXPORT ConfusionMatrixCalculator :
-  public itk::ProcessObject
+  public itk::Object
 {
 public:
   /** Standard class typedefs */
   typedef ConfusionMatrixCalculator                 Self;
-  typedef itk::ProcessObject                        Superclass;
+  typedef itk::Object                               Superclass;
   typedef itk::SmartPointer<Self>                   Pointer;
   typedef itk::SmartPointer<const Self>             ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ConfusionMatrixCalculator, itk::ProcessObject);
+  itkTypeMacro(ConfusionMatrixCalculator, itk::Object);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -83,7 +85,14 @@ public:
   /** Type for the measurement */
   typedef itk::VariableLengthVector<double>         MeasurementType;
 
-  virtual void Update();
+
+  /**
+   * \deprecated in OTB 3.16, please use void Compute(void) instead.
+   */
+  itkLegacyMacro( virtual void Update() );
+
+  /** Computes m_ConfusionMatrix and then the measurements over it. */
+  void Compute(void);
 
   /** Accessors */
   itkSetObjectMacro(ReferenceLabels, RefListLabelType);
@@ -131,8 +140,6 @@ protected:
   virtual ~ConfusionMatrixCalculator() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Triggers the computation of the confusion matrix */
-  void GenerateData(void);
 
 private:
   ConfusionMatrixCalculator(const Self &); //purposely not implemented

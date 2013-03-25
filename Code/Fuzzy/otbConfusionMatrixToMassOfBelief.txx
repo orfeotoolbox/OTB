@@ -47,7 +47,7 @@ ConfusionMatrixToMassOfBelief<TConfusionMatrix>
 ::GenerateData()
 {
   this->m_ConfMatMeasurements->SetConfusionMatrix(m_ConfusionMatrix);
-  this->m_ConfMatMeasurements->Update();
+  this->m_ConfMatMeasurements->Compute();
 
   typename MapOfIndicesType::iterator itMapOfIndices;
 

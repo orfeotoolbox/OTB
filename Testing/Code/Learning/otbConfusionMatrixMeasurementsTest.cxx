@@ -66,7 +66,7 @@ int otbConfusionMatrixMeasurementsTest(int argc, char* argv[])
 
   confMatMeasurements->SetMapOfClasses(mapOfClasses);
   confMatMeasurements->SetConfusionMatrix(confMat);
-  confMatMeasurements->Update();
+  confMatMeasurements->Compute();
 
   // mapOfIndices[index] = label associated to the rows/columns of the confusion matrix
   MapOfIndicesType mapOfIndices;

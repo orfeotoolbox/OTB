@@ -18,8 +18,6 @@
 #ifndef __otbConfusionMatrixCalculator_txx
 #define __otbConfusionMatrixCalculator_txx
 
-#include <algorithm>
-#include "otbMacro.h"
 
 namespace otb
 {
@@ -35,8 +33,6 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
   m_NumberOfClasses(0)
 
 {
-  this->SetNumberOfRequiredInputs(2);
-  this->SetNumberOfRequiredOutputs(1);
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses, m_NumberOfClasses);
   m_ConfusionMatrix.Fill(0);
   m_ConfMatMeasurements = ConfusionMatrixMeasurementsType::New();
@@ -44,18 +40,25 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
   m_ProducedLabels = ProdListLabelType::New();
 }
 
+
+#if !defined(ITK_LEGACY_REMOVE)
 template <class TRefListLabel, class TProdListLabel>
 void
 ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
 ::Update()
 {
-  this->GenerateData();
+  itkWarningMacro("otb::ConfusionMatrixCalculator::Update() is DEPRECATED. "
+                  "Use otb::ConfusionMatrixCalculator::Compute() instead.");
+
+  this->Compute();
 }
+#endif
+
 
 template <class TRefListLabel, class TProdListLabel>
 void
 ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
-::GenerateData()
+::Compute()
 {
   typename RefListLabelType::ConstIterator  refIterator = m_ReferenceLabels->Begin();
   typename ProdListLabelType::ConstIterator prodIterator = m_ProducedLabels->Begin();
@@ -116,7 +119,7 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
 
 
   m_ConfMatMeasurements->SetConfusionMatrix(m_ConfusionMatrix);
-  m_ConfMatMeasurements->Update();
+  m_ConfMatMeasurements->Compute();
 
   this->m_TruePositiveValues = m_ConfMatMeasurements->GetTruePositiveValues();
   this->m_FalseNegativeValues = m_ConfMatMeasurements->GetFalseNegativeValues();

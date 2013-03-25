@@ -19,7 +19,8 @@
 #ifndef __otbConfusionMatrixMeasurements_h
 #define __otbConfusionMatrixMeasurements_h
 
-#include "itkProcessObject.h"
+#include "itkObject.h"
+#include "itkObjectFactory.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
 
@@ -45,17 +46,17 @@ namespace otb
  */
 template <class TConfusionMatrix = itk::VariableSizeMatrix<double> >
 class ITK_EXPORT ConfusionMatrixMeasurements :
-  public itk::ProcessObject
+  public itk::Object
 {
 public:
   /** Standard class typedefs */
   typedef ConfusionMatrixMeasurements               Self;
-  typedef itk::ProcessObject                        Superclass;
+  typedef itk::Object                               Superclass;
   typedef itk::SmartPointer<Self>                   Pointer;
   typedef itk::SmartPointer<const Self>             ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ConfusionMatrixMeasurements, itk::ProcessObject);
+  itkTypeMacro(ConfusionMatrixMeasurements, itk::Object);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -70,7 +71,9 @@ public:
   /** Type for the measurement */
   typedef itk::VariableLengthVector<double>         MeasurementType;
 
-  virtual void Update();
+
+  /** Computes the measurements over m_ConfusionMatrix. */
+  void Compute(void);
 
   /** Accessors */
   itkSetMacro(ConfusionMatrix, ConfusionMatrixType);
@@ -138,8 +141,6 @@ protected:
   virtual ~ConfusionMatrixMeasurements() {}
   //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Triggers the computation of the confusion matrix */
-  void GenerateData(void);
 
 private:
   ConfusionMatrixMeasurements(const Self &); //purposely not implemented

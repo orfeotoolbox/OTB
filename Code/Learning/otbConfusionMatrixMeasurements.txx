@@ -18,8 +18,6 @@
 #ifndef __otbConfusionMatrixMeasurements_txx
 #define __otbConfusionMatrixMeasurements_txx
 
-#include <algorithm>
-#include "otbMacro.h"
 
 namespace otb
 {
@@ -36,24 +34,17 @@ ConfusionMatrixMeasurements<TConfusionMatrix>
   m_NumberOfSamples(0)
 
 {
-  this->SetNumberOfRequiredInputs(1);
-  this->SetNumberOfRequiredOutputs(1);
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses, m_NumberOfClasses);
   m_ConfusionMatrix.Fill(0);
 }
 
-template <class TConfusionMatrix>
-void
-ConfusionMatrixMeasurements<TConfusionMatrix>
-::Update()
-{
-  this->GenerateData();
-}
+
+
 
 template <class TConfusionMatrix>
 void
 ConfusionMatrixMeasurements<TConfusionMatrix>
-::GenerateData()
+::Compute()
 {
   m_NumberOfClasses = m_ConfusionMatrix.Rows();
 
@@ -129,30 +120,29 @@ ConfusionMatrixMeasurements<TConfusionMatrix>
 
   const double epsilon = 0.0000000001;
 
-  if (m_NumberOfClasses > 2)
+  for (unsigned int i = 0; i < m_NumberOfClasses; ++i)
     {
-    for (unsigned int i = 0; i < m_NumberOfClasses; ++i)
+    if (vcl_abs(this->m_TruePositiveValues[i] + this->m_FalsePositiveValues[i]) > epsilon)
       {
-      if (vcl_abs(this->m_TruePositiveValues[i] + this->m_FalsePositiveValues[i]) > epsilon)
-        {
-        this->m_Precisions[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
-            + this->m_FalsePositiveValues[i]);
-        }
+      this->m_Precisions[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
+          + this->m_FalsePositiveValues[i]);
+      }
 
-      if (vcl_abs(this->m_TruePositiveValues[i] + this->m_FalseNegativeValues[i]) > epsilon)
-        {
-        this->m_Recalls[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
+    if (vcl_abs(this->m_TruePositiveValues[i] + this->m_FalseNegativeValues[i]) > epsilon)
+      {
+      this->m_Recalls[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
           + this->m_FalseNegativeValues[i]);
-        }
+      }
 
-      if (vcl_abs(this->m_Recalls[i] + this->m_Precisions[i]) > epsilon)
-        {
-        this->m_FScores[i] = 2 * this->m_Recalls[i] * this->m_Precisions[i]
-            / (this->m_Recalls[i] + this->m_Precisions[i]);
-        }
+    if (vcl_abs(this->m_Recalls[i] + this->m_Precisions[i]) > epsilon)
+      {
+      this->m_FScores[i] = 2 * this->m_Recalls[i] * this->m_Precisions[i]
+          / (this->m_Recalls[i] + this->m_Precisions[i]);
       }
     }
-  else
+
+
+  if (m_NumberOfClasses == 2)
     {
     if (vcl_abs(this->m_TruePositiveValue + this->m_FalsePositiveValue) > epsilon)
       {

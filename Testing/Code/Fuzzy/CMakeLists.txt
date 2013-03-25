@@ -145,6 +145,18 @@ ADD_TEST(fzDSFusionOptRecTestWithExtraLabelsBig ${Fuzzy_TESTS3}
  n o p q r s t u v w x y z
  )
  
+ADD_TEST(fzDSFusionOptRecTestConfMatTestPrecision ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptRecConfMatTest
+ PRECISION)
+ 
+ADD_TEST(fzDSFusionOptRecTestConfMatTestRecall ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptRecConfMatTest
+ RECALL)
+ 
+ADD_TEST(fzDSFusionOptRecTestConfMatTestAccuracy ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptRecConfMatTest
+ ACCURACY)
+ 
 ADD_TEST(fzTuConfusionMatrixToMassOfBeliefNew ${Fuzzy_TESTS3}
   otbConfusionMatrixToMassOfBeliefNew)
   

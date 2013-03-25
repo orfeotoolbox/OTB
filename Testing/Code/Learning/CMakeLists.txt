@@ -551,10 +551,10 @@ otbConfusionMatrixCalculatorWrongSize 1000 4)
 SET_TESTS_PROPERTIES(leTvConfusionMatrixCalculatorWrongSize PROPERTIES WILL_FAIL true)
 
 ADD_TEST(leTvConfusionMatrixCalculatorUpdate ${LEARNING_TESTS4}
-otbConfusionMatrixCalculatorUpdate 4 3)
+otbConfusionMatrixCalculatorCompute 4 3)
 
 ADD_TEST(leTvConfusionMatrixCalculatorUpdateWithBaseline ${LEARNING_TESTS4}
-otbConfusionMatrixCalculatorUpdateWithBaseline)
+otbConfusionMatrixCalculatorComputeWithBaseline)
 
 # -------            otb::ConfusionMatrixMeasurements   -----------------------------
 ADD_TEST(leTuConfusionMatrixMeasurementsNew ${LEARNING_TESTS4}

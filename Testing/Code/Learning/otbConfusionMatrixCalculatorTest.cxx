@@ -73,7 +73,7 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
   calculator->SetReferenceLabels(refLabels);
   calculator->SetProducedLabels(prodLabels);
 
-  //calculator->Update();
+  //calculator->Compute();
 
   return EXIT_SUCCESS;
 }
@@ -127,7 +127,7 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
 
   try
     {
-    calculator->Update();
+    calculator->Compute();
     }
   catch (itk::ExceptionObject)
     {
@@ -137,7 +137,7 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
+int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
 {
 
   if (argc != 3)
@@ -193,7 +193,7 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
   calculator->SetProducedLabels(prodLabels);
 
   //calculator->SetConfusionMatrix(confusionMatrix);
-  calculator->Update();
+  calculator->Compute();
 
   if (static_cast<int>(calculator->GetNumberOfClasses()) != nbClasses)
     {
@@ -266,7 +266,7 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
 }
 
 
-int otbConfusionMatrixCalculatorUpdateWithBaseline(int argc, char* argv[])
+int otbConfusionMatrixCalculatorComputeWithBaseline(int argc, char* argv[])
 {
   typedef itk::VariableLengthVector<int>          PLabelType;
   typedef itk::Statistics::ListSample<PLabelType> PListLabelType;
@@ -326,7 +326,7 @@ int otbConfusionMatrixCalculatorUpdateWithBaseline(int argc, char* argv[])
   calculator->SetReferenceLabels(refLabels);
   calculator->SetProducedLabels(prodLabels);
 
-  calculator->Update();
+  calculator->Compute();
 
   CalculatorType::ConfusionMatrixType confmat = calculator->GetConfusionMatrix();
 
