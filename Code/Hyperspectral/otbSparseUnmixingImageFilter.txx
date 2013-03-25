@@ -51,7 +51,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
   m_AngleListFilter = AngleListFilterType::New();
   m_AngleListFilter->SetThresholdValue( 10. );
 
-    m_Histogram = HistogramType::New();
+  m_Histogram = HistogramType::New();
   m_Transformer = TransformFilterType::New();
 }
 
