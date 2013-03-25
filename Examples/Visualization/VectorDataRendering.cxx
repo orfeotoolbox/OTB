@@ -152,7 +152,10 @@ int main( int argc, char * argv[] )
   projection->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   projection->SetOutputOrigin(reader->GetOutput()->GetOrigin());
   projection->SetOutputSpacing(reader->GetOutput()->GetSpacing());
-  projection->SetDEMDirectory(demdirectory); // a good DEM is compulsory to get a reasonable registration
+
+  // Manage the DEM through the DEMHandler which is the unique entry point for DEM
+  // The registration will be better.
+  otb::DEMHandler::Instance()->OpenDEMDirectory(demdirectory);
 
   // get some usefull information from the image to make sure that we are
   // going to render the vector data in the same geometry
