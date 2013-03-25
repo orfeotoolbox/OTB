@@ -252,7 +252,7 @@ ImageFileWriter<TInputImage>
     {
     return 0;
     }
-  
+
   return static_cast<const InputImageType*>(this->ProcessObject::GetInput(0));
 }
 
@@ -267,7 +267,7 @@ ImageFileWriter<TInputImage>
   // Update output information on input image
   InputImagePointer inputPtr =
     const_cast<InputImageType *>(this->GetInput());
-  
+
   // Make sure input is available
   if ( inputPtr.IsNull() )
     {
@@ -331,7 +331,7 @@ ImageFileWriter<TInputImage>
           {
           itkWarningMacro("Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        
+
         this->SetTileDimensionTiledStreaming(static_cast<unsigned int>(sizevalue));
         }
       }
@@ -470,7 +470,38 @@ ImageFileWriter<TInputImage>
    */
   inputPtr->UpdateOutputInformation();
   InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
-  
+
+  /** Parse region size modes */
+  if(m_FilenameHelper->RegionSizeIsSet())
+    {
+    std::cout << "need to set image io" << std::endl;
+
+    std::string buf; // Have a buffer string
+    std::stringstream ss(m_FilenameHelper->GetRegionSize()); // Insert the string into a stream
+
+    std::vector<unsigned int> tokens; // Create vector to hold our words
+
+    while (ss >> buf)
+      {
+      tokens.push_back(atoi(buf.c_str()));
+      }
+
+    typename InputImageType::IndexType start;
+    typename InputImageType::SizeType  size;
+
+    size[0]  = tokens[2];  // size along X
+    size[1]  = tokens[3];  // size along Y
+
+    start[0] = tokens[0];  // first index on X
+    start[1] = tokens[2];  // first index on Y
+
+    inputRegion.SetSize(size);
+    inputRegion.SetIndex(start);
+    }
+
+
+
+
   /**
    * Determine of number of pieces to divide the input.  This will be the
    * minimum of what the user specified via SetNumberOfDivisionsStrippedStreaming()
@@ -654,18 +685,18 @@ ImageFileWriter<TInputImage>
   //
   //okay, now extract the data as a raw buffer pointer
   const void* dataPtr = (const void*) input->GetBufferPointer();
-  
+
   // check that the image's buffered region is the same as
   // ImageIO is expecting and we requested
   InputImageRegionType ioRegion;
-  
+
   // No shift of the ioRegion from the buffered region is expected
   typename InputImageRegionType::IndexType tmpIndex;
   tmpIndex.Fill(0);
   itk::ImageIORegionAdaptor<TInputImage::ImageDimension>::
     Convert(m_ImageIO->GetIORegion(), ioRegion, tmpIndex);
   InputImageRegionType bufferedRegion = input->GetBufferedRegion();
-  
+
   // before this test, bad stuff would happend when they don't match
   if (bufferedRegion != ioRegion)
     {
@@ -673,7 +704,7 @@ ImageFileWriter<TInputImage>
       {
       itkDebugMacro("Requested stream region does not match generated output");
       itkDebugMacro("input filter may not support streaming well");
-      
+
       cacheImage = InputImageType::New();
       cacheImage->CopyInformation(input);
       cacheImage->SetBufferedRegion(ioRegion);
@@ -681,18 +712,18 @@ ImageFileWriter<TInputImage>
 
       typedef itk::ImageRegionConstIterator<TInputImage> ConstIteratorType;
       typedef itk::ImageRegionIterator<TInputImage>      IteratorType;
-      
+
       ConstIteratorType in(input, ioRegion);
       IteratorType out(cacheImage, ioRegion);
-     
+
       // copy the data into a buffer to match the ioregion
       for (in.GoToBegin(), out.GoToBegin(); !in.IsAtEnd(); ++in, ++out)
         {
         out.Set(in.Get());
         }
-      
+
       dataPtr = (const void*) cacheImage->GetBufferPointer();
-      
+
       }
     else
       {

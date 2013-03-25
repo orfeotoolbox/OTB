@@ -54,7 +54,7 @@ SET(IO_TESTS23    ${CXX_TEST_PATH}/otbIOTests23)
 SET(IO_TESTS24    ${CXX_TEST_PATH}/otbIOTests24)
 
 # --------------------------------------------------------------------------------
-# Manage PHR data input   
+# Manage PHR data input
 IF(OTB_DATA_USE_LARGEINPUT)
    SET(GenericTestPHR_DATA_INPUTS
       ${GenericTestPHR_DATA_INPUTS}
@@ -65,7 +65,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
       ${LARGEINPUT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R1C1.JP2
       ${LARGEINPUT}/PLEIADES/PARIS_JP2_DIMAPv1_ORTHO_PMS_lossless_12bits/IMGPHR_PHR1A_ORTHO_20120502_IPU_20120430_6347-003_V1/IMG_R1C1.JP2
    )
-   
+
    SET(GenericTestPHR_DATA_TYPES
       ${GenericTestPHR_DATA_TYPES}
       SIMUL_PHR_JP2_ORTHO_DIMAPv2_PMS-N_lossy_12bits
@@ -74,8 +74,8 @@ IF(OTB_DATA_USE_LARGEINPUT)
       PHR_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits
       PHR_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits
       PHR_JP2_DIMAPv1_ORTHO_PMS_lossless_12bits
-   )      
-ENDIF(OTB_DATA_USE_LARGEINPUT)   
+   )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 IF(OTB_DATA_USE_SPOTPHRINPUT)
   SET(GenericTestPHR_SPOT_DATA_INPUTS
@@ -95,9 +95,9 @@ IF(OTB_DATA_USE_SPOTPHRINPUT)
 	  SPOT_PHR_PRIMARY_MS
 	  SPOT_PHR_PRIMARY_P
 	 )
-	 
-   SET(GenericTestPHR_DATA_INPUTS ${GenericTestPHR_DATA_INPUTS} ${GenericTestPHR_SPOT_DATA_INPUTS})	  
-   SET(GenericTestPHR_DATA_TYPES ${GenericTestPHR_DATA_TYPES} ${GenericTestPHR_SPOT_DATA_TYPES})   
+
+   SET(GenericTestPHR_DATA_INPUTS ${GenericTestPHR_DATA_INPUTS} ${GenericTestPHR_SPOT_DATA_INPUTS})
+   SET(GenericTestPHR_DATA_TYPES ${GenericTestPHR_DATA_TYPES} ${GenericTestPHR_SPOT_DATA_TYPES})
 ENDIF(OTB_DATA_USE_SPOTPHRINPUT)
 
 IF(OTB_DATA_USE_CNESPHRINPUT)
@@ -112,17 +112,17 @@ IF(OTB_DATA_USE_CNESPHRINPUT)
 	  CNES_PHR_PRIMARY_PMS_R1C1_2012-02-22
 	  CNES_PHR_PRIMARY_PMS_R3C1_2012-02-22
 	 )
-  
-  SET(GenericTestPHR_DATA_INPUTS ${GenericTestPHR_DATA_INPUTS} ${GenericTestPHR_CNES_DATA_INPUTS})	 
-  SET(GenericTestPHR_DATA_TYPES ${GenericTestPHR_DATA_TYPES} ${GenericTestPHR_CNES_DATA_TYPES})    	 	 
+
+  SET(GenericTestPHR_DATA_INPUTS ${GenericTestPHR_DATA_INPUTS} ${GenericTestPHR_CNES_DATA_INPUTS})
+  SET(GenericTestPHR_DATA_TYPES ${GenericTestPHR_DATA_TYPES} ${GenericTestPHR_CNES_DATA_TYPES})
 ENDIF(OTB_DATA_USE_CNESPHRINPUT)
 
 # Use in debug to show the variables
-#SET( GenericTestPHR_TESTNB 0)  
+#SET( GenericTestPHR_TESTNB 0)
 #FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
 #  LIST(GET GenericTestPHR_DATA_TYPES  ${GenericTestPHR_TESTNB} current_type   )
 #  MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
-#  
+#
 #  MESSAGE(STATUS ${current_file})
 #  MESSAGE(STATUS ${current_type})
 #
@@ -628,16 +628,16 @@ ADD_TEST(ioTvGDALImageIO_JPEG_99 ${IO_TESTS2}
 
 ADD_TEST(ioTuGDALOverviewsBuilder ${IO_TESTS2}
          otbGDALOverviewsBuilderNew)
-         
+
 ADD_TEST(ioTvGDALOverviewsBuilder_TIFF ${IO_TESTS2}
          otbGDALOverviewsBuilder
          ${TEMP}/ioTvGDALImageIO_Tiff_NoOption.tif
          4
          )
 SET_TESTS_PROPERTIES(ioTvGDALOverviewsBuilder_TIFF PROPERTIES DEPENDS ioTvGDALImageIO_Tiff_NoOption)
-         
-                  
-         
+
+
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -955,14 +955,14 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 IF(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
-  
+
   SET( GenericTestPHR_TESTNB 0)
-  
+
   FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
     LIST(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type )
     MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
-    
-      # Get and manipulate ImageKeywordlist 
+
+      # Get and manipulate ImageKeywordlist
       ADD_TEST(ioTvImageKeywordlist_${current_type} ${IO_TESTS4}
                --ignore-order --compare-n-ascii ${NOTOL} 2
                  ${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
@@ -2079,7 +2079,7 @@ ADD_TEST(ioTvMultiResolutionReading0 ${IO_TESTS13}
       ${INPUTDATA}/bretagne.j2k?&resol=0
       ${TEMP}/ioTvMultiResolutionReading0.txt
       )
-     
+
 ADD_TEST(ioTvMultiResolutionReading3 ${IO_TESTS13}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
                              ${TEMP}/ioTvMultiResolutionReading3.txt
@@ -2097,14 +2097,14 @@ ADD_TEST(ioTvMultiResolutionReadingInfo ${IO_TESTS13}
       ${INPUTDATA}/bretagne.j2k
       ${TEMP}/ioTvMultiResolutionReadingInfoOut.txt
       )
-      
+
 ADD_TEST(ioTvMultiResolutionReadingInfo_TIFF ${IO_TESTS13}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingInfoOut_tiff.txt
                             ${TEMP}/ioTvMultiResolutionReadingInfoOut_tiff.txt
       otbMultiResolutionReadingInfo
       ${INPUTDATA}/maur_rgb.tif
       ${TEMP}/ioTvMultiResolutionReadingInfoOut_tiff.txt
-      )   
+      )
 
 IF(OTB_DATA_USE_LARGEINPUT)
     ADD_TEST(ioTvMultiResolutionReadingInfo_TIFF2 ${IO_TESTS13}
@@ -2113,7 +2113,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
           otbMultiResolutionReadingInfo
           ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
           ${TEMP}/ioTvMultiResolutionReadingInfoOut_tiff2.txt
-          ) 
+          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # Tests which read data in JPEG2000 files.
@@ -2290,7 +2290,7 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
   LIST(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
   MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
   STRING(REGEX MATCH "TIFF" PHR_TIFF_FILE ${current_type})
-  
+
   IF (NOT PHR_TIFF_FILE)
     # CanRead
     ADD_TEST(ioTuJ2KImageIOCanRead_${current_type} ${IO_TESTS13}
@@ -2298,7 +2298,7 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
                 ${current_file}
             )
   ENDIF (NOT PHR_TIFF_FILE)
-    
+
     # Read info from the input file
     ADD_TEST(ioTvVectorImageReadingInfo_${current_type} ${IO_TESTS13}
              --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
@@ -2318,9 +2318,9 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
                 ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
              )
   ENDIF (NOT PHR_TIFF_FILE)
-            
-  IF (NOT PHR_TIFF_FILE)          
-    # Extract resolution of input file        
+
+  IF (NOT PHR_TIFF_FILE)
+    # Extract resolution of input file
     ADD_TEST(ioTvMultiResolutionReadingInfo_${current_type} ${IO_TESTS13}
              --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingInfo_${current_type}.txt
                                        ${TEMP}/ioTvMultiResolutionReadingInfo_${current_type}_OUT.txt
@@ -2329,7 +2329,7 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
                 ${TEMP}/ioTvMultiResolutionReadingInfo_${current_type}_OUT.txt
             )
 
-  
+
     # Decode an area inside one tile
     ADD_TEST(ioTvReaderWriterJP22TIF_${current_type}_1 ${COMMON_TESTS2}
 	         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_1.tif
@@ -2340,7 +2340,7 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
                 -startX 256 -startY 512 -sizeX 256 -sizeY 128
                 -time
             )
-            
+
     # Decode an area which need 4 tiles
     ADD_TEST(ioTvReaderWriterJP22TIF_${current_type}_2 ${COMMON_TESTS2}
              --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_2.tif
@@ -2351,8 +2351,8 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
                 -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
                 -time
             )
-            
-    # Decode the whole image with the lowest resolution (res=5) 
+
+    # Decode the whole image with the lowest resolution (res=5)
     # (take only one channel to put the file in baseline repository)
     ADD_TEST(ioTvReaderWriterJP22TIF_${current_type}_res5 ${COMMON_TESTS2}
              --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_res5.tif
@@ -2364,7 +2364,7 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
                 -time
          )
   ENDIF (NOT PHR_TIFF_FILE)
-                           
+
 ENDFOREACH()
 
 ENDIF(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
@@ -2837,7 +2837,7 @@ SET( GenericTestPHR_TESTNB 0)
 FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
   LIST(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
   MATH(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
-   
+
   ADD_TEST(ioTvImageMetadataInterfaceBaseTest_${current_type} ${IO_TESTS18}
            --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_${current_type}.txt
                                     ${TEMP}/ioTvImageMetadataInterfaceBase_${current_type}_OUT.txt
@@ -3302,7 +3302,7 @@ ADD_TEST(ioTvMultiDatasetReading2 ${IO_TESTS22}
       ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
       ${TEMP}/ioTvMultiDatasetReading2.txt
       )
-      
+
 # Test to check behavior of function readerGDAL->GetSubDatasetInfo() which return info about subdataset.
 ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS22}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
@@ -3686,7 +3686,7 @@ ADD_TEST(ioTvExtendedFilenameToReaderOptions_FullOptions ${IO_TESTS24}
         /home/data/filename.tif?&geom=/home/dev/custom.geom&sdataidx=2&resol=4&skipcarto=On
         ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
         )
-        
+
 ADD_TEST(ioTvExtendedFilenameToWriterOptions_NoOptions ${IO_TESTS24}
 --compare-ascii ${NOTOL}
          ${BASELINE}/ioTvExtendedFilenameToWriterOptions_NoOptions.txt
@@ -3704,7 +3704,7 @@ ADD_TEST(ioTvExtendedFilenameToWriterOptions_FullOptions ${IO_TESTS24}
         /home/data/filename.tif?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024
         ${TEMP}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
         )
-        
+
 ADD_TEST(ioTvImageFileReaderExtendedFileName_GEOM ${IO_TESTS24}
 --compare-ascii ${NOTOL}
          ${BASELINE}/ioImageFileReaderWithExternalGEOMFile.txt
@@ -3712,7 +3712,7 @@ ADD_TEST(ioTvImageFileReaderExtendedFileName_GEOM ${IO_TESTS24}
 	otbImageFileReaderWithExtendedFilename
         ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
         ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
-        ${TEMP}/ioImageFileReaderWithExternalGEOMFile_pr.txt        
+        ${TEMP}/ioImageFileReaderWithExternalGEOMFile_pr.txt
         )
 
 ADD_TEST(ioTvImageFileReaderExtendedFileName_SkipPR ${IO_TESTS24}
@@ -3747,17 +3747,17 @@ ADD_TEST(ioTvImageFileReaderExtendedFileName_mix1 ${IO_TESTS24}
 
 ADD_TEST(ioTvImageFileWriterExtendedFileName_GEOM ${IO_TESTS24}
 --ignore-order --compare-ascii ${NOTOL}
-         ${INPUTDATA}/ToulouseExtract_WithGeom.geom         
+         ${INPUTDATA}/ToulouseExtract_WithGeom.geom
          ${TEMP}/ioImageFileWriterExtendedFileName_GEOM.geom
 --ignore-lines-with 2 ce90_absolute ce90_relative
 	otbImageFileWriterWithExtendedFilename
         ${INPUTDATA}/ToulouseExtract_WithGeom.tif
         ${TEMP}/ioImageFileWriterExtendedFileName_GEOM.tif?&writegeom=ON
         )
-        
+
 ADD_TEST(ioTvImageFileWriterExtendedFileName_gdalco ${IO_TESTS24}
 --compare-image ${NOTOL}
-         ${BASELINE}/ioTvGDALImageIO_JPEG_20.jpg      
+         ${BASELINE}/ioTvGDALImageIO_JPEG_20.jpg
          ${TEMP}/ioImageFileWriterExtendedFileName_gdalco.jpg
 	otbImageFileWriterWithExtendedFilename
         ${INPUTDATA}/maur_rgb_24bpp.tif
@@ -3810,8 +3810,17 @@ ENDFOREACH(streaming_sizemode)
 ENDFOREACH(streaming_type)
 
 
+#region size options test
 
-        
+ADD_TEST(ioTvImageFileWriterExtendedFileName_RegionSize ${IO_TESTS24}
+#--compare-image ${NOTOL}
+ #        ${INPUTDATA}/maur_rgb_24bpp.tif
+  #       ${TEMP}/ioImageFileWriterExtendedFileName_streamingAuto.tif
+  otbImageFileWriterWithExtendedFilename
+        ${INPUTDATA}/maur_rgb_24bpp.tif
+        "${TEMP}/ioImageFileWriterExtendedFileName_regionSize.tif?&regionsize=0 0 10 10"
+        )
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx

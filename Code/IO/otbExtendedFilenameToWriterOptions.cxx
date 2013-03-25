@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "otbExtendedFilenameToWriterOptions.h"
 #include <boost/algorithm/string.hpp>
+#include <itksys/RegularExpression.hxx>
 
 namespace otb
 {
@@ -41,6 +42,7 @@ ExtendedFilenameToWriterOptions
   m_Options.optionList.push_back("streaming:type");
   m_Options.optionList.push_back("streaming:sizemode");
   m_Options.optionList.push_back("streaming:sizevalue");
+  m_Options.optionList.push_back("region");
 }
 
 void
@@ -81,7 +83,7 @@ ExtendedFilenameToWriterOptions
        m_Options.writeGEOMFile.second = false;
        }
      }
-  
+
   if(!map["streaming:type"].empty())
     {
     if(map["streaming:type"] == "auto"
@@ -117,6 +119,23 @@ ExtendedFilenameToWriterOptions
     {
     m_Options.streamingSizeValue.first=true;
     m_Options.streamingSizeValue.second = atof(map["streaming:sizevalue"].c_str());
+    }
+
+  //Manage region size to write in output image
+  if(!map["regionsize"].empty())
+    {
+    itksys::RegularExpression reg;
+    reg.compile("([^0-9\\.]\s[^0-9\\.]\s[^0-9\\.]\s[^0-9\\.])");
+
+    if(!reg.find(map["regionsize"]))
+      {
+      m_Options.regionSize.first=true;
+      m_Options.regionSize.second = map["regionsize"];
+      }
+    else
+      {
+      itkWarningMacro("Unkwown value "<<map["regionsize"]<<" for regionsize. Must be 'xmin ymin xmax ymax', with whitespace as separator");
+      }
     }
 
   //Option Checking
@@ -225,6 +244,20 @@ ExtendedFilenameToWriterOptions
 ::GetStreamingSizeValue() const
 {
   return m_Options.streamingSizeValue.second;
+}
+
+bool
+ExtendedFilenameToWriterOptions
+::RegionSizeIsSet() const
+{
+  return m_Options.regionSize.first;
+}
+
+std::string
+ExtendedFilenameToWriterOptions
+::GetRegionSize() const
+{
+  return m_Options.regionSize.second;
 }
 
 

@@ -63,6 +63,7 @@ public:
     std::pair<bool,  std::string>                streamingType;
     std::pair<bool,  std::string>                streamingSizeMode;
     std::pair<bool,  double>                     streamingSizeValue;
+    std::pair<bool,  std::string>                regionSize;
     std::vector<std::string>                     optionList;
   };
 
@@ -81,6 +82,10 @@ public:
   std::string GetStreamingSizeMode() const;
   bool StreamingSizeValueIsSet() const;
   double GetStreamingSizeValue() const;
+
+  bool RegionSizeIsSet() const;
+  std::string GetRegionSize() const;
+
 
 protected:
   ExtendedFilenameToWriterOptions();
