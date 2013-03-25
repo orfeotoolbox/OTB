@@ -40,6 +40,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdDatabaseModel.h"
+#include "Core/mvdDatasetModel.h"
 #include "Core/mvdI18nApplication.h"
 //
 #include "Gui/mvdDatabaseBrowserController.h"
@@ -278,6 +279,9 @@ MainWindow
 ::OnAboutToChangeSelectedDatasetModel( const DatasetModel* model )
 {
   qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
+
+  assert( m_QuicklookView!=NULL );
+  m_QuicklookView->SetImageModel( NULL );
 }
 
 /*****************************************************************************/
@@ -286,6 +290,9 @@ MainWindow
 ::OnSelectedDatasetModelChanged( DatasetModel* model )
 {
   qDebug() << this << "::OnSelectedDatasetModelChanged(" << model << ")";
+
+  assert( m_QuicklookView!=NULL );
+  m_QuicklookView->SetImageModel( model->GetSelectedImageModel() );
 }
 
 /*****************************************************************************/
