@@ -285,7 +285,7 @@ int otbDempsterShaferFusionOptRecConfMatTest(int argc, char * argv[])
     mLabelSetClk_ = 1 - mLabelSetClk - mUniverseClk;
 
     std::cout << "classifiedPixelX[" << itClk << "] = " << classLabelk;
-    std::cout << " ; MassOfBelief_Cl_" << itClk << "[" << classLabelk << "] = " << mLabelSetClk;
+    std::cout << "; MassOfBelief_Cl_" << itClk << "[" << classLabelk << "] = " << mLabelSetClk;
     std::cout << std::endl;
 
     // The first time the label {Ai} is found in classifiedPixelX
