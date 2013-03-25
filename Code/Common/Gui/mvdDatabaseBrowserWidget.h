@@ -125,6 +125,9 @@ signals:
 // Protected methods.
 protected:
 
+  void mousePressEvent( QMouseEvent * event );
+  void mouseMoveEvent ( QMouseEvent * event );
+
 //
 // Protected attributes.
 protected:
@@ -156,6 +159,11 @@ private:
   /**
    */
   QTreeWidgetItem* m_DatasetRootItem;
+
+
+  /**
+   */
+  QPoint    m_StartDragPosition;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

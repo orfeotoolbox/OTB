@@ -226,6 +226,46 @@ DatabaseBrowserWidget
 #endif
 
   m_DatasetRootItem->setExpanded( true );
+
+  //
+  //
+  setMouseTracking(true);
+  m_UI->databaseTreeWidget->setDragEnabled(true);
+}
+
+/*******************************************************************************/
+void DatabaseBrowserWidget
+::mousePressEvent( QMouseEvent * event )
+{
+  //
+  // 
+  if (event->button() == Qt::LeftButton)
+    {
+    m_StartDragPosition = event->pos(); 
+    }
+}
+
+/*******************************************************************************/
+void DatabaseBrowserWidget
+::mouseMoveEvent ( QMouseEvent * event )
+{
+  //
+  // checking
+  // if (!(event->buttons() & Qt::LeftButton))  
+  //   return;  
+  if ((event->pos() - m_StartDragPosition).manhattanLength()  
+      < QApplication::startDragDistance())  
+    return;
+
+  // Get current selection
+  QTreeWidgetItem *selectedItem = m_UI->databaseTreeWidget->currentItem();
+
+  if ( selectedItem )
+    {
+    // Get the selected dataset ???
+    
+    qDebug() << "selectedItem OK";
+    }
 }
 
 /*******************************************************************************/
