@@ -35,6 +35,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdDatabaseModel.h"
+#include "Core/mvdOTBApplicationsModel.h"
 
 //
 // Class implementation.
@@ -88,6 +89,16 @@ CatalogueApplication
 /*******************************************************************************/
 void
 CatalogueApplication
+::OpenApplicationsBrowser()
+{
+  m_OTBApplicationsModel = new OTBApplicationsModel( this );
+
+  m_OTBApplicationsModel->BuildModel();
+}
+
+/*******************************************************************************/
+void
+CatalogueApplication
 ::virtual_InitializeCore()
 {
   setObjectName( "CatalogueApplication" );
@@ -96,6 +107,10 @@ CatalogueApplication
     PROJECT_NAME, Monteverdi2_VERSION_STRING,
     "OrfeoToolBox", "orfeo-toolbox.org"
   );
+
+  //
+  // create the OTBApplications model here
+  OpenApplicationsBrowser();
 }
 
 /*******************************************************************************/

@@ -183,6 +183,7 @@ private:
   /**
    */
   QDockWidget* m_DatabaseBrowserDock;
+  QDockWidget* m_ApplicationsBrowserDock;
 
   /**
    */

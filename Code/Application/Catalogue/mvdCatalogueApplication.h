@@ -60,6 +60,7 @@ namespace mvd
 {
 //
 // Class declaration.
+class OTBApplicationsModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -100,6 +101,15 @@ public:
    */
   void OpenDatabase();
 
+  /***/
+  void OpenApplicationsBrowser();
+
+  /** Get the OTBApp Model */
+  OTBApplicationsModel* GetOTBApplicationsModel()
+  {
+    return m_OTBApplicationsModel;
+  }
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 public slots:
@@ -127,6 +137,8 @@ protected:
 //
 // Private methods.
 private:
+
+  OTBApplicationsModel* m_OTBApplicationsModel;
 
 //
 // Private attributes.

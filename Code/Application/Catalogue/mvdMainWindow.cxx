@@ -48,6 +48,13 @@
 #include "Gui/mvdImageModelRenderer.h"
 #include "Gui/mvdQuicklookViewManipulator.h"
 
+#include "Gui/mvdApplicationsToolBox.h"
+#include "Gui/mvdApplicationsToolBoxController.h"
+
+#include "Core/mvdI18nApplication.h"
+#include "mvdCatalogueApplication.h"
+#include "Core/mvdOTBApplicationsModel.h"
+
 namespace mvd
 {
 
@@ -78,6 +85,7 @@ MainWindow
   m_UI( new mvd::Ui::MainWindow() ),
   m_DatabaseBrowserDock( NULL ),
   m_QuicklookView( NULL )
+  m_ApplicationsBrowserDock(NULL)
 {
   m_UI->setupUi( this );
 }
@@ -109,6 +117,10 @@ void
 MainWindow
 ::virtual_ConnectUI()
 {
+  //
+  // Done here cause needed to be done once
+  SetControllerModel(m_ApplicationsBrowserDock, 
+                     I18nApplication::Instance< CatalogueApplication >()->GetOTBApplicationsModel());
 }
 
 /*****************************************************************************/
@@ -121,6 +133,13 @@ MainWindow
     AddDockWidget
     < DatabaseBrowserWidget, DatabaseBrowserController, QDockWidget >
     ( "DATABASE_BROWSER", tr( "Database browser" ), Qt::LeftDockWidgetArea );
+
+
+  assert (m_ApplicationsBrowserDock == NULL);
+  m_ApplicationsBrowserDock =
+    AddDockWidget
+    < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
+    ( "APPLICATIONS_BROWSER", tr( "Applications browser" ), Qt::RightDockWidgetArea );
 }
 
 /*****************************************************************************/
