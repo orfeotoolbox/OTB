@@ -18,7 +18,7 @@
 #ifndef __otbOpenCVUtils_h
 #define __otbOpenCVUtils_h
 
-#include "ml/ml.hpp"
+#include <opencv2/opencv.hpp>
 #include "itkPixelBuilder.h"
 
 namespace otb

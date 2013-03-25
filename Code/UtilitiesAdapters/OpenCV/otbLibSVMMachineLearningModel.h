@@ -24,10 +24,6 @@
 #include "itkListSample.h"
 #include "otbMachineLearningModel.h"
 
-//include opencv
-//#include <opencv.hpp>       // opencv general include file
-//#include <ml/ml.hpp>                // opencv machine learning include file
-
 // SVM estimator
 #include "otbSVMSampleListModelEstimator.h"
 // Validation
