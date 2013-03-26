@@ -87,8 +87,8 @@ MainWindow
   I18nMainWindow( parent, flags ), 
   m_UI( new mvd::Ui::MainWindow() ),
   m_DatabaseBrowserDock( NULL ),
-  m_QuicklookView( NULL ),
-  m_ApplicationsBrowserDock(NULL)
+  m_ApplicationsBrowserDock(NULL),
+  m_QuicklookView( NULL )
 {
   m_UI->setupUi( this );
 }
