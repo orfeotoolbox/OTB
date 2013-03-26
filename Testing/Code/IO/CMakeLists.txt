@@ -3812,13 +3812,13 @@ ENDFOREACH(streaming_type)
 
 #region size options test
 
-ADD_TEST(ioTvImageFileWriterExtendedFileName_RegionSize ${IO_TESTS24}
+ADD_TEST(ioTvImageFileWriterExtendedFileName_Box ${IO_TESTS24}
 #--compare-image ${NOTOL}
  #        ${INPUTDATA}/maur_rgb_24bpp.tif
   #       ${TEMP}/ioImageFileWriterExtendedFileName_streamingAuto.tif
   otbImageFileWriterWithExtendedFilename
         ${INPUTDATA}/maur_rgb_24bpp.tif
-        "${TEMP}/ioImageFileWriterExtendedFileName_regionSize.tif?&regionsize=0 0 10 10"
+        "${TEMP}/ioImageFileWriterExtendedFileName_box.tif?&box=2 2 10 10"
         )
 
 #----------------------------------------------------------------------------------

@@ -42,7 +42,7 @@ ExtendedFilenameToWriterOptions
   m_Options.optionList.push_back("streaming:type");
   m_Options.optionList.push_back("streaming:sizemode");
   m_Options.optionList.push_back("streaming:sizevalue");
-  m_Options.optionList.push_back("region");
+  m_Options.optionList.push_back("box");
 }
 
 void
@@ -122,19 +122,19 @@ ExtendedFilenameToWriterOptions
     }
 
   //Manage region size to write in output image
-  if(!map["regionsize"].empty())
+  if(!map["box"].empty())
     {
     itksys::RegularExpression reg;
     reg.compile("([^0-9\\.]\s[^0-9\\.]\s[^0-9\\.]\s[^0-9\\.])");
 
-    if(!reg.find(map["regionsize"]))
+    if(!reg.find(map["box"]))
       {
-      m_Options.regionSize.first=true;
-      m_Options.regionSize.second = map["regionsize"];
+      m_Options.box.first=true;
+      m_Options.box.second = map["box"];
       }
     else
       {
-      itkWarningMacro("Unkwown value "<<map["regionsize"]<<" for regionsize. Must be 'xmin ymin xmax ymax', with whitespace as separator");
+      itkWarningMacro("Unkwown value "<<map["box"]<<" for image region to write. Must be 'xmin ymin sizex sizey', with whitespace as separator");
       }
     }
 
@@ -248,16 +248,16 @@ ExtendedFilenameToWriterOptions
 
 bool
 ExtendedFilenameToWriterOptions
-::RegionSizeIsSet() const
+::BoxIsSet() const
 {
-  return m_Options.regionSize.first;
+  return m_Options.box.first;
 }
 
 std::string
 ExtendedFilenameToWriterOptions
-::GetRegionSize() const
+::GetBox() const
 {
-  return m_Options.regionSize.second;
+  return m_Options.box.second;
 }
 
 

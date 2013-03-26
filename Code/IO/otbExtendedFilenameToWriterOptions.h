@@ -63,7 +63,7 @@ public:
     std::pair<bool,  std::string>                streamingType;
     std::pair<bool,  std::string>                streamingSizeMode;
     std::pair<bool,  double>                     streamingSizeValue;
-    std::pair<bool,  std::string>                regionSize;
+    std::pair<bool,  std::string>                box;
     std::vector<std::string>                     optionList;
   };
 
@@ -83,8 +83,8 @@ public:
   bool StreamingSizeValueIsSet() const;
   double GetStreamingSizeValue() const;
 
-  bool RegionSizeIsSet() const;
-  std::string GetRegionSize() const;
+  bool BoxIsSet() const;
+  std::string GetBox() const;
 
 
 protected:

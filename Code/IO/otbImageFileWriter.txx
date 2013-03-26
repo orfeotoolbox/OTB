@@ -472,12 +472,12 @@ ImageFileWriter<TInputImage>
   InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
 
   /** Parse region size modes */
-  if(m_FilenameHelper->RegionSizeIsSet())
+  if(m_FilenameHelper->BoxIsSet())
     {
     std::cout << "need to set image io" << std::endl;
 
     std::string buf; // Have a buffer string
-    std::stringstream ss(m_FilenameHelper->GetRegionSize()); // Insert the string into a stream
+    std::stringstream ss(m_FilenameHelper->GetBox()); // Insert the string into a stream
 
     std::vector<unsigned int> tokens; // Create vector to hold our words
 
