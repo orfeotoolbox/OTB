@@ -136,7 +136,7 @@ private:
   /**
    * \brief Launch the appName algorithm
    */
-  void ExecuteAlgorithm( const QString& appName );
+  void LaunchApplication( const QString& appName );
 
   /**
    * \brief Helper method to check if searchText matches any of the
