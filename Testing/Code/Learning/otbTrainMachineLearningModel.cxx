@@ -147,7 +147,7 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
 
   cmCalculator->SetProducedLabels(predicted);
   cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Update();
+  cmCalculator->Compute();
 
   std::cout << "Confusion matrix: " << std::endl;
   std::cout << cmCalculator->GetConfusionMatrix() << std::endl;
@@ -201,7 +201,7 @@ int otbSVMMachineLearningModel(int argc, char * argv[])
 
   cmCalculator->SetProducedLabels(predicted);
   cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Update();
+  cmCalculator->Compute();
 
   std::cout<<"Confusion matrix: "<<std::endl;
   std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
@@ -250,7 +250,7 @@ int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
 
   cmCalculator->SetProducedLabels(predicted);
   cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Update();
+  cmCalculator->Compute();
 
   std::cout<<"Confusion matrix: "<<std::endl;
   std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
@@ -315,7 +315,7 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
 
   cmCalculator->SetProducedLabels(predicted);
   cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Update();
+  cmCalculator->Compute();
 
   std::cout<<"Confusion matrix: "<<std::endl;
   std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
@@ -340,7 +340,7 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
 
   cmCalculatorLoad->SetProducedLabels(predictedLoad);
   cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Update();
+  cmCalculatorLoad->Compute();
 
   std::cout<<"Confusion matrix: "<<std::endl;
   std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
