@@ -113,6 +113,8 @@ MainWindow
   m_QuicklookView = CreateQuicklookWidget();
 
   setCentralWidget( m_QuicklookView );
+
+  // Init dock OTB App.
 }
 
 /*****************************************************************************/

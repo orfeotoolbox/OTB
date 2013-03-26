@@ -261,12 +261,12 @@ DatasetModel
     // Traces.
     qDebug()
       << "Input image:"
-      << "\nID:" << imageContext.m_Id
-      << "\nfilename:" << imageContext.m_Filename
-      << "\nquicklook:" << imageContext.m_Quicklook;
+      << "\n- ID:" << imageContext.m_Id
+      << ";\n- filename:" << imageContext.m_Filename
+      << ";\n- quicklook:" << imageContext.m_Quicklook << ".";
 
     // TODO: 3) Remove WxH for screen best-fit during loading of model!
-    /* AbstractImageModel* imageModel = */ LoadImage(
+    LoadImage(
       imageContext,
       context->m_Width, context->m_Height
     );

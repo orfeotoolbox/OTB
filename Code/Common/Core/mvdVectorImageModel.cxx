@@ -323,6 +323,8 @@ VectorImageModel
 
   m_RenderingFilter = RenderingFilterType::New();
   m_RenderingFilter->SetInput( m_ExtractFilter->GetOutput() );
+
+  ApplySettings();
 }
 
 /*******************************************************************************/
@@ -653,7 +655,7 @@ VectorImageModel
     bestInitialLod = ComputeBestLevelOfDetail(initialZoomFactor);
     }
 
-    this->SetCurrentLod( bestInitialLod );
+  this->SetCurrentLod( bestInitialLod );
 }
 
 /*******************************************************************************/
@@ -775,13 +777,11 @@ VectorImageModel
 }
 
 /*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
 void
 VectorImageModel
-::OnModelUpdated()
+::ApplySettings()
 {
-  qDebug() << "ID " << GetId() << " - OnModelUpdated()";
+  qDebug() << this << "::ApplySettings()";
 
   RenderingFilterType::RenderingFunctionType* renderingFunc =
     m_RenderingFilter->GetRenderingFunction();
@@ -802,14 +802,23 @@ VectorImageModel
     {
     // Update quicklook rendering-settings.
     quicklookModel->SetSettings( GetSettings() );
-    quicklookModel->OnModelUpdated();
+    quicklookModel->ApplySettings();
     }
+}
 
-  // TODO: Update DatasetDescriptor.
-  // datasetModel->Foo();
+/*******************************************************************************/
+/* SLOTS                                                                       */
+/*******************************************************************************/
+void
+VectorImageModel
+::OnModelUpdated()
+{
+  qDebug() << this << "::OnModelUpdated()";
 
-  // Emit rendering settings are updated so that display could be
-  // refreshed.
+  // Apply settings to rendering pipeline.
+  ApplySettings();
+
+  // Emit settings update to notify display refresh.
   emit SettingsUpdated( this );
 }
 

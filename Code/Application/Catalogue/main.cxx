@@ -58,7 +58,6 @@ main( int argc, char* argv[] )
   mvd::CatalogueApplication application( argc, argv );
   application.Initialize();
 
-
   // 2. Initialize main-window (UI).
   mvd::MainWindow mainWindow;
   mainWindow.Initialize();

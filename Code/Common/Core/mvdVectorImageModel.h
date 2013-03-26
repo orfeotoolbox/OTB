@@ -370,13 +370,11 @@ protected:
   //
   // AbstractModel overrides.
 
-  /** */
   virtual void virtual_BuildModel( void* context =NULL );
 
   //
   // AbstractImageModel overrides.
 
-  /** */
   virtual void virtual_SetCurrentLod( CountType lod );
 
   /**
@@ -449,7 +447,8 @@ private:
 				   const ImageRegionType& region);
 
   /** Compute the image index according to a linear buffer index and its
-   * 2D region
+   * 2D region.
+   *
    * \param index 2D index
    * \param region 2D region
    */
@@ -473,8 +472,7 @@ private:
   void ComputeRegionsToLoad(const ImageRegionType& region);
 
   /**
-    * Helper method to get the best closest Jpeg2K level of detail
-    * 
+    * Helper method to get the best closest Jpeg2K level of detail.
     */
   static
     unsigned int
@@ -486,6 +484,9 @@ private:
     */
   void SetupCurrentLodImage(int w, int h);
 
+  /**
+   */
+  void ApplySettings();
 
 //
 // Private attributes.

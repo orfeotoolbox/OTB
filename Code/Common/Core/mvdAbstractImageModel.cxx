@@ -232,14 +232,22 @@ void
 AbstractImageModel
 ::virtual_BuildModel( void* context )
 {
-  if( context!=NULL )
-    {
-    BuildContext* buildContext = static_cast< BuildContext* >( context );
-    m_Id = buildContext->m_Id;
-    }
+  //
+  // Retrieve proper build-context.
+  assert( context!=NULL );
+  BuildContext* buildContext = static_cast< BuildContext* >( context );
 
+  //
+  // ID.
+  m_Id = buildContext->m_Id;
+
+  //
+  // HISTOGRAM.
   newChildModel< HistogramModel >();
-  newChildModel< QuicklookModel >();
+
+  //
+  // QUICKLOOK.
+  newChildModel< QuicklookModel >( context );
 }
 
 /*******************************************************************************/

@@ -95,12 +95,14 @@ public:
     // Public methods.
   public:
     /** \brief Constructor. */
-    BuildContext( void* const settings ) :
+    BuildContext( void* const settings =NULL,
+		  const QString& filename =QString() ) :
       m_Id( -1 ),
-      m_Filename(),
+      m_Filename( filename ),
       m_Quicklook(),
       m_Settings( settings )
     {
+      assert( settings!=NULL || !filename.isEmpty() );
     }
 
     /** \brief Constructor. */
@@ -110,6 +112,7 @@ public:
       m_Quicklook(),
       m_Settings( NULL )
     {
+      assert( !filename.isEmpty() );
     }
 
     //
