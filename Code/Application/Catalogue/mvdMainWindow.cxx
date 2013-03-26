@@ -121,6 +121,27 @@ MainWindow
   // Done here cause needed to be done once
   SetControllerModel(m_ApplicationsBrowserDock, 
                      I18nApplication::Instance< CatalogueApplication >()->GetOTBApplicationsModel());
+
+  //
+  // need to get the ApplicationToolBox widget to setup connections.
+  // a double click on the tree widget should trigger a signal connected
+  // to this MainWindow slot. this slot will be in charge of getting the
+  // widget of the application selected, and show it in the
+  // MainWindow centralView.  
+  
+  // # Step 1 : get the ApplicationToolBoxWidget
+  ApplicationsToolBox* appWidget = 
+    qobject_cast< ApplicationsToolBox * >( 
+      m_ApplicationsBrowserDock->findChild< ApplicationsToolBox* >( ) 
+      );
+  
+  // # Step 2 : setup connections
+  assert(appWidget != NULL);
+  QObject::connect(appWidget,
+                   SIGNAL( ApplicationToLaunchSelected(const QString &) ),
+                   this,
+                   SLOT( OnApplicationToLaunchSelected(const QString &) )
+    );  
 }
 
 /*****************************************************************************/
@@ -256,6 +277,20 @@ MainWindow
 ::OnSelectedDatasetModelChanged( DatasetModel* model )
 {
   qDebug() << this << "::OnSelectedDatasetModelChanged(" << model << ")";
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnApplicationToLaunchSelected(const QString & appName)
+{
+//
+  std::cout <<"Catalag MainWindow::OnApplicationToLaunchSelected " << std::endl;
+  // need to get the controller to request the application widget
+  ApplicationsToolBoxController * controller = 
+    m_ApplicationsBrowserDock->findChild<ApplicationsToolBoxController *>();
+
+  setCentralWidget( controller->GetSelectedApplicationWidget(appName) );
 }
 
 } // end namespace 'mvd'

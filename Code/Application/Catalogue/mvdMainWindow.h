@@ -154,6 +154,10 @@ protected slots:
    */
   void OnSelectedDatasetModelChanged( DatasetModel* );
 
+  /**
+   */
+  void OnApplicationToLaunchSelected( const QString & appName );
+
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
