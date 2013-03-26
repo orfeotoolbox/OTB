@@ -295,7 +295,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
   ConfusionMatrixCalculatorType::Pointer confMatCalc = ConfusionMatrixCalculatorType::New();
   confMatCalc->SetReferenceLabels(groundTruthClassList);
   confMatCalc->SetProducedLabels(classifierListLabel);
-  confMatCalc->Update();
+  confMatCalc->Compute();
 
   std::cout << std::endl;
   std::cout << "Confusion matrix: " << std::endl << confMatCalc->GetConfusionMatrix() << std::endl << std::endl;

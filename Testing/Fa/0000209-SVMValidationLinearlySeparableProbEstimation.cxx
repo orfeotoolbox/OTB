@@ -189,7 +189,7 @@ int main(int argc, char* argv[])
   confMatCalc->SetReferenceLabels(validationLabels);
   confMatCalc->SetProducedLabels(classifierListLabel);
 
-  confMatCalc->Update();
+  confMatCalc->Compute();
 
   std::cout<<std::endl;
   std::cout<<"Confusion matrix: "<<std::endl<< confMatCalc->GetConfusionMatrix()<<std::endl<<std::endl;

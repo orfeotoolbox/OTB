@@ -364,7 +364,7 @@ private:
     confMatCalc->SetReferenceLabels(validationLabeledListSample);
     confMatCalc->SetProducedLabels(classifierListLabel);
 
-    confMatCalc->Update();
+    confMatCalc->Compute();
 
     otbAppLogINFO("SVM training performances");
     std::string confMatString;
