@@ -39,7 +39,6 @@ ConfusionMatrixMeasurements<TConfusionMatrix>
 }
 
 
-
 template <class TConfusionMatrix>
 void
 ConfusionMatrixMeasurements<TConfusionMatrix>
