@@ -116,9 +116,9 @@ target_link_libraries(Monteverdi2_Gui
   Qt4::QtOpenGL
 )
 
-if (OTB_WRAP_QT)
-  target_link_libraries(Monteverdi2_Gui Monteverdi2_ApplicationsWrapper)
-endif()
+#if (OTB_WRAP_QT)
+#  target_link_libraries(Monteverdi2_Gui Monteverdi2_ApplicationsWrapper)
+#endif()
 
 set_target_properties(Monteverdi2_Gui
   PROPERTIES ${Monteverdi2_LIBRARY_PROPERTIES}

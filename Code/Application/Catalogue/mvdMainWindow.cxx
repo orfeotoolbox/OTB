@@ -47,13 +47,15 @@
 #include "Gui/mvdGLImageWidget.h"
 #include "Gui/mvdImageModelRenderer.h"
 #include "Gui/mvdQuicklookViewManipulator.h"
-
 #include "Gui/mvdApplicationsToolBox.h"
-#include "Gui/mvdApplicationsToolBoxController.h"
 
 #include "Core/mvdI18nApplication.h"
 #include "mvdCatalogueApplication.h"
-#include "Core/mvdOTBApplicationsModel.h"
+
+#ifdef OTB_WRAP_QT
+#include "ApplicationsWrapper/mvdApplicationsToolBoxController.h"
+#include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
+#endif
 
 namespace mvd
 {
@@ -117,6 +119,8 @@ void
 MainWindow
 ::virtual_ConnectUI()
 {
+
+#ifdef OTB_WRAP_QT
   //
   // Done here cause needed to be done once
   SetControllerModel(m_ApplicationsBrowserDock, 
@@ -141,7 +145,8 @@ MainWindow
                    SIGNAL( ApplicationToLaunchSelected(const QString &) ),
                    this,
                    SLOT( OnApplicationToLaunchSelected(const QString &) )
-    );  
+    );
+#endif
 }
 
 /*****************************************************************************/
@@ -156,11 +161,15 @@ MainWindow
     ( "DATABASE_BROWSER", tr( "Database browser" ), Qt::LeftDockWidgetArea );
 
 
+#ifdef OTB_WRAP_QT
+
   assert (m_ApplicationsBrowserDock == NULL);
   m_ApplicationsBrowserDock =
     AddDockWidget
     < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
     ( "APPLICATIONS_BROWSER", tr( "Applications browser" ), Qt::RightDockWidgetArea );
+
+#endif
 }
 
 /*****************************************************************************/
@@ -284,13 +293,15 @@ void
 MainWindow
 ::OnApplicationToLaunchSelected(const QString & appName)
 {
-//
-  std::cout <<"Catalag MainWindow::OnApplicationToLaunchSelected " << std::endl;
+
+#ifdef OTB_WRAP_QT
   // need to get the controller to request the application widget
   ApplicationsToolBoxController * controller = 
     m_ApplicationsBrowserDock->findChild<ApplicationsToolBoxController *>();
 
   setCentralWidget( controller->GetSelectedApplicationWidget(appName) );
+#endif
+
 }
 
 } // end namespace 'mvd'

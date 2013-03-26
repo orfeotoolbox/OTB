@@ -35,7 +35,10 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdDatabaseModel.h"
-#include "Core/mvdOTBApplicationsModel.h"
+
+#ifdef OTB_WRAP_QT
+#include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
+#endif
 
 //
 // Class implementation.
@@ -91,9 +94,12 @@ void
 CatalogueApplication
 ::OpenApplicationsBrowser()
 {
-  m_OTBApplicationsModel = new OTBApplicationsModel( this );
 
+#ifdef OTB_WRAP_QT
+  m_OTBApplicationsModel = new OTBApplicationsModel( this );
   m_OTBApplicationsModel->BuildModel();
+#endif
+
 }
 
 /*******************************************************************************/
