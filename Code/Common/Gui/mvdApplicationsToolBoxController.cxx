@@ -42,6 +42,7 @@
 #include "Core/mvdTypes.h"
 //
 #include "Gui/mvdApplicationsToolBox.h"
+//
 #include "ApplicationsWrapper/mvdApplicationsBrowser.h"
 
 namespace mvd
@@ -75,8 +76,6 @@ void
 ApplicationsToolBoxController
 ::Connect( AbstractModel* model )
 {
-  std::cout << "--> ApplicationsToolBoxController connection "<< std::endl;
-  
   //
   // Access widget
   ApplicationsToolBox* widget = GetWidget< ApplicationsToolBox >();
@@ -109,7 +108,7 @@ ApplicationsToolBoxController
   assert( appModel!=NULL );
 
   //
-  // connections
+  // disconnect app browser
   QObject::disconnect(appModel->GetApplicationsBrowser(),
                       SIGNAL( AvailableApplicationsTagsChanged(const ApplicationsTagContainer& ) ),
                       widget,
@@ -143,6 +142,19 @@ ApplicationsToolBoxController
   // Fill the widget. It also reset the datatree before filling the
   // tree...
   model->FillTree();
+}
+
+/*******************************************************************************/
+QWidget *
+ApplicationsToolBoxController
+::GetSelectedApplicationWidget( const QString& appName )
+{
+  //
+  // Access model.
+  OTBApplicationsModel* model = GetModel< OTBApplicationsModel >();
+  assert( model!=NULL );
+
+  return model->GetSelectedApplicationWidget( appName );  
 }
 
 /*******************************************************************************/

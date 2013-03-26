@@ -98,6 +98,9 @@ public:
    */
   virtual ~ApplicationsToolBoxController();
 
+  /** Get the seleceted application Gui */
+  QWidget * GetSelectedApplicationWidget(const QString& appName);
+
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
