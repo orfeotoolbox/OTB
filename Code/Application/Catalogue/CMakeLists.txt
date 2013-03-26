@@ -78,6 +78,12 @@ target_link_libraries(Monteverdi2_Catalogue
   Monteverdi2_Gui
 )
 
+if (OTB_WRAP_QT)
+target_link_libraries(Monteverdi2_Catalogue
+  Monteverdi2_ApplicationsWrapper
+)
+endif()
+
 #############################################################################
 # monteverdi2 executable
 add_executable( mvd2-catalogue
