@@ -206,7 +206,7 @@ ApplicationsToolBox
 /*******************************************************************************/
 void
 ApplicationsToolBox
-::ExecuteAlgorithm( const QString& appName )
+::LaunchApplication( const QString& appName )
 {
   emit ApplicationToLaunchSelected(appName);
 }
@@ -254,7 +254,7 @@ ApplicationsToolBox
     // Execute the algorithm
     if ( !appName.isEmpty() )
       {
-      ExecuteAlgorithm( appName );
+      LaunchApplication( appName );
       }
     }
 }
