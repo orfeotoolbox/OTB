@@ -1,4 +1,4 @@
-#############################################################################
+############################################################################
 # Source files of Common library
 
 # Package GUI (files ordered by lexicographical order i.e. ease of search).
@@ -115,10 +115,6 @@ target_link_libraries(Monteverdi2_Gui
   Qt4::QtGui
   Qt4::QtOpenGL
 )
-
-#if (OTB_WRAP_QT)
-#  target_link_libraries(Monteverdi2_Gui Monteverdi2_ApplicationsWrapper)
-#endif()
 
 set_target_properties(Monteverdi2_Gui
   PROPERTIES ${Monteverdi2_LIBRARY_PROPERTIES}

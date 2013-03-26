@@ -70,7 +70,6 @@ add_library(Monteverdi2_ApplicationsWrapper
 target_link_libraries(Monteverdi2_ApplicationsWrapper
   OTBApplicationEngine
   OTBWrapperQtWidget
-  Monteverdi2_Core
   ${OPENGL_LIBRARIES}
   Qt4::QtGui
   Qt4::QtOpenGL
