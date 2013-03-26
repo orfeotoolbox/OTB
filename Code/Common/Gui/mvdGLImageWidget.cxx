@@ -256,7 +256,10 @@ GLImageWidget
     }
   else
     {
-    // update the mouse cursor position if not dragging (just moving
+    // TODO: Out of the if/else ?
+    m_ImageViewManipulator->mouseMoveEvent(event);
+ 
+   // update the mouse cursor position if not dragging (just moving
     // the mouse )
     m_ImageViewManipulator->PropagatePointUnderCursorCoordinates(event->pos());
     }

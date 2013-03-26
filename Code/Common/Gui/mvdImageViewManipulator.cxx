@@ -79,6 +79,9 @@ void
 ImageViewManipulator
 ::mousePressEvent(QMouseEvent * event)
 {
+  // Update the pressed flag
+  m_MouseContext.pressed = true;
+
   // Update the context with the pressed position
   m_MouseContext.x = event->x();
   m_MouseContext.y = event->y();
@@ -96,35 +99,48 @@ void
 ImageViewManipulator
 ::mouseMoveEvent( QMouseEvent * event)
 {
-  m_PreviousIsotropicZoom = m_IsotropicZoom;
+  if(!m_MouseContext.pressed)
+    {
+    // Update the context with the pressed position
+    m_MouseContext.x = event->x();
+    m_MouseContext.y = event->y();
+    
+    // Update the context with the pressed position for the mouseMoveEvent
+    m_MouseContext.xMove = event->x();
+    m_MouseContext.yMove = event->y();
+    }
+  else
+    {
+    m_PreviousIsotropicZoom = m_IsotropicZoom;
+    
+    // Update the context with the pressed position
+    m_MouseContext.xMove = event->x();
+    m_MouseContext.yMove = event->y();
 
-  // Update the context with the pressed position
-  m_MouseContext.xMove = event->x();
-  m_MouseContext.yMove = event->y();
-
-  ImageRegionType::OffsetType offset;
-
-  int dx = m_MouseContext.x - m_MouseContext.xMove;
-  int dy = m_MouseContext.y - m_MouseContext.yMove;
-
-  offset[0] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dx/m_IsotropicZoom + 0.5);
-  offset[1] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dy/m_IsotropicZoom + 0.5);
-  IndexType newOrigin;
-  newOrigin[0] = m_MouseContext.moveOriginX;
-  newOrigin[1] = m_MouseContext.moveOriginY;
-
-  newOrigin+=offset;
-
-  // Update the navigation context
-  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
-  
-  currentRegion.SetIndex(newOrigin);
-
-  // Constraint the region to the largestPossibleRegion
-  this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
-
-  // tell the quicklook renderer to update the red square rendering
-  this->PropagateViewportRegionChanged(currentRegion);  
+    ImageRegionType::OffsetType offset;
+    
+    int dx = m_MouseContext.x - m_MouseContext.xMove;
+    int dy = m_MouseContext.y - m_MouseContext.yMove;
+    
+    offset[0] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dx/m_IsotropicZoom + 0.5);
+    offset[1] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dy/m_IsotropicZoom + 0.5);
+    IndexType newOrigin;
+    newOrigin[0] = m_MouseContext.moveOriginX;
+    newOrigin[1] = m_MouseContext.moveOriginY;
+    
+    newOrigin+=offset;
+    
+    // Update the navigation context
+    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+    
+    currentRegion.SetIndex(newOrigin);
+    
+    // Constraint the region to the largestPossibleRegion
+    this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
+    
+    // tell the quicklook renderer to update the red square rendering
+    this->PropagateViewportRegionChanged(currentRegion);  
+    }
 }
 
 /******************************************************************************/
@@ -157,6 +173,8 @@ void
 ImageViewManipulator
 ::mouseReleaseEvent(  QMouseEvent * event)
 {
+  // Update the pressed flag
+  m_MouseContext.pressed = false;
   //TODO: Implement mouseReleaseEvent.
   //std::cout <<" Not Implemented yet ..." << std::endl;
 }
@@ -208,7 +226,7 @@ ImageViewManipulator
   double scale = vcl_pow(scaleRatio, nbSteps);
 
   // center the viewport on the center of the previous region
-  this->CenterRegion(scale);
+  this->KeepMousePosition(scale);
 
   // rescale the viewport region
   this->Zoom(scale);
@@ -269,7 +287,7 @@ ImageViewManipulator
     {
     // The viewPort Region must be adapted to this zoom ratio
     ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
-  
+
     // center the region on the position under the cursor
     IndexType        origin = currentRegion.GetIndex();
     double centerX = (double)(origin[0]) + (double)(currentRegion.GetSize()[0])/2.;
@@ -284,7 +302,30 @@ ImageViewManipulator
     if (newIndex[1] < 0) newIndex[1] = 0;
 
     // set the new origin
-    currentRegion.SetIndex(newIndex);
+    currentRegion.SetIndex(newIndex);   
+    // Constraint this region to the LargestPossibleRegion
+    this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
+    }
+}
+
+void
+ImageViewManipulator
+::KeepMousePosition(double scale)
+{
+  if( m_IsotropicZoom * scale > 0.001 )
+    {
+    // The viewPort Region must be adapted to this zoom ratio
+    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+  
+    // center the region on the position under the cursor
+    IndexType        origin = currentRegion.GetIndex();
+    IndexType        newOrigin;
+  
+    newOrigin[0] = vcl_floor(0.5 + origin[0] +  (1-1/scale) * (m_MouseContext.x - GetViewportOrigin()[0])/m_IsotropicZoom);
+    newOrigin[1] = vcl_floor(0.5 + origin[1] +  (1-1/scale) * (m_MouseContext.y - GetViewportOrigin()[1])/m_IsotropicZoom);
+ 
+    // set the new origin
+    currentRegion.SetIndex(newOrigin);
 
     // Constraint this region to the LargestPossibleRegion
     this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
@@ -411,7 +452,7 @@ ImageViewManipulator
 void ImageViewManipulator
 ::OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
                             const SpacingType& spacing,
-  const PointType& origin)
+                            const PointType& origin)
 {
   // update the spacing
   SetSpacing(spacing);

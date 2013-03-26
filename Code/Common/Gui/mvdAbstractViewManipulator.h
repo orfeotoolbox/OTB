@@ -202,7 +202,8 @@ protected:
       xMove( 0 ),
       yMove( 0 ),
       moveOriginX(0),
-      moveOriginY(0)
+      moveOriginY(0),
+      pressed(false)
     {
     }
 
@@ -212,6 +213,7 @@ protected:
     int yMove;  // for mouseMove y
     int moveOriginX; // mouseMove in x (Drag)
     int moveOriginY; // mouseMove in y (Drag)
+    bool pressed;
   };
 
 //

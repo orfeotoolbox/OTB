@@ -146,6 +146,8 @@ protected:
   /** */
   void CenterRegion(double scale);
 
+  void KeepMousePosition(double scale);
+
   /** */
   void ResizeRegion(unsigned int w, unsigned int h);
 
