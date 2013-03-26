@@ -78,13 +78,10 @@ ApplicationLauncher
 }
 
 /*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
-void 
+QWidget* 
 ApplicationLauncher
-::OnApplicationToLaunchSelected(const QString& appname)
+::GetSelectedApplicationWidget(const QString& appname)
 {
-
   // Create module
   otb::Wrapper::Application::Pointer app 
     = otb::Wrapper::ApplicationRegistry::CreateApplication( ToStdString (appname) );
@@ -95,22 +92,39 @@ ApplicationLauncher
     }
   else
     {
-    // MainWidget : that contains the view and any other widget
-    // (progress, logs...)
-    QMainWindow* mainWindow =  new QMainWindow();
-    mainWindow->setWindowIcon(QIcon( ":/otb_small.png" ));
-    mainWindow->setWindowTitle(QString(app->GetDocName()).append(" - ").append(OTB_VERSION_STRING));
-
     // Create GUI based on module
     Wrapper::QtWidgetView* gui = new Wrapper::QtWidgetView(app);
     gui->CreateGui();
 
-    // Connect the View "Quit" signal, to the mainWindow close slot
-    QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
+    return gui;
+    }
 
+  return NULL;
+}
+
+/*******************************************************************************/
+/* SLOTS                                                                       */
+/*******************************************************************************/
+void 
+ApplicationLauncher
+::OnApplicationToLaunchSelected(const QString& appname)
+{
+  QWidget * gui = GetSelectedApplicationWidget( appname );
+  
+  if (gui)
+    {
+    // MainWidget : that contains the view and any other widget
+    // (progress, logs...)
+    QMainWindow* mainWindow =  new QMainWindow();
+    mainWindow->setWindowIcon(QIcon( ":/otb_small.png" ));
+    //mainWindow->setWindowTitle(QString(gui->->GetDocName()).append(" - ").append(OTB_VERSION_STRING));
+ 
     // build the main window, central widget is the plugin view, other
     // are docked widget (progress, logs...)
-    mainWindow->setCentralWidget(gui);
+    mainWindow->setCentralWidget( gui );
+
+    // Connect the View "Quit" signal, to the mainWindow close slot
+    QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
   
     // Show the main window
     mainWindow->show();

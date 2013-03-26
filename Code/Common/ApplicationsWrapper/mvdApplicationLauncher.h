@@ -88,6 +88,11 @@ public:
 
   /** \brief Destructor. */
   virtual ~ApplicationLauncher();
+  
+  /** return the automatic generated widget of the selected
+    * application 
+    */
+  QWidget * GetSelectedApplicationWidget(const QString& appname);
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
