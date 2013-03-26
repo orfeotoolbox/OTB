@@ -39,6 +39,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "ApplicationsWrapper/mvdApplicationsBrowser.h"
+#include "ApplicationsWrapper/mvdApplicationLauncher.h"
 
 namespace mvd
 {
@@ -67,12 +68,16 @@ OTBApplicationsModel
   AbstractModel( parent )
 {
   //
-  // instanciate an app browser
+  // instanciate apps browser
   m_ApplicationsBrowser = new ApplicationsBrowser();  
+
+  //
+  // instanciate app launcher
+  m_ApplicationLauncher = new ApplicationLauncher();
   
   // initialize the app browser with empty string. The default
   // behavior use the env ITK_AUTOLOAD_PATH
-  m_ApplicationsBrowser->SetAutoLoadPath("");
+  //m_ApplicationsBrowser->SetAutoLoadPath("");
 }
 
 /*******************************************************************************/
@@ -99,6 +104,14 @@ OTBApplicationsModel
   // ApplicationBrowser, when the map is filled with tags/Apps, a
   // signal is emitted and received by the widget to fill its tree.
   m_ApplicationsBrowser->SearchAvailableApplicationsTags();
+}
+
+/*******************************************************************************/
+QWidget*
+OTBApplicationsModel
+::GetSelectedApplicationWidget(const QString& appname )
+{
+  m_ApplicationLauncher->GetSelectedApplicationWidget( appname );
 }
 
 /*******************************************************************************/

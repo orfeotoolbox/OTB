@@ -61,6 +61,7 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 class ApplicationsBrowser;
+class ApplicationLauncher;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -95,6 +96,9 @@ public:
   /** \brief Fill Widget Tree */
   void FillTree();
 
+  /** request the selected application Gui (from the launcher)*/
+  QWidget * GetSelectedApplicationWidget(const QString& appname );
+
   //
   // Get Application Browser
   const ApplicationsBrowser* GetApplicationsBrowser() const
@@ -102,10 +106,10 @@ public:
     return m_ApplicationsBrowser;
   }
 
-   ApplicationsBrowser* GetApplicationsBrowser()
+  ApplicationsBrowser* GetApplicationsBrowser()
   {
     return m_ApplicationsBrowser;
-  }
+  }  
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -143,6 +147,7 @@ private:
 private:
 
   ApplicationsBrowser * m_ApplicationsBrowser;
+  ApplicationLauncher * m_ApplicationLauncher;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
