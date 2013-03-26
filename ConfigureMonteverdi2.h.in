@@ -54,4 +54,8 @@
 #define Monteverdi2_FLOATING_TYPE @Monteverdi2_FLOATING_TYPE@
 #define Monteverdi2_DIMENSION int( 2 )
 
+//
+// OTB_WRAP_QT defintion
+#define OTB_WRAP_QT "@OTB_WRAP_QT@"
+
 #endif // __ConfigureMonteverdi2_h
