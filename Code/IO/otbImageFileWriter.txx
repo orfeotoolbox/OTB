@@ -496,7 +496,7 @@ ImageFileWriter<TInputImage>
     inputRegion.SetSize(size);
     inputRegion.SetIndex(start);
 
-    std::cout << "inputRegion " << inputRegion << std::endl;
+    otbMsgDevMacro(<< "inputRegion " << inputRegion);
     }
 
   /**
@@ -513,7 +513,11 @@ ImageFileWriter<TInputImage>
       "> does not support streaming.");
     this->SetNumberOfDivisionsStrippedStreaming(1);
     }
-  else if (inputPtr->GetBufferedRegion() == inputPtr->GetLargestPossibleRegion())
+
+  /** Compare the buffered region  with the inputRegion which is the largest
+  * possible region or a user defined region through extended filename
+  * Not sure that if this modification is needed  */
+  else if (inputPtr->GetBufferedRegion() == inputRegion)
     {
     otbMsgDevMacro(<< "Buffered region is the largest possible region, there is no need for streaming.");
     this->SetNumberOfDivisionsStrippedStreaming(1);
