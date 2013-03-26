@@ -73,6 +73,7 @@ bool ReadDataFile(const std::string & infname, InputListSampleType * samples, Ta
         // Parse label
         TargetSampleType label;
         label[0] = atoi(line.substr(0, pos).c_str());
+        //std::cout << "label = " << label[0] << std::endl;
 
         bool endOfLine = false;
 
@@ -92,7 +93,9 @@ bool ReadDataFile(const std::string & infname, InputListSampleType * samples, Ta
             std::string feature = line.substr(pos,nextpos-pos);
             std::string::size_type semicolonpos = feature.find_first_of(":");
             id = atoi(feature.substr(0,semicolonpos).c_str());
-            sample[id] = atof(feature.substr(semicolonpos+1,feature.size()-semicolonpos).c_str());
+            //std::cout << "id = " << id << std::endl;
+            sample[id - 1] = atof(feature.substr(semicolonpos+1,feature.size()-semicolonpos).c_str());
+            //std::cout << "sample[" << id << "] = " << sample[id] << std::endl;
             pos = nextpos;
             }
           }
