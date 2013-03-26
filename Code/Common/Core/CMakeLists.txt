@@ -19,7 +19,6 @@ set( Common_Core_SOURCES
   mvdSystemError.cxx
   mvdTypes.cxx
   mvdVectorImageModel.cxx
-  mvdOTBApplicationsModel.cxx
 )
 
 #############################################################################
@@ -41,7 +40,6 @@ set( Common_Core_HEADERS_MOC
   # mvdSystemError.h
   # mvdTypes.h
   mvdVectorImageModel.h
-  mvdOTBApplicationsModel.h
 )
 
 #############################################################################

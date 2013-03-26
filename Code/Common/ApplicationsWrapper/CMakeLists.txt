@@ -12,6 +12,8 @@ set( Common_ApplicationsWrapper_SOURCES
   mvdWrapperQtWidgetChoiceParameter.cxx  
   mvdWrapperQtWidgetInputImageListParameter.cxx
   mvdWrapperQtWidgetFileSelection.cxx
+  mvdApplicationsToolBoxController.cxx
+  mvdOTBApplicationsModel.cxx
 )
 
 #############################################################################
@@ -28,6 +30,8 @@ set( Common_ApplicationsWrapper_HEADERS_MOC
   mvdWrapperQtWidgetChoiceParameter.h
   mvdWrapperQtWidgetInputImageListParameter.h
   mvdWrapperQtWidgetFileSelection.h
+  mvdApplicationsToolBoxController.h
+  mvdOTBApplicationsModel.h
 )
 
 #############################################################################
