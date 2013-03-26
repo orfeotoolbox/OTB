@@ -579,7 +579,7 @@ ImageFileWriter<TInputImage>
   // Check if source exists
   if(source)
     {
-    typedef itk::MemberCommand<Self> CommandType;
+    typedef itk::MemberCommand<Self>      CommandType;
     typedef typename CommandType::Pointer CommandPointerType;
 
     CommandPointerType command = CommandType::New();
