@@ -474,8 +474,6 @@ ImageFileWriter<TInputImage>
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
     {
-    std::cout << "need to set image io" << std::endl;
-
     std::string buf; // Have a buffer string
     std::stringstream ss(m_FilenameHelper->GetBox()); // Insert the string into a stream
 
@@ -489,18 +487,17 @@ ImageFileWriter<TInputImage>
     typename InputImageType::IndexType start;
     typename InputImageType::SizeType  size;
 
+    start[0] = tokens[0];  // first index on X
+    start[1] = tokens[1];  // first index on Y
+
     size[0]  = tokens[2];  // size along X
     size[1]  = tokens[3];  // size along Y
 
-    start[0] = tokens[0];  // first index on X
-    start[1] = tokens[2];  // first index on Y
-
     inputRegion.SetSize(size);
     inputRegion.SetIndex(start);
+
+    std::cout << "inputRegion " << inputRegion << std::endl;
     }
-
-
-
 
   /**
    * Determine of number of pieces to divide the input.  This will be the
