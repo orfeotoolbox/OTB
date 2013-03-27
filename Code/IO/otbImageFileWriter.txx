@@ -478,6 +478,20 @@ ImageFileWriter<TInputImage>
     {
     inputRegion = m_FilenameHelper->GetBox();
     otbMsgDevMacro(<< "inputRegion " << inputRegion);
+
+    if (!inputRegion.Crop(inputPtr->GetLargestPossibleRegion()))
+      {
+      // Couldn't crop the region (requested region is outside the largest
+      // possible region).  Throw an exception.
+
+      // build an exception
+      itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+      e.SetLocation(ITK_LOCATION);
+      e.SetDescription("Requested box region is (at least partially) outside the largest possible region.");
+      e.SetDataObject(inputPtr);
+      throw e;
+      }
+    otbMsgDevMacro(<< "inputRegion " << inputRegion);
     }
 
   /**
