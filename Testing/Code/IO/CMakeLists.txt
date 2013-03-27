@@ -3813,12 +3813,13 @@ ENDFOREACH(streaming_type)
 #region size options test
 
 ADD_TEST(ioTvImageFileWriterExtendedFileName_Box ${IO_TESTS24}
-#--compare-image ${NOTOL}
- #        ${INPUTDATA}/maur_rgb_24bpp.tif
-  #       ${TEMP}/ioImageFileWriterExtendedFileName_streamingAuto.tif
-  otbImageFileWriterWithExtendedFilename
+  otbImageFileWriterWithExtendedOptionBox
         ${INPUTDATA}/maur_rgb_24bpp.tif
-        "${TEMP}/ioImageFileWriterExtendedFileName_box.tif?&box=2 2 10 10"
+        ${TEMP}/ioImageFileWriterExtendedFileName_box.tif
+        2
+        2
+        10
+        10
         )
 
 #----------------------------------------------------------------------------------
@@ -4075,6 +4076,7 @@ otbIOTests24.cxx
 otbExtendedFilenameToReaderOptionsTest.cxx
 otbExtendedFilenameToWriterOptionsTest.cxx
 otbExtendedFilenameTest.cxx
+otbImageFileWriterWithExtendedOptionBox.cxx
 )
 
 IF(OTB_USE_EXTERNAL_OSSIM)

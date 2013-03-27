@@ -23,4 +23,5 @@ void RegisterTests()
   REGISTER_TEST(otbExtendedFilenameToWriterOptions);
   REGISTER_TEST(otbImageFileReaderWithExtendedFilename);
   REGISTER_TEST(otbImageFileWriterWithExtendedFilename);
+  REGISTER_TEST(otbImageFileWriterWithExtendedOptionBox);
 }
