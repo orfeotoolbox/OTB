@@ -149,14 +149,10 @@ QtWidgetInputImageParameter::dragMoveEvent(QDragMoveEvent *event)
 void QtWidgetInputImageParameter::dropEvent(QDropEvent *event)
 {
   //
-  // TODO : need to define the mimeData format
-  // TODO : the data to drop will be defined in the DataSet TreeWidget
-  
-  //
   // get the text form the mimeData stored in the event : path
   // to the image in the dataset
-  if ( event->mimeData()->hasText () )
-    {
+  if ( event->mimeData()->hasText () ) // files from disk
+    {    
     //
     // text stored in mimeData represents the filename to use
     // extract valid filename by removing %20 and file:// form the
@@ -170,6 +166,22 @@ void QtWidgetInputImageParameter::dropEvent(QDropEvent *event)
     // since QLabel does not emit signal when textChanged, raise a signal
     // in the code
     emit textChanged( QString( ofname.data() ) );
+    }
+  else if ( event->mimeData()->hasFormat("application/x-qabstractitemmodeldatalist") )
+    {
+    //
+    // TODO : use  simpler mime type
+    QString ofname(
+      event->mimeData()->data("application/x-qabstractitemmodeldatalist").constData()
+      );
+
+    //
+    // set the filename
+    m_Input->setText( ofname);
+
+    // since QLabel does not emit signal when textChanged, raise a signal
+    // in the code
+    emit textChanged( ofname );
     }
 }
 
