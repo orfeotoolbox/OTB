@@ -38,6 +38,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdAlgorithm.h"
+#include "mvdSystemError.h"
 
 namespace mvd
 {
@@ -63,6 +65,94 @@ SerializableInterface
 SerializableInterface
 ::~SerializableInterface()
 {
+}
+
+/*******************************************************************************/
+void
+SerializableInterface
+::Read( const QString& filename, Mode mode )
+{
+  // File instance.
+  QFile file( filename );
+
+  // Setup open-mode.
+  QIODevice::OpenMode openMode( QIODevice::ReadOnly );
+
+  if( mode==MODE_TEXT )
+    openMode |= QIODevice::Text;
+
+  // Open file on device.
+  if( !file.open( openMode ) )
+    throw SystemError(
+      ToStdString(
+	QString( "('%1')" ).arg( filename ) )
+    );
+
+  try
+    {
+    // Read file context.
+    virtual_Read( &file );
+    }
+  catch( SystemError& syserr )
+    {
+    // Catch any SystemError thrown by DatasetDescriptor::Write() and
+    // morph it into the same SystemError containing filename
+    // information.
+    syserr = SystemError(
+      syserr.GetErrorCode(),
+      ToStdString(
+	QString( "('%1')" ).arg( filename ) )
+    );
+
+    // Throw morphed SystemError.
+    throw syserr;
+    }
+
+  // File is closed by automatic scope detruction of QFile instance.
+}
+
+/*******************************************************************************/
+void
+SerializableInterface
+::Write( const QString& filename, Mode mode ) const
+{
+  // File instance.
+  QFile file( filename );
+
+  // Setup open-mode.
+  QIODevice::OpenMode openMode( QIODevice::WriteOnly );
+
+  if( mode==MODE_TEXT )
+    openMode |= QIODevice::Text;
+
+  // Open file on device.
+  if( !file.open( openMode ) )
+    throw SystemError(
+      ToStdString(
+	QString( "('%1')" ).arg( filename ) )
+    );
+
+  try
+    {
+    // Write file context.
+    virtual_Write( file );
+    }
+  catch( SystemError& syserr )
+    {
+    // Catch any SystemError thrown by DatasetDescriptor::Write() and
+    // morph it into the same SystemError containing filename
+    // information.
+    syserr = SystemError(
+      syserr.GetErrorCode(),
+      ToStdString(
+	QString( "('%1')" ).arg( filename ) )
+    );
+
+    // Throw morphed SystemError.
+    throw syserr;
+    }
+
+  // File is closed by automatic scope detruction of QFile instance.
 }
 
 /*******************************************************************************/

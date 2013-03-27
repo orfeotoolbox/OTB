@@ -87,11 +87,12 @@ HistogramModel
  // itk::NumericsTraits<>::Clamp(...) was removed 
   // TODO : when otb::Clamp will be developped, use this function
   measurement[0]  = 
-    measurement[0]<histogram->GetBinMin(0, 0)?
-    histogram->GetBinMin(0, 0):(measurement[0]>histogram->GetBinMax(0, histogram->GetSize(0) - 1)?
-                                histogram->GetBinMax(0, histogram->GetSize(0) - 1):measurement[0]);
+    measurement[0] < histogram->GetBinMin(0, 0)
+    ? histogram->GetBinMin(0, 0)
+    : ( measurement[0] > histogram->GetBinMax(0, histogram->GetSize(0) - 1)
+	? histogram->GetBinMax(0, histogram->GetSize(0) - 1)
+	: measurement[0] );
 
-    
   // Get the index of measurement in 1D-histogram.
   Histogram::IndexType index;
   if( !histogram->GetIndex( measurement, index ) )

@@ -280,15 +280,12 @@ I18nMainWindow
       dockArea
     );
 
-#if 0
-  TController* controller =
-#endif
-    new TController(
-      // wraps:
-      widget,
-      // as chid of:
-      dockWidget
-    );
+  new TController(
+    // wraps:
+    widget,
+    // as chid of:
+    dockWidget
+  );
 
   return dockWidget;
 }

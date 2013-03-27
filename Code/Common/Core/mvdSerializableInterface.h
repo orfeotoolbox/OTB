@@ -32,6 +32,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtCore>
 
 //
 // System includes (sorted by alphabetic order)
@@ -44,7 +45,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdModifiableInterface.h"
 
 
 /*****************************************************************************/
@@ -65,14 +65,26 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class SerializableInterface
+/**
+ * \class SerializableInterface
  *
+ * \brief 'Template method' pattern applied to serializable objects.
  */
-class Monteverdi2_EXPORT SerializableInterface :
-    public ModifiableInterface
+class Monteverdi2_EXPORT SerializableInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+
+//
+// Public types.
+public:
+  /**
+   */
+  enum Mode
+  {
+    MODE_BINARY = 0,
+    MODE_TEXT = 1,
+  };
 
 //
 // Public methods.
@@ -83,7 +95,11 @@ public:
 
   /**
    */
-  inline void Save();
+  void Write( const QString& filename, Mode mode ) const;
+
+  /**
+   */
+  void Read( const QString& filename, Mode mode );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -95,7 +111,11 @@ protected:
 
   /**
    */
-  virtual void virtual_Save() =0;
+  virtual void virtual_Write( QIODevice& device ) const =0;
+
+  /**
+   */
+  virtual void virtual_Read( QIODevice* device ) =0;
 
 //
 // Protected attributes.
@@ -120,17 +140,6 @@ private:
 
 namespace mvd
 {
-
-/*****************************************************************************/
-inline
-void
-SerializableInterface
-::Save()
-{
-  virtual_Save();
-
-  ClearModified();
-}
 
 } // end namespace 'mvd'
 

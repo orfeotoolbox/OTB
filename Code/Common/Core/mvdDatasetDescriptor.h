@@ -47,6 +47,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
 #include "mvdAbstractModel.h"
+#include "mvdSerializableInterface.h"
 
 
 /*****************************************************************************/
@@ -73,7 +74,8 @@ class AbstractImageModel;
  * \brief WIP.
  */
 class Monteverdi2_EXPORT DatasetDescriptor :
-    public AbstractModel
+    public AbstractModel,
+    private SerializableInterface
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -148,7 +150,7 @@ public:
 
   /**
    */
-  void Write( const QString& filename ) const;
+  inline void Write( const QString& filename ) const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -217,19 +219,23 @@ private:
 
   /**
    */
-  void Read( const QString& filename );
-
-  /**
-   */
-  void Read( QIODevice* device );
-
-  /**
-   */
-  void Write( QIODevice& device ) const;
-
-  /**
-   */
   void BuildDocument();
+
+  /**
+   */
+  inline void Read( const QString& filename );
+
+  //
+  // SerializableInterface overrides.
+  //
+
+  using SerializableInterface::Read;
+  using SerializableInterface::Write;
+
+  virtual void virtual_Read( QIODevice* device );
+
+  virtual void virtual_Write( QIODevice& device ) const;
+
 
 //
 // Private attributes.
@@ -289,6 +295,24 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+void
+DatasetDescriptor
+::Read( const QString& filename )
+{
+  Read( filename, SerializableInterface::MODE_TEXT );
+}
+
+/*****************************************************************************/
+inline
+void
+DatasetDescriptor
+::Write( const QString& filename ) const
+{
+  Write( filename, SerializableInterface::MODE_TEXT );
+}
 
 /*****************************************************************************/
 inline

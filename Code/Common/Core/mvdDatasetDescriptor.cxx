@@ -38,8 +38,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdVectorImageModel.h"
 #include "mvdSystemError.h"
+#include "mvdVectorImageModel.h"
 
 
 /*****************************************************************************/
@@ -327,28 +327,7 @@ DatasetDescriptor
 /*******************************************************************************/
 void
 DatasetDescriptor
-::Read( const QString& filename )
-{
-  // File instance.
-  QFile file( filename );
-
-  // Open file on device.
-  if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
-    throw SystemError(
-      ToStdString(
-	QString( "('%1')" ).arg( filename ) )
-    );
-
-  // Read file context.
-  Read( &file );
-
-  // File is closed by automatic scope detruction of QFile instance.
-}
-
-/*******************************************************************************/
-void
-DatasetDescriptor
-::Read( QIODevice* device )
+::virtual_Read( QIODevice* device )
 {
   qDebug() << "Reading  XML descriptor...";
 
@@ -391,45 +370,7 @@ DatasetDescriptor
 /*******************************************************************************/
 void
 DatasetDescriptor
-::Write( const QString& filename ) const
-{
-  // File instance.
-  QFile file( filename );
-
-  // Open file on device.
-  if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) )
-    throw SystemError(
-      ToStdString(
-	QString( "('%1')" ).arg( filename ) )
-    );
-
-  try
-    {
-    // Read file context.
-    Write( file );
-    }
-  catch( SystemError& syserr )
-    {
-    // Catch any SystemError thrown by DatasetDescriptor::Write() and
-    // morph it into the same SystemError containing filename
-    // information.
-    syserr = SystemError(
-      syserr.GetErrorCode(),
-      ToStdString(
-	QString( "('%1')" ).arg( filename ) )
-    );
-
-    // Throw morphed SystemError.
-    throw syserr;
-    }
-
-  // File is closed by automatic scope detruction of QFile instance.
-}
-
-/*******************************************************************************/
-void
-DatasetDescriptor
-::Write( QIODevice& device ) const
+::virtual_Write( QIODevice& device ) const
 {
 #if 0
   qDebug()
