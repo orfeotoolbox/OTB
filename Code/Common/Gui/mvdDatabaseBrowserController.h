@@ -105,6 +105,8 @@ public:
 // Signals.
 signals:
 
+	void SelectedDatasetFilenameChanged(const QString &);
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //

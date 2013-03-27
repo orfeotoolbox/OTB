@@ -41,6 +41,10 @@
 //
 #include "Gui/mvdDatabaseBrowserWidget.h"
 
+#include "Core/mvdVectorImageModel.h"
+//
+#include "Gui/mvdDatabaseTreeWidget.h"
+
 namespace mvd
 {
 /*
@@ -80,6 +84,15 @@ DatabaseBrowserController
     // to:
     this, SLOT( OnCurrentDatasetChanged( const QString& ) )
   );
+
+  //
+  QObject::connect(
+    this, 
+    SIGNAL( SelectedDatasetFilenameChanged( const QString& )  ),
+    // to:
+    widget->GetDatabaseTreeWidget(), 
+    SLOT( OnSelectedDatasetFilenameChanged( const QString& ) )
+    );
 }
 
 /*******************************************************************************/
@@ -94,6 +107,15 @@ DatabaseBrowserController
     // from:
     this, SLOT( OnCurrentDatasetChanged( const QString& ) )
   );
+  
+  //
+  QObject::disconnect(
+    this, 
+    SIGNAL( SelectedDatasetFilenameChanged( const QString& )  ),
+    // to:
+    widget->GetDatabaseTreeWidget(), 
+    SLOT( OnSelectedDatasetFilenameChanged( const QString& ) )
+    );
 }
 
 /*******************************************************************************/
@@ -153,7 +175,17 @@ DatabaseBrowserController
 
   DatabaseModel* model = GetModel< DatabaseModel >();
 
+  // set the newly selected dataset id
   model->SelectDatasetModel( name );
+
+  // emit selected dataset image filename
+  VectorImageModel * imageModel
+    =  qobject_cast< VectorImageModel *>(model->GetSelectedDatasetModel()->GetSelectedImageModel());
+
+  //
+  // this signal is used to pass the current dataset input filename.
+  // it is connected to the DatabaseBrowserWidget custom QTreeWidget
+  emit SelectedDatasetFilenameChanged(imageModel->GetFilename());
 }
 
 } // end namespace 'mvd'
