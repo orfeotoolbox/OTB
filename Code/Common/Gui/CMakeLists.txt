@@ -25,6 +25,7 @@ set( Common_Gui_SOURCES
   mvdQuicklookViewManipulator.cxx
   mvdStatusBarWidget.cxx
   mvdApplicationsToolBox.cxx
+  mvdDatabaseTreeWidget.cxx
 )
 
 #############################################################################
@@ -54,6 +55,7 @@ set( Common_Gui_HEADERS_MOC
   mvdQuicklookViewManipulator.h
   mvdStatusBarWidget.h
   mvdApplicationsToolBox.h
+  mvdDatabaseTreeWidget.h
 )
 
 #############################################################################

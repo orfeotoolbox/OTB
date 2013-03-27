@@ -18,7 +18,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QTreeWidget" name="databaseTreeWidget">
+    <widget class="mvd::DatabaseTreeWidget" name="databaseTreeWidget">
      <column>
       <property name="text">
        <string>Name</string>
@@ -36,6 +36,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>mvd::DatabaseTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>Gui/mvdDatabaseTreeWidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
