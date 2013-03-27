@@ -72,8 +72,15 @@ private:
     AddParameter(ParameterType_OutputFilename, "outkwl", "Write the OSSIM keywordlist to a geom file");
     SetParameterDescription("outkwl", "This option allows to extract the OSSIM keywordlist of the image into a geom file.");
     MandatoryOff("outkwl");
-    
+
     //Create output parameters to store image informations
+    AddParameter(ParameterType_Int,"indexx","Start index X");
+    SetParameterDescription("indexx","X start index");
+    SetParameterRole("indexx", Role_Output);
+    AddParameter(ParameterType_Int,"indexy","Start index Y");
+    SetParameterDescription("indexy","Y start index");
+    SetParameterRole("indexy", Role_Output);
+
     AddParameter(ParameterType_Int,"sizex","Size X");
     SetParameterDescription("sizex","X size (in pixels)");
     SetParameterRole("sizex", Role_Output);
@@ -257,6 +264,12 @@ private:
     //Get number of bands
     SetParameterInt("numberbands", inImage->GetNumberOfComponentsPerPixel());
     ossOutput << "\tNumber of bands : " << GetParameterInt("numberbands") << std::endl;
+
+    //Get image size
+    SetParameterInt("indexx", inImage->GetLargestPossibleRegion().GetIndex()[0]);
+    SetParameterInt("indexy", inImage->GetLargestPossibleRegion().GetIndex()[1]);
+
+    ossOutput << "\tStart index :  [" << GetParameterInt("indexx") << "," << GetParameterInt("indexy") << "]" << std::endl;
 
     //Get image size
     SetParameterInt("sizex", inImage->GetLargestPossibleRegion().GetSize()[0]);
