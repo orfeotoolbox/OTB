@@ -19,6 +19,9 @@
 #include <boost/algorithm/string.hpp>
 #include <itksys/RegularExpression.hxx>
 
+#include <boost/foreach.hpp>
+#include <boost/tokenizer.hpp>
+
 namespace otb
 {
 
@@ -253,11 +256,34 @@ ExtendedFilenameToWriterOptions
   return m_Options.box.first;
 }
 
-std::string
+const
+ExtendedFilenameToWriterOptions::RegionType
 ExtendedFilenameToWriterOptions
 ::GetBox() const
 {
-  return m_Options.box.second;
+  typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+
+  boost::char_separator<char> sep(":");
+  tokenizer tokens(m_Options.box.second, sep);
+
+  tokenizer::iterator it = tokens.begin();
+  typename RegionType::IndexType start;
+  typename RegionType::SizeType  size;
+
+  start[0] = atoi(it->c_str());  // first index on X
+  ++it;
+  start[1] = atoi(it->c_str());  // first index on Y
+  ++it;
+  size[0]  = atoi(it->c_str());  // size along X
+  ++it;
+  size[1]  = atoi(it->c_str());  // size along Y
+
+  RegionType inputRegion;
+
+  inputRegion.SetSize(size);
+  inputRegion.SetIndex(start);
+
+  return inputRegion;
 }
 
 

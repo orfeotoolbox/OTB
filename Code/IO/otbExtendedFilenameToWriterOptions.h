@@ -31,6 +31,9 @@ namespace otb
  * Available options for extended file name are:
  * - &writegeom=ON : to activate the creation of an external geom file
  * - &gdal:co:<KEY>=<VALUE> : the gdal creation option <KEY>
+ * - streaming modes
+ * - box
+ * See http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName
  *
  *  \sa ImageFileWriter
  */
@@ -43,6 +46,7 @@ public:
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
   typedef itk::Object                            Superclass;
+  typedef typename itk::ImageRegion<2>           RegionType;
 
   itkTypeMacro(ExtendedFilenameToWriterOptions, itk::Object);
   itkNewMacro(Self);
@@ -84,7 +88,7 @@ public:
   double GetStreamingSizeValue() const;
 
   bool BoxIsSet() const;
-  std::string GetBox() const;
+  const RegionType GetBox() const;
 
 
 protected:
