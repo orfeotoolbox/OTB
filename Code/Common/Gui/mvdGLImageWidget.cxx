@@ -282,6 +282,8 @@ GLImageWidget
 
   // emited to update to force the ql widget (if any) to update
   emit CentralWidgetUpdated();
+
+  m_ImageViewManipulator->mouseReleaseEvent(event);
 }
 
 /*******************************************************************************/
