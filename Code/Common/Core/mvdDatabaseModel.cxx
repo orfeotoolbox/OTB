@@ -112,7 +112,10 @@ DatabaseModel
 
   // If dataset model has been found, return it.
   if( datasetModel!=NULL )
+    {
+    SetSelectedDatasetModel( datasetModel );
     return datasetModel;
+    }
 
   // Otherwise, load it from disk.
   try
