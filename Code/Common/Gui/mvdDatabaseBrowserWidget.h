@@ -58,6 +58,7 @@ namespace
 namespace mvd
 {
 
+class DatabaseTreeWidget;
 //
 // Internal classes pre-declaration.
 namespace Ui
@@ -103,6 +104,10 @@ public:
    */
   void SetCurrentDataset( const QString& name );
 
+  /**
+   */
+  DatabaseTreeWidget* GetDatabaseTreeWidget( );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -125,8 +130,6 @@ signals:
 // Protected methods.
 protected:
 
-  void mousePressEvent( QMouseEvent * event );
-  void mouseMoveEvent ( QMouseEvent * event );
 
 //
 // Protected attributes.
