@@ -66,7 +66,7 @@ public:
 
     for (unsigned int comp = 0; comp < m_ImageDimension; comp++)
       {
-      jointPixel[comp] = index[comp] / m_SpatialBandwidth;
+      jointPixel[comp] = (index[comp] + m_GlobalShift[comp]) / m_SpatialBandwidth;
       }
     for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
       {
@@ -76,13 +76,14 @@ public:
   }
 
   void Initialize(unsigned int _ImageDimension, unsigned int numberOfComponentsPerPixel_, RealType spatialBandwidth_,
-                  RealType rangeBandwidth_)
+                  RealType rangeBandwidth_, typename TInputImage::IndexType globalShift_)
   {
     m_ImageDimension = _ImageDimension;
     m_NumberOfComponentsPerPixel = numberOfComponentsPerPixel_;
     m_SpatialBandwidth = spatialBandwidth_;
     m_RangeBandwidth = rangeBandwidth_;
     m_OutputSize = m_ImageDimension + m_NumberOfComponentsPerPixel;
+    m_GlobalShift = globalShift_;
   }
 
   unsigned int GetOutputSize() const
@@ -96,6 +97,7 @@ private:
   unsigned int m_OutputSize;
   RealType m_SpatialBandwidth;
   RealType m_RangeBandwidth;
+  typename TInputImage::IndexType m_GlobalShift;
 };
 
 class KernelUniform
@@ -108,7 +110,7 @@ public:
 
   RealType operator()(RealType x) const
   {
-    return (x <= 1) ? 1.0 : 0.0;
+    return (x < 1) ? 1.0 : 0.0;
   }
 
   RealType GetRadius(RealType bandwidth) const
@@ -537,6 +539,8 @@ public:
 ;
 #endif
 
+  itkSetMacro(GlobalShift,InputIndexType);
+
   /** Returns the const spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
   const OutputSpatialImageType * GetSpatialOutput() const;
   /** Returns the const spectral image output */
@@ -655,6 +659,8 @@ private:
   typedef Meanshift::BucketImage<RealVectorImageType> BucketImageType;
   BucketImageType m_BucketImage;
 #endif
+
+  InputIndexType m_GlobalShift;
 
 };
 
