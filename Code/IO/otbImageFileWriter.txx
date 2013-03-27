@@ -43,6 +43,8 @@
 #include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
 
+#include <boost/foreach.hpp>
+#include <boost/tokenizer.hpp>
 
 namespace otb
 {
@@ -474,6 +476,8 @@ ImageFileWriter<TInputImage>
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
     {
+
+    /*
     std::string buf; // Have a buffer string
     std::stringstream ss(m_FilenameHelper->GetBox()); // Insert the string into a stream
 
@@ -483,15 +487,24 @@ ImageFileWriter<TInputImage>
       {
       tokens.push_back(atoi(buf.c_str()));
       }
+*/
 
+    typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+
+    boost::char_separator<char> sep(":");
+    tokenizer tokens(m_FilenameHelper->GetBox(), sep);
+
+    tokenizer::iterator it = tokens.begin();
     typename InputImageType::IndexType start;
     typename InputImageType::SizeType  size;
 
-    start[0] = tokens[0];  // first index on X
-    start[1] = tokens[1];  // first index on Y
-
-    size[0]  = tokens[2];  // size along X
-    size[1]  = tokens[3];  // size along Y
+    start[0] = atoi(it->c_str());  // first index on X
+    ++it;
+    start[1] = atoi(it->c_str());  // first index on Y
+    ++it;
+    size[0]  = atoi(it->c_str());  // size along X
+    ++it;
+    size[1]  = atoi(it->c_str());  // size along Y
 
     inputRegion.SetSize(size);
     inputRegion.SetIndex(start);

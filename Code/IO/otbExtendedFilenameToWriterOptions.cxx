@@ -125,7 +125,7 @@ ExtendedFilenameToWriterOptions
   if(!map["box"].empty())
     {
     itksys::RegularExpression reg;
-    reg.compile("([^0-9\\.]\s[^0-9\\.]\s[^0-9\\.]\s[^0-9\\.])");
+    reg.compile("([^0-9\\.]:[^0-9\\.]:[^0-9\\.]:[^0-9\\.])");
 
     if(!reg.find(map["box"]))
       {
