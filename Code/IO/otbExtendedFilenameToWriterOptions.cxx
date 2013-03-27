@@ -261,12 +261,12 @@ ExtendedFilenameToWriterOptions::RegionType
 ExtendedFilenameToWriterOptions
 ::GetBox() const
 {
-  typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+  typedef boost::tokenizer<boost::char_separator<char> > Tokenizer;
 
   boost::char_separator<char> sep(":");
-  tokenizer tokens(m_Options.box.second, sep);
+  Tokenizer tokens(m_Options.box.second, sep);
 
-  tokenizer::iterator it = tokens.begin();
+  Tokenizer::iterator it = tokens.begin();
   typename RegionType::IndexType start;
   typename RegionType::SizeType  size;
 
