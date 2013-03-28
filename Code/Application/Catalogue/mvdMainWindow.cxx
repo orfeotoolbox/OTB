@@ -353,14 +353,18 @@ MainWindow
   if (index > 0 )
     {
     //
+    //
+    QWidget * widgetToDelete = m_CentralWidgetTabs->widget(index);
+    
+    //
     // remove the tab
     m_CentralWidgetTabs->removeTab(index);
 
     //
     // delete the selected widget
-    if (m_CentralWidgetTabs->widget(index))
+    if (widgetToDelete)
       {
-      delete m_CentralWidgetTabs->widget(index);
+      delete widgetToDelete;
       }
     }
 }
