@@ -43,6 +43,9 @@
 #include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
 
+#include <boost/foreach.hpp>
+#include <boost/tokenizer.hpp>
+
 namespace otb
 {
 
@@ -473,7 +476,26 @@ ImageFileWriter<TInputImage>
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
     {
-    inputRegion = m_FilenameHelper->GetBox();
+    typedef boost::tokenizer<boost::char_separator<char> > Tokenizer;
+
+    boost::char_separator<char> sep(":");
+    Tokenizer tokens(m_FilenameHelper->GetBox(), sep);
+
+    Tokenizer::iterator it = tokens.begin();
+    typename InputImageRegionType::IndexType start;
+    typename InputImageRegionType::SizeType  size;
+
+    start[0] = atoi(it->c_str());  // first index on X
+    ++it;
+    start[1] = atoi(it->c_str());  // first index on Y
+    ++it;
+    size[0]  = atoi(it->c_str());  // size along X
+    ++it;
+    size[1]  = atoi(it->c_str());  // size along Y
+
+    inputRegion.SetSize(size);
+    inputRegion.SetIndex(start)
+
     otbMsgDevMacro(<< "inputRegion " << inputRegion);
 
     if (!inputRegion.Crop(inputPtr->GetLargestPossibleRegion()))

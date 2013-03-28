@@ -256,33 +256,11 @@ ExtendedFilenameToWriterOptions
   return m_Options.box.first;
 }
 
-ExtendedFilenameToWriterOptions::RegionType
+std::string
 ExtendedFilenameToWriterOptions
 ::GetBox() const
 {
-  typedef boost::tokenizer<boost::char_separator<char> > Tokenizer;
-
-  boost::char_separator<char> sep(":");
-  Tokenizer tokens(m_Options.box.second, sep);
-
-  Tokenizer::iterator it = tokens.begin();
-  RegionType::IndexType start;
-  RegionType::SizeType  size;
-
-  start[0] = atoi(it->c_str());  // first index on X
-  ++it;
-  start[1] = atoi(it->c_str());  // first index on Y
-  ++it;
-  size[0]  = atoi(it->c_str());  // size along X
-  ++it;
-  size[1]  = atoi(it->c_str());  // size along Y
-
-  RegionType inputRegion;
-
-  inputRegion.SetSize(size);
-  inputRegion.SetIndex(start);
-
-  return inputRegion;
+  return m_Options.box.second;
 }
 
 
