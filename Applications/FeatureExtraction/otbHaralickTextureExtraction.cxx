@@ -152,7 +152,8 @@ SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
 SetDocExampleParameterValue("channel", "2");
 SetDocExampleParameterValue("parameters.xrad", "3");
 SetDocExampleParameterValue("parameters.yrad", "3");
-SetDocExampleParameterValue("texture.simple", "HaralickTextures.tif");
+SetDocExampleParameterValue("texture", "simple");
+SetDocExampleParameterValue("out", "HaralickTextures.tif");
 }
 
 void DoUpdateParameters()
