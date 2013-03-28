@@ -129,7 +129,9 @@ ApplicationsToolBox
 
       // If a current tag applicaton name match the searcText, add the
       // tag as an item to the tree
-      if (m_SearchText.isEmpty() ||  IsSearchTextMatchAnyAlgorithm( qcurrentTag ) )
+      if (m_SearchText.isEmpty() ||  
+          IsSearchTextMatchAnyAlgorithm( qcurrentTag ) || 
+          qcurrentTag.contains(m_SearchText ,Qt::CaseInsensitive))
         {
         //
         // step #1 ->  DocTag is a main item
@@ -150,7 +152,8 @@ ApplicationsToolBox
         
           // does the current algorithm match the search text
           if ( m_SearchText.isEmpty() ||
-               qcurrentAlg.contains(m_SearchText ,Qt::CaseInsensitive) )
+               qcurrentAlg.contains(m_SearchText ,Qt::CaseInsensitive) ||
+               qcurrentTag.contains(m_SearchText ,Qt::CaseInsensitive))
             {
             // 
             // set current application name as secondary item
