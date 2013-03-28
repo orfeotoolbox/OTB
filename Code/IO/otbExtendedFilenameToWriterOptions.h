@@ -46,7 +46,6 @@ public:
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
   typedef itk::Object                            Superclass;
-  typedef typename itk::ImageRegion<2>           RegionType;
 
   itkTypeMacro(ExtendedFilenameToWriterOptions, itk::Object);
   itkNewMacro(Self);
