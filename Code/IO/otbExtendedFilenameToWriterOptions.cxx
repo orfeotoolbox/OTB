@@ -266,8 +266,8 @@ ExtendedFilenameToWriterOptions
   Tokenizer tokens(m_Options.box.second, sep);
 
   Tokenizer::iterator it = tokens.begin();
-  typename RegionType::IndexType start;
-  typename RegionType::SizeType  size;
+  RegionType::IndexType start;
+  RegionType::SizeType  size;
 
   start[0] = atoi(it->c_str());  // first index on X
   ++it;
