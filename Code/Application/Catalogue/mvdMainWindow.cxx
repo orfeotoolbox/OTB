@@ -336,7 +336,8 @@ MainWindow
   m_CentralWidgetTabs->addTab(controller->GetSelectedApplicationWidget(appName), 
                               appName);
 
-  // no checking needs here, if index is not available nothing is done
+  // no checking needed here, if index is not available nothing is
+  // done. Focus on the newly added tab
   m_CentralWidgetTabs->setCurrentIndex( m_CentralWidgetTabs->count() - 1 );
 #endif
 
