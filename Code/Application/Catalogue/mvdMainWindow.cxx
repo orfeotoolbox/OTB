@@ -335,6 +335,9 @@ MainWindow
   // TODO : check if this application is already opened ???
   m_CentralWidgetTabs->addTab(controller->GetSelectedApplicationWidget(appName), 
                               appName);
+
+  // no checking needs here, if index is not available nothing is done
+  m_CentralWidgetTabs->setCurrentIndex( m_CentralWidgetTabs->count() - 1 );
 #endif
 
 }
