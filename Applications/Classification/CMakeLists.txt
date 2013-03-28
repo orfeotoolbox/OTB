@@ -42,4 +42,8 @@ IF(OTB_USE_OPENCV)
 	OTB_CREATE_APPLICATION(NAME           ImageClassifier
                        	   SOURCES        otbImageClassifier.cxx
                            LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)
+
+	OTB_CREATE_APPLICATION(NAME           ValidateImagesClassifier
+                           SOURCES        otbValidateImagesClassifier.cxx
+                           LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)
 ENDIF()
