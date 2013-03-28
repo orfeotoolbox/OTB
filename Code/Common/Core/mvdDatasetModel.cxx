@@ -60,6 +60,10 @@ namespace mvd
 
 const char* DatasetModel::DESCRIPTOR_FILENAME = "descriptor.xml";
 
+const char* DatasetModel::QUICKLOOK_FILE_EXT = ".ql.tif";
+
+const char* DatasetModel::HISTOGRAM_FILE_EXT = ".txt";
+
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
@@ -89,7 +93,7 @@ void
 DatasetModel
 ::ImportImage( const QString& filename, int width, int height )
 {
-  AbstractImageModel::BuildContext context( filename );
+  AbstractImageModel::BuildContext context( true, filename );
   LoadImage( context, width, height );
 }
 
@@ -110,18 +114,27 @@ DatasetModel
   //
   // 1.1. Assign new image ID to build-context if first time loading.
   // Remember provided ID.
+#if 0
   int id = context.m_Id;
+#endif
   // Assign image-model ID to build-context if there is none
   // provided but keep provided one to test if it's first time
   // import or next time loading of image-model.
-  if( id<0 )
+  if( context.IsBeingStored() )
     {
     AbstractImageModelList aimList( GetImageModels() );
+
     context.m_Id = aimList.indexOf( vectorImageModel );
 
+    context.m_Histogram = HistogramFileInfo( context.m_Filename ).filePath();
+
     qDebug()
-      << "Generated ID" << context.m_Id
-      << "for image-file " << context.m_Filename << ".";
+      << "Storing image:"
+      << "\n- id:" << context.m_Id
+      << ";\n- filename:" << context.m_Filename
+      << ";\n- quicklook:" << context.m_Quicklook
+      << ";\n- histogram:" << context.m_Histogram
+      << ".";
     }
 
   // 2. Safely load data from file.
@@ -135,19 +148,22 @@ DatasetModel
     //
     // 2.2. Build image-model structure and generate cached data).
     vectorImageModel->BuildModel( &context );
+
     assert( vectorImageModel->GetQuicklookModel()!=NULL );
+    assert( vectorImageModel->GetHistogramModel()!=NULL );
 
     // If it's first time, import image-model into descriptor.
-    if( id<0 )
+    if( context.IsBeingStored() )
       {
       //
       // 2.3a: Add image to Dataset descriptor file...
       m_Descriptor->InsertImageModel(
 	// ...providing newly calculated image-model ID.
 	context.m_Id,
-	vectorImageModel->GetFilename(),
+	context.m_Filename,
 	&vectorImageModel->GetSettings(),
-	vectorImageModel->GetQuicklookModel()->GetFilename()
+	vectorImageModel->GetQuicklookModel()->GetFilename(),
+	context.m_Histogram
       );
 
       //
@@ -247,7 +263,7 @@ DatasetModel
     {
     // Locals.
     VectorImageModel::Settings settings;
-    AbstractImageModel::BuildContext imageContext( &settings );
+    AbstractImageModel::BuildContext imageContext( false, &settings );
 
     // Read image-model descriptor information.
     DatasetDescriptor::GetImageModel(
@@ -255,7 +271,8 @@ DatasetModel
       imageContext.m_Id,
       imageContext.m_Filename,
       imageContext.m_Settings,
-      imageContext.m_Quicklook
+      imageContext.m_Quicklook,
+      imageContext.m_Histogram
     );
 
     // Traces.
@@ -263,7 +280,9 @@ DatasetModel
       << "Input image:"
       << "\n- ID:" << imageContext.m_Id
       << ";\n- filename:" << imageContext.m_Filename
-      << ";\n- quicklook:" << imageContext.m_Quicklook << ".";
+      << ";\n- quicklook:" << imageContext.m_Quicklook 
+      << ";\n- histogram: " << imageContext.m_Histogram
+      << ".";
 
     // TODO: 3) Remove WxH for screen best-fit during loading of model!
     LoadImage(

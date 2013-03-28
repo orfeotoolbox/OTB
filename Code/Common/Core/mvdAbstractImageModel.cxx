@@ -219,7 +219,6 @@ AbstractImageModel
       if( !it2->isEmpty() )
         it1->append( " (" + *it2 + ")" );
       }
-
     }
 
   //
@@ -243,7 +242,13 @@ AbstractImageModel
 
   //
   // HISTOGRAM.
-  newChildModel< HistogramModel >();
+  HistogramModel::BuildContext histogramContext(
+    buildContext->IsBeingStored(),
+    buildContext->m_Histogram
+  );
+
+  newChildModel< HistogramModel >( &histogramContext );
+  
 
   //
   // QUICKLOOK.

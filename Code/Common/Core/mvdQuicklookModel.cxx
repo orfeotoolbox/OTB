@@ -55,8 +55,6 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
-const char* QuicklookModel::IMAGE_FILE_EXT = ".ql.tif";
-
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
@@ -121,9 +119,7 @@ QuicklookModel
 
     // Quicklook file information.
     QFileInfo quicklookFileInfo(
-      datasetModel->GetDirectory().path(),
-      imageFileInfo.completeBaseName()
-      + QuicklookModel::IMAGE_FILE_EXT
+      datasetModel->QuicklookFileInfo( viModel->GetFilename() )
     );
 
     // Quicklook filename.

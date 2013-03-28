@@ -51,6 +51,19 @@ namespace mvd
 
 
 /*****************************************************************************/
+/* CONSTANTS                                                                 */
+
+namespace
+{
+} // end of anonymous namespace.
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+const int HistogramModel::BINS_OVERSAMPLING_RATE = 5;
+
+
+/*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
@@ -162,16 +175,52 @@ void
 HistogramModel
 ::virtual_BuildModel( void* context )
 {
-  // template_BuildModel_I< VectorImageModel::SourceImageType >();
-  template_BuildModel_M< VectorImageModel >();
+  if( context==NULL )
+    {
+    template_BuildModel_M< VectorImageModel >();
 
-  // template_BuildModel< otb::Image< FixedArray< double, 4 >, 2 > >();
-  // template_BuildModel< otb::Image< itk::FixedArray< float, 4 >, 2 > >();
+    // template_BuildModel_I< VectorImageModel::SourceImageType >();
 
-  /*
-  template_BuildModel< otb::VectorImage< float, 2 > >();
-  template_BuildModel< otb::Image< float, 2 > >();
-  */
+    // template_BuildModel< otb::Image< FixedArray< double, 4 >, 2 > >();
+    // template_BuildModel< otb::Image< itk::FixedArray< float, 4 >, 2 > >();
+
+    /*
+      template_BuildModel< otb::VectorImage< float, 2 > >();
+      template_BuildModel< otb::Image< float, 2 > >();
+    */
+    }
+  else
+    {
+    // Retrieve proper build-context.
+    BuildContext* buildContext = static_cast< BuildContext* >( context );
+
+    if( buildContext->IsBeingStored() )
+      {
+      template_BuildModel_M< VectorImageModel >();
+
+      Write( buildContext->m_Filename, SerializableInterface::MODE_TEXT );
+      }
+    else
+      {
+      Read( buildContext->m_Filename, SerializableInterface::MODE_TEXT );
+      }
+    }
+}
+
+/*******************************************************************************/
+void
+HistogramModel
+::virtual_Read( QIODevice* device )
+{
+  qDebug() << this << "::virtual_Read(" << device << ")";
+}
+
+/*******************************************************************************/
+void
+HistogramModel
+::virtual_Write( QIODevice& device ) const
+{
+  qDebug() << this << "::virtual_Write(" << &device << ")";
 }
 
 /*******************************************************************************/

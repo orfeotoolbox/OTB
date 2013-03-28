@@ -47,13 +47,12 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModel.h"
 #include "mvdAlgorithm.h"
+#include "mvdSerializableInterface.h"
 #include "mvdTypes.h"
 
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
-
-#define BINS_OVERSAMPLING_RATE 5
 
 //
 // External classes pre-declaration.
@@ -63,6 +62,11 @@ namespace
 
 namespace mvd
 {
+
+namespace
+{
+}
+
 //
 // Internal classes pre-declaration.
 
@@ -74,7 +78,8 @@ namespace mvd
  * \class HistogramModel
  */
 class Monteverdi2_EXPORT HistogramModel :
-    public AbstractModel
+    public AbstractModel,
+    private SerializableInterface
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -101,6 +106,38 @@ public:
     // itk::Histogram<>::MeasurementType.
     itk::NumericTraits< DefaultImageType::InternalPixelType >::RealType
     MeasurementType;
+
+  /**
+   * \class BuildContext
+   * \brief WIP.
+   */
+  class BuildContext
+  {
+    //
+    // Public methods.
+  public:
+    /** \brief Constructor. */
+    BuildContext( bool isBeingStored,
+		  const QString& filename =QString() ) :
+      m_Filename( filename )
+    {
+    }
+
+    /**
+     */
+    inline bool IsBeingStored() const
+    {
+      return m_IsBeingStored;
+    }
+
+    //
+    // Public attributes
+  public:
+    QString m_Filename;
+
+  private:
+    bool m_IsBeingStored;
+  };
 
 //
 // Public methods.
@@ -155,6 +192,13 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
+// Private constants.
+private:
+  /**
+   */
+  static const int BINS_OVERSAMPLING_RATE;
+
+//
 // Private types.
 private:
 
@@ -167,11 +211,23 @@ private:
 //
 // Private methods.
 private:
+  /**
+   */
   template< typename TImage >
     void template_BuildModel_I();
 
+  /**
+   */
   template< typename TImageModel >
     void template_BuildModel_M();
+
+  //
+  // SerializableInterface overrides.
+  //
+
+  virtual void virtual_Read( QIODevice* device );
+
+  virtual void virtual_Write( QIODevice& device ) const;
 
 //
 // Private attributes.
@@ -294,7 +350,8 @@ HistogramModel
   typename MinMaxFilter::Pointer filterMinMax( MinMaxFilter::New() );
 
   filterMinMax->SetInput(
-    otb::DynamicCast< TImage >( imageModel->ToImageBase() )
+    // otb::DynamicCast< TImage >( imageModel->ToImageBase() )
+    imageModel->ToImageBase()
   );
 
   filterMinMax->Update();
@@ -330,13 +387,16 @@ HistogramModel
   typename HistogramFilter::Pointer histogramFilter( HistogramFilter::New() );
 
   histogramFilter->SetInput(
-    otb::DynamicCast< TImage >( imageModel->ToImageBase() )
+    // otb::DynamicCast< TImage >( imageModel->ToImageBase() )
+    imageModel->ToImageBase()
   );
 
   // Setup histogram filter.
   histogramFilter->GetFilter()->SetHistogramMin( m_MinPixel );
   histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
-  histogramFilter->SetNumberOfBins( BINS_OVERSAMPLING_RATE * 256 );
+  histogramFilter->SetNumberOfBins(
+    HistogramModel::BINS_OVERSAMPLING_RATE * 256
+  );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
 
   // Go.
@@ -431,7 +491,9 @@ HistogramModel
   // Setup histogram filter.
   histogramFilter->GetFilter()->SetHistogramMin( m_MinPixel );
   histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
-  histogramFilter->GetFilter()->SetNumberOfBins( BINS_OVERSAMPLING_RATE * 256 );
+  histogramFilter->GetFilter()->SetNumberOfBins(
+    HistogramModel::BINS_OVERSAMPLING_RATE * 256
+  );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
   histogramFilter->GetFilter()->SetNoDataFlag(true);
 

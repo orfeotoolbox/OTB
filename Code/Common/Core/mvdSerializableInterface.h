@@ -90,7 +90,7 @@ public:
 // Public methods.
 public:
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~SerializableInterface();
 
   /**
@@ -106,7 +106,8 @@ public:
 //
 // Protected methods.
 protected:
-  /** Constructor */
+
+  /** \brief Constructor. */
   SerializableInterface();
 
   /**

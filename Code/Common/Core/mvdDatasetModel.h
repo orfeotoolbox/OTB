@@ -154,6 +154,14 @@ public:
    */
   inline ConstAbstractImageModelList GetImageModels() const;
 
+  /**
+   */
+  inline QFileInfo HistogramFileInfo( const QString& imageFilename ) const;
+
+  /**
+   */
+  inline QFileInfo QuicklookFileInfo( const QString& imageFilename ) const;
+
   //
   // AbstractModel overrides.
 
@@ -192,6 +200,18 @@ private:
   /**
    */
   static const char* DESCRIPTOR_FILENAME;
+
+  /**
+   * \brief The quicklook image-file extension
+   * (e.g. '/tmp/my_source_image.ql.tif'.)
+   */
+  static const char* QUICKLOOK_FILE_EXT;
+
+  /**
+   * \brief The histogram file extension
+   * (e.g. '/tmp/my_source_image.tif.htg'.)
+   */
+  static const char* HISTOGRAM_FILE_EXT;
 
 //
 // Private methods.
@@ -252,6 +272,38 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+QFileInfo
+DatasetModel
+::HistogramFileInfo( const QString& imageFilename ) const
+{
+  // Source image file information.
+  QFileInfo imageFileInfo( imageFilename );
+
+  // Histogram file information.
+  return QFileInfo(
+    m_Directory.path(),
+    imageFileInfo.fileName() + DatasetModel::HISTOGRAM_FILE_EXT
+  );
+}
+
+/*****************************************************************************/
+inline
+QFileInfo
+DatasetModel
+::QuicklookFileInfo( const QString& imageFilename ) const
+{
+  // Source image file information.
+  QFileInfo imageFileInfo( imageFilename );
+
+  // Histogram file information.
+  return QFileInfo(
+    m_Directory.path(),
+    imageFileInfo.completeBaseName() + DatasetModel::QUICKLOOK_FILE_EXT
+  );
+}
 
 /*****************************************************************************/
 inline

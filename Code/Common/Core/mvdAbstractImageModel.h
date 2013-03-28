@@ -95,24 +95,37 @@ public:
     // Public methods.
   public:
     /** \brief Constructor. */
-    BuildContext( void* const settings =NULL,
+    BuildContext( bool isBeingStored,
+		  void* const settings =NULL,
 		  const QString& filename =QString() ) :
       m_Id( -1 ),
       m_Filename( filename ),
       m_Quicklook(),
-      m_Settings( settings )
+      m_Histogram(),
+      m_Settings( settings ),
+      m_IsBeingStored( isBeingStored )
     {
       assert( settings!=NULL || !filename.isEmpty() );
     }
 
     /** \brief Constructor. */
-    BuildContext( const QString& filename ) :
+    BuildContext( bool isBeingStored,
+		  const QString& filename ) :
       m_Id( -1 ),
       m_Filename( filename ),
       m_Quicklook(),
-      m_Settings( NULL )
+      m_Histogram(),
+      m_Settings( NULL ),
+      m_IsBeingStored( isBeingStored )
     {
       assert( !filename.isEmpty() );
+    }
+
+    /**
+     */
+    inline bool IsBeingStored() const
+    {
+      return m_IsBeingStored;
     }
 
     //
@@ -121,7 +134,12 @@ public:
     int m_Id;
     QString m_Filename;
     QString m_Quicklook;
+    QString m_Histogram;
     void * const m_Settings;
+
+  private:
+    bool m_IsBeingStored;
+
   };
 
 //

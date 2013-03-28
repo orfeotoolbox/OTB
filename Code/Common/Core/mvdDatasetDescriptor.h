@@ -124,7 +124,8 @@ public:
   void InsertImageModel( int id,
 			 const QString& imageFilename,
 			 void* imageSettings,
-			 const QString& quicklookFilename );
+			 const QString& quicklookFilename,
+			 const QString& histogramFilename );
 
   /**
    */
@@ -142,7 +143,8 @@ public:
 			int& id,
 			QString& filename,
 			void* settings,
-			QString& quicklookFilename );
+			QString& quicklookFilename,
+			QString& histogramFilename );
 
   /**
    */
@@ -256,6 +258,7 @@ private:
     ELEMENT_IMAGE_INFORMATION,
     ELEMENT_IMAGE,
     ELEMENT_QUICKLOOK,
+    ELEMENT_HISTOGRAM,
     //
     ELEMENT_SETTINGS_GROUP,
     ELEMENT_RGB_CHANNELS,

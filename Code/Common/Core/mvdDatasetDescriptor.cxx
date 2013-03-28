@@ -80,6 +80,7 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   "image_information",
   "input_image",
   "ql_input_image",
+  "histogram",
   //
   "settings",
   "rgb",
@@ -114,7 +115,8 @@ DatasetDescriptor
 ::InsertImageModel( int id,
 		    const QString& imageFilename,
 		    void* imageSettings,
-		    const QString& quicklookFilename )
+		    const QString& quicklookFilename,
+		    const QString& histogramFilename )
 {
   //
   // Image information node.
@@ -138,6 +140,12 @@ DatasetDescriptor
   quicklookElt.setAttribute( "href", quicklookFilename );
   imageInfoElt.appendChild( quicklookElt );
 
+  // Histogram filename.
+  QDomElement histogramElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_HISTOGRAM ] )
+  );
+  histogramElt.setAttribute( "href", histogramFilename );
+  imageInfoElt.appendChild( histogramElt );
 
   //
   // Settings node.
@@ -262,7 +270,8 @@ DatasetDescriptor
 		 int& id,
 		 QString& imageFilename,
 		 void* imageSettings,
-		 QString& quicklookFilename )
+		 QString& quicklookFilename,
+		 QString& histogramFilename )
 {
   // TODO: Manager XML structure errors.
   assert( !imageSibling.isNull() );
@@ -286,6 +295,14 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   assert( !quicklookElt.isNull() );
   quicklookFilename = quicklookElt.attribute( "href" );
+
+  // Access histogram element.
+  QDomElement histogramElt(
+    histogramElt.firstChildElement( TAG_NAMES[ ELEMENT_HISTOGRAM ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !histogramElt.isNull() );
+  histogramFilename = histogramElt.attribute( "href" );
 
   // TODO: Generalize code section.
   if( imageSettings!=NULL )
@@ -433,6 +450,7 @@ DatasetDescriptor
   );
   rootElt.appendChild( datasetElt );
 
+#if 0
   // Dataset path element.
   QDomElement pathElt(
     m_DomDocument.createElement( TAG_NAMES[ ELEMENT_DATASET_PATH ] )
@@ -442,7 +460,9 @@ DatasetDescriptor
     QDir::cleanPath( model->GetPath() )
   );
   datasetElt.appendChild( pathElt );
+#endif
 
+#if 0
   // Dataset path element.
   QDomElement dirElt(
     m_DomDocument.createElement( TAG_NAMES[ ELEMENT_DATASET_DIRECTORY ] )
@@ -452,6 +472,7 @@ DatasetDescriptor
     QDir::cleanPath( model->GetDirectory().path() )
   );
   datasetElt.appendChild( dirElt );
+#endif
 
   // Image-group element.
   QDomElement imagesElt(

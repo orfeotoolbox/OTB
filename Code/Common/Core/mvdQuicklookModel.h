@@ -169,11 +169,6 @@ private:
 //
 // Private attributes.
 private:
-  /**
-   * \brief The quicklook image-file extension
-   * (e.g. '/tmp/my_source_image.tif.ql'.)
-   */
-  static const char* IMAGE_FILE_EXT;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
