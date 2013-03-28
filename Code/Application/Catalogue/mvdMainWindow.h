@@ -158,6 +158,9 @@ protected slots:
    */
   void OnApplicationToLaunchSelected( const QString & appName );
 
+  /** */
+  void OntabCloseRequested(int index);
+
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //

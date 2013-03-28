@@ -150,6 +150,13 @@ MainWindow
                    SLOT( OnApplicationToLaunchSelected(const QString &) )
     );
 #endif
+
+  QObject::connect(m_CentralWidgetTabs,
+                   SIGNAL(tabCloseRequested(int)),
+                   this,
+                   SLOT(OntabCloseRequested(int))
+    );
+
 }
 
 /*****************************************************************************/
@@ -183,7 +190,8 @@ MainWindow
   //
   // need to setup the central widget as QTabWidget to be able to 
   m_CentralWidgetTabs = new QTabWidget();
-  
+  m_CentralWidgetTabs->setTabsClosable(true);
+
   // 
   // add this tabWidget as central Widget
   setCentralWidget( m_CentralWidgetTabs );
@@ -329,6 +337,28 @@ MainWindow
                               appName);
 #endif
 
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OntabCloseRequested(int index)
+{
+  //
+  // Quicklook tab is not removable
+  if (index > 0 )
+    {
+    //
+    // remove the tab
+    m_CentralWidgetTabs->removeTab(index);
+
+    //
+    // delete the selected widget
+    if (m_CentralWidgetTabs->widget(index))
+      {
+      delete m_CentralWidgetTabs->widget(index);
+      }
+    }
 }
 
 } // end namespace 'mvd'
