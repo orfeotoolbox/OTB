@@ -176,6 +176,9 @@ private:
   /** */
   void InitializeDockWidgets();
 
+  /** */
+  void  InitializeCentralWidget();
+
 //
 // Private attributes.
 private:
@@ -192,6 +195,9 @@ private:
   /**
    */
   GLImageWidget* m_QuicklookView;
+
+  /** */
+  QTabWidget *   m_CentralWidgetTabs;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

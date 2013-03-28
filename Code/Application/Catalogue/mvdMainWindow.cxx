@@ -109,12 +109,12 @@ MainWindow
 
   InitializeDockWidgets();
 
+  InitializeCentralWidget();
+
   assert( m_QuicklookView==NULL );
   m_QuicklookView = CreateQuicklookWidget();
 
-  setCentralWidget( m_QuicklookView );
-
-  // Init dock OTB App.
+  m_CentralWidgetTabs->addTab(m_QuicklookView, "Quicklook");
 }
 
 /*****************************************************************************/
@@ -173,6 +173,20 @@ MainWindow
     ( "APPLICATIONS_BROWSER", tr( "Applications browser" ), Qt::RightDockWidgetArea );
 
 #endif
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::InitializeCentralWidget()
+{
+  //
+  // need to setup the central widget as QTabWidget to be able to 
+  m_CentralWidgetTabs = new QTabWidget();
+  
+  // 
+  // add this tabWidget as central Widget
+  setCentralWidget( m_CentralWidgetTabs );
 }
 
 /*****************************************************************************/
@@ -308,7 +322,11 @@ MainWindow
   ApplicationsToolBoxController * controller = 
     m_ApplicationsBrowserDock->findChild<ApplicationsToolBoxController *>();
 
-  setCentralWidget( controller->GetSelectedApplicationWidget(appName) );
+  //
+  // add the application in a tab 
+  // TODO : check if this application is already opened ???
+  m_CentralWidgetTabs->addTab(controller->GetSelectedApplicationWidget(appName), 
+                              appName);
 #endif
 
 }
