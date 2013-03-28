@@ -256,7 +256,6 @@ ExtendedFilenameToWriterOptions
   return m_Options.box.first;
 }
 
-const
 ExtendedFilenameToWriterOptions::RegionType
 ExtendedFilenameToWriterOptions
 ::GetBox() const

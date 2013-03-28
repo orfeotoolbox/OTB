@@ -88,7 +88,7 @@ public:
   double GetStreamingSizeValue() const;
 
   bool BoxIsSet() const;
-  const RegionType GetBox() const;
+  RegionType GetBox() const;
 
 
 protected:
