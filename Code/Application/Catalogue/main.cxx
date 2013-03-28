@@ -91,7 +91,14 @@ main( int argc, char* argv[] )
   application.OpenDatabase();
 
   // 5. Show window.
+#if defined( _DEBUG )
+  // Usefull when developping/debugging to avoid overlapping other windows.
   mainWindow.show();
+#else
+  // TODO: Correctly manage main-window state via application settings.
+  mainWindow.showMaximized();
+#endif
+
 
   // 6. Let's go: run the application and return exit code.
   return application.exec();
