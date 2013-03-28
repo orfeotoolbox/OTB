@@ -281,7 +281,7 @@ DatasetModel
       << "\n- ID:" << imageContext.m_Id
       << ";\n- filename:" << imageContext.m_Filename
       << ";\n- quicklook:" << imageContext.m_Quicklook 
-      << ";\n- histogram: " << imageContext.m_Histogram
+      << ";\n- histogram:" << imageContext.m_Histogram
       << ".";
 
     // TODO: 3) Remove WxH for screen best-fit during loading of model!

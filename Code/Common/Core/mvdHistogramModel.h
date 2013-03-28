@@ -119,7 +119,8 @@ public:
     /** \brief Constructor. */
     BuildContext( bool isBeingStored,
 		  const QString& filename =QString() ) :
-      m_Filename( filename )
+      m_Filename( filename ),
+      m_IsBeingStored( isBeingStored )
     {
     }
 

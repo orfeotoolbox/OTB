@@ -202,7 +202,11 @@ HistogramModel
       }
     else
       {
-      Read( buildContext->m_Filename, SerializableInterface::MODE_TEXT );
+      if( buildContext->m_Filename.isEmpty() )
+	template_BuildModel_M< VectorImageModel >();
+
+      else
+	Read( buildContext->m_Filename, SerializableInterface::MODE_TEXT );
       }
     }
 }

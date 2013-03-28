@@ -298,10 +298,10 @@ DatasetDescriptor
 
   // Access histogram element.
   QDomElement histogramElt(
-    histogramElt.firstChildElement( TAG_NAMES[ ELEMENT_HISTOGRAM ] )
+    imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_HISTOGRAM ] )
   );
   // TODO: Manage XML structure errors.
-  assert( !histogramElt.isNull() );
+  //assert( !histogramElt.isNull() );
   histogramFilename = histogramElt.attribute( "href" );
 
   // TODO: Generalize code section.
