@@ -31,7 +31,7 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 typename MachineLearningModel<TInputValue,TOutputValue>::Pointer
 MachineLearningModelFactory<TInputValue,TOutputValue>
-::CreateMachineLearningModel(const char* path, FileModeType mode)
+::CreateMachineLearningModel(const std::string& path, FileModeType mode)
 {
 
   RegisterBuiltInFactories();

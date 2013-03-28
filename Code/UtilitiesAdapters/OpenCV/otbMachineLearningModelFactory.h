@@ -48,7 +48,7 @@ public:
   typedef enum { ReadMode, WriteMode } FileModeType;
 
   /** Create the appropriate MachineLearningModel depending on the particulars of the file. */
-  static MachineLearningModelTypePointer CreateMachineLearningModel(const char* path, FileModeType mode);
+  static MachineLearningModelTypePointer CreateMachineLearningModel(const std::string& path, FileModeType mode);
 
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();

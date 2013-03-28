@@ -636,7 +636,7 @@ private:
     confMatCalc->SetReferenceLabels(validationLabeledListSample);
     confMatCalc->SetProducedLabels(predictedList);
 
-    confMatCalc->Update();
+    confMatCalc->Compute();
 
     otbAppLogINFO("SVM training performances");
     LogConfusionMatrix(confMatCalc);
