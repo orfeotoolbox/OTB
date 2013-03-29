@@ -393,7 +393,8 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     for (unsigned int comp = 0; comp < jointDimension; comp++)
       {
       shifts[comp] = jointNeighbor[comp] - jointPixel[comp];
-      norm2 += (shifts[comp] * shifts[comp]) / (bandwidth[comp] * bandwidth[comp]);
+      double d = shifts[comp]/bandwidth[comp];
+      norm2 += d*d;
       }
 
     // Compute pixel weight from kernel
@@ -630,7 +631,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
         // Find index of the pixel closest to the current jointPixel (not normalized by bandwidth)
         for (unsigned int comp = 0; comp < ImageDimension; comp++)
           {
-          modeCandidate[comp] = vcl_floor(jointPixel[comp] + 0.5);
+          modeCandidate[comp] = vcl_floor(jointPixel[comp] - m_GlobalShift[comp] + 0.5);
           }
         // Check status of candidate mode
 
@@ -701,7 +702,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
       double meanShiftVectorSqNorm = 0;
       for (unsigned int comp = 0; comp < jointDimension; comp++)
         {
-        const double v = meanShiftVector[comp]/bandwidth[comp];
+        const double v = meanShiftVector[comp];
         meanShiftVectorSqNorm += v * v;
         jointPixel[comp] += meanShiftVector[comp];
         }
