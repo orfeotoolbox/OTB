@@ -56,6 +56,6 @@
 
 //
 // OTB_WRAP_QT defintion
-#define OTB_WRAP_QT "@OTB_WRAP_QT@"
+#cmakedefine OTB_WRAP_QT "@OTB_WRAP_QT@"
 
 #endif // __ConfigureMonteverdi2_h
