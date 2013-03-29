@@ -249,8 +249,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   typename JointImageFunctorType::Pointer jointImageFunctor = JointImageFunctorType::New();
 
   jointImageFunctor->SetInput(inputPtr);
-  jointImageFunctor->GetFunctor().Initialize(ImageDimension, m_NumberOfComponentsPerPixel, m_SpatialBandwidth,
-                                             m_RangeBandwidth, m_GlobalShift);
+  jointImageFunctor->GetFunctor().Initialize(ImageDimension, m_NumberOfComponentsPerPixel, m_GlobalShift);
   jointImageFunctor->Update();
   m_JointImage = jointImageFunctor->GetOutput();
 
@@ -359,7 +358,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   // Calculates current pixel neighborhood region, restricted to the output image region
   for (unsigned int comp = 0; comp < ImageDimension; ++comp)
     {
-    inputIndex[comp] = vcl_floor(jointPixel[comp] * m_SpatialBandwidth+ 0.5) - m_GlobalShift[comp];
+    inputIndex[comp] = vcl_floor(jointPixel[comp] + 0.5) - m_GlobalShift[comp];
 
     regionIndex[comp] = vcl_max(static_cast<long int> (outputRegion.GetIndex().GetElement(comp)),
                                 static_cast<long int> (inputIndex[comp] - m_SpatialRadius[comp] - 1));
@@ -394,7 +393,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     for (unsigned int comp = 0; comp < jointDimension; comp++)
       {
       shifts[comp] = jointNeighbor[comp] - jointPixel[comp];
-      norm2 += shifts[comp] * shifts[comp];
+      norm2 += (shifts[comp] * shifts[comp]) / (bandwidth[comp] * bandwidth[comp]);
       }
 
     // Compute pixel weight from kernel
@@ -719,7 +718,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
 
     for (unsigned int comp = 0; comp < ImageDimension; comp++)
       {
-      spatialPixel[comp] = jointPixel[comp] * m_SpatialBandwidth - currentIndex[comp] - m_GlobalShift[comp];
+      spatialPixel[comp] = jointPixel[comp] - currentIndex[comp] - m_GlobalShift[comp];
       }
 
     rangeIt.Set(rangePixel);
