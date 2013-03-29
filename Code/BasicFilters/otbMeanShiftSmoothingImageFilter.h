@@ -110,7 +110,7 @@ public:
 
   RealType operator()(RealType x) const
   {
-    return (x < 1) ? 1.0 : 0.0;
+    return (x <= 1) ? 1.0 : 0.0;
   }
 
   RealType GetRadius(RealType bandwidth) const
