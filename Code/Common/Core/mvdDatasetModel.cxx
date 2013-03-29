@@ -62,6 +62,8 @@ const char* DatasetModel::DESCRIPTOR_FILENAME = "descriptor.xml";
 
 const char* DatasetModel::QUICKLOOK_FILE_EXT = ".ql.tif";
 
+const char* DatasetModel::HISTOGRAM_FILE_MARKER = ".hg";
+
 const char* DatasetModel::HISTOGRAM_FILE_EXT = ".txt";
 
 /*****************************************************************************/

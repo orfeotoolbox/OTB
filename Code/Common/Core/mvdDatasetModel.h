@@ -203,15 +203,21 @@ private:
 
   /**
    * \brief The quicklook image-file extension
-   * (e.g. '/tmp/my_source_image.ql.tif'.)
+   * (e.g. '/tmp/my_source_image.ql.tif').
    */
   static const char* QUICKLOOK_FILE_EXT;
 
   /**
-   * \brief The histogram file extension
-   * (e.g. '/tmp/my_source_image.tif.htg'.)
+   * \brief The histogram file extension '.txt'
+   * (e.g. '/tmp/my_source_image.hg.tif.txt').
    */
   static const char* HISTOGRAM_FILE_EXT;
+
+  /**
+   * \brief The histogram file marker-suffix '.hg'
+   * (e.g. '/tmp/my_source_image.hg.tif.txt').
+   */
+  static const char* HISTOGRAM_FILE_MARKER;
 
 //
 // Private methods.
@@ -285,7 +291,10 @@ DatasetModel
   // Histogram file information.
   return QFileInfo(
     m_Directory.path(),
-    imageFileInfo.fileName() + DatasetModel::HISTOGRAM_FILE_EXT
+    imageFileInfo.completeBaseName()
+    + DatasetModel::HISTOGRAM_FILE_MARKER
+    + "." + imageFileInfo.suffix()
+    + DatasetModel::HISTOGRAM_FILE_EXT
   );
 }
 
