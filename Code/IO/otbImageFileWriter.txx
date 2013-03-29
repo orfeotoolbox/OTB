@@ -494,7 +494,7 @@ ImageFileWriter<TInputImage>
     size[1]  = atoi(it->c_str());  // size along Y
 
     inputRegion.SetSize(size);
-    inputRegion.SetIndex(start)
+    inputRegion.SetIndex(start);
 
     otbMsgDevMacro(<< "inputRegion " << inputRegion);
 
