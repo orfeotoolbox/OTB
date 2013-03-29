@@ -26,10 +26,10 @@ namespace otb
 
 template <class TInputValue, class TOutputValue>
 KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
-::KNearestNeighborsMachineLearningModel()
+::KNearestNeighborsMachineLearningModel() :
+ m_K(10), m_IsRegression(false)
 {
   m_KNearestModel = new CvKNearest;
-  m_K = 10;
 }
 
 
@@ -54,7 +54,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TOutputValue>
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
   //train the KNN model
-  m_KNearestModel->train(samples,labels,cv::Mat(),false, m_K,false);
+  m_KNearestModel->train(samples,labels,cv::Mat(),m_IsRegression, m_K,false);
 }
 
 template <class TInputValue, class TOutputValue>

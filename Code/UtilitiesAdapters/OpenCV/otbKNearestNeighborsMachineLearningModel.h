@@ -53,6 +53,20 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(KNearestNeighborsMachineLearningModel, itk::MachineLearningModel);
 
+  /** Setters/Getters to the number of neighbors to use
+   *  Default is 32
+   *  see @http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html
+   */
+  itkGetMacro(K, int);
+  itkSetMacro(K, int);
+
+  /** Setters/Getters to IsRegression flag
+   *  Default is False
+   *  see @http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html
+   */
+  itkGetMacro(IsRegression, bool);
+  itkSetMacro(IsRegression, bool);
+
   /** Train the machine learning model */
   virtual void Train();
 
@@ -89,6 +103,7 @@ private:
 
   CvKNearest * m_KNearestModel;
   int m_K;
+  int m_IsRegression;
 };
 } // end namespace otb
 
