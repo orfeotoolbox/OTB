@@ -189,6 +189,7 @@ MainWindow
 {
   //
   // need to setup the central widget as QTabWidget to be able to 
+  // open several applications + the quicklook
   m_CentralWidgetTabs = new QTabWidget();
   m_CentralWidgetTabs->setTabsClosable(true);
 
