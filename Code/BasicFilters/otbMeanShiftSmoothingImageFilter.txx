@@ -336,6 +336,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
                                                                                                                         const typename RealVectorImageType::Pointer jointImage,
                                                                                                                         const RealVector& jointPixel,
                                                                                                                         const OutputRegionType& outputRegion,
+                                                                                                                        const RealVector & bandwidth,
                                                                                                                         RealVector& meanShiftVector)
 {
   const unsigned int jointDimension = ImageDimension + m_NumberOfComponentsPerPixel;
@@ -350,14 +351,14 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   // Calculates current pixel neighborhood region, restricted to the output image region
   for (unsigned int comp = 0; comp < ImageDimension; ++comp)
     {
-    inputIndex[comp] = jointPixel[comp] * m_SpatialBandwidth;
+    inputIndex[comp] = vcl_floor(jointPixel[comp]+0.5);
 
     regionIndex[comp] = vcl_max(static_cast<long int> (outputRegion.GetIndex().GetElement(comp)),
-                                static_cast<long int> (inputIndex[comp] - m_SpatialRadius[comp]));
+                                static_cast<long int> (inputIndex[comp] - m_SpatialRadius[comp]-1));
     const long int indexRight = vcl_min(
                                         static_cast<long int> (outputRegion.GetIndex().GetElement(comp)
                                             + outputRegion.GetSize().GetElement(comp) - 1),
-                                        static_cast<long int> (inputIndex[comp] + m_SpatialRadius[comp]));
+                                        static_cast<long int> (inputIndex[comp] + m_SpatialRadius[comp]+1));
 
     regionSize[comp] = vcl_max(0l, indexRight - static_cast<long int> (regionIndex[comp]) + 1);
     }
@@ -367,7 +368,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   neighborhoodRegion.SetSize(regionSize);
 
   RealType weightSum = 0;
-  RealVector jointNeighbor(ImageDimension + m_NumberOfComponentsPerPixel);
+  RealVector jointNeighbor(ImageDimension + m_NumberOfComponentsPerPixel), shifts(ImageDimension + m_NumberOfComponentsPerPixel);
 
   // An iterator on the neighborhood of the current pixel (in joint
   // spatial-range domain)
@@ -384,7 +385,8 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     RealType norm2 = 0;
     for (unsigned int comp = 0; comp < jointDimension; comp++)
       {
-      const RealType d = jointNeighbor[comp] - jointPixel[comp];
+      shifts[comp] = jointNeighbor[comp] - jointPixel[comp];
+      const RealType d = shifts[comp]/bandwidth[comp];
       norm2 += d * d;
       }
 
@@ -427,7 +429,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     // Update mean shift vector
     for (unsigned int comp = 0; comp < jointDimension; comp++)
       {
-      meanShiftVector[comp] += weight * jointNeighbor[comp];
+      meanShiftVector[comp] += weight * shifts[comp];
       }
 
     ++it;
@@ -437,7 +439,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     {
     for (unsigned int comp = 0; comp < jointDimension; comp++)
       {
-      meanShiftVector[comp] = meanShiftVector[comp] / weightSum - jointPixel[comp];
+      meanShiftVector[comp] = meanShiftVector[comp] / weightSum;
       }
     }
 }
@@ -622,7 +624,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
         // Find index of the pixel closest to the current jointPixel (not normalized by bandwidth)
         for (unsigned int comp = 0; comp < ImageDimension; comp++)
           {
-          modeCandidate[comp] = jointPixel[comp] * m_SpatialBandwidth + 0.5;
+          modeCandidate[comp] = vcl_floor(jointPixel[comp] + 0.5);
           }
         // Check status of candidate mode
 
@@ -638,7 +640,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
           RealVector const& candidatePixel = m_JointImage->GetPixel(modeCandidate);
           for (unsigned int comp = ImageDimension; comp < jointDimension; comp++)
             {
-            const RealType d = candidatePixel[comp] - jointPixel[comp];
+            const RealType d = (candidatePixel[comp] - jointPixel[comp])/bandwidth[comp];
             diff += d * d;
             }
 
@@ -660,7 +662,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
               rangePixel = rangeOutput->GetPixel(modeCandidate);
               for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
                 {
-                jointPixel[ImageDimension + comp] = rangePixel[comp] / m_RangeBandwidth;
+                jointPixel[ImageDimension + comp] = rangePixel[comp];
                 }
               // Update the mode table because pixel will be assigned just now
               modeTableIt.Set(2); // m_ModeTable->SetPixel(currentIndex, 2);
@@ -682,7 +684,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
       else
         {
 #endif
-        this->CalculateMeanShiftVector(m_JointImage, jointPixel, requestedRegion, meanShiftVector);
+        this->CalculateMeanShiftVector(m_JointImage, jointPixel, requestedRegion, bandwidth, meanShiftVector);
 
 #if 0
         }
@@ -693,7 +695,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
       double meanShiftVectorSqNorm = 0;
       for (unsigned int comp = 0; comp < jointDimension; comp++)
         {
-        const double v = meanShiftVector[comp] * bandwidth[comp];
+        const double v = meanShiftVector[comp]/bandwidth[comp];
         meanShiftVectorSqNorm += v * v;
         jointPixel[comp] += meanShiftVector[comp];
         }
@@ -705,12 +707,12 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
 
     for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
       {
-      rangePixel[comp] = jointPixel[ImageDimension + comp] * m_RangeBandwidth;
+      rangePixel[comp] = jointPixel[ImageDimension + comp];
       }
 
     for (unsigned int comp = 0; comp < ImageDimension; comp++)
       {
-      spatialPixel[comp] = jointPixel[comp] * m_SpatialBandwidth - currentIndex[comp];
+      spatialPixel[comp] = jointPixel[comp] - currentIndex[comp];
       }
 
     rangeIt.Set(rangePixel);

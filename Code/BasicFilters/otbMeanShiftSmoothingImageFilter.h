@@ -66,11 +66,11 @@ public:
 
     for (unsigned int comp = 0; comp < m_ImageDimension; comp++)
       {
-      jointPixel[comp] = index[comp] / m_SpatialBandwidth;
+      jointPixel[comp] = index[comp];
       }
     for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
       {
-      jointPixel[m_ImageDimension + comp] = inputPixel[comp] / m_RangeBandwidth;
+      jointPixel[m_ImageDimension + comp] = inputPixel[comp];
       }
     return jointPixel;
   }
@@ -108,7 +108,7 @@ public:
 
   RealType operator()(RealType x) const
   {
-    return (x <= 1) ? 1.0 : 0.0;
+    return (x < 1) ? 1.0 : 0.0;
   }
 
   RealType GetRadius(RealType bandwidth) const
@@ -595,6 +595,7 @@ protected:
 
   virtual void CalculateMeanShiftVector(const typename RealVectorImageType::Pointer inputImagePtr,
                                         const RealVector& jointPixel, const OutputRegionType& outputRegion,
+                                        const RealVector& bandwidth,
                                         RealVector& meanShiftVector);
 #if 0
   virtual void CalculateMeanShiftVectorBucket(const RealVector& jointPixel, RealVector& meanShiftVector);
