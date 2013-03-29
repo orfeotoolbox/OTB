@@ -82,62 +82,47 @@ QuicklookModel
 {
   //
   // Get build-context.
+  assert( context );
   BuildContext* buildContext = static_cast< BuildContext* >( context );
 
   //
-  // Filename & rendering settings.
-  QString quicklookFilename;
+  // Access rendering settings.
 
-  if( buildContext!=NULL )
+  // TODO: Remove temporary hack (Quicklook rendering settings).
+  if( buildContext->m_Settings!=NULL )
     {
-    quicklookFilename = buildContext->m_Quicklook;
+    Settings * const settings =
+      static_cast< Settings * const >( buildContext->m_Settings );
 
-    // TODO: Remove temporary hack (Quicklook rendering settings).
-    if( buildContext->m_Settings!=NULL )
-      {
-      Settings * const settings =
-	static_cast< Settings * const >( buildContext->m_Settings );
-
-      SetSettings( *settings );
-      }
+    SetSettings( *settings );
     }
 
   //
   // Quicklook file.
-  if( quicklookFilename.isEmpty() )
+
+  // Quicklook file information.
+  assert( !buildContext->m_Quicklook.isEmpty() );
+  QFileInfo quicklookFileInfo( buildContext->m_Quicklook );
+
+  // Quicklook filename.
+  QString quicklookFilename( quicklookFileInfo.filePath() );
+
+  // First time?
+  if( buildContext->IsBeingStored() )
     {
-    //
-    // get the parent vector image model
-    const VectorImageModel* viModel = GetImageModel< VectorImageModel >();
-    assert( viModel!=NULL );
-
-    const DatasetModel* datasetModel = viModel->GetDatasetModel();
-    assert( datasetModel!=NULL );
-
-    // Source image file information.
-    QFileInfo imageFileInfo( viModel->GetFilename() );
-
-    // Quicklook file information.
-    QFileInfo quicklookFileInfo(
-      datasetModel->QuicklookFileInfo( viModel->GetFilename() )
+    // Instanciate a quicklook file writer.
+    VectorImageFileWriterType::Pointer fileWriter(
+      VectorImageFileWriterType::New()
     );
 
-    // Quicklook filename.
-    quicklookFilename = quicklookFileInfo.filePath();
+    // Access parent image-model.
+    VectorImageModel* viModel = GetImageModel< VectorImageModel >();
+    assert( viModel!=NULL );
 
-    // First time?
-    if( !quicklookFileInfo.exists() )
-      {
-      // Instanciate a quicklook file writer.
-      VectorImageFileWriterType::Pointer fileWriter(
-	VectorImageFileWriterType::New()
-      );
-
-      // Write quicklook file on the disk.
-      fileWriter->SetFileName( ToStdString( quicklookFilename ) );
-      fileWriter->SetInput( viModel->ToImage() );
-      fileWriter->Update();
-      }
+    // Write quicklook file on the disk.
+    fileWriter->SetFileName( ToStdString( quicklookFilename ) );
+    fileWriter->SetInput( viModel->ToImage() );
+    fileWriter->Update();
     }
 
   // Source stored quicklook image-file.

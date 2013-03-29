@@ -126,6 +126,7 @@ DatasetModel
 
     context.m_Id = aimList.indexOf( vectorImageModel );
 
+    context.m_Quicklook = QuicklookFileInfo( context.m_Filename ).filePath();
     context.m_Histogram = HistogramFileInfo( context.m_Filename ).filePath();
 
     qDebug()
