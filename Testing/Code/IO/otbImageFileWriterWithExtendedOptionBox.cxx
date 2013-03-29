@@ -88,8 +88,8 @@ int otbImageFileWriterWithExtendedOptionBox(int argc, char* argv[])
 
   reader2->Update();
 
-  typename InputImageType::ConstPointer readImage = reader2->GetOutput();
-  typename InputImageType::ConstPointer extractImage = extractROIFilter->GetOutput();
+  InputImageType::ConstPointer readImage = reader2->GetOutput();
+  InputImageType::ConstPointer extractImage = extractROIFilter->GetOutput();
 
   ConstIteratorType ritr( readImage, readImage->GetLargestPossibleRegion() );
   ConstIteratorType extractitr( extractImage, extractImage->GetLargestPossibleRegion() );
