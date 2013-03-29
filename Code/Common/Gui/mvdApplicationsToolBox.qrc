@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="/images">
+    <file alias="process_icon">../../../Data/Icons/alg.png</file>      
+    <file alias="otb_icon">../../../Data/Icons/monteverdi2-32x32.png</file>      
+  </qresource>
+</RCC>
+

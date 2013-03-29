@@ -140,8 +140,9 @@ ApplicationsToolBox
         cmainItem->setExpanded( !m_SearchText.isEmpty() );
 
         //
-        // TODO : add category icon
-
+        // add category icon
+        cmainItem->setIcon(0, QIcon( ":/images/otb_icon" ));
+        
         //
         // step #2 -> Add algorithms name if matching the sear
         StringVector::const_iterator itApps = (*itTag).second.begin();
@@ -161,8 +162,8 @@ ApplicationsToolBox
             secItem->setText(0, qcurrentAlg);
           
             //
-            // TODO : add algorithm icon
-            //secItem->setIcon(0, QIcon( ":" ));
+            // add algorithm icon
+            secItem->setIcon(0, QIcon( ":/images/process_icon" ));
             }
 
           ++itApps;
