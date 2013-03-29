@@ -66,22 +66,19 @@ public:
 
     for (unsigned int comp = 0; comp < m_ImageDimension; comp++)
       {
-      jointPixel[comp] = (index[comp] + m_GlobalShift[comp]) / m_SpatialBandwidth;
+      jointPixel[comp] = index[comp] + m_GlobalShift[comp];
       }
     for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
       {
-      jointPixel[m_ImageDimension + comp] = inputPixel[comp] / m_RangeBandwidth;
+      jointPixel[m_ImageDimension + comp] = inputPixel[comp];
       }
     return jointPixel;
   }
 
-  void Initialize(unsigned int _ImageDimension, unsigned int numberOfComponentsPerPixel_, RealType spatialBandwidth_,
-                  RealType rangeBandwidth_, typename TInputImage::IndexType globalShift_)
+  void Initialize(unsigned int _ImageDimension, unsigned int numberOfComponentsPerPixel_, typename TInputImage::IndexType globalShift_)
   {
     m_ImageDimension = _ImageDimension;
     m_NumberOfComponentsPerPixel = numberOfComponentsPerPixel_;
-    m_SpatialBandwidth = spatialBandwidth_;
-    m_RangeBandwidth = rangeBandwidth_;
     m_OutputSize = m_ImageDimension + m_NumberOfComponentsPerPixel;
     m_GlobalShift = globalShift_;
   }
@@ -95,8 +92,6 @@ private:
   unsigned int m_ImageDimension;
   unsigned int m_NumberOfComponentsPerPixel;
   unsigned int m_OutputSize;
-  RealType m_SpatialBandwidth;
-  RealType m_RangeBandwidth;
   typename TInputImage::IndexType m_GlobalShift;
 };
 
@@ -539,6 +534,8 @@ public:
 ;
 #endif
 
+  /** Global shift allows to tackle down numerical instabilities by
+  aligning pixel indices when performing tile processing */
   itkSetMacro(GlobalShift,InputIndexType);
 
   /** Returns the const spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
@@ -599,6 +596,7 @@ protected:
 
   virtual void CalculateMeanShiftVector(const typename RealVectorImageType::Pointer inputImagePtr,
                                         const RealVector& jointPixel, const OutputRegionType& outputRegion,
+                                        const RealVector& bandwidth,
                                         RealVector& meanShiftVector);
 #if 0
   virtual void CalculateMeanShiftVectorBucket(const RealVector& jointPixel, RealVector& meanShiftVector);
