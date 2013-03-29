@@ -42,7 +42,7 @@ int otbImageFileWriterWithExtendedOptionBox(int argc, char* argv[])
 
   typedef otb::VectorImage<InputPixelType, 2> InputImageType;
 
-  typedef typename InputImageType::PixelType   PixelType;
+  typedef InputImageType::PixelType   PixelType;
 
   typedef otb::MultiChannelExtractROI<InputImageType::InternalPixelType,
                                       InputImageType::InternalPixelType> ExtractROIFilterType;
