@@ -45,7 +45,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdI18nApplication.h"
-
+#include "Core/mvdAbstractModel.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -60,7 +60,6 @@ namespace mvd
 {
 //
 // Class declaration.
-class OTBApplicationsModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -105,7 +104,7 @@ public:
   void OpenApplicationsBrowser();
 
   /** Get the OTBApp Model */
-  OTBApplicationsModel* GetOTBApplicationsModel()
+  AbstractModel* GetOTBApplicationsModel()
   {
     return m_OTBApplicationsModel;
   }
@@ -138,7 +137,7 @@ protected:
 // Private methods.
 private:
 
-  OTBApplicationsModel* m_OTBApplicationsModel;
+  AbstractModel* m_OTBApplicationsModel;
 
 //
 // Private attributes.

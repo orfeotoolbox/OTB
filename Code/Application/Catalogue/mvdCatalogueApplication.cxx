@@ -36,6 +36,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdDatabaseModel.h"
 
+//
 #ifdef OTB_WRAP_QT
 #include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
 #endif
@@ -67,7 +68,8 @@ namespace mvd
 /*******************************************************************************/
 CatalogueApplication
 ::CatalogueApplication( int& argc, char** argv ) :
-  I18nApplication( argc, argv )
+  I18nApplication( argc, argv ),
+  m_OTBApplicationsModel()
 {
 }
 
@@ -115,7 +117,7 @@ CatalogueApplication
   );
 
   //
-  // create the OTBApplications model here
+  // create the OTBApplications model
   OpenApplicationsBrowser();
 }
 
