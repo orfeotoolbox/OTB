@@ -25,6 +25,7 @@
 #include "otbSVMMachineLearningModel.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
 #include "otbRandomForestsMachineLearningModel.h"
+#include "otbBoostMachineLearningModel.h"
 
 #include "otbConfusionMatrixCalculator.h"
 
@@ -175,7 +176,7 @@ int otbSVMMachineLearningModel(int argc, char * argv[])
       return EXIT_FAILURE;
     }
 
-  typedef otb::LibSVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
+  typedef otb::SVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
 
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
@@ -358,4 +359,58 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 }
+
+int otbBoostMachineLearningModelNew(int argc, char * argv[])
+{
+  typedef otb::BoostMachineLearningModel<InputValueType,TargetValueType> BoostType;
+  BoostType::Pointer classifier = BoostType::New();
+  return EXIT_SUCCESS;
+}
+
+int otbBoostMachineLearningModel(int argc, char * argv[])
+{
+  if (argc != 3 )
+    {
+      std::cout<<"Wrong number of arguments "<<std::endl;
+      std::cout<<"Usage : sample file, output file "<<std::endl;
+      return EXIT_FAILURE;
+    }
+
+  typedef otb::BoostMachineLearningModel<InputValueType, TargetValueType> BoostType;
+
+  InputListSampleType::Pointer samples = InputListSampleType::New();
+  TargetListSampleType::Pointer labels = TargetListSampleType::New();
+  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
+
+  if(!ReadDataFile(argv[1],samples,labels))
+    {
+    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
+    return EXIT_FAILURE;
+    }
+
+  BoostType::Pointer classifier = BoostType::New();
+  classifier->SetInputListSample(samples);
+  classifier->SetTargetListSample(labels);
+  classifier->Train();
+
+  classifier->SetTargetListSample(predicted);
+  classifier->PredictAll();
+
+  classifier->Save(argv[2]);
+
+  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
+
+  cmCalculator->SetProducedLabels(predicted);
+  cmCalculator->SetReferenceLabels(labels);
+  cmCalculator->Compute();
+
+  std::cout<<"Confusion matrix: "<<std::endl;
+  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
+  std::cout<<"Kappa: "<<cmCalculator->GetKappaIndex()<<std::endl;
+  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
+
+  return EXIT_SUCCESS;
+}
+
+
 

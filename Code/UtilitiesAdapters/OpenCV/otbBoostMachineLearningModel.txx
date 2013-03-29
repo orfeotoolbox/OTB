@@ -26,7 +26,9 @@ namespace otb
 
 template <class TInputValue, class TOutputValue>
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::BoostMachineLearningModel()
+::BoostMachineLearningModel() :
+ m_BoostType(CvBoost::REAL), m_SplitCrit(CvBoost::DEFAULT), m_WeakCount(100),
+ m_WeightTrimRate(0.95), m_MaxDepth(1)
 {
   m_BoostModel = new CvBoost;
 }
@@ -52,9 +54,8 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
-  CvBoostParams params;
-  params.boost_type = CvBoost::DISCRETE;
-  params.split_criteria = CvBoost::DEFAULT;
+  CvBoostParams params = CvBoostParams(m_BoostType, m_WeakCount, m_WeightTrimRate, m_MaxDepth, false, 0);
+  params.split_criteria = m_SplitCrit;
 
   //train the Boost model
   cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
@@ -89,31 +90,59 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::Save(char * filename, const char * name)
+::Save(const std::string & filename, const std::string & name)
 {
-  m_BoostModel->save(filename, name);
+  if (name == "")
+    m_BoostModel->save(filename.c_str(), 0);
+  else
+    m_BoostModel->save(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
 void
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::Load(char * filename, const char * name)
+::Load(const std::string & filename, const std::string & name)
 {
-  m_BoostModel->load(filename, name);
+  if (name == "")
+      m_BoostModel->load(filename.c_str(), 0);
+  else
+      m_BoostModel->load(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
 bool
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::CanReadFile(const char * file)
+::CanReadFile(const std::string & file)
 {
+  std::ifstream ifs;
+  ifs.open(file.c_str());
+
+  if(!ifs)
+  {
+    std::cerr<<"Could not read file "<<file<<std::endl;
+    return false;
+  }
+
+  while (!ifs.eof())
+  {
+    std::string line;
+    std::getline(ifs, line);
+
+    //if (line.find(m_SVMModel->getName()) != std::string::npos)
+    if (line.find(CV_TYPE_NAME_ML_BOOSTING) != std::string::npos)
+    {
+       std::cout<<"Reading a "<<CV_TYPE_NAME_ML_BOOSTING<<" model !!!"<<std::endl;
+       return true;
+    }
+  }
+  ifs.close();
   return false;
 }
 
 template <class TInputValue, class TOutputValue>
 bool
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::CanWriteFile(const char * file)
+::CanWriteFile(const std::string & file)
 {
   return false;
 }

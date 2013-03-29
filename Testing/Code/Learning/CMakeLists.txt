@@ -725,6 +725,19 @@ IF(OTB_USE_OPENCV)
 	     ${TEMP}/libsvm_model.txt
      )
      
+     ADD_TEST(leTuBoostMachineLearningModelNew ${LEARNING_TESTS6}
+           otbBoostMachineLearningModelNew)
+
+
+	ADD_TEST(leTvBoostMachineLearningModel ${LEARNING_TESTS6}
+         #--compare-ascii ${NOTOL}
+         #${BASELINE_FILES}/BoostLearningModel.txt
+         #${TEMP}/BoostMachineLearningModel.txt
+         otbBoostMachineLearningModel
+         ${INPUTDATA}/letter.scale
+         ${TEMP}/BoostMachineLearningModel.txt
+         )
+     
      ADD_TEST(leTuImageClassificationFilterNew ${LEARNING_TESTS6}
        	 otbImageClassificationFilterNew)
        	 
@@ -755,7 +768,7 @@ IF(OTB_USE_OPENCV)
        	 
      ADD_TEST(leTuSVMMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbSVMMachineLearningModelCanRead
-       	 ${INPUTDATA}/svm_model_image
+       	 ${INPUTDATA}/opencv_svm_model.txt
        	 )
      
      ADD_TEST(leTuRandomForestsMachineLearningModelCanRead ${LEARNING_TESTS6}
@@ -764,6 +777,11 @@ IF(OTB_USE_OPENCV)
        	 )
      SET_TESTS_PROPERTIES(leTuRandomForestsMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvRandomForestsMachineLearningModel)
+     					
+     ADD_TEST(leTuBoostMachineLearningModelCanRead ${LEARNING_TESTS6}
+       	 otbBoostMachineLearningModelCanRead
+       	 ${INPUTDATA}/boost_model.txt
+       	 )
 
      
 ENDIF(OTB_USE_OPENCV)

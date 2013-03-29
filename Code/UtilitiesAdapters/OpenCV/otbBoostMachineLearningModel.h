@@ -53,6 +53,47 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(BoostMachineLearningModel, itk::MachineLearningModel);
 
+  /** Setters/Getters to the Boost type
+   *  It can be CvBoost::DISCRETE, CvBoost::REAL, CvBoost::LOGIT, CvBoost::GENTLE
+   *  Default is CvBoost::REAL.
+   *   see @http://docs.opencv.org/modules/ml/doc/boosting.html#cvboostparams-cvboostparams
+   */
+  itkGetMacro(BoostType, int);
+  itkSetMacro(BoostType, int);
+
+  /** Setters/Getters to the split criteria
+   *  It can be CvBoost::DEFAULT, CvBoost::GINI, CvBoost::MISCLASS, CvBoost::SQERR
+   *  Default is CvBoost::DEFAULT. It uses default value according to \c BoostType
+   *   see @http://docs.opencv.org/modules/ml/doc/boosting.html#cvboost-predict
+   */
+  itkGetMacro(SplitCrit, int);
+  itkSetMacro(SplitCrit, int);
+
+  /** Setters/Getters to the number of weak classifiers.
+   *  Default is 100.
+   *  see @http://docs.opencv.org/modules/ml/doc/boosting.html#cvboostparams-cvboostparams
+   */
+  itkGetMacro(WeakCount, int);
+  itkSetMacro(WeakCount, int);
+
+  /** Setters/Getters to the threshold WeightTrimRate.
+   *  A threshold between 0 and 1 used to save computational time.
+   *  Samples with summary weight \leq 1 - WeightTrimRate do not participate in the next iteration of training.
+   *  Set this parameter to 0 to turn off this functionality.
+   *  Default is 0.95
+   *  see @http://docs.opencv.org/modules/ml/doc/boosting.html#cvboostparams-cvboostparams
+   */
+  itkGetMacro(WeightTrimRate, double);
+  itkSetMacro(WeightTrimRate, double);
+
+  /** Setters/Getters to the maximum depth of the tree.
+   * Default is 1
+   *  see @http://docs.opencv.org/modules/ml/doc/decision_trees.html#CvDTreeParams::CvDTreeParams%28%29
+   */
+  itkGetMacro(MaxDepth, int);
+  itkSetMacro(MaxDepth, int);
+
+
   /** Train the machine learning model */
   virtual void Train();
 
@@ -60,18 +101,18 @@ public:
   virtual TargetSampleType Predict(const InputSampleType & input) const;
 
   /** Save the model to file */
-  virtual void Save(char * filename, const char * name=0);
+  virtual void Save(const std::string & filename, const std::string & name="");
 
   /** Load the model from file */
-  virtual bool Load(char * filename, const char * name=0);
+  virtual void Load(const std::string & filename, const std::string & name="");
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*);
+  virtual bool CanReadFile(const std::string &);
 
   /** Determine the file type. Returns true if this ImageIO can write the
    * file specified. */
-  virtual bool CanWriteFile(const char*);
+  virtual bool CanWriteFile(const std::string &);
 
 protected:
   /** Constructor */
@@ -88,6 +129,11 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   CvBoost * m_BoostModel;
+  int m_BoostType;
+  int m_SplitCrit;
+  int m_WeakCount;
+  double m_WeightTrimRate;
+  int m_MaxDepth;
 };
 } // end namespace otb
 

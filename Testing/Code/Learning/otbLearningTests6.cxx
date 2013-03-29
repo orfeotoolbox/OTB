@@ -32,9 +32,12 @@ void RegisterTests()
   REGISTER_TEST(otbKNearestNeighborsMachineLearningModel);
   REGISTER_TEST(otbRandomForestsMachineLearningModelNew);
   REGISTER_TEST(otbRandomForestsMachineLearningModel);
+  REGISTER_TEST(otbBoostMachineLearningModelNew);
+  REGISTER_TEST(otbBoostMachineLearningModel);
   REGISTER_TEST(otbImageClassificationFilterNew);
   REGISTER_TEST(otbImageClassificationFilter);
   REGISTER_TEST(otbLibSVMMachineLearningModelCanRead);
   REGISTER_TEST(otbSVMMachineLearningModelCanRead);
   REGISTER_TEST(otbRandomForestsMachineLearningModelCanRead);
+  REGISTER_TEST(otbBoostMachineLearningModelCanRead);
 }

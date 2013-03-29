@@ -23,6 +23,7 @@
 #include "otbRandomForestsMachineLearningModelFactory.h"
 #include "otbSVMMachineLearningModelFactory.h"
 #include "otbLibSVMMachineLearningModelFactory.h"
+#include "otbBoostMachineLearningModelFactory.h"
 
 
 namespace otb
@@ -95,6 +96,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::RegisterFactory(RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
       itk::ObjectFactoryBase::RegisterFactory(LibSVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
       itk::ObjectFactoryBase::RegisterFactory(SVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+      itk::ObjectFactoryBase::RegisterFactory(BoostMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 
       firstTime = false;
       }
