@@ -24,7 +24,7 @@
 #include "itkListSample.h"
 #include "otbMachineLearningModel.h"
 
-#include <opencv2/opencv.hpp>
+class CvKNearest;
 
 namespace otb
 {

@@ -25,7 +25,7 @@
 #include "itkListSample.h"
 #include "otbMachineLearningModel.h"
 
-#include <opencv2/opencv.hpp>       // opencv general include file
+class CvSVM;
 
 namespace otb
 {

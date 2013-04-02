@@ -21,6 +21,8 @@
 #include "otbBoostMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
 
+#include <opencv2/opencv.hpp>
+
 namespace otb
 {
 

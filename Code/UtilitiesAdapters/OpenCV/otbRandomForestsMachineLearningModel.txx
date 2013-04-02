@@ -22,6 +22,7 @@
 
 #include "otbRandomForestsMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
+#include <opencv2/opencv.hpp>       // opencv general include file
 
 namespace otb
 {
@@ -49,6 +50,14 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::~RandomForestsMachineLearningModel()
 {
   delete m_RFModel;
+}
+
+template <class TInputValue, class TOutputValue>
+float
+RandomForestsMachineLearningModel<TInputValue,TOutputValue>
+::GetTrainError()
+{
+  return m_RFModel->get_train_error();
 }
 
 /** Train the machine learning model */

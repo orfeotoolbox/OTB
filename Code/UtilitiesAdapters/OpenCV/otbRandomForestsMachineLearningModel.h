@@ -24,7 +24,7 @@
 #include "itkListSample.h"
 #include "otbMachineLearningModel.h"
 
-#include <opencv2/opencv.hpp>       // opencv general include file
+class CvRTrees;
 
 namespace otb
 {
@@ -170,10 +170,8 @@ public:
   //   return m_RFModel->getVarImportance();
   // }
 
-  float GetTrainError()
-  {
-    return m_RFModel->get_train_error();
-  }
+  float GetTrainError();
+
 protected:
   /** Constructor */
   RandomForestsMachineLearningModel();
