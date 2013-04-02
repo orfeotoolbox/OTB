@@ -110,7 +110,7 @@ QWidget*
 OTBApplicationsModel
 ::GetSelectedApplicationWidget(const QString& appname )
 {
-  m_ApplicationLauncher->GetSelectedApplicationWidget( appname );
+  return m_ApplicationLauncher->GetSelectedApplicationWidget( appname );
 }
 
 /*******************************************************************************/
