@@ -161,6 +161,12 @@ protected slots:
   /** */
   void OntabCloseRequested(int index);
 
+  /** */
+  void OntabCloseRequested();
+
+  /** */
+  void OnOTBApplicationOutputImageChanged( const QString & appName, const QString & outfname);
+
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //

@@ -56,6 +56,7 @@
 #ifdef OTB_WRAP_QT
 #include "ApplicationsWrapper/mvdApplicationsToolBoxController.h"
 #include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
+#include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
 #endif
 
 namespace mvd
@@ -149,14 +150,18 @@ MainWindow
                    this,
                    SLOT( OnApplicationToLaunchSelected(const QString &) )
     );
+  
+  // # Step 3 : if OTB applications has any output, it may be 
+  
 #endif
 
+  //
+  // close tabs handling
   QObject::connect(m_CentralWidgetTabs,
                    SIGNAL(tabCloseRequested(int)),
                    this,
                    SLOT(OntabCloseRequested(int))
     );
-
 }
 
 /*****************************************************************************/
@@ -340,9 +345,42 @@ MainWindow
   // no checking needed here, if index is not available nothing is
   // done. Focus on the newly added tab
   m_CentralWidgetTabs->setCurrentIndex( m_CentralWidgetTabs->count() - 1 );
+
+  //
+  // connections. not using m_CentralWidgetTabs->currentWidget() leads
+  // to a wrong connection!!!!
+  QObject::connect(
+    qobject_cast<Wrapper::QtWidgetView *>( m_CentralWidgetTabs->currentWidget() ),
+    SIGNAL( OTBApplicationOutputImageChanged( const QString &, const QString &) ),
+    this,
+    SLOT( OnOTBApplicationOutputImageChanged( const QString &, const QString &) )
+    );
+
+  //
+  // on quit widget signal, close its tab
+  QObject::connect(
+    qobject_cast<Wrapper::QtWidgetView *>( m_CentralWidgetTabs->currentWidget() ),
+    SIGNAL( QuitSignal() ),
+    this,
+    SLOT( OntabCloseRequested() )
+    );
+
 #endif
 
 }
+
+/*****************************************************************************/
+void
+MainWindow
+::OntabCloseRequested()
+{
+  // get current tab index
+  int currentIndex = m_CentralWidgetTabs->currentIndex();
+  
+  // close tab and delete its widget
+  OntabCloseRequested( currentIndex );  
+}
+
 
 /*****************************************************************************/
 void
@@ -368,6 +406,22 @@ MainWindow
       delete widgetToDelete;
       }
     }
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnOTBApplicationOutputImageChanged( const QString & appName , const QString & outfname)
+{
+  //
+  // If this slot is called, it means that an application has finished
+  // its process and has an output image parameter. The 'outfname' in
+  // parameters is the output filename. This slot may launch or not,
+  // depending on the app settings, the import of the 'outfname' to the
+  // catalog database. 
+  
+  // TODO : implement the import following the catalog settings
+  
 }
 
 } // end namespace 'mvd'
