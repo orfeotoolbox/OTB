@@ -346,6 +346,10 @@ MainWindow
   // done. Focus on the newly added tab
   m_CentralWidgetTabs->setCurrentIndex( m_CentralWidgetTabs->count() - 1 );
 
+  // set tab icon
+  m_CentralWidgetTabs->setTabIcon( m_CentralWidgetTabs->currentIndex(), 
+                                   QIcon(":/images/process_icon")  );
+
   //
   // connections. not using m_CentralWidgetTabs->currentWidget() leads
   // to a wrong connection!!!!
