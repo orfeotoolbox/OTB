@@ -102,6 +102,13 @@ public:
 //
 // Public SLOTS.
 public slots:
+
+  // slot in charge of emiting a signal to the catalogue mainWindow.
+  // when received, the main application need to get the output
+  // image filename{s} set by the user in this OTB application (if any).
+  void OnApplicationExecutionDone();
+
+  // application closed
   void CloseSlot();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
@@ -110,6 +117,8 @@ public slots:
 // Signals.
 signals:
   void QuitSignal();
+  
+  void OTBApplicationOutputImageChanged( const QString &, const QString &);
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 

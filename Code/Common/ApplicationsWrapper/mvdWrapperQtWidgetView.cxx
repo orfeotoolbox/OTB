@@ -38,6 +38,12 @@
 #include "otbWrapperQtWidgetSimpleProgressReport.h"
 #include "otbWrapperApplicationHtmlDocGenerator.h"
 
+#include "otbWrapperTypes.h"
+#include "otbWrapperOutputImageParameter.h"
+#include "otbWrapperComplexOutputImageParameter.h" // TODO : handle
+                                                   // this param to
+                                                   // get the outfname
+
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdWrapperQtWidgetParameterFactory.h"
@@ -130,6 +136,13 @@ QWidget* QtWidgetView::CreateInputWidgets()
   scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scrollArea->setWidgetResizable(true);
 
+  //
+  // need to be connected to the end of a process
+  QObject::connect(m_Model, SIGNAL( SetProgressReportDone() ),
+                   this,
+                   SLOT ( OnApplicationExecutionDone() )
+    );
+
   return scrollArea;
 }
 
@@ -209,6 +222,46 @@ void QtWidgetView::UpdateMessageAfterApplicationReady( bool val )
     m_Message->setText("<center><font color=\"#00FF00\">Ready to run</font></center>");
   else
     m_Message->setText("<center><font color=\"#FF0000\">Select parameters</font></center>");
+}
+
+/*******************************************************************************/
+void QtWidgetView::OnApplicationExecutionDone()
+{
+  //
+  // detect if this application has outputImageParameter. emit
+  // the output filenames if any
+  std::vector<std::string> paramList = m_Model->GetApplication()->GetParametersKeys(true);
+  
+  // iterate on the application parameters
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+          it != paramList.end();
+          ++it)
+    {
+    // parameter key
+    std::string key = *it;
+
+    // get a valid outputParameter
+    if (m_Model->GetApplication()->GetParameterType(key) == otb::Wrapper::ParameterType_OutputImage && 
+        m_Model->GetApplication()->IsParameterEnabled(key) &&
+        m_Model->GetApplication()->HasValue(key) )
+        {
+        // get the parameter
+        otb::Wrapper::Parameter* param = m_Model->GetApplication()->GetParameterByKey(key);
+        
+        // try to cast it to 
+        otb::Wrapper::OutputImageParameter* outputParam = 
+          dynamic_cast<otb::Wrapper::OutputImageParameter*>(param);
+
+        // emit the output image filename selected
+        if (outputParam)
+          {
+          emit OTBApplicationOutputImageChanged( QString ( m_Model->GetApplication()->GetName() ),// app
+                                                 QString ( outputParam->GetFileName() )          // outfname
+                                                 
+            );
+          }
+        }
+    }
 }
 
 
