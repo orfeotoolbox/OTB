@@ -116,6 +116,12 @@ MainWindow
   m_QuicklookView = CreateQuicklookWidget();
 
   m_CentralWidgetTabs->addTab(m_QuicklookView, "Quicklook");
+
+  //
+  // access to the quicklook tabBar to remove the close button
+  QTabBar *tabBar = m_CentralWidgetTabs->findChild<QTabBar *>();
+  tabBar->setTabButton(0, QTabBar::RightSide, 0);
+  tabBar->setTabButton(0, QTabBar::LeftSide, 0);
 }
 
 /*****************************************************************************/
