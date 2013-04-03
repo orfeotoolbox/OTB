@@ -94,14 +94,6 @@ ApplicationsBrowser
 ::GetAvailableApplications()
 {
   //
-  // check if search path is not empty
-  // TODO : throw exception to be catched by the catalog manager later
-  if (m_AutoLoadPath.empty())
-    {
-    std::cerr << "ERROR: Search path is empty "<< std::endl;
-    }
-
-  //
   // get available application in search path
   StringVector appList = otb::Wrapper::ApplicationRegistry::GetAvailableApplications();
 
