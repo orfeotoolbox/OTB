@@ -200,6 +200,7 @@ private:
    */
   QDockWidget* m_DatabaseBrowserDock;
   QDockWidget* m_ApplicationsBrowserDock;
+  QDockWidget* m_DatasetPropertiesDock;
 
   /**
    */

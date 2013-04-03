@@ -50,6 +50,9 @@
 #include "Gui/mvdQuicklookViewManipulator.h"
 #include "Gui/mvdApplicationsToolBox.h"
 
+#include "Gui/mvdDatasetPropertiesWidget.h"
+#include "Gui/mvdDatasetPropertiesController.h"
+
 #include "Core/mvdI18nApplication.h"
 #include "mvdCatalogueApplication.h"
 
@@ -89,6 +92,7 @@ MainWindow
   m_UI( new mvd::Ui::MainWindow() ),
   m_DatabaseBrowserDock( NULL ),
   m_ApplicationsBrowserDock(NULL),
+  m_DatasetPropertiesDock(NULL),
   m_QuicklookView( NULL )
 {
   m_UI->setupUi( this );
@@ -181,6 +185,11 @@ MainWindow
     < DatabaseBrowserWidget, DatabaseBrowserController, QDockWidget >
     ( "DATABASE_BROWSER", tr( "Database browser" ), Qt::LeftDockWidgetArea );
 
+  assert( m_DatasetPropertiesDock==NULL );
+  m_DatasetPropertiesDock =
+    AddDockWidget
+    < DatasetPropertiesWidget, DatasetPropertiesController, QDockWidget >
+    ( "DATASET_PROPERTIES", tr( "Dataset properties" ), Qt::LeftDockWidgetArea );
 
 #ifdef OTB_WRAP_QT
 
@@ -318,6 +327,9 @@ MainWindow
 
   assert( m_QuicklookView!=NULL );
   m_QuicklookView->SetImageModel( NULL );
+
+  // unset the dataset model in DatasetProperties controller
+  SetControllerModel(m_DatasetPropertiesDock, NULL);
 }
 
 /*****************************************************************************/
@@ -329,6 +341,9 @@ MainWindow
 
   assert( m_QuicklookView!=NULL );
   m_QuicklookView->SetImageModel( model->GetSelectedImageModel() );
+
+  // set the dataset model in DatasetProperties controller
+  SetControllerModel(m_DatasetPropertiesDock, model);
 }
 
 /*****************************************************************************/
