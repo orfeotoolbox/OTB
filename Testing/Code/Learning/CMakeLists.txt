@@ -728,7 +728,6 @@ IF(OTB_USE_OPENCV)
      ADD_TEST(leTuBoostMachineLearningModelNew ${LEARNING_TESTS6}
            otbBoostMachineLearningModelNew)
 
-
 	ADD_TEST(leTvBoostMachineLearningModel ${LEARNING_TESTS6}
          #--compare-ascii ${NOTOL}
          #${BASELINE_FILES}/BoostLearningModel.txt
@@ -736,6 +735,19 @@ IF(OTB_USE_OPENCV)
          otbBoostMachineLearningModel
          ${INPUTDATA}/letter.scale
          ${TEMP}/BoostMachineLearningModel.txt
+         )
+         
+    ADD_TEST(leTuANNMachineLearningModelNew ${LEARNING_TESTS6}
+         otbANNMachineLearningModelNew)
+
+
+	ADD_TEST(leTvANNMachineLearningModel ${LEARNING_TESTS6}
+         #--compare-ascii ${NOTOL}
+         #${BASELINE_FILES}/ANNMachineLearningModel.txt
+         #${TEMP}/ANNMachineLearningModel.txt
+         otbANNMachineLearningModel
+         ${INPUTDATA}/letter.scale
+         ${TEMP}/ANNMachineLearningModel.txt
          )
      
      ADD_TEST(leTuImageClassificationFilterNew ${LEARNING_TESTS6}
@@ -781,6 +793,11 @@ IF(OTB_USE_OPENCV)
      ADD_TEST(leTuBoostMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbBoostMachineLearningModelCanRead
        	 ${INPUTDATA}/boost_model.txt
+       	 )
+       	 
+     ADD_TEST(leTuANNMachineLearningModelCanRead ${LEARNING_TESTS6}
+       	 otbNeuralNetworkMachineLearningModelCanRead
+       	 ${INPUTDATA}/NeuralNetworkMachineLearningModel.txt
        	 )
 
      

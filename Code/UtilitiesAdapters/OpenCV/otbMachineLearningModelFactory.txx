@@ -24,6 +24,7 @@
 #include "otbSVMMachineLearningModelFactory.h"
 #include "otbLibSVMMachineLearningModelFactory.h"
 #include "otbBoostMachineLearningModelFactory.h"
+#include "otbNeuralNetworkMachineLearningModelFactory.h"
 
 
 namespace otb
@@ -97,6 +98,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::RegisterFactory(LibSVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
       itk::ObjectFactoryBase::RegisterFactory(SVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
       itk::ObjectFactoryBase::RegisterFactory(BoostMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+      itk::ObjectFactoryBase::RegisterFactory(NeuralNetworkMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 
       firstTime = false;
       }

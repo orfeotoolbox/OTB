@@ -21,6 +21,7 @@
 #include "otbSVMMachineLearningModel.h"
 #include "otbRandomForestsMachineLearningModel.h"
 #include "otbBoostMachineLearningModel.h"
+#include "otbNeuralNetworkMachineLearningModel.h"
 #include <iostream>
 
 typedef otb::MachineLearningModel<float,short>         MachineLearningModelType;
@@ -134,4 +135,31 @@ int otbBoostMachineLearningModelCanRead(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
+
+int otbNeuralNetworkMachineLearningModelCanRead(int argc, char* argv[])
+{
+  if (argc != 2)
+    {
+    std::cerr << "Usage: " << argv[0]
+              << "<model>" << std::endl;
+    std::cerr << "Called here with " << argc << " arguments\n";
+    for (int i = 1; i < argc; ++i)
+      {
+      std::cerr << " - " << argv[i] << "\n";
+      }
+    return EXIT_FAILURE;
+    }
+  std::string filename(argv[1]);
+  typedef otb::NeuralNetworkMachineLearningModel<InputValueType, TargetValueType> ANNType;
+  ANNType::Pointer classifier = ANNType::New();
+  bool lCanRead = classifier->CanReadFile(filename);
+  if (lCanRead == false)
+    {
+    std::cerr << "Erreur otb::NeuralNetworkMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
+}
+
 
