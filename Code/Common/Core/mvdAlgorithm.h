@@ -143,7 +143,62 @@ ToVariableLengthVector( itk::FixedArray< T1, N >& a,
 namespace mvd
 {
 /**
- * Convert a StringVector object to a QStringList object.
+ * \brief Write an itk::VariableLengthVector< T > into a QTextStream.
+ *
+ * \param stream QTextStream into which to write data.
+ * \param vector itk::VariableLengthVector< T > data to write.
+ *
+ * \return stream instance.
+ */
+template< typename T >
+inline
+QTextStream&
+operator << ( QTextStream& stream,
+	      const itk::VariableLengthVector< T >& vector );
+
+/**
+ * \brief Write an itk::VariableLengthVector< T > into a QTextStream.
+ *
+ * \param stream QTextStream into which to write data.
+ * \param vector itk::VariableLengthVector< T > data to write.
+ *
+ * \return stream instance.
+ */
+template< typename T >
+inline
+QTextStream&
+operator >> ( QTextStream& stream,
+	      itk::VariableLengthVector< T >& vector );
+/**
+ * \brief Write an itk::VariableLengthVector< T > into a QDataStream.
+ *
+ * \param stream QDataStream into which to write data.
+ * \param vector itk::VariableLengthVector< T > data to write.
+ *
+ * \return stream instance.
+ */
+template< typename T >
+inline
+QDataStream&
+operator << ( QDataStream& stream,
+	      const itk::VariableLengthVector< T >& vector );
+
+/**
+ * \brief Write an itk::VariableLengthVector< T > into a QDataStream.
+ *
+ * \param stream QDataStream into which to write data.
+ * \param vector itk::VariableLengthVector< T > data to write.
+ *
+ * \return stream instance.
+ */
+template< typename T >
+inline
+QDataStream&
+operator >> ( QDataStream& stream,
+	      itk::VariableLengthVector< T >& vector );
+
+/**
+ * \brief Convert a StringVector object to a QStringList object.
  *
  * Because Qt uses a shallow mecanism to copy containers, the returned
  * QStringList is shallow-copied.
@@ -153,8 +208,8 @@ QStringList
 ToQStringList( const StringVector& sv );
 
 /**
- * Append the content of a StringVector object to the content of a
- * QStringList object.
+ * \brief Append the content of a StringVector object to the content
+ * of a QStringList object.
  *
  * Because Qt uses a shallow mecanism to copy containers, the returned
  * QStringList is shallow-copied.
@@ -353,6 +408,7 @@ ToVariableLengthVector( itk::VariableLengthVector< T2 >& v,
 
 namespace mvd
 {
+
 /*******************************************************************************/
 inline
 QStringList

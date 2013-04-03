@@ -48,7 +48,6 @@
 #include "mvdAbstractModel.h"
 #include "mvdAlgorithm.h"
 #include "mvdSerializableInterface.h"
-#include "mvdTypes.h"
 
 
 /*****************************************************************************/

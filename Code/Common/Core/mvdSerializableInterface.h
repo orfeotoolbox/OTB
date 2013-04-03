@@ -112,11 +112,11 @@ protected:
 
   /**
    */
-  virtual void virtual_Write( QIODevice& device ) const =0;
+  virtual void virtual_Read( QIODevice* device ) =0;
 
   /**
    */
-  virtual void virtual_Read( QIODevice* device ) =0;
+  virtual void virtual_Write( QIODevice& device ) const =0;
 
 //
 // Protected attributes.

@@ -37,6 +37,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdStream.h"
 #include "mvdVectorImageModel.h"
 
 namespace mvd
@@ -225,6 +226,30 @@ HistogramModel
 ::virtual_Write( QIODevice& device ) const
 {
   qDebug() << this << "::virtual_Write(" << &device << ")";
+
+  QByteArray byteArray;
+  QTextStream stream( &byteArray, device.openMode() );
+
+  stream << PROJECT_NAME << endl;
+  stream << Monteverdi2_VERSION_STRING << endl;
+  stream << "HISTOGRAM" << endl;
+
+  stream << m_MinPixel << endl;
+  stream << m_MaxPixel << endl;
+
+  stream << m_Histograms->Size() << endl;
+
+  for( HistogramList::ConstIterator it( m_Histograms->Begin() );
+       it!=m_Histograms->End();
+       ++it )
+    {
+    stream << *it.Get() << endl;
+    }
+
+  qDebug() << byteArray;
+
+  if( device.write( byteArray )!=byteArray.size() )
+    throw SystemError();
 }
 
 /*******************************************************************************/

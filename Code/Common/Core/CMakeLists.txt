@@ -16,6 +16,7 @@ set( Common_Core_SOURCES
   mvdMyClass.cxx
   mvdQuicklookModel.cxx
   mvdSerializableInterface.cxx
+  mvdStream.cxx
   mvdSystemError.cxx
   mvdTypes.cxx
   mvdVectorImageModel.cxx
