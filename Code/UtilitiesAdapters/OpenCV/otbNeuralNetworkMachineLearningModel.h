@@ -199,7 +199,6 @@ private:
   double m_Epsilon;
 
 
-
 };
 } // end namespace otb
 
