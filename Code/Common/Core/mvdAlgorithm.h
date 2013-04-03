@@ -193,6 +193,31 @@ inline
 std::string
 ToStdString( const QString& str );
 
+
+/**
+ * return a std::string form various types
+ *
+ */
+inline
+std::string
+ToStdString( unsigned int val );
+
+inline
+std::string
+ToStdString( const SpacingType & spacing);
+
+inline
+std::string
+ToStdString( const SizeType & size);
+
+inline
+std::string
+ToStdString( const PointType & point);
+
+template< typename T>
+std::string
+ToStdString( const std::vector<T> & vec);
+
 } // end namespace 'mvd'.
 
 /*****************************************************************************/
@@ -366,6 +391,63 @@ std::string
 ToStdString( const QString& str )
 {
   return std::string( str.toAscii().constData() );
+}
+
+/*******************************************************************************/
+inline
+std::string
+ToStdString( unsigned int val )
+{
+  std::ostringstream oss;
+  oss << val;
+  return oss.str();
+}
+
+/*******************************************************************************/
+inline
+std::string
+ToStdString( const SpacingType & spacing)
+{
+  std::ostringstream oss;
+  oss << spacing[0] << " , " << spacing[1];
+  return oss.str();
+}
+
+/*******************************************************************************/
+inline
+std::string
+ToStdString( const SizeType & size)
+{
+  std::ostringstream oss;
+  oss << size[0] << " , " << size[1];
+  return oss.str();
+}
+
+/*******************************************************************************/
+inline
+std::string
+ToStdString( const PointType & point)
+{
+  std::ostringstream oss;
+  oss << point[0] << " , " << point[1];
+  return oss.str();
+}
+
+/*******************************************************************************/
+template< typename T>
+inline
+std::string
+ToStdString( const std::vector<T> & vec)
+{
+  std::ostringstream oss;
+  typename std::vector<T>::const_iterator it = vec.begin();
+  while( it != vec.end() )
+    {
+    oss<<*it<< " ";
+    ++it;
+    }
+  
+  return oss.str();
 }
 
 /*******************************************************************************/
