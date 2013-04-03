@@ -438,7 +438,7 @@ DatasetModel
 
   //
   pspacing.first  = ToStdString ( tr("Pixels size") );
-  pspacing.second = ToStdString( viModel->ToImageBase()->GetSpacing() );
+  pspacing.second = ToStdString( viModel->GetNativeSpacing() );
 
   //
   pnbcomp.first  = ToStdString ( tr("Number of components") );
