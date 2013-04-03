@@ -26,6 +26,8 @@ set( Common_Gui_SOURCES
   mvdStatusBarWidget.cxx
   mvdApplicationsToolBox.cxx
   mvdDatabaseTreeWidget.cxx
+  mvdDatasetPropertiesWidget.cxx
+  mvdDatasetPropertiesController.cxx
 )
 
 #############################################################################
@@ -56,6 +58,8 @@ set( Common_Gui_HEADERS_MOC
   mvdStatusBarWidget.h
   mvdApplicationsToolBox.h
   mvdDatabaseTreeWidget.h
+  mvdDatasetPropertiesWidget.h
+  mvdDatasetPropertiesController.h
 )
 
 #############################################################################
@@ -71,6 +75,7 @@ set( Common_Gui_FORMS
   mvdMyWidget.ui
   mvdStatusBarWidget.ui
   mvdVideoColorToolBox.ui
+  mvdDatasetPropertiesWidget.ui
 )
 
 # Qt resources
