@@ -38,6 +38,8 @@ void RegisterTests()
   REGISTER_TEST(otbANNMachineLearningModel);
   REGISTER_TEST(otbNormalBayesMachineLearningModelNew);
   REGISTER_TEST(otbNormalBayesMachineLearningModel);
+  REGISTER_TEST(otbDecisionTreeMachineLearningModelNew);
+  REGISTER_TEST(otbDecisionTreeMachineLearningModel);
   REGISTER_TEST(otbImageClassificationFilterNew);
   REGISTER_TEST(otbImageClassificationFilter);
   REGISTER_TEST(otbLibSVMMachineLearningModelCanRead);

@@ -16,6 +16,7 @@
 
 =========================================================================*/
 
+#include <iostream>
 #include "otbMachineLearningModel.h"
 #include "otbLibSVMMachineLearningModel.h"
 #include "otbSVMMachineLearningModel.h"
@@ -23,7 +24,7 @@
 #include "otbBoostMachineLearningModel.h"
 #include "otbNeuralNetworkMachineLearningModel.h"
 #include "otbNormalBayesMachineLearningModel.h"
-#include <iostream>
+#include "otbDecisionTreeMachineLearningModel.h"
 
 typedef otb::MachineLearningModel<float,short>         MachineLearningModelType;
 typedef MachineLearningModelType::InputValueType       InputValueType;
@@ -183,6 +184,32 @@ int otbNormalBayesMachineLearningModelCanRead(int argc, char* argv[])
   if (lCanRead == false)
     {
     std::cerr << "Erreur otb::NormalBayesMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
+}
+
+int otbDecisionTreeMachineLearningModelCanRead(int argc, char* argv[])
+{
+  if (argc != 2)
+    {
+    std::cerr << "Usage: " << argv[0]
+              << "<model>" << std::endl;
+    std::cerr << "Called here with " << argc << " arguments\n";
+    for (int i = 1; i < argc; ++i)
+      {
+      std::cerr << " - " << argv[i] << "\n";
+      }
+    return EXIT_FAILURE;
+    }
+  std::string filename(argv[1]);
+  typedef otb::DecisionTreeMachineLearningModel<InputValueType, TargetValueType> DecisionTreeType;
+  DecisionTreeType::Pointer classifier = DecisionTreeType::New();
+  bool lCanRead = classifier->CanReadFile(filename);
+  if (lCanRead == false)
+    {
+    std::cerr << "Erreur otb::DecisionTreeMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
 

@@ -26,6 +26,7 @@
 #include "otbBoostMachineLearningModelFactory.h"
 #include "otbNeuralNetworkMachineLearningModelFactory.h"
 #include "otbNormalBayesMachineLearningModelFactory.h"
+#include "otbDecisionTreeMachineLearningModelFactory.h"
 
 
 namespace otb
@@ -101,6 +102,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::RegisterFactory(BoostMachineLearningModelFactory<TInputValue,TOutputValue>::New());
       itk::ObjectFactoryBase::RegisterFactory(NeuralNetworkMachineLearningModelFactory<TInputValue,TOutputValue>::New());
       itk::ObjectFactoryBase::RegisterFactory(NormalBayesMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+      itk::ObjectFactoryBase::RegisterFactory(DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 
       firstTime = false;
       }

@@ -750,13 +750,28 @@ IF(OTB_USE_OPENCV)
          ${TEMP}/ANNMachineLearningModel.txt
          )
          
+     ADD_TEST(leTuNormalBayesMachineLearningModelNew ${LEARNING_TESTS6}
+         otbNormalBayesMachineLearningModelNew)
+     
      ADD_TEST(leTvNormalBayesMachineLearningModel ${LEARNING_TESTS6}
-         #--compare-ascii ${NOTOL}
-         #${BASELINE_FILES}/NormalBayesMachineLearningModel.txt
-         #${TEMP}/NormalBayesMachineLearningModel.txt
+         --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/NormalBayesMachineLearningModel.txt
+         ${TEMP}/NormalBayesMachineLearningModel.txt
          otbNormalBayesMachineLearningModel
          ${INPUTDATA}/letter.scale
          ${TEMP}/NormalBayesMachineLearningModel.txt
+         )
+         
+     ADD_TEST(leTuDecisionTreeMachineLearningModelNew ${LEARNING_TESTS6}
+         otbDecisionTreeMachineLearningModelNew)
+     
+     ADD_TEST(leTvDecisionTreeMachineLearningModel ${LEARNING_TESTS6}
+         --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/DecisionTreeMachineLearningModel.txt
+         ${TEMP}/DecisionTreeMachineLearningModel.txt
+         otbDecisionTreeMachineLearningModel
+         ${INPUTDATA}/letter.scale
+         ${TEMP}/DecisionTreeMachineLearningModel.txt
          )
      
      ADD_TEST(leTuImageClassificationFilterNew ${LEARNING_TESTS6}
@@ -813,7 +828,11 @@ IF(OTB_USE_OPENCV)
        	 otbNormalBayesMachineLearningModelCanRead
        	 ${INPUTDATA}/NormalBayesMachineLearningModel.txt
        	 )
-
+       	 
+	ADD_TEST(leTuDecisionTreeMachineLearningModelCanRead ${LEARNING_TESTS6}
+       	 otbDecisionTreeMachineLearningModelCanRead
+       	 ${INPUTDATA}/DecisionTreeMachineLearningModel.txt
+       	 )
      
 ENDIF(OTB_USE_OPENCV)
 
