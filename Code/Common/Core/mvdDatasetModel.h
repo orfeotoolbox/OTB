@@ -162,6 +162,10 @@ public:
    */
   inline QFileInfo QuicklookFileInfo( const QString& imageFilename ) const;
 
+  /**
+   */
+  const PropertiesContainer& QueryDatasetProperties();
+
   //
   // AbstractModel overrides.
 
@@ -256,6 +260,10 @@ private:
   /**
    */
   QDir m_Directory;
+
+  /**
+    */
+  PropertiesContainer  m_DatasetProperties;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

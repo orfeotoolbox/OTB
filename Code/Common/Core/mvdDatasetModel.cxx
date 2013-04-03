@@ -367,6 +367,154 @@ DatasetModel
 }
 
 /*******************************************************************************/
+const PropertiesContainer &
+DatasetModel
+::QueryDatasetProperties()
+{
+  //
+  // clear the container
+  m_DatasetProperties.clear();
+
+  // get the vector image model
+  VectorImageModel* viModel =
+    qobject_cast< VectorImageModel* >( GetSelectedImageModel() );
+    
+  // ------------------------------------------------------------------------------
+  // category 1 : file infos
+  // ------------------------------------------------------------------------------
+  QString key1 = tr("File Informations");
+
+  PropertiesVectorByCategory pFileInfoCat;
+  PropertiesVector vfileinfo;
+  PropertyType pfile;
+  PropertyType pdir;
+  PropertyType psize;
+  
+  //
+  std::string fname = ToStdString( viModel->GetFilename() );
+  pfile.first  = ToStdString ( tr("File") );
+  pfile.second = itksys::SystemTools::GetFilenameName(fname);
+
+  //
+  pdir.first  = ToStdString ( tr("Directory") );
+  pdir.second = itksys::SystemTools::GetFilenamePath(fname);;
+
+  //
+  psize.first  = ToStdString ( tr("Size in Bytes") );
+  psize.second = "";
+
+  // add those properties to the vector of properties
+  vfileinfo.push_back(pfile);
+  vfileinfo.push_back(pdir);
+  vfileinfo.push_back(psize);
+
+  pFileInfoCat.first  = ToStdString ( key1 );
+  pFileInfoCat.second = vfileinfo;
+  
+  // add the current category properties
+  m_DatasetProperties.insert(pFileInfoCat);
+
+  // ------------------------------------------------------------------------------
+  // category 2 : image infos
+  // ------------------------------------------------------------------------------
+  QString key2 = tr("Image Informations");
+
+  PropertiesVectorByCategory pImageInfoCat;
+  PropertiesVector vimageinfo;
+
+  PropertyType pdim;
+  PropertyType porigin;
+  PropertyType pspacing;
+  PropertyType pnbcomp;
+  PropertyType pblocksize;
+
+  //
+  pdim.first  = ToStdString ( tr("Dimension") );
+  pdim.second = ToStdString( viModel->GetNativeLargestRegion().GetSize() );
+
+  //
+  porigin.first  = ToStdString ( tr("Origin") );
+  porigin.second = ToStdString( viModel->ToImageBase()->GetOrigin() );
+
+  //
+  pspacing.first  = ToStdString ( tr("Pixels size") );
+  pspacing.second = ToStdString( viModel->ToImageBase()->GetSpacing() );
+
+  //
+  pnbcomp.first  = ToStdString ( tr("Number of components") );
+  pnbcomp.second = ToStdString( viModel->ToImageBase()->GetNumberOfComponentsPerPixel() );
+
+  // get the block size from the metadata dictionary
+  unsigned int blockSizeX = 0;
+  unsigned int blockSizeY = 0;
+  itk::MetaDataDictionary dict = viModel->ToImageBase()->GetMetaDataDictionary();
+  itk::ExposeMetaData< unsigned int >(dict, otb::MetaDataKey::TileHintX, blockSizeX);
+  itk::ExposeMetaData< unsigned int >(dict, otb::MetaDataKey::TileHintY, blockSizeY);
+
+  // from block size to string
+  std::ostringstream ossBlocksize;
+  ossBlocksize << blockSizeX <<","<<blockSizeY;
+  
+  // fill the property
+  pblocksize.first  = ToStdString ( tr("Block size") );
+  pblocksize.second = ossBlocksize.str();
+
+  // add those properties to the vector of properties
+  vimageinfo.push_back(pdim);
+  vimageinfo.push_back(porigin);
+  vimageinfo.push_back(pspacing);
+  vimageinfo.push_back(pnbcomp);
+  vimageinfo.push_back(pblocksize);
+
+  pImageInfoCat.first  = ToStdString ( key2 );
+  pImageInfoCat.second = vimageinfo;
+
+  // add the current category properties
+  m_DatasetProperties.insert(pImageInfoCat);
+  
+  // ------------------------------------------------------------------------------
+  // category 3 : metadata infos
+  // ------------------------------------------------------------------------------
+  QString key3 = tr("Metadatas");
+
+  // get meta-data interface.
+  otb::ImageMetadataInterfaceBase::ConstPointer metaData = 
+    otb::ConstCast< const otb::ImageMetadataInterfaceBase >(
+      otb::ImageMetadataInterfaceFactory::CreateIMI(
+        viModel->ToImageBase()->GetMetaDataDictionary()
+        )
+      );
+
+  PropertiesVectorByCategory pMetadataCat;
+  PropertiesVector vmetadata;
+
+  PropertyType psensorid;
+  PropertyType pdefaultrgb;
+
+  //
+  psensorid.first  = ToStdString ( tr("Sensor") );
+  psensorid.second = metaData->GetSensorID();
+
+  //
+  pdefaultrgb.first  = ToStdString ( tr("Default RGB") );
+  pdefaultrgb.second = ToStdString<unsigned int>( metaData->GetDefaultDisplay() );
+
+  // add those properties to the vector of properties
+  vmetadata.push_back(psensorid);
+  vmetadata.push_back(pdefaultrgb);
+
+  pMetadataCat.first  = ToStdString ( key3 );
+  pMetadataCat.second = vmetadata;
+
+  // add the current category properties
+  m_DatasetProperties.insert(pMetadataCat);
+
+  // ------------------------------------------------------------------------------
+
+  return m_DatasetProperties;
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 
