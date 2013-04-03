@@ -94,11 +94,6 @@ public:
   itkGetMacro(MaxDepth, int);
   itkSetMacro(MaxDepth, int);
 
-  /** Setters/Getters to IsRegression flag
-   *  Default is False
-   */
-  itkGetMacro(IsRegression, bool);
-  itkSetMacro(IsRegression, bool);
 
   /** Train the machine learning model */
   virtual void Train();
@@ -140,7 +135,6 @@ private:
   int m_WeakCount;
   double m_WeightTrimRate;
   int m_MaxDepth;
-  bool m_IsRegression;
 };
 } // end namespace otb
 

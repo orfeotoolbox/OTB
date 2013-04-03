@@ -30,7 +30,7 @@ template <class TInputValue, class TOutputValue>
 BoostMachineLearningModel<TInputValue,TOutputValue>
 ::BoostMachineLearningModel() :
  m_BoostType(CvBoost::REAL), m_SplitCrit(CvBoost::DEFAULT), m_WeakCount(100),
- m_WeightTrimRate(0.95), m_MaxDepth(1), m_IsRegression(false)
+ m_WeightTrimRate(0.95), m_MaxDepth(1)
 {
   m_BoostModel = new CvBoost;
 }
@@ -63,8 +63,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
   var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
 
-  if (!m_IsRegression) //Classification
-    var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
+  var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
 
   m_BoostModel->train(samples,CV_ROW_SAMPLE,labels,cv::Mat(),cv::Mat(),var_type,cv::Mat(),params);
 }
