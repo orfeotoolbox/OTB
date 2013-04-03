@@ -269,6 +269,9 @@ typedef otb::ImageFileWriter< VectorImageType > VectorImageFileWriterType;
 typedef VectorImageType::SpacingType  SpacingType;
 /**
  */
+typedef VectorImageType::SizeType     SizeType;
+/**
+ */
 typedef VectorImageType::PointType    PointType;
 
 /*******************************************************************************/
@@ -293,7 +296,14 @@ typedef mvd::VectorImageFileReaderType DefaultImageFileReaderType;
 /** Type definitions for wrapped applications
  * 
  */
-typedef std::map< std::string, StringVector >    ApplicationsTagContainer;
+typedef std::map< std::string, StringVector >                ApplicationsTagContainer;
+/**
+ *  Type definitions for dataset properties
+ */
+typedef std::pair< std::string, std::string >                 PropertyType;
+typedef std::vector< PropertyType >                           PropertiesVector;
+typedef std::pair< std::string, std::vector< PropertyType > > PropertiesVectorByCategory;
+typedef std::map<  std::string, PropertiesVector>             PropertiesContainer;
 
 /*******************************************************************************/
 
