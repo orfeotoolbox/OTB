@@ -749,6 +749,15 @@ IF(OTB_USE_OPENCV)
          ${INPUTDATA}/letter.scale
          ${TEMP}/ANNMachineLearningModel.txt
          )
+         
+     ADD_TEST(leTvNormalBayesMachineLearningModel ${LEARNING_TESTS6}
+         #--compare-ascii ${NOTOL}
+         #${BASELINE_FILES}/NormalBayesMachineLearningModel.txt
+         #${TEMP}/NormalBayesMachineLearningModel.txt
+         otbNormalBayesMachineLearningModel
+         ${INPUTDATA}/letter.scale
+         ${TEMP}/NormalBayesMachineLearningModel.txt
+         )
      
      ADD_TEST(leTuImageClassificationFilterNew ${LEARNING_TESTS6}
        	 otbImageClassificationFilterNew)
@@ -798,6 +807,11 @@ IF(OTB_USE_OPENCV)
      ADD_TEST(leTuANNMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbNeuralNetworkMachineLearningModelCanRead
        	 ${INPUTDATA}/NeuralNetworkMachineLearningModel.txt
+       	 )
+       	 
+     ADD_TEST(leTuNormalBayesMachineLearningModelCanRead ${LEARNING_TESTS6}
+       	 otbNormalBayesMachineLearningModelCanRead
+       	 ${INPUTDATA}/NormalBayesMachineLearningModel.txt
        	 )
 
      

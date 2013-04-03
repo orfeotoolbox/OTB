@@ -27,6 +27,7 @@
 #include "otbRandomForestsMachineLearningModel.h"
 #include "otbBoostMachineLearningModel.h"
 #include "otbNeuralNetworkMachineLearningModel.h"
+#include "otbNormalBayesMachineLearningModel.h"
 
 #include "otbConfusionMatrixCalculator.h"
 
@@ -474,6 +475,58 @@ int otbANNMachineLearningModel(int argc, char * argv[])
   std::cout << "Overall Accuracy: " << cmCalculator->GetOverallAccuracy() << std::endl;
 
   classifier->Save(argv[2]);
+
+  return EXIT_SUCCESS;
+}
+
+int otbNormalBayesMachineLearningModelNew(int argc, char * argv[])
+{
+  typedef otb::NormalBayesMachineLearningModel<InputValueType,TargetValueType> NormalBayesType;
+  NormalBayesType::Pointer classifier = NormalBayesType::New();
+  return EXIT_SUCCESS;
+}
+
+int otbNormalBayesMachineLearningModel(int argc, char * argv[])
+{
+  if (argc != 3 )
+    {
+      std::cout<<"Wrong number of arguments "<<std::endl;
+      std::cout<<"Usage : sample file, output file "<<std::endl;
+      return EXIT_FAILURE;
+    }
+
+  typedef otb::NormalBayesMachineLearningModel<InputValueType, TargetValueType> NormalBayesType;
+
+  InputListSampleType::Pointer samples = InputListSampleType::New();
+  TargetListSampleType::Pointer labels = TargetListSampleType::New();
+  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
+
+  if(!ReadDataFile(argv[1],samples,labels))
+    {
+    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
+    return EXIT_FAILURE;
+    }
+
+  NormalBayesType::Pointer classifier = NormalBayesType::New();
+  classifier->SetInputListSample(samples);
+  classifier->SetTargetListSample(labels);
+  classifier->Train();
+
+  classifier->SetTargetListSample(predicted);
+  classifier->PredictAll();
+
+  classifier->Save(argv[2]);
+
+  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
+
+  cmCalculator->SetProducedLabels(predicted);
+  cmCalculator->SetReferenceLabels(labels);
+  cmCalculator->Compute();
+
+  std::cout<<"Confusion matrix: "<<std::endl;
+  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
+  std::cout<<"Kappa: "<<cmCalculator->GetKappaIndex()<<std::endl;
+  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
 
   return EXIT_SUCCESS;
 }
