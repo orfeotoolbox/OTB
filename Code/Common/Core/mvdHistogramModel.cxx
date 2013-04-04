@@ -163,10 +163,10 @@ HistogramModel
 
   for( i=i0; i<iN; ++i )
     percent += histogram->GetFrequency( i, 0 );
-  
+
   // Calculate frequency rate.
   percent /= histogram->GetTotalFrequency();
-  
+
   // Return frequency rate.
   return percent;
 }

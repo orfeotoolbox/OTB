@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdAlgorithm.h"
+#include "mvdStream.h"
 
 
 /*****************************************************************************/
@@ -41,7 +41,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::Algorithm
+  TRANSLATOR mvd::Stream
 
   Necessary for lupdate to be aware of C++ namespaces.
 
