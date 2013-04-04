@@ -247,8 +247,14 @@ AbstractImageModel
     buildContext->m_Histogram
   );
 
+#if 0
+  // WIP (crashes on reload because serialization methods are not
+  // fully implemented.
   newChildModel< HistogramModel >( &histogramContext );
-  
+#else
+  // Temporay hack to solve segfault.
+  newChildModel< HistogramModel >( NULL );
+#endif
 
   //
   // QUICKLOOK.
