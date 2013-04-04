@@ -131,8 +131,6 @@ QtWidgetInputImageParameter::dragEnterEvent( QDragEnterEvent * event )
 void 
 QtWidgetInputImageParameter::dragMoveEvent(QDragMoveEvent *event)
  {
-   // if (event->mimeData()->hasFormat("text/plain")
-   
    //
    // if the mouse is within the QLabel geometry : allow drops
    if ( event->answerRect().intersects( m_Input->geometry() ) )
