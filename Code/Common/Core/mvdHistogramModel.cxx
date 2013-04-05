@@ -220,6 +220,42 @@ HistogramModel
   qDebug() << this << "::virtual_Read(" << device << ")";
 
   QTextStream stream( device );
+
+
+  QString string;
+  QString version;
+
+  ReadStreamTag( stream, string, PROJECT_NAME, false );
+  ReadStreamTag( stream, version, QString(), false );
+  ReadStreamTag( stream, string, "HISTOGRAM-MODEL", false );
+
+
+  ReadStreamTag( stream, string, "MIN-PIXEL" );
+  stream >> m_MinPixel;
+
+  ReadStreamTag( stream, string, "MAX-PIXEL" );
+  stream >> m_MaxPixel;
+
+  ReadStreamTag( stream, string, "BANDS" );
+  CountType size = 0;
+  stream >> size;
+  CheckStreamStatus( stream );
+
+  HistogramList::Pointer histograms( HistogramList::New() );
+
+  histograms->Initialize();
+  histograms->Resize( size );
+
+  for( CountType i=0; i<size; ++i )
+    {
+    Histogram::Pointer histogram( Histogram::New() );
+
+    stream >> *histogram;
+
+    histograms->SetNthElement( i, histogram );
+    }
+
+  m_Histograms = histograms;
 }
 
 /*******************************************************************************/

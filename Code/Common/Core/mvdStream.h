@@ -383,7 +383,7 @@ ReadStreamTag( QTextStream& stream,
     {
     throw std::runtime_error(
       ToStdString(
-	QCoreApplication::tr(
+	QCoreApplication::translate(
 	  "mvd::Stream",
 	  "Mismatching tag '%1'; expected '%2'."
 	)
@@ -432,7 +432,7 @@ operator >> ( QTextStream& stream,
     {
     throw std::runtime_error(
       ToStdString(
-	QCoreApplication::tr(
+	QCoreApplication::translate(
 	  "mvd::Stream",
 	  "Invalid tag name '%1'."
 	)
@@ -534,7 +534,7 @@ operator >> ( QTextStream& stream,
     {
     throw std::length_error(
       ToStdString(
-	QCoreApplication::tr(
+	QCoreApplication::translate(
 	  "mvd::Stream",
 	  "Input dimension '%1' does not match storage size dimension '%2'."
 	)
@@ -588,7 +588,7 @@ operator >> ( QTextStream& stream,
   typedef typename itk::VariableLengthVector< T > Vector;
 
   QString type;
-  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_VECTOR ] );
+  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_VARIABLE_LENGTH_VECTOR ] );
 
   // Read number of elements.
   typename Vector::ElementIdentifier size = 0;
@@ -719,7 +719,7 @@ QTextStream&
 operator >> ( QTextStream& stream,
 	      itk::Statistics::Histogram< T, N, FC >& histogram )
 {
-  typedef typename itk::Statistics::Histogram< T, N, FC > Histogram;
+  typedef itk::Statistics::Histogram< T, N, FC > Histogram;
 
   QString string;
 
@@ -791,7 +791,7 @@ operator >> ( QTextStream& stream,
 	{
 	throw std::runtime_error(
 	  ToStdString(
-	    QCoreApplication::tr(
+	    QCoreApplication::translate(
 	      "mvd::Stream",
 	      "Mismatching dimension '%1'; expected '%1'."
 	    )
@@ -810,7 +810,7 @@ operator >> ( QTextStream& stream,
 	{
 	throw std::runtime_error(
 	  ToStdString(
-	    QCoreApplication::tr(
+	    QCoreApplication::translate(
 	      "mvd::Stream",
 	      "Mismatching bin '%1'; expected '%2'."
 	    )
@@ -824,7 +824,7 @@ operator >> ( QTextStream& stream,
       typename Histogram::BinMinContainerType::value_type::value_type min;
 
       stream >> min >> ws;
-      CheckStreamStatus( min );
+      CheckStreamStatus( stream );
 
       histogram.SetBinMin( dim, bin, min );
 
@@ -832,17 +832,23 @@ operator >> ( QTextStream& stream,
       typename Histogram::BinMaxContainerType::value_type::value_type max;
 
       stream >> max >> ws;
-      CheckStreamStatus( max );
+      CheckStreamStatus( stream );
 
       histogram.SetBinMax( dim, bin, max );
 
       // Frequency.
-      typename Histogram::FequencyType freq( 0 );
+      typename Histogram::FrequencyType freq( 0 );
 
       stream >> freq;
       CheckStreamStatus( stream );
 
-      histogram.SetFrequency( b, d, freq );
+      typename Histogram::MeasurementType measurement(
+	histogram.GetMeasurement( b, d )
+      );
+
+      typename Histogram::IndexType index( histogram.GetIndex( measurement ) );
+
+      histogram.SetFrequency( index, freq );
       }
     }
 
