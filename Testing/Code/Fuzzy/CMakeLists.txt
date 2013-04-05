@@ -175,6 +175,101 @@ ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestAccuracy ${Fuzzy_TESTS3}
 ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestKappa ${Fuzzy_TESTS3}
   otbConfusionMatrixToMassOfBeliefTest
  KAPPA)
+ 
+ADD_TEST(fzTuDSFusionOfClassifiersImageFilterNew ${Fuzzy_TESTS3}
+  otbDSFusionOfClassifiersImageFilterNew)
+  
+ADD_TEST(fzTvDSFusionOfClassifiersImageFilterPrecision ${Fuzzy_TESTS3}
+ --compare-image ${NOTOL}
+ ${BASELINE}/QB_1_ortho_DS_FUSED_PRECISION.tif
+ ${TEMP}/QB_1_ortho_DS_FUSED_PRECISION.tif
+otbDSFusionOfClassifiersImageFilterTest
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+ PRECISION # Method to estimate the Masses of Belief of each label
+ 10 #LabelForNoDataPixels
+ 7 #LabelForUndecidedPixels
+ ${TEMP}/QB_1_ortho_DS_FUSED_PRECISION.tif
+ )
+ 
+ADD_TEST(fzTvDSFusionOfClassifiersImageFilterRecall ${Fuzzy_TESTS3}
+ --compare-image ${NOTOL}
+ ${BASELINE}/QB_1_ortho_DS_FUSED_RECALL.tif
+ ${TEMP}/QB_1_ortho_DS_FUSED_RECALL.tif
+otbDSFusionOfClassifiersImageFilterTest
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+ RECALL # Method to estimate the Masses of Belief of each label
+ 10 #LabelForNoDataPixels
+ 7 #LabelForUndecidedPixels
+ ${TEMP}/QB_1_ortho_DS_FUSED_RECALL.tif
+ )
+ 
+ ADD_TEST(fzTvDSFusionOfClassifiersImageFilterAccuracy ${Fuzzy_TESTS3}
+ --compare-image ${NOTOL}
+ ${BASELINE}/QB_1_ortho_DS_FUSED_ACCURACY.tif
+ ${TEMP}/QB_1_ortho_DS_FUSED_ACCURACY.tif
+otbDSFusionOfClassifiersImageFilterTest
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+ ACCURACY # Method to estimate the Masses of Belief of each label
+ 10 #LabelForNoDataPixels
+ 7 #LabelForUndecidedPixels
+ ${TEMP}/QB_1_ortho_DS_FUSED_ACCURACY.tif
+ )
+ 
+ ADD_TEST(fzTvDSFusionOfClassifiersImageFilterKappa ${Fuzzy_TESTS3}
+ --compare-image ${NOTOL}
+ ${BASELINE}/QB_1_ortho_DS_FUSED_KAPPA.tif
+ ${TEMP}/QB_1_ortho_DS_FUSED_KAPPA.tif
+otbDSFusionOfClassifiersImageFilterTest
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+ KAPPA # Method to estimate the Masses of Belief of each label
+ 10 #LabelForNoDataPixels
+ 7 #LabelForUndecidedPixels
+ ${TEMP}/QB_1_ortho_DS_FUSED_KAPPA.tif
+ )
 
 
 
@@ -203,6 +298,7 @@ SET(BasicFuzzy_SRCS3
 otbFuzzyTests3.cxx
 otbDempsterShaferFusionTests.cxx
 otbConfusionMatrixToMassOfBeliefTest.cxx
+otbDSFusionOfClassifiersImageFilterTest.cxx
 )
 
 ADD_EXECUTABLE(otbFuzzyTests1 otbFuzzyTests1.cxx ${BasicFuzzy_SRCS1})

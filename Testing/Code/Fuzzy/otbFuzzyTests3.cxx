@@ -31,4 +31,6 @@ void RegisterTests()
   REGISTER_TEST(otbDempsterShaferFusionOptRecConfMatTest);
   REGISTER_TEST(otbConfusionMatrixToMassOfBeliefNew);
   REGISTER_TEST(otbConfusionMatrixToMassOfBeliefTest);
+  REGISTER_TEST(otbDSFusionOfClassifiersImageFilterNew);
+  REGISTER_TEST(otbDSFusionOfClassifiersImageFilterTest);
 }
