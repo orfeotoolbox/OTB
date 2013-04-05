@@ -108,12 +108,15 @@ CheckStreamStatus( QTextStream& stream );
  *
  * \param stream Stream to write into.
  * \param name Tag name to write.
+ * \param enqueueWS Enqueue a whitespace following the tag name.
  *
  * \return stream instance.
  */
 inline
 QTextStream&
-WriteTag( QTextStream& stream, const QString& name );
+WriteStreamTag( QTextStream& stream,
+		const QString& name,
+		bool enqueueWS =true );
 
 /**
  * \brief Read a text tag followed by a whitespace from the stream and
@@ -124,12 +127,16 @@ WriteTag( QTextStream& stream, const QString& name );
  * \param expected The expected tag name. If non-empty, value read
  * from stream is checked agaisnt expected value; an
  * std::runtime_exception is thrown if both values doest not match.
+ * \param skipWS Skip whitespace following tag name.
  *
  * \return stream instance.
  */
 inline
 QTextStream&
-ReadTag( QTextStream& stream, QString& tag, const QString& expected =QString() );
+ReadStreamTag( QTextStream& stream,
+	       QString& tag,
+	       const QString& expected =QString(),
+	       bool skipWS =true );
 
 /*****************************************************************************/
 
@@ -342,9 +349,15 @@ CheckStreamStatus( QDataStream& stream )
 /*******************************************************************************/
 inline
 QTextStream&
-WriteTag( QTextStream& stream, const QString& name )
+WriteStreamTag( QTextStream& stream,
+		const QString& name,
+		bool queueWhiteSpace )
 {
-  stream << name << " ";
+  stream << name;
+
+  if( queueWhiteSpace )
+    stream << " ";
+
   CheckStreamStatus( stream );
 
   return stream;
@@ -353,9 +366,16 @@ WriteTag( QTextStream& stream, const QString& name )
 /*******************************************************************************/
 inline
 QTextStream&
-ReadTag( QTextStream& stream, QString& name, const QString& expected )
+ReadStreamTag( QTextStream& stream,
+	       QString& name,
+	       const QString& expected,
+	       bool skipWhiteSpace )
 {
   stream >> name;
+
+  if( skipWhiteSpace )
+    stream >> ws;
+
   CheckStreamStatus( stream );
 
   if( !expected.isEmpty() &&
@@ -373,9 +393,6 @@ ReadTag( QTextStream& stream, QString& name, const QString& expected )
     );
     }
 
-  stream.skipWhiteSpace();
-  CheckStreamStatus( stream );
-
   return stream;
 }
 
@@ -385,7 +402,7 @@ QTextStream&
 operator << ( QTextStream& stream,
 	      StreamTag tag )
 {
-  WriteTag( stream, STREAM_TAG_NAMES[ tag ] );
+  WriteStreamTag( stream, STREAM_TAG_NAMES[ tag ] );
 
   return stream;
 }
@@ -398,7 +415,7 @@ operator >> ( QTextStream& stream,
 {
   QString name;
 
-  ReadTag( stream, name );
+  ReadStreamTag( stream, name );
 
   bool found = false;
 
@@ -437,14 +454,12 @@ operator << ( QTextStream& stream,
   typedef std::vector< T, Alloc > Vector;
 
   stream << STREAM_TAG_VECTOR << vector.size();
-  CheckStreamStatus( stream );
 
   for( typename Vector::const_iterator it( vector.begin() );
        it!=vector.end();
        ++it )
     {
     stream << " " << *it;
-    CheckStreamStatus( stream );
     }
 
   return stream;
@@ -460,12 +475,11 @@ operator >> ( QTextStream& stream,
   typedef std::vector< T, Alloc > Vector;
 
   QString type;
-  ReadTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_VECTOR ] );
+  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_VECTOR ] );
 
   typename Vector::size_type size = 0;
 
   stream >> size;
-  CheckStreamStatus( stream );
 
   vector.resize( size );
 
@@ -473,11 +487,7 @@ operator >> ( QTextStream& stream,
        it!=vector.end();
        ++it )
     {
-    stream.skipWhiteSpace();
-    CheckStreamStatus( stream );
-
-    stream >> *it;
-    CheckStreamStatus( stream );
+    stream >> ws >> *it;
     }
 
   return stream;
@@ -516,10 +526,9 @@ operator >> ( QTextStream& stream,
   CountType dimension = 0;
 
   QString type;
-  ReadTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_SIZE ] );
+  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_SIZE ] );
 
   stream >> dimension;
-  CheckStreamStatus( stream );
 
   if( dimension!=Size::GetSizeDimension() )
     {
@@ -537,10 +546,7 @@ operator >> ( QTextStream& stream,
 
   for( CountType i=0; i<Size::GetSizeDimension(); ++i )
     {
-    stream.skipWhiteSpace();
-    CheckStreamStatus( stream );
-
-    stream >> size[ i ];
+    stream >> ws >> size[ i ];
     CheckStreamStatus( stream );
     }
 
@@ -582,7 +588,7 @@ operator >> ( QTextStream& stream,
   typedef typename itk::VariableLengthVector< T > Vector;
 
   QString type;
-  ReadTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_VECTOR ] );
+  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_VECTOR ] );
 
   // Read number of elements.
   typename Vector::ElementIdentifier size = 0;
@@ -597,10 +603,7 @@ operator >> ( QTextStream& stream,
        i<vector.Size();
        ++i )
     {
-    stream.skipWhiteSpace();
-    CheckStreamStatus( stream );
-    
-    stream >> vector[ i ];
+    stream >> ws >> vector[ i ];
     CheckStreamStatus( stream );
     }
 
@@ -674,24 +677,18 @@ operator << ( QTextStream& stream,
 {
   typedef typename itk::Statistics::Histogram< T, N, FC > Histogram;
 
+  WriteStreamTag( stream, "HISTOGRAM", false );
+  stream << endl;
 
-  stream << "HISTOGRAM" << endl;
-  CheckStreamStatus( stream );
-
-
-  WriteTag( stream, "MEASUREMENT" );
+  WriteStreamTag( stream, "MEASUREMENT" );
   stream << histogram.GetSize() << endl;
-  CheckStreamStatus( stream );
 
 #if 0
-  WriteTag( stream, "MINS" );
+  WriteStreamTag( stream, "MINS" );
   stream << histogram.GetMins() << endl;
-  CheckStreamStatus( stream );
 
-
-  WriteTag( stream, "MAXS" );
+  WriteStreamTag( stream, "MAXS" );
   stream << histogram.GetMaxs() << endl;
-  CheckStreamStatus( stream );
 #endif
 
 
@@ -728,11 +725,11 @@ operator >> ( QTextStream& stream,
 
   //
   // Histogram section.
-  ReadTag( stream, string, "HISTOGRAM" );
+  ReadStreamTag( stream, string, "HISTOGRAM" );
 
   //
   // Measurement-size section.
-  ReadTag( stream, string, "MEASUREMENT" );
+  ReadStreamTag( stream, string, "MEASUREMENT" );
   typename Histogram::SizeType size;
   stream >> size;
 
@@ -741,7 +738,7 @@ operator >> ( QTextStream& stream,
 #if 0
   //
   // Bin mins.
-  ReadTag( stream, string, "MINS" );
+  ReadStreamTag( stream, string, "MINS" );
   typename Histogram::BinMinContainerType mins;
   stream >> mins;
 
@@ -762,7 +759,7 @@ operator >> ( QTextStream& stream,
 
   //
   // Bin maxes.
-  ReadTag( stream, string, "MAXS" );
+  ReadStreamTag( stream, string, "MAXS" );
   typename Histogram::BinMaxContainerType maxs;
   stream >> maxs;
 
@@ -788,7 +785,7 @@ operator >> ( QTextStream& stream,
       // Dimension.
       unsigned int d = 0;
 
-      stream >> d;
+      stream >> d >> ws;
       CheckStreamStatus( stream );
       if( d!=dim )
 	{
@@ -804,13 +801,10 @@ operator >> ( QTextStream& stream,
 	);
 	}
 
-      stream.skipWhiteSpace();
-      CheckStreamStatus( stream );
-
       // Bin.
       unsigned long b = 0;
 
-      stream >> b;
+      stream >> b >> ws;
       CheckStreamStatus( stream );
       if( b!=bin )
 	{
@@ -826,13 +820,10 @@ operator >> ( QTextStream& stream,
 	);
 	}
 
-      stream.skipWhiteSpace();
-      CheckStreamStatus( stream );
-
       // Min.
       typename Histogram::BinMinContainerType::value_type::value_type min;
 
-      stream >> min;
+      stream >> min >> ws;
       CheckStreamStatus( min );
 
       histogram.SetBinMin( dim, bin, min );
@@ -840,7 +831,7 @@ operator >> ( QTextStream& stream,
       // Max.
       typename Histogram::BinMaxContainerType::value_type::value_type max;
 
-      stream >> max;
+      stream >> max >> ws;
       CheckStreamStatus( max );
 
       histogram.SetBinMax( dim, bin, max );

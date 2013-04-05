@@ -218,6 +218,8 @@ HistogramModel
 ::virtual_Read( QIODevice* device )
 {
   qDebug() << this << "::virtual_Read(" << device << ")";
+
+  QTextStream stream( device );
 }
 
 /*******************************************************************************/
@@ -238,13 +240,13 @@ HistogramModel
   stream << Monteverdi2_VERSION_STRING << endl;
   stream << "HISTOGRAM-MODEL" << endl;
 
-  WriteTag( stream, "MIN-PIXEL" );
+  WriteStreamTag( stream, "MIN-PIXEL" );
   stream << m_MinPixel << endl;
 
-  WriteTag( stream, "MAX-PIXEL" );
+  WriteStreamTag( stream, "MAX-PIXEL" );
   stream << m_MaxPixel << endl;
 
-  WriteTag( stream, "BANDS" );
+  WriteStreamTag( stream, "BANDS" );
   stream << m_Histograms->Size() << endl;
 
   for( HistogramList::ConstIterator it( m_Histograms->Begin() );
@@ -254,7 +256,7 @@ HistogramModel
     stream << *it.Get();
     }
 
-  stream.flush();
+  stream << flush;
   CheckStreamStatus( stream );
 
 #if 0
