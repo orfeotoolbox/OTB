@@ -177,6 +177,8 @@ protected:
   /** Destructor */
   virtual ~NeuralNetworkMachineLearningModel();
 
+  void LabelsToMat(const TargetListSampleType * listSample, cv::Mat & output);
+
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

@@ -60,6 +60,67 @@ NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
   m_LayerSizes = layers;
 }
 
+/** Converts a ListSample of VariableLengthVector to a CvMat. The user
+ *  is responsible for freeing the output pointer with the
+ *  cvReleaseMat function.  A null pointer is resturned in case the
+ *  conversion failed.
+ */
+template <class TInputValue, class TOutputValue>
+void
+NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
+::LabelsToMat(const TargetListSampleType * labels, cv::Mat & output)
+{
+    // Sample index
+    unsigned int sampleIdx = 0;
+
+    // Check for valid listSample
+    if(labels != NULL && labels->Size() > 0)
+      {
+      // Retrieve samples count
+      unsigned int sampleCount = labels->Size();
+
+      std::vector<unsigned int> classes;
+
+      // Build an iterator
+      typename TargetListSampleType::ConstIterator sampleIt = labels->Begin();
+      // Retrieve samples size alike
+      const unsigned int sampleSize = labels->GetMeasurementVectorSize();
+
+      for(; sampleIt!=labels->End(); ++sampleIt,++sampleIdx)
+        {
+        // Retrieve sample
+        typename TargetListSampleType::MeasurementVectorType sample = sampleIt.GetMeasurementVector();
+        // Loop on sample size
+        for(unsigned int i = 0; i < sampleSize; ++i)
+          {
+          classes.push_back(sample[i]);
+          }
+        }
+      std::sort(classes.begin(), classes.end());
+      std::vector<unsigned int>::iterator it = std::unique(classes.begin(), classes.end());
+      classes.resize(std::distance(classes.begin(),it));
+      const unsigned int nbClasses = classes.size();
+
+      // Allocate CvMat
+      sampleIdx = 0;
+      sampleIt = labels->Begin();
+      output.create(sampleCount,nbClasses,CV_32FC1);
+      output.setTo(0);
+      // Fill the cv matrix
+      for(; sampleIt!=labels->End(); ++sampleIt,++sampleIdx)
+        {
+        // Retrieve sample
+        typename TargetListSampleType::MeasurementVectorType sample = sampleIt.GetMeasurementVector();
+
+        // Loop on sample size
+        for(unsigned int i = 0; i < sampleSize; ++i)
+          {
+          output.at<float>(sampleIdx,sample[i]) = 1;
+          }
+        }
+      }
+}
+
 /** Train the machine learning model */
 template <class TInputValue, class TOutputValue>
 void
@@ -84,7 +145,8 @@ NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
 
   cv::Mat labels;
-  otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
+  LabelsToMat(this->GetTargetListSample(),labels);
+  //otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
   CvANN_MLP_TrainParams params;
   params.train_method = m_TrainMethod;
