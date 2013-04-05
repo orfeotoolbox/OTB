@@ -61,7 +61,7 @@ namespace
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
-const int HistogramModel::BINS_OVERSAMPLING_RATE = 5;
+const int HistogramModel::BINS_OVERSAMPLING_RATE = 3;
 
 
 /*****************************************************************************/
@@ -227,29 +227,43 @@ HistogramModel
 {
   qDebug() << this << "::virtual_Write(" << &device << ")";
 
+#if 0
   QByteArray byteArray;
   QTextStream stream( &byteArray, device.openMode() );
+#else
+  QTextStream stream( &device );
+#endif
 
   stream << PROJECT_NAME << endl;
   stream << Monteverdi2_VERSION_STRING << endl;
-  stream << "HISTOGRAM" << endl;
+  stream << "HISTOGRAM-MODEL" << endl;
 
+  WriteTag( stream, "MIN-PIXEL" );
   stream << m_MinPixel << endl;
+
+  WriteTag( stream, "MAX-PIXEL" );
   stream << m_MaxPixel << endl;
 
+  WriteTag( stream, "BANDS" );
   stream << m_Histograms->Size() << endl;
 
   for( HistogramList::ConstIterator it( m_Histograms->Begin() );
        it!=m_Histograms->End();
        ++it )
     {
-    stream << *it.Get() << endl;
+    stream << *it.Get();
     }
 
+  stream.flush();
+  CheckStreamStatus( stream );
+
+#if 0
   qDebug() << byteArray;
 
   if( device.write( byteArray )!=byteArray.size() )
     throw SystemError();
+#else
+#endif
 }
 
 /*******************************************************************************/

@@ -48,6 +48,14 @@ namespace mvd
   Context comment for translator.
 */
 
+const char*
+STREAM_TAG_NAMES[ STREAM_TAG_COUNT ] =
+{
+  "SIZE",
+  "VECTOR",
+  "VARIABLE_LENGTH_VECTOR",
+};
+
 /*******************************************************************************/
 
 } // end namespace 'mvd'
