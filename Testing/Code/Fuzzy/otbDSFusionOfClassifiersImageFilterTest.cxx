@@ -52,8 +52,8 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfIndicesType &m
     const char commentChar = '#';
     const char separatorChar = ',';
     const char eolChar = '\n';
-    std::getline(inFile, labelsLine, commentChar);// Skips the comment char
-    std::getline(inFile, labelsLine, eolChar);// Gets the first line after the comment char until the End Of Line char
+    std::getline(inFile, labelsLine, commentChar); // Skips the comment char
+    std::getline(inFile, labelsLine, eolChar); // Gets the first line after the comment char until the End Of Line char
 
     std::istringstream issLabelsLine(labelsLine);
     mapOfIndicesClX.clear();

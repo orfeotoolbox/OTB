@@ -173,7 +173,6 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 
 
 
-
 template <class TInputImage, class TOutputImage, class TMaskImage>
 const typename DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 ::LabelType
@@ -213,7 +212,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 
       /*std::cout << "vectorPixelValue[" << itClk << "] = " << classLabelk;
       std::cout << "; MassOfBelief_Cl_" << itClk << "[" << classLabelk << "] = " << mLabelSetClk;
-      std::cout << std::endl;*/
+      std::cout << std::endl; */
 
 
       if (mapJointMassesStepI.count(classLabelk) == 0)
@@ -278,7 +277,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
     /*std::cout << "****************************************" << std::endl;
     std::cout << "mapJointMassesStepI[" << classLabelk << "] = " << mLabelSetClk << std::endl;
     std::cout << "mapJointMassesStepI_[" << classLabelk << "] = " << mLabelSetClk_ << std::endl;
-    std::cout << "mapJointMassesUniverseStepI[" << classLabelk << "] = " << mUniverseClk << std::endl;*/
+    std::cout << "mapJointMassesUniverseStepI[" << classLabelk << "] = " << mUniverseClk << std::endl; */
     }
 
   unsigned int nbClkGroupsStepI = mapJointMassesStepI.size();
@@ -301,7 +300,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
   std::cout << "m_NumberOfClassifiers = " << m_NumberOfClassifiers << std::endl;
   std::cout << "nbClkGroupsStepI = " << nbClkGroupsStepI << std::endl;
   std::cout << "****************************************************************************" << std::endl;
-  std::cout << "****************************************************************************" << std::endl;*/
+  std::cout << "****************************************************************************" << std::endl; */
 
   // Calculation of the Belief functions Bel({Ai}) and Bel({Ai_}) of the singletons {Ai} and {Ai_}
   SingleClassLabelMassMapType mapBelStepII, mapBelStepII_;
@@ -370,7 +369,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 
     /*std::cout << "Bel(" << classLabelk << ") = " << mapBelStepII[classLabelk] << std::endl;
      std::cout << "Bel(NOT_" << classLabelk << ") = " << mapBelStepII_[classLabelk] << std::endl;
-     std::cout << std::endl;*/
+     std::cout << std::endl; */
     }
 
   //std::cout << "****************************************************************************" << std::endl;
@@ -417,12 +416,10 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 
   /*std::cout << "****************************************************************************" << std::endl;
   std::cout << "outFusedLabelOut = " << outFusedLabelOut << std::endl;
-  std::cout << "Bel(" << outFusedLabelOut << ") = " << fusedDSBelLabelSetClk << std::endl;*/
+  std::cout << "Bel(" << outFusedLabelOut << ") = " << fusedDSBelLabelSetClk << std::endl; */
 
   return outFusedLabelOut;
 }
-
-
 
 
 

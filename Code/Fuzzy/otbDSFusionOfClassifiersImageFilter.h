@@ -87,7 +87,6 @@ public:
   typedef typename std::vector<SingleClassLabelMassMapType>                         VectorOfMapOfMassesOfBeliefType;
 
 
-
   /** Set/Get the m_LabelForNoDataPixels */
   itkSetMacro(LabelForNoDataPixels, LabelType);
   itkGetMacro(LabelForNoDataPixels, LabelType);
