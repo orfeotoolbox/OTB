@@ -172,7 +172,6 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 }
 
 
-
 template <class TInputImage, class TOutputImage, class TMaskImage>
 const typename DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 ::LabelType
@@ -420,8 +419,6 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 
   return outFusedLabelOut;
 }
-
-
 
 
 
