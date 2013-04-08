@@ -773,6 +773,18 @@ IF(OTB_USE_OPENCV)
          ${INPUTDATA}/letter.scale
          ${TEMP}/DecisionTreeMachineLearningModel.txt
          )
+         
+     ADD_TEST(leTuGradientBoostedTreeMachineLearningModelNew ${LEARNING_TESTS6}
+         otbGradientBoostedTreeMachineLearningModelNew)
+     
+     ADD_TEST(leTvGradientBoostedTreeMachineLearningModel ${LEARNING_TESTS6}
+         #--compare-ascii ${NOTOL}
+         #${BASELINE_FILES}/GradientBoostedTreeMachineLearningModel.txt
+         #${TEMP}/GradientBoostedTreeMachineLearningModel.txt
+         otbGradientBoostedTreeMachineLearningModel
+         ${INPUTDATA}/letter.scale
+         ${TEMP}/GradientBoostedTreeMachineLearningModel.txt
+         )
      
      ADD_TEST(leTuImageClassificationFilterNew ${LEARNING_TESTS6}
        	 otbImageClassificationFilterNew)
@@ -833,6 +845,13 @@ IF(OTB_USE_OPENCV)
        	 otbDecisionTreeMachineLearningModelCanRead
        	 ${INPUTDATA}/DecisionTreeMachineLearningModel.txt
        	 )
+       	 
+    ADD_TEST(leTuGradientBoostedTreeMachineLearningModelCanRead ${LEARNING_TESTS6}
+       	 otbGradientBoostedTreeMachineLearningModelCanRead
+       	 ${TEMP}/GradientBoostedTreeMachineLearningModel.txt
+       	 )
+    SET_TESTS_PROPERTIES(leTuGradientBoostedTreeMachineLearningModelCanRead
+     					PROPERTIES DEPENDS leTvGradientBoostedTreeMachineLearningModel)
      
 ENDIF(OTB_USE_OPENCV)
 

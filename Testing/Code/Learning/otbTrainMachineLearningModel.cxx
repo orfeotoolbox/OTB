@@ -29,6 +29,7 @@
 #include "otbNeuralNetworkMachineLearningModel.h"
 #include "otbNormalBayesMachineLearningModel.h"
 #include "otbDecisionTreeMachineLearningModel.h"
+#include "otbGradientBoostedTreeMachineLearningModel.h"
 
 #include "otbConfusionMatrixCalculator.h"
 
@@ -443,22 +444,22 @@ int otbANNMachineLearningModel(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
-  std::cout<<"number of samples = "<<samples->Size()<<std::endl;
-
   std::vector<unsigned int> layerSizes;
   layerSizes.push_back(16);
-  layerSizes.push_back(25);
-  layerSizes.push_back(35);
-  layerSizes.push_back(45);
-  layerSizes.push_back(1);
+  layerSizes.push_back(100);
+  layerSizes.push_back(100);
+  layerSizes.push_back(26);
 
   ANNType::Pointer classifier = ANNType::New();
   classifier->SetInputListSample(samples);
   classifier->SetTargetListSample(labels);
   classifier->SetLayerSizes(layerSizes);
-  classifier->SetTrainMethod(CvANN_MLP_TrainParams::BACKPROP);
-  classifier->SetBackPropDWScale(0.005);
-  classifier->SetBackPropMomentScale(0.005);
+  /*classifier->SetTrainMethod(CvANN_MLP_TrainParams::RPROP);
+  classifier->SetRegPropDW0(0.1);
+  classifier->SetRegPropDWMin(0.1);
+  classifier->SetTermCriteriaType(CV_TERMCRIT_ITER);
+  classifier->SetMaxIter(300);
+  classifier->SetEpsilon(0.01);*/
   classifier->Train();
 
   classifier->SetTargetListSample(predicted);
@@ -584,6 +585,58 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
+
+int otbGradientBoostedTreeMachineLearningModelNew(int argc, char * argv[])
+{
+  typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType,TargetValueType> GBTreeType;
+  GBTreeType::Pointer classifier = GBTreeType::New();
+  return EXIT_SUCCESS;
+}
+
+int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
+{
+  if (argc != 3 )
+    {
+      std::cout<<"Wrong number of arguments "<<std::endl;
+      std::cout<<"Usage : sample file, output file "<<std::endl;
+      return EXIT_FAILURE;
+    }
+
+  typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType, TargetValueType> GBTreeType;
+
+  InputListSampleType::Pointer samples = InputListSampleType::New();
+  TargetListSampleType::Pointer labels = TargetListSampleType::New();
+  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
+
+  if(!ReadDataFile(argv[1],samples,labels))
+    {
+    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
+    return EXIT_FAILURE;
+    }
+
+  GBTreeType::Pointer classifier = GBTreeType::New();
+  classifier->SetInputListSample(samples);
+  classifier->SetTargetListSample(labels);
+  classifier->Train();
+
+  classifier->SetTargetListSample(predicted);
+  classifier->PredictAll();
+
+  classifier->Save(argv[2]);
+
+  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
+
+  cmCalculator->SetProducedLabels(predicted);
+  cmCalculator->SetReferenceLabels(labels);
+  cmCalculator->Compute();
+
+  std::cout<<"Confusion matrix: "<<std::endl;
+  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
+  std::cout<<"Kappa: "<<cmCalculator->GetKappaIndex()<<std::endl;
+  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
+
+  return EXIT_SUCCESS;
+}
 
 
 

@@ -40,6 +40,8 @@ void RegisterTests()
   REGISTER_TEST(otbNormalBayesMachineLearningModel);
   REGISTER_TEST(otbDecisionTreeMachineLearningModelNew);
   REGISTER_TEST(otbDecisionTreeMachineLearningModel);
+  REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelNew);
+  REGISTER_TEST(otbGradientBoostedTreeMachineLearningModel);
   REGISTER_TEST(otbImageClassificationFilterNew);
   REGISTER_TEST(otbImageClassificationFilter);
   REGISTER_TEST(otbLibSVMMachineLearningModelCanRead);
@@ -48,4 +50,6 @@ void RegisterTests()
   REGISTER_TEST(otbBoostMachineLearningModelCanRead);
   REGISTER_TEST(otbNeuralNetworkMachineLearningModelCanRead);
   REGISTER_TEST(otbNormalBayesMachineLearningModelCanRead);
+  REGISTER_TEST(otbDecisionTreeMachineLearningModelCanRead);
+  REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelCanRead);
 }
