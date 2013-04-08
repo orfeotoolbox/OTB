@@ -116,9 +116,7 @@ DatasetModel
   //
   // 1.1. Assign new image ID to build-context if first time loading.
   // Remember provided ID.
-#if 0
-  int id = context.m_Id;
-#endif
+
   // Assign image-model ID to build-context if there is none
   // provided but keep provided one to test if it's first time
   // import or next time loading of image-model.
@@ -165,8 +163,8 @@ DatasetModel
 	context.m_Id,
 	context.m_Filename,
 	&vectorImageModel->GetSettings(),
-	vectorImageModel->GetQuicklookModel()->GetFilename(),
-	context.m_Histogram
+	GetDirectory().relativeFilePath( context.m_Quicklook ),
+	GetDirectory().relativeFilePath( context.m_Histogram )
       );
 
       //
@@ -287,6 +285,19 @@ DatasetModel
       << ";\n- histogram:" << imageContext.m_Histogram
       << ".";
 
+    // Restore absolute file paths.
+    if( !imageContext.m_Quicklook.isEmpty() )
+      {
+      imageContext.m_Quicklook =
+	QFileInfo( GetDirectory(), imageContext.m_Quicklook ).filePath();
+      }
+
+    if( !imageContext.m_Histogram.isEmpty() )
+      {
+      imageContext.m_Histogram =
+	QFileInfo( GetDirectory(), imageContext.m_Histogram ).filePath();
+      }
+
     // TODO: 3) Remove WxH for screen best-fit during loading of model!
     LoadImage(
       imageContext,
@@ -379,9 +390,9 @@ DatasetModel
   VectorImageModel* viModel =
     qobject_cast< VectorImageModel* >( GetSelectedImageModel() );
     
-  // ------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------
   // category 1 : file infos
-  // ------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------
   QString key1 = tr("File Informations");
 
   PropertiesVectorByCategory pFileInfoCat;
