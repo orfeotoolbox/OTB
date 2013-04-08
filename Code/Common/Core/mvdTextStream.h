@@ -345,8 +345,8 @@ ReadStreamTag( QTextStream& stream,
     throw std::runtime_error(
       ToStdString(
 	QCoreApplication::translate(
-	  "mvd::Stream",
-	  "Mismatching tag '%1'; expected '%2'."
+	  "mvd::TextStream",
+	  "Read tag '%1' does not match expected tag '%2'."
 	)
 	.arg( name )
 	.arg( expected )
@@ -394,7 +394,7 @@ operator >> ( QTextStream& stream,
     throw std::runtime_error(
       ToStdString(
 	QCoreApplication::translate(
-	  "mvd::Stream",
+	  "mvd::TextStream",
 	  "Invalid tag name '%1'."
 	)
 	.arg( name )
@@ -496,8 +496,9 @@ operator >> ( QTextStream& stream,
     throw std::length_error(
       ToStdString(
 	QCoreApplication::translate(
-	  "mvd::Stream",
-	  "Input dimension '%1' does not match storage size dimension '%2'."
+	  "mvd::TextStream",
+	  "Size dimension (%1) does not match "
+	  "expected dimension (%2)."
 	)
 	.arg( dimension )
 	.arg( Size::GetSizeDimension() )
@@ -586,7 +587,7 @@ operator << ( QTextStream& stream,
   WriteStreamTag( stream, "MEASUREMENT" );
   stream << histogram.GetSize() << endl;
 
-#if 0
+#if 1
   WriteStreamTag( stream, "MINS" );
   stream << histogram.GetMins() << endl;
 
@@ -595,6 +596,7 @@ operator << ( QTextStream& stream,
 #endif
 
 
+#if 0
   typename Histogram::SizeType size( histogram.GetSize() );
 
   for( unsigned int dim=0; dim<N; ++dim )
@@ -611,6 +613,46 @@ operator << ( QTextStream& stream,
       CheckStreamStatus( stream );
       }
     }
+
+#else
+  CountType size = histogram.Size();
+
+  WriteStreamTag( stream, "SAMPLES" );
+  stream << size << endl;
+  CheckStreamStatus( stream );
+
+  CountType count = 0;
+
+  for( typename Histogram::ConstIterator it( histogram.Begin() );
+       it!=histogram.End();
+       ++it, ++count )
+    {
+    stream
+      << it.GetInstanceIdentifier() << " "
+      << it.GetFrequency() << endl;
+
+    CheckStreamStatus( stream );
+    }
+
+  WriteStreamTag( stream, "COUNT" );
+  stream << count << endl;
+  CheckStreamStatus( stream );
+
+  if( count!=size )
+    {
+    throw std::runtime_error(
+      ToStdString(
+	QCoreApplication::translate(
+	  "mvd::TextStream",
+	  "Histogram sample count (%1) does not match "
+	  "written sample count (%2)."
+	)
+	.arg( size )
+	.arg( count )
+      )
+    );
+    }
+#endif
 
   return stream;
 }
@@ -636,29 +678,17 @@ operator >> ( QTextStream& stream,
   typename Histogram::SizeType size;
   stream >> size;
 
+  // Dimension of size is checked in operator >> ( QTextStream&,
+  // itk::Size< T > ).
+
   histogram.Initialize( size );
 
-#if 0
+#if 1
   //
   // Bin mins.
   ReadStreamTag( stream, string, "MINS" );
   typename Histogram::BinMinContainerType mins;
   stream >> mins;
-
-  int dim = -1;
-  int bin = -1;
-
-  for( dim=0;
-       dim<mins.size();
-       ++dim )
-    {
-    for( bin=0;
-	 bin<mins[ dim ].size();
-	 ++bin )
-      {
-      histogram.SetBinMin( dim, bin, mins[ dim ][ bin ] );
-      }
-    }
 
   //
   // Bin maxes.
@@ -666,19 +696,53 @@ operator >> ( QTextStream& stream,
   typename Histogram::BinMaxContainerType maxs;
   stream >> maxs;
 
-  for( dim=0;
+  if( mins.size()!=N )
+    {
+    throw std::runtime_error(
+      ToStdString(
+	QCoreApplication::translate(
+	  "mvd::TextStream",
+	  "Histogram mins dimension (%1) does not match "
+	  "expected dimension (%2)."
+	)
+	.arg( mins.size() )
+	.arg( N )
+      )
+    );
+    }
+
+  if( maxs.size()!=N )
+    {
+    throw std::runtime_error(
+      ToStdString(
+	QCoreApplication::translate(
+	  "mvd::TextStream",
+	  "Histogram maxs dimension (%1) does not match "
+	  "expected dimension (%2)."
+	)
+	.arg( maxs.size() )
+	.arg( N )
+      )
+    );
+    }
+
+  //
+  // Initialize histogram mins & maxs within single pass.
+  for( typename Histogram::BinMaxContainerType::size_type dim=0;
        dim<maxs.size();
        ++dim )
     {
-    for( bin=0;
+    for( typename Histogram::BinMaxContainerType::value_type::size_type bin=0;
 	 bin<maxs[ dim ].size();
 	 ++bin )
       {
+      histogram.SetBinMin( dim, bin, mins[ dim ][ bin ] );
       histogram.SetBinMax( dim, bin, maxs[ dim ][ bin ] );
       }
     }
 #endif
 
+#if 0
   //
   // Bins.
   for( unsigned int dim=0; dim<N; ++dim )
@@ -695,8 +759,9 @@ operator >> ( QTextStream& stream,
 	throw std::runtime_error(
 	  ToStdString(
 	    QCoreApplication::translate(
-	      "mvd::Stream",
-	      "Mismatching dimension '%1'; expected '%1'."
+	      "mvd::TextStream",
+	      "Histogram dimension (%1) does not match "
+	      "expected dimension (%2)."
 	    )
 	    .arg( d )
 	    .arg( dim )
@@ -714,8 +779,9 @@ operator >> ( QTextStream& stream,
 	throw std::runtime_error(
 	  ToStdString(
 	    QCoreApplication::translate(
-	      "mvd::Stream",
-	      "Mismatching bin '%1'; expected '%2'."
+	      "mvd::TextStream",
+	      "Histogram bin count (%1) does not match "
+	      "expected bin count (%2)."
 	    )
 	    .arg( b )
 	    .arg( bin )
@@ -754,6 +820,65 @@ operator >> ( QTextStream& stream,
       histogram.SetFrequency( index, freq );
       }
     }
+
+#else
+  CountType samples = 0;
+
+  ReadStreamTag( stream, string, "SAMPLES" );
+  stream >> samples;
+  CheckStreamStatus( stream );
+
+  CountType space = histogram.Size();
+
+  if( samples!=space )
+    {
+    throw std::runtime_error(
+      ToStdString(
+	QCoreApplication::translate(
+	  "mvd::TextStream",
+	  "Histogram sample count (%1) does not match "
+	  "expected sample count (%2)."
+	)
+	.arg( samples )
+	.arg( space )
+      )
+    );
+    }
+
+  CountType i = 0;
+  for( ; i<samples; ++i )
+    {
+    typename Histogram::InstanceIdentifier id( 0 );
+    typename Histogram::FrequencyType freq( 0 );
+
+    stream >> id >> ws >> freq;
+    CheckStreamStatus( stream );
+
+    histogram.SetFrequency( id, freq );
+    }
+
+  CountType count = 0;
+
+  ReadStreamTag( stream, string, "COUNT" );
+  stream >> count;
+  CheckStreamStatus( stream );
+
+  if( count!=i )
+    {
+    throw std::runtime_error(
+      ToStdString(
+	QCoreApplication::translate(
+	  "mvd::TextStream",
+	  "Read sample count (histogram) (%1) does not match "
+	  "written sample count (%2)."
+	)
+	.arg( i )
+	.arg( count )
+      )
+    );
+    }
+
+#endif
 
   return stream;
 }

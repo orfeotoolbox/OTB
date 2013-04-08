@@ -41,7 +41,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::Stream
+  TRANSLATOR mvd::TextStream
 
   Necessary for lupdate to be aware of C++ namespaces.
 
