@@ -175,9 +175,15 @@ ImageViewManipulator
 {
   // Update the pressed flag
   m_MouseContext.pressed = false;
-  //TODO: Implement mouseReleaseEvent.
-  //std::cout <<" Not Implemented yet ..." << std::endl;
-}
+  
+  // Update the context with the pressed position
+  m_MouseContext.x = event->x();
+  m_MouseContext.y = event->y();
+  
+  // Update the context with the pressed position for the mouseMoveEvent
+  m_MouseContext.xMove = event->x();
+  m_MouseContext.yMove = event->y();
+  }
 
 /******************************************************************************/
 void ImageViewManipulator
