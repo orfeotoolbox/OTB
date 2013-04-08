@@ -141,6 +141,7 @@ VectorImageModel
         std::string tempfilename( ToStdString( m_Filename ) );
 
         filter->SetInputFileName(tempfilename);
+        filter->SetResamplingMethod(otb::AVERAGE);
         filter->SetNbOfResolutions(m_ImageFileReader->GetAvailableResolutions().size());
 
         try
