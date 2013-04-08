@@ -459,7 +459,7 @@ int otbANNMachineLearningModel(int argc, char * argv[])
   classifier->SetRegPropDWMin(0.1);
   classifier->SetTermCriteriaType(CV_TERMCRIT_ITER);
   classifier->SetMaxIter(300);
-  classifier->SetEpsilon(0.01);*/
+  classifier->SetEpsilon(0.01); */
   classifier->Train();
 
   classifier->SetTargetListSample(predicted);

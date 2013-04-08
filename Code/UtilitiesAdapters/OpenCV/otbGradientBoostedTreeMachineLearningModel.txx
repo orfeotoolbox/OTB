@@ -82,7 +82,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 
   otb::SampleToMat<InputSampleType>(input,sample);
 
-  double result = m_GBTreeModel->predict(sample);//, cv::Mat(), false)->value;
+  double result = m_GBTreeModel->predict(sample); //, cv::Mat(), false)->value;
 
   TargetSampleType target;
 
