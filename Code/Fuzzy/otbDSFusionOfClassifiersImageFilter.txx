@@ -95,7 +95,7 @@ void
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 ::SetInputConfusionMatrices(const VectorOfConfusionMatricesType vectorOfConfusionMatrices)
 {
-  this->m_VectorOfConfMatrices = vectorOfConfusionMatrices;
+  this->m_VectorOfConfusionMatrices = vectorOfConfusionMatrices;
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
@@ -108,7 +108,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
     {
     return 0;
     }
-  return m_VectorOfConfMatrices;
+  return m_VectorOfConfusionMatrices;
 }
 /* ************************************************************************************************************** */
 
@@ -138,7 +138,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
     unsigned int nbClassesClk = m_VectorOfMapOfIndices[itClk].size();
 
     m_ConfusionMatrixToMassOfBeliefFilter->SetMapOfIndices(m_VectorOfMapOfIndices[itClk]);
-    m_ConfusionMatrixToMassOfBeliefFilter->SetConfusionMatrix(m_VectorOfConfMatrices[itClk]);
+    m_ConfusionMatrixToMassOfBeliefFilter->SetConfusionMatrix(m_VectorOfConfusionMatrices[itClk]);
     m_ConfusionMatrixToMassOfBeliefFilter->SetDefinitionMethod(m_DefinitionMethod);
     m_ConfusionMatrixToMassOfBeliefFilter->Update();
 
@@ -466,12 +466,12 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
     // If point is valid
     if (validPoint)
       {
-      //Over ALL the i components inIt.Get()[i] of the input vector pixel
+      // Over ALL the i components inIt.Get()[i] of the input vector pixel (with i between 0 and m_NumberOfClassifiers)
       outIt.Set(this->OptimizedDSMassCombination(inIt.Get()));
       }
     else
       {
-      // else, set m_LabelForNoDataPixels value
+      // else, outIt is set to the m_LabelForNoDataPixels value
       outIt.Set(m_LabelForNoDataPixels);
       }
     progress.CompletedPixel();

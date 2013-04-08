@@ -18,7 +18,6 @@
 #ifndef __otbDSFusionOfClassifiersImageFilter_h
 #define __otbDSFusionOfClassifiersImageFilter_h
 
-//#include "itkInPlaceImageFilter.h"
 #include "itkImageToImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
@@ -28,10 +27,37 @@
 namespace otb
 {
 /** \class DSFusionOfClassifiersImageFilter
- *  \brief Performs Dempster-Shafer combination of n masses function.
+ *  \brief Performs a fusion of n classification maps using the Dempster Shafer (noted DS) rule of combination.
  *
- *  This filter computes the joint mass of n input masses using
- *  Dempster-Shafer rule of combination.
+ *  This filter performs a fusion of n classification maps using the Dempster Shafer rule of combination from
+ *  an otbVectorImage with n channels, each one corresponding to an input classification map to be fused. This
+ *  otbVectorImage can be obtained with the help of a preliminary use of the otbImageListToVectorImageFilter.
+ *
+ *  Moreover, the otbDSFusionOfClassifiersImageFilter needs as additional inputs the n confusion matrices and
+ *  their corresponding Maps Of Indices (std::map<indice in confusion matrix rows/columns, label>) which link
+ *  the labels to the confusion matrices. These additional inputs are respectively organized as a
+ *  VectorOfMapOfIndices and as a VectorOfConfusionMatrices both having n elements and an index order necessarily
+ *  identical to the channel order of the input otbVectorImage.
+ *
+ *  The output label image resulting from the DS fusion of classification maps only has one channel (monoband image).
+ *
+ *  The recursive optimized Dempster Shafer combination of masses of belief (noted MOB) is performed in 2 steps
+ *  for each channel component of each pixel of the input otbVectorImage within the input mask, and is based on:
+ *
+ *    [1] L. Xu, A. Krzyzak, and C.Y. Suen,
+ *       "Methods of combining multiple classifiers and their applications to handwriting recognition,"
+ *        Systems, Man and Cybernetics, IEEE Transactions on vol. 22, no.3, pp. 418-435,
+ *        May/Jun 1992.
+ *
+ *    [2] D. Ruta and B. Gabrys,
+ *       "An Overview of Classifier Fusion Methods,"
+ *        Computing and Information Systems, vol. 7 pp.1-10,
+ *        University of Paisley, 2000.
+ *
+ *    [3] C.R. Parikh, M.J. Pont, and N.B. Jones,
+ *       "Application of Dempster-Shafer theory in condition monitoring systems: A case study,"
+ *        Pattern Recognition Letters, vol. 22 (6-7): pp. 777-785,
+ *        2001.
  *
  *
  *  \sa MassOfBelief
@@ -100,7 +126,9 @@ public:
   itkSetMacro(DefinitionMethod, MassOfBeliefDefinitionMethod);
 
   /**
-   * If set, only pixels within the mask will be classified.
+   * If set, only pixels within the mask (i.e. pixels different from 0 in the InputMask) will be fused.
+   * The pixels out of the mask (i.e. pixels equal to 0 in the InputMask) will be set to m_LabelForNoDataPixels
+   * in the Output fused image.
    * \param mask The input mask.
    */
   void SetInputMask(const MaskImageType * mask);
@@ -142,7 +170,7 @@ private:
   unsigned int                              m_NumberOfClassesInUniverse;
 
   VectorOfMapOfIndicesType                  m_VectorOfMapOfIndices;
-  VectorOfConfusionMatricesType             m_VectorOfConfMatrices;
+  VectorOfConfusionMatricesType             m_VectorOfConfusionMatrices;
 
   ConfusionMatrixToMassOfBeliefPointerType  m_ConfusionMatrixToMassOfBeliefFilter;
   MassOfBeliefDefinitionMethod              m_DefinitionMethod;
