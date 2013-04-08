@@ -157,6 +157,10 @@ ADD_TEST(fzDSFusionOptRecTestConfMatTestAccuracy ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptRecConfMatTest
  ACCURACY)
  
+ADD_TEST(fzDSFusionOptRecTestConfMatTestKappa ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptRecConfMatTest
+ KAPPA)
+ 
 ADD_TEST(fzTuConfusionMatrixToMassOfBeliefNew ${Fuzzy_TESTS3}
   otbConfusionMatrixToMassOfBeliefNew)
   
