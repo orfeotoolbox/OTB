@@ -261,36 +261,6 @@ operator >> ( QTextStream& stream,
 /*****************************************************************************/
 
 /**
- * \brief Write an itk::VariableLengthVector< T > into a QDataStream.
- *
- * \param stream QDataStream into which to write data.
- * \param vector itk::VariableLengthVector< T > data to write.
- *
- * \return stream instance.
- */
-template< typename T >
-inline
-QDataStream&
-operator << ( QDataStream& stream,
-	      const itk::VariableLengthVector< T >& vector );
-
-/**
- * \brief Read an itk::VariableLengthVector< T > from a QDataStream.
- *
- * \param stream QDataStream from which to read data.
- * \param vector itk::VariableLengthVector< T > container to read data into.
- *
- * \return stream instance.
- */
-template< typename T >
-inline
-QDataStream&
-operator >> ( QDataStream& stream,
-	      itk::VariableLengthVector< T >& vector );
-
-/*****************************************************************************/
-
-/**
  * \brief Write an itk::statistics::Histogram< T, N, FX > into a QTextStream.
  *
  * \param stream QTextStream into which to write data.
@@ -334,15 +304,6 @@ void
 CheckStreamStatus( QTextStream& stream )
 {
   if( stream.status()!=QTextStream::Ok )
-    throw SystemError();
-}
-
-/*******************************************************************************/
-inline
-void
-CheckStreamStatus( QDataStream& stream )
-{
-  if( stream.status()!=QDataStream::Ok )
     throw SystemError();
 }
 
@@ -609,64 +570,6 @@ operator >> ( QTextStream& stream,
 
   return stream;
 }
-
-/*******************************************************************************/
-/*
-template< typename T >
-inline
-QDataStream&
-operator << ( QDataStream& stream,
-	      const itk::VariableLengthVector< T >& vector )
-{
-  typedef typename itk::VariableLengthVector< T > Vector;
-
-  // Write number of elements.
-  stream << vector.Size();
-  CheckStreamStatus( stream );
-
-  // Write each element prefixed by a delimitting whitespace.
-  for( typename Vector::ElementIdentifier i=0;
-       i<vector.Size();
-       ++i )
-    {
-    stream << vector[ i ];
-    CheckStreamStatus( stream );
-    }
-
-  return stream;
-}
-*/
-
-/*******************************************************************************/
-/*
-template< typename T >
-inline
-QDataStream&
-operator >> ( QDataStream& stream,
-	      itk::VariableLengthVector< T >& vector )
-{
-  typedef typename itk::VariableLengthVector< T > Vector;
-
-  // Read number of elements.
-  typename Vector::ElementIdentifier size = 0;
-  stream >> size;
-  CheckStreamStatus( stream );
-
-  // Allocates vector elements.
-  vector.SetSize( size );
-
-  // Read each element prefixed by a delimitting whitespace.
-  for( typename Vector::ElementIdentifier i=0;
-       i<vector.Size();
-       ++i )
-    {
-    stream >> vector[ i ];
-    CheckStreamStatus( stream );
-    }
-
-  return stream;
-}
-*/
 
 /*******************************************************************************/
 template< typename T, unsigned int N, typename FC >

@@ -37,7 +37,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdStream.h"
+#include "mvdTextStream.h"
 #include "mvdVectorImageModel.h"
 
 namespace mvd
