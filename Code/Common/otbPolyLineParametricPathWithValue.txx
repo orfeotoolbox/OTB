@@ -20,6 +20,8 @@
 
 #include "otbPolyLineParametricPathWithValue.h"
 
+#include "itkNumericTraits.h"
+
 namespace otb
 {
 /**
@@ -32,7 +34,9 @@ PolyLineParametricPathWithValue<TValue, VDimension>
   m_BoundingRegion(), m_BoundingRegionIsValid(false)
 {
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<ValueType>(dict, m_Key, 0);
+  itk::EncapsulateMetaData<ValueType>(dict, m_Key, static_cast<ValueType>(0));
+  // The following way seems better but I need to check with a win build
+  //itk::EncapsulateMetaData<ValueType>(dict, m_Key, itk::NumericTraits<ValueType>::ZeroValue());
 }
 
 template <class TValue, unsigned int VDimension>
