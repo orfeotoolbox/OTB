@@ -192,10 +192,10 @@ private:
   inline void SetControllerModel( QDockWidget* dock, AbstractModel* model );
 
   /** Write settings into a settings file*/
-  void WriteDsPathSettings(QString dsPath);
+  //void WriteDsPathSettings(QString dsPath);
 
   /** Read settings from a settings file*/
-  void InitializeDsPathSettings();
+  //void InitializeDsPathSettings();
 
   /**
    */
