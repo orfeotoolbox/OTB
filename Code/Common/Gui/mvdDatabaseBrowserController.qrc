@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="/images">
+    <file alias="forbidden_icon">../../../Data/Icons/forbidden.png</file>      
+  </qresource>
+</RCC>

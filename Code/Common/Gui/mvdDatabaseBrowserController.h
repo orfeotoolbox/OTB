@@ -136,6 +136,11 @@ private:
    */
   void ResetDatasetTree();
 
+  /**
+   */
+  void CheckDatasetsConsistensy();
+ 
+
 //
 // Private attributes.
 private:

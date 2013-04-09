@@ -117,7 +117,7 @@ public:
   /**
    */
   QStringList QueryDatasetModels() const;
-
+  
   /**
    */
   inline DatasetModel* GetSelectedDatasetModel();
@@ -129,6 +129,10 @@ public:
   /**
    */
   void ReleaseDatasetModel( const DatasetId& id );
+
+  /** */
+
+  bool IsDatasetConsistent( const DatasetId& id );
 
   //
   // AbstractModel overrides.

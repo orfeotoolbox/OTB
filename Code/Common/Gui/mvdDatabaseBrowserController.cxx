@@ -128,6 +128,9 @@ DatabaseBrowserController
   // Reset widget.
   ResetDatasetTree();
 
+  // Check every dataset consistency
+  CheckDatasetsConsistensy();
+
   // Signal model has been updated.
   emit ModelUpdated();
 }
@@ -161,6 +164,46 @@ DatabaseBrowserController
   widget->blockSignals( false );
   }
   this->blockSignals( false );
+}
+
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::CheckDatasetsConsistensy()
+{
+  //
+  // access widget.
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+
+  //
+  // access model.
+  DatabaseModel* model = GetModel< DatabaseModel >();
+  assert( model!=NULL );
+
+  // get the tree
+  QTreeWidget * tree = widget->GetDatabaseTreeWidget();
+
+  // iterate on the dataset list, check consistency.
+  // if not consistent add icon and disable QWidgetItem.
+  for ( int topIdx = 0; topIdx < tree->topLevelItemCount(); topIdx++)
+    {
+    int nbChild = tree->topLevelItem(topIdx)->childCount();
+    for ( int idx = 0; idx < nbChild; idx++ )
+      {
+      QTreeWidgetItem *    currentDatasetItem = tree->topLevelItem(topIdx)->child(idx);
+      QString datasetId =  currentDatasetItem->text(0);
+
+      // check consistency
+      if ( !model->IsDatasetConsistent( datasetId ) )
+        {
+        // disable inconsistent dataset
+        currentDatasetItem->setDisabled(true);
+
+        // add forbidden icon
+        currentDatasetItem->setIcon(0, QIcon( ":/images/forbidden_icon" ));
+        }
+      }
+    }
 }
 
 /*******************************************************************************/

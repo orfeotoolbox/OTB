@@ -81,6 +81,7 @@ set( Common_Gui_FORMS
 # Qt resources
 set( Common_Gui_RESOURCES
   mvdApplicationsToolBox.qrc
+  mvdDatabaseBrowserController.qrc
 )
 
 include_directories(
