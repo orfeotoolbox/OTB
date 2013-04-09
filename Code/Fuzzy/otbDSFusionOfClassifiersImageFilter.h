@@ -133,8 +133,8 @@ public:
    */
   void SetInputMask(const MaskImageType * mask);
 
-  void SetInputMapsOfIndices(const VectorOfMapOfIndicesType vectorOfMapOfIndices);
-  void SetInputConfusionMatrices(const VectorOfConfusionMatricesType vectorOfConfusionMatrices);
+  void SetInputMapsOfIndices(const VectorOfMapOfIndicesType * vectorOfMapOfIndices);
+  void SetInputConfusionMatrices(const VectorOfConfusionMatricesType * vectorOfConfusionMatrices);
 
   /**
    * Get the input mask.
@@ -142,8 +142,8 @@ public:
    */
   const MaskImageType * GetInputMask(void);
 
-  const VectorOfMapOfIndicesType GetInputMapsOfIndices(void);
-  const VectorOfConfusionMatricesType GetInputConfusionMatrices(void);
+  const VectorOfMapOfIndicesType * GetInputMapsOfIndices(void);
+  const VectorOfConfusionMatricesType * GetInputConfusionMatrices(void);
 
   const LabelType OptimizedDSMassCombination(PixelType vectorPixelValue);
 

@@ -198,8 +198,8 @@ int otbDSFusionOfClassifiersImageFilterTest(int argc, char* argv[])
 
   // Filter Inputs
   dsFusionOfClassifiersImageFilter->SetInput(imageListToVectorImageFilter->GetOutput());
-  dsFusionOfClassifiersImageFilter->SetInputMapsOfIndices(vectorOfMapOfIndices);
-  dsFusionOfClassifiersImageFilter->SetInputConfusionMatrices(vectorOfConfMatrices);
+  dsFusionOfClassifiersImageFilter->SetInputMapsOfIndices(&vectorOfMapOfIndices);
+  dsFusionOfClassifiersImageFilter->SetInputConfusionMatrices(&vectorOfConfMatrices);
   dsFusionOfClassifiersImageFilter->SetDefinitionMethod(massOfBeliefDefMethod);
   dsFusionOfClassifiersImageFilter->SetLabelForNoDataPixels(atoi(argv[argc - 3]));
   dsFusionOfClassifiersImageFilter->SetLabelForUndecidedPixels(atoi(argv[argc - 2]));

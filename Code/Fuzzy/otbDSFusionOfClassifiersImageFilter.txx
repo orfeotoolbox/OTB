@@ -71,14 +71,14 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
-::SetInputMapsOfIndices(const VectorOfMapOfIndicesType vectorOfMapOfIndices)
+::SetInputMapsOfIndices(const VectorOfMapOfIndicesType * pointerToVectorOfMapOfIndices)
 {
-  this->m_VectorOfMapOfIndices = vectorOfMapOfIndices;
+  this->m_VectorOfMapOfIndices = *pointerToVectorOfMapOfIndices;
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 const typename DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
-::VectorOfMapOfIndicesType
+::VectorOfMapOfIndicesType *
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 ::GetInputMapsOfIndices()
 {
@@ -86,21 +86,21 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
     {
     return 0;
     }
-  return this->m_VectorOfMapOfIndices;
+  return &this->m_VectorOfMapOfIndices;
 }
 /* ************************************************************************************************************** */
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
-::SetInputConfusionMatrices(const VectorOfConfusionMatricesType vectorOfConfusionMatrices)
+::SetInputConfusionMatrices(const VectorOfConfusionMatricesType * pointerToVectorOfConfusionMatrices)
 {
-  this->m_VectorOfConfusionMatrices = vectorOfConfusionMatrices;
+  this->m_VectorOfConfusionMatrices = *pointerToVectorOfConfusionMatrices;
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 const typename DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
-::VectorOfConfusionMatricesType
+::VectorOfConfusionMatricesType *
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 ::GetInputConfusionMatrices()
 {
@@ -108,7 +108,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
     {
     return 0;
     }
-  return m_VectorOfConfusionMatrices;
+  return &this->m_VectorOfConfusionMatrices;
 }
 /* ************************************************************************************************************** */
 
