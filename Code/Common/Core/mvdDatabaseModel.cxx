@@ -109,45 +109,18 @@ DatabaseModel
 
   // Find dataset model or interrupt by exception.
   DatasetModel* datasetModel = FindDatasetModel( id );
+  assert( datasetModel!=NULL );
 
-  // If dataset model has been found, return it.
-  if( datasetModel!=NULL )
-    {
-    SetSelectedDatasetModel( datasetModel );
-    return datasetModel;
-    }
-
-  // Otherwise, load it from disk.
   try
     {
-    // Create empty dataset model.
-    datasetModel = new DatasetModel( this );
+    // Load dataset sub-models.
+    datasetModel->LoadImageModels( -1, -1 );
 
-    // Build dataset model.
-    assert( I18nApplication::ConstInstance() );
-
-    DatasetModel::BuildContext context(
-      I18nApplication::ConstInstance()->GetCacheDir().path(),
-      id
-    );
-
-    datasetModel->BuildModel( &context );
-
-    // Store dataset model.
-    assert( m_DatasetModels.contains( id ) );
-    m_DatasetModels[ id ] = datasetModel;
-
-    // Change selected dataset model.
+    // If dataset model has been loaded, select it.
     SetSelectedDatasetModel( datasetModel );
     }
-
   catch( std::exception& exc )
     {
-    // If loading was interrupted, delete allocated memory.
-    delete datasetModel;
-    datasetModel = NULL;
-
-    // And forward interrupting exception.
     throw exc;
     }
 
@@ -170,43 +143,54 @@ DatabaseModel
 }
 
 /*******************************************************************************/
+DatasetModel*
+DatabaseModel
+::NewDatasetModel( const DatasetId& id )
+{
+  qDebug() << this << "::NewDatasetModel(" << id << ")";
+
+  // Find dataset model or interrupt by exception.
+  DatasetModel* datasetModel = NULL;
+
+  // Otherwise, load it from disk.
+  try
+    {
+    // Create empty dataset model.
+    datasetModel = new DatasetModel( this );
+
+    // Build dataset model.
+    assert( I18nApplication::ConstInstance() );
+
+    DatasetModel::BuildContext context(
+      I18nApplication::ConstInstance()->GetCacheDir().path(),
+      id,
+      false
+    );
+
+    datasetModel->BuildModel( &context );
+    }
+
+  catch( std::exception& exc )
+    {
+    // If loading was interrupted, delete allocated memory.
+    delete datasetModel;
+    datasetModel = NULL;
+
+    // And forward interrupting exception.
+    throw exc;
+    }
+
+  // Return loaded and selected dataset model.
+  return datasetModel;
+}
+
+/*******************************************************************************/
 void
 DatabaseModel
 ::virtual_BuildModel( void* context )
 {
   InitializeDatasetModels();
 }
-
-#if 0
-
-/*******************************************************************************/
-bool
-DatabaseModel
-::IsModified() const
-{
-  return true;
-}
-
-/*******************************************************************************/
-
-void
-DatabaseModel
-::ClearModified()
-{
-}
-
-#endif
-
-/*******************************************************************************/
-#if 0
-
-void
-DatabaseModel
-::virtual_Save()
-{
-}
-
-#endif
 
 /*******************************************************************************/
 void
@@ -221,7 +205,17 @@ DatabaseModel
        it!=datasets.end();
        ++it )
     {
-    m_DatasetModels.insert( *it, NULL );
+    try
+      {
+      DatasetModel* datasetModel = NewDatasetModel( *it );
+      assert( datasetModel!=NULL );
+
+      m_DatasetModels.insert( *it, datasetModel );
+      }
+    catch( std::exception& exc )
+      {
+      throw exc;
+      }
     }
 }
 

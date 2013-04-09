@@ -91,12 +91,63 @@ DatasetModel
 }
 
 /*******************************************************************************/
+bool
+DatasetModel
+::IsConsistent() const
+{
+  bool isConsistent = true;
+
+  if( m_Descriptor==NULL )
+    return false;
+
+  for( QDomElement imageElt( m_Descriptor->FirstImageElement() );
+       !imageElt.isNull() && isConsistent;
+       imageElt = DatasetDescriptor::NextImageSiblingElement( imageElt ) )
+    {
+    // Locals.
+    VectorImageModel::Settings settings;
+    AbstractImageModel::BuildContext imageContext( false, &settings );
+
+    // Read image-model descriptor information.
+    DatasetDescriptor::GetImageModel(
+      imageElt,
+      imageContext.m_Id,
+      imageContext.m_Filename,
+      imageContext.m_Settings,
+      imageContext.m_Quicklook,
+      imageContext.m_Histogram
+    );
+
+    QFileInfo fileInfo( GetDirectory(), imageContext.m_Filename );
+
+    isConsistent =
+      isConsistent &&
+      fileInfo.exists() &&
+      fileInfo.isReadable();
+    }
+
+  return isConsistent;
+}
+
+/*******************************************************************************/
 void
 DatasetModel
 ::ImportImage( const QString& filename, int width, int height )
 {
   AbstractImageModel::BuildContext context( true, filename );
   LoadImage( context, width, height );
+}
+
+/*******************************************************************************/
+void
+DatasetModel
+::LoadImageModels( int width, int height )
+{
+  qDebug() << this << "::LoadImageModels(" << width << "," << height << ")";
+
+  BuildContext context( width, height );
+
+  ParseDescriptor( &context );
 }
 
 /*******************************************************************************/
@@ -245,9 +296,13 @@ DatasetModel
     assert( m_Descriptor==NULL );
     m_Descriptor = newChildModel< DatasetDescriptor >( &context );
 
-    // Load image-models from descriptor.
-    // TODO: Replace DatasetModel::BuildContext() by (width, height).
-    ParseDescriptor( buildContext );
+    // If enabled...
+    if( buildContext->m_IsLoadSubModelsEnabled )
+      {
+      // ...load image-models from descriptor.
+      // TODO: Replace DatasetModel::BuildContext() by (width, height).
+      ParseDescriptor( buildContext );
+      }
     }
 }
 
@@ -256,7 +311,15 @@ void
 DatasetModel
 ::ParseDescriptor( BuildContext* context )
 {
+  qDebug() << this << "::ParseDescriptor(" << context << ")";
+
   assert( context );
+  assert( context->m_IsLoadSubModelsEnabled );
+
+  if( !context->m_IsLoadSubModelsEnabled )
+    {
+    return;
+    }
 
   for( QDomElement imageElt( m_Descriptor->FirstImageElement() );
        !imageElt.isNull();
@@ -303,16 +366,6 @@ DatasetModel
       imageContext,
       context->m_Width, context->m_Height
     );
-
-#if 0
-    // Access vector image-model.
-    VectorImageModel* vectorImageModel =
-      qobject_cast< VectorImageModel* >( imageModel );
-    assert( vectorImageModel!=NULL );
-
-    // Re-assign rendering-settings to image-model.
-    vectorImageModel->SetSettings( settings );
-#endif
     }
 }
 

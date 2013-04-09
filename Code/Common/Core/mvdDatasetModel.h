@@ -98,12 +98,23 @@ public:
   public:
     BuildContext( const QString& path,
 		  const QString& name,
+		  bool isLoadSubModelsEnabled,
 		  int width =-1,
 		  int height =-1 ) :
       m_Path( path ),
       m_Name( name ),
       m_Width( width ),
-      m_Height( height )
+      m_Height( height ),
+      m_IsLoadSubModelsEnabled( isLoadSubModelsEnabled )
+    {
+    }
+
+    BuildContext( int width, int height ) :
+      m_Path(),
+      m_Name(),
+      m_Width( width ),
+      m_Height( height ),
+      m_IsLoadSubModelsEnabled( true )
     {
     }
 
@@ -114,6 +125,7 @@ public:
     QString m_Name;
     int m_Width;
     int m_Height;
+    bool m_IsLoadSubModelsEnabled;
   };
 
 //
@@ -125,6 +137,10 @@ public:
 
   /** \brief Destructor. */
   virtual ~DatasetModel();
+
+  /**
+   */
+  bool IsConsistent() const;
 
   /**
    */
@@ -140,6 +156,10 @@ public:
 
   /** */
   void ImportImage( const QString& filename, int w, int h );
+
+  /**
+   */
+  void LoadImageModels( int width, int height );
 
   /** */
   inline bool HasSelectedImageModel() const;
@@ -263,7 +283,7 @@ private:
 
   /**
     */
-  PropertiesContainer  m_DatasetProperties;
+  PropertiesContainer m_DatasetProperties;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

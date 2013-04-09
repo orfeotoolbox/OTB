@@ -215,6 +215,10 @@ private:
    */
   void SetSelectedDatasetModel( DatasetModel* model );
 
+  /**
+   */
+  DatasetModel* NewDatasetModel( const DatasetId& id );
+
 //
 // Private attributes.
 private:
