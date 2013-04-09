@@ -201,6 +201,9 @@ DatabaseBrowserController
 
         // add forbidden icon
         currentDatasetItem->setIcon(0, QIcon( ":/images/forbidden_icon" ));
+
+        // add tootlip
+        currentDatasetItem->setToolTip (0,tr ("Inconsistent Dataset disabled") );
         }
       }
     }
