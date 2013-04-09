@@ -422,7 +422,6 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 
 
 
-
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
