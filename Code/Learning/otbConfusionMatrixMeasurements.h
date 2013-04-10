@@ -44,7 +44,7 @@ namespace otb
  *  Moreover overall accuracy and \f[ \kappa \f] index are computed.
  *
  */
-template <class TConfusionMatrix = itk::VariableSizeMatrix<double> >
+template <class TConfusionMatrix = itk::VariableSizeMatrix<double>, class TLabel = int >
 class ITK_EXPORT ConfusionMatrixMeasurements :
   public itk::Object
 {
@@ -61,9 +61,9 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  typedef int                                       ClassLabelType;
-  typedef std::map<ClassLabelType, int>             MapOfClassesType;
-  typedef std::map<int, ClassLabelType>             MapOfIndicesType;
+  typedef TLabel                                    ClassLabelType;
+  typedef std::map<ClassLabelType, unsigned int>    MapOfClassesType;
+  typedef std::map<unsigned int, ClassLabelType>    MapOfIndicesType;
 
   /** Type for the confusion matrix */
   typedef TConfusionMatrix                          ConfusionMatrixType;
@@ -103,7 +103,7 @@ public:
   virtual void SetMapOfClasses(const MapOfClassesType _arg)
   {
     m_MapOfClasses = _arg;
-    MapOfClassesType::iterator itMapOfClasses;
+    typename MapOfClassesType::iterator itMapOfClasses;
     m_MapOfIndices.clear();
     for (itMapOfClasses = m_MapOfClasses.begin(); itMapOfClasses != m_MapOfClasses.end(); ++itMapOfClasses)
       {
@@ -123,7 +123,7 @@ public:
   virtual void SetMapOfIndices(const MapOfIndicesType _arg)
   {
     m_MapOfIndices = _arg;
-    MapOfIndicesType::iterator itMapOfIndices;
+    typename MapOfIndicesType::iterator itMapOfIndices;
     m_MapOfClasses.clear();
     for (itMapOfIndices = m_MapOfIndices.begin(); itMapOfIndices != m_MapOfIndices.end(); ++itMapOfIndices)
       {

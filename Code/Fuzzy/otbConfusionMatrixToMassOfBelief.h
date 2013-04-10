@@ -47,7 +47,7 @@ namespace otb
  *
  */
 
-template <class TConfusionMatrix = itk::VariableSizeMatrix<double> >
+template <class TConfusionMatrix = itk::VariableSizeMatrix<double>, class TLabel = int >
 class ITK_EXPORT ConfusionMatrixToMassOfBelief :
   public itk::ProcessObject
 {
@@ -66,16 +66,18 @@ public:
 
 
   /** Type for the confusion matrix */
-  typedef TConfusionMatrix                                               ConfusionMatrixType;
+  typedef TConfusionMatrix                                                      ConfusionMatrixType;
+
+  /** Type for the labels */
+  typedef TLabel                                                                ClassLabelType;
 
   /** Type for the confusion matrix measurements calculator*/
-  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType>          ConfusionMatrixMeasurementsType;
-  typedef typename ConfusionMatrixMeasurementsType::ClassLabelType       ClassLabelType;
-  typedef typename ConfusionMatrixMeasurementsType::MapOfClassesType     MapOfClassesType;
-  typedef typename ConfusionMatrixMeasurementsType::MapOfIndicesType     MapOfIndicesType;
+  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurementsType;
+  typedef typename ConfusionMatrixMeasurementsType::MapOfClassesType            MapOfClassesType;
+  typedef typename ConfusionMatrixMeasurementsType::MapOfIndicesType            MapOfIndicesType;
 
-  typedef double                                                         MassType;
-  typedef std::map<ClassLabelType, MassType>                             SingleClassLabelMassMapType;
+  typedef double                                                                MassType;
+  typedef std::map<ClassLabelType, MassType>                                    LabelMassMapType;
 
   enum MassOfBeliefDefinitionMethod {PRECISION, RECALL, ACCURACY, KAPPA};
 
@@ -124,7 +126,7 @@ public:
   }
 
 
-  SingleClassLabelMassMapType GetMapMassOfBelief() const
+  LabelMassMapType GetMapMassOfBelief() const
   {
     return m_MapMassOfBelief;
   }
@@ -151,7 +153,7 @@ private:
   MapOfIndicesType m_MapOfIndices;
 
   MassOfBeliefDefinitionMethod m_DefinitionMethod;
-  SingleClassLabelMassMapType m_MapMassOfBelief;
+  LabelMassMapType m_MapMassOfBelief;
 };
 
 } // end namespace otb

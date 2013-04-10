@@ -21,8 +21,8 @@
 
 namespace otb
 {
-template<class TConfusionMatrix>
-ConfusionMatrixMeasurements<TConfusionMatrix>
+template<class TConfusionMatrix, class TLabel>
+ConfusionMatrixMeasurements<TConfusionMatrix, TLabel>
 ::ConfusionMatrixMeasurements() :
   m_KappaIndex(0.0),
   m_OverallAccuracy(0.0),
@@ -39,9 +39,9 @@ ConfusionMatrixMeasurements<TConfusionMatrix>
 }
 
 
-template <class TConfusionMatrix>
+template <class TConfusionMatrix, class TLabel>
 void
-ConfusionMatrixMeasurements<TConfusionMatrix>
+ConfusionMatrixMeasurements<TConfusionMatrix, TLabel>
 ::Compute()
 {
   m_NumberOfClasses = m_ConfusionMatrix.Rows();
@@ -165,9 +165,9 @@ ConfusionMatrixMeasurements<TConfusionMatrix>
 }
 
 /*
-template <class TConfusionMatrix>
+template <class TConfusionMatrix, class TLabel>
 void
-ConfusionMatrixMeasurements<TConfusionMatrix>
+ConfusionMatrixMeasurements<TConfusionMatrix, TLabel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   os << indent << "TODO";

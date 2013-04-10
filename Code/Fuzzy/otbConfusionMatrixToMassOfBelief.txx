@@ -23,8 +23,8 @@
 namespace otb
 {
 
-template<class TConfusionMatrix>
-ConfusionMatrixToMassOfBelief<TConfusionMatrix>
+template<class TConfusionMatrix, class TLabel>
+ConfusionMatrixToMassOfBelief<TConfusionMatrix, TLabel>
 ::ConfusionMatrixToMassOfBelief()
 {
   this->SetNumberOfRequiredInputs(2);
@@ -33,17 +33,17 @@ ConfusionMatrixToMassOfBelief<TConfusionMatrix>
   this->m_DefinitionMethod = this->PRECISION;
 }
 
-template <class TConfusionMatrix>
+template <class TConfusionMatrix, class TLabel>
 void
-ConfusionMatrixToMassOfBelief<TConfusionMatrix>
+ConfusionMatrixToMassOfBelief<TConfusionMatrix, TLabel>
 ::Update()
 {
   this->GenerateData();
 }
 
-template <class TConfusionMatrix>
+template <class TConfusionMatrix, class TLabel>
 void
-ConfusionMatrixToMassOfBelief<TConfusionMatrix>
+ConfusionMatrixToMassOfBelief<TConfusionMatrix, TLabel>
 ::GenerateData()
 {
   this->m_ConfMatMeasurements->SetConfusionMatrix(m_ConfusionMatrix);

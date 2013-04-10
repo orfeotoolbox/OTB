@@ -68,22 +68,24 @@ public:
   itkNewMacro(Self);
 
   /** List to store the corresponding labels */
-  typedef TRefListLabel                             RefListLabelType;
-  typedef typename RefListLabelType::Pointer        RefListLabelPointerType;
+  typedef TRefListLabel                                                         RefListLabelType;
+  typedef typename RefListLabelType::Pointer                                    RefListLabelPointerType;
 
-  typedef TProdListLabel                            ProdListLabelType;
-  typedef typename ProdListLabelType::Pointer       ProdListLabelPointerType;
+  typedef TProdListLabel                                                        ProdListLabelType;
+  typedef typename ProdListLabelType::Pointer                                   ProdListLabelPointerType;
 
-  typedef int                                       ClassLabelType;
+  typedef typename RefListLabelType::ValueType::ValueType                       ClassLabelType;
+  typedef std::map<ClassLabelType, unsigned int>                                MapOfClassesType;
+  typedef std::map<unsigned int, ClassLabelType>                                MapOfIndicesType;
 
   /** Type for the confusion matrix */
-  typedef itk::VariableSizeMatrix<double>           ConfusionMatrixType;
+  typedef itk::VariableSizeMatrix<double>                                       ConfusionMatrixType;
 
   /** Type for the confusion matrix measurements calculator*/
-  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType> ConfusionMatrixMeasurementsType;
+  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurementsType;
 
   /** Type for the measurement */
-  typedef itk::VariableLengthVector<double>         MeasurementType;
+  typedef itk::VariableLengthVector<double>                                     MeasurementType;
 
 
   /**
@@ -122,7 +124,7 @@ public:
   /* Gives the correspondence between a class label
    * and its index in the confusion matrix
    */
-  std::map<ClassLabelType, int> GetMapOfClasses() const
+  MapOfClassesType GetMapOfClasses() const
   {
     return m_MapOfClasses;
   }
@@ -130,7 +132,7 @@ public:
   /* Gives the correspondence between an index in the
    * confusion matrix and the class label
    */
-  std::map<int, ClassLabelType> GetMapOfIndices() const
+  MapOfIndicesType GetMapOfIndices() const
   {
     return m_MapOfIndices;
   }
@@ -166,14 +168,14 @@ private:
   double m_Recall;
   double m_FScore;
 
-  std::map<ClassLabelType, int> m_MapOfClasses;
-  std::map<int, ClassLabelType> m_MapOfIndices;
+  MapOfClassesType m_MapOfClasses;
+  MapOfIndicesType m_MapOfIndices;
 
   unsigned short m_NumberOfClasses;
   unsigned long  m_NumberOfSamples;
 
   ConfusionMatrixType m_ConfusionMatrix;
-  ConfusionMatrixMeasurementsType::Pointer m_ConfMatMeasurements;
+  typename ConfusionMatrixMeasurementsType::Pointer m_ConfMatMeasurements;
 
   RefListLabelPointerType  m_ReferenceLabels;
   ProdListLabelPointerType m_ProducedLabels;

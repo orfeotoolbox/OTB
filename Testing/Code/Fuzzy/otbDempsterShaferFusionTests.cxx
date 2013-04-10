@@ -47,7 +47,7 @@ int otbDempsterShaferFusionOptRecConfMatTest(int argc, char * argv[])
   typedef ConfusionMatrixToMassOfBeliefType::MapOfClassesType             MapOfClassesType;
   typedef ConfusionMatrixToMassOfBeliefType::MassOfBeliefDefinitionMethod MassOfBeliefDefinitionMethod;
   typedef ConfusionMatrixToMassOfBeliefType::MassType                     MassType; //double by default
-  typedef ConfusionMatrixToMassOfBeliefType::SingleClassLabelMassMapType  SingleClassLabelMassMapType;
+  typedef ConfusionMatrixToMassOfBeliefType::LabelMassMapType             SingleClassLabelMassMapType;
 
   typedef int                                                             ClassLabelType;
   typedef std::map<ClassLabelType, unsigned int>                          ClassifierHistogramType;

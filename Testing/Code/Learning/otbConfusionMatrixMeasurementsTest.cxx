@@ -23,13 +23,27 @@
 int otbConfusionMatrixMeasurementsNew(int argc, char* argv[])
 {
   typedef itk::VariableSizeMatrix<double> ConfusionMatrixType;
+  typedef unsigned char                   LabelType;
 
-  // filter type
-  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType> ConfusionMatrixMeasurementsType;
+  // filter types
+  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, LabelType> ConfusionMatrixMeasurements2TemplatesType;
+  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType> ConfusionMatrixMeasurements1TemplateType;
+  typedef otb::ConfusionMatrixMeasurements<> ConfusionMatrixMeasurements0TemplateType;
 
-  // filter
-  ConfusionMatrixMeasurementsType::Pointer confMatMeasurements = ConfusionMatrixMeasurementsType::New();
-  std::cout << confMatMeasurements << std::endl;
+  // filters
+  ConfusionMatrixMeasurements2TemplatesType::Pointer
+      confusionMatrixMeasurements2Templates = ConfusionMatrixMeasurements2TemplatesType::New();
+  ConfusionMatrixMeasurements1TemplateType::Pointer
+      confusionMatrixMeasurements1Template = ConfusionMatrixMeasurements1TemplateType::New();
+  ConfusionMatrixMeasurements0TemplateType::Pointer
+      confusionMatrixMeasurements0Template = ConfusionMatrixMeasurements0TemplateType::New();
+
+  std::cout << confusionMatrixMeasurements2Templates << std::endl;
+  std::cout << std::endl;
+  std::cout << confusionMatrixMeasurements1Template << std::endl;
+  std::cout << std::endl;
+  std::cout << confusionMatrixMeasurements0Template << std::endl;
+  std::cout << std::endl;
 
   return EXIT_SUCCESS;
 }
@@ -38,20 +52,20 @@ int otbConfusionMatrixMeasurementsNew(int argc, char* argv[])
 int otbConfusionMatrixMeasurementsTest(int argc, char* argv[])
 {
   typedef itk::VariableSizeMatrix<double> ConfusionMatrixType;
+  typedef unsigned char                   ClassLabelType;
 
   // filter type
-  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType> ConfusionMatrixMeasurementsType;
-  typedef ConfusionMatrixMeasurementsType::ClassLabelType ClassLabelType;
+  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurementsType;
   typedef ConfusionMatrixMeasurementsType::MapOfClassesType MapOfClassesType;
   typedef ConfusionMatrixMeasurementsType::MapOfIndicesType MapOfIndicesType;
   typedef ConfusionMatrixMeasurementsType::MeasurementType MeasurementType;
 
   // mapOfClasses[label] = index in the rows/columns of the confusion matrix
   MapOfClassesType mapOfClasses;
-  mapOfClasses[1] = 0;
-  mapOfClasses[2] = 1;
-  mapOfClasses[3] = 2;
-  mapOfClasses[4] = 3;
+  mapOfClasses['a'] = 0;
+  mapOfClasses['b'] = 1;
+  mapOfClasses['c'] = 2;
+  mapOfClasses['d'] = 3;
 
   unsigned int nbClasses = mapOfClasses.size();
   ConfusionMatrixType confMat = ConfusionMatrixType(nbClasses, nbClasses);
@@ -75,7 +89,7 @@ int otbConfusionMatrixMeasurementsTest(int argc, char* argv[])
 
   for (itMapOfIndices = mapOfIndices.begin(); itMapOfIndices != mapOfIndices.end(); ++itMapOfIndices)
     {
-    int itClasses = itMapOfIndices->first;
+    unsigned int itClasses = itMapOfIndices->first;
     ClassLabelType label = itMapOfIndices->second;
 
     std::cout << "Number of True Positives of class [" << label << "] = "

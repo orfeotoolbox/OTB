@@ -268,12 +268,12 @@ int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
 
 int otbConfusionMatrixCalculatorComputeWithBaseline(int argc, char* argv[])
 {
-  typedef itk::VariableLengthVector<int>          PLabelType;
-  typedef itk::Statistics::ListSample<PLabelType> PListLabelType;
-  typedef itk::FixedArray<int, 1>                 RLabelType;
-  typedef itk::Statistics::ListSample<RLabelType> RListLabelType;
-  typedef otb::ConfusionMatrixCalculator<RListLabelType,
-      PListLabelType> CalculatorType;
+  typedef char                                                           ClassLabelType;
+  typedef itk::VariableLengthVector<ClassLabelType>                      PLabelType;
+  typedef itk::Statistics::ListSample<PLabelType>                        PListLabelType;
+  typedef itk::FixedArray<ClassLabelType, 1>                             RLabelType;
+  typedef itk::Statistics::ListSample<RLabelType>                        RListLabelType;
+  typedef otb::ConfusionMatrixCalculator<RListLabelType, PListLabelType> CalculatorType;
 
   typedef CalculatorType::MeasurementType MeasurementType;
 
@@ -288,25 +288,31 @@ int otbConfusionMatrixCalculatorComputeWithBaseline(int argc, char* argv[])
   int nbSamples = 12;
   int nbClasses = 4;
 
-  // Reference samples: 1 2 3 4 1 2 3 4 1 2 3 4
-  // Classified reference samples: 1 3 3 4 4 2 3 4 4 4 4 3
-  std::vector<int> labelsClassified;
-  labelsClassified.push_back(1);
-  labelsClassified.push_back(3);
-  labelsClassified.push_back(3);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(2);
-  labelsClassified.push_back(3);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(4);
-  labelsClassified.push_back(3);
+  // Reference samples: a b c d a b c d a b c d
+  // Classified reference samples: a c c d d b c d d d d c
+  std::vector<ClassLabelType> labelsUniverse, labelsClassified;
+
+  labelsUniverse.push_back('a');
+  labelsUniverse.push_back('b');
+  labelsUniverse.push_back('c');
+  labelsUniverse.push_back('d');
+
+  labelsClassified.push_back('a');
+  labelsClassified.push_back('c');
+  labelsClassified.push_back('c');
+  labelsClassified.push_back('d');
+  labelsClassified.push_back('d');
+  labelsClassified.push_back('b');
+  labelsClassified.push_back('c');
+  labelsClassified.push_back('d');
+  labelsClassified.push_back('d');
+  labelsClassified.push_back('d');
+  labelsClassified.push_back('d');
+  labelsClassified.push_back('c');
 
   for (int i = 0; i < nbSamples; ++i)
     {
-    int label = (i % nbClasses) + 1;
+    ClassLabelType label = labelsUniverse[(i % nbClasses)];
     PLabelType plab;
     plab.SetSize(1);
     plab[0] = labelsClassified[i];
@@ -336,28 +342,28 @@ int otbConfusionMatrixCalculatorComputeWithBaseline(int argc, char* argv[])
 
   for (int itClasses = 0; itClasses < nbClasses; itClasses++)
     {
-    std::cout << "Number of True Positives of class [" << itClasses << "] = "
+    std::cout << "Number of True Positives of class [" << labelsUniverse[itClasses] << "] = "
         << calculator->GetTruePositiveValues()[itClasses] << std::endl;
-    std::cout << "Number of False Negatives of class [" << itClasses << "] = "
+    std::cout << "Number of False Negatives of class [" << labelsUniverse[itClasses] << "] = "
             << calculator->GetFalseNegativeValues()[itClasses] << std::endl;
-    std::cout << "Number of False Positives of class [" << itClasses << "] = "
+    std::cout << "Number of False Positives of class [" << labelsUniverse[itClasses] << "] = "
             << calculator->GetFalsePositiveValues()[itClasses] << std::endl;
-    std::cout << "Number of True Negatives of class [" << itClasses << "] = "
+    std::cout << "Number of True Negatives of class [" << labelsUniverse[itClasses] << "] = "
             << calculator->GetTrueNegativeValues()[itClasses] << std::endl;
 
-    std::cout << "Precision of class [" << itClasses << "] vs all: " << calculator->GetPrecisions()[itClasses]
+    std::cout << "Precision of class [" << labelsUniverse[itClasses] << "] vs all: " << calculator->GetPrecisions()[itClasses]
         << std::endl;
-    std::cout << "Recall of class [" << itClasses << "] vs all: " << calculator->GetRecalls()[itClasses] << std::endl;
-    std::cout << "F-score of class [" << itClasses << "] vs all: " << calculator->GetFScores()[itClasses] << "\n"
+    std::cout << "Recall of class [" << labelsUniverse[itClasses] << "] vs all: " << calculator->GetRecalls()[itClasses] << std::endl;
+    std::cout << "F-score of class [" << labelsUniverse[itClasses] << "] vs all: " << calculator->GetFScores()[itClasses] << "\n"
         << std::endl;
     }
-  std::cout << "Number of True Positives of the different class: "<< calculator->GetTruePositiveValues()<< std::endl;
-  std::cout << "Number of False Negatives of the different class: "<< calculator->GetFalseNegativeValues()<< std::endl;
-  std::cout << "Number of False Positives of the different class: "<< calculator->GetFalsePositiveValues()<< std::endl;
-  std::cout << "Number of True Negatives of the different class: "<< calculator->GetTrueNegativeValues()<< std::endl;
-  std::cout << "Precision of the different class: " << calculator->GetPrecisions() << std::endl;
-  std::cout << "Recall of the different class: " << calculator->GetRecalls() << std::endl;
-  std::cout << "F-score of the different class: " << calculator->GetFScores() << std::endl;
+  std::cout << "Number of True Positives of the different classes: "<< calculator->GetTruePositiveValues()<< std::endl;
+  std::cout << "Number of False Negatives of the different classes: "<< calculator->GetFalseNegativeValues()<< std::endl;
+  std::cout << "Number of False Positives of the different classes: "<< calculator->GetFalsePositiveValues()<< std::endl;
+  std::cout << "Number of True Negatives of the different classes: "<< calculator->GetTrueNegativeValues()<< std::endl;
+  std::cout << "Precision of the different classes: " << calculator->GetPrecisions() << std::endl;
+  std::cout << "Recall of the different classes: " << calculator->GetRecalls() << std::endl;
+  std::cout << "F-score of the different classes: " << calculator->GetFScores() << std::endl;
 
   std::cout << "Kappa = " << calculator->GetKappaIndex() << std::endl;
   std::cout << "OA = " << calculator->GetOverallAccuracy() << std::endl;

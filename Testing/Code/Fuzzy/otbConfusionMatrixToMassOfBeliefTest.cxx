@@ -23,13 +23,28 @@
 int otbConfusionMatrixToMassOfBeliefNew(int argc, char* argv[])
 {
   typedef itk::VariableSizeMatrix<double> ConfusionMatrixType;
+  typedef unsigned char                   LabelType;
 
-  // filter type
-  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType> ConfusionMatrixToMassOfBeliefType;
+  // filter types
+  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, LabelType>
+      ConfusionMatrixToMassOfBelief2TemplatesType;
+  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType> ConfusionMatrixToMassOfBelief1TemplateType;
+  typedef otb::ConfusionMatrixToMassOfBelief<> ConfusionMatrixToMassOfBelief0TemplateType;
 
-  // filter
-  ConfusionMatrixToMassOfBeliefType::Pointer confMatToMOB = ConfusionMatrixToMassOfBeliefType::New();
-  std::cout << confMatToMOB << std::endl;
+  // filters
+  ConfusionMatrixToMassOfBelief2TemplatesType::Pointer
+      confusionMatrixToMassOfBelief2Templates = ConfusionMatrixToMassOfBelief2TemplatesType::New();
+  ConfusionMatrixToMassOfBelief1TemplateType::Pointer
+      confusionMatrixToMassOfBelief1Template = ConfusionMatrixToMassOfBelief1TemplateType::New();
+  ConfusionMatrixToMassOfBelief0TemplateType::Pointer
+      confusionMatrixToMassOfBelief0Template = ConfusionMatrixToMassOfBelief0TemplateType::New();
+
+  std::cout << confusionMatrixToMassOfBelief2Templates << std::endl;
+  std::cout << std::endl;
+  std::cout << confusionMatrixToMassOfBelief1Template << std::endl;
+  std::cout << std::endl;
+  std::cout << confusionMatrixToMassOfBelief0Template << std::endl;
+  std::cout << std::endl;
 
   return EXIT_SUCCESS;
 }
@@ -38,12 +53,13 @@ int otbConfusionMatrixToMassOfBeliefNew(int argc, char* argv[])
 int otbConfusionMatrixToMassOfBeliefTest(int argc, char* argv[])
 {
   typedef itk::VariableSizeMatrix<double> ConfusionMatrixType;
+  typedef unsigned char                   LabelType;
 
   // filter type
-  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType> ConfusionMatrixToMassOfBeliefType;
-  typedef ConfusionMatrixToMassOfBeliefType::MapOfClassesType MapOfClassesType;
-  typedef ConfusionMatrixToMassOfBeliefType::MassOfBeliefDefinitionMethod MassOfBeliefDefinitionMethod;
-  typedef ConfusionMatrixToMassOfBeliefType::SingleClassLabelMassMapType SingleClassLabelMassMapType;
+  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, LabelType> ConfusionMatrixToMassOfBeliefType;
+  typedef ConfusionMatrixToMassOfBeliefType::MapOfClassesType                MapOfClassesType;
+  typedef ConfusionMatrixToMassOfBeliefType::MassOfBeliefDefinitionMethod    MassOfBeliefDefinitionMethod;
+  typedef ConfusionMatrixToMassOfBeliefType::LabelMassMapType                SingleClassLabelMassMapType;
 
   // mapOfClasses[label] = index in the rows/columns of the confusion matrix
   MapOfClassesType mapOfClasses;
