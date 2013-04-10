@@ -126,22 +126,12 @@ public:
    */
   DatasetModel* SelectDatasetModel( const DatasetId& id );
 
-  /**
-   */
-  void ReleaseDatasetModel( const DatasetId& id );
 
   /** */
 
   bool IsDatasetConsistent( const DatasetId& id );
-
   //
   // AbstractModel overrides.
-
-#if 0
-  bool IsModified() const;
-
-  void ClearModified();
-#endif
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -210,6 +200,10 @@ private:
   inline
     DatasetModelMap::iterator
     DatasetModelIterator( const DatasetId& id );
+
+  /**
+   */
+  void ReleaseDatasetModel( const DatasetId& id );
 
   /**
    */
