@@ -29,13 +29,13 @@
 #include <fstream>
 
 
+typedef unsigned char                                                       PixelType;
+typedef itk::VariableSizeMatrix<double>                                     ConfusionMatrixType;
+typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, PixelType>  ConfusionMatrixToMassOfBeliefType;
+typedef ConfusionMatrixToMassOfBeliefType::MapOfIndicesType                 MapOfIndicesType;
 
-typedef itk::VariableSizeMatrix<double>                                 ConfusionMatrixType;
-typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType>         ConfusionMatrixToMassOfBeliefType;
-typedef ConfusionMatrixToMassOfBeliefType::MapOfIndicesType             MapOfIndicesType;
 
-
-int CSVConfusionMatrixFileReader(const std::string fileName, MapOfIndicesType &mapOfIndicesClX, ConfusionMatrixType &confMatClX)
+int CSVConfusionMatrixFileReader(const std::string fileName, MapOfIndicesType &mapOfIndicesClX, ConfusionMatrixType &confusionMatrixClX)
 {
   std::ifstream inFile;
   inFile.open(fileName.c_str());
@@ -66,18 +66,18 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfIndicesType &m
       }
 
     unsigned int nbLabelsClk = mapOfIndicesClX.size();
-    confMatClX = ConfusionMatrixType(nbLabelsClk, nbLabelsClk);
+    confusionMatrixClX = ConfusionMatrixType(nbLabelsClk, nbLabelsClk);
 
     for (unsigned int itLin = 0; itLin < nbLabelsClk; ++itLin)
       {
       //Gets the itLin^th line after the first header line with the labels
       std::getline(inFile, currentLine, eolChar);
       std::istringstream issCurrentLine(currentLine);
-      unsigned itCol = 0;
+      unsigned int itCol = 0;
       while (issCurrentLine.good())
         {
         std::getline(issCurrentLine, currentValue, separatorChar);
-        confMatClX(itLin, itCol) = std::atoi(currentValue.c_str());
+        confusionMatrixClX(itLin, itCol) = std::atoi(currentValue.c_str());
         ++itCol;
         }
       }
@@ -94,16 +94,27 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfIndicesType &m
 int otbDSFusionOfClassifiersImageFilterNew(int argc, char* argv[])
 {
   const  unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
 
   typedef otb::VectorImage<PixelType, Dimension>  VectorImageType;
-  typedef otb::Image<PixelType, Dimension>        InputImageType;
   typedef otb::Image<PixelType, Dimension>        OutputImageType;
+  typedef otb::Image<unsigned int, Dimension>     MaskType;
 
-  typedef otb::DSFusionOfClassifiersImageFilter<VectorImageType, OutputImageType, OutputImageType>  DSFusionOfClassifiersImageFilterType;
+  // filter types
+  typedef otb::DSFusionOfClassifiersImageFilter<VectorImageType, OutputImageType, MaskType>
+      DSFusionOfClassifiersImageFilter3TemplatesType;
+  typedef otb::DSFusionOfClassifiersImageFilter<VectorImageType, OutputImageType>
+      DSFusionOfClassifiersImageFilter2TemplatesType;
 
-  DSFusionOfClassifiersImageFilterType::Pointer dsFusionOfClassifiersImageFilter = DSFusionOfClassifiersImageFilterType::New();
-  std::cout << "dsFusionOfClassifiersImageFilter:" << std::endl << dsFusionOfClassifiersImageFilter << std::endl;
+  // filters
+  DSFusionOfClassifiersImageFilter3TemplatesType::Pointer
+      dsFusionOfClassifiersImageFilter3Templates = DSFusionOfClassifiersImageFilter3TemplatesType::New();
+  DSFusionOfClassifiersImageFilter2TemplatesType::Pointer
+      dsFusionOfClassifiersImageFilter2Templates = DSFusionOfClassifiersImageFilter2TemplatesType::New();
+
+  std::cout << dsFusionOfClassifiersImageFilter3Templates << std::endl;
+  std::cout << std::endl;
+  std::cout << dsFusionOfClassifiersImageFilter2Templates << std::endl;
+  std::cout << std::endl;
 
   return EXIT_SUCCESS;
 }
@@ -113,7 +124,6 @@ int otbDSFusionOfClassifiersImageFilterNew(int argc, char* argv[])
 int otbDSFusionOfClassifiersImageFilterTest(int argc, char* argv[])
 {
   const  unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
 
   typedef otb::VectorImage<PixelType, Dimension>  VectorImageType;
   typedef otb::Image<PixelType, Dimension>        InputImageType;
@@ -130,43 +140,16 @@ int otbDSFusionOfClassifiersImageFilterTest(int argc, char* argv[])
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
 
+  typedef ConfusionMatrixToMassOfBeliefType::MassOfBeliefDefinitionMethod MassOfBeliefDefinitionMethod;
+
   typedef otb::DSFusionOfClassifiersImageFilter<VectorImageType, OutputImageType, OutputImageType>  DSFusionOfClassifiersImageFilterType;
-  typedef DSFusionOfClassifiersImageFilterType::VectorOfMapOfIndicesType         VectorOfMapOfIndicesType;
-  typedef DSFusionOfClassifiersImageFilterType::VectorOfConfusionMatricesType    VectorOfConfusionMatricesType;
   typedef DSFusionOfClassifiersImageFilterType::VectorOfMapOfMassesOfBeliefType  VectorOfMapOfMassesOfBeliefType;
-  typedef DSFusionOfClassifiersImageFilterType::MassOfBeliefDefinitionMethod     MassOfBeliefDefinitionMethod;
 
   DSFusionOfClassifiersImageFilterType::Pointer dsFusionOfClassifiersImageFilter = DSFusionOfClassifiersImageFilterType::New();
 
   unsigned int nbParameters = 4;
   unsigned int nbClassifiers = (argc - 1 - nbParameters) / 2;
 
-  VectorOfMapOfIndicesType vectorOfMapOfIndices;
-  VectorOfConfusionMatricesType vectorOfConfMatrices;
-  for (unsigned int itCM = 0; itCM < nbClassifiers; ++itCM)
-    {
-    std::string fileNameClassifiedImage = argv[itCM + 1];
-    std::string fileNameConfMat = argv[itCM + 1 + nbClassifiers];
-
-    reader = ReaderType::New();
-    reader->SetFileName(fileNameClassifiedImage);
-    reader->Update();
-
-    MapOfIndicesType mapOfIndicesClk;
-    ConfusionMatrixType confMatClk;
-    CSVConfusionMatrixFileReader(fileNameConfMat, mapOfIndicesClk, confMatClk);
-
-    imageList->PushBack(reader->GetOutput());
-    vectorOfMapOfIndices.push_back(mapOfIndicesClk);
-    vectorOfConfMatrices.push_back(confMatClk);
-    }
-
-  // **********************************************
-  // Image List To VectorImage
-  // **********************************************
-  ImageListToVectorImageFilterType::Pointer imageListToVectorImageFilter = ImageListToVectorImageFilterType::New();
-  imageListToVectorImageFilter->SetInput(imageList);
-  //imageListToVectorImageFilter->Update();
 
   std::string massOfBeliefDefMethodStr = argv[argc - 4];
   MassOfBeliefDefinitionMethod massOfBeliefDefMethod;
@@ -196,11 +179,46 @@ int otbDSFusionOfClassifiersImageFilterTest(int argc, char* argv[])
       }
     }
 
-  // Filter Inputs
+
+  ConfusionMatrixToMassOfBeliefType::Pointer confusionMatrixToMassOfBeliefFilter = ConfusionMatrixToMassOfBeliefType::New();
+  VectorOfMapOfMassesOfBeliefType vectorOfMapOfMassesOfBelief;
+  for (unsigned int itCM = 0; itCM < nbClassifiers; ++itCM)
+    {
+    std::string fileNameClassifiedImage = argv[itCM + 1];
+    std::string fileNameConfMat = argv[itCM + 1 + nbClassifiers];
+
+    reader = ReaderType::New();
+    reader->SetFileName(fileNameClassifiedImage);
+    reader->Update();
+
+    imageList->PushBack(reader->GetOutput());
+
+    MapOfIndicesType mapOfIndicesClk;
+    ConfusionMatrixType confusionMatrixClk;
+    CSVConfusionMatrixFileReader(fileNameConfMat, mapOfIndicesClk, confusionMatrixClk);
+
+    confusionMatrixToMassOfBeliefFilter->SetMapOfIndices(mapOfIndicesClk);
+    confusionMatrixToMassOfBeliefFilter->SetConfusionMatrix(confusionMatrixClk);
+    confusionMatrixToMassOfBeliefFilter->SetDefinitionMethod(massOfBeliefDefMethod);
+    confusionMatrixToMassOfBeliefFilter->Update();
+
+    // Vector containing ALL the K (= nbClassifiers) std::map<Label, MOB> of Masses of Belief
+    vectorOfMapOfMassesOfBelief.push_back(confusionMatrixToMassOfBeliefFilter->GetMapMassOfBelief());
+    }
+
+
+
+  // **********************************************
+  // Image List To VectorImage
+  // **********************************************
+  ImageListToVectorImageFilterType::Pointer imageListToVectorImageFilter = ImageListToVectorImageFilterType::New();
+  imageListToVectorImageFilter->SetInput(imageList);
+  //imageListToVectorImageFilter->Update();
+
+
+  // DSFusionOfClassifiersImageFilter Inputs
   dsFusionOfClassifiersImageFilter->SetInput(imageListToVectorImageFilter->GetOutput());
-  dsFusionOfClassifiersImageFilter->SetInputMapsOfIndices(&vectorOfMapOfIndices);
-  dsFusionOfClassifiersImageFilter->SetInputConfusionMatrices(&vectorOfConfMatrices);
-  dsFusionOfClassifiersImageFilter->SetDefinitionMethod(massOfBeliefDefMethod);
+  dsFusionOfClassifiersImageFilter->SetInputMapsOfMassesOfBelief(&vectorOfMapOfMassesOfBelief);
   dsFusionOfClassifiersImageFilter->SetLabelForNoDataPixels(atoi(argv[argc - 3]));
   dsFusionOfClassifiersImageFilter->SetLabelForUndecidedPixels(atoi(argv[argc - 2]));
   //dsFusionOfClassifiersImageFilter->Update();

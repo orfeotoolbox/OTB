@@ -21,8 +21,6 @@
 #include "itkImageToImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "itkVariableSizeMatrix.h"
-#include "otbConfusionMatrixToMassOfBelief.h"
 
 namespace otb
 {
@@ -33,16 +31,14 @@ namespace otb
  *  an otbVectorImage with n channels, each one corresponding to an input classification map to be fused. This
  *  otbVectorImage can be obtained with the help of a preliminary use of the otbImageListToVectorImageFilter.
  *
- *  Moreover, the otbDSFusionOfClassifiersImageFilter needs as additional inputs the n confusion matrices and
- *  their corresponding Maps Of Indices (std::map<indice in confusion matrix rows/columns, label>) which link
- *  the labels to the confusion matrices. These additional inputs are respectively organized as a
- *  VectorOfMapOfIndices and as a VectorOfConfusionMatrices both having n elements and an index order necessarily
- *  identical to the channel order of the input otbVectorImage.
+ *  Moreover, the otbDSFusionOfClassifiersImageFilter needs as additional input a std::vector containing the
+ *  n std::maps of Masses Of Belief (noted MOB). Each std::map<Label, MOB> in this input std::vector is related
+ *  to one classifier and links each label to its mass of belief in this classifier.
  *
  *  The output label image resulting from the DS fusion of classification maps only has one channel (monoband image).
  *
- *  The recursive optimized Dempster Shafer combination of masses of belief (noted MOB) is performed in 2 steps
- *  for each channel component of each pixel of the input otbVectorImage within the input mask, and is based on:
+ *  The recursive optimized Dempster Shafer combination of masses of belief is performed in 2 steps for each channel
+ *  component of each pixel of the input otbVectorImage within the input mask, and is based on:
  *
  *    [1] L. Xu, A. Krzyzak, and C.Y. Suen,
  *       "Methods of combining multiple classifiers and their applications to handwriting recognition,"
@@ -86,6 +82,7 @@ public:
   typedef typename InputImageType::ConstPointer       InputImageConstPointerType;
   typedef typename InputImageType::InternalPixelType  ValueType;
   typedef typename InputImageType::PixelType          PixelType;
+  typedef typename InputImageType::InternalPixelType  InternalPixelType;
 
   // TMaskImage is expected to be a mono band image
   typedef TMaskImage                                  MaskImageType;
@@ -98,19 +95,10 @@ public:
   typedef typename OutputImageType::RegionType        OutputImageRegionType;
   typedef typename OutputImageType::PixelType         LabelType;
 
-
-  typedef itk::VariableSizeMatrix<double>                                           ConfusionMatrixType;
-  typedef typename otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType>          ConfusionMatrixToMassOfBeliefType;
-  typedef typename ConfusionMatrixToMassOfBeliefType::Pointer                       ConfusionMatrixToMassOfBeliefPointerType;
-  typedef typename ConfusionMatrixToMassOfBeliefType::MapOfIndicesType              MapOfIndicesType;
-  typedef typename ConfusionMatrixToMassOfBeliefType::SingleClassLabelMassMapType   SingleClassLabelMassMapType;
-  typedef typename ConfusionMatrixToMassOfBeliefType::MassType                      MassType; //double by default
-  typedef typename ConfusionMatrixToMassOfBeliefType::MassOfBeliefDefinitionMethod  MassOfBeliefDefinitionMethod;
-
-  typedef typename std::map<LabelType, unsigned int>                                ClassifierHistogramType;
-  typedef typename std::vector<ConfusionMatrixType>                                 VectorOfConfusionMatricesType;
-  typedef typename std::vector<MapOfIndicesType>                                    VectorOfMapOfIndicesType;
-  typedef typename std::vector<SingleClassLabelMassMapType>                         VectorOfMapOfMassesOfBeliefType;
+  typedef double                                      MassType;
+  typedef typename std::map<LabelType, MassType>      LabelMassMapType;
+  typedef typename std::map<LabelType, unsigned int>  ClassifierHistogramType;
+  typedef typename std::vector<LabelMassMapType>      VectorOfMapOfMassesOfBeliefType;
 
 
   /** Set/Get the m_LabelForNoDataPixels */
@@ -121,9 +109,6 @@ public:
   itkSetMacro(LabelForUndecidedPixels, LabelType);
   itkGetMacro(LabelForUndecidedPixels, LabelType);
 
-  // Possible values for this->m_DefinitionMethod:
-  // ConfusionMatrixToMassOfBeliefType::PRECISION, RECALL, ACCURACY and KAPPA
-  itkSetMacro(DefinitionMethod, MassOfBeliefDefinitionMethod);
 
   /**
    * If set, only pixels within the mask (i.e. pixels different from 0 in the InputMask) will be fused.
@@ -133,8 +118,7 @@ public:
    */
   void SetInputMask(const MaskImageType * mask);
 
-  void SetInputMapsOfIndices(const VectorOfMapOfIndicesType * vectorOfMapOfIndices);
-  void SetInputConfusionMatrices(const VectorOfConfusionMatricesType * vectorOfConfusionMatrices);
+  void SetInputMapsOfMassesOfBelief(const VectorOfMapOfMassesOfBeliefType * ptrVectorOfMapOfMassesOfBelief);
 
   /**
    * Get the input mask.
@@ -142,8 +126,7 @@ public:
    */
   const MaskImageType * GetInputMask(void);
 
-  const VectorOfMapOfIndicesType * GetInputMapsOfIndices(void);
-  const VectorOfConfusionMatricesType * GetInputConfusionMatrices(void);
+  const VectorOfMapOfMassesOfBeliefType * GetInputMapsOfMassesOfBelief(void);
 
   const LabelType OptimizedDSMassCombination(PixelType vectorPixelValue);
 
@@ -168,12 +151,6 @@ private:
   unsigned int                              m_NumberOfClassifiers;
   ClassifierHistogramType                   m_Universe;
   unsigned int                              m_NumberOfClassesInUniverse;
-
-  VectorOfMapOfIndicesType                  m_VectorOfMapOfIndices;
-  VectorOfConfusionMatricesType             m_VectorOfConfusionMatrices;
-
-  ConfusionMatrixToMassOfBeliefPointerType  m_ConfusionMatrixToMassOfBeliefFilter;
-  MassOfBeliefDefinitionMethod              m_DefinitionMethod;
 
   VectorOfMapOfMassesOfBeliefType           m_VectorOfMapMOBs;
   std::vector<MassType>                     m_VectorOfUniverseMOBs;

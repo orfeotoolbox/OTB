@@ -35,12 +35,6 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
   this->SetNumberOfRequiredInputs(1);
 
   this->m_Universe.clear();
-  this->m_ConfusionMatrixToMassOfBeliefFilter = ConfusionMatrixToMassOfBeliefType::New();
-
-  // Possible values for this->m_DefinitionMethod:
-  // ConfusionMatrixToMassOfBeliefType::PRECISION, RECALL, ACCURACY and KAPPA
-  this->m_DefinitionMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
-
   this->m_LabelForNoDataPixels = itk::NumericTraits<LabelType>::ZeroValue();
   this->m_LabelForUndecidedPixels = itk::NumericTraits<LabelType>::ZeroValue();
 }
@@ -71,44 +65,22 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
-::SetInputMapsOfIndices(const VectorOfMapOfIndicesType * pointerToVectorOfMapOfIndices)
+::SetInputMapsOfMassesOfBelief(const VectorOfMapOfMassesOfBeliefType * ptrVectorOfMapOfMassesOfBelief)
 {
-  this->m_VectorOfMapOfIndices = *pointerToVectorOfMapOfIndices;
+  this->m_VectorOfMapMOBs = *ptrVectorOfMapOfMassesOfBelief;
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 const typename DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
-::VectorOfMapOfIndicesType *
+::VectorOfMapOfMassesOfBeliefType *
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
-::GetInputMapsOfIndices()
+::GetInputMapsOfMassesOfBelief()
 {
   if (this->GetNumberOfInputs() < 2)
     {
     return 0;
     }
-  return &this->m_VectorOfMapOfIndices;
-}
-/* ************************************************************************************************************** */
-
-template <class TInputImage, class TOutputImage, class TMaskImage>
-void
-DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
-::SetInputConfusionMatrices(const VectorOfConfusionMatricesType * pointerToVectorOfConfusionMatrices)
-{
-  this->m_VectorOfConfusionMatrices = *pointerToVectorOfConfusionMatrices;
-}
-
-template <class TInputImage, class TOutputImage, class TMaskImage>
-const typename DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
-::VectorOfConfusionMatricesType *
-DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
-::GetInputConfusionMatrices()
-{
-  if (this->GetNumberOfInputs() < 2)
-    {
-    return 0;
-    }
-  return &this->m_VectorOfConfusionMatrices;
+  return &this->m_VectorOfMapMOBs;
 }
 /* ************************************************************************************************************** */
 
@@ -122,28 +94,18 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
   // PREPROCESSING
   // **********************************************
 
-  m_NumberOfClassifiers = m_VectorOfMapOfIndices.size();
+  m_NumberOfClassifiers = m_VectorOfMapMOBs.size();
 
   // *****************************************************************************************************
-  // For each classifier: Conversion of its Confusion Matrix to a MAP of Masses Of Belief map<Label, MOB>
-  // with MOB defined according to the this->m_DefinitionMethod parameter
-  // + Definition of the UNIVERSE
+  // For each classifier: Definition of the UNIVERSE
   // *****************************************************************************************************
-  m_VectorOfMapMOBs.clear();
   m_VectorOfUniverseMOBs.clear();
   m_Universe.clear();
-  for (unsigned itClk = 0; itClk < m_NumberOfClassifiers; ++itClk)
+
+  for (unsigned int itClk = 0; itClk < m_NumberOfClassifiers; ++itClk)
     {
-    // Number of classes present in the itClk^th classifier
-    unsigned int nbClassesClk = m_VectorOfMapOfIndices[itClk].size();
-
-    m_ConfusionMatrixToMassOfBeliefFilter->SetMapOfIndices(m_VectorOfMapOfIndices[itClk]);
-    m_ConfusionMatrixToMassOfBeliefFilter->SetConfusionMatrix(m_VectorOfConfusionMatrices[itClk]);
-    m_ConfusionMatrixToMassOfBeliefFilter->SetDefinitionMethod(m_DefinitionMethod);
-    m_ConfusionMatrixToMassOfBeliefFilter->Update();
-
-    // Vector containing ALL the K (= m_NumberOfClassifiers) std::map<Label, MOB> of Mass of Belief
-    m_VectorOfMapMOBs.push_back(m_ConfusionMatrixToMassOfBeliefFilter->GetMapMassOfBelief());
+    // Map of masses of belief of the itClk^th classifier
+    LabelMassMapType mapMOBsClk = m_VectorOfMapMOBs[itClk];
 
     // mobUniverseClk is set to ZERO in order to assure the correct estimation of the Belief Functions of the
     // complementary sets bel({Ai_}) in the optimized DS combination
@@ -153,9 +115,11 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 
     // Each label present in the itClk^th classifier is pushed in the UNIVERSE if NOT present in it yet
     // thus, this->m_Universe = std::map<Label, Number of classifiers containing the label Label> is calculated
-    for (unsigned itLabel = 0; itLabel < nbClassesClk; ++itLabel)
+    typename LabelMassMapType::iterator itMapMOBClk;
+    for (itMapMOBClk = mapMOBsClk.begin(); itMapMOBClk != mapMOBsClk.end(); ++itMapMOBClk)
       {
-      LabelType classLabel = m_VectorOfMapOfIndices[itClk][itLabel];
+      LabelType classLabel = itMapMOBClk->first;
+
       // If the current classLabel has already been pushed in the UNIVERSE
       if (m_Universe.count(classLabel) > 0)
         {
@@ -180,7 +144,6 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 {
   LabelType outFusedLabelOut = itk::NumericTraits<LabelType>::ZeroValue();
 
-
   /* ************************************************************************************************ */
   /* ******************************* DS FUSION STEP #1: RECURSIVE METHOD **************************** */
   /* ************************************************************************************************ */
@@ -190,13 +153,13 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
   MassType mLabelSetClkprev, mLabelSetClkprev_, mUniverseClkprev;
   MassType KClk, mLabelSetClkNew, mLabelSetClkNew_, mUniverseClkNew;
 
-  SingleClassLabelMassMapType mapJointMassesStepI, mapJointMassesStepI_, mapJointMassesUniverseStepI;
+  LabelMassMapType mapJointMassesStepI, mapJointMassesStepI_, mapJointMassesUniverseStepI;
 
   // Extracting the masses m(Ai), m(Ai_) and m(OMEGA) for each of the K (= m_NumberOfClassifiers) classifiers
   // and grouping them according to the {Ai} singletons
   // (ex: mg(A), mg(B), mg(C),..., with mg(Ai) the joint mass of the masses of classifiers with result Ai for
   // the pixel vectorPixelValue)
-  for (unsigned itClk = 0; itClk < m_NumberOfClassifiers; ++itClk)
+  for (unsigned int itClk = 0; itClk < m_NumberOfClassifiers; ++itClk)
     {
     // Value of the itClk^th classifier {Ai} in the vectorPixelValue
     classLabelk = vectorPixelValue[itClk]; // label {Ai}
@@ -260,7 +223,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 
   // Calculation of the four constants A, B, C and K
   MassType A = 0, B = 1, C = 1, K;
-  SingleClassLabelMassMapType::iterator itMapMOBClk;
+  typename LabelMassMapType::iterator itMapMOBClk;
   for (itMapMOBClk = mapJointMassesStepI.begin(); itMapMOBClk != mapJointMassesStepI.end(); ++itMapMOBClk)
     {
     classLabelk = itMapMOBClk->first;
@@ -302,7 +265,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
   std::cout << "****************************************************************************" << std::endl; */
 
   // Calculation of the Belief functions Bel({Ai}) and Bel({Ai_}) of the singletons {Ai} and {Ai_}
-  SingleClassLabelMassMapType mapBelStepII, mapBelStepII_;
+  LabelMassMapType mapBelStepII, mapBelStepII_;
   MassType belLabelSetClk, belLabelSetClk_, addBelLabelSetClk = 0.;
   for (itMapMOBClk = mapJointMassesStepI.begin(); itMapMOBClk != mapJointMassesStepI.end(); ++itMapMOBClk)
     {
