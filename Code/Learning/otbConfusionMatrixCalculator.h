@@ -75,8 +75,8 @@ public:
   typedef typename ProdListLabelType::Pointer                                   ProdListLabelPointerType;
 
   typedef typename RefListLabelType::ValueType::ValueType                       ClassLabelType;
-  typedef std::map<ClassLabelType, unsigned int>                                MapOfClassesType;
-  typedef std::map<unsigned int, ClassLabelType>                                MapOfIndicesType;
+  typedef std::map<ClassLabelType, int>                                         MapOfClassesType;
+  typedef std::map<int, ClassLabelType>                                         MapOfIndicesType;
 
   /** Type for the confusion matrix */
   typedef itk::VariableSizeMatrix<double>                                       ConfusionMatrixType;
