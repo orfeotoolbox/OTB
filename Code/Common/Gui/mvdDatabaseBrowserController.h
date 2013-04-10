@@ -68,7 +68,8 @@ class DatabaseBrowserWidget;
 /**
  * \class DatabaseBrowserController
  *
- * \brief Color-setup widget controller for VectorImageModel objects.
+ * \brief Controller of database browser widget (for
+ * DatabaseModeleModel objects).
  */
 class Monteverdi2_EXPORT DatabaseBrowserController :
     public AbstractModelController
@@ -105,7 +106,10 @@ public:
 // Signals.
 signals:
 
-	void SelectedDatasetFilenameChanged(const QString &);
+  /**
+   */
+  void SelectedDatasetFilenameChanged(const QString &);
+
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -152,6 +156,10 @@ private:
 private slots:
 
   /**
+   * \brief Slot called when the current (selected) dataset has
+   * changed.
+   *
+   * \param name The name of the newly selected dataset.
    */
   void OnCurrentDatasetChanged( const QString& name );
 };

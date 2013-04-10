@@ -120,7 +120,18 @@ public:
   
   /**
    */
-  inline DatasetModel* GetSelectedDatasetModel();
+  inline
+    const DatasetModel* FindDatasetModel( const DatasetId& id ) const;
+
+  /**
+   */
+  inline
+    DatasetModel* GetSelectedDatasetModel();
+
+  /**
+   */
+  inline
+    const DatasetModel* GetSelectedDatasetModel() const;
 
   /**
    */
@@ -157,10 +168,6 @@ protected:
 
   void virtual_BuildModel( void* context =NULL );
 
-#if 0
-  void virtual_Save();
-#endif
-
 //
 // Protected attributes.
 protected:
@@ -187,7 +194,8 @@ private:
 
   /**
    */
-  DatasetModel* FindDatasetModel( const DatasetId& id );
+  inline
+    DatasetModel* FindDatasetModel( const DatasetId& id );
 
   /**
    */
@@ -207,11 +215,13 @@ private:
 
   /**
    */
-  void SetSelectedDatasetModel( const DatasetId& id );
+  inline
+    void SetSelectedDatasetModel( const DatasetId& id );
 
   /**
    */
-  void SetSelectedDatasetModel( DatasetModel* model );
+  inline
+    void SetSelectedDatasetModel( DatasetModel* model );
 
   /**
    */
@@ -259,6 +269,15 @@ namespace mvd
 
 /*****************************************************************************/
 inline
+const DatasetModel*
+DatabaseModel
+::GetSelectedDatasetModel() const
+{
+  return m_SelectedDatasetModel;
+}
+
+/*****************************************************************************/
+inline
 DatasetModel*
 DatabaseModel
 ::GetSelectedDatasetModel()
@@ -286,6 +305,21 @@ DatabaseModel
   m_SelectedDatasetModel = model;
 
   emit SelectedDatasetModelChanged( model );
+}
+
+/*****************************************************************************/
+inline
+const DatasetModel*
+DatabaseModel
+::FindDatasetModel( const DatasetId& id ) const
+{
+  qDebug() << this << "::FindDatasetModel(" << id << ")";
+
+  // Find (key, value) pair.
+  DatasetModelMap::const_iterator it( DatasetModelIterator( id ) );
+
+  // Return found element.
+  return it.value();
 }
 
 /*****************************************************************************/

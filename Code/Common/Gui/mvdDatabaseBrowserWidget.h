@@ -73,8 +73,8 @@ class DatabaseBrowserWidget;
 /**
  * \class DatabaseBrowserWidget
  *
- * \brief Widget template skeleton to copy-paste when adding a new
- * widget class.
+ * \brief Database content browser. Presents:
+ * - Cached datasets.
  */
 class Monteverdi2_EXPORT DatabaseBrowserWidget :
     public QWidget
@@ -97,10 +97,17 @@ public:
   virtual ~DatabaseBrowserWidget();
 
   /**
+   * \brief Assign the displayed dataset list (under the 'Datasets'
+   * root item).
+   *
+   * \param list List of dataset names.
    */
   void SetDatasetList( const QStringList& list );
 
   /**
+   * \brief Select the current dataset item of the displayed list.
+   *
+   * \param name of dataset item to select.
    */
   void SetCurrentDataset( const QString& name );
 
@@ -121,6 +128,10 @@ public slots:
 signals:
 
   /**
+   * \brief Slot emitted when the current (selected) dataset has
+   * changed.
+   *
+   * \param text Name of new current (selected) dataset.
    */
   void CurrentDatasetChanged( const QString& text );
 
@@ -141,6 +152,8 @@ protected:
 // Private types.
 private:
   /**
+   * \brief List of dataset item names displayed under the 'dataset'
+   * root item.
    */
   QList< QTreeWidgetItem* > TreeWidgetItemList;
 
@@ -148,6 +161,7 @@ private:
 // Private methods.
 private:
   /**
+   * \brief Setup UI sub-items.
    */
   void SetupUI();
 
@@ -160,13 +174,14 @@ private:
   Ui::DatabaseBrowserWidget* m_UI;
 
   /**
+   * \brief Root item of displayed datasets. It is named 'datasets'.
    */
   QTreeWidgetItem* m_DatasetRootItem;
 
 
   /**
    */
-  QPoint    m_StartDragPosition;
+  QPoint m_StartDragPosition;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -175,6 +190,11 @@ private:
 private slots:
 
   /**
+   * \brief Slot called when the current item of the QWidgetTree has
+   * changed.
+   *
+   * \param current The newly selected QTreeWidgetItem.
+   * \param previous The previously selected QTreeWidgetItem.
    */
   void on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,
 						 QTreeWidgetItem* previous );

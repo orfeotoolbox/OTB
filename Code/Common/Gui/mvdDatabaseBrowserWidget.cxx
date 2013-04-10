@@ -88,7 +88,7 @@ void
 DatabaseBrowserWidget
 ::SetDatasetList( const QStringList& list )
 {
-  // qDebug() << this << "::SetDatasetList" << list;
+  qDebug() << this << "::SetDatasetList(" << list << ")";
 
   // A. If there is no previously stored dataset child item:
   if( m_DatasetRootItem->childCount()==0 )
@@ -229,7 +229,6 @@ DatabaseBrowserWidget
 
   m_DatasetRootItem->setExpanded( true );
 }
-
 
 /*******************************************************************************/
 DatabaseTreeWidget*
