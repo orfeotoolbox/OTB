@@ -33,6 +33,13 @@
 namespace otb
 {
 
+template <class TInputValue, class TOutputValue> bool MachineLearningModelFactory<TInputValue,TOutputValue>
+::firstTime = true;
+
+template <class TInputValue, class TOutputValue> itk::SimpleMutexLock MachineLearningModelFactory<TInputValue,TOutputValue>
+::mutex;
+
+
 template <class TInputValue, class TOutputValue>
 typename MachineLearningModel<TInputValue,TOutputValue>::Pointer
 MachineLearningModelFactory<TInputValue,TOutputValue>
@@ -86,10 +93,9 @@ void
 MachineLearningModelFactory<TInputValue,TOutputValue>
 ::RegisterBuiltInFactories()
 {
-  static bool firstTime = true;
-
-  static itk::SimpleMutexLock mutex;
-    {
+  {
+  //bool firstTime = true;
+  //itk::SimpleMutexLock mutex;
     // This helper class makes sure the Mutex is unlocked
     // in the event an exception is thrown.
     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);

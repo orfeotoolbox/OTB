@@ -29,8 +29,8 @@ NormalBayesMachineLearningModelFactory<TInputValue,TOutputValue>
 ::NormalBayesMachineLearningModelFactory()
 {
 
-  static std::string classOverride = std::string("otbMachineLearningModel");
-  static std::string subclass = std::string("otbNormalBayesMachineLearningModel");
+  std::string classOverride = std::string("otbMachineLearningModel");
+  std::string subclass = std::string("otbNormalBayesMachineLearningModel");
 
   this->RegisterOverride(classOverride.c_str(),
                          subclass.c_str(),

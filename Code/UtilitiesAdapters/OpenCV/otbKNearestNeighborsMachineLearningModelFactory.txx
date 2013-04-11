@@ -29,8 +29,8 @@ KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>
 ::KNearestNeighborsMachineLearningModelFactory()
 {
 
-  static std::string classOverride = std::string("otbMachineLearningModel");
-  static std::string subclass = std::string("otbKNearestNeighborsMachineLearningModel");
+  std::string classOverride = std::string("otbMachineLearningModel");
+  std::string subclass = std::string("otbKNearestNeighborsMachineLearningModel");
 
   this->RegisterOverride(classOverride.c_str(),
                          subclass.c_str(),

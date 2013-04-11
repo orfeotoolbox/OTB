@@ -61,6 +61,9 @@ private:
   MachineLearningModelFactory(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  static bool firstTime;
+  static itk::SimpleMutexLock mutex;
+
 };
 
 } // end namespace otb
