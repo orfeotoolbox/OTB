@@ -79,7 +79,7 @@ class Monteverdi2_EXPORT I18nMainWindow
   Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-    
+
 //
 // Public types.
 public:
@@ -347,6 +347,11 @@ void
 I18nMainWindow
 ::VisibilityChanged( QAction* action, bool visible )
 {
+  action->blockSignals( true );
+  {
+  action->setChecked( visible );
+  }
+  action->blockSignals( false );
 }
 
 } // end namespace 'mvd'

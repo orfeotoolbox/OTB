@@ -246,21 +246,13 @@ private:
 // Private slots.
 private slots:
 
-  /**
-   * \brief Slot called when the visibility of related QDockWidget has
-   * changed.
-   *
-   * \param visible Visibility state flag.
-   */
-  void OnColorDynamicsVisibilityChanged( bool visible );
+#if 0
 
   /**
-   * \brief Slot called when the visibility of related QDockWidget has
-   * changed.
-   *
-   * \param visible Visibility state flag.
+   * \brief Qt auto-connected slot which is called when 'Color-setup'
+   * action is toggled.
    */
-  void OnColorSetupVisibilityChanged( bool visible );
+  void on_action_ColorSetup_toggled( bool );
 
   /**
    * \brief Qt auto-connected slot which is called when 'Database
@@ -287,16 +279,30 @@ private slots:
   void on_action_QuicklookView_toggled();
 
   /**
-   * \brief Qt auto-connected slot which is called when 'Color-setup'
-   * action is toggled.
-   */
-  void on_action_ColorSetup_toggled();
-
-  /**
    * \brief Qt auto-connected slot which is called when
    * 'Color-dynamics' action is toggled.
    */
   void on_action_ColorDynamics_toggled();
+
+#endif
+
+#if 0
+
+  /**
+   * \brief Slot called when the visibility of related QDockWidget has
+   * changed.
+   *
+   * \param visible Visibility state flag.
+   */
+  void OnColorDynamicsVisibilityChanged( bool visible );
+
+  /**
+   * \brief Slot called when the visibility of related QDockWidget has
+   * changed.
+   *
+   * \param visible Visibility state flag.
+   */
+  void OnColorSetupVisibilityChanged( bool visible );
 
   /**
    * \brief Slot called when the visibility of related QDockWidget has
@@ -329,7 +335,7 @@ private slots:
    * \param visible Visibility state flag.
    */
   void OnQuicklookViewVisibilityChanged( bool visible );
-
+#endif
 };
 
 } // end namespace 'mvd'

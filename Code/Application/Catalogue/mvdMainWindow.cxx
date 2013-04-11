@@ -142,23 +142,119 @@ void
 MainWindow
 ::virtual_ConnectUI()
 {
-  // Connect color-setup dock-widget visibilityChanged() signal.
+  // Connect quicklook-view dock-widget toggle view action to
+  // menu-item action.
+   QObject::connect(
+    m_QuicklookViewDock->toggleViewAction(),
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_UI->action_QuicklookView,
+    SLOT( setChecked( bool ) )
+  );
+  // and vice-versa.
+  QObject::connect(
+    m_UI->action_QuicklookView,
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_QuicklookViewDock,
+    SLOT( setVisible( bool ) )
+  );
+
+  // Connect database-browser dock-widget toggle view action to
+  // menu-item action.
+   QObject::connect(
+    m_DatabaseBrowserDock->toggleViewAction(),
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_UI->action_DatabaseBrowser,
+    SLOT( setChecked( bool ) )
+  );
+  // and vice-versa.
+  QObject::connect(
+    m_UI->action_DatabaseBrowser,
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_DatabaseBrowserDock,
+    SLOT( setVisible( bool ) )
+  );
+
+  // Connect database-properties dock-widget toggle view action to
+  // menu-item action.
+  assert( m_DatasetPropertiesDock!=NULL );
+  QObject::connect(
+    m_DatasetPropertiesDock->toggleViewAction(),
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_UI->action_DatasetProperties,
+    SLOT( setChecked( bool ) )
+  );
+  // and vice-versa.
+  QObject::connect(
+    m_UI->action_DatasetProperties,
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_DatasetPropertiesDock,
+    SLOT( setVisible( bool ) )
+  );
+
+  // Connect color-dynamics dock-widget toggle view action to
+  // menu-item action.
   assert( m_ColorDynamicsDock!=NULL );
   QObject::connect(
-    m_ColorDynamicsDock, SIGNAL( visibilityChanged( bool ) ),
+    m_ColorDynamicsDock->toggleViewAction(),
+    SIGNAL( toggled( bool ) ),
     // to:
-    this, SLOT( OnColorDynamicsVisibilityChanged( bool ) )
+    m_UI->action_ColorDynamics,
+    SLOT( setChecked( bool ) )
     );
+  // and vice-versa.
+  QObject::connect(
+    m_UI->action_ColorDynamics,
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_ColorDynamicsDock,
+    SLOT( setVisible( bool ) )
+  );
 
-  // Connect color-setup dock-widget visibilityChanged() signal.
+  // Connect color-setup dock-widget toggle view-action to menu-item
+  // action.
   assert( m_ColorSetupDock!=NULL );
   QObject::connect(
-    m_ColorSetupDock, SIGNAL( visibilityChanged( bool ) ),
+    m_ColorSetupDock->toggleViewAction(),
+    SIGNAL( toggled( bool ) ),
     // to:
-    this, SLOT( OnColorSetupVisibilityChanged( bool ) )
+    m_UI->action_ColorSetup,
+    SLOT( setChecked( bool ) )
     );
+  // and vice-versa.
+  QObject::connect(
+    m_UI->action_ColorSetup,
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_ColorSetupDock,
+    SLOT( setVisible( bool ) )
+  );
 
 #ifdef OTB_WRAP_QT
+  // Connect OTB-applications dock-widget toggle view action to
+  // menu-item action.
+  assert( m_OtbApplicationsBrowserDock!=NULL );
+  QObject::connect(
+    m_OtbApplicationsBrowserDock->toggleViewAction(),
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_UI->action_OtbApplicationsBrowser,
+    SLOT( setChecked( bool ) )
+    );
+  // and vice-versa.
+  QObject::connect(
+    m_UI->action_OtbApplicationsBrowser,
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_OtbApplicationsBrowserDock,
+    SLOT( setVisible( bool ) )
+  );
+
   //
   // Done here cause needed to be done once and only once.
   SetControllerModel(
@@ -196,9 +292,9 @@ MainWindow
   // close tabs handling
   QObject::connect(
     m_CentralTabWidget,
-    SIGNAL(tabCloseRequested(int)),
+    SIGNAL( tabCloseRequested( int ) ),
     this,
-    SLOT(OntabCloseRequested(int))
+    SLOT( OntabCloseRequested( int ) )
   );
 }
 
@@ -254,7 +350,6 @@ MainWindow
     tr( "Quicklook view" ),
     Qt::RightDockWidgetArea
   );
-
 
   // Color-setup.
   assert( m_ColorSetupDock==NULL );
@@ -326,12 +421,14 @@ MainWindow
 /*****************************************************************************/
 /* SLOTS                                                                     */
 
+#if 0
+
 /*****************************************************************************/
 void
 MainWindow
-::on_action_ColorSetup_toggled()
+::on_action_ColorSetup_toggled( bool checked )
 {
-  m_ColorSetupDock->setVisible( m_UI->action_ColorSetup->isChecked() );
+  m_ColorSetupDock->setVisible( /*m_UI->action_ColorSetup->isChecked()*/ checked );
 }
 
 /*****************************************************************************/
@@ -377,6 +474,10 @@ MainWindow
 {
   m_QuicklookViewDock->setVisible( m_UI->action_QuicklookView->isChecked() );
 }
+
+#endif
+
+#if 0
 
 /*****************************************************************************/
 void
@@ -425,6 +526,8 @@ MainWindow
 {
   VisibilityChanged( m_UI->action_QuicklookView, visible );
 }
+
+#endif
 
 /*****************************************************************************/
 void
