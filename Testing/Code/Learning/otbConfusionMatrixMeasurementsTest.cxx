@@ -165,7 +165,7 @@ int otbConfusionMatrixMeasurementsTest(int argc, char* argv[])
   blPrecisions.SetSize(nbClasses);
   blRecalls.SetSize(nbClasses);
   blFScores.SetSize(nbClasses);
-  for (int itC = 0; itC < nbClasses; itC++)
+  for (unsigned int itC = 0; itC < nbClasses; itC++)
     {
     blPrecisions[itC] = blTP[itC] / (blTP[itC] + blFP[itC]);
     blRecalls[itC] = blTP[itC] / (blTP[itC] + blFN[itC]);

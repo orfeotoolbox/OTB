@@ -182,7 +182,7 @@ int otbDempsterShaferFusionOptRecConfMatTest(int argc, char * argv[])
   ClassifierHistogramType::iterator itUniverse;
   std::vector<SingleClassLabelMassMapType> vectorMapMOBs;
   std::vector<MassType> vectorUniverseMOBs;
-  for (unsigned itClk = 0; itClk < nbClassifiers; ++itClk)
+  for (unsigned int itClk = 0; itClk < nbClassifiers; ++itClk)
     {
     // Classifier Cl_k:
     mapOfIndicesClk = vectorOfMapOfIndices[itClk];
@@ -207,7 +207,7 @@ int otbDempsterShaferFusionOptRecConfMatTest(int argc, char * argv[])
     vectorUniverseMOBs.push_back(mobUniverseClk);
 
     std::cout << "confusion matrix[Cl_" << itClk << "] = " << std::endl;
-    for (unsigned itLabel = 0; itLabel < nbClassesClk; ++itLabel)
+    for (unsigned int itLabel = 0; itLabel < nbClassesClk; ++itLabel)
       {
       ClassLabelType classLabel = mapOfIndicesClk[itLabel];
       std::cout << "[" << classLabel << "] ";
@@ -234,7 +234,7 @@ int otbDempsterShaferFusionOptRecConfMatTest(int argc, char * argv[])
     }
 
   // Number of classes in the universe
-  unsigned nbClasses = universe.size();
+  unsigned int nbClasses = universe.size();
 
   std::cout << "universe:" << std::endl;
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
@@ -274,7 +274,7 @@ int otbDempsterShaferFusionOptRecConfMatTest(int argc, char * argv[])
   // Extracting the masses m(Ai), m(Ai_) and m(OMEGA) for each of the K = 6 classifiers
   // and grouping them according to the {Ai} singletons
   // (ex: mg(A), mg(B), mg(C),..., with mg(Ai) the joint mass of the masses of classifiers with result Ai for pixel X)
-  for (unsigned itClk = 0; itClk < nbClassifiers; ++itClk)
+  for (unsigned int itClk = 0; itClk < nbClassifiers; ++itClk)
     {
     classLabelk = classifiedPixelX[itClk];
 
@@ -487,8 +487,8 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   typedef MassOfBeliefFunctionType::MassType MassType; //double by default
 
   std::vector<LabelPixelType> vectorAllLabels;
-
-  for (unsigned int it = 1; it < argc; ++it)
+  unsigned int nbArgs = static_cast<unsigned int> (argc);
+  for (unsigned int it = 1; it < nbArgs; ++it)
     {
     vectorAllLabels.push_back(argv[it]);
     }
@@ -499,7 +499,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   typedef std::map<LabelPixelType, MassOfBeliefFunctionType::LabelSetType> LabelSetMapType;
   LabelSetMapType mapLabelSets;
   LabelSetMapType::iterator itMapLabelSets;
-  for (unsigned it = 0; it < vectorAllLabels.size(); ++it)
+  for (unsigned int it = 0; it < vectorAllLabels.size(); ++it)
     {
     //The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
     universe.insert(vectorAllLabels[it]);
@@ -524,7 +524,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[0]]);
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[0]]);
 
-  if ((argc - 1) > nbClassesMax) //For tests with more than 4 labels in the universe TO TEST PROCESSING SPEED
+  if ((nbArgs - 1) > nbClassesMax) //For tests with more than 4 labels in the universe TO TEST PROCESSING SPEED
     {
     classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[3]]);
     classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[4]]);
@@ -621,7 +621,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   mClVector.push_back(mCl4);
   mClVector.push_back(mCl5);
 
-  if ((argc - 1) > nbClassesMax) //For tests with more than 4 labels in the universe TO TEST PROCESSING SPEED
+  if ((nbArgs - 1) > nbClassesMax) //For tests with more than 4 labels in the universe TO TEST PROCESSING SPEED
     {
     //**********************************************************************
     // OTHER MASSES TO TEST PROCESSING SPEED
@@ -891,8 +891,8 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
   typedef MassOfBeliefFunctionType::MassType MassType; //double by default
 
   std::vector<LabelPixelType> vectorAllLabels;
-
-  for (unsigned int it = 1; it < argc; ++it)
+  unsigned int nbArgs = static_cast<unsigned int> (argc);
+  for (unsigned int it = 1; it < nbArgs; ++it)
     {
     vectorAllLabels.push_back(argv[it]);
     }
@@ -903,7 +903,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
   typedef std::map<LabelPixelType, MassOfBeliefFunctionType::LabelSetType> LabelSetMapType;
   LabelSetMapType mapLabelSets;
   LabelSetMapType::iterator itMapLabelSets;
-  for (unsigned it = 0; it < vectorAllLabels.size(); ++it)
+  for (unsigned int it = 0; it < vectorAllLabels.size(); ++it)
     {
     //The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
     universe.insert(vectorAllLabels[it]);
@@ -1217,8 +1217,8 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
   typedef MassOfBeliefFunctionType::MassType MassType; //double by default
 
   std::vector<LabelPixelType> vectorAllLabels;
-
-  for (unsigned int it = 1; it < argc; ++it)
+  unsigned int nbArgs = static_cast<unsigned int> (argc);
+  for (unsigned int it = 1; it < nbArgs; ++it)
     {
     vectorAllLabels.push_back(argv[it]);
     }
@@ -1229,7 +1229,7 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
   typedef std::map<LabelPixelType, MassOfBeliefFunctionType::LabelSetType> LabelSetMapType;
   LabelSetMapType mapLabelSets;
   LabelSetMapType::iterator itMapLabelSets;
-  for (unsigned it = 0; it < vectorAllLabels.size(); ++it)
+  for (unsigned int it = 0; it < vectorAllLabels.size(); ++it)
     {
     //The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
     universe.insert(vectorAllLabels[it]);
