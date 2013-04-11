@@ -171,6 +171,10 @@ private:
 
   /**
    */
+  GLImageWidget* CreateImageWidget( QGLWidget* sharedGlWidget =NULL );
+
+  /**
+   */
   GLImageWidget* CreateQuicklookWidget( QGLWidget* sharedGlWidget =NULL );
 
   /**
@@ -234,7 +238,12 @@ private:
 #endif
 
   /**
-   * \brief Color dynamics dock-widget.
+   * \brief Image-view dock-widget.
+   */
+  GLImageWidget* m_ImageView;
+
+  /**
+   * \brief Quicklook-view dock-widget.
    */
   QDockWidget* m_QuicklookViewDock;
 

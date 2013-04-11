@@ -60,6 +60,7 @@
 #include "Gui/mvdDatasetPropertiesWidget.h"
 #include "Gui/mvdGLImageWidget.h"
 #include "Gui/mvdImageModelRenderer.h"
+#include "Gui/mvdImageViewManipulator.h"
 #include "Gui/mvdQuicklookViewManipulator.h"
 //
 #include "mvdCatalogueApplication.h"
@@ -99,7 +100,9 @@ MainWindow
 #ifdef OTB_WRAP_QT
   m_OtbApplicationsBrowserDock(NULL),
 #endif
-  m_QuicklookViewDock( NULL )
+  m_ImageView( NULL ),
+  m_QuicklookViewDock( NULL ),
+  m_CentralTabWidget( NULL )
 {
   m_UI->setupUi( this );
 }
@@ -118,23 +121,9 @@ MainWindow
   setObjectName( "mvd::MainWindow" );
   setWindowTitle( PROJECT_NAME );
 
-  InitializeDockWidgets();
-
   InitializeCentralWidget();
 
-#if 0
-  m_CentralTabWidget->addTab(
-    CreateQuicklookWidget(),
-    m_QuicklookViewDock->windowTitle()
-  );
-
-  //
-  // access to the quicklook tabBar to remove the close button
-  QTabBar* tabBar = m_CentralTabWidget->findChild< QTabBar* >();
-
-  tabBar->setTabButton(0, QTabBar::RightSide, 0);
-  tabBar->setTabButton(0, QTabBar::LeftSide, 0);
-#endif
+  InitializeDockWidgets();
 }
 
 /*****************************************************************************/
@@ -344,8 +333,9 @@ MainWindow
 
   // Quicklook-view dock-widget
   assert( m_QuicklookViewDock==NULL );
+  assert( m_ImageView!=NULL );
   m_QuicklookViewDock = AddWidgetToDock(
-    CreateQuicklookWidget(),
+    CreateQuicklookWidget( m_ImageView),
     "QUICKLOOK_VIEW",
     tr( "Quicklook view" ),
     Qt::RightDockWidgetArea
@@ -384,15 +374,32 @@ void
 MainWindow
 ::InitializeCentralWidget()
 {
-  //
-  // need to setup the central widget as QTabWidget to be able to 
-  // open several applications + the quicklook
-  m_CentralTabWidget = new QTabWidget();
-  m_CentralTabWidget->setTabsClosable(true);
+  // Create central tab-widget for multi-view support.
+  assert( m_CentralTabWidget==NULL );
+  m_CentralTabWidget = new QTabWidget( this );
 
-  // 
-  // add this tabWidget as central Widget
+  // Customize it.
+  m_CentralTabWidget->setTabsClosable( true );
+
+  // Set-it up as central widget.
   setCentralWidget( m_CentralTabWidget );
+
+  // Initialize image-view.
+  assert( m_ImageView==NULL );
+  m_ImageView = CreateImageWidget();
+
+  // Add first tab: image-view.
+  m_CentralTabWidget->addTab(
+    m_ImageView,
+    tr( "Image view" )
+  );
+
+  //
+  // access to the quicklook tabBar to remove the close button
+  QTabBar* tabBar = m_CentralTabWidget->findChild< QTabBar* >();
+
+  tabBar->setTabButton(0, QTabBar::RightSide, 0);
+  tabBar->setTabButton(0, QTabBar::LeftSide, 0);
 }
 
 /*****************************************************************************/
@@ -416,6 +423,27 @@ MainWindow
   quicklookView->setMinimumSize( 100, 100 );
 
   return quicklookView;
+}
+
+/*****************************************************************************/
+GLImageWidget*
+MainWindow
+::CreateImageWidget( QGLWidget* sharedGlWidget )
+{
+  ImageViewManipulator* manipulator =
+    new ImageViewManipulator( this );
+
+  ImageModelRenderer* renderer =
+    new ImageModelRenderer( this );
+
+  GLImageWidget* imageView = new GLImageWidget(
+    manipulator, // (will be reparented.)
+    renderer, // (will be reparented.)
+    this,
+    sharedGlWidget
+  );
+
+  return imageView;
 }
 
 /*****************************************************************************/
