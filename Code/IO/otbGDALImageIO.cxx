@@ -1183,6 +1183,8 @@ void GDALImageIO::Write(const void* buffer)
     {
 
     otbMsgDevMacro(<< "RasterIO Write requested region : " << this->GetIORegion() <<
+                 "\n, lFirstColumn =" << lFirstColumn <<
+                 "\n, lFirstLine =" << lFirstLine <<
                  "\n, lNbColumns =" << lNbColumns <<
                  "\n, lNbLines =" << lNbLines <<
                  "\n, m_PxType =" << GDALGetDataTypeName(m_PxType->pixType) <<
