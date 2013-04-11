@@ -45,7 +45,7 @@ namespace LandsatTM
  *  The OTB development team acknowledges the contribution of Andrea
  *  Baraldi, who provided the correct set of threshold values for the
  *  published rule set implementation to be reproduced. Andrea Baraldi
- *  is the inventor of the Satellite Image Automatic Mapper™ (SIAM™)
+ *  is the inventor of the Satellite Image Automatic Mapper TradeMark (SIAM)
  *  software product conceived, developed and supported solely by
  *  Baraldi Consultancy in Remote Sensing of Andrea Baraldi.
  *
