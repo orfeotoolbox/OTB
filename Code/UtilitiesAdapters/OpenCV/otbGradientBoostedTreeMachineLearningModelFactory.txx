@@ -29,8 +29,8 @@ GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue>
 ::GradientBoostedTreeMachineLearningModelFactory()
 {
 
-  static std::string classOverride = std::string("otbMachineLearningModel");
-  static std::string subclass = std::string("otbGradientBoostedTreeMachineLearningModel");
+  std::string classOverride = std::string("otbMachineLearningModel");
+  std::string subclass = std::string("otbGradientBoostedTreeMachineLearningModel");
 
   this->RegisterOverride(classOverride.c_str(),
                          subclass.c_str(),
