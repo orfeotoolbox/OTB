@@ -294,7 +294,7 @@ MainWindow
     m_CentralTabWidget,
     SIGNAL( tabCloseRequested( int ) ),
     this,
-    SLOT( OntabCloseRequested( int ) )
+    SLOT( OnTabCloseRequested( int ) )
   );
 }
 
@@ -570,7 +570,7 @@ MainWindow
     qobject_cast<Wrapper::QtWidgetView *>( m_CentralTabWidget->currentWidget() ),
     SIGNAL( QuitSignal() ),
     this,
-    SLOT( OntabCloseRequested() )
+    SLOT( OnTabCloseRequested() )
     );
 
 #endif
@@ -580,20 +580,20 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OntabCloseRequested()
+::OnTabCloseRequested()
 {
   // get current tab index
   int currentIndex = m_CentralTabWidget->currentIndex();
   
   // close tab and delete its widget
-  OntabCloseRequested( currentIndex );  
+  OnTabCloseRequested( currentIndex );  
 }
 
 
 /*****************************************************************************/
 void
 MainWindow
-::OntabCloseRequested(int index)
+::OnTabCloseRequested(int index)
 {
   //
   // Quicklook tab is not removable

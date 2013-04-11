@@ -147,11 +147,13 @@ protected slots:
    */
   void OnApplicationToLaunchSelected( const QString & appName );
 
-  /** */
-  void OntabCloseRequested(int index);
+  /**
+   */
+  void OnTabCloseRequested( int index );
 
-  /** */
-  void OntabCloseRequested();
+  /**
+   */
+  void OnTabCloseRequested();
 
   /** */
   void OnOTBApplicationOutputImageChanged( const QString & appName, const QString & outfname);
