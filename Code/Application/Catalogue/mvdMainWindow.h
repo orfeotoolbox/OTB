@@ -205,22 +205,39 @@ private:
   Ui::MainWindow* m_UI;
 
   /**
+   * \brief Color dynamicsk-view dock-widget.
+   */
+  QDockWidget* m_ColorDynamicsDock;
+
+  /**
+   * \brief Color setup dock-widget.
+   */
+  QDockWidget* m_ColorSetupDock;
+
+  /**
+   * \brief Database-browser dock-widget.
    */
   QDockWidget* m_DatabaseBrowserDock;
 
   /**
-   */
-  QDockWidget* m_ApplicationsBrowserDock;
-
-  /**
+   * \brief Dataset-properties dock-widget.
    */
   QDockWidget* m_DatasetPropertiesDock;
 
+#ifdef OTB_WRAP_QT
   /**
+   *  \brief OTB-applications browser dock-widget.
+   */
+  QDockWidget* m_OtbApplicationsBrowserDock;
+#endif
+
+  /**
+   * \brief Color dynamics dock-widget.
    */
   QDockWidget* m_QuicklookViewDock;
 
-  /** */
+  /**
+   */
   QTabWidget* m_CentralTabWidget;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -228,6 +245,90 @@ private:
 //
 // Private slots.
 private slots:
+
+  /**
+   * \brief Slot called when the visibility of related QDockWidget has
+   * changed.
+   *
+   * \param visible Visibility state flag.
+   */
+  void OnColorDynamicsVisibilityChanged( bool visible );
+
+  /**
+   * \brief Slot called when the visibility of related QDockWidget has
+   * changed.
+   *
+   * \param visible Visibility state flag.
+   */
+  void OnColorSetupVisibilityChanged( bool visible );
+
+  /**
+   * \brief Qt auto-connected slot which is called when 'Database
+   * browser' action is toggled.
+   */
+  void on_action_DatabaseBrowser_toggled();
+
+  /**
+   * \brief Qt auto-connected slot which is called when 'Dataset
+   * properties' action is toggled.
+   */
+  void on_action_DatasetProperties_toggled();
+
+  /**
+   * \brief Qt auto-connected slot which is called when 'OTB
+   * Applications browser' action is toggled.
+   */
+  void on_action_OtbApplicationsBrowser_toggled();
+
+  /**
+   * \brief Qt auto-connected slot which is called when 'Quicklook
+   * view' action is toggled.
+   */
+  void on_action_QuicklookView_toggled();
+
+  /**
+   * \brief Qt auto-connected slot which is called when 'Color-setup'
+   * action is toggled.
+   */
+  void on_action_ColorSetup_toggled();
+
+  /**
+   * \brief Qt auto-connected slot which is called when
+   * 'Color-dynamics' action is toggled.
+   */
+  void on_action_ColorDynamics_toggled();
+
+  /**
+   * \brief Slot called when the visibility of related QDockWidget has
+   * changed.
+   *
+   * \param visible Visibility state flag.
+   */
+  void OnDatabaseBrowserVisibilityChanged( bool visible );
+
+  /**
+   * \brief Slot called when the visibility of related QDockWidget has
+   * changed.
+   *
+   * \param visible Visibility state flag.
+   */
+  void OnDatasetPropertiesVisibilityChanged( bool visible );
+
+  /**
+   * \brief Slot called when the visibility of related QDockWidget has
+   * changed.
+   *
+   * \param visible Visibility state flag.
+   */
+  void OnOtbApplicationsBrowserVisibilityChanged( bool visible );
+
+  /**
+   * \brief Slot called when the visibility of related QDockWidget has
+   * changed.
+   *
+   * \param visible Visibility state flag.
+   */
+  void OnQuicklookViewVisibilityChanged( bool visible );
 
 };
 

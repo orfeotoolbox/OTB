@@ -50,6 +50,10 @@
 #include "Core/mvdI18nApplication.h"
 //
 #include "Gui/mvdApplicationsToolBox.h"
+#include "Gui/mvdColorSetupController.h"
+#include "Gui/mvdColorSetupWidget.h"
+#include "Gui/mvdColorDynamicsController.h"
+#include "Gui/mvdColorDynamicsWidget.h"
 #include "Gui/mvdDatabaseBrowserController.h"
 #include "Gui/mvdDatabaseBrowserWidget.h"
 #include "Gui/mvdDatasetPropertiesController.h"
@@ -88,9 +92,13 @@ MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
   I18nMainWindow( parent, flags ), 
   m_UI( new mvd::Ui::MainWindow() ),
+  m_ColorDynamicsDock( NULL ),
+  m_ColorSetupDock( NULL ),
   m_DatabaseBrowserDock( NULL ),
-  m_ApplicationsBrowserDock(NULL),
   m_DatasetPropertiesDock(NULL),
+#ifdef OTB_WRAP_QT
+  m_OtbApplicationsBrowserDock(NULL),
+#endif
   m_QuicklookViewDock( NULL )
 {
   m_UI->setupUi( this );
@@ -139,7 +147,7 @@ MainWindow
   //
   // Done here cause needed to be done once
   SetControllerModel(
-    m_ApplicationsBrowserDock, 
+    m_OtbApplicationsBrowserDock, 
     I18nApplication::Instance< CatalogueApplication >()->GetOTBApplicationsModel()
   );
 
@@ -153,7 +161,7 @@ MainWindow
   // # Step 1 : get the ApplicationToolBoxWidget
   ApplicationsToolBox* appWidget = 
     qobject_cast< ApplicationsToolBox * >( 
-      m_ApplicationsBrowserDock->findChild< ApplicationsToolBox* >( ) 
+      m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >( ) 
       );
   
   // # Step 2 : setup connections
@@ -182,8 +190,10 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
-  //
-  // Left pane.
+
+  // Quicklook-view dock-widget (is left or right but is the top-most
+  // widget of the dock-area. So, it is inserted as first
+  // dock-widget.
   assert( m_QuicklookViewDock==NULL );
   m_QuicklookViewDock = AddWidgetToDock(
     CreateQuicklookWidget(),
@@ -196,6 +206,10 @@ MainWindow
 #endif
   );
 
+  //
+  // Left pane.
+
+  // Database-browser.
   assert( m_DatabaseBrowserDock==NULL );
   m_DatabaseBrowserDock =
     AddDockWidget
@@ -205,6 +219,7 @@ MainWindow
       Qt::LeftDockWidgetArea
     );
 
+  // Dataset-properties.
   assert( m_DatasetPropertiesDock==NULL );
   m_DatasetPropertiesDock =
     AddDockWidget
@@ -214,17 +229,37 @@ MainWindow
       Qt::LeftDockWidgetArea
     );
 
+  // Video color-setup.
+  assert( m_ColorSetupDock==NULL );
+  m_ColorSetupDock =
+    AddDockWidget
+    < ColorSetupWidget, ColorSetupController, QDockWidget >
+    ( "COLOR_SETUP",
+      tr( "Color setup" ),
+      Qt::LeftDockWidgetArea
+    );
+
+  // Video color-dynamics.
+  assert( m_ColorDynamicsDock==NULL );
+  m_ColorDynamicsDock =
+    AddDockWidget
+    < ColorDynamicsWidget, ColorDynamicsController, QDockWidget >
+    ( "COLOR_DYNAMICS",
+      tr( "Color dynamics" ),
+      Qt::LeftDockWidgetArea
+    );
+
   //
   // Right pane.
 
 #ifdef OTB_WRAP_QT
 
-  assert( m_ApplicationsBrowserDock==NULL );
-  m_ApplicationsBrowserDock =
+  assert( m_OtbApplicationsBrowserDock==NULL );
+  m_OtbApplicationsBrowserDock =
     AddDockWidget
     < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
     ( "APPLICATIONS_BROWSER",
-      tr( "Applications browser" ),
+      tr( "OTB Applications browser" ),
       Qt::RightDockWidgetArea );
 
 #endif
@@ -271,6 +306,106 @@ MainWindow
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_ColorSetup_toggled()
+{
+  m_ColorSetupDock->setVisible( m_UI->action_ColorSetup->isChecked() );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_ColorDynamics_toggled()
+{
+  m_ColorDynamicsDock->setVisible( m_UI->action_ColorDynamics->isChecked() );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_DatabaseBrowser_toggled()
+{
+  m_DatabaseBrowserDock->setVisible( m_UI->action_DatabaseBrowser->isChecked() );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_DatasetProperties_toggled()
+{
+  m_DatasetPropertiesDock->setVisible(
+    m_UI->action_DatasetProperties->isChecked()
+  );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_OtbApplicationsBrowser_toggled()
+{
+  m_OtbApplicationsBrowserDock->setVisible(
+    m_UI->action_OtbApplicationsBrowser->isChecked()
+  );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_QuicklookView_toggled()
+{
+  m_QuicklookViewDock->setVisible( m_UI->action_QuicklookView->isChecked() );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnColorDynamicsVisibilityChanged( bool visible )
+{
+  VisibilityChanged( m_UI->action_ColorDynamics, visible );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnColorSetupVisibilityChanged( bool visible )
+{
+  VisibilityChanged( m_UI->action_ColorSetup, visible );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnDatabaseBrowserVisibilityChanged( bool visible )
+{
+  VisibilityChanged( m_UI->action_DatabaseBrowser, visible );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnDatasetPropertiesVisibilityChanged( bool visible )
+{
+  VisibilityChanged( m_UI->action_DatasetProperties, visible );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnOtbApplicationsBrowserVisibilityChanged( bool visible )
+{
+  VisibilityChanged( m_UI->action_OtbApplicationsBrowser, visible );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnQuicklookViewVisibilityChanged( bool visible )
+{
+  VisibilityChanged( m_UI->action_QuicklookView, visible );
+}
 
 /*****************************************************************************/
 void
@@ -389,7 +524,7 @@ MainWindow
 #ifdef OTB_WRAP_QT
   // need to get the controller to request the application widget
   ApplicationsToolBoxController * controller = 
-    m_ApplicationsBrowserDock->findChild<ApplicationsToolBoxController *>();
+    m_OtbApplicationsBrowserDock->findChild<ApplicationsToolBoxController *>();
 
   //
   // add the application in a tab 
