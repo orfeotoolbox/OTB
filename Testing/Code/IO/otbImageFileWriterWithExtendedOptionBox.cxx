@@ -67,7 +67,7 @@ int otbImageFileWriterWithExtendedOptionBox(int argc, char* argv[])
                          << starty << separator
                          << sizex << separator
                          << sizey
-          ;
+         ;
 
   std::cout << "Output image with user defined path " << outputFilenameExtended.str() << std::endl;
 

@@ -101,7 +101,7 @@ template <class TInputValue, class TOutputValue>
 void
 MachineLearningModelFactory<TInputValue,TOutputValue>
 ::RegisterFactory(itk::ObjectFactoryBase * factory)
-{ 
+{
   // Unregister any previously registered factory of the same class
   // Might be more intensive but static bool is not an option due to
   // ld error.

@@ -25,10 +25,10 @@ namespace otb
 {
 /** \class MachineLearningModelFactoryBase
  * \brief Base class for the MachinelearningModelFactory
- * 
+ *
  * This class intends to hold the static attributes that can not be
  * part of a template class (ld error).
- * 
+ *
  */
 class ITK_EXPORT MachineLearningModelFactoryBase : public itk::Object
 {
@@ -46,7 +46,7 @@ protected:
   MachineLearningModelFactoryBase();
   virtual ~MachineLearningModelFactoryBase();
 
-  static itk::SimpleMutexLock mutex; 
+  static itk::SimpleMutexLock mutex;
 
 private:
   MachineLearningModelFactoryBase(const Self &); //purposely not implemented
