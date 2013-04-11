@@ -115,6 +115,9 @@ public:
   itkGetMacro(P, double);
   itkSetMacro(P, double);
 
+  itkGetMacro(ParameterOptimization, bool);
+  itkSetMacro(ParameterOptimization, bool);
+
 protected:
   /** Constructor */
   SVMMachineLearningModel();
@@ -141,6 +144,7 @@ private:
   double m_C;
   double m_Nu;
   double m_P;
+  bool m_ParameterOptimization;
 };
 } // end namespace otb
 
