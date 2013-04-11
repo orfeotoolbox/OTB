@@ -623,7 +623,9 @@ ImageFileWriter<TInputImage>
       {
       ioRegion.SetSize(i, streamRegion.GetSize(i));
       ioRegion.SetIndex(i, streamRegion.GetIndex(i));
+      //ioRegion.SetIndex(i, streamRegion.GetIndex(i) - inputRegion.GetIndex(i));
       }
+    otbMsgDevMacro(<< "ioregion " <<  ioRegion )
     this->SetIORegion(ioRegion);
     m_ImageIO->SetIORegion(m_IORegion);
 
@@ -724,6 +726,8 @@ ImageFileWriter<TInputImage>
       cacheImage->CopyInformation(input);
       cacheImage->SetBufferedRegion(ioRegion);
       cacheImage->Allocate();
+
+      otbMsgDevMacro(<< "ioRegion " << ioRegion);
 
       typedef itk::ImageRegionConstIterator<TInputImage> ConstIteratorType;
       typedef itk::ImageRegionIterator<TInputImage>      IteratorType;
