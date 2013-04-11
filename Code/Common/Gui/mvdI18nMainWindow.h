@@ -149,18 +149,6 @@ protected:
    */
   inline void SetControllerModel( QDockWidget* dock, AbstractModel* model );
 
-  /**
-   * \brief Convenient method to set checked state of QAction when
-   * QWidget's visibility has changed.
-   *
-   * This method is used to factorize common code.
-   *
-   * \param action QAction which checked state has to be updated.
-   * \param visible Visibility of related QWidget.
-   */
-  inline
-    void VisibilityChanged( QAction* action, bool visible );
-
   //
   // QMainWindow overrides.
 
@@ -340,18 +328,6 @@ I18nMainWindow
   );
 
   return dockWidget;
-}
-
-/*****************************************************************************/
-void
-I18nMainWindow
-::VisibilityChanged( QAction* action, bool visible )
-{
-  action->blockSignals( true );
-  {
-  action->setChecked( visible );
-  }
-  action->blockSignals( false );
 }
 
 } // end namespace 'mvd'
