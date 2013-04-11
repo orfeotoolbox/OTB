@@ -142,10 +142,25 @@ void
 MainWindow
 ::virtual_ConnectUI()
 {
+  // Connect color-setup dock-widget visibilityChanged() signal.
+  assert( m_ColorDynamicsDock!=NULL );
+  QObject::connect(
+    m_ColorDynamicsDock, SIGNAL( visibilityChanged( bool ) ),
+    // to:
+    this, SLOT( OnColorDynamicsVisibilityChanged( bool ) )
+    );
+
+  // Connect color-setup dock-widget visibilityChanged() signal.
+  assert( m_ColorSetupDock!=NULL );
+  QObject::connect(
+    m_ColorSetupDock, SIGNAL( visibilityChanged( bool ) ),
+    // to:
+    this, SLOT( OnColorSetupVisibilityChanged( bool ) )
+    );
 
 #ifdef OTB_WRAP_QT
   //
-  // Done here cause needed to be done once
+  // Done here cause needed to be done once and only once.
   SetControllerModel(
     m_OtbApplicationsBrowserDock, 
     I18nApplication::Instance< CatalogueApplication >()->GetOTBApplicationsModel()
@@ -166,23 +181,25 @@ MainWindow
   
   // # Step 2 : setup connections
   assert(appWidget != NULL);
-  QObject::connect(appWidget,
-                   SIGNAL( ApplicationToLaunchSelected(const QString &) ),
-                   this,
-                   SLOT( OnApplicationToLaunchSelected(const QString &) )
-    );
-  
+  QObject::connect(
+    appWidget,
+    SIGNAL( ApplicationToLaunchSelected(const QString &) ),
+    this,
+    SLOT( OnApplicationToLaunchSelected(const QString &) )
+  );
+
   // # Step 3 : if OTB applications has any output, it may be 
   
 #endif
 
   //
   // close tabs handling
-  QObject::connect(m_CentralTabWidget,
-                   SIGNAL(tabCloseRequested(int)),
-                   this,
-                   SLOT(OntabCloseRequested(int))
-    );
+  QObject::connect(
+    m_CentralTabWidget,
+    SIGNAL(tabCloseRequested(int)),
+    this,
+    SLOT(OntabCloseRequested(int))
+  );
 }
 
 /*****************************************************************************/
@@ -190,7 +207,6 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
-
   // Quicklook-view dock-widget (is left or right but is the top-most
   // widget of the dock-area. So, it is inserted as first
   // dock-widget.
@@ -229,7 +245,7 @@ MainWindow
       Qt::LeftDockWidgetArea
     );
 
-  // Video color-setup.
+  // Color-setup.
   assert( m_ColorSetupDock==NULL );
   m_ColorSetupDock =
     AddDockWidget
@@ -239,7 +255,9 @@ MainWindow
       Qt::LeftDockWidgetArea
     );
 
-  // Video color-dynamics.
+  m_ColorSetupDock->setVisible( false );
+
+  // Color-dynamics.
   assert( m_ColorDynamicsDock==NULL );
   m_ColorDynamicsDock =
     AddDockWidget
@@ -248,6 +266,8 @@ MainWindow
       tr( "Color dynamics" ),
       Qt::LeftDockWidgetArea
     );
+
+  m_ColorDynamicsDock->setVisible( false );
 
   //
   // Right pane.
