@@ -16,8 +16,6 @@
 
 =========================================================================*/
 #include "otbMachineLearningModelFactory.h"
-#include "itkMutexLock.h"
-#include "itkMutexLockHolder.h"
 
 //#include "otbKNearestNeighborsMachineLearningModelFactory.h"
 #include "otbRandomForestsMachineLearningModelFactory.h"
@@ -28,24 +26,16 @@
 #include "otbNormalBayesMachineLearningModelFactory.h"
 #include "otbDecisionTreeMachineLearningModelFactory.h"
 #include "otbGradientBoostedTreeMachineLearningModelFactory.h"
+#include "itkMutexLockHolder.h"
 
 
 namespace otb
 {
-
-template <class TInputValue, class TOutputValue> bool MachineLearningModelFactory<TInputValue,TOutputValue>
-::firstTime = true;
-
-template <class TInputValue, class TOutputValue> itk::SimpleMutexLock MachineLearningModelFactory<TInputValue,TOutputValue>
-::mutex;
-
-
 template <class TInputValue, class TOutputValue>
 typename MachineLearningModel<TInputValue,TOutputValue>::Pointer
 MachineLearningModelFactory<TInputValue,TOutputValue>
 ::CreateMachineLearningModel(const std::string& path, FileModeType mode)
 {
-
   RegisterBuiltInFactories();
 
   std::list<MachineLearningModelTypePointer> possibleMachineLearningModel;
@@ -93,29 +83,30 @@ void
 MachineLearningModelFactory<TInputValue,TOutputValue>
 ::RegisterBuiltInFactories()
 {
-  {
-  //bool firstTime = true;
-  //itk::SimpleMutexLock mutex;
-    // This helper class makes sure the Mutex is unlocked
-    // in the event an exception is thrown.
-    itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
-    if (firstTime)
-      {
-      // KNN Format for OTB
-      //itk::ObjectFactoryBase::RegisterFactory(KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-      itk::ObjectFactoryBase::RegisterFactory(RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-      itk::ObjectFactoryBase::RegisterFactory(LibSVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-      itk::ObjectFactoryBase::RegisterFactory(SVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-      itk::ObjectFactoryBase::RegisterFactory(BoostMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-      itk::ObjectFactoryBase::RegisterFactory(NeuralNetworkMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-      itk::ObjectFactoryBase::RegisterFactory(NormalBayesMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-      itk::ObjectFactoryBase::RegisterFactory(DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-      itk::ObjectFactoryBase::RegisterFactory(GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
 
-      firstTime = false;
-      }
-    }
+  // KNN Format for OTB
+  //itk::ObjectFactoryBase::RegisterFactory(KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(LibSVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(SVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(BoostMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(NeuralNetworkMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(NormalBayesMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+}
 
+template <class TInputValue, class TOutputValue>
+void
+MachineLearningModelFactory<TInputValue,TOutputValue>
+::RegisterFactory(itk::ObjectFactoryBase * factory)
+{ 
+  // Unregister any previously registered factory of the same class
+  // Might be more intensive but static bool is not an option due to
+  // ld error.
+  itk::ObjectFactoryBase::UnRegisterFactory(factory);
+  itk::ObjectFactoryBase::RegisterFactory(factory);
 }
 
 } // end namespace otb

@@ -20,6 +20,7 @@
 
 #include "itkObject.h"
 #include "otbMachineLearningModel.h"
+#include "otbMachineLearningModelFactoryBase.h"
 
 namespace otb
 {
@@ -27,7 +28,7 @@ namespace otb
  * \brief Creation of object instance using object factory.
  */
 template <class TInputValue, class TOutputValue>
-class ITK_EXPORT MachineLearningModelFactory : public itk::Object
+class ITK_EXPORT MachineLearningModelFactory : public MachineLearningModelFactoryBase
 {
 public:
   /** Standard class typedefs. */
@@ -42,16 +43,14 @@ public:
   itkTypeMacro(MachineLearningModelFactory, itk::Object);
 
   /** Convenient typedefs. */
-  typedef typename otb::MachineLearningModel<TInputValue,TOutputValue>::Pointer MachineLearningModelTypePointer;
+  typedef otb::MachineLearningModel<TInputValue,TOutputValue> MachineLearningModelType;
+  typedef typename MachineLearningModelType::Pointer MachineLearningModelTypePointer;
 
   /** Mode in which the files is intended to be used */
   typedef enum { ReadMode, WriteMode } FileModeType;
 
   /** Create the appropriate MachineLearningModel depending on the particulars of the file. */
   static MachineLearningModelTypePointer CreateMachineLearningModel(const std::string& path, FileModeType mode);
-
-  /** Register Built-in factories */
-  static void RegisterBuiltInFactories();
 
 protected:
   MachineLearningModelFactory();
@@ -61,8 +60,12 @@ private:
   MachineLearningModelFactory(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  static bool firstTime;
-  static itk::SimpleMutexLock mutex;
+  /** Register Built-in factories */
+  static void RegisterBuiltInFactories();
+
+  /** Register a single factory, ensuring it has not been registered
+    * twice */
+  static void RegisterFactory(itk::ObjectFactoryBase * factory);
 
 };
 
