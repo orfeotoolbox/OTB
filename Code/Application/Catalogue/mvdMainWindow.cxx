@@ -48,6 +48,8 @@
 #include "Core/mvdDatabaseModel.h"
 #include "Core/mvdDatasetModel.h"
 #include "Core/mvdI18nApplication.h"
+#include "Core/mvdQuicklookModel.h"
+#include "Core/mvdVectorImageModel.h"
 //
 #include "Gui/mvdApplicationsToolBox.h"
 #include "Gui/mvdColorSetupController.h"
@@ -532,13 +534,24 @@ MainWindow
 {
   qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
 
+  // Unsert dataset-model from dataset-properties controller.
+  SetControllerModel( m_DatasetPropertiesDock, NULL );
+
+  // Update image-view.
+  m_ImageView->SetImageModel( NULL );
+
+  // Access quicklook-view.
   GLImageWidget* quicklookView = GetQuicklookView();
 
+  // Update quicklook-view.
   assert( quicklookView!=NULL );
   quicklookView->SetImageModel( NULL );
 
-  // unset the dataset model in DatasetProperties controller
-  SetControllerModel( m_DatasetPropertiesDock, NULL );
+  // Unset image-model to color-dynamics controller.
+  SetControllerModel( m_ColorDynamicsDock, NULL );
+
+  // Unset image-model to color-setup controller.
+  SetControllerModel( m_ColorSetupDock, NULL ); 
 }
 
 /*****************************************************************************/
@@ -548,13 +561,36 @@ MainWindow
 {
   qDebug() << this << "::OnSelectedDatasetModelChanged(" << model << ")";
 
+  // Assign dataset-model to dataset-properties controller.
+  SetControllerModel( m_DatasetPropertiesDock, model );
+
+  // Access vector-image model.
+  VectorImageModel* vectorImageModel =
+    model->GetSelectedImageModel< VectorImageModel >();
+
+  // Check type.
+  assert( vectorImageModel==model->GetSelectedImageModel() );
+
+  // Update image-view.
+  assert( m_ImageView!=NULL );
+  m_ImageView->SetImageModel( vectorImageModel );
+
+  // Access quicklook-view.
   GLImageWidget* quicklookView = GetQuicklookView();
 
+  // Update quicklook-view.
   assert( quicklookView!=NULL );
-  quicklookView->SetImageModel( model->GetSelectedImageModel() );
+  quicklookView->SetImageModel(
+    vectorImageModel==NULL
+    ? NULL
+    : vectorImageModel->GetQuicklookModel()
+  );
 
-  // set the dataset model in DatasetProperties controller
-  SetControllerModel( m_DatasetPropertiesDock, model );
+  // Assign image-model to color-dynamics controller.
+  SetControllerModel( m_ColorDynamicsDock, vectorImageModel );
+
+  // Assign image-model to color-setup controller.
+  SetControllerModel( m_ColorSetupDock, vectorImageModel );
 }
 
 /*****************************************************************************/

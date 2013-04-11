@@ -164,11 +164,25 @@ public:
   /** */
   inline bool HasSelectedImageModel() const;
 
-  /** */
+  /**
+   */
   inline const AbstractImageModel* GetSelectedImageModel() const;
 
-  /** */
+  /**
+   */
   inline AbstractImageModel* GetSelectedImageModel();
+
+  /**
+   */
+  template< typename T >
+  inline
+    const T* GetSelectedImageModel() const;
+
+  /**
+   */
+  template< typename T >
+  inline
+    T* GetSelectedImageModel();
 
   /**
    */
@@ -301,7 +315,16 @@ private slots:
 /* INLINE SECTION                                                            */
 
 //
-// Monteverdi deferred includes (sorted by alphabetic order)
+// System includes (sorted by alphabetic order)
+
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+
+//
+// Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractImageModel.h"
 
 namespace mvd
@@ -394,6 +417,26 @@ DatasetModel
 ::GetSelectedImageModel()
 {
   return GetImageModels().first();
+}
+
+/*****************************************************************************/
+template< typename T >
+inline
+const T*
+DatasetModel
+::GetSelectedImageModel() const
+{
+  return qobject_cast< const T* >( GetSelectedImageModel() );
+}
+
+/*****************************************************************************/
+template< typename T >
+inline
+T*
+DatasetModel
+::GetSelectedImageModel()
+{
+  return qobject_cast< T* >( GetSelectedImageModel() );
 }
 
 /*****************************************************************************/
