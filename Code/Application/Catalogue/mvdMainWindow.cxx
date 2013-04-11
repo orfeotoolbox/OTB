@@ -207,21 +207,6 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
-  // Quicklook-view dock-widget (is left or right but is the top-most
-  // widget of the dock-area. So, it is inserted as first
-  // dock-widget.
-  assert( m_QuicklookViewDock==NULL );
-  m_QuicklookViewDock = AddWidgetToDock(
-    CreateQuicklookWidget(),
-    "QUICKLOOK_VIEW",
-    tr( "Quicklook view" ),
-#if 0
-    Qt::LeftDockWidgetArea
-#else
-    Qt::RightDockWidgetArea
-#endif
-  );
-
   //
   // Left pane.
 
@@ -245,6 +230,32 @@ MainWindow
       Qt::LeftDockWidgetArea
     );
 
+#ifdef OTB_WRAP_QT
+  // OTB-applications browser.
+  assert( m_OtbApplicationsBrowserDock==NULL );
+  m_OtbApplicationsBrowserDock =
+    AddDockWidget
+    < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
+    ( "APPLICATIONS_BROWSER",
+      tr( "OTB Applications browser" ),
+      Qt::LeftDockWidgetArea );
+
+  tabifyDockWidget( m_DatasetPropertiesDock, m_OtbApplicationsBrowserDock );
+#endif
+
+  //
+  // Right pane.
+
+  // Quicklook-view dock-widget
+  assert( m_QuicklookViewDock==NULL );
+  m_QuicklookViewDock = AddWidgetToDock(
+    CreateQuicklookWidget(),
+    "QUICKLOOK_VIEW",
+    tr( "Quicklook view" ),
+    Qt::RightDockWidgetArea
+  );
+
+
   // Color-setup.
   assert( m_ColorSetupDock==NULL );
   m_ColorSetupDock =
@@ -252,10 +263,10 @@ MainWindow
     < ColorSetupWidget, ColorSetupController, QDockWidget >
     ( "COLOR_SETUP",
       tr( "Color setup" ),
-      Qt::LeftDockWidgetArea
+      Qt::RightDockWidgetArea
     );
 
-  m_ColorSetupDock->setVisible( false );
+  // m_ColorSetupDock->setVisible( false );
 
   // Color-dynamics.
   assert( m_ColorDynamicsDock==NULL );
@@ -264,25 +275,13 @@ MainWindow
     < ColorDynamicsWidget, ColorDynamicsController, QDockWidget >
     ( "COLOR_DYNAMICS",
       tr( "Color dynamics" ),
-      Qt::LeftDockWidgetArea
+      Qt::RightDockWidgetArea
     );
 
-  m_ColorDynamicsDock->setVisible( false );
+  // m_ColorDynamicsDock->setVisible( false );
 
-  //
-  // Right pane.
-
-#ifdef OTB_WRAP_QT
-
-  assert( m_OtbApplicationsBrowserDock==NULL );
-  m_OtbApplicationsBrowserDock =
-    AddDockWidget
-    < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
-    ( "APPLICATIONS_BROWSER",
-      tr( "OTB Applications browser" ),
-      Qt::RightDockWidgetArea );
-
-#endif
+  // Tabify dock-widgets.
+  tabifyDockWidget( m_ColorSetupDock, m_ColorDynamicsDock );
 }
 
 /*****************************************************************************/
