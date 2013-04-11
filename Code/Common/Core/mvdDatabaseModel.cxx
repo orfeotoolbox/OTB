@@ -129,21 +129,6 @@ DatabaseModel
 }
 
 /*******************************************************************************/
-bool
-DatabaseModel
-::IsDatasetConsistent( const DatasetId& id )
-{
-  qDebug() << this << "::IsDatasetConsistent(" << id << ")";
-
-  // Find dataset model or interrupt by exception.
-  DatasetModel* datasetModel = FindDatasetModel( id );
-  assert( datasetModel!=NULL );
-
-  // Return loaded and selected dataset model.
-  return datasetModel->IsConsistent();
-}
-
-/*******************************************************************************/
 void
 DatabaseModel
 ::ReleaseDatasetModel( const DatasetId& id )

@@ -100,19 +100,22 @@ public:
    */
   void OpenDatabase();
 
-  /***/
-  void OpenApplicationsBrowser();
+  /**
+   * \brief Get the OTB application model.
+   */
+  inline
+    const AbstractModel* GetOTBApplicationsModel() const;
 
-  /** Get the OTBApp Model */
-  AbstractModel* GetOTBApplicationsModel()
-  {
-    return m_OTBApplicationsModel;
-  }
+  /**
+   * \brief Get the OTB application model.
+   */
+  inline
+    AbstractModel* GetOTBApplicationsModel();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 public slots:
-  
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -137,11 +140,17 @@ protected:
 // Private methods.
 private:
 
-  AbstractModel* m_OTBApplicationsModel;
+  /**
+   */
+  void OpenApplicationsBrowser();
 
 //
 // Private attributes.
 private:
+
+  /**
+   */
+  AbstractModel* m_OTBApplicationsModel;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -150,9 +159,31 @@ private:
 private slots:
 };
 
+} // end namespace 'mvd'
+
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
+namespace mvd
+{
+
+/*****************************************************************************/
+inline
+const AbstractModel*
+CatalogueApplication
+::GetOTBApplicationsModel() const
+{
+  return m_OTBApplicationsModel;
+}
+
+/*****************************************************************************/
+inline
+AbstractModel*
+CatalogueApplication
+::GetOTBApplicationsModel()
+{
+  return m_OTBApplicationsModel;
+}
 
 } // end namespace 'mvd'
 

@@ -137,10 +137,6 @@ public:
    */
   DatasetModel* SelectDatasetModel( const DatasetId& id );
 
-
-  /** */
-
-  bool IsDatasetConsistent( const DatasetId& id );
   //
   // AbstractModel overrides.
 

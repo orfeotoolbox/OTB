@@ -69,7 +69,7 @@ namespace mvd
 CatalogueApplication
 ::CatalogueApplication( int& argc, char** argv ) :
   I18nApplication( argc, argv ),
-  m_OTBApplicationsModel()
+  m_OTBApplicationsModel( NULL )
 {
 }
 
@@ -96,12 +96,10 @@ void
 CatalogueApplication
 ::OpenApplicationsBrowser()
 {
-
 #ifdef OTB_WRAP_QT
   m_OTBApplicationsModel = new OTBApplicationsModel( this );
   m_OTBApplicationsModel->BuildModel();
 #endif
-
 }
 
 /*******************************************************************************/
@@ -109,7 +107,7 @@ void
 CatalogueApplication
 ::virtual_InitializeCore()
 {
-  setObjectName( "CatalogueApplication" );
+  setObjectName( "Application" );
 
   InitializeCore(
     PROJECT_NAME, Monteverdi2_VERSION_STRING,

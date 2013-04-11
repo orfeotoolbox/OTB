@@ -39,28 +39,26 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#ifdef OTB_WRAP_QT
+# include "ApplicationsWrapper/mvdApplicationsToolBoxController.h"
+# include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
+# include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
+#endif
+//
 #include "Core/mvdDatabaseModel.h"
 #include "Core/mvdDatasetModel.h"
 #include "Core/mvdI18nApplication.h"
 //
+#include "Gui/mvdApplicationsToolBox.h"
 #include "Gui/mvdDatabaseBrowserController.h"
 #include "Gui/mvdDatabaseBrowserWidget.h"
+#include "Gui/mvdDatasetPropertiesController.h"
+#include "Gui/mvdDatasetPropertiesWidget.h"
 #include "Gui/mvdGLImageWidget.h"
 #include "Gui/mvdImageModelRenderer.h"
 #include "Gui/mvdQuicklookViewManipulator.h"
-#include "Gui/mvdApplicationsToolBox.h"
-
-#include "Gui/mvdDatasetPropertiesWidget.h"
-#include "Gui/mvdDatasetPropertiesController.h"
-
-#include "Core/mvdI18nApplication.h"
+//
 #include "mvdCatalogueApplication.h"
-
-#ifdef OTB_WRAP_QT
-#include "ApplicationsWrapper/mvdApplicationsToolBoxController.h"
-#include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
-#include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
-#endif
 
 namespace mvd
 {
@@ -93,7 +91,7 @@ MainWindow
   m_DatabaseBrowserDock( NULL ),
   m_ApplicationsBrowserDock(NULL),
   m_DatasetPropertiesDock(NULL),
-  m_QuicklookView( NULL )
+  m_QuicklookViewDock( NULL )
 {
   m_UI->setupUi( this );
 }
@@ -116,16 +114,19 @@ MainWindow
 
   InitializeCentralWidget();
 
-  assert( m_QuicklookView==NULL );
-  m_QuicklookView = CreateQuicklookWidget();
-
-  m_CentralWidgetTabs->addTab(m_QuicklookView, "Quicklook");
+#if 0
+  m_CentralTabWidget->addTab(
+    CreateQuicklookWidget(),
+    m_QuicklookViewDock->windowTitle()
+  );
 
   //
   // access to the quicklook tabBar to remove the close button
-  QTabBar *tabBar = m_CentralWidgetTabs->findChild<QTabBar *>();
+  QTabBar* tabBar = m_CentralTabWidget->findChild< QTabBar* >();
+
   tabBar->setTabButton(0, QTabBar::RightSide, 0);
   tabBar->setTabButton(0, QTabBar::LeftSide, 0);
+#endif
 }
 
 /*****************************************************************************/
@@ -137,8 +138,10 @@ MainWindow
 #ifdef OTB_WRAP_QT
   //
   // Done here cause needed to be done once
-  SetControllerModel(m_ApplicationsBrowserDock, 
-                     I18nApplication::Instance< CatalogueApplication >()->GetOTBApplicationsModel());
+  SetControllerModel(
+    m_ApplicationsBrowserDock, 
+    I18nApplication::Instance< CatalogueApplication >()->GetOTBApplicationsModel()
+  );
 
   //
   // need to get the ApplicationToolBox widget to setup connections.
@@ -167,7 +170,7 @@ MainWindow
 
   //
   // close tabs handling
-  QObject::connect(m_CentralWidgetTabs,
+  QObject::connect(m_CentralTabWidget,
                    SIGNAL(tabCloseRequested(int)),
                    this,
                    SLOT(OntabCloseRequested(int))
@@ -179,25 +182,50 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
+  //
+  // Left pane.
+  assert( m_QuicklookViewDock==NULL );
+  m_QuicklookViewDock = AddWidgetToDock(
+    CreateQuicklookWidget(),
+    "QUICKLOOK_VIEW",
+    tr( "Quicklook view" ),
+#if 0
+    Qt::LeftDockWidgetArea
+#else
+    Qt::RightDockWidgetArea
+#endif
+  );
+
   assert( m_DatabaseBrowserDock==NULL );
   m_DatabaseBrowserDock =
     AddDockWidget
     < DatabaseBrowserWidget, DatabaseBrowserController, QDockWidget >
-    ( "DATABASE_BROWSER", tr( "Database browser" ), Qt::LeftDockWidgetArea );
+    ( "DATABASE_BROWSER",
+      tr( "Database browser" ),
+      Qt::LeftDockWidgetArea
+    );
 
   assert( m_DatasetPropertiesDock==NULL );
   m_DatasetPropertiesDock =
     AddDockWidget
     < DatasetPropertiesWidget, DatasetPropertiesController, QDockWidget >
-    ( "DATASET_PROPERTIES", tr( "Dataset properties" ), Qt::LeftDockWidgetArea );
+    ( "DATASET_PROPERTIES",
+      tr( "Dataset properties" ),
+      Qt::LeftDockWidgetArea
+    );
+
+  //
+  // Right pane.
 
 #ifdef OTB_WRAP_QT
 
-  assert (m_ApplicationsBrowserDock == NULL);
+  assert( m_ApplicationsBrowserDock==NULL );
   m_ApplicationsBrowserDock =
     AddDockWidget
     < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
-    ( "APPLICATIONS_BROWSER", tr( "Applications browser" ), Qt::RightDockWidgetArea );
+    ( "APPLICATIONS_BROWSER",
+      tr( "Applications browser" ),
+      Qt::RightDockWidgetArea );
 
 #endif
 }
@@ -210,12 +238,12 @@ MainWindow
   //
   // need to setup the central widget as QTabWidget to be able to 
   // open several applications + the quicklook
-  m_CentralWidgetTabs = new QTabWidget();
-  m_CentralWidgetTabs->setTabsClosable(true);
+  m_CentralTabWidget = new QTabWidget();
+  m_CentralTabWidget->setTabsClosable(true);
 
   // 
   // add this tabWidget as central Widget
-  setCentralWidget( m_CentralWidgetTabs );
+  setCentralWidget( m_CentralTabWidget );
 }
 
 /*****************************************************************************/
@@ -235,6 +263,8 @@ MainWindow
     this,
     sharedGlWidget
   );
+
+  quicklookView->setMinimumSize( 100, 100 );
 
   return quicklookView;
 }
@@ -325,11 +355,13 @@ MainWindow
 {
   qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
 
-  assert( m_QuicklookView!=NULL );
-  m_QuicklookView->SetImageModel( NULL );
+  GLImageWidget* quicklookView = GetQuicklookView();
+
+  assert( quicklookView!=NULL );
+  quicklookView->SetImageModel( NULL );
 
   // unset the dataset model in DatasetProperties controller
-  SetControllerModel(m_DatasetPropertiesDock, NULL);
+  SetControllerModel( m_DatasetPropertiesDock, NULL );
 }
 
 /*****************************************************************************/
@@ -339,11 +371,13 @@ MainWindow
 {
   qDebug() << this << "::OnSelectedDatasetModelChanged(" << model << ")";
 
-  assert( m_QuicklookView!=NULL );
-  m_QuicklookView->SetImageModel( model->GetSelectedImageModel() );
+  GLImageWidget* quicklookView = GetQuicklookView();
+
+  assert( quicklookView!=NULL );
+  quicklookView->SetImageModel( model->GetSelectedImageModel() );
 
   // set the dataset model in DatasetProperties controller
-  SetControllerModel(m_DatasetPropertiesDock, model);
+  SetControllerModel( m_DatasetPropertiesDock, model );
 }
 
 /*****************************************************************************/
@@ -360,22 +394,22 @@ MainWindow
   //
   // add the application in a tab 
   // TODO : check if this application is already opened ???
-  m_CentralWidgetTabs->addTab(controller->GetSelectedApplicationWidget(appName), 
+  m_CentralTabWidget->addTab(controller->GetSelectedApplicationWidget(appName), 
                               appName);
 
   // no checking needed here, if index is not available nothing is
   // done. Focus on the newly added tab
-  m_CentralWidgetTabs->setCurrentIndex( m_CentralWidgetTabs->count() - 1 );
+  m_CentralTabWidget->setCurrentIndex( m_CentralTabWidget->count() - 1 );
 
   // set tab icon
-  m_CentralWidgetTabs->setTabIcon( m_CentralWidgetTabs->currentIndex(), 
+  m_CentralTabWidget->setTabIcon( m_CentralTabWidget->currentIndex(), 
                                    QIcon(":/images/process_icon")  );
 
   //
-  // connections. not using m_CentralWidgetTabs->currentWidget() leads
+  // connections. not using m_CentralTabWidget->currentWidget() leads
   // to a wrong connection!!!!
   QObject::connect(
-    qobject_cast<Wrapper::QtWidgetView *>( m_CentralWidgetTabs->currentWidget() ),
+    qobject_cast<Wrapper::QtWidgetView *>( m_CentralTabWidget->currentWidget() ),
     SIGNAL( OTBApplicationOutputImageChanged( const QString &, const QString &) ),
     this,
     SLOT( OnOTBApplicationOutputImageChanged( const QString &, const QString &) )
@@ -384,7 +418,7 @@ MainWindow
   //
   // on quit widget signal, close its tab
   QObject::connect(
-    qobject_cast<Wrapper::QtWidgetView *>( m_CentralWidgetTabs->currentWidget() ),
+    qobject_cast<Wrapper::QtWidgetView *>( m_CentralTabWidget->currentWidget() ),
     SIGNAL( QuitSignal() ),
     this,
     SLOT( OntabCloseRequested() )
@@ -400,7 +434,7 @@ MainWindow
 ::OntabCloseRequested()
 {
   // get current tab index
-  int currentIndex = m_CentralWidgetTabs->currentIndex();
+  int currentIndex = m_CentralTabWidget->currentIndex();
   
   // close tab and delete its widget
   OntabCloseRequested( currentIndex );  
@@ -418,11 +452,11 @@ MainWindow
     {
     //
     //
-    QWidget * widgetToDelete = m_CentralWidgetTabs->widget(index);
+    QWidget * widgetToDelete = m_CentralTabWidget->widget(index);
     
     //
     // remove the tab
-    m_CentralWidgetTabs->removeTab(index);
+    m_CentralTabWidget->removeTab(index);
 
     //
     // delete the selected widget

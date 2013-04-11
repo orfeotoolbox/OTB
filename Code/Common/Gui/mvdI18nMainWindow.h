@@ -99,7 +99,7 @@ public:
 //
 // SIGNALS.
 signals:
-  
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
@@ -111,19 +111,32 @@ protected:
 
   /**
    */
-  virtual void virtual_SetupUI() =0;
+  QDockWidget*
+    AddWidgetToDock( QWidget* widget,
+		     const QString& dockName,
+		     const QString& dockTitle,
+		     Qt::DockWidgetArea dockArea,
+		     bool isFloating =false );
 
   /**
    */
-  virtual void virtual_ConnectUI() =0;
+  template< typename TWidget, typename TDockWidget >
+    inline
+    TDockWidget*
+    AddDockWidget( const QString& dockName,
+		   const QString& dockTitle,
+		   Qt::DockWidgetArea dockArea,
+		   bool isFloating =false );
 
   /**
    */
   template< typename TWidget, typename TController, typename TDockWidget >
+    inline
     TDockWidget*
     AddDockWidget( const QString& dockName,
 		   const QString& dockTitle,
-		   Qt::DockWidgetArea dockArea );
+		   Qt::DockWidgetArea dockArea,
+		   bool isFloating =false );
 
   /**
    * \brief Assign model to the controller which is child of given
@@ -172,11 +185,11 @@ private:
 
   /**
    */
-  QDockWidget*
-    AddWidgetToDock( QWidget* widget,
-		     const QString& dockName,
-		     const QString& dockTitle,
-		     Qt::DockWidgetArea dockArea );
+  virtual void virtual_SetupUI() =0;
+
+  /**
+   */
+  virtual void virtual_ConnectUI() =0;
 
   /**
    */
@@ -263,12 +276,14 @@ I18nMainWindow
 }
 
 /*****************************************************************************/
-template< typename TWidget, typename TController, typename TDockWidget >
+template< typename TWidget, typename TDockWidget >
+inline
 TDockWidget*
 I18nMainWindow
 ::AddDockWidget( const QString& dockName,
 		 const QString& dockTitle,
-		 Qt::DockWidgetArea dockArea )
+		 Qt::DockWidgetArea dockArea,
+		 bool isFloating )
 {
   TWidget* widget = new TWidget( this );
 
@@ -277,7 +292,32 @@ I18nMainWindow
       widget,
       dockName,
       dockTitle,
-      dockArea
+      dockArea,
+      isFloating
+    );
+
+  return dockWidget;
+}
+
+/*****************************************************************************/
+template< typename TWidget, typename TController, typename TDockWidget >
+inline
+TDockWidget*
+I18nMainWindow
+::AddDockWidget( const QString& dockName,
+		 const QString& dockTitle,
+		 Qt::DockWidgetArea dockArea,
+		 bool isFloating )
+{
+  TWidget* widget = new TWidget( this );
+
+  TDockWidget* dockWidget =
+    AddWidgetToDock(
+      widget,
+      dockName,
+      dockTitle,
+      dockArea,
+      isFloating
     );
 
   new TController(

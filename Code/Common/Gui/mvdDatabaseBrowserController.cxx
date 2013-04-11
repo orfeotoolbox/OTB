@@ -177,7 +177,7 @@ DatabaseBrowserController
 
   //
   // access model.
-  DatabaseModel* model = GetModel< DatabaseModel >();
+  const DatabaseModel* model = GetModel< DatabaseModel >();
   assert( model!=NULL );
 
   // get the tree
@@ -193,8 +193,11 @@ DatabaseBrowserController
       QTreeWidgetItem *    currentDatasetItem = tree->topLevelItem(topIdx)->child(idx);
       QString datasetId =  currentDatasetItem->text(0);
 
+      const DatasetModel* datasetModel = model->FindDatasetModel( datasetId );
+      assert( datasetModel!=NULL );
+
       // check consistency
-      if ( !model->IsDatasetConsistent( datasetId ) )
+      if ( !datasetModel->IsConsistent() )
         {
         // disable inconsistent dataset
         currentDatasetItem->setDisabled(true);

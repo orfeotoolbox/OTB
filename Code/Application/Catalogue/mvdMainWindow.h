@@ -116,17 +116,6 @@ signals:
 // Protected methods.
 protected:
 
-  //
-  // I18nMainWindow overrides.
-
-  /**
-   */
-  virtual void virtual_SetupUI();
-
-  /**
-   */
-  virtual void virtual_ConnectUI();
-
 
 //
 // Protected attributes.
@@ -182,11 +171,30 @@ private:
    */
   GLImageWidget* CreateQuicklookWidget( QGLWidget* sharedGlWidget =NULL );
 
-  /** */
+  /**
+   */
   void InitializeDockWidgets();
 
-  /** */
-  void  InitializeCentralWidget();
+  /**
+   */
+  void InitializeCentralWidget();
+
+  /**
+   */
+  inline
+    const GLImageWidget* GetQuicklookView() const;
+
+  /**
+   */
+  inline
+    GLImageWidget* GetQuicklookView();
+
+  //
+  // I18nMainWindow overrides.
+
+  virtual void virtual_SetupUI();
+
+  virtual void virtual_ConnectUI();
 
 //
 // Private attributes.
@@ -199,15 +207,21 @@ private:
   /**
    */
   QDockWidget* m_DatabaseBrowserDock;
+
+  /**
+   */
   QDockWidget* m_ApplicationsBrowserDock;
+
+  /**
+   */
   QDockWidget* m_DatasetPropertiesDock;
 
   /**
    */
-  GLImageWidget* m_QuicklookView;
+  QDockWidget* m_QuicklookViewDock;
 
   /** */
-  QTabWidget *   m_CentralWidgetTabs;
+  QTabWidget* m_CentralTabWidget;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -233,12 +247,31 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Gui/mvdGLImageWidget.h"
 
 //
 // Some constants.
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+const GLImageWidget*
+MainWindow
+::GetQuicklookView() const
+{
+  return qobject_cast< const GLImageWidget* >( m_QuicklookViewDock->widget() );
+}
+
+/*****************************************************************************/
+inline
+GLImageWidget*
+MainWindow
+::GetQuicklookView()
+{
+  return qobject_cast< GLImageWidget* >( m_QuicklookViewDock->widget() );
+}
 
 } // end namespace 'mvd'
 

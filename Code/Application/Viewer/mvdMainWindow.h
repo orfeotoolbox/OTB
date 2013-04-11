@@ -107,7 +107,7 @@ public:
   virtual ~MainWindow();
   
   QString SelectCacheDir(bool incorrectCacheDir = false);
-  
+
   void OpenImage( QString filename );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
