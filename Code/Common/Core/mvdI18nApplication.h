@@ -196,13 +196,6 @@ public:
    */
   bool MakeCacheDir( const QString& cacheDirStr );
 
-  /**
-   * \brief Get the cache directory.
-   *
-   * \return Return the cache directory.
-   */
-  inline const QDir& GetCacheDir() const;
-
   //
   // APPLICATION SETTINGS.
   //
@@ -270,6 +263,19 @@ public:
 				    int width,
 				    int height );
 
+  /**
+   * \brief Get the cache directory.
+   *
+   * \return Return the cache directory.
+   */
+  inline const QDir& GetCacheDir() const;
+
+  /**
+   */
+  // TODO: Remove method when Viewer/Application is updated to reuse factorized code of I18nApplication.
+  inline QDir& GetCacheDir();
+
+
 //
 // Public attributes.
 public:
@@ -330,11 +336,6 @@ signals:
 //
 // Protected methods.
 protected:
-
-  /**
-   */
-  // TODO: Remove method when Viewer/Application is updated to reuse factorized code of I18nApplication.
-  inline QDir& GetCacheDir();
 
   /**
    */
