@@ -99,7 +99,7 @@ OTBApplicationsModel
 ::FillTree( )
 {
   //
-  // the method called is connected to the widget via a signal. In
+  // this method is connected to the widget via a signal. In
   // ApplicationBrowser, when the map is filled with tags/Apps, a
   // signal is emitted and received by the widget to fill its tree.
   m_ApplicationsBrowser->SearchAvailableApplicationsTags();
