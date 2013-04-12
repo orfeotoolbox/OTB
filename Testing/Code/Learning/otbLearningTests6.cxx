@@ -52,4 +52,5 @@ void RegisterTests()
   REGISTER_TEST(otbNormalBayesMachineLearningModelCanRead);
   REGISTER_TEST(otbDecisionTreeMachineLearningModelCanRead);
   REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelCanRead);
+  REGISTER_TEST(otbKNNMachineLearningModelCanRead);
 }

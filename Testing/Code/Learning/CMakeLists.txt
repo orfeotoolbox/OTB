@@ -684,14 +684,10 @@ IF(OTB_USE_OPENCV)
 	ADD_TEST(leTuRandomForestsMachineLearningModelNew ${LEARNING_TESTS6}
            otbRandomForestsMachineLearningModelNew)
 
-
 	ADD_TEST(leTvRandomForestsMachineLearningModel ${LEARNING_TESTS6}
-         #--compare-ascii ${NOTOL}
-         #${BASELINE_FILES}/RandomForestsMachineLearningModel.txt
-         #${TEMP}/RandomForestsMachineLearningModel.txt
          otbRandomForestsMachineLearningModel
          ${INPUTDATA}/letter.scale
-         ${TEMP}/RandomForestsMachineLearningModel.txt
+         ${TEMP}/rf_model.txt
          )
 
 	ADD_TEST(leTuKNearestNeighborsMachineLearningModelNew ${LEARNING_TESTS6}
@@ -699,15 +695,14 @@ IF(OTB_USE_OPENCV)
            
 	ADD_TEST(leTvKNearestNeighborsMachineLearningModel ${LEARNING_TESTS6}
          otbKNearestNeighborsMachineLearningModel
-         ${INPUTDATA}/letter.scale)
+         ${INPUTDATA}/letter.scale
+         ${TEMP}/knn_model.txt
+         )
 
 	ADD_TEST(leTuSVMMachineLearningModelNew ${LEARNING_TESTS6}
            otbSVMMachineLearningModelNew)
 
 	ADD_TEST(leTvSVMMachineLearningModel ${LEARNING_TESTS6}
-		 --compare-ascii ${NOTOL}
-         ${BASELINE_FILES}/svm_model.txt
-         ${TEMP}/svm_model.txt
          otbSVMMachineLearningModel
          ${INPUTDATA}/letter.scale
          ${TEMP}/svm_model.txt
@@ -717,73 +712,54 @@ IF(OTB_USE_OPENCV)
        	 otbLibSVMMachineLearningModelNew)
            
 	ADD_TEST(leTvLibSVMMachineLearningModel ${LEARNING_TESTS6}
-		 --compare-ascii ${NOTOL}
-	     ${BASELINE_FILES}/libsvm_model.txt
-	     ${TEMP}/libsvm_model.txt
 	     otbLibSVMMachineLearningModel
 	     ${INPUTDATA}/letter.scale
 	     ${TEMP}/libsvm_model.txt
-     )
+     	 )
      
-     ADD_TEST(leTuBoostMachineLearningModelNew ${LEARNING_TESTS6}
+    ADD_TEST(leTuBoostMachineLearningModelNew ${LEARNING_TESTS6}
            otbBoostMachineLearningModelNew)
 
 	ADD_TEST(leTvBoostMachineLearningModel ${LEARNING_TESTS6}
-         #--compare-ascii ${NOTOL}
-         #${BASELINE_FILES}/BoostLearningModel.txt
-         #${TEMP}/BoostMachineLearningModel.txt
          otbBoostMachineLearningModel
          ${INPUTDATA}/letter.scale
-         ${TEMP}/BoostMachineLearningModel.txt
+         ${TEMP}/boost_model.txt
          )
          
     ADD_TEST(leTuANNMachineLearningModelNew ${LEARNING_TESTS6}
          otbANNMachineLearningModelNew)
 
-
 	ADD_TEST(leTvANNMachineLearningModel ${LEARNING_TESTS6}
-         #--compare-ascii ${NOTOL}
-         #${BASELINE_FILES}/ANNMachineLearningModel.txt
-         #${TEMP}/ANNMachineLearningModel.txt
          otbANNMachineLearningModel
          ${INPUTDATA}/letter.scale
-         ${TEMP}/ANNMachineLearningModel.txt
+         ${TEMP}/ann_model.txt
          )
          
      ADD_TEST(leTuNormalBayesMachineLearningModelNew ${LEARNING_TESTS6}
          otbNormalBayesMachineLearningModelNew)
      
      ADD_TEST(leTvNormalBayesMachineLearningModel ${LEARNING_TESTS6}
-         --compare-ascii ${NOTOL}
-         ${BASELINE_FILES}/NormalBayesMachineLearningModel.txt
-         ${TEMP}/NormalBayesMachineLearningModel.txt
          otbNormalBayesMachineLearningModel
          ${INPUTDATA}/letter.scale
-         ${TEMP}/NormalBayesMachineLearningModel.txt
+         ${TEMP}/normalbayes_model.txt
          )
          
      ADD_TEST(leTuDecisionTreeMachineLearningModelNew ${LEARNING_TESTS6}
          otbDecisionTreeMachineLearningModelNew)
      
      ADD_TEST(leTvDecisionTreeMachineLearningModel ${LEARNING_TESTS6}
-         --compare-ascii ${NOTOL}
-         ${BASELINE_FILES}/DecisionTreeMachineLearningModel.txt
-         ${TEMP}/DecisionTreeMachineLearningModel.txt
          otbDecisionTreeMachineLearningModel
          ${INPUTDATA}/letter.scale
-         ${TEMP}/DecisionTreeMachineLearningModel.txt
+         ${TEMP}/decisiontree_model.txt
          )
          
      ADD_TEST(leTuGradientBoostedTreeMachineLearningModelNew ${LEARNING_TESTS6}
          otbGradientBoostedTreeMachineLearningModelNew)
      
      ADD_TEST(leTvGradientBoostedTreeMachineLearningModel ${LEARNING_TESTS6}
-         #--compare-ascii ${NOTOL}
-         #${BASELINE_FILES}/GradientBoostedTreeMachineLearningModel.txt
-         #${TEMP}/GradientBoostedTreeMachineLearningModel.txt
          otbGradientBoostedTreeMachineLearningModel
          ${INPUTDATA}/letter.scale
-         ${TEMP}/GradientBoostedTreeMachineLearningModel.txt
+         ${TEMP}/gbt_model.txt
          )
      
      ADD_TEST(leTuImageClassificationFilterNew ${LEARNING_TESTS6}
@@ -811,48 +787,67 @@ IF(OTB_USE_OPENCV)
        	 
      ADD_TEST(leTuLibSVMMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbLibSVMMachineLearningModelCanRead
-       	 ${INPUTDATA}/svm_model_image
+       	 ${TEMP}/libsvm_model.txt
        	 )
+     SET_TESTS_PROPERTIES(leTuLibSVMMachineLearningModelCanRead
+     					PROPERTIES DEPENDS leTvLibSVMMachineLearningModel)
        	 
      ADD_TEST(leTuSVMMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbSVMMachineLearningModelCanRead
-       	 ${INPUTDATA}/opencv_svm_model.txt
+       	 ${TEMP}/svm_model.txt
        	 )
-     
+     SET_TESTS_PROPERTIES(leTuSVMMachineLearningModelCanRead
+     					PROPERTIES DEPENDS leTvSVMMachineLearningModel)
+     					     
      ADD_TEST(leTuRandomForestsMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbRandomForestsMachineLearningModelCanRead
-       	 ${TEMP}/RandomForestsMachineLearningModel.txt
+       	 ${TEMP}/rf_model.txt
        	 )
      SET_TESTS_PROPERTIES(leTuRandomForestsMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvRandomForestsMachineLearningModel)
      					
      ADD_TEST(leTuBoostMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbBoostMachineLearningModelCanRead
-       	 ${INPUTDATA}/boost_model.txt
+       	 ${TEMP}/boost_model.txt
        	 )
-       	 
+     SET_TESTS_PROPERTIES(leTuBoostMachineLearningModelCanRead
+     					PROPERTIES DEPENDS leTvBoostMachineLearningModel)
+     	       	 
      ADD_TEST(leTuANNMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbNeuralNetworkMachineLearningModelCanRead
-       	 ${INPUTDATA}/NeuralNetworkMachineLearningModel.txt
+       	 ${TEMP}/ann_model.txt
        	 )
-       	 
+     SET_TESTS_PROPERTIES(leTuANNMachineLearningModelCanRead
+     					PROPERTIES DEPENDS leTvANNMachineLearningModel) 
+     					      	 
      ADD_TEST(leTuNormalBayesMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbNormalBayesMachineLearningModelCanRead
-       	 ${INPUTDATA}/NormalBayesMachineLearningModel.txt
+       	 ${TEMP}/normalbayes_model.txt
        	 )
-       	 
+     SET_TESTS_PROPERTIES(leTuNormalBayesMachineLearningModelCanRead
+     					PROPERTIES DEPENDS leTvNormalBayesMachineLearningModel) 
+     					       	 
 	ADD_TEST(leTuDecisionTreeMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbDecisionTreeMachineLearningModelCanRead
-       	 ${INPUTDATA}/DecisionTreeMachineLearningModel.txt
+       	 ${TEMP}/decisiontree_model.txt
        	 )
-       	 
+     SET_TESTS_PROPERTIES(leTuDecisionTreeMachineLearningModelCanRead
+     					PROPERTIES DEPENDS leTvDecisionTreeMachineLearningModel) 
+     					       	 
     ADD_TEST(leTuGradientBoostedTreeMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbGradientBoostedTreeMachineLearningModelCanRead
-       	 ${TEMP}/GradientBoostedTreeMachineLearningModel.txt
+       	 ${TEMP}/gbt_model.txt
        	 )
     SET_TESTS_PROPERTIES(leTuGradientBoostedTreeMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvGradientBoostedTreeMachineLearningModel)
-     
+    
+    ADD_TEST(leTuKNNMachineLearningModelCanRead ${LEARNING_TESTS6}
+       	 otbKNNMachineLearningModelCanRead
+       	 ${TEMP}/knn_model.txt
+       	 )
+    SET_TESTS_PROPERTIES(leTuKNNMachineLearningModelCanRead
+     					PROPERTIES DEPENDS leTvKNearestNeighborsMachineLearningModel)
+     					
 ENDIF(OTB_USE_OPENCV)
 
 # Testing srcs
