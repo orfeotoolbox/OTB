@@ -15,120 +15,14 @@
 
  =========================================================================*/
 
-#include "otbWrapperApplication.h"
-#include "otbWrapperApplicationFactory.h"
-
-#include <iostream>
-#include "otbConfigurationFile.h"
-
-//Image
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include "otbVectorData.h"
-#include "otbListSampleGenerator.h"
-
-// ListSample
-#include "itkListSample.h"
-#include "itkVariableLengthVector.h"
-#include "itkFixedArray.h"
-
-//Estimator
-#include "otbKNearestNeighborsMachineLearningModel.h"
-#include "otbRandomForestsMachineLearningModel.h"
-#include "otbSVMMachineLearningModel.h"
-#include "otbLibSVMMachineLearningModel.h"
-#include "otbBoostMachineLearningModel.h"
-
-// Statistic XML Reader
-#include "otbStatisticsXMLFileReader.h"
-
-// Validation
-#include "otbConfusionMatrixCalculator.h"
-
-#include "itkTimeProbe.h"
-#include "otbStandardFilterWatcher.h"
-
-// Normalize the samples
-#include "otbShiftScaleSampleListFilter.h"
-
-// List sample concatenation
-#include "otbConcatenateSampleListFilter.h"
-
-// Balancing ListSample
-#include "otbListSampleToBalancedListSampleFilter.h"
-
-// VectorData projection filter
-#include "otbVectorDataProjectionFilter.h"
-
-// Extract a ROI of the vectordata
-#include "otbVectorDataIntoImageProjectionFilter.h"
-
-// Elevation handler
-#include "otbWrapperElevationParametersHandler.h"
+#include "otbTrainMachineLearningImagesClassifier.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-class TrainMachineLearningImagesClassifier: public Application
-{
-public:
-  /** Standard class typedefs. */
-  typedef TrainMachineLearningImagesClassifier Self;
-  typedef Application Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
-  /** Standard macro */
-  itkNewMacro(Self)
-;
-
-  itkTypeMacro(TrainMachineLearningImagesClassifier, otb::Application)
-;
-
-  typedef otb::Image<FloatVectorImageType::InternalPixelType, 2> ImageReaderType;
-
-  typedef FloatVectorImageType::PixelType PixelType;
-  typedef FloatVectorImageType VectorImageType;
-  typedef FloatImageType ImageType;
-
-  // Training vectordata
-  typedef itk::VariableLengthVector<ImageType::PixelType> MeasurementType;
-
-  // SampleList manipulation
-  typedef otb::ListSampleGenerator<VectorImageType, VectorDataType> ListSampleGeneratorType;
-
-  typedef ListSampleGeneratorType::ListSampleType ListSampleType;
-  typedef ListSampleGeneratorType::LabelType LabelType;
-  typedef ListSampleGeneratorType::ListLabelType LabelListSampleType;
-  typedef otb::Statistics::ConcatenateSampleListFilter<ListSampleType> ConcatenateListSampleFilterType;
-  typedef otb::Statistics::ConcatenateSampleListFilter<LabelListSampleType> ConcatenateLabelListSampleFilterType;
-
-  // Statistic XML file Reader
-  typedef otb::StatisticsXMLFileReader<MeasurementType> StatisticsReader;
-
-  // Enhance List Sample  typedef otb::Statistics::ListSampleToBalancedListSampleFilter<ListSampleType, LabelListSampleType>      BalancingListSampleFilterType;
-  typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
-
-  // Machine Learning models
-  typedef otb::RandomForestsMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> RandomForestType;
-  typedef otb::KNearestNeighborsMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> KNNType;
-  typedef otb::SVMMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> SVMType;
-  typedef otb::LibSVMMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> LibSVMType;
-  typedef otb::BoostMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> BoostType;
-
-  // Estimate performance on validation sample
-  typedef otb::ConfusionMatrixCalculator<LabelListSampleType, LabelListSampleType> ConfusionMatrixCalculatorType;
-
-  // VectorData projection filter
-  typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataProjectionFilterType;
-
-  // Extract ROI
-  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, VectorImageType> VectorDataReprojectionType;
-
-private:
-  void DoInit()
+  void TrainMachineLearningImagesClassifier::DoInit()
   {
     SetName("TrainMachineLearningImagesClassifier");
     SetDescription(
@@ -140,7 +34,7 @@ private:
         "This application performs a classifier training from multiple pairs of input images and training vector data. Samples are composed of pixel values in each band optionally centered and reduced using XML statistics file produced by the ComputeImagesStatistics application.\n The training vector data must contain polygons with a positive integer field representing the class label. Name of the field can be set using the \"Class label field\" parameter. Training and validation sample lists are built such that each class is equally represented in both lists. One parameter allows to control the ratio between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and validation sets per class and per image.\n Several classifier parameters can be set depending on the classifier. In the validation process, the confusion matrix is organized the following way: rows = reference labels, columns = produced labels.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso(" OpenCV documentation for machine learning http://docs.opencv.org/modules/ml/doc/ml.html ");
 
     AddDocTag(Tags::Learning);
 
@@ -194,70 +88,32 @@ private:
     SetParameterDescription("classifier", "Choice of the classifier to used.");
 
     //Group LibSVM
-    AddChoice("classifier.libsvm", "LibSVM classifier");
-    //AddParameter(ParameterType_Group,"libsvm","LibSVM classifier parameters");
-    SetParameterDescription("classifier.libsvm", "This group of parameters allows to set SVM classifier parameters.");
-    AddParameter(ParameterType_Choice, "classifier.libsvm.k", "SVM Kernel Type");
-    AddChoice("classifier.libsvm.k.linear", "Linear");
-    AddChoice("classifier.libsvm.k.rbf", "Gaussian radial basis function");
-    AddChoice("classifier.libsvm.k.poly", "Polynomial");
-    AddChoice("classifier.libsvm.k.sigmoid", "Sigmoid");
-    SetParameterString("classifier.libsvm.k", "linear");
-    SetParameterDescription("classifier.libsvm.k", "SVM Kernel Type.");
-    AddParameter(ParameterType_Float, "classifier.libsvm.c", "Cost parameter C.");
-    SetParameterFloat("classifier.libsvm.c", 1.0);
-    SetParameterDescription(
-        "classifier.libsvm.c",
-        "SVM models have a cost parameter C (1 by default) to control the trade-off between training errors and forcing rigid margins.");
-    AddParameter(ParameterType_Empty, "classifier.libsvm.opt", "parameters optimization");
-    MandatoryOff("classifier.libsvm.opt");
-    SetParameterDescription("classifier.libsvm.opt", "SVM optimization flag");
+    InitLibSVMParams();
 
     //Group SVM (openCV)
-    AddChoice("classifier.svm", "SVM classifier (OpenCV)");
-    //AddParameter(ParameterType_Group,"svm","SVM classifier parameters (OpenCV)");
-    SetParameterDescription("classifier.svm", "This group of parameters allows to set SVM classifier parameters.");
-    AddParameter(ParameterType_Choice, "classifier.svm.m", "SVM Model Type");
-    AddChoice("classifier.svm.m.csvc", "C support vector classification");
-    AddChoice("classifier.svm.m.nusvc", "Nu support vector classification");
-    AddChoice("classifier.svm.m.oneclass", "Distribution estimation (One Class SVM)");
-    //AddChoice("classifier.svm.m.epssvr", "Epsilon Support Vector Regression");
-    //AddChoice("classifier.svm.m.nusvr", "Nu Support Vector Regression");
-    SetParameterString("classifier.svm.m", "csvc");
-    SetParameterDescription("classifier.svm.m", "Type of SVM formulation.");
-    AddParameter(ParameterType_Choice, "classifier.svm.k", "SVM Kernel Type");
-    AddChoice("classifier.svm.k.linear", "Linear");
-    AddChoice("classifier.svm.k.rbf", "Gaussian radial basis function");
-    AddChoice("classifier.svm.k.poly", "Polynomial");
-    AddChoice("classifier.svm.k.sigmoid", "Sigmoid");
-    SetParameterString("classifier.svm.k", "linear");
-    SetParameterDescription("classifier.svm.k", "SVM Kernel Type.");
-    AddParameter(ParameterType_Float, "classifier.svm.c", "Cost parameter C.");
-    SetParameterFloat("classifier.svm.c", 1.0);
-    SetParameterDescription(
-        "classifier.svm.c",
-        "SVM models have a cost parameter C (1 by default) to control the trade-off between training errors and forcing rigid margins.");
-    AddParameter(ParameterType_Float, "classifier.svm.nu",
-                 "Parameter nu of a SVM optimization problem (NU_SVC / ONE_CLASS / NU_SVR).");
-    SetParameterFloat("classifier.svm.nu", 0.0);
-    SetParameterDescription("classifier.svm.nu", "Parameter nu of a SVM optimization problem.");
-    //AddParameter(ParameterType_Float, "classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
-    //SetParameterFloat("classifier.svm.p", 0.0);
-    //SetParameterDescription("classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
-    AddParameter(ParameterType_Float, "classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID).");
-    SetParameterFloat("classifier.svm.coef0", 0.0);
-    SetParameterDescription("classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID).");
-    AddParameter(ParameterType_Float, "classifier.svm.gamma",
-                 "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
-    SetParameterFloat("classifier.svm.gamma", 1.0);
-    SetParameterDescription("classifier.svm.gamma", "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
-    AddParameter(ParameterType_Float, "classifier.svm.degree", "Parameter degree of a kernel function (POLY).");
-    SetParameterFloat("classifier.svm.degree", 0.0);
-    SetParameterDescription("classifier.svm.degree", "Parameter degree of a kernel function (POLY).");
+    InitSVMParams();
 
     //Group Boost
-    AddChoice("classifier.boost", "Boost classifier");
-    SetParameterDescription("classifier.boost", "This group of parameters allows to set Boost classifier parameters.");
+    InitBoostParams();
+
+    //Group Decision Tree
+    InitDecisionTreeParams();
+
+    //Group Gradient Boosted Tree
+    InitGradientBoostedTreeParams();
+
+    //Group Neural Network
+    InitNeuralNetworkParams();
+
+    //Group Normal Bayes
+    InitNormalBayesParams();
+
+    //Group Random Forest
+    InitRandomForestsParams();
+
+    //Group KNN
+    InitKNNParams();
+
 
     AddRANDParameter();
     // Doc example parameter settings
@@ -271,12 +127,12 @@ private:
     SetDocExampleParameterValue("io.out", "svmModelQB1.svm");
   }
 
-  void DoUpdateParameters()
+  void TrainMachineLearningImagesClassifier::DoUpdateParameters()
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
+  void TrainMachineLearningImagesClassifier::LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
   {
     ConfusionMatrixCalculatorType::ConfusionMatrixType matrix = confMatCalc->GetConfusionMatrix();
 
@@ -348,150 +204,18 @@ private:
     otbAppLogINFO("Confusion matrix (rows = reference labels, columns = produced labels):\n" << os.str());
   }
 
-  void TrainLibSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
-  {
-    LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
-    libSVMClassifier->SetInputListSample(trainingListSample);
-    libSVMClassifier->SetTargetListSample(trainingLabeledListSample);
-    //SVM Option
-    //TODO : Add other options ?
-    if (IsParameterEnabled("classifier.libsvm.opt"))
-      {
-      libSVMClassifier->SetParameterOptimization(true);
-      }
-    libSVMClassifier->SetC(GetParameterFloat("classifier.libsvm.c"));
-
-    switch (GetParameterInt("classifier.libsvm.k"))
-      {
-      case 0: // LINEAR
-        libSVMClassifier->SetKernelType(LINEAR);
-        break;
-      case 1: // RBF
-        libSVMClassifier->SetKernelType(RBF);
-        break;
-      case 2: // POLY
-        libSVMClassifier->SetKernelType(POLY);
-        break;
-      case 3: // SIGMOID
-        libSVMClassifier->SetKernelType(SIGMOID);
-        break;
-      default: // DEFAULT = LINEAR
-        libSVMClassifier->SetKernelType(LINEAR);
-        break;
-      }
-    libSVMClassifier->Train();
-    libSVMClassifier->Save(GetParameterString("io.out"));
-    //otbAppLogINFO( "Learning done -> Final SVM accuracy: " << libSVMClassifier->GetFinalCrossValidationAccuracy() << std::endl);
-  }
-
-  void ClassifyLibSVM(ListSampleType::Pointer validationListSample, LabelListSampleType::Pointer predictedList)
+  void TrainMachineLearningImagesClassifier::Classify(ListSampleType::Pointer validationListSample, LabelListSampleType::Pointer predictedList)
   {
     //Classification
-    LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
-    libSVMClassifier->Load(GetParameterString("io.out"));
-    libSVMClassifier->SetInputListSample(validationListSample);
-    libSVMClassifier->SetTargetListSample(predictedList);
-    libSVMClassifier->PredictAll();
+    ModelPointerType model = MachineLearningModelFactoryType::CreateMachineLearningModel(GetParameterString("io.out"),
+                                                                              MachineLearningModelFactoryType::ReadMode);
+    model->Load(GetParameterString("io.out"));
+    model->SetInputListSample(validationListSample);
+    model->SetTargetListSample(predictedList);
+    model->PredictAll();
   }
 
-  void TrainSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
-  {
-    std::cout << "svm open CV" << std::endl;
-    SVMType::Pointer SVMClassifier = SVMType::New();
-    SVMClassifier->SetInputListSample(trainingListSample);
-    SVMClassifier->SetTargetListSample(trainingLabeledListSample);
-    switch (GetParameterInt("classifier.svm.k"))
-      {
-      case 0: // LINEAR
-        SVMClassifier->SetKernelType(CvSVM::LINEAR);
-        std::cout << "CvSVM::LINEAR = " << CvSVM::LINEAR << std::endl;
-        break;
-      case 1: // RBF
-        SVMClassifier->SetKernelType(CvSVM::RBF);
-        std::cout << "CvSVM::RBF = " << CvSVM::RBF << std::endl;
-        break;
-      case 2: // POLY
-        SVMClassifier->SetKernelType(CvSVM::POLY);
-        std::cout << "CvSVM::POLY = " << CvSVM::POLY << std::endl;
-        break;
-      case 3: // SIGMOID
-        SVMClassifier->SetKernelType(CvSVM::SIGMOID);
-        std::cout << "CvSVM::SIGMOID = " << CvSVM::SIGMOID << std::endl;
-        break;
-      default: // DEFAULT = LINEAR
-        SVMClassifier->SetKernelType(CvSVM::LINEAR);
-        std::cout << "CvSVM::LINEAR = " << CvSVM::LINEAR << std::endl;
-        break;
-      }
-    switch (GetParameterInt("classifier.svm.m"))
-      {
-      case 0: // C_SVC
-        SVMClassifier->SetSVMType(CvSVM::C_SVC);
-        std::cout << "CvSVM::C_SVC = " << CvSVM::C_SVC << std::endl;
-        break;
-      case 1: // NU_SVC
-        SVMClassifier->SetSVMType(CvSVM::NU_SVC);
-        std::cout << "CvSVM::NU_SVC = " << CvSVM::NU_SVC << std::endl;
-        break;
-      case 2: // ONE_CLASS
-        SVMClassifier->SetSVMType(CvSVM::ONE_CLASS);
-        std::cout << "CvSVM::ONE_CLASS = " << CvSVM::ONE_CLASS << std::endl;
-        break;
-        /*case 3: // EPS_SVR
-         SVMClassifier->SetSVMType(CvSVM::EPS_SVR);
-         std::cout<<"CvSVM::EPS_SVR = "<<CvSVM::EPS_SVR<<std::endl;
-         break;
-         case 4: // NU_SVR
-         SVMClassifier->SetSVMType(CvSVM::NU_SVR);
-         std::cout<<"CvSVM::NU_SVR = "<<CvSVM::NU_SVR<<std::endl;
-         break; */
-      default: // DEFAULT = C_SVC
-        SVMClassifier->SetSVMType(CvSVM::C_SVC);
-        std::cout << "CvSVM::C_SVC = " << CvSVM::C_SVC << std::endl;
-        break;
-      }
-    SVMClassifier->SetC(GetParameterFloat("classifier.svm.c"));
-    SVMClassifier->SetNu(GetParameterFloat("classifier.svm.nu"));
-    //SVMClassifier->SetP(GetParameterFloat("classifier.svm.p"));
-    SVMClassifier->SetCoef0(GetParameterFloat("classifier.svm.coef0"));
-    SVMClassifier->SetGamma(GetParameterFloat("classifier.svm.gamma"));
-    SVMClassifier->SetDegree(GetParameterFloat("classifier.svm.degree"));
-    SVMClassifier->Train();
-    SVMClassifier->Save(GetParameterString("io.out"));
-  }
-
-  void ClassifySVM(ListSampleType::Pointer validationListSample, LabelListSampleType::Pointer predictedList)
-  {
-    //Classification
-    SVMType::Pointer SVMClassifier = SVMType::New();
-    SVMClassifier->Load(GetParameterString("io.out"));
-    SVMClassifier->SetInputListSample(validationListSample);
-    SVMClassifier->SetTargetListSample(predictedList);
-    SVMClassifier->PredictAll();
-  }
-
-  void TrainBoost(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
-  {
-    BoostType::Pointer boostClassifier = BoostType::New();
-    boostClassifier->SetInputListSample(trainingListSample);
-    boostClassifier->SetTargetListSample(trainingLabeledListSample);
-
-    boostClassifier->Train();
-    boostClassifier->Save(GetParameterString("io.out"));
-    //otbAppLogINFO( "Learning done -> Final SVM accuracy: " << libSVMClassifier->GetFinalCrossValidationAccuracy() << std::endl);
-  }
-
-  void ClassifyBoost(ListSampleType::Pointer validationListSample, LabelListSampleType::Pointer predictedList)
-  {
-    //Classification
-    BoostType::Pointer boostClassifier = BoostType::New();
-    boostClassifier->Load(GetParameterString("io.out"));
-    boostClassifier->SetInputListSample(validationListSample);
-    boostClassifier->SetTargetListSample(predictedList);
-    boostClassifier->PredictAll();
-  }
-
-  void DoExecute()
+  void TrainMachineLearningImagesClassifier::DoExecute()
   {
     GetLogger()->Debug("Entering DoExecute\n");
     //Create training and validation for list samples and label list samples
@@ -651,24 +375,44 @@ private:
     if (classifierType == "libsvm")
       {
       TrainLibSVM(trainingListSample, trainingLabeledListSample);
-      ClassifyLibSVM(validationListSample, predictedList);
       }
-    else
-      if (classifierType == "svm")
-        {
-        TrainSVM(trainingListSample, trainingLabeledListSample);
-        ClassifySVM(validationListSample, predictedList);
-        }
-      else
-        if (classifierType == "boost")
-          {
-          TrainBoost(trainingListSample, trainingLabeledListSample);
-          ClassifyBoost(validationListSample, predictedList);
-          }
+    else if (classifierType == "svm")
+      {
+      TrainSVM(trainingListSample, trainingLabeledListSample);
+      }
+    else if (classifierType == "boost")
+      {
+      TrainBoost(trainingListSample, trainingLabeledListSample);
+      }
+    else if (classifierType == "dt")
+      {
+      TrainDecisionTree(trainingListSample, trainingLabeledListSample);
+      }
+    else if (classifierType == "gbt")
+      {
+      TrainGradientBoostedTree(trainingListSample, trainingLabeledListSample);
+      }
+    else if (classifierType == "ann")
+      {
+      TrainNeuralNetwork(trainingListSample, trainingLabeledListSample);
+      }
+    else if (classifierType == "bayes")
+      {
+      TrainNormalBayes(trainingListSample, trainingLabeledListSample);
+      }
+    else if (classifierType == "rf")
+      {
+      TrainRandomForests(trainingListSample, trainingLabeledListSample);
+      }
+    /*else if (classifierType == "knn")
+      {
+      TrainKNN(trainingListSample, trainingLabeledListSample);
+      }  */
 
     //--------------------------
     // Performances estimation
     //--------------------------
+    Classify(validationListSample, predictedList);
 
     ConfusionMatrixCalculatorType::Pointer confMatCalc = ConfusionMatrixCalculatorType::New();
 
@@ -696,11 +440,8 @@ private:
 
   }
 
-  VectorDataReprojectionType::Pointer vdreproj;
-};
 
 }
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::TrainMachineLearningImagesClassifier)
-

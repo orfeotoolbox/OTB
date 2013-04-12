@@ -83,14 +83,14 @@ public:
   itkSetMacro(ActivateFunction, int);
 
   /** Setters/Getters to the alpha parameter of the activation function
-   *  Default is 1
+   *  Default is 0.
    *  \see http://docs.opencv.org/modules/ml/doc/neural_networks.html
    */
   itkGetMacro(Alpha, double);
   itkSetMacro(Alpha, double);
 
   /** Setters/Getters to the beta parameter of the activation function
-   *  Default is 1
+   *  Default is 0.
    *  \see http://docs.opencv.org/modules/ml/doc/neural_networks.html
    */
   itkGetMacro(Beta, double);

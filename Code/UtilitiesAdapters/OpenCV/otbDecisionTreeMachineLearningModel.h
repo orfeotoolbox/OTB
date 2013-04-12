@@ -55,6 +55,9 @@ public:
   itkTypeMacro(DecisionTreeMachineLearningModel, itk::MachineLearningModel);
 
   /** Setters/Getters to the maximum depth of the tree.
+   * The maximum possible depth of the tree. That is the training algorithms attempts to split a node
+   * while its depth is less than MaxDepth. The actual depth may be smaller if the other termination criteria
+   * are met, and/or if the tree is pruned.
    * Default is INT_MAX
    * \see http://docs.opencv.org/modules/ml/doc/decision_trees.html#CvDTreeParams::CvDTreeParams%28%29
    */
@@ -62,6 +65,7 @@ public:
   itkSetMacro(MaxDepth, int);
 
   /** Setters/Getters to the minimum number of sample in each node.
+   * If the number of samples in a node is less than this parameter then the node will not be split.
    * Default is 10
    * \see http://docs.opencv.org/modules/ml/doc/decision_trees.html#CvDTreeParams::CvDTreeParams%28%29
    */

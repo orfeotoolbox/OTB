@@ -99,7 +99,8 @@ public:
   * between an estimated value in a node and values of train samples in this node
   * are less than this parameter then the node will not be split */
   itkGetMacro(RegressionAccuracy, double);
-  itkSetMacro(RegressionAccuracy, bool);
+  itkSetMacro(RegressionAccuracy, double);
+
   itkGetMacro(ComputeSurrogateSplit, bool);
   itkSetMacro(ComputeSurrogateSplit, bool);
   /* Cluster possible values of a categorical variable into K \leq

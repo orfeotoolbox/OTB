@@ -57,7 +57,7 @@ public:
   /** Setters/Getters to the Boost type
    *  It can be CvBoost::DISCRETE, CvBoost::REAL, CvBoost::LOGIT, CvBoost::GENTLE
    *  Default is CvBoost::REAL.
-   *   see @http://docs.opencv.org/modules/ml/doc/boosting.html#cvboostparams-cvboostparams
+   *  \see http://docs.opencv.org/modules/ml/doc/boosting.html#cvboostparams-cvboostparams
    */
   itkGetMacro(BoostType, int);
   itkSetMacro(BoostType, int);
@@ -65,14 +65,14 @@ public:
   /** Setters/Getters to the split criteria
    *  It can be CvBoost::DEFAULT, CvBoost::GINI, CvBoost::MISCLASS, CvBoost::SQERR
    *  Default is CvBoost::DEFAULT. It uses default value according to \c BoostType
-   *   see @http://docs.opencv.org/modules/ml/doc/boosting.html#cvboost-predict
+   *  \see http://docs.opencv.org/modules/ml/doc/boosting.html#cvboost-predict
    */
   itkGetMacro(SplitCrit, int);
   itkSetMacro(SplitCrit, int);
 
   /** Setters/Getters to the number of weak classifiers.
    *  Default is 100.
-   *  see @http://docs.opencv.org/modules/ml/doc/boosting.html#cvboostparams-cvboostparams
+   *  \see http://docs.opencv.org/modules/ml/doc/boosting.html#cvboostparams-cvboostparams
    */
   itkGetMacro(WeakCount, int);
   itkSetMacro(WeakCount, int);
@@ -82,14 +82,14 @@ public:
    *  Samples with summary weight \leq 1 - WeightTrimRate do not participate in the next iteration of training.
    *  Set this parameter to 0 to turn off this functionality.
    *  Default is 0.95
-   *  see @http://docs.opencv.org/modules/ml/doc/boosting.html#cvboostparams-cvboostparams
+   *  \see http://docs.opencv.org/modules/ml/doc/boosting.html#cvboostparams-cvboostparams
    */
   itkGetMacro(WeightTrimRate, double);
   itkSetMacro(WeightTrimRate, double);
 
   /** Setters/Getters to the maximum depth of the tree.
    * Default is 1
-   *  see @http://docs.opencv.org/modules/ml/doc/decision_trees.html#CvDTreeParams::CvDTreeParams%28%29
+   * \see http://docs.opencv.org/modules/ml/doc/decision_trees.html#CvDTreeParams::CvDTreeParams%28%29
    */
   itkGetMacro(MaxDepth, int);
   itkSetMacro(MaxDepth, int);
