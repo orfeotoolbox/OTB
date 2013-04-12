@@ -195,6 +195,14 @@ private:
   inline
     GLImageWidget* GetQuicklookView();
 
+  /**
+   */
+  void ConnectImageViews();
+
+  /**
+   */
+  void ConnectViewMenu();
+
   //
   // I18nMainWindow overrides.
 

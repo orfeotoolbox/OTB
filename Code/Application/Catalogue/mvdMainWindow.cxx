@@ -126,11 +126,98 @@ MainWindow
 
   InitializeDockWidgets();
 }
-
 /*****************************************************************************/
 void
 MainWindow
 ::virtual_ConnectUI()
+{
+  ConnectViewMenu();
+
+#ifdef OTB_WRAP_QT
+  //
+  // Done here cause needed to be done once and only once.
+  SetControllerModel(
+    m_OtbApplicationsBrowserDock, 
+    CatalogueApplication::Instance()->GetOTBApplicationsModel()
+  );
+
+  //
+  // need to get the ApplicationToolBox widget to setup connections.
+  // a double click on the tree widget should trigger a signal connected
+  // to this MainWindow slot. this slot will be in charge of getting the
+  // widget of the application selected, and show it in the
+  // MainWindow centralView.  
+  
+  // # Step 1 : get the ApplicationToolBoxWidget
+  ApplicationsToolBox* appWidget = 
+    qobject_cast< ApplicationsToolBox * >( 
+      m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >() 
+    );
+  assert( appWidget!=NULL );
+  
+  // # Step 2 : setup connections
+  QObject::connect(
+    appWidget,
+    SIGNAL( ApplicationToLaunchSelected(const QString &) ),
+    this,
+    SLOT( OnApplicationToLaunchSelected(const QString &) )
+  );
+
+  // # Step 3 : if OTB applications has any output, it may be 
+  // ???
+#endif
+
+  //
+  // close tabs handling
+  QObject::connect(
+    m_CentralTabWidget,
+    SIGNAL( tabCloseRequested( int ) ),
+    this,
+    SLOT( OnTabCloseRequested( int ) )
+  );
+
+  ConnectImageViews();
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::ConnectImageViews()
+{
+  // Access the quicklook-view.
+  GLImageWidget* quicklookView = GetQuicklookView();
+  assert( quicklookView!=NULL );
+
+  //
+  // Connect image-view manipulator to quicklook-view renderer to
+  // handle viewportRegionChanged() signals.
+  QObject::connect(
+    m_ImageView->GetImageViewManipulator(),
+    SIGNAL(
+      ViewportRegionRepresentationChanged( const PointType&, const PointType& )
+    ),
+    // to:
+    quicklookView->GetImageModelRenderer(),
+    SLOT(
+      OnViewportRegionRepresentationChanged( const PointType&, const PointType& )
+    )
+    );
+
+  // Connect quicklook-view manipulator to image-view renderer to
+  // handle mousePressEventpressed().
+  QObject::connect(
+    quicklookView->GetImageViewManipulator(),
+    SIGNAL( ViewportRegionChanged( double, double ) ),
+    // to:
+    m_ImageView->GetImageViewManipulator(),
+    SLOT( OnViewportRegionChanged( double, double ) )
+  );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::ConnectViewMenu()
 {
   // Connect quicklook-view dock-widget toggle view action to
   // menu-item action.
@@ -244,79 +331,9 @@ MainWindow
     m_OtbApplicationsBrowserDock,
     SLOT( setVisible( bool ) )
   );
-
-  //
-  // Done here cause needed to be done once and only once.
-  SetControllerModel(
-    m_OtbApplicationsBrowserDock, 
-    CatalogueApplication::Instance()->GetOTBApplicationsModel()
-  );
-
-  //
-  // need to get the ApplicationToolBox widget to setup connections.
-  // a double click on the tree widget should trigger a signal connected
-  // to this MainWindow slot. this slot will be in charge of getting the
-  // widget of the application selected, and show it in the
-  // MainWindow centralView.  
-  
-  // # Step 1 : get the ApplicationToolBoxWidget
-  ApplicationsToolBox* appWidget = 
-    qobject_cast< ApplicationsToolBox * >( 
-      m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >() 
-    );
-  assert( appWidget!=NULL );
-  
-  // # Step 2 : setup connections
-  QObject::connect(
-    appWidget,
-    SIGNAL( ApplicationToLaunchSelected(const QString &) ),
-    this,
-    SLOT( OnApplicationToLaunchSelected(const QString &) )
-  );
-
-  // # Step 3 : if OTB applications has any output, it may be 
-  // ???
-
 #endif
-
-  //
-  // close tabs handling
-  QObject::connect(
-    m_CentralTabWidget,
-    SIGNAL( tabCloseRequested( int ) ),
-    this,
-    SLOT( OnTabCloseRequested( int ) )
-  );
-
-  // Access the quicklook-view.
-  GLImageWidget* quicklookView = GetQuicklookView();
-  assert( quicklookView!=NULL );
-
-  //
-  // Connect image-view manipulator to quicklook-view renderer to
-  // handle viewportRegionChanged() signals.
-  QObject::connect(
-    m_ImageView->GetImageViewManipulator(),
-    SIGNAL(
-      ViewportRegionRepresentationChanged( const PointType&, const PointType& )
-    ),
-    // to:
-    quicklookView->GetImageModelRenderer(),
-    SLOT(
-      OnViewportRegionRepresentationChanged( const PointType&, const PointType& )
-    )
-    );
-
-  // Connect quicklook-view manipulator to image-view renderer to
-  // handle mousePressEventpressed().
-  QObject::connect(
-    quicklookView->GetImageViewManipulator(),
-    SIGNAL( ViewportRegionChanged( double, double ) ),
-    // to:
-    m_ImageView->GetImageViewManipulator(),
-    SLOT( OnViewportRegionChanged( double, double ) )
-  );
 }
+
 
 /*****************************************************************************/
 void
