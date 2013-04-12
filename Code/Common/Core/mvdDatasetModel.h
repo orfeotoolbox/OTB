@@ -407,7 +407,12 @@ const AbstractImageModel*
 DatasetModel
 ::GetSelectedImageModel() const
 {
-  return GetImageModels().first();
+  DatasetModel::ConstAbstractImageModelList imageModels( GetImageModels() );
+
+  return
+    imageModels.isEmpty()
+    ? NULL
+    : GetImageModels().first();
 }
 
 /*****************************************************************************/
@@ -416,7 +421,12 @@ AbstractImageModel*
 DatasetModel
 ::GetSelectedImageModel()
 {
-  return GetImageModels().first();
+  DatasetModel::AbstractImageModelList imageModels( GetImageModels() );
+
+  return
+    imageModels.isEmpty()
+    ? NULL
+    : GetImageModels().first();
 }
 
 /*****************************************************************************/

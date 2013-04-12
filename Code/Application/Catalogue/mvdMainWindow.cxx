@@ -467,8 +467,15 @@ MainWindow
   // Check that NULL==NULL or (DatabaseModel*)==(AbstractModel*)
   assert( databaseModel==I18nApplication::Instance()->GetModel() );
 
+  // Exit, if there were no previously set database model.
   if( databaseModel==NULL )
     return;
+
+  // Force to disconnect previously selected dataset-model before
+  // database-model is connected.
+  //
+  // N.B.: This will cause UI controllers to disable widgets.
+  OnAboutToChangeSelectedDatasetModel( NULL );
 
   // Disonnect database-model from main-window when selected
   // dataset-model is about to change.
@@ -525,6 +532,12 @@ MainWindow
     this,
     SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
   );
+
+  // Force to onnect selected dataset-model after database-model is
+  // connected.
+  //
+  // N.B.: This will cause UI controllers to disable widgets.
+  OnSelectedDatasetModelChanged( databaseModel->GetSelectedDatasetModel() );
 }
 
 /*****************************************************************************/
