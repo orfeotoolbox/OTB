@@ -41,8 +41,10 @@ public:
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
 
-protected slots:
+public slots:
   void SetFileName( const QString& value );
+
+protected slots:
   void SelectFile();
   void SetPixelType(int pixelType);
 

@@ -35,7 +35,11 @@ QtWidgetOutputImageParameter::~QtWidgetOutputImageParameter()
 
 void QtWidgetOutputImageParameter::DoUpdateGUI()
 {
-
+  // Update the lineEdit
+  if (m_Input->text() != m_OutputImageParam->GetFileName())
+    {
+    m_Input->setText(m_OutputImageParam->GetFileName());
+    }
 }
 
 void QtWidgetOutputImageParameter::DoCreateWidget()
@@ -44,7 +48,7 @@ void QtWidgetOutputImageParameter::DoCreateWidget()
   m_HLayout = new QHBoxLayout;
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit();
   m_Input->setToolTip( m_OutputImageParam->GetDescription() );
   connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
   connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
