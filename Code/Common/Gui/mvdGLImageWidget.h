@@ -81,7 +81,7 @@ public:
 		 QWidget* parent =NULL,
 		 const QGLWidget* shareWidget =NULL,
 		 Qt::WindowFlags f =0 );
-  
+
   /** \brief Constructor. */
   GLImageWidget( AbstractViewManipulator * manipulator,
                  AbstractModelRenderer * renderer,
@@ -92,6 +92,22 @@ public:
 
   /** \brief Destructor. */
   virtual ~GLImageWidget();
+
+  /**
+   * \brief Access the abstract view-manipualtor of this image-view.
+   *
+   * \return A pointer to the abstract view-manipulator of this image-view.
+   */
+  inline
+    const AbstractViewManipulator* GetImageViewManipulator() const;
+
+  /**
+   * \brief Access the abstract model-renderer of this image-view.
+   *
+   * \return A pointer to the abstract model-renderer of this image-view.
+   */
+  inline
+    const AbstractModelRenderer* GetImageModelRenderer() const;
 
   /** Set Isotropic-zoom level. */
   inline
@@ -161,9 +177,11 @@ private:
   AbstractViewManipulator* m_ImageViewManipulator;
 
   /** Model Renderer pointer */
-  AbstractModelRenderer*   m_ImageModelRenderer;
+  AbstractModelRenderer* m_ImageModelRenderer;
 
-  AbstractImageModel*      m_ImageModel;
+  /**
+   */
+  AbstractImageModel* m_ImageModel;
 };
 
 }// end namespace 'mvd'
@@ -184,7 +202,26 @@ private:
 namespace mvd
 {
 /*****************************************************************************/
-void 
+inline
+const AbstractViewManipulator*
+GLImageWidget
+::GetImageViewManipulator() const
+{
+  return m_ImageViewManipulator;
+}
+
+/*****************************************************************************/
+inline
+const AbstractModelRenderer*
+GLImageWidget
+::GetImageModelRenderer() const
+{
+  return m_ImageModelRenderer;
+}
+
+/*****************************************************************************/
+inline
+void
 GLImageWidget
 ::SetImageModel(AbstractImageModel* model)
 {

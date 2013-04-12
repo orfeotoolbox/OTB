@@ -262,11 +262,11 @@ MainWindow
   // # Step 1 : get the ApplicationToolBoxWidget
   ApplicationsToolBox* appWidget = 
     qobject_cast< ApplicationsToolBox * >( 
-      m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >( ) 
-      );
+      m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >() 
+    );
+  assert( appWidget!=NULL );
   
   // # Step 2 : setup connections
-  assert(appWidget != NULL);
   QObject::connect(
     appWidget,
     SIGNAL( ApplicationToLaunchSelected(const QString &) ),
@@ -275,7 +275,8 @@ MainWindow
   );
 
   // # Step 3 : if OTB applications has any output, it may be 
-  
+  // ???
+
 #endif
 
   //
@@ -286,6 +287,23 @@ MainWindow
     this,
     SLOT( OnTabCloseRequested( int ) )
   );
+
+
+  //
+  // Connect image-view manipulator to quicklook-view renderer to
+  // manage viewportRegionChanged() signals.
+  assert( GetQuicklookView()!=NULL );
+  QObject::connect(
+    m_ImageView->GetImageViewManipulator(),
+    SIGNAL(
+      ViewportRegionRepresentationChanged( const PointType&, const PointType& )
+    ),
+    // to:
+    GetQuicklookView()->GetImageModelRenderer(),
+    SLOT(
+      OnViewportRegionRepresentationChanged( const PointType&, const PointType& )
+    )
+    );
 }
 
 /*****************************************************************************/
