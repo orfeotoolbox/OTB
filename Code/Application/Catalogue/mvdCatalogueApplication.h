@@ -112,6 +112,23 @@ public:
   inline
     AbstractModel* GetOTBApplicationsModel();
 
+  //
+  // STATIC METHODS.
+
+  /**
+   * \brief Access the const instance of application singleton.
+   * \return The const instance to the singleton CatalogueApplication.
+   */
+  inline
+    static const CatalogueApplication* ConstInstance();
+
+  /**
+   * \brief Access the non-const instance of application singleton.
+   * \return The non-const instance to the singleton CatalogueApplication.
+   */
+  inline
+    static CatalogueApplication* Instance();
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 public slots:
@@ -166,6 +183,24 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+const CatalogueApplication*
+CatalogueApplication
+::ConstInstance()
+{
+  return I18nApplication::ConstInstance< CatalogueApplication >();
+}
+
+/*****************************************************************************/
+inline
+CatalogueApplication*
+CatalogueApplication
+::Instance()
+{
+  return I18nApplication::Instance< CatalogueApplication >();
+}
 
 /*****************************************************************************/
 inline

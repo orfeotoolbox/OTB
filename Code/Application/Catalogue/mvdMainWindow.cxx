@@ -47,7 +47,6 @@
 //
 #include "Core/mvdDatabaseModel.h"
 #include "Core/mvdDatasetModel.h"
-#include "Core/mvdI18nApplication.h"
 #include "Core/mvdQuicklookModel.h"
 #include "Core/mvdVectorImageModel.h"
 //
@@ -250,7 +249,7 @@ MainWindow
   // Done here cause needed to be done once and only once.
   SetControllerModel(
     m_OtbApplicationsBrowserDock, 
-    I18nApplication::Instance< CatalogueApplication >()->GetOTBApplicationsModel()
+    CatalogueApplication::Instance()->GetOTBApplicationsModel()
   );
 
   //
@@ -460,12 +459,12 @@ MainWindow
 
   SetControllerModel( m_DatabaseBrowserDock, NULL );
 
-  assert( I18nApplication::Instance()!=NULL );
+  assert( CatalogueApplication::Instance()!=NULL );
 
   DatabaseModel* databaseModel =
-    I18nApplication::Instance()->GetModel< DatabaseModel >();
+    CatalogueApplication::Instance()->GetModel< DatabaseModel >();
   // Check that NULL==NULL or (DatabaseModel*)==(AbstractModel*)
-  assert( databaseModel==I18nApplication::Instance()->GetModel() );
+  assert( databaseModel==CatalogueApplication::Instance()->GetModel() );
 
   // Exit, if there were no previously set database model.
   if( databaseModel==NULL )
