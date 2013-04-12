@@ -40,7 +40,7 @@ void TrainMachineLearningImagesClassifier::InitNeuralNetworkParams()
   //There is no ParameterType_IntList, so i use a ParameterType_StringList and convert it.
   /*std::vector<std::string> layerSizes;
    layerSizes.push_back("100");
-   layerSizes.push_back("100");*/
+   layerSizes.push_back("100"); */
   AddParameter(ParameterType_StringList, "classifier.ann.sizes", "Number of neurons in each intermediate layer");
   //SetParameterStringList("classifier.ann.sizes", layerSizes);
   SetParameterDescription("classifier.ann.sizes",
