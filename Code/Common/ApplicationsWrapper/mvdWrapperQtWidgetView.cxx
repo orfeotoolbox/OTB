@@ -36,6 +36,7 @@
 // OTB includes (sorted by alphabetic order)
 #include "otbWrapperQtWidgetProgressReport.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"
+#include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperApplicationHtmlDocGenerator.h"
 
 #include "otbWrapperTypes.h"
@@ -47,6 +48,11 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdWrapperQtWidgetParameterFactory.h"
+#include "Core/mvdI18nApplication.h"
+#include "Core/mvdAlgorithm.h"
+
+#include "Core/mvdI18nApplication.h"
+
 
 namespace mvd
 {
@@ -91,7 +97,6 @@ void QtWidgetView::CreateGui()
   // Create a VBoxLayout with the header, the input widgets, and the footer
   QVBoxLayout *mainLayout = new QVBoxLayout();
   QTabWidget *tab = new QTabWidget();
- 
   tab->addTab(CreateInputWidgets(), "Parameters");
 
   //QTextEdit *log = new QTextEdit();
@@ -131,7 +136,11 @@ QWidget* QtWidgetView::CreateInputWidgets()
 {
   QScrollArea *scrollArea = new QScrollArea;
   // Put the main group inside a scroll area
-  scrollArea->setWidget(mvd::Wrapper::QtWidgetParameterFactory::CreateQtWidget(m_Model->GetApplication()->GetParameterList(), m_Model));
+  QWidget * widgets = 
+    mvd::Wrapper::QtWidgetParameterFactory::CreateQtWidget(m_Model->GetApplication()->GetParameterList(),
+                                                           m_Model);
+  
+  scrollArea->setWidget(widgets);
   scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scrollArea->setWidgetResizable(true);
@@ -143,6 +152,10 @@ QWidget* QtWidgetView::CreateInputWidgets()
                    SLOT ( OnApplicationExecutionDone() )
     );
 
+  //
+  // setup the default output in Widgets OutputImageParameter
+  FillOTBAppDefaultOutputImageParameter(widgets);
+  
   return scrollArea;
 }
 
@@ -198,6 +211,61 @@ QWidget* QtWidgetView::CreateDoc()
 }
 
 /*******************************************************************************/
+void 
+QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
+{
+  //
+  // Get the cache dir
+  // get the const instance of the I18nApplication
+  I18nApplication *  app = I18nApplication::Instance< I18nApplication >();
+  QString cacheDir = app->GetCacheDir().absolutePath();
+
+  // default output fname
+  QString outfname = cacheDir + "/result/"+ m_Application->GetName()+".tif";
+
+  //
+  // get the OTB application widget layout
+  QLayout * layout = widgets->layout();
+
+  for (int idx = 0; idx < layout->count(); idx++ )
+    {
+    QWidget * currentWidget = layout->itemAt(idx)->widget();
+
+    // is it a QtWidgetOutputImageParameter ?
+    otb::Wrapper::QtWidgetOutputImageParameter * outParam 
+      = qobject_cast<otb::Wrapper::QtWidgetOutputImageParameter *>(currentWidget);
+    
+    if (outParam)
+      {
+      outParam->SetFileName(outfname);
+      outParam->UpdateGUI();
+      } // else is it a {Group/Choice}Parameter Widget containing
+        // QtWidgetOutputImageParameters ?
+    else
+      {
+      // 
+      QList< otb::Wrapper::QtWidgetOutputImageParameter *> outParameterWidget
+        = currentWidget->findChildren<otb::Wrapper::QtWidgetOutputImageParameter*>();
+  
+      QList<otb::Wrapper::QtWidgetOutputImageParameter *>::iterator  it = outParameterWidget.begin();
+
+      // 
+      while(it != outParameterWidget.end())
+        {
+        if (*it)
+          {
+          (*it)->SetFileName(outfname);
+          (*it)->UpdateGUI();
+          }
+        ++it;
+        }
+      }
+    }
+
+}
+
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void QtWidgetView::CloseSlot()
@@ -248,7 +316,7 @@ void QtWidgetView::OnApplicationExecutionDone()
         // get the parameter
         otb::Wrapper::Parameter* param = m_Model->GetApplication()->GetParameterByKey(key);
         
-        // try to cast it to 
+        // try to cast it 
         otb::Wrapper::OutputImageParameter* outputParam = 
           dynamic_cast<otb::Wrapper::OutputImageParameter*>(param);
 
@@ -263,7 +331,6 @@ void QtWidgetView::OnApplicationExecutionDone()
         }
     }
 }
-
 
 }
 }

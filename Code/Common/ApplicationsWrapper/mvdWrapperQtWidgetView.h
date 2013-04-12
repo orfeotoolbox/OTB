@@ -135,6 +135,10 @@ private:
 
   QWidget* CreateDoc();
 
+  // fill the default output image parameter with default
+  // value
+  void FillOTBAppDefaultOutputImageParameter(QWidget * widgets);
+
 //
 // Private attributes.
 
