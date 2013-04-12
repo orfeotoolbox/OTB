@@ -288,22 +288,34 @@ MainWindow
     SLOT( OnTabCloseRequested( int ) )
   );
 
+  // Access the quicklook-view.
+  GLImageWidget* quicklookView = GetQuicklookView();
+  assert( quicklookView!=NULL );
 
   //
   // Connect image-view manipulator to quicklook-view renderer to
-  // manage viewportRegionChanged() signals.
-  assert( GetQuicklookView()!=NULL );
+  // handle viewportRegionChanged() signals.
   QObject::connect(
     m_ImageView->GetImageViewManipulator(),
     SIGNAL(
       ViewportRegionRepresentationChanged( const PointType&, const PointType& )
     ),
     // to:
-    GetQuicklookView()->GetImageModelRenderer(),
+    quicklookView->GetImageModelRenderer(),
     SLOT(
       OnViewportRegionRepresentationChanged( const PointType&, const PointType& )
     )
     );
+
+  // Connect quicklook-view manipulator to image-view renderer to
+  // handle mousePressEventpressed().
+  QObject::connect(
+    quicklookView->GetImageViewManipulator(),
+    SIGNAL( ViewportRegionChanged( double, double ) ),
+    // to:
+    m_ImageView->GetImageViewManipulator(),
+    SLOT( OnViewportRegionChanged( double, double ) )
+  );
 }
 
 /*****************************************************************************/
