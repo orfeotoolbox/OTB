@@ -163,8 +163,7 @@ MainWindow
     SLOT( OnApplicationToLaunchSelected(const QString &) )
   );
 
-  // # Step 3 : if OTB applications has any output, it may be 
-  // ???
+  // # Step 3 : connect close slots
 #endif
 
   //
@@ -212,6 +211,27 @@ MainWindow
     m_ImageView->GetImageViewManipulator(),
     SLOT( OnViewportRegionChanged( double, double ) )
   );
+
+  // Connect image-view manipulator to quicklook-view renderer when
+  // viewportRegionChanged.
+  QObject::connect(
+    m_ImageView->GetImageViewManipulator(),
+    SIGNAL( ViewportRegionRepresentationChanged( const PointType&,
+						 const PointType& ) ),
+    // to:
+    quicklookView->GetImageModelRenderer(),
+    SLOT( OnViewportRegionRepresentationChanged( const PointType&,
+						 const PointType& ) )
+    );
+
+  // signal used to update the ql widget
+  QObject::connect(
+    m_ImageView,
+    SIGNAL( CentralWidgetUpdated() ),
+    // to:
+    quicklookView,
+    SLOT( updateGL()  )
+    );
 }
 
 /*****************************************************************************/
@@ -579,7 +599,7 @@ MainWindow
     SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
   );
 
-  // Force to onnect selected dataset-model after database-model is
+  // Force to connect selected dataset-model after database-model is
   // connected.
   //
   // N.B.: This will cause UI controllers to disable widgets.
@@ -593,7 +613,7 @@ MainWindow
 {
   qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
 
-  // Unsert dataset-model from dataset-properties controller.
+  // Unset dataset-model from dataset-properties controller.
   SetControllerModel( m_DatasetPropertiesDock, NULL );
 
   // Update image-view.
@@ -630,6 +650,12 @@ MainWindow
   // Check type.
   assert( vectorImageModel==model->GetSelectedImageModel() );
 
+  // Assign image-model to color-dynamics controller.
+  SetControllerModel( m_ColorDynamicsDock, vectorImageModel );
+
+  // Assign image-model to color-setup controller.
+  SetControllerModel( m_ColorSetupDock, vectorImageModel );
+
   // Update image-view.
   assert( m_ImageView!=NULL );
   m_ImageView->SetImageModel( vectorImageModel );
@@ -645,11 +671,57 @@ MainWindow
     : vectorImageModel->GetQuicklookModel()
   );
 
-  // Assign image-model to color-dynamics controller.
-  SetControllerModel( m_ColorDynamicsDock, vectorImageModel );
+  // Connect newly selected model to view (after all other widgets are
+  // connected to prevent signals/slots to produce multiple view
+  // refreshes).
+  if (vectorImageModel)  // could be null when no dataset selected
+    {
 
-  // Assign image-model to color-setup controller.
-  SetControllerModel( m_ColorSetupDock, vectorImageModel );
+    // essai avec m_TabWidget->index(0)
+    
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( SettingsUpdated() ),
+      // to:
+      m_CentralTabWidget->widget(0)/*m_ImageView*/,
+      SLOT( updateGL()  )
+      );
+
+    // Connect newly selected model to view (after all other widgets are
+    // connected to prevent signals/slots to produce multiple view
+    // refreshes).
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( SettingsUpdated() ),
+      // to:
+      m_QuicklookViewDock->widget(),
+      SLOT( updateGL()  )
+      );
+
+    //
+    // connect the vectorimage model spacing change (when zooming)
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( SpacingChanged(const SpacingType&) ),
+      // to:
+      m_CentralTabWidget->widget(0)/*m_ImageView*/,
+      SLOT( OnSpacingChanged(const SpacingType&)  )
+      );
+
+    //
+    // needed for the status bar update
+    QObject::connect(vectorImageModel,
+                     SIGNAL( ViewportRegionChanged(double, double) ),
+                     m_ImageView->GetImageViewManipulator(),
+                     SLOT( OnViewportRegionChanged(double, double) )
+      );
+
+    // 
+    // calling updated is needed here to refresh proprely the view 
+    // TODO : investigate !!!!
+    m_ImageView->update();
+    m_QuicklookViewDock->widget()->update();    
+    }
 }
 
 /*****************************************************************************/
