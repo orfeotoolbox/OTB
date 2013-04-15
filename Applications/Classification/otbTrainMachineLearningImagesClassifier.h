@@ -155,7 +155,7 @@ private:
   void InitNeuralNetworkParams();
   void InitNormalBayesParams();
   void InitRandomForestsParams();
-  void InitKNNParams(){}
+  void InitKNNParams();
 
   void TrainLibSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
   void TrainBoost(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
@@ -165,7 +165,7 @@ private:
   void TrainNeuralNetwork(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
   void TrainNormalBayes(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
   void TrainRandomForests(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
-  void TrainKNN(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample){}
+  void TrainKNN(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
 
   void Classify(ListSampleType::Pointer validationListSample, LabelListSampleType::Pointer predictedList);
 

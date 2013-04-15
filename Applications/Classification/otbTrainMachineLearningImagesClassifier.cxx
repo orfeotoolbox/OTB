@@ -404,10 +404,10 @@ namespace Wrapper
       {
       TrainRandomForests(trainingListSample, trainingLabeledListSample);
       }
-    /*else if (classifierType == "knn")
+    else if (classifierType == "knn")
       {
       TrainKNN(trainingListSample, trainingLabeledListSample);
-      }  */
+      }
 
     //--------------------------
     // Performances estimation
