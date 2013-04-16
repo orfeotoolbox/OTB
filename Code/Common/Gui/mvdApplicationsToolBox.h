@@ -102,7 +102,8 @@ public:
 //
 // Public SLOTS.
 public slots:
-  void OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& appsTags );
+  void OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& appsTags, 
+                                           const ApplicationDocNameToNameMap& docNameToNameMap);
   void OnSearchBoxChanged( const QString & search );
   void OnAlgorithmTreeDoubleClick( QTreeWidgetItem * item , int column );
 
@@ -144,6 +145,13 @@ private:
    */
   bool IsSearchTextMatchAnyAlgorithm( const QString & tagName );
 
+  /**
+   * \brief Helper method to get the DocName of an application from an
+   * application name
+   */
+  QString GetApplicationDocNameByApplicationName( const QString & appName );
+
+
 //
 // Private attributes.
 private:
@@ -156,6 +164,11 @@ private:
    * \brief map storing applications and its tags
    */
   ApplicationsTagContainer m_AppTags;
+
+  /**
+   * \brief map storing applications docName and appName association
+   */
+  ApplicationDocNameToNameMap m_AppsDocNameToNameMap;
 
   /**
    * \brief text to search in the widget tree

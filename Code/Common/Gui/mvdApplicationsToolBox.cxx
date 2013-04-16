@@ -144,7 +144,7 @@ ApplicationsToolBox
         cmainItem->setIcon(0, QIcon( ":/images/otb_icon" ));
         
         //
-        // step #2 -> Add algorithms name if matching the sear
+        // step #2 -> Add algorithms name if matching the search label
         StringVector::const_iterator itApps = (*itTag).second.begin();
         while( itApps != (*itTag).second.end() )
           {
@@ -159,7 +159,7 @@ ApplicationsToolBox
             // 
             // set current application name as secondary item
             QTreeWidgetItem * secItem = new QTreeWidgetItem( cmainItem );
-            secItem->setText(0, qcurrentAlg);
+            secItem->setText(0, GetApplicationDocNameByApplicationName( qcurrentAlg ) );
           
             //
             // add algorithm icon
@@ -216,14 +216,45 @@ ApplicationsToolBox
 }
 
 /*******************************************************************************/
+QString
+ApplicationsToolBox
+::GetApplicationDocNameByApplicationName( const QString & appName )
+{
+  QString docName("");
+
+  // find the pair corresponding to the tagName
+  ApplicationDocNameToNameMap::const_iterator itDocNames = m_AppsDocNameToNameMap.begin();
+
+  while( itDocNames != m_AppsDocNameToNameMap.end() )
+    {
+    
+    // retrieve the appName in the map
+    if ( appName == QString( (*itDocNames).second.c_str() ) )
+      {
+      //
+      // return the relative docName
+      return QString ( (*itDocNames).first.c_str() );
+      }
+
+    ++itDocNames;
+    }
+
+  return docName;
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
 ApplicationsToolBox
-::OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer& appsTags )
+::OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer& appsTags, 
+                                     const ApplicationDocNameToNameMap& docNameToNameMap)
 {
   // rememeber the map
   m_AppTags = appsTags;
+
+  // remember the OTB applications  docName <-> Name association
+  m_AppsDocNameToNameMap = docNameToNameMap;
   
   // fill the tree with the application
   FillTreeUsingTags();  
@@ -252,13 +283,17 @@ ApplicationsToolBox
   // item is low-level ->does not any child
   if ( item->childCount() == 0 )
     {
-    QString appName = item->text( column );
+    QString currentDocName = item->text( column );
   
     // 
     // Execute the algorithm
-    if ( !appName.isEmpty() )
+    if ( !currentDocName.isEmpty() )
       {
-      LaunchApplication( appName );
+      // 
+      // get the application name relative to the DocName clicked
+      std::string appName = m_AppsDocNameToNameMap[ ToStdString( currentDocName ) ];
+
+      LaunchApplication( QString (appName.c_str() ) );
       }
     }
 }
