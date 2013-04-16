@@ -83,48 +83,51 @@ DatabaseTreeWidget
 void 
 DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
 {
+  if ( !(event->buttons() &  Qt::LeftButton ))
+    return;
+  
+  //start Drag ?
+  int distance = ( event->pos() - m_StartDragPosition ).manhattanLength();
+  if (distance < QApplication::startDragDistance())
+    return;
+    
+
+  //Get current selection
+  QTreeWidgetItem *selectedItem = currentItem();
+
+  if (selectedItem)
+    {
+    //TODO : get the image filename  of the selected dataset
+    QByteArray itemData( ToStdString (m_DatasetFilename ).c_str() );
+ 
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("application/x-qabstractitemmodeldatalist", itemData);
+
+    //Create drag
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(mimeData);
+
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
+    }
+
   //
   // superclass event handling
-  QTreeWidget::mouseMoveEvent(event);
+  //QTreeWidget::mouseMoveEvent(event);
 }
 
 /*******************************************************************************/
 void
 DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
- {
-   //
-  // superclass event handling
-   QTreeWidget::mousePressEvent(event);
-   
-   if (event->buttons() & Qt::LeftButton)
+ {   
+   if (event->button() == Qt::LeftButton)
      {
+     //
+     // superclass event handling
+     QTreeWidget::mousePressEvent(event);
+
+     // remember start drag position
      m_StartDragPosition = event->pos();
      }
-
-  //
-  // 
-  if ( event->buttons() &  Qt::LeftButton )
-    {
-    // Get current selection
-    QTreeWidgetItem *selectedItem = currentItem();
-
-    if (selectedItem)
-      {
-      //
-      // TODO : get the image filename  of the selected dataset
-      
-      QByteArray itemData( ToStdString (m_DatasetFilename ).c_str() );
- 
-      QMimeData *mimeData = new QMimeData;
-      mimeData->setData("application/x-qabstractitemmodeldatalist", itemData);
-
-      // Create drag
-      QDrag *drag = new QDrag(this);
-      drag->setMimeData(mimeData);
-
-      drag->exec(Qt::CopyAction | Qt::MoveAction);
-      }
-    }
  }
 
 /*******************************************************************************/
