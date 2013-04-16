@@ -78,7 +78,6 @@ InputFilenameListParameter::SetListFromFileName(const std::vector<std::string> &
 }
 
 
-
 void
 InputFilenameListParameter::AddNullElement()
 {
@@ -186,7 +185,6 @@ InputFilenameListParameter::GetNthFileName( unsigned int i ) const
 
   itkExceptionMacro(<< "No filename value");
 }
-
 
 
 bool
