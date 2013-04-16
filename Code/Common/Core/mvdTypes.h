@@ -296,7 +296,8 @@ typedef mvd::VectorImageFileReaderType DefaultImageFileReaderType;
 /** Type definitions for wrapped applications
  * 
  */
-typedef std::map< std::string, StringVector >                ApplicationsTagContainer;
+typedef std::map< std::string, std::string >         ApplicationDocNameToNameMap;
+typedef std::map< std::string, StringVector >        ApplicationsTagContainer;
 /**
  *  Type definitions for dataset properties
  */
