@@ -276,6 +276,7 @@ public:
    * Can be called for types :
    * \li ParameterType_InputImageListParameter
    * \li ParameterType_InputVectorDataListParameter
+   * \li ParameterType_InputFilenameListParameter
    * \li ParameterType_StringList
    */
   void SetParameterStringList(std::string parameter, std::vector<std::string> value);
@@ -352,6 +353,7 @@ public:
    * Can be called for types :
    * \li ParameterType_StringList
    * \li ParameterType_InputImageList
+   * \li ParameterType_InputFilenameList
    */
   std::vector<std::string> GetParameterStringList(std::string parameter);
 
@@ -690,7 +692,7 @@ protected:
     /* Set a complex output image value
    *
    * Can be called for types :
-   * \li ParameterType_CompelxOutputImage
+   * \li ParameterType_ComplexOutputImage
    */
   template <class TImageType>
     void SetParameterComplexOutputImage(std::string parameter, TImageType* value)

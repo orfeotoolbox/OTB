@@ -36,6 +36,7 @@
 #include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetInputFilenameParameter.h"
+#include "otbWrapperQtWidgetInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetDirectoryParameter.h"
 #include "otbWrapperQtWidgetParameterGroup.h"
@@ -105,6 +106,7 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
   CREATEWIDGET(ComplexInputImageParameter,     QtWidgetComplexInputImageParameter)
   CREATEWIDGET(ComplexOutputImageParameter,     QtWidgetComplexOutputImageParameter)
   CREATEWIDGET(InputImageListParameter, QtWidgetInputImageListParameter)
+  CREATEWIDGET(InputFilenameListParameter, QtWidgetInputFilenameListParameter)
   CREATEWIDGET(InputVectorDataListParameter, QtWidgetInputVectorDataListParameter)
   CREATEWIDGET(InputVectorDataParameter, QtWidgetInputVectorDataParameter)
   CREATEWIDGET(OutputImageParameter,    QtWidgetOutputImageParameter)

@@ -22,6 +22,7 @@
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperEmptyParameter.h"
 #include "otbWrapperInputFilenameParameter.h"
+#include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
@@ -358,6 +359,10 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_InputFilename;
     }
+  else if (dynamic_cast<const InputFilenameListParameter*>(param))
+    {
+    type = ParameterType_InputFilenameList;
+    }
   else if (dynamic_cast<const OutputFilenameParameter*>(param))
     {
     type = ParameterType_OutputFilename;
@@ -693,6 +698,12 @@ void Application::SetParameterStringList(std::string parameter, std::vector<std:
      if( !paramDown->SetListFromFileName(value)  )
        otbAppLogCRITICAL( <<"At least one vector data filename is invalid..");
      }
+  else if (dynamic_cast<InputFilenameListParameter*>(param))
+     {
+     InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*>(param);
+     if( !paramDown->SetListFromFileName(value)  )
+       otbAppLogCRITICAL( <<"At least one filename is invalid..");
+     }
   else if (dynamic_cast<StringListParameter*>(param))
     {
     StringListParameter* paramDown = dynamic_cast<StringListParameter*>(param);
@@ -910,7 +921,7 @@ std::string Application::GetParameterString(std::string parameter)
   else
    {
     itkExceptionMacro(<<parameter << "parameter can't be casted to string");
-    }
+   }
 
   return ret;
 }
@@ -925,22 +936,25 @@ std::vector<std::string> Application::GetParameterStringList(std::string paramet
     InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*> (param);
     ret = paramDown->GetFileNameList();
     }
-  else
-    if (dynamic_cast<InputVectorDataListParameter*> (param))
+  else if (dynamic_cast<InputVectorDataListParameter*> (param))
       {
       InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*> (param);
       ret = paramDown->GetFileNameList();
       }
-    else
-      if (dynamic_cast<StringListParameter*> (param))
-        {
-        StringListParameter* paramDown = dynamic_cast<StringListParameter*> (param);
-        ret = paramDown->GetValue();
-        }
-      else
-       {
-            itkExceptionMacro(<<parameter << "parameter can't be casted to StringList");
-       }
+  else if (dynamic_cast<InputFilenameListParameter*> (param))
+      {
+      InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*> (param);
+      ret = paramDown->GetFileNameList();
+      }
+  else if (dynamic_cast<StringListParameter*> (param))
+      {
+      StringListParameter* paramDown = dynamic_cast<StringListParameter*> (param);
+      ret = paramDown->GetValue();
+      }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to StringList");
+    }
 
   return ret;
 }

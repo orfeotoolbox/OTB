@@ -38,6 +38,7 @@ typedef enum
   ParameterType_String,
   ParameterType_StringList,
   ParameterType_InputFilename,
+  ParameterType_InputFilenameList,
   ParameterType_OutputFilename,
   ParameterType_Directory,
   ParameterType_Choice,

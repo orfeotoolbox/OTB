@@ -38,6 +38,7 @@
 // List value parameter
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
+#include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperStringListParameter.h"
 
 #include "otbImageFileWriter.h"
@@ -394,83 +395,89 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
             dynamic_cast<InputImageListParameter *> (param.GetPointer())->SetListFromFileName(values);
             }
           else
-            if (type == ParameterType_StringList)
+            if (type == ParameterType_InputFilenameList)
               {
-              dynamic_cast<StringListParameter *> (param.GetPointer())->SetValue(values);
+              dynamic_cast<InputFilenameListParameter *> (param.GetPointer())->SetListFromFileName(values);
               }
             else
-              if (type == ParameterType_String)
+              if (type == ParameterType_StringList)
                 {
-                dynamic_cast<StringParameter *> (param.GetPointer())->SetValue( m_Parser->GetAttributAsString(std::string("-").append(paramKey), m_Expression) );
+                dynamic_cast<StringListParameter *> (param.GetPointer())->SetValue(values);
                 }
               else
-                if (type == ParameterType_OutputImage)
+                if (type == ParameterType_String)
                   {
-                  m_Application->SetParameterString(paramKey, values[0]);
-                  // Check if pixel type is given
-                  if (values.size() == 2)
-                    {
-                    ImagePixelType outPixType = ImagePixelType_float;
-                    if (values[1] == "uint8")
-                      outPixType = ImagePixelType_uint8;
-                    else if (values[1] == "int16")
-                      outPixType = ImagePixelType_int16;
-                    else if (values[1] == "uint16")
-                      outPixType = ImagePixelType_uint16;
-                    else if (values[1] == "int32")
-                      outPixType = ImagePixelType_int32;
-                    else if (values[1] == "uint32")
-                      outPixType = ImagePixelType_uint32;
-                    else if (values[1] == "float")
-                      outPixType = ImagePixelType_float;
-                    else if (values[1] == "double")
-                      outPixType = ImagePixelType_double;
-                    else
-                      {
-                      return WRONGPARAMETERVALUE;
-                      }
-                    dynamic_cast<OutputImageParameter *> (param.GetPointer())->SetPixelType(outPixType);
-                    }
-                  else
-                    if (values.size() != 1 && values.size() != 2)
-                      {
-                      std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
-                      return INVALIDNUMBEROFVALUE;
-                      }
+                  dynamic_cast<StringParameter *> (param.GetPointer())->SetValue( m_Parser->GetAttributAsString(std::string("-").append(paramKey), m_Expression) );
                   }
                 else
-                  if (type == ParameterType_ListView)
+                  if (type == ParameterType_OutputImage)
                     {
-                    dynamic_cast<ListViewParameter *> (param.GetPointer())->SetSelectedNames(values);
-                    }
-                  else
-                    if(values.size() != 1)
+                    m_Application->SetParameterString(paramKey, values[0]);
+                    // Check if pixel type is given
+                    if (values.size() == 2)
                       {
-                      // Handle space in filename. Only for input
-                      // files or directories
-                      if (type == ParameterType_Directory || type == ParameterType_InputFilename || type == ParameterType_ComplexInputImage ||
-                          type == ParameterType_InputImage || type == ParameterType_InputVectorData ||  type == ParameterType_OutputVectorData )
+                      ImagePixelType outPixType = ImagePixelType_float;
+                      if (values[1] == "uint8")
+                        outPixType = ImagePixelType_uint8;
+                      else if (values[1] == "int16")
+                        outPixType = ImagePixelType_int16;
+                      else if (values[1] == "uint16")
+                        outPixType = ImagePixelType_uint16;
+                      else if (values[1] == "int32")
+                        outPixType = ImagePixelType_int32;
+                      else if (values[1] == "uint32")
+                        outPixType = ImagePixelType_uint32;
+                      else if (values[1] == "float")
+                        outPixType = ImagePixelType_float;
+                      else if (values[1] == "double")
+                        outPixType = ImagePixelType_double;
+                      else
                         {
-                        for(unsigned int i=1; i<values.size(); i++)
-                          {
-                          values[0].append(" ");
-                          values[0].append(values[i]);
-                          }
+                        return WRONGPARAMETERVALUE;
                         }
-                      else if (!param->GetAutomaticValue())
+                      dynamic_cast<OutputImageParameter *> (param.GetPointer())->SetPixelType(outPixType);
+                      }
+                    else
+                      if (values.size() != 1 && values.size() != 2)
                         {
-                        std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", must have 1 value, not  "
-                                  << values.size() << std::endl;
+                        std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
                         return INVALIDNUMBEROFVALUE;
                         }
+                    }
+                  else
+                    if (type == ParameterType_ListView)
+                      {
+                      dynamic_cast<ListViewParameter *> (param.GetPointer())->SetSelectedNames(values);
                       }
+                    else
+                      if(values.size() != 1)
+                        {
+                        // Handle space in filename. Only for input
+                        // files or directories
+                        if (type == ParameterType_Directory || type == ParameterType_InputFilename || type == ParameterType_ComplexInputImage ||
+                            type == ParameterType_InputImage || type == ParameterType_InputVectorData ||  type == ParameterType_OutputVectorData )
+                          {
+                          for(unsigned int i=1; i<values.size(); i++)
+                            {
+                            values[0].append(" ");
+                            values[0].append(values[i]);
+                            }
+                          }
+                        else if (!param->GetAutomaticValue())
+                          {
+                          std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", must have 1 value, not  "
+                                    << values.size() << std::endl;
+                          return INVALIDNUMBEROFVALUE;
+                          }
+                        }
 
         // Single value parameter
         if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type
-            == ParameterType_Radius || type == ParameterType_Directory || type
-            == ParameterType_InputFilename || type == ParameterType_OutputFilename || type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
-            type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||  type == ParameterType_OutputVectorData
-            || type == ParameterType_RAM)
+            == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename || type
+            == ParameterType_InputFilenameList || type == ParameterType_OutputFilename || type
+            == ParameterType_ComplexInputImage || type == ParameterType_InputImage || type
+            == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList || type
+            == ParameterType_OutputVectorData || type == ParameterType_RAM)
           {
           m_Application->SetParameterString(paramKey, values[0]);
           }
@@ -746,7 +753,8 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     oss << "<string> [pixel]";
     }
   else if (type == ParameterType_Choice || type == ParameterType_ListView || ParameterType_InputImageList ||
-           type == ParameterType_InputVectorDataList || type == ParameterType_StringList )
+           type == ParameterType_InputVectorDataList || type == ParameterType_InputFilenameList ||
+           type == ParameterType_StringList )
     {
     oss << "<string list>   ";
     }
