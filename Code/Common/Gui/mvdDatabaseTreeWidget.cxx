@@ -109,10 +109,6 @@ DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
 
     drag->exec(Qt::CopyAction | Qt::MoveAction);
     }
-
-  //
-  // superclass event handling
-  //QTreeWidget::mouseMoveEvent(event);
 }
 
 /*******************************************************************************/
