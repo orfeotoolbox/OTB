@@ -127,7 +127,7 @@ ApplicationsToolBox
       // current Doctag name
       QString  qcurrentTag( (*itTag).first.c_str() );
 
-      // If a current tag applicaton name match the searcText, add the
+      // If a current tag applicaton name match the searchText, add the
       // tag as an item to the tree
       if (m_SearchText.isEmpty() ||  
           IsSearchTextMatchAnyAlgorithm( qcurrentTag ) || 
@@ -149,11 +149,14 @@ ApplicationsToolBox
         while( itApps != (*itTag).second.end() )
           {
           // get current app name
-          QString  qcurrentAlg( (*itApps).c_str() );        
+          QString  qcurrentAlg( (*itApps).c_str() );
+
+          //  get current app DocName
+          QString qcurrentAlgDocName = GetApplicationDocNameByApplicationName(qcurrentAlg );
         
-          // does the current algorithm match the search text
+          // does the current algorithm DocName match the search text
           if ( m_SearchText.isEmpty() ||
-               qcurrentAlg.contains(m_SearchText ,Qt::CaseInsensitive) ||
+               qcurrentAlgDocName.contains(m_SearchText, Qt::CaseInsensitive) ||
                qcurrentTag.contains(m_SearchText ,Qt::CaseInsensitive))
             {
             // 
@@ -191,11 +194,13 @@ ApplicationsToolBox
     StringVector::const_iterator itApps = (*itTag).second.begin();
     while( itApps != (*itTag).second.end() )
       {
+      // current application name 
+      QString currentAppName( (*itApps).c_str() );
 
-      // get current app name
-      QString  qcurrentAlgItem( (*itApps).c_str() );        
+      // get current app Doc name
+      QString  qcurrentDocNameItem = GetApplicationDocNameByApplicationName( currentAppName );
       
-      if ( qcurrentAlgItem.contains(m_SearchText ,Qt::CaseInsensitive) )
+      if ( qcurrentDocNameItem.contains(m_SearchText ,Qt::CaseInsensitive) )
         {
         return true;
         }
