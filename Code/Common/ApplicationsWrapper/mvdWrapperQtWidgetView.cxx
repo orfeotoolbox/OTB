@@ -217,8 +217,14 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
   I18nApplication *  app = I18nApplication::Instance< I18nApplication >();
   QString cacheDir = app->GetCacheDir().absolutePath();
 
+  //
+  // get an unique identifier  and remove braces
+  QString  identifier = QUuid::createUuid().toString();
+  identifier.replace("{", "");
+  identifier.replace("}", "");
+
   // default output fname
-  QString outfname = cacheDir + "/result/"+ m_Application->GetName()+".tif";
+  QString outfname = cacheDir + "/result/"+ m_Application->GetName()+"_"+identifier+".tif";
 
   //
   // get the OTB application widget layout
