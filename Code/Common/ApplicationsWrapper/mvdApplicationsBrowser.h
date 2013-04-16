@@ -130,7 +130,8 @@ public slots:
 //
 // Signals.
 signals:
-  void AvailableApplicationsTagsChanged(const ApplicationsTagContainer &);
+  void AvailableApplicationsTagsChanged(const ApplicationsTagContainer &, 
+                                        const ApplicationDocNameToNameMap &);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -154,6 +155,8 @@ private:
 private:
 
   std::string     m_AutoLoadPath;
+
+  ApplicationDocNameToNameMap   m_DocNameToNameMap;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
