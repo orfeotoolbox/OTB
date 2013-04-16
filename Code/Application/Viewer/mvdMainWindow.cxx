@@ -943,9 +943,13 @@ MainWindow
   // http://mayaposch.wordpress.com/2011/11/01/how-to-really-truly-use-qthreads-the-full-explanation
   
   // TODO : move this code to core ?
-  
+
+  //
+  // get the absolute filepath from the input filename everytime
+  QFileInfo  finfo(filename);  
+ 
   QThread* thread = new QThread;
-  ImageLoader* loader = new ImageLoader(filename, centralWidget()->width(), centralWidget()->height());
+  ImageLoader* loader = new ImageLoader(finfo.absoluteFilePath(), centralWidget()->width(), centralWidget()->height());
   loader->moveToThread(thread);
   
   // At thread startup, trigger the processing function
