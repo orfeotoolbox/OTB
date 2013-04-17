@@ -356,27 +356,125 @@ OTB_TEST_APPLICATION(NAME   apTvClSOMClassificationFull
                              ${TEMP}/apTvClSOMClassificationMap.hdr)
 
 # --- Fusion of classifications ---
-OTB_TEST_APPLICATION(NAME   apTvFusionOfClassifications2Inputs
+OTB_TEST_APPLICATION(NAME   apTvFusionOfClassificationsMV2Inputs
                      APP    FusionOfClassifications
                      OPTIONS -il ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
                                  ${OTBAPP_BASELINE}/clLabeledImageQB456_1.tif
-                             -undecided 100
-                             -out ${TEMP}/apTvFusionOfClassifications2InputsOutput.tif uint16
+                             -method majorityvoting
+                             -undecidedlabel 100
+                             -out ${TEMP}/apTvFusionOfClassificationsMV2InputsOutput.tif uint16
                      VALID   --compare-image ${NOTOL}
                      ${OTBAPP_BASELINE}/apTvFusionOfClassifications2InputsOutput.tif
-                     ${TEMP}/apTvFusionOfClassifications2InputsOutput.tif
+                     ${TEMP}/apTvFusionOfClassificationsMV2InputsOutput.tif
 )
 
-OTB_TEST_APPLICATION(NAME   apTvFusionOfClassifications3Inputs
+OTB_TEST_APPLICATION(NAME   apTvFusionOfClassificationsMV3Inputs
                      APP    FusionOfClassifications
                      OPTIONS -il ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
                                  ${OTBAPP_BASELINE}/clLabeledImageQB456_1.tif
                                  ${OTBAPP_BASELINE}/clLabeledImageQB1.tif
-                             -undecided 100
-                             -out ${TEMP}/apTvFusionOfClassifications3InputsOutput.tif uint16
+                             -method majorityvoting
+                             -undecidedlabel 100
+                             -out ${TEMP}/apTvFusionOfClassificationsMV3InputsOutput.tif uint16
                      VALID   --compare-image ${NOTOL}
                      ${OTBAPP_BASELINE}/apTvFusionOfClassifications3InputsOutput.tif
-                     ${TEMP}/apTvFusionOfClassifications3InputsOutput.tif
+                     ${TEMP}/apTvFusionOfClassificationsMV3InputsOutput.tif
+)
+
+OTB_TEST_APPLICATION(NAME   apTvFusionOfClassificationsDSPrecision6Inputs
+                     APP    FusionOfClassifications
+                     OPTIONS -il  ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+                             -method dempstershafer
+                             -method.dempstershafer.cmfl ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+                             -method.dempstershafer.mob precision
+                             -nodatalabel 10
+                             -undecidedlabel 7
+                             -out ${TEMP}/apTvFusionOfClassificationsDS6InputsPrecisionOutput.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                     ${BASELINE}/QB_1_ortho_DS_FUSED_PRECISION.tif
+                     ${TEMP}/apTvFusionOfClassificationsDS6InputsPrecisionOutput.tif
+)
+
+OTB_TEST_APPLICATION(NAME   apTvFusionOfClassificationsDSRecall6Inputs
+                     APP    FusionOfClassifications
+                     OPTIONS -il  ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+                             -method dempstershafer
+                             -method.dempstershafer.cmfl ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+                             -method.dempstershafer.mob recall
+                             -nodatalabel 10
+                             -undecidedlabel 7
+                             -out ${TEMP}/apTvFusionOfClassificationsDS6InputsRecallOutput.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                     ${BASELINE}/QB_1_ortho_DS_FUSED_RECALL.tif
+                     ${TEMP}/apTvFusionOfClassificationsDS6InputsRecallOutput.tif
+)
+
+OTB_TEST_APPLICATION(NAME   apTvFusionOfClassificationsDSAccuracy6Inputs
+                     APP    FusionOfClassifications
+                     OPTIONS -il  ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+                             -method dempstershafer
+                             -method.dempstershafer.cmfl ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+                             -method.dempstershafer.mob accuracy
+                             -nodatalabel 10
+                             -undecidedlabel 7
+                             -out ${TEMP}/apTvFusionOfClassificationsDS6InputsAccuracyOutput.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                     ${BASELINE}/QB_1_ortho_DS_FUSED_ACCURACY.tif
+                     ${TEMP}/apTvFusionOfClassificationsDS6InputsAccuracyOutput.tif
+)
+
+OTB_TEST_APPLICATION(NAME   apTvFusionOfClassificationsDSKappa6Inputs
+                     APP    FusionOfClassifications
+                     OPTIONS -il  ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+                                  ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+                             -method dempstershafer
+                             -method.dempstershafer.cmfl ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+                                                         ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+                             -method.dempstershafer.mob kappa
+                             -nodatalabel 10
+                             -undecidedlabel 7
+                             -out ${TEMP}/apTvFusionOfClassificationsDS6InputsKappaOutput.tif uint8
+                     VALID   --compare-image ${NOTOL}
+                     ${BASELINE}/QB_1_ortho_DS_FUSED_KAPPA.tif
+                     ${TEMP}/apTvFusionOfClassificationsDS6InputsKappaOutput.tif
 )
 
 

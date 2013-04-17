@@ -42,6 +42,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef otb::ObjectList<StringParameter>  StringParameterListType;
+  typedef StringParameterListType*          StringParameterListPointerType;
 
 
   /** Defining ::New() static method */
@@ -67,6 +68,9 @@ public:
 
  /** Get one specific stored filename. */
   std::string GetNthFileName( unsigned int i ) const;
+
+  /** Get one list of the stored files. */
+  StringParameterListPointerType GetFileList() const;
 
   bool HasValue() const;
 

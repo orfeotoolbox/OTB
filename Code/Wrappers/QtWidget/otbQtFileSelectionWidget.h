@@ -20,6 +20,7 @@
 
 #include <QtGui>
 #include "otbWrapperInputImageListParameter.h"
+#include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 

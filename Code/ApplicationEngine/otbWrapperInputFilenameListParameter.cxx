@@ -187,6 +187,12 @@ InputFilenameListParameter::GetNthFileName( unsigned int i ) const
 }
 
 
+InputFilenameListParameter::StringParameterListPointerType
+InputFilenameListParameter::GetFileList() const
+{
+  return m_FilenameList;
+}
+
 bool
 InputFilenameListParameter::HasValue() const
 {

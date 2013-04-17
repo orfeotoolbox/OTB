@@ -137,7 +137,7 @@ void QtWidgetInputFilenameListParameter::DoCreateWidget()
 void
 QtWidgetInputFilenameListParameter::UpdateFilenameList()
 {
-  for(unsigned int j = 0; j < m_InputFilenameListParam->GetFileNameList().size(); j++)
+  for(unsigned int j = 0; j < m_InputFilenameListParam->GetFileList()->Size(); j++)
     {
     if(m_InputFilenameListParam->SetNthFileName(j, m_FileSelectionList[j]->GetFilename()) == false)
       {
