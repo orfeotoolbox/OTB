@@ -68,6 +68,9 @@ ImageFileWriter<TInputImage>
     m_IsObserving(true),
     m_ObserverID(0)
 {
+  //Init output index shift
+  m_ShiftOutputIndex.Fill(0);
+
   // By default, we use tiled streaming, with automatic tile size
   // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
   this->SetAutomaticAdaptativeStreaming();
@@ -494,7 +497,9 @@ ImageFileWriter<TInputImage>
     size[1]  = atoi(it->c_str());  // size along Y
 
     inputRegion.SetSize(size);
-    inputRegion.SetIndex(start);
+
+    m_ShiftOutputIndex = start;
+    inputRegion.SetIndex(m_ShiftOutputIndex);
 
     otbMsgDevMacro(<< "inputRegion " << inputRegion);
 
@@ -623,7 +628,8 @@ ImageFileWriter<TInputImage>
       {
       ioRegion.SetSize(i, streamRegion.GetSize(i));
       ioRegion.SetIndex(i, streamRegion.GetIndex(i));
-      //ioRegion.SetIndex(i, streamRegion.GetIndex(i) - inputRegion.GetIndex(i));
+      //Set the ioRegion index using the shifted index ( (0,0 without box parameter))
+      ioRegion.SetIndex(i, streamRegion.GetIndex(i) - m_ShiftOutputIndex[i]);
       }
     otbMsgDevMacro(<< "ioregion " <<  ioRegion )
     this->SetIORegion(ioRegion);
@@ -711,7 +717,8 @@ ImageFileWriter<TInputImage>
   typename InputImageRegionType::IndexType tmpIndex;
   tmpIndex.Fill(0);
   itk::ImageIORegionAdaptor<TInputImage::ImageDimension>::
-    Convert(m_ImageIO->GetIORegion(), ioRegion, tmpIndex);
+    //Convert(m_ImageIO->GetIORegion(), ioRegion, tmpIndex);
+    Convert(m_ImageIO->GetIORegion(), ioRegion, m_ShiftOutputIndex);
   InputImageRegionType bufferedRegion = input->GetBufferedRegion();
 
   // before this test, bad stuff would happend when they don't match

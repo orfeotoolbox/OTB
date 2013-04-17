@@ -75,6 +75,7 @@ public:
   typedef typename InputImageType::Pointer       InputImagePointer;
   typedef typename InputImageType::RegionType    InputImageRegionType;
   typedef typename InputImageType::PixelType     InputImagePixelType;
+  typedef typename InputImageType::IndexType     InputIndexType;
   typedef TInputImage                            OutputImageType;
   typedef typename OutputImageType::Pointer      OutputImagePointer;
   typedef typename OutputImageType::RegionType   OutputImageRegionType;
@@ -156,19 +157,19 @@ public:
 
   /** Set the only input of the writer */
   virtual void SetInput(const InputImageType *input);
-  
+
   /** Get writer only input */
   const InputImageType* GetInput();
-  
+
   /** Override Update() from ProcessObject because this filter
    *  has no output. */
   virtual void Update();
-  
+
   /** ImageFileWriter Methods */
   virtual void SetFileName(const char* extendedFileName);
   virtual void SetFileName(std::string extendedFileName);
   virtual const char* GetFileName () const;
-  
+
   /** Specify the region to write. If left NULL, then the whole image
    * is written. */
   void SetIORegion(const itk::ImageIORegion& region);
@@ -192,7 +193,7 @@ public:
   itkSetObjectMacro(ImageIO, otb::ImageIOBase);
   itkGetObjectMacro(ImageIO, otb::ImageIOBase);
   itkGetConstObjectMacro(ImageIO, otb::ImageIOBase);
-  
+
 protected:
   ImageFileWriter();
   virtual ~ImageFileWriter();
@@ -244,7 +245,7 @@ private:
   bool m_UseInputMetaDataDictionary; // whether to use the
                                      // MetaDataDictionary from the
                                      // input or not.
-  
+
   bool m_WriteGeomFile;              // Write a geom file to store the
                                      // kwl
 
@@ -254,6 +255,7 @@ private:
 
   bool          m_IsObserving;
   unsigned long m_ObserverID;
+  InputIndexType m_ShiftOutputIndex;
 };
 
 } // end namespace otb
