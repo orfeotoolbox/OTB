@@ -93,6 +93,15 @@ DatabaseBrowserController
     widget->GetDatabaseTreeWidget(), 
     SLOT( OnSelectedDatasetFilenameChanged( const QString& ) )
     );
+
+  //
+  QObject::connect(
+    widget->GetDatabaseTreeWidget(), 
+    SIGNAL( DatasetToDeleteSelected( const QString & )  ),
+    // to:
+    qobject_cast< DatabaseModel *>( model ), 
+    SLOT( OnDatasetToDeleteSelected(const QString& ) )
+    );
 }
 
 /*******************************************************************************/
@@ -115,6 +124,15 @@ DatabaseBrowserController
     // to:
     widget->GetDatabaseTreeWidget(), 
     SLOT( OnSelectedDatasetFilenameChanged( const QString& ) )
+    );
+
+  //
+  QObject::disconnect(
+    widget->GetDatabaseTreeWidget(), 
+    SIGNAL( DatasetToDeleteSelected( const QString & )  ),
+    // to:
+    qobject_cast< DatabaseModel *>( model ), 
+    SLOT( OnDatasetToDeleteSelected(const QString& ) )
     );
 }
 

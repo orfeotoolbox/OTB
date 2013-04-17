@@ -142,6 +142,9 @@ public:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
+public slots:
+  void OnDatasetToDeleteSelected( const QString&  id );
+
 //
 // Signals.
 signals:

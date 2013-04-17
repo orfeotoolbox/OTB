@@ -240,5 +240,18 @@ DatabaseModel
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+void
+DatabaseModel
+::OnDatasetToDeleteSelected( const QString&  id)
+{
+  // TODO : pop up a warning ??
+  
+  // In DatabaseModel : delete from the map of datasets 
+
+  // In DatasetModel  : delete from disk
+  
+  // redraw the database widget
+
+}
 
 } // end namespace 'mvd'
