@@ -34,7 +34,6 @@
 
 
 
-
 namespace otb
 {
 
@@ -86,7 +85,6 @@ public:
   typedef otb::DSFusionOfClassifiersImageFilter<VectorImageType, IOLabelImageType> DSFusionOfClassifiersImageFilterType;
   typedef DSFusionOfClassifiersImageFilterType::VectorOfMapOfMassesOfBeliefType    VectorOfMapOfMassesOfBeliefType;
   typedef DSFusionOfClassifiersImageFilterType::LabelMassMapType                   LabelMassMapType;
-
 
 
   /** Standard macro */
@@ -162,7 +160,6 @@ private:
   }
 
 
-
   int CSVConfusionMatrixFileReader(const std::string fileName, MapOfIndicesType &mapOfIndicesClX, ConfusionMatrixType &confusionMatrixClX)
   {
     std::ifstream inFile;
@@ -213,7 +210,6 @@ private:
     inFile.close();
     return EXIT_SUCCESS;
   }
-
 
 
   void DoExecute()
