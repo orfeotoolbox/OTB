@@ -103,20 +103,25 @@ public:
 //
 // Public SLOTS.
 public slots:
-
+  
     void OnSelectedDatasetFilenameChanged(const QString& filename);
+    void OnDeleteTriggered();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
+
+    void DatasetToDeleteSelected(const QString & id);
   
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
+    
+    void InitializeContextualMenu();
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 

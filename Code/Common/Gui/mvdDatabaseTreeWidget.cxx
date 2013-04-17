@@ -71,12 +71,36 @@ DatabaseTreeWidget
 {
   //setMouseTracking(true);
   setDragEnabled(true);
+
+  // setup contextual menu
+  InitializeContextualMenu();
 }
 
 /*******************************************************************************/
 DatabaseTreeWidget
 ::~DatabaseTreeWidget()
 {
+}
+
+/*******************************************************************************/
+void
+DatabaseTreeWidget
+::InitializeContextualMenu()
+{
+  // add a action menu
+  setContextMenuPolicy(Qt::ActionsContextMenu);
+
+  // setup the menu of the contextual action
+  QMenu * menu = new QMenu(this);
+  
+  QAction * deleteNodeChild = new QAction(tr ("Delete Dataset"), menu);
+  addAction(deleteNodeChild);
+
+  QObject::connect(deleteNodeChild,  
+                   SIGNAL( triggered() ), 
+                   this, 
+                   SLOT( OnDeleteTriggered() )
+    );
 }
 
 /*******************************************************************************/
@@ -114,17 +138,17 @@ DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
 /*******************************************************************************/
 void
 DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
- {   
-   if (event->button() == Qt::LeftButton)
+{   
+  if (event->button() == Qt::LeftButton)
      {
      //
      // superclass event handling
      QTreeWidget::mousePressEvent(event);
-
+     
      // remember start drag position
      m_StartDragPosition = event->pos();
      }
- }
+}
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
@@ -135,6 +159,20 @@ DatabaseTreeWidget::OnSelectedDatasetFilenameChanged(const QString& filename)
   //
   // update the dataset image filename to be used in the dragged mime data
   m_DatasetFilename = filename;
+}
+
+/*******************************************************************************/
+void
+DatabaseTreeWidget::OnDeleteTriggered()
+{
+  // get the current item text
+  QString  id = currentItem()->text( 0 );
+
+  qDebug() << this << "::Ontriggered  DatasetId "<< id;
+  
+  // emit a signal with the current Dataset to delete.
+  // Handled in DatabaseBrowserController
+  emit DatasetToDeleteSelected( id );
 }
 
 } // end namespace 'mvd'
