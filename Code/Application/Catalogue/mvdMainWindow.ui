@@ -30,7 +30,7 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_Open"/>
+    <addaction name="action_OpenImage"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -73,7 +73,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="action_Open"/>
+   <addaction name="action_OpenImage"/>
   </widget>
   <action name="action_Quit">
    <property name="text">
@@ -86,22 +86,22 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="action_Open">
+  <action name="action_OpenImage">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="mvdMainWindow.qrc">
      <normaloff>:/icons/action_Open_Icon</normaloff>:/icons/action_Open_Icon</iconset>
    </property>
    <property name="text">
-    <string>&amp;Open...</string>
+    <string>&amp;Open image...</string>
    </property>
    <property name="iconText">
-    <string>Open...</string>
+    <string>Open image...</string>
    </property>
    <property name="toolTip">
-    <string>Open file.</string>
+    <string>Open image-file.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>

@@ -281,6 +281,11 @@ private:
 //
 // Private slots.
 private slots:
+  /**
+   * \brief Qt auto-connected slot which is called when 'File/Open
+   * image' menu action is triggered.
+   */
+  void on_action_OpenImage_triggered();
 
   /** */
   void OnUserCoordinatesEditingFinished();

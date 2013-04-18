@@ -5,6 +5,7 @@
 set( Common_Core_SOURCES
   mvdAbstractImageModel.cxx
   mvdAbstractModel.cxx
+  mvdAbstractWorker.cxx
   mvdAlgorithm.cxx
   mvdDatasetDescriptor.cxx
   mvdDatabaseModel.cxx
@@ -29,6 +30,7 @@ set( Common_Core_SOURCES
 set( Common_Core_HEADERS_MOC
   mvdAbstractImageModel.h
   mvdAbstractModel.h
+  mvdAbstractWorker.h
   # mvdAlgorithm.h
   mvdDatabaseModel.h
   mvdDatasetDescriptor.h

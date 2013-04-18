@@ -158,7 +158,7 @@ MainWindow
       m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >() 
     );
   assert( appWidget!=NULL );
-  
+
   // # Step 2 : setup connections
   QObject::connect(
     appWidget,
@@ -719,6 +719,41 @@ MainWindow
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_OpenImage_triggered()
+{  
+  QString filename(
+    QFileDialog::getOpenFileName( this, tr( "Open file..." ) )
+  );
+
+  if( filename.isNull() )
+    return;
+
+  // emit OpenImageRequest( filename );
+
+  /*
+  try
+    {
+    DatasetModel* model = Application::LoadDatasetModel(
+      m_Filename, m_Width, m_Height );
+
+    // We can only push to another thread,
+    // so thread affinity must be set here,
+    // and not in the slot that receives the object
+    model->moveToThread(Application::Instance()->thread());
+    
+    emit ModelLoaded(model);
+    }
+  catch( std::exception& exc )
+    {
+    emit Error( exc.what() );
+    }
+  emit Finished();
+  */
+}
 
 /*****************************************************************************/
 void
