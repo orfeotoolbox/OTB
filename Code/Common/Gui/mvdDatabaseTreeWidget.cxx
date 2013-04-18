@@ -87,19 +87,11 @@ void
 DatabaseTreeWidget
 ::InitializeContextualMenu()
 {
-  // add a action menu
-  setContextMenuPolicy(Qt::ActionsContextMenu);
-
-  // setup the menu of the contextual action
-  QMenu * menu = new QMenu(this);
+  setContextMenuPolicy(Qt::CustomContextMenu);
   
-  QAction * deleteNodeChild = new QAction(tr ("Delete Dataset"), menu);
-  addAction(deleteNodeChild);
-
-  QObject::connect(deleteNodeChild,  
-                   SIGNAL( triggered() ), 
-                   this, 
-                   SLOT( OnDeleteTriggered() )
+  QObject::connect(this,
+                   SIGNAL(customContextMenuRequested(const QPoint&)),
+                   SLOT(OnCustomContextMenuRequested(const QPoint&))
     );
 }
 
@@ -119,7 +111,7 @@ DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
   //Get current selection
   QTreeWidgetItem *selectedItem = currentItem();
 
-  if (selectedItem)
+  if ( selectedItem && selectedItem->parent() )
     {
     //TODO : get the image filename  of the selected dataset
     QByteArray itemData( ToStdString (m_DatasetFilename ).c_str() );
@@ -163,16 +155,51 @@ DatabaseTreeWidget::OnSelectedDatasetFilenameChanged(const QString& filename)
 
 /*******************************************************************************/
 void
-DatabaseTreeWidget::OnDeleteTriggered()
+DatabaseTreeWidget::OnDeleteTriggered( const QString & id)
 {
-  // get the current item text
-  QString  id = currentItem()->text( 0 );
-
-  qDebug() << this << "::Ontriggered  DatasetId "<< id;
-  
-  // emit a signal with the current Dataset to delete.
-  // Handled in DatabaseBrowserController
   emit DatasetToDeleteSelected( id );
+}
+
+/*******************************************************************************/
+void
+DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
+{
+  // get the item
+  QTreeWidgetItem* item = itemAt(pos);
+  
+  // if not the root item 
+  if ( item && item->parent() ) 
+    {
+    // menu 
+    QMenu  menu;
+    
+    // create the desired action
+    QAction * deleteNodeChild = new QAction(tr ("Delete Dataset") , &menu);
+
+    // use a QSignalMapper to bundle parameterless signals and re-emit
+    // them with parameters (QString here)
+    QSignalMapper *signalMapper = new QSignalMapper( this );
+    signalMapper->setMapping( deleteNodeChild, item->text(0) );
+    
+    QObject::connect( deleteNodeChild , 
+                      SIGNAL(triggered()), 
+                      signalMapper, 
+                      SLOT( map() ) 
+      );
+
+    // add action to the menu
+    menu.addAction( deleteNodeChild );
+
+    // connect the re-emitted signal to our slot 
+    QObject::connect( 
+      signalMapper, 
+      SIGNAL(mapped(const QString &)), 
+      SLOT( OnDeleteTriggered(const QString &)) 
+      );
+
+    // show menu
+    menu.exec( viewport()->mapToGlobal(pos) );
+    }
 }
 
 } // end namespace 'mvd'

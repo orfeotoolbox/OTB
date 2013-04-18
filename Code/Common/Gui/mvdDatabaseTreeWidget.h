@@ -105,7 +105,9 @@ public:
 public slots:
   
     void OnSelectedDatasetFilenameChanged(const QString& filename);
-    void OnDeleteTriggered();
+    void OnDeleteTriggered(const QString & id);
+
+    void OnCustomContextMenuRequested(const QPoint& pos);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
