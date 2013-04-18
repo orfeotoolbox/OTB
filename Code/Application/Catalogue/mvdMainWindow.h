@@ -67,6 +67,7 @@ namespace mvd
 class DatasetModel;
 // Gui
 class GLImageWidget;
+class StatusBarWidget;
 
 namespace Ui
 {
@@ -109,6 +110,10 @@ public:
 //
 // SIGNALS.
 signals:
+
+  void UserCoordinatesEditingFinished(const QString&);
+
+  void UserScaleEditingFinished(const QString &);
   
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -187,6 +192,10 @@ private:
 
   /**
    */
+  void InitializeStatusBarWidgets();
+
+  /**
+   */
   inline
     const GLImageWidget* GetQuicklookView() const;
 
@@ -202,6 +211,11 @@ private:
   /**
    */
   void ConnectViewMenu();
+
+  /**
+   */
+  void ConnectStatusBar(DatasetModel * model);
+  void DisconnectStatusBar(const DatasetModel * model);
 
   //
   // I18nMainWindow overrides.
@@ -242,28 +256,39 @@ private:
   /**
    *  \brief OTB-applications browser dock-widget.
    */
-  QDockWidget* m_OtbApplicationsBrowserDock;
+  QDockWidget*     m_OtbApplicationsBrowserDock;
 #endif
 
   /**
    * \brief Image-view dock-widget.
    */
-  GLImageWidget* m_ImageView;
+  GLImageWidget*   m_ImageView;
 
   /**
    * \brief Quicklook-view dock-widget.
    */
-  QDockWidget* m_QuicklookViewDock;
+  QDockWidget*     m_QuicklookViewDock;
 
   /**
    */
-  QTabWidget* m_CentralTabWidget;
+  QTabWidget*      m_CentralTabWidget;
+
+  /** */
+  StatusBarWidget* m_StatusBarWidget;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Private slots.
 private slots:
+
+  /** */
+  void OnUserCoordinatesEditingFinished();
+
+  /** */
+  void OnUserScaleEditingFinished();
+
+
 };
 
 } // end namespace 'mvd'

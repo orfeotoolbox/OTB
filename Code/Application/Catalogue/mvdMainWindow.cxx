@@ -63,6 +63,8 @@
 #include "Gui/mvdImageModelRenderer.h"
 #include "Gui/mvdImageViewManipulator.h"
 #include "Gui/mvdQuicklookViewManipulator.h"
+#include "Gui/mvdStatusBarWidget.h"
+
 //
 #include "mvdCatalogueApplication.h"
 
@@ -125,6 +127,8 @@ MainWindow
   InitializeCentralWidget();
 
   InitializeDockWidgets();
+
+  InitializeStatusBarWidgets();
 }
 /*****************************************************************************/
 void
@@ -354,6 +358,167 @@ MainWindow
 #endif
 }
 
+/*****************************************************************************/
+void
+MainWindow
+::ConnectStatusBar( DatasetModel * model)
+{
+  // Access vector-image model.
+  VectorImageModel* vectorImageModel =
+    model->GetSelectedImageModel< VectorImageModel >();
+
+  // 
+  // send the physical point of the clicked point in screen 
+  // vectorImageModel is in charge of pixel information computation
+  QObject::connect(
+    m_ImageView->GetImageViewManipulator(), 
+    SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    vectorImageModel, 
+    SLOT( OnPhysicalCursorPositionChanged(double, double) )
+    );
+  
+  QObject::connect(
+    GetQuicklookView()->GetImageViewManipulator(), 
+    SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    vectorImageModel, 
+    SLOT( OnPhysicalCursorPositionChanged(double, double) )
+    );
+
+  //
+  // connect the statusBar widget to the vectorImage corresponding
+  // signal 
+  QObject::connect(
+    vectorImageModel, 
+    SIGNAL( CurrentIndexUpdated(const QString& ) ),
+    m_StatusBarWidget->GetCurrentPixelIndexWidget(),
+    SLOT( setText(const QString &) )
+    );
+
+  QObject::connect(
+    vectorImageModel, 
+    SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
+    m_StatusBarWidget->GetCurrentPixelPhysicalWidget(),
+    SLOT( setText(const QString &) )
+    );
+
+  QObject::connect(
+    vectorImageModel, 
+    SIGNAL( CurrentGeographicUpdated(const QString& ) ),
+    m_StatusBarWidget->GetCurrentPixelGeographicWidget(),
+    SLOT( setText(const QString &) )
+    );
+
+  QObject::connect(
+    vectorImageModel, 
+    SIGNAL( CurrentRadioUpdated(const QString& ) ),
+    m_StatusBarWidget->GetCurrentPixelRadioWidget(),
+    SLOT( setText(const QString &) )
+    );
+
+  QObject::connect(
+    m_ImageView->GetImageViewManipulator(), 
+    SIGNAL( CurrentScaleUpdated(const QString& ) ),
+    m_StatusBarWidget->GetCurrentScaleWidget(),
+    SLOT( setText(const QString&) )
+    );
+
+  // index widget in status bar edited
+  QObject::connect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
+                   SIGNAL( editingFinished() ),
+                   this,
+                   SLOT( OnUserCoordinatesEditingFinished() )
+    );
+  
+  QObject::connect(this,
+                   SIGNAL( UserCoordinatesEditingFinished(const QString&) ),
+                   vectorImageModel,
+                   SLOT( OnUserCoordinatesEditingFinished(const QString&) )
+    );
+
+  QObject::connect(vectorImageModel,
+                   SIGNAL( ViewportRegionChanged(double, double) ),
+                   m_ImageView->GetImageViewManipulator(),
+                   SLOT( OnViewportRegionChanged(double, double) )
+    );
+
+  // scale widget in status bar edited
+  QObject::connect(m_StatusBarWidget->GetCurrentScaleWidget(),
+                   SIGNAL( editingFinished() ),
+                   this,
+                   SLOT( OnUserScaleEditingFinished() )
+    );
+  
+  QObject::connect(this,
+                   SIGNAL( UserScaleEditingFinished(const QString&) ),
+                   m_ImageView->GetImageViewManipulator(),
+                   SLOT( OnUserScaleEditingFinished(const QString&) )
+    );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::DisconnectStatusBar( const DatasetModel * model)
+{
+  // Access vector-image model.
+  const VectorImageModel* vectorImageModel =
+    model->GetSelectedImageModel< VectorImageModel >();
+
+  // 
+  // send the physical point of the clicked point in screen 
+  // vectorImageModel is in charge of pixel information computation
+  QObject::disconnect(
+    m_ImageView->GetImageViewManipulator(), 
+    SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    vectorImageModel, 
+    SLOT( OnPhysicalCursorPositionChanged(double, double) )
+    );
+  
+  QObject::disconnect(
+    GetQuicklookView()->GetImageViewManipulator(), 
+    SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    vectorImageModel, 
+    SLOT( OnPhysicalCursorPositionChanged(double, double) )
+    );
+
+  //
+  // disconnect the statusBar widget to the vectorImage corresponding
+  // signal 
+  QObject::disconnect(
+    vectorImageModel, 
+    SIGNAL( CurrentIndexUpdated(const QString& ) ),
+    m_StatusBarWidget->GetCurrentPixelIndexWidget(),
+    SLOT( setText(const QString &) )
+    );
+
+  QObject::disconnect(
+    vectorImageModel, 
+    SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
+    m_StatusBarWidget->GetCurrentPixelPhysicalWidget(),
+    SLOT( setText(const QString &) )
+    );
+
+  QObject::disconnect(
+    vectorImageModel, 
+    SIGNAL( CurrentGeographicUpdated(const QString& ) ),
+    m_StatusBarWidget->GetCurrentPixelGeographicWidget(),
+    SLOT( setText(const QString &) )
+    );
+
+  QObject::disconnect(
+    vectorImageModel, 
+    SIGNAL( CurrentRadioUpdated(const QString& ) ),
+    m_StatusBarWidget->GetCurrentPixelRadioWidget(),
+    SLOT( setText(const QString &) )
+    );
+
+  QObject::disconnect(
+    m_ImageView->GetImageViewManipulator(), 
+    SIGNAL( CurrentScaleUpdated(const QString& ) ),
+    m_StatusBarWidget->GetCurrentScaleWidget(),
+    SLOT( setText(const QString&) )
+    );
+}
 
 /*****************************************************************************/
 void
@@ -468,6 +633,15 @@ MainWindow
 
   tabBar->setTabButton(0, QTabBar::RightSide, 0);
   tabBar->setTabButton(0, QTabBar::LeftSide, 0);
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::InitializeStatusBarWidgets()
+{
+  m_StatusBarWidget = new StatusBarWidget(statusBar());
+  statusBar()->addPermanentWidget(m_StatusBarWidget, 1);
 }
 
 /*****************************************************************************/
@@ -717,6 +891,9 @@ MainWindow
       SLOT( OnViewportRegionChanged( double, double ) )
       );
     }
+
+  DisconnectStatusBar( model );
+
 }
 
 /*****************************************************************************/
@@ -736,6 +913,9 @@ MainWindow
   //
   // VIEWS.
   //
+
+  // connect the status bar
+  ConnectStatusBar( model );
 
   // Update image-view.
   assert( m_ImageView!=NULL );
@@ -935,5 +1115,34 @@ MainWindow
   // TODO : implement the import following the catalog settings
   
 }
+
+/*****************************************************************************/
+void
+MainWindow
+::OnUserCoordinatesEditingFinished()
+{
+  // get the text and send it to the vector image model to be
+  // processed 
+  QString coord = m_StatusBarWidget->GetCurrentPixelIndexWidget()->text();
+  emit UserCoordinatesEditingFinished(coord);
+
+  // update the Quicklook
+  qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnUserScaleEditingFinished()
+{
+  // get the text and send it to the view manipulator to be
+  // processed 
+  QString scale = m_StatusBarWidget->GetCurrentScaleWidget()->text();
+  emit UserScaleEditingFinished(scale);
+
+  // update the Quicklook
+  qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
+}
+
 
 } // end namespace 'mvd'
