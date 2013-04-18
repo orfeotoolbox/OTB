@@ -672,7 +672,7 @@ MainWindow
     datasetModel->GetSelectedImageModel< VectorImageModel >();
 
   // Check type.
-  assert( vectorImageModel==model->GetSelectedImageModel() );
+  assert( vectorImageModel==datasetModel->GetSelectedImageModel() );
 
   // Connect newly selected model to view (after all other widgets are
   // connected to prevent signals/slots to produce multiple view
