@@ -440,12 +440,6 @@ MainWindow
                    SLOT( OnUserCoordinatesEditingFinished() )
     );  
 
-  QObject::connect(vectorImageModel,
-                   SIGNAL( ViewportRegionChanged(double, double) ),
-                   m_ImageView->GetImageViewManipulator(),
-                   SLOT( OnViewportRegionChanged(double, double) )
-    );
-
   // scale widget in status bar edited
   QObject::connect(m_StatusBarWidget->GetCurrentScaleWidget(),
                    SIGNAL( editingFinished() ),
@@ -540,13 +534,6 @@ MainWindow
                       SLOT( OnUserCoordinatesEditingFinished() )
     );
   
-
-  QObject::disconnect(vectorImageModel,
-                      SIGNAL( ViewportRegionChanged(double, double) ),
-                      m_ImageView->GetImageViewManipulator(),
-                      SLOT( OnViewportRegionChanged(double, double) )
-    );
-
   // scale widget in status bar edited
   QObject::disconnect(m_StatusBarWidget->GetCurrentScaleWidget(),
                       SIGNAL( editingFinished() ),
