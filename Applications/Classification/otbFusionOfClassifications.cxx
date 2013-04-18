@@ -96,9 +96,19 @@ private:
   void DoInit()
   {
     SetName("FusionOfClassifications");
-    SetDescription("Fuses several classifications maps of the same image by majority voting on class labels.");
+    SetDescription("Fuses several classifications maps of the same image on the basis of class labels.");
     SetDocName("Fusion of Classifications");
-    SetDocLongDescription("This application allows to fuse several classifications maps and produce a single more robust classification map. Fusion is done by mean of majority voting on class labels: for each pixel, the class with the highest number of votes is selected. In case of number of votes equality, the undecided label is attributed to the pixel.");
+    SetDocLongDescription("This application allows to fuse several classification maps and produces a single more robust classification map. "
+        "Fusion is done either by mean of Majority Voting, or with the Dempster Shafer combination method on class labels.\n "
+        "-MAJORITY VOTING: for each pixel, the class with the highest number of votes is selected.\n "
+        "-DEMPSTER SHAFER: for each pixel, the class label for which the Belief Function is maximal is selected. This Belief Function is calculated "
+        "by mean of the Dempster Shafer combination of Masses of Belief, and indicates the belief that each input classification map presents for each label "
+        "value. Moreover, the Masses of Belief are based on the input confusion matrices of each classification map, either by using the PRECISION or RECALL "
+        "rates, or the OVERALL ACCURACY, or the KAPPA coefficient. Thus, each input classification map needs to be associated with its corresponding input "
+        "confusion matrix file for the Dempster Shafer fusion.\n"
+        "-Input pixels with the NODATA label are not handled in the fusion of classification maps. Moreover, pixels for which all the input classifiers are set to NODATA "
+        "keep this value in the output fused image.\n"
+        "-In case of number of votes equality, the UNDECIDED label is attributed to the pixel.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("SVMImagesClassifier application");
@@ -107,51 +117,57 @@ private:
     AddDocTag(Tags::Analysis);
 
     AddParameter(ParameterType_InputImageList, "il", "Input classifications");
-    SetParameterDescription( "il", "List of input classification to fuse. Labels in each classification image must represent the same class." );
+    SetParameterDescription( "il", "List of input classification maps to fuse. Labels in each classification image must represent the same class." );
 
 
     /** GROUP FUSION METHOD */
     AddParameter(ParameterType_Choice, "method", "Fusion method");
-    SetParameterDescription("method", "Selection of fusion methods and their parameters.");
+    SetParameterDescription("method", "Selection of the fusion method and its parameters.");
 
     // Majority Voting
-    AddChoice("method.majorityvoting","Fusion from majority voting");
-    SetParameterDescription("method.majorityvoting","Fusion of classification maps from majority voting for each output pixel.");
+    AddChoice("method.majorityvoting","Majority Voting");
+    SetParameterDescription("method.majorityvoting","Fusion of classification maps by majority voting for each output pixel.");
 
     // Dempster Shafer
-    AddChoice("method.dempstershafer","Fusion with Dempster Shafer");
-    SetParameterDescription("method.dempstershafer","Fusion of classification maps with the Dempster Shafer method.");
+    AddChoice("method.dempstershafer","Dempster Shafer combination");
+    SetParameterDescription("method.dempstershafer","Fusion of classification maps by the Dempster Shafer combination method for each output pixel.");
 
     AddParameter(ParameterType_InputFilenameList, "method.dempstershafer.cmfl", "Confusion Matrices");
-    SetParameterDescription("method.dempstershafer.cmfl", "A list of confusion matrix files (csv format) to define the masses of belief and the class labels.");
+    SetParameterDescription("method.dempstershafer.cmfl", "A list of confusion matrix files (*.CSV format) to define the masses of belief and the class labels. Each file should be formatted the following way: "
+        "the first line, beginning with a '#' symbol, should be a list of the class labels present in the corresponding input classification image, organized in the same order as the confusion matrix rows/columns.");
 
     AddParameter(ParameterType_Choice, "method.dempstershafer.mob", "Mass of belief measurement");
-    SetParameterDescription("method.dempstershafer.mob","Confusion matrix measurement standing for the masses of belief of each classifier.");
+    SetParameterDescription("method.dempstershafer.mob","Type of confusion matrix measurement used to compute the masses of belief of each classifier.");
     AddChoice("method.dempstershafer.mob.precision","Precision");
     SetParameterDescription("method.dempstershafer.mob.precision","Masses of belief = Precision rates of each classifier (one rate per class label).");
     AddChoice("method.dempstershafer.mob.recall", "Recall");
     SetParameterDescription("method.dempstershafer.mob.recall", "Masses of belief = Recall rates of each classifier (one rate per class label).");
     AddChoice("method.dempstershafer.mob.accuracy", "Overall Accuracy");
-    SetParameterDescription("method.dempstershafer.mob.accuracy", "Mass of belief = Overall Accuracy of each classifier (one unique rate for all the class labels).");
+    SetParameterDescription("method.dempstershafer.mob.accuracy", "Mass of belief = Overall Accuracy of each classifier (one unique value for all the class labels).");
     AddChoice("method.dempstershafer.mob.kappa", "Kappa");
-    SetParameterDescription("method.dempstershafer.mob.kappa", "Mass of belief = Kappa coefficient of each classifier (one unique rate for all the class labels).");
+    SetParameterDescription("method.dempstershafer.mob.kappa", "Mass of belief = Kappa coefficient of each classifier (one unique value for all the class labels).");
 
     AddParameter(ParameterType_Int, "nodatalabel", "Label for the NoData class");
-    SetParameterDescription("nodatalabel", "Label for the NoData class. Such input pixels keep their NoData label in the output image. By default, 'nodatalabel = 0'.");
+    SetParameterDescription("nodatalabel", "Label for the NoData class. Such input pixels keep their NoData label in the output image and are not handled in the fusion process. By default, 'nodatalabel = 0'.");
     SetDefaultParameterInt("nodatalabel", 0);
-    MandatoryOff("nodatalabel");
+    //MandatoryOff("nodatalabel");
 
     AddParameter(ParameterType_Int,"undecidedlabel","Label for the Undecided class");
-    SetParameterDescription("undecidedlabel","Label for the Undecided class. Pixels with more than 1 fused class are marked as Undecided. Please note that the Undecided value must be different from existing labels in the input classifications. By default, 'undecidedlabel = 0'.");
+    SetParameterDescription("undecidedlabel","Label for the Undecided class. Pixels with more than 1 fused class are marked as Undecided. Please note that the Undecided value must be different from existing "
+        "labels in the input classifications. By default, 'undecidedlabel = 0'.");
     SetDefaultParameterInt("undecidedlabel",0);
 
     AddParameter(ParameterType_OutputImage,"out","The output classification image");
-    SetParameterDescription("out","The output classification image resulting from the fusion of the input classification images");
+    SetParameterDescription("out","The output classification image resulting from the fusion of the input classification images.");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("il", "classification1.tif classification2.tif");
-    SetDocExampleParameterValue("out","classification_fused.tif");
+    SetDocExampleParameterValue("il", "classification1.tif classification2.tif classification3.tif");
+    SetDocExampleParameterValue("method", "dempstershafer");
+    SetDocExampleParameterValue("method.dempstershafer.cmfl", "classification1.csv classification2.csv classification3.csv");
+    SetDocExampleParameterValue("method.dempstershafer.mob", "precision");
+    SetDocExampleParameterValue("nodatalabel","0");
     SetDocExampleParameterValue("undecidedlabel","10");
+    SetDocExampleParameterValue("out","classification_fused.tif");
   }
 
   void DoUpdateParameters()
