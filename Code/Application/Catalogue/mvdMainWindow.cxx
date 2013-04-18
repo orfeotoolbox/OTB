@@ -613,8 +613,30 @@ MainWindow
 {
   qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
 
+  //
+  // CONTROLLERS.
+  //
+
+  //
+  // Unset model from controllers.
+  //
+  // N.B.: This step must be done *before* disconnecting signals &
+  // slots between model(s) and view(s).
+  //
+  // See also, ::OnSelectedDatasetModel() changed.
+
   // Unset dataset-model from dataset-properties controller.
   SetControllerModel( m_DatasetPropertiesDock, NULL );
+
+  // Unset image-model to color-dynamics controller.
+  SetControllerModel( m_ColorDynamicsDock, NULL );
+
+  // Unset image-model to color-setup controller.
+  SetControllerModel( m_ColorSetupDock, NULL ); 
+
+  //
+  // VIEWS.
+  //
 
   // Update image-view.
   m_ImageView->SetImageModel( NULL );
@@ -626,11 +648,75 @@ MainWindow
   assert( quicklookView!=NULL );
   quicklookView->SetImageModel( NULL );
 
-  // Unset image-model to color-dynamics controller.
-  SetControllerModel( m_ColorDynamicsDock, NULL );
+  //
+  // MODEL(s).
+  //
 
-  // Unset image-model to color-setup controller.
-  SetControllerModel( m_ColorSetupDock, NULL ); 
+  // Access database-model.
+  const DatabaseModel* databaseModel =
+    CatalogueApplication::ConstInstance()->GetModel< DatabaseModel >();
+
+  // Application should always have a valid database model.
+  assert( databaseModel!=NULL );
+
+  // Access previously selected dataset-model.
+  const DatasetModel* datasetModel =
+    databaseModel->GetSelectedDatasetModel();
+
+  // If there were no previously selected dataset-model, return.
+  if( datasetModel==NULL )
+    return;
+
+  // Access previously selected vector-image model.
+  const VectorImageModel* vectorImageModel =
+    datasetModel->GetSelectedImageModel< VectorImageModel >();
+
+  // Check type.
+  assert( vectorImageModel==model->GetSelectedImageModel() );
+
+  // Connect newly selected model to view (after all other widgets are
+  // connected to prevent signals/slots to produce multiple view
+  // refreshes).
+  if( vectorImageModel )  // could be null when no dataset selected
+    {
+    // Disconnect previously selected image-model from view.
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( SettingsUpdated() ),
+      // to:
+      m_ImageView,
+      SLOT( updateGL()  )
+      );
+
+    // Disconnect previously selected image-model from view.
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( SpacingChanged( const SpacingType& ) ),
+      // to:
+      m_ImageView,
+      SLOT( OnSpacingChanged( const SpacingType& ) )
+      );
+
+    // Disconnect previously selected quicklook-model from view.   
+    // TODO: Remove quicklook temporary hack by better design.
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( SettingsUpdated() ),
+      // to:
+      m_QuicklookViewDock->widget(),
+      SLOT( updateGL()  )
+      );
+
+    // Disconnect previously selected quicklook-model from view.   
+    // TODO: Remove quicklook temporary hack by better design.
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( ViewportRegionChanged( double, double ) ),
+      // to:
+      m_ImageView->GetImageViewManipulator(),
+      SLOT( OnViewportRegionChanged( double, double ) )
+      );
+    }
 }
 
 /*****************************************************************************/
@@ -640,15 +726,16 @@ MainWindow
 {
   qDebug() << this << "::OnSelectedDatasetModelChanged(" << model << ")";
 
-  // Assign dataset-model to dataset-properties controller.
-  SetControllerModel( m_DatasetPropertiesDock, model );
-
   // Access vector-image model.
   VectorImageModel* vectorImageModel =
     model->GetSelectedImageModel< VectorImageModel >();
 
   // Check type.
   assert( vectorImageModel==model->GetSelectedImageModel() );
+
+  //
+  // VIEWS.
+  //
 
   // Update image-view.
   assert( m_ImageView!=NULL );
@@ -665,12 +752,15 @@ MainWindow
     : vectorImageModel->GetQuicklookModel()
   );
 
+  //
+  // MODEL(s).
+  //
+
   // Connect newly selected model to view (after all other widgets are
   // connected to prevent signals/slots to produce multiple view
   // refreshes).
   if (vectorImageModel)  // could be null when no dataset selected
     {
-
     // essai avec m_TabWidget->index(0)
     //
     // SAT: Using m_TabWidget->index( 0 ) or m_ImageView is equivalent
@@ -685,9 +775,20 @@ MainWindow
       SLOT( updateGL()  )
       );
 
+    //
+    // connect the vectorimage model spacing change (when zooming)
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( SpacingChanged(const SpacingType&) ),
+      // to:
+      m_ImageView,
+      SLOT( OnSpacingChanged(const SpacingType&)  )
+      );
+
     // Connect newly selected model to view (after all other widgets are
     // connected to prevent signals/slots to produce multiple view
     // refreshes).
+    // TODO: Remove quicklook temporary hack by better design.
     QObject::connect(
       vectorImageModel,
       SIGNAL( SettingsUpdated() ),
@@ -697,17 +798,8 @@ MainWindow
       );
 
     //
-    // connect the vectorimage model spacing change (when zooming)
-    QObject::connect(
-      vectorImageModel,
-      SIGNAL( SpacingChanged(const SpacingType&) ),
-      // to:
-      m_CentralTabWidget->widget(0)/*m_ImageView*/,
-      SLOT( OnSpacingChanged(const SpacingType&)  )
-      );
-
-    //
     // needed for the status bar update
+    // TODO: Remove quicklook temporary hack by better design.
     QObject::connect(
       vectorImageModel,
       SIGNAL( ViewportRegionChanged( double, double ) ),
@@ -718,12 +810,22 @@ MainWindow
     }
 
   //
+  // CONTROLLERS.
+  //
+
+  //
   // Connect image-model controllers.
   //
-  // N.B.: This step *must* be done after controller-model signals and
-  // slots have been connected (because when model is assigned to
-  // controller, widgets/view are reset and emit refreshing signals).
+  // N.B.: This step *must* be done after signals and slots between
+  // model(s) and view(s) have been connected (because when model is
+  // assigned to controller, widgets/view are reset and emit
+  // refreshing signals).
   //
+  // See also: OnAboutToChangeDatasetModel().
+
+  // Assign dataset-model to dataset-properties controller.
+  SetControllerModel( m_DatasetPropertiesDock, model );
+
   // Assign image-model to color-dynamics controller.
   SetControllerModel( m_ColorDynamicsDock, vectorImageModel );
 
