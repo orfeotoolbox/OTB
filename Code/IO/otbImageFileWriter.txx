@@ -501,8 +501,6 @@ ImageFileWriter<TInputImage>
     m_ShiftOutputIndex = start;
     inputRegion.SetIndex(m_ShiftOutputIndex);
 
-    otbMsgDevMacro(<< "inputRegion " << inputRegion);
-
     if (!inputRegion.Crop(inputPtr->GetLargestPossibleRegion()))
       {
       // Couldn't crop the region (requested region is outside the largest
@@ -631,7 +629,6 @@ ImageFileWriter<TInputImage>
       //Set the ioRegion index using the shifted index ( (0,0 without box parameter))
       ioRegion.SetIndex(i, streamRegion.GetIndex(i) - m_ShiftOutputIndex[i]);
       }
-    otbMsgDevMacro(<< "ioregion " <<  ioRegion )
     this->SetIORegion(ioRegion);
     m_ImageIO->SetIORegion(m_IORegion);
 
@@ -736,8 +733,6 @@ ImageFileWriter<TInputImage>
       cacheImage->CopyInformation(input);
       cacheImage->SetBufferedRegion(ioRegion);
       cacheImage->Allocate();
-
-      otbMsgDevMacro(<< "ioRegion " << ioRegion);
 
       typedef itk::ImageRegionConstIterator<TInputImage> ConstIteratorType;
       typedef itk::ImageRegionIterator<TInputImage>      IteratorType;
