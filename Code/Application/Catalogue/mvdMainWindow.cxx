@@ -892,8 +892,8 @@ MainWindow
       );
     }
 
+  // Disconnect the signals from the  
   DisconnectStatusBar( model );
-
 }
 
 /*****************************************************************************/
@@ -915,6 +915,8 @@ MainWindow
   //
 
   // connect the status bar
+  // must be done before the SetImageModel (to be able to receive
+  // the signal with zoom level)
   ConnectStatusBar( model );
 
   // Update image-view.
@@ -936,7 +938,6 @@ MainWindow
   // MODEL(s).
   //
 
-  // Connect newly selected model to view (after all other widgets are
   // connected to prevent signals/slots to produce multiple view
   // refreshes).
   if (vectorImageModel)  // could be null when no dataset selected
