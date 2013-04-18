@@ -244,7 +244,7 @@ void
 DatabaseModel
 ::OnDatasetToDeleteSelected( const QString&  id)
 {
-  // TODO : pop up a warning ??
+  // TODO : pop up a Dialog widget ??
   
   // In DatabaseModel : delete from the map of datasets 
 

@@ -99,7 +99,7 @@ main( int argc, char* argv[] )
 
 
 #if defined( _DEBUG )
-  // Usefull when developping/debugging to avoid overlapping other windows.
+  // Useful when developping/debugging to avoid overlapping other windows.
   mainWindow.show();
 #else
   // TODO: Correctly manage main-window state via application settings.
