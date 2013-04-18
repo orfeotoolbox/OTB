@@ -26,7 +26,7 @@ namespace Wrapper
   {
     SetName("TrainMachineLearningImagesClassifier");
     SetDescription(
-        "Train a classifier (avalaible in OpenCV machine learning) from multiple pairs of images and training vector data.");
+        "Train a classifier (available in OpenCV machine learning) from multiple pairs of images and training vector data.");
 
     // Documentation
     SetDocName("Train an OpenCV classifier from multiple images");
