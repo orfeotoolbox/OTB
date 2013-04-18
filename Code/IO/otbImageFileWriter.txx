@@ -671,9 +671,12 @@ ImageFileWriter<TInputImage>
    * Release any inputs if marked for release
    */
   this->ReleaseInputs();
+
+  //Reset global shift on input region (box parameter)
+  //It allows to call multiple update over the writer
+  m_ShiftOutputIndex.Fill(0);
 }
 
-//---------------------------------------------------------
 
 /**
  *
