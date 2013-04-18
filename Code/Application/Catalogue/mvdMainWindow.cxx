@@ -650,12 +650,6 @@ MainWindow
   // Check type.
   assert( vectorImageModel==model->GetSelectedImageModel() );
 
-  // Assign image-model to color-dynamics controller.
-  SetControllerModel( m_ColorDynamicsDock, vectorImageModel );
-
-  // Assign image-model to color-setup controller.
-  SetControllerModel( m_ColorSetupDock, vectorImageModel );
-
   // Update image-view.
   assert( m_ImageView!=NULL );
   m_ImageView->SetImageModel( vectorImageModel );
@@ -678,12 +672,16 @@ MainWindow
     {
 
     // essai avec m_TabWidget->index(0)
+    //
+    // SAT: Using m_TabWidget->index( 0 ) or m_ImageView is equivalent
+    // since Qt may use signal & slot names to connect (see MOC .cxx
+    // files). Thus, using m_ImageView saves one indirection call.
     
     QObject::connect(
       vectorImageModel,
       SIGNAL( SettingsUpdated() ),
       // to:
-      m_CentralTabWidget->widget(0)/*m_ImageView*/,
+      m_ImageView,
       SLOT( updateGL()  )
       );
 
@@ -710,18 +708,27 @@ MainWindow
 
     //
     // needed for the status bar update
-    QObject::connect(vectorImageModel,
-                     SIGNAL( ViewportRegionChanged(double, double) ),
-                     m_ImageView->GetImageViewManipulator(),
-                     SLOT( OnViewportRegionChanged(double, double) )
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( ViewportRegionChanged( double, double ) ),
+      // to:
+      m_ImageView->GetImageViewManipulator(),
+      SLOT( OnViewportRegionChanged( double, double ) )
       );
-
-    // 
-    // calling updated is needed here to refresh proprely the view 
-    // TODO : investigate !!!!
-    m_ImageView->update();
-    m_QuicklookViewDock->widget()->update();    
     }
+
+  //
+  // Connect image-model controllers.
+  //
+  // N.B.: This step *must* be done after controller-model signals and
+  // slots have been connected (because when model is assigned to
+  // controller, widgets/view are reset and emit refreshing signals).
+  //
+  // Assign image-model to color-dynamics controller.
+  SetControllerModel( m_ColorDynamicsDock, vectorImageModel );
+
+  // Assign image-model to color-setup controller.
+  SetControllerModel( m_ColorSetupDock, vectorImageModel );
 }
 
 /*****************************************************************************/
