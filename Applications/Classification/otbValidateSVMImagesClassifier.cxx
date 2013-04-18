@@ -133,6 +133,11 @@ private:
     SetParameterDescription("il", "Input image list filename.");
     AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List");
     SetParameterDescription("vd", "List of vector data to select validation samples.");
+    AddParameter(ParameterType_String, "vfn", "Name of the discrimination field");
+    SetParameterDescription("vfn", "Name of the field used to discriminate class in the vector data files.");
+    SetParameterString("vfn", "Class");
+    MandatoryOff("vfn");
+
     AddParameter(ParameterType_InputFilename, "imstat", "XML image statistics file");
     MandatoryOff("imstat");
     SetParameterDescription("imstat", "Filename of an XML file containing mean and standard deviation of input images.");
@@ -290,7 +295,7 @@ private:
       sampleGenerator->SetInputVectorData(vdreproj->GetOutput());
       sampleGenerator->SetValidationTrainingProportion(1.0); // All in validation
 
-      sampleGenerator->SetClassKey("Class");
+      sampleGenerator->SetClassKey(GetParameterString("vfn"));
 
       sampleGenerator->Update();
 
@@ -400,3 +405,5 @@ private:
 } // end of namespace otb
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::ValidateSVMImagesClassifier)
+
+
