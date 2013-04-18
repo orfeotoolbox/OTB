@@ -3818,7 +3818,8 @@ ADD_TEST(ioTvImageFileWriterExtendedFileName_Box ${IO_TESTS24}
         ${TEMP}/ioImageFileWriterExtendedFileName_box.tif
         2
         2
-        10
+        200
+        200
         10
         )
 

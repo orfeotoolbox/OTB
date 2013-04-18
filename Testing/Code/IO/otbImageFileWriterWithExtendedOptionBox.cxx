@@ -35,6 +35,7 @@ int otbImageFileWriterWithExtendedOptionBox(int argc, char* argv[])
   const unsigned int starty = atoi(argv[4]);
   const unsigned int sizex = atoi(argv[5]);
   const unsigned int sizey = atoi(argv[6]);
+  const unsigned int ram = atoi(argv[7]);
   const std::string separator = ":";
 
   typedef float InputPixelType;
@@ -73,6 +74,7 @@ int otbImageFileWriterWithExtendedOptionBox(int argc, char* argv[])
 
   writer->SetFileName(outputFilenameExtended.str());
   writer->SetInput(reader->GetOutput());
+  writer->SetAutomaticAdaptativeStreaming(ram);
 
   extractROIFilter->SetStartX(startx);
   extractROIFilter->SetStartY(starty);
