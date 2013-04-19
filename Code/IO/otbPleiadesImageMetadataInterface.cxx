@@ -140,7 +140,7 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
     };
   // tolerance threshold
   double tolerance = 0.05;
-  
+
   if (outputValues.size() == 1)
     {
     // Pan
@@ -558,6 +558,7 @@ PleiadesImageMetadataInterface
     outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
     }
 
+  std::cout << "physical gain " << outputValuesVariableLengthVector << std::endl;
   return outputValuesVariableLengthVector;
 }
 
@@ -862,9 +863,10 @@ PleiadesImageMetadataInterface
   // Panchromatic case
   if (nbBands == 1)
     {
-    if (sensorId == "PHR 1A")
+    if (sensorId.find("PHR") != std::string::npos)
+      //if (sensorId == "PHR 1A")
       {
-      const float b0[209] =
+      const float pan[209] =
         {
           0.0000000,
           0.0000000,
@@ -1077,8 +1079,8 @@ PleiadesImageMetadataInterface
           0.0000000
         };
       //add panchromatic band to the temporary list
-      const std::vector<float> vb0 (b0, b0 + sizeof(b0) / sizeof(float) );
-      tmpSpectralBandList.push_back(vb0);
+      const std::vector<float> vpan (pan, pan + sizeof(pan) / sizeof(float) );
+      tmpSpectralBandList.push_back(vpan);
       }
     else
       {
@@ -1087,9 +1089,8 @@ PleiadesImageMetadataInterface
     }
   else if (nbBands > 1 && nbBands < 5)
     {
-    //FIXME add other instrument relative spectral response (not only HRG)
-    //band B0
-    const float b1[209] =
+    //band B0 (blue band)
+    const float b0[209] =
       {
         0.0098681,
         0.0293268,
@@ -1301,7 +1302,8 @@ PleiadesImageMetadataInterface
         0.0057120,
         0.0048136
       };
-    const float b2[209] =
+    //B1 green band
+    const float b1[209] =
       {
         0.0000144,
         0.0000143,
@@ -1513,7 +1515,8 @@ PleiadesImageMetadataInterface
         0.0079795,
         0.0057516
       };
-    const float b3[209] =
+    //B2 red band
+    const float b2[209] =
       {
         0.0097386,
         0.0035306,
@@ -1725,7 +1728,8 @@ PleiadesImageMetadataInterface
         0.0125129,
         0.0086117
       };
-    const float b4[209] =
+    //B3 nir band
+    const float b3[209] =
       {
         0.0024163,
         0.0017305,
@@ -1938,21 +1942,22 @@ PleiadesImageMetadataInterface
         0.0061346
       };
     //Add multispectral bands to the temporary list
+    const std::vector<float> vb0 (b0, b0 + sizeof(b0) / sizeof(float) );
     const std::vector<float> vb1 (b1, b1 + sizeof(b1) / sizeof(float) );
-    tmpSpectralBandList.push_back(vb1);
     const std::vector<float> vb2 (b2, b2 + sizeof(b2) / sizeof(float) );
-    tmpSpectralBandList.push_back(vb2);
     const std::vector<float> vb3 (b3, b3 + sizeof(b3) / sizeof(float) );
+    //For Pleiades MS image the order of band in 1A product is: B2 B1 B0 B3
+    //(BandIndexToWavelength method could be used here)
+    tmpSpectralBandList.push_back(vb2);
+    tmpSpectralBandList.push_back(vb1);
+    tmpSpectralBandList.push_back(vb0);
     tmpSpectralBandList.push_back(vb3);
-    const std::vector<float> vb4 (b4, b4 + sizeof(b4) / sizeof(float) );
-    tmpSpectralBandList.push_back(vb4);
-
     }
   else
     {
     itkExceptionMacro(<< "Invalid number of bands...");
     }
-  
+
   unsigned int j = 0;
   for (std::list <std::vector<float> >::const_iterator it = tmpSpectralBandList.begin(); it != tmpSpectralBandList.end(); ++it)
     {
@@ -1963,7 +1968,6 @@ PleiadesImageMetadataInterface
     wavelengthSpectralBand->GetNthElement(j)->SetUserStep(0.0025);
     ++j;
     }
-
   return wavelengthSpectralBand;
 }
 
