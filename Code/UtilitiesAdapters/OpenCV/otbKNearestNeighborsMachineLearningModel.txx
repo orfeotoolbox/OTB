@@ -18,12 +18,11 @@
 #ifndef __otbKNearestNeighborsMachineLearningModel_txx
 #define __otbKNearestNeighborsMachineLearningModel_txx
 
-#include <iostream>
 #include <boost/lexical_cast.hpp>
 #include "otbKNearestNeighborsMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
 
-#include <opencv2/opencv.hpp>
+#include <fstream>
 #include "itkMacro.h"
 
 namespace otb
