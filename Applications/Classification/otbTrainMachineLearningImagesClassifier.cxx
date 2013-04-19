@@ -423,7 +423,7 @@ namespace Wrapper
 
     confMatCalc->Compute();
 
-    otbAppLogINFO("SVM training performances");
+    otbAppLogINFO("training performances");
     LogConfusionMatrix(confMatCalc);
 
     for (unsigned int itClasses = 0; itClasses < confMatCalc->GetNumberOfClasses(); itClasses++)
