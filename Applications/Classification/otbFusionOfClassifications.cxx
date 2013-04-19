@@ -32,7 +32,6 @@
 #include "otbImageList.h"
 
 
-
 namespace otb
 {
 
