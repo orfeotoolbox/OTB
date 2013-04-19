@@ -74,7 +74,7 @@ public:
 
   typedef otb::ClampVectorImageFilter<DoubleVectorImageType,
                                       DoubleVectorImageType>              ClampFilterType;
-  
+
   typedef ReflectanceToSurfaceReflectanceImageFilter<DoubleVectorImageType,
                                                      DoubleVectorImageType>         ReflectanceToSurfaceReflectanceImageFilterType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionValuesType  FilterFunctionValuesType;
@@ -126,11 +126,11 @@ private:
                             "This allows to save the image with integer pixel type (in the range [0, 1000]  instead of floating point in the range [0, 1]. In order to do that, use this option and set the output pixel type (-out filename uint16 for example)");
     DisableParameter("milli");
     MandatoryOff("milli");
-    
-    AddParameter(ParameterType_Empty, "noclamp", "Disable clamp of reflectivity values");
-    SetParameterDescription("noclamp", "Disable clamping in the range [0% , 100%]. It can be usefull to preserve area with specular reflectance.");
-    DisableParameter("noclamp");
-    MandatoryOff("noclamp");
+
+    AddParameter(ParameterType_Empty, "clamp", "Clamp of reflectivity values between [0% , 100%]");
+    SetParameterDescription("clamp", "Clamping in the range [0% , 100%]. It can be usefull to preserve area with specular reflectance.");
+    EnableParameter("clamp");
+    MandatoryOff("clamp");
 
     AddParameter(ParameterType_InputFilename, "rsr", "Relative Spectral Response File");
     std::ostringstream oss;
@@ -224,22 +224,15 @@ private:
 
     m_ScaleFilter = ScaleFilterType::New();
     m_ScaleFilter->InPlaceOn();
-    
+
     m_ClampFilter = ClampFilterType::New();
 
     switch ( GetParameterInt("level") )
       {
       case Level_TOA:
       {
-      if (IsParameterEnabled("noclamp"))
-        {
-        m_LuminanceToReflectanceFilter->SetUseClamp(false);
-        }
-      else
-        {
-        m_LuminanceToReflectanceFilter->SetUseClamp(true);
-        }
-      
+      m_LuminanceToReflectanceFilter->SetUseClamp(IsParameterEnabled("clamp"));
+
       m_LuminanceToReflectanceFilter->UpdateOutputInformation();
       m_ScaleFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
       }
@@ -344,7 +337,7 @@ private:
       // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->UpdateOutputInformation();
       // //m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->Update();
       // m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
-      if (IsParameterEnabled("noclamp"))
+      if (!IsParameterEnabled("clamp"))
         {
         m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
         }
