@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdBackgroundTask.h"
+#include "Gui/mvdTaskProgressDialog.h"
 
 
 /*****************************************************************************/
@@ -38,12 +38,14 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractWorker.h"
+#include "Core/mvdAbstractWorker.h"
+#include "Core/mvdBackgroundTask.h"
 
 namespace mvd
 {
+
 /*
-  TRANSLATOR mvd::BackgroundTask
+  TRANSLATOR mvd::TaskProgressDialog
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -54,9 +56,6 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
-namespace
-{
-} // end of anonymous namespace.
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -66,75 +65,101 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-BackgroundTask
-::BackgroundTask( AbstractWorker* worker, bool autoDestroy, QObject* parent ) :
-  QThread( parent ),
-  m_Worker( worker )
+TaskProgressDialog
+::TaskProgressDialog( BackgroundTask* task,
+		      QWidget* parent,
+		      Qt::WindowFlags flags ):
+  QProgressDialog( parent, flags ),
+  m_BackgroundTask( task ),
+  m_Object( NULL ),
+  m_Exception()
 {
-  // Change thread affinity and ownership of managed worker.
-  assert( m_Worker->parent()==NULL );
-  m_Worker->moveToThread( this );
-  m_Worker->setParent( this );
+  m_BackgroundTask->setParent( this );
 
 
-  // Start.
   QObject::connect(
-    this, SIGNAL( started() ),
+    task->GetWorker(), SIGNAL( ProgressTextChanged( const QString& ) ),
     // to:
-    worker, SLOT( Do() )
+    this, SLOT( setLabelText( const QString& ) )
   );
 
-  // Stop.
   QObject::connect(
-    worker, SIGNAL( Finished() ),
+    task->GetWorker(), SIGNAL( ProgressValueChanged( int ) ),
     // to:
-    this, SLOT( quit() )
+    this, SLOT( setValue( int ) )
+  );
+
+  QObject::connect(
+    task->GetWorker(), SIGNAL( ProgressRangeChanged( int, int ) ),
+    // to:
+    this, SLOT( setRange( int, int ) )
   );
 
 
   QObject::connect(
-    worker,
-    SIGNAL( destroyed( QObject* ) ),
+    task->GetWorker(),
+    SIGNAL( Done( QObject* ) ),
     // to:
     this,
-    SLOT( OnObjectDestroyed( QObject* ) )
+    SLOT( OnDone( QObject* ) )
   );
 
-  if( autoDestroy )
-    {
-    // Auto-destroy this background task.
-    QObject::connect(
-      this, SIGNAL( finished() ),
-      // to:
-      this, SLOT( deleteLater() )
-    );
-
-    // Auto-destroy worker instance.
-    QObject::connect(
-      this, SIGNAL( finished() ),
-      // to:
-      worker, SLOT( deleteLater() )
-    );
-    }
+  QObject::connect(
+    task->GetWorker(),
+    SIGNAL( ExceptionRaised( std::exception ) ),
+    // to:
+    this,
+    SLOT( OnExceptionRaised( std::exception ) )
+  );
 }
 
 /*******************************************************************************/
-BackgroundTask
-::~BackgroundTask()
+TaskProgressDialog
+::~TaskProgressDialog()
 {
+}
+
+/*****************************************************************************/
+int
+TaskProgressDialog
+::Exec()
+{
+  m_BackgroundTask->start();
+
+  return exec();
 }
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
-BackgroundTask
+TaskProgressDialog
+::OnDone( QObject* result )
+{
+  m_Object = result;
+
+  accept();
+}
+
+/*******************************************************************************/
+void
+TaskProgressDialog
+::OnExceptionRaised( std::exception& exception )
+{
+  m_Exception = exception;
+
+  reject();
+}
+
+/*******************************************************************************/
+void
+TaskProgressDialog
 ::OnObjectDestroyed( QObject* object )
 {
-  assert( object==m_Worker );
+  assert( object==m_BackgroundTask );
 
-  if( object==m_Worker )
-    m_Worker = NULL;
+  if( object==m_BackgroundTask )
+    m_BackgroundTask = NULL;
 }
 
 } // end namespace 'mvd'

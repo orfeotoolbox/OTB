@@ -66,6 +66,7 @@
 #include "Gui/mvdImageViewManipulator.h"
 #include "Gui/mvdQuicklookViewManipulator.h"
 #include "Gui/mvdStatusBarWidget.h"
+#include "Gui/mvdTaskProgressDialog.h"
 
 //
 #include "mvdCatalogueApplication.h"
@@ -754,13 +755,29 @@ MainWindow
 
   // New background-task running worker.
   // Will be self auto-deleted when worker has finished.
-  BackgroundTask* task = new BackgroundTask( importer, this );
+  BackgroundTask* task = new BackgroundTask( importer, true, this );
 
+  /*
+  // Checks.
+  assert( CatalogueApplication::Instance()!=NULL );
+  assert(
+    CatalogueApplication::Instance()->GetModel< DatabaseModel >()!=NULL
+  );
+  // Connect result to database routine.
+  QObject::connect(
+    importer,
+    SIGNAL( Done( QObject* ) ),
+    // to:
+    CatalogueApplication::Instance()->GetModel< DatabaseModel >,
+    SLOT( RegisterDatasetModel( DatasetModel* ) )
+  );
+  */
 
   //
   // Progress dialog.
 
-  QProgressDialog progress(
+  TaskProgressDialog progress(
+    task,
     this,
     Qt::CustomizeWindowHint | Qt::WindowTitleHint
   );
@@ -771,43 +788,7 @@ MainWindow
   progress.setCancelButton( NULL );
   progress.setMinimumDuration( 0 );
 
-  QObject::connect(
-    importer, SIGNAL( ProgressTextChanged( const QString& ) ),
-    // to:
-    &progress, SLOT( setLabelText( const QString& ) )
-  );
-
-  QObject::connect(
-    importer, SIGNAL( ProgressValueChanged( int ) ),
-    // to:
-    &progress, SLOT( setValue( int ) )
-  );
-
-  QObject::connect(
-    importer, SIGNAL( ProgressRangeChanged( int, int ) ),
-    // to:
-    &progress, SLOT( setRange( int, int ) )
-  );
-
-  QObject::connect(
-    importer,
-    SIGNAL( Done( QObject* ) ),
-    // to:
-    &progress,
-    SLOT( accept() )
-  );
-
-  QObject::connect(
-    importer,
-    SIGNAL( ExceptionRaised( std::exception ) ),
-    // to:
-    &progress,
-    SLOT( reject() )
-  );
-
-  task->start();
-
-  progress.exec();
+  progress.Exec();
 }
 
 /*****************************************************************************/

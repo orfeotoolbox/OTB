@@ -97,6 +97,10 @@ ImageImporter
     .arg( m_Filename )
   );
 
+  emit ProgressValueChanged( -1 );
+
+  emit ProgressRangeChanged( 0, 0 );
+
   // Load dataset-model.
   return I18nApplication::LoadDatasetModel( m_Filename, m_Width, m_Height );
 }

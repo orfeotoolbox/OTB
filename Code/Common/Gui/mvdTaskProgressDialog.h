@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdBackgroundTask_h
-#define __mvdBackgroundTask_h
+#ifndef __mvdTaskProgressDialog_h
+#define __mvdTaskProgressDialog_h
 
 //
 // Configuration include.
@@ -31,7 +31,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtCore>
+#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -57,20 +57,22 @@ namespace
 
 namespace mvd
 {
+
 //
 // Internal classes pre-declaration.
-class AbstractWorker;
+class BackgroundTask;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class BackgroundTask
+ * \class TaskProgressDialog
  *
- * \brief WIP.
+ * \brief Widget template skeleton to copy-paste when adding a new
+ * widget class.
  */
-class Monteverdi2_EXPORT BackgroundTask :
-    public QThread
+class Monteverdi2_EXPORT TaskProgressDialog :
+    public QProgressDialog
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -86,18 +88,18 @@ public:
   /**
    * \brief Constructor.
    */
-  BackgroundTask( AbstractWorker* worker,
-		  bool autoDestroy =true,
-		  QObject* parent =NULL );
+  TaskProgressDialog( BackgroundTask* task,
+		      QWidget* parent =NULL,
+		      Qt::WindowFlags flags =0 );
 
   /**
    * \brief Destructor.
    */
-  virtual ~BackgroundTask();
+  virtual ~TaskProgressDialog();
 
   /**
    */
-  inline const AbstractWorker* GetWorker() const;
+  int Exec();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -117,23 +119,31 @@ signals:
 // Protected methods.
 protected:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
 //
 // Protected attributes.
 protected:
 
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
 //
 // Private methods.
 private:
-
+  // Mask Qt native dialogue exec to be replaced by custom Exec()
+  // method. Reason: QDialog::exec() is not virtual.
+  using QProgressDialog::exec;
 
 //
 // Private attributes.
 private:
   /**
    */
-  AbstractWorker* m_Worker;
+  BackgroundTask* m_BackgroundTask;
+  /**
+   */
+  QObject* m_Object;
+  /**
+   */
+  std::exception m_Exception;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -142,40 +152,23 @@ private:
 private slots:
   /**
    */
+  void OnDone( QObject* result );
+  /**
+   */
+  void OnExceptionRaised( std::exception& exc );
+  /**
+   */
   void OnObjectDestroyed( QObject* object );
 };
 
-} // end namespace 'mvd'.
+} // end namespace 'mvd'
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
-//
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-
 namespace mvd
 {
-/*****************************************************************************/
-inline
-const AbstractWorker*
-BackgroundTask::GetWorker() const
-{
-  return m_Worker;
-}
 
 } // end namespace 'mvd'
 
-#endif // __mvdBackgroundTask_h
+#endif // __mvdTaskProgressDialog_h

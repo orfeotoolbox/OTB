@@ -24,6 +24,7 @@ set( Common_Gui_SOURCES
   mvdMyWidget.cxx
   mvdQuicklookViewManipulator.cxx
   mvdStatusBarWidget.cxx
+  mvdTaskProgressDialog.cxx
   mvdApplicationsToolBox.cxx
   mvdDatabaseTreeWidget.cxx
   mvdDatasetPropertiesWidget.cxx
@@ -56,6 +57,7 @@ set( Common_Gui_HEADERS_MOC
   mvdMyWidget.h
   mvdQuicklookViewManipulator.h
   mvdStatusBarWidget.h
+  mvdTaskProgressDialog.h
   mvdApplicationsToolBox.h
   mvdDatabaseTreeWidget.h
   mvdDatasetPropertiesWidget.h
