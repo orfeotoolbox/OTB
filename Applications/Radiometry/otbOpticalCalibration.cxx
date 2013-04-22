@@ -180,6 +180,8 @@ private:
     MandatoryOff("radius");
     SetDefaultParameterInt("radius", 2);
 
+    AddRAMParameter();
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
     SetDocExampleParameterValue("level", "toa");
@@ -231,6 +233,7 @@ private:
       {
       case Level_TOA:
       {
+      GetLogger()->Info("Compute Top of Atmosphere reflectance");
       m_LuminanceToReflectanceFilter->SetUseClamp(IsParameterEnabled("clamp"));
 
       m_LuminanceToReflectanceFilter->UpdateOutputInformation();
@@ -239,6 +242,7 @@ private:
       break;
       case Level_TOC:
       {
+      GetLogger()->Info("Compute Top of Canopy reflectance");
       m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
       m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
       m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
@@ -339,6 +343,7 @@ private:
         }
       else
         {
+        GetLogger()->Info("Clamp values between [0%,100%]");
         m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
         m_ClampFilter->ClampOutside(0.0, 1.0);
         m_ScaleFilter->SetInput(m_ClampFilter->GetOutput());
@@ -348,7 +353,14 @@ private:
       }
 
     // Output Image
-    const double scale = IsParameterEnabled("milli") ? 1000.0 : 1.0;
+    double scale = 1.0;
+
+    if (IsParameterEnabled("milli"))
+      {
+      GetLogger()->Info("Use milli-reflectance");
+      scale = 1000.;
+      }
+
     m_ScaleFilter->SetCoef(scale);
 
     SetParameterOutputImage("out", m_ScaleFilter->GetOutput());
