@@ -12,6 +12,7 @@ set( Common_Core_SOURCES
   mvdDatasetModel.cxx
   mvdHistogramModel.cxx
   mvdI18nApplication.cxx
+  mvdImageImporter.cxx
   mvdMath.cxx
   mvdModifiableInterface.cxx
   mvdMyClass.cxx
@@ -37,6 +38,7 @@ set( Common_Core_HEADERS_MOC
   mvdDatasetModel.h
   mvdHistogramModel.h
   mvdI18nApplication.h
+  mvdImageImporter.h
   # mvdMath.h
   mvdMyClass.h
   mvdQuicklookModel.h

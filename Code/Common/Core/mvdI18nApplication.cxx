@@ -160,6 +160,7 @@ I18nApplication
     {
     // try if the filename is valid
     VectorImageModel::EnsureValidImage(imageFilename);
+
     // Build model (relink to cached data).
     DatasetModel::BuildContext context( path, name, width, height );
     model->BuildModel( &context );

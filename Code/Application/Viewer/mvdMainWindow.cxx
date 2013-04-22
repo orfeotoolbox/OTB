@@ -1014,7 +1014,6 @@ MainWindow
   m_DatasetCreationProgressDialog->show();
 }
 
-
 /*****************************************************************************/
 void
 MainWindow

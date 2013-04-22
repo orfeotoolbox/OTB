@@ -131,6 +131,20 @@ DatabaseModel
 /*******************************************************************************/
 void
 DatabaseModel
+::RegisterDatasetModel( DatasetModel* model )
+{
+  qDebug() << this << "::RegisterDatasetModel(" << model << ")";
+
+  assert( model!=NULL );
+
+  // TODO: Implement slot.
+  delete model;
+  model = NULL;
+}
+
+/*******************************************************************************/
+void
+DatabaseModel
 ::ReleaseDatasetModel( const DatasetId& id )
 {
   qDebug() << this << "::ReleaseDatasetModel(" << id << ")";

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAbstractWorker_h
-#define __mvdAbstractWorker_h
+#ifndef __mvdImageImporter_h
+#define __mvdImageImporter_h
 
 //
 // Configuration include.
@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "mvdAbstractWorker.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -60,17 +60,17 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 
-
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class AbstractWorker
+ * \class ImageImporter
  *
- * \brief Abstract worker object used as a base-class for threaded tasks.
+ * \brief Import image worker. It is parametrized by the image
+ * filename and the desired (width, height) best-fit size.
  */
-class Monteverdi2_EXPORT AbstractWorker :
-    public QObject
+class Monteverdi2_EXPORT ImageImporter :
+    public AbstractWorker
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -83,8 +83,22 @@ class Monteverdi2_EXPORT AbstractWorker :
 // Public methods.
 public:
 
-  /** \brief Destructor. */
-  virtual ~AbstractWorker();
+  /**
+   * \brief Constructor.
+   *
+   * \param filename Filename of image to import.
+   * \param width Width of the best-fit size or -1 if none.
+   * \param height Height of the best-fit size or -1 if none.
+   */
+  ImageImporter( const QString& filename,
+		 int width =-1,
+		 int height =-1,
+		 QObject* parent =NULL );
+
+  /**
+   * \brief Destructor.
+   */
+  virtual ~ImageImporter();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -92,65 +106,31 @@ public:
 // Public SLOTS.
 public slots:
 
-  /**
-   * \brief Call the implemented do job/task routine.
-   */
-  void Do();
-
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  /**
-   * \brief Signal emitted when progress text has changed.
-   *
-   * \param text New progress text to display;
-   */
-  void ProgressTextChanged( const QString& text );
-
-  /**
-   * \brief Signal emitted when progress value has changed.
-   *
-   * \param value New progress value to display.
-   */
-  void ProgressValueChanged( int value );
-
-  /**
-   * \brief Signal emitted when progress range has changed.
-   *
-   * \param min Minimum progress value.
-   * \param max Maximum progress value.
-   */
-  void ProgressRangeChanged( int min, int max );
 
   /**
    * \brief Signal emitted when job/task has correctly been done.
    *
    * \param result Resulting QObject instance of NULL if none.
    */
-  void Done( QObject* result =NULL );
-
-  /**
-   *  \brief Signal emitted when job/task has finished correctly or not.
-   */
-  void Finished();
+  //void Done( QObject* result =NULL );
 
   /**
    * \brief Signal emitted when an exception has been caught by this worker.
    *
    * \param exc The copy (thread safety) exception which has been caught.
    */
-  void ExceptionRaised( std::exception exc );
+  //void ExceptionRaised( std::exception exc );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
-
-  /** \brief Constructor. */
-  AbstractWorker( QObject* parent =NULL );
 
 //
 // Protected attributes.
@@ -161,15 +141,25 @@ protected:
 //
 // Private methods.
 private:
-  /**
-   * \brief Do job/task abstract method to implement.
-   */
-  virtual QObject* virtual_Do() =0;
+
+  //
+  // AbstractWorker oveloads.
+
+  QObject* virtual_Do();
 
 
 //
 // Private attributes.
 private:
+  /**
+   */
+  QString m_Filename;
+  /**
+   */
+  int m_Width;
+  /**
+   */
+  int m_Height;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -204,4 +194,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractWorker_h
+#endif // __mvdImageImporter_h

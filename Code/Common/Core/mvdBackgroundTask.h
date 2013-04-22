@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAbstractWorker_h
-#define __mvdAbstractWorker_h
+#ifndef __mvdWorkerThread_h
+#define __mvdWorkerThread_h
 
 //
 // Configuration include.
@@ -59,18 +59,18 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-
+class AbstractWorker;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class AbstractWorker
+ * \class WorkerThread
  *
- * \brief Abstract worker object used as a base-class for threaded tasks.
+ * \brief WIP.
  */
-class Monteverdi2_EXPORT AbstractWorker :
-    public QObject
+class Monteverdi2_EXPORT WorkerThread :
+    public QThread
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -83,8 +83,15 @@ class Monteverdi2_EXPORT AbstractWorker :
 // Public methods.
 public:
 
-  /** \brief Destructor. */
-  virtual ~AbstractWorker();
+  /**
+   * \brief Constructor.
+   */
+  WorkerThread( AbstractWorker* worker, QObject* parent =NULL );
+
+  /**
+   * \brief Destructor.
+   */
+  virtual ~WorkerThread();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -92,65 +99,17 @@ public:
 // Public SLOTS.
 public slots:
 
-  /**
-   * \brief Call the implemented do job/task routine.
-   */
-  void Do();
-
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  /**
-   * \brief Signal emitted when progress text has changed.
-   *
-   * \param text New progress text to display;
-   */
-  void ProgressTextChanged( const QString& text );
-
-  /**
-   * \brief Signal emitted when progress value has changed.
-   *
-   * \param value New progress value to display.
-   */
-  void ProgressValueChanged( int value );
-
-  /**
-   * \brief Signal emitted when progress range has changed.
-   *
-   * \param min Minimum progress value.
-   * \param max Maximum progress value.
-   */
-  void ProgressRangeChanged( int min, int max );
-
-  /**
-   * \brief Signal emitted when job/task has correctly been done.
-   *
-   * \param result Resulting QObject instance of NULL if none.
-   */
-  void Done( QObject* result =NULL );
-
-  /**
-   *  \brief Signal emitted when job/task has finished correctly or not.
-   */
-  void Finished();
-
-  /**
-   * \brief Signal emitted when an exception has been caught by this worker.
-   *
-   * \param exc The copy (thread safety) exception which has been caught.
-   */
-  void ExceptionRaised( std::exception exc );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
-
-  /** \brief Constructor. */
-  AbstractWorker( QObject* parent =NULL );
 
 //
 // Protected attributes.
@@ -161,15 +120,14 @@ protected:
 //
 // Private methods.
 private:
-  /**
-   * \brief Do job/task abstract method to implement.
-   */
-  virtual QObject* virtual_Do() =0;
 
 
 //
 // Private attributes.
 private:
+  /**
+   */
+  AbstractWorker* m_Worker;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -201,7 +159,6 @@ private slots:
 
 namespace mvd
 {
-
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractWorker_h
+#endif // __mvdWorkerThread_h

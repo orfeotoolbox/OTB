@@ -162,6 +162,15 @@ signals:
   /** */
   void CurrentSelectedItemDeleted();
 
+  /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------*/
+
+//
+// Slots.
+public slots:
+  /**
+   */
+  void RegisterDatasetModel( DatasetModel* );
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //

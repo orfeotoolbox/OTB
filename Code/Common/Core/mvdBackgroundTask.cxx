@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdAbstractWorker.h"
+#include "mvdWorkerThread.h"
 
 
 /*****************************************************************************/
@@ -37,12 +37,11 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdI18nApplication.h"
 
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::AbstractWorker
+  TRANSLATOR mvd::WorkerThread
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -65,60 +64,34 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-AbstractWorker
-::AbstractWorker( QObject* parent ) :
-  QObject( parent )
+WorkerThread
+::WorkerThread( AbstractWorker* worker, QObject* parent ) :
+  QObject( parent ),
+  m_Worker( worker )
 {
+  QObject::connect(
+    this,
+    SIGNAL( started() ),
+    // to:
+    worker, 
+    SLOT( Do() )
+  );
+
+  QObject::connect(
+    this,
+    SIGNAL( finished() ),
+    // to:
+    worker,
+    SLOT( deleteLater() )
+  );
+
+  m_Worker->moveToThread( this );
 }
 
 /*******************************************************************************/
-AbstractWorker
-::~AbstractWorker()
+WorkerThread
+::~WorkerThread()
 {
-}
-
-/*****************************************************************************/
-void
-AbstractWorker
-::Do()
-{
-  qDebug() << this << "::Do()";
-  qDebug() << this->thread();
-
-  QObject* result = NULL;
-
-  try
-    {
-    // Just do it and get resulting QObject.
-    result = virtual_Do();
-
-    // Access application.
-    const I18nApplication* app = I18nApplication::ConstInstance();
-    assert( app!=NULL );
-
-    // Move object into application's main thread.
-    //
-    // We can only push to another thread,
-    // so thread affinity must be set here,
-    // and not in the slot that receives the object.
-    if( result->thread()!=app->thread() )
-      result->moveToThread( app->thread() );
-
-    // Emit task/job has been correctly done.
-    emit Done( result );
-    }
-  catch( std::exception& exc )
-    {
-    // Delete allocated object.
-    delete result;
-    result = NULL;
-
-    // Emit clone of caught exception.
-    emit ExceptionRaised( exc );
-    }
-
-  // Emit task/job has finished.
-  emit Finished();
 }
 
 /*******************************************************************************/

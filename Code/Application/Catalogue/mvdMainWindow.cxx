@@ -47,6 +47,7 @@
 //
 #include "Core/mvdDatabaseModel.h"
 #include "Core/mvdDatasetModel.h"
+#include "Core/mvdImageImporter.h"
 #include "Core/mvdQuicklookModel.h"
 #include "Core/mvdVectorImageModel.h"
 //
@@ -724,7 +725,9 @@ MainWindow
 void
 MainWindow
 ::on_action_OpenImage_triggered()
-{  
+{
+  qDebug() << this << "::on_action_OpenImage_triggered()";
+
   QString filename(
     QFileDialog::getOpenFileName( this, tr( "Open file..." ) )
   );
@@ -732,27 +735,88 @@ MainWindow
   if( filename.isNull() )
     return;
 
-  // emit OpenImageRequest( filename );
+  QThread* thread = new QThread( this );
 
-  /*
-  try
-    {
-    DatasetModel* model = Application::LoadDatasetModel(
-      m_Filename, m_Width, m_Height );
+  thread->setObjectName( "ImageImporter" );
 
-    // We can only push to another thread,
-    // so thread affinity must be set here,
-    // and not in the slot that receives the object
-    model->moveToThread(Application::Instance()->thread());
-    
-    emit ModelLoaded(model);
-    }
-  catch( std::exception& exc )
-    {
-    emit Error( exc.what() );
-    }
-  emit Finished();
-  */
+  ImageImporter* importer =
+    new ImageImporter(
+      filename,
+      m_ImageView->width(), m_ImageView->height()
+    );
+
+  importer->moveToThread( thread );
+
+  // Start.
+  QObject::connect(
+    thread, SIGNAL( started() ),
+    // to:
+    importer, SLOT( Do() )
+  );
+
+  // Finish.
+  QObject::connect(
+    importer, SIGNAL( Finished() ),
+    // to:
+    thread, SLOT( quit() )
+  );
+
+  // Destroy thread.
+  QObject::connect(
+    thread, SIGNAL( finished() ),
+    // to:
+    thread, SLOT( deleteLater() )
+  );
+
+  // Destroy importer.
+  QObject::connect(
+    thread, SIGNAL( finished() ),
+    // to:
+    importer, SLOT( deleteLater() )
+  );
+
+  QProgressDialog progress(
+    this,
+    Qt::CustomizeWindowHint | Qt::WindowTitleHint
+  );
+
+  progress.setWindowModality( Qt::WindowModal );
+  progress.setAutoReset( false );
+  progress.setAutoClose( false );
+  progress.setCancelButton( NULL );
+  progress.setMinimumDuration( 0 );
+
+  QObject::connect(
+    importer, SIGNAL( ProgressTextChanged( const QString& ) ),
+    // to:
+    &progress, SLOT( setLabelText( const QString& ) )
+  );
+
+  QObject::connect(
+    importer, SIGNAL( ProgressValueChanged( int ) ),
+    // to:
+    &progress, SLOT( setValue( int ) )
+  );
+
+  QObject::connect(
+    importer,
+    SIGNAL( Done( QObject* ) ),
+    // to:
+    &progress,
+    SLOT( accept() )
+  );
+
+  QObject::connect(
+    importer,
+    SIGNAL( ExceptionRaised( std::exception ) ),
+    // to:
+    &progress,
+    SLOT( reject() )
+  );
+
+  thread->start();
+
+  progress.exec();
 }
 
 /*****************************************************************************/

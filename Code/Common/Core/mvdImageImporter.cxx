@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdAbstractWorker.h"
+#include "mvdImageImporter.h"
 
 
 /*****************************************************************************/
@@ -28,6 +28,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -37,12 +38,13 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdDatasetModel.h"
 #include "mvdI18nApplication.h"
 
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::AbstractWorker
+  TRANSLATOR mvd::ImageImporter
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -65,60 +67,38 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-AbstractWorker
-::AbstractWorker( QObject* parent ) :
-  QObject( parent )
+ImageImporter
+::ImageImporter( const QString& filename,
+		 int width,
+		 int height,
+		 QObject* parent ) :
+  AbstractWorker( parent ),
+  m_Filename( filename ),
+  m_Width( width ),
+  m_Height( height )
 {
 }
 
 /*******************************************************************************/
-AbstractWorker
-::~AbstractWorker()
+ImageImporter
+::~ImageImporter()
 {
 }
 
-/*****************************************************************************/
-void
-AbstractWorker
-::Do()
+/*******************************************************************************/
+QObject*
+ImageImporter
+::virtual_Do()
 {
-  qDebug() << this << "::Do()";
-  qDebug() << this->thread();
+  qDebug() << this << "::virtual_Do()";
 
-  QObject* result = NULL;
+  emit ProgressTextChanged(
+    tr( "Importing image '%1' as dataset into cache directory..." )
+    .arg( m_Filename )
+  );
 
-  try
-    {
-    // Just do it and get resulting QObject.
-    result = virtual_Do();
-
-    // Access application.
-    const I18nApplication* app = I18nApplication::ConstInstance();
-    assert( app!=NULL );
-
-    // Move object into application's main thread.
-    //
-    // We can only push to another thread,
-    // so thread affinity must be set here,
-    // and not in the slot that receives the object.
-    if( result->thread()!=app->thread() )
-      result->moveToThread( app->thread() );
-
-    // Emit task/job has been correctly done.
-    emit Done( result );
-    }
-  catch( std::exception& exc )
-    {
-    // Delete allocated object.
-    delete result;
-    result = NULL;
-
-    // Emit clone of caught exception.
-    emit ExceptionRaised( exc );
-    }
-
-  // Emit task/job has finished.
-  emit Finished();
+  // Load dataset-model.
+  return I18nApplication::LoadDatasetModel( m_Filename, m_Width, m_Height );
 }
 
 /*******************************************************************************/
