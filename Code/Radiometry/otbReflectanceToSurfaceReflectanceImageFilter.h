@@ -231,6 +231,7 @@ protected:
   ReflectanceToSurfaceReflectanceImageFilter();
   /** Destructor */
   virtual ~ReflectanceToSurfaceReflectanceImageFilter() {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Read the aeronet data and extract aerosol optical and water vapor amount. */
   //void UpdateAeronetData( const MetaDataDictionaryType dict );

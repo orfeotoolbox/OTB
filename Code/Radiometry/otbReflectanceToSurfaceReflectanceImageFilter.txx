@@ -99,7 +99,15 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
   //case where filter function values are not read from an ascii file
   else
     {
-    if (m_FilterFunctionCoef->Size() == 0)
+    try
+      {
+      m_CorrectionParameters->SetWavelengthSpectralBand(imageMetadataInterface->GetSpectralSensitivity());
+      otbMsgDevMacro(<< "use filter available in MetadataInterface " << imageMetadataInterface->GetSpectralSensitivity());
+      }
+
+       catch (itk::ExceptionObject& err)
+      {
+      if (m_FilterFunctionCoef->Size() == 0)
       {
       otbMsgDevMacro(<< "use dummy filter");
       for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
@@ -108,13 +116,13 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
         }
 
       }
-    m_CorrectionParameters->SetWavelengthSpectralBand(m_FilterFunctionCoef);
-
-    Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
-    param2Terms->SetInput(m_CorrectionParameters);
-    param2Terms->Update();
-    m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
+      m_CorrectionParameters->SetWavelengthSpectralBand(m_FilterFunctionCoef);
+      }
     }
+  Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
+  param2Terms->SetInput(m_CorrectionParameters);
+  param2Terms->Update();
+  m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
  }
 
 template <class TInputImage, class TOutputImage>
@@ -156,7 +164,11 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
     {
     double       coef;
     double       res;
-    unsigned int wavelengthPosition = imageMetadataInterface->BandIndexToWavelengthPosition(i);
+    // Don't change the order of atmospheric parameters.
+    //FIXME Need to check in 6S that
+    //unsigned int wavelengthPosition = imageMetadataInterface->BandIndexToWavelengthPosition(i);
+    unsigned int wavelengthPosition = i;
+
     coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(wavelengthPosition)
                                * m_AtmosphericRadiativeTerms->GetDownwardTransmittance(wavelengthPosition)
                                * m_AtmosphericRadiativeTerms->GetUpwardTransmittance(wavelengthPosition));
@@ -168,6 +180,14 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
     functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(wavelengthPosition)));
 
     this->GetFunctorVector().push_back(functor);
+
+    otbMsgDevMacro(<< "Parameters to compute surface reflectance: ");
+
+    otbMsgDevMacro(<< "Band wavelengh position:         " << wavelengthPosition);
+    otbMsgDevMacro(<< "Coef (A):                        " << functor.GetCoefficient());
+    otbMsgDevMacro(<< "Residu:                          " << functor.GetResidu());
+    otbMsgDevMacro(<< "Spherical albedo:                " << functor.GetSphericalAlbedo());
+
     }
  }
 
@@ -185,6 +205,16 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
   this->UpdateFunctors();
  }
 
+
+/* Standard "PrintSelf" method */
+template <class TInputImage, class TOutputImage>
+void
+ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  os << indent << "Correction parameters : " << m_CorrectionParameters << std::endl;
 }
+
+} //end namespace otb
 
 #endif
