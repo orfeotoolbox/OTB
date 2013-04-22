@@ -709,6 +709,11 @@ void Application::SetParameterStringList(std::string parameter, std::vector<std:
     StringListParameter* paramDown = dynamic_cast<StringListParameter*>(param);
     paramDown->SetValue(value);
     }
+  else if(dynamic_cast<ListViewParameter *>(param))
+    {
+    ListViewParameter * paramDown = dynamic_cast<ListViewParameter *>(param);
+    paramDown->SetSelectedNames(value);
+    }
 }
 
 void Application::SetParameterOutputImage(std::string parameter, FloatVectorImageType* value)
