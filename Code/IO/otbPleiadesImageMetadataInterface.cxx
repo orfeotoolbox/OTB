@@ -558,7 +558,7 @@ PleiadesImageMetadataInterface
     outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
     }
 
-  std::cout << "physical gain " << outputValuesVariableLengthVector << std::endl;
+  otbMsgDevMacro( << "physical gain " << outputValuesVariableLengthVector);
   return outputValuesVariableLengthVector;
 }
 
