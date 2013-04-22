@@ -273,10 +273,6 @@ private:
         {
         m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("rsr"));
         }
-      else
-        {
-        m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionCoef(lImageMetadataInterface->GetSpectralSensitivity());
-        }
 
       // Aeronet file
       if (IsParameterEnabled("atmo.aeronet"))
@@ -297,7 +293,7 @@ private:
       AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
       oss << std::endl << std::endl << atmoTerms;
 
-      //GetLogger()->Info("Atmospheric correction parameters : " + oss.str());
+      GetLogger()->Debug("Atmospheric correction parameters : " + oss.str());
 
       //Compute adjacency effect
       //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter
