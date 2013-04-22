@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdWorkerThread.h"
+#include "mvdBackgroundTask.h"
 
 
 /*****************************************************************************/
@@ -28,6 +28,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -37,11 +38,12 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdAbstractWorker.h"
 
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::WorkerThread
+  TRANSLATOR mvd::BackgroundTask
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -64,33 +66,50 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-WorkerThread
-::WorkerThread( AbstractWorker* worker, QObject* parent ) :
-  QObject( parent ),
+BackgroundTask
+::BackgroundTask( AbstractWorker* worker, QObject* parent ) :
+  QThread( parent ),
   m_Worker( worker )
 {
-  QObject::connect(
-    this,
-    SIGNAL( started() ),
-    // to:
-    worker, 
-    SLOT( Do() )
-  );
-
-  QObject::connect(
-    this,
-    SIGNAL( finished() ),
-    // to:
-    worker,
-    SLOT( deleteLater() )
-  );
-
+  // Change thread affinity and ownership of managed worker.
+  assert( m_Worker->parent()==NULL );
   m_Worker->moveToThread( this );
+  m_Worker->setParent( this );
+
+
+  // Start.
+  QObject::connect(
+    this, SIGNAL( started() ),
+    // to:
+    worker, SLOT( Do() )
+  );
+
+  // Stop.
+  QObject::connect(
+    worker, SIGNAL( Finished() ),
+    // to:
+    this, SLOT( quit() )
+  );
+
+
+  // Auto-destroy this background task.
+  QObject::connect(
+    this, SIGNAL( finished() ),
+    // to:
+    this, SLOT( deleteLater() )
+  );
+
+  // Auto-destroy worker instance.
+  QObject::connect(
+    this, SIGNAL( finished() ),
+    // to:
+    worker, SLOT( deleteLater() )
+  );
 }
 
 /*******************************************************************************/
-WorkerThread
-::~WorkerThread()
+BackgroundTask
+::~BackgroundTask()
 {
 }
 

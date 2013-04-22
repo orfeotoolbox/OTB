@@ -45,6 +45,7 @@
 # include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
 #endif
 //
+#include "Core/mvdBackgroundTask.h"
 #include "Core/mvdDatabaseModel.h"
 #include "Core/mvdDatasetModel.h"
 #include "Core/mvdImageImporter.h"
@@ -728,6 +729,10 @@ MainWindow
 {
   qDebug() << this << "::on_action_OpenImage_triggered()";
 
+
+  //
+  // Select filename.
+
   QString filename(
     QFileDialog::getOpenFileName( this, tr( "Open file..." ) )
   );
@@ -735,45 +740,25 @@ MainWindow
   if( filename.isNull() )
     return;
 
-  QThread* thread = new QThread( this );
 
-  thread->setObjectName( "ImageImporter" );
+  //
+  // Background task.
 
+  // New image-importer worker.
+  // It will be auto-deleted by background-task.
   ImageImporter* importer =
     new ImageImporter(
       filename,
       m_ImageView->width(), m_ImageView->height()
     );
 
-  importer->moveToThread( thread );
+  // New background-task running worker.
+  // Will be self auto-deleted when worker has finished.
+  BackgroundTask* task = new BackgroundTask( importer, this );
 
-  // Start.
-  QObject::connect(
-    thread, SIGNAL( started() ),
-    // to:
-    importer, SLOT( Do() )
-  );
 
-  // Finish.
-  QObject::connect(
-    importer, SIGNAL( Finished() ),
-    // to:
-    thread, SLOT( quit() )
-  );
-
-  // Destroy thread.
-  QObject::connect(
-    thread, SIGNAL( finished() ),
-    // to:
-    thread, SLOT( deleteLater() )
-  );
-
-  // Destroy importer.
-  QObject::connect(
-    thread, SIGNAL( finished() ),
-    // to:
-    importer, SLOT( deleteLater() )
-  );
+  //
+  // Progress dialog.
 
   QProgressDialog progress(
     this,
@@ -799,6 +784,12 @@ MainWindow
   );
 
   QObject::connect(
+    importer, SIGNAL( ProgressRangeChanged( int, int ) ),
+    // to:
+    &progress, SLOT( setRange( int, int ) )
+  );
+
+  QObject::connect(
     importer,
     SIGNAL( Done( QObject* ) ),
     // to:
@@ -814,7 +805,7 @@ MainWindow
     SLOT( reject() )
   );
 
-  thread->start();
+  task->start();
 
   progress.exec();
 }

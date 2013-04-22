@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdWorkerThread_h
-#define __mvdWorkerThread_h
+#ifndef __mvdBackgroundTask_h
+#define __mvdBackgroundTask_h
 
 //
 // Configuration include.
@@ -65,11 +65,11 @@ class AbstractWorker;
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class WorkerThread
+ * \class BackgroundTask
  *
  * \brief WIP.
  */
-class Monteverdi2_EXPORT WorkerThread :
+class Monteverdi2_EXPORT BackgroundTask :
     public QThread
 {
 
@@ -86,12 +86,12 @@ public:
   /**
    * \brief Constructor.
    */
-  WorkerThread( AbstractWorker* worker, QObject* parent =NULL );
+  BackgroundTask( AbstractWorker* worker, QObject* parent =NULL );
 
   /**
    * \brief Destructor.
    */
-  virtual ~WorkerThread();
+  virtual ~BackgroundTask();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -161,4 +161,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdWorkerThread_h
+#endif // __mvdBackgroundTask_h
