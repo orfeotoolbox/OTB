@@ -20,7 +20,6 @@
 
 #include "itkObject.h"
 #include "otbImageIOBase.h"
-#include "itkImageIOFactory.h"
 
 namespace otb
 {
@@ -39,7 +38,7 @@ public:
   /** Class Methods used to interface with the registered factories */
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageIOFactory, itk::ImageIOFactory);
+  itkTypeMacro(ImageIOFactory, itk::Object);
 
   /** Convenient typedefs. */
   typedef ::otb::ImageIOBase::Pointer ImageIOBasePointer;
