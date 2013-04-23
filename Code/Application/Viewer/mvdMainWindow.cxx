@@ -114,7 +114,7 @@ MainWindow
   else
     {
     QMessageBox msgBox;
-    msgBox.setWindowTitle("Welcome new Montevedi2 user !");
+    msgBox.setWindowTitle( tr("Welcome new Montevedi2 user !" ) );
     msgBox.setText(tr("Monteverdi 2 maintains a repository "
       "to store additional data related to each image "
       "(display settings, histogram, quicklook...).\n\n"
