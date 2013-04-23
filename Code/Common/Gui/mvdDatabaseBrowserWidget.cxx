@@ -266,4 +266,18 @@ DatabaseBrowserWidget
   );
 }
 
+/*******************************************************************************/
+void
+DatabaseBrowserWidget
+::OnCurrentSelectedItemDeleted()
+{
+  //
+  // when the dataset removed is the current item, change the current
+  // selected item to be the top level item ( equivalent to 
+  // no dataset selected ) 
+  GetDatabaseTreeWidget()->setCurrentItem( 
+    GetDatabaseTreeWidget()->currentItem()->parent()  
+    );
+}
+
 } // end namespace 'mvd'

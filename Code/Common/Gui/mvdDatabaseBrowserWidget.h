@@ -121,6 +121,8 @@ public:
 // Public SLOTS.
 public slots:
 
+  void OnCurrentSelectedItemDeleted();
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
