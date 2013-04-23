@@ -47,8 +47,8 @@ public:
   itkNewMacro(Self);
 
   typedef FilterFunctionValues                              FilterFunctionValuesType;
-  typedef ObjectList <FilterFunctionValuesType>           InternalWavelengthSpectralBandListType;
-  typedef InternalWavelengthSpectralBandListType::Pointer        WavelengthSpectralBandListType;
+  typedef ObjectList <FilterFunctionValuesType>             InternalWavelengthSpectralBandListType;
+  typedef InternalWavelengthSpectralBandListType::Pointer   WavelengthSpectralBandListType;
   //typedef std::map <FilterFunctionValuesType>        FilterFunctionValuesMapType;
 
   /** Set the number of bands. */
