@@ -73,7 +73,7 @@ FilterFunctionValues
        {
           os << std::endl;
        }
-       os << indent << m_FilterFunctionValues[i] ;
+       os << indent << m_FilterFunctionValues[i];
     }
   os << std::endl;
   //Default notation for floating point value can be selected by
