@@ -233,7 +233,7 @@ private:
       {
       case Level_TOA:
       {
-      GetLogger()->Info("Compute Top of Atmosphere reflectance");
+      GetLogger()->Info("Compute Top of Atmosphere reflectance\n");
       m_LuminanceToReflectanceFilter->SetUseClamp(IsParameterEnabled("clamp"));
 
       m_LuminanceToReflectanceFilter->UpdateOutputInformation();
@@ -242,7 +242,7 @@ private:
       break;
       case Level_TOC:
       {
-      GetLogger()->Info("Compute Top of Canopy reflectance");
+      GetLogger()->Info("Compute Top of Canopy reflectance\n");
       m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
       m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
       m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
@@ -281,6 +281,7 @@ private:
       // Aeronet file
       if (IsParameterEnabled("atmo.aeronet"))
         {
+        GetLogger()->Info("Use aeronet file to retrieve atmospheric parameters");
         m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("atmo.aeronet"));
         }
 
@@ -290,14 +291,20 @@ private:
       m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
       m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
+      // std::ostringstream oss_atmo;
+      // oss_atmo << "Atmospheric parameters: " << std::endl;
+      // oss_atmo << m_AtmosphericParam;
+
+      // GetLogger()->Info(oss_atmo.str());
+
       std::ostringstream oss;
       oss.str("");
-      oss << m_AtmosphericParam;
+      oss << std::endl << m_AtmosphericParam;
 
       AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
       oss << std::endl << std::endl << atmoTerms;
 
-      GetLogger()->Debug("Atmospheric correction parameters : " + oss.str());
+      GetLogger()->Info("Atmospheric correction parameters compute by 6S : " + oss.str());
 
       //Compute adjacency effect
       //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter
