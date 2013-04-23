@@ -65,15 +65,25 @@ FilterFunctionValues
   os << indent << "Maximum spectral value       : " << m_MaxSpectralValue << std::endl;
   os << indent << "Wavelength spectral band step: " << m_UserStep << std::endl;
   os << indent << "Filter function values: " << std::endl;
+
+  os << std::scientific;
   for (unsigned int i = 0; i < m_FilterFunctionValues.size(); ++i)
     {
-    os << indent << m_FilterFunctionValues[i] << std::endl;
+       if ( i%6 == 0 && i >= 6)
+       {
+          os << std::endl;
+       }
+       os << indent << m_FilterFunctionValues[i] ;
     }
-  os << indent << "6S Filter function values: " << std::endl;
-  for (unsigned int i = 0; i < m_FilterFunctionValues6S.size(); ++i)
-    {
-    os << indent << m_FilterFunctionValues6S[i] << std::endl;
-    }
+  os << std::endl;
+  //Default notation for floating point value can be selected by
+  //calling str.unsetf(ios_base::floatfield)
+  os.unsetf(std::ios_base::floatfield);
+  // os << indent << "6S Filter function values: " << std::endl;
+  // for (unsigned int i = 0; i < m_FilterFunctionValues6S.size(); ++i)
+  //   {
+  //   os << indent << m_FilterFunctionValues6S[i] << std::endl;
+  //   }
 }
 
 } // end namespace otb
