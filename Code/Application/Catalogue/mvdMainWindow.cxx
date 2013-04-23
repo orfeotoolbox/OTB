@@ -971,7 +971,6 @@ MainWindow
   // refreshes).
   if (vectorImageModel)  // could be null when no dataset selected
     {
-    // essai avec m_TabWidget->index(0)
     //
     // SAT: Using m_TabWidget->index( 0 ) or m_ImageView is equivalent
     // since Qt may use signal & slot names to connect (see MOC .cxx
