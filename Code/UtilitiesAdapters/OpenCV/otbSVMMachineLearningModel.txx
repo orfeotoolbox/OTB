@@ -31,7 +31,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 ::SVMMachineLearningModel() :
  m_SVMType(CvSVM::C_SVC), m_KernelType(CvSVM::LINEAR), m_TermCriteriaType(CV_TERMCRIT_ITER),
  m_MaxIter(100), m_Epsilon(1e-6), m_Degree(0), m_Gamma(1),
- m_Coef0(0), m_C(1), m_Nu(0), m_P(0)
+ m_Coef0(0), m_C(1), m_Nu(0), m_P(0),m_ParameterOptimization(false)
 {
   m_SVMModel = new CvSVM;
 }
