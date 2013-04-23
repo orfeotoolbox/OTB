@@ -485,24 +485,68 @@ OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixV
                              -ref vector
                              -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp
                              -ref.vector.field Class
-                             -labels 4
-                             -out ${TEMP}/apTvComputeConfusionMatrixTconfusionVOut.txt
+                             -nblabelsprod 4
+                             -nblabelsref 4
+                             -out ${TEMP}/apTvComputeConfusionMatrixTconfusionVOut.csv
                      VALID   --compare-ascii ${NOTOL}
-                     ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixTconfusionVOut.txt
-                     ${TEMP}/apTvComputeConfusionMatrixTconfusionVOut.txt
+                     ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixTconfusionVOut.csv
+                     ${TEMP}/apTvComputeConfusionMatrixTconfusionVOut.csv
 )
 
 OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixR
                      APP    ComputeConfusionMatrix
                      OPTIONS -in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
                              -ref raster
-                             -ref.raster.in ${INPUTDATA}/Classification/clLabeledImageQB456_1-tmp.tif
-                             -labels 4
-                             -nodata 255
-                             -out ${TEMP}/apTvComputeConfusionMatrixTconfusionROut.txt
+                             -ref.raster.in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
+                             -nblabelsprod 4
+                             -nblabelsref 4
+                             -nodatalabel 255
+                             -out ${TEMP}/apTvComputeConfusionMatrixTconfusionROut.csv
                      VALID   --compare-ascii ${NOTOL}
-                     ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixTconfusionROut.txt
-                     ${TEMP}/apTvComputeConfusionMatrixTconfusionROut.txt
+                     ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixTconfusionROut.csv
+                     ${TEMP}/apTvComputeConfusionMatrixTconfusionROut.csv
+)
+
+OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixExtraReferenceLabelsV
+                     APP    ComputeConfusionMatrix
+                     OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho_C7.tif
+                             -ref vector
+                             -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp
+                             -ref.vector.field Class
+                             -nblabelsprod 3
+                             -nblabelsref 4
+                             -out ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv
+                     VALID   --compare-ascii ${NOTOL}
+                     ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv
+                     ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv
+)
+
+OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixExtraReferenceLabelsR
+                     APP    ComputeConfusionMatrix
+                     OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho_C7.tif
+                             -ref raster
+                             -ref.raster.in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
+                             -nblabelsprod 3
+                             -nblabelsref 4
+                             -nodatalabel 255
+                             -out ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsROut.csv
+                     VALID   --compare-ascii ${NOTOL}
+                     ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixExtraRefLabelsROut.csv
+                     ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsROut.csv
+)
+
+OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixExtraProducedLabelsR
+                     APP    ComputeConfusionMatrix
+                     OPTIONS -in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
+                             -ref raster
+                             -ref.raster.in ${INPUTDATA}/Classification/QB_1_ortho_C8.tif
+                             -nblabelsprod 4
+                             -nblabelsref 3
+                             -nodatalabel 255
+                             -out ${TEMP}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv
+                     VALID   --compare-ascii ${NOTOL}
+                     ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv
+                     ${TEMP}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv
 )
 
 #OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixI

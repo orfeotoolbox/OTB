@@ -71,9 +71,10 @@ public:
   typedef itk::LabelVotingImageFilter<IOLabelImageType, IOLabelImageType> LabelVotingFilterType;
 
   // Dempster Shafer
-  typedef itk::VariableSizeMatrix<double>                                          ConfusionMatrixType;
-  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, LabelPixelType>       ConfusionMatrixToMassOfBeliefType;
-  typedef ConfusionMatrixToMassOfBeliefType::MapOfIndicesType                      MapOfIndicesType;
+  typedef unsigned long                                                            ConfusionMatrixEltType;
+  typedef itk::VariableSizeMatrix<ConfusionMatrixEltType>                          ConfusionMatrixType;
+  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, LabelPixelType>  ConfusionMatrixToMassOfBeliefType;
+  typedef ConfusionMatrixToMassOfBeliefType::MapOfClassesType                      MapOfClassesType;
 
   typedef otb::ImageList<IOLabelImageType>                                         ImageListType;
   typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType>        ImageListToVectorImageFilterType;
@@ -174,7 +175,7 @@ private:
   }
 
 
-  int CSVConfusionMatrixFileReader(const std::string fileName, MapOfIndicesType &mapOfIndicesClX, ConfusionMatrixType &confusionMatrixClX)
+  int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &mapOfClassesRefClX, ConfusionMatrixType &confusionMatrixClX)
   {
     std::ifstream inFile;
     inFile.open(fileName.c_str());
@@ -187,39 +188,105 @@ private:
       }
     else
       {
-      std::string currentLine, labelsLine, currentValue;
-      const char commentChar = '#';
+      LabelPixelType labelRef = 0, labelProd = 0;
+      std::string currentLine, refLabelsLine, prodLabelsLine, currentValue;
+      const char endCommentChar = ':';
       const char separatorChar = ',';
       const char eolChar = '\n';
-      std::getline(inFile, labelsLine, commentChar); // Skips the comment char
-      std::getline(inFile, labelsLine, eolChar); // Gets the first line after the comment char until the End Of Line char
+      std::getline(inFile, refLabelsLine, endCommentChar); // Skips the comments
+      std::getline(inFile, refLabelsLine, eolChar); // Gets the first line after the comment char until the End Of Line char
+      std::getline(inFile, prodLabelsLine, endCommentChar); // Skips the comments
+      std::getline(inFile, prodLabelsLine, eolChar); // Gets the second line after the comment char until the End Of Line char
 
-      std::istringstream issLabelsLine(labelsLine);
-      mapOfIndicesClX.clear();
+      std::istringstream issRefLabelsLine(refLabelsLine);
+      std::istringstream issProdLabelsLine(prodLabelsLine);
+
+      MapOfClassesType mapOfClassesProdClX;
+
+      mapOfClassesRefClX.clear();
+      mapOfClassesProdClX.clear();
       int itLab = 0;
-      while (issLabelsLine.good())
+      while (issRefLabelsLine.good())
         {
-        std::getline(issLabelsLine, currentValue, separatorChar);
-        mapOfIndicesClX[itLab] = std::atoi(currentValue.c_str());
+        std::getline(issRefLabelsLine, currentValue, separatorChar);
+        labelRef = static_cast<LabelPixelType> (std::atoi(currentValue.c_str()));
+        mapOfClassesRefClX[labelRef] = itLab;
         ++itLab;
         }
 
-      unsigned int nbLabelsClk = mapOfIndicesClX.size();
-      confusionMatrixClX = ConfusionMatrixType(nbLabelsClk, nbLabelsClk);
-
-      for (unsigned int itLin = 0; itLin < nbLabelsClk; ++itLin)
+      itLab = 0;
+      while (issProdLabelsLine.good())
         {
-        //Gets the itLin^th line after the first header line with the labels
+        std::getline(issProdLabelsLine, currentValue, separatorChar);
+        labelProd = static_cast<LabelPixelType> (std::atoi(currentValue.c_str()));
+        mapOfClassesProdClX[labelProd] = itLab;
+        ++itLab;
+        }
+
+      unsigned int nbRefLabelsClk = mapOfClassesRefClX.size();
+      unsigned int nbProdLabelsClk = mapOfClassesProdClX.size();
+      ConfusionMatrixType confusionMatrixClXTemp;
+      confusionMatrixClXTemp = ConfusionMatrixType(nbRefLabelsClk, nbProdLabelsClk);
+      confusionMatrixClXTemp.Fill(0);
+
+      // Reading the confusion matrix confusionMatrixClXTemp from the file
+      for (unsigned int itRow = 0; itRow < nbRefLabelsClk; ++itRow)
+        {
+        //Gets the itRow^th line after the header lines with the labels
         std::getline(inFile, currentLine, eolChar);
         std::istringstream issCurrentLine(currentLine);
         unsigned int itCol = 0;
         while (issCurrentLine.good())
           {
           std::getline(issCurrentLine, currentValue, separatorChar);
-          confusionMatrixClX(itLin, itCol) = std::atoi(currentValue.c_str());
+          confusionMatrixClXTemp(itRow, itCol) = static_cast<ConfusionMatrixEltType> (std::atoi(currentValue.c_str()));
           ++itCol;
           }
         }
+
+      MapOfClassesType::iterator  itMapOfClassesRef, itMapOfClassesProd;
+
+      /*for (itMapOfClassesRef = mapOfClassesRefClX.begin(); itMapOfClassesRef != mapOfClassesRefClX.end(); ++itMapOfClassesRef)
+        {
+        std::cout << "mapOfClassesRefClX[" << itMapOfClassesRef->first << "] = " << itMapOfClassesRef->second << std::endl;
+        }
+      std::cout << std::endl;
+      for (itMapOfClassesProd = mapOfClassesProdClX.begin(); itMapOfClassesProd != mapOfClassesProdClX.end(); ++itMapOfClassesProd)
+        {
+        std::cout << "mapOfClassesProdClX[" << itMapOfClassesProd->first << "] = " << itMapOfClassesProd->second << std::endl;
+        }*/
+
+      // Formatting confusionMatrixClX from confusionMatrixClXTemp in order to make confusionMatrixClX a square matrix
+      // from the reference labels in mapOfClassesRefClX
+      int indiceLabelRef = 0, indiceLabelProd = 0;
+      int indiceLabelRefTemp = 0, indiceLabelProdTemp = 0;
+      // Initialization of confusionMatrixClX
+      confusionMatrixClX = ConfusionMatrixType(nbRefLabelsClk, nbRefLabelsClk);
+      confusionMatrixClX.Fill(0);
+      for (itMapOfClassesRef = mapOfClassesRefClX.begin(); itMapOfClassesRef != mapOfClassesRefClX.end(); ++itMapOfClassesRef)
+        {
+        // labels labelRef of mapOfClassesRefClX are already sorted
+        labelRef = itMapOfClassesRef->first;
+        indiceLabelRefTemp = itMapOfClassesRef->second;
+
+        for (itMapOfClassesProd = mapOfClassesProdClX.begin(); itMapOfClassesProd != mapOfClassesProdClX.end(); ++itMapOfClassesProd)
+          {
+          // labels labelProd of mapOfClassesProdClX are already sorted
+          labelProd = itMapOfClassesProd->first;
+          indiceLabelProdTemp = itMapOfClassesProd->second;
+
+          // If labelProd is present in mapOfClassesRefClX
+          if (mapOfClassesRefClX.count(labelProd) != 0)
+            {
+            indiceLabelProd = mapOfClassesRefClX.find(labelProd)->second; // Indice of labelProd in mapOfClassesRefClX
+            confusionMatrixClX(indiceLabelRef, indiceLabelProd) = confusionMatrixClXTemp(indiceLabelRefTemp, indiceLabelProdTemp);
+            }
+          }
+        ++indiceLabelRef;
+        }
+
+      //std::cout << "confusionMatrixClXTemp:" << std::endl << confusionMatrixClXTemp << std::endl << std::endl;
+      //std::cout << "confusionMatrixClX:" << std::endl << confusionMatrixClX << std::endl;
       }
     inFile.close();
     return EXIT_SUCCESS;
@@ -234,7 +301,6 @@ private:
     FloatVectorImageListType* imageList = GetParameterImageList("il");
 
     if (GetParameterInt("method") == Method_Majority_Voting)
-    //if (IsParameterEnabled( "method.majorityvoting" ) == true)
       {
       otbAppLogINFO("Fusion by Majority Voting");
 
@@ -320,11 +386,11 @@ private:
 
           imageListTemp->PushBack(converter->GetOutput());
 
-          MapOfIndicesType mapOfIndicesClk;
+          MapOfClassesType mapOfClassesClk;
           ConfusionMatrixType confusionMatrixClk;
-          CSVConfusionMatrixFileReader(confusionMatricesFilenameList[imageId], mapOfIndicesClk, confusionMatrixClk);
+          CSVConfusionMatrixFileReader(confusionMatricesFilenameList[imageId], mapOfClassesClk, confusionMatrixClk);
 
-          confusionMatrixToMassOfBeliefFilter->SetMapOfIndices(mapOfIndicesClk);
+          confusionMatrixToMassOfBeliefFilter->SetMapOfClasses(mapOfClassesClk);
           confusionMatrixToMassOfBeliefFilter->SetConfusionMatrix(confusionMatrixClk);
           confusionMatrixToMassOfBeliefFilter->SetDefinitionMethod(massOfBeliefDefMethod);
           confusionMatrixToMassOfBeliefFilter->Update();
@@ -349,10 +415,10 @@ private:
           {
           LabelMassMapType mapOfMassesOfBelief = vectorOfMapOfMassesOfBelief[k];
           otbAppLogINFO("Classifier[" << k << "]: ");
-          otbAppLogINFO("    Confusion Matrix file_" << k << ": " << confusionMatricesFilenameList[k]);
+          otbAppLogINFO("\tConfusion Matrix file_" << k << ": " << confusionMatricesFilenameList[k]);
           for (itMap = mapOfMassesOfBelief.begin(); itMap != mapOfMassesOfBelief.end(); ++itMap)
             {
-            otbAppLogINFO("       MassOfBelief_Cl_" << k << "[label_" << itMap->first << "] = " << itMap->second );
+            otbAppLogINFO("\t\tMassOfBelief_Cl_" << k << "[label_" << itMap->first << "] = " << itMap->second );
             }
           otbAppLogINFO("");
           }
