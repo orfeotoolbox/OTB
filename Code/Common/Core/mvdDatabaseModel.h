@@ -151,10 +151,16 @@ signals:
   /**
    */
   void AboutToChangeSelectedDatasetModel( const DatasetModel*  );
+  /**
+   */
+  void DatabaseChanged();
 
   /**
    */
   void SelectedDatasetModelChanged( DatasetModel* );
+  
+  /** */
+  void CurrentSelectedItemDeleted();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

@@ -244,16 +244,70 @@ void
 DatabaseModel
 ::OnDatasetToDeleteSelected( const QString&  id)
 {
-  qDebug() << this << " ::OnDatasetToDeleteSelected (WIP) -> Dataset to delete : "<< id;
-
-  // TODO : pop up a Dialog widget ??
+  // pop up a Dialog widget to confirm the user choice
+  QMessageBox msgBox;
+  msgBox.setWindowTitle( tr( "Warning") );
+  msgBox.setText(tr("You are about to remove the dataset : \n %1 \n\n"
+                    " Are your sure ? ").arg(id) );
+  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+  msgBox.setDefaultButton(QMessageBox::No);
+  int ret = msgBox.exec();
   
-  // In DatabaseModel : delete from the map of datasets 
+  // if choice confirmed
+  if (ret == QMessageBox::Yes)
+    {
+    qDebug() << this << " ::OnDatasetToDeleteSelected -> About to remove : "<< id;
 
-  // In DatasetModel  : delete from disk
-  
-  // redraw the database widget
+    // get the full path to the dataset dir
+    QDir datasetQDir( I18nApplication::Instance()->GetCacheDir().absolutePath() + "/" + id );
+    QString datasetDir = datasetQDir.absolutePath();
 
+    //
+    // remove the files in this directory
+    bool removingFilesStatus = true;
+    QStringList fileList = datasetQDir.entryList();
+    for( int i = 0; i < fileList.count(); ++i )
+      {
+      qDebug()<< "Removing file "<< fileList.at(i);
+      removingFilesStatus &= datasetQDir.remove( fileList.at(i) );
+      }
+
+    // remove the dir
+    QDir datasetQDirParent( I18nApplication::Instance()->GetCacheDir() );
+    
+    // if path removed successfuly : 
+    //  - release dataset model
+    //  - notify change to update the database browser
+    if (datasetQDirParent.rmpath( datasetDir ) )
+      {
+      // 
+      if ( FindDatasetModel( id ) == GetSelectedDatasetModel() )
+        {
+        // set the Tree browser to point on nothing
+        emit CurrentSelectedItemDeleted();
+
+        // release the selected dataset model
+        emit AboutToChangeSelectedDatasetModel( GetSelectedDatasetModel() );
+
+        // delete from the map of datasets 
+        ReleaseDatasetModel( id );
+
+        // set the current dataset model to null
+        m_SelectedDatasetModel = NULL;
+        
+        // notify the selected dataset change
+        emit SelectedDatasetModelChanged( NULL );
+        }
+      else
+        {
+        // delete from the map of datasets 
+        ReleaseDatasetModel( id );
+        }
+        
+      //  notify database changed
+      emit DatabaseChanged();
+      }
+    }
 }
 
 } // end namespace 'mvd'
