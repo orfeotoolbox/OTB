@@ -162,6 +162,12 @@ private slots:
    * \param name The name of the newly selected dataset.
    */
   void OnCurrentDatasetChanged( const QString& name );
+
+  /**
+   * \brief Slot called when the a dataset is removed
+   *
+   */
+  void OnDatabaseChanged();
 };
 
 } // end namespace 'mvd'.

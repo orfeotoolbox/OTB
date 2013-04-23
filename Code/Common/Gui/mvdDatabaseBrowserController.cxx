@@ -102,6 +102,22 @@ DatabaseBrowserController
     qobject_cast< DatabaseModel *>( model ), 
     SLOT( OnDatasetToDeleteSelected(const QString& ) )
     );
+
+  //
+  QObject::connect(
+    qobject_cast< DatabaseModel *>( model ), 
+    SIGNAL( DatabaseChanged() ),
+    this,
+    SLOT( OnDatabaseChanged() )
+    );
+
+  //
+  QObject::connect(
+    qobject_cast< DatabaseModel *>( model ), 
+    SIGNAL( CurrentSelectedItemDeleted() ),
+    widget,
+    SLOT( OnCurrentSelectedItemDeleted() )
+    );
 }
 
 /*******************************************************************************/
@@ -254,5 +270,14 @@ DatabaseBrowserController
   // it is connected to the DatabaseBrowserWidget custom QTreeWidget
   emit SelectedDatasetFilenameChanged(imageModel->GetFilename());
 }
+
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::OnDatabaseChanged()
+{
+  ResetWidget();
+}
+
 
 } // end namespace 'mvd'
