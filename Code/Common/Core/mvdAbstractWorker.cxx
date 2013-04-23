@@ -114,7 +114,7 @@ AbstractWorker
     result = NULL;
 
     // Emit clone of caught exception.
-    emit ExceptionRaised( exc );
+    emit ExceptionRaised( FromStdString( exc.what() ) );
     }
 
   // Emit task/job has finished.

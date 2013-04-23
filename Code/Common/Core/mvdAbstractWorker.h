@@ -139,9 +139,9 @@ signals:
   /**
    * \brief Signal emitted when an exception has been caught by this worker.
    *
-   * \param exc The copy (thread safety) exception which has been caught.
+   * \param 
    */
-  void ExceptionRaised( std::exception exc );
+  void ExceptionRaised( const QString& what );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

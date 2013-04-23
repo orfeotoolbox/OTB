@@ -106,10 +106,10 @@ TaskProgressDialog
 
   QObject::connect(
     task->GetWorker(),
-    SIGNAL( ExceptionRaised( std::exception ) ),
+    SIGNAL( ExceptionRaised( const QString& ) ),
     // to:
     this,
-    SLOT( OnExceptionRaised( std::exception ) )
+    SLOT( OnExceptionRaised( const QString& ) )
   );
 }
 
@@ -136,6 +136,8 @@ void
 TaskProgressDialog
 ::OnDone( QObject* result )
 {
+  qDebug() << this << "::OnDone(" << result << ")";
+
   m_Object = result;
 
   accept();
@@ -144,9 +146,15 @@ TaskProgressDialog
 /*******************************************************************************/
 void
 TaskProgressDialog
-::OnExceptionRaised( std::exception& exception )
+::OnExceptionRaised( const QString& what )
 {
-  m_Exception = exception;
+  qDebug() << this << "::OnExceptionRaised(" << what << ")";
+
+  QMessageBox::warning(
+    this,
+    tr( "%1 - Warning!" ).arg( PROJECT_NAME ),
+    what
+  );
 
   reject();
 }

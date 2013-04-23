@@ -101,6 +101,12 @@ public:
    */
   int Exec();
 
+  /**
+   */
+  template< typename T >
+    inline
+    T* GetObject() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -155,7 +161,7 @@ private slots:
   void OnDone( QObject* result );
   /**
    */
-  void OnExceptionRaised( std::exception& exc );
+  void OnExceptionRaised( const QString& what );
   /**
    */
   void OnObjectDestroyed( QObject* object );
@@ -168,6 +174,15 @@ private slots:
 
 namespace mvd
 {
+/*****************************************************************************/
+template< typename T >
+inline
+T*
+TaskProgressDialog
+::GetObject() const
+{
+  return qobject_cast< T* >( m_Object );
+}
 
 } // end namespace 'mvd'
 

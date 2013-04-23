@@ -241,7 +241,7 @@ DatasetModel
     vectorImageModel = NULL;
 
     // Forward exception to upper level (GUI).
-    throw;
+    throw exc;
     }
 
   return vectorImageModel;

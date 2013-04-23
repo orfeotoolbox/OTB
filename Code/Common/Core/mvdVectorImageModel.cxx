@@ -120,7 +120,11 @@ VectorImageModel
   if (!hasOverviewsSupport)
     {
     // the current file doesn't have overviews available and the ImageIO doesn't support overviews
-    throw std::runtime_error(ToStdString(tr( "The ImageIO used to read this file doesn't support Overviews." )).c_str());
+    throw std::runtime_error(
+      ToStdString(
+	tr( "The ImageIO used to read this file doesn't support Overviews." )
+      )
+    );
     }
   else
     {
@@ -150,14 +154,15 @@ VectorImageModel
           filter->Update();
 	  std::cout << std::endl;
           }
-        catch (itk::ExceptionObject &)
+        catch( std::exception& exc )
           {
           // The user can continue to use the file so we return a warning message
           // TODO MSD return the message to the log widget
           qDebug() << tr( "The overviews creation failed.\n"
                           "Navigation in resolution will be slower." );
-          }
 
+	  throw exc;
+          }
         }
       else
         {

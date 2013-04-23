@@ -757,22 +757,6 @@ MainWindow
   // Will be self auto-deleted when worker has finished.
   BackgroundTask* task = new BackgroundTask( importer, true, this );
 
-  /*
-  // Checks.
-  assert( CatalogueApplication::Instance()!=NULL );
-  assert(
-    CatalogueApplication::Instance()->GetModel< DatabaseModel >()!=NULL
-  );
-  // Connect result to database routine.
-  QObject::connect(
-    importer,
-    SIGNAL( Done( QObject* ) ),
-    // to:
-    CatalogueApplication::Instance()->GetModel< DatabaseModel >,
-    SLOT( RegisterDatasetModel( DatasetModel* ) )
-  );
-  */
-
   //
   // Progress dialog.
 
@@ -788,7 +772,29 @@ MainWindow
   progress.setCancelButton( NULL );
   progress.setMinimumDuration( 0 );
 
-  progress.Exec();
+  switch( progress.Exec() )
+    {
+    case QDialog::Accepted:
+      assert( CatalogueApplication::Instance() );
+      assert( CatalogueApplication::Instance()->GetModel()!=NULL );
+      assert(
+	CatalogueApplication::Instance()->GetModel()==
+	CatalogueApplication::Instance()->GetModel< DatabaseModel >()
+      );
+
+      assert( progress.GetObject< DatasetModel >()!=NULL );
+
+      CatalogueApplication::Instance()->GetModel< DatabaseModel >()
+	->RegisterDatasetModel( progress.GetObject< DatasetModel >()  );
+      break;
+
+    case QDialog::Rejected:
+      // Error is already managed by TaskProgressDialog.
+      break;
+
+    default:
+      break;
+    }
 }
 
 /*****************************************************************************/
