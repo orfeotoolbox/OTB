@@ -94,7 +94,7 @@ public:
   {
     TOutput outPixel;
     double  temp, temp2;
-    temp = static_cast<double>(inPixel) * m_Coefficient + m_Residu;
+    temp = (static_cast<double>(inPixel) + m_Residu)* m_Coefficient;
     temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
 
     outPixel = static_cast<TOutput>(temp2);

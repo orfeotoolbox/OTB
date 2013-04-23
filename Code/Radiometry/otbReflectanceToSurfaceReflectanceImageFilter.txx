@@ -173,7 +173,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
                                * m_AtmosphericRadiativeTerms->GetDownwardTransmittance(wavelengthPosition)
                                * m_AtmosphericRadiativeTerms->GetUpwardTransmittance(wavelengthPosition));
     coef = 1. / coef;
-    res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(wavelengthPosition) * coef;
+    res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(wavelengthPosition);
     FunctorType functor;
     functor.SetCoefficient(coef);
     functor.SetResidu(res);
