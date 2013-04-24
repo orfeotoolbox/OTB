@@ -335,9 +335,12 @@ public:
 //
 // Public slots.
 public slots:
-  /** */
+  /**
+   */
   void OnPhysicalCursorPositionChanged(double Xpc, double Ypc);
-  /** */
+
+  /**
+   */
   void OnUserCoordinatesEditingFinished(const QString& coord);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
@@ -487,6 +490,10 @@ private:
   /**
    */
   void ApplySettings();
+
+  /**
+   */
+  void BuildGdalOverviews();
 
 //
 // Private attributes.

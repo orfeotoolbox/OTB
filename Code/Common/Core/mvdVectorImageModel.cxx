@@ -109,77 +109,6 @@ VectorImageModel
   m_ImageFileReader->SetFileName( ToStdString( m_Filename ) );
   m_ImageFileReader->UpdateOutputInformation();
 
-  // TODO: Move overview processing into private method.
-
-  // Build overviews if necessary
-  bool hasOverviewsSupport = m_ImageFileReader->HasOverviewsSupport();
-  int nbOfAvailableOvw = m_ImageFileReader->GetNbOfAvailableOverviews();
-  // TODO: this choice should be done by the user during the import of the file
-  bool forceToCacheOvw = true;
-
-  if (!hasOverviewsSupport)
-    {
-    // the current file doesn't have overviews available and the ImageIO doesn't support overviews
-    throw std::runtime_error(
-      ToStdString(
-	tr( "The ImageIO used to read this file doesn't support Overviews." )
-      )
-    );
-    }
-  else
-    {
-    qDebug() << tr("The ImageIO used to read this file supports overviews.");
-
-    // TODO MSD: how to manage case of JPEG2000 with no overviews ? : wait GDAL support OpenJPEG ...
-    if (nbOfAvailableOvw == 0)
-      { // The current file don't have overviews available
-      qDebug() << tr("The file doesn't have overviews.");
-      if (forceToCacheOvw)
-        { // the user want to cache the overviews
-        qDebug() << tr("Caching of overviews.");
-        typedef otb::GDALOverviewsBuilder FilterType;
-        FilterType::Pointer filter = FilterType::New();
-
-        //m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
-
-        std::string tempfilename( ToStdString( m_Filename ) );
-
-        filter->SetInputFileName(tempfilename);
-        filter->SetResamplingMethod(otb::AVERAGE);
-        filter->SetNbOfResolutions(m_ImageFileReader->GetAvailableResolutions().size());
-
-        try
-          {
-          otb::StandardOneLineFilterWatcher watcher(
-	    filter,
-	    ToStdString( tr( "Overviews creation: " ) )
-	  );
-          filter->Update();
-	  std::cout << std::endl;
-          }
-        catch( std::exception& exc )
-          {
-          // The user can continue to use the file so we return a warning message
-          // TODO MSD return the message to the log widget
-          qDebug() << tr( "The overviews creation failed.\n"
-                          "Navigation in resolution will be slower." );
-
-	  // throw exc;
-          }
-        }
-      else
-        {
-        // the user doesn't want to cache the overviews, GDAL will virtually compute the ovw on demand
-        qDebug() << tr("Letting GDAL decimate the file on-the-fly !");
-        }
-      }
-    else
-      {
-      qDebug() << tr("The file already has overviews !");
-      }
-    }
-
-
   // Retrieve the list of Lod from file
   m_AvailableLod = m_ImageFileReader->GetAvailableResolutions();
 
@@ -204,11 +133,92 @@ VectorImageModel
 /*******************************************************************************/
 void
 VectorImageModel
+::BuildGdalOverviews()
+{
+  // Build overviews if necessary
+  bool hasOverviewsSupport = m_ImageFileReader->HasOverviewsSupport();
+  int nbOfAvailableOvw = m_ImageFileReader->GetNbOfAvailableOverviews();
+  // TODO: this choice should be done by the user during the import of the file
+  bool forceToCacheOvw = true;
+
+  if (!hasOverviewsSupport)
+    {
+    // the current file doesn't have overviews available and the ImageIO doesn't support overviews
+    throw std::runtime_error(
+      ToStdString(
+	tr( "The ImageIO used to read this file doesn't support Overviews." )
+      )
+    );
+    }
+
+  // Else:
+
+  qDebug() << tr("The ImageIO used to read this file supports overviews.");
+
+  if( nbOfAvailableOvw>0 )
+    {
+    qDebug() << tr("The file already has overviews!");
+    return;
+    }
+
+  // TODO MSD: how to manage case of JPEG2000 with no overviews ? : wait GDAL support OpenJPEG ...
+
+  // The current file don't have overviews available
+  qDebug() << tr("The file doesn't have overviews.");
+
+  if( !forceToCacheOvw )
+    {
+    // the user doesn't want to cache the overviews, GDAL will virtually compute the ovw on demand
+    qDebug() << tr("Letting GDAL decimate the file on-the-fly !");
+
+    return;
+    }
+
+  // the user want to cache the overviews
+  qDebug() << tr("Caching of overviews.");
+  typedef otb::GDALOverviewsBuilder FilterType;
+  FilterType::Pointer filter = FilterType::New();
+
+  //m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
+
+  std::string tempfilename( ToStdString( m_Filename ) );
+
+  filter->SetInputFileName(tempfilename);
+  filter->SetResamplingMethod(otb::AVERAGE);
+  filter->SetNbOfResolutions(m_ImageFileReader->GetAvailableResolutions().size());
+
+  try
+    {
+    otb::StandardOneLineFilterWatcher watcher(
+      filter,
+      ToStdString( tr( "Overviews creation: " ) )
+    );
+    filter->Update();
+    std::cout << std::endl;
+    }
+  catch( std::exception& exc )
+    {
+    // The user can continue to use the file so we return a warning message
+    // TODO MSD return the message to the log widget
+    qDebug() << tr( "The overviews creation failed.\n"
+		    "Navigation in resolution will be slower." );
+
+    throw exc;
+    }
+}
+
+/*******************************************************************************/
+void
+VectorImageModel
 ::virtual_BuildModel( void* context )
 {
    // Get build-context.
   assert( context!=NULL );
   BuildContext* buildContext = static_cast< BuildContext* >( context );
+
+  // Build image overview.
+  if( buildContext->IsBeingStored() )
+    BuildGdalOverviews();
 
   // Get build-context settings.
   Settings * const  settings =

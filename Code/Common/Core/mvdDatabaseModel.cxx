@@ -141,7 +141,7 @@ DatabaseModel
   DatasetId id( model->GetName() );
 
   // Find possible previously registerd dataset-model...
-  DatasetModelMap::iterator it( DatasetModelIterator( id ) );
+  DatasetModelMap::iterator it( m_DatasetModels.find( id ) );
   if( it!=m_DatasetModels.end() )
     {
     // ...and destroy it.
