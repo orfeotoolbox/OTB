@@ -161,6 +161,60 @@ ADD_TEST(fzDSFusionOptRecTestConfMatTestKappa ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptRecConfMatTest
  KAPPA)
  
+ ADD_TEST(fzDSFusionTestConfMatFileRCMTestPrecision ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionConfMatFileTest
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C7.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C8.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C9.csv
+ PRECISION
+ )
+ 
+ ADD_TEST(fzDSFusionTestConfMatFileVCMTestPrecision ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionConfMatFileTest
+ ${INPUTDATA}/Classification/QB_1_ortho_C1_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C2_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C3_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C4_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C5_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C6_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C7_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C8_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C9_V.csv
+ PRECISION
+ )
+ 
+ ADD_TEST(fzDSFusionOptRecTestConfMatFileRCMTestPrecision ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptRecConfMatFileTest
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C7.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C8.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C9.csv
+ PRECISION)
+ 
+ ADD_TEST(fzDSFusionOptRecTestConfMatFileVCMTestPrecision ${Fuzzy_TESTS3}
+  otbDempsterShaferFusionOptRecConfMatFileTest
+ ${INPUTDATA}/Classification/QB_1_ortho_C1_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C2_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C3_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C4_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C5_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C6_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C7_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C8_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C9_V.csv
+ PRECISION)
+ 
 ADD_TEST(fzTuConfusionMatrixToMassOfBeliefNew ${Fuzzy_TESTS3}
   otbConfusionMatrixToMassOfBeliefNew)
   
@@ -205,6 +259,65 @@ otbDSFusionOfClassifiersImageFilterTest
  7 #LabelForUndecidedPixels
  ${TEMP}/QB_1_ortho_DS_FUSED_PRECISION.tif
  )
+ 
+ ADD_TEST(fzTvDSFusionOfClassifiersImageFilter9ClkRCMPrecision ${Fuzzy_TESTS3}
+ --compare-image ${NOTOL}
+ ${BASELINE}/QB_1_ortho_DS_FUSED_9_Clk_RCM_PRECISION.tif
+ ${TEMP}/QB_1_ortho_DS_FUSED_9_Clk_RCM_PRECISION.tif
+otbDSFusionOfClassifiersImageFilterTest
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C7.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C8.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C9.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C7.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C8.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C9.csv
+ PRECISION # Method to estimate the Masses of Belief of each label
+ 10 #LabelForNoDataPixels
+ 7 #LabelForUndecidedPixels
+ ${TEMP}/QB_1_ortho_DS_FUSED_9_Clk_RCM_PRECISION.tif
+ )
+ 
+ ADD_TEST(fzTvDSFusionOfClassifiersImageFilter9ClkVCMPrecision ${Fuzzy_TESTS3}
+ --compare-image ${NOTOL}
+ ${BASELINE}/QB_1_ortho_DS_FUSED_9_Clk_VCM_PRECISION.tif
+ ${TEMP}/QB_1_ortho_DS_FUSED_9_Clk_VCM_PRECISION.tif
+otbDSFusionOfClassifiersImageFilterTest
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C7.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C8.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C9.tif
+ ${INPUTDATA}/Classification/QB_1_ortho_C1_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C2_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C3_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C4_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C5_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C6_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C7_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C8_V.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C9_V.csv
+ PRECISION # Method to estimate the Masses of Belief of each label
+ 10 #LabelForNoDataPixels
+ 7 #LabelForUndecidedPixels
+ ${TEMP}/QB_1_ortho_DS_FUSED_9_Clk_VCM_PRECISION.tif
+ )
+ 
  
 ADD_TEST(fzTvDSFusionOfClassifiersImageFilterRecall ${Fuzzy_TESTS3}
  --compare-image ${NOTOL}

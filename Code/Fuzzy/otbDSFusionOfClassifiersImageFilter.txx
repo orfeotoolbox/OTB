@@ -287,7 +287,8 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
       }
 
     // Bel({Ai_})
-    if (nbClkGroupsStepI == m_NumberOfClassesInUniverse)
+    belLabelSetClk_ = 1 - belLabelSetClk;
+    /*if (nbClkGroupsStepI == m_NumberOfClassesInUniverse)
       {
       belLabelSetClk_ = K * ((A - ((mLabelSetClk - mLabelSetClk_) / (1 - mLabelSetClk))) * B - C);
       }
@@ -301,7 +302,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
         {
         belLabelSetClk_ = K * (A - (mLabelSetClk / (1 - mLabelSetClk))) * B;
         }
-      }
+      }*/
 
     mapBelStepII[classLabelk] = belLabelSetClk;
     mapBelStepII_[classLabelk] = belLabelSetClk_;
@@ -323,11 +324,14 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
       {
       mapBelStepII_[classLabelk] = addBelLabelSetClk;
       }
+    /*
     else
       {
-      // Adjustment
+      // Adjustment: Bel({Ai_}) = m_stepII({Ai_}) + 1 - SUM(m_stepII({Aj})) here;
+      // with {Aj} ALL the labels present in vectorPixelValue
       mapBelStepII_[classLabelk] += (1 - addBelLabelSetClk);
       }
+    */
 
     /*std::cout << "Bel(" << classLabelk << ") = " << mapBelStepII[classLabelk] << std::endl;
      std::cout << "Bel(NOT_" << classLabelk << ") = " << mapBelStepII_[classLabelk] << std::endl;
