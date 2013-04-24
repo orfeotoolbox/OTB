@@ -159,11 +159,7 @@ DatabaseBrowserController
 {
   qDebug() << this << "::ResetWidget()";
 
-  // Reset widget.
-  ResetDatasetTree();
-
-  // Check every dataset consistency
-  CheckDatasetsConsistensy();
+  RefreshWidget();
 }
 
 /*******************************************************************************/
@@ -273,7 +269,11 @@ void
 DatabaseBrowserController
 ::RefreshWidget()
 {
-  ResetWidget();
+  // Reset widget.
+  ResetDatasetTree();
+
+  // Check every dataset consistency
+  CheckDatasetsConsistensy();
 }
 
 
