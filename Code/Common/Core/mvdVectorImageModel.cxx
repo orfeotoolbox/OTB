@@ -203,7 +203,7 @@ VectorImageModel
     qDebug() << tr( "The overviews creation failed.\n"
 		    "Navigation in resolution will be slower." );
 
-    throw exc;
+    // throw exc;
     }
 }
 
