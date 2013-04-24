@@ -169,9 +169,10 @@ public slots:
   /**
    */
   void OnDatasetToDeleteSelected( const QString& id );
+
   /**
    */
-  void RegisterDatasetModel( DatasetModel* );
+  DatasetId RegisterDatasetModel( DatasetModel* );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

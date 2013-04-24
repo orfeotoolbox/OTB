@@ -61,6 +61,7 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 class DatabaseBrowserWidget;
+class DatasetModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -168,6 +169,10 @@ private slots:
    * \param name The name of the newly selected dataset.
    */
   void OnCurrentDatasetChanged( const QString& name );
+
+  /**
+   */
+  void OnSelectedDatasetModelChanged( DatasetModel* );
 
   //
   // AbstractModelController overloads.

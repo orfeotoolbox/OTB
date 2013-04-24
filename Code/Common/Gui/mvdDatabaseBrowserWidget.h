@@ -113,7 +113,7 @@ public:
 
   /**
    */
-  DatabaseTreeWidget* GetDatabaseTreeWidget( );
+  DatabaseTreeWidget* GetDatabaseTreeWidget();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -180,7 +180,6 @@ private:
    */
   QTreeWidgetItem* m_DatasetRootItem;
 
-
   /**
    */
   QPoint m_StartDragPosition;
@@ -209,6 +208,7 @@ private slots:
 
 namespace mvd
 {
+
 } // end namespace 'mvd'
 
 #endif // __mvdDatabaseBrowserWidget_h

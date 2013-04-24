@@ -238,6 +238,29 @@ DatabaseBrowserWidget
   return m_UI->databaseTreeWidget;
 }
 
+/*****************************************************************************/
+void
+DatabaseBrowserWidget
+::SetCurrentDataset( const QString& name )
+{
+  assert( m_UI!=NULL );
+  assert( m_UI->databaseTreeWidget!=NULL );
+
+  QList< QTreeWidgetItem* > items(
+    m_UI->databaseTreeWidget->findItems(
+      name,
+      Qt::MatchExactly | Qt::MatchRecursive
+    )
+  );
+
+  assert( items.isEmpty() || items.size()==1 );
+
+  if( items.isEmpty() )
+    return;
+
+  m_UI->databaseTreeWidget->setCurrentItem( items.first() );
+}
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/

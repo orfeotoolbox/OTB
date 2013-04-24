@@ -772,28 +772,26 @@ MainWindow
   progress.setCancelButton( NULL );
   progress.setMinimumDuration( 0 );
 
-  switch( progress.Exec() )
+  if( progress.Exec() )
     {
-    case QDialog::Accepted:
-      assert( CatalogueApplication::Instance() );
-      assert( CatalogueApplication::Instance()->GetModel()!=NULL );
-      assert(
-	CatalogueApplication::Instance()->GetModel()==
-	CatalogueApplication::Instance()->GetModel< DatabaseModel >()
-      );
-
-      assert( progress.GetObject< DatasetModel >()!=NULL );
-
+    assert( CatalogueApplication::Instance() );
+    assert( CatalogueApplication::Instance()->GetModel()!=NULL );
+    assert(
+      CatalogueApplication::Instance()->GetModel()==
       CatalogueApplication::Instance()->GetModel< DatabaseModel >()
-	->RegisterDatasetModel( progress.GetObject< DatasetModel >()  );
-      break;
+    );
 
-    case QDialog::Rejected:
-      // Error is already managed by TaskProgressDialog.
-      break;
+    assert( progress.GetObject< DatasetModel >()!=NULL );
 
-    default:
-      break;
+    DatabaseModel* databaseModel =
+      CatalogueApplication::Instance()->GetModel< DatabaseModel >();
+    assert( databaseModel!=NULL );
+
+    databaseModel->SelectDatasetModel(
+      databaseModel->RegisterDatasetModel(
+	progress.GetObject< DatasetModel >()
+      )
+    );
     }
 }
 

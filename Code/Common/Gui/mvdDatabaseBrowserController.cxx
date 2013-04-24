@@ -82,7 +82,16 @@ DatabaseBrowserController
   QObject::connect(
     widget, SIGNAL( CurrentDatasetChanged( const QString& )  ),
     // to:
-    this, SLOT( OnCurrentDatasetChanged( const QString& ) )
+    this,
+    SLOT( OnCurrentDatasetChanged( const QString& ) )
+  );
+
+  QObject::connect(
+    model,
+    SIGNAL( SelectedDatasetModelChanged( DatasetModel* ) ),
+    // to:
+    this,
+    SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
   );
 
   //
@@ -99,24 +108,24 @@ DatabaseBrowserController
     widget->GetDatabaseTreeWidget(), 
     SIGNAL( DatasetToDeleteSelected( const QString & )  ),
     // to:
-    qobject_cast< DatabaseModel *>( model ), 
+    model,
     SLOT( OnDatasetToDeleteSelected(const QString& ) )
     );
 
   //
   QObject::connect(
-    qobject_cast< DatabaseModel *>( model ), 
-    SIGNAL( DatabaseChanged() ),
-    this,
-    SLOT( RefreshWidget() )
+    model,
+    SIGNAL( CurrentSelectedItemDeleted() ),
+    widget,
+    SLOT( OnCurrentSelectedItemDeleted() )
     );
 
   //
   QObject::connect(
-    qobject_cast< DatabaseModel *>( model ), 
-    SIGNAL( CurrentSelectedItemDeleted() ),
-    widget,
-    SLOT( OnCurrentSelectedItemDeleted() )
+    model,
+    SIGNAL( DatabaseChanged() ),
+    this,
+    SLOT( RefreshWidget() )
     );
 }
 
@@ -276,5 +285,20 @@ DatabaseBrowserController
   CheckDatasetsConsistensy();
 }
 
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::OnSelectedDatasetModelChanged( DatasetModel* datasetModel )
+{
+  if( datasetModel==NULL )
+    return;
+
+  assert( GetWidget()!=NULL );
+  assert( GetWidget()==GetWidget< DatabaseBrowserWidget >() );
+
+  GetWidget< DatabaseBrowserWidget >()->SetCurrentDataset(
+    datasetModel->GetName()
+  );
+}
 
 } // end namespace 'mvd'

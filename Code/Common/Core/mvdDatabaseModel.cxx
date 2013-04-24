@@ -129,7 +129,7 @@ DatabaseModel
 }
 
 /*******************************************************************************/
-void
+DatabaseModel::DatasetId
 DatabaseModel
 ::RegisterDatasetModel( DatasetModel* model )
 {
@@ -152,8 +152,14 @@ DatabaseModel
   // Insert new dataset-model...
   it = m_DatasetModels.insert( id, model );
 
-  // 
+  // Re-parent dataset-model.
+  model->setParent( this );
+
+  // Signal model has changed.
   emit DatabaseChanged();
+
+  // Return registered ID.
+  return id;
 }
 
 /*******************************************************************************/
