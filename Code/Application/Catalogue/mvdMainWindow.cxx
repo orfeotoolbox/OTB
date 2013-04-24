@@ -931,19 +931,33 @@ MainWindow
   //
 
   // Access database-model.
-  const DatabaseModel* databaseModel =
-    CatalogueApplication::ConstInstance()->GetModel< DatabaseModel >();
+  DatabaseModel* databaseModel =
+    CatalogueApplication::Instance()->GetModel< DatabaseModel >();
 
   // Application should always have a valid database model.
   assert( databaseModel!=NULL );
 
   // Access previously selected dataset-model.
-  const DatasetModel* datasetModel =
+  DatasetModel* datasetModel =
     databaseModel->GetSelectedDatasetModel();
 
   // If there were no previously selected dataset-model, return.
   if( datasetModel==NULL )
     return;
+
+  // Confirm save dataset-model if modified.
+  if( datasetModel->IsModified() &&
+      QMessageBox::question(
+	this,
+	tr( PROJECT_NAME ),
+	tr( "Dataset has been modified.\n"
+	    "Do you want to save settings?" ),
+	QMessageBox::Yes |
+	QMessageBox::No,
+	QMessageBox::Yes )==QMessageBox::Yes )
+    {
+    datasetModel->Save();
+    }
 
   // Access previously selected vector-image model.
   const VectorImageModel* vectorImageModel =
