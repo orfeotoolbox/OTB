@@ -562,7 +562,7 @@ ImageFileWriter<TInputImage>
     // Final image size
     m_ImageIO->SetDimensions(i, inputRegion.GetSize(i));
     m_ImageIO->SetSpacing(i, spacing[i]);
-    m_ImageIO->SetOrigin(i, origin[i]);
+    m_ImageIO->SetOrigin(i, origin[i] + static_cast<double>(inputRegion.GetIndex()[i]) * spacing[i]);
 
     vnl_vector<double> axisDirection(TInputImage::ImageDimension);
     // Please note: direction cosines are stored as columns of the
