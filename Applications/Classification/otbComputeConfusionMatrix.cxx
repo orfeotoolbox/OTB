@@ -102,7 +102,7 @@ private:
   
   AddParameter(ParameterType_String,"ref.vector.field","Field name");
   SetParameterDescription("ref.vector.field","Field name containing the label values");
-  SetParameterString("ref.vector.field","dn");
+  SetParameterString("ref.vector.field","Class");
   MandatoryOff("ref.vector.field");
   DisableParameter("ref.vector.field");
 
