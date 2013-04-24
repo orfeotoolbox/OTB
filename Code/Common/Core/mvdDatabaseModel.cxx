@@ -151,6 +151,9 @@ DatabaseModel
 
   // Insert new dataset-model...
   it = m_DatasetModels.insert( id, model );
+
+  // 
+  emit DatabaseChanged();
 }
 
 /*******************************************************************************/

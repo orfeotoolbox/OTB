@@ -110,6 +110,12 @@ signals:
    */
   void SelectedDatasetFilenameChanged(const QString &);
 
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+
+//
+// Slots.
+public slots:
+
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -163,11 +169,10 @@ private slots:
    */
   void OnCurrentDatasetChanged( const QString& name );
 
-  /**
-   * \brief Slot called when the a dataset is removed
-   *
-   */
-  void OnDatabaseChanged();
+  //
+  // AbstractModelController overloads.
+
+  virtual void RefreshWidget();
 };
 
 } // end namespace 'mvd'.

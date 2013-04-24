@@ -148,6 +148,7 @@ signals:
   /**
    */
   void AboutToChangeSelectedDatasetModel( const DatasetModel*  );
+
   /**
    */
   void DatabaseChanged();
@@ -155,8 +156,9 @@ signals:
   /**
    */
   void SelectedDatasetModelChanged( DatasetModel* );
-  
-  /** */
+
+  /**
+   */
   void CurrentSelectedItemDeleted();
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------*/

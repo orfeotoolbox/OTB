@@ -124,9 +124,6 @@ public:
 //
 // Slots.
 public slots:
-  /**
-   */
-  //virtual void RefreshWidget();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -218,6 +215,10 @@ private slots:
    * Disconnect() method (which is dangerous in destructor).
    */
   void OnDestroyed( QObject* =0 );
+
+  /**
+   */
+  virtual void RefreshWidget();
 };
 
 } // end namespace 'mvd'.

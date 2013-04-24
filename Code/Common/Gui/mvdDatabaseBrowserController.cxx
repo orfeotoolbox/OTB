@@ -108,7 +108,7 @@ DatabaseBrowserController
     qobject_cast< DatabaseModel *>( model ), 
     SIGNAL( DatabaseChanged() ),
     this,
-    SLOT( OnDatabaseChanged() )
+    SLOT( RefreshWidget() )
     );
 
   //
@@ -271,7 +271,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::OnDatabaseChanged()
+::RefreshWidget()
 {
   ResetWidget();
 }

@@ -164,6 +164,13 @@ AbstractModelController
 /*******************************************************************************/
 void
 AbstractModelController
+::RefreshWidget()
+{
+}
+
+/*******************************************************************************/
+void
+AbstractModelController
 ::OnDestroyed( QObject* object )
 {
   /*
