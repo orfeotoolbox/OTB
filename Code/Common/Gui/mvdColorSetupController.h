@@ -119,15 +119,6 @@ signals:
 // Protected methods.
 protected:
 
-  //
-  // AbstractModelController overrides.
-
-  virtual void Connect( AbstractModel* );
-
-  virtual void ResetWidget();
-
-  virtual void Disconnect( AbstractModel* );
-
 //
 // Protected attributes.
 protected:
@@ -146,6 +137,15 @@ private:
    * index. \see RgbBound() for valid values.
    */
   void ResetIndices( RgbaChannel channels );
+
+  //
+  // AbstractModelController overrides.
+
+  virtual void Connect( AbstractModel* );
+
+  virtual void ResetWidget();
+
+  virtual void Disconnect( AbstractModel* );
 
 //
 // Private attributes.

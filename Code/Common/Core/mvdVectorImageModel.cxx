@@ -150,7 +150,10 @@ VectorImageModel
 
         try
           {
-          otb::StandardOneLineFilterWatcher watcher(filter, ToStdString(tr("Overviews creation: ")));
+          otb::StandardOneLineFilterWatcher watcher(
+	    filter,
+	    ToStdString( tr( "Overviews creation: " ) )
+	  );
           filter->Update();
 	  std::cout << std::endl;
           }
@@ -161,7 +164,7 @@ VectorImageModel
           qDebug() << tr( "The overviews creation failed.\n"
                           "Navigation in resolution will be slower." );
 
-	  throw exc;
+	  // throw exc;
           }
         }
       else

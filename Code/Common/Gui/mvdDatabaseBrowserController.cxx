@@ -164,9 +164,6 @@ DatabaseBrowserController
 
   // Check every dataset consistency
   CheckDatasetsConsistensy();
-
-  // Signal model has been updated.
-  emit ModelUpdated();
 }
 
 /*******************************************************************************/

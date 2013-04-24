@@ -112,15 +112,6 @@ signals:
 // Protected methods.
 protected:
 
-  //
-  // AbstractModelController overrides.
-
-  virtual void Connect( AbstractModel* );
-
-  virtual void ResetWidget();
-
-  virtual void Disconnect( AbstractModel* );
-
 //
 // Protected attributes.
 protected:
@@ -134,6 +125,15 @@ private:
   /**
    */
   void ResetDatasetTree();
+
+  //
+  // AbstractModelController overrides.
+
+  virtual void Connect( AbstractModel* );
+
+  virtual void ResetWidget();
+
+  virtual void Disconnect( AbstractModel* );
 
 //
 // Private attributes.

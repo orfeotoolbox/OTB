@@ -126,9 +126,6 @@ ColorSetupController
 {
   // Reset color-setup widget.
   ResetIndices( RGBA_CHANNEL_RGB );
-
-  // Signal model has been updated.
-  emit ModelUpdated();
 }
 
 /*******************************************************************************/

@@ -119,20 +119,38 @@ public:
   template< typename TWidget >
   inline TWidget* GetWidget();
 
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+
+//
+// Slots.
+public slots:
+  /**
+   */
+  //virtual void RefreshWidget();
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  /** */
+  /**
+   */
   void AboutToDisconnectModel( AbstractModel* );
-  /** */
+
+  /**
+   */
   void ModelDisconnected( AbstractModel* );
-  /** */
+
+  /**
+   */
   void AboutToConnectModel( AbstractModel* );
-  /** */
+
+  /**
+   */
   void ModelConnected( AbstractModel* );
-  /** */
+
+  /**
+   */
   void ModelUpdated();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -144,15 +162,6 @@ protected:
   /** Constructor */
   AbstractModelController( QWidget* widget, QObject* parent =NULL );
 
-  /** */
-  virtual void Connect( AbstractModel* ) =0;
-
-  /** */
-  virtual void ResetWidget() =0;
-
-  /** */
-  virtual void Disconnect( AbstractModel* ) =0;
-
 //
 // Protected attributes.
 protected:
@@ -162,18 +171,39 @@ protected:
 //
 // Private methods.
 private:
-  /** */
+  /**
+   */
   void private_Connect( AbstractModel* );
-  /** */
+
+  /**
+   */
   void private_Disconnect( AbstractModel* );
+
+  /**
+   */
+  void private_ResetWidget();
+
+  /**
+   */
+  virtual void Connect( AbstractModel* ) =0;
+
+  /**
+   */
+  virtual void Disconnect( AbstractModel* ) =0;
+
+  /**
+   */
+  virtual void ResetWidget() =0;
 
 //
 // Private attributes.
 private:
-  /** */
+  /**
+   */
   QWidget* m_Widget;
 
-  /** */
+  /**
+   */
   AbstractModel* m_Model;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/

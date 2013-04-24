@@ -137,9 +137,20 @@ DatabaseModel
 
   assert( model!=NULL );
 
-  // TODO: Implement slot.
-  delete model;
-  model = NULL;
+  // Construct DatasetId.
+  DatasetId id( model->GetName() );
+
+  // Find possible previously registerd dataset-model...
+  DatasetModelMap::iterator it( DatasetModelIterator( id ) );
+  if( it!=m_DatasetModels.end() )
+    {
+    // ...and destroy it.
+    delete it.value();
+    it.value() = NULL;
+    }
+
+  // Insert new dataset-model...
+  it = m_DatasetModels.insert( id, model );
 }
 
 /*******************************************************************************/

@@ -155,9 +155,6 @@ ColorDynamicsController
 #else
   ResetQuantiles( RGBA_CHANNEL_RGB );
 #endif
-
-  // Signal model has been updated.
-  emit ModelUpdated();
 }
 
 /*******************************************************************************/

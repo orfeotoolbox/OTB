@@ -96,10 +96,6 @@ DatasetPropertiesController
 
   // Reset widget.
   ResetDatasetTree();
-  
-  // 
-  // No Signal to emit
-  //emit ModelUpdated();
 }
 
 /*******************************************************************************/
