@@ -292,6 +292,16 @@ DatabaseModel
     {
     qDebug() << this << " ::OnDatasetToDeleteSelected -> About to remove : "<< id;
 
+    // 
+    if ( FindDatasetModel( id ) == GetSelectedDatasetModel() )
+      {
+      // set the Tree browser to point on nothing
+      emit CurrentSelectedItemDeleted();
+
+      //
+      SetSelectedDatasetModel( NULL );
+      }
+
     // get the full path to the dataset dir
     QDir datasetQDir( I18nApplication::Instance()->GetCacheDir().absolutePath() + "/" + id );
     QString datasetDir = datasetQDir.absolutePath();
@@ -314,30 +324,9 @@ DatabaseModel
     //  - notify change to update the database browser
     if (datasetQDirParent.rmpath( datasetDir ) )
       {
-      // 
-      if ( FindDatasetModel( id ) == GetSelectedDatasetModel() )
-        {
-        // set the Tree browser to point on nothing
-        emit CurrentSelectedItemDeleted();
-
-        // release the selected dataset model
-        emit AboutToChangeSelectedDatasetModel( GetSelectedDatasetModel() );
-
         // delete from the map of datasets 
-        ReleaseDatasetModel( id );
-
-        // set the current dataset model to null
-        m_SelectedDatasetModel = NULL;
-        
-        // notify the selected dataset change
-        emit SelectedDatasetModelChanged( NULL );
-        }
-      else
-        {
-        // delete from the map of datasets 
-        ReleaseDatasetModel( id );
-        }
-        
+      ReleaseDatasetModel( id );
+      
       //  notify database changed
       emit DatabaseChanged();
       }
