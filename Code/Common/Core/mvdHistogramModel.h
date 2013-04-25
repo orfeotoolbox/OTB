@@ -143,10 +143,10 @@ public:
 // Public methods.
 public:
 
-  /** Constructor */
+  /** \brief Constructor. */
   HistogramModel( QObject* parent =NULL );
 
-  /** Destructor */
+  /** \brief Destructor. */
   virtual ~HistogramModel();
 
   /** */
@@ -430,9 +430,13 @@ HistogramModel
   qDebug() << tr( "%1: Generating histogram (M)..." )
     .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
 
-  TImageModel* imageModel =
-    qobject_cast< TImageModel* >( parent() );
 
+  AbstractImageModel* parentImageModel =
+    qobject_cast< AbstractImageModel* >( parent() );
+  assert( parentImageModel!=NULL );
+
+
+  TImageModel* imageModel = parentImageModel->GetQuicklookModel();
   assert( imageModel!=NULL );
 
   //

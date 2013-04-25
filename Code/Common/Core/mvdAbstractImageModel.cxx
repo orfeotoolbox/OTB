@@ -241,24 +241,22 @@ AbstractImageModel
   m_Id = buildContext->m_Id;
 
   //
+  // QUICKLOOK.
+  //
+  // Build quicklook before histogram because histogram calculation is
+  // based on quicklook image.
+  newChildModel< QuicklookModel >( context );
+
+  //
   // HISTOGRAM.
   HistogramModel::BuildContext histogramContext(
     buildContext->IsBeingStored(),
     buildContext->m_Histogram
   );
 
-#if 1
   // WIP (crashes on reload because serialization methods are not
   // fully implemented.
   newChildModel< HistogramModel >( &histogramContext );
-#else
-  // Temporay hack to solve segfault.
-  newChildModel< HistogramModel >();
-#endif
-
-  //
-  // QUICKLOOK.
-  newChildModel< QuicklookModel >( context );
 }
 
 /*******************************************************************************/

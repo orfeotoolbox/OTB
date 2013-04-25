@@ -723,7 +723,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::ImportImage(const QString& filename ) 
+::ImportImage( const QString& filename )
 {
   //
   // Background task.
@@ -742,7 +742,6 @@ MainWindow
 
   //
   // Progress dialog.
-
   TaskProgressDialog progress(
     task,
     this,
@@ -755,27 +754,29 @@ MainWindow
   progress.setCancelButton( NULL );
   progress.setMinimumDuration( 0 );
 
-  if( progress.Exec() )
-    {
-    assert( CatalogueApplication::Instance() );
-    assert( CatalogueApplication::Instance()->GetModel()!=NULL );
-    assert(
-      CatalogueApplication::Instance()->GetModel()==
-      CatalogueApplication::Instance()->GetModel< DatabaseModel >()
-    );
+  //
+  // Result.
+  if( progress.Exec()!=QMessageBox::Accepted )
+    return;
 
-    assert( progress.GetObject< DatasetModel >()!=NULL );
+  assert( CatalogueApplication::Instance() );
+  assert( CatalogueApplication::Instance()->GetModel()!=NULL );
+  assert(
+    CatalogueApplication::Instance()->GetModel()==
+    CatalogueApplication::Instance()->GetModel< DatabaseModel >()
+  );
 
-    DatabaseModel* databaseModel =
-      CatalogueApplication::Instance()->GetModel< DatabaseModel >();
-    assert( databaseModel!=NULL );
+  assert( progress.GetObject< DatasetModel >()!=NULL );
 
-    databaseModel->SelectDatasetModel(
-      databaseModel->RegisterDatasetModel(
-	progress.GetObject< DatasetModel >()
-      )
-    );
-    }
+  DatabaseModel* databaseModel =
+    CatalogueApplication::Instance()->GetModel< DatabaseModel >();
+  assert( databaseModel!=NULL );
+
+  databaseModel->SelectDatasetModel(
+    databaseModel->RegisterDatasetModel(
+      progress.GetObject< DatasetModel >()
+    )
+  );
 }
 
 /*****************************************************************************/
