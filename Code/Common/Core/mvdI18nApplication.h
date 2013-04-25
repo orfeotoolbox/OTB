@@ -215,13 +215,17 @@ public:
   // TODO: Move method into Application class.
   inline QVariant RetrieveSettingsKey( const QString& key );
 
+  /**
+   */
+  inline bool IsCacheDirValid() const;
+
   //
   // STATIC methods.
   //
 
   /**
    */
-  static bool IsValidCacheDir( const QString& path );
+  static bool IsCacheDirValid( const QString& path );
 
   /**
    * \brief Make directory tree in given path.
@@ -499,6 +503,15 @@ I18nApplication
 ::GetCacheDir() const
 {
   return m_CacheDir;
+}
+
+/*****************************************************************************/
+inline
+bool
+I18nApplication
+::IsCacheDirValid() const
+{
+  return I18nApplication::IsCacheDirValid( m_CacheDir.path() );
 }
 
 /*****************************************************************************/

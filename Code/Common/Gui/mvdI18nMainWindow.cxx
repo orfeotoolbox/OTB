@@ -97,6 +97,8 @@ I18nMainWindow
   // instanciated. So, GUI will be initialized and controller-widgets
   // disabled.
   I18nApplication::Instance()->SetModel( NULL );
+
+  SetupCacheDir();
 }
 
 /*****************************************************************************/
@@ -181,6 +183,65 @@ I18nMainWindow
       assert( false );
       break;
     }
+}
+
+/*****************************************************************************/
+void
+I18nMainWindow
+::SetupCacheDir()
+{
+  if( I18nApplication::ConstInstance()->IsCacheDirValid() )
+    return;
+
+  QFileInfo fileInfo( QDir::home(), I18nApplication::DEFAULT_CACHE_DIR_NAME ); 
+  QDir dir( fileInfo.dir() );
+
+  QMessageBox messageBox;
+
+  messageBox.setWindowTitle( tr( "Welcome new " PROJECT_NAME " user!" ) );
+
+  messageBox.setText(
+    tr(
+      PROJECT_NAME
+      " maintains a repository where cached data related to images is stored "
+      "(such as, for example, color-settings, histogram, quicklook etc.)."
+      "\n\n"
+      "Default cache-directory location is: '%1'."
+      "\n\n"
+      "Warning:\n"
+      "- Your account needs to have write access to this directory;\n"
+      "- Please be aware that this directory can consume significant disk "
+      "space."
+    )
+    .arg( dir.path() )
+  );
+
+  messageBox.setInformativeText(
+    tr( "Do you want to specify a custom repository location?" )
+  );
+
+  messageBox.setStandardButtons( QMessageBox::Yes | QMessageBox::No );
+  messageBox.setDefaultButton( QMessageBox::No );
+
+  if( messageBox.exec()==QMessageBox::Yes )
+    {
+    QString path(
+      QFileDialog::getExistingDirectory(
+	this,
+	tr(
+	  "Please, select directory where the "
+	  PROJECT_NAME
+	  " cache repository will be stored."
+	),
+	dir.path()
+    )
+    );
+
+    if( !path.isEmpty() )
+      dir.setPath( path );
+    }
+
+  I18nApplication::Instance()->MakeCacheDir( dir.path() );
 }
 
 /*****************************************************************************/

@@ -62,7 +62,7 @@ const char* I18nApplication::DATASET_EXT = ".ds";
 /*******************************************************************************/
 bool
 I18nApplication
-::IsValidCacheDir( const QString& path )
+::IsCacheDirValid( const QString& path )
 {
   QDir dir( path );
   QFileInfo fileInfo( path );
@@ -249,10 +249,12 @@ bool
 I18nApplication
 ::MakeCacheDir( const QString& cacheDirStr )
 {
+  qDebug() << this << "::MakeCacheDir(" << cacheDirStr << ")";
+
   QDir homeDir (cacheDirStr);
 
   if (!homeDir.exists())
-    SystemError(ToStdString( QString( "('%1')" ).arg( homeDir.path() ) ));
+    SystemError( ToStdString( QString( "('%1')" ).arg( homeDir.path() ) ) );
 
   bool isNew = I18nApplication::MakeDirTree(
     homeDir.path(), I18nApplication::DEFAULT_CACHE_DIR_NAME );
@@ -269,7 +271,8 @@ I18nApplication
     );
 
   m_CacheDir = cacheDir;
-  qDebug() << tr("Cache directory created at %1").arg(m_CacheDir.path());
+
+  StoreSettingsKey( "cacheDir", QDir::cleanPath( m_CacheDir.path() ) );
 
   return isNew;
 }
@@ -437,7 +440,7 @@ I18nApplication
 
     qDebug() << "Settings/cacheDir:" << path;
 
-    if( I18nApplication::IsValidCacheDir( path ) )
+    if( I18nApplication::IsCacheDirValid( path ) )
       {
       m_CacheDir.setPath( path );
       }

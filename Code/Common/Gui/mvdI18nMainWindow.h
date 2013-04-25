@@ -185,6 +185,10 @@ private:
 
   /**
    */
+  void SetupCacheDir();
+
+  /**
+   */
   virtual void virtual_SetupUI() =0;
 
   /**
