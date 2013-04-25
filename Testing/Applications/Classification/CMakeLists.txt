@@ -485,8 +485,6 @@ OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixV
                              -ref vector
                              -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp
                              -ref.vector.field Class
-                             -nblabelsprod 4
-                             -nblabelsref 4
                              -out ${TEMP}/apTvComputeConfusionMatrixTconfusionVOut.csv
                      VALID   --compare-ascii ${NOTOL}
                      ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixTconfusionVOut.csv
@@ -498,8 +496,6 @@ OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixR
                      OPTIONS -in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
                              -ref raster
                              -ref.raster.in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
-                             -nblabelsprod 4
-                             -nblabelsref 4
                              -nodatalabel 255
                              -out ${TEMP}/apTvComputeConfusionMatrixTconfusionROut.csv
                      VALID   --compare-ascii ${NOTOL}
@@ -513,8 +509,6 @@ OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixExtraReferenceLabelsV
                              -ref vector
                              -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp
                              -ref.vector.field Class
-                             -nblabelsprod 3
-                             -nblabelsref 4
                              -out ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv
                      VALID   --compare-ascii ${NOTOL}
                      ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv
@@ -526,8 +520,6 @@ OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixExtraReferenceLabelsR
                      OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho_C7.tif
                              -ref raster
                              -ref.raster.in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
-                             -nblabelsprod 3
-                             -nblabelsref 4
                              -nodatalabel 255
                              -out ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsROut.csv
                      VALID   --compare-ascii ${NOTOL}
@@ -540,8 +532,6 @@ OTB_TEST_APPLICATION(NAME   apTvComputeConfusionMatrixExtraProducedLabelsR
                      OPTIONS -in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
                              -ref raster
                              -ref.raster.in ${INPUTDATA}/Classification/QB_1_ortho_C8.tif
-                             -nblabelsprod 4
-                             -nblabelsref 3
                              -nodatalabel 255
                              -out ${TEMP}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv
                      VALID   --compare-ascii ${NOTOL}

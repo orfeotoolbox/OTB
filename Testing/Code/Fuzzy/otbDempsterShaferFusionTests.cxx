@@ -1624,7 +1624,6 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
   // These masses represent the degree of belief of each classifier that the output class of the pixel X
   // is {Ai} when the input pixel X actually belongs to the class {Ai}
 
-  unsigned int nbClassesClk;
   MapOfClassesType mapOfClassesClk;
   MapOfClassesType::iterator itMapOfClassesClk;
   ConfusionMatrixType confMatClk;
@@ -1642,7 +1641,6 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
     // Classifier Cl_k:
     mapOfClassesClk = vectorOfMapOfClasses[itClk];
     confMatClk = vectorOfConfMatrices[itClk];
-    nbClassesClk = mapOfClassesClk.size();
 
     // mobUniverseClk is set to zero in order to assure the correct estimation of the Belief Functions of the
     // complementary sets bel({Ai_}) in the optimized DS combination
@@ -1650,6 +1648,7 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
 
     confMatToMass->SetMapOfClasses(mapOfClassesClk);
     confMatToMass->SetConfusionMatrix(confMatClk);
+    confMatToMass->SetDefinitionMethod(massOfBeliefDefMethod);
     confMatToMass->Update();
 
     mapMOBClk.clear();
@@ -2001,7 +2000,6 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
   // These masses represent the degree of belief of each classifier that the output class of the pixel X
   // is {Ai} when the input pixel X actually belongs to the class {Ai}
 
-  unsigned int nbClassesClk;
   MapOfClassesType mapOfClassesClk;
   MapOfClassesType::iterator itMapOfClassesClk;
   ConfusionMatrixType confMatClk;
@@ -2021,7 +2019,6 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
     // Classifier Cl_k:
     mapOfClassesClk = vectorOfMapOfClasses[itClk];
     confMatClk = vectorOfConfMatrices[itClk];
-    nbClassesClk = mapOfClassesClk.size();
 
     // mobUniverseClk is set to zero in order to assure the correct estimation of the Belief Functions of the
     // complementary sets bel({Ai_}) in the optimized DS combination
@@ -2029,6 +2026,7 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
 
     confMatToMass->SetMapOfClasses(mapOfClassesClk);
     confMatToMass->SetConfusionMatrix(confMatClk);
+    confMatToMass->SetDefinitionMethod(massOfBeliefDefMethod);
     confMatToMass->Update();
 
     mapMOBClk.clear();

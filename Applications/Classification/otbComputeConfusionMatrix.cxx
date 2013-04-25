@@ -57,9 +57,15 @@ public:
 
   typedef Int32ImageType::RegionType RegionType;
 
-  typedef int                                     ClassLabelType;
-  typedef std::map<ClassLabelType, int>           MapOfClassesType;
-  typedef itk::VariableSizeMatrix<unsigned long>  ConfusionMatrixType;
+  typedef int                                              ClassLabelType;
+  typedef std::map<ClassLabelType, int>                    MapOfClassesType;
+  typedef unsigned long                                    ConfusionMatrixEltType;
+  typedef itk::VariableSizeMatrix<ConfusionMatrixEltType>  ConfusionMatrixType;
+
+  typedef std::map<
+                   ClassLabelType,
+                   std::map<ClassLabelType, ConfusionMatrixEltType>
+                  > OutputConfusionMatrixType;
 
 
 private:
@@ -106,15 +112,6 @@ private:
   MandatoryOff("ref.vector.field");
   DisableParameter("ref.vector.field");
 
-  AddParameter(ParameterType_Int,"nblabelsprod","Number of produced labels");
-  SetParameterDescription("nblabelsprod","Number of labels in the input classification map different from NoData.");
-  SetDefaultParameterInt("nblabelsprod",2);
-
-  AddParameter(ParameterType_Int,"nblabelsref","Number of reference labels");
-  SetParameterDescription("nblabelsref","Number of labels in the reference classification map different from NoData.");
-  SetDefaultParameterInt("nblabelsref",2);
-
-
   AddParameter(ParameterType_Int,"nodatalabel","Value for nodata pixels");
   SetParameterDescription("nodatalabel", "Label for the NoData class. Such input pixels will be discarded from the "
       "ground truth and from the input classification map. By default, 'nodatalabel = 0'.");
@@ -126,12 +123,11 @@ private:
 
   // Doc example parameter settings
   SetDocExampleParameterValue("in", "clLabeledImageQB1.tif");
-  SetDocExampleParameterValue("out", "confusion.csv");
+  SetDocExampleParameterValue("out", "ConfusionMatrix.csv");
   SetDocExampleParameterValue("ref", "vector");
   SetDocExampleParameterValue("ref.vector.in","VectorData_QB1_bis.shp");
   SetDocExampleParameterValue("ref.vector.field","Class");
-  SetDocExampleParameterValue("nblabelsprod","4");
-  SetDocExampleParameterValue("nblabelsref","4");
+  SetDocExampleParameterValue("nodatalabel","255");
   }
 
   void DoUpdateParameters()
@@ -146,14 +142,6 @@ private:
     std::string field;
     int nodata = this->GetParameterInt("nodatalabel");
 
-    unsigned int nbClassesRef = this->GetParameterInt("nblabelsref");
-    unsigned int nbClassesProd = this->GetParameterInt("nblabelsprod");
-
-    // Initialization of the Confusion Matrices
-    m_MatrixUnordered.SetSize(nbClassesRef, nbClassesProd);
-    m_MatrixUnordered.Fill(0);
-    m_Matrix.SetSize(nbClassesRef, nbClassesProd);
-    m_Matrix.Fill(0);
 
     Int32ImageType::Pointer reference;
     otb::ogr::DataSource::Pointer ogrRef;
@@ -190,12 +178,11 @@ private:
     otbAppLogINFO("Number of stream divisions : "<<numberOfStreamDivisions);
 
 
-    // Extraction of the Class Labels from the Reference image/rasterized vector data + filling of m_MatrixUnordered
+    // Extraction of the Class Labels from the Reference image/rasterized vector data + filling of m_Matrix
     MapOfClassesType  mapOfClassesRef, mapOfClassesProd;
     MapOfClassesType::iterator  itMapOfClassesRef, itMapOfClassesProd;
     int labelRef = 0, labelProd = 0;
     int itLabelRef = 0, itLabelProd = 0;
-    int indiceLabelRefTemp = 0, indiceLabelProdTemp = 0;
 
     for (unsigned int index = 0; index < numberOfStreamDivisions; index++)
       {
@@ -235,10 +222,16 @@ private:
             ++itLabelProd;
             }
 
-          // Filling of m_MatrixUnordered
-          indiceLabelRefTemp = mapOfClassesRef[labelRef];
-          indiceLabelProdTemp = mapOfClassesProd[labelProd];
-          m_MatrixUnordered(indiceLabelRefTemp, indiceLabelProdTemp)++;
+          // Filling of m_Matrix
+          if (m_Matrix[labelRef][labelProd] == 0)
+            {
+            m_Matrix[labelRef][labelProd] = 1;
+            }
+          else
+            {
+            m_Matrix[labelRef][labelProd]++;
+            }
+
           } // END if ((labelRef != nodata) && (labelProd != nodata))
         ++itRef;
         ++itInput;
@@ -246,6 +239,8 @@ private:
       } // END of for (unsigned int index = 0; index < numberOfStreamDivisions; index++)
 
 
+    /////////////////////////////////////////////
+    // Filling the 2 headers for the output file
     const std::string commentRefStr = "#Reference labels (rows):";
     const std::string commentProdStr = "#Produced labels (columns):";
     const char separatorChar = ',';
@@ -256,6 +251,7 @@ private:
     itMapOfClassesRef = mapOfClassesRef.begin();
     while (itMapOfClassesRef != mapOfClassesRef.end())
       {
+      // labels labelRef of mapOfClassesRef are already sorted
       labelRef = itMapOfClassesRef->first;
       otbAppLogINFO("mapOfClassesRef[" << labelRef << "] = " << itMapOfClassesRef->second);
       ossHeaderRefLabels << labelRef;
@@ -275,6 +271,7 @@ private:
     itMapOfClassesProd = mapOfClassesProd.begin();
     while (itMapOfClassesProd != mapOfClassesProd.end())
       {
+      // labels labelProd of mapOfClassesProd are already sorted
       labelProd = itMapOfClassesProd->first;
       otbAppLogINFO("mapOfClassesProd[" << labelProd << "] = " << itMapOfClassesProd->second);
       ossHeaderProdLabels << labelProd;
@@ -302,7 +299,12 @@ private:
     /////////////////////////////////////
 
 
-    // Reordering the rows/columns of m_MatrixUnordered according to the sorted reference/produced class labels
+    // Initialization of the Confusion Matrix for the application LOG
+    unsigned int nbClassesRef = mapOfClassesRef.size();
+    unsigned int nbClassesProd = mapOfClassesProd.size();
+    m_MatrixLOG.SetSize(nbClassesRef, nbClassesProd);
+    m_MatrixLOG.Fill(0);
+
     int indiceLabelRef = 0, indiceLabelProd = 0;
     for (itMapOfClassesRef = mapOfClassesRef.begin(); itMapOfClassesRef != mapOfClassesRef.end(); ++itMapOfClassesRef)
       {
@@ -315,13 +317,11 @@ private:
         // labels labelProd of mapOfClassesProd are already sorted
         labelProd = itMapOfClassesProd->first;
 
-        indiceLabelRefTemp = mapOfClassesRef[labelRef];
-        indiceLabelProdTemp = mapOfClassesProd[labelProd];
-        m_Matrix(indiceLabelRef, indiceLabelProd) = m_MatrixUnordered(indiceLabelRefTemp, indiceLabelProdTemp);
+        m_MatrixLOG(indiceLabelRef, indiceLabelProd) = m_Matrix[labelRef][labelProd];
 
         ///////////////////////////////////////////////////////////
         // Writing the ordered confusion matrix in the output file
-        outFile << m_Matrix(indiceLabelRef, indiceLabelProd);
+        outFile << m_Matrix[labelRef][labelProd];
         if (indiceLabelProd < (nbClassesProd - 1))
           {
           outFile << separatorChar;
@@ -331,22 +331,24 @@ private:
           outFile << std::endl;
           }
         ///////////////////////////////////////////////////////////
-
         ++indiceLabelProd;
         }
+      m_Matrix[labelRef].clear();
       ++indiceLabelRef;
       }
 
+    // m_Matrix is cleared in order to remove old results in case of successive runs of the GUI application
+    m_Matrix.clear();
     outFile.close();
 
     otbAppLogINFO("Reference class labels ordered according to the rows of the output confusion matrix: " << ossHeaderRefLabels.str());
     otbAppLogINFO("Produced class labels ordered according to the columns of the output confusion matrix: " << ossHeaderProdLabels.str());
-    otbAppLogINFO("Temporary unordered confusion matrix (rows = reference labels, columns = produced labels):\n" << m_MatrixUnordered);
-    otbAppLogINFO("Output ordered confusion matrix (rows = ordered reference labels, columns = ordered produced labels):\n" << m_Matrix);
+    otbAppLogINFO("Output confusion matrix (rows = reference labels, columns = produced labels):\n" << m_MatrixLOG);
 
   }// END Execute()
 
-  ConfusionMatrixType m_MatrixUnordered, m_Matrix;
+  ConfusionMatrixType m_MatrixLOG;
+  OutputConfusionMatrixType m_Matrix;
 };
 
 }
