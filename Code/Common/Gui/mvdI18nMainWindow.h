@@ -94,6 +94,10 @@ public:
    */
   void Initialize();
 
+  /**
+   */
+  void SetupCacheDir();
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -182,10 +186,6 @@ private:
 //
 // Private methods.
 private:
-
-  /**
-   */
-  void SetupCacheDir();
 
   /**
    */

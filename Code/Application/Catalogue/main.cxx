@@ -63,29 +63,29 @@ main( int argc, char* argv[] )
   mainWindow.Initialize();
 
   // 3. Initialize cache directory.
-#if 0
-// TODO: 1) MVD2-viewer: Factorize cache-dir search between Viewer & Catalogue.
-  if (!appHasSettingsFile || appHasIncorrectCacheDir)
+  try
     {
-    // Loop until the directory will be correct
-    while (true)
-      {
-      // Select a new location for the cache director
-      try
-        {
-        // Create the cache directory
-        application.MakeCacheDir(mainWindow.SelectCacheDir(appHasIncorrectCacheDir));
-        break;
-        }
-      catch (...)
-        {
-        appHasIncorrectCacheDir = true;
-        }
-      }
-    // Save the cache directory into the settings file
-    application.WriteCacheDirIntoSettings();
+    mainWindow.SetupCacheDir();
     }
-#endif
+  catch( std::exception& exc )
+    {
+    QMessageBox::critical(
+      &mainWindow,
+      QCoreApplication::translate(
+	PROJECT_NAME,
+	PROJECT_NAME " - Critical error!"
+      ),
+      QCoreApplication::translate(
+	PROJECT_NAME,
+	"Error when creating repository cache-directory:\n"
+	"%1\n"
+	"Application will exit!"
+      )
+      .arg( exc.what() )
+    );
+
+    return -1;
+    }
 
   // 4. Initialize database.
   application.OpenDatabase();

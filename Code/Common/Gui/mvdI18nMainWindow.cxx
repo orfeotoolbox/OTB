@@ -97,8 +97,6 @@ I18nMainWindow
   // instanciated. So, GUI will be initialized and controller-widgets
   // disabled.
   I18nApplication::Instance()->SetModel( NULL );
-
-  SetupCacheDir();
 }
 
 /*****************************************************************************/
