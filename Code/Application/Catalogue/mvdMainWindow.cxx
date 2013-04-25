@@ -953,7 +953,8 @@ MainWindow
   if( datasetModel==NULL )
     return;
 
-  // Confirm save dataset-model if modified.
+  // Save dataset-model if modified.
+  /*
   if( datasetModel->IsModified() &&
       QMessageBox::question(
 	this,
@@ -963,9 +964,9 @@ MainWindow
 	QMessageBox::Yes |
 	QMessageBox::No,
 	QMessageBox::Yes )==QMessageBox::Yes )
-    {
-    datasetModel->Save();
-    }
+  */
+  datasetModel->Save();
+
 
   // Access previously selected vector-image model.
   const VectorImageModel* vectorImageModel =
