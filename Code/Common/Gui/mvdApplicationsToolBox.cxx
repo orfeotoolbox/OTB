@@ -217,7 +217,7 @@ void
 ApplicationsToolBox
 ::LaunchApplication( const QString& appName )
 {
-  emit ApplicationToLaunchSelected(appName);
+  emit ApplicationToLaunchSelected(appName, GetApplicationDocNameByApplicationName( appName ) );
 }
 
 /*******************************************************************************/

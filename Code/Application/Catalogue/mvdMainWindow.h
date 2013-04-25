@@ -120,6 +120,8 @@ signals:
 //
 // Protected methods.
 protected:
+  
+  void ImportImage( const QString & filename );
 
 
 //
@@ -150,7 +152,7 @@ protected slots:
 
   /**
    */
-  void OnApplicationToLaunchSelected( const QString & appName );
+  void OnApplicationToLaunchSelected( const QString & appName, const QString & docName );
 
   /**
    */

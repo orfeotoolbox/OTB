@@ -112,7 +112,7 @@ public slots:
 //
 // Signals.
 signals:
-  void ApplicationToLaunchSelected(const QString &);
+  void ApplicationToLaunchSelected(const QString &, const QString &);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

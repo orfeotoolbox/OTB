@@ -165,9 +165,9 @@ MainWindow
   // # Step 2 : setup connections
   QObject::connect(
     appWidget,
-    SIGNAL( ApplicationToLaunchSelected(const QString &) ),
+    SIGNAL( ApplicationToLaunchSelected(const QString &, const QString &) ),
     this,
-    SLOT( OnApplicationToLaunchSelected(const QString &) )
+    SLOT( OnApplicationToLaunchSelected(const QString &, const QString &) )
   );
 
   // # Step 3 : connect close slots
@@ -721,27 +721,10 @@ MainWindow
 }
 
 /*****************************************************************************/
-/* SLOTS                                                                     */
-
-/*****************************************************************************/
 void
 MainWindow
-::on_action_OpenImage_triggered()
+::ImportImage(const QString& filename ) 
 {
-  qDebug() << this << "::on_action_OpenImage_triggered()";
-
-
-  //
-  // Select filename.
-
-  QString filename(
-    QFileDialog::getOpenFileName( this, tr( "Open file..." ) )
-  );
-
-  if( filename.isNull() )
-    return;
-
-
   //
   // Background task.
 
@@ -793,6 +776,31 @@ MainWindow
       )
     );
     }
+}
+
+/*****************************************************************************/
+/* SLOTS                                                                     */
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_OpenImage_triggered()
+{
+  qDebug() << this << "::on_action_OpenImage_triggered()";
+
+  //
+  // Select filename.
+
+  QString filename(
+    QFileDialog::getOpenFileName( this, tr( "Open file..." ) )
+  );
+
+  if( filename.isNull() )
+    return;
+
+  //
+  // Import the image
+  ImportImage( filename ); 
 }
 
 /*****************************************************************************/
@@ -1134,7 +1142,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnApplicationToLaunchSelected(const QString & appName)
+::OnApplicationToLaunchSelected(const QString & appName, const QString & docName)
 {
 
 #ifdef OTB_WRAP_QT
@@ -1146,7 +1154,7 @@ MainWindow
   // add the application in a tab 
   // TODO : check if this application is already opened ???
   m_CentralTabWidget->addTab(controller->GetSelectedApplicationWidget(appName), 
-                              appName);
+                              docName);
 
   // no checking needed here, if index is not available nothing is
   // done. Focus on the newly added tab
@@ -1230,8 +1238,8 @@ MainWindow
   // depending on the app settings, the import of the 'outfname' to the
   // catalog database. 
   
-  // TODO : implement the import following the catalog settings
-  
+  // import the result image into the database
+  ImportImage( outfname );   
 }
 
 /*****************************************************************************/
