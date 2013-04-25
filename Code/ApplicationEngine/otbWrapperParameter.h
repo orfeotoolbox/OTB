@@ -162,7 +162,7 @@ public:
   /** Set/Get the root of the current parameter (direct parent) */
   virtual void SetRoot(const Parameter::Pointer  root)
   {
-    m_Root = root;
+    m_Root = root.GetPointer();
   }
 
   virtual const Parameter::Pointer GetRoot()
@@ -256,7 +256,7 @@ protected:
   Role                               m_Role;
 
   /** List of parents Parameters */
-  Parameter::Pointer                 m_Root;
+  Parameter*                         m_Root;
 
   /** List of children parameters */
   std::vector<Parameter::Pointer >   m_ChildrenList;
