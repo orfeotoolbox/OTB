@@ -107,6 +107,7 @@ ApplicationRegistry::CreateApplication(const std::string& name)
       if ( (*k)->GetName() == name )
         {
         appli = *k;
+        break;
         }
       }
     catch(...)
