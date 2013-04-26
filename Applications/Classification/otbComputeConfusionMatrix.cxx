@@ -75,7 +75,6 @@ public:
   typedef ConfusionMatrixMeasurementsType::MeasurementType                      MeasurementType;
 
 
-
 private:
   void DoInit()
   {
@@ -411,7 +410,7 @@ private:
         // If labelProd is present in mapOfClassesRef
         if (mapOfClassesRef.count(labelProd) != 0)
           {
-          // Indice of labelProd in mapOfClassesRef ; itMapOfClassesRef->second elements are now SORTED
+          // Indice of labelProd in mapOfClassesRef; itMapOfClassesRef->second elements are now SORTED
           indiceLabelProdInRef = mapOfClassesRef[labelProd];
           m_MatrixLOG(indiceLabelRef, indiceLabelProdInRef) = m_Matrix[labelRef][labelProd];
           }
