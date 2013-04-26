@@ -167,13 +167,13 @@ public:
 
   virtual const Parameter::Pointer GetRoot()
   {
-    return m_Root;
+    return m_Root.GetPointer();
   }
 
   /** Is the paramter a root or a child of another param */
   virtual bool IsRoot()
   {
-    return (this == m_Root);
+    return (this == m_Root.GetPointer());
   }
 
   /** Add a child of this parameter when the param is a Group or a
@@ -256,7 +256,7 @@ protected:
   Role                               m_Role;
 
   /** List of parents Parameters */
-  Parameter*                         m_Root;
+  itk::WeakPointer<Parameter>        m_Root;
 
   /** List of children parameters */
   std::vector<Parameter::Pointer >   m_ChildrenList;
