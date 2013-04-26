@@ -478,27 +478,24 @@ void ImageViewManipulator
   // store the image largest region
   m_NavigationContext.m_ModelImageRegion = largestRegion;
   
-  // set back the origin to O
-  IndexType nullIndex;
-  nullIndex.Fill(0);
-  m_NavigationContext.m_ViewportImageRegion.SetIndex(nullIndex);
-
   // get the widget size and use it to resize the Viewport region
   QWidget* parent_widget = qobject_cast< QWidget* >( parent() );
   
+  // Init region to the center of the scene
+  IndexType initIndex;
+  initIndex.Fill(0);
+  m_NavigationContext.m_ViewportImageRegion.SetIndex(initIndex);
+
   if (parent_widget)
     {
+    initIndex[0] = (largestRegion.GetSize()[0]-parent_widget->width())/2;
+    initIndex[1] = (largestRegion.GetSize()[1]-parent_widget->height())/2;
+    m_NavigationContext.m_ViewportImageRegion.SetIndex(initIndex);
     this->ResizeRegion(parent_widget->width(), parent_widget->height());
     }
-  
-  // compute the intial scale factor to fit to screen
-  double factorX = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[0]
-    /(double)(largestRegion.GetSize()[0]);
-  double factorY = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[1]
-    /(double)(largestRegion.GetSize()[1]);
     
-  double scale = std::min(factorX, factorY);
-  this->Zoom(scale);
+  // double scale = std::min(factorX, factorY);
+  this->Zoom(1.);
 }
 
 /*****************************************************************************/
