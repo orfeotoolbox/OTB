@@ -292,7 +292,8 @@ DatabaseModel
     {
     qDebug() << this << " ::OnDatasetToDeleteSelected -> About to remove : "<< id;
 
-    // 
+    // if current selected item is removed, make the TreeWidget
+    // focusing on the root item
     if ( FindDatasetModel( id ) == GetSelectedDatasetModel() )
       {
       // set the Tree browser to point on nothing
@@ -309,26 +310,41 @@ DatabaseModel
     //
     // remove the files in this directory
     bool removingFilesStatus = true;
-    QStringList fileList = datasetQDir.entryList();
+    QStringList fileList = datasetQDir.entryList( QDir::NoDotAndDotDot |  QDir::Files );
     for( int i = 0; i < fileList.count(); ++i )
       {
       qDebug()<< "Removing file "<< fileList.at(i);
       removingFilesStatus &= datasetQDir.remove( fileList.at(i) );
       }
-
-    // remove the dir
-    QDir datasetQDirParent( I18nApplication::Instance()->GetCacheDir() );
+    
+    // go to parent dir
+    QDir datasetQDirParent = datasetQDir;
+    datasetQDirParent.cdUp();
     
     // if path removed successfuly : 
     //  - release dataset model
     //  - notify change to update the database browser
-    if (datasetQDirParent.rmpath( datasetDir ) )
+    if ( removingFilesStatus &&  datasetQDirParent.rmpath( datasetDir ) )
       {
-        // delete from the map of datasets 
+      qDebug() << this 
+               << " ::OnDatasetToDeleteSelected -> Removing : "
+               << datasetQDir.absolutePath();
+      
+      // delete from the map of datasets 
       ReleaseDatasetModel( id );
       
       //  notify database changed
       emit DatabaseChanged();
+      }
+
+    // rmpath() removes the parent directory (i.e mvd2 ) when no files
+    // (datasets ) in it ->  recreate "mvd2" if removed
+    // TODO : find a better solution to replace this hack
+    if (! datasetQDirParent.exists() )
+      {
+      qDebug() << this<< "::OnDatasetToDeleteSelected Making removed dir "
+               << datasetQDirParent.absolutePath();
+      datasetQDirParent.mkpath( datasetQDirParent.absolutePath() );
       }
     }
 }
