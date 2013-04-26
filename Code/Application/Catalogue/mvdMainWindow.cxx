@@ -780,6 +780,28 @@ MainWindow
 }
 
 /*****************************************************************************/
+void
+MainWindow
+::closeEvent( QCloseEvent* event )
+{
+  assert( CatalogueApplication::Instance() );
+  assert(
+    CatalogueApplication::Instance()->GetModel()==
+    CatalogueApplication::Instance()->GetModel< DatabaseModel >()
+  );
+
+  DatabaseModel* databaseModel =
+    CatalogueApplication::Instance()->GetModel< DatabaseModel >();
+
+  DatasetModel* datasetModel = databaseModel->GetSelectedDatasetModel();
+
+  if( datasetModel!=NULL )
+    datasetModel->Save();
+
+  I18nMainWindow::closeEvent( event );
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 
 /*****************************************************************************/

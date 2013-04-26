@@ -123,6 +123,11 @@ protected:
   
   void ImportImage( const QString & filename );
 
+  //
+  // QMainWindow overrides.
+
+  void closeEvent( QCloseEvent* event );
+
 
 //
 // Protected attributes.
