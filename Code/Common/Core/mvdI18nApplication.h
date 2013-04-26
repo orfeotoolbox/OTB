@@ -289,6 +289,11 @@ public:
   static const char* DEFAULT_CACHE_DIR_NAME;
 
   /**
+   * Name of the result cache directory
+   */
+  static const char* DEFAULT_CACHE_RESULT_DIR_NAME;
+
+  /**
    */
   static const char* DATASET_EXT;
 

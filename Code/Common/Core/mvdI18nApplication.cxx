@@ -54,6 +54,8 @@ namespace mvd
 
 const char* I18nApplication::DEFAULT_CACHE_DIR_NAME = "mvd2";
 
+const char* I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME = "result";
+
 const char* I18nApplication::DATASET_EXT = ".ds";
 
 /*****************************************************************************/
@@ -101,6 +103,20 @@ I18nApplication
 	QString( "('%1')" ).arg( pathDir.filePath( tree ) )
       )
     );
+
+  //
+  // create result directory in  CacheDir
+  QDir resultDir( treeDir.filePath(I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME ) );
+
+  if ( !resultDir.exists() &&
+       !treeDir.mkpath( I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME ))
+    {
+    throw SystemError(
+      ToStdString(
+	QString( "('%1')" ).arg( treeDir.filePath(I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME ) )
+        )
+      );
+    }
 
   return true;
 }
