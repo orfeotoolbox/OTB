@@ -195,6 +195,7 @@ public:
    * it was already existing.
    */
   bool MakeCacheDir( const QString& cacheDirStr );
+  bool MakeResultCacheDir( const QString& cacheDirStr );
 
   //
   // APPLICATION SETTINGS.

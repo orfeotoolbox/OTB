@@ -104,20 +104,6 @@ I18nApplication
       )
     );
 
-  //
-  // create result directory in  CacheDir
-  QDir resultDir( treeDir.filePath(I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME ) );
-
-  if ( !resultDir.exists() &&
-       !treeDir.mkpath( I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME ))
-    {
-    throw SystemError(
-      ToStdString(
-	QString( "('%1')" ).arg( treeDir.filePath(I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME ) )
-        )
-      );
-    }
-
   return true;
 }
 
@@ -291,6 +277,32 @@ I18nApplication
   StoreSettingsKey( "cacheDir", QDir::cleanPath( m_CacheDir.path() ) );
 
   return isNew;
+}
+
+/*******************************************************************************/
+bool
+I18nApplication
+::MakeResultCacheDir( const QString& cacheDirStr )
+{
+  //
+  QDir homeDir (cacheDirStr);
+
+  //
+  // create result directory in  CacheDir
+  QDir cacheDir( homeDir.filePath( I18nApplication::DEFAULT_CACHE_DIR_NAME ) );
+  QDir resultDir(cacheDir.filePath ( I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME ) );
+
+  if ( !resultDir.exists() &&
+       !cacheDir.mkpath( I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME ) )
+    {
+    throw SystemError(
+      ToStdString(
+	QString( "('%1')" ).arg( cacheDir.filePath(I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME ) )
+        )
+      );
+    }
+
+  return true;
 }
 
 /*******************************************************************************/
