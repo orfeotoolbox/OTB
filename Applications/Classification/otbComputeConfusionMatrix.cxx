@@ -28,6 +28,8 @@
 
 #include "itkVariableSizeMatrix.h"
 
+#include "otbConfusionMatrixMeasurements.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -58,7 +60,6 @@ public:
   typedef Int32ImageType::RegionType RegionType;
 
   typedef int                                              ClassLabelType;
-  typedef std::map<ClassLabelType, int>                    MapOfClassesType;
   typedef unsigned long                                    ConfusionMatrixEltType;
   typedef itk::VariableSizeMatrix<ConfusionMatrixEltType>  ConfusionMatrixType;
 
@@ -66,6 +67,13 @@ public:
                    ClassLabelType,
                    std::map<ClassLabelType, ConfusionMatrixEltType>
                   > OutputConfusionMatrixType;
+
+
+  // filter type
+  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurementsType;
+  typedef ConfusionMatrixMeasurementsType::MapOfClassesType                     MapOfClassesType;
+  typedef ConfusionMatrixMeasurementsType::MeasurementType                      MeasurementType;
+
 
 
 private:
@@ -135,6 +143,78 @@ private:
     // Nothing to do here : all parameters are independent
   }
 
+  std::string LogConfusionMatrix(MapOfClassesType* mapOfClasses, ConfusionMatrixType* matrix)
+    {
+      // Compute minimal width
+      size_t minwidth = 0;
+
+      for (unsigned int i = 0; i < matrix->Rows(); i++)
+        {
+        for (unsigned int j = 0; j < matrix->Cols(); j++)
+          {
+          std::ostringstream os;
+          os << (*matrix)(i,j);
+          size_t size = os.str().size();
+
+          if (size > minwidth)
+            {
+            minwidth = size;
+            }
+          }
+        }
+
+      MapOfClassesType::const_iterator it = mapOfClasses->begin();
+      MapOfClassesType::const_iterator end = mapOfClasses->end();
+
+      for(; it != end; ++it)
+        {
+        std::ostringstream os;
+        os << "[" << it->first << "]";
+
+        size_t size = os.str().size();
+        if (size > minwidth)
+          {
+          minwidth = size;
+          }
+        }
+
+      // Generate matrix string, with 'minwidth' as size specifier
+      std::ostringstream os;
+
+      // Header line
+      for (size_t i = 0; i < minwidth; ++i)
+        os << " ";
+      os << " ";
+
+      it = mapOfClasses->begin();
+      end = mapOfClasses->end();
+      for(; it != end; ++it)
+        {
+        //os << "[" << it->first << "]" << " ";
+        os << "[" << std::setw(minwidth - 2) << it->first << "]" << " ";
+        }
+
+      os << std::endl;
+
+      // Each line of confusion matrix
+      it = mapOfClasses->begin();
+      for (unsigned int i = 0; i < matrix->Rows(); i++)
+        {
+        ClassLabelType label = it->first;
+        os << "[" << std::setw(minwidth - 2) << label << "]" << " ";
+        for (unsigned int j = 0; j < matrix->Cols(); j++)
+          {
+          os << std::setw(minwidth) << (*matrix)(i,j) << " ";
+          }
+        os << std::endl;
+        ++it;
+        }
+
+      otbAppLogINFO("Confusion matrix (rows = reference labels, columns = produced labels):\n" << os.str());
+      return os.str();
+    }
+
+
   void DoExecute()
   {
     Int32ImageType* input = this->GetParameterImage<Int32ImageType> ("in");
@@ -181,7 +261,7 @@ private:
     // Extraction of the Class Labels from the Reference image/rasterized vector data + filling of m_Matrix
     MapOfClassesType  mapOfClassesRef, mapOfClassesProd;
     MapOfClassesType::iterator  itMapOfClassesRef, itMapOfClassesProd;
-    int labelRef = 0, labelProd = 0;
+    ClassLabelType labelRef = 0, labelProd = 0;
     int itLabelRef = 0, itLabelProd = 0;
 
     for (unsigned int index = 0; index < numberOfStreamDivisions; index++)
@@ -249,11 +329,17 @@ private:
     // Filling ossHeaderRefLabels for the output file
     ossHeaderRefLabels << commentRefStr;
     itMapOfClassesRef = mapOfClassesRef.begin();
+    int indiceLabelRef = 0;
     while (itMapOfClassesRef != mapOfClassesRef.end())
       {
       // labels labelRef of mapOfClassesRef are already sorted
       labelRef = itMapOfClassesRef->first;
       otbAppLogINFO("mapOfClassesRef[" << labelRef << "] = " << itMapOfClassesRef->second);
+
+      // SORTING the itMapOfClassesRef->second items of mapOfClassesRef
+      mapOfClassesRef[labelRef] = indiceLabelRef;
+      ++indiceLabelRef;
+
       ossHeaderRefLabels << labelRef;
       ++itMapOfClassesRef;
       if (itMapOfClassesRef != mapOfClassesRef.end())
@@ -299,13 +385,18 @@ private:
     /////////////////////////////////////
 
 
-    // Initialization of the Confusion Matrix for the application LOG
+    // Initialization of the Confusion Matrix for the application LOG and for measurements
     unsigned int nbClassesRef = mapOfClassesRef.size();
     unsigned int nbClassesProd = mapOfClassesProd.size();
-    m_MatrixLOG.SetSize(nbClassesRef, nbClassesProd);
-    m_MatrixLOG.Fill(0);
 
-    int indiceLabelRef = 0, indiceLabelProd = 0;
+    // Formatting m_MatrixLOG from m_Matrix in order to make m_MatrixLOG a square matrix
+    // from the reference labels in mapOfClassesRef
+    indiceLabelRef = 0;
+    int indiceLabelProd = 0, indiceLabelProdInRef = 0;
+
+    // Initialization of m_MatrixLOG
+    m_MatrixLOG.SetSize(nbClassesRef, nbClassesRef);
+    m_MatrixLOG.Fill(0);
     for (itMapOfClassesRef = mapOfClassesRef.begin(); itMapOfClassesRef != mapOfClassesRef.end(); ++itMapOfClassesRef)
       {
       // labels labelRef of mapOfClassesRef are already sorted
@@ -317,7 +408,13 @@ private:
         // labels labelProd of mapOfClassesProd are already sorted
         labelProd = itMapOfClassesProd->first;
 
-        m_MatrixLOG(indiceLabelRef, indiceLabelProd) = m_Matrix[labelRef][labelProd];
+        // If labelProd is present in mapOfClassesRef
+        if (mapOfClassesRef.count(labelProd) != 0)
+          {
+          // Indice of labelProd in mapOfClassesRef ; itMapOfClassesRef->second elements are now SORTED
+          indiceLabelProdInRef = mapOfClassesRef[labelProd];
+          m_MatrixLOG(indiceLabelRef, indiceLabelProdInRef) = m_Matrix[labelRef][labelProd];
+          }
 
         ///////////////////////////////////////////////////////////
         // Writing the ordered confusion matrix in the output file
@@ -333,6 +430,7 @@ private:
         ///////////////////////////////////////////////////////////
         ++indiceLabelProd;
         }
+
       m_Matrix[labelRef].clear();
       ++indiceLabelRef;
       }
@@ -343,7 +441,34 @@ private:
 
     otbAppLogINFO("Reference class labels ordered according to the rows of the output confusion matrix: " << ossHeaderRefLabels.str());
     otbAppLogINFO("Produced class labels ordered according to the columns of the output confusion matrix: " << ossHeaderProdLabels.str());
-    otbAppLogINFO("Output confusion matrix (rows = reference labels, columns = produced labels):\n" << m_MatrixLOG);
+    //otbAppLogINFO("Output confusion matrix (rows = reference labels, columns = produced labels):\n" << m_MatrixLOG);
+
+    LogConfusionMatrix(&mapOfClassesRef, &m_MatrixLOG);
+
+
+    // Measurements of the Confusion Matrix parameters
+    ConfusionMatrixMeasurementsType::Pointer confMatMeasurements = ConfusionMatrixMeasurementsType::New();
+
+    confMatMeasurements->SetMapOfClasses(mapOfClassesRef);
+    confMatMeasurements->SetConfusionMatrix(m_MatrixLOG);
+    confMatMeasurements->Compute();
+
+    for (itMapOfClassesRef = mapOfClassesRef.begin(); itMapOfClassesRef != mapOfClassesRef.end(); ++itMapOfClassesRef)
+      {
+      labelRef = itMapOfClassesRef->first;
+      indiceLabelRef = itMapOfClassesRef->second;
+
+      otbAppLogINFO("Precision of class [" << labelRef << "] vs all: " << confMatMeasurements->GetPrecisions()[indiceLabelRef]);
+      otbAppLogINFO("Recall of class [" << labelRef << "] vs all: " << confMatMeasurements->GetRecalls()[indiceLabelRef]);
+      otbAppLogINFO("F-score of class [" << labelRef << "] vs all: " << confMatMeasurements->GetFScores()[indiceLabelRef] << std::endl);
+      }
+
+    otbAppLogINFO("Precision of the different classes: " << confMatMeasurements->GetPrecisions());
+    otbAppLogINFO("Recall of the different classes: " << confMatMeasurements->GetRecalls());
+    otbAppLogINFO("F-score of the different classes: " << confMatMeasurements->GetFScores() << std::endl);
+
+    otbAppLogINFO("Kappa index: " << confMatMeasurements->GetKappaIndex());
+    otbAppLogINFO("Overall accuracy index: " << confMatMeasurements->GetOverallAccuracy());
 
   }// END Execute()
 
