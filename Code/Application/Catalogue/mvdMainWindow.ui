@@ -50,6 +50,7 @@
     <addaction name="action_DatasetProperties"/>
     <addaction name="action_OtbApplicationsBrowser"/>
     <addaction name="action_QuicklookView"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
@@ -74,6 +75,11 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_OpenImage"/>
+   <addaction name="separator"/>
+   <addaction name="action_ZoomIn"/>
+   <addaction name="action_ZoomOut"/>
+   <addaction name="action_ZoomExtent"/>
+   <addaction name="action_ZoomFull"/>
   </widget>
   <action name="action_Quit">
    <property name="text">
@@ -217,6 +223,42 @@
    </property>
    <property name="toolTip">
     <string>Show/hide OTB Applications browser.</string>
+   </property>
+  </action>
+  <action name="action_ZoomIn">
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_ZoomIn_Icon</normaloff>:/icons/action_ZoomIn_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom in</string>
+   </property>
+  </action>
+  <action name="action_ZoomOut">
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_ZoomOut_Icon</normaloff>:/icons/action_ZoomOut_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom out</string>
+   </property>
+  </action>
+  <action name="action_ZoomExtent">
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_ZoomExtent_Icon</normaloff>:/icons/action_ZoomExtent_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom to image extent</string>
+   </property>
+  </action>
+  <action name="action_ZoomFull">
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_ZoomFull_Icon</normaloff>:/icons/action_ZoomFull_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom to full resolution</string>
    </property>
   </action>
  </widget>

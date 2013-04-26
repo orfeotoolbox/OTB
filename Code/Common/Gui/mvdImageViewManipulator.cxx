@@ -564,5 +564,51 @@ void ImageViewManipulator
 
 }
 
+void ImageViewManipulator
+::OnUserZoomIn()
+{
+  this->CenterRegion(1.25);
+  this->Zoom(1.25);
+
+  // force repaintGL
+  qobject_cast< QWidget* >( parent() )->update();
+}
+
+void ImageViewManipulator
+::OnUserZoomOut()
+{
+
+  this->CenterRegion(1/1.25);
+  this->Zoom(1/1.25);  
+
+  // force repaintGL
+  qobject_cast< QWidget* >( parent() )->update();
+
+}
+
+void ImageViewManipulator
+::OnUserZoomExtent()
+{
+  // compute the intial scale factor to fit to screen
+  double factorX = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[0]/(double)(m_NavigationContext.m_ModelImageRegion.GetSize()[0]);
+  double factorY = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[1]/(double)(m_NavigationContext.m_ModelImageRegion.GetSize()[1]);
+  double scale = std::min(factorX, factorY);
+
+  this->Zoom(scale/m_IsotropicZoom);
+
+  // force repaintGL
+  qobject_cast< QWidget* >( parent() )->update();
+}
+
+void ImageViewManipulator
+::OnUserZoomFull()
+{
+  this->CenterRegion(1/m_IsotropicZoom);
+  this->Zoom(1/m_IsotropicZoom);  
+
+  // force repaintGL
+  qobject_cast< QWidget* >( parent() )->update();
+}
+
 /*****************************************************************************/
 } // end namespace 'mvd'

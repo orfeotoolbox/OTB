@@ -127,6 +127,14 @@ public slots:
 
   void OnUserScaleEditingFinished(const QString & scale);
 
+  void OnUserZoomIn();
+
+  void OnUserZoomOut();
+
+  void OnUserZoomExtent();
+
+  void OnUserZoomFull();
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //

@@ -239,6 +239,31 @@ MainWindow
     quicklookView,
     SLOT( updateGL()  )
     );
+
+  // signal used when zoom in is pressed
+   QObject::connect(
+     this,
+     SIGNAL(UserZoomIn()),
+     m_ImageView->GetImageViewManipulator(),
+     SLOT(OnUserZoomIn()));
+
+   QObject::connect(
+     this,
+     SIGNAL(UserZoomOut()),
+     m_ImageView->GetImageViewManipulator(),
+     SLOT(OnUserZoomOut()));
+
+   QObject::connect(
+     this,
+     SIGNAL(UserZoomExtent()),
+     m_ImageView->GetImageViewManipulator(),
+     SLOT(OnUserZoomExtent()));
+
+   QObject::connect(
+     this,
+     SIGNAL(UserZoomFull()),
+     m_ImageView->GetImageViewManipulator(),
+     SLOT(OnUserZoomFull()));
 }
 
 /*****************************************************************************/
@@ -825,6 +850,50 @@ MainWindow
   // Import the image
   ImportImage( filename ); 
 }
+
+void
+MainWindow
+::on_action_ZoomIn_triggered()
+{
+  emit UserZoomIn();
+
+  // update the Quicklook
+  qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
+}
+
+
+void
+MainWindow
+::on_action_ZoomOut_triggered()
+{
+  emit UserZoomOut();
+
+  // update the Quicklook
+  qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
+}
+
+
+void
+MainWindow
+::on_action_ZoomExtent_triggered()
+{
+  emit UserZoomExtent();
+
+  // update the Quicklook
+  qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
+}
+
+
+void
+MainWindow
+::on_action_ZoomFull_triggered()
+{
+  emit UserZoomFull();
+
+  // update the Quicklook
+  qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
+}
+
 
 /*****************************************************************************/
 void

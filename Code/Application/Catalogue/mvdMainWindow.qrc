@@ -1,5 +1,9 @@
 <RCC>
   <qresource prefix="/icons">
+    <file alias="action_ZoomIn_Icon">../../../Data/Icons/action-zoomin_24x24.png</file>
+    <file alias="action_ZoomExtent_Icon">../../../Data/Icons/action-zoomfullextent_24x24.png</file>
+    <file alias="action_ZoomOut_Icon">../../../Data/Icons/action-zoomout_24x24.png</file>
+    <file alias="action_ZoomFull_Icon">../../../Data/Icons/action-zoomtolayer_24x24.png</file>
     <file alias="action_Open_Icon">../../../Data/Icons/document-open_32x32.png</file>
   </qresource>
   <qresource prefix="/images">
