@@ -216,7 +216,7 @@ void ImageViewManipulator
   this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
 
   // call the rescale method with the same zoom as before (scale = 1)
-  this->Zoom(1.);
+  this->ZoomBy(1.);
 }
 
 /******************************************************************************/
@@ -235,25 +235,25 @@ ImageViewManipulator
   this->KeepMousePosition(scale);
 
   // rescale the viewport region
-  this->Zoom(scale);
+  this->ZoomBy(scale);
 }
 
 /******************************************************************************/
 void
 ImageViewManipulator
-::Zoom(const double scale)
+::ZoomBy(const double factor)
 {
   m_PreviousIsotropicZoom = m_IsotropicZoom;
 
   // compute the new size
-  double sizeX = m_NavigationContext.m_SizeXBeforeConstrain / scale;
-  double sizeY = m_NavigationContext.m_SizeYBeforeConstrain / scale;
+  double sizeX = m_NavigationContext.m_SizeXBeforeConstrain / factor;
+  double sizeY = m_NavigationContext.m_SizeYBeforeConstrain / factor;
   
   // check that the new size is greater than 1x1
   // check that the new isoZoom is not too low: 0.001
   if ( (unsigned int)(sizeX) > 1  && 
        (unsigned int)(sizeY) > 1  &&  
-       m_IsotropicZoom * scale > 0.001 )
+       m_IsotropicZoom * factor > 0.001 )
     {
     // Update the the sizeBeforeConstrain
     m_NavigationContext.m_SizeXBeforeConstrain = sizeX;
@@ -274,7 +274,54 @@ ImageViewManipulator
     this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
 
     // Update the isotropicZoom
-    m_IsotropicZoom *= scale;
+    m_IsotropicZoom *= factor;
+
+    // tell the quicklook renderer to update the red square rendering
+    this->PropagateViewportRegionChanged(currentRegion); 
+
+    // emit the factor change
+    this->UpdateScale();
+    }
+}
+
+void
+ImageViewManipulator
+::ZoomTo(const double scale)
+{
+  m_PreviousIsotropicZoom = m_IsotropicZoom;
+
+  double factor = scale / m_PreviousIsotropicZoom;
+
+  // compute the new size
+  double sizeX = m_NavigationContext.m_SizeXBeforeConstrain / factor;
+  double sizeY = m_NavigationContext.m_SizeYBeforeConstrain / factor;
+  
+  // check that the new size is greater than 1x1
+  // check that the new isoZoom is not too low: 0.001
+  if ( (unsigned int)(sizeX) > 1  && 
+       (unsigned int)(sizeY) > 1  &&  
+       scale > 0.001 )
+    {
+    // Update the the sizeBeforeConstrain
+    m_NavigationContext.m_SizeXBeforeConstrain = sizeX;
+    m_NavigationContext.m_SizeYBeforeConstrain = sizeY;
+
+    // Update the viewort region with the new size
+    ImageRegionType::SizeType size;
+    size[0] = static_cast<unsigned int>(sizeX);
+    size[1] = static_cast<unsigned int>(sizeY);
+
+    // The viewPort Region must be adapted to this zoom ratio
+    ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+ 
+    // Update the stored region with the new size
+    currentRegion.SetSize(size);
+    
+    // Constraint this region to the LargestPossibleRegion
+    this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
+
+    // Update the isotropicZoom
+    m_IsotropicZoom = scale;
 
     // tell the quicklook renderer to update the red square rendering
     this->PropagateViewportRegionChanged(currentRegion); 
@@ -283,6 +330,7 @@ ImageViewManipulator
     this->UpdateScale();
     }
 }
+
 
 /******************************************************************************/
 void
@@ -391,11 +439,11 @@ ImageViewManipulator
     {
     case Qt::Key_Minus:
       CenterRegion(0.8);
-      Zoom(0.8);
+      ZoomBy(0.8);
       break;
     case Qt::Key_Plus: 
       CenterRegion(1.25);
-      Zoom(1.25);
+      ZoomBy(1.25);
       break;
     case Qt::Key_Left:
       moveRegion(-static_cast<double>(m_NavigationContext.m_ViewportImageRegion.GetSize(0))*m_IsotropicZoom/4 ,0);
@@ -495,7 +543,7 @@ void ImageViewManipulator
     }
     
   // double scale = std::min(factorX, factorY);
-  this->Zoom(1.);
+  this->ZoomBy(1.);
 }
 
 /*****************************************************************************/
@@ -556,7 +604,7 @@ void ImageViewManipulator
 
     //
     // apply the zoom
-    this->Zoom(scale / GetIsotropicZoom());
+    this->ZoomBy(scale / GetIsotropicZoom());
 
     // force repaintGL
     qobject_cast< QWidget* >( parent() )->update();     
@@ -568,7 +616,7 @@ void ImageViewManipulator
 ::OnUserZoomIn()
 {
   this->CenterRegion(1.25);
-  this->Zoom(1.25);
+  this->ZoomBy(1.25);
 
   // force repaintGL
   qobject_cast< QWidget* >( parent() )->update();
@@ -579,7 +627,7 @@ void ImageViewManipulator
 {
 
   this->CenterRegion(1/1.25);
-  this->Zoom(1/1.25);  
+  this->ZoomBy(1/1.25);  
 
   // force repaintGL
   qobject_cast< QWidget* >( parent() )->update();
@@ -589,12 +637,20 @@ void ImageViewManipulator
 void ImageViewManipulator
 ::OnUserZoomExtent()
 {
-  // compute the intial scale factor to fit to screen
-  double factorX = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[0]/(double)(m_NavigationContext.m_ModelImageRegion.GetSize()[0]);
-  double factorY = (double)m_NavigationContext.m_ViewportImageRegion.GetSize()[1]/(double)(m_NavigationContext.m_ModelImageRegion.GetSize()[1]);
-  double scale = std::min(factorX, factorY);
+  // get the widget size and use it to resize the Viewport region
+  QWidget* parent_widget = qobject_cast< QWidget* >( parent() );
 
-  this->Zoom(scale/m_IsotropicZoom);
+  double scale = 1;
+
+  if(parent_widget)
+    {
+    // compute the intial scale factor to fit to screen
+    double factorX = (double)parent_widget->width()/(double)(m_NavigationContext.m_ModelImageRegion.GetSize()[0]);
+    double factorY = (double)parent_widget->height()/(double)(m_NavigationContext.m_ModelImageRegion.GetSize()[1]);
+    scale = std::min(factorX, factorY);
+    }
+
+  this->ZoomTo(scale);
 
   // force repaintGL
   qobject_cast< QWidget* >( parent() )->update();
@@ -603,8 +659,7 @@ void ImageViewManipulator
 void ImageViewManipulator
 ::OnUserZoomFull()
 {
-  this->CenterRegion(1/m_IsotropicZoom);
-  this->Zoom(1/m_IsotropicZoom);  
+  this->ZoomTo(1.0);  
 
   // force repaintGL
   qobject_cast< QWidget* >( parent() )->update();

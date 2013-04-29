@@ -175,8 +175,11 @@ private:
 //
 // Private methods.
 private:
-  /** */
-  void Zoom(const double scale);
+  /** Zoom view by a given factor */
+  void ZoomBy(const double factor);
+
+  /** Zoom to a given scale */
+  void ZoomTo(const double scale);
 
   /** */
   void PropagateViewportRegionChanged(const ImageRegionType& region);
