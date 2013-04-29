@@ -193,6 +193,9 @@ private:
   /** */
   double m_PreviousIsotropicZoom;
 
+  /** Zoom multiplier: factor of zoom when zoom actions are triggered */
+  double m_ZoomMultiplier;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //

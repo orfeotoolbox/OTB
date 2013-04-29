@@ -49,7 +49,8 @@ namespace mvd
 ImageViewManipulator
 ::ImageViewManipulator( QObject* parent ) :
   AbstractViewManipulator( parent ),
-  m_PreviousIsotropicZoom(1.)
+  m_PreviousIsotropicZoom(1.),
+  m_ZoomMultiplier(1.1)
 {
 }
 
@@ -225,7 +226,7 @@ ImageViewManipulator
 ::wheelEvent(  QWheelEvent * event)
 {
   // compute the new scale
-  double scaleRatio = 1.25;
+  double scaleRatio = m_ZoomMultiplier;
   double numDegrees = event->delta() / 8.;
   int    nbSteps    = static_cast<int>(numDegrees / 15.);
 
@@ -438,12 +439,12 @@ ImageViewManipulator
   switch(event->key())
     {
     case Qt::Key_Minus:
-      CenterRegion(0.8);
-      ZoomBy(0.8);
+      CenterRegion(1/m_ZoomMultiplier);
+      ZoomBy(1/m_ZoomMultiplier);
       break;
     case Qt::Key_Plus: 
-      CenterRegion(1.25);
-      ZoomBy(1.25);
+      CenterRegion(m_ZoomMultiplier);
+      ZoomBy(m_ZoomMultiplier);
       break;
     case Qt::Key_Left:
       moveRegion(-static_cast<double>(m_NavigationContext.m_ViewportImageRegion.GetSize(0))*m_IsotropicZoom/4 ,0);
@@ -615,8 +616,8 @@ void ImageViewManipulator
 void ImageViewManipulator
 ::OnUserZoomIn()
 {
-  this->CenterRegion(1.25);
-  this->ZoomBy(1.25);
+  this->CenterRegion(m_ZoomMultiplier);
+  this->ZoomBy(m_ZoomMultiplier);
 
   // force repaintGL
   qobject_cast< QWidget* >( parent() )->update();
@@ -626,8 +627,8 @@ void ImageViewManipulator
 ::OnUserZoomOut()
 {
 
-  this->CenterRegion(1/1.25);
-  this->ZoomBy(1/1.25);  
+  this->CenterRegion(1/m_ZoomMultiplier);
+  this->ZoomBy(1/m_ZoomMultiplier);  
 
   // force repaintGL
   qobject_cast< QWidget* >( parent() )->update();
