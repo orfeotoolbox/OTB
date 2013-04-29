@@ -15,14 +15,14 @@
 
  =========================================================================*/
 
-#include "otbTrainMachineLearningImagesClassifier.h"
+#include "otbTrainImagesClassifier.h"
 
 
 namespace otb
 {
 namespace Wrapper
 {
-  void TrainMachineLearningImagesClassifier::InitKNNParams()
+  void TrainImagesClassifier::InitKNNParams()
   {
     AddChoice("classifier.knn", "KNN classifier");
     SetParameterDescription("classifier.knn", "This group of parameters allows to set KNN classifier parameters."
@@ -36,7 +36,7 @@ namespace Wrapper
   }
 
 
-  void TrainMachineLearningImagesClassifier::TrainKNN(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
+  void TrainImagesClassifier::TrainKNN(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
   {
     KNNType::Pointer knnClassifier = KNNType::New();
     knnClassifier->SetInputListSample(trainingListSample);

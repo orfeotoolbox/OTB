@@ -15,14 +15,14 @@
 
  =========================================================================*/
 
-#include "otbTrainMachineLearningImagesClassifier.h"
+#include "otbTrainImagesClassifier.h"
 
 
 namespace otb
 {
 namespace Wrapper
 {
-  void TrainMachineLearningImagesClassifier::InitSVMParams()
+  void TrainImagesClassifier::InitSVMParams()
   {
     AddChoice("classifier.svm", "SVM classifier (OpenCV)");
     SetParameterDescription("classifier.svm", "This group of parameters allows to set SVM classifier parameters."
@@ -70,7 +70,7 @@ namespace Wrapper
   }
 
 
-  void TrainMachineLearningImagesClassifier::TrainSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
+  void TrainImagesClassifier::TrainSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
   {
     SVMType::Pointer SVMClassifier = SVMType::New();
     SVMClassifier->SetInputListSample(trainingListSample);

@@ -15,26 +15,35 @@
 
  =========================================================================*/
 
-#include "otbTrainMachineLearningImagesClassifier.h"
+#include "otbTrainImagesClassifier.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-  void TrainMachineLearningImagesClassifier::DoInit()
+  void TrainImagesClassifier::DoInit()
   {
-    SetName("TrainMachineLearningImagesClassifier");
+    SetName("TrainImagesClassifier");
     SetDescription(
         "Train a classifier (available in OpenCV machine learning) from multiple pairs of images and training vector data.");
 
     // Documentation
     SetDocName("Train an OpenCV classifier from multiple images");
     SetDocLongDescription(
-        "This application performs a classifier training from multiple pairs of input images and training vector data. Samples are composed of pixel values in each band optionally centered and reduced using XML statistics file produced by the ComputeImagesStatistics application.\n The training vector data must contain polygons with a positive integer field representing the class label. Name of the field can be set using the \"Class label field\" parameter. Training and validation sample lists are built such that each class is equally represented in both lists. One parameter allows to control the ratio between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and validation sets per class and per image.\n Several classifier parameters can be set depending on the classifier. In the validation process, the confusion matrix is organized the following way: rows = reference labels, columns = produced labels.");
+        "This application performs a classifier training from multiple pairs of input images and training vector data. "
+        "Samples are composed of pixel values in each band optionally centered and reduced using XML statistics file produced by "
+        "the ComputeImagesStatistics application.\n The training vector data must contain polygons with a positive integer field "
+        "representing the class label. Name of the field can be set using the \"Class label field\" parameter. Training and validation "
+        "sample lists are built such that each class is equally represented in both lists. One parameter allows to control the ratio "
+        "between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and "
+        "validation sets per class and per image.\n Several classifier parameters can be set depending on the classifier. In the "
+        "validation process, the confusion matrix is organized the following way: rows = reference labels, columns = produced labels. "
+        "In the header of the optional confusion matrix output file, the validation (reference) and predicted (produced) class labels"
+        " are ordered according to the rows/columns of the confusion matrix.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" OpenCV documentation for machine learning http://docs.opencv.org/modules/ml/doc/ml.html ");
+    SetDocSeeAlso("OpenCV documentation for machine learning http://docs.opencv.org/modules/ml/doc/ml.html ");
 
     AddDocTag(Tags::Learning);
 
@@ -51,6 +60,10 @@ namespace Wrapper
                             "Filename of an XML file containing mean and standard deviation of input images.");
     AddParameter(ParameterType_OutputFilename, "io.out", "Output model");
     SetParameterDescription("io.out", "Output file containing the model estimated");
+
+    AddParameter(ParameterType_OutputFilename, "io.confmatout", "Confusion matrix output");
+    SetParameterDescription("io.confmatout", "Filename to store the output confusion matrix (csv format)");
+    MandatoryOff("io.confmatout");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
@@ -125,14 +138,16 @@ namespace Wrapper
     SetDocExampleParameterValue("sample.vtr", "0.5");
     SetDocExampleParameterValue("svm.opt", "true");
     SetDocExampleParameterValue("io.out", "svmModelQB1.svm");
+    SetDocExampleParameterValue("io.confmatout", "svmConfusionMatrixQB1.csv");
   }
 
-  void TrainMachineLearningImagesClassifier::DoUpdateParameters()
+  void TrainImagesClassifier::DoUpdateParameters()
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void TrainMachineLearningImagesClassifier::LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
+
+  void TrainImagesClassifier::LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
   {
     ConfusionMatrixCalculatorType::ConfusionMatrixType matrix = confMatCalc->GetConfusionMatrix();
 
@@ -204,7 +219,7 @@ namespace Wrapper
     otbAppLogINFO("Confusion matrix (rows = reference labels, columns = produced labels):\n" << os.str());
   }
 
-  void TrainMachineLearningImagesClassifier::Classify(ListSampleType::Pointer validationListSample, LabelListSampleType::Pointer predictedList)
+  void TrainImagesClassifier::Classify(ListSampleType::Pointer validationListSample, LabelListSampleType::Pointer predictedList)
   {
     //Classification
     ModelPointerType model = MachineLearningModelFactoryType::CreateMachineLearningModel(GetParameterString("io.out"),
@@ -215,7 +230,7 @@ namespace Wrapper
     model->PredictAll();
   }
 
-  void TrainMachineLearningImagesClassifier::DoExecute()
+  void TrainImagesClassifier::DoExecute()
   {
     GetLogger()->Debug("Entering DoExecute\n");
     //Create training and validation for list samples and label list samples
@@ -436,7 +451,94 @@ namespace Wrapper
           "F-score of class   [" << classLabel << "] vs all: " << confMatCalc->GetFScores()[itClasses] << "\n");
       }
     otbAppLogINFO("Global performance, Kappa index: " << confMatCalc->GetKappaIndex());
-    // TODO: implement hyperplan distance classifier and performance validation (cf. object detection) ?
+
+
+    if (this->HasValue("io.confmatout"))
+      {
+      // Writing the confusion matrix in the output .CSV file
+
+      MapOfClassesType::iterator itMapOfClassesValid, itMapOfClassesPred;
+      ClassLabelType labelValid = 0;
+
+      ConfusionMatrixType confusionMatrix = confMatCalc->GetConfusionMatrix();
+      MapOfClassesType mapOfClassesValid = confMatCalc->GetMapOfClasses();
+
+      unsigned int nbClassesPred = mapOfClassesValid.size();
+
+      /////////////////////////////////////////////
+      // Filling the 2 headers for the output file
+      const std::string commentValidStr = "#Reference labels (rows):";
+      const std::string commentPredStr = "#Produced labels (columns):";
+      const char separatorChar = ',';
+      std::ostringstream ossHeaderValidLabels, ossHeaderPredLabels;
+
+      // Filling ossHeaderValidLabels and ossHeaderPredLabels for the output file
+      ossHeaderValidLabels << commentValidStr;
+      ossHeaderPredLabels << commentPredStr;
+      itMapOfClassesValid = mapOfClassesValid.begin();
+      while (itMapOfClassesValid != mapOfClassesValid.end())
+        {
+        // labels labelValid of mapOfClassesValid are already sorted
+        labelValid = itMapOfClassesValid->first;
+        otbAppLogINFO("mapOfClassesValid[" << labelValid << "] = " << itMapOfClassesValid->second);
+
+        ossHeaderValidLabels << labelValid;
+        ossHeaderPredLabels << labelValid;
+        ++itMapOfClassesValid;
+        if (itMapOfClassesValid != mapOfClassesValid.end())
+          {
+          ossHeaderValidLabels << separatorChar;
+          ossHeaderPredLabels << separatorChar;
+          }
+        else
+          {
+          ossHeaderValidLabels << std::endl;
+          ossHeaderPredLabels << std::endl;
+          }
+        }
+
+
+      std::ofstream outFile;
+      outFile.open(this->GetParameterString("io.confmatout").c_str());
+      outFile << std::fixed;
+      outFile.precision(10);
+
+
+      /////////////////////////////////////
+      // Writing the 2 headers
+      outFile << ossHeaderValidLabels.str();
+      outFile << ossHeaderPredLabels.str();
+      /////////////////////////////////////
+
+      int indiceLabelValid = 0, indiceLabelPred = 0;
+
+      for (itMapOfClassesValid = mapOfClassesValid.begin(); itMapOfClassesValid != mapOfClassesValid.end(); ++itMapOfClassesValid)
+        {
+        // labels labelValid = itMapOfClassesValid->first of mapOfClassesRef are already sorted
+
+        indiceLabelPred = 0;
+        for (itMapOfClassesPred = mapOfClassesValid.begin(); itMapOfClassesPred != mapOfClassesValid.end(); ++itMapOfClassesPred)
+          {
+          // Writing the ordered confusion matrix in the output file
+          outFile << confusionMatrix(indiceLabelValid, indiceLabelPred);
+          if (indiceLabelPred < (nbClassesPred - 1))
+            {
+            outFile << separatorChar;
+            }
+          else
+            {
+            outFile << std::endl;
+            }
+          ++indiceLabelPred;
+          }
+
+        ++indiceLabelValid;
+        }
+
+      outFile.close();
+      } // END if (this->HasValue("io.confmatout"))
+
+    // TODO: implement hyperplane distance classifier and performance validation (cf. object detection) ?
 
   }
 
@@ -444,4 +546,4 @@ namespace Wrapper
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::TrainMachineLearningImagesClassifier)
+OTB_APPLICATION_EXPORT(otb::Wrapper::TrainImagesClassifier)

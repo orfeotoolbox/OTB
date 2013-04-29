@@ -79,7 +79,7 @@ public:
   typedef std::map<int, ClassLabelType>                                         MapOfIndicesType;
 
   /** Type for the confusion matrix */
-  typedef itk::VariableSizeMatrix<double>                                       ConfusionMatrixType;
+  typedef itk::VariableSizeMatrix<unsigned long>                                ConfusionMatrixType;
 
   /** Type for the confusion matrix measurements calculator*/
   typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurementsType;

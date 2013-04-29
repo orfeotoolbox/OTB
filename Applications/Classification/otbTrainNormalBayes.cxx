@@ -15,14 +15,14 @@
 
  =========================================================================*/
 
-#include "otbTrainMachineLearningImagesClassifier.h"
+#include "otbTrainImagesClassifier.h"
 
 
 namespace otb
 {
 namespace Wrapper
 {
-  void TrainMachineLearningImagesClassifier::InitNormalBayesParams()
+  void TrainImagesClassifier::InitNormalBayesParams()
   {
     AddChoice("classifier.bayes", "Normal Bayes classifier");
     SetParameterDescription("classifier.bayes", "Use a Normal Bayes Classifier."
@@ -31,7 +31,7 @@ namespace Wrapper
   }
 
 
-  void TrainMachineLearningImagesClassifier::TrainNormalBayes(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
+  void TrainImagesClassifier::TrainNormalBayes(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
   {
     NormalBayesType::Pointer classifier = NormalBayesType::New();
     classifier->SetInputListSample(trainingListSample);

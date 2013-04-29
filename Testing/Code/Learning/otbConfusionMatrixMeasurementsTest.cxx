@@ -22,8 +22,9 @@
 
 int otbConfusionMatrixMeasurementsNew(int argc, char* argv[])
 {
-  typedef itk::VariableSizeMatrix<double> ConfusionMatrixType;
-  typedef unsigned char                   LabelType;
+  typedef unsigned long                                   ConfusionMatrixEltType;
+  typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
+  typedef unsigned char                                   LabelType;
 
   // filter types
   typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, LabelType> ConfusionMatrixMeasurements2TemplatesType;
@@ -51,8 +52,9 @@ int otbConfusionMatrixMeasurementsNew(int argc, char* argv[])
 
 int otbConfusionMatrixMeasurementsTest(int argc, char* argv[])
 {
-  typedef itk::VariableSizeMatrix<double> ConfusionMatrixType;
-  typedef unsigned char                   ClassLabelType;
+  typedef unsigned long                                   ConfusionMatrixEltType;
+  typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
+  typedef unsigned char                                   ClassLabelType;
 
   // filter type
   typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurementsType;

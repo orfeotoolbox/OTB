@@ -22,8 +22,9 @@
 
 int otbConfusionMatrixToMassOfBeliefNew(int argc, char* argv[])
 {
-  typedef itk::VariableSizeMatrix<double> ConfusionMatrixType;
-  typedef unsigned char                   LabelType;
+  typedef unsigned long                                   ConfusionMatrixEltType;
+  typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
+  typedef int                                             LabelType;
 
   // filter types
   typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, LabelType>
@@ -52,8 +53,9 @@ int otbConfusionMatrixToMassOfBeliefNew(int argc, char* argv[])
 
 int otbConfusionMatrixToMassOfBeliefTest(int argc, char* argv[])
 {
-  typedef itk::VariableSizeMatrix<double> ConfusionMatrixType;
-  typedef unsigned char                   LabelType;
+  typedef unsigned long                                   ConfusionMatrixEltType;
+  typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
+  typedef int                                             LabelType;
 
   // filter type
   typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, LabelType> ConfusionMatrixToMassOfBeliefType;

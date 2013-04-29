@@ -15,14 +15,14 @@
 
  =========================================================================*/
 
-#include "otbTrainMachineLearningImagesClassifier.h"
+#include "otbTrainImagesClassifier.h"
 
 
 namespace otb
 {
 namespace Wrapper
 {
-  void TrainMachineLearningImagesClassifier::InitBoostParams()
+  void TrainImagesClassifier::InitBoostParams()
   {
     AddChoice("classifier.boost", "Boost classifier");
     SetParameterDescription("classifier.boost", "This group of parameters allows to set Boost classifier parameters."
@@ -55,7 +55,7 @@ namespace Wrapper
   }
 
 
-  void TrainMachineLearningImagesClassifier::TrainBoost(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
+  void TrainImagesClassifier::TrainBoost(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
   {
     BoostType::Pointer boostClassifier = BoostType::New();
     boostClassifier->SetInputListSample(trainingListSample);

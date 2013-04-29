@@ -15,13 +15,13 @@
 
  =========================================================================*/
 
-#include "otbTrainMachineLearningImagesClassifier.h"
+#include "otbTrainImagesClassifier.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-void TrainMachineLearningImagesClassifier::InitGradientBoostedTreeParams()
+void TrainImagesClassifier::InitGradientBoostedTreeParams()
 {
   AddChoice("classifier.gbt", "Gradient Boosted Tree classifier");
   SetParameterDescription(
@@ -65,7 +65,7 @@ void TrainMachineLearningImagesClassifier::InitGradientBoostedTreeParams()
 
 }
 
-void TrainMachineLearningImagesClassifier::TrainGradientBoostedTree(
+void TrainImagesClassifier::TrainGradientBoostedTree(
     ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
 {
   GradientBoostedTreeType::Pointer classifier = GradientBoostedTreeType::New();

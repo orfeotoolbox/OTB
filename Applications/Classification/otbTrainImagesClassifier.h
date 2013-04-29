@@ -76,11 +76,11 @@ namespace otb
 namespace Wrapper
 {
 
-class TrainMachineLearningImagesClassifier: public Application
+class TrainImagesClassifier: public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef TrainMachineLearningImagesClassifier Self;
+  typedef TrainImagesClassifier Self;
   typedef Application Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -88,7 +88,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self)
 
-  itkTypeMacro(TrainMachineLearningImagesClassifier, otb::Application)
+  itkTypeMacro(TrainImagesClassifier, otb::Application)
 
   typedef otb::Image<FloatVectorImageType::InternalPixelType, 2> ImageReaderType;
 
@@ -129,6 +129,10 @@ public:
 
   // Estimate performance on validation sample
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType, LabelListSampleType> ConfusionMatrixCalculatorType;
+  typedef ConfusionMatrixCalculatorType::ConfusionMatrixType ConfusionMatrixType;
+  typedef ConfusionMatrixCalculatorType::MapOfClassesType MapOfClassesType;
+  typedef ConfusionMatrixCalculatorType::ClassLabelType ClassLabelType;
+
 
   // VectorData projection filter
   typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataProjectionFilterType;
@@ -138,7 +142,7 @@ public:
 
 protected:
   using Superclass::AddParameter;
-  friend void InitSVMParams(TrainMachineLearningImagesClassifier & app);
+  friend void InitSVMParams(TrainImagesClassifier & app);
 
 private:
   void DoInit();

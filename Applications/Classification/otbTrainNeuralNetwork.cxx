@@ -16,13 +16,13 @@
  =========================================================================*/
 
 #include <boost/lexical_cast.hpp>
-#include "otbTrainMachineLearningImagesClassifier.h"
+#include "otbTrainImagesClassifier.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-void TrainMachineLearningImagesClassifier::InitNeuralNetworkParams()
+void TrainImagesClassifier::InitNeuralNetworkParams()
 {
   AddChoice("classifier.ann", "Artificial Neural Network classifier");
   SetParameterDescription("classifier.ann",
@@ -118,7 +118,7 @@ void TrainMachineLearningImagesClassifier::InitNeuralNetworkParams()
 
 }
 
-void TrainMachineLearningImagesClassifier::TrainNeuralNetwork(ListSampleType::Pointer trainingListSample,
+void TrainImagesClassifier::TrainNeuralNetwork(ListSampleType::Pointer trainingListSample,
                                                               LabelListSampleType::Pointer trainingLabeledListSample)
 {
   NeuralNetworkType::Pointer classifier = NeuralNetworkType::New();

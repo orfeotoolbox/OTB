@@ -15,13 +15,13 @@
 
  =========================================================================*/
 
-#include "otbTrainMachineLearningImagesClassifier.h"
+#include "otbTrainImagesClassifier.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-void TrainMachineLearningImagesClassifier::InitRandomForestsParams()
+void TrainImagesClassifier::InitRandomForestsParams()
 {
   AddChoice("classifier.rf", "Random forests classifier");
   SetParameterDescription("classifier.rf",
@@ -94,7 +94,7 @@ void TrainMachineLearningImagesClassifier::InitRandomForestsParams()
   //TerminationCriteria not exposed
 }
 
-void TrainMachineLearningImagesClassifier::TrainRandomForests(ListSampleType::Pointer trainingListSample,
+void TrainImagesClassifier::TrainRandomForests(ListSampleType::Pointer trainingListSample,
                                                               LabelListSampleType::Pointer trainingLabeledListSample)
 {
   RandomForestType::Pointer classifier = RandomForestType::New();

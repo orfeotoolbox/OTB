@@ -15,13 +15,13 @@
 
  =========================================================================*/
 
-#include "otbTrainMachineLearningImagesClassifier.h"
+#include "otbTrainImagesClassifier.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-void TrainMachineLearningImagesClassifier::InitDecisionTreeParams()
+void TrainImagesClassifier::InitDecisionTreeParams()
 {
   AddChoice("classifier.dt", "Decision Tree classifier");
   SetParameterDescription("classifier.dt",
@@ -80,7 +80,7 @@ void TrainMachineLearningImagesClassifier::InitDecisionTreeParams()
 
 }
 
-void TrainMachineLearningImagesClassifier::TrainDecisionTree(ListSampleType::Pointer trainingListSample,
+void TrainImagesClassifier::TrainDecisionTree(ListSampleType::Pointer trainingListSample,
                                                              LabelListSampleType::Pointer trainingLabeledListSample)
 {
   DecisionTreeType::Pointer classifier = DecisionTreeType::New();

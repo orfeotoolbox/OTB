@@ -44,7 +44,7 @@ namespace otb
  *  Moreover overall accuracy and \f[ \kappa \f] index are computed.
  *
  */
-template <class TConfusionMatrix = itk::VariableSizeMatrix<double>, class TLabel = int >
+template <class TConfusionMatrix = itk::VariableSizeMatrix<unsigned long>, class TLabel = int >
 class ITK_EXPORT ConfusionMatrixMeasurements :
   public itk::Object
 {
