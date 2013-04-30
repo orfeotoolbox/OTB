@@ -25,8 +25,8 @@ namespace Wrapper
   void TrainImagesClassifier::InitSVMParams()
   {
     AddChoice("classifier.svm", "SVM classifier (OpenCV)");
-    SetParameterDescription("classifier.svm", "This group of parameters allows to set SVM classifier parameters."
-        "See complete documentation here http://docs.opencv.org/modules/ml/doc/support_vector_machines.html");
+    SetParameterDescription("classifier.svm", "This group of parameters allows to set SVM classifier parameters. "
+        "See complete documentation here http://docs.opencv.org/modules/ml/doc/support_vector_machines.html.");
     AddParameter(ParameterType_Choice, "classifier.svm.m", "SVM Model Type");
     AddChoice("classifier.svm.m.csvc", "C support vector classification");
     AddChoice("classifier.svm.m.nusvc", "Nu support vector classification");
@@ -42,31 +42,31 @@ namespace Wrapper
     AddChoice("classifier.svm.k.sigmoid", "Sigmoid");
     SetParameterString("classifier.svm.k", "linear");
     SetParameterDescription("classifier.svm.k", "SVM Kernel Type.");
-    AddParameter(ParameterType_Float, "classifier.svm.c", "Cost parameter C.");
+    AddParameter(ParameterType_Float, "classifier.svm.c", "Cost parameter C");
     SetParameterFloat("classifier.svm.c", 1.0);
     SetParameterDescription(
         "classifier.svm.c",
         "SVM models have a cost parameter C (1 by default) to control the trade-off between training errors and forcing rigid margins.");
     AddParameter(ParameterType_Float, "classifier.svm.nu",
-                 "Parameter nu of a SVM optimization problem (NU_SVC / ONE_CLASS).");
+                 "Parameter nu of a SVM optimization problem (NU_SVC / ONE_CLASS)");
     SetParameterFloat("classifier.svm.nu", 0.0);
     SetParameterDescription("classifier.svm.nu", "Parameter nu of a SVM optimization problem.");
-    //AddParameter(ParameterType_Float, "classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
+    //AddParameter(ParameterType_Float, "classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR)");
     //SetParameterFloat("classifier.svm.p", 0.0);
     //SetParameterDescription("classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
-    AddParameter(ParameterType_Float, "classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID).");
+    AddParameter(ParameterType_Float, "classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID)");
     SetParameterFloat("classifier.svm.coef0", 0.0);
     SetParameterDescription("classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID).");
     AddParameter(ParameterType_Float, "classifier.svm.gamma",
-                 "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
+                 "Parameter gamma of a kernel function (POLY / RBF / SIGMOID)");
     SetParameterFloat("classifier.svm.gamma", 1.0);
     SetParameterDescription("classifier.svm.gamma", "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
-    AddParameter(ParameterType_Float, "classifier.svm.degree", "Parameter degree of a kernel function (POLY).");
+    AddParameter(ParameterType_Float, "classifier.svm.degree", "Parameter degree of a kernel function (POLY)");
     SetParameterFloat("classifier.svm.degree", 0.0);
     SetParameterDescription("classifier.svm.degree", "Parameter degree of a kernel function (POLY).");
-    AddParameter(ParameterType_Empty, "classifier.svm.opt", "parameters optimization");
+    AddParameter(ParameterType_Empty, "classifier.svm.opt", "Parameters optimization");
     MandatoryOff("classifier.svm.opt");
-    SetParameterDescription("classifier.svm.opt", "SVM optimization flag");
+    SetParameterDescription("classifier.svm.opt", "SVM parameters optimization flag.");
   }
 
 

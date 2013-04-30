@@ -25,13 +25,13 @@ namespace Wrapper
   void TrainImagesClassifier::InitKNNParams()
   {
     AddChoice("classifier.knn", "KNN classifier");
-    SetParameterDescription("classifier.knn", "This group of parameters allows to set KNN classifier parameters."
-        "See complete documentation here http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html");
+    SetParameterDescription("classifier.knn", "This group of parameters allows to set KNN classifier parameters. "
+        "See complete documentation here http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html.");
 
     //K parameter
     AddParameter(ParameterType_Int, "classifier.knn.k", "Number of Neighbors");
     SetParameterInt("classifier.knn.k", 32);
-    SetParameterDescription("classifier.knn.k","The number of neighbors to used.");
+    SetParameterDescription("classifier.knn.k","The number of neighbors to use.");
 
   }
 

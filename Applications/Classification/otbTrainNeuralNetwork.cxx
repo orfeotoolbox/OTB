@@ -26,15 +26,15 @@ void TrainImagesClassifier::InitNeuralNetworkParams()
 {
   AddChoice("classifier.ann", "Artificial Neural Network classifier");
   SetParameterDescription("classifier.ann",
-                          "This group of parameters allows to set Artificial Neural Network classifier parameters."
-                          "See complete documentation here http://docs.opencv.org/modules/ml/doc/neural_networks.html");
+                          "This group of parameters allows to set Artificial Neural Network classifier parameters. "
+                          "See complete documentation here http://docs.opencv.org/modules/ml/doc/neural_networks.html.");
 
   //TrainMethod
   AddParameter(ParameterType_Choice, "classifier.ann.t", "Train Method Type");
-  AddChoice("classifier.ann.t.reg", "RPROP algorithm.");
-  AddChoice("classifier.ann.t.back", "back-propagation algorithm");
+  AddChoice("classifier.ann.t.reg", "RPROP algorithm");
+  AddChoice("classifier.ann.t.back", "Back-propagation algorithm");
   SetParameterString("classifier.ann.t", "reg");
-  SetParameterDescription("classifier.ann.t", "Type of train method for the MLP neural network.");
+  SetParameterDescription("classifier.ann.t", "Type of training method for the multilayer perceptron (MLP) neural network.");
 
   //LayerSizes
   //There is no ParameterType_IntList, so i use a ParameterType_StringList and convert it.
@@ -44,63 +44,63 @@ void TrainImagesClassifier::InitNeuralNetworkParams()
   AddParameter(ParameterType_StringList, "classifier.ann.sizes", "Number of neurons in each intermediate layer");
   //SetParameterStringList("classifier.ann.sizes", layerSizes);
   SetParameterDescription("classifier.ann.sizes",
-                          "the number of neurons in each intermediate layer (excluding input and output layers).");
+                          "The number of neurons in each intermediate layer (excluding input and output layers).");
 
   //ActivateFunction
   AddParameter(ParameterType_Choice, "classifier.ann.f", "Neuron activation function type");
-  AddChoice("classifier.ann.f.ident", "Identity function.");
+  AddChoice("classifier.ann.f.ident", "Identity function");
   AddChoice("classifier.ann.f.sig", "Symmetrical Sigmoid function");
-  AddChoice("classifier.ann.f.gau", "Gaussian function. (Not completely supported)");
+  AddChoice("classifier.ann.f.gau", "Gaussian function (Not completely supported)");
   SetParameterString("classifier.ann.f", "sig");
   SetParameterDescription("classifier.ann.f", "Neuron activation function.");
 
   //Alpha
-  AddParameter(ParameterType_Float, "classifier.ann.a", "Alpha parameter of the activation function.");
+  AddParameter(ParameterType_Float, "classifier.ann.a", "Alpha parameter of the activation function");
   SetParameterFloat("classifier.ann.a", 0.);
   SetParameterDescription("classifier.ann.a",
-                          "Alpha parameter of the activation function (used only with sigmoid and gaussian functions.");
+                          "Alpha parameter of the activation function (used only with sigmoid and gaussian functions).");
 
   //Beta
-  AddParameter(ParameterType_Float, "classifier.ann.b", "Beta parameter of the activation function.");
+  AddParameter(ParameterType_Float, "classifier.ann.b", "Beta parameter of the activation function");
   SetParameterFloat("classifier.ann.b", 0.);
   SetParameterDescription("classifier.ann.b",
-                          "Beta parameter of the activation function (used only with sigmoid and gaussian functions.");
+                          "Beta parameter of the activation function (used only with sigmoid and gaussian functions).");
 
   //BackPropDWScale
   AddParameter(ParameterType_Float, "classifier.ann.bpdw",
-               "Strength of the weight gradient term in the BACKPROP method.");
+               "Strength of the weight gradient term in the BACKPROP method");
   SetParameterFloat("classifier.ann.bpdw", 0.1);
   SetParameterDescription(
       "classifier.ann.bpdw",
-      "Strength of the weight gradient term in the BACKPROP method. The recommended value is about 0.1");
+      "Strength of the weight gradient term in the BACKPROP method. The recommended value is about 0.1.");
 
   //BackPropMomentScale
   AddParameter(ParameterType_Float, "classifier.ann.bpms",
-               "Strength of the momentum term (the difference between weights on the 2 previous iterations).");
+               "Strength of the momentum term (the difference between weights on the 2 previous iterations)");
   SetParameterFloat("classifier.ann.bpms", 0.1);
   SetParameterDescription(
       "classifier.ann.bpms",
       "Strength of the momentum term (the difference between weights on the 2 previous iterations). "
       "This parameter provides some inertia to smooth the random fluctuations of the weights. "
-      "It can vary from 0 (the feature is disabled) to 1 and beyond. The value 0.1 or so is good enough");
+      "It can vary from 0 (the feature is disabled) to 1 and beyond. The value 0.1 or so is good enough.");
 
   //RegPropDW0
   AddParameter(ParameterType_Float, "classifier.ann.rdw",
-               "Initial value Delta_0 of update-values Delta_{ij} in RPROP method.");
+               "Initial value Delta_0 of update-values Delta_{ij} in RPROP method");
   SetParameterFloat("classifier.ann.rdw", 0.1);
-  SetParameterDescription("classifier.ann.rdw", "Initial value Delta_0 of update-values Delta_{ij} in RPROP method.");
+  SetParameterDescription("classifier.ann.rdw", "Initial value Delta_0 of update-values Delta_{ij} in RPROP method (default = 0.1).");
 
   //RegPropDWMin
-  AddParameter(ParameterType_Float, "classifier.ann.rdwm", "Update-values lower limit Delta_{min} in RPROP method.");
+  AddParameter(ParameterType_Float, "classifier.ann.rdwm", "Update-values lower limit Delta_{min} in RPROP method");
   SetParameterFloat("classifier.ann.rdwm", 1e-7);
   SetParameterDescription(
       "classifier.ann.rdwm",
-      "Update-values lower limit Delta_{min} in RPROP method. It must be positive. Default is 1e-7");
+      "Update-values lower limit Delta_{min} in RPROP method. It must be positive (default = 1e-7).");
 
   //TermCriteriaType
   AddParameter(ParameterType_Choice, "classifier.ann.term", "Termination criteria");
   AddChoice("classifier.ann.term.iter", "Maximum number of iterations");
-  AddChoice("classifier.ann.term.eps", "Espilon");
+  AddChoice("classifier.ann.term.eps", "Epsilon");
   AddChoice("classifier.ann.term.all", "Max. iterations + Epsilon");
   SetParameterString("classifier.ann.term", "all");
   SetParameterDescription("classifier.ann.term", "Termination criteria.");
@@ -108,13 +108,13 @@ void TrainImagesClassifier::InitNeuralNetworkParams()
   //Epsilon
   AddParameter(ParameterType_Float, "classifier.ann.eps", "Epsilon value used in the Termination criteria");
   SetParameterFloat("classifier.ann.eps", 0.01);
-  SetParameterDescription("classifier.ann.eps", "Epsilon value used in the Termination criteria");
+  SetParameterDescription("classifier.ann.eps", "Epsilon value used in the Termination criteria.");
 
   //MaxIter
   AddParameter(ParameterType_Int, "classifier.ann.iter",
-               "Maximum number of iteration used in the Termination criteria.");
+               "Maximum number of iterations used in the Termination criteria");
   SetParameterInt("classifier.ann.iter", 1000);
-  SetParameterDescription("classifier.ann.iter", "Maximum number of iteration used in the Termination criteria.");
+  SetParameterDescription("classifier.ann.iter", "Maximum number of iterations used in the Termination criteria.");
 
 }
 

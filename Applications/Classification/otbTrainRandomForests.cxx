@@ -25,8 +25,8 @@ void TrainImagesClassifier::InitRandomForestsParams()
 {
   AddChoice("classifier.rf", "Random forests classifier");
   SetParameterDescription("classifier.rf",
-                          "This group of parameters allows to set Random Forests classifier parameters."
-                          "See complete documentation here http://docs.opencv.org/modules/ml/doc/random_trees.html");
+                          "This group of parameters allows to set Random Forests classifier parameters. "
+                          "See complete documentation here http://docs.opencv.org/modules/ml/doc/random_trees.html.");
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.rf.max", "Maximum depth of the tree");
   SetParameterInt("classifier.rf.max", 25);
@@ -39,14 +39,14 @@ void TrainImagesClassifier::InitRandomForestsParams()
   AddParameter(ParameterType_Int, "classifier.rf.min", "Minimum number of samples in each node");
   SetParameterInt("classifier.rf.min", 5);
   SetParameterDescription(
-      "classifier.rf.min", "If the number of samples in a node is less than this parameter "
-      "then the node will not be split. A reasonable value is a small percentage of the total data e.g. 1%");
+      "classifier.rf.min", "If the number of samples in a node is smaller than this parameter, "
+      "then the node will not be split. A reasonable value is a small percentage of the total data e.g. 1\%.");
 
   //RegressionAccuracy
-  AddParameter(ParameterType_Float, "classifier.rf.ra", "Termination Criteria for regression tree.");
+  AddParameter(ParameterType_Float, "classifier.rf.ra", "Termination Criteria for regression tree");
   SetParameterFloat("classifier.rf.ra", 0.);
-  SetParameterDescription("classifier.rf.min", "If all absolute differences between an estimated value in a node"
-                          "and values of train samples in this node are less than this parameter"
+  SetParameterDescription("classifier.rf.ra", "If all absolute differences between an estimated value in a node "
+                          "and the values of the train samples in this node are smaller than this regression accuracy parameter, "
                           "then the node will not be split.");
 
   //UseSurrogates : don't need to be exposed !
@@ -59,7 +59,7 @@ void TrainImagesClassifier::InitRandomForestsParams()
   SetParameterInt("classifier.rf.cat", 15);
   SetParameterDescription(
       "classifier.rf.cat",
-      "Cluster possible values of a categorical variable into K <= cat clusters to find a suboptimal split");
+      "Cluster possible values of a categorical variable into K <= cat clusters to find a suboptimal split.");
 
   //Priors are not exposed.
 
@@ -71,8 +71,8 @@ void TrainImagesClassifier::InitRandomForestsParams()
   SetParameterInt("classifier.rf.var", 4);
   SetParameterDescription(
       "classifier.rf.var",
-      "The size of the randomly selected subset of features at each tree node and that are used to find the best split(s)."
-      "If you set it to 0 then the size will be set to the square root of the total number of features.");
+      "The size of the subset of features, randomly selected at each tree node, that are used to find the best split(s). "
+      "If you set it to 0, then the size will be set to the square root of the total number of features.");
 
   //MaxNumberOfTrees
   AddParameter(ParameterType_Int, "classifier.rf.nbtrees",
@@ -80,15 +80,15 @@ void TrainImagesClassifier::InitRandomForestsParams()
   SetParameterInt("classifier.rf.nbtrees", 100);
   SetParameterDescription(
       "classifier.rf.nbtrees",
-      "The maximum number of trees in the forest (surprise, surprise). Typically the more trees you have the better the accuracy."
-      "However, the improvement in accuracy generally diminishes and asymptotes pass a certain number of trees. "
-      "Also to keep in mind, the number of tree increases the prediction time linearly.");
+      "The maximum number of trees in the forest. Typically, the more trees you have, the better the accuracy. "
+      "However, the improvement in accuracy generally diminishes and reaches an asymptote for a certain number of trees. "
+      "Also to keep in mind, increasing the number of trees increases the prediction time linearly.");
 
   //ForestAccuracy
   AddParameter(ParameterType_Float, "classifier.rf.acc",
                "Sufficient accuracy (OOB error)");
   SetParameterFloat("classifier.rf.acc", 0.01);
-  SetParameterDescription("classifier.rf.acc","Sufficient accuracy (OOB error)");
+  SetParameterDescription("classifier.rf.acc","Sufficient accuracy (OOB error).");
 
 
   //TerminationCriteria not exposed

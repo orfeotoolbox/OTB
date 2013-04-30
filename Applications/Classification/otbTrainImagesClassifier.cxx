@@ -32,12 +32,12 @@ namespace Wrapper
     SetDocName("Train an OpenCV classifier from multiple images");
     SetDocLongDescription(
         "This application performs a classifier training from multiple pairs of input images and training vector data. "
-        "Samples are composed of pixel values in each band optionally centered and reduced using XML statistics file produced by "
+        "Samples are composed of pixel values in each band optionally centered and reduced using an XML statistics file produced by "
         "the ComputeImagesStatistics application.\n The training vector data must contain polygons with a positive integer field "
-        "representing the class label. Name of the field can be set using the \"Class label field\" parameter. Training and validation "
+        "representing the class label. The name of this field can be set using the \"Class label field\" parameter. Training and validation "
         "sample lists are built such that each class is equally represented in both lists. One parameter allows to control the ratio "
         "between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and "
-        "validation sets per class and per image.\n Several classifier parameters can be set depending on the classifier. In the "
+        "validation sets per class and per image.\n Several classifier parameters can be set depending on the chosen classifier. In the "
         "validation process, the confusion matrix is organized the following way: rows = reference labels, columns = produced labels. "
         "In the header of the optional confusion matrix output file, the validation (reference) and predicted (produced) class labels"
         " are ordered according to the rows/columns of the confusion matrix.");
@@ -52,18 +52,17 @@ namespace Wrapper
     SetParameterDescription("io", "This group of parameters allows to set input and output data.");
     AddParameter(ParameterType_InputImageList, "io.il", "Input Image List");
     SetParameterDescription("io.il", "A list of input images.");
-    AddParameter(ParameterType_InputVectorDataList, "io.vd", "Vector Data List");
+    AddParameter(ParameterType_InputVectorDataList, "io.vd", "Input Vector Data List");
     SetParameterDescription("io.vd", "A list of vector data to select the training samples.");
-    AddParameter(ParameterType_InputFilename, "io.imstat", "XML image statistics file");
+    AddParameter(ParameterType_InputFilename, "io.imstat", "Input XML image statistics file");
     MandatoryOff("io.imstat");
     SetParameterDescription("io.imstat",
-                            "Filename of an XML file containing mean and standard deviation of input images.");
-    AddParameter(ParameterType_OutputFilename, "io.out", "Output model");
-    SetParameterDescription("io.out", "Output file containing the model estimated");
-
-    AddParameter(ParameterType_OutputFilename, "io.confmatout", "Confusion matrix output");
-    SetParameterDescription("io.confmatout", "Filename to store the output confusion matrix (csv format)");
+                            "Input XML file containing the mean and the standard deviation of the input images.");
+    AddParameter(ParameterType_OutputFilename, "io.confmatout", "Output confusion matrix");
+    SetParameterDescription("io.confmatout", "Output file containing the confusion matrix (.csv format).");
     MandatoryOff("io.confmatout");
+    AddParameter(ParameterType_OutputFilename, "io.out", "Output model");
+    SetParameterDescription("io.out", "Output file containing the model estimated (.txt format).");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
@@ -76,29 +75,28 @@ namespace Wrapper
     AddParameter(ParameterType_Int, "sample.mt", "Maximum training sample size");
     //MandatoryOff("mt");
     SetDefaultParameterInt("sample.mt", 1000);
-    SetParameterDescription("sample.mt", "Maximum size of the training sample list (default = 1000).");
+    SetParameterDescription("sample.mt", "Maximum size of the training sample list (default = 1000) (no limit = -1).");
     AddParameter(ParameterType_Int, "sample.mv", "Maximum validation sample size");
     // MandatoryOff("mv");
     SetDefaultParameterInt("sample.mv", 1000);
-    SetParameterDescription("sample.mv", "Maximum size of the validation sample list (default = 1000)");
+    SetParameterDescription("sample.mv", "Maximum size of the validation sample list (default = 1000) (no limit = -1).");
 
     AddParameter(ParameterType_Empty, "sample.edg", "On edge pixel inclusion");
-    SetParameterDescription(
-        "sample.edg", "Take pixels on polygon edge into consideration when building training and validation samples.");
+    SetParameterDescription("sample.edg",
+                            "Takes pixels on polygon edge into consideration when building training and validation samples.");
     MandatoryOff("sample.edg");
 
-    AddParameter(ParameterType_Float, "sample.vtr", "training and validation sample ratio");
-    SetParameterDescription(
-        "sample.vtr",
-        "Ratio between training and validation samples (0.0 = all training, 1.0 = all validation) default = 0.5.");
+    AddParameter(ParameterType_Float, "sample.vtr", "Training and validation sample ratio");
+    SetParameterDescription("sample.vtr",
+                            "Ratio between training and validation samples (0.0 = all training, 1.0 = all validation) (default = 0.5).");
     SetParameterFloat("sample.vtr", 0.5);
 
     AddParameter(ParameterType_String, "sample.vfn", "Name of the discrimination field");
-    SetParameterDescription("sample.vfn", "Name of the field used to discriminate class in the vector data files.");
+    SetParameterDescription("sample.vfn", "Name of the field used to discriminate class labels in the input vector data files.");
     SetParameterString("sample.vfn", "Class");
 
-    AddParameter(ParameterType_Choice, "classifier", "Classifier to used.");
-    SetParameterDescription("classifier", "Choice of the classifier to used.");
+    AddParameter(ParameterType_Choice, "classifier", "Classifier to use for the training");
+    SetParameterDescription("classifier", "Choice of the classifier to use for the training.");
 
     //Group LibSVM
     InitLibSVMParams();
@@ -136,8 +134,13 @@ namespace Wrapper
     SetDocExampleParameterValue("sample.mv", "100");
     SetDocExampleParameterValue("sample.mt", "100");
     SetDocExampleParameterValue("sample.vtr", "0.5");
-    SetDocExampleParameterValue("svm.opt", "true");
-    SetDocExampleParameterValue("io.out", "svmModelQB1.svm");
+    SetDocExampleParameterValue("sample.edg", "false");
+    SetDocExampleParameterValue("sample.vfn", "Class");
+    SetDocExampleParameterValue("classifier", "libsvm");
+    SetDocExampleParameterValue("classifier.libsvm.k", "linear");
+    SetDocExampleParameterValue("classifier.libsvm.c", "1");
+    SetDocExampleParameterValue("classifier.libsvm.opt", "false");
+    SetDocExampleParameterValue("io.out", "svmModelQB1.txt");
     SetDocExampleParameterValue("io.confmatout", "svmConfusionMatrixQB1.csv");
   }
 

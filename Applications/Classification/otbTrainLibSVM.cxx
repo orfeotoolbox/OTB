@@ -33,14 +33,14 @@ namespace Wrapper
     AddChoice("classifier.libsvm.k.sigmoid", "Sigmoid");
     SetParameterString("classifier.libsvm.k", "linear");
     SetParameterDescription("classifier.libsvm.k", "SVM Kernel Type.");
-    AddParameter(ParameterType_Float, "classifier.libsvm.c", "Cost parameter C.");
+    AddParameter(ParameterType_Float, "classifier.libsvm.c", "Cost parameter C");
     SetParameterFloat("classifier.libsvm.c", 1.0);
     SetParameterDescription(
         "classifier.libsvm.c",
         "SVM models have a cost parameter C (1 by default) to control the trade-off between training errors and forcing rigid margins.");
-    AddParameter(ParameterType_Empty, "classifier.libsvm.opt", "parameters optimization");
+    AddParameter(ParameterType_Empty, "classifier.libsvm.opt", "Parameters optimization");
     MandatoryOff("classifier.libsvm.opt");
-    SetParameterDescription("classifier.libsvm.opt", "SVM optimization flag");
+    SetParameterDescription("classifier.libsvm.opt", "SVM parameters optimization flag.");
   }
 
 
