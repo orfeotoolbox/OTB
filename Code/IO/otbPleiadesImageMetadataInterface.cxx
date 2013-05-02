@@ -129,15 +129,36 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
 
   // Check that values read from metadata is not too far from the standard realistic values
   // '999' are likely to be dummy values (see Mantis #601)
-  const double defaultRadianceP = 1548.71;
-  // MS, ordered as B0, B1, B2, B3
-  const double defaultRadianceMS[4] =
+  // This values were provided by the French Space Agency
+  double defaultRadianceMS[4];
+  double defaultRadianceP;
+
+  const std::string sensorId = this->GetSensorID();
+  if (sensorId == "PHR 1A")
     {
-      1915.01,
-      1830.57,
-      1594.06,
-      1060.01
-    };
+    // MS, ordered as B0, B1, B2, B3
+    defaultRadianceMS[0] = 1915.01;
+    defaultRadianceMS[1] = 1830.57;
+    defaultRadianceMS[2] = 1594.06;
+    defaultRadianceMS[3] = 1060.01;
+
+    defaultRadianceP = 1548.71;
+    }
+  else if (sensorId == "PHR 1B")
+    {
+    // MS, ordered as B0, B1, B2, B3
+    defaultRadianceMS[0] = 1926.51688;
+    defaultRadianceMS[1] = 1805.91412;
+    defaultRadianceMS[2] = 1533.60973;
+    defaultRadianceMS[3] = 1019.23037;
+
+    defaultRadianceP = 1529.00384;
+    }
+  else
+    {
+    itkExceptionMacro(<< "Invalid sensor ID.");
+    }
+
   // tolerance threshold
   double tolerance = 0.05;
 
@@ -857,8 +878,8 @@ PleiadesImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  int nbBands = this->GetNumberOfBands();
-  std::string sensorId = this->GetSensorID();
+  const int nbBands = this->GetNumberOfBands();
+  const std::string sensorId = this->GetSensorID();
 
   // Panchromatic case
   if (nbBands == 1)
