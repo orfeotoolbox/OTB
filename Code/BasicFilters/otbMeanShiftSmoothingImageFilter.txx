@@ -250,6 +250,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
 
   jointImageFunctor->SetInput(inputPtr);
   jointImageFunctor->GetFunctor().Initialize(ImageDimension, m_NumberOfComponentsPerPixel, m_GlobalShift);
+  jointImageFunctor->GetOutput()->SetRequestedRegion(this->GetInput()->GetBufferedRegion());
   jointImageFunctor->Update();
   m_JointImage = jointImageFunctor->GetOutput();
 
