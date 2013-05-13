@@ -73,6 +73,7 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   //
   "dataset",
   "name",
+  "alias",
   "path",
   "directory",
   //
@@ -99,6 +100,7 @@ DatasetDescriptor
 ::DatasetDescriptor( QObject* parent ) :
   AbstractModel( parent ),
   m_DomDocument( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] ),
+  m_DatasetGroupElement(),
   m_ImagesGroupElement()
 {
 }
@@ -264,6 +266,39 @@ DatasetDescriptor
 }
 
 /*******************************************************************************/
+bool
+DatasetDescriptor
+::UpdateDatasetAlias( const QString & newAlias )
+{
+  qDebug() << this << "::UpdateDatasetAlias(" << newAlias << ")";
+  assert( !newAlias.isEmpty() ); 
+ 
+  // Access dataset group
+  if ( m_DatasetGroupElement.isNull() )
+    return false;
+
+  // Access dataset alias
+  QDomElement dsAliasElt(
+    m_DatasetGroupElement.firstChildElement( TAG_NAMES[ ELEMENT_DATASET_ALIAS] )
+  );
+
+  // TODO: Manage XML structure errors.
+  assert( !dsAliasElt.isNull() );  
+
+  // create a new node
+  QDomElement newdsAliasElt(
+    CreateTextNode( newAlias, 
+                    TAG_NAMES[ ELEMENT_DATASET_ALIAS ] )
+    );
+
+  // replace the node
+  m_DatasetGroupElement.replaceChild(newdsAliasElt, dsAliasElt );
+
+  // if everything went ok
+  return true;
+}
+
+/*******************************************************************************/
 void
 DatasetDescriptor
 ::GetImageModel( const QDomElement& imageSibling,
@@ -344,6 +379,38 @@ DatasetDescriptor
 /*******************************************************************************/
 void
 DatasetDescriptor
+::GetDatasetInformation( const QDomElement& datasetSibling,
+                         QString& datasetPath,
+                         QString& datasetAlias )
+{
+
+  // TODO: Manager XML structure errors.
+  assert( !datasetSibling.isNull() );
+
+  // Alias imageSibling into image-information element.
+  QDomElement datasetElt( datasetSibling );
+
+  // Acces dataset name
+  QDomElement datasetNameElt(
+		  datasetElt.firstChildElement( TAG_NAMES[ ELEMENT_DATASET_NAME ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !datasetNameElt.isNull() );
+  datasetPath = datasetNameElt.text();
+
+  // Access dataset alias
+  QDomElement datasetAliasElt(
+		  datasetElt.firstChildElement( TAG_NAMES[ ELEMENT_DATASET_ALIAS] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !datasetAliasElt.isNull() );
+  datasetAlias = datasetAliasElt.text();
+  qDebug()<< " ::GetDatasetInformation( datasetPath :  "<< datasetPath<< " - alais :  "<< datasetAlias <<" )";
+}
+
+/*******************************************************************************/
+void
+DatasetDescriptor
 ::virtual_Read( QIODevice* device )
 {
   qDebug() << "Reading  XML descriptor...";
@@ -369,6 +436,10 @@ DatasetDescriptor
     m_DomDocument.firstChildElement( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] )
   );
   assert( !rootElt.isNull() );
+
+  // Relink image ,
+  m_DatasetGroupElement =
+    rootElt.firstChildElement( TAG_NAMES[ ELEMENT_DATASET_GROUP ] );
 
   // Relink image-group element.
   m_ImagesGroupElement =
@@ -444,11 +515,24 @@ DatasetDescriptor
   QDomElement datasetElt(
     m_DomDocument.createElement( TAG_NAMES[ ELEMENT_DATASET_GROUP ] )
   );
-  datasetElt.setAttribute(
-    "name",
-    model->GetName()
-  );
   rootElt.appendChild( datasetElt );
+  
+  // dataset name element
+  QDomElement nameElt(
+    CreateTextNode( model->GetName(), 
+                    TAG_NAMES[ ELEMENT_DATASET_NAME ] )
+    );
+  datasetElt.appendChild( nameElt );
+
+  // dataset alias element
+  QDomElement aliasElt(
+    CreateTextNode( model->GetAlias(), 
+                    TAG_NAMES[ ELEMENT_DATASET_ALIAS ] )
+    );
+  datasetElt.appendChild( aliasElt );
+
+  // Remember dataset group element.
+  m_DatasetGroupElement = datasetElt;
 
 #if 0
   // Dataset path element.

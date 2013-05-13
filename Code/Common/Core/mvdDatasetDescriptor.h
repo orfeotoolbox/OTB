@@ -133,6 +133,10 @@ public:
 
   /**
    */
+  inline QDomElement FirstDatasetElement();
+
+  /**
+   */
   static
     inline QDomElement NextImageSiblingElement( const QDomElement& sibling );
 
@@ -148,7 +152,16 @@ public:
 
   /**
    */
+  static
+    void GetDatasetInformation( const QDomElement& datasetSibling,
+              QString& datasetPath,
+              QString& datasetAlias );
+
+  /**
+   */
   bool SetImageModel( int id, void* settings );
+
+  bool UpdateDatasetAlias( const QString& newAlias);
 
   /**
    */
@@ -251,6 +264,7 @@ private:
     //
     ELEMENT_DATASET_GROUP,
     ELEMENT_DATASET_NAME,
+    ELEMENT_DATASET_ALIAS,
     ELEMENT_DATASET_PATH,
     ELEMENT_DATASET_DIRECTORY,
     //
@@ -274,6 +288,10 @@ private:
   /**
    */
   QDomDocument m_DomDocument;
+
+  /**
+   */
+  QDomElement m_DatasetGroupElement;
 
   /**
    */
@@ -326,6 +344,15 @@ DatasetDescriptor
   return m_ImagesGroupElement.firstChildElement(
       TAG_NAMES[ ELEMENT_IMAGE_INFORMATION ]
   );
+}
+
+/*****************************************************************************/
+inline
+QDomElement
+DatasetDescriptor
+::FirstDatasetElement()
+{
+  return m_DatasetGroupElement;
 }
 
 /*****************************************************************************/
