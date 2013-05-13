@@ -154,6 +154,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
   MassType KClk, mLabelSetClkNew, mLabelSetClkNew_, mUniverseClkNew;
 
   LabelMassMapType mapJointMassesStepI, mapJointMassesStepI_, mapJointMassesUniverseStepI;
+  LabelMassMapType mapOfLabelsWithMassOne, mapOfLabelsWithMassZero;
 
   // Extracting the masses m(Ai), m(Ai_) and m(OMEGA) for each of the K (= m_NumberOfClassifiers) classifiers
   // and grouping them according to the {Ai} singletons
@@ -177,36 +178,91 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
       std::cout << std::endl; */
 
 
-      if (mapJointMassesStepI.count(classLabelk) == 0)
+      if ((mLabelSetClk > 0) && (mLabelSetClk < 1.0))
         {
-        // If the label {Ai} is NOT present in vectorPixelValue yet: initializations of the three DS combined MOBs
-        mLabelSetClkNew = mLabelSetClk;
-        mLabelSetClkNew_ = mLabelSetClk_;
-        mUniverseClkNew = mUniverseClk;
-        }
+        if (mapJointMassesStepI.count(classLabelk) == 0)
+          {
+          // If the label {Ai} is NOT present in vectorPixelValue yet: initializations of the three DS combined MOBs
+          mLabelSetClkNew = mLabelSetClk;
+          mLabelSetClkNew_ = mLabelSetClk_;
+          mUniverseClkNew = mUniverseClk;
+          }
+        else
+          {
+          // If the label {Ai} is already present in vectorPixelValue: recursive DS combination of the three MOBs
+          mLabelSetClkprev = mapJointMassesStepI[classLabelk];
+          mLabelSetClkprev_ = mapJointMassesStepI_[classLabelk];
+          mUniverseClkprev = mapJointMassesUniverseStepI[classLabelk];
+
+          KClk = 1.0 / (1 - mLabelSetClkprev * mLabelSetClk_ - mLabelSetClkprev_ * mLabelSetClk);
+          mLabelSetClkNew = KClk * (mLabelSetClkprev * (mLabelSetClk + mUniverseClk) + mUniverseClkprev * mLabelSetClk);
+          mLabelSetClkNew_ = KClk * (mLabelSetClkprev_ * (mLabelSetClk_ + mUniverseClk) + mUniverseClkprev * mLabelSetClk_);
+          mUniverseClkNew = KClk * mUniverseClkprev * mUniverseClk;
+          }
+
+        mapJointMassesStepI[classLabelk] = mLabelSetClkNew;
+        mapJointMassesStepI_[classLabelk] = mLabelSetClkNew_;
+        mapJointMassesUniverseStepI[classLabelk] = mUniverseClkNew;
+        }// END if ((mLabelSetClk > 0) && (mLabelSetClk < 1.0))
       else
         {
-        // If the label {Ai} is already present in vectorPixelValue: recursive DS combination of the three MOBs
-        mLabelSetClkprev = mapJointMassesStepI[classLabelk];
-        mLabelSetClkprev_ = mapJointMassesStepI_[classLabelk];
-        mUniverseClkprev = mapJointMassesUniverseStepI[classLabelk];
+        if (mLabelSetClk == 1.0)
+          {
+          mapOfLabelsWithMassOne[classLabelk] = mLabelSetClk;
+          }
+        else
+          {
+          if (mLabelSetClk == 0)
+            {
+            mapOfLabelsWithMassZero[classLabelk] = 1.0;
+            }
+          }
+        } // END if ((mLabelSetClk == 0) || (mLabelSetClk == 1.0))
 
-        KClk = 1.0 / (1 - mLabelSetClkprev * mLabelSetClk_ - mLabelSetClkprev_ * mLabelSetClk);
-        mLabelSetClkNew = KClk * (mLabelSetClkprev * (mLabelSetClk + mUniverseClk) + mUniverseClkprev * mLabelSetClk);
-        mLabelSetClkNew_ = KClk * (mLabelSetClkprev_ * (mLabelSetClk_ + mUniverseClk) + mUniverseClkprev * mLabelSetClk_);
-        mUniverseClkNew = KClk * mUniverseClkprev * mUniverseClk;
-        }
-
-      mapJointMassesStepI[classLabelk] = mLabelSetClkNew;
-      mapJointMassesStepI_[classLabelk] = mLabelSetClkNew_;
-      mapJointMassesUniverseStepI[classLabelk] = mUniverseClkNew;
       } // END if (classLabelk != m_LabelForNoDataPixels)
+    }
+
+
+  /* ************************************************************************************************ */
+  /* ************************************************************************************************ */
+  // If at least one classifier returns a label with a mass of belief equal to 1.0, then 2 cases
+  // should be considered:
+  //
+  // -If this label is unique, then this label is considered as the truth, and the output pixel is set
+  //  to this label value
+  //
+  // -If this label is NOT unique, then the corresponding classifiers are in conflict and the output
+  //  pixel is set to the m_LabelForUndecidedPixels value
+
+  typename LabelMassMapType::iterator itMapMOBClk;
+
+  if (mapOfLabelsWithMassOne.size() > 0)
+    {
+    if (mapOfLabelsWithMassOne.size() == 1)
+      {
+      itMapMOBClk = mapOfLabelsWithMassOne.begin();
+      classLabelk = itMapMOBClk->first;
+      return classLabelk;
+      }
+    else
+      {
+      return m_LabelForUndecidedPixels;
+      }
     }
 
   /* ************************************************************************************************ */
   /* ************************************************************************************************ */
-  // If ALL the K (= m_NumberOfClassifiers) classifiers of the pixel vectorPixelValue
-  // are equal to this->m_LabelForNoDataPixels, they keep their m_LabelForNoDataPixels value
+  // If ALL the K (= m_NumberOfClassifiers) classifiers of the pixel vectorPixelValue have
+  // masses of belief equal to 0, then the output pixel is set to the m_LabelForUndecidedPixels value
+  if (mapOfLabelsWithMassZero.size() == m_NumberOfClassifiers)
+    {
+    return m_LabelForUndecidedPixels;
+    }
+
+  /* ************************************************************************************************ */
+  /* ************************************************************************************************ */
+  // If ALL the K (= m_NumberOfClassifiers) classifiers of the pixel vectorPixelValue are
+  // equal to m_LabelForNoDataPixels, then the output pixel is set to the m_LabelForNoDataPixels value
   if (mapJointMassesStepI.size() == 0)
     {
     return m_LabelForNoDataPixels;
@@ -223,7 +279,6 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 
   // Calculation of the four constants A, B, C and K
   MassType A = 0, B = 1, C = 1, K;
-  typename LabelMassMapType::iterator itMapMOBClk;
   for (itMapMOBClk = mapJointMassesStepI.begin(); itMapMOBClk != mapJointMassesStepI.end(); ++itMapMOBClk)
     {
     classLabelk = itMapMOBClk->first;
