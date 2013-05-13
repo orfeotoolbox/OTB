@@ -67,13 +67,21 @@ namespace mvd
 DatabaseTreeWidget
 ::DatabaseTreeWidget( QWidget* parent  ):
   QTreeWidget( parent),
-  m_DatasetFilename("")
+  m_DatasetFilename(""),
+  m_EditionActive(false)
 {
   //setMouseTracking(true);
   setDragEnabled(true);
 
   // setup contextual menu
   InitializeContextualMenu();
+
+  //
+  // do some connection
+  QObject::connect(this,
+                   SIGNAL( itemChanged( QTreeWidgetItem * , int ) ),
+                   SLOT( OnItemChanged( QTreeWidgetItem* , int ) )
+    );
 }
 
 /*******************************************************************************/
@@ -92,7 +100,7 @@ DatabaseTreeWidget
   QObject::connect(this,
                    SIGNAL(customContextMenuRequested(const QPoint&)),
                    SLOT(OnCustomContextMenuRequested(const QPoint&))
-    );
+    );  
 }
 
 /*******************************************************************************/
@@ -157,7 +165,51 @@ DatabaseTreeWidget::OnSelectedDatasetFilenameChanged(const QString& filename)
 void
 DatabaseTreeWidget::OnDeleteTriggered( const QString & id)
 {
+  qDebug() << this << " ::OnDeleteTriggered ("<<id<<")";
+
   emit DatasetToDeleteSelected( id );
+}
+
+/*******************************************************************************/
+void
+DatabaseTreeWidget::OnRenameTriggered()
+{
+  // find the QTreeWidgetItem and make it editable
+  m_ItemToEdit = itemAt( m_ContextualMenuClickedPosition );
+  m_PreviousItemText = m_ItemToEdit->text(0);
+  m_DefaultItemFlags  = m_ItemToEdit->flags(); 
+  m_ItemToEdit->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled);
+
+  // edit item
+  // inspired from here:
+  // http://www.qtcentre.org/archive/index.php/t-45857.html?s=ad4e7c45bbd9fd4bf5cc32853dd3fe82  
+  m_EditionActive = true;
+  editItem(m_ItemToEdit, 0);
+}
+
+/*******************************************************************************/
+void
+DatabaseTreeWidget::OnItemChanged( QTreeWidgetItem* item , int column)
+{
+  if (m_EditionActive )
+    {
+    if (!item->text(column).isEmpty() )
+      {
+      // send a signal with the previous name and the new EditedName
+      emit DatasetRenamed(m_PreviousItemText, item->text(column)  );
+      }
+    else
+      {
+      m_ItemToEdit->setText( column, m_PreviousItemText );
+      }
+
+    // initialize all needed variables
+    m_PreviousItemText.clear();
+    m_EditionActive = false;
+
+    // set back default item flags
+    m_ItemToEdit->setFlags( m_DefaultItemFlags );
+    }
 }
 
 /*******************************************************************************/
@@ -170,20 +222,24 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
   // if not the root item 
   if ( item && item->parent() ) 
     {
+    // update clicked poistion
+    m_ContextualMenuClickedPosition = pos;
+
     // menu 
     QMenu  menu;
     
+    // 
     // create the desired action
     QAction * deleteNodeChild = new QAction(tr ("Delete Dataset") , &menu);
 
     // use a QSignalMapper to bundle parameterless signals and re-emit
     // them with parameters (QString here)
-    QSignalMapper *signalMapper = new QSignalMapper( this );
-    signalMapper->setMapping( deleteNodeChild, item->text(0) );
+    QSignalMapper *signalMapperDelete = new QSignalMapper( this );
+    signalMapperDelete->setMapping( deleteNodeChild, item->text(0) );
     
     QObject::connect( deleteNodeChild , 
                       SIGNAL(triggered()), 
-                      signalMapper, 
+                      signalMapperDelete, 
                       SLOT( map() ) 
       );
 
@@ -192,10 +248,24 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
 
     // connect the re-emitted signal to our slot 
     QObject::connect( 
-      signalMapper, 
+      signalMapperDelete, 
       SIGNAL(mapped(const QString &)), 
       SLOT( OnDeleteTriggered(const QString &)) 
       );
+
+    // 
+    // create the desired action
+    QAction * renameNodeChild = new QAction(tr ("Rename Dataset") , &menu);
+
+    // 
+    QObject::connect( renameNodeChild , 
+                      SIGNAL(triggered()), 
+                      this, 
+                      SLOT( OnRenameTriggered( ) ) 
+      );
+
+    // add action to the menu
+    menu.addAction( renameNodeChild );
 
     // show menu
     menu.exec( viewport()->mapToGlobal(pos) );

@@ -104,10 +104,13 @@ public:
 // Public SLOTS.
 public slots:
   
-    void OnSelectedDatasetFilenameChanged(const QString& filename);
-    void OnDeleteTriggered(const QString & id);
-
-    void OnCustomContextMenuRequested(const QPoint& pos);
+  void OnSelectedDatasetFilenameChanged(const QString& filename);
+  void OnDeleteTriggered(const QString & id);
+  void OnRenameTriggered();
+  void OnCustomContextMenuRequested(const QPoint& pos);
+  void OnItemChanged( QTreeWidgetItem* item , int column);
+    
+    
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -115,7 +118,9 @@ public slots:
 // Signals.
 signals:
 
-    void DatasetToDeleteSelected(const QString & id);
+  void DatasetToDeleteSelected( const QString & id );
+
+  void DatasetRenamed(const QString &, const QString &);
   
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -141,6 +146,13 @@ private:
 
   QPoint   m_StartDragPosition;
   QString  m_DatasetFilename; 
+  QPoint   m_ContextualMenuClickedPosition;
+
+  QTreeWidgetItem * m_ItemToEdit;
+
+  bool              m_EditionActive;
+  QString           m_PreviousItemText;
+  Qt::ItemFlags     m_DefaultItemFlags;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
