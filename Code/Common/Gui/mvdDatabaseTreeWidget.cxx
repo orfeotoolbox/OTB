@@ -212,6 +212,28 @@ DatabaseTreeWidget::OnItemChanged( QTreeWidgetItem* item , int column)
     }
 }
 
+/******************************************************************************/
+void
+DatabaseTreeWidget
+::keyPressEvent( QKeyEvent * event )
+{
+  // triggered only if an item (and not the root one) is selected
+  if (event->key() == Qt::Key_F2 && currentItem() && currentItem()->parent())
+    {
+    // find the QTreeWidgetItem and make it editable
+    m_ItemToEdit = currentItem();
+    m_PreviousItemText = m_ItemToEdit->text(0);
+    m_DefaultItemFlags  = m_ItemToEdit->flags(); 
+    m_ItemToEdit->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled);
+
+    // edit item
+    // inspired from here:
+    // http://www.qtcentre.org/archive/index.php/t-45857.html?s=ad4e7c45bbd9fd4bf5cc32853dd3fe82  
+    m_EditionActive = true;
+    editItem(m_ItemToEdit, 0);
+    }
+}
+
 /*******************************************************************************/
 void
 DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
