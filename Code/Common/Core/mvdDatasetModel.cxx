@@ -80,6 +80,7 @@ DatasetModel
   m_Descriptor( NULL ),
   m_Path(),
   m_Name(),
+  m_Alias( m_Name ),
   m_Directory()
 {
 }
@@ -273,6 +274,7 @@ DatasetModel
   // Remember access to directory structure.
   m_Path = buildContext->m_Path;
   m_Name = buildContext->m_Name;
+  m_Alias = buildContext->m_Alias;
   m_Directory = workingDir;
 
   // Initialize content.
@@ -321,6 +323,29 @@ DatasetModel
     return;
     }
 
+  // local variable
+  QString  dsName;
+   
+  // loop on dataset elements
+  for( QDomElement datasetElt( m_Descriptor->FirstDatasetElement() );
+       !datasetElt.isNull();
+       datasetElt = DatasetDescriptor::NextImageSiblingElement( datasetElt ) )
+    {
+
+    // Read image-model descriptor information.
+     DatasetDescriptor::GetDatasetInformation(
+    		 datasetElt,
+    		 dsName,
+    		 m_Alias
+    		 );
+    }
+
+  // verbosity
+  qDebug() << "Input Dataset :"
+           << "\n Path : " << dsName
+           << "\n Alias: " << m_Alias;
+
+  // loop on images elements
   for( QDomElement imageElt( m_Descriptor->FirstImageElement() );
        !imageElt.isNull();
        imageElt = DatasetDescriptor::NextImageSiblingElement( imageElt ) )
@@ -329,7 +354,7 @@ DatasetModel
     VectorImageModel::Settings settings;
     AbstractImageModel::BuildContext imageContext( false, &settings );
 
-    // Read image-model descriptor information.
+   // Read image-model descriptor information.
     DatasetDescriptor::GetImageModel(
       imageElt,
       imageContext.m_Id,
@@ -576,6 +601,27 @@ DatasetModel
   // ------------------------------------------------------------------------------
 
   return m_DatasetProperties;
+}
+
+/*****************************************************************************/
+void
+DatasetModel
+::SetAlias(const QString & alias)
+{
+  m_Alias = alias;
+
+  // if not empty, update the alias in the descriptor
+  if ( !alias.isEmpty() )
+    {
+    m_Descriptor->UpdateDatasetAlias( alias );
+
+
+    // TODO : ismodified to true
+    // ...
+
+    //
+    Save();
+    }
 }
 
 /*******************************************************************************/

@@ -164,7 +164,7 @@ I18nApplication
     VectorImageModel::EnsureValidImage(imageFilename);
 
     // Build model (relink to cached data).
-    DatasetModel::BuildContext context( path, name, width, height );
+    DatasetModel::BuildContext context( path, name, name, width, height );
     model->BuildModel( &context );
 
     // Load image if DatasetModel is empty.

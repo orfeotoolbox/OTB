@@ -98,11 +98,13 @@ public:
   public:
     BuildContext( const QString& path,
 		  const QString& name,
+                  const QString& alias,
 		  bool isLoadSubModelsEnabled,
 		  int width =-1,
 		  int height =-1 ) :
       m_Path( path ),
       m_Name( name ),
+      m_Alias( alias),
       m_Width( width ),
       m_Height( height ),
       m_IsLoadSubModelsEnabled( isLoadSubModelsEnabled )
@@ -112,6 +114,7 @@ public:
     BuildContext( int width, int height ) :
       m_Path(),
       m_Name(),
+      m_Alias(),
       m_Width( width ),
       m_Height( height ),
       m_IsLoadSubModelsEnabled( true )
@@ -123,6 +126,7 @@ public:
   public:
     QString m_Path;
     QString m_Name;
+    QString m_Alias;
     int m_Width;
     int m_Height;
     bool m_IsLoadSubModelsEnabled;
@@ -142,6 +146,9 @@ public:
    */
   bool IsConsistent() const;
 
+  /** */
+  void SetAlias(const QString & alias);
+
   /**
    */
   inline const QDir& GetDirectory() const;
@@ -149,6 +156,10 @@ public:
   /**
    */
   inline const QString& GetName() const;
+
+  /**
+   */
+  inline const QString& GetAlias() const;
 
   /**
    */
@@ -293,6 +304,10 @@ private:
 
   /**
    */
+  QString m_Alias;
+
+  /**
+   */
   QDir m_Directory;
 
   /**
@@ -390,6 +405,15 @@ DatasetModel
 ::GetName() const
 {
   return m_Name;
+}
+
+/*****************************************************************************/
+inline
+const QString&
+DatasetModel
+::GetAlias() const
+{
+  return m_Alias;
 }
 
 /*****************************************************************************/
