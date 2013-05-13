@@ -114,6 +114,15 @@ DatabaseBrowserController
 
   //
   QObject::connect(
+    widget->GetDatabaseTreeWidget(), 
+    SIGNAL( DatasetRenamed( const QString &, const QString & )  ),
+    // to:
+    model,
+    SLOT( OnDatasetRenamed(const QString&, const QString & ) )
+    );
+
+  //
+  QObject::connect(
     model,
     SIGNAL( CurrentSelectedItemDeleted() ),
     widget,
