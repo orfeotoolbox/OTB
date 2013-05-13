@@ -172,6 +172,10 @@ public slots:
 
   /**
    */
+  void OnDatasetRenamed( const QString& previous, const QString & current );
+
+  /**
+   */
   DatasetId RegisterDatasetModel( DatasetModel* );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -204,6 +208,10 @@ private:
   /**
    */
   void InitializeDatasetModels();
+
+  /**
+   */
+  QStringList ListAvailableDatasets() const;
 
   /**
    */

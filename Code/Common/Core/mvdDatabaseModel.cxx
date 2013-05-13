@@ -80,24 +80,32 @@ DatabaseModel
 /*******************************************************************************/
 QStringList
 DatabaseModel
-::QueryDatasetModels() const
+::ListAvailableDatasets() const
 {
+  qDebug() << this << " ::ListAvailableDatasets( )";
+  
   QDir cacheDir( I18nApplication::ConstInstance()->GetCacheDir() );
 
   QStringList nameFilters;
   nameFilters << QString( "*%1" ).arg( I18nApplication::DATASET_EXT );
 
-  /*
-  cacheDir.setNameFilters( nameFilters );
-  cacheDir.setFilter( QDir::Dirs | QDir::NoDotAndDotDot );
-  cacheDir.setSorting( QDir::Name );
-  */
-
   return cacheDir.entryList(
     nameFilters,
     QDir::Dirs | QDir::NoDotAndDotDot,
     QDir::Name
-  );
+    );
+}
+
+/*******************************************************************************/
+QStringList
+DatabaseModel
+::QueryDatasetModels() const
+{
+  qDebug() << this 
+           << " ::QueryDatasetModels( Available Datasets keys: "
+           << m_DatasetModels.keys() <<") ";
+  
+  return m_DatasetModels.keys();
 }
 
 /*******************************************************************************/
@@ -133,12 +141,10 @@ DatabaseModel::DatasetId
 DatabaseModel
 ::RegisterDatasetModel( DatasetModel* model )
 {
-  qDebug() << this << "::RegisterDatasetModel(" << model << ")";
-
   assert( model!=NULL );
 
   // Construct DatasetId.
-  DatasetId id( model->GetName() );
+  DatasetId id( model->GetAlias() );
 
   // Find possible previously registerd dataset-model...
   DatasetModelMap::iterator it( m_DatasetModels.find( id ) );
@@ -172,6 +178,7 @@ DatabaseModel
   // Find (key, value) pair.
   DatasetModelMap::iterator it( DatasetModelIterator( id ) );
 
+  // release model
   delete it.value();
   it.value() = NULL;
 }
@@ -198,7 +205,8 @@ DatabaseModel
     DatasetModel::BuildContext context(
       I18nApplication::ConstInstance()->GetCacheDir().path(),
       id,
-      false
+      id,
+      true // TODO: is changing to true decrease performances ??
     );
 
     datasetModel->BuildModel( &context );
@@ -226,14 +234,12 @@ DatabaseModel
   InitializeDatasetModels();
 }
 
-/**************************************************************************************************************************************************************/
-
 /*******************************************************************************/
 void
 DatabaseModel
 ::InitializeDatasetModels()
 {
-  QStringList datasets( QueryDatasetModels() );
+  QStringList datasets( ListAvailableDatasets() );
 
   ClearDatasetModels();
 
@@ -246,7 +252,8 @@ DatabaseModel
       DatasetModel* datasetModel = NewDatasetModel( *it );
       assert( datasetModel!=NULL );
 
-      m_DatasetModels.insert( *it, datasetModel );
+      // by default alias == name
+      m_DatasetModels.insert( datasetModel->GetAlias(), datasetModel );
       }
     catch( std::exception& exc )
       {
@@ -304,7 +311,11 @@ DatabaseModel
       }
 
     // get the full path to the dataset dir
-    QDir datasetQDir( I18nApplication::Instance()->GetCacheDir().absolutePath() + "/" + id );
+    QDir datasetQDir( 
+      I18nApplication::Instance()->GetCacheDir().absolutePath() + 
+      "/" + 
+      FindDatasetModel( id )->GetName() 
+      );
     QString datasetDir = datasetQDir.absolutePath();
 
     //
@@ -330,8 +341,11 @@ DatabaseModel
                << " ::OnDatasetToDeleteSelected -> Removing : "
                << datasetQDir.absolutePath();
       
-      // delete from the map of datasets 
+      // release the model relative to 'id'
       ReleaseDatasetModel( id );
+
+      // remove from the map the key
+      m_DatasetModels.remove( id );
       
       //  notify database changed
       emit DatabaseChanged();
@@ -347,6 +361,24 @@ DatabaseModel
       datasetQDirParent.mkpath( datasetQDirParent.absolutePath() );
       }
     }
+}
+
+/*******************************************************************************/
+void
+DatabaseModel
+::OnDatasetRenamed( const QString&  previous, const QString & current)
+{
+  // get the model relative to the previous key
+  DatasetModel * datasetModel = FindDatasetModel(previous);
+  
+  // create a new entry in the map
+  m_DatasetModels.insert(current, datasetModel);
+  
+  // remove the old key in the map
+  m_DatasetModels.remove(previous);
+  
+  // update the alias
+  datasetModel->SetAlias( current );
 }
 
 } // end namespace 'mvd'
