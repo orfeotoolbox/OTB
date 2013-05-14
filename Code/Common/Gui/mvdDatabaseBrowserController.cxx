@@ -120,6 +120,15 @@ DatabaseBrowserController
     model,
     SLOT( OnDatasetRenamed(const QString&, const QString & ) )
     );
+  
+  //
+  QObject::connect(
+    model,
+    SIGNAL( RenameDeclined(const QString&, const QString & ) ),
+    // to:    
+    widget->GetDatabaseTreeWidget(), 
+    SLOT( OnRenameDeclined( const QString &, const QString & )  )
+    );
 
   //
   QObject::connect(
