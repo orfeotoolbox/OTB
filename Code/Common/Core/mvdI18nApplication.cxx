@@ -163,8 +163,11 @@ I18nApplication
     // try if the filename is valid
     VectorImageModel::EnsureValidImage(imageFilename);
 
+    // get the basename from the filename to be used as an Alias
+    QFileInfo finfo( imageFilename );
+
     // Build model (relink to cached data).
-    DatasetModel::BuildContext context( path, name, name, width, height );
+    DatasetModel::BuildContext context( path, name, finfo.baseName(), width, height );
     model->BuildModel( &context );
 
     // Load image if DatasetModel is empty.
