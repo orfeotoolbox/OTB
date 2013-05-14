@@ -161,6 +161,10 @@ signals:
    */
   void CurrentSelectedItemDeleted();
 
+  /**
+   */
+  void RenameDeclined(const QString&, const QString &);
+
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------*/
 
 //

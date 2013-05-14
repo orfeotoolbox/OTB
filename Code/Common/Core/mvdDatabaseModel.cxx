@@ -368,17 +368,34 @@ void
 DatabaseModel
 ::OnDatasetRenamed( const QString&  previous, const QString & current)
 {
-  // get the model relative to the previous key
-  DatasetModel * datasetModel = FindDatasetModel(previous);
+  // replace with the new key if does not exists
+  if ( !m_DatasetModels.contains( current ) )
+    {
+    // get the model relative to the previous key
+    DatasetModel * datasetModel = FindDatasetModel(previous);
   
-  // create a new entry in the map
-  m_DatasetModels.insert(current, datasetModel);
+    // create a new entry in the map
+    m_DatasetModels.insert(current, datasetModel);
   
-  // remove the old key in the map
-  m_DatasetModels.remove(previous);
+    // remove the old key in the map
+    m_DatasetModels.remove(previous);
   
-  // update the alias
-  datasetModel->SetAlias( current );
+    // update the alias
+    datasetModel->SetAlias( current );
+    }
+  else
+    {
+    // pop up a Dialog widget to warn the user that the name already
+    // exists 
+    QMessageBox msgBox;
+    msgBox.setWindowTitle( tr( "Warning") );
+    msgBox.setText(tr("Dataset %1 already exists. Please Try a different name.").arg( current ) );
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.exec();
+    
+    // decline item rename
+    emit RenameDeclined(previous, current);
+    }
 }
 
 } // end namespace 'mvd'
