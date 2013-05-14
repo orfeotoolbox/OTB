@@ -215,6 +215,22 @@ DatabaseTreeWidget::OnItemChanged( QTreeWidgetItem* item , int column)
 /******************************************************************************/
 void
 DatabaseTreeWidget
+::OnRenameDeclined( const QString & previous, const QString & current)
+{
+  // deactivate the edition state to avoid emitting the signal
+  // OnItemChanged 
+  m_EditionActive = false;
+
+  // set back the previous text
+  m_ItemToEdit->setText( 0, previous );
+  
+  // set back default item flags
+  m_ItemToEdit->setFlags( m_DefaultItemFlags );
+}
+
+/******************************************************************************/
+void
+DatabaseTreeWidget
 ::keyPressEvent( QKeyEvent * event )
 {
   // triggered only if an item (and not the root one) is selected
