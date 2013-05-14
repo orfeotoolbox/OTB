@@ -40,7 +40,6 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdDatasetModel.h"
 #include "mvdI18nApplication.h"
-#include "mvdVectorImageModel.h"
 
 namespace mvd
 {
@@ -211,12 +210,6 @@ DatabaseModel
     );
 
     datasetModel->BuildModel( &context );
-
-    // setup alias
-    VectorImageModel * viModel =
-       			dynamic_cast<VectorImageModel*> (datasetModel->GetSelectedImageModel());
-    QFileInfo finfo( viModel->GetFilename() );
-    datasetModel->SetAlias( finfo.baseName() );
     }
 
   catch( std::exception& exc )

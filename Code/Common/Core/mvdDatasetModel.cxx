@@ -80,7 +80,7 @@ DatasetModel
   m_Descriptor( NULL ),
   m_Path(),
   m_Name(),
-  m_Alias( m_Name ),
+  m_Alias( ),
   m_Directory()
 {
 }
@@ -608,13 +608,11 @@ void
 DatasetModel
 ::SetAlias(const QString & alias)
 {
-  m_Alias = alias;
-
   // if not empty, update the alias in the descriptor
   if ( !alias.isEmpty() )
     {
+    m_Alias = alias;
     m_Descriptor->UpdateDatasetAlias( alias );
-
 
     // TODO : ismodified to true
     // ...
