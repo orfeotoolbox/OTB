@@ -110,7 +110,7 @@ private:
         "-In case of number of votes equality, the UNDECIDED label is attributed to the pixel.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("SVMImagesClassifier application");
+    SetDocSeeAlso("ImageClassifier application");
  
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Analysis);
