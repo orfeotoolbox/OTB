@@ -110,13 +110,13 @@ private:
     SetParameterDescription("hcp","Parameters to cut the histogram edges before rescaling");
 
     AddParameter(ParameterType_Float, "hcp.high", "High Cut Quantile");
-    SetParameterDescription("hcp.high", "Quantiles to cut from histogram high values before computing min/max rescaling (in percent, 2% by default)");
+    SetParameterDescription("hcp.high", "Quantiles to cut from histogram high values before computing min/max rescaling (in percent, 2 by default)");
     MandatoryOff("hcp.high");
     SetDefaultParameterFloat("hcp.high", 2.0);
     DisableParameter("hcp.high");
 
     AddParameter(ParameterType_Float, "hcp.low", "Low Cut Quantile");
-    SetParameterDescription("hcp.low", "Quantiles to cut from histogram low values before computing min/max rescaling (in percent, 2% by default)");
+    SetParameterDescription("hcp.low", "Quantiles to cut from histogram low values before computing min/max rescaling (in percent, 2 by default)");
     MandatoryOff("hcp.low");
     SetDefaultParameterFloat("hcp.low", 2.0);
     DisableParameter("hcp.low");

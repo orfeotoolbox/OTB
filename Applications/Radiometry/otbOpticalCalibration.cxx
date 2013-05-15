@@ -127,8 +127,8 @@ private:
     DisableParameter("milli");
     MandatoryOff("milli");
 
-    AddParameter(ParameterType_Empty, "clamp", "Clamp of reflectivity values between [0% , 100%]");
-    SetParameterDescription("clamp", "Clamping in the range [0% , 100%]. It can be usefull to preserve area with specular reflectance.");
+    AddParameter(ParameterType_Empty, "clamp", "Clamp of reflectivity values between [0, 100]");
+    SetParameterDescription("clamp", "Clamping in the range [0, 100]. It can be useful to preserve area with specular reflectance.");
     EnableParameter("clamp");
     MandatoryOff("clamp");
 
@@ -350,7 +350,7 @@ private:
         }
       else
         {
-        GetLogger()->Info("Clamp values between [0%,100%]");
+        GetLogger()->Info("Clamp values between [0, 100]");
         m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
         m_ClampFilter->ClampOutside(0.0, 1.0);
         m_ScaleFilter->SetInput(m_ClampFilter->GetOutput());

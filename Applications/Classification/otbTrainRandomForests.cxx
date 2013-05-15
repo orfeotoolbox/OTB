@@ -40,7 +40,7 @@ void TrainImagesClassifier::InitRandomForestsParams()
   SetParameterInt("classifier.rf.min", 5);
   SetParameterDescription(
       "classifier.rf.min", "If the number of samples in a node is smaller than this parameter, "
-      "then the node will not be split. A reasonable value is a small percentage of the total data e.g. 1\%.");
+      "then the node will not be split. A reasonable value is a small percentage of the total data e.g. 1 percent.");
 
   //RegressionAccuracy
   AddParameter(ParameterType_Float, "classifier.rf.ra", "Termination Criteria for regression tree");
