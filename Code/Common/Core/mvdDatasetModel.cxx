@@ -467,7 +467,7 @@ DatasetModel
   // get the vector image model
   VectorImageModel* viModel =
     qobject_cast< VectorImageModel* >( GetSelectedImageModel() );
-    
+
   // ----------------------------------------------------------------------------
   // category 1 : file infos
   // ----------------------------------------------------------------------------
@@ -490,7 +490,7 @@ DatasetModel
 
   //
   psize.first  = ToStdString ( tr("Size in Bytes") );
-  psize.second = "";
+  psize.second = ToStdString( viModel->GetImageSizeInBytes() );
 
   // add those properties to the vector of properties
   vfileinfo.push_back(pfile);

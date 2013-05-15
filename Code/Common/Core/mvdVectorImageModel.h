@@ -330,6 +330,12 @@ public:
 
   virtual void ClearModified();
 
+  // get image size in byte
+  std::streamoff GetImageSizeInBytes()
+  {
+    return m_ImageFileReader->GetImageIO()->GetImageSizeInBytes();
+  }
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
