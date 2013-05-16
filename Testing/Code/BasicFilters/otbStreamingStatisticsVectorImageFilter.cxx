@@ -27,6 +27,11 @@ int otbStreamingStatisticsVectorImageFilter(int argc, char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];
+  float userIgnoredValue = 0.;
+  if (argc>3)
+    {
+    userIgnoredValue = atof(argv[3]);
+    }
 
   const unsigned int Dimension = 2;
   typedef double PixelType;
@@ -43,6 +48,11 @@ int otbStreamingStatisticsVectorImageFilter(int argc, char * argv[])
 
   filter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 10 );
   filter->SetInput(reader->GetOutput());
+  if (argc>3)
+    {
+    filter->SetIgnoreUserDefinedValue(true);
+    filter->SetUserIgnoredValue(userIgnoredValue);
+    }
   filter->Update();
 
   std::ofstream file;
