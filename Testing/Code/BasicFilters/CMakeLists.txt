@@ -442,6 +442,14 @@ ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS4}
 #                ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
                 ${INPUTDATA}/small_poupees_1canal.hd
                 ${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
+                
+ADD_TEST(bfTvStreamingStatisticsImageFilterWithNaNs ${BASICFILTERS_TESTS4}
+        --compare-ascii ${NOTOL}
+                    ${BASELINE_FILES}/bfStreamingStatisticsImageFilterWithNaNsResults.txt
+                    ${TEMP}/bfStreamingStatisticsImageFilterWithNaNsResults.txt
+         otbStreamingStatisticsImageFilter
+                ${INPUTDATA}/small_poupees_1canalWithNaNs.TIF
+                ${TEMP}/bfStreamingStatisticsImageFilterWithNaNsResults.txt)
 
 # -------            otb::StreamingCompareImageFilter   ----------------------------
 
@@ -574,6 +582,16 @@ ADD_TEST(bfTvStreamingStatisticsVectorImageFilter ${BASICFILTERS_TESTS5}
                 ${INPUTDATA}/couleurs_extrait.png
                 ${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
                 )
+
+ADD_TEST(bfTvStreamingStatisticsVectorImageFilterWithNaNs ${BASICFILTERS_TESTS5}
+        --compare-ascii ${NOTOL}
+                    ${BASELINE_FILES}/bfTvStreamingStatisticsVectorImageFilterWithNaNsResults.txt
+                    ${TEMP}/bfTvStreamingStatisticsVectorImageFilterWithNaNsResults.txt
+         otbStreamingStatisticsVectorImageFilter
+                ${INPUTDATA}/small_poupees_WithNaNs.TIF
+                ${TEMP}/bfTvStreamingStatisticsVectorImageFilterWithNaNsResults.txt
+                )
+
 
 # -------            otb::MatrixTransposeMatrixImageFilter   ----------------------------
 
