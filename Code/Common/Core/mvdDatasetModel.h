@@ -285,6 +285,10 @@ private:
   void ParseDescriptor( BuildContext* context );
 
   /** */
+  void ParseAlias();
+
+
+  /** */
   void WriteDescriptor() const;
 
 //

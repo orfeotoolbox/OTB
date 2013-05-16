@@ -305,6 +305,9 @@ DatasetModel
       // TODO: Replace DatasetModel::BuildContext() by (width, height).
       ParseDescriptor( buildContext );
       }
+
+    // Always parse alias
+    ParseAlias();
     }
 }
 
@@ -322,28 +325,6 @@ DatasetModel
     {
     return;
     }
-
-  // local variable
-  QString  dsName;
-   
-  // loop on dataset elements
-  for( QDomElement datasetElt( m_Descriptor->FirstDatasetElement() );
-       !datasetElt.isNull();
-       datasetElt = DatasetDescriptor::NextImageSiblingElement( datasetElt ) )
-    {
-
-    // Read image-model descriptor information.
-     DatasetDescriptor::GetDatasetInformation(
-    		 datasetElt,
-    		 dsName,
-    		 m_Alias
-    		 );
-    }
-
-  // verbosity
-  qDebug() << "Input Dataset :"
-           << "\n Path : " << dsName
-           << "\n Alias: " << m_Alias;
 
   // loop on images elements
   for( QDomElement imageElt( m_Descriptor->FirstImageElement() );
@@ -392,6 +373,34 @@ DatasetModel
       context->m_Width, context->m_Height
     );
     }
+}
+
+/*******************************************************************************/
+void
+DatasetModel
+::ParseAlias()
+{
+  // local variable
+  QString  dsName;
+   
+  // loop on dataset elements
+  for( QDomElement datasetElt( m_Descriptor->FirstDatasetElement() );
+       !datasetElt.isNull();
+       datasetElt = DatasetDescriptor::NextImageSiblingElement( datasetElt ) )
+    {
+
+    // Read image-model descriptor information.
+     DatasetDescriptor::GetDatasetInformation(
+    		 datasetElt,
+    		 dsName,
+    		 m_Alias
+    		 );
+    }
+
+  // verbosity
+  qDebug() << "Input Dataset :"
+           << "\n Path : " << dsName
+           << "\n Alias: " << m_Alias;
 }
 
 /*******************************************************************************/
