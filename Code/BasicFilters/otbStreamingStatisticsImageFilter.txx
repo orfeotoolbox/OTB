@@ -33,7 +33,14 @@ namespace otb
 
 template<class TInputImage>
 PersistentStatisticsImageFilter<TInputImage>
-::PersistentStatisticsImageFilter() : m_ThreadSum(1), m_SumOfSquares(1), m_Count(1), m_ThreadMin(1), m_ThreadMax(1), m_IgnoreInfiniteValues(true)
+::PersistentStatisticsImageFilter()
+ : m_ThreadSum(1),
+   m_SumOfSquares(1),
+   m_Count(1),
+   m_ThreadMin(1),
+   m_ThreadMax(1),
+   m_IgnoreInfiniteValues(true),
+   m_IgnoreUserDefinedValue(false)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
@@ -64,6 +71,7 @@ PersistentStatisticsImageFilter<TInputImage>
 
   // Initiate the infinite ignored pixel counters
   m_IgnoredInfinitePixelCount= std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
+  m_IgnoredUserPixelCount= std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
 
   this->Reset();
 }
@@ -299,7 +307,12 @@ PersistentStatisticsImageFilter<TInputImage>
   m_ThreadMax.Fill(itk::NumericTraits<PixelType>::NonpositiveMin());
   if (m_IgnoreInfiniteValues)
     {
-      m_IgnoredInfinitePixelCount= std::vector<unsigned int>(numberOfThreads, 0);
+    m_IgnoredInfinitePixelCount= std::vector<unsigned int>(numberOfThreads, 0);
+    }
+
+  if (m_IgnoreUserDefinedValue)
+    {
+    m_IgnoredUserPixelCount= std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
     }
 }
 
@@ -333,18 +346,25 @@ PersistentStatisticsImageFilter<TInputImage>
       }
     else
       {
-      if (value < m_ThreadMin[threadId])
+      if (m_IgnoreUserDefinedValue && (value == m_UserIgnoredValue))
         {
-        m_ThreadMin[threadId] = value;
+        m_IgnoredUserPixelCount[threadId] ++;
         }
-      if (value > m_ThreadMax[threadId])
+      else
         {
-        m_ThreadMax[threadId] = value;
-        }
+        if (value < m_ThreadMin[threadId])
+          {
+          m_ThreadMin[threadId] = value;
+          }
+        if (value > m_ThreadMax[threadId])
+          {
+          m_ThreadMax[threadId] = value;
+          }
 
-      m_ThreadSum[threadId] += realValue;
-      m_SumOfSquares[threadId] += (realValue * realValue);
-      m_Count[threadId]++;
+        m_ThreadSum[threadId] += realValue;
+        m_SumOfSquares[threadId] += (realValue * realValue);
+        m_Count[threadId]++;
+        }
       }
     ++it;
     progress.CompletedPixel();

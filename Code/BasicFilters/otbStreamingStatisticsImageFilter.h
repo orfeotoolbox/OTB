@@ -151,6 +151,12 @@ public:
   itkSetMacro(IgnoreInfiniteValues, bool);
   itkGetMacro(IgnoreInfiniteValues, bool);
 
+  itkSetMacro(IgnoreUserDefinedValue, bool);
+  itkGetMacro(IgnoreUserDefinedValue, bool);
+
+  itkSetMacro(UserIgnoredValue, RealType);
+  itkGetMacro(UserIgnoredValue, RealType);
+
 protected:
   PersistentStatisticsImageFilter();
   virtual ~PersistentStatisticsImageFilter() {}
@@ -170,8 +176,14 @@ private:
   itk::Array<long>           m_Count;
   itk::Array<PixelType>      m_ThreadMin;
   itk::Array<PixelType>      m_ThreadMax;
+
+  /* Ignored values */
   bool                       m_IgnoreInfiniteValues;
+  bool                       m_IgnoreUserDefinedValue;
+  RealType                   m_UserIgnoredValue;
   std::vector<unsigned int>  m_IgnoredInfinitePixelCount;
+  std::vector<unsigned int>  m_IgnoredUserPixelCount;
+
 
 }; // end of class PersistentStatisticsImageFilter
 
@@ -327,6 +339,12 @@ public:
 
   otbSetObjectMemberMacro(Filter, IgnoreInfiniteValues, bool);
   otbGetObjectMemberMacro(Filter, IgnoreInfiniteValues, bool);
+
+  otbSetObjectMemberMacro(Filter, IgnoreUserDefinedValue, bool);
+  otbGetObjectMemberMacro(Filter, IgnoreUserDefinedValue, bool);
+
+  otbSetObjectMemberMacro(Filter, UserIgnoredValue, RealType);
+  otbGetObjectMemberMacro(Filter, UserIgnoredValue, RealType);
 
 protected:
   /** Constructor */
