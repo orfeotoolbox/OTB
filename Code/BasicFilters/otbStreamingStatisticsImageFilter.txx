@@ -33,7 +33,7 @@ namespace otb
 
 template<class TInputImage>
 PersistentStatisticsImageFilter<TInputImage>
-::PersistentStatisticsImageFilter() : m_ThreadSum(1), m_SumOfSquares(1), m_Count(1), m_ThreadMin(1), m_ThreadMax(1)
+::PersistentStatisticsImageFilter() : m_ThreadSum(1), m_SumOfSquares(1), m_Count(1), m_ThreadMin(1), m_ThreadMax(1), m_IgnoreInfiniteValues(true)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
@@ -61,6 +61,9 @@ PersistentStatisticsImageFilter<TInputImage>
   this->GetSigmaOutput()->Set(itk::NumericTraits<RealType>::max());
   this->GetVarianceOutput()->Set(itk::NumericTraits<RealType>::max());
   this->GetSumOutput()->Set(itk::NumericTraits<RealType>::Zero);
+
+  // Initiate the infinite ignored pixel counters
+  m_IgnoredInfinitePixelCount= std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
 
   this->Reset();
 }
@@ -288,13 +291,16 @@ PersistentStatisticsImageFilter<TInputImage>
   m_ThreadSum.SetSize(numberOfThreads);
   m_ThreadMin.SetSize(numberOfThreads);
   m_ThreadMax.SetSize(numberOfThreads);
-
   // Initialize the temporaries
   m_Count.Fill(itk::NumericTraits<long>::Zero);
   m_ThreadSum.Fill(itk::NumericTraits<RealType>::Zero);
   m_SumOfSquares.Fill(itk::NumericTraits<RealType>::Zero);
   m_ThreadMin.Fill(itk::NumericTraits<PixelType>::max());
   m_ThreadMax.Fill(itk::NumericTraits<PixelType>::NonpositiveMin());
+  if (m_IgnoreInfiniteValues)
+    {
+      m_IgnoredInfinitePixelCount= std::vector<unsigned int>(numberOfThreads, 0);
+    }
 }
 
 template<class TInputImage>
@@ -321,18 +327,25 @@ PersistentStatisticsImageFilter<TInputImage>
     {
     value = it.Get();
     realValue = static_cast<RealType>(value);
-    if (value < m_ThreadMin[threadId])
+    if (m_IgnoreInfiniteValues && !(vnl_math_isfinite(realValue)))
       {
-      m_ThreadMin[threadId] = value;
+      m_IgnoredInfinitePixelCount[threadId] ++;
       }
-    if (value > m_ThreadMax[threadId])
+    else
       {
-      m_ThreadMax[threadId] = value;
-      }
+      if (value < m_ThreadMin[threadId])
+        {
+        m_ThreadMin[threadId] = value;
+        }
+      if (value > m_ThreadMax[threadId])
+        {
+        m_ThreadMax[threadId] = value;
+        }
 
-    m_ThreadSum[threadId] += realValue;
-    m_SumOfSquares[threadId] += (realValue * realValue);
-    m_Count[threadId]++;
+      m_ThreadSum[threadId] += realValue;
+      m_SumOfSquares[threadId] += (realValue * realValue);
+      m_Count[threadId]++;
+      }
     ++it;
     progress.CompletedPixel();
     }

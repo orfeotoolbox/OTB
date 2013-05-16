@@ -148,6 +148,9 @@ public:
   void Synthetize(void);
   void Reset(void);
 
+  itkSetMacro(IgnoreInfiniteValues, bool);
+  itkGetMacro(IgnoreInfiniteValues, bool);
+
 protected:
   PersistentStatisticsImageFilter();
   virtual ~PersistentStatisticsImageFilter() {}
@@ -162,11 +165,14 @@ private:
   PersistentStatisticsImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  itk::Array<RealType>  m_ThreadSum;
-  itk::Array<RealType>  m_SumOfSquares;
-  itk::Array<long>      m_Count;
-  itk::Array<PixelType> m_ThreadMin;
-  itk::Array<PixelType> m_ThreadMax;
+  itk::Array<RealType>       m_ThreadSum;
+  itk::Array<RealType>       m_SumOfSquares;
+  itk::Array<long>           m_Count;
+  itk::Array<PixelType>      m_ThreadMin;
+  itk::Array<PixelType>      m_ThreadMax;
+  bool                       m_IgnoreInfiniteValues;
+  std::vector<unsigned int>  m_IgnoredInfinitePixelCount;
+
 }; // end of class PersistentStatisticsImageFilter
 
 /*===========================================================================*/
@@ -179,6 +185,8 @@ private:
  * Synthetize() method of the PersistentStatisticsImageFilter after having streamed the image
  * to compute the statistics. The accessor on the results are wrapping the accessors of the
  * internal PersistentStatisticsImageFilter.
+ * By default infinite values are ignored, use IgnoreInfiniteValues accessor to consider
+ * infinite values in the computation.
  *
  * This filter can be used as:
  * \code
@@ -316,6 +324,9 @@ public:
   {
     return this->GetFilter()->GetSumOutput();
   }
+
+  otbSetObjectMemberMacro(Filter, IgnoreInfiniteValues, bool);
+  otbGetObjectMemberMacro(Filter, IgnoreInfiniteValues, bool);
 
 protected:
   /** Constructor */
