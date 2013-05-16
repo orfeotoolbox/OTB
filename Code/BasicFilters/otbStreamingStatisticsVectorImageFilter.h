@@ -191,6 +191,12 @@ public:
   itkSetMacro(IgnoreInfiniteValues, bool);
   itkGetMacro(IgnoreInfiniteValues, bool);
 
+  itkSetMacro(IgnoreUserDefinedValue, bool);
+  itkGetMacro(IgnoreUserDefinedValue, bool);
+
+  itkSetMacro(UserIgnoredValue, InternalPixelType);
+  itkGetMacro(UserIgnoredValue, InternalPixelType);
+
   itkSetMacro(UseUnbiasedEstimator, bool);
   itkGetMacro(UseUnbiasedEstimator, bool);
 
@@ -218,7 +224,7 @@ private:
   bool m_EnableMinMax;
   bool m_EnableFirstOrderStats;
   bool m_EnableSecondOrderStats;
-  bool m_IgnoreInfiniteValues;
+
 
   /* use an unbiased estimator to compute the covariance */
   bool m_UseUnbiasedEstimator;
@@ -229,7 +235,13 @@ private:
   std::vector<RealType>      m_ThreadSecondOrderComponentAccumulators;
   std::vector<RealPixelType> m_ThreadFirstOrderAccumulators;
   std::vector<MatrixType>    m_ThreadSecondOrderAccumulators;
+
+  /* Ignored values */
+  bool m_IgnoreInfiniteValues;
+  bool m_IgnoreUserDefinedValue;
+  InternalPixelType m_UserIgnoredValue;
   std::vector<unsigned int>  m_IgnoredInfinitePixelCount;
+  std::vector<unsigned int>  m_IgnoredUserPixelCount;
 
 }; // end of class PersistentStreamingStatisticsVectorImageFilter
 
@@ -284,6 +296,8 @@ public:
   typedef typename StatFilterType::RealPixelObjectType RealPixelObjectType;
   typedef typename StatFilterType::MatrixType          MatrixType;
   typedef typename StatFilterType::MatrixObjectType    MatrixObjectType;
+
+  typedef typename StatFilterType::InternalPixelType   InternalPixelType;
 
   void SetInput(InputImageType * input)
   {
@@ -431,6 +445,12 @@ public:
 
   otbSetObjectMemberMacro(Filter, IgnoreInfiniteValues, bool);
   otbGetObjectMemberMacro(Filter, IgnoreInfiniteValues, bool);
+
+  otbSetObjectMemberMacro(Filter, IgnoreUserDefinedValue, bool);
+  otbGetObjectMemberMacro(Filter, IgnoreUserDefinedValue, bool);
+
+  otbSetObjectMemberMacro(Filter, UserIgnoredValue, InternalPixelType);
+  otbGetObjectMemberMacro(Filter, UserIgnoredValue, InternalPixelType);
 
   otbSetObjectMemberMacro(Filter, UseUnbiasedEstimator, bool);
   otbGetObjectMemberMacro(Filter, UseUnbiasedEstimator, bool);

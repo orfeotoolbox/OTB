@@ -35,6 +35,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
    m_EnableFirstOrderStats(true),
    m_EnableSecondOrderStats(true),
    m_IgnoreInfiniteValues(true),
+   m_IgnoreUserDefinedValue(false),
    m_UseUnbiasedEstimator(true)
 {
   // first output is a copy of the image, DataObject created by
@@ -46,8 +47,9 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     {
     this->itk::ProcessObject::SetNthOutput(i, this->MakeOutput(i).GetPointer());
     }
-  // Initiate the infinite ignored pixel counters
+  // Initiate ignored pixel counters
   m_IgnoredInfinitePixelCount= std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
+  m_IgnoredUserPixelCount= std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
 }
 
 template<class TInputImage, class TPrecision>
@@ -335,6 +337,11 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     {
       m_IgnoredInfinitePixelCount= std::vector<unsigned int>(numberOfThreads, 0);
     }
+
+  if (m_IgnoreUserDefinedValue)
+    {
+    m_IgnoredUserPixelCount= std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
+    }
 }
 
 template<class TInputImage, class TPrecision>
@@ -362,6 +369,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
   RealType streamSecondOrderComponentAccumulator = itk::NumericTraits<RealType>::Zero;
 
   unsigned int ignoredInfinitePixelCount = 0;
+  unsigned int ignoredUserPixelCount = 0;
 
   // Accumulate results from all threads
   const unsigned int numberOfThreads = this->GetNumberOfThreads();
@@ -398,9 +406,11 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
       }
     // Ignored Infinite Pixels
     ignoredInfinitePixelCount += m_IgnoredInfinitePixelCount[threadId];
+    // Ignored Pixels
+    ignoredUserPixelCount += m_IgnoredUserPixelCount[threadId];
     }
 
-  unsigned int nbRelevantPixels = nbPixels - ignoredInfinitePixelCount;
+  unsigned int nbRelevantPixels = nbPixels - (ignoredInfinitePixelCount + ignoredUserPixelCount);
 
   // Final calculations
   if (m_EnableMinMax)
@@ -470,11 +480,12 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     {
     const PixelType& vectorValue = it.Get();
 
-
     float finiteProbe = 0.;
+    bool userProbe = false;
     for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
       {
       finiteProbe += (float)(vectorValue[j]);
+      userProbe = userProbe || (vectorValue[j] == m_UserIgnoredValue);
       }
 
     if (m_IgnoreInfiniteValues && !(vnl_math_isfinite(finiteProbe)))
@@ -483,52 +494,58 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
       }
     else
       {
-
-      for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
+      if (m_IgnoreUserDefinedValue && (userProbe))
         {
-
-        if (m_EnableMinMax)
+        m_IgnoredUserPixelCount[threadId] ++;
+        }
+      else
+        {
+        for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
           {
-          for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
+
+          if (m_EnableMinMax)
             {
-            if (vectorValue[j] < threadMin[j])
+            for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
               {
-              threadMin[j] = vectorValue[j];
-              }
-            if (vectorValue[j] > threadMax[j])
-              {
-              threadMax[j] = vectorValue[j];
+              if (vectorValue[j] < threadMin[j])
+                {
+                threadMin[j] = vectorValue[j];
+                }
+              if (vectorValue[j] > threadMax[j])
+                {
+                threadMax[j] = vectorValue[j];
+                }
               }
             }
           }
-        }
 
-      if (m_EnableFirstOrderStats)
-        {
-        RealPixelType& threadFirstOrder  = m_ThreadFirstOrderAccumulators [threadId];
-        RealType& threadFirstOrderComponent  = m_ThreadFirstOrderComponentAccumulators [threadId];
-
-        threadFirstOrder += vectorValue;
-
-        for (unsigned int i = 0; i < vectorValue.GetSize(); ++i)
+        if (m_EnableFirstOrderStats)
           {
-          threadFirstOrderComponent += vectorValue[i];
-          }
-        }
+          RealPixelType& threadFirstOrder  = m_ThreadFirstOrderAccumulators [threadId];
+          RealType& threadFirstOrderComponent  = m_ThreadFirstOrderComponentAccumulators [threadId];
 
-      if (m_EnableSecondOrderStats)
-        {
-        MatrixType&    threadSecondOrder = m_ThreadSecondOrderAccumulators[threadId];
-        RealType& threadSecondOrderComponent = m_ThreadSecondOrderComponentAccumulators[threadId];
+          threadFirstOrder += vectorValue;
 
-        for (unsigned int r = 0; r < threadSecondOrder.Rows(); ++r)
-          {
-          for (unsigned int c = 0; c < threadSecondOrder.Cols(); ++c)
+          for (unsigned int i = 0; i < vectorValue.GetSize(); ++i)
             {
-            threadSecondOrder(r, c) += vectorValue[r] * vectorValue[c];
+            threadFirstOrderComponent += vectorValue[i];
             }
           }
-        threadSecondOrderComponent += vectorValue.GetSquaredNorm();
+
+        if (m_EnableSecondOrderStats)
+          {
+          MatrixType&    threadSecondOrder = m_ThreadSecondOrderAccumulators[threadId];
+          RealType& threadSecondOrderComponent = m_ThreadSecondOrderComponentAccumulators[threadId];
+
+          for (unsigned int r = 0; r < threadSecondOrder.Rows(); ++r)
+            {
+            for (unsigned int c = 0; c < threadSecondOrder.Cols(); ++c)
+              {
+              threadSecondOrder(r, c) += vectorValue[r] * vectorValue[c];
+              }
+            }
+          threadSecondOrderComponent += vectorValue.GetSquaredNorm();
+          }
         }
       }
     }
