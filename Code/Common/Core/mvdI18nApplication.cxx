@@ -114,27 +114,18 @@ I18nApplication
 		   QString& name,
 		   const QString& imageFilename )
 {
-  // '/tmp/archive.tar.gz'
+  // convenient QFileInfo
   QFileInfo fileInfo( imageFilename );
 
-#if 0
-  // Dataset is stored into image-file path.
-  // E.g. '/tmp'
-  path = fileInfo.path();
-#else
   // Dataset is stored into application cache-directory.
   // E.g. '$HOME/<CACHE_DIR>'
   path = I18nApplication::Instance()->GetCacheDir().path();
-#endif
+  
+  // get the md5 of the filename
+  QByteArray result = QCryptographicHash::hash(imageFilename.toAscii(), QCryptographicHash::Md5);
 
-  // '[_tmp_]archive.tar.gz.<SUFFIX>'
-  name =
-#if 1
-    fileInfo.canonicalPath().replace( QRegExp( "[/\\\\:]+" ), "_") +
-    "_" +
-#endif
-    fileInfo.fileName() +
-    I18nApplication::DATASET_EXT;
+  // store the md5 + the dataset extension at the end
+  name = result.toHex() + I18nApplication::DATASET_EXT;
 }
 
 /*****************************************************************************/
