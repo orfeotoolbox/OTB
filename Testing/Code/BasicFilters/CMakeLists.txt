@@ -450,7 +450,16 @@ ADD_TEST(bfTvStreamingStatisticsImageFilterWithNaNs ${BASICFILTERS_TESTS4}
          otbStreamingStatisticsImageFilter
                 ${INPUTDATA}/small_poupees_1canalWithNaNs.TIF
                 ${TEMP}/bfStreamingStatisticsImageFilterWithNaNsResults.txt)
-
+                
+ADD_TEST(bfTvStreamingStatisticsImageFilterWithBckGrdVal ${BASICFILTERS_TESTS4}
+        --compare-ascii ${NOTOL}
+                    ${BASELINE_FILES}/bfStreamingStatisticsImageFilterWithBckGrdValResults.txt
+                    ${TEMP}/bfStreamingStatisticsImageFilterWithBckGrdValResults.txt
+         otbStreamingStatisticsImageFilter
+                ${INPUTDATA}/small_poupees_1canalWithNaNs.TIF
+                ${TEMP}/bfStreamingStatisticsImageFilterWithBckGrdValResults.txt
+                0 )
+                
 # -------            otb::StreamingCompareImageFilter   ----------------------------
 
 ADD_TEST(bfTuStreamingCompareImageFilterNew ${BASICFILTERS_TESTS4}
@@ -591,6 +600,16 @@ ADD_TEST(bfTvStreamingStatisticsVectorImageFilterWithNaNs ${BASICFILTERS_TESTS5}
                 ${INPUTDATA}/small_poupees_WithNaNs.TIF
                 ${TEMP}/bfTvStreamingStatisticsVectorImageFilterWithNaNsResults.txt
                 )
+                
+ADD_TEST(bfTvStreamingStatisticsVectorImageFilterWithBckGrdVal ${BASICFILTERS_TESTS5}
+        --compare-ascii ${NOTOL}
+                    ${BASELINE_FILES}/bfTvStreamingStatisticsVectorImageFilterWithBckGrdValResults.txt
+                    ${TEMP}/bfTvStreamingStatisticsVectorImageFilterWithBckGrdValResults.txt
+         otbStreamingStatisticsVectorImageFilter
+                ${INPUTDATA}/small_poupees_WithNaNs.TIF
+                ${TEMP}/bfTvStreamingStatisticsVectorImageFilterWithBckGrdValResults.txt
+                0
+                )              
 
 
 # -------            otb::MatrixTransposeMatrixImageFilter   ----------------------------
