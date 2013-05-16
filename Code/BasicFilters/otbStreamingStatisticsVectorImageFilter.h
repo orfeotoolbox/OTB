@@ -188,6 +188,9 @@ public:
   itkSetMacro(EnableSecondOrderStats, bool);
   itkGetMacro(EnableSecondOrderStats, bool);
 
+  itkSetMacro(IgnoreInfiniteValues, bool);
+  itkGetMacro(IgnoreInfiniteValues, bool);
+
   itkSetMacro(UseUnbiasedEstimator, bool);
   itkGetMacro(UseUnbiasedEstimator, bool);
 
@@ -203,7 +206,6 @@ protected:
 
   virtual void GenerateOutputInformation();
 
-
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Multi-thread version GenerateData. */
@@ -216,6 +218,7 @@ private:
   bool m_EnableMinMax;
   bool m_EnableFirstOrderStats;
   bool m_EnableSecondOrderStats;
+  bool m_IgnoreInfiniteValues;
 
   /* use an unbiased estimator to compute the covariance */
   bool m_UseUnbiasedEstimator;
@@ -226,6 +229,7 @@ private:
   std::vector<RealType>      m_ThreadSecondOrderComponentAccumulators;
   std::vector<RealPixelType> m_ThreadFirstOrderAccumulators;
   std::vector<MatrixType>    m_ThreadSecondOrderAccumulators;
+  std::vector<unsigned int>  m_IgnoredInfinitePixelCount;
 
 }; // end of class PersistentStreamingStatisticsVectorImageFilter
 
@@ -239,6 +243,8 @@ private:
  * Synthetize() method of the PersistentStreamingStatisticsVectorImageFilter after having streamed the image
  * to compute the statistics. The accessor on the results are wrapping the accessors of the
  * internal PersistentStreamingStatisticsVectorImageFilter.
+ * By default infinite values are ignored, use IgnoreInfiniteValues accessor to consider
+ * infinite values in the computation.
  *
  * \sa PersistentStreamingStatisticsVectorImageFilter
  * \sa PersistentImageFilter
@@ -422,6 +428,9 @@ public:
 
   otbSetObjectMemberMacro(Filter, EnableSecondOrderStats, bool);
   otbGetObjectMemberMacro(Filter, EnableSecondOrderStats, bool);
+
+  otbSetObjectMemberMacro(Filter, IgnoreInfiniteValues, bool);
+  otbGetObjectMemberMacro(Filter, IgnoreInfiniteValues, bool);
 
   otbSetObjectMemberMacro(Filter, UseUnbiasedEstimator, bool);
   otbGetObjectMemberMacro(Filter, UseUnbiasedEstimator, bool);

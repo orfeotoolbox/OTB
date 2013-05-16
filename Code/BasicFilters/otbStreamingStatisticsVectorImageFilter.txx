@@ -34,6 +34,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
  : m_EnableMinMax(true),
    m_EnableFirstOrderStats(true),
    m_EnableSecondOrderStats(true),
+   m_IgnoreInfiniteValues(true),
    m_UseUnbiasedEstimator(true)
 {
   // first output is a copy of the image, DataObject created by
@@ -45,6 +46,8 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     {
     this->itk::ProcessObject::SetNthOutput(i, this->MakeOutput(i).GetPointer());
     }
+  // Initiate the infinite ignored pixel counters
+  m_IgnoredInfinitePixelCount= std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
 }
 
 template<class TInputImage, class TPrecision>
@@ -328,6 +331,10 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     std::fill(m_ThreadSecondOrderComponentAccumulators.begin(), m_ThreadSecondOrderComponentAccumulators.end(), zeroReal);
     }
 
+  if (m_IgnoreInfiniteValues)
+    {
+      m_IgnoredInfinitePixelCount= std::vector<unsigned int>(numberOfThreads, 0);
+    }
 }
 
 template<class TInputImage, class TPrecision>
@@ -353,6 +360,8 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 
   RealType streamFirstOrderComponentAccumulator = itk::NumericTraits<RealType>::Zero;
   RealType streamSecondOrderComponentAccumulator = itk::NumericTraits<RealType>::Zero;
+
+  unsigned int ignoredInfinitePixelCount = 0;
 
   // Accumulate results from all threads
   const unsigned int numberOfThreads = this->GetNumberOfThreads();
@@ -387,7 +396,11 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
       streamSecondOrderAccumulator += m_ThreadSecondOrderAccumulators[threadId];
       streamSecondOrderComponentAccumulator += m_ThreadSecondOrderComponentAccumulators[threadId];
       }
+    // Ignored Infinite Pixels
+    ignoredInfinitePixelCount += m_IgnoredInfinitePixelCount[threadId];
     }
+
+  unsigned int nbRelevantPixels = nbPixels - ignoredInfinitePixelCount;
 
   // Final calculations
   if (m_EnableMinMax)
@@ -398,20 +411,20 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 
   if (m_EnableFirstOrderStats)
     {
-    this->GetComponentMeanOutput()->Set(streamFirstOrderComponentAccumulator / (nbPixels * numberOfComponent));
+    this->GetComponentMeanOutput()->Set(streamFirstOrderComponentAccumulator / (nbRelevantPixels * numberOfComponent));
 
-    this->GetMeanOutput()->Set(streamFirstOrderAccumulator / nbPixels);
+    this->GetMeanOutput()->Set(streamFirstOrderAccumulator / nbRelevantPixels);
     this->GetSumOutput()->Set(streamFirstOrderAccumulator);
     }
 
   if (m_EnableSecondOrderStats)
     {
 
-    MatrixType cor = streamSecondOrderAccumulator / nbPixels;
+    MatrixType cor = streamSecondOrderAccumulator / nbRelevantPixels;
     this->GetCorrelationOutput()->Set(cor);
 
     const RealPixelType& mean = this->GetMeanOutput()->Get();
-    double regul = static_cast<double>(nbPixels) / (nbPixels - 1);
+    double regul = static_cast<double>(nbRelevantPixels) / (nbRelevantPixels - 1);
 
     if (!m_UseUnbiasedEstimator)
       {
@@ -428,10 +441,10 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
       }
     this->GetCovarianceOutput()->Set(cov);
 
-    this->GetComponentMeanOutput()->Set(streamFirstOrderComponentAccumulator / (nbPixels * numberOfComponent));
-    this->GetComponentCorrelationOutput()->Set(streamSecondOrderComponentAccumulator / (nbPixels * numberOfComponent));
+    this->GetComponentMeanOutput()->Set(streamFirstOrderComponentAccumulator / (nbRelevantPixels * numberOfComponent));
+    this->GetComponentCorrelationOutput()->Set(streamSecondOrderComponentAccumulator / (nbRelevantPixels * numberOfComponent));
     this->GetComponentCovarianceOutput()->Set(
-        (nbPixels * numberOfComponent) / (nbPixels * numberOfComponent - 1)
+        (nbRelevantPixels * numberOfComponent) / (nbRelevantPixels * numberOfComponent - 1)
         * (this->GetComponentCorrelation()
            - (this->GetComponentMean() * this->GetComponentMean())));
     }
@@ -441,7 +454,7 @@ template<class TInputImage, class TPrecision>
 void
 PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
-{
+ {
   // Support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
@@ -457,51 +470,70 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     {
     const PixelType& vectorValue = it.Get();
 
-    if (m_EnableMinMax)
+
+    float finiteProbe = 0.;
+    for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
       {
+      finiteProbe += (float)(vectorValue[j]);
+      }
+
+    if (m_IgnoreInfiniteValues && !(vnl_math_isfinite(finiteProbe)))
+      {
+      m_IgnoredInfinitePixelCount[threadId] ++;
+      }
+    else
+      {
+
       for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
         {
-        if (vectorValue[j] < threadMin[j])
+
+        if (m_EnableMinMax)
           {
-          threadMin[j] = vectorValue[j];
-          }
-        if (vectorValue[j] > threadMax[j])
-          {
-          threadMax[j] = vectorValue[j];
+          for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
+            {
+            if (vectorValue[j] < threadMin[j])
+              {
+              threadMin[j] = vectorValue[j];
+              }
+            if (vectorValue[j] > threadMax[j])
+              {
+              threadMax[j] = vectorValue[j];
+              }
+            }
           }
         }
-      }
 
-    if (m_EnableFirstOrderStats)
-      {
-      RealPixelType& threadFirstOrder  = m_ThreadFirstOrderAccumulators [threadId];
-      RealType& threadFirstOrderComponent  = m_ThreadFirstOrderComponentAccumulators [threadId];
-
-      threadFirstOrder += vectorValue;
-
-      for (unsigned int i = 0; i < vectorValue.GetSize(); ++i)
+      if (m_EnableFirstOrderStats)
         {
-        threadFirstOrderComponent += vectorValue[i];
-        }
-      }
+        RealPixelType& threadFirstOrder  = m_ThreadFirstOrderAccumulators [threadId];
+        RealType& threadFirstOrderComponent  = m_ThreadFirstOrderComponentAccumulators [threadId];
 
-    if (m_EnableSecondOrderStats)
-      {
-      MatrixType&    threadSecondOrder = m_ThreadSecondOrderAccumulators[threadId];
-      RealType& threadSecondOrderComponent = m_ThreadSecondOrderComponentAccumulators[threadId];
+        threadFirstOrder += vectorValue;
 
-      for (unsigned int r = 0; r < threadSecondOrder.Rows(); ++r)
-        {
-        for (unsigned int c = 0; c < threadSecondOrder.Cols(); ++c)
+        for (unsigned int i = 0; i < vectorValue.GetSize(); ++i)
           {
-          threadSecondOrder(r, c) += vectorValue[r] * vectorValue[c];
+          threadFirstOrderComponent += vectorValue[i];
           }
         }
-      threadSecondOrderComponent += vectorValue.GetSquaredNorm();
-      }
 
+      if (m_EnableSecondOrderStats)
+        {
+        MatrixType&    threadSecondOrder = m_ThreadSecondOrderAccumulators[threadId];
+        RealType& threadSecondOrderComponent = m_ThreadSecondOrderComponentAccumulators[threadId];
+
+        for (unsigned int r = 0; r < threadSecondOrder.Rows(); ++r)
+          {
+          for (unsigned int c = 0; c < threadSecondOrder.Cols(); ++c)
+            {
+            threadSecondOrder(r, c) += vectorValue[r] * vectorValue[c];
+            }
+          }
+        threadSecondOrderComponent += vectorValue.GetSquaredNorm();
+        }
+      }
     }
-}
+
+ }
 
 template <class TImage, class TPrecision>
 void
