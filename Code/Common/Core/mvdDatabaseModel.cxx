@@ -206,7 +206,7 @@ DatabaseModel
       I18nApplication::ConstInstance()->GetCacheDir().path(),
       id,
       id,
-      true // TODO: is changing to true decrease performances ??
+      false
     );
 
     datasetModel->BuildModel( &context );
