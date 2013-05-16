@@ -869,6 +869,10 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     itk::ContinuousIndex<double,2> midIndex;
     outputDEM->TransformPhysicalPointToContinuousIndex(midPoint2D,midIndex);
     typename DEMImageType::IndexType cellIndex;
+
+    //TODO JGT check if cellIndex should be calculed from the center of the pixel
+    // TransformContinuousIndexToPhysicalPoint with index [0,0] returns Origin of image
+    // TransformContinuousIndexToPhysicalPoint with index [0.5,0.5] returns a slight difference from Origin of image
     cellIndex[0] = static_cast<int>(vcl_floor(midIndex[0] + 0.5));
     cellIndex[1] = static_cast<int>(vcl_floor(midIndex[1] + 0.5));
     
