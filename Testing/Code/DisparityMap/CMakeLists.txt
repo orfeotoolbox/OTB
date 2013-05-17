@@ -648,6 +648,10 @@ ADD_TEST(dmTvDisparityTranslateFilter ${DISPARITYMAP_TESTS4}
          ${TEMP}/dmTvDisparityTranslateFilterOutput.tif
          )
 
+# -------            otb::Multi3DMapToDEMFilter   ----------
+ADD_TEST(dmTuMulti3DMapTo3DEMFilterNew ${DISPARITYMAP_TESTS4}
+         otbMulti3DMapToDEMFilterNew)
+
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -697,6 +701,7 @@ otbPixelWiseBlockMatchingImageFilter.cxx
 otbSubPixelDisparityImageFilter.cxx
 otbDisparityMapTo3DFilter.cxx
 otbMultiDisparityMapTo3DFilter.cxx
+otbMulti3DMapToDEMFilter.cxx
 otbBijectionCoherencyFilter.cxx
 otbDisparityTranslateFilter.cxx
 )

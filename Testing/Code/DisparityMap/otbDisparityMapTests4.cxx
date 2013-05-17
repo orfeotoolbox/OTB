@@ -39,6 +39,8 @@ void RegisterTests()
   REGISTER_TEST(otbDisparityMapTo3DFilterNew);
   REGISTER_TEST(otbMultiDisparityMapTo3DFilter);
   REGISTER_TEST(otbMultiDisparityMapTo3DFilterNew);
+  REGISTER_TEST(otbMulti3DMapToDEMFilter);
+  REGISTER_TEST(otbMulti3DMapToDEMFilterNew);
   REGISTER_TEST(otbBijectionCoherencyFilter);
   REGISTER_TEST(otbBijectionCoherencyFilterNew);
   REGISTER_TEST(otbDisparityTranslateFilter);
