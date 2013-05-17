@@ -26,7 +26,7 @@ namespace Wrapper
   {
     AddChoice("classifier.svm", "SVM classifier (OpenCV)");
     SetParameterDescription("classifier.svm", "This group of parameters allows to set SVM classifier parameters. "
-        "See complete documentation here http://docs.opencv.org/modules/ml/doc/support_vector_machines.html.");
+        "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/support_vector_machines.html}.");
     AddParameter(ParameterType_Choice, "classifier.svm.m", "SVM Model Type");
     AddChoice("classifier.svm.m.csvc", "C support vector classification");
     AddChoice("classifier.svm.m.nusvc", "Nu support vector classification");

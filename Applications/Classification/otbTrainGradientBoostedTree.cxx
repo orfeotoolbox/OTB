@@ -27,7 +27,7 @@ void TrainImagesClassifier::InitGradientBoostedTreeParams()
   SetParameterDescription(
       "classifier.gbt",
       "This group of parameters allows to set Gradient Boosted Tree classifier parameters. "
-      "See complete documentation here http://docs.opencv.org/modules/ml/doc/gradient_boosted_trees.html.");
+      "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/gradient_boosted_trees.html}.");
   //LossFunctionType : not exposed, as only one type is used for Classification,
   // the other three are used for regression.
 

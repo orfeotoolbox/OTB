@@ -26,7 +26,7 @@ void TrainImagesClassifier::InitDecisionTreeParams()
   AddChoice("classifier.dt", "Decision Tree classifier");
   SetParameterDescription("classifier.dt",
                           "This group of parameters allows to set Decision Tree classifier parameters. "
-                          "See complete documentation here http://docs.opencv.org/modules/ml/doc/decision_trees.html.");
+                          "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/decision_trees.html}.");
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.dt.max", "Maximum depth of the tree");
   SetParameterInt("classifier.dt.max", 65000);

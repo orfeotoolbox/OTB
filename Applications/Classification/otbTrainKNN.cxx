@@ -26,7 +26,7 @@ namespace Wrapper
   {
     AddChoice("classifier.knn", "KNN classifier");
     SetParameterDescription("classifier.knn", "This group of parameters allows to set KNN classifier parameters. "
-        "See complete documentation here http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html.");
+        "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html}.");
 
     //K parameter
     AddParameter(ParameterType_Int, "classifier.knn.k", "Number of Neighbors");

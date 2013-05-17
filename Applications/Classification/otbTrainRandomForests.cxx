@@ -26,7 +26,7 @@ void TrainImagesClassifier::InitRandomForestsParams()
   AddChoice("classifier.rf", "Random forests classifier");
   SetParameterDescription("classifier.rf",
                           "This group of parameters allows to set Random Forests classifier parameters. "
-                          "See complete documentation here http://docs.opencv.org/modules/ml/doc/random_trees.html.");
+                          "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/random_trees.html}.");
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.rf.max", "Maximum depth of the tree");
   SetParameterInt("classifier.rf.max", 25);
