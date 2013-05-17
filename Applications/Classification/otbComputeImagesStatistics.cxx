@@ -57,6 +57,10 @@ private:
     AddParameter(ParameterType_InputImageList, "il", "Input images");
     SetParameterDescription( "il", "List of input images filenames." );
 
+    AddParameter(ParameterType_Float, "bv", "Background Value");
+    SetParameterDescription( "bv", "Background value to ignore in statistics computation." );
+    MandatoryOff("bv");
+
     AddParameter(ParameterType_OutputFilename, "out", "Output XML file");
     SetParameterDescription( "out", "XML filename where the statistics are saved for future reuse." );
     MandatoryOff("out");
@@ -120,6 +124,11 @@ private:
       // Compute Statistics of each VectorImage
       StreamingStatisticsVImageFilterType::Pointer statsEstimator = StreamingStatisticsVImageFilterType::New();
       statsEstimator->SetInput(image);
+      if( HasValue( "bv" )==true )
+        {
+        statsEstimator->SetIgnoreUserDefinedValue(true);
+        statsEstimator->SetUserIgnoredValue(GetParameterFloat("bv"));
+        }
       statsEstimator->Update();
       mean += statsEstimator->GetMean();
       for (unsigned int itBand = 0; itBand < nbBands; itBand++)
