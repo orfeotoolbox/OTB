@@ -481,11 +481,11 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     const PixelType& vectorValue = it.Get();
 
     float finiteProbe = 0.;
-    bool userProbe = false;
+    bool userProbe = true;
     for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
       {
       finiteProbe += (float)(vectorValue[j]);
-      userProbe = userProbe || (vectorValue[j] == m_UserIgnoredValue);
+      userProbe = userProbe && (vectorValue[j] == m_UserIgnoredValue);
       }
 
     if (m_IgnoreInfiniteValues && !(vnl_math_isfinite(finiteProbe)))
