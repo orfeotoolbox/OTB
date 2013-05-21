@@ -32,6 +32,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -307,7 +308,13 @@ typedef std::pair< std::string, std::vector< PropertyType > > PropertiesVectorBy
 typedef std::map<  std::string, PropertiesVector>             PropertiesContainer;
 
 /*******************************************************************************/
+/** Type definitions for Dataset list
+ * 
+ */
+typedef QPair< QString, QString >        StringPairType;
+typedef QList< StringPairType >          StringPairListType; 
 
+/*******************************************************************************/
 } // end namespace 'mvd'
 
 #endif // __mvdTypes_h
