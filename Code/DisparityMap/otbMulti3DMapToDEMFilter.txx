@@ -295,6 +295,11 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
         }
       mskPtr->SetRequestedRegion(largest);
       }
+    if (this->m_MapKeywordLists[k].GetSize() == 0)
+      {
+      itkExceptionMacro(<< "Keywordlist of image at position "<<k<<" is empty");
+      }
+
     }
 }
 
