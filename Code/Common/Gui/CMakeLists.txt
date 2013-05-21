@@ -29,6 +29,7 @@ set( Common_Gui_SOURCES
   mvdDatabaseTreeWidget.cxx
   mvdDatasetPropertiesWidget.cxx
   mvdDatasetPropertiesController.cxx
+  mvdDatasetTreeWidgetItem.cxx
 )
 
 #############################################################################
@@ -62,6 +63,7 @@ set( Common_Gui_HEADERS_MOC
   mvdDatabaseTreeWidget.h
   mvdDatasetPropertiesWidget.h
   mvdDatasetPropertiesController.h
+  mvdDatasetTreeWidgetItem.h
 )
 
 #############################################################################
