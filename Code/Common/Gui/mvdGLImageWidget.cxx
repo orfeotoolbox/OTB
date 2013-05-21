@@ -62,6 +62,10 @@ GLImageWidget
 {
   // Set focus policy so that the widget gets the focus if it is clicked
   setMouseTracking(true);
+
+  // Accept drops
+  setAcceptDrops(true);
+
   setFocusPolicy(Qt::StrongFocus);
   Initialize(manipulator, renderer);
 }
@@ -83,6 +87,9 @@ GLImageWidget
   setMouseTracking(true);
   setFocusPolicy(Qt::StrongFocus);
 
+  // Accept drops
+  setAcceptDrops(true);
+
   Initialize(manipulator, renderer);
 }
 
@@ -102,6 +109,10 @@ GLImageWidget
   // Set focus policy so that the widget gets the focus if it is clicked
   setMouseTracking(true);
   setFocusPolicy(Qt::StrongFocus);
+
+  // Accept drops
+  setAcceptDrops(true);
+
 
   Initialize(manipulator, renderer);
 }
@@ -330,6 +341,54 @@ GLImageWidget
   
   // emited to update to force the ql widget (if any) to update
   emit CentralWidgetUpdated();
+}
+
+/*******************************************************************************/
+void
+GLImageWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+  if (event->mimeData()->hasText())
+    {
+    event->acceptProposedAction();
+    }
+}
+
+/*******************************************************************************/
+void 
+GLImageWidget::dragMoveEvent(QDragMoveEvent *event)
+ {
+   //
+   // if the mouse is within the QLabel geometry : allow drops
+   if ( event->answerRect().intersects( this->geometry() ) )
+     {
+     event->acceptProposedAction();
+     }
+   else
+    {
+    event->ignore();
+    }
+ }
+
+/*******************************************************************************/
+void 
+GLImageWidget::dropEvent(QDropEvent *event)
+{
+  QList<QUrl> urls = event->mimeData()->urls();
+
+  // cheking
+  if (urls.isEmpty())
+    return;
+
+  // get the filename and send 
+  QString fileName = urls.first().toLocalFile();
+  if (fileName.isEmpty())
+    {
+    return;
+    }
+  else
+    {
+    emit ImageToImportDropped( fileName );
+    }
 }
 
 /*******************************************************************************/

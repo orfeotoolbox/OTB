@@ -141,6 +141,7 @@ signals:
   void releasingMouse();
   void ModelImageRegionChanged(const ImageRegionType &, const SpacingType&, const PointType&);
   void CentralWidgetUpdated();
+  void ImageToImportDropped(const QString &);
 
 //
 // Protected methods.
@@ -154,6 +155,11 @@ protected:
   void wheelEvent( QWheelEvent *event);
   void resizeEvent(QResizeEvent* event);
   void keyPressEvent( QKeyEvent * event );
+
+  void dragEnterEvent(QDragEnterEvent *event);
+  void dragMoveEvent(QDragMoveEvent *event);
+  void dropEvent(QDropEvent *event);
+  
 
 //
 // Protected attributes.

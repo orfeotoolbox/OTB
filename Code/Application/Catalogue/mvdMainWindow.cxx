@@ -264,6 +264,14 @@ MainWindow
      SIGNAL(UserZoomFull()),
      m_ImageView->GetImageViewManipulator(),
      SLOT(OnUserZoomFull()));
+
+   // connect image to load when dropped on CentralView
+   QObject::connect(
+     m_ImageView,
+     SIGNAL( ImageToImportDropped (const QString &) ),
+     this,
+     SLOT( OnImageToImportDropped(const QString & ) )
+     );
 }
 
 /*****************************************************************************/
