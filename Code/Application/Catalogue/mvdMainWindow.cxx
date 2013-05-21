@@ -265,12 +265,23 @@ MainWindow
      m_ImageView->GetImageViewManipulator(),
      SLOT(OnUserZoomFull()));
 
-   // connect image to load when dropped on CentralView
+   // connect image to load image when file dropped in CentralView
    QObject::connect(
      m_ImageView,
      SIGNAL( ImageToImportDropped (const QString &) ),
      this,
      SLOT( OnImageToImportDropped(const QString & ) )
+     );
+
+   // Connect databasebrowser drop to import new dataset
+   // need to get the controller to request the application widget
+   DatabaseBrowserController * dbcontroller =
+     m_DatabaseBrowserDock->findChild<DatabaseBrowserController *>();
+  
+   QObject::connect(dbcontroller,
+                    SIGNAL( ImageToImportDropped(const QString & ) ),
+                    this,
+                    SLOT( OnImageToImportDropped(const QString &) )
      );
 }
 
@@ -392,17 +403,7 @@ MainWindow
     SLOT( setVisible( bool ) )
   );
 #endif
-  
-  // Connect databasebrowser drop to import new dataset
-  // need to get the controller to request the application widget
-  DatabaseBrowserController * dbcontroller =
-    m_DatabaseBrowserDock->findChild<DatabaseBrowserController *>();
-  
-  QObject::connect(dbcontroller,
-                   SIGNAL( ImageToImportDropped(const QString & ) ),
-                   this,
-                   SLOT( OnImageToImportDropped(const QString &) )
-    );
+
 }
 
 /*****************************************************************************/
