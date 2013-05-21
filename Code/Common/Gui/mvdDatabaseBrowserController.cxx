@@ -138,6 +138,14 @@ DatabaseBrowserController
     this,
     SLOT( RefreshWidget() )
     );
+
+  //
+  QObject::connect(
+    widget->GetDatabaseTreeWidget(),
+    SIGNAL( ImageDropped(const QString &) ),
+    this,
+    SLOT( OnImageDropped(const QString &) )
+    );
 }
 
 /*******************************************************************************/
@@ -313,6 +321,14 @@ DatabaseBrowserController
   GetWidget< DatabaseBrowserWidget >()->SetCurrentDataset(
     datasetModel->GetName()
   );
+}
+
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::OnImageDropped( const QString & imagefname )
+{
+  emit ImageToImportDropped( imagefname );
 }
 
 } // end namespace 'mvd'

@@ -136,10 +136,6 @@ protected:
 
   void closeEvent( QCloseEvent* event );
 
-
-  // Drag and drop image from a file explorer
-  void dragEnterEvent(QDragEnterEvent *event);
-  void dropEvent(QDropEvent *event);
 //
 // Protected attributes.
 protected:
@@ -180,6 +176,10 @@ protected slots:
 
   /** */
   void OnOTBApplicationOutputImageChanged( const QString & appName, const QString & outfname);
+
+  /**
+   */
+  void OnImageToImportDropped(const QString& fname);
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 

@@ -97,6 +97,9 @@ public:
 
   void mouseMoveEvent( QMouseEvent * event );
   void mousePressEvent( QMouseEvent * event );
+  void dragEnterEvent(QDragEnterEvent *event);
+  void dragMoveEvent(QDragMoveEvent *event);
+  void dropEvent(QDropEvent *event);
   void keyPressEvent( QKeyEvent * event );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
@@ -111,7 +114,7 @@ public slots:
   void OnCustomContextMenuRequested(const QPoint& pos);
   void OnItemChanged( QTreeWidgetItem* item , int column);
 
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/  
 
 //
 // Signals.
@@ -120,6 +123,9 @@ signals:
   void DatasetToDeleteSelected( const QString & id );
 
   void DatasetRenamed(const QString &, const QString &);
+
+  void ImageDropped(const QString &);
+  
   
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

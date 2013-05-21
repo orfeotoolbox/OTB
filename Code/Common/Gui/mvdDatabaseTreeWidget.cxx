@@ -73,6 +73,9 @@ DatabaseTreeWidget
 {
   //setMouseTracking(true);
   setDragEnabled(true);
+  
+  // 
+  setAcceptDrops(true);
 
   // setup contextual menu
   InitializeContextualMenu();
@@ -149,6 +152,55 @@ DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
      // remember start drag position
      m_StartDragPosition = event->pos();
      }
+}
+
+/*******************************************************************************/
+void
+DatabaseTreeWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+  if (event->mimeData()->hasText()/*("text/uri-list")*/)
+    {
+    event->acceptProposedAction();
+    }
+}
+
+/*******************************************************************************/
+void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
+ {
+   //
+   // if the mouse is within the QLabel geometry : allow drops
+   if ( event->answerRect().intersects( this->geometry() ) )
+     {
+     event->acceptProposedAction();
+     }
+   else
+    {
+    event->ignore();
+    }
+ }
+
+/*******************************************************************************/
+void 
+DatabaseTreeWidget::dropEvent(QDropEvent *event)
+{
+  qDebug()<<this << " ::dropEvent ";
+  
+  QList<QUrl> urls = event->mimeData()->urls();
+
+  // cheking
+  if (urls.isEmpty())
+    return;
+
+  // get the filename and send 
+  QString fileName = urls.first().toLocalFile();
+  if (fileName.isEmpty())
+    {
+    return;
+    }
+  else
+    {
+    emit ImageDropped( fileName );
+    }
 }
 
 /*******************************************************************************/

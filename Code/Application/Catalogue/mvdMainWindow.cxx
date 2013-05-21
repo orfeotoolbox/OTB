@@ -111,7 +111,6 @@ MainWindow
   m_CentralTabWidget( NULL )
 {
   m_UI->setupUi( this );
-  setAcceptDrops(true);
 }
 
 /*****************************************************************************/
@@ -385,6 +384,17 @@ MainWindow
     SLOT( setVisible( bool ) )
   );
 #endif
+  
+  // Connect databasebrowser drop to import new dataset
+  // need to get the controller to request the application widget
+  DatabaseBrowserController * dbcontroller =
+    m_DatabaseBrowserDock->findChild<DatabaseBrowserController *>();
+  
+  QObject::connect(dbcontroller,
+                   SIGNAL( ImageToImportDropped(const QString & ) ),
+                   this,
+                   SLOT( OnImageToImportDropped(const QString &) )
+    );
 }
 
 /*****************************************************************************/
@@ -1364,27 +1374,12 @@ MainWindow
   qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
 }
 
+/*****************************************************************************/
 void
 MainWindow
-::dragEnterEvent(QDragEnterEvent *event)
+::OnImageToImportDropped(const QString & fname)
 {
-    if (event->mimeData()->hasFormat("text/uri-list"))
-        event->acceptProposedAction();
-}
-
-void MainWindow
-::dropEvent(QDropEvent *event)
-{
-    QList<QUrl> urls = event->mimeData()->urls();
-    if (urls.isEmpty())
-        return;
-    QString fileName = urls.first().toLocalFile();
-    if (fileName.isEmpty())
-        return;
-    else
-      {
-      ImportImage(fileName);
-      }
+  ImportImage( fname );
 }
 
 } // end namespace 'mvd'
