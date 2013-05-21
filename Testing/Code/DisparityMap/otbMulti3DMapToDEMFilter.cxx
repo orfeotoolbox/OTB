@@ -75,7 +75,7 @@ int otbMulti3DMapToDEMFilter(int argc, char* argv[])
   
   MapReaderListType::Pointer mapReaderList=MapReaderListType::New();
   MaskReaderListType::Pointer  maskReaderList=MaskReaderListType::New();
-  for(unsigned int i=0;i<(mapSize);i++)
+  for(unsigned int i=0; i<(mapSize); i++)
    {
     mapReaderList->PushBack(ReaderVectorType::New());
     maskReaderList->PushBack(ReaderType::New());
@@ -84,7 +84,7 @@ int otbMulti3DMapToDEMFilter(int argc, char* argv[])
 
   // unsigned int i=1;
   unsigned int index=0;
-  for(unsigned int i=1;i<(2*mapSize+1);i=i+2)
+  for(unsigned int i=1; i<(2*mapSize+1); i=i+2)
   {
     mapReaderList->GetNthElement(index)->SetFileName(argv[i]);
     mapReaderList->GetNthElement(index)->UpdateOutputInformation();
@@ -108,7 +108,7 @@ int otbMulti3DMapToDEMFilter(int argc, char* argv[])
   multiFilter->SetDEMGridStep(gridStep);
   multiFilter->SetCellFusionMode(fusionMode);
 
-  for(unsigned int i=0;i<mapSize;i++)
+  for(unsigned int i=0; i<mapSize; i++)
    {
     multiFilter->Set3DMapInput(i,mapReaderList->GetNthElement(i)->GetOutput());
     multiFilter->SetMapKeywordList(i,mapReaderList->GetNthElement(i)->GetOutput()->GetImageKeywordlist());
