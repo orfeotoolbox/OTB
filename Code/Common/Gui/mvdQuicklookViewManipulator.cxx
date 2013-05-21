@@ -72,6 +72,9 @@ void
 QuicklookViewManipulator
 ::mousePressEvent(QMouseEvent * event)
 {
+  // Update the pressed flag
+  m_MouseContext.pressed = true;
+
   // Update the context with the pressed position
   m_MouseContext.x = event->x();
   m_MouseContext.y = event->y();
@@ -80,7 +83,6 @@ QuicklookViewManipulator
   m_MouseContext.xMove = event->x();
   m_MouseContext.yMove = event->y();
 
-  //
   // compute the physcial coordinates
   // computation takes into the origin of the viewport in the widget,
   // the spacing of the rendered image and the isotropicZoom
@@ -98,7 +100,43 @@ void
 QuicklookViewManipulator
 ::mouseMoveEvent( QMouseEvent * event)
 {
-  // nothing to do
+  //If the mouse is not pressed just update the context
+  if(!m_MouseContext.pressed)
+    {
+    // Update the context with the pressed position
+    m_MouseContext.x = event->x();
+    m_MouseContext.y = event->y();
+
+    // Update the context with the pressed position for the mouseMoveEvent
+    m_MouseContext.xMove = event->x();
+    m_MouseContext.yMove = event->y();
+    }
+  //In case where the mouse is pressed, update the quicklook context
+
+  //FIXME Bug when you move the cursor to the left or to the upper region (negative y
+  //coordinate) where red square is shifted to the other side
+  //It can be fix easily in the second case by replacing m_MouseContext.yMove = event->y() by
+  //std::max(0,event.y())
+  //But I don't know how to solve this issue regarding the X coordinate as the
+  //xmin coordinate of the quicklook is not 0
+  else
+    {
+    // Update the context with the pressed position for the mouseMoveEvent
+    m_MouseContext.xMove = event->x();
+    m_MouseContext.yMove = event->y();
+
+    // compute the physical coordinates
+    // computation takes into the origin of the viewport in the widget,
+    // the spacing of the rendered image and the isotropicZoom
+    IndexType index;
+    index[0] = event->x();
+    //FIXME replace event->y() by std::max(0,event->y())?
+    index[1] = event->y();
+    PointType physicalPt = ScreenIndexToPhysicalPoint(index);
+
+    // emit the new viewport center on physical coordinates
+    emit ViewportRegionChanged(physicalPt[0], physicalPt[1]);
+    }
 }
 
 /******************************************************************************/
@@ -113,7 +151,7 @@ QuicklookViewManipulator
   ImageRegionType::OffsetType offset;
   offset[0] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dx/m_IsotropicZoom + 0.5);
   offset[1] = static_cast<ImageRegionType::OffsetType::OffsetValueType> (dy/m_IsotropicZoom + 0.5);
- 
+
   // Apply the offset to the (start) index of the stored region
   IndexType    index = currentRegion.GetIndex() + offset;
   currentRegion.SetIndex(index);
@@ -130,6 +168,17 @@ QuicklookViewManipulator
 {
   //TODO: Implement mouseReleaseEvent.
   //std::cout <<" Not Implemented yet ..." << std::endl;
+
+  // Update the pressed flag
+  m_MouseContext.pressed = false;
+
+  // Update the context with the pressed position
+  m_MouseContext.x = event->x();
+  m_MouseContext.y = event->y();
+
+  // Update the context with the pressed position for the mouseMoveEvent
+  m_MouseContext.xMove = event->x();
+  m_MouseContext.yMove = event->y();
 }
 
 /******************************************************************************/
@@ -138,7 +187,7 @@ void QuicklookViewManipulator
 {
   // set back the zoom to 1
   m_IsotropicZoom = 1.;
-  
+
   m_PreviousIsotropicZoom = 1.;
 
   this->ResizeRegion( event->size().width(),
@@ -173,7 +222,7 @@ void QuicklookViewManipulator
   // Recompute the size before
   m_NavigationContext.m_SizeXBeforeConstrain = (double)size[0] / this->GetIsotropicZoom();
   m_NavigationContext.m_SizeYBeforeConstrain = (double)size[1] / this->GetIsotropicZoom();
-  
+
   // Constraint this region to the LargestPossibleRegion
   this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
 
@@ -211,7 +260,7 @@ QuicklookViewManipulator
   // compute the new size
   double sizeX = m_NavigationContext.m_SizeXBeforeConstrain / scale;
   double sizeY = m_NavigationContext.m_SizeYBeforeConstrain / scale;
-  
+
   // check that the new size is greater than 30x30
   // check that the new isoZoom is not too low and not too large
   // TODO : compute automatically the minSize and the isoZoom range ???
@@ -228,10 +277,10 @@ QuicklookViewManipulator
 
     // The viewPort Region must be adapted to this zoom ratio
     ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
- 
+
     // Update the stored region with the new size
     currentRegion.SetSize(size);
-    
+
     // Constraint this region to the LargestPossibleRegion
     this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
 
@@ -249,7 +298,7 @@ QuicklookViewManipulator
     {
     // The viewPort Region must be adapted to this zoom ratio
     ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
-  
+
     // center the region on the position under the cursor
     IndexType        origin = currentRegion.GetIndex();
     double centerX = (double)(origin[0]) + (double)(currentRegion.GetSize()[0])/2.;
@@ -257,7 +306,7 @@ QuicklookViewManipulator
 
     // new origin
     IndexType  newIndex;
-    newIndex[0] = centerX - currentRegion.GetSize()[0]/scale/2.; 
+    newIndex[0] = centerX - currentRegion.GetSize()[0]/scale/2.;
     if (newIndex[0] < 0) newIndex[0] = 0;
 
     newIndex[1] = centerY - currentRegion.GetSize()[1]/scale/2.;
@@ -278,7 +327,7 @@ QuicklookViewManipulator
 {
   ImageRegionType::SizeType zeroSize;
   zeroSize.Fill(0);
-  
+
   if (largest.GetSize() != zeroSize)
     {
     // Else we can constrain it
@@ -327,7 +376,7 @@ QuicklookViewManipulator
 /*****************************************************************************/
 void
 QuicklookViewManipulator
-::OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
+::OnModelImageRegionChanged(const ImageRegionType & largestRegion,
                             const SpacingType & spacing,
                             const PointType& origin )
 {
