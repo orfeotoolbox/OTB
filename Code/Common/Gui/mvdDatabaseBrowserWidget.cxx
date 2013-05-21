@@ -244,6 +244,9 @@ void
 DatabaseBrowserWidget
 ::SetupUI()
 {
+  // 
+  setAcceptDrops(true);
+
   m_DatasetRootItem = m_UI->databaseTreeWidget->topLevelItem( 0 );
   assert( m_DatasetRootItem!=NULL );
   assert( m_DatasetRootItem->text( 0 )==tr( "Datasets" ) );
@@ -302,40 +305,18 @@ DatabaseBrowserWidget
     << current << "," << previous
     << ")";
 
-  // qDebug()
-  //   << ( previous==NULL ? "" : previous->text( 0 ) )
-  //   << "->"
-  //   << ( current==NULL ? "" : current->text( 0 ) );
-
-  // //
-  // // verbosity : dont ask root item for DatasetId, it doesn't have
-  // // any -> leads to a crash
-  // if (current != m_DatasetRootItem && previous != m_DatasetRootItem)
-  //   {
-  //   qDebug()
-  //     << " Previous Item Unique ID: "
-  //     << ( previous==NULL ? "" : dynamic_cast<DatasetTreeWidgetItem*>(previous)->GetDatasetId( ) )
-  //     << "-> Current Item Item Unique ID: "
-  //     << ( current==NULL ? "" : dynamic_cast<DatasetTreeWidgetItem*>(current)->GetDatasetId() );
-  //   }
-
-
-  //qDebug() << this << " ::on_databaseTreeWidget_currentItemChanged currentParent : "<< current->parent();
-  // if current is root
+  // if current is root and not NULL get the Id of the
+  // corresponding Dataset
   if ( current && current->parent() )
     {
-    emit CurrentDatasetChanged( dynamic_cast<DatasetTreeWidgetItem*>(current)->GetDatasetId() );
+    emit CurrentDatasetChanged( 
+      dynamic_cast<DatasetTreeWidgetItem*>(current)->GetDatasetId() 
+      );
     }
   else
     {
     emit CurrentDatasetChanged( QString() );
     }
-
-  // emit CurrentDatasetChanged(
-  //   current->parent()!=m_DatasetRootItem
-  //   ? QString()
-  //   : dynamic_cast<DatasetTreeWidgetItem*>(current)->GetDatasetId()
-  // );
 }
 
 /*******************************************************************************/
