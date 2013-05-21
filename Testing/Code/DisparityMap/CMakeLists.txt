@@ -553,6 +553,7 @@ ADD_TEST(dmTuDisparityMapToDEMFilterNew ${DISPARITYMAP_TESTS4}
          
 
 
+
 ADD_TEST(dmTvDisparityMapToDEMFilter ${DISPARITYMAP_TESTS4}
 --compare-image ${NOTOL}
 		 ${BASELINE_EXAMPLE}/elevationOutput.tif
@@ -652,6 +653,153 @@ ADD_TEST(dmTvDisparityTranslateFilter ${DISPARITYMAP_TESTS4}
 ADD_TEST(dmTuMulti3DMapTo3DEMFilterNew ${DISPARITYMAP_TESTS4}
          otbMulti3DMapToDEMFilterNew)
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(dmTuMulti3DMapToDEMFilterMeanMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
+         otbMulti3DMapToDEMFilter
+         ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
+         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
+         ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
+         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
+		 ${TEMP}/dmTuMulti3DMapToDEMFilterOutputMeanMultiThreadMultiStream.tif
+		 2.5
+		 2 
+		 8
+		 4)
+		 
+ADD_TEST(dmTuMulti3DMapToDEMFilterAccMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
+         otbMulti3DMapToDEMFilter
+         ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
+         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
+         ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
+         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
+		 ${TEMP}/dmTuMulti3DMapToDEMFilterOutputAccMultiThreadMultiStream.tif
+		 2.5
+		 3 
+		 8
+		 4		 
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMinROI ${DISPARITYMAP_TESTS4}
+--compare-image ${EPSILON_6}
+     ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMin.tif
+     ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMinROI.tif
+         otbMulti3DMapToDEMFilter
+         ${INPUTDATA}/Stadium3DMap1.tif
+         ${INPUTDATA}/Stadium3DMapMask1.tif
+         ${INPUTDATA}/Stadium3DMap2.tif
+         ${INPUTDATA}/Stadium3DMapMask2.tif
+         ${INPUTDATA}/Stadium3DMap3.tif
+         ${INPUTDATA}/Stadium3DMapMask3.tif
+         ${INPUTDATA}/Stadium3DMap4.tif
+         ${INPUTDATA}/Stadium3DMapMask4.tif 
+         ${INPUTDATA}/Stadium3DMap5.tif
+         ${INPUTDATA}/Stadium3DMapMask5.tif 
+		 ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMinROI.tif
+		 2.5
+		 0
+		 8
+		 4
+)
+
+
+
+ADD_TEST(dmTuMulti3DMapToDEMFilterStadiumAcc ${DISPARITYMAP_TESTS4}
+         otbMulti3DMapToDEMFilter
+         ${INPUTDATA}/Stadium3DMap.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${INPUTDATA}/Stadium3DMap.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${TEMP}/dmTuMulti3DMapToDEMFilterOutputStadiumAcc.tif
+		 2.5
+		 3
+		 1
+		 1
+)
+
+
+ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMin ${DISPARITYMAP_TESTS4}
+--compare-image ${EPSILON_6}
+     ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMin.tif
+     ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMin.tif
+         otbMulti3DMapToDEMFilter
+         ${INPUTDATA}/Stadium3DMap.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${INPUTDATA}/Stadium3DMapBis.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMin.tif
+		 2.5
+		 0
+		 1
+		 1
+)
+
+
+
+
+ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMax ${DISPARITYMAP_TESTS4}
+--compare-image ${EPSILON_6}
+     ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMax.tif
+     ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMax.tif
+         otbMulti3DMapToDEMFilter
+         ${INPUTDATA}/Stadium3DMap.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${INPUTDATA}/Stadium3DMapBis.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMax.tif
+		 2.5
+		 1
+		 1
+		 1
+)
+
+ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMean ${DISPARITYMAP_TESTS4}
+--compare-image ${EPSILON_6}
+     ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMean.tif
+     ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMean.tif
+         otbMulti3DMapToDEMFilter
+         ${INPUTDATA}/Stadium3DMap.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${INPUTDATA}/Stadium3DMapBis.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMean.tif
+		 2.5
+		 2
+		 1
+		 1
+)
+
+
+ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMeanMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
+--compare-image ${EPSILON_6}
+     ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMean.tif
+     ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanMultiThreadMultiStream.tif
+         otbMulti3DMapToDEMFilter
+         ${INPUTDATA}/Stadium3DMap.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${INPUTDATA}/Stadium3DMapBis.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanMultiThreadMultiStream.tif
+		 2.5
+		 2
+		 8
+		 4
+)
+
+
+ADD_TEST(dmTuMulti3DMapToDEMFilterStadiumMeanLarge ${DISPARITYMAP_TESTS4}
+         otbMulti3DMapToDEMFilter
+         ${INPUTDATA}/Stadium3DMap.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${INPUTDATA}/Stadium3DMapBis.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${TEMP}/dmTuMulti3DMapToDEMFilterOutputStadiumMeanLarge.tif
+		 10
+		 2
+		 8
+		 4
+)
 
 
 # -------       Fichiers sources CXX -----------------------------------
