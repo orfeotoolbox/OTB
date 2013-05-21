@@ -45,7 +45,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModel.h"
-
+#include "mvdTypes.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -116,7 +116,7 @@ public:
 
   /**
    */
-  QStringList QueryDatasetModels() const;
+  StringPairListType QueryDatasetModels() const;
   
   /**
    */
@@ -163,7 +163,7 @@ signals:
 
   /**
    */
-  void RenameDeclined(const QString&, const QString &);
+  //void RenameDeclined(const QString&, const QString &);
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------*/
 
@@ -176,7 +176,7 @@ public slots:
 
   /**
    */
-  void OnDatasetRenamed( const QString& previous, const QString & current );
+  void OnDatasetRenamed( const QString& alias, const QString & id );
 
   /**
    */
@@ -204,7 +204,7 @@ protected:
 private:
   /**
    */
-  typedef QMap< DatasetId, DatasetModel* > DatasetModelMap;
+  typedef QMap< DatasetId, DatasetModel*>  DatasetModelMap;
 
 //
 // Private methods.

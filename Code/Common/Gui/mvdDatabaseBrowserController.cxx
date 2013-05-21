@@ -44,6 +44,8 @@
 #include "Core/mvdVectorImageModel.h"
 //
 #include "Gui/mvdDatabaseTreeWidget.h"
+//
+#include "Gui/mvdDatasetTreeWidgetItem.h"
 
 namespace mvd
 {
@@ -119,15 +121,6 @@ DatabaseBrowserController
     // to:
     model,
     SLOT( OnDatasetRenamed(const QString&, const QString & ) )
-    );
-  
-  //
-  QObject::connect(
-    model,
-    SIGNAL( RenameDeclined(const QString&, const QString & ) ),
-    // to:    
-    widget->GetDatabaseTreeWidget(), 
-    SLOT( OnRenameDeclined( const QString &, const QString & )  )
     );
 
   //
@@ -243,9 +236,12 @@ DatabaseBrowserController
     {
     int nbChild = tree->topLevelItem(topIdx)->childCount();
     for ( int idx = 0; idx < nbChild; idx++ )
-      {
-      QTreeWidgetItem *    currentDatasetItem = tree->topLevelItem(topIdx)->child(idx);
-      QString datasetId =  currentDatasetItem->text(0);
+      {      
+      DatasetTreeWidgetItem * currentDatasetItem = 
+        dynamic_cast<DatasetTreeWidgetItem*>(
+          tree->topLevelItem(topIdx)->child(idx)
+          );
+      QString datasetId =  currentDatasetItem->GetDatasetId();
 
       const DatasetModel* datasetModel = model->FindDatasetModel( datasetId );
       assert( datasetModel!=NULL );
@@ -299,7 +295,7 @@ DatabaseBrowserController
   // Reset widget.
   ResetDatasetTree();
 
-  // Check every dataset consistency
+  // Check every dataset consistency  
   CheckDatasetsConsistensy();
 }
 

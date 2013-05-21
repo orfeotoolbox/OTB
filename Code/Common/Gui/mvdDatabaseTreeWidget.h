@@ -110,8 +110,6 @@ public slots:
   void OnRenameTriggered();
   void OnCustomContextMenuRequested(const QPoint& pos);
   void OnItemChanged( QTreeWidgetItem* item , int column);
-  void OnRenameDeclined( const QString & previous, const QString & current);
-    
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

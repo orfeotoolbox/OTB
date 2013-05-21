@@ -82,8 +82,6 @@ QStringList
 DatabaseModel
 ::ListAvailableDatasets() const
 {
-  qDebug() << this << " ::ListAvailableDatasets( )";
-  
   QDir cacheDir( I18nApplication::ConstInstance()->GetCacheDir() );
 
   QStringList nameFilters;
@@ -97,15 +95,28 @@ DatabaseModel
 }
 
 /*******************************************************************************/
-QStringList
+StringPairListType
 DatabaseModel
 ::QueryDatasetModels() const
 {
-  qDebug() << this 
-           << " ::QueryDatasetModels( Available Datasets keys: "
-           << m_DatasetModels.keys() <<") ";
+  StringPairListType   list;
+
+  // need to send a list of pairs <alias, id> to know what is the
+  // corresponding model to each alias in the WidgetTree
+  DatasetModelMap::const_iterator it =  m_DatasetModels.begin();
+  while( it != m_DatasetModels.end() )
+    {
+    // store alias <-> name
+    StringPairType spair;
+    spair.first = it.value()->GetAlias();
+    spair.second = it.value()->GetName();
+
+    // insert the pair in the list
+    list.append( spair);
+    ++it;
+    }
   
-  return m_DatasetModels.keys();
+  return list;
 }
 
 /*******************************************************************************/
@@ -144,10 +155,11 @@ DatabaseModel
   assert( model!=NULL );
 
   // Construct DatasetId.
-  DatasetId id( model->GetAlias() );
+  DatasetId id( model->GetName() );
 
   // Find possible previously registerd dataset-model...
   DatasetModelMap::iterator it( m_DatasetModels.find( id ) );
+
   if( it!=m_DatasetModels.end() )
     {
     // ...and destroy it.
@@ -253,7 +265,7 @@ DatabaseModel
       assert( datasetModel!=NULL );
 
       // by default alias == name
-      m_DatasetModels.insert( datasetModel->GetAlias(), datasetModel );
+      m_DatasetModels.insert( datasetModel->GetName(), datasetModel );
       }
     catch( std::exception& exc )
       {
@@ -314,7 +326,7 @@ DatabaseModel
     QDir datasetQDir( 
       I18nApplication::Instance()->GetCacheDir().absolutePath() + 
       "/" + 
-      FindDatasetModel( id )->GetName() 
+      id
       );
     QString datasetDir = datasetQDir.absolutePath();
 
@@ -344,9 +356,9 @@ DatabaseModel
       // release the model relative to 'id'
       ReleaseDatasetModel( id );
 
-      // remove from the map the key
+      // remove the key from the map
       m_DatasetModels.remove( id );
-      
+
       //  notify database changed
       emit DatabaseChanged();
       }
@@ -366,36 +378,13 @@ DatabaseModel
 /*******************************************************************************/
 void
 DatabaseModel
-::OnDatasetRenamed( const QString&  previous, const QString & current)
+::OnDatasetRenamed( const QString&  alias, const QString & id)
 {
-  // replace with the new key if does not exists
-  if ( !m_DatasetModels.contains( current ) )
-    {
-    // get the model relative to the previous key
-    DatasetModel * datasetModel = FindDatasetModel(previous);
+  // get the model relative to the previous key
+  DatasetModel * datasetModel = FindDatasetModel(id);
   
-    // create a new entry in the map
-    m_DatasetModels.insert(current, datasetModel);
-  
-    // remove the old key in the map
-    m_DatasetModels.remove(previous);
-  
-    // update the alias
-    datasetModel->SetAlias( current );
-    }
-  else
-    {
-    // pop up a Dialog widget to warn the user that the name already
-    // exists 
-    QMessageBox msgBox;
-    msgBox.setWindowTitle( tr( "Warning") );
-    msgBox.setText(tr("Dataset %1 already exists. Please Try a different name.").arg( current ) );
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.exec();
-    
-    // decline item rename
-    emit RenameDeclined(previous, current);
-    }
+  // update the alias
+  datasetModel->SetAlias( alias );
 }
 
 } // end namespace 'mvd'

@@ -44,6 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -59,6 +60,7 @@ namespace mvd
 {
 
 class DatabaseTreeWidget;
+class DatasetTreeWidgetItem;
 //
 // Internal classes pre-declaration.
 namespace Ui
@@ -102,7 +104,7 @@ public:
    *
    * \param list List of dataset names.
    */
-  void SetDatasetList( const QStringList& list );
+  void SetDatasetList( const StringPairListType/*QStringList*/& list );
 
   /**
    * \brief Select the current dataset item of the displayed list.
@@ -194,7 +196,7 @@ private slots:
    * \brief Slot called when the current item of the QWidgetTree has
    * changed.
    *
-   * \param current The newly selected QTreeWidgetItem.
+   * \param current The newly selected DatasetTreeWidgetItem.
    * \param previous The previously selected QTreeWidgetItem.
    */
   void on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,

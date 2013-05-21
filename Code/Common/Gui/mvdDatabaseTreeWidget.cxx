@@ -39,6 +39,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAlgorithm.h"
+#include "Gui/mvdDatasetTreeWidgetItem.h"
 
 namespace mvd
 {
@@ -195,8 +196,12 @@ DatabaseTreeWidget::OnItemChanged( QTreeWidgetItem* item , int column)
     {
     if (!item->text(column).isEmpty() )
       {
-      // send a signal with the previous name and the new EditedName
-      emit DatasetRenamed(m_PreviousItemText, item->text(column)  );
+      // dynamic cast to get the id
+      DatasetTreeWidgetItem* dsItem = 
+        dynamic_cast<DatasetTreeWidgetItem *>( item );
+
+      // send the new alias of the dataset / it identifier
+      emit DatasetRenamed(dsItem->text(column), dsItem->GetDatasetId()  );
       }
     else
       {
@@ -210,22 +215,6 @@ DatabaseTreeWidget::OnItemChanged( QTreeWidgetItem* item , int column)
     // set back default item flags
     m_ItemToEdit->setFlags( m_DefaultItemFlags );
     }
-}
-
-/******************************************************************************/
-void
-DatabaseTreeWidget
-::OnRenameDeclined( const QString & previous, const QString & current)
-{
-  // deactivate the edition state to avoid emitting the signal
-  // OnItemChanged 
-  m_EditionActive = false;
-
-  // set back the previous text
-  m_ItemToEdit->setText( 0, previous );
-  
-  // set back default item flags
-  m_ItemToEdit->setFlags( m_DefaultItemFlags );
 }
 
 /******************************************************************************/
@@ -255,7 +244,7 @@ void
 DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
 {
   // get the item
-  QTreeWidgetItem* item = itemAt(pos);
+  DatasetTreeWidgetItem* item = dynamic_cast<DatasetTreeWidgetItem *>( itemAt(pos) );
   
   // if not the root item 
   if ( item && item->parent() ) 
@@ -273,7 +262,7 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
     // use a QSignalMapper to bundle parameterless signals and re-emit
     // them with parameters (QString here)
     QSignalMapper *signalMapperDelete = new QSignalMapper( this );
-    signalMapperDelete->setMapping( deleteNodeChild, item->text(0) );
+    signalMapperDelete->setMapping( deleteNodeChild, item->GetDatasetId() );
     
     QObject::connect( deleteNodeChild , 
                       SIGNAL(triggered()), 
