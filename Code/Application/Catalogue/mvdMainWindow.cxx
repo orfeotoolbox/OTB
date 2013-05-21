@@ -97,7 +97,7 @@ namespace mvd
 /*****************************************************************************/
 MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
-  I18nMainWindow( parent, flags ), 
+  I18nMainWindow( parent, flags ),
   m_UI( new mvd::Ui::MainWindow() ),
   m_ColorDynamicsDock( NULL ),
   m_ColorSetupDock( NULL ),
@@ -111,6 +111,7 @@ MainWindow
   m_CentralTabWidget( NULL )
 {
   m_UI->setupUi( this );
+  setAcceptDrops(true);
 }
 
 /*****************************************************************************/
@@ -144,7 +145,7 @@ MainWindow
   //
   // Done here cause needed to be done once and only once.
   SetControllerModel(
-    m_OtbApplicationsBrowserDock, 
+    m_OtbApplicationsBrowserDock,
     CatalogueApplication::Instance()->GetOTBApplicationsModel()
   );
 
@@ -153,12 +154,12 @@ MainWindow
   // a double click on the tree widget should trigger a signal connected
   // to this MainWindow slot. this slot will be in charge of getting the
   // widget of the application selected, and show it in the
-  // MainWindow centralView.  
-  
+  // MainWindow centralView.
+
   // # Step 1 : get the ApplicationToolBoxWidget
-  ApplicationsToolBox* appWidget = 
-    qobject_cast< ApplicationsToolBox * >( 
-      m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >() 
+  ApplicationsToolBox* appWidget =
+    qobject_cast< ApplicationsToolBox * >(
+      m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >()
     );
   assert( appWidget!=NULL );
 
@@ -397,49 +398,49 @@ MainWindow
 
   if ( vectorImageModel )
     {
-    // 
-    // send the physical point of the clicked point in screen 
+    //
+    // send the physical point of the clicked point in screen
     // vectorImageModel is in charge of pixel information computation
     QObject::connect(
-      m_ImageView->GetImageViewManipulator(), 
-      SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
-      vectorImageModel, 
+      m_ImageView->GetImageViewManipulator(),
+      SIGNAL( PhysicalCursorPositionChanged(double, double) ),
+      vectorImageModel,
       SLOT( OnPhysicalCursorPositionChanged(double, double) )
       );
-  
+
     QObject::connect(
-      GetQuicklookView()->GetImageViewManipulator(), 
-      SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
-      vectorImageModel, 
+      GetQuicklookView()->GetImageViewManipulator(),
+      SIGNAL( PhysicalCursorPositionChanged(double, double) ),
+      vectorImageModel,
       SLOT( OnPhysicalCursorPositionChanged(double, double) )
       );
 
     //
     // connect the statusBar widget to the vectorImage corresponding
-    // signal 
+    // signal
     QObject::connect(
-      vectorImageModel, 
+      vectorImageModel,
       SIGNAL( CurrentIndexUpdated(const QString& ) ),
       m_StatusBarWidget->GetCurrentPixelIndexWidget(),
       SLOT( setText(const QString &) )
       );
 
     QObject::connect(
-      vectorImageModel, 
+      vectorImageModel,
       SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
       m_StatusBarWidget->GetCurrentPixelPhysicalWidget(),
       SLOT( setText(const QString &) )
       );
 
     QObject::connect(
-      vectorImageModel, 
+      vectorImageModel,
       SIGNAL( CurrentGeographicUpdated(const QString& ) ),
       m_StatusBarWidget->GetCurrentPixelGeographicWidget(),
       SLOT( setText(const QString &) )
       );
 
     QObject::connect(
-      vectorImageModel, 
+      vectorImageModel,
       SIGNAL( CurrentRadioUpdated(const QString& ) ),
       m_StatusBarWidget->GetCurrentPixelRadioWidget(),
       SLOT( setText(const QString &) )
@@ -455,7 +456,7 @@ MainWindow
     }
 
   QObject::connect(
-    m_ImageView->GetImageViewManipulator(), 
+    m_ImageView->GetImageViewManipulator(),
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
     m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
@@ -466,7 +467,7 @@ MainWindow
                    SIGNAL( editingFinished() ),
                    this,
                    SLOT( OnUserCoordinatesEditingFinished() )
-    );  
+    );
 
   // scale widget in status bar edited
   QObject::connect(m_StatusBarWidget->GetCurrentScaleWidget(),
@@ -474,7 +475,7 @@ MainWindow
                    this,
                    SLOT( OnUserScaleEditingFinished() )
     );
-  
+
   QObject::connect(this,
                    SIGNAL( UserScaleEditingFinished(const QString&) ),
                    m_ImageView->GetImageViewManipulator(),
@@ -493,54 +494,54 @@ MainWindow
 
   if( vectorImageModel )
     {
-    // 
-    // send the physical point of the clicked point in screen 
+    //
+    // send the physical point of the clicked point in screen
     // vectorImageModel is in charge of pixel information computation
     QObject::disconnect(
-      m_ImageView->GetImageViewManipulator(), 
-      SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
-      vectorImageModel, 
+      m_ImageView->GetImageViewManipulator(),
+      SIGNAL( PhysicalCursorPositionChanged(double, double) ),
+      vectorImageModel,
       SLOT( OnPhysicalCursorPositionChanged(double, double) )
       );
-  
+
     QObject::disconnect(
-      GetQuicklookView()->GetImageViewManipulator(), 
-      SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
-      vectorImageModel, 
+      GetQuicklookView()->GetImageViewManipulator(),
+      SIGNAL( PhysicalCursorPositionChanged(double, double) ),
+      vectorImageModel,
       SLOT( OnPhysicalCursorPositionChanged(double, double) )
       );
 
     //
     // disconnect the statusBar widget to the vectorImage corresponding
-    // signal 
+    // signal
     QObject::disconnect(
-      vectorImageModel, 
+      vectorImageModel,
       SIGNAL( CurrentIndexUpdated(const QString& ) ),
       m_StatusBarWidget->GetCurrentPixelIndexWidget(),
       SLOT( setText(const QString &) )
       );
 
     QObject::disconnect(
-      vectorImageModel, 
+      vectorImageModel,
       SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
       m_StatusBarWidget->GetCurrentPixelPhysicalWidget(),
       SLOT( setText(const QString &) )
       );
 
     QObject::disconnect(
-      vectorImageModel, 
+      vectorImageModel,
       SIGNAL( CurrentGeographicUpdated(const QString& ) ),
       m_StatusBarWidget->GetCurrentPixelGeographicWidget(),
       SLOT( setText(const QString &) )
       );
 
     QObject::disconnect(
-      vectorImageModel, 
+      vectorImageModel,
       SIGNAL( CurrentRadioUpdated(const QString& ) ),
       m_StatusBarWidget->GetCurrentPixelRadioWidget(),
       SLOT( setText(const QString &) )
       );
-    
+
     QObject::disconnect(this,
                         SIGNAL( UserCoordinatesEditingFinished(const QString&) ),
                         vectorImageModel,
@@ -549,7 +550,7 @@ MainWindow
     }
 
   QObject::disconnect(
-    m_ImageView->GetImageViewManipulator(), 
+    m_ImageView->GetImageViewManipulator(),
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
     m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
@@ -561,14 +562,14 @@ MainWindow
                       this,
                       SLOT( OnUserCoordinatesEditingFinished() )
     );
-  
+
   // scale widget in status bar edited
   QObject::disconnect(m_StatusBarWidget->GetCurrentScaleWidget(),
                       SIGNAL( editingFinished() ),
                       this,
                       SLOT( OnUserScaleEditingFinished() )
     );
-  
+
   QObject::disconnect(this,
                       SIGNAL( UserScaleEditingFinished(const QString&) ),
                       m_ImageView->GetImageViewManipulator(),
@@ -848,7 +849,7 @@ MainWindow
 
   //
   // Import the image
-  ImportImage( filename ); 
+  ImportImage( filename );
 }
 
 void
@@ -1010,7 +1011,7 @@ MainWindow
   SetControllerModel( m_ColorDynamicsDock, NULL );
 
   // Unset image-model to color-setup controller.
-  SetControllerModel( m_ColorSetupDock, NULL ); 
+  SetControllerModel( m_ColorSetupDock, NULL );
 
   //
   // VIEWS.
@@ -1090,7 +1091,7 @@ MainWindow
       SLOT( OnSpacingChanged( const SpacingType& ) )
       );
 
-    // Disconnect previously selected quicklook-model from view.   
+    // Disconnect previously selected quicklook-model from view.
     // TODO: Remove quicklook temporary hack by better design.
     QObject::disconnect(
       vectorImageModel,
@@ -1100,7 +1101,7 @@ MainWindow
       SLOT( updateGL()  )
       );
 
-    // Disconnect previously selected quicklook-model from view.   
+    // Disconnect previously selected quicklook-model from view.
     // TODO: Remove quicklook temporary hack by better design.
     QObject::disconnect(
       vectorImageModel,
@@ -1111,7 +1112,7 @@ MainWindow
       );
     }
 
-  // Disconnect the signals from the  
+  // Disconnect the signals from the
   DisconnectStatusBar( model );
 }
 
@@ -1165,7 +1166,7 @@ MainWindow
     // SAT: Using m_TabWidget->index( 0 ) or m_ImageView is equivalent
     // since Qt may use signal & slot names to connect (see MOC .cxx
     // files). Thus, using m_ImageView saves one indirection call.
-    
+
     QObject::connect(
       vectorImageModel,
       SIGNAL( SettingsUpdated() ),
@@ -1240,13 +1241,13 @@ MainWindow
 
 #ifdef OTB_WRAP_QT
   // need to get the controller to request the application widget
-  ApplicationsToolBoxController * controller = 
+  ApplicationsToolBoxController * controller =
     m_OtbApplicationsBrowserDock->findChild<ApplicationsToolBoxController *>();
 
   //
-  // add the application in a tab 
+  // add the application in a tab
   // TODO : check if this application is already opened ???
-  m_CentralTabWidget->addTab(controller->GetSelectedApplicationWidget(appName), 
+  m_CentralTabWidget->addTab(controller->GetSelectedApplicationWidget(appName),
                               docName);
 
   // no checking needed here, if index is not available nothing is
@@ -1254,7 +1255,7 @@ MainWindow
   m_CentralTabWidget->setCurrentIndex( m_CentralTabWidget->count() - 1 );
 
   // set tab icon
-  m_CentralTabWidget->setTabIcon( m_CentralTabWidget->currentIndex(), 
+  m_CentralTabWidget->setTabIcon( m_CentralTabWidget->currentIndex(),
                                    QIcon(":/images/process_icon")  );
 
   //
@@ -1287,9 +1288,9 @@ MainWindow
 {
   // get current tab index
   int currentIndex = m_CentralTabWidget->currentIndex();
-  
+
   // close tab and delete its widget
-  OnTabCloseRequested( currentIndex );  
+  OnTabCloseRequested( currentIndex );
 }
 
 
@@ -1305,7 +1306,7 @@ MainWindow
     //
     //
     QWidget * widgetToDelete = m_CentralTabWidget->widget(index);
-    
+
     //
     // remove the tab
     m_CentralTabWidget->removeTab(index);
@@ -1329,10 +1330,10 @@ MainWindow
   // its process and has an output image parameter. The 'outfname' in
   // parameters is the output filename. This slot may launch or not,
   // depending on the app settings, the import of the 'outfname' to the
-  // catalog database. 
-  
+  // catalog database.
+
   // import the result image into the database
-  ImportImage( outfname );   
+  ImportImage( outfname );
 }
 
 /*****************************************************************************/
@@ -1341,7 +1342,7 @@ MainWindow
 ::OnUserCoordinatesEditingFinished()
 {
   // get the text and send it to the vector image model to be
-  // processed 
+  // processed
   QString coord = m_StatusBarWidget->GetCurrentPixelIndexWidget()->text();
   emit UserCoordinatesEditingFinished(coord);
 
@@ -1355,7 +1356,7 @@ MainWindow
 ::OnUserScaleEditingFinished()
 {
   // get the text and send it to the view manipulator to be
-  // processed 
+  // processed
   QString scale = m_StatusBarWidget->GetCurrentScaleWidget()->text();
   emit UserScaleEditingFinished(scale);
 
@@ -1363,5 +1364,27 @@ MainWindow
   qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
 }
 
+void
+MainWindow
+::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat("text/uri-list"))
+        event->acceptProposedAction();
+}
+
+void MainWindow
+::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> urls = event->mimeData()->urls();
+    if (urls.isEmpty())
+        return;
+    QString fileName = urls.first().toLocalFile();
+    if (fileName.isEmpty())
+        return;
+    else
+      {
+      ImportImage(fileName);
+      }
+}
 
 } // end namespace 'mvd'

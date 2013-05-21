@@ -118,17 +118,17 @@ signals:
   void UserZoomIn();
 
   void UserZoomOut();
-  
+
   void UserZoomExtent();
 
   void UserZoomFull();
-  
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
-  
+
   void ImportImage( const QString & filename );
 
   //
@@ -137,6 +137,9 @@ protected:
   void closeEvent( QCloseEvent* event );
 
 
+  // Drag and drop image from a file explorer
+  void dragEnterEvent(QDragEnterEvent *event);
+  void dropEvent(QDropEvent *event);
 //
 // Protected attributes.
 protected:
