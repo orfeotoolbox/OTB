@@ -70,7 +70,7 @@ int otbMulti3DMapToDEMFilter(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   
-  int mapSize=(argc-6)/2;
+  unsigned int mapSize=(argc-6)/2;
 
   
   MapReaderListType::Pointer mapReaderList=MapReaderListType::New();
