@@ -303,11 +303,15 @@ void
 DatabaseModel
 ::OnDatasetToDeleteSelected( const QString&  id)
 {
+  // get the datasetModel to be deleted
+  DatasetModel * model = FindDatasetModel( id );
+  assert (model!=NULL);
+
   // pop up a Dialog widget to confirm the user choice
   QMessageBox msgBox;
   msgBox.setWindowTitle( tr( "Warning") );
   msgBox.setText(tr("You are about to remove the dataset : \n %1 \n\n"
-                    " Are your sure ? ").arg(id) );
+                    " Are your sure ? ").arg( model->GetAlias() ) );
   msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
   msgBox.setDefaultButton(QMessageBox::No);
   int ret = msgBox.exec();
@@ -319,7 +323,7 @@ DatabaseModel
 
     // if current selected item is removed, make the TreeWidget
     // focusing on the root item
-    if ( FindDatasetModel( id ) == GetSelectedDatasetModel() )
+    if (model  == GetSelectedDatasetModel() )
       {
       // set the Tree browser to point on nothing
       emit CurrentSelectedItemDeleted();
