@@ -240,7 +240,6 @@ I18nMainWindow
     }
 
   I18nApplication::Instance()->MakeCacheDir( dir.path() );
-  I18nApplication::Instance()->MakeResultCacheDir( dir.path() );
 }
 
 /*****************************************************************************/

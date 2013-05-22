@@ -306,25 +306,31 @@ private slots:
   void on_action_OpenImage_triggered();
 
   /**
-   * \brief Qt auto-connected slot which is called when Zoom In button
+   * \brief Qt auto-connected slot which is called when
+   * 'File/Preferences' menu action is activated.
+   */
+  void on_action_Preferences_activated();
+
+  /**
+   * \brief Qt auto-connected slot which is called when zoom-in button
    * is pressed.
    */
   void on_action_ZoomIn_triggered();
 
   /**
-   * \brief Qt auto-connected slot which is called when Zoom Out button
+   * \brief Qt auto-connected slot which is called when zoom-out button
    * is pressed.
    */
   void on_action_ZoomOut_triggered();
 
   /**
-   * \brief Qt auto-connected slot which is called when Zoom Extent button
+   * \brief Qt auto-connected slot which is called when zoom-extent button
    * is pressed.
    */
   void on_action_ZoomExtent_triggered();
 
   /**
-   * \brief Qt auto-connected slot which is called when Zoom Full button
+   * \brief Qt auto-connected slot which is called when zoom-full button
    * is pressed.
    */
   void on_action_ZoomFull_triggered();

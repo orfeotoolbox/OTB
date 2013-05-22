@@ -67,9 +67,9 @@
 #include "Gui/mvdQuicklookViewManipulator.h"
 #include "Gui/mvdStatusBarWidget.h"
 #include "Gui/mvdTaskProgressDialog.h"
-
 //
 #include "mvdCatalogueApplication.h"
+#include "mvdPreferencesDialog.h"
 
 namespace mvd
 {
@@ -871,6 +871,17 @@ MainWindow
   ImportImage( filename );
 }
 
+/*****************************************************************************/
+void
+MainWindow
+::on_action_Preferences_activated()
+{
+  PreferencesDialog prefDialog( this );
+
+  prefDialog.exec();
+}
+
+/*****************************************************************************/
 void
 MainWindow
 ::on_action_ZoomIn_triggered()
@@ -881,7 +892,7 @@ MainWindow
   qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
 }
 
-
+/*****************************************************************************/
 void
 MainWindow
 ::on_action_ZoomOut_triggered()
@@ -892,7 +903,7 @@ MainWindow
   qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
 }
 
-
+/*****************************************************************************/
 void
 MainWindow
 ::on_action_ZoomExtent_triggered()
@@ -903,7 +914,7 @@ MainWindow
   qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
 }
 
-
+/*****************************************************************************/
 void
 MainWindow
 ::on_action_ZoomFull_triggered()
@@ -913,7 +924,6 @@ MainWindow
   // update the Quicklook
   qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
 }
-
 
 /*****************************************************************************/
 void

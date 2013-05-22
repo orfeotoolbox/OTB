@@ -195,7 +195,6 @@ public:
    * it was already existing.
    */
   bool MakeCacheDir( const QString& cacheDirStr );
-  bool MakeResultCacheDir( const QString& cacheDirStr );
 
   //
   // APPLICATION SETTINGS.
@@ -229,6 +228,10 @@ public:
   static bool IsCacheDirValid( const QString& path );
 
   /**
+   */
+  static bool IsDirValid( const QString& path );
+
+  /**
    * \brief Make directory tree in given path.
    *
    * Throws mvd::SystemError exception if sub-directory tree could not
@@ -237,10 +240,10 @@ public:
    * \param path Location where to create sub-directory tree.
    * \param tree Sub-directory tree path. E.g.: 'level_1/level_2'.
    *
-   * \return true if sub-directory tree is newly created or false if
-   * it was already existing.
+   * \return path if sub-directory tree is newly created or an null
+   * string if it is already existing.
    */
-  static bool MakeDirTree( const QString& path, const QString& tree );
+  static QString MakeDirTree( const QString& path, const QString& tree );
 
   /**
    * \brief Construct a consistent Dataset path-name.

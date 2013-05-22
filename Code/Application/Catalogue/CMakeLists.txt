@@ -3,17 +3,20 @@
 set( Catalogue_SOURCES
        mvdCatalogueApplication.cxx
        mvdMainWindow.cxx
+       mvdPreferencesDialog.cxx
 )
 
 # Headers for classes with Q_OBJECT macro (needs to go to Qt moc)
 set( Catalogue_HEADERS_MOC
        mvdCatalogueApplication.h
        mvdMainWindow.h
+       mvdPreferencesDialog.h
 )
 
 # Qt designer UI files
 set( Catalogue_FORMS
        mvdMainWindow.ui
+       mvdPreferencesDialog.ui
 )
 
 # Qt resources included in executable
