@@ -24,7 +24,6 @@
 #include "itkImageRegionConstIterator.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "otbStreamingMinMaxVectorImageFilter.h"
 #include "itkImageRegionSplitter.h"
 #include "otbObjectList.h"
 
@@ -45,8 +44,16 @@ enum CellFusionMode {
 /** \class Multi3DMapToDEMFilter
  *  \brief Project N 3D images (long,lat,alti) into a regular DEM in the chosen map projection system.
  *
- *  This filter uses a group of N 3D points images and project then onto a regular DEM grid.
- *  The 3D coordinates (sorted by band) are : longitude , latitude (in degree, wrt WGS84) and altitude (in meters)
+ *  This filter uses a group of N 3D points images and project then onto a regular DEM grid parametrized by DEMGridStep (in meter).
+ *  The 3D coordinates (sorted by band) of input map  are : longitude , latitude (in degree, wrt WGS84) and altitude (in meters)
+ *
+ * DEM cell fusion strategy available are :
+ * - 0 MIN : we keep the minimum altitide
+ * - 1 MAX : we keep the maximum altitude
+ * - 2 MEAN : mean is computed
+ * - 3 ACC : returns cell count (usefull to create mask from output)
+ *
+ *  empty cell are fileld with the NoDataValue
  *
  *  \sa FineRegistrationImageFilter
  *  \sa MultiDisparityMapTo3DFilter
@@ -105,7 +112,6 @@ public:
     <unsigned int,
      itk::ImageRegionConstIterator<MaskImageType> >      MaskIteratorList;
   
-  typedef otb::StreamingMinMaxVectorImageFilter<InputMapType> StreamingMinMaxVImageFilterType;
 
   typedef double ValueType;
   typedef itk::VariableLengthVector<ValueType> MeasurementType;
