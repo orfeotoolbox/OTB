@@ -126,7 +126,7 @@ DatabaseBrowserWidget
     // was it the selected item ?
     if (currentItemId == (*it).second )
       {
-      // ...as this child item as currentItem
+      // ...add this child item as currentItem
       GetDatabaseTreeWidget()->setCurrentItem( 
         new DatasetTreeWidgetItem( (*it).second, m_DatasetRootItem, QStringList( (*it).first ) )
         );
