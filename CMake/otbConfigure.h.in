@@ -62,6 +62,9 @@
 /* OpenJpeg */
 #cmakedefine OTB_USE_JPEG2000
 
+/* OpenCV */
+#cmakedefine OTB_USE_OPENCV
+
 /* SiftFast */
 #cmakedefine OTB_USE_SIFTFAST
 
@@ -80,7 +83,7 @@
 /* Path of OTB binaries and OTB install */
 #define OTB_CONFIG "@OTB_BINARY_DIR@"
 
-/* Deprecated Managment */
+/* Deprecated Management */
 #cmakedefine OTB_USE_DEPRECATED
 
 #cmakedefine CHECK_HDF4OPEN_SYMBOL
