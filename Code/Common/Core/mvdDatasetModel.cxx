@@ -258,13 +258,10 @@ DatasetModel
   BuildContext* buildContext = static_cast< BuildContext* >( context );
 
   // Create directory structure, if needed.
-  QString path(
-    I18nApplication::MakeDirTree(
-      buildContext->m_Path,
-      buildContext->m_Name
-    )
+  bool isEmpty = I18nApplication::MakeDirTree(
+    buildContext->m_Path,
+    buildContext->m_Name
   );
-  bool isEmpty = path.isNull();
 
   // Access working directory.
   QDir workingDir( buildContext->m_Path );

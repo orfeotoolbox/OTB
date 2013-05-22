@@ -78,9 +78,9 @@ I18nApplication
 }
 
 /*******************************************************************************/
-QString
+bool
 I18nApplication
-::MakeDirTree( const QString& path, const QString& tree )
+::MakeDirTree( const QString& path, const QString& tree, QDir* dir )
 {
   QDir pathDir( path );
 
@@ -95,7 +95,7 @@ I18nApplication
 
   QDir treeDir( pathDir.filePath( tree ) );
   if( treeDir.exists() )
-    return QString();
+    return false;
 
   if( !pathDir.mkpath( tree ) )
     throw SystemError(
@@ -113,7 +113,12 @@ I18nApplication
       )
     );
 
-  return pathDir.path();
+  if( dir!=NULL )
+    {
+    *dir = pathDir;
+    }
+
+  return true;
 }
 
 /*****************************************************************************/
@@ -265,33 +270,26 @@ I18nApplication
 
   //
   // Create cache-dir.
-  QString cacheDirStr(
-    I18nApplication::MakeDirTree(
-      homeDir.path(),
-      I18nApplication::DEFAULT_CACHE_DIR_NAME
-    )
+  bool isNew = I18nApplication::MakeDirTree(
+    homeDir.path(),
+    I18nApplication::DEFAULT_CACHE_DIR_NAME,
+    &m_CacheDir
   );
-
-  QDir cacheDir( cacheDirStr );
 
   //
   // Remember cache-dir.
-  m_CacheDir = cacheDir;
-
   StoreSettingsKey( "cacheDir", QDir::cleanPath( m_CacheDir.path() ) );
 
   //
   // Construct result-dir path.
-  QDir resultDir( cacheDir );
-  QString resultDirStr(
-    I18nApplication::MakeDirTree(
-      cacheDir.path(),
-      I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME )
+  I18nApplication::MakeDirTree(
+    m_CacheDir.path(),
+    I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME
   );
 
   //
   // Result.
-  return !cacheDirStr.isNull();
+  return isNew;
 }
 
 /*******************************************************************************/
