@@ -102,9 +102,9 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   oss <<".code";
   app->AddParameter(ParameterType_Int, oss.str(), "EPSG Code");
   app->SetParameterDescription(oss.str(),"See www.spatialreference.org to find which EPSG code is associated to your projection");
-  app->SetDefaultParameterInt(oss.str(), 32631);
+  app->SetDefaultParameterInt(oss.str(), 4326);
 
-  app->SetParameterString(key, "epsg");
+  app->SetParameterString(key, "utm");
 }
 
 /**
