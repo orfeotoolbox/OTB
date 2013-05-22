@@ -1260,6 +1260,14 @@ MainWindow
 
   // Assign image-model to color-setup controller.
   SetControllerModel( m_ColorSetupDock, vectorImageModel );
+
+  //
+  // TOOLBAR.
+  //
+  m_UI->action_ZoomIn->setEnabled( vectorImageModel!=NULL );
+  m_UI->action_ZoomOut->setEnabled( vectorImageModel!=NULL );
+  m_UI->action_ZoomExtent->setEnabled( vectorImageModel!=NULL );
+  m_UI->action_ZoomFull->setEnabled( vectorImageModel!=NULL );
 }
 
 /*****************************************************************************/

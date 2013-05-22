@@ -65,6 +65,9 @@
   </widget>
   <widget class="QStatusBar" name="m_StatusBar"/>
   <widget class="QToolBar" name="m_ToolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="windowTitle">
     <string>Main toolbar</string>
    </property>
@@ -226,6 +229,9 @@
    </property>
   </action>
   <action name="action_ZoomIn">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="mvdMainWindow.qrc">
      <normaloff>:/icons/action_ZoomIn_Icon</normaloff>:/icons/action_ZoomIn_Icon</iconset>
@@ -235,6 +241,9 @@
    </property>
   </action>
   <action name="action_ZoomOut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="mvdMainWindow.qrc">
      <normaloff>:/icons/action_ZoomOut_Icon</normaloff>:/icons/action_ZoomOut_Icon</iconset>
@@ -244,6 +253,9 @@
    </property>
   </action>
   <action name="action_ZoomExtent">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="mvdMainWindow.qrc">
      <normaloff>:/icons/action_ZoomExtent_Icon</normaloff>:/icons/action_ZoomExtent_Icon</iconset>
@@ -253,6 +265,9 @@
    </property>
   </action>
   <action name="action_ZoomFull">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="mvdMainWindow.qrc">
      <normaloff>:/icons/action_ZoomFull_Icon</normaloff>:/icons/action_ZoomFull_Icon</iconset>
