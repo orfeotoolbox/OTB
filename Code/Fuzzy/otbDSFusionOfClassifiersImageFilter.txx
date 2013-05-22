@@ -222,6 +222,16 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
       } // END if (classLabelk != m_LabelForNoDataPixels)
     }
 
+  /* ************************************************************************************************ */
+  /* ************************************************************************************************ */
+  // If ALL the classifiers give the same result, then there is no need to process the DS combination
+  typename LabelMassMapType::iterator itMapMOBClk;
+  if (mapJointMassesStepI.size() == 1)
+    {
+    itMapMOBClk = mapJointMassesStepI.begin();
+    classLabelk = itMapMOBClk->first;
+    return classLabelk;
+    }
 
   /* ************************************************************************************************ */
   /* ************************************************************************************************ */
@@ -233,8 +243,6 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
   //
   // -If this label is NOT unique, then the corresponding classifiers are in conflict and the output
   //  pixel is set to the m_LabelForUndecidedPixels value
-
-  typename LabelMassMapType::iterator itMapMOBClk;
 
   if (mapOfLabelsWithMassOne.size() > 0)
     {
