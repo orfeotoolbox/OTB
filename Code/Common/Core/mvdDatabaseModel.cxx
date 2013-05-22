@@ -162,6 +162,12 @@ DatabaseModel
 
   if( it!=m_DatasetModels.end() )
     {
+    // BUGFIX: Clear selected dataset-model if it is to be deleted below.
+    if( it.value()==m_SelectedDatasetModel )
+      {
+      SetSelectedDatasetModel( NULL );
+      }
+
     // ...and destroy it.
     delete it.value();
     it.value() = NULL;

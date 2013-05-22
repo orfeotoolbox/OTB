@@ -117,7 +117,7 @@ public:
   /**
    */
   StringPairListType QueryDatasetModels() const;
-  
+
   /**
    */
   inline
