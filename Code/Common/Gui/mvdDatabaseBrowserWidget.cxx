@@ -91,6 +91,18 @@ DatabaseBrowserWidget
 {
   qDebug() << this << "::SetDatasetList(" << list << ")";
 
+  // get the currentItem Id if any selected.
+  // since all the TreeWidgetItem are deleted next, need to remember
+  // it in order to set it back
+  QString currentItemId = QString();
+
+  DatasetTreeWidgetItem* selectedItem = 
+    dynamic_cast<DatasetTreeWidgetItem*>( GetDatabaseTreeWidget()->currentItem() );
+  if (selectedItem)
+    {
+    currentItemId = selectedItem->GetDatasetId();
+    }
+  
   // Remove all previously stored dataset child items.
   while( m_DatasetRootItem->childCount()>0 )
     {
@@ -111,8 +123,20 @@ DatabaseBrowserWidget
     {
     // qDebug() << "+" << *it;
 
-    // ...as child items.
-    new DatasetTreeWidgetItem( (*it).second, m_DatasetRootItem, QStringList( (*it).first ) );
+    // was it the selected item ?
+    if (currentItemId == (*it).second )
+      {
+      // ...as this child item as currentItem
+      GetDatabaseTreeWidget()->setCurrentItem( 
+        new DatasetTreeWidgetItem( (*it).second, m_DatasetRootItem, QStringList( (*it).first ) )
+        );
+      }
+    else
+      {
+      // ...as child items.
+      new DatasetTreeWidgetItem( (*it).second, m_DatasetRootItem, QStringList( (*it).first ) );
+      }
+    
     }
 
   // // A. If there is no previously stored dataset child item:
