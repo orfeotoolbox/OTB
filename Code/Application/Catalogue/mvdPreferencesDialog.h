@@ -141,6 +141,16 @@ private slots:
    */
   void on_buttonBox_accepted();
 
+
+  void on_srtmCheckbox_clicked();
+
+  void on_geoidCheckbox_clicked();
+
+  void on_srtmButton_clicked();
+
+  void on_geoidButton_clicked();
+
+
 };
 
 } // end namespace 'mvd'

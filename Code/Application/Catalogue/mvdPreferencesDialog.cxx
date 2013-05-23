@@ -77,6 +77,28 @@ PreferencesDialog
     {
     m_UI->cacheDirPathLineEdit->setText( settings.value( "cacheDir" ).toString() );
     }
+  if(settings.contains("srtmDir"))
+    {
+    m_UI->srtmLineEdit->setText(settings.value("srtmDir").toString());
+    }
+  if(settings.contains("srtmDirActive"))
+    {
+    m_UI->srtmCheckbox->setChecked(settings.value("srtmDirActive").toBool());
+    m_UI->srtmLineEdit->setEnabled(true);
+    m_UI->srtmButton->setEnabled(true);
+    }
+  if(settings.contains("geoidPath"))
+    {
+    m_UI->geoidLineEdit->setText(settings.value("geoidPath").toString());
+    }
+  if(settings.contains("geoidPathActive"))
+    {
+    m_UI->geoidCheckbox->setChecked(settings.value("geoidPathActive").toBool());
+    m_UI->geoidLineEdit->setEnabled(true);
+    m_UI->geoidButton->setEnabled(true);
+    }
+
+
   
   // Connect centralWidget manipulator to Ql renderer when viewportRegionChanged
   QObject::connect(
@@ -155,7 +177,73 @@ PreferencesDialog
     }
 #endif
 
+  I18nApplication::Instance()->StoreSettingsKey( "srtmDir", QDir::cleanPath( m_UI->srtmLineEdit->text() ) );
+  I18nApplication::Instance()->StoreSettingsKey( "geoidPath", m_UI->geoidLineEdit->text() );
+  I18nApplication::Instance()->StoreSettingsKey( "srtmDirActive", this->m_UI->srtmCheckbox->isChecked() );
+  I18nApplication::Instance()->StoreSettingsKey( "geoidPathActive", this->m_UI->geoidCheckbox->isChecked() );
+
   close();
+}
+
+
+void PreferencesDialog
+::on_srtmCheckbox_clicked()
+{
+  this->m_UI->srtmLineEdit->setEnabled(this->m_UI->srtmCheckbox->isChecked());
+  this->m_UI->srtmButton->setEnabled(this->m_UI->srtmCheckbox->isChecked());
+}
+
+void PreferencesDialog
+::on_geoidCheckbox_clicked()
+{
+  this->m_UI->geoidLineEdit->setEnabled(this->m_UI->geoidCheckbox->isChecked());
+  this->m_UI->geoidButton->setEnabled(this->m_UI->geoidCheckbox->isChecked());
+}
+
+
+void PreferencesDialog
+::on_srtmButton_clicked()
+{
+  while (true)
+    {
+    QString srtmDirStr = QFileDialog::getExistingDirectory(
+        this,
+        tr("Select the directory containing SRTM tiles."),
+        QDir::homePath());
+    if (srtmDirStr.isEmpty())
+      { // User push default button => don't modify the value
+      break;
+      }
+    else
+      { // User select something, test if it is correct
+        QDir displayedDir (srtmDirStr);
+        m_UI->srtmLineEdit->setText(displayedDir.absolutePath());
+        break;
+      }
+    }
+}
+
+
+void PreferencesDialog
+::on_geoidButton_clicked()
+{
+  while (true)
+    {
+    QString geoidStr = QFileDialog::getOpenFileName(
+        this,
+        tr("Select a geoid file."),
+        QDir::homePath());
+    if (geoidStr.isEmpty())
+      { // User push default button => don't modify the value
+      break;
+      }
+    else
+      { // User select something, test if it is correct
+        QDir displayedDir (geoidStr);
+        m_UI->geoidLineEdit->setText(displayedDir.absolutePath());
+        break;
+      }
+    }
 }
 
 /*******************************************************************************/
