@@ -34,15 +34,19 @@
 
 //Estimator
 #include "otbMachineLearningModelFactory.h"
-#include "otbKNearestNeighborsMachineLearningModel.h"
-#include "otbRandomForestsMachineLearningModel.h"
-#include "otbSVMMachineLearningModel.h"
+
+#ifdef OTB_USE_OPENCV
+# include "otbKNearestNeighborsMachineLearningModel.h"
+# include "otbRandomForestsMachineLearningModel.h"
+# include "otbSVMMachineLearningModel.h"
+# include "otbBoostMachineLearningModel.h"
+# include "otbDecisionTreeMachineLearningModel.h"
+# include "otbGradientBoostedTreeMachineLearningModel.h"
+# include "otbNormalBayesMachineLearningModel.h"
+# include "otbNeuralNetworkMachineLearningModel.h"
+#endif
+
 #include "otbLibSVMMachineLearningModel.h"
-#include "otbBoostMachineLearningModel.h"
-#include "otbDecisionTreeMachineLearningModel.h"
-#include "otbGradientBoostedTreeMachineLearningModel.h"
-#include "otbNormalBayesMachineLearningModel.h"
-#include "otbNeuralNetworkMachineLearningModel.h"
 
 // Statistic XML Reader
 #include "otbStatisticsXMLFileReader.h"
@@ -117,16 +121,19 @@ public:
   // Machine Learning models
   typedef otb::MachineLearningModelFactory<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> MachineLearningModelFactoryType;
   typedef MachineLearningModelFactoryType::MachineLearningModelTypePointer ModelPointerType;
+  
+#ifdef OTB_USE_OPENCV
   typedef otb::RandomForestsMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> RandomForestType;
   typedef otb::KNearestNeighborsMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> KNNType;
   typedef otb::SVMMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> SVMType;
-  typedef otb::LibSVMMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> LibSVMType;
   typedef otb::BoostMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> BoostType;
   typedef otb::DecisionTreeMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> DecisionTreeType;
   typedef otb::GradientBoostedTreeMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> GradientBoostedTreeType;
   typedef otb::NeuralNetworkMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> NeuralNetworkType;
   typedef otb::NormalBayesMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> NormalBayesType;
-
+#endif
+  typedef otb::LibSVMMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> LibSVMType;
+  
   // Estimate performance on validation sample
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType, LabelListSampleType> ConfusionMatrixCalculatorType;
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType ConfusionMatrixType;
@@ -152,6 +159,7 @@ private:
   void LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc);
 
   void InitLibSVMParams();
+#ifdef OTB_USE_OPENCV
   void InitBoostParams();
   void InitSVMParams();
   void InitDecisionTreeParams();
@@ -160,8 +168,10 @@ private:
   void InitNormalBayesParams();
   void InitRandomForestsParams();
   void InitKNNParams();
-
+#endif
+  
   void TrainLibSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
+#ifdef OTB_USE_OPENCV
   void TrainBoost(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
   void TrainSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
   void TrainDecisionTree(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
@@ -170,6 +180,7 @@ private:
   void TrainNormalBayes(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
   void TrainRandomForests(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
   void TrainKNN(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
+#endif
 
   void Classify(ListSampleType::Pointer validationListSample, LabelListSampleType::Pointer predictedList);
 

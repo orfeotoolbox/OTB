@@ -101,30 +101,16 @@ namespace Wrapper
     //Group LibSVM
     InitLibSVMParams();
 
-    //Group SVM (openCV)
+#ifdef OTB_USE_OPENCV
     InitSVMParams();
-
-    //Group Boost
     InitBoostParams();
-
-    //Group Decision Tree
     InitDecisionTreeParams();
-
-    //Group Gradient Boosted Tree
     InitGradientBoostedTreeParams();
-
-    //Group Neural Network
     InitNeuralNetworkParams();
-
-    //Group Normal Bayes
     InitNormalBayesParams();
-
-    //Group Random Forest
     InitRandomForestsParams();
-
-    //Group KNN
     InitKNNParams();
-
+#endif
 
     AddRANDParameter();
     // Doc example parameter settings
@@ -394,6 +380,7 @@ namespace Wrapper
       {
       TrainLibSVM(trainingListSample, trainingLabeledListSample);
       }
+#ifdef OTB_USE_OPENCV
     else if (classifierType == "svm")
       {
       TrainSVM(trainingListSample, trainingLabeledListSample);
@@ -426,6 +413,7 @@ namespace Wrapper
       {
       TrainKNN(trainingListSample, trainingLabeledListSample);
       }
+#endif
 
     //--------------------------
     // Performances estimation

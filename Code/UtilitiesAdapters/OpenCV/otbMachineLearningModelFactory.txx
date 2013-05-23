@@ -17,15 +17,18 @@
 =========================================================================*/
 #include "otbMachineLearningModelFactory.h"
 
+#ifdef OTB_USE_OPENCV
 //#include "otbKNearestNeighborsMachineLearningModelFactory.h"
 #include "otbRandomForestsMachineLearningModelFactory.h"
 #include "otbSVMMachineLearningModelFactory.h"
-#include "otbLibSVMMachineLearningModelFactory.h"
 #include "otbBoostMachineLearningModelFactory.h"
 #include "otbNeuralNetworkMachineLearningModelFactory.h"
 #include "otbNormalBayesMachineLearningModelFactory.h"
 #include "otbDecisionTreeMachineLearningModelFactory.h"
 #include "otbGradientBoostedTreeMachineLearningModelFactory.h"
+#endif
+#include "otbLibSVMMachineLearningModelFactory.h"
+
 #include "itkMutexLockHolder.h"
 
 
@@ -85,6 +88,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
 {
   itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
 
+#ifdef OTB_USE_OPENCV
   // KNN Format for OTB
   //itk::ObjectFactoryBase::RegisterFactory(KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
@@ -95,6 +99,8 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
   RegisterFactory(NormalBayesMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+#endif
+
 }
 
 template <class TInputValue, class TOutputValue>
