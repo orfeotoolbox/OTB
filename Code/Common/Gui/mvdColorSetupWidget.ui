@@ -36,7 +36,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>&lt;span style=&quot;color:#FFFFFF;background-color:#000000&quot;&gt;&amp;nbsp;&lt;b&gt;G&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
+          <string>&lt;span style=&quot;color:#EEEEEE;background-color:#111111&quot;&gt;&amp;nbsp;&lt;b&gt;G&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
          </property>
         </widget>
        </item>
@@ -301,5 +301,198 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>whiteComboBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>95</x>
+     <y>162</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>wLeftArrow</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>41</x>
+     <y>162</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>wLabel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>19</x>
+     <y>162</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>bLabel</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>18</x>
+     <y>129</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>bLeftArrow</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>40</x>
+     <y>129</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>blueComboBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>95</x>
+     <y>129</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>gLabel</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>19</x>
+     <y>96</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>greenLeftArrow</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>41</x>
+     <y>96</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>greenComboBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>95</x>
+     <y>96</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>rLabel</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>18</x>
+     <y>63</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>rLeftArrow</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>40</x>
+     <y>63</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>redComboBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>95</x>
+     <y>63</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
