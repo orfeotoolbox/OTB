@@ -223,9 +223,6 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
   identifier.replace("{", "");
   identifier.replace("}", "");
 
-  // default output fname
-  QString outfname = cacheDir + "/result/"+ m_Application->GetName()+"_"+identifier+".tif";
-
   //
   // get the OTB application widget layout
   QLayout * layout = widgets->layout();
@@ -240,6 +237,12 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
     
     if (outParam)
       {
+      // generate a default output fname for the current
+      // OutputImageParameter 
+      QString outfname = 
+        app->GetResultsDir().absolutePath() + "/"+ m_Application->GetName()+"_"+identifier+".tif";
+
+      // use it
       outParam->SetFileName(outfname);
       outParam->UpdateGUI();
       } // else is it a {Group/Choice}Parameter Widget containing
@@ -257,6 +260,12 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
         {
         if (*it)
           {
+          // generate a default output fname for the current
+          // OutputImageParameter 
+          QString outfname = 
+            app->GetResultsDir().absolutePath() + "/"+ m_Application->GetName()+"_"+identifier+".tif";
+
+          // use the outfname
           (*it)->SetFileName(outfname);
           (*it)->UpdateGUI();
           }
