@@ -41,11 +41,13 @@
 #include "otbStandardOneLineFilterWatcher.h"
 #include "otbGeoInformationConversion.h"
 #include "otbCoordinateToName.h"
+#include "otbDEMHandler.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAlgorithm.h"
 #include "mvdQuicklookModel.h"
+
 
 
 namespace mvd
@@ -886,7 +888,16 @@ VectorImageModel
       {
       PointType wgs84;
       wgs84 = GetGenericRSTransform()->TransformPoint(point);
-      ossGeographic <<"WGS84 : [long : "<<wgs84[0] << " , lat : " << wgs84[1]<<"]";
+      ossGeographic <<"WGS84 : [long : "<<wgs84[0] << " , lat : " << wgs84[1];
+
+      double elev = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(wgs84[0],wgs84[1]);
+
+      if(elev > -32768)
+        {
+        ossGeographic<<", "<<elev;
+        }
+
+      ossGeographic<<"]";
       }
       
     //
