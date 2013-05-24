@@ -162,7 +162,7 @@ public:
    /** compute
     *  Set DEM extent using 3DMap 'index' , if index =-1 union of all input Map extent is done
      */
-    void SetOutputParametersFrom3DMap(int index);
+    void SetOutputParametersFrom3DMap(int index=-1);
 
 
     itkSetMacro(OutputOrigin, OriginType);
@@ -180,6 +180,9 @@ public:
     itkSetMacro(OutputSpacing, SpacingType);
     itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
+    /** Projection REf */
+    itkSetMacro(ProjectionRef, std::string);
+    itkGetConstReferenceMacro(ProjectionRef, std::string);
 
 
    /** Set keywordlist of the 3D map  'index' */

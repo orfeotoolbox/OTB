@@ -159,7 +159,7 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GetDEMOutput()
 }
 
 template<class T3DImage, class TMaskImage, class TOutputDEMImage>
-void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputParametersFrom3DMap(int index=-1)
+void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputParametersFrom3DMap(int index)
 {
   if (static_cast<unsigned int>((2 * (index + 1))) > this->GetNumberOfInputs())
      {
@@ -323,17 +323,16 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateOutpu
     }
   //Superclass::GenerateOutputInformation();
 
-   /*if(!m_MapProjection.IsNull()  && !m_MapProjection->GetWkt().empty())
+   if(!m_ProjectionRef.empty())
      {
      // fill up the metadata information for ProjectionRef
      itk::MetaDataDictionary&  dict          = this->GetOutput()->GetMetaDataDictionary();
-     std::string               projectionRef = m_MapProjection->GetWkt();
-     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
+     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, m_ProjectionRef);
 
      // Fill the GenericRSTransform with those information
-     th outputPtr->is->SetOutputProjectionRef(projectionRef);
+     //th outputPtr->is->SetOutputProjectionRef(projectionRef);
 
-     }*/
+     }
   /*if(!m_ProjectionRef.empty())
     {
       outputPtr->SetProjectionRef(m_ProjectionRef);
