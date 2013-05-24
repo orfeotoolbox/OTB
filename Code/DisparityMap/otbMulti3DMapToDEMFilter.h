@@ -48,10 +48,10 @@ enum CellFusionMode {
  *  The 3D coordinates (sorted by band) of input map  are : longitude , latitude (in degree, wrt WGS84) and altitude (in meters)
  *
  * DEM cell fusion strategy available are :
- * - 0 MIN : we keep the minimum altitide
+ * - 0 MIN : we keep the minimum altitude
  * - 1 MAX : we keep the maximum altitude
  * - 2 MEAN : mean is computed
- * - 3 ACC : returns cell count (usefull to create mask from output)
+ * - 3 ACC : returns cell count (useful to create mask from output)
  *
  *  empty cell are filled with the NoDataValue
  *
