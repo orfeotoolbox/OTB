@@ -53,7 +53,14 @@ enum CellFusionMode {
  * - 2 MEAN : mean is computed
  * - 3 ACC : returns cell count (usefull to create mask from output)
  *
- *  empty cell are fileld with the NoDataValue
+ *  empty cell are filled with the NoDataValue
+ *
+ *  DEM parameters are automatically deduced by the union of input extent if SetOutputParametersFrom3DMap is called without parameters. If
+ *  an index is given, the 3D corresponding Map is used to deduced Output parameters (expect Spacing which is calculated for DEMGridStep (in meter))
+ *
+ *  DEM output parameters can also be manually filled using Setters for :
+ *  Origin, Spacing, Size, StartIndex, ProjectionRef
+ *  thus DEMGridStep parameter is ignored in this case (replaced by Spacing)
  *
  *  \sa FineRegistrationImageFilter
  *  \sa MultiDisparityMapTo3DFilter
