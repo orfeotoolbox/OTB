@@ -228,7 +228,7 @@ int otbMulti3DMapToDEMFilterEPSG(int argc, char* argv[])
   writer->SetNumberOfDivisionsTiledStreaming(4);
   writer->Update();
 
-  return EXIT_SUCCESS;*/
+  return EXIT_SUCCESS; */
 
 
 
@@ -303,7 +303,7 @@ int otbMulti3DMapToDEMFilterEPSG(int argc, char* argv[])
   writer->SetNumberOfDivisionsTiledStreaming(4);
   writer->Update();
 
-  return EXIT_SUCCESS;*/
+  return EXIT_SUCCESS; */
 }
 
 int otbMulti3DMapToDEMFilterManual(int argc, char* argv[])
@@ -488,7 +488,7 @@ writer->SetInput(orthoRectifFilter->GetOutput());
 writer->SetNumberOfDivisionsTiledStreaming(4);
 writer->Update();
 
-return EXIT_SUCCESS;*/
+return EXIT_SUCCESS; */
 
 }
 

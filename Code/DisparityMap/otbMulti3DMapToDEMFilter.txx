@@ -584,7 +584,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
             default:
 
               itkExceptionMacro(<< "Unexpected value cell fusion mode :"<<this->m_CellFusionMode)
-              ;
+             ;
               break;
             }
           }
@@ -722,7 +722,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::AfterThreaded
           default:
 
             itkExceptionMacro(<< "Unexpected value cell fusion mode :"<<this->m_CellFusionMode)
-            ;
+           ;
             break;
           }
         }
