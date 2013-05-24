@@ -162,7 +162,14 @@ public:
    /** compute
     *  Set DEM extent using 3DMap 'index' , if index =-1 union of all input Map extent is done
      */
-    void SetOutputParametersFrom3DMap(int index=-1);
+    void SetOutputParametersFrom3DMap(int index=-1)
+    {
+      if (static_cast<unsigned int>((2 * (index + 1))) > this->GetNumberOfInputs())
+          {
+           itkExceptionMacro(<< "input at position "<<index<<" is unavailable");
+          }
+      m_OutputParametersFrom3DMap=index;
+    }
 
 
     itkSetMacro(OutputOrigin, OriginType);
@@ -184,12 +191,7 @@ public:
     itkSetMacro(ProjectionRef, std::string);
     itkGetConstReferenceMacro(ProjectionRef, std::string);
 
-
-   /** Set keywordlist of the 3D map  'index' */
-   //void SetMapKeywordList(unsigned int index, const ImageKeywordListType kwl);
-
-   /** Get keywordlist of the 3D map 'index' */
-   //const ImageKeywordListType & GetMapKeywordList(unsigned int index) const;
+    itkGetConstReferenceMacro(OutputParametersFrom3DMap, int);
 
 protected:
   /** Constructor */
@@ -214,6 +216,9 @@ protected:
   virtual void AfterThreadedGenerateData();
 
 private:
+
+  void SetOutputParametersFromImage();
+
   Multi3DMapToDEMFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
@@ -233,7 +238,7 @@ private:
   double m_DEMGridStep;
 
   /** Temporary DEMs for multithreading */
-   std::vector<typename OutputImageType::Pointer> m_TempDEMRegions;
+   std::vector<typename OutputImageType::Pointer>      m_TempDEMRegions;
    /** Temporary accumulator for multithreading and mean calculus*/
    std::vector<typename AccumulatorImageType::Pointer> m_TempDEMAccumulatorRegions;
 
@@ -243,8 +248,8 @@ private:
   /** Region splitter for input disparity maps */
   SplitterListType::Pointer m_MapSplitterList;
 
-  DEMPixelType m_NoDataValue;
-  int m_CellFusionMode;
+  DEMPixelType              m_NoDataValue;
+  int                       m_CellFusionMode;
   std::string               m_ProjectionRef;
 
   SizeType      m_OutputSize;
@@ -252,7 +257,9 @@ private:
   SpacingType   m_OutputSpacing;
   OriginType    m_OutputOrigin;
 
-  bool          m_OutputHasBeenUpdated;
+
+  int           m_OutputParametersFrom3DMap;
+  bool          m_IsGeographic;
 
 
 };
