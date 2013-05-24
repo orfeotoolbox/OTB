@@ -20,6 +20,7 @@
 
 #include "otbStatisticsXMLFileWriter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
+#include <sstream>
 
 namespace otb
 {
@@ -123,6 +124,9 @@ private:
 
       // Compute Statistics of each VectorImage
       StreamingStatisticsVImageFilterType::Pointer statsEstimator = StreamingStatisticsVImageFilterType::New();
+      std::ostringstream processName;
+      processName << "Processing Image (" << imageId+1 << "/" << imageList->Size() << ")";
+      AddProcess(statsEstimator->GetStreamer(), processName.str().c_str());
       statsEstimator->SetInput(image);
       if( HasValue( "bv" )==true )
         {
