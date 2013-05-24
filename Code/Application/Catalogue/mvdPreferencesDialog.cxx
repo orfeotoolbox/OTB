@@ -68,7 +68,8 @@ PreferencesDialog
   QDialog( parent ),
   m_UI( new mvd::Ui::PreferencesDialog() ),
   m_CacheDirRoot(),
-  m_CacheDirRootModified(false)
+  m_CacheDirRootModified(false),
+  m_ElevationSetupModified(false)
 {
   m_UI->setupUi( this );
   
@@ -182,6 +183,12 @@ PreferencesDialog
   I18nApplication::Instance()->StoreSettingsKey( "srtmDirActive", this->m_UI->srtmCheckbox->isChecked() );
   I18nApplication::Instance()->StoreSettingsKey( "geoidPathActive", this->m_UI->geoidCheckbox->isChecked() );
 
+  if(m_ElevationSetupModified)
+    {
+    I18nApplication::Instance()->ElevationSetup();
+    m_ElevationSetupModified = false;
+    }
+
   close();
 }
 
@@ -191,6 +198,7 @@ void PreferencesDialog
 {
   this->m_UI->srtmLineEdit->setEnabled(this->m_UI->srtmCheckbox->isChecked());
   this->m_UI->srtmButton->setEnabled(this->m_UI->srtmCheckbox->isChecked());
+  m_ElevationSetupModified = true;
 }
 
 void PreferencesDialog
@@ -198,6 +206,7 @@ void PreferencesDialog
 {
   this->m_UI->geoidLineEdit->setEnabled(this->m_UI->geoidCheckbox->isChecked());
   this->m_UI->geoidButton->setEnabled(this->m_UI->geoidCheckbox->isChecked());
+  m_ElevationSetupModified = true;
 }
 
 
@@ -218,6 +227,7 @@ void PreferencesDialog
       { // User select something, test if it is correct
         QDir displayedDir (srtmDirStr);
         m_UI->srtmLineEdit->setText(displayedDir.absolutePath());
+        m_ElevationSetupModified = true;
         break;
       }
     }
@@ -241,6 +251,7 @@ void PreferencesDialog
       { // User select something, test if it is correct
         QDir displayedDir (geoidStr);
         m_UI->geoidLineEdit->setText(displayedDir.absolutePath());
+        m_ElevationSetupModified = true;
         break;
       }
     }

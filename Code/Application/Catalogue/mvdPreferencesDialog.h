@@ -124,6 +124,8 @@ private:
 
   bool m_CacheDirRootModified;
 
+  bool m_ElevationSetupModified;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
