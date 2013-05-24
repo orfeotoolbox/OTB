@@ -47,21 +47,6 @@ IF(OTB_USE_OPENCV)
   SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_allOpt PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1)
   
   
-  OTB_TEST_APPLICATION(NAME apTvClValidateSVMImagesClassifierQB1
-                       APP  ValidateImagesClassifier
-                       OPTIONS -il     ${INPUTDATA}/Classification/QB_1_ortho.tif
-                               -vd     ${INPUTDATA}/Classification/VectorData_QB1_bis.shp
-                               -imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
-                               -model  ${TEMP}/clsvmModelQB1.svm
-                               -out    ${TEMP}/clsvmPerformanceEstimationQB1.txt
-                               -rand   121212
-                       VALID   --compare-ascii ${NOTOL}
-                               ${OTBAPP_BASELINE_FILES}/clsvmPerformanceEstimationQB1.txt
-                               ${TEMP}/clsvmPerformanceEstimationQB1.txt)
-   
-  SET_TESTS_PROPERTIES(apTvClValidateSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
-  
-  
   OTB_TEST_APPLICATION(NAME apTvClImageSVMClassifierQB1
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_1_ortho.tif
@@ -135,21 +120,6 @@ IF(OTB_USE_OPENCV)
                                ${TEMP}/clsvmModelQB123.svm)
   
   SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB123 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB123)
-  
-  
-  OTB_TEST_APPLICATION(NAME apTvClValidateSVMImagesClassifierQB123
-                       APP  ValidateImagesClassifier
-                       OPTIONS -il     ${INPUTDATA}/Classification/QB_1_ortho.tif
-                               -vd     ${INPUTDATA}/Classification/VectorData_QB1_bis.shp
-                               -imstat ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
-                               -model  ${TEMP}/clsvmModelQB123.svm
-                               -out    ${TEMP}/clsvmPerformanceEstimationQB123.txt
-                               -rand   121212
-                       VALID   --compare-ascii ${NOTOL}
-                               ${OTBAPP_BASELINE_FILES}/clsvmPerformanceEstimationQB123.txt
-                               ${TEMP}/clsvmPerformanceEstimationQB123.txt)
-   
-  SET_TESTS_PROPERTIES(apTvClValidateSVMImagesClassifierQB123 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
   
   
   OTB_TEST_APPLICATION(NAME apTvClImageSVMClassifierQB123_1
@@ -250,21 +220,6 @@ IF(OTB_USE_OPENCV)
                                ${TEMP}/clsvmModelQB456.svm)
   
   SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB456 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB456)
-  
-  
-  OTB_TEST_APPLICATION(NAME apTvClValidateSVMImagesClassifierQB456
-                       APP  ValidateImagesClassifier
-                       OPTIONS -il     ${INPUTDATA}/Classification/QB_5_extract.tif
-                               -vd     ${INPUTDATA}/Classification/VectorData_QB5_bis.shp
-                               -imstat ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
-                               -model  ${TEMP}/clsvmModelQB456.svm
-                               -rand   121212
-                               -out    ${TEMP}/clsvmPerformanceEstimationQB456.txt
-                       VALID   --compare-ascii ${NOTOL}
-                               ${OTBAPP_BASELINE_FILES}/clsvmPerformanceEstimationQB456.txt
-                               ${TEMP}/clsvmPerformanceEstimationQB456.txt)
-  
-  SET_TESTS_PROPERTIES(apTvClValidateSVMImagesClassifierQB456 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
   
   
   OTB_TEST_APPLICATION(NAME apTvClImageSVMClassifierQB456_4
