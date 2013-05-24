@@ -92,6 +92,33 @@ ApplicationLauncher
     }
   else
     {
+    QSettings settings;
+
+    // Search for elev parameters
+    std::vector<std::string> parameters = app->GetParametersKeys();
+
+    for(std::vector<std::string>::const_iterator it = parameters.begin();
+        it!=parameters.end();++it)
+      {
+      std::size_t lastDot = (it->find_last_of('.'));
+      
+      if(lastDot != std::string::npos)
+        {
+        std::string lastKey = it->substr(lastDot+1,it->size()-lastDot-1);
+
+        if(lastKey == "dem" && settings.contains("srtmDirActive") && settings.value("srtmDirActive").toBool())
+          {
+          app->EnableParameter(*it);
+          app->SetParameterString(*it,settings.value("srtmDir").toString().toStdString());
+          }
+        if(lastKey == "geoid" && settings.contains("geoidPathActive") && settings.value("geoidPathActive").toBool())
+          {
+          app->EnableParameter(*it);
+          app->SetParameterString(*it,settings.value("geoidPath").toString().toStdString());
+          }
+        }
+      }
+
     // Create GUI based on module
     Wrapper::QtWidgetView* gui = new Wrapper::QtWidgetView(app);
     gui->CreateGui();
