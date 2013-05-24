@@ -33,7 +33,7 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::Multi3DMapToDEMFil
   // Set the number of inputs (1 image one optional mask)
   this->SetNumberOfInputs(2);
   this->SetNumberOfRequiredInputs(1);
-  this->m_MapKeywordLists.resize(1);
+  //this->m_MapKeywordLists.resize(1);
   m_DEMGridStep = 10.0;
   // Set the outputs
   this->SetNumberOfOutputs(1);
@@ -44,6 +44,7 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::Multi3DMapToDEMFil
   //m_NoDataValue = itk::NumericTraits<DEMPixelType>::NonpositiveMin();
   m_NoDataValue = 0; //TODO replace this value by Max or Min
   m_CellFusionMode = otb::CellFusionMode::MAX;
+  m_OutputHasBeenUpdated =false;
 
 }
 
@@ -58,7 +59,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetNumberOf3D
   if (nb > 0)
     {
     this->SetNumberOfInputs(2 * nb);
-    this->m_MapKeywordLists.resize(nb);
+   // this->m_MapKeywordLists.resize(nb);
     }
 }
 
@@ -80,7 +81,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::Set3DMapInput
   this->SetNthInput(2 * index, const_cast<T3DImage *> (map));
 }
 
-template<class T3DImage, class TMaskImage, class TOutputDEMImage>
+/*template<class T3DImage, class TMaskImage, class TOutputDEMImage>
 void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetMapKeywordList(unsigned int index,
                                                                                      const ImageKeywordListType kwl)
 {
@@ -88,9 +89,9 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetMapKeyword
     {
     this->m_MapKeywordLists[index] = kwl;
     }
-}
+}*/
 
-template<class T3DImage, class TMaskImage, class TOutputDEMImage>
+/*template<class T3DImage, class TMaskImage, class TOutputDEMImage>
 const typename Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ImageKeywordListType &
 Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GetMapKeywordList(unsigned int index) const
 {
@@ -99,7 +100,7 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GetMapKeywordList(
     itkExceptionMacro(<<"Keywordlist index is outside the container");
     }
   return this->m_MapKeywordLists[index];
-}
+}*/
 
 template<class T3DImage, class TMaskImage, class TOutputDEMImage>
 void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetMaskInput(unsigned int index,
@@ -158,119 +159,185 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GetDEMOutput()
 }
 
 template<class T3DImage, class TMaskImage, class TOutputDEMImage>
-void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateOutputInformation()
+void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputParametersFrom3DMap(int index=-1)
 {
+  if (static_cast<unsigned int>((2 * (index + 1))) > this->GetNumberOfInputs())
+     {
+      itkExceptionMacro(<< "input at position "<<index<<" is unavailable");
+     }
+
+  unsigned int numberOfInputs= this->GetNumberOfInputs()/2;
+  unsigned int indexStart=0;
+  unsigned int indexEnd=numberOfInputs-1;
+
+  if(index!=-1)
+    {
+     indexStart=index;
+     indexEnd=index;
+    }
 
   //compute DEM extent union of 3D map extent
 
+   TOutputDEMImage * outputPtr = this->GetDEMOutput();
+
+   // Set-up a transform to use the DEMHandler
+   typedef otb::GenericRSTransform<> RSTransform2DType;
+
+   // DEM BBox
+   itk::NumericTraits<DEMPixelType>::max();
+   double box_xmin = itk::NumericTraits<DEMPixelType>::max();
+   double box_xmax = itk::NumericTraits<DEMPixelType>::NonpositiveMin();
+   double box_ymin = itk::NumericTraits<DEMPixelType>::max();
+   double box_ymax = itk::NumericTraits<DEMPixelType>::NonpositiveMin();
+
+   //min val
+   //max val
+
+   //compute extent for each image
+   // this is done using sensor model
+
+   //m_MapMinVal.resize(this->GetNumberOf3DMaps());
+   //m_MapMaxVal.resize(this->GetNumberOf3DMaps());
+   // m_MapMinVal.SetSize(3);
+   // m_MapMinVal.Fill(0.);
+   // m_MapMaxVal.SetSize(3);
+   // m_MapMaxVal.Fill(0.);
+
+   for (unsigned int k = indexStart; k <= indexEnd; ++k)
+     {
+     T3DImage *imgPtr = const_cast<T3DImage *> (this->Get3DMapInput(k));
+
+     //TODO set KWL from input KWL
+
+       RSTransform2DType::Pointer mapToGroundTransform = RSTransform2DType::New();
+     ImageKeywordListType imageKWL=imgPtr->GetImageKeywordlist();
+     mapToGroundTransform->SetInputKeywordList(imageKWL);
+     mapToGroundTransform->InstanciateTransform();
+     if(!m_ProjectionRef.empty())
+     {
+           mapToGroundTransform->SetOutputProjectionRef(m_ProjectionRef);
+     }
+
+     // left image
+     typename InputMapType::SizeType inputSize = imgPtr->GetLargestPossibleRegion().GetSize();
+
+     // Min/Max stats have to be computed (this is done using sensor model )
+     //typename StreamingMinMaxVImageFilterType::Pointer statsEstimator = StreamingMinMaxVImageFilterType::New();
+     // statsEstimator->SetInput(imgPtr);
+     //statsEstimator->Update();
+     //m_MapMinVal[k]=statsEstimator->GetMinimum();
+     //m_MapMaxVal[k]=statsEstimator->GetMaximum();
+
+     //std::cout<<"minval "<<m_MapMinVal[k]<<std::endl;
+     //std::cout<<"maxval "<<m_MapMaxVal[k]<<std::endl;
+
+
+     typename InputMapType::PointType tmpPoint;
+     tmpPoint = imgPtr->GetOrigin();
+     RSTransform2DType::OutputPointType ul = mapToGroundTransform->TransformPoint(tmpPoint);
+
+     tmpPoint[0] = (imgPtr->GetOrigin())[0] + (imgPtr->GetSpacing())[0] * static_cast<double> (inputSize[0]);
+     tmpPoint[1] = (imgPtr->GetOrigin())[1];
+     RSTransform2DType::OutputPointType ur = mapToGroundTransform->TransformPoint(tmpPoint);
+
+     tmpPoint[0] = (imgPtr->GetOrigin())[0] + (imgPtr->GetSpacing())[0] * static_cast<double> (inputSize[0]);
+     tmpPoint[1] = (imgPtr->GetOrigin())[1] + (imgPtr->GetSpacing())[1] * static_cast<double> (inputSize[1]);
+     RSTransform2DType::OutputPointType lr = mapToGroundTransform->TransformPoint(tmpPoint);
+
+     tmpPoint[0] = (imgPtr->GetOrigin())[0];
+     tmpPoint[1] = (imgPtr->GetOrigin())[1] + (imgPtr->GetSpacing())[1] * static_cast<double> (inputSize[1]);
+     RSTransform2DType::OutputPointType ll = mapToGroundTransform->TransformPoint(tmpPoint);
+
+     // std::cout<<"coord "<<ul<<" "<<ur<<" "<<ll<<" "<<lr<<std::endl;
+     double xmin = std::min(std::min(std::min(ul[0], ur[0]), lr[0]), ll[0]);
+     double xmax = std::max(std::max(std::max(ul[0], ur[0]), lr[0]), ll[0]);
+     double ymin = std::min(std::min(std::min(ul[1], ur[1]), lr[1]), ll[1]);
+     double ymax = std::max(std::max(std::max(ul[1], ur[1]), lr[1]), ll[1]);
+
+
+     box_xmin = std::min(box_xmin, xmin);
+     box_xmax = std::max(box_xmax, xmax);
+     box_ymin = std::min(box_ymin, ymin);
+     box_ymax = std::max(box_ymax, ymax);
+
+     if (imageKWL.GetSize() > 0)
+             {
+       //encapsulate proj ref ?
+             itk::EncapsulateMetaData<ImageKeywordListType>
+               (outputPtr->GetMetaDataDictionary(),
+               MetaDataKey::OSSIMKeywordlistKey,
+               imageKWL);
+             }
+
+     }
+
+
+   //std::cout<<"box_xmin "<<box_xmin<<" box_xmax "<<box_xmax<<" box_ymin "<<box_ymin<<" box_ymax "<<box_ymax<<std::endl;
+
+   // Choose origin
+   typename TOutputDEMImage::PointType outOrigin;
+   outOrigin[0] = box_xmin;
+   outOrigin[1] = box_ymax;
+   outputPtr->SetOrigin(outOrigin);
+
+   // Compute step :
+   // TODO : use a clean RS transform instead
+   typename TOutputDEMImage::SpacingType outSpacing;
+   //std::cout<<" GrisStep "<<m_DEMGridStep<<std::endl;
+   outSpacing[0] = 57.295779513 * m_DEMGridStep / (6378137.0 * vcl_cos((box_ymin + box_ymax) * 0.5 * 0.01745329251));
+   outSpacing[1] = -57.295779513 * m_DEMGridStep / 6378137.0;
+   outputPtr->SetSpacing(outSpacing);
+   // Compute output size
+   typename TOutputDEMImage::RegionType outRegion;
+   outRegion.SetIndex(0, 0);
+   outRegion.SetIndex(1, 0);
+   outRegion.SetSize(0, static_cast<unsigned int> ((box_xmax - box_xmin) / vcl_abs(outSpacing[0])+1));
+   //TODO JGT check the size
+   outRegion.SetSize(1, static_cast<unsigned int> ((box_ymax - box_ymin) / vcl_abs(outSpacing[1])));
+   outputPtr->SetLargestPossibleRegion(outRegion);
+   outputPtr->SetNumberOfComponentsPerPixel(1);
+   m_OutputHasBeenUpdated =true;
+   this->Modified();
+
+}
+
+
+
+template<class T3DImage, class TMaskImage, class TOutputDEMImage>
+void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateOutputInformation()
+{
+  //
   TOutputDEMImage * outputPtr = this->GetDEMOutput();
+  //
 
-  // DEM BBox
-  itk::NumericTraits<DEMPixelType>::max();
-  double box_xmin = itk::NumericTraits<DEMPixelType>::max();
-  double box_xmax = itk::NumericTraits<DEMPixelType>::NonpositiveMin();
-  double box_ymin = itk::NumericTraits<DEMPixelType>::max();
-  double box_ymax = itk::NumericTraits<DEMPixelType>::NonpositiveMin();
-
-  //min val
-  //max val
-
-  //compute extent for each image
-  // this is done using sensor model
-
-  //m_MapMinVal.resize(this->GetNumberOf3DMaps());
-  //m_MapMaxVal.resize(this->GetNumberOf3DMaps());
-  // m_MapMinVal.SetSize(3);
-  // m_MapMinVal.Fill(0.);
-  // m_MapMaxVal.SetSize(3);
-  // m_MapMaxVal.Fill(0.);
-
-  for (unsigned int k = 0; k < this->GetNumberOf3DMaps(); ++k)
+  if(!m_OutputHasBeenUpdated)
     {
-    T3DImage *imgPtr = const_cast<T3DImage *> (this->Get3DMapInput(k));
+     outputPtr->SetOrigin(m_OutputOrigin);
+     outputPtr->SetSpacing(m_OutputSpacing);
 
-    //TODO set KWL from input KWL
-
-    // Set-up a transform to use the DEMHandler
-    typedef otb::GenericRSTransform<> RSTransform2DType;
-    RSTransform2DType::Pointer mapToGroundTransform = RSTransform2DType::New();
-    mapToGroundTransform->SetInputKeywordList(this->GetMapKeywordList(k));
-    mapToGroundTransform->InstanciateTransform();
-
-    // left image
-    typename InputMapType::SizeType inputSize = imgPtr->GetLargestPossibleRegion().GetSize();
-
-    // Min/Max stats have to be computed (this is done using sensor model )
-    //typename StreamingMinMaxVImageFilterType::Pointer statsEstimator = StreamingMinMaxVImageFilterType::New();
-    // statsEstimator->SetInput(imgPtr);
-    //statsEstimator->Update();
-    //m_MapMinVal[k]=statsEstimator->GetMinimum();
-    //m_MapMaxVal[k]=statsEstimator->GetMaximum();
-
-    //std::cout<<"minval "<<m_MapMinVal[k]<<std::endl;
-    //std::cout<<"maxval "<<m_MapMaxVal[k]<<std::endl;
-
-
-    typename InputMapType::PointType tmpPoint;
-    tmpPoint = imgPtr->GetOrigin();
-    RSTransform2DType::OutputPointType ul = mapToGroundTransform->TransformPoint(tmpPoint);
-
-    tmpPoint[0] = (imgPtr->GetOrigin())[0] + (imgPtr->GetSpacing())[0] * static_cast<double> (inputSize[0]);
-    tmpPoint[1] = (imgPtr->GetOrigin())[1];
-    RSTransform2DType::OutputPointType ur = mapToGroundTransform->TransformPoint(tmpPoint);
-
-    tmpPoint[0] = (imgPtr->GetOrigin())[0] + (imgPtr->GetSpacing())[0] * static_cast<double> (inputSize[0]);
-    tmpPoint[1] = (imgPtr->GetOrigin())[1] + (imgPtr->GetSpacing())[1] * static_cast<double> (inputSize[1]);
-    RSTransform2DType::OutputPointType lr = mapToGroundTransform->TransformPoint(tmpPoint);
-
-    tmpPoint[0] = (imgPtr->GetOrigin())[0];
-    tmpPoint[1] = (imgPtr->GetOrigin())[1] + (imgPtr->GetSpacing())[1] * static_cast<double> (inputSize[1]);
-    RSTransform2DType::OutputPointType ll = mapToGroundTransform->TransformPoint(tmpPoint);
-
-    // std::cout<<"coord "<<ul<<" "<<ur<<" "<<ll<<" "<<lr<<std::endl;
-    double xmin = std::min(std::min(std::min(ul[0], ur[0]), lr[0]), ll[0]);
-    double xmax = std::max(std::max(std::max(ul[0], ur[0]), lr[0]), ll[0]);
-    double ymin = std::min(std::min(std::min(ul[1], ur[1]), lr[1]), ll[1]);
-    double ymax = std::max(std::max(std::max(ul[1], ur[1]), lr[1]), ll[1]);
-
-    //std::cout<<"xmin "<<xmin<<" xmax "<<xmax<<" ymin "<<ymin<<" ymax "<<ymax<<std::endl;
-
-    box_xmin = std::min(box_xmin, xmin);
-    box_xmax = std::max(box_xmax, xmax);
-    box_ymin = std::min(box_ymin, ymin);
-    box_ymax = std::max(box_ymax, ymax);
-
+     typename TOutputDEMImage::RegionType outRegion;
+     outRegion.SetIndex(m_OutputStartIndex);
+     outRegion.SetSize(m_OutputSize);
+     outputPtr->SetLargestPossibleRegion(outRegion);
+     outputPtr->SetNumberOfComponentsPerPixel(1);
     }
+  //Superclass::GenerateOutputInformation();
 
-  //std::cout<<"BBOX "<<box_xmin<<" "<<box_xmax<<" "<<box_ymin<<" "<<box_ymax<<std::endl;
+   /*if(!m_MapProjection.IsNull()  && !m_MapProjection->GetWkt().empty())
+     {
+     // fill up the metadata information for ProjectionRef
+     itk::MetaDataDictionary&  dict          = this->GetOutput()->GetMetaDataDictionary();
+     std::string               projectionRef = m_MapProjection->GetWkt();
+     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
 
+     // Fill the GenericRSTransform with those information
+     th outputPtr->is->SetOutputProjectionRef(projectionRef);
 
-  // Choose origin
-  typename TOutputDEMImage::PointType outOrigin;
-  outOrigin[0] = box_xmin;
-  outOrigin[1] = box_ymax;
-  outputPtr->SetOrigin(outOrigin);
-
-  // Compute step :
-  // TODO : use a clean RS transform instead
-  typename TOutputDEMImage::SpacingType outSpacing;
-  //std::cout<<" GrisStep "<<m_DEMGridStep<<std::endl;
-  outSpacing[0] = 57.295779513 * m_DEMGridStep / (6378137.0 * vcl_cos((box_ymin + box_ymax) * 0.5 * 0.01745329251));
-  outSpacing[1] = -57.295779513 * m_DEMGridStep / 6378137.0;
-  outputPtr->SetSpacing(outSpacing);
-
-  //std::cout << "outSpacing " << outSpacing << std::endl;
-  // Compute output size
-  typename TOutputDEMImage::RegionType outRegion;
-  outRegion.SetIndex(0, 0);
-  outRegion.SetIndex(1, 0);
-  outRegion.SetSize(0, static_cast<unsigned int> ((box_xmax - box_xmin) / vcl_abs(outSpacing[0])+1));
-  //TODO JGT check the size
-  outRegion.SetSize(1, static_cast<unsigned int> ((box_ymax - box_ymin) / vcl_abs(outSpacing[1])));
-
-  outputPtr->SetLargestPossibleRegion(outRegion);
-  outputPtr->SetNumberOfComponentsPerPixel(1);
-
+     }*/
+  /*if(!m_ProjectionRef.empty())
+    {
+      outputPtr->SetProjectionRef(m_ProjectionRef);
+    }*/
 }
 
 template<class T3DImage, class TMaskImage, class TOutputDEMImage>
@@ -295,10 +362,10 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
         }
       mskPtr->SetRequestedRegion(largest);
       }
-    if (this->m_MapKeywordLists[k].GetSize() == 0)
+  /*  if (this->m_MapKeywordLists[k].GetSize() == 0)
       {
       itkExceptionMacro(<< "Keywordlist of image at position "<<k<<" is empty");
-      }
+      }*/
 
     }
 }

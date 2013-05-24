@@ -89,6 +89,11 @@ public:
 
   typedef typename OutputImageType::RegionType         RegionType;
   typedef typename OutputImageType::PixelType          DEMPixelType;
+  typedef typename OutputImageType::PointType          OriginType;
+  typedef typename OutputImageType::SpacingType        SpacingType;
+  typedef typename OutputImageType::SizeType           SizeType;
+  typedef typename OutputImageType::IndexType          IndexType;
+
   typedef typename AccumulatorImageType::PixelType     AccumulatorPixelType;
 
   typedef typename InputMapType::PixelType             MapPixelType;
@@ -154,12 +159,34 @@ public:
    itkSetMacro(NoDataValue, DEMPixelType);
    itkGetConstReferenceMacro(NoDataValue, DEMPixelType);
 
+   /** compute
+    *  Set DEM extent using 3DMap 'index' , if index =-1 union of all input Map extent is done
+     */
+    void SetOutputParametersFrom3DMap(int index);
+
+
+    itkSetMacro(OutputOrigin, OriginType);
+    itkGetConstReferenceMacro(OutputOrigin, OriginType);
+
+    /** Output Start index */
+    itkSetMacro(OutputStartIndex, IndexType);
+    itkGetConstReferenceMacro(OutputStartIndex, IndexType);
+
+    /** Output Size */
+    itkSetMacro(OutputSize, SizeType);
+    itkGetConstReferenceMacro(OutputSize, SizeType);
+
+    /** Output Spacing */
+    itkSetMacro(OutputSpacing, SpacingType);
+    itkGetConstReferenceMacro(OutputSpacing, SpacingType);
+
+
 
    /** Set keywordlist of the 3D map  'index' */
-   void SetMapKeywordList(unsigned int index, const ImageKeywordListType kwl);
+   //void SetMapKeywordList(unsigned int index, const ImageKeywordListType kwl);
 
    /** Get keywordlist of the 3D map 'index' */
-   const ImageKeywordListType & GetMapKeywordList(unsigned int index) const;
+   //const ImageKeywordListType & GetMapKeywordList(unsigned int index) const;
 
 protected:
   /** Constructor */
@@ -188,7 +215,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Keywordlist of each map */
-  std::vector<ImageKeywordListType> m_MapKeywordLists;
+ // std::vector<ImageKeywordListType> m_MapKeywordLists;
 
   
   /** Reference sensor image transform */
@@ -215,6 +242,14 @@ private:
 
   DEMPixelType m_NoDataValue;
   int m_CellFusionMode;
+  std::string               m_ProjectionRef;
+
+  SizeType      m_OutputSize;
+  IndexType     m_OutputStartIndex;
+  SpacingType   m_OutputSpacing;
+  OriginType    m_OutputOrigin;
+
+  bool          m_OutputHasBeenUpdated;
 
 
 };
