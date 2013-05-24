@@ -25,7 +25,12 @@ namespace Wrapper
 QtWidgetModel::QtWidgetModel(Application* app)
  : m_Application(app)
 {
-  m_Application->Init();
+  // Init only if not already done
+  if(!m_Application->IsInitialized())
+    {
+    m_Application->Init();
+    }
+
   m_LogOutput = QtLogOutput::New();
 
  // Attach log output to the Application logger
