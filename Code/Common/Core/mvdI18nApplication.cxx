@@ -289,7 +289,8 @@ I18nApplication
   // Construct result-dir path.
   I18nApplication::MakeDirTree(
     m_CacheDir.path(),
-    I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME
+    I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME,
+    &m_ResultsDir
   );
 
   //

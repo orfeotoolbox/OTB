@@ -292,7 +292,19 @@ public:
    */
   // TODO: Remove method when Viewer/Application is updated to reuse factorized code of I18nApplication.
   inline QDir& GetCacheDir();
+  
+  /**
+   * \brief Get the results directory (where output from
+   * OTBApplicaitons are stored).
+   *
+   * \return Return the cache directory.
+   */
+  inline const QDir& GetResultsDir() const;
 
+  /**
+   */
+  // TODO: Remove method when Viewer/Application is updated to reuse factorized code of I18nApplication.
+  inline QDir& GetResultsDir();
 
 //
 // Public attributes.
@@ -413,6 +425,12 @@ private:
   QDir m_CacheDir;
 
   /**
+  * \brief Directory where all result files from OTB applications are
+  * stored 
+  */
+  QDir m_ResultsDir;
+
+  /**
    * \brief Application settings 
    */
   QSettings* m_Settings;
@@ -525,6 +543,14 @@ I18nApplication
 }
 
 /*****************************************************************************/
+const QDir&
+I18nApplication
+::GetResultsDir() const
+{
+  return m_ResultsDir;
+}
+
+/*****************************************************************************/
 inline
 bool
 I18nApplication
@@ -539,6 +565,14 @@ I18nApplication
 ::GetCacheDir()
 {
   return m_CacheDir;
+}
+
+/*****************************************************************************/
+QDir&
+I18nApplication
+::GetResultsDir()
+{
+  return m_ResultsDir;
 }
 
 /*****************************************************************************/
