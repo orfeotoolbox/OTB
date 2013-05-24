@@ -40,7 +40,7 @@ void RegisterTests()
   REGISTER_TEST(otbMultiDisparityMapTo3DFilter);
   REGISTER_TEST(otbMultiDisparityMapTo3DFilterNew);
   REGISTER_TEST(otbMulti3DMapToDEMFilter);
-  REGISTER_TEST(otbMulti3DMapToDEMFilterUTM);
+  REGISTER_TEST(otbMulti3DMapToDEMFilterEPSG);
   REGISTER_TEST(otbMulti3DMapToDEMFilterManual);
   REGISTER_TEST(otbMulti3DMapToDEMFilterNew);
   REGISTER_TEST(otbBijectionCoherencyFilter);

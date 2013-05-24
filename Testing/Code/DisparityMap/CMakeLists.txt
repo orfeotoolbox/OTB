@@ -817,6 +817,52 @@ ADD_TEST(dmTuMulti3DMapToDEMFilterStadiumMeanManualROI ${DISPARITYMAP_TESTS4}
 		 -0.000022457882103
 )
 
+ADD_TEST(dmTuMulti3DMapToDEMFilterStadiumMeanEPSGUTM31N ${DISPARITYMAP_TESTS4}
+         otbMulti3DMapToDEMFilterEPSG
+         ${INPUTDATA}/Stadium3DMap.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${INPUTDATA}/Stadium3DMapBis.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanEPSGUTM31N.tif
+		 2.5
+		 2
+		 1
+		 1
+		 0
+		 0
+		 373473
+		 4826907
+		 103
+		 107
+		 2.5
+		 -2.5
+		 32631
+)
+
+ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMeanEPSGWGS84 ${DISPARITYMAP_TESTS4}
+--compare-image ${EPSILON_6}
+     ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMean.tif
+     ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanEPSGWGS84.tif
+         otbMulti3DMapToDEMFilterEPSG
+         ${INPUTDATA}/Stadium3DMap.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${INPUTDATA}/Stadium3DMapBis.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanEPSGWGS84.tif
+		 2.5
+		 2
+		 1
+		 1
+		 0
+		 0
+		 1.432817727834504
+		 43.584395676937191
+		 103
+		 107
+		 0.000031003154124
+		 -0.000022457882103
+		 4326
+)
 
 ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMeanMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
