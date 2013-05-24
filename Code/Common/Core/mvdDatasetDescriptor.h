@@ -137,6 +137,10 @@ public:
 
   /**
    */
+  inline QDomElement FirstRenderingImageInformationElement();
+
+  /**
+   */
   static
     inline QDomElement NextImageSiblingElement( const QDomElement& sibling );
 
@@ -157,6 +161,12 @@ public:
               QString& datasetPath,
               QString& datasetAlias );
 
+  /**
+   */
+  static
+    void GetRenderingImageInformation( const QDomElement& datasetSibling,
+                                       ImageRegionType& viewportRegion,
+                                       double&  zoom );
   /**
    */
   bool SetImageModel( int id, void* settings );
@@ -228,6 +238,15 @@ private:
   void ExtractArrayFromElement( itk::Array<T>& array,
                                 QDomElement& tagName );
 
+
+  /**
+   * \brief Deserialize a ImageRegion from a QDomElement
+   */
+  inline
+    static
+    void ExtractImageRegionFromElement( ImageRegionType & region,
+                                        QDomElement& element );
+  
   /**
    */
   inline QDomElement GetImageElement( int id );
@@ -278,6 +297,10 @@ private:
     ELEMENT_RGB_CHANNELS,
     ELEMENT_DYNAMICS_PARAMETERS,
     //
+    ELEMENT_VIEW_GROUP,
+    ELEMENT_VIEW_ROI,
+    ELEMENT_VIEW_ZOOM,
+    //
     ELEMENT_COUNT
   };
 
@@ -296,6 +319,10 @@ private:
   /**
    */
   QDomElement m_ImagesGroupElement;
+
+  /**
+   */
+  QDomElement m_ImageViewGroupElement;
 
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -353,6 +380,15 @@ DatasetDescriptor
 ::FirstDatasetElement()
 {
   return m_DatasetGroupElement;
+}
+
+/*****************************************************************************/
+inline
+QDomElement
+DatasetDescriptor
+::FirstRenderingImageInformationElement()
+{
+  return m_ImageViewGroupElement;
 }
 
 /*****************************************************************************/
@@ -468,6 +504,41 @@ DatasetDescriptor
     QVariant v = stringList[i];
     array[i] = v.value<T>();
   }
+}
+
+/*****************************************************************************/
+inline
+void
+DatasetDescriptor
+::ExtractImageRegionFromElement( ImageRegionType & region,
+                                 QDomElement& element )
+{
+  QDomNode node = element.firstChild();
+  // TODO: Manage XML structure errors.
+  assert( !node.isNull() );
+  assert( node.isText() );
+
+  QDomText textNode = node.toText();
+  assert( !textNode.isNull() );
+  
+  QString data = textNode.data();
+  QStringList stringList = data.split(" ");
+  
+  // checkings
+  unsigned int nbElements = static_cast<unsigned int>(stringList.size());
+  assert( nbElements == 4 );
+
+  // get the image region fields
+  ImageRegionType::IndexType origin;
+  ImageRegionType::SizeType  size;
+  origin[0] =  stringList[0].toUInt();
+  origin[1] =  stringList[1].toUInt();
+  size[0]   =  stringList[2].toUInt();
+  size[1]   =  stringList[3].toUInt();
+  
+  // fill the region
+  region.SetIndex( origin );
+  region.SetSize( size );
 }
 
 } // end namespace 'mvd'

@@ -85,7 +85,11 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   //
   "settings",
   "rgb",
-  "dynamics"
+  "dynamics",
+  //
+  "view",
+  "roi",
+  "zoom"
 };
 
 /*****************************************************************************/
@@ -405,7 +409,44 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   assert( !datasetAliasElt.isNull() );
   datasetAlias = datasetAliasElt.text();
-  qDebug()<< " ::GetDatasetInformation( datasetPath :  "<< datasetPath<< " - alais :  "<< datasetAlias <<" )";
+  qDebug()<< " ::GetDatasetInformation( datasetPath :  "<< datasetPath<< " - alias :  "<< datasetAlias <<" )";
+}
+
+/*******************************************************************************/
+void
+DatasetDescriptor
+::GetRenderingImageInformation( const QDomElement& datasetSibling,
+                                ImageRegionType& viewportRegion,
+                                double&  zoom )
+{
+  // TODO: Manager XML structure errors.
+  assert( !datasetSibling.isNull() );
+
+  // Alias imageSibling into image-information element.
+  QDomElement imageViewElt( datasetSibling );
+
+  // Acces roi element
+  QDomElement roiElt(
+    imageViewElt.firstChildElement( TAG_NAMES[ ELEMENT_VIEW_ROI ] )
+    );
+  // TODO: Manage XML structure errors.
+  assert( !roiElt.isNull() );
+
+  // fill the image region
+  ExtractImageRegionFromElement(viewportRegion, roiElt );
+  
+  // Access zoom 
+  QDomElement zoomElt(
+    imageViewElt.firstChildElement( TAG_NAMES[ ELEMENT_VIEW_ZOOM ] )
+    );
+  // TODO: Manage XML structure errors.
+  assert( !zoomElt.isNull() );
+  zoom = QVariant( zoomElt.text() ).toReal() ;
+
+
+  std::cout<< " ::GetRenderingImageInformation( ImageRegion : "<< viewportRegion 
+           << " - zoom : "<< zoom <<" )"
+           <<std::endl;
 }
 
 /*******************************************************************************/
@@ -566,6 +607,29 @@ DatasetDescriptor
 
   // Remember image group element.
   m_ImagesGroupElement = imagesElt;
+
+  // Image view element.
+  QDomElement viewElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_VIEW_GROUP ] )
+  );
+  rootElt.appendChild( viewElt );
+  
+  // Image view RegionOfInterest element
+  QDomElement roiElt(
+    CreateTextNode( "0 0 100 100", 
+                    TAG_NAMES[ ELEMENT_VIEW_ROI ] )
+    );
+  viewElt.appendChild( roiElt );
+
+  // Image View zoom factor element
+  QDomElement zoomElt(
+    CreateTextNode( "0.12",
+                    TAG_NAMES[ ELEMENT_VIEW_ZOOM ] )
+    );
+  viewElt.appendChild( zoomElt );
+
+  // remember view group
+  m_ImageViewGroupElement = viewElt;
 
   // Add XML processing instruction.
   QDomNode xmlNode(
