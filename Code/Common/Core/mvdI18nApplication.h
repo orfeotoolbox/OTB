@@ -196,6 +196,13 @@ public:
    */
   bool MakeCacheDir( const QString& cacheDirStr );
 
+
+  /**
+   * \brief setup elevation management
+   * 
+   */
+  void ElevationSetup();
+
   //
   // APPLICATION SETTINGS.
   //

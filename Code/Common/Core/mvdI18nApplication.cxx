@@ -31,6 +31,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbDEMHandler.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -236,6 +237,9 @@ I18nApplication
 
   // Initialize settings.
   InitializeSettings();
+
+  // Elevation setup
+  ElevationSetup();
 }
 
 /*******************************************************************************/
@@ -291,6 +295,42 @@ I18nApplication
   //
   // Result.
   return isNew;
+}
+
+void
+I18nApplication
+::ElevationSetup()
+{
+  QSettings settings;
+
+  otb::DEMHandler::Pointer demHandlerInstance = otb::DEMHandler::Instance();
+
+  if(settings.contains("geoidPathActive") && settings.value("geoidPathActive").toBool())
+    {
+    qDebug() << "Settings/GeoidFile:" <<settings.value("geoidPath").toString() ;
+    try
+      {
+      demHandlerInstance->OpenGeoidFile(settings.value("geoidPath").toString().toStdString());
+      }
+    catch(itk::ExceptionObject & err)
+      {
+      qDebug() <<tr("An error occured while loading the geoid file, no geoid file will be used.");
+      qDebug()<<tr("Error: ")<<err.what();
+      }
+    }
+  if(settings.contains("srtmDirActive") && settings.value("srtmDirActive").toBool())
+    {
+    qDebug() << "Settings/DEMDir:" <<settings.value("srtmDir").toString();
+    try
+      {
+      demHandlerInstance->OpenDEMDirectory(settings.value("srtmDir").toString().toStdString());
+      }
+    catch(itk::ExceptionObject & err)
+      {
+      qDebug() <<tr("An error occured while loading the DEM directory, no DEM will be used.");
+      qDebug()<<tr("Error: ") << err.what();
+      }
+    }
 }
 
 /*******************************************************************************/
