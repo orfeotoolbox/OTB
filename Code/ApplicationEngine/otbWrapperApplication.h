@@ -1,3 +1,4 @@
+
 /*=========================================================================
   
   Program:   ORFEO Toolbox
@@ -79,6 +80,9 @@ public:
 
   /** Initialize the application, instantiating the parameter list */
   void Init();
+
+  /** Check if the application has been initialized */
+  bool IsInitialized() const;
 
   /** Update the value of parameters for which no user value has been provided */
   void UpdateParameters();
@@ -600,8 +604,6 @@ protected:
 
   /** Destructor */
   virtual ~Application();
-
-  bool IsInitialized() const;
 
   /* Register a ProcessObject as a new progress source */
   void AddProcess(itk::ProcessObject* object, std::string description);
