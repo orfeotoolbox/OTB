@@ -124,9 +124,9 @@ public:
   }
 
   /**
-   * \brief Set the current (selected) index of a video channel.
+   * \brief Set the current (selected) index of a RGB video channel.
    *
-   * Calling SetCurrentIndex() let the CurrentIndexChanged()
+   * Calling SetCurrentRgbIndex() let the CurrentRgbIndexChanged()
    * signal to be emitted.
    *
    * \param channel The video channel for which to set the current
@@ -137,25 +137,66 @@ public:
    * list has been set, index 1 set "1: Green" as the current select
    * combo-box item.
    */
-  void SetCurrentIndex( RgbaChannel channel, int index );
+  void SetCurrentRgbIndex( RgbaChannel channel, int index );
 
   /**
-   * \return the current (selected) index of a video-channel in the
-   * component-name list.
+   * \return the current (selected) index of a RGB video-channel in
+   * the component-name list.
    */
-  int GetCurrentIndex( RgbaChannel channel );
+  int GetCurrentRgbIndex( RgbaChannel channel );
+
+  /**
+   * \brief Enable/disable the grayscale-mode check-box.
+   *
+   * \param enabled true to enable the grayscale-mode check-box.
+   */
+  void SetGrayscaleEnabled( bool enabled );
+
+  /**
+   * \brief Activate/deactivate the gray-scale mode.
+   *
+   * \param activated true to enable the grayscale-model.
+   */
+  void SetGrayscaleActivated( bool activated );
+
+  /**
+   * \brief Set the current (selected) index of the white (gray)
+   * channel.
+   *
+   * Calling SetCurrentGrayIndex() let the CurrentGrayIndexChanged()
+   * signal to be emitted.
+   *
+   * \param index The index in the component-name list.
+   */
+  void SetCurrentGrayIndex( int index );
 
 //
 // SIGNALS.
 signals:
   /**
-   * \brief Signal emitted when the current-index of a video-channel
-   * has been modified.
+   * \brief Signal emitted when the current-index of a RGB
+   * video-channel has been modified.
    *
-   * \param channel The video-channel which has been modified.
+   * \param channel The RGB video-channel which has been modified.
    * \param index The curren-index in the component-list.
    */
-  void CurrentIndexChanged( RgbaChannel channel, int index );
+  void CurrentRgbIndexChanged( RgbaChannel channel, int index );
+
+  /**
+   * \brief Signal emitted when the current-index of the white (gray)
+   * channel has been modified.
+   *
+   * \param index The curren-index in the component-list.
+   */
+  void CurrentGrayIndexChanged( int index );
+
+  /**
+   * \brief Signal emitted when the activation-state of the
+   * grayscale-mode has been modified.
+   *
+   * \param activated The new activation-state.
+   */
+  void GrayscaleActivated( bool activated );
 
 //
 // Protected methods.
@@ -187,44 +228,77 @@ private:
 // SLOTS.
 private slots:
   /**
-   * \brief Slot called when the curernt-index of the red
+   * \brief Slot called when the current-index of the red
    * video-channel has been modified.
    *
    * \param index The new current-index of the red combo-box.
    */
   inline
     void
-    on_redComboBox_currentIndexChanged( int index )
+    on_rComboBox_currentIndexChanged( int index )
   {
-    emit CurrentIndexChanged( RGBA_CHANNEL_RED, index );
+    emit CurrentRgbIndexChanged( RGBA_CHANNEL_RED, index );
   }
 
   /**
-   * \brief Slot called when the curernt-index of the green
+   * \brief Slot called when the current-index of the green
    * video-channel has been modified.
    *
    * \param index The new current-index of the green combo-box.
    */
   inline
     void
-    on_greenComboBox_currentIndexChanged( int index )
+    on_gComboBox_currentIndexChanged( int index )
   {
-    emit CurrentIndexChanged( RGBA_CHANNEL_GREEN, index );
+    emit CurrentRgbIndexChanged( RGBA_CHANNEL_GREEN, index );
   }
 
   /**
-   * \brief Slot called when the curernt-index of the blue
+   * \brief Slot called when the current-index of the blue
    * video-channel has been modified.
    *
    * \param index The new current-index of the blue combo-box.
    */
   inline
     void
-    on_blueComboBox_currentIndexChanged( int index )
+    on_bComboBox_currentIndexChanged( int index )
   {
-    emit CurrentIndexChanged( RGBA_CHANNEL_BLUE, index );
+    emit CurrentRgbIndexChanged( RGBA_CHANNEL_BLUE, index );
+  }
+
+  /**
+   * \brief Slot called when the current-index of the white (gray)
+   * channel has been modified.
+   *
+   * \param index The new current-index of the white (gray) combo-box.
+   */
+  inline
+    void
+    on_wComboBox_currentIndexChanged( int index )
+  {
+    emit CurrentGrayIndexChanged( index );
+  }
+
+  /**
+   * \brief Slot called when the grayscale-mode is activated/deactivated.
+   *
+   * \param activated The new activation-state of the grayscale-mode.
+   */
+  inline
+    void
+    on_wCheckBox_toggled( bool activated )
+  {
+    emit GrayscaleActivated( activated );
   }
 };
+
+} // end namespace 'mvd'
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
 
 } // end namespace 'mvd'
 

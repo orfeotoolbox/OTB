@@ -661,8 +661,6 @@ MainWindow
       Qt::RightDockWidgetArea
     );
 
-  // m_ColorSetupDock->setVisible( false );
-
   // Color-dynamics.
   assert( m_ColorDynamicsDock==NULL );
   m_ColorDynamicsDock =

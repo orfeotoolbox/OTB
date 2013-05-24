@@ -113,6 +113,15 @@ signals:
    */
   void RgbChannelIndexChanged( RgbaChannel channel, int band );
 
+  /**
+   * \brief Signal emitted when the band-index of a white (gray)
+   * channel has been changed. This signal is used to forward events
+   * to other controllers such as ColorDynamicsController.
+   *
+   * \param band The new band-index of the white (gray) channel.
+   */
+  void GrayChannelIndexChanged( int band );
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
@@ -157,14 +166,24 @@ private:
 // Slots.
 private slots:
   /**
-   * \brief Slot called when the current index of a RGB channel of the controlled widget has changed.
+   * \brief Slot called when the current index of a RGB channel of the
+   * controlled widget has changed.
    *
    * \param channel The RGB video-channel for which the current
    * band-index has changed.
    *
    * \param index The new band-index of the RGB video-channel.
    */
-  void OnCurrentIndexChanged( RgbaChannel channel, int index );
+  void OnCurrentRgbIndexChanged( RgbaChannel channel, int index );
+
+  /**
+   * \brief Slot called when the current index of the white (gray)
+   * channel of the controlled widget has changed.
+   *
+   * \param index The new band-index of the white (gray)
+   * video-channel.
+   */
+  void OnCurrentGrayIndexChanged( int index );
 
 };
 

@@ -60,9 +60,9 @@ namespace
 /**
  */
 const char* QCOMBOBOX_NAMES[] = {
-  "redComboBox",
-  "greenComboBox",
-  "blueComboBox"
+  "rComboBox",
+  "gComboBox",
+  "bComboBox"
 };
 
 } // end of anonymous namespace.
@@ -97,9 +97,10 @@ ColorSetupWidget
 {
   m_Components = components;
 
-  m_UI->redComboBox->clear();
-  m_UI->greenComboBox->clear();
-  m_UI->blueComboBox->clear();
+  m_UI->rComboBox->clear();
+  m_UI->gComboBox->clear();
+  m_UI->bComboBox->clear();
+  m_UI->wComboBox->clear();
 
   QStringList itemTexts( components );
 
@@ -118,20 +119,22 @@ ColorSetupWidget
       }
     }
 
-  m_UI->redComboBox->addItems( itemTexts );
-  m_UI->greenComboBox->addItems( itemTexts );
-  m_UI->blueComboBox->addItems( itemTexts );
+  m_UI->rComboBox->addItems( itemTexts );
+  m_UI->gComboBox->addItems( itemTexts );
+  m_UI->bComboBox->addItems( itemTexts );
+  m_UI->wComboBox->addItems( itemTexts );
 
   // Black screen.
-  m_UI->redComboBox->setCurrentIndex( 0 );
-  m_UI->greenComboBox->setCurrentIndex( 0 );
-  m_UI->blueComboBox->setCurrentIndex( 0 );
+  m_UI->rComboBox->setCurrentIndex( 0 );
+  m_UI->gComboBox->setCurrentIndex( 0 );
+  m_UI->bComboBox->setCurrentIndex( 0 );
+  m_UI->wComboBox->setCurrentIndex( 0 );
 }
 
 /*******************************************************************************/
 void
 ColorSetupWidget
-::SetCurrentIndex( RgbaChannel channel, int index )
+::SetCurrentRgbIndex( RgbaChannel channel, int index )
 {
   QComboBox* comboBox = findChild< QComboBox* >( QCOMBOBOX_NAMES[ channel ] );
 
@@ -141,11 +144,35 @@ ColorSetupWidget
 /*******************************************************************************/
 int
 ColorSetupWidget
-::GetCurrentIndex( RgbaChannel channel )
+::GetCurrentRgbIndex( RgbaChannel channel )
 {
   QComboBox* comboBox = findChild< QComboBox* >( QCOMBOBOX_NAMES[ channel ] );
 
   return comboBox->currentIndex();
+}
+
+/*****************************************************************************/
+void
+ColorSetupWidget
+::SetGrayscaleEnabled( bool enable )
+{
+  m_UI->wCheckBox->setEnabled( enable );
+}
+
+/*****************************************************************************/
+void
+ColorSetupWidget
+::SetGrayscaleActivated( bool activated )
+{
+  m_UI->wCheckBox->setChecked( activated );
+}
+
+/*******************************************************************************/
+void
+ColorSetupWidget
+::SetCurrentGrayIndex( int index )
+{
+  m_UI->wComboBox->setCurrentIndex( index );
 }
 
 /*******************************************************************************/

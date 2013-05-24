@@ -78,10 +78,18 @@ ColorSetupController
   // Connect GUI to controller.
   QObject::connect(
     colorSetupWidget,
-    SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
+    SIGNAL( CurrentRgbIndexChanged( RgbaChannel, int ) ),
     // to:
     this,
-    SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
+    SLOT( OnCurrentRgbIndexChanged( RgbaChannel, int ) )
+  );
+
+  QObject::connect(
+    colorSetupWidget,
+    SIGNAL( CurrentGrayIndexChanged( int ) ),
+    // to:
+    this,
+    SLOT( OnCurrentGrayIndexChanged( int ) )
   );
 
   //
@@ -112,10 +120,18 @@ ColorSetupController
   // Disconnect GUI from controller.
   QObject::disconnect(
     colorSetupWidget,
-    SIGNAL( CurrentIndexChanged( RgbaChannel, int ) ),
+    SIGNAL( CurrentRgbIndexChanged( RgbaChannel, int ) ),
     // to:
     this,
-    SLOT( OnCurrentIndexChanged( RgbaChannel, int ) )
+    SLOT( OnCurrentRgbIndexChanged( RgbaChannel, int ) )
+  );
+
+  QObject::disconnect(
+    colorSetupWidget,
+    SIGNAL( CurrentGrayIndexChanged( RgbaChannel, int ) ),
+    // to:
+    this,
+    SLOT( OnCurrentGrayIndexChanged( RgbaChannel, int ) )
   );
 }
 
@@ -162,17 +178,45 @@ ColorSetupController
   // Reset list of component names.
   colorSetupWidget->SetComponents( imageModel->GetBandNames(true) );
 
+  //
+  // RGB-mode.
+
   // Reset current-indices of RGB channels widgets.
   for( CountType i=begin; i<end; ++i )
     {
     RgbaChannel channel = static_cast< RgbaChannel >( i );
-    
+
     VectorImageModel::Settings::ChannelVector::value_type band =
       imageModel->GetSettings().GetRgbChannel( i );
 
     // Set current-index of channel.
-    colorSetupWidget->SetCurrentIndex( channel, band );
-    OnCurrentIndexChanged( channel, band );
+    colorSetupWidget->SetCurrentRgbIndex( channel, band );
+#if 0
+    OnCurrentRgbIndexChanged( channel, band );
+#endif
+    }
+
+  //
+  // Grayscale-mode.
+  if( channels==RGBA_CHANNEL_RGB )
+    {
+    if( imageModel->GetNbComponents()<3 )
+      {
+      // Allow user-selectable grayscale-mode.
+      colorSetupWidget->SetGrayscaleEnabled( false  );
+      colorSetupWidget->SetGrayscaleActivated( true );
+      }
+    else
+      {
+      // Force grayscale-mode.
+      colorSetupWidget->SetGrayscaleEnabled( true  );
+      colorSetupWidget->SetGrayscaleActivated( false );
+      }
+
+    // Set current-index of white (gray).
+    colorSetupWidget->SetCurrentGrayIndex(
+      imageModel->GetSettings().GetRgbChannel( RGBA_CHANNEL_RED  )
+    );
     }
   }
   colorSetupWidget->blockSignals( false );
@@ -185,9 +229,11 @@ ColorSetupController
 /*******************************************************************************/
 void
 ColorSetupController
-::OnCurrentIndexChanged( RgbaChannel channel, int index )
+::OnCurrentRgbIndexChanged( RgbaChannel channel, int index )
 {
-  qDebug() << QString( "OnCurrentIndexChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( index );
+  qDebug() <<
+    QString( "OnCurrentRgbIndexChanged(%1, %2)" )
+    .arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( index );
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
@@ -199,6 +245,30 @@ ColorSetupController
   // Signal band-index of RGB channel has changed to other
   // controllers.
   emit RgbChannelIndexChanged( channel, index );
+
+  // Signal model has been updated.
+  emit ModelUpdated();
+}
+
+/*******************************************************************************/
+void
+ColorSetupController
+::OnCurrentGrayIndexChanged( int index )
+{
+  qDebug() << QString( "OnCurrentGrayIndexChanged(%1)" ).arg( index );
+
+  // Get image-model.
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  // Update channel indices.
+  imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_RED, index );
+  imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_GREEN, index );
+  imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_BLUE, index );
+
+  // Signal band-index of gray channel has changed to other
+  // controllers.
+  emit GrayChannelIndexChanged( index );
 
   // Signal model has been updated.
   emit ModelUpdated();
