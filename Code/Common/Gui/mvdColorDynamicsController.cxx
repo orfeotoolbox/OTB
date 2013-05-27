@@ -279,11 +279,11 @@ ColorDynamicsController
       colorDynamicsWidget->GetChannel( channel );
 
     DefaultImageType::PixelType::ValueType min(
-      minPx[ settings.GetRgbChannel( channel ) ]
+      minPx[ settings.GetChannel( channel ) ]
     );
 
     DefaultImageType::PixelType::ValueType max(
-      maxPx[ settings.GetRgbChannel( channel ) ]
+      maxPx[ settings.GetChannel( channel ) ]
     );
 
     // Block widget's signals...
@@ -349,11 +349,11 @@ ColorDynamicsController
       colorDynamicsWidget->GetChannel( channel );
 
     DefaultImageType::PixelType::ValueType min(
-      minPx[ settings.GetRgbChannel( channel ) ]
+      minPx[ settings.GetChannel( channel ) ]
     );
 
     DefaultImageType::PixelType::ValueType max(
-      maxPx[ settings.GetRgbChannel( channel ) ]
+      maxPx[ settings.GetChannel( channel ) ]
     );
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
@@ -505,7 +505,11 @@ void
 ColorDynamicsController
 ::OnRgbChannelIndexChanged( RgbaChannel channel, int band )
 {
-  qDebug() << QString( "OnRgbChannelIndexChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( band );
+  qDebug()
+    << this
+    << "::OnRgbChannelIndexChanged("
+    << RGBA_CHANNEL_NAMES[ channel ] << ", " << band <<
+    ")";
 
   //
   // Reset color-dynamics widget.
@@ -519,9 +523,49 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
+::OnGrayChannelIndexChanged( int band )
+{
+  qDebug()
+    << this
+    << "::OnGrayChannelIndexChanged(" << band << ")";
+
+  //
+  // Reset color-dynamics widget.
+  ResetIntensityRanges( RGBA_CHANNEL_RGB );
+  ResetQuantiles( RGBA_CHANNEL_RGB );
+
+  // Signal model has been updated.
+  emit ModelUpdated();
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsController
+::OnGrayscaleActivated( bool activated )
+{
+  qDebug()
+    << this
+    << "::OnGrayscaleActivated(" << activated << ")";
+
+  //
+  // Reset color-dynamics widget.
+  ResetIntensityRanges( RGBA_CHANNEL_RGB );
+  ResetQuantiles( RGBA_CHANNEL_RGB );
+
+  // Signal model has been updated.
+  emit ModelUpdated();
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsController
 ::OnLowQuantileChanged( RgbaChannel channel, double value )
 {
-  qDebug() << QString( "OnLowQuantileChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
+  qDebug()
+    << this
+    << "::OnLowQuantileChanged("
+    << RGBA_CHANNEL_NAMES[ channel ] << ", " << value
+    << ")";
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
@@ -534,7 +578,7 @@ ColorDynamicsController
   // Calculate quantile intensity.
   HistogramModel::MeasurementType intensity =
     imageModel->GetHistogramModel()->Quantile(
-      settings.GetRgbChannel( channel ),
+      settings.GetChannel( channel ),
       0.01 * value,
       BOUND_LOWER
     );
@@ -566,7 +610,11 @@ void
 ColorDynamicsController
 ::OnHighQuantileChanged( RgbaChannel channel, double value )
 {
-  qDebug() << QString( "OnHighQuantileChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
+  qDebug()
+    << this
+    << "::OnHighQuantileChanged("
+    << RGBA_CHANNEL_NAMES[ channel ] << ", " << value <<
+    ")";
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
@@ -579,7 +627,7 @@ ColorDynamicsController
   // Calculate quantile intensity.
   HistogramModel::MeasurementType intensity =
     imageModel->GetHistogramModel()->Quantile(
-      settings.GetRgbChannel( channel ),
+      settings.GetChannel( channel ),
       0.01 * value,
       BOUND_UPPER
     );
@@ -611,7 +659,11 @@ void
 ColorDynamicsController
 ::OnLowIntensityChanged( RgbaChannel channel, double value )
 {
-  qDebug() << QString( "OnLowIntensityChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
+  qDebug()
+    << this
+    << "::OnLowIntensityChanged("
+    << RGBA_CHANNEL_NAMES[ channel ] << ", " << value
+    << ")";
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
@@ -633,7 +685,7 @@ ColorDynamicsController
   // Refresh quantile display.
   colorBandDynWgt->SetLowQuantile(
     100.0 * imageModel->GetHistogramModel()->Percentile(
-      imageModel->GetSettings().GetRgbChannel( channel ),
+      imageModel->GetSettings().GetChannel( channel ),
       value,
       BOUND_LOWER )
   );
@@ -649,7 +701,11 @@ void
 ColorDynamicsController
 ::OnHighIntensityChanged( RgbaChannel channel, double value )
 {
-  qDebug() << QString( "OnHighIntensityChanged(%1, %2)" ).arg( RGBA_CHANNEL_NAMES[ channel ] ).arg( value );
+  qDebug()
+    << this
+    << "::OnHighIntensityChanged("
+    << RGBA_CHANNEL_NAMES[ channel ] << ", " << value
+    << ")";
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
@@ -671,7 +727,7 @@ ColorDynamicsController
   // Refresh quantile display.
   colorBandDynWgt->SetHighQuantile(
     100.0 * imageModel->GetHistogramModel()->Percentile(
-      imageModel->GetSettings().GetRgbChannel( channel ),
+      imageModel->GetSettings().GetChannel( channel ),
       value,
       BOUND_UPPER )
   );
@@ -687,7 +743,9 @@ void
 ColorDynamicsController
 ::OnResetIntensityClicked( RgbaChannel channel )
 {
-  qDebug() << QString( "OnResetIntensityClicked(%1)" ).arg( RGBA_CHANNEL_NAMES[ channel ] );
+  qDebug()
+    << this
+    << "::OnResetIntensityClicked(" << RGBA_CHANNEL_NAMES[ channel ] << ")";
 
   ResetIntensities( channel );
 
@@ -700,7 +758,9 @@ void
 ColorDynamicsController
 ::OnResetQuantileClicked( RgbaChannel channel )
 {
-  qDebug() << QString( "OnResetQuantileChanged(%1)" ).arg( RGBA_CHANNEL_NAMES[ channel ] );
+  qDebug()
+    << this
+    << "::OnResetQuantileChanged(" << RGBA_CHANNEL_NAMES[ channel ] << ")";
 
   ResetQuantiles( channel );
 
@@ -713,7 +773,9 @@ void
 ColorDynamicsController
 ::OnApplyAllClicked( RgbaChannel channel, double low, double high )
 {
-  qDebug() << QString( "OnApplyAllChanged(%1)" ).arg( RGBA_CHANNEL_NAMES[ channel ] );
+  qDebug()
+    << this
+    << "::OnApplyAllChanged(" << RGBA_CHANNEL_NAMES[ channel ] << ")";
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
@@ -728,7 +790,7 @@ ColorDynamicsController
 
     HistogramModel::MeasurementType lintensity =
       imageModel->GetHistogramModel()->Quantile(
-        settings.GetRgbChannel( i ),
+        settings.GetChannel( i ),
         0.01 * low,
         BOUND_LOWER
     );
@@ -736,7 +798,7 @@ ColorDynamicsController
     // Calculate quantile intensity.
     HistogramModel::MeasurementType uintensity =
       imageModel->GetHistogramModel()->Quantile(
-        settings.GetRgbChannel( i ),
+        settings.GetChannel( i ),
         0.01 * high,
         BOUND_UPPER
     );

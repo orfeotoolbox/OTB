@@ -109,6 +109,22 @@ public slots:
    */
   void OnRgbChannelIndexChanged( RgbaChannel channel, int band );
 
+  /**
+   * \brief Slot called when the band-index of the white (gray)
+   * channel has changed.
+   *
+   * \param band The new band-index of the white (gray) channel.
+   */
+  void OnGrayChannelIndexChanged( int band );
+
+  /**
+   * \brief Slot called when the activation-state of the
+   * grayscale-mode has changed.
+   *
+   * \param activated The new grayscale-mode activation state.
+   */
+  void OnGrayscaleActivated( bool activated );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //

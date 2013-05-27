@@ -338,6 +338,13 @@ MainWindow
     colorDynamicsCtrl,
     SLOT( OnGrayChannelIndexChanged( int ) )
   );
+  QObject::connect(
+    colorSetupCtrl,
+    SIGNAL( GrayscaleActivated( bool ) ),
+    // to: ...color-dynamics controller model update signal.
+    colorDynamicsCtrl,
+    SLOT( OnGrayscaleActivated( bool ) )
+  );
 
   //
   // EXPERIMENTAL TOOLBOX.
