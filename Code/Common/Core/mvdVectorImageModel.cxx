@@ -318,7 +318,7 @@ VectorImageModel
   for( CountType i=0; i<RGBA_CHANNEL_ALPHA; ++i )
     {
     Settings::ChannelVector::value_type band =
-      GetSettings().GetRgbChannel( static_cast< RgbaChannel >( i ) );
+      GetSettings().GetChannel( static_cast< RgbaChannel >( i ) );
 
     ParametersType::ValueType index = 2 * i;
 
@@ -510,17 +510,6 @@ VectorImageModel
   //m_RenderingFilter->GetRenderingFunction()->SetParameters(paramsMinMax);
 // ---------------------------- 
 
-  // TODO: Remove local variable.
-  // Local variable because RenderingFunction::SetChannels() gets a
-  // non-const std::vector< unsigned int >& as argument instead of a
-  // const one.
-  /*
-    // Done in VectorImageModel::OnModelUpdated() slot.
-  Settings::ChannelVector rgb( m_Settings.GetRgbChannels() );
-  m_RenderingFilter->GetRenderingFunction()->SetChannelList(
-    rgb
-  );
-  */
   m_RenderingFilter->GetOutput()->SetRequestedRegion(region);
   m_RenderingFilter->Update();
 
@@ -807,11 +796,8 @@ VectorImageModel
   RenderingFilterType::RenderingFunctionType* renderingFunc =
     m_RenderingFilter->GetRenderingFunction();
 
-  // TODO: Remove local variable.
-  // Local variable because RenderingFunction::SetChannels() gets a
-  // non-const std::vector< unsigned int >& as argument instead of a
-  // const one.
-  Settings::ChannelVector rgb( GetSettings().GetRgbChannels() );
+  Settings::ChannelVector rgb;
+  GetSettings().GetChannels( rgb );
 
   renderingFunc->SetChannelList( rgb );
   renderingFunc->SetParameters( GetSettings().GetDynamicsParams() );
@@ -908,7 +894,8 @@ VectorImageModel
 
     //
     // Display the radiometry of the displayed channels
-    Settings::ChannelVector rgb( GetSettings().GetRgbChannels() );
+    Settings::ChannelVector rgb;
+    GetSettings().GetChannels( rgb );
 
     if ( ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
       {
