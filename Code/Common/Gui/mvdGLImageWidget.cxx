@@ -163,6 +163,24 @@ GLImageWidget
                                      const PointType&) )
   );
 
+  // Connect this model region changed with more information than the
+  // previous signal (to load previous visual context)
+  QObject::connect(
+    this,
+    SIGNAL( ModelImageRegionChanged( const ImageRegionType& , 
+                                     const SpacingType&,
+                                     const PointType&,
+                                     const PointType&,
+                                     double) ),
+    // to:
+    m_ImageViewManipulator,
+    SLOT( OnModelImageRegionChanged( const ImageRegionType&, 
+                                     const SpacingType&,
+                                     const PointType&,
+                                     const PointType&,
+                                     double) )
+  );
+
   // Connect the renderer origin (of extent) changed to the manipulator
   QObject::connect(
     m_ImageModelRenderer,
@@ -222,7 +240,15 @@ GLImageWidget
     m_ImageViewManipulator->HasZoomChanged()
   );
 
-    // use the model renderer to paint the requested region of the image.
+  // 
+  // emit an event with viewport center and zoom level (will be stored
+  // in DatasetModel to be written in Descriptor)
+  emit RenderingContextChanged(
+    m_ImageViewManipulator->GetViewportPhysicalCenter(), 
+    isotropicZoom
+    );
+
+  // use the model renderer to paint the requested region of the image.
   m_ImageModelRenderer->paintGL( context );
 }
 
@@ -380,6 +406,7 @@ GLImageWidget::dropEvent(QDropEvent *event)
     return;
 
   // get the filename and send 
+  // TODO : handle several files dropped
   QString fileName = urls.first().toLocalFile();
   if (fileName.isEmpty())
     {

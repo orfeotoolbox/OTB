@@ -129,6 +129,10 @@ public:
   /** Set image model */
   inline void SetImageModel(AbstractImageModel* model);
 
+  inline void SetImageModel(AbstractImageModel* model, 
+                            const PointType& centerPoint, 
+                            double zoomLevel);
+
 //
 // Public SLOTS.
 public slots:
@@ -139,9 +143,17 @@ public slots:
 signals:
   void movingMouse();
   void releasingMouse();
-  void ModelImageRegionChanged(const ImageRegionType &, const SpacingType&, const PointType&);
+  void ModelImageRegionChanged(const ImageRegionType &, const SpacingType&, const PointType& );
+
+  void ModelImageRegionChanged(const ImageRegionType &, 
+                               const SpacingType&, 
+                               const PointType&, 
+                               const PointType&, 
+                               double);
   void CentralWidgetUpdated();
   void ImageToImportDropped(const QString &);
+
+  void RenderingContextChanged( const PointType&, double);
 
 //
 // Protected methods.
@@ -247,6 +259,37 @@ GLImageWidget
       model->GetNativeLargestRegion(),      
       model->GetNativeSpacing(), 
       model->GetOrigin() // origin is the same for ql and central image
+      );
+    }
+}
+
+/*****************************************************************************/
+inline
+void
+GLImageWidget
+::SetImageModel(AbstractImageModel* model, 
+                const PointType& centerPoint, 
+                double zoomLevel)
+{
+  m_ImageModel = model;
+  
+  //
+  // REFRESH DISPLAY.
+
+  // set the largest possible region of the image and the initial
+  // spacing (may change when zooming)
+  // TODO:  rename signal name when handling DataSets collections
+  // TODO: move signal into mvdApplication and link it to DockWidget
+  // and ImageView.
+  if( model!=NULL )
+    {
+    emit ModelImageRegionChanged(
+      model->GetNativeLargestRegion(),      
+      model->GetNativeSpacing(), 
+      model->GetOrigin(), // origin is the same for ql and central
+                          // image
+      centerPoint,
+      zoomLevel
       );
     }
 }
