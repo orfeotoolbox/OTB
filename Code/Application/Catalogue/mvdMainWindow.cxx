@@ -1141,8 +1141,17 @@ MainWindow
       );
     }
 
-  // Disconnect the signals from the
-  DisconnectStatusBar( model );
+  // Disconnect update of last viewport informations in datasetmodel
+  // from the previous ImageView
+    QObject::disconnect(
+      m_ImageView,
+      SIGNAL( RenderingContextChanged( const PointType&, double ) ),
+      datasetModel,
+      SLOT(  OnRenderingContextChanged(const PointType&, double ))
+      );
+
+  // Disconnect the signals from the previous dataset model
+  DisconnectStatusBar( datasetModel );
 }
 
 /*****************************************************************************/
@@ -1168,9 +1177,33 @@ MainWindow
   // the signal with zoom level)
   ConnectStatusBar( model );
 
+  // connect to get the last rendering context (to be written in Descriptor)
+  if (vectorImageModel)
+    {
+    // update the last viewport centerPoint and zoom in DatasetModel
+    QObject::connect(
+      m_ImageView,
+      SIGNAL( RenderingContextChanged( const PointType&, double ) ),
+      model,
+      SLOT(  OnRenderingContextChanged(const PointType&, double ))
+      );
+    }
+
   // Update image-view.
   assert( m_ImageView!=NULL );
-  m_ImageView->SetImageModel( vectorImageModel );
+
+  // if a model is selected get the previous model rendering
+  // informations 
+  if ( model )
+    {
+    m_ImageView->SetImageModel( vectorImageModel, 
+                                model->GetLastPhysicalCenter(),
+                                model->GetLastIsotropicZoom() );
+    }
+  else
+    {
+    m_ImageView->SetImageModel( vectorImageModel );
+    }
 
   // Access quicklook-view.
   GLImageWidget* quicklookView = GetQuicklookView();
@@ -1236,6 +1269,7 @@ MainWindow
       m_ImageView->GetImageViewManipulator(),
       SLOT( OnViewportRegionChanged( double, double ) )
       );
+
     }
 
   //
