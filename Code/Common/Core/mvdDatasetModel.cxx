@@ -85,9 +85,9 @@ DatasetModel
   m_LastPhysicalCenter(),
   m_LastIsotropicZoom(1.)
 {
-  // need to initialize proprely the last physical center
-  m_LastPhysicalCenter.Fill(0.);
-
+  // need to initialize to LastPhysicalCenter to detect (in
+  // MainWindow) if it is the first time this model is loaded. 
+  m_LastPhysicalCenter.Fill(-1.);
 }
 
 /*******************************************************************************/

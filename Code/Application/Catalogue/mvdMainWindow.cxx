@@ -1192,9 +1192,11 @@ MainWindow
   // Update image-view.
   assert( m_ImageView!=NULL );
 
-  // if a model is selected get the previous model rendering
-  // informations 
-  if ( model )
+  // if a model is set and not the first time, use previous rendering
+  // context informations
+  if ( model && 
+       model->GetLastPhysicalCenter()[0] != -1. &&  
+       model->GetLastPhysicalCenter()[1] != -1. )
     {
     m_ImageView->SetImageModel( vectorImageModel, 
                                 model->GetLastPhysicalCenter(),
