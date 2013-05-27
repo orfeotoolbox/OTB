@@ -34,9 +34,9 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
  : m_EnableMinMax(true),
    m_EnableFirstOrderStats(true),
    m_EnableSecondOrderStats(true),
+   m_UseUnbiasedEstimator(true),
    m_IgnoreInfiniteValues(true),
-   m_IgnoreUserDefinedValue(false),
-   m_UseUnbiasedEstimator(true)
+   m_IgnoreUserDefinedValue(false)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
