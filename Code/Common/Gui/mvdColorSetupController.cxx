@@ -136,10 +136,10 @@ ColorSetupController
 
   QObject::disconnect(
     colorSetupWidget,
-    SIGNAL( CurrentGrayIndexChanged( RgbaChannel, int ) ),
+    SIGNAL( CurrentGrayIndexChanged( int ) ),
     // to:
     this,
-    SLOT( OnCurrentGrayIndexChanged( RgbaChannel, int ) )
+    SLOT( OnCurrentGrayIndexChanged( int ) )
   );
 
   QObject::disconnect(
