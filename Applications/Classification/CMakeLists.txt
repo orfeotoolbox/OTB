@@ -22,15 +22,27 @@ OTB_CREATE_APPLICATION(NAME           ClassificationMapRegularization
                        SOURCES        otbClassificationMapRegularization.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
 
-IF(OTB_USE_OPENCV)
-  OTB_CREATE_APPLICATION(NAME         TrainImagesClassifier
-                         SOURCES      otbTrainImagesClassifier.cxx otbTrainSVM.cxx otbTrainLibSVM.cxx otbTrainBoost.cxx 
-                                      otbTrainDecisionTree.cxx otbTrainGradientBoostedTree.cxx otbTrainNeuralNetwork.cxx otbTrainNormalBayes.cxx
-                                      otbTrainRandomForests.cxx otbTrainKNN.cxx
-                         LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)
+set( TrainImagesClassifier_SRC otbTrainImagesClassifier.cxx otbTrainLibSVM.cxx )
+if(OTB_USE_OPENCV)
+  # This library is used available only when OpenCV is activated.
+  # Use a cmake variable as proxy, which is empty when OpenCV is deactivated
+  set( OTBMachineLearning_LIBRARY OTBMachineLearning )
+  
+  # Add source files with OpenCV dependency
+  set( TrainImagesClassifier_SRC ${TrainImagesClassifier_SRC} 
+         otbTrainSVM.cxx  otbTrainBoost.cxx 
+         otbTrainDecisionTree.cxx otbTrainGradientBoostedTree.cxx
+         otbTrainNeuralNetwork.cxx otbTrainNormalBayes.cxx
+         otbTrainRandomForests.cxx otbTrainKNN.cxx )
+endif()
 
-  OTB_CREATE_APPLICATION(NAME         ImageClassifier
-                         SOURCES      otbImageClassifier.cxx
-                         LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)
+OTB_CREATE_APPLICATION(NAME         TrainImagesClassifier
+                       SOURCES      ${TrainImagesClassifier_SRC}
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;${OTBMachineLearning_LIBRARY})
 
-ENDIF()
+OTB_CREATE_APPLICATION(NAME         ImageClassifier
+                       SOURCES      otbImageClassifier.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;${OTBMachineLearning_LIBRARY})
+
+
+ 
