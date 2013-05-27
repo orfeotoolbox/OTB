@@ -81,8 +81,13 @@ DatasetModel
   m_Path(),
   m_Name(),
   m_Alias( ),
-  m_Directory()
+  m_Directory(),
+  m_LastPhysicalCenter(),
+  m_LastIsotropicZoom(1.)
 {
+  // need to initialize proprely the last physical center
+  m_LastPhysicalCenter.Fill(0.);
+
 }
 
 /*******************************************************************************/
@@ -308,6 +313,9 @@ DatasetModel
 
     // Always parse alias
     ParseAlias();
+    
+    // Parse center point and zoom level
+    ParseImageViewContext();
     }
 }
 
@@ -401,6 +409,42 @@ DatasetModel
   qDebug() << "Input Dataset :"
            << "\n Path : " << dsName
            << "\n Alias: " << m_Alias;
+}
+
+/*******************************************************************************/
+void
+DatasetModel
+::ParseImageViewContext()
+{
+  // local variable
+  PointType center;
+  double    zoom;
+   
+  // loop on dataset elements
+  for( QDomElement viewElt( m_Descriptor->FirstImageViewContextElement() );
+       !viewElt.isNull();
+        viewElt = DatasetDescriptor::NextImageSiblingElement(viewElt  ) )
+    {
+
+    // Read image-model descriptor information.
+     DatasetDescriptor::GetRenderingImageInformation(
+    		 viewElt,
+
+                 // TODO : need to use attributes to remember loaded
+                 // context and set it to the manipulator + accessors
+                 // 
+    		 m_LastPhysicalCenter,
+                 m_LastIsotropicZoom
+       );
+    }
+
+  // no need à priori
+  //emit ImageViewContextLoaded( center, zoom);
+  
+  // verbosity
+  qDebug() << "::ParseImageViewContext() :"
+           << "\n Center : " << m_LastPhysicalCenter[0] <<","<<m_LastPhysicalCenter[1]
+           << "\n Zoom  : " << m_LastIsotropicZoom;
 }
 
 /*******************************************************************************/
@@ -653,6 +697,21 @@ DatasetModel
     vectorImageModel->GetId(),
     &vectorImageModel->GetSettings()
   );
+}
+
+/*******************************************************************************/
+void
+DatasetModel
+::OnRenderingContextChanged(const PointType& center, double zoom)
+{
+  // 
+  qDebug() <<this <<"::OnRenderingContextChanged to center "<<center[0]<<","<<center[1]<<" zoom: "<< zoom; 
+
+  // update the descriptor
+  m_Descriptor->UpdateViewContext(center, zoom );
+
+  // write the changes
+  Save();
 }
 
 } // end namespace 'mvd'

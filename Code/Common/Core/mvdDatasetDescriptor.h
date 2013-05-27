@@ -137,7 +137,7 @@ public:
 
   /**
    */
-  inline QDomElement FirstRenderingImageInformationElement();
+  inline QDomElement FirstImageViewContextElement();
 
   /**
    */
@@ -165,13 +165,15 @@ public:
    */
   static
     void GetRenderingImageInformation( const QDomElement& datasetSibling,
-                                       ImageRegionType& viewportRegion,
+                                       PointType& center,
                                        double&  zoom );
   /**
    */
   bool SetImageModel( int id, void* settings );
 
   bool UpdateDatasetAlias( const QString& newAlias);
+
+  bool UpdateViewContext(const PointType& center, double zoom);
 
   /**
    */
@@ -237,15 +239,6 @@ private:
   static
   void ExtractArrayFromElement( itk::Array<T>& array,
                                 QDomElement& tagName );
-
-
-  /**
-   * \brief Deserialize a ImageRegion from a QDomElement
-   */
-  inline
-    static
-    void ExtractImageRegionFromElement( ImageRegionType & region,
-                                        QDomElement& element );
   
   /**
    */
@@ -298,7 +291,7 @@ private:
     ELEMENT_DYNAMICS_PARAMETERS,
     //
     ELEMENT_VIEW_GROUP,
-    ELEMENT_VIEW_ROI,
+    ELEMENT_VIEW_CENTER,
     ELEMENT_VIEW_ZOOM,
     //
     ELEMENT_COUNT
@@ -386,7 +379,7 @@ DatasetDescriptor
 inline
 QDomElement
 DatasetDescriptor
-::FirstRenderingImageInformationElement()
+::FirstImageViewContextElement()
 {
   return m_ImageViewGroupElement;
 }
@@ -504,41 +497,6 @@ DatasetDescriptor
     QVariant v = stringList[i];
     array[i] = v.value<T>();
   }
-}
-
-/*****************************************************************************/
-inline
-void
-DatasetDescriptor
-::ExtractImageRegionFromElement( ImageRegionType & region,
-                                 QDomElement& element )
-{
-  QDomNode node = element.firstChild();
-  // TODO: Manage XML structure errors.
-  assert( !node.isNull() );
-  assert( node.isText() );
-
-  QDomText textNode = node.toText();
-  assert( !textNode.isNull() );
-  
-  QString data = textNode.data();
-  QStringList stringList = data.split(" ");
-  
-  // checkings
-  unsigned int nbElements = static_cast<unsigned int>(stringList.size());
-  assert( nbElements == 4 );
-
-  // get the image region fields
-  ImageRegionType::IndexType origin;
-  ImageRegionType::SizeType  size;
-  origin[0] =  stringList[0].toUInt();
-  origin[1] =  stringList[1].toUInt();
-  size[0]   =  stringList[2].toUInt();
-  size[1]   =  stringList[3].toUInt();
-  
-  // fill the region
-  region.SetIndex( origin );
-  region.SetSize( size );
 }
 
 } // end namespace 'mvd'

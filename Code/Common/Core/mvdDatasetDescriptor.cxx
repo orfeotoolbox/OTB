@@ -88,7 +88,7 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   "dynamics",
   //
   "view",
-  "roi",
+  "center",
   "zoom"
 };
 
@@ -303,6 +303,55 @@ DatasetDescriptor
 }
 
 /*******************************************************************************/
+bool
+DatasetDescriptor
+::UpdateViewContext(const PointType& center, double zoom)
+{
+  qDebug() << this << "::UpdateViewContext( center: " << center[0]<<","<<center[1]<< " zoom: "<< zoom << ")";
+
+  // Create QString from parameters
+  QString scenter = QString( "%1 %2" ).arg( center[0] ).arg( center[1] );
+  QString szoom   = QString( "%1" ).arg( zoom );
+ 
+  // Access image view group
+  if ( m_ImageViewGroupElement.isNull() )
+    return false;
+
+  // Access center
+  QDomElement centerElt(
+    m_ImageViewGroupElement.firstChildElement( TAG_NAMES[ ELEMENT_VIEW_CENTER] )
+  );
+  assert( !centerElt.isNull() );
+
+  // create a new center node
+  QDomElement newcenterElt(
+    CreateTextNode( scenter, 
+                    TAG_NAMES[ ELEMENT_VIEW_CENTER ] )
+    );
+
+  // replace the node
+  m_ImageViewGroupElement.replaceChild(newcenterElt,  centerElt);
+
+  // Access center
+  QDomElement zoomElt(
+    m_ImageViewGroupElement.firstChildElement( TAG_NAMES[ ELEMENT_VIEW_ZOOM] )
+  );
+  assert( !zoomElt.isNull() );
+
+  // create a new center node
+  QDomElement newzoomElt(
+    CreateTextNode( szoom, 
+                    TAG_NAMES[ ELEMENT_VIEW_ZOOM ] )
+    );
+
+  // replace the node
+  m_ImageViewGroupElement.replaceChild(newzoomElt,  zoomElt);
+
+  // if everything went ok
+  return true;
+}
+
+/*******************************************************************************/
 void
 DatasetDescriptor
 ::GetImageModel( const QDomElement& imageSibling,
@@ -409,14 +458,13 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   assert( !datasetAliasElt.isNull() );
   datasetAlias = datasetAliasElt.text();
-  qDebug()<< " ::GetDatasetInformation( datasetPath :  "<< datasetPath<< " - alias :  "<< datasetAlias <<" )";
 }
 
 /*******************************************************************************/
 void
 DatasetDescriptor
 ::GetRenderingImageInformation( const QDomElement& datasetSibling,
-                                ImageRegionType& viewportRegion,
+                                PointType& center,
                                 double&  zoom )
 {
   // TODO: Manager XML structure errors.
@@ -426,14 +474,19 @@ DatasetDescriptor
   QDomElement imageViewElt( datasetSibling );
 
   // Acces roi element
-  QDomElement roiElt(
-    imageViewElt.firstChildElement( TAG_NAMES[ ELEMENT_VIEW_ROI ] )
+  QDomElement centerElt(
+    imageViewElt.firstChildElement( TAG_NAMES[ ELEMENT_VIEW_CENTER ] )
     );
   // TODO: Manage XML structure errors.
-  assert( !roiElt.isNull() );
+  assert( !centerElt.isNull() );
 
-  // fill the image region
-  ExtractImageRegionFromElement(viewportRegion, roiElt );
+  // get the viewport physical center
+  itk::Array<double>  aCenter;
+  ExtractArrayFromElement(aCenter, centerElt );
+
+  // fill the reference to the center argument
+  center[0] = aCenter.GetElement(0);
+  center[1] = aCenter.GetElement(1);
   
   // Access zoom 
   QDomElement zoomElt(
@@ -442,11 +495,6 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   assert( !zoomElt.isNull() );
   zoom = QVariant( zoomElt.text() ).toReal() ;
-
-
-  std::cout<< " ::GetRenderingImageInformation( ImageRegion : "<< viewportRegion 
-           << " - zoom : "<< zoom <<" )"
-           <<std::endl;
 }
 
 /*******************************************************************************/
@@ -485,6 +533,10 @@ DatasetDescriptor
   // Relink image-group element.
   m_ImagesGroupElement =
     rootElt.firstChildElement( TAG_NAMES[ ELEMENT_IMAGES_GROUP ] );
+
+  // Relink view-group element.
+  m_ImageViewGroupElement =
+    rootElt.firstChildElement( TAG_NAMES[ ELEMENT_VIEW_GROUP ] );
 
 #if 0
   qDebug()
@@ -614,16 +666,18 @@ DatasetDescriptor
   );
   rootElt.appendChild( viewElt );
   
-  // Image view RegionOfInterest element
-  QDomElement roiElt(
-    CreateTextNode( "0 0 100 100", 
-                    TAG_NAMES[ ELEMENT_VIEW_ROI ] )
+  // Image view physicalCenter element
+  QDomElement centerElt(
+    CreateTextNode( QString::number( model->GetLastPhysicalCenter()[0] ) + 
+                    " " + 
+                    QString::number( model->GetLastPhysicalCenter()[1] ), 
+                    TAG_NAMES[ ELEMENT_VIEW_CENTER ] )
     );
-  viewElt.appendChild( roiElt );
+  viewElt.appendChild( centerElt );
 
   // Image View zoom factor element
   QDomElement zoomElt(
-    CreateTextNode( "0.12",
+    CreateTextNode( QString::number( model->GetLastIsotropicZoom() ),
                     TAG_NAMES[ ELEMENT_VIEW_ZOOM ] )
     );
   viewElt.appendChild( zoomElt );

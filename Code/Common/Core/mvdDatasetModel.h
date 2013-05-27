@@ -218,6 +218,14 @@ public:
 
   virtual void ClearModified();
 
+  //
+  // accessors to last rendering information
+
+  inline const PointType& GetLastPhysicalCenter() const ;
+
+  inline const double GetLastIsotropicZoom() const ;
+
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -268,6 +276,7 @@ private:
    */
   static const char* HISTOGRAM_FILE_MARKER;
 
+
 //
 // Private methods.
 private:
@@ -287,6 +296,9 @@ private:
   /** */
   void ParseAlias();
 
+
+  /** */
+  void ParseImageViewContext();
 
   /** */
   void WriteDescriptor() const;
@@ -313,10 +325,22 @@ private:
   /**
    */
   QDir m_Directory;
-
+  
   /**
     */
   PropertiesContainer m_DatasetProperties;
+
+  /**
+   * \brief Last physical center used for viewport rendering
+   * 
+   */
+  PointType      m_LastPhysicalCenter;
+
+  /**
+   * \brief Last zoom level used for viewport rendering
+   * 
+   */
+  double         m_LastIsotropicZoom;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -326,6 +350,9 @@ private slots:
   /**
    */
   void OnSettingsUpdated( AbstractImageModel* );
+
+  /** */
+  void OnRenderingContextChanged(const PointType&, double );
 };
 
 } // end namespace 'mvd'
@@ -493,6 +520,26 @@ DatasetModel
 ::GetImageModels()
 {
   return findChildren< AbstractImageModel* >();
+}
+
+/*****************************************************************************/
+inline
+const 
+PointType&
+DatasetModel
+::GetLastPhysicalCenter() const
+{
+  return m_LastPhysicalCenter;
+}
+
+/*****************************************************************************/
+inline
+const
+double
+DatasetModel
+::GetLastIsotropicZoom() const
+{
+  return m_LastIsotropicZoom;
 }
 
 } // end namespace 'mvd'
