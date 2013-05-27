@@ -363,6 +363,7 @@ ImageViewManipulator
     }
 }
 
+/******************************************************************************/
 void
 ImageViewManipulator
 ::KeepMousePosition(double scale)
@@ -504,7 +505,8 @@ ImageViewManipulator
 /*****************************************************************************/
 
 /*****************************************************************************/
-void ImageViewManipulator
+void 
+ImageViewManipulator
 ::OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
                             const SpacingType& spacing,
                             const PointType& origin)
@@ -548,7 +550,8 @@ void ImageViewManipulator
 }
 
 /*****************************************************************************/
-void ImageViewManipulator
+void 
+ImageViewManipulator
 ::OnViewportRegionChanged(double Xpc, double Ypc)
 {
   // Update the navigation context
@@ -573,7 +576,8 @@ void ImageViewManipulator
 }
 
 /*****************************************************************************/
-void ImageViewManipulator
+void 
+ImageViewManipulator
 ::OnUserScaleEditingFinished(const QString & scale)
 {
   //
@@ -613,6 +617,7 @@ void ImageViewManipulator
 
 }
 
+/*****************************************************************************/
 void ImageViewManipulator
 ::OnUserZoomIn()
 {
@@ -623,6 +628,7 @@ void ImageViewManipulator
   qobject_cast< QWidget* >( parent() )->update();
 }
 
+/*****************************************************************************/
 void ImageViewManipulator
 ::OnUserZoomOut()
 {
@@ -635,6 +641,7 @@ void ImageViewManipulator
 
 }
 
+/*****************************************************************************/
 void ImageViewManipulator
 ::OnUserZoomExtent()
 {
@@ -657,6 +664,7 @@ void ImageViewManipulator
   qobject_cast< QWidget* >( parent() )->update();
 }
 
+/*****************************************************************************/
 void ImageViewManipulator
 ::OnUserZoomFull()
 {
