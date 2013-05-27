@@ -134,6 +134,9 @@ public:
   /** */
   inline PointType ScreenIndexToPhysicalPoint(int x, int y);
 
+  /** */
+  inline PointType GetViewportPhysicalCenter();
+
 //
 // Public SLOTS.
 public slots:
@@ -259,7 +262,6 @@ private:
 // Private attributes.
 private:
 
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -365,6 +367,30 @@ AbstractViewManipulator
   
   return ScreenIndexToPhysicalPoint(index);
 }
+
+/*****************************************************************************/
+inline 
+PointType
+AbstractViewManipulator
+::GetViewportPhysicalCenter()
+{  
+  // get the viewport region
+  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+
+  // get the viewport center
+  IndexType        origin = currentRegion.GetIndex();
+  double centerX = (double)(origin[0]) + (double)(currentRegion.GetSize()[0])/2.;
+  double centerY = (double)(origin[1]) + (double)(currentRegion.GetSize()[1])/2.;
+  
+  // index -> physical point
+  PointType  physicalCenter;
+  physicalCenter[0] = centerX * vcl_abs(GetNativeSpacing()[0]) + GetOrigin()[0];
+  physicalCenter[1] = centerY * vcl_abs(GetNativeSpacing()[1]) + GetOrigin()[1];
+  
+  //
+  return physicalCenter;
+}
+
 
 } // end namespace 'mvd'
 
