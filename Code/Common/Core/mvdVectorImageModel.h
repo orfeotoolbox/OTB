@@ -152,7 +152,8 @@ public:
     /** */
     inline void SetRgbChannels( const ChannelVector& rgb );
 
-    /** */
+    /**
+     */
     inline const ChannelVector& GetRgbChannels() const;
 
     /**
@@ -186,6 +187,42 @@ public:
     void SetDynamicsParam( CountType i,
 			   const ParametersType::ValueType& param );
 
+    /**
+     * \brief Set/clear grayscale-mode activation-state flag for image.
+     */
+    inline void SetGrayscaleActivated( bool activated );
+
+    /**
+     * \return Grayscale-mode activation state flag.
+     */
+    inline bool IsGrayscaleActivated() const;
+
+    /**
+     * \brief Set white (gray) channel index.
+     *
+     * \param index The new index of white (gray) channel.
+     */
+    inline void SetGrayChannel( unsigned int );
+
+    /**
+     * \return White (gray) channel index.
+     */
+    inline unsigned int GetGrayChannel() const;
+
+    /**
+     * \return the band-index for the given component taking the
+     * grayscale-mode activation state flag into account.
+     */
+    inline
+    unsigned int
+    GetChannel( ChannelVector::size_type i ) const;
+
+    /**
+     * \return the channels band-index vector taking the
+     * grayscale-mode activation state flag into account.
+     */
+    inline void GetChannels( ChannelVector& channels ) const;
+
     //
     // Private attributes.
   private:
@@ -200,6 +237,16 @@ public:
      * HistogramModel::Quantile()).
      */
     ParametersType m_DynamicsParams;
+
+    /**
+     * \brief Grayscale-mode band-index.
+     */
+    unsigned int m_GrayChannel;
+
+    /**
+     * \brief Grayscale-mode activation state.
+     */
+    bool m_IsGrayscaleActivated;
 
     /**
      * \brief Flag which notices that rendering settings have been
@@ -568,6 +615,8 @@ VectorImageModel::Settings
 ::Settings() :
   m_RgbChannels(),
   m_DynamicsParams( 6 ),
+  m_GrayChannel( 0 ),
+  m_IsGrayscaleActivated( false ),
   m_IsModified( false ),
   m_IsApplied( false )
 {
@@ -579,10 +628,11 @@ VectorImageModel::Settings
 ::Settings( const Settings& other ) :
   m_RgbChannels( other.m_RgbChannels ),
   m_DynamicsParams( other.m_DynamicsParams ),
+  m_GrayChannel( other.m_GrayChannel ),
+  m_IsGrayscaleActivated( false ),
   m_IsModified( false ),
   m_IsApplied( other.m_IsApplied )
 {
-  qDebug() << this << "Settings( const Settigs& )";
 }
 
 /*****************************************************************************/
@@ -596,6 +646,8 @@ VectorImageModel::Settings
 
   m_RgbChannels = other.m_RgbChannels;
   m_DynamicsParams = other.m_DynamicsParams;
+  m_GrayChannel = other.m_GrayChannel;
+  m_IsGrayscaleActivated = other.m_IsGrayscaleActivated;
   m_IsApplied = other.m_IsApplied;
 
   return *this;
@@ -692,6 +744,25 @@ VectorImageModel::Settings
 inline
 void
 VectorImageModel::Settings
+::GetChannels( VectorImageModel::Settings::ChannelVector& channels ) const
+{
+  if( IsGrayscaleActivated() )
+    {
+    channels.resize( 3 );
+
+    for( CountType i=0; i<channels.size(); ++i )
+      channels[ i ] = m_GrayChannel;
+    }
+  else
+    {
+    channels = m_RgbChannels;
+    }
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
 ::SetRgbChannel( ChannelVector::size_type i,
 		 const ChannelVector::value_type& channel )
 {
@@ -712,6 +783,15 @@ VectorImageModel::Settings
 ::GetRgbChannel( ChannelVector::size_type i ) const
 {
   return m_RgbChannels[ i ];
+}
+
+/*****************************************************************************/
+inline
+unsigned int
+VectorImageModel::Settings
+::GetChannel( ChannelVector::size_type i ) const
+{
+  return m_IsGrayscaleActivated ? m_GrayChannel : m_RgbChannels[ i ];
 }
 
 /*****************************************************************************/
@@ -769,7 +849,50 @@ VectorImageModel::Settings
   m_DynamicsParams[ i ] = param;
 }
 
+/*****************************************************************************/
+inline
+bool
+VectorImageModel::Settings
+::IsGrayscaleActivated() const
+{
+  return m_IsGrayscaleActivated;
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::SetGrayscaleActivated( bool activated )
+{
+  m_IsGrayscaleActivated = activated;
+
+  SetModified();
+}
+
+/*****************************************************************************/
+inline
+unsigned int
+VectorImageModel::Settings
+::GetGrayChannel() const
+{
+  return m_GrayChannel;
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::SetGrayChannel( unsigned int index )
+{
+  m_GrayChannel = index;
+
+  SetModified();
+}
+
 } // end namespace 'mvd'.
+
+/*****************************************************************************/
+/*****************************************************************************/
 
 namespace mvd
 {

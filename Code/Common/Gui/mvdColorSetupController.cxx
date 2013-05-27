@@ -216,22 +216,17 @@ ColorSetupController
   // Grayscale-mode.
   if( channels==RGBA_CHANNEL_RGB )
     {
-    if( imageModel->GetNbComponents()<3 )
-      {
-      // Allow user-selectable grayscale-mode.
-      colorSetupWidget->SetGrayscaleEnabled( false  );
-      colorSetupWidget->SetGrayscaleActivated( true );
-      }
-    else
-      {
-      // Force grayscale-mode.
-      colorSetupWidget->SetGrayscaleEnabled( true  );
-      colorSetupWidget->SetGrayscaleActivated( false );
-      }
+    // Activated grayscale-mode.
+    colorSetupWidget->SetGrayscaleActivated(
+      imageModel->GetSettings().IsGrayscaleActivated()
+    );
+
+    // Allow user-selectable grayscale-mode.
+    colorSetupWidget->SetGrayscaleEnabled( imageModel->GetNbComponents()>=3  );
 
     // Set current-index of white (gray).
     colorSetupWidget->SetCurrentGrayIndex(
-      imageModel->GetSettings().GetRgbChannel( RGBA_CHANNEL_RED  )
+      imageModel->GetSettings().GetGrayChannel()
     );
     }
   }
@@ -278,9 +273,7 @@ ColorSetupController
   assert( imageModel!=NULL );
 
   // Update channel indices.
-  imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_RED, index );
-  imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_GREEN, index );
-  imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_BLUE, index );
+  imageModel->GetSettings().SetGrayChannel( index );
 
   // Signal band-index of gray channel has changed to other
   // controllers.
@@ -297,38 +290,12 @@ ColorSetupController
 {
   qDebug() << QString( "OnGrayscaleActivated(%1)" ).arg( activated );
 
-  // Access controlled widget.
-  assert( GetWidget()==GetWidget< ColorSetupWidget >() );
-  const ColorSetupWidget* widget = GetWidget< ColorSetupWidget >();
-  assert( widget!=NULL );
-
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
 
-  // Forward indices.
-  if( activated )
-    {
-    int index = widget->GetCurrentGrayIndex();
-
-    // Update channel indices.
-    imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_RED, index );
-    imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_GREEN, index );
-    imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_BLUE, index );
-    }
-  else
-    {
-    // Update channel indices.
-    imageModel->GetSettings().SetRgbChannel(
-      RGBA_CHANNEL_RED, widget->GetCurrentRgbIndex( RGBA_CHANNEL_RED )
-    );
-    imageModel->GetSettings().SetRgbChannel(
-      RGBA_CHANNEL_GREEN, widget->GetCurrentRgbIndex( RGBA_CHANNEL_GREEN )
-    );
-    imageModel->GetSettings().SetRgbChannel(
-      RGBA_CHANNEL_BLUE, widget->GetCurrentRgbIndex( RGBA_CHANNEL_BLUE )
-    );
-    }
+  // Change grayscale-mode activation state.
+  imageModel->GetSettings().SetGrayscaleActivated( activated );
 
   // Signal model has been updated.
   emit ModelUpdated();
